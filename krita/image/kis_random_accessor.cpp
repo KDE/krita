@@ -51,7 +51,8 @@ KisRandomConstAccessor::KisRandomConstAccessor(KisDataManager *ktm, qint32 x, qi
     d->accessor = new KisTiledRandomAccessor(ktm, x, y, false);
 }
 
-KisRandomConstAccessor::KisRandomConstAccessor(const KisRandomConstAccessor& rhs) : d(new Private) {
+KisRandomConstAccessor::KisRandomConstAccessor(const KisRandomConstAccessor& rhs) : d(new Private)
+{
     d->accessor = rhs.d->accessor;
     d->offsetx = rhs.d->offsetx;
     d->offsety = rhs.d->offsety;

@@ -37,19 +37,19 @@
  *
  * See the unittest for example code.
  */
-class KRITAIMAGE_EXPORT KisPainterlyOverlay : public KisPaintDevice {
+class KRITAIMAGE_EXPORT KisPainterlyOverlay : public KisPaintDevice
+{
 
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
     KisPainterlyOverlay();
     virtual ~KisPainterlyOverlay();
 
-    QIcon icon() const
-        {
-            return KIcon(""); // XXX: Find nice icon for the subclasses.
-        }
+    QIcon icon() const {
+        return KIcon(""); // XXX: Find nice icon for the subclasses.
+    }
 
 private:
 

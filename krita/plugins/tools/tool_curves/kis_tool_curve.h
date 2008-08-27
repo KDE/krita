@@ -36,12 +36,13 @@ class QRect;
 class KisPainter;
 class KisSelectionOptions;
 
-typedef QPair<KisCurve::iterator,bool> PointPair;
+typedef QPair<KisCurve::iterator, bool> PointPair;
 
 const double MAXDISTANCE = 2.5;
 double pointToSegmentDistance(const QPointF& p, const QPointF& l0, const QPointF& l1);
 
-class KisToolCurve : public KisToolPaint {
+class KisToolCurve : public KisToolPaint
+{
 
     typedef KisToolPaint super;
     Q_OBJECT
@@ -50,7 +51,7 @@ public:
     KisToolCurve(const QString& UIName);
     virtual ~KisToolCurve();
 
-    virtual void update (KisCanvasSubject *subject);
+    virtual void update(KisCanvasSubject *subject);
     virtual QWidget* createOptionWidget();
 
     virtual void buttonPress(KoPointerEvent *event);
@@ -134,12 +135,12 @@ protected:
     /*
      * Return the rect around a given point, assuming that that point is an unselected pivot
      */
-    QRect pivotRect (const QPointF&);
+    QRect pivotRect(const QPointF&);
 
     /*
      * Same as above for selected pivots
      */
-    QRect selectedPivotRect (const QPointF&);
+    QRect selectedPivotRect(const QPointF&);
 
 protected:
 
@@ -149,7 +150,7 @@ protected:
     KisCurve::iterator m_current;
     KisCurve::iterator m_previous;
     QPointF m_currentPoint;
-    
+
     bool m_dragging;
     bool m_drawPivots;
     QPen m_drawingPen;
@@ -170,9 +171,9 @@ private:
     QString m_UIName;
 
 
-/* ********************************** *
- * Selection Tools specific functions *
- * ********************************** */
+    /* ********************************** *
+     * Selection Tools specific functions *
+     * ********************************** */
 
 public:
 
@@ -180,7 +181,7 @@ public:
      * This initializes our Option Widget (called by createOptionWidget())
      */
     virtual QWidget* createSelectionOptionWidget(QWidget* parent);
-    
+
     /*
      * This return our internal KisSelectionOptions if toolType() returns TOOL_SELECT
      */

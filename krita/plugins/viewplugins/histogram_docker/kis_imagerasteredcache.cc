@@ -32,7 +32,7 @@
 #include <kis_view2.h>
 
 KisImageRasteredCache::KisImageRasteredCache(KisView2* view, Observer* o)
-    : m_observer(o->createNew(0, 0, 0, 0)), m_view(view)
+        : m_observer(o->createNew(0, 0, 0, 0)), m_view(view)
 {
     m_busy = false;
     m_imageProjection = 0;
@@ -58,11 +58,13 @@ KisImageRasteredCache::KisImageRasteredCache(KisView2* view, Observer* o)
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(timeOut()));
 }
 
-KisImageRasteredCache::~KisImageRasteredCache() {
+KisImageRasteredCache::~KisImageRasteredCache()
+{
     cleanUpElements();
 }
 
-void KisImageRasteredCache::imageUpdated(QRect rc) {
+void KisImageRasteredCache::imageUpdated(QRect rc)
+{
 
     QRect r(0, 0, m_width * m_rasterSize, m_height * m_rasterSize);
     r &= rc;
@@ -73,7 +75,7 @@ void KisImageRasteredCache::imageUpdated(QRect rc) {
     int y2 = static_cast<int>(ceil(float(r.y() + r.height()) / float(m_rasterSize)));
 
     if (!m_raster.empty()) {
-        for ( ; x < x2; x++) {
+        for (; x < x2; x++) {
             for (int i = y; i < y2; i++) {
                 if (x < m_raster.size()) {
                     if (i < m_raster.at(x).size()) {
@@ -95,7 +97,8 @@ void KisImageRasteredCache::imageUpdated(QRect rc) {
     }
 }
 
-void KisImageRasteredCache::imageSizeChanged(qint32 w, qint32 h) {
+void KisImageRasteredCache::imageSizeChanged(qint32 w, qint32 h)
+{
 
     KisImageSP image = m_view->image();
 
@@ -122,10 +125,11 @@ void KisImageRasteredCache::imageSizeChanged(qint32 w, qint32 h) {
         rasterX++;
     }
 
-    imageUpdated(QRect(0,0, image->width(), image->height()));
+    imageUpdated(QRect(0, 0, image->width(), image->height()));
 }
 
-void KisImageRasteredCache::timeOut() {
+void KisImageRasteredCache::timeOut()
+{
     m_busy = true;
     KisImageSP img = m_view->image();
 
@@ -150,7 +154,8 @@ void KisImageRasteredCache::timeOut() {
     }
 }
 
-void KisImageRasteredCache::cleanUpElements() {
+void KisImageRasteredCache::cleanUpElements()
+{
     for (int i = 0; i < m_raster.count(); i++) {
         for (int j = 0; j < m_raster.at(i).count(); j++) {
             delete m_raster.at(i).at(j);

@@ -26,18 +26,15 @@ class TestAction : public KisPaintDeviceAction
 {
 public:
 
-    void act(KisPaintDeviceSP, qint32, qint32) const
-        {
-        }
+    void act(KisPaintDeviceSP, qint32, qint32) const {
+    }
 
-    QString name() const
-        {
-            return "TestAction";
-        }
-    QString description() const
-        {
-            return "TestAction description";
-        }
+    QString name() const {
+        return "TestAction";
+    }
+    QString description() const {
+        return "TestAction description";
+    }
 };
 
 

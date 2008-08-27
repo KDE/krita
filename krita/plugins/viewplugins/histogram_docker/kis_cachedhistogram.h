@@ -26,22 +26,23 @@
 
 #include "kis_imagerasteredcache.h"
 
-class KisCachedHistogramObserver : public KisImageRasteredCache::Observer {
+class KisCachedHistogramObserver : public KisImageRasteredCache::Observer
+{
 public:
     typedef Q3ValueVector<KoHistogramProducer*> Producers;
     KisCachedHistogramObserver(Producers* p, KoHistogramProducerFactory* f,
                                int x, int y, int w, int h, bool add = true)
-        : m_producers(p), m_factory(f), m_x(x), m_y(y), m_w(w), m_h(h)
-    {
+            : m_producers(p), m_factory(f), m_x(x), m_y(y), m_w(w), m_h(h) {
         m_producer = m_factory->generate();
         if (add)
             m_producers->append(m_producer.data());
     }
     virtual ~KisCachedHistogramObserver() {}
 
-    virtual Observer* createNew(int x, int y, int w, int h)
-        { return new KisCachedHistogramObserver(m_producers, m_factory, x, y, w, h); }
-        
+    virtual Observer* createNew(int x, int y, int w, int h) {
+        return new KisCachedHistogramObserver(m_producers, m_factory, x, y, w, h);
+    }
+
     virtual void regionUpdated(KisPaintDeviceSP dev);
 private:
     Producers* m_producers;

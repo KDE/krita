@@ -62,9 +62,13 @@ public:
 
     QImage img() const;
 
-    bool removable() const { return true; }
+    bool removable() const {
+        return true;
+    }
 
-    QString defaultFileExtension() const { return "kpp"; }
+    QString defaultFileExtension() const {
+        return "kpp";
+    }
 
     // XXX: serialize to/from xml for recording!
 
@@ -80,6 +84,6 @@ private:
     Private * const m_d;
 };
 
-Q_DECLARE_METATYPE( KisPaintOpPresetSP )
+Q_DECLARE_METATYPE(KisPaintOpPresetSP)
 
 #endif

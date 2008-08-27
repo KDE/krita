@@ -34,15 +34,20 @@ class Brush;
 class Stroke;
 
 
-class KisCPaintOpFactory : public KisPaintOpFactory  {
+class KisCPaintOpFactory : public KisPaintOpFactory
+{
 
 public:
     KisCPaintOpFactory();
     virtual ~KisCPaintOpFactory();
 
     virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
-    virtual QString id() const { return "paintCPaint"; }
-    virtual QString name() const { return i18n("Chinese Brush"); }
+    virtual QString id() const {
+        return "paintCPaint";
+    }
+    virtual QString name() const {
+        return i18n("Chinese Brush");
+    }
     virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
 
@@ -53,9 +58,10 @@ private:
 
 
 
-class KisCPaintOpSettings : public QObject, public KisPaintOpSettings {
+class KisCPaintOpSettings : public QObject, public KisPaintOpSettings
+{
 
-Q_OBJECT
+    Q_OBJECT
 
 public:
     KisCPaintOpSettings(QWidget * parent,  Q3ValueVector<Brush*> m_brushes);
@@ -67,7 +73,9 @@ public:
     int ink() const;
     int water() const;
 
-    QWidget * widget() const { return m_optionsWidget; }
+    QWidget * widget() const {
+        return m_optionsWidget;
+    }
 
     using KisPaintOpSettings::fromXML;
     virtual void fromXML(const QDomElement&);
@@ -89,7 +97,8 @@ private:
 
 
 
-class KisCPaintOp : public KisPaintOp {
+class KisCPaintOp : public KisPaintOp
+{
 
 public:
 
@@ -98,8 +107,7 @@ public:
 
     void paintAt(const KisPaintInformation& info);
 
-    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const
-    {
+    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
         Q_UNUSED(xSpacing);
         Q_UNUSED(ySpacing);
         Q_UNUSED(pressure1);

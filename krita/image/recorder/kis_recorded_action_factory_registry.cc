@@ -29,8 +29,7 @@ KisRecordedActionFactoryRegistry* KisRecordedActionFactoryRegistry::Private::ins
 
 KisRecordedActionFactoryRegistry* KisRecordedActionFactoryRegistry::instance()
 {
-    if(!Private::instance)
-    {
+    if (!Private::instance) {
         Private::instance = new KisRecordedActionFactoryRegistry;
     }
     return Private::instance;

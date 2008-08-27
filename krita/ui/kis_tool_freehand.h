@@ -59,12 +59,12 @@ protected:
 
     /// Paint a line between the specified positions on the current layer
     virtual void paintLine(const KisPaintInformation &pi1,
-                   const KisPaintInformation &pi2);
+                           const KisPaintInformation &pi2);
 
     virtual void paintBezierCurve(const KisPaintInformation &pi1,
-                   const QPointF &control1,
-                   const QPointF &control2,
-                   const KisPaintInformation &pi2);
+                                  const QPointF &control1,
+                                  const QPointF &control2,
+                                  const KisPaintInformation &pi2);
 
     virtual void initPaint(KoPointerEvent *e);
     virtual void endPaint();
@@ -81,7 +81,7 @@ private:
     /**
      * adjust a coordinates according to a KisPaintingAssitant, if available.
      */
-    QPointF adjustPosition( const QPointF& point);
+    QPointF adjustPosition(const QPointF& point);
     void queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* previousJob);
 
 protected:

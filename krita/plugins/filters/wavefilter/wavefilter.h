@@ -36,24 +36,26 @@ public:
 class KisFilterWave : public KisFilter
 {
 public:
-    
+
     KisFilterWave();
 
 public:
 
     using KisFilter::process;
-    
+
     void process(KisConstProcessingInformation src,
                  KisProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
-        ) const;
-    static inline KoID id() { return KoID("wave", i18n("Wave")); }
-    
+                ) const;
+    static inline KoID id() {
+        return KoID("wave", i18n("Wave"));
+    }
+
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 public:
-        
+
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
 };
 

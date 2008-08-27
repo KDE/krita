@@ -35,9 +35,10 @@
  * in brush creation. It is not a generic alpha mask that can be used with
  * KisPaintDevices: use a KisSelection for that.
  */
-class KisQImagemask : public KisShared {
+class KisQImagemask : public KisShared
+{
 
- public:
+public:
     /**
        Create an alpha mask based on the specified QImage. If the image is
        not a grayscale, the mask value is calculated from the effective grey
@@ -66,15 +67,14 @@ class KisQImagemask : public KisShared {
     /**
        @return the number of lines in the mask.
      */
-       qint32 width() const;
+    qint32 width() const;
 
     /**
      * Return the alpha mask bytes
      */
-    inline quint8 * data()
-        {
-            return m_data.data();
-        }
+    inline quint8 * data() {
+        return m_data.data();
+    }
 
     /**
        @return the alpha value at the specified position.
@@ -89,22 +89,19 @@ class KisQImagemask : public KisShared {
        qint32 alphaPos). That would be fastest, or we could
        provide an iterator over the mask, that would be nice, too.
     */
-    inline quint8 alphaAt(qint32 x, qint32 y) const
-        {
-            if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
-                return m_data[(y * m_width) + x];
-            }
-            else {
-                return OPACITY_TRANSPARENT;
-            }
+    inline quint8 alphaAt(qint32 x, qint32 y) const {
+        if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
+            return m_data[(y * m_width) + x];
+        } else {
+            return OPACITY_TRANSPARENT;
         }
+    }
 
-    inline void setAlphaAt(qint32 x, qint32 y, quint8 alpha)
-        {
-            if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
-                m_data[(y * m_width) + x] = alpha;
-            }
+    inline void setAlphaAt(qint32 x, qint32 y, quint8 alpha) {
+        if (y >= 0 && y < m_height && x >= 0 && x < m_width) {
+            m_data[(y * m_width) + x] = alpha;
         }
+    }
 
 
     // Create a new mask by interpolating between mask1 and mask2 as t
@@ -120,16 +117,27 @@ private:
     qint32 m_height;
 };
 
-class KisBrush::ScaledBrush {
+class KisBrush::ScaledBrush
+{
 public:
     ScaledBrush();
     ScaledBrush(KisQImagemaskSP scaledMask, const QImage& scaledImage, double scale, double xScale, double yScale);
 
-    double scale() const { return m_scale; }
-    double xScale() const { return m_xScale; }
-    double yScale() const { return m_yScale; }
-    KisQImagemaskSP mask() const { return m_mask; }
-    QImage image() const { return m_image; }
+    double scale() const {
+        return m_scale;
+    }
+    double xScale() const {
+        return m_xScale;
+    }
+    double yScale() const {
+        return m_yScale;
+    }
+    KisQImagemaskSP mask() const {
+        return m_mask;
+    }
+    QImage image() const {
+        return m_image;
+    }
 
 private:
     KisQImagemaskSP m_mask;

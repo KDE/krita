@@ -32,22 +32,25 @@ class WdgDropshadow : public QWidget, public Ui::WdgDropshadow
 {
     Q_OBJECT
 
-    public:
-        WdgDropshadow(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
+public:
+    WdgDropshadow(QWidget *parent, const char *name) : QWidget(parent) {
+        setObjectName(name); setupUi(this);
+    }
 };
 
 /**
  * This dialog allows the user to configure the decomposition of an image
  * into layers: one layer for each color channel.
  */
-class DlgDropshadow: public KDialog {
+class DlgDropshadow: public KDialog
+{
     typedef KDialog super;
     Q_OBJECT
 
 public:
 
     DlgDropshadow(const QString & imageCS, const QString & layerCS, QWidget * parent = 0,
-             const char* name = 0);
+                  const char* name = 0);
     ~DlgDropshadow();
 
 public:

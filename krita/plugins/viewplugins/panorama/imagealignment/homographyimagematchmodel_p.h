@@ -18,103 +18,94 @@
 #define _HOMOGRAPHY_IMAGE_MATCH_MODEL_P_H_
 
 
-class HomographyImageMatchModel {
-    public:
-        struct Params {
-            inline Params(int w, int h, double thres)
-                : width(w), height(h), threshold(thres)
-            {}
-            int width, height;
-            double threshold;
-        };
-    public:
-        inline HomographyImageMatchModel(std::vector<KisMatch> samples, Params* params) : m_isValid(false), m_fitComputed(false), m_matches(samples), m_width(params->width), m_height(params->height), m_threshold(params->threshold)
-        {
+class HomographyImageMatchModel
+{
+public:
+    struct Params {
+        inline Params(int w, int h, double thres)
+                : width(w), height(h), threshold(thres) {}
+        int width, height;
+        double threshold;
+    };
+public:
+    inline HomographyImageMatchModel(std::vector<KisMatch> samples, Params* params) : m_isValid(false), m_fitComputed(false), m_matches(samples), m_width(params->width), m_height(params->height), m_threshold(params->threshold) {
+    }
+    /**
+     * @return the minimal number of points needed for a fit
+     */
+    inline static uint nbFit() {
+        return 6;
+    }
+    inline bool isValid() {
+        if (not m_fitComputed) {
+            computeFitting();
         }
-        /**
-         * @return the minimal number of points needed for a fit
-         */
-        inline static uint nbFit() {
-            return 6;
+        return m_isValid;
+    }
+    inline void addData(std::vector<KisMatch>::iterator begin, std::vector<KisMatch>::iterator end) {
+        for (std::vector<KisMatch>::iterator it = begin; it != end; it++) {
+            m_matches.push_back(*it);
         }
-        inline bool isValid() {
-            if(not m_fitComputed)
-            {
-                computeFitting();
-            }
-            return m_isValid;
-        }
-        inline void addData(std::vector<KisMatch>::iterator begin, std::vector<KisMatch>::iterator end)
-        {
-            for(std::vector<KisMatch>::iterator it = begin; it != end; it++)
-            {
-                m_matches.push_back(*it);
-            }
-            m_fitComputed = false;
-        }
-        inline double fittingErrorSum() {
-        if(not m_fitComputed)
-        {
+        m_fitComputed = false;
+    }
+    inline double fittingErrorSum() {
+        if (not m_fitComputed) {
             computeFitting();
         }
         return m_fittingErrorSum;
+    }
+    inline double threshold() const {
+        return m_threshold;
+    }
+    inline double fittingError(const KisMatch& m) {
+        int indx[HomographySameDistortionFunction::SIZEINDEXES];
+        for (int i = 0; i < HomographySameDistortionFunction::SIZEINDEXES; i++) {
+            indx[i] = i;
         }
-        inline double threshold() const {
-            return m_threshold;
+        double norm(4.0 / (m_width * m_width + m_height * m_height));
+        HomographySameDistortionFunction hsdf(indx, m_width * 0.5, m_height * 0.5, norm, m.ref->x(), m.ref->y(), m.match->x(), m.match->y());
+        double f1, f2;
+        hsdf.f(parameters(), f1, f2);
+        return (f1 + f2) * 0.5;
+    }
+    inline const std::vector<double>& parameters() const {
+        return m_parameters;
+    }
+    inline const std::vector<KisMatch>& matches() const {
+        return m_matches;
+    }
+private:
+    void computeFitting() {
+        KisControlPoints cps(2);
+        cps.addMatches(m_matches, 0, 1);
+        PanoptimFunction<HomographySameDistortionFunction, HomographySameDistortionFunction::SIZEINDEXES> f(cps, m_width * 0.5, m_height * 0.5, m_width, m_height);
+        m_parameters.resize(HomographySameDistortionFunction::SIZEINDEXES);
+        m_parameters[HomographySameDistortionFunction::INDX_a] = 0.0;
+        m_parameters[HomographySameDistortionFunction::INDX_b] = 0.0;
+        m_parameters[HomographySameDistortionFunction::INDX_c] = 0.0;
+        m_parameters[HomographySameDistortionFunction::INDX_h11] = 1.0;
+        m_parameters[HomographySameDistortionFunction::INDX_h21] = 0.0;
+        m_parameters[HomographySameDistortionFunction::INDX_h31] = m_matches[0].ref->x() - m_matches[0].match->x();
+        m_parameters[HomographySameDistortionFunction::INDX_h12] = 0.0;
+        m_parameters[HomographySameDistortionFunction::INDX_h22] = 1.0;
+        m_parameters[HomographySameDistortionFunction::INDX_h32] = m_matches[0].ref->y() - m_matches[0].match->y();
+        m_parameters[HomographySameDistortionFunction::INDX_h13] = 0.0;
+        m_parameters[HomographySameDistortionFunction::INDX_h23] = 0.0;
+        m_fittingErrorSum = Optimization::Algorithms::levenbergMarquardt(&f, m_parameters, 100, 1e-12, 0.01, 10.0);
+        m_isValid = true;
+        m_fitComputed = true;
+        for (uint i = 0; i < m_parameters.size(); i++) {
+            dbgPlugins << "m_parameters[" << i << "]=" << m_parameters[i];
         }
-        inline double fittingError(const KisMatch& m)
-        {
-            int indx[HomographySameDistortionFunction::SIZEINDEXES];
-            for(int i = 0; i < HomographySameDistortionFunction::SIZEINDEXES; i++)
-            {
-                indx[i] = i;
-            }
-            double norm(4.0 / ( m_width * m_width + m_height * m_height ) );
-            HomographySameDistortionFunction hsdf(indx, m_width * 0.5, m_height * 0.5, norm, m.ref->x(), m.ref->y(), m.match->x(), m.match->y());
-            double f1, f2;
-            hsdf.f(parameters(), f1, f2);
-            return (f1 + f2) * 0.5;
-        }
-        inline const std::vector<double>& parameters() const {
-            return m_parameters;
-        }
-        inline const std::vector<KisMatch>& matches() const {
-            return m_matches;
-        }
-    private:
-        void computeFitting()
-        {
-            KisControlPoints cps(2);
-            cps.addMatches( m_matches, 0, 1);
-            PanoptimFunction<HomographySameDistortionFunction, HomographySameDistortionFunction::SIZEINDEXES> f( cps, m_width * 0.5, m_height * 0.5, m_width, m_height );
-            m_parameters.resize(HomographySameDistortionFunction::SIZEINDEXES);
-            m_parameters[HomographySameDistortionFunction::INDX_a] = 0.0;
-            m_parameters[HomographySameDistortionFunction::INDX_b] = 0.0;
-            m_parameters[HomographySameDistortionFunction::INDX_c] = 0.0;
-            m_parameters[HomographySameDistortionFunction::INDX_h11] = 1.0;
-            m_parameters[HomographySameDistortionFunction::INDX_h21] = 0.0;
-            m_parameters[HomographySameDistortionFunction::INDX_h31] = m_matches[0].ref->x() - m_matches[0].match->x();
-            m_parameters[HomographySameDistortionFunction::INDX_h12] = 0.0;
-            m_parameters[HomographySameDistortionFunction::INDX_h22] = 1.0;
-            m_parameters[HomographySameDistortionFunction::INDX_h32] = m_matches[0].ref->y() - m_matches[0].match->y();
-            m_parameters[HomographySameDistortionFunction::INDX_h13] = 0.0;
-            m_parameters[HomographySameDistortionFunction::INDX_h23] = 0.0;
-            m_fittingErrorSum = Optimization::Algorithms::levenbergMarquardt(&f, m_parameters, 100, 1e-12, 0.01, 10.0);
-            m_isValid = true;
-            m_fitComputed = true;
-            for(uint i = 0; i < m_parameters.size(); i++)
-            {
-                dbgPlugins <<"m_parameters["<< i <<"]=" << m_parameters[i];
-            }
-        }
-    private:
-        bool m_isValid;
-        bool m_fitComputed;
-        double m_fittingErrorSum;
-        lMatches m_matches;
-        std::vector<double> m_parameters;
-        int m_width, m_height;
-        double m_threshold;
+    }
+private:
+    bool m_isValid;
+    bool m_fitComputed;
+    double m_fittingErrorSum;
+    lMatches m_matches;
+    std::vector<double> m_parameters;
+    int m_width, m_height;
+    double m_threshold;
 };
 
 #endif

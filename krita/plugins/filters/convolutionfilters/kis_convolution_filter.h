@@ -26,19 +26,20 @@
 #include "filter/kis_filter_configuration.h"
 #include "kis_convolution_painter.h"
 
-class KisConvolutionFilter : public KisFilter {
+class KisConvolutionFilter : public KisFilter
+{
 
 public:
     KisConvolutionFilter(const KoID& id, const KoID & category, const QString & entry);
 public:
     using KisFilter::process;
-    
+
     void process(KisConstProcessingInformation src,
                  KisProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
-        ) const;
+                ) const;
     virtual int overlapMarginNeeded(const KisFilterConfiguration* c) const;
 protected:
 

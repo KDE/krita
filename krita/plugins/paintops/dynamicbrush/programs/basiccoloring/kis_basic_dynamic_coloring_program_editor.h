@@ -24,19 +24,20 @@ class Ui_BasicDynamicColoringProgramEditor;
 
 class KisBasicDynamicColoringProgram;
 
-class KisBasicDynamicColoringProgramEditor : public QWidget {
+class KisBasicDynamicColoringProgramEditor : public QWidget
+{
     Q_OBJECT
-    public:
-        KisBasicDynamicColoringProgramEditor(KisBasicDynamicColoringProgram* program);
-        ~KisBasicDynamicColoringProgramEditor();
-    public slots:
-        void setMixerEnable(bool v);
-        void setHueEnable(bool v);
-        void setSaturationEnable(bool v);
-        void setBrightnessEnable(bool v);
-    private:
-        Ui_BasicDynamicColoringProgramEditor* m_basicDynamicColoringProgramEditor;
-        KisBasicDynamicColoringProgram* m_program;
+public:
+    KisBasicDynamicColoringProgramEditor(KisBasicDynamicColoringProgram* program);
+    ~KisBasicDynamicColoringProgramEditor();
+public slots:
+    void setMixerEnable(bool v);
+    void setHueEnable(bool v);
+    void setSaturationEnable(bool v);
+    void setBrightnessEnable(bool v);
+private:
+    Ui_BasicDynamicColoringProgramEditor* m_basicDynamicColoringProgramEditor;
+    KisBasicDynamicColoringProgram* m_program;
 };
 
 #endif

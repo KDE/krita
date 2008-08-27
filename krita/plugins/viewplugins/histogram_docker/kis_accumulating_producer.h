@@ -36,23 +36,31 @@
  * of HistogramProducers if you'd take addRegionsToBinAsync = addRegionToBin, but since that is
  * already violated with the asynchronousity of it that is not really an issue anymore, I think)
  **/
-class KisAccumulatingHistogramProducer : public QObject, public KoBasicHistogramProducer {
-Q_OBJECT
+class KisAccumulatingHistogramProducer : public QObject, public KoBasicHistogramProducer
+{
+    Q_OBJECT
 public:
     KisAccumulatingHistogramProducer(KisCachedHistogramObserver::Producers* source);
     ~KisAccumulatingHistogramProducer();
     /// Does _nothing_, use addRegionsToBinAsync
     virtual void addRegionToBin(const quint8 *, const quint8*, quint32, const KoColorSpace *) {}
     virtual void addRegionsToBinAsync();
-    virtual QString positionToString(double pos) const
-        { return m_source->at(0)->positionToString(pos); }
+    virtual QString positionToString(double pos) const {
+        return m_source->at(0)->positionToString(pos);
+    }
 
     virtual void setView(double, double) {} // No view support
-    virtual double maximalZoom() const { return 1.0; }
+    virtual double maximalZoom() const {
+        return 1.0;
+    }
 
-    virtual qint32 numberOfBins() { return m_source->at(0)->numberOfBins(); }
+    virtual qint32 numberOfBins() {
+        return m_source->at(0)->numberOfBins();
+    }
 
-    virtual QList<KoChannelInfo *> channels() { return m_source->at(0)->channels(); }
+    virtual QList<KoChannelInfo *> channels() {
+        return m_source->at(0)->channels();
+    }
 
     /// Call this when the 'source' list has changed colorspace
     virtual void changedSourceProducer() {
@@ -66,7 +74,9 @@ signals:
 
 protected:
     /// source already converts external to internal
-    virtual int externalToInternal(int ext) { return ext; }
+    virtual int externalToInternal(int ext) {
+        return ext;
+    }
     KisCachedHistogramObserver::Producers* m_source;
 
     class ThreadedProducer;

@@ -35,11 +35,11 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent),
     d->colorSpaceSelector->cmbColorModels->setIDList(KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::OnlyUserVisible));
     fillCmbDepths(d->colorSpaceSelector->cmbColorModels->currentItem());
     connect(d->colorSpaceSelector->cmbColorModels, SIGNAL(activated(const KoID &)),
-        this, SLOT(fillCmbDepths(const KoID &)));
+            this, SLOT(fillCmbDepths(const KoID &)));
     connect(d->colorSpaceSelector->cmbColorDepth, SIGNAL(activated(const KoID &)),
-        this, SLOT(fillCmbProfiles()));
+            this, SLOT(fillCmbProfiles()));
     connect(d->colorSpaceSelector->cmbColorModels, SIGNAL(activated(const KoID &)),
-        this, SLOT(fillCmbProfiles()));
+            this, SLOT(fillCmbProfiles()));
     fillCmbProfiles();
 }
 
@@ -61,15 +61,15 @@ void KisColorSpaceSelector::fillCmbProfiles()
     KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->value(s);
     if (csf == 0) return;
 
-    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
+    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
 
-    foreach (const KoColorProfile *profile, profileList) {
+    foreach(const KoColorProfile *profile, profileList) {
         d->colorSpaceSelector->cmbProfile->addSqueezedItem(profile->name());
     }
     d->colorSpaceSelector->cmbProfile->setCurrent(csf->defaultProfile());
 }
 
- void KisColorSpaceSelector::fillCmbDepths(const KoID& id)
+void KisColorSpaceSelector::fillCmbDepths(const KoID& id)
 {
     d->colorSpaceSelector->cmbColorDepth->clear();
     d->colorSpaceSelector->cmbColorDepth->setIDList(KoColorSpaceRegistry::instance()->colorDepthList(id, KoColorSpaceRegistry::OnlyUserVisible));
@@ -77,9 +77,9 @@ void KisColorSpaceSelector::fillCmbProfiles()
 
 const KoColorSpace* KisColorSpaceSelector::currentColorSpace()
 {
-    return KoColorSpaceRegistry::instance()->colorSpace( 
-            KoColorSpaceRegistry::instance()->colorSpaceId(d->colorSpaceSelector->cmbColorModels->currentItem(), d->colorSpaceSelector->cmbColorDepth->currentItem())
-            , d->colorSpaceSelector->cmbProfile->itemHighlighted());
+    return KoColorSpaceRegistry::instance()->colorSpace(
+               KoColorSpaceRegistry::instance()->colorSpaceId(d->colorSpaceSelector->cmbColorModels->currentItem(), d->colorSpaceSelector->cmbColorDepth->currentItem())
+               , d->colorSpaceSelector->cmbProfile->itemHighlighted());
 }
 
 void KisColorSpaceSelector::setCurrentColorModel(const KoID& id)

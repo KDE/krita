@@ -29,7 +29,8 @@ class KoCompositeOp;
 
 #include <krita_export.h>
 
-class KRITAIMAGE_EXPORT KisRecordedPaintAction : public KisRecordedAction {
+class KRITAIMAGE_EXPORT KisRecordedPaintAction : public KisRecordedAction
+{
 public:
 
     KisRecordedPaintAction(const QString & name,
@@ -63,13 +64,14 @@ private:
     Private* const d;
 };
 
-class KisRecordedPaintActionFactory : public KisRecordedActionFactory {
-    public:
-        KisRecordedPaintActionFactory(const QString & id) : KisRecordedActionFactory(id) {}
-        virtual ~KisRecordedPaintActionFactory(){}
-    protected:
+class KisRecordedPaintActionFactory : public KisRecordedActionFactory
+{
+public:
+    KisRecordedPaintActionFactory(const QString & id) : KisRecordedActionFactory(id) {}
+    virtual ~KisRecordedPaintActionFactory() {}
+protected:
 
-        KisPaintOpPresetSP paintOpPresetFromXML(const QString& paintOpId, const QDomElement& elt, KisImageSP image);
+    KisPaintOpPresetSP paintOpPresetFromXML(const QString& paintOpId, const QDomElement& elt, KisImageSP image);
 };
 
 

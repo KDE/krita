@@ -36,20 +36,20 @@
 #include "kis_paintop_registry.h"
 
 typedef KGenericFactory<DefaultPaintOpsPlugin> DefaultPaintOpsPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritadefaultpaintops, DefaultPaintOpsPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritadefaultpaintops, DefaultPaintOpsPluginFactory("krita"))
 
 
 DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     setComponentData(DefaultPaintOpsPluginFactory::componentData());
 
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add( new KisAirbrushOpFactory );
-    r->add( new KisBrushOpFactory );
-    r->add( new KisDuplicateOpFactory );
-    r->add( new KisEraseOpFactory );
-    r->add( new KisPenOpFactory );
+    r->add(new KisAirbrushOpFactory);
+    r->add(new KisBrushOpFactory);
+    r->add(new KisDuplicateOpFactory);
+    r->add(new KisEraseOpFactory);
+    r->add(new KisPenOpFactory);
 //    r->add(KisPaintOpFactorySP( new KisSmudgeOpFactory ));
 }
 

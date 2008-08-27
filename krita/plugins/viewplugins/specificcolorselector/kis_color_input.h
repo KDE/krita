@@ -29,48 +29,51 @@ class KDoubleNumInput;
 class QLabel;
 class QHBoxLayout;
 
-class KisColorInput : public QWidget {
+class KisColorInput : public QWidget
+{
     Q_OBJECT
-    public:
-        KisColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color);
-    protected:
-        void init();
-        virtual KNumInput* createInput() =0;
-    signals:
-        void updated();
-    protected:
-        const KoChannelInfo* m_channelInfo;
-        KoColor* m_color;
-        KNumInput* m_input;
-        QLabel* m_label;
-        QHBoxLayout *m_layout;
+public:
+    KisColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color);
+protected:
+    void init();
+    virtual KNumInput* createInput() = 0;
+signals:
+    void updated();
+protected:
+    const KoChannelInfo* m_channelInfo;
+    KoColor* m_color;
+    KNumInput* m_input;
+    QLabel* m_label;
+    QHBoxLayout *m_layout;
 };
 
-class KisIntegerColorInput : public KisColorInput {
+class KisIntegerColorInput : public KisColorInput
+{
     Q_OBJECT
-    public:
-        KisIntegerColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color);
-    protected:
-        virtual KNumInput* createInput();
-    public slots:
-        void setValue(int);
-        void update();
-    private:
-        KIntNumInput* m_intNumInput;
+public:
+    KisIntegerColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color);
+protected:
+    virtual KNumInput* createInput();
+public slots:
+    void setValue(int);
+    void update();
+private:
+    KIntNumInput* m_intNumInput;
 };
 
 
-class KisFloatColorInput : public KisColorInput {
+class KisFloatColorInput : public KisColorInput
+{
     Q_OBJECT
-    public:
-        KisFloatColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color);
-    protected:
-        virtual KNumInput* createInput();
-    public slots:
-        void setValue(double);
-        void update();
-    private:
-        KDoubleNumInput* m_dblNumInput;
+public:
+    KisFloatColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color);
+protected:
+    virtual KNumInput* createInput();
+public slots:
+    void setValue(double);
+    void update();
+private:
+    KDoubleNumInput* m_dblNumInput;
 };
 
 #endif

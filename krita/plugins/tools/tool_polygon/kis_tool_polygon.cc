@@ -42,15 +42,15 @@
 
 KisToolPolygon::KisToolPolygon(KoCanvasBase *canvas)
         : super(canvas, KisCursor::load("tool_polygon_cursor.png", 6, 6)),
-          m_dragging (false)
+        m_dragging(false)
 {
     setObjectName("tool_polygon");
 
     QAction *action = new QAction(i18n("&Finish Polygon"), this);
-    addAction("finish_polygon", action );
+    addAction("finish_polygon", action);
     connect(action, SIGNAL(triggered()), this, SLOT(finish()));
     action = new QAction(KIcon("dialog-cancel"), i18n("&Cancel"), this);
-    addAction("cancel_polygon", action );
+    addAction("cancel_polygon", action);
     connect(action, SIGNAL(triggered()), this, SLOT(cancel()));
 
 
@@ -71,8 +71,7 @@ void KisToolPolygon::mousePressEvent(KoPointerEvent *event)
 
             m_dragging = true;
 
-            if (m_points.isEmpty())
-            {
+            if (m_points.isEmpty()) {
                 m_dragStart = convertToPixelCoord(event);
                 m_dragEnd = m_dragStart;
                 m_points.append(m_dragStart);
@@ -105,24 +104,23 @@ void KisToolPolygon::mouseReleaseEvent(KoPointerEvent *event)
         return;
 
     if (m_dragging && event->button() == Qt::LeftButton)  {
-            m_dragging = false;
-            m_points.append (m_dragEnd);
+        m_dragging = false;
+        m_points.append(m_dragEnd);
     }
 
     if (m_dragging && event->button() == Qt::RightButton) {
 
-        }
+    }
 }
 
-void KisToolPolygon::mouseDoubleClickEvent( KoPointerEvent * )
+void KisToolPolygon::mouseDoubleClickEvent(KoPointerEvent *)
 {
     finish();
 }
 
 void KisToolPolygon::keyPressEvent(QKeyEvent *e)
 {
-    if (e->key()==Qt::Key_Escape)
-    {
+    if (e->key() == Qt::Key_Escape) {
         cancel();
     }
 }
@@ -141,13 +139,13 @@ void KisToolPolygon::finish()
 
     KisPaintDeviceSP device = currentNode()->paintDevice();
     if (device) {
-        KisPainter painter (device, currentSelection());
-        if (currentImage()->undo()) painter.beginTransaction (i18n ("Polygon"));
+        KisPainter painter(device, currentSelection());
+        if (currentImage()->undo()) painter.beginTransaction(i18n("Polygon"));
         setupPainter(&painter);
         painter.setOpacity(m_opacity);
         painter.setCompositeOp(m_compositeOp);
         painter.paintPolygon(m_points);
-        device->setDirty( painter.dirtyRegion() );
+        device->setDirty(painter.dirtyRegion());
         notifyModified();
 
         m_canvas->addCommand(painter.endTransaction());
@@ -185,8 +183,7 @@ void KisToolPolygon::paint(QPainter& gc, const KoViewConverter &converter)
     }
     for (vQPointF::iterator it = m_points.begin(); it != m_points.end(); ++it) {
 
-        if (it == m_points.begin())
-        {
+        if (it == m_points.begin()) {
             start = (*it);
         } else {
             end = (*it);

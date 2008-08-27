@@ -34,36 +34,34 @@
 #include "tmo_reinhard02.h"
 #include "ui_reinhard02_configuration_widget.h"
 
-class KisReinhard02OperatorConfigurationWidget : public KisToneMappingOperatorConfigurationWidget{
-    public:
-        KisReinhard02OperatorConfigurationWidget(QWidget* wdg) : KisToneMappingOperatorConfigurationWidget(wdg)
-        {
-            widget.setupUi(this);
-        }
-        virtual void setConfiguration(KisPropertiesConfiguration* config)
-        {
-            widget.scales->setChecked(config->getBool("Scales", false));
-            widget.key->setValue(config->getDouble("Key", 0.18));
-            widget.phi->setValue(config->getDouble("Phi", 1.0));
-            widget.range->setValue(config->getDouble("Range", 8.0));
-            widget.lower->setValue(config->getDouble("Lower", 1.0));
-            widget.upper->setValue(config->getDouble("Upper", 43.0));
-            widget.timeCoherent->setChecked(config->getBool("TimeCoherent", false));
-        }
-        virtual KisPropertiesConfiguration* configuration() const
-        {
-            KisPropertiesConfiguration* config = new KisPropertiesConfiguration();
-            config->setProperty("Scales", widget.scales->isChecked());
-            config->setProperty("Key", widget.key->value());
-            config->setProperty("Phi", widget.phi->value());
-            config->setProperty("Range", widget.range->value());
-            config->setProperty("Lower", widget.lower->value());
-            config->setProperty("Upper", widget.upper->value());
-            config->setProperty("TimeCoherent", widget.timeCoherent->isChecked());
-            return config;
-        }
-    private:
-        Ui_Reinhard02OperatorConfigurationWidget widget;
+class KisReinhard02OperatorConfigurationWidget : public KisToneMappingOperatorConfigurationWidget
+{
+public:
+    KisReinhard02OperatorConfigurationWidget(QWidget* wdg) : KisToneMappingOperatorConfigurationWidget(wdg) {
+        widget.setupUi(this);
+    }
+    virtual void setConfiguration(KisPropertiesConfiguration* config) {
+        widget.scales->setChecked(config->getBool("Scales", false));
+        widget.key->setValue(config->getDouble("Key", 0.18));
+        widget.phi->setValue(config->getDouble("Phi", 1.0));
+        widget.range->setValue(config->getDouble("Range", 8.0));
+        widget.lower->setValue(config->getDouble("Lower", 1.0));
+        widget.upper->setValue(config->getDouble("Upper", 43.0));
+        widget.timeCoherent->setChecked(config->getBool("TimeCoherent", false));
+    }
+    virtual KisPropertiesConfiguration* configuration() const {
+        KisPropertiesConfiguration* config = new KisPropertiesConfiguration();
+        config->setProperty("Scales", widget.scales->isChecked());
+        config->setProperty("Key", widget.key->value());
+        config->setProperty("Phi", widget.phi->value());
+        config->setProperty("Range", widget.range->value());
+        config->setProperty("Lower", widget.lower->value());
+        config->setProperty("Upper", widget.upper->value());
+        config->setProperty("TimeCoherent", widget.timeCoherent->isChecked());
+        return config;
+    }
+private:
+    Ui_Reinhard02OperatorConfigurationWidget widget;
 };
 
 PUBLISH_OPERATOR(KisReinhard02Operator)
@@ -79,26 +77,26 @@ KisToneMappingOperatorConfigurationWidget* KisReinhard02Operator::createConfigur
 
 const KoColorSpace* KisReinhard02Operator::colorSpace() const
 {
-    return KoColorSpaceRegistry::instance()->colorSpace( KoColorSpaceRegistry::instance()->colorSpaceId( XYZAColorModelID, Float32BitsColorDepthID), "" );
+    return KoColorSpaceRegistry::instance()->colorSpace(KoColorSpaceRegistry::instance()->colorSpaceId(XYZAColorModelID, Float32BitsColorDepthID), "");
 }
 
 void KisReinhard02Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfiguration* config) const
 {
-    Q_ASSERT( *device->colorSpace() == *colorSpace() );
+    Q_ASSERT(*device->colorSpace() == *colorSpace());
     QRect r = device->exactBounds();
     dbgKrita << "Tonemaping with Reinhard02 operator on " << r;
-    
-    pfs::Array2DImpl Y( r, KoXyzTraits<float>::y_pos, device);
-    
-    pfs::Array2DImpl L (r.width(),r.height());
+
+    pfs::Array2DImpl Y(r, KoXyzTraits<float>::y_pos, device);
+
+    pfs::Array2DImpl L(r.width(), r.height());
     dbgKrita << "tmo_ashikhmin02";
     tmo_reinhard02(&Y, &L, config->getBool("Scales", false),
-                    config->getDouble("Key", 0.18),
-                    config->getDouble("Phi", 1.00),
-                    config->getDouble("Range", 8.0),
-                    config->getDouble("Lower", 1.0),
-                    config->getDouble("Upper", 43.0),
-                    config->getBool("TimeCoherent", false));
+                   config->getDouble("Key", 0.18),
+                   config->getDouble("Phi", 1.00),
+                   config->getDouble("Range", 8.0),
+                   config->getDouble("Lower", 1.0),
+                   config->getDouble("Upper", 43.0),
+                   config->getBool("TimeCoherent", false));
     dbgKrita << "Apply luminance";
     applyLuminance(device, L.device(), r);
     dbgKrita << "Done";

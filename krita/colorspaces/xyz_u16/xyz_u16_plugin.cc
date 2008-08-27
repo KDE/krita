@@ -26,28 +26,28 @@
 #include "kis_xyz_u16_colorspace.h"
 
 typedef KGenericFactory<XYZU16Plugin> XYZU16PluginFactory;
-K_EXPORT_COMPONENT_FACTORY( krita_xyz_u16_plugin, XYZU16PluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(krita_xyz_u16_plugin, XYZU16PluginFactory("krita"))
 
 
 XYZU16Plugin::XYZU16Plugin(QObject *parent, const QStringList &)
-    : QObject(parent)
+        : QObject(parent)
 {
-    
+
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
 
     KoColorProfile *xyzProfile = KoLcmsColorProfileContainer::createFromLcmsProfile(cmsCreateXYZProfile());
     f->addProfile(xyzProfile);
-    
+
 
     KoColorSpaceFactory * csf = new KisXyzU16ColorSpaceFactory();
     f->add(csf);
-    
-    KoColorSpace * colorSpaceXYZU16 = new KisXyzU16ColorSpace( KoColorSpaceRegistry::instance()->profileByName(csf->defaultProfile())->clone());
+
+    KoColorSpace * colorSpaceXYZU16 = new KisXyzU16ColorSpace(KoColorSpaceRegistry::instance()->profileByName(csf->defaultProfile())->clone());
     Q_CHECK_PTR(colorSpaceXYZU16);
-    
+
     KoHistogramProducerFactoryRegistry::instance()->add(
-            new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
-            (KoID("XYZ16HISTO", i18n("XYZ16 Histogram")), colorSpaceXYZU16) );
+        new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
+        (KoID("XYZ16HISTO", i18n("XYZ16 Histogram")), colorSpaceXYZU16));
 
 }
 

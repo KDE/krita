@@ -75,7 +75,7 @@ public:
     KisPrescaledProjection();
     virtual ~KisPrescaledProjection();
 
-    void setImage( KisImageSP image );
+    void setImage(KisImageSP image);
 
     /**
      * @return true if the prescaled projection is set to draw the
@@ -90,7 +90,7 @@ public:
      * Set the drawCheckers variable to @param drawCheckers. @see
      * drawCheckers.
      */
-    void setDrawCheckers( bool drawCheckers );
+    void setDrawCheckers(bool drawCheckers);
 
     /**
      * The pre-scaled pixmap includes the underlying checker
@@ -113,13 +113,13 @@ public:
      * translating between image pixels, document points and view
      * pixels, keeping track of zoom levels.
      */
-    void setViewConverter( KoViewConverter * viewConverter );
+    void setViewConverter(KoViewConverter * viewConverter);
 
     /**
      * Return the intersection of the widget size and the given rect
      * in image pixels converted to widget pixels.
      */
-    QRect viewRectFromImagePixels( const QRect & imageRect );
+    QRect viewRectFromImagePixels(const QRect & imageRect);
 
 
 public slots:
@@ -135,7 +135,7 @@ public slots:
      *
      * @param documentOffset the offset in widget pixels
      */
-    void documentOffsetMoved( const QPoint &documentOffset );
+    void documentOffsetMoved(const QPoint &documentOffset);
 
     /**
      * The image projection has changed, now update the canvas
@@ -143,7 +143,7 @@ public slots:
      *
      * @param rc the are to be updated in image pixels
      */
-    void updateCanvasProjection( const QRect & rc );
+    void updateCanvasProjection(const QRect & rc);
 
     /**
      * Called whenever the size of the KisImage changes
@@ -161,30 +161,30 @@ public slots:
      * preScale and draw onto the scaled projection the specified rect,
      * in canvas view pixels.
      */
-    void preScale( const QRect & rc );
+    void preScale(const QRect & rc);
 
     /**
      * Resize the prescaled image. The size is given in canvas
      * widget pixels.
      */
-    void resizePrescaledImage( const QSize & newSize );
+    void resizePrescaledImage(const QSize & newSize);
 
     /**
      * Set the current monitor profile
      */
-    void setMonitorProfile( const KoColorProfile * profile );
+    void setMonitorProfile(const KoColorProfile * profile);
 
     /**
      * Set the current node
      */
-    void setCurrentNode( const KisNodeSP node );
+    void setCurrentNode(const KisNodeSP node);
 
     /**
      * Toggle whether the selection should be displayed as a mask.
      * (The display as ants should be a toggle, too, but is done
      * elsewhere.)
      */
-    void showCurrentMask( bool showMask );
+    void showCurrentMask(bool showMask);
 
 
 
@@ -197,15 +197,15 @@ signals:
      *
      * @param rc the updated area in image pixels
      */
-    void sigPrescaledProjectionUpdated( const QRect & rc );
+    void sigPrescaledProjectionUpdated(const QRect & rc);
 
 private slots:
 
-   /**
-    * The timer has fired, and we're going to smoothly scale the
-    * entire rect that's been aggregated, in the main thread (for
-    * now).
-    */
+    /**
+     * The timer has fired, and we're going to smoothly scale the
+     * entire rect that's been aggregated, in the main thread (for
+     * now).
+     */
     void slotDoSmoothScale();
 
 private:
@@ -223,8 +223,8 @@ private:
                              bool cacheKisImageAsQImage,
                              bool showMask);
 
-    KisPrescaledProjection( const KisPrescaledProjection & );
-    KisPrescaledProjection operator=( const KisPrescaledProjection & );
+    KisPrescaledProjection(const KisPrescaledProjection &);
+    KisPrescaledProjection operator=(const KisPrescaledProjection &);
 
     /**
      * Draw the prescaled image onto the painter.
@@ -234,12 +234,12 @@ private:
      * @param isDeferredAction we're in the smoothing cycle, so go
      * directly to the blitz code
      */
-    void drawScaledImage( const QRect & rc,  QPainter & gc, bool isDeferredAction = false );
+    void drawScaledImage(const QRect & rc,  QPainter & gc, bool isDeferredAction = false);
 
     /**
      * Return the aligned rect in image pixels.
      */
-    QRect imageRectFromViewPortPixels( const QRect & viewportRect );
+    QRect imageRectFromViewPortPixels(const QRect & viewportRect);
 
     /**
      * Update the internal unscaled canvas cache from the kisimage, if
@@ -247,7 +247,7 @@ private:
      *
      * @param imageRect the rect to be updated in image pixels
      */
-    void updateUnscaledCache( const QRect & imageRect);
+    void updateUnscaledCache(const QRect & imageRect);
 
     struct Private;
     Private * const m_d;

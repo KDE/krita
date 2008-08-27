@@ -25,8 +25,7 @@ KisDynamicBrushRegistry *KisDynamicBrushRegistry::singleton = 0;
 
 KisDynamicBrushRegistry* KisDynamicBrushRegistry::instance()
 {
-    if(KisDynamicBrushRegistry::singleton == 0)
-    {
+    if (KisDynamicBrushRegistry::singleton == 0) {
         KisDynamicBrushRegistry::singleton = new KisDynamicBrushRegistry();
         KisDynamicBrushRegistry::singleton->init();
     }

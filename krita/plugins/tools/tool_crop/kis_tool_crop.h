@@ -36,8 +36,10 @@ class WdgToolCrop : public QWidget, public Ui::WdgToolCrop
 {
     Q_OBJECT
 
-    public:
-        WdgToolCrop(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgToolCrop(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
 /**
@@ -47,7 +49,8 @@ class WdgToolCrop : public QWidget, public Ui::WdgToolCrop
  *       - (when moving to Qt 4: replace rectangle with  darker, dimmer overlay layer
  *         like we have for selections right now)
  */
-class KisToolCrop : public KisTool {
+class KisToolCrop : public KisTool
+{
 
     typedef KisTool super;
     Q_OBJECT
@@ -57,28 +60,28 @@ public:
     KisToolCrop(KoCanvasBase * canvas);
     virtual ~KisToolCrop();
 
-     virtual QWidget* createOptionWidget();
+    virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
 
     virtual void mousePressEvent(KoPointerEvent *e);
     virtual void mouseMoveEvent(KoPointerEvent *e);
     virtual void mouseReleaseEvent(KoPointerEvent *e);
-    virtual void mouseDoubleClickEvent( KoPointerEvent *e );
+    virtual void mouseDoubleClickEvent(KoPointerEvent *e);
 
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
 public slots:
 
-    virtual void activate( bool );
+    virtual void activate(bool);
     virtual void deactivate();
-    
+
 private:
     QRectF boundingRect();
     QRectF borderLineRect();
     QPainterPath handlesPath();
     void paintOutlineWithHandles(QPainter& gc);
-    qint32 mouseOnHandle (const QPointF currentViewPoint);
-    void setMoveResizeCursor (qint32 handle);
+    qint32 mouseOnHandle(const QPointF currentViewPoint);
+    void setMoveResizeCursor(qint32 handle);
     void validateSelection(bool updateratio = true);
     void setOptionWidgetX(qint32 x);
     void setOptionWidgetY(qint32 y);
@@ -115,8 +118,7 @@ private:
     bool m_haveCropSelection;
     qint32 m_mouseOnHandleType;
 
-    enum handleType
-    {
+    enum handleType {
         None = 0,
         UpperLeft = 1,
         UpperRight = 2,
@@ -130,20 +132,20 @@ private:
     };
 };
 
-class KisToolCropFactory : public KoToolFactory {
+class KisToolCropFactory : public KoToolFactory
+{
 
 public:
     KisToolCropFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolCrop", i18n( "Crop" ))
-        {
-            setToolTip(i18n("Crop the image to an area"));
-            setToolType(TOOL_TYPE_TRANSFORM);
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setPriority( 10 );
-            setIcon("tool_crop");
-        }
+            : KoToolFactory(parent, "KisToolCrop", i18n("Crop")) {
+        setToolTip(i18n("Crop the image to an area"));
+        setToolType(TOOL_TYPE_TRANSFORM);
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        setPriority(10);
+        setIcon("tool_crop");
+    }
 
-    virtual ~KisToolCropFactory(){}
+    virtual ~KisToolCropFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolCrop(canvas);

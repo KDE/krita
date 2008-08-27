@@ -27,7 +27,8 @@
 class KisDoc2;
 class KisTransaction;
 
-namespace Scripting {
+namespace Scripting
+{
 
 class Image;
 
@@ -37,22 +38,28 @@ class Image;
  */
 class PaintLayer : public QObject
 {
-        Q_OBJECT
-    public:
-        explicit PaintLayer(KisPaintLayerSP layer, KisDoc2* doc = 0);
-        virtual ~PaintLayer();
+    Q_OBJECT
+public:
+    explicit PaintLayer(KisPaintLayerSP layer, KisDoc2* doc = 0);
+    virtual ~PaintLayer();
 
-    public slots:
-        QObject* paintDevice();
+public slots:
+    QObject* paintDevice();
 
-    public:
-        inline KisPaintLayerSP paintLayer() { return m_layer; }
-        inline const KisPaintLayerSP paintLayer() const { return m_layer; }
-        inline KisDoc2* doc() { return m_doc; }
-    private:
-        KisPaintLayerSP m_layer;
-        KisDoc2* m_doc;
-        KisTransaction* m_cmd;
+public:
+    inline KisPaintLayerSP paintLayer() {
+        return m_layer;
+    }
+    inline const KisPaintLayerSP paintLayer() const {
+        return m_layer;
+    }
+    inline KisDoc2* doc() {
+        return m_doc;
+    }
+private:
+    KisPaintLayerSP m_layer;
+    KisDoc2* m_doc;
+    KisTransaction* m_cmd;
 };
 
 }

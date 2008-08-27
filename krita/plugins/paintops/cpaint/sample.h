@@ -19,26 +19,47 @@
 #ifndef SAMPLE_H
 #define SAMPLE_H
 
-class Sample {
+class Sample
+{
 
 public:
 
-    Sample ();
+    Sample();
 
-    void setPressure ( int pressure ) { m_pressure = pressure; }
-    int pressure () { return static_cast<int>(m_pressure); }
+    void setPressure(int pressure) {
+        m_pressure = pressure;
+    }
+    int pressure() {
+        return static_cast<int>(m_pressure);
+    }
 
-    void setX( int cx ) { m_x = cx; }
-    int x() { return m_x; }
+    void setX(int cx) {
+        m_x = cx;
+    }
+    int x() {
+        return m_x;
+    }
 
-    void setY( int cy ) { m_y = cy; }
-    int y() { return m_y; }
+    void setY(int cy) {
+        m_y = cy;
+    }
+    int y() {
+        return m_y;
+    }
 
-    void setTiltX( int cx ) { m_tiltX = cx; }
-    int tiltX() { return static_cast<int>(m_tiltX); }
+    void setTiltX(int cx) {
+        m_tiltX = cx;
+    }
+    int tiltX() {
+        return static_cast<int>(m_tiltX);
+    }
 
-    void setTiltY( int cy ) { m_tiltY = cy; }
-    int tiltY() { return static_cast<int>(m_tiltY); }
+    void setTiltY(int cy) {
+        m_tiltY = cy;
+    }
+    int tiltY() {
+        return static_cast<int>(m_tiltY);
+    }
 
 private:
 

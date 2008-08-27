@@ -37,7 +37,7 @@
 // #include <filter/kis_filter_registry.h>
 // #include <kis_image.h>
 // #include <kis_layer.h>
-// 
+//
 // #include <kis_paint_layer.h>
 // #include <kis_pattern.h>
 // #include <kis_resourceserver.h>
@@ -54,14 +54,21 @@
 
 using namespace Scripting;
 
-Monitor* Monitor::instance() {
+Monitor* Monitor::instance()
+{
     K_GLOBAL_STATIC(Monitor, _self)
     return _self;
 }
 
 Monitor::Monitor() : QObject() {}
 Monitor::~Monitor() {}
-void Monitor::started() { emit signalExecutionStarted(); }
-void Monitor::finished() { emit signalExecutionFinished(); }
+void Monitor::started()
+{
+    emit signalExecutionStarted();
+}
+void Monitor::finished()
+{
+    emit signalExecutionFinished();
+}
 
 #include "krs_monitor.moc"

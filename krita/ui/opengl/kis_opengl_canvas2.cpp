@@ -31,7 +31,6 @@
 #include <QPaintEvent>
 #include <QPoint>
 
-#include <kis_debug.h>
 #include <kxmlguifactory.h>
 
 #include "KoToolProxy.h"
@@ -54,12 +53,11 @@ class KisOpenGLCanvas2::Private
 {
 public:
     Private(const KoViewConverter *vc)
-        : viewConverter(vc)
-        , canvas(0)
-        , toolProxy(0)
-        , previousEvent( QEvent::TabletRelease, QPoint(), QPoint(), QPointF(),
-                         QTabletEvent::NoDevice, 0, 0.0, 0, 0, 0, 0, 0, Qt::NoModifier, Q_INT64_C(932838457459459) )
-    {}
+            : viewConverter(vc)
+            , canvas(0)
+            , toolProxy(0)
+            , previousEvent(QEvent::TabletRelease, QPoint(), QPoint(), QPointF(),
+                            QTabletEvent::NoDevice, 0, 0.0, 0, 0, 0, 0, 0, Qt::NoModifier, Q_INT64_C(932838457459459)) {}
     const KoViewConverter * viewConverter;
     KisCanvas2 * canvas;
     KoToolProxy * toolProxy;
@@ -70,24 +68,24 @@ public:
 
 };
 
-KisOpenGLCanvas2::KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOpenGLImageTexturesSP imageTextures )
-    : QGLWidget( QGLFormat(QGL::SampleBuffers), parent, KisOpenGL::sharedContextWidget() )
-    , m_d( new Private(canvas->viewConverter()) )
+KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 * canvas, QWidget * parent, KisOpenGLImageTexturesSP imageTextures)
+        : QGLWidget(QGLFormat(QGL::SampleBuffers), parent, KisOpenGL::sharedContextWidget())
+        , m_d(new Private(canvas->viewConverter()))
 {
     m_d->canvas = canvas;
     m_d->toolProxy = canvas->toolProxy();
     m_d->openGLImageTextures = imageTextures;
-    
-    setAcceptDrops( true );
+
+    setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_NoSystemBackground);
     imageTextures->generateBackgroundTexture(checkImage(KisOpenGLImageTextures::BACKGROUND_TEXTURE_CHECK_SIZE));
     setAttribute(Qt::WA_InputMethodEnabled, true);
 
     if (isSharing()) {
-        dbgUI <<"Created QGLWidget with sharing";
+        dbgUI << "Created QGLWidget with sharing";
     } else {
-        dbgUI <<"Created QGLWidget with no sharing";
+        dbgUI << "Created QGLWidget with no sharing";
     }
 }
 
@@ -119,14 +117,14 @@ void KisOpenGLCanvas2::paintGL()
 
     KisImageSP img = m_d->canvas->image();
 
-    if ( !img ) return;
+    if (!img) return;
 
     // Zoom factor
     double sx, sy;
     m_d->viewConverter->zoom(&sx, &sy);
 
     // Resolution
-    double pppx,pppy;
+    double pppx, pppy;
     pppx = img->xRes();
     pppy = img->yRes();
 
@@ -147,7 +145,7 @@ void KisOpenGLCanvas2::paintGL()
 
     glScalef(checkSizeScale, checkSizeScale, 1.0);
 
-    if ( cfg.scrollCheckers() ) {
+    if (cfg.scrollCheckers()) {
         glTranslatef(static_cast<GLfloat>(m_d->documentOffset.x()) / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
                      static_cast<GLfloat>(m_d->documentOffset.y()) / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
                      0.0);
@@ -191,7 +189,7 @@ void KisOpenGLCanvas2::paintGL()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    QRectF documentRect = m_d->viewConverter->viewToDocument( QRectF( m_d->documentOffset.x(), m_d->documentOffset.y(), width(), height() ) );
+    QRectF documentRect = m_d->viewConverter->viewToDocument(QRectF(m_d->documentOffset.x(), m_d->documentOffset.y(), width(), height()));
     QRect wr = img->documentToIntPixel(documentRect);
     wr &= QRect(0, 0, img->width(), img->height());
 
@@ -205,11 +203,11 @@ void KisOpenGLCanvas2::paintGL()
     makeCurrent();
 
     for (int x = (wr.left() / m_d->openGLImageTextures->imageTextureTileWidth()) * m_d->openGLImageTextures->imageTextureTileWidth();
-         x <= wr.right();
-         x += m_d->openGLImageTextures->imageTextureTileWidth()) {
+            x <= wr.right();
+            x += m_d->openGLImageTextures->imageTextureTileWidth()) {
         for (int y = (wr.top() / m_d->openGLImageTextures->imageTextureTileHeight()) * m_d->openGLImageTextures->imageTextureTileHeight();
-             y <= wr.bottom();
-             y += m_d->openGLImageTextures->imageTextureTileHeight()) {
+                y <= wr.bottom();
+                y += m_d->openGLImageTextures->imageTextureTileHeight()) {
 
             glBindTexture(GL_TEXTURE_2D, m_d->openGLImageTextures->imageTextureTile(x, y));
 
@@ -249,12 +247,12 @@ void KisOpenGLCanvas2::paintGL()
     bool drawAnts = true;
     bool drawTools = true;
 
-    QPainter gc ( this );
+    QPainter gc(this);
 
-    drawDecorations( gc, drawAnts, drawTools,
-                     m_d->documentOffset,
-                     QRect( QPoint( 0, 0 ), QSize() ),
-                     m_d->canvas );
+    drawDecorations(gc, drawAnts, drawTools,
+                    m_d->documentOffset,
+                    QRect(QPoint(0, 0), QSize()),
+                    m_d->canvas);
 
     gc.end();
 }
@@ -263,14 +261,14 @@ void KisOpenGLCanvas2::setPixelToViewTransformation(void)
 {
     KisImageSP img = m_d->canvas->image();
 
-    if ( !img ) return;
+    if (!img) return;
 
     // Zoom factor
     double sx, sy;
     m_d->viewConverter->zoom(&sx, &sy);
 
     // Resolution
-    double pppx,pppy;
+    double pppx, pppy;
     pppx = img->xRes();
     pppy = img->yRes();
 
@@ -289,55 +287,61 @@ void KisOpenGLCanvas2::setPixelToViewTransformation(void)
     glScalef(scaleX, scaleY, 1.0);
 }
 
-void KisOpenGLCanvas2::enterEvent( QEvent* e )
+void KisOpenGLCanvas2::enterEvent(QEvent* e)
 {
     dbgRender << "Enter event ";
-    QWidget::enterEvent( e );
+    QWidget::enterEvent(e);
 }
 
-void KisOpenGLCanvas2::leaveEvent( QEvent* e )
+void KisOpenGLCanvas2::leaveEvent(QEvent* e)
 {
     dbgRender << "Leave event ";
-    if( m_d->tabletDown )
-    {
+    if (m_d->tabletDown) {
         m_d->tabletDown = false;
-        QTabletEvent* fakeEvent = new QTabletEvent( QEvent::TabletRelease, m_d->previousEvent.pos(), m_d->previousEvent.globalPos(), m_d->previousEvent.hiResGlobalPos(), m_d->previousEvent.device(), m_d->previousEvent.pointerType(), m_d->previousEvent.pressure(), m_d->previousEvent.xTilt(), m_d->previousEvent.yTilt(), m_d->previousEvent.tangentialPressure(), m_d->previousEvent.rotation(), m_d->previousEvent.z(), m_d->previousEvent.modifiers(), m_d->previousEvent.uniqueId() );
-        m_d->toolProxy->tabletEvent( fakeEvent , QPointF() ); // HACK this fake event is a work around a bug in Qt which stops sending tablet events when the tablet pen move outside the widget (and you get a nasty surprise when the cursor moves back on the widget especially if you have released your tablet as krita is still in drawing mode)
+        QTabletEvent* fakeEvent = new QTabletEvent(QEvent::TabletRelease, m_d->previousEvent.pos(), m_d->previousEvent.globalPos(), m_d->previousEvent.hiResGlobalPos(), m_d->previousEvent.device(), m_d->previousEvent.pointerType(), m_d->previousEvent.pressure(), m_d->previousEvent.xTilt(), m_d->previousEvent.yTilt(), m_d->previousEvent.tangentialPressure(), m_d->previousEvent.rotation(), m_d->previousEvent.z(), m_d->previousEvent.modifiers(), m_d->previousEvent.uniqueId());
+        m_d->toolProxy->tabletEvent(fakeEvent , QPointF());   // HACK this fake event is a work around a bug in Qt which stops sending tablet events when the tablet pen move outside the widget (and you get a nasty surprise when the cursor moves back on the widget especially if you have released your tablet as krita is still in drawing mode)
     }
-    QWidget::leaveEvent( e );
+    QWidget::leaveEvent(e);
 }
 
 
-void KisOpenGLCanvas2::mouseMoveEvent(QMouseEvent *e) {
-    m_d->toolProxy->mouseMoveEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
+void KisOpenGLCanvas2::mouseMoveEvent(QMouseEvent *e)
+{
+    m_d->toolProxy->mouseMoveEvent(e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset));
 }
 
-void KisOpenGLCanvas2::contextMenuEvent(QContextMenuEvent *e) {
-    m_d->canvas->view()->unplugActionList( "flake_tool_actions" );
-    m_d->canvas->view()->plugActionList( "flake_tool_actions",
-                                         m_d->toolProxy->popupActionList() );
-    QMenu *menu = dynamic_cast<QMenu*> (m_d->canvas->view()->factory()->container("image_popup", m_d->canvas->view()));
-    if(menu)
-        menu->exec( e->globalPos() );
+void KisOpenGLCanvas2::contextMenuEvent(QContextMenuEvent *e)
+{
+    m_d->canvas->view()->unplugActionList("flake_tool_actions");
+    m_d->canvas->view()->plugActionList("flake_tool_actions",
+                                        m_d->toolProxy->popupActionList());
+    QMenu *menu = dynamic_cast<QMenu*>(m_d->canvas->view()->factory()->container("image_popup", m_d->canvas->view()));
+    if (menu)
+        menu->exec(e->globalPos());
 }
 
-void KisOpenGLCanvas2::mousePressEvent(QMouseEvent *e) {
-    m_d->toolProxy->mousePressEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
+void KisOpenGLCanvas2::mousePressEvent(QMouseEvent *e)
+{
+    m_d->toolProxy->mousePressEvent(e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset));
 }
 
-void KisOpenGLCanvas2::mouseReleaseEvent(QMouseEvent *e) {
-    m_d->toolProxy->mouseReleaseEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
+void KisOpenGLCanvas2::mouseReleaseEvent(QMouseEvent *e)
+{
+    m_d->toolProxy->mouseReleaseEvent(e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset));
 }
 
-void KisOpenGLCanvas2::mouseDoubleClickEvent(QMouseEvent *e) {
-    m_d->toolProxy->mouseDoubleClickEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
+void KisOpenGLCanvas2::mouseDoubleClickEvent(QMouseEvent *e)
+{
+    m_d->toolProxy->mouseDoubleClickEvent(e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset));
 }
 
-void KisOpenGLCanvas2::keyPressEvent( QKeyEvent *e ) {
+void KisOpenGLCanvas2::keyPressEvent(QKeyEvent *e)
+{
     m_d->toolProxy->keyPressEvent(e);
 }
 
-void KisOpenGLCanvas2::keyReleaseEvent (QKeyEvent *e) {
+void KisOpenGLCanvas2::keyReleaseEvent(QKeyEvent *e)
+{
     m_d->toolProxy->keyReleaseEvent(e);
 }
 
@@ -351,10 +355,10 @@ void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
     m_d->toolProxy->inputMethodEvent(event);
 }
 
-void KisOpenGLCanvas2::tabletEvent( QTabletEvent *e )
+void KisOpenGLCanvas2::tabletEvent(QTabletEvent *e)
 {
-    dbgRender <<"tablet event:" << e->pressure() << e->type() << " " << e->device();
-    switch( e->type() ) {
+    dbgRender << "tablet event:" << e->pressure() << e->type() << " " << e->device();
+    switch (e->type()) {
     case QEvent::TabletPress:
         m_d->tabletDown = true;
         break;
@@ -373,22 +377,23 @@ void KisOpenGLCanvas2::tabletEvent( QTabletEvent *e )
     QPointF pos(e->x() + subpixelX + m_d->documentOffset.x(), e->y() + subpixelY + m_d->documentOffset.y());
 
     m_d->previousEvent = *e;
-    m_d->toolProxy->tabletEvent( e, m_d->viewConverter->viewToDocument( pos ) );
+    m_d->toolProxy->tabletEvent(e, m_d->viewConverter->viewToDocument(pos));
 }
 
-void KisOpenGLCanvas2::wheelEvent( QWheelEvent *e )
+void KisOpenGLCanvas2::wheelEvent(QWheelEvent *e)
 {
-    m_d->toolProxy->wheelEvent( e, m_d->viewConverter->viewToDocument( e->pos() + m_d->documentOffset ) );
+    m_d->toolProxy->wheelEvent(e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset));
 }
 
-bool KisOpenGLCanvas2::event (QEvent *event) {
+bool KisOpenGLCanvas2::event(QEvent *event)
+{
     // we should forward tabs, and let tools decide if they should be used or ignored.
     // if the tool ignores it, it will move focus.
-    if(event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
-        QKeyEvent *keyEvent = static_cast<QKeyEvent*> (event);
-        if(keyEvent->key() == Qt::Key_Backtab)
+    if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        if (keyEvent->key() == Qt::Key_Backtab)
             return true;
-        if(keyEvent->key() == Qt::Key_Tab && event->type() == QEvent::KeyPress) {
+        if (keyEvent->key() == Qt::Key_Tab && event->type() == QEvent::KeyPress) {
             // we loose key-release events, which I think is not an issue.
             keyPressEvent(keyEvent);
             return true;
@@ -397,11 +402,12 @@ bool KisOpenGLCanvas2::event (QEvent *event) {
     return QWidget::event(event);
 }
 
-KoToolProxy * KisOpenGLCanvas2::toolProxy() {
+KoToolProxy * KisOpenGLCanvas2::toolProxy()
+{
     return m_d->toolProxy;
 }
 
-void KisOpenGLCanvas2::documentOffsetMoved( const QPoint & pt )
+void KisOpenGLCanvas2::documentOffsetMoved(const QPoint & pt)
 {
     m_d->documentOffset = pt;
     updateGL();

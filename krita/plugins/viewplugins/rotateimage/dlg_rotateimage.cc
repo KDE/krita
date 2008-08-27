@@ -24,13 +24,13 @@
 
 #include <klocale.h>
 #include <kis_debug.h>
-DlgRotateImage::DlgRotateImage( QWidget *  parent,
-                const char * name)
-    : super (parent)
+DlgRotateImage::DlgRotateImage(QWidget *  parent,
+                               const char * name)
+        : super(parent)
 {
-    setCaption( i18n("Rotate Image") );
-    setButtons(  Ok | Cancel);
-    setDefaultButton( Ok );
+    setCaption(i18n("Rotate Image"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
     setObjectName(name);
 
     m_lock = false;
@@ -43,9 +43,9 @@ DlgRotateImage::DlgRotateImage( QWidget *  parent,
     resize(m_page->sizeHint());
 
     connect(this, SIGNAL(okClicked()),
-        this, SLOT(okClicked()));
-        connect( m_page->doubleCustom, SIGNAL( valueChanged ( int ) ),
-                 this, SLOT( slotAngleValueChanged( int ) ) );
+            this, SLOT(okClicked()));
+    connect(m_page->doubleCustom, SIGNAL(valueChanged(int)),
+            this, SLOT(slotAngleValueChanged(int)));
 
 }
 
@@ -54,7 +54,7 @@ DlgRotateImage::~DlgRotateImage()
     delete m_page;
 }
 
-void DlgRotateImage::slotAngleValueChanged( int )
+void DlgRotateImage::slotAngleValueChanged(int)
 {
     m_page->radioCustom->setChecked(true);
 }
@@ -63,14 +63,11 @@ void DlgRotateImage::setAngle(quint32 angle)
 {
     if (angle == 90) {
         m_page->radio90->setChecked(true);
-    }
-    else if (angle == 180) {
+    } else if (angle == 180) {
         m_page->radio180->setChecked(true);
-    }
-    else if (angle == 270) {
+    } else if (angle == 270) {
         m_page->radio270->setChecked(true);
-    }
-    else {
+    } else {
         m_page->radioCustom->setChecked(true);
         m_page->doubleCustom->setValue(angle);
     }
@@ -87,30 +84,25 @@ qint32 DlgRotateImage::angle()
     double angle = 0;
     if (m_page->radio90->isChecked()) {
         angle = 90;
-    }
-    else if (m_page->radio180->isChecked()) {
+    } else if (m_page->radio180->isChecked()) {
         angle = 180;
-    }
-    else if (m_page->radio270->isChecked()) {
+    } else if (m_page->radio270->isChecked()) {
         angle = 270;
-    }
-    else {
+    } else {
         angle = qRound(m_page->doubleCustom->value());
     }
     if (m_page->radioCW->isChecked()) {
         return qint32(angle);
-    }
-    else {
+    } else {
         return qint32(-angle);
     }
 }
 
-void DlgRotateImage::setDirection (enumRotationDirection direction)
+void DlgRotateImage::setDirection(enumRotationDirection direction)
 {
     if (direction == CLOCKWISE) {
         m_page->radioCW->setChecked(true);
-    }
-    else if (direction== COUNTERCLOCKWISE) {
+    } else if (direction == COUNTERCLOCKWISE) {
         m_page->radioCCW->setChecked(true);
     }
 }
@@ -119,8 +111,7 @@ enumRotationDirection DlgRotateImage::direction()
 {
     if (m_page->radioCCW->isChecked()) {
         return COUNTERCLOCKWISE;
-    }
-    else {
+    } else {
         return CLOCKWISE;
     }
 }

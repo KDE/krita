@@ -25,7 +25,7 @@
 
 void KisCropVisitorTest::testCreation()
 {
-    QRect rc(0,0,100,100);
+    QRect rc(0, 0, 100, 100);
     KisCropVisitor test(rc, true);
 }
 

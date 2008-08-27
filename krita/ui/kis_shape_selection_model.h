@@ -27,7 +27,8 @@ class KisShapeSelection;
 /**
  *
  */
-class KisShapeSelectionModel: public KoShapeContainerModel {
+class KisShapeSelectionModel: public KoShapeContainerModel
+{
 public:
     KisShapeSelectionModel(KisImageSP image, KisSelectionSP selection, KisShapeSelection* shapeSelection);
     ~KisShapeSelectionModel();
@@ -41,7 +42,7 @@ public:
     int count() const;
     QList<KoShape*> iterator() const;
 
-    void containerChanged(KoShapeContainer * );
+    void containerChanged(KoShapeContainer *);
     void childChanged(KoShape * child, KoShape::ChangeType type);
     bool isChildLocked(const KoShape *child) const;
 

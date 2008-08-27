@@ -41,11 +41,11 @@
 
 
 typedef KGenericFactory<ToolPolyline> ToolPolylineFactory;
-K_EXPORT_COMPONENT_FACTORY( kritatoolpolyline, ToolPolylineFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritatoolpolyline, ToolPolylineFactory("krita"))
 
 
 ToolPolyline::ToolPolyline(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     setComponentData(ToolPolylineFactory::componentData());
 

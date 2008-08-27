@@ -22,7 +22,6 @@
 #include <QString>
 
 #include <kaction.h>
-#include <kis_debug.h>
 #include <klocale.h>
 #include <kparts/plugin.h>
 #include <kservice.h>
@@ -44,22 +43,20 @@ KisFilterRegistry::KisFilterRegistry()
     KisFilterRegistry::m_singleton = this;
 
     KService::List  offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/Filter"),
-                                                         QString::fromLatin1("(Type == 'Service') and "
-                                                                             "([X-Krita-Version] == 3)"));
+                             QString::fromLatin1("(Type == 'Service') and "
+                                                 "([X-Krita-Version] == 3)"));
 
     KService::List::ConstIterator iter;
 
-    for(iter = offers.begin(); iter != offers.end(); ++iter)
-    {
+    for (iter = offers.begin(); iter != offers.end(); ++iter) {
         KService::Ptr service = *iter;
         int errCode = 0;
         KParts::Plugin* plugin =
-             KService::createInstance<KParts::Plugin> ( service, this, QStringList(), &errCode);
-        if ( !plugin ) {
-            dbgPlugins <<"found plugin" << service->property("Name").toString() <<"," << errCode <<"";
-            if( errCode == KLibLoader::ErrNoLibrary)
-            {
-                kWarning(41006) <<" Error loading plugin was : ErrNoLibrary" << KLibLoader::self()->lastErrorMessage();
+            KService::createInstance<KParts::Plugin> (service, this, QStringList(), &errCode);
+        if (!plugin) {
+            dbgPlugins << "found plugin" << service->property("Name").toString() << "," << errCode << "";
+            if (errCode == KLibLoader::ErrNoLibrary) {
+                kWarning(41006) << " Error loading plugin was : ErrNoLibrary" << KLibLoader::self()->lastErrorMessage();
             }
         }
 
@@ -72,8 +69,7 @@ KisFilterRegistry::~KisFilterRegistry()
 
 KisFilterRegistry* KisFilterRegistry::instance()
 {
-    if(KisFilterRegistry::m_singleton == 0)
-    {
+    if (KisFilterRegistry::m_singleton == 0) {
         KisFilterRegistry::m_singleton = new KisFilterRegistry();
     }
     return KisFilterRegistry::m_singleton;

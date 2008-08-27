@@ -37,17 +37,18 @@ class QListWidgetItem;
  * and has a popdown button that shows a settings widget.
  *
  */
-class KRITAUI_EXPORT KisPaintOpOptionsWidget : public QWidget {
+class KRITAUI_EXPORT KisPaintOpOptionsWidget : public QWidget
+{
 
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
-    KisPaintOpOptionsWidget( QWidget * parent = 0 );
+    KisPaintOpOptionsWidget(QWidget * parent = 0);
 
     ~KisPaintOpOptionsWidget();
 
-    void addPaintOpOption( KisPaintOpOption * option );
+    void addPaintOpOption(KisPaintOpOption * option);
 
 private slots:
 

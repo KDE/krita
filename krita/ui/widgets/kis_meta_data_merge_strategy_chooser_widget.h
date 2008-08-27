@@ -22,35 +22,37 @@
 
 #include <QWidget>
 
-namespace KisMetaData {
-    class MergeStrategy;
+namespace KisMetaData
+{
+class MergeStrategy;
 }
 
 /**
  * This widget allows to select a meta data merge strategy.
  */
-class KisMetaDataMergeStrategyChooserWidget : public QWidget {
-    public:
-        /**
-         * Creates a widget to select a merge strategy.
-         */
-        KisMetaDataMergeStrategyChooserWidget(QWidget* parent);
-        ~KisMetaDataMergeStrategyChooserWidget();
-    public:
-        const KisMetaData::MergeStrategy* currentStrategy();
-    public:
-        /**
-         * Show a dialog which embed that widget, and have an Ok and Cancel button.
-         * @return 0 if no merge strategy was selected, or the selected merge strategy
-         */
-        static const KisMetaData::MergeStrategy* showDialog(QWidget* parent);
-    private slots:
-        void setCurrentDescription(int index);
-    private:
-        const KisMetaData::MergeStrategy* mergeStrategy(int index);
-    private:
-        struct Private;
-        Private* const d;
+class KisMetaDataMergeStrategyChooserWidget : public QWidget
+{
+public:
+    /**
+     * Creates a widget to select a merge strategy.
+     */
+    KisMetaDataMergeStrategyChooserWidget(QWidget* parent);
+    ~KisMetaDataMergeStrategyChooserWidget();
+public:
+    const KisMetaData::MergeStrategy* currentStrategy();
+public:
+    /**
+     * Show a dialog which embed that widget, and have an Ok and Cancel button.
+     * @return 0 if no merge strategy was selected, or the selected merge strategy
+     */
+    static const KisMetaData::MergeStrategy* showDialog(QWidget* parent);
+private slots:
+    void setCurrentDescription(int index);
+private:
+    const KisMetaData::MergeStrategy* mergeStrategy(int index);
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

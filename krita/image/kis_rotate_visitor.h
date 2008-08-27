@@ -24,12 +24,13 @@
 class KisPaintDevice;
 class KoUpdater;
 
-class KRITAIMAGE_EXPORT KisRotateVisitor {
+class KRITAIMAGE_EXPORT KisRotateVisitor
+{
 
     /* Structs for the image rescaling routine */
 
 public:
-    KisRotateVisitor( KoUpdater * updater );
+    KisRotateVisitor(KoUpdater * updater);
     ~KisRotateVisitor();
 
     void visitKisPaintDevice(KisPaintDevice* dev);
@@ -49,7 +50,7 @@ public:
 
 private:
 
-    void rotate( double angle, QPointF center, KoUpdater *progress);
+    void rotate(double angle, QPointF center, KoUpdater *progress);
 
     KisPaintDeviceSP m_dev;
 

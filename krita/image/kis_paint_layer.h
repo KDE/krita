@@ -33,7 +33,8 @@ class KoColorSpace;
  * The transparency mask has two rendering forms: as a selection mask
  * and by changing the transparency of the paint layer's pixels.
  */
-class KRITAIMAGE_EXPORT KisPaintLayer : public KisLayer, public KisIndirectPaintingSupport {
+class KRITAIMAGE_EXPORT KisPaintLayer : public KisLayer, public KisIndirectPaintingSupport
+{
 
     Q_OBJECT
 
@@ -44,12 +45,11 @@ public:
     KisPaintLayer(const KisPaintLayer& rhs);
     virtual ~KisPaintLayer();
 
-    KisNodeSP clone() const
-        {
-            return KisNodeSP(new KisPaintLayer(*this));
-        }
+    KisNodeSP clone() const {
+        return KisNodeSP(new KisPaintLayer(*this));
+    }
 
-    bool allowAsChild( KisNodeSP ) const;
+    bool allowAsChild(KisNodeSP) const;
 
     const KoColorSpace * colorSpace() const;
 
@@ -110,7 +110,9 @@ public:
 public slots:
 
     // KisIndirectPaintingSupport
-    KisLayer* layer() { return this; }
+    KisLayer* layer() {
+        return this;
+    }
 
 private slots:
     void slotColorSpaceChanged();

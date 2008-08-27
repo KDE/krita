@@ -32,13 +32,13 @@ typedef KGenericFactory<CPaintBrush> CPaintBrushFactory;
 K_EXPORT_COMPONENT_FACTORY(kritacpaintbrush, CPaintBrushFactory("krita"))
 
 CPaintBrush::CPaintBrush(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     setComponentData(CPaintBrushFactory::componentData());
 
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    if ( r )
-        r->add ( new KisCPaintOpFactory );
+    if (r)
+        r->add(new KisCPaintOpFactory);
 }
 
 CPaintBrush::~CPaintBrush()

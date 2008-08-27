@@ -22,7 +22,8 @@
 #include <QVector>
 #include "bristle.h"
 
-class BrushShape{
+class BrushShape
+{
 
 public:
     BrushShape();
@@ -41,7 +42,7 @@ private:
     int m_width;
     int m_height;
 
-    int	m_radius;
+    int m_radius;
     float m_sigma;
 
     QVector<Bristle> m_bristles;

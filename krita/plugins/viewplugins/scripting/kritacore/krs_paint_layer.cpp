@@ -30,9 +30,9 @@
 using namespace Scripting;
 
 PaintLayer::PaintLayer(KisPaintLayerSP layer, KisDoc2* doc)
-    : m_layer(layer)
-    , m_doc(doc)
-    , m_cmd(0)
+        : m_layer(layer)
+        , m_doc(doc)
+        , m_cmd(0)
 {
     setObjectName("KritaLayer");
 }

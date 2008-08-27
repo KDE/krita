@@ -30,18 +30,18 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include <kis_debug.h>
-DlgSeparate::DlgSeparate( const QString & imageCS,
-                          const QString & layerCS,
-                          QWidget *  parent,
-                          const char * name)
-    : super (parent),
-      m_imageCS(imageCS),
-      m_layerCS(layerCS)
+DlgSeparate::DlgSeparate(const QString & imageCS,
+                         const QString & layerCS,
+                         QWidget *  parent,
+                         const char * name)
+        : super(parent),
+        m_imageCS(imageCS),
+        m_layerCS(layerCS)
 {
     setObjectName(name);
-    setCaption( i18n("Separate Image") );
-    setButtons(  Ok | Cancel );
-    setDefaultButton( Ok );
+    setCaption(i18n("Separate Image"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
 
     m_page = new WdgSeparations(this);
     Q_CHECK_PTR(m_page);
@@ -54,13 +54,14 @@ DlgSeparate::DlgSeparate( const QString & imageCS,
     connect(m_page->chkColors, SIGNAL(toggled(bool)), m_page->chkDownscale, SLOT(setDisabled(bool)));
 
     connect(this, SIGNAL(okClicked()),
-        this, SLOT(okClicked()));
+            this, SLOT(okClicked()));
 }
 
 DlgSeparate::~DlgSeparate()
 {
     delete m_page;
-}enumSepAlphaOptions DlgSeparate::getAlphaOptions()
+}
+enumSepAlphaOptions DlgSeparate::getAlphaOptions()
 {
     return (enumSepAlphaOptions)m_page->grpAlpha->selectedId();
 }
@@ -97,12 +98,12 @@ void DlgSeparate::slotSetColorSpaceLabel(int buttonid)
 {
     if (buttonid == 0) {
         m_page->lblColormodel->setText(m_layerCS);
-    }
-    else {
+    } else {
         m_page->lblColormodel->setText(m_imageCS);
     }
 }
-void DlgSeparate::enableDownscale(bool enable) {
+void DlgSeparate::enableDownscale(bool enable)
+{
     m_page->chkDownscale->setEnabled(enable);
 }
 

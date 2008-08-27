@@ -27,7 +27,7 @@
 void KisFilterConfigurationTest::testCreation()
 {
     KisFilterConfiguration * kfc = new KisFilterConfiguration("test", 1);
-    QVERIFY2( kfc != 0,  "Could not create test filter configuration");
+    QVERIFY2(kfc != 0,  "Could not create test filter configuration");
     QCOMPARE(kfc->version(), 1);
     QCOMPARE(kfc->name(), QString("test"));
 
@@ -42,7 +42,7 @@ void KisFilterConfigurationTest::testRoundTrip()
     QString s = kfc->toLegacyXML();
     delete kfc;
     kfc = new KisFilterConfiguration("test2", 2);
-    kfc->fromLegacyXML( s );
+    kfc->fromLegacyXML(s);
     QCOMPARE(kfc->version(), 1);
     QCOMPARE(kfc->name(), QString("test"));
     delete kfc;

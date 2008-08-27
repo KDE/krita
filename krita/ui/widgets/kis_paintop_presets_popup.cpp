@@ -44,18 +44,18 @@ public:
 
 };
 
-KisPaintOpPresetsPopup::KisPaintOpPresetsPopup( QWidget * parent )
-    : QWidget( parent )
-    , m_d(new Private())
+KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(QWidget * parent)
+        : QWidget(parent)
+        , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsPopup");
-    KConfigGroup group( KGlobal::config(), "GUI" );
+    KConfigGroup group(KGlobal::config(), "GUI");
     m_d->smallFont  = KGlobalSettings::generalFont();
     double pointSize = group.readEntry("palettefontsize", m_d->smallFont.pointSize() * 0.75);
     pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
     m_d->smallFont.setPointSizeF(pointSize);
     setFont(m_d->smallFont);
-    m_d->uiWdgPaintOpPresets.setupUi( this );
+    m_d->uiWdgPaintOpPresets.setupUi(this);
 
     m_d->layout = new QGridLayout(m_d->uiWdgPaintOpPresets.frmOptionWidgetContainer);
     m_d->settingsWidget = 0;
@@ -67,10 +67,10 @@ KisPaintOpPresetsPopup::~KisPaintOpPresetsPopup()
     delete m_d;
 }
 
-void KisPaintOpPresetsPopup::setPaintOpSettingsWidget( QWidget * widget )
+void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
 {
     if (m_d->settingsWidget) {
-        m_d->layout->removeWidget( m_d->settingsWidget );
+        m_d->layout->removeWidget(m_d->settingsWidget);
         m_d->settingsWidget->hide();
         m_d->uiWdgPaintOpPresets.frmOptionWidgetContainer->updateGeometry();
     }
@@ -79,7 +79,7 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget( QWidget * widget )
     widget->setFont(m_d->smallFont);
 
     m_d->settingsWidget = widget;
-    m_d->layout->addWidget( widget );
+    m_d->layout->addWidget(widget);
     updateGeometry();
     m_d->layout->update();
     widget->show();

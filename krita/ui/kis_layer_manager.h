@@ -44,7 +44,8 @@ class KisFilterConfiguration;
  * adding, removing, editing. It also keeps track of the active layer
  * for this view.
  */
-class KRITAUI_EXPORT KisLayerManager : public QObject {
+class KRITAUI_EXPORT KisLayerManager : public QObject
+{
 
     Q_OBJECT
 
@@ -65,7 +66,7 @@ signals:
 
     /// XXX: Move this to kisview or to kisresourceprovider? (BSAR)
     void currentColorSpaceChanged(const KoColorSpace * cs);
-    void sigLayerActivated( KisLayerSP layer );
+    void sigLayerActivated(KisLayerSP layer);
 
 public slots:
 
@@ -91,8 +92,8 @@ public slots:
     void rotateLayerRight90();
     void mirrorLayerX();
     void mirrorLayerY();
-    void scaleLayer( double sx, double sy, KisFilterStrategy *filterStrategy );
-    void rotateLayer( double radians );
+    void scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy);
+    void rotateLayer(double radians);
     void shearLayer(double angleX, double angleY)        ;
     void flattenImage();
     void mergeLayer();
@@ -107,10 +108,10 @@ public slots:
     void addGroupLayer(KisNodeSP parent, KisNodeSP above);
 
     void addCloneLayer();
-    void addCloneLayer( KisNodeSP parent, KisNodeSP above );
+    void addCloneLayer(KisNodeSP parent, KisNodeSP above);
 
     void addShapeLayer();
-    void addShapeLayer( KisNodeSP parent, KisNodeSP above );
+    void addShapeLayer(KisNodeSP parent, KisNodeSP above);
 
     void addAdjustmentLayer();
     void addAdjustmentLayer(KisNodeSP parent, KisNodeSP above);
@@ -124,7 +125,7 @@ private:
 
     friend class KisNodeManager;
 
-    void activateLayer( KisLayerSP layer );
+    void activateLayer(KisLayerSP layer);
 
 
 private:

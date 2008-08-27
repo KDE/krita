@@ -32,36 +32,33 @@
 #include "tmo_ashikhmin02.h"
 #include "ui_ashikhmin02_configuration_widget.h"
 
-class KisAshikhmin02OperatorConfigurationWidget : public KisToneMappingOperatorConfigurationWidget{
-    public:
-        KisAshikhmin02OperatorConfigurationWidget(QWidget* wdg) : KisToneMappingOperatorConfigurationWidget(wdg)
-        {
-            widget.setupUi(this);
+class KisAshikhmin02OperatorConfigurationWidget : public KisToneMappingOperatorConfigurationWidget
+{
+public:
+    KisAshikhmin02OperatorConfigurationWidget(QWidget* wdg) : KisToneMappingOperatorConfigurationWidget(wdg) {
+        widget.setupUi(this);
+    }
+    virtual void setConfiguration(KisPropertiesConfiguration* config) {
+        widget.simple->setChecked(config->getBool("Simple", false));
+        widget.localContrast->setValue(config->getDouble("LocalContrastThreshold", 0.5));
+        if (config->getInt("Equation", 2) == 2) {
+            widget.equation->setCurrentIndex(0);
+        } else {
+            widget.equation->setCurrentIndex(1);
         }
-        virtual void setConfiguration(KisPropertiesConfiguration* config)
-        {
-            widget.simple->setChecked(config->getBool("Simple", false));
-            widget.localContrast->setValue(config->getDouble("LocalContrastThreshold", 0.5));
-            if(config->getInt("Equation", 2) == 2)
-            {
-                widget.equation->setCurrentIndex(0);
-            } else {
-                widget.equation->setCurrentIndex(1);
-            }
-        }
-        virtual KisPropertiesConfiguration* configuration() const
-        {
-            KisPropertiesConfiguration* config = new KisPropertiesConfiguration();
-            config->setProperty("Simple", widget.simple->isChecked());
-            config->setProperty("LocalContrastThreshold", widget.localContrast->value());
-            if(widget.equation->currentIndex() == 0)
-                config->setProperty("Equation", 2);
-            else
-                config->setProperty("Equation", 4);
-            return config;
-        }
-    private:
-        Ui_Ashikhmin02OperatorConfigurationWidget widget;
+    }
+    virtual KisPropertiesConfiguration* configuration() const {
+        KisPropertiesConfiguration* config = new KisPropertiesConfiguration();
+        config->setProperty("Simple", widget.simple->isChecked());
+        config->setProperty("LocalContrastThreshold", widget.localContrast->value());
+        if (widget.equation->currentIndex() == 0)
+            config->setProperty("Equation", 2);
+        else
+            config->setProperty("Equation", 4);
+        return config;
+    }
+private:
+    Ui_Ashikhmin02OperatorConfigurationWidget widget;
 };
 
 PUBLISH_OPERATOR(KisAshikhmin02Operator);
@@ -77,7 +74,7 @@ KisToneMappingOperatorConfigurationWidget* KisAshikhmin02Operator::createConfigu
 
 KoColorSpace* KisAshikhmin02Operator::colorSpace() const
 {
-    return KoColorSpaceRegistry::instance()->colorSpace( KoColorSpaceRegistry::instance()->colorSpaceId( XYZAColorModelID, Float32BitsColorDepthID), "" );
+    return KoColorSpaceRegistry::instance()->colorSpace(KoColorSpaceRegistry::instance()->colorSpaceId(XYZAColorModelID, Float32BitsColorDepthID), "");
 }
 
 void KisAshikhmin02Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfiguration* config) const
@@ -87,8 +84,8 @@ void KisAshikhmin02Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfi
     bool simple = config->getBool("Simple", false);
     double lC = config->getDouble("LocalContrastThreshold", 0.5);
     int eqn = config->getInt("Equation", 2);
-    if(eqn != 2 or eqn !=4) eqn = 2;
-    
+    if (eqn != 2 or eqn != 4) eqn = 2;
+
     // Compute luminance
     dbgKrita << "Compute luminance";
     double avLum = 0.0;
@@ -96,23 +93,22 @@ void KisAshikhmin02Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfi
     double minLum = 0.0f;
     {
         KisRectIterator itR = device->createRectIterator(r.x(), r.y(), r.width(), r.height());
-        while(not itR.isDone())
-        {
+        while (not itR.isDone()) {
             KoXyzTraits<float>::Pixel* data = reinterpret_cast< KoXyzTraits<float>::Pixel* >(itR.rawData());
-            avLum += log( data->Y + 1e-4 );
-            maxLum = ( data->Y > maxLum ) ? data->Y : maxLum ;
-            minLum = ( data->Y < minLum ) ? data->Y : minLum ;
+            avLum += log(data->Y + 1e-4);
+            maxLum = (data->Y > maxLum) ? data->Y : maxLum ;
+            minLum = (data->Y < minLum) ? data->Y : minLum ;
             ++itR;
         }
     }
-    avLum =exp( avLum/ (r.width() * r.height()));
-    
-    pfs::Array2DImpl Y( r, KoXyzTraits<float>::y_pos, device);
-    
-    pfs::Array2DImpl L (r.width(),r.height());
+    avLum = exp(avLum / (r.width() * r.height()));
+
+    pfs::Array2DImpl Y(r, KoXyzTraits<float>::y_pos, device);
+
+    pfs::Array2DImpl L(r.width(), r.height());
     dbgKrita << "tmo_ashikhmin02";
-   tmo_ashikhmin02(&Y, &L, maxLum, minLum, avLum, simple, lC, eqn);
-    
+    tmo_ashikhmin02(&Y, &L, maxLum, minLum, avLum, simple, lC, eqn);
+
     dbgKrita << "Apply luminance";
     applyLuminance(device, L.device(), r);
     dbgKrita << "Finished";

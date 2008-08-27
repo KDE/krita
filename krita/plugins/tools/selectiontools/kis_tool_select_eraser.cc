@@ -43,7 +43,7 @@
 
 KisToolSelectEraser::KisToolSelectEraser(KoCanvasBase *canvas)
         : super(canvas, KisCursor::load("tool_eraser_selection_cursor.png", 5, 5),
-                i18n( "Selection Eraser" ))
+                i18n("Selection Eraser"))
 {
     setObjectName("tool_select_eraser");
     m_optWidget = 0;
@@ -54,9 +54,9 @@ KisToolSelectEraser::~KisToolSelectEraser()
 {
 }
 
-void KisToolSelectEraser::activate( bool tmp )
+void KisToolSelectEraser::activate(bool tmp)
 {
-    super::activate( tmp );
+    super::activate(tmp);
 
     if (!m_optWidget)
         return;
@@ -98,7 +98,8 @@ void KisToolSelectEraser::initPaint(KoPointerEvent */*e*/)
 #endif
 }
 
-void KisToolSelectEraser::endPaint() {
+void KisToolSelectEraser::endPaint()
+{
     super::endPaint();
 }
 

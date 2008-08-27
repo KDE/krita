@@ -31,7 +31,7 @@ struct KisConvolutionKernel::Private {
     qint32 * data;
 };
 
-KisConvolutionKernel::KisConvolutionKernel( quint32 _width, quint32 _height, qint32 _offset, qint32 _factor) : d(new Private)
+KisConvolutionKernel::KisConvolutionKernel(quint32 _width, quint32 _height, qint32 _offset, qint32 _factor) : d(new Private)
 {
     d->width = _width;
     d->height = _height;
@@ -78,14 +78,13 @@ const qint32* KisConvolutionKernel::data() const
 
 KisConvolutionKernelSP KisConvolutionKernel::fromQImage(const QImage& img)
 {
-    KisConvolutionKernelSP k = new KisConvolutionKernel( img.width(), img.height(), 0, 0);
+    KisConvolutionKernelSP k = new KisConvolutionKernel(img.width(), img.height(), 0, 0);
     uint count = k->width() * k->height();
     qint32* itData = k->data();
     const quint8* itImg = img.bits();
     qint32 factor = 0;
-    for(uint i = 0; i < count; ++i , ++itData, itImg+=4)
-    {
-        *itData = 255 - ( *itImg + *(itImg+1) + *(itImg+2) ) / 3;
+    for (uint i = 0; i < count; ++i , ++itData, itImg += 4) {
+        *itData = 255 - (*itImg + *(itImg + 1) + *(itImg + 2)) / 3;
         factor += *itData;
     }
     k->d->factor = factor;
@@ -96,26 +95,24 @@ KisConvolutionKernelSP KisConvolutionKernel::kernelFromMaskGenerator(KisMaskGene
 {
     Q_UNUSED(angle);
 
-    qint32 width = (int)( kmg->width() + 0.5 );
-    qint32 height = (int)( kmg->height() + 0.5 );
+    qint32 width = (int)(kmg->width() + 0.5);
+    qint32 height = (int)(kmg->height() + 0.5);
 
-    KisConvolutionKernelSP k = new KisConvolutionKernel( width, height, 0, 0);
+    KisConvolutionKernelSP k = new KisConvolutionKernel(width, height, 0, 0);
     double cosa = 1.0;//cos(angle);
     double sina = 0.0;//sin(angle);
     double xc = 0.5 * width;
     double yc = 0.5 * height;
     qint32 factor = 0;
     qint32* itData = k->data();
-    for(int y_it = 0; y_it < height; ++y_it)
-    {
-        for(int x_it = 0; x_it < width; ++x_it)
-        {
-            double x_ = ( x_it - xc);
-            double y_ = ( y_it - yc);
+    for (int y_it = 0; y_it < height; ++y_it) {
+        for (int x_it = 0; x_it < width; ++x_it) {
+            double x_ = (x_it - xc);
+            double y_ = (y_it - yc);
             double x = cosa * x_ - sina * y_;
             double y = sina * x_ + cosa * y_;
 //             dbgKrita << x << " " << y << " " << x_ << " " << y_ << " " << kmg->interpolatedValueAt( x,y);
-            *itData = 255 - kmg->interpolatedValueAt( x,y);
+            *itData = 255 - kmg->interpolatedValueAt(x, y);
             factor += *itData;
             ++itData;
         }
@@ -128,40 +125,37 @@ KisConvolutionKernelSP KisConvolutionKernel::kernelFromMaskGenerator(KisMaskGene
 
 
 #if 0
-    double xr = (x /*- m_xcenter*/);
-    double yr = (y /*- m_ycenter*/);
-    double n = norme( xr * m_xcoef, yr * m_ycoef);
-    if( n > 1 )
-    {
-        return 255;
-    }
-    else
-    {
-        double normeFade = norme( xr * m_xfadecoef, yr * m_yfadecoef );
-        if( normeFade > 1)
-        {
-            double xle, yle;
-            // xle stands for x-coordinate limit exterior
-            // yle stands for y-coordinate limit exterior
-            // we are computing the coordinate on the external ellipse in order to compute
-            // the fade value
-            if( xr == 0 )
-            {
-                xle = 0;
-                yle = yr > 0 ? 1/m_ycoef : -1/m_ycoef;
-            } else {
-                double c = yr / (double)xr;
-                xle = sqrt(1 / norme( m_xcoef, c * m_ycoef ));
-                xle = xr > 0 ? xle : -xle;
-                yle = xle * c;
-            }
-            // On the internal limit of the fade area, normeFade is equal to 1
-            double normeFadeLimitE = norme( xle * m_xfadecoef, yle * m_yfadecoef );
-            return (uchar)(255 * ( normeFade - 1 ) / ( normeFadeLimitE - 1 ));
+double xr = (x /*- m_xcenter*/);
+double yr = (y /*- m_ycenter*/);
+double n = norme(xr * m_xcoef, yr * m_ycoef);
+if (n > 1)
+{
+    return 255;
+} else
+{
+    double normeFade = norme(xr * m_xfadecoef, yr * m_yfadecoef);
+    if (normeFade > 1) {
+        double xle, yle;
+        // xle stands for x-coordinate limit exterior
+        // yle stands for y-coordinate limit exterior
+        // we are computing the coordinate on the external ellipse in order to compute
+        // the fade value
+        if (xr == 0) {
+            xle = 0;
+            yle = yr > 0 ? 1 / m_ycoef : -1 / m_ycoef;
         } else {
-            return 0;
+            double c = yr / (double)xr;
+            xle = sqrt(1 / norme(m_xcoef, c * m_ycoef));
+            xle = xr > 0 ? xle : -xle;
+            yle = xle * c;
         }
+        // On the internal limit of the fade area, normeFade is equal to 1
+        double normeFadeLimitE = norme(xle * m_xfadecoef, yle * m_yfadecoef);
+        return (uchar)(255 * (normeFade - 1) / (normeFadeLimitE - 1));
+    } else {
+        return 0;
     }
+}
 #endif
 
 #include "kis_debug.h"
@@ -170,15 +164,13 @@ QDebug operator<<(QDebug dbg, const KisConvolutionKernel &c)
 {
     int pos = 0;
     dbg.nospace() << "[" << c.width() << "," << c.height() << "]{";
-    for( unsigned int i = 0; i < c.width(); ++i)
-    {
+    for (unsigned int i = 0; i < c.width(); ++i) {
         dbg.nospace() << " {";
-        for(unsigned int j = 0; j < c.height(); ++j, ++pos)
-        {
+        for (unsigned int j = 0; j < c.height(); ++j, ++pos) {
             dbg.nospace() << c.data()[pos] << " ";
         }
         dbg.nospace() << " }";
     }
-    dbg.nospace() << c.factor()<< " " << c.offset() <<  " }";
+    dbg.nospace() << c.factor() << " " << c.offset() <<  " }";
     return dbg.space();
 }

@@ -23,13 +23,13 @@
 #include "kis_tile_global.h"
 #include "kis_tilediterator.h"
 
-KisTiledRectIterator::KisTiledRectIterator( KisTiledDataManager *ndevice,  qint32 nleft,
-                        qint32 ntop, qint32 nw, qint32 nh, bool writable) :
-    KisTiledIterator(ndevice),
-    m_left(nleft),
-    m_top(ntop),
-    m_w(nw),
-    m_h(nh)
+KisTiledRectIterator::KisTiledRectIterator(KisTiledDataManager *ndevice,  qint32 nleft,
+        qint32 ntop, qint32 nw, qint32 nh, bool writable) :
+        KisTiledIterator(ndevice),
+        m_left(nleft),
+        m_top(ntop),
+        m_w(nw),
+        m_h(nh)
 {
 
     Q_ASSERT(ndevice != 0);
@@ -50,14 +50,14 @@ KisTiledRectIterator::KisTiledRectIterator( KisTiledDataManager *ndevice,  qint3
     // calc limits within the tile
     m_topInTile = m_top - m_topRow * KisTile::HEIGHT;
 
-    if(m_row == m_bottomRow)
+    if (m_row == m_bottomRow)
         m_bottomInTile = m_top + m_h - 1 - m_bottomRow * KisTile::HEIGHT;
     else
         m_bottomInTile = KisTile::HEIGHT - 1;
 
     m_leftInTile = m_left - m_leftCol * KisTile::WIDTH;
 
-    if(m_col == m_rightCol)
+    if (m_col == m_rightCol)
         m_rightInTile = m_left + m_w - 1 - m_rightCol * KisTile::WIDTH;
     else
         m_rightInTile = KisTile::WIDTH - 1;
@@ -65,13 +65,13 @@ KisTiledRectIterator::KisTiledRectIterator( KisTiledDataManager *ndevice,  qint3
     m_xInTile = m_leftInTile;
     m_yInTile = m_topInTile;
 
-    if( ! m_beyondEnd)
+    if (! m_beyondEnd)
         fetchTileData(m_col, m_row);
     m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
 }
 
 KisTiledRectIterator::KisTiledRectIterator(const KisTiledRectIterator& rhs)
-    : KisTiledIterator(rhs)
+        : KisTiledIterator(rhs)
 {
     if (this != &rhs) {
         m_left = rhs.m_left;
@@ -92,7 +92,7 @@ KisTiledRectIterator::KisTiledRectIterator(const KisTiledRectIterator& rhs)
     }
 }
 
-KisTiledRectIterator& KisTiledRectIterator::operator=(const KisTiledRectIterator& rhs)
+KisTiledRectIterator& KisTiledRectIterator::operator=(const KisTiledRectIterator & rhs)
 {
     if (this != &rhs) {
         KisTiledIterator::operator=(rhs);
@@ -115,13 +115,13 @@ KisTiledRectIterator& KisTiledRectIterator::operator=(const KisTiledRectIterator
     return *this;
 }
 
-KisTiledRectIterator::~KisTiledRectIterator( )
+KisTiledRectIterator::~KisTiledRectIterator()
 {
 }
 
 qint32 KisTiledRectIterator::nConseqPixels() const
 {
-    if(m_leftInTile || (m_rightInTile != KisTile::WIDTH - 1))
+    if (m_leftInTile || (m_rightInTile != KisTile::WIDTH - 1))
         return m_rightInTile - m_xInTile + 1;
     else
         return KisTile::WIDTH * (m_bottomInTile - m_yInTile + 1) - m_xInTile;
@@ -131,25 +131,23 @@ KisTiledRectIterator & KisTiledRectIterator::operator+=(int n)
 {
     int remainInTile;
 
-    remainInTile= (m_bottomInTile - m_yInTile) * (m_rightInTile - m_leftInTile + 1);
+    remainInTile = (m_bottomInTile - m_yInTile) * (m_rightInTile - m_leftInTile + 1);
     remainInTile += m_rightInTile - m_xInTile + 1;
 
     // This while loop may not bet the fastest, but usually it's not entered more than once.
-    while(n >= remainInTile)
-    {
+    while (n >= remainInTile) {
         n -= remainInTile;
         nextTile();
-        if(m_beyondEnd)
+        if (m_beyondEnd)
             return *this;
         m_yInTile = m_topInTile;
         m_xInTile = m_leftInTile;
-        remainInTile= (m_bottomInTile - m_yInTile) * (m_rightInTile - m_leftInTile + 1);
+        remainInTile = (m_bottomInTile - m_yInTile) * (m_rightInTile - m_leftInTile + 1);
         remainInTile += m_rightInTile - m_xInTile + 1;
     }
 
     int lWidth = m_rightInTile - m_leftInTile + 1;
-    while(n >= lWidth)
-    {
+    while (n >= lWidth) {
         n -= lWidth;
         m_yInTile++;
     }
@@ -167,29 +165,23 @@ KisTiledRectIterator & KisTiledRectIterator::operator ++ ()
 {
     // advance through rect completing each tile before moving on
     // as per excellent suggestion by Cyrille, avoiding excessive tile switching
-    if(m_xInTile >= m_rightInTile)
-    {
-        if (m_yInTile >= m_bottomInTile)
-        {
+    if (m_xInTile >= m_rightInTile) {
+        if (m_yInTile >= m_bottomInTile) {
             nextTile();
-            if(m_beyondEnd)
+            if (m_beyondEnd)
                 return *this;
             m_yInTile = m_topInTile;
             m_x = m_col * KisTile::WIDTH + m_leftInTile;
             m_y = m_row * KisTile::HEIGHT + m_topInTile;
             fetchTileData(m_col, m_row);
-        }
-        else
-        {
+        } else {
             m_x -= m_rightInTile - m_leftInTile;
             m_y++;
             m_yInTile++;
         }
-        m_xInTile =m_leftInTile;
+        m_xInTile = m_leftInTile;
         m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
-    }
-    else
-    {
+    } else {
         m_x++;
         m_xInTile++;
         m_offset += m_pixelSize;
@@ -199,38 +191,34 @@ KisTiledRectIterator & KisTiledRectIterator::operator ++ ()
 
 void KisTiledRectIterator::nextTile()
 {
-    if(m_col >= m_rightCol)
-    {
+    if (m_col >= m_rightCol) {
         // needs to switch row
-        if(m_row >= m_bottomRow) {
+        if (m_row >= m_bottomRow) {
             m_beyondEnd = true;
-        }
-        else
-        {
+        } else {
             m_col = m_leftCol;
             m_row++;
             // The row has now changed, so recalc vertical limits
-            if(m_row == m_topRow)
+            if (m_row == m_topRow)
                 m_topInTile = m_top - m_topRow * KisTile::HEIGHT;
             else
                 m_topInTile = 0;
 
-            if(m_row == m_bottomRow)
+            if (m_row == m_bottomRow)
                 m_bottomInTile = m_top + m_h - 1 - m_bottomRow * KisTile::HEIGHT;
             else
                 m_bottomInTile = KisTile::HEIGHT - 1;
         }
-    }
-    else
+    } else
         m_col++;
 
     // No matter what the column has now changed, so recalc horizontal limits
-    if(m_col == m_leftCol)
+    if (m_col == m_leftCol)
         m_leftInTile = m_left - m_leftCol * KisTile::WIDTH;
     else
         m_leftInTile = 0;
 
-    if(m_col == m_rightCol)
+    if (m_col == m_rightCol)
         m_rightInTile = m_left + m_w - 1 - m_rightCol * KisTile::WIDTH;
     else
         m_rightInTile = KisTile::WIDTH - 1;

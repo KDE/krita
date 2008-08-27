@@ -23,35 +23,29 @@
 const double LUMA_RED = 0.2989;
 const double LUMA_GREEN = 0.587;
 const double LUMA_BLUE = 0.114;
-  
+
 
 template<typename _channels_type_>
 struct KoYCbCrTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
-    
+
 #define CLAMP_TO_CHANNELSIZE(a) CLAMP(a, 0, KoColorSpaceMathsTraits<_channels_type_>::max)
-    static inline _channels_type_ computeRed(_channels_type_ Y, _channels_type_ /*Cb*/, _channels_type_ Cr)
-    {
-        return (_channels_type_)( CLAMP_TO_CHANNELSIZE( (Cr - MIDDLE_VALUE)* (2-2*LUMA_RED) + Y )  );
+    static inline _channels_type_ computeRed(_channels_type_ Y, _channels_type_ /*Cb*/, _channels_type_ Cr) {
+        return (_channels_type_)(CLAMP_TO_CHANNELSIZE((Cr - MIDDLE_VALUE)* (2 - 2*LUMA_RED) + Y));
     }
-    static inline _channels_type_ computeGreen(_channels_type_ Y, _channels_type_ Cb, _channels_type_ Cr)
-    {
-        return (_channels_type_)( CLAMP_TO_CHANNELSIZE( (Y - LUMA_BLUE * computeBlue(Y,Cb,Cr) - LUMA_RED * computeRed(Y,Cb,Cr) ) / LUMA_GREEN ) );
+    static inline _channels_type_ computeGreen(_channels_type_ Y, _channels_type_ Cb, _channels_type_ Cr) {
+        return (_channels_type_)(CLAMP_TO_CHANNELSIZE((Y - LUMA_BLUE * computeBlue(Y, Cb, Cr) - LUMA_RED * computeRed(Y, Cb, Cr)) / LUMA_GREEN));
     }
-    static inline _channels_type_ computeBlue(_channels_type_ Y, _channels_type_ Cb, _channels_type_ /*Cr*/)
-    {
-        return (_channels_type_)( CLAMP_TO_CHANNELSIZE( (Cb - MIDDLE_VALUE)*(2 - 2 * LUMA_BLUE) + Y) );
+    static inline _channels_type_ computeBlue(_channels_type_ Y, _channels_type_ Cb, _channels_type_ /*Cr*/) {
+        return (_channels_type_)(CLAMP_TO_CHANNELSIZE((Cb - MIDDLE_VALUE)*(2 - 2 * LUMA_BLUE) + Y));
     }
-    static inline _channels_type_ computeY( _channels_type_ r, _channels_type_ b, _channels_type_ g)
-    {
-        return (_channels_type_)( CLAMP_TO_CHANNELSIZE( LUMA_RED*r + LUMA_GREEN*g + LUMA_BLUE*b ) );
+    static inline _channels_type_ computeY(_channels_type_ r, _channels_type_ b, _channels_type_ g) {
+        return (_channels_type_)(CLAMP_TO_CHANNELSIZE(LUMA_RED*r + LUMA_GREEN*g + LUMA_BLUE*b));
     }
-    static inline _channels_type_ computeCb( _channels_type_ r, _channels_type_ b, _channels_type_ g)
-    {
-        return (_channels_type_)( CLAMP_TO_CHANNELSIZE( (b - computeY(r,g,b))/(2-2*LUMA_BLUE) + MIDDLE_VALUE) );
+    static inline _channels_type_ computeCb(_channels_type_ r, _channels_type_ b, _channels_type_ g) {
+        return (_channels_type_)(CLAMP_TO_CHANNELSIZE((b - computeY(r, g, b)) / (2 - 2*LUMA_BLUE) + MIDDLE_VALUE));
     }
-    static inline _channels_type_ computeCr( _channels_type_ r, _channels_type_ b, _channels_type_ g)
-    {
-        return (_channels_type_)( CLAMP_TO_CHANNELSIZE( (r - computeY(r,g,b))/(2-2*LUMA_RED) + MIDDLE_VALUE) );
+    static inline _channels_type_ computeCr(_channels_type_ r, _channels_type_ b, _channels_type_ g) {
+        return (_channels_type_)(CLAMP_TO_CHANNELSIZE((r - computeY(r, g, b)) / (2 - 2*LUMA_RED) + MIDDLE_VALUE));
     }
 #undef CLAMP_TO_CHANNELSIZE
 
@@ -60,7 +54,7 @@ struct KoYCbCrTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
     static const quint8 cb_pos = 1;
     static const quint8 cr_pos = 2;
     static const quint8 alpha_pos = 3;
-    
+
     struct Pixel {
         _channels_type_ Y;
         _channels_type_ Cb;

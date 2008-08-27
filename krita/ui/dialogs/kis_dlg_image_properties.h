@@ -31,11 +31,14 @@ class WdgImageProperties : public QWidget, public Ui::WdgImageProperties
 {
     Q_OBJECT
 
-    public:
-        WdgImageProperties(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgImageProperties(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
-class KisDlgImageProperties : public KDialog {
+class KisDlgImageProperties : public KDialog
+{
 
     Q_OBJECT
 

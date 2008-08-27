@@ -36,6 +36,6 @@ KisOpenGLFragmentShader KisOpenGLFragmentShader::string(const QString& sourceCod
 }
 
 KisOpenGLFragmentShader::KisOpenGLFragmentShader() :
-    KisOpenGLShader(GL_FRAGMENT_SHADER)
+        KisOpenGLShader(GL_FRAGMENT_SHADER)
 {
 }

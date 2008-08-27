@@ -25,16 +25,16 @@ FilterRegistry *FilterRegistry::s_singleton = 0;
 
 FilterRegistry::FilterRegistry()
 {
-    add( new AnonymizerFilter() );
-    add( new ToolInfoFilter() );
+    add(new AnonymizerFilter());
+    add(new ToolInfoFilter());
 }
 
 FilterRegistry::FilterRegistry(const FilterRegistry&)
-    : KoGenericRegistry<const KisMetaData::Filter*>()
+        : KoGenericRegistry<const KisMetaData::Filter*>()
 {
 }
 
-FilterRegistry& FilterRegistry::operator=(const FilterRegistry& )
+FilterRegistry& FilterRegistry::operator=(const FilterRegistry&)
 {
     return *this;
 }
@@ -45,8 +45,7 @@ FilterRegistry::~FilterRegistry()
 
 FilterRegistry* FilterRegistry::instance()
 {
-    if(!s_singleton)
-    {
+    if (!s_singleton) {
         s_singleton = new FilterRegistry();
     }
     return s_singleton;

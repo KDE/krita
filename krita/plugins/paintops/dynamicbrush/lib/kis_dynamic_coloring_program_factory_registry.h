@@ -24,15 +24,16 @@
 
 #include "kis_dynamic_coloring_program.h"
 
-class DYNAMIC_BRUSH_EXPORT KisDynamicColoringProgramFactoryRegistry : public KoGenericRegistry<KisDynamicColoringProgramFactory*>, public KisDynamicProgramFactoryRegistry {
-        KisDynamicColoringProgramFactoryRegistry();
-    public:
-        static KisDynamicColoringProgramFactoryRegistry* instance();
-        virtual KisDynamicProgramFactory* programFactory(QString id) const;
-        virtual QList<KoID> programTypes() const;
-    private:
-        struct Private;
-        Private* const d;
+class DYNAMIC_BRUSH_EXPORT KisDynamicColoringProgramFactoryRegistry : public KoGenericRegistry<KisDynamicColoringProgramFactory*>, public KisDynamicProgramFactoryRegistry
+{
+    KisDynamicColoringProgramFactoryRegistry();
+public:
+    static KisDynamicColoringProgramFactoryRegistry* instance();
+    virtual KisDynamicProgramFactory* programFactory(QString id) const;
+    virtual QList<KoID> programTypes() const;
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

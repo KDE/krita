@@ -51,15 +51,18 @@ class WdgColorRange : public QWidget, public Ui::WdgColorRange
 {
     Q_OBJECT
 
-    public:
-        WdgColorRange(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgColorRange(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
- /**
- * This dialog allows the user to create a selection mask based
- * on a (range of) colors.
- */
-class DlgColorRange: public KDialog {
+/**
+* This dialog allows the user to create a selection mask based
+* on a (range of) colors.
+*/
+class DlgColorRange: public KDialog
+{
     typedef KDialog super;
     Q_OBJECT
 

@@ -36,7 +36,7 @@
 void mix(int N, const float *data1, float c1, const float *data2, float c2, float *datam)
 {
     for (int i = 0; i < 2*N; i++)
-        datam[i] = c1*data1[i] + c2*data2[i];
+        datam[i] = c1 * data1[i] + c2 * data2[i];
     datam[2*N] = 1;
 }
 
@@ -49,12 +49,12 @@ void MixingTest::initTestCase()
     KisIlluminantProfile *p;
     foreach(QString ill, list.filter("_111_")) {
         p = new KisIlluminantProfile(ill); p->load();
-        css.append(f->colorSpace(KisKSF32ColorSpace<3>::ColorSpaceId().id(),p));
+        css.append(f->colorSpace(KisKSF32ColorSpace<3>::ColorSpaceId().id(), p));
         delete p;
     }
     foreach(QString ill, list.filter("_222_")) {
         p = new KisIlluminantProfile(ill); p->load();
-        css.append(f->colorSpace(KisKSF32ColorSpace<6>::ColorSpaceId().id(),p));
+        css.append(f->colorSpace(KisKSF32ColorSpace<6>::ColorSpaceId().id(), p));
         delete p;
     }
 }

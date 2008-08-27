@@ -41,7 +41,8 @@ class QPoint;
    and unzooming. The actual computation of zoom levels and things
    are the job of KoZoomHandler or its descendants
 */
-class KisZoomManager : public QObject {
+class KisZoomManager : public QObject
+{
 
     Q_OBJECT
 
@@ -52,15 +53,17 @@ public:
 
     void setup(KActionCollection * actionCollection);
     void updateGUI();
-    KoZoomController * zoomController() { return m_zoomController; }
-    
+    KoZoomController * zoomController() {
+        return m_zoomController;
+    }
+
 private slots:
 
     void slotZoomChanged(KoZoomMode::Mode mode, double zoom);
     void toggleShowRulers(bool show);
     void mousePositionChanged(const QPoint &pos);
     void changeAspectMode(bool aspectMode);
-    
+
 private:
 
     KisView2 * m_view;

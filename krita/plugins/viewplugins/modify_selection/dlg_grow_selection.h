@@ -28,11 +28,14 @@ class WdgGrowSelection : public QWidget, public Ui::WdgGrowSelection
 {
     Q_OBJECT
 
-    public:
-        WdgGrowSelection(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgGrowSelection(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
-class DlgGrowSelection: public KDialog {
+class DlgGrowSelection: public KDialog
+{
     typedef KDialog super;
     Q_OBJECT
 

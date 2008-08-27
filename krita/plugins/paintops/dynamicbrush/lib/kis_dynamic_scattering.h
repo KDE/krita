@@ -23,14 +23,15 @@
 /**
  * This class holds the information about the scattering around the drawing.
  */
-class DYNAMIC_BRUSH_EXPORT KisDynamicScattering {
-    public:
-        KisDynamicScattering(int _count, double _maximumDistance);
-        int count();
-        double maximumDistance();
-    private:
-        int m_count;
-        double m_maximumDistance;
+class DYNAMIC_BRUSH_EXPORT KisDynamicScattering
+{
+public:
+    KisDynamicScattering(int _count, double _maximumDistance);
+    int count();
+    double maximumDistance();
+private:
+    int m_count;
+    double m_maximumDistance;
 };
 
 #endif

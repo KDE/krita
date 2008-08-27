@@ -47,7 +47,8 @@ class KoChannelInfo;
  * some functionality will disappear, like listProducers(). Setting a histogram will discard
  * info on the layer, and setting a layer will discard info on the histogram.
  **/
-class KRITAUI_EXPORT KisHistogramView : public QLabel {
+class KRITAUI_EXPORT KisHistogramView : public QLabel
+{
     Q_OBJECT
 public:
     KisHistogramView(QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);

@@ -29,7 +29,7 @@ class QImage;
 
 enum KisConvolutionBorderOp {
     BORDER_DEFAULT_FILL = 0, // Use the default pixel to make up for the missing pixels on the border or the pixel that lies beyond
-                             // the rect we are convolving.
+    // the rect we are convolving.
     BORDER_WRAP = 1, // Use the pixel on the opposite side to make up for the missing pixels on the border. XXX: Not implemented yet
     BORDER_REPEAT = 2, // Use the border for the missing pixels, too.
     BORDER_AVOID = 3 // Skip convolving the border pixels at all.
@@ -41,7 +41,7 @@ class KRITAIMAGE_EXPORT KisConvolutionPainter : public KisPainter
 public:
 
     KisConvolutionPainter();
-    KisConvolutionPainter(KisPaintDeviceSP device );
+    KisConvolutionPainter(KisPaintDeviceSP device);
     KisConvolutionPainter(KisPaintDeviceSP device, KisSelectionSP selection);
 
     /**

@@ -37,7 +37,7 @@ class KisBrushSelectionWidget : public QWidget
     Q_OBJECT
 
 public:
-    KisBrushSelectionWidget( QWidget * parent = 0 );
+    KisBrushSelectionWidget(QWidget * parent = 0);
 
     ~KisBrushSelectionWidget();
 

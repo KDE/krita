@@ -32,23 +32,23 @@ void KisPaintInformationTest::testCreation()
 
 void KisPaintInformationTest::testSerialisation()
 {
-    KisPaintInformation test(QPointF( double(rand()) / RAND_MAX, double(rand()) / RAND_MAX), double(rand()) / RAND_MAX, double(rand()) / RAND_MAX, double(rand()) / RAND_MAX, KisVector2D::Random(), double(rand()) / RAND_MAX, double(rand()) / RAND_MAX );
-    
+    KisPaintInformation test(QPointF(double(rand()) / RAND_MAX, double(rand()) / RAND_MAX), double(rand()) / RAND_MAX, double(rand()) / RAND_MAX, double(rand()) / RAND_MAX, KisVector2D::Random(), double(rand()) / RAND_MAX, double(rand()) / RAND_MAX);
+
     QDomDocument doc = QDomDocument("pi");
-    QDomElement root = doc.createElement( "pi" );
-    doc.appendChild( root );
-    test.toXML(doc, root );
-    KisPaintInformation testUnS = KisPaintInformation::fromXML( root );
-    QVERIFY( test.pos().x() == testUnS.pos().x() );
-    QVERIFY( test.pos().y() == testUnS.pos().y() );
-    QVERIFY( test.pressure() == testUnS.pressure() );
-    QVERIFY( test.xTilt() == testUnS.xTilt() );
-    QVERIFY( test.yTilt() == testUnS.yTilt() );
-    QVERIFY( test.movement().x() == testUnS.movement().x() );
-    QVERIFY( test.movement().y() == testUnS.movement().y() );
-    QVERIFY( test.angle() == testUnS.angle() );
-    QVERIFY( test.rotation() == testUnS.rotation() );
-    QVERIFY( test.tangentialPressure() == testUnS.tangentialPressure() );
+    QDomElement root = doc.createElement("pi");
+    doc.appendChild(root);
+    test.toXML(doc, root);
+    KisPaintInformation testUnS = KisPaintInformation::fromXML(root);
+    QVERIFY(test.pos().x() == testUnS.pos().x());
+    QVERIFY(test.pos().y() == testUnS.pos().y());
+    QVERIFY(test.pressure() == testUnS.pressure());
+    QVERIFY(test.xTilt() == testUnS.xTilt());
+    QVERIFY(test.yTilt() == testUnS.yTilt());
+    QVERIFY(test.movement().x() == testUnS.movement().x());
+    QVERIFY(test.movement().y() == testUnS.movement().y());
+    QVERIFY(test.angle() == testUnS.angle());
+    QVERIFY(test.rotation() == testUnS.rotation());
+    QVERIFY(test.tangentialPressure() == testUnS.tangentialPressure());
 }
 
 

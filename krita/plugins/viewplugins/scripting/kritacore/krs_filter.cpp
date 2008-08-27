@@ -30,9 +30,9 @@
 using namespace Scripting;
 
 Filter::Filter(Module* module, KisFilter* filter)
-    : QObject(module)
-    , m_filter(filter)
-    , m_config(0)
+        : QObject(module)
+        , m_filter(filter)
+        , m_config(0)
 {
     setObjectName("KritaFilter");
 }
@@ -52,7 +52,7 @@ KisFilterConfiguration* Filter::config()
     if( c )
         return c;
     */
-    if( ! m_config )
+    if (! m_config)
         m_config = new KisFilterConfiguration(m_filter->id(), 0);
     return m_config;
 }
@@ -74,7 +74,7 @@ void Filter::setProperty(const QString& name, const QVariant& value)
 
 QVariantMap Filter::properties()
 {
-     return config()->getProperties();
+    return config()->getProperties();
 }
 
 void Filter::fromXML(const QString& xml)
@@ -90,9 +90,8 @@ const QString Filter::toXML()
 bool Filter::process(QObject* layer)
 {
     PaintDevice* paintDevice = dynamic_cast< PaintDevice* >(layer);
-    if(! paintDevice || ! m_filter->workWith( paintDevice->paintDevice()->colorSpace()))
-    {
-        kWarning(41011) << i18n("An error has occurred in %1",QString("process"));
+    if (! paintDevice || ! m_filter->workWith(paintDevice->paintDevice()->colorSpace())) {
+        kWarning(41011) << i18n("An error has occurred in %1", QString("process"));
         return false;
     }
 
@@ -104,7 +103,7 @@ bool Filter::process(QObject* layer)
 //         QRect r2 = paintDevice->paintDevice()->image()->bounds();
 //         rect = r1.intersect(r2);
 //     } else {
-        rect = r1;
+    rect = r1;
 //     }
 
     //m_filter->process(paintDevice->paintDevice(), rect, config()); //sebsauer, 20080117: crashes with filterstest.rb
@@ -115,9 +114,8 @@ bool Filter::process(QObject* layer)
 bool Filter::process(QObject* layer, int x, int y, int width, int height)
 {
     PaintDevice* paintDevice = dynamic_cast< PaintDevice* >(layer);
-    if(! paintDevice || ! m_filter->workWith( paintDevice->paintDevice()->colorSpace()))
-    {
-        kWarning(41011) << i18n("An error has occurred in %1",QString("process"));
+    if (! paintDevice || ! m_filter->workWith(paintDevice->paintDevice()->colorSpace())) {
+        kWarning(41011) << i18n("An error has occurred in %1", QString("process"));
         return false;
     }
     QRect rect(x, y, width, height);

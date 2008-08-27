@@ -29,13 +29,13 @@
 #include <widgets/kis_cmb_idlist.h>
 #include <kis_filter_strategy.h>// XXX: I'm really real bad at arithmetic, let alone math. Here
 // be rounding errors. (Boudewijn)
-DlgLayerSize::DlgLayerSize( QWidget *  parent,
-                const char * name)
-    : super (parent)
+DlgLayerSize::DlgLayerSize(QWidget *  parent,
+                           const char * name)
+        : super(parent)
 {
-    setCaption( i18n("Image Size") );
-    setButtons( Ok | Cancel);
-    setDefaultButton( Ok );
+    setCaption(i18n("Image Size"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
     setObjectName(name);
 
     m_lock = false;
@@ -54,7 +54,7 @@ DlgLayerSize::DlgLayerSize( QWidget *  parent,
 
 
     connect(this, SIGNAL(okClicked()),
-        this, SLOT(okClicked()));
+            this, SLOT(okClicked()));
 
 }
 
@@ -198,7 +198,7 @@ void DlgLayerSize::slotWidthPercentChanged(int w)
 
     if (m_page->chkConstrain->isChecked()) {
         m_page->intHeightPercent->setValue(w);
-        m_page->intHeight->setValue(qRound( w * m_origH / 100));
+        m_page->intHeight->setValue(qRound(w * m_origH / 100));
     }
 
     unblockAll();
@@ -211,7 +211,7 @@ void DlgLayerSize::slotHeightPercentChanged(int h)
     m_page->intHeight->setValue(qRound(h * m_origH / 100));
     if (m_page->chkConstrain->isChecked()) {
         m_page->intWidthPercent->setValue(h);
-        m_page->intWidth->setValue(qRound( h * m_origW / 100));
+        m_page->intWidth->setValue(qRound(h * m_origW / 100));
     }
 
     unblockAll();
@@ -232,17 +232,17 @@ void DlgLayerSize::blockAll()
 void DlgLayerSize::unblockAll()
 {
     // XXX: more efficient to use blockSignals?
-    connect (m_page->intWidth, SIGNAL(valueChanged(int)),
-         this, SLOT(slotWidthPixelsChanged(int)));
+    connect(m_page->intWidth, SIGNAL(valueChanged(int)),
+            this, SLOT(slotWidthPixelsChanged(int)));
 
-    connect (m_page->intHeight, SIGNAL(valueChanged(int)),
-         this, SLOT(slotHeightPixelsChanged(int)));
+    connect(m_page->intHeight, SIGNAL(valueChanged(int)),
+            this, SLOT(slotHeightPixelsChanged(int)));
 
-    connect (m_page->intWidthPercent, SIGNAL(valueChanged(int)),
-         this, SLOT(slotWidthPercentChanged(int)));
+    connect(m_page->intWidthPercent, SIGNAL(valueChanged(int)),
+            this, SLOT(slotWidthPercentChanged(int)));
 
-    connect (m_page->intHeightPercent, SIGNAL(valueChanged(int)),
-         this, SLOT(slotHeightPercentChanged(int)));
+    connect(m_page->intHeightPercent, SIGNAL(valueChanged(int)),
+            this, SLOT(slotHeightPercentChanged(int)));
 
 
 }

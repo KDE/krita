@@ -31,8 +31,8 @@
 void KisBrushTest::testCreation()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisPaintDeviceSP dev = new KisPaintDevice( cs );
-    QImage img( 512, 512, QImage::Format_ARGB32 );
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    QImage img(512, 512, QImage::Format_ARGB32);
 
     KisBrush a(QString(FILES_DATA_DIR) + QDir::separator() + "brush.gbr");
     KisBrush b(dev, 0, 0, 10, 10);

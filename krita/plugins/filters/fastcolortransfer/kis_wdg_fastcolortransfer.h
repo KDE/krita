@@ -27,18 +27,20 @@ class KisFilter;
 class Ui_WdgFastColorTransfer;
 
 /**
-	@author Cyrille Berger <cberger@cberger.net>
+ @author Cyrille Berger <cberger@cberger.net>
 */
 class KisWdgFastColorTransfer : public KisFilterConfigWidget
 {
-    public:
-        KisWdgFastColorTransfer(QWidget * parent);
-        ~KisWdgFastColorTransfer();
-        virtual void setConfiguration(KisFilterConfiguration*);
-        inline const Ui_WdgFastColorTransfer* widget() const { return m_widget; }
-        virtual KisFilterConfiguration* configuration() const;
-    private:
-        Ui_WdgFastColorTransfer* m_widget;
+public:
+    KisWdgFastColorTransfer(QWidget * parent);
+    ~KisWdgFastColorTransfer();
+    virtual void setConfiguration(KisFilterConfiguration*);
+    inline const Ui_WdgFastColorTransfer* widget() const {
+        return m_widget;
+    }
+    virtual KisFilterConfiguration* configuration() const;
+private:
+    Ui_WdgFastColorTransfer* m_widget;
 };
 
 #endif

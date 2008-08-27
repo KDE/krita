@@ -44,22 +44,22 @@ class KisMaskShape : public KoShape
 {
 public:
 
-    KisMaskShape( KoShapeContainer * parent, KisMaskSP mask );
+    KisMaskShape(KoShapeContainer * parent, KisMaskSP mask);
     ~KisMaskShape();
 
     KisMaskSP mask();
 
     void paint(QPainter &painter, const KoViewConverter &converter);
-    bool isSelectable() const { return false; }
+    bool isSelectable() const {
+        return false;
+    }
 
-    bool loadOdf( const KoXmlElement&, KoShapeLoadingContext&)
-        {
-            return false;
-        }
+    bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&) {
+        return false;
+    }
 
-    void saveOdf( KoShapeSavingContext& ) const
-        {
-        }
+    void saveOdf(KoShapeSavingContext&) const {
+    }
 
 
 private:

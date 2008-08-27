@@ -32,16 +32,16 @@
 #include "kis_global.h"
 
 typedef KGenericFactory<ChalkPaintOpPlugin> ChalkPaintOpPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritachalkpaintop, ChalkPaintOpPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritachalkpaintop, ChalkPaintOpPluginFactory("krita"))
 
 
 ChalkPaintOpPlugin::ChalkPaintOpPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     //
-	setComponentData(ChalkPaintOpPluginFactory::componentData());
+    setComponentData(ChalkPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add( new KisChalkPaintOpFactory() );
+    r->add(new KisChalkPaintOpFactory());
 
 }
 

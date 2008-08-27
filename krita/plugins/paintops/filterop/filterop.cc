@@ -32,13 +32,13 @@ typedef KGenericFactory<FilterOp> FilterOpFactory;
 K_EXPORT_COMPONENT_FACTORY(kritafilterop, FilterOpFactory("krita"))
 
 FilterOp::FilterOp(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     setComponentData(FilterOpFactory::componentData());
 
     // This is not a gui plugin; only load it when the doc is created.
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add (new KisFilterOpFactory);
+    r->add(new KisFilterOpFactory);
 
 }
 

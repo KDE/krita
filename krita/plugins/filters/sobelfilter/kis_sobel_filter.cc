@@ -76,17 +76,17 @@
 
 KisSobelFilter::KisSobelFilter() : KisFilter(id(), CategoryEdgeDetection, i18n("&Sobel..."))
 {
-    setSupportsPainting( false );
-    setSupportsPreview( true );
+    setSupportsPainting(false);
+    setSupportsPreview(true);
 }
 
 
-void KisSobelFilter::prepareRow (KisPaintDeviceSP src, quint8* data, quint32 x, quint32 y, quint32 w, quint32 h) const
+void KisSobelFilter::prepareRow(KisPaintDeviceSP src, quint8* data, quint32 x, quint32 y, quint32 w, quint32 h) const
 {
-    if (y > h -1) y = h -1;
+    if (y > h - 1) y = h - 1;
     quint32 pixelSize = src->pixelSize();
 
-    src->readBytes( data, x, y, w, 1 );
+    src->readBytes(data, x, y, w, 1);
 
     for (quint32 b = 0; b < pixelSize; b++) {
         int offset = pixelSize - b;
@@ -99,11 +99,11 @@ void KisSobelFilter::prepareRow (KisPaintDeviceSP src, quint8* data, quint32 x, 
 #define ROUND(x) ((int) ((x) + 0.5))
 
 void KisSobelFilter::process(KisConstProcessingInformation srcInfo,
-                 KisProcessingInformation dstInfo,
-                 const QSize& size,
-                 const KisFilterConfiguration* configuration,
-                 KoUpdater* progressUpdater
-        ) const
+                             KisProcessingInformation dstInfo,
+                             const QSize& size,
+                             const KisFilterConfiguration* configuration,
+                             KoUpdater* progressUpdater
+                            ) const
 {
     const KisPaintDeviceSP src = srcInfo.paintDevice();
     KisPaintDeviceSP dst = dstInfo.paintDevice();
@@ -126,11 +126,11 @@ void KisSobelFilter::process(KisConstProcessingInformation srcInfo,
     int cost = size.height();
 
     /*  allocate row buffers  */
-    quint8* prevRow = new quint8[ (width + 2) * pixelSize];
+    quint8* prevRow = new quint8[(width + 2) * pixelSize];
     Q_CHECK_PTR(prevRow);
-    quint8* curRow = new quint8[ (width + 2) * pixelSize];
+    quint8* curRow = new quint8[(width + 2) * pixelSize];
     Q_CHECK_PTR(curRow);
-    quint8* nextRow = new quint8[ (width + 2) * pixelSize];
+    quint8* nextRow = new quint8[(width + 2) * pixelSize];
     Q_CHECK_PTR(nextRow);
     quint8* dest = new quint8[ width  * pixelSize];
     Q_CHECK_PTR(dest);
@@ -139,26 +139,24 @@ void KisSobelFilter::process(KisConstProcessingInformation srcInfo,
     quint8* cr = curRow + pixelSize;
     quint8* nr = nextRow + pixelSize;
 
-    prepareRow (src, pr, srcTopLeft.x(), srcTopLeft.y() - 1, width, height);
-    prepareRow (src, cr, srcTopLeft.x(), srcTopLeft.y(), width, height);
+    prepareRow(src, pr, srcTopLeft.x(), srcTopLeft.y() - 1, width, height);
+    prepareRow(src, cr, srcTopLeft.x(), srcTopLeft.y(), width, height);
 
-    quint32 counter =0;
+    quint32 counter = 0;
     quint8* d;
     quint8* tmp;
     qint32 gradient, horGradient, verGradient;
     // loop through the rows, applying the sobel convolution
 
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), width, dstInfo.selection() );
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), width, dstInfo.selection());
 
-    for (quint32 row = 0; row < height; row++)
-    {
+    for (quint32 row = 0; row < height; row++) {
 
         // prepare the next row
-        prepareRow (src, nr, srcTopLeft.x(), srcTopLeft.y() + row + 1, width, height);
+        prepareRow(src, nr, srcTopLeft.x(), srcTopLeft.y() + row + 1, width, height);
         d = dest;
 
-        for (quint32 col = 0; col < width * pixelSize; col++)
-        {
+        for (quint32 col = 0; col < width * pixelSize; col++) {
             int positive = col + pixelSize;
             int negative = col - pixelSize;
             horGradient = (doHorizontal ?
@@ -171,9 +169,9 @@ void KisSobelFilter::process(KisConstProcessingInformation srcInfo,
                             (pr[positive] + 2 * cr[positive] + nr[positive]))
                            : 0);
             gradient = (qint32)((doVertical && doHorizontal) ?
-                                (ROUND (RMS (horGradient, verGradient)) / 5.66) // always >0
-                                : (keepSign ? (127 + (ROUND ((horGradient + verGradient) / 8.0)))
-                                   : (ROUND (QABS (horGradient + verGradient) / 4.0))));
+                                (ROUND(RMS(horGradient, verGradient)) / 5.66)   // always >0
+                                : (keepSign ? (127 + (ROUND((horGradient + verGradient) / 8.0)))
+                                   : (ROUND(QABS(horGradient + verGradient) / 4.0))));
 
             *d++ = gradient;
             if (gradient > 10) counter ++;
@@ -188,16 +186,14 @@ void KisSobelFilter::process(KisConstProcessingInformation srcInfo,
         //store the dest
         dst->writeBytes(dest, dstTopLeft.x(), row, width, 1);
 
-        if ( makeOpaque )
-        {
-            while( ! dstIt.isDone() )
-            {
-                dst->colorSpace()->setAlpha(dstIt.rawData(), 255,1);
+        if (makeOpaque) {
+            while (! dstIt.isDone()) {
+                dst->colorSpace()->setAlpha(dstIt.rawData(), 255, 1);
                 ++dstIt;
             }
             dstIt.nextRow();
         }
-        if (progressUpdater) progressUpdater->setProgress( row / cost);
+        if (progressUpdater) progressUpdater->setProgress(row / cost);
     }
 
     delete[] prevRow;
@@ -210,9 +206,9 @@ void KisSobelFilter::process(KisConstProcessingInformation srcInfo,
 KisFilterConfigWidget * KisSobelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageSP) const
 {
     vKisBoolWidgetParam param;
-    param.push_back( KisBoolWidgetParam( true, i18n("Sobel horizontally"), "doHorizontally" ) );
-    param.push_back( KisBoolWidgetParam( true, i18n("Sobel vertically"), "doVertically" ) );
-    param.push_back( KisBoolWidgetParam( true, i18n("Keep sign of result"), "keepSign" ) );
-    param.push_back( KisBoolWidgetParam( true, i18n("Make image opaque"), "makeOpaque" ) );
-    return new KisMultiBoolFilterWidget(id().id(), parent, id().id(), param );
+    param.push_back(KisBoolWidgetParam(true, i18n("Sobel horizontally"), "doHorizontally"));
+    param.push_back(KisBoolWidgetParam(true, i18n("Sobel vertically"), "doVertically"));
+    param.push_back(KisBoolWidgetParam(true, i18n("Keep sign of result"), "keepSign"));
+    param.push_back(KisBoolWidgetParam(true, i18n("Make image opaque"), "makeOpaque"));
+    return new KisMultiBoolFilterWidget(id().id(), parent, id().id(), param);
 }

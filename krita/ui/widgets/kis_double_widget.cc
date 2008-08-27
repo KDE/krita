@@ -28,14 +28,14 @@
 #include <knuminput.h>
 
 KisDoubleWidget::KisDoubleWidget(QWidget* parent, const char* name)
-  : QWidget(parent)
+        : QWidget(parent)
 {
     setObjectName(name);
     init(0, 1);
 }
 
 KisDoubleWidget::KisDoubleWidget(double min, double max, QWidget* parent, const char* name)
-  : QWidget(parent)
+        : QWidget(parent)
 {
     setObjectName(name);
     init(min, max);
@@ -74,7 +74,7 @@ void KisDoubleWidget::init(double min, double max)
     m_layout->addWidget(m_slider);
     m_layout->addSpacing(5);
     m_layout->addWidget(m_spinBox);
-    m_layout->addItem(new QSpacerItem(5,1,QSizePolicy::Expanding, QSizePolicy::Minimum));
+    m_layout->addItem(new QSpacerItem(5, 1, QSizePolicy::Expanding, QSizePolicy::Minimum));
 }
 
 double KisDoubleWidget::value() const

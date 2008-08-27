@@ -32,23 +32,31 @@
 class QPointF;
 class KisPainter;
 
-class KisPenOpFactory  : public KisPaintOpFactory  {
+class KisPenOpFactory  : public KisPaintOpFactory
+{
 
 public:
     KisPenOpFactory() {}
     virtual ~KisPenOpFactory() {}
 
     virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
-    virtual QString id() const { return "pen"; }
-    virtual QString name() const { return i18n("Pixel Pencil"); }
-    virtual QString pixmap() { return "krita-pencil.png"; }
+    virtual QString id() const {
+        return "pen";
+    }
+    virtual QString name() const {
+        return i18n("Pixel Pencil");
+    }
+    virtual QString pixmap() {
+        return "krita-pencil.png";
+    }
     virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
 };
 
 
 
-class KisPenOp : public KisBrushBasedPaintOp {
+class KisPenOp : public KisBrushBasedPaintOp
+{
 
 public:
 

@@ -32,7 +32,7 @@ const quint8 quint8_MAX = UCHAR_MAX;
 const quint16 quint16_MAX = 65535;
 
 const qint32 qint32_MAX = (2147483647);
-const qint32 qint32_MIN = (-2147483647-1);
+const qint32 qint32_MIN = (-2147483647 - 1);
 
 const quint8 MAX_SELECTED = UCHAR_MAX;
 const quint8 MIN_SELECTED = 0;
@@ -50,7 +50,7 @@ enum enumCursorStyle {
  * this is downscaled to 127 levels because the line would be too jittery, and
  * the amount of masks take too much memory otherwise.
  */
-const qint32 PRESSURE_LEVELS= 127;
+const qint32 PRESSURE_LEVELS = 127;
 const double PRESSURE_MIN = 0.0;
 const double PRESSURE_MAX = 1.0;
 const double PRESSURE_DEFAULT = (PRESSURE_MAX - PRESSURE_MIN) / 2;

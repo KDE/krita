@@ -38,24 +38,25 @@ class KoDataCenter;
  * selections -- everything that needs to be wrapped as a shape for
  * the tools to work on.
  */
-class KRITAUI_EXPORT KisShapeController : public QObject, public KoShapeControllerBase {
+class KRITAUI_EXPORT KisShapeController : public QObject, public KoShapeControllerBase
+{
 
     Q_OBJECT
 
 public:
 
-    KisShapeController( KisDoc2 * doc, KisNameServer *nameServer);
+    KisShapeController(KisDoc2 * doc, KisNameServer *nameServer);
     ~KisShapeController();
 
-    void setImage( KisImageSP image );
-    KoShape * shapeForNode( KisNodeSP layer ) const;
-    void setInitialShapeForView( KisView2 * view );
+    void setImage(KisImageSP image);
+    KoShape * shapeForNode(KisNodeSP layer) const;
+    void setInitialShapeForView(KisView2 * view);
     QMap<QString, KoDataCenter *> dataCenterMap();
 
 private:
 
-    void addShape( KoShape* shape );
-    void removeShape( KoShape* shape );
+    void addShape(KoShape* shape);
+    void removeShape(KoShape* shape);
 
 private slots:
 
@@ -63,9 +64,9 @@ private slots:
     friend class KisDoc2;
     // These slots keep track of changes in the layer stack and make
     // sure that the shape stack doesn't get out of sync
-    void slotNodeAdded( KisNode* node, int index );
-    void slotNodeRemoved( KisNode*node, int index  );
-    void slotLayersChanged( KisGroupLayerSP rootLayer );
+    void slotNodeAdded(KisNode* node, int index);
+    void slotNodeRemoved(KisNode*node, int index);
+    void slotLayersChanged(KisGroupLayerSP rootLayer);
 
 private:
 

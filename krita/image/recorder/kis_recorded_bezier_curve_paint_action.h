@@ -30,7 +30,8 @@ class KoCompositeOp;
 
 #include <krita_export.h>
 
-class KRITAIMAGE_EXPORT KisRecordedBezierCurvePaintAction : public KisRecordedPaintAction {
+class KRITAIMAGE_EXPORT KisRecordedBezierCurvePaintAction : public KisRecordedPaintAction
+{
 
 public:
 
@@ -67,7 +68,8 @@ private:
 };
 
 
-class KisRecordedBezierCurvePaintActionFactory : public KisRecordedPaintActionFactory {
+class KisRecordedBezierCurvePaintActionFactory : public KisRecordedPaintActionFactory
+{
 public:
     KisRecordedBezierCurvePaintActionFactory();
     virtual ~KisRecordedBezierCurvePaintActionFactory();

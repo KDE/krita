@@ -26,10 +26,10 @@
 #include "kis_global.h"
 #include "filter/kis_filter_registry.h"
 typedef KGenericFactory<KisRoundCornersFilterPlugin> KisRoundCornersFilterPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritaroundcornersfilter, KisRoundCornersFilterPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritaroundcornersfilter, KisRoundCornersFilterPluginFactory("krita"))
 
 KisRoundCornersFilterPlugin::KisRoundCornersFilterPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     setComponentData(KisRoundCornersFilterPluginFactory::componentData());
 

@@ -28,8 +28,7 @@
 
 struct KisBaseProcessor::Private {
     Private()
-        : bookmarkManager(0), supportsPainting(false), supportsPreview(true), supportsAdjustmentLayers(false), supportsIncrementalPainting(true), supportsThreading(true), colorSpaceIndependence(FULLY_INDEPENDENT)
-    {
+            : bookmarkManager(0), supportsPainting(false), supportsPreview(true), supportsAdjustmentLayers(false), supportsIncrementalPainting(true), supportsThreading(true), colorSpaceIndependence(FULLY_INDEPENDENT) {
     }
 
     KisBookmarkedConfigurationManager* bookmarkManager;
@@ -46,7 +45,7 @@ struct KisBaseProcessor::Private {
 };
 
 KisBaseProcessor::KisBaseProcessor(const KoID& id, const KoID & category, const QString & entry)
-    : d(new Private)
+        : d(new Private)
 {
     d->id = id;
     d->category = category;
@@ -67,23 +66,22 @@ KisFilterConfiguration * KisBaseProcessor::factoryConfiguration(const KisPaintDe
 KisFilterConfiguration * KisBaseProcessor::defaultConfiguration(const KisPaintDeviceSP pd) const
 {
     KisFilterConfiguration* fc = 0;
-    if(bookmarkManager())
-    {
+    if (bookmarkManager()) {
         fc = dynamic_cast<KisFilterConfiguration*>(bookmarkManager()->defaultConfiguration());
     }
-    if(!fc || !fc->isCompatible(pd) )
-    {
+    if (!fc || !fc->isCompatible(pd)) {
         fc = factoryConfiguration(pd);
     }
     return fc;
 }
 
-KisFilterConfigWidget * KisBaseProcessor::createConfigurationWidget(QWidget *, const KisPaintDeviceSP, const KisImageSP ) const
+KisFilterConfigWidget * KisBaseProcessor::createConfigurationWidget(QWidget *, const KisPaintDeviceSP, const KisImageSP) const
 {
     return 0;
 }
 
-QRect KisBaseProcessor::enlargeRect(const QRect & rect, const KisFilterConfiguration* c) const {
+QRect KisBaseProcessor::enlargeRect(const QRect & rect, const KisFilterConfiguration* c) const
+{
     QRect rc = rect;
     int margin = overlapMarginNeeded(c);
     rc.setLeft(rect.left() - margin);
@@ -110,15 +108,30 @@ void KisBaseProcessor::setBookmarkManager(KisBookmarkedConfigurationManager* bm)
     d->bookmarkManager = bm;
 }
 
-int KisBaseProcessor::overlapMarginNeeded( const KisFilterConfiguration* ) const { return 0; }
+int KisBaseProcessor::overlapMarginNeeded(const KisFilterConfiguration*) const
+{
+    return 0;
+}
 
-QString KisBaseProcessor::id() const { return d->id.id(); }
+QString KisBaseProcessor::id() const
+{
+    return d->id.id();
+}
 
-QString KisBaseProcessor::name() const { return d->id.name(); }
+QString KisBaseProcessor::name() const
+{
+    return d->id.name();
+}
 
-KoID KisBaseProcessor::menuCategory() const { return d->category; }
+KoID KisBaseProcessor::menuCategory() const
+{
+    return d->category;
+}
 
-QString KisBaseProcessor::menuEntry() const { return d->entry; }
+QString KisBaseProcessor::menuEntry() const
+{
+    return d->entry;
+}
 
 bool KisBaseProcessor::supportsPainting() const
 {

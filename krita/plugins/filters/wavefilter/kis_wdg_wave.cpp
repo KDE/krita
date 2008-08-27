@@ -27,19 +27,19 @@
 #include "ui_wdgwaveoptions.h"
 
 KisWdgWave::KisWdgWave(KisFilter* /*nfilter*/, QWidget* parent)
-    : KisFilterConfigWidget(parent)
+        : KisFilterConfigWidget(parent)
 {
     m_widget = new Ui_WdgWaveOptions();
     m_widget->setupUi(this);
 
-    connect( widget()->intHWavelength, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->intHShift, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->intHAmplitude, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->cbHShape, SIGNAL( activated(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->intVWavelength, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->intVShift, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->intVAmplitude, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->cbVShape, SIGNAL( activated(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->intHWavelength, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->intHShift, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->intHAmplitude, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->cbHShape, SIGNAL(activated(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->intVWavelength, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->intVShift, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->intVAmplitude, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->cbVShape, SIGNAL(activated(int)), SIGNAL(sigPleaseUpdatePreview()));
 }
 
 KisWdgWave::~KisWdgWave()
@@ -49,51 +49,43 @@ KisWdgWave::~KisWdgWave()
 void KisWdgWave::setConfiguration(KisFilterConfiguration* config)
 {
     QVariant value;
-    if (config->getProperty("horizontalwavelength", value))
-    {
-        widget()->intHWavelength->setValue( value.toUInt() );
+    if (config->getProperty("horizontalwavelength", value)) {
+        widget()->intHWavelength->setValue(value.toUInt());
     }
-    if (config->getProperty("horizontalshift", value))
-    {
-        widget()->intHShift->setValue( value.toUInt() );
+    if (config->getProperty("horizontalshift", value)) {
+        widget()->intHShift->setValue(value.toUInt());
     }
-    if (config->getProperty("horizontalamplitude", value))
-    {
-        widget()->intHAmplitude->setValue( value.toUInt() );
+    if (config->getProperty("horizontalamplitude", value)) {
+        widget()->intHAmplitude->setValue(value.toUInt());
     }
-    if (config->getProperty("horizontalshape", value))
-    {
-        widget()->cbHShape->setCurrentIndex( value.toUInt() );
+    if (config->getProperty("horizontalshape", value)) {
+        widget()->cbHShape->setCurrentIndex(value.toUInt());
     }
-    if (config->getProperty("verticalwavelength", value))
-    {
-        widget()->intVWavelength->setValue( value.toUInt() );
+    if (config->getProperty("verticalwavelength", value)) {
+        widget()->intVWavelength->setValue(value.toUInt());
     }
-    if (config->getProperty("verticalshift", value))
-    {
-        widget()->intVShift->setValue( value.toUInt() );
+    if (config->getProperty("verticalshift", value)) {
+        widget()->intVShift->setValue(value.toUInt());
     }
-    if (config->getProperty("verticalamplitude", value))
-    {
-        widget()->intVAmplitude->setValue( value.toUInt() );
+    if (config->getProperty("verticalamplitude", value)) {
+        widget()->intVAmplitude->setValue(value.toUInt());
     }
-    if (config->getProperty("verticalshape", value))
-    {
-        widget()->cbVShape->setCurrentIndex( value.toUInt() );
+    if (config->getProperty("verticalshape", value)) {
+        widget()->cbVShape->setCurrentIndex(value.toUInt());
     }
 }
 
 KisFilterConfiguration* KisWdgWave::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("wave", 1);
-    config->setProperty("horizontalwavelength", this->widget()->intHWavelength->value() );
-    config->setProperty("horizontalshift", this->widget()->intHShift->value() );
-    config->setProperty("horizontalamplitude", this->widget()->intHAmplitude->value() );
-    config->setProperty("horizontalshape", this->widget()->cbHShape->currentIndex() );
-    config->setProperty("verticalwavelength", this->widget()->intVWavelength->value() );
-    config->setProperty("verticalshift", this->widget()->intVShift->value() );
-    config->setProperty("verticalamplitude", this->widget()->intVAmplitude->value() );
-    config->setProperty("verticalshape", this->widget()->cbVShape->currentIndex() );
+    config->setProperty("horizontalwavelength", this->widget()->intHWavelength->value());
+    config->setProperty("horizontalshift", this->widget()->intHShift->value());
+    config->setProperty("horizontalamplitude", this->widget()->intHAmplitude->value());
+    config->setProperty("horizontalshape", this->widget()->cbHShape->currentIndex());
+    config->setProperty("verticalwavelength", this->widget()->intVWavelength->value());
+    config->setProperty("verticalshift", this->widget()->intVShift->value());
+    config->setProperty("verticalamplitude", this->widget()->intVAmplitude->value());
+    config->setProperty("verticalshape", this->widget()->cbVShape->currentIndex());
     return config;
 }
 

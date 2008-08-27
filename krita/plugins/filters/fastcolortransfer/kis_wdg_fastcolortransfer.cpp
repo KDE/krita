@@ -27,7 +27,7 @@
 
 #include "ui_wdgfastcolortransfer.h"
 #include <filter/kis_filter_configuration.h>
-KisWdgFastColorTransfer::KisWdgFastColorTransfer(QWidget * parent) : KisFilterConfigWidget ( parent )
+KisWdgFastColorTransfer::KisWdgFastColorTransfer(QWidget * parent) : KisFilterConfigWidget(parent)
 {
     m_widget = new Ui_WdgFastColorTransfer();
     m_widget->setupUi(this);
@@ -42,9 +42,8 @@ KisWdgFastColorTransfer::~KisWdgFastColorTransfer()
 void KisWdgFastColorTransfer::setConfiguration(KisFilterConfiguration* config)
 {
     QVariant value;
-    if (config->getProperty("filename", value))
-    {
-        widget()->fileNameURLRequester->setUrl( value.toString() );
+    if (config->getProperty("filename", value)) {
+        widget()->fileNameURLRequester->setUrl(value.toString());
     }
 
 }
@@ -54,6 +53,6 @@ KisFilterConfiguration* KisWdgFastColorTransfer::configuration() const
     KisFilterConfiguration* config = new KisFilterConfiguration("colortransfer", 1);
     QString url = this->widget()->fileNameURLRequester->url().url();
     dbgPlugins << "Filename : " << this->widget()->fileNameURLRequester->url() << " = " << url;
-    config->setProperty("filename", url );
+    config->setProperty("filename", url);
     return config;
 }

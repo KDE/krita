@@ -32,7 +32,8 @@
 #include <kis_paint_information.h>
 #include <kis_random_accessor.h>
 
-class Brush{
+class Brush
+{
 
 public:
     Brush(const BrushShape &initialShape, KoColor inkColor);
@@ -40,11 +41,11 @@ public:
     ~Brush();
     Brush(KoColor inkColor, BrushShape shape);
     void paint(KisPaintDeviceSP dev, const KisPaintInformation &info);
-    void paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const KisPaintInformation &pi2);
+    void paintLine(KisPaintDeviceSP dev, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
     void setInkDepletion(QList<float> *curveData);
     void setInkColor(const KoColor &color);
     void addStrokeSample(StrokeSample sample);
-    void addStrokeSample(float x,float y,float pressure,float tiltX, float tiltY,float rotation);
+    void addStrokeSample(float x, float y, float pressure, float tiltX, float tiltY, float rotation);
 
     void repositionBristles(double angle, double slope);
     void rotateBristles(double angle);
@@ -57,9 +58,15 @@ public:
     double computeMousePressure(double distance);
     void enableMousePressure(bool enable);
 
-    void setShear(double shearFactor){ m_shearFactor = shearFactor; }
-    void setRandom(double randomFactor){ m_randomFactor = randomFactor; }
-    void setScale(double scaleFactor){ m_scaleFactor = scaleFactor; }
+    void setShear(double shearFactor) {
+        m_shearFactor = shearFactor;
+    }
+    void setRandom(double randomFactor) {
+        m_randomFactor = randomFactor;
+    }
+    void setScale(double scaleFactor) {
+        m_scaleFactor = scaleFactor;
+    }
 
     /// paints single bristle
     void putBristle(Bristle *bristle, float wx, float wy, const KoColor &color);

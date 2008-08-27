@@ -52,20 +52,20 @@
 class KisPenOpSettings : public KisPaintOpSettings
 {
 public:
-    KisPenOpSettings( QWidget * parent )
-        : KisPaintOpSettings()
-        {
-            m_optionsWidget = new KisPaintOpOptionsWidget( parent );
-        }
+    KisPenOpSettings(QWidget * parent)
+            : KisPaintOpSettings() {
+        m_optionsWidget = new KisPaintOpOptionsWidget(parent);
+    }
 
-    KisPaintOpSettingsSP clone() const
-        {
-            KisPaintOpSettings * c = new KisPenOpSettings( 0 );
-            c->fromXML(toXML());
-            return c;
-        }
+    KisPaintOpSettingsSP clone() const {
+        KisPaintOpSettings * c = new KisPenOpSettings(0);
+        c->fromXML(toXML());
+        return c;
+    }
 
-    QWidget * widget() const { return m_optionsWidget; }
+    QWidget * widget() const {
+        return m_optionsWidget;
+    }
 
 private:
 
@@ -76,8 +76,8 @@ private:
 
 KisPaintOp * KisPenOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
 {
-    Q_UNUSED( image );
-    Q_UNUSED( settings );
+    Q_UNUSED(image);
+    Q_UNUSED(settings);
 
     KisPaintOp * op = new KisPenOp(painter);
     Q_CHECK_PTR(op);
@@ -97,7 +97,7 @@ KisPaintOpSettingsSP KisPenOpFactory::settings(KisImageSP image)
 
 
 KisPenOp::KisPenOp(KisPainter * painter)
-    : KisBrushBasedPaintOp(painter)
+        : KisBrushBasedPaintOp(painter)
 {
 }
 
@@ -112,10 +112,10 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
     if (!device) return;
     KisBrushSP brush = m_brush;
     if (!brush) return;
-    if (! brush->canPaintFor(info) )
+    if (! brush->canPaintFor(info))
         return;
 
-    double scale = KisPaintOp::scaleForPressure( info.pressure() );
+    double scale = KisPaintOp::scaleForPressure(info.pressure());
     QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 
@@ -124,14 +124,13 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
 
     KisPaintDeviceSP dab = KisPaintDeviceSP(0);
     if (brush->brushType() == IMAGE ||
-        brush->brushType() == PIPE_IMAGE) {
+            brush->brushType() == PIPE_IMAGE) {
         dab = brush->image(device->colorSpace(), scale, 0.0, info);
-    }
-    else {
+    } else {
         // Compute mask without sub-pixel positioning
-        dab = cachedDab( );
+        dab = cachedDab();
         KoColor color = painter()->paintColor();
-        color.convertTo( dab->colorSpace() );
+        color.convertTo(dab->colorSpace());
         brush->mask(dab, color, scale, scale, 0.0, info);
     }
 
@@ -139,7 +138,7 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
 
-    if ( painter()->bounds().isValid() ) {
+    if (painter()->bounds().isValid()) {
         dstRect &= painter()->bounds();
     }
 

@@ -138,7 +138,7 @@ public slots:
 
     /// The image projection has changed, now update the canvas
     /// representation of it.
-    void updateCanvasProjection( const QRect & rc );
+    void updateCanvasProjection(const QRect & rc);
 
     void setImageSize(qint32 w, qint32 h);
 
@@ -150,7 +150,7 @@ private slots:
      *
      * @param documentOffset the offset in widget pixels
      */
-    void documentOffsetMoved( const QPoint &documentOffset );
+    void documentOffsetMoved(const QPoint &documentOffset);
 
     /**
      * Called whenever the configuration settings change.
@@ -160,11 +160,11 @@ private slots:
     /**
      * Called whenever the display monitor profile resource changes
      */
-    void slotSetDisplayProfile( const KoColorProfile * profile );
+    void slotSetDisplayProfile(const KoColorProfile * profile);
 
 private:
 
-friend class KisView2;
+    friend class KisView2;
 
     void resetCanvas();
 
@@ -179,7 +179,7 @@ friend class KisView2;
      * offset, resolution and zoom and that is guaranteed to be inside
      * the widget.
      */
-    QRect viewRectFromDoc( const QRectF & docRect );
+    QRect viewRectFromDoc(const QRectF & docRect);
 
 private:
 

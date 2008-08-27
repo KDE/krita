@@ -22,7 +22,7 @@
 #include "kis_brush.h"
 
 KisBrushOption::KisBrushOption()
-    : KisPaintOpOption(i18n("Brush Tip"))
+        : KisPaintOpOption(i18n("Brush Tip"))
 {
     m_checkable = false;
     m_brushSelectionWidget = new KisBrushSelectionWidget();

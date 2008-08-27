@@ -29,13 +29,14 @@ class KisFilterConfiguration;
  * inherit this class. The configuration widget can emit sigPleaseUpdatePreview
  * when it wants the preview in the filter dialog to be updated.
  */
-class KRITAIMAGE_EXPORT KisFilterConfigWidget : public QWidget {
+class KRITAIMAGE_EXPORT KisFilterConfigWidget : public QWidget
+{
 
     Q_OBJECT
 
 protected:
 
-    KisFilterConfigWidget(QWidget * parent, Qt::WFlags f = 0 );
+    KisFilterConfigWidget(QWidget * parent, Qt::WFlags f = 0);
 
 public:
     virtual ~KisFilterConfigWidget();

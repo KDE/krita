@@ -29,39 +29,60 @@ typedef KoYCbCrTraits<quint16> YCbCrU16Traits;
 
 class KisYCbCrU16ColorSpace : public KisYCbCrBaseColorSpace<YCbCrU16Traits>
 {
-    public:
-        KisYCbCrU16ColorSpace( const KoCtlColorProfile *p);
-        virtual bool willDegrade(ColorSpaceIndependence independence) const {
-          if (independence == TO_RGBA8 )
+public:
+    KisYCbCrU16ColorSpace(const KoCtlColorProfile *p);
+    virtual bool willDegrade(ColorSpaceIndependence independence) const {
+        if (independence == TO_RGBA8)
             return true;
-          else
+        else
             return false;
-        }
-        virtual KoID colorModelId() const { return YCbCrAColorModelID; }
-        virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
-        virtual KoColorSpace* clone() const;
+    }
+    virtual KoID colorModelId() const {
+        return YCbCrAColorModelID;
+    }
+    virtual KoID colorDepthId() const {
+        return Integer16BitsColorDepthID;
+    }
+    virtual KoColorSpace* clone() const;
 };
 
 class KisYCbCrU16ColorSpaceFactory : public KoCtlColorSpaceFactory
 {
 public:
-    virtual QString id() const { return "YCbCrAU16"; }
-    virtual QString name() const { return i18n("YCBCR (16-bit integer/channel)"); }
-    virtual KoID colorModelId() const { return YCbCrAColorModelID; }
-    virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
-    virtual bool userVisible() const { return true; }
-    
-    virtual KoColorSpace *createColorSpace( const KoColorProfile * p) const
-    {
-        return new KisYCbCrU16ColorSpace( dynamic_cast<const KoCtlColorProfile*>(p));
+    virtual QString id() const {
+        return "YCbCrAU16";
     }
-    virtual int referenceDepth() const { return 16; }
+    virtual QString name() const {
+        return i18n("YCBCR (16-bit integer/channel)");
+    }
+    virtual KoID colorModelId() const {
+        return YCbCrAColorModelID;
+    }
+    virtual KoID colorDepthId() const {
+        return Integer16BitsColorDepthID;
+    }
+    virtual bool userVisible() const {
+        return true;
+    }
 
-    
-    virtual QString colorSpaceEngine() const { return ""; }
-    virtual bool isHdr() const { return false; }
-    
-    virtual QString defaultProfile() const { return "Standard YCbCr (16-bits)"; }
+    virtual KoColorSpace *createColorSpace(const KoColorProfile * p) const {
+        return new KisYCbCrU16ColorSpace(dynamic_cast<const KoCtlColorProfile*>(p));
+    }
+    virtual int referenceDepth() const {
+        return 16;
+    }
+
+
+    virtual QString colorSpaceEngine() const {
+        return "";
+    }
+    virtual bool isHdr() const {
+        return false;
+    }
+
+    virtual QString defaultProfile() const {
+        return "Standard YCbCr (16-bits)";
+    }
 };
 
 #endif

@@ -29,10 +29,10 @@
 using namespace Scripting;
 
 Progress::Progress(Module* module, KisView2* view)
-    : QObject()
-    , m_module(module)
-    , m_view(view)
-    , m_progressTotalSteps(0)
+        : QObject()
+        , m_module(module)
+        , m_view(view)
+        , m_progressTotalSteps(0)
 {
     m_mainwin = m_view ? m_view->shell() : 0;
 }
@@ -51,8 +51,8 @@ void Progress::activateAsSubject()
 
 void Progress::updateProgress(int progressPerCent)
 {
-    if( m_mainwin ) {
-        if( m_progressSteps == m_progressTotalSteps )
+    if (m_mainwin) {
+        if (m_progressSteps == m_progressTotalSteps)
             m_mainwin->slotProgress(-1);
         else
             m_mainwin->slotProgress(progressPerCent);
@@ -61,7 +61,7 @@ void Progress::updateProgress(int progressPerCent)
 
 void Progress::setProgressTotalSteps(uint totalSteps)
 {
-    if(m_progressTotalSteps < 1)
+    if (m_progressTotalSteps < 1)
         activateAsSubject();
 
     m_progressTotalSteps = totalSteps > 1 ? totalSteps : 1;
@@ -72,7 +72,7 @@ void Progress::setProgressTotalSteps(uint totalSteps)
 
 void Progress::setProgress(uint progress)
 {
-    if(m_progressTotalSteps < 1)
+    if (m_progressTotalSteps < 1)
         return;
 
     m_progressSteps = progress;
@@ -87,12 +87,12 @@ void Progress::setProgress(uint progress)
 
 void Progress::incProgress()
 {
-    setProgress( ++m_progressSteps );
+    setProgress(++m_progressSteps);
 }
 
 void Progress::setProgressStage(const QString& stage, uint progress)
 {
-    if(m_progressTotalSteps < 1)
+    if (m_progressTotalSteps < 1)
         return;
 
     uint progressPerCent = (progress * 100) / m_progressTotalSteps;

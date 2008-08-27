@@ -30,7 +30,8 @@
  * Creates the right layershape for all layers and puts them in the
  * right order
  */
-class KisLayerMapVisitor : public KisNodeVisitor {
+class KisLayerMapVisitor : public KisNodeVisitor
+{
 public:
 
     using KisNodeVisitor::visit;
@@ -39,14 +40,14 @@ public:
      * @param layerMap: the map that maps layers to layer shapes and
      * masks to mask shapes.
      */
-    KisLayerMapVisitor( QMap<KisNodeSP, KoShape*> & nodeMap );
+    KisLayerMapVisitor(QMap<KisNodeSP, KoShape*> & nodeMap);
     virtual ~KisLayerMapVisitor() {}
 
     QMap<KisNodeSP, KoShape*> & layerMap();
 
 public:
 
-    bool visit( KisExternalLayer * layer);
+    bool visit(KisExternalLayer * layer);
 
     bool visit(KisPaintLayer *layer);
 
@@ -68,8 +69,8 @@ public:
 
 private:
 
-    bool visitLeafNodeLayer( KisLayer * layer );
-    bool visitMask( KisMask * mask );
+    bool visitLeafNodeLayer(KisLayer * layer);
+    bool visitMask(KisMask * mask);
 
     QMap<KisNodeSP, KoShape*> m_nodeMap;
 };

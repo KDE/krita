@@ -28,28 +28,29 @@
 
 class KisRecordedAction;
 
-class KRITAIMAGE_EXPORT KisMacro : public QObject, public KisSerializableConfiguration {
+class KRITAIMAGE_EXPORT KisMacro : public QObject, public KisSerializableConfiguration
+{
     Q_OBJECT
-    public:
-        KisMacro(KisImageSP _image);
-        KisMacro(KisImageSP _image, const QList<KisRecordedAction*>& _actions);
-        ~KisMacro();
-    public:
-        void appendActions(const QList<KisRecordedAction*>& actions);
-    public:
-        void play();
-    public: // serialization functions
+public:
+    KisMacro(KisImageSP _image);
+    KisMacro(KisImageSP _image, const QList<KisRecordedAction*>& _actions);
+    ~KisMacro();
+public:
+    void appendActions(const QList<KisRecordedAction*>& actions);
+public:
+    void play();
+public: // serialization functions
 
-        using KisSerializableConfiguration::fromXML;
-        using KisSerializableConfiguration::toXML;
+    using KisSerializableConfiguration::fromXML;
+    using KisSerializableConfiguration::toXML;
 
-        virtual void fromXML(const QDomElement&);
-        virtual void toXML(QDomDocument&, QDomElement&) const;
-    public slots:
-        virtual void addAction(const KisRecordedAction& action);
-    private:
-        struct Private;
-        Private* const d;
+    virtual void fromXML(const QDomElement&);
+    virtual void toXML(QDomDocument&, QDomElement&) const;
+public slots:
+    virtual void addAction(const KisRecordedAction& action);
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

@@ -47,23 +47,23 @@ class KisQPainterCanvas : public QWidget, public KisAbstractCanvasWidget
 
 public:
 
-    KisQPainterCanvas( KisCanvas2 * canvas, QWidget * parent );
+    KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent);
 
     virtual ~KisQPainterCanvas();
 
-    void setPrescaledProjection( KisPrescaledProjectionSP prescaledProjection );
-    
+    void setPrescaledProjection(KisPrescaledProjectionSP prescaledProjection);
+
 public: // QWidget
 
-    
-    /// reimplemented method from superclass
-    void enterEvent( QEvent* e );
 
     /// reimplemented method from superclass
-    void leaveEvent( QEvent* e );
+    void enterEvent(QEvent* e);
 
     /// reimplemented method from superclass
-    void keyPressEvent( QKeyEvent *e );
+    void leaveEvent(QEvent* e);
+
+    /// reimplemented method from superclass
+    void keyPressEvent(QKeyEvent *e);
 
     /// reimplemented method from superclass
     void mouseMoveEvent(QMouseEvent *e);
@@ -81,22 +81,22 @@ public: // QWidget
     void mouseDoubleClickEvent(QMouseEvent *e);
 
     /// reimplemented method from superclass
-    void keyReleaseEvent (QKeyEvent *e);
+    void keyReleaseEvent(QKeyEvent *e);
 
     /// reimplemented method from superclass
     void paintEvent(QPaintEvent * ev);
 
     /// reimplemented method from superclass
-    void tabletEvent( QTabletEvent *e );
+    void tabletEvent(QTabletEvent *e);
 
     /// reimplemented method from superclass
-    void wheelEvent( QWheelEvent *e );
+    void wheelEvent(QWheelEvent *e);
 
     /// reimplemented method from superclass
     bool event(QEvent *event);
 
     /// reimplemented method from superclass
-    void resizeEvent( QResizeEvent *e );
+    void resizeEvent(QResizeEvent *e);
 
     /// reimplemented method from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
@@ -106,12 +106,14 @@ public: // QWidget
 
 public: // KisAbstractCanvasWidget
 
-    QWidget * widget() { return this; }
+    QWidget * widget() {
+        return this;
+    }
 
     KoToolProxy * toolProxy();
 
-    void documentOffsetMoved( const QPoint & );
-    
+    void documentOffsetMoved(const QPoint &);
+
 private slots:
     void slotConfigChanged();
 

@@ -27,11 +27,12 @@
 class KisDynamicTransformation;
 class QDomElement;
 
-class DYNAMIC_BRUSH_EXPORT KisDynamicTransformationsFactory {
-    public:
-        static KisDynamicTransformation* id2Transformation(QString id);
-        static KisDynamicTransformation* createFromXML(const QDomElement& e);
-        static QList<KoID> ids();
+class DYNAMIC_BRUSH_EXPORT KisDynamicTransformationsFactory
+{
+public:
+    static KisDynamicTransformation* id2Transformation(QString id);
+    static KisDynamicTransformation* createFromXML(const QDomElement& e);
+    static QList<KoID> ids();
 };
 
 #endif

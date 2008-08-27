@@ -32,10 +32,10 @@ class KRITAUI_EXPORT KisPressureSizeOption : public KisCurveOption
 {
 public:
     KisPressureSizeOption();
-    virtual void writeOptionSetting( KisPaintOpPresetSP preset ) const;
-    virtual void readOptionSetting( KisPaintOpPresetSP preset );
+    virtual void writeOptionSetting(KisPaintOpPresetSP preset) const;
+    virtual void readOptionSetting(KisPaintOpPresetSP preset);
 
-    KisPaintInformation apply( const KisPaintInformation & info ) const;
+    KisPaintInformation apply(const KisPaintInformation & info) const;
 
 
 };

@@ -49,7 +49,7 @@
 #include "kis_selection_tool_helper.h"
 
 KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
-    : super(canvas, KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6))
+        : super(canvas, KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6))
 {
     setObjectName("tool_select_contiguous");
     m_optWidget = 0;
@@ -62,9 +62,9 @@ KisToolSelectContiguous::~KisToolSelectContiguous()
 {
 }
 
-void KisToolSelectContiguous::activate( bool tmp )
+void KisToolSelectContiguous::activate(bool tmp)
 {
-    super::activate( tmp );
+    super::activate(tmp);
 
     if (!m_optWidget)
         return;
@@ -88,15 +88,15 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
         QPoint pos = convertToIntPixelCoord(e);
         QRect rc = currentImage()->bounds();
         KisFillPainter fillpainter(dev);
-        fillpainter.setHeight( rc.height() );
-        fillpainter.setWidth( rc.width() );
+        fillpainter.setHeight(rc.height());
+        fillpainter.setWidth(rc.width());
         fillpainter.setFillThreshold(m_fuzziness);
         fillpainter.setSampleMerged(m_sampleMerged);
         KisSelectionSP selection =
-            fillpainter.createFloodSelection(pos.x(), pos.y(), currentImage()->mergedImage() );
+            fillpainter.createFloodSelection(pos.x(), pos.y(), currentImage()->mergedImage());
 
-        KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*> ( m_canvas );
-        if ( !kisCanvas )
+        KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(m_canvas);
+        if (!kisCanvas)
             return;
 
         KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Contiguous Area Selection"));
@@ -107,7 +107,7 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
     }
 }
 
-void KisToolSelectContiguous::paint( QPainter &painter, const KoViewConverter &converter )
+void KisToolSelectContiguous::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
@@ -121,7 +121,7 @@ void KisToolSelectContiguous::slotSetFuzziness(int fuzziness)
 void KisToolSelectContiguous::slotSetAction(int action)
 {
     if (action >= SELECTION_REPLACE && action <= SELECTION_INTERSECT)
-        m_selectAction =(selectionAction)action;
+        m_selectAction = (selectionAction)action;
 // XXX: Fix cursors when then are done.
 //     switch(m_selectAction) {
 //         case SELECTION_ADD:
@@ -145,9 +145,9 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
     Q_ASSERT(l);
     if (l) {
-        l->setSpacing( 6 );
+        l->setSpacing(6);
 
-        connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+        connect(m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
         QHBoxLayout * hbox = new QHBoxLayout();
         Q_CHECK_PTR(hbox);
@@ -166,7 +166,7 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
 
         QCheckBox* samplemerged = new QCheckBox(i18n("Sample merged"), m_optWidget);
-        l->addWidget( samplemerged );
+        l->addWidget(samplemerged);
         samplemerged->setChecked(m_sampleMerged);
         connect(samplemerged, SIGNAL(stateChanged(int)),
                 this, SLOT(slotSetSampleMerged(int)));
@@ -179,7 +179,7 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
 
 QWidget* KisToolSelectContiguous::optionWidget()
 {
-        return m_optWidget;
+    return m_optWidget;
 }
 
 void KisToolSelectContiguous::slotSetSampleMerged(int state)

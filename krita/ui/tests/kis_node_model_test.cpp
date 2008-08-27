@@ -54,36 +54,36 @@ node model
 */
 void kisnodemodel_test::testRowcount()
 {
-    KisImageSP img = new KisImage( 0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage" );
+    KisImageSP img = new KisImage(0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage");
 
     KisNodeModel model(0);
     ModelTest(&model, this);
-    model.setImage( img );
+    model.setImage(img);
 
     KisLayerSP l1 = new KisPaintLayer(img, "first", 200, img->colorSpace());
-    img->addNode(l1.data(), img->root() );
-    QCOMPARE( model.rowCount(), 1 );
+    img->addNode(l1.data(), img->root());
+    QCOMPARE(model.rowCount(), 1);
 
     KisLayerSP l2 = new KisPaintLayer(img, "second", 200, img->colorSpace());
     img->addNode(l2.data(), img->root());
-    QVERIFY( model.rowCount() == 2 );
+    QVERIFY(model.rowCount() == 2);
 
     KisGroupLayerSP parent = new KisGroupLayer(img, "group 1", 200);
-    img->addLayer( parent, img->rootLayer() );
+    img->addLayer(parent, img->rootLayer());
 
-    QVERIFY( model.rowCount() == 3 );
+    QVERIFY(model.rowCount() == 3);
 
     KisPaintLayerSP child = new KisPaintLayer(img, "child", 200);
-    img->addLayer( child, parent );
+    img->addLayer(child, parent);
 
-    QVERIFY( model.rowCount() == 3 );
+    QVERIFY(model.rowCount() == 3);
 
-    QModelIndex idx = model.index( 0, 0 );
+    QModelIndex idx = model.index(0, 0);
     dbgKrita << "node: " << model.nodeFromIndex(idx);
-    QVERIFY( idx.isValid() );
-    QVERIFY( !idx.parent().isValid() );
-    QVERIFY( model.hasChildren( idx ) );
-    QVERIFY( model.rowCount(idx) == 1 );
+    QVERIFY(idx.isValid());
+    QVERIFY(!idx.parent().isValid());
+    QVERIFY(model.hasChildren(idx));
+    QVERIFY(model.rowCount(idx) == 1);
 }
 
 
@@ -95,116 +95,116 @@ image:
         second
 
 mode:
-        
+
         second 0
         first  1
 
 */
 void kisnodemodel_test::testModelIndex()
 {
-    KisImageSP img = new KisImage( 0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage" );
+    KisImageSP img = new KisImage(0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage");
 
     KisNodeModel model(0);
     ModelTest(&model, this);
-    model.setImage( img );
+    model.setImage(img);
 
     KisLayerSP first = new KisPaintLayer(img, "first", 200, img->colorSpace());
     img->addNode(first.data());
-    QModelIndex idx = model.index( 0, 0 );
+    QModelIndex idx = model.index(0, 0);
 
-    QVERIFY( idx.isValid() );
-    QVERIFY( !idx.parent().isValid() );
-    QVERIFY( idx.internalPointer() == first.data() );
-    QVERIFY( model.hasChildren( idx ) == false );
+    QVERIFY(idx.isValid());
+    QVERIFY(!idx.parent().isValid());
+    QVERIFY(idx.internalPointer() == first.data());
+    QVERIFY(model.hasChildren(idx) == false);
 
-    KisLayerSP second = new KisPaintLayer(img, "second", 200, img->colorSpace() );
+    KisLayerSP second = new KisPaintLayer(img, "second", 200, img->colorSpace());
     img->addNode(second.data());
-    QModelIndex idx2 = model.index( 0, 0 );
-    QVERIFY( idx2 != idx );
-    idx = model.index( 1, 0 );
-    
-    QVERIFY( idx2.isValid() );
-    QVERIFY( !idx2.parent().isValid() );
-    QVERIFY( idx2.internalPointer() == second.data() );
-    QVERIFY( idx2.sibling(1, 0) == idx );
-    QVERIFY( idx.sibling(0, 0) == idx2 );
-    QVERIFY( idx.model() == &model );
+    QModelIndex idx2 = model.index(0, 0);
+    QVERIFY(idx2 != idx);
+    idx = model.index(1, 0);
+
+    QVERIFY(idx2.isValid());
+    QVERIFY(!idx2.parent().isValid());
+    QVERIFY(idx2.internalPointer() == second.data());
+    QVERIFY(idx2.sibling(1, 0) == idx);
+    QVERIFY(idx.sibling(0, 0) == idx2);
+    QVERIFY(idx.model() == &model);
 
 
-/*
-image:
+    /*
+    image:
 
-    root
-        first
-        second
-        group
-            child
+        root
+            first
+            second
+            group
+                child
 
-mode:
-        group
-            child
-        second 0
-        first  1
- */
-    KisGroupLayerSP parent = new KisGroupLayer (img, "group 1", 200);
-    img->addLayer( parent, img->rootLayer() );
+    mode:
+            group
+                child
+            second 0
+            first  1
+     */
+    KisGroupLayerSP parent = new KisGroupLayer(img, "group 1", 200);
+    img->addLayer(parent, img->rootLayer());
 
     KisPaintLayerSP child = new KisPaintLayer(img, "child", 200);
-    img->addLayer( child, parent );
+    img->addLayer(child, parent);
 
-    QModelIndex parentIdx = model.index( 0, 0 );
+    QModelIndex parentIdx = model.index(0, 0);
 
-    QVERIFY( parentIdx.isValid() );
-    QVERIFY( !parentIdx.parent().isValid() );
+    QVERIFY(parentIdx.isValid());
+    QVERIFY(!parentIdx.parent().isValid());
     dbgKrita << model.nodeFromIndex(parentIdx);
-    QVERIFY( parentIdx.internalPointer() == parent.data() );
-    QVERIFY( model.hasChildren( parentIdx ) );
+    QVERIFY(parentIdx.internalPointer() == parent.data());
+    QVERIFY(model.hasChildren(parentIdx));
 
-    QModelIndex childIdx = parentIdx.child( 0, 0 );
-    QVERIFY( childIdx.isValid() );
-    QVERIFY( childIdx.parent().isValid() );
-    QVERIFY( childIdx.parent() == parentIdx );
-    QVERIFY( childIdx.internalPointer() == child.data() );
-    QVERIFY( childIdx.parent().internalPointer() == parent.data() );
+    QModelIndex childIdx = parentIdx.child(0, 0);
+    QVERIFY(childIdx.isValid());
+    QVERIFY(childIdx.parent().isValid());
+    QVERIFY(childIdx.parent() == parentIdx);
+    QVERIFY(childIdx.internalPointer() == child.data());
+    QVERIFY(childIdx.parent().internalPointer() == parent.data());
 
-    QModelIndex childIdx2 = model.index( 0, 0, parentIdx );
-    QVERIFY( childIdx2.isValid() );
-    QVERIFY( childIdx2.parent().isValid() );
-    QVERIFY( childIdx2.parent() == parentIdx );
-    QVERIFY( childIdx2.internalPointer() == child.data() );
-    QVERIFY( childIdx2.parent().internalPointer() == parent.data() );
+    QModelIndex childIdx2 = model.index(0, 0, parentIdx);
+    QVERIFY(childIdx2.isValid());
+    QVERIFY(childIdx2.parent().isValid());
+    QVERIFY(childIdx2.parent() == parentIdx);
+    QVERIFY(childIdx2.internalPointer() == child.data());
+    QVERIFY(childIdx2.parent().internalPointer() == parent.data());
 
-    idx = model.index( -1, 0 );
+    idx = model.index(-1, 0);
     QVERIFY(!idx.isValid());
 }
 
 void kisnodemodel_test::testGroupLayers()
 {
-    KisImageSP img = new KisImage( 0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage" );
+    KisImageSP img = new KisImage(0, 100, 100,  KoColorSpaceRegistry::instance()->rgb8(), "testimage");
 
     KisNodeModel model(0);
     ModelTest(&model, this);
-    
-    model.setImage( img );
+
+    model.setImage(img);
 
     KisLayerSP first = new KisPaintLayer(img, "first", 200, img->colorSpace());
-    KisLayerSP second = new KisPaintLayer(img, "second", 200, img->colorSpace() );
+    KisLayerSP second = new KisPaintLayer(img, "second", 200, img->colorSpace());
 
-    KisGroupLayerSP parent = new KisGroupLayer (img, "group 1", 200);
-    img->addLayer( parent, img->rootLayer() );
+    KisGroupLayerSP parent = new KisGroupLayer(img, "group 1", 200);
+    img->addLayer(parent, img->rootLayer());
 
     KisPaintLayerSP child = new KisPaintLayer(img, "child", 200);
-    img->addLayer( child, parent );
+    img->addLayer(child, parent);
 
-    QModelIndex parentIdx = model.index( 0, 0 );
-    QVERIFY( model.hasChildren( parentIdx ) );
+    QModelIndex parentIdx = model.index(0, 0);
+    QVERIFY(model.hasChildren(parentIdx));
 
-    QModelIndex childIdx2 = model.index( 0, 0, parentIdx );
-    QVERIFY( childIdx2.isValid() );
-    QVERIFY( childIdx2.parent().isValid() );
-    QVERIFY( childIdx2.parent() == parentIdx );
-    QVERIFY( childIdx2.internalPointer() == child.data() );
-    QVERIFY( childIdx2.parent().internalPointer() == parent.data() );
+    QModelIndex childIdx2 = model.index(0, 0, parentIdx);
+    QVERIFY(childIdx2.isValid());
+    QVERIFY(childIdx2.parent().isValid());
+    QVERIFY(childIdx2.parent() == parentIdx);
+    QVERIFY(childIdx2.internalPointer() == child.data());
+    QVERIFY(childIdx2.parent().internalPointer() == parent.data());
 
 }
 

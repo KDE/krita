@@ -17,7 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
- 
+
 #ifndef _KIS_GLSL_WIDGET
 #define _KIS_GLSL_WIDGET
 
@@ -34,28 +34,30 @@ class QString;
 class KisGlslWidget : public QGLWidget
 {
     Q_OBJECT
-            
-    public:
-        KisGlslWidget(KisPaintDeviceSP device, QWidget *parent = 0);
-        ~KisGlslWidget();
-        
-        void paintGL();
-        void resizeGL(int width, int height);
-        void initializeGL();
-        
-        bool isValidGLSL() const { return m_valid; }
-        
-    public slots:
-        void slotShaders(const QString &fragmentShader, const QString &vertexShader);
-     
-    private:
-        
-        GLuint m_texture, m_fragshader, m_vertexshader, m_program;
-        QGLFramebufferObject *m_framebuffer;
-        bool m_valid;
-        KisPaintDeviceSP m_device;
-        QRect m_bounds;
-        quint8* m_imgbuf;
-};       
+
+public:
+    KisGlslWidget(KisPaintDeviceSP device, QWidget *parent = 0);
+    ~KisGlslWidget();
+
+    void paintGL();
+    void resizeGL(int width, int height);
+    void initializeGL();
+
+    bool isValidGLSL() const {
+        return m_valid;
+    }
+
+public slots:
+    void slotShaders(const QString &fragmentShader, const QString &vertexShader);
+
+private:
+
+    GLuint m_texture, m_fragshader, m_vertexshader, m_program;
+    QGLFramebufferObject *m_framebuffer;
+    bool m_valid;
+    KisPaintDeviceSP m_device;
+    QRect m_bounds;
+    quint8* m_imgbuf;
+};
 
 #endif

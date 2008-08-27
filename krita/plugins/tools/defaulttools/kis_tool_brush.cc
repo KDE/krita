@@ -71,11 +71,11 @@ KisToolBrush::~KisToolBrush()
 
 void KisToolBrush::timeoutPaint()
 {
-    Q_ASSERT( m_painter->paintOp()->incremental() );
+    Q_ASSERT(m_painter->paintOp()->incremental());
     if (currentImage() && m_painter) {
-        paintAt( m_previousPaintInformation );
+        paintAt(m_previousPaintInformation);
         QRegion r = m_painter->dirtyRegion();
-        dbgPlugins <<"Timeout paint dirty region:" << r;
+        dbgPlugins << "Timeout paint dirty region:" << r;
         currentNode()->setDirty(r);
     }
 }
@@ -86,7 +86,7 @@ void KisToolBrush::initPaint(KoPointerEvent *e)
     KisToolFreehand::initPaint(e);
 
     if (!m_painter) {
-        kWarning() <<"Didn't create a painter! Something is wrong!";
+        kWarning() << "Didn't create a painter! Something is wrong!";
         return;
     }
 
@@ -100,7 +100,7 @@ void KisToolBrush::initPaint(KoPointerEvent *e)
     m_painter->setPaintOpPreset(currentPaintOpPreset(), currentImage()); // And now the painter owns the op and will destroy it.
 
     if (m_painter->paintOp()->incremental()) {
-        m_timer->start( m_rate );
+        m_timer->start(m_rate);
     }
 }
 
@@ -112,42 +112,43 @@ void KisToolBrush::endPaint()
 }
 
 
-void KisToolBrush::mouseMoveEvent(KoPointerEvent *e) {
+void KisToolBrush::mouseMoveEvent(KoPointerEvent *e)
+{
     KisToolFreehand::mouseMoveEvent(e);
     KisConfig cfg;
     if (m_mode != PAINT && cfg.cursorStyle() == CURSOR_STYLE_OUTLINE)
         paintOutline(e->pos());
-    if ( m_painter && m_painter->paintOp() && m_painter->paintOp()->incremental()) {
-        m_timer->start( m_rate );
+    if (m_painter && m_painter->paintOp() && m_painter->paintOp()->incremental()) {
+        m_timer->start(m_rate);
     }
 }
 
 #if 0
 // XXX: TOOL_REFACTOR
-void KisToolBrush::leave(QEvent */*e*/) {
+void KisToolBrush::leave(QEvent */*e*/)
+{
     m_canvs->updateCanvas(); // remove the outline
 }
 #endif
 
-void KisToolBrush::slotSetPaintingMode( int mode )
+void KisToolBrush::slotSetPaintingMode(int mode)
 {
     if (mode == QCheckBox::On) {
         // Direct painting
         m_paintIncremental = true;
-    }
-    else {
+    } else {
         m_paintIncremental = false;
     }
 }
 
-void KisToolBrush::slotSetSmoothness( int smoothness )
+void KisToolBrush::slotSetSmoothness(int smoothness)
 {
     m_smoothness = smoothness / (double)MAXIMUM_SMOOTHNESS;
 }
 
-void KisToolBrush::slotSetMagnetism( int magnetism )
+void KisToolBrush::slotSetMagnetism(int magnetism)
 {
-    m_magnetism = expf(magnetism / (double)MAXIMUM_MAGNETISM)/ expf(1.0);
+    m_magnetism = expf(magnetism / (double)MAXIMUM_MAGNETISM) / expf(1.0);
 }
 
 QWidget * KisToolBrush::createOptionWidget()
@@ -175,7 +176,7 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderSmoothness->setEnabled(false);
     connect(m_chkSmooth, SIGNAL(toggled(bool)), m_sliderSmoothness, SLOT(setEnabled(bool)));
     connect(m_sliderSmoothness, SIGNAL(valueChanged(int)), SLOT(slotSetSmoothness(int)));
-    m_sliderSmoothness->setValue( m_smoothness * MAXIMUM_SMOOTHNESS );
+    m_sliderSmoothness->setValue(m_smoothness * MAXIMUM_SMOOTHNESS);
 
     // Drawing assistant configuration
     m_chkAssistant = new QCheckBox(i18n("Assistant:"), optionWidget);
@@ -189,7 +190,7 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderMagnetism->setMaximum(MAXIMUM_SMOOTHNESS);
     m_sliderMagnetism->setEnabled(false);
     connect(m_chkAssistant, SIGNAL(toggled(bool)), m_sliderMagnetism, SLOT(setEnabled(bool)));
-    m_sliderMagnetism->setValue( m_magnetism * MAXIMUM_MAGNETISM );
+    m_sliderMagnetism->setValue(m_magnetism * MAXIMUM_MAGNETISM);
     connect(m_sliderMagnetism, SIGNAL(valueChanged(int)), SLOT(slotSetMagnetism(int)));
 
     m_optionLayout = new QGridLayout(optionWidget);

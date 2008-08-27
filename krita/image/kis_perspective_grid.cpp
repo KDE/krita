@@ -27,7 +27,7 @@ struct KisPerspectiveGridNode::Private {
     QList<KisSubPerspectiveGrid*> subGrids;
 };
 
-KisPerspectiveGridNode::KisPerspectiveGridNode(double x, double y) : QPointF(x,y), d(new Private)
+KisPerspectiveGridNode::KisPerspectiveGridNode(double x, double y) : QPointF(x, y), d(new Private)
 {
 }
 KisPerspectiveGridNode::KisPerspectiveGridNode(QPointF p) : QPointF(p), d(new Private)
@@ -40,33 +40,28 @@ KisPerspectiveGridNode::~KisPerspectiveGridNode()
 
 void KisPerspectiveGridNode::registerSubPerspectiveGrid(KisSubPerspectiveGrid* grid)
 {
-    d->subGrids.append( grid );
+    d->subGrids.append(grid);
 }
 
-void KisPerspectiveGridNode::unRegisterSubPerspectiveGrid(KisSubPerspectiveGrid* grid )
+void KisPerspectiveGridNode::unRegisterSubPerspectiveGrid(KisSubPerspectiveGrid* grid)
 {
-    d->subGrids.removeAll( grid );
+    d->subGrids.removeAll(grid);
 }
 
 
 void KisPerspectiveGridNode::mergeWith(KisPerspectiveGridNodeSP node)
 {
-    foreach(KisSubPerspectiveGrid* grid, node->d->subGrids)
-    {
-        if(grid->topLeft() == node)
-        {
+    foreach(KisSubPerspectiveGrid* grid, node->d->subGrids) {
+        if (grid->topLeft() == node) {
             grid->setTopLeft(this);
         }
-        if(grid->topRight() == node)
-        {
+        if (grid->topRight() == node) {
             grid->setTopRight(this);
         }
-        if(grid->bottomLeft() == node)
-        {
+        if (grid->bottomLeft() == node) {
             grid->setBottomLeft(this);
         }
-        if(grid->bottomRight() == node)
-        {
+        if (grid->bottomRight() == node) {
             grid->setBottomRight(this);
         }
     }
@@ -86,12 +81,12 @@ struct KisSubPerspectiveGrid::Private {
 int KisSubPerspectiveGrid::Private::s_lastIndex = 0;
 
 KisSubPerspectiveGrid::KisSubPerspectiveGrid(KisPerspectiveGridNodeSP topLeft, KisPerspectiveGridNodeSP topRight, KisPerspectiveGridNodeSP bottomRight, KisPerspectiveGridNodeSP bottomLeft)
-    : d(new Private)
+        : d(new Private)
 {
     setTopLeft(topLeft);
-    setTopRight( topRight );
-    setBottomLeft( bottomLeft );
-    setBottomRight( bottomRight );
+    setTopRight(topRight);
+    setBottomLeft(bottomLeft);
+    setBottomRight(bottomRight);
     d->subdivisions = 5;
     d->index = ++Private::s_lastIndex;
 }
@@ -107,7 +102,7 @@ KisSubPerspectiveGrid::~KisSubPerspectiveGrid()
 
 QPointF KisSubPerspectiveGrid::computeVanishingPoint(KisPerspectiveGridNodeSP p11, KisPerspectiveGridNodeSP p12, KisPerspectiveGridNodeSP p21, KisPerspectiveGridNodeSP p22)
 {
-    return toQPointF(LineEquation(p11, p12).intersection(LineEquation( p21, p22 )));
+    return toQPointF(LineEquation(p11, p12).intersection(LineEquation(p21, p22)));
 }
 
 bool KisSubPerspectiveGrid::contains(const QPointF p) const
@@ -115,22 +110,18 @@ bool KisSubPerspectiveGrid::contains(const QPointF p) const
     Q_UNUSED(p);
     return true;
 #if 0
-    KisPerspectiveMath::LineEquation d1 = KisPerspectiveMath::computeLineEquation( topLeft().data(), topRight().data() );
+    KisPerspectiveMath::LineEquation d1 = KisPerspectiveMath::computeLineEquation(topLeft().data(), topRight().data());
 //     dbgImage << p.y() <<"" << (p.x() * d1.a + d1.b);
-    if( p.y() >= p.x() * d1.a + d1.b)
-    {
-        d1 = KisPerspectiveMath::computeLineEquation( topRight().data(), bottomRight().data() );
+    if (p.y() >= p.x() * d1.a + d1.b) {
+        d1 = KisPerspectiveMath::computeLineEquation(topRight().data(), bottomRight().data());
 //         dbgImage << p.y() <<"" << (p.x() * d1.a + d1.b);
-        if( p.y() >= p.x() * d1.a + d1.b)
-        {
-            d1 = KisPerspectiveMath::computeLineEquation( bottomRight().data(), bottomLeft().data() );
+        if (p.y() >= p.x() * d1.a + d1.b) {
+            d1 = KisPerspectiveMath::computeLineEquation(bottomRight().data(), bottomLeft().data());
 //             dbgImage << p.y() <<"" << (p.x() * d1.a + d1.b);
-            if( p.y() <= p.x() * d1.a + d1.b)
-            {
-                d1 = KisPerspectiveMath::computeLineEquation( bottomLeft().data(), topLeft().data() );
+            if (p.y() <= p.x() * d1.a + d1.b) {
+                d1 = KisPerspectiveMath::computeLineEquation(bottomLeft().data(), topLeft().data());
 //                 dbgImage << p.y() <<"" << (p.x() * d1.a + d1.b);
-                if( p.y() <= p.x() * d1.a + d1.b)
-                {
+                if (p.y() <= p.x() * d1.a + d1.b) {
                     return true;
                 }
             }
@@ -142,7 +133,7 @@ bool KisSubPerspectiveGrid::contains(const QPointF p) const
 
 QPointF KisSubPerspectiveGrid::center() const
 {
-    return 0.25 * ( *d->topLeft + *d->topRight + *d->bottomLeft + *d->bottomRight );
+    return 0.25 * (*d->topLeft + *d->topRight + *d->bottomLeft + *d->bottomRight);
 }
 
 int KisSubPerspectiveGrid::index() const
@@ -152,12 +143,12 @@ int KisSubPerspectiveGrid::index() const
 
 QPointF KisSubPerspectiveGrid::topBottomVanishingPoint()
 {
-    return computeVanishingPoint( topLeft(), topRight(), bottomLeft(), bottomRight() );
+    return computeVanishingPoint(topLeft(), topRight(), bottomLeft(), bottomRight());
 }
 
 QPointF KisSubPerspectiveGrid::leftRightVanishingPoint()
 {
-    return computeVanishingPoint( topLeft(), bottomLeft(), topRight(), bottomRight() );
+    return computeVanishingPoint(topLeft(), bottomLeft(), topRight(), bottomRight());
 }
 
 const KisPerspectiveGridNodeSP KisSubPerspectiveGrid::topLeft() const
@@ -170,10 +161,10 @@ KisPerspectiveGridNodeSP KisSubPerspectiveGrid::topLeft()
     return d->topLeft;
 }
 
-void KisSubPerspectiveGrid::setTopLeft( KisPerspectiveGridNodeSP node)
+void KisSubPerspectiveGrid::setTopLeft(KisPerspectiveGridNodeSP node)
 {
     d->topLeft = node;
-    d->topLeft->registerSubPerspectiveGrid( this );
+    d->topLeft->registerSubPerspectiveGrid(this);
 }
 
 const KisPerspectiveGridNodeSP KisSubPerspectiveGrid::topRight() const
@@ -186,10 +177,10 @@ KisPerspectiveGridNodeSP KisSubPerspectiveGrid::topRight()
     return d->topRight;
 }
 
-void KisSubPerspectiveGrid::setTopRight( KisPerspectiveGridNodeSP node)
+void KisSubPerspectiveGrid::setTopRight(KisPerspectiveGridNodeSP node)
 {
     d->topRight = node;
-    d->topRight->registerSubPerspectiveGrid( this );
+    d->topRight->registerSubPerspectiveGrid(this);
 }
 
 const KisPerspectiveGridNodeSP KisSubPerspectiveGrid::bottomLeft() const
@@ -202,10 +193,10 @@ KisPerspectiveGridNodeSP KisSubPerspectiveGrid::bottomLeft()
     return d->bottomLeft;
 }
 
-void KisSubPerspectiveGrid::setBottomLeft( KisPerspectiveGridNodeSP node)
+void KisSubPerspectiveGrid::setBottomLeft(KisPerspectiveGridNodeSP node)
 {
     d->bottomLeft = node;
-    d->bottomLeft->registerSubPerspectiveGrid( this );
+    d->bottomLeft->registerSubPerspectiveGrid(this);
 }
 
 const KisPerspectiveGridNodeSP KisSubPerspectiveGrid::bottomRight() const
@@ -218,10 +209,10 @@ KisPerspectiveGridNodeSP KisSubPerspectiveGrid::bottomRight()
     return d->bottomRight;
 }
 
-void KisSubPerspectiveGrid::setBottomRight( KisPerspectiveGridNodeSP node)
+void KisSubPerspectiveGrid::setBottomRight(KisPerspectiveGridNodeSP node)
 {
     d->bottomRight = node;
-    d->bottomRight->registerSubPerspectiveGrid( this );
+    d->bottomRight->registerSubPerspectiveGrid(this);
 }
 
 int KisSubPerspectiveGrid::subdivisions() const
@@ -244,26 +235,25 @@ KisPerspectiveGrid::KisPerspectiveGrid() : d(new Private)
 
 KisPerspectiveGrid::~KisPerspectiveGrid()
 {
-    clearSubGrids( );
+    clearSubGrids();
     delete d;
 }
 
-bool KisPerspectiveGrid::addNewSubGrid( KisSubPerspectiveGrid* ng )
+bool KisPerspectiveGrid::addNewSubGrid(KisSubPerspectiveGrid* ng)
 {
     d->subGrids.push_back(ng);
     return true;
 }
 
-void KisPerspectiveGrid::deleteSubGrid( KisSubPerspectiveGrid* grid)
+void KisPerspectiveGrid::deleteSubGrid(KisSubPerspectiveGrid* grid)
 {
     d->subGrids.removeAll(grid);
     delete grid;
 }
 
-void KisPerspectiveGrid::clearSubGrids( )
+void KisPerspectiveGrid::clearSubGrids()
 {
-    for( QList<KisSubPerspectiveGrid*>::const_iterator it = begin(); it != end(); ++it)
-    {
+    for (QList<KisSubPerspectiveGrid*>::const_iterator it = begin(); it != end(); ++it) {
         delete *it;
     }
     d->subGrids.clear();
@@ -271,10 +261,8 @@ void KisPerspectiveGrid::clearSubGrids( )
 
 KisSubPerspectiveGrid* KisPerspectiveGrid::gridAt(QPointF p)
 {
-    for( QList<KisSubPerspectiveGrid*>::const_iterator it = begin(); it != end(); ++it)
-    {
-        if( (*it)->contains(p) )
-        {
+    for (QList<KisSubPerspectiveGrid*>::const_iterator it = begin(); it != end(); ++it) {
+        if ((*it)->contains(p)) {
             return *it;
         }
     }

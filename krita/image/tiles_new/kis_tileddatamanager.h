@@ -45,13 +45,16 @@ class KisTileStore;
 class KisDataManagerProxy;
 typedef KisSharedPtr<KisDataManagerProxy> KisDataManagerProxySP;
 
-class KisTileDataWrapper : public KisShared {
+class KisTileDataWrapper : public KisShared
+{
     KisTile* m_tile;
     qint32 m_offset;
 public:
     KisTileDataWrapper(KisTile* tile, qint32 offset);
     virtual ~KisTileDataWrapper();
-    quint8* data() const { return m_tile->data() + m_offset; }
+    quint8* data() const {
+        return m_tile->data() + m_offset;
+    }
 };
 
 typedef KisSharedPtr<KisTileDataWrapper> KisTileDataWrapperSP;
@@ -72,7 +75,8 @@ typedef KisSharedPtr<KisTileDataWrapper> KisTileDataWrapperSP;
  * how many quint8's a single pixel takes.
  */
 
-class KRITAIMAGE_EXPORT KisTiledDataManager : public KisShared {
+class KRITAIMAGE_EXPORT KisTiledDataManager : public KisShared
+{
 
 protected:
     KisTiledDataManager(quint32 pixelSize, const quint8 *defPixel);
@@ -89,12 +93,16 @@ protected:
 protected:
 
     void setDefaultPixel(const quint8 *defPixel);
-    const quint8 * defaultPixel() const { return m_defPixel;}
+    const quint8 * defaultPixel() const {
+        return m_defPixel;
+    }
 
     KisMementoSP getMemento();
     void rollback(KisMementoSP memento);
     void rollforward(KisMementoSP memento);
-    bool hasCurrentMemento() const { return m_currentMemento; }
+    bool hasCurrentMemento() const {
+        return m_currentMemento;
+    }
 
 protected:
     /**
@@ -134,8 +142,8 @@ protected:
      * for managing the vector.
      */
     void readBytes(quint8 * bytes,
-               qint32 x, qint32 y,
-               qint32 w, qint32 h);
+                   qint32 x, qint32 y,
+                   qint32 w, qint32 h);
     /**
      * Copy the bytes in the vector to the specified rect. If there are bytes left
      * in the vector after filling the rect, they will be ignored. If there are
@@ -143,8 +151,8 @@ protected:
      * given (by default, 0);
      */
     void writeBytes(const quint8 * bytes,
-            qint32 x, qint32 y,
-            qint32 w, qint32 h);
+                    qint32 x, qint32 y,
+                    qint32 w, qint32 h);
 
 
     /**
@@ -153,7 +161,7 @@ protected:
      * paint device. If the specified area is larger than the paint
      * device's extent, the default pixel will be read.
      */
-    QVector<quint8*> readPlanarBytes( QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h);
+    QVector<quint8*> readPlanarBytes(QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h);
 
     /**
      * Write the data in the separate arrays to the channes. If there
@@ -168,7 +176,7 @@ protected:
      *
      * XXX: what about undo?
      */
-    void writePlanarBytes( QVector<quint8*> planes, QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h);
+    void writePlanarBytes(QVector<quint8*> planes, QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h);
 
     /// Get the number of contiguous columns starting at x, valid for all values
     /// of y between minY and maxY.

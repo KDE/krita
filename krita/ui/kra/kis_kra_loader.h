@@ -30,13 +30,14 @@ class KoStore;
 /**
  * Load old-style 1.x .kra files.
  */
-class KisKraLoader : public QObject {
+class KisKraLoader : public QObject
+{
 
     Q_OBJECT
 
 public:
 
-    KisKraLoader( KisDoc2 * document );
+    KisKraLoader(KisDoc2 * document);
 
     ~KisKraLoader();
 
@@ -46,7 +47,7 @@ public:
      */
     KisImageSP loadXML(const KoXmlElement& elem);
 
-    void loadBinaryData( KoStore* store, KisImageSP image, const QString & uri, bool external);
+    void loadBinaryData(KoStore* store, KisImageSP image, const QString & uri, bool external);
 private:
 
     void loadLayers(const KoXmlElement& element, KisImageSP img, KisGroupLayerSP parent);
@@ -58,10 +59,10 @@ private:
     KisGroupLayerSP loadGroupLayer(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp);
 
     KisAdjustmentLayerSP loadAdjustmentLayer(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString & compositeOp);
-    
+
     KisShapeLayerSP loadShapeLayer(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp);
 
-    
+
 
 private:
 

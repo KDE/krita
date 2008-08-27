@@ -30,9 +30,10 @@ class Ui_FilterOpOptions;
 class KoID;
 class KisFilterConfigWidget;
 
-class KisFilterOpSettings : public QObject, public KisPaintOpSettings {
+class KisFilterOpSettings : public QObject, public KisPaintOpSettings
+{
 
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -42,7 +43,9 @@ public:
 
     virtual KisPaintOpSettingsSP clone() const;
 
-    virtual QWidget *widget() const { return m_optionsWidget; }
+    virtual QWidget *widget() const {
+        return m_optionsWidget;
+    }
 
     const KisFilterSP filter() const;
 
@@ -50,7 +53,7 @@ public:
 
     bool ignoreAlpha() const;
 
-    virtual void setNode( KisNodeSP node );
+    virtual void setNode(KisNodeSP node);
 
     using KisPaintOpSettings::fromXML;
     virtual void fromXML(const QDomElement&);

@@ -23,7 +23,8 @@
 #include <QVector>
 #include <QPointF>
 
-class Trajectory{
+class Trajectory
+{
 
 public:
     Trajectory();

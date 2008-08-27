@@ -29,16 +29,18 @@ class KisFilter;
 class KisWdgNoise : public KisFilterConfigWidget
 {
     Q_OBJECT
-    public:
-        KisWdgNoise(KisFilter* nfilter, QWidget* parent = 0);
-        ~KisWdgNoise();
-    public:
-        inline const Ui_WdgNoiseOptions* widget() const { return m_widget; }
-        virtual void setConfiguration(KisFilterConfiguration*);
-        virtual KisFilterConfiguration* configuration() const;
-    private:
-        Ui_WdgNoiseOptions* m_widget;
-        int m_seedThreshold, m_seedRed, m_seedGreen, m_seedBlue;
+public:
+    KisWdgNoise(KisFilter* nfilter, QWidget* parent = 0);
+    ~KisWdgNoise();
+public:
+    inline const Ui_WdgNoiseOptions* widget() const {
+        return m_widget;
+    }
+    virtual void setConfiguration(KisFilterConfiguration*);
+    virtual KisFilterConfiguration* configuration() const;
+private:
+    Ui_WdgNoiseOptions* m_widget;
+    int m_seedThreshold, m_seedRed, m_seedGreen, m_seedBlue;
 };
 
 #endif

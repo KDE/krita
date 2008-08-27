@@ -26,22 +26,23 @@
 
 class KisView2;
 
-namespace Scripting {
+namespace Scripting
+{
 
-    class KROSSKRITACORE_EXPORT Monitor : public QObject
-    {
-            Q_OBJECT
-        private:
-            explicit Monitor();
-        public:
-            virtual ~Monitor();
-            static Monitor* instance();
-            void started();
-            void finished();
-        Q_SIGNALS:
-            void signalExecutionStarted();
-            void signalExecutionFinished();
-    };
+class KROSSKRITACORE_EXPORT Monitor : public QObject
+{
+    Q_OBJECT
+private:
+    explicit Monitor();
+public:
+    virtual ~Monitor();
+    static Monitor* instance();
+    void started();
+    void finished();
+Q_SIGNALS:
+    void signalExecutionStarted();
+    void signalExecutionFinished();
+};
 
 }
 

@@ -55,433 +55,439 @@
 
 #include "KoColorSpaceRegistry.h"
 
-namespace {
+namespace
+{
 
-    class GradientShapeStrategy {
-    public:
-        GradientShapeStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
-        virtual ~GradientShapeStrategy() {}
+class GradientShapeStrategy
+{
+public:
+    GradientShapeStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
+    virtual ~GradientShapeStrategy() {}
 
-        virtual double valueAt(double x, double y) const = 0;
+    virtual double valueAt(double x, double y) const = 0;
 
-    protected:
-        QPointF m_gradientVectorStart;
-        QPointF m_gradientVectorEnd;
-    };
+protected:
+    QPointF m_gradientVectorStart;
+    QPointF m_gradientVectorEnd;
+};
 
-    GradientShapeStrategy::GradientShapeStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
+GradientShapeStrategy::GradientShapeStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
         : m_gradientVectorStart(gradientVectorStart), m_gradientVectorEnd(gradientVectorEnd)
-    {
-    }
+{
+}
 
 
-    class LinearGradientStrategy : public GradientShapeStrategy {
+class LinearGradientStrategy : public GradientShapeStrategy
+{
 
-    public:
-        LinearGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
+public:
+    LinearGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
 
-        virtual double valueAt(double x, double y) const;
+    virtual double valueAt(double x, double y) const;
 
-    protected:
-        double m_normalisedVectorX;
-        double m_normalisedVectorY;
-        double m_vectorLength;
-    };
+protected:
+    double m_normalisedVectorX;
+    double m_normalisedVectorY;
+    double m_vectorLength;
+};
 
-    LinearGradientStrategy::LinearGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
+LinearGradientStrategy::LinearGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
         : GradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
-    {
-        double dx = gradientVectorEnd.x() - gradientVectorStart.x();
-        double dy = gradientVectorEnd.y() - gradientVectorStart.y();
-
-        m_vectorLength = sqrt((dx * dx) + (dy * dy));
-
-        if (m_vectorLength < DBL_EPSILON) {
-            m_normalisedVectorX = 0;
-            m_normalisedVectorY = 0;
-        }
-        else {
-            m_normalisedVectorX = dx / m_vectorLength;
-            m_normalisedVectorY = dy / m_vectorLength;
-        }
-    }
-
-    double LinearGradientStrategy::valueAt(double x, double y) const
-    {
-        double vx = x - m_gradientVectorStart.x();
-        double vy = y - m_gradientVectorStart.y();
-
-        // Project the vector onto the normalised gradient vector.
-        double t = vx * m_normalisedVectorX + vy * m_normalisedVectorY;
-
-        if (m_vectorLength < DBL_EPSILON) {
-            t = 0;
-        }
-        else {
-            // Scale to 0 to 1 over the gradient vector length.
-            t /= m_vectorLength;
-        }
-
-        return t;
-    }
-
-
-    class BiLinearGradientStrategy : public LinearGradientStrategy {
-
-    public:
-        BiLinearGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
-
-        virtual double valueAt(double x, double y) const;
-    };
-
-    BiLinearGradientStrategy::BiLinearGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
-        : LinearGradientStrategy(gradientVectorStart, gradientVectorEnd)
-    {
-    }
-
-    double BiLinearGradientStrategy::valueAt(double x, double y) const
-    {
-        double t = LinearGradientStrategy::valueAt(x, y);
-
-        // Reflect
-        if (t < -DBL_EPSILON) {
-            t = -t;
-        }
-
-        return t;
-    }
-
-
-    class RadialGradientStrategy : public GradientShapeStrategy {
-
-    public:
-        RadialGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
-
-        virtual double valueAt(double x, double y) const;
-
-    protected:
-        double m_radius;
-    };
-
-    RadialGradientStrategy::RadialGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
-        : GradientShapeStrategy (gradientVectorStart, gradientVectorEnd)
-    {
-        double dx = gradientVectorEnd.x() - gradientVectorStart.x();
-        double dy = gradientVectorEnd.y() - gradientVectorStart.y();
-
-        m_radius = sqrt((dx * dx) + (dy * dy));
-    }
-
-    double RadialGradientStrategy::valueAt(double x, double y) const
-    {
-        double dx = x - m_gradientVectorStart.x();
-        double dy = y - m_gradientVectorStart.y();
-
-        double distance = sqrt((dx * dx) + (dy * dy));
-
-        double t;
-
-        if (m_radius < DBL_EPSILON) {
-            t = 0;
-        }
-        else {
-            t = distance / m_radius;
-        }
-
-        return t;
-    }
-
-
-    class SquareGradientStrategy : public GradientShapeStrategy {
-
-    public:
-        SquareGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
-
-        virtual double valueAt(double x, double y) const;
-
-    protected:
-        double m_normalisedVectorX;
-        double m_normalisedVectorY;
-        double m_vectorLength;
-    };
-
-    SquareGradientStrategy::SquareGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
-        : GradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
-    {
-        double dx = gradientVectorEnd.x() - gradientVectorStart.x();
-        double dy = gradientVectorEnd.y() - gradientVectorStart.y();
-
-        m_vectorLength = sqrt((dx * dx) + (dy * dy));
-
-        if (m_vectorLength < DBL_EPSILON) {
-            m_normalisedVectorX = 0;
-            m_normalisedVectorY = 0;
-        }
-        else {
-            m_normalisedVectorX = dx / m_vectorLength;
-            m_normalisedVectorY = dy / m_vectorLength;
-        }
-    }
-
-    double SquareGradientStrategy::valueAt(double x, double y) const
-    {
-        double px = x - m_gradientVectorStart.x();
-        double py = y - m_gradientVectorStart.y();
-
-        double distance1 = 0;
-        double distance2 = 0;
-
-        if (m_vectorLength > DBL_EPSILON) {
-
-            // Point to line distance is:
-            // distance = ((l0.y() - l1.y()) * p.x() + (l1.x() - l0.x()) * p.y() + l0.x() * l1.y() - l1.x() * l0.y()) / m_vectorLength;
-            //
-            // Here l0 = (0, 0) and |l1 - l0| = 1
-
-            distance1 = -m_normalisedVectorY * px + m_normalisedVectorX * py;
-            distance1 = fabs(distance1);
-
-            // Rotate point by 90 degrees and get the distance to the perpendicular
-            distance2 = -m_normalisedVectorY * -py + m_normalisedVectorX * px;
-            distance2 = fabs(distance2);
-        }
-
-        double t = qMax(distance1, distance2) / m_vectorLength;
-
-        return t;
-    }
-
-
-    class ConicalGradientStrategy : public GradientShapeStrategy {
-
-    public:
-        ConicalGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
-
-        virtual double valueAt(double x, double y) const;
-
-    protected:
-        double m_vectorAngle;
-    };
-
-    ConicalGradientStrategy::ConicalGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
-        : GradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
-    {
-        double dx = gradientVectorEnd.x() - gradientVectorStart.x();
-        double dy = gradientVectorEnd.y() - gradientVectorStart.y();
-
-        // Get angle from 0 to 2 PI.
-        m_vectorAngle = atan2(dy, dx) + M_PI;
-    }
-
-    double ConicalGradientStrategy::valueAt(double x, double y) const
-    {
-        double px = x - m_gradientVectorStart.x();
-        double py = y - m_gradientVectorStart.y();
-
-        double angle = atan2(py, px) + M_PI;
-
-        angle -= m_vectorAngle;
-
-        if (angle < 0) {
-            angle += 2 * M_PI;
-        }
-
-        double t = angle / (2 * M_PI);
-
-        return t;
-    }
-
-
-    class ConicalSymetricGradientStrategy : public GradientShapeStrategy {
-    public:
-        ConicalSymetricGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
-
-        virtual double valueAt(double x, double y) const;
-
-    protected:
-        double m_vectorAngle;
-    };
-
-    ConicalSymetricGradientStrategy::ConicalSymetricGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
-        : GradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
-    {
-        double dx = gradientVectorEnd.x() - gradientVectorStart.x();
-        double dy = gradientVectorEnd.y() - gradientVectorStart.y();
-
-        // Get angle from 0 to 2 PI.
-        m_vectorAngle = atan2(dy, dx) + M_PI;
-    }
-
-    double ConicalSymetricGradientStrategy::valueAt(double x, double y) const
-    {
-        double px = x - m_gradientVectorStart.x();
-        double py = y - m_gradientVectorStart.y();
-
-        double angle = atan2(py, px) + M_PI;
-
-        angle -= m_vectorAngle;
-
-        if (angle < 0) {
-            angle += 2 * M_PI;
-        }
-
-        double t;
-
-        if (angle < M_PI) {
-            t = angle / M_PI;
-        }
-        else {
-            t = 1 - ((angle - M_PI) / M_PI);
-        }
-
-        return t;
-    }
-
-
-    class GradientRepeatStrategy {
-    public:
-        GradientRepeatStrategy() {}
-        virtual ~GradientRepeatStrategy() {}
-
-        virtual double valueAt(double t) const = 0;
-    };
-
-
-    class GradientRepeatNoneStrategy : public GradientRepeatStrategy {
-    public:
-        static GradientRepeatNoneStrategy *instance();
-
-        virtual double valueAt(double t) const;
-
-    private:
-        GradientRepeatNoneStrategy() {}
-
-        static GradientRepeatNoneStrategy *m_instance;
-    };
-
-    GradientRepeatNoneStrategy *GradientRepeatNoneStrategy::m_instance = 0;
-
-    GradientRepeatNoneStrategy *GradientRepeatNoneStrategy::instance()
-    {
-        if (m_instance == 0) {
-            m_instance = new GradientRepeatNoneStrategy();
-            Q_CHECK_PTR(m_instance);
-        }
-
-        return m_instance;
-    }
-
-    // Output is clamped to 0 to 1.
-    double GradientRepeatNoneStrategy::valueAt(double t) const
-    {
-        double value = t;
-
-        if (t < DBL_EPSILON) {
-            value = 0;
-        }
-        else
-            if (t > 1 - DBL_EPSILON) {
-                value = 1;
-            }
-
-        return value;
-    }
-
-
-    class GradientRepeatForwardsStrategy : public GradientRepeatStrategy {
-    public:
-        static GradientRepeatForwardsStrategy *instance();
-
-        virtual double valueAt(double t) const;
-
-    private:
-        GradientRepeatForwardsStrategy() {}
-
-        static GradientRepeatForwardsStrategy *m_instance;
-    };
-
-    GradientRepeatForwardsStrategy *GradientRepeatForwardsStrategy::m_instance = 0;
-
-    GradientRepeatForwardsStrategy *GradientRepeatForwardsStrategy::instance()
-    {
-        if (m_instance == 0) {
-            m_instance = new GradientRepeatForwardsStrategy();
-            Q_CHECK_PTR(m_instance);
-        }
-
-        return m_instance;
-    }
-
-    // Output is 0 to 1, 0 to 1, 0 to 1...
-    double GradientRepeatForwardsStrategy::valueAt(double t) const
-    {
-        int i = static_cast<int>(t);
-
-        if (t < DBL_EPSILON) {
-            i--;
-        }
-
-        double value = t - i;
-
-        return value;
-    }
-
-
-    class GradientRepeatAlternateStrategy : public GradientRepeatStrategy {
-    public:
-        static GradientRepeatAlternateStrategy *instance();
-
-        virtual double valueAt(double t) const;
-
-    private:
-        GradientRepeatAlternateStrategy() {}
-
-        static GradientRepeatAlternateStrategy *m_instance;
-    };
-
-    GradientRepeatAlternateStrategy *GradientRepeatAlternateStrategy::m_instance = 0;
-
-    GradientRepeatAlternateStrategy *GradientRepeatAlternateStrategy::instance()
-    {
-        if (m_instance == 0) {
-            m_instance = new GradientRepeatAlternateStrategy();
-            Q_CHECK_PTR(m_instance);
-        }
-
-        return m_instance;
-    }
-
-    // Output is 0 to 1, 1 to 0, 0 to 1, 1 to 0...
-    double GradientRepeatAlternateStrategy::valueAt(double t) const
-    {
-        if (t < 0) {
-            t = -t;
-        }
-
-        int i = static_cast<int>(t);
-
-                double value = t - i;
-
-        if (i % 2 == 1) {
-            value = 1 - value;
-        }
-
-        return value;
+{
+    double dx = gradientVectorEnd.x() - gradientVectorStart.x();
+    double dy = gradientVectorEnd.y() - gradientVectorStart.y();
+
+    m_vectorLength = sqrt((dx * dx) + (dy * dy));
+
+    if (m_vectorLength < DBL_EPSILON) {
+        m_normalisedVectorX = 0;
+        m_normalisedVectorY = 0;
+    } else {
+        m_normalisedVectorX = dx / m_vectorLength;
+        m_normalisedVectorY = dy / m_vectorLength;
     }
 }
 
+double LinearGradientStrategy::valueAt(double x, double y) const
+{
+    double vx = x - m_gradientVectorStart.x();
+    double vy = y - m_gradientVectorStart.y();
+
+    // Project the vector onto the normalised gradient vector.
+    double t = vx * m_normalisedVectorX + vy * m_normalisedVectorY;
+
+    if (m_vectorLength < DBL_EPSILON) {
+        t = 0;
+    } else {
+        // Scale to 0 to 1 over the gradient vector length.
+        t /= m_vectorLength;
+    }
+
+    return t;
+}
+
+
+class BiLinearGradientStrategy : public LinearGradientStrategy
+{
+
+public:
+    BiLinearGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
+
+    virtual double valueAt(double x, double y) const;
+};
+
+BiLinearGradientStrategy::BiLinearGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
+        : LinearGradientStrategy(gradientVectorStart, gradientVectorEnd)
+{
+}
+
+double BiLinearGradientStrategy::valueAt(double x, double y) const
+{
+    double t = LinearGradientStrategy::valueAt(x, y);
+
+    // Reflect
+    if (t < -DBL_EPSILON) {
+        t = -t;
+    }
+
+    return t;
+}
+
+
+class RadialGradientStrategy : public GradientShapeStrategy
+{
+
+public:
+    RadialGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
+
+    virtual double valueAt(double x, double y) const;
+
+protected:
+    double m_radius;
+};
+
+RadialGradientStrategy::RadialGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
+        : GradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
+{
+    double dx = gradientVectorEnd.x() - gradientVectorStart.x();
+    double dy = gradientVectorEnd.y() - gradientVectorStart.y();
+
+    m_radius = sqrt((dx * dx) + (dy * dy));
+}
+
+double RadialGradientStrategy::valueAt(double x, double y) const
+{
+    double dx = x - m_gradientVectorStart.x();
+    double dy = y - m_gradientVectorStart.y();
+
+    double distance = sqrt((dx * dx) + (dy * dy));
+
+    double t;
+
+    if (m_radius < DBL_EPSILON) {
+        t = 0;
+    } else {
+        t = distance / m_radius;
+    }
+
+    return t;
+}
+
+
+class SquareGradientStrategy : public GradientShapeStrategy
+{
+
+public:
+    SquareGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
+
+    virtual double valueAt(double x, double y) const;
+
+protected:
+    double m_normalisedVectorX;
+    double m_normalisedVectorY;
+    double m_vectorLength;
+};
+
+SquareGradientStrategy::SquareGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
+        : GradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
+{
+    double dx = gradientVectorEnd.x() - gradientVectorStart.x();
+    double dy = gradientVectorEnd.y() - gradientVectorStart.y();
+
+    m_vectorLength = sqrt((dx * dx) + (dy * dy));
+
+    if (m_vectorLength < DBL_EPSILON) {
+        m_normalisedVectorX = 0;
+        m_normalisedVectorY = 0;
+    } else {
+        m_normalisedVectorX = dx / m_vectorLength;
+        m_normalisedVectorY = dy / m_vectorLength;
+    }
+}
+
+double SquareGradientStrategy::valueAt(double x, double y) const
+{
+    double px = x - m_gradientVectorStart.x();
+    double py = y - m_gradientVectorStart.y();
+
+    double distance1 = 0;
+    double distance2 = 0;
+
+    if (m_vectorLength > DBL_EPSILON) {
+
+        // Point to line distance is:
+        // distance = ((l0.y() - l1.y()) * p.x() + (l1.x() - l0.x()) * p.y() + l0.x() * l1.y() - l1.x() * l0.y()) / m_vectorLength;
+        //
+        // Here l0 = (0, 0) and |l1 - l0| = 1
+
+        distance1 = -m_normalisedVectorY * px + m_normalisedVectorX * py;
+        distance1 = fabs(distance1);
+
+        // Rotate point by 90 degrees and get the distance to the perpendicular
+        distance2 = -m_normalisedVectorY * -py + m_normalisedVectorX * px;
+        distance2 = fabs(distance2);
+    }
+
+    double t = qMax(distance1, distance2) / m_vectorLength;
+
+    return t;
+}
+
+
+class ConicalGradientStrategy : public GradientShapeStrategy
+{
+
+public:
+    ConicalGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
+
+    virtual double valueAt(double x, double y) const;
+
+protected:
+    double m_vectorAngle;
+};
+
+ConicalGradientStrategy::ConicalGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
+        : GradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
+{
+    double dx = gradientVectorEnd.x() - gradientVectorStart.x();
+    double dy = gradientVectorEnd.y() - gradientVectorStart.y();
+
+    // Get angle from 0 to 2 PI.
+    m_vectorAngle = atan2(dy, dx) + M_PI;
+}
+
+double ConicalGradientStrategy::valueAt(double x, double y) const
+{
+    double px = x - m_gradientVectorStart.x();
+    double py = y - m_gradientVectorStart.y();
+
+    double angle = atan2(py, px) + M_PI;
+
+    angle -= m_vectorAngle;
+
+    if (angle < 0) {
+        angle += 2 * M_PI;
+    }
+
+    double t = angle / (2 * M_PI);
+
+    return t;
+}
+
+
+class ConicalSymetricGradientStrategy : public GradientShapeStrategy
+{
+public:
+    ConicalSymetricGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
+
+    virtual double valueAt(double x, double y) const;
+
+protected:
+    double m_vectorAngle;
+};
+
+ConicalSymetricGradientStrategy::ConicalSymetricGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
+        : GradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
+{
+    double dx = gradientVectorEnd.x() - gradientVectorStart.x();
+    double dy = gradientVectorEnd.y() - gradientVectorStart.y();
+
+    // Get angle from 0 to 2 PI.
+    m_vectorAngle = atan2(dy, dx) + M_PI;
+}
+
+double ConicalSymetricGradientStrategy::valueAt(double x, double y) const
+{
+    double px = x - m_gradientVectorStart.x();
+    double py = y - m_gradientVectorStart.y();
+
+    double angle = atan2(py, px) + M_PI;
+
+    angle -= m_vectorAngle;
+
+    if (angle < 0) {
+        angle += 2 * M_PI;
+    }
+
+    double t;
+
+    if (angle < M_PI) {
+        t = angle / M_PI;
+    } else {
+        t = 1 - ((angle - M_PI) / M_PI);
+    }
+
+    return t;
+}
+
+
+class GradientRepeatStrategy
+{
+public:
+    GradientRepeatStrategy() {}
+    virtual ~GradientRepeatStrategy() {}
+
+    virtual double valueAt(double t) const = 0;
+};
+
+
+class GradientRepeatNoneStrategy : public GradientRepeatStrategy
+{
+public:
+    static GradientRepeatNoneStrategy *instance();
+
+    virtual double valueAt(double t) const;
+
+private:
+    GradientRepeatNoneStrategy() {}
+
+    static GradientRepeatNoneStrategy *m_instance;
+};
+
+GradientRepeatNoneStrategy *GradientRepeatNoneStrategy::m_instance = 0;
+
+GradientRepeatNoneStrategy *GradientRepeatNoneStrategy::instance()
+{
+    if (m_instance == 0) {
+        m_instance = new GradientRepeatNoneStrategy();
+        Q_CHECK_PTR(m_instance);
+    }
+
+    return m_instance;
+}
+
+// Output is clamped to 0 to 1.
+double GradientRepeatNoneStrategy::valueAt(double t) const
+{
+    double value = t;
+
+    if (t < DBL_EPSILON) {
+        value = 0;
+    } else
+        if (t > 1 - DBL_EPSILON) {
+            value = 1;
+        }
+
+    return value;
+}
+
+
+class GradientRepeatForwardsStrategy : public GradientRepeatStrategy
+{
+public:
+    static GradientRepeatForwardsStrategy *instance();
+
+    virtual double valueAt(double t) const;
+
+private:
+    GradientRepeatForwardsStrategy() {}
+
+    static GradientRepeatForwardsStrategy *m_instance;
+};
+
+GradientRepeatForwardsStrategy *GradientRepeatForwardsStrategy::m_instance = 0;
+
+GradientRepeatForwardsStrategy *GradientRepeatForwardsStrategy::instance()
+{
+    if (m_instance == 0) {
+        m_instance = new GradientRepeatForwardsStrategy();
+        Q_CHECK_PTR(m_instance);
+    }
+
+    return m_instance;
+}
+
+// Output is 0 to 1, 0 to 1, 0 to 1...
+double GradientRepeatForwardsStrategy::valueAt(double t) const
+{
+    int i = static_cast<int>(t);
+
+    if (t < DBL_EPSILON) {
+        i--;
+    }
+
+    double value = t - i;
+
+    return value;
+}
+
+
+class GradientRepeatAlternateStrategy : public GradientRepeatStrategy
+{
+public:
+    static GradientRepeatAlternateStrategy *instance();
+
+    virtual double valueAt(double t) const;
+
+private:
+    GradientRepeatAlternateStrategy() {}
+
+    static GradientRepeatAlternateStrategy *m_instance;
+};
+
+GradientRepeatAlternateStrategy *GradientRepeatAlternateStrategy::m_instance = 0;
+
+GradientRepeatAlternateStrategy *GradientRepeatAlternateStrategy::instance()
+{
+    if (m_instance == 0) {
+        m_instance = new GradientRepeatAlternateStrategy();
+        Q_CHECK_PTR(m_instance);
+    }
+
+    return m_instance;
+}
+
+// Output is 0 to 1, 1 to 0, 0 to 1, 1 to 0...
+double GradientRepeatAlternateStrategy::valueAt(double t) const
+{
+    if (t < 0) {
+        t = -t;
+    }
+
+    int i = static_cast<int>(t);
+
+    double value = t - i;
+
+    if (i % 2 == 1) {
+        value = 1 - value;
+    }
+
+    return value;
+}
+}
+
 KisGradientPainter::KisGradientPainter()
-    : KisPainter()
+        : KisPainter()
 {
 }
 
 KisGradientPainter::KisGradientPainter(KisPaintDeviceSP device)
-    : KisPainter(device)
+        : KisPainter(device)
 {
 }
 
 KisGradientPainter::KisGradientPainter(KisPaintDeviceSP device, KisSelectionSP selection)
-    : KisPainter( device, selection )
+        : KisPainter(device, selection)
 {
 }
 
@@ -540,7 +546,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
     //If the device has a selection only iterate over that selection
     QRect r;
-    if( selection() ) {
+    if (selection()) {
         r = selection()->selectedExactRect();
         startx = r.x();
         starty = r.y();
@@ -554,7 +560,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     int linesProcessed = 0;
     int lastProgressPercent = 0;
 
-    if (progressUpdater()) progressUpdater()->setProgress( 0 );
+    if (progressUpdater()) progressUpdater()->setProgress(0);
 
     int totalPixels = width * height;
     if (antiAliasThreshold < 1 - DBL_EPSILON) {
@@ -573,7 +579,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
         for (int x = startx; x <= endx; x++) {
 
-            double t = shapeStrategy->valueAt( x, y);
+            double t = shapeStrategy->valueAt(x, y);
             t = repeatStrategy->valueAt(t);
 
             if (reverseGradient) {
@@ -582,7 +588,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
             gradient()->colorAt(color, t);
             memcpy(hit.rawData(), color.data(), pixelSize);
-            
+
             ++hit;
         }
         hit.nextRow();
@@ -607,16 +613,16 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
     if (!progressUpdater() || (progressUpdater() && !progressUpdater()->interrupted())) {
         // XXX: FIX ANTIALISED DRAWING OF GRADIENTS
-        if ( false && antiAliasThreshold < 1 - DBL_EPSILON) {
+        if (false && antiAliasThreshold < 1 - DBL_EPSILON) {
 
             QList<KoChannelInfo *> channels = colorSpace->channels();
             KisHLineIterator iter = dev->createHLineIterator(0, 0, 0);
             KisRandomAccessor accessor = dev->createRandomAccessor(0, 0, 0);
             double squareRootNumColorChannels = sqrt(static_cast<double>(colorSpace->colorChannelCount()));
-            
+
             for (int y = starty; y <= endy; y++) {
                 for (int x = startx; x <= endx; x++) {
-        
+
                     double maxDistance = 0;
                     quint8* thisPixel = colorSpace->allocPixelBuffer(1);
                     memcpy(thisPixel, iter.rawData(), pixelSize);
@@ -633,37 +639,37 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                 if (sampleX >= startx && sampleX <= endx && sampleY >= starty && sampleY <= endy) {
                                     uint x = sampleX - startx;
                                     uint y = sampleY - starty;
-                                    
+
                                     accessor.moveTo(x, y);
                                     quint8 * pixel = accessor.rawData();
                                     quint8 opacity = colorSpace->alpha(pixel);
-    
+
                                     double totalDistance = 0;
-                                    
+
                                     foreach(KoChannelInfo * channel, channels) {
                                         double d = 0;
                                         int pos = channel->pos();
                                         if (channel->channelType() == KoChannelInfo::COLOR) {
                                             if (channel->channelValueType() == KoChannelInfo::UINT8) {
-                                                d = ((quint8)*(pixel + pos) * opacity - (quint8)*(thisPixel + pos) * thisPixelOpacity) / 65535.0;
-                                            } else if ( channel->channelValueType() ==  KoChannelInfo::UINT16) {
-                                                d = ((quint16)*(pixel + pos) * opacity - (quint16)*(thisPixel + pos) * thisPixelOpacity) / 65535.0;
-                                            } else if ( channel->channelValueType() == KoChannelInfo::UINT32 ) {
-                                                d = ((quint32)*(pixel + pos) * opacity - (quint32)*(thisPixel + pos) * thisPixelOpacity) / 65535.0;
+                                                d = ((quint8) * (pixel + pos) * opacity - (quint8) * (thisPixel + pos) * thisPixelOpacity) / 65535.0;
+                                            } else if (channel->channelValueType() ==  KoChannelInfo::UINT16) {
+                                                d = ((quint16) * (pixel + pos) * opacity - (quint16) * (thisPixel + pos) * thisPixelOpacity) / 65535.0;
+                                            } else if (channel->channelValueType() == KoChannelInfo::UINT32) {
+                                                d = ((quint32) * (pixel + pos) * opacity - (quint32) * (thisPixel + pos) * thisPixelOpacity) / 65535.0;
 #if 0 // Check how to use the half datatype                                                    
-                                            } else if ( channel->channelValueType() == KoChannelInfo::FLOAT16 ) {
-                                                d = ((quint8)*(pixel + pos) * opacity - (quint8)*(thisPixel + pos) * thisPixelOpacity) / 65535.0;
-#endif                                                    
-                                            } else if ( channel->channelValueType() == KoChannelInfo::FLOAT32 ) {
-                                                d = ((float)*(pixel + pos) * opacity - (float)*(thisPixel + pos) * thisPixelOpacity) / 65535.0;
-                                            } else if ( channel->channelValueType() == KoChannelInfo::FLOAT64 ) {
-                                                d = ((double)*(pixel + pos) * opacity - (double)*(thisPixel + pos) * thisPixelOpacity) / 65535.0;
-                                            } else if ( channel->channelValueType() == KoChannelInfo::INT8 ) {
-                                                d = ((qint8)*(pixel + pos) * opacity - (qint8)*(thisPixel + pos) * thisPixelOpacity) / 65535.0;
-                                            } else if ( channel->channelValueType() == KoChannelInfo::INT16 ) {
-                                                d = ((qint16)*(pixel + pos) * opacity - (qint16)*(thisPixel + pos) * thisPixelOpacity) / 65535.0;
+                                            } else if (channel->channelValueType() == KoChannelInfo::FLOAT16) {
+                                                d = ((quint8) * (pixel + pos) * opacity - (quint8) * (thisPixel + pos) * thisPixelOpacity) / 65535.0;
+#endif
+                                            } else if (channel->channelValueType() == KoChannelInfo::FLOAT32) {
+                                                d = ((float) * (pixel + pos) * opacity - (float) * (thisPixel + pos) * thisPixelOpacity) / 65535.0;
+                                            } else if (channel->channelValueType() == KoChannelInfo::FLOAT64) {
+                                                d = ((double) * (pixel + pos) * opacity - (double) * (thisPixel + pos) * thisPixelOpacity) / 65535.0;
+                                            } else if (channel->channelValueType() == KoChannelInfo::INT8) {
+                                                d = ((qint8) * (pixel + pos) * opacity - (qint8) * (thisPixel + pos) * thisPixelOpacity) / 65535.0;
+                                            } else if (channel->channelValueType() == KoChannelInfo::INT16) {
+                                                d = ((qint16) * (pixel + pos) * opacity - (qint16) * (thisPixel + pos) * thisPixelOpacity) / 65535.0;
                                             }
-                                            
+
                                         }
                                         totalDistance += d * d;
                                     }
@@ -680,7 +686,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                     // XXX: Move this averaging code into the colorspace
                     if (maxDistance > 3. * antiAliasThreshold * antiAliasThreshold) {
                         const int numSamples = 4;
-                        
+
                         QVector<quint32> channelTotals(colorSpace->channelCount());
                         for (uint i = 0; i < colorSpace->channelCount(); ++i) {
                             channelTotals[i] = 0;
@@ -704,29 +710,29 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
                                 KoColor color;
                                 gradient()->colorAt(color, t);
-                                
+
                                 foreach(KoChannelInfo * channel, channels) {
 
                                     int pos = channel->pos();
                                     if (channel->channelType() == KoChannelInfo::COLOR) {
                                         if (channel->channelValueType() == KoChannelInfo::UINT8) {
-                                            channelTotals[pos] += (quint8)*(color.data() + pos);
-                                        } else if ( channel->channelValueType() ==  KoChannelInfo::UINT16) {
-                                            channelTotals[pos] += (quint16)*(color.data() + pos);
-                                        } else if ( channel->channelValueType() == KoChannelInfo::UINT32 ) {
-                                            channelTotals[pos] += (quint32)*(color.data() + pos);
+                                            channelTotals[pos] += (quint8) * (color.data() + pos);
+                                        } else if (channel->channelValueType() ==  KoChannelInfo::UINT16) {
+                                            channelTotals[pos] += (quint16) * (color.data() + pos);
+                                        } else if (channel->channelValueType() == KoChannelInfo::UINT32) {
+                                            channelTotals[pos] += (quint32) * (color.data() + pos);
 #if 0 // Check how to use the half datatype
-                                        } else if ( channel->channelValueType() == KoChannelInfo::FLOAT16 ) {
+                                        } else if (channel->channelValueType() == KoChannelInfo::FLOAT16) {
                                             channelTotals[pos] += (quint8)(color.data() + pos);
 #endif
-                                        } else if ( channel->channelValueType() == KoChannelInfo::FLOAT32 ) {
-                                            channelTotals[pos] += (float)*(color.data() + pos);
-                                        } else if ( channel->channelValueType() == KoChannelInfo::FLOAT64 ) {
-                                            channelTotals[pos] += (double)*(color.data() + pos);
-                                        } else if ( channel->channelValueType() == KoChannelInfo::INT8 ) {
-                                            channelTotals[pos] += (qint8)*(color.data() + pos);
-                                        } else if ( channel->channelValueType() == KoChannelInfo::INT16 ) {
-                                            channelTotals[pos] += (qint16)*(color.data() + pos);
+                                        } else if (channel->channelValueType() == KoChannelInfo::FLOAT32) {
+                                            channelTotals[pos] += (float) * (color.data() + pos);
+                                        } else if (channel->channelValueType() == KoChannelInfo::FLOAT64) {
+                                            channelTotals[pos] += (double) * (color.data() + pos);
+                                        } else if (channel->channelValueType() == KoChannelInfo::INT8) {
+                                            channelTotals[pos] += (qint8) * (color.data() + pos);
+                                        } else if (channel->channelValueType() == KoChannelInfo::INT16) {
+                                            channelTotals[pos] += (qint16) * (color.data() + pos);
                                         }
                                     }
                                 }
@@ -760,7 +766,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                     ++iter;
                 }
                 iter.nextRow();
-                if ( progressUpdater() && progressUpdater()->interrupted()) {
+                if (progressUpdater() && progressUpdater()->interrupted()) {
                     break;
                 }
             }
@@ -768,15 +774,14 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     }
 
     if (!progressUpdater() || (progressUpdater() && !progressUpdater()->interrupted())) {
-            bltSelection(startx, starty, compositeOp(), dev, opacity(), startx, starty, width, height);
+        bltSelection(startx, starty, compositeOp(), dev, opacity(), startx, starty, width, height);
     }
     delete shapeStrategy;
 
     if (progressUpdater()) {
         progressUpdater()->setProgress(100);
         return !progressUpdater()->interrupted();
-    }
-    else {
+    } else {
         return true;
     }
 }

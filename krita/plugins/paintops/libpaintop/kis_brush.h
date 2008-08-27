@@ -55,7 +55,8 @@ class KisBrush;
  * A brush factory can create a new brush instance based
  * on a filename and a brush id or just a brush id.
  */
-class KRITAUI_EXPORT KisBrushFactory : public KisShared {
+class KRITAUI_EXPORT KisBrushFactory : public KisShared
+{
 
 public:
 
@@ -63,13 +64,13 @@ public:
     virtual ~KisBrushFactory() {}
 
     virtual KisBrush * createBrush() const = 0;
-    virtual KisBrush * createBrush( const QString & fileName ) const = 0;
-    virtual KisBrush * createBrush( const QString& filename,
-                                    const QByteArray & data,
-                                    qint32 & dataPos) const = 0;
+    virtual KisBrush * createBrush(const QString & fileName) const = 0;
+    virtual KisBrush * createBrush(const QString& filename,
+                                   const QByteArray & data,
+                                   qint32 & dataPos) const = 0;
 
     /// Load brush from the specified paint device, in the specified region
-    virtual KisBrush * createBrush (KisPaintDeviceSP image, int x, int y, int w, int h) const = 0;
+    virtual KisBrush * createBrush(KisPaintDeviceSP image, int x, int y, int w, int h) const = 0;
 
     /// Load brush as a copy from the specified QImage (handy when you need to copy a brush!)
     virtual KisBrush* createBrush(const QImage& image, const QString& name = QString("")) const = 0;
@@ -77,15 +78,17 @@ public:
 };
 
 
-class KRITAIMAGE_EXPORT KisBrush : public KoResource, public KisShared {
+class KRITAIMAGE_EXPORT KisBrush : public KoResource, public KisShared
+{
 
-  class ScaledBrush;
+    class ScaledBrush;
 
     Q_OBJECT
 
 protected:
 
-    class ColoringInformation {
+    class ColoringInformation
+    {
     public:
         virtual ~ColoringInformation();
         virtual const quint8* color() const = 0;
@@ -93,7 +96,8 @@ protected:
         virtual void nextRow() = 0;
     };
 
-    class PlainColoringInformation : public ColoringInformation {
+    class PlainColoringInformation : public ColoringInformation
+    {
     public:
         PlainColoringInformation(const quint8* color);
         virtual ~PlainColoringInformation();
@@ -104,7 +108,8 @@ protected:
         const quint8* m_color;
     };
 
-    class PaintDeviceColoringInformation : public ColoringInformation {
+    class PaintDeviceColoringInformation : public ColoringInformation
+    {
     public:
         PaintDeviceColoringInformation(const KisPaintDeviceSP source, int width);
         virtual ~PaintDeviceColoringInformation();
@@ -176,7 +181,7 @@ public:
 
     void setHotSpot(QPointF);
 
-    QPointF hotSpot(double scaleX, double scaleY ) const;
+    QPointF hotSpot(double scaleX, double scaleY) const;
 
     /**
      * Change the spacing of the brush.

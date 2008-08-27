@@ -36,7 +36,8 @@
 
 using namespace ThreadWeaver;
 
-class KisThreadedApplicator::Private {
+class KisThreadedApplicator::Private
+{
 
 public:
 
@@ -51,12 +52,12 @@ public:
 };
 
 
-KisThreadedApplicator::KisThreadedApplicator( KisPaintDeviceSP dev,
-    const QRect & rc,
-    KisJobFactory * jobFactory,
-    KoProgressUpdater * progressUpdater,
-    int margin)
-    : m_d( new Private() )
+KisThreadedApplicator::KisThreadedApplicator(KisPaintDeviceSP dev,
+        const QRect & rc,
+        KisJobFactory * jobFactory,
+        KoProgressUpdater * progressUpdater,
+        int margin)
+        : m_d(new Private())
 {
     m_d->dev = dev;
     m_d->rc = rc;
@@ -65,12 +66,12 @@ KisThreadedApplicator::KisThreadedApplicator( KisPaintDeviceSP dev,
     m_d->progressUpdater = progressUpdater;
 
     KConfigGroup cfg = KGlobal::config()->group("");
-    m_d->maxThreads = cfg.readEntry("maxthreads",  QThread::idealThreadCount() );
-    m_d->tileSize = cfg.readEntry( "threadingtilesize", 512 );
+    m_d->maxThreads = cfg.readEntry("maxthreads",  QThread::idealThreadCount());
+    m_d->tileSize = cfg.readEntry("threadingtilesize", 512);
 
     m_d->weaver = new Weaver();
-    m_d->weaver->setMaximumNumberOfThreads( m_d->maxThreads );
-    connect( m_d->weaver, SIGNAL( jobDone(ThreadWeaver::Job*) ), this, SLOT( jobDone( ThreadWeaver::Job* ) ) );
+    m_d->weaver->setMaximumNumberOfThreads(m_d->maxThreads);
+    connect(m_d->weaver, SIGNAL(jobDone(ThreadWeaver::Job*)), this, SLOT(jobDone(ThreadWeaver::Job*)));
 }
 
 
@@ -91,26 +92,25 @@ void KisThreadedApplicator::execute()
     // Note: we're doing columns first, so when we have small strip left
     // at the bottom, we have as few and as long runs of pixels left
     // as possible.
-    if ( w <= m_d->tileSize && h <= m_d->tileSize ) {
+    if (w <= m_d->tileSize && h <= m_d->tileSize) {
         KoUpdater updater = m_d->progressUpdater->startSubtask();
-        updater.setRange(0,0);
-        Job * job = m_d->jobFactory->createJob( this, m_d->dev, m_d->rc, m_d->margin, updater );
-        m_d->weaver->enqueue( job );
-    }
-    else {
-        int numTasks = static_cast<int>( ceil( w / m_d->tileSize * h / m_d->tileSize) );
-        m_d->progressUpdater->start( numTasks );
+        updater.setRange(0, 0);
+        Job * job = m_d->jobFactory->createJob(this, m_d->dev, m_d->rc, m_d->margin, updater);
+        m_d->weaver->enqueue(job);
+    } else {
+        int numTasks = static_cast<int>(ceil(w / m_d->tileSize * h / m_d->tileSize));
+        m_d->progressUpdater->start(numTasks);
 
         int wleft = w;
         int col = 0;
-        while ( wleft > 0 ) {
+        while (wleft > 0) {
             int hleft = h;
             int row = 0;
-            while ( hleft > 0 ) {
-                QRect subrect( col + x, row + y, qMin( wleft, m_d->tileSize ), qMin( hleft, m_d->tileSize ) );
-                KoUpdater updater = m_d->progressUpdater->startSubtask(); 
-                Job * job = m_d->jobFactory->createJob( this, m_d->dev, subrect, m_d->margin, updater );
-                m_d->weaver->enqueue( job );
+            while (hleft > 0) {
+                QRect subrect(col + x, row + y, qMin(wleft, m_d->tileSize), qMin(hleft, m_d->tileSize));
+                KoUpdater updater = m_d->progressUpdater->startSubtask();
+                Job * job = m_d->jobFactory->createJob(this, m_d->dev, subrect, m_d->margin, updater);
+                m_d->weaver->enqueue(job);
                 hleft -= m_d->tileSize;
                 row += m_d->tileSize;
             }
@@ -124,11 +124,11 @@ void KisThreadedApplicator::execute()
     m_d->weaver->finish();
 }
 
-void KisThreadedApplicator::jobDone( Job* job)
+void KisThreadedApplicator::jobDone(Job* job)
 {
     QRect rc = static_cast<KisJob*>(job)->area();
     delete job;
-    emit areaDone( rc );
+    emit areaDone(rc);
 }
 
 #include "kis_threaded_applicator.moc"

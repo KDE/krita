@@ -25,10 +25,10 @@
 enum CurrentHandle {
     NoHandle,
     HueHandle,
-    ValueSaturationHandle };
+    ValueSaturationHandle
+};
 
-struct KisSmallColorWidget::Private
-{
+struct KisSmallColorWidget::Private {
     QPixmap rubberPixmap;
     QPixmap squarePixmap;
     double rectangleWidthProportion;
@@ -77,9 +77,9 @@ int KisSmallColorWidget::saturation() const
 
 QColor KisSmallColorWidget::color() const
 {
-    int r,g,b;
-    hsv_to_rgb( d->hue, d->saturation, d->value, &r, &g, &b);
-    return QColor(r,g,b);
+    int r, g, b;
+    hsv_to_rgb(d->hue, d->saturation, d->value, &r, &g, &b);
+    return QColor(r, g, b);
 }
 
 void KisSmallColorWidget::setHue(int h)
@@ -106,10 +106,9 @@ void KisSmallColorWidget::setHSV(int h, int s, int v)
 
 void KisSmallColorWidget::setQColor(const QColor& c)
 {
-    if(d->updateAllowed)
-    {
+    if (d->updateAllowed) {
         int hue;
-        rgb_to_hsv( c.red(), c.green(), c.blue(), &hue, &d->saturation, &d->value);
+        rgb_to_hsv(c.red(), c.green(), c.blue(), &hue, &d->saturation, &d->value);
         if (hue >= 0 && hue <= 360) {
             d->hue = hue;
         }
@@ -125,33 +124,33 @@ void KisSmallColorWidget::tellColorChanged()
     d->updateAllowed = true;
 }
 
-void KisSmallColorWidget::paintEvent( QPaintEvent * event )
+void KisSmallColorWidget::paintEvent(QPaintEvent * event)
 {
     Q_UNUSED(event);
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing);
-    p.drawPixmap( 0, 0, d->rubberPixmap );
-    p.drawPixmap( width() - d->rectangleWidth, 0 , d->squarePixmap );
+    p.drawPixmap(0, 0, d->rubberPixmap);
+    p.drawPixmap(width() - d->rectangleWidth, 0 , d->squarePixmap);
     // Draw Hue handle
     p.save();
-    p.setPen( QPen( Qt::white, 1.0) );
-    p.translate( (d->hue * d->rubberWidth) / 360.0 , 0.0 );
-    p.drawRect( QRectF( -1.5, 0 , 3.0, height()));
+    p.setPen(QPen(Qt::white, 1.0));
+    p.translate((d->hue * d->rubberWidth) / 360.0 , 0.0);
+    p.drawRect(QRectF(-1.5, 0 , 3.0, height()));
     p.restore();
     // Draw Saturation / Value handle
     p.save();
-    p.setPen( QPen( Qt::white, 1.0) );
-    p.setBrush( color() );
-    p.translate( d->saturation * d->rectangleWidth / 255.0 + width() - d->rectangleWidth,
-                 d->value * d->rectangleHeight / 255.0 );
-    p.drawEllipse( QRectF( -d->squareHandleSize * 0.5, -d->squareHandleSize * 0.5, d->squareHandleSize, d->squareHandleSize ) );
+    p.setPen(QPen(Qt::white, 1.0));
+    p.setBrush(color());
+    p.translate(d->saturation * d->rectangleWidth / 255.0 + width() - d->rectangleWidth,
+                d->value * d->rectangleHeight / 255.0);
+    p.drawEllipse(QRectF(-d->squareHandleSize * 0.5, -d->squareHandleSize * 0.5, d->squareHandleSize, d->squareHandleSize));
     p.end();
 }
 
-void KisSmallColorWidget::resizeEvent( QResizeEvent * event )
+void KisSmallColorWidget::resizeEvent(QResizeEvent * event)
 {
-    QWidget::resizeEvent( event );
-    setMaximumHeight( width() / 3 );
+    QWidget::resizeEvent(event);
+    setMaximumHeight(width() / 3);
     updateParameters();
     generateRubber();
     generateSquare();
@@ -161,7 +160,7 @@ void KisSmallColorWidget::updateParameters()
 {
     d->margin = 5;
     d->rectangleWidthProportion = 0.3;
-    d->rectangleWidth = qMax( (int)( width() * d->rectangleWidthProportion) , height());
+    d->rectangleWidth = qMax((int)(width() * d->rectangleWidthProportion) , height());
     d->rectangleHeight = height();
     d->rubberWidth = width() - d->rectangleWidth - d->margin;
     d->rubberHeight = height();
@@ -170,15 +169,13 @@ void KisSmallColorWidget::updateParameters()
 
 void KisSmallColorWidget::generateRubber()
 {
-    QImage img( d->rubberWidth, d->rubberHeight, QImage::Format_RGB32);
-    for(int y = 0; y < d->rubberHeight; y++)
-    {
-        for(int x = 0; x < d->rubberWidth; x++)
-        {
-            int h = ( x * 360 ) / d->rubberWidth ;
-            int r,g,b;
+    QImage img(d->rubberWidth, d->rubberHeight, QImage::Format_RGB32);
+    for (int y = 0; y < d->rubberHeight; y++) {
+        for (int x = 0; x < d->rubberWidth; x++) {
+            int h = (x * 360) / d->rubberWidth ;
+            int r, g, b;
             hsv_to_rgb(h, 255, 255, &r, &g, &b);
-            img.setPixel(x,y, qRgb(r, g, b ));
+            img.setPixel(x, y, qRgb(r, g, b));
         }
     }
     d->rubberPixmap = QPixmap::fromImage(img);
@@ -186,61 +183,54 @@ void KisSmallColorWidget::generateRubber()
 
 void KisSmallColorWidget::generateSquare()
 {
-    QImage img( d->rectangleWidth, d->rectangleHeight, QImage::Format_RGB32);
-    for(int y = 0; y < d->rectangleHeight; y++)
-    {
-        int v = (y * 255 ) / d->rectangleHeight;
-        for(int x = 0; x < d->rectangleWidth; x++)
-        {
-            int s = (x * 255 ) / d->rectangleWidth;
-            int r,g,b;
+    QImage img(d->rectangleWidth, d->rectangleHeight, QImage::Format_RGB32);
+    for (int y = 0; y < d->rectangleHeight; y++) {
+        int v = (y * 255) / d->rectangleHeight;
+        for (int x = 0; x < d->rectangleWidth; x++) {
+            int s = (x * 255) / d->rectangleWidth;
+            int r, g, b;
             hsv_to_rgb(hue(), s, v, &r, &g, &b);
-            img.setPixel( x, y, qRgb(r, g, b) );
+            img.setPixel(x, y, qRgb(r, g, b));
         }
     }
     d->squarePixmap = QPixmap::fromImage(img);
 }
 
-void KisSmallColorWidget::mouseReleaseEvent( QMouseEvent * event )
+void KisSmallColorWidget::mouseReleaseEvent(QMouseEvent * event)
 {
-    if(event->button() == Qt::LeftButton)
-    {
-        selectColorAt( event->x(), event->y());
+    if (event->button() == Qt::LeftButton) {
+        selectColorAt(event->x(), event->y());
         d->handle = NoHandle;
     }
-    QWidget::mouseReleaseEvent( event );
+    QWidget::mouseReleaseEvent(event);
 }
 
-void KisSmallColorWidget::mousePressEvent( QMouseEvent * event )
+void KisSmallColorWidget::mousePressEvent(QMouseEvent * event)
 {
-    if(event->button() == Qt::LeftButton)
-    {
+    if (event->button() == Qt::LeftButton) {
         d->handle = NoHandle;
-        selectColorAt( event->x(), event->y());
+        selectColorAt(event->x(), event->y());
     }
-    QWidget::mousePressEvent( event );
+    QWidget::mousePressEvent(event);
 }
 
-void KisSmallColorWidget::mouseMoveEvent( QMouseEvent * event )
+void KisSmallColorWidget::mouseMoveEvent(QMouseEvent * event)
 {
-    if(event->buttons() & Qt::LeftButton)
-    {
-        selectColorAt( event->x(), event->y());
+    if (event->buttons() & Qt::LeftButton) {
+        selectColorAt(event->x(), event->y());
     }
-    QWidget::mouseMoveEvent( event );
+    QWidget::mouseMoveEvent(event);
 }
 
 void KisSmallColorWidget::selectColorAt(int _x, int _y)
 {
-    if ( (_x < d->rubberWidth && d->handle == NoHandle ) || d->handle == HueHandle  )
-    {
+    if ((_x < d->rubberWidth && d->handle == NoHandle) || d->handle == HueHandle) {
         d->handle = HueHandle;
-        setHue( (_x * 360.0) / d->rubberWidth );
+        setHue((_x * 360.0) / d->rubberWidth);
         update();
-    }
-    else if( (_x > width() - d->rectangleWidth && d->handle == NoHandle ) || d->handle == ValueSaturationHandle ) {
+    } else if ((_x > width() - d->rectangleWidth && d->handle == NoHandle) || d->handle == ValueSaturationHandle) {
         d->handle = ValueSaturationHandle;
-        setHSV( d->hue, ( _x - width() + d->rectangleWidth ) * 255 / d->rectangleWidth, (_y * 255 ) / d->rectangleHeight );
+        setHSV(d->hue, (_x - width() + d->rectangleWidth) * 255 / d->rectangleWidth, (_y * 255) / d->rectangleHeight);
         update();
     }
 }

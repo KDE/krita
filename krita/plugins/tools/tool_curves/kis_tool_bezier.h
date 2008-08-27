@@ -35,19 +35,22 @@ const int BEZIERNEXTCONTROLHINT = 0x0040;
 const int SYMMETRICALCONTROLSOPTION = ALTOPTION;
 const int PREFERCONTROLSOPTION = SHIFTOPTION;
 
-class KisCurveBezier : public KisCurve {
+class KisCurveBezier : public KisCurve
+{
 
     typedef KisCurve super;
 
-    void recursiveCurve (const QPointF& P1, const QPointF& P2, const QPointF& P3,
-                         const QPointF& P4, int level, iterator it);
-    QPointF midpoint (const QPointF&, const QPointF&);
+    void recursiveCurve(const QPointF& P1, const QPointF& P2, const QPointF& P3,
+                        const QPointF& P4, int level, iterator it);
+    QPointF midpoint(const QPointF&, const QPointF&);
 
     int m_maxLevel;
 
 public:
 
-    KisCurveBezier() : super() {m_maxLevel = 5;}
+    KisCurveBezier() : super() {
+        m_maxLevel = 5;
+    }
 
     ~KisCurveBezier() {}
 
@@ -58,18 +61,19 @@ public:
 
 public:
 
-    iterator groupEndpoint (iterator) const;
-    iterator groupPrevControl (iterator) const;
-    iterator groupNextControl (iterator) const;
+    iterator groupEndpoint(iterator) const;
+    iterator groupPrevControl(iterator) const;
+    iterator groupNextControl(iterator) const;
 
-    bool groupSelected (iterator) const;
+    bool groupSelected(iterator) const;
 
-    iterator nextGroupEndpoint (iterator) const;
-    iterator prevGroupEndpoint (iterator) const;
+    iterator nextGroupEndpoint(iterator) const;
+    iterator prevGroupEndpoint(iterator) const;
 
 };
 
-class KisToolBezier : public KisToolCurve {
+class KisToolBezier : public KisToolCurve
+{
 
     typedef KisToolCurve super;
     Q_OBJECT

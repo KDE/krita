@@ -29,23 +29,23 @@
 #include "kis_gray_u16_colorspace.h"
 
 typedef KGenericFactory<GRAYU16Plugin> GRAYU16PluginFactory;
-K_EXPORT_COMPONENT_FACTORY( krita_gray_u16_plugin, GRAYU16PluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(krita_gray_u16_plugin, GRAYU16PluginFactory("krita"))
 
 
 GRAYU16Plugin::GRAYU16Plugin(QObject *parent, const QStringList &)
-    : QObject(parent)
+        : QObject(parent)
 {
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
-    
+
     KoColorSpaceFactory * csf = new KisGrayU16ColorSpaceFactory();
     f->add(csf);
 
-    KoColorSpace * colorSpaceGRAYU16 = new KisGrayU16ColorSpace( KoColorSpaceRegistry::instance()->profileByName(csf->defaultProfile())->clone() );
+    KoColorSpace * colorSpaceGRAYU16 = new KisGrayU16ColorSpace(KoColorSpaceRegistry::instance()->profileByName(csf->defaultProfile())->clone());
     Q_CHECK_PTR(colorSpaceGRAYU16);
-    
+
     KoHistogramProducerFactoryRegistry::instance()->add(
-            new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
-            (KoID("GRAYA16HISTO", i18n("GRAY/Alpha16 Histogram")), colorSpaceGRAYU16) );
+        new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
+        (KoID("GRAYA16HISTO", i18n("GRAY/Alpha16 Histogram")), colorSpaceGRAYU16));
 
 }
 

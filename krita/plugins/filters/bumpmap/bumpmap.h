@@ -37,17 +37,20 @@ class BumpmapWidget : public QWidget, public Ui::WdgBumpmap
 {
     Q_OBJECT
 
-    public:
-        BumpmapWidget(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    BumpmapWidget(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
-namespace krita {
+namespace krita
+{
 
-    enum enumBumpmapType {
-        LINEAR = 0,
-        SPHERICAL = 1,
-        SINUSOIDAL = 2
-    };
+enum enumBumpmapType {
+    LINEAR = 0,
+    SPHERICAL = 1,
+    SINUSOIDAL = 2
+};
 
 }
 
@@ -87,20 +90,23 @@ public:
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
-        ) const;
+                ) const;
 
-    bool supportsAdjustmentLayers() const { return false; }
-    
+    bool supportsAdjustmentLayers() const {
+        return false;
+    }
+
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 };
 
-class KisBumpmapConfigWidget : public KisFilterConfigWidget {
+class KisBumpmapConfigWidget : public KisFilterConfigWidget
+{
 
     Q_OBJECT
 
 public:
-    KisBumpmapConfigWidget(const KisPaintDeviceSP dev, const KisImageSP image, QWidget * parent, Qt::WFlags f = 0 );
+    KisBumpmapConfigWidget(const KisPaintDeviceSP dev, const KisImageSP image, QWidget * parent, Qt::WFlags f = 0);
     virtual ~KisBumpmapConfigWidget() {}
 
     void setConfiguration(KisFilterConfiguration * config);

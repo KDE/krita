@@ -27,16 +27,19 @@
 #include "ui_wdgsumieoptions.h"
 #include "widgets/kis_popup_button.h"
 
-class KisSumiPaintOpSettings : public QObject, public KisPaintOpSettings {
+class KisSumiPaintOpSettings : public QObject, public KisPaintOpSettings
+{
     Q_OBJECT
 
 public:
-    KisSumiPaintOpSettings(QWidget * paren );
+    KisSumiPaintOpSettings(QWidget * paren);
     virtual ~KisSumiPaintOpSettings() {}
 
     virtual KisPaintOpSettingsSP clone() const;
 
-    QWidget * widget() const { return m_optionsWidget; }
+    QWidget * widget() const {
+        return m_optionsWidget;
+    }
 
     using KisPropertiesConfiguration::fromXML;
     using KisPropertiesConfiguration::toXML;

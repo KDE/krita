@@ -44,49 +44,49 @@
 #include "kis_statusbar.h"
 #include "kis_config.h"
 
-KisZoomManager::KisZoomManager( KisView2 * view, KoZoomHandler * zoomHandler,
-                                KoCanvasController * canvasController)
-    : m_view( view )
-    , m_zoomHandler( zoomHandler )
-    , m_canvasController( canvasController )
-    , m_horizontalRuler( 0 )
-    , m_verticalRuler( 0 )
-    , m_zoomAction( 0 )
-    , m_zoomIn( 0 )
-    , m_zoomOut( 0 )
-    , m_actualPixels( 0 )
-    , m_actualSize( 0 )
-    , m_fitToCanvas( 0 )
+KisZoomManager::KisZoomManager(KisView2 * view, KoZoomHandler * zoomHandler,
+                               KoCanvasController * canvasController)
+        : m_view(view)
+        , m_zoomHandler(zoomHandler)
+        , m_canvasController(canvasController)
+        , m_horizontalRuler(0)
+        , m_verticalRuler(0)
+        , m_zoomAction(0)
+        , m_zoomIn(0)
+        , m_zoomOut(0)
+        , m_actualPixels(0)
+        , m_actualSize(0)
+        , m_fitToCanvas(0)
 {
 }
 
 KisZoomManager::~KisZoomManager()
 {
     KisConfig cfg;
-    cfg.setShowRulers( m_showRulersAction->isChecked() );
+    cfg.setShowRulers(m_showRulersAction->isChecked());
 }
 
-void KisZoomManager::setup( KActionCollection * actionCollection )
+void KisZoomManager::setup(KActionCollection * actionCollection)
 {
     KisConfig cfg;
     m_zoomController = new KoZoomController(m_canvasController, m_zoomHandler, actionCollection, true);
-    m_zoomHandler->setZoomMode( KoZoomMode::ZOOM_PIXELS );
+    m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_PIXELS);
 
     KisImageSP img = m_view->image();
-    m_zoomController->setPageSize(QSizeF(img->width() / img->xRes(), img->height() / img->yRes() ));
-    m_zoomController->setDocumentSize(QSizeF(img->width() / img->xRes(), img->height() / img->yRes() ));
+    m_zoomController->setPageSize(QSizeF(img->width() / img->xRes(), img->height() / img->yRes()));
+    m_zoomController->setDocumentSize(QSizeF(img->width() / img->xRes(), img->height() / img->yRes()));
 
     m_zoomAction = m_zoomController->zoomAction();
-    m_view->addStatusBarItem( m_zoomAction->createWidget( m_view->KoView::statusBar() ), 0, true );
+    m_view->addStatusBarItem(m_zoomAction->createWidget(m_view->KoView::statusBar()), 0, true);
 
     m_showRulersAction  = new KToggleAction(i18n("Show Rulers"), this);
-    actionCollection->addAction("view_ruler", m_showRulersAction );
-    m_showRulersAction->setWhatsThis( i18n("The rulers show the horizontal and vertical positions of the mouse on the image "
-                                      "and can be used to position your mouse at the right place on the canvas. <p>Uncheck this to hide the rulers." ) );
+    actionCollection->addAction("view_ruler", m_showRulersAction);
+    m_showRulersAction->setWhatsThis(i18n("The rulers show the horizontal and vertical positions of the mouse on the image "
+                                          "and can be used to position your mouse at the right place on the canvas. <p>Uncheck this to hide the rulers."));
     connect(m_showRulersAction, SIGNAL(toggled(bool)), SLOT(toggleShowRulers(bool)));
 
     // Put the canvascontroller in a layout so it resizes with us
-    QGridLayout * layout = new QGridLayout( m_view );
+    QGridLayout * layout = new QGridLayout(m_view);
     layout->setSpacing(0);
     layout->setMargin(0);
     m_view->setLayout(layout);
@@ -97,7 +97,7 @@ void KisZoomManager::setup( KActionCollection * actionCollection )
     m_horizontalRuler->setShowMousePosition(true);
     m_horizontalRuler->setUnit(KoUnit(KoUnit::Point));
     m_horizontalRuler->setVisible(show);
-    new KoRulerController( m_horizontalRuler, m_canvasController->canvas()->resourceProvider() );
+    new KoRulerController(m_horizontalRuler, m_canvasController->canvas()->resourceProvider());
     m_verticalRuler = new KoRuler(m_view, Qt::Vertical, m_zoomHandler);
     m_verticalRuler->setShowMousePosition(true);
     m_verticalRuler->setUnit(KoUnit(KoUnit::Point));
@@ -114,9 +114,9 @@ void KisZoomManager::setup( KActionCollection * actionCollection )
     connect(m_canvasController, SIGNAL(canvasOffsetYChanged(int)),
             m_verticalRuler, SLOT(setOffset(int)));
 
-    connect( m_canvasController,
-             SIGNAL( canvasMousePositionChanged(const QPoint & ) ),
-             SLOT( mousePositionChanged( const QPoint & ) ) );
+    connect(m_canvasController,
+            SIGNAL(canvasMousePositionChanged(const QPoint &)),
+            SLOT(mousePositionChanged(const QPoint &)));
 
     connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
             this, SLOT(slotZoomChanged(KoZoomMode::Mode, double)));
@@ -159,7 +159,7 @@ void KisZoomManager::changeAspectMode(bool aspectMode)
 {
     KisImageSP img = m_view->image();
 
-    if(aspectMode)
+    if (aspectMode)
         m_zoomHandler->setResolution(img->xRes(), img->yRes());
     else
         m_zoomHandler->setResolutionToStandard();
@@ -167,9 +167,9 @@ void KisZoomManager::changeAspectMode(bool aspectMode)
     m_view->canvasBase()->preScale();
     m_view->canvas()->update();
 
-    QSize sz = QSize( int(0.5 + m_zoomHandler->documentToViewX(img->width() / img->xRes())),
-                      int(0.5 + m_zoomHandler->documentToViewY(img->height() / img->yRes())) );
-    m_canvasController->setDocumentSize( sz );
+    QSize sz = QSize(int(0.5 + m_zoomHandler->documentToViewX(img->width() / img->xRes())),
+                     int(0.5 + m_zoomHandler->documentToViewY(img->height() / img->yRes())));
+    m_canvasController->setDocumentSize(sz);
 
     // Finally ask the canvasController to recenter
     m_canvasController->recenterPreferred();

@@ -35,9 +35,9 @@ class KRITAUI_EXPORT KisCmbComposite : public KComboBox
 
     Q_OBJECT
 
- public:
+public:
 
-    KisCmbComposite(QWidget * parent = 0, const char * name = 0 );
+    KisCmbComposite(QWidget * parent = 0, const char * name = 0);
     virtual ~KisCmbComposite();
 
     KoCompositeOp * currentItem() const;

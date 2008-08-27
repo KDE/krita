@@ -17,7 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
- 
+
 #ifndef _KIS_WDG_BLUR_H_
 #define _KIS_WDG_BLUR_H_
 
@@ -29,18 +29,20 @@ class Ui_WdgBlur;
 class KisWdgBlur : public KisFilterConfigWidget
 {
     Q_OBJECT
-    public:
-        KisWdgBlur( QWidget * parent);
-        inline const Ui_WdgBlur* widget() const { return m_widget; }
-        virtual void setConfiguration(KisFilterConfiguration*);
-        virtual KisFilterConfiguration* configuration() const;
-    private slots:
-        void linkSpacingToggled(bool);
-        void spinBoxHalfWidthChanged(int );
-        void spinBoxHalfHeightChanged(int );
-    private:
-        bool m_halfSizeLink;
-        Ui_WdgBlur* m_widget;
+public:
+    KisWdgBlur(QWidget * parent);
+    inline const Ui_WdgBlur* widget() const {
+        return m_widget;
+    }
+    virtual void setConfiguration(KisFilterConfiguration*);
+    virtual KisFilterConfiguration* configuration() const;
+private slots:
+    void linkSpacingToggled(bool);
+    void spinBoxHalfWidthChanged(int);
+    void spinBoxHalfHeightChanged(int);
+private:
+    bool m_halfSizeLink;
+    Ui_WdgBlur* m_widget;
 };
 
 #endif

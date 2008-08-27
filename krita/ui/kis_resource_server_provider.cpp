@@ -65,10 +65,9 @@ KisResourceServerProvider::~KisResourceServerProvider()
 
 KisResourceServerProvider* KisResourceServerProvider::instance()
 {
-     if(KisResourceServerProvider::m_singleton == 0)
-     {
-         KisResourceServerProvider::m_singleton = new KisResourceServerProvider();
-     }
+    if (KisResourceServerProvider::m_singleton == 0) {
+        KisResourceServerProvider::m_singleton = new KisResourceServerProvider();
+    }
     return KisResourceServerProvider::m_singleton;
 }
 

@@ -31,32 +31,32 @@
 
 class KisImageAlignmentModel;
 
-class KisImageAlignment {
-    public:
-        struct ImageInfo {
-            ImageInfo() : referenceFrame(0)
-            {
-                transfoToFrame.setIdentity();
-            }
-            KisPaintDeviceSP bigDevice;
-            KisPaintDeviceSP smallDevice;
-            QRect bigRect;
-            QRect smallRect;
-            lInterestPoints points;
-            Eigen::Matrix3d transfoToFrame; ///< transfo to the frame
-            ImageInfo* referenceFrame; ///< frame reference for which the transfo is given
-        };
-        struct Result {
-            double a,b,c; // Distortion parameters
-            Eigen::Matrix3d homography; ///< homography parameters
-        };
-    public:
-        KisImageAlignment(const KisImageAlignmentModel*, KisInterestPointsDetector* );
-        ~KisImageAlignment();
-        std::vector<Result> align(QList<ImageInfo> info);
-    private:
-        struct Private;
-        Private* const d;
+class KisImageAlignment
+{
+public:
+    struct ImageInfo {
+        ImageInfo() : referenceFrame(0) {
+            transfoToFrame.setIdentity();
+        }
+        KisPaintDeviceSP bigDevice;
+        KisPaintDeviceSP smallDevice;
+        QRect bigRect;
+        QRect smallRect;
+        lInterestPoints points;
+        Eigen::Matrix3d transfoToFrame; ///< transfo to the frame
+        ImageInfo* referenceFrame; ///< frame reference for which the transfo is given
+    };
+    struct Result {
+        double a, b, c; // Distortion parameters
+        Eigen::Matrix3d homography; ///< homography parameters
+    };
+public:
+    KisImageAlignment(const KisImageAlignmentModel*, KisInterestPointsDetector*);
+    ~KisImageAlignment();
+    std::vector<Result> align(QList<ImageInfo> info);
+private:
+    struct Private;
+    Private* const d;
 };
 
 

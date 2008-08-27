@@ -28,14 +28,14 @@
 #include <klocale.h>
 
 KisDelayedActionDoubleInput::KisDelayedActionDoubleInput(QWidget * parent, const QString & name)
-    : KDoubleNumInput(parent)
+        : KDoubleNumInput(parent)
 {
     setObjectName(name);
     m_timer = new QTimer(this);
     m_timer->setObjectName(name);
     m_timer->setSingleShot(true);
     connect(m_timer, SIGNAL(timeout()), SLOT(slotValueChanged()));
-    connect(this, SIGNAL(valueChanged( double )), SLOT(slotTimeToUpdate()));
+    connect(this, SIGNAL(valueChanged(double)), SLOT(slotTimeToUpdate()));
 }
 
 void KisDelayedActionDoubleInput::slotTimeToUpdate()
@@ -45,7 +45,7 @@ void KisDelayedActionDoubleInput::slotTimeToUpdate()
 
 void KisDelayedActionDoubleInput::slotValueChanged()
 {
-    emit valueChangedDelayed( value() );
+    emit valueChangedDelayed(value());
 }
 
 void KisDelayedActionDoubleInput::cancelDelayedSignal()
@@ -54,17 +54,17 @@ void KisDelayedActionDoubleInput::cancelDelayedSignal()
 }
 
 KisDoubleWidgetParam::KisDoubleWidgetParam(double nmin, double nmax, double ninitvalue, const QString & nlabel, const QString & nname) :
-    min(nmin),
-    max(nmax),
-    initvalue(ninitvalue),
-    label(nlabel),
-    name(nname)
+        min(nmin),
+        max(nmax),
+        initvalue(ninitvalue),
+        label(nlabel),
+        name(nname)
 {
 
 }
 
 KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(const QString & filterid, QWidget * parent, const QString & caption, vKisDoubleWidgetParam dwparam)
-    : KisFilterConfigWidget( parent ), m_filterid(filterid)
+        : KisFilterConfigWidget(parent), m_filterid(filterid)
 {
     m_nbdoubleWidgets = dwparam.size();
 
@@ -75,19 +75,18 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(const QString & filterid,
 
     m_doubleWidgets = new KisDelayedActionDoubleInput*[ m_nbdoubleWidgets ];
 
-    for( qint32 i = 0; i < m_nbdoubleWidgets; ++i)
-    {
+    for (qint32 i = 0; i < m_nbdoubleWidgets; ++i) {
         m_doubleWidgets[i] = new KisDelayedActionDoubleInput(this, dwparam[i].name);
-        m_doubleWidgets[i]->setRange( dwparam[i].min, dwparam[i].max );
-        m_doubleWidgets[i]->setValue( dwparam[i].initvalue );
+        m_doubleWidgets[i]->setRange(dwparam[i].min, dwparam[i].max);
+        m_doubleWidgets[i]->setValue(dwparam[i].initvalue);
         m_doubleWidgets[i]->cancelDelayedSignal();
 
         connect(m_doubleWidgets[i], SIGNAL(valueChangedDelayed(double)), SIGNAL(sigPleaseUpdatePreview()));
 
-        QLabel* lbl = new QLabel(dwparam[i].label+':', this);
-        widgetLayout->addWidget( lbl, i , 0);
+        QLabel* lbl = new QLabel(dwparam[i].label + ':', this);
+        widgetLayout->addWidget(lbl, i , 0);
 
-        widgetLayout->addWidget( m_doubleWidgets[i], i , 1);
+        widgetLayout->addWidget(m_doubleWidgets[i], i , 1);
     }
     QSpacerItem * sp = new QSpacerItem(1, 1);
     widgetLayout->addItem(sp, m_nbdoubleWidgets, 0);
@@ -96,7 +95,7 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(const QString & filterid,
 
 void KisMultiDoubleFilterWidget::setConfiguration(KisFilterConfiguration * config)
 {
-    if ( !config ) return;
+    if (!config) return;
 
     for (int i = 0; i < m_nbdoubleWidgets ; ++i) {
         KisDelayedActionDoubleInput *  w = m_doubleWidgets[i];

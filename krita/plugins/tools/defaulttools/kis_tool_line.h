@@ -38,12 +38,13 @@ class KoCanvasBase;
 
 class KisRecordedPolyLinePaintAction;
 
-class KisToolLine : public KisToolPaint {
+class KisToolLine : public KisToolPaint
+{
 
     Q_OBJECT
     typedef KisToolPaint super;
 
- public:
+public:
     KisToolLine(KoCanvasBase * canvas);
     virtual ~KisToolLine();
 
@@ -55,13 +56,13 @@ class KisToolLine : public KisToolPaint {
 
     virtual QString quickHelp() const;
 
- private:
+private:
     void paintLine();
     void paintLine(QPainter& gc, const QRect& rc);
 
     QPointF straightLine(QPointF point);
 
- private:
+private:
 
     bool m_dragging;
 
@@ -72,23 +73,23 @@ class KisToolLine : public KisToolPaint {
 };
 
 
-class KisToolLineFactory : public KoToolFactory {
+class KisToolLineFactory : public KoToolFactory
+{
 
 public:
 
     KisToolLineFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KritaShape/KisToolLine", i18nc( "straigh line drawing tool", "Line" ))
-        {
-            setToolTip(i18n("Draw a straight line with the current brush"));
-            // Temporarily
-            setToolType(TOOL_TYPE_SHAPE);
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setPriority( 1 );
-            setIcon("krita_tool_line");
-            setInputDeviceAgnostic(false);
-        }
+            : KoToolFactory(parent, "KritaShape/KisToolLine", i18nc("straigh line drawing tool", "Line")) {
+        setToolTip(i18n("Draw a straight line with the current brush"));
+        // Temporarily
+        setToolType(TOOL_TYPE_SHAPE);
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        setPriority(1);
+        setIcon("krita_tool_line");
+        setInputDeviceAgnostic(false);
+    }
 
-    virtual ~KisToolLineFactory(){}
+    virtual ~KisToolLineFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolLine(canvas);

@@ -37,10 +37,10 @@
 void KisFilterJobTest::testCreation()
 {
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
-    Q_ASSERT( f );
+    Q_ASSERT(f);
 
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
-    Q_ASSERT( kfc );
+    Q_ASSERT(kfc);
 
     TestUtil::TestProgressBar bar;
     KoProgressUpdater pu(&bar);
@@ -48,7 +48,7 @@ void KisFilterJobTest::testCreation()
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    
+
     KisFilterJobFactory factory(f, kfc);
     ThreadWeaver::Job * job = factory.createJob(0, dev, QRect(0, 0, 2000, 2000), f->overlapMarginNeeded(kfc), up);
     Q_ASSERT(job);
@@ -58,30 +58,30 @@ void KisFilterJobTest::testCreation()
 void KisFilterJobTest::testInWeaver()
 {
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
-    Q_ASSERT( f );
+    Q_ASSERT(f);
 
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
-    Q_ASSERT( kfc );
+    Q_ASSERT(kfc);
 
     TestUtil::TestProgressBar * bar = new TestUtil::TestProgressBar();
     KoProgressUpdater * pu = new KoProgressUpdater(bar);
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    QImage qimg( QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    QImage inverted( QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png" );
+    QImage qimg(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
     KisPaintDeviceSP dev = new KisPaintDevice(cs, "filter test");
     dev->convertFromQImage(qimg, "", 0, 0);
 
     KisFilterJobFactory factory(f, kfc);
 
-    KisThreadedApplicator applicator(dev, QRect(0, 0, 2000, 2000), &factory, pu, f->overlapMarginNeeded( kfc ));
+    KisThreadedApplicator applicator(dev, QRect(0, 0, 2000, 2000), &factory, pu, f->overlapMarginNeeded(kfc));
     applicator.execute();
 
-    
+
     QPoint errpoint;
-    if ( !TestUtil::compareQImages( errpoint, inverted, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
+    if (!TestUtil::compareQImages(errpoint, inverted, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()))) {
         dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("filtermasktest2.png");
-        QFAIL( QString( "Failed to create inverted image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
+        QFAIL(QString("Failed to create inverted image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
     delete pu;
     delete bar;

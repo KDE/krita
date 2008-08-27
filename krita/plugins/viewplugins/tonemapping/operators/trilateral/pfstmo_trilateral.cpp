@@ -24,127 +24,123 @@ using namespace std;
 /// verbose mode
 bool verbose = false;
 
-class QuietException 
+class QuietException
 {
 };
 
 void printHelp()
 {
-  fprintf( stderr, PROG_NAME ": \n"
-    "\t[--saturation <val>] [--sigma <val>] \n"
-    "\t[--contrast <val>] [--shift <val>] \n"
-    "\t[--verbose] [--help] \n"
-    "See man page for more information.\n" );
+    fprintf(stderr, PROG_NAME ": \n"
+            "\t[--saturation <val>] [--sigma <val>] \n"
+            "\t[--contrast <val>] [--shift <val>] \n"
+            "\t[--verbose] [--help] \n"
+            "See man page for more information.\n");
 }
 
-void pfstmo_trilateral( int argc, char* argv[] )
+void pfstmo_trilateral(int argc, char* argv[])
 {
-  pfs::DOMIO pfsio;
+    pfs::DOMIO pfsio;
 
-  //--- default tone mapping parameters;
-static double    sigma_c          = 21.;         /* The only user parameter                */
-static double    saturation       = 1.0;
-static double    base_range       = 5.0;
-static double    base_value       = 0.0;
+    //--- default tone mapping parameters;
+    static double    sigma_c          = 21.;         /* The only user parameter                */
+    static double    saturation       = 1.0;
+    static double    base_range       = 5.0;
+    static double    base_value       = 0.0;
 
 
-  static struct option cmdLineOptions[] = {
-	
-	
-    { "help", no_argument, NULL, 'h' },
-	{ "verbose", no_argument, NULL, 'v' },
+    static struct option cmdLineOptions[] = {
+
+
+        { "help", no_argument, NULL, 'h' },
+        { "verbose", no_argument, NULL, 'v' },
 /////////////////////////////////////////////////////////
-	{ "saturation", required_argument, NULL, 's' },
-	{ "sigma", required_argument, NULL, 'g' },
-	{ "contrast", required_argument, NULL, 'c' },
-	{ "shift", required_argument, NULL, 't' },
+        { "saturation", required_argument, NULL, 's' },
+        { "sigma", required_argument, NULL, 'g' },
+        { "contrast", required_argument, NULL, 'c' },
+        { "shift", required_argument, NULL, 't' },
 /////////////////////////////////////////////////////////
-	{ NULL, 0, NULL, 0 }
-  };
+        { NULL, 0, NULL, 0 }
+    };
 
-  int optionIndex = 0;
-  while( 1 ) {
-	  int c = getopt_long (argc, argv, "hv:c:g:s:t", cmdLineOptions, &optionIndex);
-    if( c == -1 ) break;
-    switch( c ) {
-    case 'h':
-      printHelp();
-      throw QuietException();
-    case 'v':
-      verbose = true;
-      break;
-    case 'g':
-      sigma_c = (float)strtod( optarg, NULL );
+    int optionIndex = 0;
+    while (1) {
+        int c = getopt_long(argc, argv, "hv:c:g:s:t", cmdLineOptions, &optionIndex);
+        if (c == -1) break;
+        switch (c) {
+        case 'h':
+            printHelp();
+            throw QuietException();
+        case 'v':
+            verbose = true;
             break;
-    case 'c':
-      base_range = (float)strtod( optarg, NULL );
-	       break;
-    case 's':
-      saturation = (float)strtod( optarg, NULL );
+        case 'g':
+            sigma_c = (float)strtod(optarg, NULL);
             break;
-	case 't':
-      base_value = (float)strtod( optarg, NULL );
+        case 'c':
+            base_range = (float)strtod(optarg, NULL);
             break;
-    case '?':
-      throw QuietException();
-    case ':':
-      throw QuietException();
+        case 's':
+            saturation = (float)strtod(optarg, NULL);
+            break;
+        case 't':
+            base_value = (float)strtod(optarg, NULL);
+            break;
+        case '?':
+            throw QuietException();
+        case ':':
+            throw QuietException();
+        }
     }
-  }
 
-  VERBOSE_STR << "contrast value: " << base_range << endl;
-  VERBOSE_STR << "sigma value: " << sigma_c << endl;
-  VERBOSE_STR << "shift value: " << base_value << endl;
-  VERBOSE_STR << "saturation value: " << saturation << endl;
+    VERBOSE_STR << "contrast value: " << base_range << endl;
+    VERBOSE_STR << "sigma value: " << sigma_c << endl;
+    VERBOSE_STR << "shift value: " << base_value << endl;
+    VERBOSE_STR << "saturation value: " << saturation << endl;
 
 
-  while( true ) 
-  {
-    pfs::Frame *frame = pfsio.readFrame( stdin );
-    if( frame == NULL ) break; // No more frames
+    while (true) {
+        pfs::Frame *frame = pfsio.readFrame(stdin);
+        if (frame == NULL) break;  // No more frames
 
-    pfs::Channel *X, *Y, *Z;
-    frame->getXYZChannels( X, Y, Z );
-    //---
+        pfs::Channel *X, *Y, *Z;
+        frame->getXYZChannels(X, Y, Z);
+        //---
 
-    if( Y==NULL || X==NULL || Z==NULL)
-      throw pfs::Exception( "Missing X, Y, Z channels in the PFS stream" );
-        
-    // tone mapping
-    int w = Y->getCols();
-    int h = Y->getRows();
-    pfs::Array2D* L = new pfs::Array2DImpl(w,h);
-	
-    tmo_trilateral( Y, L, base_range, sigma_c, base_value, saturation);
+        if (Y == NULL || X == NULL || Z == NULL)
+            throw pfs::Exception("Missing X, Y, Z channels in the PFS stream");
 
-    for( int x=0 ; x<w ; x++ )
-      for( int y=0 ; y<h ; y++ )
-      {
-        float scale = (*L)(x,y) / (*Y)(x,y);
-        (*Y)(x,y) *= scale;
-        (*X)(x,y) *= scale;
-        (*Z)(x,y) *= scale;
-      }
+        // tone mapping
+        int w = Y->getCols();
+        int h = Y->getRows();
+        pfs::Array2D* L = new pfs::Array2DImpl(w, h);
 
-    delete L;
+        tmo_trilateral(Y, L, base_range, sigma_c, base_value, saturation);
 
-    //---
-    pfsio.writeFrame( frame, stdout );
-    pfsio.freeFrame( frame );        
-  }
+        for (int x = 0 ; x < w ; x++)
+            for (int y = 0 ; y < h ; y++) {
+                float scale = (*L)(x, y) / (*Y)(x, y);
+                (*Y)(x, y) *= scale;
+                (*X)(x, y) *= scale;
+                (*Z)(x, y) *= scale;
+            }
+
+        delete L;
+
+        //---
+        pfsio.writeFrame(frame, stdout);
+        pfsio.freeFrame(frame);
+    }
 }
 
-int main( int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
-  try {
-    pfstmo_trilateral( argc, argv );
-  }
-  catch( pfs::Exception ex ) {
-    fprintf( stderr, PROG_NAME " error: %s\n", ex.getMessage() );
-    return EXIT_FAILURE;
-  }        
-  catch( QuietException  ex ) {
-    return EXIT_FAILURE;
-  }       
-  return EXIT_SUCCESS;
+    try {
+        pfstmo_trilateral(argc, argv);
+    } catch (pfs::Exception ex) {
+        fprintf(stderr, PROG_NAME " error: %s\n", ex.getMessage());
+        return EXIT_FAILURE;
+    } catch (QuietException  ex) {
+        return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
 }

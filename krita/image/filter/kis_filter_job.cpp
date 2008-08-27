@@ -35,18 +35,18 @@
 #include "kis_painter.h"
 #include "kis_selection.h"
 
-KisFilterJob::KisFilterJob( const KisFilter* filter,
-                            const KisFilterConfiguration * config,
-                            QObject * parent, KisPaintDeviceSP dev,
-                            const QRect & rc,
-                            int margin,
-                            const KoUpdater& updater,
-                            KisSelectionSP selection)
-    : KisJob( parent, dev, rc, margin )
-    , m_filter( filter )
-    , m_config( config )
-    , m_updater( updater)
-    , m_selection( selection )
+KisFilterJob::KisFilterJob(const KisFilter* filter,
+                           const KisFilterConfiguration * config,
+                           QObject * parent, KisPaintDeviceSP dev,
+                           const QRect & rc,
+                           int margin,
+                           const KoUpdater& updater,
+                           KisSelectionSP selection)
+        : KisJob(parent, dev, rc, margin)
+        , m_filter(filter)
+        , m_config(config)
+        , m_updater(updater)
+        , m_selection(selection)
 {
 }
 
@@ -55,34 +55,34 @@ void KisFilterJob::run()
 {
     // XXX: Is it really necessary to output the filter on a second paint device and
     //      then blit it back? (boud)
-    KisPaintDeviceSP dst = new KisPaintDevice( m_dev->colorSpace() );
-    QRect marginRect = m_rc.adjusted( -m_margin, -m_margin, m_margin, m_margin );
-    KisPainter p1( dst );
-    p1.setCompositeOp( dst->colorSpace()->compositeOp( COMPOSITE_COPY ) );
-    p1.bitBlt( m_rc.topLeft(), m_dev, m_rc );
+    KisPaintDeviceSP dst = new KisPaintDevice(m_dev->colorSpace());
+    QRect marginRect = m_rc.adjusted(-m_margin, -m_margin, m_margin, m_margin);
+    KisPainter p1(dst);
+    p1.setCompositeOp(dst->colorSpace()->compositeOp(COMPOSITE_COPY));
+    p1.bitBlt(m_rc.topLeft(), m_dev, m_rc);
     p1.end();
 
-    m_filter->process( KisConstProcessingInformation( m_dev, marginRect.topLeft(), m_selection),
-                        KisProcessingInformation( dst, marginRect.topLeft(), m_selection ),
-                        marginRect.size(),
-                        m_config,
-                        &m_updater );
-    KisPainter p2( m_dev );
-    p2.setCompositeOp( m_dev->colorSpace()->compositeOp( COMPOSITE_COPY ) );
-    p2.bitBlt( m_rc.topLeft(), dst, m_rc );
+    m_filter->process(KisConstProcessingInformation(m_dev, marginRect.topLeft(), m_selection),
+                      KisProcessingInformation(dst, marginRect.topLeft(), m_selection),
+                      marginRect.size(),
+                      m_config,
+                      &m_updater);
+    KisPainter p2(m_dev);
+    p2.setCompositeOp(m_dev->colorSpace()->compositeOp(COMPOSITE_COPY));
+    p2.bitBlt(m_rc.topLeft(), dst, m_rc);
     p2.end();
     m_updater.setProgress(100);
 }
 
-KisFilterJobFactory::KisFilterJobFactory( const KisFilter* filter, const KisFilterConfiguration * config, KisSelectionSP selection )
-    : m_filter( filter )
-    , m_config( config )
-    , m_selection( selection )
+KisFilterJobFactory::KisFilterJobFactory(const KisFilter* filter, const KisFilterConfiguration * config, KisSelectionSP selection)
+        : m_filter(filter)
+        , m_config(config)
+        , m_selection(selection)
 {
 }
 
-ThreadWeaver::Job * KisFilterJobFactory::createJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc, int margin, KoUpdater updater )
+ThreadWeaver::Job * KisFilterJobFactory::createJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc, int margin, KoUpdater updater)
 {
-    return new KisFilterJob( m_filter, m_config, parent, dev, rc, margin, updater, m_selection );
+    return new KisFilterJob(m_filter, m_config, parent, dev, rc, margin, updater, m_selection);
 }
 

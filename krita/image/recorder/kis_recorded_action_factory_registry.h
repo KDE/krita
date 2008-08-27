@@ -27,13 +27,13 @@ class KisRecordedActionFactory;
 
 class KRITAIMAGE_EXPORT KisRecordedActionFactoryRegistry : public KoGenericRegistry<KisRecordedActionFactory*>
 {
-    public:
-        KisRecordedActionFactoryRegistry();
-        ~KisRecordedActionFactoryRegistry();
-        static KisRecordedActionFactoryRegistry* instance();
-    private:
-        struct Private;
-        Private* const d;
+public:
+    KisRecordedActionFactoryRegistry();
+    ~KisRecordedActionFactoryRegistry();
+    static KisRecordedActionFactoryRegistry* instance();
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

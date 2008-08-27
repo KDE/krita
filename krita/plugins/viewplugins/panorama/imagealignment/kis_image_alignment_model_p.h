@@ -22,12 +22,13 @@
 
 #include "kis_image_alignment_model.h"
 
-class KisImageAlignmentModel::OptimizationFunction {
-  public:
+class KisImageAlignmentModel::OptimizationFunction
+{
+public:
     virtual ~OptimizationFunction();
-    virtual std::vector<double> values(const std::vector<double>& parameters) =0;
+    virtual std::vector<double> values(const std::vector<double>& parameters) = 0;
     virtual gmm::row_matrix< gmm::rsvector<double> > jacobian(const std::vector<double>& parameters) = 0;
-    virtual void removeOutlier(const std::vector<double>& parameters, double threshold) =0;
+    virtual void removeOutlier(const std::vector<double>& parameters, double threshold) = 0;
 };
 
 #endif

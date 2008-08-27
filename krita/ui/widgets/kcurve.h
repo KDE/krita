@@ -39,14 +39,14 @@
  * and pressing the delete key.
  *
  * (From: http://techbase.kde.org/Projects/Widgets_and_Classes#KCurve)
- * KCurve allows editing of spline based y=f(x) curves. Handy for cases 
- * where you want the user to control such things as tablet pressure 
- * response, color transformations, acceleration by time, aeroplane lift 
+ * KCurve allows editing of spline based y=f(x) curves. Handy for cases
+ * where you want the user to control such things as tablet pressure
+ * response, color transformations, acceleration by time, aeroplane lift
  *by angle of attack.
  */
 class KRITAUI_EXPORT KCurve : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -91,10 +91,10 @@ protected:
 
     void keyPressEvent(QKeyEvent *);
     void paintEvent(QPaintEvent *);
-    void mousePressEvent (QMouseEvent * e);
-    void mouseReleaseEvent ( QMouseEvent * e );
-    void mouseMoveEvent ( QMouseEvent * e );
-    void leaveEvent ( QEvent * );
+    void mousePressEvent(QMouseEvent * e);
+    void mouseReleaseEvent(QMouseEvent * e);
+    void mouseMoveEvent(QMouseEvent * e);
+    void leaveEvent(QEvent *);
 
 public:
 

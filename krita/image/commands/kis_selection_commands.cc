@@ -26,8 +26,8 @@
 #include "kis_selection_mask.h"
 
 KisSetGlobalSelectionCommand::KisSetGlobalSelectionCommand(KisImageSP image, QUndoCommand * parent, KisSelectionSP selection) :
-    QUndoCommand(parent)
-  , m_image(image)
+        QUndoCommand(parent)
+        , m_image(image)
 {
     m_oldSelection = m_image->globalSelection();
 
@@ -46,7 +46,7 @@ void KisSetGlobalSelectionCommand::redo()
 
 void KisSetGlobalSelectionCommand::undo()
 {
-    if(m_oldSelection)
+    if (m_oldSelection)
         m_image->setGlobalSelection(m_oldSelection);
     else
         m_image->removeGlobalSelection();
@@ -55,9 +55,9 @@ void KisSetGlobalSelectionCommand::undo()
 
 
 KisDeselectLocalSelectionCommand::KisDeselectLocalSelectionCommand(KisImageSP image, KisSelectionMaskSP selectionMask, QUndoCommand * parent) :
-    QUndoCommand(i18n("Deselect"), parent)
-  , m_image(image)
-  , m_selectionMask(selectionMask)
+        QUndoCommand(i18n("Deselect"), parent)
+        , m_image(image)
+        , m_selectionMask(selectionMask)
 {
 }
 
@@ -70,12 +70,11 @@ void KisDeselectLocalSelectionCommand::redo()
     m_oldDeselectedSelection = m_selectionMask->deleselectedSelection();
     m_selectionMask->setDeleselectedSelection(m_selectionMask->selection());
 
-    if(!m_newSelection) {
+    if (!m_newSelection) {
         m_selectionMask->setSelection(0);
         m_newSelection = m_selectionMask->selection();
         m_newSelection->setDeselected(true);
-    }
-    else
+    } else
         m_selectionMask->setSelection(m_newSelection);
 
     m_image->undoAdapter()->emitSelectionChanged();
@@ -90,9 +89,9 @@ void KisDeselectLocalSelectionCommand::undo()
 }
 
 KisReselectLocalSelectionCommand::KisReselectLocalSelectionCommand(KisImageSP image, KisSelectionMaskSP selectionMask, QUndoCommand * parent) :
-    QUndoCommand(i18n("Reselect"), parent)
-  , m_image(image)
-  , m_selectionMask(selectionMask)
+        QUndoCommand(i18n("Reselect"), parent)
+        , m_image(image)
+        , m_selectionMask(selectionMask)
 {
 }
 
@@ -119,8 +118,8 @@ void KisReselectLocalSelectionCommand::undo()
 
 
 KisDeselectGlobalSelectionCommand::KisDeselectGlobalSelectionCommand(KisImageSP image, QUndoCommand * parent) :
-    QUndoCommand(i18n("Deselect"), parent)
-  , m_image(image)
+        QUndoCommand(i18n("Deselect"), parent)
+        , m_image(image)
 {
 }
 
@@ -133,12 +132,11 @@ void KisDeselectGlobalSelectionCommand::redo()
     m_oldDeselectedSelection = m_image->deleselectedGlobalSelection();
     m_image->setDeleselectedGlobalSelection(m_image->globalSelection());
 
-    if(!m_newSelection) {
+    if (!m_newSelection) {
         m_image->setGlobalSelection();
         m_newSelection = m_image->globalSelection();
         m_newSelection->setDeselected(true);
-    }
-    else
+    } else
         m_image->setGlobalSelection(m_newSelection);
 
     m_image->undoAdapter()->emitSelectionChanged();
@@ -153,8 +151,8 @@ void KisDeselectGlobalSelectionCommand::undo()
 }
 
 KisReselectGlobalSelectionCommand::KisReselectGlobalSelectionCommand(KisImageSP image, QUndoCommand * parent) :
-    QUndoCommand(i18n("Reselect"), parent)
-  , m_image(image)
+        QUndoCommand(i18n("Reselect"), parent)
+        , m_image(image)
 {
 }
 

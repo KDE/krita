@@ -31,22 +31,27 @@
  * moveTo function to select the pixel. And then rawData to access the
  * value of a pixel.
  */
-class  KRITAIMAGE_EXPORT KisRandomSubAccessorPixel{
-    public:
-        KisRandomSubAccessorPixel(const KisPaintDeviceSP device);
-        ~KisRandomSubAccessorPixel();
-        /**
-         * Copy the sampled old value to destination
-         */
-        void sampledOldRawData(quint8* dst);
-        void sampledRawData(quint8* dst);
-        inline void moveTo(double x, double y) { m_currentPoint.setX(x); m_currentPoint.setY(y); }
-        inline void moveTo(const QPointF& p ) { m_currentPoint = p; }
-    private:
-        KisPaintDeviceSP m_device;
-        int m_position, m_end;
-        QPointF m_currentPoint;
-        KisRandomConstAccessorPixel m_randomAccessor;
+class  KRITAIMAGE_EXPORT KisRandomSubAccessorPixel
+{
+public:
+    KisRandomSubAccessorPixel(const KisPaintDeviceSP device);
+    ~KisRandomSubAccessorPixel();
+    /**
+     * Copy the sampled old value to destination
+     */
+    void sampledOldRawData(quint8* dst);
+    void sampledRawData(quint8* dst);
+    inline void moveTo(double x, double y) {
+        m_currentPoint.setX(x); m_currentPoint.setY(y);
+    }
+    inline void moveTo(const QPointF& p) {
+        m_currentPoint = p;
+    }
+private:
+    KisPaintDeviceSP m_device;
+    int m_position, m_end;
+    QPointF m_currentPoint;
+    KisRandomConstAccessorPixel m_randomAccessor;
 };
 
 #endif

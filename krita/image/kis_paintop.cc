@@ -46,8 +46,7 @@
 #define BEZIER_FLATNESS_THRESHOLD 0.5
 #define MAXIMUM_SCALE 2
 
-struct KisPaintOp::Private
-{
+struct KisPaintOp::Private {
     Private() : dab(0) {}
     KisPaintDeviceSP dab;
     KoColor color;
@@ -56,7 +55,7 @@ struct KisPaintOp::Private
 };
 
 
-KisPaintOp::KisPaintOp( KisPainter * painter) : d(new Private)
+KisPaintOp::KisPaintOp(KisPainter * painter) : d(new Private)
 {
     d->painter = painter;
 }
@@ -66,17 +65,17 @@ KisPaintOp::~KisPaintOp()
     delete d;
 }
 
-KisPaintDeviceSP KisPaintOp::cachedDab(  )
+KisPaintDeviceSP KisPaintOp::cachedDab()
 {
-  return cachedDab( d->painter->device()->colorSpace() );
+    return cachedDab(d->painter->device()->colorSpace());
 }
 
-KisPaintDeviceSP KisPaintOp::cachedDab( const KoColorSpace *cs )
+KisPaintDeviceSP KisPaintOp::cachedDab(const KoColorSpace *cs)
 {
-  if( !d->dab || !(*d->dab->colorSpace() == *cs )) {
-      d->dab = KisPaintDeviceSP(new KisPaintDevice(cs, "dab"));
-  }
-  return d->dab;
+    if (!d->dab || !(*d->dab->colorSpace() == *cs)) {
+        d->dab = KisPaintDeviceSP(new KisPaintDevice(cs, "dab"));
+    }
+    return d->dab;
 }
 
 void KisPaintOp::splitCoordinate(double coordinate, qint32 *whole, double *fraction) const
@@ -122,7 +121,7 @@ static double paintBezierCurve(KisPaintOp *paintOp,
         double midXTilt = (pi1.xTilt() + pi2.xTilt()) / 2;
         double midYTilt = (pi1.yTilt() + pi2.yTilt()) / 2;
 
-        KisPaintInformation middlePI( toQPointF(l4), midPressure, midXTilt, midYTilt );
+        KisPaintInformation middlePI(toQPointF(l4), midPressure, midXTilt, midYTilt);
         newDistance = paintBezierCurve(paintOp, pi1, l2, l3, middlePI, savedDist);
         newDistance = paintBezierCurve(paintOp, middlePI, r2, r3, pi2, newDistance);
     }
@@ -141,8 +140,8 @@ double KisPaintOp::paintBezierCurve(const KisPaintInformation &pi1,
 
 
 double KisPaintOp::paintLine(const KisPaintInformation &pi1,
-                     const KisPaintInformation &pi2,
-                     double savedDist)
+                             const KisPaintInformation &pi2,
+                             double savedDist)
 {
     KisVector2D end = toKisVector2D(pi2.pos());
     KisVector2D start = toKisVector2D(pi1.pos());
@@ -157,7 +156,7 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
     double xSpacing, ySpacing = 1;
     double sp = spacing(xSpacing, ySpacing, pi1.pressure(), pi2.pressure());
 
-    KisVector2D scale(1,1);
+    KisVector2D scale(1, 1);
 
     // Scale x or y so that we effectively have a square brush
     // and calculate distance in that coordinate space. We reverse this scaling
@@ -165,8 +164,7 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
     // x and y directions, even if the brush's aspect ratio is not 1:1.
     if (xSpacing > ySpacing) {
         scale.y() = xSpacing / ySpacing;
-    }
-    else {
+    } else {
         scale.x() = ySpacing / xSpacing;
     }
 
@@ -187,8 +185,7 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
         if (l_savedDist > 0) {
             step += dragVec * (sp - l_savedDist);
             l_savedDist -= sp;
-        }
-        else {
+        } else {
             step += dragVec * sp;
         }
 
@@ -209,8 +206,8 @@ double KisPaintOp::paintLine(const KisPaintInformation &pi1,
         dist -= sp;
     }
 
-    QRect r( pi1.pos().toPoint(), pi2.pos().toPoint() );
-    d->painter->addDirtyRect( r.normalized() );
+    QRect r(pi1.pos().toPoint(), pi2.pos().toPoint());
+    d->painter->addDirtyRect(r.normalized());
 
     if (dist > 0)
         return dist;
@@ -249,7 +246,7 @@ KisPaintOpFactory::KisPaintOpFactory()
 {
 }
 
-bool KisPaintOpFactory::userVisible(const KoColorSpace * cs )
+bool KisPaintOpFactory::userVisible(const KoColorSpace * cs)
 {
     return cs && cs->id() != "WET";
 }

@@ -27,7 +27,8 @@
 #include "kis_global.h"
 #include "krita_export.h"
 
-class KRITAUI_EXPORT KisConfig {
+class KRITAUI_EXPORT KisConfig
+{
 public:
     KisConfig();
     ~KisConfig();
@@ -39,7 +40,7 @@ public:
     void setFixedDockerWidth(bool fix);
 
     bool useProjections() const;
-    void setUseProjections( bool useProj );
+    void setUseProjections(bool useProj);
 
     bool undoEnabled() const;
     void setUndoEnabled(bool undo);
@@ -106,7 +107,7 @@ public:
     void setSwappiness(qint32 swappiness);
 
     qint32 getPressureCorrection();
-    void setPressureCorrection( qint32 correction);
+    void setPressureCorrection(qint32 correction);
     qint32 getDefaultPressureCorrection();
 
     bool tabletDeviceEnabled(const QString& tabletDeviceName) const;
@@ -135,7 +136,7 @@ public:
     void setGridOffsetY(quint32 v);
 
     qint32 checkSize();
-    void setCheckSize( qint32 checkSize );
+    void setCheckSize(qint32 checkSize);
 
     bool scrollCheckers() const;
     void setScrollingCheckers(bool scollCheckers);
@@ -144,56 +145,58 @@ public:
     void setCheckersColor(const QColor & v);
 
     int numProjectionThreads();
-    void setNumProjectThreads( int num );
+    void setNumProjectThreads(int num);
 
     int projectionChunkSize();
-    void setProjectionChunkSize( int num );
+    void setProjectionChunkSize(int num);
 
     bool aggregateDirtyRegionsInPainter();
-    void setAggregateDirtyRegionsInPainter( bool aggregate );
+    void setAggregateDirtyRegionsInPainter(bool aggregate);
 
     bool useBoundingRectInProjection();
-    void setUseBoundingRectInProjection( bool use );
+    void setUseBoundingRectInProjection(bool use);
 
     bool useRegionOfInterestInProjection();
-    void setUseRegionOfInterestInProjection( bool use );
+    void setUseRegionOfInterestInProjection(bool use);
 
     bool updateAllOfQPainterCanvas();
     void setUpdateAllOfQpainterCanvas(bool all);
 
     // Use nearest-neighbour interpolation on KisImage
     bool useNearestNeigbour();
-    void setUseNearestNeighbour( bool useNearestNeigbour );
+    void setUseNearestNeighbour(bool useNearestNeigbour);
 
     // Use Blitz sampling on a QImage
     bool useSampling();
-    void setSampling( bool sampling );
+    void setSampling(bool sampling);
 
     // First nearest-neighbour, then smooth scaling
     bool useDeferredSmoothing();
-    void setDeferredSmoothing( bool deferredSmoothing );
+    void setDeferredSmoothing(bool deferredSmoothing);
 
     // Don't use our own method, but use Qt
     bool useQtSmoothScaling();
-    void setUseQtSmoothScaling( bool useQtSmootScaling );
+    void setUseQtSmoothScaling(bool useQtSmootScaling);
 
     bool threadColorSpaceConversion();
-    void setThreadColorSpaceConversion( bool threadColorSpaceConversion );
+    void setThreadColorSpaceConversion(bool threadColorSpaceConversion);
 
     bool cacheKisImageAsQImage();
-    void setCacheKisImageAsQImage( bool cacheKisImageAsQImage );
+    void setCacheKisImageAsQImage(bool cacheKisImageAsQImage);
 
     bool drawMaskVisualisationOnUnscaledCanvasCache();
-    void setDrawMaskVisualisationOnUnscaledCanvasCache( bool drawMaskVisualisationOnUnscaledCanvasCache );
+    void setDrawMaskVisualisationOnUnscaledCanvasCache(bool drawMaskVisualisationOnUnscaledCanvasCache);
 
-    bool fastZoom() { return false; }
+    bool fastZoom() {
+        return false;
+    }
 
     // If there's no XRender use QPixmaps instead of QImage for the QPainterCanvas
     bool noXRender();
-    void setNoXRender( bool noXRender );
+    void setNoXRender(bool noXRender);
 
     bool showRootLayer();
-    void setShowRootLayer( bool showRootLayer );
+    void setShowRootLayer(bool showRootLayer);
 
 
 private:

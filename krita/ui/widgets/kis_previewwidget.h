@@ -39,8 +39,10 @@ class PreviewWidgetBase : public QWidget, public Ui::PreviewWidgetBase
 {
     Q_OBJECT
 
-    public:
-        PreviewWidgetBase(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
+public:
+    PreviewWidgetBase(QWidget *parent, const char *name) : QWidget(parent) {
+        setObjectName(name); setupUi(this);
+    }
 };
 
 /**
@@ -57,7 +59,7 @@ class KRITAUI_EXPORT KisPreviewWidget : public PreviewWidgetBase
 
 public:
     /** Constructs the widget */
-    KisPreviewWidget( QWidget* parent = 0, const char* name = 0 );
+    KisPreviewWidget(QWidget* parent = 0, const char* name = 0);
 
     /** @return the scaled down copy of the layer, so the dialog can apply its effect on it. */
     KisPaintDeviceSP getDevice();
@@ -66,7 +68,7 @@ public:
     bool getAutoUpdate() const;
 
     void wheelEvent(QWheelEvent * e);
-    
+
 public slots:
 
     /** Sets the preview to use the layer specified as argument */
@@ -82,10 +84,10 @@ public slots:
 
     /** Toggle between display preview and display original */
     void setPreviewDisplayed(bool v);
-    
+
     /** use to indicate that the preview need to be updated. */
     void needUpdate();
-    
+
 signals:
     /** This is emitted when the position or zoom factor of the widget has changed */
     void updated();
@@ -97,17 +99,17 @@ private slots:
     void zoomOneToOne();
 
     void forceUpdate();
-    
+
 private:
 
     bool zoomChanged();
-    
+
     bool m_autoupdate, m_previewIsDisplayed;
 
     QImage m_scaledOriginal;
     QImage m_scaledPreview;
     KisPaintDeviceSP m_previewDevice;
-    
+
     double m_zoom;
     const KoColorProfile * m_profile;
 

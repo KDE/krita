@@ -34,34 +34,36 @@ typedef Q3ValueVector<NodeCol> NodeMatrix;
 typedef Q3ValueVector<qint16> GrayCol;
 typedef Q3ValueVector<GrayCol> GrayMatrix;
 
-class KisCurveMagnetic : public KisCurve {
+class KisCurveMagnetic : public KisCurve
+{
 
     typedef KisCurve super;
 
     KisToolMagnetic *m_parent;
 
-    void reduceMatrix (QRect&, GrayMatrix&, int, int, int, int);
-    void findEdge (int, int, const GrayMatrix&, Node&);
-    void detectEdges (const QRect&, KisPaintDeviceSP, GrayMatrix&);
+    void reduceMatrix(QRect&, GrayMatrix&, int, int, int, int);
+    void findEdge(int, int, const GrayMatrix&, Node&);
+    void detectEdges(const QRect&, KisPaintDeviceSP, GrayMatrix&);
 
-    void gaussianBlur (const QRect&, KisPaintDeviceSP, KisPaintDeviceSP);
-    void toGrayScale (const QRect&, KisPaintDeviceSP, GrayMatrix&);
-    void getDeltas (const GrayMatrix&, GrayMatrix&, GrayMatrix&);
-    void getMagnitude (const GrayMatrix&, const GrayMatrix&, GrayMatrix&);
-    void nonMaxSupp (const GrayMatrix&, const GrayMatrix&, const GrayMatrix&, GrayMatrix&);
+    void gaussianBlur(const QRect&, KisPaintDeviceSP, KisPaintDeviceSP);
+    void toGrayScale(const QRect&, KisPaintDeviceSP, GrayMatrix&);
+    void getDeltas(const GrayMatrix&, GrayMatrix&, GrayMatrix&);
+    void getMagnitude(const GrayMatrix&, const GrayMatrix&, GrayMatrix&);
+    void nonMaxSupp(const GrayMatrix&, const GrayMatrix&, const GrayMatrix&, GrayMatrix&);
 
 public:
 
-    KisCurveMagnetic (KisToolMagnetic *parent);
-    ~KisCurveMagnetic ();
+    KisCurveMagnetic(KisToolMagnetic *parent);
+    ~KisCurveMagnetic();
 
-    virtual KisCurve::iterator addPivot (iterator, const QPointF&);
-    virtual KisCurve::iterator pushPivot (const QPointF&);
-    virtual void calculateCurve (iterator, iterator, iterator);
+    virtual KisCurve::iterator addPivot(iterator, const QPointF&);
+    virtual KisCurve::iterator pushPivot(const QPointF&);
+    virtual void calculateCurve(iterator, iterator, iterator);
 
 };
 
-class KisToolMagnetic : public KisToolCurve {
+class KisToolMagnetic : public KisToolCurve
+{
 
     typedef KisToolCurve super;
     Q_OBJECT
@@ -73,7 +75,7 @@ public:
     KisToolMagnetic();
     ~KisToolMagnetic();
 
-    virtual void setup (KActionCollection*);
+    virtual void setup(KActionCollection*);
 
     virtual void keyPress(QKeyEvent*);
     virtual void buttonPress(KoPointerEvent*);
@@ -82,16 +84,18 @@ public:
 
     virtual KisCurve::iterator selectByMouse(KisCurve::iterator it);
 
-    bool editingMode() {return m_editingMode;}
+    bool editingMode() {
+        return m_editingMode;
+    }
     virtual QWidget* createOptionWidget();
 
 public slots:
 
-    virtual void activate ();
-    virtual void deactivate ();
+    virtual void activate();
+    virtual void deactivate();
 
-    void slotCommitCurve ();
-    void slotSetDistance (int);
+    void slotCommitCurve();
+    void slotSetDistance(int);
 
 private:
 
@@ -109,19 +113,19 @@ private:
 
 };
 
-class KisToolMagneticFactory : public KoToolFactory {
+class KisToolMagneticFactory : public KoToolFactory
+{
 
 public:
     KisToolMagneticFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolMagnetic", i18n( "Magnetic Outline Selection")
-        {
-            setToolTip( i18n( "Magnetic Selection: move around an edge to select it. Hit Ctrl to enter/quit manual mode, and double click to finish." ) );
-            setToolType( TOOL_TYPE_SELECTED );
-            setIcon( "tool_moutline" );
-            setPriority( 0 );
-        };
+            : KoToolFactory(parent, "KisToolMagnetic", i18n("Magnetic Outline Selection") {
+        setToolTip(i18n("Magnetic Selection: move around an edge to select it. Hit Ctrl to enter/quit manual mode, and double click to finish."));
+        setToolType(TOOL_TYPE_SELECTED);
+        setIcon("tool_moutline");
+        setPriority(0);
+    };
 
-    virtual ~KisToolMagneticFactory(){}
+    virtual ~KisToolMagneticFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolMagnetic(canvas);

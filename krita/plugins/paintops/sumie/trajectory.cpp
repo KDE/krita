@@ -21,7 +21,8 @@
 
 #include <kis_debug.h>
 
-Trajectory::Trajectory(){
+Trajectory::Trajectory()
+{
 
 }
 
@@ -38,52 +39,43 @@ QVector<QPointF> &Trajectory::getLinearTrajectory(QPointF start, QPointF end, do
     int y = (int)start.y();
     float fx = start.x();
     float fy = start.y();
-    float m = yd/xd;
+    float m = yd / xd;
 
     int y2 = (int)end.y();
     int x2 = (int)end.x();
 
     m_path.append(start);
 
-    if ( fabs(m) > 1 )
-    {
+    if (fabs(m) > 1) {
         // y - directional axis
         int incr;
-        if ( yd > 0 )
-        {
-            m = 1.0f/m;
+        if (yd > 0) {
+            m = 1.0f / m;
             incr = 1;
-        }
-        else
-        {
-            m = -1.0f/m;
+        } else {
+            m = -1.0f / m;
             incr = -1;
         }
-        while ( y!=y2 )
-        {
+        while (y != y2) {
             fx = fx + m;
             y = y + incr;
             x = (int)(fx + 0.5f);
-            m_path.append( QPointF(fx, y) );
+            m_path.append(QPointF(fx, y));
         }
-    }else
-    {
+    } else {
         // x - directional axis
         int incr;
-        if ( xd > 0 )
-        {
+        if (xd > 0) {
             incr = 1;
-        }else
-        {
+        } else {
             incr = -1;
             m = -m;
         }
-        while ( x!=x2 )
-        {
-            fy= fy + m;
+        while (x != x2) {
+            fy = fy + m;
             x = x + incr;
             y = (int)(fy + 0.5f);
-            m_path.append( QPointF(x, fy) );
+            m_path.append(QPointF(x, fy));
         }
     }
 
@@ -104,47 +96,38 @@ QVector<QPointF> Trajectory::getDDATrajectory(QPointF start, QPointF end, double
     int y = (int)start.y();
     float fx = start.x();
     float fy = start.y();
-    float m = (float)yd/(float)xd;
+    float m = (float)yd / (float)xd;
     int y2 = (int)end.y();
     int x2 = (int)end.x();
 
-    if ( fabs(m) > 1 )
-    {
+    if (fabs(m) > 1) {
         int incr;
-        if ( yd > 0 )
-        {
-            m = 1.0f/m;
+        if (yd > 0) {
+            m = 1.0f / m;
             incr = 1;
-        }
-        else
-        {
-            m = -1.0f/m;
+        } else {
+            m = -1.0f / m;
             incr = -1;
         }
-        while ( y!=y2 )
-        {
+        while (y != y2) {
             fx = fx + m;
             y = y + incr;
             x = (int)(fx + 0.5f);
             m_path.append(QPointF(x, y));
         }
-    }else
-    {
+    } else {
         int incr;
-        if ( xd > 0 )
-        {
+        if (xd > 0) {
             incr = 1;
-        }else
-        {
+        } else {
             incr = -1;
             m = -m;
         }
-        while ( x!=x2 )
-        {
-            fy= fy + m;
+        while (x != x2) {
+            fy = fy + m;
             x = x + incr;
             y = (int)(fy + 0.5f);
-            m_path.append( QPointF(x, y) );
+            m_path.append(QPointF(x, y));
         }
     }
 
@@ -152,5 +135,6 @@ QVector<QPointF> Trajectory::getDDATrajectory(QPointF start, QPointF end, double
 }
 
 
-Trajectory::~Trajectory(){
+Trajectory::~Trajectory()
+{
 }

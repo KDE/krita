@@ -24,7 +24,8 @@
 
 class KoResource;
 
-class KisIconItem : public QTableWidgetItem {
+class KisIconItem : public QTableWidgetItem
+{
 
 public:
     KisIconItem(KoResource *resource);

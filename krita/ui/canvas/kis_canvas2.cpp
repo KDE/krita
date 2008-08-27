@@ -60,28 +60,27 @@
 #include <QGLFormat>
 #endif
 
-class KisCanvas2::KisCanvas2Private {
+class KisCanvas2::KisCanvas2Private
+{
 
 public:
 
-    KisCanvas2Private( KoCanvasBase * parent, KoViewConverter * viewConverter, KisView2 * view )
-        : viewConverter( viewConverter )
-        , view( view )
-        , canvasWidget( 0 )
-        , shapeManager( new KoShapeManager(parent) )
-        , monitorProfile( 0 )
-        , currentCanvasIsOpenGL( false )
-        , currentCanvasUsesOpenGLShaders( false )
-        , toolProxy( new KoToolProxy(parent) )
-        {
-        }
+    KisCanvas2Private(KoCanvasBase * parent, KoViewConverter * viewConverter, KisView2 * view)
+            : viewConverter(viewConverter)
+            , view(view)
+            , canvasWidget(0)
+            , shapeManager(new KoShapeManager(parent))
+            , monitorProfile(0)
+            , currentCanvasIsOpenGL(false)
+            , currentCanvasUsesOpenGLShaders(false)
+            , toolProxy(new KoToolProxy(parent)) {
+    }
 
-    ~KisCanvas2Private()
-        {
-            delete shapeManager;
-            delete monitorProfile;
-            delete toolProxy;
-        }
+    ~KisCanvas2Private() {
+        delete shapeManager;
+        delete monitorProfile;
+        delete toolProxy;
+    }
 
     KoViewConverter * viewConverter;
     KisView2 * view;
@@ -101,12 +100,12 @@ public:
 };
 
 KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShapeControllerBase * sc)
-    : KoCanvasBase(sc)
-    , m_d ( new KisCanvas2Private(this, viewConverter, view) )
+        : KoCanvasBase(sc)
+        , m_d(new KisCanvas2Private(this, viewConverter, view))
 {
     createCanvas();
-    connect( view->canvasController(), SIGNAL( moveDocumentOffset( const QPoint& ) ), SLOT( documentOffsetMoved( const QPoint& ) ) );
-    connect( KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    connect(view->canvasController(), SIGNAL(moveDocumentOffset(const QPoint&)), SLOT(documentOffsetMoved(const QPoint&)));
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
 }
 
 KisCanvas2::~KisCanvas2()
@@ -116,13 +115,13 @@ KisCanvas2::~KisCanvas2()
 
 void KisCanvas2::setCanvasWidget(QWidget * widget)
 {
-    KisAbstractCanvasWidget * tmp = dynamic_cast<KisAbstractCanvasWidget*>( widget );
-    Q_ASSERT_X( tmp, "setCanvasWidget", "Cannot cast the widget to a KisAbstractCanvasWidget" );
+    KisAbstractCanvasWidget * tmp = dynamic_cast<KisAbstractCanvasWidget*>(widget);
+    Q_ASSERT_X(tmp, "setCanvasWidget", "Cannot cast the widget to a KisAbstractCanvasWidget");
     m_d->canvasWidget = tmp;
-    widget->setAutoFillBackground( false );
-    widget->setAttribute( Qt::WA_OpaquePaintEvent );
-    widget->setMouseTracking( true );
-    widget->setAcceptDrops( true );
+    widget->setAutoFillBackground(false);
+    widget->setAttribute(Qt::WA_OpaquePaintEvent);
+    widget->setMouseTracking(true);
+    widget->setAcceptDrops(true);
     KoCanvasController *controller = canvasController();
     if (controller) {
         Q_ASSERT(controller->canvas() == this);
@@ -149,17 +148,17 @@ bool KisCanvas2::snapToGrid() const
 
 void KisCanvas2::addCommand(QUndoCommand *command)
 {
-    m_d->view->koDocument()->addCommand( command );
+    m_d->view->koDocument()->addCommand(command);
 }
 
 void KisCanvas2::startMacro(const QString &title)
 {
-    m_d->view->koDocument()->beginMacro( title );
+    m_d->view->koDocument()->beginMacro(title);
 }
 
 void KisCanvas2::stopMacro()
 {
-    m_d->view->koDocument()->endMacro( );
+    m_d->view->koDocument()->endMacro();
 }
 
 KoShapeManager* KisCanvas2::shapeManager() const
@@ -168,11 +167,11 @@ KoShapeManager* KisCanvas2::shapeManager() const
     if (!m_d->view->layerManager()) return m_d->shapeManager;
 
     KisLayerSP activeLayer = m_d->view->layerManager()->activeLayer();
-    if ( activeLayer ) {
-        KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>( activeLayer.data() );
-        if ( shapeLayer )
+    if (activeLayer) {
+        KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(activeLayer.data());
+        if (shapeLayer)
             return shapeLayer->shapeManager();
-        if ( activeLayer->selection() && activeLayer->selection()->hasShapeSelection() )
+        if (activeLayer->selection() && activeLayer->selection()->hasShapeSelection())
             return static_cast<KisShapeSelection*>(activeLayer->selection()->shapeSelection())->shapeManager();
     }
     return m_d->shapeManager;
@@ -189,18 +188,18 @@ void KisCanvas2::updateCanvas(const QRectF& rc)
     // updates, so no need to prescale!
 
     // First convert from document coordinated to widget coordinates
-    if ( m_d->updateAllOfQPainterCanvas && !m_d->currentCanvasIsOpenGL ) {
+    if (m_d->updateAllOfQPainterCanvas && !m_d->currentCanvasIsOpenGL) {
         m_d->canvasWidget->widget()->update();
-    }
-    else {
-        QRect vRect = viewRectFromDoc( rc );
-        if ( !vRect.isEmpty() ) {
-            m_d->canvasWidget->widget()->update( vRect );
+    } else {
+        QRect vRect = viewRectFromDoc(rc);
+        if (!vRect.isEmpty()) {
+            m_d->canvasWidget->widget()->update(vRect);
         }
     }
 }
 
-void KisCanvas2::updateInputMethodInfo() {
+void KisCanvas2::updateInputMethodInfo()
+{
     // TODO call (the protected) QWidget::updateMicroFocus() on the proper canvas widget...
 }
 
@@ -220,7 +219,8 @@ KoUnit KisCanvas2::unit() const
     return KoUnit(KoUnit::Pixel);
 }
 
-KoToolProxy * KisCanvas2::toolProxy() const {
+KoToolProxy * KisCanvas2::toolProxy() const
+{
     return m_d->toolProxy;
 }
 
@@ -231,29 +231,28 @@ void KisCanvas2::createQPainterCanvas()
 #endif
     m_d->currentCanvasIsOpenGL = false;
 
-    KisQPainterCanvas * canvasWidget = new KisQPainterCanvas( this, m_d->view );
+    KisQPainterCanvas * canvasWidget = new KisQPainterCanvas(this, m_d->view);
     m_d->prescaledProjection = new KisPrescaledProjection();
-    m_d->prescaledProjection->setViewConverter( m_d->viewConverter );
+    m_d->prescaledProjection->setViewConverter(m_d->viewConverter);
 
-    canvasWidget->setPrescaledProjection( m_d->prescaledProjection );
+    canvasWidget->setPrescaledProjection(m_d->prescaledProjection);
 
     KisConfig cfg;
     m_d->updateAllOfQPainterCanvas = cfg.updateAllOfQPainterCanvas();
 
-    setCanvasWidget( canvasWidget );
+    setCanvasWidget(canvasWidget);
 }
 
 void KisCanvas2::createOpenGLCanvas()
 {
 #ifdef HAVE_OPENGL
-    if ( QGLFormat::hasOpenGL() ) {
+    if (QGLFormat::hasOpenGL()) {
         // XXX: The image isn't done loading here!
         m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(), m_d->monitorProfile);
-        setCanvasWidget( new KisOpenGLCanvas2( this, m_d->view, m_d->openGLImageTextures ) );
+        setCanvasWidget(new KisOpenGLCanvas2(this, m_d->view, m_d->openGLImageTextures));
         m_d->currentCanvasIsOpenGL = true;
         m_d->currentCanvasUsesOpenGLShaders = m_d->openGLImageTextures->usingHDRExposureProgram();
-    }
-    else {
+    } else {
         kWarning() << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
         createQPainterCanvas();
     }
@@ -263,15 +262,14 @@ void KisCanvas2::createOpenGLCanvas()
 void KisCanvas2::createCanvas()
 {
     KisConfig cfg;
-    if ( cfg.useOpenGL() ) {
+    if (cfg.useOpenGL()) {
 #ifdef HAVE_OPENGL
         createOpenGLCanvas();
 #else
         kWarning() << "OpenGL requested while its not available, starting qpainter canvas";
         createQPainterCanvas();
 #endif
-    }
-    else {
+    } else {
         createQPainterCanvas();
 
     }
@@ -284,43 +282,42 @@ KisView2* KisCanvas2::view()
 }
 
 
-QRect KisCanvas2::viewRectFromDoc( const QRectF & rc )
+QRect KisCanvas2::viewRectFromDoc(const QRectF & rc)
 {
     QRect viewRect = m_d->viewConverter->documentToView(rc).toAlignedRect();
-    viewRect = viewRect.translated( -m_d->documentOffset );
-    viewRect = viewRect.intersected( QRect( 0, 0, m_d->canvasWidget->widget()->width(), m_d->canvasWidget->widget()->height() ) );
+    viewRect = viewRect.translated(-m_d->documentOffset);
+    viewRect = viewRect.intersected(QRect(0, 0, m_d->canvasWidget->widget()->width(), m_d->canvasWidget->widget()->height()));
     return viewRect;
 }
 
 
-void KisCanvas2::updateCanvasProjection( const QRect & rc )
+void KisCanvas2::updateCanvasProjection(const QRect & rc)
 {
 #ifdef HAVE_OPENGL
     // Should never have an OpenGL image context and get here as that
     // connects to the image directly.
-    Q_ASSERT( m_d->openGLImageTextures.isNull() );
+    Q_ASSERT(m_d->openGLImageTextures.isNull());
 #endif
     // XXX: Use the KisQPainterImageContext here
     // If this does anything, it updates the pixel-for-pixel
     // projection of the KisImage
-    m_d->prescaledProjection->updateCanvasProjection( rc );
+    m_d->prescaledProjection->updateCanvasProjection(rc);
 
-    QRect vRect = m_d->prescaledProjection->viewRectFromImagePixels( rc );
+    QRect vRect = m_d->prescaledProjection->viewRectFromImagePixels(rc);
 
-    if ( !vRect.isEmpty() ) {
+    if (!vRect.isEmpty()) {
 
         // If so desired, rescale all of the visible area so we don't
         // see any jitter when using algorithms that cannot handle the
         // +/- half pixel inaccuracy of our algorithms
-        if ( m_d->updateAllOfQPainterCanvas ) {
+        if (m_d->updateAllOfQPainterCanvas) {
             m_d->prescaledProjection->preScale();
-        }
-        else {
-            m_d->prescaledProjection->preScale( vRect );
+        } else {
+            m_d->prescaledProjection->preScale(vRect);
         }
 
         // Regardless, the actual
-        m_d->canvasWidget->widget()->update( vRect );
+        m_d->canvasWidget->widget()->update(vRect);
 
     }
 }
@@ -348,10 +345,10 @@ KisImageSP KisCanvas2::currentImage()
     return m_d->view->image();
 }
 
-void KisCanvas2::setImageSize( qint32 w, qint32 h )
+void KisCanvas2::setImageSize(qint32 w, qint32 h)
 {
-    if ( m_d->prescaledProjection )
-        m_d->prescaledProjection->setImageSize( w, h );
+    if (m_d->prescaledProjection)
+        m_d->prescaledProjection->setImageSize(w, h);
 }
 
 void KisCanvas2::connectCurrentImage()
@@ -363,10 +360,10 @@ void KisCanvas2::connectCurrentImage()
     } else {
 #endif
         connect(m_d->view->image(), SIGNAL(sigImageUpdated(const QRect &)), SLOT(updateCanvasProjection(const QRect &)));
-        connect(m_d->view->image(), SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(setImageSize( qint32, qint32)) );
+        connect(m_d->view->image(), SIGNAL(sigSizeChanged(qint32, qint32)), SLOT(setImageSize(qint32, qint32)));
 
-        if ( m_d->prescaledProjection ) {
-            m_d->prescaledProjection->setImage( m_d->view->image() );
+        if (m_d->prescaledProjection) {
+            m_d->prescaledProjection->setImage(m_d->view->image());
         }
 
 #ifdef HAVE_OPENGL
@@ -381,7 +378,7 @@ void KisCanvas2::disconnectCurrentImage()
         m_d->openGLImageTextures->disconnect(this);
     }
 #endif
-    m_d->view->image()->disconnect( this );
+    m_d->view->image()->disconnect(this);
 }
 
 void KisCanvas2::resetCanvas()
@@ -391,7 +388,7 @@ void KisCanvas2::resetCanvas()
 #if HAVE_OPENGL
 
     if ((cfg.useOpenGL() != m_d->currentCanvasIsOpenGL) ||
-        (m_d->currentCanvasIsOpenGL && (cfg.useOpenGLShaders() != m_d->currentCanvasUsesOpenGLShaders))) {
+            (m_d->currentCanvasIsOpenGL && (cfg.useOpenGLShaders() != m_d->currentCanvasUsesOpenGLShaders))) {
 
         disconnectCurrentImage();
         createCanvas();
@@ -410,15 +407,15 @@ void KisCanvas2::resetCanvas()
     m_d->canvasWidget->widget()->update();
 }
 
-void KisCanvas2::documentOffsetMoved( const QPoint &documentOffset )
+void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)
 {
     m_d->documentOffset = documentOffset;
-    m_d->canvasWidget->documentOffsetMoved( documentOffset );
+    m_d->canvasWidget->documentOffsetMoved(documentOffset);
 }
 
 void KisCanvas2::preScale()
 {
-    if ( !m_d->currentCanvasIsOpenGL && m_d->prescaledProjection )
+    if (!m_d->currentCanvasIsOpenGL && m_d->prescaledProjection)
         m_d->prescaledProjection->preScale();
 }
 
@@ -439,19 +436,19 @@ void KisCanvas2::slotConfigChanged()
     resetCanvas();
 }
 
-void KisCanvas2::slotSetDisplayProfile( const KoColorProfile * profile )
+void KisCanvas2::slotSetDisplayProfile(const KoColorProfile * profile)
 {
     m_d->monitorProfile = const_cast<KoColorProfile*>(profile);
 }
 
 void KisCanvas2::addDecoration(KisCanvasDecoration* deco)
 {
-    m_d->canvasWidget->addDecoration( deco );
+    m_d->canvasWidget->addDecoration(deco);
 }
 
 KisCanvasDecoration* KisCanvas2::decoration(const QString& id)
 {
-    return m_d->canvasWidget->decoration( id );
+    return m_d->canvasWidget->decoration(id);
 }
 
 #include "kis_canvas2.moc"

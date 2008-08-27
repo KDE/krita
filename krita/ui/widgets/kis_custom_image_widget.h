@@ -32,8 +32,10 @@ class WdgNewImage : public QWidget, public Ui::WdgNewImage
 {
     Q_OBJECT
 
-    public:
-        WdgNewImage(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgNewImage(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
 /**
@@ -41,7 +43,8 @@ class WdgNewImage : public QWidget, public Ui::WdgNewImage
  * This class embeds the image size and colorspace to allow the user to select the image properties
  * for a new empty image document.
  */
-class KisCustomImageWidget : public WdgNewImage {
+class KisCustomImageWidget : public WdgNewImage
+{
     Q_OBJECT
 public:
     /**
@@ -60,7 +63,7 @@ private slots:
     void resolutionChanged(double value);
     void clipboardDataChanged();
     void screenSizeClicked();
-    
+
 signals:
     /// this signal is emitted (as defined by KoDocument) the moment the document is 'ready'
     void documentSelected();

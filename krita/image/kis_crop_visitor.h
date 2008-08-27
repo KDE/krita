@@ -41,38 +41,34 @@
 /**
  * XXX: crop all masks, too?
  */
-class KisCropVisitor : public KisNodeVisitor {
+class KisCropVisitor : public KisNodeVisitor
+{
 
 public:
 
     using KisNodeVisitor::visit;
 
-    KisCropVisitor( const QRect & rc, bool movelayers = true)
-        : KisNodeVisitor()
-        , m_rect(rc), m_movelayers(movelayers)
-    {
+    KisCropVisitor(const QRect & rc, bool movelayers = true)
+            : KisNodeVisitor()
+            , m_rect(rc), m_movelayers(movelayers) {
     }
 
-    virtual ~KisCropVisitor()
-    {
+    virtual ~KisCropVisitor() {
     }
 
-    bool visit( KisExternalLayer * )
-        {
-            return true;
-        }
+    bool visit(KisExternalLayer *) {
+        return true;
+    }
 
     /**
      * Crops the specified layer and adds the undo information to the undo adapter of the
      * layer's image.
      */
-    bool visit(KisPaintLayer *layer)
-    {
+    bool visit(KisPaintLayer *layer) {
         return cropPaintDeviceLayer(layer);
     }
 
-    bool visit(KisGroupLayer *layer)
-    {
+    bool visit(KisGroupLayer *layer) {
         layer->resetProjection();
 
         KisNodeSP child = layer->firstChild();
@@ -84,22 +80,19 @@ public:
         return true;
     }
 
-    virtual bool visit(KisAdjustmentLayer* layer)
-    {
+    virtual bool visit(KisAdjustmentLayer* layer) {
         // XXX: crop the selection?
         layer->resetCache();
         return true;
     }
 
-    virtual bool visit(KisGeneratorLayer * layer)
-    {
+    virtual bool visit(KisGeneratorLayer * layer) {
         return cropPaintDeviceLayer(layer);
     }
 
 private:
 
-    bool cropPaintDeviceLayer(KisLayer * layer)
-    {
+    bool cropPaintDeviceLayer(KisLayer * layer) {
 
         KisPaintDeviceSP dev = layer->paintDevice();
         KisUndoAdapter* undoAdapter = layer->image()->undoAdapter();
@@ -114,8 +107,8 @@ private:
             undoAdapter->addCommand(t);
         }
 
-        if(m_movelayers) {
-            if(undoAdapter && undoAdapter->undo()) {
+        if (m_movelayers) {
+            if (undoAdapter && undoAdapter->undo()) {
                 QPoint oldPos(layer->x(), layer->y());
                 QPoint newPos(layer->x() - m_rect.x(), layer->y() - m_rect.y());
                 QUndoCommand * cmd = new KisNodeMoveCommand(layer, oldPos, newPos);

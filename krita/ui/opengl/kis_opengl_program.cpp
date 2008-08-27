@@ -23,14 +23,12 @@
 #include <QWidget>
 #include <QPointF>
 
-#include <kis_debug.h>
-
 #include "opengl/kis_opengl.h"
 #include "opengl/kis_opengl_shader.h"
 #include "kis_debug.h"
 
 KisOpenGLProgram::KisOpenGLProgram()
-    : m_isValid(false)
+        : m_isValid(false)
 {
     KIS_OPENGL_CLEAR_ERROR();
 
@@ -38,7 +36,7 @@ KisOpenGLProgram::KisOpenGLProgram()
     KIS_OPENGL_PRINT_ERROR();
 
     if (m_program == 0) {
-        dbgUI <<"Failed to create program";
+        dbgUI << "Failed to create program";
     }
 }
 
@@ -66,7 +64,7 @@ GLint KisOpenGLProgram::uniformVariableLocation(const GLchar *variableName) cons
         KIS_OPENGL_PRINT_ERROR();
 
         if (location == -1) {
-            dbgUI <<"Failed to find uniform variable '" << variableName <<"' in program";
+            dbgUI << "Failed to find uniform variable '" << variableName << "' in program";
         }
     }
 
@@ -164,8 +162,8 @@ void KisOpenGLProgram::link()
             m_isValid = true;
         } else {
             m_isValid = false;
-            dbgUI <<"Failed to link program";
-            dbgUI <<"Info log:" << getInfoLog();
+            dbgUI << "Failed to link program";
+            dbgUI << "Info log:" << getInfoLog();
         }
     }
 }

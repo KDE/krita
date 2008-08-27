@@ -29,51 +29,50 @@
 #include "kis_threaded_applicator.h"
 #include "testutil.h"
 
-class TestJob : public KisJob {
+class TestJob : public KisJob
+{
 public:
-    TestJob(   QObject * parent, KisPaintDeviceSP dev, const QRect & rc, int margin  )
-        : KisJob( parent, dev, rc, margin )
+    TestJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc, int margin)
+            : KisJob(parent, dev, rc, margin) {
+    }
+
+    virtual void run() {
+
+        quint8 * oldBytes = m_dev->colorSpace()->allocPixelBuffer(1);
+        memset(oldBytes, 128, m_dev->colorSpace()->pixelSize());
+
+        quint8 * newBytes = m_dev->colorSpace()->allocPixelBuffer(1);
+        memset(newBytes, 255, m_dev->colorSpace()->pixelSize());
+
+        QRect rc = m_rc.adjusted(-m_margin, -m_margin, m_margin, m_margin);
+
         {
+            KisRectIteratorPixel it = m_dev->createRectIterator(rc.x(), rc.y(), rc.width(), rc.height());
+            while (!it.isDone()) {
+                QVERIFY(memcmp(it.oldRawData(), oldBytes, m_dev->colorSpace()->pixelSize()) == 0);
+                ++it;
+            }
         }
 
-    virtual void run()
         {
-
-            quint8 * oldBytes = m_dev->colorSpace()->allocPixelBuffer( 1 );
-            memset( oldBytes, 128, m_dev->colorSpace()->pixelSize() );
-
-            quint8 * newBytes = m_dev->colorSpace()->allocPixelBuffer( 1 );
-            memset( newBytes, 255, m_dev->colorSpace()->pixelSize() );
-
-            QRect rc = m_rc.adjusted( -m_margin, -m_margin, m_margin, m_margin );
-
-            {
-                KisRectIteratorPixel it = m_dev->createRectIterator(rc.x(), rc.y(), rc.width(), rc.height() );
-                while ( !it.isDone() ) {
-                    QVERIFY( memcmp(it.oldRawData(), oldBytes, m_dev->colorSpace()->pixelSize() ) == 0 );
-                    ++it;
-                }
+            KisRectIteratorPixel it = m_dev->createRectIterator(m_rc.x(), m_rc.y(), m_rc.width(), m_rc.height());
+            while (!it.isDone()) {
+                memcpy(it.rawData(), newBytes, m_dev->colorSpace()->pixelSize());
+                ++it;
             }
-
-            {
-                KisRectIteratorPixel it = m_dev->createRectIterator(m_rc.x(), m_rc.y(), m_rc.width(), m_rc.height() );
-                while ( !it.isDone() ) {
-                    memcpy(it.rawData(), newBytes, m_dev->colorSpace()->pixelSize() );
-                    ++it;
-                }
-            }
-
         }
+
+    }
 
 };
 
-class TestJobFactory : public KisJobFactory {
+class TestJobFactory : public KisJobFactory
+{
 public:
-    ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev,  const QRect & rc, int margin, KoUpdater updater)
-        {
-            Q_UNUSED(updater);
-            return new TestJob( parent, dev, rc, margin );
-        }
+    ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev,  const QRect & rc, int margin, KoUpdater updater) {
+        Q_UNUSED(updater);
+        return new TestJob(parent, dev, rc, margin);
+    }
 };
 
 void KisThreadedApplicatorTest::testApplication()
@@ -82,21 +81,21 @@ void KisThreadedApplicatorTest::testApplication()
     TestJobFactory factory;
     TestUtil::TestProgressBar bar;
     KoProgressUpdater updater(&bar);
-    KisPaintDeviceSP test = new KisPaintDevice( colorSpace, "test" );
+    KisPaintDeviceSP test = new KisPaintDevice(colorSpace, "test");
 
-    quint8 *bytes = test->colorSpace()->allocPixelBuffer( 1 );
-    memset( bytes, 128, test->colorSpace()->pixelSize() );
-    test->fill( 0, 0, 1000, 1000, bytes );
+    quint8 *bytes = test->colorSpace()->allocPixelBuffer(1);
+    memset(bytes, 128, test->colorSpace()->pixelSize());
+    test->fill(0, 0, 1000, 1000, bytes);
 
-    KisThreadedApplicator applicator( test, QRect( 0, 0, 1000, 1000 ), &factory, &updater);
+    KisThreadedApplicator applicator(test, QRect(0, 0, 1000, 1000), &factory, &updater);
     applicator.execute();
 
-    KisRectConstIteratorPixel it = test->createRectConstIterator(0, 0, 1000, 1000 );
-    while ( !it.isDone() ) {
-        QCOMPARE( ( int )it.rawData()[0], ( int )255 );
-        QCOMPARE( ( int )it.rawData()[1], ( int )255 );
-        QCOMPARE( ( int )it.rawData()[2], ( int )255 );
-        QCOMPARE( ( int )it.rawData()[3], ( int )255 );
+    KisRectConstIteratorPixel it = test->createRectConstIterator(0, 0, 1000, 1000);
+    while (!it.isDone()) {
+        QCOMPARE((int)it.rawData()[0], (int)255);
+        QCOMPARE((int)it.rawData()[1], (int)255);
+        QCOMPARE((int)it.rawData()[2], (int)255);
+        QCOMPARE((int)it.rawData()[3], (int)255);
         ++it;
     }
 }

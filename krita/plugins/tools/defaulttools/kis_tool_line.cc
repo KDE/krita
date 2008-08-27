@@ -44,8 +44,8 @@
 #include <recorder/kis_recorded_polyline_paint_action.h>
 
 KisToolLine::KisToolLine(KoCanvasBase * canvas)
-    : KisToolPaint(canvas, KisCursor::load("tool_line_cursor.png", 6, 6)),
-      m_dragging( false )
+        : KisToolPaint(canvas, KisCursor::load("tool_line_cursor.png", 6, 6)),
+        m_dragging(false)
 {
     setObjectName("tool_line");
 
@@ -65,7 +65,7 @@ void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
     double sx, sy;
     converter.zoom(&sx, &sy);
 
-    gc.scale( sx/currentImage()->xRes(), sy/currentImage()->yRes() );
+    gc.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
     if (m_dragging)
         paintLine(gc, QRect());
 }
@@ -116,7 +116,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
     if (m_dragging && e->button() == Qt::LeftButton) {
         m_dragging = false;
 
-        if(m_canvas) {
+        if (m_canvas) {
 
             if (m_startPos == m_endPos) {
                 m_dragging = false;
@@ -129,9 +129,9 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
 
             KisPaintDeviceSP device;
 
-            if ( currentNode() &&  ( device = currentNode()->paintDevice()) ) {
+            if (currentNode() && (device = currentNode()->paintDevice())) {
                 delete m_painter;
-                m_painter = new KisPainter( device, currentSelection() );
+                m_painter = new KisPainter(device, currentSelection());
                 Q_CHECK_PTR(m_painter);
 
                 m_painter->beginTransaction(i18nc("a straight drawn line", "Line"));
@@ -140,20 +140,19 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
                 m_painter->setOpacity(m_opacity);
                 m_painter->setCompositeOp(m_compositeOp);
                 m_painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
-                m_painter->paintLine( m_startPos, m_endPos );
+                m_painter->paintLine(m_startPos, m_endPos);
                 QRegion dirtyRegion = m_painter->dirtyRegion();
-                device->setDirty( dirtyRegion );
+                device->setDirty(dirtyRegion);
                 notifyModified();
 // Should not be necessary anymore because of KisProjection
 #if 0
                 m_canvas->updateCanvas(convertToPt(dirtyRegion));
 #endif
 
-                if (image())
-                {
-                    KisRecordedPolyLinePaintAction* linePaintAction = new KisRecordedPolyLinePaintAction( i18n("Line tool"), currentNode(), currentPaintOpPreset(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), false, m_compositeOp );
-                    linePaintAction->addPoint( m_startPos );
-                    linePaintAction->addPoint( m_endPos );
+                if (image()) {
+                    KisRecordedPolyLinePaintAction* linePaintAction = new KisRecordedPolyLinePaintAction(i18n("Line tool"), currentNode(), currentPaintOpPreset(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), false, m_compositeOp);
+                    linePaintAction->addPoint(m_startPos);
+                    linePaintAction->addPoint(m_endPos);
                     image()->actionRecorder()->addAction(*linePaintAction);
                 }
 
@@ -163,7 +162,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
             } else {
                 // Remove the last remaining line.
                 // m_painter can be 0 here...!!!
-dbgPlugins <<"do we ever go here";
+                dbgPlugins << "do we ever go here";
                 QRectF bound;
                 bound.setTopLeft(m_startPos);
                 bound.setBottomRight(m_endPos);
@@ -181,12 +180,12 @@ QPointF KisToolLine::straightLine(QPointF point)
     QPointF comparison = point - m_startPos;
     QPointF result;
 
-    if ( fabs(comparison.x()) > fabs(comparison.y())) {
+    if (fabs(comparison.x()) > fabs(comparison.y())) {
         result.setX(point.x());
         result.setY(m_startPos.y());
     } else {
-        result.setX( m_startPos.x() );
-        result.setY( point.y() );
+        result.setX(m_startPos.x());
+        result.setY(point.y());
     }
 
     return result;
@@ -213,19 +212,20 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
         QPointF end;
 
 //        Q_ASSERT(controller);
-    start = m_startPos;
-    end = m_endPos;
+        start = m_startPos;
+        end = m_endPos;
         gc.setPen(pen);
         //gc.drawLine(start.toPoint(), end.toPoint());
-    start = QPoint(static_cast<int>(start.x()), static_cast<int>(start.y()));
-    end = QPoint(static_cast<int>(end.x()), static_cast<int>(end.y()));
-    gc.drawLine(start, end);
+        start = QPoint(static_cast<int>(start.x()), static_cast<int>(start.y()));
+        end = QPoint(static_cast<int>(end.x()), static_cast<int>(end.y()));
+        gc.drawLine(start, end);
         gc.setPen(old);
     }
 }
 
 
-QString KisToolLine::quickHelp() const {
+QString KisToolLine::quickHelp() const
+{
     return i18n("Alt+Drag will move the origin of the currently displayed line around, Shift+Drag will force you to draw straight lines");
 }
 

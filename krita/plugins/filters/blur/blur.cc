@@ -25,7 +25,7 @@
 #include "filter/kis_filter_registry.h"
 
 typedef KGenericFactory<BlurFilterPlugin> BlurFilterPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritablurfilter, BlurFilterPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritablurfilter, BlurFilterPluginFactory("krita"))
 
 BlurFilterPlugin::BlurFilterPlugin(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)

@@ -45,7 +45,7 @@
 #include "kis_paint_device.h"
 
 KisHistogramView::KisHistogramView(QWidget *parent, const char *name, Qt::WFlags f)
-    : QLabel(parent, f)
+        : QLabel(parent, f)
 {
     setObjectName(name);
     // This is needed until we can computationally scale it well. Until then, this is needed
@@ -240,7 +240,7 @@ void KisHistogramView::setChannels()
     } else {
         for (int i = 0; i < list.count(); i++) {
             KoID id(list.at(i));
-            addProducerChannels( KoHistogramProducerFactoryRegistry::instance()->value(id.id())->generate() );
+            addProducerChannels(KoHistogramProducerFactoryRegistry::instance()->value(id.id())->generate());
         }
     }
 
@@ -251,21 +251,22 @@ void KisHistogramView::setChannels()
     m_channelToOffset.append(0);
 }
 
-void KisHistogramView::addProducerChannels(KoHistogramProducerSP producer) {
-        ComboboxInfo info;
-        info.isProducer = true;
-        info.producer = producer;
-        // channel not used for a producer
-        QList<KoChannelInfo *> channels = info.producer->channels();
-        int count = channels.count();
+void KisHistogramView::addProducerChannels(KoHistogramProducerSP producer)
+{
+    ComboboxInfo info;
+    info.isProducer = true;
+    info.producer = producer;
+    // channel not used for a producer
+    QList<KoChannelInfo *> channels = info.producer->channels();
+    int count = channels.count();
+    m_comboInfo.append(info);
+    m_channelStrings.append(producer->id() . name());
+    for (int j = 0; j < count; j++) {
+        info.isProducer = false;
+        info.channel = channels.at(j);
         m_comboInfo.append(info);
-        m_channelStrings.append(producer->id() . name());
-        for (int j = 0; j < count; j++) {
-            info.isProducer = false;
-            info.channel = channels.at(j);
-            m_comboInfo.append(info);
-            m_channelStrings.append(QString(" ").append(info.channel->name()));
-        }
+        m_channelStrings.append(QString(" ").append(info.channel->name()));
+    }
 }
 
 void KisHistogramView::updateHistogram()
@@ -322,7 +323,7 @@ void KisHistogramView::updateHistogram()
 
         if (m_histogram->getHistogramType() == LINEAR) {
             double factor = (double)height / highest;
-            for( i=0; i<bins; ++i ) {
+            for (i = 0; i < bins; ++i) {
                 // So that we get a good view even with a selection box with
                 // black colors on background of black selection
                 if (i >= selFrom && i < selTo && blackOnBlack) {
@@ -334,7 +335,7 @@ void KisHistogramView::updateHistogram()
             }
         } else {
             double factor = (double)height / (double)log(highest);
-            for( i = 0; i < bins; ++i ) {
+            for (i = 0; i < bins; ++i) {
                 // Same as above
                 if (i >= selFrom && i < selTo && blackOnBlack) {
                     p.setPen(Qt::white);
@@ -350,7 +351,8 @@ void KisHistogramView::updateHistogram()
     setPixmap(m_pix);
 }
 
-void KisHistogramView::mousePressEvent(QMouseEvent * e) {
+void KisHistogramView::mousePressEvent(QMouseEvent * e)
+{
     if (e->button() == Qt::RightButton)
         emit rightClicked(e->globalPos());
     else

@@ -23,7 +23,8 @@
 
 class KisBrush;
 
-namespace Scripting {
+namespace Scripting
+{
 
 class Module;
 
@@ -32,21 +33,23 @@ class Module;
  */
 class Brush : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-    public:
-        /**
-         * @param sharedBrush tell if the brush should be deleted or not when this object is deleted
-         */
-        Brush(Module* module, KisBrush*, bool sharedBrush );
-        ~Brush();
+public:
+    /**
+     * @param sharedBrush tell if the brush should be deleted or not when this object is deleted
+     */
+    Brush(Module* module, KisBrush*, bool sharedBrush);
+    ~Brush();
 
-    public:
-        inline KisBrush* getBrush() { return m_brush; }
+public:
+    inline KisBrush* getBrush() {
+        return m_brush;
+    }
 
-    private:
-        KisBrush* m_brush;
-        bool m_sharedBrush;
+private:
+    KisBrush* m_brush;
+    bool m_sharedBrush;
 };
 
 }

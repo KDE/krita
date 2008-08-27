@@ -27,16 +27,16 @@ class KisKSColorSpaceTest : public QObject
 {
     Q_OBJECT
 
-    private slots:
+private slots:
 
-        void initTestCase();
-        void testConstructor();
-        void testRegistry();
-        void testToFromRgbA16();
+    void initTestCase();
+    void testConstructor();
+    void testRegistry();
+    void testToFromRgbA16();
 
-    private:
+private:
 
-        QStringList list;
+    QStringList list;
 
 };
 

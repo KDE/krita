@@ -30,7 +30,7 @@
 #include <ktemporaryfile.h>
 
 #ifndef FILES_DATA_DIR
-    #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
+#error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
 #endif
 
 
@@ -45,15 +45,13 @@ void KisActionRecorderTest::testCreation()
 
 void KisActionRecorderTest::testFiles()
 {
-    QDir dirSources ( QString(FILES_DATA_DIR) + "/actionrecorder/sources" );
-    foreach(QFileInfo sourceFileInfo, dirSources.entryInfoList())
-    {
-        if( !sourceFileInfo.isHidden())
-        {
+    QDir dirSources(QString(FILES_DATA_DIR) + "/actionrecorder/sources");
+    foreach(QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
+        if (!sourceFileInfo.isHidden()) {
             qDebug() << "handling " << sourceFileInfo.fileName();
-            QFileInfo resultFileInfo(  QString(FILES_DATA_DIR) + "/actionrecorder/results/" + sourceFileInfo.fileName() + ".png" );
+            QFileInfo resultFileInfo(QString(FILES_DATA_DIR) + "/actionrecorder/results/" + sourceFileInfo.fileName() + ".png");
             QVERIFY2(resultFileInfo.exists(),
-                     QString( "Result file %1 not found" ).arg(resultFileInfo.fileName()).toAscii().data() );
+                     QString("Result file %1 not found").arg(resultFileInfo.fileName()).toAscii().data());
             // Replay
             // Create an image and the document
             QDomDocument domDoc;
@@ -64,7 +62,7 @@ void KisActionRecorderTest::testFiles()
             QString err;
             int line, col;
             QFile file(sourceFileInfo.absoluteFilePath());
-            QVERIFY(file.open( QIODevice::ReadOnly));
+            QVERIFY(file.open(QIODevice::ReadOnly));
             QVERIFY(domDoc.setContent(&file, &err, &line, &col));
             file.close();
             QDomElement docElem = domDoc.documentElement();
@@ -74,32 +72,28 @@ void KisActionRecorderTest::testFiles()
             m.fromXML(docElem);
             // Play
             m.play();
-            QImage sourceImg = image->convertToQImage(0,0,200,200, 0 );
+            QImage sourceImg = image->convertToQImage(0, 0, 200, 200, 0);
             // load what we should have get from the hard drive
             QImage resultImg(resultFileInfo.absoluteFilePath());
             resultImg = resultImg.convertToFormat(QImage::Format_ARGB32);
             QVERIFY(resultImg.width() == sourceImg.width());
             QVERIFY(resultImg.height() == sourceImg.height());
             QCOMPARE(resultImg.numBytes(), sourceImg.numBytes());
-            if(memcmp(resultImg.bits(), sourceImg.bits(), sourceImg.numBytes()) != 0)
-            {
-                for(int i = 0; i < sourceImg.numBytes(); i+=4)
-                {
-                    if( resultImg.bits()[i + 3] == sourceImg.bits()[i + 3] && resultImg.bits()[i + 3] != 0 )
-                    {
-                        for(int j = 0; j < 4; j++ )
-                        {
-/*                            QVERIFY2( resultImg.bits()[i+j] == sourceImg.bits()[i+j],
-                                    QString("byte %1 is different : result: %2 krita: %3 in file %4").arg(i+j)
-                                    .arg((int)resultImg.bits()[i+j])
-                                    .arg((int)sourceImg.bits()[i+j])
-                                    .arg(sourceFileInfo.fileName()).toAscii().data());*/
+            if (memcmp(resultImg.bits(), sourceImg.bits(), sourceImg.numBytes()) != 0) {
+                for (int i = 0; i < sourceImg.numBytes(); i += 4) {
+                    if (resultImg.bits()[i + 3] == sourceImg.bits()[i + 3] && resultImg.bits()[i + 3] != 0) {
+                        for (int j = 0; j < 4; j++) {
+                            /*                            QVERIFY2( resultImg.bits()[i+j] == sourceImg.bits()[i+j],
+                                                                QString("byte %1 is different : result: %2 krita: %3 in file %4").arg(i+j)
+                                                                .arg((int)resultImg.bits()[i+j])
+                                                                .arg((int)sourceImg.bits()[i+j])
+                                                                .arg(sourceFileInfo.fileName()).toAscii().data());*/
                             // TODO figure out why sometimes there is a slight difference between original and replay
-                            QVERIFY2( qAbs( resultImg.bits()[i+j] - sourceImg.bits()[i+j] ) <= 4,
-                                    QString("byte %1 is different : result: %2 krita: %3 in file %4").arg(i+j)
-                                    .arg((int)resultImg.bits()[i+j])
-                                    .arg((int)sourceImg.bits()[i+j])
-                                    .arg(sourceFileInfo.fileName()).toAscii().data());
+                            QVERIFY2(qAbs(resultImg.bits()[i+j] - sourceImg.bits()[i+j]) <= 4,
+                                     QString("byte %1 is different : result: %2 krita: %3 in file %4").arg(i + j)
+                                     .arg((int)resultImg.bits()[i+j])
+                                     .arg((int)sourceImg.bits()[i+j])
+                                     .arg(sourceFileInfo.fileName()).toAscii().data());
                         }
                     }
                 }

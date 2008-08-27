@@ -27,11 +27,12 @@
  * brush to paint with. This is mainly important for the spacing
  * generation.
  */
-class KRITAUI_EXPORT KisBrushBasedPaintOp : public KisPaintOp {
+class KRITAUI_EXPORT KisBrushBasedPaintOp : public KisPaintOp
+{
 
 public:
 
-    KisBrushBasedPaintOp( KisPainter * painter, KisBrushSP brush = 0 );
+    KisBrushBasedPaintOp(KisPainter * painter, KisBrushSP brush = 0);
     double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const;
 
 protected: // XXX: make private!

@@ -50,7 +50,7 @@
 #include "ui_wdgcoloroptions.h"
 
 typedef KGenericFactory<KritaColorGenerator> KritaColorGeneratorFactory;
-K_EXPORT_COMPONENT_FACTORY( kritacolorgenerator, KritaColorGeneratorFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritacolorgenerator, KritaColorGeneratorFactory("krita"))
 
 KritaColorGenerator::KritaColorGenerator(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
@@ -70,10 +70,10 @@ KritaColorGenerator::~KritaColorGenerator()
 
 KisColorGenerator::KisColorGenerator() : KisGenerator(id(), KoID("basic"), i18n("&Solid Color..."))
 {
-    setColorSpaceIndependence( FULLY_INDEPENDENT );
-    setSupportsPainting( true );
-    setSupportsPreview( true );
-    setSupportsIncrementalPainting( false );
+    setColorSpaceIndependence(FULLY_INDEPENDENT);
+    setSupportsPainting(true);
+    setSupportsPreview(true);
+    setSupportsIncrementalPainting(false);
 }
 
 KisFilterConfiguration* KisColorGenerator::factoryConfiguration(const KisPaintDeviceSP) const
@@ -82,8 +82,8 @@ KisFilterConfiguration* KisColorGenerator::factoryConfiguration(const KisPaintDe
 
     QVariant v;
     v.setValue(KoColor());
-    config->setProperty("color", v );
-    config->setProperty("opacity", 100 );
+    config->setProperty("color", v);
+    config->setProperty("opacity", 100);
     return config;
 }
 
@@ -94,10 +94,10 @@ KisFilterConfigWidget * KisColorGenerator::createConfigurationWidget(QWidget* pa
     return new KisWdgColor(parent);
 }
 
-void KisColorGenerator::generate( KisProcessingInformation dstInfo,
-                                  const QSize& size,
-                                  const KisFilterConfiguration* config,
-                                  KoUpdater* progressUpdater ) const
+void KisColorGenerator::generate(KisProcessingInformation dstInfo,
+                                 const QSize& size,
+                                 const KisFilterConfiguration* config,
+                                 KoUpdater* progressUpdater) const
 {
     KisPaintDeviceSP dst = dstInfo.paintDevice();
     QPoint dstTopLeft = dstInfo.topLeft();

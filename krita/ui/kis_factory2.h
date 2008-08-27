@@ -38,14 +38,14 @@ class KRITAUI_EXPORT KisFactory2 : public KoFactory
 
 public:
 
-    KisFactory2( QObject* parent = 0 );
+    KisFactory2(QObject* parent = 0);
     ~KisFactory2();
 
     virtual KParts::Part *createPartObject(QWidget *parentWidget = 0,
-					   QObject *parent = 0,
-					   const char *classname = "KoDocument",
-					   const QStringList &args = QStringList() );
-    
+                                           QObject *parent = 0,
+                                           const char *classname = "KoDocument",
+                                           const QStringList &args = QStringList());
+
     static KAboutData * aboutData();
     static const KComponentData &componentData();
 

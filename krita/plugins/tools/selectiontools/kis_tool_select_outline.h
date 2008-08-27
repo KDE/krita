@@ -33,7 +33,8 @@
 
 class KisSelectionOptions;
 
-class KisToolSelectOutline : public KisTool {
+class KisToolSelectOutline : public KisTool
+{
 
     typedef KisTool super;
     Q_OBJECT
@@ -53,7 +54,7 @@ public:
 public slots:
     virtual void slotSetAction(int);
     virtual void slotSetSelectionMode(int);
-    virtual void activate( bool );
+    virtual void activate(bool);
     virtual void deactivate();
 
 private:
@@ -67,20 +68,20 @@ private:
 };
 
 
-class KisToolSelectOutlineFactory : public KoToolFactory {
+class KisToolSelectOutlineFactory : public KoToolFactory
+{
     typedef KoToolFactory super;
 public:
     KisToolSelectOutlineFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolSelectOutline", i18n("Outline Selection"))
-        {
-            setToolTip( i18n( "Select an area by its outline" ) );
-            setToolType( TOOL_TYPE_SELECTED );
-            setIcon( "tool_outline_selection" );
-            setPriority( 55 );
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-        }
+            : KoToolFactory(parent, "KisToolSelectOutline", i18n("Outline Selection")) {
+        setToolTip(i18n("Select an area by its outline"));
+        setToolType(TOOL_TYPE_SELECTED);
+        setIcon("tool_outline_selection");
+        setPriority(55);
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+    }
 
-    virtual ~KisToolSelectOutlineFactory(){}
+    virtual ~KisToolSelectOutlineFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolSelectOutline(canvas);

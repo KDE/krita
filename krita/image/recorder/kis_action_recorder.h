@@ -23,7 +23,8 @@
 
 class KisRecordedAction;
 
-class KRITAIMAGE_EXPORT KisActionRecorder : public KisMacro {
+class KRITAIMAGE_EXPORT KisActionRecorder : public KisMacro
+{
 
     Q_OBJECT
 

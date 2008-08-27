@@ -59,19 +59,19 @@
 #include <kis_layer_manager.h>
 
 KisChannelSeparator::KisChannelSeparator(KisView2 * view)
-    : m_view(view)
+        : m_view(view)
 {
 }
 
 void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, enumSepOutput outputOps, bool downscale, bool toColor)
 {
     KisImageSP image = m_view->image();
-    if ( !image ) return;
+    if (!image) return;
 
     KisPaintDeviceSP src = m_view->activeDevice();
     if (!src) return;
 
-    progressUpdater->setProgress( 0 );
+    progressUpdater->setProgress(0);
 
     const KoColorSpace * dstCs = 0;
 
@@ -80,13 +80,13 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
     QList<KoChannelInfo *> channels = srcCs->channels();
 
     // Use the flattened image, if required
-    switch(sourceOps) {
+    switch (sourceOps) {
 
-        case(ALL_LAYERS):
-            src = image->mergedImage();
-            break;
-        default:
-            break;
+    case(ALL_LAYERS):
+        src = image->mergedImage();
+        break;
+    default:
+        break;
     }
 
     vKisPaintDeviceSP layers;
@@ -99,8 +99,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
     int i = 0;
     quint32 channelIndex = 0;
-    for (QList<KoChannelInfo *>::const_iterator it = begin; it != end; ++it, ++channelIndex)
-    {
+    for (QList<KoChannelInfo *>::const_iterator it = begin; it != end; ++it, ++channelIndex) {
 
         KoChannelInfo * ch = (*it);
 
@@ -116,13 +115,11 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
         if (toColor) {
             // We don't downscale if we separate to color channels
             dev = new KisPaintDevice(srcCs, "color separations");
-        }
-        else {
+        } else {
             if (channelSize == 1 || downscale) {
-                dev = new KisPaintDevice( KoColorSpaceRegistry::instance()->colorSpace("GRAYA",0 ), "8 bit grayscale sep");
-            }
-            else {
-                dev = new KisPaintDevice( KoColorSpaceRegistry::instance()->colorSpace("GRAYA16",0 ), "16 bit grayscale sep");
+                dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace("GRAYA", 0), "8 bit grayscale sep");
+            } else {
+                dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace("GRAYA16", 0), "16 bit grayscale sep");
                 destSize = 2;
             }
         }
@@ -137,22 +134,18 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
         for (qint32 row = 0; row < rect.height(); ++row) {
 
 
-            while( ! srcIt.isDone() )
-            {
-                if (srcIt.isSelected())
-                {
+            while (! srcIt.isDone()) {
+                if (srcIt.isSelected()) {
                     if (toColor) {
                         dstCs->singleChannelPixel(dstIt.rawData(), srcIt.rawData(), channelIndex);
 
                         if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
                             //dstCs->setAlpha(dstIt.rawData(), srcIt.rawData()[srcAlphaPos], 1);
                             dstCs->setAlpha(dstIt.rawData(), srcCs->alpha(srcIt.rawData()), 1);
-                        }
-                        else {
+                        } else {
                             dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
                         }
-                    }
-                    else {
+                    } else {
 
                         // To grayscale
 
@@ -164,12 +157,10 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
                             if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
                                 dstCs->setAlpha(dstIt.rawData(), srcCs->alpha(srcIt.rawData()), 1);
-                            }
-                            else {
+                            } else {
                                 dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
                             }
-                        }
-                        else if (channelSize == 2 && destSize == 2) {
+                        } else if (channelSize == 2 && destSize == 2) {
 
                             // Both 16-bit
                             dstIt.rawData()[0] = srcIt.rawData()[channelPos];
@@ -177,19 +168,16 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
                             if (alphaOps == COPY_ALPHA_TO_SEPARATIONS) {
                                 dstCs->setAlpha(dstIt.rawData(), srcCs->alpha(srcIt.rawData()), 1);
-                            }
-                            else {
+                            } else {
                                 dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
                             }
-                        }
-                        else if (channelSize != 1 && destSize == 1) {
+                        } else if (channelSize != 1 && destSize == 1) {
                             // Downscale
                             memset(dstIt.rawData(), srcCs->scaleToU8(srcIt.rawData(), channelPos), 1);
 
                             // XXX: Do alpha
                             dstCs->setAlpha(dstIt.rawData(), OPACITY_OPAQUE, 1);
-                        }
-                        else if (channelSize != 2 && destSize == 2) {
+                        } else if (channelSize != 2 && destSize == 2) {
                             // Upscale
                             dstIt.rawData()[0] = srcCs->scaleToU8(srcIt.rawData(), channelPos);
 
@@ -225,33 +213,31 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
         }
 
         // Flatten the image if required
-        switch(sourceOps) {
-            case(ALL_LAYERS):
-                image->flatten();
-                break;
-            default:
-                break;
+        switch (sourceOps) {
+        case(ALL_LAYERS):
+            image->flatten();
+            break;
+        default:
+            break;
         }
 
-        for (QList<KoChannelInfo *>::const_iterator it = begin; it != end; ++it)
-        {
+        for (QList<KoChannelInfo *>::const_iterator it = begin; it != end; ++it) {
 
             KoChannelInfo * ch = (*it);
 
             if (ch->channelType() == KoChannelInfo::ALPHA && alphaOps != CREATE_ALPHA_SEPARATION) {
-            // Don't make an separate separation of the alpha channel if the user didn't ask for it.
+                // Don't make an separate separation of the alpha channel if the user didn't ask for it.
                 continue;
             }
 
             if (outputOps == TO_LAYERS) {
-                KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer( image.data(), ch->name(), OPACITY_OPAQUE, *deviceIt));
-                image->addNode( l.data(), image->rootLayer().data() );
-            }
-            else {
+                KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE, *deviceIt));
+                image->addNode(l.data(), image->rootLayer().data());
+            } else {
                 QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
                 QString mimelist = listMimeFilter.join(" ");
 
-                KFileDialog fd (QString(), mimelist, m_view);
+                KFileDialog fd(QString(), mimelist, m_view);
                 fd.setObjectName("Export Layer");
                 fd.setCaption(i18n("Export Layer") + '(' + ch->name() + ')');
                 fd.setMimeFilter(listMimeFilter);
@@ -265,14 +251,14 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 if (url.isEmpty())
                     return;
 
-                KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer( image.data(), ch->name(), OPACITY_OPAQUE, *deviceIt));
+                KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE, *deviceIt));
                 QRect r = l->exactBounds();
 
                 KisDoc2 d;
                 d.prepareForImport();
 
                 KisImageSP dst = KisImageSP(new KisImage(d.undoAdapter(), r.width(), r.height(), (*deviceIt)->colorSpace(), l->name()));
-                d.setCurrentImage( dst );
+                d.setCurrentImage(dst);
                 dst->addNode(l->clone().data(), dst->rootLayer().data());
 
                 d.setOutputMimeType(mimefilter.toLatin1());

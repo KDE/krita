@@ -30,7 +30,8 @@ class KisNode;
  * be QObjects, nor to have sig-slot connections between every node
  * and every mode.
  */
-class KisNodeGraphListener {
+class KisNodeGraphListener
+{
 
 public:
 
@@ -39,34 +40,34 @@ public:
     /**
      * Inform the model that we're going to add a node.
      */
-    virtual void aboutToAddANode( KisNode *parent, int index ) = 0;
+    virtual void aboutToAddANode(KisNode *parent, int index) = 0;
 
     /**
      * Inform the model we're done adding a node.
      */
-    virtual void nodeHasBeenAdded( KisNode *parent, int index ) = 0;
+    virtual void nodeHasBeenAdded(KisNode *parent, int index) = 0;
 
     /**
      * Inform the model we're going to remove a node.
      */
-    virtual void aboutToRemoveANode( KisNode *parent, int index ) = 0;
+    virtual void aboutToRemoveANode(KisNode *parent, int index) = 0;
 
     /**
      * Inform the model we're done removing a node.
      */
-    virtual void nodeHasBeenRemoved( KisNode *parent, int index ) = 0;
+    virtual void nodeHasBeenRemoved(KisNode *parent, int index) = 0;
 
     /**
      * Inform the model we're about to start moving a node (which
      * includes removing and adding the same node)
      */
-    virtual void aboutToMoveNode( KisNode * parent, int oldIndex, int newIndex ) = 0;
+    virtual void aboutToMoveNode(KisNode * parent, int oldIndex, int newIndex) = 0;
 
     /**
      * Inform the model we're done moving the node: it has been
      * removed and added successfully
      */
-    virtual void nodeHasBeenMoved( KisNode * parent, int oldIndex, int newIndex ) = 0;
+    virtual void nodeHasBeenMoved(KisNode * parent, int oldIndex, int newIndex) = 0;
 };
 
 #endif

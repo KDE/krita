@@ -24,15 +24,16 @@
 
 #include "kis_dynamic_shape_program.h"
 
-class DYNAMIC_BRUSH_EXPORT KisDynamicShapeProgramFactoryRegistry : public KoGenericRegistry<KisDynamicShapeProgramFactory*>, public KisDynamicProgramFactoryRegistry {
-        KisDynamicShapeProgramFactoryRegistry();
-    public:
-        static KisDynamicShapeProgramFactoryRegistry* instance();
-        virtual KisDynamicProgramFactory* programFactory(QString id) const;
-        virtual QList<KoID> programTypes() const;
-    private:
-        struct Private;
-        Private* const d;
+class DYNAMIC_BRUSH_EXPORT KisDynamicShapeProgramFactoryRegistry : public KoGenericRegistry<KisDynamicShapeProgramFactory*>, public KisDynamicProgramFactoryRegistry
+{
+    KisDynamicShapeProgramFactoryRegistry();
+public:
+    static KisDynamicShapeProgramFactoryRegistry* instance();
+    virtual KisDynamicProgramFactory* programFactory(QString id) const;
+    virtual QList<KoID> programTypes() const;
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

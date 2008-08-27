@@ -38,7 +38,8 @@ class KisNodeVisitor;
  * anything about its peers. You should not directly inherit from a
  * KisBaseNode; inherit from KisNode instead.
  */
-class KRITAIMAGE_EXPORT KisBaseNode : public QObject, public KisShared {
+class KRITAIMAGE_EXPORT KisBaseNode : public QObject, public KisShared
+{
 
     Q_OBJECT
 
@@ -55,7 +56,7 @@ public:
     /**
      * Create a copy of this node.
      */
-    KisBaseNode( const KisBaseNode & rhs );
+    KisBaseNode(const KisBaseNode & rhs);
 
     /**
      * Delete this node
@@ -77,29 +78,26 @@ public:
      * return the name of this node. This is the same as the
      * QObject::objectName.
      */
-    QString name() const
-        {
-            return objectName();
-        }
+    QString name() const {
+        return objectName();
+    }
 
     /**
      * set the QObject::objectName. This is also the user-visible name
      * of the layer. The reason for this is that we want to see the
      * layer name also when debugging.
      */
-    void setName(const QString& name)
-        {
-            setObjectName( name );
-        }
+    void setName(const QString& name) {
+        setObjectName(name);
+    }
 
     /**
      * @return the icon used to represent the node type, for instance
      * in the layerbox and in the menu.
      */
-    virtual QIcon icon() const
-        {
-            return QIcon();
-        };
+    virtual QIcon icon() const {
+        return QIcon();
+    };
 
     /**
      * Return a the properties of this base node (locked, visible etc,
@@ -121,7 +119,7 @@ public:
     /**
      * Change the section model properties.
      */
-    virtual void setSectionModelProperties( const KoDocumentSectionModel::PropertyList &properties  );
+    virtual void setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties);
 
     /**
      * Return all the properties of this layer as a KoProperties-based
@@ -136,7 +134,7 @@ public:
      * deleted. If there are new properties in this list, they will be
      * added on the node.
      */
-    void mergeNodeProperties( const KoProperties & properties );
+    void mergeNodeProperties(const KoProperties & properties);
 
     /**
      * Compare the given properties list with the properties of this
@@ -146,7 +144,7 @@ public:
      * but with a different value. Properties that are not in both
      * lists are disregarded.
      */
-    bool check( const KoProperties & properties ) const;
+    bool check(const KoProperties & properties) const;
 
     /**
      * Accept the KisNodeVisitor (for the Visitor design pattern),
@@ -157,10 +155,9 @@ public:
      * return false if the visitor could not successfully act on this
      * node instance.
      */
-    virtual bool accept(KisNodeVisitor &)
-        {
-            return false;
-        }
+    virtual bool accept(KisNodeVisitor &) {
+        return false;
+    }
 
     /**
      * @return a thumbnail in requested size. The thumbnail is a rgba
@@ -169,15 +166,14 @@ public:
      * type cannot generate a thumbnail. If the requested size is too
      * big, return a null QImage.
      */
-    virtual QImage createThumbnail(qint32 w, qint32 h );
+    virtual QImage createThumbnail(qint32 w, qint32 h);
 
     /**
      * Ask this node to re-read the pertinent settings from the krita
      * configuration.
      */
-    virtual void updateSettings()
-        {
-        }
+    virtual void updateSettings() {
+    }
 
     /**
      * @return true if this node is visible (i.e, active) in the graph
@@ -211,54 +207,48 @@ public:
     /**
      * @return the x-offset of this layer in the image plane.
      */
-    virtual qint32 x() const
-        {
-            return 0;
-        }
+    virtual qint32 x() const {
+        return 0;
+    }
 
     /**
      * Set the x offset of this layer in the image place.
      * Re-implement this where it makes sense, by default it does
      * nothing.
      */
-    virtual void setX(qint32)
-        {
-        }
+    virtual void setX(qint32) {
+    }
 
     /**
      * @return the y-offset of this layer in the image plane.
      */
-    virtual qint32 y() const
-        {
-            return 0;
-        }
+    virtual qint32 y() const {
+        return 0;
+    }
 
     /**
      * Set the y offset of this layer in the image place.
      * Re-implement this where it makes sense, by default it does
      * nothing.
      */
-    virtual void setY(qint32)
-        {
-        }
+    virtual void setY(qint32) {
+    }
 
-        /**
-     * Returns an approximation of where the bounds on actual data are
-     * in this node.
-     */
-    virtual QRect extent() const
-        {
-            return QRect();
-        }
+    /**
+    * Returns an approximation of where the bounds on actual data are
+    * in this node.
+    */
+    virtual QRect extent() const {
+        return QRect();
+    }
 
     /**
      * Returns the exact bounds of where the actual data resides in
      * this node.
      */
-    virtual QRect exactBounds() const
-        {
-            return QRect();
-        }
+    virtual QRect exactBounds() const {
+        return QRect();
+    }
 
 
 private:

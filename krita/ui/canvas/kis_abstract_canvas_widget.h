@@ -33,7 +33,8 @@ class KisCanvas2;
 class KisGridDrawer;
 class KisCanvasDecoration;
 
-class KisAbstractCanvasWidget {
+class KisAbstractCanvasWidget
+{
 
 public:
 
@@ -45,15 +46,15 @@ public:
 
     virtual KoToolProxy * toolProxy() = 0;
 
-    virtual void documentOffsetMoved( const QPoint &) = 0;
+    virtual void documentOffsetMoved(const QPoint &) = 0;
 
     /**
      * Draw the specified decorations on the view.
      */
-    void drawDecorations( QPainter & gc, bool ants, bool tools,
-                          const QPoint & documentOffset,
-                          const QRect & clipRect,
-                          KisCanvas2 * canvas );
+    void drawDecorations(QPainter & gc, bool ants, bool tools,
+                         const QPoint & documentOffset,
+                         const QRect & clipRect,
+                         KisCanvas2 * canvas);
 
     /**
      * Returns one check of the background checkerboard pattern.

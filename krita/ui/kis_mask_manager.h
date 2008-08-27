@@ -32,14 +32,15 @@ class KToggleAction;
 /**
  * Handle the gui for manipulating masks.
  */
-class KisMaskManager : public QObject {
+class KisMaskManager : public QObject
+{
 
     Q_OBJECT
 
 public:
 
 
-    KisMaskManager(KisView2 * view );
+    KisMaskManager(KisView2 * view);
     ~KisMaskManager() {}
 
     void setup(KActionCollection * actionCollection);
@@ -58,7 +59,7 @@ public:
 
 signals:
 
-    void sigMaskActivated( KisMaskSP mask );
+    void sigMaskActivated(KisMaskSP mask);
 
 public slots:
 
@@ -66,25 +67,25 @@ public slots:
      * Create a new transparency mask.
      */
     void createTransparencyMask();
-    void createTransparencyMask( KisNodeSP parent, KisNodeSP above );
+    void createTransparencyMask(KisNodeSP parent, KisNodeSP above);
     /**
      * Create a new filter mask.
      */
     void createFilterMask();
-    void createFilterMask( KisNodeSP parent, KisNodeSP above );
+    void createFilterMask(KisNodeSP parent, KisNodeSP above);
     /**
      * create a new transformation mask. If the transform tool is
      * active, get the current transformation and selection and create
      * the mask from that.
      */
     void createTransformationMask();
-    void createTransformationMask( KisNodeSP parent, KisNodeSP above );
+    void createTransformationMask(KisNodeSP parent, KisNodeSP above);
 
     /**
      * Create a local, i.e., per-layer selection object.
      */
     void createSelectionmask();
-    void createSelectionMask( KisNodeSP parent, KisNodeSP above );
+    void createSelectionMask(KisNodeSP parent, KisNodeSP above);
 
     /**
      * Create a new local selection from the active mask.
@@ -168,7 +169,7 @@ private:
      * Activate a new mask. There can be only one mask active per
      * view; and if the mask is active, it becomes the paint device.
      */
-    void activateMask( KisMaskSP mask );
+    void activateMask(KisMaskSP mask);
 
 
 private:

@@ -51,49 +51,49 @@
 #include "dlg_rotateimage.h"
 
 typedef KGenericFactory<RotateImage> RotateImageFactory;
-K_EXPORT_COMPONENT_FACTORY( kritarotateimage, RotateImageFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritarotateimage, RotateImageFactory("krita"))
 
 // XXX: this plugin could also provide layer scaling/resizing
 RotateImage::RotateImage(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
-    if ( parent->inherits("KisView2") ) {
+    if (parent->inherits("KisView2")) {
         setComponentData(RotateImageFactory::componentData());
 
-setXMLFile(KStandardDirs::locate("data","kritaplugins/rotateimage.rc"),
-true);
+        setXMLFile(KStandardDirs::locate("data", "kritaplugins/rotateimage.rc"),
+                   true);
         m_view = (KisView2*) parent;
 
         KAction *action  = new KAction(i18n("&Rotate Image..."), this);
-        actionCollection()->addAction("rotateimage", action );
+        actionCollection()->addAction("rotateimage", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage()));
 
         action  = new KAction(KIcon("object-rotate-right"), i18nc("rotate image 90 degrees to the right", "Right 90°"), this);
-        actionCollection()->addAction("rotateImageCW90", action );
+        actionCollection()->addAction("rotateImageCW90", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage90()));
 
         action  = new KAction(i18nc("rotate image 180 degrees to the right", "1&80°"), this);
-        actionCollection()->addAction("rotateImage180", action );
+        actionCollection()->addAction("rotateImage180", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage180()));
 
         action  = new KAction(KIcon("object-rotate-left"), i18nc("rotate image 90 degrees to the left", "Left 90°"), this);
-        actionCollection()->addAction("rotateImageCCW90", action );
+        actionCollection()->addAction("rotateImageCCW90", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateImage270()));
 
         action  = new KAction(i18n("&Rotate Layer..."), this);
-        actionCollection()->addAction("rotatelayer", action );
+        actionCollection()->addAction("rotatelayer", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotRotateLayer()));
 
         action  = new KAction(i18nc("rotate the layer 180 degrees", "1&80°"), this);
-        actionCollection()->addAction("rotateLayer180", action );
+        actionCollection()->addAction("rotateLayer180", action);
         connect(action, SIGNAL(triggered()), m_view->layerManager(), SLOT(rotateLayer180()));
 
         action  = new KAction(KIcon("object-rotate-right"), i18nc("rotate the layer 90 degrees to the right", "Right 90°"), this);
-        actionCollection()->addAction("rotateLayerCW90", action );
+        actionCollection()->addAction("rotateLayerCW90", action);
         connect(action, SIGNAL(triggered()), m_view->layerManager(), SLOT(rotateLayerRight90()));
 
         action  = new KAction(KIcon("object-rotate-left"), i18nc("rotate the layer 90 degrees to the left", "Left 90°"), this);
-        actionCollection()->addAction("rotateLayerCCW90", action );
+        actionCollection()->addAction("rotateLayerCCW90", action);
         connect(action, SIGNAL(triggered()), m_view->layerManager(), SLOT(rotateLayerLeft90()));
     }
 }
@@ -114,8 +114,8 @@ void RotateImage::slotRotateImage()
 
     dlgRotateImage->setCaption(i18n("Rotate Image"));
 
-        if (dlgRotateImage->exec() == QDialog::Accepted) {
-        double angle = dlgRotateImage->angle() * M_PI/180;
+    if (dlgRotateImage->exec() == QDialog::Accepted) {
+        double angle = dlgRotateImage->angle() * M_PI / 180;
         m_view->imageManager()->rotateCurrentImage(angle);
     }
     delete dlgRotateImage;
@@ -123,18 +123,18 @@ void RotateImage::slotRotateImage()
 
 void RotateImage::slotRotateImage90()
 {
-    m_view->imageManager()->rotateCurrentImage( M_PI/2 );
+    m_view->imageManager()->rotateCurrentImage(M_PI / 2);
 }
 
 void RotateImage::slotRotateImage180()
 {
-    m_view->imageManager()->rotateCurrentImage( M_PI );
+    m_view->imageManager()->rotateCurrentImage(M_PI);
 }
 
 
 void RotateImage::slotRotateImage270()
 {
-    m_view->imageManager()->rotateCurrentImage( - M_PI/2 + M_PI*2 );
+    m_view->imageManager()->rotateCurrentImage(- M_PI / 2 + M_PI*2);
 }
 
 void RotateImage::slotRotateLayer()
@@ -149,7 +149,7 @@ void RotateImage::slotRotateLayer()
     dlgRotateImage->setCaption(i18n("Rotate Layer"));
 
     if (dlgRotateImage->exec() == QDialog::Accepted) {
-        double angle = dlgRotateImage->angle() * M_PI/180;
+        double angle = dlgRotateImage->angle() * M_PI / 180;
         m_view->layerManager()->rotateLayer(angle);
 
     }

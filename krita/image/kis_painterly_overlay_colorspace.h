@@ -47,7 +47,7 @@
  */
 
 template<typename _channels_type_>
-struct KisPainterlyOverlayColorSpaceTraits : public KoColorSpaceTrait<_channels_type_, 8, -1> {
+struct KisPainterlyOverlayColorSpaceTraits : public KoColorSpaceTrait < _channels_type_, 8, -1 > {
 
     static const quint8 adsorbency_pos = 0;
     static const quint8 gravity_pos = 1;
@@ -75,15 +75,15 @@ typedef KisPainterlyOverlayColorSpaceTraits<float> PainterlyOverlayFloatTraits;
 typedef PainterlyOverlayFloatTraits::Cell PropertyCell;
 
 class KRITAIMAGE_EXPORT KisPainterlyOverlayColorSpace
-    : public KoIncompleteColorSpace<PainterlyOverlayFloatTraits>
+            : public KoIncompleteColorSpace<PainterlyOverlayFloatTraits>
 {
 
 public:
 
     virtual ~KisPainterlyOverlayColorSpace();
-     virtual KoID colorModelId() const;
-     virtual KoID colorDepthId() const;
-     virtual KoColorSpace* clone() const;
+    virtual KoID colorModelId() const;
+    virtual KoID colorDepthId() const;
+    virtual KoColorSpace* clone() const;
 
     static const KisPainterlyOverlayColorSpace* instance();
 
@@ -96,74 +96,66 @@ private: // This is a singleton
     KisPainterlyOverlayColorSpace operator=(const KisPainterlyOverlayColorSpace&);
 
 public:
-    void colorToXML( const quint8* , QDomDocument& , QDomElement& ) const{}
-    void colorFromXML( quint8* , const QDomElement& ) const{}
+    void colorToXML(const quint8* , QDomDocument& , QDomElement&) const {}
+    void colorFromXML(quint8* , const QDomElement&) const {}
 
-    bool willDegrade(ColorSpaceIndependence independence) const
-        {
-            Q_UNUSED( independence );
-            return true;
-        }
+    bool willDegrade(ColorSpaceIndependence independence) const {
+        Q_UNUSED(independence);
+        return true;
+    }
 
-    bool profileIsCompatible(const KoColorProfile* profile) const
-        {
-            Q_UNUSED( profile );
-            return false;
-        }
-    void fromQColor(const QColor& c, quint8 *dstU8, const KoColorProfile * profile) const
-        {
-            Q_UNUSED( c );
-            Q_UNUSED( dstU8 );
-            Q_UNUSED( profile );
-            // Don't call this!
-            Q_ASSERT( 0 == 1 );
-        }
+    bool profileIsCompatible(const KoColorProfile* profile) const {
+        Q_UNUSED(profile);
+        return false;
+    }
+    void fromQColor(const QColor& c, quint8 *dstU8, const KoColorProfile * profile) const {
+        Q_UNUSED(c);
+        Q_UNUSED(dstU8);
+        Q_UNUSED(profile);
+        // Don't call this!
+        Q_ASSERT(0 == 1);
+    }
 
-    void fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, const KoColorProfile * profile) const
-        {
-            Q_UNUSED( c );
-            Q_UNUSED( opacity );
-            Q_UNUSED( dstU8 );
-            Q_UNUSED( profile );
-            // Don't call this!
-            Q_ASSERT( 0 == 1 );
-        }
+    void fromQColor(const QColor& c, quint8 opacity, quint8 *dstU8, const KoColorProfile * profile) const {
+        Q_UNUSED(c);
+        Q_UNUSED(opacity);
+        Q_UNUSED(dstU8);
+        Q_UNUSED(profile);
+        // Don't call this!
+        Q_ASSERT(0 == 1);
+    }
 
-    void toQColor(const quint8 *srcU8, QColor *c, const KoColorProfile * profile) const
-        {
-            Q_UNUSED( srcU8 );
-            Q_UNUSED( c );
-            Q_UNUSED( profile );
-            // Don't call this!
-            Q_ASSERT( 0 == 1 );
-        }
+    void toQColor(const quint8 *srcU8, QColor *c, const KoColorProfile * profile) const {
+        Q_UNUSED(srcU8);
+        Q_UNUSED(c);
+        Q_UNUSED(profile);
+        // Don't call this!
+        Q_ASSERT(0 == 1);
+    }
 
-    void toQColor(const quint8 *srcU8, QColor *c, quint8 *opacity, const KoColorProfile * profile) const
-        {
-            Q_UNUSED( srcU8 );
-            Q_UNUSED( c );
-            Q_UNUSED( opacity );
-            Q_UNUSED( profile );
-            // Don't call this!
-            Q_ASSERT( 0 == 1 );
-        }
+    void toQColor(const quint8 *srcU8, QColor *c, quint8 *opacity, const KoColorProfile * profile) const {
+        Q_UNUSED(srcU8);
+        Q_UNUSED(c);
+        Q_UNUSED(opacity);
+        Q_UNUSED(profile);
+        // Don't call this!
+        Q_ASSERT(0 == 1);
+    }
 
-    void fromRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPixels) const
-        {
-            Q_UNUSED( srcU8 );
-            Q_UNUSED( dstU8 );
-            Q_UNUSED( nPixels );
-            // Don't call this!
-            Q_ASSERT( 0 == 1 );
-        }
-    void toRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPixels) const
-        {
-            Q_UNUSED( srcU8 );
-            Q_UNUSED( dstU8 );
-            Q_UNUSED( nPixels );
-            // Don't call this!
-            Q_ASSERT( 0 == 1 );
-        }
+    void fromRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPixels) const {
+        Q_UNUSED(srcU8);
+        Q_UNUSED(dstU8);
+        Q_UNUSED(nPixels);
+        // Don't call this!
+        Q_ASSERT(0 == 1);
+    }
+    void toRgbA16(const quint8 * srcU8, quint8 * dstU8, quint32 nPixels) const {
+        Q_UNUSED(srcU8);
+        Q_UNUSED(dstU8);
+        Q_UNUSED(nPixels);
+        // Don't call this!
+        Q_ASSERT(0 == 1);
+    }
 public:
     struct Private;
     Private* const d;

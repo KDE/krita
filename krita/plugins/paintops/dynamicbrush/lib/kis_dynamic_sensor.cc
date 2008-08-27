@@ -33,40 +33,32 @@ QWidget* KisDynamicSensor::createConfigurationWidget(QWidget* parent, KisSensorS
 
 KisDynamicSensor* KisDynamicSensor::id2Sensor(const KoID& id)
 {
-    if( id.id() == PressureId.id())
-    {
+    if (id.id() == PressureId.id()) {
         return new KisDynamicSensorPressure();
-    } else if( id.id() == XTiltId.id())
-    {
+    } else if (id.id() == XTiltId.id()) {
         return new KisDynamicSensorXTilt();
-    } else if( id.id() == YTiltId.id())
-    {
+    } else if (id.id() == YTiltId.id()) {
         return new KisDynamicSensorYTilt();
-    } else if( id.id() == SpeedId.id())
-    {
+    } else if (id.id() == SpeedId.id()) {
         return new KisDynamicSensorSpeed();
-    } else if( id.id() == DrawingAngleId.id())
-    {
+    } else if (id.id() == DrawingAngleId.id()) {
         return new KisDynamicSensorDrawingAngle();
-    } else if( id.id() == TimeId.id())
-    {
+    } else if (id.id() == TimeId.id()) {
         return new KisDynamicSensorTime();
-    } else if( id.id() == FuzzyId.id())
-    {
+    } else if (id.id() == FuzzyId.id()) {
         return new KisDynamicSensorFuzzy();
     }
-    
-    dbgPlugins <<"Unknown transform parameter :" << id.id();
+
+    dbgPlugins << "Unknown transform parameter :" << id.id();
     return 0;
 }
 
 KisDynamicSensor* KisDynamicSensor::createFromXML(const QDomElement& e)
 {
-    QString id = e.attribute("id","");
+    QString id = e.attribute("id", "");
     KisDynamicSensor* sensor = id2Sensor(id);
-    if(sensor)
-    {
-        sensor->fromXML( e );
+    if (sensor) {
+        sensor->fromXML(e);
     }
     return sensor;
 }
@@ -86,6 +78,6 @@ void KisDynamicSensor::toXML(QDomDocument&, QDomElement& e) const
 
 void KisDynamicSensor::fromXML(const QDomElement& e)
 {
-    Q_ASSERT(e.attribute("id","") == id());
-    
+    Q_ASSERT(e.attribute("id", "") == id());
+
 }

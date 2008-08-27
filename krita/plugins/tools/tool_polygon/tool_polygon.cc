@@ -20,7 +20,7 @@
 
 #include "tool_polygon.h"
 
- 
+
 #include <stdlib.h>
 #include <vector>
 
@@ -44,11 +44,11 @@
 
 
 typedef KGenericFactory<ToolPolygon> ToolPolygonFactory;
-K_EXPORT_COMPONENT_FACTORY( kritatoolpolygon, ToolPolygonFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritatoolpolygon, ToolPolygonFactory("krita"))
 
 
 ToolPolygon::ToolPolygon(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     setComponentData(ToolPolygonFactory::componentData());
 

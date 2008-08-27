@@ -30,7 +30,7 @@ struct KisBookmarkedFilterConfigurationsModel::Private {
 };
 
 KisBookmarkedFilterConfigurationsModel::KisBookmarkedFilterConfigurationsModel(KisPaintDeviceSP thumb, KisFilterSP filter)
-    : KisBookmarkedConfigurationsModel(filter->bookmarkManager()), d(new Private)
+        : KisBookmarkedConfigurationsModel(filter->bookmarkManager()), d(new Private)
 {
     d->thumb = thumb;
     d->filter = filter;
@@ -43,17 +43,14 @@ KisBookmarkedFilterConfigurationsModel::~KisBookmarkedFilterConfigurationsModel(
 
 QVariant KisBookmarkedFilterConfigurationsModel::data(const QModelIndex &index, int role) const
 {
-    if(!index.isValid())
-    {
+    if (!index.isValid()) {
         return QVariant();
     }
-    if(role == Qt::DecorationRole)
-    {
-        if(!d->previewCache.contains(index.row()))
-        {
+    if (role == Qt::DecorationRole) {
+        if (!d->previewCache.contains(index.row())) {
             KisPaintDeviceSP target = new KisPaintDevice(*d->thumb);
-            d->filter->process(target, QRect(0,0,100,100), configuration(index));
-            d->previewCache[index.row()] = target->convertToQImage( 0);
+            d->filter->process(target, QRect(0, 0, 100, 100), configuration(index));
+            d->previewCache[index.row()] = target->convertToQImage(0);
         }
         return d->previewCache[index.row()];
     } else {
@@ -64,6 +61,6 @@ QVariant KisBookmarkedFilterConfigurationsModel::data(const QModelIndex &index, 
 KisFilterConfiguration* KisBookmarkedFilterConfigurationsModel::configuration(const QModelIndex &index) const
 {
     KisFilterConfiguration* config = dynamic_cast<KisFilterConfiguration*>(KisBookmarkedConfigurationsModel::configuration(index));
-    if(config) return config;
-    return d->filter->defaultConfiguration( d->thumb );
+    if (config) return config;
+    return d->filter->defaultConfiguration(d->thumb);
 }

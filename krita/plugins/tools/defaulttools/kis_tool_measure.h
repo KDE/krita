@@ -59,7 +59,8 @@ private:
     KoUnit m_unit;
 };
 
-class KisToolMeasure : public KisTool {
+class KisToolMeasure : public KisTool
+{
 
     Q_OBJECT
     typedef KisTool super;
@@ -85,8 +86,12 @@ private:
     double angle();
     double distance();
 
-    double deltaX() { return m_endPos.x() - m_startPos.x(); }
-    double deltaY() { return m_startPos.y() - m_endPos.y(); }
+    double deltaX() {
+        return m_endPos.x() - m_startPos.x();
+    }
+    double deltaY() {
+        return m_startPos.y() - m_endPos.y();
+    }
 
 private:
     bool m_dragging;
@@ -97,21 +102,21 @@ private:
 };
 
 
-class KisToolMeasureFactory : public KoToolFactory {
+class KisToolMeasureFactory : public KoToolFactory
+{
 
 public:
 
     KisToolMeasureFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KritaShape/KisToolMeasure", i18n( "Measure" ))
-        {
-            setToolType( TOOL_TYPE_TRANSFORM );
-            setToolTip( i18n( "Measure the distance between two points" ) );
-            setIcon( "krita_tool_measure" );
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setPriority( 16 );
-        }
+            : KoToolFactory(parent, "KritaShape/KisToolMeasure", i18n("Measure")) {
+        setToolType(TOOL_TYPE_TRANSFORM);
+        setToolTip(i18n("Measure the distance between two points"));
+        setIcon("krita_tool_measure");
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        setPriority(16);
+    }
 
-    virtual ~KisToolMeasureFactory(){}
+    virtual ~KisToolMeasureFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolMeasure(canvas);

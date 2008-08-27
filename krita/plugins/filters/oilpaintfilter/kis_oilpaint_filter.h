@@ -37,8 +37,10 @@ public:
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
-        ) const;
-    static inline KoID id() { return KoID("oilpaint", i18n("Oilpaint")); }
+                ) const;
+    static inline KoID id() {
+        return KoID("oilpaint", i18n("Oilpaint"));
+    }
 
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 public:

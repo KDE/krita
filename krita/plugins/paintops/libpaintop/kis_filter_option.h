@@ -30,7 +30,8 @@ class KisFilterConfiguration;
  * that can be applied by the paintop to the brush footprint or the
  * original paint device data.
  */
-class KRITAUI_EXPORT KisFilterOption : public KisPaintOpOption {
+class KRITAUI_EXPORT KisFilterOption : public KisPaintOpOption
+{
 
 public:
 

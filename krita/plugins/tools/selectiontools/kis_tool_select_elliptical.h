@@ -32,7 +32,8 @@
 
 class KisSelectionOptions;
 
-class KisToolSelectElliptical : public KisTool {
+class KisToolSelectElliptical : public KisTool
+{
 
     typedef KisTool super;
     Q_OBJECT
@@ -42,7 +43,7 @@ public:
     virtual ~KisToolSelectElliptical();
 
     virtual QWidget * createOptionWidget();
-        virtual QWidget* optionWidget();
+    virtual QWidget* optionWidget();
 //     virtual enumToolType toolType() { return TOOL_SELECT; }
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
@@ -54,7 +55,7 @@ public:
 public slots:
     virtual void slotSetAction(int);
     virtual void slotSetSelectionMode(int);
-    virtual void activate( bool );
+    virtual void activate(bool);
 
 
 private:
@@ -71,21 +72,21 @@ private:
 
 };
 
-class KisToolSelectEllipticalFactory : public KoToolFactory {
+class KisToolSelectEllipticalFactory : public KoToolFactory
+{
 
 public:
     KisToolSelectEllipticalFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolSelectElliptical", i18n( "Elliptical Selection" ))
-        {
-            setToolTip( i18n( "Select an elliptical area" ) );
-            setToolType( TOOL_TYPE_SELECTED);
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setIcon( "tool_elliptical_selection" );
-            setShortcut( KShortcut(Qt::Key_J) );
-            setPriority( 53 );
-        }
+            : KoToolFactory(parent, "KisToolSelectElliptical", i18n("Elliptical Selection")) {
+        setToolTip(i18n("Select an elliptical area"));
+        setToolType(TOOL_TYPE_SELECTED);
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        setIcon("tool_elliptical_selection");
+        setShortcut(KShortcut(Qt::Key_J));
+        setPriority(53);
+    }
 
-    virtual ~KisToolSelectEllipticalFactory(){}
+    virtual ~KisToolSelectEllipticalFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return  new KisToolSelectElliptical(canvas);

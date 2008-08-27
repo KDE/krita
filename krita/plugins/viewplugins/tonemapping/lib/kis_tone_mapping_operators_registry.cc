@@ -17,8 +17,7 @@
 
 #include "kis_tone_mapping_operators_registry.h"
 
-struct KisToneMappingOperatorsRegistry::Private
-{
+struct KisToneMappingOperatorsRegistry::Private {
     static KisToneMappingOperatorsRegistry* s_instance;
 };
 
@@ -30,8 +29,7 @@ KisToneMappingOperatorsRegistry::KisToneMappingOperatorsRegistry() : d(new Priva
 
 KisToneMappingOperatorsRegistry* KisToneMappingOperatorsRegistry::instance()
 {
-    if(!Private::s_instance)
-    {
+    if (!Private::s_instance) {
         Private::s_instance = new KisToneMappingOperatorsRegistry;
     }
     return Private::s_instance;

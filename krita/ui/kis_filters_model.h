@@ -31,20 +31,21 @@ class KisFilter;
 /**
  *
  */
-class KisFiltersModel : public QAbstractItemModel {
-    public:
-        KisFiltersModel(KisPaintDeviceSP thumb);
-        virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-        virtual QModelIndex parent(const QModelIndex &child) const;
-        QModelIndex indexForFilter( const QString& id );
-        const KisFilter* indexToFilter( const QModelIndex& idx);
-        virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-        virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
-        virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-        virtual Qt::ItemFlags flags(const QModelIndex & index) const;
-    private:
-        struct Private;
-        Private* const d;
+class KisFiltersModel : public QAbstractItemModel
+{
+public:
+    KisFiltersModel(KisPaintDeviceSP thumb);
+    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+    virtual QModelIndex parent(const QModelIndex &child) const;
+    QModelIndex indexForFilter(const QString& id);
+    const KisFilter* indexToFilter(const QModelIndex& idx);
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual Qt::ItemFlags flags(const QModelIndex & index) const;
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

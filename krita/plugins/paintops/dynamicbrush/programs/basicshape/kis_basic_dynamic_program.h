@@ -23,77 +23,79 @@
 
 class KisDynamicSensor;
 
-class KisBasicDynamicProgram : public KisDynamicShapeProgram {
+class KisBasicDynamicProgram : public KisDynamicShapeProgram
+{
     Q_OBJECT
-    public:
-        KisBasicDynamicProgram(const QString& name);
-        virtual ~KisBasicDynamicProgram();
-        virtual KisDynamicScattering scattering( const KisPaintInformation& info ) const;
-        virtual void apply(KisDynamicShape* shape, const KisPaintInformation& adjustedInfo) const;
-        virtual QWidget* createEditor(QWidget* parent);
-        
-        using KisSerializableConfiguration::fromXML;
-        using KisSerializableConfiguration::toXML;
-        
-        virtual void fromXML(const QDomElement&);
-        virtual void toXML(QDomDocument&, QDomElement&) const;
-    public:
-        bool isSizeEnabled() const;
-        int sizeMinimum() const;
-        int sizeMaximum() const;
-        int sizeJitter() const;
-        KisDynamicSensor* sizeSensor() const;
-        bool isAngleEnabled() const;
-        int angleJitter() const;
-        KisDynamicSensor* angleSensor() const;
-        bool isScatterEnabled() const;
-        int scatterAmount() const;
-        int scatterJitter() const;
-        KisDynamicSensor* scatterSensor() const;
-        bool isCountEnabled() const;
-        int countCount() const;
-        int countJitter() const;
-        KisDynamicSensor* countSensor() const;
-    public slots:
-        void setEnableSize(bool );
-        void setSizeMinimum(int );
-        void setSizeMaximum(int );
-        void setSizeJitter(int );
-        void setSizeSensor(KisDynamicSensor* );
-        void setEnableAngle(bool );
-        void setAngleJitter(int );
-        void setAngleSensor(KisDynamicSensor* );
-        void setEnableScatter(bool );
-        void setScatterAmount(int );
-        void setScatterJitter(int );
-        void setScatterSensor(KisDynamicSensor* );
-        void setEnableCount(bool );
-        void setCountCount(int );
-        void setCountJitter(int );
-        void setCountSensor(KisDynamicSensor* );
-    private:
-        bool m_sizeEnabled;
-        int m_sizeMinimum;
-        int m_sizeMaximum;
-        int m_sizeJitter;
-        KisDynamicSensor* m_sizeSensor;
-        bool m_angleEnabled;
-        int m_angleJitter;
-        KisDynamicSensor* m_angleSensor;
-        bool m_scatterEnabled;
-        int m_scatterAmount;
-        int m_scatterJitter;
-        KisDynamicSensor* m_scatterSensor;
-        bool m_enableCout;
-        int m_countCount;
-        int m_countJitter;
-        KisDynamicSensor* m_countSensor;
+public:
+    KisBasicDynamicProgram(const QString& name);
+    virtual ~KisBasicDynamicProgram();
+    virtual KisDynamicScattering scattering(const KisPaintInformation& info) const;
+    virtual void apply(KisDynamicShape* shape, const KisPaintInformation& adjustedInfo) const;
+    virtual QWidget* createEditor(QWidget* parent);
+
+    using KisSerializableConfiguration::fromXML;
+    using KisSerializableConfiguration::toXML;
+
+    virtual void fromXML(const QDomElement&);
+    virtual void toXML(QDomDocument&, QDomElement&) const;
+public:
+    bool isSizeEnabled() const;
+    int sizeMinimum() const;
+    int sizeMaximum() const;
+    int sizeJitter() const;
+    KisDynamicSensor* sizeSensor() const;
+    bool isAngleEnabled() const;
+    int angleJitter() const;
+    KisDynamicSensor* angleSensor() const;
+    bool isScatterEnabled() const;
+    int scatterAmount() const;
+    int scatterJitter() const;
+    KisDynamicSensor* scatterSensor() const;
+    bool isCountEnabled() const;
+    int countCount() const;
+    int countJitter() const;
+    KisDynamicSensor* countSensor() const;
+public slots:
+    void setEnableSize(bool);
+    void setSizeMinimum(int);
+    void setSizeMaximum(int);
+    void setSizeJitter(int);
+    void setSizeSensor(KisDynamicSensor*);
+    void setEnableAngle(bool);
+    void setAngleJitter(int);
+    void setAngleSensor(KisDynamicSensor*);
+    void setEnableScatter(bool);
+    void setScatterAmount(int);
+    void setScatterJitter(int);
+    void setScatterSensor(KisDynamicSensor*);
+    void setEnableCount(bool);
+    void setCountCount(int);
+    void setCountJitter(int);
+    void setCountSensor(KisDynamicSensor*);
+private:
+    bool m_sizeEnabled;
+    int m_sizeMinimum;
+    int m_sizeMaximum;
+    int m_sizeJitter;
+    KisDynamicSensor* m_sizeSensor;
+    bool m_angleEnabled;
+    int m_angleJitter;
+    KisDynamicSensor* m_angleSensor;
+    bool m_scatterEnabled;
+    int m_scatterAmount;
+    int m_scatterJitter;
+    KisDynamicSensor* m_scatterSensor;
+    bool m_enableCout;
+    int m_countCount;
+    int m_countJitter;
+    KisDynamicSensor* m_countSensor;
 };
 
-class KisBasicDynamicProgramFactory : public KisDynamicShapeProgramFactory {
-    public:
-        KisBasicDynamicProgramFactory();
-        virtual KisDynamicShapeProgram* shapeProgram(QString name) const;
+class KisBasicDynamicProgramFactory : public KisDynamicShapeProgramFactory
+{
+public:
+    KisBasicDynamicProgramFactory();
+    virtual KisDynamicShapeProgram* shapeProgram(QString name) const;
 };
 
 #endif

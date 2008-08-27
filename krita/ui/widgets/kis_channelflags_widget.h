@@ -41,7 +41,7 @@ class KRITAUI_EXPORT KisChannelFlagsWidget : public QScrollArea
 
 public:
 
-    KisChannelFlagsWidget(const KoColorSpace * colorSpace, QWidget * parent = 0 );
+    KisChannelFlagsWidget(const KoColorSpace * colorSpace, QWidget * parent = 0);
     ~KisChannelFlagsWidget();
 
 public:
@@ -49,7 +49,7 @@ public:
     /**
      * Set the channelflags -- they are supposed to be in pixel order.
      */
-    void setChannelFlags( const QBitArray & channelFlags );
+    void setChannelFlags(const QBitArray & channelFlags);
 
     /**
      * retrieve the channel flags, in pixel order.

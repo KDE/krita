@@ -38,36 +38,32 @@
 #include "specificcolorselector_dock.h"
 
 typedef KGenericFactory<SpecificColorSelectorPlugin> SpecificColorSelectorPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritaspecificcolorselector, SpecificColorSelectorPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritaspecificcolorselector, SpecificColorSelectorPluginFactory("krita"))
 
-class SpecificColorSelectorDockFactory : public KoDockFactory {
+class SpecificColorSelectorDockFactory : public KoDockFactory
+{
 public:
     SpecificColorSelectorDockFactory(KisView2 * view)
-        : m_view( view )
-    {
+            : m_view(view) {
     }
 
-    virtual QString id() const
-    {
-        return QString( "SpecificColorSelector" );
+    virtual QString id() const {
+        return QString("SpecificColorSelector");
     }
 
-    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
-    {
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const {
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget()
-    {
+    virtual QDockWidget* createDockWidget() {
         SpecificColorSelectorDock * dockWidget = new SpecificColorSelectorDock(m_view);
-        
+
         dockWidget->setObjectName(id());
 
         return dockWidget;
     }
 
-    KoDockFactory::DockPosition defaultDockPosition() const
-    {
+    KoDockFactory::DockPosition defaultDockPosition() const {
         return DockMinimized;
     }
 
@@ -78,16 +74,15 @@ private:
 
 
 SpecificColorSelectorPlugin::SpecificColorSelectorPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     dbgPlugins << "SpecificColorSelectorPlugin";
-    if ( parent->inherits("KisView2") )
-    {
+    if (parent->inherits("KisView2")) {
         m_view = (KisView2*) parent;
 
         setComponentData(SpecificColorSelectorPluginFactory::componentData());
-        SpecificColorSelectorDockFactory dockFactory( m_view);
-        m_view->createDockWidget( &dockFactory );
+        SpecificColorSelectorDockFactory dockFactory(m_view);
+        m_view->createDockWidget(&dockFactory);
     }
 }
 

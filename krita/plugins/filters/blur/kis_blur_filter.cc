@@ -45,7 +45,7 @@ KisBlurFilter::KisBlurFilter() : KisFilter(id(), CategoryBlur, i18n("&Blur..."))
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisFilterConfigWidget * KisBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageSP image ) const
+KisFilterConfigWidget * KisBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageSP image) const
 {
     Q_UNUSED(image)
     return new KisWdgBlur(parent);
@@ -54,20 +54,20 @@ KisFilterConfigWidget * KisBlurFilter::createConfigurationWidget(QWidget* parent
 KisFilterConfiguration* KisBlurFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
-    config->setProperty("halfWidth", 5 );
-    config->setProperty("halfHeight", 5 );
-    config->setProperty("rotate", 0 );
-    config->setProperty("strength", 0 );
+    config->setProperty("halfWidth", 5);
+    config->setProperty("halfHeight", 5);
+    config->setProperty("rotate", 0);
+    config->setProperty("strength", 0);
     config->setProperty("shape", 0);
     return config;
 }
 
 void KisBlurFilter::process(KisConstProcessingInformation srcInfo,
-                 KisProcessingInformation dstInfo,
-                 const QSize& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-        ) const
+                            KisProcessingInformation dstInfo,
+                            const QSize& size,
+                            const KisFilterConfiguration* config,
+                            KoUpdater* progressUpdater
+                           ) const
 {
     const KisPaintDeviceSP src = srcInfo.paintDevice();
     KisPaintDeviceSP dst = dstInfo.paintDevice();
@@ -76,7 +76,7 @@ void KisBlurFilter::process(KisConstProcessingInformation srcInfo,
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
 
-    if(!config) config = new KisFilterConfiguration(id().id(), 1);
+    if (!config) config = new KisFilterConfiguration(id().id(), 1);
 
     QVariant value;
     int shape = (config->getProperty("shape", value)) ? value.toInt() : 0;
@@ -92,26 +92,26 @@ void KisBlurFilter::process(KisConstProcessingInformation srcInfo,
 
     KisMaskGenerator* kas;
 //     dbgKrita << width <<"" << height <<"" << hFade <<"" << vFade;
-    switch(shape)
-    {
-        case 1:
-            kas = new KisRectangleMaskGenerator(width, height , hFade, vFade);
-            break;
-        case 0:
-        default:
-            kas = new KisCircleMaskGenerator(width, height, hFade, vFade);
-            break;
+    switch (shape) {
+    case 1:
+        kas = new KisRectangleMaskGenerator(width, height , hFade, vFade);
+        break;
+    case 0:
+    default:
+        kas = new KisCircleMaskGenerator(width, height, hFade, vFade);
+        break;
     }
 
     KisConvolutionKernelSP kernel = KisConvolutionKernel::kernelFromMaskGenerator(kas, rotate);
     delete kas;
-    KisConvolutionPainter painter( dst, dstInfo.selection() );
-    painter.setProgress( progressUpdater );
+    KisConvolutionPainter painter(dst, dstInfo.selection());
+    painter.setProgress(progressUpdater);
     painter.applyMatrix(kernel, src, dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);
 
 }
 
-int KisBlurFilter::overlapMarginNeeded(const KisFilterConfiguration* _config) const {
+int KisBlurFilter::overlapMarginNeeded(const KisFilterConfiguration* _config) const
+{
     QVariant value;
     uint halfWidth = (_config->getProperty("halfWidth", value)) ? value.toUInt() : 5;
     uint halfHeight = (_config->getProperty("halfHeight", value)) ? value.toUInt() : 5;

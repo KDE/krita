@@ -40,19 +40,18 @@
 #include <kis_view2.h>
 
 typedef KGenericFactory<TogetherPlugin> TogetherPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritatogether, TogetherPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritatogether, TogetherPluginFactory("krita"))
 
 
 TogetherPlugin::TogetherPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
-    if ( parent->inherits("KisView2") )
-    {
+    if (parent->inherits("KisView2")) {
         m_view = (KisView2*) parent;
 
         setComponentData(TogetherPluginFactory::componentData());
 
-        setXMLFile(KStandardDirs::locate("data","kritaplugins/together.rc"), true);
+        setXMLFile(KStandardDirs::locate("data", "kritaplugins/together.rc"), true);
 
     }
 }

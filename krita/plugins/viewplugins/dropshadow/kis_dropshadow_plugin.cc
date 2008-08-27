@@ -42,20 +42,20 @@
 #include "kis_dropshadow.h"
 #include "dlg_dropshadow.h"
 
-K_EXPORT_COMPONENT_FACTORY( kritadropshadow, KGenericFactory<KisDropshadowPlugin>( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritadropshadow, KGenericFactory<KisDropshadowPlugin>("krita"))
 
 KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
-    if ( parent->inherits("KisView2") ) {
+    if (parent->inherits("KisView2")) {
 
         setComponentData(KGenericFactory<KisDropshadowPlugin>::componentData());
 
-        setXMLFile(KStandardDirs::locate("data","kritaplugins/dropshadow.rc"), true);
+        setXMLFile(KStandardDirs::locate("data", "kritaplugins/dropshadow.rc"), true);
 
         m_view = (KisView2*) parent;
         KAction *action  = new KAction(i18n("Add Drop Shadow..."), this);
-        actionCollection()->addAction("dropshadow", action );
+        actionCollection()->addAction("dropshadow", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotDropshadow()));
     }
 }
@@ -73,8 +73,8 @@ void KisDropshadowPlugin::slotDropshadow()
     if (!dev) return;
 
     DlgDropshadow * dlgDropshadow = new DlgDropshadow(dev->colorSpace()->name(),
-                                                      image->colorSpace()->name(),
-                                                      m_view, "Dropshadow");
+            image->colorSpace()->name(),
+            m_view, "Dropshadow");
     Q_CHECK_PTR(dlgDropshadow);
 
     dlgDropshadow->setCaption(i18n("Drop Shadow"));
@@ -82,16 +82,16 @@ void KisDropshadowPlugin::slotDropshadow()
     if (dlgDropshadow->exec() == QDialog::Accepted) {
 
         KisDropshadow dropshadow(m_view);
-        KoProgressUpdater pu( m_view->statusBar()->progress() );
+        KoProgressUpdater pu(m_view->statusBar()->progress());
         pu.start();
         KoUpdater u = pu.startSubtask();
         dropshadow.dropshadow(& u,
-                           dlgDropshadow->getXOffset(),
-                           dlgDropshadow->getYOffset(),
-                           dlgDropshadow->getBlurRadius(),
-                           dlgDropshadow->getShadowColor(),
-                           dlgDropshadow->getShadowOpacity(),
-                           dlgDropshadow->allowResizingChecked());
+                              dlgDropshadow->getXOffset(),
+                              dlgDropshadow->getYOffset(),
+                              dlgDropshadow->getBlurRadius(),
+                              dlgDropshadow->getShadowColor(),
+                              dlgDropshadow->getShadowOpacity(),
+                              dlgDropshadow->allowResizingChecked());
 
     }
 

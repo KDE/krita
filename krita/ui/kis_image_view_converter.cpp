@@ -21,41 +21,41 @@
 // #include <kis_debug.h>
 
 KisImageViewConverter::KisImageViewConverter(const KisImageSP image)
-    : m_image(image)
+        : m_image(image)
 {
     Q_ASSERT(image);
 }
 
 // remember here; document is postscript points;  view is krita pixels.
 
-QPointF KisImageViewConverter::documentToView( const QPointF &documentPoint ) const
+QPointF KisImageViewConverter::documentToView(const QPointF &documentPoint) const
 {
-    return QPointF( documentToViewX(documentPoint.x()), documentToViewX(documentPoint.y()) );
+    return QPointF(documentToViewX(documentPoint.x()), documentToViewX(documentPoint.y()));
 }
 
-QPointF KisImageViewConverter::viewToDocument( const QPointF &viewPoint ) const
+QPointF KisImageViewConverter::viewToDocument(const QPointF &viewPoint) const
 {
-    return QPointF( viewToDocumentX(viewPoint.x()), viewToDocumentY(viewPoint.y()) );
+    return QPointF(viewToDocumentX(viewPoint.x()), viewToDocumentY(viewPoint.y()));
 }
 
-QRectF KisImageViewConverter::documentToView( const QRectF &documentRect ) const
+QRectF KisImageViewConverter::documentToView(const QRectF &documentRect) const
 {
-    return QRectF( documentToView(documentRect.topLeft()),
-        QSizeF(documentToViewX(documentRect.width()), documentToViewY(documentRect.height())) );
+    return QRectF(documentToView(documentRect.topLeft()),
+                  QSizeF(documentToViewX(documentRect.width()), documentToViewY(documentRect.height())));
 }
 
-QRectF KisImageViewConverter::viewToDocument( const QRectF &viewRect ) const
+QRectF KisImageViewConverter::viewToDocument(const QRectF &viewRect) const
 {
-    return QRectF( viewToDocument(viewRect.topLeft()),
-        QSizeF(viewToDocumentX(viewRect.width()), viewToDocumentY(viewRect.height())) );
+    return QRectF(viewToDocument(viewRect.topLeft()),
+                  QSizeF(viewToDocumentX(viewRect.width()), viewToDocumentY(viewRect.height())));
 }
 
-QSizeF KisImageViewConverter::documentToView( const QSizeF &documentSize ) const
+QSizeF KisImageViewConverter::documentToView(const QSizeF &documentSize) const
 {
     return QSizeF(documentToViewX(documentSize.width()), documentToViewY(documentSize.height()));
 }
 
-QSizeF KisImageViewConverter::viewToDocument( const QSizeF &viewSize ) const
+QSizeF KisImageViewConverter::viewToDocument(const QSizeF &viewSize) const
 {
     return QSizeF(viewToDocumentX(viewSize.width()), viewToDocumentY(viewSize.height()));
 }

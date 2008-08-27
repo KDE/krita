@@ -25,12 +25,11 @@
 
 KisDynamicTransformation* KisDynamicTransformationsFactory::id2Transformation(QString id)
 {
-    if(id == KisDynamicTransformation::SizeTransformationID.id())
-    {
+    if (id == KisDynamicTransformation::SizeTransformationID.id()) {
         return new KisSizeTransformation(0, 0);
-    } else if(id == KisDynamicTransformation::DarkenTransformationID.id()) {
+    } else if (id == KisDynamicTransformation::DarkenTransformationID.id()) {
         return new KisDarkenTransformation(0);
-    } else if(id == KisDynamicTransformation::RotationTransformationID.id()) {
+    } else if (id == KisDynamicTransformation::RotationTransformationID.id()) {
         return new KisRotationTransformation(0);
     }
     return 0;
@@ -40,9 +39,8 @@ KisDynamicTransformation* KisDynamicTransformationsFactory::createFromXML(const 
 {
     QString id = e.attribute("id", "");
     KisDynamicTransformation* transfo = id2Transformation(id);
-    if(transfo)
-    {
-        transfo->fromXML( e );
+    if (transfo) {
+        transfo->fromXML(e);
     }
     return transfo;
 }

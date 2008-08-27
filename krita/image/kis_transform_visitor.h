@@ -40,48 +40,44 @@
 class KoUpdater;
 class KisFilterStrategy;
 
-class KisTransformVisitor : public KisNodeVisitor {
+class KisTransformVisitor : public KisNodeVisitor
+{
 
 public:
 
     using KisNodeVisitor::visit;
-    
+
     KisTransformVisitor(KisImageSP img, double  xscale, double  yscale,
-        double  /*xshear*/, double  /*yshear*/, double angle,
-        qint32  tx, qint32  ty, KoUpdater *progress, KisFilterStrategy *filter)
-        : KisNodeVisitor()
-        , m_sx(xscale)
-        , m_sy(yscale)
-        , m_tx(tx)
-        , m_ty(ty)
-        , m_filter(filter)
-        , m_angle(angle)
-        , m_progress(progress)
-        , m_img(img)
-    {
+                        double  /*xshear*/, double  /*yshear*/, double angle,
+                        qint32  tx, qint32  ty, KoUpdater *progress, KisFilterStrategy *filter)
+            : KisNodeVisitor()
+            , m_sx(xscale)
+            , m_sy(yscale)
+            , m_tx(tx)
+            , m_ty(ty)
+            , m_filter(filter)
+            , m_angle(angle)
+            , m_progress(progress)
+            , m_img(img) {
     }
 
-    virtual ~KisTransformVisitor()
-    {
+    virtual ~KisTransformVisitor() {
     }
 
-    bool visit( KisExternalLayer * )
-        {
-            return true;
-        }
+    bool visit(KisExternalLayer *) {
+        return true;
+    }
 
     /**
      * Crops the specified layer and adds the undo information to the undo adapter of the
      * layer's image.
      */
-    bool visit(KisPaintLayer *layer)
-    {
+    bool visit(KisPaintLayer *layer) {
         transformPaintDevice(layer);
         return true;
     }
 
-    bool visit(KisGroupLayer *layer)
-    {
+    bool visit(KisGroupLayer *layer) {
         layer->resetProjection();
 
         KisNodeSP child = layer->firstChild();
@@ -93,23 +89,20 @@ public:
         return true;
     }
 
-    virtual bool visit(KisAdjustmentLayer* layer)
-    {
+    virtual bool visit(KisAdjustmentLayer* layer) {
         transformPaintDevice(layer);
         layer->resetCache();
         return true;
     }
 
-    bool visit(KisGeneratorLayer* layer)
-    {
+    bool visit(KisGeneratorLayer* layer) {
         transformPaintDevice(layer);
         return true;
     }
-    
+
 private:
 
-    void transformPaintDevice(KisNode * node)
-    {
+    void transformPaintDevice(KisNode * node) {
         KisPaintDeviceSP dev = node->paintDevice();
 
         KisTransaction * t = 0;

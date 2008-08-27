@@ -32,20 +32,20 @@
 #include "compositeops/KoCompositeOpOver.h"
 #include "compositeops/KoCompositeOpErase.h"
 
-KisYCbCrU8ColorSpace::KisYCbCrU8ColorSpace( const KoCtlColorProfile *p)
-: KisYCbCrBaseColorSpace<YCbCrU8Traits>("YCbCrAU8", i18n("YCbCr (8-bit integer/channel)"), p)
+KisYCbCrU8ColorSpace::KisYCbCrU8ColorSpace(const KoCtlColorProfile *p)
+        : KisYCbCrBaseColorSpace<YCbCrU8Traits>("YCbCrAU8", i18n("YCbCr (8-bit integer/channel)"), p)
 {
-    addChannel(new KoChannelInfo(i18n("Y"), YCbCrU8Traits::y_pos * sizeof(quint8), KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), QColor(255,0,0)));
-    addChannel(new KoChannelInfo(i18n("Cb"), YCbCrU8Traits::cb_pos * sizeof(quint8), KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), QColor(0,255,0)));
-    addChannel(new KoChannelInfo(i18n("Cr"), YCbCrU8Traits::cr_pos * sizeof(quint8), KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), QColor(0,0,255)));
+    addChannel(new KoChannelInfo(i18n("Y"), YCbCrU8Traits::y_pos * sizeof(quint8), KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), QColor(255, 0, 0)));
+    addChannel(new KoChannelInfo(i18n("Cb"), YCbCrU8Traits::cb_pos * sizeof(quint8), KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), QColor(0, 255, 0)));
+    addChannel(new KoChannelInfo(i18n("Cr"), YCbCrU8Traits::cr_pos * sizeof(quint8), KoChannelInfo::COLOR, KoChannelInfo::UINT8, sizeof(quint8), QColor(0, 0, 255)));
     addChannel(new KoChannelInfo(i18n("Alpha"), YCbCrU8Traits::alpha_pos * sizeof(quint8), KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
 
-    addCompositeOp( new KoCompositeOpOver<YCbCrU8Traits>( this ) );
-    addCompositeOp( new KoCompositeOpErase<YCbCrU8Traits>( this ) );
+    addCompositeOp(new KoCompositeOpOver<YCbCrU8Traits>(this));
+    addCompositeOp(new KoCompositeOpErase<YCbCrU8Traits>(this));
 }
 
 KoColorSpace* KisYCbCrU8ColorSpace::clone() const
 {
-    return new KisYCbCrU8ColorSpace( static_cast<const KoCtlColorProfile*>(profile()));
+    return new KisYCbCrU8ColorSpace(static_cast<const KoCtlColorProfile*>(profile()));
 }
 

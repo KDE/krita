@@ -39,92 +39,91 @@
 // XXX: Make undoable (used to be in KisPaintDevice, should be in
 // KisLayer)
 #if 0
-namespace {
+namespace
+{
 
-    class KisPaintDeviceCommand : public QUndoCommand {
-        typedef QUndoCommand super;
+class KisPaintDeviceCommand : public QUndoCommand
+{
+    typedef QUndoCommand super;
 
-    public:
-        KisPaintDeviceCommand(const QString& name, KisPaintDeviceSP paintDevice);
-        virtual ~KisPaintDeviceCommand() {}
+public:
+    KisPaintDeviceCommand(const QString& name, KisPaintDeviceSP paintDevice);
+    virtual ~KisPaintDeviceCommand() {}
 
-    protected:
-        void setUndo(bool undo);
+protected:
+    void setUndo(bool undo);
 
-        KisPaintDeviceSP m_paintDevice;
-    };
+    KisPaintDeviceSP m_paintDevice;
+};
 
-    KisPaintDeviceCommand::KisPaintDeviceCommand(const QString& name, KisPaintDeviceSP paintDevice) :
+KisPaintDeviceCommand::KisPaintDeviceCommand(const QString& name, KisPaintDeviceSP paintDevice) :
         super(name), m_paintDevice(paintDevice)
-    {
+{
+}
+
+void KisPaintDeviceCommand::setUndo(bool undo)
+{
+    if (m_paintDevice->undoAdapter()) {
+        m_paintDevice->undoAdapter()->setUndo(undo);
+    }
+}
+
+class KisConvertLayerTypeCmd : public KisPaintDeviceCommand
+{
+    typedef KisPaintDeviceCommand super;
+
+public:
+    KisConvertLayerTypeCmd(KisPaintDeviceSP paintDevice,
+                           KisDataManagerSP beforeData, const KoColorSpace * beforeColorSpace,
+                           KisDataManagerSP afterData, const KoColorSpace * afterColorSpace
+                          ) : super(i18n("Convert Layer Type"), paintDevice) {
+        m_beforeData = beforeData;
+        m_beforeColorSpace = beforeColorSpace;
+        m_afterData = afterData;
+        m_afterColorSpace = afterColorSpace;
     }
 
-    void KisPaintDeviceCommand::setUndo(bool undo)
-    {
-        if (m_paintDevice->undoAdapter()) {
-            m_paintDevice->undoAdapter()->setUndo(undo);
-        }
+    virtual ~KisConvertLayerTypeCmd() {
     }
 
-    class KisConvertLayerTypeCmd : public KisPaintDeviceCommand {
-        typedef KisPaintDeviceCommand super;
+public:
+    virtual void redo() {
+        setUndo(false);
+        m_paintDevice->setDataManager(m_afterData, m_afterColorSpace);
+        setUndo(true);
+    }
 
-    public:
-        KisConvertLayerTypeCmd(KisPaintDeviceSP paintDevice,
-                       KisDataManagerSP beforeData, const KoColorSpace * beforeColorSpace,
-                       KisDataManagerSP afterData, const KoColorSpace * afterColorSpace
-                ) : super(i18n("Convert Layer Type"), paintDevice)
-            {
-                m_beforeData = beforeData;
-                m_beforeColorSpace = beforeColorSpace;
-                m_afterData = afterData;
-                m_afterColorSpace = afterColorSpace;
-            }
+    virtual void undo() {
+        setUndo(false);
+        m_paintDevice->setDataManager(m_beforeData, m_beforeColorSpace);
+        setUndo(true);
+    }
 
-        virtual ~KisConvertLayerTypeCmd()
-            {
-            }
+private:
+    KisDataManagerSP m_beforeData;
+    const KoColorSpace * m_beforeColorSpace;
 
-    public:
-        virtual void redo()
-            {
-                setUndo(false);
-                m_paintDevice->setDataManager(m_afterData, m_afterColorSpace);
-                setUndo(true);
-            }
-
-        virtual void undo()
-            {
-                setUndo(false);
-                m_paintDevice->setDataManager(m_beforeData, m_beforeColorSpace);
-                setUndo(true);
-            }
-
-    private:
-        KisDataManagerSP m_beforeData;
-        const KoColorSpace * m_beforeColorSpace;
-
-        KisDataManagerSP m_afterData;
-        const KoColorSpace * m_afterColorSpace;
-    };
+    KisDataManagerSP m_afterData;
+    const KoColorSpace * m_afterColorSpace;
+};
 
 }
 #endif
 
 
-class KisColorSpaceConvertVisitor :public KisNodeVisitor {
+class KisColorSpaceConvertVisitor : public KisNodeVisitor
+{
 public:
     KisColorSpaceConvertVisitor(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent);
     virtual ~KisColorSpaceConvertVisitor();
 
     using KisNodeVisitor::visit;
-    
+
 public:
 
-    bool visit( KisExternalLayer * )
-        {
-            return true;
-        }
+    bool visit(KisExternalLayer *) {
+        return true;
+    }
 
     bool visit(KisPaintLayer *layer);
     bool visit(KisGroupLayer *layer);
@@ -137,9 +136,9 @@ private:
 };
 
 KisColorSpaceConvertVisitor::KisColorSpaceConvertVisitor(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) :
-    KisNodeVisitor(),
-    m_dstColorSpace(dstColorSpace),
-    m_renderingIntent(renderingIntent)
+        KisNodeVisitor(),
+        m_dstColorSpace(dstColorSpace),
+        m_renderingIntent(renderingIntent)
 {
 }
 
@@ -152,32 +151,32 @@ bool KisColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
     // Clear the projection, we will have to re-render everything.
     // The image is already set to the new colorspace, so this'll work.
     layer->resetProjection();
-    layer->setChannelFlags( m_emptyChannelFlags );
-    KisLayerSP child = dynamic_cast<KisLayer*>( layer->firstChild().data() );
+    layer->setChannelFlags(m_emptyChannelFlags);
+    KisLayerSP child = dynamic_cast<KisLayer*>(layer->firstChild().data());
     while (child) {
         child->accept(*this);
-        child = dynamic_cast<KisLayer*>( child->nextSibling().data() );
+        child = dynamic_cast<KisLayer*>(child->nextSibling().data());
     }
     layer->setDirty();
-    layer->setCompositeOp( m_dstColorSpace->compositeOp( layer->compositeOp()->id() ) );
+    layer->setCompositeOp(m_dstColorSpace->compositeOp(layer->compositeOp()->id()));
     return true;
 }
 
 bool KisColorSpaceConvertVisitor::visit(KisPaintLayer *layer)
 {
     layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent);
-    layer->setChannelFlags( m_emptyChannelFlags );
+    layer->setChannelFlags(m_emptyChannelFlags);
     layer->setDirty();
-    layer->setCompositeOp( m_dstColorSpace->compositeOp( layer->compositeOp()->id() ) );
+    layer->setCompositeOp(m_dstColorSpace->compositeOp(layer->compositeOp()->id()));
     return true;
 }
 
 bool KisColorSpaceConvertVisitor::visit(KisGeneratorLayer *layer)
 {
     layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent);
-    layer->setChannelFlags( m_emptyChannelFlags );
+    layer->setChannelFlags(m_emptyChannelFlags);
     layer->setDirty();
-    layer->setCompositeOp( m_dstColorSpace->compositeOp( layer->compositeOp()->id() ) );
+    layer->setCompositeOp(m_dstColorSpace->compositeOp(layer->compositeOp()->id()));
     return true;
 }
 
@@ -193,7 +192,7 @@ bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
         KisFilterSP f = KisFilterRegistry::instance()->value("perchannel");
         layer->setFilter(f->defaultConfiguration(0));
     }
-    layer->setChannelFlags( m_emptyChannelFlags );
+    layer->setChannelFlags(m_emptyChannelFlags);
     layer->resetCache();
     layer->setDirty();
     return true;

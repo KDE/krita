@@ -20,7 +20,7 @@
 
 /** @file */
 
-#include "config-opengl.h"
+#include <config-opengl.h>
 
 #ifdef HAVE_OPENGL
 
@@ -29,14 +29,15 @@
 class QGLWidget;
 
 /**
- * This class manages a shared OpenGL context and provides utility 
+ * This class manages a shared OpenGL context and provides utility
  * functions for checking capabilities and error reporting.
  */
-class KRITAUI_EXPORT KisOpenGL {
+class KRITAUI_EXPORT KisOpenGL
+{
 public:
     /**
      * Returns the QGLWidget that uses the shared OpenGL context.
-     * You should pass this as the shareWidget parameter to the 
+     * You should pass this as the shareWidget parameter to the
      * QGLWidget constructor.
      */
     static QGLWidget *sharedContextWidget();
@@ -48,10 +49,10 @@ public:
      */
     static void makeContextCurrent();
 
-    /** 
+    /**
      * Returns true if the OpenGL shading language is available.
-     * 
-     * Specifically, this checks for the availabilty of all of the following 
+     *
+     * Specifically, this checks for the availabilty of all of the following
      * extensions: ARB_shader_objects, ARB_vertex_shader, ARB_fragment_shader,
      * and ARB_shading_language_100.
      */

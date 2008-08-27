@@ -39,7 +39,8 @@ class KIntNumInput;
 
 class KoCanvasBase;
 
-class KisToolFill : public KisToolPaint {
+class KisToolFill : public KisToolPaint
+{
 
     typedef KisToolPaint super;
     Q_OBJECT
@@ -83,22 +84,22 @@ private:
 
 #include "KoToolFactory.h"
 
-class KisToolFillFactory : public KoToolFactory {
+class KisToolFillFactory : public KoToolFactory
+{
 
 public:
     KisToolFillFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KritaFill/KisTooLFill", i18n( "Contiguous Fill" ))
-        {
-            setToolTip( i18n( "Fill a contiguous area of color with a color, or fill a selection." ) );
-            setToolType( TOOL_TYPE_FILL );
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setIcon( "krita_tool_color_fill" );
-            //setShortcut( QKeySequence( Qt::Key_F ) );
-            setPriority( 14 );
-            setInputDeviceAgnostic(false);
-	}
+            : KoToolFactory(parent, "KritaFill/KisTooLFill", i18n("Contiguous Fill")) {
+        setToolTip(i18n("Fill a contiguous area of color with a color, or fill a selection."));
+        setToolType(TOOL_TYPE_FILL);
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        setIcon("krita_tool_color_fill");
+        //setShortcut( QKeySequence( Qt::Key_F ) );
+        setPriority(14);
+        setInputDeviceAgnostic(false);
+    }
 
-    virtual ~KisToolFillFactory(){}
+    virtual ~KisToolFillFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolFill(canvas);

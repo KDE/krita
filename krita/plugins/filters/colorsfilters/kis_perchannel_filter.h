@@ -34,14 +34,16 @@ class WdgPerChannel : public QWidget, public Ui::WdgPerChannel
 {
     Q_OBJECT
 
-    public:
-        WdgPerChannel(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgPerChannel(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
 typedef QList<QPointF> KisCurve;
 
 class KisPerChannelFilterConfiguration
-    : public KisFilterConfiguration
+            : public KisFilterConfiguration
 {
 public:
     KisPerChannelFilterConfiguration(int n);
@@ -49,7 +51,7 @@ public:
 
     using KisFilterConfiguration::fromXML;
 
-    virtual void fromXML( const QString&  );
+    virtual void fromXML(const QString&);
     virtual QString toString();
 
     bool isCompatible(const KisPaintDeviceSP) const;
@@ -69,31 +71,34 @@ public:
  * This class is generic for filters that affect channel separately
  */
 class KisPerChannelFilter
-    : public KisFilter
+            : public KisFilter
 {
 public:
     KisPerChannelFilter();
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev, const KisImageSP image = 0) const;
-    
+
     using KisFilter::process;
     void process(KisConstProcessingInformation src,
                  KisProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
-        ) const;
-    static inline KoID id() { return KoID("perchannel", i18n("Color Adjustment")); }
+                ) const;
+    static inline KoID id() {
+        return KoID("perchannel", i18n("Color Adjustment"));
+    }
 private:
 };
 
-class KisPerChannelConfigWidget : public KisFilterConfigWidget {
+class KisPerChannelConfigWidget : public KisFilterConfigWidget
+{
 
     typedef KisFilterConfigWidget super;
     Q_OBJECT
 
 public:
-    KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f = 0 );
+    KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f = 0);
     virtual ~KisPerChannelConfigWidget() {}
 
     virtual void setConfiguration(KisFilterConfiguration * config);

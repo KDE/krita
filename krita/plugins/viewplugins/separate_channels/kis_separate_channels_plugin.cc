@@ -44,19 +44,19 @@
 #include "kis_channel_separator.h"
 #include "dlg_separate.h"
 
-K_EXPORT_COMPONENT_FACTORY( kritaseparatechannels, KGenericFactory<KisSeparateChannelsPlugin>( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritaseparatechannels, KGenericFactory<KisSeparateChannelsPlugin>("krita"))
 
 KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
-    if ( parent->inherits("KisView2") ) {
+    if (parent->inherits("KisView2")) {
         setComponentData(KGenericFactory<KisSeparateChannelsPlugin>::componentData());
 
-        setXMLFile(KStandardDirs::locate("data","kritaplugins/imageseparate.rc"), true);
+        setXMLFile(KStandardDirs::locate("data", "kritaplugins/imageseparate.rc"), true);
         m_view = (KisView2*) parent;
         KAction *action  = new KAction(i18n("Separate Image..."), this);
-        actionCollection()->addAction("separate", action );
-        connect(action, SIGNAL(triggered(bool) ), SLOT(slotSeparate()));
+        actionCollection()->addAction("separate", action);
+        connect(action, SIGNAL(triggered(bool)), SLOT(slotSeparate()));
     }
 }
 
@@ -67,7 +67,7 @@ KisSeparateChannelsPlugin::~KisSeparateChannelsPlugin()
 void KisSeparateChannelsPlugin::slotSeparate()
 {
     KisImageSP image = m_view->image();
-    if ( !image ) return;
+    if (!image) return;
 
     KisLayerSP l = m_view->layerManager()->activeLayer();
     if (!l) return;
@@ -76,19 +76,19 @@ void KisSeparateChannelsPlugin::slotSeparate()
     if (!dev) return;
 
     DlgSeparate * dlgSeparate = new DlgSeparate(dev->colorSpace()->name(),
-                                                image->colorSpace()->name(), m_view, "Separate");
+            image->colorSpace()->name(), m_view, "Separate");
     Q_CHECK_PTR(dlgSeparate);
 
     dlgSeparate->setCaption(i18n("Separate Image"));
 
     // If we're 8-bits, disable the downscale option
     if (dev->pixelSize() == dev->channelCount()) {
-	dlgSeparate->enableDownscale(false);
+        dlgSeparate->enableDownscale(false);
     }
 
     if (dlgSeparate->exec() == QDialog::Accepted) {
 
-        KoProgressUpdater pu( m_view->statusBar()->progress() );
+        KoProgressUpdater pu(m_view->statusBar()->progress());
         KoUpdater u = pu.startSubtask();
 
         KisChannelSeparator separator(m_view);

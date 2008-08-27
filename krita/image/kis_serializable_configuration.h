@@ -28,7 +28,8 @@ class QDomDocument;
  * It can be used together with the factory in case the type of configuration object
  * is also unknown at creation time.
  */
-class KRITAIMAGE_EXPORT KisSerializableConfiguration {
+class KRITAIMAGE_EXPORT KisSerializableConfiguration
+{
 public:
 
     virtual ~KisSerializableConfiguration() {};
@@ -57,17 +58,18 @@ public:
 /**
  * This is an interface for a factory of serializable configuration objects.
  */
-class KRITAIMAGE_EXPORT KisSerializableConfigurationFactory {
+class KRITAIMAGE_EXPORT KisSerializableConfigurationFactory
+{
 public:
     virtual ~KisSerializableConfigurationFactory();
     /**
      * @return an empty object with a sane default configuration
      */
-    virtual KisSerializableConfiguration* createDefault() =0;
+    virtual KisSerializableConfiguration* createDefault() = 0;
     /**
      * @return an unserialied version of the configuration
      */
-    virtual KisSerializableConfiguration* create(const QDomElement&) =0;
+    virtual KisSerializableConfiguration* create(const QDomElement&) = 0;
 };
 
 

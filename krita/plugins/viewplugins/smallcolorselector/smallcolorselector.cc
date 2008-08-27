@@ -38,36 +38,32 @@
 #include "smallcolorselector_dock.h"
 
 typedef KGenericFactory<SmallColorSelectorPlugin> SmallColorSelectorPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritasmallcolorselector, SmallColorSelectorPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritasmallcolorselector, SmallColorSelectorPluginFactory("krita"))
 
-class SmallColorSelectorDockFactory : public KoDockFactory {
+class SmallColorSelectorDockFactory : public KoDockFactory
+{
 public:
     SmallColorSelectorDockFactory(KisView2 * view)
-        : m_view( view )
-    {
+            : m_view(view) {
     }
 
-    virtual QString id() const
-    {
-        return QString( "SmallColorSelector" );
+    virtual QString id() const {
+        return QString("SmallColorSelector");
     }
 
-    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
-    {
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const {
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget()
-    {
+    virtual QDockWidget* createDockWidget() {
         SmallColorSelectorDock * dockWidget = new SmallColorSelectorDock(m_view);
-        
+
         dockWidget->setObjectName(id());
 
         return dockWidget;
     }
-    
-    DockPosition defaultDockPosition() const
-    {
+
+    DockPosition defaultDockPosition() const {
         return DockRight;
     }
 
@@ -78,16 +74,15 @@ private:
 
 
 SmallColorSelectorPlugin::SmallColorSelectorPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     dbgPlugins << "SmallColorSelectorPlugin";
-    if ( parent->inherits("KisView2") )
-    {
+    if (parent->inherits("KisView2")) {
         m_view = (KisView2*) parent;
 
         setComponentData(SmallColorSelectorPluginFactory::componentData());
-        SmallColorSelectorDockFactory dockFactory( m_view);
-        m_view->createDockWidget( &dockFactory );
+        SmallColorSelectorDockFactory dockFactory(m_view);
+        m_view->createDockWidget(&dockFactory);
     }
 }
 

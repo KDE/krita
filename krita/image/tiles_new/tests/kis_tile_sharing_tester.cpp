@@ -190,7 +190,8 @@ void KisTileSharingTester::detachUnshared()
 // ### TODO: Check KisMemento interaction
 // ### TODO: Check default tile sharing! (this is being done, but how good is it?)
 // Check if implicitly sharing the datamanager works (using iterators)
-void KisTileSharingTester::dataManagerTileSharingTest() {
+void KisTileSharingTester::dataManagerTileSharingTest()
+{
     KisDataManager dm1(sizeof(defPixel), &defPixel);
     // First, initialize this device with a pixel. Otherwise, we just look at the shared default tile!
     {
@@ -227,32 +228,33 @@ void KisTileSharingTester::dataManagerTileSharingTest() {
     }
 }
 
-void KisTileSharingTester::iterationTest() {
+void KisTileSharingTester::iterationTest()
+{
     const KoColorSpace* colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
-    KisPaintDevice dev1( colorSpace, "test");
+    KisPaintDevice dev1(colorSpace, "test");
     KisPaintDevice dev2(dev1); // Shared with dev1
 
     {
-    KisHLineConstIteratorPixel srcIt = dev1.createHLineConstIterator(0, 0, 128);
-    KisHLineIteratorPixel dstIt = dev2.createHLineIterator(0, 0, 128);
+        KisHLineConstIteratorPixel srcIt = dev1.createHLineConstIterator(0, 0, 128);
+        KisHLineIteratorPixel dstIt = dev2.createHLineIterator(0, 0, 128);
 
-    for (int y = 0; y < 10; y++) {
-        while ( !srcIt.isDone()  ) {
-            (quint8*) srcIt.oldRawData();
-            (quint8*) dstIt.rawData();
-            ++srcIt;
-            ++dstIt;
+        for (int y = 0; y < 10; y++) {
+            while (!srcIt.isDone()) {
+                (quint8*) srcIt.oldRawData();
+                (quint8*) dstIt.rawData();
+                ++srcIt;
+                ++dstIt;
+            }
+            srcIt.nextRow();
+            dstIt.nextRow();
         }
-        srcIt.nextRow();
-        dstIt.nextRow();
-    }
     }
     {
         KisHLineConstIteratorPixel srcIt = dev1.createHLineConstIterator(0, 0, 128);
         KisHLineIteratorPixel dstIt = dev2.createHLineIterator(0, 0, 128);
 
         for (int y = 0; y < 10; y++) {
-            while ( !srcIt.isDone()  ) {
+            while (!srcIt.isDone()) {
                 (quint8*) srcIt.oldRawData();
                 (quint8*) dstIt.rawData();
                 ++srcIt;
@@ -264,59 +266,62 @@ void KisTileSharingTester::iterationTest() {
     }
 }
 
-void KisTileSharingTester::shareTilesAcrossDatamanagersTest() {
-    
+void KisTileSharingTester::shareTilesAcrossDatamanagersTest()
+{
+
 }
 
 // Test if the degrading of tiledata works: in this case, we have a store that mprotects the data, so we MUST degrade to write to it!
-namespace {
-    struct StrictReadOnlyTileStore : public KisTileStore {
-        virtual ~StrictReadOnlyTileStore() {}
+namespace
+{
+struct StrictReadOnlyTileStore : public KisTileStore {
+    virtual ~StrictReadOnlyTileStore() {}
 
-        virtual void requestTileData(KisSharedTileData* tileData) {
-            // TODO: share this piece of code with the tileswapper?
-            long pageSize;
+    virtual void requestTileData(KisSharedTileData* tileData) {
+        // TODO: share this piece of code with the tileswapper?
+        long pageSize;
 #ifdef Q_WS_WIN
-            SYSTEM_INFO systemInfo;
-            GetSystemInfo(&systemInfo);
-            pageSize = systemInfo.dwPageSize;
+        SYSTEM_INFO systemInfo;
+        GetSystemInfo(&systemInfo);
+        pageSize = systemInfo.dwPageSize;
 #else
-            pageSize = sysconf(_SC_PAGESIZE);
+        pageSize = sysconf(_SC_PAGESIZE);
 #endif
 
-            size_t len = tileData->pixelSize * KisTile::WIDTH * KisTile::HEIGHT;
-            tileData->data = 0;
-            int res = posix_memalign(reinterpret_cast<void**>(&tileData->data), sysconf(_SC_PAGESIZE), len);
-            assert(res == 0);
-        }
+        size_t len = tileData->pixelSize * KisTile::WIDTH * KisTile::HEIGHT;
+        tileData->data = 0;
+        int res = posix_memalign(reinterpret_cast<void**>(&tileData->data), sysconf(_SC_PAGESIZE), len);
+        assert(res == 0);
+    }
 
-        void protect(KisTile& tile) {
-            // Note that we don't lock, since this class will not interact with the swapper, and as a unit test, it will
-            // not be used in a multithreaded environment...
-            mprotect(tile.m_tileData->data, tile.m_tileData->tileSize, PROT_READ);
-        }
+    void protect(KisTile& tile) {
+        // Note that we don't lock, since this class will not interact with the swapper, and as a unit test, it will
+        // not be used in a multithreaded environment...
+        mprotect(tile.m_tileData->data, tile.m_tileData->tileSize, PROT_READ);
+    }
 
-        virtual void dontNeedTileData(KisSharedTileData* tileData) {
-            free(tileData->data);
-        }
+    virtual void dontNeedTileData(KisSharedTileData* tileData) {
+        free(tileData->data);
+    }
 
-        virtual KisSharedTileData* degradedTileDataForSharing(KisSharedTileData* tileData) {
-            KisSharedTileData* data = new KisSharedTileData(new KisTileStoreMemory, tileData->tileSize, tileData->pixelSize);
+    virtual KisSharedTileData* degradedTileDataForSharing(KisSharedTileData* tileData) {
+        KisSharedTileData* data = new KisSharedTileData(new KisTileStoreMemory, tileData->tileSize, tileData->pixelSize);
 
-            tileData->addLockInMemory();
-            data->addLockInMemory();
+        tileData->addLockInMemory();
+        data->addLockInMemory();
 
-            memcpy(data->data, tileData->data, tileData->tileSize);
+        memcpy(data->data, tileData->data, tileData->tileSize);
 
-            data->removeLockInMemory();
-            tileData->removeLockInMemory();
+        data->removeLockInMemory();
+        tileData->removeLockInMemory();
 
-            return data;
-        }
-    };
+        return data;
+    }
+};
 }
 
-void KisTileSharingTester::degradeDataTest() {
+void KisTileSharingTester::degradeDataTest()
+{
     KisSharedPtr<StrictReadOnlyTileStore> store = new StrictReadOnlyTileStore;
     KisTile tile(store, sizeof(defPixel), 0, 0, &defPixel);
     store->protect(tile);

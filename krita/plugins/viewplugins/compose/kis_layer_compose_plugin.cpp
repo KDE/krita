@@ -37,19 +37,19 @@
 
 #include "dlg_compose.h"
 
-K_EXPORT_COMPONENT_FACTORY( kritalayercompose, KGenericFactory<KisLayerComposePlugin>( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritalayercompose, KGenericFactory<KisLayerComposePlugin>("krita"))
 
 KisLayerComposePlugin::KisLayerComposePlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
-    if ( parent->inherits("KisView2") ) {
+    if (parent->inherits("KisView2")) {
         setComponentData(KGenericFactory<KisLayerComposePlugin>::componentData());
 
-        setXMLFile(KStandardDirs::locate("data","kritaplugins/imageseparate.rc"), true);
+        setXMLFile(KStandardDirs::locate("data", "kritaplugins/imageseparate.rc"), true);
         m_view = (KisView2*) parent;
         KAction *action  = new KAction(i18n("Compose Layer..."), this);
-        actionCollection()->addAction("layercompose", action );
-        connect(action, SIGNAL(triggered(bool) ), SLOT(slotCompose()));
+        actionCollection()->addAction("layercompose", action);
+        connect(action, SIGNAL(triggered(bool)), SLOT(slotCompose()));
     }
 }
 
@@ -60,9 +60,9 @@ KisLayerComposePlugin::~KisLayerComposePlugin()
 void KisLayerComposePlugin::slotCompose()
 {
     KisImageSP image = m_view->image();
-    if ( !image ) return;
+    if (!image) return;
 
-    DlgCompose dlgCompose( image, m_view );
+    DlgCompose dlgCompose(image, m_view);
 
     dlgCompose.setCaption(i18n("Compose Layer"));
 

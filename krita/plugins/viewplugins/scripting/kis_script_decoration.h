@@ -23,22 +23,24 @@
 
 #include <canvas/kis_canvas_decoration.h>
 
-namespace Kross {
-    class Action;
+namespace Kross
+{
+class Action;
 }
 
 class KisView2;
 
-class KisScriptDecoration : public KisCanvasDecoration {
+class KisScriptDecoration : public KisCanvasDecoration
+{
     Q_OBJECT
-    public:
-        KisScriptDecoration(Kross::Action* _action, KisView2* _view);
-        virtual ~KisScriptDecoration();
-    protected:
-        virtual void drawDecoration(QPainter& gc, const QPoint & documentOffset, const QRect& area, const KoViewConverter &converter);
-    private:
-        struct Private;
-        Private* const d;
+public:
+    KisScriptDecoration(Kross::Action* _action, KisView2* _view);
+    virtual ~KisScriptDecoration();
+protected:
+    virtual void drawDecoration(QPainter& gc, const QPoint & documentOffset, const QRect& area, const KoViewConverter &converter);
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

@@ -26,21 +26,22 @@ struct KisPaintBrush;
 #include <kis_shared_ptr.h>
 typedef KisSharedPtr<KisPaintBrush> KisPaintBrushSP;
 
-class DYNAMIC_BRUSH_EXPORT KisBristleShape : public KisDynamicShape {
-    public:
-        KisBristleShape(double paintbrushMinRadius = 10.0, double paintbrushMaxRadius = 20.0, double bristlesDensity = 1.0, double bristlesMinRadius = 0.0, double bristlesMaxRadius = 3.0);
-        virtual QRect rect() const;
-        virtual KisDynamicShape* clone() const;
-        virtual void resize(double xs, double ys);
-        virtual void rotate(double r);
-        virtual void paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc);
-        virtual void startPainting(KisPainter* m_painter);
-        virtual void endPainting();
-    private:
-        KisPaintBrushSP m_paintBrush;
-        double m_radius;
-        double m_angle;
-        QRect m_rect;
+class DYNAMIC_BRUSH_EXPORT KisBristleShape : public KisDynamicShape
+{
+public:
+    KisBristleShape(double paintbrushMinRadius = 10.0, double paintbrushMaxRadius = 20.0, double bristlesDensity = 1.0, double bristlesMinRadius = 0.0, double bristlesMaxRadius = 3.0);
+    virtual QRect rect() const;
+    virtual KisDynamicShape* clone() const;
+    virtual void resize(double xs, double ys);
+    virtual void rotate(double r);
+    virtual void paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc);
+    virtual void startPainting(KisPainter* m_painter);
+    virtual void endPainting();
+private:
+    KisPaintBrushSP m_paintBrush;
+    double m_radius;
+    double m_angle;
+    QRect m_rect;
 };
 
 #endif

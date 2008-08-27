@@ -34,22 +34,22 @@
 #include <kis_processing_information.h>
 
 KisConvolutionFilter::KisConvolutionFilter(const KoID& id, const KoID & category, const QString & entry)
-    : KisFilter( id, category, entry )
+        : KisFilter(id, category, entry)
 {
-    setSupportsIncrementalPainting( false );
-    setColorSpaceIndependence( FULLY_INDEPENDENT);
+    setSupportsIncrementalPainting(false);
+    setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
 
 void KisConvolutionFilter::process(KisConstProcessingInformation srcInfo,
-                 KisProcessingInformation dstInfo,
-                 const QSize& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-        ) const
+                                   KisProcessingInformation dstInfo,
+                                   const QSize& size,
+                                   const KisFilterConfiguration* config,
+                                   KoUpdater* progressUpdater
+                                  ) const
 {
     Q_UNUSED(config);
-    
+
     const KisPaintDeviceSP src = srcInfo.paintDevice();
     KisPaintDeviceSP dst = dstInfo.paintDevice();
     QPoint dstTopLeft = dstInfo.topLeft();
@@ -57,19 +57,20 @@ void KisConvolutionFilter::process(KisConstProcessingInformation srcInfo,
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
 
-    KisConvolutionPainter painter( dst, dstInfo.selection() );
+    KisConvolutionPainter painter(dst, dstInfo.selection());
 
     QBitArray channelFlags;
-    if( config) channelFlags = config->channelFlags();
+    if (config) channelFlags = config->channelFlags();
     if (channelFlags.isEmpty()) {
         channelFlags = dst->colorSpace()->channelFlags();
     }
-    
-    painter.setProgress( progressUpdater );
+
+    painter.setProgress(progressUpdater);
     painter.applyMatrix(m_matrix, src, dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);
 
 }
 
-int KisConvolutionFilter::overlapMarginNeeded(const KisFilterConfiguration* /*c*/) const {
+int KisConvolutionFilter::overlapMarginNeeded(const KisFilterConfiguration* /*c*/) const
+{
     return qMax(m_matrix->width() / 2, m_matrix->height() / 2);
 }

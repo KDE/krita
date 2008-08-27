@@ -22,7 +22,7 @@
 #include "recorder/kis_recorded_action.h"
 
 KisActionRecorder::KisActionRecorder(KisImageSP image)
-    : KisMacro(image)
+        : KisMacro(image)
 {
 
 }

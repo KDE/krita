@@ -26,18 +26,19 @@ class Ui_FiltersListDynamicProgramEditor;
 class KisFiltersListDynamicProgram;
 class KisFiltersListModel;
 
-class KisFiltersListDynamicProgramEditor : public QWidget {
+class KisFiltersListDynamicProgramEditor : public QWidget
+{
     Q_OBJECT
-    public:
-        KisFiltersListDynamicProgramEditor(KisFiltersListDynamicProgram* program);
-        ~KisFiltersListDynamicProgramEditor();
-    private slots:
-        void setCurrentFilter(const QModelIndex&);
-    private:
-        KisFiltersListModel* m_filtersModel;
-        Ui_FiltersListDynamicProgramEditor* m_filtersListDynamicProgramEditor;
-        KisFiltersListDynamicProgram* m_program;
-        QWidget* m_currentFilterEditor;
+public:
+    KisFiltersListDynamicProgramEditor(KisFiltersListDynamicProgram* program);
+    ~KisFiltersListDynamicProgramEditor();
+private slots:
+    void setCurrentFilter(const QModelIndex&);
+private:
+    KisFiltersListModel* m_filtersModel;
+    Ui_FiltersListDynamicProgramEditor* m_filtersListDynamicProgramEditor;
+    KisFiltersListDynamicProgram* m_program;
+    QWidget* m_currentFilterEditor;
 };
 
 #endif

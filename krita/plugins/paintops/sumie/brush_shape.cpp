@@ -26,21 +26,24 @@ using namespace std;
 
 const float PI = 3.141592f;
 
-BrushShape::BrushShape(){
+BrushShape::BrushShape()
+{
 
 }
 
-BrushShape::~BrushShape(){
+BrushShape::~BrushShape()
+{
 
 }
 
 
-void BrushShape::fromGaussian(int radius, float sigma){
+void BrushShape::fromGaussian(int radius, float sigma)
+{
     m_radius = radius;
     m_sigma = sigma;
 
     m_width = m_height = radius * 2 + 1;
-    int gaussLength = (int)(m_width*m_width);
+    int gaussLength = (int)(m_width * m_width);
     //int center = (edgeSize - 1) / 2;
 
     float sigmaSquare = - 2.0 * sigma * sigma;
@@ -52,11 +55,11 @@ void BrushShape::fromGaussian(int radius, float sigma){
 
 
 
-    for (int y=-radius;y<=radius;y++){
-        for (int x=-radius;x<=radius;x++){
-            length = (exp( (x*x + y*y) / sigmaSquare ) * sigmaConst);
+    for (int y = -radius;y <= radius;y++) {
+        for (int x = -radius;x <= radius;x++) {
+            length = (exp((x * x + y * y) / sigmaSquare) * sigmaConst);
             total += length;
-            Bristle b(x,y,length);
+            Bristle b(x, y, length);
             b.setInkAmount(1.0f);
             m_bristles.append(b);
             p++;
@@ -72,11 +75,9 @@ void BrushShape::fromGaussian(int radius, float sigma){
     float result;
     int i = 0;
 
-    for (int x=0;x<m_width;x++)
-    {
-        for (int y=0;y<m_height;y++,i++)
-        {
-            result = (m_bristles[i].length() - minLen ) / dist;
+    for (int x = 0;x < m_width;x++) {
+        for (int y = 0;y < m_height;y++, i++) {
+            result = (m_bristles[i].length() - minLen) / dist;
             m_bristles[i].setLength(result);
         }
     }
@@ -88,7 +89,7 @@ void BrushShape::fromLine(int radius, float sigma)
     m_radius = radius;
     m_sigma = sigma;
 
-    m_width = radius*2+1;
+    m_width = radius * 2 + 1;
     m_height = 1;
 
     int gaussLength = m_width;
@@ -97,10 +98,9 @@ void BrushShape::fromLine(int radius, float sigma)
     float sigmaConst = 1.0f / (sigma * 2.506628f); /* sqrt(2.0*pi) */
 
     float length;
-    for (int x=-radius;x<=radius;x++)
-    {
-        length = exp(x*x / sigmaSquare) * sigmaConst;
-        Bristle b(x ,0.0f , length);
+    for (int x = -radius;x <= radius;x++) {
+        length = exp(x * x / sigmaSquare) * sigmaConst;
+        Bristle b(x , 0.0f , length);
         m_bristles.append(b);
     }
 
@@ -111,36 +111,41 @@ void BrushShape::fromLine(int radius, float sigma)
     // normalise lengths
     float result;
 
-    for (int x=0;x<m_width;x++)
-    {
-        result = (m_bristles[x].length() - minLen ) / dist;
+    for (int x = 0;x < m_width;x++) {
+        result = (m_bristles[x].length() - minLen) / dist;
         m_bristles[x].setLength(result);
     }
 }
 
-QVector<Bristle> BrushShape::getBristles(){
+QVector<Bristle> BrushShape::getBristles()
+{
     return m_bristles;
 }
 
-int BrushShape::width(){
+int BrushShape::width()
+{
     return m_width;
 }
 
-int BrushShape::height(){
+int BrushShape::height()
+{
     return m_height;
 }
 
-int BrushShape::radius(){
+int BrushShape::radius()
+{
     return m_radius;
 }
 
-float BrushShape::sigma(){
+float BrushShape::sigma()
+{
     return m_sigma;
 }
 
-void BrushShape::tresholdBristles(double treshold){
-    for (int i=0;i<m_bristles.size();i++){
-        if (m_bristles[i].length() < treshold){
+void BrushShape::tresholdBristles(double treshold)
+{
+    for (int i = 0;i < m_bristles.size();i++) {
+        if (m_bristles[i].length() < treshold) {
             m_bristles.remove(i);
         }
     }

@@ -39,10 +39,10 @@ class KRITAUI_EXPORT KisNodeModel : public KoDocumentSectionModel
 
 public: // from QAbstractItemModel
 
-    KisNodeModel(QObject * parent );
+    KisNodeModel(QObject * parent);
     ~KisNodeModel();
 
-    void setImage( KisImageSP image );
+    void setImage(KisImageSP image);
 
     KisNodeSP nodeFromIndex(const QModelIndex &index);
     vKisNodeSP nodesFromIndexes(const QModelIndexList &list);
@@ -56,14 +56,14 @@ public: // from QAbstractItemModel
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     virtual QStringList mimeTypes() const;
-    QMimeData * mimeData ( const QModelIndexList & indexes ) const;
-    virtual bool dropMimeData ( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent );
-    virtual Qt::DropActions supportedDragActions () const;
+    QMimeData * mimeData(const QModelIndexList & indexes) const;
+    virtual bool dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent);
+    virtual Qt::DropActions supportedDragActions() const;
     virtual Qt::DropActions supportedDropActions() const;
 
 signals:
 
-    void nodeActivated( KisNodeSP );
+    void nodeActivated(KisNodeSP);
     void requestAddNode(KisNodeSP node, KisNodeSP activeNode);
     void requestAddNode(KisNodeSP node, KisNodeSP parent, int index);
     void requestMoveNode(KisNodeSP node, KisNodeSP activeNode);
@@ -71,10 +71,10 @@ signals:
 
 private slots:
 
-    void beginInsertNodes( KisNode * parent, int index );
-    void endInsertNodes( KisNode * parent, int index );
-    void beginRemoveNodes( KisNode * parent, int index );
-    void endRemoveNodes( KisNode * parent, int index );
+    void beginInsertNodes(KisNode * parent, int index);
+    void endInsertNodes(KisNode * parent, int index);
+    void beginRemoveNodes(KisNode * parent, int index);
+    void endRemoveNodes(KisNode * parent, int index);
     void updateSettings();
 
 private:

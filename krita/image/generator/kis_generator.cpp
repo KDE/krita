@@ -30,22 +30,22 @@
 #include "kis_types.h"
 
 KisGenerator::KisGenerator(const KoID& id, const KoID & category, const QString & entry)
-    : KisBaseProcessor(id, category, entry)
+        : KisBaseProcessor(id, category, entry)
 {
-    setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(), new KisFilterConfigurationFactory(id.id(), 1) ));
+    setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(), new KisFilterConfigurationFactory(id.id(), 1)));
 }
 
 KisGenerator::~KisGenerator()
 {
 }
-    
+
 void KisGenerator::generate(KisProcessingInformation dst,
-                          const QSize& size,
-                          const KisFilterConfiguration* config
-        ) const
+                            const QSize& size,
+                            const KisFilterConfiguration* config
+                           ) const
 {
     generate(dst, size, config, 0);
-}        
+}
 
 const KoColorSpace * KisGenerator::colorSpace()
 {

@@ -27,9 +27,9 @@ class KisColorAdjustment;
 
 class LevelFilter : public KParts::Plugin
 {
-    public:
-        LevelFilter(QObject *parent, const QStringList &);
-        virtual ~LevelFilter();
+public:
+    LevelFilter(QObject *parent, const QStringList &);
+    virtual ~LevelFilter();
 };
 
 #endif

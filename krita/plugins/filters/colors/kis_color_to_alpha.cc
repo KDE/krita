@@ -44,26 +44,26 @@ KisFilterColorToAlpha::KisFilterColorToAlpha() : KisFilter(id(), CategoryColors,
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisFilterConfigWidget * KisFilterColorToAlpha::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageSP image ) const
+KisFilterConfigWidget * KisFilterColorToAlpha::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageSP image) const
 {
     Q_UNUSED(image);
-    return new KisWdgColorToAlpha( parent);
+    return new KisWdgColorToAlpha(parent);
 }
 
-KisFilterConfiguration* KisFilterColorToAlpha::factoryConfiguration(const KisPaintDeviceSP ) const
+KisFilterConfiguration* KisFilterColorToAlpha::factoryConfiguration(const KisPaintDeviceSP) const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("colortoalpha", 1);
-    config->setProperty("targetcolor", QColor(255,255,255) );
+    config->setProperty("targetcolor", QColor(255, 255, 255));
     config->setProperty("threshold", 0);
     return config;
 }
 
 void KisFilterColorToAlpha::process(KisConstProcessingInformation srcInfo,
-                 KisProcessingInformation dstInfo,
-                 const QSize& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-        ) const
+                                    KisProcessingInformation dstInfo,
+                                    const QSize& size,
+                                    const KisFilterConfiguration* config,
+                                    KoUpdater* progressUpdater
+                                   ) const
 {
     const KisPaintDeviceSP src = srcInfo.paintDevice();
     KisPaintDeviceSP dst = dstInfo.paintDevice();
@@ -72,17 +72,17 @@ void KisFilterColorToAlpha::process(KisConstProcessingInformation srcInfo,
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
 
-    if(config == 0) config = new KisFilterConfiguration("colortoalpha", 1);
+    if (config == 0) config = new KisFilterConfiguration("colortoalpha", 1);
 
     QVariant value;
-    QColor cTA = (config->getProperty("targetcolor", value)) ? value.value<QColor>() : QColor(255,255,255);
+    QColor cTA = (config->getProperty("targetcolor", value)) ? value.value<QColor>() : QColor(255, 255, 255);
     int threshold = (config->getProperty("threshold", value)) ? value.toInt() : 0;
 
-    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection() );
-    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), srcInfo.selection() );
+    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection());
+    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), srcInfo.selection());
 
     int totalCost = size.width() * size.height() / 100;
-    if( totalCost == 0 ) totalCost = 1;
+    if (totalCost == 0) totalCost = 1;
     int currentProgress = 0;
 
     const KoColorSpace * cs = src->colorSpace();
@@ -91,19 +91,16 @@ void KisFilterColorToAlpha::process(KisConstProcessingInformation srcInfo,
     quint8* color = new quint8[pixelsize];
     cs->fromQColor(cTA, color);
 
-    while( ! srcIt.isDone() )
-    {
-        if(srcIt.isSelected())
-        {
+    while (! srcIt.isDone()) {
+        if (srcIt.isSelected()) {
             quint8 d = cs->difference(color, srcIt.oldRawData());
-            if( d >= threshold )
-            {
-                    cs->setAlpha(dstIt.rawData(), 255, 1);
+            if (d >= threshold) {
+                cs->setAlpha(dstIt.rawData(), 255, 1);
             } else {
-                cs->setAlpha(dstIt.rawData(), (255 * d ) / threshold, 1 );
+                cs->setAlpha(dstIt.rawData(), (255 * d) / threshold, 1);
             }
         }
-        if(progressUpdater) progressUpdater->setProgress((++currentProgress) / totalCost);
+        if (progressUpdater) progressUpdater->setProgress((++currentProgress) / totalCost);
         ++srcIt;
         ++dstIt;
     }

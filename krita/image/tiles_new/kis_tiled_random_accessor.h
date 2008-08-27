@@ -27,7 +27,8 @@
 
 class KisTile;
 
-class KisTiledRandomAccessor : public KisShared {
+class KisTiledRandomAccessor : public KisShared
+{
     struct KisTileInfo {
         KisTile* tile;
         KisTile* oldtile;
@@ -35,33 +36,37 @@ class KisTiledRandomAccessor : public KisShared {
         const quint8* oldData;
         qint32 area_x1, area_y1, area_x2, area_y2;
     };
-    public:
-        KisTiledRandomAccessor(KisDataManager *ktm, qint32 x, qint32 y, bool writable);
-        KisTiledRandomAccessor(const KisTiledRandomAccessor& lhs);
-        ~KisTiledRandomAccessor();
+public:
+    KisTiledRandomAccessor(KisDataManager *ktm, qint32 x, qint32 y, bool writable);
+    KisTiledRandomAccessor(const KisTiledRandomAccessor& lhs);
+    ~KisTiledRandomAccessor();
 
 
-    private:
-        inline quint32 xToCol(quint32 x) const { if (m_ktm) return m_ktm->xToCol(x); else return 0; }
-        inline quint32 yToRow(quint32 y) const { if (m_ktm) return m_ktm->yToRow(y); else return 0; }
-        KisTileInfo* fetchTileData(qint32 col, qint32 row);
+private:
+    inline quint32 xToCol(quint32 x) const {
+        if (m_ktm) return m_ktm->xToCol(x); else return 0;
+    }
+    inline quint32 yToRow(quint32 y) const {
+        if (m_ktm) return m_ktm->yToRow(y); else return 0;
+    }
+    KisTileInfo* fetchTileData(qint32 col, qint32 row);
 
-    public:
-        /// Move to a given x,y position, fetch tiles and data
-        void moveTo(qint32 x, qint32 y);
-        quint8* rawData() const;
-        const quint8* oldRawData() const;
+public:
+    /// Move to a given x,y position, fetch tiles and data
+    void moveTo(qint32 x, qint32 y);
+    quint8* rawData() const;
+    const quint8* oldRawData() const;
 
-    private:
-        KisDataManager *m_ktm;
-        KisTileInfo** m_tilesCache;
-        quint32 m_tilesCacheSize;
-        qint32 m_pixelSize;
-        quint8* m_data;
-        const quint8* m_oldData;
-        bool m_writable;
-        int m_lastX, m_lastY;
-        static const quint32 CACHESIZE; // Define the number of tiles we keep in cache
+private:
+    KisDataManager *m_ktm;
+    KisTileInfo** m_tilesCache;
+    quint32 m_tilesCacheSize;
+    qint32 m_pixelSize;
+    quint8* m_data;
+    const quint8* m_oldData;
+    bool m_writable;
+    int m_lastX, m_lastY;
+    static const quint32 CACHESIZE; // Define the number of tiles we keep in cache
 
 };
 

@@ -25,20 +25,33 @@ struct KisDynamicProgram::Private {
     QString type;
 };
 
-KisDynamicProgram::KisDynamicProgram(const QString& name, const QString& type) : d(new Private) {
+KisDynamicProgram::KisDynamicProgram(const QString& name, const QString& type) : d(new Private)
+{
     d->name = name;
     d->type = type;
 }
 
-KisDynamicProgram::~KisDynamicProgram() { delete d; }
+KisDynamicProgram::~KisDynamicProgram()
+{
+    delete d;
+}
 
-QString KisDynamicProgram::name() const { return d->name; }
-QString KisDynamicProgram::id() const { return d->name; }
-QString KisDynamicProgram::type() const { return d->type; }
+QString KisDynamicProgram::name() const
+{
+    return d->name;
+}
+QString KisDynamicProgram::id() const
+{
+    return d->name;
+}
+QString KisDynamicProgram::type() const
+{
+    return d->type;
+}
 
 void KisDynamicProgram::fromXML(const QDomElement& e)
 {
-    Q_ASSERT(e.attribute("type","") == type());
+    Q_ASSERT(e.attribute("type", "") == type());
     d->name = e.attribute("name", "");
 }
 
@@ -55,7 +68,7 @@ struct KisDynamicProgramFactory::Private {
     QString name;
 };
 
-KisDynamicProgramFactory::KisDynamicProgramFactory(QString id, QString name) :d(new Private)
+KisDynamicProgramFactory::KisDynamicProgramFactory(QString id, QString name) : d(new Private)
 {
     d->id = id;
     d->name = name;

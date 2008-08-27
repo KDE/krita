@@ -28,7 +28,8 @@
 class KisNode;
 
 template <typename T>
-class KisChangeFilterCmd : public QUndoCommand {
+class KisChangeFilterCmd : public QUndoCommand
+{
 
 public:
     // The QStrings are the _serialized_ configs
@@ -36,24 +37,21 @@ public:
                        KisFilterConfiguration* config,
                        const QString& before,
                        const QString& after)
-        : QUndoCommand(i18n("Change Filter"))
-    {
+            : QUndoCommand(i18n("Change Filter")) {
         m_node = node;
         m_config = config;
         m_before = before;
         m_after = after;
     }
 public:
-    virtual void redo()
-    {
+    virtual void redo() {
         if (m_config)
             m_config->fromLegacyXML(m_after);
         m_node->setFilter(m_config);
         m_node->setDirty();
     }
 
-    virtual void undo()
-    {
+    virtual void undo() {
         if (m_config)
             m_config->fromLegacyXML(m_before);
         m_node->setFilter(m_config);
@@ -68,31 +66,29 @@ private:
 };
 
 template <typename T>
-class KisChangeGeneratorCmd : public QUndoCommand {
+class KisChangeGeneratorCmd : public QUndoCommand
+{
 
 public:
     // The QStrings are the _serialized_ configs
     KisChangeGeneratorCmd(T node,
-                       KisFilterConfiguration* config,
-                       const QString& before,
-                       const QString& after)
-        : QUndoCommand(i18n("Change Generator"))
-    {
+                          KisFilterConfiguration* config,
+                          const QString& before,
+                          const QString& after)
+            : QUndoCommand(i18n("Change Generator")) {
         m_node = node;
         m_config = config;
         m_before = before;
         m_after = after;
     }
 public:
-    virtual void redo()
-    {
+    virtual void redo() {
         m_config->fromLegacyXML(m_after);
         m_node->setGenerator(m_config);
         m_node->setDirty();
     }
 
-    virtual void undo()
-    {
+    virtual void undo() {
         m_config->fromLegacyXML(m_before);
         m_node->setGenerator(m_config);
         m_node->setDirty();
@@ -107,7 +103,8 @@ private:
 
 
 /// The command for moving of a node
-class KRITAIMAGE_EXPORT KisNodeMoveCommand : public QUndoCommand {
+class KRITAIMAGE_EXPORT KisNodeMoveCommand : public QUndoCommand
+{
 
 public:
     /**

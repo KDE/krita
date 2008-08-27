@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_PALETTE_WIDGET_H__
-#define __KIS_PALETTE_WIDGET_H__
+#ifndef __KIS_PALETTE_DOCKER_H__
+#define __KIS_PALETTE_DOCKER_H__
 
 #include <QDockWidget>
 #include <klocale.h>
@@ -39,16 +39,16 @@ class KisPaletteDocker : public QDockWidget
 {
     Q_OBJECT
 public:
-    KisPaletteDocker( KisView2 * view );
+    KisPaletteDocker(KisView2 * view);
     virtual ~KisPaletteDocker();
 
     QString palette() const;
 
 protected slots:
-    void colorSelected( const KoColor& color, bool final );
+    void colorSelected(const KoColor& color, bool final);
 
 protected:
-    void readNamedColor( void );
+    void readNamedColor(void);
 
 protected:
     KoColorSet *m_currentPalette;
@@ -58,14 +58,15 @@ protected:
 class KisPaletteDockerFactory : public KoDockFactory
 {
 public:
-    KisPaletteDockerFactory(KisView2 * view) { m_view = view; }
+    KisPaletteDockerFactory(KisView2 * view) {
+        m_view = view;
+    }
     ~KisPaletteDockerFactory() {}
 
     virtual QString id() const;
     QDockWidget * createDockWidget();
 
-    DockPosition defaultDockPosition() const
-    {
+    DockPosition defaultDockPosition() const {
         return DockMinimized;
     }
 

@@ -26,7 +26,8 @@
 
 class KisCanvas2;
 
-class KisToolPerspectiveGrid : public KisTool {
+class KisToolPerspectiveGrid : public KisTool
+{
     Q_OBJECT
     enum PerspectiveGridEditionMode {
         MODE_CREATION, // This is the mode when there is not yet a perspective grid
@@ -43,7 +44,9 @@ public:
     // KisToolPaint interface
     //
 
-    virtual quint32 priority() { return 3; }
+    virtual quint32 priority() {
+        return 3;
+    }
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
@@ -56,7 +59,7 @@ public slots:
     void deactivate();
 
 protected:
-    
+
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
     void drawGridCreation(QPainter& gc);
     void drawGrid(QPainter& gc);
@@ -64,7 +67,7 @@ protected:
 private:
     void drawSmallRectangle(QPainter& gc, const QPointF& p);
     bool mouseNear(const QPointF& mousep, const QPointF& point);
-    KisPerspectiveGridNodeSP nodeNearPoint( KisSubPerspectiveGrid* grid, QPointF point);
+    KisPerspectiveGridNodeSP nodeNearPoint(KisSubPerspectiveGrid* grid, QPointF point);
 
 protected:
     QPointF m_dragStart;
@@ -83,17 +86,17 @@ private:
 };
 
 
-class KisToolPerspectiveGridFactory : public KoToolFactory {
+class KisToolPerspectiveGridFactory : public KoToolFactory
+{
 
 public:
     KisToolPerspectiveGridFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolPerspectiveGrid", i18n( "Perspective grid" ))
-        {
-            setToolTip( i18n( "Edit the perspective grid" ) );
-            setToolType( TOOL_TYPE_VIEW );
-            setIcon( "tool_perspectivegrid" );
-            setPriority( 16 );
-        };
+            : KoToolFactory(parent, "KisToolPerspectiveGrid", i18n("Perspective grid")) {
+        setToolTip(i18n("Edit the perspective grid"));
+        setToolType(TOOL_TYPE_VIEW);
+        setIcon("tool_perspectivegrid");
+        setPriority(16);
+    };
 
 
     virtual ~KisToolPerspectiveGridFactory() {}

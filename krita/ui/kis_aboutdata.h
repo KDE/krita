@@ -27,15 +27,15 @@
 
 KAboutData * newKritaAboutData()
 {
-    KAboutData * aboutData = new KAboutData( "krita", 0,
-            ki18n("Krita"),
-            KOFFICE_VERSION_STRING,
-            ki18n("KOffice image manipulation application"),
-            KAboutData::License_GPL,
-            ki18n("(c) 1999-2008 The Krita team.\n"),
-            KLocalizedString(),
-            "http://www.koffice.org/krita",
-            "submit@bugs.kde.org");
+    KAboutData * aboutData = new KAboutData("krita", 0,
+                                            ki18n("Krita"),
+                                            KOFFICE_VERSION_STRING,
+                                            ki18n("KOffice image manipulation application"),
+                                            KAboutData::License_GPL,
+                                            ki18n("(c) 1999-2008 The Krita team.\n"),
+                                            KLocalizedString(),
+                                            "http://www.koffice.org/krita",
+                                            "submit@bugs.kde.org");
     aboutData->addAuthor(ki18n("Adrian Page"), KLocalizedString(), "Adrian.Page@tesco.net");
     aboutData->addAuthor(ki18n("Alan Horkan"), KLocalizedString(), "", "http://www.openclipart.org");
     aboutData->addAuthor(ki18n("Bart Coppens"), KLocalizedString(), "kde@bartcoppens.be");
@@ -48,8 +48,8 @@ KAboutData * newKritaAboutData()
     aboutData->addAuthor(ki18n("Danny Allen"), KLocalizedString() , "danny@dannyallen.co.uk");
     aboutData->addAuthor(ki18n("Emanuele Tamponi"), KLocalizedString(), "emanuele@valinor.it");
     aboutData->addAuthor(ki18n("Gábor Lehel"), KLocalizedString(), "<illissius@gmail.com>");
-    aboutData->addAuthor(ki18n("John Califf"),KLocalizedString(), "jcaliff@compuzone.net");
-    aboutData->addAuthor(ki18n("Laurent Montel"),KLocalizedString(), "lmontel@mandrakesoft.com");
+    aboutData->addAuthor(ki18n("John Califf"), KLocalizedString(), "jcaliff@compuzone.net");
+    aboutData->addAuthor(ki18n("Laurent Montel"), KLocalizedString(), "lmontel@mandrakesoft.com");
     aboutData->addAuthor(ki18n("Matthias Elter"), KLocalizedString(), "me@kde.org");
     aboutData->addAuthor(ki18n("Melchior Franz"), KLocalizedString(), "mfranz@kde.org");
     aboutData->addAuthor(ki18n("Michael Koch"), KLocalizedString(), "koch@kde.org");

@@ -47,13 +47,14 @@
 #include "KoResourceServerProvider.h"
 #include "KoColorSet.h"
 
-namespace {
-    // The location of the sample all visible layers in the combobox
-    const int SAMPLE_MERGED = 0;
+namespace
+{
+// The location of the sample all visible layers in the combobox
+const int SAMPLE_MERGED = 0;
 }
 
 KisToolColorPicker::KisToolColorPicker(KoCanvasBase* canvas)
-    :  KisTool(canvas, KisCursor::pickerCursor())
+        :  KisTool(canvas, KisCursor::pickerCursor())
 {
     setObjectName("tool_colorpicker");
     m_optionsWidget = 0;
@@ -86,8 +87,7 @@ void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
 
         bool sampleMerged = m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED;
         if (!sampleMerged) {
-            if (!currentNode())
-            {
+            if (!currentNode()) {
                 KMessageBox::information(0, i18n("Cannot pick a color as no layer is active."));
                 return;
             }
@@ -140,7 +140,7 @@ void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
                             // to sum to 255 in total
                             // It's -(counts -1), because we'll add the center one implicitly
                             // through that calculation
-                            weights[i] = 255 - (counts[m_radius]-1) * (255 / counts[m_radius]);
+                            weights[i] = 255 - (counts[m_radius] - 1) * (255 / counts[m_radius]);
                         } else {
                             weights[i] = 255 / counts[m_radius];
                         }
@@ -246,7 +246,7 @@ QWidget* KisToolColorPicker::createOptionWidget()
 
     QList<KoColorSet*> palettes = srv->resources();
 
-    foreach (KoColorSet *palette, palettes) {
+    foreach(KoColorSet *palette, palettes) {
         if (palette) {
             m_optionsWidget->cmbPalette->addItem(palette->name());
             m_palettes.append(palette);
@@ -276,15 +276,18 @@ void KisToolColorPicker::slotSetNormaliseValues(bool state)
     displayPickedColor();
 }
 
-void KisToolColorPicker::slotSetAddPalette(bool state) {
+void KisToolColorPicker::slotSetAddPalette(bool state)
+{
     m_addPalette = state;
 }
 
-void KisToolColorPicker::slotChangeRadius(int value) {
+void KisToolColorPicker::slotChangeRadius(int value)
+{
     m_radius = value;
 }
 
-void KisToolColorPicker::slotAddPalette(KoResource* resource) {
+void KisToolColorPicker::slotAddPalette(KoResource* resource)
+{
     KoColorSet* palette = dynamic_cast<KoColorSet*>(resource);
     if (palette) {
         m_optionsWidget->cmbPalette->addItem(palette->name());

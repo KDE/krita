@@ -24,7 +24,7 @@
 class KisConvolutionPainterTest : public QObject
 {
     Q_OBJECT
-    
+
 private slots:
 
     void testCreation();
@@ -33,7 +33,7 @@ private slots:
     void testMaskConvolution();
     void testMaskConvolutionOnColorChannels();
     void testMaskConvolutionOnRedChannel();
-    
+
 };
 
 #endif

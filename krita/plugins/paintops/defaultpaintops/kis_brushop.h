@@ -43,21 +43,29 @@ class QPointF;
 class KisPainter;
 class KCurve;
 
-class KisBrushOpFactory : public KisPaintOpFactory  {
+class KisBrushOpFactory : public KisPaintOpFactory
+{
 
 public:
     KisBrushOpFactory() {}
     virtual ~KisBrushOpFactory() {}
 
     virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
-    virtual QString id() const { return "paintbrush"; }
-    virtual QString name() const { return i18n("Pixel Brush"); }
-    virtual QString pixmap() { return "krita-paintbrush.png"; }
+    virtual QString id() const {
+        return "paintbrush";
+    }
+    virtual QString name() const {
+        return i18n("Pixel Brush");
+    }
+    virtual QString pixmap() {
+        return "krita-paintbrush.png";
+    }
     virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
 };
 
-class KisBrushOp : public KisBrushBasedPaintOp {
+class KisBrushOp : public KisBrushBasedPaintOp
+{
 
 public:
 

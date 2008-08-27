@@ -39,8 +39,8 @@
 #include <kis_paint_device.h>
 
 KisToolRectangle::KisToolRectangle(KoCanvasBase * canvas)
-    : KisToolShape(canvas, KisCursor::load("tool_rectangle_cursor.png", 6, 6)),
-      m_dragging (false)
+        : KisToolShape(canvas, KisCursor::load("tool_rectangle_cursor.png", 6, 6)),
+        m_dragging(false)
 {
     setObjectName("tool_rectangle");
 
@@ -62,7 +62,7 @@ void KisToolRectangle::paint(QPainter& gc, const KoViewConverter &converter)
         kWarning() << "No currentImage!";
         return;
     }
-    gc.scale( sx/currentImage()->xRes(), sy/currentImage()->yRes() );
+    gc.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
     if (m_dragging)
         paintRectangle(gc, QRect());
 }
@@ -149,17 +149,17 @@ void KisToolRectangle::mouseReleaseEvent(KoPointerEvent *event)
             return;
 
         delete m_painter;
-        m_painter = new KisPainter( device, currentSelection() );
+        m_painter = new KisPainter(device, currentSelection());
         Q_CHECK_PTR(m_painter);
 
-        m_painter->beginTransaction (i18n ("Rectangle"));
+        m_painter->beginTransaction(i18n("Rectangle"));
         setupPainter(m_painter);
         m_painter->setOpacity(m_opacity);
         m_painter->setCompositeOp(m_compositeOp);
 
         m_painter->paintRect(QRectF(m_dragStart, m_dragEnd));
         QRegion bound = m_painter->dirtyRegion();
-        device->setDirty( bound );
+        device->setDirty(bound);
         notifyModified();
 // Should not be necessary anymore
 #if 0

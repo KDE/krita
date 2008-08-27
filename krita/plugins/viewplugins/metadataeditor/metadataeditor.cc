@@ -48,21 +48,20 @@
 #include "kis_meta_data_editor.h"
 
 typedef KGenericFactory<metadataeditorPlugin> metadataeditorPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritametadataeditor, metadataeditorPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritametadataeditor, metadataeditorPluginFactory("krita"))
 
 metadataeditorPlugin::metadataeditorPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
-    if ( parent->inherits("KisView2") )
-    {
+    if (parent->inherits("KisView2")) {
         m_view = (KisView2*) parent;
 
         setComponentData(metadataeditorPluginFactory::componentData());
 
-        setXMLFile(KStandardDirs::locate("data","kritaplugins/metadataeditor.rc"), true);
+        setXMLFile(KStandardDirs::locate("data", "kritaplugins/metadataeditor.rc"), true);
 
         KAction *action  = new KAction(i18n("&Edit metadata..."), this);
-        actionCollection()->addAction("EditLayerMetaData", action );
+        actionCollection()->addAction("EditLayerMetaData", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotEditLayerMetaData()));
     }
 
@@ -77,7 +76,7 @@ void metadataeditorPlugin::slotEditLayerMetaData()
 {
     KisImageSP image = m_view->image();
     if (!image) return;
-    
+
     KisMetaDataEditor editor(m_view, m_view->layerManager()->activeLayer()->metaData());
     editor.exec();
 }

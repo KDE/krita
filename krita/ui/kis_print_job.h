@@ -24,12 +24,15 @@
 #include <kis_types.h>
 
 
-class KisPrintJob : public KoPrintJob {
+class KisPrintJob : public KoPrintJob
+{
 public:
     KisPrintJob(KisImageSP image);
 
 protected:
-    virtual QPrinter &printer() { return m_printer; }
+    virtual QPrinter &printer() {
+        return m_printer;
+    }
     virtual QList<QWidget*> createOptionWidgets() const;
     virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
 

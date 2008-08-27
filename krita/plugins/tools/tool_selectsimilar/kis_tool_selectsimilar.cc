@@ -81,7 +81,7 @@ void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const qu
 }
 
 KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
-    : KisTool(canvas, KisCursor::load("tool_similar_selection_plus_cursor.png", 6, 6))
+        : KisTool(canvas, KisCursor::load("tool_similar_selection_plus_cursor.png", 6, 6))
 {
     m_addCursor = KisCursor::load("tool_similar_selection_plus_cursor.png", 1, 21);
     m_subtractCursor = KisCursor::load("tool_similar_selection_minus_cursor.png", 1, 21);
@@ -90,16 +90,16 @@ KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
     m_fuzziness = 20;
     m_currentSelectAction = m_defaultSelectAction = SELECTION_REPLACE;
     m_timer = new QTimer(this);
-    connect(m_timer, SIGNAL(timeout()), SLOT(slotTimer()) );
+    connect(m_timer, SIGNAL(timeout()), SLOT(slotTimer()));
 }
 
 KisToolSelectSimilar::~KisToolSelectSimilar()
 {
 }
 
-void KisToolSelectSimilar::activate( bool tmp )
+void KisToolSelectSimilar::activate(bool tmp)
 {
-    super::activate( tmp );
+    super::activate(tmp);
 //    m_timer->start(50);
 //    setPickerCursor(m_currentSelectAction);
 
@@ -115,7 +115,7 @@ void KisToolSelectSimilar::deactivate()
 
 void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *e)
 {
-useCursor(m_subtractCursor);
+    useCursor(m_subtractCursor);
     if (m_canvas) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         quint8 opacity = OPACITY_OPAQUE;
@@ -133,8 +133,8 @@ useCursor(m_subtractCursor);
 
         QPointF pos = convertToPixelCoord(e);
 
-        KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*> ( m_canvas );
-        if ( !kisCanvas )
+        KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(m_canvas);
+        if (!kisCanvas)
             return;
 
         KoColor c;
@@ -156,7 +156,7 @@ useCursor(m_subtractCursor);
 
 void KisToolSelectSimilar::slotTimer()
 {
-    int state = QApplication::keyboardModifiers() & (Qt::ShiftModifier|Qt::ControlModifier|Qt::AltModifier);
+    int state = QApplication::keyboardModifiers() & (Qt::ShiftModifier | Qt::ControlModifier | Qt::AltModifier);
     selectionAction action;
 
     if (state == Qt::ShiftModifier)
@@ -214,7 +214,7 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
     m_selectionOptionsWidget->disableSelectionModeOption();
 
     l->addWidget(m_selectionOptionsWidget);
-    connect (m_selectionOptionsWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+    connect(m_selectionOptionsWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
     QHBoxLayout * hbox = new QHBoxLayout();
     Q_CHECK_PTR(hbox);

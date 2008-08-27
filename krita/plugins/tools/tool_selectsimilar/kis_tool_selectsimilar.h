@@ -36,7 +36,8 @@ class KoCanvasBase;
 
 class KisSelectionOptions;
 
-class KisToolSelectSimilar : public KisTool {
+class KisToolSelectSimilar : public KisTool
+{
 
     Q_OBJECT
     typedef KisTool super;
@@ -45,16 +46,15 @@ public:
     KisToolSelectSimilar(KoCanvasBase * canvas);
     virtual ~KisToolSelectSimilar();
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter)
-        {
-            Q_UNUSED(gc);
-            Q_UNUSED(converter);
-        }
+    virtual void paint(QPainter& gc, const KoViewConverter &converter) {
+        Q_UNUSED(gc);
+        Q_UNUSED(converter);
+    }
     virtual void mousePressEvent(KoPointerEvent *e);
 
 public slots:
 
-    void activate( bool );
+    void activate(bool);
     void deactivate();
 
     virtual void slotSetFuzziness(int);
@@ -80,21 +80,21 @@ private slots:
     void slotTimer();
 };
 
-class KisToolSelectSimilarFactory : public KoToolFactory {
+class KisToolSelectSimilarFactory : public KoToolFactory
+{
 
 public:
     KisToolSelectSimilarFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolSelectSimilar", i18n( "Select similar colors"))
-        {
-            setToolTip( i18n( "Select similar colors" ) );
-            setToolType( TOOL_TYPE_SELECTED );
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setIcon( "tool_similar_selection" );
-            setShortcut( KShortcut(Qt::CTRL + Qt::Key_E) );
-            setPriority( 57 );
-        }
+            : KoToolFactory(parent, "KisToolSelectSimilar", i18n("Select similar colors")) {
+        setToolTip(i18n("Select similar colors"));
+        setToolType(TOOL_TYPE_SELECTED);
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        setIcon("tool_similar_selection");
+        setShortcut(KShortcut(Qt::CTRL + Qt::Key_E));
+        setPriority(57);
+    }
 
-    virtual ~KisToolSelectSimilarFactory(){}
+    virtual ~KisToolSelectSimilarFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return  new KisToolSelectSimilar(canvas);

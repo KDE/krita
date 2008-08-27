@@ -26,8 +26,8 @@
 
 using namespace KUnitTest;
 
-KUNITTEST_MODULE( kunittest_kis_strategy_colorspace_grayscale_tester, "Greyscale ColorSpace Tester" );
-KUNITTEST_MODULE_REGISTER_TESTER( KisGrayColorSpaceTester );
+KUNITTEST_MODULE(kunittest_kis_strategy_colorspace_grayscale_tester, "Greyscale ColorSpace Tester");
+KUNITTEST_MODULE_REGISTER_TESTER(KisGrayColorSpaceTester);
 
 void KisGrayColorSpaceTester::allTests()
 {
@@ -123,7 +123,7 @@ void KisGrayColorSpaceTester::testMixColors()
     weights[1] = 127;
 
     cs->mixColors(pixelPtrs, weights, 2, outputPixel);
-     
+
     CHECK((int)outputPixel[KisGrayColorSpace::PIXEL_GRAY], 255);
     CHECK((int)outputPixel[KisGrayColorSpace::PIXEL_GRAY_ALPHA], 128);
 

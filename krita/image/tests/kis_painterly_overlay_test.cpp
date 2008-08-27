@@ -28,42 +28,42 @@
 void KisPainterlyOverlayTest::testConstructor()
 {
     KisPainterlyOverlay * overlay = new KisPainterlyOverlay();
-    Q_ASSERT( overlay );
+    Q_ASSERT(overlay);
     delete overlay;
 
     const KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
-    Q_ASSERT( cs );
+    Q_ASSERT(cs);
 
 }
 
 void KisPainterlyOverlayTest::testPainterlyOverlayColorSpace()
 {
     const KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
-    Q_ASSERT( cs );
-    QCOMPARE( cs->pixelSize(), uint(8 * sizeof( float )) );
+    Q_ASSERT(cs);
+    QCOMPARE(cs->pixelSize(), uint(8 * sizeof(float)));
 }
 
 void KisPainterlyOverlayTest::testPainterlyOverlayColorSpaceCell()
 {
     const KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
-    Q_ASSERT( cs );
-    Q_ASSERT( cs->compositeOp( COMPOSITE_OVER ) != 0 );
-    Q_ASSERT( cs->compositeOp( COMPOSITE_COPY ) != 0 );
+    Q_ASSERT(cs);
+    Q_ASSERT(cs->compositeOp(COMPOSITE_OVER) != 0);
+    Q_ASSERT(cs->compositeOp(COMPOSITE_COPY) != 0);
 
-    quint8 * bytes = cs->allocPixelBuffer( 1 );
-    memset( bytes, 0, cs->pixelSize() );
+    quint8 * bytes = cs->allocPixelBuffer(1);
+    memset(bytes, 0, cs->pixelSize());
 
     PainterlyOverlayFloatTraits::Cell * cell =
-        reinterpret_cast<PainterlyOverlayFloatTraits::Cell *>( bytes );
+        reinterpret_cast<PainterlyOverlayFloatTraits::Cell *>(bytes);
 
-    QVERIFY( cell->adsorbency == 0.0 );
-    QVERIFY( cell->gravity == 0.0 );
-    QVERIFY( cell->mixability == 0.0 );
-    QVERIFY( cell->height == 0.0 );
-    QVERIFY( cell->pigment_concentration == 0.0 );
-    QVERIFY( cell->viscosity == 0.0 );
-    QVERIFY( cell->volume == 0.0 );
-    QVERIFY( cell->wetness == 0.0 );
+    QVERIFY(cell->adsorbency == 0.0);
+    QVERIFY(cell->gravity == 0.0);
+    QVERIFY(cell->mixability == 0.0);
+    QVERIFY(cell->height == 0.0);
+    QVERIFY(cell->pigment_concentration == 0.0);
+    QVERIFY(cell->viscosity == 0.0);
+    QVERIFY(cell->volume == 0.0);
+    QVERIFY(cell->wetness == 0.0);
 
     delete cell;
 }
@@ -71,49 +71,49 @@ void KisPainterlyOverlayTest::testPainterlyOverlayColorSpaceCell()
 void KisPainterlyOverlayTest::testPainterlyOverlay()
 {
     KisPainterlyOverlaySP overlay = new KisPainterlyOverlay();
-    Q_ASSERT( overlay );
+    Q_ASSERT(overlay);
     const KisPainterlyOverlayColorSpace * cs = KisPainterlyOverlayColorSpace::instance();
-    Q_ASSERT( cs );
-    QVERIFY( *overlay->colorSpace() == *cs );
-    quint8 * bytes = cs->allocPixelBuffer( 1 );
-    memset( bytes, 0,  cs->pixelSize());
+    Q_ASSERT(cs);
+    QVERIFY(*overlay->colorSpace() == *cs);
+    quint8 * bytes = cs->allocPixelBuffer(1);
+    memset(bytes, 0,  cs->pixelSize());
 
-    overlay->fill( 0, 0, 100, 100, bytes );
+    overlay->fill(0, 0, 100, 100, bytes);
 
     {
         KisRectIteratorPixel it = overlay->createRectIterator(0, 0, 128, 128);
-        while ( !it.isDone() ) {
+        while (!it.isDone()) {
 
             PainterlyOverlayFloatTraits::Cell * cell =
-                reinterpret_cast<PainterlyOverlayFloatTraits::Cell *>( it.rawData() );
+                reinterpret_cast<PainterlyOverlayFloatTraits::Cell *>(it.rawData());
 
-            QVERIFY( cell->adsorbency == 0.0 );
-            QVERIFY( cell->gravity == 0.0 );
-            QVERIFY( cell->mixability == 0.0 );
-            QVERIFY( cell->height == 0.0 );
-            QVERIFY( cell->pigment_concentration == 0.0 );
-            QVERIFY( cell->viscosity == 0.0 );
-            QVERIFY( cell->volume == 0.0 );
-            QVERIFY( cell->wetness == 0.0 );
+            QVERIFY(cell->adsorbency == 0.0);
+            QVERIFY(cell->gravity == 0.0);
+            QVERIFY(cell->mixability == 0.0);
+            QVERIFY(cell->height == 0.0);
+            QVERIFY(cell->pigment_concentration == 0.0);
+            QVERIFY(cell->viscosity == 0.0);
+            QVERIFY(cell->volume == 0.0);
+            QVERIFY(cell->wetness == 0.0);
 
             cell->wetness = 1.0;
             cell->mixability = 1.1;
 
             ++it;
         }
-        QVERIFY( overlay->exactBounds() == QRect( 0, 0, 128, 128 ) );
+        QVERIFY(overlay->exactBounds() == QRect(0, 0, 128, 128));
     }
 
 
     {
         KisRectConstIteratorPixel it = overlay->createRectConstIterator(10, 10, 10, 10);
-        while ( !it.isDone() ) {
+        while (!it.isDone()) {
 
             const PainterlyOverlayFloatTraits::Cell * cell =
-                reinterpret_cast<const PainterlyOverlayFloatTraits::Cell *>( it.rawData() );
+                reinterpret_cast<const PainterlyOverlayFloatTraits::Cell *>(it.rawData());
 
-            QVERIFY( cell->wetness == 1.0 );
-            QVERIFY( cell->mixability < 1.2 && cell->mixability > 1.0 );
+            QVERIFY(cell->wetness == 1.0);
+            QVERIFY(cell->mixability < 1.2 && cell->mixability > 1.0);
 
             ++it;
         }

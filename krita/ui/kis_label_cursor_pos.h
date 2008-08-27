@@ -20,7 +20,8 @@
 
 #include <QLabel>
 
-class KisLabelCursorPos : public QLabel {
+class KisLabelCursorPos : public QLabel
+{
     Q_OBJECT
 
 public:

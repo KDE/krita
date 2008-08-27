@@ -27,14 +27,15 @@ class KisView2;
 class KActionCollection;
 class KisFilterStrategy;
 
-class KRITAUI_EXPORT KisImageManager : public QObject {
+class KRITAUI_EXPORT KisImageManager : public QObject
+{
 
     Q_OBJECT
 
 public:
 
 
-    KisImageManager(KisView2 * view );
+    KisImageManager(KisView2 * view);
     ~KisImageManager() {}
 
     void setup(KActionCollection * actionCollection);

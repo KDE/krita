@@ -65,7 +65,7 @@ static QMutex tempMutex;
 */
 
 KisTileSwapper::KisTileSwapper()
-    : m_swapQueueLock(QMutex::Recursive)
+        : m_swapQueueLock(QMutex::Recursive)
 {
     Q_ASSERT(KisTileSwapper::m_singleton == 0);
     //KisTileSwapper::m_singleton = this;
@@ -73,7 +73,8 @@ KisTileSwapper::KisTileSwapper()
     m_stopThread = false;
 }
 
-KisTileSwapper::~KisTileSwapper() {
+KisTileSwapper::~KisTileSwapper()
+{
     // Wait on ourself to stop...(this is called from the MAIN THREAD)
     m_stopThread = true;
     m_waitLock.lock();
@@ -103,9 +104,10 @@ KisTileSwapper::~KisTileSwapper() {
 #endif
 }
 
-KisTileSwapper* KisTileSwapper::instance() {
+KisTileSwapper* KisTileSwapper::instance()
+{
     tempMutex.lock(); // ### Look at the C++ book from Alexandrescu(?) for the 3-locking thing for singletons
-    if(KisTileSwapper::m_singleton == 0) {
+    if (KisTileSwapper::m_singleton == 0) {
         staticDeleter.setObject(KisTileSwapper::m_singleton, new KisTileSwapper()); // threadsafe?
         Q_CHECK_PTR(KisTileSwapper::m_singleton);
         m_singleton->start();
@@ -115,7 +117,8 @@ KisTileSwapper* KisTileSwapper::instance() {
     return KisTileSwapper::m_singleton;
 }
 
-void KisTileSwapper::run() {
+void KisTileSwapper::run()
+{
     forever {
         if (m_stopThread) // No locking, since it only changes from false to true
             return;
@@ -133,9 +136,9 @@ void KisTileSwapper::run() {
             tileData->lock.lock(); // No mutex locker here: we'd otherwise SLEEP in it!
 
             KisTileStoreMemory::SharedDataMemoryInfo* memInfo
-                    = dynamic_cast<KisTileStoreMemory::SharedDataMemoryInfo*>(tileData->storeData);
+            = dynamic_cast<KisTileStoreMemory::SharedDataMemoryInfo*>(tileData->storeData);
 
-            if ( tileData->references == 0 /* we are the last one */ ) {
+            if (tileData->references == 0 /* we are the last one */) {
                 assert(tileData->timesLockedInMemory == 0);
                 assert(!tileData->deleteable);
                 // The swap list was the last reference to this tile info, delete it
@@ -172,11 +175,13 @@ void KisTileSwapper::run() {
     }
 }
 
-KisSharedTileData::TimeDiffType KisTileSwapper::idleThreshold() {
+KisSharedTileData::TimeDiffType KisTileSwapper::idleThreshold()
+{
     return 500; // ###
 }
 
-void KisTileSwapper::enqueueForSwapping(KisSharedTileData* tileData) {
+void KisTileSwapper::enqueueForSwapping(KisSharedTileData* tileData)
+{
     QMutexLocker dataLock(&(tileData->lock));
 
     KisTileStoreMemory::SharedDataMemoryInfo* memInfo = dynamic_cast<KisTileStoreMemory::SharedDataMemoryInfo*>(tileData->storeData);
@@ -209,7 +214,8 @@ void KisTileSwapper::enqueueForSwapping(KisSharedTileData* tileData) {
 
 
 // ### ACTUALLY! Can we multithread file reads (whilst ftruncating, in particular)???
-void KisTileSwapper::addTileDataToSwapFile(KisSharedTileData* tileData) { // LOCKED
+void KisTileSwapper::addTileDataToSwapFile(KisSharedTileData* tileData)   // LOCKED
+{
     KisTileStoreMemory::SharedDataMemoryInfo* memInfo = dynamic_cast<KisTileStoreMemory::SharedDataMemoryInfo*>(tileData->storeData);
 
     // This tile is not yet in the file. Save it there
@@ -307,7 +313,8 @@ void KisTileSwapper::addTileDataToSwapFile(KisSharedTileData* tileData) { // LOC
 }
 
 
-unsigned long KisTileSwapper::shouldSleepAmountmsecs(KisSharedTileData* tileData) {
+unsigned long KisTileSwapper::shouldSleepAmountmsecs(KisSharedTileData* tileData)
+{
     // ASSUMPTION: Queue is still locked so it can't get pulled away under our feet! ### tileData also locked
     // Not old enough?
     KisSharedTileData::TimeDiffType age = tileData->lastUse.msecsTo(QTime::currentTime());
@@ -319,7 +326,8 @@ unsigned long KisTileSwapper::shouldSleepAmountmsecs(KisSharedTileData* tileData
     }
 }
 
-void KisTileSwapper::swapTileData(KisSharedTileData* tileData) { // LOCKED
+void KisTileSwapper::swapTileData(KisSharedTileData* tileData)   // LOCKED
+{
     /* Read comments at the beginning of swapTilesInStore*/
 
     Q_ASSERT(tileData);
@@ -346,7 +354,7 @@ void KisTileSwapper::swapTileData(KisSharedTileData* tileData) { // LOCKED
         addTileDataToSwapFile(tileData);
 
         QFile* file = memInfo->file;
-        if(!file) {
+        if (!file) {
             kWarning() << "Opening the file as QFile failed";
             m_swapForbidden = true;
             return;
@@ -356,16 +364,16 @@ void KisTileSwapper::swapTileData(KisSharedTileData* tileData) { // LOCKED
         quint8* data = 0;
         // ### TODO We could perhaps fwrite directly -> faster???
         if (!kritaMmap(data, 0, tileData->tileSize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, memInfo->filePos)) {
-                 kWarning() << "Initial mmap failed";
-                 memInfo->onFile = false;
-                 m_swapForbidden = true;
-                 return;
+            kWarning() << "Initial mmap failed";
+            memInfo->onFile = false;
+            m_swapForbidden = true;
+            return;
         }
 
         memcpy(data, tileData->data, tileData->tileSize);
         munmap(data, tileData->tileSize);
 
-             // ### tile pools
+        // ### tile pools
         delete[] tileData->data;
 
         //kDebug() << "Swapped out " << tileData->data;
@@ -390,10 +398,10 @@ void KisTileSwapper::swapTileData(KisSharedTileData* tileData) { // LOCKED
     memInfo->onFile = true;
     memInfo->isSwappable = false;
 
-/*
-    m_currentInMem--;
-    m_bytesInMem -= info->size;
-*/
+    /*
+        m_currentInMem--;
+        m_bytesInMem -= info->size;
+    */
 }
 
 void KisTileSwapper::fromSwap(KisSharedTileData* tileData)
@@ -421,7 +429,8 @@ void KisTileSwapper::fromSwap(KisSharedTileData* tileData)
     //m_bytesInMem += info->size;
 }
 
-void KisTileSwapper::fromSwappableList(KisSharedTileData* tileData) { // ### Special Locking policy
+void KisTileSwapper::fromSwappableList(KisSharedTileData* tileData)   // ### Special Locking policy
+{
     KisTileStoreMemory::SharedDataMemoryInfo* memInfo = dynamic_cast<KisTileStoreMemory::SharedDataMemoryInfo*>(tileData->storeData);
 
     assert(memInfo->isInSwappableList);
@@ -444,60 +453,62 @@ void KisTileSwapper::fromSwappableList(KisSharedTileData* tileData) { // ### Spe
     m_swapQueueLock.unlock();
 }
 
-void KisTileSwapper::ftruncateError(int errorNumber, off_t oldSize, off_t newSize, int tileSize, TempFile* tempFile) {
+void KisTileSwapper::ftruncateError(int errorNumber, off_t oldSize, off_t newSize, int tileSize, TempFile* tempFile)
+{
     // XXX make these maybe i18n()able and in an error box, but then through
     // some kind of proxy such that we don't pollute this with GUI code
     kWarning(DBG_AREA_TILES) << "Resizing the temporary swapfile failed!";
 
     // Be somewhat polite and try to figure out why it failed
     switch (errorNumber) {
-        case EIO:
-            kWarning(DBG_AREA_TILES) << "Error was E IO,"
-                                        " possible reason is a disk error!";
-            break;
-        case EINVAL: kWarning(DBG_AREA_TILES) << "Error was E INVAL,"
-                                                 " possible reason is that you are using more memory than "
-                                                 " the filesystem or disk can handle";
-            break;
-        default:
-            kWarning(DBG_AREA_TILES) << "Errno was:" << errno;
+    case EIO:
+        kWarning(DBG_AREA_TILES) << "Error was E IO,"
+        " possible reason is a disk error!";
+        break;
+    case EINVAL: kWarning(DBG_AREA_TILES) << "Error was E INVAL,"
+        " possible reason is that you are using more memory than "
+        " the filesystem or disk can handle";
+        break;
+    default:
+        kWarning(DBG_AREA_TILES) << "Errno was:" << errno;
     }
 
     kWarning(DBG_AREA_TILES) << "The swapfile is:" << tempFile->tempFile->fileName();
     kWarning(DBG_AREA_TILES) << "Will try to avoid using the swap any further";
 
     dbgTiles << " Failed ftruncate info:"
-            "tried adding " << tileSize << " bytes "
-            "(rounded to pagesize: " << newSize << ") "
-            "to a" << tempFile->fileSize << "bytes file (after adding)";
+    "tried adding " << tileSize << " bytes "
+    "(rounded to pagesize: " << newSize << ") "
+    "to a" << tempFile->fileSize << "bytes file (after adding)";
 
 #ifndef DO_NOT_PRINT_INFO
-            //printInfo();
+    //printInfo();
 #endif
 
     m_swapForbidden = true;
 }
 
 bool KisTileSwapper::kritaMmap(quint8*& result, void *start, size_t length,
-                               int prot, int flags, int fd, off_t offset) {
+                               int prot, int flags, int fd, off_t offset)
+{
     result = (quint8*) mmap(start, length, prot, flags, fd, offset);
 
     // Same here for warning and GUI
-    if (result == (quint8*)-1) {
+    if (result == (quint8*) - 1) {
         kWarning(DBG_AREA_TILES) << "mmap failed: errno is" << errno << "; we're probably going to crash very soon now...";
 
         // Try to ignore what happened and carry on, but unlikely that we'll get
         // much further, since the file resizing went OK and this is memory-related...
         if (errno == ENOMEM) {
             kWarning(DBG_AREA_TILES) << "mmap failed with E NOMEM! This means that"
-                    << "either there are no more memory mappings available for Krita, "
-                    << "or that there is no more memory available!" << endl;
+            << "either there are no more memory mappings available for Krita, "
+            << "or that there is no more memory available!" << endl;
         }
 
         kWarning(DBG_AREA_TILES) << "Trying to continue anyway (no guarantees)";
-        kWarning(DBG_AREA_TILES) <<" Will try to avoid using the swap any further";
-        dbgTiles <<" Failed mmap info:"
-                << "tried mapping " << length << " bytes" << endl;
+        kWarning(DBG_AREA_TILES) << " Will try to avoid using the swap any further";
+        dbgTiles << " Failed mmap info:"
+        << "tried mapping " << length << " bytes" << endl;
         /*if (!m_files.empty()) {
             dbgTiles << "Probably to a" << m_files.back().fileSize << " bytes file";
         }*/

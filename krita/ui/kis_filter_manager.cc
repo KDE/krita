@@ -67,14 +67,14 @@ void KisFilterManager::setup(KActionCollection * ac)
     d->actionCollection = ac;
 
     // Setup reapply action
-    d->reapplyAction = new KAction( i18n("Apply Filter Again"), this );
-    d->actionCollection->addAction( "filter_apply_again", d->reapplyAction );
-    d->reapplyAction->setShortcut( QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F) );
-    d->reapplyAction->setEnabled( false );
+    d->reapplyAction = new KAction(i18n("Apply Filter Again"), this);
+    d->actionCollection->addAction("filter_apply_again", d->reapplyAction);
+    d->reapplyAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
+    d->reapplyAction->setEnabled(false);
 
     // Setup list of filters
     QList<QString> filterList = KisFilterRegistry::instance()->keys();
-    for ( QList<QString>::Iterator it = filterList.begin(); it != filterList.end(); ++it ) {
+    for (QList<QString>::Iterator it = filterList.begin(); it != filterList.end(); ++it) {
         insertFilter(*it);
     }
     connect(KisFilterRegistry::instance(), SIGNAL(filterAdded(QString)), SLOT(insertFilter(const QString &)));
@@ -83,49 +83,45 @@ void KisFilterManager::setup(KActionCollection * ac)
 void KisFilterManager::insertFilter(const QString & name)
 {
     Q_ASSERT(d->actionCollection);
-    KisFilterSP f = KisFilterRegistry::instance()->value( name );
+    KisFilterSP f = KisFilterRegistry::instance()->value(name);
     Q_ASSERT(f);
-    if(d->filters2Action.keys().contains(f.data()) )
-    {
-        kWarning() <<"Filter" << name <<" has already been inserted";
+    if (d->filters2Action.keys().contains(f.data())) {
+        kWarning() << "Filter" << name << " has already been inserted";
         return;
     }
     KoID category = f->menuCategory();
-    KActionMenu* actionMenu = d->filterActionMenus[ category.id() ];
-    if(!actionMenu)
-    {
+    KActionMenu* actionMenu = d->filterActionMenus[ category.id()];
+    if (!actionMenu) {
         actionMenu = new KActionMenu(category.name(), this);
-        d->actionCollection->addAction(category.id(), actionMenu );
+        d->actionCollection->addAction(category.id(), actionMenu);
         d->filterActionMenus[category.id()] = actionMenu;
-        dbgUI <<"Creating entry menu for" << category.id() <<" with name" << category.name();
+        dbgUI << "Creating entry menu for" << category.id() << " with name" << category.name();
     }
 
-    KisFilterHandler* handler = new KisFilterHandler( this, f, d->view);
+    KisFilterHandler* handler = new KisFilterHandler(this, f, d->view);
 
     KAction * a = new KAction(f->menuEntry(), this);
     d->actionCollection->addAction(QString("krita_filter_%1").arg(name), a);
     d->filters2Action[f.data()] = a;
     connect(a, SIGNAL(triggered()), handler, SLOT(showDialog()));
-    actionMenu->addAction( a );
+    actionMenu->addAction(a);
 }
 
 void KisFilterManager::updateGUI()
 {
-    if ( !d->view ) return;
-    if ( !d->view->activeLayer() ) return;
+    if (!d->view) return;
+    if (!d->view->activeLayer()) return;
 
     KisLayerSP layer = d->view->activeLayer();
-    KisPaintLayerSP player = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>( layer.data()));
+    KisPaintLayerSP player = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(layer.data()));
 
     bool enable = player && (!layer->locked()) && layer->visible();
 
     d->reapplyAction->setEnabled(enable);
 
-    for(QHash<KisFilter*, KAction*>::iterator it = d->filters2Action.begin();
-        it != d->filters2Action.end(); ++it)
-    {
-        if(player && it.key()->workWith( player->paintDevice()->colorSpace() ))
-        {
+    for (QHash<KisFilter*, KAction*>::iterator it = d->filters2Action.begin();
+            it != d->filters2Action.end(); ++it) {
+        if (player && it.key()->workWith(player->paintDevice()->colorSpace())) {
             it.value()->setEnabled(enable);
         } else {
             it.value()->setEnabled(false);
@@ -135,9 +131,9 @@ void KisFilterManager::updateGUI()
 
 void KisFilterManager::setLastFilterHandler(KisFilterHandler* handler)
 {
-    disconnect(d->reapplyAction, SIGNAL(triggered()),0 ,0);
-    connect(d->reapplyAction, SIGNAL(triggered()), handler, SLOT(reapply()) );
+    disconnect(d->reapplyAction, SIGNAL(triggered()), 0 , 0);
+    connect(d->reapplyAction, SIGNAL(triggered()), handler, SLOT(reapply()));
     d->reapplyAction->setEnabled(true);
-    d->reapplyAction->setText(i18n("Apply Filter Again: %1", handler->filter()->name() ));
+    d->reapplyAction->setText(i18n("Apply Filter Again: %1", handler->filter()->name()));
 }
 

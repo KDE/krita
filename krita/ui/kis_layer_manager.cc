@@ -61,7 +61,6 @@
 
 #include "kis_config.h"
 #include "kis_cursor.h"
-#include "kis_shape_layer.h"
 #include "dialogs/kis_dlg_adj_layer_props.h"
 #include "dialogs/kis_dlg_adjustment_layer.h"
 #include "dialogs/kis_dlg_layer_properties.h"
@@ -81,28 +80,28 @@
 #include "widgets/kis_meta_data_merge_strategy_chooser_widget.h"
 #include "widgets/kis_wdg_generator.h"
 
-KisLayerManager::KisLayerManager( KisView2 * view, KisDoc2 * doc )
-    : m_view( view )
-    , m_doc( doc )
-    , m_imgFlatten( 0 )
-    , m_imgMergeLayer( 0 )
-    , m_actionAdjustmentLayer( 0 )
-    , m_actionGeneratorLayer( 0 )
-    , m_layerAdd( 0 )
-    , m_layerAddCloneLayer( 0 )
-    , m_layerAddShapeLayer( 0 )
-    , m_layerBottom( 0 )
-    , m_layerDup( 0 )
-    , m_layerHide( 0 )
-    , m_layerLower( 0 )
-    , m_layerProperties( 0 )
-    , m_layerRaise( 0 )
-    , m_layerRm( 0 )
-    , m_layerSaveAs( 0 )
-    , m_layerTop( 0 )
-    , m_actLayerVis( false )
-    , m_imgResizeToLayer( 0 )
-    , m_activeLayer( 0 )
+KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
+        : m_view(view)
+        , m_doc(doc)
+        , m_imgFlatten(0)
+        , m_imgMergeLayer(0)
+        , m_actionAdjustmentLayer(0)
+        , m_actionGeneratorLayer(0)
+        , m_layerAdd(0)
+        , m_layerAddCloneLayer(0)
+        , m_layerAddShapeLayer(0)
+        , m_layerBottom(0)
+        , m_layerDup(0)
+        , m_layerHide(0)
+        , m_layerLower(0)
+        , m_layerProperties(0)
+        , m_layerRaise(0)
+        , m_layerRm(0)
+        , m_layerSaveAs(0)
+        , m_layerTop(0)
+        , m_actLayerVis(false)
+        , m_imgResizeToLayer(0)
+        , m_activeLayer(0)
 {
 }
 
@@ -117,108 +116,108 @@ KisLayerSP KisLayerManager::activeLayer()
 
 KisPaintDeviceSP KisLayerManager::activeDevice()
 {
-    if ( m_activeLayer )
+    if (m_activeLayer)
         return m_activeLayer->paintDevice();
     else
         return 0;
 }
 
-void KisLayerManager::activateLayer( KisLayerSP layer )
+void KisLayerManager::activateLayer(KisLayerSP layer)
 {
-    Q_ASSERT( layer );
+    Q_ASSERT(layer);
     m_activeLayer = layer;
-    emit sigLayerActivated( layer );
+    emit sigLayerActivated(layer);
     layersUpdated();
-    m_view->resourceProvider()->slotNodeActivated( layer.data() );
+    m_view->resourceProvider()->slotNodeActivated(layer.data());
 }
 
 
 void KisLayerManager::setup(KActionCollection * actionCollection)
 {
     m_imgFlatten  = new KAction(i18n("&Flatten image"), this);
-    actionCollection->addAction("flatten_image", m_imgFlatten );
-    m_imgFlatten->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_E));
+    actionCollection->addAction("flatten_image", m_imgFlatten);
+    m_imgFlatten->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_E));
     connect(m_imgFlatten, SIGNAL(triggered()), this, SLOT(flattenImage()));
 
     m_imgMergeLayer  = new KAction(i18n("&Merge with Layer Below"), this);
-    actionCollection->addAction("merge_layer", m_imgMergeLayer );
-    m_imgMergeLayer->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_E));
+    actionCollection->addAction("merge_layer", m_imgMergeLayer);
+    m_imgMergeLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
     connect(m_imgMergeLayer, SIGNAL(triggered()), this, SLOT(mergeLayer()));
 
     m_layerAdd  = new KAction(i18n("&Add..."), this);
-    actionCollection->addAction("insert_layer", m_layerAdd );
-    m_layerAdd->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_N));
+    actionCollection->addAction("insert_layer", m_layerAdd);
+    m_layerAdd->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_N));
     connect(m_layerAdd, SIGNAL(triggered()), this, SLOT(layerAdd()));
 
     m_actionAdjustmentLayer  = new KAction(i18n("&Filter Layer"), this);
-    actionCollection->addAction("insert_adjustment_layer", m_actionAdjustmentLayer );
+    actionCollection->addAction("insert_adjustment_layer", m_actionAdjustmentLayer);
     connect(m_actionAdjustmentLayer, SIGNAL(triggered()), this, SLOT(addAdjustmentLayer()));
 
     m_actionGeneratorLayer  = new KAction(i18n("&Generator Layer"), this);
-    actionCollection->addAction("insert_Generator_layer", m_actionGeneratorLayer );
+    actionCollection->addAction("insert_Generator_layer", m_actionGeneratorLayer);
     connect(m_actionGeneratorLayer, SIGNAL(triggered()), this, SLOT(addGeneratorLayer()));
 
     m_layerAddCloneLayer  = new KAction(i18n("&Clone Layer"), this);
-    actionCollection->addAction("insert_clone_layer", m_layerAddCloneLayer );
+    actionCollection->addAction("insert_clone_layer", m_layerAddCloneLayer);
     connect(m_layerAddCloneLayer, SIGNAL(triggered()), this, SLOT(addCloneLayer()));
 
     m_layerAddShapeLayer  = new KAction(i18n("&Shape Layer"), this);
-    actionCollection->addAction("insert_shape_layer", m_layerAddShapeLayer );
+    actionCollection->addAction("insert_shape_layer", m_layerAddShapeLayer);
     connect(m_layerAddShapeLayer, SIGNAL(triggered()), this, SLOT(addShapeLayer()));
 
     m_layerRm  = new KAction(i18n("&Remove"), this);
-    actionCollection->addAction("remove_layer", m_layerRm );
+    actionCollection->addAction("remove_layer", m_layerRm);
     connect(m_layerRm, SIGNAL(triggered()), this, SLOT(layerRemove()));
 
     m_layerDup  = new KAction(i18n("Duplicate"), this);
-    actionCollection->addAction("duplicate_layer", m_layerDup );
+    actionCollection->addAction("duplicate_layer", m_layerDup);
     connect(m_layerDup, SIGNAL(triggered()), this, SLOT(layerDuplicate()));
 
     m_layerHide  = new KToggleAction(i18n("&Hide"), this);
-    actionCollection->addAction("hide_layer", m_layerHide );
+    actionCollection->addAction("hide_layer", m_layerHide);
     connect(m_layerHide, SIGNAL(triggered()), this,  SLOT(layerToggleVisible()));
 
     m_layerHide->setCheckedState(KGuiItem(i18n("&Show")));
     m_layerHide->setChecked(false);
 
     m_layerRaise  = new KAction(KIcon("go-up"), i18n("Raise"), this);
-    actionCollection->addAction("raiselayer", m_layerRaise );
-    m_layerRaise->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_BracketRight));
+    actionCollection->addAction("raiselayer", m_layerRaise);
+    m_layerRaise->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_BracketRight));
     connect(m_layerRaise, SIGNAL(triggered()), this, SLOT(layerRaise()));
 
     m_layerLower  = new KAction(KIcon("go-down"), i18n("Lower"), this);
-    actionCollection->addAction("lowerlayer", m_layerLower );
-    m_layerLower->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_BracketLeft));
+    actionCollection->addAction("lowerlayer", m_layerLower);
+    m_layerLower->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_BracketLeft));
     connect(m_layerLower, SIGNAL(triggered()), this, SLOT(layerLower()));
 
     m_layerTop  = new KAction(KIcon("go-top"), i18n("To Top"), this);
-    actionCollection->addAction("toplayer", m_layerTop );
-    m_layerTop->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_BracketRight));
+    actionCollection->addAction("toplayer", m_layerTop);
+    m_layerTop->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_BracketRight));
     connect(m_layerTop, SIGNAL(triggered()), this, SLOT(layerFront()));
 
     m_layerBottom  = new KAction(KIcon("go-down"), i18n("To Bottom"), this);
-    actionCollection->addAction("bottomlayer", m_layerBottom );
-    m_layerBottom->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_BracketLeft));
+    actionCollection->addAction("bottomlayer", m_layerBottom);
+    m_layerBottom->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_BracketLeft));
     connect(m_layerBottom, SIGNAL(triggered()), this, SLOT(layerBack()));
 
     m_layerProperties  = new KAction(i18n("Properties..."), this);
-    actionCollection->addAction("layer_properties", m_layerProperties );
+    actionCollection->addAction("layer_properties", m_layerProperties);
     connect(m_layerProperties, SIGNAL(triggered()), this, SLOT(layerProperties()));
 
     m_layerSaveAs  = new KAction(KIcon("document-save"), i18n("Save Layer as Image..."), this);
-    actionCollection->addAction("save_layer_as_image", m_layerSaveAs );
+    actionCollection->addAction("save_layer_as_image", m_layerSaveAs);
     connect(m_layerSaveAs, SIGNAL(triggered()), this, SLOT(saveLayerAsImage()));
 
     KAction * action  = new KAction(KIcon("view-split-left-right"), i18n("Flip on &X Axis"), this);
-    actionCollection->addAction("mirrorLayerX", action );
+    actionCollection->addAction("mirrorLayerX", action);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorLayerX()));
 
     action  = new KAction(KIcon("view-split-top-bottom"), i18n("Flip on &Y Axis"), this);
-    actionCollection->addAction("mirrorLayerY", action );
+    actionCollection->addAction("mirrorLayerY", action);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorLayerY()));
 
     m_imgResizeToLayer  = new KAction(i18n("Resize Image to Size of Current Layer"), this);
-    actionCollection->addAction("resizeimgtolayer", m_imgResizeToLayer );
+    actionCollection->addAction("resizeimgtolayer", m_imgResizeToLayer);
     connect(m_imgResizeToLayer, SIGNAL(triggered()), this, SLOT(imgResizeToActiveLayer()));
 }
 
@@ -265,7 +264,7 @@ void KisLayerManager::updateGUI()
 
     m_imgResizeToLayer->setEnabled(activeLayer());
 
-    if( m_view->statusBar() )
+    if (m_view->statusBar())
         m_view->statusBar()->setProfile(img);
 }
 
@@ -315,14 +314,11 @@ void KisLayerManager::layerOpacity(double opacity, bool final)
 
     if (opacity == layer->opacity()) return;
 
-    if (!final)
-    {
-        layer->setOpacity( static_cast<int>( opacity ) );
+    if (!final) {
+        layer->setOpacity(static_cast<int>(opacity));
         layer->setDirty();
-    }
-    else
-    {
-        m_doc->addCommand(new KisLayerOpacityCommand(layer, layer->opacity(), static_cast<int>( opacity )));
+    } else {
+        m_doc->addCommand(new KisLayerOpacityCommand(layer, layer->opacity(), static_cast<int>(opacity)));
     }
 }
 
@@ -353,47 +349,43 @@ void KisLayerManager::layerProperties()
 {
     KisLayerSP layer = m_activeLayer;
 
-    if ( !layer ) return;
+    if (!layer) return;
 
     const KoColorSpace * cs = 0;
-    KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>( layer.data() );
-    if ( pl ) {
+    KisPaintLayer * pl = dynamic_cast<KisPaintLayer*>(layer.data());
+    if (pl) {
         cs = pl->paintDevice()->colorSpace();
-    }
-    else {
+    } else {
         cs = layer->image()->colorSpace();
     }
 
 
-    if (KisAdjustmentLayerSP alayer = KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(layer.data())))
-    {
+    if (KisAdjustmentLayerSP alayer = KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(layer.data()))) {
         KisPaintDeviceSP dev = alayer->projection();
-        KisLayerSP prev = dynamic_cast<KisLayer*>( alayer->prevSibling().data() );
-        if ( prev ) dev = prev->projection();
+        KisLayerSP prev = dynamic_cast<KisLayer*>(alayer->prevSibling().data());
+        if (prev) dev = prev->projection();
 
-        KisDlgAdjLayerProps dlg( dev, alayer->image(), alayer->filter(), alayer->name(), i18n("Filter Layer Properties"), m_view, "dlgadjlayerprops");
+        KisDlgAdjLayerProps dlg(dev, alayer->image(), alayer->filter(), alayer->name(), i18n("Filter Layer Properties"), m_view, "dlgadjlayerprops");
         KisFilterConfiguration* config = dlg.filterConfiguration();
         QString before;
         if (config)
             before = config->toLegacyXML();
-        if (dlg.exec() == QDialog::Accepted)
-        {
+        if (dlg.exec() == QDialog::Accepted) {
 
             QString after;
             if (dlg.filterConfiguration())
                 after = dlg.filterConfiguration()->toLegacyXML();
             alayer->setName(dlg.layerName());
             KisChangeFilterCmd<KisAdjustmentLayerSP> * cmd
-                = new KisChangeFilterCmd<KisAdjustmentLayerSP>(alayer,
-                                                               dlg.filterConfiguration(),
-                                                               before,
-                                                               after );
+            = new KisChangeFilterCmd<KisAdjustmentLayerSP>(alayer,
+                    dlg.filterConfiguration(),
+                    before,
+                    after);
             cmd->redo();
             m_view->undoAdapter()->addCommand(cmd);
-            m_doc->setModified( true );
+            m_doc->setModified(true);
         }
-    }
-    else if (KisGeneratorLayerSP alayer = KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(layer.data()))) {
+    } else if (KisGeneratorLayerSP alayer = KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(layer.data()))) {
 
         KisDlgGeneratorLayer dlg(alayer->name(), m_view);
         dlg.setCaption(i18n("Generator Layer Properties"));
@@ -404,44 +396,40 @@ void KisLayerManager::layerProperties()
         if (dlg.exec() == QDialog::Accepted) {
 
             KisChangeGeneratorCmd<KisGeneratorLayerSP> * cmd
-                = new KisChangeGeneratorCmd<KisGeneratorLayerSP>(alayer,
-                                                              dlg.configuration(),
-                                                              before,
-                                                              dlg.configuration()->toLegacyXML());
+            = new KisChangeGeneratorCmd<KisGeneratorLayerSP>(alayer,
+                    dlg.configuration(),
+                    before,
+                    dlg.configuration()->toLegacyXML());
             cmd->redo();
             m_view->undoAdapter()->addCommand(cmd);
-            m_doc->setModified( true );
+            m_doc->setModified(true);
 
         }
-    }
-    else
-    {
+    } else {
         KisDlgLayerProperties dlg(layer->name(),
                                   layer->opacity(),
                                   layer->compositeOp(),
                                   cs,
                                   layer->channelFlags());
-        if (dlg.exec() == QDialog::Accepted)
-        {
+        if (dlg.exec() == QDialog::Accepted) {
             QBitArray newChannelFlags = dlg.getChannelFlags();
             QBitArray oldChannelFlags = layer->channelFlags();
 
             if (layer->name() != dlg.getName() ||
-                layer->opacity() != dlg.getOpacity() ||
-                layer->compositeOp() != dlg.getCompositeOp() ||
-                oldChannelFlags != newChannelFlags
-               )
-            {
+                    layer->opacity() != dlg.getOpacity() ||
+                    layer->compositeOp() != dlg.getCompositeOp() ||
+                    oldChannelFlags != newChannelFlags
+               ) {
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
                 m_view->undoAdapter()->addCommand(new KisImageLayerPropsCommand(layer->image(),
-                    layer,
-                    dlg.getOpacity(),
-                    dlg.getCompositeOp(),
-                    dlg.getName(),
-                    newChannelFlags));
+                                                  layer,
+                                                  dlg.getOpacity(),
+                                                  dlg.getCompositeOp(),
+                                                  dlg.getName(),
+                                                  newChannelFlags));
                 layer->setDirty();
                 QApplication::restoreOverrideCursor();
-                m_doc->setModified( true );
+                m_doc->setModified(true);
             }
         }
     }
@@ -453,8 +441,7 @@ void KisLayerManager::layerAdd()
     KisImageSP img = m_view->image();
     if (img && activeLayer()) {
         addLayer(activeLayer()->parent(), activeLayer());
-    }
-    else if (img)
+    } else if (img)
         addLayer(img->rootLayer(), KisLayerSP(0));
 }
 
@@ -466,7 +453,7 @@ void KisLayerManager::addLayer(KisNodeSP parent, KisNodeSP above)
         QString profilename;
         KisLayerSP layer = KisLayerSP(new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE, img->colorSpace()));
         if (layer) {
-            layer->setCompositeOp(img->colorSpace()->compositeOp( COMPOSITE_OVER ));
+            layer->setCompositeOp(img->colorSpace()->compositeOp(COMPOSITE_OVER));
             img->addNode(layer.data(), parent.data(), above.data());
             m_view->canvas()->update();
         } else {
@@ -481,7 +468,7 @@ void KisLayerManager::addGroupLayer(KisNodeSP parent, KisNodeSP above)
     if (img) {
         KisLayerSP layer = KisLayerSP(new KisGroupLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE));
         if (layer) {
-            layer->setCompositeOp(img->colorSpace()->compositeOp( COMPOSITE_OVER ));
+            layer->setCompositeOp(img->colorSpace()->compositeOp(COMPOSITE_OVER));
             img->addNode(layer.data(), parent.data(), above.data());
             m_view->canvas()->update();
         } else {
@@ -496,20 +483,19 @@ void KisLayerManager::addCloneLayer()
     KisImageSP img = m_view->image();
     if (img && activeLayer()) {
         addCloneLayer(activeLayer()->parent(), activeLayer());
-    }
-    else if (img)
+    } else if (img)
         addCloneLayer(img->rootLayer(), KisLayerSP(0));
 }
 
-void KisLayerManager::addCloneLayer( KisNodeSP parent, KisNodeSP above )
+void KisLayerManager::addCloneLayer(KisNodeSP parent, KisNodeSP above)
 {
     KisImageSP img = m_view->image();
-    if ( img ) {
+    if (img) {
         // Check whether we are not cloning a parent layer
-        if ( KisGroupLayer * from = dynamic_cast<KisGroupLayer*>( m_activeLayer.data() ) ) {
+        if (KisGroupLayer * from = dynamic_cast<KisGroupLayer*>(m_activeLayer.data())) {
             KisNodeSP parent = parent;
-            while ( parent && parent != img->root() ) {
-                if ( parent.data() == from ) {
+            while (parent && parent != img->root()) {
+                if (parent.data() == from) {
                     // The chosen layer is one of our own parents -- this will
                     // lead to cyclic behaviour when updating. Don't do that!
                     return;
@@ -518,12 +504,12 @@ void KisLayerManager::addCloneLayer( KisNodeSP parent, KisNodeSP above )
             }
         }
 
-        KisLayerSP layer = new KisCloneLayer( m_activeLayer, img.data(), img->nextLayerName(), OPACITY_OPAQUE );
+        KisLayerSP layer = new KisCloneLayer(m_activeLayer, img.data(), img->nextLayerName(), OPACITY_OPAQUE);
 
-        if ( layer ) {
+        if (layer) {
 
-            layer->setCompositeOp( img->colorSpace()->compositeOp( COMPOSITE_OVER ) );
-            img->addNode( layer.data(), parent.data(), above.data() );
+            layer->setCompositeOp(img->colorSpace()->compositeOp(COMPOSITE_OVER));
+            img->addNode(layer.data(), parent.data(), above.data());
 
             m_view->canvas()->update();
 
@@ -539,26 +525,25 @@ void KisLayerManager::addShapeLayer()
     KisImageSP img = m_view->image();
     if (img && activeLayer()) {
         addShapeLayer(activeLayer()->parent(), activeLayer());
-    }
-    else if (img)
+    } else if (img)
         addShapeLayer(img->rootLayer(), KisLayerSP(0));
 }
 
 
-void KisLayerManager::addShapeLayer( KisNodeSP parent, KisNodeSP above )
+void KisLayerManager::addShapeLayer(KisNodeSP parent, KisNodeSP above)
 {
     KisImageSP img = m_view->image();
-    if ( img ) {
+    if (img) {
         // XXX: Make work with nodes!
-        KisLayer * parentLayer = dynamic_cast<KisLayer*>( parent.data() );
+        KisLayer * parentLayer = dynamic_cast<KisLayer*>(parent.data());
         KoShapeContainer * parentContainer =
-            dynamic_cast<KoShapeContainer*>( m_doc->shapeForNode( parentLayer ) );
-        if ( !parentContainer ) return;
+            dynamic_cast<KoShapeContainer*>(m_doc->shapeForNode(parentLayer));
+        if (!parentContainer) return;
 
-        KisLayerSP layer = new KisShapeLayer(parentContainer, img.data(), img->nextLayerName(), OPACITY_OPAQUE );
-        if ( layer ) {
-            layer->setCompositeOp( img->colorSpace()->compositeOp( COMPOSITE_OVER ) );
-            img->addNode( layer.data(), parent, above.data() );
+        KisLayerSP layer = new KisShapeLayer(parentContainer, img.data(), img->nextLayerName(), OPACITY_OPAQUE);
+        if (layer) {
+            layer->setCompositeOp(img->colorSpace()->compositeOp(COMPOSITE_OVER));
+            img->addNode(layer.data(), parent, above.data());
             m_view->canvas()->update();
         } else {
             KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
@@ -569,7 +554,7 @@ void KisLayerManager::addShapeLayer( KisNodeSP parent, KisNodeSP above )
 
 void KisLayerManager::addAdjustmentLayer()
 {
-    addAdjustmentLayer( activeLayer()->parent(), activeLayer() );
+    addAdjustmentLayer(activeLayer()->parent(), activeLayer());
 }
 
 void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
@@ -584,24 +569,23 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
     KisPaintDeviceSP dev = l->projection();
 
     KisSelectionSP selection;
-    if ( l->selection() )
+    if (l->selection())
         selection = l->selection();
     else
         selection = img->globalSelection();
 
-    KisAdjustmentLayerSP adjl = addAdjustmentLayer( parent, above, QString(), 0, selection);
+    KisAdjustmentLayerSP adjl = addAdjustmentLayer(parent, above, QString(), 0, selection);
 
     KisDlgAdjustmentLayer dlg(adjl, adjl.data(), dev, adjl->image(), img->nextLayerName(), i18n("New Filter Layer"), m_view, "dlgadjustmentlayer");
-    if ( dlg.exec() != QDialog::Accepted) {
-        m_view->image()->removeNode( adjl );
-    }
-    else {
-        adjl->setName( dlg.layerName() );
+    if (dlg.exec() != QDialog::Accepted) {
+        m_view->image()->removeNode(adjl);
+    } else {
+        adjl->setName(dlg.layerName());
     }
 }
 
 KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above, const QString & name,
-                                 KisFilterConfiguration * filter, KisSelectionSP selection)
+        KisFilterConfiguration * filter, KisSelectionSP selection)
 {
     Q_ASSERT(parent);
 
@@ -616,7 +600,7 @@ KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNo
 
 void KisLayerManager::addGeneratorLayer()
 {
-    addGeneratorLayer( activeLayer()->parent(), activeLayer() );
+    addGeneratorLayer(activeLayer()->parent(), activeLayer());
 }
 
 void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above)
@@ -631,7 +615,7 @@ void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above)
         KisSelectionSP selection = m_view->selection();
         KisFilterConfiguration * generator = dlg.configuration();
         QString name = dlg.layerName();
-        addGeneratorLayer( parent, above, name, generator, selection);
+        addGeneratorLayer(parent, above, name, generator, selection);
     }
 
 }
@@ -687,11 +671,11 @@ void KisLayerManager::layerDuplicate()
     if (!active)
         return;
 
-    KisLayerSP dup = dynamic_cast<KisLayer*>( active->clone().data() );
-    dup->setName(i18n("Duplicate of '%1'",active->name()));
+    KisLayerSP dup = dynamic_cast<KisLayer*>(active->clone().data());
+    dup->setName(i18n("Duplicate of '%1'", active->name()));
     img->addNode(dup.data(), active->parent(), active.data());
     if (dup) {
-        activateLayer( dup );
+        activateLayer(dup);
         dup->setDirty();
         m_view->canvas()->update();
     } else {
@@ -754,17 +738,17 @@ void KisLayerManager::layerBack()
 
 void KisLayerManager::rotateLayer180()
 {
-    rotateLayer( M_PI );
+    rotateLayer(M_PI);
 }
 
 void KisLayerManager::rotateLayerLeft90()
 {
-    rotateLayer( M_PI/2 - 2*M_PI );
+    rotateLayer(M_PI / 2 - 2*M_PI);
 }
 
 void KisLayerManager::rotateLayerRight90()
 {
-    rotateLayer( M_PI/2 );
+    rotateLayer(M_PI / 2);
 }
 
 void KisLayerManager::mirrorLayerX()
@@ -816,7 +800,7 @@ void KisLayerManager::scaleLayer(double sx, double sy, KisFilterStrategy *filter
     if (!layer) return;
 
     KisSelectedTransaction * t = 0;
-    if (m_view->undoAdapter() && m_view->undoAdapter()->undo() && layer->selection() ) {
+    if (m_view->undoAdapter() && m_view->undoAdapter()->undo() && layer->selection()) {
         t = new KisSelectedTransaction(i18n("Scale Layer"), layer);
         Q_CHECK_PTR(t);
     }
@@ -847,14 +831,14 @@ void KisLayerManager::rotateLayer(double radians)
     KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Triangle");
     QRect r;
 
-    if(KisSelectionSP selection = activeLayer()->selection())
+    if (KisSelectionSP selection = activeLayer()->selection())
         r = selection->selectedExactRect();
     else
         r = layer->exactBounds();
-    double cx = r.x()+r.width()/2.0;
-    double cy = r.y()+r.height()/2.0;
-    qint32 tx = qint32(cx*cos(radians) - cy*sin(radians) - cx + 0.5);
-    qint32 ty = qint32(cy*cos(radians) + cx*sin(radians) - cy + 0.5);
+    double cx = r.x() + r.width() / 2.0;
+    double cy = r.y() + r.height() / 2.0;
+    qint32 tx = qint32(cx * cos(radians) - cy * sin(radians) - cx + 0.5);
+    qint32 ty = qint32(cy * cos(radians) + cx * sin(radians) - cy + 0.5);
     KisTransformWorker tw(layer->paintDevice(), 1.0, 1.0, 0, 0, radians, -tx, -ty, 0, filter);
     tw.run();
 
@@ -921,8 +905,8 @@ void KisLayerManager::mergeLayer()
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    const KisMetaData::MergeStrategy* strategy = KisMetaDataMergeStrategyChooserWidget::showDialog( m_view );
-    if(!strategy) return;
+    const KisMetaData::MergeStrategy* strategy = KisMetaDataMergeStrategyChooserWidget::showDialog(m_view);
+    if (!strategy) return;
 
     img->mergeLayer(layer, strategy);
     m_view->updateGUI();
@@ -935,7 +919,7 @@ void KisLayerManager::layersUpdated()
     if (!layer) return;
 
     m_view->updateGUI();
-    m_view->resourceProvider()->slotNodeActivated( layer.data() );
+    m_view->resourceProvider()->slotNodeActivated(layer.data());
 
 }
 
@@ -944,7 +928,7 @@ void KisLayerManager::saveLayerAsImage()
     QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
     QString mimelist = listMimeFilter.join(" ");
 
-    KFileDialog fd (KUrl(QString()), mimelist, m_view);
+    KFileDialog fd(KUrl(QString()), mimelist, m_view);
     fd.setObjectName("Export Layer");
     fd.setCaption(i18n("Export Layer"));
     fd.setMimeFilter(listMimeFilter);
@@ -971,8 +955,8 @@ void KisLayerManager::saveLayerAsImage()
     d.prepareForImport();
 
     KisImageSP dst = KisImageSP(new KisImage(d.undoAdapter(), r.width(), r.height(), img->colorSpace(), l->name()));
-    d.setCurrentImage( dst );
-    dst->addNode(l->clone(),dst->rootLayer(),KisLayerSP(0));
+    d.setCurrentImage(dst);
+    dst->addNode(l->clone(), dst->rootLayer(), KisLayerSP(0));
 
     d.setOutputMimeType(mimefilter.toLatin1());
     d.exportDocument(url);
@@ -980,7 +964,7 @@ void KisLayerManager::saveLayerAsImage()
 
 bool KisLayerManager::activeLayerHasSelection()
 {
-    return ( activeLayer()->selection() != 0 );
+    return (activeLayer()->selection() != 0);
 }
 
 

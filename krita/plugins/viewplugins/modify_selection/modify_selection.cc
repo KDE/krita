@@ -54,27 +54,26 @@
 #include "dlg_border_selection.h"
 
 typedef KGenericFactory<ModifySelection> ModifySelectionFactory;
-K_EXPORT_COMPONENT_FACTORY( kritamodifyselection, ModifySelectionFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritamodifyselection, ModifySelectionFactory("krita"))
 
 ModifySelection::ModifySelection(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
-    if ( parent->inherits("KisView2") )
-    {
+    if (parent->inherits("KisView2")) {
         setComponentData(ModifySelectionFactory::componentData());
 
-setXMLFile(KStandardDirs::locate("data","kritaplugins/modify_selection.rc"),
-true);
+        setXMLFile(KStandardDirs::locate("data", "kritaplugins/modify_selection.rc"),
+                   true);
 
         m_view = (KisView2*) parent;
 
         // Selection manager takes ownership?
         KAction* a  = new KAction(i18n("Grow selection..."), this);
-        actionCollection()->addAction("growselection", a );
+        actionCollection()->addAction("growselection", a);
         KAction* b  = new KAction(i18n("Shrink selection..."), this);
-        actionCollection()->addAction("shrinkselection", b );
+        actionCollection()->addAction("shrinkselection", b);
         KAction* c  = new KAction(i18n("Border selection..."), this);
-        actionCollection()->addAction("borderselection", c );
+        actionCollection()->addAction("borderselection", c);
 
         Q_CHECK_PTR(a);
         Q_CHECK_PTR(b);

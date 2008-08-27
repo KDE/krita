@@ -30,10 +30,11 @@ class QWidget;
  * possible to show its items in various list forms.
  *
  */
-class KisPresetChooser : public KisItemChooser {
+class KisPresetChooser : public KisItemChooser
+{
 
 public:
-    KisPresetChooser( QWidget * parent );
+    KisPresetChooser(QWidget * parent);
 
     ~KisPresetChooser();
 

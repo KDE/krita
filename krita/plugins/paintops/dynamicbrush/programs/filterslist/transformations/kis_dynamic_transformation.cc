@@ -23,8 +23,8 @@
 #include "kis_dynamic_transformation.moc"
 
 KoID KisDynamicTransformation::SizeTransformationID = KoID("size", i18n("Resize"));
-KoID KisDynamicTransformation::RotationTransformationID = KoID("rotation",i18n("Rotation"));
-KoID KisDynamicTransformation::DarkenTransformationID = KoID("darken",i18n("Darken"));
+KoID KisDynamicTransformation::RotationTransformationID = KoID("rotation", i18n("Rotation"));
+KoID KisDynamicTransformation::DarkenTransformationID = KoID("darken", i18n("Darken"));
 
 void KisDynamicTransformation::toXML(QDomDocument&, QDomElement& e) const
 {
@@ -33,7 +33,7 @@ void KisDynamicTransformation::toXML(QDomDocument&, QDomElement& e) const
 
 void KisDynamicTransformation::fromXML(const QDomElement& e)
 {
-    Q_ASSERT(e.attribute("id","") == id());
-    
+    Q_ASSERT(e.attribute("id", "") == id());
+
 }
 

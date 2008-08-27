@@ -29,8 +29,7 @@ KisDynamicColoringProgramFactoryRegistry::KisDynamicColoringProgramFactoryRegist
 
 KisDynamicColoringProgramFactoryRegistry* KisDynamicColoringProgramFactoryRegistry::instance()
 {
-    if(Private::instance ==0)
-    {
+    if (Private::instance == 0) {
         Private::instance = new KisDynamicColoringProgramFactoryRegistry;
     }
     return Private::instance;

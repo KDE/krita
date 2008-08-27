@@ -17,7 +17,8 @@
  */
 #include "stroke_sample.h"
 
-StrokeSample::StrokeSample(	float x,float y,float pressure,float tiltX, float tiltY,float rotation){
+StrokeSample::StrokeSample(float x, float y, float pressure, float tiltX, float tiltY, float rotation)
+{
     m_x = x;
     m_y = y;
     m_pressure = pressure;
@@ -27,35 +28,43 @@ StrokeSample::StrokeSample(	float x,float y,float pressure,float tiltX, float ti
 }
 
 
-StrokeSample::StrokeSample(){
+StrokeSample::StrokeSample()
+{
 
 }
 
-StrokeSample::~StrokeSample(){
+StrokeSample::~StrokeSample()
+{
 
 }
 
 
-float StrokeSample::x(){
+float StrokeSample::x()
+{
     return m_x;
 }
 
-float StrokeSample::y(){
+float StrokeSample::y()
+{
     return m_y;
 }
 
-float StrokeSample::pressure(){
+float StrokeSample::pressure()
+{
     return pressure();
 }
 
-float StrokeSample::tiltX(){
+float StrokeSample::tiltX()
+{
     return m_tiltX;
 }
 
-float StrokeSample::tiltY(){
+float StrokeSample::tiltY()
+{
     return m_tiltY;
 }
 
-float StrokeSample::rotation(){
+float StrokeSample::rotation()
+{
     return m_rotation;
 }

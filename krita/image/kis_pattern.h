@@ -32,7 +32,8 @@ class QImage;
 class KoColorSpace;
 class KisPaintDevice;
 
-class KRITAIMAGE_EXPORT KisPattern : public KoPattern {
+class KRITAIMAGE_EXPORT KisPattern : public KoPattern
+{
 
     Q_OBJECT
 

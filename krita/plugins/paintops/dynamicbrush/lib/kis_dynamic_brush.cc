@@ -28,7 +28,7 @@
 #include "kis_dynamic_shape_program.h"
 
 KisDynamicBrush::KisDynamicBrush(const QString& name)
-    : m_name(name), m_shape(0), m_coloring(0), m_shapeProgram(0), m_coloringProgram(0)
+        : m_name(name), m_shape(0), m_coloring(0), m_shapeProgram(0), m_coloringProgram(0)
 {
 }
 

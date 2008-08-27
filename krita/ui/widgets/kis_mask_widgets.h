@@ -38,56 +38,46 @@ class WdgTransformationEffect : public QWidget, public Ui::WdgTransformationEffe
 
 public:
     WdgTransformationEffect(QWidget *parent)
-        : QWidget(parent)
-        {
-            setupUi(this);
-        }
+            : QWidget(parent) {
+        setupUi(this);
+    }
 
 
-    QString maskName() const
-        {
-            return Ui::WdgTransformationEffect::maskName->text();
-        }
+    QString maskName() const {
+        return Ui::WdgTransformationEffect::maskName->text();
+    }
 
-    double xScale() const
-        {
-            return dblScaleX->value();
-        }
+    double xScale() const {
+        return dblScaleX->value();
+    }
 
-    double yScale() const
-        {
-            return dblScaleY->value();
-        }
+    double yScale() const {
+        return dblScaleY->value();
+    }
 
-    double xShear() const
-        {
-            return dblShearX->value();
-        }
+    double xShear() const {
+        return dblShearX->value();
+    }
 
-    double yShear() const
-        {
-            return dblShearY->value();
-        }
+    double yShear() const {
+        return dblShearY->value();
+    }
 
-    double rotation() const
-        {
-            return dblRotation->value();
-        }
-    int moveX() const
-        {
-            return intMoveX->value();
-        }
+    double rotation() const {
+        return dblRotation->value();
+    }
+    int moveX() const {
+        return intMoveX->value();
+    }
 
-    int moveY() const
-        {
-            return intMoveY->value();
-        }
+    int moveY() const {
+        return intMoveY->value();
+    }
 
-    KisFilterStrategy * filterStrategy()
-        {
-            KoID filterID = cmbFilter->currentItem();
-            return KisFilterStrategyRegistry::instance()->value(filterID.id());
-        }
+    KisFilterStrategy * filterStrategy() {
+        KoID filterID = cmbFilter->currentItem();
+        return KisFilterStrategyRegistry::instance()->value(filterID.id());
+    }
 };
 
 class WdgMaskSource : public QWidget, public Ui::WdgMaskSource
@@ -96,11 +86,10 @@ class WdgMaskSource : public QWidget, public Ui::WdgMaskSource
 
 public:
 
-    WdgMaskSource( QWidget *parent )
-        : QWidget( parent )
-        {
-            setupUi( this );
-        }
+    WdgMaskSource(QWidget *parent)
+            : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
 class WdgMaskFromSelection : public QWidget, public Ui::WdgMaskFromSelection
@@ -109,11 +98,10 @@ class WdgMaskFromSelection : public QWidget, public Ui::WdgMaskFromSelection
 
 public:
 
-    WdgMaskFromSelection( QWidget *parent )
-        : QWidget( parent )
-        {
-            setupUi( this );
-        }
+    WdgMaskFromSelection(QWidget *parent)
+            : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
 #endif

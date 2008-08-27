@@ -27,26 +27,28 @@
 
 #include "kritacore/krs_paint_device.h"
 
-namespace Kross {
-    class Action;
+namespace Kross
+{
+class Action;
 }
 
-class KisScriptFilter : public QObject, public KisFilter {
+class KisScriptFilter : public QObject, public KisFilter
+{
     Q_OBJECT
-    public:
-        KisScriptFilter(Kross::Action* action);
-        virtual ~KisScriptFilter();
+public:
+    KisScriptFilter(Kross::Action* action);
+    virtual ~KisScriptFilter();
 
-        using KisFilter::process;
-        
-        virtual void process(KisConstProcessingInformation srcInfo, KisProcessingInformation dstInfo, const QSize& size, const KisFilterConfiguration* config, KoUpdater*) const;
-    public Q_SLOTS:
-        QString category() const;
-    signals:
-        void scriptProcess( QObject* src, const QPoint& srcTopLeft, QObject* dst, const QPoint& dstTopLeft, const QSize& size, QObject* config ) const;
-    private:
-        class Private;
-        Private* const d;
+    using KisFilter::process;
+
+    virtual void process(KisConstProcessingInformation srcInfo, KisProcessingInformation dstInfo, const QSize& size, const KisFilterConfiguration* config, KoUpdater*) const;
+public Q_SLOTS:
+    QString category() const;
+signals:
+    void scriptProcess(QObject* src, const QPoint& srcTopLeft, QObject* dst, const QPoint& dstTopLeft, const QSize& size, QObject* config) const;
+private:
+    class Private;
+    Private* const d;
 };
 
 

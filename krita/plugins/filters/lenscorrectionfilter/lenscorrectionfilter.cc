@@ -54,7 +54,7 @@
 #include "ui_wdglenscorrectionoptions.h"
 
 typedef KGenericFactory<KritaLensCorrectionFilter> KritaLensCorrectionFilterFactory;
-K_EXPORT_COMPONENT_FACTORY( kritalenscorrectionfilter, KritaLensCorrectionFilterFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritalenscorrectionfilter, KritaLensCorrectionFilterFactory("krita"))
 
 KritaLensCorrectionFilter::KritaLensCorrectionFilter(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
@@ -74,22 +74,22 @@ KritaLensCorrectionFilter::~KritaLensCorrectionFilter()
 
 KisFilterLensCorrection::KisFilterLensCorrection() : KisFilter(id(), CategoryOther, i18n("&Lens Correction..."))
 {
-        setColorSpaceIndependence( FULLY_INDEPENDENT );
-        setSupportsPainting( true );
-        setSupportsPreview( true );
-        setSupportsIncrementalPainting( false );
-        setSupportsAdjustmentLayers( false );
+    setColorSpaceIndependence(FULLY_INDEPENDENT);
+    setSupportsPainting(true);
+    setSupportsPreview(true);
+    setSupportsIncrementalPainting(false);
+    setSupportsAdjustmentLayers(false);
 }
 
 KisFilterConfiguration* KisFilterLensCorrection::factoryConfiguration(const KisPaintDeviceSP) const
 {
     QVariant value;
     KisFilterConfiguration* config = new KisFilterConfiguration("lenscorrection", 1);
-    config->setProperty("xcenter", 50 );
-    config->setProperty("ycenter", 50 );
-    config->setProperty("correctionnearcenter", 0. );
-    config->setProperty("correctionnearedges", 0. );
-    config->setProperty("brightness", 0. );
+    config->setProperty("xcenter", 50);
+    config->setProperty("ycenter", 50);
+    config->setProperty("correctionnearcenter", 0.);
+    config->setProperty("correctionnearedges", 0.);
+    config->setProperty("brightness", 0.);
     return config;
 }
 
@@ -99,26 +99,26 @@ KisFilterConfigWidget * KisFilterLensCorrection::createConfigurationWidget(QWidg
 }
 
 void KisFilterLensCorrection::process(KisConstProcessingInformation srcInfo,
-                 KisProcessingInformation dstInfo,
-                 const QSize& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-        ) const
+                                      KisProcessingInformation dstInfo,
+                                      const QSize& size,
+                                      const KisFilterConfiguration* config,
+                                      KoUpdater* progressUpdater
+                                     ) const
 {
     const KisPaintDeviceSP src = srcInfo.paintDevice();
     KisPaintDeviceSP dst = dstInfo.paintDevice();
     QPoint dstTopLeft = dstInfo.topLeft();
     QPoint srcTopLeft = srcInfo.topLeft();
-    
+
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
 
     QRect layerrect = src->exactBounds();
 
-    QRect workingrect = layerrect.intersect( QRect(srcTopLeft, size) );
+    QRect workingrect = layerrect.intersect(QRect(srcTopLeft, size));
 
     int cost = (size.width() * size.height()) / 100;
-    if( cost == 0 ) cost = 1;
+    if (cost == 0) cost = 1;
     int count = 0;
 
     KoColorSpace* cs = dst->colorSpace();
@@ -128,10 +128,10 @@ void KisFilterLensCorrection::process(KisConstProcessingInformation srcInfo,
     double ycenter = (config && config->getProperty("ycenter", value)) ? value.toInt() : 50;
     double correctionnearcenter = (config && config->getProperty("correctionnearcenter", value)) ? value.toDouble() : 0.;
     double correctionnearedges = (config && config->getProperty("correctionnearedges", value)) ? value.toDouble() : 0.;
-    double brightness = ( (config && config->getProperty("brightness", value)) ? value.toDouble() : 0. );
+    double brightness = ((config && config->getProperty("brightness", value)) ? value.toDouble() : 0.);
 
-    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), workingrect.width(), workingrect.height(), dstInfo.selection() );
-    KisRandomSubAccessorPixel srcRSA = src->createRandomSubAccessor( srcInfo.selection() );
+    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), workingrect.width(), workingrect.height(), dstInfo.selection());
+    KisRandomSubAccessorPixel srcRSA = src->createRandomSubAccessor(srcInfo.selection());
 
     double normallise_radius_sq = 4.0 / (layerrect.width() * layerrect.width() + layerrect.height() * layerrect.height());
     xcenter = layerrect.x() + layerrect.width() * xcenter / 100.0;
@@ -144,11 +144,10 @@ void KisFilterLensCorrection::process(KisConstProcessingInformation srcInfo,
     int tx = dstTopLeft.x() - srcTopLeft.x();
     int ty = dstTopLeft.y() - srcTopLeft.y();
 
-    while(!dstIt.isDone())
-    {
+    while (!dstIt.isDone()) {
         double off_x = dstIt.x() - xcenter;
         double off_y = dstIt.y() - ycenter;
-        double radius_sq = ( (off_x * off_x) + (off_y * off_y) ) * normallise_radius_sq;
+        double radius_sq = ((off_x * off_x) + (off_y * off_y)) * normallise_radius_sq;
 
         double radius_mult = radius_sq * mult_sq + radius_sq * radius_sq * mult_qd;
         double mag = radius_mult;
@@ -159,15 +158,15 @@ void KisFilterLensCorrection::process(KisConstProcessingInformation srcInfo,
 
         double brighten = 1.0 + mag * brightness;
 
-        srcRSA.moveTo( QPointF( srcX + tx, srcY+ty ) );
-        srcRSA.sampledOldRawData( dstIt.rawData() );
-        cs->toLabA16( dstIt.rawData(), (quint8*)lab, 1);
+        srcRSA.moveTo(QPointF(srcX + tx, srcY + ty));
+        srcRSA.sampledOldRawData(dstIt.rawData());
+        cs->toLabA16(dstIt.rawData(), (quint8*)lab, 1);
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-        lab[0] = CLAMP( lab[0] * static_cast<quint16>( brighten ), 0, 65535);
-        cs->fromLabA16( (quint8*)lab, dstIt.rawData(), 1);
+        lab[0] = CLAMP(lab[0] * static_cast<quint16>(brighten), 0, 65535);
+        cs->fromLabA16((quint8*)lab, dstIt.rawData(), 1);
 
         ++dstIt;
-        if (progressUpdater) progressUpdater->setProgress( (++count) / cost);
+        if (progressUpdater) progressUpdater->setProgress((++count) / cost);
     }
 }

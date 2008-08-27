@@ -38,7 +38,8 @@ class KoPointerEvent;
  * paintop's settings subclass has data that is not stored as a property, that data is not
  * saved and restored.
  */
-class KRITAIMAGE_EXPORT KisPaintOpSettings : public KisPropertiesConfiguration, public KisShared {
+class KRITAIMAGE_EXPORT KisPaintOpSettings : public KisPropertiesConfiguration, public KisShared
+{
 
 public:
     KisPaintOpSettings();
@@ -62,7 +63,7 @@ public:
      * Override this function if your paintop is interested in which
      * node is currently active.
      */
-    virtual void setNode(KisNodeSP node );
+    virtual void setNode(KisNodeSP node);
 
     /**
      * @return a pointer to the widget displaying the settings

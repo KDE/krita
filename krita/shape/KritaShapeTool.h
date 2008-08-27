@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef PICTURE_TOOL
-#define PICTURE_TOOL
+#ifndef KRITA_SHAPE_TOOL
+#define KRITA_SHAPE_TOOL
 
 #include <KoTool.h>
 
@@ -27,16 +27,16 @@ class KritaShapeTool : public KoTool
 {
     Q_OBJECT
 public:
-    explicit KritaShapeTool( KoCanvasBase* canvas );
+    explicit KritaShapeTool(KoCanvasBase* canvas);
     ~KritaShapeTool();
 
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
+    virtual void paint(QPainter& painter, const KoViewConverter& converter);
 
-    virtual void mousePressEvent( KoPointerEvent* event ) ;
-    virtual void mouseMoveEvent( KoPointerEvent* event );
-    virtual void mouseReleaseEvent( KoPointerEvent* event );
+    virtual void mousePressEvent(KoPointerEvent* event) ;
+    virtual void mouseMoveEvent(KoPointerEvent* event);
+    virtual void mouseReleaseEvent(KoPointerEvent* event);
 
-    void activate (bool temporary=false);
+    void activate(bool temporary = false);
     void deactivate();
 
 protected:
@@ -47,11 +47,11 @@ protected:
 
 protected slots:
 
-   void slotChangeUrl();
+    void slotChangeUrl();
 
 private slots:
 
-   void slotConvertToQImage();
+    void slotConvertToQImage();
 
 private:
     KritaShape *m_kritaShapeshape;

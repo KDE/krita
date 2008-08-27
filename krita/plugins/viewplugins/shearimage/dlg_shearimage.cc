@@ -24,13 +24,13 @@
 
 #include <klocale.h>
 #include <kis_debug.h>
-DlgShearImage::DlgShearImage( QWidget *  parent,
-                const char * name)
-    : super (parent)
+DlgShearImage::DlgShearImage(QWidget *  parent,
+                             const char * name)
+        : super(parent)
 {
-    setCaption( i18n("Shear Image") );
-    setButtons(  Ok | Cancel);
-    setDefaultButton( Ok );
+    setCaption(i18n("Shear Image"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
     setObjectName(name);
 
     m_lock = false;
@@ -44,7 +44,7 @@ DlgShearImage::DlgShearImage( QWidget *  parent,
     resize(m_page->sizeHint());
 
     connect(this, SIGNAL(okClicked()),
-        this, SLOT(okClicked()));
+            this, SLOT(okClicked()));
 
 }
 

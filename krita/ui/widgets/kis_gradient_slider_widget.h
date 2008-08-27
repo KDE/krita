@@ -17,8 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_WDG_GRADIENT_SLIDER_H_
-#define _KIS_WDG_GRADIENT_SLIDER_H_
+#ifndef _KIS_GRADIENT_SLIDER_WIDGET_H_
+#define _KIS_GRADIENT_SLIDER_WIDGET_H_
 
 #include <QWidget>
 #include <QMouseEvent>
@@ -37,19 +37,21 @@ public:
     KisGradientSliderWidget(QWidget *parent = 0, const char* name = 0, Qt::WFlags f = 0);
 
 public:
-    virtual void paintEvent ( QPaintEvent * );
-    void setGradientResource( KisAutogradientResource* agr);
-    KoGradientSegment* selectedSegment() { return m_selectedSegment; }
+    virtual void paintEvent(QPaintEvent *);
+    void setGradientResource(KisAutogradientResource* agr);
+    KoGradientSegment* selectedSegment() {
+        return m_selectedSegment;
+    }
 
 signals:
     void sigSelectedSegment(KoGradientSegment*);
     void sigChangedSegment(KoGradientSegment*);
 
 protected:
-    virtual void mousePressEvent( QMouseEvent * e );
-    virtual void mouseReleaseEvent ( QMouseEvent * e );
-    virtual void mouseMoveEvent( QMouseEvent * e );
-    virtual void contextMenuEvent( QContextMenuEvent * e );
+    virtual void mousePressEvent(QMouseEvent * e);
+    virtual void mouseReleaseEvent(QMouseEvent * e);
+    virtual void mouseMoveEvent(QMouseEvent * e);
+    virtual void contextMenuEvent(QContextMenuEvent * e);
 
 private slots:
     void slotSplitSegment();

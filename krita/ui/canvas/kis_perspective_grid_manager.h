@@ -34,34 +34,34 @@ class KisView2;
 class KRITAUI_EXPORT KisPerspectiveGridManager : public KisCanvasDecoration
 {
     Q_OBJECT
-    public:
-        /** Create a perspective manager for this view
-         */
-        KisPerspectiveGridManager(KisView2 * parent);
-        ~KisPerspectiveGridManager();
-        void setup(KActionCollection * collection);
-        /**
-         * Call this function to start editing the grid, to disable display
-         */
-        void startEdition();
-        /**
-         * Call this function when the edition of the grid is finished. Trigger a redisplay of the perspective
-         * grid if necesserary
-         */
-        void stopEdition();
-    public slots:
-        void updateGUI();
-        /**
-         * Call this to remove all the perspective subgrids.
-         */
-        void clearPerspectiveGrid();
-    protected:
-        virtual void drawDecoration(QPainter& gc, const QPoint& documentOffset,  const QRect& area, const KoViewConverter &converter);
-    private:
-        bool m_toggleEdition;
-        KisView2* m_view;
-        KToggleAction* m_toggleGrid;
-        KAction* m_gridClear;
+public:
+    /** Create a perspective manager for this view
+     */
+    KisPerspectiveGridManager(KisView2 * parent);
+    ~KisPerspectiveGridManager();
+    void setup(KActionCollection * collection);
+    /**
+     * Call this function to start editing the grid, to disable display
+     */
+    void startEdition();
+    /**
+     * Call this function when the edition of the grid is finished. Trigger a redisplay of the perspective
+     * grid if necesserary
+     */
+    void stopEdition();
+public slots:
+    void updateGUI();
+    /**
+     * Call this to remove all the perspective subgrids.
+     */
+    void clearPerspectiveGrid();
+protected:
+    virtual void drawDecoration(QPainter& gc, const QPoint& documentOffset,  const QRect& area, const KoViewConverter &converter);
+private:
+    bool m_toggleEdition;
+    KisView2* m_view;
+    KToggleAction* m_toggleGrid;
+    KAction* m_gridClear;
 };
 
 #endif

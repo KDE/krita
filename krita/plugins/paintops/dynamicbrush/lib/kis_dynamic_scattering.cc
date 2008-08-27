@@ -17,9 +17,9 @@
 
 #include "kis_dynamic_scattering.h"
 KisDynamicScattering::KisDynamicScattering(int _count, double _maximumDistance)
-    : m_count(_count), m_maximumDistance(_maximumDistance)
+        : m_count(_count), m_maximumDistance(_maximumDistance)
 {
-    
+
 }
 int KisDynamicScattering::count()
 {

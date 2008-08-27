@@ -54,9 +54,10 @@ class KisGridManager;
  * Following the broad model-view-controller idea this class shows you one view on the document.
  * There can be multiple views of the same document each in with independent settings for viewMode and zoom etc.
  */
-class KRITAUI_EXPORT KisView2 : public KoView {
+class KRITAUI_EXPORT KisView2 : public KoView
+{
 
-Q_OBJECT
+    Q_OBJECT
 
 public:
     /**
@@ -70,13 +71,15 @@ public:
 public:
 
     // QWidget overrides
-    virtual void dragEnterEvent ( QDragEnterEvent * event );
-    virtual void dropEvent ( QDropEvent * event );
+    virtual void dragEnterEvent(QDragEnterEvent * event);
+    virtual void dropEvent(QDropEvent * event);
 
     // KoView implementation
-    virtual void updateReadWrite( bool readwrite ) { Q_UNUSED(readwrite); }
+    virtual void updateReadWrite(bool readwrite) {
+        Q_UNUSED(readwrite);
+    }
     void slotChildActivated(bool a);
-    void canvasAddChild( KoViewChild * child );
+    void canvasAddChild(KoViewChild * child);
 
 public:  // Krita specific interfaces
 
@@ -170,7 +173,7 @@ private slots:
     void slotUpdateFullScreen(bool);
     void slotPreferences();
     void slotEditPalette();
-    void slotSetImageSize( qint32 w, qint32 h );
+    void slotSetImageSize(qint32 w, qint32 h);
     void slotTotalRefresh();
 private:
 

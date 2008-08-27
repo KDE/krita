@@ -23,7 +23,8 @@
 
 class KisCanvas2;
 
-class KisToolGrid : public KisTool {
+class KisToolGrid : public KisTool
+{
     Q_OBJECT
     enum Mode {
         TRANSLATION,
@@ -43,7 +44,7 @@ public slots:
     void deactivate();
 
 protected:
-    
+
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
 private:
@@ -58,17 +59,17 @@ private:
 };
 
 
-class KisToolGridFactory : public KoToolFactory {
+class KisToolGridFactory : public KoToolFactory
+{
 
 public:
     KisToolGridFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolGrid", i18n( "Grid" ))
-        {
-            setToolTip( i18n( "Edit the grid" ) );
-            setToolType( TOOL_TYPE_VIEW );
-            setIcon( "krita_tool_grid" );
-            setPriority( 17 );
-        };
+            : KoToolFactory(parent, "KisToolGrid", i18n("Grid")) {
+        setToolTip(i18n("Edit the grid"));
+        setToolType(TOOL_TYPE_VIEW);
+        setIcon("krita_tool_grid");
+        setPriority(17);
+    };
 
 
     virtual ~KisToolGridFactory() {}

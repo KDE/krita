@@ -24,7 +24,7 @@
 #include <QHBoxLayout>
 
 #include <klineedit.h>
-#include <klocale.h>
+
 
 #include "filter/kis_filter_config_widget.h"
 #include "kis_transaction.h"
@@ -38,26 +38,24 @@
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 
-#include "filter/kis_filter.h"
-#include "filter/kis_filter_configuration.h"
 
 KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisPaintDeviceSP paintDevice,
-                                         const KisImageSP image,
-                                         KisFilterConfiguration * configuration,
-                                         const QString & layerName,
-                                         const QString & caption,
-                                         QWidget *parent,
-                                         const char *name)
-    : KDialog( parent )
-    , m_paintDevice( paintDevice )
-    , m_image( 0 )
-    , m_currentConfigWidget ( 0 )
-    , m_currentFilter ( 0 )
-    , m_currentConfiguration ( 0 )
-    , m_layer ( 0 )
+        const KisImageSP image,
+        KisFilterConfiguration * configuration,
+        const QString & layerName,
+        const QString & caption,
+        QWidget *parent,
+        const char *name)
+        : KDialog(parent)
+        , m_paintDevice(paintDevice)
+        , m_image(0)
+        , m_currentConfigWidget(0)
+        , m_currentFilter(0)
+        , m_currentConfiguration(0)
+        , m_layer(0)
 {
-    setButtons( Ok | Cancel);
-    setDefaultButton( Ok );
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
 
     setObjectName(name);
 
@@ -73,9 +71,9 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisPaintDeviceSP paintDevice,
     layout->setSpacing(6);
     setMainWidget(page);
 
-    QVBoxLayout *v1 = new QVBoxLayout( );
+    QVBoxLayout *v1 = new QVBoxLayout();
     layout->addLayout(v1);
-    QHBoxLayout *hl = new QHBoxLayout( );
+    QHBoxLayout *hl = new QHBoxLayout();
     v1->addLayout(hl);
 
     QLabel * lblName = new QLabel(i18n("Layer name:"), page);
@@ -87,29 +85,28 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisPaintDeviceSP paintDevice,
     m_layerName->setText(layerName);
     m_layerName->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
     hl->addWidget(m_layerName, 0, Qt::AlignLeft);
-    connect( m_layerName, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
+    connect(m_layerName, SIGNAL(textChanged(const QString &)), this, SLOT(slotNameChanged(const QString &)));
 
-    if ( m_currentFilter ) {
+    if (m_currentFilter) {
         m_currentConfigWidget = m_currentFilter->createConfigurationWidget(page, paintDevice, image);
         if (m_currentConfigWidget) {
-            m_currentConfigWidget->setConfiguration( m_currentConfiguration );
+            m_currentConfigWidget->setConfiguration(m_currentConfiguration);
         }
     }
-    if ( m_currentFilter == 0 || m_currentConfigWidget == 0 ) {
-        QLabel * labelNoConfigWidget = new QLabel( i18n("No configuration options are available for this filter"), page );
-        v1->addWidget( labelNoConfigWidget );
-    }
-    else {
-        v1->addWidget( m_currentConfigWidget );
+    if (m_currentFilter == 0 || m_currentConfigWidget == 0) {
+        QLabel * labelNoConfigWidget = new QLabel(i18n("No configuration options are available for this filter"), page);
+        v1->addWidget(labelNoConfigWidget);
+    } else {
+        v1->addWidget(m_currentConfigWidget);
     }
 
-    enableButtonOk( !m_layerName->text().isEmpty() );
+    enableButtonOk(!m_layerName->text().isEmpty());
 
 }
 
-void KisDlgAdjLayerProps::slotNameChanged( const QString & text )
+void KisDlgAdjLayerProps::slotNameChanged(const QString & text)
 {
-    enableButtonOk( !text.isEmpty() );
+    enableButtonOk(!text.isEmpty());
 }
 
 KisFilterConfiguration * KisDlgAdjLayerProps::filterConfiguration() const
@@ -117,7 +114,7 @@ KisFilterConfiguration * KisDlgAdjLayerProps::filterConfiguration() const
     if (m_currentConfigWidget)
         return m_currentConfigWidget->configuration();
     else
-        return m_currentFilter->defaultConfiguration( m_paintDevice );
+        return m_currentFilter->defaultConfiguration(m_paintDevice);
 }
 
 QString KisDlgAdjLayerProps::layerName() const

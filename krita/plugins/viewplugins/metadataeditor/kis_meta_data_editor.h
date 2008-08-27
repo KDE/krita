@@ -21,19 +21,21 @@
 
 #include <kpagedialog.h>
 
-namespace KisMetaData {
-    class Store;
+namespace KisMetaData
+{
+class Store;
 }
 
-class KisMetaDataEditor : public KPageDialog {
-        struct Private;
-    public:
-        KisMetaDataEditor(QWidget* parent, KisMetaData::Store* store);
-        ~KisMetaDataEditor();
-    public slots:
-        virtual void accept ();
-    private:
-        Private* const d;
+class KisMetaDataEditor : public KPageDialog
+{
+    struct Private;
+public:
+    KisMetaDataEditor(QWidget* parent, KisMetaData::Store* store);
+    ~KisMetaDataEditor();
+public slots:
+    virtual void accept();
+private:
+    Private* const d;
 };
 
 #endif

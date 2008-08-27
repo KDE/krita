@@ -56,15 +56,15 @@
 
 KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), CategoryEmboss, i18n("&Emboss with Variable Depth..."))
 {
-    setSupportsPainting( false );
-    setSupportsPreview( true );
+    setSupportsPainting(false);
+    setSupportsPreview(true);
     setColorSpaceIndependence(TO_RGBA8);
 }
 
 KisFilterConfiguration* KisEmbossFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 0);
-    config->setProperty("depth",30);
+    config->setProperty("depth", 30);
     return config;
 }
 
@@ -82,11 +82,11 @@ KisFilterConfiguration* KisEmbossFilter::factoryConfiguration(const KisPaintDevi
  *                     increase it. After this, get the gray tone
  */
 void KisEmbossFilter::process(KisConstProcessingInformation srcInfo,
-                 KisProcessingInformation dstInfo,
-                 const QSize& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-        ) const
+                              KisProcessingInformation dstInfo,
+                              const QSize& size,
+                              const KisFilterConfiguration* config,
+                              KoUpdater* progressUpdater
+                             ) const
 {
     const KisPaintDeviceSP src = srcInfo.paintDevice();
     KisPaintDeviceSP dst = dstInfo.paintDevice();
@@ -96,7 +96,7 @@ void KisEmbossFilter::process(KisConstProcessingInformation srcInfo,
     Q_ASSERT(dst != 0);
 
     //read the filter configuration values from the KisFilterConfiguration object
-    quint32 embossdepth = config ?  config->getInt("depth",30) : 30;
+    quint32 embossdepth = config ?  config->getInt("depth", 30) : 30;
 
     //the actual filter function from digikam. It needs a pointer to a quint8 array
     //with the actual pixel data.
@@ -107,28 +107,25 @@ void KisEmbossFilter::process(KisConstProcessingInformation srcInfo,
     int Width = size.width();
     int Height = size.height();
 
-    if( progressUpdater )
-    {
-        progressUpdater->setRange(0, Height );
+    if (progressUpdater) {
+        progressUpdater->setRange(0, Height);
     }
 
     KisHLineConstIteratorPixel it = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
     QColor color1;
     QColor color2;
-    for (int y = 0; !(progressUpdater && progressUpdater->interrupted()) && (y < Height); ++y)
-    {
+    for (int y = 0; !(progressUpdater && progressUpdater->interrupted()) && (y < Height); ++y) {
         KisRandomConstAccessorPixel acc = src->createRandomConstAccessor(srcTopLeft.x(), srcTopLeft.y());
 
-        for (int x = 0; !(progressUpdater && progressUpdater->interrupted()) && (x < Width); ++x, ++it, ++dstIt)
-        {
+        for (int x = 0; !(progressUpdater && progressUpdater->interrupted()) && (x < Width); ++x, ++it, ++dstIt) {
             if (dstIt.isSelected()) {
 
 // FIXME: COLORSPACE_INDEPENDENCE or at least work IN RGB16A
 
 
-                src->colorSpace()->toQColor( it.oldRawData(), &color1 );
-                 acc.moveTo(srcTopLeft.x() + x + Lim_Max(x, 1, Width), srcTopLeft.y() + y + Lim_Max(y, 1, Height) );
+                src->colorSpace()->toQColor(it.oldRawData(), &color1);
+                acc.moveTo(srcTopLeft.x() + x + Lim_Max(x, 1, Width), srcTopLeft.y() + y + Lim_Max(y, 1, Height));
 
                 src->colorSpace()->toQColor(acc.oldRawData(), &color2);
 
@@ -143,7 +140,7 @@ void KisEmbossFilter::process(KisConstProcessingInformation srcInfo,
         }
         it.nextRow();
         dstIt.nextRow();
-        if(progressUpdater) progressUpdater->setValue(y);
+        if (progressUpdater) progressUpdater->setValue(y);
     }
 }
 
@@ -164,7 +161,7 @@ void KisEmbossFilter::process(KisConstProcessingInformation srcInfo,
  *                      "for step", when necessary, until reach the last possible value
  */
 
-int KisEmbossFilter::Lim_Max (int Now, int Up, int Max) const
+int KisEmbossFilter::Lim_Max(int Now, int Up, int Max) const
 {
     --Max;
     while (Now > Max - Up)
@@ -178,8 +175,8 @@ KisFilterConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* pare
     Q_UNUSED(image);
 
     vKisIntegerWidgetParam param;
-    param.push_back( KisIntegerWidgetParam( 10, 300, 30, i18n("Depth"), "depth" ) );
-    KisFilterConfigWidget * w = new KisMultiIntegerFilterWidget( id().id(), parent, id().id(), param );
+    param.push_back(KisIntegerWidgetParam(10, 300, 30, i18n("Depth"), "depth"));
+    KisFilterConfigWidget * w = new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
     Q_CHECK_PTR(w);
     return w;
 }

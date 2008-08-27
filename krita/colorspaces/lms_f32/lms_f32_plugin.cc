@@ -32,11 +32,11 @@
 #include "kis_lms_f32_colorspace.h"
 
 typedef KGenericFactory<LMSF32Plugin> LMSF32PluginFactory;
-K_EXPORT_COMPONENT_FACTORY( krita_lms_f32_plugin, LMSF32PluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(krita_lms_f32_plugin, LMSF32PluginFactory("krita"))
 
 
 LMSF32Plugin::LMSF32Plugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
 
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
@@ -45,13 +45,13 @@ LMSF32Plugin::LMSF32Plugin(QObject *parent, const QStringList &)
 
         KisLmsAF32ColorSpaceFactory * csf  = new KisLmsAF32ColorSpaceFactory();
         f->add(csf);
-        const KoCtlColorProfile* profile = static_cast<const KoCtlColorProfile*>(f->profileByName( csf->defaultProfile() ) );
+        const KoCtlColorProfile* profile = static_cast<const KoCtlColorProfile*>(f->profileByName(csf->defaultProfile()));
         Q_ASSERT(profile);
-        KoColorSpace * colorSpaceLMSF32  = new KisLmsAF32ColorSpace( profile );
+        KoColorSpace * colorSpaceLMSF32  = new KisLmsAF32ColorSpace(profile);
 
         KoHistogramProducerFactoryRegistry::instance()->add(
             new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
-            (KoID("LMSF32HISTO", i18n("Float32 Histogram")), colorSpaceLMSF32) );
+            (KoID("LMSF32HISTO", i18n("Float32 Histogram")), colorSpaceLMSF32));
     }
 
 }

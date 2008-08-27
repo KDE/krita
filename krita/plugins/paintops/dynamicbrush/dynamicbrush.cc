@@ -42,50 +42,49 @@ typedef KGenericFactory<DynamicBrush> DynamicBrushFactory;
 K_EXPORT_COMPONENT_FACTORY(kritadynamicbrushpaintop, DynamicBrushFactory("krita"))
 
 DynamicBrush::DynamicBrush(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent), m_shapeBookmarksManager( new KisBookmarkedConfigurationManager("dynamicopshape", new KisDynamicShapeProgramsFactory()) ), m_coloringBookmarksManager( new KisBookmarkedConfigurationManager("dynamicopcoloring", new KisDynamicColoringProgramsFactory()) )
+        : KParts::Plugin(parent), m_shapeBookmarksManager(new KisBookmarkedConfigurationManager("dynamicopshape", new KisDynamicShapeProgramsFactory())), m_coloringBookmarksManager(new KisBookmarkedConfigurationManager("dynamicopcoloring", new KisDynamicColoringProgramsFactory()))
 
 {
     setComponentData(DynamicBrushFactory::componentData());
 
     // This is not a gui plugin; only load it when the doc is created.
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add (new KisDynamicOpFactory(m_shapeBookmarksManager, m_coloringBookmarksManager ));
+    r->add(new KisDynamicOpFactory(m_shapeBookmarksManager, m_coloringBookmarksManager));
 #if 0
     {
         // TODO: remove this, temp stuff for testing only
         {
             KisFiltersListDynamicProgram* programSpeed = new KisFiltersListDynamicProgram("speed");
-            programSpeed->appendTransformation( new KisSizeTransformation(KisDynamicSensor::id2Sensor("speed"), KisDynamicSensor::id2Sensor("speed") ) );
-            KisDynamicProgramRegistry::instance()->add( programSpeed);
+            programSpeed->appendTransformation(new KisSizeTransformation(KisDynamicSensor::id2Sensor("speed"), KisDynamicSensor::id2Sensor("speed")));
+            KisDynamicProgramRegistry::instance()->add(programSpeed);
         }
         {
             KisFiltersListDynamicProgram* programPressure = new KisFiltersListDynamicProgram("pressure");
-            programPressure->appendTransformation( new KisSizeTransformation( KisDynamicSensor::id2Sensor("pressure"), KisDynamicSensor::id2Sensor("pressure") ) );
-            KisDynamicProgramRegistry::instance()->add(  programPressure);
+            programPressure->appendTransformation(new KisSizeTransformation(KisDynamicSensor::id2Sensor("pressure"), KisDynamicSensor::id2Sensor("pressure")));
+            KisDynamicProgramRegistry::instance()->add(programPressure);
         }
         {
             KisFiltersListDynamicProgram* programRotation = new KisFiltersListDynamicProgram("rotation");
-            programRotation->appendTransformation( new KisRotationTransformation( KisDynamicSensor::id2Sensor("drawingangle") ) );
-            KisDynamicProgramRegistry::instance()->add(  programRotation);
+            programRotation->appendTransformation(new KisRotationTransformation(KisDynamicSensor::id2Sensor("drawingangle")));
+            KisDynamicProgramRegistry::instance()->add(programRotation);
         }
         {
             KisFiltersListDynamicProgram* programTime = new KisFiltersListDynamicProgram("time");
-            programTime->appendTransformation( new KisRotationTransformation( KisDynamicSensor::id2Sensor("time") ) );
-            KisDynamicProgramRegistry::instance()->add( programTime);
+            programTime->appendTransformation(new KisRotationTransformation(KisDynamicSensor::id2Sensor("time")));
+            KisDynamicProgramRegistry::instance()->add(programTime);
         }
     }
 #endif
-    if ( parent->inherits("KisView2") )
-    {
+    if (parent->inherits("KisView2")) {
         m_view = (KisView2*) parent;
 
-        setXMLFile(KStandardDirs::locate("data","kritaplugins/dynamicbrush.rc"), true);
+        setXMLFile(KStandardDirs::locate("data", "kritaplugins/dynamicbrush.rc"), true);
 
         KAction *action  = new KAction(i18n("Edit dynamic shape programs"), this);
-        actionCollection()->addAction("EditDynamicShapePrograms", action );
+        actionCollection()->addAction("EditDynamicShapePrograms", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotEditDynamicShapePrograms()));
         action  = new KAction(i18n("Edit dynamic coloring programs"), this);
-        actionCollection()->addAction("EditDynamicColoringPrograms", action );
+        actionCollection()->addAction("EditDynamicColoringPrograms", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotEditDynamicColoringPrograms()));
     }
 }

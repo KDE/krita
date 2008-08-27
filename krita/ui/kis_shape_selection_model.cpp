@@ -28,9 +28,9 @@
 #include "kis_undo_adapter.h"
 
 KisShapeSelectionModel::KisShapeSelectionModel(KisImageSP image, KisSelectionSP selection, KisShapeSelection* shapeSelection)
- : m_image(image)
- , m_parentSelection(selection)
- , m_shapeSelection(shapeSelection)
+        : m_image(image)
+        , m_parentSelection(selection)
+        , m_shapeSelection(shapeSelection)
 {
 }
 
@@ -38,8 +38,9 @@ KisShapeSelectionModel::~KisShapeSelectionModel()
 {
 }
 
-void KisShapeSelectionModel::add(KoShape *child) {
-    if(m_shapeMap.contains(child))
+void KisShapeSelectionModel::add(KoShape *child)
+{
+    if (m_shapeMap.contains(child))
         return;
 
     child->setBorder(0);
@@ -98,7 +99,7 @@ void KisShapeSelectionModel::containerChanged(KoShapeContainer *)
 
 void KisShapeSelectionModel::childChanged(KoShape * child, KoShape::ChangeType type)
 {
-    if(type == KoShape::ParentChanged)
+    if (type == KoShape::ParentChanged)
         return;
 
     m_shapeSelection->setDirty();
@@ -114,6 +115,7 @@ void KisShapeSelectionModel::childChanged(KoShape * child, KoShape::ChangeType t
     m_image->undoAdapter()->emitSelectionChanged();
 }
 
-bool KisShapeSelectionModel::isChildLocked(const KoShape *child) const {
+bool KisShapeSelectionModel::isChildLocked(const KoShape *child) const
+{
     return child->isLocked() || child->parent()->isLocked();
 }

@@ -23,8 +23,9 @@
 
 class KisView2;
 
-namespace KisMetaData {
-    class Store;
+namespace KisMetaData
+{
+class Store;
 }
 
 /**

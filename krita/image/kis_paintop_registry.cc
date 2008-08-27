@@ -20,7 +20,6 @@
 #include <QPixmap>
 #include <QWidget>
 
-#include <kis_debug.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -57,8 +56,7 @@ KisPaintOpRegistry::~KisPaintOpRegistry()
 
 KisPaintOpRegistry* KisPaintOpRegistry::instance()
 {
-    if(KisPaintOpRegistry::m_singleton == 0)
-    {
+    if (KisPaintOpRegistry::m_singleton == 0) {
         KisPaintOpRegistry::m_singleton = new KisPaintOpRegistry();
         KoPluginLoader::instance()->load("Krita/Paintop", "(Type == 'Service') and ([X-Krita-Version] == 3)");
         Q_CHECK_PTR(KisPaintOpRegistry::m_singleton);
@@ -69,12 +67,12 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
 KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image) const
 {
     if (painter == 0) {
-        kWarning() <<" KisPaintOpRegistry::paintOp painter is null";
+        kWarning() << " KisPaintOpRegistry::paintOp painter is null";
         return 0;
     }
 
-    if ( !painter->bounds().isValid() && image ) {
-        painter->setBounds( image->bounds() );
+    if (!painter->bounds().isValid() && image) {
+        painter->setBounds(image->bounds());
     }
 
     KisPaintOpFactory* f = value(id);
@@ -95,12 +93,12 @@ KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id, QWidget * pare
 {
     KisPaintOpFactory* f = value(id.id());
     if (f)
-        return f->settings( parent, inputDevice, image);
+        return f->settings(parent, inputDevice, image);
 
     return 0;
 }
 
-KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id, QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image ) const
+KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id, QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image) const
 {
     KisPaintOpPresetSP preset = new KisPaintOpPreset();
     preset->setName(i18n("default"));
@@ -118,7 +116,7 @@ bool KisPaintOpRegistry::userVisible(const KoID & id, const KoColorSpace* cs) co
 
     KisPaintOpFactory* f = value(id.id());
     if (!f) {
-        dbgRegistry <<"No paintop" << id.id() <<"";
+        dbgRegistry << "No paintop" << id.id() << "";
         return false;
     }
     return f->userVisible(cs);
@@ -130,7 +128,7 @@ QString KisPaintOpRegistry::pixmap(const KoID & id) const
     KisPaintOpFactory* f = value(id.id());
 
     if (!f) {
-        dbgRegistry <<"No paintop" << id.id() <<"";
+        dbgRegistry << "No paintop" << id.id() << "";
         return "";
     }
 

@@ -31,42 +31,48 @@ static const int EmitCompletedType = QEvent::User + 1;
  * Note that since we _know_ that we'll only have a single instance of it running, at most,
  * we don't care too much about locking and synchronization
  **/
-class KisAccumulatingHistogramProducer::ThreadedProducer : public QThread {
+class KisAccumulatingHistogramProducer::ThreadedProducer : public QThread
+{
     KisAccumulatingHistogramProducer* m_source;
     bool m_stop;
 protected:
     virtual void run();
 public:
     ThreadedProducer(KisAccumulatingHistogramProducer* source)
-        : m_source(source), m_stop(false) {}
-    void cancel() { m_stop = true; }
+            : m_source(source), m_stop(false) {}
+    void cancel() {
+        m_stop = true;
+    }
 };
 
 KisAccumulatingHistogramProducer::KisAccumulatingHistogramProducer(KisCachedHistogramObserver::Producers* source)
-    : KoBasicHistogramProducer(
-        KoID("ACCHISTO", ""),
-        source->at(0)->channels().count(),
-        source->at(0)->numberOfBins(),
-        0),
-      m_source(source)
+        : KoBasicHistogramProducer(
+            KoID("ACCHISTO", ""),
+            source->at(0)->channels().count(),
+            source->at(0)->numberOfBins(),
+            0),
+        m_source(source)
 {
     m_thread = new ThreadedProducer(this);
 }
 
-KisAccumulatingHistogramProducer::~KisAccumulatingHistogramProducer() {
+KisAccumulatingHistogramProducer::~KisAccumulatingHistogramProducer()
+{
     m_thread->cancel();
     m_thread->wait();
     delete m_thread;
 }
 
-void KisAccumulatingHistogramProducer::addRegionsToBinAsync() {
+void KisAccumulatingHistogramProducer::addRegionsToBinAsync()
+{
     m_thread->cancel();
     m_thread->wait();
     clear();
     m_thread->start();
 }
 
-void KisAccumulatingHistogramProducer::ThreadedProducer::run() {
+void KisAccumulatingHistogramProducer::ThreadedProducer::run()
+{
     m_stop = false;
 
     uint count = m_source->m_source->count(); // Talk about bad naming schemes...

@@ -43,23 +43,33 @@ public:
     bool containsTile(qint32 col, qint32 row, quint32 tileHash) const;
 
     // For debugging use
-    bool valid() const { return m_valid; }
-    void setInvalid() { m_valid = false; }
+    bool valid() const {
+        return m_valid;
+    }
+    void setInvalid() {
+        m_valid = false;
+    }
 
 private:
 
-    class DeletedTile {
+    class DeletedTile
+    {
     public:
         DeletedTile(qint32 col, qint32 row, const DeletedTile *next)
-            : m_col(col),
-              m_row(row),
-              m_next(next)
-        {
+                : m_col(col),
+                m_row(row),
+                m_next(next) {
         }
 
-        qint32 col() const { return m_col; }
-        qint32 row() const { return m_row; }
-        const DeletedTile *next() const { return m_next; }
+        qint32 col() const {
+            return m_col;
+        }
+        qint32 row() const {
+            return m_row;
+        }
+        const DeletedTile *next() const {
+            return m_next;
+        }
 
     private:
         qint32 m_col;
@@ -67,25 +77,23 @@ private:
         const DeletedTile *m_next;
     };
 
-    class DeletedTileList {
+    class DeletedTileList
+    {
     public:
         DeletedTileList()
-            : m_firstDeletedTile(0)
-        {
+                : m_firstDeletedTile(0) {
         }
 
         ~DeletedTileList();
 
-        void addTile(qint32 col, qint32 row)
-        {
+        void addTile(qint32 col, qint32 row) {
             DeletedTile *d = new DeletedTile(col, row, m_firstDeletedTile);
             Q_CHECK_PTR(d);
 
             m_firstDeletedTile = d;
         }
 
-        DeletedTile *firstTile() const
-        {
+        DeletedTile *firstTile() const {
             return m_firstDeletedTile;
         }
 
@@ -95,33 +103,27 @@ private:
         DeletedTile *m_firstDeletedTile;
     };
 
-    void addTileToDeleteOnRedo(qint32 col, qint32 row)
-    {
+    void addTileToDeleteOnRedo(qint32 col, qint32 row) {
         m_redoDelTilesList.addTile(col, row);
     }
 
-    DeletedTile *tileListToDeleteOnRedo()
-    {
+    DeletedTile *tileListToDeleteOnRedo() {
         return m_redoDelTilesList.firstTile();
     }
 
-    void clearTilesToDeleteOnRedo()
-    {
+    void clearTilesToDeleteOnRedo() {
         m_redoDelTilesList.clear();
     }
 
-    void addTileToDeleteOnUndo(qint32 col, qint32 row)
-    {
+    void addTileToDeleteOnUndo(qint32 col, qint32 row) {
         m_undoDelTilesList.addTile(col, row);
     }
 
-    DeletedTile *tileListToDeleteOnUndo()
-    {
+    DeletedTile *tileListToDeleteOnUndo() {
         return m_undoDelTilesList.firstTile();
     }
 
-    void clearTilesToDeleteOnUndo()
-    {
+    void clearTilesToDeleteOnUndo() {
         m_undoDelTilesList.clear();
     }
 

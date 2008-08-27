@@ -20,7 +20,8 @@
 #ifndef _GAUSS_H_
 #define _GAUSS_H_
 
-class gauss {
+class gauss
+{
 public:
     /**
      * This function takes as parameters real valued mean and
@@ -34,7 +35,7 @@ public:
      * distributed random number through the inverse of the Normal
      * Distribution function.
      */
-    static double gaussian(double, double, int );
+    static double gaussian(double, double, int);
 };
 
 #endif

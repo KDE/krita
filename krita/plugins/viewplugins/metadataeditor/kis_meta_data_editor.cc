@@ -48,8 +48,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
 
     QStringList files = KGlobal::dirs()->findAllResources("data", "kritaplugins/metadataeditor/*.rc");
 
-    foreach(const QString & file, files)
-    {
+    foreach(const QString & file, files) {
 
         QFile xmlFile(file);
         xmlFile.open(QFile::ReadOnly);
@@ -57,38 +56,35 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
         int errLine, errCol;
 
         QDomDocument document;
-        if(!document.setContent(&xmlFile, false, &errMsg, &errLine, &errCol))
-        {
-            dbgPlugins <<"Error reading XML at line" << errLine <<" column" << errCol <<" :" << errMsg;
+        if (!document.setContent(&xmlFile, false, &errMsg, &errLine, &errCol)) {
+            dbgPlugins << "Error reading XML at line" << errLine << " column" << errCol << " :" << errMsg;
         }
         QDomElement rootElement = document.documentElement();
-        if(rootElement.tagName() != "MetaDataEditor")
-        {
-            dbgPlugins <<"Invalid XML file";
+        if (rootElement.tagName() != "MetaDataEditor") {
+            dbgPlugins << "Invalid XML file";
         }
 
         const QString uiFileName = rootElement.attribute("uiFile");
         const QString pageName = rootElement.attribute("name");
         const QString iconName = rootElement.attribute("icon");
-        if(uiFileName == "") continue;
+        if (uiFileName == "") continue;
 
         // Read the ui file
         QUiLoader loader;
-        QFile uiFile(KStandardDirs::locate("data","kritaplugins/metadataeditor/" + uiFileName));
+        QFile uiFile(KStandardDirs::locate("data", "kritaplugins/metadataeditor/" + uiFileName));
         uiFile.open(QFile::ReadOnly);
         QWidget *widget = dynamic_cast<QWidget*>(loader.load(&uiFile, this));
-        if(widget ==0)
-        {
-            dbgPlugins <<"Failed to load ui file" << uiFileName;
+        if (widget == 0) {
+            dbgPlugins << "Failed to load ui file" << uiFileName;
             continue;
         }
         uiFile.close();
 
         QDomNodeList list = rootElement.childNodes();
         const int size = list.size();
-        for(int i = 0; i < size; ++i) {
+        for (int i = 0; i < size; ++i) {
             QDomElement elem = list.item(i).toElement();
-            if( elem.isNull() || elem.tagName() != "EntryEditor" ) continue;
+            if (elem.isNull() || elem.tagName() != "EntryEditor") continue;
             const QString editorName = elem.attribute("editorName");
             const QString schemaUri = elem.attribute("schemaUri");
             const QString entryName = elem.attribute("entryName");
@@ -97,61 +93,54 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
             const QString structureField = elem.attribute("structureField");
 
             QWidget* obj = widget->findChild<QWidget*>(editorName);
-            if(obj)
-            {
+            if (obj) {
                 const KisMetaData::Schema* schema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(schemaUri);
-                if(schema)
-                {
-                    if(!d->store->containsEntry( schema, entryName))
-                    {
-                        dbgPlugins <<" Store does not have yet entry :" << entryName <<" in" << schemaUri  <<" ==" << schema->generateQualifiedName(entryName);
+                if (schema) {
+                    if (!d->store->containsEntry(schema, entryName)) {
+                        dbgPlugins << " Store does not have yet entry :" << entryName << " in" << schemaUri  << " ==" << schema->generateQualifiedName(entryName);
                     }
                     KisMetaData::Value& value = d->store->getEntry(schema, entryName).value();
                     KisEntryEditor* ee = 0;
-                    if( value.type() == KisMetaData::Value::Structure && !structureField.isEmpty())
-                    {
+                    if (value.type() == KisMetaData::Value::Structure && !structureField.isEmpty()) {
                         QMap<QString, KisMetaData::Value>* structure = value.asStructure();
-                        ee = new KisEntryEditor( obj, &(*structure)[ structureField ], propertyName);
+                        ee = new KisEntryEditor(obj, &(*structure)[ structureField ], propertyName);
                     } else {
-                        ee = new KisEntryEditor( obj, &value, propertyName);
+                        ee = new KisEntryEditor(obj, &value, propertyName);
                     }
-                    connect( obj, editorSignal.toAscii(), ee, SLOT(valueEdited()) );
+                    connect(obj, editorSignal.toAscii(), ee, SLOT(valueEdited()));
                     QList<KisEntryEditor*> otherEditors = d->entryEditors.values(&value);
-                    foreach(KisEntryEditor* oe, otherEditors)
-                    {
+                    foreach(KisEntryEditor* oe, otherEditors) {
                         connect(ee, SIGNAL(valueHasBeenEdited()), oe, SLOT(valueChanged()));
                         connect(oe, SIGNAL(valueHasBeenEdited()), ee, SLOT(valueChanged()));
                     }
                     d->entryEditors.insert(&value, ee);
                 } else {
-                    dbgPlugins <<"Unknown schema :" << schemaUri;
+                    dbgPlugins << "Unknown schema :" << schemaUri;
                 }
             } else {
-                dbgPlugins <<"Unknown object :" << editorName;
+                dbgPlugins << "Unknown object :" << editorName;
             }
         }
         xmlFile.close();
 
-        KPageWidgetItem *page = new KPageWidgetItem( widget, pageName );
-        if(!iconName.isEmpty())
-        {
-            page->setIcon( KIcon( iconName ) );
+        KPageWidgetItem *page = new KPageWidgetItem(widget, pageName);
+        if (!iconName.isEmpty()) {
+            page->setIcon(KIcon(iconName));
         }
-        addPage( page );
+        addPage(page);
     }
 }
 
 KisMetaDataEditor::~KisMetaDataEditor()
 {
-    foreach(KisEntryEditor* e, d->entryEditors)
-    {
+    foreach(KisEntryEditor* e, d->entryEditors) {
         delete e;
     }
     delete d->store;
     delete d;
 }
 
-void KisMetaDataEditor::accept ()
+void KisMetaDataEditor::accept()
 {
     KPageDialog::accept();
     d->originalStore->copyFrom(d->store);

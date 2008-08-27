@@ -48,7 +48,7 @@ private:
     KisGeneratorRegistry operator=(const KisGeneratorRegistry&);
 
 private:
-     static KisGeneratorRegistry *m_singleton;
+    static KisGeneratorRegistry *m_singleton;
 };
 
 #endif // KIS_GENERATOR_REGISTRY_H_

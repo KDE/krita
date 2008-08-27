@@ -31,7 +31,8 @@ class KoCompositeOp;
 
 #include <krita_export.h>
 
-class KRITAIMAGE_EXPORT KisRecordedPolyLinePaintAction : public KisRecordedPaintAction {
+class KRITAIMAGE_EXPORT KisRecordedPolyLinePaintAction : public KisRecordedPaintAction
+{
 
 public:
 
@@ -64,11 +65,12 @@ private:
     Private* const d;
 };
 
-class KisRecordedPolyLinePaintActionFactory : public KisRecordedPaintActionFactory {
-    public:
-        KisRecordedPolyLinePaintActionFactory();
-        virtual ~KisRecordedPolyLinePaintActionFactory();
-        virtual KisRecordedAction* fromXML(KisImageSP img, const QDomElement& elt);
+class KisRecordedPolyLinePaintActionFactory : public KisRecordedPaintActionFactory
+{
+public:
+    KisRecordedPolyLinePaintActionFactory();
+    virtual ~KisRecordedPolyLinePaintActionFactory();
+    virtual KisRecordedAction* fromXML(KisImageSP img, const QDomElement& elt);
 };
 
 

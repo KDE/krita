@@ -49,11 +49,6 @@ public:
     virtual ~KisPaintOpRegistry();
 
     /**
-     * Return a newly created paintop. You are responsible for deleting
-     */
-    KDE_DEPRECATED KisPaintOp * paintOp(const QString& id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image = 0) const;
-
-    /**
      * Create and return a paintop based on the given preset. A preset defines
      * a paintop, a settings object and possible a brush tip.
      */
@@ -86,6 +81,12 @@ private:
     KisPaintOpRegistry();
     KisPaintOpRegistry(const KisPaintOpRegistry&);
     KisPaintOpRegistry operator=(const KisPaintOpRegistry&);
+
+    /**
+     * Return a newly created paintop. You are responsible for deleting
+     */
+    KisPaintOp * paintOp(const QString& id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image = 0) const;
+
 
 private:
     static KisPaintOpRegistry *m_singleton;

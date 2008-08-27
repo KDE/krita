@@ -30,12 +30,12 @@
 // basic program includes
 #include "kis_basic_dynamic_coloring_program_editor.h"
 
-class Factory {
-    public:
-        Factory()
-        {
-            KisDynamicColoringProgramFactoryRegistry::instance()->add( new KisBasicDynamicColoringProgramFactory );
-        }
+class Factory
+{
+public:
+    Factory() {
+        KisDynamicColoringProgramFactoryRegistry::instance()->add(new KisBasicDynamicColoringProgramFactory);
+    }
 };
 
 static Factory factory;
@@ -64,16 +64,15 @@ KisBasicDynamicColoringProgram::~KisBasicDynamicColoringProgram()
 
 inline double jitter(int amount, double v)
 {
-    v = (1.0 + (rand() - RAND_MAX / 2 ) * amount / (RAND_MAX * 50) ) * v;
-    if(v >= 1.0) v= 1.0;
+    v = (1.0 + (rand() - RAND_MAX / 2) * amount / (RAND_MAX * 50)) * v;
+    if (v >= 1.0) v = 1.0;
     return v;
 }
 
 double KisBasicDynamicColoringProgram::mix(const KisPaintInformation& info) const
 {
-    if(m_mixerEnabled)
-    {
-        return jitter( m_mixerJitter, m_mixerSensor->parameter( info ) );
+    if (m_mixerEnabled) {
+        return jitter(m_mixerJitter, m_mixerSensor->parameter(info));
     } else {
         return 1.0;
     }
@@ -82,23 +81,19 @@ double KisBasicDynamicColoringProgram::mix(const KisPaintInformation& info) cons
 void KisBasicDynamicColoringProgram::apply(KisDynamicColoring* coloring, const KisPaintInformation& info) const
 {
     QHash<QString, QVariant> params;
-    if(m_hueEnabled)
-    {
-        params["h"] = 2.0 * jitter( m_hueJitter, m_hueSensor->parameter( info ) ) - 1.0 ;
+    if (m_hueEnabled) {
+        params["h"] = 2.0 * jitter(m_hueJitter, m_hueSensor->parameter(info)) - 1.0 ;
     }
-    if(m_saturationEnabled)
-    {
-        params["s"] = 2.0 * jitter( m_saturationJitter, m_saturationSensor->parameter( info ) ) - 1.0 ;
+    if (m_saturationEnabled) {
+        params["s"] = 2.0 * jitter(m_saturationJitter, m_saturationSensor->parameter(info)) - 1.0 ;
     }
-    if(m_brightnessEnabled)
-    {
-        params["v"] = 2.0 * jitter( m_brightnessJitter, m_brightnessSensor->parameter( info ) ) - 1.0 ;
+    if (m_brightnessEnabled) {
+        params["v"] = 2.0 * jitter(m_brightnessJitter, m_brightnessSensor->parameter(info)) - 1.0 ;
     }
-    KoColorTransformation* transfo = coloring->colorSpace()->createColorTransformation( "hsv_adjustment", params);
+    KoColorTransformation* transfo = coloring->colorSpace()->createColorTransformation("hsv_adjustment", params);
     dbgKrita << "transfo = " << transfo << params["h"] << " " << params["s"] << " " << params["v"];
-    if( transfo )
-    {
-        coloring->applyColorTransformation( transfo );
+    if (transfo) {
+        coloring->applyColorTransformation(transfo);
     }
     delete transfo;
 }
@@ -115,18 +110,17 @@ void KisBasicDynamicColoringProgram::fromXML(const QDomElement& elt)
     while (!n.isNull()) {
         QDomElement e = n.toElement();
         if (!e.isNull()) {
-            if( e.tagName() == "params")
-            {
+            if (e.tagName() == "params") {
                 KisPropertiesConfiguration kpc;
                 kpc.fromXML(e);
-                setMixerEnable(kpc.getBool( "mixerEnabled", false) );
-                setMixerJitter(kpc.getInt( "mixerJitter", 0) );
-                setHueEnable(kpc.getBool( "hueEnabled", false) );
-                setHueJitter(kpc.getInt( "hueJitter", 0) );
-                setSaturationEnable(kpc.getBool( "saturationEnabled", false) );
-                setSaturationJitter(kpc.getInt( "saturationJitter", 0) );
-                setBrightnessEnable(kpc.getBool( "brightnessEnabled", false) );
-                setBrightnessJitter(kpc.getInt( "brightnessJitter", 0) );
+                setMixerEnable(kpc.getBool("mixerEnabled", false));
+                setMixerJitter(kpc.getInt("mixerJitter", 0));
+                setHueEnable(kpc.getBool("hueEnabled", false));
+                setHueJitter(kpc.getInt("hueJitter", 0));
+                setSaturationEnable(kpc.getBool("saturationEnabled", false));
+                setSaturationJitter(kpc.getInt("saturationJitter", 0));
+                setBrightnessEnable(kpc.getBool("brightnessEnabled", false));
+                setBrightnessJitter(kpc.getInt("brightnessJitter", 0));
             } else if (e.tagName() == "mixerSensor") {
                 m_mixerSensor = KisDynamicSensor::createFromXML(e);
             } else if (e.tagName() == "hueSensor") {
@@ -153,32 +147,28 @@ void KisBasicDynamicColoringProgram::toXML(QDomDocument& doc, QDomElement& rootE
     kpc.setProperty("saturationJitter", QVariant(saturationJitter()));
     kpc.setProperty("brightnessEnabled", QVariant(isBrightnessEnabled()));
     kpc.setProperty("brightnessJitter", QVariant(brightnessJitter()));
-    QDomElement paramsElt = doc.createElement( "params" );
-    rootElt.appendChild( paramsElt );
-    kpc.toXML( doc, paramsElt);
-    if(m_mixerSensor)
-    {
-        QDomElement eSensor = doc.createElement( "mixerSensor" );
-        m_mixerSensor->toXML( doc, eSensor);
-        rootElt.appendChild( eSensor );
+    QDomElement paramsElt = doc.createElement("params");
+    rootElt.appendChild(paramsElt);
+    kpc.toXML(doc, paramsElt);
+    if (m_mixerSensor) {
+        QDomElement eSensor = doc.createElement("mixerSensor");
+        m_mixerSensor->toXML(doc, eSensor);
+        rootElt.appendChild(eSensor);
     }
-    if(m_hueSensor)
-    {
-        QDomElement eSensor = doc.createElement( "hueSensor" );
-        m_hueSensor->toXML( doc, eSensor);
-        rootElt.appendChild( eSensor );
+    if (m_hueSensor) {
+        QDomElement eSensor = doc.createElement("hueSensor");
+        m_hueSensor->toXML(doc, eSensor);
+        rootElt.appendChild(eSensor);
     }
-    if(m_saturationSensor)
-    {
-        QDomElement eSensor = doc.createElement( "saturationSensor" );
-        m_saturationSensor->toXML( doc, eSensor);
-        rootElt.appendChild( eSensor );
+    if (m_saturationSensor) {
+        QDomElement eSensor = doc.createElement("saturationSensor");
+        m_saturationSensor->toXML(doc, eSensor);
+        rootElt.appendChild(eSensor);
     }
-    if(m_brightnessSensor)
-    {
-        QDomElement eSensor = doc.createElement( "brightnessSensor" );
-        m_brightnessSensor->toXML( doc, eSensor);
-        rootElt.appendChild( eSensor );
+    if (m_brightnessSensor) {
+        QDomElement eSensor = doc.createElement("brightnessSensor");
+        m_brightnessSensor->toXML(doc, eSensor);
+        rootElt.appendChild(eSensor);
     }
 
     KisDynamicColoringProgram::toXML(doc, rootElt);
@@ -319,7 +309,7 @@ void KisBasicDynamicColoringProgram::setBrightnessSensor(KisDynamicSensor* s)
 //--- KisBasicDynamicColoringProgramFactory ---//
 
 KisBasicDynamicColoringProgramFactory::KisBasicDynamicColoringProgramFactory() :
-    KisDynamicColoringProgramFactory("basiccoloring", i18n("Basic"))
+        KisDynamicColoringProgramFactory("basiccoloring", i18n("Basic"))
 {
 }
 

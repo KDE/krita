@@ -33,10 +33,11 @@ class KisFilterHandler;
 /**
  * Create all the filter actions for the specified view and implement re-apply filter
  */
-class KRITAUI_EXPORT KisFilterManager : public QObject {
+class KRITAUI_EXPORT KisFilterManager : public QObject
+{
 
     Q_OBJECT
-    
+
 public:
 
     KisFilterManager(KisView2 * parent, KisDoc2 * doc);
@@ -47,9 +48,9 @@ public:
     void setLastFilterHandler(KisFilterHandler* handler);
 
 private slots:
-    
+
     void insertFilter(const QString & name);
-    
+
 private:
     struct Private;
     Private * const d;

@@ -25,7 +25,8 @@
 #include <kis_types.h>
 #include <kis_mask.h>
 
-class KisMaskShape::Private {
+class KisMaskShape::Private
+{
 
 public:
 
@@ -33,13 +34,13 @@ public:
 };
 
 
-KisMaskShape::KisMaskShape(KoShapeContainer * parent, KisMaskSP mask )
-    : m_d( new Private() )
+KisMaskShape::KisMaskShape(KoShapeContainer * parent, KisMaskSP mask)
+        : m_d(new Private())
 {
     m_d->mask = mask;
 
-    setParent( parent );
-    setShapeId( KIS_MASK_SHAPE_ID );
+    setParent(parent);
+    setShapeId(KIS_MASK_SHAPE_ID);
 }
 
 KisMaskShape::~KisMaskShape()
@@ -54,8 +55,8 @@ KisMaskSP KisMaskShape::mask()
 
 void KisMaskShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
-   Q_UNUSED( painter );
-   Q_UNUSED( converter );
-   // Do nothing! Masks don't paint on QPainters
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
+    // Do nothing! Masks don't paint on QPainters
 }
 

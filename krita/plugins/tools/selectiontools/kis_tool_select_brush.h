@@ -34,7 +34,8 @@ class KisSelectionOptions;
  * brush shape. Not sure what kind of an icon could represent this...
  * Depends a bit on how we're going to visualize selections.
  */
-class KisToolSelectBrush : public KisToolFreehand {
+class KisToolSelectBrush : public KisToolFreehand
+{
     Q_OBJECT
     typedef KisToolFreehand super;
 
@@ -46,7 +47,7 @@ public:
     virtual QWidget* optionWidget();
 
 public slots:
-    virtual void activate( bool );
+    virtual void activate(bool);
 
 protected:
 
@@ -58,21 +59,21 @@ private:
     KisSelectedTransaction *m_transaction;
 };
 
-class KisToolSelectBrushFactory : public KoToolFactory {
+class KisToolSelectBrushFactory : public KoToolFactory
+{
 
 public:
     KisToolSelectBrushFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolSelectBrush", i18n( "Selection Brush" ))
-        {
-            setToolTip( i18n( "Paint a selection with a brush" ) );
-            setToolType( TOOL_TYPE_SELECTED );
-            setIcon( "tool_brush_selection" );
-            setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
-            setPriority( 50 );
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-        }
+            : KoToolFactory(parent, "KisToolSelectBrush", i18n("Selection Brush")) {
+        setToolTip(i18n("Paint a selection with a brush"));
+        setToolType(TOOL_TYPE_SELECTED);
+        setIcon("tool_brush_selection");
+        setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_B));
+        setPriority(50);
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+    }
 
-    virtual ~KisToolSelectBrushFactory(){}
+    virtual ~KisToolSelectBrushFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return  new KisToolSelectBrush(canvas);

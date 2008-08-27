@@ -36,9 +36,8 @@
 
 struct KisFilterDialog::Private {
     Private()
-        : currentFilter(0)
-        , mask(0)
-    {
+            : currentFilter(0)
+            , mask(0) {
     }
 
     KisFilterSP currentFilter;
@@ -49,33 +48,32 @@ struct KisFilterDialog::Private {
     KisImageSP image;
 };
 
-KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageSP image ) :
-    QDialog( parent ),
-    d( new Private )
+KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageSP image) :
+        QDialog(parent),
+        d(new Private)
 {
     QRect rc = node->extent();
-    setModal( false );
+    setModal(false);
 
-    d->uiFilterDialog.setupUi( this );
+    d->uiFilterDialog.setupUi(this);
     d->node = node;
     d->image = image;
     d->mask = new KisFilterMask();
 
     KisPixelSelectionSP psel = d->mask->selection()->getOrCreatePixelSelection();
-    psel->select( rc );
+    psel->select(rc);
     d->mask->selection()->updateProjection();
 
     if (d->node->inherits("KisLayer")) {
-        qobject_cast<KisLayer*>(d->node.data())->setPreviewMask( d->mask );
+        qobject_cast<KisLayer*>(d->node.data())->setPreviewMask(d->mask);
         d->uiFilterDialog.pushButtonCreateMaskEffect->show();
         d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(true);
         connect(d->uiFilterDialog.pushButtonCreateMaskEffect, SIGNAL(pressed()), SLOT(createMask()));
-    }
-    else {
+    } else {
         d->uiFilterDialog.pushButtonCreateMaskEffect->hide();
     }
-    d->uiFilterDialog.filterSelection->setPaintDevice( d->node->paintDevice() );
-    d->uiFilterDialog.filterSelection->setImage( d->image );
+    d->uiFilterDialog.filterSelection->setPaintDevice(d->node->paintDevice());
+    d->uiFilterDialog.filterSelection->setImage(d->image);
     d->timer.setSingleShot(true);
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(close()));
@@ -106,16 +104,16 @@ void KisFilterDialog::setFilter(KisFilterSP f)
 
 void KisFilterDialog::updatePreview()
 {
-    dbgKrita <<">>>>  KisFilterDialog::updatePreview() " << d->currentFilter->name();
+    dbgKrita << ">>>>  KisFilterDialog::updatePreview() " << d->currentFilter->name();
 
-    if ( !d->currentFilter ) return;
+    if (!d->currentFilter) return;
 
-    d->mask->setFilter( d->uiFilterDialog.filterSelection->configuration() );
+    d->mask->setFilter(d->uiFilterDialog.filterSelection->configuration());
 }
 
 void KisFilterDialog::apply()
 {
-    if ( !d->currentFilter ) return;
+    if (!d->currentFilter) return;
 
     KisFilterConfiguration* config = d->uiFilterDialog.filterSelection->configuration();
     emit(sigPleaseApplyFilter(d->node, config));

@@ -26,7 +26,8 @@
 /**
  * An OpenGL program for displaying high dynamic range images using an exposure control.
  */
-class KRITAUI_EXPORT KisOpenGLHDRExposureProgram : public KisOpenGLProgram {
+class KRITAUI_EXPORT KisOpenGLHDRExposureProgram : public KisOpenGLProgram
+{
 
 
 public:

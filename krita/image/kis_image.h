@@ -48,15 +48,17 @@ class KoColorProfile;
 class KoUpdater;
 class KisPerspectiveGrid;
 
-namespace KisMetaData {
-    class MergeStrategy;
+namespace KisMetaData
+{
+class MergeStrategy;
 }
 
 /**
  * This is the image class, it contains a tree of KisLayer stack and meta information about the image. And it also provides some functions
  * to manipulate the whole image.
  */
-class KRITAIMAGE_EXPORT KisImage : public QObject, public KisNodeFacade, public KisNodeGraphListener, public KisShared {
+class KRITAIMAGE_EXPORT KisImage : public QObject, public KisNodeFacade, public KisNodeGraphListener, public KisShared
+{
 
     Q_OBJECT
 
@@ -67,12 +69,12 @@ public:
 
 public: // KisNodeGraphListener implementation
 
-    void aboutToAddANode( KisNode *parent, int index );
-    void nodeHasBeenAdded( KisNode *parent, int index );
-    void aboutToRemoveANode( KisNode *parent, int index );
-    void nodeHasBeenRemoved( KisNode *parent, int index );
-    void aboutToMoveNode( KisNode * parent, int oldIndex, int newIndex );
-    void nodeHasBeenMoved( KisNode * parent, int oldIndex, int newIndex );
+    void aboutToAddANode(KisNode *parent, int index);
+    void nodeHasBeenAdded(KisNode *parent, int index);
+    void aboutToRemoveANode(KisNode *parent, int index);
+    void nodeHasBeenRemoved(KisNode *parent, int index);
+    void aboutToMoveNode(KisNode * parent, int oldIndex, int newIndex);
+    void nodeHasBeenMoved(KisNode * parent, int oldIndex, int newIndex);
 
 public:
 
@@ -98,27 +100,27 @@ public:
                            qint32 height,
                            const KoColorProfile * profile);
 
-     /**
-      * Render the projection scaled onto a QImage. Use this when
-      * zoom < 100% to avoid color-adjusting pixels that will be
-      * filtered away anyway. It uses nearest-neighbour sampling, so
-      * the result is inaccurate and ugly. Set the option "fast_zoom"
-      * to true to make Krita use this.
-      *
-      * XXX: Implement the mask option to draw the mask onto the
-      * scaled image.
-      *
-      * @param r the source rectangle in pixels that needs to be drawn
-      * @param xScale the X axis scale (1.0 == 100%)
-      * @param yScale the Y axis scale (1.0 == 100%)
-      * @param projection the display profile
-      * @param mask the mask that will be rendered on top of the image
-      * @return a qimage containing the sampled image pixels
-      */
-     QImage convertToQImage(const QRect& r,
-                            const double xScale, const double yScale,
-                            const KoColorProfile *profile,
-                            KisSelectionSP mask = 0);
+    /**
+     * Render the projection scaled onto a QImage. Use this when
+     * zoom < 100% to avoid color-adjusting pixels that will be
+     * filtered away anyway. It uses nearest-neighbour sampling, so
+     * the result is inaccurate and ugly. Set the option "fast_zoom"
+     * to true to make Krita use this.
+     *
+     * XXX: Implement the mask option to draw the mask onto the
+     * scaled image.
+     *
+     * @param r the source rectangle in pixels that needs to be drawn
+     * @param xScale the X axis scale (1.0 == 100%)
+     * @param yScale the Y axis scale (1.0 == 100%)
+     * @param projection the display profile
+     * @param mask the mask that will be rendered on top of the image
+     * @return a qimage containing the sampled image pixels
+     */
+    QImage convertToQImage(const QRect& r,
+                           const double xScale, const double yScale,
+                           const KoColorProfile *profile,
+                           KisSelectionSP mask = 0);
 
     /**
      * Lock the image to make sure no recompositing-causing signals get emitted
@@ -151,7 +153,7 @@ public:
      * globalSelection is empty, a new selection object will be
      * created that is by default completely deselected.
      */
-    void setGlobalSelection( KisSelectionSP globalSelection = 0 );
+    void setGlobalSelection(KisSelectionSP globalSelection = 0);
 
     /**
      * Removes the global selection.
@@ -342,7 +344,9 @@ public:
     /**
      * Return the size of the image
      */
-    QSize size() const { return QSize( width(), height() ); }
+    QSize size() const {
+        return QSize(width(), height());
+    }
 
     /**
      *  returns a paintdevice that contains the merged layers of this image, within
@@ -389,7 +393,7 @@ public:
      * returns false if the layer is already in this group or any
      * other (remove it first.)
      */
-    bool KDE_DEPRECATED addLayer( KisLayerSP layer,  KisGroupLayerSP parent, int index );
+    bool KDE_DEPRECATED addLayer(KisLayerSP layer,  KisGroupLayerSP parent, int index);
 
     /// Remove layer
     bool KDE_DEPRECATED removeLayer(KisLayerSP layer);
@@ -421,7 +425,7 @@ public:
      * Merge the specified layer with the layer
      * below this layer, remove the specified layer.
      */
-    void mergeLayer(KisLayerSP l, const KisMetaData::MergeStrategy* strategy );
+    void mergeLayer(KisLayerSP l, const KisMetaData::MergeStrategy* strategy);
 
     QRect bounds() const;
 
@@ -477,8 +481,8 @@ signals:
      */
     void sigLayersChanged(KisGroupLayerSP rootLayer);
 
-    void sigLayerMoved( KisLayerSP layer );
-    void sigLayerRemoved( KisLayerSP layer );
+    void sigLayerMoved(KisLayerSP layer);
+    void sigLayerRemoved(KisLayerSP layer);
 
     /**
      *  Emitted whenever an action has caused the image to be
@@ -486,7 +490,7 @@ signals:
      *
      * @param rc The recty that has been recomposited.
      */
-    void sigImageUpdated( const QRect & );
+    void sigImageUpdated(const QRect &);
 
     /**
        Emitted whenever the image has been modified, so that it
@@ -501,32 +505,32 @@ signals:
     /**
      * Inform the model that we're going to add a layer.
      */
-    void sigAboutToAddANode( KisNode *parent, int index );
+    void sigAboutToAddANode(KisNode *parent, int index);
 
     /**
      * Inform the model we're done adding a layer.
      */
-    void sigNodeHasBeenAdded( KisNode *parent, int index );
+    void sigNodeHasBeenAdded(KisNode *parent, int index);
 
     /**
      * Inform the model we're going to remove a layer.
      */
-    void sigAboutToRemoveANode( KisNode *parent, int index );
+    void sigAboutToRemoveANode(KisNode *parent, int index);
 
     /**
      * Inform the model we're done removing a layer.
      */
-    void sigNodeHasBeenRemoved( KisNode *parent, int index );
+    void sigNodeHasBeenRemoved(KisNode *parent, int index);
 
 
 public slots:
-   void slotProjectionUpdated( const QRect & rc );
+    void slotProjectionUpdated(const QRect & rc);
 
 private:
     KisImage& operator=(const KisImage& rhs);
     void init(KisUndoAdapter * adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace);
     void emitSizeChanged();
-    void preparePaintLayerAfterAdding( KisLayerSP layer );
+    void preparePaintLayerAfterAdding(KisLayerSP layer);
 
 private:
     class KisImagePrivate;

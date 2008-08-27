@@ -25,17 +25,16 @@
 using namespace Scripting;
 
 Brush::Brush(Module* module, KisBrush* brush, bool sharedBrush)
-    : QObject(module)
-    , m_brush(brush)
-    , m_sharedBrush(sharedBrush)
+        : QObject(module)
+        , m_brush(brush)
+        , m_sharedBrush(sharedBrush)
 {
     setObjectName("KritaBrush");
 }
 
 Brush::~Brush()
 {
-    if(!m_sharedBrush)
-    {
+    if (!m_sharedBrush) {
         delete m_brush;
     }
 }

@@ -35,9 +35,10 @@ class KisPaintOpPreset;
  * brush stroke and pops down the paintop settings widget
  * when clicked for use in the paintop box.
  */
-class KisPresetWidget : public KisPopupButton {
+class KisPresetWidget : public KisPopupButton
+{
 
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -45,8 +46,8 @@ public:
 
 public slots:
 
-    void slotSetPaintOp( const KoID & paintOp );
-    void slotSetItem( KisPaintOpPreset * preset );
+    void slotSetPaintOp(const KoID & paintOp);
+    void slotSetItem(KisPaintOpPreset * preset);
 
 protected:
 

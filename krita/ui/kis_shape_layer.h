@@ -53,18 +53,19 @@ class KisShapeLayer : public KisExternalLayer, public KoShapeLayer
 
 public:
 
-    KisShapeLayer( KoShapeContainer * parent, KisImageSP img, const QString &name, quint8 opacity );
+    KisShapeLayer(KoShapeContainer * parent, KisImageSP img, const QString &name, quint8 opacity);
     virtual ~KisShapeLayer();
-    KisNodeSP clone() const
-        {
-            return KisNodeSP( new KisShapeLayer(*this) );
-        }
-    bool allowAsChild( KisNodeSP ) const;
+    KisNodeSP clone() const {
+        return KisNodeSP(new KisShapeLayer(*this));
+    }
+    bool allowAsChild(KisNodeSP) const;
 
 public:
 
     // KoShape overrides
-    bool isSelectable() const { return false; }
+    bool isSelectable() const {
+        return false;
+    }
 
     // KoShapeContainer implementation
     void paintComponent(QPainter &painter, const KoViewConverter &converter);
@@ -102,9 +103,9 @@ public:
     KoShapeManager *shapeManager() const;
 
     using KoShapeLayer::saveOdf;
-    
+
     bool saveOdf(KoStore * store) const;
-    
+
 private:
 
     class Private;

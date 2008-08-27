@@ -34,24 +34,24 @@ class KisGeneratorLayer;
 
 class QDomElement;
 
-class KRITAUI_EXPORT KisOpenRasterStackSaveVisitor : public KisNodeVisitor {
+class KRITAUI_EXPORT KisOpenRasterStackSaveVisitor : public KisNodeVisitor
+{
 public:
-    KisOpenRasterStackSaveVisitor(KisOpenRasterSaveContext* );
+    KisOpenRasterStackSaveVisitor(KisOpenRasterSaveContext*);
     virtual ~KisOpenRasterStackSaveVisitor();
 
     using KisNodeVisitor::visit;
-    
+
 public:
     bool visit(KisPaintLayer *layer);
     bool visit(KisGroupLayer *layer);
     bool visit(KisAdjustmentLayer *layer);
-    bool visit( KisExternalLayer * )
-        {
-            return true;
-        }
+    bool visit(KisExternalLayer *) {
+        return true;
+    }
 
     bool visit(KisGeneratorLayer * layer);
-    
+
 private:
     void saveLayerInfo(QDomElement& elt, KisLayer* layer);
     struct Private;

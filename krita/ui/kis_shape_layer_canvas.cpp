@@ -38,16 +38,16 @@
 //#define DEBUG_REPAINT
 
 KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter * viewConverter)
-    : QObject(parent)
-    , KoCanvasBase( 0 )
-    , m_viewConverter( viewConverter )
-    , m_shapeManager( new KoShapeManager( this ) )
-    , m_projection( 0 )
-    , m_parentLayer( parent)
-    , m_repaintTriggered(false)
-    , m_antialias(false)
+        : QObject(parent)
+        , KoCanvasBase(0)
+        , m_viewConverter(viewConverter)
+        , m_shapeManager(new KoShapeManager(this))
+        , m_projection(0)
+        , m_parentLayer(parent)
+        , m_repaintTriggered(false)
+        , m_antialias(false)
 {
-    m_shapeManager->selection()->setActiveLayer( parent );
+    m_shapeManager->selection()->setActiveLayer(parent);
 }
 
 KisShapeLayerCanvas::~KisShapeLayerCanvas()
@@ -57,8 +57,8 @@ KisShapeLayerCanvas::~KisShapeLayerCanvas()
 void KisShapeLayerCanvas::gridSize(double *horizontal, double *vertical) const
 {
     Q_ASSERT(false); // This should never be called as this canvas should have no tools.
-    Q_UNUSED( horizontal );
-    Q_UNUSED( vertical );
+    Q_UNUSED(horizontal);
+    Q_UNUSED(vertical);
 }
 
 bool KisShapeLayerCanvas::snapToGrid() const
@@ -83,33 +83,34 @@ KoShapeManager *KisShapeLayerCanvas::shapeManager() const
 
 void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 {
-    dbgImage <<"KisShapeLayerCanvas::updateCanvas()" << rc;
+    dbgImage << "KisShapeLayerCanvas::updateCanvas()" << rc;
 
     QRect r = m_viewConverter->documentToView(rc).toRect();
     r.adjust(-2, -2, 2, 2); // for antialias
     m_dirty += r;
-    if(! m_repaintTriggered) {
+    if (! m_repaintTriggered) {
         double x, y;
         m_viewConverter->zoom(&x, &y);
         m_antialias = x < 3 || y < 3;
 
-        QTimer::singleShot (0, this, SLOT(repaint()));
+        QTimer::singleShot(0, this, SLOT(repaint()));
         m_repaintTriggered = true;
     }
 }
 
-void KisShapeLayerCanvas::repaint() {
+void KisShapeLayerCanvas::repaint()
+{
     QRect r = m_dirty.boundingRect();
     QImage img(r.width(), r.height(), QImage::Format_ARGB32);
     img.fill(0);
     QPainter p(&img);
-    
-    if(m_antialias)
+
+    if (m_antialias)
         p.setRenderHint(QPainter::Antialiasing);
     p.translate(-r.x(), -r.y());
     p.setClipRect(r);
 #ifdef DEBUG_REPAINT
-    QColor color = QColor(random()%255, random()%255, random()%255);
+    QColor color = QColor(random() % 255, random() % 255, random() % 255);
     p.fillRect(r, color);
 #endif
 
@@ -119,7 +120,7 @@ void KisShapeLayerCanvas::repaint() {
     KisPaintDeviceSP dev = new KisPaintDevice(m_projection->colorSpace());
     dev->convertFromQImage(img, "");
     KisPainter kp(m_projection.data());
-    kp.bitBlt(r.x(), r.y(), m_projection->colorSpace()->compositeOp( COMPOSITE_COPY ),
+    kp.bitBlt(r.x(), r.y(), m_projection->colorSpace()->compositeOp(COMPOSITE_COPY),
               dev, OPACITY_OPAQUE, 0, 0, r.width(), r.height());
     kp.end();
     m_parentLayer->setDirty(r);

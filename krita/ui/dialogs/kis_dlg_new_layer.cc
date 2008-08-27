@@ -42,15 +42,15 @@
 #include "kis_dlg_layer_properties.h"
 
 NewLayerDialog::NewLayerDialog(const KoID & colorSpaceID,
-                   const QString & profilename,
-                   const QString & deviceName,
-                   QWidget *parent,
-                   const char *name)
-    : KDialog(parent)
+                               const QString & profilename,
+                               const QString & deviceName,
+                               QWidget *parent,
+                               const char *name)
+        : KDialog(parent)
 {
-    setCaption( i18n("New Layer") );
-    setButtons( Ok| Cancel );
-    setDefaultButton( Ok );
+    setCaption(i18n("New Layer"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
     setObjectName(name);
     m_page = new WdgLayerProperties(this);
     m_page->layout()->setMargin(0);
@@ -70,9 +70,9 @@ NewLayerDialog::NewLayerDialog(const KoID & colorSpaceID,
     m_page->cmbColorSpaces->setIDList(KoColorSpaceRegistry::instance()->listKeys());
     m_page->cmbColorSpaces->setCurrent(colorSpaceID.id());
     connect(m_page->cmbColorSpaces, SIGNAL(activated(const KoID &)),
-        this, SLOT(fillCmbProfiles(const KoID &)));
+            this, SLOT(fillCmbProfiles(const KoID &)));
     connect(m_page->cmbColorSpaces, SIGNAL(activated(const KoID &)),
-        this, SLOT(fillCmbComposite(const KoID &)));
+            this, SLOT(fillCmbComposite(const KoID &)));
 
     // Init profiles
     fillCmbProfiles(m_page->cmbColorSpaces->currentItem());
@@ -99,9 +99,9 @@ void NewLayerDialog::fillCmbProfiles(const KoID & s)
     KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->value(s.id());
     if (csf == 0) return;
 
-    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
+    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
 
-    foreach (const KoColorProfile *profile, profileList) {
+    foreach(const KoColorProfile *profile, profileList) {
         m_page->cmbProfile->addSqueezedItem(profile->name());
     }
     m_page->cmbProfile->setCurrent(csf->defaultProfile());
@@ -115,7 +115,7 @@ void NewLayerDialog::fillCmbComposite(const KoID & s)
         return;
     }
 
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(s,"");
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(s, "");
     if (cs) {
         m_page->cmbComposite->setCompositeOpList(cs->compositeOps());
     }
@@ -129,8 +129,8 @@ int NewLayerDialog::opacity() const
         return 0;
 
     opacity = int((opacity * 255.0) / 100 + 0.5);
-    if(opacity>255)
-        opacity=255;
+    if (opacity > 255)
+        opacity = 255;
     return opacity;
 }
 

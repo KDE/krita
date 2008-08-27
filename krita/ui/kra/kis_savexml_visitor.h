@@ -26,15 +26,16 @@
 #include "kis_types.h"
 
 
-class KisSaveXmlVisitor : public KisNodeVisitor {
+class KisSaveXmlVisitor : public KisNodeVisitor
+{
 public:
-    KisSaveXmlVisitor(QDomDocument doc, const QDomElement & element, quint32 &count, bool root=false);
+    KisSaveXmlVisitor(QDomDocument doc, const QDomElement & element, quint32 &count, bool root = false);
 
     using KisNodeVisitor::visit;
 
 public:
 
-    bool visit( KisExternalLayer * );
+    bool visit(KisExternalLayer *);
     bool visit(KisPaintLayer *layer);
     bool visit(KisGroupLayer *layer);
     bool visit(KisAdjustmentLayer* layer);

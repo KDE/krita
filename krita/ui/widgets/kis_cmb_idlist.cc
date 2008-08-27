@@ -27,7 +27,7 @@
 
 
 KisCmbIDList::KisCmbIDList(QWidget * parent, const char * name)
-    : KComboBox(parent)
+        : KComboBox(parent)
 {
     setObjectName(name);
     setEditable(false);
@@ -43,7 +43,7 @@ KisCmbIDList::~KisCmbIDList()
 void KisCmbIDList::setIDList(const QList<KoID>  & list)
 {
     m_list = list;
-    for(qint32 i = 0; i < m_list.count(); ++i) {
+    for (qint32 i = 0; i < m_list.count(); ++i) {
         addItem(m_list.at(i).name());
     }
 }
@@ -63,8 +63,7 @@ void KisCmbIDList::setCurrent(const KoID id)
 
     if (index >= 0) {
         KComboBox::setCurrentIndex(index);
-    }
-    else {
+    } else {
         m_list.push_back(id);
         addItem(id.name());
         KComboBox::setCurrentIndex(m_list.count() - 1);

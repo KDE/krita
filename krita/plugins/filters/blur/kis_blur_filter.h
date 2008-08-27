@@ -35,9 +35,11 @@ public:
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
-        ) const;
-    static inline KoID id() { return KoID("blur", i18n("Blur")); }
-    
+                ) const;
+    static inline KoID id() {
+        return KoID("blur", i18n("Blur"));
+    }
+
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 public:
     KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;

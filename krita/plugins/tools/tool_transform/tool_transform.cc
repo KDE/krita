@@ -41,11 +41,11 @@
 
 
 typedef KGenericFactory<ToolTransform> ToolTransformFactory;
-K_EXPORT_COMPONENT_FACTORY( kritatooltransform, ToolTransformFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritatooltransform, ToolTransformFactory("krita"))
 
 
 ToolTransform::ToolTransform(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     setComponentData(ToolTransformFactory::componentData());
 

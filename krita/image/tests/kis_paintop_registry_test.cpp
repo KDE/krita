@@ -31,21 +31,7 @@
 void KisPaintopRegistryTest::testCreation()
 {
     KisPaintOpRegistry * reg = KisPaintOpRegistry::instance();
-    QVERIFY( reg->count() > 0 );
-}
-
-void KisPaintopRegistryTest::testDefaultPaintops()
-{
-    KisPaintOpRegistry * reg = KisPaintOpRegistry::instance();
-    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "paintop registry test");
-    KisPaintLayerSP l = new KisPaintLayer(image, "test", OPACITY_OPAQUE);
-    image->addNode( l.data() );
-
-    KisPainter p( l->paintDevice() );
-    
-    KisPaintOp * op = reg->paintOp("paintbrush", 0, &p, image);
-    Q_UNUSED(op);
+    QVERIFY(reg->count() > 0);
 }
 
 QTEST_KDEMAIN(KisPaintopRegistryTest, GUI)

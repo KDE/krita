@@ -29,8 +29,7 @@ KisDynamicShapeProgramFactoryRegistry::KisDynamicShapeProgramFactoryRegistry() :
 
 KisDynamicShapeProgramFactoryRegistry* KisDynamicShapeProgramFactoryRegistry::instance()
 {
-    if(Private::instance ==0)
-    {
+    if (Private::instance == 0) {
         Private::instance = new KisDynamicShapeProgramFactoryRegistry;
     }
     return Private::instance;

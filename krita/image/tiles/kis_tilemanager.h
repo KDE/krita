@@ -46,7 +46,8 @@ class KisTile;
  *    read any tile, as long as nobody is writing to it. (bsar)
  *    See: http://doc.trolltech.com/qq/qq14-threading.html
  */
-class KRITAIMAGE_EXPORT KisTileManager  {
+class KRITAIMAGE_EXPORT KisTileManager
+{
 public:
     ~KisTileManager();
     static KisTileManager* instance();
@@ -109,7 +110,9 @@ private:
         bool validNode;
     };
 
-    typedef struct { KTemporaryFile* file; off_t filePos; int size; } FreeInfo;
+    typedef struct {
+        KTemporaryFile* file; off_t filePos; int size;
+    } FreeInfo;
     typedef QHash<const KisTile*, TileInfo*> TileMap;
     typedef Q3ValueList<TileInfo*> TileList;
     typedef Q3ValueList<FreeInfo*> FreeList;
@@ -139,7 +142,7 @@ private:
     // This is the constant that we will use to see if we want to add a new tempfile
     // We use 1<<30 (one gigabyte) because apparently 32bit systems don't really like very
     // large files.
-    static const long MaxSwapFileSize = 1<<30; // For debugging purposes: 1<<20 is a megabyte
+    static const long MaxSwapFileSize = 1 << 30; // For debugging purposes: 1<<20 is a megabyte
 
     // debug
     int counter;

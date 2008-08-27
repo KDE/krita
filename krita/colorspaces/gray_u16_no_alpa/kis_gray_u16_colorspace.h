@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_STRATEGY_COLORSPACE_GRAYSCALE_U16_H_
-#define KIS_STRATEGY_COLORSPACE_GRAYSCALE_U16_H_
+#ifndef KIS_GRAY_U16_COLORSPACE_H_
+#define KIS_GRAY_U16_COLORSPACE_H_
 #include <QColor>
 
 #include <klocale.h>
@@ -25,35 +25,56 @@
 #include <KoColorSpaceTraits.h>
 #include <KoColorModelStandardIds.h>
 
-typedef KoColorSpaceTrait<quint16, 1, -1> GrayU16Traits;
+typedef KoColorSpaceTrait < quint16, 1, -1 > GrayU16Traits;
 
 class KRITA_GRAY_U16_EXPORT KisGrayU16ColorSpace : public KoLcmsColorSpace<GrayU16Traits>
 {
-    public:
-        KisGrayU16ColorSpace( KoColorProfile *p);
-        virtual bool willDegrade(ColorSpaceIndependence ) const { return false; }
-        virtual KoID colorModelId() const { return GrayColorModelID; }
-        virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
-        virtual KoColorSpace* clone() const;
-        virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
-        virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const;
+public:
+    KisGrayU16ColorSpace(KoColorProfile *p);
+    virtual bool willDegrade(ColorSpaceIndependence) const {
+        return false;
+    }
+    virtual KoID colorModelId() const {
+        return GrayColorModelID;
+    }
+    virtual KoID colorDepthId() const {
+        return Integer16BitsColorDepthID;
+    }
+    virtual KoColorSpace* clone() const;
+    virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
+    virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
 };
 
 class KisGrayU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
 {
 public:
-    KisGrayU16ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_GRAY_16, icSigGrayData)
-    {}
-    virtual QString id() const { return "GRAY16"; }
-    virtual QString name() const { return i18n("Grayscale (16-bit integer/channel)"); }
-    virtual bool userVisible() const { return false; }
-    virtual KoID colorModelId() const { return GrayColorModelID; }
-    virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
-    virtual int referenceDepth() const { return 16; }
+    KisGrayU16ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_GRAY_16, icSigGrayData) {}
+    virtual QString id() const {
+        return "GRAY16";
+    }
+    virtual QString name() const {
+        return i18n("Grayscale (16-bit integer/channel)");
+    }
+    virtual bool userVisible() const {
+        return false;
+    }
+    virtual KoID colorModelId() const {
+        return GrayColorModelID;
+    }
+    virtual KoID colorDepthId() const {
+        return Integer16BitsColorDepthID;
+    }
+    virtual int referenceDepth() const {
+        return 16;
+    }
 
-    virtual KoColorSpace *createColorSpace( const KoColorProfile *p) const { return new KisGrayU16ColorSpace( p->clone() ); }
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const {
+        return new KisGrayU16ColorSpace(p->clone());
+    }
 
-    virtual QString defaultProfile() const { return "gray built-in - (lcms internal)"; }
+    virtual QString defaultProfile() const {
+        return "gray built-in - (lcms internal)";
+    }
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_

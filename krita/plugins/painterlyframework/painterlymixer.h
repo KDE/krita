@@ -27,7 +27,8 @@
 class KisView2;
 class KisPainterlyMixerDockerFactory;
 
-class PainterlyMixer : public KParts::Plugin {
+class PainterlyMixer : public KParts::Plugin
+{
     Q_OBJECT
 
 public:

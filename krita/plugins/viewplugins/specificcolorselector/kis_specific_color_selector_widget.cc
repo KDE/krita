@@ -31,8 +31,8 @@
 KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent) : QWidget(parent), m_colorSpace(0)
 {
     m_layout = new QVBoxLayout(this);
-    setColorSpace( KoColorSpaceRegistry::instance()->rgb8());
-    m_updateAllowed= true;
+    setColorSpace(KoColorSpaceRegistry::instance()->rgb8());
+    m_updateAllowed = true;
 }
 
 KisSpecificColorSelectorWidget::~KisSpecificColorSelectorWidget()
@@ -41,45 +41,38 @@ KisSpecificColorSelectorWidget::~KisSpecificColorSelectorWidget()
 
 void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
 {
-    if(m_colorSpace && *m_colorSpace == *cs) return;
-    m_colorSpace = KoColorSpaceRegistry::instance()->colorSpace( cs->id(), cs->profile() );
-    m_color = KoColor( m_color, m_colorSpace );
-    foreach(KisColorInput* input, m_inputs)
-    {
+    if (m_colorSpace && *m_colorSpace == *cs) return;
+    m_colorSpace = KoColorSpaceRegistry::instance()->colorSpace(cs->id(), cs->profile());
+    m_color = KoColor(m_color, m_colorSpace);
+    foreach(KisColorInput* input, m_inputs) {
         delete input;
     }
     m_inputs.clear();
     QList<KoChannelInfo*> channels = m_colorSpace->channels();
-    foreach(KoChannelInfo* channel, channels)
-    {
-        if(channel->channelType() == KoChannelInfo::COLOR)
-        {
+    foreach(KoChannelInfo* channel, channels) {
+        if (channel->channelType() == KoChannelInfo::COLOR) {
             KisColorInput* input = 0;
-            switch(channel->channelValueType())
-            {
-                case KoChannelInfo::UINT8:
-                case KoChannelInfo::UINT16:
-                case KoChannelInfo::UINT32:
-                {
-                    input = new KisIntegerColorInput(this, channel, &m_color);
-                }
-                    break;
-                case KoChannelInfo::FLOAT16:
-                case KoChannelInfo::FLOAT32:
-                {
-                    input = new KisFloatColorInput(this, channel, &m_color);
-                }
-                    break;
-                default:
-                    Q_ASSERT(false);
-                    input = 0;
+            switch (channel->channelValueType()) {
+            case KoChannelInfo::UINT8:
+            case KoChannelInfo::UINT16:
+            case KoChannelInfo::UINT32: {
+                input = new KisIntegerColorInput(this, channel, &m_color);
             }
-            if(input)
-            {
+            break;
+            case KoChannelInfo::FLOAT16:
+            case KoChannelInfo::FLOAT32: {
+                input = new KisFloatColorInput(this, channel, &m_color);
+            }
+            break;
+            default:
+                Q_ASSERT(false);
+                input = 0;
+            }
+            if (input) {
                 connect(input, SIGNAL(updated()), this, SLOT(update()));
                 connect(this, SIGNAL(updated()), input, SLOT(update()));
                 m_inputs.append(input);
-                m_layout->addWidget( input);
+                m_layout->addWidget(input);
             }
         }
     }
@@ -87,14 +80,14 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
 
 void KisSpecificColorSelectorWidget::update()
 {
-    if(m_updateAllowed)
+    if (m_updateAllowed)
         emit(colorChanged(m_color));
 }
 
 void KisSpecificColorSelectorWidget::setColor(const KoColor& c)
 {
     m_updateAllowed = false;
-    m_color.fromKoColor( c );
+    m_color.fromKoColor(c);
     emit(updated());
     m_updateAllowed = true;
 }

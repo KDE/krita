@@ -52,29 +52,29 @@
 #include "kis_layer_manager.h"
 
 typedef KGenericFactory<Histogram> HistogramFactory;
-K_EXPORT_COMPONENT_FACTORY( kritahistogram, HistogramFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritahistogram, HistogramFactory("krita"))
 
 Histogram::Histogram(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
-    if ( parent->inherits("KisView2") ) {
+    if (parent->inherits("KisView2")) {
 
         setComponentData(HistogramFactory::componentData());
 
-setXMLFile(KStandardDirs::locate("data","kritaplugins/histogram.rc"),
-true);
+        setXMLFile(KStandardDirs::locate("data", "kritaplugins/histogram.rc"),
+                   true);
 
         m_action  = new KAction(i18n("&Histogram..."), this);
-        actionCollection()->addAction("histogram", m_action );
+        actionCollection()->addAction("histogram", m_action);
         connect(m_action,  SIGNAL(triggered()), this, SLOT(slotActivated()));
 
         m_view = (KisView2*) parent;
         if (KisImageSP img = m_view->image()) {
             connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), SLOT(slotLayersChanged()));
-            connect(img.data(), SIGNAL(sigNodeHasBeenAdded( KisNode *, int )), SLOT(slotLayersChanged()));
+            connect(img.data(), SIGNAL(sigNodeHasBeenAdded(KisNode *, int)), SLOT(slotLayersChanged()));
             connect(m_view->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(slotLayersChanged()));
             connect(img.data(), SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), SLOT(slotLayersChanged()));
-            connect(img.data(), SIGNAL(sigNodeHasBeenRemoved( KisNode *, int )), SLOT(slotLayersChanged()));
+            connect(img.data(), SIGNAL(sigNodeHasBeenRemoved(KisNode *, int)), SLOT(slotLayersChanged()));
             m_img = img.data();
         }
     }
@@ -84,7 +84,8 @@ Histogram::~Histogram()
 {
 }
 
-void Histogram::slotLayersChanged() {
+void Histogram::slotLayersChanged()
+{
     m_action->setEnabled(m_img && m_view->layerManager()->activeLayer() && m_view->layerManager()->activeLayer()->visible());
 }
 
@@ -94,7 +95,7 @@ void Histogram::slotActivated()
     Q_CHECK_PTR(dlgHistogram);
 
     KisLayerSP layer = m_view->layerManager()->activeLayer();
-    if ( layer ) {
+    if (layer) {
         KisPaintDeviceSP dev = layer->paintDevice();
 
         if (dev)

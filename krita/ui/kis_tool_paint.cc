@@ -61,13 +61,13 @@
 
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
-    : KisTool(canvas, cursor)
+        : KisTool(canvas, cursor)
 {
     m_optionWidgetLayout = 0;
 
     m_lbOpacity = 0;
     m_slOpacity = 0;
-    m_lbComposite= 0;
+    m_lbComposite = 0;
     m_cmbComposite = 0;
 
     m_opacity = OPACITY_OPAQUE;
@@ -79,12 +79,12 @@ KisToolPaint::~KisToolPaint()
 {
 }
 
-void KisToolPaint::resourceChanged( int key, const QVariant & v )
+void KisToolPaint::resourceChanged(int key, const QVariant & v)
 {
-    KisTool::resourceChanged( key, v );
+    KisTool::resourceChanged(key, v);
 
-    switch ( key ) {
-    case ( KisCanvasResourceProvider::CurrentKritaNode ):
+    switch (key) {
+    case(KisCanvasResourceProvider::CurrentKritaNode):
         updateCompositeOpComboBox();
         break;
     default:
@@ -97,18 +97,17 @@ void KisToolPaint::paint(QPainter&, const KoViewConverter &)
 {
 }
 
-void KisToolPaint::mouseReleaseEvent( KoPointerEvent *e )
+void KisToolPaint::mouseReleaseEvent(KoPointerEvent *e)
 {
-    if(e->button() == Qt::MidButton)
-    {
+    if (e->button() == Qt::MidButton) {
         KoCanvasResourceProvider * resourceProvider = 0;
-        if ( m_canvas && ( resourceProvider = m_canvas->resourceProvider() ) ) {
-            QVariant fg = resourceProvider->resource( KoCanvasResource::ForegroundColor );
-            if ( !fg.isValid() ) return;
-            QVariant bg = resourceProvider->resource( KoCanvasResource::BackgroundColor );
-            if ( !bg.isValid() ) return;
-            resourceProvider->setResource( KoCanvasResource::ForegroundColor, bg );
-            resourceProvider->setResource( KoCanvasResource::BackgroundColor, fg );
+        if (m_canvas && (resourceProvider = m_canvas->resourceProvider())) {
+            QVariant fg = resourceProvider->resource(KoCanvasResource::ForegroundColor);
+            if (!fg.isValid()) return;
+            QVariant bg = resourceProvider->resource(KoCanvasResource::BackgroundColor);
+            if (!bg.isValid()) return;
+            resourceProvider->setResource(KoCanvasResource::ForegroundColor, bg);
+            resourceProvider->setResource(KoCanvasResource::BackgroundColor, fg);
         }
     }
 
@@ -120,7 +119,7 @@ QWidget * KisToolPaint::createOptionWidget()
     QWidget * optionWidget = new QWidget();
 
     m_lbOpacity = new QLabel(i18n("Opacity: "), optionWidget);
-    m_slOpacity = new KoSliderCombo( optionWidget );
+    m_slOpacity = new KoSliderCombo(optionWidget);
     m_slOpacity->setMinimum(0);
     m_slOpacity->setMaximum(100);
     m_slOpacity->setDecimals(0);
@@ -149,7 +148,7 @@ QWidget * KisToolPaint::createOptionWidget()
     verticalLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Expanding));
 
     if (!quickHelp().isEmpty()) {
-        QPushButton* push = new QPushButton(KIcon( "help-contents" ), "", optionWidget);
+        QPushButton* push = new QPushButton(KIcon("help-contents"), "", optionWidget);
         connect(push, SIGNAL(clicked()), this, SLOT(slotPopupQuickHelp()));
 
         QHBoxLayout* hLayout = new QHBoxLayout(optionWidget);
@@ -158,7 +157,7 @@ QWidget * KisToolPaint::createOptionWidget()
         verticalLayout->addLayout(hLayout);
     }
 
-return optionWidget;
+    return optionWidget;
 }
 
 
@@ -175,8 +174,7 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
     if (label) {
         m_optionWidgetLayout->addWidget(label, m_optionWidgetLayout->rowCount(), 0);
         m_optionWidgetLayout->addWidget(control, m_optionWidgetLayout->rowCount() - 1, 1);
-    }
-    else
+    } else
         m_optionWidgetLayout->addWidget(control, m_optionWidgetLayout->rowCount(), 0, 1, 2);
 }
 
@@ -209,7 +207,8 @@ void KisToolPaint::updateCompositeOpComboBox()
     }
 }
 
-void KisToolPaint::slotPopupQuickHelp() {
+void KisToolPaint::slotPopupQuickHelp()
+{
     QWhatsThis::showText(QCursor::pos(), quickHelp());
 }
 

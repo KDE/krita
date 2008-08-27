@@ -32,10 +32,10 @@
 #include "kis_global.h"
 
 typedef KGenericFactory<SumiPaintOpPlugin> SumiPaintOpPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritasumipaintop, SumiPaintOpPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritasumipaintop, SumiPaintOpPluginFactory("krita"))
 
 
-    SumiPaintOpPlugin::SumiPaintOpPlugin(QObject *parent, const QStringList &)
+SumiPaintOpPlugin::SumiPaintOpPlugin(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
     //

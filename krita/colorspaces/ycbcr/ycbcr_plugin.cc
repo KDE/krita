@@ -35,34 +35,34 @@
 #include "kis_ycbcr_u8_colorspace.h"
 
 typedef KGenericFactory<YCbCrPlugin> YCbCrPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritaycbcrplugin, YCbCrPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritaycbcrplugin, YCbCrPluginFactory("krita"))
 
 
 YCbCrPlugin::YCbCrPlugin(QObject *parent, const QStringList &)
-    : QObject(parent)
+        : QObject(parent)
 {
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
     // Register U16 YCbCr colorspace
     {
         KoColorSpaceFactory *csf  = new KisYCbCrU16ColorSpaceFactory();
-        const KoCtlColorProfile* profile = static_cast<const KoCtlColorProfile*>(f->profileByName( csf->defaultProfile() ) );
-        KoColorSpace * colorSpaceYCbCr16  = new KisYCbCrU16ColorSpace( profile );
+        const KoCtlColorProfile* profile = static_cast<const KoCtlColorProfile*>(f->profileByName(csf->defaultProfile()));
+        KoColorSpace * colorSpaceYCbCr16  = new KisYCbCrU16ColorSpace(profile);
         Q_CHECK_PTR(colorSpaceYCbCr16);
         f->add(csf);
         KoHistogramProducerFactoryRegistry::instance()->add(
-                    new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
-                    (KoID("YCBCRU16HISTO", i18n("Unsigned Int 16 Half Histogram")), colorSpaceYCbCr16) );
+            new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
+            (KoID("YCBCRU16HISTO", i18n("Unsigned Int 16 Half Histogram")), colorSpaceYCbCr16));
     }
     // Register U8 YCbCr colorspace
     {
         KoColorSpaceFactory *csf  = new KisYCbCrU8ColorSpaceFactory();
-        const KoCtlColorProfile* profile = static_cast<const KoCtlColorProfile*>(f->profileByName( csf->defaultProfile() ) );
-        KoColorSpace * colorSpaceYCbCr8  = new KisYCbCrU8ColorSpace( profile);
+        const KoCtlColorProfile* profile = static_cast<const KoCtlColorProfile*>(f->profileByName(csf->defaultProfile()));
+        KoColorSpace * colorSpaceYCbCr8  = new KisYCbCrU8ColorSpace(profile);
         Q_CHECK_PTR(colorSpaceYCbCr8);
         f->add(csf);
         KoHistogramProducerFactoryRegistry::instance()->add(
-                    new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
-                    (KoID("YCBCRU8HISTO", i18n("Unsigned Int 8 Half Histogram")), colorSpaceYCbCr8) );
+            new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
+            (KoID("YCBCRU8HISTO", i18n("Unsigned Int 8 Half Histogram")), colorSpaceYCbCr8));
     }
 }
 

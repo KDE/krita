@@ -26,12 +26,12 @@
 #include "kis_undo_adapter.h"
 
 KisSelectionTransaction::KisSelectionTransaction(const QString& name, KisImageSP image, KisSelectionSP selection, QUndoCommand* parent) :
-    KisTransaction(name, selection->getOrCreatePixelSelection().data(), parent)
-   ,m_image(image)
-   ,m_selection(selection)
-   ,m_wasDeselected(selection->isDeselected())
+        KisTransaction(name, selection->getOrCreatePixelSelection().data(), parent)
+        , m_image(image)
+        , m_selection(selection)
+        , m_wasDeselected(selection->isDeselected())
 {
-    if(m_selection->isDeselected()) {
+    if (m_selection->isDeselected()) {
         m_selection->getOrCreatePixelSelection()->clear();
         m_selection->setDeselected(false);
     }

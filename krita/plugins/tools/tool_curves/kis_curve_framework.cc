@@ -18,7 +18,7 @@
 
 #include "kis_curve_framework.h"
 
- 
+
 #include <QRect>
 #include <QPointF>
 
@@ -31,34 +31,34 @@ using namespace std;
  * KisCurve methods definitions *
  * **************************** */
 
-KisCurve::iterator KisCurve::addPivot (KisCurve::iterator it, const QPointF& point)
+KisCurve::iterator KisCurve::addPivot(KisCurve::iterator it, const QPointF& point)
 {
-    return iterator(*this,m_curve.insert(it.position(), CurvePoint(point,true,false,NOHINTS)));
+    return iterator(*this, m_curve.insert(it.position(), CurvePoint(point, true, false, NOHINTS)));
 }
 
-KisCurve::iterator KisCurve::pushPivot (const QPointF& point)
+KisCurve::iterator KisCurve::pushPivot(const QPointF& point)
 {
-    return selectPivot(iterator(*this,m_curve.insert(m_curve.end(),CurvePoint(point,true,false,NOHINTS))),true);
+    return selectPivot(iterator(*this, m_curve.insert(m_curve.end(), CurvePoint(point, true, false, NOHINTS))), true);
 }
 
-KisCurve::iterator KisCurve::addPoint (KisCurve::iterator it, const QPointF& point, bool pivot, bool selected, int hint)
+KisCurve::iterator KisCurve::addPoint(KisCurve::iterator it, const QPointF& point, bool pivot, bool selected, int hint)
 {
-    return iterator(*this,m_curve.insert(it.position(), CurvePoint(point,pivot,selected, hint)));
+    return iterator(*this, m_curve.insert(it.position(), CurvePoint(point, pivot, selected, hint)));
 }
 
-KisCurve::iterator KisCurve::addPoint (KisCurve::iterator it, const CurvePoint& point)
+KisCurve::iterator KisCurve::addPoint(KisCurve::iterator it, const CurvePoint& point)
 {
-    return iterator(*this,m_curve.insert(it.position(), point));
+    return iterator(*this, m_curve.insert(it.position(), point));
 }
 
-KisCurve::iterator KisCurve::pushPoint (const QPointF& point, bool pivot, bool selected,int hint)
+KisCurve::iterator KisCurve::pushPoint(const QPointF& point, bool pivot, bool selected, int hint)
 {
-    return iterator(*this,m_curve.insert(m_curve.end(),CurvePoint(point,pivot,selected,hint)));
+    return iterator(*this, m_curve.insert(m_curve.end(), CurvePoint(point, pivot, selected, hint)));
 }
 
-KisCurve::iterator KisCurve::pushPoint (const CurvePoint& point)
+KisCurve::iterator KisCurve::pushPoint(const CurvePoint& point)
 {
-    return iterator(*this,m_curve.insert(m_curve.end(),point));
+    return iterator(*this, m_curve.insert(m_curve.end(), point));
 }
 
 KisCurve KisCurve::pivots()
@@ -89,22 +89,22 @@ KisCurve KisCurve::subCurve(const QPointF& tend)
 
 KisCurve KisCurve::subCurve(const CurvePoint& tend)
 {
-    return subCurve(find(tend).previousPivot(),find(tend));
+    return subCurve(find(tend).previousPivot(), find(tend));
 }
 
 KisCurve KisCurve::subCurve(iterator tend)
 {
-    return subCurve(tend.previousPivot(),tend);
+    return subCurve(tend.previousPivot(), tend);
 }
 
 KisCurve KisCurve::subCurve(const QPointF& tstart, const QPointF& tend)
 {
-    return subCurve(find(tstart),find(tend));
+    return subCurve(find(tstart), find(tend));
 }
 
 KisCurve KisCurve::subCurve(const CurvePoint& tstart, const CurvePoint& tend)
 {
-    return subCurve(find(tstart),find(tend));
+    return subCurve(find(tstart), find(tend));
 }
 
 KisCurve KisCurve::subCurve(iterator tstart, iterator tend)
@@ -117,7 +117,7 @@ KisCurve KisCurve::subCurve(iterator tstart, iterator tend)
     return temp;
 }
 
-void KisCurve::deleteFirstPivot ()
+void KisCurve::deleteFirstPivot()
 {
     if (!m_curve.empty()) {
         m_curve.erase(m_curve.begin());
@@ -126,7 +126,7 @@ void KisCurve::deleteFirstPivot ()
     }
 }
 
-void KisCurve::deleteLastPivot ()
+void KisCurve::deleteLastPivot()
 {
     if (!m_curve.empty()) {
         m_curve.pop_back();
@@ -135,17 +135,17 @@ void KisCurve::deleteLastPivot ()
     }
 }
 
-KisCurve::iterator KisCurve::deleteCurve (const QPointF& pos1, const QPointF& pos2)
+KisCurve::iterator KisCurve::deleteCurve(const QPointF& pos1, const QPointF& pos2)
 {
-    return deleteCurve (CurvePoint(pos1),CurvePoint(pos2));
+    return deleteCurve(CurvePoint(pos1), CurvePoint(pos2));
 }
 
-KisCurve::iterator KisCurve::deleteCurve (const CurvePoint& pos1, const CurvePoint& pos2)
+KisCurve::iterator KisCurve::deleteCurve(const CurvePoint& pos1, const CurvePoint& pos2)
 {
-    return deleteCurve (find(pos1),find(pos2));
+    return deleteCurve(find(pos1), find(pos2));
 }
 
-KisCurve::iterator KisCurve::deleteCurve (KisCurve::iterator pos1, KisCurve::iterator pos2)
+KisCurve::iterator KisCurve::deleteCurve(KisCurve::iterator pos1, KisCurve::iterator pos2)
 {
     if (pos1 == pos2)
         return end();
@@ -159,12 +159,12 @@ KisCurve::iterator KisCurve::deleteCurve (KisCurve::iterator pos1, KisCurve::ite
 
 KisCurve::iterator KisCurve::selectPivot(const QPointF& pt, bool isSelected)
 {
-    return selectPivot(find(CurvePoint(pt,true)),isSelected);
+    return selectPivot(find(CurvePoint(pt, true)), isSelected);
 }
 
 KisCurve::iterator KisCurve::selectPivot(const CurvePoint& pt, bool isSelected)
 {
-    return selectPivot(find(pt),isSelected);
+    return selectPivot(find(pt), isSelected);
 }
 
 KisCurve::iterator KisCurve::selectPivot(KisCurve::iterator it, bool isSelected)
@@ -184,7 +184,7 @@ KisCurve::iterator KisCurve::selectPivot(KisCurve::iterator it, bool isSelected)
 
 KisCurve::iterator KisCurve::movePivot(const QPointF& oldPt, const QPointF& newPt)
 {
-    return movePivot(CurvePoint(oldPt,true), newPt);
+    return movePivot(CurvePoint(oldPt, true), newPt);
 }
 
 KisCurve::iterator KisCurve::movePivot(const CurvePoint& oldPt, const QPointF& newPt)
@@ -200,28 +200,28 @@ KisCurve::iterator KisCurve::movePivot(KisCurve::iterator it, const QPointF& new
     (*it).setPoint(newPt);
 
     if ((*it) != first()) {
-        deleteCurve (it.previousPivot(), it);
-        calculateCurve (it.previousPivot(), it, it);
+        deleteCurve(it.previousPivot(), it);
+        calculateCurve(it.previousPivot(), it, it);
     }
     if ((*it) != last()) {
-        deleteCurve (it, it.nextPivot());
-        calculateCurve (it, it.nextPivot(), it.nextPivot());
+        deleteCurve(it, it.nextPivot());
+        calculateCurve(it, it.nextPivot(), it.nextPivot());
     }
 
     return it;
 }
 
-void KisCurve::deletePivot (const QPointF& pt)
+void KisCurve::deletePivot(const QPointF& pt)
 {
     deletePivot(CurvePoint(pt));
 }
 
-void KisCurve::deletePivot (const CurvePoint& pt)
+void KisCurve::deletePivot(const CurvePoint& pt)
 {
     deletePivot(find(pt));
 }
 
-void KisCurve::deletePivot (KisCurve::iterator it)
+void KisCurve::deletePivot(KisCurve::iterator it)
 {
     if (!(*it).isPivot())
         return;
@@ -234,24 +234,24 @@ void KisCurve::deletePivot (KisCurve::iterator it)
     else if (start == it)
         deleteFirstPivot();
     else {
-        deleteCurve(start,end);
-        calculateCurve(start,end,end);
+        deleteCurve(start, end);
+        calculateCurve(start, end, end);
     }
 }
 
 // Probably it can be optimized - it is smooth though.
-void KisCurve::moveSelected (const QPointF& trans)
+void KisCurve::moveSelected(const QPointF& trans)
 {
     QPointF p;
     KisCurve sel = selectedPivots();
 
     for (iterator it = sel.begin(); it != sel.end(); it++) {
         p = (*it).point() + trans;
-        movePivot((*it),p);
+        movePivot((*it), p);
     }
 }
 
-void KisCurve::deleteSelected ()
+void KisCurve::deleteSelected()
 {
     KisCurve sel = selectedPivots();
     for (iterator it = sel.begin(); it != sel.end(); it++)

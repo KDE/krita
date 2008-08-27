@@ -34,7 +34,6 @@
 #include <QList>
 
 // KDE
-#include <kis_debug.h>
 #include <kimageio.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -113,22 +112,20 @@ class KisDoc2::KisDocPrivate
 public:
 
     KisDocPrivate()
-        : undoAdapter( 0 )
-        , nserver( 0 )
-        , macroNestDepth( 0 )
-        , conversionDepth( 0 )
-        , ioProgressTotalSteps( 0 )
-        , ioProgressBase( 0 )
-        , kraLoader( 0 )
-        {
-        }
+            : undoAdapter(0)
+            , nserver(0)
+            , macroNestDepth(0)
+            , conversionDepth(0)
+            , ioProgressTotalSteps(0)
+            , ioProgressBase(0)
+            , kraLoader(0) {
+    }
 
-    ~KisDocPrivate()
-        {
-            // Don't delete m_d->shapeController or m_d->nodeModel because it's in a QObject hierarchy.
-            //delete undoAdapter;
-            //delete nserver;
-        }
+    ~KisDocPrivate() {
+        // Don't delete m_d->shapeController or m_d->nodeModel because it's in a QObject hierarchy.
+        //delete undoAdapter;
+        //delete nserver;
+    }
 
     KisUndoAdapter *undoAdapter;
     KisNameServer *nserver;
@@ -146,12 +143,12 @@ public:
 
 
 KisDoc2::KisDoc2(QWidget *parentWidget, QObject *parent, bool singleViewMode)
-    : KoDocument(parentWidget, parent, singleViewMode)
-    , m_d( new KisDocPrivate() )
+        : KoDocument(parentWidget, parent, singleViewMode)
+        , m_d(new KisDocPrivate())
 {
 
-    setComponentData( KisFactory2::componentData(), false );
-    setTemplateType( "krita_template" );
+    setComponentData(KisFactory2::componentData(), false);
+    setTemplateType("krita_template");
     init();
 
 }
@@ -168,20 +165,20 @@ QByteArray KisDoc2::mimeType() const
 
 void KisDoc2::openExistingFile(const KUrl& url)
 {
-  setUndo(false);
+    setUndo(false);
 
-  KoDocument::openExistingFile(url);
+    KoDocument::openExistingFile(url);
 
-  setUndo(true);
+    setUndo(true);
 }
 
 void KisDoc2::openTemplate(const KUrl& url)
 {
-  setUndo(false);
+    setUndo(false);
 
-  KoDocument::openTemplate(url);
+    KoDocument::openTemplate(url);
 
-  setUndo(true);
+    setUndo(true);
 }
 
 bool KisDoc2::init()
@@ -204,8 +201,8 @@ bool KisDoc2::init()
     m_d->nserver = new KisNameServer(1);
     Q_CHECK_PTR(m_d->nserver);
 
-    m_d->shapeController = new KisShapeController( this, m_d->nserver );
-    m_d->nodeModel = new KisNodeModel( this );
+    m_d->shapeController = new KisShapeController(this, m_d->nserver);
+    m_d->nodeModel = new KisNodeModel(this);
 
     return true;
 }
@@ -224,14 +221,14 @@ QDomDocument KisDoc2::saveXML()
     return doc;
 }
 
-bool KisDoc2::loadOdf( KoOdfReadStore & odfStore )
+bool KisDoc2::loadOdf(KoOdfReadStore & odfStore)
 {
     Q_UNUSED(odfStore);
     return false;
 }
 
 
-bool KisDoc2::saveOdf( SavingContext &documentContext )
+bool KisDoc2::saveOdf(SavingContext &documentContext)
 {
     Q_UNUSED(documentContext);
     return false;
@@ -250,8 +247,8 @@ bool KisDoc2::loadXML(QIODevice *, const KoXmlDocument& doc)
         return false;
     root = doc.documentElement();
     attr = root.attribute("syntaxVersion");
-     if (attr.toInt() > 1)
-         return false;
+    if (attr.toInt() > 1)
+        return false;
     if ((attr = root.attribute("depth")).isNull())
         return false;
     m_d->conversionDepth = attr.toInt();
@@ -276,14 +273,15 @@ bool KisDoc2::loadXML(QIODevice *, const KoXmlDocument& doc)
             }
         }
     }
-    setCurrentImage( img );
+    setCurrentImage(img);
 
     return true;
 }
 
-bool KisDoc2::loadChildren(KoStore* store) {
+bool KisDoc2::loadChildren(KoStore* store)
+{
     Q3PtrListIterator<KoDocumentChild> it(children());
-    for( ; it.current(); ++it ) {
+    for (; it.current(); ++it) {
         if (!it.current()->loadDocument(store)) {
             return false;
         }
@@ -308,7 +306,7 @@ QDomElement KisDoc2::saveImage(QDomDocument& doc, KisImageSP img)
     image.setAttribute("x-res", img->xRes());
     image.setAttribute("y-res", img->yRes());
 
-    quint32 count=0;
+    quint32 count = 0;
     KisSaveXmlVisitor visitor(doc, image, count, true);
 
     m_d->image->rootLayer()->accept(visitor);
@@ -333,10 +331,10 @@ bool KisDoc2::completeSaving(KoStore *store)
     setIOSteps(totalSteps + 1);
 
     // Save the layers data
-    quint32 count=0;
-    KisKraSaveVisitor visitor( img, store, count, documentInfo()->aboutInfo("title"));
+    quint32 count = 0;
+    KisKraSaveVisitor visitor(img, store, count, documentInfo()->aboutInfo("title"));
 
-    if(external)
+    if (external)
         visitor.setExternalUri(uri);
 
     img->rootLayer()->accept(visitor);
@@ -356,8 +354,7 @@ bool KisDoc2::completeSaving(KoStore *store)
     if (img->profile()) {
         const KoColorProfile *profile = img->profile();
         KisAnnotationSP annotation;
-        if (profile)
-        {
+        if (profile) {
             const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
             if (iccprofile && !iccprofile->rawData().isEmpty())
                 annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
@@ -378,7 +375,7 @@ bool KisDoc2::completeSaving(KoStore *store)
 
 bool KisDoc2::completeLoading(KoStore *store)
 {
-    if ( !m_d->image ) return false;
+    if (!m_d->image) return false;
 
     setIOSteps(m_d->image->nlayers());
 
@@ -386,13 +383,13 @@ bool KisDoc2::completeLoading(KoStore *store)
 
     IODone();
 
-    setModified( false );
+    setModified(false);
     setUndo(true);
 
     delete m_d->kraLoader;
     m_d->kraLoader = 0;
 
-    connect( m_d->image.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
+    connect(m_d->image.data(), SIGNAL(sigImageModified()), this, SLOT(slotImageUpdated()));
     emit sigLoadingFinished();
 
     return true;
@@ -415,14 +412,15 @@ QList<KoDocument::CustomDocumentWidgetItem> KisDoc2::createCustomDocumentWidgets
 
     QList<KoDocument::CustomDocumentWidgetItem> widgetList;
     KoDocument::CustomDocumentWidgetItem item;
-    item.widget = new KisCustomImageWidget(parent, this, w, h, clipAvailable, cfg.defImgResolution(), cfg.workingColorSpace(),"unnamed");
+    item.widget = new KisCustomImageWidget(parent, this, w, h, clipAvailable, cfg.defImgResolution(), cfg.workingColorSpace(), "unnamed");
     widgetList << item;
 
     return widgetList;
 }
 
 
-KoDocument* KisDoc2::hitTest(const QPoint &pos, KoView* view, const QMatrix& matrix) {
+KoDocument* KisDoc2::hitTest(const QPoint &pos, KoView* view, const QMatrix& matrix)
+{
     KoDocument* doc = KoDocument::hitTest(pos, view, matrix);
     return doc;
 }
@@ -439,19 +437,19 @@ KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, c
     img->lock();
 
     Q_CHECK_PTR(img);
-    connect( img.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
+    connect(img.data(), SIGNAL(sigImageModified()), this, SLOT(slotImageUpdated()));
 
-    KisPaintLayerSP layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE,colorspace);
+    KisPaintLayerSP layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE, colorspace);
     Q_CHECK_PTR(layer);
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFillPainter painter;
 
-    layer->paintDevice()->fill( 0, 0, width, height, KoColor(Qt::white, cs).data() );
+    layer->paintDevice()->fill(0, 0, width, height, KoColor(Qt::white, cs).data());
 
-    img->addNode(layer.data(), img->rootLayer().data() );
+    img->addNode(layer.data(), img->rootLayer().data());
 
-    setCurrentImage(img );
+    setCurrentImage(img);
     layer->setDirty();
     setUndo(true);
     img->unlock();
@@ -479,7 +477,7 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const K
     Q_CHECK_PTR(img);
     img->lock();
 
-    connect( img.data(), SIGNAL( sigImageModified() ), this, SLOT( slotImageUpdated() ));
+    connect(img.data(), SIGNAL(sigImageModified()), this, SLOT(slotImageUpdated()));
     img->setResolution(imgResolution, imgResolution);
     img->setProfile(cs->profile());
     documentInfo()->setAboutInfo("title", name);
@@ -500,9 +498,9 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const K
         actions.at(i)->act(layer->paintDevice(), img->width(), img->height());
 
     img->setBackgroundColor(bgColor);
-    img->addNode(layer.data(), img->rootLayer().data() );
+    img->addNode(layer.data(), img->rootLayer().data());
 
-    setCurrentImage( img );
+    setCurrentImage(img);
 
     cfg.defImgWidth(width);
     cfg.defImgHeight(height);
@@ -520,7 +518,7 @@ KoView* KisDoc2::createViewInstance(QWidget* parent)
     KisView2 * v = new KisView2(this, parent);
     Q_CHECK_PTR(v);
 
-    m_d->shapeController->setInitialShapeForView( v );
+    m_d->shapeController->setInitialShapeForView(v);
     KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
     return v;
 }
@@ -572,16 +570,16 @@ KoShapeControllerBase * KisDoc2::shapeController() const
     return m_d->shapeController;
 }
 
-KoShape * KisDoc2::shapeForNode( KisNodeSP layer ) const
+KoShape * KisDoc2::shapeForNode(KisNodeSP layer) const
 {
-    return m_d->shapeController->shapeForNode( layer );
+    return m_d->shapeController->shapeForNode(layer);
 }
 
 KoShape * KisDoc2::addShape(const KisNodeSP node)
 {
     KisNodeSP parent = node->parent();
-    m_d->shapeController->slotNodeAdded( parent.data(), parent->index(node) );
-    return m_d->shapeController->shapeForNode( node );
+    m_d->shapeController->slotNodeAdded(parent.data(), parent->index(node));
+    return m_d->shapeController->shapeForNode(node);
 }
 
 KisNodeModel * KisDoc2::nodeModel() const
@@ -618,17 +616,17 @@ void KisDoc2::slotIOProgress(qint8 percentage)
     emitProgress(totalPercentage);
 }
 
-KisChildDoc * KisDoc2::createChildDoc( const QRect & rect, KoDocument* childDoc )
+KisChildDoc * KisDoc2::createChildDoc(const QRect & rect, KoDocument* childDoc)
 {
     Q_UNUSED(rect);
     Q_UNUSED(childDoc);
 #if 0
-    KisChildDoc * ch = new KisChildDoc( this, rect, childDoc );
-    insertChild( ch );
+    KisChildDoc * ch = new KisChildDoc(this, rect, childDoc);
+    insertChild(ch);
     ch->document()->setStoreInternal(true);
     return ch;
 #endif
-return 0;
+    return 0;
 }
 
 void KisDoc2::prepareForImport()
@@ -647,14 +645,14 @@ KisImageSP KisDoc2::image() const
 void KisDoc2::setCurrentImage(KisImageSP image)
 {
 
-    if ( m_d->image ) {
+    if (m_d->image) {
         // Disconnect existing sig/slot connections
-        m_d->image->disconnect( this );
+        m_d->image->disconnect(this);
     }
     m_d->image = image;
-    m_d->image->setUndoAdapter( m_d->undoAdapter );
-    m_d->shapeController->setImage( image );
-    m_d->nodeModel->setImage( image );
+    m_d->image->setUndoAdapter(m_d->undoAdapter);
+    m_d->shapeController->setImage(image);
+    m_d->nodeModel->setImage(image);
     setUndo(true);
 
     emit sigLoadingFinished();

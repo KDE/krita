@@ -28,22 +28,20 @@
 #include "kis_selection.h"
 
 KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, KoUpdater *progress)
-    : m_dev(dev), m_progressUpdater->interrupted()(false), m_progress(progress)
+        : m_dev(dev), m_progressUpdater->interrupted()(false), m_progress(progress)
 
 {
     QRect m_r;
-    if(m_dev->hasSelection())
+    if (m_dev->hasSelection())
         m_r = m_dev->selection()->selectedExactRect();
     else
         m_r = m_dev->exactBounds();
-/*    if(m_dev->hasSelection())
-        m_dev->selection()->clear();*/
+    /*    if(m_dev->hasSelection())
+            m_dev->selection()->clear();*/
 
     double* b = KisPerspectiveMath::computeMatrixTransfoToPerspective(topLeft, topRight, bottomLeft, bottomRight, m_r);
-    for(int i = 0; i < 3; i++)
-    {
-        for(int j = 0; j < 3; j++)
-        {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
             m_matrix[i][j] = b[3*i+j];
         }
     }
@@ -57,19 +55,16 @@ KisPerspectiveTransformWorker::~KisPerspectiveTransformWorker()
 
 double norm2(const QPointF& p)
 {
-    return sqrt(p.x() * p.x() + p.y() * p.y() );
+    return sqrt(p.x() * p.x() + p.y() * p.y());
 }
 
 void KisPerspectiveTransformWorker::run()
 {
 
     //TODO: understand why my caching of the rect didn't work...
-    if(m_dev->hasSelection())
-    {
+    if (m_dev->hasSelection()) {
         m_r = m_dev->selection()->selectedExactRect();
-    }
-    else
-    {
+    } else {
         m_r = m_dev->exactBounds();
     }
     KoColorSpace * cs = m_dev->colorSpace();
@@ -83,18 +78,16 @@ void KisPerspectiveTransformWorker::run()
         m_progressStep = 0;
         m_progressTotalSteps = m_r.width() * m_r.height();
         //Action
-        while(!dstIt.isDone())
-        {
-            if(dstIt.isSelected())
-            {
+        while (!dstIt.isDone()) {
+            if (dstIt.isSelected()) {
                 QPointF p;
-                double sf = ( dstIt.x() * m_matrix[2][0] + dstIt.y() * m_matrix[2][1] + 1.0);
-                sf = (sf == 0.) ? 1. : 1./sf;
-                p.setX( ( dstIt.x() * m_matrix[0][0] + dstIt.y() * m_matrix[0][1] + m_matrix[0][2] ) * sf );
-                p.setY( ( dstIt.x() * m_matrix[1][0] + dstIt.y() * m_matrix[1][1] + m_matrix[1][2] ) * sf );
+                double sf = (dstIt.x() * m_matrix[2][0] + dstIt.y() * m_matrix[2][1] + 1.0);
+                sf = (sf == 0.) ? 1. : 1. / sf;
+                p.setX((dstIt.x() * m_matrix[0][0] + dstIt.y() * m_matrix[0][1] + m_matrix[0][2]) * sf);
+                p.setY((dstIt.x() * m_matrix[1][0] + dstIt.y() * m_matrix[1][1] + m_matrix[1][2]) * sf);
 
-                srcAcc.moveTo( p );
-                srcAcc.sampledOldRawData( dstIt.rawData() );
+                srcAcc.moveTo(p);
+                srcAcc.sampledOldRawData(dstIt.rawData());
 
                 // TODO: Should set alpha = alpha*(1-selectedness)
 //                 cs->setAlpha( dstIt.rawData(), 255, 1);
@@ -102,8 +95,7 @@ void KisPerspectiveTransformWorker::run()
 //                 cs->setAlpha( dstIt.rawData(), 0, 1);
             }
             m_progressStep ++;
-            if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps)
-            {
+            if (m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
                 m_lastProgressReport = (m_progressStep * 100) / m_progressTotalSteps;
                 m_progressUpdater->setProgress(m_lastProgressReport);
             }

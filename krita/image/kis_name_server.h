@@ -21,7 +21,8 @@
 #include <QString>
 #include <krita_export.h>
 
-class KRITAIMAGE_EXPORT KisNameServer {
+class KRITAIMAGE_EXPORT KisNameServer
+{
 public:
     KisNameServer(qint32 seed = 1);
     ~KisNameServer();

@@ -33,11 +33,14 @@ class ColorPickerOptionsWidget : public QWidget, public Ui::ColorPickerOptionsWi
 {
     Q_OBJECT
 
-    public:
-        ColorPickerOptionsWidget(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    ColorPickerOptionsWidget(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
-class KisToolColorPicker : public KisTool {
+class KisToolColorPicker : public KisTool
+{
 
     Q_OBJECT
     typedef KisTool super;
@@ -78,21 +81,21 @@ private:
     QList<KoColorSet*> m_palettes;
 };
 
-class KisToolColorPickerFactory : public KoToolFactory {
+class KisToolColorPickerFactory : public KoToolFactory
+{
 
 public:
     KisToolColorPickerFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KritaSelected/KisToolColorPicker", i18n( "Color Picker" ))
-        {
-            setToolTip(i18n("Select a color from the image or current layer"));
-            setToolType(TOOL_TYPE_FILL);
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setPriority( 15 );
-            setIcon("krita_tool_color_picker");
-            setShortcut( KShortcut( Qt::Key_P ) );
-        }
+            : KoToolFactory(parent, "KritaSelected/KisToolColorPicker", i18n("Color Picker")) {
+        setToolTip(i18n("Select a color from the image or current layer"));
+        setToolType(TOOL_TYPE_FILL);
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        setPriority(15);
+        setIcon("krita_tool_color_picker");
+        setShortcut(KShortcut(Qt::Key_P));
+    }
 
-    virtual ~KisToolColorPickerFactory(){}
+    virtual ~KisToolColorPickerFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolColorPicker(canvas);

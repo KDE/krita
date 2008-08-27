@@ -45,7 +45,7 @@ public:
     ~KisOpenGLGradientProgram();
 
     using KisOpenGLProgram::activate;
-    
+
     void activate(const QPointF &gradientVectorStart, const QPointF &gradientVectorEnd);
 
 private:

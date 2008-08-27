@@ -28,55 +28,53 @@
 
 class TestNode : public KisBaseNode
 {
-    bool accept( KisNodeVisitor & )
-        {
-            return false;
-        }
-        
-    KisPaintDeviceSP paintDevice() const
-        {
-            return 0;
-        }
+    bool accept(KisNodeVisitor &) {
+        return false;
+    }
+
+    KisPaintDeviceSP paintDevice() const {
+        return 0;
+    }
 };
 
 void KisBaseNodeTest::testCreation()
 {
     KisBaseNodeSP node = new TestNode();
-    QVERIFY( node->name() == QString() );
-    QVERIFY( node->name() == node->objectName() );
-    QVERIFY( node->icon().isNull() );
-    QVERIFY( node->visible() == true );
-    QVERIFY( node->locked() == false );
-    QVERIFY( node->x() == 0 );
-    QVERIFY( node->y() == 0 );
+    QVERIFY(node->name() == QString());
+    QVERIFY(node->name() == node->objectName());
+    QVERIFY(node->icon().isNull());
+    QVERIFY(node->visible() == true);
+    QVERIFY(node->locked() == false);
+    QVERIFY(node->x() == 0);
+    QVERIFY(node->y() == 0);
 }
 
 void KisBaseNodeTest::testContract()
 {
     KisBaseNodeSP node = new TestNode();
 
-    node->setName( "bla" );
-    QVERIFY( node->name()  == "bla" );
-    QVERIFY( node->objectName() == "bla" );
+    node->setName("bla");
+    QVERIFY(node->name()  == "bla");
+    QVERIFY(node->objectName() == "bla");
 
-    node->setObjectName( "zxc" );
-    QVERIFY( node->name()  == "zxc" );
-    QVERIFY( node->objectName() == "zxc" );
+    node->setObjectName("zxc");
+    QVERIFY(node->name()  == "zxc");
+    QVERIFY(node->objectName() == "zxc");
 
-    node->setVisible( !node->visible() );
-    QVERIFY( node->visible() == false );
+    node->setVisible(!node->visible());
+    QVERIFY(node->visible() == false);
 
-    node->setLocked( !node->locked() );
-    QVERIFY( node->locked() == true );
+    node->setLocked(!node->locked());
+    QVERIFY(node->locked() == true);
 
     KoDocumentSectionModel::PropertyList list = node->sectionModelProperties();
-    QVERIFY( list.count() == 2 );
-    QVERIFY( list.at( 0 ).state == node->visible() );
-    QVERIFY( list.at( 1 ).state == node->locked() );
+    QVERIFY(list.count() == 2);
+    QVERIFY(list.at(0).state == node->visible());
+    QVERIFY(list.at(1).state == node->locked());
 
-    QImage img = node->createThumbnail( 10, 10 );
-    QCOMPARE( img.size(), QSize( 10, 10 ) );
-    QVERIFY( img.pixel( 5, 5 ) == QColor( 0, 0, 0, 0 ).rgba() );
+    QImage img = node->createThumbnail(10, 10);
+    QCOMPARE(img.size(), QSize(10, 10));
+    QVERIFY(img.pixel(5, 5) == QColor(0, 0, 0, 0).rgba());
 
 }
 
@@ -87,28 +85,28 @@ void KisBaseNodeTest::testProperties()
     {
         KoProperties props;
 
-        props.setProperty( "bladiebla", false );
-        QVERIFY( node->check( props ) );
+        props.setProperty("bladiebla", false);
+        QVERIFY(node->check(props));
 
-        props.setProperty( "visible", true );
-        props.setProperty( "locked", false );
-        QVERIFY( node->check( props ) );
+        props.setProperty("visible", true);
+        props.setProperty("locked", false);
+        QVERIFY(node->check(props));
 
-        props.setProperty( "locked", true );
-        QVERIFY( !node->check( props ) );
+        props.setProperty("locked", true);
+        QVERIFY(!node->check(props));
 
-        node->nodeProperties().setProperty( "locked", false );
-        QVERIFY( node->locked() == false );
+        node->nodeProperties().setProperty("locked", false);
+        QVERIFY(node->locked() == false);
     }
     {
         KoProperties props;
-        props.setProperty( "blablabla", 10 );
-        node->mergeNodeProperties( props );
+        props.setProperty("blablabla", 10);
+        node->mergeNodeProperties(props);
 
-        QVERIFY( node->nodeProperties().intProperty( "blablabla" ) == 10 );
-        QVERIFY( node->check( props ) );
-        props.setProperty( "blablabla", 12 );
-        QVERIFY( !node->check( props ) );
+        QVERIFY(node->nodeProperties().intProperty("blablabla") == 10);
+        QVERIFY(node->check(props));
+        props.setProperty("blablabla", 12);
+        QVERIFY(!node->check(props));
     }
 }
 

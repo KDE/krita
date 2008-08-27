@@ -51,7 +51,8 @@ class Ui_WdgLayerBox;
  * A widget that visualized the layer structure.
  *
  */
-class KisLayerBox : public QDockWidget {
+class KisLayerBox : public QDockWidget
+{
 
     Q_OBJECT
 
@@ -70,20 +71,20 @@ public slots:
     void slotSetOpacity(double opacity);
     void slotFillCompositeOps(const KoColorSpace * colorSpace);
     void updateUI();
-    void setCurrentNode( KisNodeSP node );
+    void setCurrentNode(KisNodeSP node);
 
 signals:
 
     // XXX: create a node factory and a node factory registry in for now just
     //      use strings
-    void sigRequestNewNode( const QString & nodetype);
+    void sigRequestNewNode(const QString & nodetype);
     void sigRequestNodeProperties(KisNodeSP node);
     void sigOpacityChanged(qreal opacity, bool final);
     void sigItemComposite(const KoCompositeOp*);
 
 private slots:
 
-    void slotContextMenuRequested( const QPoint &pos, const QModelIndex &index );
+    void slotContextMenuRequested(const QPoint &pos, const QModelIndex &index);
 
     void slotMinimalView();
     void slotDetailedView();
@@ -94,7 +95,7 @@ private slots:
     void slotLowerClicked();
     void slotPropertiesClicked();
     void slotDuplicateClicked();
-    
+
     void slotNewPaintLayer();
     void slotNewGroupLayer();
     void slotNewAdjustmentLayer();
@@ -106,7 +107,7 @@ private slots:
     void slotNewTransformationMask();
     void slotNewSelectionMask();
 
-    void slotNodeActivated( const QModelIndex & );
+    void slotNodeActivated(const QModelIndex &);
 
 private:
     QModelIndexList selectedNodes() const;
@@ -126,24 +127,21 @@ class KisLayerBoxFactory : public KoDockFactory
 public:
     KisLayerBoxFactory() { }
 
-    virtual QString id() const
-        {
-            return QString( "KisLayerBox" );
-        }
+    virtual QString id() const {
+        return QString("KisLayerBox");
+    }
 
-    virtual QDockWidget* createDockWidget()
-        {
-            KisLayerBox * dockWidget = new KisLayerBox();
+    virtual QDockWidget* createDockWidget() {
+        KisLayerBox * dockWidget = new KisLayerBox();
 
-            dockWidget->setObjectName(id());
+        dockWidget->setObjectName(id());
 
-            return dockWidget;
-        }
-        
-    DockPosition defaultDockPosition() const
-    {
+        return dockWidget;
+    }
+
+    DockPosition defaultDockPosition() const {
         return DockRight;
-    }        
+    }
 };
 
 

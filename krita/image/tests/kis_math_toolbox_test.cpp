@@ -26,11 +26,11 @@
 void KisMathToolboxTest::testCreation()
 {
     KisMathToolboxRegistry * reg = KisMathToolboxRegistry::instance();
-    QVERIFY( reg );
-    
+    QVERIFY(reg);
+
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisMathToolbox * toolbox = reg->get( cs->mathToolboxId().id() );
-    QVERIFY( toolbox );
+    KisMathToolbox * toolbox = reg->get(cs->mathToolboxId().id());
+    QVERIFY(toolbox);
 }
 
 

@@ -22,47 +22,52 @@
 #include <cmath>
 #include <KoColor.h>
 
-class Bristle{
+class Bristle
+{
 
 public:
-    Bristle(float x, float y,float length);
+    Bristle(float x, float y, float length);
     Bristle();
     ~Bristle();
 
-    inline float x(){
+    inline float x() {
         return m_x;
     }
 
-    inline float y(){
+    inline float y() {
         return m_y;
     }
 
-    inline float length(){
+    inline float length() {
         return m_length;
     }
 
-    inline  KoColor color(){
+    inline  KoColor color() {
         return m_color;
     }
 
-    inline int increment(){
+    inline int increment() {
         return m_counter;
     }
 
-    inline void upIncrement(){
+    inline void upIncrement() {
         m_counter++;
     }
 
-    inline float inkAmount(){
+    inline float inkAmount() {
         return m_inkAmount;
     };
 
-    inline float distanceCenter(){
+    inline float distanceCenter() {
         return std::sqrt(m_x*m_x + m_y*m_y);
     }
 
-    inline void setX(float x){ m_x = x; }
-    inline void setY(float y){ m_y = y; }
+    inline void setX(float x) {
+        m_x = x;
+    }
+    inline void setY(float y) {
+        m_y = y;
+    }
 
     void setLength(float length);
     void setColor(KoColor color);
@@ -72,7 +77,7 @@ public:
     void setInkAmount(float inkAmount);
 
 private:
-    void init (float x, float y, float length);
+    void init(float x, float y, float length);
 
     // coordinates of bristle
     float m_x;

@@ -45,27 +45,28 @@
 #include "kis_curve_framework.h"
 
 
-class KisCurveExample : public KisCurve {
+class KisCurveExample : public KisCurve
+{
 
     typedef KisCurve super;
-    
+
 public:
 
     KisCurveExample() : super() {}
 
     ~KisCurveExample() {}
 
-    virtual iterator pushPivot (const QPointF&);
+    virtual iterator pushPivot(const QPointF&);
 
 };
 
-KisCurve::iterator KisCurveExample::pushPivot (const QPointF& point)
+KisCurve::iterator KisCurveExample::pushPivot(const QPointF& point)
 {
-    return selectPivot(iterator(*this,m_curve.insert(m_curve.end(),CurvePoint(point,true,false,LINEHINT))), true);
+    return selectPivot(iterator(*this, m_curve.insert(m_curve.end(), CurvePoint(point, true, false, LINEHINT))), true);
 }
 
 KisToolExample::KisToolExample()
-    : super(i18n("Tool for Curves - Example"))
+        : super(i18n("Tool for Curves - Example"))
 {
     setName("tool_example");
     m_cursor = "tool_example_cursor.png";

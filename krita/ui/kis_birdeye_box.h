@@ -73,25 +73,21 @@ class KisBirdEyeBoxFactory : public KoDockFactory
 {
 public:
     KisBirdEyeBoxFactory(KisView2 * view)
-        : m_view( view )
-        {
-        }
+            : m_view(view) {
+    }
 
-    virtual QString id() const
-        {
-            return QString( "KisBirdeyeBox" );
-        }
+    virtual QString id() const {
+        return QString("KisBirdeyeBox");
+    }
 
-    virtual QDockWidget* createDockWidget()
-        {
-            KisBirdEyeBox * dockWidget = new KisBirdEyeBox(m_view);
-            dockWidget->setObjectName(id());
+    virtual QDockWidget* createDockWidget() {
+        KisBirdEyeBox * dockWidget = new KisBirdEyeBox(m_view);
+        dockWidget->setObjectName(id());
 
-            return dockWidget;
-        }
+        return dockWidget;
+    }
 
-    DockPosition defaultDockPosition() const
-    {
+    DockPosition defaultDockPosition() const {
         return DockMinimized;
     }
 private:

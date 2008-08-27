@@ -36,11 +36,12 @@
 class KisSharedTileData;
 
 /**
- * This class is a very small tilestore that knows how to deal with the case where we read 
+ * This class is a very small tilestore that knows how to deal with the case where we read
  * tiledata directly from an image file, and which on write actions will duplicate itself into
  * a tile from a memory tilestore.
  */
-class KRITAIMAGE_EXPORT KisTileStoreFromFile : public KisTileStore {
+class KRITAIMAGE_EXPORT KisTileStoreFromFile : public KisTileStore
+{
 public:
     virtual ~KisTileStoreFromFile() {}
 

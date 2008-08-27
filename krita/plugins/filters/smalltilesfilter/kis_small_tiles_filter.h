@@ -33,15 +33,17 @@ public:
 
 public:
     using KisFilter::process;
-    
+
     void process(KisConstProcessingInformation src,
                  KisProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
-        ) const;
-    static inline KoID id() { return KoID("smalltiles", i18n("Small Tiles")); }
-    
+                ) const;
+    static inline KoID id() {
+        return KoID("smalltiles", i18n("Small Tiles"));
+    }
+
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 
 public:

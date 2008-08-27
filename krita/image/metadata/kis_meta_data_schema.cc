@@ -41,7 +41,7 @@ struct Schema::Private {
 };
 
 Schema::Schema(const QString & _uri, const QString & _ns)
-    : d(new Private)
+        : d(new Private)
 {
     d->uri = _uri;
     d->prefix = _ns;
@@ -67,7 +67,7 @@ QString Schema::prefix() const
 QString Schema::generateQualifiedName(const QString & name) const
 {
     dbgImage << "generateQualifiedName for " << name;
-    Q_ASSERT( !name.isEmpty() && !name.isNull());
+    Q_ASSERT(!name.isEmpty() && !name.isNull());
     return prefix() + ':' + name;
 }
 
@@ -89,8 +89,7 @@ SchemaRegistry *SchemaRegistry::Private::singleton = 0;
 
 SchemaRegistry* SchemaRegistry::instance()
 {
-    if(SchemaRegistry::Private::singleton == 0)
-    {
+    if (SchemaRegistry::Private::singleton == 0) {
         SchemaRegistry::Private::singleton = new SchemaRegistry();
     }
     return SchemaRegistry::Private::singleton;
@@ -98,15 +97,15 @@ SchemaRegistry* SchemaRegistry::instance()
 
 SchemaRegistry::SchemaRegistry() : d(new Private)
 {
-    create( Schema::TIFFSchemaUri, "tiff");
-    create( Schema::EXIFSchemaUri, "exif");
-    create( Schema::DublinCoreSchemaUri, "dc");
-    create( Schema::XMPSchemaUri, "xmp");
-    create( Schema::XMPRightsSchemaUri, "xmpRights");
-    create( Schema::XMPMediaManagementUri, "xmpMM");
-    create( Schema::MakerNoteSchemaUri, "mkn");
-    create( Schema::IPTCSchemaUri, "Iptc4xmpCore");
-    create( Schema::PhotoshopSchemaUri, "photoshop");
+    create(Schema::TIFFSchemaUri, "tiff");
+    create(Schema::EXIFSchemaUri, "exif");
+    create(Schema::DublinCoreSchemaUri, "dc");
+    create(Schema::XMPSchemaUri, "xmp");
+    create(Schema::XMPRightsSchemaUri, "xmpRights");
+    create(Schema::XMPMediaManagementUri, "xmpMM");
+    create(Schema::MakerNoteSchemaUri, "mkn");
+    create(Schema::IPTCSchemaUri, "Iptc4xmpCore");
+    create(Schema::PhotoshopSchemaUri, "photoshop");
 }
 
 
@@ -124,14 +123,12 @@ const Schema* SchemaRegistry::create(const QString & uri, const QString & prefix
 {
     // First search for the schema
     const Schema* schema = schemaFromUri(uri);
-    if(schema)
-    {
+    if (schema) {
         return schema;
     }
     // Second search for the prefix
     schema = schemaFromPrefix(prefix);
-    if(schema)
-    {
+    if (schema) {
         return 0; // A schema with the same prefix already exist
     }
     // The schema doesn't exist yet, create it

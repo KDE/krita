@@ -27,14 +27,19 @@ struct KisCurvePoint {
 typedef QList<KisCurvePoint> KoPointList;
 typedef QMutableListIterator<KisCurvePoint> KisBaseIterator;
 
-class KisCurveIterator : public KisBaseIterator {
+class KisCurveIterator : public KisBaseIterator
+{
 
     typedef KisBaseIterator super;
 
 public:
 
-    KisCurveIterator (KoPointList& base) : super (base) {return;}
-    ~KisCurveIterator () {return;}
+    KisCurveIterator(KoPointList& base) : super(base) {
+        return;
+    }
+    ~KisCurveIterator() {
+        return;
+    }
 
     KisCurvePoint& nextPivot();
     KisCurvePoint& previousPivot();

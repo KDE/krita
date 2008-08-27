@@ -36,7 +36,8 @@
  *
  * KisSelectedTransaction remembers which selection was changed.
  */
-class KRITAIMAGE_EXPORT KisSelectionTransaction : public KisTransaction {
+class KRITAIMAGE_EXPORT KisSelectionTransaction : public KisTransaction
+{
 
 public:
     KisSelectionTransaction(const QString& name, KisImageSP image, KisSelectionSP selection, QUndoCommand* parent = 0);

@@ -79,14 +79,14 @@ bool KisCubismFilter::workWith(const KoColorSpace* /*cs*/) const
 
 
 void KisCubismFilter::process(KisConstProcessingInformation srcInfo,
-                 KisProcessingInformation dstInfo,
-                 const QSize& size,
-                 const KisFilterConfiguration* configuration,
-                 KoUpdater* progressUpdater
-        ) const
+                              KisProcessingInformation dstInfo,
+                              const QSize& size,
+                              const KisFilterConfiguration* configuration,
+                              KoUpdater* progressUpdater
+                             ) const
 {
     Q_UNUSED(progressUpdater);
-    
+
     const KisPaintDeviceSP src = srcInfo.paintDevice();
     KisPaintDeviceSP dst = dstInfo.paintDevice();
     QPoint dstTopLeft = dstInfo.topLeft();
@@ -104,8 +104,7 @@ void KisCubismFilter::process(KisConstProcessingInformation srcInfo,
 
     if (id == "RGBA" || id == "GRAY" || id == "CMYK") {
         cubism(src, srcTopLeft, dst, dstTopLeft, size, tileSize, tileSaturation);
-    }
-    else {
+    } else {
 //         if (src->image()) src->image()->lock();
 
         KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "temporary");
@@ -125,361 +124,331 @@ void KisCubismFilter::process(KisConstProcessingInformation srcInfo,
     }
 }
 
-void KisCubismFilter::randomizeIndices (qint32 count, qint32* indices) const
+void KisCubismFilter::randomizeIndices(qint32 count, qint32* indices) const
 {
-        qint32 index1, index2;
-        qint32 tmp;
+    qint32 index1, index2;
+    qint32 tmp;
 
-        //initialize random number generator with time
-        srand(static_cast<unsigned int>(time(0)));
+    //initialize random number generator with time
+    srand(static_cast<unsigned int>(time(0)));
 
-        for (qint32 i = 0; i < count * RANDOMNESS; i++)
-        {
-                index1 = randomIntNumber(0, count);
-                index2 = randomIntNumber(0, count);
-                tmp = indices[index1];
-                indices[index1] = indices[index2];
-                indices[index2] = tmp;
-        }
+    for (qint32 i = 0; i < count * RANDOMNESS; i++) {
+        index1 = randomIntNumber(0, count);
+        index2 = randomIntNumber(0, count);
+        tmp = indices[index1];
+        indices[index1] = indices[index2];
+        indices[index2] = tmp;
+    }
 }
 
 qint32 KisCubismFilter::randomIntNumber(qint32 lowestNumber, qint32 highestNumber) const
 {
-        if(lowestNumber > highestNumber)
-        {
-                qint32 temp = lowestNumber;
-                lowestNumber = highestNumber;
-                highestNumber = temp;
-        }
+    if (lowestNumber > highestNumber) {
+        qint32 temp = lowestNumber;
+        lowestNumber = highestNumber;
+        highestNumber = temp;
+    }
 
-        return lowestNumber + (( highestNumber - lowestNumber ) * rand() )/ RAND_MAX;
+    return lowestNumber + ((highestNumber - lowestNumber) * rand()) / RAND_MAX;
 }
 
 double KisCubismFilter::randomDoubleNumber(double lowestNumber, double highestNumber) const
 {
-        if(lowestNumber > highestNumber)
-        {
-                double temp = lowestNumber;
-                lowestNumber = highestNumber;
-                highestNumber = temp;
-        }
+    if (lowestNumber > highestNumber) {
+        double temp = lowestNumber;
+        lowestNumber = highestNumber;
+        highestNumber = temp;
+    }
 
-        double range = highestNumber - lowestNumber;
-        return lowestNumber + range * rand() / (double)RAND_MAX;
+    double range = highestNumber - lowestNumber;
+    return lowestNumber + range * rand() / (double)RAND_MAX;
 }
 
-double KisCubismFilter::calcAlphaBlend (double* vec, double  oneOverDist, double  x, double  y) const
+double KisCubismFilter::calcAlphaBlend(double* vec, double  oneOverDist, double  x, double  y) const
 {
 
-        if ( oneOverDist==0 )
-            return 1.0;
-        else
-        {
-            double r = (vec[0] * x + vec[1] * y) * oneOverDist;
-            if (r < 0.2)
-                r = 0.2;
-            else if (r > 1.0)
-                r = 1.0;
-            return r;
-        }
+    if (oneOverDist == 0)
+        return 1.0;
+    else {
+        double r = (vec[0] * x + vec[1] * y) * oneOverDist;
+        if (r < 0.2)
+            r = 0.2;
+        else if (r > 1.0)
+            r = 1.0;
+        return r;
+    }
 }
 
-void KisCubismFilter::convertSegment (qint32 x1, qint32 y1, qint32 x2, qint32  y2, qint32 offset, qint32* min, qint32* max, qint32 xmin, qint32 xmax) const
+void KisCubismFilter::convertSegment(qint32 x1, qint32 y1, qint32 x2, qint32  y2, qint32 offset, qint32* min, qint32* max, qint32 xmin, qint32 xmax) const
 {
-        if (y1 > y2)
-        {
-                qint32 tmp = y2; y2 = y1; y1 = tmp;
-                tmp = x2; x2 = x1; x1 = tmp;
-        }
-        qint32 ydiff = (y2 - y1);
+    if (y1 > y2) {
+        qint32 tmp = y2; y2 = y1; y1 = tmp;
+        tmp = x2; x2 = x1; x1 = tmp;
+    }
+    qint32 ydiff = (y2 - y1);
 
-        if (ydiff)
-        {
-                double xinc = static_cast<double>(x2 - x1) / static_cast<double>(ydiff);
-                double xstart = x1 + 0.5 * xinc;
-                for (qint32 y = y1 ; y < y2; y++)
-                {
-                    if(xstart >= xmin && xstart <= xmax)
-                    {
-                        if (xstart < min[y - offset])
-                        {
-                            min[y-offset] = (int)xstart;
-                        }
-                        if (xstart > max[y - offset])
-                        {
-                            max[y-offset] = (int)xstart;
-                        }
-                        xstart += xinc;
-                    }
+    if (ydiff) {
+        double xinc = static_cast<double>(x2 - x1) / static_cast<double>(ydiff);
+        double xstart = x1 + 0.5 * xinc;
+        for (qint32 y = y1 ; y < y2; y++) {
+            if (xstart >= xmin && xstart <= xmax) {
+                if (xstart < min[y - offset]) {
+                    min[y-offset] = (int)xstart;
                 }
+                if (xstart > max[y - offset]) {
+                    max[y-offset] = (int)xstart;
+                }
+                xstart += xinc;
+            }
         }
+    }
 }
 
 #define USE_READABLE_BUT_SLOW_CODE
 
 void KisCubismFilter::fillPolyColor(KisPaintDeviceSP src,
-    const QPoint& srcTopLeft,
-    KisPaintDeviceSP dst,
-    const QPoint & dstTopLeft,
-    const QSize& size,
-    KisPolygon* poly,
-    const quint8* col,
-    quint8* dest) const
+                                    const QPoint& srcTopLeft,
+                                    KisPaintDeviceSP dst,
+                                    const QPoint & dstTopLeft,
+                                    const QSize& size,
+                                    KisPolygon* poly,
+                                    const quint8* col,
+                                    quint8* dest) const
 // void KisCubismFilter::fillPolyColor (KisPaintDeviceSP src, KisPaintDeviceSP dst, KisPolygon* poly, const quint8* col, quint8* /*s*/, QRect rect) const
 {
     Q_UNUSED(srcTopLeft);
     Q_UNUSED(dest);
-    
-        qint32         val;
-        qint32         alpha;
-        quint8         buf[4];
-        qint32         x, y;
-        double          xx, yy;
-        double          vec[2];
-        QRect rect(dstTopLeft, size);
-        qint32         x1 = rect.left(), y1 = rect.top(), x2 = rect.right(), y2 = rect.bottom();
+
+    qint32         val;
+    qint32         alpha;
+    quint8         buf[4];
+    qint32         x, y;
+    double          xx, yy;
+    double          vec[2];
+    QRect rect(dstTopLeft, size);
+    qint32         x1 = rect.left(), y1 = rect.top(), x2 = rect.right(), y2 = rect.bottom();
 //         qint32         selWidth, selHeight;
-        qint32         *vals, *valsIter, *valsEnd;
-        qint32         b;
-        qint32         xs, ys, xe, ye;
+    qint32         *vals, *valsIter, *valsEnd;
+    qint32         b;
+    qint32         xs, ys, xe, ye;
 
 
-        qint32 sx = (qint32) (*poly)[0].x();
-        qint32 sy = (qint32) (*poly)[0].y();
-        qint32 ex = (qint32) (*poly)[1].x();
-        qint32 ey = (qint32) (*poly)[1].y();
+    qint32 sx = (qint32)(*poly)[0].x();
+    qint32 sy = (qint32)(*poly)[0].y();
+    qint32 ex = (qint32)(*poly)[1].x();
+    qint32 ey = (qint32)(*poly)[1].y();
 
-        double dist = sqrt ((double)(SQR (ex - sx) + SQR (ey - sy)));
-        double oneOverDist = 0.0;
-        if (dist > 0.0)
-        {
-                double oneOverDist = 1/dist;
-                vec[0] = (ex - sx) * oneOverDist;
-                vec[1] = (ey - sy) * oneOverDist;
-        }
+    double dist = sqrt((double)(SQR(ex - sx) + SQR(ey - sy)));
+    double oneOverDist = 0.0;
+    if (dist > 0.0) {
+        double oneOverDist = 1 / dist;
+        vec[0] = (ex - sx) * oneOverDist;
+        vec[1] = (ey - sy) * oneOverDist;
+    }
 
-        qint32 pixelSize = src->pixelSize();
-        //get the extents of the polygon
-        double dMinX, dMinY, dMaxX, dMaxY;
-        poly->extents (dMinX, dMinY, dMaxX, dMaxY);
-        qint32 minX = static_cast<qint32>(dMinX);
-        qint32 minY = static_cast<qint32>(dMinY);
-        qint32 maxX = static_cast<qint32>(dMaxX);
-        qint32 maxY = static_cast<qint32>(dMaxY);
-        qint32 sizeX = (maxX - minX) * SUPERSAMPLE;
-        qint32 sizeY = (maxY - minY) * SUPERSAMPLE;
+    qint32 pixelSize = src->pixelSize();
+    //get the extents of the polygon
+    double dMinX, dMinY, dMaxX, dMaxY;
+    poly->extents(dMinX, dMinY, dMaxX, dMaxY);
+    qint32 minX = static_cast<qint32>(dMinX);
+    qint32 minY = static_cast<qint32>(dMinY);
+    qint32 maxX = static_cast<qint32>(dMaxX);
+    qint32 maxY = static_cast<qint32>(dMaxY);
+    qint32 sizeX = (maxX - minX) * SUPERSAMPLE;
+    qint32 sizeY = (maxY - minY) * SUPERSAMPLE;
 
-        qint32 *minScanlines = new qint32[sizeY];
-        qint32 *minScanlinesIter = minScanlines;
-        qint32 *maxScanlines = new qint32[sizeY];
-        qint32 *maxScanlinesIter = maxScanlines;
+    qint32 *minScanlines = new qint32[sizeY];
+    qint32 *minScanlinesIter = minScanlines;
+    qint32 *maxScanlines = new qint32[sizeY];
+    qint32 *maxScanlinesIter = maxScanlines;
 
-        for (qint32 i = 0; i < sizeY; i++)
-        {
-            minScanlines[i] = maxX * SUPERSAMPLE;
-            maxScanlines[i] = minX * SUPERSAMPLE;
-        }
+    for (qint32 i = 0; i < sizeY; i++) {
+        minScanlines[i] = maxX * SUPERSAMPLE;
+        maxScanlines[i] = minX * SUPERSAMPLE;
+    }
 
-        if ( poly->numberOfPoints() )
-        {
-                qint32 polyNpts = poly->numberOfPoints();
+    if (poly->numberOfPoints()) {
+        qint32 polyNpts = poly->numberOfPoints();
 
-                xs = static_cast<qint32>((*poly)[polyNpts-1].x());
-                ys = static_cast<qint32>((*poly)[polyNpts-1].y());
-                xe = static_cast<qint32>((*poly)[0].x());
-                ye = static_cast<qint32>((*poly)[0].y());
+        xs = static_cast<qint32>((*poly)[polyNpts-1].x());
+        ys = static_cast<qint32>((*poly)[polyNpts-1].y());
+        xe = static_cast<qint32>((*poly)[0].x());
+        ye = static_cast<qint32>((*poly)[0].y());
+
+        xs *= SUPERSAMPLE;
+        ys *= SUPERSAMPLE;
+        xe *= SUPERSAMPLE;
+        ye *= SUPERSAMPLE;
+
+        convertSegment(xs, ys, xe, ye, minY * SUPERSAMPLE, minScanlines, maxScanlines, minX* SUPERSAMPLE, maxX* SUPERSAMPLE);
+
+        KisPolygon::iterator it;
+
+        for (it = poly->begin(); it != poly->end();) {
+            xs = static_cast<qint32>((*it).x());
+            ys = static_cast<qint32>((*it).y());
+            ++it;
+
+            if (it != poly->end()) {
+                xe = static_cast<qint32>((*it).x());
+                ye = static_cast<qint32>((*it).y());
 
                 xs *= SUPERSAMPLE;
                 ys *= SUPERSAMPLE;
                 xe *= SUPERSAMPLE;
                 ye *= SUPERSAMPLE;
 
-                convertSegment (xs, ys, xe, ye, minY * SUPERSAMPLE, minScanlines, maxScanlines, minX* SUPERSAMPLE, maxX* SUPERSAMPLE);
+                convertSegment(xs, ys, xe, ye, minY * SUPERSAMPLE, minScanlines, maxScanlines, minX* SUPERSAMPLE, maxX* SUPERSAMPLE);
+            }
+        }
+    }
 
-                KisPolygon::iterator it;
-
-                for ( it = poly->begin(); it != poly->end(); )
-                {
-                        xs = static_cast<qint32>((*it).x());
-                        ys = static_cast<qint32>((*it).y());
-                        ++it;
-
-                        if( it != poly->end() )
-                        {
-                            xe = static_cast<qint32>((*it).x());
-                            ye = static_cast<qint32>((*it).y());
-
-                            xs *= SUPERSAMPLE;
-                            ys *= SUPERSAMPLE;
-                            xe *= SUPERSAMPLE;
-                            ye *= SUPERSAMPLE;
-
-                            convertSegment (xs, ys, xe, ye, minY * SUPERSAMPLE, minScanlines, maxScanlines, minX* SUPERSAMPLE, maxX* SUPERSAMPLE);
-                        }
-                }
+    vals = new qint32[sizeX];
+//         x1 = minX; x2 = maxX; y1 = minY; y2 = maxY;
+    for (qint32 i = 0; i < sizeY; i++, minScanlinesIter++, maxScanlinesIter++) {
+        if (!(i % SUPERSAMPLE)) {
+            memset(vals, 0, sizeof(qint32) * sizeX);
         }
 
-        vals = new qint32[sizeX];
-//         x1 = minX; x2 = maxX; y1 = minY; y2 = maxY;
-        for (qint32 i = 0; i < sizeY; i++, minScanlinesIter++, maxScanlinesIter++)
-        {
-                if (! (i % SUPERSAMPLE))
-                {
-                        memset (vals, 0, sizeof( qint32 ) * sizeX);
-                }
+        yy = static_cast<double>(i) / static_cast<double>(SUPERSAMPLE) + minY;
 
-                yy = static_cast<double>(i) / static_cast<double>(SUPERSAMPLE) + minY;
+        for (qint32 j = *minScanlinesIter; j < *maxScanlinesIter; j++) {
+            x = j - minX * SUPERSAMPLE;
+            vals[x] += 255;
+        }
 
-                for (qint32 j = *minScanlinesIter; j < *maxScanlinesIter; j++)
-                {
-                        x = j - minX * SUPERSAMPLE;
-                        vals[x] += 255;
-                }
+        if (!((i + 1) % SUPERSAMPLE)) {
+            y = (i / SUPERSAMPLE) + minY;
+            if (y >= y1 && y <= y2) {
+                for (qint32 j = 0; j < sizeX; j += SUPERSAMPLE) {
+                    x = (j / SUPERSAMPLE) + minX;
 
-                if (! ((i + 1) % SUPERSAMPLE))
-                {
-                        y = (i / SUPERSAMPLE) + minY;
-                        if (y >= y1 && y <= y2)
-                        {
-                                for (qint32 j = 0; j < sizeX; j += SUPERSAMPLE)
-                                {
-                                        x = (j / SUPERSAMPLE) + minX;
+                    if (x >= x1 && x <= x2) {
+                        for (val = 0, valsIter = &vals[j], valsEnd = &valsIter[SUPERSAMPLE]; valsIter < valsEnd; valsIter++) {
+                            val += *valsIter;
+                        }
+                        val /= SQR(SUPERSAMPLE);
 
-                                        if (x >= x1 && x <= x2)
-                                        {
-                                                for (val = 0, valsIter = &vals[j], valsEnd = &valsIter[SUPERSAMPLE]; valsIter < valsEnd; valsIter++)
-                                                {
-                                                        val += *valsIter;
-                                                }
-                                                val /= SQR(SUPERSAMPLE);
-
-                                                if (val > 0)
-                                                {
-                                                        xx = static_cast<double>(j) / static_cast<double>(SUPERSAMPLE) + minX;
-                                                        alpha = static_cast<qint32>(val * calcAlphaBlend (vec, oneOverDist, xx - sx, yy - sy));
+                        if (val > 0) {
+                            xx = static_cast<double>(j) / static_cast<double>(SUPERSAMPLE) + minX;
+                            alpha = static_cast<qint32>(val * calcAlphaBlend(vec, oneOverDist, xx - sx, yy - sy));
 
 //                                                         KisRectIteratorPixel srcIt = src->createRectIterator(x,y,1,1, false);
 //                                                         const quint8* srcPixel = srcIt.oldRawData();
 //                                                         memcpy( buf, srcPixel, sizeof(quint8) * pixelSize );
-                                                        dst->readBytes(buf, x, y, 1, 1);
-                                                #ifndef USE_READABLE_BUT_SLOW_CODE
-                                                        quint8 *bufIter = buf;
-                                                        const quint8 *colIter = col;
-                                                        quint8 *bufEnd = buf+pixelSize;
+                            dst->readBytes(buf, x, y, 1, 1);
+#ifndef USE_READABLE_BUT_SLOW_CODE
+                            quint8 *bufIter = buf;
+                            const quint8 *colIter = col;
+                            quint8 *bufEnd = buf + pixelSize;
 
-                                                        for(; bufIter < bufEnd; bufIter++, colIter++)
-                                                        *bufIter = (static_cast<quint8>(*colIter * alpha)
-                                                                        + (static_cast<quint8>(*bufIter)
-                                                                        * (256 - alpha))) >> 8;
-                                                #else  //original, pre-ECL code
-                                                        for (b = 0; b < pixelSize; b++)
-                                                        {
-                                                            buf[b] = ((col[b] * alpha) + (buf[b] * (255 - alpha))) / 255;
-                                                        }
-                                                #endif
+                            for (; bufIter < bufEnd; bufIter++, colIter++)
+                                *bufIter = (static_cast<quint8>(*colIter * alpha)
+                                            + (static_cast<quint8>(*bufIter)
+                                               * (256 - alpha))) >> 8;
+#else  //original, pre-ECL code
+                            for (b = 0; b < pixelSize; b++) {
+                                buf[b] = ((col[b] * alpha) + (buf[b] * (255 - alpha))) / 255;
+                            }
+#endif
 
-                                                        dst->writeBytes(buf, x, y, 1, 1);
-                                                }
-                                        }
-                                }
+                            dst->writeBytes(buf, x, y, 1, 1);
                         }
+                    }
                 }
+            }
         }
+    }
     delete[] vals;
     delete[] minScanlines;
     delete[] maxScanlines;
 }
 
 void KisCubismFilter::cubism(KisPaintDeviceSP src,
-    const QPoint& srcTopLeft,
-    KisPaintDeviceSP dst,
-    const QPoint& dstTopLeft,
-    const QSize& size,
-    quint32 tileSize,
-    quint32 tileSaturation) const
+                             const QPoint& srcTopLeft,
+                             KisPaintDeviceSP dst,
+                             const QPoint& dstTopLeft,
+                             const QSize& size,
+                             quint32 tileSize,
+                             quint32 tileSaturation) const
 {
     Q_ASSERT(src);
     Q_ASSERT(dst);
 
-        //fill the destination image with the background color (black for now)
-        KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
-        qint32 depth = src->colorSpace()->colorChannelCount();
-        while( ! dstIt.isDone() )
-        {
-                for( qint32 i = 0; i < depth; i++)
-                {
-                        dstIt.rawData()[i] = 0;
-                }
-                ++dstIt;
+    //fill the destination image with the background color (black for now)
+    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
+    qint32 depth = src->colorSpace()->colorChannelCount();
+    while (! dstIt.isDone()) {
+        for (qint32 i = 0; i < depth; i++) {
+            dstIt.rawData()[i] = 0;
         }
+        ++dstIt;
+    }
 
-        //compute number of rows and columns
-        qint32 cols = ( size.width() + tileSize - 1) / tileSize;
-        qint32 rows = ( size.height() + tileSize - 1) / tileSize;
-        qint32 numTiles = (rows + 1) * (cols + 1);
+    //compute number of rows and columns
+    qint32 cols = (size.width() + tileSize - 1) / tileSize;
+    qint32 rows = (size.height() + tileSize - 1) / tileSize;
+    qint32 numTiles = (rows + 1) * (cols + 1);
 
 //         setProgressTotalSteps(numTiles);
 //         setProgressStage(i18n("Applying cubism filter..."),0);
 
-        qint32* randomIndices = new qint32[numTiles];
-        for (qint32 i = 0; i < numTiles; i++)
-        {
-                randomIndices[i] = i;
+    qint32* randomIndices = new qint32[numTiles];
+    for (qint32 i = 0; i < numTiles; i++) {
+        randomIndices[i] = i;
+    }
+    randomizeIndices(numTiles, randomIndices);
+
+    qint32 count = 0;
+    qint32 i, j, ix, iy;
+    double x, y, width, height, theta;
+    KisPolygon *poly = new KisPolygon();
+    qint32 pixelSize = src->pixelSize();
+    const quint8 *srcPixel /*= new quint8[ pixelSize ]*/;
+    quint8 *dstPixel = 0;
+    while (count < numTiles) {
+        i = randomIndices[count] / (cols + 1);
+        j = randomIndices[count] % (cols + 1);
+        x = j * tileSize + (tileSize / 4.0) - randomDoubleNumber(0, tileSize / 2.0) + dstTopLeft.x();
+        y = i * tileSize + (tileSize / 4.0) - randomDoubleNumber(0, tileSize / 2.0) + dstTopLeft.y();
+        width = (tileSize + randomDoubleNumber(0, tileSize / 4.0) - tileSize / 8.0) * tileSaturation;
+        height = (tileSize + randomDoubleNumber(0, tileSize / 4.0) - tileSize / 8.0) * tileSaturation;
+        theta = randomDoubleNumber(0, 2 * M_PI);
+        poly->clear();
+        poly->addPoint(-width / 2.0, -height / 2.0);
+        poly->addPoint(width / 2.0, -height / 2.0);
+        poly->addPoint(width / 2.0, height / 2.0);
+        poly->addPoint(-width / 2.0, height / 2.0);
+        poly->rotate(theta);
+        poly->translate(x, y);
+        //  bounds check on x, y
+        ix = (qint32) CLAMP(x, dstTopLeft.x(), dstTopLeft.x() + size.width() - 1);
+        iy = (qint32) CLAMP(y, dstTopLeft.y(), dstTopLeft.y() + size.height() - 1);
+
+        //read the pixel at ix, iy
+        KisRectIteratorPixel srcIt = src->createRectIterator(ix, iy, 1, 1, false); // TODO use a random accessor here
+        srcPixel = srcIt.oldRawData();
+        if (srcPixel[pixelSize - 1]) {
+            fillPolyColor(src, srcTopLeft, dst, dstTopLeft, size, poly, srcPixel, dstPixel);
         }
-        randomizeIndices (numTiles, randomIndices);
-
-        qint32 count = 0;
-        qint32 i, j, ix, iy;
-        double x, y, width, height, theta;
-        KisPolygon *poly = new KisPolygon();
-        qint32 pixelSize = src->pixelSize();
-        const quint8 *srcPixel /*= new quint8[ pixelSize ]*/;
-        quint8 *dstPixel = 0;
-        while (count < numTiles)
-        {
-                i = randomIndices[count] / (cols + 1);
-                j = randomIndices[count] % (cols + 1);
-                x = j * tileSize + (tileSize / 4.0) - randomDoubleNumber(0, tileSize/2.0) + dstTopLeft.x();
-                y = i * tileSize + (tileSize / 4.0) - randomDoubleNumber(0, tileSize/2.0) + dstTopLeft.y();
-                width = (tileSize + randomDoubleNumber(0, tileSize / 4.0) - tileSize / 8.0) * tileSaturation;
-                height = (tileSize + randomDoubleNumber (0, tileSize / 4.0) - tileSize / 8.0) * tileSaturation;
-                theta = randomDoubleNumber(0, 2*M_PI);
-                poly->clear();
-                poly->addPoint( -width / 2.0, -height / 2.0 );
-                poly->addPoint( width / 2.0, -height / 2.0 );
-                poly->addPoint( width / 2.0, height / 2.0 );
-                poly->addPoint( -width / 2.0, height / 2.0 );
-                poly->rotate( theta );
-                poly->translate ( x, y );
-                //  bounds check on x, y
-                ix = (qint32) CLAMP (x, dstTopLeft.x(), dstTopLeft.x() + size.width() - 1);
-                iy = (qint32) CLAMP (y, dstTopLeft.y(), dstTopLeft.y() + size.height() - 1);
-
-                //read the pixel at ix, iy
-                KisRectIteratorPixel srcIt = src->createRectIterator(ix,iy,1,1, false); // TODO use a random accessor here
-                srcPixel = srcIt.oldRawData();
-                if (srcPixel[pixelSize - 1])
-                {
-                    fillPolyColor (src, srcTopLeft, dst, dstTopLeft, size, poly, srcPixel, dstPixel);
-                }
-                count++;
+        count++;
 //                 if ((count % 5) == 0) setProgress(count);
-        }
+    }
 
 }
 
 KisFilterConfigWidget * KisCubismFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP /*dev*/, const KisImageSP) const
 {
     vKisIntegerWidgetParam param;
-    param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Tile size"), "tileSize" ) );
-    param.push_back( KisIntegerWidgetParam( 2, 40, 10, i18n("Tile saturation"), "tileSaturation" ) );
-    return new KisMultiIntegerFilterWidget( id().id(),  parent,  id().id(),  param );
+    param.push_back(KisIntegerWidgetParam(2, 40, 10, i18n("Tile size"), "tileSize"));
+    param.push_back(KisIntegerWidgetParam(2, 40, 10, i18n("Tile saturation"), "tileSaturation"));
+    return new KisMultiIntegerFilterWidget(id().id(),  parent,  id().id(),  param);
 }
 
 KisFilterConfiguration* KisCubismFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
-    config->setProperty("tileSize", 10 );
-    config->setProperty("tileSaturation", 10 );
+    config->setProperty("tileSize", 10);
+    config->setProperty("tileSaturation", 10);
     return config;
 }

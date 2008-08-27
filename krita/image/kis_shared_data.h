@@ -24,15 +24,16 @@
 /**
  * XXX: Add documentation!
  */
-class KisSharedData  {
+class KisSharedData
+{
 #if QT_VERSION < 0x040400
-    private:
-        typedef QAtomic QAtomicInt;
+private:
+    typedef QAtomic QAtomicInt;
 #endif
-    public:
-        KisSharedData() : valid(true) { }
-        QAtomicInt ref;
-        bool valid;
+public:
+    KisSharedData() : valid(true) { }
+    QAtomicInt ref;
+    bool valid;
 };
 
 

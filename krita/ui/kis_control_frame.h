@@ -55,7 +55,7 @@ class KisControlFrame : public QObject
 
 public:
 
-    KisControlFrame(KisView2 * view,  const char *name = 0 );
+    KisControlFrame(KisView2 * view,  const char *name = 0);
     virtual ~KisControlFrame() {}
 
 public slots:

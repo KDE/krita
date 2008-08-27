@@ -29,69 +29,69 @@
 void KisTransactionTest::testUndo()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
-    KisPaintDeviceSP dev = new KisPaintDevice( cs );
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
-    quint8* pixel = cs->allocPixelBuffer( 1 );
-    cs->fromQColor( Qt::white, pixel );
-    dev->fill( 0, 0, 512, 512, pixel);
+    quint8* pixel = cs->allocPixelBuffer(1);
+    cs->fromQColor(Qt::white, pixel);
+    dev->fill(0, 0, 512, 512, pixel);
 
-    cs->fromQColor( Qt::black, pixel );
-    dev->fill( 512, 0, 512, 512, pixel );
+    cs->fromQColor(Qt::black, pixel);
+    dev->fill(512, 0, 512, 512, pixel);
 
     QColor c1;
-    dev->pixel( 5, 5, &c1 );
+    dev->pixel(5, 5, &c1);
 
     QColor c2;
-    dev->pixel( 517, 5, &c2 );
+    dev->pixel(517, 5, &c2);
 
-    QVERIFY( c1 == Qt::white );
-    QVERIFY( c2 == Qt::black );
+    QVERIFY(c1 == Qt::white);
+    QVERIFY(c2 == Qt::black);
 
-    KisTransaction t( "mirror", dev, 0 );
+    KisTransaction t("mirror", dev, 0);
     dev->mirrorX();
 
     t.undo();
 
-    dev->pixel( 5, 5, &c1 );
-    dev->pixel( 517, 5, &c2 );
+    dev->pixel(5, 5, &c1);
+    dev->pixel(517, 5, &c2);
 
-    QVERIFY( c1 == Qt::white );
-    QVERIFY( c2 == Qt::black );
+    QVERIFY(c1 == Qt::white);
+    QVERIFY(c2 == Qt::black);
 
 }
 
 void KisTransactionTest::testRedo()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
-    KisPaintDeviceSP dev = new KisPaintDevice( cs );
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
-    quint8* pixel = cs->allocPixelBuffer( 1 );
-    cs->fromQColor( Qt::white, pixel );
-    dev->fill( 0, 0, 512, 512, pixel);
+    quint8* pixel = cs->allocPixelBuffer(1);
+    cs->fromQColor(Qt::white, pixel);
+    dev->fill(0, 0, 512, 512, pixel);
 
-    cs->fromQColor( Qt::black, pixel );
-    dev->fill( 512, 0, 512, 512, pixel );
+    cs->fromQColor(Qt::black, pixel);
+    dev->fill(512, 0, 512, 512, pixel);
 
     QColor c1;
-    dev->pixel( 5, 5, &c1 );
+    dev->pixel(5, 5, &c1);
 
     QColor c2;
-    dev->pixel( 517, 5, &c2 );
+    dev->pixel(517, 5, &c2);
 
-    QVERIFY( c1 == Qt::white );
-    QVERIFY( c2 == Qt::black );
+    QVERIFY(c1 == Qt::white);
+    QVERIFY(c2 == Qt::black);
 
-    KisTransaction t( "mirror", dev, 0 );
+    KisTransaction t("mirror", dev, 0);
     dev->mirrorX();
 
     t.undo();
     t.redo();
 
-    dev->pixel( 5, 5, &c1 );
-    dev->pixel( 517, 5, &c2 );
+    dev->pixel(5, 5, &c1);
+    dev->pixel(517, 5, &c2);
 
-    QVERIFY( c1 == Qt::black );
-    QVERIFY( c2 == Qt::white );
+    QVERIFY(c1 == Qt::black);
+    QVERIFY(c2 == Qt::white);
 }
 
 QTEST_KDEMAIN(KisTransactionTest, GUI)

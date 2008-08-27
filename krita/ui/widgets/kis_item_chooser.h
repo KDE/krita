@@ -34,7 +34,8 @@ class QTableWidgetItem;
  * more information about the currently selected item. Reimplement update()
  * to extract that information and fill the appropriate widgets.
  */
-class KRITAUI_EXPORT KisItemChooser : public QWidget {
+class KRITAUI_EXPORT KisItemChooser : public QWidget
+{
 
     Q_OBJECT
 

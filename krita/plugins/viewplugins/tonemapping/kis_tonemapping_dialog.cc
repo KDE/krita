@@ -61,17 +61,17 @@ KisToneMappingDialog::KisToneMappingDialog(QWidget* parent, KisLayerSP _layer) :
     d->currentOperator = 0;
     d->currentBookmarkedToneMappingConfigurationsModel = 0;
     d->uiToneMappingDialog.setupUi(this);
-    d->widgetLayout = new QGridLayout( d->uiToneMappingDialog.centralWidgetHolder );
+    d->widgetLayout = new QGridLayout(d->uiToneMappingDialog.centralWidgetHolder);
     d->thumb = d->layer->paintDevice()->createThumbnailDevice(100, 100);
-    connect(d->uiToneMappingDialog.comboBoxOperators, SIGNAL(activated ( int )), SLOT(slotOperatorSelected(int )) );
+    connect(d->uiToneMappingDialog.comboBoxOperators, SIGNAL(activated(int)), SLOT(slotOperatorSelected(int)));
     connect(d->uiToneMappingDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
     connect(d->uiToneMappingDialog.pushButtonOk, SIGNAL(pressed()), SLOT(apply()));
     connect(d->uiToneMappingDialog.pushButtonApply, SIGNAL(pressed()), SLOT(apply()));
     connect(d->uiToneMappingDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(reject()));
-    connect(d->uiToneMappingDialog.comboBoxPresets, SIGNAL(activated ( int )), SLOT(slotBookmarkedToneMappingConfigurationSelected(int )) );
+    connect(d->uiToneMappingDialog.comboBoxPresets, SIGNAL(activated(int)), SLOT(slotBookmarkedToneMappingConfigurationSelected(int)));
     connect(d->uiToneMappingDialog.pushButtonEditPressets, SIGNAL(pressed()), SLOT(editConfigurations()));
 
-    
+
     d->operatorsModel = new KoGenericRegistryModel<KisToneMappingOperator*>(KisToneMappingOperatorsRegistry::instance());
     d->uiToneMappingDialog.comboBoxOperators->setModel(d->operatorsModel);
     slotOperatorSelected(0);
@@ -82,19 +82,18 @@ void KisToneMappingDialog::apply()
     d->layer->image()->lock();
     KisPropertiesConfiguration* config = (d->currentConfigurationWidget) ? d->currentConfigurationWidget->configuration() : new KisPropertiesConfiguration;
     const KoColorSpace* colorSpace = d->currentOperator->colorSpace();
-    
-    
-    if( !(*d->layer->paintDevice()->colorSpace() == *colorSpace))
-    {
+
+
+    if (!(*d->layer->paintDevice()->colorSpace() == *colorSpace)) {
         d->layer->paintDevice()->convertTo(colorSpace);
-        d->layer->setChannelFlags( QBitArray() );
+        d->layer->setChannelFlags(QBitArray());
     }
     KisTransaction * cmd = 0;
-    
-    if (d->layer->image()->undo()) cmd = new KisTransaction( d->currentOperator->name(), d->layer->paintDevice());
+
+    if (d->layer->image()->undo()) cmd = new KisTransaction(d->currentOperator->name(), d->layer->paintDevice());
     d->currentOperator->toneMap(d->layer->paintDevice(), config);
     if (cmd) d->layer->image()->undoAdapter()->addCommand(cmd);
-    
+
     d->currentOperator->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed.id(), config);
 
     d->layer->setDirty();
@@ -105,45 +104,42 @@ void KisToneMappingDialog::apply()
 void KisToneMappingDialog::slotOperatorSelected(int index)
 {
     dbgKrita << "slotOperatorSelected(" << index << ")";
-    QModelIndex modelIndex = d->operatorsModel->index(index,0);
-    KisToneMappingOperator* tmop = d->operatorsModel->get( modelIndex );
-    if( tmop)
-    {
+    QModelIndex modelIndex = d->operatorsModel->index(index, 0);
+    KisToneMappingOperator* tmop = d->operatorsModel->get(modelIndex);
+    if (tmop) {
         delete d->currentCentralWidget;
-        KisToneMappingOperatorConfigurationWidget* widget = tmop->createConfigurationWidget( d->uiToneMappingDialog.centralWidgetHolder );
-        if(widget)
-        {
+        KisToneMappingOperatorConfigurationWidget* widget = tmop->createConfigurationWidget(d->uiToneMappingDialog.centralWidgetHolder);
+        if (widget) {
             d->currentConfigurationWidget = widget;
             d->currentCentralWidget = widget;
-            d->currentConfigurationWidget->setConfiguration( tmop->defaultConfiguration() );
+            d->currentConfigurationWidget->setConfiguration(tmop->defaultConfiguration());
         } else {
             d->currentConfigurationWidget = 0;
-            d->currentCentralWidget = new QLabel( i18n("No configuration option."), d->uiToneMappingDialog.centralWidgetHolder );
+            d->currentCentralWidget = new QLabel(i18n("No configuration option."), d->uiToneMappingDialog.centralWidgetHolder);
         }
-        d->widgetLayout->addWidget( d->currentCentralWidget, 0 , 0);
-        
-    // Change the list of presets
+        d->widgetLayout->addWidget(d->currentCentralWidget, 0 , 0);
+
+        // Change the list of presets
         delete d->currentBookmarkedToneMappingConfigurationsModel;
-        d->currentBookmarkedToneMappingConfigurationsModel = new KisBookmarkedToneMappingOperatorConfigurationsModel(d->thumb, tmop );
-        d->uiToneMappingDialog.comboBoxPresets->setModel(  d->currentBookmarkedToneMappingConfigurationsModel );
+        d->currentBookmarkedToneMappingConfigurationsModel = new KisBookmarkedToneMappingOperatorConfigurationsModel(d->thumb, tmop);
+        d->uiToneMappingDialog.comboBoxPresets->setModel(d->currentBookmarkedToneMappingConfigurationsModel);
         d->currentOperator = tmop;
     }
 }
 
 void KisToneMappingDialog::slotBookmarkedToneMappingConfigurationSelected(int index)
 {
-    if(d->currentConfigurationWidget)
-    {
-        QModelIndex modelIndex = d->currentBookmarkedToneMappingConfigurationsModel->index(index,0);
-        KisPropertiesConfiguration* config  = d->currentBookmarkedToneMappingConfigurationsModel->configuration( modelIndex );
-        d->currentConfigurationWidget->setConfiguration( config );
+    if (d->currentConfigurationWidget) {
+        QModelIndex modelIndex = d->currentBookmarkedToneMappingConfigurationsModel->index(index, 0);
+        KisPropertiesConfiguration* config  = d->currentBookmarkedToneMappingConfigurationsModel->configuration(modelIndex);
+        d->currentConfigurationWidget->setConfiguration(config);
     }
 }
 
 void KisToneMappingDialog::editConfigurations()
 {
     KisSerializableConfiguration* config =
-            d->currentConfigurationWidget ? d->currentConfigurationWidget->configuration() : 0;
+        d->currentConfigurationWidget ? d->currentConfigurationWidget->configuration() : 0;
     KisBookmarkedConfigurationsEditor editor(this, d->currentBookmarkedToneMappingConfigurationsModel, config);
     editor.exec();
 }

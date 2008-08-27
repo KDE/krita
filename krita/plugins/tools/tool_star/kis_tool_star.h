@@ -30,11 +30,14 @@ class WdgToolStar : public QWidget, public Ui::WdgToolStar
 {
     Q_OBJECT
 
-    public:
-        WdgToolStar(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgToolStar(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
-class KisToolStar : public KisToolShape {
+class KisToolStar : public KisToolShape
+{
 
     typedef KisToolShape super;
     Q_OBJECT
@@ -71,21 +74,21 @@ private:
 
 #include "KoToolFactory.h"
 
-class KisToolStarFactory : public KoToolFactory {
+class KisToolStarFactory : public KoToolFactory
+{
 
 public:
     KisToolStarFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolStar", i18n( "Star" ))
-        {
-            setToolTip(i18n("Draw a star with the current brush"));
-            setToolType(TOOL_TYPE_SHAPE);
-            setPriority( 6 );
-            setIcon("tool_star");
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setInputDeviceAgnostic(false);
-        }
+            : KoToolFactory(parent, "KisToolStar", i18n("Star")) {
+        setToolTip(i18n("Draw a star with the current brush"));
+        setToolType(TOOL_TYPE_SHAPE);
+        setPriority(6);
+        setIcon("tool_star");
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        setInputDeviceAgnostic(false);
+    }
 
-    virtual ~KisToolStarFactory(){}
+    virtual ~KisToolStarFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolStar(canvas);

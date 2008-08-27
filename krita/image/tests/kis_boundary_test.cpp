@@ -28,7 +28,7 @@
 void KisBoundaryTest::testCreation()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisPaintDeviceSP dev = new KisPaintDevice( cs );
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
     KisBoundary test(dev);
 }
 

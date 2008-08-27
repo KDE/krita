@@ -41,7 +41,8 @@ class QResizeEvent;
 class QTabletEvent;
 class QUndoCommand;
 
-class MixerCanvas : public QFrame, public KoCanvasBase {
+class MixerCanvas : public QFrame, public KoCanvasBase
+{
     Q_OBJECT
 
 public:
@@ -56,8 +57,7 @@ public:
     KisPainterlyOverlay *overlay();
     void setToolProxy(KoToolProxy *proxy);
 
-    KoToolProxy *toolProxy() const
-    {
+    KoToolProxy *toolProxy() const {
         return m_toolProxy;
     }
 
@@ -75,18 +75,27 @@ protected:
 // Implement KoCanvasBase
 public:
     // These methods are not needed.
-    void gridSize(double *, double *) const {Q_ASSERT(false);}
-    bool snapToGrid() const {Q_ASSERT(false); return false;}
-    KoShapeManager *shapeManager() const {Q_ASSERT(false); return 0;}
-    const KoViewConverter *viewConverter() const {Q_ASSERT(false); return 0;}
-    void updateInputMethodInfo() {Q_ASSERT(false);}
+    void gridSize(double *, double *) const {
+        Q_ASSERT(false);
+    }
+    bool snapToGrid() const {
+        Q_ASSERT(false); return false;
+    }
+    KoShapeManager *shapeManager() const {
+        Q_ASSERT(false); return 0;
+    }
+    const KoViewConverter *viewConverter() const {
+        Q_ASSERT(false); return 0;
+    }
+    void updateInputMethodInfo() {
+        Q_ASSERT(false);
+    }
     void updateCanvas(const QRectF &) {}
     // Not needed but defined in the cpp source
     KoUnit unit() const;
     void addCommand(QUndoCommand*);
 
-    QWidget* canvasWidget()
-    {
+    QWidget* canvasWidget() {
         return this;
     }
 

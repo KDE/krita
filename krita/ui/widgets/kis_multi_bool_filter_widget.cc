@@ -25,16 +25,16 @@
 
 #include <klocale.h>
 
-KisBoolWidgetParam::KisBoolWidgetParam(  bool ninitvalue, const QString & nlabel, const QString & nname) :
-    initvalue(ninitvalue),
-    label(nlabel),
-    name(nname)
+KisBoolWidgetParam::KisBoolWidgetParam(bool ninitvalue, const QString & nlabel, const QString & nname) :
+        initvalue(ninitvalue),
+        label(nlabel),
+        name(nname)
 {
 
 }
 
 KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(const QString & filterid, QWidget * parent, const QString & caption, vKisBoolWidgetParam iwparam) :
-    KisFilterConfigWidget( parent ), m_filterid(filterid)
+        KisFilterConfigWidget(parent), m_filterid(filterid)
 {
     qint32 nbboolWidgets = iwparam.size();
 
@@ -44,13 +44,12 @@ KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(const QString & filterid, QWi
     widgetLayout->setMargin(nbboolWidgets + 1);
 
 
-    for( qint32 i = 0; i < nbboolWidgets; ++i)
-    {
+    for (qint32 i = 0; i < nbboolWidgets; ++i) {
         QCheckBox * cb = new QCheckBox(this);
         cb->setObjectName(iwparam[i].name);
         cb->setChecked(iwparam[i].initvalue);
         cb->setText(iwparam[i].label);
-        connect(cb, SIGNAL(toggled( bool ) ), SIGNAL(sigPleaseUpdatePreview()));
+        connect(cb, SIGNAL(toggled(bool)), SIGNAL(sigPleaseUpdatePreview()));
         widgetLayout->addWidget(cb);
         m_boolWidgets.append(cb);
     }
@@ -60,7 +59,7 @@ KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(const QString & filterid, QWi
 
 void KisMultiBoolFilterWidget::setConfiguration(KisFilterConfiguration * config)
 {
-    if ( !config ) return;
+    if (!config) return;
 
     for (int i = 0; i < nbValues(); ++i) {
         double val = config->getBool(m_boolWidgets[i]->objectName());

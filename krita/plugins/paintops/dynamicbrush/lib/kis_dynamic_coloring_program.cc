@@ -23,18 +23,27 @@
 struct KisDynamicColoringProgram::Private {
 };
 
-KisDynamicColoringProgram::KisDynamicColoringProgram(const QString& name, const QString& type) : KisDynamicProgram(name, type), d(new Private) {
+KisDynamicColoringProgram::KisDynamicColoringProgram(const QString& name, const QString& type) : KisDynamicProgram(name, type), d(new Private)
+{
 }
 
-KisDynamicColoringProgram::~KisDynamicColoringProgram() { delete d; }
+KisDynamicColoringProgram::~KisDynamicColoringProgram()
+{
+    delete d;
+}
 
 
-class KisDynamicDummyColoringProgram : public KisDynamicProgram {
-    public:
-        KisDynamicDummyColoringProgram(const QString& name) : KisDynamicProgram(name, "dummy") { }
-        virtual double mix(const KisPaintInformation& ) const { return 1.0; }
-        virtual void apply( KisDynamicColoring* , const KisPaintInformation& ) const { }
-        virtual QWidget* createEditor(QWidget* ) { return 0; }
+class KisDynamicDummyColoringProgram : public KisDynamicProgram
+{
+public:
+    KisDynamicDummyColoringProgram(const QString& name) : KisDynamicProgram(name, "dummy") { }
+    virtual double mix(const KisPaintInformation&) const {
+        return 1.0;
+    }
+    virtual void apply(KisDynamicColoring* , const KisPaintInformation&) const { }
+    virtual QWidget* createEditor(QWidget*) {
+        return 0;
+    }
 };
 
 
@@ -75,10 +84,10 @@ KisSerializableConfiguration* KisDynamicColoringProgramsFactory::create(const QD
 {
     QString type = e.attribute("type", "");
     QString name = e.attribute("name", "");
-    KisDynamicColoringProgramFactory* factory = KisDynamicColoringProgramFactoryRegistry::instance()->value( type );
+    KisDynamicColoringProgramFactory* factory = KisDynamicColoringProgramFactoryRegistry::instance()->value(type);
     dbgKrita << "Type is : " << type;
     Q_ASSERT(factory);
-    KisDynamicColoringProgram* program = factory->coloringProgram( name );
+    KisDynamicColoringProgram* program = factory->coloringProgram(name);
     Q_ASSERT(program);
     program->fromXML(e);
     return program;

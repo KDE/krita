@@ -27,8 +27,7 @@
 class KisNodeVisitor;
 class KoCompositeOp;
 
-enum CopyLayerType
-{
+enum CopyLayerType {
     COPY_PROJECTION,
     COPY_ORIGINAL
 };
@@ -54,12 +53,11 @@ public:
     KisCloneLayer(const KisCloneLayer& rhs);
     virtual ~KisCloneLayer();
 
-    KisNodeSP clone() const
-        {
-            return KisNodeSP(new KisCloneLayer(*this));
-        }
+    KisNodeSP clone() const {
+        return KisNodeSP(new KisCloneLayer(*this));
+    }
 
-    bool allowAsChild( KisNodeSP ) const;
+    bool allowAsChild(KisNodeSP) const;
 
     void updateProjection(const QRect& r);
     KisPaintDeviceSP projection() const;
@@ -89,10 +87,10 @@ public:
         return this;
     }
 
-    void setCopyFrom( KisLayerSP layer, CopyLayerType type );
+    void setCopyFrom(KisLayerSP layer, CopyLayerType type);
     KisLayerSP copyFrom() const;
 
-    void setCopyType( CopyLayerType type );
+    void setCopyType(CopyLayerType type);
     CopyLayerType copyType() const;
 
 private:

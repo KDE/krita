@@ -27,40 +27,40 @@
 #include "kis_debug.h"
 
 KisTransparencyMask::KisTransparencyMask()
-    : KisEffectMask()
+        : KisEffectMask()
 {
-    dbgImage <<"Creating a transparency mask";
+    dbgImage << "Creating a transparency mask";
 }
 
 KisTransparencyMask::~KisTransparencyMask()
 {
 }
 
-KisTransparencyMask::KisTransparencyMask( const KisTransparencyMask& rhs )
-    : KisEffectMask( rhs )
+KisTransparencyMask::KisTransparencyMask(const KisTransparencyMask& rhs)
+        : KisEffectMask(rhs)
 {
 }
 
-bool KisTransparencyMask::allowAsChild( KisNodeSP node) const
+bool KisTransparencyMask::allowAsChild(KisNodeSP node) const
 {
     Q_UNUSED(node);
     return false;
 }
 
 
-void KisTransparencyMask::apply( KisPaintDeviceSP projection, const QRect & rc ) const
+void KisTransparencyMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
 {
     selection()->updateProjection();
 
     const KoColorSpace * cs = projection->colorSpace();
 
-    KisHLineIteratorPixel projectionIt = projection->createHLineIterator( rc.x(), rc.y(), rc.width() );
-    KisHLineConstIteratorPixel maskIt = selection()->createHLineConstIterator( rc.x(), rc.y(), rc.width() );
+    KisHLineIteratorPixel projectionIt = projection->createHLineIterator(rc.x(), rc.y(), rc.width());
+    KisHLineConstIteratorPixel maskIt = selection()->createHLineConstIterator(rc.x(), rc.y(), rc.width());
 
-    for ( int row = rc.y(); row < rc.height(); ++row ) {
-        while ( !projectionIt.isDone() ) {
+    for (int row = rc.y(); row < rc.height(); ++row) {
+        while (!projectionIt.isDone()) {
 
-            int pixels = qMin( projectionIt.nConseqHPixels(), maskIt.nConseqHPixels() );
+            int pixels = qMin(projectionIt.nConseqHPixels(), maskIt.nConseqHPixels());
             cs->applyAlphaU8Mask(projectionIt.rawData(), maskIt.rawData(), pixels);
 
             projectionIt += pixels;

@@ -26,9 +26,9 @@ KisImageAlignmentProjectiveModel::~KisImageAlignmentProjectiveModel()
 {
 }
 
-KisImageAlignmentModel::OptimizationFunction* KisImageAlignmentProjectiveModel::createOptimizationFunction( const KisControlPoints& controlPoints, double xc, double yc, int width, int height) const
+KisImageAlignmentModel::OptimizationFunction* KisImageAlignmentProjectiveModel::createOptimizationFunction(const KisControlPoints& controlPoints, double xc, double yc, int width, int height) const
 {
 
-  return new PanoptimFunction<DoubleHomographySameDistortionFunction>( controlPoints, xc, yc, width, height );
+    return new PanoptimFunction<DoubleHomographySameDistortionFunction>(controlPoints, xc, yc, width, height);
 }
 

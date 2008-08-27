@@ -28,23 +28,24 @@
 
 class QRect;
 
-class Stroke {
+class Stroke
+{
 
 public:
 
     Stroke();
     virtual ~Stroke();
 
-    void draw (KisPaintDeviceSP dev);
-    void setColor ( const KoColor & c );
-    double x1,y1,x2,y2;
+    void draw(KisPaintDeviceSP dev);
+    void setColor(const KoColor & c);
+    double x1, y1, x2, y2;
 
 private:
-    void drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color );
+    void drawLine(KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color);
     /*void drawWuLine(KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color );*/
     void drawGSLine(KisPaintDeviceSP image, int x0, int y0, int x1, int y1, int w1, int w2, const QColor &color);
     int gsfilter(float val);
-    void drawDDALine(KisPaintDeviceSP image, int x1, int y1, int x2, int y2,const QColor &color);
+    void drawDDALine(KisPaintDeviceSP image, int x1, int y1, int x2, int y2, const QColor &color);
 
 private:
     KoColor m_color;

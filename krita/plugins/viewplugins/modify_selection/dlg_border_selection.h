@@ -28,11 +28,14 @@ class WdgBorderSelection : public QWidget, public Ui::WdgBorderSelection
 {
     Q_OBJECT
 
-    public:
-        WdgBorderSelection(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgBorderSelection(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
-class DlgBorderSelection: public KDialog {
+class DlgBorderSelection: public KDialog
+{
     typedef KDialog super;
     Q_OBJECT
 

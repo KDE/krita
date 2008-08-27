@@ -28,7 +28,7 @@
 #include "filter/kis_filter_registry.h"
 
 typedef KGenericFactory<KisCImgPlugin> KisCImgPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritacimg, KisCImgPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritacimg, KisCImgPluginFactory("krita"))
 
 KisCImgPlugin::KisCImgPlugin(QObject *parent, const QStringList &) : KParts::Plugin(parent)
 {

@@ -24,11 +24,10 @@ int KisInterestPointsDetector::s_interestPointDetectorPriority = -1;
 
 void KisInterestPointsDetector::setInterestPointDetector(int priority, KisInterestPointsDetector* interestPointDetector)
 {
-    if(!s_interestPointDetector)
-    {
+    if (!s_interestPointDetector) {
         s_interestPointDetector = interestPointDetector;
         s_interestPointDetectorPriority = priority;
-    } else if(priority > s_interestPointDetectorPriority) {
+    } else if (priority > s_interestPointDetectorPriority) {
         delete s_interestPointDetector;
         s_interestPointDetector = interestPointDetector;
         s_interestPointDetectorPriority = priority;

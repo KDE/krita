@@ -33,23 +33,23 @@ class KoProgressProxy;
 class KRITAIMAGE_EXPORT KisNodeAction : public KoAction
 {
 
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
-    KisNodeAction( QObject * parent, KisNodeSP node, KoProgressProxy * progressProxy );
+    KisNodeAction(QObject * parent, KisNodeSP node, KoProgressProxy * progressProxy);
     virtual ~KisNodeAction();
-    
+
 protected slots:
 
     virtual void slotTriggered() {}
 
 private slots:
-    
+
     void slotUpdateGUI();
 
 private:
-    
+
     struct Private;
     Private * const m_d;
 

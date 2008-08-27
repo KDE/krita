@@ -29,24 +29,24 @@
 #include <QList>
 
 class KisRandomSubAccessorPixel;
-class KisImagesBlender {
-  public:
+class KisImagesBlender
+{
+public:
     struct LayerSource {
-      KisPaintDeviceSP layer;
-      double a,b,c; ///< distortion parameters
-      double xc1, yc1, xc2, yc2;
-      double norm;
-      Eigen::Matrix3d homography; ///< homography parameters
-      Eigen::Matrix3d invHomography; ///< homography parameters
-      QRect rect; ///< size of the layer
-      QRegion boundingBox; ///<contain the bounding box of the image (will be computed by the blend algorithm)
-      KisRandomSubAccessorPixel* accessor;
+        KisPaintDeviceSP layer;
+        double a, b, c; ///< distortion parameters
+        double xc1, yc1, xc2, yc2;
+        double norm;
+        Eigen::Matrix3d homography; ///< homography parameters
+        Eigen::Matrix3d invHomography; ///< homography parameters
+        QRect rect; ///< size of the layer
+        QRegion boundingBox; ///<contain the bounding box of the image (will be computed by the blend algorithm)
+        KisRandomSubAccessorPixel* accessor;
     };
     static void blend(QList<LayerSource> sources, KisPaintDeviceSP dst);
-  private:
-    static inline double poly(double a, double b, double c, double u)
-    {
-        return 1.0 + a*u+b*u*u+c*u*u*u;
+private:
+    static inline double poly(double a, double b, double c, double u) {
+        return 1.0 + a*u + b*u*u + c*u*u*u;
     }
 };
 

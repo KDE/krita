@@ -33,15 +33,15 @@
 #include <kis_debug.h>
 #include <kcolorbutton.h>
 
-DlgDropshadow::DlgDropshadow( const QString & /*imageCS*/,
-                          const QString & /*layerCS*/,
-                          QWidget *  parent,
-                          const char * name)
-    : super (parent)
+DlgDropshadow::DlgDropshadow(const QString & /*imageCS*/,
+                             const QString & /*layerCS*/,
+                             QWidget *  parent,
+                             const char * name)
+        : super(parent)
 {
-    setCaption( i18n("Drop Shadow") );
-    setButtons(  Ok | Cancel);
-    setDefaultButton( Ok );
+    setCaption(i18n("Drop Shadow"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
     setObjectName(name);
     m_page = new WdgDropshadow(this, "dropshadow");
     Q_CHECK_PTR(m_page);
@@ -49,17 +49,17 @@ DlgDropshadow::DlgDropshadow( const QString & /*imageCS*/,
     resize(m_page->sizeHint());
 
     KConfigGroup cfg = KGlobal::config()->group("dropshadow");
-    m_page->xOffsetSpinBox->setValue( cfg.readEntry<int>("x", 8) );
-    m_page->yOffsetSpinBox->setValue( cfg.readEntry<int>("y", 8) );
-    m_page->blurRadiusSpinBox->setValue( cfg.readEntry<int>("blurRadius", 5) );
-    QColor black(0,0,0);
-    m_page->shadowColorButton->setColor( cfg.readEntry<QColor>("color", Qt::black) );
-    m_page->opacitySlider->setValue( cfg.readEntry<int>("opacity", 80 ) );
-    m_page->opacitySpinBox->setValue( cfg.readEntry<int>("opacity", 80 ) );
-    m_page->allowResizingCheckBox->setChecked( cfg.readEntry<bool>("resizing", true ) );
-    
+    m_page->xOffsetSpinBox->setValue(cfg.readEntry<int>("x", 8));
+    m_page->yOffsetSpinBox->setValue(cfg.readEntry<int>("y", 8));
+    m_page->blurRadiusSpinBox->setValue(cfg.readEntry<int>("blurRadius", 5));
+    QColor black(0, 0, 0);
+    m_page->shadowColorButton->setColor(cfg.readEntry<QColor>("color", Qt::black));
+    m_page->opacitySlider->setValue(cfg.readEntry<int>("opacity", 80));
+    m_page->opacitySpinBox->setValue(cfg.readEntry<int>("opacity", 80));
+    m_page->allowResizingCheckBox->setChecked(cfg.readEntry<bool>("resizing", true));
+
     connect(this, SIGNAL(okClicked()),
-        this, SLOT(okClicked()));
+            this, SLOT(okClicked()));
 }
 
 DlgDropshadow::~DlgDropshadow()

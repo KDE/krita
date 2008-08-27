@@ -37,52 +37,59 @@ const KoID SpeedId("speed", i18n("Speed"));
 const KoID TimeId("time", i18n("Time"));
 const KoID DrawingAngleId("drawingangle", i18n("Drawing angle"));
 const KoID PressureId("pressure", i18n("Pressure"));
-const KoID XTiltId ("xtilt", i18n("X-Tilt"));
-const KoID YTiltId ("ytilt", i18n("Y-Tilt"));
+const KoID XTiltId("xtilt", i18n("X-Tilt"));
+const KoID YTiltId("ytilt", i18n("Y-Tilt"));
 
 /**
  * Sensor are used to extract from KisPaintInformation a single
- * double value which can be used to control 
+ * double value which can be used to control
  */
-class DYNAMIC_BRUSH_EXPORT KisDynamicSensor : public QObject, public KisSerializableConfiguration {
-    public:
-        enum ParameterSign {
-            NegativeParameter = -1,
-            UnSignedParameter = 0,
-            PositiveParameter = 1
-        };
-    protected:
-        KisDynamicSensor(const KoID& id);
-    public:
-        virtual ~KisDynamicSensor() { }
-        /**
-         * @return the value of this sensor for the given KisPaintInformation
-         */
-        virtual double parameter(const KisPaintInformation& info) = 0;
-        virtual QWidget* createConfigurationWidget(QWidget* parent, KisSensorSelector*);
-        /**
-         * Creates a sensor from its identifiant.
-         */
-        static KisDynamicSensor* id2Sensor(const KoID&);
-        static KisDynamicSensor* id2Sensor(const QString& s) { return id2Sensor(KoID(s)); }
-        static KisDynamicSensor* createFromXML(const QDomElement&);
-        /**
-         * @return the list of sensors
-         */
-        static QList<KoID> sensorsIds();
-        /**
-         * @return the identifiant of this sensor
-         */
-        inline QString id() const { return m_id.id(); }
-        inline QString name() const { return m_id.name(); }
+class DYNAMIC_BRUSH_EXPORT KisDynamicSensor : public QObject, public KisSerializableConfiguration
+{
+public:
+    enum ParameterSign {
+        NegativeParameter = -1,
+        UnSignedParameter = 0,
+        PositiveParameter = 1
+    };
+protected:
+    KisDynamicSensor(const KoID& id);
+public:
+    virtual ~KisDynamicSensor() { }
+    /**
+     * @return the value of this sensor for the given KisPaintInformation
+     */
+    virtual double parameter(const KisPaintInformation& info) = 0;
+    virtual QWidget* createConfigurationWidget(QWidget* parent, KisSensorSelector*);
+    /**
+     * Creates a sensor from its identifiant.
+     */
+    static KisDynamicSensor* id2Sensor(const KoID&);
+    static KisDynamicSensor* id2Sensor(const QString& s) {
+        return id2Sensor(KoID(s));
+    }
+    static KisDynamicSensor* createFromXML(const QDomElement&);
+    /**
+     * @return the list of sensors
+     */
+    static QList<KoID> sensorsIds();
+    /**
+     * @return the identifiant of this sensor
+     */
+    inline QString id() const {
+        return m_id.id();
+    }
+    inline QString name() const {
+        return m_id.name();
+    }
 
-        using KisSerializableConfiguration::fromXML;
-        using KisSerializableConfiguration::toXML;
-        
-        virtual void toXML(QDomDocument&, QDomElement&) const;
-        virtual void fromXML(const QDomElement&);
-    private:
-        const KoID& m_id;
+    using KisSerializableConfiguration::fromXML;
+    using KisSerializableConfiguration::toXML;
+
+    virtual void toXML(QDomDocument&, QDomElement&) const;
+    virtual void fromXML(const QDomElement&);
+private:
+    const KoID& m_id;
 };
 
 #endif

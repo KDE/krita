@@ -36,8 +36,8 @@
 #include "generator/kis_generator_layer.h"
 
 KisKraSaveVisitor::KisKraSaveVisitor(KisImageSP img, KoStore *store, quint32 &count, const QString & name) :
-    KisNodeVisitor(),
-    m_count(count)
+        KisNodeVisitor(),
+        m_count(count)
 {
     m_external = false;
     m_img = img;
@@ -51,14 +51,14 @@ void KisKraSaveVisitor::setExternalUri(QString &uri)
     m_uri = uri;
 }
 
-bool KisKraSaveVisitor::visit( KisExternalLayer * layer )
+bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
 {
     bool result = false;
     if (KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
 
         QString location = m_external ? QString::null : m_uri;
         m_store->pushDirectory();
-        m_store->enterDirectory( m_name + QString("/shapelayers/layer%1").arg(m_count) );
+        m_store->enterDirectory(m_name + QString("/shapelayers/layer%1").arg(m_count));
         result = shapeLayer->saveOdf(m_store);
         m_store->popDirectory();
     }
@@ -73,8 +73,7 @@ bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
     if (layer->paintDevice()->colorSpace()->profile()) {
         const KoColorProfile *profile = layer->paintDevice()->colorSpace()->profile();
         KisAnnotationSP annotation;
-        if (profile)
-        {
+        if (profile) {
             const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
             if (iccprofile && !iccprofile->rawData().isEmpty())
                 annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
@@ -91,7 +90,7 @@ bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
             }
         }
     }
-    visitAllInverse( layer );
+    visitAllInverse(layer);
     // XXX: save masks!
 
 //     if (layer->hasMask()) {
@@ -120,7 +119,7 @@ bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
 
 bool KisKraSaveVisitor::visit(KisGroupLayer *layer)
 {
-    return visitAllInverse( layer );
+    return visitAllInverse(layer);
 }
 
 bool KisKraSaveVisitor::visit(KisAdjustmentLayer* layer)
@@ -148,8 +147,7 @@ bool KisKraSaveVisitor::visit(KisGeneratorLayer * layer)
     if (layer->paintDevice()->colorSpace()->profile()) {
         const KoColorProfile *profile = layer->paintDevice()->colorSpace()->profile();
         KisAnnotationSP annotation;
-        if (profile)
-        {
+        if (profile) {
             const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
             if (iccprofile && !iccprofile->rawData().isEmpty())
                 annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
@@ -213,7 +211,7 @@ bool KisKraSaveVisitor::visit(KisSelectionMask *mask)
 }
 
 
-bool KisKraSaveVisitor::savePaintDevice( KisNode * node )
+bool KisKraSaveVisitor::savePaintDevice(KisNode * node)
 {
 
     QString location = m_external ? QString::null : m_uri;

@@ -33,29 +33,31 @@ public:
     KisCubismFilter();
 public:
     using KisFilter::process;
-    
+
     void process(KisConstProcessingInformation src,
                  KisProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
-        ) const;
-    static inline KoID id() { return KoID("cubism", i18n("Cubism")); }
-    
-    virtual bool workWith(const KoColorSpace* cs) const; 
+                ) const;
+    static inline KoID id() {
+        return KoID("cubism", i18n("Cubism"));
+    }
+
+    virtual bool workWith(const KoColorSpace* cs) const;
 public:
     virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
 protected:
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 private:
     //this function takes an array of ordered indices i1,i2,i3,... and randomizes them i3,i1,i2,...
-        void randomizeIndices (qint32 count, qint32* indices) const;
-        qint32 randomIntNumber(qint32 lowestNumber, qint32 highestNumber)  const;
-        double randomDoubleNumber(double lowestNumber, double highestNumber)  const;
-        double   calcAlphaBlend(double *vec, double oneOverDist, double x, double y) const;
-        void convertSegment(qint32 x1, qint32 y1, qint32 x2, qint32  y2, qint32 offset, qint32* min, qint32* max, qint32 xmin, qint32 xmax) const;
-        void fillPolyColor(KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint & dstTopLeft, const QSize& size, KisPolygon* poly, const quint8* col, quint8* dest) const;
-        void cubism(KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint & dstTopLeft, const QSize& size, quint32 tileSize, quint32 tileSaturation) const;
+    void randomizeIndices(qint32 count, qint32* indices) const;
+    qint32 randomIntNumber(qint32 lowestNumber, qint32 highestNumber)  const;
+    double randomDoubleNumber(double lowestNumber, double highestNumber)  const;
+    double   calcAlphaBlend(double *vec, double oneOverDist, double x, double y) const;
+    void convertSegment(qint32 x1, qint32 y1, qint32 x2, qint32  y2, qint32 offset, qint32* min, qint32* max, qint32 xmin, qint32 xmax) const;
+    void fillPolyColor(KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint & dstTopLeft, const QSize& size, KisPolygon* poly, const quint8* col, quint8* dest) const;
+    void cubism(KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint & dstTopLeft, const QSize& size, quint32 tileSize, quint32 tileSaturation) const;
 
 };
 

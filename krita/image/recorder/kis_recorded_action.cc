@@ -59,8 +59,8 @@ QString KisRecordedAction::name() const
 
 void KisRecordedAction::toXML(QDomDocument& , QDomElement& elt) const
 {
-    elt.setAttribute( "name", name() );
-    elt.setAttribute( "id", id() );
+    elt.setAttribute("name", name());
+    elt.setAttribute("id", id());
 }
 
 QString KisRecordedAction::nodeToIndexPath(KisNodeSP _node)
@@ -68,10 +68,9 @@ QString KisRecordedAction::nodeToIndexPath(KisNodeSP _node)
     QString path;
     KisNodeSP node = _node;
     KisNodeSP parent = 0;
-    while((parent = node->parent()))
-    {
-        int index = parent->index( node );
-        if ( index >= 0 ) {
+    while ((parent = node->parent())) {
+        int index = parent->index(node);
+        if (index >= 0) {
             path = (QString("\\%0").arg(index)) + path;
         }
         node = parent;
@@ -107,14 +106,11 @@ KisNodeSP KisRecordedActionFactory::indexPathToNode(KisImageSP img, const QStrin
 {
     QStringList indexes = path.split("\\");
     KisNodeSP current = (img->rootLayer()->at(indexes[0].toUInt()));
-    for(int i = 1; i < indexes.size(); i++)
-    {
+    for (int i = 1; i < indexes.size(); i++) {
         KisGroupLayer* groupCurrent = dynamic_cast<KisGroupLayer*>(current.data());
-        if(groupCurrent)
-        {
+        if (groupCurrent) {
             current = groupCurrent->at(indexes[i].toUInt());
-        } else
-        {
+        } else {
             break;
         }
     }

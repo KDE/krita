@@ -18,8 +18,8 @@
 #ifndef KIS_OPENGL_IMAGE_TEXTURES_H_
 #define KIS_OPENGL_IMAGE_TEXTURES_H_
 
-#include "config-opengl.h"
-#include "config-glew.h"
+#include <config-opengl.h>
+#include <config-glew.h>
 
 #ifdef HAVE_OPENGL
 
@@ -52,7 +52,8 @@ class KoColorProfile;
 /**
  * A set of OpenGL textures that contains the projection of a KisImage.
  */
-class KRITAUI_EXPORT KisOpenGLImageTextures : public QObject, public KisShared {
+class KRITAUI_EXPORT KisOpenGLImageTextures : public QObject, public KisShared
+{
 
     Q_OBJECT
 

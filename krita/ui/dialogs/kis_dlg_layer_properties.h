@@ -35,11 +35,14 @@ class WdgLayerProperties : public QWidget, public Ui::WdgLayerProperties
 {
     Q_OBJECT
 
-    public:
-        WdgLayerProperties(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgLayerProperties(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
-class KisDlgLayerProperties : public KDialog {
+class KisDlgLayerProperties : public KDialog
+{
 
     Q_OBJECT
 
@@ -65,7 +68,7 @@ public:
     QBitArray getChannelFlags() const;
 
 protected slots:
-    void slotNameChanged( const QString & );
+    void slotNameChanged(const QString &);
 
 private:
     WdgLayerProperties * m_page;

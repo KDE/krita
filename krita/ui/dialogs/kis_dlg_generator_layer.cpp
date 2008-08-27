@@ -33,32 +33,32 @@
 #include <widgets/kis_previewwidget.h>
 #include <kis_transaction.h>
 
-KisDlgGeneratorLayer::KisDlgGeneratorLayer( const QString & name, QWidget * parent )
-    : KDialog(parent)
-    , m_currentConfigWidget(0)
-    , m_currentGenerator(0)
-    , m_customName(false)
-    , m_freezeName(false)
+KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & name, QWidget * parent)
+        : KDialog(parent)
+        , m_currentConfigWidget(0)
+        , m_currentGenerator(0)
+        , m_customName(false)
+        , m_freezeName(false)
 {
 
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
     QWidget * page = new QWidget(this);
     dlgWidget.setupUi(page);
     setMainWidget(page);
-    
+
     dlgWidget.txtLayerName->setText(name);
-    connect( dlgWidget.txtLayerName, SIGNAL( textChanged ( const QString & ) ),
-             this, SLOT( slotNameChanged( const QString & ) ) );
+    connect(dlgWidget.txtLayerName, SIGNAL(textChanged(const QString &)),
+            this, SLOT(slotNameChanged(const QString &)));
 }
 
-void KisDlgGeneratorLayer::slotNameChanged( const QString & text )
+void KisDlgGeneratorLayer::slotNameChanged(const QString & text)
 {
     if (m_freezeName)
         return;
 
     m_customName = !text.isEmpty();
-    enableButtonOk( m_customName );
+    enableButtonOk(m_customName);
 }
 
 void KisDlgGeneratorLayer::setConfiguration(KisFilterConfiguration * config)

@@ -29,7 +29,8 @@
 class KisSelectionOptions;
 class KoCanvasBase;
 
-class KisToolSelectPath : public KoCreatePathTool {
+class KisToolSelectPath : public KoCreatePathTool
+{
 
     typedef KoCreatePathTool super;
     Q_OBJECT
@@ -45,7 +46,7 @@ public:
 public slots:
     virtual void slotSetAction(int);
     virtual void slotSetSelectionMode(int);
-    virtual void activate( bool );
+    virtual void activate(bool);
 
 private:
     KisSelectionOptions * m_optWidget;
@@ -54,20 +55,20 @@ private:
 
 };
 
-class KisToolSelectPathFactory : public KoToolFactory {
+class KisToolSelectPathFactory : public KoToolFactory
+{
 
 public:
     KisToolSelectPathFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolSelectPath", i18n( "Path Selection" ))
-        {
-            setToolTip( i18n( "Select an area of the image with path." ) );
-            setToolType( TOOL_TYPE_SELECTED );
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setIcon( "tool_outline_selection" );
-            setPriority( 58 );
-        }
+            : KoToolFactory(parent, "KisToolSelectPath", i18n("Path Selection")) {
+        setToolTip(i18n("Select an area of the image with path."));
+        setToolType(TOOL_TYPE_SELECTED);
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        setIcon("tool_outline_selection");
+        setPriority(58);
+    }
 
-    virtual ~KisToolSelectPathFactory(){}
+    virtual ~KisToolSelectPathFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolSelectPath(canvas);

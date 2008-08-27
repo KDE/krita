@@ -66,16 +66,16 @@ public:
     virtual ~KritaShape();
 
     /// reimplemented
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
+    virtual void paint(QPainter& painter, const KoViewConverter& converter);
     /// reimplemented
-    virtual void saveOdf( KoShapeSavingContext & context ) const;
+    virtual void saveOdf(KoShapeSavingContext & context) const;
     // reimplemented
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
     // reimplemented
     virtual void waitUntilReady() const;
 
-    void setDisplayProfile( const QString & profileName );
-    void importImage( const KUrl & url );
+    void setDisplayProfile(const QString & profileName);
+    void importImage(const KUrl & url);
 
     QImage convertToQImage();
 

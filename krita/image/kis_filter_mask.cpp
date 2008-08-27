@@ -26,15 +26,16 @@
 #include "kis_node.h"
 #include "kis_node_visitor.h"
 
-class KRITAIMAGE_EXPORT KisFilterMask::Private {
+class KRITAIMAGE_EXPORT KisFilterMask::Private
+{
 public:
 
     KisFilterConfiguration * filterConfig;
 };
 
 KisFilterMask::KisFilterMask()
-    : KisEffectMask()
-    , m_d( new Private() )
+        : KisEffectMask()
+        , m_d(new Private())
 {
     m_d->filterConfig = 0;
 }
@@ -45,16 +46,16 @@ KisFilterMask::~KisFilterMask()
     delete m_d;
 }
 
-bool KisFilterMask::allowAsChild( KisNodeSP node) const
+bool KisFilterMask::allowAsChild(KisNodeSP node) const
 {
     Q_UNUSED(node);
     return false;
 }
 
-KisFilterMask::KisFilterMask( const KisFilterMask& rhs )
-    : KisEffectMask( rhs )
-    , KisNodeFilterInterface(rhs)
-    , m_d( new Private() )
+KisFilterMask::KisFilterMask(const KisFilterMask& rhs)
+        : KisEffectMask(rhs)
+        , KisNodeFilterInterface(rhs)
+        , m_d(new Private())
 {
     m_d->filterConfig = rhs.m_d->filterConfig;
 }
@@ -71,26 +72,26 @@ void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)
     m_d->filterConfig = filterConfig;
 }
 
-void KisFilterMask::apply( KisPaintDeviceSP projection, const QRect & rc ) const
+void KisFilterMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
 {
     dbgImage << "Applying filter mask on projection  " << projection << " with rect " << rc
-             << " and filter config " << m_d->filterConfig;
+    << " and filter config " << m_d->filterConfig;
 
-    Q_ASSERT( m_d->filterConfig );
+    Q_ASSERT(m_d->filterConfig);
     if (!m_d->filterConfig) return;
 
     selection()->updateProjection(rc);
 
-    KisConstProcessingInformation src( projection,  rc.topLeft(), selection() );
-    KisProcessingInformation dst( projection, rc.topLeft(), selection() );
+    KisConstProcessingInformation src(projection,  rc.topLeft(), selection());
+    KisProcessingInformation dst(projection, rc.topLeft(), selection());
 
-    KisFilterSP filter = KisFilterRegistry::instance()->value( m_d->filterConfig->name() );
+    KisFilterSP filter = KisFilterRegistry::instance()->value(m_d->filterConfig->name());
     if (!filter) {
         kWarning() << "Could not retrieve filter with name " <<  m_d->filterConfig->name();
         return;
     }
 
-    filter->process( src, dst, rc.size(), m_d->filterConfig);
+    filter->process(src, dst, rc.size(), m_d->filterConfig);
 
 }
 

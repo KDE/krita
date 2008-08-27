@@ -50,87 +50,86 @@
 
 KisCPaintOpFactory::KisCPaintOpFactory()
 {
-    m_brushes.resize( 6 );
-    for ( int i=0; i < 6; i++ )
-        m_brushes[i] = new Brush ( i+1 );
+    m_brushes.resize(6);
+    for (int i = 0; i < 6; i++)
+        m_brushes[i] = new Brush(i + 1);
 }
 
 KisCPaintOpFactory::~KisCPaintOpFactory()
 {
-/*
-    for (uint i = 0; i < m_brushes.count(); i++) {
-        delete m_brushes[i];
-        m_brushes[i] = 0;
-    }
-*/
+    /*
+        for (uint i = 0; i < m_brushes.count(); i++) {
+            delete m_brushes[i];
+            m_brushes[i] = 0;
+        }
+    */
 }
 
 KisPaintOp * KisCPaintOpFactory::createOp(const KisPaintOpSettingsSP settings,
-                                          KisPainter * painter,
-                                          KisImageSP image)
+        KisPainter * painter,
+        KisImageSP image)
 {
-    Q_UNUSED( image );
+    Q_UNUSED(image);
     dbgKrita << settings;
 
     const KisCPaintOpSettings * cpaintOpSettings =
-        dynamic_cast<const KisCPaintOpSettings*>( settings.data() );
+        dynamic_cast<const KisCPaintOpSettings*>(settings.data());
 
-    Q_ASSERT( cpaintOpSettings );
-    if ( !cpaintOpSettings ) return 0;
+    Q_ASSERT(cpaintOpSettings);
+    if (!cpaintOpSettings) return 0;
 
     int curBrush = cpaintOpSettings->brush();
-    if ( curBrush > 5 ) {
+    if (curBrush > 5) {
         curBrush = 5;
-    }
-    else if ( curBrush < 0 ) {
+    } else if (curBrush < 0) {
         curBrush = 0;
     }
 
-    KisPaintOp * op = new KisCPaintOp( m_brushes[curBrush], cpaintOpSettings, painter );
+    KisPaintOp * op = new KisCPaintOp(m_brushes[curBrush], cpaintOpSettings, painter);
 
-    Q_CHECK_PTR( op );
+    Q_CHECK_PTR(op);
     return op;
 }
 
 KisPaintOpSettingsSP KisCPaintOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
 {
-    Q_UNUSED( inputDevice );
-    Q_UNUSED( image );
-    return new KisCPaintOpSettings( parent,  m_brushes);
+    Q_UNUSED(inputDevice);
+    Q_UNUSED(image);
+    return new KisCPaintOpSettings(parent,  m_brushes);
 }
 
 KisPaintOpSettingsSP KisCPaintOpFactory::settings(KisImageSP image)
 {
-    Q_UNUSED( image );
-    return new KisCPaintOpSettings( 0,  m_brushes);
+    Q_UNUSED(image);
+    return new KisCPaintOpSettings(0,  m_brushes);
 }
 
 //=================
 
-KisCPaintOpSettings::KisCPaintOpSettings( QWidget * parent,  Q3ValueVector<Brush*> brushes)
-    : KisPaintOpSettings( )
+KisCPaintOpSettings::KisCPaintOpSettings(QWidget * parent,  Q3ValueVector<Brush*> brushes)
+        : KisPaintOpSettings()
 {
     m_brushes = brushes;
-    m_optionsWidget = new QWidget( parent );
-    m_options = new Ui::WdgCPaintOptions( );
-    m_options->setupUi( m_optionsWidget );
-    m_options->intInk->setMinimum( 0 );
-    m_options->intInk->setMaximum( 255 );
-    m_options->intInk->setDecimals( 0 );
+    m_optionsWidget = new QWidget(parent);
+    m_options = new Ui::WdgCPaintOptions();
+    m_options->setupUi(m_optionsWidget);
+    m_options->intInk->setMinimum(0);
+    m_options->intInk->setMaximum(255);
+    m_options->intInk->setDecimals(0);
 
-    m_options->intWater->setMinimum( 0 );
-    m_options->intWater->setMaximum( 255 );
-    m_options->intWater->setDecimals( 0 );
+    m_options->intWater->setMinimum(0);
+    m_options->intWater->setMaximum(255);
+    m_options->intWater->setDecimals(0);
 
-    connect( m_options->bnInk, SIGNAL( clicked() ), this, SLOT( resetCurrentBrush() ) );
+    connect(m_options->bnInk, SIGNAL(clicked()), this, SLOT(resetCurrentBrush()));
 }
 
 KisPaintOpSettingsSP KisCPaintOpSettings::clone() const
 {
     KisCPaintOpSettings* s = new KisCPaintOpSettings(0, m_brushes);
-    s->m_options->intInk->setValue( ink() );
-    s->m_options->intWater->setValue( water() );
-    s->m_options->cmbBrush->setCurrentIndex( brush() );
+    s->m_options->intInk->setValue(ink());
+    s->m_options->intWater->setValue(water());
+    s->m_options->cmbBrush->setCurrentIndex(brush());
     return s;
 }
 
@@ -158,9 +157,9 @@ void KisCPaintOpSettings::resetCurrentBrush()
 
 void KisCPaintOpSettings::fromXML(const QDomElement& elt)
 {
-    m_options->cmbBrush->setCurrentIndex( elt.attribute("brush", "0" ).toInt() );
-    m_options->intInk->setValue( elt.attribute("ink", "0" ).toInt() );
-    m_options->intWater->setValue( elt.attribute("water", "0" ).toInt() );
+    m_options->cmbBrush->setCurrentIndex(elt.attribute("brush", "0").toInt());
+    m_options->intInk->setValue(elt.attribute("ink", "0").toInt());
+    m_options->intWater->setValue(elt.attribute("water", "0").toInt());
 }
 
 void KisCPaintOpSettings::toXML(QDomDocument& /*doc*/, QDomElement& elt) const
@@ -173,7 +172,7 @@ void KisCPaintOpSettings::toXML(QDomDocument& /*doc*/, QDomElement& elt) const
 //=================
 
 KisCPaintOp::KisCPaintOp(Brush * brush, const KisCPaintOpSettings * settings, KisPainter * painter)
-    : KisPaintOp(painter)
+        : KisPaintOp(painter)
 {
     m_currentBrush = brush;
     m_ink = settings->ink();
@@ -197,24 +196,23 @@ void KisCPaintOp::paintAt(const KisPaintInformation& info)
 
     sampleCount++;
     Sample * newSample = new Sample;
-    newSample->setPressure ( (int)( info.pressure() * 500 ) );
-    newSample->setX ( (int)info.pos().x() );
-    newSample->setY ( (int)info.pos().y() );
-    newSample->setTiltX ( (int)info.xTilt() );
-    newSample->setTiltY ( (int)info.yTilt() );
+    newSample->setPressure((int)(info.pressure() * 500));
+    newSample->setX((int)info.pos().x());
+    newSample->setY((int)info.pos().y());
+    newSample->setTiltX((int)info.xTilt());
+    newSample->setTiltY((int)info.yTilt());
 
 
-    if ( newStrokeFlag ) {
+    if (newStrokeFlag) {
         m_lastPoint = info.pos();
-        m_stroke = new Stroke( m_currentBrush);
-        m_stroke->setColor( m_color );
-        m_stroke->storeSample( newSample );
-        m_stroke->storeOldPath( info.pos().x(), info.pos().y() );
+        m_stroke = new Stroke(m_currentBrush);
+        m_stroke->setColor(m_color);
+        m_stroke->storeSample(newSample);
+        m_stroke->storeOldPath(info.pos().x(), info.pos().y());
         newStrokeFlag = false;
-    }
-    else {
-        if ( m_stroke )
-            m_stroke->storeSample( newSample );
+    } else {
+        if (m_stroke)
+            m_stroke->storeSample(newSample);
         else {
             delete newSample;
             sampleCount--;
@@ -222,12 +220,12 @@ void KisCPaintOp::paintAt(const KisPaintInformation& info)
         }
     }
 
-    if ( m_stroke ) {
+    if (m_stroke) {
         //int brushSize = m_currentBrush->size();
         KisPaintDeviceSP dab = new KisPaintDevice(device->colorSpace());
-        m_stroke->draw( dab );
+        m_stroke->draw(dab);
         QRect rc = dab->extent();
-        painter()->bitBlt( rc.topLeft(), dab, dab->extent() );
+        painter()->bitBlt(rc.topLeft(), dab, dab->extent());
     }
     m_lastPoint = info.pos();
 }

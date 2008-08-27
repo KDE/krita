@@ -37,7 +37,7 @@ private:
      * The prefix is used to save the result qimages and compare them
      * to the prepared correct images.
      */
-    bool testProjectionScenario( KisPrescaledProjection & projection, KoZoomHandler * viewConverter, const QString & name );
+    bool testProjectionScenario(KisPrescaledProjection & projection, KoZoomHandler * viewConverter, const QString & name);
 
 private slots:
 

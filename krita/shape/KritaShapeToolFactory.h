@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef PICTURE_TOOL_FACTORY
-#define PICTURE_TOOL_FACTORY
+#ifndef KRITA_SHAPE_TOOL_FACTORY
+#define KRITA_SHAPE_TOOL_FACTORY
 
 #include <QStringList>
 
@@ -27,10 +27,10 @@ class KritaShapeToolFactory : public KoToolFactory
 {
     Q_OBJECT
 public:
-    KritaShapeToolFactory( QObject* parent, const QStringList& );
+    KritaShapeToolFactory(QObject* parent, const QStringList&);
     ~KritaShapeToolFactory();
 
-    KoTool* createTool( KoCanvasBase* canvas );
+    KoTool* createTool(KoCanvasBase* canvas);
 };
 
 

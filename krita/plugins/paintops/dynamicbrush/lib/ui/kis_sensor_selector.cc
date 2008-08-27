@@ -26,30 +26,28 @@ KisSensorSelector::KisSensorSelector(QWidget* parent) : QWidget(parent), m_curre
 {
     sensorSelectorUI = new Ui_SensorSelector;
     sensorSelectorUI->setupUi(this);
-    sensorSelectorUI->comboBoxSensor->setIDList( KisDynamicSensor::sensorsIds() );
+    sensorSelectorUI->comboBoxSensor->setIDList(KisDynamicSensor::sensorsIds());
     m_layout = new QHBoxLayout(sensorSelectorUI->widgetConfiguration);
-    connect(sensorSelectorUI->comboBoxSensor, SIGNAL(activated(const KoID &)), this, SLOT(setSensorId(const KoID& )));
+    connect(sensorSelectorUI->comboBoxSensor, SIGNAL(activated(const KoID &)), this, SLOT(setSensorId(const KoID&)));
 }
 
 void KisSensorSelector::setCurrent(KisDynamicSensor* sensor)
 {
-    if(!sensor) return;
-    dbgPlugins <<"setCurrent" << sensor <<"" << sensor->id();
+    if (!sensor) return;
+    dbgPlugins << "setCurrent" << sensor << "" << sensor->id();
     m_currentSensor = sensor;
-    sensorSelectorUI->comboBoxSensor->setCurrent( sensor->id() );
+    sensorSelectorUI->comboBoxSensor->setCurrent(sensor->id());
     delete m_currentConfigWidget;
-    m_currentConfigWidget = sensor->createConfigurationWidget( sensorSelectorUI->widgetConfiguration, this );
-    if(m_currentConfigWidget)
-    {
-        m_layout->addWidget( m_currentConfigWidget );
+    m_currentConfigWidget = sensor->createConfigurationWidget(sensorSelectorUI->widgetConfiguration, this);
+    if (m_currentConfigWidget) {
+        m_layout->addWidget(m_currentConfigWidget);
     }
 }
 
 void KisSensorSelector::setSensorId(const KoID& id)
 {
-    if(!m_currentSensor || id.id() != m_currentSensor->id() )
-    {
-        setCurrent( KisDynamicSensor::id2Sensor(id) );
+    if (!m_currentSensor || id.id() != m_currentSensor->id()) {
+        setCurrent(KisDynamicSensor::id2Sensor(id));
         emit sensorChanged(m_currentSensor);
     }
 }

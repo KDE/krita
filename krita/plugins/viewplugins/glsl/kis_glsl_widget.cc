@@ -34,7 +34,7 @@ KisGlslWidget::KisGlslWidget(KisPaintDeviceSP device, QWidget *parent) : QGLWidg
     //get the bounds of the image
     m_bounds = m_device->exactBounds();
 
-    bufsize = m_device->colorSpace()->pixelSize()*m_bounds.width()*m_bounds.height();
+    bufsize = m_device->colorSpace()->pixelSize() * m_bounds.width() * m_bounds.height();
     m_imgbuf = new quint8[bufsize];
 }
 
@@ -51,7 +51,7 @@ void KisGlslWidget::initializeGL()
 
 
     //if glew can't initialize, everything following is useless
-    if(GLEW_OK != err) {
+    if (GLEW_OK != err) {
 
         qDebug("Unable to initialize glew, useful information follows");
         qDebug("OpenGL version: %s", glGetString(GL_VERSION));
@@ -65,14 +65,13 @@ void KisGlslWidget::initializeGL()
     //if glew can't find support for the needed features,
     //everything following is useless as well
     if (glewIsSupported("GL_VERSION_2_0") != GL_TRUE ||
-        glewGetExtension("GL_ARB_fragment_shader")      != GL_TRUE ||
-        glewGetExtension("GL_ARB_vertex_shader")        != GL_TRUE ||
-        glewGetExtension("GL_ARB_shader_objects")       != GL_TRUE ||
-        glewGetExtension("GL_ARB_shading_language_100") != GL_TRUE ||
-        glewGetExtension("GL_EXT_framebuffer_object")   != GL_TRUE ||
-        glewGetExtension("GL_ARB_texture_rectangle")    != GL_TRUE )
-    {
-       QMessageBox::warning( this, i18n( "Krita" ), i18n( "The OpenGL filter cannot run. Your graphics card or driver is missing the necessary extensions" ) );
+            glewGetExtension("GL_ARB_fragment_shader")      != GL_TRUE ||
+            glewGetExtension("GL_ARB_vertex_shader")        != GL_TRUE ||
+            glewGetExtension("GL_ARB_shader_objects")       != GL_TRUE ||
+            glewGetExtension("GL_ARB_shading_language_100") != GL_TRUE ||
+            glewGetExtension("GL_EXT_framebuffer_object")   != GL_TRUE ||
+            glewGetExtension("GL_ARB_texture_rectangle")    != GL_TRUE) {
+        QMessageBox::warning(this, i18n("Krita"), i18n("The OpenGL filter cannot run. Your graphics card or driver is missing the necessary extensions"));
         m_valid = false;
         return;
     }
@@ -110,7 +109,7 @@ void KisGlslWidget::initializeGL()
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
     glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, m_bounds.width(),
-                 m_bounds.height(),0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8,
+                 m_bounds.height(), 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8,
                  m_imgbuf);
 
     m_fragshader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -134,7 +133,7 @@ void KisGlslWidget::resizeGL(int width, int height)
 
 void KisGlslWidget::paintGL()
 {
-    glClear( GL_COLOR_BUFFER_BIT );
+    glClear(GL_COLOR_BUFFER_BIT);
 
     glActiveTexture(GL_TEXTURE0_ARB);
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_texture);
@@ -172,7 +171,7 @@ void KisGlslWidget::slotShaders(const QString &fragShader, const QString &vertSh
     GLchar *log = new GLchar[logbufsize];
 
 
-    QMessageBox::warning( this, i18n( "Krita" ), i18n( "Setting up Shader" ) );
+    QMessageBox::warning(this, i18n("Krita"), i18n("Setting up Shader"));
     QByteArray b = fragShader.toAscii();
     sourcetmp[0] = b.constData();
 
@@ -181,9 +180,9 @@ void KisGlslWidget::slotShaders(const QString &fragShader, const QString &vertSh
 
     glGetShaderiv(m_fragshader, GL_COMPILE_STATUS, &compiled);
 
-    if(!compiled) {
+    if (!compiled) {
         glGetShaderInfoLog(m_fragshader, logbufsize, &loglength, log);
-        QMessageBox::warning( this, i18n( "Krita" ), i18n( "There is an error in your Fragment Shader" ) );
+        QMessageBox::warning(this, i18n("Krita"), i18n("There is an error in your Fragment Shader"));
         QMessageBox::warning(this, i18n("Krita"), (char *)log);
         fragvalid = false;
 
@@ -198,20 +197,20 @@ void KisGlslWidget::slotShaders(const QString &fragShader, const QString &vertSh
 
     glGetShaderiv(m_vertexshader, GL_COMPILE_STATUS, &compiled);
 
-    if(!compiled) {
+    if (!compiled) {
         glGetShaderInfoLog(m_vertexshader, logbufsize, &loglength, log);
-        QMessageBox::warning( this, i18n( "Krita" ), i18n( "There is an error in your Vertex Shader" ) );
+        QMessageBox::warning(this, i18n("Krita"), i18n("There is an error in your Vertex Shader"));
         qDebug("Vertex shader log: %s", log);
         vertvalid = false;
 
     }
     compiled = 1;
 
-    if(fragvalid) {
+    if (fragvalid) {
         glAttachShader(m_program, m_fragshader);
     }
 
-    if(vertvalid) {
+    if (vertvalid) {
         glAttachShader(m_program, m_vertexshader);
     }
 
@@ -219,14 +218,14 @@ void KisGlslWidget::slotShaders(const QString &fragShader, const QString &vertSh
 
     glGetProgramiv(m_program, GL_LINK_STATUS, &compiled);
 
-    if(!compiled) {
+    if (!compiled) {
         glGetProgramInfoLog(m_program, logbufsize, &loglength, log);
-        QMessageBox::warning( this, i18n( "Krita" ), i18n( "There is an error with your GLSL Program, it cannot be linked" ) );
+        QMessageBox::warning(this, i18n("Krita"), i18n("There is an error with your GLSL Program, it cannot be linked"));
         qDebug("Program shader log: %s", log);
         m_valid = false;
 
     }
-    QMessageBox::warning( this, i18n( "Krita" ), i18n( "The shader should run!" ) );
+    QMessageBox::warning(this, i18n("Krita"), i18n("The shader should run!"));
 
     glDraw();
 

@@ -29,28 +29,41 @@ class KisDynamicShape;
 class KisDynamicShapeProgram;
 class KisPainter;
 
-class DYNAMIC_BRUSH_EXPORT KisDynamicBrush {
-    public:
-        KisDynamicBrush(const QString& name);
-        ~KisDynamicBrush();
-        inline QString name() const { return m_name; }
-        inline KoID id() const { return KoID(name(), name()); }
-        inline const KisDynamicShape* shape() const { return m_shape; }
-        inline const KisDynamicColoring* coloring() const { return m_coloring; }
-        inline KisDynamicShapeProgram* shapeProgram() const { return m_shapeProgram; }
-        inline KisDynamicColoringProgram* coloringProgram() const { return m_coloringProgram; }
-        void setShape(KisDynamicShape* shape);
-        void setShapeProgram(KisDynamicShapeProgram* p);
-        void setColoringProgram(KisDynamicColoringProgram* p);
-        void setColoring(KisDynamicColoring* coloring);
-        void startPainting(KisPainter* _painter);
-        void endPainting();
-    private:
-        QString m_name;
-        KisDynamicShape* m_shape;
-        KisDynamicColoring* m_coloring;
-        KisDynamicShapeProgram* m_shapeProgram;
-        KisDynamicColoringProgram* m_coloringProgram;
+class DYNAMIC_BRUSH_EXPORT KisDynamicBrush
+{
+public:
+    KisDynamicBrush(const QString& name);
+    ~KisDynamicBrush();
+    inline QString name() const {
+        return m_name;
+    }
+    inline KoID id() const {
+        return KoID(name(), name());
+    }
+    inline const KisDynamicShape* shape() const {
+        return m_shape;
+    }
+    inline const KisDynamicColoring* coloring() const {
+        return m_coloring;
+    }
+    inline KisDynamicShapeProgram* shapeProgram() const {
+        return m_shapeProgram;
+    }
+    inline KisDynamicColoringProgram* coloringProgram() const {
+        return m_coloringProgram;
+    }
+    void setShape(KisDynamicShape* shape);
+    void setShapeProgram(KisDynamicShapeProgram* p);
+    void setColoringProgram(KisDynamicColoringProgram* p);
+    void setColoring(KisDynamicColoring* coloring);
+    void startPainting(KisPainter* _painter);
+    void endPainting();
+private:
+    QString m_name;
+    KisDynamicShape* m_shape;
+    KisDynamicColoring* m_coloring;
+    KisDynamicShapeProgram* m_shapeProgram;
+    KisDynamicColoringProgram* m_coloringProgram;
 };
 
 #endif

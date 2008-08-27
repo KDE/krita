@@ -26,14 +26,13 @@
 #include <compositeops/KoCompositeOpOver.h>
 #include <compositeops/KoCompositeOpErase.h>
 
-struct KisPainterlyOverlayColorSpace::Private
-{
+struct KisPainterlyOverlayColorSpace::Private {
     static KisPainterlyOverlayColorSpace* s_instance;
 };
 
 KisPainterlyOverlayColorSpace* KisPainterlyOverlayColorSpace::Private::s_instance  = 0;
 
-const KoID painterlyOverlayColorModelID("painterlyoverlay", i18n("Painterly Overlay") );
+const KoID painterlyOverlayColorModelID("painterlyoverlay", i18n("Painterly Overlay"));
 
 KoColorSpace* KisPainterlyOverlayColorSpace::clone() const
 {
@@ -42,74 +41,73 @@ KoColorSpace* KisPainterlyOverlayColorSpace::clone() const
 
 const KisPainterlyOverlayColorSpace * KisPainterlyOverlayColorSpace::instance()
 {
-    if( !Private::s_instance )
-    {
-        Private::s_instance = new KisPainterlyOverlayColorSpace( painterlyOverlayColorModelID.id(), painterlyOverlayColorModelID.name());
+    if (!Private::s_instance) {
+        Private::s_instance = new KisPainterlyOverlayColorSpace(painterlyOverlayColorModelID.id(), painterlyOverlayColorModelID.name());
     }
     return Private::s_instance;
 }
 
 KisPainterlyOverlayColorSpace::KisPainterlyOverlayColorSpace(const QString &id, const QString &name)
-    : KoIncompleteColorSpace<PainterlyOverlayFloatTraits>(id, name, KoColorSpaceRegistry::instance()->rgb16("")), d(new Private)
+        : KoIncompleteColorSpace<PainterlyOverlayFloatTraits>(id, name, KoColorSpaceRegistry::instance()->rgb16("")), d(new Private)
 {
     addChannel(new KoChannelInfo(i18n("Adsorbency"),
                                  PainterlyOverlayFloatTraits::adsorbency_pos * sizeof(float),
                                  KoChannelInfo::SUBSTRATE,
                                  KoChannelInfo::FLOAT32,
                                  sizeof(float),
-                                 QColor(255,0,0)));
+                                 QColor(255, 0, 0)));
 
     addChannel(new KoChannelInfo(i18n("Gravity"),
                                  PainterlyOverlayFloatTraits::gravity_pos * sizeof(float),
                                  KoChannelInfo::SUBSTRATE,
                                  KoChannelInfo::FLOAT32,
                                  sizeof(float),
-                                 QColor(255,0,0)));
+                                 QColor(255, 0, 0)));
 
     addChannel(new KoChannelInfo(i18n("Mixability"),
                                  PainterlyOverlayFloatTraits::mixability_pos * sizeof(float),
                                  KoChannelInfo::SUBSTANCE,
                                  KoChannelInfo::FLOAT32,
                                  sizeof(float),
-                                 QColor(255,0,0)));
+                                 QColor(255, 0, 0)));
 
     addChannel(new KoChannelInfo(i18n("Height"),
                                  PainterlyOverlayFloatTraits::height_pos * sizeof(float),
                                  KoChannelInfo::SUBSTRATE,
                                  KoChannelInfo::FLOAT32,
                                  sizeof(float),
-                                 QColor(255,0,0)));
+                                 QColor(255, 0, 0)));
 
     addChannel(new KoChannelInfo(i18n("Pigment Concentration"),
                                  PainterlyOverlayFloatTraits::pigment_concentration_pos * sizeof(float),
                                  KoChannelInfo::SUBSTANCE,
                                  KoChannelInfo::FLOAT32,
                                  sizeof(float),
-                                 QColor(255,0,0)));
+                                 QColor(255, 0, 0)));
 
     addChannel(new KoChannelInfo(i18n("Viscosity"),
                                  PainterlyOverlayFloatTraits::viscosity_pos * sizeof(float),
                                  KoChannelInfo::SUBSTANCE,
                                  KoChannelInfo::FLOAT32,
                                  sizeof(float),
-                                 QColor(255,0,0)));
+                                 QColor(255, 0, 0)));
 
     addChannel(new KoChannelInfo(i18n("Volume"),
                                  PainterlyOverlayFloatTraits::volume_pos * sizeof(float),
                                  KoChannelInfo::SUBSTANCE,
                                  KoChannelInfo::FLOAT32,
                                  sizeof(float),
-                                 QColor(255,0,0)));
+                                 QColor(255, 0, 0)));
 
     addChannel(new KoChannelInfo(i18n("Wetness"),
                                  PainterlyOverlayFloatTraits::wetness_pos * sizeof(float),
                                  KoChannelInfo::SUBSTANCE,
                                  KoChannelInfo::FLOAT32,
                                  sizeof(float),
-                                 QColor(255,0,0)));
+                                 QColor(255, 0, 0)));
 
-	addCompositeOp( new KoCompositeOpOver<PainterlyOverlayFloatTraits>( this ) );
-	addCompositeOp( new KoCompositeOpErase<PainterlyOverlayFloatTraits>( this ) );
+    addCompositeOp(new KoCompositeOpOver<PainterlyOverlayFloatTraits>(this));
+    addCompositeOp(new KoCompositeOpErase<PainterlyOverlayFloatTraits>(this));
 }
 
 KisPainterlyOverlayColorSpace::~KisPainterlyOverlayColorSpace()

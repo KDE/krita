@@ -49,20 +49,20 @@ class KisEraseOpSettings : public KisPaintOpSettings
 {
 public:
 
-    KisEraseOpSettings( QWidget * widget )
-        : KisPaintOpSettings()
-        {
-            m_optionsWidget = new KisPaintOpOptionsWidget();
-        }
+    KisEraseOpSettings(QWidget * widget)
+            : KisPaintOpSettings() {
+        m_optionsWidget = new KisPaintOpOptionsWidget();
+    }
 
-    KisPaintOpSettingsSP clone() const
-        {
-            KisPaintOpSettings * c = new KisEraseOpSettings( 0 );
-            c->fromXML(toXML());
-            return c;
-        }
+    KisPaintOpSettingsSP clone() const {
+        KisPaintOpSettings * c = new KisEraseOpSettings(0);
+        c->fromXML(toXML());
+        return c;
+    }
 
-    QWidget * widget() const { return m_optionsWidget; }
+    QWidget * widget() const {
+        return m_optionsWidget;
+    }
 
 private:
     KisPaintOpOptionsWidget *m_optionsWidget;
@@ -72,8 +72,8 @@ private:
 
 KisPaintOp * KisEraseOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
 {
-    Q_UNUSED( settings );
-    Q_UNUSED( image );
+    Q_UNUSED(settings);
+    Q_UNUSED(image);
     KisPaintOp * op = new KisEraseOp(painter);
     Q_CHECK_PTR(op);
     return op;
@@ -92,7 +92,7 @@ KisPaintOpSettingsSP KisEraseOpFactory::settings(KisImageSP image)
 }
 
 KisEraseOp::KisEraseOp(KisPainter * painter)
-    : KisBrushBasedPaintOp(painter)
+        : KisBrushBasedPaintOp(painter)
 {
 }
 
@@ -128,9 +128,9 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
     if (!device) return;
 
     KisBrushSP brush = m_brush;
-    if (! brush->canPaintFor(info) )
+    if (! brush->canPaintFor(info))
         return;
-    double scale = KisPaintOp::scaleForPressure( info.pressure() );
+    double scale = KisPaintOp::scaleForPressure(info.pressure());
     QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 
@@ -142,7 +142,7 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.x(), &destX, &xFraction);
     splitCoordinate(pt.y(), &destY, &yFraction);
 
-    KisPaintDeviceSP dab = cachedDab( );
+    KisPaintDeviceSP dab = cachedDab();
     brush->mask(dab, scale, scale, 0.0, info, xFraction, yFraction);
 
 //     KisRectIteratorPixel it = dab->createRectIterator(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
@@ -157,7 +157,7 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
     QRect dstRect = QRect(destX, destY, dabRect.width(), dabRect.height());
 
 
-    if ( painter()->bounds().isValid() ) {
+    if (painter()->bounds().isValid()) {
         dstRect &= painter()->bounds();
     }
 

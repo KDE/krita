@@ -18,7 +18,7 @@
 */
 
 #include "xyz_float_hdr.h"
-#include "config-openexr.h"
+#include <config-openexr.h>
 
 #include <klocale.h>
 #include <kgenericfactory.h>
@@ -31,24 +31,24 @@
 #include "kis_xyz_f32_hdr_colorspace.h"
 
 typedef KGenericFactory<XYZFloatHDRPlugin> XYZFloatHDRPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritaxyzfloathdrplugin, XYZFloatHDRPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritaxyzfloathdrplugin, XYZFloatHDRPluginFactory("krita"))
 
 
 XYZFloatHDRPlugin::XYZFloatHDRPlugin(QObject *parent, const QStringList &)
-    : QObject(parent)
+        : QObject(parent)
 {
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
 
     // Register F32 HDR colorspace
     {
         KoColorSpaceFactory *csf  = new KisXyzF32HDRColorSpaceFactory();
-        const KoCtlColorProfile* profile = static_cast<const KoCtlColorProfile*>(f->profileByName( csf->defaultProfile() ) );
+        const KoCtlColorProfile* profile = static_cast<const KoCtlColorProfile*>(f->profileByName(csf->defaultProfile()));
         KoColorSpace * colorSpaceXYZF32  = new KisXyzF32HDRColorSpace(profile);
         Q_CHECK_PTR(colorSpaceXYZF32);
         f->add(csf);
         KoHistogramProducerFactoryRegistry::instance()->add(
-                    new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
-                    (KoID("XYZF32HISTO", i18n("Float32 Half Histogram")), colorSpaceXYZF32) );
+            new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
+            (KoID("XYZF32HISTO", i18n("Float32 Half Histogram")), colorSpaceXYZF32));
     }
 
 }

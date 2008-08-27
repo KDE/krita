@@ -59,16 +59,15 @@
 
 extern "C"
 {
-    KROSSKRITACORE_EXPORT QObject* krossmodule()
-    {
+    KROSSKRITACORE_EXPORT QObject* krossmodule() {
         KisDoc2* doc = new KisDoc2(0, 0, true);
 
         // dirty hack to get an image defined
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-        doc->newImage("unnamed", 100,100,cs /*,KoColor(QColor(255,255,255),cs)*/);
+        doc->newImage("unnamed", 100, 100, cs /*,KoColor(QColor(255,255,255),cs)*/);
         //doc->prepareForImport();
 
-        KisView2* view = dynamic_cast< KisView2* >( doc->createViewInstance(0 /*no parent widget*/) );
+        KisView2* view = dynamic_cast< KisView2* >(doc->createViewInstance(0 /*no parent widget*/));
         Q_ASSERT(view);
         return new Scripting::Module(view);
     }
@@ -76,21 +75,22 @@ extern "C"
 
 using namespace Scripting;
 
-namespace Scripting {
+namespace Scripting
+{
 
-    /// \internal d-pointer class.
-    class Module::Private
-    {
-        public:
-            KisView2* view;
-            Progress* progress;
-    };
+/// \internal d-pointer class.
+class Module::Private
+{
+public:
+    KisView2* view;
+    Progress* progress;
+};
 
 }
 
 Module::Module(KisView2* view)
-	: KoScriptingModule(view, "Krita")
-	, d(new Private())
+        : KoScriptingModule(view, "Krita")
+        , d(new Private())
 {
     d->view = view;
     d->progress = 0;
@@ -113,7 +113,7 @@ KoDocument* Module::doc()
 
 QObject* Module::progress()
 {
-    if(! d->progress)
+    if (! d->progress)
         d->progress = new Progress(this, d->view);
     return d->progress;
 }
@@ -126,13 +126,12 @@ QObject* Module::image()
 
 QObject* Module::activeLayer()
 {
-  KisLayerSP aL = d->view->activeLayer();
-  KisPaintLayerSP aPL = dynamic_cast<KisPaintLayer*>( aL.data() );
-  if(aPL)
-  {
-    return new PaintLayer(aPL, d->view->document() );
-  }
-  return 0;
+    KisLayerSP aL = d->view->activeLayer();
+    KisPaintLayerSP aPL = dynamic_cast<KisPaintLayer*>(aL.data());
+    if (aPL) {
+        return new PaintLayer(aPL, d->view->document());
+    }
+    return 0;
 }
 
 QObject* Module::createRGBColor(int r, int g, int b)
@@ -149,8 +148,8 @@ QObject* Module::pattern(const QString& patternname)
 {
     KoResourceServer<KisPattern>* rServer = KisResourceServerProvider::instance()->patternServer();
     foreach(KisPattern* pattern, rServer->resources())
-        if(pattern->name() == patternname)
-            return new Pattern(this, pattern, true);
+    if (pattern->name() == patternname)
+        return new Pattern(this, pattern, true);
     kWarning(41011) << QString("Unknown pattern \"%1\"").arg(patternname);
     return 0;
 }
@@ -159,22 +158,22 @@ QObject* Module::brush(const QString& brushname)
 {
     KoResourceServer<KisBrush>* rServer = KisResourceServerProvider::instance()->brushServer();
     foreach(KisBrush* brush, rServer->resources())
-        if(brush->name() == brushname)
-            return new Brush(this, brush, true);
+    if (brush->name() == brushname)
+        return new Brush(this, brush, true);
     kWarning(41011) << QString("Unknown brush \"%1\"").arg(brushname);
     return 0;
 }
 
 QObject* Module::createCircleBrush(uint w, uint h, uint hf, uint vf)
 {
-    KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(qMax(1u,w), qMax(1u,h), hf, vf);
+    KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(qMax(1u, w), qMax(1u, h), hf, vf);
     KisAutoBrush *thing = new KisAutoBrush(kas);
     return new Brush(this, thing, false);
 }
 
 QObject* Module::createRectBrush(uint w, uint h, uint hf, uint vf)
 {
-    KisRectangleMaskGenerator* kas = new KisRectangleMaskGenerator(qMax(1u,w), qMax(1u,h), hf, vf);
+    KisRectangleMaskGenerator* kas = new KisRectangleMaskGenerator(qMax(1u, w), qMax(1u, h), hf, vf);
     KisAutoBrush *thing = new KisAutoBrush(kas);
     return new Brush(this, thing, false);
 }
@@ -183,7 +182,7 @@ QObject* Module::createRectBrush(uint w, uint h, uint hf, uint vf)
 QObject* Module::loadPattern(const QString& filename)
 {
     KisPattern* pattern = new KisPattern(filename);
-    if(pattern->load())
+    if (pattern->load())
         return new Pattern(this, pattern, false);
     delete pattern;
     kWarning(41011) << i18n("Unknown pattern \"%1\"", filename);
@@ -193,7 +192,7 @@ QObject* Module::loadPattern(const QString& filename)
 QObject* Module::loadBrush(const QString& filename)
 {
     KisBrush* brush = new KisBrush(filename);
-    if(brush->load())
+    if (brush->load())
         return new Brush(this, brush, false);
     delete brush;
     kWarning(41011) << i18n("Unknown brush \"%1\"", filename);
@@ -203,25 +202,22 @@ QObject* Module::loadBrush(const QString& filename)
 QObject* Module::filter(const QString& filtername)
 {
     KisFilter* filter = KisFilterRegistry::instance()->get(filtername).data();
-    if(filter)
-    {
+    if (filter) {
         return new Filter(this, filter);
     } else {
-      return 0;
+        return 0;
     }
 }
 
 QObject* Module::createImage(int width, int height, const QString& colorspace, const QString& name)
 {
-    if( width < 0 || height < 0)
-    {
+    if (width < 0 || height < 0) {
         kWarning(41011) << i18n("Invalid image size");
         return 0;
     }
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(colorspace, 0);
-    if(!cs)
-    {
-        kWarning(41011) << i18n("ColorSpace %1 is not available, please check your installation.", colorspace );
+    if (!cs) {
+        kWarning(41011) << i18n("ColorSpace %1 is not available, please check your installation.", colorspace);
         return 0;
     }
     return new Image(this, KisImageSP(new KisImage(0, width, height, cs, name)));

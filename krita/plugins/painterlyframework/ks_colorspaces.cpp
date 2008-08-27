@@ -39,10 +39,10 @@
 #endif
 
 typedef KGenericFactory<KSColorSpacesPlugin> KSColorSpacesPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritakscolorspacesplugin, KSColorSpacesPluginFactory("krita") )
+K_EXPORT_COMPONENT_FACTORY(kritakscolorspacesplugin, KSColorSpacesPluginFactory("krita"))
 
 KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
-: QObject(parent)
+        : QObject(parent)
 {
     QStringList list;
     KoColorSpaceEngineRegistry *e = KoColorSpaceEngineRegistry::instance();
@@ -55,11 +55,10 @@ KSColorSpacesPlugin::KSColorSpacesPlugin(QObject *parent, const QStringList &)
     foreach(const QString & curr, list) {
         p = new KisIlluminantProfile(curr);
         bool r = p->load();
-        if(!r) {
+        if (!r) {
             qWarning() << "failed to load profile " << curr;
             delete p;
-        }
-        else {
+        } else {
             f->addProfile(p);
         }
     }

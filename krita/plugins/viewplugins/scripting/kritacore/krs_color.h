@@ -23,23 +23,26 @@
 
 #include <QObject>
 
-namespace Scripting {
+namespace Scripting
+{
 
 /**
  * The color class represents a single color.
  */
 class Color : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
-    public:
-        Color(int x, int y, int z, QColor::Spec colorSpec);
-        virtual ~Color();
+public:
+    Color(int x, int y, int z, QColor::Spec colorSpec);
+    virtual ~Color();
 
-        inline QColor toQColor() { return m_color; }
+    inline QColor toQColor() {
+        return m_color;
+    }
 
-    private:
-        QColor m_color;
+private:
+    QColor m_color;
 };
 
 }

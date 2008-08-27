@@ -36,11 +36,13 @@ public:
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
-        ) const;
+                ) const;
 
-    static inline KoID id() { return KoID("unsharp", i18n("Unsharp Mask")); }
+    static inline KoID id() {
+        return KoID("unsharp", i18n("Unsharp Mask"));
+    }
 
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image =0) const;
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
     int overlapMarginNeeded(const KisFilterConfiguration* /*c*/) const;
 };

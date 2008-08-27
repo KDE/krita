@@ -33,7 +33,8 @@ class KisGroupLayer;
 class KisOpenRasterLoadContext;
 class KisPaintLayer;
 
-class KRITAUI_EXPORT KisOpenRasterStackLoadVisitor {
+class KRITAUI_EXPORT KisOpenRasterStackLoadVisitor
+{
 public:
     KisOpenRasterStackLoadVisitor(KisDoc2* doc, KisOpenRasterLoadContext* orlc);
     virtual ~KisOpenRasterStackLoadVisitor();

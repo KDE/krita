@@ -26,25 +26,26 @@ class KoColorSpace;
 class QVBoxLayout;
 class KisColorInput;
 
-class KisSpecificColorSelectorWidget : public QWidget {
-        Q_OBJECT
-    public:
-        KisSpecificColorSelectorWidget(QWidget* parent);
-        ~KisSpecificColorSelectorWidget();
-    public slots:
-        void setColorSpace(const KoColorSpace*);
-        void setColor(const KoColor& );
-    private slots:
-        void update();
-    signals:
-        void colorChanged(const KoColor& );
-        void updated();
-    private:
-        QList<KisColorInput*> m_inputs;
-        const KoColorSpace* m_colorSpace;
-        QVBoxLayout *m_layout;
-        KoColor m_color;
-        bool m_updateAllowed;
+class KisSpecificColorSelectorWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    KisSpecificColorSelectorWidget(QWidget* parent);
+    ~KisSpecificColorSelectorWidget();
+public slots:
+    void setColorSpace(const KoColorSpace*);
+    void setColor(const KoColor&);
+private slots:
+    void update();
+signals:
+    void colorChanged(const KoColor&);
+    void updated();
+private:
+    QList<KisColorInput*> m_inputs;
+    const KoColorSpace* m_colorSpace;
+    QVBoxLayout *m_layout;
+    KoColor m_color;
+    bool m_updateAllowed;
 };
 
 #endif

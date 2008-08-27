@@ -65,20 +65,19 @@ public:
     KisAdjustmentLayer(const KisAdjustmentLayer& rhs);
     virtual ~KisAdjustmentLayer();
 
-    KisNodeSP clone() const
-        {
-            return KisNodeSP(new KisAdjustmentLayer(*this));
-        }
+    KisNodeSP clone() const {
+        return KisNodeSP(new KisAdjustmentLayer(*this));
+    }
 
-    bool allowAsChild( KisNodeSP ) const;
+    bool allowAsChild(KisNodeSP) const;
 
     void updateProjection(const QRect& r);
-    
+
     /**
      * return the final result of the layer and all masks
      */
     KisPaintDeviceSP projection() const;
-    
+
     /**
      * return paint device that the user can paint on. For paint layers,
      * this is the basic, wet painting device, for adjustment layers it's
@@ -139,10 +138,9 @@ public:
     QImage createThumbnail(qint32 w, qint32 h);
 
     // KisIndirectPaintingSupport
-    KisLayer* layer()
-        {
-            return this;
-        }
+    KisLayer* layer() {
+        return this;
+    }
 
 private:
 

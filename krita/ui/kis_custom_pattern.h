@@ -35,8 +35,10 @@ class KisWdgCustomPattern : public QWidget, public Ui::KisWdgCustomPattern
 {
     Q_OBJECT
 
-    public:
-        KisWdgCustomPattern(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
+public:
+    KisWdgCustomPattern(QWidget *parent, const char *name) : QWidget(parent) {
+        setObjectName(name); setupUi(this);
+    }
 };
 
 class KisCustomPattern : public KisWdgCustomPattern

@@ -27,30 +27,29 @@
 
 Qt::PenStyle gs2style(quint32 s)
 {
-    switch(s)
-    {
-        case 1:
-            return Qt::DashLine;
-        case 2:
-            return Qt::DotLine;
-        case 3:
-            return Qt::DashDotLine;
-        case 4:
-            return Qt::DashDotDotLine;
-        default:
-            return Qt::SolidLine;
+    switch (s) {
+    case 1:
+        return Qt::DashLine;
+    case 2:
+        return Qt::DotLine;
+    case 3:
+        return Qt::DashDotLine;
+    case 4:
+        return Qt::DashDotDotLine;
+    default:
+        return Qt::SolidLine;
     }
 }
 
 QPen KisGridPainterConfiguration::mainPen()
 {
     KisConfig cfg;
-    return QPen ( cfg.getGridMainColor(), 1, gs2style( cfg.getGridMainStyle() ) );
+    return QPen(cfg.getGridMainColor(), 1, gs2style(cfg.getGridMainStyle()));
 }
 QPen KisGridPainterConfiguration::subdivisionPen()
 {
     KisConfig cfg;
-    return QPen ( cfg.getGridSubdivisionColor(), 1, gs2style( cfg.getGridSubdivisionStyle() ) );
+    return QPen(cfg.getGridSubdivisionColor(), 1, gs2style(cfg.getGridSubdivisionStyle()));
 }
 
 
@@ -64,33 +63,25 @@ QPen KisGridPainterConfiguration::subdivisionPen()
 
 #include <KoViewConverter.h>
 
-#include "kis_config.h"
-#include "kis_doc2.h"
-#include "kis_image.h"
-#include "kis_perspective_grid.h"
-#include "canvas/kis_perspective_grid_manager.h"
-
-
 KisGridDrawer::KisGridDrawer(KisDoc2* doc, const KoViewConverter * viewConverter)
-    : m_doc( doc ),
-      m_viewConverter( viewConverter )
+        : m_doc(doc),
+        m_viewConverter(viewConverter)
 {
 }
 
 Qt::PenStyle KisGridDrawer::gs2style(quint32 s)
 {
-    switch(s)
-    {
-        case 1:
-            return Qt::DashLine;
-        case 2:
-            return Qt::DotLine;
-        case 3:
-            return Qt::DashDotLine;
-        case 4:
-            return Qt::DashDotDotLine;
-        default:
-            return Qt::SolidLine;
+    switch (s) {
+    case 1:
+        return Qt::DashLine;
+    case 2:
+        return Qt::DotLine;
+    case 3:
+        return Qt::DashDotLine;
+    case 4:
+        return Qt::DashDotDotLine;
+    default:
+        return Qt::SolidLine;
     }
 }
 
@@ -103,44 +94,43 @@ void KisGridDrawer::drawPerspectiveGrid(KisImageSP image, const QRect& wr, const
     Q_UNUSED(wr);
 
     KisConfig cfg;
-    QPen mainPen = QPen ( cfg.getGridMainColor(), 1, gs2style( cfg.getGridMainStyle() ) );
-    QPen subdivisionPen =  QPen ( cfg.getGridSubdivisionColor(), 1, gs2style( cfg.getGridSubdivisionStyle() ) );
-    setPen(subdivisionPen );
+    QPen mainPen = QPen(cfg.getGridMainColor(), 1, gs2style(cfg.getGridMainStyle()));
+    QPen subdivisionPen =  QPen(cfg.getGridSubdivisionColor(), 1, gs2style(cfg.getGridSubdivisionStyle()));
+    setPen(subdivisionPen);
     // 1 -> top-left corner
     // 2 -> top-right corner
     // 3 -> bottom-right corner
     // 4 -> bottom-left corner
     // d12 line from top-left to top-right
     // note that the notion of top-left is purely theorical
-    KisPerspectiveMath::LineEquation d12 = KisPerspectiveMath::computeLineEquation( grid->topLeft().data(), grid->topRight().data() ) ;
+    KisPerspectiveMath::LineEquation d12 = KisPerspectiveMath::computeLineEquation(grid->topLeft().data(), grid->topRight().data()) ;
     QPointF v12 = QPointF(*grid->topLeft() - *grid->topRight());
-    v12.setX( v12.x() / grid->subdivisions()); v12.setY( v12.y() / grid->subdivisions() );
-    KisPerspectiveMath::LineEquation d23 = KisPerspectiveMath::computeLineEquation( grid->topRight().data(), grid->bottomRight().data() );
+    v12.setX(v12.x() / grid->subdivisions()); v12.setY(v12.y() / grid->subdivisions());
+    KisPerspectiveMath::LineEquation d23 = KisPerspectiveMath::computeLineEquation(grid->topRight().data(), grid->bottomRight().data());
     QPointF v23 = QPointF(*grid->topRight() - *grid->bottomRight());
-    v23.setX( v23.x() / grid->subdivisions()); v23.setY( v23.y() / grid->subdivisions() );
-    KisPerspectiveMath::LineEquation d34 = KisPerspectiveMath::computeLineEquation( grid->bottomRight().data(), grid->bottomLeft().data() );
-    KisPerspectiveMath::LineEquation d41 = KisPerspectiveMath::computeLineEquation( grid->bottomLeft().data(), grid->topLeft().data() );
+    v23.setX(v23.x() / grid->subdivisions()); v23.setY(v23.y() / grid->subdivisions());
+    KisPerspectiveMath::LineEquation d34 = KisPerspectiveMath::computeLineEquation(grid->bottomRight().data(), grid->bottomLeft().data());
+    KisPerspectiveMath::LineEquation d41 = KisPerspectiveMath::computeLineEquation(grid->bottomLeft().data(), grid->topLeft().data());
 
-    QPointF horizVanishingPoint = KisPerspectiveMath::computeIntersection(d12,d34);
-    QPointF vertVanishingPoint = KisPerspectiveMath::computeIntersection(d23,d41);
+    QPointF horizVanishingPoint = KisPerspectiveMath::computeIntersection(d12, d34);
+    QPointF vertVanishingPoint = KisPerspectiveMath::computeIntersection(d23, d41);
 
-    for(int i = 1; i < grid->subdivisions(); i ++)
-    {
+    for (int i = 1; i < grid->subdivisions(); i ++) {
         QPointF pol1 = *grid->topRight() + i * v12;
-        KisPerspectiveMath::LineEquation d1 = KisPerspectiveMath::computeLineEquation( &pol1, &vertVanishingPoint );
-        QPointF pol1b =  KisPerspectiveMath::computeIntersection(d1,d34);
-        drawLine( pixelToView(pol1.toPoint()), pixelToView(pol1b.toPoint() ));
+        KisPerspectiveMath::LineEquation d1 = KisPerspectiveMath::computeLineEquation(&pol1, &vertVanishingPoint);
+        QPointF pol1b =  KisPerspectiveMath::computeIntersection(d1, d34);
+        drawLine(pixelToView(pol1.toPoint()), pixelToView(pol1b.toPoint()));
 
         QPointF pol2 = *grid->bottomRight() + i * v23;
-        KisPerspectiveMath::LineEquation d2 = KisPerspectiveMath::computeLineEquation( &pol2, &horizVanishingPoint );
-        QPointF pol2b = KisPerspectiveMath::computeIntersection(d2,d41);
-        drawLine( pixelToView(pol2.toPoint()), pixelToView(pol2b.toPoint()) );
+        KisPerspectiveMath::LineEquation d2 = KisPerspectiveMath::computeLineEquation(&pol2, &horizVanishingPoint);
+        QPointF pol2b = KisPerspectiveMath::computeIntersection(d2, d41);
+        drawLine(pixelToView(pol2.toPoint()), pixelToView(pol2b.toPoint()));
     }
     setPen(mainPen);
-    drawLine( pixelToView( *grid->topLeft()), pixelToView(  *grid->topRight() ) );
-    drawLine( pixelToView( *grid->topRight()), pixelToView( *grid->bottomRight()) );
-    drawLine( pixelToView( *grid->bottomRight()), pixelToView( *grid->bottomLeft()) );
-    drawLine( pixelToView( *grid->bottomLeft()), pixelToView( *grid->topLeft()) );
+    drawLine(pixelToView(*grid->topLeft()), pixelToView(*grid->topRight()));
+    drawLine(pixelToView(*grid->topRight()), pixelToView(*grid->bottomRight()));
+    drawLine(pixelToView(*grid->bottomRight()), pixelToView(*grid->bottomLeft()));
+    drawLine(pixelToView(*grid->bottomLeft()), pixelToView(*grid->topLeft()));
 }
 
 #undef pixelToView
@@ -161,56 +151,50 @@ void KisGridDrawer::drawGrid(const QRectF& area)
     quint32 subdivision = cfg.getGridSubdivisions() - 1;
 
     // Draw vertical line
-    QPen mainPen = QPen ( cfg.getGridMainColor(), 1, gs2style( cfg.getGridMainStyle() ) );
-    QPen subdivisionPen = QPen ( cfg.getGridSubdivisionColor(), 1, gs2style( cfg.getGridSubdivisionStyle() ) );
-    quint32 i = subdivision - (offsetx / hspacing) % (subdivision+1);
-    
-    QPointF bottomRight = m_doc->image()->documentToPixel( area.bottomRight() );
-    QPointF topLeft = m_doc->image()->documentToPixel( area.topLeft() );
-    
+    QPen mainPen = QPen(cfg.getGridMainColor(), 1, gs2style(cfg.getGridMainStyle()));
+    QPen subdivisionPen = QPen(cfg.getGridSubdivisionColor(), 1, gs2style(cfg.getGridSubdivisionStyle()));
+    quint32 i = subdivision - (offsetx / hspacing) % (subdivision + 1);
+
+    QPointF bottomRight = m_doc->image()->documentToPixel(area.bottomRight());
+    QPointF topLeft = m_doc->image()->documentToPixel(area.topLeft());
+
     double x = offsetx % hspacing;
-    while( x <= bottomRight.x())
-    {
-        if( i == subdivision )
-        {
+    while (x <= bottomRight.x()) {
+        if (i == subdivision) {
             setPen(mainPen);
             i = 0;
         } else {
             setPen(subdivisionPen);
             i++;
         }
-        if( x >= topLeft.x() )
-        {
+        if (x >= topLeft.x()) {
             // Always draw the full line otherwise the line stippling varies
             // with the location of area and we get glitchy patterns.
-            drawLine( pixelToView( QPointF( x, topLeft.y() ) ), pixelToView( QPointF( x, bottomRight.y() ) ) );
+            drawLine(pixelToView(QPointF(x, topLeft.y())), pixelToView(QPointF(x, bottomRight.y())));
         }
         x += hspacing;
     }
     // Draw horizontal line
-    i = subdivision - (offsety / vspacing) % (subdivision +1);
+    i = subdivision - (offsety / vspacing) % (subdivision + 1);
     double y = offsety % vspacing;
-    while( y <= bottomRight.y())
-    {
-        if( i == subdivision )
-        {
+    while (y <= bottomRight.y()) {
+        if (i == subdivision) {
             setPen(mainPen);
             i = 0;
         } else {
             setPen(subdivisionPen);
             i++;
         }
-        if( y >= topLeft.y() )
-        {
-            drawLine( pixelToView( QPointF( topLeft.x(), y ) ), pixelToView( QPointF( bottomRight.x(), y ) ) );
+        if (y >= topLeft.y()) {
+            drawLine(pixelToView(QPointF(topLeft.x(), y)), pixelToView(QPointF(bottomRight.x(), y)));
         }
         y += vspacing;
     }
 }
 
 QPainterGridDrawer::QPainterGridDrawer(KisDoc2* doc, const KoViewConverter * viewConverter)
-    : KisGridDrawer(doc, viewConverter),
-      m_painter(0)
+        : KisGridDrawer(doc, viewConverter),
+        m_painter(0)
 {
 }
 

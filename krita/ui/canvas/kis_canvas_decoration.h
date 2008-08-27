@@ -32,35 +32,36 @@ class KisView2;
  * This class is the base class for object that draw a decoration on the canvas,
  * for instance, selections, grids, tools, ...
  */
-class KRITAUI_EXPORT KisCanvasDecoration : public QObject {
-        Q_OBJECT
-    public:
-        KisCanvasDecoration(const QString& id, const QString& name, KisView2 * parent);
-        ~KisCanvasDecoration();
-        const QString& id() const;
-        const QString& name() const;
-        /**
-         * @return whether the decoration is visible.
-         */
-        bool visible() const;
-        /**
-         * Will paint the decoration on the QPainter, if the visible is set to true.
-         */
-        void paint(QPainter& gc, const QPoint & documentOffset, const QRect& area, const KoViewConverter &converter);
-    public slots:
-        /**
-         * Set if the decoration is visible or not.
-         */
-        void setVisible(bool v);
-        /**
-         * If decoration is visible, hide it, if not show it.
-         */
-        void toggleVisibility();
-    protected:
-        virtual void drawDecoration(QPainter& gc, const QPoint & documentOffset, const QRect& area, const KoViewConverter &converter) = 0;
-    private:
-        struct Private;
-        Private* const d;
+class KRITAUI_EXPORT KisCanvasDecoration : public QObject
+{
+    Q_OBJECT
+public:
+    KisCanvasDecoration(const QString& id, const QString& name, KisView2 * parent);
+    ~KisCanvasDecoration();
+    const QString& id() const;
+    const QString& name() const;
+    /**
+     * @return whether the decoration is visible.
+     */
+    bool visible() const;
+    /**
+     * Will paint the decoration on the QPainter, if the visible is set to true.
+     */
+    void paint(QPainter& gc, const QPoint & documentOffset, const QRect& area, const KoViewConverter &converter);
+public slots:
+    /**
+     * Set if the decoration is visible or not.
+     */
+    void setVisible(bool v);
+    /**
+     * If decoration is visible, hide it, if not show it.
+     */
+    void toggleVisibility();
+protected:
+    virtual void drawDecoration(QPainter& gc, const QPoint & documentOffset, const QRect& area, const KoViewConverter &converter) = 0;
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

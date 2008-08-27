@@ -34,12 +34,15 @@ class QDomElement;
    A base interface for layers that are implemented outside the Krita
    core.
  */
-class KisExternalLayer : public KisLayer {
+class KisExternalLayer : public KisLayer
+{
 
 public:
     KisExternalLayer(KisImageSP img, const QString &name, quint8 opacity)
-        : KisLayer(img, name, opacity) {}
-    virtual QIcon icon() const { return KIcon("system-run"); }
+            : KisLayer(img, name, opacity) {}
+    virtual QIcon icon() const {
+        return KIcon("system-run");
+    }
 };
 
 #endif // KIS_EXTERNAL_IFACE_LAYER_IFACE_

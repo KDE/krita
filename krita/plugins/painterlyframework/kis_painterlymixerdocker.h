@@ -28,7 +28,8 @@
 
 class KisPainterlyMixer;
 
-class KisPainterlyMixerDocker : public QDockWidget {
+class KisPainterlyMixerDocker : public QDockWidget
+{
     Q_OBJECT
 
 public:
@@ -40,15 +41,15 @@ private:
 };
 
 
-class KisPainterlyMixerDockerFactory : public KoDockFactory {
+class KisPainterlyMixerDockerFactory : public KoDockFactory
+{
 public:
     KisPainterlyMixerDockerFactory(KisView2 *view) : m_view(view) {}
     ~KisPainterlyMixerDockerFactory() {}
 
     QString id() const;
     QDockWidget *createDockWidget();
-    DockPosition defaultDockPosition() const
-    {
+    DockPosition defaultDockPosition() const {
         return DockMinimized;
     }
 

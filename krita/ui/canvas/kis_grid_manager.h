@@ -35,40 +35,40 @@ class KAction;
 class KRITAUI_EXPORT KisGridManager : public KisCanvasDecoration
 {
     Q_OBJECT
-    public:
-        KisGridManager(KisView2 * parent);
-        ~KisGridManager();
-    public:
-        void setup(KActionCollection * collection);
+public:
+    KisGridManager(KisView2 * parent);
+    ~KisGridManager();
+public:
+    void setup(KActionCollection * collection);
 
-    public slots:
+public slots:
 
-        void updateGUI();
+    void updateGUI();
 
-    private slots:
+private slots:
 
-        void toggleSnapToGrid();
-        void fastConfig1x1();
-        void fastConfig2x2();
-        void fastConfig5x5();
-        void fastConfig10x10();
-        void fastConfig20x20();
-        void fastConfig40x40();
-    protected:
-        virtual void drawDecoration(QPainter& gc, const QPoint& documentOffset, const QRect& area, const KoViewConverter &converter);
+    void toggleSnapToGrid();
+    void fastConfig1x1();
+    void fastConfig2x2();
+    void fastConfig5x5();
+    void fastConfig10x10();
+    void fastConfig20x20();
+    void fastConfig40x40();
+protected:
+    virtual void drawDecoration(QPainter& gc, const QPoint& documentOffset, const QRect& area, const KoViewConverter &converter);
 
-    private:
+private:
 
-        KisView2* m_view;
-        KToggleAction* m_toggleGrid;
-        KToggleAction* m_toggleSnapToGrid;
-        KAction* m_gridConfig;
-        KAction* m_gridFastConfig1x1;
-        KAction* m_gridFastConfig2x2;
-        KAction* m_gridFastConfig5x5;
-        KAction* m_gridFastConfig10x10;
-        KAction* m_gridFastConfig20x20;
-        KAction* m_gridFastConfig40x40;
+    KisView2* m_view;
+    KToggleAction* m_toggleGrid;
+    KToggleAction* m_toggleSnapToGrid;
+    KAction* m_gridConfig;
+    KAction* m_gridFastConfig1x1;
+    KAction* m_gridFastConfig2x2;
+    KAction* m_gridFastConfig5x5;
+    KAction* m_gridFastConfig10x10;
+    KAction* m_gridFastConfig20x20;
+    KAction* m_gridFastConfig40x40;
 };
 
 #endif

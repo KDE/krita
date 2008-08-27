@@ -62,7 +62,8 @@ class KisPaintOp;
  * For more complex operations, you might want to have a look at the subclasses
  * of KisPainter: KisConvolutionPainter, KisFillPainter and KisGradientPainter
  */
-class KRITAIMAGE_EXPORT KisPainter {
+class KRITAIMAGE_EXPORT KisPainter
+{
 
 
 public:
@@ -70,7 +71,7 @@ public:
     KisPainter();
 
     /// Construct a painter, and begin painting on the device
-    KisPainter( KisPaintDeviceSP device );
+    KisPainter(KisPaintDeviceSP device);
 
     /// Construct a painter, and begin painting on the device. All actions will be masked by the given selection.
     KisPainter(KisPaintDeviceSP device, KisSelectionSP selection);
@@ -80,12 +81,12 @@ public:
     /**
      * Start painting on the specified device. Not undoable.
      */
-    void begin( KisPaintDeviceSP device );
+    void begin(KisPaintDeviceSP device);
 
     /**
      * Start painting on the specified paint device. All actions will be masked by the given selection.
      */
-    void begin( KisPaintDeviceSP device, KisSelectionSP selection );
+    void begin(KisPaintDeviceSP device, KisSelectionSP selection);
 
     /**
      * Finish painting on the current device
@@ -98,13 +99,13 @@ public:
     void setProgress(KoUpdater * progressUpdater);
 
     /// Begin an undoable paint operation
-    void beginTransaction(const QString& customName = QString::null);
+    void beginTransaction(const QString& customName = "");
 
     /// Finish the undoable paint operation
     QUndoCommand *endTransaction();
 
     /// begin a transaction with the given command
-    void beginTransaction( KisTransaction* command);
+    void beginTransaction(KisTransaction* command);
 
     /// Return the current transcation
     KisTransaction  * transaction();
@@ -137,7 +138,7 @@ public:
      * Convenience method that uses the opacity and composite op set
      * in the painter. If nothing is set, opaque and OVER are assumed.
      */
-    void bitBlt(const QPoint & pos, const KisPaintDeviceSP src, const QRect & srcRect );
+    void bitBlt(const QPoint & pos, const KisPaintDeviceSP src, const QRect & srcRect);
 
     /**
      * Overloaded function of the previous which differs that you can pass the composite op using
@@ -188,11 +189,10 @@ public:
      * @param sh the height of the region
      */
     inline void bitBlt(qint32 dx, qint32 dy,
-                const QString & op,
-                const KisPaintDeviceSP src,
-                qint32 sx, qint32 sy,
-                qint32 sw, qint32 sh)
-    {
+                       const QString & op,
+                       const KisPaintDeviceSP src,
+                       qint32 sx, qint32 sy,
+                       qint32 sw, qint32 sh) {
         bitBlt(dx, dy, op, src, OPACITY_OPAQUE, sx, sy, sw, sh);
     }
 
@@ -221,7 +221,7 @@ public:
      * Convenience method that uses the opacity and composite op set
      * in the painter. If noting is set, opaque and OVER are assumed.
      */
-    void bltSelection(const QPoint & pos, const KisPaintDeviceSP src, const KisSelectionSP selDev, const QRect & srcRect );
+    void bltSelection(const QPoint & pos, const KisPaintDeviceSP src, const KisSelectionSP selDev, const QRect & srcRect);
 
     /**
      * Overloaded function of the previous that takes a KisSelection
@@ -320,19 +320,19 @@ public:
      * because the currenlty set brush has a spacing greater than that distance.
      */
     double paintBezierCurve(const KisPaintInformation &pi1,
-                const QPointF &control1,
-                const QPointF &control2,
-                const KisPaintInformation &pi2,
-                const double savedDist = -1);
+                            const QPointF &control1,
+                            const QPointF &control2,
+                            const KisPaintInformation &pi2,
+                            const double savedDist = -1);
     /**
      * Fill the given vector points with the points needed to draw the Bezier curve between
      * pos1 and pos2 using control points 1 and 2, excluding the final pos2.
      */
     void getBezierCurvePoints(const QPointF &pos1,
-                const QPointF &control1,
-                const QPointF &control2,
-                const QPointF &pos2,
-                vQPointF& points) const;
+                              const QPointF &control1,
+                              const QPointF &control2,
+                              const QPointF &pos2,
+                              vQPointF& points) const;
 
     /**
      * Paint a rectangle.
@@ -444,7 +444,7 @@ public:
      * the channels where the corresponding bit is true will will be
      * composited onto the destination device.
      */
-    void setChannelFlags( QBitArray channelFlags );
+    void setChannelFlags(QBitArray channelFlags);
 
 
     QBitArray channelFlags();
@@ -455,7 +455,7 @@ public:
      * Some paintops really want to know about the image they work
      * for, e.g. the duplicate paintop.
      */
-    void setPaintOpPreset( KisPaintOpPresetSP preset, KisImageSP image = 0 );
+    void setPaintOpPreset(KisPaintOpPresetSP preset, KisImageSP image = 0);
 
     /// Return the paintop preset
     KisPaintOpPresetSP preset() const;
@@ -540,7 +540,7 @@ public:
     /// Sets the bounds of the painter area; if not set, the painter
     /// will happily paint where you ask it, making the paint device
     /// larger as it goes
-    void setBounds( const QRect & bounds );
+    void setBounds(const QRect & bounds);
     QRect bounds();
 
     /// Set the composite op for this painter
@@ -579,14 +579,12 @@ private:
     KisPainter(const KisPainter&);
     KisPainter& operator=(const KisPainter&);
 
-    float frac(float value)
-    {
+    float frac(float value) {
         float tmp = 0;
         return modff(value , &tmp);
     }
 
-    float invertFrac(float value)
-    {
+    float invertFrac(float value) {
         float tmp = 0;
         return 1.0f - modff(value , &tmp);
     }

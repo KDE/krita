@@ -28,9 +28,10 @@
  * This class is a convenience class for a button that
  * when clicked displays a popup widget.
  */
-class KRITAUI_EXPORT KisPopupButton : public QPushButton {
+class KRITAUI_EXPORT KisPopupButton : public QPushButton
+{
 
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -54,7 +55,7 @@ public:
      * Set the width of the popup widget.
      * @return new width of the popup widget
      */
-    void setPopupWidgetWidth( int w );
+    void setPopupWidgetWidth(int w);
 
 public slots:
 

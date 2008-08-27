@@ -36,21 +36,29 @@ class QPointF;
 class KisPainter;
 class Ui_DuplicateOpOptionsWidget;
 
-class KisDuplicateOpFactory  : public KisPaintOpFactory  {
+class KisDuplicateOpFactory  : public KisPaintOpFactory
+{
 
 public:
     KisDuplicateOpFactory() {}
     virtual ~KisDuplicateOpFactory() {}
 
     virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
-    virtual QString id() const { return "duplicate"; }
-    virtual QString name() const { return i18nc("duplicate paintbrush", "Duplicate"); }
-    virtual QString pixmap() { return "krita-duplicate.png"; }
+    virtual QString id() const {
+        return "duplicate";
+    }
+    virtual QString name() const {
+        return i18nc("duplicate paintbrush", "Duplicate");
+    }
+    virtual QString pixmap() {
+        return "krita-duplicate.png";
+    }
     virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
 };
 
-class KisDuplicateOp : public KisBrushBasedPaintOp {
+class KisDuplicateOp : public KisBrushBasedPaintOp
+{
 
 public:
 

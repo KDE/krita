@@ -48,7 +48,7 @@
 
 
 KisToolSelectPath::KisToolSelectPath(KoCanvasBase * canvas)
-    : KoCreatePathTool(canvas)
+        : KoCreatePathTool(canvas)
 {
     m_optWidget = 0;
     m_selectAction = SELECTION_REPLACE;
@@ -59,9 +59,9 @@ KisToolSelectPath::~KisToolSelectPath()
 {
 }
 
-void KisToolSelectPath::activate( bool tmp )
+void KisToolSelectPath::activate(bool tmp)
 {
-    super::activate( tmp );
+    super::activate(tmp);
 
     if (!m_optWidget)
         return;
@@ -69,12 +69,14 @@ void KisToolSelectPath::activate( bool tmp )
     m_optWidget->slotActivated();
 }
 
-void KisToolSelectPath::slotSetAction(int action) {
+void KisToolSelectPath::slotSetAction(int action)
+{
     if (action >= SELECTION_REPLACE && action <= SELECTION_INTERSECT)
-        m_selectAction =(selectionAction)action;
+        m_selectAction = (selectionAction)action;
 }
 
-void KisToolSelectPath::slotSetSelectionMode(int mode) {
+void KisToolSelectPath::slotSetSelectionMode(int mode)
+{
     m_selectionMode = (selectionMode)mode;
 
 }
@@ -103,14 +105,14 @@ QWidget* KisToolSelectPath::createOptionWidget()
 
 QWidget* KisToolSelectPath::optionWidget()
 {
-        return m_optWidget;
+    return m_optWidget;
 }
 
 void KisToolSelectPath::addPathShape()
 {
     KisNodeSP currentNode =
-        m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentKritaNode ).value<KisNodeSP>();
-    if(!currentNode)
+        m_canvas->resourceProvider()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
+    if (!currentNode)
         return;
 
     KisImageSP image = qobject_cast<KisLayer*>(currentNode->parent().data())->image();
@@ -118,7 +120,7 @@ void KisToolSelectPath::addPathShape()
 
     KisSelectionSP selection = image->globalSelection();
     // XXX: also get global selection!
-    if ( selection && currentNode->inherits("KisLayer") ) {
+    if (selection && currentNode->inherits("KisLayer")) {
         selection = qobject_cast<KisLayer*>(currentNode.data())->selection();
     }
 
@@ -129,13 +131,13 @@ void KisToolSelectPath::addPathShape()
     shape->close();
     m_shape = 0;
 
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*> ( m_canvas );
-    if ( !kisCanvas )
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(m_canvas);
+    if (!kisCanvas)
         return;
 
     KisSelectionToolHelper helper(kisCanvas, currentNode, i18n("Path Selection"));
 
-    if( m_selectionMode == PIXEL_SELECTION ){
+    if (m_selectionMode == PIXEL_SELECTION) {
 
         KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection(dev));
 
@@ -147,8 +149,8 @@ void KisToolSelectPath::addPathShape()
         painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
 
         KisPaintOpPresetSP preset =
-            static_cast<KisPaintOpPreset*>( m_canvas->resourceProvider()->
-                        resource( KisCanvasResourceProvider::CurrentPaintOpPreset ).value<void *>() );
+            static_cast<KisPaintOpPreset*>(m_canvas->resourceProvider()->
+                                           resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<void *>());
         painter.setPaintOpPreset(preset, image);
 
 
@@ -161,8 +163,7 @@ void KisToolSelectPath::addPathShape()
         m_canvas->addCommand(cmd);
 
         delete shape;
-    }
-    else {
+    } else {
         helper.addSelectionShape(shape);
     }
 }

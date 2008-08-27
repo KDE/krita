@@ -34,15 +34,17 @@ class KisWdgCustomPalette : public QWidget, public Ui::KisWdgCustomPalette
 {
     Q_OBJECT
 
-    public:
-        KisWdgCustomPalette( QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
+public:
+    KisWdgCustomPalette(QWidget *parent, const char *name) : QWidget(parent) {
+        setObjectName(name); setupUi(this);
+    }
 };
 
 class KisCustomPalette : public KisWdgCustomPalette
 {
     Q_OBJECT
 public:
-    KisCustomPalette( QList<KoColorSet*> &palettes, QWidget *parent, const char* name, const QString& caption, KisView2* view);
+    KisCustomPalette(QList<KoColorSet*> &palettes, QWidget *parent, const char* name, const QString& caption, KisView2* view);
     virtual ~KisCustomPalette();
     void setPalette(KoColorSet* p);
 
@@ -53,7 +55,7 @@ private slots:
     void slotAddPalette();
     void slotAddNew();
     void slotRemoveCurrent();
-    void slotPaletteChanged( QListWidgetItem * current, QListWidgetItem * previous );
+    void slotPaletteChanged(QListWidgetItem * current, QListWidgetItem * previous);
 
 private:
     bool m_ownPalette;

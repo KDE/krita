@@ -30,16 +30,16 @@
 
 void KisProjectionTest::testDirty()
 {
-    KisImageSP image = new KisImage( 0, 1000, 1000, 0, "layer tests" );
+    KisImageSP image = new KisImage(0, 1000, 1000, 0, "layer tests");
 
     // Two layers so the single-layer-is-rootlayer optimization doesn't kick in
-    KisLayerSP layer = new KisPaintLayer( image, "layer 1", OPACITY_OPAQUE );
-    KisLayerSP layer2 = new KisPaintLayer( image, "layer 2", OPACITY_OPAQUE );
-    image->addNode( layer );
-    image->addNode( layer2 );
-    KisFillPainter gc( layer2->paintDevice() );
+    KisLayerSP layer = new KisPaintLayer(image, "layer 1", OPACITY_OPAQUE);
+    KisLayerSP layer2 = new KisPaintLayer(image, "layer 2", OPACITY_OPAQUE);
+    image->addNode(layer);
+    image->addNode(layer2);
+    KisFillPainter gc(layer2->paintDevice());
     KoColor c(Qt::red, layer2->colorSpace());
-    gc.fillRect( 0, 0, 1000, 1000, c );
+    gc.fillRect(0, 0, 1000, 1000, c);
     gc.end();
     layer2->setDirty(gc.dirtyRegion());
 
@@ -51,7 +51,7 @@ void KisProjectionTest::testDirty()
     while (!iter.isDone()) {
         QColor c;
         image->colorSpace()->toQColor(iter.rawData(), &c, image->profile());
-        QVERIFY( c == Qt::red );
+        QVERIFY(c == Qt::red);
         ++iter;
     }
 }

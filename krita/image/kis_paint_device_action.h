@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_PAINTDEV_ACTION_H_
-#define KIS_PAINTDEV_ACTION_H_
+#ifndef KIS_PAINT_DEVICE_ACTION_H_
+#define KIS_PAINT_DEVICE_ACTION_H_
 
 #include "kis_types.h"
 class QString;
@@ -25,7 +25,8 @@ class QString;
  * Defines an action to do with a paint device. It can be force used by the gui on creation
  * of a layer, for example. Or just appear in a list of actions to do.
  */
-class KisPaintDeviceAction {
+class KisPaintDeviceAction
+{
 public:
     virtual ~KisPaintDeviceAction() {}
     /**

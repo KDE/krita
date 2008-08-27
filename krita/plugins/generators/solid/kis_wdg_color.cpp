@@ -29,7 +29,7 @@
 #include "ui_wdgcoloroptions.h"
 
 KisWdgColor::KisWdgColor(QWidget* parent)
-    : KisFilterConfigWidget(parent)
+        : KisFilterConfigWidget(parent)
 {
     m_widget = new Ui_WdgColorOptions();
     m_widget->setupUi(this);
@@ -42,13 +42,11 @@ KisWdgColor::~KisWdgColor()
 void KisWdgColor::setConfiguration(KisFilterConfiguration* config)
 {
     QVariant value;
-    if (config->getProperty("color", value))
-    {
+    if (config->getProperty("color", value)) {
         widget()->bnColor->setColor(value.value<KoColor>().toQColor());
     }
-    if (config->getProperty("opacity", value))
-    {
-        widget()->intOpacity->setValue( value.toUInt() );
+    if (config->getProperty("opacity", value)) {
+        widget()->intOpacity->setValue(value.toUInt());
     }
 }
 
@@ -59,8 +57,8 @@ KisFilterConfiguration* KisWdgColor::configuration() const
     c.fromQColor(this->widget()->bnColor->color());
     QVariant v;
     v.setValue(c);
-    config->setProperty("color", v );
-    config->setProperty("opacity", this->widget()->intOpacity->value() );
+    config->setProperty("color", v);
+    config->setProperty("opacity", this->widget()->intOpacity->value());
     return config;
 }
 

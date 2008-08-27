@@ -26,7 +26,8 @@
 #include "kis_painterly_overlay.h"
 #include "kis_datamanager.h"
 
-class KisTransaction::Private {
+class KisTransaction::Private
+{
 public:
     QString name;
     KisPaintDeviceSP device;
@@ -36,8 +37,8 @@ public:
 };
 
 KisTransaction::KisTransaction(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent)
-    : QUndoCommand(name, parent)
-    , m_d( new Private() )
+        : QUndoCommand(name, parent)
+        , m_d(new Private())
 {
     m_d->device = device;
     m_d->memento = device->dataManager()->getMemento();
@@ -63,8 +64,7 @@ KisTransaction::~KisTransaction()
 void KisTransaction::redo()
 {
     //QUndoStack calls redo(), so the first call needs to be blocked
-    if(m_d->firstRedo)
-    {
+    if (m_d->firstRedo) {
         m_d->firstRedo = false;
         return;
     }
@@ -75,19 +75,19 @@ void KisTransaction::redo()
 
     QRect rc;
     qint32 x, y, width, height;
-    m_d->memento->extent(x,y,width,height);
+    m_d->memento->extent(x, y, width, height);
     rc.setRect(x + m_d->device->x(), y + m_d->device->y(), width, height);
 
-    m_d->device->setDirty( rc );
+    m_d->device->setDirty(rc);
 
     if (!m_d->overlayMemento.isNull()) {
         m_d->device->painterlyOverlay()->dataManager()->rollforward(m_d->overlayMemento);
 
-        m_d->overlayMemento->extent(x,y,width,height);
+        m_d->overlayMemento->extent(x, y, width, height);
         rc.setRect(x + m_d->device->painterlyOverlay()->x(),
                    y + m_d->device->painterlyOverlay()->y(), width, height);
 
-        m_d->device->painterlyOverlay()->setDirty( rc );
+        m_d->device->painterlyOverlay()->setDirty(rc);
     }
 }
 
@@ -98,19 +98,19 @@ void KisTransaction::undo()
 
     QRect rc;
     qint32 x, y, width, height;
-    m_d->memento->extent(x,y,width,height);
+    m_d->memento->extent(x, y, width, height);
     rc.setRect(x + m_d->device->x(), y + m_d->device->y(), width, height);
 
-    m_d->device->setDirty( rc );
+    m_d->device->setDirty(rc);
 
     if (!m_d->overlayMemento.isNull()) {
         m_d->device->painterlyOverlay()->dataManager()->rollback(m_d->overlayMemento);
 
-        m_d->overlayMemento->extent(x,y,width,height);
+        m_d->overlayMemento->extent(x, y, width, height);
         rc.setRect(x + m_d->device->painterlyOverlay()->x(),
                    y + m_d->device->painterlyOverlay()->y(), width, height);
 
-        m_d->device->painterlyOverlay()->setDirty( rc );
+        m_d->device->painterlyOverlay()->setDirty(rc);
     }
 }
 
@@ -126,7 +126,7 @@ void KisTransaction::undoNoUpdate()
 
 void KisTransaction::painterlyOverlayAdded()
 {
-    if ( m_d->device->painterlyOverlay() && !m_d->overlayMemento )
+    if (m_d->device->painterlyOverlay() && !m_d->overlayMemento)
         m_d->overlayMemento = m_d->device->painterlyOverlay()->dataManager()->getMemento();
 }
 

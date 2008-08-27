@@ -45,12 +45,12 @@
 #include "kis_paint_device.h"
 
 KisPattern::KisPattern(const QString& file)
-    : KoPattern(file)
+        : KoPattern(file)
 {
 }
 
 KisPattern::KisPattern(KisPaintDevice* image, int x, int y, int w, int h)
-    : KoPattern("")
+        : KoPattern("")
 {
     // Forcefully convert to RGBA8
     // XXX profile and exposure?
@@ -62,7 +62,8 @@ KisPattern::~KisPattern()
 {
 }
 
-KisPaintDeviceSP KisPattern::image(const KoColorSpace * colorSpace) {
+KisPaintDeviceSP KisPattern::image(const KoColorSpace * colorSpace)
+{
     // Check if there's already a pattern prepared for this colorspace
     QMap<QString, KisPaintDeviceSP>::const_iterator it = m_colorspaces.find(colorSpace->id());
     if (it != m_colorspaces.end())
@@ -73,7 +74,7 @@ KisPaintDeviceSP KisPattern::image(const KoColorSpace * colorSpace) {
 
     Q_CHECK_PTR(layer);
 
-    layer->convertFromQImage(img(),"");
+    layer->convertFromQImage(img(), "");
 
     m_colorspaces[colorSpace->id()] = layer;
     return layer;

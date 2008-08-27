@@ -32,22 +32,30 @@
 class QPointF;
 class KisPainter;
 
-class KisEraseOpFactory : public KisPaintOpFactory {
+class KisEraseOpFactory : public KisPaintOpFactory
+{
 
 public:
     KisEraseOpFactory() {}
     virtual ~KisEraseOpFactory() {}
 
     virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
-    virtual QString id() const { return "eraser"; }
-    virtual QString name() const { return i18n("Pixel Eraser"); }
-    virtual QString pixmap() { return "krita-eraser.png"; }
+    virtual QString id() const {
+        return "eraser";
+    }
+    virtual QString name() const {
+        return i18n("Pixel Eraser");
+    }
+    virtual QString pixmap() {
+        return "krita-eraser.png";
+    }
     virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
 };
 
 
-class KisEraseOp : public KisBrushBasedPaintOp {
+class KisEraseOp : public KisBrushBasedPaintOp
+{
 
 public:
 

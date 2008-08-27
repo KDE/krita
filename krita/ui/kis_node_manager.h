@@ -44,7 +44,8 @@ class KisMaskManager;
  * The node manager passes requests for new layers or masks on to the mask and layer
  * managers.
  */
-class KRITAUI_EXPORT KisNodeManager : public QObject {
+class KRITAUI_EXPORT KisNodeManager : public QObject
+{
 
     Q_OBJECT
 
@@ -67,41 +68,41 @@ public:
      * of the active mask, or the color space of the parent of the active layer
      */
     const KoColorSpace* activeColorSpace();
-    
+
     /// Get the class that manages the layer user interface
     KisLayerManager * layerManager();
 
     /// Get the class that manages the user interface for the masks
     KisMaskManager * maskManager();
-    
+
 signals:
 
-    void sigNodeActivated( KisNodeSP layer );
+    void sigNodeActivated(KisNodeSP layer);
 
 public slots:
 
-    void addNode( KisNodeSP node, KisNodeSP activeNode);
-    void insertNode( KisNodeSP node, KisNodeSP parent, int index );
-    void moveNode( KisNodeSP node, KisNodeSP activeNode);
-    void moveNodeAt( KisNodeSP node, KisNodeSP parent, int index);
-    void createNode( const QString & node);
-    void activateNode( KisNodeSP layer );
+    void addNode(KisNodeSP node, KisNodeSP activeNode);
+    void insertNode(KisNodeSP node, KisNodeSP parent, int index);
+    void moveNode(KisNodeSP node, KisNodeSP activeNode);
+    void moveNodeAt(KisNodeSP node, KisNodeSP parent, int index);
+    void createNode(const QString & node);
+    void activateNode(KisNodeSP layer);
     void nodesUpdated();
-    void nodeProperties( KisNodeSP node );
-    void nodeOpacityChanged( qreal opacity, bool final);
-    void nodeCompositeOpChanged( const KoCompositeOp* op );
-    void duplicateActiveNode( KisNodeSP node );
-    
+    void nodeProperties(KisNodeSP node);
+    void nodeOpacityChanged(qreal opacity, bool final);
+    void nodeCompositeOpChanged(const KoCompositeOp* op);
+    void duplicateActiveNode(KisNodeSP node);
+
     /**
      * move the active node up the nodestack.
      */
     void raiseNode();
-    
+
     /**
      * move the active node down the nodestack
      */
     void lowerNode();
-    
+
     /**
      * move the activenode to the top-most position of the nodestack
      * If the node is a mask, the stack is limited to the set of masks
@@ -112,10 +113,10 @@ public slots:
     /**
      * move the activenode to the bottom-most position of the nodestack
      * If the node is a mask, the stack is limited to the set of masks
-     * belonging to the current layer.     
+     * belonging to the current layer.
      */
     void nodeToBottom();
-    
+
 private:
     void getNewNodeLocation(const QString & nodeType, KisNodeSP &parent, KisNodeSP &above, KisNodeSP active);
 

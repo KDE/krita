@@ -26,7 +26,8 @@
 
 class KoCanvasBase;
 
-class KisToolPolygon : public KisToolShape {
+class KisToolPolygon : public KisToolShape
+{
 
     typedef KisToolShape super;
     Q_OBJECT
@@ -66,21 +67,21 @@ private:
 
 #include "KoToolFactory.h"
 
-class KisToolPolygonFactory : public KoToolFactory {
+class KisToolPolygonFactory : public KoToolFactory
+{
 
 public:
     KisToolPolygonFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolPolygon", i18n( "Polygon" ))
-        {
-            setToolTip( i18n( "Draw a polygon. Shift-mouseclick ends the polygon." ) );
-            setToolType( TOOL_TYPE_SHAPE );
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setIcon( "tool_polygon" );
-            setPriority( 4 );
-            setInputDeviceAgnostic(false);
-        }
+            : KoToolFactory(parent, "KisToolPolygon", i18n("Polygon")) {
+        setToolTip(i18n("Draw a polygon. Shift-mouseclick ends the polygon."));
+        setToolType(TOOL_TYPE_SHAPE);
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        setIcon("tool_polygon");
+        setPriority(4);
+        setInputDeviceAgnostic(false);
+    }
 
-    virtual ~KisToolPolygonFactory(){}
+    virtual ~KisToolPolygonFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolPolygon(canvas);

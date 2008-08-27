@@ -31,20 +31,21 @@
 #include "kis_global.h"
 
 
-namespace {
-    const double IMG_DEFAULT_RESOLUTION = 100.0; // dpi
-    const qint32 IMG_DEFAULT_WIDTH = 512;
-    const qint32 IMG_DEFAULT_HEIGHT = 512;
-    const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_OUTLINE;
-    const qint32 DEFAULT_MAX_TILES_MEM = 5000;
-    const qint32 DEFAULT_SWAPPINESS = 100;
-    const qint32 DEFAULT_PRESSURE_CORRECTION = 50;
-    const qint32 DEFAULT_UNDO_LIMIT = 50;
-    const qint32 DEFAULT_BORDER_SIZE = 128;
+namespace
+{
+const double IMG_DEFAULT_RESOLUTION = 100.0; // dpi
+const qint32 IMG_DEFAULT_WIDTH = 512;
+const qint32 IMG_DEFAULT_HEIGHT = 512;
+const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_OUTLINE;
+const qint32 DEFAULT_MAX_TILES_MEM = 5000;
+const qint32 DEFAULT_SWAPPINESS = 100;
+const qint32 DEFAULT_PRESSURE_CORRECTION = 50;
+const qint32 DEFAULT_UNDO_LIMIT = 50;
+const qint32 DEFAULT_BORDER_SIZE = 128;
 }
 
 KisConfig::KisConfig()
-    : m_cfg(KGlobal::config()->group(""))
+        : m_cfg(KGlobal::config()->group(""))
 {
 }
 
@@ -56,12 +57,12 @@ KisConfig::~KisConfig()
 
 int KisConfig::borderSize() const
 {
-    return m_cfg.readEntry( "borderSize", DEFAULT_BORDER_SIZE );
+    return m_cfg.readEntry("borderSize", DEFAULT_BORDER_SIZE);
 }
 
-void KisConfig::setBorderSize( int borderSize )
+void KisConfig::setBorderSize(int borderSize)
 {
-    m_cfg.writeEntry( "borderSize", borderSize );
+    m_cfg.writeEntry("borderSize", borderSize);
 }
 
 bool KisConfig::fixDockerWidth() const
@@ -76,12 +77,12 @@ void KisConfig::setFixedDockerWidth(bool fix)
 
 bool KisConfig::useProjections() const
 {
-    return m_cfg.readEntry( "useProjections", true );
+    return m_cfg.readEntry("useProjections", true);
 }
 
-void KisConfig::setUseProjections( bool useProj )
+void KisConfig::setUseProjections(bool useProj)
 {
-    m_cfg.writeEntry( "useProjections", useProj );
+    m_cfg.writeEntry("useProjections", useProj);
 }
 
 bool KisConfig::undoEnabled() const
@@ -117,7 +118,7 @@ qint32 KisConfig::defImgHeight() const
 
 double KisConfig::defImgResolution() const
 {
-    return m_cfg.readEntry("imgResolutionDef", IMG_DEFAULT_RESOLUTION)/72.0;
+    return m_cfg.readEntry("imgResolutionDef", IMG_DEFAULT_RESOLUTION) / 72.0;
 }
 
 void KisConfig::defImgWidth(qint32 width)
@@ -260,7 +261,7 @@ void KisConfig::setUseOpenGLShaders(bool useOpenGLShaders)
 
 qint32 KisConfig::maxNumberOfThreads()
 {
-    return m_cfg.readEntry("maxthreads", QThread::idealThreadCount() );
+    return m_cfg.readEntry("maxthreads", QThread::idealThreadCount());
 }
 
 void KisConfig::setMaxNumberOfThreads(qint32 maxThreads)
@@ -290,12 +291,12 @@ void KisConfig::setSwappiness(qint32 swappiness)
 
 qint32 KisConfig::getPressureCorrection()
 {
-    return m_cfg.readEntry( "pressurecorrection", DEFAULT_PRESSURE_CORRECTION );
+    return m_cfg.readEntry("pressurecorrection", DEFAULT_PRESSURE_CORRECTION);
 }
 
-void KisConfig::setPressureCorrection( qint32 correction )
+void KisConfig::setPressureCorrection(qint32 correction)
 {
-    m_cfg.writeEntry( "pressurecorrection",  correction );
+    m_cfg.writeEntry("pressurecorrection",  correction);
 }
 
 qint32 KisConfig::getDefaultPressureCorrection()
@@ -350,7 +351,7 @@ void KisConfig::setGridSubdivisionStyle(quint32 v)
 
 QColor KisConfig::getGridMainColor()
 {
-    QColor col(99,99,99);
+    QColor col(99, 99, 99);
     return m_cfg.readEntry("gridmaincolor", col);
 }
 
@@ -361,8 +362,8 @@ void KisConfig::setGridMainColor(const QColor & v)
 
 QColor KisConfig::getGridSubdivisionColor()
 {
-	QColor col(150,150,150);
-    return m_cfg.readEntry("gridsubdivisioncolor",col);
+    QColor col(150, 150, 150);
+    return m_cfg.readEntry("gridsubdivisioncolor", col);
 }
 
 void KisConfig::setGridSubdivisionColor(const QColor & v)
@@ -373,7 +374,7 @@ void KisConfig::setGridSubdivisionColor(const QColor & v)
 quint32 KisConfig::getGridHSpacing()
 {
     qint32 v = m_cfg.readEntry("gridhspacing", 10);
-    return (quint32)qMax(1, v );
+    return (quint32)qMax(1, v);
 }
 
 void KisConfig::setGridHSpacing(quint32 v)
@@ -384,7 +385,7 @@ void KisConfig::setGridHSpacing(quint32 v)
 quint32 KisConfig::getGridVSpacing()
 {
     qint32 v = m_cfg.readEntry("gridvspacing", 10);
-    return (quint32)qMax(1, v );
+    return (quint32)qMax(1, v);
 }
 
 void KisConfig::setGridVSpacing(quint32 v)
@@ -395,7 +396,7 @@ void KisConfig::setGridVSpacing(quint32 v)
 quint32 KisConfig::getGridSubdivisions()
 {
     qint32 v = m_cfg.readEntry("gridsubsivisons", 2);
-    return (quint32)qMax(1, v );
+    return (quint32)qMax(1, v);
 }
 
 void KisConfig::setGridSubdivisions(quint32 v)
@@ -406,7 +407,7 @@ void KisConfig::setGridSubdivisions(quint32 v)
 quint32 KisConfig::getGridOffsetX()
 {
     qint32 v = m_cfg.readEntry("gridoffsetx", 0);
-    return (quint32)qMax(0, v );
+    return (quint32)qMax(0, v);
 }
 
 void KisConfig::setGridOffsetX(quint32 v)
@@ -417,7 +418,7 @@ void KisConfig::setGridOffsetX(quint32 v)
 quint32 KisConfig::getGridOffsetY()
 {
     qint32 v = m_cfg.readEntry("gridoffsety", 0);
-    return (quint32)qMax(0, v );
+    return (quint32)qMax(0, v);
 }
 
 void KisConfig::setGridOffsetY(quint32 v)
@@ -427,12 +428,12 @@ void KisConfig::setGridOffsetY(quint32 v)
 
 qint32 KisConfig::checkSize()
 {
-    return m_cfg.readEntry( "checksize", 32 );
+    return m_cfg.readEntry("checksize", 32);
 }
 
-void KisConfig::setCheckSize( qint32 checksize )
+void KisConfig::setCheckSize(qint32 checksize)
 {
-    m_cfg.writeEntry( "checksize", checksize );
+    m_cfg.writeEntry("checksize", checksize);
 }
 
 bool KisConfig::scrollCheckers() const
@@ -458,144 +459,144 @@ void KisConfig::setCheckersColor(const QColor & v)
 
 int KisConfig::numProjectionThreads()
 {
-    return m_cfg.readEntry( "maxprojectionthreads", QThread::idealThreadCount()  );
+    return m_cfg.readEntry("maxprojectionthreads", QThread::idealThreadCount());
 }
 
-void KisConfig::setNumProjectThreads( int num )
+void KisConfig::setNumProjectThreads(int num)
 {
-    m_cfg.writeEntry( "maxprojectionthreads", num );
+    m_cfg.writeEntry("maxprojectionthreads", num);
 }
 
 int KisConfig::projectionChunkSize()
 {
-    return m_cfg.readEntry( "updaterectsize", 1024 );
+    return m_cfg.readEntry("updaterectsize", 1024);
 }
 
-void KisConfig::setProjectionChunkSize( int num )
+void KisConfig::setProjectionChunkSize(int num)
 {
-    m_cfg.writeEntry( "updaterectsize", num );
+    m_cfg.writeEntry("updaterectsize", num);
 }
 
 bool KisConfig::aggregateDirtyRegionsInPainter()
 {
-    return m_cfg.readEntry( "aggregate_dirty_regions", true );
+    return m_cfg.readEntry("aggregate_dirty_regions", true);
 }
 
-void KisConfig::setAggregateDirtyRegionsInPainter( bool aggregate )
+void KisConfig::setAggregateDirtyRegionsInPainter(bool aggregate)
 {
-    m_cfg.writeEntry( "aggregate_dirty_regions", aggregate );
+    m_cfg.writeEntry("aggregate_dirty_regions", aggregate);
 }
 
 bool KisConfig::useBoundingRectInProjection()
 {
-    return m_cfg.readEntry( "use_bounding_rect_of_dirty_region", true );
+    return m_cfg.readEntry("use_bounding_rect_of_dirty_region", true);
 }
 
-void KisConfig::setUseBoundingRectInProjection( bool use )
+void KisConfig::setUseBoundingRectInProjection(bool use)
 {
-    m_cfg.writeEntry( "use_bounding_rect_of_dirty_region", use );
+    m_cfg.writeEntry("use_bounding_rect_of_dirty_region", use);
 }
 
 bool KisConfig::useRegionOfInterestInProjection()
 {
-    return m_cfg.readEntry( "use_region_of_interest", false);
+    return m_cfg.readEntry("use_region_of_interest", false);
 }
 
-void KisConfig::setUseRegionOfInterestInProjection( bool use )
+void KisConfig::setUseRegionOfInterestInProjection(bool use)
 {
-    m_cfg.writeEntry( "use_region_of_interest", use );
+    m_cfg.writeEntry("use_region_of_interest", use);
 }
 
 bool KisConfig::updateAllOfQPainterCanvas()
 {
-    return m_cfg.readEntry( "update_all_of_qpainter_canvas", false );
+    return m_cfg.readEntry("update_all_of_qpainter_canvas", false);
 }
 
-void KisConfig::setUpdateAllOfQpainterCanvas( bool all )
+void KisConfig::setUpdateAllOfQpainterCanvas(bool all)
 {
-    m_cfg.writeEntry( "update_all_of_qpainter_canvas", all );
+    m_cfg.writeEntry("update_all_of_qpainter_canvas", all);
 }
 
 bool KisConfig::useNearestNeigbour()
 {
-    return m_cfg.readEntry( "fast_zoom", false );
+    return m_cfg.readEntry("fast_zoom", false);
 }
 
-void KisConfig::setUseNearestNeighbour( bool useNearestNeigbour )
+void KisConfig::setUseNearestNeighbour(bool useNearestNeigbour)
 {
-    m_cfg.writeEntry( "fast_zoom", useNearestNeigbour );
+    m_cfg.writeEntry("fast_zoom", useNearestNeigbour);
 }
 
 
 bool KisConfig::useSampling()
 {
-    return m_cfg.readEntry( "sampled_scaling", false );
+    return m_cfg.readEntry("sampled_scaling", false);
 }
 
-void KisConfig::setSampling( bool sampling )
+void KisConfig::setSampling(bool sampling)
 {
-    m_cfg.writeEntry( "sampled_scaling", sampling );
+    m_cfg.writeEntry("sampled_scaling", sampling);
 }
 
 bool KisConfig::useDeferredSmoothing()
 {
-    return m_cfg.readEntry( "deferred_smoothing", false );
+    return m_cfg.readEntry("deferred_smoothing", false);
 }
 
-void KisConfig::setDeferredSmoothing( bool deferredSmoothing )
+void KisConfig::setDeferredSmoothing(bool deferredSmoothing)
 {
-    m_cfg.writeEntry( "deferred_smoothing", deferredSmoothing );
+    m_cfg.writeEntry("deferred_smoothing", deferredSmoothing);
 }
 
 bool KisConfig::useQtSmoothScaling()
 {
-    return m_cfg.readEntry( "qt_smooth_scaling", false );
+    return m_cfg.readEntry("qt_smooth_scaling", false);
 }
 
-void KisConfig::setUseQtSmoothScaling( bool useQtSmootScaling )
+void KisConfig::setUseQtSmoothScaling(bool useQtSmootScaling)
 {
-    m_cfg.writeEntry( "qt_smooth_scaling", useQtSmootScaling );
+    m_cfg.writeEntry("qt_smooth_scaling", useQtSmootScaling);
 }
 
 bool KisConfig::threadColorSpaceConversion()
 {
-    return m_cfg.readEntry( "thread_colorspace_conversion", false );
+    return m_cfg.readEntry("thread_colorspace_conversion", false);
 }
 
-void KisConfig::setThreadColorSpaceConversion( bool threadColorSpaceConversion )
+void KisConfig::setThreadColorSpaceConversion(bool threadColorSpaceConversion)
 {
-    m_cfg.writeEntry( "thread_colorspace_conversion", threadColorSpaceConversion );
+    m_cfg.writeEntry("thread_colorspace_conversion", threadColorSpaceConversion);
 }
 
 bool KisConfig::cacheKisImageAsQImage()
 {
-    return m_cfg.readEntry( "cache_kis_image_as_qimage", true );
+    return m_cfg.readEntry("cache_kis_image_as_qimage", true);
 }
 
-void KisConfig::setCacheKisImageAsQImage( bool cacheKisImageAsQImage )
+void KisConfig::setCacheKisImageAsQImage(bool cacheKisImageAsQImage)
 {
-    m_cfg.writeEntry( "cache_kis_image_as_qimage", cacheKisImageAsQImage );
+    m_cfg.writeEntry("cache_kis_image_as_qimage", cacheKisImageAsQImage);
 }
 
 
 bool KisConfig::drawMaskVisualisationOnUnscaledCanvasCache()
 {
-    return m_cfg.readEntry( "drawMaskVisualisationOnUnscaledCanvasCache", false );
+    return m_cfg.readEntry("drawMaskVisualisationOnUnscaledCanvasCache", false);
 }
 
-void KisConfig::setDrawMaskVisualisationOnUnscaledCanvasCache( bool drawMaskVisualisationOnUnscaledCanvasCache )
+void KisConfig::setDrawMaskVisualisationOnUnscaledCanvasCache(bool drawMaskVisualisationOnUnscaledCanvasCache)
 {
-    m_cfg.writeEntry( "drawMaskVisualisationOnUnscaledCanvasCache", drawMaskVisualisationOnUnscaledCanvasCache );
+    m_cfg.writeEntry("drawMaskVisualisationOnUnscaledCanvasCache", drawMaskVisualisationOnUnscaledCanvasCache);
 }
 
 bool KisConfig::noXRender()
 {
-    return m_cfg.readEntry( "NoXRender",  false );
+    return m_cfg.readEntry("NoXRender",  false);
 }
 
-void KisConfig::setNoXRender( bool noXRender )
+void KisConfig::setNoXRender(bool noXRender)
 {
-    m_cfg.writeEntry( "NoXRender",  noXRender );
+    m_cfg.writeEntry("NoXRender",  noXRender);
 }
 
 bool KisConfig::showRootLayer()
@@ -603,7 +604,7 @@ bool KisConfig::showRootLayer()
     return m_cfg.readEntry("ShowRootLayer", false);
 }
 
-void KisConfig::setShowRootLayer( bool showRootLayer )
+void KisConfig::setShowRootLayer(bool showRootLayer)
 {
     m_cfg.writeEntry("ShowRootLayer", showRootLayer);
 }

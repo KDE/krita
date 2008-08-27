@@ -66,63 +66,60 @@
 #include "kis_script_decoration.h"
 
 typedef KGenericFactory<ScriptingPart> KritaScriptingFactory;
-K_EXPORT_COMPONENT_FACTORY( kritascripting, KritaScriptingFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritascripting, KritaScriptingFactory("krita"))
 
 class ScriptingPart::Private
 {
-    public:
-        KisView2* view;
+public:
+    KisView2* view;
 };
 
 ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
-    : KoScriptingPart(new Scripting::Module( dynamic_cast<KisView2*>(parent) ), list)
-    , d(new Private())
+        : KoScriptingPart(new Scripting::Module(dynamic_cast<KisView2*>(parent)), list)
+        , d(new Private())
 {
     d->view = dynamic_cast<KisView2*>(parent);
-    dbgScript <<"ScriptingPart Ctor";
+    dbgScript << "ScriptingPart Ctor";
     setComponentData(ScriptingPart::componentData());
-    setXMLFile(KStandardDirs::locate("data","kritaplugins/scripting.rc"), true);
+    setXMLFile(KStandardDirs::locate("data", "kritaplugins/scripting.rc"), true);
 #if 1
     // Add filters
     Kross::ActionCollection* actioncollection = Kross::Manager::self().actionCollection();
     Kross::ActionCollection* actioncollection2;
-    if( actioncollection && (actioncollection2 = actioncollection->collection("filters")) ) {
+    if (actioncollection && (actioncollection2 = actioncollection->collection("filters"))) {
         foreach(Kross::Action* action, actioncollection2->actions()) {
             Q_ASSERT(action);
-            if(Kross::Manager::self().hasInterpreterInfo( action->interpreter() ) )
-            {
+            if (Kross::Manager::self().hasInterpreterInfo(action->interpreter())) {
                 action->addObject(module());
                 KisScriptFilter* sf = new KisScriptFilter(action);
-                KisFilterRegistry::instance()->add( sf );
-                dbgScript <<"Adding scripting filters with id=" << sf->id();
+                KisFilterRegistry::instance()->add(sf);
+                dbgScript << "Adding scripting filters with id=" << sf->id();
             } else {
                 dbgScript << "No such interpreter as " << action->interpreter();
             }
         }
     }
-    if( actioncollection && (actioncollection2 = actioncollection->collection("dockers")) ) {
+    if (actioncollection && (actioncollection2 = actioncollection->collection("dockers"))) {
         foreach(Kross::Action* action, actioncollection2->actions()) {
             Q_ASSERT(action);
-            if(Kross::Manager::self().hasInterpreterInfo( action->interpreter() ) )
-            {
+            if (Kross::Manager::self().hasInterpreterInfo(action->interpreter())) {
                 action->addObject(module());
-                dbgScript <<"Start Adding scripting dockers with id=" << action->name();
+                dbgScript << "Start Adding scripting dockers with id=" << action->name();
                 KisScriptDockFactory ksdf(action);
-                d->view->createDockWidget( &ksdf );
+                d->view->createDockWidget(&ksdf);
             } else {
                 dbgScript << "No such interpreter as " << action->interpreter();
             }
         }
     }
-    if( actioncollection && (actioncollection2 = actioncollection->collection("decorations")) ) {        
+    if (actioncollection && (actioncollection2 = actioncollection->collection("decorations"))) {
         foreach(Kross::Action* action, actioncollection2->actions()) {
             Q_ASSERT(action);
-            if(Kross::Manager::self().hasInterpreterInfo( action->interpreter() ) )
-            {
+            if (Kross::Manager::self().hasInterpreterInfo(action->interpreter())) {
                 action->addObject(module());
-                dbgScript <<"Start Adding scripting decoration with id=" << action->name();
+                dbgScript << "Start Adding scripting decoration with id=" << action->name();
                 KisScriptDecoration* ksd = new KisScriptDecoration(action, d->view);
-                d->view->canvasBase()->addDecoration( ksd );
+                d->view->canvasBase()->addDecoration(ksd);
                 QString menuActionName = "toggle" + action->name() + "Action";
                 QString document = "<!DOCTYPE kpartgui SYSTEM \"kpartgui.dtd\"> \
 <kpartgui library=\"kritascripting\" version=\"7\"> \
@@ -138,7 +135,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
                 setXML(document, true);
                 dbgScript << "Create an action " << menuActionName;
                 KToggleAction *actionMenu  = new KToggleAction(i18n("&Show %1", action->text()), this);
-                actionCollection()->addAction( menuActionName, actionMenu );
+                actionCollection()->addAction(menuActionName, actionMenu);
                 connect(actionMenu, SIGNAL(triggered()), ksd, SLOT(toggleVisibility()));
             } else {
                 dbgScript << "No such interpreter as " << action->interpreter();
@@ -150,7 +147,7 @@ ScriptingPart::ScriptingPart(QObject *parent, const QStringList &list)
 
 ScriptingPart::~ScriptingPart()
 {
-    dbgScript <<"ScriptingPart Dtor";
+    dbgScript << "ScriptingPart Dtor";
     delete d;
 }
 
@@ -162,7 +159,7 @@ void ScriptingPart::myStarted(Kross::Action*)
 void ScriptingPart::myFinished(Kross::Action*)
 {
 #ifdef __GNUC__
-    #warning "ScriptingPart::myFinished: reimplement, somehow the view variable got lost here."
+#warning "ScriptingPart::myFinished: reimplement, somehow the view variable got lost here."
 #endif
 #if 0
 //     dbgKrita <<"ScriptingPart::executionFinished";
@@ -170,7 +167,7 @@ void ScriptingPart::myFinished(Kross::Action*)
 
     d->view->layerManager()->activeLayer()->setDirty();
 
-    static_cast< Scripting::Progress* >( d->module->progress() )->progressDone();
+    static_cast< Scripting::Progress* >(d->module->progress())->progressDone();
     //d->module->deleteLater();
 #endif
     QApplication::restoreOverrideCursor();

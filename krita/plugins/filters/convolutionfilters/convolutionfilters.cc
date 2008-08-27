@@ -35,10 +35,10 @@
 #include <kis_processing_information.h>
 #include <KoProgressUpdater.h>
 
-KisConvolutionKernelSP createKernel( qint32 i0, qint32 i1, qint32 i2,
-                          qint32 i3, qint32 i4, qint32 i5,
-                          qint32 i6, qint32 i7, qint32 i8,
-                          qint32 factor, qint32 offset )
+KisConvolutionKernelSP createKernel(qint32 i0, qint32 i1, qint32 i2,
+                                    qint32 i3, qint32 i4, qint32 i5,
+                                    qint32 i6, qint32 i7, qint32 i8,
+                                    qint32 factor, qint32 offset)
 {
     KisConvolutionKernelSP kernel = new KisConvolutionKernel(3, 3, offset, factor);
 
@@ -53,8 +53,9 @@ KisConvolutionKernelSP createKernel( qint32 i0, qint32 i1, qint32 i2,
     kernel->data()[8] = i8;
 
     return kernel;
-}typedef KGenericFactory<KritaConvolutionFilters> KritaConvolutionFiltersFactory;
-K_EXPORT_COMPONENT_FACTORY( kritaconvolutionfilters, KritaConvolutionFiltersFactory( "krita" ) )
+}
+typedef KGenericFactory<KritaConvolutionFilters> KritaConvolutionFiltersFactory;
+K_EXPORT_COMPONENT_FACTORY(kritaconvolutionfilters, KritaConvolutionFiltersFactory("krita"))
 
 KritaConvolutionFilters::KritaConvolutionFilters(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
@@ -83,97 +84,97 @@ KritaConvolutionFilters::~KritaConvolutionFilters()
 }
 
 KisGaussianBlurFilter::KisGaussianBlurFilter()
-    : KisConvolutionFilter(id(), CategoryBlur, i18n("&Gaussian Blur"))
+        : KisConvolutionFilter(id(), CategoryBlur, i18n("&Gaussian Blur"))
 {
-    m_matrix = createKernel( 1, 2, 1, 2, 4, 2, 1, 2, 1, 16, 0);
-    setSupportsPainting( true );
-    setSupportsIncrementalPainting( false );
+    m_matrix = createKernel(1, 2, 1, 2, 4, 2, 1, 2, 1, 16, 0);
+    setSupportsPainting(true);
+    setSupportsIncrementalPainting(false);
 
 }
 
 
 KisSharpenFilter::KisSharpenFilter()
-    : KisConvolutionFilter(id(), CategoryEnhance, i18n("&Sharpen"))
+        : KisConvolutionFilter(id(), CategoryEnhance, i18n("&Sharpen"))
 {
-    setSupportsPainting( true );
-    setSupportsIncrementalPainting( false );
+    setSupportsPainting(true);
+    setSupportsIncrementalPainting(false);
 
-    m_matrix = createKernel( 0, -2, 0, -2, 11, -2, 0, -2, 0, 3, 0);
+    m_matrix = createKernel(0, -2, 0, -2, 11, -2, 0, -2, 0, 3, 0);
 }
 
 KisMeanRemovalFilter::KisMeanRemovalFilter()
-    : KisConvolutionFilter(id(), CategoryEnhance, i18n("&Mean Removal"))
+        : KisConvolutionFilter(id(), CategoryEnhance, i18n("&Mean Removal"))
 {
-    setSupportsPainting( false );
-    m_matrix = createKernel( -1, -1, -1, -1, 9, -1, -1, -1, -1, 1, 0);
+    setSupportsPainting(false);
+    m_matrix = createKernel(-1, -1, -1, -1, 9, -1, -1, -1, -1, 1, 0);
 }
 
 KisEmbossLaplascianFilter::KisEmbossLaplascianFilter()
-    : KisConvolutionFilter(id(), CategoryEmboss, i18n("Emboss Laplascian"))
+        : KisConvolutionFilter(id(), CategoryEmboss, i18n("Emboss Laplascian"))
 {
-    setSupportsPainting( false );
-    m_matrix = createKernel( -1, 0, -1 , 0, 4, 0 , -1, 0, -1, 1, 127);
+    setSupportsPainting(false);
+    m_matrix = createKernel(-1, 0, -1 , 0, 4, 0 , -1, 0, -1, 1, 127);
 }
 
 KisEmbossInAllDirectionsFilter::KisEmbossInAllDirectionsFilter()
-    : KisConvolutionFilter(id(), CategoryEmboss, i18n("Emboss in All Directions"))
+        : KisConvolutionFilter(id(), CategoryEmboss, i18n("Emboss in All Directions"))
 {
-    setSupportsPainting( false );
-    m_matrix = createKernel( -1, -1, -1 , -1, 8, -1 , -1, -1, -1, 1, 127);
+    setSupportsPainting(false);
+    m_matrix = createKernel(-1, -1, -1 , -1, 8, -1 , -1, -1, -1, 1, 127);
 }
 
 KisEmbossHorizontalVerticalFilter::KisEmbossHorizontalVerticalFilter()
-    : KisConvolutionFilter(id(), CategoryEmboss, i18n("Emboss Horizontal && Vertical"))
+        : KisConvolutionFilter(id(), CategoryEmboss, i18n("Emboss Horizontal && Vertical"))
 {
-    setSupportsPainting( false );
-    m_matrix = createKernel( 0, -1, 0 , -1, 4, -1 , 0, -1, 0, 1, 127);
+    setSupportsPainting(false);
+    m_matrix = createKernel(0, -1, 0 , -1, 4, -1 , 0, -1, 0, 1, 127);
 }
 
 KisEmbossVerticalFilter::KisEmbossVerticalFilter()
-    : KisConvolutionFilter(id(), CategoryEmboss, i18n("Emboss Vertical Only"))
+        : KisConvolutionFilter(id(), CategoryEmboss, i18n("Emboss Vertical Only"))
 {
-    setSupportsPainting( false );
-    m_matrix = createKernel( 0, -1, 0 , 0, 2, 0 , 0, -1, 0, 1, 127);
+    setSupportsPainting(false);
+    m_matrix = createKernel(0, -1, 0 , 0, 2, 0 , 0, -1, 0, 1, 127);
 }
 
 KisEmbossHorizontalFilter::KisEmbossHorizontalFilter() :
-    KisConvolutionFilter(id(), CategoryEmboss, i18n("Emboss Horizontal Only"))
+        KisConvolutionFilter(id(), CategoryEmboss, i18n("Emboss Horizontal Only"))
 {
-    setSupportsPainting( false );
-    m_matrix = createKernel( 0, 0, 0 , -1, 4, -1 , 0, 0, 0, 1, 127);
+    setSupportsPainting(false);
+    m_matrix = createKernel(0, 0, 0 , -1, 4, -1 , 0, 0, 0, 1, 127);
 }
 
 KisEmbossDiagonalFilter::KisEmbossDiagonalFilter()
-    : KisConvolutionFilter(id(), CategoryEdgeDetection, i18n("Top Edge Detection"))
+        : KisConvolutionFilter(id(), CategoryEdgeDetection, i18n("Top Edge Detection"))
 {
-    setSupportsPainting( false );
-    m_matrix = createKernel( -1, 0, -1 , 0, 4, 0 , -1, 0, -1, 1, 127);
+    setSupportsPainting(false);
+    m_matrix = createKernel(-1, 0, -1 , 0, 4, 0 , -1, 0, -1, 1, 127);
 }
 
 
 KisTopEdgeDetectionFilter::KisTopEdgeDetectionFilter()
-    : KisConvolutionFilter(id(), CategoryEdgeDetection, i18n("Top Edge Detection"))
+        : KisConvolutionFilter(id(), CategoryEdgeDetection, i18n("Top Edge Detection"))
 {
-    setSupportsPainting( false );
-    m_matrix = createKernel( 1, 1, 1 , 0, 0, 0 , -1, -1, -1, 1, 127);
+    setSupportsPainting(false);
+    m_matrix = createKernel(1, 1, 1 , 0, 0, 0 , -1, -1, -1, 1, 127);
 
 }
 
 KisRightEdgeDetectionFilter::KisRightEdgeDetectionFilter()
-    : KisConvolutionFilter(id(), CategoryEdgeDetection, i18n("Right Edge Detection"))
+        : KisConvolutionFilter(id(), CategoryEdgeDetection, i18n("Right Edge Detection"))
 {
-    setSupportsPainting( false );
-    m_matrix = createKernel(  -1, 0, 1 , -1, 0, 1 , -1, 0, 1,  1, 127);
+    setSupportsPainting(false);
+    m_matrix = createKernel(-1, 0, 1 , -1, 0, 1 , -1, 0, 1,  1, 127);
 }
 
 KisBottomEdgeDetectionFilter::KisBottomEdgeDetectionFilter() : KisConvolutionFilter(id(), CategoryEdgeDetection, i18n("Bottom Edge Detection"))
 {
-    setSupportsPainting( false );
-    m_matrix = createKernel( -1, -1, -1 , 0, 0, 0 , 1, 1, 1, 1, 127);
+    setSupportsPainting(false);
+    m_matrix = createKernel(-1, -1, -1 , 0, 0, 0 , 1, 1, 1, 1, 127);
 }
 
 KisLeftEdgeDetectionFilter::KisLeftEdgeDetectionFilter() : KisConvolutionFilter(id(), CategoryEdgeDetection, i18n("Left Edge Detection"))
 {
-    setSupportsPainting( false );
-    m_matrix = createKernel( 1, 0, -1 , 1, 0, -1 , 1, 0, -1, 1, 127);
+    setSupportsPainting(false);
+    m_matrix = createKernel(1, 0, -1 , 1, 0, -1 , 1, 0, -1, 1, 127);
 }

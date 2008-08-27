@@ -34,54 +34,57 @@ class KoID;
 /**
  * This is the base class of a dynamic program.
  */
-class DYNAMIC_BRUSH_EXPORT KisDynamicProgram : public QObject, public KisSerializableConfiguration {
+class DYNAMIC_BRUSH_EXPORT KisDynamicProgram : public QObject, public KisSerializableConfiguration
+{
     Q_OBJECT
-    protected:
-        /**
-         * @param name the name of this program, will be displayed in the list of programs
-         */
-        KisDynamicProgram(const QString& name, const QString& type);
-    public:
-        virtual ~KisDynamicProgram();
-        /// @return the name of this program
-        QString name() const;
-        QString id() const;
-        QString type() const;
-        /**
-         * Create and return an editor for that program.
-         * @return a QWidget which display editing option for that program
-         */
-        virtual QWidget* createEditor(QWidget* parent) = 0;
+protected:
+    /**
+     * @param name the name of this program, will be displayed in the list of programs
+     */
+    KisDynamicProgram(const QString& name, const QString& type);
+public:
+    virtual ~KisDynamicProgram();
+    /// @return the name of this program
+    QString name() const;
+    QString id() const;
+    QString type() const;
+    /**
+     * Create and return an editor for that program.
+     * @return a QWidget which display editing option for that program
+     */
+    virtual QWidget* createEditor(QWidget* parent) = 0;
 
-        using KisSerializableConfiguration::fromXML;
-        using KisSerializableConfiguration::toXML;
-        
-        virtual void fromXML(const QDomElement&);
-        virtual void toXML(QDomDocument&, QDomElement&) const;
-    signals:
-        void programChanged();
-    private:
-        struct Private;
-        Private* const d;
+    using KisSerializableConfiguration::fromXML;
+    using KisSerializableConfiguration::toXML;
+
+    virtual void fromXML(const QDomElement&);
+    virtual void toXML(QDomDocument&, QDomElement&) const;
+signals:
+    void programChanged();
+private:
+    struct Private;
+    Private* const d;
 };
 
-class DYNAMIC_BRUSH_EXPORT KisDynamicProgramFactory {
-    public:
-        KisDynamicProgramFactory(QString id, QString name);
-        virtual ~KisDynamicProgramFactory();
-        QString id() const;
-        QString name() const;
-        virtual KisDynamicProgram* program(QString name) const = 0;
-    private:
-        struct Private;
-        Private* const d;
+class DYNAMIC_BRUSH_EXPORT KisDynamicProgramFactory
+{
+public:
+    KisDynamicProgramFactory(QString id, QString name);
+    virtual ~KisDynamicProgramFactory();
+    QString id() const;
+    QString name() const;
+    virtual KisDynamicProgram* program(QString name) const = 0;
+private:
+    struct Private;
+    Private* const d;
 };
 
-class DYNAMIC_BRUSH_EXPORT KisDynamicProgramFactoryRegistry {
-    public:
-        virtual ~KisDynamicProgramFactoryRegistry();
-        virtual KisDynamicProgramFactory* programFactory(QString id) const =0;
-        virtual QList<KoID> programTypes() const =0;
+class DYNAMIC_BRUSH_EXPORT KisDynamicProgramFactoryRegistry
+{
+public:
+    virtual ~KisDynamicProgramFactoryRegistry();
+    virtual KisDynamicProgramFactory* programFactory(QString id) const = 0;
+    virtual QList<KoID> programTypes() const = 0;
 };
 
 #endif

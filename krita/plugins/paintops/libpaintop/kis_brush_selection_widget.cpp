@@ -37,8 +37,8 @@
 #include "kis_text_brush.h"
 #include <kis_image.h>
 
-KisBrushSelectionWidget::KisBrushSelectionWidget( QWidget * parent )
-    : QWidget( parent )
+KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
+        : QWidget(parent)
 {
     QHBoxLayout * l = new QHBoxLayout(this);
     l->setObjectName("brushpopuplayout");
@@ -53,21 +53,21 @@ KisBrushSelectionWidget::KisBrushSelectionWidget( QWidget * parent )
     l->addWidget(m_brushesTab);
 
     m_autoBrushWidget = new KisAutoBrushWidget(0, "autobrush", i18n("Autobrush"));
-    m_brushesTab->addTab( m_autoBrushWidget, i18n("Autobrush"));
+    m_brushesTab->addTab(m_autoBrushWidget, i18n("Autobrush"));
 
     m_brushChooser = new KisBrushChooser(0);
-    m_brushesTab->addTab( m_brushChooser, i18n("Predefined Brushes"));
+    m_brushesTab->addTab(m_brushChooser, i18n("Predefined Brushes"));
 
     // XXX: pass image!
     m_customBrushWidget = new KisCustomBrush(0, i18n("Custom Brush"), 0);
-    m_brushesTab->addTab( m_customBrushWidget, i18n("Custom Brush"));
+    m_brushesTab->addTab(m_customBrushWidget, i18n("Custom Brush"));
 
     m_textBrushWidget = new KisTextBrush(0, "textbrush", i18n("Text Brush"));
-    m_brushesTab->addTab( m_textBrushWidget, i18n("Text Brush"));
+    m_brushesTab->addTab(m_textBrushWidget, i18n("Text Brush"));
 
     setLayout(l);
 
-    m_brushChooser->setCurrent( 0 );
+    m_brushChooser->setCurrent(0);
     m_autoBrushWidget->activate();
 }
 

@@ -33,10 +33,10 @@ class KRITAUI_EXPORT KisPressureOpacityOption : public KisCurveOption
 public:
 
     KisPressureOpacityOption();
-    virtual void writeOptionSetting( KisPaintOpPresetSP preset ) const;
-    virtual void readOptionSetting( KisPaintOpPresetSP preset );
+    virtual void writeOptionSetting(KisPaintOpPresetSP preset) const;
+    virtual void readOptionSetting(KisPaintOpPresetSP preset);
 
-    quint8 apply( KisPainter * painter, double pressure ) const;
+    quint8 apply(KisPainter * painter, double pressure) const;
 
 };
 

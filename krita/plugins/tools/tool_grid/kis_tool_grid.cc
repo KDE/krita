@@ -14,18 +14,16 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_tool_grid.h"
 
 #include <KoViewConverter.h>
-
-#include "kis_tool_grid.h"
+#include <KoCanvasController.h>
+#include <KoPointerEvent.h>
 
 #include <qpainter.h>
 
 #include <kis_debug.h>
 #include <klocale.h>
-
-#include <KoCanvasController.h>
-#include <KoPointerEvent.h>
 
 #include <canvas/kis_grid_manager.h>
 #include <canvas/kis_canvas2.h>
@@ -35,7 +33,7 @@
 
 
 KisToolGrid::KisToolGrid(KoCanvasBase * canvas)
-    : KisTool(canvas, KisCursor::moveCursor()), m_canvas( dynamic_cast<KisCanvas2*>(canvas) )
+        : KisTool(canvas, KisCursor::moveCursor()), m_canvas(dynamic_cast<KisCanvas2*>(canvas))
 {
     Q_ASSERT(m_canvas);
     setObjectName("tool_grid");
@@ -46,9 +44,9 @@ KisToolGrid::~KisToolGrid()
 {
 }
 
-void KisToolGrid::activate(bool )
+void KisToolGrid::activate(bool)
 {
-    m_canvas->view()->gridManager()->setVisible( true);
+    m_canvas->view()->gridManager()->setVisible(true);
     m_canvas->updateCanvas();
     KisTool::activate();
 }
@@ -64,38 +62,34 @@ void KisToolGrid::mousePressEvent(KoPointerEvent *event)
     m_dragging = true;
     m_dragStart = event->pos();
     KisConfig cfg;
-    if( event->modifiers() == Qt::ControlModifier )
-    {
+    if (event->modifiers() == Qt::ControlModifier) {
         m_currentMode = SCALE;
     } else {
         m_currentMode = TRANSLATION;
     }
-    
-    if(m_currentMode == TRANSLATION)
-    {
-        m_initialOffset = QPoint( cfg.getGridOffsetX(), cfg.getGridOffsetY() );
+
+    if (m_currentMode == TRANSLATION) {
+        m_initialOffset = QPoint(cfg.getGridOffsetX(), cfg.getGridOffsetY());
     } else {
-        m_initialSpacing = QPoint( cfg.getGridHSpacing(), cfg.getGridVSpacing() );
+        m_initialSpacing = QPoint(cfg.getGridHSpacing(), cfg.getGridVSpacing());
     }
 }
 
 
 void KisToolGrid::mouseMoveEvent(KoPointerEvent *event)
 {
-    if(m_dragging)
-    {
+    if (m_dragging) {
         KisConfig cfg;
         int subdivisions = cfg.getGridSubdivisions();
         m_dragEnd = event->pos();
-        if( m_currentMode == TRANSLATION)
-        {
-            QPoint newoffset = m_initialOffset + viewToPixel( m_dragEnd - m_dragStart).toPoint();
-            cfg.setGridOffsetX( newoffset.x() % (cfg.getGridHSpacing() * subdivisions ) );
-            cfg.setGridOffsetY( newoffset.y() % (cfg.getGridVSpacing() * subdivisions ) );
+        if (m_currentMode == TRANSLATION) {
+            QPoint newoffset = m_initialOffset + viewToPixel(m_dragEnd - m_dragStart).toPoint();
+            cfg.setGridOffsetX(newoffset.x() % (cfg.getGridHSpacing() * subdivisions));
+            cfg.setGridOffsetY(newoffset.y() % (cfg.getGridVSpacing() * subdivisions));
         } else { // SCALE
-            QPoint newSize = m_initialSpacing + viewToPixel( m_dragEnd - m_dragStart).toPoint();
-            if( newSize.x() >= 1 ) cfg.setGridHSpacing( newSize.x() );
-            if( newSize.y() >= 1 ) cfg.setGridVSpacing( newSize.y() );
+            QPoint newSize = m_initialSpacing + viewToPixel(m_dragEnd - m_dragStart).toPoint();
+            if (newSize.x() >= 1) cfg.setGridHSpacing(newSize.x());
+            if (newSize.y() >= 1) cfg.setGridVSpacing(newSize.y());
         }
         m_canvas->updateCanvas();
     } else {

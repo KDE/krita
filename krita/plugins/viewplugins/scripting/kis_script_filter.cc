@@ -28,19 +28,19 @@
 
 class KisScriptFilter::Private
 {
-    public:
-        Kross::Action* action;
-        explicit Private(Kross::Action* a) : action(a) {}
+public:
+    Kross::Action* action;
+    explicit Private(Kross::Action* a) : action(a) {}
 };
 
-KisScriptFilter::KisScriptFilter(Kross::Action* action) : KisFilter(KoID(action->name(),action->text()), KoID(action->property("categoryId").toString(), i18n(action->property("categoryName").toString().toUtf8().data() )), action->text()), d(new Private(action))
+KisScriptFilter::KisScriptFilter(Kross::Action* action) : KisFilter(KoID(action->name(), action->text()), KoID(action->property("categoryId").toString(), i18n(action->property("categoryName").toString().toUtf8().data())), action->text()), d(new Private(action))
 {
     d->action->addObject(this, "KritaFilter", Kross::ChildrenInterface::AutoConnectSignals);
     setSupportsPainting(d->action->property("supportsPainting").toBool());
     setSupportsPreview(d->action->property("supportsPreview").toBool());
     setSupportsIncrementalPainting(d->action->property("supportsIncrementalPainting").toBool());
     setSupportsAdjustmentLayers(d->action->property("supportsAdjustmentLayers").toBool());
-    setSupportsThreading( false );
+    setSupportsThreading(false);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 

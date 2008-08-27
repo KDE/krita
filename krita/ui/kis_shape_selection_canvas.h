@@ -16,8 +16,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_SHAPE_LAYER_CANVAS_H
-#define KIS_SHAPE_LAYER_CANVAS_H
+#ifndef KIS_SHAPE_SELECTION_CANVAS_H
+#define KIS_SHAPE_SELECTION_CANVAS_H
 
 #include <KoCanvasBase.h>
 

@@ -39,14 +39,14 @@
 
 KisUnsharpFilter::KisUnsharpFilter() : KisFilter(id(), CategoryEnhance, i18n("&Unsharp Mask..."))
 {
-        setSupportsPainting(true);
-        setSupportsPreview(true);
-        setSupportsIncrementalPainting(false);
-        setSupportsAdjustmentLayers(false);
-        setColorSpaceIndependence(FULLY_INDEPENDENT);
+    setSupportsPainting(true);
+    setSupportsPreview(true);
+    setSupportsIncrementalPainting(false);
+    setSupportsAdjustmentLayers(false);
+    setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisFilterConfigWidget * KisUnsharpFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageSP ) const
+KisFilterConfigWidget * KisUnsharpFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageSP) const
 {
     return new KisWdgUnsharp(parent);
 }
@@ -54,32 +54,32 @@ KisFilterConfigWidget * KisUnsharpFilter::createConfigurationWidget(QWidget* par
 KisFilterConfiguration* KisUnsharpFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
-    config->setProperty("halfSize", 5 );
-    config->setProperty("amount", 0.5 );
-    config->setProperty("threshold", 10 );
+    config->setProperty("halfSize", 5);
+    config->setProperty("amount", 0.5);
+    config->setProperty("threshold", 10);
     return config;
 }
 
 void KisUnsharpFilter::process(KisConstProcessingInformation src,
-                 KisProcessingInformation dst,
-                 const QSize& areaSize,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-        ) const
+                               KisProcessingInformation dst,
+                               const QSize& areaSize,
+                               const KisFilterConfiguration* config,
+                               KoUpdater* progressUpdater
+                              ) const
 {
-    
+
     KoUpdater* filterUpdater = 0;
     KoUpdater* convolutionUpdater = 0;
     KoProgressUpdater* updater = 0;
-    if (progressUpdater){
-    	updater = new KoProgressUpdater(progressUpdater);
-    	updater->start();
-    	// Two sub-sub tasks that each go from 0 to 100.
-    	convolutionUpdater = new KoUpdater( updater->startSubtask() );
-    	filterUpdater = new KoUpdater(updater->startSubtask() );
+    if (progressUpdater) {
+        updater = new KoProgressUpdater(progressUpdater);
+        updater->start();
+        // Two sub-sub tasks that each go from 0 to 100.
+        convolutionUpdater = new KoUpdater(updater->startSubtask());
+        filterUpdater = new KoUpdater(updater->startSubtask());
     }
 
-    if(!config) config = new KisFilterConfiguration(id().id(), 1);
+    if (!config) config = new KisFilterConfiguration(id().id(), 1);
 
     QVariant value;
     uint halfSize = (config->getProperty("halfSize", value)) ? value.toUInt() : 5;
@@ -94,16 +94,16 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     KisPaintDeviceSP interm = new KisPaintDevice(*src.paintDevice());
     KoColorSpace * cs = interm->colorSpace();
     KoConvolutionOp * convolutionOp = cs->convolutionOp();
-    
-    KisConvolutionPainter painter( interm ); // TODO no need for a full copy and then a transaction
-    if (progressUpdater){
-    	painter.setProgress( convolutionUpdater );
+
+    KisConvolutionPainter painter(interm);   // TODO no need for a full copy and then a transaction
+    if (progressUpdater) {
+        painter.setProgress(convolutionUpdater);
     }
     QBitArray channelFlags = config->channelFlags();
     if (channelFlags.isEmpty()) {
         channelFlags = cs->channelFlags();
     }
-    painter.setChannelFlags( channelFlags );
+    painter.setChannelFlags(channelFlags);
     painter.beginTransaction("convolution step");
     painter.applyMatrix(kernel, interm, src.topLeft().x(), src.topLeft().y(), areaSize.width(), areaSize.height(), BORDER_REPEAT);
 
@@ -125,25 +125,21 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     qint32 factor = 128;
 
     // XXX: Added static cast to avoid warning
-    weights[0] = static_cast<qint32>(factor * ( 1. + amount));
+    weights[0] = static_cast<qint32>(factor * (1. + amount));
     weights[1] = static_cast<qint32>(-factor * amount);
 
     int steps = 100 / areaSize.width() * areaSize.height();
 
-    for( int j = 0; j < areaSize.height(); j++)
-    {
-        while( ! srcIt.isDone() )
-        {
-            if(srcIt.isSelected())
-            {
+    for (int j = 0; j < areaSize.height(); j++) {
+        while (! srcIt.isDone()) {
+            if (srcIt.isSelected()) {
                 quint8 diff = cs->difference(srcIt.oldRawData(), intermIt.rawData());
-                if( diff > threshold)
-                {
-                    memcpy(colors[0],srcIt.oldRawData(), cdepth);
-                    memcpy(colors[1],intermIt.rawData(), cdepth);
-                    convolutionOp->convolveColors(colors, weights, dstIt.rawData(),  factor, 0, 2, channelFlags );
+                if (diff > threshold) {
+                    memcpy(colors[0], srcIt.oldRawData(), cdepth);
+                    memcpy(colors[1], intermIt.rawData(), cdepth);
+                    convolutionOp->convolveColors(colors, weights, dstIt.rawData(),  factor, 0, 2, channelFlags);
                 } else {
-                    memcpy( dstIt.rawData(), srcIt.oldRawData(), cdepth);
+                    memcpy(dstIt.rawData(), srcIt.oldRawData(), cdepth);
                 }
             }
             ++pixelsProcessed;
@@ -152,7 +148,7 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
             ++dstIt;
             ++intermIt;
         }
-        
+
         if (progressUpdater && progressUpdater->interrupted()) {
             return;
         }
@@ -169,7 +165,8 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     if (progressUpdater) progressUpdater->setProgress(100);
 }
 
-int KisUnsharpFilter::overlapMarginNeeded(const KisFilterConfiguration* _config) const {
+int KisUnsharpFilter::overlapMarginNeeded(const KisFilterConfiguration* _config) const
+{
     QVariant value;
     return (_config->getProperty("halfSize", value)) ? value.toUInt() : 5;
 }

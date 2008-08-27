@@ -33,8 +33,10 @@ class WdgApplyProfile : public QWidget, public Ui::WdgApplyProfile
 {
     Q_OBJECT
 
-    public:
-        WdgApplyProfile(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgApplyProfile(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
 class KisDlgApplyProfile : public KDialog
@@ -44,7 +46,7 @@ class KisDlgApplyProfile : public KDialog
 
 public:
     KisDlgApplyProfile(QWidget *parent = 0,
-               const char *name = 0);
+                       const char *name = 0);
     virtual ~KisDlgApplyProfile();
 
 

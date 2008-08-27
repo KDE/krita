@@ -40,13 +40,13 @@ void KisRotateVisitor::rotate(double angle, KoUpdater *progress)
 {
     QRect r = m_dev->exactBounds();
     QPointF centerOfRotation = QPointF(r.x() + (r.width() / 2.0), r.y() + (r.height() / 2.0));
-    rotate( angle, centerOfRotation, progress );
+    rotate(angle, centerOfRotation, progress);
 }
 
 void KisRotateVisitor::rotate(double angle, qint32 width, qint32 height, KoUpdater *progress)
 {
     QPointF centerOfRotation = QPointF(width / 2.0,  height / 2.0);
-    rotate( angle, centerOfRotation, progress );
+    rotate(angle, centerOfRotation, progress);
 }
 
 void KisRotateVisitor::rotate(double angle, QPointF centerOfRotation, KoUpdater *progress)
@@ -78,7 +78,7 @@ void KisRotateVisitor::rotate(double angle, QPointF centerOfRotation, KoUpdater 
 
 void KisRotateVisitor::shear(double angleX, double angleY, KoUpdater *progress)
 {
-    const double pi=3.1415926535897932385;
+    const double pi = 3.1415926535897932385;
     double thetaX = angleX * pi / 180;
     double shearX = tan(thetaX);
     double thetaY = angleY * pi / 180;
@@ -100,25 +100,24 @@ void KisRotateVisitor::shear(double angleX, double angleY, KoUpdater *progress)
         KisPainter p1(sheared);
         p1.bltSelection(r.x(), r.y(), COMPOSITE_OVER, m_dev, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
         p1.end();
-         sheared = xShear(sheared, shearX);
-    }
-    else {
+        sheared = xShear(sheared, shearX);
+    } else {
 #endif
         sheared = xShear(m_dev, shearX);
 #if 0
     }
 #endif
 
-     sheared = yShear(sheared, shearY);
+    sheared = yShear(sheared, shearY);
 #if 0
-     if (!m_dev->hasSelection()) {
+    if (!m_dev->hasSelection()) {
 #endif
         m_dev->clear();
 #if 0
-     } else {
-         // Clear selected pixels
-         m_dev->clearSelection();
-     }
+    } else {
+        // Clear selected pixels
+        m_dev->clearSelection();
+    }
 #endif
     KisPainter p2(m_dev);
     r = sheared->extent();
@@ -143,7 +142,7 @@ KisPaintDeviceSP KisRotateVisitor::rotateRight90(KisPaintDeviceSP src)
         KisHLineConstIteratorPixel hit = src->createHLineIterator(r.x(), y, r.width());
         KisVLineIterator vit = dst->createVLineIterator(-y, r.x(), r.width());
 
-            while (!hit.isDone()) {
+        while (!hit.isDone()) {
             if (hit.isSelected())  {
                 memcpy(vit.rawData(), hit.rawData(), pixelSize);
             }
@@ -199,7 +198,7 @@ KisPaintDeviceSP KisRotateVisitor::rotate180(KisPaintDeviceSP src)
     KisHLineConstIteratorPixel srcIt = src->createHLineIterator(r.x(), r.top(), r.width());
 
     for (qint32 y = r.top(); y <= r.bottom(); ++y) {
-        KisHLineIterator dstIt = dst->createHLineIterator( -r.x() - r.width(), -y, r.width());
+        KisHLineIterator dstIt = dst->createHLineIterator(-r.x() - r.width(), -y, r.width());
 
         srcIt += r.width() - 1;
         while (!dstIt.isDone()) {
@@ -241,7 +240,7 @@ KisPaintDeviceSP KisRotateVisitor::rotate(KisPaintDeviceSP src, double angle, QP
         initProgress(fixedRotateSteps);
         dst = rotate180(src);
     } else if (angle == 270) {
-         initProgress(fixedRotateSteps);
+        initProgress(fixedRotateSteps);
         dst = rotateLeft90(src);
     } else {
         double theta;
@@ -251,14 +250,12 @@ KisPaintDeviceSP KisRotateVisitor::rotate(KisPaintDeviceSP src, double angle, QP
             theta = angle * pi / 180;
             dst = src;
             initProgress(yShearSteps + (2 * xShearSteps));
-        }
-        else if (angle >= 45 && angle < 135) {
+        } else if (angle >= 45 && angle < 135) {
 
             initProgress(fixedRotateSteps + yShearSteps + (2 * xShearSteps));
             dst = rotateRight90(src);
             theta = (angle - 90) * pi / 180;
-        }
-        else if (angle >= 135 && angle < 225) {
+        } else if (angle >= 135 && angle < 225) {
 
             initProgress(fixedRotateSteps + yShearSteps + (2 * xShearSteps));
             dst = rotate180(src);
@@ -286,8 +283,8 @@ KisPaintDeviceSP KisRotateVisitor::rotate(KisPaintDeviceSP src, double angle, QP
     double cosAngle = cos(angle * pi / 180);
 
     QPointF rotatedCenterOfRotation(
-                                centerOfRotation.x() * cosAngle - centerOfRotation.y() * sinAngle,
-                                centerOfRotation.x() * sinAngle + centerOfRotation.y() * cosAngle);
+        centerOfRotation.x() * cosAngle - centerOfRotation.y() * sinAngle,
+        centerOfRotation.x() * sinAngle + centerOfRotation.y() * cosAngle);
 
     dst->setX((qint32)(dst->x() + centerOfRotation.x() - rotatedCenterOfRotation.x()));
     dst->setY((qint32)(dst->y() + centerOfRotation.y() - rotatedCenterOfRotation.y()));
@@ -394,7 +391,7 @@ KisPaintDeviceSP KisRotateVisitor::yShear(KisPaintDeviceSP src, double shearY)
 //         incrementProgress();
     }
 
-        return dst;
+    return dst;
 }
 
 void KisRotateVisitor::initProgress(qint32 totalSteps)
@@ -428,8 +425,9 @@ void KisRotateVisitor::setProgressDone()
     if (!m_progressUpdater) return;
 
     m_progressUpdater->setProgress(100);
-}KisRotateVisitor::KisRotateVisitor( KoUpdater * progressUpdater )
-    : m_progressUpdater(progressUpdater)
+}
+KisRotateVisitor::KisRotateVisitor(KoUpdater * progressUpdater)
+        : m_progressUpdater(progressUpdater)
 {
 }
 

@@ -30,26 +30,26 @@
 #include <KoColorSpace.h>
 
 
-KisChannelFlagsWidget::KisChannelFlagsWidget(const KoColorSpace * colorSpace, QWidget * parent )
-    : QScrollArea( parent )
-    , m_colorSpace( colorSpace )
+KisChannelFlagsWidget::KisChannelFlagsWidget(const KoColorSpace * colorSpace, QWidget * parent)
+        : QScrollArea(parent)
+        , m_colorSpace(colorSpace)
 {
 
-    setToolTip( "Check the active channels in this layer. Only these channels will be affected by any operation." );
+    setToolTip("Check the active channels in this layer. Only these channels will be affected by any operation.");
     QWidget * w = new QWidget();
     setBackgroundRole(QPalette::Window);
     QVBoxLayout * vbl = new QVBoxLayout();
 
-    for ( int i = 0; i < colorSpace->channels().size(); ++i ) {
-        KoChannelInfo * channel = colorSpace->channels().at( i );
-        QCheckBox * bx = new QCheckBox(channel->name(), w );
-        bx->setCheckState( Qt::Checked );
-        vbl->addWidget( bx );
-        m_channelChecks.append( bx );
+    for (int i = 0; i < colorSpace->channels().size(); ++i) {
+        KoChannelInfo * channel = colorSpace->channels().at(i);
+        QCheckBox * bx = new QCheckBox(channel->name(), w);
+        bx->setCheckState(Qt::Checked);
+        vbl->addWidget(bx);
+        m_channelChecks.append(bx);
     }
 
-    w->setLayout( vbl );
-    setWidget( w );
+    w->setLayout(vbl);
+    setWidget(w);
 
 }
 
@@ -57,28 +57,28 @@ KisChannelFlagsWidget::~KisChannelFlagsWidget()
 {
 }
 
-void KisChannelFlagsWidget::setChannelFlags( const QBitArray & cf )
+void KisChannelFlagsWidget::setChannelFlags(const QBitArray & cf)
 {
-    if ( cf.isEmpty() ) return;
+    if (cf.isEmpty()) return;
 
-    QBitArray channelFlags = m_colorSpace->setChannelFlagsToColorSpaceOrder( cf );
-    for ( int i = 0; i < qMin( m_channelChecks.size(), channelFlags.size() ); ++i ) {
-        m_channelChecks.at( i )->setChecked( channelFlags.testBit( i ) );
+    QBitArray channelFlags = m_colorSpace->setChannelFlagsToColorSpaceOrder(cf);
+    for (int i = 0; i < qMin(m_channelChecks.size(), channelFlags.size()); ++i) {
+        m_channelChecks.at(i)->setChecked(channelFlags.testBit(i));
     }
 }
 
 QBitArray KisChannelFlagsWidget::channelFlags() const
 {
     bool allTrue = true;
-    QBitArray ba( m_channelChecks.size() );
+    QBitArray ba(m_channelChecks.size());
 
-    for ( int i = 0; i < m_channelChecks.size(); ++i ) {
-        bool flag = m_channelChecks.at( i )->isChecked();
-        if ( !flag ) allTrue = false;
-        ba.setBit( i, flag );
+    for (int i = 0; i < m_channelChecks.size(); ++i) {
+        bool flag = m_channelChecks.at(i)->isChecked();
+        if (!flag) allTrue = false;
+        ba.setBit(i, flag);
     }
-    if ( allTrue )
+    if (allTrue)
         return QBitArray();
     else
-        return m_colorSpace->setChannelFlagsToPixelOrder( ba );
+        return m_colorSpace->setChannelFlagsToPixelOrder(ba);
 }

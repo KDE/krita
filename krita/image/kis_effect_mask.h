@@ -44,17 +44,16 @@ public:
     KisEffectMask();
 
     virtual ~KisEffectMask();
-    KisEffectMask( const KisEffectMask& rhs );
+    KisEffectMask(const KisEffectMask& rhs);
 
-    QIcon icon() const
-        {
-            return KIcon(""); // XXX: Find nice icon for the subclasses.
-        }
+    QIcon icon() const {
+        return KIcon(""); // XXX: Find nice icon for the subclasses.
+    }
 
     /**
      * Apply the effect the projection using the mask as a selection.
      */
-    virtual void apply( KisPaintDeviceSP projection, const QRect & rc ) const = 0;
+    virtual void apply(KisPaintDeviceSP projection, const QRect & rc) const = 0;
 
 };
 

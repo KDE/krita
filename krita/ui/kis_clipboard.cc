@@ -61,8 +61,8 @@ KisClipboard::KisClipboard()
     clipboardDataChanged();
 
     // Make sure we are notified when clipboard changes
-    connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
-         this, SLOT( clipboardDataChanged() ) );
+    connect(QApplication::clipboard(), SIGNAL(dataChanged()),
+            this, SLOT(clipboardDataChanged()));
 }
 
 KisClipboard::~KisClipboard()
@@ -71,8 +71,7 @@ KisClipboard::~KisClipboard()
 
 KisClipboard* KisClipboard::instance()
 {
-    if(KisClipboard::m_singleton == 0)
-    {
+    if (KisClipboard::m_singleton == 0) {
         KisClipboard::m_singleton = new KisClipboard();
         Q_CHECK_PTR(KisClipboard::m_singleton);
     }
@@ -91,9 +90,9 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
     // We'll create a store (ZIP format) in memory
     QBuffer buffer;
     QByteArray mimeType("application/x-krita-selection");
-    KoStore* store = KoStore::createStore( &buffer, KoStore::Write, mimeType );
-    Q_ASSERT( store );
-    Q_ASSERT( !store->bad() );
+    KoStore* store = KoStore::createStore(&buffer, KoStore::Write, mimeType);
+    Q_ASSERT(store);
+    Q_ASSERT(!store->bad());
 
     // Layer data
     if (store->open("layerdata")) {
@@ -115,8 +114,7 @@ void KisClipboard::setClip(KisPaintDeviceSP selection)
     if (selection->colorSpace()->profile()) {
         const KoColorProfile *profile = selection->colorSpace()->profile();
         KisAnnotationSP annotation;
-        if (profile)
-        {
+        if (profile) {
             const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
             if (iccprofile && !iccprofile->rawData().isEmpty())
                 annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
@@ -161,19 +159,18 @@ KisPaintDeviceSP KisClipboard::clip()
     QByteArray mimeType("application/x-krita-selection");
     const QMimeData *cbData = cb->mimeData();
 
-    if (cbData && cbData->hasFormat(mimeType))
-    {
+    if (cbData && cbData->hasFormat(mimeType)) {
         QByteArray encodedData = cbData->data(mimeType);
         QBuffer buffer(&encodedData);
-        KoStore* store = KoStore::createStore( &buffer, KoStore::Read, mimeType );
-        KoColorProfile *profile=0;
+        KoStore* store = KoStore::createStore(&buffer, KoStore::Read, mimeType);
+        KoColorProfile *profile = 0;
 
         if (store->hasFile("profile.icc")) {
             QByteArray data;
             store->open("profile.icc");
             data = store->read(store->size());
             store->close();
-           profile = new KoIccColorProfile(data);
+            profile = new KoIccColorProfile(data);
         }
 
         QString csName;
@@ -194,9 +191,7 @@ KisPaintDeviceSP KisClipboard::clip()
             store->close();
         }
         delete store;
-    }
-    else
-    {
+    } else {
         QImage qimg = cb->image();
 
         if (qimg.isNull())
@@ -206,10 +201,9 @@ KisPaintDeviceSP KisClipboard::clip()
 
         quint32 behaviour = cfg.pasteBehaviour();
 
-        if (behaviour == PASTE_ASK)
-        {
+        if (behaviour == PASTE_ASK) {
             // Ask user each time
-            behaviour = QMessageBox::question(0,i18n("Pasting data from simple source"),i18n("The image data you are trying to paste has no color profile information.\n\nOn the web and in simple applications the data are supposed to be in sRGB color format.\nImporting as web will show it as it is supposed to look.\nMost monitors are not perfect though so if you made the image yourself\nyou might want to import it as it looked on you monitor.\n\nHow do you want to interpret these data?"),i18n("As &Web"),i18n("As on &Monitor"));
+            behaviour = QMessageBox::question(0, i18n("Pasting data from simple source"), i18n("The image data you are trying to paste has no color profile information.\n\nOn the web and in simple applications the data are supposed to be in sRGB color format.\nImporting as web will show it as it is supposed to look.\nMost monitors are not perfect though so if you made the image yourself\nyou might want to import it as it looked on you monitor.\n\nHow do you want to interpret these data?"), i18n("As &Web"), i18n("As on &Monitor"));
         }
 
         const KoColorSpace * cs;
@@ -259,12 +253,12 @@ QSize KisClipboard::clipSize()
     const QMimeData *cbData = cb->mimeData();
 
     KisPaintDeviceSP clip;
-    
+
     if (cbData && cbData->hasFormat(mimeType)) {
         QByteArray encodedData = cbData->data(mimeType);
         QBuffer buffer(&encodedData);
-        KoStore* store = KoStore::createStore( &buffer, KoStore::Read, mimeType );
-        KoColorProfile *profile=0;
+        KoStore* store = KoStore::createStore(&buffer, KoStore::Read, mimeType);
+        KoColorProfile *profile = 0;
 
         if (store->hasFile("profile.icc")) {
             QByteArray data;
@@ -294,8 +288,7 @@ QSize KisClipboard::clipSize()
         delete store;
 
         return clip->exactBounds().size();
-    }
-    else {
+    } else {
         QImage qimg = cb->image();
         return qimg.size();
     }

@@ -33,13 +33,14 @@ class KisHistogram;
 
 #if 0
 
-class KisLevelFilterConfiguration : public KisFilterConfiguration {
+class KisLevelFilterConfiguration : public KisFilterConfiguration
+{
 
 public:
 
     KisLevelFilterConfiguration();
     virtual ~KisLevelFilterConfiguration();
-    virtual void fromXML( const QString&  );
+    virtual void fromXML(const QString&);
     virtual QString toString();
 
 public:
@@ -74,21 +75,24 @@ public:
                          const QSize& size,
                          const KisFilterConfiguration* config,
                          KoUpdater* progressUpdater
-        ) const;
-    static inline KoID id() { return KoID("levels", i18n("Levels")); };
+                        ) const;
+    static inline KoID id() {
+        return KoID("levels", i18n("Levels"));
+    };
 
     virtual bool workWith(KoColorSpace* cs) const;
 };
 
 
-class KisLevelConfigWidget : public KisFilterConfigWidget {
-Q_OBJECT
+class KisLevelConfigWidget : public KisFilterConfigWidget
+{
+    Q_OBJECT
 public:
     KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev);
     virtual ~KisLevelConfigWidget();
 
     virtual KisFilterConfiguration* configuration() const;
-    void setConfiguration( KisFilterConfiguration * config );
+    void setConfiguration(KisFilterConfiguration * config);
     Ui::WdgLevel m_page;
 
 protected slots:

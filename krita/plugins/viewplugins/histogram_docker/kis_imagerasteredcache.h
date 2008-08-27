@@ -41,11 +41,13 @@ class KisView2;
   for long enough (hence the timer), we'll update the histograms that
   became dirty
 */
-class KisImageRasteredCache : public QObject {
-Q_OBJECT
+class KisImageRasteredCache : public QObject
+{
+    Q_OBJECT
 
 public:
-    class Observer {
+    class Observer
+    {
     public:
         virtual Observer* createNew(int x, int y, int w, int h) = 0;
         virtual void regionUpdated(KisPaintDeviceSP dev) = 0;
@@ -64,7 +66,8 @@ private slots:
     void timeOut();
 
 private:
-    class Element {
+    class Element
+    {
     public:
         Element(Observer* o) : observer(o), valid(true) {}
         Observer* observer;

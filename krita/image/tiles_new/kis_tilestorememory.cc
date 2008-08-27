@@ -90,7 +90,8 @@ KisTileStoreMemory::KisTileStoreMemory()
 #endif
 }
 
-KisTileStoreMemory::~KisTileStoreMemory() {
+KisTileStoreMemory::~KisTileStoreMemory()
+{
     /*if (!m_freeLists.empty()) { // See if there are any nonempty freelists
         FreeListList::iterator listsIt = m_freeLists.begin();
         FreeListList::iterator listsEnd = m_freeLists.end();
@@ -164,7 +165,8 @@ KisTileStoreData* KisTileStoreMemory::registerTileData(const KisSharedTileData* 
     return data;
 }
 
-void KisTileStoreMemory::deregisterTileData(const KisSharedTileData* tile) {
+void KisTileStoreMemory::deregisterTileData(const KisSharedTileData* tile)
+{
     // Does nothing atm...
 }
 
@@ -246,7 +248,8 @@ void KisTileStoreMemory::dontNeedTileData(KisSharedTileData* tileData)
 
 }
 
-void KisTileStoreMemory::configChanged() {
+void KisTileStoreMemory::configChanged()
+{
     m_lock.lock();
     //KConfigGroup cfg = KGlobal::config()->group("");
     //m_maxInMem = cfg.readEntry("maxtilesinmem",  4000);
@@ -259,7 +262,8 @@ void KisTileStoreMemory::configChanged() {
 }
 
 // ### TODO Shared Pointer! (And check that for threadsafe)
-KisTileStoreSP defaultTileStore() {
+KisTileStoreSP defaultTileStore()
+{
     return new KisTileStoreMemory();
 }
 
@@ -311,9 +315,8 @@ quint8* KisTileStoreMemory::findTileFor(qint32 pixelSize)
             m_poolPixelSizes[i] = pixelSize;
             try {
                 m_pools[i] = new quint8[pixelSize * m_tileSize * m_tilesPerPool];
-            }
-            catch ( std::bad_alloc ) {
-                kDebug() <<">>>>>>> Could not allocated memory" << pixelSize <<"" << m_tileSize <<"" << m_tilesPerPool;
+            } catch (std::bad_alloc) {
+                kDebug() << ">>>>>>> Could not allocated memory" << pixelSize << "" << m_tileSize << "" << m_tilesPerPool;
                 // XXX: bart! What shall we do here?
                 abort();
             }
@@ -327,7 +330,8 @@ quint8* KisTileStoreMemory::findTileFor(qint32 pixelSize)
     return 0;
 }
 
-bool KisTileStoreMemory::isPoolTile(quint8* data, qint32 pixelSize) {
+bool KisTileStoreMemory::isPoolTile(quint8* data, qint32 pixelSize)
+{
 
     if (data == 0) {
         return false;
@@ -345,7 +349,8 @@ bool KisTileStoreMemory::isPoolTile(quint8* data, qint32 pixelSize) {
     return false;
 }
 
-void KisTileStoreMemory::reclaimTileToPool(quint8* data, qint32 pixelSize) {
+void KisTileStoreMemory::reclaimTileToPool(quint8* data, qint32 pixelSize)
+{
 
     for (int i = 0; i < 4; i++) {
         if (m_poolPixelSizes[i] == pixelSize)

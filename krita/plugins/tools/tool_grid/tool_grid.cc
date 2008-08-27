@@ -40,11 +40,11 @@
 
 
 typedef KGenericFactory<GridPlugin> GridFactory;
-K_EXPORT_COMPONENT_FACTORY( kritatoolgrid, GridFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritatoolgrid, GridFactory("krita"))
 
 
 GridPlugin::GridPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     setComponentData(GridFactory::componentData());
 

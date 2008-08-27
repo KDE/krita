@@ -22,7 +22,7 @@
 #include <KoColorSpaceTraits.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpace.h>
-    
+
 #include <kis_paint_device.h>
 #include <kis_properties_configuration.h>
 
@@ -34,32 +34,30 @@
 #include "tmo_icam.h"
 #include "ui_icam_configuration_widget.h"
 
-class KisIcamOperatorConfigurationWidget : public KisToneMappingOperatorConfigurationWidget{
-    public:
-        KisIcamOperatorConfigurationWidget(QWidget* wdg) : KisToneMappingOperatorConfigurationWidget(wdg)
-        {
-            widget.setupUi(this);
-        }
-        virtual void setConfiguration(KisPropertiesConfiguration* config)
-        {
-            widget.independence->setChecked(config->getBool("Independence", false));
-            widget.variance->setValue(config->getDouble("Variance", -0.10));
-            widget.variance2->setValue(config->getDouble("Variance2", -0.30));
-            widget.d->setValue(config->getDouble("D", 0.10));
-            widget.percentile->setValue(config->getDouble("Percentile", 1000.0));
-        }
-        virtual KisPropertiesConfiguration* configuration() const
-        {
-            KisPropertiesConfiguration* config = new KisPropertiesConfiguration();
-            config->setProperty("Independence", widget.independence->isChecked());
-            config->setProperty("Variance", widget.variance->value());
-            config->setProperty("Variance2", widget.variance2->value());
-            config->setProperty("D", widget.d->value());
-            config->setProperty("Percentile", widget.percentile->value());
-            return config;
-        }
-    private:
-        Ui_IcamOperatorConfigurationWidget widget;
+class KisIcamOperatorConfigurationWidget : public KisToneMappingOperatorConfigurationWidget
+{
+public:
+    KisIcamOperatorConfigurationWidget(QWidget* wdg) : KisToneMappingOperatorConfigurationWidget(wdg) {
+        widget.setupUi(this);
+    }
+    virtual void setConfiguration(KisPropertiesConfiguration* config) {
+        widget.independence->setChecked(config->getBool("Independence", false));
+        widget.variance->setValue(config->getDouble("Variance", -0.10));
+        widget.variance2->setValue(config->getDouble("Variance2", -0.30));
+        widget.d->setValue(config->getDouble("D", 0.10));
+        widget.percentile->setValue(config->getDouble("Percentile", 1000.0));
+    }
+    virtual KisPropertiesConfiguration* configuration() const {
+        KisPropertiesConfiguration* config = new KisPropertiesConfiguration();
+        config->setProperty("Independence", widget.independence->isChecked());
+        config->setProperty("Variance", widget.variance->value());
+        config->setProperty("Variance2", widget.variance2->value());
+        config->setProperty("D", widget.d->value());
+        config->setProperty("Percentile", widget.percentile->value());
+        return config;
+    }
+private:
+    Ui_IcamOperatorConfigurationWidget widget;
 };
 
 PUBLISH_OPERATOR(KisIcamOperator)
@@ -75,26 +73,26 @@ KisToneMappingOperatorConfigurationWidget* KisIcamOperator::createConfigurationW
 
 const KoColorSpace* KisIcamOperator::colorSpace() const
 {
-    return KoColorSpaceRegistry::instance()->colorSpace( KoColorSpaceRegistry::instance()->colorSpaceId( XYZAColorModelID, Float32BitsColorDepthID), "" );
+    return KoColorSpaceRegistry::instance()->colorSpace(KoColorSpaceRegistry::instance()->colorSpaceId(XYZAColorModelID, Float32BitsColorDepthID), "");
 }
 
 void KisIcamOperator::toneMap(KisPaintDeviceSP device, KisPropertiesConfiguration* config) const
 {
-    Q_ASSERT( *device->colorSpace() == *colorSpace() );
+    Q_ASSERT(*device->colorSpace() == *colorSpace());
     QRect r = device->exactBounds();
     dbgKrita << "Tonemaping with Icam operator on " << r;
-    
-    pfs::Array2DImpl Y( r, KoXyzTraits<float>::y_pos, device);
-    
-    pfs::Array2DImpl L (r.width(),r.height());
+
+    pfs::Array2DImpl Y(r, KoXyzTraits<float>::y_pos, device);
+
+    pfs::Array2DImpl L(r.width(), r.height());
     dbgKrita << "tmo_ashikhmin02";
     icam::tmo_icam(&Y, &L,
-                    config->getDouble("Variance", -0.1),
-                    config->getDouble("Variance2", -0.3),
-                    config->getDouble("D", 0.1),
-                    config->getDouble("Prescaling", 1000.0),
-                    config->getDouble("Percentile", 0.01),
-                    config->getBool("Independence", false) );
+                   config->getDouble("Variance", -0.1),
+                   config->getDouble("Variance2", -0.3),
+                   config->getDouble("D", 0.1),
+                   config->getDouble("Prescaling", 1000.0),
+                   config->getDouble("Percentile", 0.01),
+                   config->getBool("Independence", false));
     dbgKrita << "Apply luminance";
     applyLuminance(device, L.device(), r);
     dbgKrita << "Done";

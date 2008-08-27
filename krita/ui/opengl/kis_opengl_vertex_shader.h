@@ -28,7 +28,8 @@
 /**
  * An encapsulation of an OpenGL Shading Language vertex shader object.
  */
-class KRITAUI_EXPORT KisOpenGLVertexShader : public KisOpenGLShader {
+class KRITAUI_EXPORT KisOpenGLVertexShader : public KisOpenGLShader
+{
 public:
 
     /**
@@ -47,7 +48,7 @@ public:
     static KisOpenGLVertexShader string(const QString& sourceCodeString);
 
     /**
-     * Loads the shader source code from the given char* string 
+     * Loads the shader source code from the given char* string
      *
      * @param sourceCodeString the source string to load from
      */

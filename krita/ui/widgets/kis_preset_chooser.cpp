@@ -22,8 +22,8 @@
 #include "QLabel"
 
 
-KisPresetChooser::KisPresetChooser( QWidget * parent )
- : KisItemChooser( parent )
+KisPresetChooser::KisPresetChooser(QWidget * parent)
+        : KisItemChooser(parent)
 {
     setMinimumSize(chooserWidget()->sizeHint());
 }

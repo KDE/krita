@@ -35,24 +35,35 @@ class KCurve;
 
 class KisSmudgeOpSettings;
 
-namespace Ui { class WdgBrushCurveControl; }
+namespace Ui
+{
+class WdgBrushCurveControl;
+}
 
 
-class KisSmudgeOpFactory : public KisPaintOpFactory  {
+class KisSmudgeOpFactory : public KisPaintOpFactory
+{
 
 public:
     KisSmudgeOpFactory() {}
     virtual ~KisSmudgeOpFactory() {}
 
     virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
-    virtual QString id() const { return "smudge"; }
-    virtual QString name() const { return i18n("Smudge Brush"); }
-    virtual QString pixmap() { return "paintbrush.png"; }
+    virtual QString id() const {
+        return "smudge";
+    }
+    virtual QString name() const {
+        return i18n("Smudge Brush");
+    }
+    virtual QString pixmap() {
+        return "paintbrush.png";
+    }
     virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
 };
 
-class KisSmudgeOp : public KisBrushBasedPaintOp {
+class KisSmudgeOp : public KisBrushBasedPaintOp
+{
 
 public:
 
@@ -61,10 +72,12 @@ public:
 
     void paintAt(const KisPaintInformation& info);
     double paintLine(const KisPaintInformation &pi1,
-                             const KisPaintInformation &pi2,
-                             double savedDist = -1);
+                     const KisPaintInformation &pi2,
+                     double savedDist = -1);
 
-    int rate() { return (m_rate * 255) / 100; }
+    int rate() {
+        return (m_rate * 255) / 100;
+    }
 private:
     KisPaintDeviceSP m_target, m_srcdev;
     inline double scaleToCurve(double pressure, double* curve) const {

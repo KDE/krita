@@ -34,7 +34,8 @@ class KisPainter;
 
 class KoCanvasBase;
 
-class KisToolEllipse : public KisToolShape {
+class KisToolEllipse : public KisToolShape
+{
 
     typedef KisToolShape super;
     Q_OBJECT
@@ -62,21 +63,21 @@ protected:
     KisPainter *m_painter;
 };
 
-class KisToolEllipseFactory : public KoToolFactory {
+class KisToolEllipseFactory : public KoToolFactory
+{
 
 public:
     KisToolEllipseFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KritaShape/KisToolEllipse", i18n( "Ellipse" ))
-        {
-            setToolTip( i18n( "Draw an ellipse" ) );
-            setToolType( TOOL_TYPE_SHAPE );
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setIcon( "krita_tool_ellipse" );
-            setPriority( 3 );
-            setInputDeviceAgnostic(false);
-        }
+            : KoToolFactory(parent, "KritaShape/KisToolEllipse", i18n("Ellipse")) {
+        setToolTip(i18n("Draw an ellipse"));
+        setToolType(TOOL_TYPE_SHAPE);
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        setIcon("krita_tool_ellipse");
+        setPriority(3);
+        setInputDeviceAgnostic(false);
+    }
 
-    virtual ~KisToolEllipseFactory(){}
+    virtual ~KisToolEllipseFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return  new KisToolEllipse(canvas);

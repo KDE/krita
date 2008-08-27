@@ -29,19 +29,16 @@ class TestMask : public KisMask
 {
 public:
 
-    TestMask() : KisMask("TestMask")
-        {
-        }
-    
-    KisNodeSP clone() const
-        {
-            return new TestMask(*this);
-        }       
+    TestMask() : KisMask("TestMask") {
+    }
 
-    bool allowAsChild(KisNodeSP) const
-        {
-            return false;
-        }
+    KisNodeSP clone() const {
+        return new TestMask(*this);
+    }
+
+    bool allowAsChild(KisNodeSP) const {
+        return false;
+    }
 
 };
 
@@ -57,12 +54,12 @@ void KisMaskTest::testSelection()
     QVERIFY(mask.selection()->isTotallyUnselected(QRect(0, 0, 1000, 1000)));
     QVERIFY(mask.exactBounds().width() == 0);
     QVERIFY(mask.extent().width() == 0);
-    
+
     mask.select(QRect(0, 0, 1000, 1000));
-    
+
     QCOMPARE(mask.exactBounds(), QRect(0, 0, 1000, 1000));
     QCOMPARE(mask.extent(), QRect(0, 0, 1024, 1024));
-    
+
 }
 
 QTEST_KDEMAIN(KisMaskTest, GUI)

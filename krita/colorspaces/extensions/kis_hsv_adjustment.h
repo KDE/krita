@@ -17,12 +17,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KIS_HSV_ADJUSTEMENT_H_
-#define _KIS_HSV_ADJUSTEMENT_H_
+#ifndef _KIS_HSV_ADJUSTMENT_H_
+#define _KIS_HSV_ADJUSTMENT_H_
 
 #include "KoColorTransformationFactory.h"
 
-class KisHSVAdjustmentFactory : public KoColorTransformationFactory {
+class KisHSVAdjustmentFactory : public KoColorTransformationFactory
+{
 public:
 
     KisHSVAdjustmentFactory();

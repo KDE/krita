@@ -50,55 +50,56 @@
 #include <kis_selected_transaction.h>
 #include <kis_cursor.h>
 
-namespace {
+namespace
+{
 
 // XXX: Poynton says: hsv/hls is not what one ought to use for color calculations.
 //      Unfortunately, I don't know enough to be able to use anything else.
 
-    bool isReddish(int h)
-    {
-        return ((h > 330 && h < 360) || ( h > 0 && h < 40));
-    }
+bool isReddish(int h)
+{
+    return ((h > 330 && h < 360) || (h > 0 && h < 40));
+}
 
-    bool isYellowish(int h)
-    {
-        return (h> 40 && h < 65);
-    }
+bool isYellowish(int h)
+{
+    return (h > 40 && h < 65);
+}
 
-    bool isGreenish(int h)
-    {
-        return (h > 70 && h < 155);
-    }
+bool isGreenish(int h)
+{
+    return (h > 70 && h < 155);
+}
 
-    bool isCyanish(int h)
-    {
-        return (h > 150 && h < 190);
-    }
+bool isCyanish(int h)
+{
+    return (h > 150 && h < 190);
+}
 
-    bool isBlueish(int h)
-    {
-        return (h > 185 && h < 270);
-    }
+bool isBlueish(int h)
+{
+    return (h > 185 && h < 270);
+}
 
-    bool isMagentaish(int h)
-    {
-        return (h > 265 && h < 330);
-    }
+bool isMagentaish(int h)
+{
+    return (h > 265 && h < 330);
+}
 
-    bool isHighlight(int v)
-    {
-        return (v > 200);
-    }
+bool isHighlight(int v)
+{
+    return (v > 200);
+}
 
-    bool isMidTone(int v)
-    {
-        return (v > 100 && v < 200);
-    }
+bool isMidTone(int v)
+{
+    return (v > 100 && v < 200);
+}
 
-    bool isShadow(int v)
-    {
-        return (v < 100);
-    }
+bool isShadow(int v)
+{
+    return (v < 100);
+}
 
 }
 
@@ -114,64 +115,64 @@ quint32 matchColors(const QColor & c, enumAction action)
 
     // XXX: Implement out-of-gamut using lcms
 
-    switch(action) {
+    switch (action) {
 
-        case REDS:
-            if (isReddish(h))
-                return MAX_SELECTED;
-            else
-                return MIN_SELECTED;
-        case YELLOWS:
-            if (isYellowish(h)) {
-                return MAX_SELECTED;
-            }
-            else
-                return MIN_SELECTED;
-        case GREENS:
-            if (isGreenish(h))
-                return MAX_SELECTED;
-            else
-                return MIN_SELECTED;
-        case CYANS:
-            if (isCyanish(h))
-                return MAX_SELECTED;
-            else
-                return MIN_SELECTED;
-        case BLUES:
-            if (isBlueish(h))
-                return MAX_SELECTED;
-            else
-                return MIN_SELECTED;
-        case MAGENTAS:
-            if (isMagentaish(h))
-                return MAX_SELECTED;
-            else
-                return MIN_SELECTED;
-        case HIGHLIGHTS:
-            if (isHighlight(v))
-                return MAX_SELECTED;
-            else
-                return MIN_SELECTED;
-        case MIDTONES:
-            if (isMidTone(v))
-                return MAX_SELECTED;
-            else
-                return MIN_SELECTED;
-        case SHADOWS:
-            if (isShadow(v))
-                return MAX_SELECTED;
-            else
-                return MIN_SELECTED;
+    case REDS:
+        if (isReddish(h))
+            return MAX_SELECTED;
+        else
+            return MIN_SELECTED;
+    case YELLOWS:
+        if (isYellowish(h)) {
+            return MAX_SELECTED;
+        } else
+            return MIN_SELECTED;
+    case GREENS:
+        if (isGreenish(h))
+            return MAX_SELECTED;
+        else
+            return MIN_SELECTED;
+    case CYANS:
+        if (isCyanish(h))
+            return MAX_SELECTED;
+        else
+            return MIN_SELECTED;
+    case BLUES:
+        if (isBlueish(h))
+            return MAX_SELECTED;
+        else
+            return MIN_SELECTED;
+    case MAGENTAS:
+        if (isMagentaish(h))
+            return MAX_SELECTED;
+        else
+            return MIN_SELECTED;
+    case HIGHLIGHTS:
+        if (isHighlight(v))
+            return MAX_SELECTED;
+        else
+            return MIN_SELECTED;
+    case MIDTONES:
+        if (isMidTone(v))
+            return MAX_SELECTED;
+        else
+            return MIN_SELECTED;
+    case SHADOWS:
+        if (isShadow(v))
+            return MAX_SELECTED;
+        else
+            return MIN_SELECTED;
     };
 
     return MIN_SELECTED;
-}DlgColorRange::DlgColorRange( KisView2 * view, KisPaintDeviceSP dev, QWidget *  parent, const char * name)
-    : super (parent)
-    , m_transaction(0)
+}
+DlgColorRange::DlgColorRange(KisView2 * view, KisPaintDeviceSP dev, QWidget *  parent, const char * name)
+        : super(parent)
+        , m_transaction(0)
 {
-    setCaption( i18n("Color Range") );
-    setButtons(  Ok | Cancel);
-    setDefaultButton( Ok );
+    setCaption(i18n("Color Range"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
     setObjectName(name);
     m_dev = dev;
     m_view = view;
@@ -189,7 +190,7 @@ quint32 matchColors(const QColor & c, enumAction action)
 
     KisSelectionSP selection = m_view->selection();
 
-    if( !selection ) {
+    if (!selection) {
         m_view->image()->setGlobalSelection();
         selection = m_view->selection();
     }
@@ -202,28 +203,28 @@ quint32 matchColors(const QColor & c, enumAction action)
     m_currentAction = REDS;
 
     connect(this, SIGNAL(okClicked()),
-        this, SLOT(okClicked()));
+            this, SLOT(okClicked()));
 
     connect(this, SIGNAL(cancelClicked()),
-        this, SLOT(cancelClicked()));
+            this, SLOT(cancelClicked()));
 
     connect(m_page->chkInvert, SIGNAL(clicked()),
-        this, SLOT(slotInvertClicked()));
+            this, SLOT(slotInvertClicked()));
 
     connect(m_page->cmbSelect, SIGNAL(activated(int)),
-        this, SLOT(slotSelectionTypeChanged(int)));
+            this, SLOT(slotSelectionTypeChanged(int)));
 
-    connect (m_page->radioAdd, SIGNAL(toggled(bool)),
-         this, SLOT(slotAdd(bool)));
+    connect(m_page->radioAdd, SIGNAL(toggled(bool)),
+            this, SLOT(slotAdd(bool)));
 
-    connect (m_page->radioSubtract, SIGNAL(toggled(bool)),
-         this, SLOT(slotSubtract(bool)));
+    connect(m_page->radioSubtract, SIGNAL(toggled(bool)),
+            this, SLOT(slotSubtract(bool)));
 
-    connect (m_page->bnSelect, SIGNAL(clicked()),
-        this, SLOT(slotSelectClicked()));
+    connect(m_page->bnSelect, SIGNAL(clicked()),
+            this, SLOT(slotSelectClicked()));
 
-    connect (m_page->bnDeselect, SIGNAL(clicked()),
-        this, SLOT(slotDeselectClicked()));
+    connect(m_page->bnDeselect, SIGNAL(clicked()),
+            this, SLOT(slotDeselectClicked()));
 
 }
 
@@ -239,7 +240,7 @@ void DlgColorRange::updatePreview()
 
     qint32 x, y, w, h;
     m_dev->exactBounds(x, y, w, h);
-    QPixmap pix = QPixmap::fromImage(m_selection->maskImage( m_view->image()->bounds() ).scaled(350, 350, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    QPixmap pix = QPixmap::fromImage(m_selection->maskImage(m_view->image()->bounds()).scaled(350, 350, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     m_view->canvas()->update();
     m_page->pixSelection->setPixmap(pix);
 }
@@ -310,28 +311,23 @@ void DlgColorRange::slotSelectClicked()
                     if (!m_invert) {
                         if (m_mode == SELECTION_ADD) {
                             *(selIter.rawData()) =  match;
-                        }
-                        else if (m_mode == SELECTION_SUBTRACT) {
+                        } else if (m_mode == SELECTION_SUBTRACT) {
                             quint8 selectedness = *(selIter.rawData());
                             if (match < selectedness) {
                                 *(selIter.rawData()) = selectedness - match;
-                            }
-                            else {
+                            } else {
                                 *(selIter.rawData()) = 0;
                             }
                         }
-                    }
-                    else {
+                    } else {
                         if (m_mode == SELECTION_ADD) {
                             quint8 selectedness = *(selIter.rawData());
                             if (match < selectedness) {
                                 *(selIter.rawData()) = selectedness - match;
-                            }
-                            else {
+                            } else {
                                 *(selIter.rawData()) = 0;
                             }
-                        }
-                        else if (m_mode == SELECTION_SUBTRACT) {
+                        } else if (m_mode == SELECTION_SUBTRACT) {
                             *(selIter.rawData()) =  match;
                         }
                     }
@@ -349,7 +345,7 @@ void DlgColorRange::slotSelectClicked()
 
 void DlgColorRange::slotDeselectClicked()
 {
-    if ( m_view->selection() ) {
+    if (m_view->selection()) {
         m_view->selection()->getOrCreatePixelSelection()->clear();
         updatePreview();
     }

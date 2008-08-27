@@ -24,30 +24,41 @@
 
 class KisDynamicTransformation;
 
-class KisFiltersListDynamicProgram : public KisDynamicProgram {
-    public:
-        KisFiltersListDynamicProgram(const QString& name) : KisDynamicProgram(name, "filterslist")
-        {
-        }
-        ~KisFiltersListDynamicProgram();
-        virtual void apply(KisDynamicShape* shape, KisDynamicColoring* coloringsrc, const KisPaintInformation& adjustedInfo);
-        inline QList<KisDynamicTransformation*>::iterator beginTransformation() { return m_transformations.begin(); }
-        inline QList<KisDynamicTransformation*>::iterator endTransformation() { return m_transformations.end(); }
-        inline KisDynamicTransformation* transfoAt(uint i) { return m_transformations[i]; }
-        inline void removeTransformationAt(uint i) { m_transformations.removeAt(i); }
-        inline uint countTransformations() const { return m_transformations.size(); }
-        void appendTransformation(KisDynamicTransformation* transfo);
-        virtual QWidget* createEditor(QWidget* parent);
-        virtual void fromXML(const QDomElement&);
-        virtual void toXML(QDomDocument&, QDomElement&) const;
-    private:
-        QList<KisDynamicTransformation*> m_transformations;
+class KisFiltersListDynamicProgram : public KisDynamicProgram
+{
+public:
+    KisFiltersListDynamicProgram(const QString& name) : KisDynamicProgram(name, "filterslist") {
+    }
+    ~KisFiltersListDynamicProgram();
+    virtual void apply(KisDynamicShape* shape, KisDynamicColoring* coloringsrc, const KisPaintInformation& adjustedInfo);
+    inline QList<KisDynamicTransformation*>::iterator beginTransformation() {
+        return m_transformations.begin();
+    }
+    inline QList<KisDynamicTransformation*>::iterator endTransformation() {
+        return m_transformations.end();
+    }
+    inline KisDynamicTransformation* transfoAt(uint i) {
+        return m_transformations[i];
+    }
+    inline void removeTransformationAt(uint i) {
+        m_transformations.removeAt(i);
+    }
+    inline uint countTransformations() const {
+        return m_transformations.size();
+    }
+    void appendTransformation(KisDynamicTransformation* transfo);
+    virtual QWidget* createEditor(QWidget* parent);
+    virtual void fromXML(const QDomElement&);
+    virtual void toXML(QDomDocument&, QDomElement&) const;
+private:
+    QList<KisDynamicTransformation*> m_transformations;
 };
 
-class KisFiltersListDynamicProgramFactory : public KisDynamicProgramFactory {
-    public:
-        KisFiltersListDynamicProgramFactory();
-        virtual KisDynamicProgram* program(QString name);
+class KisFiltersListDynamicProgramFactory : public KisDynamicProgramFactory
+{
+public:
+    KisFiltersListDynamicProgramFactory();
+    virtual KisDynamicProgram* program(QString name);
 };
 
 #endif

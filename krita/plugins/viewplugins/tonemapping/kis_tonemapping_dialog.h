@@ -23,18 +23,19 @@
 
 class Ui_WdgToneMappingDialog;
 
-class KisToneMappingDialog : public QDialog {
+class KisToneMappingDialog : public QDialog
+{
     Q_OBJECT
-    public:
-        KisToneMappingDialog(QWidget* parent, KisLayerSP layer);
-    protected slots:
-        void slotBookmarkedToneMappingConfigurationSelected(int );
-        void slotOperatorSelected(int );
-        void apply();
-        void editConfigurations();
-    private:
-        struct Private;
-        Private* const d;
+public:
+    KisToneMappingDialog(QWidget* parent, KisLayerSP layer);
+protected slots:
+    void slotBookmarkedToneMappingConfigurationSelected(int);
+    void slotOperatorSelected(int);
+    void apply();
+    void editConfigurations();
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

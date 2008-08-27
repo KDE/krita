@@ -24,32 +24,33 @@
 
 class KisFiltersListDynamicProgram;
 
-class KisFiltersListModel : public QAbstractListModel {
+class KisFiltersListModel : public QAbstractListModel
+{
     Q_OBJECT
 
-    public:
-        KisFiltersListModel(KisFiltersListDynamicProgram* db, QObject *parent = 0);
-        ~KisFiltersListModel();
-        int rowCount(const QModelIndex &parent = QModelIndex()) const;
-        QVariant data(const QModelIndex &index, int role) const;
-        Qt::ItemFlags flags(const QModelIndex &index) const;
+public:
+    KisFiltersListModel(KisFiltersListDynamicProgram* db, QObject *parent = 0);
+    ~KisFiltersListModel();
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
 #if 0
-        QVariant headerData(int section, Qt::Orientation orientation,
-                            int role = Qt::DisplayRole) const;
-        QModelIndex index(int row, int column,
-                        const QModelIndex &parent = QModelIndex()) const;
-        QModelIndex parent(const QModelIndex &index) const;
-        int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant headerData(int section, Qt::Orientation orientation,
+                        int role = Qt::DisplayRole) const;
+    QModelIndex index(int row, int column,
+                      const QModelIndex &parent = QModelIndex()) const;
+    QModelIndex parent(const QModelIndex &index) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
 #endif
-    private slots:
-        void addNewFilter();
-        void deleteCurrentFilter();
-        void setCurrentFilterType(const KoID &);
-        void setCurrentFilter(const QModelIndex&);
-    private:
-        KisFiltersListDynamicProgram* m_program;
-        QString m_currentFilterType;
-        int m_currentTransformation;
+private slots:
+    void addNewFilter();
+    void deleteCurrentFilter();
+    void setCurrentFilterType(const KoID &);
+    void setCurrentFilter(const QModelIndex&);
+private:
+    KisFiltersListDynamicProgram* m_program;
+    QString m_currentFilterType;
+    int m_currentTransformation;
 };
 
 #endif

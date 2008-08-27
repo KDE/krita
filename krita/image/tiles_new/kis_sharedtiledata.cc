@@ -15,6 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_sharedtiledata.h"
 
 #include <assert.h>
 #include <kis_debug.h>
@@ -23,10 +24,11 @@
 
 #include "kis_tile.h"
 #include "kis_tilestore.h"
-#include "kis_sharedtiledata.h"
+
 
 KisSharedTileData::KisSharedTileData(KisTileStoreSP store, int tileSize, int pixelSize)
-    : lock(QMutex::Recursive), tileSize(tileSize), pixelSize(pixelSize), store(store) {
+        : lock(QMutex::Recursive), tileSize(tileSize), pixelSize(pixelSize), store(store)
+{
     timesLockedInMemory = 0;
     data = 0;
     references = 0;
@@ -38,7 +40,8 @@ KisSharedTileData::KisSharedTileData(KisTileStoreSP store, int tileSize, int pix
     storeData = store->registerTileData(this);
 }
 
-KisSharedTileData::~KisSharedTileData() {
+KisSharedTileData::~KisSharedTileData()
+{
     store->dontNeedTileData(this);
     store->deregisterTileData(this);
 
@@ -47,7 +50,8 @@ KisSharedTileData::~KisSharedTileData() {
     data = 0;
 }
 
-void KisSharedTileData::addLockInMemory() {
+void KisSharedTileData::addLockInMemory()
+{
     QMutexLocker lock(&this->lock);
     if (timesLockedInMemory++ == 0) {
         store->ensureTileLoaded(this); // Needs to come after the locking of the tile in memory!
@@ -58,7 +62,8 @@ void KisSharedTileData::addLockInMemory() {
     assert(data);
 }
 
-void KisSharedTileData::removeLockInMemory() {
+void KisSharedTileData::removeLockInMemory()
+{
     QMutexLocker lock(&this->lock);
     assert(timesLockedInMemory > 0);
     if (--timesLockedInMemory == 0) {

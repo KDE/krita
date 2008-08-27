@@ -36,24 +36,25 @@ class KRITAIMAGE_EXPORT KisJob : public ThreadWeaver::Job
 {
 public:
 
-    KisJob( QObject * parent, KisPaintDeviceSP dev, const QRect & rc, int margin )
-        : ThreadWeaver::Job( parent )
-        , m_dev( dev )
-        , m_rc( rc )
-        , m_margin( margin )
-        {
-        }
+    KisJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc, int margin)
+            : ThreadWeaver::Job(parent)
+            , m_dev(dev)
+            , m_rc(rc)
+            , m_margin(margin) {
+    }
 
 
     virtual ~KisJob() {}
-    
+
     /**
      * Reimplement this method if you need something done whenever the
      * job is done.
      */
     virtual void jobDone() {}
 
-    QRect area() { return m_rc; }
+    QRect area() {
+        return m_rc;
+    }
 protected:
 
     KisPaintDeviceSP m_dev;
@@ -64,7 +65,8 @@ protected:
 /**
    Implement this interface to create the specific jobs you need.
  */
-class KRITAIMAGE_EXPORT KisJobFactory {
+class KRITAIMAGE_EXPORT KisJobFactory
+{
 
 public:
 
@@ -80,7 +82,8 @@ public:
    paint device and creates threadweaver jobs for as many subrects as
    are needed to cover the whole paint device.
 */
-class KRITAIMAGE_EXPORT KisThreadedApplicator : public QObject {
+class KRITAIMAGE_EXPORT KisThreadedApplicator : public QObject
+{
 
     Q_OBJECT
 
@@ -99,7 +102,7 @@ public:
      *                 Use this for convolutions, for instance.
      *
      */
-    KisThreadedApplicator( KisPaintDeviceSP dev, const QRect & rc, KisJobFactory * jobFactory, KoProgressUpdater * updater, int margin = 0);
+    KisThreadedApplicator(KisPaintDeviceSP dev, const QRect & rc, KisJobFactory * jobFactory, KoProgressUpdater * updater, int margin = 0);
     ~KisThreadedApplicator();
 
     /**
@@ -114,7 +117,7 @@ signals:
 
 private slots:
 
-    void jobDone( ThreadWeaver::Job* );
+    void jobDone(ThreadWeaver::Job*);
 
 private:
 

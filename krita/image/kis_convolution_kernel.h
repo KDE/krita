@@ -29,22 +29,22 @@ class QImage;
 class KRITAIMAGE_EXPORT KisConvolutionKernel : public KisShared
 {
 
-    public:
-        KisConvolutionKernel( quint32 width, quint32 height, qint32 offset, qint32 factor);
-        virtual ~KisConvolutionKernel();
-        
-        quint32 width() const;
-        quint32 height() const;
-        qint32 offset() const;
-        qint32 factor() const;
-        qint32 * data();
-        const qint32 * data() const;
-        
-        static KisConvolutionKernelSP fromQImage(const QImage& img);
-        static KisConvolutionKernelSP kernelFromMaskGenerator(KisMaskGenerator* , double angle = 0.0);
-    private:
-        struct Private;
-        Private* const d;
+public:
+    KisConvolutionKernel(quint32 width, quint32 height, qint32 offset, qint32 factor);
+    virtual ~KisConvolutionKernel();
+
+    quint32 width() const;
+    quint32 height() const;
+    qint32 offset() const;
+    qint32 factor() const;
+    qint32 * data();
+    const qint32 * data() const;
+
+    static KisConvolutionKernelSP fromQImage(const QImage& img);
+    static KisConvolutionKernelSP kernelFromMaskGenerator(KisMaskGenerator* , double angle = 0.0);
+private:
+    struct Private;
+    Private* const d;
 
 };
 

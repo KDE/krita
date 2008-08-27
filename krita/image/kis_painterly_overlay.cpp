@@ -19,13 +19,14 @@
 
 #include "kis_painterly_overlay.h"
 
-class KisPainterlyOverlay::Private {
+class KisPainterlyOverlay::Private
+{
 public:
 };
 
 KisPainterlyOverlay::KisPainterlyOverlay()
-    : KisPaintDevice( KisPainterlyOverlayColorSpace::instance() )
-    , m_d( new Private() )
+        : KisPaintDevice(KisPainterlyOverlayColorSpace::instance())
+        , m_d(new Private())
 {
 }
 

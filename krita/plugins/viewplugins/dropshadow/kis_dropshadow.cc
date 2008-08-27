@@ -64,20 +64,20 @@
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
 KisDropshadow::KisDropshadow(KisView2 * view)
-    : m_view(view)
+        : m_view(view)
 {
 }
 
 void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
-    qint32 xoffset,
-    qint32 yoffset,
-    qint32 blurradius,
-    const QColor & c,
-    quint8 opacity,
-    bool allowResize)
+                               qint32 xoffset,
+                               qint32 yoffset,
+                               qint32 blurradius,
+                               const QColor & c,
+                               quint8 opacity,
+                               bool allowResize)
 {
     QColor color = c;
-    
+
     KisImageSP image = m_view->image();
     if (!image) return;
 
@@ -91,7 +91,7 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
         image->undoAdapter()->beginMacro(i18n("Add Drop Shadow"));
     }
 
-    KisPaintDeviceSP shadowDev = KisPaintDeviceSP(new KisPaintDevice( KoColorSpaceRegistry::instance()->colorSpace("RGBA",0 ), "Shadow"));
+    KisPaintDeviceSP shadowDev = KisPaintDeviceSP(new KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0), "Shadow"));
     KisPaintDeviceSP bShadowDev;
     const KoColorSpace *rgb8cs = shadowDev->colorSpace();
 
@@ -100,15 +100,12 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
     KisHLineConstIteratorPixel srcIt = dev->createHLineConstIterator(rect.x(), rect.y(), rect.width());
     KisHLineIteratorPixel dstIt = shadowDev->createHLineIterator(rect.x(), rect.y(), rect.width());
 
-    for (qint32 row = 0; row < rect.height(); ++row)
-    {
-        while( ! srcIt.isDone() )
-        {
-            if (srcIt.isSelected())
-            {
+    for (qint32 row = 0; row < rect.height(); ++row) {
+        while (! srcIt.isDone()) {
+            if (srcIt.isSelected()) {
                 //set the shadow color
                 quint8 alpha = dev->colorSpace()->alpha(srcIt.rawData());
-                color.setAlpha( alpha );
+                color.setAlpha(alpha);
                 rgb8cs->fromQColor(color, dstIt.rawData());
             }
             ++srcIt;
@@ -116,28 +113,26 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
         }
         srcIt.nextRow();
         dstIt.nextRow();
-        progressUpdater->setProgress((row * 100) / rect.height() );
+        progressUpdater->setProgress((row * 100) / rect.height());
     }
 
-    if( blurradius > 0 )
-    {
-        bShadowDev = new KisPaintDevice( KoColorSpaceRegistry::instance()->colorSpace("RGBA",0 ), "bShadow");
+    if (blurradius > 0) {
+        bShadowDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0), "bShadow");
         gaussianblur(progressUpdater, shadowDev, bShadowDev, rect, blurradius, blurradius, BLUR_RLE, progressUpdater);
         shadowDev = bShadowDev;
     }
 
     if (!progressUpdater->interrupted()) {
-        shadowDev->move (xoffset,yoffset);
+        shadowDev->move(xoffset, yoffset);
 
         KisGroupLayerSP parent = image->rootLayer();
         if (m_view->activeLayer())
-            parent = dynamic_cast<KisGroupLayer*>( m_view->activeLayer()->parent().data() );
+            parent = dynamic_cast<KisGroupLayer*>(m_view->activeLayer()->parent().data());
 
         KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), i18n("Drop Shadow"), opacity, shadowDev));
-        image->addNode( l.data(), parent.data(), src->nextSibling() );
+        image->addNode(l.data(), parent.data(), src->nextSibling());
 
-        if (allowResize)
-        {
+        if (allowResize) {
             QRect shadowBounds = shadowDev->exactBounds();
 
             if (!image->bounds().contains(shadowBounds)) {
@@ -158,7 +153,7 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
                     }
 
                     QUndoCommand *moveCommand = new KisNodeMoveCommand(image->rootLayer(),
-                                   QPoint(image->rootLayer()->x(), image->rootLayer()->y()), QPoint(newRootX, newRootY));
+                            QPoint(image->rootLayer()->x(), image->rootLayer()->y()), QPoint(newRootX, newRootY));
                     Q_ASSERT(moveCommand != 0);
 
                     m_view->document()->addCommand(moveCommand);
@@ -175,7 +170,7 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
     progressUpdater->setProgress(100);
 }
 
-void KisDropshadow::gaussianblur (KoUpdater * progressUpdater, KisPaintDeviceSP srcDev, KisPaintDeviceSP dstDev, QRect& rect, double horz, double vert, BlurMethod method, KoUpdater *)
+void KisDropshadow::gaussianblur(KoUpdater * progressUpdater, KisPaintDeviceSP srcDev, KisPaintDeviceSP dstDev, QRect& rect, double horz, double vert, BlurMethod method, KoUpdater *)
 {
     qint32 width, height;
     qint32 bytes;
@@ -219,43 +214,40 @@ void KisDropshadow::gaussianblur (KoUpdater * progressUpdater, KisPaintDeviceSP 
 
     bytes = srcDev->pixelSize();
 
-    switch (method)
-    {
+    switch (method) {
     case BLUR_IIR:
-        val_p = new double[MAX (width, height) * bytes];
-        val_m = new double[MAX (width, height) * bytes];
+        val_p = new double[MAX(width, height) * bytes];
+        val_m = new double[MAX(width, height) * bytes];
         break;
 
     case BLUR_RLE:
-        buf = new qint32[MAX (width, height) * 2];
+        buf = new qint32[MAX(width, height) * 2];
         break;
     }
 
-    src =  new quint8[MAX (width, height) * bytes];
-    dest = new quint8[MAX (width, height) * bytes];
+    src =  new quint8[MAX(width, height) * bytes];
+    dest = new quint8[MAX(width, height) * bytes];
 
     progress = 0.0;
-    max_progress  = (horz <= 0.0 ) ? 0 : width * height * horz;
-    max_progress += (vert <= 0.0 ) ? 0 : width * height * vert;
+    max_progress  = (horz <= 0.0) ? 0 : width * height * horz;
+    max_progress += (vert <= 0.0) ? 0 : width * height * vert;
 
 
     /*  First the vertical pass  */
-    if (vert > 0.0)
-    {
-        vert = fabs (vert) + 1.0;
-        std_dev = sqrt (-(vert * vert) / (2 * log (1.0 / 255.0)));
+    if (vert > 0.0) {
+        vert = fabs(vert) + 1.0;
+        std_dev = sqrt(-(vert * vert) / (2 * log(1.0 / 255.0)));
 
-        switch (method)
-        {
+        switch (method) {
         case BLUR_IIR:
             /*  derive the constants for calculating the gaussian
              *  from the std dev
              */
-            find_constants (n_p, n_m, d_p, d_m, bd_p, bd_m, std_dev);
+            find_constants(n_p, n_m, d_p, d_m, bd_p, bd_m, std_dev);
             break;
 
         case BLUR_RLE:
-            curve = make_curve (std_dev, &length);
+            curve = make_curve(std_dev, &length);
             sum = new qint32[2 * length + 1];
 
             sum[0] = 0;
@@ -268,13 +260,11 @@ void KisDropshadow::gaussianblur (KoUpdater * progressUpdater, KisPaintDeviceSP 
             break;
         }
 
-        for (col = 0; col < width; col++)
-        {
-            switch (method)
-            {
+        for (col = 0; col < width; col++) {
+            switch (method) {
             case BLUR_IIR:
-                memset (val_p, 0, height * bytes * sizeof (double));
-                memset (val_m, 0, height * bytes * sizeof (double));
+                memset(val_p, 0, height * bytes * sizeof(double));
+                memset(val_m, 0, height * bytes * sizeof(double));
                 break;
 
             case BLUR_RLE:
@@ -282,12 +272,11 @@ void KisDropshadow::gaussianblur (KoUpdater * progressUpdater, KisPaintDeviceSP 
             }
 
             //gimp_pixel_rgn_get_col (&src_rgn, src, col + x1, y1, height);
-            srcDev->readBytes(src, col+x1, y1, 1, height);
+            srcDev->readBytes(src, col + x1, y1, 1, height);
 
-            multiply_alpha (src, height, bytes);
+            multiply_alpha(src, height, bytes);
 
-            switch (method)
-            {
+            switch (method) {
             case BLUR_IIR:
                 sp_p = src;
                 sp_m = src + (height - 1) * bytes;
@@ -295,29 +284,24 @@ void KisDropshadow::gaussianblur (KoUpdater * progressUpdater, KisPaintDeviceSP 
                 vm = val_m + (height - 1) * bytes;
 
                 /*  Set up the first vals  */
-                for (i = 0; i < bytes; i++)
-                {
+                for (i = 0; i < bytes; i++) {
                     initial_p[i] = sp_p[i];
                     initial_m[i] = sp_m[i];
                 }
 
-                for (row = 0; row < height; row++)
-                {
+                for (row = 0; row < height; row++) {
                     double *vpptr, *vmptr;
                     terms = (row < 4) ? row : 4;
 
-                    for (b = 0; b < bytes; b++)
-                    {
+                    for (b = 0; b < bytes; b++) {
                         vpptr = vp + b; vmptr = vm + b;
-                        for (i = 0; i <= terms; i++)
-                        {
+                        for (i = 0; i <= terms; i++) {
                             *vpptr += n_p[i] * sp_p[(-i * bytes) + b] -
                                       d_p[i] * vp[(-i * bytes) + b];
                             *vmptr += n_m[i] * sp_m[(i * bytes) + b] -
                                       d_m[i] * vm[(i * bytes) + b];
                         }
-                        for (j = i; j <= 4; j++)
-                        {
+                        for (j = i; j <= 4; j++) {
                             *vpptr += (n_p[j] - bd_p[j]) * initial_p[b];
                             *vmptr += (n_m[j] - bd_m[j]) * initial_m[b];
                         }
@@ -329,23 +313,21 @@ void KisDropshadow::gaussianblur (KoUpdater * progressUpdater, KisPaintDeviceSP 
                     vm -= bytes;
                 }
 
-                transfer_pixels (val_p, val_m, dest, bytes, height);
+                transfer_pixels(val_p, val_m, dest, bytes, height);
                 break;
 
             case BLUR_RLE:
                 sp = src;
                 dp = dest;
 
-                for (b = 0; b < bytes; b++)
-                {
+                for (b = 0; b < bytes; b++) {
                     initial_pp = sp[b];
                     initial_mm = sp[(height-1) * bytes + b];
 
                     /*  Determine a run-length encoded version of the row  */
-                    run_length_encode (sp + b, buf, bytes, height);
+                    run_length_encode(sp + b, buf, bytes, height);
 
-                    for (row = 0; row < height; row++)
-                    {
+                    for (row = 0; row < height; row++) {
                         start = (row < length) ? -row : -length;
                         end = (height <= (row + length) ?
                                (height - row - 1) : length);
@@ -357,8 +339,7 @@ void KisDropshadow::gaussianblur (KoUpdater * progressUpdater, KisPaintDeviceSP 
                         if (start != -length)
                             val += initial_pp * (sum[start] - sum[-length]);
 
-                        while (i < end)
-                        {
+                        while (i < end) {
                             pixels = bb[0];
                             i += pixels;
                             if (i > end)
@@ -377,35 +358,32 @@ void KisDropshadow::gaussianblur (KoUpdater * progressUpdater, KisPaintDeviceSP 
                 break;
             }
 
-            separate_alpha (src, height, bytes);
+            separate_alpha(src, height, bytes);
 
             dstDev->writeBytes(dest, col + x1, y1, 1, height);
 
             progress += height * vert;
-            if ((col % 5) == 0) progressUpdater->setProgress( (quint32)((progress * 100) / max_progress));
+            if ((col % 5) == 0) progressUpdater->setProgress((quint32)((progress * 100) / max_progress));
         }
     }
 
     /*  Now the horizontal pass  */
-    if (horz > 0.0)
-    {
-        horz = fabs (horz) + 1.0;
+    if (horz > 0.0) {
+        horz = fabs(horz) + 1.0;
 
-        if (horz != vert)
-        {
-            std_dev = sqrt (-(horz * horz) / (2 * log (1.0 / 255.0)));
+        if (horz != vert) {
+            std_dev = sqrt(-(horz * horz) / (2 * log(1.0 / 255.0)));
 
-            switch (method)
-            {
+            switch (method) {
             case BLUR_IIR:
                 /*  derive the constants for calculating the gaussian
                  *  from the std dev
                  */
-                find_constants (n_p, n_m, d_p, d_m, bd_p, bd_m, std_dev);
+                find_constants(n_p, n_m, d_p, d_m, bd_p, bd_m, std_dev);
                 break;
 
             case BLUR_RLE:
-                curve = make_curve (std_dev, &length);
+                curve = make_curve(std_dev, &length);
                 sum = new qint32[2 * length + 1];
 
                 sum[0] = 0;
@@ -419,13 +397,11 @@ void KisDropshadow::gaussianblur (KoUpdater * progressUpdater, KisPaintDeviceSP 
             }
         }
 
-        for (row = 0; row < height; row++)
-        {
-            switch (method)
-            {
+        for (row = 0; row < height; row++) {
+            switch (method) {
             case BLUR_IIR:
-                memset (val_p, 0, width * bytes * sizeof (double));
-                memset (val_m, 0, width * bytes * sizeof (double));
+                memset(val_p, 0, width * bytes * sizeof(double));
+                memset(val_m, 0, width * bytes * sizeof(double));
                 break;
 
             case BLUR_RLE:
@@ -436,10 +412,9 @@ void KisDropshadow::gaussianblur (KoUpdater * progressUpdater, KisPaintDeviceSP 
             //gimp_pixel_rgn_get_row (&src_rgn, src, x1, row + y1, width);
             dstDev->readBytes(src, x1, row + y1, width, 1);
 
-            multiply_alpha (dest, width, bytes);
+            multiply_alpha(dest, width, bytes);
 
-            switch (method)
-            {
+            switch (method) {
             case BLUR_IIR:
                 sp_p = src;
                 sp_m = src + (width - 1) * bytes;
@@ -447,29 +422,24 @@ void KisDropshadow::gaussianblur (KoUpdater * progressUpdater, KisPaintDeviceSP 
                 vm = val_m + (width - 1) * bytes;
 
                 /*  Set up the first vals  */
-                for (i = 0; i < bytes; i++)
-                {
+                for (i = 0; i < bytes; i++) {
                     initial_p[i] = sp_p[i];
                     initial_m[i] = sp_m[i];
                 }
 
-                for (col = 0; col < width; col++)
-                {
+                for (col = 0; col < width; col++) {
                     double *vpptr, *vmptr;
                     terms = (col < 4) ? col : 4;
 
-                    for (b = 0; b < bytes; b++)
-                    {
+                    for (b = 0; b < bytes; b++) {
                         vpptr = vp + b; vmptr = vm + b;
-                        for (i = 0; i <= terms; i++)
-                        {
+                        for (i = 0; i <= terms; i++) {
                             *vpptr += n_p[i] * sp_p[(-i * bytes) + b] -
                                       d_p[i] * vp[(-i * bytes) + b];
                             *vmptr += n_m[i] * sp_m[(i * bytes) + b] -
                                       d_m[i] * vm[(i * bytes) + b];
                         }
-                        for (j = i; j <= 4; j++)
-                        {
+                        for (j = i; j <= 4; j++) {
                             *vpptr += (n_p[j] - bd_p[j]) * initial_p[b];
                             *vmptr += (n_m[j] - bd_m[j]) * initial_m[b];
                         }
@@ -481,23 +451,21 @@ void KisDropshadow::gaussianblur (KoUpdater * progressUpdater, KisPaintDeviceSP 
                     vm -= bytes;
                 }
 
-                transfer_pixels (val_p, val_m, dest, bytes, width);
+                transfer_pixels(val_p, val_m, dest, bytes, width);
                 break;
 
             case BLUR_RLE:
                 sp = src;
                 dp = dest;
 
-                for (b = 0; b < bytes; b++)
-                {
+                for (b = 0; b < bytes; b++) {
                     initial_pp = sp[b];
                     initial_mm = sp[(width-1) * bytes + b];
 
                     /*  Determine a run-length encoded version of the row  */
-                    run_length_encode (sp + b, buf, bytes, width);
+                    run_length_encode(sp + b, buf, bytes, width);
 
-                    for (col = 0; col < width; col++)
-                    {
+                    for (col = 0; col < width; col++) {
                         start = (col < length) ? -col : -length;
                         end = (width <= (col + length)) ? (width - col - 1) : length;
 
@@ -508,8 +476,7 @@ void KisDropshadow::gaussianblur (KoUpdater * progressUpdater, KisPaintDeviceSP 
                         if (start != -length)
                             val += initial_pp * (sum[start] - sum[-length]);
 
-                        while (i < end)
-                        {
+                        while (i < end) {
                             pixels = bb[0];
                             i += pixels;
                             if (i > end)
@@ -528,20 +495,19 @@ void KisDropshadow::gaussianblur (KoUpdater * progressUpdater, KisPaintDeviceSP 
                 break;
             }
 
-            separate_alpha (dest, width, bytes);
+            separate_alpha(dest, width, bytes);
 
             //gimp_pixel_rgn_set_row (&dest_rgn, dest, x1, row + y1, width);
             dstDev->writeBytes(dest, x1, row + y1, width, 1);
 
             progress += width * horz;
             //if ((row % 5) == 0) gimp_progress_update (progress / max_progress);
-            if ((row % 5) == 0) progressUpdater->setProgress( (quint32)((progress * 100) / max_progress ));
+            if ((row % 5) == 0) progressUpdater->setProgress((quint32)((progress * 100) / max_progress));
         }
     }
 
     /*  free up buffers  */
-    switch (method)
-    {
+    switch (method) {
     case BLUR_IIR:
         delete[] val_p;
         delete[] val_m;
@@ -556,7 +522,7 @@ void KisDropshadow::gaussianblur (KoUpdater * progressUpdater, KisPaintDeviceSP 
     delete[] dest;
 }
 
-void KisDropshadow::find_constants (double n_p[], double n_m[], double d_p[], double d_m[], double bd_p[], double bd_m[], double std_dev)
+void KisDropshadow::find_constants(double n_p[], double n_m[], double d_p[], double d_m[], double bd_p[], double bd_m[], double std_dev)
 {
     qint32    i;
     double constants [8];
@@ -577,32 +543,32 @@ void KisDropshadow::find_constants (double n_p[], double n_m[], double d_p[], do
     constants [7] = -0.2598 / div;
 
     n_p [0] = constants[4] + constants[6];
-    n_p [1] = exp (constants[1]) *
-              (constants[7] * sin (constants[3]) -
-               (constants[6] + 2 * constants[4]) * cos (constants[3])) +
-              exp (constants[0]) *
-              (constants[5] * sin (constants[2]) -
-               (2 * constants[6] + constants[4]) * cos (constants[2]));
-    n_p [2] = 2 * exp (constants[0] + constants[1]) *
-              ((constants[4] + constants[6]) * cos (constants[3]) * cos (constants[2]) -
-               constants[5] * cos (constants[3]) * sin (constants[2]) -
-               constants[7] * cos (constants[2]) * sin (constants[3])) +
-              constants[6] * exp (2 * constants[0]) +
-              constants[4] * exp (2 * constants[1]);
-    n_p [3] = exp (constants[1] + 2 * constants[0]) *
-              (constants[7] * sin (constants[3]) - constants[6] * cos (constants[3])) +
-              exp (constants[0] + 2 * constants[1]) *
-              (constants[5] * sin (constants[2]) - constants[4] * cos (constants[2]));
+    n_p [1] = exp(constants[1]) *
+              (constants[7] * sin(constants[3]) -
+               (constants[6] + 2 * constants[4]) * cos(constants[3])) +
+              exp(constants[0]) *
+              (constants[5] * sin(constants[2]) -
+               (2 * constants[6] + constants[4]) * cos(constants[2]));
+    n_p [2] = 2 * exp(constants[0] + constants[1]) *
+              ((constants[4] + constants[6]) * cos(constants[3]) * cos(constants[2]) -
+               constants[5] * cos(constants[3]) * sin(constants[2]) -
+               constants[7] * cos(constants[2]) * sin(constants[3])) +
+              constants[6] * exp(2 * constants[0]) +
+              constants[4] * exp(2 * constants[1]);
+    n_p [3] = exp(constants[1] + 2 * constants[0]) *
+              (constants[7] * sin(constants[3]) - constants[6] * cos(constants[3])) +
+              exp(constants[0] + 2 * constants[1]) *
+              (constants[5] * sin(constants[2]) - constants[4] * cos(constants[2]));
     n_p [4] = 0.0;
 
     d_p [0] = 0.0;
-    d_p [1] = -2 * exp (constants[1]) * cos (constants[3]) -
-              2 * exp (constants[0]) * cos (constants[2]);
-    d_p [2] = 4 * cos (constants[3]) * cos (constants[2]) * exp (constants[0] + constants[1]) +
-              exp (2 * constants[1]) + exp (2 * constants[0]);
-    d_p [3] = -2 * cos (constants[2]) * exp (constants[0] + 2 * constants[1]) -
-              2 * cos (constants[3]) * exp (constants[1] + 2 * constants[0]);
-    d_p [4] = exp (2 * constants[0] + 2 * constants[1]);
+    d_p [1] = -2 * exp(constants[1]) * cos(constants[3]) -
+              2 * exp(constants[0]) * cos(constants[2]);
+    d_p [2] = 4 * cos(constants[3]) * cos(constants[2]) * exp(constants[0] + constants[1]) +
+              exp(2 * constants[1]) + exp(2 * constants[0]);
+    d_p [3] = -2 * cos(constants[2]) * exp(constants[0] + 2 * constants[1]) -
+              2 * cos(constants[3]) * exp(constants[1] + 2 * constants[0]);
+    d_p [4] = exp(2 * constants[0] + 2 * constants[1]);
 
     for (i = 0; i <= 4; i++)
         d_m [i] = d_p [i];
@@ -618,8 +584,7 @@ void KisDropshadow::find_constants (double n_p[], double n_m[], double d_p[], do
         sum_n_p = 0.0;
         sum_n_m = 0.0;
         sum_d = 0.0;
-        for (i = 0; i <= 4; i++)
-        {
+        for (i = 0; i <= 4; i++) {
             sum_n_p += n_p[i];
             sum_n_m += n_m[i];
             sum_d += d_p[i];
@@ -628,8 +593,7 @@ void KisDropshadow::find_constants (double n_p[], double n_m[], double d_p[], do
         a = sum_n_p / (1.0 + sum_d);
         b = sum_n_m / (1.0 + sum_d);
 
-        for (i = 0; i <= 4; i++)
-        {
+        for (i = 0; i <= 4; i++) {
             bd_p[i] = d_p[i] * a;
             bd_m[i] = d_m[i] * b;
         }
@@ -637,17 +601,16 @@ void KisDropshadow::find_constants (double n_p[], double n_m[], double d_p[], do
 }
 
 
-void KisDropshadow::transfer_pixels (double *src1, double *src2, quint8 *dest, qint32 bytes, qint32 width)
+void KisDropshadow::transfer_pixels(double *src1, double *src2, quint8 *dest, qint32 bytes, qint32 width)
 {
     qint32    b;
     qint32    bend = bytes * width;
     double sum;
 
-    for(b = 0; b < bend; b++)
-    {
+    for (b = 0; b < bend; b++) {
         sum = *src1++ + *src2++;
         if (sum > 255) sum = 255;
-        else if(sum < 0) sum = 0;
+        else if (sum < 0) sum = 0;
 
         *dest++ = (quint8) sum;
     }
@@ -663,9 +626,9 @@ qint32 * KisDropshadow::make_curve(double sigma, qint32 *length)
     int     i, n;
 
     sigma2 = 2 * sigma * sigma;
-    l = sqrt (-sigma2 * log (1.0 / 255.0));
+    l = sqrt(-sigma2 * log(1.0 / 255.0));
 
-    n = (int)(ceil (l) * 2);
+    n = (int)(ceil(l) * 2);
     if ((n % 2) == 0)
         n += 1;
 
@@ -675,9 +638,8 @@ qint32 * KisDropshadow::make_curve(double sigma, qint32 *length)
     curve += *length;
     curve[0] = 255;
 
-    for (i = 1; i <= *length; i++)
-    {
-        temp = (qint32) (exp (- (i * i) / sigma2) * 255);
+    for (i = 1; i <= *length; i++) {
+        temp = (qint32)(exp(- (i * i) / sigma2) * 255);
         curve[-i] = temp;
         curve[i] = temp;
     }
@@ -685,7 +647,7 @@ qint32 * KisDropshadow::make_curve(double sigma, qint32 *length)
     return curve;
 }
 
-void KisDropshadow::run_length_encode (quint8 *src, qint32 *dest, qint32 bytes, qint32 width)
+void KisDropshadow::run_length_encode(quint8 *src, qint32 *dest, qint32 bytes, qint32 width)
 {
     qint32   start;
     qint32   i;
@@ -696,12 +658,9 @@ void KisDropshadow::run_length_encode (quint8 *src, qint32 *dest, qint32 bytes, 
     src += bytes;
     start = 0;
 
-    for (i = 1; i < width; i++)
-    {
-        if (*src != last)
-        {
-            for (j = start; j < i; j++)
-            {
+    for (i = 1; i < width; i++) {
+        if (*src != last) {
+            for (j = start; j < i; j++) {
                 *dest++ = (i - j);
                 *dest++ = last;
             }
@@ -711,20 +670,18 @@ void KisDropshadow::run_length_encode (quint8 *src, qint32 *dest, qint32 bytes, 
         src += bytes;
     }
 
-    for (j = start; j < i; j++)
-    {
+    for (j = start; j < i; j++) {
         *dest++ = (i - j);
         *dest++ = last;
     }
 }
 
-void KisDropshadow::multiply_alpha (quint8 *buf, qint32 width, qint32 bytes)
+void KisDropshadow::multiply_alpha(quint8 *buf, qint32 width, qint32 bytes)
 {
     qint32    i, j;
     double alpha;
 
-    for (i = 0; i < width * bytes; i += bytes)
-    {
+    for (i = 0; i < width * bytes; i += bytes) {
         alpha = buf[i + bytes - 1] * (1.0 / 255.0);
         for (j = 0; j < bytes - 1; j++) {
             double a = (double)(buf[i + j]) * alpha;
@@ -733,23 +690,20 @@ void KisDropshadow::multiply_alpha (quint8 *buf, qint32 width, qint32 bytes)
     }
 }
 
-void KisDropshadow::separate_alpha (quint8 *buf, qint32 width, qint32 bytes)
+void KisDropshadow::separate_alpha(quint8 *buf, qint32 width, qint32 bytes)
 {
     qint32   i, j;
     quint8 alpha;
     double recip_alpha;
     quint32    new_val;
 
-    for (i = 0; i < width * bytes; i += bytes)
-    {
+    for (i = 0; i < width * bytes; i += bytes) {
         alpha = buf[i + bytes - 1];
-        if (alpha != 0 && alpha != 255)
-        {
+        if (alpha != 0 && alpha != 255) {
             recip_alpha = 255.0 / alpha;
-            for (j = 0; j < bytes - 1; j++)
-            {
+            for (j = 0; j < bytes - 1; j++) {
                 new_val = (quint32)(buf[i + j] * recip_alpha);
-                buf[i + j] = MIN (255, new_val);
+                buf[i + j] = MIN(255, new_val);
             }
         }
     }

@@ -27,7 +27,7 @@ class KisTile;
 /**
 
 The goal is to have a three-stage caching system: uncompressed tiles that are currently in use,
-compressed tiles that have been recently used and compressed tiles in the swapfile that aren't 
+compressed tiles that have been recently used and compressed tiles in the swapfile that aren't
 used a lot.
 
 It is beneficial to separate at least the alpha channel before compression: it may be beneficial
@@ -43,17 +43,19 @@ public:
     KisTileCompressor();
     ~KisTileCompressor();
 
-    void enqueue( KisTile * tile );
-    void dequeue( KisTile * tile );
+    void enqueue(KisTile * tile);
+    void dequeue(KisTile * tile);
 
     virtual void run();
-    void stop() { m_stopped = true; }
+    void stop() {
+        m_stopped = true;
+    }
 
-    static void decompress( KisTile * tile );
+    static void decompress(KisTile * tile);
 
 private:
 
-    KisTileCompressor( const KisTileCompressor & );
+    KisTileCompressor(const KisTileCompressor &);
 
     static QByteArray compress(const QByteArray&);
     static void decompress(const QByteArray&, QByteArray&);

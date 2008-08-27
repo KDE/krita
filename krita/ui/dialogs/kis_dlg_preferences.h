@@ -18,8 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __preferencesdlg_h__
-#define __preferencesdlg_h__
+#ifndef _KIS_DLG_PREFERENCES_H_
+#define _KIS_DLG_PREFERENCES_H_
 
 #include <QWidget>
 
@@ -28,12 +28,10 @@
 #include "kis_global.h"
 
 #include "ui_wdggeneralsettings.h"
-#include "ui_wdgperformancesettings.h"
 #include "ui_wdgdisplaysettings.h"
 #include "ui_wdggridsettings.h"
 #include "ui_wdgcolorsettings.h"
 #include "ui_wdgperformancesettings.h"
-#include "ui_wdggeneralsettings.h"
 
 class KoID;
 
@@ -45,8 +43,10 @@ class WdgGeneralSettings : public QWidget, public Ui::WdgGeneralSettings
 {
     Q_OBJECT
 
-    public:
-        WdgGeneralSettings(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
+public:
+    WdgGeneralSettings(QWidget *parent, const char *name) : QWidget(parent) {
+        setObjectName(name); setupUi(this);
+    }
 };
 
 class GeneralTab : public WdgGeneralSettings
@@ -55,7 +55,7 @@ class GeneralTab : public WdgGeneralSettings
 
 public:
 
-    GeneralTab( QWidget *parent = 0, const char *name = 0 );
+    GeneralTab(QWidget *parent = 0, const char *name = 0);
 
     enumCursorStyle cursorStyle();
     bool showRootLayer();
@@ -69,8 +69,10 @@ class WdgColorSettings : public QWidget, public Ui::WdgColorSettings
 {
     Q_OBJECT
 
-    public:
-        WdgColorSettings(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgColorSettings(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
 class ColorSettingsTab : public QWidget
@@ -79,7 +81,7 @@ class ColorSettingsTab : public QWidget
 
 public:
 
-    ColorSettingsTab( QWidget *parent = 0, const char * name = 0 );
+    ColorSettingsTab(QWidget *parent = 0, const char * name = 0);
 
 private slots:
 
@@ -101,16 +103,18 @@ class WdgPerformanceSettings : public QWidget, public Ui::WdgPerformanceSettings
 {
     Q_OBJECT
 
-    public:
-        WdgPerformanceSettings(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
+public:
+    WdgPerformanceSettings(QWidget *parent, const char *name) : QWidget(parent) {
+        setObjectName(name); setupUi(this);
+    }
 };
 
 class PerformanceTab : public WdgPerformanceSettings
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-    PerformanceTab( QWidget *parent = 0, const char *name = 0 );
+    PerformanceTab(QWidget *parent = 0, const char *name = 0);
 
 public:
     void setDefault();
@@ -122,8 +126,10 @@ class WdgDisplaySettings : public QWidget, public Ui::WdgDisplaySettings
 {
     Q_OBJECT
 
-    public:
-        WdgDisplaySettings(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
+public:
+    WdgDisplaySettings(QWidget *parent, const char *name) : QWidget(parent) {
+        setObjectName(name); setupUi(this);
+    }
 };
 
 /**
@@ -131,10 +137,10 @@ class WdgDisplaySettings : public QWidget, public Ui::WdgDisplaySettings
  */
 class DisplaySettingsTab : public WdgDisplaySettings
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-    DisplaySettingsTab( QWidget *parent = 0, const char *name = 0 );
+    DisplaySettingsTab(QWidget *parent = 0, const char *name = 0);
 
 public:
     void setDefault();
@@ -152,22 +158,25 @@ class WdgGridSettingsBase : public QWidget, public Ui::WdgGridSettingsBase
 {
     Q_OBJECT
 
-    public:
-        WdgGridSettingsBase(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgGridSettingsBase(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
-class GridSettingsTab : public WdgGridSettingsBase {
+class GridSettingsTab : public WdgGridSettingsBase
+{
     Q_OBJECT
-    public:
-        GridSettingsTab(QWidget* parent);
-    public:
-        void setDefault();
-    private slots:
-        void linkSpacingToggled(bool);
-        void spinBoxHSpacingChanged(int );
-        void spinBoxVSpacingChanged(int );
-    private:
-        bool m_linkSpacing;
+public:
+    GridSettingsTab(QWidget* parent);
+public:
+    void setDefault();
+private slots:
+    void linkSpacingToggled(bool);
+    void spinBoxHSpacingChanged(int);
+    void spinBoxVSpacingChanged(int);
+private:
+    bool m_linkSpacing;
 };
 
 //=======================
@@ -187,7 +196,7 @@ public:
 
 protected:
 
-    PreferencesDialog( QWidget *parent = 0, const char *name = 0 );
+    PreferencesDialog(QWidget *parent = 0, const char *name = 0);
     ~PreferencesDialog();
 
 protected:

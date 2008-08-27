@@ -49,7 +49,8 @@ class QImage;
  * until we have reached dimension dim. Or at least, that is how it looks like, we'll know
  * for sure when we can test it better with >1 dim brushes and Angular selectionMode.
  **/
-class KisPipeBrushParasite {
+class KisPipeBrushParasite
+{
 public:
     /// Set some default values
     KisPipeBrushParasite() : ncells(0), dim(0), needsMovement(false) {
@@ -93,7 +94,8 @@ public:
 };
 
 
-class KRITAUI_EXPORT KisImagePipeBrush : public KisBrush {
+class KRITAUI_EXPORT KisImagePipeBrush : public KisBrush
+{
 
     Q_OBJECT
 
@@ -132,7 +134,9 @@ public:
 
     virtual KisBoundary boundary();
 
-    KisPipeBrushParasite const& parasite() const { return m_parasite; }
+    KisPipeBrushParasite const& parasite() const {
+        return m_parasite;
+    }
 
     virtual bool canPaintFor(const KisPaintInformation& info);
 

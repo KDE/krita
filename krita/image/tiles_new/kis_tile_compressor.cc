@@ -38,7 +38,7 @@
 int lzff_compress(const void* input, int length, void* output, int /*maxout*/)
 {
     const quint8* ip = (const quint8*) input;
-    const quint8* ip_limit = ip + length - MAX_COPY -4;
+    const quint8* ip_limit = ip + length - MAX_COPY - 4;
     quint8* op = (quint8*) output;
 
     const quint8* htab[HASH_SIZE];
@@ -53,138 +53,129 @@ int lzff_compress(const void* input, int length, void* output, int /*maxout*/)
 
     /* initializes hash table */
     for (hslot = htab; hslot < htab + HASH_SIZE; hslot++)
-	*hslot = ip;
+        *hslot = ip;
 
     /* we start with literal copy */
     copy = 0;
-    *op++ = MAX_COPY-1;
+    *op++ = MAX_COPY - 1;
 
     /* main loop */
-    while(ip < ip_limit)
-    {
-	/* find potential match */
-	UPDATE_HASH(hval,ip);
-	hslot = htab + (hval & HASH_MASK);
-	ref = (quint8*) *hslot;
+    while (ip < ip_limit) {
+        /* find potential match */
+        UPDATE_HASH(hval, ip);
+        hslot = htab + (hval & HASH_MASK);
+        ref = (quint8*) * hslot;
 
-	/* update hash table */
-	*hslot = ip;
+        /* update hash table */
+        *hslot = ip;
 
-	/* find itself? then it's no match */
-	if(ip == ref)
-	    goto literal;
+        /* find itself? then it's no match */
+        if (ip == ref)
+            goto literal;
 
-	/* is this a match? check the first 2 bytes */
-	if( *((quint16*)ref) != *((quint16*)ip) )
-	    goto literal;
+        /* is this a match? check the first 2 bytes */
+        if (*((quint16*)ref) != *((quint16*)ip))
+            goto literal;
 
-	/* now check the 3rd byte */
-	if(ref[2]!= ip[2])
-	    goto literal;
+        /* now check the 3rd byte */
+        if (ref[2] != ip[2])
+            goto literal;
 
-	/* calculate distance to the match */
-	distance = ip - ref;
+        /* calculate distance to the match */
+        distance = ip - ref;
 
-	/* skip if too far away */
-	if(distance >= MAX_DISTANCE)
-	    goto literal;
+        /* skip if too far away */
+        if (distance >= MAX_DISTANCE)
+            goto literal;
 
-	/* here we have 3-byte matches */
-	anchor = (quint8*)ip;
-	len = 3;
-	ref += 3;
-	ip += 3;
+        /* here we have 3-byte matches */
+        anchor = (quint8*)ip;
+        len = 3;
+        ref += 3;
+        ip += 3;
 
-	/* now we have to check how long the match is */
-	if(ip < ip_limit - MAX_LEN)
-	{
-	    while(len < MAX_LEN-8)
-	    {
-		/* unroll 8 times */
-		if(*ref++ != *ip++) break;
-		if(*ref++ != *ip++) break;
-		if(*ref++ != *ip++) break;
-		if(*ref++ != *ip++) break;
-		if(*ref++ != *ip++) break;
-		if(*ref++ != *ip++) break;
-		if(*ref++ != *ip++) break;
-		if(*ref++ != *ip++) break;
-		len += 8;
-	    }
-	    ip--;
-	}
-	len = ip - anchor;
+        /* now we have to check how long the match is */
+        if (ip < ip_limit - MAX_LEN) {
+            while (len < MAX_LEN - 8) {
+                /* unroll 8 times */
+                if (*ref++ != *ip++) break;
+                if (*ref++ != *ip++) break;
+                if (*ref++ != *ip++) break;
+                if (*ref++ != *ip++) break;
+                if (*ref++ != *ip++) break;
+                if (*ref++ != *ip++) break;
+                if (*ref++ != *ip++) break;
+                if (*ref++ != *ip++) break;
+                len += 8;
+            }
+            ip--;
+        }
+        len = ip - anchor;
 
-	/* just before the last non-matching byte */
-	ip = anchor + len;
+        /* just before the last non-matching byte */
+        ip = anchor + len;
 
-	/* if we have copied something, adjust the copy count */
-	if(copy)
-	{
-	    /* copy is biased, '0' means 1 byte copy */
-	    anchor = anchor - copy - 1;
-	    *(op-copy-1) = copy-1;
-	    copy = 0;
-	}
-	else
-	    /* back, to overwrite the copy count */
-	    op--;
+        /* if we have copied something, adjust the copy count */
+        if (copy) {
+            /* copy is biased, '0' means 1 byte copy */
+            anchor = anchor - copy - 1;
+            *(op - copy - 1) = copy - 1;
+            copy = 0;
+        } else
+            /* back, to overwrite the copy count */
+            op--;
 
-	/* length is biased, '1' means a match of 3 bytes */
-	len -= 2;
+        /* length is biased, '1' means a match of 3 bytes */
+        len -= 2;
 
-	/* distance is also biased */
-	distance--;
+        /* distance is also biased */
+        distance--;
 
-	/* encode the match */
-	if(len < 7)
-	    *op++ = (len << 5) + (distance >> 8);
-	else
-	{
-	    *op++ = (7 << 5) + (distance >> 8);
-	    *op++ = len - 7;
-	}
-	*op++ = (distance & 255);
+        /* encode the match */
+        if (len < 7)
+            *op++ = (len << 5) + (distance >> 8);
+        else {
+            *op++ = (7 << 5) + (distance >> 8);
+            *op++ = len - 7;
+        }
+        *op++ = (distance & 255);
 
-	/* assuming next will be literal copy */
-	*op++ = MAX_COPY-1;
+        /* assuming next will be literal copy */
+        *op++ = MAX_COPY - 1;
 
-	/* update the hash at match boundary */
-	--ip;
-	UPDATE_HASH(hval,ip);
-	htab[hval & HASH_MASK] = ip;
-	ip++;
+        /* update the hash at match boundary */
+        --ip;
+        UPDATE_HASH(hval, ip);
+        htab[hval & HASH_MASK] = ip;
+        ip++;
 
-	continue;
+        continue;
 
     literal:
-	*op++ = *ip++;
-	copy++;
-	if(copy >= MAX_COPY)
-	{
-	    copy = 0;
-	    *op++ = MAX_COPY-1;
-	}
+        *op++ = *ip++;
+        copy++;
+        if (copy >= MAX_COPY) {
+            copy = 0;
+            *op++ = MAX_COPY - 1;
+        }
     }
 
     /* left-over as literal copy */
     ip_limit = (const quint8*)input + length;
-    while(ip < ip_limit)
-    {
-	*op++ = *ip++;
-	copy++;
-	if(copy == MAX_COPY)
-	{
-	    copy = 0;
-	    *op++ = MAX_COPY-1;
-	}
+    while (ip < ip_limit) {
+        *op++ = *ip++;
+        copy++;
+        if (copy == MAX_COPY) {
+            copy = 0;
+            *op++ = MAX_COPY - 1;
+        }
     }
 
     /* if we have copied something, adjust the copy length */
-    if(copy)
-	*(op-copy-1) = copy-1;
+    if (copy)
+        *(op - copy - 1) = copy - 1;
     else
-	op--;
+        op--;
 
     return op - (quint8*)output;
 }
@@ -197,64 +188,57 @@ int lzff_decompress(const void* input, int length, void* output, int maxout)
     quint8* op_limit = op + maxout;
     quint8* ref;
 
-    while(ip < ip_limit)
-    {
-	quint32 ctrl = (*ip)+1;
-	quint32 ofs = ((*ip) & 31) << 8;
-	quint32 len = (*ip++) >> 5;
+    while (ip < ip_limit) {
+        quint32 ctrl = (*ip) + 1;
+        quint32 ofs = ((*ip) & 31) << 8;
+        quint32 len = (*ip++) >> 5;
 
-	if (ctrl < 33)
-        {
-	    /* literal copy */
-	    if (op + ctrl > op_limit)
-		return 0;
+        if (ctrl < 33) {
+            /* literal copy */
+            if (op + ctrl > op_limit)
+                return 0;
 
-	    /* crazy unrolling */
-	    if(ctrl)
-	    {
-		*op++ = *ip++;
-		ctrl--;
+            /* crazy unrolling */
+            if (ctrl) {
+                *op++ = *ip++;
+                ctrl--;
 
-		if(ctrl)
-		{
-		    *op++ = *ip++;
-		    ctrl--;
+                if (ctrl) {
+                    *op++ = *ip++;
+                    ctrl--;
 
-		    if(ctrl)
-		    {
-			*op++ = *ip++;
-			ctrl--;
+                    if (ctrl) {
+                        *op++ = *ip++;
+                        ctrl--;
 
-			for(;ctrl; ctrl--)
-			    *op++ = *ip++;
-		    }
-		}
-	    }
-        }
-	else
-        {
-	    /* back reference */
-	    len--;
-	    ref = op - ofs;
-	    ref--;
+                        for (;ctrl; ctrl--)
+                            *op++ = *ip++;
+                    }
+                }
+            }
+        } else {
+            /* back reference */
+            len--;
+            ref = op - ofs;
+            ref--;
 
-	    if (len == 7-1)
-		len += *ip++;
+            if (len == 7 - 1)
+                len += *ip++;
 
-	    ref -= *ip++;
+            ref -= *ip++;
 
-	    if (op + len + 3 > op_limit)
-		return 0;
+            if (op + len + 3 > op_limit)
+                return 0;
 
-	    if (ref < (quint8 *)output)
-		return 0;
+            if (ref < (quint8 *)output)
+                return 0;
 
-	    *op++ = *ref++;
-	    *op++ = *ref++;
-	    *op++ = *ref++;
-	    if(len)
-		for(; len; --len)
-		    *op++ = *ref++;
+            *op++ = *ref++;
+            *op++ = *ref++;
+            *op++ = *ref++;
+            if (len)
+                for (; len; --len)
+                    *op++ = *ref++;
         }
     }
 
@@ -263,8 +247,8 @@ int lzff_decompress(const void* input, int length, void* output, int maxout)
 
 
 KisTileCompressor::KisTileCompressor()
-    : QThread(0)
-    , m_stopped( false )
+        : QThread(0)
+        , m_stopped(false)
 {
 }
 
@@ -272,25 +256,25 @@ KisTileCompressor::~KisTileCompressor()
 {
 }
 
-void KisTileCompressor::enqueue( KisTile * tile )
+void KisTileCompressor::enqueue(KisTile * tile)
 {
     //tile->setTileState( QUEUED );
-    m_tileQueue.enqueue( tile );
+    m_tileQueue.enqueue(tile);
 }
 
-void KisTileCompressor::dequeue( KisTile * tile )
+void KisTileCompressor::dequeue(KisTile * tile)
 {
     m_queueLock.lock();
-    if ( int i =  m_tileQueue.indexOf( tile ) > -1)
+    if (int i =  m_tileQueue.indexOf(tile) > -1)
         m_tileQueue.removeAt(i);
     m_queueLock.unlock();
 }
 
 void KisTileCompressor::run()
 {
-    while ( !m_stopped ) {
+    while (!m_stopped) {
         KisTile * tile = 0;
-        if ( m_queueLock.tryLock() && !m_tileQueue.isEmpty() ) {
+        if (m_queueLock.tryLock() && !m_tileQueue.isEmpty()) {
             tile = m_tileQueue.dequeue();
             // XXX: hard lock this tile!
             m_queueLock.unlock();
@@ -300,11 +284,11 @@ void KisTileCompressor::run()
             tile->setTileState(  COMPRESSED );
             KisTileStoreMemory::instance()->maySwapTile(tile);
         }*/
-        sleep( 1 ); // Sleep a second
+        sleep(1);   // Sleep a second
     }
 }
 
-void KisTileCompressor::decompress( KisTile * tile )
+void KisTileCompressor::decompress(KisTile * tile)
 {
     //tile->setTileState(  UNCOMPRESSED );
 }
@@ -315,14 +299,14 @@ QByteArray KisTileCompressor::compress(const QByteArray& input)
     unsigned int in_len = (unsigned int)input.size();
 
     QByteArray output;
-    output.resize( in_len + 4 + 1 );
+    output.resize(in_len + 4 + 1);
 
     // we use 4 bytes to store uncompressed length
     // and 1 extra byte as flag (0=uncompressed, 1=compressed)
     output[0] = in_len & 255;
-    output[1] = (in_len >>8) & 255;
-    output[2] = (in_len >>16) & 255;
-    output[3] = (in_len >>24) & 255;
+    output[1] = (in_len >> 8) & 255;
+    output[2] = (in_len >> 16) & 255;
+    output[3] = (in_len >> 24) & 255;
     output[4] = 1;
 
     unsigned int out_len = in_len - 1;
@@ -331,19 +315,18 @@ QByteArray KisTileCompressor::compress(const QByteArray& input)
     unsigned int len = lzff_compress(in_data, in_len, out_data, out_len);
     out_len = len;
 
-    if( (len > out_len) || (len == 0) )
-    {
-	// output buffer is too small, likely because the data can't
-	// be compressed. so here just copy without compression
-	out_len = in_len;
-	output.insert(5, input);
+    if ((len > out_len) || (len == 0)) {
+        // output buffer is too small, likely because the data can't
+        // be compressed. so here just copy without compression
+        out_len = in_len;
+        output.insert(5, input);
 
-	// flag must indicate "uncompressed block"
-	output[4] = 0;
+        // flag must indicate "uncompressed block"
+        output[4] = 0;
     }
 
     // minimize memory
-    output.resize( out_len + 4 + 1 );
+    output.resize(out_len + 4 + 1);
     output.squeeze();
 
     return output;
@@ -355,9 +338,9 @@ void KisTileCompressor::decompress(const QByteArray& input, QByteArray& output)
     // read out first how big is the uncompressed size
     unsigned int unpack_size = 0;
     unpack_size |= ((quint8)input[0]);
-    unpack_size |= ((quint8)input[1])<<8;
-    unpack_size |= ((quint8)input[2])<<16;
-    unpack_size |= ((quint8)input[3])<<24;
+    unpack_size |= ((quint8)input[1]) << 8;
+    unpack_size |= ((quint8)input[2]) << 16;
+    unpack_size |= ((quint8)input[3]) << 24;
 
     // prepare the output
     output.reserve(unpack_size);
@@ -371,12 +354,11 @@ void KisTileCompressor::decompress(const QByteArray& input, QByteArray& output)
     unsigned char* out_data = (unsigned char*) output.data();
     unsigned int out_len = (unsigned int)unpack_size;
 
-    if(flag == 0)
-	memcpy(output.data(), in_data, in_len);
-    else
-    {
-	unsigned int len = lzff_decompress(in_data, in_len, out_data, out_len);
-	output.resize(len);
-	output.squeeze();
+    if (flag == 0)
+        memcpy(output.data(), in_data, in_len);
+    else {
+        unsigned int len = lzff_decompress(in_data, in_len, out_data, out_len);
+        output.resize(len);
+        output.squeeze();
     }
 }

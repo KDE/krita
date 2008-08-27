@@ -35,28 +35,34 @@
 // Basic implementation of all functions (a swapless memory tilestore)
 
 KisTileStore::KisTileStore()
-    : m_lock( QMutex::Recursive )
+        : m_lock(QMutex::Recursive)
 {
 
 }
 
-KisTileStoreData* KisTileStore::registerTileData(const KisSharedTileData*) { return 0; } // ###
+KisTileStoreData* KisTileStore::registerTileData(const KisSharedTileData*)
+{
+    return 0;
+} // ###
 
 void KisTileStore::deregisterTileData(const KisSharedTileData*) {}
 
-KisSharedTileData* KisTileStore::degradedTileDataForSharing(KisSharedTileData* data) {
+KisSharedTileData* KisTileStore::degradedTileDataForSharing(KisSharedTileData* data)
+{
     return new KisSharedTileData(data->store, data->tileSize, data->pixelSize);
 }
 
 void KisTileStore::ensureTileLoaded(KisSharedTileData* tile) {}
 void KisTileStore::maySwapTile(KisSharedTileData* tile) {}
 
-void KisTileStore::requestTileData(KisSharedTileData* tileData) {
+void KisTileStore::requestTileData(KisSharedTileData* tileData)
+{
     QMutexLocker dataLock(&(tileData->lock));
     tileData->data = new quint8[tileData->pixelSize * KisTile::WIDTH * KisTile::HEIGHT];
 }
 
-void KisTileStore::dontNeedTileData(KisSharedTileData* tileData) {
+void KisTileStore::dontNeedTileData(KisSharedTileData* tileData)
+{
     delete[] tileData->data;
 }
 

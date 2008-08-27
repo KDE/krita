@@ -38,9 +38,9 @@
 
 // XXX: Hardcode RGBA name. This should be a constant, somewhere.
 KisDlgApplyProfile::KisDlgApplyProfile(QWidget *parent, const char *name)
-    : KDialog(parent )
+        : KDialog(parent)
 {
-    setButtons( Ok |Cancel );
+    setButtons(Ok | Cancel);
     setObjectName(name);
     setWindowTitle(i18n("Apply Image Profile to Clipboard Data"));
     m_page = new WdgApplyProfile(this);
@@ -79,7 +79,7 @@ const KoColorProfile *  KisDlgApplyProfile::profile() const
 
     profileName = m_page->cmbProfile->currentText();
 
-    return KoColorSpaceRegistry::instance()->profileByName( profileName);
+    return KoColorSpaceRegistry::instance()->profileByName(profileName);
 }
 
 int KisDlgApplyProfile::renderIntent() const
@@ -100,10 +100,10 @@ void KisDlgApplyProfile::fillCmbProfiles(const KoID & s)
     KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->value(s.id());
     if (csf == 0) return;
 
-    QList<const KoColorProfile *> profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
+    QList<const KoColorProfile *> profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
 
-    foreach (const KoColorProfile *profile, profileList) {
-            m_page->cmbProfile->addSqueezedItem(profile->name());
+    foreach(const KoColorProfile *profile, profileList) {
+        m_page->cmbProfile->addSqueezedItem(profile->name());
     }
     m_page->cmbProfile->setCurrent(csf->defaultProfile());
 }

@@ -41,7 +41,8 @@ class KisPainter;
 /**
  * XXX: doc
  */
-class FreehandPaintJob {
+class FreehandPaintJob
+{
 
 public:
 
@@ -53,7 +54,9 @@ public:
 
     virtual ~FreehandPaintJob();
 
-    double dragDist() const { return m_dragDist; }
+    double dragDist() const {
+        return m_dragDist;
+    }
     virtual void run() = 0;
 
 protected:
@@ -70,14 +73,15 @@ protected:
 /**
  * XXX: doc
  */
-class FreehandPaintAtJob : public FreehandPaintJob {
+class FreehandPaintAtJob : public FreehandPaintJob
+{
 
 public:
 
     FreehandPaintAtJob(KisToolFreehand* freeHand,
-                         KisPainter* painter,
-                         const KisPaintInformation & pi,
-                         const FreehandPaintJob* previousPaintJob);
+                       KisPainter* painter,
+                       const KisPaintInformation & pi,
+                       const FreehandPaintJob* previousPaintJob);
     virtual ~FreehandPaintAtJob();
     virtual void run();
 };
@@ -85,7 +89,8 @@ public:
 /**
  * XXX: doc
  */
-class FreehandPaintLineJob : public FreehandPaintJob {
+class FreehandPaintLineJob : public FreehandPaintJob
+{
 
 public:
 
@@ -102,7 +107,8 @@ public:
 /**
  * XXX: doc
  */
-class FreehandPaintBezierJob : public FreehandPaintJob {
+class FreehandPaintBezierJob : public FreehandPaintJob
+{
 
 public:
 
@@ -125,66 +131,60 @@ private:
 
 };
 
-class FreehandPaintJobExecutor : public QThread {
+class FreehandPaintJobExecutor : public QThread
+{
 
 public:
 
     FreehandPaintJobExecutor()
-        : m_finish(false)
-        {
-        }
+            : m_finish(false) {
+    }
 
-    virtual void run()
-        {
-            while(!m_finish || !isEmpty() )
+    virtual void run() {
+        while (!m_finish || !isEmpty()) {
+            FreehandPaintJob* nextJob = 0;
             {
-                FreehandPaintJob* nextJob = 0;
-                {
-                    QMutexLocker lock(&m_mutex_queue);
-                    if(m_queue.size() > 0)
-                    {
-                        nextJob = m_queue.dequeue();
-                    }
-                }
-                if ( nextJob )
-                {
-                    nextJob->run();
-                }
-                else {
-                    msleep(1);
+                QMutexLocker lock(&m_mutex_queue);
+                if (m_queue.size() > 0) {
+                    nextJob = m_queue.dequeue();
                 }
             }
+            if (nextJob) {
+                nextJob->run();
+            } else {
+                msleep(1);
+            }
         }
-        
-        void postJob(FreehandPaintJob* job)
-        {
-            QMutexLocker lock(&m_mutex_queue);
-            m_queue.enqueue(job);
-        }
-        
-        void finish() {
-            m_finish = true;
-            this->wait();
-        }
-        
-        bool isEmpty() {
-            QMutexLocker lock(&m_mutex_queue);
-            return m_queue.size() == 0;
-        }
-        
-        int queueLength() {
-            QMutexLocker lock(&m_mutex_queue);
-            return m_queue.size();
-        }
-        void start() {
-            m_finish = false;
-            QThread::start();
-        }
-        
-    private:
-        QQueue<FreehandPaintJob* > m_queue;
-        QMutex m_mutex_queue;
-        bool m_finish;
+    }
+
+    void postJob(FreehandPaintJob* job) {
+        QMutexLocker lock(&m_mutex_queue);
+        m_queue.enqueue(job);
+    }
+
+    void finish() {
+        m_finish = true;
+        this->wait();
+    }
+
+    bool isEmpty() {
+        QMutexLocker lock(&m_mutex_queue);
+        return m_queue.size() == 0;
+    }
+
+    int queueLength() {
+        QMutexLocker lock(&m_mutex_queue);
+        return m_queue.size();
+    }
+    void start() {
+        m_finish = false;
+        QThread::start();
+    }
+
+private:
+    QQueue<FreehandPaintJob* > m_queue;
+    QMutex m_mutex_queue;
+    bool m_finish;
 };
 
 

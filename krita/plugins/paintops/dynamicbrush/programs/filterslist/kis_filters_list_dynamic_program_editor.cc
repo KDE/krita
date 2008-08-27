@@ -32,46 +32,44 @@ KisFiltersListDynamicProgramEditor::KisFiltersListDynamicProgramEditor(KisFilter
 {
     m_filtersListDynamicProgramEditor = new Ui_FiltersListDynamicProgramEditor();
     m_filtersListDynamicProgramEditor->setupUi(this);
-    
+
     m_filtersListDynamicProgramEditor->comboBoxFilter->setIDList(KisDynamicTransformationsFactory::ids());
     // Initialize the model
-    m_filtersModel = new KisFiltersListModel( program, m_filtersListDynamicProgramEditor->listViewFilters);
-    m_filtersListDynamicProgramEditor->listViewFilters->setModel( m_filtersModel );
+    m_filtersModel = new KisFiltersListModel(program, m_filtersListDynamicProgramEditor->listViewFilters);
+    m_filtersListDynamicProgramEditor->listViewFilters->setModel(m_filtersModel);
     // Connect the respective signals to the actions of the model
     connect(m_filtersListDynamicProgramEditor->comboBoxFilter, SIGNAL(activated(const KoID &)),
-                            m_filtersModel, SLOT(setCurrentFilterType(const KoID &)));
+            m_filtersModel, SLOT(setCurrentFilterType(const KoID &)));
     m_filtersModel->connect(m_filtersListDynamicProgramEditor->pushButtonAdd,
                             SIGNAL(pressed()), SLOT(addNewFilter()));
     m_filtersModel->connect(m_filtersListDynamicProgramEditor->listViewFilters->selectionModel(),
-                            SIGNAL(currentChanged ( const QModelIndex & , const QModelIndex & )),
+                            SIGNAL(currentChanged(const QModelIndex & , const QModelIndex &)),
                             SLOT(setCurrentFilter(const QModelIndex&)));
     m_filtersModel->connect(m_filtersListDynamicProgramEditor->pushButtonRemove,
                             SIGNAL(pressed()), SLOT(deleteCurrentFilter()));
     // Connect the respective signals to the actions of the editor
-    connect(m_filtersListDynamicProgramEditor->listViewFilters->selectionModel(), 
-                            SIGNAL(currentChanged ( const QModelIndex & , const QModelIndex & )),
-                            SLOT(setCurrentFilter(const QModelIndex&)));
+    connect(m_filtersListDynamicProgramEditor->listViewFilters->selectionModel(),
+            SIGNAL(currentChanged(const QModelIndex & , const QModelIndex &)),
+            SLOT(setCurrentFilter(const QModelIndex&)));
 
 }
 KisFiltersListDynamicProgramEditor::~KisFiltersListDynamicProgramEditor()
 {
     delete m_filtersListDynamicProgramEditor;
     delete m_filtersModel;
-    if(m_currentFilterEditor) delete m_currentFilterEditor;
+    if (m_currentFilterEditor) delete m_currentFilterEditor;
 }
 
 void KisFiltersListDynamicProgramEditor::setCurrentFilter(const QModelIndex& index)
 {
-    if(m_currentFilterEditor)
-    {
+    if (m_currentFilterEditor) {
         delete m_currentFilterEditor;
         m_currentFilterEditor = 0;
     }
-    m_currentFilterEditor = m_program->transfoAt( index.row() )->createConfigWidget(  m_filtersListDynamicProgramEditor->groupBoxProperties );
+    m_currentFilterEditor = m_program->transfoAt(index.row())->createConfigWidget(m_filtersListDynamicProgramEditor->groupBoxProperties);
     dbgPlugins << m_currentFilterEditor;
-    if(m_currentFilterEditor)
-    {
-        m_filtersListDynamicProgramEditor->widgetNoProperties->setVisible(false);         m_filtersListDynamicProgramEditor->gridLayout->addWidget( m_currentFilterEditor, 0,0,1,1);
+    if (m_currentFilterEditor) {
+        m_filtersListDynamicProgramEditor->widgetNoProperties->setVisible(false);         m_filtersListDynamicProgramEditor->gridLayout->addWidget(m_currentFilterEditor, 0, 0, 1, 1);
     } else {
         m_filtersListDynamicProgramEditor->widgetNoProperties->setVisible(true);
     }

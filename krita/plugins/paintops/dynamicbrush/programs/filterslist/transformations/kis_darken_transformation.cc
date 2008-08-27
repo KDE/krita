@@ -20,9 +20,9 @@
 #include "kis_dynamic_sensor.h"
 
 KisDarkenTransformation::KisDarkenTransformation(KisDynamicSensor* transfoParameter)
-    : KisDynamicTransformation(KisDynamicTransformation::DarkenTransformationID), m_transfoParameter(transfoParameter)
+        : KisDynamicTransformation(KisDynamicTransformation::DarkenTransformationID), m_transfoParameter(transfoParameter)
 {
-    
+
 }
 
 KisDarkenTransformation::~KisDarkenTransformation()

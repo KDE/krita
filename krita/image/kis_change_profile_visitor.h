@@ -37,55 +37,49 @@
  * conversions. This is essential if you have loaded an image that didn't
  * have an embedded profile to which you want to attach the right profile.
  */
-class KisChangeProfileVisitor :public KisNodeVisitor {
+class KisChangeProfileVisitor : public KisNodeVisitor
+{
 public:
-    
+
     using KisNodeVisitor::visit;
 
     KisChangeProfileVisitor(const KoColorSpace * oldColorSpace,
                             const KoColorSpace *dstColorSpace)
-        : KisNodeVisitor()
-        , m_oldColorSpace(oldColorSpace)
-        , m_dstColorSpace(dstColorSpace)
-    {
+            : KisNodeVisitor()
+            , m_oldColorSpace(oldColorSpace)
+            , m_dstColorSpace(dstColorSpace) {
     }
 
-    ~KisChangeProfileVisitor()
-    {
+    ~KisChangeProfileVisitor() {
     }
-    
-    bool visit( KisExternalLayer * )
-    {
+
+    bool visit(KisExternalLayer *) {
         return true;
     }
 
-    bool visit(KisGroupLayer * layer)
-    {
+    bool visit(KisGroupLayer * layer) {
         // Clear the projection, we will have to re-render everything.
         layer->resetProjection();
 
-        KisLayerSP child = dynamic_cast<KisLayer*>( layer->firstChild().data() );
+        KisLayerSP child = dynamic_cast<KisLayer*>(layer->firstChild().data());
         while (child) {
             child->accept(*this);
-            child = dynamic_cast<KisLayer*>( child->nextSibling().data() );
+            child = dynamic_cast<KisLayer*>(child->nextSibling().data());
         }
         layer->setDirty();
         return true;
     }
 
 
-    bool visit(KisPaintLayer *layer)
-    {
+    bool visit(KisPaintLayer *layer) {
         return updatePaintDevice(layer);
     }
 
-    bool visit(KisGeneratorLayer *layer)
-    {
+    bool visit(KisGeneratorLayer *layer) {
         return updatePaintDevice(layer);
     }
 
-    bool visit(KisAdjustmentLayer * layer)
-    {
+    bool visit(KisAdjustmentLayer * layer) {
         layer->resetCache();
         layer->setDirty();
         return true;
@@ -93,8 +87,7 @@ public:
 
 private:
 
-    bool updatePaintDevice(KisLayer * layer)
-    {
+    bool updatePaintDevice(KisLayer * layer) {
         if (!layer) return false;
         if (!layer->paintDevice()) return false;
         if (!layer->paintDevice()->colorSpace()) return false;
@@ -110,7 +103,7 @@ private:
 
         return true;
     }
-    
+
     const KoColorSpace *m_oldColorSpace;
     const KoColorSpace *m_dstColorSpace;
 };

@@ -30,10 +30,10 @@
 #include "kis_pixelize_filter.h"
 
 typedef KGenericFactory<KisPixelizeFilterPlugin> KisPixelizeFilterPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritapixelizefilter, KisPixelizeFilterPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritapixelizefilter, KisPixelizeFilterPluginFactory("krita"))
 
 KisPixelizeFilterPlugin::KisPixelizeFilterPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     setComponentData(KisPixelizeFilterPluginFactory::componentData());
 

@@ -34,7 +34,8 @@
  * The ExtentVisitor determines the total extent of all layers
  * that comprise the image: the union therefore of their extents.
  */
-class KisExtentVisitor : public KisNodeVisitor {
+class KisExtentVisitor : public KisNodeVisitor
+{
 
 public:
 
@@ -46,65 +47,58 @@ public:
      *               function.
      */
     KisExtentVisitor(QRect rc, bool exact)
-        : m_imageRect(rc)
-        , m_region(rc)
-        , m_exact(exact)
-        {
-        }
+            : m_imageRect(rc)
+            , m_region(rc)
+            , m_exact(exact) {
+    }
     virtual ~KisExtentVisitor() {}
 
-    QRegion region() { return m_region; }
+    QRegion region() {
+        return m_region;
+    }
 
-    bool visit( KisExternalLayer * )
-        {
-            return true;
+    bool visit(KisExternalLayer *) {
+        return true;
+    }
+
+    bool visit(KisPaintLayer *layer) {
+        return updateExtent(layer);
+    }
+
+    bool visit(KisGroupLayer *layer) {
+        KisNodeSP child = layer->firstChild();
+        while (child) {
+            child->accept(*this);
+            child = child->nextSibling();
         }
 
-    bool visit(KisPaintLayer *layer)
-        {
-            return updateExtent(layer);
-        }
+        return true;
+    }
 
-    bool visit(KisGroupLayer *layer)
-        {
-            KisNodeSP child = layer->firstChild();
-            while (child) {
-                child->accept(*this);
-                child = child->nextSibling();
-            }
+    bool visit(KisAdjustmentLayer *layer) {
+        return updateExtent(layer);
+    }
 
-            return true;
-        }
+    bool visit(KisCloneLayer *layer) {
+        return updateExtent(layer);
+    }
 
-    bool visit(KisAdjustmentLayer *layer)
-        {
-            return updateExtent(layer);
-        }
+    bool visit(KisGeneratorLayer * layer) {
+        return updateExtent(layer);
+    }
 
-    bool visit(KisCloneLayer *layer)
-        {
-            return updateExtent(layer);
-        }
-
-    bool visit(KisGeneratorLayer * layer)
-        {
-            return updateExtent(layer);
-        }
-        
 private:
 
-    bool updateExtent( KisLayer * layer )
-        {
-            if (m_exact) {
-                m_region = m_region.united(layer->exactBounds());
-            }
-            else {
-                m_region = m_region.united(layer->extent());
-            }
-            return true;
-     
+    bool updateExtent(KisLayer * layer) {
+        if (m_exact) {
+            m_region = m_region.united(layer->exactBounds());
+        } else {
+            m_region = m_region.united(layer->extent());
         }
-    
+        return true;
+
+    }
+
     QRect m_imageRect;
     QRegion m_region;
     bool m_exact;

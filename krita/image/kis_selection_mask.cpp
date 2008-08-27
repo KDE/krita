@@ -34,9 +34,9 @@ public:
     KisSelectionSP deselectedSelection;
 };
 
-KisSelectionMask::KisSelectionMask( KisImageWSP image )
-    : KisMask( "selection" )
-    , m_d( new Private() )
+KisSelectionMask::KisSelectionMask(KisImageWSP image)
+        : KisMask("selection")
+        , m_d(new Private())
 {
     m_d->image = image;
     m_d->deselectedSelection = 0;
@@ -47,16 +47,16 @@ KisSelectionMask::~KisSelectionMask()
     delete m_d;
 }
 
-bool KisSelectionMask::allowAsChild( KisNodeSP node) const
+bool KisSelectionMask::allowAsChild(KisNodeSP node) const
 {
     Q_UNUSED(node);
     return false;
 }
 
 
-KisSelectionMask::KisSelectionMask( const KisSelectionMask& rhs )
-    : KisMask( rhs )
-    , m_d( new Private() )
+KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
+        : KisMask(rhs)
+        , m_d(new Private())
 {
 }
 

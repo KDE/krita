@@ -18,7 +18,7 @@
 */
 
 #include "rgb_float_hdr.h"
-#include "config-openexr.h"
+#include <config-openexr.h>
 
 #include <klocale.h>
 #include <kgenericfactory.h>
@@ -31,37 +31,37 @@
 #include "kis_rgb_f32_hdr_colorspace.h"
 
 typedef KGenericFactory<RGBFloatHDRPlugin> RGBFloatHDRPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritargbfloathdrplugin, RGBFloatHDRPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritargbfloathdrplugin, RGBFloatHDRPluginFactory("krita"))
 
 
 RGBFloatHDRPlugin::RGBFloatHDRPlugin(QObject *parent, const QStringList &)
-    : QObject(parent)
+        : QObject(parent)
 {
     KoColorSpaceRegistry * f = KoColorSpaceRegistry::instance();
     // Register F16 HDR colorspace
 #ifdef HAVE_OPENEXR
     {
         KoColorSpaceFactory *csf  = new KisRgbF16HDRColorSpaceFactory();
-        const KoCtlColorProfile* profile = static_cast<const KoCtlColorProfile*>(f->profileByName( csf->defaultProfile() ) );
+        const KoCtlColorProfile* profile = static_cast<const KoCtlColorProfile*>(f->profileByName(csf->defaultProfile()));
         KoColorSpace * colorSpaceRGBF16  = new KisRgbF16HDRColorSpace(profile);
         Q_CHECK_PTR(colorSpaceRGBF16);
         f->add(csf);
         KoHistogramProducerFactoryRegistry::instance()->add(
-                    new KoBasicHistogramProducerFactory<KoBasicF16HalfHistogramProducer>
-                    (KoID("RGBF16HISTO", i18n("Float16 Half Histogram")), colorSpaceRGBF16) );
+            new KoBasicHistogramProducerFactory<KoBasicF16HalfHistogramProducer>
+            (KoID("RGBF16HISTO", i18n("Float16 Half Histogram")), colorSpaceRGBF16));
     }
 #endif
     // Register F32 HDR colorspace
     {
         KoColorSpaceFactory *csf  = new KisRgbF32HDRColorSpaceFactory();
-        const KoCtlColorProfile* profile = static_cast<const KoCtlColorProfile*>(f->profileByName( csf->defaultProfile() ) );
+        const KoCtlColorProfile* profile = static_cast<const KoCtlColorProfile*>(f->profileByName(csf->defaultProfile()));
         Q_ASSERT(profile);
         KoColorSpace * colorSpaceRGBF32  = new KisRgbF32HDRColorSpace(profile);
         Q_CHECK_PTR(colorSpaceRGBF32);
         f->add(csf);
         KoHistogramProducerFactoryRegistry::instance()->add(
-                    new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
-                    (KoID("RGBF32HISTO", i18n("Float32 Half Histogram")), colorSpaceRGBF32) );
+            new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
+            (KoID("RGBF32HISTO", i18n("Float32 Half Histogram")), colorSpaceRGBF32));
     }
 
 }

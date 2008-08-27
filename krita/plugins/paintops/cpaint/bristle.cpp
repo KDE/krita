@@ -21,44 +21,44 @@
 #include "gauss.h"
 
 
-void Bristle::initializeThickness ( int size )
+void Bristle::initializeThickness(int size)
 {
-    thickness = gauss::gaussian ( log10(size+7)*2.6, size/3.0, 0 );
-    if ( thickness < 0 )
+    thickness = gauss::gaussian(log10(size + 7) * 2.6, size / 3.0, 0);
+    if (thickness < 0)
         thickness = -thickness;
-    while ( thickness > 4.0 )
+    while (thickness > 4.0)
         thickness -= 0.5;
 }
 
 
 // called by constructor of brush
-void Bristle::setPos ( double x1, double y1 )
+void Bristle::setPos(double x1, double y1)
 {
     x = x1;
     y = y1;
 }
 
 
-void Bristle::setInitialPosition ( double x1, double y1 )
+void Bristle::setInitialPosition(double x1, double y1)
 {
     Q_UNUSED(x1);
     Q_UNUSED(y1);
-    
+
     lastx = x;
     lasty = y;
 }
 
 
-void Bristle::reposition ( double p )
+void Bristle::reposition(double p)
 {
     lastx = x;
     lasty = y;
-    x = lastx + ( gauss::gaussian ( 0.0, p/500.0, 1 ) );
-    y = lasty + ( gauss::gaussian ( 0.0, p/500.0, 1 ) );
+    x = lastx + (gauss::gaussian(0.0, p / 500.0, 1));
+    y = lasty + (gauss::gaussian(0.0, p / 500.0, 1));
 }
 
 
-double Bristle::distanceFromCenter ()
+double Bristle::distanceFromCenter()
 {
-    return sqrt ( x*x + y*y );
+    return sqrt(x*x + y*y);
 }

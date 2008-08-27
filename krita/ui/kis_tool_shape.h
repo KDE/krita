@@ -34,14 +34,17 @@ class WdgGeometryOptions : public QWidget, public Ui::WdgGeometryOptions
 {
     Q_OBJECT
 
-    public:
-        WdgGeometryOptions(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgGeometryOptions(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
 /**
  * Base for tools specialized in drawing shapes
  */
-class KRITAUI_EXPORT KisToolShape : public KisToolPaint {
+class KRITAUI_EXPORT KisToolShape : public KisToolPaint
+{
 
     Q_OBJECT
 

@@ -29,7 +29,8 @@ class WdgTransformationEffect;
 class WdgMaskSource;
 class WdgMaskFromSelection;
 
-class KisDlgTransformationEffect : public KDialog {
+class KisDlgTransformationEffect : public KDialog
+{
 
     Q_OBJECT
 
@@ -47,20 +48,17 @@ public:
                                QWidget *parent = 0,
                                const char *name = 0);
 
-    WdgTransformationEffect * transformationEffect()
-        {
-            return m_transformEffectWidget;
-        }
+    WdgTransformationEffect * transformationEffect() {
+        return m_transformEffectWidget;
+    }
 
-    WdgMaskSource * maskSource()
-        {
-            return m_maskSource;
-        }
+    WdgMaskSource * maskSource() {
+        return m_maskSource;
+    }
 
-    WdgMaskFromSelection * maskFromSelection()
-        {
-            return m_maskFromSelection;
-        }
+    WdgMaskFromSelection * maskFromSelection() {
+        return m_maskFromSelection;
+    }
 
 
 private:

@@ -50,15 +50,13 @@
 struct KisFilterHandler::Private {
 
     Private()
-        : view(0)
-        , manager(0)
-        , lastConfiguration(0)
-        {
-        }
+            : view(0)
+            , manager(0)
+            , lastConfiguration(0) {
+    }
 
-    ~Private()
-        {
-        }
+    ~Private() {
+    }
 
     KisFilterSP filter;
     KisView2* view;
@@ -68,8 +66,8 @@ struct KisFilterHandler::Private {
 };
 
 KisFilterHandler::KisFilterHandler(KisFilterManager* parent, KisFilterSP f, KisView2* view)
-    : QObject(parent)
-    , m_d(new Private)
+        : QObject(parent)
+        , m_d(new Private)
 {
     m_d->filter = f;
     m_d->view = view;
@@ -95,8 +93,7 @@ void KisFilterHandler::showDialog()
                                                    KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
                                                    "lab16degradation") != KMessageBox::Continue) return;
 
-        }
-        else if (m_d->filter->colorSpaceIndependence() == TO_RGBA16) {
+        } else if (m_d->filter->colorSpaceIndependence() == TO_RGBA16) {
             if (KMessageBox::warningContinueCancel(m_d->view,
                                                    i18n("The %1 filter will convert your %2 data to 16-bit RGBA and vice versa. ",
                                                         m_d->filter->name() , dev->colorSpace()->name()),
@@ -107,8 +104,8 @@ void KisFilterHandler::showDialog()
     }
 
 
-    KisFilterDialog* dialog = new KisFilterDialog( m_d->view , m_d->view->activeNode(), m_d->view->image());
-    dialog->setFilter( m_d->filter );
+    KisFilterDialog* dialog = new KisFilterDialog(m_d->view , m_d->view->activeNode(), m_d->view->image());
+    dialog->setFilter(m_d->filter);
     connect(dialog, SIGNAL(sigPleaseApplyFilter(KisNodeSP, KisFilterConfiguration*)),
             SLOT(apply(KisNodeSP, KisFilterConfiguration*)));
     dialog->setVisible(true);
@@ -122,10 +119,10 @@ void KisFilterHandler::reapply()
 
 void KisFilterHandler::apply(KisNodeSP layer, KisFilterConfiguration* config)
 {
-    dbgUI <<"Applying a filter";
-    if( !layer ) return;
+    dbgUI << "Applying a filter";
+    if (!layer) return;
 
-    KisFilterSP filter = KisFilterRegistry::instance()->value( config->name() );
+    KisFilterSP filter = KisFilterRegistry::instance()->value(config->name());
 
     m_d->dev = layer->paintDevice();
 
@@ -137,53 +134,50 @@ void KisFilterHandler::apply(KisNodeSP layer, KisFilterConfiguration* config)
 
     KisSelectionSP selection = m_d->view->selection();
 
-    if (  selection  ) {
+    if (selection) {
         QRect r3 = selection->selectedExactRect();
         rect = rect.intersect(r3);
     }
 
     KisTransaction * cmd = 0;
-    KoProgressUpdater updater( m_d->view->statusBar()->progress() );
-    if (m_d->view->image()->undo()) cmd = new KisTransaction( filter->name(), m_d->dev);
+    KoProgressUpdater updater(m_d->view->statusBar()->progress());
+    if (m_d->view->image()->undo()) cmd = new KisTransaction(filter->name(), m_d->dev);
 
-    KisProcessingInformation src( m_d->dev, rect.topLeft(), selection );
-    KisProcessingInformation dst( m_d->dev, rect.topLeft(), selection );
+    KisProcessingInformation src(m_d->dev, rect.topLeft(), selection);
+    KisProcessingInformation dst(m_d->dev, rect.topLeft(), selection);
 
-    if ( !filter->supportsThreading() ) {
+    if (!filter->supportsThreading()) {
         KoUpdater up = updater.startSubtask();
         filter->process(src, dst, rect.size(), config, &up);
         areaDone(rect);
-    }
-    else {
+    } else {
         // Chop up in rects.
-        KisFilterJobFactory factory( filter, config, selection );
-        KisThreadedApplicator applicator(m_d->dev, rect, &factory, &updater, filter->overlapMarginNeeded( config ));
-        applicator.connect( &applicator, SIGNAL(areaDone(const QRect&)), this, SLOT(areaDone(const QRect &)));
+        KisFilterJobFactory factory(filter, config, selection);
+        KisThreadedApplicator applicator(m_d->dev, rect, &factory, &updater, filter->overlapMarginNeeded(config));
+        applicator.connect(&applicator, SIGNAL(areaDone(const QRect&)), this, SLOT(areaDone(const QRect &)));
         applicator.execute();
     }
 
-/*    if (filter->cancelRequested()) { // TODO: port to the progress display reporter
-        delete config;
-        if (cmd) {
-            cmm_d->undo();
-            delete cmd;
-        }
-    } else */{
+    /*    if (filter->cancelRequested()) { // TODO: port to the progress display reporter
+            delete config;
+            if (cmd) {
+                cmm_d->undo();
+                delete cmd;
+            }
+        } else */{
         if (cmd) m_d->view->document()->addCommand(cmd);
-        if(filter->bookmarkManager())
-        {
+        if (filter->bookmarkManager()) {
             filter->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed.id(), config); // TODO ugly const_cast
         }
-        if(m_d->lastConfiguration != config)
-        {
+        if (m_d->lastConfiguration != config) {
             delete m_d->lastConfiguration;
         }
         m_d->lastConfiguration = config;
         m_d->manager->setLastFilterHandler(this);
 
-        m_d->view->image()->actionRecorder()->addAction( KisRecordedFilterAction(filter->name(), layer, filter, config));
+        m_d->view->image()->actionRecorder()->addAction(KisRecordedFilterAction(filter->name(), layer, filter, config));
     }
-    layer->setDirty( rect );
+    layer->setDirty(rect);
     QApplication::restoreOverrideCursor();
 }
 

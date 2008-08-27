@@ -51,8 +51,7 @@ KisMacro::~KisMacro()
 
 void KisMacro::appendActions(const QList<KisRecordedAction*>& actions)
 {
-    foreach(KisRecordedAction* action, actions)
-    {
+    foreach(KisRecordedAction* action, actions) {
         d->actions.append(action->clone());
     }
 }
@@ -68,22 +67,19 @@ void KisMacro::play()
 {
     dbgImage << "Start playing macro with " << d->actions.size() << " actions";
     KisUndoAdapter* undoAdapter = 0;
-    if(d->image->undo())
-    {
+    if (d->image->undo()) {
         undoAdapter = d->image->undoAdapter();
         undoAdapter->beginMacro(i18n("Play macro"));
     }
 
-    for( QList<KisRecordedAction*>::iterator it = d->actions.begin();
-         it != d->actions.end(); ++it)
-    {
+    for (QList<KisRecordedAction*>::iterator it = d->actions.begin();
+            it != d->actions.end(); ++it) {
         dbgImage << "Play action : " << (*it)->name();
         (*it)->play(undoAdapter);
         QApplication::processEvents();
     }
 
-    if(undoAdapter)
-    {
+    if (undoAdapter) {
         undoAdapter->endMacro();
     }
 }
@@ -92,17 +88,15 @@ void KisMacro::fromXML(const QDomElement& docElem)
 {
     d->actions.clear();
     QDomNode node = docElem.firstChild();
-    while(!node.isNull()) {
+    while (!node.isNull()) {
         QDomElement elt = node.toElement(); // try to convert the node to an element.
-        if(!elt.isNull() && elt.tagName() == "RecordedAction") {
+        if (!elt.isNull() && elt.tagName() == "RecordedAction") {
             QString id = elt.attribute("id", "");
-            if(!id.isNull())
-            {
+            if (!id.isNull()) {
                 dbgImage << "Reconstruct : " << id << endl; // the node really is an element.
                 KisRecordedActionFactory* raf = KisRecordedActionFactoryRegistry::instance()->get(id);
-                if(raf)
-                {
-                    d->actions.append( raf->fromXML( d->image, elt) );
+                if (raf) {
+                    d->actions.append(raf->fromXML(d->image, elt));
                 } else {
                     dbgImage << "Unknown action : " << id << endl;
                 }
@@ -118,9 +112,8 @@ void KisMacro::fromXML(const QDomElement& docElem)
 
 void KisMacro::toXML(QDomDocument& doc, QDomElement& e) const
 {
-    for( QList<KisRecordedAction*>::iterator it = d->actions.begin();
-        it != d->actions.end(); ++it)
-    {
+    for (QList<KisRecordedAction*>::iterator it = d->actions.begin();
+            it != d->actions.end(); ++it) {
         QDomElement eAct = doc.createElement("RecordedAction");
         (*it)->toXML(doc, eAct);
         e.appendChild(eAct);

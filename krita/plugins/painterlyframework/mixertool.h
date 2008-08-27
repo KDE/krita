@@ -28,7 +28,8 @@ class KoPointerEvent;
 class MixerCanvas;
 class QRegion;
 
-class MixerTool : public KisToolFreehand {
+class MixerTool : public KisToolFreehand
+{
     Q_OBJECT
 
 public:

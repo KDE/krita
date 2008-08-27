@@ -28,10 +28,10 @@
 using namespace Scripting;
 
 Wavelet::Wavelet(KisMathToolbox::KisWavelet* kwl)
-    : QObject(), m_wavelet(kwl)
+        : QObject(), m_wavelet(kwl)
 {
     setObjectName("KritaWavelet");
-    m_numCoeff = m_wavelet->size*m_wavelet->size*m_wavelet->depth;
+    m_numCoeff = m_wavelet->size * m_wavelet->size * m_wavelet->depth;
 }
 
 
@@ -42,47 +42,43 @@ Wavelet::~Wavelet()
 double Wavelet::getNCoeff(uint index)
 {
     quint32 n = index;
-    if( n > m_numCoeff)
-    {
-        kWarning(41011) << i18n("An error has occurred in %1",QString("getNCoeff")) + '\n' + i18n("Index out of bound") ;
+    if (n > m_numCoeff) {
+        kWarning(41011) << i18n("An error has occurred in %1", QString("getNCoeff")) + '\n' + i18n("Index out of bound") ;
         return 0.0;
     }
-    return *(m_wavelet->coeffs + n );
+    return *(m_wavelet->coeffs + n);
 }
 
 void Wavelet::setNCoeff(uint index, double value)
 {
     quint32 n = index;
-    if( n > m_numCoeff)
-    {
-        kWarning(41011) << i18n("An error has occurred in %1",QString("setNCoeff")) + '\n' + i18n("Index out of bound") ;
+    if (n > m_numCoeff) {
+        kWarning(41011) << i18n("An error has occurred in %1", QString("setNCoeff")) + '\n' + i18n("Index out of bound") ;
         return;
     }
-    *(m_wavelet->coeffs + n ) = value;
+    *(m_wavelet->coeffs + n) = value;
 }
 
 double Wavelet::getXYCoeff(uint x, uint y)
 {
     quint32 _x = x;
     quint32 _y = y;
-    if( _x > m_wavelet->size && _y > m_wavelet->size)
-    {
-        kWarning(41011) << i18n("An error has occurred in %1",QString("getXYCoeff")) + '\n' + i18n("Index out of bound") ;
+    if (_x > m_wavelet->size && _y > m_wavelet->size) {
+        kWarning(41011) << i18n("An error has occurred in %1", QString("getXYCoeff")) + '\n' + i18n("Index out of bound") ;
         return 0.0;
     }
-    return *( m_wavelet->coeffs  + (_x + _y * m_wavelet->size ) * m_wavelet->depth );
+    return *(m_wavelet->coeffs  + (_x + _y * m_wavelet->size) * m_wavelet->depth);
 }
 
 void Wavelet::setXYCoeff(uint x, uint y, double value)
 {
     quint32 _x = x;
     quint32 _y = y;
-    if( _x > m_wavelet->size && _y > m_wavelet->size)
-    {
-        kWarning(41011) << i18n("An error has occurred in %1",QString("setXYCoeff")) + '\n' + i18n("Index out of bound") ;
+    if (_x > m_wavelet->size && _y > m_wavelet->size) {
+        kWarning(41011) << i18n("An error has occurred in %1", QString("setXYCoeff")) + '\n' + i18n("Index out of bound") ;
         return;
     }
-    *(m_wavelet->coeffs + (_x + _y * m_wavelet->size ) * m_wavelet->depth ) = value;
+    *(m_wavelet->coeffs + (_x + _y * m_wavelet->size) * m_wavelet->depth) = value;
 }
 
 uint Wavelet::getDepth()

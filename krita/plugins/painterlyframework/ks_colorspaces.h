@@ -25,9 +25,9 @@
 class KSColorSpacesPlugin : public QObject
 {
     Q_OBJECT
-    public:
-        KSColorSpacesPlugin(QObject *parent, const QStringList &);
-        ~KSColorSpacesPlugin();
+public:
+    KSColorSpacesPlugin(QObject *parent, const QStringList &);
+    ~KSColorSpacesPlugin();
 
 };
 

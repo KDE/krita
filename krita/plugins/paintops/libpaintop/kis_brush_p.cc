@@ -78,8 +78,7 @@ KisQImagemask::KisQImagemask(const QImage& img, bool hasColor)
 
     if (hasColor) {
         copyAlpha(img);
-    }
-    else {
+    } else {
         computeAlpha(img);
     }
 }
@@ -91,8 +90,7 @@ KisQImagemask::KisQImagemask(const QImage& img)
 
     if (!img.allGray()) {
         copyAlpha(img);
-    }
-    else {
+    } else {
         computeAlpha(img);
     }
 }
@@ -118,12 +116,13 @@ qint32 KisQImagemask::width() const
 qint32 KisQImagemask::height() const
 {
     return m_height;
-}void KisQImagemask::copyAlpha(const QImage& img)
+}
+void KisQImagemask::copyAlpha(const QImage& img)
 {
     for (int y = 0; y < img.height(); y++) {
         for (int x = 0; x < img.width(); x++) {
-                        QRgb c = img.pixel(x,y);
-                        quint8 a = (qGray(c) * qAlpha(c)) / 255;
+            QRgb c = img.pixel(x, y);
+            quint8 a = (qGray(c) * qAlpha(c)) / 255;
             m_data.push_back(a);
 
         }

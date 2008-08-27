@@ -37,26 +37,28 @@ class KRITAUI_EXPORT KisLayerShape : public KoShapeContainer
 
 public:
 
-    KisLayerShape( KoShapeContainer * parent, KisLayerSP layer );
+    KisLayerShape(KoShapeContainer * parent, KisLayerSP layer);
     virtual ~KisLayerShape();
 
     KisLayerSP layer();
 
     // Shape overrides
     void paint(QPainter &painter, const KoViewConverter &converter);
-    bool isSelectable() const { return false; }
+    bool isSelectable() const {
+        return false;
+    }
     QSizeF size() const;
     QRectF boundingRect() const;
-    void setPosition( const QPointF & position );
+    void setPosition(const QPointF & position);
 
     // KoShapeContainer implementation
     void paintComponent(QPainter &painter, const KoViewConverter &converter);
 
-    void addChild( KoShape * shape );
+    void addChild(KoShape * shape);
     /// reimplemented
-    virtual void saveOdf( KoShapeSavingContext & context ) const;
+    virtual void saveOdf(KoShapeSavingContext & context) const;
     // reimplemented
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
 
 private:
     class Private;

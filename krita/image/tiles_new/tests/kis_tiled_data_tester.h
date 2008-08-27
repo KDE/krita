@@ -27,7 +27,7 @@ class KisTiledDataTester : public QObject
     Q_OBJECT
 
 private slots:
-        void allTests();
+    void allTests();
 };
 
 #endif

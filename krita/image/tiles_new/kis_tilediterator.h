@@ -28,7 +28,8 @@
 /**
  * The KisIterator class iterates through the pixels of a KisPaintDevice hiding the tile structure
  */
-class KisTiledIterator : public KisShared {
+class KisTiledIterator : public KisShared
+{
 
 protected:
     KisTiledDataManager *m_ktm;
@@ -45,22 +46,30 @@ protected:
     bool m_writable;
 
 protected:
-    inline quint32 xToCol(quint32 x) const { if (m_ktm) return m_ktm->xToCol(x); else return 0; }
-    inline quint32 yToRow(quint32 y) const { if (m_ktm) return m_ktm->yToRow(y); else return 0; }
+    inline quint32 xToCol(quint32 x) const {
+        if (m_ktm) return m_ktm->xToCol(x); else return 0;
+    }
+    inline quint32 yToRow(quint32 y) const {
+        if (m_ktm) return m_ktm->yToRow(y); else return 0;
+    }
     void fetchTileData(qint32 col, qint32 row);
 
 public:
-    KisTiledIterator( KisTiledDataManager *ktm);
+    KisTiledIterator(KisTiledDataManager *ktm);
     KisTiledIterator(const KisTiledIterator&);
     KisTiledIterator& operator=(const KisTiledIterator&);
     ~KisTiledIterator();
 
 public:
     // current x position
-    qint32 x() const { return m_x; }
+    qint32 x() const {
+        return m_x;
+    }
 
     // cirrent y position
-    qint32 y() const { return m_y; }
+    qint32 y() const {
+        return m_y;
+    }
 
     /// Returns a pointer to the pixel data. Do NOT interpret the data - leave that to a colorspace
     quint8 *rawData() const;
@@ -78,7 +87,7 @@ class KRITAIMAGE_EXPORT KisTiledRectIterator : public KisTiledIterator
 
 public:
     /// do not call constructor directly use factory method in KisDataManager instead.
-    KisTiledRectIterator( KisTiledDataManager *dm, qint32  x, qint32  y, qint32  w, qint32  h, bool writable);
+    KisTiledRectIterator(KisTiledDataManager *dm, qint32  x, qint32  y, qint32  w, qint32  h, bool writable);
     KisTiledRectIterator(const KisTiledRectIterator&);
     KisTiledRectIterator& operator=(const KisTiledRectIterator&);
     ~KisTiledRectIterator();
@@ -96,28 +105,30 @@ public:
     //KisTiledRectIterator & operator--();
 
     /// returns true when the iterator has reached the end
-    inline bool isDone() const { return m_beyondEnd; }
+    inline bool isDone() const {
+        return m_beyondEnd;
+    }
 
 
 protected:
-     qint32 m_left;
-     qint32 m_top;
-     qint32 m_w;
-     qint32 m_h;
-     qint32 m_topRow;
-     qint32 m_bottomRow;
-     qint32 m_leftCol;
-     qint32 m_rightCol;
-     qint32 m_xInTile;
-     qint32 m_yInTile;
-     qint32 m_leftInTile;
-     qint32 m_rightInTile;
-     qint32 m_topInTile;
-     qint32 m_bottomInTile;
-     bool m_beyondEnd;
+    qint32 m_left;
+    qint32 m_top;
+    qint32 m_w;
+    qint32 m_h;
+    qint32 m_topRow;
+    qint32 m_bottomRow;
+    qint32 m_leftCol;
+    qint32 m_rightCol;
+    qint32 m_xInTile;
+    qint32 m_yInTile;
+    qint32 m_leftInTile;
+    qint32 m_rightInTile;
+    qint32 m_topInTile;
+    qint32 m_bottomInTile;
+    bool m_beyondEnd;
 
 private:
-     void nextTile();
+    void nextTile();
 };
 
 /**
@@ -129,7 +140,7 @@ class KRITAIMAGE_EXPORT KisTiledHLineIterator : public KisTiledIterator
 
 public:
     /// do not call constructor directly use factory method in KisDataManager instead.
-    KisTiledHLineIterator( KisTiledDataManager *dm, qint32  x, qint32  y, qint32 w, bool writable);
+    KisTiledHLineIterator(KisTiledDataManager *dm, qint32  x, qint32  y, qint32 w, bool writable);
     KisTiledHLineIterator(const KisTiledHLineIterator&);
     KisTiledHLineIterator& operator=(const KisTiledHLineIterator&);
     ~KisTiledHLineIterator();
@@ -149,24 +160,26 @@ public:
     KisTiledHLineIterator & operator--();
 
     /// returns true when the iterator has reached the end
-    bool isDone() const { return m_x > m_right; }
+    bool isDone() const {
+        return m_x > m_right;
+    }
 
     /// increment to the next row and rewind to the beginning
     void nextRow();
 
 protected:
-     qint32 m_right;
-     qint32 m_left;
-     qint32 m_leftCol;
-     qint32 m_rightCol;
-     qint32 m_xInTile;
-     qint32 m_yInTile;
-     qint32 m_leftInTile;
-     qint32 m_rightInTile;
+    qint32 m_right;
+    qint32 m_left;
+    qint32 m_leftCol;
+    qint32 m_rightCol;
+    qint32 m_xInTile;
+    qint32 m_yInTile;
+    qint32 m_leftInTile;
+    qint32 m_rightInTile;
 
 private:
-     void nextTile();
-     void prevTile();
+    void nextTile();
+    void prevTile();
 };
 
 /**
@@ -178,7 +191,7 @@ class KRITAIMAGE_EXPORT KisTiledVLineIterator : public KisTiledIterator
 
 public:
     /// do not call constructor directly use factory method in KisDataManager instead.
-    KisTiledVLineIterator( KisTiledDataManager *dm, qint32  x, qint32 y, qint32 h, bool writable);
+    KisTiledVLineIterator(KisTiledDataManager *dm, qint32  x, qint32 y, qint32 h, bool writable);
     KisTiledVLineIterator(const KisTiledVLineIterator&);
     KisTiledVLineIterator& operator=(const KisTiledVLineIterator&);
     ~KisTiledVLineIterator();
@@ -191,7 +204,9 @@ public:
     //KisTiledVLineIterator & operator--();
 
     /// returns true when the iterator has reached the end
-    bool isDone() const { return m_y > m_bottom; }
+    bool isDone() const {
+        return m_y > m_bottom;
+    }
 
     /// increment to the next column and rewind to the beginning
     void nextCol();
@@ -207,7 +222,7 @@ protected:
     qint32 m_bottomInTile;
 
 private:
-     void nextTile();
+    void nextTile();
 };
 
 #endif // KIS_TILED_ITERATOR_H_

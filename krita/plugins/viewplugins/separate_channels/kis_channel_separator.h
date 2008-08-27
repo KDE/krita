@@ -42,7 +42,8 @@ enum enumSepOutput {
     TO_IMAGES = 1
 };
 
-class KisChannelSeparator {
+class KisChannelSeparator
+{
 
 public:
 

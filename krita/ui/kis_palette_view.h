@@ -34,12 +34,14 @@ class KisPaletteView : public Q3ScrollView
 {
     Q_OBJECT
 public:
-    KisPaletteView(QWidget *parent, const char* name = 0, int minWidth=210, int cols = 16);
+    KisPaletteView(QWidget *parent, const char* name = 0, int minWidth = 210, int cols = 16);
     virtual ~KisPaletteView();
 
     KoColorSet* palette() const;
     /// Might return the default constructed entry...
-    KoColorSetEntry currentEntry() const { return m_currentEntry; }
+    KoColorSetEntry currentEntry() const {
+        return m_currentEntry;
+    }
 
 public slots:
     void setPalette(KoColorSet* p);
@@ -50,8 +52,8 @@ signals:
     void colorDoubleClicked(const KoColor &, const QString &);
 
 protected slots:
-    void slotColorCellSelected( int );
-    void slotColorCellDoubleClicked( int );
+    void slotColorCellSelected(int);
+    void slotColorCellDoubleClicked(int);
 
 protected:
     KoColorSet* m_currentPalette;

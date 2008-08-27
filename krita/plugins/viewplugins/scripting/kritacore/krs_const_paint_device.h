@@ -28,7 +28,8 @@
 class KisDoc2;
 class KisPaintDevice;
 
-namespace Scripting {
+namespace Scripting
+{
 
 class Image;
 
@@ -38,80 +39,84 @@ class Image;
  */
 class KROSSKRITACORE_EXPORT ConstPaintDevice : public QObject
 {
-        Q_OBJECT
-    public:
-        explicit ConstPaintDevice(const KisPaintDeviceSP layer, KisDoc2* doc = 0);
-        virtual ~ConstPaintDevice();
+    Q_OBJECT
+public:
+    explicit ConstPaintDevice(const KisPaintDeviceSP layer, KisDoc2* doc = 0);
+    virtual ~ConstPaintDevice();
 
-    public slots:
+public slots:
 
-        /**
-         * Return the width of the layer.
-         */
-        int width();
+    /**
+     * Return the width of the layer.
+     */
+    int width();
 
-        /**
-         * Return the height of the layer.
-         */
-        int height();
+    /**
+     * Return the height of the layer.
+     */
+    int height();
 
-        /**
-         * Return the id of the colorspace of this image (e.g. "RGBA" or "CMYK").
-         */
-        QString colorSpaceId();
+    /**
+     * Return the id of the colorspace of this image (e.g. "RGBA" or "CMYK").
+     */
+    QString colorSpaceId();
 
-        /**
-         * Create an iterator over a layer, it will iterate on a rectangle area.
-         * This function takes four arguments :
-         *  - x
-         *  - y
-         *  - width of the rectangle
-         *  - height of the rectangle
-         */
-        QObject* createRectConstIterator(uint x, uint y, uint width, uint height);
+    /**
+     * Create an iterator over a layer, it will iterate on a rectangle area.
+     * This function takes four arguments :
+     *  - x
+     *  - y
+     *  - width of the rectangle
+     *  - height of the rectangle
+     */
+    QObject* createRectConstIterator(uint x, uint y, uint width, uint height);
 
-        /**
-         * Create an iterator over a layer, it will iterate on a row.
-         * This function takes three arguments :
-         *  - x start in the row
-         *  - y vertical position of the row
-         *  - width of the row
-         */
-        QObject* createHLineConstIterator(uint x, uint y, uint width);
+    /**
+     * Create an iterator over a layer, it will iterate on a row.
+     * This function takes three arguments :
+     *  - x start in the row
+     *  - y vertical position of the row
+     *  - width of the row
+     */
+    QObject* createHLineConstIterator(uint x, uint y, uint width);
 
-        /**
-         * Create an iterator over a layer, it will iterate on a column.
-         * This function takes three arguments :
-         *  - x horizontal position of the column
-         *  - y start in the column
-         *  - height of the column
-         */
-        QObject* createVLineConstIterator(uint x, uint y, uint height);
+    /**
+     * Create an iterator over a layer, it will iterate on a column.
+     * This function takes three arguments :
+     *  - x horizontal position of the column
+     *  - y start in the column
+     *  - height of the column
+     */
+    QObject* createVLineConstIterator(uint x, uint y, uint height);
 
-        /**
-         * This function creates an Histogram for this layer.
-         * It takes two arguments :
-         *  - the type of the histogram ("RGB8HISTO")
-         *  - 0 if the histogram is linear, or 1 if it is logarithmic
-         */
-        QObject* createHistogram(const QString& histoname, uint typenr);
+    /**
+     * This function creates an Histogram for this layer.
+     * It takes two arguments :
+     *  - the type of the histogram ("RGB8HISTO")
+     *  - 0 if the histogram is linear, or 1 if it is logarithmic
+     */
+    QObject* createHistogram(const QString& histoname, uint typenr);
 
-        /**
-         * Return the fast \a Wavelet transformed of the layer.
-         */
-        QObject* fastWaveletTransformation();
+    /**
+     * Return the fast \a Wavelet transformed of the layer.
+     */
+    QObject* fastWaveletTransformation();
 
-        /**
-         * clone this paint layer, making a deep copy.
-         */
-        QObject* clone();
+    /**
+     * clone this paint layer, making a deep copy.
+     */
+    QObject* clone();
 
-    public:
-        inline const KisPaintDeviceSP paintDevice() const { return m_device; }
-        inline KisDoc2* doc() { return m_doc; }
-    private:
-        const KisPaintDeviceSP m_device;
-        KisDoc2* m_doc;
+public:
+    inline const KisPaintDeviceSP paintDevice() const {
+        return m_device;
+    }
+    inline KisDoc2* doc() {
+        return m_doc;
+    }
+private:
+    const KisPaintDeviceSP m_device;
+    KisDoc2* m_doc;
 };
 
 }

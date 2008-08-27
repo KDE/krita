@@ -22,19 +22,20 @@
  * This is an interface to define the function call which are common between
  * shapes and coloring.
  */
-class KisDynamicTransformable {
-    public:
-        virtual ~KisDynamicTransformable() {}
-        /**
-         * Call this function to rotate this object
-         */
-        virtual void rotate(double r) = 0;
-        /**
-         * Call this function to resize the object.
-         * @param xs horizontal scaling
-         * @param ys vertical scaling
-         */
-        virtual void resize(double xs, double ys) = 0;
+class KisDynamicTransformable
+{
+public:
+    virtual ~KisDynamicTransformable() {}
+    /**
+     * Call this function to rotate this object
+     */
+    virtual void rotate(double r) = 0;
+    /**
+     * Call this function to resize the object.
+     * @param xs horizontal scaling
+     * @param ys vertical scaling
+     */
+    virtual void resize(double xs, double ys) = 0;
 };
 
 #endif

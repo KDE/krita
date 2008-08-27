@@ -30,24 +30,25 @@ class QModelIndex;
  * allow to embed a QTreeView
  * (see http://trolltech.com/developer/task-tracker/index_html?method=entry&id=87744
  * and http://trolltech.com/developer/task-tracker/index_html?method=entry&id=109685).
- * Once (if) those bugs are fixed, this class should be removed and should not be 
+ * Once (if) those bugs are fixed, this class should be removed and should not be
  * part of Krita's official API.
  */
-class KisTreeViewPopup : public KisPopupButton {
+class KisTreeViewPopup : public KisPopupButton
+{
     Q_OBJECT
-    public:
-        KisTreeViewPopup(QWidget* parent);
-        void setModel(QAbstractItemModel* model);
-        void setCurrentFilterId( const QString& id );
-    signals:
-        void currentItemChanged(const QModelIndex &);
-    public slots:
-        void setCurrentIndex(const QModelIndex &);
-    protected:
-        virtual void resizeEvent ( QResizeEvent * event );
-    private:
-        struct Private;
-        Private* const d;
+public:
+    KisTreeViewPopup(QWidget* parent);
+    void setModel(QAbstractItemModel* model);
+    void setCurrentFilterId(const QString& id);
+signals:
+    void currentItemChanged(const QModelIndex &);
+public slots:
+    void setCurrentIndex(const QModelIndex &);
+protected:
+    virtual void resizeEvent(QResizeEvent * event);
+private:
+    struct Private;
+    Private* const d;
 };
 
 

@@ -28,15 +28,17 @@ class Ui_WdgColorOptions;
 class KisWdgColor : public KisFilterConfigWidget
 {
     Q_OBJECT
-    public:
-        KisWdgColor(QWidget* parent = 0);
-        ~KisWdgColor();
-    public:
-        inline const Ui_WdgColorOptions* widget() const { return m_widget; }
-        virtual void setConfiguration(KisFilterConfiguration*);
-        virtual KisFilterConfiguration* configuration() const;
-    private:
-        Ui_WdgColorOptions* m_widget;
+public:
+    KisWdgColor(QWidget* parent = 0);
+    ~KisWdgColor();
+public:
+    inline const Ui_WdgColorOptions* widget() const {
+        return m_widget;
+    }
+    virtual void setConfiguration(KisFilterConfiguration*);
+    virtual KisFilterConfiguration* configuration() const;
+private:
+    Ui_WdgColorOptions* m_widget;
 };
 
 #endif

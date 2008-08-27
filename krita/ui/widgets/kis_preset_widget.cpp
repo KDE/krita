@@ -31,20 +31,20 @@
 #include <kis_painter.h>
 
 KisPresetWidget::KisPresetWidget(QWidget *parent, const char *name)
-    : KisPopupButton(parent)
+        : KisPopupButton(parent)
 {
     setObjectName(name);
     m_preset = 0;
     m_canvas = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "preset preview canvas");
 }
 
-void KisPresetWidget::slotSetPaintOp( const KoID & paintOp )
+void KisPresetWidget::slotSetPaintOp(const KoID & paintOp)
 {
     m_paintOp = paintOp;
 }
 
 
-void KisPresetWidget::slotSetItem( KisPaintOpPreset * preset )
+void KisPresetWidget::slotSetItem(KisPaintOpPreset * preset)
 {
     m_preset = preset;
     update();
@@ -55,14 +55,14 @@ void KisPresetWidget::paintEvent(QPaintEvent *)
     QPainter p(this);
     qint32 cw = width();
     qint32 ch = height();
-    p.fillRect( 0, 0, cw, ch, Qt::white); // XXX: use a palette for this instead of white?
+    p.fillRect(0, 0, cw, ch, Qt::white);  // XXX: use a palette for this instead of white?
 
-/*
-    draw a sinus with min pressure at start, max pressure in the middle, min pressure at end
-*/
+    /*
+        draw a sinus with min pressure at start, max pressure in the middle, min pressure at end
+    */
     if (m_preset) {
-        p.drawImage( 1, 1, m_preset->img() );
-        p.drawText( 1, ch -1 , m_preset->name() );
+        p.drawImage(1, 1, m_preset->img());
+        p.drawText(1, ch - 1 , m_preset->name());
     }
     p.setPen(Qt::gray);
     p.drawRect(0, 0, cw + 1, ch + 1);

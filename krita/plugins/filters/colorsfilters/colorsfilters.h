@@ -33,7 +33,8 @@ public:
     virtual ~ColorsFilters();
 };
 
-class KisAutoContrast : public KisFilter {
+class KisAutoContrast : public KisFilter
+{
 public:
     KisAutoContrast();
 public:
@@ -43,14 +44,17 @@ public:
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
-        ) const;
-    static inline KoID id() { return KoID("autocontrast", i18n("Auto Contrast")); }
+                ) const;
+    static inline KoID id() {
+        return KoID("autocontrast", i18n("Auto Contrast"));
+    }
     virtual bool workWith(const KoColorSpace* cs) const;
 
 };
 
 
-class KisDesaturateFilter : public KisFilter {
+class KisDesaturateFilter : public KisFilter
+{
 public:
     KisDesaturateFilter();
     ~KisDesaturateFilter();
@@ -61,8 +65,10 @@ public:
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
-        ) const;
-    static inline KoID id() { return KoID("desaturate", i18n("Desaturate")); }
+                ) const;
+    static inline KoID id() {
+        return KoID("desaturate", i18n("Desaturate"));
+    }
     virtual bool workWith(const KoColorSpace* cs) const;
 
 };

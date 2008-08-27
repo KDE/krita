@@ -30,14 +30,17 @@ class KisResourceMediator;
 class KoResource;
 
 
-class KRITAUI_EXPORT KisBrushChooser : public KisItemChooser {
+class KRITAUI_EXPORT KisBrushChooser : public KisItemChooser
+{
 
     Q_OBJECT
 
 public:
     KisBrushChooser(QWidget *parent = 0, const char *name = 0);
     virtual ~KisBrushChooser();
-    KisBrushSP brush() { return m_brush; };
+    KisBrushSP brush() {
+        return m_brush;
+    };
 
 protected:
     virtual void update(QTableWidgetItem *item);

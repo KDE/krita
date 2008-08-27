@@ -30,46 +30,46 @@
 
 void KisTextBrushResource::updateBrush()
 {
-	QFontMetrics metric(m_font);
-	int w = metric.width(m_txt);
-	int h = metric.height();
-	QPixmap px(w,h);
-	QPainter p;
-	p.begin(&px);
-	p.setFont( m_font );
-	p.fillRect(0,0, w, h, Qt::white);
-	p.setPen(Qt::black);
-	p.drawText(0, metric.ascent(), m_txt );
-	p.end();
-	setImage(px.toImage());
+    QFontMetrics metric(m_font);
+    int w = metric.width(m_txt);
+    int h = metric.height();
+    QPixmap px(w, h);
+    QPainter p;
+    p.begin(&px);
+    p.setFont(m_font);
+    p.fillRect(0, 0, w, h, Qt::white);
+    p.setPen(Qt::black);
+    p.drawText(0, metric.ascent(), m_txt);
+    p.end();
+    setImage(px.toImage());
 }
 
 KisTextBrush::KisTextBrush(QWidget *parent, const char* name, const QString& caption)
-	: KisWdgTextBrush(parent, name),
-	  m_textBrush(new KisTextBrushResource())
+        : KisWdgTextBrush(parent, name),
+        m_textBrush(new KisTextBrushResource())
 {
-	setWindowTitle(caption);
-	connect((QObject*)lineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(rebuildTextBrush()));
-	connect((QObject*)bnFont, SIGNAL(clicked()), this, SLOT(getFont()));
-	m_font = font();
-	rebuildTextBrush();
+    setWindowTitle(caption);
+    connect((QObject*)lineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(rebuildTextBrush()));
+    connect((QObject*)bnFont, SIGNAL(clicked()), this, SLOT(getFont()));
+    m_font = font();
+    rebuildTextBrush();
 }
 
 
 void KisTextBrush::getFont()
 {
-	KFontDialog::getFont( m_font, false/*, QWidget* parent! */ );
-	rebuildTextBrush();
+    KFontDialog::getFont(m_font, false/*, QWidget* parent! */);
+    rebuildTextBrush();
 }
 
 void KisTextBrush::rebuildTextBrush()
 {
-	lblFont->setText(QString(m_font.family() + ", %1").arg(m_font.pointSize()));
-	lblFont->setFont(m_font);
-        KisTextBrushResource* textBrush = dynamic_cast<KisTextBrushResource*>( m_textBrush.data() );
-	textBrush->setFont(m_font);
-	textBrush->setText(lineEdit->text());
-	textBrush->updateBrush();
+    lblFont->setText(QString(m_font.family() + ", %1").arg(m_font.pointSize()));
+    lblFont->setFont(m_font);
+    KisTextBrushResource* textBrush = dynamic_cast<KisTextBrushResource*>(m_textBrush.data());
+    textBrush->setFont(m_font);
+    textBrush->setText(lineEdit->text());
+    textBrush->updateBrush();
 }
 
 #include "kis_text_brush.moc"

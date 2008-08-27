@@ -49,7 +49,7 @@ private:
     KisFilterRegistry operator=(const KisFilterRegistry&);
 
 private:
-     static KisFilterRegistry *m_singleton;
+    static KisFilterRegistry *m_singleton;
 };
 
 #endif // KIS_FILTERSPACE_REGISTRY_H_

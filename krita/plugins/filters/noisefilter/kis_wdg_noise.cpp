@@ -30,13 +30,13 @@
 #include "ui_wdgnoiseoptions.h"
 
 KisWdgNoise::KisWdgNoise(KisFilter* /*nfilter*/, QWidget* parent)
-    : KisFilterConfigWidget(parent)
+        : KisFilterConfigWidget(parent)
 {
     m_widget = new Ui_WdgNoiseOptions();
     m_widget->setupUi(this);
 
-    connect( widget()->intLevel, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->intOpacity, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->intLevel, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->intOpacity, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
     m_seedThreshold = rand();
     m_seedRed = rand();
     m_seedGreen = rand();
@@ -50,25 +50,23 @@ KisWdgNoise::~KisWdgNoise()
 void KisWdgNoise::setConfiguration(KisFilterConfiguration* config)
 {
     QVariant value;
-    if (config->getProperty("level", value))
-    {
-        widget()->intLevel->setValue( value.toUInt() );
+    if (config->getProperty("level", value)) {
+        widget()->intLevel->setValue(value.toUInt());
     }
-    if (config->getProperty("opacity", value))
-    {
-        widget()->intOpacity->setValue( value.toUInt() );
+    if (config->getProperty("opacity", value)) {
+        widget()->intOpacity->setValue(value.toUInt());
     }
 }
 
 KisFilterConfiguration* KisWdgNoise::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("noise", 1);
-    config->setProperty("level", this->widget()->intLevel->value() );
-    config->setProperty("opacity", this->widget()->intOpacity->value() );
-    config->setProperty("seedThreshold", m_seedThreshold );
-    config->setProperty("seedRed", m_seedRed );
-    config->setProperty("seedGreen", m_seedGreen );
-    config->setProperty("seedBlue", m_seedBlue );
+    config->setProperty("level", this->widget()->intLevel->value());
+    config->setProperty("opacity", this->widget()->intOpacity->value());
+    config->setProperty("seedThreshold", m_seedThreshold);
+    config->setProperty("seedRed", m_seedRed);
+    config->setProperty("seedGreen", m_seedGreen);
+    config->setProperty("seedBlue", m_seedBlue);
     return config;
 }
 

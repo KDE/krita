@@ -30,8 +30,8 @@
 #include "KoColorSetWidget.h"
 #include "kis_canvas_resource_provider.h"
 
-KisPaletteDocker::KisPaletteDocker( KisView2 * view )
-    : QDockWidget(i18n("Palettes"))
+KisPaletteDocker::KisPaletteDocker(KisView2 * view)
+        : QDockWidget(i18n("Palettes"))
 {
     m_view = view;
 
@@ -40,10 +40,10 @@ KisPaletteDocker::KisPaletteDocker( KisView2 * view )
 
     m_currentPalette = 0;
 
-    QVBoxLayout *layout = new QVBoxLayout( mainWidget );
+    QVBoxLayout *layout = new QVBoxLayout(mainWidget);
 
     KoColorSetWidget* chooser = new KoColorSetWidget(this);
-    layout->addWidget( chooser );
+    layout->addWidget(chooser);
     mainWidget->setLayout(layout);
 
     //setFixedSize(sizeHint());
@@ -56,9 +56,9 @@ KisPaletteDocker::~KisPaletteDocker()
 {
 }
 
-void KisPaletteDocker::colorSelected( const KoColor& color, bool final )
+void KisPaletteDocker::colorSelected(const KoColor& color, bool final)
 {
-    if(final)
+    if (final)
         m_view->resourceProvider()->setFGColor(color);
 }
 

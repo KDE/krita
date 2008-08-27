@@ -31,44 +31,42 @@
 // Filterslist program includes
 #include "kis_filters_list_dynamic_program_editor.h"
 
-class Factory {
-    public:
-        Factory()
-        {
-            KisDynamicProgramFactoryRegistry::instance()->add( new KisFiltersListDynamicProgramFactory );
-        }
+class Factory
+{
+public:
+    Factory() {
+        KisDynamicProgramFactoryRegistry::instance()->add(new KisFiltersListDynamicProgramFactory);
+    }
 };
 
 static Factory factory;
 
 KisFiltersListDynamicProgram::~KisFiltersListDynamicProgram()
 {
-    for(QList<KisDynamicTransformation*>::iterator transfo = beginTransformation();
-        transfo != endTransformation(); ++transfo)
-    {
+    for (QList<KisDynamicTransformation*>::iterator transfo = beginTransformation();
+            transfo != endTransformation(); ++transfo) {
         delete * transfo;
     }
 }
 
 void KisFiltersListDynamicProgram::apply(KisDynamicShape* shape, KisDynamicColoring* coloringsrc, const KisPaintInformation& adjustedInfo)
 {
-     // First apply the transfo to the dab source
-    for(QList<KisDynamicTransformation*>::iterator transfo = beginTransformation();
-        transfo != endTransformation(); ++transfo)
-    {
+    // First apply the transfo to the dab source
+    for (QList<KisDynamicTransformation*>::iterator transfo = beginTransformation();
+            transfo != endTransformation(); ++transfo) {
         (*transfo)->transformBrush(shape, adjustedInfo);
     }
 
     // Then to the coloring source
-    for(QList<KisDynamicTransformation*>::iterator transfo = beginTransformation();
-        transfo != endTransformation(); ++transfo)
-    {
+    for (QList<KisDynamicTransformation*>::iterator transfo = beginTransformation();
+            transfo != endTransformation(); ++transfo) {
         (*transfo)->transformColoring(coloringsrc, adjustedInfo);
     }
 
 }
 
-void KisFiltersListDynamicProgram::appendTransformation(KisDynamicTransformation* transfo) {
+void KisFiltersListDynamicProgram::appendTransformation(KisDynamicTransformation* transfo)
+{
     dbgPlugins << "Append transfo : " << transfo->name();
     m_transformations.append(transfo);
     emit(programChanged());
@@ -88,14 +86,11 @@ void KisFiltersListDynamicProgram::fromXML(const QDomElement& elt)
         if (not e.isNull()) {
             if (e.tagName() == "Filters") {
                 QDomNode nFilter = e.firstChild();
-                while(not nFilter.isNull())
-                {
+                while (not nFilter.isNull()) {
                     QDomElement eFilter = nFilter.toElement();
-                    if(eFilter.tagName() == "Filter")
-                    {
+                    if (eFilter.tagName() == "Filter") {
                         KisDynamicTransformation* transfo = KisDynamicTransformationsFactory::createFromXML(eFilter);
-                        if(transfo)
-                        {
+                        if (transfo) {
                             appendTransformation(transfo);
                         }
                     }
@@ -111,11 +106,10 @@ void KisFiltersListDynamicProgram::fromXML(const QDomElement& elt)
 void KisFiltersListDynamicProgram::toXML(QDomDocument& doc, QDomElement& rootElt) const
 {
     KisDynamicProgram::toXML(doc, rootElt);
-    
+
     QDomElement filtersElt = doc.createElement("Filters");
-    for( QList<KisDynamicTransformation*>::const_iterator it = m_transformations.begin();
-    it != m_transformations.end(); ++it)
-    {
+    for (QList<KisDynamicTransformation*>::const_iterator it = m_transformations.begin();
+            it != m_transformations.end(); ++it) {
         QDomElement filterElt = doc.createElement("Filter");
         (*it)->toXML(doc, filterElt);
         filtersElt.appendChild(filterElt);
@@ -127,7 +121,7 @@ void KisFiltersListDynamicProgram::toXML(QDomDocument& doc, QDomElement& rootElt
 //--- KisFiltersListDynamicProgramFactory ---//
 
 KisFiltersListDynamicProgramFactory::KisFiltersListDynamicProgramFactory() :
-    KisDynamicProgramFactory("filterslist", i18n("Filters list"))
+        KisDynamicProgramFactory("filterslist", i18n("Filters list"))
 {
 }
 

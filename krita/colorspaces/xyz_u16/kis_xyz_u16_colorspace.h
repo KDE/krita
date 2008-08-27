@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KIS_STRATEGY_COLORSPACE_XYZ_U16_H_
-#define KIS_STRATEGY_COLORSPACE_XYZ_U16_H_
+#ifndef KIS_XYZ_U16_COLORSPACE_H_
+#define KIS_XYZ_U16_COLORSPACE_H_
 
 #include <KoLcmsColorSpace.h>
 #include <KoColorSpaceTraits.h>
@@ -30,35 +30,54 @@ typedef KoXyzTraits<quint16> XyzU16Traits;
 
 class PIGMENT_XYZ_U16_EXPORT KisXyzU16ColorSpace : public KoLcmsColorSpace<XyzU16Traits>
 {
-    public:
-        KisXyzU16ColorSpace( KoColorProfile *p);
-        virtual bool willDegrade(ColorSpaceIndependence independence) const;
-        virtual KoID colorModelId() const { return XYZAColorModelID; }
-        virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
-        virtual KoColorSpace* clone() const;
-        virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
-        virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const;
+public:
+    KisXyzU16ColorSpace(KoColorProfile *p);
+    virtual bool willDegrade(ColorSpaceIndependence independence) const;
+    virtual KoID colorModelId() const {
+        return XYZAColorModelID;
+    }
+    virtual KoID colorDepthId() const {
+        return Integer16BitsColorDepthID;
+    }
+    virtual KoColorSpace* clone() const;
+    virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
+    virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const;
 };
 
 #define TYPE_XYZA_16 (COLORSPACE_SH(PT_XYZ)|CHANNELS_SH(3)|BYTES_SH(2)|EXTRA_SH(1))
 
 class KisXyzU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
 {
-    public:
-        KisXyzU16ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_XYZA_16, icSigXYZData)
-        {
-        }
-        virtual QString id() const { return "XYZA16"; }
-        virtual QString name() const { return i18n("XYZ (16-bit integer/channel)"); }
-        virtual bool userVisible() const { return true; }
+public:
+    KisXyzU16ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_XYZA_16, icSigXYZData) {
+    }
+    virtual QString id() const {
+        return "XYZA16";
+    }
+    virtual QString name() const {
+        return i18n("XYZ (16-bit integer/channel)");
+    }
+    virtual bool userVisible() const {
+        return true;
+    }
 
-        virtual KoID colorModelId() const { return XYZAColorModelID; }
-        virtual KoID colorDepthId() const { return Integer16BitsColorDepthID; }
-        virtual int referenceDepth() const { return 16; }
+    virtual KoID colorModelId() const {
+        return XYZAColorModelID;
+    }
+    virtual KoID colorDepthId() const {
+        return Integer16BitsColorDepthID;
+    }
+    virtual int referenceDepth() const {
+        return 16;
+    }
 
-        virtual KoColorSpace *createColorSpace( const KoColorProfile *p) const { return new KisXyzU16ColorSpace( p->clone() ); }
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *p) const {
+        return new KisXyzU16ColorSpace(p->clone());
+    }
 
-        virtual QString defaultProfile() const { return "XYZ built-in - (lcms internal)"; }
+    virtual QString defaultProfile() const {
+        return "XYZ built-in - (lcms internal)";
+    }
 };
 
 

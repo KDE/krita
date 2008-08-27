@@ -47,32 +47,32 @@ void KisTransparencyMaskTest::testCreation()
 void KisTransparencyMaskTest::testApply()
 {
     QPoint errpoint;
-    
+
     KisTransparencyMaskSP mask = new KisTransparencyMask();
-    
+
     // Nothing is selected -- therefore everything should be filtered out on apply
     KisPaintDeviceSP dev = createDevice();
     mask->apply(dev, QRect(0, 0, 200, 100));
     QImage qimg = dev->convertToQImage(0, 0, 0, 200, 100);
 
-    if ( !TestUtil::compareQImages( errpoint,
-            QImage(QString(FILES_DATA_DIR) + QDir::separator() + "transparency_mask_test_1.png"),
-            qimg ) ) {
-        QFAIL( QString( "Failed to mask out image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
+    if (!TestUtil::compareQImages(errpoint,
+                                  QImage(QString(FILES_DATA_DIR) + QDir::separator() + "transparency_mask_test_1.png"),
+                                  qimg)) {
+        QFAIL(QString("Failed to mask out image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
-    
+
     // Invert the mask -- everything is selected
     dev = createDevice();
     mask->selection()->getOrCreatePixelSelection()->invert();
     mask->apply(dev, QRect(0, 0, 200, 100));
     qimg = dev->convertToQImage(0, 0, 0, 200, 100);
 
-    if ( !TestUtil::compareQImages( errpoint,
-            QImage(QString(FILES_DATA_DIR) + QDir::separator() + "transparency_mask_test_2.png"),
-            qimg ) ) {
-        QFAIL( QString( "Failed to mask in image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
+    if (!TestUtil::compareQImages(errpoint,
+                                  QImage(QString(FILES_DATA_DIR) + QDir::separator() + "transparency_mask_test_2.png"),
+                                  qimg)) {
+        QFAIL(QString("Failed to mask in image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
-    
+
     // Invert back, and select a small area
     dev = createDevice();
     mask->selection()->getOrCreatePixelSelection()->invert();
@@ -80,13 +80,13 @@ void KisTransparencyMaskTest::testApply()
     mask->apply(dev, QRect(0, 0, 200, 100));
     qimg = dev->convertToQImage(0, 0, 0, 200, 100);
 
-    if ( !TestUtil::compareQImages( errpoint,
-            QImage(QString(FILES_DATA_DIR) + QDir::separator() + "transparency_mask_test_3.png"),
-            qimg ) ) {
+    if (!TestUtil::compareQImages(errpoint,
+                                  QImage(QString(FILES_DATA_DIR) + QDir::separator() + "transparency_mask_test_3.png"),
+                                  qimg)) {
 
-        QFAIL( QString( "Failed to apply partial mask, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
+        QFAIL(QString("Failed to apply partial mask, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
-    
+
 }
 
 QTEST_KDEMAIN(KisTransparencyMaskTest, GUI)

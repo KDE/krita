@@ -29,16 +29,16 @@
 #include "ui_wdglenscorrectionoptions.h"
 
 KisWdgLensCorrection::KisWdgLensCorrection(KisFilter* /*nfilter*/, QWidget* parent)
-    : KisFilterConfigWidget(parent)
+        : KisFilterConfigWidget(parent)
 {
     m_widget = new Ui_WdgLensCorrectionOptions();
     m_widget->setupUi(this);
 
-    connect( widget()->intXCenter, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->intYCenter, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->dblCorrectionNearCenter, SIGNAL( valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->dblCorrectionNearEdges, SIGNAL( valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->dblBrightness, SIGNAL( valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->intXCenter, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->intYCenter, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->dblCorrectionNearCenter, SIGNAL(valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->dblCorrectionNearEdges, SIGNAL(valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->dblBrightness, SIGNAL(valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));
 }
 
 KisWdgLensCorrection::~KisWdgLensCorrection()
@@ -48,25 +48,20 @@ KisWdgLensCorrection::~KisWdgLensCorrection()
 void KisWdgLensCorrection::setConfiguration(KisFilterConfiguration* config)
 {
     QVariant value;
-    if (config->getProperty("xcenter", value))
-    {
-        widget()->intXCenter->setValue( value.toUInt() );
+    if (config->getProperty("xcenter", value)) {
+        widget()->intXCenter->setValue(value.toUInt());
     }
-    if (config->getProperty("ycenter", value))
-    {
-        widget()->intYCenter->setValue( value.toUInt() );
+    if (config->getProperty("ycenter", value)) {
+        widget()->intYCenter->setValue(value.toUInt());
     }
-    if (config->getProperty("correctionnearcenter", value))
-    {
-        widget()->dblCorrectionNearCenter->setValue( value.toDouble() );
+    if (config->getProperty("correctionnearcenter", value)) {
+        widget()->dblCorrectionNearCenter->setValue(value.toDouble());
     }
-    if (config->getProperty("correctionnearedges", value))
-    {
-        widget()->dblCorrectionNearEdges->setValue( value.toDouble() );
+    if (config->getProperty("correctionnearedges", value)) {
+        widget()->dblCorrectionNearEdges->setValue(value.toDouble());
     }
-    if (config->getProperty("brightness", value))
-    {
-        widget()->dblBrightness->setValue( value.toDouble() );
+    if (config->getProperty("brightness", value)) {
+        widget()->dblBrightness->setValue(value.toDouble());
     }
 }
 
@@ -74,11 +69,11 @@ KisFilterConfiguration* KisWdgLensCorrection::configuration() const
 {
     QVariant value;
     KisFilterConfiguration* config = new KisFilterConfiguration("lenscorrection", 1);
-    config->setProperty("xcenter", widget()->intXCenter->value() );
-    config->setProperty("ycenter", widget()->intYCenter->value() );
-    config->setProperty("correctionnearcenter", widget()->dblCorrectionNearCenter->value() );
-    config->setProperty("correctionnearedges", widget()->dblCorrectionNearEdges->value() );
-    config->setProperty("brightness", widget()->dblBrightness->value() );
+    config->setProperty("xcenter", widget()->intXCenter->value());
+    config->setProperty("ycenter", widget()->intYCenter->value());
+    config->setProperty("correctionnearcenter", widget()->dblCorrectionNearCenter->value());
+    config->setProperty("correctionnearedges", widget()->dblCorrectionNearEdges->value());
+    config->setProperty("brightness", widget()->dblBrightness->value());
     return config;
 }
 

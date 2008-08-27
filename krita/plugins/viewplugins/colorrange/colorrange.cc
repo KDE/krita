@@ -49,19 +49,19 @@
 #include "dlg_colorrange.h"
 
 typedef KGenericFactory<ColorRange> ColorRangeFactory;
-K_EXPORT_COMPONENT_FACTORY( kritacolorrange, ColorRangeFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritacolorrange, ColorRangeFactory("krita"))
 
 ColorRange::ColorRange(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
         setComponentData(ColorRangeFactory::componentData());
 
-setXMLFile(KStandardDirs::locate("data","kritaplugins/colorrange.rc"),
-true);
+        setXMLFile(KStandardDirs::locate("data", "kritaplugins/colorrange.rc"),
+                   true);
         m_view = dynamic_cast<KisView2*>(parent);
-    QAction *action  = new KAction(i18n("&Color Range..."), this);
-    actionCollection()->addAction("colorrange", action );
+        QAction *action  = new KAction(i18n("&Color Range..."), this);
+        actionCollection()->addAction("colorrange", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotActivated()));
         m_view->selectionManager()->addSelectionAction(action);
     }

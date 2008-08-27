@@ -43,12 +43,12 @@
 #include "kis_selection.h"
 
 KisToolStar::KisToolStar(KoCanvasBase * canvas)
-    : super(canvas, KisCursor::load("tool_star_cursor.png", 6, 6)),
-      m_dragging (false)
+        : super(canvas, KisCursor::load("tool_star_cursor.png", 6, 6)),
+        m_dragging(false)
 {
     setObjectName("tool_star");
-    m_innerOuterRatio=40;
-    m_vertices=5;
+    m_innerOuterRatio = 40;
+    m_vertices = 5;
 }
 
 KisToolStar::~KisToolStar()
@@ -99,8 +99,8 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
             return;
 
         KisPaintDeviceSP device = currentNode()->paintDevice();
-        KisPainter painter (device, currentSelection());
-        painter.beginTransaction (i18n("Star"));
+        KisPainter painter(device, currentSelection());
+        painter.beginTransaction(i18n("Star"));
         setupPainter(&painter);
         painter.setOpacity(m_opacity);
         painter.setCompositeOp(m_compositeOp);
@@ -109,7 +109,7 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
 
         painter.paintPolygon(coord);
 
-        device->setDirty( painter.dirtyRegion() );
+        device->setDirty(painter.dirtyRegion());
         notifyModified();
         m_canvas->updateCanvas(convertToPt(boundingRect()));
 
@@ -125,7 +125,7 @@ void KisToolStar::paint(QPainter& gc, const KoViewConverter &converter)
     double sx, sy;
     converter.zoom(&sx, &sy);
 
-    gc.scale( sx/currentImage()->xRes(), sy/currentImage()->yRes() );
+    gc.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
 
     if (!m_canvas)
         return;
@@ -143,29 +143,29 @@ void KisToolStar::paint(QPainter& gc, const KoViewConverter &converter)
 
 vQPointF KisToolStar::starCoordinates(int N, double mx, double my, double x, double y)
 {
-    double R=0, r=0;
-    qint32 n=0;
+    double R = 0, r = 0;
+    qint32 n = 0;
     double angle;
 
     vQPointF starCoordinatesArray(2*N);
 
     // the radius of the outer edges
-    R=sqrt((x-mx)*(x-mx)+(y-my)*(y-my));
+    R = sqrt((x - mx) * (x - mx) + (y - my) * (y - my));
 
     // the radius of the inner edges
-    r=R*m_innerOuterRatio/100.0;
+    r = R * m_innerOuterRatio / 100.0;
 
     // the angle
-    angle=-atan2((x-mx),(y-my));
+    angle = -atan2((x - mx), (y - my));
 
     //set outer edges
-    for(n=0;n<N;n++){
-        starCoordinatesArray[2*n] = QPointF(mx+R*cos(n * 2.0 * M_PI / N + angle),my+R*sin(n *2.0 * M_PI / N+angle));
+    for (n = 0;n < N;n++) {
+        starCoordinatesArray[2*n] = QPointF(mx + R * cos(n * 2.0 * M_PI / N + angle), my + R * sin(n * 2.0 * M_PI / N + angle));
     }
 
     //set inner edges
-    for(n=0;n<N;n++){
-        starCoordinatesArray[2*n+1] = QPointF(mx+r*cos((n + 0.5) * 2.0 * M_PI / N + angle),my+r*sin((n +0.5) * 2.0 * M_PI / N + angle));
+    for (n = 0;n < N;n++) {
+        starCoordinatesArray[2*n+1] = QPointF(mx + r * cos((n + 0.5) * 2.0 * M_PI / N + angle), my + r * sin((n + 0.5) * 2.0 * M_PI / N + angle));
     }
 
     return starCoordinatesArray;
@@ -174,8 +174,8 @@ vQPointF KisToolStar::starCoordinates(int N, double mx, double my, double x, dou
 QRectF KisToolStar::boundingRect()
 {
     //Calculating the radius
-    double radius = sqrt((m_dragEnd.x()-m_dragStart.x())*(m_dragEnd.x()-m_dragStart.x())+(m_dragEnd.y()-m_dragStart.y())*((m_dragEnd.y()-m_dragStart.y())));
-    return QRectF(m_dragStart.x()-radius, m_dragStart.y()-radius, 2*radius, 2*radius);
+    double radius = sqrt((m_dragEnd.x() - m_dragStart.x()) * (m_dragEnd.x() - m_dragStart.x()) + (m_dragEnd.y() - m_dragStart.y()) * ((m_dragEnd.y() - m_dragStart.y())));
+    return QRectF(m_dragStart.x() - radius, m_dragStart.y() - radius, 2*radius, 2*radius);
 }
 
 QWidget* KisToolStar::createOptionWidget()

@@ -40,10 +40,10 @@ const KoID KisFilter::CategoryOther = KoID("other_filters", i18n("Other"));
 
 
 KisFilter::KisFilter(const KoID& id, const KoID & category, const QString & entry)
-    : KisBaseProcessor(id, category, entry)
+        : KisBaseProcessor(id, category, entry)
 {
     setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(),
-                       new KisFilterConfigurationFactory(id.id(), 1) ));
+                       new KisFilterConfigurationFactory(id.id(), 1)));
 }
 
 KisFilter::~KisFilter()
@@ -51,15 +51,15 @@ KisFilter::~KisFilter()
 }
 
 void KisFilter::process(KisConstProcessingInformation src,
-                         KisProcessingInformation dst,
-                         const QSize& size,
-                         const KisFilterConfiguration* config) const
+                        KisProcessingInformation dst,
+                        const QSize& size,
+                        const KisFilterConfiguration* config) const
 {
     process(src, dst, size, config, 0);
 }
 
 void KisFilter::process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater) const
+                        KoUpdater* progressUpdater) const
 {
     KisProcessingInformation info(device, rect.topLeft());
     process(info, info, rect.size(), config, progressUpdater);
@@ -76,4 +76,7 @@ QString KisFilter::configEntryGroup() const
     return id() + "_filter_bookmarks";
 }
 
-bool KisFilter::workWith(const KoColorSpace* cs) const { Q_UNUSED(cs); return true; }
+bool KisFilter::workWith(const KoColorSpace* cs) const
+{
+    Q_UNUSED(cs); return true;
+}

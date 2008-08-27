@@ -42,7 +42,8 @@
 #include "kis_meta_data_store.h"
 #include "kis_selection.h"
 
-class KisLayer::Private {
+class KisLayer::Private
+{
 
 public:
 
@@ -55,23 +56,23 @@ public:
 
 
 KisLayer::KisLayer(KisImageWSP img, const QString &name, quint8 opacity)
-    : KisNode()
-    , m_d( new Private )
+        : KisNode()
+        , m_d(new Private)
 {
 //     Q_ASSERT( img );
-    setName( name );
-    setOpacity( opacity );
+    setName(name);
+    setOpacity(opacity);
     m_d->image = img;
-	if (m_d->image)
-    	m_d->compositeOp = const_cast<KoCompositeOp*>( img->colorSpace()->compositeOp( COMPOSITE_OVER ) );
-	else
-		m_d->compositeOp = 0;
+    if (m_d->image)
+        m_d->compositeOp = const_cast<KoCompositeOp*>(img->colorSpace()->compositeOp(COMPOSITE_OVER));
+    else
+        m_d->compositeOp = 0;
     m_d->metaDataStore = new KisMetaData::Store();
 }
 
 KisLayer::KisLayer(const KisLayer& rhs)
-    : KisNode( rhs )
-    , m_d( new Private() )
+        : KisNode(rhs)
+        , m_d(new Private())
 {
     if (this != &rhs) {
         m_d->image = rhs.m_d->image;
@@ -88,21 +89,21 @@ KisLayer::~KisLayer()
 
 const KoColorSpace * KisLayer::colorSpace() const
 {
-	if (m_d->image)
-    	return m_d->image->colorSpace();
-	return 0;
+    if (m_d->image)
+        return m_d->image->colorSpace();
+    return 0;
 }
 
 KoDocumentSectionModel::PropertyList KisLayer::sectionModelProperties() const
 {
     KoDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
     l << KoDocumentSectionModel::Property(i18n("Opacity"), i18n("%1%", percentOpacity()));
-	if (compositeOp())
-    	l << KoDocumentSectionModel::Property(i18n("Composite Mode"), compositeOp()->description());
+    if (compositeOp())
+        l << KoDocumentSectionModel::Property(i18n("Composite Mode"), compositeOp()->description());
     return l;
 }
 
-void KisLayer::setSectionModelProperties( const KoDocumentSectionModel::PropertyList &properties )
+void KisLayer::setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties)
 {
     KisBaseNode::setSectionModelProperties(properties);
     /// TODO no nope not at all, the state contains a use-visible string not the actual property
@@ -116,9 +117,9 @@ KisPaintDeviceSP KisLayer::original() const
 }
 
 
-void KisLayer::setChannelFlags( const QBitArray & channelFlags )
+void KisLayer::setChannelFlags(const QBitArray & channelFlags)
 {
-    Q_ASSERT( ( ( quint32 )channelFlags.count() == colorSpace()->channelCount() || channelFlags.isEmpty()) );
+    Q_ASSERT(((quint32)channelFlags.count() == colorSpace()->channelCount() || channelFlags.isEmpty()));
     m_d->channelFlags = channelFlags;
 }
 
@@ -129,14 +130,13 @@ QBitArray & KisLayer::channelFlags()
 
 quint8 KisLayer::opacity() const
 {
-    return nodeProperties().intProperty( "opacity", OPACITY_OPAQUE );
+    return nodeProperties().intProperty("opacity", OPACITY_OPAQUE);
 }
 
 void KisLayer::setOpacity(quint8 val)
 {
-    if ( opacity() != val )
-    {
-        nodeProperties().setProperty( "opacity", val );
+    if (opacity() != val) {
+        nodeProperties().setProperty("opacity", val);
     }
 }
 
@@ -152,12 +152,12 @@ void KisLayer::setPercentOpacity(quint8 val)
 
 bool KisLayer::temporary() const
 {
-    return nodeProperties().boolProperty( "temporary", false );
+    return nodeProperties().boolProperty("temporary", false);
 }
 
 void KisLayer::setTemporary(bool t)
 {
-    nodeProperties().setProperty( "temporary", t );
+    nodeProperties().setProperty("temporary", t);
 }
 
 const KoCompositeOp * KisLayer::compositeOp() const
@@ -169,9 +169,8 @@ const KoCompositeOp * KisLayer::compositeOp() const
 void KisLayer::setCompositeOp(const KoCompositeOp* compositeOp)
 {
     //dbgImage << "old: " <<  m_d->compositeOp->description() << ", new: " << compositeOp->description();
-    if (m_d->compositeOp != compositeOp)
-    {
-       m_d->compositeOp = const_cast<KoCompositeOp*>( compositeOp );
+    if (m_d->compositeOp != compositeOp) {
+        m_d->compositeOp = const_cast<KoCompositeOp*>(compositeOp);
     }
 }
 
@@ -183,19 +182,19 @@ KisImageSP KisLayer::image() const
 void KisLayer::setImage(KisImageSP image)
 {
     m_d->image = image;
-    for ( uint i = 0; i < childCount(); ++i ) {
+    for (uint i = 0; i < childCount(); ++i) {
         // Only layers know about the image
-        KisLayer * layer = dynamic_cast<KisLayer*>( at( i ).data() );
-        if ( layer )
-            layer->setImage( image );
+        KisLayer * layer = dynamic_cast<KisLayer*>(at(i).data());
+        if (layer)
+            layer->setImage(image);
     }
 }
 
 KisSelectionMaskSP KisLayer::selectionMask() const
 {
-    QList<KisNodeSP> masks = childNodes( QStringList( "KisSelectionMask" ), KoProperties() );
+    QList<KisNodeSP> masks = childNodes(QStringList("KisSelectionMask"), KoProperties());
     Q_ASSERT(masks.size() <= 1); // Or do we allow more than one selection mask to a layer?
-    if(masks.size() == 1) {
+    if (masks.size() == 1) {
         KisSelectionMaskSP selection = dynamic_cast<KisSelectionMask*>(masks[0].data());
         return selection;
     }
@@ -217,31 +216,31 @@ bool KisLayer::hasEffectMasks() const
 {
     if (m_d->previewMask) return true;
 
-    QList<KisNodeSP> masks = childNodes( QStringList( "KisEffectMask" ), KoProperties() );
+    QList<KisNodeSP> masks = childNodes(QStringList("KisEffectMask"), KoProperties());
     if (!masks.isEmpty()) return true;
 
     return false;
 }
 
-void KisLayer::applyEffectMasks( const KisPaintDeviceSP projection, const QRect & rc )
+void KisLayer::applyEffectMasks(const KisPaintDeviceSP projection, const QRect & rc)
 {
-    if ( m_d->previewMask ) {
-        m_d->previewMask->apply( projection, rc );
+    if (m_d->previewMask) {
+        m_d->previewMask->apply(projection, rc);
     }
 
     KoProperties props;
-    props.setProperty( "visible", true );
+    props.setProperty("visible", true);
 
-    QList<KisNodeSP> masks = childNodes( QStringList( "KisEffectMask" ), props );
+    QList<KisNodeSP> masks = childNodes(QStringList("KisEffectMask"), props);
 
     // Then loop through the effect masks and apply them
-    for ( int i = 0; i < masks.size(); ++i ) {
+    for (int i = 0; i < masks.size(); ++i) {
 
-        const KisEffectMask * effectMask = dynamic_cast<const KisEffectMask*>( masks.at( i ).data() );
+        const KisEffectMask * effectMask = dynamic_cast<const KisEffectMask*>(masks.at(i).data());
 
-        if ( effectMask ) {
+        if (effectMask) {
             dbgImage << " layer " << name() << " has effect mask " << effectMask->name();
-            effectMask->apply( projection, rc );
+            effectMask->apply(projection, rc);
         }
     }
 
@@ -250,21 +249,21 @@ void KisLayer::applyEffectMasks( const KisPaintDeviceSP projection, const QRect 
 
 QList<KisMaskSP> KisLayer::effectMasks() const
 {
-    QList<KisNodeSP> nodes = childNodes( QStringList( "KisEffectMask" ), KoProperties() );
+    QList<KisNodeSP> nodes = childNodes(QStringList("KisEffectMask"), KoProperties());
     QList<KisMaskSP> masks;
-    foreach( KisNodeSP node,  nodes ) {
-        KisMaskSP mask = dynamic_cast<KisMask*>( node.data() );
-        if ( mask )
-            masks.append( mask );
+    foreach(KisNodeSP node,  nodes) {
+        KisMaskSP mask = dynamic_cast<KisMask*>(node.data());
+        if (mask)
+            masks.append(mask);
     }
     return masks;
 
 }
 
-void KisLayer::setPreviewMask( KisEffectMaskSP mask )
+void KisLayer::setPreviewMask(KisEffectMaskSP mask)
 {
     m_d->previewMask = mask;
-    m_d->previewMask->setParent( this );
+    m_d->previewMask->setParent(this);
 }
 
 KisEffectMaskSP KisLayer::previewMask() const
@@ -279,7 +278,7 @@ void KisLayer::removePreviewMask()
 
 KisLayerSP KisLayer::parentLayer() const
 {
-    return dynamic_cast<KisLayer*>( parent().data() );
+    return dynamic_cast<KisLayer*>(parent().data());
 }
 
 KisMetaData::Store* KisLayer::metaData()
@@ -294,27 +293,33 @@ struct KisIndirectPaintingSupport::Private {
     quint8 compositeOpacity;
 };
 
-void KisIndirectPaintingSupport::setTemporaryTarget(KisPaintDeviceSP t) {
+void KisIndirectPaintingSupport::setTemporaryTarget(KisPaintDeviceSP t)
+{
     d->temporaryTarget = t;
 }
 
-void KisIndirectPaintingSupport::setTemporaryCompositeOp(const KoCompositeOp* c) {
+void KisIndirectPaintingSupport::setTemporaryCompositeOp(const KoCompositeOp* c)
+{
     d->compositeOp = c;
 }
 
-void KisIndirectPaintingSupport::setTemporaryOpacity(quint8 o) {
+void KisIndirectPaintingSupport::setTemporaryOpacity(quint8 o)
+{
     d->compositeOpacity = o;
 }
 
-KisPaintDeviceSP KisIndirectPaintingSupport::temporaryTarget() {
+KisPaintDeviceSP KisIndirectPaintingSupport::temporaryTarget()
+{
     return d->temporaryTarget;
 }
 
-const KoCompositeOp* KisIndirectPaintingSupport::temporaryCompositeOp() const {
+const KoCompositeOp* KisIndirectPaintingSupport::temporaryCompositeOp() const
+{
     return d->compositeOp;
 }
 
-quint8 KisIndirectPaintingSupport::temporaryOpacity() const {
+quint8 KisIndirectPaintingSupport::temporaryOpacity() const
+{
     return d->compositeOpacity;
 }
 
@@ -323,6 +328,9 @@ KisIndirectPaintingSupport::KisIndirectPaintingSupport() : d(new Private)
 {
     d->compositeOp = 0;
 }
-KisIndirectPaintingSupport::~KisIndirectPaintingSupport() { delete d; }
+KisIndirectPaintingSupport::~KisIndirectPaintingSupport()
+{
+    delete d;
+}
 
 #include "kis_layer.moc"

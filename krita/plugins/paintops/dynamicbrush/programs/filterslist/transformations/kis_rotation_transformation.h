@@ -23,21 +23,22 @@
 
 class KisDynamicSensor;
 
-class KisRotationTransformation : public KisDynamicTransformation {
+class KisRotationTransformation : public KisDynamicTransformation
+{
     Q_OBJECT
-    public:
-        KisRotationTransformation(KisDynamicSensor* transfoParameter);
-        virtual ~KisRotationTransformation();
-    public:
-        virtual void transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info);
-        virtual void transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info);
-        virtual QWidget* createConfigWidget(QWidget* parent);
-        virtual void toXML(QDomDocument&, QDomElement&) const;
-        virtual void fromXML(const QDomElement&);
-    private slots:
-        void setRotationSensor(KisDynamicSensor*);
-    private:
-        KisDynamicSensor* m_transfoParameter;
+public:
+    KisRotationTransformation(KisDynamicSensor* transfoParameter);
+    virtual ~KisRotationTransformation();
+public:
+    virtual void transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info);
+    virtual void transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info);
+    virtual QWidget* createConfigWidget(QWidget* parent);
+    virtual void toXML(QDomDocument&, QDomElement&) const;
+    virtual void fromXML(const QDomElement&);
+private slots:
+    void setRotationSensor(KisDynamicSensor*);
+private:
+    KisDynamicSensor* m_transfoParameter;
 };
 
 #endif

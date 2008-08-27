@@ -42,15 +42,18 @@ class WdgToolTransform : public QWidget, public Ui::WdgToolTransform
 {
     Q_OBJECT
 
-    public:
-        WdgToolTransform(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgToolTransform(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
 /**
  * Transform tool
  *
  */
-class KisToolTransform : public KisTool, KisCommandHistoryListener {
+class KisToolTransform : public KisTool, KisCommandHistoryListener
+{
 
     Q_OBJECT
 
@@ -79,8 +82,12 @@ private:
 
     void transform();
     void recalcOutline();
-    QPointF rot(double x, double y) { return QPointF(m_cosa*x - m_sina*y, m_sina*x + m_cosa*y);}
-    QPointF invrot(double x, double y) { return QPointF(m_cosa*x + m_sina*y, -m_sina*x + m_cosa*y);}
+    QPointF rot(double x, double y) {
+        return QPointF(m_cosa*x - m_sina*y, m_sina*x + m_cosa*y);
+    }
+    QPointF invrot(double x, double y) {
+        return QPointF(m_cosa*x + m_sina*y, -m_sina*x + m_cosa*y);
+    }
     int det(const QPointF & v, const QPointF & w);
     double distsq(const QPointF & v, const QPointF & w);
     void setFunctionalCursor();
@@ -91,8 +98,9 @@ private slots:
     void slotSetFilter(const KoID &);
 
 private:
-    enum function {ROTATE,MOVE,TOPLEFTSCALE,TOPSCALE,TOPRIGHTSCALE,RIGHTSCALE,
-                BOTTOMRIGHTSCALE, BOTTOMSCALE,BOTTOMLEFTSCALE, LEFTSCALE};
+    enum function {ROTATE, MOVE, TOPLEFTSCALE, TOPSCALE, TOPRIGHTSCALE, RIGHTSCALE,
+                   BOTTOMRIGHTSCALE, BOTTOMSCALE, BOTTOMLEFTSCALE, LEFTSCALE
+                  };
     QCursor m_sizeCursors[8];
     function m_function;
     QPoint m_originalTopLeft;  //in image coords
@@ -121,23 +129,23 @@ private:
     KoCanvasBase *m_canvas;
 };
 
-class KisToolTransformFactory : public KoToolFactory {
+class KisToolTransformFactory : public KoToolFactory
+{
 
 
 public:
 
     KisToolTransformFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolTransform", i18n( "Transform" ))
-        {
-            setToolTip( i18n( "Transform a layer or a selection" ) );
-            setToolType( TOOL_TYPE_TRANSFORM );
-            setIcon( "transform-rotate" );
-            setPriority( 11 );
+            : KoToolFactory(parent, "KisToolTransform", i18n("Transform")) {
+        setToolTip(i18n("Transform a layer or a selection"));
+        setToolType(TOOL_TYPE_TRANSFORM);
+        setIcon("transform-rotate");
+        setPriority(11);
 
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-        }
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+    }
 
-    virtual ~KisToolTransformFactory(){}
+    virtual ~KisToolTransformFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolTransform(canvas);

@@ -46,8 +46,8 @@
 
 
 KAboutData* KisFactory2::s_aboutData = 0;
-KComponentData* KisFactory2::s_instance = 0;KisFactory2::KisFactory2( QObject* parent )
-    : KoFactory( parent )
+KComponentData* KisFactory2::s_instance = 0;KisFactory2::KisFactory2(QObject* parent)
+        : KoFactory(parent)
 {
     s_aboutData = newKritaAboutData();
 
@@ -65,17 +65,17 @@ KisFactory2::~KisFactory2()
 /**
  * Create the document
  */
-KParts::Part* KisFactory2::createPartObject( QWidget *parentWidget,
-                        QObject* parent,
-                        const char* classname, const QStringList & )
+KParts::Part* KisFactory2::createPartObject(QWidget *parentWidget,
+        QObject* parent,
+        const char* classname, const QStringList &)
 {
-    bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
+    bool bWantKoDocument = (strcmp(classname, "KoDocument") == 0);
 
-    KisDoc2 *doc = new KisDoc2( parentWidget, parent, !bWantKoDocument );
+    KisDoc2 *doc = new KisDoc2(parentWidget, parent, !bWantKoDocument);
     Q_CHECK_PTR(doc);
 
-    if ( !bWantKoDocument )
-        doc->setReadWrite( false );
+    if (!bWantKoDocument)
+        doc->setReadWrite(false);
 
     return doc;
 }
@@ -90,16 +90,15 @@ const KComponentData &KisFactory2::componentData()
 {
     QString homedir = qgetenv("HOME");
 
-    if ( !s_instance )
-    {
-        if ( s_aboutData )
+    if (!s_instance) {
+        if (s_aboutData)
             s_instance = new KComponentData(s_aboutData);
         else
-            s_instance = new KComponentData( newKritaAboutData() );
+            s_instance = new KComponentData(newKritaAboutData());
         Q_CHECK_PTR(s_instance);
 
         KoShapeRegistry* r = KoShapeRegistry::instance();
-        r->add( new KisShapeSelectionFactory(r) );
+        r->add(new KisShapeSelectionFactory(r));
 
         // Load the krita-specific tools
         KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
@@ -119,7 +118,8 @@ const KComponentData &KisFactory2::componentData()
         s_instance->dirs()->addResourceType("kis_shaders", "data", "krita/shaders/");
 
         // Tell the iconloader about share/apps/koffice/icons
-        KIconLoader::global()->addAppDir("koffice");    }
+        KIconLoader::global()->addAppDir("koffice");
+    }
 
     return *s_instance;
 }

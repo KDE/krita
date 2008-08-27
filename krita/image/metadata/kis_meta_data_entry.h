@@ -24,62 +24,64 @@
 
 class QString;
 
-namespace KisMetaData {
-    class Value;
-    class Store;
-    class Schema;
-    class KRITAIMAGE_EXPORT Entry {
-        struct Private;
-        friend class Store;
-        public:
-            /**
-             * Create an invalid entry
-             */
-            Entry();
-            /**
-             * Create a new entry.
-             * @param name
-             * @param namespacePrefix
-             * @param value
-             */
-            Entry(const KisMetaData::Schema* schema, QString name, const KisMetaData::Value& value);
-            Entry(const Entry&);
-            ~Entry();
-            /**
-             * @return the name of this entry
-             */
-            QString name() const;
-            /**
-             * @return the namespace of this entry
-             */
-            const KisMetaData::Schema* schema() const;
-            /**
-             * @return the qualified name of this entry, which is the concatenation of the
-             * namespace and of the name
-             */
-            QString qualifiedName() const;
-            /**
-             * @return the value of this entry
-             */
-            const KisMetaData::Value& value() const;
-            /**
-             * @return the value of this entry
-             */
-            KisMetaData::Value& value();
-            /**
-             * @return true if this entry is valid
-             */
-            bool isValid() const;
-            /**
-             * Affect the content of entry to this entry if entry is valid
-             */
-            Entry& operator=(const Entry& entry);
-            bool operator==(const Entry&);
-        private:
-            void setSchema(const KisMetaData::Schema* schema);
-        private:
-            Private* const d;
-    };
+namespace KisMetaData
+{
+class Value;
+class Store;
+class Schema;
+class KRITAIMAGE_EXPORT Entry
+{
+    struct Private;
+    friend class Store;
+public:
+    /**
+     * Create an invalid entry
+     */
+    Entry();
+    /**
+     * Create a new entry.
+     * @param name
+     * @param namespacePrefix
+     * @param value
+     */
+    Entry(const KisMetaData::Schema* schema, QString name, const KisMetaData::Value& value);
+    Entry(const Entry&);
+    ~Entry();
+    /**
+     * @return the name of this entry
+     */
+    QString name() const;
+    /**
+     * @return the namespace of this entry
+     */
+    const KisMetaData::Schema* schema() const;
+    /**
+     * @return the qualified name of this entry, which is the concatenation of the
+     * namespace and of the name
+     */
+    QString qualifiedName() const;
+    /**
+     * @return the value of this entry
+     */
+    const KisMetaData::Value& value() const;
+    /**
+     * @return the value of this entry
+     */
+    KisMetaData::Value& value();
+    /**
+     * @return true if this entry is valid
+     */
+    bool isValid() const;
+    /**
+     * Affect the content of entry to this entry if entry is valid
+     */
+    Entry& operator=(const Entry& entry);
+    bool operator==(const Entry&);
+private:
+    void setSchema(const KisMetaData::Schema* schema);
+private:
+    Private* const d;
+};
 }
 
 KRITAIMAGE_EXPORT QDebug operator<<(QDebug dbg, const KisMetaData::Entry &c);

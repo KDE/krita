@@ -27,28 +27,26 @@
 #include "kis_ks_colorspace.h"
 
 template< typename _TYPE_, int _N_ >
-class KisCtlRGBToKSColorConversionTransformation : public KoColorConversionTransformation {
+class KisCtlRGBToKSColorConversionTransformation : public KoColorConversionTransformation
+{
 
-typedef KoColorConversionTransformation parent;
-typedef KisKSColorSpaceTrait<_TYPE_,_N_> CSTrait;
+    typedef KoColorConversionTransformation parent;
+    typedef KisKSColorSpaceTrait<_TYPE_, _N_> CSTrait;
 
 public:
     KisCtlRGBToKSColorConversionTransformation(const KoColorSpace *srcCs, const KoColorSpace *dstCs)
-    : parent(srcCs, dstCs), m_rgbvec(0), m_ksvec(0), m_dstProfile(0)
-    {
+            : parent(srcCs, dstCs), m_rgbvec(0), m_ksvec(0), m_dstProfile(0) {
         m_dstProfile = static_cast<const KisIlluminantProfile*>(parent::dstColorSpace()->profile());
         m_rgbvec = new double[3];
         m_ksvec  = new double[2*_N_];
     }
 
-    ~KisCtlRGBToKSColorConversionTransformation()
-    {
+    ~KisCtlRGBToKSColorConversionTransformation() {
         delete [] m_rgbvec;
         delete [] m_ksvec;
     }
 
-    void transform(const quint8 *src8, quint8 *dst, int nPixels) const
-    {
+    void transform(const quint8 *src8, quint8 *dst, int nPixels) const {
         // For each pixel we do this:
         // 1 - convert raw bytes to quint16
         // 2 - find reflectances using the transformation matrix of the profile.
@@ -57,7 +55,7 @@ public:
         const float *src = reinterpret_cast<const float*>(src8);
         const int pixelSize = CSTrait::pixelSize;
 
-        for ( ; nPixels > 0; nPixels-- ) {
+        for (; nPixels > 0; nPixels--) {
             m_rgbvec[0] = (double)src[2];
             m_rgbvec[1] = (double)src[1];
             m_rgbvec[2] = (double)src[0];
@@ -65,8 +63,8 @@ public:
             m_dstProfile->fromRgb(m_rgbvec, m_ksvec);
 
             for (int i = 0; i < _N_; i++) {
-                CSTrait::K(dst,i) = (_TYPE_)m_ksvec[2*i+0];
-                CSTrait::S(dst,i) = (_TYPE_)m_ksvec[2*i+1];
+                CSTrait::K(dst, i) = (_TYPE_)m_ksvec[2*i+0];
+                CSTrait::S(dst, i) = (_TYPE_)m_ksvec[2*i+1];
             }
             CSTrait::nativealpha(dst) = (_TYPE_)src[3];
 
@@ -84,27 +82,31 @@ protected:
 };
 
 template< typename _TYPE_, int _N_ >
-class KisCtlRGBToKSColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
+class KisCtlRGBToKSColorConversionTransformationFactory : public KoColorConversionTransformationFactory
+{
 
 public:
     KisCtlRGBToKSColorConversionTransformationFactory(QString dstProfile)
-    : KoColorConversionTransformationFactory( RGBAColorModelID.id(),
-                                              Float32BitsColorDepthID.id(), "Standard RGB (sRGB)",
-                                              QString("KS%1").arg(_N_),
-                                              KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id(), dstProfile ) { }
+            : KoColorConversionTransformationFactory(RGBAColorModelID.id(),
+                    Float32BitsColorDepthID.id(), "Standard RGB (sRGB)",
+                    QString("KS%1").arg(_N_),
+                    KisKSColorSpace<_TYPE_, _N_>::ColorDepthId().id(), dstProfile) { }
 
-    KoColorConversionTransformation *createColorTransformation( const KoColorSpace* srcColorSpace,
-                                                                const KoColorSpace* dstColorSpace,
-                                                                KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual ) const
-    {
+    KoColorConversionTransformation *createColorTransformation(const KoColorSpace* srcColorSpace,
+            const KoColorSpace* dstColorSpace,
+            KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const {
         Q_UNUSED(renderingIntent);
         Q_ASSERT(canBeSource(srcColorSpace));
         Q_ASSERT(canBeDestination(dstColorSpace));
-        return new KisCtlRGBToKSColorConversionTransformation<_TYPE_,_N_>(srcColorSpace, dstColorSpace);
+        return new KisCtlRGBToKSColorConversionTransformation<_TYPE_, _N_>(srcColorSpace, dstColorSpace);
     }
 
-    bool conserveColorInformation() const { return true; }
-    bool conserveDynamicRange() const { return false; }
+    bool conserveColorInformation() const {
+        return true;
+    }
+    bool conserveDynamicRange() const {
+        return false;
+    }
 
 };
 

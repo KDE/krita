@@ -32,11 +32,14 @@ class WdgGlsl : public QWidget, public Ui::WdgGlsl
 {
     Q_OBJECT
 
-    public:
-        WdgGlsl(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgGlsl(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
-class DlgGlsl: public KDialog {
+class DlgGlsl: public KDialog
+{
 
     Q_OBJECT
 
@@ -56,7 +59,7 @@ private:
 
     class Private;
     Private * const m_d;
-    
+
 };
 
 #endif // DLG_GLSLIMAGE

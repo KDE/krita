@@ -64,8 +64,8 @@
 #endif
 
 KisToolGradient::KisToolGradient(KoCanvasBase * canvas)
-    : super(canvas, KisCursor::load("tool_gradient_cursor.png", 6, 6)),
-      m_dragging( false )
+        : super(canvas, KisCursor::load("tool_gradient_cursor.png", 6, 6)),
+        m_dragging(false)
 {
     setObjectName("tool_gradient");
 
@@ -87,13 +87,13 @@ KisToolGradient::~KisToolGradient()
 {
 }
 
-void KisToolGradient::paint( QPainter &painter, const KoViewConverter &converter )
+void KisToolGradient::paint(QPainter &painter, const KoViewConverter &converter)
 {
     if (m_dragging && m_startPos != m_endPos) {
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
         if (m_gradientProgram) {
-    
+
             QPointF gradientVector = m_endPos - m_startPos;
             double gradientVectorLength = sqrt((gradientVector.x() * gradientVector.x()) + (gradientVector.y() * gradientVector.y()));
 
@@ -123,7 +123,7 @@ void KisToolGradient::paint( QPainter &painter, const KoViewConverter &converter
                     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
                     canvasWidget->makeCurrent();
-                    m_gradientProgram->activate(normalisedGradientVectorStart, 
+                    m_gradientProgram->activate(normalisedGradientVectorStart,
                                                 normalisedGradientVectorStart + normalisedGradientVector);
 
 //                     glValidateProgramARB(m_gradientProgram->handle());
@@ -161,7 +161,7 @@ void KisToolGradient::paint( QPainter &painter, const KoViewConverter &converter
         {
             double sx, sy;
             converter.zoom(&sx, &sy);
-            painter.scale( sx/currentImage()->xRes(), sy/currentImage()->yRes() );
+            painter.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
             paintLine(painter);
         }
     }
@@ -195,13 +195,13 @@ void KisToolGradient::mousePressEvent(KoPointerEvent *e)
             }
 
             KisOpenGL::makeContextCurrent();
-            m_gradientProgram = new KisOpenGLGradientProgram(currentGradient(), 
-                                                             m_shape, 
-                                                             m_repeat, 
-                                                             m_reverse,
-                                                             currentImage()->colorSpace(),
-                                                             monitorProfile,
-                                                             m_previewOpacityPercent / 100.0);
+            m_gradientProgram = new KisOpenGLGradientProgram(currentGradient(),
+                    m_shape,
+                    m_repeat,
+                    m_reverse,
+                    currentImage()->colorSpace(),
+                    monitorProfile,
+                    m_previewOpacityPercent / 100.0);
         }
 #endif
     }
@@ -219,8 +219,7 @@ void KisToolGradient::mouseMoveEvent(KoPointerEvent *e)
 
         if ((e->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier) {
             m_endPos = straightLine(pos);
-        }
-        else {
+        } else {
             m_endPos = pos;
         }
 
@@ -252,8 +251,7 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
 
         if ((e->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier) {
             m_endPos = straightLine(pos);
-        }
-        else {
+        } else {
             m_endPos = pos;
         }
 
@@ -300,12 +298,12 @@ QPointF KisToolGradient::straightLine(QPointF point)
     QPointF comparison = point - m_startPos;
     QPointF result;
 
-    if ( fabs(comparison.x()) > fabs(comparison.y())) {
+    if (fabs(comparison.x()) > fabs(comparison.y())) {
         result.setX(point.x());
         result.setY(m_startPos.y());
     } else {
-        result.setX( m_startPos.x() );
-        result.setY( point.y() );
+        result.setX(m_startPos.x());
+        result.setY(point.y());
     }
 
     return result;
@@ -337,7 +335,7 @@ QWidget* KisToolGradient::createOptionWidget()
     m_lbShape = new QLabel(i18n("Shape:"), widget);
     m_lbRepeat = new QLabel(i18n("Repeat:"), widget);
 
-    m_ckReverse = new QCheckBox(i18nc("the gradient will be drawn with the color order reversed","Reverse"), widget);
+    m_ckReverse = new QCheckBox(i18nc("the gradient will be drawn with the color order reversed", "Reverse"), widget);
     m_ckReverse->setObjectName("reverse_check");
     connect(m_ckReverse, SIGNAL(toggled(bool)), this, SLOT(slotSetReverse(bool)));
 
@@ -355,7 +353,7 @@ QWidget* KisToolGradient::createOptionWidget()
     m_cmbRepeat->setObjectName("repeat_combo");
     connect(m_cmbRepeat, SIGNAL(activated(int)), this, SLOT(slotSetRepeat(int)));
     m_cmbRepeat->addItem(i18nc("The gradient will not repeat", "None"));
-    m_cmbRepeat->addItem(i18nc("The gradient will repeat forwards","Forwards"));
+    m_cmbRepeat->addItem(i18nc("The gradient will repeat forwards", "Forwards"));
     m_cmbRepeat->addItem(i18nc("The gradient will repeat alternatingly", "Alternating"));
 
     addOptionWidgetOption(m_cmbShape, m_lbShape);
@@ -368,8 +366,8 @@ QWidget* KisToolGradient::createOptionWidget()
 
     m_slAntiAliasThreshold = new KDoubleNumInput(widget);
     m_slAntiAliasThreshold->setObjectName("threshold_slider");
-    m_slAntiAliasThreshold->setMinimum( 0 );
-    m_slAntiAliasThreshold->setMaximum( 1 );
+    m_slAntiAliasThreshold->setMinimum(0);
+    m_slAntiAliasThreshold->setMaximum(1);
     m_slAntiAliasThreshold->setValue(m_antiAliasThreshold);
     connect(m_slAntiAliasThreshold, SIGNAL(valueChanged(double)), this, SLOT(slotSetAntiAliasThreshold(double)));
 
@@ -377,7 +375,7 @@ QWidget* KisToolGradient::createOptionWidget()
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
     m_lbPreviewOpacity = new QLabel(i18n("Preview opacity:"), widget);
-    m_slPreviewOpacity = new KoSliderCombo( widget );
+    m_slPreviewOpacity = new KoSliderCombo(widget);
     m_slPreviewOpacity->setDecimals(0);
     m_slPreviewOpacity->setValue(m_previewOpacityPercent);
     connect(m_slPreviewOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotSetPreviewOpacity(int)));

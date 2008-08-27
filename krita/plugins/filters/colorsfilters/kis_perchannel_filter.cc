@@ -46,27 +46,26 @@
 #include "kis_histogram.h"
 #include "kis_painter.h"
 
-class KisPerChannelFilterConfigurationFactory : public KisFilterConfigurationFactory {
-    public:
-        KisPerChannelFilterConfigurationFactory() :KisFilterConfigurationFactory("perchannel", 1) {}
-        virtual ~KisPerChannelFilterConfigurationFactory() { }
-        virtual KisSerializableConfiguration* createDefault()
-        {
-            return new KisPerChannelFilterConfiguration(0);
-        }
-        virtual KisSerializableConfiguration* create(const QDomElement& e)
-        {
-            KisFilterConfiguration* fc = new KisPerChannelFilterConfiguration(0);
-            fc->fromXML( e );
-            return fc;
-        }
+class KisPerChannelFilterConfigurationFactory : public KisFilterConfigurationFactory
+{
+public:
+    KisPerChannelFilterConfigurationFactory() : KisFilterConfigurationFactory("perchannel", 1) {}
+    virtual ~KisPerChannelFilterConfigurationFactory() { }
+    virtual KisSerializableConfiguration* createDefault() {
+        return new KisPerChannelFilterConfiguration(0);
+    }
+    virtual KisSerializableConfiguration* create(const QDomElement& e) {
+        KisFilterConfiguration* fc = new KisPerChannelFilterConfiguration(0);
+        fc->fromXML(e);
+        return fc;
+    }
 };
 
 KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int n)
-    : KisFilterConfiguration( "perchannel", 1 )
+        : KisFilterConfiguration("perchannel", 1)
 {
     transfers = new quint16*[n];
-    for(int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++) {
         curves.append(KisCurve());
 
         transfers[i] = new quint16[256];
@@ -83,7 +82,7 @@ KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int n)
 
 KisPerChannelFilterConfiguration::~KisPerChannelFilterConfiguration()
 {
-    for(int i=0;i<nTransfers;i++)
+    for (int i = 0;i < nTransfers;i++)
         delete [] transfers[i];
     delete[] transfers;
     delete adjustment;
@@ -91,14 +90,14 @@ KisPerChannelFilterConfiguration::~KisPerChannelFilterConfiguration()
 
 bool KisPerChannelFilterConfiguration::isCompatible(const KisPaintDeviceSP dev) const
 {
-    if(!oldCs) return false;
+    if (!oldCs) return false;
     return *dev->colorSpace() == *oldCs;
 }
 
-void KisPerChannelFilterConfiguration::fromXML( const QString& s )
+void KisPerChannelFilterConfiguration::fromXML(const QString& s)
 {
     QDomDocument doc;
-    doc.setContent( s );
+    doc.setContent(s);
     QDomElement e = doc.documentElement();
     QDomNode n = e.firstChild();
 
@@ -125,9 +124,9 @@ void KisPerChannelFilterConfiguration::fromXML( const QString& s )
                     QDomElement curvesElement = curvesNode.toElement();
 
                     if (!curvesElement.isNull() && !curvesElement.text().isEmpty()) {
-                        QStringList data = curvesElement.text().split( ';' );
+                        QStringList data = curvesElement.text().split(';');
 
-                        foreach (const QString & pair, data) {
+                        foreach(const QString & pair, data) {
                             if (pair.indexOf(',') > -1) {
                                 QPointF p;
                                 p.rx() = pair.section(',', 0, 0).toDouble();
@@ -144,17 +143,15 @@ void KisPerChannelFilterConfiguration::fromXML( const QString& s )
         n = n.nextSibling();
     }
 
-    for(int ch = 0; ch < nTransfers; ++ch)
-    {
+    for (int ch = 0; ch < nTransfers; ++ch) {
         transfers[ch] = new quint16[256];
-        for(int i = 0; i < 256; ++i)
-        {
+        for (int i = 0; i < 256; ++i) {
             qint32 val;
             val = int(0xFFFF * KCurve::getCurveValue(curves[ch], i /
-255.0));
-            if(val > 0xFFFF)
+                      255.0));
+            if (val > 0xFFFF)
                 val = 0xFFFF;
-            if(val < 0)
+            if (val < 0)
                 val = 0;
 
             transfers[ch][i] = val;
@@ -166,9 +163,9 @@ void KisPerChannelFilterConfiguration::fromXML( const QString& s )
 QString KisPerChannelFilterConfiguration::toString()
 {
     QDomDocument doc = QDomDocument("filterconfig");
-    QDomElement root = doc.createElement( "filterconfig" );
-    root.setAttribute( "name", name() );
-    root.setAttribute( "version", version() );
+    QDomElement root = doc.createElement("filterconfig");
+    root.setAttribute("name", name());
+    root.setAttribute("version", version());
 
     QDomElement c = doc.createElement("curves");
     c.setAttribute("number", nTransfers);
@@ -178,7 +175,7 @@ QString KisPerChannelFilterConfiguration::toString()
         KisCurve curve = curves[i];
         QString sCurve;
 
-        foreach (const QPointF & pair, curve) {
+        foreach(const QPointF & pair, curve) {
             sCurve += QString::number(pair.x());
             sCurve += ',';
             sCurve += QString::number(pair.y());
@@ -189,11 +186,11 @@ QString KisPerChannelFilterConfiguration::toString()
         c.appendChild(t);
     }
     root.appendChild(c);
-    doc.appendChild( root );
+    doc.appendChild(root);
     return doc.toString();
 }
 
-KisPerChannelFilter::KisPerChannelFilter() : KisFilter( id(), CategoryAdjust, i18n("&Color Adjustment curves..."))
+KisPerChannelFilter::KisPerChannelFilter() : KisFilter(id(), CategoryAdjust, i18n("&Color Adjustment curves..."))
 {
     setSupportsPainting(true);
     setSupportsPreview(true);
@@ -203,18 +200,18 @@ KisPerChannelFilter::KisPerChannelFilter() : KisFilter( id(), CategoryAdjust, i1
                        new KisPerChannelFilterConfigurationFactory()));
 }
 
-KisFilterConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceSP dev, const KisImageSP image ) const
+KisFilterConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceSP dev, const KisImageSP image) const
 {
     Q_UNUSED(image);
     return new KisPerChannelConfigWidget(parent, dev);
 }
 
 void KisPerChannelFilter::process(KisConstProcessingInformation srcInfo,
-                 KisProcessingInformation dstInfo,
-                 const QSize& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-        ) const
+                                  KisProcessingInformation dstInfo,
+                                  const QSize& size,
+                                  const KisFilterConfiguration* config,
+                                  KoUpdater* progressUpdater
+                                 ) const
 {
     const KisPaintDeviceSP src = srcInfo.paintDevice();
     KisPaintDeviceSP dst = dstInfo.paintDevice();
@@ -223,14 +220,14 @@ void KisPerChannelFilter::process(KisConstProcessingInformation srcInfo,
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
     if (!config) {
-        kWarning() <<"No configuration object for per-channel filter";
+        kWarning() << "No configuration object for per-channel filter";
         return;
     }
 
     KisPerChannelFilterConfiguration* configBC =
-            const_cast<KisPerChannelFilterConfiguration*>(dynamic_cast<const KisPerChannelFilterConfiguration*>(config)); // Somehow, this shouldn't happen
-    if( not configBC )
-      return;
+        const_cast<KisPerChannelFilterConfiguration*>(dynamic_cast<const KisPerChannelFilterConfiguration*>(config)); // Somehow, this shouldn't happen
+    if (not configBC)
+        return;
     if (configBC->nTransfers != src->colorSpace()->colorChannelCount()) {
         // We got an illegal number of colorchannels.KisFilter
         return;
@@ -239,7 +236,7 @@ void KisPerChannelFilter::process(KisConstProcessingInformation srcInfo,
     if (configBC->dirty || (src->colorSpace() != configBC->oldCs)) {
         delete configBC->adjustment;
         configBC->adjustment =
-                src->colorSpace()->createPerChannelAdjustment(configBC->transfers);
+            src->colorSpace()->createPerChannelAdjustment(configBC->transfers);
 //         dbgKrita << configBC->adjustment;
         configBC->oldCs = src->colorSpace();
         configBC->dirty = false;
@@ -248,64 +245,59 @@ void KisPerChannelFilter::process(KisConstProcessingInformation srcInfo,
     KoColorTransformation *adj = configBC->adjustment;
 
 
-    if (src!=dst) {
+    if (src != dst) {
         KisPainter gc(dst, dstInfo.selection());
         gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         gc.end();
     }
 
-    KisRectIteratorPixel iter = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection() );
+    KisRectIteratorPixel iter = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection());
     KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
     qint32 totalCost = (size.width() * size.height()) / 100;
-    if( totalCost == 0 ) totalCost = 1;
+    if (totalCost == 0) totalCost = 1;
     qint32 pixelsProcessed = 0;
 
-    while( !iter.isDone()  && (progressUpdater && !progressUpdater->interrupted()))
-    {
-        quint32 npix=0, maxpix = iter.nConseqPixels();
+    while (!iter.isDone()  && (progressUpdater && !progressUpdater->interrupted())) {
+        quint32 npix = 0, maxpix = iter.nConseqPixels();
         quint8 selectedness = iter.selectedness();
         // The idea here is to handle stretches of completely selected and completely unselected pixels.
         // Partially selected pixels are handled one pixel at a time.
-        switch(selectedness)
-        {
-            case MIN_SELECTED:
-                while(iter.selectedness()==MIN_SELECTED && maxpix)
-                {
-                    --maxpix;
-                    ++iter;
-                    ++npix;
-                }
-                pixelsProcessed += npix;
-                break;
-
-            case MAX_SELECTED:
-            {
-                quint8 *firstPixel = iter.rawData();
-                while(iter.selectedness()==MAX_SELECTED && maxpix)
-                {
-                    --maxpix;
-                    if (maxpix != 0)
-                        ++iter;
-                    ++npix;
-                }
-                // adjust
-                adj->transform(firstPixel, firstPixel, npix);
-                pixelsProcessed += npix;
+        switch (selectedness) {
+        case MIN_SELECTED:
+            while (iter.selectedness() == MIN_SELECTED && maxpix) {
+                --maxpix;
                 ++iter;
-                break;
+                ++npix;
             }
+            pixelsProcessed += npix;
+            break;
 
-            default:
-                // adjust, but since it's partially selected we also only partially adjust
-                adj->transform(iter.oldRawData(), iter.rawData(), 1);
-                const quint8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
-                qint16 weights[2] = {MAX_SELECTED - selectedness, selectedness};
-                mixOp->mixColors(pixels, weights, 2, iter.rawData());
-                ++iter;
-                pixelsProcessed++;
-                break;
+        case MAX_SELECTED: {
+            quint8 *firstPixel = iter.rawData();
+            while (iter.selectedness() == MAX_SELECTED && maxpix) {
+                --maxpix;
+                if (maxpix != 0)
+                    ++iter;
+                ++npix;
+            }
+            // adjust
+            adj->transform(firstPixel, firstPixel, npix);
+            pixelsProcessed += npix;
+            ++iter;
+            break;
         }
-        if(progressUpdater) progressUpdater->setProgress(pixelsProcessed / totalCost);
+
+        default:
+            // adjust, but since it's partially selected we also only partially adjust
+            adj->transform(iter.oldRawData(), iter.rawData(), 1);
+            const quint8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
+            qint16 weights[2] = {MAX_SELECTED - selectedness, selectedness};
+            mixOp->mixColors(pixels, weights, 2, iter.rawData());
+            ++iter;
+            pixelsProcessed++;
+            break;
+        }
+        if (progressUpdater) progressUpdater->setProgress(pixelsProcessed / totalCost);
     }
 
 }
@@ -317,7 +309,7 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
     QPixmap pix(256, height);
     pix.fill();
     QPainter p(&pix);
-    p.setPen(QPen::QPen(Qt::gray,1, Qt::SolidLine));
+    p.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
 
     m_histogram->setChannel(ch);
 
@@ -326,12 +318,12 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
 
     if (m_histogram->getHistogramType() == LINEAR) {
         double factor = (double)height / highest;
-        for( i=0; i<bins; ++i ) {
+        for (i = 0; i < bins; ++i) {
             p.drawLine(i, height, i, height - int(m_histogram->getValue(i) * factor));
         }
     } else {
         double factor = (double)height / (double)log(highest);
-        for( i = 0; i < bins; ++i ) {
+        for (i = 0; i < bins; ++i) {
             p.drawLine(i, height, i, height - int(log((double)m_histogram->getValue(i)) * factor));
         }
     }
@@ -344,7 +336,7 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
 }
 
 KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)
-    : KisFilterConfigWidget(parent, f)
+        : KisFilterConfigWidget(parent, f)
 {
     Q_ASSERT(dev);
     int i;
@@ -356,8 +348,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     m_dev = dev;
     m_curves.clear();
     m_activeCh = 0;
-    for(unsigned int ch = 0; ch < m_dev->colorSpace()->colorChannelCount(); ch++)
-    {
+    for (unsigned int ch = 0; ch < m_dev->colorSpace()->colorChannelCount(); ch++) {
         m_curves.append(KisCurve());
         m_curves[ch].append(QPointF(0, 0));
         m_curves[ch].append(QPointF(1, 1));
@@ -369,17 +360,16 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
 
     // Fill in the channel chooser
     QList<KoChannelInfo *> channels = dev->colorSpace()->channels();
-    for(unsigned int val=0; val < dev->colorSpace()->colorChannelCount(); val++)
+    for (unsigned int val = 0; val < dev->colorSpace()->colorChannelCount(); val++)
         m_page->cmbChannel->addItem(channels.at(val)->name());
-    connect( m_page->cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
+    connect(m_page->cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
 
     // Create the horizontal gradient label
     QPixmap hgradientpix(256, 1);
     QPainter hgp(&hgradientpix);
-    hgp.setPen(QPen::QPen(QColor(0,0,0),1, Qt::SolidLine));
-    for( i=0; i<256; ++i )
-    {
-        hgp.setPen(QColor(i,i,i));
+    hgp.setPen(QPen::QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
+    for (i = 0; i < 256; ++i) {
+        hgp.setPen(QColor(i, i, i));
         hgp.drawPoint(i, 0);
     }
     m_page->hgradient->setPixmap(hgradientpix);
@@ -387,11 +377,10 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     // Create the vertical gradient label
     QPixmap vgradientpix(1, 256);
     QPainter vgp(&vgradientpix);
-    vgp.setPen(QPen::QPen(QColor(0,0,0),1, Qt::SolidLine));
-    for( i=0; i<256; ++i )
-    {
-        vgp.setPen(QColor(i,i,i));
-        vgp.drawPoint(0, 255-i);
+    vgp.setPen(QPen::QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
+    for (i = 0; i < 256; ++i) {
+        vgp.setPen(QColor(i, i, i));
+        vgp.drawPoint(0, 255 - i);
     }
     m_page->vgradient->setPixmap(vgradientpix);
 
@@ -411,17 +400,15 @@ KisFilterConfiguration * KisPerChannelConfigWidget::configuration() const
 
     m_curves[m_activeCh] = m_page->kCurve->getCurve();
 
-    for(int ch = 0; ch < nCh; ch++)
-    {
+    for (int ch = 0; ch < nCh; ch++) {
         cfg->curves[ch] = m_curves[ch];
 
-        for(int i = 0; i < 256; i++)
-        {
+        for (int i = 0; i < 256; i++) {
             qint32 val;
             val = int(0xFFFF * m_page->kCurve->getCurveValue(m_curves[ch],  i / 255.0));
-            if ( val > 0xFFFF )
+            if (val > 0xFFFF)
                 val = 0xFFFF;
-            if ( val < 0 )
+            if (val < 0)
                 val = 0;
 
             cfg->transfers[ch][i] = val;
@@ -439,12 +426,11 @@ void KisPerChannelConfigWidget::setConfiguration(KisFilterConfiguration * config
     if (!cfg)
         return;
 
-    for(unsigned int ch = 0; ch < cfg->nTransfers; ch++)
-    {
+    for (unsigned int ch = 0; ch < cfg->nTransfers; ch++) {
         m_curves[ch] = cfg->curves[ch];
     }
     m_page->kCurve->setCurve(m_curves[m_activeCh]);
-    setActiveChannel( 0 );
+    setActiveChannel(0);
 }
 
 #include "kis_perchannel_filter.moc"

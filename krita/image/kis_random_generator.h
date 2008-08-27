@@ -30,26 +30,27 @@
  * needs to always get the same random value at each run, or else the result will constantly
  * changes when used as an adjustement layer.
  */
-class KRITAIMAGE_EXPORT KisRandomGenerator {
-    public:
-        /**
-         * Creates a new instance of a random generator with the given seed.
-         */
-        KisRandomGenerator(int seed);
-        ~KisRandomGenerator();
-        /**
-         * @return the constant random value corresponding to a given pixel, the value is between 0
-         *         and RAND_MAX
-         */
-        int randomAt(int x, int y);
-        /**
-         * @return the constant random value correspoding to a given pixel, the value is between 0
-         *         and 1.0
-         */
-        double doubleRandomAt(int x, int y);
-    private:
-        struct Private;
-        Private* const d;
+class KRITAIMAGE_EXPORT KisRandomGenerator
+{
+public:
+    /**
+     * Creates a new instance of a random generator with the given seed.
+     */
+    KisRandomGenerator(int seed);
+    ~KisRandomGenerator();
+    /**
+     * @return the constant random value corresponding to a given pixel, the value is between 0
+     *         and RAND_MAX
+     */
+    int randomAt(int x, int y);
+    /**
+     * @return the constant random value correspoding to a given pixel, the value is between 0
+     *         and 1.0
+     */
+    double doubleRandomAt(int x, int y);
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

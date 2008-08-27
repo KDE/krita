@@ -25,15 +25,15 @@
 using namespace Scripting;
 
 Pattern::Pattern(Module* module, KisPattern* pattern, bool sharedPattern)
-    : QObject(module)
-    , m_pattern(pattern)
-    , m_sharedPattern(sharedPattern)
+        : QObject(module)
+        , m_pattern(pattern)
+        , m_sharedPattern(sharedPattern)
 {
     setObjectName("KritaPattern");
 }
 
 Pattern::~Pattern()
 {
-    if(!m_sharedPattern)
+    if (!m_sharedPattern)
         delete m_pattern;
 }

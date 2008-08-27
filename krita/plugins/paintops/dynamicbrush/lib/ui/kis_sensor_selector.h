@@ -27,25 +27,26 @@ class KisDynamicSensor;
 class QHBoxLayout;
 class KoID;
 
-class DYNAMIC_BRUSH_EXPORT KisSensorSelector : public QWidget {
+class DYNAMIC_BRUSH_EXPORT KisSensorSelector : public QWidget
+{
     Q_OBJECT
-    public:
-        KisSensorSelector(QWidget* parent);
-    public:
-        void setCurrent(KisDynamicSensor* sensor);
-    signals:
-        void sensorChanged(KisDynamicSensor* sensor);
-        /**
-         * This signal is emitted when the parameters of sensor are changed.
-         */
-        void parametersChanged();
-    private slots:
-        void setSensorId(const KoID& id);
-    private:
-        Ui_SensorSelector* sensorSelectorUI;
-        QHBoxLayout* m_layout;
-        QWidget* m_currentConfigWidget;
-        KisDynamicSensor* m_currentSensor;
+public:
+    KisSensorSelector(QWidget* parent);
+public:
+    void setCurrent(KisDynamicSensor* sensor);
+signals:
+    void sensorChanged(KisDynamicSensor* sensor);
+    /**
+     * This signal is emitted when the parameters of sensor are changed.
+     */
+    void parametersChanged();
+private slots:
+    void setSensorId(const KoID& id);
+private:
+    Ui_SensorSelector* sensorSelectorUI;
+    QHBoxLayout* m_layout;
+    QWidget* m_currentConfigWidget;
+    KisDynamicSensor* m_currentSensor;
 };
 
 #endif

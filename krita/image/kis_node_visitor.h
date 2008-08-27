@@ -31,23 +31,46 @@ class KisTransparencyMask;
 class KisTransformationMask;
 class KisSelectionMask;
 
-class KisNodeVisitor {
+class KisNodeVisitor
+{
 public:
     KisNodeVisitor() {}
     virtual ~KisNodeVisitor() {}
 
 public:
-    virtual bool visit(KisNode *node) { Q_UNUSED( node ); return false; }
-    virtual bool visit(KisPaintLayer *layer) { Q_UNUSED( layer ); return false; }
-    virtual bool visit(KisGroupLayer *layer) { Q_UNUSED( layer ); return false; }
-    virtual bool visit(KisAdjustmentLayer *layer) { Q_UNUSED( layer ); return false; }
-    virtual bool visit(KisExternalLayer *layer) { Q_UNUSED( layer ); return false; }
-    virtual bool visit(KisGeneratorLayer *layer) { Q_UNUSED( layer); return false; }
-    virtual bool visit(KisCloneLayer *layer) { Q_UNUSED( layer ); return false; }
-    virtual bool visit(KisFilterMask *mask) { Q_UNUSED( mask ); return false; }
-    virtual bool visit(KisTransparencyMask *mask) { Q_UNUSED( mask ); return false; }
-    virtual bool visit(KisTransformationMask *mask) { Q_UNUSED( mask ); return false; }
-    virtual bool visit(KisSelectionMask *mask) { Q_UNUSED( mask ); return false; }
+    virtual bool visit(KisNode *node) {
+        Q_UNUSED(node); return false;
+    }
+    virtual bool visit(KisPaintLayer *layer) {
+        Q_UNUSED(layer); return false;
+    }
+    virtual bool visit(KisGroupLayer *layer) {
+        Q_UNUSED(layer); return false;
+    }
+    virtual bool visit(KisAdjustmentLayer *layer) {
+        Q_UNUSED(layer); return false;
+    }
+    virtual bool visit(KisExternalLayer *layer) {
+        Q_UNUSED(layer); return false;
+    }
+    virtual bool visit(KisGeneratorLayer *layer) {
+        Q_UNUSED(layer); return false;
+    }
+    virtual bool visit(KisCloneLayer *layer) {
+        Q_UNUSED(layer); return false;
+    }
+    virtual bool visit(KisFilterMask *mask) {
+        Q_UNUSED(mask); return false;
+    }
+    virtual bool visit(KisTransparencyMask *mask) {
+        Q_UNUSED(mask); return false;
+    }
+    virtual bool visit(KisTransformationMask *mask) {
+        Q_UNUSED(mask); return false;
+    }
+    virtual bool visit(KisSelectionMask *mask) {
+        Q_UNUSED(mask); return false;
+    }
 
 protected:
 
@@ -60,16 +83,15 @@ protected:
      * @return true if none of the childnodes returns false on
      * accepting the visitor.
      */
-    bool visitAll( KisNode * node, bool breakOnFail = false )
-        {
-            for ( uint i = 0; i < node->childCount(); ++i ) {
-                if ( !node->at( i )->accept( *this ) ) {
-                    if ( breakOnFail )
-                        return false;
-                }
+    bool visitAll(KisNode * node, bool breakOnFail = false) {
+        for (uint i = 0; i < node->childCount(); ++i) {
+            if (!node->at(i)->accept(*this)) {
+                if (breakOnFail)
+                    return false;
             }
-            return true;
         }
+        return true;
+    }
 
 
 
@@ -82,20 +104,19 @@ protected:
      * @return true if none of the childnodes returns false on
      * accepting the visitor.
      */
-    bool visitAllInverse( KisNode * node, bool breakOnFail = false )
-        {
-            KisNodeSP child = node->lastChild();
-            while (child) {
-                dbgKrita << child->name();
-                if ( !child->accept( *this ) ) {
-                    dbgKrita << " visiting failed";
-                    if ( breakOnFail )
-                        return false;
-                }
-                child = child->prevSibling();
+    bool visitAllInverse(KisNode * node, bool breakOnFail = false) {
+        KisNodeSP child = node->lastChild();
+        while (child) {
+            dbgKrita << child->name();
+            if (!child->accept(*this)) {
+                dbgKrita << " visiting failed";
+                if (breakOnFail)
+                    return false;
             }
-            return true;
+            child = child->prevSibling();
         }
+        return true;
+    }
 };
 
 

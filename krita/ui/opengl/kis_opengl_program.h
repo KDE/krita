@@ -37,7 +37,8 @@ class KisOpenGLShader;
  * and set any uniform variables with setUniformVariable(). Call deactivate()
  * when the program has finished being used.
  */
-class KRITAUI_EXPORT KisOpenGLProgram {
+class KRITAUI_EXPORT KisOpenGLProgram
+{
 public:
     /**
      * Create a program object.

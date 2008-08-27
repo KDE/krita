@@ -33,7 +33,7 @@
 #include <QButtonGroup>
 
 KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
-    : QWidget(parent), m_view(view), m_resources(view->resourceProvider()), m_tool(0), m_colorspace(0)
+        : QWidget(parent), m_view(view), m_resources(view->resourceProvider()), m_tool(0), m_colorspace(0)
 {
     setupUi(this);
 
@@ -46,8 +46,7 @@ KisPainterlyMixer::KisPainterlyMixer(QWidget *parent, KisView2 *view)
         const KoColorProfile* testp = profiles.at(0);
         m_colorspace = f->colorSpace(csid, testp);
         Q_ASSERT(m_colorspace);
-    }
-    else {
+    } else {
         setEnabled(false);
         return;
     }
@@ -95,7 +94,7 @@ void KisPainterlyMixer::initSpots()
     l->setSpacing(5);
     for (row = 0; row < ROWS; row++) {
         for (col = 0; col < COLS; col++) {
-            int index = row*COLS + col;
+            int index = row * COLS + col;
             QToolButton *curr = new ColorSpot(m_spotsFrame, m_vColors[index]);
             l->addWidget(curr, row, col);
 

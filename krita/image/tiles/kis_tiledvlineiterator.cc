@@ -21,9 +21,9 @@
 #include "kis_tilediterator.h"
 #include "kis_debug.h"
 
-KisTiledVLineIterator::KisTiledVLineIterator( KisTiledDataManager *ndevice,  qint32 x,  qint32 y, qint32 h, bool writable) :
-    KisTiledIterator(ndevice),
-    m_bottom(y + h - 1)
+KisTiledVLineIterator::KisTiledVLineIterator(KisTiledDataManager *ndevice,  qint32 x,  qint32 y, qint32 h, bool writable) :
+        KisTiledIterator(ndevice),
+        m_bottom(y + h - 1)
 {
     m_writable = writable;
     m_top = y;
@@ -40,7 +40,7 @@ KisTiledVLineIterator::KisTiledVLineIterator( KisTiledDataManager *ndevice,  qin
     m_xInTile = m_x - m_col * KisTile::WIDTH;
     m_topInTile = m_y - m_topRow * KisTile::HEIGHT;
 
-    if(m_row == m_bottomRow)
+    if (m_row == m_bottomRow)
         m_bottomInTile = m_bottom - m_bottomRow * KisTile::HEIGHT;
     else
         m_bottomInTile = KisTile::HEIGHT - 1;
@@ -52,7 +52,7 @@ KisTiledVLineIterator::KisTiledVLineIterator( KisTiledDataManager *ndevice,  qin
 }
 
 KisTiledVLineIterator::KisTiledVLineIterator(const KisTiledVLineIterator& rhs)
-    : KisTiledIterator(rhs)
+        : KisTiledIterator(rhs)
 {
     if (this != &rhs) {
         m_top = rhs.m_top;
@@ -66,7 +66,7 @@ KisTiledVLineIterator::KisTiledVLineIterator(const KisTiledVLineIterator& rhs)
     }
 }
 
-KisTiledVLineIterator& KisTiledVLineIterator::operator=(const KisTiledVLineIterator& rhs)
+KisTiledVLineIterator& KisTiledVLineIterator::operator=(const KisTiledVLineIterator & rhs)
 {
     if (this != &rhs) {
         KisTiledIterator::operator=(rhs);
@@ -83,21 +83,18 @@ KisTiledVLineIterator& KisTiledVLineIterator::operator=(const KisTiledVLineItera
     return *this;
 }
 
-KisTiledVLineIterator::~KisTiledVLineIterator( )
+KisTiledVLineIterator::~KisTiledVLineIterator()
 {
 }
 
 KisTiledVLineIterator & KisTiledVLineIterator::operator ++ ()
 {
-    if(m_yInTile >= m_bottomInTile)
-    {
+    if (m_yInTile >= m_bottomInTile) {
         nextTile();
         fetchTileData(m_col, m_row);
-        m_yInTile =m_topInTile;
+        m_yInTile = m_topInTile;
         m_offset = m_pixelSize * (m_yInTile * KisTile::WIDTH + m_xInTile);
-    }
-    else
-    {
+    } else {
         m_yInTile++;
         m_offset += m_pixelSize * KisTile::WIDTH;
     }
@@ -108,12 +105,11 @@ KisTiledVLineIterator & KisTiledVLineIterator::operator ++ ()
 
 void KisTiledVLineIterator::nextTile()
 {
-    if(m_row < m_bottomRow)
-    {
+    if (m_row < m_bottomRow) {
         m_row++;
         m_topInTile = 0;
 
-        if(m_row == m_bottomRow)
+        if (m_row == m_bottomRow)
             m_bottomInTile = m_bottom - m_bottomRow * KisTile::HEIGHT;
         else
             m_bottomInTile = KisTile::HEIGHT - 1;
@@ -127,17 +123,16 @@ void KisTiledVLineIterator::nextCol()
     m_y = m_top;
     m_topInTile = m_y - m_topRow * KisTile::HEIGHT;
     m_yInTile = m_topInTile;
-    if( m_xInTile >= KisTile::WIDTH )
-    { // Need a new row
+    if (m_xInTile >= KisTile::WIDTH) { // Need a new row
         m_xInTile = 0;
         m_col++;
         m_row = m_topRow;
         fetchTileData(m_col, m_row);
-    } else if( m_topRow != m_row ) {
+    } else if (m_topRow != m_row) {
         m_row = m_topRow;
         fetchTileData(m_col, m_row);
     }
-    if(m_row == m_bottomRow)
+    if (m_row == m_bottomRow)
         m_bottomInTile = m_bottom - m_bottomRow * KisTile::HEIGHT;
     else
         m_bottomInTile = KisTile::HEIGHT - 1;

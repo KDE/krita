@@ -31,7 +31,7 @@
 #include <kis_paint_device.h>
 
 // Constructor
-Stroke::Stroke ()
+Stroke::Stroke()
 {
     m_color = KoColor();
     x1 = 0;
@@ -44,7 +44,7 @@ Stroke::~Stroke()
 {
 }
 
-void Stroke::drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color )
+void Stroke::drawLine(KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color)
 {
     QColor mycolor = color.toQColor();
     int ix1, ix2, iy1, iy2, iwidth;
@@ -54,7 +54,7 @@ void Stroke::drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, do
     iy2 = (int)y2;
     iwidth = (int)width;
 
-    drawGSLine(dev,ix1,iy1,ix2,iy2,iwidth,iwidth,mycolor);
+    drawGSLine(dev, ix1, iy1, ix2, iy2, iwidth, iwidth, mycolor);
 }
 
 int Stroke::gsfilter(float val)
@@ -64,7 +64,8 @@ int Stroke::gsfilter(float val)
                    0x7f, 0x70, 0x62, 0x54,
                    0x46, 0x3a, 0x2f, 0x25,
                    0x1c, 0x15, 0x0e, 0x09,
-                   0x05, 0x03, 0x01, 0x00 };
+                   0x05, 0x03, 0x01, 0x00
+                 };
 
     float ret;
     if (val < 0) val = -val;
@@ -72,29 +73,29 @@ int Stroke::gsfilter(float val)
 //printf("%lf'n", val);
 
     //if (val == 0) ret = 1.0;
-    if (val < 1/16) ret = pole[0];
-    else if (val < 2/16.0) ret = pole[1];
-    else if (val < 3/16.0) ret = pole[2];
-    else if (val < 4/16.0) ret = pole[3];
-    else if (val < 5/16.0) ret = pole[4];
-    else if (val < 6/16.0) ret = pole[5];
-    else if (val < 7/16.0) ret = pole[6];
-    else if (val < 8/16.0) ret = pole[7];
-    else if (val < 9/16.0) ret = pole[8];
-    else if (val < 10/16.0) ret =pole[9];
-    else if (val < 11/16.0) ret =pole[10];
-    else if (val < 12/16.0) ret =pole[11];
-    else if (val < 13/16.0) ret =pole[12];
-    else if (val < 14/16.0) ret =pole[13];
-    else if (val < 15/16.0) ret =pole[14];
-    else if (val < 16/16.0) ret =pole[15];
-    else if (val < 17/16.0) ret =pole[16];
-    else if (val < 18/16.0) ret =pole[17];
-    else if (val < 19/16.0) ret =pole[18];
-    else if (val < 20/16.0) ret =pole[19];
-    else if (val < 21/16.0) ret =pole[20];
-    else if (val < 22/16.0) ret =pole[21];
-    else if (val < 23/16.0) ret =pole[22];
+    if (val < 1 / 16) ret = pole[0];
+    else if (val < 2 / 16.0) ret = pole[1];
+    else if (val < 3 / 16.0) ret = pole[2];
+    else if (val < 4 / 16.0) ret = pole[3];
+    else if (val < 5 / 16.0) ret = pole[4];
+    else if (val < 6 / 16.0) ret = pole[5];
+    else if (val < 7 / 16.0) ret = pole[6];
+    else if (val < 8 / 16.0) ret = pole[7];
+    else if (val < 9 / 16.0) ret = pole[8];
+    else if (val < 10 / 16.0) ret = pole[9];
+    else if (val < 11 / 16.0) ret = pole[10];
+    else if (val < 12 / 16.0) ret = pole[11];
+    else if (val < 13 / 16.0) ret = pole[12];
+    else if (val < 14 / 16.0) ret = pole[13];
+    else if (val < 15 / 16.0) ret = pole[14];
+    else if (val < 16 / 16.0) ret = pole[15];
+    else if (val < 17 / 16.0) ret = pole[16];
+    else if (val < 18 / 16.0) ret = pole[17];
+    else if (val < 19 / 16.0) ret = pole[18];
+    else if (val < 20 / 16.0) ret = pole[19];
+    else if (val < 21 / 16.0) ret = pole[20];
+    else if (val < 22 / 16.0) ret = pole[21];
+    else if (val < 23 / 16.0) ret = pole[22];
     else ret = pole[23];
 
 
@@ -121,48 +122,44 @@ void Stroke::drawGSLine(KisPaintDeviceSP image, int x0, int y0, int x1, int y1, 
 //   if (w1!=1) w1--;
 //   if (w2!=1) w2--;
 
-    if ( x1 < x0 ) // sort so x0<x1
-    {
-	int xt, yt, wt;
-	xt = x0;       x0 = x1;       x1 = xt;
-	yt = y0;       y0 = y1;       y1 = yt;
-	wt = w2;       w2 = w1;       w1 = wt;
+    if (x1 < x0) { // sort so x0<x1
+        int xt, yt, wt;
+        xt = x0;       x0 = x1;       x1 = xt;
+        yt = y0;       y0 = y1;       y1 = yt;
+        wt = w2;       w2 = w1;       w1 = wt;
     }
 
-    tp0 = w1/2;
-    tn0 = w1/2;
-    if ( w1%2==0 ) // even width w1
-	tn0--;
+    tp0 = w1 / 2;
+    tn0 = w1 / 2;
+    if (w1 % 2 == 0) // even width w1
+        tn0--;
 
-    tp1 = w2/2;
-    tn1 = w2/2;
-    if ( w2%2==0 ) // even width w2
-	tn1--;
+    tp1 = w2 / 2;
+    tn1 = w2 / 2;
+    if (w2 % 2 == 0) // even width w2
+        tn1--;
 
     int dx = x1 - x0; // run
     int dy = y1 - y0; // rise
     int ady;
-    if ( dy < 0 ) ady = -dy;
+    if (dy < 0) ady = -dy;
     else ady = dy;
     int adx;
-    if ( dx < 0 ) adx = -dx;
+    if (dx < 0) adx = -dx;
     else adx = dx;
 
     int x0a, y0a, x1a, y1a, x0b, y0b, x1b, y1b;
 
-    if ( adx > ady ) // horizontalish
-    {
-	x0a = x0;   y0a = y0 - tn0;
-	x0b = x0;   y0b = y0 + tp0;
-	x1a = x1;   y1a = y1 - tn1;
-	x1b = x1;   y1b = y1 + tp1;
-    }
-    else
-    {
-	x0a = x0 - tn0;   y0a = y0;
-	x0b = x0 + tp0;   y0b = y0;
-	x1a = x1 - tn1;   y1a = y1;
-	x1b = x1 + tp1;   y1b = y1;
+    if (adx > ady) { // horizontalish
+        x0a = x0;   y0a = y0 - tn0;
+        x0b = x0;   y0b = y0 + tp0;
+        x1a = x1;   y1a = y1 - tn1;
+        x1b = x1;   y1b = y1 + tp1;
+    } else {
+        x0a = x0 - tn0;   y0a = y0;
+        x0b = x0 + tp0;   y0b = y0;
+        x1a = x1 - tn1;   y1a = y1;
+        x1b = x1 + tp1;   y1b = y1;
     }
 
     int dxa, dxb, dya, dyb, adya, adyb;
@@ -171,605 +168,557 @@ void Stroke::drawGSLine(KisPaintDeviceSP image, int x0, int y0, int x1, int y1, 
     dxb = x1b - x0b; // run of b
     dyb = y1b - y0b; // rise of b
 
-    if ( dya < 0 ) adya = -dya;
+    if (dya < 0) adya = -dya;
     else adya = dya;
-    if ( dyb < 0 ) adyb = -dyb;
+    if (dyb < 0) adyb = -dyb;
     else adyb = dyb;
 
 
-    if ( dy > 0 ) // y1>y0 -- line goes right
-    {
-	if ( dx >= dy ) dir = 1; // more run than rise
-	else dir = 2;          // less run than rise
-    }
-    else  // y1<=y0 -- line goes right
-    {
-	if ( dx >= -1*dy ) dir = 3;  // more run than rise
-	else dir = 4;          // less run than rise
+    if (dy > 0) { // y1>y0 -- line goes right
+        if (dx >= dy) dir = 1;   // more run than rise
+        else dir = 2;          // less run than rise
+    } else { // y1<=y0 -- line goes right
+        if (dx >= -1*dy) dir = 3;    // more run than rise
+        else dir = 4;          // less run than rise
     }
 
     float perc; int intensity;
-    QColor *lineColor = new QColor ( color );
+    QColor *lineColor = new QColor(color);
 
-    switch ( dir )
-    {
+    switch (dir) {
     case 1:
-	Aa = 0;
-	Ba = 1.0/ ( 2.0 * sqrt ( (double)(dxa *dxa + dya * dya) ) );
-	Ca = 2.0 * dxa * Ba;
+        Aa = 0;
+        Ba = 1.0 / (2.0 * sqrt((double)(dxa * dxa + dya * dya)));
+        Ca = 2.0 * dxa * Ba;
 
-	Ab = 0;
-	Bb = 1.0/ ( 2.0 * sqrt ( (double)(dxb *dxb + dyb * dyb) ) );
-	Cb = 2.0 * dxb * Bb;
+        Ab = 0;
+        Bb = 1.0 / (2.0 * sqrt((double)(dxb * dxb + dyb * dyb)));
+        Cb = 2.0 * dxb * Bb;
 
-	da = 2*dya-dxa;
-	incrEa  = 2*dya;
-	incrNEa = 2* ( dya-dxa );
-	ya = y0a;
+        da = 2 * dya - dxa;
+        incrEa  = 2 * dya;
+        incrNEa = 2 * (dya - dxa);
+        ya = y0a;
 
-	db = 2*dyb-dxb;
-	incrEb  = 2*dyb;
-	incrNEb = 2* ( dyb-dxb );
-	yb = y0b;
+        db = 2 * dyb - dxb;
+        incrEb  = 2 * dyb;
+        incrNEb = 2 * (dyb - dxb);
+        yb = y0b;
 
-	d = 2*dy-dx;
-	incrE  = 2*dy;
-	incrNE = 2* ( dy-dx );
-	x = x0;
+        d = 2 * dy - dx;
+        incrE  = 2 * dy;
+        incrNE = 2 * (dy - dx);
+        x = x0;
 
 
-	// line a ------------------------------------------------
-	intensity = gsfilter ( 0 );
-	lineColor->setAlpha ( intensity );
-	image->setPixel ( x,ya,lineColor->rgba() );
+        // line a ------------------------------------------------
+        intensity = gsfilter(0);
+        lineColor->setAlpha(intensity);
+        image->setPixel(x, ya, lineColor->rgba());
 
-	intensity = gsfilter ( Ca - Aa*Ba );
-	lineColor->setAlpha ( intensity );
-	image->setPixel ( x,ya+1,lineColor->rgba() );
+        intensity = gsfilter(Ca - Aa * Ba);
+        lineColor->setAlpha(intensity);
+        image->setPixel(x, ya + 1, lineColor->rgba());
 
-	intensity = gsfilter ( Ca + Aa*Ba );
-	lineColor->setAlpha ( intensity );
-	image->setPixel ( x,ya+1,lineColor->rgba() );
+        intensity = gsfilter(Ca + Aa * Ba);
+        lineColor->setAlpha(intensity);
+        image->setPixel(x, ya + 1, lineColor->rgba());
 
-	//--------------------------------------------------------
-	// line b ------------------------------------------------
-	//if (!(w1==1 && w2==1))
-	{
+        //--------------------------------------------------------
+        // line b ------------------------------------------------
+        //if (!(w1==1 && w2==1))
+        {
 
-            intensity = gsfilter ( Ab*Bb );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( x,yb,lineColor->rgba() );
+            intensity = gsfilter(Ab * Bb);
+            lineColor->setAlpha(intensity);
+            image->setPixel(x, yb, lineColor->rgba());
 
-            intensity = gsfilter ( Cb - Ab*Bb );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( x,yb+1,lineColor->rgba() );
+            intensity = gsfilter(Cb - Ab * Bb);
+            lineColor->setAlpha(intensity);
+            image->setPixel(x, yb + 1, lineColor->rgba());
 
-            intensity = gsfilter ( Cb + Ab*Bb );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( x,yb-1,lineColor->rgba() );
+            intensity = gsfilter(Cb + Ab * Bb);
+            lineColor->setAlpha(intensity);
+            image->setPixel(x, yb - 1, lineColor->rgba());
 
-	}
-	//--------------------------------------------------------
+        }
+        //--------------------------------------------------------
 
-	while ( x < x1 )
-	{
-            if ( da <= 0 )
-            {
+        while (x < x1) {
+            if (da <= 0) {
                 Aa = da + dxa;
                 da += incrEa;
-            }
-            else
-            {
+            } else {
                 Aa = da - dxa;
                 da += incrNEa;
                 ya++;
             }
 
-            if ( db <= 0 )
-            {
+            if (db <= 0) {
                 Ab = db + dxb;
                 db += incrEb;
-            }
-            else
-            {
+            } else {
                 Ab = db - dxb;
                 db += incrNEb;
                 yb++;
             }
 
-            if ( d <= 0 )
-            {
+            if (d <= 0) {
                 d += incrE;
                 x++;
-            }
-            else
-            {
+            } else {
                 d += incrNE;
                 x++;
             }
 
-            perc = ( float ) ( x-x0 ) / ( float ) adx;
+            perc = (float)(x - x0) / (float) adx;
 
             // line a ------------------------------------------------
-            intensity = gsfilter ( Aa*Ba );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( x,ya,lineColor->rgba() );
+            intensity = gsfilter(Aa * Ba);
+            lineColor->setAlpha(intensity);
+            image->setPixel(x, ya, lineColor->rgba());
 
-            intensity = gsfilter ( Ca - Aa*Ba );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( x,ya+1,lineColor->rgba() );
+            intensity = gsfilter(Ca - Aa * Ba);
+            lineColor->setAlpha(intensity);
+            image->setPixel(x, ya + 1, lineColor->rgba());
 
-            intensity = gsfilter ( Ca + Aa*Ba );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( x,ya-1,lineColor->rgba() );
+            intensity = gsfilter(Ca + Aa * Ba);
+            lineColor->setAlpha(intensity);
+            image->setPixel(x, ya - 1, lineColor->rgba());
 
             //--------------------------------------------------------
             // line b ------------------------------------------------
             //if (!(w1==1 && w2==1))
             {
 
-                intensity = gsfilter ( Ab*Bb );
-                lineColor->setAlpha ( intensity );
-                image->setPixel ( x,yb,lineColor->rgba() );
+                intensity = gsfilter(Ab * Bb);
+                lineColor->setAlpha(intensity);
+                image->setPixel(x, yb, lineColor->rgba());
 
-                intensity = gsfilter ( Cb - Ab*Bb );
-                lineColor->setAlpha ( intensity );
-                image->setPixel ( x,yb+1,lineColor->rgba() );
+                intensity = gsfilter(Cb - Ab * Bb);
+                lineColor->setAlpha(intensity);
+                image->setPixel(x, yb + 1, lineColor->rgba());
 
-                intensity = gsfilter ( Cb + Ab*Bb );
-                lineColor->setAlpha ( intensity );
-                image->setPixel ( x,yb-1,lineColor->rgba() );
+                intensity = gsfilter(Cb + Ab * Bb);
+                lineColor->setAlpha(intensity);
+                image->setPixel(x, yb - 1, lineColor->rgba());
 
             }
             //--------------------------------------------------------
-            lineColor->setAlpha ( (int)(255*perc) ); // 255*perc is cool, gradient color
+            lineColor->setAlpha((int)(255*perc));    // 255*perc is cool, gradient color
             // fill remaining pixels between current xfa,xfb
-            if ( ! ( w1==1 && w2==1 ) )
-            {
-                if ( ya<yb )
-                    for ( int i=ya; i<=yb; i++ )
-                        image->setPixel ( x,i,lineColor->rgba() );
+            if (!(w1 == 1 && w2 == 1)) {
+                if (ya < yb)
+                    for (int i = ya; i <= yb; i++)
+                        image->setPixel(x, i, lineColor->rgba());
                 else
-                    for ( int i=yb; i<=ya; i++ )
-                        image->setPixel ( x,i,lineColor->rgba() );
+                    for (int i = yb; i <= ya; i++)
+                        image->setPixel(x, i, lineColor->rgba());
             }
 
-	}
+        }
 
-	break;
+        break;
 
     case 2:
-	Aa = 0;
-	Ba = 1.0/ ( 2.0 * sqrt ( (double)(dxa *dxa + dya * dya) ) );
-	Ca = 2.0 * dxa * Ba;
+        Aa = 0;
+        Ba = 1.0 / (2.0 * sqrt((double)(dxa * dxa + dya * dya)));
+        Ca = 2.0 * dxa * Ba;
 
-	Ab = 0;
-	Bb = 1.0/ ( 2.0 * sqrt ( (double)(dxb *dxb + dyb * dyb) ) );
-	Cb = 2.0 * dxb * Bb;
+        Ab = 0;
+        Bb = 1.0 / (2.0 * sqrt((double)(dxb * dxb + dyb * dyb)));
+        Cb = 2.0 * dxb * Bb;
 
-	da = dya-2*dxa;
-	incrNa  = -2*dxa;
-	incrNEa = 2* ( dya-dxa );
-	xa = x0a;
+        da = dya - 2 * dxa;
+        incrNa  = -2 * dxa;
+        incrNEa = 2 * (dya - dxa);
+        xa = x0a;
 
-	db = dyb-2*dxb;
-	incrNb  = -2*dxb;
-	incrNEb = 2* ( dyb-dxb );
-	xb = x0b;
+        db = dyb - 2 * dxb;
+        incrNb  = -2 * dxb;
+        incrNEb = 2 * (dyb - dxb);
+        xb = x0b;
 
-	d = dy-2*dx;
-	incrN  = -2*dx;
-	incrNE = 2* ( dy-dx );
-	y = y0;
+        d = dy - 2 * dx;
+        incrN  = -2 * dx;
+        incrNE = 2 * (dy - dx);
+        y = y0;
 
-	// line a ------------------------------------------------
-	intensity = gsfilter ( 0 );
-	lineColor->setAlpha ( intensity );
-	image->setPixel ( xa,y,lineColor->rgba() );
+        // line a ------------------------------------------------
+        intensity = gsfilter(0);
+        lineColor->setAlpha(intensity);
+        image->setPixel(xa, y, lineColor->rgba());
 
-	intensity = gsfilter ( Ca - Aa*Ba );
-	lineColor->setAlpha ( intensity );
-	image->setPixel ( xa+1,y,lineColor->rgba() );
+        intensity = gsfilter(Ca - Aa * Ba);
+        lineColor->setAlpha(intensity);
+        image->setPixel(xa + 1, y, lineColor->rgba());
 
-	intensity = gsfilter ( Ca + Aa*Ba );
-	lineColor->setAlpha ( intensity );
-	image->setPixel ( xa-1,y,lineColor->rgba() );
+        intensity = gsfilter(Ca + Aa * Ba);
+        lineColor->setAlpha(intensity);
+        image->setPixel(xa - 1, y, lineColor->rgba());
 
-	//--------------------------------------------------------
-	// line b ------------------------------------------------
-	//if (!(w1==1 && w2==1))
-	{
+        //--------------------------------------------------------
+        // line b ------------------------------------------------
+        //if (!(w1==1 && w2==1))
+        {
 
-            intensity = gsfilter ( Ab*Bb );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( xb,y,lineColor->rgba() );
+            intensity = gsfilter(Ab * Bb);
+            lineColor->setAlpha(intensity);
+            image->setPixel(xb, y, lineColor->rgba());
 
-            intensity = gsfilter ( Cb - Ab*Bb );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( xb+1,y,lineColor->rgba() );
+            intensity = gsfilter(Cb - Ab * Bb);
+            lineColor->setAlpha(intensity);
+            image->setPixel(xb + 1, y, lineColor->rgba());
 
-            intensity = gsfilter ( Cb + Ab*Bb );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( xb-1,y,lineColor->rgba() );
-	}
-	//--------------------------------------------------------
+            intensity = gsfilter(Cb + Ab * Bb);
+            lineColor->setAlpha(intensity);
+            image->setPixel(xb - 1, y, lineColor->rgba());
+        }
+        //--------------------------------------------------------
 
-	while ( y < y1 )
-	{
-            if ( da <= 0 )
-            {
+        while (y < y1) {
+            if (da <= 0) {
                 Aa = da + dya;
                 da += incrNEa;
                 xa++;
-            }
-            else
-            {
+            } else {
                 Aa = da - dya;
                 da += incrNa;
             }
 
-            if ( db <= 0 )
-            {
+            if (db <= 0) {
                 Ab = db + dyb;
                 db += incrNEb;
                 xb++;
-            }
-            else
-            {
+            } else {
                 Ab = db - dyb;
                 db += incrNb;
             }
 
-            if ( d <= 0 )
-            {
+            if (d <= 0) {
                 d += incrNE;
                 y++;
-            }
-            else
-            {
+            } else {
                 d += incrN;
                 y++;
             }
 
-            perc = ( float ) ( y-y0 ) / ( float ) ady;
+            perc = (float)(y - y0) / (float) ady;
             /*c3.r = perc*c2.r + (1 - perc)*c1.r;
               c3.g = perc*c2.g + (1 - perc)*c1.g;
               c3.b = perc*c2.b + (1 - perc)*c1.b;*/
 
 
             // line a ------------------------------------------------
-            intensity = gsfilter ( Aa*Ba );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( xa,y,lineColor->rgba() );
+            intensity = gsfilter(Aa * Ba);
+            lineColor->setAlpha(intensity);
+            image->setPixel(xa, y, lineColor->rgba());
 
-            intensity = gsfilter ( Ca - Aa*Ba );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( xa+1,y,lineColor->rgba() );
+            intensity = gsfilter(Ca - Aa * Ba);
+            lineColor->setAlpha(intensity);
+            image->setPixel(xa + 1, y, lineColor->rgba());
 
-            intensity = gsfilter ( Ca + Aa*Ba );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( xa-1,y,lineColor->rgba() );
+            intensity = gsfilter(Ca + Aa * Ba);
+            lineColor->setAlpha(intensity);
+            image->setPixel(xa - 1, y, lineColor->rgba());
 
             //--------------------------------------------------------
             // line b ------------------------------------------------
             //if (!(w1==1 && w2==1))
             {
-                intensity = gsfilter ( Ab*Bb );
-                lineColor->setAlpha ( intensity );
-                image->setPixel ( xb,y,lineColor->rgba() );
+                intensity = gsfilter(Ab * Bb);
+                lineColor->setAlpha(intensity);
+                image->setPixel(xb, y, lineColor->rgba());
 
-                intensity = gsfilter ( Cb - Ab*Bb );
-                lineColor->setAlpha ( intensity );
-                image->setPixel ( xb+1,y,lineColor->rgba() );
+                intensity = gsfilter(Cb - Ab * Bb);
+                lineColor->setAlpha(intensity);
+                image->setPixel(xb + 1, y, lineColor->rgba());
 
-                intensity = gsfilter ( Cb + Ab*Bb );
-                lineColor->setAlpha ( intensity );
-                image->setPixel ( xb-1,y,lineColor->rgba() );
+                intensity = gsfilter(Cb + Ab * Bb);
+                lineColor->setAlpha(intensity);
+                image->setPixel(xb - 1, y, lineColor->rgba());
             }
             //--------------------------------------------------------
 
-            lineColor->setAlpha ( 255 );
+            lineColor->setAlpha(255);
             // fill remaining pixels between current xfa,xfb
-            if ( ! ( w1==1 && w2==1 ) )
-            {
-                if ( xa<xb )
-                    for ( int i=xa; i<=xb; i++ )
-                        image->setPixel ( i,y,lineColor->rgba() );
+            if (!(w1 == 1 && w2 == 1)) {
+                if (xa < xb)
+                    for (int i = xa; i <= xb; i++)
+                        image->setPixel(i, y, lineColor->rgba());
 
                 else
-                    for ( int i=xb; i<=xa; i++ )
-                        image->setPixel ( i,y,lineColor->rgba() );
+                    for (int i = xb; i <= xa; i++)
+                        image->setPixel(i, y, lineColor->rgba());
             }
-	}
+        }
 
-	break;
+        break;
 
     case 3:
-	Aa = 0;
-	Ba = 1.0/ ( 2.0 * sqrt ( (double)(dxa *dxa + dya * dya) ) );
-	Ca = 2.0 * dxa * Ba;
+        Aa = 0;
+        Ba = 1.0 / (2.0 * sqrt((double)(dxa * dxa + dya * dya)));
+        Ca = 2.0 * dxa * Ba;
 
-	Ab = 0;
-	Bb = 1.0/ ( 2.0 * sqrt ( (double)(dxb *dxb + dyb * dyb) ) );
-	Cb = 2.0 * dxb * Bb;
+        Ab = 0;
+        Bb = 1.0 / (2.0 * sqrt((double)(dxb * dxb + dyb * dyb)));
+        Cb = 2.0 * dxb * Bb;
 
-	da = 2*dya+dxa;
-	incrEa  = 2*dya;
-	incrSEa = 2* ( dya+dxa );
-	ya = y0a;
+        da = 2 * dya + dxa;
+        incrEa  = 2 * dya;
+        incrSEa = 2 * (dya + dxa);
+        ya = y0a;
 
-	db = 2*dyb+dxb;
-	incrEb  = 2*dyb;
-	incrSEb = 2* ( dyb+dxb );
-	yb = y0b;
+        db = 2 * dyb + dxb;
+        incrEb  = 2 * dyb;
+        incrSEb = 2 * (dyb + dxb);
+        yb = y0b;
 
-	d = 2*dy+dx;
-	incrE  = 2*dy;
-	incrSE = 2* ( dy+dx );
-	x = x0;
+        d = 2 * dy + dx;
+        incrE  = 2 * dy;
+        incrSE = 2 * (dy + dx);
+        x = x0;
 
-	// line a ------------------------------------------------
-	intensity = gsfilter ( 0 );
-	lineColor->setAlpha ( intensity );
-	image->setPixel ( x,ya,lineColor->rgba() );
+        // line a ------------------------------------------------
+        intensity = gsfilter(0);
+        lineColor->setAlpha(intensity);
+        image->setPixel(x, ya, lineColor->rgba());
 
-	intensity = gsfilter ( Ca - Aa*Ba );
-	lineColor->setAlpha ( intensity );
-	image->setPixel ( x,ya+1,lineColor->rgba() );
+        intensity = gsfilter(Ca - Aa * Ba);
+        lineColor->setAlpha(intensity);
+        image->setPixel(x, ya + 1, lineColor->rgba());
 
-	intensity = gsfilter ( Ca + Aa*Ba );
-	lineColor->setAlpha ( intensity );
-	image->setPixel ( x,ya-1,lineColor->rgba() );
+        intensity = gsfilter(Ca + Aa * Ba);
+        lineColor->setAlpha(intensity);
+        image->setPixel(x, ya - 1, lineColor->rgba());
 
 
-	//--------------------------------------------------------
-	// line b ------------------------------------------------
-	//if (!(w1==1 && w2==1))
-	{
-            intensity = gsfilter ( Ab*Bb );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( x,yb,lineColor->rgba() );
+        //--------------------------------------------------------
+        // line b ------------------------------------------------
+        //if (!(w1==1 && w2==1))
+        {
+            intensity = gsfilter(Ab * Bb);
+            lineColor->setAlpha(intensity);
+            image->setPixel(x, yb, lineColor->rgba());
 
-            intensity = gsfilter ( Cb - Ab*Bb );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( x,yb+1,lineColor->rgba() );
+            intensity = gsfilter(Cb - Ab * Bb);
+            lineColor->setAlpha(intensity);
+            image->setPixel(x, yb + 1, lineColor->rgba());
 
-            intensity = gsfilter ( Cb + Ab*Bb );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( x,yb-1,lineColor->rgba() );
-	}
-	//--------------------------------------------------------
+            intensity = gsfilter(Cb + Ab * Bb);
+            lineColor->setAlpha(intensity);
+            image->setPixel(x, yb - 1, lineColor->rgba());
+        }
+        //--------------------------------------------------------
 
-	while ( x < x1 )
-	{
-            if ( da <= 0 )
-            {
+        while (x < x1) {
+            if (da <= 0) {
                 Aa = da + dxa;
                 da += incrSEa;
                 ya--;
-            }
-            else
-            {
+            } else {
                 Aa = da - dxa;
                 da += incrEa;
             }
 
-            if ( db <= 0 )
-            {
+            if (db <= 0) {
                 Ab = db + dxb;
                 db += incrSEb;
                 yb--;
-            }
-            else
-            {
+            } else {
                 Ab = db - dxb;
                 db += incrEb;
             }
 
-            if ( d <= 0 )
-            {
+            if (d <= 0) {
                 d += incrSE;
                 x++;
-            }
-            else
-            {
+            } else {
                 d += incrE;
                 x++;
             }
 
-            perc = ( float ) ( x-x0 ) / ( float ) adx;
+            perc = (float)(x - x0) / (float) adx;
 
             // line a ------------------------------------------------
-            intensity = gsfilter ( Aa*Ba );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( x,ya,lineColor->rgba() );
+            intensity = gsfilter(Aa * Ba);
+            lineColor->setAlpha(intensity);
+            image->setPixel(x, ya, lineColor->rgba());
 
-            intensity = gsfilter ( Ca - Aa*Ba );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( x,ya+1,lineColor->rgba() );
+            intensity = gsfilter(Ca - Aa * Ba);
+            lineColor->setAlpha(intensity);
+            image->setPixel(x, ya + 1, lineColor->rgba());
 
-            intensity = gsfilter ( Ca + Aa*Ba );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( x,ya-1,lineColor->rgba() );
+            intensity = gsfilter(Ca + Aa * Ba);
+            lineColor->setAlpha(intensity);
+            image->setPixel(x, ya - 1, lineColor->rgba());
 
             //--------------------------------------------------------
             // line b ------------------------------------------------
             //if (!(w1==1 && w2==1))
             {
-                intensity = gsfilter ( Ab*Bb );
-                lineColor->setAlpha ( intensity );
-                image->setPixel ( x,yb,lineColor->rgba() );
+                intensity = gsfilter(Ab * Bb);
+                lineColor->setAlpha(intensity);
+                image->setPixel(x, yb, lineColor->rgba());
 
-                intensity = gsfilter ( Cb - Ab*Bb );
-                lineColor->setAlpha ( intensity );
-                image->setPixel ( x,yb+1,lineColor->rgba() );
+                intensity = gsfilter(Cb - Ab * Bb);
+                lineColor->setAlpha(intensity);
+                image->setPixel(x, yb + 1, lineColor->rgba());
 
 
-                intensity = gsfilter ( Cb + Ab*Bb );
-                lineColor->setAlpha ( intensity );
-                image->setPixel ( x,yb-1,lineColor->rgba() );
+                intensity = gsfilter(Cb + Ab * Bb);
+                lineColor->setAlpha(intensity);
+                image->setPixel(x, yb - 1, lineColor->rgba());
             }
             //--------------------------------------------------------
-            lineColor->setAlpha ( (int)(255*perc) );
+            lineColor->setAlpha((int)(255*perc));
             // fill remaining pixels between current xfa,xfb
-            if ( ! ( w1==1 && w2==1 ) )
-            {
-                if ( ya<yb )
-                    for ( int i=ya; i<=yb; i++ )
-                        image->setPixel ( x,i,lineColor->rgba() );
+            if (!(w1 == 1 && w2 == 1)) {
+                if (ya < yb)
+                    for (int i = ya; i <= yb; i++)
+                        image->setPixel(x, i, lineColor->rgba());
 
                 else
-                    for ( int i=yb; i<=ya; i++ )
-                        image->setPixel ( x,i,lineColor->rgba() );
+                    for (int i = yb; i <= ya; i++)
+                        image->setPixel(x, i, lineColor->rgba());
             }
-	}
+        }
 
-	break;
+        break;
 
     case 4:
-	Aa = 0;
-	Ba = 1.0/ ( 2.0 * sqrt ( (double)(dxa *dxa + dya * dya) ) );
-	Ca = 2.0 * dxa * Ba;
+        Aa = 0;
+        Ba = 1.0 / (2.0 * sqrt((double)(dxa * dxa + dya * dya)));
+        Ca = 2.0 * dxa * Ba;
 
-	Ab = 0;
-	Bb = 1.0/ ( 2.0 * sqrt ( (double)(dxb *dxb + dyb * dyb) ) );
-	Cb = 2.0 * dxb * Bb;
+        Ab = 0;
+        Bb = 1.0 / (2.0 * sqrt((double)(dxb * dxb + dyb * dyb)));
+        Cb = 2.0 * dxb * Bb;
 
-	da = dya+2*dxa;
-	incrSEa = 2* ( dya+dxa );
-	incrSa  = 2*dxa;
-	xa = x0a;
+        da = dya + 2 * dxa;
+        incrSEa = 2 * (dya + dxa);
+        incrSa  = 2 * dxa;
+        xa = x0a;
 
-	db = dyb+2*dxb;
-	incrSEb = 2* ( dyb+dxb );
-	incrSb  = 2*dxb;
-	xb = x0b;
+        db = dyb + 2 * dxb;
+        incrSEb = 2 * (dyb + dxb);
+        incrSb  = 2 * dxb;
+        xb = x0b;
 
-	d = dy+2*dx;
-	incrSE = 2* ( dy+dx );
-	incrS  = 2*dx;
-	y = y0;
-
-
-	// line a ------------------------------------------------
-	intensity = gsfilter ( 0 );
-	lineColor->setAlpha ( intensity );
-	image->setPixel ( xa,y,lineColor->rgba() );
-
-	intensity = gsfilter ( Ca - Aa*Ba );
-	lineColor->setAlpha ( intensity );
-	image->setPixel ( xa+1,y,lineColor->rgba() );
-
-	intensity = gsfilter ( Ca + Aa*Ba );
-	lineColor->setAlpha ( intensity );
-	image->setPixel ( xa-1,y,lineColor->rgba() );
+        d = dy + 2 * dx;
+        incrSE = 2 * (dy + dx);
+        incrS  = 2 * dx;
+        y = y0;
 
 
-	//--------------------------------------------------------
-	// line b ------------------------------------------------
-	//if (!(w1==1 && w2==1))
-	{
-            intensity = gsfilter ( Ab*Bb );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( xb,y,lineColor->rgba() );
+        // line a ------------------------------------------------
+        intensity = gsfilter(0);
+        lineColor->setAlpha(intensity);
+        image->setPixel(xa, y, lineColor->rgba());
 
-            intensity = gsfilter ( Cb - Ab*Bb );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( xb+1,y,lineColor->rgba() );
+        intensity = gsfilter(Ca - Aa * Ba);
+        lineColor->setAlpha(intensity);
+        image->setPixel(xa + 1, y, lineColor->rgba());
+
+        intensity = gsfilter(Ca + Aa * Ba);
+        lineColor->setAlpha(intensity);
+        image->setPixel(xa - 1, y, lineColor->rgba());
 
 
-            intensity = gsfilter ( Cb + Ab*Bb );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( xb-1,y,lineColor->rgba() );
+        //--------------------------------------------------------
+        // line b ------------------------------------------------
+        //if (!(w1==1 && w2==1))
+        {
+            intensity = gsfilter(Ab * Bb);
+            lineColor->setAlpha(intensity);
+            image->setPixel(xb, y, lineColor->rgba());
 
-	}
-	//--------------------------------------------------------
+            intensity = gsfilter(Cb - Ab * Bb);
+            lineColor->setAlpha(intensity);
+            image->setPixel(xb + 1, y, lineColor->rgba());
 
-	while ( y > y1 )
-	{
-            if ( da <= 0 )
-            {
+
+            intensity = gsfilter(Cb + Ab * Bb);
+            lineColor->setAlpha(intensity);
+            image->setPixel(xb - 1, y, lineColor->rgba());
+
+        }
+        //--------------------------------------------------------
+
+        while (y > y1) {
+            if (da <= 0) {
                 Aa = da + dya;
                 da += incrSa;
-            }
-            else
-            {
+            } else {
                 Aa = da - dya;
                 da += incrSEa;
                 xa++;
             }
 
-            if ( db <= 0 )
-            {
+            if (db <= 0) {
                 Ab = db + dyb;
                 db += incrSb;
-            }
-            else
-            {
+            } else {
                 Ab = db - dyb;
                 db += incrSEb;
                 xb++;
             }
 
-            if ( d <= 0 )
-            {
+            if (d <= 0) {
                 d += incrS;
                 y--;
-            }
-            else
-            {
+            } else {
                 d += incrSE;
                 y--;
             }
 
-            perc = ( float ) ( y0-y ) / ( float ) ady;
+            perc = (float)(y0 - y) / (float) ady;
 
             // line a ------------------------------------------------
-            intensity = gsfilter ( Aa*Ba );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( xa,y,lineColor->rgba() );
+            intensity = gsfilter(Aa * Ba);
+            lineColor->setAlpha(intensity);
+            image->setPixel(xa, y, lineColor->rgba());
 
-            intensity = gsfilter ( Ca - Aa*Ba );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( xa+1,y,lineColor->rgba() );
+            intensity = gsfilter(Ca - Aa * Ba);
+            lineColor->setAlpha(intensity);
+            image->setPixel(xa + 1, y, lineColor->rgba());
 
 
-            intensity = gsfilter ( Ca + Aa*Ba );
-            lineColor->setAlpha ( intensity );
-            image->setPixel ( xa-1,y,lineColor->rgba() );
+            intensity = gsfilter(Ca + Aa * Ba);
+            lineColor->setAlpha(intensity);
+            image->setPixel(xa - 1, y, lineColor->rgba());
 
 
             //--------------------------------------------------------
             // line b ------------------------------------------------
             //if (!(w1==1 && w2==1))
             {
-                intensity = gsfilter ( Ab*Bb );
-                lineColor->setAlpha ( intensity );
-                image->setPixel ( xb,y,lineColor->rgba() );
+                intensity = gsfilter(Ab * Bb);
+                lineColor->setAlpha(intensity);
+                image->setPixel(xb, y, lineColor->rgba());
 
-                intensity = gsfilter ( Cb - Ab*Bb );
-                lineColor->setAlpha ( intensity );
-                image->setPixel ( xb+1,y,lineColor->rgba() );
+                intensity = gsfilter(Cb - Ab * Bb);
+                lineColor->setAlpha(intensity);
+                image->setPixel(xb + 1, y, lineColor->rgba());
 
-                intensity = gsfilter ( Cb + Ab*Bb );
-                lineColor->setAlpha ( intensity );
-                image->setPixel ( xb-1,y,lineColor->rgba() );
+                intensity = gsfilter(Cb + Ab * Bb);
+                lineColor->setAlpha(intensity);
+                image->setPixel(xb - 1, y, lineColor->rgba());
             }
             //--------------------------------------------------------
-            lineColor->setAlpha ( 255 );
+            lineColor->setAlpha(255);
             // fill remaining pixels between current xfa,xfb
-            if ( ! ( w1==1 && w2==1 ) )
-            {
-                if ( xa<xb )
-                    for ( int i=xa; i<=xb; i++ )
-                        image->setPixel ( i,y,lineColor->rgba() );
+            if (!(w1 == 1 && w2 == 1)) {
+                if (xa < xb)
+                    for (int i = xa; i <= xb; i++)
+                        image->setPixel(i, y, lineColor->rgba());
                 else
-                    for ( int i=xb; i<=xa; i++ )
-                        image->setPixel ( i,y,lineColor->rgba() );
+                    for (int i = xb; i <= xa; i++)
+                        image->setPixel(i, y, lineColor->rgba());
             }
-	}
+        }
 
-	break;
+        break;
     }
 
 }
@@ -781,29 +730,28 @@ void Stroke::draw(KisPaintDeviceSP dev)
     dbgPlugins << "Coordinates" << endl;
     dbgPlugins << x1 << y1 << x2 << y2 << flush << endl;
 
-    if (x1<0 || x2<0 || y1 <0 || y2<0)
-    {
+    if (x1 < 0 || x2 < 0 || y1 < 0 || y2 < 0) {
         dbgPlugins << "less than zero" << endl;
         return;
     }
 
-    if (x1>1600 || x2>1600 || y1>1600 || y2>1600)
-    {
+    if (x1 > 1600 || x2 > 1600 || y1 > 1600 || y2 > 1600) {
         dbgPlugins << "..just testing , bigger than 1600" << endl;
         return;
     }
     //drawDDALine( dev,(int)x1,(int)y1,(int)x2,(int)y2, m_color.toQColor() );
-    drawGSLine(dev,(int)x1,(int)y1,(int)x2,(int)y2,1,1,m_color.toQColor() );
+    drawGSLine(dev, (int)x1, (int)y1, (int)x2, (int)y2, 1, 1, m_color.toQColor());
 }
 
 
-void Stroke::setColor ( const KoColor & color )
+void Stroke::setColor(const KoColor & color)
 {
     m_color = color;
 }
 
 
-void Stroke::drawDDALine(KisPaintDeviceSP image, int x1, int y1, int x2, int y2,const QColor &color){
+void Stroke::drawDDALine(KisPaintDeviceSP image, int x1, int y1, int x2, int y2, const QColor &color)
+{
     Q_ASSERT(image);
 // Width and height of the line
     int xd = (x2 - x1);
@@ -813,46 +761,37 @@ void Stroke::drawDDALine(KisPaintDeviceSP image, int x1, int y1, int x2, int y2,
     int y;
     float fx = (x = x1);
     float fy = (y = y1);
-    float m = (float)yd/(float)xd;
+    float m = (float)yd / (float)xd;
 
-    if ( fabs(m) > 1 )
-    {
-	int incr;
-	if ( yd > 0 )
-	{
-            m = 1.0f/m;
+    if (fabs(m) > 1) {
+        int incr;
+        if (yd > 0) {
+            m = 1.0f / m;
             incr = 1;
-	}
-	else
-	{
-            m = -1.0f/m;
+        } else {
+            m = -1.0f / m;
             incr = -1;
-	}
-	while ( y!=y2 )
-	{
+        }
+        while (y != y2) {
             fx = fx + m;
             y = y + incr;
             x = (int)(fx + 0.5f);
-            image->setPixel(x,y,color.rgba());
-	}
-    }else
-    {
-	int incr;
-	if ( xd > 0 )
-	{
+            image->setPixel(x, y, color.rgba());
+        }
+    } else {
+        int incr;
+        if (xd > 0) {
             incr = 1;
-	}else
-	{
+        } else {
             incr = -1;
             m = -m;
-	}
-	while ( x!=x2 )
-	{
-            fy= fy + m;
+        }
+        while (x != x2) {
+            fy = fy + m;
             x = x + incr;
             y = (int)(fy + 0.5f);
-            image->setPixel ( x,y,color.rgba() );
-	}
+            image->setPixel(x, y, color.rgba());
+        }
     }
 
 

@@ -30,7 +30,8 @@
 class KisSelectionOptions;
 class KoCanvasBase;
 
-class KisToolSelectRectangular : public KisTool {
+class KisToolSelectRectangular : public KisTool
+{
 
     typedef KisTool super;
     Q_OBJECT
@@ -40,7 +41,7 @@ public:
     virtual ~KisToolSelectRectangular();
 
     virtual QWidget * createOptionWidget();
-        virtual QWidget* optionWidget();
+    virtual QWidget* optionWidget();
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
@@ -51,7 +52,7 @@ public:
 public slots:
     virtual void slotSetAction(int);
     virtual void slotSetSelectionMode(int);
-    virtual void activate( bool );
+    virtual void activate(bool);
 
 private:
     void clearSelection();
@@ -67,21 +68,21 @@ private:
 
 };
 
-class KisToolSelectRectangularFactory : public KoToolFactory {
+class KisToolSelectRectangularFactory : public KoToolFactory
+{
 
 public:
     KisToolSelectRectangularFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolSelectRectangular", i18n( "Rectangular Selection" ))
-        {
-            setToolTip( i18n( "Select a rectangular area" ) );
-            setToolType( TOOL_TYPE_SELECTED );
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setIcon( "tool_rect_selection" );
-            setShortcut( KShortcut( Qt::Key_R ) );
-            setPriority( 52 );
-        }
+            : KoToolFactory(parent, "KisToolSelectRectangular", i18n("Rectangular Selection")) {
+        setToolTip(i18n("Select a rectangular area"));
+        setToolType(TOOL_TYPE_SELECTED);
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        setIcon("tool_rect_selection");
+        setShortcut(KShortcut(Qt::Key_R));
+        setPriority(52);
+    }
 
-    virtual ~KisToolSelectRectangularFactory(){}
+    virtual ~KisToolSelectRectangularFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return  new KisToolSelectRectangular(canvas);

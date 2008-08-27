@@ -27,7 +27,7 @@ struct KisBookmarkedToneMappingOperatorConfigurationsModel::Private {
 };
 
 KisBookmarkedToneMappingOperatorConfigurationsModel::KisBookmarkedToneMappingOperatorConfigurationsModel(KisPaintDeviceSP thumb, KisToneMappingOperator* op)
-    : KisBookmarkedConfigurationsModel(op->bookmarkManager()), d(new Private)
+        : KisBookmarkedConfigurationsModel(op->bookmarkManager()), d(new Private)
 {
     d->toneMappingOperator = op;
     d->thumbnail = thumb;
@@ -41,6 +41,6 @@ KisBookmarkedToneMappingOperatorConfigurationsModel::~KisBookmarkedToneMappingOp
 KisPropertiesConfiguration* KisBookmarkedToneMappingOperatorConfigurationsModel::configuration(const QModelIndex &index) const
 {
     KisPropertiesConfiguration* config = dynamic_cast<KisPropertiesConfiguration*>(KisBookmarkedConfigurationsModel::configuration(index));
-    if(config) return config;
+    if (config) return config;
     return new KisPropertiesConfiguration;
 }

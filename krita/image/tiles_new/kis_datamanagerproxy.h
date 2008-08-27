@@ -27,7 +27,8 @@ class KisTile;
  * default tile should be returned. Is used in case a tile is not yet in the datamanager.
  * TODO: rename as KisTileSource of so?
  */
-class KRITAIMAGE_EXPORT KisDataManagerProxy : public virtual KisShared {
+class KRITAIMAGE_EXPORT KisDataManagerProxy : public virtual KisShared
+{
 public:
     virtual ~KisDataManagerProxy() {}
 

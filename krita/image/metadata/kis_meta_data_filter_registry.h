@@ -24,20 +24,21 @@
 #include "KoGenericRegistry.h"
 #include "kis_meta_data_filter.h"
 
-namespace KisMetaData {
+namespace KisMetaData
+{
 
-    class KRITAIMAGE_EXPORT FilterRegistry : public KoGenericRegistry<const KisMetaData::Filter*>
-    {
-        public:
-            virtual ~FilterRegistry();
-            static FilterRegistry* instance();
-        private:
-            FilterRegistry();
-            FilterRegistry(const FilterRegistry&);
-            FilterRegistry& operator=(const FilterRegistry&);
-        private:
-            static FilterRegistry *s_singleton;
-    };
+class KRITAIMAGE_EXPORT FilterRegistry : public KoGenericRegistry<const KisMetaData::Filter*>
+{
+public:
+    virtual ~FilterRegistry();
+    static FilterRegistry* instance();
+private:
+    FilterRegistry();
+    FilterRegistry(const FilterRegistry&);
+    FilterRegistry& operator=(const FilterRegistry&);
+private:
+    static FilterRegistry *s_singleton;
+};
 
 }
 

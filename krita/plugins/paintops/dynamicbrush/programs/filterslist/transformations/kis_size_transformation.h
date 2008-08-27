@@ -23,26 +23,27 @@
 
 class KisDynamicSensor;
 
-class KisSizeTransformation : public KisDynamicTransformation {
+class KisSizeTransformation : public KisDynamicTransformation
+{
     Q_OBJECT
-    public:
-        KisSizeTransformation(KisDynamicSensor* hTransfoParameter, KisDynamicSensor* vTransfoParameter);
-        virtual ~KisSizeTransformation();
-    public:
-        virtual void transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info);
-        virtual void transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info);
-        virtual QWidget* createConfigWidget(QWidget* parent);
-    private slots:
-        void setHSensor(KisDynamicSensor*);
-        void setVSensor(KisDynamicSensor*);
-        void setHMaximum(double v);
-        void setVMaximum(double v);
-        void setHMinimum(double v);
-        void setVMinimum(double v);
-    private:
-        KisDynamicSensor* m_horizTransfoParameter;
-        KisDynamicSensor* m_vertiTransfoParameter;
-        double m_hmax, m_hmin, m_vmax, m_vmin;
+public:
+    KisSizeTransformation(KisDynamicSensor* hTransfoParameter, KisDynamicSensor* vTransfoParameter);
+    virtual ~KisSizeTransformation();
+public:
+    virtual void transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info);
+    virtual void transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info);
+    virtual QWidget* createConfigWidget(QWidget* parent);
+private slots:
+    void setHSensor(KisDynamicSensor*);
+    void setVSensor(KisDynamicSensor*);
+    void setHMaximum(double v);
+    void setVMaximum(double v);
+    void setHMinimum(double v);
+    void setVMinimum(double v);
+private:
+    KisDynamicSensor* m_horizTransfoParameter;
+    KisDynamicSensor* m_vertiTransfoParameter;
+    double m_hmax, m_hmin, m_vmax, m_vmin;
 };
 
 #endif

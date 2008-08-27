@@ -28,73 +28,65 @@
 
 void KisPolygon::addPoint(double x, double y)
 {
-        QPointF point(x, y);
-        append(point);
+    QPointF point(x, y);
+    append(point);
 }
 
 void KisPolygon::rotate(double theta)
 {
-        double ct, st, ox, oy;
-        
-        ct = cos( theta );
-        st = sin( theta );
-        
-        KoPointVector::iterator it;
-        for( it = begin(); it != end(); ++it )
-        {
-                ox = (*it).x();
-                oy = (*it).y();
-                (*it).setX( ct * ox - st * oy );
-                (*it).setY( st * ox + ct * oy );
-        }
+    double ct, st, ox, oy;
+
+    ct = cos(theta);
+    st = sin(theta);
+
+    KoPointVector::iterator it;
+    for (it = begin(); it != end(); ++it) {
+        ox = (*it).x();
+        oy = (*it).y();
+        (*it).setX(ct * ox - st * oy);
+        (*it).setY(st * ox + ct * oy);
+    }
 }
 
 void KisPolygon::translate(double tx, double ty)
 {
-        KoPointVector::iterator it;
-        
-        for( it = begin(); it != end(); ++it )
-        {
-                (*it).setX( (*it).x() + tx );
-                (*it).setY( (*it).y() + ty );
-        }
+    KoPointVector::iterator it;
+
+    for (it = begin(); it != end(); ++it) {
+        (*it).setX((*it).x() + tx);
+        (*it).setY((*it).y() + ty);
+    }
 }
 
-qint32 KisPolygon::extents (double& x1, double& y1, double& x2, double& y2)
+qint32 KisPolygon::extents(double& x1, double& y1, double& x2, double& y2)
 {
-        if ( empty() )
-        {
-                return 0;     
-        }
-        x1 = x2 = front().x();
-        y1 = y2 = front().y();
+    if (empty()) {
+        return 0;
+    }
+    x1 = x2 = front().x();
+    y1 = y2 = front().y();
 
-        KoPointVector::iterator it;
-        
-        for( it = begin(); it != end(); ++it )
-        {
-                if ((*it).x() < x1)
-                {
-                        x1 = (*it).x();
-                }
-                if ((*it).x() > x2)
-                {
-                        x2 = (*it).x();
-                }
-                if ((*it).y() < y1)
-                {
-                        y1 = (*it).y();
-                }
-                if ((*it).y() > y2)
-                {
-                        y2 = (*it).y();
-                }
+    KoPointVector::iterator it;
+
+    for (it = begin(); it != end(); ++it) {
+        if ((*it).x() < x1) {
+            x1 = (*it).x();
         }
-        return 1;
+        if ((*it).x() > x2) {
+            x2 = (*it).x();
+        }
+        if ((*it).y() < y1) {
+            y1 = (*it).y();
+        }
+        if ((*it).y() > y2) {
+            y2 = (*it).y();
+        }
+    }
+    return 1;
 }
 
 qint32 KisPolygon::numberOfPoints()
 {
-        return count();
+    return count();
 }
 

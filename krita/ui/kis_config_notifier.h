@@ -23,10 +23,11 @@
 #include "krita_export.h"
 
 /**
- * An object that emits a signal to inform interested parties that the 
+ * An object that emits a signal to inform interested parties that the
  * configuration settings have changed.
  */
-class KRITAUI_EXPORT KisConfigNotifier : public QObject {
+class KRITAUI_EXPORT KisConfigNotifier : public QObject
+{
     Q_OBJECT
 public:
     /**
@@ -35,14 +36,14 @@ public:
     static KisConfigNotifier *instance();
 
     /**
-     * Notify that the configuration has changed. This will cause the 
+     * Notify that the configuration has changed. This will cause the
      * configChanged() signal to be emitted.
      */
     void notifyConfigChanged(void);
 
 signals:
     /**
-     * This signal is emitted whenever notifyConfigChanged() is called. 
+     * This signal is emitted whenever notifyConfigChanged() is called.
      */
     void configChanged(void);
 

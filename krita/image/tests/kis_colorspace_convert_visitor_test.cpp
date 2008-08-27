@@ -30,7 +30,7 @@ void KisColorSpaceConvertVisitorTest::testCreation()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("CMYK", 0);
     QVERIFY(colorSpace);
-    KisColorSpaceConvertVisitor test( colorSpace, KoColorConversionTransformation::IntentPerceptual );
+    KisColorSpaceConvertVisitor test(colorSpace, KoColorConversionTransformation::IntentPerceptual);
 }
 
 

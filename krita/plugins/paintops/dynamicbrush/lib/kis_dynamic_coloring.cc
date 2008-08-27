@@ -27,7 +27,7 @@ KisDynamicColoring::~KisDynamicColoring() { }
 
 KisUniformColoring::KisUniformColoring() : m_color(0), m_cachedColor(0)
 {
-    
+
 }
 
 KisUniformColoring::~KisUniformColoring()
@@ -39,40 +39,39 @@ KisUniformColoring::~KisUniformColoring()
 void KisUniformColoring::darken(qint32 v)
 {
     KoColorTransformation* transfo = m_color->colorSpace()->createDarkenAdjustment(v, false, 0.0);
-    transfo->transform( m_color->data(),  m_color->data(), 1);
+    transfo->transform(m_color->data(),  m_color->data(), 1);
     delete transfo;
 }
 
-void KisUniformColoring::rotate(double )
+void KisUniformColoring::rotate(double)
 {}
 
-void KisUniformColoring::resize(double , double ) {
+void KisUniformColoring::resize(double , double)
+{
     // Do nothing as plain color doesn't have size
 }
 
 void KisUniformColoring::colorize(KisPaintDeviceSP dev, const QRect& size)
 {
     Q_UNUSED(size);
-    if(!m_cachedColor || !(*dev->colorSpace() == *m_cachedColor->colorSpace()))
-    {
-        if(m_cachedColor) delete m_cachedColor;
-        m_cachedColor = new KoColor( dev->colorSpace() );
+    if (!m_cachedColor || !(*dev->colorSpace() == *m_cachedColor->colorSpace())) {
+        if (m_cachedColor) delete m_cachedColor;
+        m_cachedColor = new KoColor(dev->colorSpace());
         m_cachedColor->fromKoColor(*m_color);
     }
-    
-    dev->dataManager()->setDefaultPixel(  m_cachedColor->data());
+
+    dev->dataManager()->setDefaultPixel(m_cachedColor->data());
     dev->clear();
 }
 
 void KisUniformColoring::colorAt(int x, int y, KoColor* c)
 {
-    Q_UNUSED( x );
-    Q_UNUSED( y );
+    Q_UNUSED(x);
+    Q_UNUSED(y);
 
-    if(!m_cachedColor || !(*c->colorSpace() == *m_cachedColor->colorSpace()))
-    {
-        if(m_cachedColor) delete m_cachedColor;
-        m_cachedColor = new KoColor( c->colorSpace() );
+    if (!m_cachedColor || !(*c->colorSpace() == *m_cachedColor->colorSpace())) {
+        if (m_cachedColor) delete m_cachedColor;
+        m_cachedColor = new KoColor(c->colorSpace());
         m_cachedColor->fromKoColor(*m_color);
     }
     c->fromKoColor(*m_cachedColor);
@@ -80,7 +79,7 @@ void KisUniformColoring::colorAt(int x, int y, KoColor* c)
 
 void KisUniformColoring::applyColorTransformation(const KoColorTransformation* transfo)
 {
-    transfo->transform( m_color->data(), m_color->data(), 1 );
+    transfo->transform(m_color->data(), m_color->data(), 1);
 }
 
 const KoColorSpace* KisUniformColoring::colorSpace() const
@@ -94,7 +93,7 @@ const KoColorSpace* KisUniformColoring::colorSpace() const
 
 KisPlainColoring::KisPlainColoring(const KoColor& backGroundColor, const KoColor& foreGroundColor) : m_backGroundColor(backGroundColor), m_foreGroundColor(foreGroundColor), m_cachedBackGroundColor(0)
 {
-    
+
 }
 
 KisPlainColoring::~KisPlainColoring()
@@ -109,13 +108,12 @@ KisDynamicColoring* KisPlainColoring::clone() const
 
 void KisPlainColoring::selectColor(double mix)
 {
-    if(!m_color || !(*m_color->colorSpace() == *m_foreGroundColor.colorSpace()))
-    {
+    if (!m_color || !(*m_color->colorSpace() == *m_foreGroundColor.colorSpace())) {
         delete m_color;
-        m_color = new KoColor( m_foreGroundColor.colorSpace() );
+        m_color = new KoColor(m_foreGroundColor.colorSpace());
         delete m_cachedBackGroundColor;
-        m_cachedBackGroundColor = new KoColor( m_foreGroundColor.colorSpace() );
-        m_cachedBackGroundColor->fromKoColor( m_backGroundColor );
+        m_cachedBackGroundColor = new KoColor(m_foreGroundColor.colorSpace());
+        m_cachedBackGroundColor->fromKoColor(m_backGroundColor);
     }
 
     const quint8 * colors[2];
@@ -123,7 +121,7 @@ void KisPlainColoring::selectColor(double mix)
     colors[1] = m_foreGroundColor.data();
     int weight = (int)(mix * 255);
     const qint16 weights[2] = { 255 - weight, weight };
-    
+
     m_color->colorSpace()->mixColorsOp()->mixColors(colors, weights, 2, m_color->data());
 
 }
@@ -132,9 +130,9 @@ void KisPlainColoring::selectColor(double mix)
 //--------------- KisGradientColoring -------------//
 //-------------------------------------------------//
 
-KisGradientColoring::KisGradientColoring(const KoAbstractGradient* gradient, const KoColorSpace* workingCS  ) : m_gradient(gradient), m_colorSpace( workingCS )
+KisGradientColoring::KisGradientColoring(const KoAbstractGradient* gradient, const KoColorSpace* workingCS) : m_gradient(gradient), m_colorSpace(workingCS)
 {
-    m_color = new KoColor( workingCS );
+    m_color = new KoColor(workingCS);
 }
 
 KisGradientColoring::~KisGradientColoring()
@@ -148,16 +146,16 @@ KisDynamicColoring* KisGradientColoring::clone() const
 
 void KisGradientColoring::selectColor(double mix)
 {
-    m_gradient->colorAt( *m_color, mix );
+    m_gradient->colorAt(*m_color, mix);
 }
 
 //-------------------------------------------------//
 //--------------- KisGradientColoring -------------//
 //-------------------------------------------------//
 
-KisUniformRandomColoring::KisUniformRandomColoring( )
+KisUniformRandomColoring::KisUniformRandomColoring()
 {
-    m_color = new KoColor( );
+    m_color = new KoColor();
 }
 
 KisUniformRandomColoring::~KisUniformRandomColoring()
@@ -172,7 +170,7 @@ KisDynamicColoring* KisUniformRandomColoring::clone() const
 void KisUniformRandomColoring::selectColor(double mix)
 {
     Q_UNUSED(mix);
-    m_color->fromQColor( QColor( (int) ((255.0*rand()) / RAND_MAX), (int) ((255.0*rand()) / RAND_MAX), (int) ((255.0*rand()) / RAND_MAX ) ) );
+    m_color->fromQColor(QColor((int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX)));
 }
 
 
@@ -182,14 +180,14 @@ void KisUniformRandomColoring::selectColor(double mix)
 
 KisTotalRandomColoring::KisTotalRandomColoring() : m_colorSpace(KoColorSpaceRegistry::instance()->rgb8())
 {
-    
+
 }
 
 KisTotalRandomColoring::~KisTotalRandomColoring()
 {
 }
 
-void KisTotalRandomColoring::selectColor(double )
+void KisTotalRandomColoring::selectColor(double)
 {
 }
 
@@ -198,40 +196,38 @@ KisDynamicColoring* KisTotalRandomColoring::clone() const
     return new KisTotalRandomColoring;
 }
 
-void KisTotalRandomColoring::darken(qint32 ) {}
-void KisTotalRandomColoring::applyColorTransformation(const KoColorTransformation* ) {}
+void KisTotalRandomColoring::darken(qint32) {}
+void KisTotalRandomColoring::applyColorTransformation(const KoColorTransformation*) {}
 const KoColorSpace* KisTotalRandomColoring::colorSpace() const
 {
     return m_colorSpace;
 }
 void KisTotalRandomColoring::colorize(KisPaintDeviceSP dev, const QRect& rect)
 {
-    KoColor kc (dev->colorSpace());
-    
+    KoColor kc(dev->colorSpace());
+
     QColor qc;
-    
+
     int pixelSize = dev->colorSpace()->pixelSize();
-    
-    KisHLineIteratorPixel it = dev->createHLineIterator( rect.x(), rect.y(), rect.width(), 0);
-    for(int y = 0; y < rect.height(); y++)
-    {
-        while(!it.isDone())
-        {
-            qc.setRgb( (int) ((255.0*rand()) / RAND_MAX), (int) ((255.0*rand()) / RAND_MAX), (int) ((255.0*rand()) / RAND_MAX ) );
-            kc.fromQColor( qc);
+
+    KisHLineIteratorPixel it = dev->createHLineIterator(rect.x(), rect.y(), rect.width(), 0);
+    for (int y = 0; y < rect.height(); y++) {
+        while (!it.isDone()) {
+            qc.setRgb((int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX));
+            kc.fromQColor(qc);
             memcpy(it.rawData(), kc.data(), pixelSize);
             ++it;
         }
         it.nextRow();
     }
-    
+
 }
 void KisTotalRandomColoring::colorAt(int x, int y, KoColor* c)
 {
     Q_UNUSED(x);
     Q_UNUSED(y);
-    c->fromQColor( QColor( (int) ((255.0*rand()) / RAND_MAX), (int) ((255.0*rand()) / RAND_MAX), (int) ((255.0*rand()) / RAND_MAX ) ) );
+    c->fromQColor(QColor((int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX)));
 }
 
-void KisTotalRandomColoring::rotate(double ){}
-void KisTotalRandomColoring::resize(double , double ) {}
+void KisTotalRandomColoring::rotate(double) {}
+void KisTotalRandomColoring::resize(double , double) {}

@@ -36,11 +36,11 @@
 #include "kis_canvas_resource_provider.h"
 
 KisCustomGradientDialog::KisCustomGradientDialog(KisView2 * view, QWidget * parent, const char *name)
-    : KDialog(parent)
+        : KDialog(parent)
 {
-    setCaption( i18n("Custom Gradient") );
-    setButtons(  Close);
-    setDefaultButton( Close );
+    setCaption(i18n("Custom Gradient"));
+    setButtons(Close);
+    setDefaultButton(Close);
     setObjectName(name);
     setModal(false);
     m_page = new KisAutogradient(this, "autogradient", i18n("Custom Gradient"));
@@ -66,7 +66,7 @@ KisGradientChooser::KisGradientChooser(KisView2 * view, QWidget *parent, const c
     mainLayout->addWidget(m_customGradient, 10);
     setLayout(mainLayout);
 
-    connect( this, SIGNAL( importClicked() ), this, SLOT( slotImportGradient() ) );
+    connect(this, SIGNAL(importClicked()), this, SLOT(slotImportGradient()));
 }
 
 KisGradientChooser::~KisGradientChooser()
@@ -86,8 +86,8 @@ void KisGradientChooser::update(QTableWidgetItem *item)
 
 void KisGradientChooser::slotImportGradient()
 {
-    QString filter( "*.svg *.kgr *.ggr" );
-    QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18n( "Choose Gradient to Add" ) );
+    QString filter("*.svg *.kgr *.ggr");
+    QString filename = KFileDialog::getOpenFileName(KUrl(), filter, 0, i18n("Choose Gradient to Add"));
 
     KoResourceServerProvider::instance()->gradientServer()->importResource(filename);
 }

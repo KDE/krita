@@ -24,24 +24,25 @@
 #include <KoDockFactory.h>
 #include <QObject>
 
-namespace Kross {
-    class Action;
+namespace Kross
+{
+class Action;
 }
 
-class KisScriptDockFactory : public QObject, public KoDockFactory {
+class KisScriptDockFactory : public QObject, public KoDockFactory
+{
 
-Q_OBJECT
+    Q_OBJECT
 
-    public:
-        KisScriptDockFactory(Kross::Action* act);
-        virtual QString id() const;
-        virtual QDockWidget* createDockWidget();
-        DockPosition defaultDockPosition() const
-        {
-            return DockMinimized;
-        }        
-    private:
-        Kross::Action* m_action;
+public:
+    KisScriptDockFactory(Kross::Action* act);
+    virtual QString id() const;
+    virtual QDockWidget* createDockWidget();
+    DockPosition defaultDockPosition() const {
+        return DockMinimized;
+    }
+private:
+    Kross::Action* m_action;
 };
 
 #endif

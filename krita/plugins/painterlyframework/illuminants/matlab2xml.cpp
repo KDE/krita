@@ -61,7 +61,8 @@ void writePrimary(QDomDocument & doc, QDomElement & node, double * primary, int 
     }
 }
 
-int main(int c, char **v) {
+int main(int c, char **v)
+{
     QCoreApplication app(c, v);
 
     if (sizeof(double) != 8) {
@@ -69,7 +70,7 @@ int main(int c, char **v) {
         return 1;
     }
 
-    
+
     if (c < 2) {
         QTextStream(stdout) << "Usage; matlab2xml input > output" << endl;
         return 1;
@@ -88,17 +89,17 @@ int main(int c, char **v) {
     fwrite(fid,profile.P,'double');
     fwrite(fid,profile.coeffs,'char*1');
     fwrite(fid,profile.Xmin,'double');
- 
+
     Data is saved cols-first.
- 
+
     T is a matrix with 3 rows and N cols
- 
+
     P is a matrix with 3 cols and N rows
- 
+
     Xmin is a vector of N*coeffs doubles
     */
     int m_wl = -1;
-    double **m_T = 0; 
+    double **m_T = 0;
     double *m_red = 0;
     double *m_green = 0;
     double *m_blue = 0;
@@ -128,20 +129,20 @@ int main(int c, char **v) {
         m_T = allocateMatrix(3, m_wl);
         for (int i = 0; i < m_wl; i++)
             for (int j = 0; j < 3; j++)
-                data.readRawData((char*)&m_T[j][i],8);
+                data.readRawData((char*)&m_T[j][i], 8);
     }
     {
         m_red   = new double[m_wl];
         m_green = new double[m_wl];
         m_blue  = new double[m_wl];
         for (int i = 0; i < m_wl; i++) {
-            data.readRawData((char*)&m_red[i],8);
+            data.readRawData((char*)&m_red[i], 8);
         }
         for (int i = 0; i < m_wl; i++) {
-            data.readRawData((char*)&m_green[i],8);
+            data.readRawData((char*)&m_green[i], 8);
         }
         for (int i = 0; i < m_wl; i++) {
-            data.readRawData((char*)&m_blue[i],8);
+            data.readRawData((char*)&m_blue[i], 8);
         }
     }
     {
@@ -150,7 +151,7 @@ int main(int c, char **v) {
         nc = (int)tmp;
         coeffs = new double[nc*m_wl];
         for (quint8 i = 0; i < nc*m_wl; i++)
-            data.readRawData((char*)&coeffs[i],8);
+            data.readRawData((char*)&coeffs[i], 8);
     }
 
     // Create a dom document & save it
@@ -172,19 +173,19 @@ int main(int c, char **v) {
     QDomElement red = doc.createElement("red");
     primaries.appendChild(red);
     writePrimary(doc, red, m_red, m_wl);
-    
+
     QDomElement green = doc.createElement("green");
     primaries.appendChild(green);
     writePrimary(doc, green, m_green, m_wl);
-    
+
     QDomElement blue = doc.createElement("blue");
     primaries.appendChild(blue);
     writePrimary(doc, blue, m_blue, m_wl);
-    
+
     QDomElement coefficients = doc.createElement("X");
     coefficients.setAttribute("nc", nc);
     root.appendChild(coefficients);
-    
+
     for (int i = 0; i < m_wl * nc; ++i) {
         QDomElement coeff = doc.createElement("coefficient");
         coeff.setAttribute("value", coeffs[i]);
@@ -193,8 +194,8 @@ int main(int c, char **v) {
         coefficients.appendChild(coeff);
         //coeff.appendChild(cdata);
     }
-    
+
     QTextStream(stdout) << doc.toString();
-    
+
 
 }

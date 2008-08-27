@@ -26,7 +26,8 @@
 class KisView2;
 class KoMainWindow;
 
-namespace Scripting {
+namespace Scripting
+{
 
 class Module;
 
@@ -55,58 +56,58 @@ class Module;
  */
 class KROSSKRITACORE_EXPORT Progress : public QObject
 {
-        Q_OBJECT
-    public:
-        Progress(Module* module, KisView2* view);
-        virtual ~Progress();
+    Q_OBJECT
+public:
+    Progress(Module* module, KisView2* view);
+    virtual ~Progress();
 
-    public:
-        void activateAsSubject();
-        void updateProgress(int progressPerCent);
+public:
+    void activateAsSubject();
+    void updateProgress(int progressPerCent);
 
-    public slots:
+public slots:
 
-        /**
-         * Set the total steps the progressbar should have. This
-         * could be as example the width * height of an image
-         * and if you iterate over the images, just call
-         * \a incProgress() to increase the current stage.
-         * If this function got called, Krita starts to display
-         * the progressbar.
-         */
-        void setProgressTotalSteps(uint totalSteps);
+    /**
+     * Set the total steps the progressbar should have. This
+     * could be as example the width * height of an image
+     * and if you iterate over the images, just call
+     * \a incProgress() to increase the current stage.
+     * If this function got called, Krita starts to display
+     * the progressbar.
+     */
+    void setProgressTotalSteps(uint totalSteps);
 
-        /**
-         * Increment the progress by one step.
-         */
-        void incProgress();
+    /**
+     * Increment the progress by one step.
+     */
+    void incProgress();
 
-        /**
-         * Set the current stage to \p progress . The value
-         * should be always <= as the with \a setProgressTotalSteps()
-         * defined maximal number of steps.
-         */
-        void setProgress(uint progress);
+    /**
+     * Set the current stage to \p progress . The value
+     * should be always <= as the with \a setProgressTotalSteps()
+     * defined maximal number of steps.
+     */
+    void setProgress(uint progress);
 
-        /**
-         * Set the current stage to \p progress and provide with
-         * \p stage a in the progressbar displayed string.
-         */
-        void setProgressStage(const QString& stage, uint progress);
+    /**
+     * Set the current stage to \p progress and provide with
+     * \p stage a in the progressbar displayed string.
+     */
+    void setProgressStage(const QString& stage, uint progress);
 
-        /**
-         * If called, the progressbar will be disabled again do
-         * indicate, that the operation is done. Please note, that
-         * it's not needed to call this explicit since once the
-         * script finished, it's called automatically.
-         */
-        void progressDone();
+    /**
+     * If called, the progressbar will be disabled again do
+     * indicate, that the operation is done. Please note, that
+     * it's not needed to call this explicit since once the
+     * script finished, it's called automatically.
+     */
+    void progressDone();
 
-    private:
-        Module* m_module;
-        KisView2* m_view;
-        KoMainWindow* m_mainwin;
-        uint m_progressSteps, m_progressTotalSteps, m_lastProgressPerCent;
+private:
+    Module* m_module;
+    KisView2* m_view;
+    KoMainWindow* m_mainwin;
+    uint m_progressSteps, m_progressTotalSteps, m_lastProgressPerCent;
 };
 
 }

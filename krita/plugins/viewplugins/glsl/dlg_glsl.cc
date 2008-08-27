@@ -56,14 +56,14 @@ public:
 };
 
 
-DlgGlsl::DlgGlsl( KisView2 *  parent,
-                  const char * name)
-    : KDialog (parent)
-    , m_d( new Private )
+DlgGlsl::DlgGlsl(KisView2 *  parent,
+                 const char * name)
+        : KDialog(parent)
+        , m_d(new Private)
 {
-    setCaption( i18n("Glsl Image") );
-    setButtons(  Ok | Cancel);
-    setDefaultButton( Ok );
+    setCaption(i18n("Glsl Image"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
     setObjectName(name);
 
     m_d->view = parent;
@@ -76,10 +76,10 @@ DlgGlsl::DlgGlsl( KisView2 *  parent,
     m_d->scrollArea->setBackgroundRole(QPalette::Dark);    m_d->glslview = new KisGlslWidget(m_d->view->activeLayer()->paintDevice());
     m_d->glslview->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     //m_d->scrollArea->setWidget(m_d->glslview);
-    vbox->addWidget( m_d->glslview);
-    m_d->page->grpPreview->setLayout( vbox );
-    
-    if(!m_d->glslview->isValidGLSL()) {
+    vbox->addWidget(m_d->glslview);
+    m_d->page->grpPreview->setLayout(vbox);
+
+    if (!m_d->glslview->isValidGLSL()) {
         close();
     }
 
@@ -89,8 +89,8 @@ DlgGlsl::DlgGlsl( KisView2 *  parent,
     connect(this, SIGNAL(okClicked()),
             this, SLOT(okClicked()));
 
-    connect( m_d->page->bnPreview,  SIGNAL( clicked() ),
-             this,  SLOT( resetPreview() ) );
+    connect(m_d->page->bnPreview,  SIGNAL(clicked()),
+            this,  SLOT(resetPreview()));
 
 
 }

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org> 
+ *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@
 
 #include <QImage>
 
-#include <kis_debug.h>
 #include <kicon.h>
 
 #include <klocale.h>
@@ -55,13 +54,13 @@ public:
 };
 
 KisGeneratorLayer::KisGeneratorLayer(KisImageSP img, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection)
-    : KisLayer (img.data(), name, OPACITY_OPAQUE)
-    , m_d( new Private() )
+        : KisLayer(img.data(), name, OPACITY_OPAQUE)
+        , m_d(new Private())
 {
     Q_ASSERT(kfc);
 
     m_d->filterConfig = kfc;
-    setSelection( selection );
+    setSelection(selection);
 
     m_d->showSelection = true;
 
@@ -69,16 +68,16 @@ KisGeneratorLayer::KisGeneratorLayer(KisImageSP img, const QString &name, KisFil
 }
 
 KisGeneratorLayer::KisGeneratorLayer(const KisGeneratorLayer& rhs)
-    : KisLayer(rhs)
-    , KisIndirectPaintingSupport(rhs)
-    , m_d( new Private() )
+        : KisLayer(rhs)
+        , KisIndirectPaintingSupport(rhs)
+        , m_d(new Private())
 {
     m_d->filterConfig = new KisFilterConfiguration(*rhs.m_d->filterConfig);
     if (rhs.m_d->selection) {
-        m_d->selection = new KisSelection( *rhs.m_d->selection.data() );
+        m_d->selection = new KisSelection(*rhs.m_d->selection.data());
         m_d->selection->setInterestedInDirtyness(true);
     }
-    m_d->paintDevice = new KisPaintDevice( *rhs.m_d->paintDevice.data() );
+    m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
     m_d->showSelection = false;
 }
 
@@ -89,31 +88,30 @@ KisGeneratorLayer::~KisGeneratorLayer()
     delete m_d;
 }
 
-bool KisGeneratorLayer::allowAsChild( KisNodeSP node) const
+bool KisGeneratorLayer::allowAsChild(KisNodeSP node) const
 {
-    if ( node->inherits( "KisMask" ) )
-       return true;
+    if (node->inherits("KisMask"))
+        return true;
     else
-       return false;
+        return false;
 }
 
 
 void KisGeneratorLayer::updateProjection(const QRect& rc)
 {
-    if ( !rc.isValid() ) return ;
-    if ( !hasEffectMasks() ) return;
-    if ( !m_d->paintDevice ) return;
+    if (!rc.isValid()) return ;
+    if (!hasEffectMasks()) return;
+    if (!m_d->paintDevice) return;
 
-    if ( !m_d->projection ) {
-        m_d->projection = new KisPaintDevice( *m_d->paintDevice );
-    }
-    else {
-        KisPainter gc( m_d->projection );
-        gc.setCompositeOp( colorSpace()->compositeOp( COMPOSITE_COPY ) );
-        gc.bitBlt( rc.topLeft(), m_d->paintDevice, rc);
+    if (!m_d->projection) {
+        m_d->projection = new KisPaintDevice(*m_d->paintDevice);
+    } else {
+        KisPainter gc(m_d->projection);
+        gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
+        gc.bitBlt(rc.topLeft(), m_d->paintDevice, rc);
     }
 
-    applyEffectMasks( m_d->projection, rc );
+    applyEffectMasks(m_d->projection, rc);
 
 }
 
@@ -239,7 +237,7 @@ QRect KisGeneratorLayer::exactBounds() const
 
 bool KisGeneratorLayer::accept(KisNodeVisitor & v)
 {
-    return v.visit( this );
+    return v.visit(this);
 }
 
 QImage KisGeneratorLayer::createThumbnail(qint32 w, qint32 h)
@@ -250,23 +248,29 @@ QImage KisGeneratorLayer::createThumbnail(qint32 w, qint32 h)
         return QImage();
 }
 
-bool KisGeneratorLayer::showSelection() const { return m_d->showSelection; }
+bool KisGeneratorLayer::showSelection() const
+{
+    return m_d->showSelection;
+}
 
-void KisGeneratorLayer::setSelection(bool b) { m_d->showSelection = b; }
+void KisGeneratorLayer::setSelection(bool b)
+{
+    m_d->showSelection = b;
+}
 
 void KisGeneratorLayer::update()
 {
 
-    KisGeneratorSP f = KisGeneratorRegistry::instance()->value( m_d->filterConfig->name() );
+    KisGeneratorSP f = KisGeneratorRegistry::instance()->value(m_d->filterConfig->name());
     if (!f) return;
 
     if (f->colorSpace())
-        m_d->paintDevice = new KisPaintDevice( f->colorSpace(), name().toLatin1());
+        m_d->paintDevice = new KisPaintDevice(f->colorSpace(), name().toLatin1());
     else
-        m_d->paintDevice = new KisPaintDevice( image()->colorSpace(), name().toLatin1());
+        m_d->paintDevice = new KisPaintDevice(image()->colorSpace(), name().toLatin1());
 
     QRect tmpRc = exactBounds();
-    
+
     KisProcessingInformation dstCfg(m_d->paintDevice, tmpRc.topLeft(), m_d->selection);
     m_d->filterConfig->setChannelFlags(channelFlags());
     f->generate(dstCfg, tmpRc.size(), m_d->filterConfig);

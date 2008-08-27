@@ -41,12 +41,12 @@
 #include "kis_histogram_widget.h"
 
 
-DlgHistogram::DlgHistogram( QWidget *  parent, const char * name)
-    : super (parent)
+DlgHistogram::DlgHistogram(QWidget *  parent, const char * name)
+        : super(parent)
 {
-    setCaption( i18n("Histogram") );
-    setButtons( Ok | Cancel );
-    setDefaultButton( Ok );
+    setCaption(i18n("Histogram"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
     setObjectName(name);
     m_page = new KisHistogramWidget(this, "histogram");
     Q_CHECK_PTR(m_page);

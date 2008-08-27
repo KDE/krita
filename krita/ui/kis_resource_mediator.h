@@ -36,14 +36,15 @@ class KoAbstractResourceServerAdapter;
  * For every view, a new resource mediator is created for every
  * resource type.
  */
-class KRITAUI_EXPORT KisResourceMediator : public QObject {
+class KRITAUI_EXPORT KisResourceMediator : public QObject
+{
     Q_OBJECT
 
 public:
     KisResourceMediator(KisItemChooser *chooser,
-                KoAbstractResourceServerAdapter* rServerAdapter,
-                QObject *parent = 0,
-                const char *name = 0);
+                        KoAbstractResourceServerAdapter* rServerAdapter,
+                        QObject *parent = 0,
+                        const char *name = 0);
     virtual ~KisResourceMediator();
 
 public:

@@ -32,38 +32,39 @@
  * Routines that are useful for writing efficient tests
  */
 
-namespace TestUtil {
+namespace TestUtil
+{
 
-void dumpNodeStack( KisNodeSP node, QString prefix = QString( "\t" ) ) {
+void dumpNodeStack(KisNodeSP node, QString prefix = QString("\t"))
+{
     qDebug() << node->name();
     KisNodeSP child = node->firstChild();
-    
+
     while (child) {
-        
+
         if (child->childCount() > 0) {
             dumpNodeStack(child, prefix + "\t");
-        }
-        else {
+        } else {
             qDebug() << prefix << child->name();
         }
         child = child->nextSibling();
     }
 }
 
-struct TestProgressBar : public KoProgressProxy
-{
-    int maximum() const { return 0; }
-    void setValue( int value )
-        {
-            Q_UNUSED(value);
-            //qDebug() << "Progress (" << this << "): " << value ;
-        }
-    void setRange( int, int) {}
-    void setFormat( const QString & ) {}
+struct TestProgressBar : public KoProgressProxy {
+    int maximum() const {
+        return 0;
+    }
+    void setValue(int value) {
+        Q_UNUSED(value);
+        //qDebug() << "Progress (" << this << "): " << value ;
+    }
+    void setRange(int, int) {}
+    void setFormat(const QString &) {}
 };
 
 
-bool compareQImages( QPoint & pt, const QImage & img1, const QImage & img2, int fuzzy = 0 )
+bool compareQImages(QPoint & pt, const QImage & img1, const QImage & img2, int fuzzy = 0)
 {
 //     QTime t;
 //     t.start();
@@ -74,9 +75,9 @@ bool compareQImages( QPoint & pt, const QImage & img1, const QImage & img2, int 
     const int h2 = img2.height();
     const int bytesPerLine = img1.bytesPerLine();
 
-    if ( w1 != w2 || h1 != h2 ) {
-        pt.setX( -1 );
-        pt.setY( -1 );
+    if (w1 != w2 || h1 != h2) {
+        pt.setX(-1);
+        pt.setY(-1);
         qDebug() << "Images have different sizes";
         return false;
     }
@@ -90,9 +91,9 @@ bool compareQImages( QPoint & pt, const QImage & img1, const QImage & img2, int 
                 const QRgb a = firstLine[x];
                 const QRgb b = secondLine[x];
                 const bool same = qAbs(qRed(a) - qRed(b)) <= fuzzy
-                    && qAbs(qGreen(a) - qGreen(b)) <= fuzzy
-                    && qAbs(qBlue(a) - qBlue(b)) <= fuzzy;
-                if (!same && (qAlpha(a) != 0 || qAlpha(b) != 0 ) ) {
+                                  && qAbs(qGreen(a) - qGreen(b)) <= fuzzy
+                                  && qAbs(qBlue(a) - qBlue(b)) <= fuzzy;
+                if (!same && (qAlpha(a) != 0 || qAlpha(b) != 0)) {
                     qDebug() << " Different! source" << qRed(a) << qGreen(a) << qBlue(a) << "dest" << qRed(b) << qGreen(b) << qBlue(b);
                     return false;
                 }
@@ -104,7 +105,7 @@ bool compareQImages( QPoint & pt, const QImage & img1, const QImage & img2, int 
     return true;
 }
 
-bool comparePaintDevices( QPoint & pt, const KisPaintDeviceSP dev1, const KisPaintDeviceSP dev2 )
+bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const KisPaintDeviceSP dev2)
 {
 //     QTime t;
 //     t.start();
@@ -112,20 +113,20 @@ bool comparePaintDevices( QPoint & pt, const KisPaintDeviceSP dev1, const KisPai
     QRect rc1 = dev1->exactBounds();
     QRect rc2 = dev2->exactBounds();
 
-    if ( rc1 != rc2 ) {
-        pt.setX( -1 );
-        pt.setY( -1 );
+    if (rc1 != rc2) {
+        pt.setX(-1);
+        pt.setY(-1);
     }
 
-    KisHLineConstIteratorPixel iter1 = dev1->createHLineConstIterator( 0, 0, rc1.width() );
-    KisHLineConstIteratorPixel iter2 = dev2->createHLineConstIterator( 0, 0, rc1.width() );
+    KisHLineConstIteratorPixel iter1 = dev1->createHLineConstIterator(0, 0, rc1.width());
+    KisHLineConstIteratorPixel iter2 = dev2->createHLineConstIterator(0, 0, rc1.width());
 
     int pixelSize = dev1->pixelSize();
 
-    for ( int y = 0; y < rc1.height(); ++y ) {
+    for (int y = 0; y < rc1.height(); ++y) {
 
-        while ( !iter1.isDone() ) {
-            if ( memcmp( iter1.rawData(), iter2.rawData(), pixelSize ) != 0 )
+        while (!iter1.isDone()) {
+            if (memcmp(iter1.rawData(), iter2.rawData(), pixelSize) != 0)
                 return false;
             ++iter1;
             ++iter2;
@@ -148,16 +149,15 @@ QList<const KoColorSpace*> allColorSpaces()
 
     QList<QString> csIds = KoColorSpaceRegistry::instance()->keys();
 
-    foreach( QString csId, csIds ) {
-        QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor ( csId );
-        if ( profiles.size() == 0 ) {
-            const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, 0 );
-            colorSpaces.append( cs );
-        }
-        else {
-            foreach( const KoColorProfile * profile, profiles ) {
-                const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, profile );
-                colorSpaces.append( cs );
+    foreach(QString csId, csIds) {
+        QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor(csId);
+        if (profiles.size() == 0) {
+            const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(csId, 0);
+            colorSpaces.append(cs);
+        } else {
+            foreach(const KoColorProfile * profile, profiles) {
+                const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(csId, profile);
+                colorSpaces.append(cs);
             }
         }
     }

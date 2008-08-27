@@ -25,21 +25,22 @@
 
 #include "kis_mask_shape.h"
 
-class KisLayerShape::Private {
+class KisLayerShape::Private
+{
 public:
     KisLayerSP layer;
 };
 
-KisLayerShape::KisLayerShape( KoShapeContainer * parent, KisLayerSP layer)
-    : KoShapeContainer()
-    , m_d ( new Private() )
+KisLayerShape::KisLayerShape(KoShapeContainer * parent, KisLayerSP layer)
+        : KoShapeContainer()
+        , m_d(new Private())
 {
 
     m_d->layer = layer;
-    Q_ASSERT( layer->image() );
+    Q_ASSERT(layer->image());
 
-    setShapeId( KIS_LAYER_SHAPE_ID );
-    setParent( parent );
+    setShapeId(KIS_LAYER_SHAPE_ID);
+    setParent(parent);
     parent->addChild(this);
 }
 
@@ -68,60 +69,60 @@ void KisLayerShape::paintComponent(QPainter &painter, const KoViewConverter &con
 
 QSizeF KisLayerShape::size() const
 {
-    Q_ASSERT( m_d );
-    Q_ASSERT( m_d->layer );
+    Q_ASSERT(m_d);
+    Q_ASSERT(m_d->layer);
 
     QRect br = m_d->layer->extent();
     KisImageSP image = m_d->layer->image();
 
-    if ( !image ) return QSizeF( 0.0, 0.0 );
+    if (!image) return QSizeF(0.0, 0.0);
 
-    dbgUI <<"KisLayerShape::size extent:" << br <<", x res:" << image->xRes() <<", y res:" << image->yRes();
+    dbgUI << "KisLayerShape::size extent:" << br << ", x res:" << image->xRes() << ", y res:" << image->yRes();
 
-    return QSizeF( br.width() / image->xRes(), br.height() / image->yRes() );
+    return QSizeF(br.width() / image->xRes(), br.height() / image->yRes());
 }
 
 QRectF KisLayerShape::boundingRect() const
 {
     QRect br = m_d->layer->extent();
-    dbgUI <<"KisLayerShape::boundingRect extent:" << br <<", x res:" << m_d->layer->image()->xRes() <<", y res:" << m_d->layer->image()->yRes();
+    dbgUI << "KisLayerShape::boundingRect extent:" << br << ", x res:" << m_d->layer->image()->xRes() << ", y res:" << m_d->layer->image()->yRes();
     return QRectF(int(br.left()) / m_d->layer->image()->xRes(), int(br.top()) / m_d->layer->image()->yRes(),
                   int(1 + br.right()) / m_d->layer->image()->xRes(), int(1 + br.bottom()) / m_d->layer->image()->yRes());
 
 }
 
-void KisLayerShape::setPosition( const QPointF & position )
+void KisLayerShape::setPosition(const QPointF & position)
 {
-    Q_ASSERT( m_d );
-    Q_ASSERT( m_d->layer );
+    Q_ASSERT(m_d);
+    Q_ASSERT(m_d->layer);
 
     KisImageSP image = m_d->layer->image();
-    if ( image ) {
+    if (image) {
         // XXX: Does flake handle undo for us?
-        QPointF pf( position.x() / image->xRes(), position.y() / image->yRes() );
+        QPointF pf(position.x() / image->xRes(), position.y() / image->yRes());
         QPoint p = pf.toPoint();
-        m_d->layer->setX( p.x() );
-        m_d->layer->setY( p.y() );
+        m_d->layer->setX(p.x());
+        m_d->layer->setY(p.y());
     }
 }
 
 
-void KisLayerShape::addChild( KoShape * shape )
+void KisLayerShape::addChild(KoShape * shape)
 {
-    if ( shape->shapeId() != KIS_MASK_SHAPE_ID ) {
-        dbgUI <<"Can only add mask shapes as children to layer shapes!";
+    if (shape->shapeId() != KIS_MASK_SHAPE_ID) {
+        dbgUI << "Can only add mask shapes as children to layer shapes!";
         return;
     }
     KoShapeContainer::addChild(shape);
 }
 
-void KisLayerShape::saveOdf( KoShapeSavingContext & /*context*/ ) const
+void KisLayerShape::saveOdf(KoShapeSavingContext & /*context*/) const
 {
-    
+
     // TODO
 }
 
-bool KisLayerShape::loadOdf( const KoXmlElement & /*element*/, KoShapeLoadingContext &/*context*/ )
+bool KisLayerShape::loadOdf(const KoXmlElement & /*element*/, KoShapeLoadingContext &/*context*/)
 {
     return false; // TODO
 }

@@ -30,20 +30,23 @@ class KisPainter;
 
 #include "kis_dynamic_transformable.h"
 
-class DYNAMIC_BRUSH_EXPORT KisDynamicShape : public KisDynamicTransformable {
-    public:
-        KisDynamicShape() {}
-        virtual ~KisDynamicShape() {}
-    public:
-        virtual QRect rect() const =0;
-        virtual KisDynamicShape* clone() const = 0;
-        virtual void startPainting(KisPainter* m_painter);
-        virtual void endPainting();
-        virtual void paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc) = 0;
-    protected:
-        KisPainter* painter() { return m_painter;}
-    private:
-        KisPainter* m_painter;
+class DYNAMIC_BRUSH_EXPORT KisDynamicShape : public KisDynamicTransformable
+{
+public:
+    KisDynamicShape() {}
+    virtual ~KisDynamicShape() {}
+public:
+    virtual QRect rect() const = 0;
+    virtual KisDynamicShape* clone() const = 0;
+    virtual void startPainting(KisPainter* m_painter);
+    virtual void endPainting();
+    virtual void paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc) = 0;
+protected:
+    KisPainter* painter() {
+        return m_painter;
+    }
+private:
+    KisPainter* m_painter;
 
 };
 

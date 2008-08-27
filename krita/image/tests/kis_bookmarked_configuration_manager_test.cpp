@@ -29,28 +29,24 @@ public:
     using KisSerializableConfiguration::fromXML;
     using KisSerializableConfiguration::toXML;
 
-    void fromXML(const QDomElement&)
-        {
-        }
+    void fromXML(const QDomElement&) {
+    }
 
-    void toXML(QDomDocument&, QDomElement&) const 
-        {
-        }
+    void toXML(QDomDocument&, QDomElement&) const {
+    }
 };
 
 class TestConfigurationFactory : public KisSerializableConfigurationFactory
 {
 public:
 
-    virtual KisSerializableConfiguration* createDefault() 
-        {
-            return &tc;
-        }            
+    virtual KisSerializableConfiguration* createDefault() {
+        return &tc;
+    }
 
-    virtual KisSerializableConfiguration* create(const QDomElement&)
-        {
-            return &tc;
-        }       
+    virtual KisSerializableConfiguration* create(const QDomElement&) {
+        return &tc;
+    }
 private:
 
     TestConfiguration tc;

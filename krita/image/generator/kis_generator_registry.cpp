@@ -21,7 +21,6 @@
 #include <QString>
 
 #include <kaction.h>
-#include <kis_debug.h>
 #include <klocale.h>
 #include <kparts/plugin.h>
 #include <kservice.h>
@@ -44,22 +43,20 @@ KisGeneratorRegistry::KisGeneratorRegistry()
     KisGeneratorRegistry::m_singleton = this;
 
     KService::List  offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/Generator"),
-                                                         QString::fromLatin1("(Type == 'Service') and "
-                                                                             "([X-Krita-Version] == 4)"));
+                             QString::fromLatin1("(Type == 'Service') and "
+                                                 "([X-Krita-Version] == 4)"));
 
     KService::List::ConstIterator iter;
     dbgPlugins << "generators found: " << offers.count();
-    for(iter = offers.begin(); iter != offers.end(); ++iter)
-    {
+    for (iter = offers.begin(); iter != offers.end(); ++iter) {
         KService::Ptr service = *iter;
         int errCode = 0;
         KParts::Plugin* plugin =
-             KService::createInstance<KParts::Plugin> ( service, this, QStringList(), &errCode);
-        if ( !plugin ) {
-            dbgPlugins <<"found plugin" << service->property("Name").toString() <<"," << errCode <<"";
-            if( errCode == KLibLoader::ErrNoLibrary)
-            {
-                kWarning(41006) <<" Error loading plugin was : ErrNoLibrary" << KLibLoader::self()->lastErrorMessage();
+            KService::createInstance<KParts::Plugin> (service, this, QStringList(), &errCode);
+        if (!plugin) {
+            dbgPlugins << "found plugin" << service->property("Name").toString() << "," << errCode << "";
+            if (errCode == KLibLoader::ErrNoLibrary) {
+                kWarning(41006) << " Error loading plugin was : ErrNoLibrary" << KLibLoader::self()->lastErrorMessage();
             }
         }
 
@@ -72,8 +69,7 @@ KisGeneratorRegistry::~KisGeneratorRegistry()
 
 KisGeneratorRegistry* KisGeneratorRegistry::instance()
 {
-    if(KisGeneratorRegistry::m_singleton == 0)
-    {
+    if (KisGeneratorRegistry::m_singleton == 0) {
         KisGeneratorRegistry::m_singleton = new KisGeneratorRegistry();
     }
     return KisGeneratorRegistry::m_singleton;

@@ -23,20 +23,23 @@
 #include <KoColor.h>
 #include <QToolButton>
 
-class ColorSpot : public QToolButton {
+class ColorSpot : public QToolButton
+{
     Q_OBJECT
 
-    public:
-        ColorSpot (QWidget *parent, const KoColor &color);
+public:
+    ColorSpot(QWidget *parent, const KoColor &color);
 
-        ~ColorSpot();
+    ~ColorSpot();
 
-        void setColor(const KoColor &color);
+    void setColor(const KoColor &color);
 
-        KoColor color() const { return m_color; }
+    KoColor color() const {
+        return m_color;
+    }
 
-    private:
-        KoColor m_color;
+private:
+    KoColor m_color;
 };
 
 #endif // COLORSPOT_H_

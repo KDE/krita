@@ -24,8 +24,8 @@
 #include <KoColorConversionTransformationFactory.h>
 #include <KoCtlColorConversionTransformation.h>
 
-KisRgbF16HDRColorSpace::KisRgbF16HDRColorSpace( const KoCtlColorProfile *p)
-: KisRgbFloatHDRColorSpace<RgbF16Traits>(colorSpaceId(), i18n("RGB (16-bit float/channel) for High Dynamic Range imaging"),  p)
+KisRgbF16HDRColorSpace::KisRgbF16HDRColorSpace(const KoCtlColorProfile *p)
+        : KisRgbFloatHDRColorSpace<RgbF16Traits>(colorSpaceId(), i18n("RGB (16-bit float/channel) for High Dynamic Range imaging"),  p)
 {
 }
 
@@ -36,19 +36,19 @@ QString KisRgbF16HDRColorSpace::colorSpaceId()
 
 KoColorSpace* KisRgbF16HDRColorSpace::clone() const
 {
-    return new KisRgbF16HDRColorSpace( static_cast<const KoCtlColorProfile*>(profile()) );
+    return new KisRgbF16HDRColorSpace(static_cast<const KoCtlColorProfile*>(profile()));
 }
 
-KoColorSpace* KisRgbF16HDRColorSpaceFactory::createColorSpace( const KoColorProfile * p) const {
-    return new KisRgbF16HDRColorSpace( dynamic_cast<const KoCtlColorProfile*>(p) );
+KoColorSpace* KisRgbF16HDRColorSpaceFactory::createColorSpace(const KoColorProfile * p) const
+{
+    return new KisRgbF16HDRColorSpace(dynamic_cast<const KoCtlColorProfile*>(p));
 }
 
 bool KisRgbF16HDRColorSpaceFactory::profileIsCompatible(const KoColorProfile* profile) const
 {
 
     const KoCtlColorProfile* ctlp = dynamic_cast<const KoCtlColorProfile*>(profile);
-    if(ctlp && ctlp->colorModel() == "RGBA" )
-    {
+    if (ctlp && ctlp->colorModel() == "RGBA") {
         return true;
     }
     return false;

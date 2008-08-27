@@ -29,15 +29,17 @@ class KisFilter;
 class KisWdgLensCorrection : public KisFilterConfigWidget
 {
     Q_OBJECT
-    public:
-        KisWdgLensCorrection(KisFilter* nfilter, QWidget* parent = 0);
-        ~KisWdgLensCorrection();
-    public:
-        inline const Ui_WdgLensCorrectionOptions* widget() const { return m_widget; }
-        virtual void setConfiguration(KisFilterConfiguration*);
-        virtual KisFilterConfiguration* configuration() const;
-    private:
-        Ui_WdgLensCorrectionOptions* m_widget;
+public:
+    KisWdgLensCorrection(KisFilter* nfilter, QWidget* parent = 0);
+    ~KisWdgLensCorrection();
+public:
+    inline const Ui_WdgLensCorrectionOptions* widget() const {
+        return m_widget;
+    }
+    virtual void setConfiguration(KisFilterConfiguration*);
+    virtual KisFilterConfiguration* configuration() const;
+private:
+    Ui_WdgLensCorrectionOptions* m_widget;
 };
 
 #endif

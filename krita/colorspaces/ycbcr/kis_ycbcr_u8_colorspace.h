@@ -29,35 +29,56 @@ typedef KoYCbCrTraits<quint8> YCbCrU8Traits;
 
 class KisYCbCrU8ColorSpace : public KisYCbCrBaseColorSpace<YCbCrU8Traits>
 {
-    public:
-        KisYCbCrU8ColorSpace( const KoCtlColorProfile *p);
-        virtual bool willDegrade(ColorSpaceIndependence /*independence*/) const {
-            return false;
-        }
-        virtual KoID colorModelId() const { return YCbCrAColorModelID; }
-        virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
-        virtual KoColorSpace* clone() const;
+public:
+    KisYCbCrU8ColorSpace(const KoCtlColorProfile *p);
+    virtual bool willDegrade(ColorSpaceIndependence /*independence*/) const {
+        return false;
+    }
+    virtual KoID colorModelId() const {
+        return YCbCrAColorModelID;
+    }
+    virtual KoID colorDepthId() const {
+        return Integer8BitsColorDepthID;
+    }
+    virtual KoColorSpace* clone() const;
 };
 
 class KisYCbCrU8ColorSpaceFactory : public KoCtlColorSpaceFactory
 {
 public:
-    virtual QString id() const { return "YCbCrAU8"; }
-    virtual QString name() const { return i18n("YCBCR (8-bit integer/channel)"); }
-    virtual KoID colorModelId() const { return YCbCrAColorModelID; }
-    virtual KoID colorDepthId() const { return Integer8BitsColorDepthID; }
-    virtual bool userVisible() const { return true; }
+    virtual QString id() const {
+        return "YCbCrAU8";
+    }
+    virtual QString name() const {
+        return i18n("YCBCR (8-bit integer/channel)");
+    }
+    virtual KoID colorModelId() const {
+        return YCbCrAColorModelID;
+    }
+    virtual KoID colorDepthId() const {
+        return Integer8BitsColorDepthID;
+    }
+    virtual bool userVisible() const {
+        return true;
+    }
 
-    virtual KoColorSpace *createColorSpace( const KoColorProfile * p) const
-    {
+    virtual KoColorSpace *createColorSpace(const KoColorProfile * p) const {
         return new KisYCbCrU8ColorSpace(dynamic_cast<const KoCtlColorProfile*>(p));
     }
 
-    virtual int referenceDepth() const { return 8; }
-    virtual QString colorSpaceEngine() const { return ""; }
-    virtual bool isHdr() const { return false; }
+    virtual int referenceDepth() const {
+        return 8;
+    }
+    virtual QString colorSpaceEngine() const {
+        return "";
+    }
+    virtual bool isHdr() const {
+        return false;
+    }
 
-    virtual QString defaultProfile() const { return "Standard YCbCr (8-bits)"; }
+    virtual QString defaultProfile() const {
+        return "Standard YCbCr (8-bits)";
+    }
 };
 
 #endif // KIS_STRATEGY_COLORSPACE_RGB_H_

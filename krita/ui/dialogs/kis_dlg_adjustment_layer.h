@@ -69,7 +69,7 @@ public:
 
 protected slots:
 
-    void slotNameChanged( const QString & );
+    void slotNameChanged(const QString &);
     void slotConfigChanged();
 private slots:
     void kickTimer();

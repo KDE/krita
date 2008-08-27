@@ -37,7 +37,8 @@
 #include "kis_node_visitor.h"
 #include "kis_layer.h"
 
-class KisCloneLayer::Private {
+class KisCloneLayer::Private
+{
 public:
     KisPaintDeviceSP projection;
     KisLayerSP copyFrom;
@@ -47,8 +48,8 @@ public:
 };
 
 KisCloneLayer::KisCloneLayer(KisLayerSP from, KisImageSP img, const QString &name, quint8 opacity)
-    : KisLayer( img, name, opacity )
-    , m_d( new Private() )
+        : KisLayer(img, name, opacity)
+        , m_d(new Private())
 {
     m_d->projection = 0;
     m_d->copyFrom = from;
@@ -58,12 +59,12 @@ KisCloneLayer::KisCloneLayer(KisLayerSP from, KisImageSP img, const QString &nam
 }
 
 KisCloneLayer::KisCloneLayer(const KisCloneLayer& rhs)
-    : KisLayer( rhs )
-    , KisIndirectPaintingSupport( rhs )
-    , m_d( new Private() )
+        : KisLayer(rhs)
+        , KisIndirectPaintingSupport(rhs)
+        , m_d(new Private())
 {
     // XXX: Yah, booh!
-    m_d->projection = new KisPaintDevice( *rhs.projection().data() );
+    m_d->projection = new KisPaintDevice(*rhs.projection().data());
     m_d->copyFrom = rhs.copyFrom();
     m_d->type = rhs.copyType();
     m_d->x = rhs.x();
@@ -76,9 +77,9 @@ KisCloneLayer::~KisCloneLayer()
 }
 
 
-bool KisCloneLayer::allowAsChild( KisNodeSP node) const
+bool KisCloneLayer::allowAsChild(KisNodeSP node) const
 {
-    if ( node->inherits( "KisMask" ) )
+    if (node->inherits("KisMask"))
         return true;
     else
         return false;
@@ -87,32 +88,32 @@ bool KisCloneLayer::allowAsChild( KisNodeSP node) const
 
 void KisCloneLayer::updateProjection(const QRect& r)
 {
-    if ( !m_d->copyFrom ) return;
-    if ( !r.isValid() ) return ;
+    if (!m_d->copyFrom) return;
+    if (!r.isValid()) return ;
 
     // XXX: update only the overlap of r and the rects in the dirty region
 
     // if there are effect masks, apply them to the either original or
     // to the original's projection.
-    if ( hasEffectMasks() ) {
-        if ( m_d->projection == 0 ) {
-            m_d->projection = new KisPaintDevice( m_d->copyFrom->colorSpace() );
+    if (hasEffectMasks()) {
+        if (m_d->projection == 0) {
+            m_d->projection = new KisPaintDevice(m_d->copyFrom->colorSpace());
         }
 
         qint32 deltaX = m_d->copyFrom->x() - m_d->x;
         qint32 deltaY = m_d->copyFrom->y() - m_d->y;
-        QRect rc = r.translated( deltaX, deltaY );
+        QRect rc = r.translated(deltaX, deltaY);
 
-        KisPainter gc( m_d->projection );
-        gc.setCompositeOp( colorSpace()->compositeOp( COMPOSITE_COPY ) );
+        KisPainter gc(m_d->projection);
+        gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
 
-        switch ( m_d->type ) {
+        switch (m_d->type) {
         case COPY_PROJECTION:
-            gc.bitBlt( rc.topLeft(), m_d->copyFrom->projection(), rc );
+            gc.bitBlt(rc.topLeft(), m_d->copyFrom->projection(), rc);
             break;
         case COPY_ORIGINAL:
         default:
-            gc.bitBlt( rc.topLeft(), m_d->copyFrom->original(), rc );
+            gc.bitBlt(rc.topLeft(), m_d->copyFrom->original(), rc);
         }
         applyEffectMasks(m_d->projection, r);
     }
@@ -127,8 +128,8 @@ KisPaintDeviceSP KisCloneLayer::projection() const
     // XXX: if the original is an adjustment layer -- should we copy
     // the the projection or apply the filter here again? This is
     // potentially very difficult to do!
-    if ( !hasEffectMasks() && m_d->x == 0 && m_d->y == 0 ) {
-        switch( m_d->type ) {
+    if (!hasEffectMasks() && m_d->x == 0 && m_d->y == 0) {
+        switch (m_d->type) {
         case COPY_PROJECTION:
             return m_d->copyFrom->projection();
             break;
@@ -159,7 +160,7 @@ QIcon KisCloneLayer::icon() const
 KoDocumentSectionModel::PropertyList KisCloneLayer::sectionModelProperties() const
 {
     KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
-    if ( m_d->copyFrom )
+    if (m_d->copyFrom)
         l << KoDocumentSectionModel::Property(i18n("Copy From"), m_d->copyFrom->name());
     return l;
 }
@@ -187,9 +188,9 @@ void KisCloneLayer::setY(qint32 y)
 /// Returns an approximation of where the bounds on actual data are in this layer
 QRect KisCloneLayer::extent() const
 {
-    if ( m_d->copyFrom ) {
+    if (m_d->copyFrom) {
         QRect rc = m_d->copyFrom->extent();
-        rc.moveTo( m_d->x, m_d->y );
+        rc.moveTo(m_d->x, m_d->y);
         return rc;
     }
     return QRect();
@@ -198,9 +199,9 @@ QRect KisCloneLayer::extent() const
 /// Returns the exact bounds of where the actual data resides in this layer
 QRect KisCloneLayer::exactBounds() const
 {
-    if ( m_d->copyFrom ) {
+    if (m_d->copyFrom) {
         QRect rc = m_d->copyFrom->exactBounds();
-        rc.moveTo( m_d->x, m_d->y );
+        rc.moveTo(m_d->x, m_d->y);
         return rc;
     }
     return QRect();
@@ -208,22 +209,21 @@ QRect KisCloneLayer::exactBounds() const
 
 bool KisCloneLayer::accept(KisNodeVisitor & v)
 {
-    return v.visit( this );
+    return v.visit(this);
 }
 
 QImage KisCloneLayer::createThumbnail(qint32 w, qint32 h)
 {
-    if ( !m_d->copyFrom ) return QImage();
+    if (!m_d->copyFrom) return QImage();
 
-    if ( hasEffectMasks() ) {
-        return m_d->projection->createThumbnail( w, h );
-    }
-    else {
-        return m_d->copyFrom->createThumbnail( w, h );
+    if (hasEffectMasks()) {
+        return m_d->projection->createThumbnail(w, h);
+    } else {
+        return m_d->copyFrom->createThumbnail(w, h);
     }
 }
 
-void KisCloneLayer::setCopyFrom( KisLayerSP fromLayer, CopyLayerType type )
+void KisCloneLayer::setCopyFrom(KisLayerSP fromLayer, CopyLayerType type)
 {
     m_d->type = type;
     m_d->copyFrom = fromLayer;
@@ -234,9 +234,9 @@ KisLayerSP KisCloneLayer::copyFrom() const
     return m_d->copyFrom;
 }
 
-void KisCloneLayer::setCopyType( CopyLayerType type )
+void KisCloneLayer::setCopyType(CopyLayerType type)
 {
-    if ( type != m_d->type ) {
+    if (type != m_d->type) {
         m_d->type = type;
     }
 }

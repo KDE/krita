@@ -27,10 +27,19 @@
 typedef Eigen::Matrix<qreal, 2, 1> KisVector2D;
 typedef Eigen::Matrix<qreal, 3, 1> KisVector3D;
 
-inline KisVector2D toKisVector2D(const QPointF& p) { return KisVector2D(p.x(), p.y()); }
-inline KisVector2D toKisVector2D(const QPoint& p) { return KisVector2D(p.x(), p.y()); }
+inline KisVector2D toKisVector2D(const QPointF& p)
+{
+    return KisVector2D(p.x(), p.y());
+}
+inline KisVector2D toKisVector2D(const QPoint& p)
+{
+    return KisVector2D(p.x(), p.y());
+}
 
 template<typename ExpressionType>
-inline QPointF toQPointF(const ExpressionType& expr) { return QPointF(expr.x(), expr.y()); }
+inline QPointF toQPointF(const ExpressionType& expr)
+{
+    return QPointF(expr.x(), expr.y());
+}
 
 #endif

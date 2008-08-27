@@ -23,7 +23,8 @@
 
 class Bristle;
 
-class Brush {
+class Brush
+{
 
 public:
 
@@ -32,20 +33,22 @@ public:
 
 public:
 
-    Brush ( int );
-    ~Brush ();
+    Brush(int);
+    ~Brush();
 
     int size() {
         return m_size;
     }
-    int numberOfBristles () { return m_numBristles; }
-    void setSize ( int );
-    void setInitialPosition ( double, double );
-    void repositionBristles ( double );
+    int numberOfBristles() {
+        return m_numBristles;
+    }
+    void setSize(int);
+    void setInitialPosition(double, double);
+    void repositionBristles(double);
     void setBristlesPos();
 
-    void addInk ();
-    void removeInk ();
+    void addInk();
+    void removeInk();
 
 private:
 

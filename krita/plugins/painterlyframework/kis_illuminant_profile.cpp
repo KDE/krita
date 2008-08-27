@@ -36,14 +36,14 @@ double **allocateMatrix(int m, int n)
     return matrix;
 }
 
-void freeMatrix(int m,double **matrix)
+void freeMatrix(int m, double **matrix)
 {
     for (int i = 0; i < m; i++)
         delete [] matrix[i];
     delete [] matrix;
 }
 
-void applyMatrix(int m,int n, double **T,double *b, double *d)
+void applyMatrix(int m, int n, double **T, double *b, double *d)
 {
     for (int i = 0; i < m; i++) {
         d[i] = 0;
@@ -56,23 +56,23 @@ double polyval(int n, const double *P, double x)
 {
     double y = 0;
     for (int i = 0; i < n; i++)
-        y += P[n-1-i]*pow(x,i);
+        y += P[n-1-i] * pow(x, i);
     return y;
 }
 
 double phi(double r)
 {
-    return 2.0*r / pow(1.0-r,2);
+    return 2.0*r / pow(1.0 - r, 2);
 }
 
 double psi(double r)
 {
-    return pow(1.0-r,2) / (2.0*r);
+    return pow(1.0 -r, 2) / (2.0*r);
 }
 
 double invphi(double y)
 {
-    return ( 1.0 + y - sqrt(2.0 * y + 1.0) ) / y;
+    return (1.0 + y - sqrt(2.0 * y + 1.0)) / y;
 }
 
 //--------------------------
@@ -128,7 +128,7 @@ bool verifyCount(const QString & elementName, QDomElement & e, int num)
     // Check whether there are enough coeffs
     int count = 0;
     QDomElement c = e.firstChildElement(elementName);
-    while(! c.isNull()) {
+    while (! c.isNull()) {
         ++count;
         c = c.nextSiblingElement(elementName);
     }
@@ -139,17 +139,17 @@ bool verifyCount(const QString & elementName, QDomElement & e, int num)
 
 
 KisIlluminantProfile::KisIlluminantProfile(const QString &fileName)
-    : KoColorProfile(fileName),
-      m_wl(-1), m_T(0), m_red(0), m_green(0), m_blue(0), m_refvec(0),
-      coeffs(0), m_illuminant(""), m_valid(false)
+        : KoColorProfile(fileName),
+        m_wl(-1), m_T(0), m_red(0), m_green(0), m_blue(0), m_refvec(0),
+        coeffs(0), m_illuminant(""), m_valid(false)
 {
 
 }
 
 KisIlluminantProfile::KisIlluminantProfile(const KisIlluminantProfile &copy)
-    : KoColorProfile(copy.fileName()),
-      m_wl(-1), m_T(0), m_red(0), m_green(0), m_blue(0), m_refvec(0),
-      coeffs(0), m_illuminant(""), m_valid(false)
+        : KoColorProfile(copy.fileName()),
+        m_wl(-1), m_T(0), m_red(0), m_green(0), m_blue(0), m_refvec(0),
+        coeffs(0), m_illuminant(""), m_valid(false)
 {
     if (copy.valid()) {
         m_valid = copy.m_valid;
@@ -157,7 +157,7 @@ KisIlluminantProfile::KisIlluminantProfile(const KisIlluminantProfile &copy)
         m_illuminant = copy.m_illuminant;
         setName(copy.name());
 
-        m_T = allocateMatrix(3,m_wl);
+        m_T = allocateMatrix(3, m_wl);
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < m_wl; j++)
                 m_T[i][j] = copy.m_T[i][j];
@@ -208,7 +208,7 @@ bool KisIlluminantProfile::load()
         dbgFile << "Not an illuminant file or wrong version; " << fileName();
         return false;
     }
-    
+
     m_wl = root.attribute("wavelengths").toInt();
     if (m_wl == 0) {
         dbgFile << "No wavelengths; " << fileName();
@@ -229,14 +229,14 @@ bool KisIlluminantProfile::load()
         dbgFile << "Wrong number of transformations; " << fileName();
         return false;
     }
-    
+
     QDomElement transformation = transformations.firstChildElement("transformation");
     for (int i = 0; i < m_wl; i++) {
         for (int j = 0; j < 3; j++) {
             if (transformation.isNull()) {
                 dbgFile << "Not enough transformations: " << fileName();
                 return false;
-            
+
             }
             QString v = transformation.attribute("value");
             if (v.isEmpty()) {
@@ -253,27 +253,27 @@ bool KisIlluminantProfile::load()
             transformation = transformation.nextSiblingElement("transformation");
         }
     }
-    
+
     QDomElement primaries = root.firstChildElement("primaries");
     if (primaries.isNull()) {
         dbgFile << "No primaries; " << fileName();
         return false;
     }
-        
+
     m_red   = new double[m_wl];
     QDomElement red = primaries.firstChildElement("red");
     if (red.isNull()) {
         dbgFile << "No red; " << fileName();
         return false;
     }
-    
+
     if (!verifyCount("wavelength", red, m_wl)) {
         dbgFile << "Wrong number of red wavelengths; " << m_wl << ": " << fileName();
         return false;
     }
 
     readPrimaries(m_red, red, m_wl);
-    
+
     m_green = new double[m_wl];
     QDomElement green = primaries.firstChildElement("green");
     if (green.isNull()) {
@@ -297,13 +297,13 @@ bool KisIlluminantProfile::load()
         return false;
     }
     readPrimaries(m_blue, blue, m_wl);
-    
+
     QDomElement X = root.firstChildElement("X");
     if (X.isNull()) {
         dbgFile << "No X: " << fileName();
         return false;
     }
-    
+
     nc = X.attribute("nc").toInt();
     if (nc == 0) {
         dbgFile << "No number of coefficients " << fileName();
@@ -314,10 +314,10 @@ bool KisIlluminantProfile::load()
         dbgFile << "Got wrong number coefficients (" << nc * m_wl << "): " << fileName();
         return false;
     }
-    
+
     coeffs = new double[nc*m_wl];
 
-    
+
     QDomElement coefficient = X.firstChildElement("coefficient");
     for (int i = 0; i < nc * m_wl; ++i) {
         if (coefficient.isNull()) {
@@ -335,9 +335,9 @@ bool KisIlluminantProfile::load()
             dbgFile << "Could not convert" << v << " to double: " << fileName();
             return false;
         }
-        
+
         coeffs[i] = d;
-        
+
         coefficient = coefficient.nextSiblingElement("coefficient");
     }
 
@@ -377,25 +377,25 @@ bool KisIlluminantProfile::save(const QString &fileName)
     QDomElement red = doc.createElement("red");
     primaries.appendChild(red);
     writePrimary(doc, red, m_red, m_wl);
-    
+
     QDomElement green = doc.createElement("green");
     primaries.appendChild(green);
     writePrimary(doc, green, m_green, m_wl);
-    
+
     QDomElement blue = doc.createElement("blue");
     primaries.appendChild(blue);
     writePrimary(doc, blue, m_blue, m_wl);
-    
+
     QDomElement coefficients = doc.createElement("X");
     coefficients.setAttribute("nc", nc);
     root.appendChild(coefficients);
-    
+
     for (int i = 0; i < m_wl * nc; ++i) {
         QDomElement coeff = doc.createElement("coefficient");
         coeff.setAttribute("value", coeffs[i]);
         coefficients.appendChild(coeff);
     }
-    
+
     QTextStream(&file) << doc.toString();
     return true;
 }
@@ -416,14 +416,14 @@ void KisIlluminantProfile::toRgb(const double *ksvec, double *rgbvec) const
 
 double KisIlluminantProfile::fgen(double R, int i) const
 {
-    return fabs( polyval(nc,coeffs+i*nc,R) );
+    return fabs(polyval(nc, coeffs + i*nc, R));
 }
 
 void KisIlluminantProfile::reflectanceToKS(double *ksvec) const
 {
     for (int i = 0; i < m_wl; i++) {
-        ksvec[2*i+0] = fgen(m_refvec[i],i) * pow(1-m_refvec[i],2);
-        ksvec[2*i+1] = fgen(m_refvec[i],i) * 2.0 * m_refvec[i];
+        ksvec[2*i+0] = fgen(m_refvec[i], i) * pow(1 - m_refvec[i], 2);
+        ksvec[2*i+1] = fgen(m_refvec[i], i) * 2.0 * m_refvec[i];
     }
 }
 
@@ -435,7 +435,7 @@ void KisIlluminantProfile::KSToReflectance(const double *ksvec) const
         else if (ksvec[2*i+1] <= 0)
             m_refvec[i] = 0;
         else
-            m_refvec[i] = invphi(ksvec[2*i+1]/ksvec[2*i+0]);
+            m_refvec[i] = invphi(ksvec[2*i+1] / ksvec[2*i+0]);
     }
 }
 
@@ -462,7 +462,7 @@ void KisIlluminantProfile::reflectanceToRgb(double *rgbvec) const
         return;
     }
 
-    applyMatrix(3,m_wl, m_T,m_refvec, rgbvec);
+    applyMatrix(3, m_wl, m_T, m_refvec, rgbvec);
     for (int i = 0; i < 3; i++) {
         if (rgbvec[i] < 0) rgbvec[i] = 0;
         if (rgbvec[i] > 1) rgbvec[i] = 1;
@@ -472,7 +472,7 @@ void KisIlluminantProfile::reflectanceToRgb(double *rgbvec) const
 void KisIlluminantProfile::reset()
 {
     if (m_T)
-        freeMatrix(3,m_T);
+        freeMatrix(3, m_T);
     if (m_refvec)
         delete [] m_refvec;
     if (m_red)

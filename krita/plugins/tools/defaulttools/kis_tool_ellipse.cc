@@ -39,8 +39,8 @@
 #include <kis_layer.h>
 
 KisToolEllipse::KisToolEllipse(KoCanvasBase * canvas)
-    : KisToolShape(canvas, KisCursor::load("tool_ellipse_cursor.png", 6, 6)),
-      m_dragging (false)
+        : KisToolShape(canvas, KisCursor::load("tool_ellipse_cursor.png", 6, 6)),
+        m_dragging(false)
 {
     setObjectName("tool_ellipse");
 
@@ -60,7 +60,7 @@ void KisToolEllipse::paint(QPainter& gc, const KoViewConverter &converter)
     double sx, sy;
     converter.zoom(&sx, &sy);
 
-    gc.scale( sx/currentImage()->xRes(), sy/currentImage()->yRes() );
+    gc.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
     if (m_dragging)
         paintEllipse(gc, QRect());
 }
@@ -68,10 +68,10 @@ void KisToolEllipse::paint(QPainter& gc, const KoViewConverter &converter)
 
 void KisToolEllipse::mousePressEvent(KoPointerEvent *event)
 {
-     if (!m_canvas || !currentImage()) return;
+    if (!m_canvas || !currentImage()) return;
 
     if (event->button() == Qt::LeftButton) {
-    QPointF pos = convertToPixelCoord(event);
+        QPointF pos = convertToPixelCoord(event);
         m_dragging = true;
         m_dragStart = m_dragCenter = m_dragEnd = pos;
         //draw(m_dragStart, m_dragEnd);
@@ -97,7 +97,7 @@ void KisToolEllipse::mouseMoveEvent(KoPointerEvent *event)
             m_dragEnd += trans;
         } else {
             QPointF diag = pos - (event->modifiers() & Qt::ControlModifier
-                  ? m_dragCenter : m_dragStart);
+                                  ? m_dragCenter : m_dragStart);
             // circle?
             if (event->modifiers() & Qt::ShiftModifier) {
                 double size = qMax(fabs(diag.x()), fabs(diag.y()));
@@ -116,13 +116,13 @@ void KisToolEllipse::mouseMoveEvent(KoPointerEvent *event)
         }
         // draw new lines on canvas
         //draw(m_dragStart, m_dragEnd);
-    bound.setTopLeft(m_dragStart);
+        bound.setTopLeft(m_dragStart);
         bound.setBottomRight(m_dragEnd);
         /* FIXME Which rectangle to repaint */
         m_canvas->updateCanvas(convertToPt(bound.normalized()));
 
         m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,
-                                (m_dragStart.y() + m_dragEnd.y()) / 2);
+                               (m_dragStart.y() + m_dragEnd.y()) / 2);
     }
 }
 
@@ -149,17 +149,17 @@ void KisToolEllipse::mouseReleaseEvent(KoPointerEvent *event)
 
         KisPaintDeviceSP device = currentNode()->paintDevice();
         delete m_painter;
-        m_painter = new KisPainter( device, currentSelection() );
+        m_painter = new KisPainter(device, currentSelection());
         Q_CHECK_PTR(m_painter);
 
-        m_painter->beginTransaction (i18n ("Ellipse"));
+        m_painter->beginTransaction(i18n("Ellipse"));
         setupPainter(m_painter);
         m_painter->setOpacity(m_opacity);
         m_painter->setCompositeOp(m_compositeOp);
 
         m_painter->paintEllipse(QRectF(m_dragStart, m_dragEnd));
         QRegion bound = m_painter->dirtyRegion();
-        device->setDirty( bound );
+        device->setDirty(bound);
         notifyModified();
 
         m_canvas->addCommand(m_painter->endTransaction());
@@ -182,9 +182,9 @@ void KisToolEllipse::paintEllipse(QPainter& gc, const QRect&)
 
         gc.setPen(pen);
 
-    start = QPoint(static_cast<int>(m_dragStart.x()), static_cast<int>(m_dragStart.y()));
-    end = QPoint(static_cast<int>(m_dragEnd.x()), static_cast<int>(m_dragEnd.y()));
-    gc.drawEllipse(QRect(start, end));
+        start = QPoint(static_cast<int>(m_dragStart.x()), static_cast<int>(m_dragStart.y()));
+        end = QPoint(static_cast<int>(m_dragEnd.x()), static_cast<int>(m_dragEnd.y()));
+        gc.drawEllipse(QRect(start, end));
         gc.setPen(old);
     }
 }

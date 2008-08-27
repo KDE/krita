@@ -29,14 +29,13 @@ IOBackendRegistry* IOBackendRegistry::Private::s_instance = 0;
 
 IOBackendRegistry::IOBackendRegistry() : d(new Private)
 {
-    
+
 }
 
 IOBackendRegistry* IOBackendRegistry::instance()
 {
-    if(!Private::s_instance)
-    {
-       Private::s_instance = new IOBackendRegistry;
+    if (!Private::s_instance) {
+        Private::s_instance = new IOBackendRegistry;
     }
     return Private::s_instance;
 }

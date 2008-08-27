@@ -31,15 +31,15 @@ class MixingTest : public QObject
 {
     Q_OBJECT
 
-    private slots:
+private slots:
 
-        void initTestCase();
-        void testMixing1();
-        void testMixing2();
+    void initTestCase();
+    void testMixing1();
+    void testMixing2();
 
-    private:
-        QVector<const KoColorSpace*> css;
-        QStringList list;
+private:
+    QVector<const KoColorSpace*> css;
+    QStringList list;
 
 };
 

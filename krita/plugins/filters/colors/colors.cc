@@ -26,7 +26,7 @@
 #include <filter/kis_filter_registry.h>
 
 typedef KGenericFactory<KritaExtensionsColors> KritaExtensionsColorsFactory;
-K_EXPORT_COMPONENT_FACTORY( kritaextensioncolorsfilters, KritaExtensionsColorsFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritaextensioncolorsfilters, KritaExtensionsColorsFactory("krita"))
 
 KritaExtensionsColors::KritaExtensionsColors(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)

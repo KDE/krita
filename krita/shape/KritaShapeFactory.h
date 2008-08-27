@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef PICTURE_SHAPE_FACTORY
-#define PICTURE_SHAPE_FACTORY
+#ifndef KRITA_SHAPE_SHAPE_FACTORY
+#define KRITA_SHAPE_SHAPE_FACTORY
 
 #include <QStringList>
 
@@ -32,7 +32,7 @@ class KritaShapePlugin : public QObject
 
 public:
 
-    KritaShapePlugin( QObject * parent,  const QStringList & );
+    KritaShapePlugin(QObject * parent,  const QStringList &);
     ~KritaShapePlugin() {}
 
 };
@@ -41,11 +41,11 @@ class KritaShapeFactory : public KoShapeFactory
 {
     Q_OBJECT
 public:
-    KritaShapeFactory( QObject* parent);
+    KritaShapeFactory(QObject* parent);
     ~KritaShapeFactory() {}
 
     KoShape* createDefaultShape() const;
-    KoShape* createShape( const KoProperties* params ) const;
+    KoShape* createShape(const KoProperties* params) const;
 };
 
 #endif

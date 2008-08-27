@@ -21,31 +21,32 @@
 #include "kis_vec.h"
 
 #include "kis_dynamic_sensor.h"
-// 
-class KisDynamicSensorTime : public KisDynamicSensor {
+//
+class KisDynamicSensorTime : public KisDynamicSensor
+{
     Q_OBJECT
-    public:
-        using KisSerializableConfiguration::fromXML;
-        using KisSerializableConfiguration::toXML;
+public:
+    using KisSerializableConfiguration::fromXML;
+    using KisSerializableConfiguration::toXML;
 
-    
-        KisDynamicSensorTime();
-        virtual ~KisDynamicSensorTime() { }
-        virtual double parameter(const KisPaintInformation& );
-        virtual QWidget* createConfigurationWidget(QWidget* parent, KisSensorSelector* );
-    public slots:
-        virtual void setPeriodic(bool periodic);
-        virtual void setLength(int length);
 
-        
-        virtual void toXML(QDomDocument&, QDomElement&) const;
-        virtual void fromXML(const QDomElement&);
-    private:
-        double m_time;
-        int m_length;
-        bool m_periodic;
-        bool m_firstPos;
-        KisVector2D m_previousPos;
+    KisDynamicSensorTime();
+    virtual ~KisDynamicSensorTime() { }
+    virtual double parameter(const KisPaintInformation&);
+    virtual QWidget* createConfigurationWidget(QWidget* parent, KisSensorSelector*);
+public slots:
+    virtual void setPeriodic(bool periodic);
+    virtual void setLength(int length);
+
+
+    virtual void toXML(QDomDocument&, QDomElement&) const;
+    virtual void fromXML(const QDomElement&);
+private:
+    double m_time;
+    int m_length;
+    bool m_periodic;
+    bool m_firstPos;
+    KisVector2D m_previousPos;
 };
 
 #endif

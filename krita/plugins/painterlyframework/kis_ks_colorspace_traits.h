@@ -23,9 +23,9 @@
 #include <KoColorSpaceTraits.h>
 
 template< typename _TYPE_, int _N_ >
-struct KisKSColorSpaceTrait : public KoColorSpaceTrait<_TYPE_, 2*_N_+1, 2*_N_> {
+struct KisKSColorSpaceTrait : public KoColorSpaceTrait < _TYPE_, 2*_N_ + 1, 2*_N_ > {
 
-    typedef KoColorSpaceTrait<_TYPE_, 2*(_N_)+1, 6> parent;
+    typedef KoColorSpaceTrait < _TYPE_, 2*(_N_) + 1, 6 > parent;
 
     struct {
         _TYPE_ m_K;
@@ -33,37 +33,31 @@ struct KisKSColorSpaceTrait : public KoColorSpaceTrait<_TYPE_, 2*_N_+1, 2*_N_> {
     } wavelength[_N_];
     _TYPE_ m_opacity;
 
-    inline static _TYPE_ &K(quint8* data, const int wavelen)
-    {
+    inline static _TYPE_ &K(quint8* data, const int wavelen) {
         _TYPE_ *d = reinterpret_cast<_TYPE_ *>(data);
         return d[2*wavelen+0];
     }
 
-    inline static _TYPE_ &S(quint8* data, const int wavelen)
-    {
+    inline static _TYPE_ &S(quint8* data, const int wavelen) {
         _TYPE_ *d = reinterpret_cast<_TYPE_ *>(data);
         return d[2*wavelen+1];
     }
 
-    inline static _TYPE_ &nativealpha(quint8* data)
-    {
+    inline static _TYPE_ &nativealpha(quint8* data) {
         return reinterpret_cast<_TYPE_ *>(data)[2*_N_];
     }
 
-    inline static const _TYPE_ &K(const quint8* data, const int wavelen)
-    {
+    inline static const _TYPE_ &K(const quint8* data, const int wavelen) {
         const _TYPE_ *d = reinterpret_cast<const _TYPE_ *>(data);
         return d[2*wavelen+0];
     }
 
-    inline static const _TYPE_ &S(const quint8* data, const int wavelen)
-    {
+    inline static const _TYPE_ &S(const quint8* data, const int wavelen) {
         const _TYPE_ *d = reinterpret_cast<const _TYPE_ *>(data);
         return d[2*wavelen+1];
     }
 
-    inline static const _TYPE_ &nativealpha(const quint8* data)
-    {
+    inline static const _TYPE_ &nativealpha(const quint8* data) {
         return reinterpret_cast<const _TYPE_ *>(data)[2*_N_];
     }
 };

@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_TILEMANAGER_H_
-#define KIS_TILEMANAGER_H_
+#ifndef KIS_TILESTOREMEMORY_H_
+#define KIS_TILESTOREMEMORY_H_
 
 #include <sys/types.h>
 
@@ -54,7 +54,8 @@ class KisSharedTileData;
  *    read any tile, as long as nobody is writing to it. (bsar)
  *    See: http://doc.trolltech.com/qq/qq14-threading.html
  */
-class KRITAIMAGE_EXPORT KisTileStoreMemory : public KisTileStore {
+class KRITAIMAGE_EXPORT KisTileStoreMemory : public KisTileStore
+{
 public:
     virtual ~KisTileStoreMemory();
 

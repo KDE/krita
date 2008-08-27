@@ -38,7 +38,7 @@ KisRandomGenerator::~KisRandomGenerator()
 
 int KisRandomGenerator::randomAt(int x, int y)
 {
-    return (int)(doubleRandomAt(x,y) * RAND_MAX);
+    return (int)(doubleRandomAt(x, y) * RAND_MAX);
 }
 
 double KisRandomGenerator::doubleRandomAt(int x, int y)
@@ -48,6 +48,6 @@ double KisRandomGenerator::doubleRandomAt(int x, int y)
     //plot (t, sort(0.5*(cos( cos(cos(t.*t.*t.*t))) + 1)));
     // This function has a near-gaussian distribtution
     int n = x + (y + 1) * d->seed;
-    return 0.5*(cos( pow(n, 4)) + 1);
+    return 0.5*(cos(pow(n, 4)) + 1);
 }
 

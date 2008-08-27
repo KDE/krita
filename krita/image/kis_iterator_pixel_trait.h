@@ -32,18 +32,15 @@ class KisIteratorPixelTrait
 {
 public:
     KisIteratorPixelTrait(_iTp *underlyingIterator)
-    : m_underlyingIterator(underlyingIterator)
-    {
+            : m_underlyingIterator(underlyingIterator) {
         m_selectionIterator = NULL;
     }
 
-    ~KisIteratorPixelTrait()
-    {
+    ~KisIteratorPixelTrait() {
         delete m_selectionIterator;
     }
 
-    KisIteratorPixelTrait(const KisIteratorPixelTrait& rhs)
-    {
+    KisIteratorPixelTrait(const KisIteratorPixelTrait& rhs) {
         if (this == &rhs)
             return;
 
@@ -56,8 +53,7 @@ public:
         }
     }
 
-    KisIteratorPixelTrait& operator=(const KisIteratorPixelTrait& rhs)
-    {
+    KisIteratorPixelTrait& operator=(const KisIteratorPixelTrait& rhs) {
         if (this == &rhs)
             return *this;
 
@@ -79,53 +75,59 @@ public:
      * Return one channel from the current kispixel. Does not check whether
      * channel index actually exists in this colorspace.
      */
-    inline quint8 operator[](int index) const
-            { return m_underlyingIterator->rawData()[index]; }
+    inline quint8 operator[](int index) const {
+        return m_underlyingIterator->rawData()[index];
+    }
 
     /**
      * Returns if the pixel is selected or not. This is much faster than first building a KisPixel
      */
-    inline bool isSelected() const
-        {
-            if (m_selectionIterator)
-                return *(m_selectionIterator->rawData()) > SELECTION_THRESHOLD;
-            else
-                return true;
-        }
+    inline bool isSelected() const {
+        if (m_selectionIterator)
+            return *(m_selectionIterator->rawData()) > SELECTION_THRESHOLD;
+        else
+            return true;
+    }
 
     /**
       * Returns the degree of selectedness of the pixel.
       */
-    inline quint8 selectedness() const
-        {
-            if (m_selectionIterator)
-                return *(m_selectionIterator->rawData());
-            else {
-                return MAX_SELECTED;
-            }
+    inline quint8 selectedness() const {
+        if (m_selectionIterator)
+            return *(m_selectionIterator->rawData());
+        else {
+            return MAX_SELECTED;
         }
+    }
 
     /**
      * Returns the selectionmask from the current point; this is guaranteed
      * to have the same number of consecutive pixels that the iterator has
      * at a given point. It return a 0 if there is no selection.
      */
-    inline TSelect selectionMask() const
-        {
-            if ( m_selectionIterator )
-                return m_selectionIterator->rawData();
-            else
-                return 0;
-        }
+    inline TSelect selectionMask() const {
+        if (m_selectionIterator)
+            return m_selectionIterator->rawData();
+        else
+            return 0;
+    }
 
-        const _iTp* selectionIterator() const { return m_selectionIterator; }
+    const _iTp* selectionIterator() const {
+        return m_selectionIterator;
+    }
 
 protected:
 
-    inline void advance(int n){if (m_selectionIterator) for(int i=0; i< n; i++) ++(*m_selectionIterator);}
-    inline void retreat(){if (m_selectionIterator) --(*m_selectionIterator);}
+    inline void advance(int n) {
+        if (m_selectionIterator) for (int i = 0; i < n; i++) ++(*m_selectionIterator);
+    }
+    inline void retreat() {
+        if (m_selectionIterator) --(*m_selectionIterator);
+    }
 
-    void setSelectionIterator(_iTp *si){m_selectionIterator = si;}
+    void setSelectionIterator(_iTp *si) {
+        m_selectionIterator = si;
+    }
 
     _iTp *m_underlyingIterator;
     _iTp *m_selectionIterator;

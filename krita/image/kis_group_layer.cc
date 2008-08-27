@@ -26,7 +26,6 @@
 #include <QDateTime>
 
 #include <ksharedconfig.h>
-#include <kconfiggroup.h>
 
 #include <KoColorSpace.h>
 
@@ -45,31 +44,30 @@ class KisGroupLayer::Private
 {
 public:
     Private()
-        : projection( 0 )
-        , cacheProjection( true )
-        , x( 0 )
-        , y( 0 )
-        {
-        }
+            : projection(0)
+            , cacheProjection(true)
+            , x(0)
+            , y(0) {
+    }
 
     KisPaintDeviceSP projection; // The cached composition of all
-                                 // layers in this group
+    // layers in this group
     bool cacheProjection;
     qint32 x;
     qint32 y;
 };
 
 KisGroupLayer::KisGroupLayer(KisImageWSP img, const QString &name, quint8 opacity) :
-    KisLayer(img, name, opacity),
-    m_d( new Private() )
+        KisLayer(img, name, opacity),
+        m_d(new Private())
 {
     m_d->projection = new KisPaintDevice(this, img->colorSpace(), name.toLatin1());
     updateSettings();
 }
 
 KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
-    KisLayer(rhs),
-    m_d( new Private() )
+        KisLayer(rhs),
+        m_d(new Private())
 {
     m_d->projection = new KisPaintDevice(*rhs.m_d->projection.data());
     updateSettings();
@@ -80,7 +78,7 @@ KisGroupLayer::~KisGroupLayer()
     delete m_d;
 }
 
-bool KisGroupLayer::allowAsChild( KisNodeSP node) const
+bool KisGroupLayer::allowAsChild(KisNodeSP node) const
 {
     Q_UNUSED(node);
     return true;
@@ -95,7 +93,7 @@ const KoColorSpace * KisGroupLayer::colorSpace() const
     return m_d->projection->colorSpace();
 }
 
-KoColorSpace * KisGroupLayer::colorSpace() 
+KoColorSpace * KisGroupLayer::colorSpace()
 {
     // Due to virtual void resetProjection(KisPaintDeviceSP to =
     // 0), the colorspace of the group layer can be different from the
@@ -111,7 +109,7 @@ QIcon KisGroupLayer::icon() const
 void KisGroupLayer::updateSettings()
 {
     KConfigGroup cfg = KGlobal::config()->group("");
-    m_d->cacheProjection = cfg.readEntry( "useProjections", true );
+    m_d->cacheProjection = cfg.readEntry("useProjections", true);
     emit settingsUpdated();
 }
 
@@ -123,7 +121,8 @@ void KisGroupLayer::resetProjection(KisPaintDeviceSP to)
         m_d->projection = new KisPaintDevice(this, image()->colorSpace(), name().toLatin1());
 }
 
-bool KisGroupLayer::paintLayerInducesProjectionOptimization(KisPaintLayerSP l) const {
+bool KisGroupLayer::paintLayerInducesProjectionOptimization(KisPaintLayerSP l) const
+{
     if (!l) return false;
     if (!l->paintDevice()) return false;
     if (!(*l->paintDevice()->colorSpace() == *image()->colorSpace())) return false;
@@ -157,9 +156,8 @@ QRect KisGroupLayer::extent() const
 {
     QRect groupExtent;
 
-    for (uint i = 0; i < childCount(); ++i)
-    {
-        groupExtent |= (at( i ))->extent();
+    for (uint i = 0; i < childCount(); ++i) {
+        groupExtent |= (at(i))->extent();
     }
 
     return groupExtent;
@@ -170,9 +168,8 @@ QRect KisGroupLayer::exactBounds() const
 
     QRect groupExactBounds;
 
-    for (uint i = 0; i < childCount(); ++i)
-    {
-        groupExactBounds |= (at( i ))->exactBounds();
+    for (uint i = 0; i < childCount(); ++i) {
+        groupExactBounds |= (at(i))->exactBounds();
     }
 
     return groupExactBounds;
@@ -193,9 +190,8 @@ void KisGroupLayer::setX(qint32 x)
 {
     qint32 delta = x - m_d->x;
 
-    for (uint i = 0; i < childCount(); ++i)
-    {
-        KisNodeSP layer = at( i );
+    for (uint i = 0; i < childCount(); ++i) {
+        KisNodeSP layer = at(i);
         layer->setX(layer->x() + delta);
     }
     m_d->x = x;
@@ -210,9 +206,8 @@ void KisGroupLayer::setY(qint32 y)
 {
     qint32 delta = y - m_d->y;
 
-    for (uint i = 0; i < childCount(); ++i)
-    {
-        KisNodeSP layer = at( i );
+    for (uint i = 0; i < childCount(); ++i) {
+        KisNodeSP layer = at(i);
         layer->setY(layer->y() + delta);
     }
 
@@ -226,7 +221,7 @@ QImage KisGroupLayer::createThumbnail(qint32 w, qint32 h)
 
 void KisGroupLayer::updateProjection(const QRect & rc)
 {
-    m_d->projection = updateStrategy()->updateGroupLayerProjection( rc, m_d->projection );
+    m_d->projection = updateStrategy()->updateGroupLayerProjection(rc, m_d->projection);
 
 }
 

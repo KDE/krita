@@ -28,20 +28,20 @@ class KisImage;
 class KisPainter;
 class Histogram : public KParts::Plugin
 {
-        Q_OBJECT
-    public:
-        Histogram(QObject *parent, const QStringList &);
-        virtual ~Histogram();
+    Q_OBJECT
+public:
+    Histogram(QObject *parent, const QStringList &);
+    virtual ~Histogram();
 
-    private slots:
-        void slotActivated();
-        void slotLayersChanged();
+private slots:
+    void slotActivated();
+    void slotLayersChanged();
 
-    private:
-        KisImage* m_img;
-        KisView2 * m_view;
-        KisPainter * m_painter;
-        QAction * m_action;
+private:
+    KisImage* m_img;
+    KisView2 * m_view;
+    KisPainter * m_painter;
+    QAction * m_action;
 
 };
 

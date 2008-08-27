@@ -27,23 +27,24 @@
 class WdgSeparations : public QWidget, public Ui::WdgSeparations
 {
 public:
-  WdgSeparations( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
+    WdgSeparations(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
 /**
  * This dialog allows the user to configure the decomposition of an image
  * into layers: one layer for each color channel.
  */
-class DlgSeparate: public KDialog {
+class DlgSeparate: public KDialog
+{
     typedef KDialog super;
     Q_OBJECT
 
 public:
 
     DlgSeparate(const QString & imageCS, const QString & layerCS, QWidget * parent = 0,
-             const char* name = 0);
+                const char* name = 0);
     ~DlgSeparate();
 
 public:
@@ -59,7 +60,7 @@ public:
 
 
 private slots:
-    
+
     void slotSetColorSpaceLabel(int buttonid);
     void okClicked();
 

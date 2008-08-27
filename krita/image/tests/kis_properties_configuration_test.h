@@ -26,20 +26,20 @@ class KisPropertiesConfiguration;
 class KisPropertiesConfigurationTest : public QObject
 {
     Q_OBJECT
-    public:
-        KisPropertiesConfigurationTest();
-    private slots:
-        void testSetGet();
-        void testSerialization();
-        void testDefaultValues();
-    private:
-        KisPropertiesConfiguration* createConfig();
-        void testConfig(KisPropertiesConfiguration* config);
-    private:
-        int v1;
-        QString v2;
-        double v3;
-        bool v4;
+public:
+    KisPropertiesConfigurationTest();
+private slots:
+    void testSetGet();
+    void testSerialization();
+    void testDefaultValues();
+private:
+    KisPropertiesConfiguration* createConfig();
+    void testConfig(KisPropertiesConfiguration* config);
+private:
+    int v1;
+    QString v2;
+    double v3;
+    bool v4;
 };
 
 #endif

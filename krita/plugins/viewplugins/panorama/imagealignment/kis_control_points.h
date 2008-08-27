@@ -24,15 +24,16 @@
 class KisControlPoint;
 class KisInterestPoint;
 
-class KisControlPoints {
-  public:
+class KisControlPoints
+{
+public:
     KisControlPoints(int framesCount);
     ~KisControlPoints();
-    void addMatches( const lMatches& matches, int frameRef, int frameMatch );
-   void addControlPoint(const KisControlPoint& cp);
-    bool findControlPoint( const KisInterestPoint* , int imageNb, KisControlPoint& result );
+    void addMatches(const lMatches& matches, int frameRef, int frameMatch);
+    void addControlPoint(const KisControlPoint& cp);
+    bool findControlPoint(const KisInterestPoint* , int imageNb, KisControlPoint& result);
     const QList<KisControlPoint>& controlPoints() const;
-  private:
+private:
     struct Private;
     Private* const d;
 };

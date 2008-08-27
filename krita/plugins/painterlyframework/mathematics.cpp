@@ -21,7 +21,8 @@
 #include <cmath>
 #include <cstdio>
 
-namespace maths {
+namespace maths
+{
 
 double coth(double z)
 {
@@ -30,7 +31,7 @@ double coth(double z)
 
 double acoth(double z)
 {
-    return 0.5*log((1.0 + 1.0/z) / (1.0 - 1.0/z));
+    return 0.5*log((1.0 + 1.0 / z) / (1.0 - 1.0 / z));
 }
 
 double sigmoid(double v)
@@ -40,8 +41,8 @@ double sigmoid(double v)
 
 double smoothstep(double a, double b, double v)
 {
-    const double b1 = log(1.0/0.00247262 - 1.0);
-    const double b2 = log(1.0/0.99752737 - 1.0);
+    const double b1 = log(1.0 / 0.00247262 - 1.0);
+    const double b2 = log(1.0 / 0.99752737 - 1.0);
 
     if (a > b) {
         double tmp = a;
@@ -59,12 +60,12 @@ double smoothstep(double a, double b, double v)
 
     double del = -a + b;
     double del_k = b1 - b2;
-    double del_c = -a*b2 + b*b1;
+    double del_c = -a * b2 + b * b1;
 
-    double k = del_k/del;
-    double c = del_c/del;
+    double k = del_k / del;
+    double c = del_c / del;
 
-    double z = 1.0 / ( 1.0 + exp( -k*v + c ) );
+    double z = 1.0 / (1.0 + exp(-k * v + c));
 
     return z;
 }

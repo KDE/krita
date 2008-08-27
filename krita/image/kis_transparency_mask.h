@@ -44,17 +44,16 @@ public:
 
     virtual ~KisTransparencyMask();
 
-    KisNodeSP clone() const
-    {
+    KisNodeSP clone() const {
         return KisNodeSP(new KisTransparencyMask(*this));
     }
 
-    KisTransparencyMask( const KisTransparencyMask& rhs );
+    KisTransparencyMask(const KisTransparencyMask& rhs);
 
 
-    bool allowAsChild( KisNodeSP ) const;
+    bool allowAsChild(KisNodeSP) const;
 
-    virtual void apply( KisPaintDeviceSP projection, const QRect & rc ) const;
+    virtual void apply(KisPaintDeviceSP projection, const QRect & rc) const;
 
     bool accept(KisNodeVisitor &v);
 };

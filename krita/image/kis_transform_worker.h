@@ -27,7 +27,8 @@ class KisPaintDevice;
 class KoUpdater;
 class KisFilterStrategy;
 
-class KRITAIMAGE_EXPORT KisTransformWorker {
+class KRITAIMAGE_EXPORT KisTransformWorker
+{
 
 public:
     KisTransformWorker(KisPaintDeviceSP dev,
@@ -35,7 +36,7 @@ public:
                        double  xshear, double  yshear, double rotation,
                        qint32  xtranslate, qint32  ytranslate,
                        KoUpdater *progress,
-                       KisFilterStrategy *filter, bool fixBorderAlpha=false);
+                       KisFilterStrategy *filter, bool fixBorderAlpha = false);
     ~KisTransformWorker();
 
 public:

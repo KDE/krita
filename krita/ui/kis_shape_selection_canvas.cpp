@@ -25,8 +25,8 @@
 #include <KoShapeManager.h>
 
 KisShapeSelectionCanvas::KisShapeSelectionCanvas()
-    : KoCanvasBase( 0 )
-    , m_shapeManager( new KoShapeManager( this ) )
+        : KoCanvasBase(0)
+        , m_shapeManager(new KoShapeManager(this))
 {
 }
 
@@ -37,8 +37,8 @@ KisShapeSelectionCanvas::~KisShapeSelectionCanvas()
 void KisShapeSelectionCanvas::gridSize(double *horizontal, double *vertical) const
 {
     Q_ASSERT(false); // This should never be called as this canvas should have no tools.
-    Q_UNUSED( horizontal );
-    Q_UNUSED( vertical );
+    Q_UNUSED(horizontal);
+    Q_UNUSED(vertical);
 }
 
 bool KisShapeSelectionCanvas::snapToGrid() const
@@ -59,6 +59,7 @@ KoShapeManager *KisShapeSelectionCanvas::shapeManager() const
 
 void KisShapeSelectionCanvas::updateCanvas(const QRectF& rc)
 {
+    Q_UNUSED(rc);
 }
 
 KoToolProxy * KisShapeSelectionCanvas::toolProxy() const

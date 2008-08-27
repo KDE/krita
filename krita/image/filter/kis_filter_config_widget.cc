@@ -19,7 +19,7 @@
 #include "filter/kis_filter_config_widget.h"
 
 KisFilterConfigWidget::KisFilterConfigWidget(QWidget * parent, Qt::WFlags f)
-    : QWidget(parent, f)
+        : QWidget(parent, f)
 {
 }
 

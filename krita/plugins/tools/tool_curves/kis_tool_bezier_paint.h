@@ -24,7 +24,8 @@
 #include "KoToolFactory.h"
 #include "kis_tool_bezier.h"
 
-class KisToolBezierPaint : public KisToolBezier {
+class KisToolBezierPaint : public KisToolBezier
+{
 
     typedef KisToolBezier super;
     Q_OBJECT
@@ -41,19 +42,19 @@ protected:
 
 };
 
-class KisToolBezierPaintFactory : public KoToolFactory {
+class KisToolBezierPaintFactory : public KoToolFactory
+{
 
 public:
     KisToolBezierPaintFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolBezierPaint", i18n( "Paint with curves" ))
-        {
-            setToolTip(i18n("Draw cubic Beziers. Keep Alt, Control or Shift pressed for options. Return or double-click to finish."));
-            setToolType(TOOL_TYPE_SHAPE);
-            setPriority(7);
-            setIcon("tool_bezier_paint");
-        };
+            : KoToolFactory(parent, "KisToolBezierPaint", i18n("Paint with curves")) {
+        setToolTip(i18n("Draw cubic Beziers. Keep Alt, Control or Shift pressed for options. Return or double-click to finish."));
+        setToolType(TOOL_TYPE_SHAPE);
+        setPriority(7);
+        setIcon("tool_bezier_paint");
+    };
 
-    virtual ~KisToolBezierPaintFactory(){}
+    virtual ~KisToolBezierPaintFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolBezierPaint(canvas);

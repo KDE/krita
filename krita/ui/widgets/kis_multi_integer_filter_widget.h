@@ -46,12 +46,12 @@ signals:
 
 private:
 
-        QTimer * m_timer;
+    QTimer * m_timer;
 };
 
 
 struct KisIntegerWidgetParam {
-    KRITAUI_EXPORT KisIntegerWidgetParam(  qint32 nmin, qint32 nmax, qint32 ninitvalue, const QString & label, const QString & nname);
+    KRITAUI_EXPORT KisIntegerWidgetParam(qint32 nmin, qint32 nmax, qint32 ninitvalue, const QString & label, const QString & nname);
     qint32 min;
     qint32 max;
     qint32 initvalue;
@@ -71,8 +71,12 @@ public:
     virtual KisFilterConfiguration* configuration() const;
 
 public:
-    inline qint32 nbValues() const { return m_nbintegerWidgets; }
-    inline qint32 valueAt( qint32 i ) { return m_integerWidgets[i]->value(); }
+    inline qint32 nbValues() const {
+        return m_nbintegerWidgets;
+    }
+    inline qint32 valueAt(qint32 i) {
+        return m_integerWidgets[i]->value();
+    }
 
 private:
     qint32 m_nbintegerWidgets;

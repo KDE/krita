@@ -41,11 +41,11 @@
 #include "kis_tool_move.h"
 
 typedef KGenericFactory<DefaultTools> DefaultToolsFactory;
-K_EXPORT_COMPONENT_FACTORY( kritadefaulttools, DefaultToolsFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritadefaulttools, DefaultToolsFactory("krita"))
 
 
 DefaultTools::DefaultTools(QObject *parent, const QStringList &)
-    : QObject(parent)
+        : QObject(parent)
 {
     KoToolRegistry * r = KoToolRegistry::instance();
 

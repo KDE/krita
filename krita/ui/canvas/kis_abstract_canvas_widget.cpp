@@ -30,42 +30,41 @@
 #include "../kis_view2.h"
 #include "../kis_selection_manager.h"
 
-void KisAbstractCanvasWidget::drawDecorations( QPainter & gc, bool ants, bool tools,
-                                               const QPoint & documentOffset,
-                                               const QRect & clipRect,
-                                               KisCanvas2 * canvas)
+void KisAbstractCanvasWidget::drawDecorations(QPainter & gc, bool ants, bool tools,
+        const QPoint & documentOffset,
+        const QRect & clipRect,
+        KisCanvas2 * canvas)
 {
     // Setup the painter to take care of the offset; all that the
     // classes that do painting need to keep track of is resolution
-    gc.setRenderHint( QPainter::Antialiasing );
-    gc.setRenderHint( QPainter::TextAntialiasing );
-    gc.setRenderHint( QPainter::HighQualityAntialiasing );
-    gc.setRenderHint( QPainter::SmoothPixmapTransform );
-    gc.translate( QPoint( -documentOffset.x(), -documentOffset.y() ) );
+    gc.setRenderHint(QPainter::Antialiasing);
+    gc.setRenderHint(QPainter::TextAntialiasing);
+    gc.setRenderHint(QPainter::HighQualityAntialiasing);
+    gc.setRenderHint(QPainter::SmoothPixmapTransform);
+    gc.translate(QPoint(-documentOffset.x(), -documentOffset.y()));
 
     // Paint the shapes (other than the layers)
     gc.save();
-    gc.setClipRect( clipRect );
-    canvas->globalShapeManager()->paint( gc, *canvas->viewConverter(), false );
+    gc.setClipRect(clipRect);
+    canvas->globalShapeManager()->paint(gc, *canvas->viewConverter(), false);
     gc.restore();
 
     //Paint marching ants and selection shapes
-    if ( ants ) {
+    if (ants) {
         gc.save();
-        canvas->view()->selectionManager()->paint(gc, *canvas->viewConverter() );
+        canvas->view()->selectionManager()->paint(gc, *canvas->viewConverter());
         gc.restore();
     }
 
     // ask the decorations to paint themselves
-    foreach( KisCanvasDecoration* deco, m_decorations)
-    {
-        deco->paint(gc, documentOffset, clipRect, *canvas->viewConverter() );
+    foreach(KisCanvasDecoration* deco, m_decorations) {
+        deco->paint(gc, documentOffset, clipRect, *canvas->viewConverter());
     }
-    
+
     // Give the tool a chance to paint its stuff
-    if ( tools ) {
+    if (tools) {
         gc.save();
-        toolProxy()->paint(gc, *canvas->viewConverter() );
+        toolProxy()->paint(gc, *canvas->viewConverter());
         gc.restore();
     }
 
@@ -87,15 +86,13 @@ QImage KisAbstractCanvasWidget::checkImage(qint32 checkSize)
 
 void KisAbstractCanvasWidget::addDecoration(KisCanvasDecoration* deco)
 {
-    m_decorations.push_back( deco );
+    m_decorations.push_back(deco);
 }
 
 KisCanvasDecoration* KisAbstractCanvasWidget::decoration(const QString& id)
 {
-    foreach( KisCanvasDecoration* deco, m_decorations)
-    {
-        if(deco->id() == id)
-        {
+    foreach(KisCanvasDecoration* deco, m_decorations) {
+        if (deco->id() == id) {
             return deco;
         }
     }

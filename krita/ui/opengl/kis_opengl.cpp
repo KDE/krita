@@ -18,7 +18,7 @@
 
 #include "opengl/kis_opengl.h"
 
-#include "config-glew.h"
+#include <config-glew.h>
 
 #ifdef HAVE_OPENGL
 
@@ -49,7 +49,7 @@ void KisOpenGL::createContext()
 {
     Q_ASSERT(SharedContextWidget == 0);
 
-    dbgUI <<"Creating shared context widget";
+    dbgUI << "Creating shared context widget";
 
     SharedContextWidget = new QGLWidget();//KisOpenGLCanvasFormat);
     SharedContextWidget->makeCurrent();
@@ -74,9 +74,9 @@ void KisOpenGL::initGlew()
 #ifdef HAVE_GLEW
     GLenum err = glewInit();
     if (GLEW_OK != err) {
-        dbgUI <<"glewInit error:" << (const char *)glewGetErrorString(err);
+        dbgUI << "glewInit error:" << (const char *)glewGetErrorString(err);
     } else {
-        dbgUI <<"Status: Using GLEW" << (const char *)glewGetString(GLEW_VERSION);
+        dbgUI << "Status: Using GLEW" << (const char *)glewGetString(GLEW_VERSION);
     }
 #endif
 }
@@ -90,11 +90,11 @@ bool KisOpenGL::hasShadingLanguage()
         makeContextCurrent();
 
         if (GLEW_ARB_shader_objects && GLEW_ARB_vertex_shader && GLEW_ARB_fragment_shader
-            && GLEW_ARB_shading_language_100) {
-            dbgUI <<"Check: have opengl shading extensions";
+                && GLEW_ARB_shading_language_100) {
+            dbgUI << "Check: have opengl shading extensions";
             haveShadingLanguage = true;
         } else {
-            dbgUI <<"Check: we do not have opengl shading extensions";
+            dbgUI << "Check: we do not have opengl shading extensions";
         }
     }
 #endif
@@ -107,13 +107,13 @@ void KisOpenGL::printError(const char *file, int line)
 
     while (glErr != GL_NO_ERROR) {
 
-        dbgUI <<"glError:" << (const char *)gluErrorString(glErr);
+        dbgUI << "glError:" << (const char *)gluErrorString(glErr);
 
         if (file != 0) {
             if (line != -1) {
-                dbgUI <<" at" << file <<" line" << line;
+                dbgUI << " at" << file << " line" << line;
             } else {
-                dbgUI <<" in" << file;
+                dbgUI << " in" << file;
             }
         }
 

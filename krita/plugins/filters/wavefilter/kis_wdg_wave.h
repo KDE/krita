@@ -29,15 +29,17 @@ class KisFilter;
 class KisWdgWave : public KisFilterConfigWidget
 {
     Q_OBJECT
-    public:
-        KisWdgWave(KisFilter* nfilter, QWidget* parent = 0);
-        ~KisWdgWave();
-    public:
-        inline const Ui_WdgWaveOptions* widget() const { return m_widget; }
-        virtual void setConfiguration(KisFilterConfiguration*);
-        virtual KisFilterConfiguration* configuration() const;
-    private:
-      Ui_WdgWaveOptions* m_widget;
+public:
+    KisWdgWave(KisFilter* nfilter, QWidget* parent = 0);
+    ~KisWdgWave();
+public:
+    inline const Ui_WdgWaveOptions* widget() const {
+        return m_widget;
+    }
+    virtual void setConfiguration(KisFilterConfiguration*);
+    virtual KisFilterConfiguration* configuration() const;
+private:
+    Ui_WdgWaveOptions* m_widget;
 };
 
 #endif

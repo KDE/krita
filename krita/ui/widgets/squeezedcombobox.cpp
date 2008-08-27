@@ -31,8 +31,8 @@
 #include <QToolTip>
 #include <QResizeEvent>
 
-SqueezedComboBox::SqueezedComboBox( QWidget *parent, const char *name )
-    : QComboBox(parent)
+SqueezedComboBox::SqueezedComboBox(QWidget *parent, const char *name)
+        : QComboBox(parent)
 {
     setObjectName(name);
     setMinimumWidth(100);
@@ -52,16 +52,14 @@ SqueezedComboBox::~SqueezedComboBox()
     delete m_timer;
 }
 
-bool SqueezedComboBox::contains( const QString& _text ) const
+bool SqueezedComboBox::contains(const QString& _text) const
 {
-    if ( _text.isEmpty() )
+    if (_text.isEmpty())
         return false;
 
     for (QMap<int, QString>::const_iterator it = m_originalItems.begin() ; it != m_originalItems.end();
-         ++it)
-    {
-        if (it.value() == _text)
-        {
+            ++it) {
+        if (it.value() == _text) {
             return true;
         }
     }
@@ -74,7 +72,7 @@ QSize SqueezedComboBox::sizeHint() const
     QFontMetrics fm = fontMetrics();
 
     int maxW = count() ? 18 : 7 * fm.width(QChar('x')) + 18;
-    int maxH = qMax( fm.lineSpacing(), 14 ) + 2;
+    int maxH = qMax(fm.lineSpacing(), 14) + 2;
 
     QStyleOptionComboBox options;
     options.initFrom(this);
@@ -107,7 +105,7 @@ void SqueezedComboBox::setCurrent(const QString& itemText)
     }
 }
 
-void SqueezedComboBox::resizeEvent ( QResizeEvent * )
+void SqueezedComboBox::resizeEvent(QResizeEvent *)
 {
     m_timer->start(200);
 }
@@ -115,17 +113,16 @@ void SqueezedComboBox::resizeEvent ( QResizeEvent * )
 void SqueezedComboBox::slotTimeOut()
 {
     for (QMap<int, QString>::iterator it = m_originalItems.begin() ; it != m_originalItems.end();
-         ++it)
-    {
-        setItemText( it.key(), squeezeText( it.value() ) );
+            ++it) {
+        setItemText(it.key(), squeezeText(it.value()));
     }
 }
 
-QString SqueezedComboBox::squeezeText( const QString& original)
+QString SqueezedComboBox::squeezeText(const QString& original)
 {
     // not the complete widgetSize is usable. Need to compensate for that.
-    int widgetSize = width()-30;
-    QFontMetrics fm( fontMetrics() );
+    int widgetSize = width() - 30;
+    QFontMetrics fm(fontMetrics());
 
     // If we can fit the full text, return that.
     if (fm.width(original) < widgetSize)
@@ -133,11 +130,9 @@ QString SqueezedComboBox::squeezeText( const QString& original)
 
     // We need to squeeze.
     QString sqItem = original; // prevent empty return value;
-    widgetSize = widgetSize-fm.width("...");
-    for (int i = 0 ; i != original.length(); ++i)
-    {
-        if ( (int)fm.width(original.right(i)) > widgetSize)
-        {
+    widgetSize = widgetSize - fm.width("...");
+    for (int i = 0 ; i != original.length(); ++i) {
+        if ((int)fm.width(original.right(i)) > widgetSize) {
             sqItem = QString("..." + original.right(--i));
             break;
         }
@@ -145,7 +140,7 @@ QString SqueezedComboBox::squeezeText( const QString& original)
     return sqItem;
 }
 
-void SqueezedComboBox::slotUpdateToolTip( int /*index*/ )
+void SqueezedComboBox::slotUpdateToolTip(int /*index*/)
 {
 //     QToolTip::remove(this); XXX
 //     this->setToolTip( m_originalItems[index]);

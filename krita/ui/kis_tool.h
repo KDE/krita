@@ -44,7 +44,7 @@ static const QString TOOL_TYPE_SELECTED = "5 Krita/Select"; // Tools that select
 
 
 class  KRITAUI_EXPORT KisTool
-    : public KoTool
+            : public KoTool
 {
     Q_OBJECT
 
@@ -61,34 +61,34 @@ public slots:
 
     virtual void deactivate();
 
-    virtual void resourceChanged( int key, const QVariant & res );
+    virtual void resourceChanged(int key, const QVariant & res);
 
 public:
 
     /// reimplemented from superclass
-    virtual void mousePressEvent( KoPointerEvent *event );
+    virtual void mousePressEvent(KoPointerEvent *event);
 
     /// reimplemented from superclass
-    virtual void mouseMoveEvent( KoPointerEvent *event );
+    virtual void mouseMoveEvent(KoPointerEvent *event);
 
     /// reimplemented from superclass
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
 
     /// reimplemented from superclass
-    virtual void mouseDoubleClickEvent( KoPointerEvent *) {} // when a krita tool is enabled, don't push double click on
+    virtual void mouseDoubleClickEvent(KoPointerEvent *) {}  // when a krita tool is enabled, don't push double click on
 
     /// Convert from native (postscript points) to image pixel
     /// coordinates.
-    QPointF convertToPixelCoord( KoPointerEvent *e );
-    QPointF convertToPixelCoord( const QPointF& pt );
+    QPointF convertToPixelCoord(KoPointerEvent *e);
+    QPointF convertToPixelCoord(const QPointF& pt);
 
     /// Convert from native (postscript points) to integer image pixel
     /// coordinates. This truncates the floating point components and
     /// should be used in preference to QPointF::toPoint(), which rounds,
     /// to ensure the cursor acts on the pixel it is visually over.
-    QPoint convertToIntPixelCoord( KoPointerEvent *e );
+    QPoint convertToIntPixelCoord(KoPointerEvent *e);
 
-    QRectF convertToPt( const QRectF &rect );
+    QRectF convertToPt(const QRectF &rect);
 
     QPointF viewToPixel(const QPointF &viewCoord);
     /// Convert an integer pixel coordinate into a view coordinate.

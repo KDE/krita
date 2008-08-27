@@ -32,14 +32,15 @@ class KisHistogramWidget;
  *
  * XXX: Also for complete image?
  */
-class DlgHistogram: public KDialog {
+class DlgHistogram: public KDialog
+{
     typedef KDialog super;
     Q_OBJECT
 
 public:
 
     DlgHistogram(QWidget * parent = 0,
-             const char* name = 0);
+                 const char* name = 0);
     ~DlgHistogram();
 
     void setPaintDevice(KisPaintDeviceSP dev);

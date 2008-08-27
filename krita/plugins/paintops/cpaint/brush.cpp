@@ -33,60 +33,60 @@
 #define SPREAD 1/350
 
 
-Brush::Brush ( int s )
+Brush::Brush(int s)
 {
     m_bristles = 0;
-    setSize ( s );
-    for ( int i = 0; i < 3; i++ )
+    setSize(s);
+    for (int i = 0; i < 3; i++)
         addInk();
 }
 
-Brush::~Brush ()
+Brush::~Brush()
 {
-    if ( m_bristles )
+    if (m_bristles)
         delete m_bristles;
 }
 
-void Brush::setInitialPosition ( double x, double y )
+void Brush::setInitialPosition(double x, double y)
 {
     int i;
 
-    for ( i=0; i < m_numBristles; i++ ) {
-        m_bristles[i].setInitialPosition ( x, y );
+    for (i = 0; i < m_numBristles; i++) {
+        m_bristles[i].setInitialPosition(x, y);
     }
 }
 
 
-void Brush::setSize ( int s )
+void Brush::setSize(int s)
 {
     m_size = s;
     setBristlesPos();
 }
 
 
-void Brush::repositionBristles ( double pre )
+void Brush::repositionBristles(double pre)
 {
     double x, y, dx, dy, px, py, maxradius;
     int i;
 
-    if ( pre <= 1.0 ) pre = 1.0;  // make sure pressure is at least 1
-    m_radius = m_size * RADIUS_INCRE * ( 1 + pre * SPREAD );
-    maxradius = 6 * RADIUS_INCRE * ( 1 + MAXPRESSURE * SPREAD );
-    dx = DX * ( 1 + pre*SPREAD );
-    dy = DY * ( 1 + pre*SPREAD );
+    if (pre <= 1.0) pre = 1.0;    // make sure pressure is at least 1
+    m_radius = m_size * RADIUS_INCRE * (1 + pre * SPREAD);
+    maxradius = 6 * RADIUS_INCRE * (1 + MAXPRESSURE * SPREAD);
+    dx = DX * (1 + pre * SPREAD);
+    dy = DY * (1 + pre * SPREAD);
 
     x = y = -1.0 * m_radius;
     i = 0;
-    while ( x < m_radius && i < m_numBristles ) {
-        while ( y < m_radius ) {
-            if ( x*x + y*y < m_radius * m_radius ) {
-                px = gauss::gaussian ( x, .5*DX, 1 );
-                py = gauss::gaussian ( y, .5*DY, 1 );
-                if ( fabs (px) > x+DX )
+    while (x < m_radius && i < m_numBristles) {
+        while (y < m_radius) {
+            if (x*x + y*y < m_radius * m_radius) {
+                px = gauss::gaussian(x, .5 * DX, 1);
+                py = gauss::gaussian(y, .5 * DY, 1);
+                if (fabs(px) > x + DX)
                     px = x;
-                if ( fabs (py) > y+DY )
+                if (fabs(py) > y + DY)
                     py = y;
-                m_bristles[i++].setPos ( px, py );
+                m_bristles[i++].setPos(px, py);
             }
             y += dy;
         }
@@ -98,75 +98,75 @@ void Brush::repositionBristles ( double pre )
     int indx, i1, i2, i3, i4;
     double rn;
 
-    if ( m_size > 1 ) {
-        for ( i=0; i< m_numBristles * 0.01 * m_size; i++ ) {
-            rn = ( double ) rand ();
+    if (m_size > 1) {
+        for (i = 0; i < m_numBristles * 0.01 * m_size; i++) {
+            rn = (double) rand();
             rn = rn / RAND_MAX * m_numBristles;
-            indx = ( int ) rn;
-            if ( indx > m_numBristles - 1 )
+            indx = (int) rn;
+            if (indx > m_numBristles - 1)
                 indx = m_numBristles / 2;
-            if ( indx > m_numBristles - 2 )
+            if (indx > m_numBristles - 2)
                 indx = indx - 2;
-            if ( indx < 2 )
+            if (indx < 2)
                 indx = 2;
 
-            if ( m_bristles[indx-2].getInkAmount() - m_size < 0 )
+            if (m_bristles[indx-2].getInkAmount() - m_size < 0)
                 i1 = m_bristles[indx-2].getInkAmount();
             else
                 i1 = m_size;
-            if ( m_bristles[indx-1].getInkAmount() - m_size < 0 )
+            if (m_bristles[indx-1].getInkAmount() - m_size < 0)
                 i2 = m_bristles[indx-1].getInkAmount();
             else
                 i2 =  m_size;
-            if ( m_bristles[indx+1].getInkAmount() - m_size < 0 )
+            if (m_bristles[indx+1].getInkAmount() - m_size < 0)
                 i3 = m_bristles[indx+1].getInkAmount();
             else
                 i3 =  m_size;
-            if ( m_bristles[indx+2].getInkAmount() - m_size < 0 )
+            if (m_bristles[indx+2].getInkAmount() - m_size < 0)
                 i4 = m_bristles[indx+2].getInkAmount();
             else
                 i4 =  m_size;
-            m_bristles[indx-2].setInkAmount ( m_bristles[indx-2].getInkAmount()-i1 );
-            m_bristles[indx-1].setInkAmount ( m_bristles[indx-2].getInkAmount()-i2 );
-            m_bristles[indx+1].setInkAmount ( m_bristles[indx+1].getInkAmount()-i3 );
-            m_bristles[indx+2].setInkAmount ( m_bristles[indx+2].getInkAmount()-i4 );
-            m_bristles[indx].setInkAmount ( m_bristles[indx].getInkAmount()+i1+i2+i3+i4 );
+            m_bristles[indx-2].setInkAmount(m_bristles[indx-2].getInkAmount() - i1);
+            m_bristles[indx-1].setInkAmount(m_bristles[indx-2].getInkAmount() - i2);
+            m_bristles[indx+1].setInkAmount(m_bristles[indx+1].getInkAmount() - i3);
+            m_bristles[indx+2].setInkAmount(m_bristles[indx+2].getInkAmount() - i4);
+            m_bristles[indx].setInkAmount(m_bristles[indx].getInkAmount() + i1 + i2 + i3 + i4);
         }
     }
 }
 
 
-void Brush::setBristlesPos ()
+void Brush::setBristlesPos()
 {
     double x, y, p, tx, ty, maxradius, px, py, xxyy;
     int i, j;
     m_numBristles = 0;
-    m_radius =  m_size * RADIUS_INCRE * ( 1 + 1/500.0 );
-    maxradius = 6 * RADIUS_INCRE * ( 1 + MAXPRESSURE/500.0 );
-    i = ( int )( pow ( m_radius / DX * m_radius / DY, 2 ) * 4 );
-    if ( m_bristles ) {
+    m_radius =  m_size * RADIUS_INCRE * (1 + 1 / 500.0);
+    maxradius = 6 * RADIUS_INCRE * (1 + MAXPRESSURE / 500.0);
+    i = (int)(pow(m_radius / DX * m_radius / DY, 2) * 4);
+    if (m_bristles) {
         delete[] m_bristles;
     }
     m_bristles = new Bristle[i];
     x = y = -1.0 * m_radius;
-    while ( x <  m_radius ) {
-        while ( y <  m_radius ) {
-            if ( (xxyy=(x*x + y*y)) <  m_radius* m_radius ) {
-                px = gauss::gaussian ( x, .5*DX, 1 );
-                if ( fabs (px) > x+DX )
+    while (x <  m_radius) {
+        while (y <  m_radius) {
+            if ((xxyy = (x * x + y * y)) <  m_radius * m_radius) {
+                px = gauss::gaussian(x, .5 * DX, 1);
+                if (fabs(px) > x + DX)
                     px = x;
-                py = gauss::gaussian ( y, .5*DY, 1 );
-                if ( fabs (py) > y+DY )
+                py = gauss::gaussian(y, .5 * DY, 1);
+                if (fabs(py) > y + DY)
                     py = y;
-                m_bristles[m_numBristles].setPos ( px, py );
-                p = sqrt(px * px + py * py)/( m_radius) * MAXPRESSURE;
-                m_bristles[m_numBristles].setPreThres ( p );
+                m_bristles[m_numBristles].setPos(px, py);
+                p = sqrt(px * px + py * py) / (m_radius) * MAXPRESSURE;
+                m_bristles[m_numBristles].setPreThres(p);
 
                 tx = (px /  m_radius) * (px /  m_radius) * 60.0;
                 ty = (py /  m_radius) * (py /  m_radius) * 60.0;
 
-                m_bristles[m_numBristles].setTXThres ( tx );
-                m_bristles[m_numBristles].setTYThres ( ty );
+                m_bristles[m_numBristles].setTXThres(tx);
+                m_bristles[m_numBristles].setTYThres(ty);
                 m_numBristles++;
             }
             y += DY;
@@ -175,48 +175,48 @@ void Brush::setBristlesPos ()
         x += DX;
     }
 
-    for ( j = 0; j < m_numBristles; j++ ) {
-        m_bristles[j].initializeThickness ( m_size );
+    for (j = 0; j < m_numBristles; j++) {
+        m_bristles[j].initializeThickness(m_size);
     }
 }
 
-void Brush::addInk ()
+void Brush::addInk()
 {
     int totalInk = m_numBristles * MAXINK * 0.2;
-    for ( int i = 0; i < totalInk; i++ ) {
+    for (int i = 0; i < totalInk; i++) {
 
-        double rn = ( double ) rand ();
+        double rn = (double) rand();
         rn = rn / RAND_MAX * m_numBristles;
-        int indx = ( int ) rn;
+        int indx = (int) rn;
 
-        if ( indx > m_numBristles - 1 )
+        if (indx > m_numBristles - 1)
             indx = m_numBristles / 2;
 
-        if ( m_bristles[indx].getInkAmount() < MAXINK ) {
+        if (m_bristles[indx].getInkAmount() < MAXINK) {
             double ink = m_bristles[indx].distanceFromCenter() / m_radius;
-            ink = 10.0 / ink + gauss::gaussian ( 10.0, 5.0, 0 );
+            ink = 10.0 / ink + gauss::gaussian(10.0, 5.0, 0);
             double ink2 = ink;
-            if ( ink2 > 200 ) ink2 = 200;
-            m_bristles[indx].addInk ( ink2 );
+            if (ink2 > 200) ink2 = 200;
+            m_bristles[indx].addInk(ink2);
             totalInk -= ink2;
         }
     }
 }
 
 
-void Brush::removeInk ()
+void Brush::removeInk()
 {
     int totalInk = m_numBristles * MAXINK * 0.2;
-    for ( int i = 0; i < totalInk; i++ ) {
+    for (int i = 0; i < totalInk; i++) {
 
-        double rn = ( double ) rand ();
+        double rn = (double) rand();
         rn = rn / RAND_MAX * m_numBristles;
-        int indx = ( int ) rn;
+        int indx = (int) rn;
 
-        if ( indx > m_numBristles-1 )
+        if (indx > m_numBristles - 1)
             indx = m_numBristles / 2;
 
-        if ( m_bristles[indx].getInkAmount() > 0 ) {
+        if (m_bristles[indx].getInkAmount() > 0) {
             m_bristles[indx].depleteInk(1);
             totalInk--;
         }

@@ -33,7 +33,8 @@
  * KisPixelSelection contains a byte-map representation of a layer, where
  * the value of a byte signifies whether a corresponding pixel is selected, or not.
  */
-class KRITAIMAGE_EXPORT KisPixelSelection : public KisPaintDevice, public KisSelectionComponent {
+class KRITAIMAGE_EXPORT KisPixelSelection : public KisPaintDevice, public KisSelectionComponent
+{
 
 public:
 
@@ -67,7 +68,7 @@ public:
      * Return a grayscale QImage representing the selectedness as grayscale
      * pixels of the specified rect of this pixel selection.
      */
-    QImage maskImage( const QRect & rc ) const;
+    QImage maskImage(const QRect & rc) const;
 
     /**
      * Fill the specified rect with the specified selectedness.
@@ -78,7 +79,7 @@ public:
      * Invert the total selection. This will also invert the default value
      * of the selection paint device, from MIN_SELECTED to MAX_SELECTED or
      * back.
-     */ 
+     */
     void invert();
 
     /**
@@ -160,25 +161,24 @@ private:
 
     // We don't want these methods to be used on selections:
 
-    QRect extent() const
-        {
-            return KisPaintDevice::extent();
-        }
+    QRect extent() const {
+        return KisPaintDevice::extent();
+    }
 
-    QRect exactBounds() const
-        {
-            return KisPaintDevice::exactBounds();
-        }
+    QRect exactBounds() const {
+        return KisPaintDevice::exactBounds();
+    }
 
 
-    enum EdgeType
-    {
+    enum EdgeType {
         TopEdge = 1, LeftEdge = 2, BottomEdge = 3, RightEdge = 0, NoEdge = 4
     };
 
     bool isOutlineEdge(EdgeType edge, qint32 row, qint32 col, quint8* buffer, qint32 width, qint32 height);
 
-    EdgeType nextEdge(EdgeType edge) { return edge == NoEdge ? edge : static_cast<EdgeType>((edge + 1) % 4); }
+    EdgeType nextEdge(EdgeType edge) {
+        return edge == NoEdge ? edge : static_cast<EdgeType>((edge + 1) % 4);
+    }
 
     void nextOutlineEdge(EdgeType *edge, qint32 *row, qint32 *col, quint8* buffer, qint32 bufWidth, qint32 bufHeight);
 

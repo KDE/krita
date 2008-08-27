@@ -23,10 +23,10 @@
 #include <QDomDocument>
 #include <QString>
 
-void KisSerializableConfiguration::fromXML(const QString & s )
+void KisSerializableConfiguration::fromXML(const QString & s)
 {
     QDomDocument doc;
-    doc.setContent( s );
+    doc.setContent(s);
     QDomElement e = doc.documentElement();
     fromXML(e);
 }
@@ -34,8 +34,8 @@ void KisSerializableConfiguration::fromXML(const QString & s )
 QString KisSerializableConfiguration::toXML() const
 {
     QDomDocument doc = QDomDocument("params");
-    QDomElement root = doc.createElement( "params" );
-    doc.appendChild( root );
+    QDomElement root = doc.createElement("params");
+    doc.appendChild(root);
     toXML(doc, root);
     return doc.toString();
 }

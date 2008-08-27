@@ -38,7 +38,7 @@
 #include "ui_wdgfastcolortransfer.h"
 
 typedef KGenericFactory<FastColorTransferPlugin> KritaFastColorTransferFactory;
-K_EXPORT_COMPONENT_FACTORY( kritafastcolortransferfilter, KritaFastColorTransferFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritafastcolortransferfilter, KritaFastColorTransferFactory("krita"))
 
 
 FastColorTransferPlugin::FastColorTransferPlugin(QObject *parent, const QStringList &)
@@ -59,11 +59,11 @@ FastColorTransferPlugin::~FastColorTransferPlugin()
 
 KisFilterFastColorTransfer::KisFilterFastColorTransfer() : KisFilter(id(), CategoryColors, i18n("&Color Transfer..."))
 {
-    setColorSpaceIndependence( FULLY_INDEPENDENT );
-    setSupportsPainting( true );
-    setSupportsPreview( true );
-    setSupportsIncrementalPainting( false );
-    setSupportsAdjustmentLayers( false );
+    setColorSpaceIndependence(FULLY_INDEPENDENT);
+    setSupportsPainting(true);
+    setSupportsPreview(true);
+    setSupportsIncrementalPainting(false);
+    setSupportsAdjustmentLayers(false);
 }
 
 
@@ -77,18 +77,18 @@ KisFilterConfigWidget * KisFilterFastColorTransfer::createConfigurationWidget(QW
 KisFilterConfiguration* KisFilterFastColorTransfer::factoryConfiguration(const KisPaintDeviceSP) const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
-    config->setProperty("filename", "" ); // TODO: put an exemple image in share/krita, like a sunset that what's give the best results
+    config->setProperty("filename", "");  // TODO: put an exemple image in share/krita, like a sunset that what's give the best results
     return config;
 }
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
 void KisFilterFastColorTransfer::process(KisConstProcessingInformation srcInfo,
-                 KisProcessingInformation dstInfo,
-                 const QSize& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-        ) const
+        KisProcessingInformation dstInfo,
+        const QSize& size,
+        const KisFilterConfiguration* config,
+        KoUpdater* progressUpdater
+                                        ) const
 {
     const KisPaintDeviceSP src = srcInfo.paintDevice();
     KisPaintDeviceSP dst = dstInfo.paintDevice();
@@ -97,15 +97,14 @@ void KisFilterFastColorTransfer::process(KisConstProcessingInformation srcInfo,
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
 
-    dbgPlugins <<"Start transferring color";
+    dbgPlugins << "Start transferring color";
     QVariant value;
     QString fileName;
-    if (config && config->getProperty("filename", value))
-    {
+    if (config && config->getProperty("filename", value)) {
         fileName = value.toString();
     } else {
         // XXX: Make this a warning message box!
-        dbgPlugins <<"No file name for the reference image was specified.";
+        dbgPlugins << "No file name for the reference image was specified.";
         return;
     }
 
@@ -116,21 +115,18 @@ void KisFilterFastColorTransfer::process(KisConstProcessingInformation srcInfo,
     d.importDocument(fileName);
     KisImageSP importedImage = d.image();
 
-    if(importedImage)
-    {
+    if (importedImage) {
         ref = importedImage->projection();
     }
-    if(!ref)
-    {
-        dbgPlugins <<"No reference image was specified.";
+    if (!ref) {
+        dbgPlugins << "No reference image was specified.";
         return;
     }
 
     // Convert ref and src to LAB
     const KoColorSpace* labCS = KoColorSpaceRegistry::instance()->lab16();
-    if(!labCS)
-    {
-        dbgPlugins <<"The LAB colorspace is not available.";
+    if (!labCS) {
+        dbgPlugins << "The LAB colorspace is not available.";
         return;
     }
     dbgPlugins << "convert a copy of src to lab";
@@ -142,9 +138,8 @@ void KisFilterFastColorTransfer::process(KisConstProcessingInformation srcInfo,
     dbgPlugins << "ref : " << srcLAB->extent();
     ref->convertTo(labCS);
 
-    if( progressUpdater )
-    {
-        progressUpdater->setRange(0, 2*size.width() * size.height() + importedImage->width() * importedImage->height() );
+    if (progressUpdater) {
+        progressUpdater->setRange(0, 2*size.width() * size.height() + importedImage->width() * importedImage->height());
     }
     int count = 0;
 
@@ -152,9 +147,8 @@ void KisFilterFastColorTransfer::process(KisConstProcessingInformation srcInfo,
     dbgPlugins << "Compute the means and sigmas of src";
     double meanL_src = 0., meanA_src = 0., meanB_src = 0.;
     double sigmaL_src = 0., sigmaA_src = 0., sigmaB_src = 0.;
-    KisRectConstIteratorPixel srcLABIt = srcLAB->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), srcInfo.selection() );
-    while(!srcLABIt.isDone() && !(progressUpdater && progressUpdater->interrupted()))
-    {
+    KisRectConstIteratorPixel srcLABIt = srcLAB->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), srcInfo.selection());
+    while (!srcLABIt.isDone() && !(progressUpdater && progressUpdater->interrupted())) {
         const quint16* data = reinterpret_cast<const quint16*>(srcLABIt.oldRawData());
         quint32 L = data[0];
         quint32 A = data[1];
@@ -162,27 +156,26 @@ void KisFilterFastColorTransfer::process(KisConstProcessingInformation srcInfo,
         meanL_src += L;
         meanA_src += A;
         meanB_src += B;
-        sigmaL_src += L*L;
-        sigmaA_src += A*A;
-        sigmaB_src += B*B;
+        sigmaL_src += L * L;
+        sigmaA_src += A * A;
+        sigmaB_src += B * B;
         ++srcLABIt;
-        if(progressUpdater) progressUpdater->setValue(++count);
+        if (progressUpdater) progressUpdater->setValue(++count);
     }
-    double totalSize = 1. / ( size.width() * size.height() );
+    double totalSize = 1. / (size.width() * size.height());
     meanL_src *= totalSize;
     meanA_src *= totalSize;
     meanB_src *= totalSize;
     sigmaL_src *= totalSize;
     sigmaA_src *= totalSize;
     sigmaB_src *= totalSize;
-    dbgPlugins << totalSize <<"" << meanL_src <<"" << meanA_src <<"" << meanB_src <<"" << sigmaL_src <<"" << sigmaA_src <<"" << sigmaB_src;
+    dbgPlugins << totalSize << "" << meanL_src << "" << meanA_src << "" << meanB_src << "" << sigmaL_src << "" << sigmaA_src << "" << sigmaB_src;
     // Compute the means and sigmas of ref
     dbgPlugins << "Compute the means and sigmas of ref";
     double meanL_ref = 0., meanA_ref = 0., meanB_ref = 0.;
     double sigmaL_ref = 0., sigmaA_ref = 0., sigmaB_ref = 0.;
     KisRectConstIteratorPixel refIt = ref->createRectConstIterator(0, 0, importedImage->width(), importedImage->height());
-    while(!refIt.isDone() && !(progressUpdater && progressUpdater->interrupted()))
-    {
+    while (!refIt.isDone() && !(progressUpdater && progressUpdater->interrupted())) {
         const quint16* data = reinterpret_cast<const quint16*>(refIt.oldRawData());
         quint32 L = data[0];
         quint32 A = data[1];
@@ -190,20 +183,20 @@ void KisFilterFastColorTransfer::process(KisConstProcessingInformation srcInfo,
         meanL_ref += L;
         meanA_ref += A;
         meanB_ref += B;
-        sigmaL_ref += L*L;
-        sigmaA_ref += A*A;
-        sigmaB_ref += B*B;
+        sigmaL_ref += L * L;
+        sigmaA_ref += A * A;
+        sigmaB_ref += B * B;
         ++refIt;
-        if(progressUpdater) progressUpdater->setValue(++count);
+        if (progressUpdater) progressUpdater->setValue(++count);
     }
-    totalSize = 1. / ( importedImage->width() * importedImage->height() );
+    totalSize = 1. / (importedImage->width() * importedImage->height());
     meanL_ref *= totalSize;
     meanA_ref *= totalSize;
     meanB_ref *= totalSize;
     sigmaL_ref *= totalSize;
     sigmaA_ref *= totalSize;
     sigmaB_ref *= totalSize;
-    dbgPlugins << totalSize <<"" << meanL_ref <<"" << meanA_ref <<"" << meanB_ref <<"" << sigmaL_ref <<"" << sigmaA_ref <<"" << sigmaB_ref;
+    dbgPlugins << totalSize << "" << meanL_ref << "" << meanA_ref << "" << meanB_ref << "" << sigmaL_ref << "" << sigmaA_ref << "" << sigmaB_ref;
 
     // Transfer colors
     dbgPlugins << "Transfer colors";
@@ -211,22 +204,20 @@ void KisFilterFastColorTransfer::process(KisConstProcessingInformation srcInfo,
         double coefL = sqrt((sigmaL_ref - meanL_ref * meanL_ref) / (sigmaL_src - meanL_src * meanL_src));
         double coefA = sqrt((sigmaA_ref - meanA_ref * meanA_ref) / (sigmaA_src - meanA_src * meanA_src));
         double coefB = sqrt((sigmaB_ref - meanB_ref * meanB_ref) / (sigmaB_src - meanB_src * meanB_src));
-        KisHLineConstIteratorPixel srcLABIt = srcLAB->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection() );
-        KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection() );
+        KisHLineConstIteratorPixel srcLABIt = srcLAB->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
+        KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
         quint16 labPixel[4];
-        for(int y = 0; y < size.height() && !(progressUpdater && progressUpdater->interrupted()); ++y)
-        {
-            while( !dstIt.isDone() )
-            {
+        for (int y = 0; y < size.height() && !(progressUpdater && progressUpdater->interrupted()); ++y) {
+            while (!dstIt.isDone()) {
                 const quint16* data = reinterpret_cast<const quint16*>(srcLABIt.oldRawData());
-                labPixel[0] = (quint16)CLAMP( ( (double)data[0] - meanL_src) * coefL + meanL_ref, 0., 65535.);
-                labPixel[1] = (quint16)CLAMP( ( (double)data[1] - meanA_src) * coefA + meanA_ref, 0., 65535.);
-                labPixel[2] = (quint16)CLAMP( ( (double)data[2] - meanB_src) * coefB + meanB_ref, 0., 65535.);
+                labPixel[0] = (quint16)CLAMP(((double)data[0] - meanL_src) * coefL + meanL_ref, 0., 65535.);
+                labPixel[1] = (quint16)CLAMP(((double)data[1] - meanA_src) * coefA + meanA_ref, 0., 65535.);
+                labPixel[2] = (quint16)CLAMP(((double)data[2] - meanB_src) * coefB + meanB_ref, 0., 65535.);
                 labPixel[3] = data[3];
-                oldCS->fromLabA16( reinterpret_cast<const quint8*>(labPixel), dstIt.rawData(), 1 );
+                oldCS->fromLabA16(reinterpret_cast<const quint8*>(labPixel), dstIt.rawData(), 1);
                 ++dstIt;
                 ++srcLABIt;
-                if(progressUpdater) progressUpdater->setValue(++count);
+                if (progressUpdater) progressUpdater->setValue(++count);
             }
             dstIt.nextRow();
             srcLABIt.nextRow();

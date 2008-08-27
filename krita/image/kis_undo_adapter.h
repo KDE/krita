@@ -34,18 +34,20 @@ class KoDocument;
  * stack.
  * execute notification is given on undo and redo
  */
-class KisCommandHistoryListener {
+class KisCommandHistoryListener
+{
 
 public:
 
-    KisCommandHistoryListener(){}
+    KisCommandHistoryListener() {}
     virtual ~KisCommandHistoryListener() {}
     virtual void notifyCommandAdded(QUndoCommand * cmd) = 0;
     virtual void notifyCommandExecuted(QUndoCommand * cmd) = 0;
 };
 
-class KRITAIMAGE_EXPORT KisUndoAdapter : public QObject {
-Q_OBJECT
+class KRITAIMAGE_EXPORT KisUndoAdapter : public QObject
+{
+    Q_OBJECT
 
 public:
     KisUndoAdapter(KoDocument* doc);
@@ -53,8 +55,8 @@ public:
 
 public:
 
-    virtual void setCommandHistoryListener( KisCommandHistoryListener * l);
-    virtual void removeCommandHistoryListener( KisCommandHistoryListener * l);
+    virtual void setCommandHistoryListener(KisCommandHistoryListener * l);
+    virtual void removeCommandHistoryListener(KisCommandHistoryListener * l);
     virtual void notifyCommandExecuted(QUndoCommand *command);
 
     virtual QUndoCommand * presentCommand();

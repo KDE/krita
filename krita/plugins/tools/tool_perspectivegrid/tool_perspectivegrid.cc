@@ -40,11 +40,11 @@
 
 
 typedef KGenericFactory<ToolPerspectiveGrid> ToolPerspectiveGridFactory;
-K_EXPORT_COMPONENT_FACTORY( kritatoolperspectivegrid, ToolPerspectiveGridFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritatoolperspectivegrid, ToolPerspectiveGridFactory("krita"))
 
 
 ToolPerspectiveGrid::ToolPerspectiveGrid(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     setComponentData(ToolPerspectiveGridFactory::componentData());
 

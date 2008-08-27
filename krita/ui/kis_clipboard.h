@@ -37,7 +37,8 @@ enum enumPasteBehaviour {
  * The Krita clipboard is a clipboard that can store paint devices
  * instead of just qimage's.
  */
-class KRITAUI_EXPORT KisClipboard : public QObject {
+class KRITAUI_EXPORT KisClipboard : public QObject
+{
 
     Q_OBJECT
 

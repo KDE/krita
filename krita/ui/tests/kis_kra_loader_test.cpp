@@ -34,23 +34,23 @@ void KisKraLoaderTest::testLoading()
     doc.loadNativeFormat(QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra");
     KisImageSP image = doc.image();
     image->lock();
-    QCOMPARE( image->nlayers(), 12 );
-    QCOMPARE( doc.documentInfo()->aboutInfo("title"), QString("test image for loading"));
-    QCOMPARE( image->height(), 753 );
-    QCOMPARE( image->width(), 1000 );
-    QCOMPARE( image->colorSpace()->id(), KoColorSpaceRegistry::instance()->rgb8()->id() );
+    QCOMPARE(image->nlayers(), 12);
+    QCOMPARE(doc.documentInfo()->aboutInfo("title"), QString("test image for loading"));
+    QCOMPARE(image->height(), 753);
+    QCOMPARE(image->width(), 1000);
+    QCOMPARE(image->colorSpace()->id(), KoColorSpaceRegistry::instance()->rgb8()->id());
 
     KisNodeSP node = image->root()->firstChild();
-    QVERIFY( node );
-    QCOMPARE( node->name(), QString("Background"));
-    QVERIFY( node->inherits("KisPaintLayer") );
-    
+    QVERIFY(node);
+    QCOMPARE(node->name(), QString("Background"));
+    QVERIFY(node->inherits("KisPaintLayer"));
+
     node = node->nextSibling();
-    QVERIFY( node );
-    QCOMPARE( node->name(), QString("Group 1"));
-    QVERIFY( node->inherits("KisGroupLayer") );
-    QCOMPARE( (int) node->childCount(), 2 );
-    
+    QVERIFY(node);
+    QCOMPARE(node->name(), QString("Group 1"));
+    QVERIFY(node->inherits("KisGroupLayer"));
+    QCOMPARE((int) node->childCount(), 2);
+
 }
 
 QTEST_KDEMAIN(KisKraLoaderTest, GUI)

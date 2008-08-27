@@ -48,101 +48,100 @@
 #include "kis_pixel_selection.h"
 #include "dialogs/kis_dlg_adj_layer_props.h"
 #include "kis_selection_mask.h"
-#include "kis_selection.h"
 #include "kis_paint_device.h"
 #include "kis_image.h"
 #include <KoCompositeOp.h>
 #include <KoColorSpace.h>
 #include <KoColor.h>
 
-KisMaskManager::KisMaskManager( KisView2 * view)
-    : m_view( view )
-    , m_activeMask( 0 )
-    , m_createTransparencyMask( 0 )
-    , m_createFilterMask( 0 )
-    , m_createTransformationMask( 0 )
-    , m_createSelectionMask( 0 )
-    , m_maskToSelection( 0 )
-    , m_maskToLayer( 0 )
-    , m_duplicateMask( 0 )
-    , m_showMask( 0 )
-    , m_removeMask( 0 )
-    , m_raiseMask( 0 )
-    , m_lowerMask( 0 )
-    , m_maskToTop( 0 )
-    , m_maskToBottom( 0 )
-    , m_mirrorMaskX( 0 )
-    , m_mirrorMaskY( 0 )
-    , m_maskProperties( 0 )
+KisMaskManager::KisMaskManager(KisView2 * view)
+        : m_view(view)
+        , m_activeMask(0)
+        , m_createTransparencyMask(0)
+        , m_createFilterMask(0)
+        , m_createTransformationMask(0)
+        , m_createSelectionMask(0)
+        , m_maskToSelection(0)
+        , m_maskToLayer(0)
+        , m_duplicateMask(0)
+        , m_showMask(0)
+        , m_removeMask(0)
+        , m_raiseMask(0)
+        , m_lowerMask(0)
+        , m_maskToTop(0)
+        , m_maskToBottom(0)
+        , m_mirrorMaskX(0)
+        , m_mirrorMaskY(0)
+        , m_maskProperties(0)
 {
 }
 
-void KisMaskManager::setup( KActionCollection * actionCollection )
+void KisMaskManager::setup(KActionCollection * actionCollection)
 {
     // XXX: Set shortcuts, tooltips, what's this text and statustips!
 
     m_createTransparencyMask  = new KAction(i18n("Transparency Mask"), this);
-    actionCollection->addAction("create_transparency_mask", m_createTransparencyMask );
+    actionCollection->addAction("create_transparency_mask", m_createTransparencyMask);
     connect(m_createTransparencyMask, SIGNAL(triggered()), this, SLOT(createTransparencyMask()));
 
     m_createFilterMask  = new KAction(i18n("Filter Mask..."), this);
-    actionCollection->addAction("create_filter_mask", m_createFilterMask );
+    actionCollection->addAction("create_filter_mask", m_createFilterMask);
     connect(m_createFilterMask, SIGNAL(triggered()), this, SLOT(createFilterMask()));
 
     m_createTransformationMask  = new KAction(i18n("Transformation Mask..."), this);
-    actionCollection->addAction("create_transformation_mask", m_createTransformationMask );
+    actionCollection->addAction("create_transformation_mask", m_createTransformationMask);
     connect(m_createTransformationMask, SIGNAL(triggered()), this, SLOT(createTransformationMask()));
 
     m_createSelectionMask = new KAction(i18n("Selection Mask..."), this);
-    actionCollection->addAction("create_selection_mask", m_createSelectionMask );
+    actionCollection->addAction("create_selection_mask", m_createSelectionMask);
     connect(m_createSelectionMask, SIGNAL(triggered()), this, SLOT(createSelectionmask()));
 
     m_maskToSelection  = new KAction(i18n("Mask To Selection"), this);
-    actionCollection->addAction("create_selection_from_mask", m_maskToSelection );
+    actionCollection->addAction("create_selection_from_mask", m_maskToSelection);
     connect(m_maskToSelection, SIGNAL(triggered()), this, SLOT(maskToSelection()));
 
-    m_maskToLayer = new KAction( i18n( "Create Layer from Mask..." ), this );
-    actionCollection->addAction( "create_layer_from_mask", m_maskToLayer );
-    connect( m_maskToLayer, SIGNAL( triggered() ), this, SLOT( maskToLayer() ) );
+    m_maskToLayer = new KAction(i18n("Create Layer from Mask..."), this);
+    actionCollection->addAction("create_layer_from_mask", m_maskToLayer);
+    connect(m_maskToLayer, SIGNAL(triggered()), this, SLOT(maskToLayer()));
 
-    m_duplicateMask = new KAction( i18n( "Duplicate Mask" ), this );
-    actionCollection->addAction( "duplicate_mask", m_duplicateMask );
-    connect( m_duplicateMask, SIGNAL( triggered() ), this, SLOT( duplicateMask() ) );
+    m_duplicateMask = new KAction(i18n("Duplicate Mask"), this);
+    actionCollection->addAction("duplicate_mask", m_duplicateMask);
+    connect(m_duplicateMask, SIGNAL(triggered()), this, SLOT(duplicateMask()));
 
     m_removeMask  = new KAction(i18n("Remove Mask"), this);
-    actionCollection->addAction("remove_mask", m_removeMask );
+    actionCollection->addAction("remove_mask", m_removeMask);
     connect(m_removeMask, SIGNAL(triggered()), this, SLOT(removeMask()));
 
     m_showMask  = new KToggleAction(i18n("Show Mask"), this);
-    actionCollection->addAction("show_mask", m_showMask );
+    actionCollection->addAction("show_mask", m_showMask);
     connect(m_showMask, SIGNAL(triggered()), this, SLOT(showMask()));
 
     m_raiseMask = new KAction(i18n("Raise Mask"), this);
-    actionCollection->addAction("raise_mask", m_raiseMask );
+    actionCollection->addAction("raise_mask", m_raiseMask);
     connect(m_raiseMask, SIGNAL(triggered()), this, SLOT(raiseMask()));
 
     m_lowerMask  = new KAction(i18n("Lower Mask"), this);
-    actionCollection->addAction("lower_mask", m_lowerMask );
+    actionCollection->addAction("lower_mask", m_lowerMask);
     connect(m_lowerMask, SIGNAL(triggered()), this, SLOT(lowerMask()));
 
     m_maskToTop  = new KAction(i18n("Move Mask to Top"), this);
-    actionCollection->addAction("mask_to_top", m_maskToTop );
+    actionCollection->addAction("mask_to_top", m_maskToTop);
     connect(m_maskToTop, SIGNAL(triggered()), this, SLOT(maskToTop()));
 
     m_maskToBottom = new KAction(i18n("Move Mask to Bottom"), this);
-    actionCollection->addAction("mask_to_bottom", m_maskToBottom );
+    actionCollection->addAction("mask_to_bottom", m_maskToBottom);
     connect(m_maskToBottom, SIGNAL(triggered()), this, SLOT(maskToBottom()));
 
     m_mirrorMaskX = new KAction(i18n("Mirror Mask Horizontally"), this);
-    actionCollection->addAction("mirror_mask_x", m_mirrorMaskX );
+    actionCollection->addAction("mirror_mask_x", m_mirrorMaskX);
     connect(m_mirrorMaskX, SIGNAL(triggered()), this, SLOT(mirrorMaskX()));
 
     m_mirrorMaskY  = new KAction(i18n("Mirror Mask Vertically"), this);
-    actionCollection->addAction("mirror_mask_y", m_mirrorMaskY );
+    actionCollection->addAction("mirror_mask_y", m_mirrorMaskY);
     connect(m_mirrorMaskY, SIGNAL(triggered()), this, SLOT(mirrorMaskY()));
 
     m_maskProperties  = new KAction(i18n("Mask Properties"), this);
-    actionCollection->addAction("mask_properties", m_maskProperties );
+    actionCollection->addAction("mask_properties", m_maskProperties);
     connect(m_maskProperties, SIGNAL(triggered()), this, SLOT(maskProperties()));
 
 }
@@ -162,7 +161,7 @@ KisPaintDeviceSP KisMaskManager::activeDevice()
 {
     // XXX: we may need to also have a possibility of getting the vector part of the
     // selection here
-    if ( m_activeMask ) {
+    if (m_activeMask) {
         KisSelectionSP selection = m_activeMask->selection();
         if (selection)
             return m_activeMask->selection()->getOrCreatePixelSelection();
@@ -170,34 +169,34 @@ KisPaintDeviceSP KisMaskManager::activeDevice()
     return 0;
 }
 
-void KisMaskManager::activateMask( KisMaskSP mask )
+void KisMaskManager::activateMask(KisMaskSP mask)
 {
     m_activeMask = mask;
-    emit sigMaskActivated( mask );
+    emit sigMaskActivated(mask);
 }
 
 void KisMaskManager::createTransparencyMask()
 {
     KisLayerSP parent = m_view->activeLayer();
-    if ( parent ) {
-        if ( parent == 0 )
-            createTransparencyMask( parent.data(), parent->firstChild() );
+    if (parent) {
+        if (parent == 0)
+            createTransparencyMask(parent.data(), parent->firstChild());
         else
-            createTransparencyMask( parent.data(), m_activeMask.data() );
+            createTransparencyMask(parent.data(), m_activeMask.data());
     }
 }
 
-void KisMaskManager::createTransparencyMask( KisNodeSP parent, KisNodeSP above )
+void KisMaskManager::createTransparencyMask(KisNodeSP parent, KisNodeSP above)
 {
     KisMaskSP mask = new KisTransparencyMask();
     KisSelectionSP selection = m_view->selection();
     if (selection) {
         mask->setSelection(selection);
     }
-    mask->setName( i18n( "Transparency Mask" ) ); // XXX:Auto-increment a number here, like with layers
-    mask->setActive( true );
-    m_view->image()->addNode( mask, parent, above );
-    activateMask( mask );
+    mask->setName(i18n("Transparency Mask"));     // XXX:Auto-increment a number here, like with layers
+    mask->setActive(true);
+    m_view->image()->addNode(mask, parent, above);
+    activateMask(mask);
 }
 
 
@@ -205,19 +204,19 @@ void KisMaskManager::createFilterMask()
 {
     KisLayerSP parent = m_view->activeLayer();
 
-    if ( parent ) {
-        if ( m_activeMask == 0 )
-            createFilterMask( parent.data(), parent->firstChild() );
+    if (parent) {
+        if (m_activeMask == 0)
+            createFilterMask(parent.data(), parent->firstChild());
         else
-            createFilterMask( parent.data(), m_activeMask.data() );
+            createFilterMask(parent.data(), m_activeMask.data());
 
     }
 }
 
-void KisMaskManager::createFilterMask( KisNodeSP parent, KisNodeSP above )
+void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
 {
     KisLayerSP layer = dynamic_cast<KisLayer*>(parent.data());
-    if (! layer )
+    if (! layer)
         return;
 
     KisPaintDeviceSP dev = layer->projection();
@@ -226,19 +225,19 @@ void KisMaskManager::createFilterMask( KisNodeSP parent, KisNodeSP above )
     if (selection) {
         mask->setSelection(selection);
     }
-    mask->setActive( true );
-    mask->setName( i18n("New filter mask" ));
-    m_view->image()->addNode( mask, parent, above );
+    mask->setActive(true);
+    mask->setName(i18n("New filter mask"));
+    m_view->image()->addNode(mask, parent, above);
 
     KisDlgAdjustmentLayer dlg(mask, mask, dev, m_view->image(), mask->name(), i18n("New Filter Mask"), m_view, "dlgfiltermask");
 
     if (dlg.exec() == QDialog::Accepted) {
         KisFilterConfiguration * filter = dlg.filterConfiguration();
         QString name = dlg.layerName();
-        mask->setFilter( filter );
-        activateMask( mask );
+        mask->setFilter(filter);
+        activateMask(mask);
     } else {
-      m_view->image()->removeNode(mask);
+        m_view->image()->removeNode(mask);
     }
 }
 
@@ -246,36 +245,36 @@ void KisMaskManager::createTransformationMask()
 {
     KisLayerSP activeLayer = m_view->activeLayer();
 
-    if ( activeLayer ) {
-        if ( m_activeMask == 0 )
-            createTransformationMask( activeLayer.data(), activeLayer->firstChild() );
+    if (activeLayer) {
+        if (m_activeMask == 0)
+            createTransformationMask(activeLayer.data(), activeLayer->firstChild());
         else
-            createTransformationMask( activeLayer.data(), m_activeMask.data() );
+            createTransformationMask(activeLayer.data(), m_activeMask.data());
     }
 }
 
-void KisMaskManager::createTransformationMask( KisNodeSP parent, KisNodeSP above )
+void KisMaskManager::createTransformationMask(KisNodeSP parent, KisNodeSP above)
 {
-    KisDlgTransformationEffect dlg(QString(), 1.0, 1.0, 0.0, 0.0, 0.0, 0, 0, KoID( "Mitchell" ), m_view);
-    if ( dlg.exec() == QDialog::Accepted ) {
+    KisDlgTransformationEffect dlg(QString(), 1.0, 1.0, 0.0, 0.0, 0.0, 0, 0, KoID("Mitchell"), m_view);
+    if (dlg.exec() == QDialog::Accepted) {
         KisTransformationMask * mask = new KisTransformationMask();
 
         KisSelectionSP selection = m_view->selection();
         if (selection) {
             mask->setSelection(selection);
         }
-        mask->setName( dlg.transformationEffect()->maskName() );
-        mask->setXScale( dlg.transformationEffect()->xScale() );
-        mask->setYScale( dlg.transformationEffect()->yScale() );
-        mask->setXShear( dlg.transformationEffect()->xShear() );
-        mask->setYShear( dlg.transformationEffect()->yShear() );
-        mask->setRotation( dlg.transformationEffect()->rotation() );
-        mask->setXTranslation( dlg.transformationEffect()->moveX() );
-        mask->setYTranslation( dlg.transformationEffect()->moveY() );
-        mask->setFilterStrategy( dlg.transformationEffect()->filterStrategy() );
-        mask->setActive( true );
-        m_view->image()->addNode( mask, parent, above );
-        activateMask( mask );
+        mask->setName(dlg.transformationEffect()->maskName());
+        mask->setXScale(dlg.transformationEffect()->xScale());
+        mask->setYScale(dlg.transformationEffect()->yScale());
+        mask->setXShear(dlg.transformationEffect()->xShear());
+        mask->setYShear(dlg.transformationEffect()->yShear());
+        mask->setRotation(dlg.transformationEffect()->rotation());
+        mask->setXTranslation(dlg.transformationEffect()->moveX());
+        mask->setYTranslation(dlg.transformationEffect()->moveY());
+        mask->setFilterStrategy(dlg.transformationEffect()->filterStrategy());
+        mask->setActive(true);
+        m_view->image()->addNode(mask, parent, above);
+        activateMask(mask);
     }
 }
 
@@ -283,15 +282,15 @@ void KisMaskManager::createSelectionmask()
 {
     KisLayerSP activeLayer = m_view->activeLayer();
 
-    if ( activeLayer && activeLayer->selectionMask() == 0 ) {
-        if ( m_activeMask == 0 )
-            createSelectionMask( activeLayer.data(), activeLayer->firstChild() );
+    if (activeLayer && activeLayer->selectionMask() == 0) {
+        if (m_activeMask == 0)
+            createSelectionMask(activeLayer.data(), activeLayer->firstChild());
         else
-            createSelectionMask( activeLayer.data(), m_activeMask.data() );
+            createSelectionMask(activeLayer.data(), m_activeMask.data());
     }
 }
 
-void KisMaskManager::createSelectionMask( KisNodeSP parent, KisNodeSP above )
+void KisMaskManager::createSelectionMask(KisNodeSP parent, KisNodeSP above)
 {
     if (parent->inherits("KisLayer")) {
         KisLayer * layer = dynamic_cast<KisLayer*>(parent.data());
@@ -304,10 +303,10 @@ void KisMaskManager::createSelectionMask( KisNodeSP parent, KisNodeSP above )
     if (selection) {
         mask->setSelection(selection);
     }
-    mask->setName( i18n( "Selection" ) ); // XXX:Auto-increment a number here, like with layers
-    mask->setActive( true );
-    m_view->image()->addNode( mask, parent, above );
-    activateMask( mask );
+    mask->setName(i18n("Selection"));     // XXX:Auto-increment a number here, like with layers
+    mask->setActive(true);
+    m_view->image()->addNode(mask, parent, above);
+    activateMask(mask);
 }
 
 
@@ -428,73 +427,70 @@ void KisMaskManager::maskProperties()
 {
     if (!m_activeMask) return;
 
-    if ( m_activeMask->inherits( "KisTransformationMask") ) {
-        KisTransformationMask * mask = static_cast<KisTransformationMask*>( m_activeMask.data() );
+    if (m_activeMask->inherits("KisTransformationMask")) {
+        KisTransformationMask * mask = static_cast<KisTransformationMask*>(m_activeMask.data());
 
-        KisDlgTransformationEffect dlg( mask->name(),
-                                        mask->xScale(),
-                                        mask->yScale(),
-                                        mask->xShear(),
-                                        mask->yShear(),
-                                        mask->rotation(),
-                                        mask->xTranslate(),
-                                        mask->yTranslate(),
-                                        KoID(mask->filterStrategy()->id()),
-                                        m_view);
-        if ( dlg.exec() == QDialog::Accepted ) {
+        KisDlgTransformationEffect dlg(mask->name(),
+                                       mask->xScale(),
+                                       mask->yScale(),
+                                       mask->xShear(),
+                                       mask->yShear(),
+                                       mask->rotation(),
+                                       mask->xTranslate(),
+                                       mask->yTranslate(),
+                                       KoID(mask->filterStrategy()->id()),
+                                       m_view);
+        if (dlg.exec() == QDialog::Accepted) {
             // XXX_NODE: make undoable
             KisTransformationSettingsCommand * cmd = new KisTransformationSettingsCommand
-                ( mask,
-                  mask->name(),
-                  mask->xScale(),
-                  mask->yScale(),
-                  mask->xShear(),
-                  mask->yShear(),
-                  mask->rotation(),
-                  mask->xTranslate(),
-                  mask->yTranslate(),
-                  mask->filterStrategy(),
-                  dlg.transformationEffect()->maskName(),
-                  dlg.transformationEffect()->xScale(),
-                  dlg.transformationEffect()->yScale(),
-                  dlg.transformationEffect()->xShear(),
-                  dlg.transformationEffect()->yShear(),
-                  dlg.transformationEffect()->rotation(),
-                  dlg.transformationEffect()->moveX(),
-                  dlg.transformationEffect()->moveY(),
-                  dlg.transformationEffect()->filterStrategy() );
+            (mask,
+             mask->name(),
+             mask->xScale(),
+             mask->yScale(),
+             mask->xShear(),
+             mask->yShear(),
+             mask->rotation(),
+             mask->xTranslate(),
+             mask->yTranslate(),
+             mask->filterStrategy(),
+             dlg.transformationEffect()->maskName(),
+             dlg.transformationEffect()->xScale(),
+             dlg.transformationEffect()->yScale(),
+             dlg.transformationEffect()->xShear(),
+             dlg.transformationEffect()->yShear(),
+             dlg.transformationEffect()->rotation(),
+             dlg.transformationEffect()->moveX(),
+             dlg.transformationEffect()->moveY(),
+             dlg.transformationEffect()->filterStrategy());
             cmd->redo();
             m_view->undoAdapter()->addCommand(cmd);
-            m_view->document()->setModified( true );
+            m_view->document()->setModified(true);
         }
-    }
-    else if ( m_activeMask->inherits( "KisFilterMask") ) {
-        KisFilterMask * mask = static_cast<KisFilterMask*>( m_activeMask.data() );
+    } else if (m_activeMask->inherits("KisFilterMask")) {
+        KisFilterMask * mask = static_cast<KisFilterMask*>(m_activeMask.data());
 
         KisLayerSP layer = dynamic_cast<KisLayer*>(mask->parent().data());
-        if (! layer )
+        if (! layer)
             return;
 
         KisPaintDeviceSP dev = layer->projection();
-        KisDlgAdjLayerProps dlg( layer->projection(), layer->image(), mask->filter(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops" );
+        KisDlgAdjLayerProps dlg(layer->projection(), layer->image(), mask->filter(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops");
         QString before;
         if (dlg.filterConfiguration())
             before = dlg.filterConfiguration()->toLegacyXML();
-        if (dlg.exec() == QDialog::Accepted)
-        {
+        if (dlg.exec() == QDialog::Accepted) {
             QString after;
             if (dlg.filterConfiguration())
                 after = dlg.filterConfiguration()->toLegacyXML();
             KisChangeFilterCmd<KisFilterMaskSP> * cmd = new KisChangeFilterCmd<KisFilterMaskSP>(mask,
-                dlg.filterConfiguration(),
-                before,
-                after);
+                    dlg.filterConfiguration(),
+                    before,
+                    after);
             cmd->redo();
             m_view->undoAdapter()->addCommand(cmd);
-            m_view->document()->setModified( true );
+            m_view->document()->setModified(true);
         }
-    }
-    else {
+    } else {
         // Not much to show for transparency or selection masks?
     }
 }

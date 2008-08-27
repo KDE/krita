@@ -28,11 +28,14 @@ class WdgShrinkSelection : public QWidget, public Ui::WdgShrinkSelection
 {
     Q_OBJECT
 
-    public:
-        WdgShrinkSelection(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgShrinkSelection(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
-class DlgShrinkSelection: public KDialog {
+class DlgShrinkSelection: public KDialog
+{
     typedef KDialog super;
     Q_OBJECT
 

@@ -27,26 +27,26 @@
 #include <KoColorSpaceConstants.h>
 //#include "kis_simple_node_action.h"
 
-struct TestProgressBar : public KoProgressProxy
-{
-    int maximum() const { return 0; }
-    void setValue( int value )
-        {
-            qDebug() << "Progress (" << this << "): " << value ;
-        }
-    void setRange( int, int) {}
-    void setFormat( const QString & ) {}
+struct TestProgressBar : public KoProgressProxy {
+    int maximum() const {
+        return 0;
+    }
+    void setValue(int value) {
+        qDebug() << "Progress (" << this << "): " << value ;
+    }
+    void setRange(int, int) {}
+    void setFormat(const QString &) {}
 };
 
 
-SimpleNodeAction::SimpleNodeAction( QObject * parent, KisNodeSP node, KoProgressProxy * progressBar)
-        : KisNodeAction( parent, node, progressBar )
+SimpleNodeAction::SimpleNodeAction(QObject * parent, KisNodeSP node, KoProgressProxy * progressBar)
+        : KisNodeAction(parent, node, progressBar)
 {
 }
 
 void SimpleNodeAction::slotTriggered()
 {
-     // Do stuff on the layer
+    // Do stuff on the layer
 }
 
 
@@ -61,9 +61,9 @@ void KisNodeActionTest::testExecution()
     TestProgressBar bar;
 
     KisImageSP img = new KisImage(0, 1000, 1000, 0, "test");
-    KisPaintLayerSP layer = new KisPaintLayer( img, "test", OPACITY_OPAQUE, img->colorSpace() );
-    
-    SimpleNodeAction action( this, layer.data(), &bar );
+    KisPaintLayerSP layer = new KisPaintLayer(img, "test", OPACITY_OPAQUE, img->colorSpace());
+
+    SimpleNodeAction action(this, layer.data(), &bar);
     QCOMPARE(layer->locked(), true);
     // Only for test purposes
     connect(&action, SIGNAL(updateUi(const QVariant&)), this, SLOT(updateGUI()), Qt::DirectConnection);

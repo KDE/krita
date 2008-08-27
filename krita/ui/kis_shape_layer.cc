@@ -49,7 +49,6 @@
 #include <KoStoreDevice.h>
 #include <KoViewConverter.h>
 #include <KoXmlWriter.h>
-#include <KoShapeContainer.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -69,22 +68,22 @@ public:
     KisShapeLayerCanvas * canvas;
 };
 
-KisShapeLayer::KisShapeLayer( KoShapeContainer * parent,
-                              KisImageSP img,
-                              const QString &name,
-                              quint8 opacity )
-    : KisExternalLayer( img, name, opacity )
-    , m_d( new Private() )
+KisShapeLayer::KisShapeLayer(KoShapeContainer * parent,
+                             KisImageSP img,
+                             const QString &name,
+                             quint8 opacity)
+        : KisExternalLayer(img, name, opacity)
+        , m_d(new Private())
 {
-    KoShapeContainer::setParent( parent );
-    setShapeId( KIS_SHAPE_LAYER_ID );
+    KoShapeContainer::setParent(parent);
+    setShapeId(KIS_SHAPE_LAYER_ID);
 
     m_d->converter = new KisImageViewConverter(image());
     m_d->x = 0;
     m_d->y = 0;
-    m_d->projection = new KisPaintDevice( img->colorSpace() );
-    m_d->canvas = new KisShapeLayerCanvas( this, m_d->converter );
-    m_d->canvas->setProjection( m_d->projection );
+    m_d->projection = new KisPaintDevice(img->colorSpace());
+    m_d->canvas = new KisShapeLayerCanvas(this, m_d->converter);
+    m_d->canvas->setProjection(m_d->projection);
 }
 
 KisShapeLayer::~KisShapeLayer()
@@ -94,32 +93,32 @@ KisShapeLayer::~KisShapeLayer()
     delete m_d;
 }
 
-bool KisShapeLayer::allowAsChild( KisNodeSP node) const
+bool KisShapeLayer::allowAsChild(KisNodeSP node) const
 {
-    if ( node->inherits( "KisMask" ) )
-       return true;
+    if (node->inherits("KisMask"))
+        return true;
     else
         return false;
 }
 
 void KisShapeLayer::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
-    Q_UNUSED( converter );
-    Q_UNUSED( painter );
+    Q_UNUSED(converter);
+    Q_UNUSED(painter);
 }
 
 void KisShapeLayer::addChild(KoShape *object)
 {
-    KoShapeLayer::addChild( object );
-    m_d->canvas->shapeManager()->add( object );
+    KoShapeLayer::addChild(object);
+    m_d->canvas->shapeManager()->add(object);
 
     setDirty(m_d->converter->documentToView(object->boundingRect()).toRect());
 }
 
 void KisShapeLayer::removeChild(KoShape *object)
 {
-    m_d->canvas->shapeManager()->remove( object );
-    KoShapeLayer::removeChild( object );
+    m_d->canvas->shapeManager()->remove(object);
+    KoShapeLayer::removeChild(object);
 }
 
 QIcon KisShapeLayer::icon() const
@@ -129,7 +128,7 @@ QIcon KisShapeLayer::icon() const
 
 void KisShapeLayer::updateProjection(const QRect& r)
 {
-    dbgImage <<"KisShapeLayer::updateProjection()" << r;
+    dbgImage << "KisShapeLayer::updateProjection()" << r;
 }
 
 KisPaintDeviceSP KisShapeLayer::projection() const
@@ -144,7 +143,7 @@ qint32 KisShapeLayer::x() const
 
 void KisShapeLayer::setX(qint32 x)
 {
-    if ( x == m_d->x ) return;
+    if (x == m_d->x) return;
     m_d->x = x;
     setDirty();
 }
@@ -156,7 +155,7 @@ qint32 KisShapeLayer::y() const
 
 void KisShapeLayer::setY(qint32 y)
 {
-    if ( y == m_d->y ) return;
+    if (y == m_d->y) return;
     m_d->y = y;
     setDirty();
 }
@@ -164,13 +163,13 @@ void KisShapeLayer::setY(qint32 y)
 QRect KisShapeLayer::extent() const
 {
     QRect rc = boundingRect().toRect();
-    return QRectF( rc.x() * image()->xRes(), rc.y() * image()->yRes(), rc.width() * image()->xRes(), rc.height() * image()->yRes() ).toRect();
+    return QRectF(rc.x() * image()->xRes(), rc.y() * image()->yRes(), rc.width() * image()->xRes(), rc.height() * image()->yRes()).toRect();
 }
 
 QRect KisShapeLayer::exactBounds() const
 {
     QRect rc = boundingRect().toRect();
-    return QRectF( rc.x() * image()->xRes(), rc.y() * image()->yRes(), rc.width() * image()->xRes(), rc.height() * image()->yRes() ).toRect();
+    return QRectF(rc.x() * image()->xRes(), rc.y() * image()->yRes(), rc.width() * image()->xRes(), rc.height() * image()->yRes()).toRect();
 }
 
 bool KisShapeLayer::accept(KisNodeVisitor& visitor)
@@ -187,56 +186,56 @@ bool KisShapeLayer::saveOdf(KoStore * store) const
 {
 
     QList<KoShape*> shapes = iterator();
-    qSort( shapes.begin(), shapes.end(), KoShape::compareShapeZIndex );
+    qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
-    foreach(KoShape* shape, shapes ) {
+    foreach(KoShape* shape, shapes) {
         dbgKrita << "shape: " << shape->name();
     }
-    
+
     store->disallowNameExpansion();
-    KoOdfWriteStore odfStore( store );
-    KoXmlWriter* manifestWriter = odfStore.manifestWriter( "application/vnd.oasis.opendocument.graphics" );
+    KoOdfWriteStore odfStore(store);
+    KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
     KoEmbeddedDocumentSaver embeddedSaver;
-    KoDocument::SavingContext documentContext( odfStore, embeddedSaver );
-    
-    if( !store->open( "content.xml" ) )
+    KoDocument::SavingContext documentContext(odfStore, embeddedSaver);
+
+    if (!store->open("content.xml"))
         return false;
-    
-    KoStoreDevice storeDev( store );
-    KoXmlWriter * docWriter = KoOdfWriteStore::createOasisXmlWriter( &storeDev, "office:document-content" );
-    
+
+    KoStoreDevice storeDev(store);
+    KoXmlWriter * docWriter = KoOdfWriteStore::createOasisXmlWriter(&storeDev, "office:document-content");
+
     // for office:master-styles
     KTemporaryFile masterStyles;
     masterStyles.open();
-    KoXmlWriter masterStylesTmpWriter( &masterStyles, 1 );
-    
+    KoXmlWriter masterStylesTmpWriter(&masterStyles, 1);
+
     KoPageLayout page;
     page.format = KoPageFormat::defaultFormat();
     page.orientation = KoPageFormat::Portrait;
     // XXX: this is in pixels -- should be in points?
     page.width = image()->width();
     page.height = image()->height();
-    
+
     KoGenStyles mainStyles;
     KoGenStyle pageLayout = page.saveOasis();
-    QString layoutName = mainStyles.lookup( pageLayout, "PL" );
-    KoGenStyle masterPage( KoGenStyle::StyleMaster );
-    masterPage.addAttribute( "style:page-layout-name", layoutName );
-    mainStyles.lookup( masterPage, "Default", KoGenStyles::DontForceNumbering );
-    
+    QString layoutName = mainStyles.lookup(pageLayout, "PL");
+    KoGenStyle masterPage(KoGenStyle::StyleMaster);
+    masterPage.addAttribute("style:page-layout-name", layoutName);
+    mainStyles.lookup(masterPage, "Default", KoGenStyles::DontForceNumbering);
+
     KTemporaryFile contentTmpFile;
     contentTmpFile.open();
-    KoXmlWriter contentTmpWriter( &contentTmpFile, 1 );
-    
-    contentTmpWriter.startElement( "office:body" );
-    contentTmpWriter.startElement( "office:drawing" );
+    KoXmlWriter contentTmpWriter(&contentTmpFile, 1);
 
-    KoShapeSavingContext shapeContext( contentTmpWriter, mainStyles, documentContext.embeddedSaver );
+    contentTmpWriter.startElement("office:body");
+    contentTmpWriter.startElement("office:drawing");
 
-    shapeContext.xmlWriter().startElement( "draw:page" );
-    shapeContext.xmlWriter().addAttribute( "draw:name", "" );
-    shapeContext.xmlWriter().addAttribute( "draw:id", "page1");
-    shapeContext.xmlWriter().addAttribute( "draw:master-page-name", "Default");
+    KoShapeSavingContext shapeContext(contentTmpWriter, mainStyles, documentContext.embeddedSaver);
+
+    shapeContext.xmlWriter().startElement("draw:page");
+    shapeContext.xmlWriter().addAttribute("draw:name", "");
+    shapeContext.xmlWriter().addAttribute("draw:id", "page1");
+    shapeContext.xmlWriter().addAttribute("draw:master-page-name", "Default");
 
     saveOdf(shapeContext);
 
@@ -245,33 +244,32 @@ bool KisShapeLayer::saveOdf(KoStore * store) const
     contentTmpWriter.endElement(); // office:drawing
     contentTmpWriter.endElement(); // office:body
 
-    mainStyles.saveOdfAutomaticStyles( docWriter, false );
+    mainStyles.saveOdfAutomaticStyles(docWriter, false);
 
     // And now we can copy over the contents from the tempfile to the real one
     contentTmpFile.seek(0);
-    docWriter->addCompleteElement( &contentTmpFile );
+    docWriter->addCompleteElement(&contentTmpFile);
 
     docWriter->endElement(); // Root element
     docWriter->endDocument();
     delete docWriter;
 
-    if( !store->close() )
+    if (!store->close())
         return false;
 
-    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
+    manifestWriter->addManifestEntry("content.xml", "text/xml");
 
-    if ( ! mainStyles.saveOdfStylesDotXml( store, manifestWriter ) ) {
+    if (! mainStyles.saveOdfStylesDotXml(store, manifestWriter)) {
         return false;
     }
-   
-   manifestWriter->addManifestEntry("settings.xml", "text/xml");
 
-    if( ! shapeContext.saveImages( store, manifestWriter ) )
+    manifestWriter->addManifestEntry("settings.xml", "text/xml");
+
+    if (! shapeContext.saveImages(store, manifestWriter))
         return false;
 
     // Write out manifest file
-    if ( !odfStore.closeManifestWriter() )
-    {
+    if (!odfStore.closeManifestWriter()) {
         dbgImage << "closing manifestWriter failed";
         return false;
     }

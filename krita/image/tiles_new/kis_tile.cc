@@ -35,7 +35,7 @@ const qint32 KisTile::HEIGHT = 64;
 #define USE_IMPLICIT_SHARING
 
 KisTile::KisTile(KisTileStoreSP store, qint32 pixelSize, qint32 col, qint32 row, const quint8 *defPixel)
-    : m_lock(QMutex::Recursive)
+        : m_lock(QMutex::Recursive)
 {
     m_pixelSize = pixelSize;
     m_nextTile = 0;
@@ -56,7 +56,7 @@ KisTile::KisTile(KisTileStoreSP store, qint32 pixelSize, qint32 col, qint32 row,
 }
 
 KisTile::KisTile(const KisTile& rhs, qint32 col, qint32 row)
-    : m_lock(QMutex::Recursive)
+        : m_lock(QMutex::Recursive)
 {
     // Lock rhs?
     if (this != &rhs) {
@@ -95,7 +95,7 @@ KisTile::KisTile(const KisTile& rhs, qint32 col, qint32 row)
 }
 
 KisTile::KisTile(qint32 pixelSize, qint32 col, qint32 row, KisSharedTileData *data)
-    : m_lock(QMutex::Recursive)
+        : m_lock(QMutex::Recursive)
 {
     m_pixelSize = pixelSize;
     m_nextTile = 0;
@@ -109,7 +109,7 @@ KisTile::KisTile(qint32 pixelSize, qint32 col, qint32 row, KisSharedTileData *da
 }
 
 KisTile::KisTile(const KisTile& rhs)
-    : m_lock(QMutex::Recursive)
+        : m_lock(QMutex::Recursive)
 {
     // Lock rhs?
     if (this != &rhs) {
@@ -137,8 +137,7 @@ KisTile::KisTile(const KisTile& rhs)
         m_tileData->lastUse = QTime::currentTime(); // Lock?
         m_tileData->store->maySwapTile(m_tileData); // ### Possibly leaked! So try to keep this at the end at all times
 #endif
-    }
-    else {
+    } else {
         ;
     }
 
@@ -150,7 +149,7 @@ KisTile::~KisTile()
 {
     m_tileData->lock.lock();
 
-    if ( (m_tileData->references == 1) && (m_tileData->timesLockedInMemory == 0) && (m_tileData->deleteable) ) { // We are the last tile referring to this shared tile data (timesLockedInMemory -> tileswapper
+    if ((m_tileData->references == 1) && (m_tileData->timesLockedInMemory == 0) && (m_tileData->deleteable)) {   // We are the last tile referring to this shared tile data (timesLockedInMemory -> tileswapper
         m_tileData->lock.unlock();
 
         delete m_tileData; // Deregisters and deallocates itself
@@ -188,10 +187,9 @@ void KisTile::setData(const quint8 *pixel)
 {
     addReader();
     quint8 *dst = m_tileData->data;
-    for(int i=0; i <WIDTH * HEIGHT;i++)
-    {
+    for (int i = 0; i < WIDTH * HEIGHT;i++) {
         memcpy(dst, pixel, m_pixelSize);
-        dst+=m_pixelSize;
+        dst += m_pixelSize;
     }
     removeReader();
 }

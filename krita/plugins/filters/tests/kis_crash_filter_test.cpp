@@ -30,9 +30,10 @@
 #include <KoColorSpaceRegistry.h>
 
 
-bool applyFilter( const KoColorSpace * cs,  KisFilterSP f ) {
+bool applyFilter(const KoColorSpace * cs,  KisFilterSP f)
+{
 
-    QImage qimg( QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
+    QImage qimg(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 //    dev->fill(0, 0, 100, 100, dev->defaultPixel());
@@ -47,17 +48,16 @@ bool applyFilter( const KoColorSpace * cs,  KisFilterSP f ) {
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
         out << kfc->toXML();
-    }
-    else {
+    } else {
         QString s;
         QTextStream in(&file);
         s = in.readAll();
-        kfc->fromXML( s );
+        kfc->fromXML(s);
     }
     qDebug() << f->id() << ", " << cs->id() << ", " << cs->profile()->name();// << kfc->toXML() << "\n";
 
-    KisConstProcessingInformation src( dev,  QPoint(0, 0), 0 );
-    KisProcessingInformation dst( dev, QPoint(0, 0), 0 );
+    KisConstProcessingInformation src(dev,  QPoint(0, 0), 0);
+    KisProcessingInformation dst(dev, QPoint(0, 0), 0);
 
     f->process(src, dst, qimg.size(), kfc);
 
@@ -70,20 +70,19 @@ bool testFilter(KisFilterSP f)
 
     QList<QString> csIds = KoColorSpaceRegistry::instance()->keys();
     bool ok = false;
-    foreach( QString csId, csIds ) {
+    foreach(QString csId, csIds) {
         // XXX: Let's not check the painterly colorspaces right now
-        if ( csId.startsWith( "KS", Qt::CaseInsensitive ) ) {
+        if (csId.startsWith("KS", Qt::CaseInsensitive)) {
             continue;
         }
-        QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor ( csId );
-        if ( profiles.size() == 0 ) {
-            const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, 0 );
-            ok = applyFilter( cs, f );
-        }
-        else {
-            foreach( const KoColorProfile * profile, profiles ) {
-                const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace( csId, profile );
-                ok = applyFilter( cs, f );
+        QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor(csId);
+        if (profiles.size() == 0) {
+            const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(csId, 0);
+            ok = applyFilter(cs, f);
+        } else {
+            foreach(const KoColorProfile * profile, profiles) {
+                const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(csId, profile);
+                ok = applyFilter(cs, f);
             }
 
         }
@@ -99,7 +98,7 @@ void KisCrashFilterTest::testCrashFilters()
 
     QList<QString> filterList = KisFilterRegistry::instance()->keys();
     qSort(filterList);
-    for ( QList<QString>::Iterator it = filterList.begin(); it != filterList.end(); ++it ) {
+    for (QList<QString>::Iterator it = filterList.begin(); it != filterList.end(); ++it) {
         if (testFilter(KisFilterRegistry::instance()->value(*it)))
             successes << *it;
         else

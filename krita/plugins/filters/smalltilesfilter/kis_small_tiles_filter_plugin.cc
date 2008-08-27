@@ -27,10 +27,10 @@
 #include "filter/kis_filter_registry.h"
 
 typedef KGenericFactory<KisSmallTilesFilterPlugin> KisSmallTilesFilterPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritasmalltilesfilter, KisSmallTilesFilterPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritasmalltilesfilter, KisSmallTilesFilterPluginFactory("krita"))
 
 KisSmallTilesFilterPlugin::KisSmallTilesFilterPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     setComponentData(KisSmallTilesFilterPluginFactory::componentData());
 

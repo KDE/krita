@@ -34,27 +34,28 @@ class QRect;
 
 using namespace std;
 
-class Stroke {
+class Stroke
+{
 
 
 public:
 
-    Stroke (Brush *brush);
+    Stroke(Brush *brush);
     virtual ~Stroke();
 
-    void draw (KisPaintDeviceSP dev);
-    void setColor ( const KoColor & c );
-    void storeOldPath ( double, double );
-    void storeSample ( Sample * sample );
-    
+    void draw(KisPaintDeviceSP dev);
+    void setColor(const KoColor & c);
+    void storeOldPath(double, double);
+    void storeSample(Sample * sample);
+
 private:
-    void drawLine( KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color );
-    void drawWuLine(KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color );
-	void drawGSLine(KisPaintDeviceSP image, int x0, int y0, int x1, int y1, int w1, int w2, const QColor &color);
-	int gsfilter(float val);    
+    void drawLine(KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color);
+    void drawWuLine(KisPaintDeviceSP dev, double x1, double y1, double x2, double y2, double width, const KoColor & color);
+    void drawGSLine(KisPaintDeviceSP image, int x0, int y0, int x1, int y1, int w1, int w2, const QColor &color);
+    int gsfilter(float val);
     // test whether a bristle is touching the paper or not
     // by testing the pressure threshold and test if there is any ink
-    bool testThreshold ( int, double, double, double );
+    bool testThreshold(int, double, double, double);
 
 private:
     KoColor m_color;

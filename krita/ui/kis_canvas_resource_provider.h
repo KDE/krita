@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_RESOURCE_PROVIDER_H_
-#define KIS_RESOURCE_PROVIDER_H_
+#ifndef KIS_CANVAS_RESOURCE_PROVIDER_H_
+#define KIS_CANVAS_RESOURCE_PROVIDER_H_
 
 #include <QObject>
 
@@ -39,14 +39,15 @@ class KisFilterConfiguration;
  * KisCanvasResourceProvider contains the per-view current settings that
  * influence painting, like paintop, color, gradients and so on.
  */
-class KRITAUI_EXPORT KisCanvasResourceProvider : public QObject {
+class KRITAUI_EXPORT KisCanvasResourceProvider : public QObject
+{
 
     Q_OBJECT
 
 public:
 
     enum Resources {
-        HdrExposure = KoCanvasResource::KritaStart+1,
+        HdrExposure = KoCanvasResource::KritaStart + 1,
         CurrentPattern,
         CurrentGradient,
         CurrentDisplayProfile,
@@ -60,7 +61,7 @@ public:
     KisCanvasResourceProvider(KisView2 * view);
     ~KisCanvasResourceProvider();
 
-    void setCanvasResourceProvider( KoCanvasResourceProvider * resourceProvider );
+    void setCanvasResourceProvider(KoCanvasResourceProvider * resourceProvider);
 
     KoCanvasBase * canvas() const;
 
@@ -94,20 +95,20 @@ public slots:
     void slotSetBGColor(const KoColor& c);
     void slotPatternActivated(KoResource *pattern);
     void slotGradientActivated(KoResource *gradient);
-    void slotPaintOpPresetActivated( const KisPaintOpPresetSP preset );
-    void slotNodeActivated( const KisNodeSP node );
+    void slotPaintOpPresetActivated(const KisPaintOpPresetSP preset);
+    void slotNodeActivated(const KisNodeSP node);
     void slotGeneratorConfigurationActivated(KisFilterConfiguration * generatorConfiguration);
 
     /**
      * Set the image size in pixels. The resource provider will store
      * the image size in postscript points.
      */
-    void slotSetImageSize( qint32 w, qint32 h );
-    void slotSetDisplayProfile( const KoColorProfile * profile );
+    void slotSetImageSize(qint32 w, qint32 h);
+    void slotSetDisplayProfile(const KoColorProfile * profile);
 
 private slots:
 
-    void slotResourceChanged( int key, const QVariant & res );
+    void slotResourceChanged(int key, const QVariant & res);
 
 signals:
 
@@ -115,7 +116,7 @@ signals:
     void sigBGColorChanged(const KoColor &);
     void sigGradientChanged(KoAbstractGradient *);
     void sigPatternChanged(KisPattern *);
-    void sigPaintOpPresetChanged( KisPaintOpPresetSP preset );
+    void sigPaintOpPresetChanged(KisPaintOpPresetSP preset);
     void sigNodeChanged(const KisNodeSP);
     void sigDisplayProfileChanged(const KoColorProfile *);
     void sigGeneratorConfigurationChanged(KisFilterConfiguration * generatorConfiguration);

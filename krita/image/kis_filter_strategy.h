@@ -29,97 +29,120 @@
 
 class KRITAIMAGE_EXPORT KisFilterStrategy
 {
-    public:
-        KisFilterStrategy(KoID id) : m_id(id) {}
-        virtual ~KisFilterStrategy() {}
+public:
+    KisFilterStrategy(KoID id) : m_id(id) {}
+    virtual ~KisFilterStrategy() {}
 
-        QString id() {return m_id.id();}
-        QString name() {return m_id.name();}
-        virtual double valueAt(double /*t*/) const {return 0;}
-        virtual qint32 intValueAt(qint32 t) const {return qint32(255*valueAt(t/256.0));}
-        double support() { return supportVal;}
-        qint32 intSupport() { return intSupportVal;}
-        virtual bool boxSpecial() { return false;}
-    protected:
-        double supportVal;
-        qint32 intSupportVal;
-        KoID m_id;
+    QString id() {
+        return m_id.id();
+    }
+    QString name() {
+        return m_id.name();
+    }
+    virtual double valueAt(double /*t*/) const {
+        return 0;
+    }
+    virtual qint32 intValueAt(qint32 t) const {
+        return qint32(255*valueAt(t / 256.0));
+    }
+    double support() {
+        return supportVal;
+    }
+    qint32 intSupport() {
+        return intSupportVal;
+    }
+    virtual bool boxSpecial() {
+        return false;
+    }
+protected:
+    double supportVal;
+    qint32 intSupportVal;
+    KoID m_id;
 };
 
 class KRITAIMAGE_EXPORT KisHermiteFilterStrategy : public KisFilterStrategy
 {
-    public:
-        KisHermiteFilterStrategy() : KisFilterStrategy(KoID("Hermite", i18n("Hermite")))
-            {supportVal = 1.0; intSupportVal = 256;}
-        virtual ~KisHermiteFilterStrategy() {}
+public:
+    KisHermiteFilterStrategy() : KisFilterStrategy(KoID("Hermite", i18n("Hermite"))) {
+        supportVal = 1.0; intSupportVal = 256;
+    }
+    virtual ~KisHermiteFilterStrategy() {}
 
-        virtual qint32 intValueAt(qint32 t) const;
-        virtual double valueAt(double t) const;
+    virtual qint32 intValueAt(qint32 t) const;
+    virtual double valueAt(double t) const;
 };
 
 class KRITAIMAGE_EXPORT KisBoxFilterStrategy : public KisFilterStrategy
 {
-    public:
-        KisBoxFilterStrategy() : KisFilterStrategy(KoID("Box", i18n("Box")))
-             {supportVal = 0.5; intSupportVal = 128;}
-        virtual ~KisBoxFilterStrategy() {}
+public:
+    KisBoxFilterStrategy() : KisFilterStrategy(KoID("Box", i18n("Box"))) {
+        supportVal = 0.5; intSupportVal = 128;
+    }
+    virtual ~KisBoxFilterStrategy() {}
 
-        virtual qint32 intValueAt(qint32 t) const;
-        virtual double valueAt(double t) const;
-        virtual bool boxSpecial() { return true;}
+    virtual qint32 intValueAt(qint32 t) const;
+    virtual double valueAt(double t) const;
+    virtual bool boxSpecial() {
+        return true;
+    }
 };
 
 class KRITAIMAGE_EXPORT KisTriangleFilterStrategy : public KisFilterStrategy
 {
-    public:
-        KisTriangleFilterStrategy() : KisFilterStrategy(KoID("Triangle", i18n("Triangle aka (bi)linear")))
-            {supportVal = 1.0; intSupportVal = 256;}
-        virtual ~KisTriangleFilterStrategy() {}
+public:
+    KisTriangleFilterStrategy() : KisFilterStrategy(KoID("Triangle", i18n("Triangle aka (bi)linear"))) {
+        supportVal = 1.0; intSupportVal = 256;
+    }
+    virtual ~KisTriangleFilterStrategy() {}
 
-        virtual qint32 intValueAt(qint32 t) const;
-        virtual double valueAt(double t) const;
+    virtual qint32 intValueAt(qint32 t) const;
+    virtual double valueAt(double t) const;
 };
 
 class KRITAIMAGE_EXPORT KisBellFilterStrategy : public KisFilterStrategy
 {
-    public:
-        KisBellFilterStrategy() : KisFilterStrategy(KoID("Bell", i18n("Bell")))
-            {supportVal = 1.5; intSupportVal = 128+256;}
-        virtual ~KisBellFilterStrategy() {}
+public:
+    KisBellFilterStrategy() : KisFilterStrategy(KoID("Bell", i18n("Bell"))) {
+        supportVal = 1.5; intSupportVal = 128 + 256;
+    }
+    virtual ~KisBellFilterStrategy() {}
 
-        virtual double valueAt(double t) const;
+    virtual double valueAt(double t) const;
 };
 
 class KRITAIMAGE_EXPORT KisBSplineFilterStrategy : public KisFilterStrategy
 {
-    public:
-        KisBSplineFilterStrategy() : KisFilterStrategy(KoID("BSpline", i18n("BSpline")))
-            {supportVal = 2.0; intSupportVal = 512;}
-        virtual ~KisBSplineFilterStrategy() {}
+public:
+    KisBSplineFilterStrategy() : KisFilterStrategy(KoID("BSpline", i18n("BSpline"))) {
+        supportVal = 2.0; intSupportVal = 512;
+    }
+    virtual ~KisBSplineFilterStrategy() {}
 
-        virtual double valueAt(double t) const;
+    virtual double valueAt(double t) const;
 };
 
 class KRITAIMAGE_EXPORT KisLanczos3FilterStrategy : public KisFilterStrategy
 {
-    public:
-        KisLanczos3FilterStrategy() : KisFilterStrategy(KoID("Lanczos3", i18n("Lanczos3")))
-            {supportVal = 3.0; intSupportVal = 768;}
-        virtual ~KisLanczos3FilterStrategy() {}
+public:
+    KisLanczos3FilterStrategy() : KisFilterStrategy(KoID("Lanczos3", i18n("Lanczos3"))) {
+        supportVal = 3.0; intSupportVal = 768;
+    }
+    virtual ~KisLanczos3FilterStrategy() {}
 
-        virtual double valueAt(double t) const;
-    private:
-        double sinc(double x) const;
+    virtual double valueAt(double t) const;
+private:
+    double sinc(double x) const;
 };
 
 class KRITAIMAGE_EXPORT  KisMitchellFilterStrategy : public KisFilterStrategy
 {
-    public:
-        KisMitchellFilterStrategy() : KisFilterStrategy(KoID("Mitchell", i18n("Mitchell")))
-            {supportVal = 2.0; intSupportVal = 256;}
-        virtual ~KisMitchellFilterStrategy() {}
+public:
+    KisMitchellFilterStrategy() : KisFilterStrategy(KoID("Mitchell", i18n("Mitchell"))) {
+        supportVal = 2.0; intSupportVal = 256;
+    }
+    virtual ~KisMitchellFilterStrategy() {}
 
-        virtual double valueAt(double t) const;
+    virtual double valueAt(double t) const;
 };
 
 class KRITAIMAGE_EXPORT KisFilterStrategyRegistry : public KoGenericRegistry<KisFilterStrategy *>
@@ -131,8 +154,8 @@ public:
 
 private:
     KisFilterStrategyRegistry();
-     KisFilterStrategyRegistry(const KisFilterStrategyRegistry&);
-     KisFilterStrategyRegistry operator=(const KisFilterStrategyRegistry&);
+    KisFilterStrategyRegistry(const KisFilterStrategyRegistry&);
+    KisFilterStrategyRegistry operator=(const KisFilterStrategyRegistry&);
 
 private:
     static KisFilterStrategyRegistry *m_singleton;

@@ -25,21 +25,27 @@
 struct KisDynamicShapeProgram::Private {
 };
 
-KisDynamicShapeProgram::KisDynamicShapeProgram(const QString& name, const QString& type) : KisDynamicProgram(name, type), d(new Private) {
+KisDynamicShapeProgram::KisDynamicShapeProgram(const QString& name, const QString& type) : KisDynamicProgram(name, type), d(new Private)
+{
 }
 
-KisDynamicShapeProgram::~KisDynamicShapeProgram() { delete d; }
+KisDynamicShapeProgram::~KisDynamicShapeProgram()
+{
+    delete d;
+}
 
-class KisDynamicDummyShapeProgram : public KisDynamicShapeProgram {
-    public:
-        KisDynamicDummyShapeProgram(const QString& name) : KisDynamicShapeProgram(name, "dummy") { }
-        virtual KisDynamicScattering scattering( const KisPaintInformation& info ) const
-            {
-                Q_UNUSED(info);
-                return KisDynamicScattering(1, 0.0);
-            }
-        virtual void apply( KisDynamicShape* , const KisPaintInformation& ) const { }
-        virtual QWidget* createEditor(QWidget* ) { return 0; }
+class KisDynamicDummyShapeProgram : public KisDynamicShapeProgram
+{
+public:
+    KisDynamicDummyShapeProgram(const QString& name) : KisDynamicShapeProgram(name, "dummy") { }
+    virtual KisDynamicScattering scattering(const KisPaintInformation& info) const {
+        Q_UNUSED(info);
+        return KisDynamicScattering(1, 0.0);
+    }
+    virtual void apply(KisDynamicShape* , const KisPaintInformation&) const { }
+    virtual QWidget* createEditor(QWidget*) {
+        return 0;
+    }
 };
 
 
@@ -80,10 +86,10 @@ KisSerializableConfiguration* KisDynamicShapeProgramsFactory::create(const QDomE
 {
     QString type = e.attribute("type", "");
     QString name = e.attribute("name", "");
-    KisDynamicShapeProgramFactory* factory = KisDynamicShapeProgramFactoryRegistry::instance()->value( type );
+    KisDynamicShapeProgramFactory* factory = KisDynamicShapeProgramFactoryRegistry::instance()->value(type);
     dbgKrita << "Type is : " << type;
     Q_ASSERT(factory);
-    KisDynamicShapeProgram* program = factory->shapeProgram( name );
+    KisDynamicShapeProgram* program = factory->shapeProgram(name);
     Q_ASSERT(program);
     program->fromXML(e);
     return program;

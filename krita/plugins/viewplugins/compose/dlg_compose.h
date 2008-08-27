@@ -26,26 +26,27 @@
 class WdgCompose : public QWidget, public Ui::WdgCompose
 {
 public:
-  WdgCompose( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
+    WdgCompose(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
 /**
  * This dialog allows the user to configure the decomposition of an image
  * into layers: one layer for each color channel.
  */
-class DlgCompose: public KDialog {
+class DlgCompose: public KDialog
+{
 
     Q_OBJECT
 
 public:
 
-    DlgCompose(KisImageSP image, QWidget * parent = 0 );
+    DlgCompose(KisImageSP image, QWidget * parent = 0);
     ~DlgCompose();
 
 private slots:
-    
+
     void okClicked();
 
 private:

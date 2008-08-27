@@ -27,24 +27,26 @@ class QString;
 class KisFilterConfiguration;
 class QRect;
 
-class KRITAIMAGE_EXPORT KisRecordedFilterAction : public KisRecordedAction {
-    public:
-        KisRecordedFilterAction(QString name, KisNodeSP node, const KisFilter* filter, KisFilterConfiguration*);
-        KisRecordedFilterAction(const KisRecordedFilterAction&);
-        virtual ~KisRecordedFilterAction();
-        virtual void play(KisUndoAdapter* adapter = 0) const;
-        virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
-        virtual KisRecordedAction* clone() const;
-    private:
-        struct Private;
-        Private* const d;
+class KRITAIMAGE_EXPORT KisRecordedFilterAction : public KisRecordedAction
+{
+public:
+    KisRecordedFilterAction(QString name, KisNodeSP node, const KisFilter* filter, KisFilterConfiguration*);
+    KisRecordedFilterAction(const KisRecordedFilterAction&);
+    virtual ~KisRecordedFilterAction();
+    virtual void play(KisUndoAdapter* adapter = 0) const;
+    virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
+    virtual KisRecordedAction* clone() const;
+private:
+    struct Private;
+    Private* const d;
 };
 
-class KisRecordedFilterActionFactory : public KisRecordedActionFactory {
-    public:
-        KisRecordedFilterActionFactory();
-        virtual ~KisRecordedFilterActionFactory();
-        virtual KisRecordedAction* fromXML(KisImageSP img, const QDomElement& elt);
+class KisRecordedFilterActionFactory : public KisRecordedActionFactory
+{
+public:
+    KisRecordedFilterActionFactory();
+    virtual ~KisRecordedFilterActionFactory();
+    virtual KisRecordedAction* fromXML(KisImageSP img, const QDomElement& elt);
 };
 
 #endif

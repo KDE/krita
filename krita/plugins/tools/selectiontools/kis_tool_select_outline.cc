@@ -51,7 +51,7 @@
 #include "kis_selection_tool_helper.h"
 
 KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
-    : KisTool(canvas, KisCursor::load("tool_outline_selection_cursor.png", 5, 5))
+        : KisTool(canvas, KisCursor::load("tool_outline_selection_cursor.png", 5, 5))
 {
     m_dragging = false;
     m_optWidget = 0;
@@ -63,9 +63,9 @@ KisToolSelectOutline::~KisToolSelectOutline()
 {
 }
 
-void KisToolSelectOutline::activate( bool temporary )
+void KisToolSelectOutline::activate(bool temporary)
 {
-    super::activate( temporary );
+    super::activate(temporary);
 
     if (!m_optWidget)
         return;
@@ -103,18 +103,18 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
         if (currentImage()) {
             QApplication::setOverrideCursor(KisCursor::waitCursor());
 
-            KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*> ( m_canvas );
-            if ( !kisCanvas )
+            KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(m_canvas);
+            if (!kisCanvas)
                 return;
 
             KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Outline Selection"));
 
-            if(m_selectionMode == PIXEL_SELECTION){
+            if (m_selectionMode == PIXEL_SELECTION) {
 
                 KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
 
                 KisPainter painter(tmpSel);
-                painter.setBounds( currentImage()->bounds() );
+                painter.setBounds(currentImage()->bounds());
                 painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
                 painter.setFillStyle(KisPainter::FillStyleForegroundColor);
                 painter.setStrokeStyle(KisPainter::StrokeStyleNone);
@@ -126,18 +126,17 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
 
                 QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectAction);
                 m_canvas->addCommand(cmd);
-            }
-            else {
+            } else {
 
-                if(m_points.count() > 1) {
+                if (m_points.count() > 1) {
                     KoPathShape* path = new KoPathShape();
-                    path->setShapeId( KoPathShapeId );
+                    path->setShapeId(KoPathShapeId);
 
                     QMatrix resolutionMatrix;
-                    resolutionMatrix.scale(1/currentImage()->xRes(), 1/currentImage()->yRes());
-                    path->moveTo( resolutionMatrix.map(m_points[0]) );
-                    for(int i = 1; i < m_points.count(); i++)
-                        path->lineTo( resolutionMatrix.map(m_points[i]) );
+                    resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
+                    path->moveTo(resolutionMatrix.map(m_points[0]));
+                    for (int i = 1; i < m_points.count(); i++)
+                        path->lineTo(resolutionMatrix.map(m_points[i]));
                     path->close();
                     path->normalize();
 
@@ -200,7 +199,7 @@ QWidget* KisToolSelectOutline::createOptionWidget()
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setWindowTitle(i18n("Outline Selection"));
 
-    connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+    connect(m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
     connect(m_optWidget, SIGNAL(modeChanged(int)), this, SLOT(slotSetSelectionMode(int)));
 
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
@@ -214,15 +213,17 @@ QWidget* KisToolSelectOutline::createOptionWidget()
 
 QWidget* KisToolSelectOutline::optionWidget()
 {
-        return m_optWidget;
+    return m_optWidget;
 }
 
-void KisToolSelectOutline::slotSetAction(int action) {
+void KisToolSelectOutline::slotSetAction(int action)
+{
     if (action >= SELECTION_REPLACE && action <= SELECTION_INTERSECT)
-        m_selectAction =(selectionAction)action;
+        m_selectAction = (selectionAction)action;
 }
 
-void KisToolSelectOutline::slotSetSelectionMode(int mode) {
+void KisToolSelectOutline::slotSetSelectionMode(int mode)
+{
     m_selectionMode = (selectionMode)mode;
 }
 

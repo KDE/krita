@@ -35,10 +35,10 @@ class KRITAUI_EXPORT KisPressureDarkenOption : public KisCurveOption
 public:
 
     KisPressureDarkenOption();
-    virtual void writeOptionSetting( KisPaintOpPresetSP preset ) const;
-    virtual void readOptionSetting( KisPaintOpPresetSP preset );
+    virtual void writeOptionSetting(KisPaintOpPresetSP preset) const;
+    virtual void readOptionSetting(KisPaintOpPresetSP preset);
 
-    KoColor apply( KisPainter * painter, double pressure ) const;
+    KoColor apply(KisPainter * painter, double pressure) const;
 };
 
 #endif

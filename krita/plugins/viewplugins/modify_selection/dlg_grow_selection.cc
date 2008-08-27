@@ -24,11 +24,11 @@
 
 #include <klocale.h>
 #include <kis_debug.h>
-DlgGrowSelection::DlgGrowSelection( QWidget *  parent, const char * name) : super (parent)
+DlgGrowSelection::DlgGrowSelection(QWidget *  parent, const char * name) : super(parent)
 {
-    setCaption( i18n("Grow Selection") );
-    setButtons(  Ok | Cancel);
-    setDefaultButton( Ok );
+    setCaption(i18n("Grow Selection"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
     setObjectName(name);
     m_page = new WdgGrowSelection(this);
     Q_CHECK_PTR(m_page);

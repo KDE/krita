@@ -49,11 +49,12 @@ class KisFilterConfigWidget;
  *
  * in-out processing is typically filtering: @see KisFilter.
  * out-only processing is typiccaly generating: @see KisGenerator.
- * 
+ *
  * Information about the area that needs to be processed is contained
  * @see KisProcessingInformation and @see KisConstProcessingInformation.
  */
-class KRITAIMAGE_EXPORT KisBaseProcessor : public KisShared {
+class KRITAIMAGE_EXPORT KisBaseProcessor : public KisShared
+{
 
 public:
 
@@ -61,12 +62,12 @@ public:
     KisBaseProcessor(const KoID& id, const KoID & category, const QString & entry);
 
     virtual ~KisBaseProcessor();
-    
+
     /**
-     * Return the configuration set as the default by the user or the default 
+     * Return the configuration set as the default by the user or the default
      * configuration from the filter writer as returned by factoryConfiguration.
      *
-     * This configuration is used by default for the configuration widget and 
+     * This configuration is used by default for the configuration widget and
      * given to the process function if there is no configuration widget.
      *
      * @return the default configuration of this widget
@@ -88,20 +89,20 @@ public:
      * filter to use to compute pixels, but the margin is not pasted into the
      * resulting image. Use this for convolution filters, for instance.
      */
-    virtual int overlapMarginNeeded( const KisFilterConfiguration* = 0 ) const;
+    virtual int overlapMarginNeeded(const KisFilterConfiguration* = 0) const;
 
-     /**
-     * Similar to overlapMarginNeeded: some filters will alter a lot of pixels that are
-     * near to each other at the same time. So when you changed a single rectangle
-     * in a device, the actual rectangle that will feel the influence of this change
-     * might be bigger. Use this function to determine that rect.
-     * The default implementation makes a guess using overlapMarginNeeded.
-      */
+    /**
+    * Similar to overlapMarginNeeded: some filters will alter a lot of pixels that are
+    * near to each other at the same time. So when you changed a single rectangle
+    * in a device, the actual rectangle that will feel the influence of this change
+    * might be bigger. Use this function to determine that rect.
+    * The default implementation makes a guess using overlapMarginNeeded.
+     */
     virtual QRect enlargeRect(const QRect & rect, const KisFilterConfiguration* = 0) const;
 
     /// @return Unique identification for this processor
     QString id() const;
-    
+
     /// @return User-visible identification for this processor
     QString name() const;
 
@@ -143,7 +144,7 @@ public:
      * whole area for correct computations should return false.
      */
     bool supportsThreading() const;
-    
+
     /**
      * Determine the colorspace independence of this filter.
      * @see ColorSpaceIndependence
@@ -160,11 +161,11 @@ protected:
     void setSupportsIncrementalPainting(bool v);
     void setSupportsThreading(bool v);
     void setColorSpaceIndependence(ColorSpaceIndependence v);
-    
+
 protected:
-    
-    void setBookmarkManager(KisBookmarkedConfigurationManager* );
-    
+
+    void setBookmarkManager(KisBookmarkedConfigurationManager*);
+
     /// @return the name of config group in KConfig
     virtual QString configEntryGroup() const = 0;
 

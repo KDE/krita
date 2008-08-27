@@ -21,29 +21,30 @@
 
 #include <QtTest/QtTest>
 
-namespace KisMetaData {
-    class Value;
+namespace KisMetaData
+{
+class Value;
 }
 
 class KisMetaDataTest : public QObject
 {
     Q_OBJECT
-    private slots:
+private slots:
 
-        void testRationals();
-        void testValueCreation();
-        void testValueEquality();
-        void testValueCopy();
-        void testSchema();
-        void testEntry();
-        void testStore();
-        void testFilters();
-    private:
-        KisMetaData::Value createUnsignedRationalValue();
-        KisMetaData::Value createSignedRationalValue();
-        KisMetaData::Value createIntegerValue(int v = 42);
-        KisMetaData::Value createStringValue();
-        KisMetaData::Value createListValue();
+    void testRationals();
+    void testValueCreation();
+    void testValueEquality();
+    void testValueCopy();
+    void testSchema();
+    void testEntry();
+    void testStore();
+    void testFilters();
+private:
+    KisMetaData::Value createUnsignedRationalValue();
+    KisMetaData::Value createSignedRationalValue();
+    KisMetaData::Value createIntegerValue(int v = 42);
+    KisMetaData::Value createStringValue();
+    KisMetaData::Value createListValue();
 };
 
 #endif

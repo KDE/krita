@@ -26,11 +26,11 @@
 #include "kis_hsv_adjustment.h"
 
 typedef KGenericFactory<ExtensionsPlugin> ExtensionsPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( krita_colorspaces_extensions, ExtensionsPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(krita_colorspaces_extensions, ExtensionsPluginFactory("krita"))
 
 ExtensionsPlugin::ExtensionsPlugin(QObject *parent, const QStringList &)
 {
-    Q_UNUSED( parent );
+    Q_UNUSED(parent);
     KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisHSVAdjustmentFactory);
 }
 

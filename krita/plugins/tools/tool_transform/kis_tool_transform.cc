@@ -61,31 +61,33 @@
 #include "kis_shape_layer.h"
 #include "kis_canvas_resource_provider.h"
 
-namespace {
-    class TransformCmd : public KisSelectedTransaction {
+namespace
+{
+class TransformCmd : public KisSelectedTransaction
+{
 
-    public:
-        TransformCmd(KisToolTransform *tool, KisNodeSP node, double scaleX, double scaleY, QPointF translate, double a, KisSelectionSP origSel, QPoint startPos, QPoint endPos);
-        virtual ~TransformCmd();
+public:
+    TransformCmd(KisToolTransform *tool, KisNodeSP node, double scaleX, double scaleY, QPointF translate, double a, KisSelectionSP origSel, QPoint startPos, QPoint endPos);
+    virtual ~TransformCmd();
 
-    public:
-        virtual void redo();
-        virtual void undo();
-        void transformArgs(double &sx, double &sy, QPointF &translate, double &a);
-        KisSelectionSP origSelection(QPoint &startPos, QPoint &endPos);
+public:
+    virtual void redo();
+    virtual void undo();
+    void transformArgs(double &sx, double &sy, QPointF &translate, double &a);
+    KisSelectionSP origSelection(QPoint &startPos, QPoint &endPos);
 
-    private:
-        double m_scaleX;
-        double m_scaleY;
-        QPointF m_translate;
-        double m_a;
-        KisToolTransform *m_tool;
-        KisSelectionSP m_origSelection;
-        QPoint m_originalTopLeft;
-        QPoint m_originalBottomRight;
-    };
+private:
+    double m_scaleX;
+    double m_scaleY;
+    QPointF m_translate;
+    double m_a;
+    KisToolTransform *m_tool;
+    KisSelectionSP m_origSelection;
+    QPoint m_originalTopLeft;
+    QPoint m_originalBottomRight;
+};
 
-    TransformCmd::TransformCmd(KisToolTransform *tool, KisNodeSP node, double scaleX, double scaleY, QPointF translate, double a, KisSelectionSP origSel, QPoint originalTopLeft, QPoint originalBottomRight)
+TransformCmd::TransformCmd(KisToolTransform *tool, KisNodeSP node, double scaleX, double scaleY, QPointF translate, double a, KisSelectionSP origSel, QPoint originalTopLeft, QPoint originalBottomRight)
         : KisSelectedTransaction(i18n("Transform"), node)
         , m_scaleX(scaleX)
         , m_scaleY(scaleY)
@@ -95,42 +97,42 @@ namespace {
         , m_origSelection(origSel)
         , m_originalTopLeft(originalTopLeft)
         , m_originalBottomRight(originalBottomRight)
-    {
-    }
+{
+}
 
-    TransformCmd::~TransformCmd()
-    {
-    }
+TransformCmd::~TransformCmd()
+{
+}
 
-    void TransformCmd::transformArgs(double &sx, double &sy, QPointF &translate, double &a)
-    {
-        sx = m_scaleX;
-        sy = m_scaleY;
-        translate = m_translate;
-        a = m_a;
-    }
+void TransformCmd::transformArgs(double &sx, double &sy, QPointF &translate, double &a)
+{
+    sx = m_scaleX;
+    sy = m_scaleY;
+    translate = m_translate;
+    a = m_a;
+}
 
-    KisSelectionSP TransformCmd::origSelection(QPoint &originalTopLeft, QPoint &originalBottomRight)
-    {
-        originalTopLeft = m_originalTopLeft;
-        originalBottomRight = m_originalBottomRight;
-        return m_origSelection;
-    }
+KisSelectionSP TransformCmd::origSelection(QPoint &originalTopLeft, QPoint &originalBottomRight)
+{
+    originalTopLeft = m_originalTopLeft;
+    originalBottomRight = m_originalBottomRight;
+    return m_origSelection;
+}
 
-    void TransformCmd::redo()
-    {
-        KisSelectedTransaction::redo();
-    }
+void TransformCmd::redo()
+{
+    KisSelectedTransaction::redo();
+}
 
-    void TransformCmd::undo()
-    {
-        KisSelectedTransaction::undo();
-    }
+void TransformCmd::undo()
+{
+    KisSelectedTransaction::undo();
+}
 }
 
 KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
-    : KisTool(canvas, KisCursor::rotateCursor())
-    , m_canvas(canvas)
+        : KisTool(canvas, KisCursor::rotateCursor())
+        , m_canvas(canvas)
 {
     setObjectName("tool_transform");
     useCursor(KisCursor::selectCursor());
@@ -157,7 +159,7 @@ KisToolTransform::~KisToolTransform()
 void KisToolTransform::deactivate()
 {
     if (image()->undoAdapter())
-        image()->undoAdapter()->removeCommandHistoryListener( this );
+        image()->undoAdapter()->removeCommandHistoryListener(this);
 
     if (image()) return;
 
@@ -168,21 +170,18 @@ void KisToolTransform::activate(bool temporary)
 {
     Q_UNUSED(temporary);
 
-    if( currentNode() && currentNode()->paintDevice() )
-    {
+    if (currentNode() && currentNode()->paintDevice()) {
         //connect(m_subject, commandExecuted(K3Command *c), this, notifyCommandAdded( KCommand * c));
         //m_subject->undoAdapter()->setCommandHistoryListener( this );
 
-        TransformCmd * cmd=0;
+        TransformCmd * cmd = 0;
 
-        if(image()->undoAdapter()->presentCommand())
+        if (image()->undoAdapter()->presentCommand())
             cmd = dynamic_cast<TransformCmd*>(image()->undoAdapter()->presentCommand());
 
         if (cmd == 0) {
             initHandles();
-        }
-        else
-        {
+        } else {
             // One of our commands is on top
             // We should ask for tool args and orig selection
             cmd->transformArgs(m_scaleX, m_scaleY, m_translate, m_a);
@@ -191,12 +190,12 @@ void KisToolTransform::activate(bool temporary)
         }
     }
     currentNode() =
-        m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentKritaNode ).value<KisNodeSP>();
+        m_canvas->resourceProvider()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
 }
 
 void KisToolTransform::initHandles()
 {
-    int x,y,w,h;
+    int x, y, w, h;
 
     KisPaintDeviceSP dev = currentNode()->paintDevice();
 
@@ -205,19 +204,17 @@ void KisToolTransform::initHandles()
     Q_ASSERT(m_origDevice);
 
     KisSelectionSP selection = currentSelection();
-    if(selection)
-    {
+    if (selection) {
         QRect r = selection->selectedExactRect();
         m_origSelection = new KisSelection(*selection.data());
         r.getRect(&x, &y, &w, &h);
-    }
-    else {
-        dev->exactBounds(x,y,w,h);
+    } else {
+        dev->exactBounds(x, y, w, h);
         m_origSelection = 0;
     }
     m_originalTopLeft = QPoint(x, y);
-    m_originalBottomRight = QPoint(x+w-1, y+h-1);
-    m_originalCenter = QPointF(m_originalTopLeft + m_originalBottomRight + QPoint(1,1)) / 2.0;
+    m_originalBottomRight = QPoint(x + w - 1, y + h - 1);
+    m_originalCenter = QPointF(m_originalTopLeft + m_originalBottomRight + QPoint(1, 1)) / 2.0;
 
     m_a = 0.0;
     m_scaleX = 1.0;
@@ -233,40 +230,39 @@ void KisToolTransform::mousePressEvent(KoPointerEvent *e)
 
     if (img && currentNode()->paintDevice() && e->button() == Qt::LeftButton) {
         QPointF mousePos = QPointF(e->point.x() * img->xRes(), e->point.y() * img->yRes());
-        switch(m_function)
-        {
-            case ROTATE:
-                m_clickoffset = mousePos - m_translate;
-                m_clickangle = -m_a - atan2(m_clickoffset.x(),m_clickoffset.y());
-                m_clickoffset = QPoint(0, 0);
-                break;
-            case MOVE:
-                m_clickoffset = mousePos - m_translate;
-                break;
-            case TOPSCALE:
-                m_clickoffset = mousePos - (m_topleft + m_topright)/2.0;
-                break;
-            case TOPRIGHTSCALE:
-                m_clickoffset = mousePos - m_topright;
-                break;
-            case RIGHTSCALE:
-                m_clickoffset = mousePos - (m_topright + m_bottomright)/2.0;
-                break;
-            case BOTTOMRIGHTSCALE:
-                m_clickoffset = mousePos - m_bottomright;
-                break;
-            case BOTTOMSCALE:
-                m_clickoffset = mousePos - (m_bottomleft + m_bottomright)/2.0;
-                break;
-            case BOTTOMLEFTSCALE:
-                m_clickoffset = mousePos - m_bottomleft;
-                break;
-            case LEFTSCALE:
-                m_clickoffset = mousePos - (m_topleft + m_bottomleft)/2.0;
-                break;
-            case TOPLEFTSCALE:
-                m_clickoffset = mousePos - m_topleft;
-                break;
+        switch (m_function) {
+        case ROTATE:
+            m_clickoffset = mousePos - m_translate;
+            m_clickangle = -m_a - atan2(m_clickoffset.x(), m_clickoffset.y());
+            m_clickoffset = QPoint(0, 0);
+            break;
+        case MOVE:
+            m_clickoffset = mousePos - m_translate;
+            break;
+        case TOPSCALE:
+            m_clickoffset = mousePos - (m_topleft + m_topright) / 2.0;
+            break;
+        case TOPRIGHTSCALE:
+            m_clickoffset = mousePos - m_topright;
+            break;
+        case RIGHTSCALE:
+            m_clickoffset = mousePos - (m_topright + m_bottomright) / 2.0;
+            break;
+        case BOTTOMRIGHTSCALE:
+            m_clickoffset = mousePos - m_bottomright;
+            break;
+        case BOTTOMSCALE:
+            m_clickoffset = mousePos - (m_bottomleft + m_bottomright) / 2.0;
+            break;
+        case BOTTOMLEFTSCALE:
+            m_clickoffset = mousePos - m_bottomleft;
+            break;
+        case LEFTSCALE:
+            m_clickoffset = mousePos - (m_topleft + m_bottomleft) / 2.0;
+            break;
+        case TOPLEFTSCALE:
+            m_clickoffset = mousePos - m_topleft;
+            break;
         }
         m_selecting = true;
         m_actualyMoveWhileSelected = false;
@@ -275,7 +271,7 @@ void KisToolTransform::mousePressEvent(KoPointerEvent *e)
 
 int KisToolTransform::det(const QPointF & v, const QPointF & w)
 {
-    return int(v.x()*w.y()-v.y()*w.x());
+    return int(v.x()*w.y() - v.y()*w.x());
 }
 
 double KisToolTransform::distsq(const QPointF & v, const QPointF & w)
@@ -286,46 +282,45 @@ double KisToolTransform::distsq(const QPointF & v, const QPointF & w)
 
 void KisToolTransform::setFunctionalCursor()
 {
-    int rotOctant = 8 + int(8.5 + m_a* 4 / M_PI);
+    int rotOctant = 8 + int(8.5 + m_a * 4 / M_PI);
 
     int s;
-    if ( (m_scaleX * m_scaleY) < 0 )
+    if ((m_scaleX * m_scaleY) < 0)
         s = -1;
     else
-        s=1;
+        s = 1;
 
-    switch(m_function)
-    {
-        case MOVE:
-            useCursor(KisCursor::moveCursor());
-            break;
-        case ROTATE:
-            useCursor(KisCursor::rotateCursor());
-            break;
-        case TOPSCALE:
-            useCursor(m_sizeCursors[(0*s +rotOctant)%8]);
-            break;
-        case TOPRIGHTSCALE:
-            useCursor(m_sizeCursors[(1*s +rotOctant)%8]);
-            break;
-        case RIGHTSCALE:
-            useCursor(m_sizeCursors[(2*s +rotOctant)%8]);
-            break;
-        case BOTTOMRIGHTSCALE:
-            useCursor(m_sizeCursors[(3*s +rotOctant)%8]);
-            break;
-        case BOTTOMSCALE:
-            useCursor(m_sizeCursors[(4*s +rotOctant)%8]);
-            break;
-        case BOTTOMLEFTSCALE:
-            useCursor(m_sizeCursors[(5*s +rotOctant)%8]);
-            break;
-        case LEFTSCALE:
-            useCursor(m_sizeCursors[(6*s +rotOctant)%8]);
-            break;
-        case TOPLEFTSCALE:
-            useCursor(m_sizeCursors[(7*s +rotOctant)%8]);
-            break;
+    switch (m_function) {
+    case MOVE:
+        useCursor(KisCursor::moveCursor());
+        break;
+    case ROTATE:
+        useCursor(KisCursor::rotateCursor());
+        break;
+    case TOPSCALE:
+        useCursor(m_sizeCursors[(0*s +rotOctant)%8]);
+        break;
+    case TOPRIGHTSCALE:
+        useCursor(m_sizeCursors[(1*s +rotOctant)%8]);
+        break;
+    case RIGHTSCALE:
+        useCursor(m_sizeCursors[(2*s +rotOctant)%8]);
+        break;
+    case BOTTOMRIGHTSCALE:
+        useCursor(m_sizeCursors[(3*s +rotOctant)%8]);
+        break;
+    case BOTTOMSCALE:
+        useCursor(m_sizeCursors[(4*s +rotOctant)%8]);
+        break;
+    case BOTTOMLEFTSCALE:
+        useCursor(m_sizeCursors[(5*s +rotOctant)%8]);
+        break;
+    case LEFTSCALE:
+        useCursor(m_sizeCursors[(6*s +rotOctant)%8]);
+        break;
+    case TOPLEFTSCALE:
+        useCursor(m_sizeCursors[(7*s +rotOctant)%8]);
+        break;
     }
 }
 
@@ -348,38 +343,33 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *e)
 
         // transform mousePos coords, so it seems like it isn't rotated and centered at 0,0
         QPointF newpos = invrot(mousePos.x() - m_translate.x(), mousePos.y() - m_translate.y());
-        double dx=0, dy=0;
+        double dx = 0, dy = 0;
         double oldScaleX = m_scaleX;
         double oldScaleY = m_scaleY;
 
-        if(m_function == MOVE)
-        {
+        if (m_function == MOVE) {
             m_translate += mousePos - m_translate;
         }
 
-        if(m_function == ROTATE)
-        {
+        if (m_function == ROTATE) {
             m_a = -atan2(mousePos.x() - m_translate.x(), mousePos.y() - m_translate.y())
-                - m_clickangle;
+                  - m_clickangle;
         }
 
-        if(m_function == TOPSCALE)
-        {
+        if (m_function == TOPSCALE) {
             dy = (newpos.y() - m_scaleY * (m_originalTopLeft.y() - m_originalCenter.y())) / 2;
             m_scaleY = (newpos.y() - dy) / (m_originalTopLeft.y() - m_originalCenter.y());
 
             // enforce same acpect if shift button is pressed
-            if(e->modifiers() & Qt::ShiftModifier)
-            {
-                if(m_scaleX>0) // handle the mirrored cases
+            if (e->modifiers() & Qt::ShiftModifier) {
+                if (m_scaleX > 0) // handle the mirrored cases
                     m_scaleX = fabs(m_scaleY);
                 else
                     m_scaleX = -fabs(m_scaleY);
             }
         }
 
-        if(m_function == TOPRIGHTSCALE)
-        {
+        if (m_function == TOPRIGHTSCALE) {
             dx = (newpos.x() - m_scaleX * (m_originalBottomRight.x() - m_originalCenter.x())) / 2;
             m_scaleX = (newpos.x() - dx) / (m_originalBottomRight.x() - m_originalCenter.x());
 
@@ -387,19 +377,15 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *e)
             m_scaleY = (newpos.y() - dy) / (m_originalTopLeft.y() - m_originalCenter.y());
 
             // enforce same aspect if shift button is pressed
-            if(e->modifiers() & Qt::ShiftModifier)
-            {
-                if(m_scaleX < m_scaleY)
-                {
-                    if(m_scaleX>0) // handle the mirrored cases
+            if (e->modifiers() & Qt::ShiftModifier) {
+                if (m_scaleX < m_scaleY) {
+                    if (m_scaleX > 0) // handle the mirrored cases
                         m_scaleX = fabs(m_scaleY);
                     else
                         m_scaleX = -fabs(m_scaleY);
                     dx = (m_scaleX - oldScaleX) * (m_originalBottomRight.x() - m_originalCenter.x());
-                }
-                else
-                {
-                    if(m_scaleY>0) // handle the mirrored cases
+                } else {
+                    if (m_scaleY > 0) // handle the mirrored cases
                         m_scaleY = fabs(m_scaleX);
                     else
                         m_scaleY = -fabs(m_scaleX);
@@ -408,23 +394,20 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *e)
             }
         }
 
-        if(m_function == RIGHTSCALE)
-        {
+        if (m_function == RIGHTSCALE) {
             dx = (newpos.x() - m_scaleX * (m_originalBottomRight.x() - m_originalCenter.x())) / 2;
             m_scaleX = (newpos.x() - dx) / (m_originalBottomRight.x() - m_originalCenter.x());
 
             // enforce same acpect if shift button is pressed
-            if(e->modifiers() & Qt::ShiftModifier)
-            {
-                if(m_scaleY>0) // handle the mirrored cases
+            if (e->modifiers() & Qt::ShiftModifier) {
+                if (m_scaleY > 0) // handle the mirrored cases
                     m_scaleY = fabs(m_scaleX);
                 else
                     m_scaleY = -fabs(m_scaleX);
             }
         }
 
-        if(m_function == BOTTOMRIGHTSCALE)
-        {
+        if (m_function == BOTTOMRIGHTSCALE) {
             dx = (newpos.x() - m_scaleX * (m_originalBottomRight.x() - m_originalCenter.x())) / 2;
             m_scaleX = (newpos.x() - dx) / (m_originalBottomRight.x() - m_originalCenter.x());
 
@@ -432,19 +415,15 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *e)
             m_scaleY = (newpos.y() - dy) / (m_originalBottomRight.y() - m_originalCenter.y());
 
             // enforce same acpect if shift button is pressed
-            if(e->modifiers() & Qt::ShiftModifier)
-            {
-                if(m_scaleX < m_scaleY)
-                {
-                    if(m_scaleX>0) // handle the mirrored cases
+            if (e->modifiers() & Qt::ShiftModifier) {
+                if (m_scaleX < m_scaleY) {
+                    if (m_scaleX > 0) // handle the mirrored cases
                         m_scaleX = fabs(m_scaleY);
                     else
                         m_scaleX = -fabs(m_scaleY);
                     dx = (m_scaleX - oldScaleX) * (m_originalBottomRight.x() - m_originalCenter.x());
-                }
-                else
-                {
-                    if(m_scaleY>0) // handle the mirrored cases
+                } else {
+                    if (m_scaleY > 0) // handle the mirrored cases
                         m_scaleY = fabs(m_scaleX);
                     else
                         m_scaleY = -fabs(m_scaleX);
@@ -453,23 +432,20 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *e)
             }
         }
 
-        if(m_function == BOTTOMSCALE)
-        {
+        if (m_function == BOTTOMSCALE) {
             dy = (newpos.y() - m_scaleY * (m_originalBottomRight.y() - m_originalCenter.y())) / 2;
             m_scaleY = (newpos.y() - dy) / (m_originalBottomRight.y() - m_originalCenter.y());
 
             // enforce same acpect if shift button is pressed
-            if(e->modifiers() & Qt::ShiftModifier)
-            {
-                if(m_scaleX>0) // handle the mirrored cases
+            if (e->modifiers() & Qt::ShiftModifier) {
+                if (m_scaleX > 0) // handle the mirrored cases
                     m_scaleX = fabs(m_scaleY);
                 else
                     m_scaleX = -fabs(m_scaleY);
             }
         }
 
-        if(m_function == BOTTOMLEFTSCALE)
-        {
+        if (m_function == BOTTOMLEFTSCALE) {
             dx = (newpos.x() - m_scaleX * (m_originalTopLeft.x() - m_originalCenter.x())) / 2;
             m_scaleX = (newpos.x() - dx) / (m_originalTopLeft.x() - m_originalCenter.x());
 
@@ -477,19 +453,15 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *e)
             m_scaleY = (newpos.y() - dy) / (m_originalBottomRight.y() - m_originalCenter.y());
 
             // enforce same acpect if shift button is pressed
-            if(e->modifiers() & Qt::ShiftModifier)
-            {
-                if(m_scaleX < m_scaleY)
-                {
-                    if(m_scaleX>0) // handle the mirrored cases
+            if (e->modifiers() & Qt::ShiftModifier) {
+                if (m_scaleX < m_scaleY) {
+                    if (m_scaleX > 0) // handle the mirrored cases
                         m_scaleX = fabs(m_scaleY);
                     else
                         m_scaleX = -fabs(m_scaleY);
                     dx = (m_scaleX - oldScaleX) * (m_originalTopLeft.x() - m_originalCenter.x());
-                }
-                else
-                {
-                    if(m_scaleY>0) // handle the mirrored cases
+                } else {
+                    if (m_scaleY > 0) // handle the mirrored cases
                         m_scaleY = fabs(m_scaleX);
                     else
                         m_scaleY = -fabs(m_scaleX);
@@ -498,23 +470,20 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *e)
             }
         }
 
-        if(m_function == LEFTSCALE)
-        {
+        if (m_function == LEFTSCALE) {
             dx = (newpos.x() - m_scaleX * (m_originalTopLeft.x() - m_originalCenter.x())) / 2;
             m_scaleX = (newpos.x() - dx) / (m_originalTopLeft.x() - m_originalCenter.x());
 
             // enforce same acpect if shift button is pressed
-            if(e->modifiers() & Qt::ShiftModifier)
-            {
-                if(m_scaleY>0) // handle the mirrored cases
+            if (e->modifiers() & Qt::ShiftModifier) {
+                if (m_scaleY > 0) // handle the mirrored cases
                     m_scaleY = fabs(m_scaleX);
                 else
                     m_scaleY = -fabs(m_scaleX);
             }
         }
 
-        if(m_function == TOPLEFTSCALE)
-        {
+        if (m_function == TOPLEFTSCALE) {
             dx = (newpos.x() - m_scaleX * (m_originalTopLeft.x() - m_originalCenter.x())) / 2;
             m_scaleX = (newpos.x() - dx) / (m_originalTopLeft.x() - m_originalCenter.x());
 
@@ -522,19 +491,15 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *e)
             m_scaleY = (newpos.y() - dy) / (m_originalTopLeft.y() - m_originalCenter.y());
 
             // enforce same acpect if shift button is pressed
-            if(e->modifiers() & Qt::ShiftModifier)
-            {
-                if(m_scaleX < m_scaleY)
-                {
-                    if(m_scaleX>0) // handle the mirrored cases
+            if (e->modifiers() & Qt::ShiftModifier) {
+                if (m_scaleX < m_scaleY) {
+                    if (m_scaleX > 0) // handle the mirrored cases
                         m_scaleX = fabs(m_scaleY);
                     else
                         m_scaleX = -fabs(m_scaleY);
                     dx = (m_scaleX - oldScaleX) * (m_originalTopLeft.x() - m_originalCenter.x());
-                }
-                else
-                {
-                    if(m_scaleY>0) // handle the mirrored cases
+                } else {
+                    if (m_scaleY > 0) // handle the mirrored cases
                         m_scaleY = fabs(m_scaleX);
                     else
                         m_scaleY = -fabs(m_scaleX);
@@ -546,16 +511,14 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *e)
         m_translate += rot(dx, dy);
 
         m_canvas->updateCanvas(QRect(m_originalTopLeft, m_originalBottomRight));
-    }
-    else
-    {
-        if(det(mousePos - topleft, topright - topleft)>0)
+    } else {
+        if (det(mousePos - topleft, topright - topleft) > 0)
             m_function = ROTATE;
-        else if(det(mousePos - topright, bottomright - topright)>0)
+        else if (det(mousePos - topright, bottomright - topright) > 0)
             m_function = ROTATE;
-        else if(det(mousePos - bottomright, bottomleft - bottomright)>0)
+        else if (det(mousePos - bottomright, bottomleft - bottomright) > 0)
             m_function = ROTATE;
-        else if(det(mousePos - bottomleft, topleft - bottomleft)>0)
+        else if (det(mousePos - bottomleft, topleft - bottomleft) > 0)
             m_function = ROTATE;
         else
             m_function = MOVE;
@@ -563,21 +526,21 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *e)
         double handleradius = m_canvas->viewConverter()->viewToDocumentX(5);
         handleradius *= handleradius; // square it so it fits with distsq
 
-        if(distsq(mousePos, (m_topleft + m_topright)/2.0)<=handleradius)
+        if (distsq(mousePos, (m_topleft + m_topright) / 2.0) <= handleradius)
             m_function = TOPSCALE;
-        if(distsq(mousePos, m_topright)<=handleradius)
+        if (distsq(mousePos, m_topright) <= handleradius)
             m_function = TOPRIGHTSCALE;
-        if(distsq(mousePos, (m_topright + m_bottomright)/2.0)<=handleradius)
+        if (distsq(mousePos, (m_topright + m_bottomright) / 2.0) <= handleradius)
             m_function = RIGHTSCALE;
-        if(distsq(mousePos, m_bottomright)<=handleradius)
+        if (distsq(mousePos, m_bottomright) <= handleradius)
             m_function = BOTTOMRIGHTSCALE;
-        if(distsq(mousePos, (m_bottomleft + m_bottomright)/2.0)<=handleradius)
+        if (distsq(mousePos, (m_bottomleft + m_bottomright) / 2.0) <= handleradius)
             m_function = BOTTOMSCALE;
-        if(distsq(mousePos, m_bottomleft)<=handleradius)
+        if (distsq(mousePos, m_bottomleft) <= handleradius)
             m_function = BOTTOMLEFTSCALE;
-        if(distsq(mousePos, (m_topleft + m_bottomleft)/2.0)<=handleradius)
+        if (distsq(mousePos, (m_topleft + m_bottomleft) / 2.0) <= handleradius)
             m_function = LEFTSCALE;
-        if(distsq(mousePos, m_topleft)<=handleradius)
+        if (distsq(mousePos, m_topleft) <= handleradius)
             m_function = TOPLEFTSCALE;
 
         setFunctionalCursor();
@@ -588,7 +551,7 @@ void KisToolTransform::mouseReleaseEvent(KoPointerEvent */*e*/)
 {
     m_selecting = false;
 
-    if(m_actualyMoveWhileSelected) {
+    if (m_actualyMoveWhileSelected) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         m_canvas->updateCanvas(QRect(m_originalTopLeft, m_originalBottomRight));
         transform();
@@ -598,26 +561,26 @@ void KisToolTransform::mouseReleaseEvent(KoPointerEvent */*e*/)
 
 void KisToolTransform::recalcOutline()
 {
-    double x,y;
+    double x, y;
 
     m_sina = sin(m_a);
     m_cosa = cos(m_a);
 
     x = (m_originalTopLeft.x() - m_originalCenter.x()) * m_scaleX;
     y = (m_originalTopLeft.y() - m_originalCenter.y()) * m_scaleY;
-    m_topleft = rot(x,y) + m_translate;
+    m_topleft = rot(x, y) + m_translate;
 
     x = (m_originalBottomRight.x() - m_originalCenter.x()) * m_scaleX;
     y = (m_originalTopLeft.y() - m_originalCenter.y()) * m_scaleY;
-    m_topright = rot(x,y) + m_translate;
+    m_topright = rot(x, y) + m_translate;
 
     x = (m_originalTopLeft.x() - m_originalCenter.x()) * m_scaleX;
     y = (m_originalBottomRight.y() - m_originalCenter.y()) * m_scaleY;
-    m_bottomleft = rot(x,y) + m_translate;
+    m_bottomleft = rot(x, y) + m_translate;
 
     x = (m_originalBottomRight.x() - m_originalCenter.x()) * m_scaleX;
     y = (m_originalBottomRight.y() - m_originalCenter.y()) * m_scaleY;
-    m_bottomright = rot(x,y) + m_translate;
+    m_bottomright = rot(x, y) + m_translate;
 }
 
 void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
@@ -628,23 +591,23 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
 
     recalcOutline();
     KisImageSP img = image();
-    QPointF topleft = converter.documentToView(QPointF(m_topleft.x() / img->xRes(), m_topleft.y()/img->yRes()));
-    QPointF topright = converter.documentToView(QPointF(m_topright.x() / img->xRes(), m_topright.y()/img->yRes()));
-    QPointF bottomleft = converter.documentToView(QPointF(m_bottomleft.x() / img->xRes(), m_bottomleft.y()/img->yRes()));
-    QPointF bottomright = converter.documentToView(QPointF(m_bottomright.x() / img->xRes(), m_bottomright.y()/img->yRes()));
+    QPointF topleft = converter.documentToView(QPointF(m_topleft.x() / img->xRes(), m_topleft.y() / img->yRes()));
+    QPointF topright = converter.documentToView(QPointF(m_topright.x() / img->xRes(), m_topright.y() / img->yRes()));
+    QPointF bottomleft = converter.documentToView(QPointF(m_bottomleft.x() / img->xRes(), m_bottomleft.y() / img->yRes()));
+    QPointF bottomright = converter.documentToView(QPointF(m_bottomright.x() / img->xRes(), m_bottomright.y() / img->yRes()));
 
     QRectF handleRect(-4, -4, 8, 8);
 
     gc.setPen(pen);
 
     gc.drawRect(handleRect.translated(topleft));
-    gc.drawRect(handleRect.translated((topleft+topright)/2.0));
+    gc.drawRect(handleRect.translated((topleft + topright) / 2.0));
     gc.drawRect(handleRect.translated(topright));
-    gc.drawRect(handleRect.translated((topright+bottomright)/2.0));
+    gc.drawRect(handleRect.translated((topright + bottomright) / 2.0));
     gc.drawRect(handleRect.translated(bottomright));
-    gc.drawRect(handleRect.translated((bottomleft+bottomright)/2.0));
+    gc.drawRect(handleRect.translated((bottomleft + bottomright) / 2.0));
     gc.drawRect(handleRect.translated(bottomleft));
-    gc.drawRect(handleRect.translated((topleft+bottomleft)/2.0));
+    gc.drawRect(handleRect.translated((topleft + bottomleft) / 2.0));
 
     gc.drawLine(topleft, topright);
     gc.drawLine(topright, bottomright);
@@ -664,7 +627,7 @@ void KisToolTransform::transform()
 
     // This mementoes the current state of the active device.
     TransformCmd * transaction = new TransformCmd(this, currentNode(), m_scaleX,
-                                                  m_scaleY, m_translate, m_a, m_origSelection, m_originalTopLeft, m_originalBottomRight);
+            m_scaleY, m_translate, m_a, m_origSelection, m_originalTopLeft, m_originalBottomRight);
 
     // Copy the original state back.
     QRect rc = m_origDevice->extent();
@@ -675,18 +638,16 @@ void KisToolTransform::transform()
     gc.end();
 
     // Also restore the original selection.
-    if(m_origSelection)
-    {
+    if (m_origSelection) {
         QRect rc = m_origSelection->selectedRect();
         rc = rc.normalized();
         // XXX_SELECTION This used to create a new selection!
-        if ( currentSelection() ) currentSelection()->clear();
+        if (currentSelection()) currentSelection()->clear();
         KisPainter sgc(KisPaintDeviceSP(currentSelection().data()));
         sgc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, KisPaintDeviceSP(m_origSelection.data()), rc.x(), rc.y(), rc.width(), rc.height());
         sgc.end();
-    }
-    else
-        if(currentSelection())
+    } else
+        if (currentSelection())
             currentSelection()->clear();
 
     // Perform the transform. Since we copied the original state back, this doesn't degrade
@@ -717,7 +678,7 @@ void KisToolTransform::transform()
     }
 }
 
-void KisToolTransform::notifyCommandAdded( QUndoCommand * command)
+void KisToolTransform::notifyCommandAdded(QUndoCommand * command)
 {
     TransformCmd * cmd = dynamic_cast<TransformCmd*>(command);
     if (cmd == 0) {
@@ -728,21 +689,19 @@ void KisToolTransform::notifyCommandAdded( QUndoCommand * command)
     }
 }
 
-void KisToolTransform::notifyCommandExecuted( QUndoCommand * command)
+void KisToolTransform::notifyCommandExecuted(QUndoCommand * command)
 {
     Q_UNUSED(command);
-    TransformCmd * cmd=0;
+    TransformCmd * cmd = 0;
 
-    if(image()->undoAdapter()->presentCommand())
+    if (image()->undoAdapter()->presentCommand())
         cmd = dynamic_cast<TransformCmd*>(image()->undoAdapter()->presentCommand());
 
     if (cmd == 0) {
         // The command now on the top of the stack isn't one of ours
         // We should treat this as if the tool has been just activated
         initHandles();
-    }
-    else
-    {
+    } else {
         // One of our commands is now on top
         // We should ask for tool args and orig selection
         cmd->transformArgs(m_scaleX, m_scaleY, m_translate, m_a);
@@ -766,17 +725,17 @@ QWidget* KisToolTransform::createOptionWidget()
 
     m_optWidget->cmbFilter->setCurrent("Mitchell");
     connect(m_optWidget->cmbFilter, SIGNAL(activated(const KoID &)),
-        this, SLOT(slotSetFilter(const KoID &)));
+            this, SLOT(slotSetFilter(const KoID &)));
 
     KoID filterID = m_optWidget->cmbFilter->currentItem();
     m_filter = KisFilterStrategyRegistry::instance()->value(filterID.id());
 
-/*
-    connect(m_optWidget->intStartX, SIGNAL(valueChanged(int)), this, SLOT(setStartX(int)));
-    connect(m_optWidget->intStartY, SIGNAL(valueChanged(int)), this, SLOT(setStartY(int)));
-    connect(m_optWidget->intEndX, SIGNAL(valueChanged(int)), this, SLOT(setEndX(int)));
-    connect(m_optWidget->intEndY, SIGNAL(valueChanged(int)), this, SLOT(setEndY(int)));
-*/
+    /*
+        connect(m_optWidget->intStartX, SIGNAL(valueChanged(int)), this, SLOT(setStartX(int)));
+        connect(m_optWidget->intStartY, SIGNAL(valueChanged(int)), this, SLOT(setStartY(int)));
+        connect(m_optWidget->intEndX, SIGNAL(valueChanged(int)), this, SLOT(setEndX(int)));
+        connect(m_optWidget->intEndY, SIGNAL(valueChanged(int)), this, SLOT(setEndY(int)));
+    */
     m_optWidget->intStartX->hide();
     m_optWidget->intStartY->hide();
     m_optWidget->intEndX->hide();

@@ -34,30 +34,28 @@
 #include "tmo_trilateral.h"
 #include "ui_trilateral_configuration_widget.h"
 
-class KisTrilateralOperatorConfigurationWidget : public KisToneMappingOperatorConfigurationWidget{
-    public:
-        KisTrilateralOperatorConfigurationWidget(QWidget* wdg) : KisToneMappingOperatorConfigurationWidget(wdg)
-        {
-            widget.setupUi(this);
-        }
-        virtual void setConfiguration(KisPropertiesConfiguration* config)
-        {
-            widget.saturation->setValue(config->getDouble("Saturation", 1.0));
-            widget.sigma->setValue(config->getDouble("Sigma", 21.0));
-            widget.contrast->setValue(config->getDouble("Contrast", 5.0));
-            widget.shift->setValue(config->getDouble("Shift", 0.0));
-        }
-        virtual KisPropertiesConfiguration* configuration() const
-        {
-            KisPropertiesConfiguration* config = new KisPropertiesConfiguration();
-            config->setProperty("Saturation", widget.saturation->value());
-            config->setProperty("Sigma", widget.sigma->value());
-            config->setProperty("Contrast", widget.contrast->value());
-            config->setProperty("Shift", widget.shift->value());
-            return config;
-        }
-    private:
-        Ui_TrilateralOperatorConfigurationWidget widget;
+class KisTrilateralOperatorConfigurationWidget : public KisToneMappingOperatorConfigurationWidget
+{
+public:
+    KisTrilateralOperatorConfigurationWidget(QWidget* wdg) : KisToneMappingOperatorConfigurationWidget(wdg) {
+        widget.setupUi(this);
+    }
+    virtual void setConfiguration(KisPropertiesConfiguration* config) {
+        widget.saturation->setValue(config->getDouble("Saturation", 1.0));
+        widget.sigma->setValue(config->getDouble("Sigma", 21.0));
+        widget.contrast->setValue(config->getDouble("Contrast", 5.0));
+        widget.shift->setValue(config->getDouble("Shift", 0.0));
+    }
+    virtual KisPropertiesConfiguration* configuration() const {
+        KisPropertiesConfiguration* config = new KisPropertiesConfiguration();
+        config->setProperty("Saturation", widget.saturation->value());
+        config->setProperty("Sigma", widget.sigma->value());
+        config->setProperty("Contrast", widget.contrast->value());
+        config->setProperty("Shift", widget.shift->value());
+        return config;
+    }
+private:
+    Ui_TrilateralOperatorConfigurationWidget widget;
 };
 
 PUBLISH_OPERATOR(KisTrilateralOperator)
@@ -73,24 +71,24 @@ KisToneMappingOperatorConfigurationWidget* KisTrilateralOperator::createConfigur
 
 const KoColorSpace* KisTrilateralOperator::colorSpace() const
 {
-    return KoColorSpaceRegistry::instance()->colorSpace( KoColorSpaceRegistry::instance()->colorSpaceId( XYZAColorModelID, Float32BitsColorDepthID), "" );
+    return KoColorSpaceRegistry::instance()->colorSpace(KoColorSpaceRegistry::instance()->colorSpaceId(XYZAColorModelID, Float32BitsColorDepthID), "");
 }
 
 void KisTrilateralOperator::toneMap(KisPaintDeviceSP device, KisPropertiesConfiguration* config) const
 {
-    Q_ASSERT( *device->colorSpace() == *colorSpace() );
+    Q_ASSERT(*device->colorSpace() == *colorSpace());
     QRect r = device->exactBounds();
     dbgKrita << "Tonemaping with Trilateral operator on " << r;
-    
-    pfs::Array2DImpl Y( r, KoXyzTraits<float>::y_pos, device);
-    
-    pfs::Array2DImpl L (r.width(),r.height());
+
+    pfs::Array2DImpl Y(r, KoXyzTraits<float>::y_pos, device);
+
+    pfs::Array2DImpl L(r.width(), r.height());
     dbgKrita << "tmo_ashikhmin02";
     tmo_trilateral(&Y, &L,
-                    config->getDouble("Contrast", 5.0),
-                    config->getDouble("Sigma", 21.0),
-                    config->getDouble("Shift", 0.0),
-                    config->getDouble("Saturation", 1.0) );
+                   config->getDouble("Contrast", 5.0),
+                   config->getDouble("Sigma", 21.0),
+                   config->getDouble("Shift", 0.0),
+                   config->getDouble("Saturation", 1.0));
     dbgKrita << "Apply luminance";
     applyLuminance(device, L.device(), r);
     dbgKrita << "Done";

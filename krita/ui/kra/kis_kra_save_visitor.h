@@ -27,7 +27,8 @@
 
 class KoStore;
 
-class KisKraSaveVisitor : public KisNodeVisitor {
+class KisKraSaveVisitor : public KisNodeVisitor
+{
 public:
     KisKraSaveVisitor(KisImageSP img, KoStore *store, quint32 &count, const QString & name);
 
@@ -36,7 +37,7 @@ public:
 public:
     void setExternalUri(QString &uri);
 
-    bool visit( KisExternalLayer * );
+    bool visit(KisExternalLayer *);
 
     bool visit(KisPaintLayer *layer);
 
@@ -58,7 +59,7 @@ public:
 
 private:
 
-    bool savePaintDevice( KisNode * node );
+    bool savePaintDevice(KisNode * node);
 
 private:
     KisImageSP m_img;

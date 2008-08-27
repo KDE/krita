@@ -23,11 +23,12 @@
 #include <kis_paint_device.h>
 #include <kis_iterators_pixel.h>
 
-void KisCachedHistogramObserver::regionUpdated(KisPaintDeviceSP dev) {
+void KisCachedHistogramObserver::regionUpdated(KisPaintDeviceSP dev)
+{
     m_producer->clear();
     KisRectConstIteratorPixel srcIt = dev->createRectConstIterator(m_x, m_y, m_w, m_h);
     int i;
-    while ( !srcIt.isDone() ) {
+    while (!srcIt.isDone()) {
         i = srcIt.nConseqPixels();
         m_producer->addRegionToBin(srcIt.rawData(), srcIt.selectionMask(), i, dev->colorSpace());
         srcIt += i;

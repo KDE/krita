@@ -50,7 +50,7 @@ public:
      * Renders the shapes to a selection. This method should only be called
      * by KisSelection to update it's projection.
      *
-     * @param projection the target selection 
+     * @param projection the target selection
      */
     virtual void renderToProjection(KisSelection* projection);
     virtual void renderToProjection(KisSelection* projection, const QRect& r);
@@ -68,7 +68,7 @@ protected:
     virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
 
 private:
-    
+
     Q_DISABLE_COPY(KisShapeSelection)
 
     void renderSelection(KisSelection* projection, const QRect& r);
@@ -90,11 +90,11 @@ public:
     using KoShapeFactory::createDefaultShape;
     using KoShapeFactory::createShape;
 
-    KisShapeSelectionFactory( QObject* parent);
+    KisShapeSelectionFactory(QObject* parent);
     ~KisShapeSelectionFactory() {}
 
     KoShape* createDefaultShape() const;
-    KoShape* createShape( const KoProperties* params ) const;
+    KoShape* createShape(const KoProperties* params) const;
 };
 
 #endif

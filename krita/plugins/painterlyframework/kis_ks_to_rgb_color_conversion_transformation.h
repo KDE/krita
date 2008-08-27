@@ -28,36 +28,34 @@
 #include <KoHdrColorProfile.h>
 
 template< typename _TYPE_, int _N_ >
-class KisKSToRGBColorConversionTransformation : public KoColorConversionTransformation {
+class KisKSToRGBColorConversionTransformation : public KoColorConversionTransformation
+{
 
-typedef KoColorConversionTransformation parent;
-typedef KisKSColorSpaceTrait<_TYPE_,_N_> CSTrait;
+    typedef KoColorConversionTransformation parent;
+    typedef KisKSColorSpaceTrait<_TYPE_, _N_> CSTrait;
 
 public:
 
     KisKSToRGBColorConversionTransformation(const KoColorSpace *srcCs, const KoColorSpace *dstCs)
-    : parent(srcCs, dstCs), m_rgbvec(0), m_ksvec(0), m_srcProfile(0)
-    {
+            : parent(srcCs, dstCs), m_rgbvec(0), m_ksvec(0), m_srcProfile(0) {
         m_srcProfile = static_cast<const KisIlluminantProfile*>(parent::srcColorSpace()->profile());
         m_rgbvec = new double[3];
         m_ksvec  = new double[2*_N_];
     }
 
-    ~KisKSToRGBColorConversionTransformation()
-    {
+    ~KisKSToRGBColorConversionTransformation() {
         delete [] m_rgbvec;
         delete [] m_ksvec;
     }
 
-    void transform(const quint8 *src, quint8 *dst8, int nPixels) const
-    {
+    void transform(const quint8 *src, quint8 *dst8, int nPixels) const {
         quint16 *dst = reinterpret_cast<quint16*>(dst8);
 
-        for ( ; nPixels > 0; nPixels-- ) {
+        for (; nPixels > 0; nPixels--) {
 
             for (int i = 0; i < _N_; i++) {
-                m_ksvec[2*i+0] = (double)CSTrait::K(src,i);
-                m_ksvec[2*i+1] = (double)CSTrait::S(src,i);
+                m_ksvec[2*i+0] = (double)CSTrait::K(src, i);
+                m_ksvec[2*i+1] = (double)CSTrait::S(src, i);
             }
 
             m_srcProfile->toRgb(m_ksvec, m_rgbvec);
@@ -83,29 +81,33 @@ private:
 };
 
 template< typename _TYPE_, int _N_ >
-class KisKSToRGBColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
+class KisKSToRGBColorConversionTransformationFactory : public KoColorConversionTransformationFactory
+{
 
 public:
     KisKSToRGBColorConversionTransformationFactory(QString srcProfile)
-    : KoColorConversionTransformationFactory( QString("KS%1").arg(_N_),
-                                              KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id(), srcProfile,
-                                              RGBAColorModelID.id(),
-                                              Integer16BitsColorDepthID.id(), "sRGB built-in - (lcms internal)" ) { }
+            : KoColorConversionTransformationFactory(QString("KS%1").arg(_N_),
+                    KisKSColorSpace<_TYPE_, _N_>::ColorDepthId().id(), srcProfile,
+                    RGBAColorModelID.id(),
+                    Integer16BitsColorDepthID.id(), "sRGB built-in - (lcms internal)") { }
 
-    KoColorConversionTransformation *createColorTransformation( const KoColorSpace* srcColorSpace,
-                                                                const KoColorSpace* dstColorSpace,
-                                                                KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const
-    {
+    KoColorConversionTransformation *createColorTransformation(const KoColorSpace* srcColorSpace,
+            const KoColorSpace* dstColorSpace,
+            KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const {
         Q_UNUSED(renderingIntent);
 
         Q_ASSERT(canBeSource(srcColorSpace));
         Q_ASSERT(canBeDestination(dstColorSpace));
 
-        return new KisKSToRGBColorConversionTransformation<_TYPE_,_N_>(srcColorSpace, dstColorSpace);
+        return new KisKSToRGBColorConversionTransformation<_TYPE_, _N_>(srcColorSpace, dstColorSpace);
     }
 
-    bool conserveColorInformation() const { return true; }
-    bool conserveDynamicRange() const { return false; }
+    bool conserveColorInformation() const {
+        return true;
+    }
+    bool conserveDynamicRange() const {
+        return false;
+    }
 
 };
 

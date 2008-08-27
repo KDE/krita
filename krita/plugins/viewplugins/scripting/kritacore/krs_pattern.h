@@ -23,24 +23,28 @@
 
 class KisPattern;
 
-namespace Scripting {
+namespace Scripting
+{
 
 class Module;
 
 /**
  * Pattern object.
  */
-class Pattern : public QObject {
-        //Q_OBJECT
-    public:
-        // @param sharedPattern tell if the pattern should be deleted or not when this object is deleted
-        Pattern(Module* module, KisPattern*, bool sharedPattern);
-        ~Pattern();
-    public:
-        KisPattern* getPattern() { return m_pattern; }
-    private:
-        KisPattern* m_pattern;
-        bool m_sharedPattern;
+class Pattern : public QObject
+{
+    //Q_OBJECT
+public:
+    // @param sharedPattern tell if the pattern should be deleted or not when this object is deleted
+    Pattern(Module* module, KisPattern*, bool sharedPattern);
+    ~Pattern();
+public:
+    KisPattern* getPattern() {
+        return m_pattern;
+    }
+private:
+    KisPattern* m_pattern;
+    bool m_sharedPattern;
 };
 
 }

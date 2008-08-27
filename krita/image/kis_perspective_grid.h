@@ -36,98 +36,101 @@ class KisSubPerspectiveGrid;
 /**
  * This class is the corner of sub perspective grid, it can be shared between various grid.
  */
-class KRITAIMAGE_EXPORT KisPerspectiveGridNode : public QPointF, public KisShared {
+class KRITAIMAGE_EXPORT KisPerspectiveGridNode : public QPointF, public KisShared
+{
     friend class KisSubPerspectiveGrid;
-    public:
-        KisPerspectiveGridNode(double x, double y);
-        KisPerspectiveGridNode(QPointF p);
-        ~KisPerspectiveGridNode();
-        void mergeWith(KisPerspectiveGridNodeSP );
-    private:
-        void registerSubPerspectiveGrid(KisSubPerspectiveGrid* );
-        void unRegisterSubPerspectiveGrid(KisSubPerspectiveGrid* );
-    private:
-        struct Private;
-        Private* const d;
+public:
+    KisPerspectiveGridNode(double x, double y);
+    KisPerspectiveGridNode(QPointF p);
+    ~KisPerspectiveGridNode();
+    void mergeWith(KisPerspectiveGridNodeSP);
+private:
+    void registerSubPerspectiveGrid(KisSubPerspectiveGrid*);
+    void unRegisterSubPerspectiveGrid(KisSubPerspectiveGrid*);
+private:
+    struct Private;
+    Private* const d;
 };
 
 /**
  * This class contains the information of a sub perspective grid.
  */
-class KRITAIMAGE_EXPORT KisSubPerspectiveGrid {
-    public:
-        KisSubPerspectiveGrid(KisPerspectiveGridNodeSP topLeft, KisPerspectiveGridNodeSP topRight, KisPerspectiveGridNodeSP bottomRight, KisPerspectiveGridNodeSP bottomLeft);
-        ~KisSubPerspectiveGrid();
-        
-        QPointF topBottomVanishingPoint();
-        QPointF leftRightVanishingPoint();
-        
-        /**
-         * @return the top left corner of the grid
-         */
-        const KisPerspectiveGridNodeSP topLeft() const;
-        KisPerspectiveGridNodeSP topLeft();
-        void setTopLeft( KisPerspectiveGridNodeSP );
-        const KisPerspectiveGridNodeSP topRight() const;
-        KisPerspectiveGridNodeSP topRight();
-        void setTopRight( KisPerspectiveGridNodeSP );
-        const KisPerspectiveGridNodeSP bottomLeft() const;
-        KisPerspectiveGridNodeSP bottomLeft();
-        void setBottomLeft( KisPerspectiveGridNodeSP );
-        const KisPerspectiveGridNodeSP bottomRight() const;
-        KisPerspectiveGridNodeSP bottomRight();
-        void setBottomRight( KisPerspectiveGridNodeSP );
-        int subdivisions() const;
-        
-        /**
-         * @return the center of the sub perspective grid
-         */
-        QPointF center() const;
-        
-        /**
-         * Return the index of the subgrid, the value is automatically set when the KisSubPerspectiveGrid, it is useful for
-         * drawing the perspective grid, to avoid drawing twice the same border, or points
-         */
-        int index() const;
+class KRITAIMAGE_EXPORT KisSubPerspectiveGrid
+{
+public:
+    KisSubPerspectiveGrid(KisPerspectiveGridNodeSP topLeft, KisPerspectiveGridNodeSP topRight, KisPerspectiveGridNodeSP bottomRight, KisPerspectiveGridNodeSP bottomLeft);
+    ~KisSubPerspectiveGrid();
 
-        /**
-         * @return true if the point p is contain by the grid
-         */
-        bool contains(const QPointF p) const;
-    private:
-        inline QPointF computeVanishingPoint(KisPerspectiveGridNodeSP p11, KisPerspectiveGridNodeSP p12, KisPerspectiveGridNodeSP p21, KisPerspectiveGridNodeSP p22);
-    private:
-        struct Private;
-        Private* const d;
+    QPointF topBottomVanishingPoint();
+    QPointF leftRightVanishingPoint();
+
+    /**
+     * @return the top left corner of the grid
+     */
+    const KisPerspectiveGridNodeSP topLeft() const;
+    KisPerspectiveGridNodeSP topLeft();
+    void setTopLeft(KisPerspectiveGridNodeSP);
+    const KisPerspectiveGridNodeSP topRight() const;
+    KisPerspectiveGridNodeSP topRight();
+    void setTopRight(KisPerspectiveGridNodeSP);
+    const KisPerspectiveGridNodeSP bottomLeft() const;
+    KisPerspectiveGridNodeSP bottomLeft();
+    void setBottomLeft(KisPerspectiveGridNodeSP);
+    const KisPerspectiveGridNodeSP bottomRight() const;
+    KisPerspectiveGridNodeSP bottomRight();
+    void setBottomRight(KisPerspectiveGridNodeSP);
+    int subdivisions() const;
+
+    /**
+     * @return the center of the sub perspective grid
+     */
+    QPointF center() const;
+
+    /**
+     * Return the index of the subgrid, the value is automatically set when the KisSubPerspectiveGrid, it is useful for
+     * drawing the perspective grid, to avoid drawing twice the same border, or points
+     */
+    int index() const;
+
+    /**
+     * @return true if the point p is contain by the grid
+     */
+    bool contains(const QPointF p) const;
+private:
+    inline QPointF computeVanishingPoint(KisPerspectiveGridNodeSP p11, KisPerspectiveGridNodeSP p12, KisPerspectiveGridNodeSP p21, KisPerspectiveGridNodeSP p22);
+private:
+    struct Private;
+    Private* const d;
 };
 
 /**
  * This class contains the list of sub perspective grid
  */
-class KRITAIMAGE_EXPORT KisPerspectiveGrid {
-    public:
-        KisPerspectiveGrid();
-        ~KisPerspectiveGrid();
-        /**
-         * @return false if the grid wasn't added, note that subgrids must be attached to an other grid, except if it's the first grid
-         */
-        bool addNewSubGrid( KisSubPerspectiveGrid* ng );
-        QList<KisSubPerspectiveGrid*>::const_iterator begin() const;
-        QList<KisSubPerspectiveGrid*>::const_iterator end() const;
-        bool hasSubGrids() const;
-        void clearSubGrids();
-        int countSubGrids() const;
-        /**
-         * Delete the grid given as argument and remove it from the list of grids.
-         */
-        void deleteSubGrid( KisSubPerspectiveGrid* grid);
-        /**
-         * @return the first grid hit by the point p
-         */
-        KisSubPerspectiveGrid* gridAt(QPointF p);
-    private:
-        struct Private;
-        Private* const d;
+class KRITAIMAGE_EXPORT KisPerspectiveGrid
+{
+public:
+    KisPerspectiveGrid();
+    ~KisPerspectiveGrid();
+    /**
+     * @return false if the grid wasn't added, note that subgrids must be attached to an other grid, except if it's the first grid
+     */
+    bool addNewSubGrid(KisSubPerspectiveGrid* ng);
+    QList<KisSubPerspectiveGrid*>::const_iterator begin() const;
+    QList<KisSubPerspectiveGrid*>::const_iterator end() const;
+    bool hasSubGrids() const;
+    void clearSubGrids();
+    int countSubGrids() const;
+    /**
+     * Delete the grid given as argument and remove it from the list of grids.
+     */
+    void deleteSubGrid(KisSubPerspectiveGrid* grid);
+    /**
+     * @return the first grid hit by the point p
+     */
+    KisSubPerspectiveGrid* gridAt(QPointF p);
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

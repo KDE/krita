@@ -20,21 +20,20 @@
 #include "kis_node.h"
 #include "KoProgressUpdater.h"
 
-struct KisNodeAction::Private
-{
+struct KisNodeAction::Private {
     KisNodeSP node;
     KoProgressUpdater * updater;
 };
-    
-KisNodeAction::KisNodeAction( QObject * parent, KisNodeSP node, KoProgressProxy * progressProxy )
-    : KoAction( parent )
-    , m_d(new Private)
+
+KisNodeAction::KisNodeAction(QObject * parent, KisNodeSP node, KoProgressProxy * progressProxy)
+        : KoAction(parent)
+        , m_d(new Private)
 {
     m_d->node = node;
     m_d->node->setLocked(true);
     m_d->updater = new KoProgressUpdater(progressProxy);
-    connect( this, SIGNAL(triggered(const QVariant &)), this, SLOT(slotTriggered()), Qt::DirectConnection);
-    connect( this, SIGNAL(updateUi(const QVariant &)), this, SLOT(slotUpdateGUI()), Qt::DirectConnection);
+    connect(this, SIGNAL(triggered(const QVariant &)), this, SLOT(slotTriggered()), Qt::DirectConnection);
+    connect(this, SIGNAL(updateUi(const QVariant &)), this, SLOT(slotUpdateGUI()), Qt::DirectConnection);
 }
 
 KisNodeAction::~KisNodeAction()

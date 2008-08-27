@@ -26,7 +26,7 @@
 #include "filter/kis_filter_registry.h"
 
 typedef KGenericFactory<KisEmbossFilterPlugin> KisEmbossFilterPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritaembossfilter, KisEmbossFilterPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritaembossfilter, KisEmbossFilterPluginFactory("krita"))
 
 KisEmbossFilterPlugin::KisEmbossFilterPlugin(QObject *parent, const QStringList &) : KParts::Plugin(parent)
 {

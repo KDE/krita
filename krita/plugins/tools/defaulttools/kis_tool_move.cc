@@ -35,7 +35,7 @@
 #include "kis_node.h"
 
 KisToolMove::KisToolMove(KoCanvasBase * canvas)
-    :  KisTool(canvas, KisCursor::moveCursor())
+        :  KisTool(canvas, KisCursor::moveCursor())
 {
     setObjectName("tool_move");
     m_dragging = false;
@@ -72,10 +72,10 @@ void KisToolMove::mousePressEvent(KoPointerEvent *e)
 void KisToolMove::mouseMoveEvent(KoPointerEvent *e)
 {
     if (m_canvas && m_dragging) {
-	QPointF posf = convertToPixelCoord(e);
+        QPointF posf = convertToPixelCoord(e);
         QPoint pos = QPoint(static_cast<int>(posf.x()), static_cast<int>(posf.y()));
-        if((e->modifiers() & Qt::AltModifier) || (e->modifiers() & Qt::ControlModifier)) {
-            if(fabs(static_cast<double>(pos.x() - m_dragStart.x())) > fabs(static_cast<double>(pos.y() - m_dragStart.y())))
+        if ((e->modifiers() & Qt::AltModifier) || (e->modifiers() & Qt::ControlModifier)) {
+            if (fabs(static_cast<double>(pos.x() - m_dragStart.x())) > fabs(static_cast<double>(pos.y() - m_dragStart.y())))
                 pos.setY(m_dragStart.y());
             else
                 pos.setX(m_dragStart.x());

@@ -51,7 +51,8 @@ class KoStore;
  * A datamanager knows nothing about the type of pixel data except
  * how many quint8's a single pixel takes.
  */
-class KisDataManager : public ACTUAL_DATAMGR {
+class KisDataManager : public ACTUAL_DATAMGR
+{
 
 public:
 
@@ -70,12 +71,16 @@ public:
      * Sets the default pixel. New data will be initialised with this pixel. The pixel is copied: the
      * caller still owns the pointer.
      */
-    inline void setDefaultPixel(const quint8 *defPixel) { return ACTUAL_DATAMGR::setDefaultPixel(defPixel); }
+    inline void setDefaultPixel(const quint8 *defPixel) {
+        return ACTUAL_DATAMGR::setDefaultPixel(defPixel);
+    }
 
     /**
      * Get a pointer to the default pixel.
      */
-     inline const quint8 *defaultPixel() const { return ACTUAL_DATAMGR::defaultPixel(); }
+    inline const quint8 *defaultPixel() const {
+        return ACTUAL_DATAMGR::defaultPixel();
+    }
 
     /**
      * Reguests a memento from the data manager. There is only one memento active
@@ -83,7 +88,9 @@ public:
      * write actions on the datamanger builds undo data into this memento
      * necessary to rollback the transaction.
      */
-    inline KisMementoSP getMemento() { return ACTUAL_DATAMGR::getMemento(); }
+    inline KisMementoSP getMemento() {
+        return ACTUAL_DATAMGR::getMemento();
+    }
 
     /**
      * Restores the image data to the state at the time of the getMemento() call.
@@ -91,7 +98,9 @@ public:
      * Note that rollback should be performed with mementos in the reverse order of
      * their creation, as mementos only store incremental changes
      */
-    inline void rollback(KisMementoSP memento) { ACTUAL_DATAMGR::rollback(memento); }
+    inline void rollback(KisMementoSP memento) {
+        ACTUAL_DATAMGR::rollback(memento);
+    }
 
     /**
      * Restores the image data to the state at the time of the rollback call of the memento.
@@ -100,21 +109,29 @@ public:
      * no intermittent actions have been performed (though it's ok to rollback other mementos and
      * roll them forward again)
      */
-    inline void rollforward(KisMementoSP memento) { ACTUAL_DATAMGR::rollforward(memento); }
+    inline void rollforward(KisMementoSP memento) {
+        ACTUAL_DATAMGR::rollforward(memento);
+    }
 
     /**
      * @returns true is there is a memento active. This means that
      * iterators can rely on oldData() to function.
      */
-    inline bool hasCurrentMemento() const { return ACTUAL_DATAMGR::hasCurrentMemento(); }
+    inline bool hasCurrentMemento() const {
+        return ACTUAL_DATAMGR::hasCurrentMemento();
+    }
 
 public:
     /**
      * Reads and writes the tiles from/onto a KoStore (which is simply a file within a zip file)
      *
      */
-    inline bool write(KoStore *store) { return ACTUAL_DATAMGR::write(store); }
-    inline bool read(KoStore *store) { return ACTUAL_DATAMGR::read(store); }
+    inline bool write(KoStore *store) {
+        return ACTUAL_DATAMGR::write(store);
+    }
+    inline bool read(KoStore *store) {
+        return ACTUAL_DATAMGR::read(store);
+    }
 
 
 public:
@@ -122,25 +139,33 @@ public:
     /**
      * Returns the number of bytes a pixel takes
      */
-    inline quint32 pixelSize() { return ACTUAL_DATAMGR::pixelSize(); }
+    inline quint32 pixelSize() {
+        return ACTUAL_DATAMGR::pixelSize();
+    }
 
     /**
      * Return the extent of the data in x,y,w,h.
      */
-    inline void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
-                         { return ACTUAL_DATAMGR::extent(x, y, w, h); }
+    inline void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const {
+        return ACTUAL_DATAMGR::extent(x, y, w, h);
+    }
 
-    QRect extent() const { return ACTUAL_DATAMGR::extent(); }
+    QRect extent() const {
+        return ACTUAL_DATAMGR::extent();
+    }
 
 public:
 
     /**
       * Crop or extend the data to x, y, w, h.
       */
-    inline void setExtent(qint32 x, qint32 y, qint32 w, qint32 h)
-                         { return ACTUAL_DATAMGR::setExtent(x, y, w, h); }
+    inline void setExtent(qint32 x, qint32 y, qint32 w, qint32 h) {
+        return ACTUAL_DATAMGR::setExtent(x, y, w, h);
+    }
 
-    inline void setExtent(const QRect & rect) { setExtent(rect.x(), rect.y(), rect.width(), rect.height()); }
+    inline void setExtent(const QRect & rect) {
+        setExtent(rect.x(), rect.y(), rect.width(), rect.height());
+    }
 
 public:
 
@@ -149,47 +174,56 @@ public:
      */
     inline void clear(qint32 x, qint32 y,
                       qint32 w, qint32 h,
-                      quint8 def) { ACTUAL_DATAMGR::clear(x, y, w, h, def); }
+                      quint8 def) {
+        ACTUAL_DATAMGR::clear(x, y, w, h, def);
+    }
 
     /**
      * Clear the specified rect to the specified pixel value.
      */
     inline void clear(qint32 x, qint32 y,
                       qint32 w, qint32 h,
-                      const quint8 * def) { ACTUAL_DATAMGR::clear(x, y, w, h, def); }
+                      const quint8 * def) {
+        ACTUAL_DATAMGR::clear(x, y, w, h, def);
+    }
 
 
     /**
      * Clear all back to default values.
      */
-    inline void clear() { ACTUAL_DATAMGR::clear(); }
+    inline void clear() {
+        ACTUAL_DATAMGR::clear();
+    }
 
 public:
 
     /**
      * Write the specified data to x, y. There is no checking on pixelSize!
      */
-    inline void setPixel(qint32 x, qint32 y, const quint8 * data)
-        { ACTUAL_DATAMGR::setPixel(x, y, data);}
+    inline void setPixel(qint32 x, qint32 y, const quint8 * data) {
+        ACTUAL_DATAMGR::setPixel(x, y, data);
+    }
 
 
-     /**
-      * Copy the bytes in the specified rect to a chunk of memory.
-      * The pixelSize in bytes is w * h * pixelSize
-      */
-     inline void readBytes(quint8 * data,
-               qint32 x, qint32 y,
-               qint32 w, qint32 h)
-        { ACTUAL_DATAMGR::readBytes(data, x, y, w, h);}
+    /**
+     * Copy the bytes in the specified rect to a chunk of memory.
+     * The pixelSize in bytes is w * h * pixelSize
+     */
+    inline void readBytes(quint8 * data,
+                          qint32 x, qint32 y,
+                          qint32 w, qint32 h) {
+        ACTUAL_DATAMGR::readBytes(data, x, y, w, h);
+    }
 
-     /**
-      * Copy the bytes to the specified rect. w * h * pixelSize bytes
-      * will be read, whether the caller prepared them or not.
-      */
-     inline void writeBytes(const quint8 * data,
-             qint32 x, qint32 y,
-             qint32 w, qint32 h)
-        {ACTUAL_DATAMGR::writeBytes( data, x, y, w, h); }
+    /**
+     * Copy the bytes to the specified rect. w * h * pixelSize bytes
+     * will be read, whether the caller prepared them or not.
+     */
+    inline void writeBytes(const quint8 * data,
+                           qint32 x, qint32 y,
+                           qint32 w, qint32 h) {
+        ACTUAL_DATAMGR::writeBytes(data, x, y, w, h);
+    }
 
 
     /**
@@ -200,10 +234,9 @@ public:
      *
      * @param channelsize a vector with for every channel its size in bytes
      */
-    QVector<quint8*> readPlanarBytes( QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h)
-        {
-            return ACTUAL_DATAMGR::readPlanarBytes( channelsizes, x, y, w, h );
-        }
+    QVector<quint8*> readPlanarBytes(QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h) {
+        return ACTUAL_DATAMGR::readPlanarBytes(channelsizes, x, y, w, h);
+    }
 
     /**
      * Write the data in the separate arrays to the channes. If there
@@ -222,34 +255,36 @@ public:
      *
      * XXX: what about undo?
      */
-    void writePlanarBytes( QVector<quint8*> planes, QVector<qint32> channelsizes,  qint32 x, qint32 y, qint32 w, qint32 h)
-        {
-            ACTUAL_DATAMGR::writePlanarBytes( planes, channelsizes, x, y, w, h );
-        }
+    void writePlanarBytes(QVector<quint8*> planes, QVector<qint32> channelsizes,  qint32 x, qint32 y, qint32 w, qint32 h) {
+        ACTUAL_DATAMGR::writePlanarBytes(planes, channelsizes, x, y, w, h);
+    }
 
 
     /**
      * Get the number of contiguous columns starting at x, valid for all values
      * of y between minY and maxY.
      */
-    inline qint32 numContiguousColumns(qint32 x, qint32 minY, qint32 maxY) const
-        { return ACTUAL_DATAMGR::numContiguousColumns(x, minY, maxY); }
+    inline qint32 numContiguousColumns(qint32 x, qint32 minY, qint32 maxY) const {
+        return ACTUAL_DATAMGR::numContiguousColumns(x, minY, maxY);
+    }
 
 
     /**
      * Get the number of contiguous rows starting at y, valid for all
      * values of x between minX and maxX.
      */
-    inline qint32 numContiguousRows(qint32 y, qint32 minX, qint32 maxX) const
-        { return ACTUAL_DATAMGR::numContiguousRows(y, minX, maxX); }
+    inline qint32 numContiguousRows(qint32 y, qint32 minX, qint32 maxX) const {
+        return ACTUAL_DATAMGR::numContiguousRows(y, minX, maxX);
+    }
 
 
     /**
      * Get the row stride at pixel (x, y). This is the number of bytes
      * to add to a pointer to pixel (x, y) to access (x, y + 1).
      */
-    inline qint32 rowStride(qint32 x, qint32 y) const
-        { return ACTUAL_DATAMGR::rowStride(x, y); }
+    inline qint32 rowStride(qint32 x, qint32 y) const {
+        return ACTUAL_DATAMGR::rowStride(x, y);
+    }
 
 protected:
     friend class KisRectIterator;

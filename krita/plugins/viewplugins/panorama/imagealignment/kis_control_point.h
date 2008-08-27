@@ -25,14 +25,13 @@
 class KisInterestPoint;
 
 struct KisControlPoint {
-  KisControlPoint(int size = 0) : positions(size), interestPoints(size)
-  {
-  }
-  /// list of index of images where this point was seen
-  QList<int> frames;
-  /// list of postion in the image of a this point
-  QVector<QPointF> positions;
-  QVector<const KisInterestPoint*> interestPoints;
+    KisControlPoint(int size = 0) : positions(size), interestPoints(size) {
+    }
+    /// list of index of images where this point was seen
+    QList<int> frames;
+    /// list of postion in the image of a this point
+    QVector<QPointF> positions;
+    QVector<const KisInterestPoint*> interestPoints;
 };
 
 #endif

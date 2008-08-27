@@ -30,35 +30,44 @@ class KisInterestPoint;
 
 typedef QList<KisInterestPoint*> lInterestPoints;
 
-class KisInterestPoint {
-    public:
-        KisInterestPoint(double x, double y);
-        virtual ~KisInterestPoint();
-        virtual double fastCompare(const KisInterestPoint* ip) const =0;
-        virtual double compare(const KisInterestPoint* ip) const =0;
-        virtual QString toString() const = 0;
-        inline double x() const { return m_x; }
-        inline double y() const { return m_y; }
-        inline void appendNeighbourgh( KisInterestPoint* point) { m_neighbourghood.append(point); }
-        const lInterestPoints& neighbourghood() const { return m_neighbourghood; }
-    private:
-        double m_x, m_y;
-        lInterestPoints m_neighbourghood;
+class KisInterestPoint
+{
+public:
+    KisInterestPoint(double x, double y);
+    virtual ~KisInterestPoint();
+    virtual double fastCompare(const KisInterestPoint* ip) const = 0;
+    virtual double compare(const KisInterestPoint* ip) const = 0;
+    virtual QString toString() const = 0;
+    inline double x() const {
+        return m_x;
+    }
+    inline double y() const {
+        return m_y;
+    }
+    inline void appendNeighbourgh(KisInterestPoint* point) {
+        m_neighbourghood.append(point);
+    }
+    const lInterestPoints& neighbourghood() const {
+        return m_neighbourghood;
+    }
+private:
+    double m_x, m_y;
+    lInterestPoints m_neighbourghood;
 };
 
-class KisInterestPointsDetector {
-    public:
-        virtual ~KisInterestPointsDetector();
-        virtual lInterestPoints computeInterestPoints(KisPaintDeviceSP device, const QRect& area) =0;
-    public:
-        inline static KisInterestPointsDetector* interestPointDetector()
-        {
-            return s_interestPointDetector;
-        }
-        static void setInterestPointDetector(int priority, KisInterestPointsDetector* interestPointDetector);
-    private:
-        static KisInterestPointsDetector* s_interestPointDetector;
-        static int s_interestPointDetectorPriority;
+class KisInterestPointsDetector
+{
+public:
+    virtual ~KisInterestPointsDetector();
+    virtual lInterestPoints computeInterestPoints(KisPaintDeviceSP device, const QRect& area) = 0;
+public:
+    inline static KisInterestPointsDetector* interestPointDetector() {
+        return s_interestPointDetector;
+    }
+    static void setInterestPointDetector(int priority, KisInterestPointsDetector* interestPointDetector);
+private:
+    static KisInterestPointsDetector* s_interestPointDetector;
+    static int s_interestPointDetectorPriority;
 };
 
 #endif

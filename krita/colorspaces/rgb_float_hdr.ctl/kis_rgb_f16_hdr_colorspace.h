@@ -30,15 +30,19 @@ typedef KoRgbTraits<float> RgbF16Traits;
 class KisRgbF16HDRColorSpace : public KisRgbFloatHDRColorSpace<RgbF16Traits>
 {
 public:
-    KisRgbF16HDRColorSpace( const KoCtlColorProfile *p);
+    KisRgbF16HDRColorSpace(const KoCtlColorProfile *p);
 
-    virtual KoID colorModelId() const { return RGBAColorModelID; }
-    virtual KoID colorDepthId() const { return Float16BitsColorDepthID; }
-   /**
-     * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter 
-     * to the KoColorSpaceRegistry::colorSpace() functions to obtain this colorspace.
-     * This is the value that the member function id() returns.
-     */
+    virtual KoID colorModelId() const {
+        return RGBAColorModelID;
+    }
+    virtual KoID colorDepthId() const {
+        return Float16BitsColorDepthID;
+    }
+    /**
+      * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter
+      * to the KoColorSpaceRegistry::colorSpace() functions to obtain this colorspace.
+      * This is the value that the member function id() returns.
+      */
     static QString colorSpaceId();
     virtual KoColorSpace* clone() const;
 };
@@ -52,15 +56,27 @@ public:
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-    virtual QString id() const { return KisRgbF16HDRColorSpace::colorSpaceId(); }
-    virtual QString name() const { return i18n("RGB (16-bit float/channel) for High Dynamic Range imaging"); }
-    virtual KoID colorModelId() const { return RGBAColorModelID; }
-    virtual KoID colorDepthId() const { return Float16BitsColorDepthID; }
-    virtual bool userVisible() const { return true; }
-    
-    virtual int referenceDepth() const { return 16; }
+    virtual QString id() const {
+        return KisRgbF16HDRColorSpace::colorSpaceId();
+    }
+    virtual QString name() const {
+        return i18n("RGB (16-bit float/channel) for High Dynamic Range imaging");
+    }
+    virtual KoID colorModelId() const {
+        return RGBAColorModelID;
+    }
+    virtual KoID colorDepthId() const {
+        return Float16BitsColorDepthID;
+    }
+    virtual bool userVisible() const {
+        return true;
+    }
 
-    virtual KoColorSpace *createColorSpace( const KoColorProfile * p) const;
+    virtual int referenceDepth() const {
+        return 16;
+    }
+
+    virtual KoColorSpace *createColorSpace(const KoColorProfile * p) const;
     virtual bool profileIsCompatible(const KoColorProfile* profile) const;
 };
 

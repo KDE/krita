@@ -62,47 +62,44 @@ KisPaintOp * KisSumiPaintOpFactory::createOp(const KisPaintOpSettingsSP settings
 
 KisPaintOpSettingsSP KisSumiPaintOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
 {
-    Q_UNUSED( inputDevice );
-    Q_UNUSED( image );
-    return new KisSumiPaintOpSettings( parent );
+    Q_UNUSED(inputDevice);
+    Q_UNUSED(image);
+    return new KisSumiPaintOpSettings(parent);
 }
 
 KisPaintOpSettingsSP KisSumiPaintOpFactory::settings(KisImageSP image)
 {
-    Q_UNUSED( image );
-    return new KisSumiPaintOpSettings( 0 );
+    Q_UNUSED(image);
+    return new KisSumiPaintOpSettings(0);
 }
 
-KisSumiPaintOp::KisSumiPaintOp(const KisSumiPaintOpSettings *settings,KisPainter * painter, KisImageSP image)
-    : KisPaintOp(painter)
+KisSumiPaintOp::KisSumiPaintOp(const KisSumiPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
+        : KisPaintOp(painter)
 {
     newStrokeFlag = true;
     m_image = image;
     BrushShape brushShape;
 
-    if (settings->brushDimension() == 1){
-        brushShape.fromLine(settings->radius(), settings->sigma() );
+    if (settings->brushDimension() == 1) {
+        brushShape.fromLine(settings->radius(), settings->sigma());
         brushShape.tresholdBristles(0.1);
-    }
-    else if (settings->brushDimension() == 2)
-    {
-        brushShape.fromGaussian(settings->radius(), settings->sigma() );
+    } else if (settings->brushDimension() == 2) {
+        brushShape.fromGaussian(settings->radius(), settings->sigma());
         brushShape.tresholdBristles(0.1);
-    }
-    else {
+    } else {
         Q_ASSERT(false);
     }
 
     m_brush.setBrushShape(brushShape);
 
-    m_brush.enableMousePressure( settings->mousePressure() );
+    m_brush.enableMousePressure(settings->mousePressure());
 
-    m_brush.setInkDepletion( settings->curve() );
-    m_brush.setInkColor( painter->paintColor() );
+    m_brush.setInkDepletion(settings->curve());
+    m_brush.setInkColor(painter->paintColor());
 
-    m_brush.setScale(settings->scaleFactor() );
-    m_brush.setRandom(settings->randomFactor() );
-    m_brush.setShear(settings->shearFactor() );
+    m_brush.setScale(settings->scaleFactor());
+    m_brush.setRandom(settings->randomFactor());
+    m_brush.setShear(settings->shearFactor());
     // delete??
 }
 
@@ -116,7 +113,8 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 }
 
 
-double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1,const KisPaintInformation &pi2,double savedDist ){
+double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist)
+{
     QMutexLocker locker(&m_mutex);
 
     Q_UNUSED(savedDist);
@@ -131,7 +129,7 @@ double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1,const KisPaintIn
 //     } else
 //     {
 
-    dab = cachedDab( );
+    dab = cachedDab();
     dab->clear();
 
     Lines line;
@@ -140,33 +138,33 @@ double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1,const KisPaintIn
     //line.drawWuLine(dab, pi1.pos().x(), pi1.pos().y(), pi2.pos().x(), pi2.pos().y(), painter()->paintColor());
 
 // testing lines in every direction (circle of lines)
-/*	int x, y;
-  float phase = 0.0;
+    /* int x, y;
+      float phase = 0.0;
 
-  for (float theta= phase; theta<360+phase; theta += 10 )
-  {
-  x = (int)(100.0*cos(theta*3.14/180.0)+pi1.pos().x());
-  y = (int)(-100.0*sin(theta*3.14/180.0)+pi1.pos().y());
-  line.drawDDALine(dab, x, y, pi1.pos().x(), pi1.pos().y(), painter()->paintColor());
-  //line.drawThickLine(dab, x, y, pi1.pos().x(), pi1.pos().y(),painter()->paintColor(),painter()->paintColor(), 1, 1);
-// 		line.drawWuLine(dab, x,y ,pi1.pos().x(), pi1.pos().y(), painter()->paintColor());
-//painter()->drawThickLine(QPointF(x, y), QPointF(pi1.pos().x(), pi1.pos().y()), 1, 1);
+      for (float theta= phase; theta<360+phase; theta += 10 )
+      {
+      x = (int)(100.0*cos(theta*3.14/180.0)+pi1.pos().x());
+      y = (int)(-100.0*sin(theta*3.14/180.0)+pi1.pos().y());
+      line.drawDDALine(dab, x, y, pi1.pos().x(), pi1.pos().y(), painter()->paintColor());
+      //line.drawThickLine(dab, x, y, pi1.pos().x(), pi1.pos().y(),painter()->paintColor(),painter()->paintColor(), 1, 1);
+    //   line.drawWuLine(dab, x,y ,pi1.pos().x(), pi1.pos().y(), painter()->paintColor());
+    //painter()->drawThickLine(QPointF(x, y), QPointF(pi1.pos().x(), pi1.pos().y()), 1, 1);
 
-}
+    }
 
-phase = 0.0;
-for (float theta= phase; theta<360+phase; theta += 10 )
-{
-x = (int)(100.0*cos(theta*3.14/180.0)+pi2.pos().x());
-y = (int)(-100.0*sin(theta*3.14/180.0)+pi2.pos().y());
-//line.drawWuLine(dab, x, y, pi2.pos().x(), pi2.pos().y(), painter()->paintColor());
-//line.drawDDAALine(dab, x, y, pi2.pos().x(), pi2.pos().y(), painter()->paintColor());
-}
+    phase = 0.0;
+    for (float theta= phase; theta<360+phase; theta += 10 )
+    {
+    x = (int)(100.0*cos(theta*3.14/180.0)+pi2.pos().x());
+    y = (int)(-100.0*sin(theta*3.14/180.0)+pi2.pos().y());
+    //line.drawWuLine(dab, x, y, pi2.pos().x(), pi2.pos().y(), painter()->paintColor());
+    //line.drawDDAALine(dab, x, y, pi2.pos().x(), pi2.pos().y(), painter()->paintColor());
+    }
 
-*/
+    */
 //     dbgPlugins << "Start coords:";
 //
-//  	dbgPlugins << pi1.pos().x();
+//   dbgPlugins << pi1.pos().x();
 //     dbgPlugins << pi1.pos().y();
 //     dbgPlugins << "End coords:";
 //     dbgPlugins << pi2.pos().x();
@@ -178,7 +176,7 @@ y = (int)(-100.0*sin(theta*3.14/180.0)+pi2.pos().y());
 
     QRect rc = dab->extent();
 //    qDebug() << rc;
-    painter()->bitBlt( rc.topLeft(), dab, rc );
+    painter()->bitBlt(rc.topLeft(), dab, rc);
 
 //     } newStroke
     //painter()->bltSelection(x, y, painter()->compositeOp(), dab, painter()->opacity(), x, y, 1, 1);

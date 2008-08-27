@@ -23,7 +23,6 @@
 #include <QImage>
 #include <QVector>
 
-#include <kis_debug.h>
 #include <QPoint>
 #include <QPolygon>
 
@@ -36,20 +35,18 @@
 #include "kis_debug.h"
 #include "kis_types.h"
 #include "kis_fill_painter.h"
-#include "kis_iterators_pixel.h"
 #include "kis_image.h"
 #include "kis_datamanager.h"
 #include "kis_fill_painter.h"
 
-struct KisPixelSelection::Private
-{
+struct KisPixelSelection::Private {
     KisPaintDeviceWSP parentPaintDevice;
     bool interestedInDirtyness;
 };
 
 KisPixelSelection::KisPixelSelection()
-    : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), QString("selection") )
-    , m_d( new Private )
+        : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), QString("selection"))
+        , m_d(new Private)
 {
     m_d->parentPaintDevice = 0;
     m_d->interestedInDirtyness = true;
@@ -57,8 +54,8 @@ KisPixelSelection::KisPixelSelection()
 }
 
 KisPixelSelection::KisPixelSelection(KisPaintDeviceSP dev)
-    : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), QString("selection for ") + dev->objectName())
-    , m_d( new Private )
+        : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), QString("selection for ") + dev->objectName())
+        , m_d(new Private)
 {
     Q_ASSERT(dev);
     m_d->parentPaintDevice = dev;
@@ -66,9 +63,9 @@ KisPixelSelection::KisPixelSelection(KisPaintDeviceSP dev)
 }
 
 KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs)
-    : KisPaintDevice( rhs )
-    , KisSelectionComponent( rhs )
-    , m_d( new Private )
+        : KisPaintDevice(rhs)
+        , KisSelectionComponent(rhs)
+        , m_d(new Private)
 {
     m_d->parentPaintDevice = rhs.m_d->parentPaintDevice.data();
     m_d->interestedInDirtyness = rhs.m_d->interestedInDirtyness;
@@ -98,17 +95,16 @@ void KisPixelSelection::setSelected(qint32 x, qint32 y, quint8 s)
     *pix = s;
 }
 
-QImage KisPixelSelection::maskImage( const QRect & rc  ) const
+QImage KisPixelSelection::maskImage(const QRect & rc) const
 {
     // If part of a KisAdjustmentLayer, there may be no parent device.
     QImage img;
     QRect bounds;
     if (m_d->parentPaintDevice) {
         bounds = m_d->parentPaintDevice->exactBounds();
-        bounds = bounds.intersect( rc );
+        bounds = bounds.intersect(rc);
         img = QImage(bounds.width(), bounds.height(), QImage::Format_RGB32);
-    }
-    else {
+    } else {
         bounds = rc;
         img = QImage(bounds.width(), bounds.height(), QImage::Format_RGB32);
     }
@@ -124,11 +120,11 @@ QImage KisPixelSelection::maskImage( const QRect & rc  ) const
             ++it;
         }
         it.nextRow(); // XXX: Why wasn't this line here? Used to be
-                      // present in 1.6.
+        // present in 1.6.
     }
     return img;
 }
-void KisPixelSelection::select(const QRect & r, quint8 selectedness )
+void KisPixelSelection::select(const QRect & r, quint8 selectedness)
 {
     KisFillPainter painter(KisPaintDeviceSP(this));
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -137,21 +133,20 @@ void KisPixelSelection::select(const QRect & r, quint8 selectedness )
 
 void KisPixelSelection::applySelection(KisPixelSelectionSP selection, selectionAction action)
 {
-    switch(action)
-    {
-        case SELECTION_REPLACE:
-            // XXX: Shouldn't we actually replace the selection, instead of falling through to add?
-        case SELECTION_ADD:
-            addSelection(selection);
-            break;
-        case SELECTION_SUBTRACT:
-            subtractSelection(selection);
-            break;
-        case SELECTION_INTERSECT:
-            intersectSelection(selection);
-            break;
-        default:
-            break;
+    switch (action) {
+    case SELECTION_REPLACE:
+        // XXX: Shouldn't we actually replace the selection, instead of falling through to add?
+    case SELECTION_ADD:
+        addSelection(selection);
+        break;
+    case SELECTION_SUBTRACT:
+        subtractSelection(selection);
+        break;
+    case SELECTION_INTERSECT:
+        intersectSelection(selection);
+        break;
+    default:
+        break;
     }
 }
 
@@ -162,7 +157,7 @@ void KisPixelSelection::addSelection(KisPixelSelectionSP selection)
     KisHLineConstIteratorPixel src = selection->createHLineConstIterator(r.x(), r.y(), r.width());
     for (int i = 0; i < r.height(); ++i) {
         while (!src.isDone()) {
-            if ( *src.rawData() + *dst.rawData() < MAX_SELECTED )
+            if (*src.rawData() + *dst.rawData() < MAX_SELECTED)
                 *dst.rawData() = *src.rawData() + *dst.rawData();
             else
                 *dst.rawData() = MAX_SELECTED;
@@ -172,7 +167,7 @@ void KisPixelSelection::addSelection(KisPixelSelectionSP selection)
         dst.nextRow();
         src.nextRow();
     }
-    
+
 }
 
 void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
@@ -182,7 +177,7 @@ void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
     KisHLineConstIteratorPixel src = selection->createHLineConstIterator(r.x(), r.y(), r.width());
     for (int i = 0; i < r.height(); ++i) {
         while (!src.isDone()) {
-            if ( *dst.rawData() - *src.rawData() > MIN_SELECTED )
+            if (*dst.rawData() - *src.rawData() > MIN_SELECTED)
                 *dst.rawData() = *dst.rawData() - *src.rawData();
             else
                 *dst.rawData() = MIN_SELECTED;
@@ -192,7 +187,7 @@ void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
         dst.nextRow();
         src.nextRow();
     }
-    
+
 }
 
 void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
@@ -203,7 +198,7 @@ void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
     KisHLineConstIteratorPixel src = selection->createHLineConstIterator(r.x(), r.y(), r.width());
     for (int i = 0; i < r.height(); ++i) {
         while (!src.isDone()) {
-            if ( *dst.rawData() == MAX_SELECTED && *src.rawData() == MAX_SELECTED )
+            if (*dst.rawData() == MAX_SELECTED && *src.rawData() == MAX_SELECTED)
                 *dst.rawData() = MAX_SELECTED;
             else
                 *dst.rawData() = MIN_SELECTED;
@@ -221,8 +216,7 @@ void KisPixelSelection::clear(const QRect & r)
         KisFillPainter painter(KisPaintDeviceSP(this));
         const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
         painter.fillRect(r, KoColor(Qt::white, cs), MIN_SELECTED);
-    }
-    else {
+    } else {
         m_datamanager->clear(r.x(), r.y(), r.width(), r.height(), m_datamanager->defaultPixel());
     }
 }
@@ -241,8 +235,7 @@ void KisPixelSelection::invert()
     QRect rc = extent();
 
     KisRectIterator it = createRectIterator(rc.x(), rc.y(), rc.width(), rc.height());
-    while ( ! it.isDone() )
-    {
+    while (! it.isDone()) {
         *(it.rawData()) = MAX_SELECTED - *(it.rawData());
         ++it;
     }
@@ -252,7 +245,7 @@ void KisPixelSelection::invert()
 
 bool KisPixelSelection::isTotallyUnselected(const QRect & r) const
 {
-    if(*(m_datamanager->defaultPixel()) != MIN_SELECTED)
+    if (*(m_datamanager->defaultPixel()) != MIN_SELECTED)
         return false;
     QRect sr = selectedExactRect();
     return ! r.intersects(sr);
@@ -260,7 +253,7 @@ bool KisPixelSelection::isTotallyUnselected(const QRect & r) const
 
 bool KisPixelSelection::isProbablyTotallyUnselected(const QRect & r) const
 {
-    if(*(m_datamanager->defaultPixel()) != MIN_SELECTED)
+    if (*(m_datamanager->defaultPixel()) != MIN_SELECTED)
         return false;
     QRect sr = selectedRect();
     return ! r.intersects(sr);
@@ -269,23 +262,19 @@ bool KisPixelSelection::isProbablyTotallyUnselected(const QRect & r) const
 
 QRect KisPixelSelection::selectedRect() const
 {
-    if (*(m_datamanager->defaultPixel()) == MIN_SELECTED )
-    {
+    if (*(m_datamanager->defaultPixel()) == MIN_SELECTED) {
         if (m_d->parentPaintDevice) {
             // The selected exact rect is the area of this selection that overlaps
             // with the parent paint device.
             return m_d->parentPaintDevice->extent().intersected(extent());
-        }
-        else {
+        } else {
             return extent();
         }
-    }
-    else {
+    } else {
         if (m_d->parentPaintDevice) {
             // By default all pixels are selected, to the size of the parent paint device.
             return m_d->parentPaintDevice->extent();
-        }
-        else {
+        } else {
             // By default all pixels are selected; no matter how many pixels are
             // marked as deselected, there are always by-default-selected pixels
             // around the deselected pixels.
@@ -296,23 +285,19 @@ QRect KisPixelSelection::selectedRect() const
 
 QRect KisPixelSelection::selectedExactRect() const
 {
-    if (*(m_datamanager->defaultPixel()) == MIN_SELECTED )
-    {
+    if (*(m_datamanager->defaultPixel()) == MIN_SELECTED) {
         if (m_d->parentPaintDevice) {
             // The selected exact rect is the area of this selection that overlaps
             // with the parent paint device.
             return m_d->parentPaintDevice->exactBounds().intersected(exactBounds());
-        }
-        else {
+        } else {
             return exactBounds();
         }
-    }
-    else {
+    } else {
         if (m_d->parentPaintDevice) {
             // By default all pixels are selected, to the size of the parent paint device.
             return m_d->parentPaintDevice->exactBounds();
-        }
-        else {
+        } else {
             // By default all pixels are selected; no matter how many pixels are
             // marked as deselected, there are always by-default-selected pixels
             // around the deselected pixels.
@@ -361,7 +346,7 @@ QVector<QPolygon> KisPixelSelection::outline()
     quint8* buffer = new quint8[width*height];
     quint8* marks = new quint8[width*height];
     for (int i = 0; i < width*height; i++) {
-            marks[i] = 0;
+        marks[i] = 0;
     }
     QVector<QPolygon> paths;
 
@@ -371,23 +356,21 @@ QVector<QPolygon> KisPixelSelection::outline()
     for (qint32 y = 0; y < height; y++) {
         for (qint32 x = 0; x < width; x++) {
 
-            if(buffer[y*width+x]== defaultPixel)
+            if (buffer[y*width+x] == defaultPixel)
                 continue;
 
             EdgeType startEdge = TopEdge;
 
             EdgeType edge = startEdge;
-            while( edge != NoEdge && (marks[y*width+x] & (1 << edge) || !isOutlineEdge(edge, x, y, buffer, width, height)))
-            {
+            while (edge != NoEdge && (marks[y*width+x] & (1 << edge) || !isOutlineEdge(edge, x, y, buffer, width, height))) {
                 edge = nextEdge(edge);
                 if (edge == startEdge)
                     edge = NoEdge;
             }
 
-            if (edge != NoEdge)
-            {
+            if (edge != NoEdge) {
                 QPolygon path;
-                path << QPoint(x+xOffset, y+yOffset);
+                path << QPoint(x + xOffset, y + yOffset);
 
 // XXX: Unused? (BSAR)
 //                bool clockwise = edge == BottomEdge;
@@ -397,16 +380,15 @@ QVector<QPolygon> KisPixelSelection::outline()
                 EdgeType lastEdge = currentEdge;
                 do {
                     //While following a strait line no points nead to be added
-                    if(lastEdge != currentEdge){
-                        appendCoordinate(&path, col+xOffset, row+yOffset, currentEdge);
+                    if (lastEdge != currentEdge) {
+                        appendCoordinate(&path, col + xOffset, row + yOffset, currentEdge);
                         nodes++;
                         lastEdge = currentEdge;
                     }
 
                     marks[row*width+col] |= 1 << currentEdge;
-                    nextOutlineEdge( &currentEdge, &row, &col, buffer, width, height);
-                }
-                while (row != y || col != x || currentEdge != edge);
+                    nextOutlineEdge(&currentEdge, &row, &col, buffer, width, height);
+                } while (row != y || col != x || currentEdge != edge);
 
                 paths.push_back(path);
             }
@@ -416,82 +398,82 @@ QVector<QPolygon> KisPixelSelection::outline()
     delete[] marks;
 
     return paths;
-}bool KisPixelSelection::isOutlineEdge(EdgeType edge, qint32 x, qint32 y, quint8* buffer, qint32 bufWidth, qint32 bufHeight )
+}
+bool KisPixelSelection::isOutlineEdge(EdgeType edge, qint32 x, qint32 y, quint8* buffer, qint32 bufWidth, qint32 bufHeight)
 {
     quint8 defaultPixel = *(m_datamanager->defaultPixel());
-    if(buffer[y*bufWidth+x] == defaultPixel)
+    if (buffer[y*bufWidth+x] == defaultPixel)
         return false;
 
-    switch(edge){
-        case LeftEdge:
-            return x == 0 || buffer[y*bufWidth+(x - 1)] == defaultPixel;
-        case TopEdge:
-            return y == 0 || buffer[(y - 1)*bufWidth+x] == defaultPixel;
-        case RightEdge:
-            return x == bufWidth -1 || buffer[y*bufWidth+(x + 1)] == defaultPixel;
-        case BottomEdge:
-            return y == bufHeight -1 || buffer[(y + 1)*bufWidth+x] == defaultPixel;
-        case NoEdge:
-            return false;
+    switch (edge) {
+    case LeftEdge:
+        return x == 0 || buffer[y*bufWidth+(x - 1)] == defaultPixel;
+    case TopEdge:
+        return y == 0 || buffer[(y - 1)*bufWidth+x] == defaultPixel;
+    case RightEdge:
+        return x == bufWidth - 1 || buffer[y*bufWidth+(x + 1)] == defaultPixel;
+    case BottomEdge:
+        return y == bufHeight - 1 || buffer[(y + 1)*bufWidth+x] == defaultPixel;
+    case NoEdge:
+        return false;
     }
     return false;
 }
 
 #define TRY_PIXEL(deltaRow, deltaCol, test_edge)                                                \
-{                                                                                               \
-    int test_row = *row + deltaRow;                                                             \
-    int test_col = *col + deltaCol;                                                             \
-    if ( (0 <= (test_row) && (test_row) < height && 0 <= (test_col) && (test_col) < width) &&   \
-         isOutlineEdge (test_edge, test_col, test_row, buffer, width, height))                  \
-    {                                                                                           \
-        *row = test_row;                                                                        \
-        *col = test_col;                                                                        \
-        *edge = test_edge;                                                                      \
-        break;                                                                                  \
+    {                                                                                               \
+        int test_row = *row + deltaRow;                                                             \
+        int test_col = *col + deltaCol;                                                             \
+        if ( (0 <= (test_row) && (test_row) < height && 0 <= (test_col) && (test_col) < width) &&   \
+                isOutlineEdge (test_edge, test_col, test_row, buffer, width, height))                  \
+        {                                                                                           \
+            *row = test_row;                                                                        \
+            *col = test_col;                                                                        \
+            *edge = test_edge;                                                                      \
+            break;                                                                                  \
         }                                                                                       \
-}
+    }
 
 void KisPixelSelection::nextOutlineEdge(EdgeType *edge, qint32 *row, qint32 *col, quint8* buffer, qint32 width, qint32 height)
 {
-  int original_row = *row;
-  int original_col = *col;
+    int original_row = *row;
+    int original_col = *col;
 
-  switch (*edge){
+    switch (*edge) {
     case RightEdge:
-      TRY_PIXEL( -1, 0, RightEdge);
-      TRY_PIXEL( -1, 1, BottomEdge);
-      break;
+        TRY_PIXEL(-1, 0, RightEdge);
+        TRY_PIXEL(-1, 1, BottomEdge);
+        break;
 
     case TopEdge:
-      TRY_PIXEL( 0, -1, TopEdge);
-      TRY_PIXEL( -1, -1, RightEdge);
-      break;
+        TRY_PIXEL(0, -1, TopEdge);
+        TRY_PIXEL(-1, -1, RightEdge);
+        break;
 
     case LeftEdge:
-      TRY_PIXEL( 1, 0, LeftEdge);
-      TRY_PIXEL( 1, -1, TopEdge);
-      break;
+        TRY_PIXEL(1, 0, LeftEdge);
+        TRY_PIXEL(1, -1, TopEdge);
+        break;
 
     case BottomEdge:
-      TRY_PIXEL( 0, 1, BottomEdge);
-      TRY_PIXEL( 1, 1, LeftEdge);
-      break;
+        TRY_PIXEL(0, 1, BottomEdge);
+        TRY_PIXEL(1, 1, LeftEdge);
+        break;
 
     default:
         break;
 
     }
 
-  if (*row == original_row && *col == original_col)
-    *edge = nextEdge (*edge);
+    if (*row == original_row && *col == original_col)
+        *edge = nextEdge(*edge);
 }
 
 void KisPixelSelection::appendCoordinate(QPolygon * path, int x, int y, EdgeType edge)
 {
-  switch (edge)
-    {
+    switch (edge) {
     case TopEdge:
-         x++;
+        x++;
         break;
     case RightEdge:
         x++;
@@ -499,10 +481,10 @@ void KisPixelSelection::appendCoordinate(QPolygon * path, int x, int y, EdgeType
         break;
     case BottomEdge:
         y++;
-      break;
+        break;
     case LeftEdge:
     case NoEdge:
-      break;
+        break;
 
     }
     *path << QPoint(x, y);
@@ -513,7 +495,7 @@ void KisPixelSelection::renderToProjection(KisSelection* projection)
     QRect updateRect = selectedExactRect();
     KisPainter painter(projection);
     painter.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
-    
+
     painter.bitBlt(updateRect.topLeft(), KisPaintDeviceSP(this), updateRect);
     painter.end();
 }
@@ -521,7 +503,7 @@ void KisPixelSelection::renderToProjection(KisSelection* projection)
 void KisPixelSelection::renderToProjection(KisSelection* projection, const QRect& r)
 {
     QRect updateRect = r.intersected(selectedExactRect());
-    if(updateRect.isValid()) {
+    if (updateRect.isValid()) {
         KisPainter painter(projection);
         painter.bitBlt(updateRect.x(), updateRect.y(), COMPOSITE_COPY, KisPaintDeviceSP(this),
                        updateRect.x(), updateRect.y(), updateRect.width(), updateRect.height());

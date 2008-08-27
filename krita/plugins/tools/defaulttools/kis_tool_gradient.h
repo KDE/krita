@@ -48,7 +48,8 @@ class QWidget;
 class QCheckBox;
 class KComboBox;
 
-class KisToolGradient : public KisToolPaint {
+class KisToolGradient : public KisToolPaint
+{
 
     Q_OBJECT
     typedef KisToolPaint super;
@@ -61,7 +62,7 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
 
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
     QWidget* createOptionWidget();
 
@@ -108,22 +109,22 @@ private:
 #endif
 };
 
-class KisToolGradientFactory : public KoToolFactory {
+class KisToolGradientFactory : public KoToolFactory
+{
 
 public:
     KisToolGradientFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KritaFill/KisToolGradient", i18n( "Gradient" ))
-        {
-            setToolTip( i18n( "Draw a gradient." ) );
-            setToolType( TOOL_TYPE_FILL );
-            setIcon( "krita_tool_gradient" );
-            setShortcut( KShortcut( Qt::Key_G ) );
-            setPriority( 15 );
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setInputDeviceAgnostic(false);
-        }
+            : KoToolFactory(parent, "KritaFill/KisToolGradient", i18n("Gradient")) {
+        setToolTip(i18n("Draw a gradient."));
+        setToolType(TOOL_TYPE_FILL);
+        setIcon("krita_tool_gradient");
+        setShortcut(KShortcut(Qt::Key_G));
+        setPriority(15);
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        setInputDeviceAgnostic(false);
+    }
 
-    virtual ~KisToolGradientFactory(){}
+    virtual ~KisToolGradientFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return  new KisToolGradient(canvas);

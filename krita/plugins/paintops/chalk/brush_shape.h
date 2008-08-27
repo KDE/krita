@@ -22,21 +22,22 @@
 #include <QVector>
 #include "bristle.h"
 
-class BrushShape{
+class BrushShape
+{
 
-public: 
-	BrushShape();
-	~BrushShape();
-	void fromGaussian(int radius, float maxLength, float sigma);
-	QVector<Bristle> getBristles();
-	int width();
-	int height();
+public:
+    BrushShape();
+    ~BrushShape();
+    void fromGaussian(int radius, float maxLength, float sigma);
+    QVector<Bristle> getBristles();
+    int width();
+    int height();
 
 private:
-	int m_width;
-	int m_height;
-	QVector<Bristle> m_bristles;
-	
+    int m_width;
+    int m_height;
+    QVector<Bristle> m_bristles;
+
 };
 
 #endif

@@ -33,28 +33,26 @@
 #include "tmo_reinhard05.h"
 #include "ui_reinhard05_configuration_widget.h"
 
-class KisReinhard05OperatorConfigurationWidget : public KisToneMappingOperatorConfigurationWidget{
-    public:
-        KisReinhard05OperatorConfigurationWidget(QWidget* wdg) : KisToneMappingOperatorConfigurationWidget(wdg)
-        {
-            widget.setupUi(this);
-        }
-        virtual void setConfiguration(KisPropertiesConfiguration* config)
-        {
-            widget.brightness->setValue(config->getDouble("Brightness", 0.0));
-            widget.chromatic->setValue(config->getDouble("Chromatic", 0.0));
-            widget.light->setValue(config->getDouble("Light", 1.0));
-        }
-        virtual KisPropertiesConfiguration* configuration() const
-        {
-            KisPropertiesConfiguration* config = new KisPropertiesConfiguration();
-            config->setProperty("Brightness", widget.brightness->value());
-            config->setProperty("Chromatic", widget.chromatic->value());
-            config->setProperty("Light", widget.light->value());
-            return config;
-        }
-    private:
-        Ui_Reinhard05OperatorConfigurationWidget widget;
+class KisReinhard05OperatorConfigurationWidget : public KisToneMappingOperatorConfigurationWidget
+{
+public:
+    KisReinhard05OperatorConfigurationWidget(QWidget* wdg) : KisToneMappingOperatorConfigurationWidget(wdg) {
+        widget.setupUi(this);
+    }
+    virtual void setConfiguration(KisPropertiesConfiguration* config) {
+        widget.brightness->setValue(config->getDouble("Brightness", 0.0));
+        widget.chromatic->setValue(config->getDouble("Chromatic", 0.0));
+        widget.light->setValue(config->getDouble("Light", 1.0));
+    }
+    virtual KisPropertiesConfiguration* configuration() const {
+        KisPropertiesConfiguration* config = new KisPropertiesConfiguration();
+        config->setProperty("Brightness", widget.brightness->value());
+        config->setProperty("Chromatic", widget.chromatic->value());
+        config->setProperty("Light", widget.light->value());
+        return config;
+    }
+private:
+    Ui_Reinhard05OperatorConfigurationWidget widget;
 };
 
 PUBLISH_OPERATOR(KisReinhard05Operator)
@@ -70,22 +68,22 @@ KisToneMappingOperatorConfigurationWidget* KisReinhard05Operator::createConfigur
 
 const KoColorSpace* KisReinhard05Operator::colorSpace() const
 {
-    return KoColorSpaceRegistry::instance()->colorSpace( KoColorSpaceRegistry::instance()->colorSpaceId( RGBAColorModelID, Float32BitsColorDepthID), "" );
+    return KoColorSpaceRegistry::instance()->colorSpace(KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID, Float32BitsColorDepthID), "");
 }
 
 void KisReinhard05Operator::toneMap(KisPaintDeviceSP device, KisPropertiesConfiguration* config) const
 {
     dbgKrita << "Create a copy of the paint device as XYZAF32";
     QRect r = device->exactBounds();
-    const KoColorSpace* XYZACs = KoColorSpaceRegistry::instance()->colorSpace( KoColorSpaceRegistry::instance()->colorSpaceId( XYZAColorModelID, Float32BitsColorDepthID), "" );
+    const KoColorSpace* XYZACs = KoColorSpaceRegistry::instance()->colorSpace(KoColorSpaceRegistry::instance()->colorSpaceId(XYZAColorModelID, Float32BitsColorDepthID), "");
     Q_ASSERT(XYZACs);
     KisPaintDeviceSP deviceXYZ = new KisPaintDevice(*device);
     deviceXYZ->convertTo(XYZACs);
     dbgKrita << "Tone map using reinhard05";
-    pfs::Array2DImpl Y( r, KoXyzTraits<float>::y_pos, device);
-    pfs::Array2DImpl R( r, KoRgbTraits<float>::red_pos, device);
-    pfs::Array2DImpl G( r, KoRgbTraits<float>::green_pos, device);
-    pfs::Array2DImpl B( r, KoRgbTraits<float>::blue_pos, device);
-    tmo_reinhard05( &R, &G, &B, &Y, config->getDouble("Brightness", 0.0), config->getDouble("Chromatic", 0.0), config->getDouble("Light", 1.0) );
+    pfs::Array2DImpl Y(r, KoXyzTraits<float>::y_pos, device);
+    pfs::Array2DImpl R(r, KoRgbTraits<float>::red_pos, device);
+    pfs::Array2DImpl G(r, KoRgbTraits<float>::green_pos, device);
+    pfs::Array2DImpl B(r, KoRgbTraits<float>::blue_pos, device);
+    tmo_reinhard05(&R, &G, &B, &Y, config->getDouble("Brightness", 0.0), config->getDouble("Chromatic", 0.0), config->getDouble("Light", 1.0));
     dbgKrita << "Done !";
 }

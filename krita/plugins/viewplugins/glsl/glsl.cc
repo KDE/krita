@@ -35,22 +35,22 @@
 #include "dlg_glsl.h"
 
 typedef KGenericFactory<Glsl> GlslFactory;
-K_EXPORT_COMPONENT_FACTORY( kritaglsl, GlslFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritaglsl, GlslFactory("krita"))
 
 Glsl::Glsl(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
 
-    if ( parent->inherits("KisView2") ) {
+    if (parent->inherits("KisView2")) {
         setComponentData(GlslFactory::componentData());
 
-        setXMLFile(KStandardDirs::locate("data","kritaplugins/kritaglsl.rc"), true);
+        setXMLFile(KStandardDirs::locate("data", "kritaplugins/kritaglsl.rc"), true);
 
-        m_view = static_cast<KisView2*>(  parent );
+        m_view = static_cast<KisView2*>(parent);
         m_image = m_view->image();
 
         KAction *action  = new KAction(i18n("&OpenGL Shader Filter..."), this);
-        actionCollection()->addAction("kritaglsl", action );
+        actionCollection()->addAction("kritaglsl", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotActivate()));
 
     }

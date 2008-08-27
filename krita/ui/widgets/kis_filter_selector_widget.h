@@ -30,18 +30,19 @@ class KisFilterConfiguration;
 /**
  *
  */
-class KisFilterSelectorWidget : public QWidget {
+class KisFilterSelectorWidget : public QWidget
+{
     Q_OBJECT
 public:
-    KisFilterSelectorWidget( QWidget* parent);
+    KisFilterSelectorWidget(QWidget* parent);
     ~KisFilterSelectorWidget();
     void setFilter(KisFilterSP f);
-    void setPaintDevice( KisPaintDeviceSP );
-    void setImage( KisImageSP );
+    void setPaintDevice(KisPaintDeviceSP);
+    void setImage(KisImageSP);
     KisFilterConfiguration* configuration();
 protected slots:
-    void slotBookmarkedFilterConfigurationSelected(int );
-    void setFilterIndex(const QModelIndex& );
+    void slotBookmarkedFilterConfigurationSelected(int);
+    void setFilterIndex(const QModelIndex&);
     void editConfigurations();
 signals:
     void configurationChanged();

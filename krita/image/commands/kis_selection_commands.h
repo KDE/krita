@@ -23,7 +23,8 @@
 #include "kis_types.h"
 
 /// The command for setting the global selection
-class KRITAIMAGE_EXPORT KisSetGlobalSelectionCommand : public QUndoCommand {
+class KRITAIMAGE_EXPORT KisSetGlobalSelectionCommand : public QUndoCommand
+{
 
 public:
     /**
@@ -45,7 +46,8 @@ private:
 };
 
 /// The command for deselection the local selection (KisSelectionMask)
-class KRITAIMAGE_EXPORT KisDeselectLocalSelectionCommand : public QUndoCommand {
+class KRITAIMAGE_EXPORT KisDeselectLocalSelectionCommand : public QUndoCommand
+{
 
 public:
     /**
@@ -61,14 +63,15 @@ public:
     virtual void undo();
 
 private:
-     KisImageSP m_image;
-     KisSelectionMaskSP m_selectionMask;
-     KisSelectionSP m_newSelection;
-     KisSelectionSP m_oldDeselectedSelection;
+    KisImageSP m_image;
+    KisSelectionMaskSP m_selectionMask;
+    KisSelectionSP m_newSelection;
+    KisSelectionSP m_oldDeselectedSelection;
 };
 
 /// The command for reselection the local selection (KisSelectionMask)
-class KRITAIMAGE_EXPORT KisReselectLocalSelectionCommand : public QUndoCommand {
+class KRITAIMAGE_EXPORT KisReselectLocalSelectionCommand : public QUndoCommand
+{
 
 public:
     /**
@@ -84,13 +87,14 @@ public:
     virtual void undo();
 
 private:
-     KisImageSP m_image;
-     KisSelectionMaskSP m_selectionMask;
-     KisSelectionSP m_oldSelection;
+    KisImageSP m_image;
+    KisSelectionMaskSP m_selectionMask;
+    KisSelectionSP m_oldSelection;
 };
 
 /// The command for deselection the global selection of KisImage
-class KRITAIMAGE_EXPORT KisDeselectGlobalSelectionCommand : public QUndoCommand {
+class KRITAIMAGE_EXPORT KisDeselectGlobalSelectionCommand : public QUndoCommand
+{
 
 public:
     /**
@@ -105,13 +109,14 @@ public:
     virtual void undo();
 
 private:
-     KisImageSP m_image;
-     KisSelectionSP m_newSelection;
-     KisSelectionSP m_oldDeselectedSelection;
+    KisImageSP m_image;
+    KisSelectionSP m_newSelection;
+    KisSelectionSP m_oldDeselectedSelection;
 };
 
 /// The command for deselection the global selection of KisImage
-class KRITAIMAGE_EXPORT KisReselectGlobalSelectionCommand : public QUndoCommand {
+class KRITAIMAGE_EXPORT KisReselectGlobalSelectionCommand : public QUndoCommand
+{
 
 public:
     /**
@@ -126,8 +131,8 @@ public:
     virtual void undo();
 
 private:
-     KisImageSP m_image;
-     KisSelectionSP m_oldSelection;
+    KisImageSP m_image;
+    KisSelectionSP m_oldSelection;
 };
 
 

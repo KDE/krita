@@ -25,7 +25,8 @@
 class KisFilter;
 class KisFilterConfiguration;
 
-namespace Scripting {
+namespace Scripting
+{
 
 class Module;
 
@@ -62,104 +63,104 @@ class Module;
  */
 class Filter : public QObject
 {
-        Q_OBJECT
-    public:
-        Filter(Module* module, KisFilter*);
-        ~Filter();
-        KisFilterConfiguration* config();
+    Q_OBJECT
+public:
+    Filter(Module* module, KisFilter*);
+    ~Filter();
+    KisFilterConfiguration* config();
 
-    public slots:
+public slots:
 
-        /**
-         * Return the unique name the filter has.
-         */
-        const QString name();
+    /**
+     * Return the unique name the filter has.
+     */
+    const QString name();
 
-        /**
-         * This function return the value of a parameter of the associated
-         * Filter. The properties define the filters-configuration and you
-         * are able to use \a property and \a setProperty to manipulate them.
-         *
-         * It takes one argument :
-         *  - the name of the parameter
-         * It returns the properties value.
-         */
-        const QVariant property(const QString& name);
+    /**
+     * This function return the value of a parameter of the associated
+     * Filter. The properties define the filters-configuration and you
+     * are able to use \a property and \a setProperty to manipulate them.
+     *
+     * It takes one argument :
+     *  - the name of the parameter
+     * It returns the properties value.
+     */
+    const QVariant property(const QString& name);
 
-        /**
-         * This function define a parameter of the associated Filter.
-         *
-         * It takes two arguments :
-         *  - the name of the parameter
-         *  - the value, whose type depends of the Filter
-         */
-        void setProperty(const QString& name, const QVariant& value);
+    /**
+     * This function define a parameter of the associated Filter.
+     *
+     * It takes two arguments :
+     *  - the name of the parameter
+     *  - the value, whose type depends of the Filter
+     */
+    void setProperty(const QString& name, const QVariant& value);
 
-        /**
-         * This function returns all properties the filter has
-         * as name=value dictonary.
-         *
-         * For example (in Python)
-         * @code
-         * require "Krita"
-         * filter = Krita.filter("invert")
-         * for propname in filter.properties().keys():
-         *     propvalue = filter.property(propname)
-         *     filter.setProperty(propname, propvalue)
-         * @endcode
-         */
-        QVariantMap properties();
+    /**
+     * This function returns all properties the filter has
+     * as name=value dictonary.
+     *
+     * For example (in Python)
+     * @code
+     * require "Krita"
+     * filter = Krita.filter("invert")
+     * for propname in filter.properties().keys():
+     *     propvalue = filter.property(propname)
+     *     filter.setProperty(propname, propvalue)
+     * @endcode
+     */
+    QVariantMap properties();
 
-        /**
-         * Deserialize the filter-configuration from XML.
-         */
-        void fromXML(const QString& xml);
+    /**
+     * Deserialize the filter-configuration from XML.
+     */
+    void fromXML(const QString& xml);
 
-        /**
-         * Serialize filter-configuration to XML.
-         */
-        const QString toXML();
+    /**
+     * Serialize filter-configuration to XML.
+     */
+    const QString toXML();
 
-        /**
-         * This function will apply the filter.
-         * It takes one argument :
-         *  - the source layer
-         *
-         * For example (in Ruby)
-         * @code
-         * require "Krita"
-         * layer = Krita.image().activePaintLayer()
-         * filter = Krita.filter("invert")
-         * filter.process(layer)
-         * @endcode
-         */
-        bool process(QObject* layer);
+    /**
+     * This function will apply the filter.
+     * It takes one argument :
+     *  - the source layer
+     *
+     * For example (in Ruby)
+     * @code
+     * require "Krita"
+     * layer = Krita.image().activePaintLayer()
+     * filter = Krita.filter("invert")
+     * filter.process(layer)
+     * @endcode
+     */
+    bool process(QObject* layer);
 
-        /**
-         * This function will apply the filter.
-         * It takes five argument :
-         *  - the source layer
-         *  - x
-         *  - y
-         *  - width
-         *  - height
-         *
-         * (x,y, width, height) defines the rectangular area on which the filter will be computed.
-         * If the rectangle is not defined, then the filter will be apply on alll the source layer.
-         * 
-         * For example (in Ruby)
-         * @code
-         * require "Krita"
-         * layer = Krita.image().activePaintLayer()
-         * filter = Krita.filter("invert")
-         * filter.process(layer, 10, 10, 20, 20)
-         * @endcode
-         */
-        bool process(QObject* layer, int x, int y, int width, int height);
+    /**
+     * This function will apply the filter.
+     * It takes five argument :
+     *  - the source layer
+     *  - x
+     *  - y
+     *  - width
+     *  - height
+     *
+     * (x,y, width, height) defines the rectangular area on which the filter will be computed.
+     * If the rectangle is not defined, then the filter will be apply on alll the source layer.
+     *
+     * For example (in Ruby)
+     * @code
+     * require "Krita"
+     * layer = Krita.image().activePaintLayer()
+     * filter = Krita.filter("invert")
+     * filter.process(layer, 10, 10, 20, 20)
+     * @endcode
+     */
+    bool process(QObject* layer, int x, int y, int width, int height);
 
-    private:
-        KisFilter* m_filter;
-        KisFilterConfiguration* m_config;
+private:
+    KisFilter* m_filter;
+    KisFilterConfiguration* m_config;
 };
 
 }

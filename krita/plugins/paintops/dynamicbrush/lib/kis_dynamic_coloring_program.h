@@ -32,44 +32,47 @@ class QWidget;
 /**
  * This is the base class of a dynamic program.
  */
-class DYNAMIC_BRUSH_EXPORT KisDynamicColoringProgram : public KisDynamicProgram {
+class DYNAMIC_BRUSH_EXPORT KisDynamicColoringProgram : public KisDynamicProgram
+{
     Q_OBJECT
-    protected:
-        /**
-         * @param name the name of this program, will be displayed in the list of programs
-         */
-        KisDynamicColoringProgram(const QString& name, const QString& type);
-    public:
-        virtual ~KisDynamicColoringProgram();
-        /**
-         * Mix color.
-         */
-        virtual double mix(const KisPaintInformation& ) const = 0;
-        /**
-         * Apply the program on the shape and the coloring
-         */
-        virtual void apply(KisDynamicColoring* coloringsrc, const KisPaintInformation& ) const = 0;
-    private:
-        struct Private;
-        Private* const d;
+protected:
+    /**
+     * @param name the name of this program, will be displayed in the list of programs
+     */
+    KisDynamicColoringProgram(const QString& name, const QString& type);
+public:
+    virtual ~KisDynamicColoringProgram();
+    /**
+     * Mix color.
+     */
+    virtual double mix(const KisPaintInformation&) const = 0;
+    /**
+     * Apply the program on the shape and the coloring
+     */
+    virtual void apply(KisDynamicColoring* coloringsrc, const KisPaintInformation&) const = 0;
+private:
+    struct Private;
+    Private* const d;
 };
 
-class DYNAMIC_BRUSH_EXPORT KisDynamicColoringProgramFactory : public KisDynamicProgramFactory {
-    public:
-        KisDynamicColoringProgramFactory(QString id, QString name);
-        virtual ~KisDynamicColoringProgramFactory();
-        virtual KisDynamicProgram* program(QString name) const;
-        virtual KisDynamicColoringProgram* coloringProgram(QString name) const = 0;
-    private:
-        struct Private;
-        Private* const d;
+class DYNAMIC_BRUSH_EXPORT KisDynamicColoringProgramFactory : public KisDynamicProgramFactory
+{
+public:
+    KisDynamicColoringProgramFactory(QString id, QString name);
+    virtual ~KisDynamicColoringProgramFactory();
+    virtual KisDynamicProgram* program(QString name) const;
+    virtual KisDynamicColoringProgram* coloringProgram(QString name) const = 0;
+private:
+    struct Private;
+    Private* const d;
 };
 
-class DYNAMIC_BRUSH_EXPORT KisDynamicColoringProgramsFactory : public KisSerializableConfigurationFactory {
-    public:
-        virtual ~KisDynamicColoringProgramsFactory();
-        virtual KisSerializableConfiguration* createDefault();
-        virtual KisSerializableConfiguration* create(const QDomElement&);
+class DYNAMIC_BRUSH_EXPORT KisDynamicColoringProgramsFactory : public KisSerializableConfigurationFactory
+{
+public:
+    virtual ~KisDynamicColoringProgramsFactory();
+    virtual KisSerializableConfiguration* createDefault();
+    virtual KisSerializableConfiguration* create(const QDomElement&);
 };
 
 #endif

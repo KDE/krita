@@ -50,7 +50,8 @@
 #include "ui_wdgbrushcurves.h"
 
 
-class KisSmudgeOpSettings : public QObject, public KisPaintOpSettings {
+class KisSmudgeOpSettings : public QObject, public KisPaintOpSettings
+{
 
     Q_OBJECT
 
@@ -62,17 +63,31 @@ public:
     bool varySize() const;
     bool varyOpacity() const;
 
-    bool customRate() const { return m_customRate; }
-    bool customSize() const { return m_customSize; }
-    bool customOpacity() const { return m_customOpacity; }
-    const double* rateCurve() const { return m_rateCurve; }
-    const double* sizeCurve() const { return m_sizeCurve; }
-    const double* opacityCurve() const { return m_opacityCurve; }
+    bool customRate() const {
+        return m_customRate;
+    }
+    bool customSize() const {
+        return m_customSize;
+    }
+    bool customOpacity() const {
+        return m_customOpacity;
+    }
+    const double* rateCurve() const {
+        return m_rateCurve;
+    }
+    const double* sizeCurve() const {
+        return m_sizeCurve;
+    }
+    const double* opacityCurve() const {
+        return m_opacityCurve;
+    }
 
     virtual void fromXML(const QDomElement&);
     virtual void toXML(QDomDocument&, QDomElement&) const;
 
-    virtual QWidget *widget() const { return m_optionsWidget; }
+    virtual QWidget *widget() const {
+        return m_optionsWidget;
+    }
 
 
 private slots:
@@ -111,14 +126,13 @@ KisPaintOp * KisSmudgeOpFactory::createOp(const KisPaintOpSettingsSP settings, K
 }
 
 KisSmudgeOpSettings::KisSmudgeOpSettings(QWidget *parent, bool isTablet)
-    : KisPaintOpSettings()
+        : KisPaintOpSettings()
 {
     m_optionsWidget = new QWidget(parent, "brush option widget");
     QHBoxLayout * l = new QHBoxLayout(m_optionsWidget);
     m_rateLabel = new QLabel(i18n("Rate: "), m_optionsWidget);
-    m_rateSlider = new QSlider(0,100,1, 50, Qt::Horizontal, m_optionsWidget);
-    if(isTablet)
-    {
+    m_rateSlider = new QSlider(0, 100, 1, 50, Qt::Horizontal, m_optionsWidget);
+    if (isTablet) {
         m_size =  new QCheckBox(i18n("Size"), m_optionsWidget);
         m_size->setChecked(true);
         m_opacity = new QCheckBox(i18n("Opacity"), m_optionsWidget);
@@ -134,7 +148,7 @@ KisSmudgeOpSettings::KisSmudgeOpSettings(QWidget *parent, bool isTablet)
         QToolButton* moreButton = new QToolButton(m_optionsWidget);
         moreButton->setArrowType(Qt::UpArrow);
         moreButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        moreButton->setMinimumSize(QSize(24,24)); // Bah, I had hoped the above line would make this unneeded
+        moreButton->setMinimumSize(QSize(24, 24)); // Bah, I had hoped the above line would make this unneeded
 
         connect(moreButton, SIGNAL(clicked()), this, SLOT(slotCustomCurves()));
     } else {
@@ -151,7 +165,8 @@ KisSmudgeOpSettings::KisSmudgeOpSettings(QWidget *parent, bool isTablet)
     // the curves will get filled in when the slot gets accepted
 }
 
-void KisSmudgeOpSettings::slotCustomCurves() {
+void KisSmudgeOpSettings::slotCustomCurves()
+{
     if (m_curveControlWidget->exec() == KDialog::Accepted) {
         m_customRate = m_curveControl->darkenCheckbox->isChecked();
         m_customSize = m_curveControl->sizeCheckbox->isChecked();
@@ -169,10 +184,11 @@ void KisSmudgeOpSettings::slotCustomCurves() {
     }
 }
 
-void KisSmudgeOpSettings::transferCurve(KCurve* curve, double* target) {
+void KisSmudgeOpSettings::transferCurve(KCurve* curve, double* target)
+{
     double value;
     for (int i = 0; i < 256; i++) {
-        value = curve->getCurveValue( i / 255.0);
+        value = curve->getCurveValue(i / 255.0);
         if (value < PRESSURE_MIN)
             target[i] = PRESSURE_MIN;
         else if (value > PRESSURE_MAX)
@@ -205,20 +221,18 @@ bool KisSmudgeOpSettings::varyOpacity() const
 void KisSmudgeOpSettings::fromXML(const QDomElement& elt)
 {
     QDomElement e = elt.firstChildElement("Params");
-    if(not e.isNull())
-    {
+    if (not e.isNull()) {
         KisPropertiesConfiguration kpc;
         kpc.fromXML(e);
-        m_size->setChecked( kpc.getBool( "PressureSize", false) );
-        m_opacity->setChecked( kpc.getBool( "PressureOpacity", false) );
-        m_customSize = kpc.getBool( "CustomSize", false);
-        m_customOpacity = kpc.getBool( "CustomOpacity", false);
-        for(int i = 0; i < 256; i++)
-        {
-            if( m_customSize )
-                m_sizeCurve[i] = kpc.getDouble( QString("SizeCurve%0").arg(i), i / 255.0 );
-            if( m_customOpacity )
-                m_opacityCurve[i] = kpc.getDouble( QString("OpacityCurve%0").arg(i), i / 255.0 );
+        m_size->setChecked(kpc.getBool("PressureSize", false));
+        m_opacity->setChecked(kpc.getBool("PressureOpacity", false));
+        m_customSize = kpc.getBool("CustomSize", false);
+        m_customOpacity = kpc.getBool("CustomOpacity", false);
+        for (int i = 0; i < 256; i++) {
+            if (m_customSize)
+                m_sizeCurve[i] = kpc.getDouble(QString("SizeCurve%0").arg(i), i / 255.0);
+            if (m_customOpacity)
+                m_opacityCurve[i] = kpc.getDouble(QString("OpacityCurve%0").arg(i), i / 255.0);
         }
     }
 }
@@ -231,17 +245,16 @@ void KisSmudgeOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
     kpc.setProperty("CustomSize", m_customSize);
     kpc.setProperty("CustomOpacity", m_customOpacity);
 
-    for(int i = 0; i < 256; i++)
-    {
-        if( m_customSize )
-            kpc.setProperty( QString("SizeCurve%0").arg(i), m_sizeCurve[i] );
-        if( m_customOpacity )
-            kpc.setProperty( QString("OpacityCurve%0").arg(i), m_opacityCurve[i] );
+    for (int i = 0; i < 256; i++) {
+        if (m_customSize)
+            kpc.setProperty(QString("SizeCurve%0").arg(i), m_sizeCurve[i]);
+        if (m_customOpacity)
+            kpc.setProperty(QString("OpacityCurve%0").arg(i), m_opacityCurve[i]);
     }
 
-    QDomElement paramsElt = doc.createElement( "Params" );
-    rootElt.appendChild( paramsElt );
-    kpc.toXML( doc, paramsElt);
+    QDomElement paramsElt = doc.createElement("Params");
+    rootElt.appendChild(paramsElt);
+    kpc.toXML(doc, paramsElt);
 }
 
 
@@ -256,17 +269,17 @@ KisPaintOpSettingsSP KisSmudgeOpFactory::settings(QWidget * parent, const KoInpu
 }
 
 KisSmudgeOp::KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter *painter)
-    : KisBrushBasedPaintOp(painter)
-    , m_firstRun(true)
-    , m_rate(50)
-    , m_pressureSize(true)
-    , m_pressureRate(false)
-    , m_pressureOpacity(false)
-    , m_customRate(false)
-    , m_customSize(false)
-    , m_customOpacity(false)
-    , m_target(0)
-    , m_srcdev(0)
+        : KisBrushBasedPaintOp(painter)
+        , m_firstRun(true)
+        , m_rate(50)
+        , m_pressureSize(true)
+        , m_pressureRate(false)
+        , m_pressureOpacity(false)
+        , m_customRate(false)
+        , m_customSize(false)
+        , m_customOpacity(false)
+        , m_target(0)
+        , m_srcdev(0)
 {
     if (settings != 0) {
         m_rate = settings->rate();
@@ -299,7 +312,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
 {
     KisPaintInformation adjustedInfo(info);
     if (!m_pressureSize)
-        adjustedInfo.setPressure( PRESSURE_DEFAULT );
+        adjustedInfo.setPressure(PRESSURE_DEFAULT);
 
     if (!painter()->device()) return;
 
@@ -307,13 +320,13 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
 
     Q_ASSERT(brush);
     if (!brush) return;
-    if (! brush->canPaintFor(adjustedInfo) )
+    if (! brush->canPaintFor(adjustedInfo))
         return;
 
     KisPaintDeviceSP device = painter()->device();
 
-    double pScale = KisPaintOp::scaleForPressure( adjustedInfo.pressure() );
-    QPointF hotSpot = brush->hotSpot( pScale, pScale );
+    double pScale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());
+    QPointF hotSpot = brush->hotSpot(pScale, pScale);
     QPointF pt = info.pos() - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
@@ -341,12 +354,11 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         dab = brush->image(device->colorSpace(), pScale, 0.0, adjustedInfo, xFraction, yFraction);
         dab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
-    }
-    else {
+    } else {
         KisAlphaMaskSP mask = brush->mask(adjustedInfo, xFraction, yFraction);
-        dab = cachedDab( );
+        dab = cachedDab();
         KoColor color = painter()->paintColor();
-        color.convertTo( dab->convertTo(KoColorSpaceRegistry::instance()->alpha8()) );
+        color.convertTo(dab->convertTo(KoColorSpaceRegistry::instance()->alpha8()));
         brush->mask(dab, color, scale, pScale, 0.0, info, xFraction, yFraction);
     }
 
@@ -367,8 +379,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     Q_INT32 sh = dab->extent().height();
 
     int opacity = OPACITY_OPAQUE;
-    if(!m_firstRun)
-    {
+    if (!m_firstRun) {
         opacity = rate();
         if (m_pressureRate) {
             if (m_customRate) {
@@ -379,8 +390,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
         }
         KisRectIterator it = m_srcdev->createRectIterator(0, 0, sw, sh, true);
         KoColorSpace* cs = m_srcdev->colorSpace();
-        while(not it.isDone())
-        {
+        while (not it.isDone()) {
 //kdDebug() << ((cs->getAlpha(it.rawData()) * opacity) / OPACITY_OPAQUE) << endl;
             cs->setAlpha(it.rawData(), (cs->getAlpha(it.rawData()) * opacity) / OPACITY_OPAQUE, 1);
             ++it;
@@ -414,8 +424,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     if (m_source->hasSelection()) {
         painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_target,
                                 m_source->selection(), painter()->opacity(), sx, sy, sw, sh);
-    }
-    else {
+    } else {
         painter()->bitBlt(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_target, painter()->opacity(), sx, sy, sw, sh);
     }
 

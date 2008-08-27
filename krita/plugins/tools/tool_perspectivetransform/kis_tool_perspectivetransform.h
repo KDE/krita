@@ -39,7 +39,8 @@ class WdgToolPerspectiveTransform;
  * PerspectiveTransform tool
  *
  */
-class KisToolPerspectiveTransform : public KisToolNonPaint, KisCommandHistoryListener {
+class KisToolPerspectiveTransform : public KisToolNonPaint, KisCommandHistoryListener
+{
 
     typedef KisToolNonPaint super;
     Q_OBJECT
@@ -101,19 +102,19 @@ private:
 
 };
 
-class KisToolPerspectiveTransformFactory : public KoToolFactory {
+class KisToolPerspectiveTransformFactory : public KoToolFactory
+{
 
 public:
     KisToolPerspectiveTransformFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolPerspectiveTransform", i18n( "Perspective Transform" ))
-        {
-            setToolTip( i18n( "Transform the perspective appearance of a layer or a selection" ) );
-            setToolType( TOOL_TYPE_TRANSFORM );
-            setIcon( "tool_perspectivetransform" );
-            setPriority( 12 );
-        };
+            : KoToolFactory(parent, "KisToolPerspectiveTransform", i18n("Perspective Transform")) {
+        setToolTip(i18n("Transform the perspective appearance of a layer or a selection"));
+        setToolType(TOOL_TYPE_TRANSFORM);
+        setIcon("tool_perspectivetransform");
+        setPriority(12);
+    };
 
-    virtual ~KisToolPerspectiveTransformFactory(QObject *parent, const QStringList&){}
+    virtual ~KisToolPerspectiveTransformFactory(QObject *parent, const QStringList&) {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return KisToolPerspectiveTransform(canvas);

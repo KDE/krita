@@ -39,14 +39,14 @@ KisPaintOpSettings::~KisPaintOpSettings()
 
 void KisPaintOpSettings::mousePressEvent(KoPointerEvent *e)
 {
-  e->ignore();
+    e->ignore();
 }
 
 void KisPaintOpSettings::activate()
 {
 }
 
-void KDE_DEPRECATED KisPaintOpSettings::setNode(KisNodeSP node )
+void KDE_DEPRECATED KisPaintOpSettings::setNode(KisNodeSP node)
 {
     d->node = node;
 }

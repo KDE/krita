@@ -39,28 +39,24 @@ class KisSharedPtrVector : public QVector< KisSharedPtr<T> >
 public:
     KisSharedPtrVector() {}
 
-    void pop_back()
-    {
-            if (!super::empty()) {
+    void pop_back() {
+        if (!super::empty()) {
             super::back() = 0;
             super::pop_back();
         }
     }
 
-    typename super::iterator erase(typename super::iterator it)
-    {
+    typename super::iterator erase(typename super::iterator it) {
         *it = 0;
         return super::erase(it);
     }
 
-    typename super::iterator erase(typename super::iterator first, typename super::iterator last)
-    {
+    typename super::iterator erase(typename super::iterator first, typename super::iterator last) {
         qFill(first, last, 0);
         return super::erase(first, last);
     }
 
-    bool contains(KisSharedPtr<T> ptr) const
-    {
+    bool contains(KisSharedPtr<T> ptr) const {
         for (int i = 0, n = super::count(); i < n; ++i)
             if (super::at(i) == ptr)
                 return true;

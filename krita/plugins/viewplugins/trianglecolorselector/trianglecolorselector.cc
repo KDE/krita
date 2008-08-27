@@ -38,36 +38,32 @@
 #include "kis_triangle_color_selector_dock.h"
 
 typedef KGenericFactory<TriangleColorSelectorPlugin> TriangleColorSelectorPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritatrianglecolorselector, TriangleColorSelectorPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritatrianglecolorselector, TriangleColorSelectorPluginFactory("krita"))
 
-class KisTriangleColorSelectorDockFactory : public KoDockFactory {
+class KisTriangleColorSelectorDockFactory : public KoDockFactory
+{
 public:
     KisTriangleColorSelectorDockFactory(KisView2 * view)
-        : m_view( view )
-    {
+            : m_view(view) {
     }
 
-    virtual QString id() const
-    {
-        return QString( "KisTriangleColorSelector" );
+    virtual QString id() const {
+        return QString("KisTriangleColorSelector");
     }
 
-    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
-    {
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const {
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget()
-    {
+    virtual QDockWidget* createDockWidget() {
         KisTriangleColorSelectorDock * dockWidget = new KisTriangleColorSelectorDock(m_view);
-        
+
         dockWidget->setObjectName(id());
 
         return dockWidget;
     }
 
-    KoDockFactory::DockPosition defaultDockPosition() const
-    {
+    KoDockFactory::DockPosition defaultDockPosition() const {
         return DockMinimized;
     }
 
@@ -79,16 +75,15 @@ private:
 
 
 TriangleColorSelectorPlugin::TriangleColorSelectorPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     dbgPlugins << "TriangleColorSelectorPlugin";
-    if ( parent->inherits("KisView2") )
-    {
+    if (parent->inherits("KisView2")) {
         m_view = (KisView2*) parent;
 
         setComponentData(TriangleColorSelectorPluginFactory::componentData());
-        KisTriangleColorSelectorDockFactory triangleColorSelectorDockFactory( m_view);
-        m_view->createDockWidget( &triangleColorSelectorDockFactory );
+        KisTriangleColorSelectorDockFactory triangleColorSelectorDockFactory(m_view);
+        m_view->createDockWidget(&triangleColorSelectorDockFactory);
     }
 }
 

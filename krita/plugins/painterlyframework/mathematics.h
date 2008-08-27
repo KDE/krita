@@ -20,7 +20,8 @@
 #ifndef MATHEMATICS_H_
 #define MATHEMATICS_H_
 
-namespace maths {
+namespace maths
+{
 
 double coth(double z);
 

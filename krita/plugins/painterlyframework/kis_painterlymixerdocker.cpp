@@ -24,10 +24,10 @@
 
 #include <KLocale>
 
-KisPainterlyMixerDocker::KisPainterlyMixerDocker (KisView2 *view)
-    : QDockWidget()
+KisPainterlyMixerDocker::KisPainterlyMixerDocker(KisView2 *view)
+        : QDockWidget()
 {
-    setWindowTitle( i18n( "Painterly Color Mixer" ) );
+    setWindowTitle(i18n("Painterly Color Mixer"));
 
     m_painterlyMixer = new KisPainterlyMixer(this, view);
     setWidget(m_painterlyMixer);

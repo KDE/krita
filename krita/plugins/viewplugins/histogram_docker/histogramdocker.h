@@ -37,7 +37,7 @@ class KoColorSpace;
 
 class KritaHistogramDocker : public KParts::Plugin
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     KritaHistogramDocker(QObject *parent, const QStringList &);
     virtual ~KritaHistogramDocker();
@@ -59,8 +59,9 @@ private:
 };
 
 
-class HistogramDockerUpdater : public QObject {
-Q_OBJECT
+class HistogramDockerUpdater : public QObject
+{
+    Q_OBJECT
 public:
     HistogramDockerUpdater(QObject* parent, KisHistogramSP h, KisHistogramView* v,
                            KisAccumulatingHistogramProducer* p);

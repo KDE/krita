@@ -58,26 +58,25 @@
 #include "dlg_colorspaceconversion.h"
 
 typedef KGenericFactory<ColorSpaceConversion> ColorSpaceConversionFactory;
-K_EXPORT_COMPONENT_FACTORY( kritacolorspaceconversion, ColorSpaceConversionFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritacolorspaceconversion, ColorSpaceConversionFactory("krita"))
 
 
 ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
-    if ( parent->inherits("KisView2") )
-    {
+    if (parent->inherits("KisView2")) {
         m_view = (KisView2*) parent;
 
         setComponentData(ColorSpaceConversionFactory::componentData());
 
-setXMLFile(KStandardDirs::locate("data","kritaplugins/colorspaceconversion.rc"),
-true);
+        setXMLFile(KStandardDirs::locate("data", "kritaplugins/colorspaceconversion.rc"),
+                   true);
 
         KAction *action  = new KAction(i18n("&Convert Image Type..."), this);
-        actionCollection()->addAction("imgcolorspaceconversion", action );
+        actionCollection()->addAction("imgcolorspaceconversion", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotImgColorSpaceConversion()));
         action  = new KAction(i18n("&Convert Layer Type..."), this);
-        actionCollection()->addAction("layercolorspaceconversion", action );
+        actionCollection()->addAction("layercolorspaceconversion", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotLayerColorSpaceConversion()));
     }
 }
@@ -128,7 +127,7 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
     if (dlgColorSpaceConversion->exec() == QDialog::Accepted) {
         KoID cspace = dlgColorSpaceConversion->m_page->cmbColorSpaces->currentItem();
         const KoColorSpace * cs = KoColorSpaceRegistry::instance() ->
-                colorSpace(cspace, dlgColorSpaceConversion->m_page->cmbDestProfile->currentText());
+                                  colorSpace(cspace, dlgColorSpaceConversion->m_page->cmbDestProfile->currentText());
 
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         dev->convertTo(cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId());

@@ -25,28 +25,30 @@
 
 class QString;
 
-namespace KisMetaData {
-    class Store;
+namespace KisMetaData
+{
+class Store;
+/**
+ * This is an interface which serves as a base class for meta data store merge strategy.
+ */
+class KRITAIMAGE_EXPORT MergeStrategy
+{
+public:
+    virtual ~MergeStrategy();
+    /// @return the id of this merge strategy
+    virtual QString id() const = 0;
+    /// @return the name of this merge strategy
+    virtual QString name() const = 0;
+    /// @return a description of this merge strategy
+    virtual QString description() const = 0;
     /**
-     * This is an interface which serves as a base class for meta data store merge strategy.
+     * Call this function to merge a list of meta data stores in one.
+     * @param dst the destination store
+     * @param srcs the list of source meta data store
      */
-    class KRITAIMAGE_EXPORT MergeStrategy {
-        public:
-            virtual ~MergeStrategy();
-            /// @return the id of this merge strategy
-            virtual QString id() const = 0;
-            /// @return the name of this merge strategy
-            virtual QString name() const = 0;
-            /// @return a description of this merge strategy
-            virtual QString description() const = 0;
-            /**
-             * Call this function to merge a list of meta data stores in one.
-             * @param dst the destination store
-             * @param srcs the list of source meta data store
-             */
-            virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const = 0;
-    };
-    
+    virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const = 0;
+};
+
 }
 
 #endif

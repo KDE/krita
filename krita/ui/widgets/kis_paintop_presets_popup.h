@@ -29,15 +29,16 @@ class KisPropertiesConfiguration;
  * Popup widget for presets with built-in functionality
  * for adding and removing presets.
  */
-class KisPaintOpPresetsPopup : public QWidget {
+class KisPaintOpPresetsPopup : public QWidget
+{
 
 public:
 
-    KisPaintOpPresetsPopup( QWidget * parent = 0 );
+    KisPaintOpPresetsPopup(QWidget * parent = 0);
 
     ~KisPaintOpPresetsPopup();
 
-    void setPaintOpSettingsWidget( QWidget * widget );
+    void setPaintOpSettingsWidget(QWidget * widget);
 
 private:
 

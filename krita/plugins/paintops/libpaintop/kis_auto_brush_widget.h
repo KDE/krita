@@ -29,8 +29,10 @@ class KRITAUI_EXPORT KisWdgAutobrush : public QWidget, public Ui::KisWdgAutobrus
 {
     Q_OBJECT
 
-    public:
-        KisWdgAutobrush(QWidget *parent, const char *name) : QWidget(parent) { setObjectName(name); setupUi(this); }
+public:
+    KisWdgAutobrush(QWidget *parent, const char *name) : QWidget(parent) {
+        setObjectName(name); setupUi(this);
+    }
 };
 
 class KRITAUI_EXPORT KisAutoBrushWidget : public KisWdgAutobrush
@@ -44,15 +46,15 @@ public:
 private slots:
 
     void paramChanged();
-    void spinBoxWidthChanged(int );
-    void spinBoxHeigthChanged(int );
+    void spinBoxWidthChanged(int);
+    void spinBoxHeigthChanged(int);
     void spinBoxHorizontalChanged(int);
     void spinBoxVerticalChanged(int);
     void linkSizeToggled(bool);
     void linkFadeToggled(bool);
 
 protected:
-    virtual void resizeEvent ( QResizeEvent * );
+    virtual void resizeEvent(QResizeEvent *);
 
 private:
     QImage m_brush;

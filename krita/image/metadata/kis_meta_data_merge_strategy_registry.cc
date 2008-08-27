@@ -25,17 +25,17 @@ MergeStrategyRegistry *MergeStrategyRegistry::s_singleton = 0;
 
 MergeStrategyRegistry::MergeStrategyRegistry()
 {
-    add( new DropMergeStrategy() );
-    add( new PriorityToFirstMergeStrategy() );
-    add( new OnlyIdenticalMergeStrategy() );
-    add( new SmartMergeStrategy() );
+    add(new DropMergeStrategy());
+    add(new PriorityToFirstMergeStrategy());
+    add(new OnlyIdenticalMergeStrategy());
+    add(new SmartMergeStrategy());
 }
 
 MergeStrategyRegistry::MergeStrategyRegistry(const MergeStrategyRegistry&) : KoGenericRegistry<const KisMetaData::MergeStrategy*>()
 {
 }
 
-MergeStrategyRegistry& MergeStrategyRegistry::operator=(const MergeStrategyRegistry& )
+MergeStrategyRegistry& MergeStrategyRegistry::operator=(const MergeStrategyRegistry&)
 {
     return *this;
 }
@@ -46,8 +46,7 @@ MergeStrategyRegistry::~MergeStrategyRegistry()
 
 MergeStrategyRegistry* MergeStrategyRegistry::instance()
 {
-    if(!s_singleton)
-    {
+    if (!s_singleton) {
         s_singleton = new MergeStrategyRegistry();
     }
     return s_singleton;

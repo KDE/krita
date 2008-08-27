@@ -25,22 +25,22 @@
 
 #include "kis_specific_color_selector_widget.h"
 
-SpecificColorSelectorDock::SpecificColorSelectorDock( KisView2 *view ) : QDockWidget(i18n("Specific Color Selector")), m_view(view)
+SpecificColorSelectorDock::SpecificColorSelectorDock(KisView2 *view) : QDockWidget(i18n("Specific Color Selector")), m_view(view)
 {
     m_colorSelector = new KisSpecificColorSelectorWidget(this);
-    setWidget( m_colorSelector );
-    connect( m_colorSelector, SIGNAL(colorChanged(const KoColor&)), view->resourceProvider(), SLOT(slotSetFGColor(const KoColor&)));
-    connect( view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), m_colorSelector, SLOT(setColor(const KoColor&)));
-    m_colorSelector->setColor( view->resourceProvider()->fgColor() );
-    connect( view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), this, SLOT(layerChanged(const KisNodeSP)));
+    setWidget(m_colorSelector);
+    connect(m_colorSelector, SIGNAL(colorChanged(const KoColor&)), view->resourceProvider(), SLOT(slotSetFGColor(const KoColor&)));
+    connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), m_colorSelector, SLOT(setColor(const KoColor&)));
+    m_colorSelector->setColor(view->resourceProvider()->fgColor());
+    connect(view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), this, SLOT(layerChanged(const KisNodeSP)));
 }
 
 void SpecificColorSelectorDock::layerChanged(const KisNodeSP l)
 {
     if (l->inherits("KisMask") && l->parent())
-        m_colorSelector->setColorSpace( static_cast<const KisLayer*>(l->parent().data())->colorSpace());
+        m_colorSelector->setColorSpace(static_cast<const KisLayer*>(l->parent().data())->colorSpace());
     else
-        m_colorSelector->setColorSpace( static_cast<const KisLayer*>(l.data())->colorSpace());
+        m_colorSelector->setColorSpace(static_cast<const KisLayer*>(l.data())->colorSpace());
 }
 
 

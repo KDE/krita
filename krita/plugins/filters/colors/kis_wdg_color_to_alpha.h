@@ -17,7 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
- 
+
 #ifndef _KIS_WDG_COLOR_TO_ALPHA_H_
 #define _KIS_WDG_COLOR_TO_ALPHA_H_
 
@@ -29,13 +29,15 @@ class Ui_WdgColorToAlphaBase;
 class KisWdgColorToAlpha : public KisFilterConfigWidget
 {
     Q_OBJECT
-    public:
-        KisWdgColorToAlpha( QWidget * parent);
-        inline const Ui_WdgColorToAlphaBase* widget() const { return m_widget; }
-        virtual void setConfiguration(KisFilterConfiguration*);
-        virtual KisFilterConfiguration* configuration() const;
-    private:
-        Ui_WdgColorToAlphaBase* m_widget;
+public:
+    KisWdgColorToAlpha(QWidget * parent);
+    inline const Ui_WdgColorToAlphaBase* widget() const {
+        return m_widget;
+    }
+    virtual void setConfiguration(KisFilterConfiguration*);
+    virtual KisFilterConfiguration* configuration() const;
+private:
+    Ui_WdgColorToAlphaBase* m_widget;
 };
 
 #endif

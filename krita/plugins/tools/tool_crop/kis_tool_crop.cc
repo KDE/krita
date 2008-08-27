@@ -50,7 +50,7 @@
 #include <kis_crop_visitor.h>
 
 KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
-    : super(canvas, KisCursor::load("tool_crop_cursor.png", 6, 6))
+        : super(canvas, KisCursor::load("tool_crop_cursor.png", 6, 6))
 {
     setObjectName("tool_crop");
     m_selecting = false;
@@ -64,9 +64,9 @@ KisToolCrop::~KisToolCrop()
 {
 }
 
-void KisToolCrop::activate( bool tmp )
+void KisToolCrop::activate(bool tmp)
 {
-    super::activate( tmp );
+    super::activate(tmp);
 
     KisSelectionSP sel = currentSelection();
     if (sel) {
@@ -81,12 +81,12 @@ void KisToolCrop::deactivate()
 {
     m_selecting = false;
     m_haveCropSelection = false;
-    m_rectCrop = QRect(0,0,0,0);
+    m_rectCrop = QRect(0, 0, 0, 0);
     updateWidgetValues();
     updateCanvasPixelRect(image()->bounds());
 }
 
-void KisToolCrop::paint( QPainter &painter, const KoViewConverter &converter )
+void KisToolCrop::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
     paintOutlineWithHandles(painter);
@@ -100,18 +100,15 @@ void KisToolCrop::mousePressEvent(KoPointerEvent *e)
 
             QPoint pos = convertToIntPixelCoord(e);
 
-            pos.setX( qBound(0, pos.x(), image()->width() - 1));
-            pos.setY( qBound(0, pos.y(), image()->height() - 1));
+            pos.setX(qBound(0, pos.x(), image()->width() - 1));
+            pos.setY(qBound(0, pos.y(), image()->height() - 1));
 
             m_selecting = true;
 
-            if( !m_haveCropSelection ) //if the selection is not set
-            {
-                m_rectCrop = QRect( pos.x(), pos.y(), 1, 1);
+            if (!m_haveCropSelection) { //if the selection is not set
+                m_rectCrop = QRect(pos.x(), pos.y(), 1, 1);
                 updateCanvasPixelRect(image()->bounds());
-            }
-            else
-            {
+            } else {
                 m_mouseOnHandleType = mouseOnHandle(pixelToView(convertToPixelCoord(e)));
                 m_dragStart = pos;
             }
@@ -121,157 +118,136 @@ void KisToolCrop::mousePressEvent(KoPointerEvent *e)
 
 void KisToolCrop::mouseMoveEvent(KoPointerEvent *e)
 {
-    if ( m_canvas && currentImage())
-    {
-        if( m_selecting ) //if the user selects
-        {
+    if (m_canvas && currentImage()) {
+        if (m_selecting) { //if the user selects
             QPoint pos = convertToIntPixelCoord(e);
 
-            if( !m_haveCropSelection ) //if the cropSelection is not yet set
-            {
+            if (!m_haveCropSelection) { //if the cropSelection is not yet set
                 QRectF updateRect = boundingRect();
 
                 m_rectCrop.setBottomRight(convertToIntPixelCoord(e));
 
-                m_rectCrop.setRight( qBound(0, m_rectCrop.right(), image()->width() - 1));
-                m_rectCrop.setBottom( qBound(0, m_rectCrop.bottom(), image()->height() - 1));
+                m_rectCrop.setRight(qBound(0, m_rectCrop.right(), image()->width() - 1));
+                m_rectCrop.setBottom(qBound(0, m_rectCrop.bottom(), image()->height() - 1));
 
                 updateRect |= boundingRect();
                 updateCanvasViewRect(updateRect);
-            }
-            else //if the crop selection is set
-            {
+            } else { //if the crop selection is set
                 QPoint dragStop = convertToIntPixelCoord(e);
                 QPoint drag = dragStop - m_dragStart;
 
-                if (m_mouseOnHandleType != None && m_dragStart != dragStop ) {
+                if (m_mouseOnHandleType != None && m_dragStart != dragStop) {
 
                     qint32 imageWidth = currentImage()->width();
                     qint32 imageHeight = currentImage()->height();
 
                     QRectF updateRect = boundingRect();
 
-                    if( m_mouseOnHandleType == Inside )
-                    {
-                        m_rectCrop.translate( drag );
+                    if (m_mouseOnHandleType == Inside) {
+                        m_rectCrop.translate(drag);
 
-                        if( m_rectCrop.left() < 0 )
-                        {
-                            m_rectCrop.moveLeft( 0 );
+                        if (m_rectCrop.left() < 0) {
+                            m_rectCrop.moveLeft(0);
                         }
-                        if( m_rectCrop.right() > imageWidth - 1)
-                        {
-                            m_rectCrop.moveRight( imageWidth - 1);
+                        if (m_rectCrop.right() > imageWidth - 1) {
+                            m_rectCrop.moveRight(imageWidth - 1);
                         }
-                        if( m_rectCrop.top() < 0 )
-                        {
-                            m_rectCrop.moveTop( 0 );
+                        if (m_rectCrop.top() < 0) {
+                            m_rectCrop.moveTop(0);
                         }
-                        if( m_rectCrop.bottom() > imageHeight - 1)
-                        {
-                            m_rectCrop.moveBottom( imageHeight - 1);
+                        if (m_rectCrop.bottom() > imageHeight - 1) {
+                            m_rectCrop.moveBottom(imageHeight - 1);
                         }
-                    } else if(m_optWidget->boolRatio->isChecked())
-                    {
-                        if( ! m_optWidget->boolWidth->isChecked() && !m_optWidget->boolHeight->isChecked() )
-                        {
-                            switch (m_mouseOnHandleType)
-                            {
-                            case (UpperLeft):
-                            {
+                    } else if (m_optWidget->boolRatio->isChecked()) {
+                        if (! m_optWidget->boolWidth->isChecked() && !m_optWidget->boolHeight->isChecked()) {
+                            switch (m_mouseOnHandleType) {
+                            case(UpperLeft): {
                                 qint32 dep = (drag.x() + drag.y()) / 2;
-                                m_rectCrop.setTop( m_rectCrop.top() + dep  );
-                                m_rectCrop.setLeft( (int) ( m_rectCrop.right() - m_optWidget->doubleRatio->value() * m_rectCrop.height() ) );
+                                m_rectCrop.setTop(m_rectCrop.top() + dep);
+                                m_rectCrop.setLeft((int)(m_rectCrop.right() - m_optWidget->doubleRatio->value() * m_rectCrop.height()));
                             }
-                                break;
-                            case (LowerRight):
-                            {
+                            break;
+                            case(LowerRight): {
                                 qint32 dep = (drag.x() + drag.y()) / 2;
-                                m_rectCrop.setBottom( m_rectCrop.bottom() + dep );
-                                m_rectCrop.setWidth( (int) ( m_optWidget->doubleRatio->value() * m_rectCrop.height() ) );
+                                m_rectCrop.setBottom(m_rectCrop.bottom() + dep);
+                                m_rectCrop.setWidth((int)(m_optWidget->doubleRatio->value() * m_rectCrop.height()));
                                 break;
                             }
-                            case (UpperRight):
-                            {
+                            case(UpperRight): {
                                 qint32 dep = (drag.x() - drag.y()) / 2;
-                                m_rectCrop.setTop( m_rectCrop.top() - dep  );
-                                m_rectCrop.setWidth( (int) ( m_optWidget->doubleRatio->value() * m_rectCrop.height() ) );
+                                m_rectCrop.setTop(m_rectCrop.top() - dep);
+                                m_rectCrop.setWidth((int)(m_optWidget->doubleRatio->value() * m_rectCrop.height()));
                                 break;
                             }
-                            case (LowerLeft):
-                            {
+                            case(LowerLeft): {
                                 qint32 dep = (drag.x() - drag.y()) / 2;
-                                m_rectCrop.setBottom( m_rectCrop.bottom() - dep );
-                                m_rectCrop.setLeft( (int) ( m_rectCrop.right() - m_optWidget->doubleRatio->value() * m_rectCrop.height() ) );
+                                m_rectCrop.setBottom(m_rectCrop.bottom() - dep);
+                                m_rectCrop.setLeft((int)(m_rectCrop.right() - m_optWidget->doubleRatio->value() * m_rectCrop.height()));
                                 break;
                             }
-                            case (Upper):
-                                m_rectCrop.setTop( pos.y() );
-                                m_rectCrop.setWidth( (int) (m_rectCrop.height() * m_optWidget->doubleRatio->value()) );
+                            case(Upper):
+                                m_rectCrop.setTop(pos.y());
+                                m_rectCrop.setWidth((int)(m_rectCrop.height() * m_optWidget->doubleRatio->value()));
                                 break;
-                            case (Lower):
-                                m_rectCrop.setBottom( pos.y() );
-                                m_rectCrop.setWidth( (int) (m_rectCrop.height() * m_optWidget->doubleRatio->value()) );
+                            case(Lower):
+                                m_rectCrop.setBottom(pos.y());
+                                m_rectCrop.setWidth((int)(m_rectCrop.height() * m_optWidget->doubleRatio->value()));
                                 break;
-                            case (Left):
-                                m_rectCrop.setLeft( pos.x() );
-                                m_rectCrop.setHeight( (int) (m_rectCrop.width() / m_optWidget->doubleRatio->value()) );
+                            case(Left):
+                                m_rectCrop.setLeft(pos.x());
+                                m_rectCrop.setHeight((int)(m_rectCrop.width() / m_optWidget->doubleRatio->value()));
                                 break;
-                            case (Right):
-                                m_rectCrop.setRight( pos.x() );
-                                m_rectCrop.setHeight( (int) (m_rectCrop.width() / m_optWidget->doubleRatio->value()) );
+                            case(Right):
+                                m_rectCrop.setRight(pos.x());
+                                m_rectCrop.setHeight((int)(m_rectCrop.width() / m_optWidget->doubleRatio->value()));
                                 break;
-                            case (Inside): // never happen
+                            case(Inside):  // never happen
                                 break;
                             }
                         }
                     } else {
-                        if( m_optWidget->boolWidth->isChecked() )
-                        {
-                            m_rectCrop.setWidth( m_optWidget->intWidth->value() );
+                        if (m_optWidget->boolWidth->isChecked()) {
+                            m_rectCrop.setWidth(m_optWidget->intWidth->value());
                         } else {
-                            switch (m_mouseOnHandleType)
-                            {
-                                case (LowerLeft):
-                                case (Left):
-                                case (UpperLeft):
-                                    m_rectCrop.setLeft( pos.x() );
-                                    break;
-                                case (Right):
-                                case (UpperRight):
-                                case (LowerRight):
-                                    m_rectCrop.setRight( pos.x() );
-                                    break;
-                                default:
-                                    break;
+                            switch (m_mouseOnHandleType) {
+                            case(LowerLeft):
+                            case(Left):
+                            case(UpperLeft):
+                                m_rectCrop.setLeft(pos.x());
+                                break;
+                            case(Right):
+                            case(UpperRight):
+                            case(LowerRight):
+                                m_rectCrop.setRight(pos.x());
+                                break;
+                            default:
+                                break;
                             }
                         }
-                        if( m_optWidget->boolHeight->isChecked() )
-                        {
-                            m_rectCrop.setHeight( m_optWidget->intHeight->value() );
+                        if (m_optWidget->boolHeight->isChecked()) {
+                            m_rectCrop.setHeight(m_optWidget->intHeight->value());
                         } else {
-                            switch (m_mouseOnHandleType)
-                            {
-                                case (UpperLeft):
-                                case (Upper):
-                                case (UpperRight):
-                                    m_rectCrop.setTop( pos.y() );
-                                    break;
-                                case (LowerRight):
-                                case (LowerLeft):
-                                case (Lower):
-                                    m_rectCrop.setBottom( pos.y() );
-                                    break;
-                                default:
-                                    break;
+                            switch (m_mouseOnHandleType) {
+                            case(UpperLeft):
+                            case(Upper):
+                            case(UpperRight):
+                                m_rectCrop.setTop(pos.y());
+                                break;
+                            case(LowerRight):
+                            case(LowerLeft):
+                            case(Lower):
+                                m_rectCrop.setBottom(pos.y());
+                                break;
+                            default:
+                                break;
                             }
                         }
                     }
 
-                    m_rectCrop.setLeft( qBound(0, m_rectCrop.left(), image()->width() - 1));
-                    m_rectCrop.setRight( qBound(0, m_rectCrop.right(), image()->width() - 1));
-                    m_rectCrop.setTop( qBound(0, m_rectCrop.top(), image()->height() - 1));
-                    m_rectCrop.setBottom( qBound(0, m_rectCrop.bottom(), image()->height() - 1));
+                    m_rectCrop.setLeft(qBound(0, m_rectCrop.left(), image()->width() - 1));
+                    m_rectCrop.setRight(qBound(0, m_rectCrop.right(), image()->width() - 1));
+                    m_rectCrop.setTop(qBound(0, m_rectCrop.top(), image()->height() - 1));
+                    m_rectCrop.setBottom(qBound(0, m_rectCrop.bottom(), image()->height() - 1));
 
                     m_dragStart = dragStop;
 
@@ -280,11 +256,8 @@ void KisToolCrop::mouseMoveEvent(KoPointerEvent *e)
                 }
             }
             updateWidgetValues();
-        }
-        else //if we are not selecting
-        {
-            if ( m_haveCropSelection )  //if the crop selection is set
-            {
+        } else { //if we are not selecting
+            if (m_haveCropSelection) {  //if the crop selection is set
                 QPointF pos = convertToPixelCoord(e);
                 qint32 type = mouseOnHandle(pixelToView(pos));
                 //set resize cursor if we are on one of the handles
@@ -301,10 +274,10 @@ void KisToolCrop::updateWidgetValues(bool updateratio)
 
     setOptionWidgetX(r.x());
     setOptionWidgetY(r.y());
-    setOptionWidgetWidth(r.width() );
-    setOptionWidgetHeight(r.height() );
-    if(updateratio && !m_optWidget->boolRatio->isChecked() )
-        setOptionWidgetRatio((double)r.width() / (double)r.height() );
+    setOptionWidgetWidth(r.width());
+    setOptionWidgetHeight(r.height());
+    if (updateratio && !m_optWidget->boolRatio->isChecked())
+        setOptionWidgetRatio((double)r.width() / (double)r.height());
 }
 
 void KisToolCrop::mouseReleaseEvent(KoPointerEvent *e)
@@ -332,10 +305,10 @@ void KisToolCrop::mouseDoubleClickEvent(KoPointerEvent *)
 void KisToolCrop::validateSelection(bool updateratio)
 {
     if (m_canvas && image()) {
-        m_rectCrop.setLeft( qBound(0, m_rectCrop.left(), image()->width() - 1));
-        m_rectCrop.setRight( qBound(0, m_rectCrop.right(), image()->width() - 1));
-        m_rectCrop.setTop( qBound(0, m_rectCrop.top(), image()->height() - 1));
-        m_rectCrop.setBottom( qBound(0, m_rectCrop.bottom(), image()->height() - 1));
+        m_rectCrop.setLeft(qBound(0, m_rectCrop.left(), image()->width() - 1));
+        m_rectCrop.setRight(qBound(0, m_rectCrop.right(), image()->width() - 1));
+        m_rectCrop.setTop(qBound(0, m_rectCrop.top(), image()->height() - 1));
+        m_rectCrop.setBottom(qBound(0, m_rectCrop.bottom(), image()->height() - 1));
 
         updateWidgetValues(updateratio);
     }
@@ -415,7 +388,8 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc)
     }
 }
 
-void KisToolCrop::crop() {
+void KisToolCrop::crop()
+{
     // XXX: Should cropping be part of KisImage/KisPaintDevice's API?
 
     m_haveCropSelection = false;
@@ -440,13 +414,12 @@ void KisToolCrop::crop() {
         if (currentImage()->undo())
             currentImage()->undoAdapter()->endMacro();
 
-    }
-    else {
+    } else {
         // Resize creates the undo macro itself
         currentImage()->resize(cropRect, true);
     }
 
-    m_rectCrop = QRect(0,0,0,0);
+    m_rectCrop = QRect(0, 0, 0, 0);
 
     updateWidgetValues();
 }
@@ -459,8 +432,7 @@ void KisToolCrop::setCropX(int x)
         m_haveCropSelection = true;
         m_rectCrop = QRect(x, 0, 1, 1);
         updateRect = pixelToView(image()->bounds());
-    }
-    else {
+    } else {
         updateRect = boundingRect();
         m_rectCrop.moveLeft(x);
     }
@@ -479,8 +451,7 @@ void KisToolCrop::setCropY(int y)
         m_haveCropSelection = true;
         m_rectCrop = QRect(0, y, 1, 1);
         updateRect = pixelToView(image()->bounds());
-    }
-    else {
+    } else {
         updateRect = boundingRect();
         m_rectCrop.moveTop(y);
     }
@@ -499,17 +470,15 @@ void KisToolCrop::setCropWidth(int w)
         m_haveCropSelection = true;
         m_rectCrop = QRect(0, 0, w, 1);
         updateRect = pixelToView(image()->bounds());
-    }
-    else {
+    } else {
         updateRect = boundingRect();
         m_rectCrop.setWidth(w);
     }
 
-    if( m_optWidget->boolRatio->isChecked() )
-    {
-        m_rectCrop.setHeight( (int) ( w / m_optWidget->doubleRatio->value() ) );
+    if (m_optWidget->boolRatio->isChecked()) {
+        m_rectCrop.setHeight((int)(w / m_optWidget->doubleRatio->value()));
     } else {
-        setOptionWidgetRatio((double)m_rectCrop.width() / (double)m_rectCrop.height() );
+        setOptionWidgetRatio((double)m_rectCrop.width() / (double)m_rectCrop.height());
     }
 
     validateSelection();
@@ -526,17 +495,15 @@ void KisToolCrop::setCropHeight(int h)
         m_haveCropSelection = true;
         m_rectCrop = QRect(0, 0, 1, h);
         updateRect = pixelToView(image()->bounds());
-    }
-    else {
+    } else {
         updateRect = boundingRect();
         m_rectCrop.setHeight(h);
     }
 
-    if( m_optWidget->boolRatio->isChecked() )
-    {
-        m_rectCrop.setWidth( (int) ( h * m_optWidget->doubleRatio->value() ) );
+    if (m_optWidget->boolRatio->isChecked()) {
+        m_rectCrop.setWidth((int)(h * m_optWidget->doubleRatio->value()));
     } else {
-        setOptionWidgetRatio((double)m_rectCrop.width() / (double)m_rectCrop.height() );
+        setOptionWidgetRatio((double)m_rectCrop.width() / (double)m_rectCrop.height());
     }
 
     validateSelection();
@@ -545,34 +512,31 @@ void KisToolCrop::setCropHeight(int h)
     updateCanvasViewRect(updateRect);
 }
 
-void KisToolCrop::setRatio(double )
+void KisToolCrop::setRatio(double)
 {
-    if( ! (m_optWidget->boolWidth->isChecked() && m_optWidget->boolHeight->isChecked() ))
-    {
+    if (!(m_optWidget->boolWidth->isChecked() && m_optWidget->boolHeight->isChecked())) {
         QRectF updateRect;
 
         if (!m_haveCropSelection) {
             m_haveCropSelection = true;
             m_rectCrop = QRect(0, 0, 1, 1);
             updateRect = pixelToView(image()->bounds());
-        }
-        else {
+        } else {
             updateRect = boundingRect();
         }
-        if( m_optWidget->boolWidth->isChecked() )
-        {
-            m_rectCrop.setHeight( (int) ( m_rectCrop.width() / m_optWidget->doubleRatio->value()) );
-            setOptionWidgetHeight( m_rectCrop.height() );
-        } else if(m_optWidget->boolHeight->isChecked()) {
-            m_rectCrop.setWidth( (int) (m_rectCrop.height() * m_optWidget->doubleRatio->value()) );
-            setOptionWidgetWidth( m_rectCrop.width() );
+        if (m_optWidget->boolWidth->isChecked()) {
+            m_rectCrop.setHeight((int)(m_rectCrop.width() / m_optWidget->doubleRatio->value()));
+            setOptionWidgetHeight(m_rectCrop.height());
+        } else if (m_optWidget->boolHeight->isChecked()) {
+            m_rectCrop.setWidth((int)(m_rectCrop.height() * m_optWidget->doubleRatio->value()));
+            setOptionWidgetWidth(m_rectCrop.width());
         } else {
-            int newwidth = (int) (m_optWidget->doubleRatio->value() * m_rectCrop.height());
+            int newwidth = (int)(m_optWidget->doubleRatio->value() * m_rectCrop.height());
             newwidth = (newwidth + m_rectCrop.width()) / 2;
-            m_rectCrop.setWidth( newwidth );
-            setOptionWidgetWidth( newwidth );
-            m_rectCrop.setHeight( (int) (newwidth / m_optWidget->doubleRatio->value()) );
-            setOptionWidgetHeight( m_rectCrop.height() );
+            m_rectCrop.setWidth(newwidth);
+            setOptionWidgetWidth(newwidth);
+            m_rectCrop.setHeight((int)(newwidth / m_optWidget->doubleRatio->value()));
+            setOptionWidgetHeight(m_rectCrop.height());
         }
         validateSelection(false);
         updateRect |= boundingRect();
@@ -629,7 +593,7 @@ QWidget* KisToolCrop::createOptionWidget()
     connect(m_optWidget->intY, SIGNAL(valueChanged(int)), this, SLOT(setCropY(int)));
     connect(m_optWidget->intWidth, SIGNAL(valueChanged(int)), this, SLOT(setCropWidth(int)));
     connect(m_optWidget->intHeight, SIGNAL(valueChanged(int)), this, SLOT(setCropHeight(int)));
-    connect(m_optWidget->doubleRatio, SIGNAL(valueChanged(double)), this, SLOT(setRatio( double )));
+    connect(m_optWidget->doubleRatio, SIGNAL(valueChanged(double)), this, SLOT(setRatio(double)));
 
     return m_optWidget;
 }
@@ -641,42 +605,42 @@ QWidget* KisToolCrop::optionWidget()
 
 QRectF KisToolCrop::lowerRightHandleRect(QRectF cropBorderRect)
 {
-    return QRectF( cropBorderRect.right() - m_handleSize / 2.0, cropBorderRect.bottom() - m_handleSize / 2.0, m_handleSize, m_handleSize );
+    return QRectF(cropBorderRect.right() - m_handleSize / 2.0, cropBorderRect.bottom() - m_handleSize / 2.0, m_handleSize, m_handleSize);
 }
 
 QRectF KisToolCrop::upperRightHandleRect(QRectF cropBorderRect)
 {
-    return QRectF( cropBorderRect.right() - m_handleSize / 2.0 , cropBorderRect.top() - m_handleSize / 2.0, m_handleSize, m_handleSize );
+    return QRectF(cropBorderRect.right() - m_handleSize / 2.0 , cropBorderRect.top() - m_handleSize / 2.0, m_handleSize, m_handleSize);
 }
 
 QRectF KisToolCrop::lowerLeftHandleRect(QRectF cropBorderRect)
 {
-    return QRectF( cropBorderRect.left() - m_handleSize / 2.0 , cropBorderRect.bottom() - m_handleSize / 2.0, m_handleSize, m_handleSize );
+    return QRectF(cropBorderRect.left() - m_handleSize / 2.0 , cropBorderRect.bottom() - m_handleSize / 2.0, m_handleSize, m_handleSize);
 }
 
 QRectF KisToolCrop::upperLeftHandleRect(QRectF cropBorderRect)
 {
-    return QRectF( cropBorderRect.left() - m_handleSize / 2.0, cropBorderRect.top() - m_handleSize / 2.0, m_handleSize, m_handleSize );
+    return QRectF(cropBorderRect.left() - m_handleSize / 2.0, cropBorderRect.top() - m_handleSize / 2.0, m_handleSize, m_handleSize);
 }
 
 QRectF KisToolCrop::lowerHandleRect(QRectF cropBorderRect)
 {
-    return QRectF( cropBorderRect.left() + ( cropBorderRect.width() - m_handleSize ) / 2.0 , cropBorderRect.bottom() - m_handleSize / 2.0, m_handleSize, m_handleSize );
+    return QRectF(cropBorderRect.left() + (cropBorderRect.width() - m_handleSize) / 2.0 , cropBorderRect.bottom() - m_handleSize / 2.0, m_handleSize, m_handleSize);
 }
 
 QRectF KisToolCrop::rightHandleRect(QRectF cropBorderRect)
 {
-    return QRectF( cropBorderRect.right() - m_handleSize / 2.0 , cropBorderRect.top() + ( cropBorderRect.height() - m_handleSize ) / 2.0, m_handleSize, m_handleSize );
+    return QRectF(cropBorderRect.right() - m_handleSize / 2.0 , cropBorderRect.top() + (cropBorderRect.height() - m_handleSize) / 2.0, m_handleSize, m_handleSize);
 }
 
 QRectF KisToolCrop::upperHandleRect(QRectF cropBorderRect)
 {
-    return QRectF( cropBorderRect.left() + ( cropBorderRect.width() - m_handleSize ) / 2.0 , cropBorderRect.top() - m_handleSize / 2.0, m_handleSize, m_handleSize );
+    return QRectF(cropBorderRect.left() + (cropBorderRect.width() - m_handleSize) / 2.0 , cropBorderRect.top() - m_handleSize / 2.0, m_handleSize, m_handleSize);
 }
 
 QRectF KisToolCrop::leftHandleRect(QRectF cropBorderRect)
 {
-    return QRectF( cropBorderRect.left() - m_handleSize / 2.0, cropBorderRect.top() + ( cropBorderRect.height() - m_handleSize ) / 2.0, m_handleSize, m_handleSize );
+    return QRectF(cropBorderRect.left() - m_handleSize / 2.0, cropBorderRect.top() + (cropBorderRect.height() - m_handleSize) / 2.0, m_handleSize, m_handleSize);
 }
 
 QPainterPath KisToolCrop::handlesPath()
@@ -701,69 +665,51 @@ qint32 KisToolCrop::mouseOnHandle(QPointF currentViewPoint)
     QRectF borderRect = borderLineRect();
     qint32 handleType = None;
 
-    if ( upperLeftHandleRect(borderRect).contains( currentViewPoint ) )
-    {
+    if (upperLeftHandleRect(borderRect).contains(currentViewPoint)) {
         handleType = UpperLeft;
-    }
-    else if ( lowerLeftHandleRect(borderRect).contains( currentViewPoint ) )
-    {
+    } else if (lowerLeftHandleRect(borderRect).contains(currentViewPoint)) {
         handleType = LowerLeft;
-    }
-    else if ( upperRightHandleRect(borderRect).contains( currentViewPoint ) )
-    {
+    } else if (upperRightHandleRect(borderRect).contains(currentViewPoint)) {
         handleType = UpperRight;
-    }
-    else if ( lowerRightHandleRect(borderRect).contains( currentViewPoint ) )
-    {
+    } else if (lowerRightHandleRect(borderRect).contains(currentViewPoint)) {
         handleType = LowerRight;
-    }
-    else if ( upperHandleRect(borderRect).contains( currentViewPoint ) )
-    {
+    } else if (upperHandleRect(borderRect).contains(currentViewPoint)) {
         handleType = Upper;
-    }
-    else if ( lowerHandleRect(borderRect).contains( currentViewPoint ) )
-    {
+    } else if (lowerHandleRect(borderRect).contains(currentViewPoint)) {
         handleType = Lower;
-    }
-    else if ( leftHandleRect(borderRect).contains( currentViewPoint ) )
-    {
+    } else if (leftHandleRect(borderRect).contains(currentViewPoint)) {
         handleType = Left;
-    }
-    else if ( rightHandleRect(borderRect).contains( currentViewPoint ) )
-    {
+    } else if (rightHandleRect(borderRect).contains(currentViewPoint)) {
         handleType = Right;
-    }
-    else if ( borderRect.contains( currentViewPoint ) )
-    {
+    } else if (borderRect.contains(currentViewPoint)) {
         handleType = Inside;
     }
 
     return handleType;
 }
 
-void KisToolCrop::setMoveResizeCursor (qint32 handle)
+void KisToolCrop::setMoveResizeCursor(qint32 handle)
 {
     QCursor cursor;
 
-    switch (handle)
-    {
-    case (UpperLeft):
-    case (LowerRight):
+    switch (handle) {
+    case(UpperLeft):
+    case(LowerRight):
         cursor = KisCursor::sizeFDiagCursor();
         break;
-    case (LowerLeft):
-    case (UpperRight):
+    case(LowerLeft):
+    case(UpperRight):
         cursor = KisCursor::sizeBDiagCursor();
         break;
-    case (Upper):
-    case (Lower):
+    case(Upper):
+    case(Lower):
         cursor = KisCursor::sizeVerCursor();
         break;
-    case (Left):
-    case (Right):
+    case(Left):
+    case(Right):
         cursor = KisCursor::sizeHorCursor();
         break;
-    case (Inside):
+    case(Inside):
         cursor = KisCursor::sizeAllCursor();
         break;
     default:

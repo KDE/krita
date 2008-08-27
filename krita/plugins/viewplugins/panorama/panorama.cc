@@ -56,22 +56,21 @@
 #include "ui_wdgpanoramacreation.h"
 
 typedef KGenericFactory<PanoramaPlugin> PanoramaPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritapanorama, PanoramaPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritapanorama, PanoramaPluginFactory("krita"))
 
 
 PanoramaPlugin::PanoramaPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent), m_wdgPanoramaCreation(0)
+        : KParts::Plugin(parent), m_wdgPanoramaCreation(0)
 {
-    if ( parent->inherits("KisView2") )
-    {
+    if (parent->inherits("KisView2")) {
         m_view = (KisView2*) parent;
 
         setComponentData(PanoramaPluginFactory::componentData());
 
-        setXMLFile(KStandardDirs::locate("data","kritaplugins/panorama.rc"), true);
+        setXMLFile(KStandardDirs::locate("data", "kritaplugins/panorama.rc"), true);
 
         KAction *action  = new KAction(i18n("New Panorama Layer"), this);
-        actionCollection()->addAction("PanoramaLayer", action );
+        actionCollection()->addAction("PanoramaLayer", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotCreatePanoramaLayer()));
     }
     KisInterestPointsDetector::setInterestPointDetector(0, new HarrisPointDetector);
@@ -91,11 +90,10 @@ void PanoramaPlugin::addImage(const QString& filename)
 void PanoramaPlugin::slotAddImages()
 {
 //     dbgPlugins <<"Add image";
-    QStringList openfiles = KFileDialog::getOpenFileNames(KUrl(),"*", m_view);
+    QStringList openfiles = KFileDialog::getOpenFileNames(KUrl(), "*", m_view);
 //     dbgPlugins << openfiles.size() <<" files selected for inclusion";
-    foreach(const QString & filename, openfiles)
-    {
-        addImage( filename );
+    foreach(const QString & filename, openfiles) {
+        addImage(filename);
     }
 }
 
@@ -129,7 +127,7 @@ void PanoramaPlugin::slotImageDown()
 
 void PanoramaPlugin::slotCreatePanoramaLayer()
 {
-    dbgPlugins <<"Create a panorama layer";
+    dbgPlugins << "Create a panorama layer";
     delete m_wdgPanoramaCreation;
     m_wdgPanoramaCreation = new Ui_WdgPanoramaCreation();
 
@@ -138,10 +136,10 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
     dialog->setModal(true);
     m_wdgPanoramaCreation->setupUi(dialog);
 
-/*    addImage("/home/cyrille/0.fontromeu.png");
-    addImage("/home/cyrille/1.fontromeu.png");
-    addImage("/home/cyrille/2.fontromeu.png");
-    addImage("/home/cyrille/3.fontromeu.png");*/
+    /*    addImage("/home/cyrille/0.fontromeu.png");
+        addImage("/home/cyrille/1.fontromeu.png");
+        addImage("/home/cyrille/2.fontromeu.png");
+        addImage("/home/cyrille/3.fontromeu.png");*/
     addImage("/home/cyrille/H0014717.JPG");
     addImage("/home/cyrille/H0014718.JPG");
     addImage("/home/cyrille/H0014719.JPG");
@@ -157,18 +155,18 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
 //     addImage("/home/cyrille/0.montreal.2.png");
 //     addImage("/home/cyrille/1.montreal.2.png");
 //     addImage("/home/cyrille/2.montreal.2.png");
-/*    addImage("/home/cyrille/0.montreal.png");
-    addImage("/home/cyrille/1.montreal.png");
-    addImage("/home/cyrille/2.montreal.png");*/
-/*   addImage("/home/cyrille/0.graffitis.png");
-   addImage("/home/cyrille/1.graffitis.png");
-   addImage("/home/cyrille/2.graffitis.png");
-   addImage("/home/cyrille/3.graffitis.png");*/
+    /*    addImage("/home/cyrille/0.montreal.png");
+        addImage("/home/cyrille/1.montreal.png");
+        addImage("/home/cyrille/2.montreal.png");*/
+    /*   addImage("/home/cyrille/0.graffitis.png");
+       addImage("/home/cyrille/1.graffitis.png");
+       addImage("/home/cyrille/2.graffitis.png");
+       addImage("/home/cyrille/3.graffitis.png");*/
 //     addImage("/home/cyrille/0.a.png");
 //     addImage("/home/cyrille/1.a.png");
 
-    connect(m_wdgPanoramaCreation->pushButtonCancel, SIGNAL(released()), dialog, SLOT(reject ()));
-    connect(m_wdgPanoramaCreation->pushButtonCreatePanorama, SIGNAL(released()), dialog, SLOT(accept ()));
+    connect(m_wdgPanoramaCreation->pushButtonCancel, SIGNAL(released()), dialog, SLOT(reject()));
+    connect(m_wdgPanoramaCreation->pushButtonCreatePanorama, SIGNAL(released()), dialog, SLOT(accept()));
     connect(m_wdgPanoramaCreation->bnAdd, SIGNAL(released()), this, SLOT(slotAddImages()));
     connect(m_wdgPanoramaCreation->bnRemove, SIGNAL(released()), this, SLOT(slotRemoveImage()));
     connect(m_wdgPanoramaCreation->bnUp, SIGNAL(released()), this, SLOT(slotImageUp()));
@@ -181,24 +179,22 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
     m_wdgPanoramaCreation->bnUp->setIcon(SmallIcon("go-up"));
     m_wdgPanoramaCreation->bnDown->setIcon(SmallIcon("go-down"));
 
-    if(dialog->exec()==QDialog::Accepted)
-    {
+    if (dialog->exec() == QDialog::Accepted) {
 
         QList<KisImageAlignment::ImageInfo> images;
-        for(int i = 0; i < m_wdgPanoramaCreation->listImages->count(); i++)
-        {
+        for (int i = 0; i < m_wdgPanoramaCreation->listImages->count(); i++) {
             QString fileName = m_wdgPanoramaCreation->listImages->item(i)->text();
-            dbgPlugins <<"Loading fileName" << fileName;
+            dbgPlugins << "Loading fileName" << fileName;
             KisDoc2 d;
             d.importDocument(fileName);
             KisImageAlignment::ImageInfo pi;
             KisImageSP img = d.image();
-            if(!img) break;
-            pi.bigDevice = new KisPaintDevice( *img->projection() );
-            pi.bigRect = QRect(0,0, img->width(), img->height());
+            if (!img) break;
+            pi.bigDevice = new KisPaintDevice(*img->projection());
+            pi.bigRect = QRect(0, 0, img->width(), img->height());
             img->scale(1000.0 / img->width(), 1000.0 / img->width(), 0, new KisBoxFilterStrategy);
             pi.smallDevice = img->projection();
-            pi.smallRect = QRect(0,0, img->width(), img->height());
+            pi.smallRect = QRect(0, 0, img->width(), img->height());
             images.push_back(pi);
         }
 
@@ -206,13 +202,12 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
         Q_ASSERT(layer);
         KisGroupLayerSP parent;
         KisLayerSP above;
-        if (KisGroupLayer* pactive = qobject_cast<KisGroupLayer*>(m_view->activeLayer().data()))
-        {
+        if (KisGroupLayer* pactive = qobject_cast<KisGroupLayer*>(m_view->activeLayer().data())) {
             parent = pactive;
         }
-        if(!parent)
+        if (!parent)
             parent = m_view->image()->rootLayer();
-        above = qobject_cast<KisLayer*>( parent->firstChild().data() );
+        above = qobject_cast<KisLayer*>(parent->firstChild().data());
         m_view->image()->addNode(layer.data(), parent.data(), above.data());
 
 
@@ -226,23 +221,22 @@ void PanoramaPlugin::slotCreatePanoramaLayer()
 void PanoramaPlugin::slotPreview()
 {
     QList<KisImageAlignment::ImageInfo> images;
-    for(int i = 0; i < m_wdgPanoramaCreation->listImages->count(); i++)
-    {
+    for (int i = 0; i < m_wdgPanoramaCreation->listImages->count(); i++) {
         QString fileName = m_wdgPanoramaCreation->listImages->item(i)->text();
-        dbgPlugins <<"Loading fileName" << fileName;
+        dbgPlugins << "Loading fileName" << fileName;
         KisDoc2 d;
         d.importDocument(fileName);
         KisImageAlignment::ImageInfo pi;
         KisImageSP img = d.image();
-        if(!img) break;
+        if (!img) break;
         img->scale(1000.0 / img->width(), 1000.0 / img->width(), 0, new KisBoxFilterStrategy);
         pi.bigDevice = img->projection();
-        pi.bigRect = QRect(0,0, img->width(), img->height());
+        pi.bigRect = QRect(0, 0, img->width(), img->height());
         pi.smallDevice = pi.bigDevice;
-        pi.smallRect = QRect(0,0, img->width(), img->height());
+        pi.smallRect = QRect(0, 0, img->width(), img->height());
         images.push_back(pi);
     }
-    KisPaintDeviceSP dst = new KisPaintDevice( images[0].bigDevice->colorSpace(), "panorama preview" );
+    KisPaintDeviceSP dst = new KisPaintDevice(images[0].bigDevice->colorSpace(), "panorama preview");
     QRect dstArea;
     createPanorama(images, dst, dstArea);
     QImage img = dst->convertToQImage(0);
@@ -251,15 +245,14 @@ void PanoramaPlugin::slotPreview()
     //m_wdgPanoramaCreation->labelPreview->setPixmap(QPixmap::fromImage(img));
 }
 
-void PanoramaPlugin::createPanorama(QList<KisImageAlignment::ImageInfo>& images, KisPaintDeviceSP dstdevice, QRect& )
+void PanoramaPlugin::createPanorama(QList<KisImageAlignment::ImageInfo>& images, KisPaintDeviceSP dstdevice, QRect&)
 {
-    KisImageAlignment ia( new KisImageAlignmentProjectiveModel, KisInterestPointsDetector::interestPointDetector());
+    KisImageAlignment ia(new KisImageAlignmentProjectiveModel, KisInterestPointsDetector::interestPointDetector());
     std::vector< KisImageAlignment::Result > p = ia.align(images);
     std::cout << "Number of results = " << p.size() << std::endl;
     // blend
     QList<KisImagesBlender::LayerSource> sources;
-    for(int i = 0; i < (int)p.size(); i++)
-    {
+    for (int i = 0; i < (int)p.size(); i++) {
         KisImagesBlender::LayerSource layerSource;
         layerSource.layer = images[ i ].bigDevice;
         layerSource.a = p[ i ].a;
@@ -269,7 +262,7 @@ void PanoramaPlugin::createPanorama(QList<KisImageAlignment::ImageInfo>& images,
         layerSource.xc2 = images[ i ].bigRect.width()  * 0.5;
         layerSource.yc1 = images[ i ].bigRect.height() * 0.5;
         layerSource.yc2 = images[ i ].bigRect.height() * 0.5;
-        layerSource.norm = (4.0 / ( images[ i ].bigRect.width() * images[ i ].bigRect.width() + images[ i ].bigRect.height() * images[ i ].bigRect.height() ) );
+        layerSource.norm = (4.0 / (images[ i ].bigRect.width() * images[ i ].bigRect.width() + images[ i ].bigRect.height() * images[ i ].bigRect.height()));
         layerSource.homography = p[ i ].homography;
         layerSource.rect = images[ i ].bigRect;
         sources.push_back(layerSource);

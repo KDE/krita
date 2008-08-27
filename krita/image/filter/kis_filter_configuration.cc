@@ -40,16 +40,16 @@ struct KisFilterConfiguration::Private {
 };
 
 KisFilterConfiguration::KisFilterConfiguration(const QString & name, qint32 version)
-    : d(new Private)
+        : d(new Private)
 {
-     d->name = name;
-     d->version = version;
-     d->channelFlags = QBitArray();
+    d->name = name;
+    d->version = version;
+    d->channelFlags = QBitArray();
 }
 
 KisFilterConfiguration::KisFilterConfiguration(const KisFilterConfiguration & rhs)
-    : KisPropertiesConfiguration( rhs )
-    , d( new Private )
+        : KisPropertiesConfiguration(rhs)
+        , d(new Private)
 {
     d->name = rhs.d->name;
     d->version = rhs.d->version;
@@ -62,18 +62,18 @@ KisFilterConfiguration::~KisFilterConfiguration()
 
 void KisFilterConfiguration::toLegacyXML(QDomDocument& doc, QDomElement& root) const
 {
-    root.setAttribute( "name", d->name );
-    root.setAttribute( "version", d->version );
+    root.setAttribute("name", d->name);
+    root.setAttribute("version", d->version);
 
     QMap<QString, QVariant> properties = getProperties();
     QMap<QString, QVariant>::Iterator it;
-    for ( it = properties.begin(); it != properties.end(); ++it ) {
-        QDomElement e = doc.createElement( "property" );
-        e.setAttribute( "name", QString(it.key().toLatin1()) );
+    for (it = properties.begin(); it != properties.end(); ++it) {
+        QDomElement e = doc.createElement("property");
+        e.setAttribute("name", QString(it.key().toLatin1()));
         QVariant v = it.value();
-        e.setAttribute( "type", v.typeName() );
+        e.setAttribute("type", v.typeName());
         QString s = v.toString();
-        QDomText text = doc.createCDATASection(v.toString() ); // XXX: Unittest this!
+        QDomText text = doc.createCDATASection(v.toString());  // XXX: Unittest this!
         e.appendChild(text);
         root.appendChild(e);
     }
@@ -82,8 +82,8 @@ void KisFilterConfiguration::toLegacyXML(QDomDocument& doc, QDomElement& root) c
 QString KisFilterConfiguration::toLegacyXML() const
 {
     QDomDocument doc = QDomDocument("filterconfig");
-    QDomElement root = doc.createElement( "filterconfig" );
-    doc.appendChild( root );
+    QDomElement root = doc.createElement("filterconfig");
+    doc.appendChild(root);
     toLegacyXML(doc, root);
     return doc.toString();
 }
@@ -121,7 +121,7 @@ void KisFilterConfiguration::fromLegacyXML(const QString & s)
     clearProperties();
 
     QDomDocument doc;
-    doc.setContent( s );
+    doc.setContent(s);
     QDomElement e = doc.documentElement();
     fromLegacyXML(e);
 }
@@ -151,8 +151,7 @@ void KisFilterConfiguration::setChannelFlags(QBitArray channelFlags)
     d->channelFlags = channelFlags;
 }
 
-struct KisFilterConfigurationFactory::Private
-{
+struct KisFilterConfigurationFactory::Private {
     QString name;
     qint32 version;
 };
@@ -176,6 +175,6 @@ KisSerializableConfiguration* KisFilterConfigurationFactory::createDefault()
 KisSerializableConfiguration* KisFilterConfigurationFactory::create(const QDomElement& e)
 {
     KisFilterConfiguration* fc = new KisFilterConfiguration(d->name, d->version);
-    fc->fromXML( e );
+    fc->fromXML(e);
     return fc;
 }

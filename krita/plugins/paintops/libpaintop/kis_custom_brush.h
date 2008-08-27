@@ -35,7 +35,9 @@ class KisWdgCustomBrush : public QWidget, public Ui::KisWdgCustomBrush
     Q_OBJECT
 
 public:
-    KisWdgCustomBrush(QWidget *parent) : QWidget(parent) { setupUi(this); }
+    KisWdgCustomBrush(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
 class KisCustomBrush : public KisWdgCustomBrush
@@ -44,7 +46,9 @@ class KisCustomBrush : public KisWdgCustomBrush
 public:
     KisCustomBrush(QWidget *parent, const QString& caption, KisImageSP image);
     virtual ~KisCustomBrush();
-    KisBrushSP brush() { return m_brush; };
+    KisBrushSP brush() {
+        return m_brush;
+    };
 
 protected:
     virtual void showEvent(QShowEvent *);

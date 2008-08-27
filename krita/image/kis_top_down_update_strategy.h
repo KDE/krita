@@ -29,26 +29,27 @@ class QRect;
  * by eagerly making sure that from the leaf nodes back to the root
  * all layer projections are always up-to-date
  */
-class KisTopDownUpdateStrategy : public KisProjectionUpdateStrategy {
+class KisTopDownUpdateStrategy : public KisProjectionUpdateStrategy
+{
 
 public:
-    
-    KisTopDownUpdateStrategy( KisNodeWSP node );
+
+    KisTopDownUpdateStrategy(KisNodeWSP node);
 
     ~KisTopDownUpdateStrategy();
-    
-    void setDirty( const QRect & rc );
- 
+
+    void setDirty(const QRect & rc);
+
     void setImage(KisImageSP image);
-     
+
     void lock();
 
     void unlock();
-     
+
 protected:
-    
-    KisPaintDeviceSP updateGroupLayerProjection( const QRect & rc, KisPaintDeviceSP projection );
-    void setFilthyNode( const KisNodeWSP node );
+
+    KisPaintDeviceSP updateGroupLayerProjection(const QRect & rc, KisPaintDeviceSP projection);
+    void setFilthyNode(const KisNodeWSP node);
 
 private:
 

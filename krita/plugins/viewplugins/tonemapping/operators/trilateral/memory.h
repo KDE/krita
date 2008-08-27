@@ -1,26 +1,26 @@
 /*
  Copyright (c) 2005 Erik Reinhard, Greg Ward, Sumanta Pattanaik and
  Paul Debevec.   All rights reserved.
- 
+
  Copyright (c) 2007 Shaine Joseph
 
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
          notice, this list of conditions and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright
        notice, this list of conditions and the following disclaimer in
        the documentation and/or other materials provided with the
        distribution.
- 
+
  3. The name "Elsevier" must not be used to endorse or promote products
        derived from this software without prior written permission. For
        written permission, please contact Elsevier.
- 
- 
+
+
  THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -55,96 +55,90 @@ static double  **luminance;
 static double  **detail;
 static double  **base;
 
-void allocate_memory (int width, int height)
+void allocate_memory(int width, int height)
 {
-  int y;
+    int y;
 
-  rgb_image = (COLOR **) malloc (height * sizeof (COLOR *));
-  luminance = (double **) malloc (height * sizeof (double *));
-  x_grad    = (double **) malloc (height * sizeof (double *));
-  y_grad    = (double **) malloc (height * sizeof (double *));
-  x_smooth  = (double **) malloc (height * sizeof (double *));
-  y_smooth  = (double **) malloc (height * sizeof (double *));
-  theta     = (double **) malloc (height * sizeof (double *));
-  detail    = (double **) malloc (height * sizeof (double *));
-  base      = (double **) malloc (height * sizeof (double *));
-  for (y = 0; y < height; y++)
-  {
-    rgb_image[y] = (COLOR *) malloc (width * sizeof (COLOR));
-    luminance[y] = (double *) malloc (width * sizeof (double));
-    x_grad[y]    = (double *) malloc (width * sizeof (double));
-    y_grad[y]    = (double *) malloc (width * sizeof (double));
-    x_smooth[y]  = (double *) malloc (width * sizeof (double));
-    y_smooth[y]  = (double *) malloc (width * sizeof (double));
-    theta[y]     = (double *) malloc (width * sizeof (double));
-    detail[y]    = (double *) malloc (width * sizeof (double));
-    base[y]      = (double *) malloc (width * sizeof (double));
-  }
-}
-void allocate_stack (int width, int height, int levels)
-{
-  int k, y;
-
-  min_stack = (double ***) malloc (levels * sizeof (double **));
-  max_stack = (double ***) malloc (levels * sizeof (double **));
-
-  for (k = 0; k < levels; k++)
-  {
-    min_stack[k] = (double **) malloc (height * sizeof (double *));
-    max_stack[k] = (double **) malloc (height * sizeof (double *));
-    for (y = 0; y < height; y++)
-    {
-      min_stack[k][y] = (double *) malloc (width * sizeof (double));
-      max_stack[k][y] = (double *) malloc (width * sizeof (double));
+    rgb_image = (COLOR **) malloc(height * sizeof(COLOR *));
+    luminance = (double **) malloc(height * sizeof(double *));
+    x_grad    = (double **) malloc(height * sizeof(double *));
+    y_grad    = (double **) malloc(height * sizeof(double *));
+    x_smooth  = (double **) malloc(height * sizeof(double *));
+    y_smooth  = (double **) malloc(height * sizeof(double *));
+    theta     = (double **) malloc(height * sizeof(double *));
+    detail    = (double **) malloc(height * sizeof(double *));
+    base      = (double **) malloc(height * sizeof(double *));
+    for (y = 0; y < height; y++) {
+        rgb_image[y] = (COLOR *) malloc(width * sizeof(COLOR));
+        luminance[y] = (double *) malloc(width * sizeof(double));
+        x_grad[y]    = (double *) malloc(width * sizeof(double));
+        y_grad[y]    = (double *) malloc(width * sizeof(double));
+        x_smooth[y]  = (double *) malloc(width * sizeof(double));
+        y_smooth[y]  = (double *) malloc(width * sizeof(double));
+        theta[y]     = (double *) malloc(width * sizeof(double));
+        detail[y]    = (double *) malloc(width * sizeof(double));
+        base[y]      = (double *) malloc(width * sizeof(double));
     }
-  }
+}
+void allocate_stack(int width, int height, int levels)
+{
+    int k, y;
+
+    min_stack = (double ***) malloc(levels * sizeof(double **));
+    max_stack = (double ***) malloc(levels * sizeof(double **));
+
+    for (k = 0; k < levels; k++) {
+        min_stack[k] = (double **) malloc(height * sizeof(double *));
+        max_stack[k] = (double **) malloc(height * sizeof(double *));
+        for (y = 0; y < height; y++) {
+            min_stack[k][y] = (double *) malloc(width * sizeof(double));
+            max_stack[k][y] = (double *) malloc(width * sizeof(double));
+        }
+    }
 }
 
-double build_stack (double **x_grad, double **y_grad, 
-		    double ***min_stack, double ***max_stack,
-		    int levels, double beta)
+double build_stack(double **x_grad, double **y_grad,
+                   double ***min_stack, double ***max_stack,
+                   int levels, double beta)
 {
-  int    x, y, u, v, k;
-  double gx, gy, value;
-  double min, max;
-  double min_grad =  1e20;
-  double max_grad = -1e20;
+    int    x, y, u, v, k;
+    double gx, gy, value;
+    double min, max;
+    double min_grad =  1e20;
+    double max_grad = -1e20;
 
-  fprintf (stderr, "\tComputing stack\n");
+    fprintf(stderr, "\tComputing stack\n");
 
-  for (y = 0; y < height; y++)
-    for (x = 0; x < width; x++)
-    {
-      gx                 = x_grad[y][x];
-      gy                 = y_grad[y][x];
-      value              = hypot (gx, gy);
-      max_grad           = (max_grad < value) ? value : max_grad;
-      min_grad           = (min_grad > value) ? value : min_grad;
-      min_stack[0][y][x] = value;
-      max_stack[0][y][x] = value;
-    }
-
-  for (k = 1; k < levels; k++)
     for (y = 0; y < height; y++)
-      for (x = 0; x < width; x++)
-      {
-	min = min_stack[k - 1][y][x];
-	max = max_stack[k - 1][y][x];
+        for (x = 0; x < width; x++) {
+            gx                 = x_grad[y][x];
+            gy                 = y_grad[y][x];
+            value              = hypot(gx, gy);
+            max_grad           = (max_grad < value) ? value : max_grad;
+            min_grad           = (min_grad > value) ? value : min_grad;
+            min_stack[0][y][x] = value;
+            max_stack[0][y][x] = value;
+        }
 
-	for (v = y - 1; v <= y + 1; v++)
-	  for (u = x - 1; u <= x + 1; u++)
-	    if (u >= 0 && u < width &&
-		v >= 0 && v < height)
-	    {
-	      value = min_stack[k - 1][v][u];
-	      min   = (min > value) ? value : min;
-	      value = max_stack[k - 1][v][u];
-	      max   = (max < value) ? value : max;
-	    }
+    for (k = 1; k < levels; k++)
+        for (y = 0; y < height; y++)
+            for (x = 0; x < width; x++) {
+                min = min_stack[k - 1][y][x];
+                max = max_stack[k - 1][y][x];
 
-	min_stack[k][y][x] = min;
-	max_stack[k][y][x] = max;
-      }
+                for (v = y - 1; v <= y + 1; v++)
+                    for (u = x - 1; u <= x + 1; u++)
+                        if (u >= 0 && u < width &&
+                                v >= 0 && v < height) {
+                            value = min_stack[k - 1][v][u];
+                            min   = (min > value) ? value : min;
+                            value = max_stack[k - 1][v][u];
+                            max   = (max < value) ? value : max;
+                        }
 
-  return beta * (max_grad - min_grad);
+                min_stack[k][y][x] = min;
+                max_stack[k][y][x] = max;
+            }
+
+    return beta * (max_grad - min_grad);
 }

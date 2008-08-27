@@ -44,8 +44,8 @@
 #include "kis_group_layer.h"
 
 KisCustomBrush::KisCustomBrush(QWidget *parent, const QString& caption, KisImageSP image)
-    : KisWdgCustomBrush( parent )
-    , m_image(image)
+        : KisWdgCustomBrush(parent)
+        , m_image(image)
 {
     setWindowTitle(caption);
     preview->setScaledContents(true);
@@ -61,16 +61,19 @@ KisCustomBrush::KisCustomBrush(QWidget *parent, const QString& caption, KisImage
     slotUpdateCurrentBrush();
 }
 
-KisCustomBrush::~KisCustomBrush() {
+KisCustomBrush::~KisCustomBrush()
+{
     delete m_brush;
     delete m_rServerAdapter;
 }
 
-void KisCustomBrush::showEvent(QShowEvent *) {
+void KisCustomBrush::showEvent(QShowEvent *)
+{
     slotUpdateCurrentBrush(0);
 }
 
-void KisCustomBrush::slotUpdateCurrentBrush(int) {
+void KisCustomBrush::slotUpdateCurrentBrush(int)
+{
     if (m_image) {
         createBrush();
         if (m_brush)
@@ -78,11 +81,13 @@ void KisCustomBrush::slotUpdateCurrentBrush(int) {
     }
 }
 
-void KisCustomBrush::slotExport() {
+void KisCustomBrush::slotExport()
+{
     ;
 }
 
-void KisCustomBrush::slotAddPredefined() {
+void KisCustomBrush::slotAddPredefined()
+{
     // Save in the directory that is likely to be: ~/.kde/share/apps/krita/brushes
     // a unique file with this brushname
     QString dir = KGlobal::dirs()->saveLocation("data", "krita/brushes");
@@ -113,7 +118,8 @@ void KisCustomBrush::slotAddPredefined() {
         m_rServerAdapter->addResource(m_brush->clone());
 }
 
-void KisCustomBrush::createBrush() {
+void KisCustomBrush::createBrush()
+{
     if (!m_image)
         return;
 
@@ -132,22 +138,22 @@ void KisCustomBrush::createBrush() {
 
     // We only loop over the rootLayer. Since we actually should have a layer selection
     // list, no need to elaborate on that here and now
-    KisLayer* layer = dynamic_cast<KisLayer*>( m_image->rootLayer()->firstChild().data() );
+    KisLayer* layer = dynamic_cast<KisLayer*>(m_image->rootLayer()->firstChild().data());
     while (layer) {
         KisPaintLayer* paint = 0;
         if (layer->visible() && (paint = dynamic_cast<KisPaintLayer*>(layer)))
             devices[0].push_back(paint->paintDevice().data());
-        layer = dynamic_cast<KisLayer*>( layer->nextSibling().data() );
+        layer = dynamic_cast<KisLayer*>(layer->nextSibling().data());
     }
     QVector<KisPipeBrushParasite::SelectionMode> modes;
 
-    switch(comboBox2->currentIndex()) {
-        case 0: modes.push_back(KisPipeBrushParasite::Constant); break;
-        case 1: modes.push_back(KisPipeBrushParasite::Random); break;
-        case 2: modes.push_back(KisPipeBrushParasite::Incremental); break;
-        case 3: modes.push_back(KisPipeBrushParasite::Pressure); break;
-        case 4: modes.push_back(KisPipeBrushParasite::Angular); break;
-        default: modes.push_back(KisPipeBrushParasite::Incremental);
+    switch (comboBox2->currentIndex()) {
+    case 0: modes.push_back(KisPipeBrushParasite::Constant); break;
+    case 1: modes.push_back(KisPipeBrushParasite::Random); break;
+    case 2: modes.push_back(KisPipeBrushParasite::Incremental); break;
+    case 3: modes.push_back(KisPipeBrushParasite::Pressure); break;
+    case 4: modes.push_back(KisPipeBrushParasite::Angular); break;
+    default: modes.push_back(KisPipeBrushParasite::Incremental);
     }
 
     m_brush = new KisImagePipeBrush(m_image->objectName(), w, h, devices, modes);

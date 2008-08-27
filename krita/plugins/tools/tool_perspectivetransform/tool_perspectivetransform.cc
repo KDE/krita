@@ -42,17 +42,16 @@
 
 
 typedef KGenericFactory<ToolPerspectiveTransform> ToolPerspectiveTransformFactory;
-K_EXPORT_COMPONENT_FACTORY( kritatoolperspectivetransform, ToolPerspectiveTransformFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritatoolperspectivetransform, ToolPerspectiveTransformFactory("krita"))
 
 
 ToolPerspectiveTransform::ToolPerspectiveTransform(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     setComponentData(ToolPerspectiveTransformFactory::componentData());
 
-    if ( parent->inherits("KoToolRegistry") )
-    {
-        dbgPlugins <<" add perspective transform tool to the registry";
+    if (parent->inherits("KoToolRegistry")) {
+        dbgPlugins << " add perspective transform tool to the registry";
         KoToolRegistry * r = dynamic_cast<KoToolRegistry*>(parent);
         r->add(new KisToolPerspectiveTransformFactory());
     }

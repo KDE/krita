@@ -68,7 +68,7 @@ KisPaintOpSettingsSP KisFilterOpFactory::settings(KisImageSP image)
 
 
 KisFilterOp::KisFilterOp(const KisPaintOpSettingsSP settings, KisPainter * painter)
-    : KisBrushBasedPaintOp(painter)
+        : KisBrushBasedPaintOp(painter)
 {
     m_settings = dynamic_cast<const KisFilterOpSettings*>(settings.data());
     m_tmpDevice = new KisPaintDevice(source()->colorSpace(), "tmp");
@@ -80,26 +80,23 @@ KisFilterOp::~KisFilterOp()
 
 void KisFilterOp::paintAt(const KisPaintInformation& info)
 {
-    if (!painter())
-    {
-      return;
+    if (!painter()) {
+        return;
     }
 
     KisFilterSP filter = m_settings->filter();
-    if (!filter)
-    {
-      return;
+    if (!filter) {
+        return;
     }
 
-    if (!source() )
-    {
-      return;
+    if (!source()) {
+        return;
     }
 
     KisBrushSP brush = m_brush;;
     if (!brush) return;
 
-    double scale = KisPaintOp::scaleForPressure( info.pressure() );
+    double scale = KisPaintOp::scaleForPressure(info.pressure());
     QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 
@@ -120,33 +117,30 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     m_tmpDevice->clear();
 
     // Filter the paint device
-    filter->process( KisConstProcessingInformation( source(), QPoint(x,y)),
-		     KisProcessingInformation(m_tmpDevice, QPoint(0,0) ),
-		     QSize(maskWidth, maskHeight),
-		     m_settings->filterConfig(), 0 );
+    filter->process(KisConstProcessingInformation(source(), QPoint(x, y)),
+                    KisProcessingInformation(m_tmpDevice, QPoint(0, 0)),
+                    QSize(maskWidth, maskHeight),
+                    m_settings->filterConfig(), 0);
 
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
     brush->mask(m_tmpDevice, scale, scale, 0.0, info, xFraction, yFraction);
 
-    if( !m_settings->ignoreAlpha())
-    {
-      KisHLineIteratorPixel itTmpDev = m_tmpDevice->createHLineIterator( 0,0, maskWidth );
-      KisHLineIteratorPixel itSrc = source()->createHLineIterator( x, y, maskWidth );
-      const KoColorSpace* cs = m_tmpDevice->colorSpace();
-      for( int y = 0; y < maskHeight; ++y )
-      {
-        while( !itTmpDev.isDone())
-        {
-          quint8 alphaTmpDev = cs->alpha( itTmpDev.rawData());
-          quint8 alphaSrc = cs->alpha( itSrc.rawData());
+    if (!m_settings->ignoreAlpha()) {
+        KisHLineIteratorPixel itTmpDev = m_tmpDevice->createHLineIterator(0, 0, maskWidth);
+        KisHLineIteratorPixel itSrc = source()->createHLineIterator(x, y, maskWidth);
+        const KoColorSpace* cs = m_tmpDevice->colorSpace();
+        for (int y = 0; y < maskHeight; ++y) {
+            while (!itTmpDev.isDone()) {
+                quint8 alphaTmpDev = cs->alpha(itTmpDev.rawData());
+                quint8 alphaSrc = cs->alpha(itSrc.rawData());
 
-          cs->setAlpha( itTmpDev.rawData(), qMin( alphaTmpDev, alphaSrc), 1);
-          ++itTmpDev;
-          ++itSrc;
+                cs->setAlpha(itTmpDev.rawData(), qMin(alphaTmpDev, alphaSrc), 1);
+                ++itTmpDev;
+                ++itSrc;
+            }
+            itTmpDev.nextRow();
+            itSrc.nextRow();
         }
-        itTmpDev.nextRow();
-        itSrc.nextRow();
-      }
     }
 
     // Blit the paint device onto the layer

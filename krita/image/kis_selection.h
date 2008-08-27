@@ -64,7 +64,8 @@ class KisSelectionComponent;
  *
  * XXX: optimize: if there is only a PixelSelection, use that as projection.
  */
-class KRITAIMAGE_EXPORT KisSelection : public KisPaintDevice {
+class KRITAIMAGE_EXPORT KisSelection : public KisPaintDevice
+{
 
 public:
     /**
@@ -79,7 +80,7 @@ public:
      * Create a new KisSelection from the given mask. The selection
      * will share its pixel data with the mask
      */
-    KisSelection( KisPaintDeviceSP parent, KisMaskSP mask );
+    KisSelection(KisPaintDeviceSP parent, KisMaskSP mask);
 
     /**
      * Create a new KisSelection. This selection will not have a
@@ -113,14 +114,14 @@ public:
      * Afterwards, you can call updateProjection to recompute the selection.
      */
     void clear();
-    
+
     /**
      * Clear the specified rect in the selection projection. This invalidates
      * the projection. It does not clear the selection components.
      * Afterwards, you can call updateProjection to recompute
      * the selection.
      */
-     void clear(const QRect& r);
+    void clear(const QRect& r);
 
     /**
      * Tests if the the rect is totally outside the selection.
@@ -165,7 +166,7 @@ public:
     bool interestedInDirtyness() const;
 
     virtual void setDirty(const QRect & rc);
-    virtual void setDirty( const QRegion & region );
+    virtual void setDirty(const QRegion & region);
     virtual void setDirty();
 
     bool hasPixelSelection() const;
@@ -182,7 +183,7 @@ public:
      * if hasShapeSelection() returns false.
      */
     KisSelectionComponent* shapeSelection() const;
-    
+
     /**
      * Return the pixel selection associated with this selection or
      * create a new one if there is currently no pixel selection
@@ -203,16 +204,14 @@ private:
 
     // We don't want these methods to be used on selections:
 
-    QRect extent() const
-        {
-            return KisPaintDevice::extent();
-        }
+    QRect extent() const {
+        return KisPaintDevice::extent();
+    }
 
 
-    QRect exactBounds() const
-        {
-            return KisPaintDevice::exactBounds();
-        }
+    QRect exactBounds() const {
+        return KisPaintDevice::exactBounds();
+    }
 
 
 private:

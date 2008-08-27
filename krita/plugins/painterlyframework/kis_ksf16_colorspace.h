@@ -36,57 +36,54 @@
 #include "half.h"
 
 template< int _N_ >
-class KisKSF16ColorSpace : public KisKSColorSpace< half,_N_ >
+class KisKSF16ColorSpace : public KisKSColorSpace< half, _N_ >
 {
-    typedef KisKSColorSpace< half,_N_ > parent;
+    typedef KisKSColorSpace< half, _N_ > parent;
 
-    public:
+public:
 
-        KisKSF16ColorSpace(KoColorProfile *p) : parent(p) { }
-        ~KisKSF16ColorSpace() { }
+    KisKSF16ColorSpace(KoColorProfile *p) : parent(p) { }
+    ~KisKSF16ColorSpace() { }
 
-        KoColorSpace *clone() const
-        {
-            return new KisKSF16ColorSpace<_N_>(parent::profile()->clone());
-        }
+    KoColorSpace *clone() const {
+        return new KisKSF16ColorSpace<_N_>(parent::profile()->clone());
+    }
 
 };
 
 template< int _N_ >
-class KisKSF16ColorSpaceFactory : public KisKSColorSpaceFactory<half,_N_>
+class KisKSF16ColorSpaceFactory : public KisKSColorSpaceFactory<half, _N_>
 {
-    public:
+public:
 
-        QList<KoColorConversionTransformationFactory*> colorConversionLinks() const
-        {
-            QList<KoColorConversionTransformationFactory*> list;
+    QList<KoColorConversionTransformationFactory*> colorConversionLinks() const {
+        QList<KoColorConversionTransformationFactory*> list;
 
-            // RGB to KS and vice versa
-            KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
-            QString csid = KisKSF16ColorSpace<_N_>::ColorSpaceId().id();
-            foreach(const KoColorProfile *p, f->profilesFor(csid)) {
+        // RGB to KS and vice versa
+        KoColorSpaceRegistry *f = KoColorSpaceRegistry::instance();
+        QString csid = KisKSF16ColorSpace<_N_>::ColorSpaceId().id();
+        foreach(const KoColorProfile *p, f->profilesFor(csid)) {
 #ifdef HAVE_OPENCTL
-                list.append(new KisCtlRGBToKSColorConversionTransformationFactory<half,_N_>(p->name()));
-                list.append(new KisKSToCtlRGBColorConversionTransformationFactory<half,_N_>(p->name()));
+            list.append(new KisCtlRGBToKSColorConversionTransformationFactory<half, _N_>(p->name()));
+            list.append(new KisKSToCtlRGBColorConversionTransformationFactory<half, _N_>(p->name()));
 #else
-                list.append(new KisRGBToKSColorConversionTransformationFactory<half,_N_>(p->name()));
-                list.append(new KisKSToRGBColorConversionTransformationFactory<half,_N_>(p->name()));
+            list.append(new KisRGBToKSColorConversionTransformationFactory<half, _N_>(p->name()));
+            list.append(new KisKSToRGBColorConversionTransformationFactory<half, _N_>(p->name()));
 #endif
-            }
-/*
-            // From F32
-            list.append(new KisKSToKSColorConversionTransformationFactory<float,half,_N_>);
-
-            // Self to self (profile change)
-            list.append(new KisKSToKSColorConversionTransformationFactory<half,half,_N_>);
-*/
-            return list;
         }
+        /*
+                    // From F32
+                    list.append(new KisKSToKSColorConversionTransformationFactory<float,half,_N_>);
 
-        KoColorSpace *createColorSpace(const KoColorProfile *p) const
-        {
-            return new KisKSF16ColorSpace<_N_>(p->clone());
-        }
+                    // Self to self (profile change)
+                    list.append(new KisKSToKSColorConversionTransformationFactory<half,half,_N_>);
+        */
+        return list;
+    }
+
+    KoColorSpace *createColorSpace(const KoColorProfile *p) const {
+        return new KisKSF16ColorSpace<_N_>(p->clone());
+    }
 
 };
 

@@ -32,15 +32,18 @@ class WdgImageSize : public QWidget, public Ui::WdgImageScale
 {
     Q_OBJECT
 
-    public:
-        WdgImageSize(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgImageSize(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
 /**
  * This dialog allows the user to create a selection mask based
  * on a (range of) colors.
  */
-class DlgImageSize: public KDialog {
+class DlgImageSize: public KDialog
+{
     typedef KDialog super;
     Q_OBJECT
 

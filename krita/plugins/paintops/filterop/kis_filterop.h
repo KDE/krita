@@ -37,21 +37,29 @@ class KoID;
 class QGridLayout;
 class KisFilterOpSettings;
 
-class KisFilterOpFactory  : public KisPaintOpFactory  {
+class KisFilterOpFactory  : public KisPaintOpFactory
+{
 
-    public:
+public:
     KisFilterOpFactory() {}
     virtual ~KisFilterOpFactory() {}
 
     virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
-    virtual QString id() const { return "filter"; }
-    virtual QString name() const { return i18n("Filter"); }
-    virtual QString pixmap() { return "filterop.png"; }
+    virtual QString id() const {
+        return "filter";
+    }
+    virtual QString name() const {
+        return i18n("Filter");
+    }
+    virtual QString pixmap() {
+        return "filterop.png";
+    }
     virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
 };
 
-class KisFilterOp : public KisBrushBasedPaintOp {
+class KisFilterOp : public KisBrushBasedPaintOp
+{
 
 public:
 

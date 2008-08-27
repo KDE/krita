@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_FILTER_PROCESSING_INFORMATION_H_
-#define _KIS_FILTER_PROCESSING_INFORMATION_H_
+#ifndef _KIS_PROCESSING_INFORMATION_H_
+#define _KIS_PROCESSING_INFORMATION_H_
 
 #include "kis_types.h"
 
@@ -29,28 +29,29 @@
  * on a paint device.
  * This one have only a const paint device and holds information about the source.
  */
-class KRITAIMAGE_EXPORT KisConstProcessingInformation {
-    public:
-        KisConstProcessingInformation(const KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection = 0);
-        KisConstProcessingInformation(const KisConstProcessingInformation& _rhs );
-        KisConstProcessingInformation& operator=(const KisConstProcessingInformation& _rhs );
-        ~KisConstProcessingInformation();
-        /**
-         * @return the paint device
-         */
-        const KisPaintDeviceSP paintDevice() const;
+class KRITAIMAGE_EXPORT KisConstProcessingInformation
+{
+public:
+    KisConstProcessingInformation(const KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection = 0);
+    KisConstProcessingInformation(const KisConstProcessingInformation& _rhs);
+    KisConstProcessingInformation& operator=(const KisConstProcessingInformation& _rhs);
+    ~KisConstProcessingInformation();
+    /**
+     * @return the paint device
+     */
+    const KisPaintDeviceSP paintDevice() const;
 
-        /**
-         * @return the active selection
-         */
-        const KisSelectionSP selection() const;
-        /**
-         * @return the top left pixel that need to process
-         */
-        const QPoint& topLeft() const;
-    private:
-        struct Private;
-        Private* const d;
+    /**
+     * @return the active selection
+     */
+    const KisSelectionSP selection() const;
+    /**
+     * @return the top left pixel that need to process
+     */
+    const QPoint& topLeft() const;
+private:
+    struct Private;
+    Private* const d;
 };
 
 /**
@@ -58,19 +59,20 @@ class KRITAIMAGE_EXPORT KisConstProcessingInformation {
  * on a paint device.
  * This one can have a non const paint device and holds information about the destination.
  */
-class KRITAIMAGE_EXPORT KisProcessingInformation : public KisConstProcessingInformation {
-    public:
-        KisProcessingInformation(KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection = 0);
-        KisProcessingInformation(const KisProcessingInformation& _rhs );
-        KisProcessingInformation& operator=(const KisProcessingInformation& _rhs );
-        ~KisProcessingInformation();
-        /**
-         * @return the paint device
-         */
-        KisPaintDeviceSP paintDevice();
-    private:
-        struct Private;
-        Private* const d;
+class KRITAIMAGE_EXPORT KisProcessingInformation : public KisConstProcessingInformation
+{
+public:
+    KisProcessingInformation(KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection = 0);
+    KisProcessingInformation(const KisProcessingInformation& _rhs);
+    KisProcessingInformation& operator=(const KisProcessingInformation& _rhs);
+    ~KisProcessingInformation();
+    /**
+     * @return the paint device
+     */
+    KisPaintDeviceSP paintDevice();
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

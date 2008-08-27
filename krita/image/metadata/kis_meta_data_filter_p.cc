@@ -61,17 +61,17 @@ void AnonymizerFilter::filter(KisMetaData::Store* store) const
 {
     dbgImage << "Anonymize a store";
     const KisMetaData::Schema* dcSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::DublinCoreSchemaUri);
-    store->removeEntry( dcSchema, "contributor");
-    store->removeEntry( dcSchema, "creator");
-    store->removeEntry( dcSchema, "publisher");
-    store->removeEntry( dcSchema, "rights");
-    
+    store->removeEntry(dcSchema, "contributor");
+    store->removeEntry(dcSchema, "creator");
+    store->removeEntry(dcSchema, "publisher");
+    store->removeEntry(dcSchema, "rights");
+
     const KisMetaData::Schema* psSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::PhotoshopSchemaUri);
-    store->removeEntry( psSchema, "AuthorsPosition");
-    store->removeEntry( psSchema, "CaptionWriter");
-    store->removeEntry( psSchema, "Credit");
-    store->removeEntry( psSchema, "City");
-    store->removeEntry( psSchema, "Country");
+    store->removeEntry(psSchema, "AuthorsPosition");
+    store->removeEntry(psSchema, "CaptionWriter");
+    store->removeEntry(psSchema, "Credit");
+    store->removeEntry(psSchema, "City");
+    store->removeEntry(psSchema, "Country");
 }
 
 //------------------------------------//
@@ -105,10 +105,9 @@ QString ToolInfoFilter::description() const
 void ToolInfoFilter::filter(KisMetaData::Store* store) const
 {
     const KisMetaData::Schema* xmpSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::XMPSchemaUri);
-    store->getEntry( xmpSchema, "ModifyDate").value() = Value( QDate::currentDate() );
-    store->getEntry( xmpSchema, "MetadataDate").value() = Value( QDate::currentDate() );
-    if(!store->containsEntry( xmpSchema, "CreatorTool") )
-    {
-        store->getEntry( xmpSchema, "CreatorTool").value() = Value( i18n("Krita %1", QString(KOFFICE_VERSION_STRING) )  );
+    store->getEntry(xmpSchema, "ModifyDate").value() = Value(QDate::currentDate());
+    store->getEntry(xmpSchema, "MetadataDate").value() = Value(QDate::currentDate());
+    if (!store->containsEntry(xmpSchema, "CreatorTool")) {
+        store->getEntry(xmpSchema, "CreatorTool").value() = Value(i18n("Krita %1", QString(KOFFICE_VERSION_STRING)));
     }
 }

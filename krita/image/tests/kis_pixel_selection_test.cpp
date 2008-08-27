@@ -37,40 +37,40 @@ void KisPixelSelectionTest::testCreation()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, cs, "merge test");
-    KisPaintLayerSP layer = new KisPaintLayer( image, "test", OPACITY_OPAQUE );
+    KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE);
     KisPaintDeviceSP dev = layer->paintDevice();
-    
-    KisPixelSelectionSP selection = new KisPixelSelection();
-    QVERIFY( selection );
-    QVERIFY( selection->isTotallyUnselected(QRect( 0, 0, 512, 512 )) );
-    QVERIFY( selection->interestedInDirtyness() == true );
 
-    selection = new KisPixelSelection( dev );
-    QVERIFY( selection );
-    QVERIFY( selection->isTotallyUnselected(QRect( 0, 0, 512, 512 )) );
-    QVERIFY( selection->interestedInDirtyness() == true );
-    selection->setInterestedInDirtyness( true );
-    selection->setDirty( QRect( 10, 10, 10, 10 ) );
+    KisPixelSelectionSP selection = new KisPixelSelection();
+    QVERIFY(selection);
+    QVERIFY(selection->isTotallyUnselected(QRect(0, 0, 512, 512)));
+    QVERIFY(selection->interestedInDirtyness() == true);
+
+    selection = new KisPixelSelection(dev);
+    QVERIFY(selection);
+    QVERIFY(selection->isTotallyUnselected(QRect(0, 0, 512, 512)));
+    QVERIFY(selection->interestedInDirtyness() == true);
+    selection->setInterestedInDirtyness(true);
+    selection->setDirty(QRect(10, 10, 10, 10));
 }
 
 void KisPixelSelectionTest::testSetSelected()
 {
     KisPixelSelectionSP selection = new KisPixelSelection();
-    QVERIFY(selection->selected(1, 1) == MIN_SELECTED );
+    QVERIFY(selection->selected(1, 1) == MIN_SELECTED);
     selection->setSelected(1, 1, MAX_SELECTED);
-    QVERIFY(selection->selected(1, 1) == MAX_SELECTED );
-    selection->setSelected(1, 1, 128 );
-    QVERIFY(selection->selected(1, 1) == 128 );
+    QVERIFY(selection->selected(1, 1) == MAX_SELECTED);
+    selection->setSelected(1, 1, 128);
+    QVERIFY(selection->selected(1, 1) == 128);
 }
 
 void KisPixelSelectionTest::testMaskImage()
 {
     KisPixelSelectionSP selection = new KisPixelSelection();
-    selection->select(QRect( 10, 10, 50, 50), 128);
-    QImage img = selection->maskImage( QRect(0, 0, 70, 70) );
+    selection->select(QRect(10, 10, 50, 50), 128);
+    QImage img = selection->maskImage(QRect(0, 0, 70, 70));
     QPoint pt;
     if (!TestUtil::compareQImages(pt, img, QImage(QString(FILES_DATA_DIR) + QDir::separator() + "pixel_selection_test.png"))) {
-       QFAIL( QString( "Failed to create correct mask image, wrong pixel at: %1,%2 " ).arg( pt.x() ).arg( pt.y() ).toAscii() );
+        QFAIL(QString("Failed to create correct mask image, wrong pixel at: %1,%2 ").arg(pt.x()).arg(pt.y()).toAscii());
 
     }
 }
@@ -78,12 +78,12 @@ void KisPixelSelectionTest::testMaskImage()
 void KisPixelSelectionTest::testInvert()
 {
     KisPixelSelectionSP selection = new KisPixelSelection();
-    selection->select(QRect( 5, 5, 10, 10));
+    selection->select(QRect(5, 5, 10, 10));
     selection->invert();
-    QCOMPARE( selection->selected( 20, 20), MAX_SELECTED);
-    QCOMPARE( selection->selected( 6, 6), MIN_SELECTED);
-    QCOMPARE( selection->selectedExactRect(), QRect(0, 0, qint32_MAX, qint32_MAX));
-    QCOMPARE( selection->selectedRect(), QRect(0, 0, qint32_MAX, qint32_MAX));
+    QCOMPARE(selection->selected(20, 20), MAX_SELECTED);
+    QCOMPARE(selection->selected(6, 6), MIN_SELECTED);
+    QCOMPARE(selection->selectedExactRect(), QRect(0, 0, qint32_MAX, qint32_MAX));
+    QCOMPARE(selection->selectedRect(), QRect(0, 0, qint32_MAX, qint32_MAX));
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
@@ -91,55 +91,55 @@ void KisPixelSelectionTest::testInvert()
     KoColor c(Qt::red, cs);
     gc.fillRect(5, 5, 100, 100, c);
     gc.end();
-    
+
     selection = new KisPixelSelection(dev);
-    selection->select(QRect( 5, 5, 10, 10));
+    selection->select(QRect(5, 5, 10, 10));
     selection->invert();
-    
-    QCOMPARE( (int)selection->selected( 6, 6), (int)MIN_SELECTED);
-    QCOMPARE( (int)selection->selected( 20, 20), (int)MAX_SELECTED);
-    
-    QCOMPARE( selection->selectedExactRect(), QRect(5, 5, 100, 100));
-    QCOMPARE( selection->selectedRect(), QRect(0, 0, 128, 128));
-    
+
+    QCOMPARE((int)selection->selected(6, 6), (int)MIN_SELECTED);
+    QCOMPARE((int)selection->selected(20, 20), (int)MAX_SELECTED);
+
+    QCOMPARE(selection->selectedExactRect(), QRect(5, 5, 100, 100));
+    QCOMPARE(selection->selectedRect(), QRect(0, 0, 128, 128));
+
 }
 
 void KisPixelSelectionTest::testClear()
 {
     KisPixelSelectionSP selection = new KisPixelSelection();
-    selection->select(QRect( 5, 5, 300, 300));
+    selection->select(QRect(5, 5, 300, 300));
     selection->clear(QRect(5, 5, 200, 200));
-    QCOMPARE( selection->selected( 0, 0), MIN_SELECTED);
-    QCOMPARE( selection->selected( 5, 5), MIN_SELECTED);
-    QCOMPARE( selection->selected( 10, 10), MIN_SELECTED);
-    QCOMPARE( selection->selected( 204, 204), MIN_SELECTED);
-    QCOMPARE( selection->selected( 205, 205), MAX_SELECTED);
-    QCOMPARE( selection->selected( 250, 250), MAX_SELECTED);
+    QCOMPARE(selection->selected(0, 0), MIN_SELECTED);
+    QCOMPARE(selection->selected(5, 5), MIN_SELECTED);
+    QCOMPARE(selection->selected(10, 10), MIN_SELECTED);
+    QCOMPARE(selection->selected(204, 204), MIN_SELECTED);
+    QCOMPARE(selection->selected(205, 205), MAX_SELECTED);
+    QCOMPARE(selection->selected(250, 250), MAX_SELECTED);
     // everything deselected
     selection->clear();
     // completely selected
     selection->invert();
     // deselect a certain area
     selection->clear(QRect(5, 5, 200, 200));
-    QCOMPARE( selection->selected( 0, 0), MAX_SELECTED);
-    QCOMPARE( selection->selected( 5, 5), MIN_SELECTED);
-    QCOMPARE( selection->selected( 10, 10), MIN_SELECTED);
-    QCOMPARE( selection->selected( 204, 204), MIN_SELECTED);
-    QCOMPARE( selection->selected( 205, 205), MAX_SELECTED);
-    QCOMPARE( selection->selected( 250, 250), MAX_SELECTED);
+    QCOMPARE(selection->selected(0, 0), MAX_SELECTED);
+    QCOMPARE(selection->selected(5, 5), MIN_SELECTED);
+    QCOMPARE(selection->selected(10, 10), MIN_SELECTED);
+    QCOMPARE(selection->selected(204, 204), MIN_SELECTED);
+    QCOMPARE(selection->selected(205, 205), MAX_SELECTED);
+    QCOMPARE(selection->selected(250, 250), MAX_SELECTED);
 }
 
 void KisPixelSelectionTest::testSelect()
 {
     KisPixelSelectionSP selection = new KisPixelSelection();
     selection->select(QRect(0, 0, 512, 441));
-    for ( int i = 0; i < 441; ++i ) {
-        for ( int j = 0; j < 512; ++j ) {
-            QVERIFY(selection->selected( j, i ) == MAX_SELECTED);
+    for (int i = 0; i < 441; ++i) {
+        for (int j = 0; j < 512; ++j) {
+            QVERIFY(selection->selected(j, i) == MAX_SELECTED);
         }
     }
-    QCOMPARE( selection->selectedExactRect(), QRect(0, 0, 512, 441));
-    QCOMPARE( selection->selectedRect(), QRect(0, 0, 512, 448));
+    QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 512, 441));
+    QCOMPARE(selection->selectedRect(), QRect(0, 0, 512, 448));
 }
 
 void KisPixelSelectionTest::testExtent()
@@ -209,12 +209,12 @@ void KisPixelSelectionTest::testExactRectWithParent()
     QCOMPARE(sel->selectedRect(), QRect(0, 0, 0, 0));
     KisFillPainter gc(dev);
     gc.fillRect(0, 0, 100, 100, KoColor(Qt::red, dev->colorSpace()));
-    
+
     QCOMPARE(sel->selectedExactRect(), QRect(10, 10, 90, 90));
     QCOMPARE(sel->selectedRect(), QRect(0, 0, 128, 128));
 
     gc.fillRect(0, 0, 500, 500, KoColor(Qt::blue, dev->colorSpace()));
-    
+
     QCOMPARE(sel->selectedExactRect(), QRect(10, 10, 200, 143));
     QCOMPARE(sel->selectedRect(), QRect(0, 0, 256, 192));
 }

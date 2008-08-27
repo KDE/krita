@@ -70,15 +70,15 @@ public:
     QMap<QString, KoDataCenter *>  dataCenterMap;
 };
 
-KisShapeController::KisShapeController( KisDoc2 * doc, KisNameServer *nameServer )
-    : QObject( doc )
-    , m_d( new Private )
+KisShapeController::KisShapeController(KisDoc2 * doc, KisNameServer *nameServer)
+        : QObject(doc)
+        , m_d(new Private)
 {
     m_d->doc = doc;
     m_d->nameServer = nameServer;
     m_d->image = 0;
     // Ask every shapefactory to populate the dataCenterMap
-    foreach( KoShapeFactory * shapeFactory, KoShapeRegistry::instance()->values() ) {
+    foreach(KoShapeFactory * shapeFactory, KoShapeRegistry::instance()->values()) {
         shapeFactory->populateDataCenterMap(m_d->dataCenterMap);
     }
 }
@@ -86,29 +86,29 @@ KisShapeController::KisShapeController( KisDoc2 * doc, KisNameServer *nameServer
 
 KisShapeController::~KisShapeController()
 {
-    dbgUI <<"Deleting the KisShapeController. There are" << m_d->nodeShapes.size() <<" shapes";
-/*
-    XXX: leak!
+    dbgUI << "Deleting the KisShapeController. There are" << m_d->nodeShapes.size() << " shapes";
+    /*
+        XXX: leak!
 
-    foreach( KoShape* shape, m_d->nodeShapes ) {
-        removeShape( shape);
-        delete shape; // XXX: What happes with stuff on the
-                      // clipboard? And how about undo information?
-    }
-    m_d->nodeShapes.clear();
-*/
-    qDeleteAll( m_d->dataCenterMap );
+        foreach( KoShape* shape, m_d->nodeShapes ) {
+            removeShape( shape);
+            delete shape; // XXX: What happes with stuff on the
+                          // clipboard? And how about undo information?
+        }
+        m_d->nodeShapes.clear();
+    */
+    qDeleteAll(m_d->dataCenterMap);
 
     delete m_d;
 }
 
-void KisShapeController::setImage( KisImageSP image )
+void KisShapeController::setImage(KisImageSP image)
 {
-    if ( m_d->image ) {
-        m_d->image->disconnect( this );
+    if (m_d->image) {
+        m_d->image->disconnect(this);
         // First clear the current set of shapes away
-        foreach( KoShape* shape, m_d->nodeShapes ) {
-            removeShape( shape );
+        foreach(KoShape* shape, m_d->nodeShapes) {
+            removeShape(shape);
             delete shape; // XXX: What happes with stuff on the
             // clipboard? And how about undo information?
 
@@ -117,64 +117,61 @@ void KisShapeController::setImage( KisImageSP image )
 
     }
 
-    if ( image ) {
+    if (image) {
         m_d->image = image;
 
-        KisLayerMapVisitor v( m_d->nodeShapes );
-        m_d->image->rootLayer()->accept( v );
+        KisLayerMapVisitor v(m_d->nodeShapes);
+        m_d->image->rootLayer()->accept(v);
         m_d->nodeShapes = v.layerMap();
 
-        foreach( KoView *view, m_d->doc->views() ) {
+        foreach(KoView *view, m_d->doc->views()) {
             KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();
-            foreach( KoShape* shape, m_d->nodeShapes ) {
+            foreach(KoShape* shape, m_d->nodeShapes) {
                 canvas->shapeManager()->add(shape);
             }
             canvas->canvasWidget()->update();
         }
 
-        connect( m_d->image, SIGNAL( sigNodeHasBeenAdded( KisNode *, int ) ), SLOT( slotNodeAdded( KisNode*, int ) ) );
-        connect( m_d->image, SIGNAL( sigAboutToRemoveANode( KisNode *, int ) ), SLOT( slotNodeRemoved( KisNode*, int) ) );
-        connect( m_d->image, SIGNAL( sigLayersChanged( KisGroupLayerSP ) ), this, SLOT( slotLayersChanged( KisGroupLayerSP ) ) );
+        connect(m_d->image, SIGNAL(sigNodeHasBeenAdded(KisNode *, int)), SLOT(slotNodeAdded(KisNode*, int)));
+        connect(m_d->image, SIGNAL(sigAboutToRemoveANode(KisNode *, int)), SLOT(slotNodeRemoved(KisNode*, int)));
+        connect(m_d->image, SIGNAL(sigLayersChanged(KisGroupLayerSP)), this, SLOT(slotLayersChanged(KisGroupLayerSP)));
     }
 }
 
-void KisShapeController::removeShape( KoShape* shape )
+void KisShapeController::removeShape(KoShape* shape)
 {
 
     // Also remove all the children, if any
     {
-        KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>( shape );
-        if ( parent ) {
-            foreach( KoShape * child, parent->iterator() ) {
-                removeShape( child );
+        KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>(shape);
+        if (parent) {
+            foreach(KoShape * child, parent->iterator()) {
+                removeShape(child);
             }
         }
     }
 
-    if ( shape->shapeId() == KIS_LAYER_SHAPE_ID
-         || shape->shapeId() == KIS_SHAPE_LAYER_ID
-         || shape->shapeId() == KIS_LAYER_CONTAINER_ID
-         || shape->shapeId() == KIS_MASK_SHAPE_ID
-         || shape->shapeId() == KoPathShapeId)  // selection shapes
-    {
-        if (   KoToolManager::instance()->activeCanvasController()
-            && KoToolManager::instance()->activeCanvasController()->canvas() )
-        {
+    if (shape->shapeId() == KIS_LAYER_SHAPE_ID
+            || shape->shapeId() == KIS_SHAPE_LAYER_ID
+            || shape->shapeId() == KIS_LAYER_CONTAINER_ID
+            || shape->shapeId() == KIS_MASK_SHAPE_ID
+            || shape->shapeId() == KoPathShapeId) { // selection shapes
+        if (KoToolManager::instance()->activeCanvasController()
+                && KoToolManager::instance()->activeCanvasController()->canvas()) {
             KisCanvas2 * canvas =  dynamic_cast<KisCanvas2*>(KoToolManager::instance()->activeCanvasController()->canvas());
             KisSelectionSP selection;
-            if ( canvas && (selection = canvas->view()->selection()) ) {
-                if ( selection->hasShapeSelection() ) {
+            if (canvas && (selection = canvas->view()->selection())) {
+                if (selection->hasShapeSelection()) {
                     KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
                     shapeSelection->removeChild(shape);
                 }
-            }
-            else {
-                KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>( shape->parent() );
+            } else {
+                KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(shape->parent());
 
                 // XXX: What happens if the shape is added embedded in another
                 // shape?
-                if ( shapeLayer )
-                    shapeLayer->removeChild( shape );
+                if (shapeLayer)
+                    shapeLayer->removeChild(shape);
             }
         }
     }
@@ -183,7 +180,7 @@ void KisShapeController::removeShape( KoShape* shape )
     KisNodeMap::iterator end = m_d->nodeShapes.end();
     KisNodeMap::iterator it = begin;
     while (it != end) {
-        if (it.value() == shape ) {
+        if (it.value() == shape) {
             dbgKrita << "Going to delete node " << it.key() << " with shape " << it.value() << ", because it is the same as " << shape;
             m_d->nodeShapes.remove(it.key());
             break;
@@ -191,12 +188,12 @@ void KisShapeController::removeShape( KoShape* shape )
         ++it;
     }
 
-    m_d->doc->setModified( true );
+    m_d->doc->setModified(true);
 }
 
-void KisShapeController::addShape( KoShape* shape )
+void KisShapeController::addShape(KoShape* shape)
 {
-    if ( !m_d->image ) return;
+    if (!m_d->image) return;
 
     // If the parent of the added shape has is a selection, has a selection
     // or if the image has a selection, add the shape to the selection, instead
@@ -206,27 +203,26 @@ void KisShapeController::addShape( KoShape* shape )
     // Only non-krita shapes get added through this method; krita
     // layer shapes are added to kisimage and then end up in
     // slotLayerAdded
-    if ( shape->shapeId() != KIS_LAYER_SHAPE_ID  &&
-         shape->shapeId() != KIS_SHAPE_LAYER_ID  &&
-         shape->shapeId() != KIS_LAYER_CONTAINER_ID &&
-         shape->shapeId() != KIS_MASK_SHAPE_ID ) {
+    if (shape->shapeId() != KIS_LAYER_SHAPE_ID  &&
+            shape->shapeId() != KIS_SHAPE_LAYER_ID  &&
+            shape->shapeId() != KIS_LAYER_CONTAINER_ID &&
+            shape->shapeId() != KIS_MASK_SHAPE_ID) {
 
         // There's a selection active. that means that all shapes get added to the active selection,
         // instead of to a shape layer or a newly created shape layer.
         KisSelectionSP selection;
-        if ( canvas && (selection = canvas->view()->selection()) ) {
-            if ( !selection->shapeSelection() ) {
-                selection->setShapeSelection( new KisShapeSelection( m_d->image, selection ) );
+        if (canvas && (selection = canvas->view()->selection())) {
+            if (!selection->shapeSelection()) {
+                selection->setShapeSelection(new KisShapeSelection(m_d->image, selection));
             }
             KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
             shapeSelection->addChild(shape);
-/*
-            foreach( KoView *view, m_d->doc->views() ) {
-                KisCanvas2 *canvas = static_cast<KisView2*>(view)->canvasBase();
-                canvas->globalShapeManager()->add(shape);
-            }*/
-        }
-        else {
+            /*
+                        foreach( KoView *view, m_d->doc->views() ) {
+                            KisCanvas2 *canvas = static_cast<KisView2*>(view)->canvasBase();
+                            canvas->globalShapeManager()->add(shape);
+                        }*/
+        } else {
             // An ordinary shape, if the active layer is a KisShapeLayer,
             // add it there, otherwise, create a new KisShapeLayer on top
             // of the active layer.
@@ -239,32 +235,32 @@ void KisShapeController::addShape( KoShape* shape )
             // KoSelection::setActiveLayer. The inheritance is:
             // KisShapeLayer::KoShapeLayer::KoShapeContainer::KoShape.
 
-            KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>( shape->parent() );
-            dbgUI <<"shape:" << shape;
-            dbgUI <<"shape parent:" << shape->parent();
-            dbgUI <<"shape layer:" << shapeLayer;
+            KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(shape->parent());
+            dbgUI << "shape:" << shape;
+            dbgUI << "shape parent:" << shape->parent();
+            dbgUI << "shape layer:" << shapeLayer;
 
-            if ( !shapeLayer ) {
+            if (!shapeLayer) {
                 // There is no parent layer set, which means that when
                 // dropping, there was no shape layer active. Create one
                 // and add it on top of the image stack.
 
                 KisLayerContainerShape * container =
-                    dynamic_cast<KisLayerContainerShape*>( shapeForNode(m_d->image->rootLayer().data() ) );
+                    dynamic_cast<KisLayerContainerShape*>(shapeForNode(m_d->image->rootLayer().data()));
 
-                dbgUI <<"container:" << container;
+                dbgUI << "container:" << container;
                 shapeLayer = new KisShapeLayer(container,
-                                            m_d->image,
-                                            i18n( "Flake shapes %1", m_d->nameServer->number() ),
-                                            OPACITY_OPAQUE);
+                                               m_d->image,
+                                               i18n("Flake shapes %1", m_d->nameServer->number()),
+                                               OPACITY_OPAQUE);
 
                 // Add the shape layer to the image. The image then emits
                 // a signal that is caught by us (the document) and the
                 // layerbox and makes sure the new layer is in the
                 // layer-shape map and in the layerbox
 
-                m_d->image->addNode( shapeLayer, m_d->image->rootLayer());
-                if ( canvas ) {
+                m_d->image->addNode(shapeLayer, m_d->image->rootLayer());
+                if (canvas) {
                     canvas->view()->nodeManager()->activateNode(shapeLayer);
                 }
 
@@ -272,16 +268,15 @@ void KisShapeController::addShape( KoShape* shape )
 
             // XXX: What happens if the shape is added embedded in another
             // shape?
-            if ( shapeLayer )
-                shapeLayer->addChild( shape );
+            if (shapeLayer)
+                shapeLayer->addChild(shape);
 
         }
-    }
-    else {
-        kWarning() <<"Eeek -- we tried to add a krita layer shape without going through KisImage";
+    } else {
+        kWarning() << "Eeek -- we tried to add a krita layer shape without going through KisImage";
     }
 
-    m_d->doc->setModified( true );
+    m_d->doc->setModified(true);
 }
 
 QMap<QString, KoDataCenter *> KisShapeController::dataCenterMap()
@@ -290,65 +285,62 @@ QMap<QString, KoDataCenter *> KisShapeController::dataCenterMap()
 }
 
 
-void KisShapeController::setInitialShapeForView( KisView2 * view )
+void KisShapeController::setInitialShapeForView(KisView2 * view)
 {
-    if ( !m_d->image ) return;
+    if (!m_d->image) return;
 
-    if(! m_d->nodeShapes.isEmpty()) {
+    if (! m_d->nodeShapes.isEmpty()) {
         Q_ASSERT(view->canvasBase());
         Q_ASSERT(view->canvasBase()->shapeManager());
         KoSelection *selection = view->canvasBase()->shapeManager()->selection();
-        if ( selection ) {
+        if (selection) {
             selection->select(m_d->nodeShapes.values().first());
             KoToolManager::instance()->switchToolRequested(KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes()));
         }
     }
 }
 
-void KisShapeController::slotNodeAdded( KisNode* parentNode, int index )
+void KisShapeController::slotNodeAdded(KisNode* parentNode, int index)
 {
     if (!parentNode) return;
 
-    KisNodeSP node = parentNode->at( index );
+    KisNodeSP node = parentNode->at(index);
 
     // Check whether the layer is already in the map
-    if ( m_d->nodeShapes.contains( node ) ) {
-        dbgUI <<"The document already contains node" << node->name();
+    if (m_d->nodeShapes.contains(node)) {
+        dbgUI << "The document already contains node" << node->name();
         return;
     }
 
     // Get the parent -- there is always one, and it should be in the nodemap already
-    KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>( shapeForNode( parentNode ) );
-    Q_ASSERT( parent );
+    KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>(shapeForNode(parentNode));
+    Q_ASSERT(parent);
 
     KoShape * shape = 0;
 
     dbgUI << "Going to add node of type " << node->metaObject()->className();
-    if ( node->inherits("KisGroupLayer" ) ) {
+    if (node->inherits("KisGroupLayer")) {
         shape = new KisLayerContainerShape(parent, static_cast<KisGroupLayer*>(node.data()));
-    }
-    else if ( node->inherits("KisPaintLayer")  ||
-              node->inherits("KisAdjustmentLayer") ||
-              node->inherits("KisCloneLayer") ||
-              node->inherits("KisGeneratorLayer") ) {
-        shape = new KisLayerShape( parent, static_cast<KisLayer*>( node.data() ) );
-    }
-    else if ( node->inherits("KisShapeLayer") ) {
-        shape = static_cast<KisShapeLayer*>( node.data() );
-    }
-    else if ( node->inherits("KisMask") ) {
-        shape = new KisMaskShape( parent, static_cast<KisMask*>( node.data() ) );
+    } else if (node->inherits("KisPaintLayer")  ||
+               node->inherits("KisAdjustmentLayer") ||
+               node->inherits("KisCloneLayer") ||
+               node->inherits("KisGeneratorLayer")) {
+        shape = new KisLayerShape(parent, static_cast<KisLayer*>(node.data()));
+    } else if (node->inherits("KisShapeLayer")) {
+        shape = static_cast<KisShapeLayer*>(node.data());
+    } else if (node->inherits("KisMask")) {
+        shape = new KisMaskShape(parent, static_cast<KisMask*>(node.data()));
     }
 
-    Q_ASSERT( shape );
+    Q_ASSERT(shape);
 
     // Put the layer in the right place in the hierarchy
-    shape->setParent( parent );
-    parent->addChild( shape );
+    shape->setParent(parent);
+    parent->addChild(shape);
 
     m_d->nodeShapes[node] = shape;
 
-    foreach( KoView *view, m_d->doc->views() ) {
+    foreach(KoView *view, m_d->doc->views()) {
         KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();
         canvas->shapeManager()->add(shape);
         canvas->canvasWidget()->update();
@@ -356,28 +348,28 @@ void KisShapeController::slotNodeAdded( KisNode* parentNode, int index )
     dbgUI << "Added " << node << " as shape " << shape << " to the document";
 }
 
-void KisShapeController::slotNodeRemoved( KisNode* parent, int index )
+void KisShapeController::slotNodeRemoved(KisNode* parent, int index)
 {
-    KisNodeSP node = parent->at( index );
+    KisNodeSP node = parent->at(index);
     dbgKrita << "Going to remove node " << node << " from parent " << parent;
-    KoShape * shape = shapeForNode( node );
+    KoShape * shape = shapeForNode(node);
     dbgKrita << "Going to remove node " << node << " from parent " << parent << "( shape: " << shape << ")";
-    removeShape( shapeForNode( node ) );
+    removeShape(shapeForNode(node));
 }
 
-void KisShapeController::slotLayersChanged( KisGroupLayerSP rootLayer )
+void KisShapeController::slotLayersChanged(KisGroupLayerSP rootLayer)
 {
-    Q_UNUSED( rootLayer );
+    Q_UNUSED(rootLayer);
 
-    setImage( m_d->image );
+    setImage(m_d->image);
 }
 
-KoShape * KisShapeController::shapeForNode( KisNodeSP node ) const
+KoShape * KisShapeController::shapeForNode(KisNodeSP node) const
 {
-    if ( m_d->nodeShapes.contains( node) )
+    if (m_d->nodeShapes.contains(node))
         return m_d->nodeShapes[node];
     else {
-        dbgUI <<"KisShapeController::shapeForNode does not find a shape for node " << node << ", this should never happen!";
+        dbgUI << "KisShapeController::shapeForNode does not find a shape for node " << node << ", this should never happen!";
         return 0;
     }
 }

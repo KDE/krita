@@ -35,8 +35,8 @@ KisOpenGLVertexShader KisOpenGLVertexShader::string(const QString& sourceCodeStr
     return shader;
 }
 
-KisOpenGLVertexShader::KisOpenGLVertexShader() 
-    : KisOpenGLShader(GL_VERTEX_SHADER)
+KisOpenGLVertexShader::KisOpenGLVertexShader()
+        : KisOpenGLShader(GL_VERTEX_SHADER)
 {
 }
 

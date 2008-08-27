@@ -18,28 +18,26 @@
 #include "kis_dynamic_sensors.h"
 KisDynamicSensorFuzzy::KisDynamicSensorFuzzy() : KisDynamicSensor(FuzzyId)
 {
-    
+
 }
 
 KisDynamicSensorSpeed::KisDynamicSensorSpeed() : KisDynamicSensor(SpeedId)
 {
-    
+
 }
 
 KisDynamicSensorDrawingAngle::KisDynamicSensorDrawingAngle() : KisDynamicSensor(DrawingAngleId), m_angle(0.0)
 {
-    
+
 }
 
 double KisDynamicSensorDrawingAngle::parameter(const KisPaintInformation& info)
 {
     double angle = atan2(info.movement().y() , info.movement().x());
     double v = modulo(m_angle - angle + M_PI, 2.0 * M_PI) - M_PI;
-    if(v < 0)
-    {
+    if (v < 0) {
         m_angle += 0.1;
-    } else if( v > 0)
-    {
+    } else if (v > 0) {
         m_angle -= 0.1;
     }
     m_angle = modulo(m_angle, 2.0 * M_PI);
@@ -48,16 +46,16 @@ double KisDynamicSensorDrawingAngle::parameter(const KisPaintInformation& info)
 
 KisDynamicSensorPressure::KisDynamicSensorPressure() : KisDynamicSensor(PressureId)
 {
-    
+
 }
 
 KisDynamicSensorXTilt::KisDynamicSensorXTilt() : KisDynamicSensor(XTiltId)
 {
-    
+
 }
 
 KisDynamicSensorYTilt::KisDynamicSensorYTilt() : KisDynamicSensor(YTiltId)
 {
-    
+
 }
 

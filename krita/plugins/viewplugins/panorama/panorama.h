@@ -33,25 +33,25 @@ class Ui_WdgPanoramaCreation;
 class PanoramaPlugin : public KParts::Plugin
 {
     Q_OBJECT
-    public:
-        PanoramaPlugin(QObject *parent, const QStringList &);
-        virtual ~PanoramaPlugin();
-    
-    private slots:
-    
-        void slotAddImages();
-        void slotRemoveImage();
-        void slotImageUp();
-        void slotImageDown();
-        void slotCreatePanoramaLayer();
-        void addImage(const QString& filename);
-        void slotPreview();
-    
-    private:
-        void createPanorama(QList<KisImageAlignment::ImageInfo>& images, KisPaintDeviceSP dstdevice, QRect& area);
-    private:
-        KisView2 * m_view;
-        Ui_WdgPanoramaCreation* m_wdgPanoramaCreation;
+public:
+    PanoramaPlugin(QObject *parent, const QStringList &);
+    virtual ~PanoramaPlugin();
+
+private slots:
+
+    void slotAddImages();
+    void slotRemoveImage();
+    void slotImageUp();
+    void slotImageDown();
+    void slotCreatePanoramaLayer();
+    void addImage(const QString& filename);
+    void slotPreview();
+
+private:
+    void createPanorama(QList<KisImageAlignment::ImageInfo>& images, KisPaintDeviceSP dstdevice, QRect& area);
+private:
+    KisView2 * m_view;
+    Ui_WdgPanoramaCreation* m_wdgPanoramaCreation;
 };
 #endif // PanoramaPlugin_H
 

@@ -22,23 +22,23 @@
 #include "KritaShape.h"
 #include "KritaShapeTool.h"
 
-KritaShapeToolFactory::KritaShapeToolFactory( QObject* parent, const QStringList& )
-    : KoToolFactory( parent, "KritaShapeToolFactoryId", i18n( "KritaShape Tool" ) )
+KritaShapeToolFactory::KritaShapeToolFactory(QObject* parent, const QStringList&)
+        : KoToolFactory(parent, "KritaShapeToolFactoryId", i18n("KritaShape Tool"))
 {
-    setToolTip( i18n( "KritaShape editing tool" ) );
-    setIcon( "kritashape" );
-    setToolType( dynamicToolType() );
-    setPriority( 1 );
-    setActivationShapeId( KritaShapeId );
+    setToolTip(i18n("KritaShape editing tool"));
+    setIcon("kritashape");
+    setToolType(dynamicToolType());
+    setPriority(1);
+    setActivationShapeId(KritaShapeId);
 }
 
 KritaShapeToolFactory::~KritaShapeToolFactory()
 {
 }
 
-KoTool* KritaShapeToolFactory::createTool( KoCanvasBase* canvas )
+KoTool* KritaShapeToolFactory::createTool(KoCanvasBase* canvas)
 {
-    return new KritaShapeTool( canvas );
+    return new KritaShapeTool(canvas);
 }
 
 #include "KritaShapeToolFactory.moc"

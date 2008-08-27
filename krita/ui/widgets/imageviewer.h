@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.          *
  ***************************************************************************/
-#ifndef PIXMAPVIEWER_H
-#define PIXMAPVIEWER_H
+#ifndef _IMAGE_VIEWER_H
+#define _IMAGE_VIEWER_H
 
 #include <q3scrollview.h>
 #include <QImage>
@@ -36,7 +36,8 @@ class QLabel;
  * XXX: We should add a signal that emits newly eposed rects so the filters
  *      don't have to filter everything, but just the the new bits.
  */
-class KRITAUI_EXPORT ImageViewer : public Q3ScrollView {
+class KRITAUI_EXPORT ImageViewer : public Q3ScrollView
+{
     Q_OBJECT
 
 public:
@@ -47,7 +48,9 @@ public:
     void contentsMousePressEvent(QMouseEvent *event);
     void contentsMouseReleaseEvent(QMouseEvent *event);
     void contentsMouseMoveEvent(QMouseEvent *event);
-    void wheelEvent(QWheelEvent * event) { event->ignore(); }
+    void wheelEvent(QWheelEvent * event) {
+        event->ignore();
+    }
 private:
     QLabel* m_label;
     bool m_isDragging;

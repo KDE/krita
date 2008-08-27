@@ -26,7 +26,7 @@
 
 /**
  * Generates an 'outline' for a paint device. It should look a bit like the outline of a
- * marching ants selection. 
+ * marching ants selection.
  *
  * It's not really optimized, so it's not recommended to do big things with it and expect
  * it to be fast.
@@ -34,7 +34,8 @@
  * Usage: construct a KisBoundary, and then run a generateBoundary(w, h) on it. After that,
  * you can use the KisBoundaryPainter::paint method to let it paint the outline, or get a pixmap.
  **/
-class KRITAIMAGE_EXPORT KisBoundary {
+class KRITAIMAGE_EXPORT KisBoundary
+{
 public:
     KisBoundary(KisPaintDeviceSP dev);
     void generateBoundary(int w, int h);

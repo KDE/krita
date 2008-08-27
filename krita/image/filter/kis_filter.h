@@ -38,7 +38,8 @@ class KisProcessingInformation;
 /**
  * Basic interface of a Krita filter.
  */
-class KRITAIMAGE_EXPORT KisFilter : public KisBaseProcessor {
+class KRITAIMAGE_EXPORT KisFilter : public KisBaseProcessor
+{
 
 public:
     static const KoID CategoryAdjust;
@@ -51,7 +52,7 @@ public:
     static const KoID CategoryMap;
     static const KoID CategoryNonPhotorealistic;
     static const KoID CategoryOther;
-    
+
 public:
 
     /**
@@ -79,7 +80,7 @@ public:
                          const QSize& size,
                          const KisFilterConfiguration* config,
                          KoUpdater* progressUpdater
-        ) const = 0;
+                        ) const = 0;
 
     /**
      * Provided for convenience when no progress reporting is needed.
@@ -88,7 +89,7 @@ public:
                          KisProcessingInformation dst,
                          const QSize& size,
                          const KisFilterConfiguration* config
-        ) const;
+                        ) const;
 
 
     /**

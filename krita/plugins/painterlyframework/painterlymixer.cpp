@@ -29,13 +29,12 @@
 #include <kis_view2.h>
 
 typedef KGenericFactory<PainterlyMixer> PainterlyMixerFactory;
-K_EXPORT_COMPONENT_FACTORY( kritapainterlymixer, PainterlyMixerFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritapainterlymixer, PainterlyMixerFactory("krita"))
 
 PainterlyMixer::PainterlyMixer(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
-    if (parent->inherits("KisView2"))
-    {
+    if (parent->inherits("KisView2")) {
         setComponentData(PainterlyMixerFactory::componentData());
         m_view = static_cast<KisView2*>(parent);
         m_factory = new KisPainterlyMixerDockerFactory(m_view);

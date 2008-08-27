@@ -31,17 +31,16 @@ class QRegion;
  * strategies, such as the TopDown or BottomUp projection
  * update strategy.
  */
-class KisProjectionUpdateStrategy {
+class KisProjectionUpdateStrategy
+{
 
 public:
 
-    KisProjectionUpdateStrategy()
-        {
-        }
-    
-    virtual ~KisProjectionUpdateStrategy()
-        {
-        }
+    KisProjectionUpdateStrategy() {
+    }
+
+    virtual ~KisProjectionUpdateStrategy() {
+    }
 
     /**
      * Nodes call this to inform the update strategy that a particular
@@ -49,15 +48,15 @@ public:
      * @param rc the dirty rect
      * @param filthyNode the node that set dirty
      */
-    virtual void setDirty( const QRect & rc ) = 0;
-    
-    
+    virtual void setDirty(const QRect & rc) = 0;
+
+
     /**
      * If a KisImage is set on the update strategy, the image will
      * be notified if the update is done.
      */
-     virtual void setImage(KisImageSP image) = 0;
-     
+    virtual void setImage(KisImageSP image) = 0;
+
     /**
        Lock the projection: we will add new rects to the dirty region,
        but not composite until unlocked
@@ -69,17 +68,17 @@ public:
        dirty region and emit projectionUpdated signals
     */
     virtual void unlock() = 0;
-     
+
 protected:
 
     friend class KisGroupLayer;
-    
-     /**
-      * The way group layers are updated is very much dependent on the update strategy
-      * because group layers have to take into account that adjustment layers can
-      * be used to cache part of a composition stack.
-      */
-     virtual KisPaintDeviceSP updateGroupLayerProjection( const QRect & rc, KisPaintDeviceSP projection ) = 0;
+
+    /**
+     * The way group layers are updated is very much dependent on the update strategy
+     * because group layers have to take into account that adjustment layers can
+     * be used to cache part of a composition stack.
+     */
+    virtual KisPaintDeviceSP updateGroupLayerProjection(const QRect & rc, KisPaintDeviceSP projection) = 0;
 };
 
 

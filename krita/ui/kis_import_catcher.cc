@@ -30,15 +30,14 @@
 #include "kis_group_layer.h"
 
 KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
-    : m_doc( new KisDoc2() )
-    , m_view( view )
-    , m_url( url )
+        : m_doc(new KisDoc2())
+        , m_view(view)
+        , m_url(url)
 {
     m_doc->openUrl(url);
-    if ( !m_doc->isLoading() ) {
+    if (!m_doc->isLoading()) {
         slotLoadingFinished();
-    }
-    else {
+    } else {
         connect(m_doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
     }
 }
@@ -48,20 +47,20 @@ void KisImportCatcher::slotLoadingFinished()
     KisImageSP importedImage = m_doc->image();
 
     if (importedImage) {
-        KisLayerSP importedImageLayer = KisLayerSP( importedImage->rootLayer().data() );
+        KisLayerSP importedImageLayer = KisLayerSP(importedImage->rootLayer().data());
 
         if (!importedImageLayer.isNull()) {
             QStringList list;
             list << "KisLayer";
 
             KisCountVisitor visitor(list, KoProperties());
-            importedImageLayer->accept( visitor );
+            importedImageLayer->accept(visitor);
 
             if (visitor.count() == 2) {
                 // Don't import the root if this is not a layered image (1 group layer
                 // plus 1 other).
-                importedImageLayer = dynamic_cast<KisLayer*>( importedImageLayer->firstChild().data() );
-                if ( importedImageLayer )
+                importedImageLayer = dynamic_cast<KisLayer*>(importedImageLayer->firstChild().data());
+                if (importedImageLayer)
                     importedImage->removeNode(importedImageLayer.data());
             }
 

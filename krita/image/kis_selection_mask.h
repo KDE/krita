@@ -41,17 +41,15 @@ public:
     KisSelectionMask(KisImageWSP image);
 
     virtual ~KisSelectionMask();
-    KisSelectionMask( const KisSelectionMask& rhs );
+    KisSelectionMask(const KisSelectionMask& rhs);
 
-    bool allowAsChild( KisNodeSP ) const;
+    bool allowAsChild(KisNodeSP) const;
 
-    QIcon icon() const
-        {
-            return KIcon(""); // XXX: Find nice icon for the subclasses.
-        }
+    QIcon icon() const {
+        return KIcon(""); // XXX: Find nice icon for the subclasses.
+    }
 
-    KisNodeSP clone() const
-    {
+    KisNodeSP clone() const {
         return KisNodeSP(new KisSelectionMask(*this));
     }
 

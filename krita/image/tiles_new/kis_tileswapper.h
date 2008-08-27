@@ -45,7 +45,8 @@
  * TODO: add something to a generic paintdevice that it should be considered 'volatile', i.e. will be used so shortly that swapping or compressing it is useless
  * (think paintbrush dabs).
  */
-class KRITAIMAGE_EXPORT KisTileSwapper : public QThread {
+class KRITAIMAGE_EXPORT KisTileSwapper : public QThread
+{
     Q_OBJECT
 public:
     ~KisTileSwapper();
@@ -112,7 +113,7 @@ private: // File handling
     // This is the constant that we will use to see if we want to add a new tempfile
     // We use 1<<30 (one gigabyte) because apparently 32bit systems don't really like very
     // large files.
-    static const long MaxSwapFileSize = 1<<30; // For debugging purposes: 1<<20 is a megabyte
+    static const long MaxSwapFileSize = 1 << 30; // For debugging purposes: 1<<20 is a megabyte
 
     void ftruncateError(int errorNumber, off_t oldSize, off_t newSize, int tileSize, TempFile* tempFile);
 

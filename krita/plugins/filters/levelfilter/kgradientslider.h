@@ -30,7 +30,7 @@
 
 class KGradientSlider : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 
     typedef enum {
         BlackCursor,
@@ -56,10 +56,10 @@ signals:
 
 protected:
     void paintEvent(QPaintEvent *);
-    void mousePressEvent (QMouseEvent * e);
-    void mouseReleaseEvent ( QMouseEvent * e );
-    void mouseMoveEvent ( QMouseEvent * e );
-    void leaveEvent ( QEvent * );
+    void mousePressEvent(QMouseEvent * e);
+    void mouseReleaseEvent(QMouseEvent * e);
+    void mouseMoveEvent(QMouseEvent * e);
+    void leaveEvent(QEvent *);
 
 public:
     void enableGamma(bool b);

@@ -19,7 +19,7 @@
 #include <klocale.h>
 
 KisPaintActionTypeOption::KisPaintActionTypeOption()
-   : KisPaintOpOption(i18n("Paint deposition"), false)
+        : KisPaintOpOption(i18n("Paint deposition"), false)
 {
 }
 

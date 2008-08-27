@@ -26,9 +26,9 @@
 #include "ui_RotationTransformationEditor.h"
 
 KisRotationTransformation::KisRotationTransformation(KisDynamicSensor* transfoParameter)
-    : KisDynamicTransformation(KisDynamicTransformation::RotationTransformationID), m_transfoParameter(transfoParameter)
+        : KisDynamicTransformation(KisDynamicTransformation::RotationTransformationID), m_transfoParameter(transfoParameter)
 {
-    
+
 }
 
 KisRotationTransformation::~KisRotationTransformation()
@@ -41,19 +41,18 @@ void KisRotationTransformation::transformBrush(KisDynamicShape* dabsrc, const Ki
     dabsrc->rotate(m_transfoParameter->parameter(info) * 2.0 * M_PI);
 }
 
-void KisRotationTransformation::transformColoring(KisDynamicColoring* , const KisPaintInformation& )
+void KisRotationTransformation::transformColoring(KisDynamicColoring* , const KisPaintInformation&)
 {
 }
 
 void KisRotationTransformation::toXML(QDomDocument& d, QDomElement& e) const
 {
-    KisDynamicTransformation::toXML(d,e);
-    QDomElement eSensor = d.createElement( "sensor" );
-    if(m_transfoParameter)
-    {
-        m_transfoParameter->toXML( d, eSensor);
+    KisDynamicTransformation::toXML(d, e);
+    QDomElement eSensor = d.createElement("sensor");
+    if (m_transfoParameter) {
+        m_transfoParameter->toXML(d, eSensor);
     }
-    e.appendChild( eSensor );
+    e.appendChild(eSensor);
 }
 
 void KisRotationTransformation::fromXML(const QDomElement& rootElt)
@@ -82,9 +81,9 @@ QWidget* KisRotationTransformation::createConfigWidget(QWidget* parent)
     QWidget* editorWidget = new QWidget(parent);
     Ui_RotationTransformationEditor ste;
     ste.setupUi(editorWidget);
-    connect(ste.comboBoxRotationSensor, SIGNAL(sensorChanged(KisDynamicSensor*)), this, SLOT(setRotationSensor(KisDynamicSensor* )));
+    connect(ste.comboBoxRotationSensor, SIGNAL(sensorChanged(KisDynamicSensor*)), this, SLOT(setRotationSensor(KisDynamicSensor*)));
     ste.comboBoxRotationSensor->setCurrent(m_transfoParameter);
-    
+
     return editorWidget;
 }
 

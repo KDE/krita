@@ -24,23 +24,24 @@
 class KoColorProfile;
 
 /**
- * Set the exposure 
+ * Set the exposure
  */
-class KisExposureVisitor : public KisNodeVisitor {
-    public:
-        KisExposureVisitor(double exposure);
+class KisExposureVisitor : public KisNodeVisitor
+{
+public:
+    KisExposureVisitor(double exposure);
 
-        using KisNodeVisitor::visit;
-        
-        virtual bool visit( KisExternalLayer * );
-        virtual bool visit(KisPaintLayer *layer);
-        virtual bool visit(KisGroupLayer *layer);
-        virtual bool visit(KisAdjustmentLayer* layer);
-        virtual bool visit(KisGeneratorLayer* layer);
-    protected:
-        void setExposureToProfile(KoColorProfile* profile);
-    private:
-        double m_exposure;
+    using KisNodeVisitor::visit;
+
+    virtual bool visit(KisExternalLayer *);
+    virtual bool visit(KisPaintLayer *layer);
+    virtual bool visit(KisGroupLayer *layer);
+    virtual bool visit(KisAdjustmentLayer* layer);
+    virtual bool visit(KisGeneratorLayer* layer);
+protected:
+    void setExposureToProfile(KoColorProfile* profile);
+private:
+    double m_exposure;
 };
 
 

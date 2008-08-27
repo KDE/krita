@@ -47,101 +47,87 @@ public:
 
     using KisNodeVisitor::visit;
 
-    KisCountVisitor( const QStringList & nodeTypes, const KoProperties & properties )
-        : m_nodeTypes( nodeTypes )
-        , m_properties( properties )
-        , m_count( 0 )
-        {
-        }
+    KisCountVisitor(const QStringList & nodeTypes, const KoProperties & properties)
+            : m_nodeTypes(nodeTypes)
+            , m_properties(properties)
+            , m_count(0) {
+    }
 
-    quint32 count()
-        {
-            return m_count;
-        }
+    quint32 count() {
+        return m_count;
+    }
 
-    bool visit( KisNode* node )
-        {
-            return check( node );
-        }
+    bool visit(KisNode* node) {
+        return check(node);
+    }
 
-    bool visit(KisPaintLayer *layer)
-        {
-            return check( layer );
-        }
+    bool visit(KisPaintLayer *layer) {
+        return check(layer);
+    }
 
-    bool visit(KisGroupLayer *layer)
-        {
-            return check( layer );
-        }
+    bool visit(KisGroupLayer *layer) {
+        return check(layer);
+    }
 
 
-    bool visit(KisAdjustmentLayer *layer)
-        {
-            return check( layer );
-        }
+    bool visit(KisAdjustmentLayer *layer) {
+        return check(layer);
+    }
 
 
-    bool visit(KisExternalLayer *layer)
-        {
-            return check( layer );
-        }
+    bool visit(KisExternalLayer *layer) {
+        return check(layer);
+    }
 
 
-    bool visit(KisCloneLayer *layer)
-        {
-            return check( layer );
-        }
+    bool visit(KisCloneLayer *layer) {
+        return check(layer);
+    }
 
 
-    bool visit(KisFilterMask *mask)
-        {
-            return check( mask );
-        }
+    bool visit(KisFilterMask *mask) {
+        return check(mask);
+    }
 
 
-    bool visit(KisTransparencyMask *mask)
-        {
-            return check( mask );
-        }
+    bool visit(KisTransparencyMask *mask) {
+        return check(mask);
+    }
 
 
-    bool visit(KisTransformationMask *mask)
-        {
-            return check( mask );
-        }
+    bool visit(KisTransformationMask *mask) {
+        return check(mask);
+    }
 
-    bool visit(KisGeneratorLayer * layer)
-        {
-            return check( layer );
-        }
+    bool visit(KisGeneratorLayer * layer) {
+        return check(layer);
+    }
 
 private:
 
-    bool inList( KisNode* node )
-        {
-            foreach( QString nodeType, m_nodeTypes ) {
-                if ( node->inherits( nodeType.toAscii() ) )
-                    return true;
+    bool inList(KisNode* node) {
+        foreach(QString nodeType, m_nodeTypes) {
+            if (node->inherits(nodeType.toAscii()))
+                return true;
+        }
+        return false;
+    }
+
+    bool check(KisNode * node) {
+        if (m_nodeTypes.isEmpty() || inList(node)) {
+
+            if (m_properties.isEmpty() || node->check(m_properties)) {
+                m_count++;
             }
-            return false;
         }
 
-    bool check( KisNode * node )
-        {
-            if ( m_nodeTypes.isEmpty() || inList( node ) ){
-
-                if ( m_properties.isEmpty() || node->check( m_properties ) ) {
-                    m_count++;
-                }
-            }
-
-            for ( uint i = 0; i < node->childCount(); ++i ) {
-                KisNodeSP child = node->at( i );
-                child->accept( *this );
-            }
-
-            return true;
+        for (uint i = 0; i < node->childCount(); ++i) {
+            KisNodeSP child = node->at(i);
+            child->accept(*this);
         }
+
+        return true;
+    }
 
     const QStringList m_nodeTypes;
     const KoProperties m_properties;

@@ -38,10 +38,11 @@ class KisProcessingInformation;
  *
  * Generators can have initial parameter settings that determine the
  * way a particular generator works, but also state that allows the generator
- * to continue from one invocation of generate to another (handy for, e.g., 
+ * to continue from one invocation of generate to another (handy for, e.g.,
  * painting)
  */
-class KRITAIMAGE_EXPORT KisGenerator : public KisBaseProcessor {
+class KRITAIMAGE_EXPORT KisGenerator : public KisBaseProcessor
+{
 
 public:
 
@@ -58,10 +59,10 @@ public:
      * @param config the parameters of the filter
      */
     virtual void generate(KisProcessingInformation dst,
-                         const QSize& size,
-                         const KisFilterConfiguration* config,
-                         KoUpdater* progressUpdater
-        ) const = 0;
+                          const QSize& size,
+                          const KisFilterConfiguration* config,
+                          KoUpdater* progressUpdater
+                         ) const = 0;
 
     /**
      * Provided for convenience when no progress reporting is needed.
@@ -69,7 +70,7 @@ public:
     virtual void generate(KisProcessingInformation dst,
                           const QSize& size,
                           const KisFilterConfiguration* config
-        ) const;
+                         ) const;
 
     /**
      * A generator may be specialized for working in a certain colorspace.
@@ -77,7 +78,7 @@ public:
      * it return 0.
      */
     virtual const KoColorSpace * colorSpace();
-    
+
 protected:
 
     /// @return the name of config group in KConfig

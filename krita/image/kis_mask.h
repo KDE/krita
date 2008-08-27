@@ -62,7 +62,8 @@
    XXX: For now, all masks are 8 bit. Make the channel depth settable.
 
  */
-class KRITAIMAGE_EXPORT KisMask : public KisNode  {
+class KRITAIMAGE_EXPORT KisMask : public KisNode
+{
 
     Q_OBJECT
 
@@ -82,7 +83,7 @@ public:
 
     virtual KoDocumentSectionModel::PropertyList sectionModelProperties() const;
 
-    virtual void setSectionModelProperties( const KoDocumentSectionModel::PropertyList &properties  );
+    virtual void setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties);
 
     /**
      * @return true if the mask is active, i.e. should be applied on
@@ -94,14 +95,14 @@ public:
      * set the active status of this mask. Inactive layers can be
      * edited but are not applied to their parent layer.
      */
-    void setActive( bool active );
+    void setActive(bool active);
 
     /**
      * Return the selection associated with this mask. A selection can
      * contain both a paint device and shapes.
      */
     KisSelectionSP selection() const;
-    
+
     /**
      * @return the selection: if you paint on mask, you paint on the selections
      */
@@ -111,16 +112,16 @@ public:
      * Change the selection to the specified selection object. The
      * selection is deep copied.
      */
-     void setSelection( KisSelectionSP selection );
+    void setSelection(KisSelectionSP selection);
 
-     /**
-      * Selected the specified rect with the specified amount of selectedness.
-      */ 
-     void select( const QRect & rc, quint8 selectedness = MAX_SELECTED );
+    /**
+     * Selected the specified rect with the specified amount of selectedness.
+     */
+    void select(const QRect & rc, quint8 selectedness = MAX_SELECTED);
 
-     /**
-      * The extent and bounds of the mask are those of the selection inside
-      */
+    /**
+     * The extent and bounds of the mask are those of the selection inside
+     */
     QRect extent() const;
     QRect exactBounds() const;
 

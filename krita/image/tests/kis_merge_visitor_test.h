@@ -41,8 +41,8 @@ private slots:
     void visitGroupLayerWithAnAdjustmentLayer();
     void visitAdjustmentLayer();
     void visitCloneLayer();
-    
-    
+
+
 private:
     const KoColorSpace * colorSpace;
     KisImageSP image;

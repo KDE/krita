@@ -33,35 +33,34 @@
  *
  * Options are disabled by default.
  */
-class KRITAUI_EXPORT KisPaintOpOption {
+class KRITAUI_EXPORT KisPaintOpOption
+{
 
 public:
 
-    KisPaintOpOption( const QString & label, bool checked = false );
+    KisPaintOpOption(const QString & label, bool checked = false);
     virtual ~KisPaintOpOption();
 
     QString & label() const;
-    bool isChecked () const;
-    void setChecked ( bool checked );
+    bool isChecked() const;
+    void setChecked(bool checked);
 
-    void setConfigurationPage( QWidget * page );
+    void setConfigurationPage(QWidget * page);
     QWidget * configurationPage() const;
 
     /**
      * Re-implement this to save the configuration to the paint configuration.
      */
-    virtual void writeOptionSetting( KisPaintOpPresetSP preset ) const
-        {
-            Q_UNUSED(preset);
-        }
+    virtual void writeOptionSetting(KisPaintOpPresetSP preset) const {
+        Q_UNUSED(preset);
+    }
 
     /**
      * Re-implement this to read the paintop configuration for this setting
      */
-    virtual void readOptionSetting( KisPaintOpPresetSP preset )
-        {
-            Q_UNUSED(preset);
-        }
+    virtual void readOptionSetting(KisPaintOpPresetSP preset) {
+        Q_UNUSED(preset);
+    }
 
 protected:
 

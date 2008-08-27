@@ -24,19 +24,20 @@ class Ui_BasicDynamicProgramEditor;
 
 class KisBasicDynamicProgram;
 
-class KisBasicDynamicProgramEditor : public QWidget {
+class KisBasicDynamicProgramEditor : public QWidget
+{
     Q_OBJECT
-    public:
-        KisBasicDynamicProgramEditor(KisBasicDynamicProgram* program);
-        ~KisBasicDynamicProgramEditor();
-    public slots:
-        void setEnableSize(bool );
-        void setEnableAngle(bool );
-        void setEnableScatter(bool );
-        void setEnableCount(bool );
-    private:
-        Ui_BasicDynamicProgramEditor* m_basicDynamicProgramEditor;
-        KisBasicDynamicProgram* m_program;
+public:
+    KisBasicDynamicProgramEditor(KisBasicDynamicProgram* program);
+    ~KisBasicDynamicProgramEditor();
+public slots:
+    void setEnableSize(bool);
+    void setEnableAngle(bool);
+    void setEnableScatter(bool);
+    void setEnableCount(bool);
+private:
+    Ui_BasicDynamicProgramEditor* m_basicDynamicProgramEditor;
+    KisBasicDynamicProgram* m_program;
 };
 
 #endif

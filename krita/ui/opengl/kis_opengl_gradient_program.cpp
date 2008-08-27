@@ -24,7 +24,6 @@
 
 #include <cfloat>
 
-#include <kis_debug.h>
 #include <KoAbstractGradient.h>
 
 #include "opengl/kis_opengl.h"
@@ -55,8 +54,8 @@ protected:
 };
 
 KisOpenGLGradientShader::KisOpenGLGradientShader(KisOpenGLProgram *program, const QString &sourceFilename)
-    : m_program(program),
-      m_shader(KisOpenGLFragmentShader::file(sourceFilename))
+        : m_program(program),
+        m_shader(KisOpenGLFragmentShader::file(sourceFilename))
 {
 }
 
@@ -79,12 +78,12 @@ protected:
 };
 
 KisOpenGLLinearGradientShader::KisOpenGLLinearGradientShader(KisOpenGLProgram *program)
-    : KisOpenGLGradientShader(program, "linear_gradient.frag")
+        : KisOpenGLGradientShader(program, "linear_gradient.frag")
 {
 }
 
 KisOpenGLLinearGradientShader::KisOpenGLLinearGradientShader(KisOpenGLProgram *program, const QString &shaderSourceFilename)
-    : KisOpenGLGradientShader(program, shaderSourceFilename)
+        : KisOpenGLGradientShader(program, shaderSourceFilename)
 {
 }
 
@@ -109,7 +108,7 @@ public:
 };
 
 KisOpenGLBilinearGradientShader::KisOpenGLBilinearGradientShader(KisOpenGLProgram *program)
-    : KisOpenGLLinearGradientShader(program, "bilinear_gradient.frag")
+        : KisOpenGLLinearGradientShader(program, "bilinear_gradient.frag")
 {
 }
 
@@ -124,7 +123,7 @@ public:
 };
 
 KisOpenGLRadialGradientShader::KisOpenGLRadialGradientShader(KisOpenGLProgram *program)
-    : KisOpenGLGradientShader(program, "radial_gradient.frag")
+        : KisOpenGLGradientShader(program, "radial_gradient.frag")
 {
 }
 
@@ -149,7 +148,7 @@ public:
 };
 
 KisOpenGLSquareGradientShader::KisOpenGLSquareGradientShader(KisOpenGLProgram *program)
-    : KisOpenGLGradientShader(program, "square_gradient.frag")
+        : KisOpenGLGradientShader(program, "square_gradient.frag")
 {
 }
 
@@ -179,12 +178,12 @@ protected:
 };
 
 KisOpenGLConicalGradientShader::KisOpenGLConicalGradientShader(KisOpenGLProgram *program)
-    : KisOpenGLGradientShader(program, "conical_gradient.frag")
+        : KisOpenGLGradientShader(program, "conical_gradient.frag")
 {
 }
 
 KisOpenGLConicalGradientShader::KisOpenGLConicalGradientShader(KisOpenGLProgram *program, const QString &shaderSourceFilename)
-    : KisOpenGLGradientShader(program, shaderSourceFilename)
+        : KisOpenGLGradientShader(program, shaderSourceFilename)
 {
 }
 
@@ -212,19 +211,19 @@ public:
 };
 
 KisOpenGLConicalSymetricGradientShader::KisOpenGLConicalSymetricGradientShader(KisOpenGLProgram *program)
-    : KisOpenGLConicalGradientShader(program, "conical_symetric_gradient.frag")
+        : KisOpenGLConicalGradientShader(program, "conical_symetric_gradient.frag")
 {
 }
 
 //-----------------------------------------------------------------------------
 
 KisOpenGLGradientProgram::KisOpenGLGradientProgram(const KoAbstractGradient *gradient,
-                                                   KisGradientPainter::enumGradientShape shape,
-                                                   KisGradientPainter::enumGradientRepeat repeat,
-                                                   bool reverseGradient,
-                                                   const KoColorSpace *colorSpace,
-                                                   KoColorProfile *monitorProfile,
-                                                   double opacity)
+        KisGradientPainter::enumGradientShape shape,
+        KisGradientPainter::enumGradientRepeat repeat,
+        bool reverseGradient,
+        const KoColorSpace *colorSpace,
+        KoColorProfile *monitorProfile,
+        double opacity)
 {
     createGradientColorsTexture(gradient, repeat, reverseGradient, colorSpace, monitorProfile, opacity);
 
@@ -263,11 +262,11 @@ KisOpenGLGradientProgram::~KisOpenGLGradientProgram()
 }
 
 void KisOpenGLGradientProgram::createGradientColorsTexture(const KoAbstractGradient *gradient,
-                                                           KisGradientPainter::enumGradientRepeat repeat,
-                                                           bool reverseGradient,
-                                                           const KoColorSpace *colorSpace,
-                                                           KoColorProfile *monitorProfile,
-                                                           double opacity)
+        KisGradientPainter::enumGradientRepeat repeat,
+        bool reverseGradient,
+        const KoColorSpace *colorSpace,
+        KoColorProfile *monitorProfile,
+        double opacity)
 {
     KisOpenGL::makeContextCurrent();
 
@@ -297,10 +296,10 @@ void KisOpenGLGradientProgram::createGradientColorsTexture(const KoAbstractGradi
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     QRgb gradientColorsArray[GRADIENT_COLORS_TEXTURE_WIDTH];
-    
+
     for (int texelIndex = 0; texelIndex < GRADIENT_COLORS_TEXTURE_WIDTH; ++texelIndex) {
 
-        double t = (double)texelIndex/(GRADIENT_COLORS_TEXTURE_WIDTH-1);
+        double t = (double)texelIndex / (GRADIENT_COLORS_TEXTURE_WIDTH - 1);
 
         if (reverseGradient) {
             t = 1 - t;
@@ -311,15 +310,15 @@ void KisOpenGLGradientProgram::createGradientColorsTexture(const KoAbstractGradi
 
         gradient->colorAt(texelColor, t);
         texelColor.colorSpace()->toQColor(texelColor.data(), &texelRGB, monitorProfile);
-        gradientColorsArray[texelIndex] = qRgba(texelRGB.red(), 
-                                                texelRGB.green(), 
-                                                texelRGB.blue(), 
+        gradientColorsArray[texelIndex] = qRgba(texelRGB.red(),
+                                                texelRGB.green(),
+                                                texelRGB.blue(),
                                                 qRound(texelRGB.alpha() * opacity));
     }
 
     KIS_OPENGL_CLEAR_ERROR();
     glTexImage1D(GL_TEXTURE_1D, 0, GL_RGBA8, GRADIENT_COLORS_TEXTURE_WIDTH, 0,
-          GL_BGRA, GL_UNSIGNED_BYTE, gradientColorsArray);
+                 GL_BGRA, GL_UNSIGNED_BYTE, gradientColorsArray);
     KIS_OPENGL_PRINT_ERROR();
 }
 

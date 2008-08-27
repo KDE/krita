@@ -54,12 +54,13 @@ class KisPaintOpPresetsPopup;
  *
  * XXX: instead of text, use pretty pictures.
  */
-class KisPaintopBox : public QWidget {
+class KisPaintopBox : public QWidget
+{
 
     Q_OBJECT
 
 public:
-    KisPaintopBox (KisView2 * view,  QWidget * parent, const char * name );
+    KisPaintopBox(KisView2 * view,  QWidget * parent, const char * name);
 
     ~KisPaintopBox();
 

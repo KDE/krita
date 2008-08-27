@@ -41,10 +41,10 @@
 #include "kis_tool_selectsimilar.h"
 
 typedef KGenericFactory<SelectSimilar> SelectSimilarFactory;
-K_EXPORT_COMPONENT_FACTORY( kritatoolselectsimilar, SelectSimilarFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritatoolselectsimilar, SelectSimilarFactory("krita"))
 
 SelectSimilar::SelectSimilar(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     setComponentData(SelectSimilarFactory::componentData());
 

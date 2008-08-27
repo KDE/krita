@@ -26,12 +26,12 @@
 typedef Q3ValueVector<QPointF> KoPointVector;
 class KisPolygon : public KoPointVector
 {
-        public:
-                void addPoint(double x, double y);
-                void translate(double tx, double ty);
-                void rotate(double theta);
-                qint32 extents(double &minX, double &minY, double &maxX, double &maxY);
-                qint32 numberOfPoints();
+public:
+    void addPoint(double x, double y);
+    void translate(double tx, double ty);
+    void rotate(double theta);
+    qint32 extents(double &minX, double &minY, double &maxX, double &maxY);
+    qint32 numberOfPoints();
 };
 
 #endif

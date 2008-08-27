@@ -46,7 +46,7 @@ public:
 };
 
 KisNode::KisNode()
-    : m_d( new Private() )
+        : m_d(new Private())
 {
     m_d->parent = 0;
     m_d->graphListener = 0;
@@ -55,14 +55,14 @@ KisNode::KisNode()
 }
 
 
-KisNode::KisNode( const KisNode & rhs )
-    : KisBaseNode( rhs )
-    , m_d( new Private() )
+KisNode::KisNode(const KisNode & rhs)
+        : KisBaseNode(rhs)
+        , m_d(new Private())
 {
     m_d->parent = 0;
     m_d->graphListener = rhs.m_d->graphListener;
-    foreach( const KisNodeSP & node, rhs.m_d->nodes ) {
-        m_d->nodes.append( node.data()->clone() );
+    foreach(const KisNodeSP & node, rhs.m_d->nodes) {
+        m_d->nodes.append(node.data()->clone());
     }
     init();
 }
@@ -72,10 +72,9 @@ void KisNode::init()
     KConfigGroup cfg = KGlobal::config()->group("");
     QString updateStrategy = cfg.readEntry("update_strategy", "TopDown");
     if (updateStrategy == "BottomUp") {
-        m_d->updateStrategy = new KisBottomUpUpdateStrategy( this );
-    }
-    else if (updateStrategy == "TopDown") {
-        m_d->updateStrategy = new KisTopDownUpdateStrategy( this );
+        m_d->updateStrategy = new KisBottomUpUpdateStrategy(this);
+    } else if (updateStrategy == "TopDown") {
+        m_d->updateStrategy = new KisTopDownUpdateStrategy(this);
     }
 }
 
@@ -88,7 +87,7 @@ KisNode::~KisNode()
 
 bool KisNode::accept(KisNodeVisitor &v)
 {
-    return v.visit( this );
+    return v.visit(this);
 }
 
 KisNodeGraphListener * KisNode::graphListener() const
@@ -96,7 +95,7 @@ KisNodeGraphListener * KisNode::graphListener() const
     return m_d->graphListener;
 }
 
-void KisNode::setGraphListener( KisNodeGraphListener * graphListener )
+void KisNode::setGraphListener(KisNodeGraphListener * graphListener)
 {
     m_d->graphListener = graphListener;
 }
@@ -108,20 +107,20 @@ KisProjectionUpdateStrategy * KisNode::updateStrategy() const
 
 void KisNode::setDirty()
 {
-    m_d->updateStrategy->setDirty( extent() );
+    m_d->updateStrategy->setDirty(extent());
 }
 
 void KisNode::setDirty(const QRect & rc)
 {
-    m_d->updateStrategy->setDirty( rc );
+    m_d->updateStrategy->setDirty(rc);
 }
 
-void KisNode::setDirty( const QRegion & region)
+void KisNode::setDirty(const QRegion & region)
 {
-    if ( region.isEmpty() ) return;
+    if (region.isEmpty()) return;
 
-    foreach (const QRect & rc, region.rects()) {
-        m_d->updateStrategy->setDirty( rc );
+    foreach(const QRect & rc, region.rects()) {
+        m_d->updateStrategy->setDirty(rc);
     }
 }
 
@@ -130,14 +129,14 @@ KisNodeSP KisNode::parent() const
     return m_d->parent;
 }
 
-void KisNode::setParent( KisNodeSP parent )
+void KisNode::setParent(KisNodeSP parent)
 {
     m_d->parent = parent;
 }
 
 KisNodeSP KisNode::firstChild() const
 {
-    if ( !m_d->nodes.isEmpty() )
+    if (!m_d->nodes.isEmpty())
         return m_d->nodes.first();
     else
         return 0;
@@ -145,7 +144,7 @@ KisNodeSP KisNode::firstChild() const
 
 KisNodeSP KisNode::lastChild() const
 {
-    if ( !m_d->nodes.isEmpty() )
+    if (!m_d->nodes.isEmpty())
         return m_d->nodes.last();
     else
         return 0;
@@ -153,17 +152,17 @@ KisNodeSP KisNode::lastChild() const
 
 KisNodeSP KisNode::prevSibling() const
 {
-    if ( !parent() ) return 0;
-    int i = parent()->index( const_cast<KisNode*>( this ) );
-    return parent()->at( i - 1 );
+    if (!parent()) return 0;
+    int i = parent()->index(const_cast<KisNode*>(this));
+    return parent()->at(i - 1);
 
 }
 
 KisNodeSP KisNode::nextSibling() const
 {
-    if ( !parent() ) return 0;
+    if (!parent()) return 0;
 
-    return parent()->at( parent()->index( const_cast<KisNode*>( this ) ) + 1 );
+    return parent()->at(parent()->index(const_cast<KisNode*>(this)) + 1);
 }
 
 quint32 KisNode::childCount() const
@@ -172,117 +171,112 @@ quint32 KisNode::childCount() const
 }
 
 
-KisNodeSP KisNode::at( quint32 index ) const
+KisNodeSP KisNode::at(quint32 index) const
 {
-    if ( !m_d->nodes.isEmpty() && index < ( quint32 )m_d->nodes.size() ) {
-        return m_d->nodes.at( index );
+    if (!m_d->nodes.isEmpty() && index < (quint32)m_d->nodes.size()) {
+        return m_d->nodes.at(index);
     }
 
     return 0;
 }
 
-int KisNode::index( const KisNodeSP node ) const
+int KisNode::index(const KisNodeSP node) const
 {
-    if ( m_d->nodes.contains( node ) ) {
-         return m_d->nodes.indexOf( node );
+    if (m_d->nodes.contains(node)) {
+        return m_d->nodes.indexOf(node);
     }
 
     return -1;
 }
 
-QList<KisNodeSP> KisNode::childNodes( const QStringList & nodeTypes, const KoProperties & properties ) const
+QList<KisNodeSP> KisNode::childNodes(const QStringList & nodeTypes, const KoProperties & properties) const
 {
     QList<KisNodeSP> nodes;
 
-    foreach( const KisNodeSP & node, m_d->nodes ) {
-        if ( !nodeTypes.isEmpty() ) {
-            foreach ( const QString & nodeType,  nodeTypes ) {
-                if ( node->inherits( nodeType.toAscii() ) ) {
-                    if ( properties.isEmpty() || node->check( properties ) )
-                        nodes.append( node );
+    foreach(const KisNodeSP & node, m_d->nodes) {
+        if (!nodeTypes.isEmpty()) {
+            foreach(const QString & nodeType,  nodeTypes) {
+                if (node->inherits(nodeType.toAscii())) {
+                    if (properties.isEmpty() || node->check(properties))
+                        nodes.append(node);
                 }
             }
-        }
-        else if ( properties.isEmpty() || node->check( properties ) )
-            nodes.append( node );
-        }
+        } else if (properties.isEmpty() || node->check(properties))
+            nodes.append(node);
+    }
     return nodes;
 }
 
-bool KisNode::add( KisNodeSP newNode, KisNodeSP aboveThis )
+bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis)
 {
-    Q_ASSERT( newNode );
+    Q_ASSERT(newNode);
 
-    if ( !newNode ) return false;
+    if (!newNode) return false;
     if (aboveThis && aboveThis->parent().data() != this) return false;
-    if ( !allowAsChild( newNode ) ) return false;
-    if ( newNode->parent() ) return false;
-    if ( m_d->nodes.contains(newNode) ) return false;
+    if (!allowAsChild(newNode)) return false;
+    if (newNode->parent()) return false;
+    if (m_d->nodes.contains(newNode)) return false;
 
     newNode->prepareForAddition();
 
     int idx = 0;
 
-    if ( aboveThis != 0 ) {
+    if (aboveThis != 0) {
 
-        idx = this->index( aboveThis ) + 1;
+        idx = this->index(aboveThis) + 1;
 
-        if ( m_d->graphListener )
-            m_d->graphListener->aboutToAddANode( this, idx );
+        if (m_d->graphListener)
+            m_d->graphListener->aboutToAddANode(this, idx);
 
-        m_d->nodes.insert( idx, newNode );
-    }
-    else
-    {
-        if ( m_d->graphListener )
-            m_d->graphListener->aboutToAddANode( this, idx );
+        m_d->nodes.insert(idx, newNode);
+    } else {
+        if (m_d->graphListener)
+            m_d->graphListener->aboutToAddANode(this, idx);
 
-        m_d->nodes.prepend( newNode );
+        m_d->nodes.prepend(newNode);
     }
 
-    newNode->setParent( this );
-    newNode->setGraphListener( m_d->graphListener );
+    newNode->setParent(this);
+    newNode->setGraphListener(m_d->graphListener);
     newNode->initAfterAddition();
 
-    if ( m_d->graphListener )
+    if (m_d->graphListener)
         m_d->graphListener->nodeHasBeenAdded(this, idx);
 
 
     return true;
 }
 
-bool KisNode::remove( quint32 index )
+bool KisNode::remove(quint32 index)
 {
-    if ( index < childCount() )
-    {
+    if (index < childCount()) {
         KisNodeSP removedNode = at(index);
         removedNode->prepareForRemoval();
-        removedNode->setGraphListener( 0 );
+        removedNode->setGraphListener(0);
 
-        if ( m_d->graphListener )
-            m_d->graphListener->aboutToRemoveANode( this, index );
+        if (m_d->graphListener)
+            m_d->graphListener->aboutToRemoveANode(this, index);
 
-        removedNode->setParent( 0 ); // after calling aboutToRemoveANode or then the model get broken according to TT's modeltest
+        removedNode->setParent(0);   // after calling aboutToRemoveANode or then the model get broken according to TT's modeltest
 
-        m_d->nodes.removeAt( index );
+        m_d->nodes.removeAt(index);
 
         setDirty(); // FIXME Would probably better if we could set a QRect
 
-        if ( m_d->graphListener ) m_d->graphListener->nodeHasBeenRemoved(this, index);
+        if (m_d->graphListener) m_d->graphListener->nodeHasBeenRemoved(this, index);
 
         return true;
     }
     return false;
 }
 
-bool KisNode::remove( KisNodeSP node )
+bool KisNode::remove(KisNodeSP node)
 {
-    if ( node->parent().data() != this)
-    {
+    if (node->parent().data() != this) {
         return false;
     }
 
-    return remove( index( node ) );
+    return remove(index(node));
 
 }
 

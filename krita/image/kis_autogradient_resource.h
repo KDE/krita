@@ -27,8 +27,8 @@
 
 class QColor;
 
-class KRITAIMAGE_EXPORT KisAutogradientResource 
-    : public KoSegmentGradient
+class KRITAIMAGE_EXPORT KisAutogradientResource
+            : public KoSegmentGradient
 {
 
 public:
@@ -36,7 +36,7 @@ public:
 
 public:
 
-    void createSegment( int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset, const QColor & left, const QColor & right );
+    void createSegment(int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset, const QColor & left, const QColor & right);
 
     const QList<double> getHandlePositions() const;
     const QList<double> getMiddleHandlePositions() const;
@@ -48,7 +48,7 @@ public:
      * The offset will maximally be moved till the middle of the current or the previous
      * segment
      */
-    void moveSegmentStartOffset( KoGradientSegment* segment, double t);
+    void moveSegmentStartOffset(KoGradientSegment* segment, double t);
 
     /**
      * Moves the endoffset of the specified segment to the specified value
@@ -57,25 +57,25 @@ public:
      * The offset will maximally be moved till the middle of the current or the following
      * segment
      */
-    void moveSegmentEndOffset( KoGradientSegment* segment, double t);
+    void moveSegmentEndOffset(KoGradientSegment* segment, double t);
 
     /**
      * Moves the Middle of the specified segment to the specified value
      * The offset will maximally be moved till the endoffset or startoffset of the segment
      */
-    void moveSegmentMiddleOffset( KoGradientSegment* segment, double t);
+    void moveSegmentMiddleOffset(KoGradientSegment* segment, double t);
 
 
-    void splitSegment( KoGradientSegment* segment );
-    void duplicateSegment( KoGradientSegment* segment );
-    void mirrorSegment( KoGradientSegment* segment );
+    void splitSegment(KoGradientSegment* segment);
+    void duplicateSegment(KoGradientSegment* segment);
+    void mirrorSegment(KoGradientSegment* segment);
 
     /**
      * Removes the specific segment from the gradient.
      * @return The segment which will be at the place of the old segment.
      * 0 if the segment is not in the gradient or it is not possible to remove the segment.
      */
-    KoGradientSegment* removeSegment( KoGradientSegment* segment );
+    KoGradientSegment* removeSegment(KoGradientSegment* segment);
 
     /**
      * Checks if it's possible to remove an segment(at least two segments in the gradient)
@@ -84,7 +84,9 @@ public:
     bool removeSegmentPossible() const;
 
 public:
-    virtual bool load() { return false; }
+    virtual bool load() {
+        return false;
+    }
 };
 
 #endif // _KIS_AUTOGRADIENT_RESOURCE_H_

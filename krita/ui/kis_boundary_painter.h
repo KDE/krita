@@ -25,7 +25,8 @@
 class KisBoundary;
 class QPainter;
 
-class KRITAUI_EXPORT KisBoundaryPainter {
+class KRITAUI_EXPORT KisBoundaryPainter
+{
 public:
     static void paint(const KisBoundary& boundary, QPainter& painter);
     static QPixmap createPixmap(const KisBoundary& boundary, int w, int h);

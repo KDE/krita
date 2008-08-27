@@ -28,7 +28,8 @@
 class KisSelectionOptions;
 class KoCanvasBase;
 
-class KisToolPath : public KoCreatePathTool {
+class KisToolPath : public KoCreatePathTool
+{
 
     typedef KoCreatePathTool super;
     Q_OBJECT
@@ -41,20 +42,20 @@ public:
 
 };
 
-class KisToolPathFactory : public KoToolFactory {
+class KisToolPathFactory : public KoToolFactory
+{
 
 public:
     KisToolPathFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolPath", i18n( "Paint a path" ))
-        {
-            setToolTip( i18n( "Draw a path." ) );
-            setToolType( TOOL_TYPE_SHAPE );
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setIcon( "krita_draw_path" );
-            setPriority( 7 );
-        }
+            : KoToolFactory(parent, "KisToolPath", i18n("Paint a path")) {
+        setToolTip(i18n("Draw a path."));
+        setToolType(TOOL_TYPE_SHAPE);
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        setIcon("krita_draw_path");
+        setPriority(7);
+    }
 
-    virtual ~KisToolPathFactory(){}
+    virtual ~KisToolPathFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolPath(canvas);

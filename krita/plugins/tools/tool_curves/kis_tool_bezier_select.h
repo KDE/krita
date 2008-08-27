@@ -26,7 +26,8 @@
 #include "KoToolFactory.h"
 #include "kis_tool_bezier.h"
 
-class KisToolBezierSelect : public KisToolBezier {
+class KisToolBezierSelect : public KisToolBezier
+{
 
     typedef KisToolBezier super;
     Q_OBJECT
@@ -36,8 +37,12 @@ public:
     virtual ~KisToolBezierSelect();
 
     virtual void setup(KActionCollection *collection);
-    virtual enumToolType toolType() { return TOOL_SELECT; }
-    virtual quint32 priority() { return 10; }
+    virtual enumToolType toolType() {
+        return TOOL_SELECT;
+    }
+    virtual quint32 priority() {
+        return 10;
+    }
 
 protected:
 
@@ -46,19 +51,19 @@ protected:
 
 };
 
-class KisToolBezierSelectFactory : public KoToolFactory {
+class KisToolBezierSelectFactory : public KoToolFactory
+{
 
 public:
     KisToolBezierSelectFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolBezierSelect", i18n( "Select with curves" ))
-        {
-            setToolTip(i18n("Select an area of the image with curves"));
-            setToolType(TOOL_TYPE_SELECTED);
-            setPriority(0);
-            setIcon("tool_bezier_select");
-        };
+            : KoToolFactory(parent, "KisToolBezierSelect", i18n("Select with curves")) {
+        setToolTip(i18n("Select an area of the image with curves"));
+        setToolType(TOOL_TYPE_SELECTED);
+        setPriority(0);
+        setIcon("tool_bezier_select");
+    };
 
-    virtual ~KisToolBezierSelectFactory(){}
+    virtual ~KisToolBezierSelectFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolBezierSelect(canvas);

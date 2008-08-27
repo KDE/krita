@@ -24,11 +24,12 @@ class QDomDocument;
 
 #include <kis_types.h>
 
-class KisOpenRasterLoadContext {
-    public:
-        virtual ~KisOpenRasterLoadContext() {}
-        virtual KisPaintDeviceSP loadDeviceData( const QString & fileName) = 0;
-        virtual QDomDocument loadStack() = 0;
+class KisOpenRasterLoadContext
+{
+public:
+    virtual ~KisOpenRasterLoadContext() {}
+    virtual KisPaintDeviceSP loadDeviceData(const QString & fileName) = 0;
+    virtual QDomDocument loadStack() = 0;
 };
 
 

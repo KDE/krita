@@ -28,7 +28,8 @@
 
 class KoStore;
 
-class KisKraLoadVisitor : public KisNodeVisitor {
+class KisKraLoadVisitor : public KisNodeVisitor
+{
 public:
 
     using KisNodeVisitor::visit;
@@ -38,7 +39,7 @@ public:
 public:
     void setExternalUri(const QString &uri);
 
-    bool visit( KisExternalLayer * );
+    bool visit(KisExternalLayer *);
     bool visit(KisPaintLayer *layer);
     bool visit(KisGroupLayer *layer);
     bool visit(KisAdjustmentLayer* layer);

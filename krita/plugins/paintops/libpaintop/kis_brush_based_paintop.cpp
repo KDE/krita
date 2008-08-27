@@ -20,9 +20,9 @@
 #include <QImage>
 #include <QPainter>
 
-KisBrushBasedPaintOp::KisBrushBasedPaintOp( KisPainter * painter, KisBrushSP brush )
-    : KisPaintOp( painter )
-    , m_brush( brush.data() )
+KisBrushBasedPaintOp::KisBrushBasedPaintOp(KisPainter * painter, KisBrushSP brush)
+        : KisPaintOp(painter)
+        , m_brush(brush.data())
 {
 }
 
@@ -30,8 +30,8 @@ double KisBrushBasedPaintOp::spacing(double & xSpacing, double & ySpacing, doubl
 {
     // XXX: The spacing should vary as the pressure changes along the line.
     // This is a quick simplification.
-    xSpacing = m_brush->xSpacing( scaleForPressure( (pressure1 + pressure2) / 2) );
-    ySpacing = m_brush->ySpacing( scaleForPressure( (pressure1 + pressure2) / 2) );
+    xSpacing = m_brush->xSpacing(scaleForPressure((pressure1 + pressure2) / 2));
+    ySpacing = m_brush->ySpacing(scaleForPressure((pressure1 + pressure2) / 2));
 
     if (xSpacing < 0.5) {
         xSpacing = 0.5;
@@ -42,8 +42,7 @@ double KisBrushBasedPaintOp::spacing(double & xSpacing, double & ySpacing, doubl
 
     if (xSpacing > ySpacing) {
         return xSpacing;
-    }
-    else {
+    } else {
         return ySpacing;
     }
 }

@@ -30,14 +30,14 @@
 
 
 KisGrayU16ColorSpace ::KisGrayU16ColorSpace(KoColorProfile *p) :
-            KoLcmsColorSpace<GrayU16Traits>("GRAYU16", i18n("Grayscale (16-bit integer/channel)"), TYPE_GRAY_16, icSigGrayData, p)
+        KoLcmsColorSpace<GrayU16Traits>("GRAYU16", i18n("Grayscale (16-bit integer/channel)"), TYPE_GRAY_16, icSigGrayData, p)
 {
     addChannel(new KoChannelInfo(i18n("Gray"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT16));
 
     init();
 
-    addCompositeOp( new KoCompositeOpOver<GrayU16Traits>( this ) );
-    addCompositeOp( new KoCompositeOpErase<GrayU16Traits>( this ) );
+    addCompositeOp(new KoCompositeOpOver<GrayU16Traits>(this));
+    addCompositeOp(new KoCompositeOpErase<GrayU16Traits>(this));
 }
 
 KoColorSpace* KisGrayU16ColorSpace::clone() const
@@ -46,18 +46,18 @@ KoColorSpace* KisGrayU16ColorSpace::clone() const
 }
 
 
-void KisGrayU16ColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
+void KisGrayU16ColorSpace::colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
 {
-    const GrayU16Traits::channels_type* p = reinterpret_cast<const GrayU16Traits::channels_type*>( pixel );
-    QDomElement labElt = doc.createElement( "Gray" );
-    labElt.setAttribute("g", KoColorSpaceMaths< GrayU16Traits::channels_type, qreal>::scaleToA( p[0]) );
-    labElt.setAttribute("space", profile()->name() );
-    colorElt.appendChild( labElt );
+    const GrayU16Traits::channels_type* p = reinterpret_cast<const GrayU16Traits::channels_type*>(pixel);
+    QDomElement labElt = doc.createElement("Gray");
+    labElt.setAttribute("g", KoColorSpaceMaths< GrayU16Traits::channels_type, qreal>::scaleToA(p[0]));
+    labElt.setAttribute("space", profile()->name());
+    colorElt.appendChild(labElt);
 }
 
-void KisGrayU16ColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt) const
+void KisGrayU16ColorSpace::colorFromXML(quint8* pixel, const QDomElement& elt) const
 {
-    GrayU16Traits::channels_type* p = reinterpret_cast<GrayU16Traits::channels_type*>( pixel );
+    GrayU16Traits::channels_type* p = reinterpret_cast<GrayU16Traits::channels_type*>(pixel);
     p[0] = KoColorSpaceMaths< qreal, GrayU16Traits::channels_type >::scaleToA(elt.attribute("g").toDouble());
 }
 

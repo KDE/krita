@@ -32,9 +32,10 @@ class KisFilterConfiguration;
  * XXX: make use of bookmarked configuration things, like
  *      in the filter widget.
  */
-class KisWdgGenerator : public QWidget {
+class KisWdgGenerator : public QWidget
+{
 
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -45,13 +46,13 @@ public:
     ~KisWdgGenerator();
 
     void setPaintdevice(KisPaintDeviceSP dev);
-        
+
     void init(KisPaintDeviceSP dev);
-    
+
     void setConfiguration(KisFilterConfiguration * config);
 
     KisFilterConfiguration * configuration();
-    
+
 
 private slots:
 

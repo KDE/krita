@@ -27,29 +27,28 @@
 #include <KoColorConversionTransformationFactory.h>
 
 template< typename src_TYPE_, typename dst_TYPE_, int _N_ >
-class KisKSToKSColorConversionTransformation : public KoColorConversionTransformation {
+class KisKSToKSColorConversionTransformation : public KoColorConversionTransformation
+{
 
-typedef KoColorConversionTransformation parent;
-typedef KisKSColorSpaceTrait<src_TYPE_,_N_> srcCSTrait;
-typedef KisKSColorSpaceTrait<dst_TYPE_,_N_> dstCSTrait;
+    typedef KoColorConversionTransformation parent;
+    typedef KisKSColorSpaceTrait<src_TYPE_, _N_> srcCSTrait;
+    typedef KisKSColorSpaceTrait<dst_TYPE_, _N_> dstCSTrait;
 
 public:
 
     KisKSToKSColorConversionTransformation(const KoColorSpace *srcCs, const KoColorSpace *dstCs)
-    : parent(srcCs, dstCs)
-    {
+            : parent(srcCs, dstCs) {
 
     }
 
-    void transform(const quint8 *src8, quint8 *dst8, int nPixels) const
-    {
+    void transform(const quint8 *src8, quint8 *dst8, int nPixels) const {
         const src_TYPE_ *src = reinterpret_cast<const src_TYPE_*>(src8);
         dst_TYPE_ *dst = reinterpret_cast<dst_TYPE_*>(dst8);
 
-        for ( ; nPixels > 0; nPixels-- ) {
+        for (; nPixels > 0; nPixels--) {
 
-            for (int i = 0; i < _N_+1; i++)
-                dst[i] = KoColorSpaceMaths<src_TYPE_,dst_TYPE_>::scaleToA(src[i]);
+            for (int i = 0; i < _N_ + 1; i++)
+                dst[i] = KoColorSpaceMaths<src_TYPE_, dst_TYPE_>::scaleToA(src[i]);
 
             src += srcCSTrait::pixelSize;
             dst += dstCSTrait::pixelSize;
@@ -61,27 +60,33 @@ public:
 
 
 template< typename src_TYPE_, typename dst_TYPE_, int _N_ >
-class KisKSToKSColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
+class KisKSToKSColorConversionTransformationFactory : public KoColorConversionTransformationFactory
+{
 
 public:
     KisKSToKSColorConversionTransformationFactory()
-    : KoColorConversionTransformationFactory( QString("KS%1").arg(_N_),
-                                              KisKSColorSpace<src_TYPE_,_N_>::ColorDepthId().id(), "",
-                                              QString("KS%1").arg(_N_),
-                                              KisKSColorSpace<dst_TYPE_,_N_>::ColorDepthId().id(), "" ) { return; }
+            : KoColorConversionTransformationFactory(QString("KS%1").arg(_N_),
+                    KisKSColorSpace<src_TYPE_, _N_>::ColorDepthId().id(), "",
+                    QString("KS%1").arg(_N_),
+                    KisKSColorSpace<dst_TYPE_, _N_>::ColorDepthId().id(), "") {
+        return;
+    }
 
-    KoColorConversionTransformation *createColorTransformation( const KoColorSpace* srcColorSpace,
-                                                                const KoColorSpace* dstColorSpace,
-                                                                KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const
-    {
+    KoColorConversionTransformation *createColorTransformation(const KoColorSpace* srcColorSpace,
+            const KoColorSpace* dstColorSpace,
+            KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const {
         Q_UNUSED(renderingIntent);
         Q_ASSERT(canBeSource(srcColorSpace));
         Q_ASSERT(canBeDestination(dstColorSpace));
-        return new KisKSToKSColorConversionTransformation<src_TYPE_,dst_TYPE_,_N_>(srcColorSpace, dstColorSpace);
+        return new KisKSToKSColorConversionTransformation<src_TYPE_, dst_TYPE_, _N_>(srcColorSpace, dstColorSpace);
     }
 
-    bool conserveColorInformation() const { return true; }
-    bool conserveDynamicRange() const { return false; }
+    bool conserveColorInformation() const {
+        return true;
+    }
+    bool conserveDynamicRange() const {
+        return false;
+    }
 
 };
 

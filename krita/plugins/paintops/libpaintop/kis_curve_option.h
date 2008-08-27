@@ -35,13 +35,14 @@ class KCurve;
  *
  * XXX; Add a reset button!
  */
-class KRITAUI_EXPORT KisCurveOption : public QObject, public KisPaintOpOption {
+class KRITAUI_EXPORT KisCurveOption : public QObject, public KisPaintOpOption
+{
 
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
-    KisCurveOption( const QString & label );
+    KisCurveOption(const QString & label);
 
 
 protected:
@@ -55,7 +56,9 @@ protected:
         return m_curve[offset];
     }
 
-    bool customCurve() const { return m_customCurve; }
+    bool customCurve() const {
+        return m_customCurve;
+    }
 
 private slots:
 

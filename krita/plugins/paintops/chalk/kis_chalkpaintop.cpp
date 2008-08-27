@@ -46,20 +46,20 @@ class KisChalkOpSettings : public KisPaintOpSettings
 {
 public:
 
-    KisChalkOpSettings( QWidget * widget )
-        : KisPaintOpSettings()
-        {
-            m_optionsWidget = new KisPaintOpOptionsWidget();
-        }
+    KisChalkOpSettings(QWidget * widget)
+            : KisPaintOpSettings() {
+        m_optionsWidget = new KisPaintOpOptionsWidget();
+    }
 
-    KisPaintOpSettingsSP clone() const
-        {
-            KisPaintOpSettings * c = new KisChalkOpSettings( 0 );
-            c->fromXML(toXML());
-            return c;
-        }
+    KisPaintOpSettingsSP clone() const {
+        KisPaintOpSettings * c = new KisChalkOpSettings(0);
+        c->fromXML(toXML());
+        return c;
+    }
 
-    QWidget * widget() const { return m_optionsWidget; }
+    QWidget * widget() const {
+        return m_optionsWidget;
+    }
 
 private:
     KisPaintOpOptionsWidget *m_optionsWidget;
@@ -67,9 +67,9 @@ private:
 
 KisPaintOp * KisChalkPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
 {
-    Q_UNUSED( settings );
+    Q_UNUSED(settings);
     KisPaintOp * op = new KisChalkPaintOp(painter, image);
-	Q_CHECK_PTR(op);
+    Q_CHECK_PTR(op);
     return op;
 }
 
@@ -88,10 +88,10 @@ KisPaintOpSettingsSP KisChalkPaintOpFactory::settings(KisImageSP image)
 
 
 KisChalkPaintOp::KisChalkPaintOp(KisPainter * painter, KisImageSP image)
-    : KisPaintOp(painter)
+        : KisPaintOp(painter)
 {
     newStrokeFlag = true;
-	m_image = image;
+    m_image = image;
 }
 
 KisChalkPaintOp::~KisChalkPaintOp()
@@ -106,21 +106,20 @@ void KisChalkPaintOp::paintAt(const KisPaintInformation& info)
     KisPaintDeviceSP device = painter()->device();
     if (!device) return;
 
-    if ( newStrokeFlag ) {
+    if (newStrokeFlag) {
         newStrokeFlag = false;
-    } else
-	{
-	dab = cachedDab( );
-	dab->clear();
+    } else {
+        dab = cachedDab();
+        dab->clear();
 
-	float x1,y1;
+        float x1, y1;
 
-	x1 = info.pos().x();
-	y1 = info.pos().y();
+        x1 = info.pos().x();
+        y1 = info.pos().y();
 
-	m_mybrush.paint(dab, x1, y1, painter()->paintColor() );
+        m_mybrush.paint(dab, x1, y1, painter()->paintColor());
 
-	QRect rc = dab->extent();
-	painter()->bitBlt( rc.topLeft(), dab, rc );
-	}
+        QRect rc = dab->extent();
+        painter()->bitBlt(rc.topLeft(), dab, rc);
+    }
 }

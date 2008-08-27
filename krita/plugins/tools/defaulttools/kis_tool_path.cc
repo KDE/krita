@@ -31,7 +31,7 @@
 #include "kis_selection.h"
 
 KisToolPath::KisToolPath(KoCanvasBase * canvas)
-    : KoCreatePathTool(canvas)
+        : KoCreatePathTool(canvas)
 {
 }
 
@@ -42,8 +42,8 @@ KisToolPath::~KisToolPath()
 void KisToolPath::addPathShape()
 {
     KisNodeSP currentNode =
-        m_canvas->resourceProvider()->resource( KisCanvasResourceProvider::CurrentKritaNode ).value<KisNodeSP>();
-    if(!currentNode)
+        m_canvas->resourceProvider()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
+    if (!currentNode)
         return;
 
     KisImageSP image = qobject_cast<KisLayer*>(currentNode->parent().data())->image();
@@ -51,7 +51,7 @@ void KisToolPath::addPathShape()
 
     KisSelectionSP selection = image->globalSelection();
     // XXX: also get global selection!
-    if ( selection && currentNode->inherits("KisLayer") ) {
+    if (selection && currentNode->inherits("KisLayer")) {
         selection = qobject_cast<KisLayer*>(currentNode.data())->selection();
     }
     KisPainter painter(dev, selection);
@@ -62,7 +62,7 @@ void KisToolPath::addPathShape()
     painter.setOpacity(OPACITY_OPAQUE);
     painter.setCompositeOp(dev->colorSpace()->compositeOp(COMPOSITE_OVER));
     KisPaintOpPresetSP preset = m_canvas->resourceProvider()->
-                        resource( KisCanvasResourceProvider::CurrentPaintOpPreset ).value<KisPaintOpPresetSP>();
+                                resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
     painter.setPaintOpPreset(preset, image);
 
     QMatrix matrix;
@@ -70,7 +70,7 @@ void KisToolPath::addPathShape()
     matrix.translate(m_shape->position().x(), m_shape->position().y());
     painter.paintPainterPath(matrix.map(m_shape->outline()));
     QRegion dirtyRegion = painter.dirtyRegion();
-    dev->setDirty( dirtyRegion );
+    dev->setDirty(dirtyRegion);
     image->setModified();
 
     m_canvas->addCommand(painter.endTransaction());

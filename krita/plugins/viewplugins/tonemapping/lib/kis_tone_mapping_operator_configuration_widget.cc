@@ -16,7 +16,7 @@
  */
 
 #include "kis_tone_mapping_operator_configuration_widget.h"
-KisToneMappingOperatorConfigurationWidget::KisToneMappingOperatorConfigurationWidget(QWidget * parent, Qt::WFlags f  ) : QWidget(parent, f)
+KisToneMappingOperatorConfigurationWidget::KisToneMappingOperatorConfigurationWidget(QWidget * parent, Qt::WFlags f) : QWidget(parent, f)
 {
 }
 KisToneMappingOperatorConfigurationWidget::~KisToneMappingOperatorConfigurationWidget()

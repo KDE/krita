@@ -30,15 +30,15 @@ KisUndoAdapter::~KisUndoAdapter()
 {
 }
 
-void KisUndoAdapter::setCommandHistoryListener( KisCommandHistoryListener * l)
+void KisUndoAdapter::setCommandHistoryListener(KisCommandHistoryListener * l)
 {
-    if(!m_undoListeners.contains(l))
+    if (!m_undoListeners.contains(l))
         m_undoListeners.append(l);
 }
-void KisUndoAdapter::removeCommandHistoryListener( KisCommandHistoryListener * l)
+void KisUndoAdapter::removeCommandHistoryListener(KisCommandHistoryListener * l)
 {
     int index = m_undoListeners.indexOf(l);
-    if(index != -1)
+    if (index != -1)
         m_undoListeners.remove(index);
 }
 

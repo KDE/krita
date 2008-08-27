@@ -38,9 +38,9 @@ public:
     QStackedWidget * optionsStack;
 };
 
-KisPaintOpOptionsWidget::KisPaintOpOptionsWidget( QWidget * parent )
-    : QWidget( parent )
-    , m_d(new Private())
+KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
+        : QWidget(parent)
+        , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsWidget");
     QHBoxLayout * layout = new QHBoxLayout(this);
@@ -51,9 +51,9 @@ KisPaintOpOptionsWidget::KisPaintOpOptionsWidget( QWidget * parent )
     layout->addWidget(m_d->optionsStack);
 
     connect(m_d->optionsList,
-             SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
-             this, SLOT(changePage(QListWidgetItem *, QListWidgetItem*)));
- }
+            SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
+            this, SLOT(changePage(QListWidgetItem *, QListWidgetItem*)));
+}
 
 
 KisPaintOpOptionsWidget::~KisPaintOpOptionsWidget()
@@ -64,23 +64,23 @@ KisPaintOpOptionsWidget::~KisPaintOpOptionsWidget()
     delete m_d;
 }
 
-void KisPaintOpOptionsWidget::addPaintOpOption( KisPaintOpOption * option )
+void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption * option)
 {
     // XXX
-    if ( !option->configurationPage() ) return;
+    if (!option->configurationPage()) return;
 
     m_d->paintOpOptions << option;
-    m_d->optionsStack->addWidget( option->configurationPage() );
+    m_d->optionsStack->addWidget(option->configurationPage());
     m_d->paintOpOptions << option;
 
-    QListWidgetItem * item = new QListWidgetItem( m_d->optionsList );
-    item->setText( option->label() );
+    QListWidgetItem * item = new QListWidgetItem(m_d->optionsList);
+    item->setText(option->label());
     item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 }
 
 void KisPaintOpOptionsWidget::changePage(QListWidgetItem *current, QListWidgetItem *previous)
 {
-    m_d->optionsStack->setCurrentIndex( m_d->optionsList->row( current ) );
+    m_d->optionsStack->setCurrentIndex(m_d->optionsList->row(current));
 }
 
 #include "kis_paintop_options_widget.moc"

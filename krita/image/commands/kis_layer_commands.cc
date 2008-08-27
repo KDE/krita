@@ -17,16 +17,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_layer_commands.h"
+#include "commands/kis_layer_commands.h"
 #include <klocale.h>
 
-#include "KoCompositeOp.h"
+#include <KoCompositeOp.h>
 
-#include "commands/kis_layer_commands.h"
 #include "kis_layer.h"
 
 KisLayerCommand::KisLayerCommand(const QString& name, KisLayerSP layer) :
-    QUndoCommand(name), m_layer(layer)
+        QUndoCommand(name), m_layer(layer)
 {
 }
 
@@ -36,7 +35,7 @@ KisLayerCommand::~KisLayerCommand()
 
 
 KisLayerOpacityCommand::KisLayerOpacityCommand(KisLayerSP layer, quint8 oldOpacity, quint8 newOpacity) :
-    KisLayerCommand(i18n("Layer Opacity"), layer)
+        KisLayerCommand(i18n("Layer Opacity"), layer)
 {
     m_oldOpacity = oldOpacity;
     m_newOpacity = newOpacity;
@@ -55,8 +54,8 @@ void KisLayerOpacityCommand::undo()
 }
 
 KisLayerCompositeOpCommand::KisLayerCompositeOpCommand(KisLayerSP layer, const KoCompositeOp* oldCompositeOp,
-                                const KoCompositeOp* newCompositeOp) :
-    KisLayerCommand(i18n("Layer Composite Mode"), layer)
+        const KoCompositeOp* newCompositeOp) :
+        KisLayerCommand(i18n("Layer Composite Mode"), layer)
 {
     m_oldCompositeOp = oldCompositeOp;
     m_newCompositeOp = newCompositeOp;

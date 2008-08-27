@@ -23,17 +23,18 @@
 
 #include "kis_interest_points_detector.h"
 
-class HarrisPointDetector : public KisInterestPointsDetector {
-    public:
-        virtual ~HarrisPointDetector() { }
-        virtual lInterestPoints computeInterestPoints(KisPaintDeviceSP device, const QRect& area);
+class HarrisPointDetector : public KisInterestPointsDetector
+{
+public:
+    virtual ~HarrisPointDetector() { }
+    virtual lInterestPoints computeInterestPoints(KisPaintDeviceSP device, const QRect& area);
 };
 
 
 #if 0
 struct HarrisPoint {
     HarrisPoint(int ni, int nj, float nint, float nl1, float nl2) : i(ni), j(nj), intensity(nint), lambda1(nl1), lambda2(nl2) { }
-    int i,j;
+    int i, j;
     float intensity, lambda1, lambda2;
 };
 
@@ -45,7 +46,7 @@ typedef std::list<HarrisPoint> lHarrisPoints;
 lHarrisPoints computeHarrisPoints(KisPaintDeviceSP device, QRect area);
 
 struct Match {
-    const HarrisPoint* ref,* match;
+    const HarrisPoint* ref, * match;
     Q_INT32 l1Ref, l2Ref, l1Match, l2Match;
     double strength;
 };

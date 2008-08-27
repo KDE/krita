@@ -24,42 +24,40 @@
 
 #include <ktemporaryfile.h>
 
-namespace TestUtil {
+namespace TestUtil
+{
 
 void testFiles(const QString& _dirname)
 {
-    QDir dirSources ( _dirname );
+    QDir dirSources(_dirname);
     qDebug() << "There are " << dirSources.entryInfoList().count() << " files in " << _dirname;
-    foreach(QFileInfo sourceFileInfo, dirSources.entryInfoList())
-    {
-        if( !sourceFileInfo.isHidden())
-        {
+    foreach(QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
+        if (!sourceFileInfo.isHidden()) {
             qDebug() << "handling " << sourceFileInfo.fileName();
-            QFileInfo resultFileInfo(  QString(FILES_DATA_DIR) + "/results/" + sourceFileInfo.fileName() + ".png" );
+            QFileInfo resultFileInfo(QString(FILES_DATA_DIR) + "/results/" + sourceFileInfo.fileName() + ".png");
             QVERIFY2(resultFileInfo.exists(),
-                     QString( "Result file %1 not found" ).arg(resultFileInfo.fileName()).toAscii().data() );
+                     QString("Result file %1 not found").arg(resultFileInfo.fileName()).toAscii().data());
             KisDoc2 doc;
-            doc.importDocument( sourceFileInfo.absoluteFilePath() );
+            doc.importDocument(sourceFileInfo.absoluteFilePath());
             QVERIFY(doc.image());
             QString id = doc.image()->colorSpace()->id();
-            if(id != "GRAYA" && id != "GRAYA16" && id != "RGBA" && id != "RGBA16")
-            {
-              dbgKrita << "Images need conversion";
-              doc.image()->convertTo( KoColorSpaceRegistry::instance()->rgb8());
+            if (id != "GRAYA" && id != "GRAYA16" && id != "RGBA" && id != "RGBA16") {
+                dbgKrita << "Images need conversion";
+                doc.image()->convertTo(KoColorSpaceRegistry::instance()->rgb8());
             }
             KTemporaryFile tmpFile;
             tmpFile.setSuffix(".png");
             tmpFile.open();
             tmpFile.setAutoRemove(false);
             doc.setOutputMimeType("image/png");
-            doc.saveAs( "file://" + tmpFile.fileName());
+            doc.saveAs("file://" + tmpFile.fileName());
             QImage resultImg(resultFileInfo.absoluteFilePath());
             resultImg = resultImg.convertToFormat(QImage::Format_ARGB32);
             QImage sourceImg(tmpFile.fileName());
             sourceImg = sourceImg.convertToFormat(QImage::Format_ARGB32);
-            
+
             QPoint pt;
-            QVERIFY2( TestUtil::compareQImages( pt, resultImg, sourceImg), QString("Pixel (%1,%2) has different values").arg(pt.x()).arg(pt.y()).toLatin1() );
+            QVERIFY2(TestUtil::compareQImages(pt, resultImg, sourceImg), QString("Pixel (%1,%2) has different values").arg(pt.x()).arg(pt.y()).toLatin1());
         }
     }
 }

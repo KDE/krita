@@ -44,7 +44,7 @@ Entry::Entry() :
 Entry::Entry(const Schema* schema, QString name, const Value& value) :
         d(new Private)
 {
-    Q_ASSERT( !name.isEmpty() );
+    Q_ASSERT(!name.isEmpty());
     d->name = name;
     d->schema = schema;
     d->value = value;
@@ -80,7 +80,7 @@ void Entry::setSchema(const KisMetaData::Schema* schema)
 
 QString Entry::qualifiedName() const
 {
-    return d->schema->generateQualifiedName( d->name);
+    return d->schema->generateQualifiedName(d->name);
 }
 
 const Value& Entry::value() const
@@ -93,7 +93,8 @@ Value& Entry::value()
     return d->value;
 }
 
-bool Entry::isValid() const {
+bool Entry::isValid() const
+{
     return d->valid;
 }
 
@@ -103,11 +104,10 @@ bool Entry::operator==(const Entry& e)
     return qualifiedName() == e.qualifiedName();
 }
 
-Entry& Entry::operator=(const Entry& e)
+Entry& Entry::operator=(const Entry & e)
 {
-    if(e.isValid())
-    {
-        Q_ASSERT( !isValid() || *this == e);
+    if (e.isValid()) {
+        Q_ASSERT(!isValid() || *this == e);
         d->name = e.d->name;
         d->schema = e.d->schema;
         d->value = e.d->value;

@@ -24,20 +24,21 @@
 #include "KoGenericRegistry.h"
 #include "kis_meta_data_merge_strategy.h"
 
-namespace KisMetaData {
+namespace KisMetaData
+{
 
-    class KRITAIMAGE_EXPORT MergeStrategyRegistry : public KoGenericRegistry<const KisMetaData::MergeStrategy*>
-    {
-        public:
-            virtual ~MergeStrategyRegistry();
-            static MergeStrategyRegistry* instance();
-        private:
-            MergeStrategyRegistry();
-            MergeStrategyRegistry(const MergeStrategyRegistry&);
-            MergeStrategyRegistry& operator=(const MergeStrategyRegistry&);
-        private:
-            static MergeStrategyRegistry *s_singleton;
-    };
+class KRITAIMAGE_EXPORT MergeStrategyRegistry : public KoGenericRegistry<const KisMetaData::MergeStrategy*>
+{
+public:
+    virtual ~MergeStrategyRegistry();
+    static MergeStrategyRegistry* instance();
+private:
+    MergeStrategyRegistry();
+    MergeStrategyRegistry(const MergeStrategyRegistry&);
+    MergeStrategyRegistry& operator=(const MergeStrategyRegistry&);
+private:
+    static MergeStrategyRegistry *s_singleton;
+};
 
 }
 

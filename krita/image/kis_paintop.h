@@ -64,7 +64,9 @@ public:
      * while drawing.
      * @return true if the current paintop is painterly.
      */
-    virtual bool painterly() const {return false;}
+    virtual bool painterly() const {
+        return false;
+    }
 
 
     /**
@@ -94,14 +96,16 @@ public:
      * Whether this paintop wants to deposit paint even when not moving, i.e. the
      * tool needs to activate its timer.
      */
-    virtual bool incremental() const { return false; }
+    virtual bool incremental() const {
+        return false;
+    }
 
 protected:
 
     static double scaleForPressure(double pressure);
 
     KisPaintDeviceSP cachedDab();
-    KisPaintDeviceSP cachedDab( const KoColorSpace *cs );
+    KisPaintDeviceSP cachedDab(const KoColorSpace *cs);
 
     /**
      * Split the coordinate into whole + fraction, where fraction is always >= 0.

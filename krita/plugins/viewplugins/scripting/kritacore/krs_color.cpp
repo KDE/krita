@@ -22,11 +22,11 @@
 using namespace Scripting;
 
 Color::Color(int x, int y, int z, QColor::Spec colorSpec)
-    : QObject()
+        : QObject()
 {
     setObjectName("KritaColor");
 
-    if(colorSpec == QColor::Hsv)
+    if (colorSpec == QColor::Hsv)
         m_color.setHsv(x, y, z);
     else
         m_color.setRgb(x, y, z);

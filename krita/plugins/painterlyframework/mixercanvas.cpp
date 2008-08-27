@@ -46,7 +46,7 @@
 #include <QUndoCommand>
 
 MixerCanvas::MixerCanvas(QWidget *parent)
-    : QFrame(parent), KoCanvasBase(0), m_toolProxy(0), m_dirty(false)
+        : QFrame(parent), KoCanvasBase(0), m_toolProxy(0), m_dirty(false)
 {
     m_image = QImage(size(), QImage::Format_ARGB32);
     m_image.fill(0);
@@ -102,16 +102,16 @@ void MixerCanvas::setResources(KisCanvasResourceProvider *rp)
     internal->setResource(KisCanvasResourceProvider::HdrExposure, rp->HDRExposure());
     QVariant v;
     v.setValue(rp->currentPreset());
-    internal->setResource( KisCanvasResourceProvider::CurrentPaintOpPreset, v );
+    internal->setResource(KisCanvasResourceProvider::CurrentPaintOpPreset, v);
 
     checkCurrentPaintop();
 
-    connect( rp->canvas()->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant &)),
-             this, SLOT(slotResourceChanged(int, const QVariant &)));
+    connect(rp->canvas()->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant &)),
+            this, SLOT(slotResourceChanged(int, const QVariant &)));
 
     // By now, both properties have been set
-    connect( rp, SIGNAL(sigPaintOpPresetChanged( KisPaintOpPresetSP )),
-             this, SLOT(checkCurrentPaintop()));
+    connect(rp, SIGNAL(sigPaintOpPresetChanged(KisPaintOpPresetSP)),
+            this, SLOT(checkCurrentPaintop()));
 }
 
 void MixerCanvas::checkCurrentPaintop()
@@ -121,8 +121,8 @@ void MixerCanvas::checkCurrentPaintop()
 
     KisPainter painter(device());
     KisPaintOp *current = KisPaintOpRegistry::instance()->paintOp(
-                          internal->resource(KisCanvasResourceProvider::CurrentPaintop).value<KoID>().id(),
-                          settings, &painter, 0);
+                              internal->resource(KisCanvasResourceProvider::CurrentPaintop).value<KoID>().id(),
+                              settings, &painter, 0);
     painter.setPaintOp(current); // This is done just for the painter to own the paintop and destroy it
 
     if (current && !current->painterly())
@@ -177,7 +177,7 @@ void MixerCanvas::tabletEvent(QTabletEvent *event)
 void MixerCanvas::resizeEvent(QResizeEvent *event)
 {
     if (event->size().width() > m_image.width() ||
-        event->size().height() > m_image.height()) {
+            event->size().height() > m_image.height()) {
         QImage newImg(event->size(), QImage::Format_ARGB32);
         newImg.fill(0);
 
@@ -231,14 +231,14 @@ void MixerCanvas::slotResourceChanged(int key, const QVariant &value)
     }
     switch (key) {
     case KisCanvasResourceProvider::CurrentPaintOpPreset:
-            checkCurrentPaintop();
-            break;
+        checkCurrentPaintop();
+        break;
 
-        case KisCanvasResourceProvider::CurrentKritaNode:
-            checkCurrentLayer();
-            break;
-        default:
-            ;
+    case KisCanvasResourceProvider::CurrentKritaNode:
+        checkCurrentLayer();
+        break;
+    default:
+        ;
     }
 
 }

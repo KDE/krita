@@ -31,12 +31,12 @@ struct KisPaintInformation::Private {
 };
 
 KisPaintInformation::KisPaintInformation(const QPointF & pos_, double pressure_,
-                        double xTilt_, double yTilt_,
-                        KisVector2D movement_,
-                        double rotation_,
-                        double tangentialPressure_
-)
-    : d(new Private)
+        double xTilt_, double yTilt_,
+        KisVector2D movement_,
+        double rotation_,
+        double tangentialPressure_
+                                        )
+        : d(new Private)
 {
     d->pos = pos_;
     d->pressure = pressure_;
@@ -52,7 +52,7 @@ KisPaintInformation::KisPaintInformation(const KisPaintInformation& rhs) : d(new
 {
 }
 
-void KisPaintInformation::operator=(const KisPaintInformation& rhs)
+void KisPaintInformation::operator=(const KisPaintInformation & rhs)
 {
     *d = *rhs.d;
 }
@@ -65,31 +65,31 @@ KisPaintInformation::~KisPaintInformation()
 
 void KisPaintInformation::toXML(QDomDocument&, QDomElement& e) const
 {
-    e.setAttribute("pointX", QString::number( pos().x(), 'g', 15) );
-    e.setAttribute("pointY", QString::number( pos().y(), 'g', 15) );
-    e.setAttribute("pressure", QString::number( pressure(), 'g', 15) );
-    e.setAttribute("xTilt", QString::number( xTilt(), 'g', 15) );
-    e.setAttribute("yTilt", QString::number( yTilt(), 'g', 15) );
-    e.setAttribute("movementX", QString::number( movement().x(), 'g', 15) );
-    e.setAttribute("movementY", QString::number( movement().y(), 'g', 15) );
-    e.setAttribute("rotation", QString::number( rotation(), 'g', 15) );
-    e.setAttribute("tangentialPressure", QString::number( tangentialPressure(), 'g', 15) );
+    e.setAttribute("pointX", QString::number(pos().x(), 'g', 15));
+    e.setAttribute("pointY", QString::number(pos().y(), 'g', 15));
+    e.setAttribute("pressure", QString::number(pressure(), 'g', 15));
+    e.setAttribute("xTilt", QString::number(xTilt(), 'g', 15));
+    e.setAttribute("yTilt", QString::number(yTilt(), 'g', 15));
+    e.setAttribute("movementX", QString::number(movement().x(), 'g', 15));
+    e.setAttribute("movementY", QString::number(movement().y(), 'g', 15));
+    e.setAttribute("rotation", QString::number(rotation(), 'g', 15));
+    e.setAttribute("tangentialPressure", QString::number(tangentialPressure(), 'g', 15));
 }
 
 KisPaintInformation KisPaintInformation::fromXML(const QDomElement& e)
 {
-    double pointX = e.attribute("pointX","0.0").toDouble();
-    double pointY = e.attribute("pointY","0.0").toDouble();
-    double pressure = e.attribute("pressure","0.0").toDouble();
+    double pointX = e.attribute("pointX", "0.0").toDouble();
+    double pointY = e.attribute("pointY", "0.0").toDouble();
+    double pressure = e.attribute("pressure", "0.0").toDouble();
     double rotation = e.attribute("rotation", "0.0").toDouble();
     double tangentialPressure = e.attribute("tangentialPressure", "0.0").toDouble();
-    double xTilt = e.attribute("xTilt","0.0").toDouble();
-    double yTilt = e.attribute("yTilt","0.0").toDouble();
-    double movementX = e.attribute("movementX","0.0").toDouble();
-    double movementY = e.attribute("movementY","0.0").toDouble();
-    
+    double xTilt = e.attribute("xTilt", "0.0").toDouble();
+    double yTilt = e.attribute("yTilt", "0.0").toDouble();
+    double movementX = e.attribute("movementX", "0.0").toDouble();
+    double movementY = e.attribute("movementY", "0.0").toDouble();
+
     return KisPaintInformation(QPointF(pointX, pointY), pressure, xTilt, yTilt, KisVector2D(movementX, movementY),
-        rotation, tangentialPressure);
+                               rotation, tangentialPressure);
 }
 
 const QPointF& KisPaintInformation::pos() const

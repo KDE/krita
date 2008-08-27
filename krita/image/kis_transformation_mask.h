@@ -49,101 +49,84 @@ public:
 
     virtual ~KisTransformationMask();
 
-    KisNodeSP clone() const
-    {
+    KisNodeSP clone() const {
         return KisNodeSP(new KisTransformationMask(*this));
     }
 
 
-    KisTransformationMask( const KisTransformationMask& rhs );
+    KisTransformationMask(const KisTransformationMask& rhs);
 
-    bool allowAsChild( KisNodeSP ) const;
+    bool allowAsChild(KisNodeSP) const;
 
-    void setXScale( double xscale )
-        {
-            m_xscale = xscale;
-        }
+    void setXScale(double xscale) {
+        m_xscale = xscale;
+    }
 
-    double xScale()
-        {
-            return m_xscale;
-        }
+    double xScale() {
+        return m_xscale;
+    }
 
-    void setYScale( double yscale )
-        {
-            m_yscale = yscale;
-        }
+    void setYScale(double yscale) {
+        m_yscale = yscale;
+    }
 
-    double yScale()
-        {
-            return m_yscale;
-        }
+    double yScale() {
+        return m_yscale;
+    }
 
-    void setXShear( double xshear )
-        {
-            m_xshear = xshear;
-        }
+    void setXShear(double xshear) {
+        m_xshear = xshear;
+    }
 
-    double xShear()
-        {
-            return m_xshear;
-        }
+    double xShear() {
+        return m_xshear;
+    }
 
-    void setYShear( double yshear )
-        {
-            m_yshear = yshear;
-        }
+    void setYShear(double yshear) {
+        m_yshear = yshear;
+    }
 
-    double yShear()
-        {
-            return m_yshear;
-        }
+    double yShear() {
+        return m_yshear;
+    }
 
-    void setRotation( double rotation )
-        {
-            m_rotation = rotation;
-        }
+    void setRotation(double rotation) {
+        m_rotation = rotation;
+    }
 
-    double rotation()
-        {
-            return m_rotation;
-        }
+    double rotation() {
+        return m_rotation;
+    }
 
-    void setXTranslation( qint32 xtranslate )
-        {
-            m_xtranslate = xtranslate;
-        }
+    void setXTranslation(qint32 xtranslate) {
+        m_xtranslate = xtranslate;
+    }
 
-    qint32 xTranslate()
-        {
-            return m_xtranslate;
-        }
+    qint32 xTranslate() {
+        return m_xtranslate;
+    }
 
-    void setYTranslation( qint32 ytranslate )
-        {
-            m_ytranslate = ytranslate;
-        }
+    void setYTranslation(qint32 ytranslate) {
+        m_ytranslate = ytranslate;
+    }
 
-    qint32 yTranslate()
-        {
-            return m_ytranslate;
-        }
+    qint32 yTranslate() {
+        return m_ytranslate;
+    }
 
 
-    void setFilterStrategy( KisFilterStrategy * filter )
-        {
-            m_filter = filter;
-        }
+    void setFilterStrategy(KisFilterStrategy * filter) {
+        m_filter = filter;
+    }
 
-    KisFilterStrategy * filterStrategy()
-        {
-            return m_filter;
-        }
+    KisFilterStrategy * filterStrategy() {
+        return m_filter;
+    }
 
     /**
      * Apply the effect the projection using the mask as a selection.
      */
-    virtual void apply( KisPaintDeviceSP projection, const QRect & rc ) const;
+    virtual void apply(KisPaintDeviceSP projection, const QRect & rc) const;
 
     bool accept(KisNodeVisitor &v);
 private:
@@ -156,7 +139,8 @@ private:
 
 };
 
-class KRITAIMAGE_EXPORT KisTransformationSettingsCommand : public QUndoCommand {
+class KRITAIMAGE_EXPORT KisTransformationSettingsCommand : public QUndoCommand
+{
 
 public:
     /**

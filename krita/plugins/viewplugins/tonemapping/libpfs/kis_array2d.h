@@ -28,32 +28,32 @@ class QRect;
 
 namespace pfs
 {
-    /**
-     * This class is a replacement for the Array2DImpl of libpfs which use a KisPaintDevice.
-     */
-    class Array2DImpl : public Array2D
-    {
-        public:
-            Array2DImpl( int cols, int rows);
-            Array2DImpl( QRect r, int index, KisPaintDeviceSP device );
-            ~Array2DImpl();
-            int getCols() const;
-            int getRows() const;
-            float& operator()( int col, int row );
-            const float& operator()( int col, int row ) const;
-            float& operator()( int index );
-            const float& operator()( int index ) const;
-            KisPaintDeviceSP device();
-        private:
-            void init( int sx, int sy, int cols, int rows, int index, KisPaintDeviceSP device );
-            inline int colToDevice(int col) const;
-            inline int rowToDevice(int row) const;
-        private:
-            struct Private;
-            Private* const d;
-    };
-    
-    
+/**
+ * This class is a replacement for the Array2DImpl of libpfs which use a KisPaintDevice.
+ */
+class Array2DImpl : public Array2D
+{
+public:
+    Array2DImpl(int cols, int rows);
+    Array2DImpl(QRect r, int index, KisPaintDeviceSP device);
+    ~Array2DImpl();
+    int getCols() const;
+    int getRows() const;
+    float& operator()(int col, int row);
+    const float& operator()(int col, int row) const;
+    float& operator()(int index);
+    const float& operator()(int index) const;
+    KisPaintDeviceSP device();
+private:
+    void init(int sx, int sy, int cols, int rows, int index, KisPaintDeviceSP device);
+    inline int colToDevice(int col) const;
+    inline int rowToDevice(int row) const;
+private:
+    struct Private;
+    Private* const d;
+};
+
+
 }
 
 #endif

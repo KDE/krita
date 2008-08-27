@@ -35,7 +35,7 @@ void KisRecordedFilterActionTest::testCreation()
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
     KisImageSP image = new KisImage(0, 10, 10, cs, "merge test");
-    KisPaintLayerSP layer = new KisPaintLayer( image, "test", OPACITY_OPAQUE );
+    KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE);
 
     KisRecordedFilterAction test("invert", layer, f, kfc);
 }

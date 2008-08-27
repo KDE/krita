@@ -22,12 +22,13 @@
 
 #include "kis_tone_mapping_operator.h"
 
-class KisIcamOperator : public KisToneMappingOperator {
-    public:
-        KisIcamOperator();
-        virtual KisToneMappingOperatorConfigurationWidget* createConfigurationWidget(QWidget*) const;
-        virtual void toneMap(KisPaintDeviceSP, KisPropertiesConfiguration* config) const;
-        virtual const KoColorSpace* colorSpace() const ;
+class KisIcamOperator : public KisToneMappingOperator
+{
+public:
+    KisIcamOperator();
+    virtual KisToneMappingOperatorConfigurationWidget* createConfigurationWidget(QWidget*) const;
+    virtual void toneMap(KisPaintDeviceSP, KisPropertiesConfiguration* config) const;
+    virtual const KoColorSpace* colorSpace() const ;
 };
 
 #endif

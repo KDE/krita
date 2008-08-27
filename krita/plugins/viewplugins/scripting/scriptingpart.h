@@ -23,22 +23,23 @@
 
 #include <KoScriptingPart.h>
 
-namespace Kross {
-    class Action;
+namespace Kross
+{
+class Action;
 }
 
 class ScriptingPart : public KoScriptingPart
 {
-        Q_OBJECT
-    public:
-        ScriptingPart(QObject *parent, const QStringList &);
-        virtual ~ScriptingPart();
-    private:
-        virtual void myStarted(Kross::Action*);
-        virtual void myFinished(Kross::Action*);
-    private:
-        class Private;
-        Private* const d;
+    Q_OBJECT
+public:
+    ScriptingPart(QObject *parent, const QStringList &);
+    virtual ~ScriptingPart();
+private:
+    virtual void myStarted(Kross::Action*);
+    virtual void myFinished(Kross::Action*);
+private:
+    class Private;
+    Private* const d;
 };
 
 

@@ -32,7 +32,8 @@ class KoColorSpace;
 class KoColorProfile;
 
 /// the base command for commands altering a KisImage
-class KisImageCommand : public QUndoCommand {
+class KisImageCommand : public QUndoCommand
+{
 
 
 public:
@@ -62,7 +63,8 @@ protected:
   * It will ensurce that the image is properly locked during the execution
   * of macro commands. Place it at the start and end of the macro command.
   */
-class KisImageLockCommand : public KisImageCommand {
+class KisImageLockCommand : public KisImageCommand
+{
 
 public:
     /**
@@ -80,7 +82,8 @@ private:
 };
 
 
-class KisImageResizeCommand : public KisImageCommand {
+class KisImageResizeCommand : public KisImageCommand
+{
 
 public:
     KisImageResizeCommand(KisImageSP image, qint32 width, qint32 height, qint32 oldWidth, qint32 oldHeight);
@@ -94,7 +97,8 @@ private:
 };
 
 
-class KisImageConvertTypeCommand : public KisImageCommand {
+class KisImageConvertTypeCommand : public KisImageCommand
+{
 
 public:
     KisImageConvertTypeCommand(KisImageSP image, const KoColorSpace * beforeColorSpace, const KoColorSpace * afterColorSpace);
@@ -109,7 +113,8 @@ private:
 
 
 /// The command for image property changes
-class KRITAIMAGE_EXPORT KisImagePropsCommand : public KisImageCommand {
+class KRITAIMAGE_EXPORT KisImagePropsCommand : public KisImageCommand
+{
 
 public:
     /**
@@ -135,7 +140,8 @@ private:
 };
 
 
-class KisImageChangeLayersCommand : public KisImageCommand {
+class KisImageChangeLayersCommand : public KisImageCommand
+{
 
 public:
     KisImageChangeLayersCommand(KisImageSP image, KisNodeSP oldRootLayer, KisNodeSP newRootLayer, const QString& name);
@@ -149,7 +155,8 @@ private:
 };
 
 /// The command for adding a layer
-class KisImageLayerAddCommand : public KisImageCommand {
+class KisImageLayerAddCommand : public KisImageCommand
+{
 
 public:
     /**
@@ -170,7 +177,8 @@ private:
 
 
 /// The command for removing a layer
-class KisImageLayerRemoveCommand : public KisImageCommand {
+class KisImageLayerRemoveCommand : public KisImageCommand
+{
 
 
 public:
@@ -193,7 +201,8 @@ private:
 };
 
 /// The command for layer moves inside the layer stack
-class KisImageLayerMoveCommand: public KisImageCommand {
+class KisImageLayerMoveCommand: public KisImageCommand
+{
 
 
 public:
@@ -219,7 +228,8 @@ private:
 };
 
 /// The command for image property changes
-class KRITAIMAGE_EXPORT KisImageLayerPropsCommand : public KisImageCommand {
+class KRITAIMAGE_EXPORT KisImageLayerPropsCommand : public KisImageCommand
+{
 
 
 public:

@@ -44,15 +44,14 @@
 #include "kis_wavelet_noise_reduction.h"
 
 typedef KGenericFactory<KritaImageEnhancement> KritaImageEnhancementFactory;
-K_EXPORT_COMPONENT_FACTORY( kritaimageenhancement, KritaImageEnhancementFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritaimageenhancement, KritaImageEnhancementFactory("krita"))
 
 KritaImageEnhancement::KritaImageEnhancement(QObject *parent, const QStringList &)
-  : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     setComponentData(KritaImageEnhancementFactory::componentData());
 
-    if ( parent->inherits("KisFilterRegistry") )
-    {
+    if (parent->inherits("KisFilterRegistry")) {
         KisFilterRegistry * r = dynamic_cast<KisFilterRegistry*>(parent);
         r->add(KisFilterSP(new KisSimpleNoiseReducer()));
         r->add(KisFilterSP(new KisWaveletNoiseReduction()));

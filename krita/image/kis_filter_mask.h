@@ -45,21 +45,20 @@ public:
 
     virtual ~KisFilterMask();
 
-    KisNodeSP clone() const
-    {
+    KisNodeSP clone() const {
         return KisNodeSP(new KisFilterMask(*this));
     }
 
     bool accept(KisNodeVisitor &v);
 
-    KisFilterMask( const KisFilterMask& rhs );
+    KisFilterMask(const KisFilterMask& rhs);
 
-    bool allowAsChild( KisNodeSP ) const;
+    bool allowAsChild(KisNodeSP) const;
 
     KisFilterConfiguration * filter() const;
     void setFilter(KisFilterConfiguration * filterConfig);
 
-    void apply( KisPaintDeviceSP projection, const QRect & rc ) const;
+    void apply(KisPaintDeviceSP projection, const QRect & rc) const;
 
 private:
 

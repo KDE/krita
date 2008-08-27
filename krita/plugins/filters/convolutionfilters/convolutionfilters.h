@@ -24,97 +24,136 @@
 #include <kparts/plugin.h>
 #include "kis_convolution_filter.h"
 
-class KisGaussianBlurFilter : public KisConvolutionFilter {
+class KisGaussianBlurFilter : public KisConvolutionFilter
+{
 public:
     KisGaussianBlurFilter();
 public:
-    static inline KoID id() { return KoID("gaussian blur", i18n("Gaussian Blur")); }
-    
+    static inline KoID id() {
+        return KoID("gaussian blur", i18n("Gaussian Blur"));
+    }
+
 };
 
-class KisSharpenFilter : public KisConvolutionFilter {
+class KisSharpenFilter : public KisConvolutionFilter
+{
 public:
     KisSharpenFilter();
 public:
-    static inline KoID id() { return KoID("sharpen", i18n("Sharpen")); }
-    
+    static inline KoID id() {
+        return KoID("sharpen", i18n("Sharpen"));
+    }
+
 };
 
-class KisMeanRemovalFilter : public KisConvolutionFilter {
+class KisMeanRemovalFilter : public KisConvolutionFilter
+{
 public:
     KisMeanRemovalFilter();
 public:
-    static inline KoID id() { return KoID("mean removal", i18n("Mean Removal")); }
+    static inline KoID id() {
+        return KoID("mean removal", i18n("Mean Removal"));
+    }
 };
 
-class KisEmbossLaplascianFilter : public KisConvolutionFilter {
+class KisEmbossLaplascianFilter : public KisConvolutionFilter
+{
 public:
     KisEmbossLaplascianFilter();
 public:
-    static inline KoID id() { return KoID("emboss laplascian", i18n("Emboss Laplascian")); }
+    static inline KoID id() {
+        return KoID("emboss laplascian", i18n("Emboss Laplascian"));
+    }
 };
 
-class KisEmbossInAllDirectionsFilter : public KisConvolutionFilter {
+class KisEmbossInAllDirectionsFilter : public KisConvolutionFilter
+{
 public:
     KisEmbossInAllDirectionsFilter();
 public:
-    static inline KoID id() { return KoID("emboss all directions", i18n("Emboss in All Directions")); }
+    static inline KoID id() {
+        return KoID("emboss all directions", i18n("Emboss in All Directions"));
+    }
 };
 
-class KisEmbossHorizontalVerticalFilter : public KisConvolutionFilter {
+class KisEmbossHorizontalVerticalFilter : public KisConvolutionFilter
+{
 public:
     KisEmbossHorizontalVerticalFilter();
 public:
-    static inline KoID id() { return KoID("emboss horizontal and vertical", i18n("Emboss Horizontal & Vertical")); }
+    static inline KoID id() {
+        return KoID("emboss horizontal and vertical", i18n("Emboss Horizontal & Vertical"));
+    }
 };
 
-class KisEmbossVerticalFilter : public KisConvolutionFilter {
+class KisEmbossVerticalFilter : public KisConvolutionFilter
+{
 public:
     KisEmbossVerticalFilter();
 public:
-    static inline KoID id() { return KoID("emboss vertical only", i18n("Emboss Vertical Only")); }
+    static inline KoID id() {
+        return KoID("emboss vertical only", i18n("Emboss Vertical Only"));
+    }
 };
 
-class KisEmbossHorizontalFilter : public KisConvolutionFilter {
+class KisEmbossHorizontalFilter : public KisConvolutionFilter
+{
 public:
     KisEmbossHorizontalFilter();
 public:
-    static inline KoID id() { return KoID("emboss horizontal only", i18n("Emboss Horizontal Only")); }
+    static inline KoID id() {
+        return KoID("emboss horizontal only", i18n("Emboss Horizontal Only"));
+    }
 };
 
-class KisEmbossDiagonalFilter : public KisConvolutionFilter {
+class KisEmbossDiagonalFilter : public KisConvolutionFilter
+{
 public:
     KisEmbossDiagonalFilter();
 public:
-    static inline KoID id() { return KoID("emboss diagonal", i18n("Emboss Diagonal")); }
+    static inline KoID id() {
+        return KoID("emboss diagonal", i18n("Emboss Diagonal"));
+    }
 };
 
-class KisTopEdgeDetectionFilter : public KisConvolutionFilter {
+class KisTopEdgeDetectionFilter : public KisConvolutionFilter
+{
 public:
     KisTopEdgeDetectionFilter();
 public:
-    static inline KoID id() { return KoID("top edge detections", i18n("Top Edge Detection")); }
+    static inline KoID id() {
+        return KoID("top edge detections", i18n("Top Edge Detection"));
+    }
 };
 
-class KisRightEdgeDetectionFilter : public KisConvolutionFilter {
+class KisRightEdgeDetectionFilter : public KisConvolutionFilter
+{
 public:
     KisRightEdgeDetectionFilter();
 public:
-    static inline KoID id() { return KoID("right edge detections", i18n("Right Edge Detection")); }
+    static inline KoID id() {
+        return KoID("right edge detections", i18n("Right Edge Detection"));
+    }
 };
 
-class KisBottomEdgeDetectionFilter : public KisConvolutionFilter {
+class KisBottomEdgeDetectionFilter : public KisConvolutionFilter
+{
 public:
     KisBottomEdgeDetectionFilter();
 public:
-    static inline KoID id() { return KoID("bottom edge detections", i18n("Bottom Edge Detection")); }
+    static inline KoID id() {
+        return KoID("bottom edge detections", i18n("Bottom Edge Detection"));
+    }
 };
 
-class KisLeftEdgeDetectionFilter : public KisConvolutionFilter {
+class KisLeftEdgeDetectionFilter : public KisConvolutionFilter
+{
 public:
     KisLeftEdgeDetectionFilter();
 public:
-    static inline KoID id() { return KoID("left edge detections", i18n("Left Edge Detection")); }
+    static inline KoID id() {
+        return KoID("left edge detections", i18n("Left Edge Detection"));
+    }
 };
 
 

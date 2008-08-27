@@ -28,7 +28,7 @@ const qint32 KisTile::HEIGHT = 64;
 
 
 KisTile::KisTile(qint32 pixelSize, qint32 col, qint32 row, const quint8 *defPixel)
-    : m_lock(QMutex::Recursive)
+        : m_lock(QMutex::Recursive)
 {
     m_pixelSize = pixelSize;
     m_data = 0;
@@ -46,7 +46,7 @@ KisTile::KisTile(qint32 pixelSize, qint32 col, qint32 row, const quint8 *defPixe
 }
 
 KisTile::KisTile(const KisTile& rhs, qint32 col, qint32 row)
-    : m_lock(QMutex::Recursive)
+        : m_lock(QMutex::Recursive)
 {
     if (this != &rhs) {
         m_pixelSize = rhs.m_pixelSize;
@@ -65,8 +65,7 @@ KisTile::KisTile(const KisTile& rhs, qint32 col, qint32 row)
         m_row = row;
 
         KisTileManager::instance()->registerTile(this);
-    }
-    else {
+    } else {
         //m_data = 0;
         //m_nextTile = 0;
         m_nReadlock = 0;
@@ -74,7 +73,7 @@ KisTile::KisTile(const KisTile& rhs, qint32 col, qint32 row)
 }
 
 KisTile::KisTile(const KisTile& rhs)
-    : m_lock(QMutex::Recursive)
+        : m_lock(QMutex::Recursive)
 {
     if (this != &rhs) {
         m_pixelSize = rhs.m_pixelSize;
@@ -91,8 +90,7 @@ KisTile::KisTile(const KisTile& rhs)
         rhs.removeReader();
 
         KisTileManager::instance()->registerTile(this);
-    }
-    else {
+    } else {
         m_nReadlock = 0;
     }
 }
@@ -105,14 +103,14 @@ KisTile::~KisTile()
         KisTileManager::instance()->dontNeedTileData(m_data, m_pixelSize);
         m_data = 0;
     }
-    assert( !readers() );
+    assert(!readers());
 }
 
 void KisTile::allocate()
 {
     m_lock.lock();
     if (m_data == 0) {
-        assert (!readers());
+        assert(!readers());
         m_data = KisTileManager::instance()->requestTileData(m_pixelSize);
         Q_CHECK_PTR(m_data);
     }
@@ -130,10 +128,9 @@ void KisTile::setData(const quint8 *pixel)
 {
     addReader();
     quint8 *dst = m_data;
-    for(int i=0; i <WIDTH * HEIGHT;i++)
-    {
+    for (int i = 0; i < WIDTH * HEIGHT;i++) {
         memcpy(dst, pixel, m_pixelSize);
-        dst+=m_pixelSize;
+        dst += m_pixelSize;
     }
     removeReader();
 }

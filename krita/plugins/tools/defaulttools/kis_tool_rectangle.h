@@ -39,7 +39,8 @@ class QPoint;
 
 class KoCanvasBase;
 
-class KisToolRectangle : public KisToolShape {
+class KisToolRectangle : public KisToolShape
+{
 
     typedef KisToolShape super;
     Q_OBJECT
@@ -54,7 +55,7 @@ public:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
- private:
+private:
     void paintRectangle();
     void paintRectangle(QPainter& gc, const QRect& rc);
 
@@ -73,23 +74,23 @@ protected:
     //KisImageSP m_currentImage;
 };
 
-class KisToolRectangleFactory : public KoToolFactory {
+class KisToolRectangleFactory : public KoToolFactory
+{
 
 public:
     KisToolRectangleFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KritaShape/KisToolRectangle", i18n( "Rectangle" ))
-        {
-            setToolTip( i18n( "Draw a rectangle" ) );
+            : KoToolFactory(parent, "KritaShape/KisToolRectangle", i18n("Rectangle")) {
+        setToolTip(i18n("Draw a rectangle"));
 
-            setToolType( TOOL_TYPE_SHAPE );
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setIcon( "krita_tool_rectangle" );
-            //setShortcut( Qt::Key_F6 );
-            setPriority( 2 );
-            setInputDeviceAgnostic(false);
-        }
+        setToolType(TOOL_TYPE_SHAPE);
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        setIcon("krita_tool_rectangle");
+        //setShortcut( Qt::Key_F6 );
+        setPriority(2);
+        setInputDeviceAgnostic(false);
+    }
 
-    virtual ~KisToolRectangleFactory(){}
+    virtual ~KisToolRectangleFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return  new KisToolRectangle(canvas);

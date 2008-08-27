@@ -35,26 +35,30 @@
  * Shears the layers it visits. Will set the paint devices of the
  * visited layers dirty. *
  */
-class KisShearVisitor : public KisNodeVisitor {
+class KisShearVisitor : public KisNodeVisitor
+{
 public:
 
     using KisNodeVisitor::visit;
 
     KisShearVisitor(double xshear, double yshear, KoUpdater *progress)
-        : m_xshear(xshear), m_yshear(yshear), m_progress(progress), m_strategy(0), m_undo(0) {}
+            : m_xshear(xshear), m_yshear(yshear), m_progress(progress), m_strategy(0), m_undo(0) {}
 
-    void setStrategy(KisFilterStrategy* strategy) { m_strategy = strategy; }
-    void setUndoAdapter(KisUndoAdapter* undo) { m_undo = undo; }
+    void setStrategy(KisFilterStrategy* strategy) {
+        m_strategy = strategy;
+    }
+    void setUndoAdapter(KisUndoAdapter* undo) {
+        m_undo = undo;
+    }
 public:
 
-    bool visit( KisExternalLayer * )
-        {
-            return true;
-        }
+    bool visit(KisExternalLayer *) {
+        return true;
+    }
 
     bool visit(KisPaintLayer* layer) {
         KisPaintDeviceSP dev = layer->paintDevice();
-        if(!dev)
+        if (!dev)
             return true;
 
         KisFilterStrategy* strategy = 0;
@@ -72,7 +76,7 @@ public:
         //KisTransformWorker w(dev, 1.0, 1.0, m_xshear, m_yshear, 0, 0, 0, m_progress, strategy);
         //w.run();
 
-        KisRotateVisitor v( m_progress );
+        KisRotateVisitor v(m_progress);
         v.visitKisPaintDevice(dev.data());
         v.shear(m_xshear, m_yshear, m_progress);
 
@@ -90,15 +94,16 @@ public:
     bool visit(KisGroupLayer* layer) {
         KisNodeSP child = layer->firstChild();
 
-        while(child)
-        {
+        while (child) {
             child->accept(*this);
             child = child->nextSibling();
         }
         return true;
     }
 
-    bool visit(KisAdjustmentLayer *) { return true; }
+    bool visit(KisAdjustmentLayer *) {
+        return true;
+    }
 private:
     double m_xshear;
     double m_yshear;

@@ -30,7 +30,8 @@ class QDomElement;
  * This class keeps information that can be used in the painting process, for example by
  * brushes.
  **/
-class KRITAIMAGE_EXPORT KisPaintInformation {
+class KRITAIMAGE_EXPORT KisPaintInformation
+{
 
 public:
 
@@ -39,14 +40,14 @@ public:
                         KisVector2D movement = KisVector2D(),
                         double rotation = 0.0,
                         double tangentialPressure = 0.0
-                        );
+                       );
     KisPaintInformation(const KisPaintInformation& rhs);
     void operator=(const KisPaintInformation& rhs);
     ~KisPaintInformation();
 
     const QPointF& pos() const;
     void setPos(const QPointF& p);
-        
+
     /// The pressure of the value (from 0.0 to 1.0)
     double pressure() const;
     /// Set the pressure
@@ -60,7 +61,7 @@ public:
 
     /// The movement of the pen is equal to current position minus the last position of the call to paintAt
     KisVector2D movement() const;
-    
+
     /// Rotation computed from the movement
     double angle() const;
 
@@ -69,7 +70,7 @@ public:
 
     /// tangential pressure (i.e., rate for an airbrush device)
     double tangentialPressure() const;
-    
+
     void toXML(QDomDocument&, QDomElement&) const;
     static KisPaintInformation fromXML(const QDomElement&);
 private:

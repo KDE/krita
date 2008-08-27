@@ -49,25 +49,24 @@
 #include "dlg_shearimage.h"
 
 typedef KGenericFactory<ShearImage> ShearImageFactory;
-K_EXPORT_COMPONENT_FACTORY( kritashearimage, ShearImageFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritashearimage, ShearImageFactory("krita"))
 
 // XXX: this plugin could also provide layer scaling/resizing
-    ShearImage::ShearImage(QObject *parent, const QStringList &)
+ShearImage::ShearImage(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    if ( parent->inherits("KisView2") )
-    {
+    if (parent->inherits("KisView2")) {
         setComponentData(ShearImageFactory::componentData());
 
-        setXMLFile(KStandardDirs::locate("data","kritaplugins/shearimage.rc"),
+        setXMLFile(KStandardDirs::locate("data", "kritaplugins/shearimage.rc"),
                    true);
 
         KAction *action  = new KAction(i18n("&Shear Image..."), this);
-        actionCollection()->addAction("shearimage", action );
+        actionCollection()->addAction("shearimage", action);
         connect(action,  SIGNAL(triggered()), this, SLOT(slotShearImage()));
 
         action  = new KAction(i18n("&Shear Layer..."), this);
-        actionCollection()->addAction("shearlayer", action );
+        actionCollection()->addAction("shearlayer", action);
         connect(action,  SIGNAL(triggered()), this, SLOT(slotShearLayer()));
 
         m_view = (KisView2*) parent;

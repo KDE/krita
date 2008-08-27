@@ -36,7 +36,8 @@ class KisDoc2;
  * Caveat: this class calls "delete this", which means that you new
  * it and then never touch it again. Thank you very much.
  */
-class KisImportCatcher : QObject {
+class KisImportCatcher : QObject
+{
 
     Q_OBJECT
 

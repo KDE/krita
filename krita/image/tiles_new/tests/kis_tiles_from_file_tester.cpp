@@ -46,9 +46,11 @@
 
 static quint8 defPixel[2] = { 145, 42 };
 
-namespace {
+namespace
+{
 /// Somewhat realistic file loader, fakes loading a file with 2 U8 channels (like GRAYA(8)), with full and half-full tiles
-class FakeTileSourceTest : public KisTileSourceFile {
+class FakeTileSourceTest : public KisTileSourceFile
+{
     static const qint32 w = /*KisTile::WIDTH*/  64* 2 + 20;
     static const qint32 h = /*KisTile::HEIGHT*/ 64 * 2 + 20;
 public: // broadens privileges from protected:
@@ -58,8 +60,8 @@ public: // broadens privileges from protected:
         Q_ASSERT(col < h);
         quint8* d = new quint8[2*w];
         for (int i = 0; i < w; i++) {
-            d[2*i] = (quint8)(i+col); // Channel 1
-            d[2*i+1] = (quint8)(i*col); // Channel 2
+            d[2*i] = (quint8)(i + col); // Channel 1
+            d[2*i+1] = (quint8)(i * col); // Channel 2
         }
 
         columnsGotten++;
@@ -67,9 +69,15 @@ public: // broadens privileges from protected:
         return d;
     }
 
-    qint32 width() { return w; }
-    qint32 height() { return h; }
-    qint32 pixelSize() const { return 2; }
+    qint32 width() {
+        return w;
+    }
+    qint32 height() {
+        return h;
+    }
+    qint32 pixelSize() const {
+        return 2;
+    }
 
     int columnsGotten;
 };
@@ -87,7 +95,7 @@ void KisTilesFromFileTester::loadFakeTilesTest()
         for (int x = 0; x < tileSource.width() + 64; x++) {
             KisTileDataWrapperSP data = dm.pixelPtrSafe(x, y, false /*writable*/);
             if (x < tileSource.width() && y < tileSource.height()) {
-                QVERIFY(data->data()[0] == (quint8)(x+y)); // Channel 1
+                QVERIFY(data->data()[0] == (quint8)(x + y)); // Channel 1
                 QVERIFY(data->data()[1] == (quint8)(x*y)); // Channel 2
             } else {
                 QVERIFY(data->data()[0] == defPixel[0]); // Channel 1
@@ -104,7 +112,7 @@ void KisTilesFromFileTester::loadFakeTilesTest()
 void KisTilesFromFileTester::paintDeviceTest()
 {
     const KoColorSpace* colorSpace = KoColorSpaceRegistry::instance()->colorSpace("GRAYA", 0);
-    KisPaintDevice dev( colorSpace, "test");
+    KisPaintDevice dev(colorSpace, "test");
 
     FakeTileSourceTest tileSource;
     KisDataManagerSP dm = new KisDataManager(tileSource.pixelSize(), defPixel);
@@ -112,15 +120,15 @@ void KisTilesFromFileTester::paintDeviceTest()
     dm->setProxy(&tileSource);
 
     dev.setDataManager(dm, dev.colorSpace()); // Clones the colorspace, perhaps that's overkill?
- 
+
     // Iterate over the tiles a first time:
     KisHLineConstIteratorPixel srcIt = dev.createHLineConstIterator(0, 0, tileSource.width() + 64);
 
     for (int y = 0; y < tileSource.height() + 64; y++) {
-        while ( !srcIt.isDone()  ) {
+        while (!srcIt.isDone()) {
             const quint8* data = srcIt.rawData();
             if (srcIt.x() < tileSource.width() && y < tileSource.height()) {
-                QVERIFY(data[0] == (quint8)(srcIt.x()+y)); // Channel 1
+                QVERIFY(data[0] == (quint8)(srcIt.x() + y)); // Channel 1
                 QVERIFY(data[1] == (quint8)(srcIt.x()*y)); // Channel 2
             } else {
                 QVERIFY(data[0] == defPixel[0]); // Channel 1
@@ -137,10 +145,10 @@ void KisTilesFromFileTester::paintDeviceTest()
     srcIt = dev.createHLineConstIterator(0, 0, tileSource.width() + 64);
 
     for (int y = 0; y < tileSource.height() + 64; y++) {
-        while ( !srcIt.isDone()  ) {
+        while (!srcIt.isDone()) {
             const quint8* data = srcIt.rawData();
             if (srcIt.x() < tileSource.width() && y < tileSource.height()) {
-                QVERIFY(data[0] == (quint8)(srcIt.x()+y)); // Channel 1
+                QVERIFY(data[0] == (quint8)(srcIt.x() + y)); // Channel 1
                 QVERIFY(data[1] == (quint8)(srcIt.x()*y)); // Channel 2
             } else {
                 QVERIFY(data[0] == defPixel[0]); // Channel 1
@@ -158,7 +166,7 @@ void KisTilesFromFileTester::paintDeviceTest()
 void KisTilesFromFileTester::writeTest()
 {
     const KoColorSpace* colorSpace = KoColorSpaceRegistry::instance()->colorSpace("GRAYA", 0);
-    KisPaintDeviceSP dev = new KisPaintDevice( colorSpace, "test");
+    KisPaintDeviceSP dev = new KisPaintDevice(colorSpace, "test");
 
     KisSharedPtr<FakeTileSourceTest> tileSource = new FakeTileSourceTest;
     KisDataManagerSP dm = new KisDataManager(tileSource->pixelSize(), defPixel);
@@ -175,10 +183,10 @@ void KisTilesFromFileTester::writeTest()
 
     // Manually fill the pixels to 23,32:
     for (int y = 0; y < tileSource->height() + 64; y++) {
-        while ( !dstIt.isDone()  ) {
+        while (!dstIt.isDone()) {
             quint8* data = dstIt.rawData();
             if (dstIt.x() < tileSource->width() && y < tileSource->height()) {
-                QVERIFY(data[0] == (quint8)(dstIt.x()+y)); // Channel 1
+                QVERIFY(data[0] == (quint8)(dstIt.x() + y)); // Channel 1
                 QVERIFY(data[1] == (quint8)(dstIt.x()*y)); // Channel 2
             } else {
                 QVERIFY(data[0] == defPixel[0]); // Channel 1
@@ -197,11 +205,11 @@ void KisTilesFromFileTester::writeTest()
     KisHLineConstIteratorPixel srcIt = dev->createHLineConstIterator(0, 0, tileSource->width() + 64);
 
     for (int y = 0; y < tileSource->height() + 64; y++) {
-        while ( !srcIt.isDone()  ) {
+        while (!srcIt.isDone()) {
             // Check oldData
             const quint8* data = srcIt.oldRawData();
             if (srcIt.x() < tileSource->width() && y < tileSource->height()) {
-                QVERIFY(data[0] == (quint8)(srcIt.x()+y)); // Channel 1
+                QVERIFY(data[0] == (quint8)(srcIt.x() + y)); // Channel 1
                 QVERIFY(data[1] == (quint8)(srcIt.x()*y)); // Channel 2
             } else {
                 QVERIFY(data[0] == defPixel[0]); // Channel 1

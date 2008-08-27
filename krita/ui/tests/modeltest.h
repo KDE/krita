@@ -58,8 +58,7 @@ private:
 
     QAbstractItemModel *model;
 
-    struct Changing
-    {
+    struct Changing {
         QModelIndex parent;
         int oldSize;
         QVariant last;

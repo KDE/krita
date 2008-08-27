@@ -36,22 +36,21 @@ class KisStatusBar : public QObject
 
 public:
 
-    KisStatusBar(KStatusBar * statusBar, KisView2 * view );
+    KisStatusBar(KStatusBar * statusBar, KisView2 * view);
     ~KisStatusBar();
 
 public slots:
 
-    void setZoom( int percentage );
-    void documentMousePositionChanged( const QPointF &p );
-    void imageSizeChanged( qint32 w, qint32 h );
-    void setSelection( KisImageSP img );
-    void setProfile( KisImageSP img );
-    void setHelp( const QString &t );
+    void setZoom(int percentage);
+    void documentMousePositionChanged(const QPointF &p);
+    void imageSizeChanged(qint32 w, qint32 h);
+    void setSelection(KisImageSP img);
+    void setProfile(KisImageSP img);
+    void setHelp(const QString &t);
     void updateStatusBarProfileLabel();
-    KoProgressBar * progress()
-        {
-            return m_progress;
-        }
+    KoProgressBar * progress() {
+        return m_progress;
+    }
 private:
 
     KisView2 * m_view;

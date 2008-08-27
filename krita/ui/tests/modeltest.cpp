@@ -46,9 +46,9 @@ ModelTest::ModelTest(QAbstractItemModel *_model, QObject *parent) : QObject(pare
             this, SLOT(runAllTests()));
     connect(model, SIGNAL(headerDataChanged(Qt::Orientation, int, int)),
             this, SLOT(runAllTests()));
-    connect(model, SIGNAL(layoutAboutToBeChanged ()), this, SLOT(runAllTests()));
-    connect(model, SIGNAL(layoutChanged ()), this, SLOT(runAllTests()));
-    connect(model, SIGNAL(modelReset ()), this, SLOT(runAllTests()));
+    connect(model, SIGNAL(layoutAboutToBeChanged()), this, SLOT(runAllTests()));
+    connect(model, SIGNAL(layoutChanged()), this, SLOT(runAllTests()));
+    connect(model, SIGNAL(modelReset()), this, SLOT(runAllTests()));
     connect(model, SIGNAL(rowsAboutToBeInserted(const QModelIndex &, int, int)),
             this, SLOT(runAllTests()));
     connect(model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &, int, int)),
@@ -357,7 +357,7 @@ void ModelTest::checkChildren(const QModelIndex &parent, int currentDepth)
             Q_ASSERT(model->parent(index) == parent);
 
             // recursively go down the children
-            if (model->hasChildren(index) && currentDepth < 10 ) {
+            if (model->hasChildren(index) && currentDepth < 10) {
                 //qDebug() << r << c << "has children" << model->rowCount(index);
                 checkChildren(index, ++currentDepth);
             }/* else { if (currentDepth >= 10) qDebug() << "checked 10 deep"; };*/

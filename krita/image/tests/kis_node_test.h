@@ -27,15 +27,21 @@ class TestNode : public KisNode
 {
     Q_OBJECT
 public:
-    KisNodeSP clone() { return new TestNode(*this); }
-    bool allowAsChild( KisNodeSP ) const { return true; }
+    KisNodeSP clone() {
+        return new TestNode(*this);
+    }
+    bool allowAsChild(KisNodeSP) const {
+        return true;
+    }
 
     using KisNode::setDirty;
-    
+
     void setDirty() {
-        KisNode::setDirty( QRect( -1000, -1000, 2000, 200 ) );
+        KisNode::setDirty(QRect(-1000, -1000, 2000, 200));
     }
-    KisNodeSP clone() const { return new TestNode(*this); }
+    KisNodeSP clone() const {
+        return new TestNode(*this);
+    }
 };
 
 
@@ -43,24 +49,36 @@ class TestNodeA : public KisNode
 {
     Q_OBJECT
 public:
-    KisNodeSP clone() const { return new TestNodeA(*this); }
-    bool allowAsChild( KisNodeSP ) const { return true; }
+    KisNodeSP clone() const {
+        return new TestNodeA(*this);
+    }
+    bool allowAsChild(KisNodeSP) const {
+        return true;
+    }
 };
 
 class TestNodeB : public KisNode
 {
     Q_OBJECT
 public:
-    KisNodeSP clone() const { return new TestNodeB(*this); }
-    bool allowAsChild( KisNodeSP ) const { return true; }
+    KisNodeSP clone() const {
+        return new TestNodeB(*this);
+    }
+    bool allowAsChild(KisNodeSP) const {
+        return true;
+    }
 };
 
 class TestNodeC : public KisNode
 {
     Q_OBJECT
 public:
-    KisNodeSP clone() const { return new TestNodeC(*this); }
-    bool allowAsChild( KisNodeSP ) const { return true; }
+    KisNodeSP clone() const {
+        return new TestNodeC(*this);
+    }
+    bool allowAsChild(KisNodeSP) const {
+        return true;
+    }
 };
 
 

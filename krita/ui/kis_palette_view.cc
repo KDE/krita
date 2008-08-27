@@ -34,12 +34,12 @@
 #include "KoColorSet.h"
 
 KisPaletteView::KisPaletteView(QWidget *parent, const char* name, int minWidth, int cols)
-    : Q3ScrollView( parent, name ), mMinWidth(minWidth), mCols(cols)
+        : Q3ScrollView(parent, name), mMinWidth(minWidth), mCols(cols)
 {
     m_cells = 0;
     m_currentPalette = 0;
 
-    QSize cellSize = QSize( mMinWidth, 50);
+    QSize cellSize = QSize(mMinWidth, 50);
 
     setHScrollBarMode(Q3ScrollView::AlwaysOff);
     setVScrollBarMode(Q3ScrollView::AlwaysOn);
@@ -66,7 +66,7 @@ void KisPaletteView::setPalette(KoColorSet* palette)
     m_currentPalette = palette;
     delete m_cells;
 
-    int rows = (m_currentPalette->nColors() + mCols -1 ) / mCols;
+    int rows = (m_currentPalette->nColors() + mCols - 1) / mCols;
 
     if (rows < 1) rows = 1;
 
@@ -76,27 +76,26 @@ void KisPaletteView::setPalette(KoColorSet* palette)
     m_cells->setShading(false);
     m_cells->setAcceptDrags(false);
 
-    QSize cellSize = QSize( mMinWidth, mMinWidth * rows / mCols);
-    m_cells->setFixedSize( cellSize );
+    QSize cellSize = QSize(mMinWidth, mMinWidth * rows / mCols);
+    m_cells->setFixedSize(cellSize);
 
-    for( int i = 0; i < m_currentPalette->nColors(); i++)
-    {
+    for (int i = 0; i < m_currentPalette->nColors(); i++) {
         QColor c = m_currentPalette->getColor(i).color;
-        m_cells->setColor( i, c );
+        m_cells->setColor(i, c);
     }
 
     connect(m_cells, SIGNAL(colorSelected(int, const QColor&)),
             SLOT(slotColorCellSelected(int)));
 
     connect(m_cells, SIGNAL(colorDoubleClicked(int, const QColor&)),
-            SLOT(slotColorCellDoubleClicked(int)) );
+            SLOT(slotColorCellDoubleClicked(int)));
 
-    addChild( m_cells );
+    addChild(m_cells);
     m_cells->show();
     updateScrollBars();
 }
 
-void KisPaletteView::slotColorCellSelected( int col )
+void KisPaletteView::slotColorCellSelected(int col)
 {
     KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     if (!m_currentPalette || (col >= m_currentPalette->nColors()))
@@ -107,7 +106,7 @@ void KisPaletteView::slotColorCellSelected( int col )
     emit colorSelected(m_currentPalette->getColor(col).color);
 }
 
-void KisPaletteView::slotColorCellDoubleClicked( int col )
+void KisPaletteView::slotColorCellDoubleClicked(int col)
 {
     KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     if (!m_currentPalette || (col >= m_currentPalette->nColors()))

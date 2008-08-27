@@ -61,15 +61,15 @@ public:
      * XXX: Make cs-independent
      */
     bool paintGradient(const QPointF& gradientVectorStart,
-               const QPointF& gradientVectorEnd,
-               enumGradientShape shape,
-               enumGradientRepeat repeat,
-               double antiAliasThreshold,
-               bool reverseGradient,
-               qint32 startx,
-               qint32 starty,
-               qint32 width,
-               qint32 height);
+                       const QPointF& gradientVectorEnd,
+                       enumGradientShape shape,
+                       enumGradientRepeat repeat,
+                       double antiAliasThreshold,
+                       bool reverseGradient,
+                       qint32 startx,
+                       qint32 starty,
+                       qint32 width,
+                       qint32 height);
 
 };
 #endif //KIS_GRADIENT_PAINTER_H_

@@ -20,12 +20,12 @@
 
 Bristle::Bristle()
 {
-    init(0,0,0);
+    init(0, 0, 0);
 }
 
-Bristle::Bristle(float x, float y,float length)
+Bristle::Bristle(float x, float y, float length)
 {
-    init (x, y, length);
+    init(x, y, length);
 }
 
 void Bristle::init(float x, float y, float length)
@@ -36,36 +36,39 @@ void Bristle::init(float x, float y, float length)
     m_counter = 0;
 }
 
-Bristle::~Bristle(){
+Bristle::~Bristle()
+{
 }
 
-void Bristle::setLength(float length){
+void Bristle::setLength(float length)
+{
     m_length = length;
 }
 
 
-void Bristle::addInk(float value){
+void Bristle::addInk(float value)
+{
     m_inkAmount = m_inkAmount + value;
 }
 
-void Bristle::removeInk(float value){
+void Bristle::removeInk(float value)
+{
     m_inkAmount = m_inkAmount - value;
 }
 
-void Bristle::setInkAmount(float inkAmount){
-    if (inkAmount > 1.0f)
-    {
+void Bristle::setInkAmount(float inkAmount)
+{
+    if (inkAmount > 1.0f) {
         inkAmount = 1.0f;
-    }
-    else if (inkAmount < -1.0f)
-    {
+    } else if (inkAmount < -1.0f) {
         inkAmount = -1.0f;
     }
 
     m_inkAmount = inkAmount;
 }
 
-void Bristle::setColor(KoColor color){
+void Bristle::setColor(KoColor color)
+{
     m_color = color;
 }
 

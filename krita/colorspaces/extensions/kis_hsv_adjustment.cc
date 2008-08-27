@@ -37,12 +37,12 @@
 #define SCALE_FROM_FLOAT( v  ) KoColorSpaceMaths< float, _channel_type_>::scaleToA( v )
 
 template<typename _channel_type_>
-void clamp( float* r, float* g, float* b);
+void clamp(float* r, float* g, float* b);
 
 #define FLOAT_CLAMP( v ) * v = (*v < 0.0) ? 0.0 : ( (*v>1.0) ? 1.0 : *v )
 
 template<>
-void clamp<quint8>( float* r, float* g, float* b)
+void clamp<quint8>(float* r, float* g, float* b)
 {
     FLOAT_CLAMP(r);
     FLOAT_CLAMP(g);
@@ -50,7 +50,7 @@ void clamp<quint8>( float* r, float* g, float* b)
 }
 
 template<>
-void clamp<quint16>( float* r, float* g, float* b)
+void clamp<quint16>(float* r, float* g, float* b)
 {
     FLOAT_CLAMP(r);
     FLOAT_CLAMP(g);
@@ -59,7 +59,7 @@ void clamp<quint16>( float* r, float* g, float* b)
 
 #ifdef HAVE_OPENEXR
 template<>
-void clamp<half>( float* r, float* g, float* b)
+void clamp<half>(float* r, float* g, float* b)
 {
     Q_UNUSED(r);
     Q_UNUSED(g);
@@ -68,7 +68,7 @@ void clamp<half>( float* r, float* g, float* b)
 #endif
 
 template<>
-void clamp<float>( float* r, float* g, float* b)
+void clamp<float>(float* r, float* g, float* b)
 {
     Q_UNUSED(r);
     Q_UNUSED(g);
@@ -76,65 +76,59 @@ void clamp<float>( float* r, float* g, float* b)
 }
 
 template<typename _channel_type_>
-class KisHSVAdjustment : public KoColorTransformation {
+class KisHSVAdjustment : public KoColorTransformation
+{
     typedef KoRgbTraits<_channel_type_> RGBTrait;
     typedef typename RGBTrait::Pixel RGBPixel;
-    public:
-        KisHSVAdjustment()
-        {
+public:
+    KisHSVAdjustment() {
+    }
+
+public:
+    void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const {
+        const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
+        RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
+        float h, s, v, r, g, b;
+        while (nPixels > 0) {
+            RGBToHSV(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s, &v);
+            h += m_adj_h;
+            if (h > 360) h -= 360;
+            if (h < 0) h += 360;
+            s += m_adj_s;
+            v += m_adj_v;
+            HSVToRGB(h, s, v, &r, &g, &b);
+            clamp< _channel_type_ >(&r, &g, &b);
+            dst->red = SCALE_FROM_FLOAT(r);
+            dst->green = SCALE_FROM_FLOAT(g);
+            dst->blue = SCALE_FROM_FLOAT(b);
+            dst->alpha = src->alpha;
+
+            --nPixels;
+            ++src;
+            ++dst;
         }
+    }
 
-    public:
-        void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
-        {
-            const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
-            RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
-            float h,s,v,r,g,b;
-            while( nPixels > 0)
-            {
-                RGBToHSV( SCALE_TO_FLOAT( src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s,&v );
-                h += m_adj_h;
-                if(h > 360) h -= 360;
-                if(h < 0 ) h += 360;
-                s += m_adj_s;
-                v += m_adj_v;
-                HSVToRGB( h, s, v, &r, &g, &b);
-                clamp< _channel_type_ >( &r, &g, &b);
-                dst->red = SCALE_FROM_FLOAT( r );
-                dst->green = SCALE_FROM_FLOAT( g );
-                dst->blue = SCALE_FROM_FLOAT( b );
-                dst->alpha = src->alpha;
+    virtual void setParameters(const QHash<QString, QVariant> & parameters) {
 
-                --nPixels;
-                ++src;
-                ++dst;
-            }
-        }
-
-    virtual void setParameters(const QHash<QString, QVariant> & parameters)
-    {
-
-        if(parameters.contains("h"))
-        {
+        if (parameters.contains("h")) {
             m_adj_h = parameters["h"].toDouble();
         }
-        if(parameters.contains("s"))
-        {
+        if (parameters.contains("s")) {
             m_adj_s = parameters["s"].toDouble();
         }
-        if(parameters.contains("v"))
-        {
+        if (parameters.contains("v")) {
             m_adj_v = parameters["v"].toDouble();
         }
 
     }
 
-    private:
-        double m_adj_h, m_adj_s, m_adj_v;
+private:
+    double m_adj_h, m_adj_s, m_adj_v;
 };
 
 
-KisHSVAdjustmentFactory::KisHSVAdjustmentFactory() : KoColorTransformationFactory("hsv_adjustment", i18n("HSV Adjustment") )
+KisHSVAdjustmentFactory::KisHSVAdjustmentFactory() : KoColorTransformationFactory("hsv_adjustment", i18n("HSV Adjustment"))
 {
 
 }
@@ -142,37 +136,31 @@ KisHSVAdjustmentFactory::KisHSVAdjustmentFactory() : KoColorTransformationFactor
 QList< QPair< KoID, KoID > > KisHSVAdjustmentFactory::supportedModels() const
 {
     QList< QPair< KoID, KoID > > l;
-    l.append( QPair< KoID, KoID >( RGBAColorModelID , Integer8BitsColorDepthID ) );
-    l.append( QPair< KoID, KoID >( RGBAColorModelID , Integer16BitsColorDepthID ) );
-    l.append( QPair< KoID, KoID >( RGBAColorModelID , Float16BitsColorDepthID ) );
-    l.append( QPair< KoID, KoID >( RGBAColorModelID , Float32BitsColorDepthID ) );
+    l.append(QPair< KoID, KoID >(RGBAColorModelID , Integer8BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID , Integer16BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID , Float16BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID , Float32BitsColorDepthID));
     return l;
 }
 
 KoColorTransformation* KisHSVAdjustmentFactory::createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const
 {
     KoColorTransformation * adj;
-    if ( colorSpace->colorModelId() != RGBAColorModelID)
-    {
+    if (colorSpace->colorModelId() != RGBAColorModelID) {
         kError() << "Unsupported color space " << colorSpace->id() << " in KisHSVAdjustmentFactory::createTransformation";
         return 0;
     }
-    if ( colorSpace->colorDepthId() == Integer8BitsColorDepthID )
-    {
+    if (colorSpace->colorDepthId() == Integer8BitsColorDepthID) {
         adj = new KisHSVAdjustment< quint8 >();
-    }
-    else if( colorSpace->colorDepthId() == Integer16BitsColorDepthID )
-    {
+    } else if (colorSpace->colorDepthId() == Integer16BitsColorDepthID) {
         adj = new KisHSVAdjustment< quint16 >();
     }
 #ifdef HAVE_OPENEXR
-    else if( colorSpace->colorDepthId() == Float16BitsColorDepthID )
-    {
+    else if (colorSpace->colorDepthId() == Float16BitsColorDepthID) {
         adj = new KisHSVAdjustment< half >();
     }
 #endif
-    else if( colorSpace->colorDepthId() == Float32BitsColorDepthID )
-    {
+    else if (colorSpace->colorDepthId() == Float32BitsColorDepthID) {
         adj = new KisHSVAdjustment< float >();
     } else {
         kError() << "Unsupported color space " << colorSpace->id() << " in KisHSVAdjustmentFactory::createTransformation";

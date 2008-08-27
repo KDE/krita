@@ -28,12 +28,13 @@
 
 void KisSelectedTransactionTest::testCreation()
 {
-    
+
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    QUndoCommand * cmd = new QUndoCommand();
-// //     KisSelectedTransaction test("bla", dev, cmd);
-    
+    QFAIL("implement this test again after api change");
+//    QUndoCommand * cmd = new QUndoCommand();
+//    KisSelectedTransaction test("bla", dev, cmd);
+
 }
 
 

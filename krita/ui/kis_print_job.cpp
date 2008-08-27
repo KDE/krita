@@ -20,7 +20,6 @@
 
 #include "kis_print_job.h"
 
-#include "kis_image.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_config.h"
 #include "kis_canvas_resource_provider.h"
@@ -32,8 +31,8 @@
 #include <QPainter>
 
 KisPrintJob::KisPrintJob(KisImageSP image)
-    : KoPrintJob(image.data())
-    , m_image(image)
+        : KoPrintJob(image.data())
+        , m_image(image)
 {
     m_printer.setFromTo(1, 1);
 }
@@ -56,7 +55,7 @@ void KisPrintJob::startPrinting(RemovePolicy removePolicy)
     QRect r = m_image->bounds();
 
     gc.scale(scaleX, scaleY);
-    m_image->renderToPainter(0, 0, r.x(), r.y(), r.width(), r.height(), gc, printerProfile );
+    m_image->renderToPainter(0, 0, r.x(), r.y(), r.width(), r.height(), gc, printerProfile);
     if (removePolicy == DeleteWhenDone)
         deleteLater();
 }

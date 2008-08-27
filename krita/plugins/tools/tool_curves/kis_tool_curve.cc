@@ -49,18 +49,18 @@
 #include "kis_curve_framework.h"
 
 
-QRect KisToolCurve::pivotRect (const QPointF& pos)
+QRect KisToolCurve::pivotRect(const QPointF& pos)
 {
-    return QRect ((pos-QPointF(4,4)).toPoint(),(pos+QPointF(4,4)).toPoint());
+    return QRect((pos -QPointF(4, 4)).toPoint(), (pos + QPointF(4, 4)).toPoint());
 }
 
-QRect KisToolCurve::selectedPivotRect (const QPointF& pos)
+QRect KisToolCurve::selectedPivotRect(const QPointF& pos)
 {
-    return QRect ((pos-QPointF(5,5)).toPoint(),(pos+QPointF(5,5)).toPoint());
+    return QRect((pos -QPointF(5, 5)).toPoint(), (pos + QPointF(5, 5)).toPoint());
 }
 
 KisToolCurve::KisToolCurve(const QString& UIName)
-    : super(UIName)
+        : super(UIName)
 {
     m_UIName = UIName;
     m_currentImage = 0;
@@ -106,14 +106,14 @@ void KisToolCurve::buttonPress(KoPointerEvent *event)
     if (event->button() == Qt::LeftButton) {
         m_dragging = true;
         m_currentPoint = event->pos().toPointF();
-        PointPair temp = pointUnderMouse (m_subject->canvasController()->windowToView(event->pos()).toPointF());
+        PointPair temp = pointUnderMouse(m_subject->canvasController()->windowToView(event->pos()).toPointF());
         if (temp.first == m_curve->end() && !(m_actionOptions)) {
             m_curve->selectAll(false);
-	    if (!m_curve->isEmpty())
+            if (!m_curve->isEmpty())
                 m_previous = --(m_curve->end());
             m_current = m_curve->pushPivot(event->pos().toPointF());
             if (m_curve->pivots().count() > 1)
-                m_curve->calculateCurve(m_previous,m_current,m_current);
+                m_curve->calculateCurve(m_previous, m_current, m_current);
             draw(m_current);
         } else {
             if (temp.second)
@@ -134,17 +134,17 @@ void KisToolCurve::keyPress(QKeyEvent *event)
         m_dragging = false;
         commitCurve();
     } else
-    if (event->key() == Qt::Key_Escape) {
-        m_dragging = false;
-        m_curve->clear();
-    } else
-    if (event->key() == Qt::Key_Delete) {
-        m_dragging = false;
-        m_curve->deleteSelected();
-        m_current = m_curve->lastIterator();
-        m_previous = m_curve->selectPivot(m_current);
-        draw(false);
-    }
+        if (event->key() == Qt::Key_Escape) {
+            m_dragging = false;
+            m_curve->clear();
+        } else
+            if (event->key() == Qt::Key_Delete) {
+                m_dragging = false;
+                m_curve->deleteSelected();
+                m_current = m_curve->lastIterator();
+                m_previous = m_curve->selectPivot(m_current);
+                draw(false);
+            }
 }
 
 void KisToolCurve::keyRelease(QKeyEvent *)
@@ -189,10 +189,10 @@ double pointToSegmentDistance(const QPointF& pp, const QPointF& pl0, const QPoin
     QPointF l0 = pl0, l1 = pl1, p = pp;
     double lineLength = sqrt((l1.x() - l0.x()) * (l1.x() - l0.x()) + (l1.y() - l0.y()) * (l1.y() - l0.y()));
     double distance = 0;
-    KisVector2D v0(l0), v1(l1), v(p), seg(v0-v1), dist0(v0-p), dist1(v1-p);
+    KisVector2D v0(l0), v1(l1), v(p), seg(v0 - v1), dist0(v0 - p), dist1(v1 - p);
 
     if (seg.length() < dist0.length() ||
-        seg.length() < dist1.length()) // the point doesn't perpendicolarly intersecate the segment (or it's too far from the segment)
+            seg.length() < dist1.length()) // the point doesn't perpendicolarly intersecate the segment (or it's too far from the segment)
         return (double)INT_MAX;
 
     if (lineLength > DBL_EPSILON) {
@@ -209,23 +209,23 @@ PointPair KisToolCurve::pointUnderMouse(const QPointF& pos)
     QPointF pos1, pos2;
     it = handleUnderMouse(pos);
     if (it != m_curve->end())
-        return PointPair(it,true);
+        return PointPair(it, true);
 
     for (it = m_curve->begin(); it != m_curve->end(); it++) {
         next = it.next();
         if (next == m_curve->end() || it == m_curve->end())
-            return PointPair(m_curve->end(),false);
+            return PointPair(m_curve->end(), false);
         if ((*it).hint() > LINEHINT || (*next).hint() > LINEHINT)
             continue;
         pos1 = m_subject->canvasController()->windowToView((*it).point()).toPointF();
         pos2 = m_subject->canvasController()->windowToView((*next).point()).toPointF();
         if (pos1 == pos2)
             continue;
-        if (pointToSegmentDistance(pos,pos1,pos2) <= MAXDISTANCE)
+        if (pointToSegmentDistance(pos, pos1, pos2) <= MAXDISTANCE)
             break;
     }
 
-    return PointPair(it,false);
+    return PointPair(it, false);
 }
 
 KisCurve::iterator KisToolCurve::handleUnderMouse(const QPointF& pos)
@@ -262,13 +262,13 @@ int KisToolCurve::updateOptions(int key)
     int options = 0x0000;
 
     if (key & Qt::ControlModifier)
-            options |= CONTROLOPTION;
+        options |= CONTROLOPTION;
 
     if (key & Qt::ShiftModifier)
-            options |= SHIFTOPTION;
+        options |= SHIFTOPTION;
 
     if (key & Qt::AltModifier)
-            options |= ALTOPTION;
+        options |= ALTOPTION;
 
     if (options != m_actionOptions) {
         m_actionOptions = options;
@@ -307,7 +307,7 @@ void KisToolCurve::draw(KisCurve::iterator inf, bool pivotonly, bool minimal)
         if (pivotonly) {
             KisCurve p = m_curve->pivots();
             for (KisCurve::iterator i = p.begin(); i != p.end(); i++)
-                drawPivotHandle (*gc, i);
+                drawPivotHandle(*gc, i);
             delete gc;
             return;
         }
@@ -332,8 +332,8 @@ void KisToolCurve::draw(KisCurve::iterator inf, bool pivotonly, bool minimal)
                     finish = finish.previousPivot();
                 while (it != finish) {
                     if ((*it).isPivot())
-                        drawPivotHandle (*gc, it);
-                    it = drawPoint (*gc, it);
+                        drawPivotHandle(*gc, it);
+                    it = drawPoint(*gc, it);
                 }
             }
             delete gc;
@@ -345,8 +345,8 @@ void KisToolCurve::draw(KisCurve::iterator inf, bool pivotonly, bool minimal)
     }
     while (it != finish) {
         if ((*it).isPivot())
-            drawPivotHandle (*gc, it);
-        it = drawPoint (*gc, it);
+            drawPivotHandle(*gc, it);
+        it = drawPoint(*gc, it);
     }
 
     delete gc;
@@ -368,7 +368,7 @@ KisCurve::iterator KisToolCurve::drawPoint(QPainter& gc, KisCurve::iterator poin
         gc.drawPoint(pos1);
         if (++point != m_curve->end() && (*point).hint() <= LINEHINT) {
             pos2 = controller->windowToView((*point).point()).toPointF();
-            gc.drawLine(pos1,pos2);
+            gc.drawLine(pos1, pos2);
         }
         break;
     default:
@@ -386,10 +386,10 @@ void KisToolCurve::drawPivotHandle(QPainter& gc, KisCurve::iterator point)
         QPointF pos = controller->windowToView((*point).point()).toPointF();
         if ((*point).isSelected()) {
             gc.setPen(m_selectedPivotPen);
-            gc.drawRoundRect(selectedPivotRect(pos),m_selectedPivotRounding,m_selectedPivotRounding);
+            gc.drawRoundRect(selectedPivotRect(pos), m_selectedPivotRounding, m_selectedPivotRounding);
         } else {
             gc.setPen(m_pivotPen);
-            gc.drawRoundRect(pivotRect(pos),m_pivotRounding,m_pivotRounding);
+            gc.drawRoundRect(pivotRect(pos), m_pivotRounding, m_pivotRounding);
         }
         gc.setPen(m_drawingPen);
     }
@@ -412,7 +412,7 @@ void KisToolCurve::commitCurve()
     else if (toolType() == TOOL_SELECT)
         selectCurve();
     else
-        dbgKrita <<"NO SUPPORT FOR THIS TYPE OF TOOL";
+        dbgKrita << "NO SUPPORT FOR THIS TYPE OF TOOL";
 
     m_curve->clear();
     m_curve->endActionOptions();
@@ -423,9 +423,9 @@ void KisToolCurve::paintCurve()
     KisPaintDeviceSP device = currentNode()->paintDevice();
     if (!device) return;
 
-    KisPainter painter (device);
-    if (m_currentImage->undo()) painter.beginTransaction (m_transactionMessage);
-    painter.setBounds( m_currentImage->bounds() );
+    KisPainter painter(device);
+    if (m_currentImage->undo()) painter.beginTransaction(m_transactionMessage);
+    painter.setBounds(m_currentImage->bounds());
     painter.setPaintColor(m_subject->fgColor());
     painter.setBrush(m_subject->currentBrush());
     painter.setOpacity(m_opacity);
@@ -436,10 +436,10 @@ void KisToolCurve::paintCurve()
 // Call paintPoint
     KisCurve::iterator it = m_curve->begin();
     while (it != m_curve->end())
-        it = paintPoint(painter,it);
+        it = paintPoint(painter, it);
 // Finish
 
-    device->setDirty( painter.dirtyRegion() );
+    device->setDirty(painter.dirtyRegion());
     notifyModified();
 
     if (m_currentImage->undo()) {
@@ -449,9 +449,9 @@ void KisToolCurve::paintCurve()
     draw(false);
 }
 
-KisCurve::iterator KisToolCurve::paintPoint (KisPainter& painter, KisCurve::iterator point)
+KisCurve::iterator KisToolCurve::paintPoint(KisPainter& painter, KisCurve::iterator point)
 {
-    KisCurve::iterator next = point; next+=1;
+    KisCurve::iterator next = point; next += 1;
     switch ((*point).hint()) {
     case POINTHINT:
         painter.paintAt((*point++).point(), PRESSURE_DEFAULT, 0, 0);
@@ -517,7 +517,7 @@ void KisToolCurve::selectCurve()
     painter.paintPolygon(convertCurve());
 
 
-    if(hasSelection) {
+    if (hasSelection) {
         QRect dirty(painter.dirtyRegion());
         dev->setDirty(dirty);
     } else {
@@ -539,13 +539,14 @@ QWidget* KisToolCurve::createOptionWidget()
     else if (toolType() == TOOL_SELECT)
         return createSelectionOptionWidget(parent);
     else
-        dbgKrita <<"NO SUPPORT FOR THIS TOOL TYPE";
+        dbgKrita << "NO SUPPORT FOR THIS TOOL TYPE";
     return 0;
 }
 
-void KisToolCurve::slotSetAction(int action) {
+void KisToolCurve::slotSetAction(int action)
+{
     if (action >= SELECTION_ADD && action <= SELECTION_SUBTRACT)
-        m_selectAction =(selectionAction)action;
+        m_selectAction = (selectionAction)action;
 }
 
 QWidget* KisToolCurve::createSelectionOptionWidget(QWidget* parent)
@@ -554,7 +555,7 @@ QWidget* KisToolCurve::createSelectionOptionWidget(QWidget* parent)
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setCaption(m_UIName);
 
-    connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+    connect(m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
     QVBoxLayout * l = static_cast<QVBoxLayout*>(m_optWidget->layout());
     l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));

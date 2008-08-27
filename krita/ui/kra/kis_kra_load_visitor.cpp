@@ -41,8 +41,8 @@
 #include "generator/kis_generator_layer.h"
 
 KisKraLoadVisitor::KisKraLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayer *, QString> &layerFilenames, const QString & name) :
-    KisNodeVisitor(),
-    m_layerFilenames(layerFilenames)
+        KisNodeVisitor(),
+        m_layerFilenames(layerFilenames)
 {
     m_external = false;
     m_img = img;
@@ -56,7 +56,7 @@ void KisKraLoadVisitor::setExternalUri(const QString &uri)
     m_uri = uri;
 }
 
-bool KisKraLoadVisitor::visit( KisExternalLayer * )
+bool KisKraLoadVisitor::visit(KisExternalLayer *)
 {
     return true;
 }
@@ -66,7 +66,7 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
 
     QString location = m_external ? QString::null : m_uri;
     location += m_name + "/layers/" + m_layerFilenames[layer];
-    
+
     // Layer data
     if (m_store->open(location)) {
         if (!layer->paintDevice()->read(m_store)) {
@@ -77,8 +77,7 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
         }
 
         m_store->close();
-    }
-    else {
+    } else {
         kError() << "No image data: that's an error!";
         return false;
     }
@@ -128,10 +127,10 @@ bool KisKraLoadVisitor::visit(KisGroupLayer *layer)
 {
     KisKraLoadVisitor visitor(m_img, m_store, m_layerFilenames, m_name);
 
-    if(m_external)
+    if (m_external)
         visitor.setExternalUri(m_uri);
 
-    visitAll( layer );
+    visitAll(layer);
 
     layer->setDirty(m_img->bounds());
     return true;
@@ -150,9 +149,8 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
         if (!selection->read(m_store)) {
             selection->disconnect();
             m_store->close();
-        }
-        else {
-            layer->setSelection( selection );
+        } else {
+            layer->setSelection(selection);
         }
         m_store->close();
 
@@ -173,7 +171,7 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
         }
     }
 
-    layer->setDirty( m_img->bounds() );
+    layer->setDirty(m_img->bounds());
     return true;
 
 
@@ -183,7 +181,7 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
 {
     QString location = m_external ? QString::null : m_uri;
     location += m_name + "/layers/" + m_layerFilenames[layer];
-    
+
     // Layer data
     if (m_store->open(location)) {
         if (!layer->paintDevice()->read(m_store)) {
@@ -194,8 +192,7 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
         }
 
         m_store->close();
-    }
-    else {
+    } else {
         kError() << "No image data: that's an error!";
         return false;
     }
@@ -224,9 +221,8 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
         if (!selection->read(m_store)) {
             selection->disconnect();
             m_store->close();
-        }
-        else {
-            layer->setSelection( selection );
+        } else {
+            layer->setSelection(selection);
         }
         m_store->close();
 
@@ -247,6 +243,6 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
         }
     }
 
-    layer->setDirty( m_img->bounds() );
+    layer->setDirty(m_img->bounds());
     return true;
 }

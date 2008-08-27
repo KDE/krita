@@ -23,68 +23,81 @@
 #include <KoColorProfile.h>
 #include <QString>
 
-class KisIlluminantProfile : public KoColorProfile {
+class KisIlluminantProfile : public KoColorProfile
+{
 
-    public:
-        KisIlluminantProfile(const QString &fileName = "");
-        KisIlluminantProfile(const KisIlluminantProfile &copy);
-        ~KisIlluminantProfile();
+public:
+    KisIlluminantProfile(const QString &fileName = "");
+    KisIlluminantProfile(const KisIlluminantProfile &copy);
+    ~KisIlluminantProfile();
 
-        // Repeat here from KoColorProfile, to remember it in subclasses
-        KoColorProfile *clone() const
-        {
-            return new KisIlluminantProfile(*this);
-        }
+    // Repeat here from KoColorProfile, to remember it in subclasses
+    KoColorProfile *clone() const {
+        return new KisIlluminantProfile(*this);
+    }
 
-        ///////////////////////////////////////////////////
-        // KoColorProfile interface
+    ///////////////////////////////////////////////////
+    // KoColorProfile interface
 
-        bool load();
-        bool save(const QString &fileName);
+    bool load();
+    bool save(const QString &fileName);
 
-        bool valid() const { return m_valid; }
-        bool isSuitableForOutput() const   { return true; }
-        bool isSuitableForPrinting() const { return true; }
-        bool isSuitableForDisplay() const  { return true; }
-        bool operator==(const KoColorProfile &op2) const
-            { return (name() == op2.name()); }
+    bool valid() const {
+        return m_valid;
+    }
+    bool isSuitableForOutput() const   {
+        return true;
+    }
+    bool isSuitableForPrinting() const {
+        return true;
+    }
+    bool isSuitableForDisplay() const  {
+        return true;
+    }
+    bool operator==(const KoColorProfile &op2) const {
+        return (name() == op2.name());
+    }
 
-        ///////////////////////////////////////////////////
+    ///////////////////////////////////////////////////
 
-        // INTROSPECTION
-        QString illuminant() const { return m_illuminant; }
-        int wavelengths() const { return m_wl; }
+    // INTROSPECTION
+    QString illuminant() const {
+        return m_illuminant;
+    }
+    int wavelengths() const {
+        return m_wl;
+    }
 
-        // UTILITY
-        void fromRgb(const double *rgbvec, double *ksvec) const;
-        void toRgb(const double *ksvec, double *rgbvec) const;
+    // UTILITY
+    void fromRgb(const double *rgbvec, double *ksvec) const;
+    void toRgb(const double *ksvec, double *rgbvec) const;
 
-    private:
-        double fgen(double R, int i) const;
+private:
+    double fgen(double R, int i) const;
 
-        void rgbToReflectance(const double *rgbvec) const;
-        void reflectanceToRgb(double *rgbvec) const;
+    void rgbToReflectance(const double *rgbvec) const;
+    void reflectanceToRgb(double *rgbvec) const;
 
-        void reflectanceToKS(double *ksvec) const;
-        void KSToReflectance(const double *ksvec) const;
+    void reflectanceToKS(double *ksvec) const;
+    void KSToReflectance(const double *ksvec) const;
 
-        void reset();
+    void reset();
 
-    private:
+private:
 
-        int m_wl;
-        double **m_T;
-        double *m_red;
-        double *m_green;
-        double *m_blue;
+    int m_wl;
+    double **m_T;
+    double *m_red;
+    double *m_green;
+    double *m_blue;
 
-        double *m_refvec;
+    double *m_refvec;
 
-        int nc;
-        double *coeffs;
+    int nc;
+    double *coeffs;
 
-        QString m_illuminant;
-        bool m_valid;
+    QString m_illuminant;
+    bool m_valid;
 
 };
 

@@ -21,8 +21,8 @@
 #include "kis_node.h"
 
 KisNodeMoveCommand::KisNodeMoveCommand(KisNodeSP node, const QPoint& oldpos, const QPoint& newpos) :
-    QUndoCommand(i18n("Move")),
-    m_node(node)
+        QUndoCommand(i18n("Move")),
+        m_node(node)
 {
     m_oldPos = oldpos;
     m_newPos = newpos;

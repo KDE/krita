@@ -34,25 +34,25 @@
 #include <kis_selection.h>
 
 KisSimpleNoiseReducer::KisSimpleNoiseReducer()
-    : KisFilter(id(), CategoryEnhance, i18n("&Gaussian Noise Reduction"))
+        : KisFilter(id(), CategoryEnhance, i18n("&Gaussian Noise Reduction"))
 {
-    setSupportsPainting( false );
-    setSupportsPreview( true );
-    setSupportsIncrementalPainting( false );
+    setSupportsPainting(false);
+    setSupportsPreview(true);
+    setSupportsIncrementalPainting(false);
 }
 
 KisSimpleNoiseReducer::~KisSimpleNoiseReducer()
 {
 }
 
-KisFilterConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image ) const
+KisFilterConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image) const
 {
     Q_UNUSED(dev);
     Q_UNUSED(image);
     vKisIntegerWidgetParam param;
-    param.push_back( KisIntegerWidgetParam( 0, 255, 50, i18n("Threshold"), "threshold" ) );
-    param.push_back( KisIntegerWidgetParam( 0, 10, 1, i18n("Window size"), "windowsize") );
-    return new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param );
+    param.push_back(KisIntegerWidgetParam(0, 255, 50, i18n("Threshold"), "threshold"));
+    param.push_back(KisIntegerWidgetParam(0, 10, 1, i18n("Window size"), "windowsize"));
+    return new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
 }
 
 KisFilterConfiguration * KisSimpleNoiseReducer::factoryConfiguration(const KisPaintDeviceSP) const
@@ -65,16 +65,16 @@ KisFilterConfiguration * KisSimpleNoiseReducer::factoryConfiguration(const KisPa
 
 inline int ABS(int v)
 {
-    if(v < 0) return -v;
+    if (v < 0) return -v;
     return v;
 }
 
 void KisSimpleNoiseReducer::process(KisConstProcessingInformation srcInfo,
-                 KisProcessingInformation dstInfo,
-                 const QSize& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-        ) const
+                                    KisProcessingInformation dstInfo,
+                                    const QSize& size,
+                                    const KisFilterConfiguration* config,
+                                    KoUpdater* progressUpdater
+                                   ) const
 {
     const KisPaintDeviceSP src = srcInfo.paintDevice();
     KisPaintDeviceSP dst = dstInfo.paintDevice();
@@ -84,13 +84,11 @@ void KisSimpleNoiseReducer::process(KisConstProcessingInformation srcInfo,
     Q_ASSERT(!dst.isNull());
 
     int threshold, windowsize;
-    if(config ==0)
-    {
+    if (config == 0) {
         config = defaultConfiguration(src);
     }
-    if( progressUpdater )
-    {
-        progressUpdater->setRange(0, size.width() * size.height() );
+    if (progressUpdater) {
+        progressUpdater->setRange(0, size.width() * size.height());
     }
     int count = 0;
 
@@ -100,13 +98,13 @@ void KisSimpleNoiseReducer::process(KisConstProcessingInformation srcInfo,
     const KoColorSpace* cs = src->colorSpace();
 
     // Compute the blur mask
-    KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(2*windowsize+1, 2*windowsize+1, windowsize, windowsize);
+    KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(2*windowsize + 1, 2*windowsize + 1, windowsize, windowsize);
 
     KisConvolutionKernelSP kernel = KisConvolutionKernel::kernelFromMaskGenerator(kas);
     delete kas;
 
     KisPaintDeviceSP interm = new KisPaintDevice(*src); // TODO no need for a full copy and then a transaction
-    KisConvolutionPainter painter( interm );
+    KisConvolutionPainter painter(interm);
     painter.beginTransaction("bouuh");
     painter.applyMatrix(kernel, interm, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);
 
@@ -115,26 +113,21 @@ void KisSimpleNoiseReducer::process(KisConstProcessingInformation srcInfo,
     }
 
 
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection() );
-    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection() );
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
+    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
     KisHLineConstIteratorPixel intermIt = interm->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width());
 
-    for (int j = 0; j < size.height() && !(progressUpdater && progressUpdater->interrupted()); j++)
-    {
-        while (!srcIt.isDone() && !(progressUpdater && progressUpdater->interrupted()) )
-        {
-            if (srcIt.isSelected())
-            {
+    for (int j = 0; j < size.height() && !(progressUpdater && progressUpdater->interrupted()); j++) {
+        while (!srcIt.isDone() && !(progressUpdater && progressUpdater->interrupted())) {
+            if (srcIt.isSelected()) {
                 quint8 diff = cs->difference(srcIt.oldRawData(), intermIt.rawData());
-                if( diff > threshold)
-                {
+                if (diff > threshold) {
                     memcpy(dstIt.rawData(), intermIt.rawData(), cs->pixelSize());
-                }
-                else {
+                } else {
                     memcpy(dstIt.rawData(), srcIt.oldRawData(), cs->pixelSize());
                 }
             }
-            if (progressUpdater) progressUpdater->setValue( ++count );
+            if (progressUpdater) progressUpdater->setValue(++count);
             ++srcIt;
             ++dstIt;
             ++intermIt;

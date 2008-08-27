@@ -33,7 +33,8 @@ class KisSelectionOptions;
  * current eraser shape. Not sure what kind of an icon could represent
  * this... Depends a bit on how we're going to visualize selections.
  */
-class KisToolSelectEraser : public KisToolFreehand {
+class KisToolSelectEraser : public KisToolFreehand
+{
     Q_OBJECT
     typedef KisToolFreehand super;
 
@@ -45,7 +46,7 @@ public:
     virtual QWidget* optionWidget();
 
 public slots:
-    virtual void activate( bool tmp );
+    virtual void activate(bool tmp);
 
 protected:
     virtual void initPaint(KoPointerEvent *e);
@@ -54,21 +55,21 @@ private:
     KisSelectionOptions * m_optWidget;
 };
 
-class KisToolSelectEraserFactory : public KoToolFactory {
+class KisToolSelectEraserFactory : public KoToolFactory
+{
     typedef KoToolFactory super;
 public:
     KisToolSelectEraserFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent,  "KisToolSelectEraser", i18n( "Selection Eraser" ))
-        {
-            setToolTip( i18n( "Erase parts of a selection with a brush" ) );
-            setToolType( TOOL_TYPE_SELECTED );
-            setIcon( "tool_eraser_selection" );
-            setShortcut(KShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E));
-            setPriority( 51 );
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-        }
+            : KoToolFactory(parent,  "KisToolSelectEraser", i18n("Selection Eraser")) {
+        setToolTip(i18n("Erase parts of a selection with a brush"));
+        setToolType(TOOL_TYPE_SELECTED);
+        setIcon("tool_eraser_selection");
+        setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_E));
+        setPriority(51);
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+    }
 
-    virtual ~KisToolSelectEraserFactory(){}
+    virtual ~KisToolSelectEraserFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return  new KisToolSelectEraser(canvas);

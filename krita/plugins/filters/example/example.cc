@@ -45,7 +45,7 @@
 #include <kis_global.h>
 
 typedef KGenericFactory<KritaExample> KritaExampleFactory;
-K_EXPORT_COMPONENT_FACTORY( kritaexample, KritaExampleFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritaexample, KritaExampleFactory("krita"))
 
 KritaExample::KritaExample(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
@@ -72,23 +72,22 @@ KisFilterInvert::KisFilterInvert() : KisFilter(id(), CategoryAdjust, i18n("&Inve
 }
 
 void KisFilterInvert::process(KisConstProcessingInformation srcInfo,
-                 KisProcessingInformation dstInfo,
-                 const QSize& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-        ) const
+                              KisProcessingInformation dstInfo,
+                              const QSize& size,
+                              const KisFilterConfiguration* config,
+                              KoUpdater* progressUpdater
+                             ) const
 {
     const KisPaintDeviceSP src = srcInfo.paintDevice();
     KisPaintDeviceSP dst = dstInfo.paintDevice();
     QPoint dstTopLeft = dstInfo.topLeft();
     QPoint srcTopLeft = srcInfo.topLeft();
-    Q_UNUSED( config );
+    Q_UNUSED(config);
     Q_ASSERT(!src.isNull());
     Q_ASSERT(!dst.isNull());
 
-    if( progressUpdater )
-    {
-        progressUpdater->setRange(0, size.width() * size.height() );
+    if (progressUpdater) {
+        progressUpdater->setRange(0, size.width() * size.height());
     }
     int count = 0;
 
@@ -107,19 +106,19 @@ void KisFilterInvert::process(KisConstProcessingInformation srcInfo,
     KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
 
-    for (int row = 0; row < size.height() && !(progressUpdater && progressUpdater->interrupted()); ++row ) {
-        while ( !srcIt.isDone() && !(progressUpdater && progressUpdater->interrupted()) ) {
-            if ( srcIt.isSelected() ) {
-                inverter->transform( srcIt.oldRawData(), dstIt.rawData(), 1);
+    for (int row = 0; row < size.height() && !(progressUpdater && progressUpdater->interrupted()); ++row) {
+        while (!srcIt.isDone() && !(progressUpdater && progressUpdater->interrupted())) {
+            if (srcIt.isSelected()) {
+                inverter->transform(srcIt.oldRawData(), dstIt.rawData(), 1);
             }
             ++srcIt;
             ++dstIt;
-            if(progressUpdater) progressUpdater->setValue( ++count );
+            if (progressUpdater) progressUpdater->setValue(++count);
         }
         srcIt.nextRow();
         dstIt.nextRow();
     }
-    dbgPlugins <<"Per-pixel isSelected():" << t.elapsed() <<" ms";
+    dbgPlugins << "Per-pixel isSelected():" << t.elapsed() << " ms";
 
 #if 0
     t.restart();
@@ -136,31 +135,29 @@ void KisFilterInvert::process(KisConstProcessingInformation srcInfo,
     dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width());
 
     for (int row = 0; row < size.height(); ++row) {
-        while( ! srcIt.isDone() )
-        {
+        while (! srcIt.isDone()) {
             int srcItConseq = srcIt.nConseqHPixels();
             int dstItConseq = srcIt.nConseqHPixels();
-            int conseqPixels = qMin( srcItConseq, dstItConseq );
+            int conseqPixels = qMin(srcItConseq, dstItConseq);
 
             int pixels = 0;
 
-            if ( hasSelection ) {
+            if (hasSelection) {
                 // Get largest horizontal row of selected pixels
 
-                while ( srcIt.isSelected() && pixels < conseqPixels ) {
+                while (srcIt.isSelected() && pixels < conseqPixels) {
                     ++pixels;
                 }
-                inverter->transform( srcIt.oldRawData(), dstIt.rawData(), pixels);
+                inverter->transform(srcIt.oldRawData(), dstIt.rawData(), pixels);
 
                 // We apparently found a non-selected pixels, or the row
                 // was done; get the stretch of non-selected pixels
-                while ( !srcIt.isSelected() && pixels < conseqPixels ) {
+                while (!srcIt.isSelected() && pixels < conseqPixels) {
                     ++ pixels;
                 }
-            }
-            else {
+            } else {
                 pixels = conseqPixels;
-                inverter->transform( srcIt.oldRawData(), dstIt.rawData(), pixels );
+                inverter->transform(srcIt.oldRawData(), dstIt.rawData(), pixels);
             }
 
             // Update progress
@@ -170,7 +167,7 @@ void KisFilterInvert::process(KisConstProcessingInformation srcInfo,
         srcIt.nextRow();
         dstIt.nextRow();
     }
-    dbgPlugins <<"Consecutive pixels:" << t.elapsed() <<" ms";
+    dbgPlugins << "Consecutive pixels:" << t.elapsed() << " ms";
 
 #endif
     delete inverter;

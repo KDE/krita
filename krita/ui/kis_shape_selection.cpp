@@ -38,8 +38,8 @@
 #include <kis_debug.h>
 
 KisShapeSelection::KisShapeSelection(KisImageSP image, KisSelectionSP selection)
-    : KoShapeContainer(new KisShapeSelectionModel(image, selection, this))
-    , m_image(image)
+        : KoShapeContainer(new KisShapeSelectionModel(image, selection, this))
+        , m_image(image)
 {
     setShapeId("KisShapeSelection");
     setSelectable(false);
@@ -63,30 +63,29 @@ void KisShapeSelection::saveOdf(KoShapeSavingContext&) const
 
 void KisShapeSelection::addChild(KoShape *object)
 {
-    KoShapeContainer::addChild( object );
-    m_canvas->shapeManager()->add( object );
+    KoShapeContainer::addChild(object);
+    m_canvas->shapeManager()->add(object);
 }
 
 void KisShapeSelection::removeChild(KoShape *object)
 {
-    m_canvas->shapeManager()->remove( object );
-    KoShapeContainer::removeChild( object );
+    m_canvas->shapeManager()->remove(object);
+    KoShapeContainer::removeChild(object);
 }
 
 QPainterPath KisShapeSelection::selectionOutline()
 {
-    if(m_dirty) {
+    if (m_dirty) {
         QList<KoShape*> shapesList = iterator();
 
         QPainterPath outline;
         KoPathShape* pathShape;
-        foreach( KoShape * shape, shapesList )
-        {
-            pathShape = dynamic_cast<KoPathShape*>( shape );
-            if(pathShape) {
+        foreach(KoShape * shape, shapesList) {
+            pathShape = dynamic_cast<KoPathShape*>(shape);
+            if (pathShape) {
                 QMatrix shapeMatrix = shape->absoluteTransformation(0);
 
-            outline = outline.united(shapeMatrix.map(shape->outline()));
+                outline = outline.united(shapeMatrix.map(shape->outline()));
             }
         }
         m_outline = outline;
@@ -169,8 +168,8 @@ KoShapeManager* KisShapeSelection::shapeManager() const
     return m_canvas->shapeManager();
 }
 
-KisShapeSelectionFactory::KisShapeSelectionFactory( QObject* parent)
-    : KoShapeFactory( parent, "KisShapeSelection", "selection shape container" )
+KisShapeSelectionFactory::KisShapeSelectionFactory(QObject* parent)
+        : KoShapeFactory(parent, "KisShapeSelection", "selection shape container")
 {
 }
 
@@ -179,9 +178,9 @@ KoShape* KisShapeSelectionFactory::createDefaultShape() const
     return 0;
 }
 
-KoShape* KisShapeSelectionFactory::createShape( const KoProperties* params ) const
+KoShape* KisShapeSelectionFactory::createShape(const KoProperties* params) const
 {
-    Q_UNUSED( params );
+    Q_UNUSED(params);
     return 0;
 }
 

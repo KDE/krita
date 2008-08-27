@@ -46,7 +46,7 @@
 #include "kis_curve_framework.h"
 
 
-KisCurve::iterator KisCurveBezier::groupEndpoint (KisCurve::iterator it) const
+KisCurve::iterator KisCurveBezier::groupEndpoint(KisCurve::iterator it) const
 {
     iterator temp = it;
     if ((*it).hint() == BEZIERNEXTCONTROLHINT)
@@ -56,7 +56,7 @@ KisCurve::iterator KisCurveBezier::groupEndpoint (KisCurve::iterator it) const
     return temp;
 }
 
-KisCurve::iterator KisCurveBezier::groupPrevControl (KisCurve::iterator it) const
+KisCurve::iterator KisCurveBezier::groupPrevControl(KisCurve::iterator it) const
 {
     iterator temp = it;
     if ((*it).hint() == BEZIERENDHINT)
@@ -66,7 +66,7 @@ KisCurve::iterator KisCurveBezier::groupPrevControl (KisCurve::iterator it) cons
     return temp;
 }
 
-KisCurve::iterator KisCurveBezier::groupNextControl (KisCurve::iterator it) const
+KisCurve::iterator KisCurveBezier::groupNextControl(KisCurve::iterator it) const
 {
     iterator temp = it;
     if ((*it).hint() == BEZIERENDHINT)
@@ -76,16 +76,16 @@ KisCurve::iterator KisCurveBezier::groupNextControl (KisCurve::iterator it) cons
     return temp;
 }
 
-bool KisCurveBezier::groupSelected (KisCurve::iterator it) const
+bool KisCurveBezier::groupSelected(KisCurve::iterator it) const
 {
     if (m_curve.count() < 3)
-	return true;
+        return true;
     if ((*groupPrevControl(it)).isSelected() || (*groupEndpoint(it)).isSelected() || (*groupNextControl(it)).isSelected())
         return true;
     return false;
 }
 
-KisCurve::iterator KisCurveBezier::nextGroupEndpoint (KisCurve::iterator it) const
+KisCurve::iterator KisCurveBezier::nextGroupEndpoint(KisCurve::iterator it) const
 {
     iterator temp = it;
     if ((*it).hint() == BEZIERPREVCONTROLHINT) {
@@ -103,7 +103,7 @@ KisCurve::iterator KisCurveBezier::nextGroupEndpoint (KisCurve::iterator it) con
     return temp;
 }
 
-KisCurve::iterator KisCurveBezier::prevGroupEndpoint (KisCurve::iterator it) const
+KisCurve::iterator KisCurveBezier::prevGroupEndpoint(KisCurve::iterator it) const
 {
     iterator temp = it;
     if ((*it).hint() == BEZIERNEXTCONTROLHINT) {
@@ -120,19 +120,19 @@ KisCurve::iterator KisCurveBezier::prevGroupEndpoint (KisCurve::iterator it) con
     return temp;
 }
 
-QPointF KisCurveBezier::midpoint (const QPointF& P1, const QPointF& P2)
+QPointF KisCurveBezier::midpoint(const QPointF& P1, const QPointF& P2)
 {
     QPointF temp;
-    temp.setX((P1.x()+P2.x())/2);
-    temp.setY((P1.y()+P2.y())/2);
+    temp.setX((P1.x() + P2.x()) / 2);
+    temp.setY((P1.y() + P2.y()) / 2);
     return temp;
 }
 
-void KisCurveBezier::recursiveCurve (const QPointF& P1, const QPointF& P2, const QPointF& P3,
-                                     const QPointF& P4, int level, KisCurve::iterator it)
+void KisCurveBezier::recursiveCurve(const QPointF& P1, const QPointF& P2, const QPointF& P3,
+                                    const QPointF& P4, int level, KisCurve::iterator it)
 {
     if (level > m_maxLevel) {
-        addPoint(it,midpoint(P1,P4),false,false,LINEHINT);
+        addPoint(it, midpoint(P1, P4), false, false, LINEHINT);
         return;
     }
 
@@ -184,40 +184,40 @@ void KisCurveBezier::calculateCurve(KisCurve::iterator tstart, KisCurve::iterato
         return;
 
     deleteCurve(control1, control2);
-    recursiveCurve((*origin).point(),(*control1).point(),(*control2).point(),(*dest).point(),1,control2);
+    recursiveCurve((*origin).point(), (*control1).point(), (*control2).point(), (*dest).point(), 1, control2);
 
 }
 
-KisCurve::iterator KisCurveBezier::pushPivot (const QPointF& point)
+KisCurve::iterator KisCurveBezier::pushPivot(const QPointF& point)
 {
     iterator it;
 
     int i;
     if (isEmpty())
-	i = 0;
+        i = 0;
     else
-	i = pivots().count() % 3;
+        i = pivots().count() % 3;
 
     switch (i) {
     case 0:
-	pushPoint(point,true,false,BEZIERENDHINT);
-	it = pushPoint(point,true,false,BEZIERNEXTCONTROLHINT);
-	break;
+        pushPoint(point, true, false, BEZIERENDHINT);
+        it = pushPoint(point, true, false, BEZIERNEXTCONTROLHINT);
+        break;
     case 2:
-	pushPoint(point,true,false,BEZIERPREVCONTROLHINT);
-	pushPoint(point,true,false,BEZIERENDHINT);
-        it = pushPoint(point,true,false,BEZIERNEXTCONTROLHINT);
-	break;
+        pushPoint(point, true, false, BEZIERPREVCONTROLHINT);
+        pushPoint(point, true, false, BEZIERENDHINT);
+        it = pushPoint(point, true, false, BEZIERNEXTCONTROLHINT);
+        break;
     }
-/*
-    it = pushPoint(point,true,false,BEZIERENDHINT);
-    if (count() > 1) {
-	dbgKrita <<"QUI";
-        addPoint(it,point,true,false,BEZIERPREVCONTROLHINT);
-    }
+    /*
+        it = pushPoint(point,true,false,BEZIERENDHINT);
+        if (count() > 1) {
+     dbgKrita <<"QUI";
+            addPoint(it,point,true,false,BEZIERPREVCONTROLHINT);
+        }
 
-    it = pushPoint(point,true,false,BEZIERNEXTCONTROLHINT);
-*/
+        it = pushPoint(point,true,false,BEZIERNEXTCONTROLHINT);
+    */
     return selectPivot(it);
 }
 
@@ -235,36 +235,36 @@ KisCurve::iterator KisCurveBezier::movePivot(KisCurve::iterator it, const QPoint
 
     if (hint == BEZIERENDHINT) {
         QPointF trans = newPt - (*it).point();
-        (*thisEnd).setPoint((*thisEnd).point()+trans);
-        (*thisEnd.previous()).setPoint((*thisEnd.previous()).point()+trans);
-        (*thisEnd.next()).setPoint((*thisEnd.next()).point()+trans);
+        (*thisEnd).setPoint((*thisEnd).point() + trans);
+        (*thisEnd.previous()).setPoint((*thisEnd.previous()).point() + trans);
+        (*thisEnd.next()).setPoint((*thisEnd.next()).point() + trans);
     } else if (!(m_actionOptions & KEEPSELECTEDOPTION))
         (*it).setPoint(newPt);
     if (!(m_actionOptions & KEEPSELECTEDOPTION) && hint != BEZIERENDHINT) {
         if (nextEnd == end() || (m_actionOptions & SYMMETRICALCONTROLSOPTION)) {
             QPointF trans = (*it).point() - (*thisEnd).point();
-            trans = QPointF(-trans.x()*2,-trans.y()*2);
+            trans = QPointF(-trans.x() * 2, -trans.y() * 2);
             if (hint == BEZIERNEXTCONTROLHINT)
-                (*groupPrevControl(it)).setPoint(newPt+trans);
+                (*groupPrevControl(it)).setPoint(newPt + trans);
             else
-                (*groupNextControl(it)).setPoint(newPt+trans);
+                (*groupNextControl(it)).setPoint(newPt + trans);
         }
     }
 
     if (nextEnd != end() && count() > 4)
-        calculateCurve (thisEnd,nextEnd,iterator());
+        calculateCurve(thisEnd, nextEnd, iterator());
     if (prevEnd != thisEnd && count() > 4)
-        calculateCurve (prevEnd,thisEnd,iterator());
+        calculateCurve(prevEnd, thisEnd, iterator());
 
     return it;
 }
 
-void KisCurveBezier::deletePivot (KisCurve::iterator it)
+void KisCurveBezier::deletePivot(KisCurve::iterator it)
 {
     if (!(*it).isPivot())
         return;
 
-    iterator prevControl,thisEnd,nextControl;
+    iterator prevControl, thisEnd, nextControl;
 
     prevControl = prevGroupEndpoint(it).nextPivot();
     thisEnd = groupEndpoint(it);
@@ -279,13 +279,13 @@ void KisCurveBezier::deletePivot (KisCurve::iterator it)
         deleteLastPivot();
         deleteLastPivot();
     } else {
-        deleteCurve(prevControl,nextControl);
-        calculateCurve(prevControl,nextControl,iterator());
+        deleteCurve(prevControl, nextControl);
+        calculateCurve(prevControl, nextControl, iterator());
     }
 }
 
 KisToolBezier::KisToolBezier(const QString& UIName)
-    : super(UIName)
+        : super(UIName)
 {
     m_derivated = new KisCurveBezier;
     m_curve = m_derivated;
@@ -327,7 +327,7 @@ KisCurve::iterator KisToolBezier::handleUnderMouse(const QPoint& pos)
     return m_curve->find(inHandle.last());
 }
 
-KisCurve::iterator KisToolBezier::drawPoint (QPainter& gc, KisCurve::iterator point)
+KisCurve::iterator KisToolBezier::drawPoint(QPainter& gc, KisCurve::iterator point)
 {
     if ((*point).hint() != BEZIERENDHINT)
         return ++point;
@@ -336,7 +336,7 @@ KisCurve::iterator KisToolBezier::drawPoint (QPainter& gc, KisCurve::iterator po
 
     // Now draw the bezier
 
-    KisCurve::iterator origin,control1,control2,destination;
+    KisCurve::iterator origin, control1, control2, destination;
 
     origin = point;
     control1 = origin.next();
@@ -358,7 +358,7 @@ KisCurve::iterator KisToolBezier::drawPoint (QPainter& gc, KisCurve::iterator po
     return point;
 }
 
-void KisToolBezier::drawPivotHandle (QPainter& gc, KisCurve::iterator point)
+void KisToolBezier::drawPivotHandle(QPainter& gc, KisCurve::iterator point)
 {
     if ((*point).hint() != BEZIERENDHINT)
         return;
@@ -369,18 +369,18 @@ void KisToolBezier::drawPivotHandle (QPainter& gc, KisCurve::iterator point)
 
     if (!m_derivated->groupSelected(point)) {
         gc.setPen(m_pivotPen);
-        gc.drawRoundRect(pivotRect(endpPos),m_pivotRounding,m_pivotRounding);
+        gc.drawRoundRect(pivotRect(endpPos), m_pivotRounding, m_pivotRounding);
     } else {
         QPoint nextControlPos = controller->windowToView((*point.next()).point()).toQPoint();
         QPoint prevControlPos = controller->windowToView((*point.previousPivot()).point()).toQPoint();
 
         gc.setPen(m_selectedPivotPen);
-        gc.drawRoundRect(selectedPivotRect(endpPos),m_selectedPivotRounding,m_selectedPivotRounding);
+        gc.drawRoundRect(selectedPivotRect(endpPos), m_selectedPivotRounding, m_selectedPivotRounding);
         if ((prevControlPos != endpPos || nextControlPos != endpPos) && !(m_actionOptions & CONTROLOPTION)) {
-            gc.drawRoundRect(pivotRect(nextControlPos),m_pivotRounding,m_pivotRounding);
-            gc.drawLine(endpPos,nextControlPos);
-            gc.drawRoundRect(pivotRect(prevControlPos),m_pivotRounding,m_pivotRounding);
-            gc.drawLine(prevControlPos,endpPos);
+            gc.drawRoundRect(pivotRect(nextControlPos), m_pivotRounding, m_pivotRounding);
+            gc.drawLine(endpPos, nextControlPos);
+            gc.drawRoundRect(pivotRect(prevControlPos), m_pivotRounding, m_pivotRounding);
+            gc.drawLine(prevControlPos, endpPos);
         }
     }
 

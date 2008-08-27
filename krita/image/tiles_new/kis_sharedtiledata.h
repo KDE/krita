@@ -61,7 +61,7 @@ struct KRITAIMAGE_EXPORT KisSharedTileData {
     KisTileStoreSP store;
     KisTileStoreData* storeData;
 
-        // The last use time is *shared* amongst the different sharers!
+    // The last use time is *shared* amongst the different sharers!
     TimeType lastUse;
 };
 

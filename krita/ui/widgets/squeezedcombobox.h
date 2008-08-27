@@ -59,14 +59,14 @@ public:
      * @param parent parent widget
      * @param name name to give to the widget
      */
-    SqueezedComboBox(QWidget *parent = 0, const char *name = 0 );
+    SqueezedComboBox(QWidget *parent = 0, const char *name = 0);
     /**
      * destructor
      */
     virtual ~SqueezedComboBox();
 
     /**
-     * 
+     *
      * Returns true if the combobox contains the original (not-squeezed)
      * version of text.
      * @param text the original (not-squeezed) text to check for
@@ -102,7 +102,7 @@ public:
      * highlighted item.
      * @return full text of the highlighted item
      */
-    QString itemHighlighted( );
+    QString itemHighlighted();
 
     /**
      * Sets the sizeHint() of this widget.
@@ -111,11 +111,11 @@ public:
 
 private slots:
     void slotTimeOut();
-    void slotUpdateToolTip( int index );
+    void slotUpdateToolTip(int index);
 
 private:
-    void resizeEvent ( QResizeEvent * );
-    QString squeezeText( const QString& original);
+    void resizeEvent(QResizeEvent *);
+    QString squeezeText(const QString& original);
 
     // Prevent these from being used.
     void setCurrentText(const QString& itemText);
@@ -123,7 +123,7 @@ private:
     void insertItem(qint32 index, const QString &text);
     void addItem(const QString &text);
 
-    QMap<int,QString>   m_originalItems;
+    QMap<int, QString>   m_originalItems;
     QTimer*             m_timer;
 
 };

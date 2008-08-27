@@ -24,10 +24,10 @@ class KisTileSwapperTester : public QObject
 {
     Q_OBJECT
 private slots:
-        void tileSwapTest();
-        void checkAgeTest();
-        void interactionWithTileReadersTest();
-        void idleSwappingTest();
+    void tileSwapTest();
+    void checkAgeTest();
+    void interactionWithTileReadersTest();
+    void idleSwappingTest();
 };
 
 #endif

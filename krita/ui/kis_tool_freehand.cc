@@ -21,6 +21,8 @@
  */
 
 #include "kis_tool_freehand.h"
+#include "kis_tool_freehand_p.h"
+
 #include <QEvent>
 #include <QLabel>
 #include <QLayout>
@@ -56,13 +58,13 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_cursor.h"
 #include "kis_painting_assistant.h"
-#include "kis_tool_freehand_p.h"
+
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
-    : KisToolPaint(canvas, cursor)
-    , m_dragDist ( 0 )
-    , m_transactionText(transactionText)
-    , m_mode( HOVER )
+        : KisToolPaint(canvas, cursor)
+        , m_dragDist(0)
+        , m_transactionText(transactionText)
+        , m_mode(HOVER)
 {
     m_painter = 0;
     m_tempLayer = 0;
@@ -84,7 +86,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
     dbgUI << "mousePressEvent" << m_mode;
 //     if (!currentImage())
-//  		return;
+//    return;
 
     if (!currentNode())
         return;
@@ -92,26 +94,22 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
     if (!currentNode()->paintDevice())
         return;
 
-    if(currentPaintOpPreset() && currentPaintOpPreset()->settings())
-    {
+    if (currentPaintOpPreset() && currentPaintOpPreset()->settings()) {
         currentPaintOpPreset()->settings()->mousePressEvent(e);
-        if(e->isAccepted())
-        {
+        if (e->isAccepted()) {
             return;
         }
     }
 
-    if (e->button() == Qt::LeftButton)
-    {
+    if (e->button() == Qt::LeftButton) {
         initPaint(e);
         m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point)),
-                                                         e->pressure(), e->xTilt(), e->yTilt(),
-                                                         KisVector2D::Zero(),
-                                                         e->rotation(), e->tangentialPressure());
+                                     e->pressure(), e->xTilt(), e->yTilt(),
+                                     KisVector2D::Zero(),
+                                     e->rotation(), e->tangentialPressure());
         paintAt(m_previousPaintInformation);
-        if(!m_smooth)
-        {
-            m_polyLinePaintAction->addPoint( m_previousPaintInformation );
+        if (!m_smooth) {
+            m_polyLinePaintAction->addPoint(m_previousPaintInformation);
         }
     }
 }
@@ -132,40 +130,38 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     if (m_mode == PAINT) {
         QPointF pos = convertToPixelCoord(e);
 
-        KisPaintInformation info = KisPaintInformation( convertToPixelCoord(adjustPosition(e->point)),
-                                                       e->pressure(), e->xTilt(), e->yTilt(),
-                                                       KisVector2D::Zero(),
-                                                       e->rotation(), e->tangentialPressure());
+        KisPaintInformation info = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point)),
+                                   e->pressure(), e->xTilt(), e->yTilt(),
+                                   KisVector2D::Zero(),
+                                   e->rotation(), e->tangentialPressure());
 
-        if(m_smooth)
-        {
+        if (m_smooth) {
             QPointF dragVec = info.pos() - m_previousPaintInformation.pos();
             QPointF newTangent;
-            if( m_previousDrag.y() == 0.0 && m_previousDrag.x() == 0.0 )
-            {
+            if (m_previousDrag.y() == 0.0 && m_previousDrag.x() == 0.0) {
                 newTangent = dragVec;
             } else {
-                double angleTangent = angle( dragVec, m_previousDrag);
+                double angleTangent = angle(dragVec, m_previousDrag);
                 double cosTangent = cos(angleTangent);
                 double sinTangent = sin(angleTangent);
                 newTangent = QPointF(
-                    cosTangent * dragVec.x() - sinTangent * dragVec.y(),
-                    sinTangent * dragVec.x() + cosTangent * dragVec.y() );
+                                 cosTangent * dragVec.x() - sinTangent * dragVec.y(),
+                                 sinTangent * dragVec.x() + cosTangent * dragVec.y());
             }
 
-            if ( norm( newTangent ) != 0 ) {
-                newTangent /= norm( newTangent ) ;
+            if (norm(newTangent) != 0) {
+                newTangent /= norm(newTangent) ;
             }
 
-            double cosPreviousNewTangent = cos(angle(newTangent,m_previousTangent ));
+            double cosPreviousNewTangent = cos(angle(newTangent, m_previousTangent));
             newTangent += m_previousTangent;
             newTangent *= 0.5 * cosPreviousNewTangent;
 
-            if ( norm( dragVec ) != 0 ) {
-                newTangent += (1.0 - cosPreviousNewTangent ) * dragVec / norm(dragVec);
+            if (norm(dragVec) != 0) {
+                newTangent += (1.0 - cosPreviousNewTangent) * dragVec / norm(dragVec);
             }
 
-            newTangent *= m_smoothness / norm( newTangent ) ;
+            newTangent *= m_smoothness / norm(newTangent) ;
             double normVec = 0.5 * norm(dragVec);
             QPointF control1 = m_previousPaintInformation.pos() + m_previousTangent * normVec;
             QPointF control2 = info.pos() - newTangent * normVec;
@@ -202,10 +198,10 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     if (!currentNode() || !currentNode()->paintDevice())
         return;
 
-    if (m_compositeOp == 0 ) {
+    if (m_compositeOp == 0) {
         KisPaintDeviceSP device = currentNode()->paintDevice();
         if (device) {
-            m_compositeOp = device->colorSpace()->compositeOp( COMPOSITE_OVER );
+            m_compositeOp = device->colorSpace()->compositeOp(COMPOSITE_OVER);
         }
     }
 
@@ -222,8 +218,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
 
         KisIndirectPaintingSupport* layer;
         if ((layer = dynamic_cast<KisIndirectPaintingSupport*>(
-                 currentNode().data())))
-        {
+                         currentNode().data()))) {
             // Hack for the painting of single-layered layers using indirect painting,
             // because the group layer would not have a correctly synched cache (
             // because of an optimization that would happen, having this layer as
@@ -233,9 +228,8 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
 
 #if 0 //XXX: Warning, investigate what this was supposed to do!
             if (l->parentLayer() && (l->parentLayer()->parentLayer() == 0)
-                && (l->parentLayer()->childCount() == 1)
-                && l->parentLayer()->paintLayerInducesProjectionOptimization(pl))
-            {
+                    && (l->parentLayer()->childCount() == 1)
+                    && l->parentLayer()->paintLayerInducesProjectionOptimization(pl)) {
                 // If there's a mask, device could've been the mask. The induce function
                 // should catch this, but better safe than sorry
 
@@ -252,7 +246,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     } else {
         m_target = device;
     }
-    m_painter = new KisPainter( m_target, currentSelection() );
+    m_painter = new KisPainter(m_target, currentSelection());
     Q_CHECK_PTR(m_painter);
     m_source = device;
     m_painter->beginTransaction(m_transactionText);
@@ -265,24 +259,23 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
         m_painter->setOpacity(m_opacity);
     } else {
         m_painter->setCompositeOp(device->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
-        m_painter->setOpacity( OPACITY_OPAQUE );
+        m_painter->setOpacity(OPACITY_OPAQUE);
 
     }
-    m_previousTangent = QPointF(0,0);
-    m_previousDrag = QPointF(0,0);
-/*    dbgUI <<"target:" << m_target <<"(" << m_target->name() <<" )"
-      << " source: " << m_source << "( " << m_source->name() << " )"
-      << ", incremental " << m_paintIncremental
-      << ", paint on selection: " << m_paintOnSelection
-      << ", active device has selection: " << device->hasSelection()
-//       << ", target has selection: " << m_target->hasSelection()
-<< endl;
-*/
-    if(m_smooth)
-    {
-        m_bezierCurvePaintAction = new KisRecordedBezierCurvePaintAction( i18n("Freehand tool"),  currentNode(), currentPaintOpPreset(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), m_paintIncremental, m_compositeOp );
+    m_previousTangent = QPointF(0, 0);
+    m_previousDrag = QPointF(0, 0);
+    /*    dbgUI <<"target:" << m_target <<"(" << m_target->name() <<" )"
+          << " source: " << m_source << "( " << m_source->name() << " )"
+          << ", incremental " << m_paintIncremental
+          << ", paint on selection: " << m_paintOnSelection
+          << ", active device has selection: " << device->hasSelection()
+    //       << ", target has selection: " << m_target->hasSelection()
+    << endl;
+    */
+    if (m_smooth) {
+        m_bezierCurvePaintAction = new KisRecordedBezierCurvePaintAction(i18n("Freehand tool"),  currentNode(), currentPaintOpPreset(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), m_paintIncremental, m_compositeOp);
     } else {
-        m_polyLinePaintAction = new KisRecordedPolyLinePaintAction( i18n("Freehand tool"), currentNode(), currentPaintOpPreset(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), m_paintIncremental, m_compositeOp );
+        m_polyLinePaintAction = new KisRecordedPolyLinePaintAction(i18n("Freehand tool"), currentNode(), currentPaintOpPreset(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), m_paintIncremental, m_compositeOp);
     }
     m_executor->start();
 }
@@ -303,7 +296,7 @@ void KisToolFreehand::endPaint()
         if (layer && !m_paintIncremental) {
             m_painter->endTransaction();
 
-            KisPainter painter( m_source, currentSelection());
+            KisPainter painter(m_source, currentSelection());
             painter.setCompositeOp(m_compositeOp);
 
             painter.beginTransaction(m_transactionText);
@@ -316,9 +309,9 @@ void KisToolFreehand::endPaint()
             while (it != end) {
 
                 painter.bitBlt(it->x(), it->y(), m_compositeOp, m_target,
-                                m_opacity,
-                                it->x(), it->y(),
-                                it->width(), it->height());
+                               m_opacity,
+                               it->x(), it->y(),
+                               it->width(), it->height());
                 ++it;
             }
             KisIndirectPaintingSupport* indirect =
@@ -336,16 +329,13 @@ void KisToolFreehand::endPaint()
     m_painter = 0;
     notifyModified();
 
-    if(!m_paintJobs.empty())
-    {
-        foreach(FreehandPaintJob* job , m_paintJobs)
-        {
+    if (!m_paintJobs.empty()) {
+        foreach(FreehandPaintJob* job , m_paintJobs) {
             delete job;
         }
         m_paintJobs.clear();
     }
-    if( m_smooth )
-    {
+    if (m_smooth) {
         if (image())
             image()->actionRecorder()->addAction(*m_bezierCurvePaintAction);
         m_bezierCurvePaintAction = 0;
@@ -359,14 +349,14 @@ void KisToolFreehand::endPaint()
 void KisToolFreehand::paintAt(const KisPaintInformation &pi)
 {
     FreehandPaintJob* previousJob = m_paintJobs.empty() ? 0 : m_paintJobs.last();
-    queuePaintJob( new FreehandPaintAtJob(this, m_painter, pi, previousJob), previousJob );
+    queuePaintJob(new FreehandPaintAtJob(this, m_painter, pi, previousJob), previousJob);
 }
 
 void KisToolFreehand::paintLine(const KisPaintInformation &pi1,
                                 const KisPaintInformation &pi2)
 {
     FreehandPaintJob* previousJob = m_paintJobs.empty() ? 0 : m_paintJobs.last();
-    queuePaintJob( new FreehandPaintLineJob(this, m_painter, pi1, pi2, previousJob), previousJob );
+    queuePaintJob(new FreehandPaintLineJob(this, m_painter, pi1, pi2, previousJob), previousJob);
 }
 
 void KisToolFreehand::paintBezierCurve(const KisPaintInformation &pi1,
@@ -375,7 +365,7 @@ void KisToolFreehand::paintBezierCurve(const KisPaintInformation &pi1,
                                        const KisPaintInformation &pi2)
 {
     FreehandPaintJob* previousJob = m_paintJobs.empty() ? 0 : m_paintJobs.last();
-    queuePaintJob( new FreehandPaintBezierJob(this, m_painter, pi1, control1, control2, pi2, previousJob), previousJob );
+    queuePaintJob(new FreehandPaintBezierJob(this, m_painter, pi1, control1, control2, pi2, previousJob), previousJob);
 }
 
 void KisToolFreehand::queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* /*previousJob*/)
@@ -389,10 +379,9 @@ void KisToolFreehand::setDirty(const QRegion& region)
 {
     if (!m_paintOnSelection) {
         currentNode()->setDirty(region);
-    }
-    else {
+    } else {
         QRect r = region.boundingRect();
-        r = QRect(r.left()-1, r.top()-1, r.width()+2, r.height()+2); //needed to update selectionvisualization
+        r = QRect(r.left() - 1, r.top() - 1, r.width() + 2, r.height() + 2); //needed to update selectionvisualization
         m_target->setDirty(r);
     }
     if (!m_paintIncremental) {
@@ -411,8 +400,9 @@ void KisToolFreehand::setAssistant(bool assistant)
 }
 
 
-void KisToolFreehand::paintOutline(const QPointF& point) {
-    Q_UNUSED( point );
+void KisToolFreehand::paintOutline(const QPointF& point)
+{
+    Q_UNUSED(point);
 #if 0
     // XXX TOOL_PORT
     // I don't get this 1.6 code: we update the whole canvas, and then
@@ -439,7 +429,7 @@ void KisToolFreehand::paintOutline(const QPointF& point) {
     KisBrush *brush = m_subject->currentBrush();
     // There may not be a brush present, and we shouldn't crash in that case
     if (brush) {
-        QPainter gc( canvas->canvasWidget() );
+        QPainter gc(canvas->canvasWidget());
         QPen pen(Qt::SolidLine);
 
         QPointF hotSpot = brush->hotSpot(1.0, 1.0);
@@ -467,13 +457,12 @@ void KisToolFreehand::paintOutline(const QPointF& point) {
 #endif
 }
 
-QPointF KisToolFreehand::adjustPosition( const QPointF& point)
+QPointF KisToolFreehand::adjustPosition(const QPointF& point)
 {
     KisPaintingAssistant* assistant = KisPaintingAssistant::currentAssistant();
-    if( assistant && m_assistant)
-    {
-      QPointF ap = assistant->adjustPosition( point );
-      return  (1.0 - m_magnetism) * point + m_magnetism * ap;
+    if (assistant && m_assistant) {
+        QPointF ap = assistant->adjustPosition(point);
+        return (1.0 - m_magnetism) * point + m_magnetism * ap;
     }
     return point;
 }

@@ -23,46 +23,46 @@
 #include "kis_filter_strategy.h"
 
 KisDlgTransformationEffect::KisDlgTransformationEffect(const QString & maskName,
-                                                       double xScale,
-                                                       double yScale,
-                                                       double xShear,
-                                                       double yShear,
-                                                       double angle,
-                                                       int moveX,
-                                                       int moveY,
-                                                       const KoID & filterId,
-                                                       QWidget *parent,
-                                                       const char *name)
-    : KDialog( parent )
+        double xScale,
+        double yScale,
+        double xShear,
+        double yShear,
+        double angle,
+        int moveX,
+        int moveY,
+        const KoID & filterId,
+        QWidget *parent,
+        const char *name)
+        : KDialog(parent)
 {
-    setCaption( "New Transformation Mask" );
-    setButtons( Ok| Cancel );
-    setDefaultButton( Ok );
+    setCaption("New Transformation Mask");
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
     setObjectName(name);
 
-    QWidget * page = new QWidget( this );
-    m_grid = new QGridLayout( page );
+    QWidget * page = new QWidget(this);
+    m_grid = new QGridLayout(page);
 
-    m_maskSource = new WdgMaskSource( page );
-    m_grid->addWidget( m_maskSource, 0, 0 );
+    m_maskSource = new WdgMaskSource(page);
+    m_grid->addWidget(m_maskSource, 0, 0);
 
-    m_maskFromSelection = new WdgMaskFromSelection( page );
-    m_grid->addWidget( m_maskFromSelection, 1, 0 );
+    m_maskFromSelection = new WdgMaskFromSelection(page);
+    m_grid->addWidget(m_maskFromSelection, 1, 0);
 
-    m_transformEffectWidget = new WdgTransformationEffect( page );
+    m_transformEffectWidget = new WdgTransformationEffect(page);
     m_transformEffectWidget->layout()->setMargin(0);
-    m_grid->addWidget( m_transformEffectWidget, 0, 1, 2, 1 );
+    m_grid->addWidget(m_transformEffectWidget, 0, 1, 2, 1);
 
-    setMainWidget( page );
+    setMainWidget(page);
 
-    m_transformEffectWidget->Ui::WdgTransformationEffect::maskName->setText( maskName );
-    m_transformEffectWidget->dblScaleX->setValue( xScale );
-    m_transformEffectWidget->dblScaleY->setValue( yScale );
-    m_transformEffectWidget->dblShearX->setValue( xShear );
-    m_transformEffectWidget->dblShearY->setValue( yShear );
-    m_transformEffectWidget->dblRotation->setValue( angle );
-    m_transformEffectWidget->intMoveX->setValue( moveX );
-    m_transformEffectWidget->intMoveY->setValue( moveY );
+    m_transformEffectWidget->Ui::WdgTransformationEffect::maskName->setText(maskName);
+    m_transformEffectWidget->dblScaleX->setValue(xScale);
+    m_transformEffectWidget->dblScaleY->setValue(yScale);
+    m_transformEffectWidget->dblShearX->setValue(xShear);
+    m_transformEffectWidget->dblShearY->setValue(yShear);
+    m_transformEffectWidget->dblRotation->setValue(angle);
+    m_transformEffectWidget->intMoveX->setValue(moveX);
+    m_transformEffectWidget->intMoveY->setValue(moveY);
 
     m_transformEffectWidget->cmbFilter->clear();
     m_transformEffectWidget->cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());

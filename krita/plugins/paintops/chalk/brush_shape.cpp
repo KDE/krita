@@ -22,55 +22,61 @@
 
 const float PI = 3.141592f;
 
-BrushShape::BrushShape(){
+BrushShape::BrushShape()
+{
 
 }
 
-BrushShape::~BrushShape(){
+BrushShape::~BrushShape()
+{
 
 }
 
 
-void BrushShape::fromGaussian(int radius, float maxLength, float sigma){
-	    m_width = m_height = radius * 2 + 1;
-        int gaussLength = (int)(m_width*m_width);
-		//int center = (edgeSize - 1) / 2;
-		
-		float sigmaSquare = - 2.0 * sigma * sigma;
-		float sigmaConst = 1.0 / (2.0 * PI * sigma * sigma);
-	
-		float total = 0;
-		float length = 0;
-		int p = 0;
+void BrushShape::fromGaussian(int radius, float maxLength, float sigma)
+{
+    m_width = m_height = radius * 2 + 1;
+    int gaussLength = (int)(m_width * m_width);
+    //int center = (edgeSize - 1) / 2;
 
-		
-		for (int y=-radius;y<=radius;y++){
-			for (int x=-radius;x<=radius;x++){
-				length = (std::exp( (float)(x*x + y*y) / sigmaSquare ) * sigmaConst);
-				total += length;
-				Bristle b(x,y,length*maxLength);
-				b.setInkAmount(1.0f);
-				m_bristles.append(b);
-				p++;
-			}
-		}
+    float sigmaSquare = - 2.0 * sigma * sigma;
+    float sigmaConst = 1.0 / (2.0 * PI * sigma * sigma);
 
-		// dbgKrita << "total: " << total <<  " " << p << endl << flush;
+    float total = 0;
+    float length = 0;
+    int p = 0;
 
-		// normalise
-		for (int i=0;i<gaussLength;i++){
-				m_bristles[i].setLength(m_bristles[i].length()/total);
-		}
+
+    for (int y = -radius;y <= radius;y++) {
+        for (int x = -radius;x <= radius;x++) {
+            length = (std::exp((float)(x * x + y * y) / sigmaSquare) * sigmaConst);
+            total += length;
+            Bristle b(x, y, length*maxLength);
+            b.setInkAmount(1.0f);
+            m_bristles.append(b);
+            p++;
+        }
+    }
+
+    // dbgKrita << "total: " << total <<  " " << p << endl << flush;
+
+    // normalise
+    for (int i = 0;i < gaussLength;i++) {
+        m_bristles[i].setLength(m_bristles[i].length() / total);
+    }
 }
 
-QVector<Bristle> BrushShape::getBristles(){
-	return m_bristles;
+QVector<Bristle> BrushShape::getBristles()
+{
+    return m_bristles;
 }
 
-int BrushShape::width(){
-	return m_width;
+int BrushShape::width()
+{
+    return m_width;
 }
 
-int BrushShape::height(){
-	return m_height;
+int BrushShape::height()
+{
+    return m_height;
 }

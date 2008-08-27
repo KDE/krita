@@ -35,7 +35,8 @@ class KisSelectionOptions;
  * The 'magic wand' selection tool -- in fact just
  * a floodfill that only creates a selection.
  */
-class KisToolSelectContiguous : public KisTool {
+class KisToolSelectContiguous : public KisTool
+{
 
     typedef KisTool super;
     Q_OBJECT
@@ -46,7 +47,7 @@ public:
 
     virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
     virtual void mousePressEvent(KoPointerEvent *event);
 
@@ -54,7 +55,7 @@ public slots:
     virtual void slotSetFuzziness(int);
     virtual void slotSetAction(int);
     virtual void slotSetSampleMerged(int);
-    virtual void activate( bool );
+    virtual void activate(bool);
 
 private:
     KisSelectionOptions * m_optWidget;
@@ -64,20 +65,20 @@ private:
     bool m_sampleMerged;
 };
 
-class KisToolSelectContiguousFactory : public KoToolFactory {
+class KisToolSelectContiguousFactory : public KoToolFactory
+{
 
 public:
     KisToolSelectContiguousFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolSelectContiguous", i18n( "Select Contiguous Area" ))
-        {
-            setToolTip( i18n( "Select a contiguous area of colors" ) );
-            setToolType( TOOL_TYPE_SELECTED );
-            setIcon( "tool_contiguous_selection" );
-            setPriority( 56 );
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-        }
+            : KoToolFactory(parent, "KisToolSelectContiguous", i18n("Select Contiguous Area")) {
+        setToolTip(i18n("Select a contiguous area of colors"));
+        setToolType(TOOL_TYPE_SELECTED);
+        setIcon("tool_contiguous_selection");
+        setPriority(56);
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+    }
 
-    virtual ~KisToolSelectContiguousFactory(){}
+    virtual ~KisToolSelectContiguousFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return  new KisToolSelectContiguous(canvas);

@@ -23,23 +23,25 @@
 
 class QString;
 
-namespace KisMetaData {
-    class Value;
+namespace KisMetaData
+{
+class Value;
 }
 
-class KisEntryEditor : public QObject {
-        Q_OBJECT
-        struct Private;
-    public:
-        KisEntryEditor(QObject*, KisMetaData::Value*, QString propertyName);
-        ~KisEntryEditor();
-    public slots:
-        void valueEdited();
-        void valueChanged();
-    signals:
-        void valueHasBeenEdited();
-    private:
-        Private* const d;
+class KisEntryEditor : public QObject
+{
+    Q_OBJECT
+    struct Private;
+public:
+    KisEntryEditor(QObject*, KisMetaData::Value*, QString propertyName);
+    ~KisEntryEditor();
+public slots:
+    void valueEdited();
+    void valueChanged();
+signals:
+    void valueHasBeenEdited();
+private:
+    Private* const d;
 };
 
 #endif

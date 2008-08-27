@@ -45,7 +45,6 @@
 #include <KoProgressUpdater.h>
 
 #include "kis_convolution_kernel.h"
-#include "kis_convolution_kernel.h"
 #include "kis_global.h"
 #include "kis_image.h"
 #include "kis_iterators_pixel.h"
@@ -59,27 +58,27 @@
 
 
 KisConvolutionPainter::KisConvolutionPainter()
-    : KisPainter()
+        : KisPainter()
 {
 }
 
 KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device)
-    : KisPainter(device)
+        : KisPainter(device)
 {
 }
 
 KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, KisSelectionSP selection)
-: KisPainter(device, selection)
+        : KisPainter(device, selection)
 {
 }
 
 
 void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, qint32 h,
-                                        KisConvolutionBorderOp borderOp )
+                                        KisConvolutionBorderOp borderOp)
 {
     dbgImage << *kernel;
     // Make the area we cover as small as possible
-    if ( selection() ) {
+    if (selection()) {
 
         QRect r = selection()->selectedRect().intersect(QRect(x, y, w, h));
         x = r.x();
@@ -88,7 +87,7 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
         h = r.height();
     }
 
-    if ( w == 0 && h == 0 ) return;
+    if (w == 0 && h == 0) return;
     // Determine the kernel's extent from the center pixel
     qint32 kw, kh, khalfWidth, khalfHeight, xLastMinuskhw, yLastMinuskhh;
     kw = kernel->width();
@@ -100,7 +99,7 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
     yLastMinuskhh = y + (h - khalfHeight);
 
     // Don't try to convolve on an area smaller than the kernel, or with a kernel that is not square or has no center pixel.
-    if (w < kw || h < kh || (kw&1) == 0 || (kh&1) == 0 || kernel->factor() == 0 ) return;
+    if (w < kw || h < kh || (kw&1) == 0 || (kh&1) == 0 || kernel->factor() == 0) return;
 
     int lastProgressPercent = 0;
     if (progressUpdater()) progressUpdater()->setProgress(0);
@@ -148,8 +147,7 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
 
             // Iterate over all contributing pixels that are covered by the kernel
             // krow = the y position in the kernel matrix
-            if(needFull)
-            {
+            if (needFull) {
                 qint32 i = 0;
                 for (qint32 krow = 0; krow <  kh; ++krow) {
 
@@ -166,12 +164,12 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
                     }
                 }
                 needFull = false;
-                Q_ASSERT (i==kw*kh);
+                Q_ASSERT(i == kw*kh);
             } else {
                 for (qint32 krow = 0; krow <  kh; ++krow) { // shift the cache to the left
                     quint8** d = pixelPtrCache + krow * kw;
                     //memmove( d, d + 1, (kw-1)*sizeof(quint8*));
-                    for (int i = 0; i < (kw-1); i++) {
+                    for (int i = 0; i < (kw - 1); i++) {
                         memcpy(d[i], d[i+1], cdepth);
                     }
                 }
@@ -220,7 +218,7 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
     delete[] pixelPtrCache;
 }
 
-void KisConvolutionPainter::applyMatrixRepeat( const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, qint32 h )
+void KisConvolutionPainter::applyMatrixRepeat(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, qint32 h)
 {
     int lastProgressPercent = 0;
     // Determine the kernel's extent from the center pixel
@@ -257,12 +255,10 @@ void KisConvolutionPainter::applyMatrixRepeat( const KisConvolutionKernelSP kern
 
         qint32 itStart = row - khalfHeight;
         qint32 itH = kh;
-        if(itStart < 0)
-        {
+        if (itStart < 0) {
             itH += itStart;
             itStart = 0;
-        } else if(itStart + kh > yLastMinuskhh)
-        {
+        } else if (itStart + kh > yLastMinuskhh) {
             itH -= itStart + kh - yLastMinuskhh;
         }
         KisVLineConstIteratorPixel kitSrc = src->createVLineConstIterator(col + khalfWidth , itStart, itH);
@@ -270,24 +266,19 @@ void KisConvolutionPainter::applyMatrixRepeat( const KisConvolutionKernelSP kern
 
             // Iterate over all contributing pixels that are covered by the kernel
             // krow = the y position in the kernel matrix
-            if(needFull) // The cache has not been fill, so we need to fill it
-            {
+            if (needFull) { // The cache has not been fill, so we need to fill it
                 qint32 i = 0;
                 qint32 krow = 0;
-                if( row < khalfHeight )
-                {
+                if (row < khalfHeight) {
                     // We are just outside the layer, all the row in the cache will be identical
                     // so we need to create them only once, and then to copy them
-                    if( x < khalfWidth)
-                    { // the left pixels are outside of the layer, in the corner
+                    if (x < khalfWidth) { // the left pixels are outside of the layer, in the corner
                         qint32 kcol = 0;
                         KisHLineConstIteratorPixel kitSrc = src->createHLineConstIterator(0, 0, kw);
-                        for(; kcol < (khalfWidth - x) + 1; ++kcol)
-                        { // First copy the address of the topleft pixel
+                        for (; kcol < (khalfWidth - x) + 1; ++kcol) { // First copy the address of the topleft pixel
                             memcpy(pixelPtrCache[kcol], kitSrc.oldRawData(), cdepth);
                         }
-                        for(; kcol < kw; ++kcol)
-                        { // Then copy the address of the rest of the line
+                        for (; kcol < kw; ++kcol) { // Then copy the address of the rest of the line
                             ++kitSrc;
                             memcpy(pixelPtrCache[kcol], kitSrc.oldRawData(), cdepth);
                         }
@@ -301,8 +292,7 @@ void KisConvolutionPainter::applyMatrixRepeat( const KisConvolutionKernelSP kern
                         }
                     }
                     krow = 1; // we have already done the first krow
-                    for(;krow < (khalfHeight - row); ++krow)
-                    {
+                    for (;krow < (khalfHeight - row); ++krow) {
                         //    Copy the first line in the current line
                         for (int i = 0; i < kw; i++)
                             memcpy(pixelPtrCache[krow * kw + i], pixelPtrCache[i], cdepth);
@@ -310,8 +300,7 @@ void KisConvolutionPainter::applyMatrixRepeat( const KisConvolutionKernelSP kern
                     i = krow * kw;
                 }
                 qint32 itH = kh;
-                if(row + khalfHeight > yLastMinuskhh)
-                {
+                if (row + khalfHeight > yLastMinuskhh) {
                     itH += yLastMinuskhh - row - khalfHeight;
                 }
                 for (; krow <  itH; ++krow) {
@@ -323,16 +312,13 @@ void KisConvolutionPainter::applyMatrixRepeat( const KisConvolutionKernelSP kern
                     // Fill the cache with pointers to the pixels under the kernel
                     qint32 itHStart = col - khalfWidth;
                     qint32 itW = kw;
-                    if(itHStart < 0)
-                    {
+                    if (itHStart < 0) {
                         itW += itHStart;
                         itHStart = 0;
                     }
                     KisHLineConstIteratorPixel kitSrc = src->createHLineConstIterator(itHStart, (row - khalfHeight) + krow, itW);
-                    if( col < khalfWidth )
-                    {
-                        for(; i <  krow * kw + ( kw - itW ); i+= 1)
-                        {
+                    if (col < khalfWidth) {
+                        for (; i <  krow * kw + (kw - itW); i += 1) {
                             memcpy(pixelPtrCache[i], kitSrc.oldRawData(), cdepth);
                         }
                     }
@@ -343,7 +329,7 @@ void KisConvolutionPainter::applyMatrixRepeat( const KisConvolutionKernelSP kern
                     }
                 }
                 qint32 lastvalid = i - kw;
-                for(; krow < kh; ++krow) {
+                for (; krow < kh; ++krow) {
                     // Copy the last valid line in the current line
                     for (int i = 0; i < kw; i++)
                         memcpy(pixelPtrCache[krow * kw + i], pixelPtrCache[lastvalid + i],
@@ -355,17 +341,14 @@ void KisConvolutionPainter::applyMatrixRepeat( const KisConvolutionKernelSP kern
                     quint8** d = pixelPtrCache + krow * kw;
                     //memmove( d, d + 1, (kw-1)*sizeof(quint8*));
                     quint8* first = *d;
-                    memmove( d, d+1, (kw-1)*sizeof(quint8*));
-                    *(d + kw -1 ) = first;
+                    memmove(d, d + 1, (kw - 1)*sizeof(quint8*));
+                    *(d + kw - 1) = first;
                 }
-                if(col < xLastMinuskhw)
-                {
+                if (col < xLastMinuskhw) {
                     qint32 i = kw - 1;
                     kitSrc.nextCol();
-                    if( row < khalfHeight )
-                    {
-                        for(; i < (khalfHeight- row ) * kw; i+=kw)
-                        {
+                    if (row < khalfHeight) {
+                        for (; i < (khalfHeight - row) * kw; i += kw) {
                             memcpy(pixelPtrCache[i], kitSrc.oldRawData(), cdepth);
                         }
                     }
@@ -375,8 +358,7 @@ void KisConvolutionPainter::applyMatrixRepeat( const KisConvolutionKernelSP kern
                         i += kw;
                     }
                     qint32 lastvalid = i - kw;
-                    for(;i < kw*kh; i+=kw)
-                    {
+                    for (;i < kw*kh; i += kw) {
                         memcpy(pixelPtrCache[i], pixelPtrCache[lastvalid], cdepth);
                     }
                 }

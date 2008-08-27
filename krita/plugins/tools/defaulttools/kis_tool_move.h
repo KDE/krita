@@ -28,7 +28,8 @@
 class KoCanvasBase;
 
 // XXX: Moving is not nearly smooth enough!
-class KisToolMove : public KisTool {
+class KisToolMove : public KisTool
+{
 
     typedef KisTool super;
     Q_OBJECT
@@ -58,22 +59,22 @@ private:
 };
 
 
-class KisToolMoveFactory : public KoToolFactory {
+class KisToolMoveFactory : public KoToolFactory
+{
 
 public:
     KisToolMoveFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KritaTransform/KisToolMove", i18n( "Move" ))
-        {
-            setToolTip(i18n("Move a layer"));
-            setToolType(TOOL_TYPE_TRANSFORM);
-            //setToolType( dynamicToolType() );
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setPriority(11);
-            setIcon("krita_tool_move");
-            //setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_V ) );
-        }
+            : KoToolFactory(parent, "KritaTransform/KisToolMove", i18n("Move")) {
+        setToolTip(i18n("Move a layer"));
+        setToolType(TOOL_TYPE_TRANSFORM);
+        //setToolType( dynamicToolType() );
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        setPriority(11);
+        setIcon("krita_tool_move");
+        //setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_V ) );
+    }
 
-    virtual ~KisToolMoveFactory(){}
+    virtual ~KisToolMoveFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolMove(canvas);

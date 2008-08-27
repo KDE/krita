@@ -31,19 +31,20 @@ class KisBrush;
 
 #include "kis_dynamic_shape.h"
 
-class DYNAMIC_BRUSH_EXPORT KisDabShape : public KisDynamicShape {
-    public:
-        KisDabShape(KisBrush* brush);
-        virtual ~KisDabShape();
-        virtual void paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc);
-        virtual void resize(double xs, double ys);
-        virtual void rotate(double r);
-        virtual QRect rect() const;
-        virtual KisDynamicShape* clone() const;
-    private:
-        double m_scaleX, m_scaleY, m_rotate;
-        KisPaintDeviceSP m_dab;
-        KisBrush* m_brush;
+class DYNAMIC_BRUSH_EXPORT KisDabShape : public KisDynamicShape
+{
+public:
+    KisDabShape(KisBrush* brush);
+    virtual ~KisDabShape();
+    virtual void paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc);
+    virtual void resize(double xs, double ys);
+    virtual void rotate(double r);
+    virtual QRect rect() const;
+    virtual KisDynamicShape* clone() const;
+private:
+    double m_scaleX, m_scaleY, m_rotate;
+    KisPaintDeviceSP m_dab;
+    KisBrush* m_brush;
 };
 
 #endif

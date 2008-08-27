@@ -46,7 +46,7 @@
 #include "kis_types.h"
 
 KisLevelFilter::KisLevelFilter()
-    : KisFilter( id(), CategoryAdjust, i18n("&Levels"))
+        : KisFilter(id(), CategoryAdjust, i18n("&Levels"))
 {
     setSupportsPainting(true);
     setSupportsPreview(true);
@@ -58,7 +58,7 @@ KisLevelFilter::~KisLevelFilter()
 {
 }
 
-KisFilterConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image ) const
+KisFilterConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image) const
 {
     Q_UNUSED(image);
     return new KisLevelConfigWidget(parent, dev);
@@ -72,11 +72,11 @@ bool KisLevelFilter::workWith(KoColorSpace* cs) const
 
 
 void KisLevelFilter::process(KisConstProcessingInformation srcInfo,
-                         KisProcessingInformation dstInfo,
-                         const QSize& size,
-                         const KisFilterConfiguration* config,
-                         KoUpdater* progressUpdater
-        ) const
+                             KisProcessingInformation dstInfo,
+                             const QSize& size,
+                             const KisFilterConfiguration* config,
+                             KoUpdater* progressUpdater
+                            ) const
 {
     const KisPaintDeviceSP src = srcInfo.paintDevice();
     KisPaintDeviceSP dst = dstInfo.paintDevice();
@@ -91,23 +91,21 @@ void KisLevelFilter::process(KisConstProcessingInformation srcInfo,
 
     KoColorTransformation * adjustment = 0;
 
-    int blackvalue = config->getInt( "blackvalue" );
-    int whitevalue = config->getInt( "whitevalue", 255 );
-    double gammavalue = config->getDouble( "gammavalue", 1.0 );
-    int outblackvalue = config->getInt( "outblackvalue" );
-    int outwhitevalue = config->getInt( "outwhitevalue", 255 );
+    int blackvalue = config->getInt("blackvalue");
+    int whitevalue = config->getInt("whitevalue", 255);
+    double gammavalue = config->getDouble("gammavalue", 1.0);
+    int outblackvalue = config->getInt("outblackvalue");
+    int outwhitevalue = config->getInt("outwhitevalue", 255);
 
     Q_UINT16 transfer[256];
     for (int i = 0; i < 256; i++) {
         if (i <= blackvalue)
             transfer[i] = outblackvalue;
-        else if (i < whitevalue)
-        {
+        else if (i < whitevalue) {
             double a = (double)(i - blackvalue) / (double)(whitevalue - blackvalue);
-            a = (double)(outwhitevalue - outblackvalue) * pow (a, (1.0 / gammavalue));
+            a = (double)(outwhitevalue - outblackvalue) * pow(a, (1.0 / gammavalue));
             transfer[i] = int(outblackvalue + a);
-        }
-        else
+        } else
             transfer[i] = outwhitevalue;
         // TODO use floats instead of integer in the configuration
         transfer[i] = ((int)transfer[i] * 0xFFFF) / 0xFF ;
@@ -117,67 +115,59 @@ void KisLevelFilter::process(KisConstProcessingInformation srcInfo,
     KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
     KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
 
-    if( progressUpdater )
-    {
-        progressUpdater->setRange(0, size.width() * size.height() );
+    if (progressUpdater) {
+        progressUpdater->setRange(0, size.width() * size.height());
     }
     Q_INT32 pixelsProcessed = 0;
 
-    for (int row = 0; row < size.height() && !(progressUpdater && progressUpdater->interrupted()); ++row )
-    {
-        while( ! srcIt.isDone()  && !(progressUpdater && progressUpdater->interrupted()) )
-        {
-            Q_UINT32 npix=0, maxpix = qMin(srcIt.nConseqHPixels(), dstIt.nConseqHPixels());
+    for (int row = 0; row < size.height() && !(progressUpdater && progressUpdater->interrupted()); ++row) {
+        while (! srcIt.isDone()  && !(progressUpdater && progressUpdater->interrupted())) {
+            Q_UINT32 npix = 0, maxpix = qMin(srcIt.nConseqHPixels(), dstIt.nConseqHPixels());
             Q_UINT8 selectedness = dstIt.selectedness();
             // The idea here is to handle stretches of completely selected and completely unselected pixels.
             // Partially selected pixels are handled one pixel at a time.
-            switch(selectedness)
-            {
-                case MIN_SELECTED:
-                    while(dstIt.selectedness()==MIN_SELECTED && maxpix)
-                    {
-                        --maxpix;
+            switch (selectedness) {
+            case MIN_SELECTED:
+                while (dstIt.selectedness() == MIN_SELECTED && maxpix) {
+                    --maxpix;
+                    ++srcIt;
+                    ++dstIt;
+                    ++npix;
+                }
+                pixelsProcessed += npix;
+                break;
+
+            case MAX_SELECTED: {
+                const Q_UINT8 *firstPixelSrc = srcIt.oldRawData();
+                Q_UINT8 *firstPixelDst = dstIt.rawData();
+                while (dstIt.selectedness() == MAX_SELECTED && maxpix) {
+                    --maxpix;
+                    if (maxpix != 0) {
                         ++srcIt;
                         ++dstIt;
-                        ++npix;
                     }
-                    pixelsProcessed += npix;
-                    break;
-
-                case MAX_SELECTED:
-                {
-                    const Q_UINT8 *firstPixelSrc = srcIt.oldRawData();
-                    Q_UINT8 *firstPixelDst = dstIt.rawData();
-                    while(dstIt.selectedness()==MAX_SELECTED && maxpix)
-                    {
-                        --maxpix;
-                        if (maxpix != 0)
-                        {
-                          ++srcIt;
-                          ++dstIt;
-                        }
-                        ++npix;
-                    }
-                    // adjust
-                    adjustment->transform(firstPixelSrc, firstPixelDst, npix);
-                    pixelsProcessed += npix;
-                    ++srcIt;
-                    ++dstIt;
-                    break;
+                    ++npix;
                 }
-
-                default:
-                    // adjust, but since it's partially selected we also only partially adjust
-                    adjustment->transform(srcIt.oldRawData(), dstIt.rawData(), 1);
-                    const quint8 *pixels[2] = {srcIt.oldRawData(), dstIt.rawData()};
-                    qint16 weights[2] = {MAX_SELECTED - selectedness, selectedness};
-                    src->colorSpace()->mixColorsOp()->mixColors(pixels, weights, 2, dstIt.rawData());
-                    ++srcIt;
-                    ++dstIt;
-                    pixelsProcessed++;
-                    break;
+                // adjust
+                adjustment->transform(firstPixelSrc, firstPixelDst, npix);
+                pixelsProcessed += npix;
+                ++srcIt;
+                ++dstIt;
+                break;
             }
-            if(progressUpdater) progressUpdater->setValue( pixelsProcessed );
+
+            default:
+                // adjust, but since it's partially selected we also only partially adjust
+                adjustment->transform(srcIt.oldRawData(), dstIt.rawData(), 1);
+                const quint8 *pixels[2] = {srcIt.oldRawData(), dstIt.rawData()};
+                qint16 weights[2] = {MAX_SELECTED - selectedness, selectedness};
+                src->colorSpace()->mixColorsOp()->mixColors(pixels, weights, 2, dstIt.rawData());
+                ++srcIt;
+                ++dstIt;
+                pixelsProcessed++;
+                break;
+            }
+            if (progressUpdater) progressUpdater->setValue(pixelsProcessed);
         }
         srcIt.nextRow();
         dstIt.nextRow();
@@ -185,7 +175,7 @@ void KisLevelFilter::process(KisConstProcessingInformation srcInfo,
 }
 
 KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev)
-    : KisFilterConfigWidget(parent)
+        : KisFilterConfigWidget(parent)
 {
     m_page.setupUi(this);
     histogram = NULL;
@@ -198,29 +188,29 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
     m_page.outblackspin->setValue(0);
     m_page.outwhitespin->setValue(255);
 
-    connect( m_page.blackspin, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( m_page.whitespin, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( m_page.ingradient, SIGNAL(modifiedGamma(double)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(m_page.blackspin, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(m_page.whitespin, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(m_page.ingradient, SIGNAL(modifiedGamma(double)), SIGNAL(sigPleaseUpdatePreview()));
 
-    connect( m_page.blackspin, SIGNAL(valueChanged(int)), m_page.ingradient, SLOT(modifyBlack(int)));
-    connect( m_page.whitespin, SIGNAL(valueChanged(int)), m_page.ingradient, SLOT(modifyWhite(int)));
+    connect(m_page.blackspin, SIGNAL(valueChanged(int)), m_page.ingradient, SLOT(modifyBlack(int)));
+    connect(m_page.whitespin, SIGNAL(valueChanged(int)), m_page.ingradient, SLOT(modifyWhite(int)));
     //connect( m_page.whitespin, SIGNAL(valueChanged(int)), m_page.ingradient, SLOT(modifyGamma()));
 
-    connect( m_page.ingradient, SIGNAL(modifiedBlack(int)), m_page.blackspin, SLOT(setValue(int)));
-    connect( m_page.ingradient, SIGNAL(modifiedWhite(int)), m_page.whitespin, SLOT(setValue(int)));
-    connect( m_page.ingradient, SIGNAL(modifiedGamma(double)), m_page.gammaspin, SLOT(setNum(double)));
+    connect(m_page.ingradient, SIGNAL(modifiedBlack(int)), m_page.blackspin, SLOT(setValue(int)));
+    connect(m_page.ingradient, SIGNAL(modifiedWhite(int)), m_page.whitespin, SLOT(setValue(int)));
+    connect(m_page.ingradient, SIGNAL(modifiedGamma(double)), m_page.gammaspin, SLOT(setNum(double)));
 
 
-    connect( m_page.outblackspin, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( m_page.outwhitespin, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(m_page.outblackspin, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(m_page.outwhitespin, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
 
-    connect( m_page.outblackspin, SIGNAL(valueChanged(int)), m_page.outgradient, SLOT(modifyBlack(int)));
-    connect( m_page.outwhitespin, SIGNAL(valueChanged(int)), m_page.outgradient, SLOT(modifyWhite(int)));
+    connect(m_page.outblackspin, SIGNAL(valueChanged(int)), m_page.outgradient, SLOT(modifyBlack(int)));
+    connect(m_page.outwhitespin, SIGNAL(valueChanged(int)), m_page.outgradient, SLOT(modifyWhite(int)));
 
-    connect( m_page.outgradient, SIGNAL(modifiedBlack(int)), m_page.outblackspin, SLOT(setValue(int)));
-    connect( m_page.outgradient, SIGNAL(modifiedWhite(int)), m_page.outwhitespin, SLOT(setValue(int)));
+    connect(m_page.outgradient, SIGNAL(modifiedBlack(int)), m_page.outblackspin, SLOT(setValue(int)));
+    connect(m_page.outgradient, SIGNAL(modifiedWhite(int)), m_page.outwhitespin, SLOT(setValue(int)));
 
-    connect( (QObject*)(m_page.chkLogarithmic), SIGNAL(toggled(bool)), this, SLOT(drawHistogram(bool)));
+    connect((QObject*)(m_page.chkLogarithmic), SIGNAL(toggled(bool)), this, SLOT(drawHistogram(bool)));
 
     KoHistogramProducerSP producer = KoHistogramProducerSP(new KoGenericLabHistogramProducer());
     histogram = new KisHistogram(dev, producer, LINEAR);
@@ -250,19 +240,19 @@ void KisLevelConfigWidget::drawHistogram(bool logarithmic)
     QPixmap pix(256, height);
     pix.fill();
     QPainter p(&pix);
-    p.setPen(QPen::QPen(Qt::gray,1, Qt::SolidLine));
+    p.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
 
     double highest = (double)histogram->calculations().getHighest();
     Q_INT32 bins = histogram->producer()->numberOfBins();
 
     if (histogram->getHistogramType() == LINEAR) {
         double factor = (double)height / highest;
-        for( int i=0; i<bins; ++i ) {
+        for (int i = 0; i < bins; ++i) {
             p.drawLine(i, height, i, height - int(histogram->getValue(i) * factor));
         }
     } else {
         double factor = (double)height / (double)log(highest);
-        for( int i = 0; i < bins; ++i ) {
+        for (int i = 0; i < bins; ++i) {
             p.drawLine(i, height, i, height - int(log((double)histogram->getValue(i)) * factor));
         }
     }
@@ -274,37 +264,32 @@ KisFilterConfiguration * KisLevelConfigWidget::configuration() const
 {
     KisFilterConfiguration * config = new KisFilterConfiguration(KisLevelFilter::id().id(), 1);
 
-    config->setProperty( "blackvalue", m_page.blackspin->value());
-    config->setProperty( "whitevalue", m_page.whitespin->value());
-    config->setProperty( "gammavalue", m_page.ingradient->getGamma());
-    config->setProperty( "outblackvalue", m_page.outblackspin->value());
-    config->setProperty( "outwhitevalue", m_page.outwhitespin->value());
+    config->setProperty("blackvalue", m_page.blackspin->value());
+    config->setProperty("whitevalue", m_page.whitespin->value());
+    config->setProperty("gammavalue", m_page.ingradient->getGamma());
+    config->setProperty("outblackvalue", m_page.outblackspin->value());
+    config->setProperty("outwhitevalue", m_page.outwhitespin->value());
 
     return config;
 }
 
-void KisLevelConfigWidget::setConfiguration( KisFilterConfiguration * config )
+void KisLevelConfigWidget::setConfiguration(KisFilterConfiguration * config)
 {
     QVariant value;
-    if (config->getProperty("blackvalue", value))
-    {
-      m_page.blackspin->setValue( value.toUInt() );
+    if (config->getProperty("blackvalue", value)) {
+        m_page.blackspin->setValue(value.toUInt());
     }
-    if (config->getProperty("whitevalue", value))
-    {
-      m_page.whitespin->setValue( value.toUInt() );
+    if (config->getProperty("whitevalue", value)) {
+        m_page.whitespin->setValue(value.toUInt());
     }
-    if (config->getProperty("gammavalue", value))
-    {
-      m_page.ingradient->modifyGamma(value.toDouble());
+    if (config->getProperty("gammavalue", value)) {
+        m_page.ingradient->modifyGamma(value.toDouble());
     }
-    if (config->getProperty("outblackvalue", value))
-    {
-      m_page.outblackspin->setValue( value.toUInt() );
+    if (config->getProperty("outblackvalue", value)) {
+        m_page.outblackspin->setValue(value.toUInt());
     }
-    if (config->getProperty("outwhitevalue", value))
-    {
-      m_page.outwhitespin->setValue( value.toUInt() );
+    if (config->getProperty("outwhitevalue", value)) {
+        m_page.outwhitespin->setValue(value.toUInt());
     }
 }
 

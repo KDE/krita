@@ -34,12 +34,12 @@
 #include <kis_processing_information.h>
 
 KisWaveletNoiseReduction::KisWaveletNoiseReduction()
-    : KisFilter(id(), CategoryEnhance, i18n("&Wavelet Noise Reducer"))
+        : KisFilter(id(), CategoryEnhance, i18n("&Wavelet Noise Reducer"))
 {
-    setSupportsPainting( false );
-    setSupportsPreview( true );
-    setSupportsIncrementalPainting( false );
-    setSupportsThreading( false );
+    setSupportsPainting(false);
+    setSupportsPreview(true);
+    setSupportsIncrementalPainting(false);
+    setSupportsThreading(false);
 }
 
 
@@ -50,8 +50,8 @@ KisWaveletNoiseReduction::~KisWaveletNoiseReduction()
 KisFilterConfigWidget * KisWaveletNoiseReduction::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageSP) const
 {
     vKisDoubleWidgetParam param;
-    param.push_back( KisDoubleWidgetParam( 0.0, 256.0, BEST_WAVELET_THRESHOLD_VALUE, i18n("Threshold"), "threshold" ) );
-    return new KisMultiDoubleFilterWidget(id().id(), parent, id().id(), param );
+    param.push_back(KisDoubleWidgetParam(0.0, 256.0, BEST_WAVELET_THRESHOLD_VALUE, i18n("Threshold"), "threshold"));
+    return new KisMultiDoubleFilterWidget(id().id(), parent, id().id(), param);
 }
 
 KisFilterConfiguration* KisWaveletNoiseReduction::factoryConfiguration(const KisPaintDeviceSP) const
@@ -62,11 +62,11 @@ KisFilterConfiguration* KisWaveletNoiseReduction::factoryConfiguration(const Kis
 }
 
 void KisWaveletNoiseReduction::process(KisConstProcessingInformation srcInfo,
-                 KisProcessingInformation dstInfo,
-                 const QSize& areaSize,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-        ) const
+                                       KisProcessingInformation dstInfo,
+                                       const QSize& areaSize,
+                                       const KisFilterConfiguration* config,
+                                       KoUpdater* progressUpdater
+                                      ) const
 {
     const KisPaintDeviceSP src = srcInfo.paintDevice();
     KisPaintDeviceSP dst = dstInfo.paintDevice();
@@ -77,8 +77,7 @@ void KisWaveletNoiseReduction::process(KisConstProcessingInformation srcInfo,
     // TODO take selections into account
     float threshold;
 
-    if(!config)
-    {
+    if (!config) {
         config = defaultConfiguration(src);
     }
 
@@ -87,15 +86,14 @@ void KisWaveletNoiseReduction::process(KisConstProcessingInformation srcInfo,
     qint32 depth = src->colorSpace()->colorChannelCount();
 
     int size;
-    int maxrectsize = qMax( areaSize.width(), areaSize.height());
-    for(size = 2; size < maxrectsize; size *= 2) ;
+    int maxrectsize = qMax(areaSize.width(), areaSize.height());
+    for (size = 2; size < maxrectsize; size *= 2) ;
 
-    KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->get( src->colorSpace()->mathToolboxId().id() );
+    KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->get(src->colorSpace()->mathToolboxId().id());
     QRect srcRect(srcTopLeft, areaSize);
-    
-    if( progressUpdater )
-    {
-        progressUpdater->setRange(0, mathToolbox->fastWaveletTotalSteps(srcRect) * 2 + size*size*depth );
+
+    if (progressUpdater) {
+        progressUpdater->setRange(0, mathToolbox->fastWaveletTotalSteps(srcRect) * 2 + size*size*depth);
     }
     int count = 0;
 //     connect(mathToolbox, SIGNAL(nextStep()), this, SLOT(incProgress()));
@@ -107,41 +105,37 @@ void KisWaveletNoiseReduction::process(KisConstProcessingInformation srcInfo,
 //     setProgressStage( i18n("Fast wavelet transformation") ,progress());
     KisMathToolbox::KisWavelet* buff = 0;
     KisMathToolbox::KisWavelet* wav = 0;
-    
+
     try {
         buff = mathToolbox->initWavelet(src, srcRect);
-    } catch(std::bad_alloc)
-    {
-        if(buff) delete buff;
+    } catch (std::bad_alloc) {
+        if (buff) delete buff;
         return;
     }
     try {
         wav = mathToolbox->fastWaveletTransformation(src, srcRect, buff);
-    } catch(std::bad_alloc)
-    {
-        if(wav) delete wav;
+    } catch (std::bad_alloc) {
+        if (wav) delete wav;
         return;
     }
 
 //     dbgFilters <<"Thresholding...";
-    float* fin = wav->coeffs + wav->depth*wav->size*wav->size;
-    
-    for(float* it = wav->coeffs + wav->depth; it < fin; it++)
-    {
-        if( *it > threshold)
-        {
+    float* fin = wav->coeffs + wav->depth * wav->size * wav->size;
+
+    for (float* it = wav->coeffs + wav->depth; it < fin; it++) {
+        if (*it > threshold) {
             *it -= threshold;
-        } else if( *it < -threshold ) {
+        } else if (*it < -threshold) {
             *it += threshold;
         } else {
             *it = 0.;
         }
-        if(progressUpdater) progressUpdater->setValue( ++count );
+        if (progressUpdater) progressUpdater->setValue(++count);
     }
 
 //     dbgFilters <<"Untransforming...";
 
-    mathToolbox->fastWaveletUntransformation( dst, QRect(dstTopLeft, areaSize ), wav, buff);
+    mathToolbox->fastWaveletUntransformation(dst, QRect(dstTopLeft, areaSize), wav, buff);
 
     delete wav;
     delete buff;

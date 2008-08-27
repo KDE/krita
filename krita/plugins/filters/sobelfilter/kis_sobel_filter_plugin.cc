@@ -27,10 +27,10 @@
 #include "kis_global.h"
 
 typedef KGenericFactory<KisSobelFilterPlugin> KisSobelFilterPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritasobelfilter, KisSobelFilterPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritasobelfilter, KisSobelFilterPluginFactory("krita"))
 
 KisSobelFilterPlugin::KisSobelFilterPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     setComponentData(KisSobelFilterPluginFactory::componentData());
 

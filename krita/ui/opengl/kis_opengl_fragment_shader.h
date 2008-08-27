@@ -29,13 +29,14 @@ class KisOpenGLFragmentShader;
 typedef KisSharedPtr<KisOpenGLFragmentShader> KisOpenGLFragmentShaderSP;
 
 /**
- * An encapsulation of an OpenGL Shading Language fragment shader object. 
+ * An encapsulation of an OpenGL Shading Language fragment shader object.
  */
-class KRITAUI_EXPORT KisOpenGLFragmentShader : public KisOpenGLShader {
+class KRITAUI_EXPORT KisOpenGLFragmentShader : public KisOpenGLShader
+{
 public:
 
     /**
-     * Loads the shader source code from the given file, which will be searched 
+     * Loads the shader source code from the given file, which will be searched
      * for in the 'kis_shaders' resource directory (krita/data/shaders).
      * Refer to KisOpenGLShader for more information.
      * @param sourceCodeFilename the file to read the source code from
@@ -48,9 +49,9 @@ public:
      * @param sourceCodeStrings the source string to load from
      */
     static KisOpenGLFragmentShader string(const QString& sourceCodeString);
-    
+
     /**
-     * Loads the shader source code from the given char* string 
+     * Loads the shader source code from the given char* string
      *
      * @param sourceCodeString the source string to load from
      */

@@ -31,18 +31,15 @@ class TestAction : public KisRecordedAction
 public:
 
     TestAction(const QString & name, const QString & id)
-        : KisRecordedAction(name, id)
-        {
-        }
+            : KisRecordedAction(name, id) {
+    }
 
-    void play( KisUndoAdapter* ) const
-        {
-        }
+    void play(KisUndoAdapter*) const {
+    }
 
-    KisRecordedAction* clone() const
-        {
-            return new TestAction(name(), id());
-        }
+    KisRecordedAction* clone() const {
+        return new TestAction(name(), id());
+    }
 
 };
 

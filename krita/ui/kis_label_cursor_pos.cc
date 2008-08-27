@@ -21,7 +21,7 @@
 #include "kis_label_cursor_pos.moc"
 
 KisLabelCursorPos::KisLabelCursorPos(QWidget *parent, const char *name, Qt::WFlags f)
-    : QLabel(parent, f)
+        : QLabel(parent, f)
 {
     setObjectName(name);
     setText("0:0");

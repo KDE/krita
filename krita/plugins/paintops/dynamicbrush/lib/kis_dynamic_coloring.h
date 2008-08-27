@@ -29,82 +29,88 @@
 class KoAbstractGradient;
 class KoColorTransformation;
 
-class DYNAMIC_BRUSH_EXPORT KisDynamicColoring : public KisDynamicTransformable {
-    public:
-        virtual ~KisDynamicColoring();
-    public:
-        virtual void selectColor(double mix) = 0;
-        virtual KisDynamicColoring* clone() const = 0;
-        virtual void darken(qint32 v) = 0;
-        virtual void applyColorTransformation(const KoColorTransformation* transfo) = 0;
-        virtual const KoColorSpace* colorSpace() const = 0;
-        virtual void colorize(KisPaintDeviceSP, const QRect& rect) =0;
-        virtual void colorAt(int x, int y, KoColor*) = 0;
+class DYNAMIC_BRUSH_EXPORT KisDynamicColoring : public KisDynamicTransformable
+{
+public:
+    virtual ~KisDynamicColoring();
+public:
+    virtual void selectColor(double mix) = 0;
+    virtual KisDynamicColoring* clone() const = 0;
+    virtual void darken(qint32 v) = 0;
+    virtual void applyColorTransformation(const KoColorTransformation* transfo) = 0;
+    virtual const KoColorSpace* colorSpace() const = 0;
+    virtual void colorize(KisPaintDeviceSP, const QRect& rect) = 0;
+    virtual void colorAt(int x, int y, KoColor*) = 0;
 };
 
-class KisUniformColoring : public KisDynamicColoring {
-    public:
-        KisUniformColoring();
-        virtual ~KisUniformColoring();
-        virtual void darken(qint32 v);
-        virtual void rotate(double );
-        virtual void resize(double , double );
-        virtual void applyColorTransformation(const KoColorTransformation* transfo);
-        virtual const KoColorSpace* colorSpace() const;
-        virtual void colorize(KisPaintDeviceSP, const QRect& rect);
-        virtual void colorAt(int x, int y, KoColor*);
-    protected:
-        KoColor* m_color;
-    private:
-        KoColor* m_cachedColor;
+class KisUniformColoring : public KisDynamicColoring
+{
+public:
+    KisUniformColoring();
+    virtual ~KisUniformColoring();
+    virtual void darken(qint32 v);
+    virtual void rotate(double);
+    virtual void resize(double , double);
+    virtual void applyColorTransformation(const KoColorTransformation* transfo);
+    virtual const KoColorSpace* colorSpace() const;
+    virtual void colorize(KisPaintDeviceSP, const QRect& rect);
+    virtual void colorAt(int x, int y, KoColor*);
+protected:
+    KoColor* m_color;
+private:
+    KoColor* m_cachedColor;
 };
 
-class DYNAMIC_BRUSH_EXPORT KisPlainColoring : public KisUniformColoring {
-    public:
-        KisPlainColoring(const KoColor& backGroundColor, const KoColor& foreGroundColor);
-        virtual ~KisPlainColoring();
-        virtual KisDynamicColoring* clone() const;
-        virtual void selectColor(double mix);
-    private:
-        KoColor m_backGroundColor, m_foreGroundColor;
-        KoColor* m_cachedBackGroundColor;
+class DYNAMIC_BRUSH_EXPORT KisPlainColoring : public KisUniformColoring
+{
+public:
+    KisPlainColoring(const KoColor& backGroundColor, const KoColor& foreGroundColor);
+    virtual ~KisPlainColoring();
+    virtual KisDynamicColoring* clone() const;
+    virtual void selectColor(double mix);
+private:
+    KoColor m_backGroundColor, m_foreGroundColor;
+    KoColor* m_cachedBackGroundColor;
 };
 
-class DYNAMIC_BRUSH_EXPORT KisGradientColoring : public KisUniformColoring {
-    public:
-        KisGradientColoring(const KoAbstractGradient* gradient, const KoColorSpace* workingCS );
-        virtual ~KisGradientColoring();
-        virtual KisDynamicColoring* clone() const;
-        virtual void selectColor(double mix);
-    private:
-        const KoAbstractGradient* m_gradient;
-        const KoColorSpace* m_colorSpace;
+class DYNAMIC_BRUSH_EXPORT KisGradientColoring : public KisUniformColoring
+{
+public:
+    KisGradientColoring(const KoAbstractGradient* gradient, const KoColorSpace* workingCS);
+    virtual ~KisGradientColoring();
+    virtual KisDynamicColoring* clone() const;
+    virtual void selectColor(double mix);
+private:
+    const KoAbstractGradient* m_gradient;
+    const KoColorSpace* m_colorSpace;
 };
 
-class DYNAMIC_BRUSH_EXPORT KisUniformRandomColoring : public KisUniformColoring {
-    public:
-        KisUniformRandomColoring();
-        virtual ~KisUniformRandomColoring();
-        virtual KisDynamicColoring* clone() const;
-        virtual void selectColor(double mix);
+class DYNAMIC_BRUSH_EXPORT KisUniformRandomColoring : public KisUniformColoring
+{
+public:
+    KisUniformRandomColoring();
+    virtual ~KisUniformRandomColoring();
+    virtual KisDynamicColoring* clone() const;
+    virtual void selectColor(double mix);
 };
 
-class DYNAMIC_BRUSH_EXPORT KisTotalRandomColoring : public KisDynamicColoring {
-    public:
-        KisTotalRandomColoring();
-        virtual ~KisTotalRandomColoring();
-    public:
-        virtual void selectColor(double mix);
-        virtual KisDynamicColoring* clone() const;
-        virtual void darken(qint32 v);
-        virtual void applyColorTransformation(const KoColorTransformation* transfo);
-        virtual const KoColorSpace* colorSpace() const;
-        virtual void colorize(KisPaintDeviceSP, const QRect& rect);
-        virtual void colorAt(int x, int y, KoColor*);
-        virtual void rotate(double r);
-        virtual void resize(double xs, double ys);
-    private:
-        const KoColorSpace* m_colorSpace;
+class DYNAMIC_BRUSH_EXPORT KisTotalRandomColoring : public KisDynamicColoring
+{
+public:
+    KisTotalRandomColoring();
+    virtual ~KisTotalRandomColoring();
+public:
+    virtual void selectColor(double mix);
+    virtual KisDynamicColoring* clone() const;
+    virtual void darken(qint32 v);
+    virtual void applyColorTransformation(const KoColorTransformation* transfo);
+    virtual const KoColorSpace* colorSpace() const;
+    virtual void colorize(KisPaintDeviceSP, const QRect& rect);
+    virtual void colorAt(int x, int y, KoColor*);
+    virtual void rotate(double r);
+    virtual void resize(double xs, double ys);
+private:
+    const KoColorSpace* m_colorSpace;
 };
 
 #endif

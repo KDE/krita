@@ -28,24 +28,27 @@ class WdgShearImage : public QWidget, public Ui::WdgShearImage
 {
     Q_OBJECT
 
-    public:
-        WdgShearImage(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgShearImage(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
-class DlgShearImage: public KDialog {
+class DlgShearImage: public KDialog
+{
     typedef KDialog super;
     Q_OBJECT
 
 public:
 
     DlgShearImage(QWidget * parent = 0,
-             const char* name = 0);
+                  const char* name = 0);
     ~DlgShearImage();
 
     void setAngleX(quint32 w);
     void setAngleY(quint32 w);
-        qint32 angleX();
-        qint32 angleY();
+    qint32 angleX();
+    qint32 angleY();
 
 private slots:
 

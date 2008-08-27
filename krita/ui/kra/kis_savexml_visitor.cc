@@ -27,7 +27,6 @@
 #include "kis_paint_layer.h"
 #include "kis_shape_layer.h"
 #include "generator/kis_generator_layer.h"
-#include "kis_adjustment_layer.h"
 #include "kis_filter_mask.h"
 #include "kis_transparency_mask.h"
 #include "kis_transformation_mask.h"
@@ -38,16 +37,16 @@
 #include <KoColorSpace.h>
 
 KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, const QDomElement & element, quint32 &count, bool root) :
-    KisNodeVisitor(),
-    m_doc(doc),
-    m_count(count),
-    m_root(root)
+        KisNodeVisitor(),
+        m_doc(doc),
+        m_count(count),
+        m_root(root)
 {
     dbgKrita << " creating savexml visitor ";
     m_elem = element;
 }
 
-bool KisSaveXmlVisitor::visit( KisExternalLayer * layer )
+bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
 {
     if (KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
         QDomElement layerElement = m_doc.createElement("layer");
@@ -56,7 +55,7 @@ bool KisSaveXmlVisitor::visit( KisExternalLayer * layer )
         layerElement.setAttribute("y", shapeLayer->y());
         m_elem.appendChild(layerElement);
         m_count++;
-        return saveMasks( layer, layerElement );
+        return saveMasks(layer, layerElement);
     }
     return false;
 }
@@ -70,24 +69,23 @@ bool KisSaveXmlVisitor::visit(KisPaintLayer *layer)
     layerElement.setAttribute("colorspacename", layer->paintDevice()->colorSpace()->id());
     m_elem.appendChild(layerElement);
 
-/*    if(layer->paintDevice()->hasExifInfo())
-    {
-        QDomElement exifElmt = layer->paintDevice()->exifInfo()->save(m_doc);
-        layerElement.appendChild(exifElmt);
-    } TODO: save the metadata
-*/
+    /*    if(layer->paintDevice()->hasExifInfo())
+        {
+            QDomElement exifElmt = layer->paintDevice()->exifInfo()->save(m_doc);
+            layerElement.appendChild(exifElmt);
+        } TODO: save the metadata
+    */
     m_count++;
-    return saveMasks( layer, layerElement );
+    return saveMasks(layer, layerElement);
 }
 
 bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
 {
     QDomElement layerElement;
 
-    if(m_root) // if this is the root we fake so not to save it
+    if (m_root) // if this is the root we fake so not to save it
         layerElement = m_elem;
-    else
-    {
+    else {
         QDomElement layerElement = m_doc.createElement("layer");
         saveLayer(layerElement, "grouplayer", layer);
 
@@ -100,7 +98,7 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
     layerElement.appendChild(elem);
     KisSaveXmlVisitor visitor(m_doc, elem, m_count);
 
-    return visitor.visitAllInverse( layer );
+    return visitor.visitAllInverse(layer);
 }
 
 bool KisSaveXmlVisitor::visit(KisAdjustmentLayer* layer)
@@ -114,7 +112,7 @@ bool KisSaveXmlVisitor::visit(KisAdjustmentLayer* layer)
     m_elem.appendChild(layerElement);
 
     m_count++;
-    return saveMasks( layer, layerElement );
+    return saveMasks(layer, layerElement);
 }
 
 bool KisSaveXmlVisitor::visit(KisGeneratorLayer *layer)
@@ -128,7 +126,7 @@ bool KisSaveXmlVisitor::visit(KisGeneratorLayer *layer)
     m_elem.appendChild(layerElement);
 
     m_count++;
-    return saveMasks( layer, layerElement );
+    return saveMasks(layer, layerElement);
 }
 
 bool KisSaveXmlVisitor::visit(KisCloneLayer *layer)
@@ -142,7 +140,7 @@ bool KisSaveXmlVisitor::visit(KisCloneLayer *layer)
     m_elem.appendChild(layerElement);
 
     m_count++;
-    return saveMasks( layer, layerElement );
+    return saveMasks(layer, layerElement);
 }
 
 bool KisSaveXmlVisitor::visit(KisFilterMask *mask)
@@ -230,7 +228,7 @@ bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
         QDomElement elem = m_doc.createElement("MASKS");
         layerElement.appendChild(elem);
         KisSaveXmlVisitor visitor(m_doc, elem, m_count);
-        return visitor.visitAllInverse( node );
+        return visitor.visitAllInverse(node);
     }
     return true;
 }

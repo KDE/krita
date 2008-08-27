@@ -31,7 +31,7 @@
 #include <kis_paint_device.h>
 
 KisToolShape::KisToolShape(KoCanvasBase * canvas, const QCursor & cursor)
-    : KisToolPaint(canvas, cursor)
+        : KisToolPaint(canvas, cursor)
 {
     m_shapeOptionsWidget = 0;
     m_optionLayout = 0;

@@ -26,54 +26,52 @@
 
 void KisPerspectiveMathTest::testComputeMatrixTransfo()
 {
-  for(int i = 0; i < 10; i++)
-  {
-    QPointF topLeft = toQPointF(KisVector2D::Random());
-    QPointF topRight = toQPointF(KisVector2D::Random());
-    QPointF bottomLeft = toQPointF(KisVector2D::Random());
-    QPointF bottomRight = toQPointF(KisVector2D::Random());
-    Matrix3qreal originalMatrix = Matrix3qreal::Random();
-    originalMatrix(2,2) = 1;
+    for (int i = 0; i < 10; i++) {
+        QPointF topLeft = toQPointF(KisVector2D::Random());
+        QPointF topRight = toQPointF(KisVector2D::Random());
+        QPointF bottomLeft = toQPointF(KisVector2D::Random());
+        QPointF bottomRight = toQPointF(KisVector2D::Random());
+        Matrix3qreal originalMatrix = Matrix3qreal::Random();
+        originalMatrix(2, 2) = 1;
 
-    Matrix3qreal resultMatrix = KisPerspectiveMath::computeMatrixTransfo(
-      topLeft, topRight, bottomLeft, bottomRight,
-      KisPerspectiveMath::matProd(originalMatrix, topLeft),
-      KisPerspectiveMath::matProd(originalMatrix, topRight),
-      KisPerspectiveMath::matProd(originalMatrix, bottomLeft),
-      KisPerspectiveMath::matProd(originalMatrix, bottomRight)
-    );
+        Matrix3qreal resultMatrix = KisPerspectiveMath::computeMatrixTransfo(
+                                        topLeft, topRight, bottomLeft, bottomRight,
+                                        KisPerspectiveMath::matProd(originalMatrix, topLeft),
+                                        KisPerspectiveMath::matProd(originalMatrix, topRight),
+                                        KisPerspectiveMath::matProd(originalMatrix, bottomLeft),
+                                        KisPerspectiveMath::matProd(originalMatrix, bottomRight)
+                                    );
 
-    QVERIFY(resultMatrix.isApprox(originalMatrix));
-  }
+        QVERIFY(resultMatrix.isApprox(originalMatrix));
+    }
 }
 
 
 void KisPerspectiveMathTest::testLines()
 {
-  for(int i = 0; i < 10; i++)
-  {
-    KisVector2D center = KisVector2D::Random();
-    KisVector2D u = KisVector2D::Random();
-    KisVector2D v = KisVector2D::Random();
-    qreal a = Eigen::ei_random<qreal>();
+    for (int i = 0; i < 10; i++) {
+        KisVector2D center = KisVector2D::Random();
+        KisVector2D u = KisVector2D::Random();
+        KisVector2D v = KisVector2D::Random();
+        qreal a = Eigen::ei_random<qreal>();
 
-    QPointF pu  = toQPointF(center + u);
-    QPointF pau = toQPointF(center + a*u);
-    QPointF pv  = toQPointF(center + v);
-    QPointF pav = toQPointF(center + a*v);
+        QPointF pu  = toQPointF(center + u);
+        QPointF pau = toQPointF(center + a * u);
+        QPointF pv  = toQPointF(center + v);
+        QPointF pav = toQPointF(center + a * v);
 
-    LineEquation line_u(&pu, &pau);
-    LineEquation line_v(&pv, &pav);
+        LineEquation line_u(&pu, &pau);
+        LineEquation line_v(&pv, &pav);
 
-    // the line equations should be normalized so that a^2+b^2=1
-    QVERIFY(Eigen::ei_isApprox(line_u.a()*line_u.a()+line_u.b()*line_u.b(), qreal(1)));
-    QVERIFY(Eigen::ei_isApprox(line_v.a()*line_v.a()+line_v.b()*line_v.b(), qreal(1)));
+        // the line equations should be normalized so that a^2+b^2=1
+        QVERIFY(Eigen::ei_isApprox(line_u.a()*line_u.a() + line_u.b()*line_u.b(), qreal(1)));
+        QVERIFY(Eigen::ei_isApprox(line_v.a()*line_v.a() + line_v.b()*line_v.b(), qreal(1)));
 
-    KisVector2D result = line_u.intersection(line_v);
+        KisVector2D result = line_u.intersection(line_v);
 
-    // the lines should intersect at the point we called "center"
-    QVERIFY(result.isApprox(center));
-  }
+        // the lines should intersect at the point we called "center"
+        QVERIFY(result.isApprox(center));
+    }
 }
 
 

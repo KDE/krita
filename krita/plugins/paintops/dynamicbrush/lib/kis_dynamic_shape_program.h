@@ -33,44 +33,47 @@ class QWidget;
 /**
  * This is the base class of a dynamic program.
  */
-class DYNAMIC_BRUSH_EXPORT KisDynamicShapeProgram : public KisDynamicProgram {
+class DYNAMIC_BRUSH_EXPORT KisDynamicShapeProgram : public KisDynamicProgram
+{
     Q_OBJECT
-    protected:
-        /**
-         * @param name the name of this program, will be displayed in the list of programs
-         */
-        KisDynamicShapeProgram(const QString& name, const QString& type);
-    public:
-        virtual ~KisDynamicShapeProgram();
-        /**
-         * Compute the scattering information for that program.
-         */
-        virtual KisDynamicScattering scattering( const KisPaintInformation& info ) const =0;
-        /**
-         * Apply the program on the shape and the Shape
-         */
-        virtual void apply(KisDynamicShape* Shapesrc, const KisPaintInformation& ) const = 0;
-    private:
-        struct Private;
-        Private* const d;
+protected:
+    /**
+     * @param name the name of this program, will be displayed in the list of programs
+     */
+    KisDynamicShapeProgram(const QString& name, const QString& type);
+public:
+    virtual ~KisDynamicShapeProgram();
+    /**
+     * Compute the scattering information for that program.
+     */
+    virtual KisDynamicScattering scattering(const KisPaintInformation& info) const = 0;
+    /**
+     * Apply the program on the shape and the Shape
+     */
+    virtual void apply(KisDynamicShape* Shapesrc, const KisPaintInformation&) const = 0;
+private:
+    struct Private;
+    Private* const d;
 };
 
-class DYNAMIC_BRUSH_EXPORT KisDynamicShapeProgramFactory : public KisDynamicProgramFactory  {
-    public:
-        KisDynamicShapeProgramFactory(QString id, QString name);
-        virtual ~KisDynamicShapeProgramFactory();
-        virtual KisDynamicProgram* program(QString name) const;
-        virtual KisDynamicShapeProgram* shapeProgram(QString name) const = 0;
-    private:
-        struct Private;
-        Private* const d;
+class DYNAMIC_BRUSH_EXPORT KisDynamicShapeProgramFactory : public KisDynamicProgramFactory
+{
+public:
+    KisDynamicShapeProgramFactory(QString id, QString name);
+    virtual ~KisDynamicShapeProgramFactory();
+    virtual KisDynamicProgram* program(QString name) const;
+    virtual KisDynamicShapeProgram* shapeProgram(QString name) const = 0;
+private:
+    struct Private;
+    Private* const d;
 };
 
-class DYNAMIC_BRUSH_EXPORT KisDynamicShapeProgramsFactory : public KisSerializableConfigurationFactory {
-    public:
-        virtual ~KisDynamicShapeProgramsFactory();
-        virtual KisSerializableConfiguration* createDefault();
-        virtual KisSerializableConfiguration* create(const QDomElement&);
+class DYNAMIC_BRUSH_EXPORT KisDynamicShapeProgramsFactory : public KisSerializableConfigurationFactory
+{
+public:
+    virtual ~KisDynamicShapeProgramsFactory();
+    virtual KisSerializableConfiguration* createDefault();
+    virtual KisSerializableConfiguration* create(const QDomElement&);
 };
 
 #endif

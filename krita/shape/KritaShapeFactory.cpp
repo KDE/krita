@@ -30,20 +30,20 @@
 #include "KritaShape.h"
 #include "KritaShapeToolFactory.h"
 
-K_EXPORT_COMPONENT_FACTORY( kritashape, KGenericFactory<KritaShapePlugin>( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritashape, KGenericFactory<KritaShapePlugin>("krita"))
 
-    KritaShapePlugin::KritaShapePlugin( QObject * parent,  const QStringList & list )
+KritaShapePlugin::KritaShapePlugin(QObject * parent,  const QStringList & list)
 {
-    KoShapeRegistry::instance()->add( new KritaShapeFactory( parent) );
-    KoToolRegistry::instance()->add( new KritaShapeToolFactory( parent, list ) );
+    KoShapeRegistry::instance()->add(new KritaShapeFactory(parent));
+    KoToolRegistry::instance()->add(new KritaShapeToolFactory(parent, list));
 }
 
 
-KritaShapeFactory::KritaShapeFactory( QObject* parent)
-    : KoShapeFactory( parent, KritaShapeId, i18n( "KritaShape Shape" ) )
+KritaShapeFactory::KritaShapeFactory(QObject* parent)
+        : KoShapeFactory(parent, KritaShapeId, i18n("KritaShape Shape"))
 {
-    setToolTip( i18n( "A color managed, multi-layer raster image" ) );
-    setIcon( "kritashape" );
+    setToolTip(i18n("A color managed, multi-layer raster image"));
+    setIcon("kritashape");
 
 }
 
@@ -53,11 +53,11 @@ KoShape* KritaShapeFactory::createDefaultShape() const
     return shape;
 }
 
-KoShape* KritaShapeFactory::createShape( const KoProperties* params ) const
+KoShape* KritaShapeFactory::createShape(const KoProperties* params) const
 {
     Q_UNUSED(params);
     // XXX; Get the url and profile name from the params
-    KritaShape* shape = new KritaShape(KUrl(), "sRGB built-in - (lcms internal)" );
+    KritaShape* shape = new KritaShape(KUrl(), "sRGB built-in - (lcms internal)");
     return shape;
 }
 

@@ -26,17 +26,15 @@
 
 void KisMaskGeneratorTest::testCircleSerialisation()
 {
-    KisCircleMaskGenerator cmg(10.0 * rand() / RAND_MAX, 10.0 * rand() / RAND_MAX, rand() / RAND_MAX, rand() / RAND_MAX );
+    KisCircleMaskGenerator cmg(10.0 * rand() / RAND_MAX, 10.0 * rand() / RAND_MAX, rand() / RAND_MAX, rand() / RAND_MAX);
     QDomDocument doc = QDomDocument("cmg");
-    QDomElement root = doc.createElement( "cmg" );
-    doc.appendChild( root );
-    cmg.toXML(doc, root );
+    QDomElement root = doc.createElement("cmg");
+    doc.appendChild(root);
+    cmg.toXML(doc, root);
     KisMaskGenerator* cmg2 = KisMaskGenerator::fromXML(root);
-    for(int i = 0; i < 10; ++i)
-    {
-        for(int j = 0; j < 10; ++j)
-        {
-            QVERIFY( cmg.valueAt(i,j) == cmg2->valueAt(i, j ) );
+    for (int i = 0; i < 10; ++i) {
+        for (int j = 0; j < 10; ++j) {
+            QVERIFY(cmg.valueAt(i, j) == cmg2->valueAt(i, j));
         }
     }
     delete cmg2;
@@ -44,17 +42,15 @@ void KisMaskGeneratorTest::testCircleSerialisation()
 
 void KisMaskGeneratorTest::testSquareSerialisation()
 {
-    KisRectangleMaskGenerator cmg(10.0 * rand() / RAND_MAX, 10.0 * rand() / RAND_MAX, rand() / RAND_MAX, rand() / RAND_MAX );
+    KisRectangleMaskGenerator cmg(10.0 * rand() / RAND_MAX, 10.0 * rand() / RAND_MAX, rand() / RAND_MAX, rand() / RAND_MAX);
     QDomDocument doc = QDomDocument("cmg");
-    QDomElement root = doc.createElement( "cmg" );
-    doc.appendChild( root );
-    cmg.toXML(doc, root );
+    QDomElement root = doc.createElement("cmg");
+    doc.appendChild(root);
+    cmg.toXML(doc, root);
     KisMaskGenerator* cmg2 = KisMaskGenerator::fromXML(root);
-    for(int i = 0; i < 10; ++i)
-    {
-        for(int j = 0; j < 10; ++j)
-        {
-            QVERIFY( cmg.valueAt(i,j) == cmg2->valueAt(i, j ) );
+    for (int i = 0; i < 10; ++i) {
+        for (int j = 0; j < 10; ++j) {
+            QVERIFY(cmg.valueAt(i, j) == cmg2->valueAt(i, j));
         }
     }
     delete cmg2;

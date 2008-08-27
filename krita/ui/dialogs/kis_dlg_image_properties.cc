@@ -44,10 +44,10 @@
 #include "widgets/squeezedcombobox.h"
 
 KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, const char *name)
-    : KDialog(parent)
+        : KDialog(parent)
 {
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
     setObjectName(name);
     setCaption(i18n("Image Properties"));
     m_page = new WdgImageProperties(this);
@@ -67,7 +67,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
     //m_page->cmbColorSpaces->hide();
     //m_page->lblColorSpaces->setText(image->colorSpace()->id().name());
     QList<KoID> colorSpaces = KoColorSpaceRegistry::instance()->listKeys();
-    qint32 i = colorSpaces.indexOf(KoID("WET",""));
+    qint32 i = colorSpaces.indexOf(KoID("WET", ""));
     if (i >= 0) {
         colorSpaces.removeAt(i);
     }
@@ -78,13 +78,12 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageSP image, QWidget *parent, 
 
     if (image->profile()) {
         m_page->cmbProfile->setCurrent(image->profile()->name());
-    }
-    else {
+    } else {
         m_page->cmbProfile->setCurrentIndex(0);
     }
 
     connect(m_page->cmbColorSpaces, SIGNAL(activated(const KoID &)),
-        this, SLOT(fillCmbProfiles(const KoID &)));
+            this, SLOT(fillCmbProfiles(const KoID &)));
 }
 
 KisDlgImageProperties::~KisDlgImageProperties()
@@ -99,7 +98,7 @@ const KoColorSpace * KisDlgImageProperties::colorSpace()
 
 const KoColorProfile * KisDlgImageProperties::profile()
 {
-    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( m_image->colorSpace()->id() );
+    QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(m_image->colorSpace()->id());
     qint32 index = m_page->cmbProfile->currentIndex();
 
     if (index < profileList.count()) {
@@ -115,9 +114,9 @@ void KisDlgImageProperties::fillCmbProfiles(const KoID & s)
     KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->value(s.id());
     m_page->cmbProfile->clear();
     if (csf) {
-        QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
+        QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
 
-        foreach (const KoColorProfile *profile, profileList) {
+        foreach(const KoColorProfile *profile, profileList) {
             m_page->cmbProfile->addSqueezedItem(profile->name());
         }
     }

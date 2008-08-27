@@ -34,17 +34,23 @@ class KisBookmarkedConfigurationManager;
 class KisBookmarkedConfigurationsModel;
 class KisDynamicOpSettings;
 
-class KisDynamicOpFactory : public KisPaintOpFactory  {
+class KisDynamicOpFactory : public KisPaintOpFactory
+{
 public:
     KisDynamicOpFactory(KisBookmarkedConfigurationManager* shapeBookmarksManager, KisBookmarkedConfigurationManager* coloringBookmarksManager) :
-        m_shapeBookmarksManager(shapeBookmarksManager), m_coloringBookmarksManager(coloringBookmarksManager)
-    {}
+            m_shapeBookmarksManager(shapeBookmarksManager), m_coloringBookmarksManager(coloringBookmarksManager) {}
     virtual ~KisDynamicOpFactory() {}
 
     virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
-    virtual QString id() const { return "dynamicbrush"; }
-    virtual QString name() const { return i18n("Dynamic Brush"); }
-    virtual QString pixmap() { return "dynamicbrush.png"; }
+    virtual QString id() const {
+        return "dynamicbrush";
+    }
+    virtual QString name() const {
+        return i18n("Dynamic Brush");
+    }
+    virtual QString pixmap() {
+        return "dynamicbrush.png";
+    }
 
     virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
@@ -55,7 +61,8 @@ private:
 };
 
 
-class KisDynamicOp : public KisPaintOp {
+class KisDynamicOp : public KisPaintOp
+{
 
 public:
 
@@ -63,8 +70,7 @@ public:
     virtual ~KisDynamicOp();
 
     void paintAt(const KisPaintInformation& info);
-    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const
-    {
+    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
         Q_UNUSED(xSpacing);
         Q_UNUSED(ySpacing);
         Q_UNUSED(pressure1);

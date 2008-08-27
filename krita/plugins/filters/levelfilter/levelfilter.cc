@@ -26,7 +26,7 @@
 #include "filter/kis_filter_registry.h"
 
 typedef KGenericFactory<LevelFilter> LevelFilterFactory;
-K_EXPORT_COMPONENT_FACTORY( kritalevelfilter, LevelFilterFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritalevelfilter, LevelFilterFactory("krita"))
 
 LevelFilter::LevelFilter(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)

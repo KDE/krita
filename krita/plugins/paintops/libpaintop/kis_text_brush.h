@@ -28,22 +28,26 @@ class KisTextBrushResource : public KisBrush
 
 public:
 
-    KisTextBrushResource() : KisBrush("")
-    {
+    KisTextBrushResource() : KisBrush("") {
         setBrushType(MASK);
     }
 
-    KisTextBrushResource(const QString& txt, const QFont& font) : KisBrush("")
-    {
+    KisTextBrushResource(const QString& txt, const QFont& font) : KisBrush("") {
         setFont(font);
         setText(txt);
         updateBrush();
         setBrushType(MASK);
     }
 
-    virtual bool load() { return false; }
-    void setText(const QString& txt) { m_txt = txt; }
-    void setFont(const QFont& font) { m_font = font; }
+    virtual bool load() {
+        return false;
+    }
+    void setText(const QString& txt) {
+        m_txt = txt;
+    }
+    void setFont(const QFont& font) {
+        m_font = font;
+    }
     void updateBrush();
 
 private:
@@ -58,8 +62,7 @@ class KisWdgTextBrush : public QWidget, public Ui::KisWdgTextBrush
 
 public:
     KisWdgTextBrush(QWidget *parent, const char *name)
-        : QWidget(parent)
-    {
+            : QWidget(parent) {
         setObjectName(name);
         setupUi(this);
     }
@@ -72,7 +75,9 @@ class KisTextBrush : public KisWdgTextBrush
 public:
 
     KisTextBrush(QWidget *parent, const char* name, const QString& caption);
-    KisBrushSP brush() { return m_textBrush; }
+    KisBrushSP brush() {
+        return m_textBrush;
+    }
 
 private slots:
     void rebuildTextBrush();

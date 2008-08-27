@@ -41,20 +41,20 @@
 #include "KoResourceServerProvider.h"
 
 
-KisCustomPalette::KisCustomPalette( QList<KoColorSet*> &palettes, QWidget *parent, const char* name, const QString& caption, KisView2* view)
-    : KisWdgCustomPalette(parent, name), m_view(view)
+KisCustomPalette::KisCustomPalette(QList<KoColorSet*> &palettes, QWidget *parent, const char* name, const QString& caption, KisView2* view)
+        : KisWdgCustomPalette(parent, name), m_view(view)
 {
     Q_ASSERT(m_view);
     m_palette = 0;
     m_editMode = false;
     setWindowTitle(caption);
 
-    foreach (KoColorSet *palette, palettes) {
+    foreach(KoColorSet *palette, palettes) {
         QListWidgetItem* item = new QListWidgetItem(palette->name());
         paletteList->addItem(item);
         m_palettes[item] = palette;
     }
-    if(paletteList->count()>0) {
+    if (paletteList->count() > 0) {
         paletteList->setCurrentRow(0);
         setPalette(m_palettes.value(paletteList->currentItem()));
     }
@@ -62,50 +62,55 @@ KisCustomPalette::KisCustomPalette( QList<KoColorSet*> &palettes, QWidget *paren
     KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
     m_rServerAdapter = new KoResourceServerAdapter<KoColorSet>(rServer);
 
-    connect(paletteList, SIGNAL(currentItemChanged( QListWidgetItem*, QListWidgetItem* )), this, SLOT(slotPaletteChanged( QListWidgetItem*, QListWidgetItem* )));
+    connect(paletteList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)), this, SLOT(slotPaletteChanged(QListWidgetItem*, QListWidgetItem*)));
     connect(addColor, SIGNAL(pressed()), this, SLOT(slotAddNew()));
     connect(removeColor, SIGNAL(pressed()), this, SLOT(slotRemoveCurrent()));
     //connect(addPalette, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
 }
 
-KisCustomPalette::~KisCustomPalette() {
+KisCustomPalette::~KisCustomPalette()
+{
     delete m_rServerAdapter;
 }
 
-void KisCustomPalette::setPalette(KoColorSet* p) {
+void KisCustomPalette::setPalette(KoColorSet* p)
+{
     m_palette = p;
     //view->setPalette(m_palette);
     palettename->setText(p->name());
 }
 
-void KisCustomPalette::slotAddNew() {
+void KisCustomPalette::slotAddNew()
+{
     // Let the user select a new color
     // FIXME also let him add the current paint color to the palette
     // or even better, let the color picker have an option 'Add to palette'!
-/*
-    KoColorSetEntry entry;
+    /*
+        KoColorSetEntry entry;
 
-    m_palette->add(entry);
+        m_palette->add(entry);
 
-    // Just reload the palette completely for the view updating
-    view->setPalette(m_palette);
+        // Just reload the palette completely for the view updating
+        view->setPalette(m_palette);
 
-    if (!m_palette->save())
-        KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.",m_palette->filename()), i18n("Palette"));
-*/
+        if (!m_palette->save())
+            KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.",m_palette->filename()), i18n("Palette"));
+    */
 }
 
-void KisCustomPalette::slotRemoveCurrent() {
-    if(m_palette) {
+void KisCustomPalette::slotRemoveCurrent()
+{
+    if (m_palette) {
         // Just reload the palette completely for the view updating
 //        view->setPalette(m_palette);
 
         if (!m_palette->save())
-           KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.",m_palette->filename()), i18n("Palette"));
+            KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.", m_palette->filename()), i18n("Palette"));
     }
 }
 
-void KisCustomPalette::slotAddPalette() {
+void KisCustomPalette::slotAddPalette()
+{
 
     bool ok;
     QRegExpValidator validator(QRegExp("\\S+"), this);
@@ -128,18 +133,18 @@ void KisCustomPalette::slotAddPalette() {
     extension = ".gpl";
     QString tempFileName;
     {
-         KTemporaryFile file;
-         file.setPrefix(dir);
-         file.setSuffix(extension);
-         file.setAutoRemove(false);
-         file.open();
-         tempFileName = file.fileName();
+        KTemporaryFile file;
+        file.setPrefix(dir);
+        file.setSuffix(extension);
+        file.setAutoRemove(false);
+        file.open();
+        tempFileName = file.fileName();
     }
     // Save it to that file
     palette->setFilename(tempFileName);
 
     if (!palette->save()) {
-        KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.",m_palette->filename()), i18n("Palette"));
+        KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only.", m_palette->filename()), i18n("Palette"));
         return;
     }
 
@@ -155,8 +160,9 @@ void KisCustomPalette::slotAddPalette() {
     paletteList->setCurrentItem(item);
 }
 
-void KisCustomPalette::slotPaletteChanged( QListWidgetItem* current, QListWidgetItem* previous ) {
-    Q_UNUSED( previous ); 
+void KisCustomPalette::slotPaletteChanged(QListWidgetItem* current, QListWidgetItem* previous)
+{
+    Q_UNUSED(previous);
     setPalette(m_palettes.value(current));
 }
 

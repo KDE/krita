@@ -32,7 +32,8 @@
 #undef max
 #endif
 
-namespace Scripting {
+namespace Scripting
+{
 
 class ConstPaintDevice;
 
@@ -54,78 +55,78 @@ class ConstPaintDevice;
  */
 class Histogram : public QObject
 {
-        Q_OBJECT
-    public:
-        Histogram(ConstPaintDevice* layer, KoHistogramProducerSP producer, const enumHistogramType type);
-        ~Histogram();
+    Q_OBJECT
+public:
+    Histogram(ConstPaintDevice* layer, KoHistogramProducerSP producer, const enumHistogramType type);
+    ~Histogram();
 
-    public slots:
+public slots:
 
-        /**
-         * Return the selected channel.
-         */
-        uint channel();
+    /**
+     * Return the selected channel.
+     */
+    uint channel();
 
-        /**
-         * Select the channel of the layer on which to get the result of the histogram.
-         * This function takes one argument :
-         *  - channel number
-         */
-        void setChannel(uint channelnr);
+    /**
+     * Select the channel of the layer on which to get the result of the histogram.
+     * This function takes one argument :
+     *  - channel number
+     */
+    void setChannel(uint channelnr);
 
-        /**
-         * This function return the maximum bound of the histogram
-         * (values at greater position than the maximum are null).
-         * The value is in the range 0.0 - 1.0.
-         */
-        double max();
+    /**
+     * This function return the maximum bound of the histogram
+     * (values at greater position than the maximum are null).
+     * The value is in the range 0.0 - 1.0.
+     */
+    double max();
 
-        /**
-         * This function return the minimum bound of the histogram
-         * (values at smaller position than the minimum are null)
-         * The value is in the range 0.0 - 1.0.
-         */
-        double min();
+    /**
+     * This function return the minimum bound of the histogram
+     * (values at smaller position than the minimum are null)
+     * The value is in the range 0.0 - 1.0.
+     */
+    double min();
 
-        /**
-         * This function return the highest value of the histogram.
-         */
-        uint highest();
+    /**
+     * This function return the highest value of the histogram.
+     */
+    uint highest();
 
-        /**
-         * This function return the lowest value of the histogram.
-         */
-        uint lowest();
+    /**
+     * This function return the lowest value of the histogram.
+     */
+    uint lowest();
 
-        /**
-         * This function return the mean of the histogram.
-         */
-        double mean();
+    /**
+     * This function return the mean of the histogram.
+     */
+    double mean();
 
-        /**
-         * This function return the number of pixels used by the histogram.
-         */
-        uint count();
+    /**
+     * This function return the number of pixels used by the histogram.
+     */
+    uint count();
 
-        /**
-         * This function return the sum of all values of the histogram.
-         */
-        double total();
+    /**
+     * This function return the sum of all values of the histogram.
+     */
+    double total();
 
-        /**
-         * Return the value of a bin of the histogram.
-         * This function takes one argument :
-         *  - index, in the range [0..255], 
-         */
-        uint value(int index);
+    /**
+     * Return the value of a bin of the histogram.
+     * This function takes one argument :
+     *  - index, in the range [0..255],
+     */
+    uint value(int index);
 
-        /**
-         * Return the number of bins of this histogram.
-         */
-        int numberOfBins();
+    /**
+     * Return the number of bins of this histogram.
+     */
+    int numberOfBins();
 
-    private:
-        KisHistogram* m_histogram;
+private:
+    KisHistogram* m_histogram;
 };
 
 }

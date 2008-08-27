@@ -37,32 +37,29 @@ using namespace ThreadWeaver;
 class ConversionJob : public Job
 {
 public:
-    ConversionJob( const quint8* src,
-                   quint8* dst,
-                   const KoColorSpace* fromCS,
-                   const KoColorSpace* toCS,
-                   const quint32 nPixels,
-                   const KoColorConversionTransformation::Intent renderingIntent,
-                   QObject * parent )
-        : Job( parent )
-        , m_src( src )
-        , m_dst( dst )
-        , m_fromCS( fromCS )
-        , m_toCS( toCS )
-        , m_nPixels( nPixels )
-        , m_renderingIntent( renderingIntent )
-        {
-        }
+    ConversionJob(const quint8* src,
+                  quint8* dst,
+                  const KoColorSpace* fromCS,
+                  const KoColorSpace* toCS,
+                  const quint32 nPixels,
+                  const KoColorConversionTransformation::Intent renderingIntent,
+                  QObject * parent)
+            : Job(parent)
+            , m_src(src)
+            , m_dst(dst)
+            , m_fromCS(fromCS)
+            , m_toCS(toCS)
+            , m_nPixels(nPixels)
+            , m_renderingIntent(renderingIntent) {
+    }
 
-    ~ConversionJob()
-        {
-        }
+    ~ConversionJob() {
+    }
 
-    void run()
-        {
-            m_fromCS->convertPixelsTo(m_src, m_dst, m_toCS, m_nPixels, m_renderingIntent);
-            delete this;
-        }
+    void run() {
+        m_fromCS->convertPixelsTo(m_src, m_dst, m_toCS, m_nPixels, m_renderingIntent);
+        delete this;
+    }
 private:
 
     const quint8* m_src;

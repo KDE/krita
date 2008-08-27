@@ -28,7 +28,8 @@
 class QPointF;
 class QPointF;
 
-class KisToolExample : public KisToolCurve {
+class KisToolExample : public KisToolCurve
+{
 
     typedef KisToolCurve super;
     Q_OBJECT
@@ -38,23 +39,25 @@ public:
     virtual ~KisToolExample();
 
     virtual void setup(KActionCollection *collection);
-    virtual enumToolType toolType() { return TOOL_SHAPE; }
+    virtual enumToolType toolType() {
+        return TOOL_SHAPE;
+    }
 
 };
 
-class KisToolExampleFactory : public KoToolFactory {
+class KisToolExampleFactory : public KoToolFactory
+{
 
 public:
     KisToolExampleFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolExample", i18n( "Example curves tool" ))
-        {
-            setToolTip( i18n( "Example tool for the curves framework" ) );
-            setToolType( TOOL_TYPE_SHAPE );
-            setIcon( "tool-example" );
-            setPriority( 0 );
-        };
+            : KoToolFactory(parent, "KisToolExample", i18n("Example curves tool")) {
+        setToolTip(i18n("Example tool for the curves framework"));
+        setToolType(TOOL_TYPE_SHAPE);
+        setIcon("tool-example");
+        setPriority(0);
+    };
 
-    virtual ~KisToolExampleFactory(){}
+    virtual ~KisToolExampleFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolExample(canvas);

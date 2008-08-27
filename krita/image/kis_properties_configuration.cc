@@ -32,7 +32,7 @@
 #include "kis_types.h"
 
 struct KisPropertiesConfiguration::Private {
-  QMap<QString, QVariant> properties;
+    QMap<QString, QVariant> properties;
 };
 
 KisPropertiesConfiguration::KisPropertiesConfiguration() : d(new Private)
@@ -41,18 +41,18 @@ KisPropertiesConfiguration::KisPropertiesConfiguration() : d(new Private)
 }
 
 KisPropertiesConfiguration::KisPropertiesConfiguration(const KisPropertiesConfiguration& rhs)
-    : KisSerializableConfiguration( rhs )
-    , d(new Private(*rhs.d))
+        : KisSerializableConfiguration(rhs)
+        , d(new Private(*rhs.d))
 {
 }
 
-void KisPropertiesConfiguration::fromXML(const QString & s )
+void KisPropertiesConfiguration::fromXML(const QString & s)
 {
 //     dbgImage << "From XML (s) !!!!" << endl;
     clearProperties();
 
     QDomDocument doc;
-    doc.setContent( s );
+    doc.setContent(s);
     QDomElement e = doc.documentElement();
     fromXML(e);
 }
@@ -78,11 +78,11 @@ void KisPropertiesConfiguration::fromXML(const QDomElement& e)
 void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
 {
     QMap<QString, QVariant>::Iterator it;
-    for ( it = d->properties.begin(); it != d->properties.end(); ++it ) {
-        QDomElement e = doc.createElement( "param" );
-        e.setAttribute( "name", QString(it.key().toLatin1()) );
+    for (it = d->properties.begin(); it != d->properties.end(); ++it) {
+        QDomElement e = doc.createElement("param");
+        e.setAttribute("name", QString(it.key().toLatin1()));
         QVariant v = it.value();
-        QDomText text = doc.createCDATASection(v.toString() ); // XXX: Unittest this!
+        QDomText text = doc.createCDATASection(v.toString());  // XXX: Unittest this!
         e.appendChild(text);
         root.appendChild(e);
     }
@@ -91,39 +91,36 @@ void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) con
 QString KisPropertiesConfiguration::toXML() const
 {
     QDomDocument doc = QDomDocument("params");
-    QDomElement root = doc.createElement( "params" );
-    doc.appendChild( root );
+    QDomElement root = doc.createElement("params");
+    doc.appendChild(root);
     toXML(doc, root);
     return doc.toString();
 }
 
 void KisPropertiesConfiguration::setProperty(const QString & name, const QVariant & value)
 {
-    if ( d->properties.find( name ) == d->properties.end() ) {
-        d->properties.insert( name, value );
-    }
-    else {
+    if (d->properties.find(name) == d->properties.end()) {
+        d->properties.insert(name, value);
+    } else {
         d->properties[name] = value;
     }
 }
 
 bool KisPropertiesConfiguration::getProperty(const QString & name, QVariant & value) const
 {
-   if ( d->properties.find( name ) == d->properties.end() ) {
-       return false;
-   }
-   else {
-       value = d->properties[name];
-       return true;
-   }
+    if (d->properties.find(name) == d->properties.end()) {
+        return false;
+    } else {
+        value = d->properties[name];
+        return true;
+    }
 }
 
 QVariant KisPropertiesConfiguration::getProperty(const QString & name) const
 {
-    if ( d->properties.find( name ) == d->properties.end() ) {
+    if (d->properties.find(name) == d->properties.end()) {
         return QVariant();
-    }
-    else {
+    } else {
         return d->properties[name];
     }
 }
@@ -169,7 +166,7 @@ QString KisPropertiesConfiguration::getString(const QString & name, const QStrin
 void KisPropertiesConfiguration::dump()
 {
     QMap<QString, QVariant>::Iterator it;
-    for ( it = d->properties.begin(); it != d->properties.end(); ++it ) {
+    for (it = d->properties.begin(); it != d->properties.end(); ++it) {
     }
 
 }
@@ -186,8 +183,7 @@ QMap<QString, QVariant> KisPropertiesConfiguration::getProperties() const
 
 // --- factory ---
 
-struct KisPropertiesConfigurationFactory::Private
-{
+struct KisPropertiesConfigurationFactory::Private {
 };
 
 KisPropertiesConfigurationFactory::KisPropertiesConfigurationFactory() : d(new Private)
@@ -207,6 +203,6 @@ KisSerializableConfiguration* KisPropertiesConfigurationFactory::createDefault()
 KisSerializableConfiguration* KisPropertiesConfigurationFactory::create(const QDomElement& e)
 {
     KisPropertiesConfiguration* pc = new KisPropertiesConfiguration();
-    pc->fromXML( e );
+    pc->fromXML(e);
     return pc;
 }

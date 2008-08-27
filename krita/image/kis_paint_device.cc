@@ -59,7 +59,8 @@
 #include "kis_pixel_selection.h"
 #include "kis_paint_device_jobs.h"
 
-class KisPaintDevice::Private {
+class KisPaintDevice::Private
+{
 
 public:
 
@@ -74,8 +75,8 @@ public:
 };
 
 KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& name)
-    : QObject(0)
-    , m_d( new Private() )
+        : QObject(0)
+        , m_d(new Private())
 {
     setObjectName(name);
 
@@ -88,7 +89,7 @@ KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& n
     m_d->nChannels = colorSpace->channelCount();
 
     quint8 *defaultPixel = new quint8 [ m_d->pixelSize ];
-    memset( defaultPixel, 0, m_d->pixelSize );
+    memset(defaultPixel, 0, m_d->pixelSize);
     m_datamanager = new KisDataManager(m_d->pixelSize, defaultPixel);
     delete [] defaultPixel;
 
@@ -101,11 +102,11 @@ KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& n
 }
 
 KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, const QString& name)
-    : QObject(0)
-    , m_d( new Private() )
+        : QObject(0)
+        , m_d(new Private())
 {
     setObjectName(name);
-    Q_ASSERT( colorSpace );
+    Q_ASSERT(colorSpace);
 
     m_d->x = 0;
     m_d->y = 0;
@@ -121,7 +122,7 @@ KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpac
 
     quint8 *defaultPixel = new quint8[ m_d->pixelSize ];
     m_d->colorSpace->fromQColor(Qt::black, defaultPixel);
-    m_d->colorSpace->setAlpha( defaultPixel, OPACITY_TRANSPARENT, 1 );
+    m_d->colorSpace->setAlpha(defaultPixel, OPACITY_TRANSPARENT, 1);
 
     m_datamanager = new KisDataManager(m_d->pixelSize, defaultPixel);
     delete [] defaultPixel;
@@ -131,17 +132,16 @@ KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpac
 
 
 KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
-    : QObject()
-    , KisShared(rhs)
-    , m_d( new Private() )
+        : QObject()
+        , KisShared(rhs)
+        , m_d(new Private())
 {
     if (this != &rhs) {
         m_d->parent = 0;
         if (rhs.m_datamanager) {
             m_datamanager = new KisDataManager(*rhs.m_datamanager);
             Q_CHECK_PTR(m_datamanager);
-        }
-        else {
+        } else {
             kWarning() << "rhs " << rhs.objectName() << " has no datamanager\n";
         }
         m_d->x = rhs.m_d->x;
@@ -163,19 +163,19 @@ KisPaintDevice::~KisPaintDevice()
 void KisPaintDevice::setDirty(const QRect & rc)
 {
 
-    if ( m_d->parent.isValid() )
-        m_d->parent->setDirty( rc );
+    if (m_d->parent.isValid())
+        m_d->parent->setDirty(rc);
 }
 
-void KisPaintDevice::setDirty( const QRegion & region )
+void KisPaintDevice::setDirty(const QRegion & region)
 {
-    if ( m_d->parent.isValid() )
-        m_d->parent->setDirty( region );
+    if (m_d->parent.isValid())
+        m_d->parent->setDirty(region);
 }
 
 void KisPaintDevice::setDirty()
 {
-    if ( m_d->parent.isValid() )
+    if (m_d->parent.isValid())
         m_d->parent->setDirty();
 }
 
@@ -300,14 +300,14 @@ void KisPaintDevice::crop(qint32 x, qint32 y, qint32 w, qint32 h)
 
 void KisPaintDevice::crop(const QRect & r)
 {
-    QRect rc( r );
+    QRect rc(r);
     rc.translate(-m_d->x, -m_d->y);
     m_datamanager->setExtent(rc);
 }
 
 void KisPaintDevice::setDefaultPixel(const quint8 *defPixel)
 {
-  m_datamanager->setDefaultPixel( defPixel );
+    m_datamanager->setDefaultPixel(defPixel);
 }
 
 const quint8 *KisPaintDevice::defaultPixel() const
@@ -326,22 +326,21 @@ void KisPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *
 }
 
 
-void KisPaintDevice::clear( const QRect & rc )
+void KisPaintDevice::clear(const QRect & rc)
 {
-    m_datamanager->clear( rc.x(), rc.y(), rc.width(), rc.height(), m_datamanager->defaultPixel() );
+    m_datamanager->clear(rc.x(), rc.y(), rc.width(), rc.height(), m_datamanager->defaultPixel());
 }
 
-void KisPaintDevice::mirrorX( KisSelection * selection )
+void KisPaintDevice::mirrorX(KisSelection * selection)
 {
     KisPaintDeviceSP dst = this;
-    if ( !m_datamanager->hasCurrentMemento() )
-        dst = new KisPaintDevice( colorSpace() );
+    if (!m_datamanager->hasCurrentMemento())
+        dst = new KisPaintDevice(colorSpace());
 
     QRect r;
-    if ( selection ) {
+    if (selection) {
         r = selection->selectedExactRect();
-    }
-    else {
+    } else {
         r = exactBounds();
     }
     {
@@ -354,10 +353,10 @@ void KisPaintDevice::mirrorX( KisSelection * selection )
 
             while (!srcIt.isDone()) {
                 if (srcIt.isSelected()) {
-                    if ( m_datamanager->hasCurrentMemento() )
-                        memcpy( dstIt.rawData(), srcIt.oldRawData(), m_d->pixelSize );
+                    if (m_datamanager->hasCurrentMemento())
+                        memcpy(dstIt.rawData(), srcIt.oldRawData(), m_d->pixelSize);
                     else
-                        memcpy( dstIt.rawData(), srcIt.rawData(), m_d->pixelSize );
+                        memcpy(dstIt.rawData(), srcIt.rawData(), m_d->pixelSize);
                 }
                 ++srcIt;
                 --dstIt;
@@ -367,24 +366,23 @@ void KisPaintDevice::mirrorX( KisSelection * selection )
             dstIt.nextRow();
         }
     }
-    if ( !m_datamanager->hasCurrentMemento() )
+    if (!m_datamanager->hasCurrentMemento())
         m_datamanager = dst->dataManager();
 
     setDirty(r);
 }
 
-void KisPaintDevice::mirrorY( KisSelection * selection )
+void KisPaintDevice::mirrorY(KisSelection * selection)
 {
     KisPaintDeviceSP dst = this;
-    if ( !m_datamanager->hasCurrentMemento() )
-        dst = new KisPaintDevice( colorSpace() );
+    if (!m_datamanager->hasCurrentMemento())
+        dst = new KisPaintDevice(colorSpace());
 
     /* Read a line from bottom to top and and from top to bottom and write their values to each other */
     QRect r;
-    if ( selection ) {
+    if (selection) {
         r = selection->selectedExactRect();
-    }
-    else {
+    } else {
         r = exactBounds();
     }
 
@@ -396,7 +394,7 @@ void KisPaintDevice::mirrorY( KisSelection * selection )
 
         while (!itTop.isDone() && !itBottom.isDone()) {
             if (itBottom.isSelected()) {
-                if ( m_datamanager->hasCurrentMemento() )
+                if (m_datamanager->hasCurrentMemento())
                     memcpy(itTop.rawData(), itBottom.oldRawData(), m_d->pixelSize);
                 else
                     memcpy(itTop.rawData(), itBottom.rawData(), m_d->pixelSize);
@@ -406,7 +404,7 @@ void KisPaintDevice::mirrorY( KisSelection * selection )
         }
     }
 
-    if ( !m_datamanager->hasCurrentMemento() )
+    if (!m_datamanager->hasCurrentMemento())
         m_datamanager = dst->dataManager();
 
     setDirty(r);
@@ -417,7 +415,7 @@ bool KisPaintDevice::write(KoStore *store)
     bool retval = m_datamanager->write(store);
     emit ioProgress(100);
 
-        return retval;
+    return retval;
 }
 
 bool KisPaintDevice::read(KoStore *store)
@@ -425,13 +423,12 @@ bool KisPaintDevice::read(KoStore *store)
     bool retval = m_datamanager->read(store);
     emit ioProgress(100);
 
-        return retval;
+    return retval;
 }
 
 void KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent)
 {
-    if (   *colorSpace() == *dstColorSpace )
-    {
+    if (*colorSpace() == *dstColorSpace) {
         return;
     }
 
@@ -452,12 +449,12 @@ void KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConver
     // of multithreading yet.
 
     KConfigGroup cfg = KGlobal::config()->group("");
-    bool threadColorSpaceConversion = cfg.readEntry( "thread_colorspace_conversion", false );
+    bool threadColorSpaceConversion = cfg.readEntry("thread_colorspace_conversion", false);
     ThreadWeaver::Weaver * weaver = 0;
 
-    if ( threadColorSpaceConversion ) {
+    if (threadColorSpaceConversion) {
         weaver = new Weaver();
-        weaver->setMaximumNumberOfThreads( cfg.readEntry("threadsafe",  QThread::idealThreadCount() ) );
+        weaver->setMaximumNumberOfThreads(cfg.readEntry("threadsafe",  QThread::idealThreadCount()));
     }
 
     // Experiment with these versions to see which is faster,  but it
@@ -467,25 +464,24 @@ void KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConver
     // Because this is anew paint device, its tiles should always be
     // aligned with ours.
     {
-        KisRectConstIteratorPixel srcIter = createRectConstIterator( x, y, w, h );
-        KisRectIteratorPixel dstIter = dst.createRectIterator( x, y, w, h );
-        while ( !srcIter.isDone() && !dstIter.isDone() ) {
+        KisRectConstIteratorPixel srcIter = createRectConstIterator(x, y, w, h);
+        KisRectIteratorPixel dstIter = dst.createRectIterator(x, y, w, h);
+        while (!srcIter.isDone() && !dstIter.isDone()) {
 
             qint32 numContiguousSrcPixels = srcIter.nConseqPixels();
             qint32 numContiguousDstPixels = dstIter.nConseqPixels();
 
             // Because the tiles should be aligned
-            Q_ASSERT( numContiguousDstPixels == numContiguousSrcPixels );
+            Q_ASSERT(numContiguousDstPixels == numContiguousSrcPixels);
 
-            if ( threadColorSpaceConversion ) {
+            if (threadColorSpaceConversion) {
                 ConversionJob * job = new ConversionJob(srcIter.rawData(), dstIter.rawData(), colorSpace(), dstColorSpace, numContiguousSrcPixels, renderingIntent, 0);
-                weaver->enqueue( job );
-            }
-            else
+                weaver->enqueue(job);
+            } else
                 m_d->colorSpace->convertPixelsTo(srcIter.rawData(), dstIter.rawData(), dstColorSpace, numContiguousSrcPixels, renderingIntent);
 
-            srcIter+=numContiguousSrcPixels;
-            dstIter+=numContiguousDstPixels;
+            srcIter += numContiguousSrcPixels;
+            dstIter += numContiguousDstPixels;
         }
     }
 #else
@@ -508,11 +504,10 @@ void KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConver
             const quint8 *srcData = srcIt.rawData();
             quint8 *dstData = dstIt.rawData();
 
-            if ( threadColorSpaceConversion ) {
+            if (threadColorSpaceConversion) {
                 ConversionJob * job = new ConversionJob(srcData, dstData, colorSpace(), dstColorSpace, columns, renderingIntent, 0);
-                weaver->enqueue( job );
-            }
-            else
+                weaver->enqueue(job);
+            } else
                 m_d->colorSpace->convertPixelsTo(srcData, dstData, dstColorSpace, columns, renderingIntent);
 
             column += columns;
@@ -521,7 +516,7 @@ void KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConver
     }
 #endif
 
-    if ( threadColorSpaceConversion ) {
+    if (threadColorSpaceConversion) {
         weaver->finish();
     }
 
@@ -546,7 +541,7 @@ void KisPaintDevice::setProfile(const KoColorProfile * profile)
     if (profile == 0) return;
 
     const KoColorSpace * dstSpace =
-            KoColorSpaceRegistry::instance()->colorSpace( colorSpace()->id(), profile);
+        KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->id(), profile);
     if (dstSpace)
         m_d->colorSpace = dstSpace->clone();
     emit profileChanged(profile);
@@ -573,15 +568,14 @@ void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcPr
     // Don't convert if not no profile is given and both paint dev and qimage are rgba.
     if (srcProfileName.isEmpty() && colorSpace()->id() == "RGBA") {
         writeBytes(img.bits(), 0, 0, img.width(), img.height());
-    }
-    else {
+    } else {
         quint8 * dstData = new quint8[img.width() * img.height() * pixelSize()];
         KoColorSpaceRegistry::instance()
-                ->colorSpace("RGBA", srcProfileName)->
-                        convertPixelsTo(img.bits(), dstData, colorSpace(), img.width() * img.height());
+        ->colorSpace("RGBA", srcProfileName)->
+        convertPixelsTo(img.bits(), dstData, colorSpace(), img.width() * img.height());
         writeBytes(dstData, offsetX, offsetY, img.width(), img.height());
         delete[] dstData;
-   }
+    }
 }
 
 QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile)
@@ -615,8 +609,7 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint3
     quint8 * data;
     try {
         data = new quint8 [w * h * m_d->pixelSize];
-    } catch(std::bad_alloc)
-    {
+    } catch (std::bad_alloc) {
         kWarning() << "KisPaintDevice::convertToQImage std::bad_alloc for " << w << " * " << h << " * " << m_d->pixelSize;
         //delete[] data; // data is not allocated, so don't free it
         return QImage();
@@ -627,7 +620,7 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint3
     //      This copies potentially a lot of data.
     readBytes(data, x1, y1, w, h);
     QImage image = colorSpace()->convertToQImage(data, w, h, dstProfile,
-                                                 KoColorConversionTransformation::IntentPerceptual);
+                   KoColorConversionTransformation::IntentPerceptual);
     delete[] data;
 
     return image;
@@ -643,13 +636,11 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h) const
     srcw = e.width();
     srch = e.height();
 
-    if (w > srcw)
-    {
+    if (w > srcw) {
         w = srcw;
         h = qint32(double(srcw) / w * h);
     }
-    if (h > srch)
-    {
+    if (h > srch) {
         h = srch;
         w = qint32(double(srch) / h * w);
     }
@@ -659,11 +650,11 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h) const
     else if (srch > srcw)
         w = qint32(double(srcw) / srch * h);
 
-    KisRandomConstAccessorPixel iter = createRandomConstAccessor(0,0);
+    KisRandomConstAccessorPixel iter = createRandomConstAccessor(0, 0);
     for (qint32 y = 0; y < h; ++y) {
-        qint32 iY = (y * srch ) / h;
+        qint32 iY = (y * srch) / h;
         for (qint32 x = 0; x < w; ++x) {
-            qint32 iX = (x * srcw ) / w;
+            qint32 iX = (x * srcw) / w;
             iter.moveTo(iX, iY);
             thumbnail->setPixel(x, y, KoColor(iter.rawData(), m_d->colorSpace));
         }
@@ -680,9 +671,9 @@ KisPainterlyOverlaySP KisPaintDevice::painterlyOverlay()
 
 void KisPaintDevice::createPainterlyOverlay()
 {
-    if ( !m_d->painterlyOverlay ) {
+    if (!m_d->painterlyOverlay) {
         m_d->painterlyOverlay = new KisPainterlyOverlay();
-        emit ( painterlyOverlayCreated() );
+        emit(painterlyOverlayCreated());
     }
 
 }
@@ -695,15 +686,15 @@ void KisPaintDevice::removePainterlyOverlay()
 
 QImage KisPaintDevice::createThumbnail(qint32 w, qint32 h)
 {
-    KisPaintDeviceSP dev = createThumbnailDevice( w, h );
-    return dev->convertToQImage( KoColorSpaceRegistry::instance()->rgb8()->profile() );
+    KisPaintDeviceSP dev = createThumbnailDevice(w, h);
+    return dev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile());
 }
 
 KisRectIteratorPixel KisPaintDevice::createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h, const KisSelection * selection)
 {
     KisDataManager* selectionDm = 0;
 
-    if ( selection )
+    if (selection)
         selectionDm = selection->dataManager().data();
 
     return KisRectIteratorPixel(m_datamanager.data(), selectionDm, left, top, w, h, m_d->x, m_d->y);
@@ -714,7 +705,7 @@ KisRectConstIteratorPixel KisPaintDevice::createRectConstIterator(qint32 left, q
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
     KisDataManager* selectionDm = 0;
 
-    if(selection)
+    if (selection)
         selectionDm = const_cast< KisDataManager*>(selection->dataManager().data());
 
     return KisRectConstIteratorPixel(dm, selectionDm, left, top, w, h, m_d->x, m_d->y);
@@ -724,7 +715,7 @@ KisHLineIteratorPixel  KisPaintDevice::createHLineIterator(qint32 x, qint32 y, q
 {
     KisDataManager* selectionDm = 0;
 
-    if(selection)
+    if (selection)
         selectionDm = selection->dataManager().data();
 
     return KisHLineIteratorPixel(m_datamanager.data(), selectionDm, x, y, w, m_d->x, m_d->y);
@@ -735,7 +726,7 @@ KisHLineConstIteratorPixel  KisPaintDevice::createHLineConstIterator(qint32 x, q
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
     KisDataManager* selectionDm = 0;
 
-    if(selection)
+    if (selection)
         selectionDm = const_cast< KisDataManager*>(selection->dataManager().data());
 
     return KisHLineConstIteratorPixel(dm, selectionDm, x, y, w, m_d->x, m_d->y);
@@ -745,7 +736,7 @@ KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(qint32 x, qint32 y, q
 {
     KisDataManager* selectionDm = 0;
 
-    if(selection)
+    if (selection)
         selectionDm = selection->dataManager().data();
 
     return KisVLineIteratorPixel(m_datamanager.data(), selectionDm, x, y, h, m_d->x, m_d->y);
@@ -756,7 +747,7 @@ KisVLineConstIteratorPixel  KisPaintDevice::createVLineConstIterator(qint32 x, q
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
     KisDataManager* selectionDm = 0;
 
-    if(selection)
+    if (selection)
         selectionDm = const_cast< KisDataManager*>(selection->dataManager().data());
 
     return KisVLineConstIteratorPixel(dm, selectionDm, x, y, h, m_d->x, m_d->y);
@@ -766,7 +757,7 @@ KisRandomAccessorPixel KisPaintDevice::createRandomAccessor(qint32 x, qint32 y, 
 {
     KisDataManager* selectionDm = 0;
 
-    if(selection)
+    if (selection)
         selectionDm = selection->dataManager().data();
 
     return KisRandomAccessorPixel(m_datamanager.data(), selectionDm, x, y, m_d->x, m_d->y);
@@ -777,13 +768,13 @@ KisRandomConstAccessorPixel KisPaintDevice::createRandomConstAccessor(qint32 x, 
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
     KisDataManager* selectionDm = 0;
 
-    if ( selection )
+    if (selection)
         selectionDm = const_cast< KisDataManager*>(selection->dataManager().data());
 
     return KisRandomConstAccessorPixel(dm, selectionDm, x, y, m_d->x, m_d->y);
 }
 
-KisRandomSubAccessorPixel KisPaintDevice::createRandomSubAccessor( const KisSelection * selection ) const
+KisRandomSubAccessorPixel KisPaintDevice::createRandomSubAccessor(const KisSelection * selection) const
 {
     // XXX: shouldn't we use the selection here?
     Q_UNUSED(selection);
@@ -791,7 +782,7 @@ KisRandomSubAccessorPixel KisPaintDevice::createRandomSubAccessor( const KisSele
     return KisRandomSubAccessorPixel(pd);
 }
 
-void KisPaintDevice::clearSelection( KisSelectionSP selection )
+void KisPaintDevice::clearSelection(KisSelectionSP selection)
 {
     QRect r = selection->selectedExactRect();
 
@@ -805,7 +796,7 @@ void KisPaintDevice::clearSelection( KisSelectionSP selection )
             while (!devIt.isDone()) {
                 // XXX: Optimize by using stretches
 
-                m_d->colorSpace->applyInverseAlphaU8Mask( devIt.rawData(), selectionIt.rawData(), 1);
+                m_d->colorSpace->applyInverseAlphaU8Mask(devIt.rawData(), selectionIt.rawData(), 1);
 
                 ++devIt;
                 ++selectionIt;
@@ -831,7 +822,7 @@ void KisPaintDevice::applySelectionMask(KisSelectionSP mask)
         while (!pixelIt.isDone()) {
             // XXX: Optimize by using stretches
 
-            m_d->colorSpace->applyAlphaU8Mask( pixelIt.rawData(), maskIt.rawData(), 1);
+            m_d->colorSpace->applyAlphaU8Mask(pixelIt.rawData(), maskIt.rawData(), 1);
 
             ++pixelIt;
             ++maskIt;
@@ -882,11 +873,10 @@ bool KisPaintDevice::setPixel(qint32 x, qint32 y, const KoColor& kc)
     const quint8 * pix;
     KisHLineIteratorPixel iter = createHLineIterator(x, y, 1);
     if (kc.colorSpace() != m_d->colorSpace) {
-        KoColor kc2 (kc, m_d->colorSpace);
+        KoColor kc2(kc, m_d->colorSpace);
         pix = kc2.data();
         memcpy(iter.rawData(), pix, m_d->colorSpace->pixelSize());
-    }
-    else {
+    } else {
         pix = kc.data();
         memcpy(iter.rawData(), pix, m_d->colorSpace->pixelSize());
     }
@@ -933,7 +923,7 @@ void KisPaintDevice::readBytes(quint8 * data, const QRect &rect)
 
 void KisPaintDevice::writeBytes(const quint8 * data, qint32 x, qint32 y, qint32 w, qint32 h)
 {
-    m_datamanager->writeBytes( data, x - m_d->x, y - m_d->y, w, h);
+    m_datamanager->writeBytes(data, x - m_d->x, y - m_d->y, w, h);
 }
 
 void KisPaintDevice::writeBytes(const quint8 * data, const QRect &rect)
@@ -941,14 +931,14 @@ void KisPaintDevice::writeBytes(const quint8 * data, const QRect &rect)
     writeBytes(data, rect.x(), rect.y(), rect.width(), rect.height());
 }
 
-QVector<quint8*> KisPaintDevice::readPlanarBytes( qint32 x, qint32 y, qint32 w, qint32 h)
+QVector<quint8*> KisPaintDevice::readPlanarBytes(qint32 x, qint32 y, qint32 w, qint32 h)
 {
-    return m_datamanager->readPlanarBytes( channelSizes(), x, y, w, h );
+    return m_datamanager->readPlanarBytes(channelSizes(), x, y, w, h);
 }
 
-void KisPaintDevice::writePlanarBytes( QVector<quint8*> planes, qint32 x, qint32 y, qint32 w, qint32 h)
+void KisPaintDevice::writePlanarBytes(QVector<quint8*> planes, qint32 x, qint32 y, qint32 w, qint32 h)
 {
-    m_datamanager->writePlanarBytes( planes, channelSizes(), x, y, w, h );
+    m_datamanager->writePlanarBytes(planes, channelSizes(), x, y, w, h);
 }
 
 
@@ -968,7 +958,7 @@ quint32 KisPaintDevice::channelCount() const
 {
     Q_ASSERT(m_d->nChannels > 0);
     return m_d->nChannels;
-;
+    ;
 }
 
 KoColorSpace * KisPaintDevice::colorSpace()
@@ -998,11 +988,10 @@ QVector<qint32> KisPaintDevice::channelSizes()
 {
     QVector<qint32> sizes;
     QList<KoChannelInfo*> channels = colorSpace()->channels();
-    qSort( channels );
+    qSort(channels);
 
-    foreach( KoChannelInfo * channelInfo, channels )
-    {
-        sizes.append( channelInfo->size() );
+    foreach(KoChannelInfo * channelInfo, channels) {
+        sizes.append(channelInfo->size());
     }
     return sizes;
 }

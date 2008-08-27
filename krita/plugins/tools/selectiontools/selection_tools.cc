@@ -39,24 +39,24 @@
 #include "kis_tool_select_path.h"
 
 typedef KGenericFactory<SelectionTools> SelectionToolsFactory;
-K_EXPORT_COMPONENT_FACTORY( kritaselectiontools, SelectionToolsFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritaselectiontools, SelectionToolsFactory("krita"))
 
 
 SelectionTools::SelectionTools(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     setComponentData(SelectionToolsFactory::componentData());
 
     KoToolRegistry * r = KoToolRegistry::instance();
 
-    r->add(new KisToolSelectOutlineFactory( r, QStringList()));
-    r->add(new KisToolSelectPolygonalFactory( r, QStringList()));
-    r->add(new KisToolSelectRectangularFactory( r, QStringList()));
-    r->add(new KisToolSelectBrushFactory( r, QStringList()));
-    r->add(new KisToolSelectEraserFactory( r, QStringList()));
-    r->add(new KisToolSelectEllipticalFactory( r, QStringList()));
-    r->add(new KisToolSelectContiguousFactory( r, QStringList()));
-    r->add(new KisToolSelectPathFactory( r, QStringList()));
+    r->add(new KisToolSelectOutlineFactory(r, QStringList()));
+    r->add(new KisToolSelectPolygonalFactory(r, QStringList()));
+    r->add(new KisToolSelectRectangularFactory(r, QStringList()));
+    r->add(new KisToolSelectBrushFactory(r, QStringList()));
+    r->add(new KisToolSelectEraserFactory(r, QStringList()));
+    r->add(new KisToolSelectEllipticalFactory(r, QStringList()));
+    r->add(new KisToolSelectContiguousFactory(r, QStringList()));
+    r->add(new KisToolSelectPathFactory(r, QStringList()));
 }
 
 SelectionTools::~SelectionTools()

@@ -51,7 +51,7 @@
 #include "kis_curve_framework.h"
 
 KisToolBezierPaint::KisToolBezierPaint()
-    : super(i18n("Bezier Painting Tool"))
+        : super(i18n("Bezier Painting Tool"))
 {
     setName("tool_bezier_paint");
     m_cursor = "tool_bezier_cursor.png";
@@ -63,9 +63,9 @@ KisToolBezierPaint::~KisToolBezierPaint()
 
 }
 
-KisCurve::iterator KisToolBezierPaint::paintPoint (KisPainter& painter, KisCurve::iterator point)
+KisCurve::iterator KisToolBezierPaint::paintPoint(KisPainter& painter, KisCurve::iterator point)
 {
-    KisCurve::iterator origin,destination,control1,control2;
+    KisCurve::iterator origin, destination, control1, control2;
     switch ((*point).hint()) {
     case BEZIERENDHINT:
         origin = point++;
@@ -74,13 +74,13 @@ KisCurve::iterator KisToolBezierPaint::paintPoint (KisPainter& painter, KisCurve
         destination = control2.next();
         if (m_curve->count() > 4 && (*point) != m_curve->last()) {
             point = point.nextPivot().next();
-            painter.paintAt((*origin).point(),PRESSURE_DEFAULT,0,0);
-            painter.paintBezierCurve((*origin).point(),PRESSURE_DEFAULT,0,0,(*control1).point(),
-            (*control2).point(),(*destination).point(),PRESSURE_DEFAULT,0,0,0);
+            painter.paintAt((*origin).point(), PRESSURE_DEFAULT, 0, 0);
+            painter.paintBezierCurve((*origin).point(), PRESSURE_DEFAULT, 0, 0, (*control1).point(),
+                                     (*control2).point(), (*destination).point(), PRESSURE_DEFAULT, 0, 0, 0);
         }
         break;
     default:
-        point = super::paintPoint(painter,point);
+        point = super::paintPoint(painter, point);
     }
 
     return point;

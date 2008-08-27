@@ -27,8 +27,8 @@
 class KisSimpleNoiseReducer : public KisFilter
 {
 public:
-   KisSimpleNoiseReducer();
-   ~KisSimpleNoiseReducer();
+    KisSimpleNoiseReducer();
+    ~KisSimpleNoiseReducer();
 public:
     using KisFilter::process;
     void process(KisConstProcessingInformation src,
@@ -36,12 +36,14 @@ public:
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
-        ) const;
-        virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
-    
-        static inline KoID id() { return KoID("gaussiannoisereducer", i18n("Gaussian Noise Reducer")); }
-    protected:
-        virtual KisFilterConfiguration * factoryConfiguration(const KisPaintDeviceSP) const;
+                ) const;
+    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
+
+    static inline KoID id() {
+        return KoID("gaussiannoisereducer", i18n("Gaussian Noise Reducer"));
+    }
+protected:
+    virtual KisFilterConfiguration * factoryConfiguration(const KisPaintDeviceSP) const;
 };
 
 #endif

@@ -24,24 +24,25 @@
 #include "kis_types.h"
 #include "kis_threaded_applicator.h"
 #include "kis_processing_information.h"
-#include "krita_export.h"
+
 
 class KisFilter;
 class KisFilterConfiguration;
 class QObject;
 class QRect;
 
-class KRITAIMAGE_EXPORT KisFilterJob : public KisJob {
+class KRITAIMAGE_EXPORT KisFilterJob : public KisJob
+{
 public:
 
-    KisFilterJob( const KisFilter* filter,
-                  const KisFilterConfiguration * config,
-                  QObject * parent,
-                  KisPaintDeviceSP dev,
-                  const QRect & rc,
-                  int margin,
-                  const KoUpdater& updater,
-                  KisSelectionSP selection);
+    KisFilterJob(const KisFilter* filter,
+                 const KisFilterConfiguration * config,
+                 QObject * parent,
+                 KisPaintDeviceSP dev,
+                 const QRect & rc,
+                 int margin,
+                 const KoUpdater& updater,
+                 KisSelectionSP selection);
 
     virtual ~KisFilterJob() {}
 
@@ -56,11 +57,12 @@ private:
     const KisSelectionSP m_selection;
 };
 
-class KRITAIMAGE_EXPORT KisFilterJobFactory : public KisJobFactory {
+class KRITAIMAGE_EXPORT KisFilterJobFactory : public KisJobFactory
+{
 public:
 
-    KisFilterJobFactory( const KisFilter* filter, const KisFilterConfiguration * config, KisSelectionSP selection = 0 );
-    ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc, int margin, KoUpdater updater );
+    KisFilterJobFactory(const KisFilter* filter, const KisFilterConfiguration * config, KisSelectionSP selection = 0);
+    ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc, int margin, KoUpdater updater);
 
 private:
 

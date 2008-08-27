@@ -31,7 +31,8 @@
 
 class KisSelectionOptions;
 
-class KisToolSelectPolygonal : public KisTool {
+class KisToolSelectPolygonal : public KisTool
+{
 
     typedef KisTool super;
     Q_OBJECT
@@ -48,12 +49,12 @@ public:
     QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
 
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
 public slots:
     virtual void slotSetAction(int);
     virtual void slotSetSelectionMode(int);
-    virtual void activate( bool );
+    virtual void activate(bool);
     void deactivate();
 
 protected:
@@ -73,21 +74,21 @@ private:
 };
 
 
-class KisToolSelectPolygonalFactory : public KoToolFactory {
+class KisToolSelectPolygonalFactory : public KoToolFactory
+{
 
 public:
     KisToolSelectPolygonalFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolSelectPolygonal",
-            i18n( "Polygonal Selection") )
-        {
-            setToolTip( i18n( "Select a polygonal region" ) );
-            setToolType( TOOL_TYPE_SELECTED );
-            setIcon( "tool_polygonal_selection" );
-            setPriority( 54 );
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-        }
+            : KoToolFactory(parent, "KisToolSelectPolygonal",
+                            i18n("Polygonal Selection")) {
+        setToolTip(i18n("Select a polygonal region"));
+        setToolType(TOOL_TYPE_SELECTED);
+        setIcon("tool_polygonal_selection");
+        setPriority(54);
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+    }
 
-    virtual ~KisToolSelectPolygonalFactory(){}
+    virtual ~KisToolSelectPolygonalFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolSelectPolygonal(canvas);

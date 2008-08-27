@@ -41,7 +41,6 @@
 #include <ktoolbar.h>
 #include <knuminput.h>
 #include <klocale.h>
-#include <kicon.h>
 #include <KoDocument.h>
 
 
@@ -54,23 +53,23 @@ KoZoomAdapter::~KoZoomAdapter() {}
 KoThumbnailAdapter::KoThumbnailAdapter() {}
 KoThumbnailAdapter::~KoThumbnailAdapter() {}
 
-KoBirdEyePanel::KoBirdEyePanel( KoZoomAdapter * zoomListener,
-                                KoThumbnailAdapter * thumbnailProvider,
-                                KoCanvasAdapter * canvas,
-                                QWidget * parent,
-                                const char * name,
-                                Qt::WFlags f)
-    : QWidget(parent, f)
-    , m_zoomListener(zoomListener)
-    , m_thumbnailProvider(thumbnailProvider)
-    , m_canvas(canvas)
-    , m_dragging(false)
+KoBirdEyePanel::KoBirdEyePanel(KoZoomAdapter * zoomListener,
+                               KoThumbnailAdapter * thumbnailProvider,
+                               KoCanvasAdapter * canvas,
+                               QWidget * parent,
+                               const char * name,
+                               Qt::WFlags f)
+        : QWidget(parent, f)
+        , m_zoomListener(zoomListener)
+        , m_thumbnailProvider(thumbnailProvider)
+        , m_canvas(canvas)
+        , m_dragging(false)
 {
     setObjectName(name);
 
     QHBoxLayout * l = new QHBoxLayout(this);
     m_page = new WdgBirdEye(this, "birdeye_panel");
-    m_page->zoom->setRange((int) (qMax(1, (int)(100 * zoomListener->getMinZoom()))), (int) (100 * zoomListener->getMaxZoom()));
+    m_page->zoom->setRange((int)(qMax(1, (int)(100 * zoomListener->getMinZoom()))), (int)(100 * zoomListener->getMaxZoom()));
     m_page->zoom->setValue(100);
     m_page->zoom->setSuffix("%");
 
@@ -89,7 +88,7 @@ KoBirdEyePanel::KoBirdEyePanel( KoZoomAdapter * zoomListener,
 
     connect(m_page->zoom, SIGNAL(valueChanged(int)), SLOT(zoomValueChanged(int)));
     connect(m_page->bn100, SIGNAL(clicked()), SLOT(zoom100()));
-    connect(m_page->slZoom, SIGNAL(valueChanged(int)), SLOT(sliderChanged( int )));
+    connect(m_page->slZoom, SIGNAL(valueChanged(int)), SLOT(sliderChanged(int)));
 
     m_lastupdate.start();
 }
@@ -110,38 +109,27 @@ void KoBirdEyePanel::setZoom(int zoom)
 
     if (zoom < 10) {
         m_page->slZoom->setValue(0);
-    }
-    else if (zoom > 10 && zoom < 100) {
+    } else if (zoom > 10 && zoom < 100) {
         m_page->slZoom->setValue(zoom / 10);
-    }
-    else if (zoom >= 100 && zoom < 150) {
+    } else if (zoom >= 100 && zoom < 150) {
         m_page->slZoom->setValue(10);
-    }
-    else if (zoom >= 150 && zoom < 250) {
+    } else if (zoom >= 150 && zoom < 250) {
         m_page->slZoom->setValue(11);
-    }
-    else if (zoom >= 250 && zoom < 350) {
+    } else if (zoom >= 250 && zoom < 350) {
         m_page->slZoom->setValue(12);
-    }
-    else if (zoom >= 350 && zoom < 450) {
+    } else if (zoom >= 350 && zoom < 450) {
         m_page->slZoom->setValue(13);
-    }
-    else if (zoom >= 450 && zoom < 550) {
+    } else if (zoom >= 450 && zoom < 550) {
         m_page->slZoom->setValue(14);
-    }
-    else if (zoom >= 550 && zoom < 650) {
+    } else if (zoom >= 550 && zoom < 650) {
         m_page->slZoom->setValue(15);
-    }
-    else if (zoom >= 650 && zoom < 875) {
+    } else if (zoom >= 650 && zoom < 875) {
         m_page->slZoom->setValue(16);
-    }
-    else if (zoom >= 875 && zoom < 1150) {
+    } else if (zoom >= 875 && zoom < 1150) {
         m_page->slZoom->setValue(17);
-    }
-    else if (zoom >= 1150 && zoom < 1450) {
+    } else if (zoom >= 1150 && zoom < 1450) {
         m_page->slZoom->setValue(18);
-    }
-    else if (zoom >= 1450) {
+    } else if (zoom >= 1450) {
         m_page->slZoom->setValue(19);
     }
 
@@ -162,52 +150,51 @@ void KoBirdEyePanel::zoomValueChanged(int zoom)
 
 void KoBirdEyePanel::zoom100()
 {
-    zoomValueChanged( 100 );
+    zoomValueChanged(100);
 }
 
-void KoBirdEyePanel::sliderChanged( int v )
+void KoBirdEyePanel::sliderChanged(int v)
 {
     if (v < 10) {
         zoomValueChanged((v + 1) * 10);
-    }
-    else {
-        switch(v) {
-            case 10:
-                zoomValueChanged(100);
-                break;
-            case 11:
-                zoomValueChanged(200);
-                break;
-            case 12:
-                zoomValueChanged(300);
-            case 13:
-                zoomValueChanged(400);
-                break;
-            case 14:
-                zoomValueChanged(500);
-                break;
-            case 15:
-                zoomValueChanged(600);
-                break;
-            case 16:
-                zoomValueChanged(750);
-                break;
-            case 17:
-                zoomValueChanged(1000);
-                break;
-            case 18:
-                zoomValueChanged(1300);
-                break;
-            case 19:
-                zoomValueChanged(1600);
-                break;
+    } else {
+        switch (v) {
+        case 10:
+            zoomValueChanged(100);
+            break;
+        case 11:
+            zoomValueChanged(200);
+            break;
+        case 12:
+            zoomValueChanged(300);
+        case 13:
+            zoomValueChanged(400);
+            break;
+        case 14:
+            zoomValueChanged(500);
+            break;
+        case 15:
+            zoomValueChanged(600);
+            break;
+        case 16:
+            zoomValueChanged(750);
+            break;
+        case 17:
+            zoomValueChanged(1000);
+            break;
+        case 18:
+            zoomValueChanged(1300);
+            break;
+        case 19:
+            zoomValueChanged(1600);
+            break;
         }
     }
 }
 
 void KoBirdEyePanel::cursorPosChanged(qint32 xpos, qint32 ypos)
 {
-    if(m_lastupdate.elapsed() > 100) {
+    if (m_lastupdate.elapsed() > 100) {
         m_lastupdate.restart();
         m_page->txtX->setText(QString("%L1").arg(xpos, 5));
         m_page->txtY->setText(QString("%L1").arg(ypos, 5));
@@ -373,10 +360,10 @@ bool KoBirdEyePanel::eventFilter(QObject* o, QEvent* ev)
 
 KoBirdEyePanel::enumDragHandle KoBirdEyePanel::dragHandleAt(const QPoint & p)
 {
-    QRect left = QRect(m_visibleAreaInThumbnail.left()-1, m_visibleAreaInThumbnail.top()-1, 3, m_visibleAreaInThumbnail.height()+2);
-    QRect right = QRect(m_visibleAreaInThumbnail.right()-1, m_visibleAreaInThumbnail.top()-1, 3, m_visibleAreaInThumbnail.height()+2);
-    QRect top = QRect(m_visibleAreaInThumbnail.left()-1, m_visibleAreaInThumbnail.top()-1, m_visibleAreaInThumbnail.width()+2, 3);
-    QRect bottom = QRect(m_visibleAreaInThumbnail.left()-1, m_visibleAreaInThumbnail.bottom()-1, m_visibleAreaInThumbnail.width()+2, 3);
+    QRect left = QRect(m_visibleAreaInThumbnail.left() - 1, m_visibleAreaInThumbnail.top() - 1, 3, m_visibleAreaInThumbnail.height() + 2);
+    QRect right = QRect(m_visibleAreaInThumbnail.right() - 1, m_visibleAreaInThumbnail.top() - 1, 3, m_visibleAreaInThumbnail.height() + 2);
+    QRect top = QRect(m_visibleAreaInThumbnail.left() - 1, m_visibleAreaInThumbnail.top() - 1, m_visibleAreaInThumbnail.width() + 2, 3);
+    QRect bottom = QRect(m_visibleAreaInThumbnail.left() - 1, m_visibleAreaInThumbnail.bottom() - 1, m_visibleAreaInThumbnail.width() + 2, 3);
 
     if (left.contains(p)) {
         return DragHandleLeft;
@@ -443,19 +430,19 @@ void KoBirdEyePanel::handleMouseMoveAction(const QPoint & p)
 
         switch (m_dragHandle) {
         case DragHandleLeft: {
-            thumbnailRect.setLeft(thumbnailRect.left()+dx);
+            thumbnailRect.setLeft(thumbnailRect.left() + dx);
             break;
         }
         case DragHandleRight: {
-            thumbnailRect.setRight(thumbnailRect.right()+dx);
+            thumbnailRect.setRight(thumbnailRect.right() + dx);
             break;
         }
         case DragHandleTop: {
-            thumbnailRect.setTop(thumbnailRect.top()+dy);
+            thumbnailRect.setTop(thumbnailRect.top() + dy);
             break;
         }
         case DragHandleBottom: {
-            thumbnailRect.setBottom(thumbnailRect.bottom()+dy);
+            thumbnailRect.setBottom(thumbnailRect.bottom() + dy);
             break;
         }
         case DragHandleCenter: {
@@ -556,11 +543,11 @@ void KoBirdEyePanel::makeThumbnailRectVisible(const QRect& r)
 
 void KoBirdEyePanel::resizeViewEvent(const QSize & size)
 {
-    if(!size.isValid())
-        m_viewBuffer = QPixmap(QSize(1,1));
+    if (!size.isValid())
+        m_viewBuffer = QPixmap(QSize(1, 1));
     else
         m_viewBuffer = QPixmap(size);
-        
+
     fitThumbnailToView();
     slotUpdate(QRect(0, 0, m_documentSize.width(), m_documentSize.height()));
 }
@@ -635,7 +622,7 @@ void KoBirdEyePanel::paintViewEvent(QPaintEvent *e)
         QPainter p(m_page->view);
 
         p.drawPixmap(e->rect().x(), e->rect().y(), m_viewBuffer,
-               e->rect().x(), e->rect().y(), e->rect().width(), e->rect().height());
+                     e->rect().x(), e->rect().y(), e->rect().width(), e->rect().height());
     }
 }
 

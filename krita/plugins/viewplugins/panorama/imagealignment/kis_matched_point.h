@@ -22,10 +22,10 @@
 #include <QPointF>
 
 struct KisMatchedPoint {
-  /// list of index of images where this point was seen
-  QList<int> frames;
-  /// list of postion in the image of a this point
-  QList<QPointF> positions;
+    /// list of index of images where this point was seen
+    QList<int> frames;
+    /// list of postion in the image of a this point
+    QList<QPointF> positions;
 };
 
 #endif

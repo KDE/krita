@@ -30,14 +30,14 @@
 #include "ui_wdgrandompickoptions.h"
 
 KisWdgRandomPick::KisWdgRandomPick(KisFilter* /*nfilter*/, QWidget* parent)
-    : KisFilterConfigWidget(parent)
+        : KisFilterConfigWidget(parent)
 {
     m_widget = new Ui_WdgRandomPickOptions();
     m_widget->setupUi(this);
 
-    connect( widget()->intLevel, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->intWindowSize, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->intOpacity, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->intLevel, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->intWindowSize, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->intOpacity, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
     m_seedH = rand();
     m_seedV = rand();
     m_seedThreshold = rand();
@@ -50,17 +50,14 @@ KisWdgRandomPick::~KisWdgRandomPick()
 void KisWdgRandomPick::setConfiguration(KisFilterConfiguration* config)
 {
     QVariant value;
-    if (config->getProperty("level", value))
-    {
-        widget()->intLevel->setValue( value.toUInt() );
+    if (config->getProperty("level", value)) {
+        widget()->intLevel->setValue(value.toUInt());
     }
-    if (config->getProperty("windowsize", value))
-    {
-        widget()->intWindowSize->setValue( value.toUInt() );
+    if (config->getProperty("windowsize", value)) {
+        widget()->intWindowSize->setValue(value.toUInt());
     }
-    if (config->getProperty("opacity", value))
-    {
-        widget()->intOpacity->setValue( value.toUInt() );
+    if (config->getProperty("opacity", value)) {
+        widget()->intOpacity->setValue(value.toUInt());
     }
 }
 
@@ -68,12 +65,12 @@ void KisWdgRandomPick::setConfiguration(KisFilterConfiguration* config)
 KisFilterConfiguration* KisWdgRandomPick::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("randompick", 1);
-    config->setProperty("level", this->widget()->intLevel->value() );
-    config->setProperty("windowsize", this->widget()->intWindowSize->value() );
-    config->setProperty("opacity", this->widget()->intOpacity->value() );
-    config->setProperty("seedH", m_seedH );
-    config->setProperty("seedV", m_seedV );
-    config->setProperty("seedThreshold", m_seedThreshold );
+    config->setProperty("level", this->widget()->intLevel->value());
+    config->setProperty("windowsize", this->widget()->intWindowSize->value());
+    config->setProperty("opacity", this->widget()->intOpacity->value());
+    config->setProperty("seedH", m_seedH);
+    config->setProperty("seedV", m_seedV);
+    config->setProperty("seedThreshold", m_seedThreshold);
     return config;
 }
 

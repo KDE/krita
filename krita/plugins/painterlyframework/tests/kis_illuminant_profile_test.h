@@ -27,17 +27,17 @@ class KisIlluminantProfileTest : public QObject
 {
     Q_OBJECT
 
-    private slots:
+private slots:
 
-        void initTestCase();
-        void testLoading();
-        void testSaving();
+    void initTestCase();
+    void testLoading();
+    void testSaving();
 
-        // TODO: void testFromToRgb();
+    // TODO: void testFromToRgb();
 
-    private:
+private:
 
-        QStringList list;
+    QStringList list;
 
 };
 

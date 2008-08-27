@@ -23,17 +23,20 @@
 
 class KisDynamicSensor;
 
-class KisDarkenTransformation : public KisDynamicTransformation {
+class KisDarkenTransformation : public KisDynamicTransformation
+{
     Q_OBJECT
-    public:
-        KisDarkenTransformation(KisDynamicSensor* transfoParameter);
-        virtual ~KisDarkenTransformation();
-    public:
-        virtual void transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info);
-        virtual void transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info);
-        virtual QWidget* createConfigWidget(QWidget* parent) { Q_UNUSED(parent); return 0; }
-    private:
-        KisDynamicSensor* m_transfoParameter;
+public:
+    KisDarkenTransformation(KisDynamicSensor* transfoParameter);
+    virtual ~KisDarkenTransformation();
+public:
+    virtual void transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info);
+    virtual void transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info);
+    virtual QWidget* createConfigWidget(QWidget* parent) {
+        Q_UNUSED(parent); return 0;
+    }
+private:
+    KisDynamicSensor* m_transfoParameter;
 };
 
 #endif

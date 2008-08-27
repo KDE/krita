@@ -49,7 +49,7 @@
 #include "kis_selection_tool_helper.h"
 
 KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase * canvas)
-    : KisTool(canvas, KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6))
+        : KisTool(canvas, KisCursor::load("tool_elliptical_selection_cursor.png", 6, 6))
 {
     m_selecting = false;
     m_centerPos = QPointF(0, 0);
@@ -64,9 +64,9 @@ KisToolSelectElliptical::~KisToolSelectElliptical()
 {
 }
 
-void KisToolSelectElliptical::activate( bool tmp )
+void KisToolSelectElliptical::activate(bool tmp)
 {
-    super::activate( tmp );
+    super::activate(tmp);
 
     if (!m_optWidget)
         return;
@@ -119,7 +119,7 @@ void KisToolSelectElliptical::mouseMoveEvent(KoPointerEvent *e)
             m_endPos += trans;
         } else {
             QPointF diag = convertToPixelCoord(e) - (e->modifiers() & Qt::ControlModifier
-                    ? m_centerPos : m_startPos);
+                           ? m_centerPos : m_startPos);
             // circle?
             if (e->modifiers() & Qt::ShiftModifier) {
                 double size = qMax(fabs(diag.x()), fabs(diag.y()));
@@ -143,13 +143,13 @@ void KisToolSelectElliptical::mouseMoveEvent(KoPointerEvent *e)
         m_canvas->updateCanvas(convertToPt(updateRect));
 
         m_centerPos = QPointF((m_startPos.x() + m_endPos.x()) / 2,
-                (m_startPos.y() + m_endPos.y()) / 2);
+                              (m_startPos.y() + m_endPos.y()) / 2);
     }
 }
 
 void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
 {
-     if (m_canvas && m_selecting && e->button() == Qt::LeftButton) {
+    if (m_canvas && m_selecting && e->button() == Qt::LeftButton) {
 
         if (m_startPos == m_endPos) {
             clearSelection();
@@ -159,18 +159,18 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
             if (!currentImage())
                 return;
 
-            KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*> ( m_canvas );
-            if ( !kisCanvas )
+            KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(m_canvas);
+            if (!kisCanvas)
                 return;
 
             KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Elliptical Selection"));
 
-            if( m_selectionMode == PIXEL_SELECTION ) {
+            if (m_selectionMode == PIXEL_SELECTION) {
 
                 KisPixelSelectionSP tmpSel = new KisPixelSelection();
 
                 KisPainter painter(tmpSel);
-                painter.setBounds( currentImage()->bounds() );
+                painter.setBounds(currentImage()->bounds());
                 painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
                 painter.setFillStyle(KisPainter::FillStyleForegroundColor);
                 painter.setStrokeStyle(KisPainter::StrokeStyleNone);
@@ -183,25 +183,23 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
 
                 QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectAction);
                 m_canvas->addCommand(cmd);
-            }
-            else {
+            } else {
                 QRectF documentRect = convertToPt(QRectF(m_startPos, m_endPos));
 
                 KoShape* shape;
                 KoShapeFactory *rectFactory = KoShapeRegistry::instance()->value("KoEllipseShape");
-                if(rectFactory) {
-                    shape = rectFactory->createDefaultShapeAndInit( 0 );
+                if (rectFactory) {
+                    shape = rectFactory->createDefaultShapeAndInit(0);
                     shape->setSize(documentRect.size());
                     shape->setPosition(documentRect.topLeft());
-                }
-                else {
+                } else {
                     //Fallback if the plugin wasn't found
                     KoPathShape* path = new KoPathShape();
-                    path->setShapeId( KoPathShapeId );
+                    path->setShapeId(KoPathShapeId);
 
-                    QPointF rightMiddle = QPointF(documentRect.left() + documentRect.width(), documentRect.top() + documentRect.height()/2);
-                    path->moveTo( rightMiddle );
-                    path->arcTo( documentRect.width()/2, documentRect.height()/2, 0, 360.0 );
+                    QPointF rightMiddle = QPointF(documentRect.left() + documentRect.width(), documentRect.top() + documentRect.height() / 2);
+                    path->moveTo(rightMiddle);
+                    path->arcTo(documentRect.width() / 2, documentRect.height() / 2, 0, 360.0);
                     path->close();
                     path->normalize();
                     shape = path;
@@ -216,12 +214,14 @@ void KisToolSelectElliptical::mouseReleaseEvent(KoPointerEvent *e)
     }
 }
 
-void KisToolSelectElliptical::slotSetAction(int action) {
+void KisToolSelectElliptical::slotSetAction(int action)
+{
     if (action >= SELECTION_REPLACE && action <= SELECTION_INTERSECT)
-        m_selectAction =(selectionAction)action;
+        m_selectAction = (selectionAction)action;
 }
 
-void KisToolSelectElliptical::slotSetSelectionMode(int mode) {
+void KisToolSelectElliptical::slotSetSelectionMode(int mode)
+{
     m_selectionMode = (selectionMode)mode;
 }
 
@@ -233,7 +233,7 @@ QWidget* KisToolSelectElliptical::createOptionWidget()
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setWindowTitle(i18n("Elliptical Selection"));
 
-    connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+    connect(m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
     connect(m_optWidget, SIGNAL(modeChanged(int)), this, SLOT(slotSetSelectionMode(int)));
 
 
@@ -248,7 +248,7 @@ QWidget* KisToolSelectElliptical::createOptionWidget()
 
 QWidget* KisToolSelectElliptical::optionWidget()
 {
-        return m_optWidget;
+    return m_optWidget;
 }
 
 #include "kis_tool_select_elliptical.moc"

@@ -29,35 +29,29 @@ class TestGraphListener : public KisNodeGraphListener
 {
 public:
 
-    virtual void aboutToAddANode( KisNode *, int )
-        {
-            beforeInsertRow = true;
-        }
+    virtual void aboutToAddANode(KisNode *, int) {
+        beforeInsertRow = true;
+    }
 
-    virtual void nodeHasBeenAdded( KisNode *, int )
-        {
-            afterInsertRow = true;
-        }
+    virtual void nodeHasBeenAdded(KisNode *, int) {
+        afterInsertRow = true;
+    }
 
-    virtual void aboutToRemoveANode( KisNode *, int )
-        {
-            beforeRemoveRow  = true;
-        }
+    virtual void aboutToRemoveANode(KisNode *, int) {
+        beforeRemoveRow  = true;
+    }
 
-    virtual void nodeHasBeenRemoved( KisNode *, int )
-        {
-            afterRemoveRow = true;
-        }
+    virtual void nodeHasBeenRemoved(KisNode *, int) {
+        afterRemoveRow = true;
+    }
 
-    virtual void aboutToMoveNode( KisNode *, int, int )
-        {
-            beforeMove = true;
-        }
+    virtual void aboutToMoveNode(KisNode *, int, int) {
+        beforeMove = true;
+    }
 
-    virtual void nodeHasBeenMoved( KisNode *, int, int )
-        {
-            afterMove = true;
-        }
+    virtual void nodeHasBeenMoved(KisNode *, int, int) {
+        afterMove = true;
+    }
 
 
     bool beforeInsertRow;
@@ -67,15 +61,14 @@ public:
     bool beforeMove;
     bool afterMove;
 
-    void resetBools()
-        {
-            beforeRemoveRow = false;
-            afterRemoveRow = false;
-            beforeInsertRow = false;
-            afterInsertRow = false;
-            beforeMove = false;
-            afterMove = false;
-        }
+    void resetBools() {
+        beforeRemoveRow = false;
+        afterRemoveRow = false;
+        beforeInsertRow = false;
+        afterInsertRow = false;
+        beforeMove = false;
+        afterMove = false;
+    }
 };
 
 
@@ -84,21 +77,21 @@ void KisNodeTest::testCreation()
     TestGraphListener graphListener;
 
     KisNode * node = new TestNodeA();
-    QVERIFY( node->graphListener() == 0 );
+    QVERIFY(node->graphListener() == 0);
 
-    node->setGraphListener( &graphListener );
-    QVERIFY( node->graphListener() != 0 );
+    node->setGraphListener(&graphListener);
+    QVERIFY(node->graphListener() != 0);
 
     // Test contract for initial state
-    QVERIFY( node->parent() == 0 );
-    QVERIFY( node->firstChild() == 0 );
-    QVERIFY( node->lastChild() == 0 );
-    QVERIFY( node->prevSibling() == 0 );
-    QVERIFY( node->nextSibling() == 0 );
-    QVERIFY( node->childCount() == 0 );
-    QVERIFY( node->at( 0 ) == 0 );
-    QVERIFY( node->at( UINT_MAX ) == 0 );
-    QVERIFY( node->index( 0 ) == -1 );
+    QVERIFY(node->parent() == 0);
+    QVERIFY(node->firstChild() == 0);
+    QVERIFY(node->lastChild() == 0);
+    QVERIFY(node->prevSibling() == 0);
+    QVERIFY(node->nextSibling() == 0);
+    QVERIFY(node->childCount() == 0);
+    QVERIFY(node->at(0) == 0);
+    QVERIFY(node->at(UINT_MAX) == 0);
+    QVERIFY(node->index(0) == -1);
 
     delete node;
 }
@@ -109,92 +102,92 @@ void KisNodeTest::testOrdering()
     TestGraphListener graphListener;
 
     KisNodeSP root = new TestNodeA();
-    root->setGraphListener( &graphListener );
+    root->setGraphListener(&graphListener);
     KisNodeSP node1 = new TestNodeA();
     KisNodeSP node2 = new TestNodeA();
     KisNodeSP node3 = new TestNodeA();
     KisNodeSP node4 = new TestNodeA();
 
-     /*
-      +---------+
-      | node 4  |
-      | node 2  |
-      | node 3  |
-      | node 1  |
-      |root     |
-      +---------+
-     */
+    /*
+     +---------+
+     | node 4  |
+     | node 2  |
+     | node 3  |
+     | node 1  |
+     |root     |
+     +---------+
+    */
 
     graphListener.resetBools();
-    QVERIFY( root->lastChild() == 0 );
-    root->add( node1, root->lastChild() );
-    QVERIFY( graphListener.beforeInsertRow == true );
-    QVERIFY( graphListener.afterInsertRow == true );
-    QVERIFY( graphListener.beforeRemoveRow == false );
-    QVERIFY( graphListener.afterRemoveRow == false );
-    QVERIFY( root->firstChild() == node1 );
-    QVERIFY( root->lastChild() == node1 );
+    QVERIFY(root->lastChild() == 0);
+    root->add(node1, root->lastChild());
+    QVERIFY(graphListener.beforeInsertRow == true);
+    QVERIFY(graphListener.afterInsertRow == true);
+    QVERIFY(graphListener.beforeRemoveRow == false);
+    QVERIFY(graphListener.afterRemoveRow == false);
+    QVERIFY(root->firstChild() == node1);
+    QVERIFY(root->lastChild() == node1);
     graphListener.resetBools();
 
-    QVERIFY( root->lastChild() == node1 );
-    root->add( node2, root->lastChild() );
-    QVERIFY( graphListener.beforeInsertRow == true );
-    QVERIFY( graphListener.afterInsertRow == true );
-    QVERIFY( graphListener.beforeRemoveRow == false );
-    QVERIFY( graphListener.afterRemoveRow == false );
-    QVERIFY( root->firstChild() == node1 );
-    QVERIFY( root->lastChild() == node2 );
+    QVERIFY(root->lastChild() == node1);
+    root->add(node2, root->lastChild());
+    QVERIFY(graphListener.beforeInsertRow == true);
+    QVERIFY(graphListener.afterInsertRow == true);
+    QVERIFY(graphListener.beforeRemoveRow == false);
+    QVERIFY(graphListener.afterRemoveRow == false);
+    QVERIFY(root->firstChild() == node1);
+    QVERIFY(root->lastChild() == node2);
     graphListener.resetBools();
 
-    QVERIFY( root->lastChild() == node2 );
-    root->add( node3, node1 );
-    QVERIFY( root->lastChild() == node2 );
-    QVERIFY( graphListener.beforeInsertRow == true );
-    QVERIFY( graphListener.afterInsertRow == true );
-    QVERIFY( graphListener.beforeRemoveRow == false );
-    QVERIFY( graphListener.afterRemoveRow == false );
-    QVERIFY( root->firstChild() == node1 );
-    QVERIFY( root->lastChild() == node2 );
+    QVERIFY(root->lastChild() == node2);
+    root->add(node3, node1);
+    QVERIFY(root->lastChild() == node2);
+    QVERIFY(graphListener.beforeInsertRow == true);
+    QVERIFY(graphListener.afterInsertRow == true);
+    QVERIFY(graphListener.beforeRemoveRow == false);
+    QVERIFY(graphListener.afterRemoveRow == false);
+    QVERIFY(root->firstChild() == node1);
+    QVERIFY(root->lastChild() == node2);
     graphListener.resetBools();
 
-    root->add( node4, root->lastChild() );
-    QVERIFY( graphListener.beforeInsertRow == true );
-    QVERIFY( graphListener.afterInsertRow == true );
-    QVERIFY( graphListener.beforeRemoveRow == false );
-    QVERIFY( graphListener.afterRemoveRow == false );
-    QVERIFY( root->firstChild() == node1 );
-    QVERIFY( root->lastChild() == node4 );
+    root->add(node4, root->lastChild());
+    QVERIFY(graphListener.beforeInsertRow == true);
+    QVERIFY(graphListener.afterInsertRow == true);
+    QVERIFY(graphListener.beforeRemoveRow == false);
+    QVERIFY(graphListener.afterRemoveRow == false);
+    QVERIFY(root->firstChild() == node1);
+    QVERIFY(root->lastChild() == node4);
     graphListener.resetBools();
 
-    QVERIFY( root->childCount() == 4 );
+    QVERIFY(root->childCount() == 4);
 
-    QVERIFY( node1->parent() == root );
-    QVERIFY( node2->parent() == root );
-    QVERIFY( node3->parent() == root );
-    QVERIFY( node4->parent() == root );
+    QVERIFY(node1->parent() == root);
+    QVERIFY(node2->parent() == root);
+    QVERIFY(node3->parent() == root);
+    QVERIFY(node4->parent() == root);
 
-    QVERIFY( root->firstChild() == node1 );
-    QVERIFY( root->lastChild() == node4 );
+    QVERIFY(root->firstChild() == node1);
+    QVERIFY(root->lastChild() == node4);
 
-    QVERIFY( root->at( 0 ) == node1 );
-    QVERIFY( root->at( 1 ) == node3 );
-    QVERIFY( root->at( 2 ) == node2 );
-    QVERIFY( root->at( 3 ) == node4 );
+    QVERIFY(root->at(0) == node1);
+    QVERIFY(root->at(1) == node3);
+    QVERIFY(root->at(2) == node2);
+    QVERIFY(root->at(3) == node4);
 
-    QVERIFY( root->index( node1 ) == 0 );
-    QVERIFY( root->index( node3 ) == 1 );
-    QVERIFY( root->index( node2 ) == 2 );
-    QVERIFY( root->index( node4 ) == 3 );
+    QVERIFY(root->index(node1) == 0);
+    QVERIFY(root->index(node3) == 1);
+    QVERIFY(root->index(node2) == 2);
+    QVERIFY(root->index(node4) == 3);
 
-    QVERIFY( node4->prevSibling() == node2 );
-    QVERIFY( node3->prevSibling() == node1 );
-    QVERIFY( node2->prevSibling() == node3 );
-    QVERIFY( node1->prevSibling() == 0 );
+    QVERIFY(node4->prevSibling() == node2);
+    QVERIFY(node3->prevSibling() == node1);
+    QVERIFY(node2->prevSibling() == node3);
+    QVERIFY(node1->prevSibling() == 0);
 
-    QVERIFY( node4->nextSibling() == 0 );
-    QVERIFY( node3->nextSibling() == node2 );
-    QVERIFY( node2->nextSibling() == node4 );
-    QVERIFY( node1->nextSibling() == node3 );
+    QVERIFY(node4->nextSibling() == 0);
+    QVERIFY(node3->nextSibling() == node2);
+    QVERIFY(node2->nextSibling() == node4);
+    QVERIFY(node1->nextSibling() == node3);
 
     /*
       +---------+
@@ -206,47 +199,47 @@ void KisNodeTest::testOrdering()
       +---------+
      */
     graphListener.resetBools();
-    QVERIFY( root->remove( root->at( 3 ) ) == true );
-    QVERIFY( node4->parent() == 0 );
-    QVERIFY( graphListener.beforeInsertRow == false );
-    QVERIFY( graphListener.afterInsertRow == false );
-    QVERIFY( graphListener.beforeRemoveRow == true );
-    QVERIFY( graphListener.afterRemoveRow == true );
-    QVERIFY( root->childCount() == 3 );
-    QVERIFY( root->lastChild() == node2 );
-    QVERIFY( root->firstChild() == node1 );
-    QVERIFY( node4->prevSibling() == 0 );
-    QVERIFY( node4->nextSibling() == 0 );
+    QVERIFY(root->remove(root->at(3)) == true);
+    QVERIFY(node4->parent() == 0);
+    QVERIFY(graphListener.beforeInsertRow == false);
+    QVERIFY(graphListener.afterInsertRow == false);
+    QVERIFY(graphListener.beforeRemoveRow == true);
+    QVERIFY(graphListener.afterRemoveRow == true);
+    QVERIFY(root->childCount() == 3);
+    QVERIFY(root->lastChild() == node2);
+    QVERIFY(root->firstChild() == node1);
+    QVERIFY(node4->prevSibling() == 0);
+    QVERIFY(node4->nextSibling() == 0);
     graphListener.resetBools();
 
-    node3->add( node4, node3->lastChild() );
-    QVERIFY( graphListener.beforeInsertRow == true );
-    QVERIFY( graphListener.afterInsertRow == true );
-    QVERIFY( graphListener.beforeRemoveRow == false );
-    QVERIFY( graphListener.afterRemoveRow == false );
-    QVERIFY( root->childCount() == 3 );
-    QVERIFY( root->lastChild() == node2 );
-    QVERIFY( root->firstChild() == node1 );
-    QVERIFY( node3->childCount() == 1 );
-    QVERIFY( node3->firstChild() == node4 );
-    QVERIFY( node3->lastChild() == node4 );
-    QVERIFY( node4->prevSibling() == 0 );
-    QVERIFY( node4->nextSibling() == 0 );
-    QVERIFY( root->remove( node4 ) == false );
+    node3->add(node4, node3->lastChild());
+    QVERIFY(graphListener.beforeInsertRow == true);
+    QVERIFY(graphListener.afterInsertRow == true);
+    QVERIFY(graphListener.beforeRemoveRow == false);
+    QVERIFY(graphListener.afterRemoveRow == false);
+    QVERIFY(root->childCount() == 3);
+    QVERIFY(root->lastChild() == node2);
+    QVERIFY(root->firstChild() == node1);
+    QVERIFY(node3->childCount() == 1);
+    QVERIFY(node3->firstChild() == node4);
+    QVERIFY(node3->lastChild() == node4);
+    QVERIFY(node4->prevSibling() == 0);
+    QVERIFY(node4->nextSibling() == 0);
+    QVERIFY(root->remove(node4) == false);
     graphListener.resetBools();
 
-    node3->remove( node4 );
-    QVERIFY( graphListener.beforeInsertRow == false );
-    QVERIFY( graphListener.afterInsertRow == false );
-    QVERIFY( graphListener.beforeRemoveRow == true );
-    QVERIFY( graphListener.afterRemoveRow == true );
-    QVERIFY( node3->childCount() == 0 );
-    QVERIFY( node4->parent() == 0 );
-    QVERIFY( root->childCount() == 3 );
-    QVERIFY( root->lastChild() == node2 );
-    QVERIFY( root->firstChild() == node1 );
-    QVERIFY( node4->prevSibling() == 0 );
-    QVERIFY( node4->nextSibling() == 0 );
+    node3->remove(node4);
+    QVERIFY(graphListener.beforeInsertRow == false);
+    QVERIFY(graphListener.afterInsertRow == false);
+    QVERIFY(graphListener.beforeRemoveRow == true);
+    QVERIFY(graphListener.afterRemoveRow == true);
+    QVERIFY(node3->childCount() == 0);
+    QVERIFY(node4->parent() == 0);
+    QVERIFY(root->childCount() == 3);
+    QVERIFY(root->lastChild() == node2);
+    QVERIFY(root->firstChild() == node1);
+    QVERIFY(node4->prevSibling() == 0);
+    QVERIFY(node4->nextSibling() == 0);
 }
 
 void KisNodeTest::testSetDirty()
@@ -264,56 +257,56 @@ void KisNodeTest::testSetDirty()
       root
      */
     KisNodeSP root = new TestNode();
-    root->setName( "root" );
+    root->setName("root");
 
     KisNodeSP node1 = new TestNode();
-    node1->setName( "node1" );
-    QVERIFY( root->add( node1, 0 ) );
+    node1->setName("node1");
+    QVERIFY(root->add(node1, 0));
 
     KisNodeSP node2 = new TestNode();
-    node2->setName( "node2" );
-    QVERIFY( root->add( node2, node1 ) );
+    node2->setName("node2");
+    QVERIFY(root->add(node2, node1));
 
     KisNodeSP node3 = new TestNode();
-    node3->setName( "node3" );
-    QVERIFY( node1->add( node3, 0 ) );
+    node3->setName("node3");
+    QVERIFY(node1->add(node3, 0));
 
     KisNodeSP node4 = new TestNode();
-    node4->setName( "node4" );
-    QVERIFY( node1->add( node4, node3 ) );
+    node4->setName("node4");
+    QVERIFY(node1->add(node4, node3));
 
     KisNodeSP node5 = new TestNode();
-    node5->setName( "node5" );
-    QVERIFY( node3->add( node5, 0 ) );
+    node5->setName("node5");
+    QVERIFY(node3->add(node5, 0));
 
     KisNodeSP node6 = new TestNode();
-    node6->setName( "node6" );
-    QVERIFY( node5->add( node6, 0 ) );
+    node6->setName("node6");
+    QVERIFY(node5->add(node6, 0));
 
     KisNodeSP node7 = new TestNode();
-    node7->setName( "node7" );
-    QVERIFY( node6->add( node7, 0 ) );
+    node7->setName("node7");
+    QVERIFY(node6->add(node7, 0));
 #if 0 // XXX: rewrite tests after redesign to update strategies
     node1->setDirty();
-    QVERIFY( node1->isDirty() );
-    QVERIFY( !node2->isDirty() );
-    QVERIFY( root->isDirty() );
+    QVERIFY(node1->isDirty());
+    QVERIFY(!node2->isDirty());
+    QVERIFY(root->isDirty());
     root->setClean();
-    QVERIFY( !root->isDirty() );
+    QVERIFY(!root->isDirty());
     node1->setClean();
-    QVERIFY( !node1->isDirty() );
+    QVERIFY(!node1->isDirty());
 
-    node7->setDirty( QRect( 10, 10, 100, 100 ) );
-    QVERIFY( node7->isDirty() );
-    QVERIFY( node7->isDirty( QRect( 5, 5, 15, 15 ) ) );
-    QVERIFY( root->isDirty( QRect( 5, 5, 15, 15 ) ) );
-    QVERIFY( !root->isDirty( QRect( -10, -10, 20, 20 ) ) );
-    QVERIFY( !node2->isDirty() );
+    node7->setDirty(QRect(10, 10, 100, 100));
+    QVERIFY(node7->isDirty());
+    QVERIFY(node7->isDirty(QRect(5, 5, 15, 15)));
+    QVERIFY(root->isDirty(QRect(5, 5, 15, 15)));
+    QVERIFY(!root->isDirty(QRect(-10, -10, 20, 20)));
+    QVERIFY(!node2->isDirty());
 
-    node7->setClean( QRect( 10, 10, 10, 10 ) );
-    QVERIFY( !node7->isDirty(QRect( 10, 10, 10, 10 )) );
-    QVERIFY( node7->isDirty() );
-    QVERIFY( node7->isDirty( QRect( 0, 0, 50, 50 ) ) );
+    node7->setClean(QRect(10, 10, 10, 10));
+    QVERIFY(!node7->isDirty(QRect(10, 10, 10, 10)));
+    QVERIFY(node7->isDirty());
+    QVERIFY(node7->isDirty(QRect(0, 0, 50, 50)));
 #endif
 
 }
@@ -323,40 +316,40 @@ void KisNodeTest::testChildNodes()
 {
     KisNodeSP root = new TestNodeA();
     KisNodeSP a = new TestNodeA();
-    root->add( a, 0 );
-    a->setVisible( true );
-    a->setLocked( true );
+    root->add(a, 0);
+    a->setVisible(true);
+    a->setLocked(true);
 
     KisNodeSP b = new TestNodeB();
-    root->add( b, 0 );
-    b->setVisible( false );
-    b->setLocked( true );
+    root->add(b, 0);
+    b->setVisible(false);
+    b->setLocked(true);
 
     KisNodeSP c = new TestNodeC();
-    root->add( c, 0 );
-    c->setVisible( false );
-    c->setVisible( false );
+    root->add(c, 0);
+    c->setVisible(false);
+    c->setVisible(false);
 
-    QList<KisNodeSP> allNodes = root->childNodes( QStringList(), KoProperties() );
-    QCOMPARE( (int) allNodes.count(), 3 ); // a, b, c
+    QList<KisNodeSP> allNodes = root->childNodes(QStringList(), KoProperties());
+    QCOMPARE((int) allNodes.count(), 3);   // a, b, c
 
     QStringList nodeTypes;
     nodeTypes << "TestNodeA" << "TestNodeB";
-    QList<KisNodeSP> subSetOfNodeTypes = root->childNodes( nodeTypes, KoProperties() );
-    QVERIFY( subSetOfNodeTypes.count() == 2 ); // a, b
+    QList<KisNodeSP> subSetOfNodeTypes = root->childNodes(nodeTypes, KoProperties());
+    QVERIFY(subSetOfNodeTypes.count() == 2);   // a, b
 
     nodeTypes.clear();
     nodeTypes << "TestNodeB" << "TestNodeC";
     KoProperties props;
-    props.setProperty( "visibile", false );
-    props.setProperty( "locked", true );
-    QList<KisNodeSP> subsetOfTypesAndProps = root->childNodes( nodeTypes, props );
-    QVERIFY( subsetOfTypesAndProps.count() == 1 ); // b
+    props.setProperty("visibile", false);
+    props.setProperty("locked", true);
+    QList<KisNodeSP> subsetOfTypesAndProps = root->childNodes(nodeTypes, props);
+    QVERIFY(subsetOfTypesAndProps.count() == 1);   // b
 
     KoProperties props2;
-    props.setProperty( "visibile", false );
-    QList<KisNodeSP> subSetOfProps = root->childNodes( QStringList(), props );
-    QVERIFY( subSetOfProps.count() == 2 ); // b, c
+    props.setProperty("visibile", false);
+    QList<KisNodeSP> subSetOfProps = root->childNodes(QStringList(), props);
+    QVERIFY(subSetOfProps.count() == 2);   // b, c
 }
 
 void KisNodeTest::testDirtyRegion()
@@ -365,13 +358,13 @@ void KisNodeTest::testDirtyRegion()
     KisNodeSP root = new TestNodeA();
     root->setDirty(QRect(0, 0, 100, 100));
     root->setDirty(QRect(50, 50, 100, 100));
-    QRegion dirtyRegion = root->dirtyRegion( QRect(0, 0, 200, 200) );
+    QRegion dirtyRegion = root->dirtyRegion(QRect(0, 0, 200, 200));
     QVector<QRect> rects = dirtyRegion.rects();
-    QVERIFY( rects.count() == 3 );
-    QVERIFY( rects[0] == QRect(0, 0, 100, 50) );
-    QVERIFY( rects[1] == QRect(0, 50, 150, 50) );
-    QVERIFY( rects[2] == QRect(50, 100, 100, 50) );
-#endif    
+    QVERIFY(rects.count() == 3);
+    QVERIFY(rects[0] == QRect(0, 0, 100, 50));
+    QVERIFY(rects[1] == QRect(0, 50, 150, 50));
+    QVERIFY(rects[2] == QRect(50, 100, 100, 50));
+#endif
 }
 
 QTEST_KDEMAIN(KisNodeTest, NoGUI)

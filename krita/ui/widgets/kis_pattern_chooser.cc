@@ -45,7 +45,7 @@ KisPatternChooser::KisPatternChooser(QWidget *parent, const char *name) : KisIte
     mainLayout->addWidget(m_lbName);
     mainLayout->addWidget(chooserWidget(), 10);
 
-    connect( this, SIGNAL( importClicked() ), this, SLOT( slotImportPattern() ) );
+    connect(this, SIGNAL(importClicked()), this, SLOT(slotImportPattern()));
 }
 
 KisPatternChooser::~KisPatternChooser()
@@ -67,8 +67,8 @@ void KisPatternChooser::update(QTableWidgetItem *item)
 
 void KisPatternChooser::slotImportPattern()
 {
-    QString filter( "*.jpg *.gif *.png *.tif *.xpm *.bmp" );
-    QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18n( "Choose Pattern to Add" ) );
+    QString filter("*.jpg *.gif *.png *.tif *.xpm *.bmp");
+    QString filename = KFileDialog::getOpenFileName(KUrl(), filter, 0, i18n("Choose Pattern to Add"));
 
     KisResourceServerProvider::instance()->patternServer()->importResource(filename);
 }

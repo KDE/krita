@@ -46,64 +46,62 @@
 #include "kis_accumulating_producer.h"
 
 
-namespace {
+namespace
+{
 
-    class KisHistogramDock : public QDockWidget {
+class KisHistogramDock : public QDockWidget
+{
 
-        public:
-            KisHistogramDock(KisHistogramView *view ) : QDockWidget(i18n("Histogram")) {
-                setWidget(view);
-            }
-    };
+public:
+    KisHistogramDock(KisHistogramView *view) : QDockWidget(i18n("Histogram")) {
+        setWidget(view);
+    }
+};
 
-    class KisHistogramDockFactory : public KoDockFactory {
+class KisHistogramDockFactory : public KoDockFactory
+{
 public:
     KisHistogramDockFactory(KisHistogramView * view)
-        : m_view( view )
-        {
-        }
+            : m_view(view) {
+    }
 
-    virtual QString id() const
-        {
-            return QString( "KisHistogramDock" );
-        }
+    virtual QString id() const {
+        return QString("KisHistogramDock");
+    }
 
-    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
-        {
-            return Qt::RightDockWidgetArea;
-        }
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const {
+        return Qt::RightDockWidgetArea;
+    }
 
-    virtual QDockWidget* createDockWidget()
-        {
-            KisHistogramDock * dockWidget = new KisHistogramDock(m_view);
-            dockWidget->setObjectName(id());
+    virtual QDockWidget* createDockWidget() {
+        KisHistogramDock * dockWidget = new KisHistogramDock(m_view);
+        dockWidget->setObjectName(id());
 
-            return dockWidget;
-        }
-        
-    DockPosition defaultDockPosition() const
-    {
+        return dockWidget;
+    }
+
+    DockPosition defaultDockPosition() const {
         return DockMinimized;
-    }        
+    }
 
 private:
     KisHistogramView * m_view;
 
-    };
+};
 }
 
 typedef KGenericFactory<KritaHistogramDocker> KritaHistogramDockerFactory;
-K_EXPORT_COMPONENT_FACTORY( kritahistogramdocker, KritaHistogramDockerFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritahistogramdocker, KritaHistogramDockerFactory("krita"))
 
 KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const QStringList&)
         : KParts::Plugin(parent)
 {
-    if ( parent->inherits("KisView2") ) {
+    if (parent->inherits("KisView2")) {
         m_view = dynamic_cast<KisView2*>(parent);
 
         setComponentData(KritaHistogramDockerFactory::componentData());
 
-        setXMLFile(KStandardDirs::locate("data","kritaplugins/kritahistogramdocker.rc"), true);
+        setXMLFile(KStandardDirs::locate("data", "kritaplugins/kritahistogramdocker.rc"), true);
 
         KisImageSP img = m_view->image();
         if (!img) {
@@ -171,7 +169,7 @@ void KritaHistogramDocker::producerChanged(QAction *action)
     m_producers.clear();
 
     QList<KoID> keys = KoHistogramProducerFactoryRegistry::instance() ->
-            listKeysCompatibleWith(m_cs);
+                       listKeysCompatibleWith(m_cs);
 
     m_factory = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(pos).id());
 
@@ -185,8 +183,8 @@ void KritaHistogramDocker::producerChanged(QAction *action)
 
     // use dummy layer as a source; we are not going to actually use or need it
     // All of these are SP, no need to delete them afterwards
-    m_histogram = new KisHistogram( KisPaintDeviceSP(new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), "dummy histogram")),
-                                    KoHistogramProducerSP(m_producer), LOGARITHMIC);
+    m_histogram = new KisHistogram(KisPaintDeviceSP(new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), "dummy histogram")),
+                                   KoHistogramProducerSP(m_producer), LOGARITHMIC);
 
     if (m_hview) {
         m_hview->setHistogram(m_histogram);
@@ -208,7 +206,7 @@ void KritaHistogramDocker::colorSpaceChanged(const KoColorSpace* cs)
     m_cs = cs;
 
     QList<KoID> keys = KoHistogramProducerFactoryRegistry::instance() ->
-            listKeysCompatibleWith(m_cs);
+                       listKeysCompatibleWith(m_cs);
 
     m_popup.clear();
     m_currentProducerPos = 0;
@@ -222,19 +220,21 @@ void KritaHistogramDocker::colorSpaceChanged(const KoColorSpace* cs)
 }
 
 HistogramDockerUpdater::HistogramDockerUpdater(QObject* /*parent*/, KisHistogramSP h, KisHistogramView* v,
-                                               KisAccumulatingHistogramProducer* p)
-    : m_histogram(h), m_view(v), m_producer(p)
+        KisAccumulatingHistogramProducer* p)
+        : m_histogram(h), m_view(v), m_producer(p)
 {
     connect(p, SIGNAL(completed()), this, SLOT(completed()));
 }
 
-void HistogramDockerUpdater::updated() {
+void HistogramDockerUpdater::updated()
+{
     // We don't [!] do m_histogram->updateHistogram();, because that will try to compute
     // the histogram synchronously, while we want it asynchronously.
     m_producer->addRegionsToBinAsync();
 }
 
-void HistogramDockerUpdater::completed() {
+void HistogramDockerUpdater::completed()
+{
     m_histogram->computeHistogram();
     m_view->updateHistogram();
 }

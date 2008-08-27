@@ -32,7 +32,8 @@
 
 
 
-class KisToolPolyline : public KisToolPaint {
+class KisToolPolyline : public KisToolPaint
+{
 
     typedef KisToolPaint super;
     Q_OBJECT
@@ -70,21 +71,21 @@ private:
 
 #include "KoToolFactory.h"
 
-class KisToolPolylineFactory : public KoToolFactory {
+class KisToolPolylineFactory : public KoToolFactory
+{
 
 public:
     KisToolPolylineFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KisToolPolyline", i18n( "Polyline" ))
-        {
-            setToolTip( i18n( "Draw a polyline. Shift-mouseclick ends the polyline." ) );
-            setToolType( TOOL_TYPE_SHAPE );
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setIcon( "polyline" );
-            setPriority( 5 );
-            setInputDeviceAgnostic(false);
-        }
+            : KoToolFactory(parent, "KisToolPolyline", i18n("Polyline")) {
+        setToolTip(i18n("Draw a polyline. Shift-mouseclick ends the polyline."));
+        setToolType(TOOL_TYPE_SHAPE);
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        setIcon("polyline");
+        setPriority(5);
+        setInputDeviceAgnostic(false);
+    }
 
-    virtual ~KisToolPolylineFactory(){}
+    virtual ~KisToolPolylineFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolPolyline(canvas);

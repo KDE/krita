@@ -38,8 +38,8 @@
 #include "kis_view2.h"
 #include "canvas/kis_canvas2.h"
 
-KisCanvasResourceProvider::KisCanvasResourceProvider(KisView2 * view )
-    : m_view( view )
+KisCanvasResourceProvider::KisCanvasResourceProvider(KisView2 * view)
+        : m_view(view)
 {
 }
 
@@ -47,20 +47,20 @@ KisCanvasResourceProvider::~KisCanvasResourceProvider()
 {
 }
 
-void KisCanvasResourceProvider::setCanvasResourceProvider( KoCanvasResourceProvider * resourceProvider )
+void KisCanvasResourceProvider::setCanvasResourceProvider(KoCanvasResourceProvider * resourceProvider)
 {
     m_resourceProvider = resourceProvider;
 
     QVariant v;
-    v.setValue( KoColor(Qt::black, m_view->image()->colorSpace()) );
-    m_resourceProvider->setResource( KoCanvasResource::ForegroundColor, v );
+    v.setValue(KoColor(Qt::black, m_view->image()->colorSpace()));
+    m_resourceProvider->setResource(KoCanvasResource::ForegroundColor, v);
 
-    v.setValue( KoColor(Qt::white, m_view->image()->colorSpace()) );
-    m_resourceProvider->setResource( KoCanvasResource::BackgroundColor, v );
+    v.setValue(KoColor(Qt::white, m_view->image()->colorSpace()));
+    m_resourceProvider->setResource(KoCanvasResource::BackgroundColor, v);
 #if 0 // XXX: set a default paintop preset
-    m_resourceProvider->setResource(CurrentPaintop, KoID( "paintbrush", "Paintbrush" ) );
-    v = qVariantFromValue( ( void * ) 0 );
-    m_resourceProvider->setResource( CurrentPaintopSettings, v );
+    m_resourceProvider->setResource(CurrentPaintop, KoID("paintbrush", "Paintbrush"));
+    v = qVariantFromValue((void *) 0);
+    m_resourceProvider->setResource(CurrentPaintopSettings, v);
 #endif
 
     resetDisplayProfile();
@@ -78,45 +78,45 @@ KoCanvasBase * KisCanvasResourceProvider::canvas() const
 
 KoColor KisCanvasResourceProvider::bgColor() const
 {
-    return m_resourceProvider->resource( KoCanvasResource::BackgroundColor ).value<KoColor>();
+    return m_resourceProvider->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
 }
 
 KoColor KisCanvasResourceProvider::fgColor() const
 {
-    return m_resourceProvider->resource( KoCanvasResource::ForegroundColor ).value<KoColor>();
+    return m_resourceProvider->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
 }
 
 float KisCanvasResourceProvider::HDRExposure() const
 {
-    return static_cast<float>( m_resourceProvider->resource( HdrExposure ).toDouble() );
+    return static_cast<float>(m_resourceProvider->resource(HdrExposure).toDouble());
 }
 
 void KisCanvasResourceProvider::setHDRExposure(float exposure)
 {
-    m_resourceProvider->setResource( HdrExposure, static_cast<double>( exposure ) );
+    m_resourceProvider->setResource(HdrExposure, static_cast<double>(exposure));
     KisExposureVisitor eV(exposure);
     m_view->image()->projection()->colorSpace()->profile()->setProperty("exposure", exposure);
-    m_view->image()->rootLayer()->accept( eV );
+    m_view->image()->rootLayer()->accept(eV);
     m_view->canvasBase()->updateCanvas();
-    m_view->canvasBase()->updateCanvasProjection( m_view->image()->bounds() );
+    m_view->canvasBase()->updateCanvasProjection(m_view->image()->bounds());
 }
 
 
 KisPattern * KisCanvasResourceProvider::currentPattern() const
 {
-    return static_cast<KisPattern*>( m_resourceProvider->resource( CurrentPattern ).value<void *>() );
+    return static_cast<KisPattern*>(m_resourceProvider->resource(CurrentPattern).value<void *>());
 }
 
 KisFilterConfiguration * KisCanvasResourceProvider::currentGeneratorConfiguration() const
 {
-    return static_cast<KisFilterConfiguration*>( m_resourceProvider->
-                                                    resource( CurrentGeneratorConfiguration ).value<void *>() );
+    return static_cast<KisFilterConfiguration*>(m_resourceProvider->
+            resource(CurrentGeneratorConfiguration).value<void *>());
 }
 
 
 KoAbstractGradient* KisCanvasResourceProvider::currentGradient() const
 {
-    return static_cast<KoAbstractGradient*>( m_resourceProvider->resource( CurrentGradient ).value<void *>() );
+    return static_cast<KoAbstractGradient*>(m_resourceProvider->resource(CurrentGradient).value<void *>());
 }
 
 
@@ -130,7 +130,7 @@ void KisCanvasResourceProvider::resetDisplayProfile()
         QString monitorProfileName = cfg.monitorProfile();
         m_displayProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
     }
-    emit sigDisplayProfileChanged( m_displayProfile );
+    emit sigDisplayProfileChanged(m_displayProfile);
 }
 
 const KoColorProfile * KisCanvasResourceProvider::currentDisplayProfile() const
@@ -151,7 +151,7 @@ KisNodeSP KisCanvasResourceProvider::currentNode() const
 
 KisPaintOpPresetSP KisCanvasResourceProvider::currentPreset() const
 {
-    KisPaintOpPresetSP preset = m_resourceProvider->resource( CurrentPaintOpPreset ).value<KisPaintOpPresetSP>();
+    KisPaintOpPresetSP preset = m_resourceProvider->resource(CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
     dbgUI << "current preset: " << preset;
     return preset;
 }
@@ -160,16 +160,16 @@ KisPaintOpPresetSP KisCanvasResourceProvider::currentPreset() const
 void KisCanvasResourceProvider::slotPatternActivated(KoResource * res)
 {
     KisPattern * pattern = dynamic_cast<KisPattern*>(res);
-    QVariant v = qVariantFromValue( ( void * ) pattern );
-    m_resourceProvider->setResource( CurrentPattern, v );
+    QVariant v = qVariantFromValue((void *) pattern);
+    m_resourceProvider->setResource(CurrentPattern, v);
     emit sigPatternChanged(pattern);
 }
 
 void KisCanvasResourceProvider::slotGeneratorConfigurationActivated(KisFilterConfiguration * res)
 {
     KisFilterConfiguration * generatorConfiguration = dynamic_cast<KisFilterConfiguration*>(res);
-    QVariant v = qVariantFromValue( ( void * ) generatorConfiguration  );
-    m_resourceProvider->setResource( CurrentGeneratorConfiguration, v );
+    QVariant v = qVariantFromValue((void *) generatorConfiguration);
+    m_resourceProvider->setResource(CurrentGeneratorConfiguration, v);
     emit sigGeneratorConfigurationChanged(generatorConfiguration);
 }
 
@@ -177,49 +177,49 @@ void KisCanvasResourceProvider::slotGradientActivated(KoResource *res)
 {
 
     KoAbstractGradient * gradient = dynamic_cast<KoAbstractGradient*>(res);
-    QVariant v = qVariantFromValue( ( void * ) gradient );
-    m_resourceProvider->setResource( CurrentGradient, v );
+    QVariant v = qVariantFromValue((void *) gradient);
+    m_resourceProvider->setResource(CurrentGradient, v);
     emit sigGradientChanged(gradient);
 }
 
-void KisCanvasResourceProvider::slotPaintOpPresetActivated( const KisPaintOpPresetSP preset )
+void KisCanvasResourceProvider::slotPaintOpPresetActivated(const KisPaintOpPresetSP preset)
 {
     dbgUI << " preset activated: " << preset;
     if (!preset) return;
     QVariant v;
     v.setValue(preset);
-    m_resourceProvider->setResource( CurrentPaintOpPreset, v );
-    emit sigPaintOpPresetChanged( preset );
+    m_resourceProvider->setResource(CurrentPaintOpPreset, v);
+    emit sigPaintOpPresetChanged(preset);
 }
 
 void KisCanvasResourceProvider::setBGColor(const KoColor& c)
 {
 
     QVariant v;
-    v.setValue( c );
-    m_resourceProvider->setResource( KoCanvasResource::BackgroundColor, v );
-    emit sigBGColorChanged( c );
+    v.setValue(c);
+    m_resourceProvider->setResource(KoCanvasResource::BackgroundColor, v);
+    emit sigBGColorChanged(c);
 }
 
 void KisCanvasResourceProvider::setFGColor(const KoColor& c)
 {
     QVariant v;
-    v.setValue( c );
-    m_resourceProvider->setResource( KoCanvasResource::ForegroundColor, v );
-    emit sigFGColorChanged( c );
+    v.setValue(c);
+    m_resourceProvider->setResource(KoCanvasResource::ForegroundColor, v);
+    emit sigFGColorChanged(c);
 }
 
 void KisCanvasResourceProvider::slotSetFGColor(const KoColor& c)
 {
-    setFGColor( c );
+    setFGColor(c);
 }
 
 void KisCanvasResourceProvider::slotSetBGColor(const KoColor& c)
 {
-    setBGColor( c );
+    setBGColor(c);
 }
 
-void KisCanvasResourceProvider::slotNodeActivated( const KisNodeSP node )
+void KisCanvasResourceProvider::slotNodeActivated(const KisNodeSP node)
 {
     if (node)
         dbgUI << " node activated: " << node->name();
@@ -227,51 +227,51 @@ void KisCanvasResourceProvider::slotNodeActivated( const KisNodeSP node )
         dbgUI << " null node activated";
 
     QVariant v;
-    v.setValue( node );
-    m_resourceProvider->setResource( CurrentKritaNode, v );
-    emit sigNodeChanged( currentNode() );
+    v.setValue(node);
+    m_resourceProvider->setResource(CurrentKritaNode, v);
+    emit sigNodeChanged(currentNode());
 }
 
 
-void KisCanvasResourceProvider::slotSetImageSize( qint32 w, qint32 h )
+void KisCanvasResourceProvider::slotSetImageSize(qint32 w, qint32 h)
 {
-    if ( KisImageSP image = m_view->image() ) {
+    if (KisImageSP image = m_view->image()) {
         float fw = w / image->xRes();
         float fh = h / image->yRes();
 
-        QSizeF postscriptSize( fw, fh );
-        m_resourceProvider->setResource( KoCanvasResource::PageSize, postscriptSize );
+        QSizeF postscriptSize(fw, fh);
+        m_resourceProvider->setResource(KoCanvasResource::PageSize, postscriptSize);
     }
 }
 
-void KisCanvasResourceProvider::slotSetDisplayProfile( const KoColorProfile * profile )
+void KisCanvasResourceProvider::slotSetDisplayProfile(const KoColorProfile * profile)
 {
     m_displayProfile = const_cast<KoColorProfile*>(profile);
-    emit sigDisplayProfileChanged( profile );
+    emit sigDisplayProfileChanged(profile);
 }
 
-void KisCanvasResourceProvider::slotResourceChanged( int key, const QVariant & res )
+void KisCanvasResourceProvider::slotResourceChanged(int key, const QVariant & res)
 {
-    switch ( key ) {
-    case ( KoCanvasResource::ForegroundColor ):
-        emit sigFGColorChanged( res.value<KoColor>() );
+    switch (key) {
+    case(KoCanvasResource::ForegroundColor):
+        emit sigFGColorChanged(res.value<KoColor>());
         break;
-    case ( KoCanvasResource::BackgroundColor ):
-        emit sigBGColorChanged( res.value<KoColor>() );
+    case(KoCanvasResource::BackgroundColor):
+        emit sigBGColorChanged(res.value<KoColor>());
         break;
-    case ( CurrentPattern ):
-        emit sigPatternChanged( static_cast<KisPattern *>( res.value<void *>() ) );
+    case(CurrentPattern):
+        emit sigPatternChanged(static_cast<KisPattern *>(res.value<void *>()));
         break;
-    case ( CurrentGeneratorConfiguration ):
+    case(CurrentGeneratorConfiguration):
         emit sigGeneratorConfigurationChanged(static_cast<KisFilterConfiguration*>(res.value<void*>()));
-    case ( CurrentGradient ):
-        emit sigGradientChanged( static_cast<KoAbstractGradient *>( res.value<void *>() ) );
+    case(CurrentGradient):
+        emit sigGradientChanged(static_cast<KoAbstractGradient *>(res.value<void *>()));
         break;
-    case ( CurrentPaintOpPreset ):
+    case(CurrentPaintOpPreset):
         emit sigPaintOpPresetChanged(currentPreset());
         break;
-    case ( CurrentKritaNode ) :
-        emit sigNodeChanged( currentNode() );
+    case(CurrentKritaNode) :
+        emit sigNodeChanged(currentNode());
     default:
         ;
         // Do nothing

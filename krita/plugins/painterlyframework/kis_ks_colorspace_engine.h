@@ -33,11 +33,12 @@
 #endif
 
 template< int _N_ >
-class KisKSColorSpaceEngine : public KoColorSpaceEngine {
-    public:
-        KisKSColorSpaceEngine();
-        ~KisKSColorSpaceEngine();
-        KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
+class KisKSColorSpaceEngine : public KoColorSpaceEngine
+{
+public:
+    KisKSColorSpaceEngine();
+    ~KisKSColorSpaceEngine();
+    KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
 };
 
 template< int _N_ >
@@ -51,20 +52,20 @@ KisKSColorSpaceEngine<_N_>::~KisKSColorSpaceEngine()
 }
 
 template< int _N_ >
-KoColorConversionTransformation* KisKSColorSpaceEngine<_N_>::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent ) const
+KoColorConversionTransformation* KisKSColorSpaceEngine<_N_>::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) const
 {
     Q_UNUSED(renderingIntent)
 
     if (srcColorSpace->colorDepthId().id() == "F32" && dstColorSpace->colorDepthId().id() == "F32")
-        return new KisKSToKSColorConversionTransformation<float,float,_N_>(srcColorSpace,dstColorSpace);
-    #ifdef HAVE_OPENEXR
+        return new KisKSToKSColorConversionTransformation<float, float, _N_>(srcColorSpace, dstColorSpace);
+#ifdef HAVE_OPENEXR
     else if (srcColorSpace->colorDepthId().id() == "F32" && dstColorSpace->colorDepthId().id() == "F16")
-        return new KisKSToKSColorConversionTransformation<float,half,_N_>(srcColorSpace,dstColorSpace);
+        return new KisKSToKSColorConversionTransformation<float, half, _N_>(srcColorSpace, dstColorSpace);
     else if (srcColorSpace->colorDepthId().id() == "F16" && dstColorSpace->colorDepthId().id() == "F32")
-        return new KisKSToKSColorConversionTransformation<half,float,_N_>(srcColorSpace,dstColorSpace);
+        return new KisKSToKSColorConversionTransformation<half, float, _N_>(srcColorSpace, dstColorSpace);
     else
-        return new KisKSToKSColorConversionTransformation<half,half,_N_>(srcColorSpace,dstColorSpace);
-    #endif
+        return new KisKSToKSColorConversionTransformation<half, half, _N_>(srcColorSpace, dstColorSpace);
+#endif
 }
 
 #endif

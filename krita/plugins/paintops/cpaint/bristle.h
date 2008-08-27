@@ -24,53 +24,82 @@
 
 #include <KoColor.h>
 
-class Bristle {
+class Bristle
+{
 
     friend class Brush;
 
 public:
 
-    Bristle () { inkAmount = 0; }
+    Bristle() {
+        inkAmount = 0;
+    }
 
-    ~Bristle () {}
+    ~Bristle() {}
 
-    void initPos ( double );
+    void initPos(double);
 
-    void setPos ( double, double );
+    void setPos(double, double);
 
-    void setPreThres ( double p ) { pressureThres = p; }
+    void setPreThres(double p) {
+        pressureThres = p;
+    }
 
-    void setTXThres ( double tx ) { txThres = tx; }
+    void setTXThres(double tx) {
+        txThres = tx;
+    }
 
-    void setTYThres ( double ty ) { tyThres = ty; }
+    void setTYThres(double ty) {
+        tyThres = ty;
+    }
 
-    void setInitialPosition ( double, double );
+    void setInitialPosition(double, double);
 
-    int getX () { return static_cast<int>(x); }
+    int getX() {
+        return static_cast<int>(x);
+    }
 
-    int getY () { return static_cast<int>(y); }
+    int getY() {
+        return static_cast<int>(y);
+    }
 
-    double getPreThres () { return pressureThres; }
+    double getPreThres() {
+        return pressureThres;
+    }
 
-    double getTXThres () { return txThres; }
+    double getTXThres() {
+        return txThres;
+    }
 
-    double getTYThres () { return tyThres; }
+    double getTYThres() {
+        return tyThres;
+    }
 
-    void reposition ( double );
+    void reposition(double);
 
-    double getThickness () { return thickness; }
+    double getThickness() {
+        return thickness;
+    }
 
-    int getInkAmount () { return inkAmount; }
+    int getInkAmount() {
+        return inkAmount;
+    }
 
-    void setInkAmount ( int i ) { inkAmount = i; }
+    void setInkAmount(int i) {
+        inkAmount = i;
+    }
 
-    void depleteInk ( int i ) { inkAmount -= i; }
+    void depleteInk(int i) {
+        inkAmount -= i;
+    }
 
-    void addInk ( int i ) { inkAmount += i; }
+    void addInk(int i) {
+        inkAmount += i;
+    }
 
-    double distanceFromCenter ();
+    double distanceFromCenter();
 
-    void initializeThickness ( int );
+    void initializeThickness(int);
 
 private:
 

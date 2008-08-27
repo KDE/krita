@@ -51,21 +51,24 @@ public:
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
-        ) const;
-    static inline KoID id() { return KoID("hsvadjustment", i18n("HSV Adjustment")); }
+                ) const;
+    static inline KoID id() {
+        return KoID("hsvadjustment", i18n("HSV Adjustment"));
+    }
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 
 };
 
 
-class KisHSVConfigWidget : public KisFilterConfigWidget {
+class KisHSVConfigWidget : public KisFilterConfigWidget
+{
 
 public:
-    KisHSVConfigWidget(QWidget * parent, Qt::WFlags f = 0 );
+    KisHSVConfigWidget(QWidget * parent, Qt::WFlags f = 0);
     virtual ~KisHSVConfigWidget();
 
     virtual KisFilterConfiguration * configuration() const;
-    virtual void setConfiguration( KisFilterConfiguration * config );
+    virtual void setConfiguration(KisFilterConfiguration * config);
     Ui_WdgHSVAdjustment * m_page;
 };
 

@@ -55,9 +55,9 @@
 #include "kis_painter.h"
 
 KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32 defWidth, qint32 defHeight, bool clipAvailable, double resolution, const QString & defColorSpaceName, const QString & imageName)
-    : WdgNewImage(parent)
+        : WdgNewImage(parent)
 {
-    Q_UNUSED( defColorSpaceName );
+    Q_UNUSED(defColorSpaceName);
 
     m_doc = doc;
 
@@ -67,30 +67,30 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32
     doubleWidth->setValue(defWidth);
     doubleWidth->setDecimals(0);
     m_width = m_widthUnit.fromUserValue(defWidth);
-    cmbWidthUnit->addItems( KoUnit::listOfUnitName(false) );
+    cmbWidthUnit->addItems(KoUnit::listOfUnitName(false));
     cmbWidthUnit->setCurrentIndex(KoUnit::Pixel);
 
     m_heightUnit = KoUnit(KoUnit::Pixel, resolution);
     doubleHeight->setValue(defHeight);
     doubleHeight->setDecimals(0);
     m_height = m_heightUnit.fromUserValue(defHeight);
-    cmbHeightUnit->addItems( KoUnit::listOfUnitName(false) );
+    cmbHeightUnit->addItems(KoUnit::listOfUnitName(false));
     cmbHeightUnit->setCurrentIndex(KoUnit::Pixel);
 
     doubleResolution->setValue(72.0 * resolution);
     doubleResolution->setDecimals(0);
 
     connect(doubleResolution, SIGNAL(valueChanged(double)),
-        this, SLOT(resolutionChanged(double)));
+            this, SLOT(resolutionChanged(double)));
     connect(cmbWidthUnit, SIGNAL(activated(int)),
-        this, SLOT(widthUnitChanged(int)));
+            this, SLOT(widthUnitChanged(int)));
     connect(doubleWidth, SIGNAL(valueChanged(double)),
-        this, SLOT(widthChanged(double)));
+            this, SLOT(widthChanged(double)));
     connect(cmbHeightUnit, SIGNAL(activated(int)),
-        this, SLOT(heightUnitChanged(int)));
+            this, SLOT(heightUnitChanged(int)));
     connect(doubleHeight, SIGNAL(valueChanged(double)),
-        this, SLOT(heightChanged(double)));
-    connect (m_createButton, SIGNAL( clicked() ), this, SLOT (buttonClicked()) );
+            this, SLOT(heightChanged(double)));
+    connect(m_createButton, SIGNAL(clicked()), this, SLOT(buttonClicked()));
     m_createButton -> setDefault(true);
 
     chkFromClipboard->setChecked(clipAvailable);
@@ -99,11 +99,11 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32
     colorSpaceSelector->setCurrentColorModel(RGBAColorModelID);
     colorSpaceSelector->setCurrentColorDepth(Integer8BitsColorDepthID);
 
-    connect( QApplication::clipboard(), SIGNAL( dataChanged() ), this, SLOT( clipboardDataChanged() ) );
-    connect( QApplication::clipboard(), SIGNAL( selectionChanged() ), this, SLOT( clipboardDataChanged() ) );
-    connect( QApplication::clipboard(), SIGNAL( changed( QClipboard::Mode) ), this, SLOT( clipboardDataChanged() ) );
+    connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
+    connect(QApplication::clipboard(), SIGNAL(selectionChanged()), this, SLOT(clipboardDataChanged()));
+    connect(QApplication::clipboard(), SIGNAL(changed(QClipboard::Mode)), this, SLOT(clipboardDataChanged()));
 
-    connect( bnScreenSize, SIGNAL(clicked()), this, SLOT(screenSizeClicked()) );
+    connect(bnScreenSize, SIGNAL(clicked()), this, SLOT(screenSizeClicked()));
 }
 
 void KisCustomImageWidget::resolutionChanged(double res)
@@ -113,7 +113,7 @@ void KisCustomImageWidget::resolutionChanged(double res)
         m_width = m_widthUnit.fromUserValue(doubleWidth->value());
     }
 
-    if(m_heightUnit.indexInList(false) == KoUnit::Pixel) {
+    if (m_heightUnit.indexInList(false) == KoUnit::Pixel) {
         m_heightUnit = KoUnit(KoUnit::Pixel, res / 72.0);
         m_height = m_heightUnit.fromUserValue(doubleHeight->value());
     }
@@ -124,11 +124,10 @@ void KisCustomImageWidget::widthUnitChanged(int index)
 {
     doubleWidth->blockSignals(true);
 
-    if(index == KoUnit::Pixel) {
+    if (index == KoUnit::Pixel) {
         doubleWidth->setDecimals(0);
         m_widthUnit = KoUnit(KoUnit::Pixel, doubleResolution->value() / 72.0);
-    }
-    else {
+    } else {
         doubleWidth->setDecimals(2);
         m_widthUnit = KoUnit((KoUnit::Unit)cmbWidthUnit->currentIndex());
     }
@@ -147,11 +146,10 @@ void KisCustomImageWidget::heightUnitChanged(int index)
 {
     doubleHeight->blockSignals(true);
 
-    if(index == KoUnit::Pixel) {
+    if (index == KoUnit::Pixel) {
         doubleHeight->setDecimals(0);
-        m_heightUnit = KoUnit(KoUnit::Pixel, doubleResolution->value()/72.0);
-    }
-    else {
+        m_heightUnit = KoUnit(KoUnit::Pixel, doubleResolution->value() / 72.0);
+    } else {
         doubleHeight->setDecimals(2);
         m_heightUnit = KoUnit((KoUnit::Unit)cmbHeightUnit->currentIndex());
     }
@@ -183,12 +181,12 @@ void KisCustomImageWidget::buttonClicked()
     m_doc->newImage(txtName->text(), width, height, cs, KoColor(qc, cs), txtDescription->toPlainText(), resolution);
 
     KisImageSP img = m_doc->image();
-    if ( img && img->root() && img->root()->firstChild() ) {
-        KisLayer * layer = dynamic_cast<KisLayer*>( img->root()->firstChild().data() );
+    if (img && img->root() && img->root()->firstChild()) {
+        KisLayer * layer = dynamic_cast<KisLayer*>(img->root()->firstChild().data());
         if (layer) {
             layer->setOpacity(backgroundOpacity());
         }
-        if ( chkFromClipboard->isChecked() ) {
+        if (chkFromClipboard->isChecked()) {
             KisPaintDeviceSP clip = KisClipboard::instance()->clip();
             if (clip) {
                 QRect r = clip->exactBounds();
@@ -230,8 +228,7 @@ void KisCustomImageWidget::clipboardDataChanged()
             doubleWidth->setDecimals(0);
             doubleHeight->setValue(sz.height());
             doubleHeight->setDecimals(0);
-        }
-        else {
+        } else {
             chkFromClipboard->setChecked(false);
             chkFromClipboard->setEnabled(false);
 

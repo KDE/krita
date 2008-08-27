@@ -24,20 +24,21 @@
 class KoID;
 class KoColorSpace;
 
-class KisColorSpaceSelector : public QWidget {
+class KisColorSpaceSelector : public QWidget
+{
     Q_OBJECT
-    public:
-        KisColorSpaceSelector(QWidget* parent);
-        ~KisColorSpaceSelector();
-        const KoColorSpace* currentColorSpace();
-        void setCurrentColorModel(const KoID& id);
-        void setCurrentColorDepth(const KoID& id);
-    private slots:
-        void fillCmbDepths(const KoID& idd);
-        void fillCmbProfiles();
-    private:
-        struct Private;
-        Private * const d;
+public:
+    KisColorSpaceSelector(QWidget* parent);
+    ~KisColorSpaceSelector();
+    const KoColorSpace* currentColorSpace();
+    void setCurrentColorModel(const KoID& id);
+    void setCurrentColorDepth(const KoID& id);
+private slots:
+    void fillCmbDepths(const KoID& idd);
+    void fillCmbProfiles();
+private:
+    struct Private;
+    Private * const d;
 };
 
 

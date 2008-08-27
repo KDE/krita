@@ -37,77 +37,71 @@
 template <class _CSTraits>
 class KisXyzFloatHDRColorSpace : public KoCtlMonoTypeColorSpace<_CSTraits>
 {
-    public:
-        KisXyzFloatHDRColorSpace(const QString &id, const QString &name, const KoCtlColorProfile *profile)
-          : KoCtlMonoTypeColorSpace<_CSTraits>(id, name, KoColorSpaceRegistry::instance()->lab16(""), profile)
-        {
-            Q_UNUSED(profile);
-            
-            const KoChannelInfo::enumChannelValueType channelValueType = KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::channelValueType;
-            const int channelSize = sizeof(typename _CSTraits::channels_type);
-            this->addChannel(new KoChannelInfo(i18n("X"),
-                                         _CSTraits::x_pos * channelSize,
-                                         KoChannelInfo::COLOR,
-                                         channelValueType,
-                                         channelSize,
-                                         QColor(255,0,0)));
-            this->addChannel(new KoChannelInfo(i18n("Y"),
-                                         _CSTraits::y_pos * channelSize,
-                                         KoChannelInfo::COLOR,
-                                         channelValueType,
-                                         channelSize,
-                                         QColor(0,255,0)));
-            this->addChannel(new KoChannelInfo(i18n("Z"),
-                                         _CSTraits::z_pos * channelSize,
-                                         KoChannelInfo::COLOR,
-                                         channelValueType,
-                                         channelSize,
-                                         QColor(0,0,255)));
-            this->addChannel(new KoChannelInfo(i18n("Alpha"),
-                                         _CSTraits::alpha_pos * channelSize,
-                                         KoChannelInfo::ALPHA,
-                                         channelValueType,
-                                         channelSize));
+public:
+    KisXyzFloatHDRColorSpace(const QString &id, const QString &name, const KoCtlColorProfile *profile)
+            : KoCtlMonoTypeColorSpace<_CSTraits>(id, name, KoColorSpaceRegistry::instance()->lab16(""), profile) {
+        Q_UNUSED(profile);
 
-            addCompositeOp( new KoCompositeOpOver<_CSTraits>( this ) );
-            addCompositeOp( new KoCompositeOpErase<_CSTraits>( this ) );
+        const KoChannelInfo::enumChannelValueType channelValueType = KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::channelValueType;
+        const int channelSize = sizeof(typename _CSTraits::channels_type);
+        this->addChannel(new KoChannelInfo(i18n("X"),
+                                           _CSTraits::x_pos * channelSize,
+                                           KoChannelInfo::COLOR,
+                                           channelValueType,
+                                           channelSize,
+                                           QColor(255, 0, 0)));
+        this->addChannel(new KoChannelInfo(i18n("Y"),
+                                           _CSTraits::y_pos * channelSize,
+                                           KoChannelInfo::COLOR,
+                                           channelValueType,
+                                           channelSize,
+                                           QColor(0, 255, 0)));
+        this->addChannel(new KoChannelInfo(i18n("Z"),
+                                           _CSTraits::z_pos * channelSize,
+                                           KoChannelInfo::COLOR,
+                                           channelValueType,
+                                           channelSize,
+                                           QColor(0, 0, 255)));
+        this->addChannel(new KoChannelInfo(i18n("Alpha"),
+                                           _CSTraits::alpha_pos * channelSize,
+                                           KoChannelInfo::ALPHA,
+                                           channelValueType,
+                                           channelSize));
 
-        }
-        virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const
-        {
-            const typename _CSTraits::Pixel* p = reinterpret_cast<const typename _CSTraits::Pixel*>( pixel );
-            QDomElement labElt = doc.createElement( "XYZ" );
-            labElt.setAttribute("x", KoColorSpaceMaths< typename _CSTraits::channels_type, double>::scaleToA( p->X) );
-            labElt.setAttribute("y", KoColorSpaceMaths< typename _CSTraits::channels_type, double>::scaleToA( p->Y) );
-            labElt.setAttribute("z", KoColorSpaceMaths< typename _CSTraits::channels_type, double>::scaleToA( p->Z) );
-            labElt.setAttribute("space", "xyz" );
-            colorElt.appendChild( labElt );
-        }
-        
-        virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const
-        {
-            typename _CSTraits::Pixel* p = reinterpret_cast<typename _CSTraits::Pixel*>( pixel );
-            p->X = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("x").toDouble());
-            p->Y = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("y").toDouble());
-            p->Z = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("z").toDouble());
-        }
-    public:
-        virtual bool profileIsCompatible(const KoColorProfile* profile) const
-        {
-            const KoCtlColorProfile* ctlp = dynamic_cast<const KoCtlColorProfile*>(profile);
-            if(ctlp && ctlp->colorModel() == "XYZA" )
-            {
-                return true;
-            }
-            return false;
-        }
+        addCompositeOp(new KoCompositeOpOver<_CSTraits>(this));
+        addCompositeOp(new KoCompositeOpErase<_CSTraits>(this));
 
-        virtual bool willDegrade(ColorSpaceIndependence /*independence*/) const 
-        {
-            // Currently all levels of colorspace independence will degrade floating point
-            // colorspaces images.
+    }
+    virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const {
+        const typename _CSTraits::Pixel* p = reinterpret_cast<const typename _CSTraits::Pixel*>(pixel);
+        QDomElement labElt = doc.createElement("XYZ");
+        labElt.setAttribute("x", KoColorSpaceMaths< typename _CSTraits::channels_type, double>::scaleToA(p->X));
+        labElt.setAttribute("y", KoColorSpaceMaths< typename _CSTraits::channels_type, double>::scaleToA(p->Y));
+        labElt.setAttribute("z", KoColorSpaceMaths< typename _CSTraits::channels_type, double>::scaleToA(p->Z));
+        labElt.setAttribute("space", "xyz");
+        colorElt.appendChild(labElt);
+    }
+
+    virtual void colorFromXML(quint8* pixel, const QDomElement& elt) const {
+        typename _CSTraits::Pixel* p = reinterpret_cast<typename _CSTraits::Pixel*>(pixel);
+        p->X = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("x").toDouble());
+        p->Y = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("y").toDouble());
+        p->Z = KoColorSpaceMaths< double, typename _CSTraits::channels_type >::scaleToA(elt.attribute("z").toDouble());
+    }
+public:
+    virtual bool profileIsCompatible(const KoColorProfile* profile) const {
+        const KoCtlColorProfile* ctlp = dynamic_cast<const KoCtlColorProfile*>(profile);
+        if (ctlp && ctlp->colorModel() == "XYZA") {
             return true;
         }
+        return false;
+    }
+
+    virtual bool willDegrade(ColorSpaceIndependence /*independence*/) const {
+        // Currently all levels of colorspace independence will degrade floating point
+        // colorspaces images.
+        return true;
+    }
 
 };
 

@@ -21,4 +21,4 @@
 #include "ui/kis_factory2.h"
 
 
-K_EXPORT_COMPONENT_FACTORY( libkritapart, KisFactory2 )
+K_EXPORT_COMPONENT_FACTORY(libkritapart, KisFactory2)

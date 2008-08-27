@@ -156,36 +156,54 @@ public:
     void setFillThreshold(int threshold);
 
     /** Returns the fill threshold, see setFillThreshold for details */
-    int fillThreshold() const { return m_threshold; }
+    int fillThreshold() const {
+        return m_threshold;
+    }
 
     /** Sets the width of the paint device */
-    void setWidth(int w) { m_width = w; }
+    void setWidth(int w) {
+        m_width = w;
+    }
 
     /** Sets the height of the paint device */
-    void setHeight(int h) { m_height = h; }
+    void setHeight(int h) {
+        m_height = h;
+    }
 
     /** If sample merged is set to true, the paint device will get the bounds of the
      * floodfill from the complete image instead of the layer */
-    bool sampleMerged() const { return m_sampleMerged; }
+    bool sampleMerged() const {
+        return m_sampleMerged;
+    }
 
     /** Set sample merged. See sampleMerged() for details */
-    void setSampleMerged(bool set) { m_sampleMerged = set; }
+    void setSampleMerged(bool set) {
+        m_sampleMerged = set;
+    }
 
     /** If true, floodfill doesn't fill outside the selected area of a layer */
-    bool careForSelection() const { return m_careForSelection; }
+    bool careForSelection() const {
+        return m_careForSelection;
+    }
 
     /** Set caring for selection. See careForSelection for details */
-    void setCareForSelection(bool set) { m_careForSelection = set; }
+    void setCareForSelection(bool set) {
+        m_careForSelection = set;
+    }
 
     /**
      * If true, the floodfill will be fuzzy. This means that the 'value' of selectedness
      * will depend on the difference between the sampled color and the color at the current
      * position.
      */
-    bool fuzzyFill() const { return m_fuzzy; }
+    bool fuzzyFill() const {
+        return m_fuzzy;
+    }
 
     /** Sets the fuzzyfill parameter. See fuzzyFill for details */
-    void setFuzzyFill(bool set) { m_fuzzy = set; }
+    void setFuzzyFill(bool set) {
+        m_fuzzy = set;
+    }
 
 private:
     // for floodfill

@@ -26,9 +26,9 @@
 
 class KritaImageEnhancement : public KParts::Plugin
 {
-  public:
-        KritaImageEnhancement(QObject *parent, const QStringList &);
-        virtual ~KritaImageEnhancement();
+public:
+    KritaImageEnhancement(QObject *parent, const QStringList &);
+    virtual ~KritaImageEnhancement();
 };
 
 #endif

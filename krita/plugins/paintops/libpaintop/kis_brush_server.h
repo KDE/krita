@@ -30,7 +30,8 @@ class KisBrush;
 /**
  *
  */
-class KisBrushServer : public QObject {
+class KisBrushServer : public QObject
+{
 
     Q_OBJECT
 

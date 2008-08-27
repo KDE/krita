@@ -31,8 +31,10 @@ class WdgSelectionOptions : public QWidget, public Ui::WdgSelectionOptions
 {
     Q_OBJECT
 
-    public:
-        WdgSelectionOptions(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgSelectionOptions(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
 /**

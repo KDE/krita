@@ -32,14 +32,17 @@ class WdgConvertColorSpace : public QWidget, public Ui::WdgConvertColorSpace
 {
     Q_OBJECT
 
-    public:
-        WdgConvertColorSpace(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgConvertColorSpace(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
 /**
  * XXX
  */
-class DlgColorSpaceConversion: public KDialog {
+class DlgColorSpaceConversion: public KDialog
+{
     typedef KDialog super;
     Q_OBJECT
 

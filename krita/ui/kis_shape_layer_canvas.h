@@ -45,10 +45,9 @@ public:
     virtual ~KisShapeLayerCanvas();
 
     /// This canvas won't render onto a widget, but a projection
-    void setProjection( KisPaintDeviceSP projection )
-        {
-            m_projection = projection;
-        }
+    void setProjection(KisPaintDeviceSP projection) {
+        m_projection = projection;
+    }
 
     void gridSize(double *horizontal, double *vertical) const;
     bool snapToGrid() const;

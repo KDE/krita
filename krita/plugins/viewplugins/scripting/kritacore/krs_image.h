@@ -25,7 +25,8 @@
 
 class KisDoc2;
 
-namespace Scripting {
+namespace Scripting
+{
 
 class Module;
 
@@ -34,116 +35,116 @@ class Module;
  */
 class Image : public QObject
 {
-       Q_OBJECT
-    public:
-        Image(Module* module, KisImageSP image, KisDoc2* doc = 0);
-        ~Image();
+    Q_OBJECT
+public:
+    Image(Module* module, KisImageSP image, KisDoc2* doc = 0);
+    ~Image();
 
-    public slots:
+public slots:
 
-        /**
-         * Return the width of the image.
-         */
-        int width() const;
+    /**
+     * Return the width of the image.
+     */
+    int width() const;
 
-        /**
-         * Return the height of the image.
-         */
-        int height() const;
+    /**
+     * Return the height of the image.
+     */
+    int height() const;
 
-        /**
-         * Return the id of the colorspace of this image (e.g. "RGBA" or "CMYK").
-         */
-        QString colorSpaceId() const;
+    /**
+     * Return the id of the colorspace of this image (e.g. "RGBA" or "CMYK").
+     */
+    QString colorSpaceId() const;
 
-        /**
-         * Convert the image to a colorspace.
-         * This function takes one argument :
-         *  - the name of the destination colorspace
-         * This function returns true if convert to the
-         * colorspace was successfully else (e.g. if the
-         * colorspace is not available, please check your
-         * installation in that case) false is returned.
-         *
-         * For example (in Ruby) :
-         * @code
-         * # set the colorspace to "CMYK"
-         * image.convertToColorSpace("CMYK")
-         * # following line will print "CMYK" now.
-         * image.colorSpaceId()
-         * @endcode
-         */
-        bool convertToColorSpace(const QString& colorspacename);
+    /**
+     * Convert the image to a colorspace.
+     * This function takes one argument :
+     *  - the name of the destination colorspace
+     * This function returns true if convert to the
+     * colorspace was successfully else (e.g. if the
+     * colorspace is not available, please check your
+     * installation in that case) false is returned.
+     *
+     * For example (in Ruby) :
+     * @code
+     * # set the colorspace to "CMYK"
+     * image.convertToColorSpace("CMYK")
+     * # following line will print "CMYK" now.
+     * image.colorSpaceId()
+     * @endcode
+     */
+    bool convertToColorSpace(const QString& colorspacename);
 
-        /**
-         * Resize the image.
-         * This function takes four arguments :
-         *  - the new width of the image.
-         *  - the new height of the image.
-         *  - x-position
-         *  - y-position
-         *
-         * Example (in Ruby) :
-         * @code
-         * require 'Krita'
-         * image = Krita.image()
-         * image.resize(image.width()/2, image.height()/2)
-         * @endcode
-         */
-        void resize(int width, int height, int x = 0, int y = 0);
+    /**
+     * Resize the image.
+     * This function takes four arguments :
+     *  - the new width of the image.
+     *  - the new height of the image.
+     *  - x-position
+     *  - y-position
+     *
+     * Example (in Ruby) :
+     * @code
+     * require 'Krita'
+     * image = Krita.image()
+     * image.resize(image.width()/2, image.height()/2)
+     * @endcode
+     */
+    void resize(int width, int height, int x = 0, int y = 0);
 
-        /**
-         * Scale an image.
-         * This function takes two arguments :
-         *  - the width scalefactor.
-         *  - the height scalefactor.
-         */
-        void scale(double widthfactor, double heightfactor);
+    /**
+     * Scale an image.
+     * This function takes two arguments :
+     *  - the width scalefactor.
+     *  - the height scalefactor.
+     */
+    void scale(double widthfactor, double heightfactor);
 
-        /**
-         * Rotate the image.
-         * This function takes one argument :
-         *  - the angle.
-         *
-         * Example (in Ruby) :
-         * @code
-         * require 'Krita'
-         * image = Krita.image()
-         * image.rotate(180.0)
-         * @endcode
-         */
-        void rotate(double angle);
+    /**
+     * Rotate the image.
+     * This function takes one argument :
+     *  - the angle.
+     *
+     * Example (in Ruby) :
+     * @code
+     * require 'Krita'
+     * image = Krita.image()
+     * image.rotate(180.0)
+     * @endcode
+     */
+    void rotate(double angle);
 
-        /**
-         * Shear the image.
-         * This function takes two arguments :
-         *  - the X-angle.
-         *  - the Y-angle.
-         */
-        void shear(double xangle, double yangle);
+    /**
+     * Shear the image.
+     * This function takes two arguments :
+     *  - the X-angle.
+     *  - the Y-angle.
+     */
+    void shear(double xangle, double yangle);
 
-        /**
-         * Create a new \a PaintLayer for this image, and return it.
-         * This function takes two arguments :
-         *  - the name of the layer
-         *  - the opacity of the layer (between 0 and 255)
-         * The new \a PaintLayer will have the same colorspace as the
-         * image. Use the method bellow to define the colorspace.
-         */
-        QObject* createPaintLayer(const QString& name, int opacity);
+    /**
+     * Create a new \a PaintLayer for this image, and return it.
+     * This function takes two arguments :
+     *  - the name of the layer
+     *  - the opacity of the layer (between 0 and 255)
+     * The new \a PaintLayer will have the same colorspace as the
+     * image. Use the method bellow to define the colorspace.
+     */
+    QObject* createPaintLayer(const QString& name, int opacity);
 
-        /**
-         * Create a new PaintLayer for this image, and return it.
-         * This function takes three arguments :
-         *  - the name of the layer
-         *  - the opacity of the layer (between 0 and 255)
-         *  - the id of the colorSpace
-         */
-        QObject* createPaintLayer(const QString& name, int opacity, const QString& colorspacename);
+    /**
+     * Create a new PaintLayer for this image, and return it.
+     * This function takes three arguments :
+     *  - the name of the layer
+     *  - the opacity of the layer (between 0 and 255)
+     *  - the id of the colorSpace
+     */
+    QObject* createPaintLayer(const QString& name, int opacity, const QString& colorspacename);
 
-    private:
-        KisImageSP m_image;
-        KisDoc2* m_doc;
+private:
+    KisImageSP m_image;
+    KisDoc2* m_doc;
 };
 
 }

@@ -27,23 +27,24 @@ class KisBookmarkedConfigurationsModel;
 class KisDynamicProgram;
 class KisDynamicProgramFactoryRegistry;
 
-class KisDynamicProgramsEditor : public KDialog {
+class KisDynamicProgramsEditor : public KDialog
+{
     Q_OBJECT
-    public:
-        KisDynamicProgramsEditor(QWidget* parent, KisBookmarkedConfigurationManager* bookmarksManager, const KisDynamicProgramFactoryRegistry* factoryRegistry);
-        ~KisDynamicProgramsEditor();
-    public slots:
-        void setCurrentProgram(const QString& text);
-        void addProgram();
-        void saveCurrentProgram();
-    private:
-        Ui_DynamicProgramsEditor* m_dynamicProgramsEditor;
-        QWidget* m_currentEditor;
-        QVBoxLayout *m_frameVBoxLayout;
-        KisBookmarkedConfigurationManager* m_bookmarksManager;
-        KisBookmarkedConfigurationsModel* m_bookmarksModel;
-        KisDynamicProgram* m_currentProgram;
-        const KisDynamicProgramFactoryRegistry* m_factoryRegistry;
+public:
+    KisDynamicProgramsEditor(QWidget* parent, KisBookmarkedConfigurationManager* bookmarksManager, const KisDynamicProgramFactoryRegistry* factoryRegistry);
+    ~KisDynamicProgramsEditor();
+public slots:
+    void setCurrentProgram(const QString& text);
+    void addProgram();
+    void saveCurrentProgram();
+private:
+    Ui_DynamicProgramsEditor* m_dynamicProgramsEditor;
+    QWidget* m_currentEditor;
+    QVBoxLayout *m_frameVBoxLayout;
+    KisBookmarkedConfigurationManager* m_bookmarksManager;
+    KisBookmarkedConfigurationsModel* m_bookmarksModel;
+    KisDynamicProgram* m_currentProgram;
+    const KisDynamicProgramFactoryRegistry* m_factoryRegistry;
 };
 
 #endif

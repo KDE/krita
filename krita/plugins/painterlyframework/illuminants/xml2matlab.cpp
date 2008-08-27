@@ -35,7 +35,7 @@ double **allocateMatrix(int m, int n)
 
 bool CDataToDouble(QDomElement & e, double * d)
 {
-    
+
     if (!e.firstChild().isCDATASection()) {
         QTextStream(stderr) << "Element is not cdata " << e << endl;
         return false;
@@ -49,7 +49,7 @@ bool CDataToDouble(QDomElement & e, double * d)
     QChar * data = cdata.data().data();
 
     memcpy(d, data, 8);
-    
+
     return true;
 }
 
@@ -84,23 +84,24 @@ bool verifyCount(const QString & elementName, QDomElement & e, int num)
     // Check whether there are enough coeffs
     int count = 0;
     QDomElement c = e.firstChildElement(elementName);
-    while(! c.isNull()) {
+    while (! c.isNull()) {
         ++count;
         c = c.nextSiblingElement(elementName);
     }
     return (count == num);
-    
+
 }
 
-int main(int c, char **v) {
-    
+int main(int c, char **v)
+{
+
     QCoreApplication app(c, v);
 
     if (sizeof(double) != 8) {
         QTextStream(stdout) << "double is the wrong size " << sizeof(double) << endl;
         return 1;
     }
-    
+
     if (c < 3) {
         QTextStream(stdout) << "Usage; matlab2xml input output" << endl;
         return 1;
@@ -117,7 +118,7 @@ int main(int c, char **v) {
         QTextStream(stderr) << "Could not open file for writing; " << app.arguments()[2] << endl;
         return 1;
     }
-    
+
     int m_wl = -1;
     double **m_T = 0;
     double *m_red = 0;
@@ -141,7 +142,7 @@ int main(int c, char **v) {
         QTextStream(stderr) << "Not an illuminant file or wrong version; " << app.arguments()[1] << endl;
         return 1;
     }
-    
+
     m_wl = root.attribute("wavelengths").toInt();
     if (m_wl == 0) {
         QTextStream(stderr) << "No wavelengths; " << app.arguments()[1] << endl;
@@ -162,14 +163,14 @@ int main(int c, char **v) {
         QTextStream(stderr) << "Wrong number of transformations; " << app.arguments()[1] << endl;
         return 1;
     }
-    
+
     QDomElement transformation = transformations.firstChildElement("transformation");
     for (int i = 0; i < m_wl; i++) {
         for (int j = 0; j < 3; j++) {
             if (transformation.isNull()) {
                 QTextStream(stderr) << "Not enough transformations: " << app.arguments()[1] << endl;
                 return 1;
-            
+
             }
             QString v = transformation.attribute("value");
             if (v.isEmpty()) {
@@ -186,29 +187,29 @@ int main(int c, char **v) {
             transformation = transformation.nextSiblingElement("transformation");
         }
     }
-    
-    
-    
+
+
+
     QDomElement primaries = root.firstChildElement("primaries");
     if (primaries.isNull()) {
         QTextStream(stderr) << "No primaries; " << app.arguments()[1] << endl;
         return 1;
     }
-        
+
     m_red   = new double[m_wl];
     QDomElement red = primaries.firstChildElement("red");
     if (red.isNull()) {
         QTextStream(stderr) << "No red; " << app.arguments()[1] << endl;
         return 1;
     }
-    
+
     if (!verifyCount("wavelength", red, m_wl)) {
         QTextStream(stderr) << "Wrong number of red wavelengths; " << m_wl << ": " << app.arguments()[1] << endl;
         return 1;
     }
 
     readPrimaries(m_red, red, m_wl);
-    
+
     m_green = new double[m_wl];
     QDomElement green = primaries.firstChildElement("green");
     if (green.isNull()) {
@@ -232,13 +233,13 @@ int main(int c, char **v) {
         return 1;
     }
     readPrimaries(m_blue, blue, m_wl);
-    
+
     QDomElement X = root.firstChildElement("X");
     if (X.isNull()) {
         QTextStream(stderr) << "No X: " << app.arguments()[1] << endl;
         return 1;
     }
-    
+
     nc = X.attribute("nc").toInt();
     if (nc == 0) {
         QTextStream(stderr) << "No number of coefficients " << app.arguments()[1] << endl;
@@ -249,10 +250,10 @@ int main(int c, char **v) {
         QTextStream(stderr) << "Got wrong number coefficients (" << nc * m_wl << "): " << app.arguments()[1] << endl;
         return 1;
     }
-    
+
     coeffs = new double[nc*m_wl];
 
-    
+
     QDomElement coefficient = X.firstChildElement("coefficient");
     for (int i = 0; i < nc * m_wl; ++i) {
         if (coefficient.isNull()) {
@@ -270,9 +271,9 @@ int main(int c, char **v) {
             QTextStream(stderr) << "Could not convert" << v << " to double: " << app.arguments()[1] << endl;
             return 0;
         }
-        
+
         coeffs[i] = d;
-        
+
         coefficient = coefficient.nextSiblingElement("coefficient");
     }
 
@@ -285,18 +286,18 @@ int main(int c, char **v) {
     data << (qint8)m_wl;
     for (int i = 0; i < m_wl; i++)
         for (int j = 0; j < 3; j++)
-            data.writeRawData((char*)&m_T[j][i],8);
+            data.writeRawData((char*)&m_T[j][i], 8);
 
     for (int i = 0; i < m_wl; i++)
-        data.writeRawData((char*)&m_red[i],8);
+        data.writeRawData((char*)&m_red[i], 8);
     for (int i = 0; i < m_wl; i++)
-        data.writeRawData((char*)&m_green[i],8);
+        data.writeRawData((char*)&m_green[i], 8);
     for (int i = 0; i < m_wl; i++)
-        data.writeRawData((char*)&m_blue[i],8);
+        data.writeRawData((char*)&m_blue[i], 8);
 
     data << (qint8)nc;
     for (qint8 i = 0; i < nc*m_wl; i++)
-        data.writeRawData((char*)&coeffs[i],8);
+        data.writeRawData((char*)&coeffs[i], 8);
 
     inFile.close();
     outFile.close();

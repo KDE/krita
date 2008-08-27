@@ -23,11 +23,12 @@
 
 class QDomDocument;
 
-class KisOpenRasterSaveContext {
-    public:
-        virtual ~KisOpenRasterSaveContext() {}
-        virtual QString saveDeviceData(KisPaintLayerSP device) = 0;
-        virtual void saveStack(const QDomDocument& doc) = 0;
+class KisOpenRasterSaveContext
+{
+public:
+    virtual ~KisOpenRasterSaveContext() {}
+    virtual QString saveDeviceData(KisPaintLayerSP device) = 0;
+    virtual void saveStack(const QDomDocument& doc) = 0;
 };
 
 

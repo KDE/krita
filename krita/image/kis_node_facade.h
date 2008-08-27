@@ -30,7 +30,8 @@
  * place?
  *
  */
-class KRITAIMAGE_EXPORT KisNodeFacade {
+class KRITAIMAGE_EXPORT KisNodeFacade
+{
 
 public:
 
@@ -42,14 +43,14 @@ public:
     /**
      * Create a new kisnodefacade for the given root.
      */
-    KisNodeFacade( KisNodeSP root );
+    KisNodeFacade(KisNodeSP root);
 
     virtual ~KisNodeFacade();
 
     /**
      * Set the rootnode for this facade
      */
-    void setRoot( KisNodeSP root );
+    void setRoot(KisNodeSP root);
 
     /**
      * Return the root node for the graph this facade managed
@@ -66,9 +67,9 @@ public:
      * Move the givent node at the specified index. If the node already
      * has a parent, it is removed from the parent's node list.
      *
-     * childCount() is a valid index and appends to the end. 
+     * childCount() is a valid index and appends to the end.
      */
-    bool moveNode(KisNodeSP node, KisNodeSP parent, quint32 index );
+    bool moveNode(KisNodeSP node, KisNodeSP parent, quint32 index);
     /**
      * Add an already existing node to the image. The node is put on top
      * of the nodes in the specified nodegroup. If parent is 0, then
@@ -100,7 +101,7 @@ public:
      * returns false if the node is already in this group or any
      * other (remove it first.)
      */
-    bool addNode( KisNodeSP node,  KisNodeSP parent, quint32 index );
+    bool addNode(KisNodeSP node,  KisNodeSP parent, quint32 index);
 
     /**
      * Remove the specified node.
@@ -128,14 +129,14 @@ public:
      *
      * @return false if moving the node failed.
      */
-    bool toTop( KisNodeSP node );
+    bool toTop(KisNodeSP node);
 
     /**
      * Move the given node to bottom-most position among its siblings.
      *
      * @return false if moving the node failed.
      */
-    bool toBottom( KisNodeSP node );
+    bool toBottom(KisNodeSP node);
 
 private:
 

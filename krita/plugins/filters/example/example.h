@@ -37,15 +37,17 @@ public:
     KisFilterInvert();
 public:
     using KisFilter::process;
-    
+
     void process(KisConstProcessingInformation src,
                  KisProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
-        ) const;
-    static inline KoID id() { return KoID("invert", i18n("Invert")); }
-    
+                ) const;
+    static inline KoID id() {
+        return KoID("invert", i18n("Invert"));
+    }
+
 };
 
 #endif

@@ -17,8 +17,8 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KIS_FILTER_DIALOG_H_
-#define _KIS_FILTER_DIALOG_H_
+#ifndef _KIS_DLG_FILTER_H_
+#define _KIS_DLG_FILTER_H_
 
 #include <QDialog>
 
@@ -27,7 +27,8 @@
 class KisFilter;
 class KisFilterConfiguration;
 
-class KisFilterDialog : public QDialog {
+class KisFilterDialog : public QDialog
+{
 
     Q_OBJECT
 

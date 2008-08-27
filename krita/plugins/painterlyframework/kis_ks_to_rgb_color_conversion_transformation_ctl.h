@@ -27,36 +27,34 @@
 #include <KoColorConversionTransformationFactory.h>
 
 template< typename _TYPE_, int _N_ >
-class KisKSToCtlRGBColorConversionTransformation : public KoColorConversionTransformation {
+class KisKSToCtlRGBColorConversionTransformation : public KoColorConversionTransformation
+{
 
-typedef KoColorConversionTransformation parent;
-typedef KisKSColorSpaceTrait<_TYPE_,_N_> CSTrait;
+    typedef KoColorConversionTransformation parent;
+    typedef KisKSColorSpaceTrait<_TYPE_, _N_> CSTrait;
 
 public:
 
     KisKSToCtlRGBColorConversionTransformation(const KoColorSpace *srcCs, const KoColorSpace *dstCs)
-    : parent(srcCs, dstCs), m_rgbvec(0), m_ksvec(0), m_srcProfile(0)
-    {
+            : parent(srcCs, dstCs), m_rgbvec(0), m_ksvec(0), m_srcProfile(0) {
         m_srcProfile = static_cast<const KisIlluminantProfile*>(parent::srcColorSpace()->profile());
         m_rgbvec = new double[3];
         m_ksvec  = new double[2*_N_];
     }
 
-    ~KisKSToCtlRGBColorConversionTransformation()
-    {
+    ~KisKSToCtlRGBColorConversionTransformation() {
         delete [] m_rgbvec;
         delete [] m_ksvec;
     }
 
-    void transform(const quint8 *src, quint8 *dst8, int nPixels) const
-    {
+    void transform(const quint8 *src, quint8 *dst8, int nPixels) const {
         float *dst = reinterpret_cast<float*>(dst8);
 
-        for ( ; nPixels > 0; nPixels-- ) {
+        for (; nPixels > 0; nPixels--) {
 
             for (int i = 0; i < _N_; i++) {
-                m_ksvec[2*i+0] = (double)CSTrait::K(src,i);
-                m_ksvec[2*i+1] = (double)CSTrait::S(src,i);
+                m_ksvec[2*i+0] = (double)CSTrait::K(src, i);
+                m_ksvec[2*i+1] = (double)CSTrait::S(src, i);
             }
 
             m_srcProfile->toRgb(m_ksvec, m_rgbvec);
@@ -82,29 +80,33 @@ private:
 };
 
 template< typename _TYPE_, int _N_ >
-class KisKSToCtlRGBColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
+class KisKSToCtlRGBColorConversionTransformationFactory : public KoColorConversionTransformationFactory
+{
 
 public:
     KisKSToCtlRGBColorConversionTransformationFactory(QString srcProfile)
-    : KoColorConversionTransformationFactory( QString("KS%1").arg(_N_),
-                                              KisKSColorSpace<_TYPE_,_N_>::ColorDepthId().id(), srcProfile,
-                                              RGBAColorModelID.id(),
-                                              Float32BitsColorDepthID.id(), "Standard RGB (sRGB)" ) { }
+            : KoColorConversionTransformationFactory(QString("KS%1").arg(_N_),
+                    KisKSColorSpace<_TYPE_, _N_>::ColorDepthId().id(), srcProfile,
+                    RGBAColorModelID.id(),
+                    Float32BitsColorDepthID.id(), "Standard RGB (sRGB)") { }
 
-    KoColorConversionTransformation *createColorTransformation( const KoColorSpace* srcColorSpace,
-                                                                const KoColorSpace* dstColorSpace,
-                                                                KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const
-    {
+    KoColorConversionTransformation *createColorTransformation(const KoColorSpace* srcColorSpace,
+            const KoColorSpace* dstColorSpace,
+            KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const {
         Q_UNUSED(renderingIntent);
 
         Q_ASSERT(canBeSource(srcColorSpace));
         Q_ASSERT(canBeDestination(dstColorSpace));
 
-        return new KisKSToCtlRGBColorConversionTransformation<_TYPE_,_N_>(srcColorSpace, dstColorSpace);
+        return new KisKSToCtlRGBColorConversionTransformation<_TYPE_, _N_>(srcColorSpace, dstColorSpace);
     }
 
-    bool conserveColorInformation() const { return true; }
-    bool conserveDynamicRange() const { return false; }
+    bool conserveColorInformation() const {
+        return true;
+    }
+    bool conserveDynamicRange() const {
+        return false;
+    }
 
 };
 

@@ -35,7 +35,7 @@ KisToneMappingOperator::KisToneMappingOperator(QString _id, QString _name) : d(n
 {
     d->id = _id;
     d->name = _name;
-    d->bookmarkManager = (new KisBookmarkedConfigurationManager(configEntryGroup(), new KisPropertiesConfigurationFactory() ));
+    d->bookmarkManager = (new KisBookmarkedConfigurationManager(configEntryGroup(), new KisPropertiesConfigurationFactory()));
 }
 
 KisToneMappingOperator::~KisToneMappingOperator()
@@ -56,12 +56,10 @@ QString KisToneMappingOperator::name() const
 
 void KisToneMappingOperator::applyLuminance(KisPaintDeviceSP src, KisPaintDeviceSP lumi, const QRect& r) const
 {
-    KisHLineIterator itSrc = src->createHLineIterator( r.x(), r.y(), r.width());
-    KisHLineIterator itL = lumi->createHLineIterator( 0,0, r.width());
-    for(int y = 0; y < r.height(); y++)
-    {
-        while(!itSrc.isDone())
-        {
+    KisHLineIterator itSrc = src->createHLineIterator(r.x(), r.y(), r.width());
+    KisHLineIterator itL = lumi->createHLineIterator(0, 0, r.width());
+    for (int y = 0; y < r.height(); y++) {
+        while (!itSrc.isDone()) {
             KoXyzTraits<float>::Pixel* dataSrc = reinterpret_cast< KoXyzTraits<float>::Pixel* >(itSrc.rawData());
             float* dataL = reinterpret_cast< float* >(itL.rawData());
             float scale = *dataL / dataSrc->Y;
@@ -100,12 +98,10 @@ const KisBookmarkedConfigurationManager* KisToneMappingOperator::bookmarkManager
 KisPropertiesConfiguration * KisToneMappingOperator::defaultConfiguration() const
 {
     KisPropertiesConfiguration* fc = 0;
-    if(bookmarkManager())
-    {
+    if (bookmarkManager()) {
         fc = dynamic_cast<KisPropertiesConfiguration*>(bookmarkManager()->defaultConfiguration());
     }
-    if(!fc )
-    {
+    if (!fc) {
         dbgPlugins << "Factory configuration";
         fc = factoryConfiguration();
     } else {
@@ -116,5 +112,5 @@ KisPropertiesConfiguration * KisToneMappingOperator::defaultConfiguration() cons
 
 KisPropertiesConfiguration* KisToneMappingOperator::factoryConfiguration() const
 {
-    return new KisPropertiesConfiguration( );
+    return new KisPropertiesConfiguration();
 }

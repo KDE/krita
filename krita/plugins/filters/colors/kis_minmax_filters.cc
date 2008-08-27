@@ -27,7 +27,7 @@
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
 
-typedef void (*funcMaxMin)(const quint8* , quint8* , uint );
+typedef void (*funcMaxMin)(const quint8* , quint8* , uint);
 
 template<typename _TYPE>
 void maximize(const quint8* s, quint8* d, uint nbpixels)
@@ -35,17 +35,13 @@ void maximize(const quint8* s, quint8* d, uint nbpixels)
     const _TYPE* sT = (_TYPE*)(s);
     _TYPE* dT = (_TYPE*)(d);
     _TYPE vmax = *sT;
-    for(uint i = 1; i < nbpixels; i ++)
-    {
-        if(sT[i] > vmax)
-        {
+    for (uint i = 1; i < nbpixels; i ++) {
+        if (sT[i] > vmax) {
             vmax = sT[i];
         }
     }
-    for(uint i = 0; i < nbpixels; i ++)
-    {
-        if(dT[i] != vmax)
-        {
+    for (uint i = 0; i < nbpixels; i ++) {
+        if (dT[i] != vmax) {
             dT[i] = 0;
         }
     }
@@ -57,17 +53,13 @@ void minimize(const quint8* s, quint8* d, uint nbpixels)
     const _TYPE* sT = (_TYPE*)(s);
     _TYPE* dT = (_TYPE*)(d);
     _TYPE vmin = *sT;
-    for(uint i = 1; i < nbpixels; i ++)
-    {
-        if(sT[i] < vmin)
-        {
+    for (uint i = 1; i < nbpixels; i ++) {
+        if (sT[i] < vmin) {
             vmin = sT[i];
         }
     }
-    for(uint i = 0; i < nbpixels; i ++)
-    {
-        if(dT[i] != vmin)
-        {
+    for (uint i = 0; i < nbpixels; i ++) {
+        if (dT[i] != vmin) {
             dT[i] = 0;
         }
     }
@@ -82,11 +74,11 @@ KisFilterMax::KisFilterMax() : KisFilter(id(), CategoryColors, i18n("M&aximize C
 }
 
 void KisFilterMax::process(KisConstProcessingInformation srcInfo,
-                 KisProcessingInformation dstInfo,
-                 const QSize& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-        ) const
+                           KisProcessingInformation dstInfo,
+                           const QSize& size,
+                           const KisFilterConfiguration* config,
+                           KoUpdater* progressUpdater
+                          ) const
 {
     Q_UNUSED(config);
     const KisPaintDeviceSP src = srcInfo.paintDevice();
@@ -96,7 +88,7 @@ void KisFilterMax::process(KisConstProcessingInformation srcInfo,
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
 
-    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection() );
+    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection());
     KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), srcInfo.selection());
 
     int pixelsProcessed = 0;
@@ -107,24 +99,19 @@ void KisFilterMax::process(KisConstProcessingInformation srcInfo,
 
     funcMaxMin F;
     KoChannelInfo::enumChannelValueType cT = cs->channels()[0]->channelValueType();
-    if( cT == KoChannelInfo::UINT8 || cT == KoChannelInfo::INT8 )
-    {
+    if (cT == KoChannelInfo::UINT8 || cT == KoChannelInfo::INT8) {
         F = & maximize<quint8>;
-    } else if( cT == KoChannelInfo::UINT16 || cT == KoChannelInfo::INT16 )
-    {
+    } else if (cT == KoChannelInfo::UINT16 || cT == KoChannelInfo::INT16) {
         F = & maximize<quint16>;
-    } else if( cT == KoChannelInfo::FLOAT32 )
-    {
+    } else if (cT == KoChannelInfo::FLOAT32) {
         F = & maximize<float>;
     } else {
         return;
     }
 
-    while( ! srcIt.isDone() )
-    {
-        if(srcIt.isSelected())
-        {
-            F( srcIt.oldRawData(), dstIt.rawData(), nC);
+    while (! srcIt.isDone()) {
+        if (srcIt.isSelected()) {
+            F(srcIt.oldRawData(), dstIt.rawData(), nC);
         }
         if (progressUpdater) progressUpdater->setProgress((++pixelsProcessed) / totalCost);
         ++srcIt;
@@ -141,11 +128,11 @@ KisFilterMin::KisFilterMin() : KisFilter(id(), CategoryColors, i18n("M&inimize C
 }
 
 void KisFilterMin::process(KisConstProcessingInformation srcInfo,
-                 KisProcessingInformation dstInfo,
-                 const QSize& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-        ) const
+                           KisProcessingInformation dstInfo,
+                           const QSize& size,
+                           const KisFilterConfiguration* config,
+                           KoUpdater* progressUpdater
+                          ) const
 {
     Q_UNUSED(config);
     const KisPaintDeviceSP src = srcInfo.paintDevice();
@@ -160,31 +147,26 @@ void KisFilterMin::process(KisConstProcessingInformation srcInfo,
 
     int pixelsProcessed = 0;
     int totalCost = size.width() * size.height() / 100;
-    if( totalCost == 0 ) totalCost = 1;
+    if (totalCost == 0) totalCost = 1;
 
     const KoColorSpace * cs = src->colorSpace();
     qint32 nC = cs->colorChannelCount();
 
     funcMaxMin F;
     KoChannelInfo::enumChannelValueType cT = cs->channels()[0]->channelValueType();
-    if( cT == KoChannelInfo::UINT8 || cT == KoChannelInfo::INT8 )
-    {
+    if (cT == KoChannelInfo::UINT8 || cT == KoChannelInfo::INT8) {
         F = & minimize<quint8>;
-    } else if( cT == KoChannelInfo::UINT16 || cT == KoChannelInfo::INT16 )
-    {
+    } else if (cT == KoChannelInfo::UINT16 || cT == KoChannelInfo::INT16) {
         F = & minimize<quint16>;
-    } else if( cT == KoChannelInfo::FLOAT32 )
-    {
+    } else if (cT == KoChannelInfo::FLOAT32) {
         F = & minimize<float>;
     } else {
         return;
     }
 
-    while( ! srcIt.isDone() )
-    {
-        if(srcIt.isSelected())
-        {
-            F( srcIt.oldRawData(), dstIt.rawData(), nC);
+    while (! srcIt.isDone()) {
+        if (srcIt.isSelected()) {
+            F(srcIt.oldRawData(), dstIt.rawData(), nC);
         }
         if (progressUpdater) progressUpdater->setProgress((++pixelsProcessed) / totalCost);
         ++srcIt;

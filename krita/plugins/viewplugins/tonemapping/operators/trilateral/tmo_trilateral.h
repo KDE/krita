@@ -20,7 +20,7 @@
  * @param saturation
  */
 
-void tmo_trilateral(const pfs::Array2D *Y, pfs::Array2D *L, 
-  float contrast, float sigma, float shift, float saturation);
+void tmo_trilateral(const pfs::Array2D *Y, pfs::Array2D *L,
+                    float contrast, float sigma, float shift, float saturation);
 
 #endif /* _tmo_trilateral_h_ */

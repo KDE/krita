@@ -19,7 +19,6 @@
 
 #include "kis_histogram.h"
 
-#include <kis_debug.h>
 #include <QVector>
 
 #include "kis_types.h"
@@ -76,7 +75,7 @@ void KisHistogram::updateHistogram()
     if (srcIt.isDone()) {
         m_producer->addRegionToBin(0, 0, 0, cs);
     } else {
-        while ( !srcIt.isDone() ) {
+        while (!srcIt.isDone()) {
             i = srcIt.nConseqPixels();
             m_producer->addRegionToBin(srcIt.rawData(), srcIt.selectionMask(), i, cs);
             srcIt += i;
@@ -89,7 +88,7 @@ void KisHistogram::updateHistogram()
 void KisHistogram::computeHistogram()
 {
     m_completeCalculations = calculateForRange(m_producer->viewFrom(),
-            m_producer->viewFrom() + m_producer->viewWidth());
+                             m_producer->viewFrom() + m_producer->viewWidth());
 
     if (m_selection) {
         m_selectionCalculations = calculateForRange(m_selFrom, m_selTo);
@@ -102,15 +101,18 @@ void KisHistogram::computeHistogram()
 #endif
 }
 
-KisHistogram::Calculations KisHistogram::calculations() {
+KisHistogram::Calculations KisHistogram::calculations()
+{
     return m_completeCalculations.at(m_channel);
 }
 
-KisHistogram::Calculations KisHistogram::selectionCalculations() {
+KisHistogram::Calculations KisHistogram::selectionCalculations()
+{
     return m_selectionCalculations.at(m_channel);
 }
 
-QVector<KisHistogram::Calculations> KisHistogram::calculateForRange(double from, double to) {
+QVector<KisHistogram::Calculations> KisHistogram::calculateForRange(double from, double to)
+{
     QVector<Calculations> calculations;
     uint count = m_producer->channels().count();
 
@@ -121,13 +123,14 @@ QVector<KisHistogram::Calculations> KisHistogram::calculateForRange(double from,
     return calculations;
 }
 
-KisHistogram::Calculations KisHistogram::calculateSingleRange(int channel, double from, double to) {
+KisHistogram::Calculations KisHistogram::calculateSingleRange(int channel, double from, double to)
+{
     Calculations c;
 
     // XXX If from == to, we only want a specific bin, handle that properly!
 
     double max = from, min = to, total = 0.0, mean = 0.0; //, median = 0.0, stddev = 0.0;
-    quint32 high = 0, low = (quint32) -1, count = 0;
+    quint32 high = 0, low = (quint32) - 1, count = 0;
 
     if (m_producer->count() == 0) {
         // We won't get anything, even if a range is specified
@@ -179,38 +182,39 @@ KisHistogram::Calculations KisHistogram::calculateSingleRange(int channel, doubl
 }
 
 
-void KisHistogram::dump() {
-    dbgMath <<"Histogram";
+void KisHistogram::dump()
+{
+    dbgMath << "Histogram";
 
     switch (m_type) {
     case LINEAR:
-        dbgMath <<"Linear histogram";
+        dbgMath << "Linear histogram";
         break;
     case LOGARITHMIC:
-        dbgMath <<"Logarithmic histogram";
+        dbgMath << "Logarithmic histogram";
     }
 
-    dbgMath <<"Dumping channel" << m_channel;
+    dbgMath << "Dumping channel" << m_channel;
     Calculations c = calculations();
 
-/*        for( int i = 0; i <256; ++i ) {
-        dbgMath <<"Value"
-              << QString().setNum(i)
-              << ": "
-              <<  QString().setNum(m_values[i])
-              << "\n";
-        }*/
-    dbgMath <<"";
+    /*        for( int i = 0; i <256; ++i ) {
+            dbgMath <<"Value"
+                  << QString().setNum(i)
+                  << ": "
+                  <<  QString().setNum(m_values[i])
+                  << "\n";
+            }*/
+    dbgMath << "";
 
-    dbgMath <<"Max:" << QString().setNum(c.getMax()) <<"";
-    dbgMath <<"Min:" << QString().setNum(c.getMin()) <<"";
-    dbgMath <<"High:" << QString().setNum(c.getHighest()) <<"";
-    dbgMath <<"Low:" << QString().setNum(c.getLowest()) <<"";
-    dbgMath <<"Mean:" << m_producer->positionToString(c.getMean()) <<"";
-    dbgMath <<"Total:" << QString().setNum(c.getTotal()) <<"";
+    dbgMath << "Max:" << QString().setNum(c.getMax()) << "";
+    dbgMath << "Min:" << QString().setNum(c.getMin()) << "";
+    dbgMath << "High:" << QString().setNum(c.getHighest()) << "";
+    dbgMath << "Low:" << QString().setNum(c.getLowest()) << "";
+    dbgMath << "Mean:" << m_producer->positionToString(c.getMean()) << "";
+    dbgMath << "Total:" << QString().setNum(c.getTotal()) << "";
 //    dbgMath <<"Median:" << QString().setNum(m_median) <<"";
 //    dbgMath <<"Stddev:" << QString().setNum(m_stddev) <<"";
 //    dbgMath <<"percentile:" << QString().setNum(m_percentile) <<"";
 
-    dbgMath <<"";
+    dbgMath << "";
 }

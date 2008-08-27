@@ -39,7 +39,7 @@
 #include "kis_brush.h"
 
 KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
-    : KisItemChooser(parent, name)
+        : KisItemChooser(parent, name)
 {
     m_lbSpacing = new QLabel(i18n("Spacing: "), this);
     m_slSpacing = new KisDoubleWidget(0.0, 10, this, "double_widget");
@@ -69,7 +69,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 
     spacingLayout->addWidget(m_chkColorMask, 1, 0, 1, 2);
 
-    connect( this, SIGNAL( importClicked() ), this, SLOT( slotImportBrush() ) );
+    connect(this, SIGNAL(importClicked()), this, SLOT(slotImportBrush()));
 
     KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
     KoResourceServerAdapter<KisBrush>* rServerAdapter = new KoResourceServerAdapter<KisBrush>(rServer);
@@ -114,9 +114,9 @@ void KisBrushChooser::update(QTableWidgetItem *item)
         KisBrush *brush = static_cast<KisBrush *>(kisItem->resource());
 
         QString text = QString("%1 (%2 x %3)")
-            .arg(brush->name())
-            .arg(brush->width())
-            .arg(brush->height());
+                       .arg(brush->name())
+                       .arg(brush->width())
+                       .arg(brush->height());
 
         m_lbName->setText(text);
         m_slSpacing->setValue(brush->spacing());
@@ -127,8 +127,8 @@ void KisBrushChooser::update(QTableWidgetItem *item)
 
 void KisBrushChooser::slotImportBrush()
 {
-    QString filter( "*.gbr *.gih" );
-    QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18n( "Choose Brush to Add" ) );
+    QString filter("*.gbr *.gih");
+    QString filename = KFileDialog::getOpenFileName(KUrl(), filter, 0, i18n("Choose Brush to Add"));
 
     KisBrushServer::instance()->brushServer()->importResource(filename);
 }
@@ -136,7 +136,7 @@ void KisBrushChooser::slotImportBrush()
 void KisBrushChooser::slotActivatedBrush(KoResource * resource)
 {
     KisBrush * brush = dynamic_cast<KisBrush*>(resource);
-    if ( brush ) {
+    if (brush) {
         m_brush = brush->clone();
     }
 }

@@ -25,11 +25,11 @@
 #include <kis_debug.h>
 
 struct KisScriptDecoration::Private {
-    Kross::Action* action;    
+    Kross::Action* action;
 };
 
 KisScriptDecoration::KisScriptDecoration(Kross::Action* _action, KisView2* _view) :
-    KisCanvasDecoration(_action->name(), _action->text(), _view), d(new Private)
+        KisCanvasDecoration(_action->name(), _action->text(), _view), d(new Private)
 {
     d->action = _action;
 }
@@ -42,5 +42,5 @@ KisScriptDecoration::~KisScriptDecoration()
 void KisScriptDecoration::drawDecoration(QPainter& gc, const QPoint & documentOffset, const QRect& area, const KoViewConverter &converter)
 {
     dbgScript << "Call to drawDecoration";
-    d->action->callFunction( "drawDecoration", QVariantList() << qVariantFromValue((void*)&gc) << documentOffset << area << qVariantFromValue((void*)&converter) );
+    d->action->callFunction("drawDecoration", QVariantList() << qVariantFromValue((void*)&gc) << documentOffset << area << qVariantFromValue((void*)&converter));
 }

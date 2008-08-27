@@ -26,7 +26,7 @@
 #include "kis_global.h"
 #include "filter/kis_filter_registry.h"
 typedef KGenericFactory<KisOilPaintFilterPlugin> KisOilPaintFilterPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritaoilpaintfilter, KisOilPaintFilterPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritaoilpaintfilter, KisOilPaintFilterPluginFactory("krita"))
 
 KisOilPaintFilterPlugin::KisOilPaintFilterPlugin(QObject *parent, const QStringList &) : KParts::Plugin(parent)
 {

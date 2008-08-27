@@ -63,7 +63,7 @@ enum enumBrushMode {
 };
 
 class KRITAUI_EXPORT KisToolPaint
-    : public KisTool
+            : public KisTool
 {
 
     Q_OBJECT
@@ -75,11 +75,11 @@ public:
 
 public:
 
-    virtual void resourceChanged( int key, const QVariant & v );
+    virtual void resourceChanged(int key, const QVariant & v);
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
 
 protected:
 

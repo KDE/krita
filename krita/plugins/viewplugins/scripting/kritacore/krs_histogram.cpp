@@ -35,7 +35,7 @@
 using namespace Scripting;
 
 Histogram::Histogram(ConstPaintDevice* layer, KoHistogramProducerSP producer, const enumHistogramType type)
-    : QObject(layer)
+        : QObject(layer)
 {
     setObjectName("KritaHistogram");
     m_histogram = new KisHistogram(layer->paintDevice(), producer, type);

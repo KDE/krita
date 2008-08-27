@@ -41,7 +41,7 @@
 
 
 KisHistogramWidget::KisHistogramWidget(QWidget *parent, const char *name)
-    : super(parent)
+        : super(parent)
 {
     setObjectName(name);
     m_from = 0.0;
@@ -105,24 +105,28 @@ void KisHistogramWidget::setView(double from, double size)
     updateEnabled();
 }
 
-void KisHistogramWidget::slotZoomIn() {
+void KisHistogramWidget::slotZoomIn()
+{
     if ((m_width / 2) >= m_histogramView->currentProducer()->maximalZoom()) {
         setView(m_from, m_width / 2);
     }
 }
 
-void KisHistogramWidget::slotZoomOut() {
+void KisHistogramWidget::slotZoomOut()
+{
     if (m_width * 2 <= 1.0) {
         setView(m_from, m_width * 2);
     }
 }
 
-void KisHistogramWidget::slide(int val) {
+void KisHistogramWidget::slide(int val)
+{
     // Beware: at the END (e.g. 100), we want to still view m_width:
     setView((static_cast<double>(val) / 100.0) * (1.0 - m_width), m_width);
 }
 
-void KisHistogramWidget::updateEnabled() {
+void KisHistogramWidget::updateEnabled()
+{
     if (m_histogramView->currentProducer()->maximalZoom() < 1.0) {
         if ((m_width / 2) >= m_histogramView->currentProducer()->maximalZoom()) {
             zoomIn->setEnabled(true);

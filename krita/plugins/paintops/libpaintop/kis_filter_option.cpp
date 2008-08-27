@@ -22,7 +22,7 @@
 #include <filter/kis_filter_configuration.h>
 
 KisFilterOption::KisFilterOption()
-    : KisPaintOpOption( i18n( "Filter" ) )
+        : KisPaintOpOption(i18n("Filter"))
 {
 }
 

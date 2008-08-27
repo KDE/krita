@@ -22,53 +22,58 @@
 
 class QString;
 
-namespace KisMetaData {
-    class Schema;
-    class Value;
+namespace KisMetaData
+{
+class Schema;
+class Value;
+/**
+ * This strategy drop all meta data.
+ */
+class DropMergeStrategy : public MergeStrategy
+{
+public:
+    DropMergeStrategy();
+    virtual ~DropMergeStrategy();
+    virtual QString id() const;
+    virtual QString name() const;
+    virtual QString description() const;
+    virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const;
+};
+class PriorityToFirstMergeStrategy : public MergeStrategy
+{
+public:
+    PriorityToFirstMergeStrategy();
+    virtual ~PriorityToFirstMergeStrategy();
+    virtual QString id() const;
+    virtual QString name() const;
+    virtual QString description() const;
+    virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const;
+};
+class OnlyIdenticalMergeStrategy : public MergeStrategy
+{
+public:
+    OnlyIdenticalMergeStrategy();
+    virtual ~OnlyIdenticalMergeStrategy();
+    virtual QString id() const;
+    virtual QString name() const;
+    virtual QString description() const;
+    virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const;
+};
+class SmartMergeStrategy : public MergeStrategy
+{
+public:
+    SmartMergeStrategy();
+    virtual ~SmartMergeStrategy();
+    virtual QString id() const;
+    virtual QString name() const;
+    virtual QString description() const;
+    virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const;
+protected:
     /**
-     * This strategy drop all meta data.
+     * Merge multiple entries in one.
      */
-    class DropMergeStrategy : public MergeStrategy {
-        public:
-            DropMergeStrategy();
-            virtual ~DropMergeStrategy();
-            virtual QString id() const;
-            virtual QString name() const;
-            virtual QString description() const;
-            virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const;
-    };
-    class PriorityToFirstMergeStrategy : public MergeStrategy {
-        public:
-            PriorityToFirstMergeStrategy();
-            virtual ~PriorityToFirstMergeStrategy();
-            virtual QString id() const;
-            virtual QString name() const;
-            virtual QString description() const;
-            virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const;
-    };
-    class OnlyIdenticalMergeStrategy : public MergeStrategy {
-        public:
-            OnlyIdenticalMergeStrategy();
-            virtual ~OnlyIdenticalMergeStrategy();
-            virtual QString id() const;
-            virtual QString name() const;
-            virtual QString description() const;
-            virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const;
-    };
-    class SmartMergeStrategy : public MergeStrategy {
-        public:
-            SmartMergeStrategy();
-            virtual ~SmartMergeStrategy();
-            virtual QString id() const;
-            virtual QString name() const;
-            virtual QString description() const;
-            virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> score) const;
-        protected:
-            /**
-             * Merge multiple entries in one.
-             */
-            void mergeEntry(Store* dst, QList<const Store*> srcs, const Schema* schema, const QString & identifier) const;
-            Value election(QList<const Store*> srcs, QList<double> score, const QString & key ) const;
-    };
+    void mergeEntry(Store* dst, QList<const Store*> srcs, const Schema* schema, const QString & identifier) const;
+    Value election(QList<const Store*> srcs, QList<double> score, const QString & key) const;
+};
 }
 #endif

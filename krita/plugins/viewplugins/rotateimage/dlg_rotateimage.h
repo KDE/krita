@@ -35,31 +35,34 @@ class WdgRotateImage : public QWidget, public Ui::WdgRotateImage
 {
     Q_OBJECT
 
-    public:
-        WdgRotateImage(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgRotateImage(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
-class DlgRotateImage: public KDialog {
+class DlgRotateImage: public KDialog
+{
     typedef KDialog super;
     Q_OBJECT
 
 public:
 
     DlgRotateImage(QWidget * parent = 0,
-             const char* name = 0);
+                   const char* name = 0);
     ~DlgRotateImage();
 
     void setAngle(quint32 w);
     qint32 angle();
 
-    void setDirection (enumRotationDirection direction);
+    void setDirection(enumRotationDirection direction);
     enumRotationDirection direction();
 
 private slots:
 
     void okClicked();
     void resetPreview();
-    void slotAngleValueChanged( int );
+    void slotAngleValueChanged(int);
 
 private:
 

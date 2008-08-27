@@ -17,11 +17,12 @@
  */
 #ifndef _STROKE_SAMPLE_H_
 #define _STROKE_SAMPLE_H_
-class StrokeSample{
+class StrokeSample
+{
 
 
 public:
-    StrokeSample(float x,float y,float pressure,float tiltX, float tiltY,float rotation);
+    StrokeSample(float x, float y, float pressure, float tiltX, float tiltY, float rotation);
     StrokeSample();
     ~StrokeSample();
 

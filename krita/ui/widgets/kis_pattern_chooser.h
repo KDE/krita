@@ -22,7 +22,8 @@
 
 class QLabel;
 
-class KisPatternChooser : public KisItemChooser {
+class KisPatternChooser : public KisItemChooser
+{
 
     Q_OBJECT
 

@@ -18,8 +18,6 @@
 
 #include "kis_layermap_visitor.h"
 
-#include <kis_layermap_visitor.h>
-
 #include <KoShape.h>
 #include <KoShapeContainer.h>
 
@@ -46,8 +44,8 @@
 #include "kis_mask_shape.h"
 
 
-KisLayerMapVisitor::KisLayerMapVisitor( QMap<KisNodeSP, KoShape*> & nodeMap )
-    : m_nodeMap( nodeMap )
+KisLayerMapVisitor::KisLayerMapVisitor(QMap<KisNodeSP, KoShape*> & nodeMap)
+        : m_nodeMap(nodeMap)
 {
 }
 
@@ -57,99 +55,99 @@ QMap<KisNodeSP, KoShape*> & KisLayerMapVisitor::layerMap()
 }
 
 
-bool KisLayerMapVisitor::visit( KisExternalLayer * layer)
+bool KisLayerMapVisitor::visit(KisExternalLayer * layer)
 {
-        KisShapeLayer * layerShape = dynamic_cast<KisShapeLayer*>( layer );
-        if ( !layerShape ) {
-            return false;
-        }
-
-        m_nodeMap[layer] = layerShape;
-        visitAll( layer );
-        return true;
+    KisShapeLayer * layerShape = dynamic_cast<KisShapeLayer*>(layer);
+    if (!layerShape) {
+        return false;
     }
+
+    m_nodeMap[layer] = layerShape;
+    visitAll(layer);
+    return true;
+}
 
 bool KisLayerMapVisitor::visit(KisPaintLayer *layer)
 {
-    return visitLeafNodeLayer( layer );
+    return visitLeafNodeLayer(layer);
 }
 
 bool KisLayerMapVisitor::visit(KisGeneratorLayer * layer)
 {
-    return visitLeafNodeLayer( layer );
+    return visitLeafNodeLayer(layer);
 }
 
 bool KisLayerMapVisitor::visit(KisGroupLayer *layer)
 {
     KoShapeContainer * parent = 0;
-    if ( m_nodeMap.contains( layer->parent() ) ) {
-        parent = static_cast<KoShapeContainer*>( m_nodeMap[layer->parent()] );
+    if (m_nodeMap.contains(layer->parent())) {
+        parent = static_cast<KoShapeContainer*>(m_nodeMap[layer->parent()]);
     }
 
     KisLayerContainerShape * layerContainer = new KisLayerContainerShape(parent, layer);
     m_nodeMap[layer] = layerContainer;
-    visitAll( layer );
+    visitAll(layer);
 
     return true;
 }
 
 bool KisLayerMapVisitor::visit(KisAdjustmentLayer *layer)
 {
-    return visitLeafNodeLayer( layer );
+    return visitLeafNodeLayer(layer);
 }
 
 bool KisLayerMapVisitor::visit(KisCloneLayer *layer)
 {
-    return visitLeafNodeLayer( layer );
+    return visitLeafNodeLayer(layer);
 }
 
 bool KisLayerMapVisitor::visit(KisFilterMask *mask)
 {
-    return visitMask( mask );
+    return visitMask(mask);
 }
 
 bool KisLayerMapVisitor::visit(KisTransparencyMask *mask)
 {
-    return visitMask( mask );
+    return visitMask(mask);
 }
 
 bool KisLayerMapVisitor::visit(KisTransformationMask *mask)
 {
-    return visitMask( mask );
+    return visitMask(mask);
 }
 
 bool KisLayerMapVisitor::visit(KisSelectionMask *mask)
 {
-    return visitMask( mask );
+    return visitMask(mask);
 }
 
-bool KisLayerMapVisitor::visitLeafNodeLayer( KisLayer * layer )
+bool KisLayerMapVisitor::visitLeafNodeLayer(KisLayer * layer)
 {
     // Leaf layers can always have masks as subnodes
 
-    Q_ASSERT( layer->parent() );
-    Q_ASSERT( m_nodeMap.contains( layer->parent() ) );
+    Q_ASSERT(layer->parent());
+    Q_ASSERT(m_nodeMap.contains(layer->parent()));
 
-    if ( m_nodeMap.contains( layer->parent() ) ) {
-        KoShapeContainer * parent = static_cast<KoShapeContainer*>( m_nodeMap[layer->parent()] );
-        KisLayerShape * layerShape = new KisLayerShape( parent, layer );
+    if (m_nodeMap.contains(layer->parent())) {
+        KoShapeContainer * parent = static_cast<KoShapeContainer*>(m_nodeMap[layer->parent()]);
+        KisLayerShape * layerShape = new KisLayerShape(parent, layer);
         m_nodeMap[layer] = layerShape;
-        visitAll( layer );
+        visitAll(layer);
         return true;
     }
     return false;
 }
 
-bool KisLayerMapVisitor::visitMask( KisMask * mask )
+bool KisLayerMapVisitor::visitMask(KisMask * mask)
 {
     // Masks cannot be nested
 
-    Q_ASSERT( mask->parent() );
-    Q_ASSERT( m_nodeMap.contains( mask->parent() ) );
+    Q_ASSERT(mask->parent());
+    Q_ASSERT(m_nodeMap.contains(mask->parent()));
 
-    if ( m_nodeMap.contains( mask->parent() ) ) {
-        KoShapeContainer * parent = static_cast<KoShapeContainer*>( m_nodeMap[mask->parent()] );
-        KisMaskShape * maskShape = new KisMaskShape( parent, mask );
+    if (m_nodeMap.contains(mask->parent())) {
+        KoShapeContainer * parent = static_cast<KoShapeContainer*>(m_nodeMap[mask->parent()]);
+        KisMaskShape * maskShape = new KisMaskShape(parent, mask);
         m_nodeMap[mask] = maskShape;
         return true;
     }

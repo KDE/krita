@@ -32,13 +32,13 @@
 
 #include <kis_image.h>
 
-DlgCompose::DlgCompose( KisImageSP image, QWidget *  parent )
-    : KDialog (parent),
-      m_image(image)
+DlgCompose::DlgCompose(KisImageSP image, QWidget *  parent)
+        : KDialog(parent),
+        m_image(image)
 {
-    setCaption( i18n("compose Layer") );
-    setButtons(  Ok | Cancel );
-    setDefaultButton( Ok );
+    setCaption(i18n("compose Layer"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
 
     m_page = new WdgCompose(this);
     Q_CHECK_PTR(m_page);
@@ -46,7 +46,7 @@ DlgCompose::DlgCompose( KisImageSP image, QWidget *  parent )
     resize(m_page->sizeHint());
 
     connect(this, SIGNAL(okClicked()),
-        this, SLOT(okClicked()));
+            this, SLOT(okClicked()));
 }
 
 DlgCompose::~DlgCompose()

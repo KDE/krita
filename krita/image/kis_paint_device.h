@@ -62,11 +62,11 @@ typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
  * when pixels are accessed by an iterator.
  */
 class KRITAIMAGE_EXPORT KisPaintDevice
-    : public QObject
-    , public KisShared
+            : public QObject
+            , public KisShared
 {
 
-        Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -140,14 +140,13 @@ public:
      * For instance, the tiled datamanager keeps the extent to the nearest
      * multiple of 64.
      */
-    void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
-        {
-            QRect rc = extent();
-            x = rc.x();
-            y = rc.y();
-            w = rc.width();
-            h = rc.height();
-        }
+    void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const {
+        QRect rc = extent();
+        x = rc.x();
+        y = rc.y();
+        w = rc.width();
+        h = rc.height();
+    }
 
     virtual QRect extent() const;
 
@@ -156,14 +155,13 @@ public:
      * Get the exact bounds of this paint device. This may be very slow,
      * especially on larger paint devices because it does a linear scanline search.
      */
-    void exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
-        {
-            QRect rc = exactBounds();
-            x = rc.x();
-            y = rc.y();
-            w = rc.width();
-            h = rc.height();
-        }
+    void exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const {
+        QRect rc = exactBounds();
+        x = rc.x();
+        y = rc.y();
+        w = rc.width();
+        h = rc.height();
+    }
 
 
     virtual QRect exactBounds() const;
@@ -198,7 +196,7 @@ public:
      * Clear the given rectangle to transparent black. This does not take the selection
      * into account.
      */
-    void clear( const QRect & rc );
+    void clear(const QRect & rc);
 
     /**
      * Fill the given rectangle with the given pixel. This does not take the
@@ -261,7 +259,7 @@ public:
      * paint device. If the specified area is larger than the paint
      * device's extent, the default pixel will be read.
      */
-    QVector<quint8*> readPlanarBytes( qint32 x, qint32 y, qint32 w, qint32 h);
+    QVector<quint8*> readPlanarBytes(qint32 x, qint32 y, qint32 w, qint32 h);
 
     /**
      * Write the data in the separate arrays to the channes. If there
@@ -276,7 +274,7 @@ public:
      *
      * XXX: what about undo?
      */
-    void writePlanarBytes( QVector<quint8*> planes, qint32 x, qint32 y, qint32 w, qint32 h);
+    void writePlanarBytes(QVector<quint8*> planes, qint32 x, qint32 y, qint32 w, qint32 h);
 
 
     /**
@@ -440,7 +438,7 @@ public:
      *  Add the specified region to the parent layer's dirty region
      *  (if there is a parent layer)
      */
-    virtual void setDirty( const QRegion & region );
+    virtual void setDirty(const QRegion & region);
 
     /**
      *  Set the parent layer completely dirty, if this paint device has
@@ -451,11 +449,11 @@ public:
     /**
      * Mirror the device along the X axis
      */
-    void mirrorX( KisSelection * selection = 0);
+    void mirrorX(KisSelection * selection = 0);
     /**
      * Mirror the device along the Y axis
      */
-    void mirrorY( KisSelection * selection = 0);
+    void mirrorY(KisSelection * selection = 0);
 
     /**
      * Create an iterator over a rectangle section of a paint device, the path followed by
@@ -526,11 +524,11 @@ public:
      * This function create a random accessor which can easily access to sub pixel values.
      * @param selection an up-to-date selection that has the same origin as the paint device
      */
-    KisRandomSubAccessorPixel createRandomSubAccessor( const KisSelection * selection = 0) const;
+    KisRandomSubAccessorPixel createRandomSubAccessor(const KisSelection * selection = 0) const;
 
 
     /** Clear the selected pixels from the paint device */
-    void clearSelection( KisSelectionSP selection);
+    void clearSelection(KisSelectionSP selection);
 
     /**
      * Apply a mask to the image data, i.e. multiply each pixel's opacity by its

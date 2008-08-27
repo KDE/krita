@@ -34,7 +34,8 @@ class QDomDocument;
  * KisPropertiesConfiguration is a map-based properties class that can be serialized
  * and deserialized.
  */
-class KRITAIMAGE_EXPORT KisPropertiesConfiguration : public KisSerializableConfiguration {
+class KRITAIMAGE_EXPORT KisPropertiesConfiguration : public KisSerializableConfiguration
+{
 
 public:
 
@@ -92,7 +93,7 @@ public:
     int getInt(const QString & name, int def = 0) const;
     double getDouble(const QString & name, double def = 0.0) const;
     bool getBool(const QString & name, bool def = false) const;
-    QString getString(const QString & name, const QString & def = QString::null) const;
+    QString getString(const QString & name, const QString & def = "") const;
 
     QMap<QString, QVariant> getProperties() const;
 
@@ -106,7 +107,8 @@ private:
     Private* const d;
 };
 
-class KRITAIMAGE_EXPORT KisPropertiesConfigurationFactory : public KisSerializableConfigurationFactory {
+class KRITAIMAGE_EXPORT KisPropertiesConfigurationFactory : public KisSerializableConfigurationFactory
+{
 public:
     KisPropertiesConfigurationFactory();
     virtual ~KisPropertiesConfigurationFactory();

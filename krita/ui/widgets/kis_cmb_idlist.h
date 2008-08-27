@@ -37,7 +37,7 @@ class KRITAUI_EXPORT KisCmbIDList : public KComboBox
 
 public:
 
-    KisCmbIDList(QWidget * parent = 0, const char * name = 0 );
+    KisCmbIDList(QWidget * parent = 0, const char * name = 0);
     virtual ~KisCmbIDList();
 
 

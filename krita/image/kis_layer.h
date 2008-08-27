@@ -39,8 +39,9 @@ class KoCompositeOp;
 class KisGroupLayer;
 class KisNodeVisitor;
 
-namespace KisMetaData {
-    class Store;
+namespace KisMetaData
+{
+class Store;
 }
 
 /**
@@ -99,7 +100,7 @@ public:
     virtual KisSelectionSP selection() const;
 
     virtual KoDocumentSectionModel::PropertyList sectionModelProperties() const;
-    virtual void setSectionModelProperties( const KoDocumentSectionModel::PropertyList &properties  );
+    virtual void setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties);
 
     /**
      * set the channelflags for this layer to the specified bit array.
@@ -107,7 +108,7 @@ public:
      * the colorspace this layer is in, or be empty, in which case all
      * channels are active.
      */
-    void setChannelFlags( const QBitArray & channelFlags );
+    void setChannelFlags(const QBitArray & channelFlags);
 
     /**
      * Return a bit array where each bit indicates whether a
@@ -195,7 +196,7 @@ public:
     /**
      * Set a temporary effect mask on this layer for filter previews.
      */
-    void setPreviewMask( KisEffectMaskSP mask );
+    void setPreviewMask(KisEffectMaskSP mask);
 
     /**
      * Retrieve the current preview effect mask
@@ -219,7 +220,7 @@ protected:
      * Apply the effect masks to the given projection, producing
      * finally the dst paint device.
      */
-    void applyEffectMasks( KisPaintDeviceSP projection, const QRect & rc );
+    void applyEffectMasks(KisPaintDeviceSP projection, const QRect & rc);
 
 private:
     class Private;
@@ -233,7 +234,8 @@ private:
  * XXX: Name doesn't suggest an object -- is KisIndirectPaintingLayer
  * a better name? (BSAR)
  */
-class KRITAIMAGE_EXPORT KisIndirectPaintingSupport {
+class KRITAIMAGE_EXPORT KisIndirectPaintingSupport
+{
 
 public:
 
@@ -259,6 +261,6 @@ private:
 
 };
 
-Q_DECLARE_METATYPE( KisLayerSP )
+Q_DECLARE_METATYPE(KisLayerSP)
 
 #endif // KIS_LAYER_H_

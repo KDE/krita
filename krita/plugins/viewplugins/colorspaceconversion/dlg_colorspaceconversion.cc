@@ -38,13 +38,13 @@
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"// TODO: add a label that would display if there isn't a good color conversion path (use KoColorConversionSystem::isGoodPath), all color spaces shiped with KOffice are expected to have a good path, but better warn the user in case
 
-DlgColorSpaceConversion::DlgColorSpaceConversion( QWidget *  parent,
-                          const char * name)
-    : super (parent)
+DlgColorSpaceConversion::DlgColorSpaceConversion(QWidget *  parent,
+        const char * name)
+        : super(parent)
 {
-    setCaption( i18n("Image Size") );
-    setButtons(  Ok | Cancel);
-    setDefaultButton( Ok );
+    setCaption(i18n("Image Size"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
     setObjectName(name);
     m_page = new WdgConvertColorSpace(this);
     Q_CHECK_PTR(m_page);
@@ -63,11 +63,11 @@ DlgColorSpaceConversion::DlgColorSpaceConversion( QWidget *  parent,
     m_intentButtonGroup.addButton(m_page->radioSaturation, KoColorConversionTransformation::IntentSaturation);
 
     connect(m_page->cmbColorSpaces, SIGNAL(activated(const KoID &)),
-        this, SLOT(fillCmbDestProfile(const KoID &)));
+            this, SLOT(fillCmbDestProfile(const KoID &)));
 
 
     connect(this, SIGNAL(okClicked()),
-        this, SLOT(okClicked()));
+            this, SLOT(okClicked()));
 
 }
 
@@ -90,7 +90,7 @@ void DlgColorSpaceConversion::fillCmbDestProfile(const KoID & s)
 
     QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(s);
 
-    foreach (const KoColorProfile *profile, profileList) {
+    foreach(const KoColorProfile *profile, profileList) {
         m_page->cmbDestProfile->addSqueezedItem(profile->name());
 
     }

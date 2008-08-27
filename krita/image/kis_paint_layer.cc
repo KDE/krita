@@ -54,8 +54,8 @@ public:
 };
 
 KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
-    : KisLayer(img, name, opacity)
-    , m_d( new Private() )
+        : KisLayer(img, name, opacity)
+        , m_d(new Private())
 {
     Q_ASSERT(img);
     Q_ASSERT(dev);
@@ -66,8 +66,8 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
 
 
 KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity)
-    : KisLayer(img, name, opacity)
-    , m_d( new Private() )
+        : KisLayer(img, name, opacity)
+        , m_d(new Private())
 {
     Q_ASSERT(img);
     m_d->paintDevice = new KisPaintDevice(this, img->colorSpace(), name);
@@ -75,23 +75,23 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
 }
 
 KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, const KoColorSpace * colorSpace)
-    : KisLayer(img, name, opacity)
-    , m_d( new Private() )
+        : KisLayer(img, name, opacity)
+        , m_d(new Private())
 {
 //     Q_ASSERT(img);
-    if ( colorSpace == 0 )
+    if (colorSpace == 0)
         colorSpace = img->colorSpace();
-    Q_ASSERT( colorSpace );
+    Q_ASSERT(colorSpace);
     m_d->paintDevice = new KisPaintDevice(this, colorSpace, name);
     init();
 }
 
 KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
-    : KisLayer(rhs)
-    , KisIndirectPaintingSupport(rhs)
-    , m_d (new Private)
+        : KisLayer(rhs)
+        , KisIndirectPaintingSupport(rhs)
+        , m_d(new Private)
 {
-    m_d->paintDevice = new KisPaintDevice( *rhs.m_d->paintDevice.data() );
+    m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
     init();
 }
 
@@ -100,24 +100,24 @@ KisPaintLayer::~KisPaintLayer()
     delete m_d;
 }
 
-bool KisPaintLayer::allowAsChild( KisNodeSP node) const
+bool KisPaintLayer::allowAsChild(KisNodeSP node) const
 {
-    if ( node->inherits( "KisMask" ) )
-       return true;
+    if (node->inherits("KisMask"))
+        return true;
     else
         return false;
 }
 
 void KisPaintLayer::init()
 {
-    connect( m_d->paintDevice.data(), SIGNAL( colorSpaceChanged( const KoColorSpace* ) ), this, SLOT( slotColorSpaceChanged() ) );
-    connect( m_d->paintDevice.data(), SIGNAL( profileChanged( const KoColorProfile* ) ), this, SLOT( slotColorSpaceChanged() ) );
+    connect(m_d->paintDevice.data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SLOT(slotColorSpaceChanged()));
+    connect(m_d->paintDevice.data(), SIGNAL(profileChanged(const KoColorProfile*)), this, SLOT(slotColorSpaceChanged()));
 }
 
 
 KisPaintDeviceSP KisPaintLayer::projection() const
 {
-    if ( !hasEffectMasks() )
+    if (!hasEffectMasks())
         return m_d->paintDevice;
     else {
         return m_d->projection;
@@ -126,22 +126,21 @@ KisPaintDeviceSP KisPaintLayer::projection() const
 
 void KisPaintLayer::updateProjection(const QRect & rc)
 {
-    if ( !rc.isValid() ) return ;
-    if ( !hasEffectMasks() ) return;
-    if ( !m_d->paintDevice ) return;
+    if (!rc.isValid()) return ;
+    if (!hasEffectMasks()) return;
+    if (!m_d->paintDevice) return;
 
     dbgImage << name() << ": updateProjection " << rc;
 
-    if ( !m_d->projection ) {
-        m_d->projection = new KisPaintDevice( *m_d->paintDevice );
-    }
-    else {
-        KisPainter gc( m_d->projection );
-        gc.setCompositeOp( colorSpace()->compositeOp( COMPOSITE_COPY ) );
-        gc.bitBlt( rc.topLeft(), m_d->paintDevice, rc);
+    if (!m_d->projection) {
+        m_d->projection = new KisPaintDevice(*m_d->paintDevice);
+    } else {
+        KisPainter gc(m_d->projection);
+        gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
+        gc.bitBlt(rc.topLeft(), m_d->paintDevice, rc);
     }
 
-    applyEffectMasks( m_d->projection, rc );
+    applyEffectMasks(m_d->projection, rc);
 }
 
 
@@ -154,7 +153,7 @@ KoDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() con
 {
     KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
     l << KoDocumentSectionModel::Property(i18n("ColorSpace"), m_d->paintDevice->colorSpace()->name());
-    if( const KoColorProfile *profile = m_d->paintDevice->colorSpace()->profile() )
+    if (const KoColorProfile *profile = m_d->paintDevice->colorSpace()->profile())
         l << KoDocumentSectionModel::Property(i18n("Profile"), profile->name());
     return l;
 }
@@ -212,25 +211,29 @@ void KisPaintLayer::setX(qint32 x)
         m_d->paintDevice->setX(x);
 }
 
-qint32 KisPaintLayer::y() const {
+qint32 KisPaintLayer::y() const
+{
     if (m_d->paintDevice)
         return m_d->paintDevice->y();
     else
         return 0;
 }
-void KisPaintLayer::setY(qint32 y) {
+void KisPaintLayer::setY(qint32 y)
+{
     if (m_d->paintDevice)
         m_d->paintDevice->setY(y);
 }
 
-QRect KisPaintLayer::extent() const {
+QRect KisPaintLayer::extent() const
+{
     if (m_d->paintDevice)
         return m_d->paintDevice->extent();
     else
         return QRect();
 }
 
-QRect KisPaintLayer::exactBounds() const {
+QRect KisPaintLayer::exactBounds() const
+{
     if (m_d->paintDevice)
         return m_d->paintDevice->exactBounds();
     else

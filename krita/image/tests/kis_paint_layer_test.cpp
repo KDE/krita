@@ -37,51 +37,51 @@
 void KisPaintLayerTest::testProjection()
 {
 
-    QImage qimg( QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QImage qimg(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
     KisImageSP image = new KisImage(0, qimg.width(), qimg.height(), cs, "merge test");
     image->lock(); // We'll call for recomposition ourselves
-    
-    KisPaintLayerSP layer = new KisPaintLayer( image, "test", OPACITY_OPAQUE );
-    layer->paintDevice()->convertFromQImage( qimg, 0, 0, 0 );
-    image->addNode( layer.data() );
+
+    KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE);
+    layer->paintDevice()->convertFromQImage(qimg, 0, 0, 0);
+    image->addNode(layer.data());
 
     // Make sure the projection and the paint device are the same -- we don't have masks yet
-    QVERIFY( layer->paintDevice().data() == layer->projection().data() );
+    QVERIFY(layer->paintDevice().data() == layer->projection().data());
 
     KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
-    image->addNode( transparencyMask.data(), layer.data() );
+    image->addNode(transparencyMask.data(), layer.data());
 
     // Now there are masks. Verify that
-    Q_ASSERT( layer->hasEffectMasks() );
+    Q_ASSERT(layer->hasEffectMasks());
 
     // Which also means that the projection is no longer the paint device
-    QVERIFY( layer->paintDevice().data() != layer->projection().data() );
+    QVERIFY(layer->paintDevice().data() != layer->projection().data());
 
     // And the projection is still 0, because we've updated it
-    QVERIFY( layer->projection().data() == 0 );
+    QVERIFY(layer->projection().data() == 0);
 
     // And now we're going to update the projection, but nothing is dirty yet
-    layer->updateProjection( qimg.rect() );
+    layer->updateProjection(qimg.rect());
 
     // Which also means that the projection is no longer the paint device
-    QVERIFY( layer->paintDevice().data() != layer->projection().data() );
+    QVERIFY(layer->paintDevice().data() != layer->projection().data());
 
     // Now the machinery will start to roll
-    layer->setDirty( qimg.rect() );
+    layer->setDirty(qimg.rect());
 
     // And now we're going to update the projection, but nothing is dirty yet
-    layer->updateProjection( qimg.rect() );
+    layer->updateProjection(qimg.rect());
 
     // Which also means that the projection is no longer the paint device
-    QVERIFY( layer->paintDevice().data() != layer->projection().data() );
+    QVERIFY(layer->paintDevice().data() != layer->projection().data());
 
     // And the projection is no longer 0, because while we've updated it, nothing is dirty,
     // so nothing gets updated
-    QVERIFY( layer->projection().data() != 0 );
+    QVERIFY(layer->projection().data() != 0);
 
     // The selection is initially empty, so after an update, all pixels are still visible
-    layer->updateProjection( qimg.rect() );
+    layer->updateProjection(qimg.rect());
 
     // By default a new transparency mask blanks out the entire layer (photoshop mode "hide all")
     KisRectConstIterator it = layer->projection()->createRectConstIterator(0, 0, qimg.width(), qimg.height());
@@ -91,15 +91,15 @@ void KisPaintLayerTest::testProjection()
     }
 
     // Now fill the layer with some opaque pixels
-    transparencyMask->select( qimg.rect() );
-    transparencyMask->setDirty( qimg.rect() );
+    transparencyMask->select(qimg.rect());
+    transparencyMask->setDirty(qimg.rect());
     layer->updateProjection(qimg.rect());
-    
+
     layer->projection()->convertToQImage(0, 0, 0, qimg.width(), qimg.height()).save("aaa.png");
     // Nothing is transparent anymore, so the projection and the paint device should be identical again
     QPoint errpoint;
-    if ( !TestUtil::compareQImages( errpoint, qimg, layer->projection()->convertToQImage(0, 0, 0, qimg.width(), qimg.height() ) ) ) {
-        QFAIL( QString( "Failed to create identical image, first different pixel: %1,%2 " ).arg( errpoint.x() ).arg( errpoint.y() ).toAscii() );
+    if (!TestUtil::compareQImages(errpoint, qimg, layer->projection()->convertToQImage(0, 0, 0, qimg.width(), qimg.height()))) {
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
     }
 
 }

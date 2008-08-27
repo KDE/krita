@@ -32,23 +32,34 @@ class QLabel;
 class QPointF;
 class KisPainter;
 class KCurve;
-namespace Ui { class WdgBrushCurveControl; }
+namespace Ui
+{
+class WdgBrushCurveControl;
+}
 
-class KisComplexOpFactory : public KisPaintOpFactory  {
+class KisComplexOpFactory : public KisPaintOpFactory
+{
 
 public:
     KisComplexOpFactory() {}
     virtual ~KisComplexOpFactory() {}
 
     virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
-    virtual QString id() const { return "paintcomplex"; }
-    virtual QString name() const { return i18n("Complex Brush"); }
-    virtual QString pixmap() { return ""; }
+    virtual QString id() const {
+        return "paintcomplex";
+    }
+    virtual QString name() const {
+        return i18n("Complex Brush");
+    }
+    virtual QString pixmap() {
+        return "";
+    }
     virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
 };
 
-class KisComplexOpSettings : public QObject, public KisPaintOpSettings {
+class KisComplexOpSettings : public QObject, public KisPaintOpSettings
+{
     Q_OBJECT
 
 public:
@@ -59,14 +70,28 @@ public:
     bool varyOpacity() const;
     bool varyDarken() const;
 
-    bool customSize() const { return m_customSize; }
-    bool customOpacity() const { return m_customOpacity; }
-    bool customDarken() const { return m_customDarken; }
-    const double* sizeCurve() const { return m_sizeCurve; }
-    const double* opacityCurve() const { return m_opacityCurve; }
-    const double* darkenCurve() const { return m_darkenCurve; }
+    bool customSize() const {
+        return m_customSize;
+    }
+    bool customOpacity() const {
+        return m_customOpacity;
+    }
+    bool customDarken() const {
+        return m_customDarken;
+    }
+    const double* sizeCurve() const {
+        return m_sizeCurve;
+    }
+    const double* opacityCurve() const {
+        return m_opacityCurve;
+    }
+    const double* darkenCurve() const {
+        return m_darkenCurve;
+    }
 
-    virtual QWidget *widget() const { return m_optionsWidget; }
+    virtual QWidget *widget() const {
+        return m_optionsWidget;
+    }
 
     virtual void fromXML(const QDomElement&);
     virtual void toXML(QDomDocument&, QDomElement&) const;
@@ -93,7 +118,8 @@ private:
     double m_darkenCurve[256];
 };
 
-class KisComplexOp : public KisBrushBasedPaintOp {
+class KisComplexOp : public KisBrushBasedPaintOp
+{
 
 public:
 

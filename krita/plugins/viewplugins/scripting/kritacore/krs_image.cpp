@@ -37,9 +37,9 @@
 using namespace Scripting;
 
 Image::Image(Module* module, KisImageSP image, KisDoc2* doc)
-    : QObject(module)
-    , m_image(image)
-    , m_doc(doc)
+        : QObject(module)
+        , m_image(image)
+        , m_doc(doc)
 {
     setObjectName("KritaImage");
 }
@@ -66,8 +66,7 @@ QString Image::colorSpaceId() const
 bool Image::convertToColorSpace(const QString& colorspacename)
 {
     const KoColorSpace * dstCS = KoColorSpaceRegistry::instance()->colorSpace(colorspacename, 0);
-    if(!dstCS)
-    {
+    if (!dstCS) {
         kWarning(41011) << QString("ColorSpace %1 is not available, please check your installation.").arg(colorspacename);
         return false;
     }
@@ -77,12 +76,12 @@ bool Image::convertToColorSpace(const QString& colorspacename)
 
 void Image::resize(int width, int height, int x, int y)
 {
-    m_image->resize( width, height, x, y );
+    m_image->resize(width, height, x, y);
 }
 
 void Image::scale(double widthfactor, double heightfactor)
 {
-    m_image->scale( widthfactor, heightfactor, 0, KisFilterStrategyRegistry::instance()->value( "Mitchell") );
+    m_image->scale(widthfactor, heightfactor, 0, KisFilterStrategyRegistry::instance()->value("Mitchell"));
 }
 
 void Image::rotate(double angle)
@@ -105,10 +104,10 @@ QObject* Image::createPaintLayer(const QString& name, int opacity, const QString
     opacity = CLAMP(opacity, 0, 255);
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(colorspacename, 0);
     KisPaintLayerSP layer = cs ? new KisPaintLayer(m_image.data(), name, opacity, cs)
-                              : new KisPaintLayer(m_image.data(), name, opacity);
+                            : new KisPaintLayer(m_image.data(), name, opacity);
     layer->setVisible(true);
     m_image->addNode(layer.data(), m_image->rootLayer().data());
-    return new PaintLayer( layer, m_doc);
+    return new PaintLayer(layer, m_doc);
 }
 
 #include "krs_image.moc"

@@ -19,12 +19,11 @@
 */
 
 #include "kis_tilediterator.h"
-#include <kis_debug.h>
 
 #include "kis_debug.h"
 
 
-KisTiledIterator::KisTiledIterator( KisTiledDataManager *ndevice)
+KisTiledIterator::KisTiledIterator(KisTiledDataManager *ndevice)
 {
     Q_ASSERT(ndevice != 0);
     m_ktm = ndevice;
@@ -37,7 +36,7 @@ KisTiledIterator::KisTiledIterator( KisTiledDataManager *ndevice)
     m_oldTile = 0;
 }
 
-KisTiledIterator::~KisTiledIterator( )
+KisTiledIterator::~KisTiledIterator()
 {
     if (m_tile)
         m_tile->removeReader();
@@ -46,7 +45,7 @@ KisTiledIterator::~KisTiledIterator( )
 }
 
 KisTiledIterator::KisTiledIterator(const KisTiledIterator& rhs)
-    : KisShared()
+        : KisShared()
 {
     if (this != &rhs) {
         m_ktm = rhs.m_ktm;
@@ -68,7 +67,7 @@ KisTiledIterator::KisTiledIterator(const KisTiledIterator& rhs)
     }
 }
 
-KisTiledIterator& KisTiledIterator::operator=(const KisTiledIterator& rhs)
+KisTiledIterator& KisTiledIterator::operator=(const KisTiledIterator & rhs)
 {
     if (this != &rhs) {
         if (m_tile)

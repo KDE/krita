@@ -49,7 +49,7 @@ public:
      * @param name the proposed name for this layer
      * @param parent the widget parent of this dialog
      */
-    KisDlgGeneratorLayer( const QString & name, QWidget *parent = 0 );
+    KisDlgGeneratorLayer(const QString & name, QWidget *parent = 0);
 
     void setConfiguration(KisFilterConfiguration * config);
     KisFilterConfiguration * configuration() const;
@@ -57,7 +57,7 @@ public:
 
 protected slots:
 
-    void slotNameChanged( const QString & );
+    void slotNameChanged(const QString &);
 
 private:
 

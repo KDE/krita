@@ -30,15 +30,19 @@ typedef KoXyzTraits<float> XyzF32Traits;
 class KisXyzF32HDRColorSpace : public KisXyzFloatHDRColorSpace<XyzF32Traits>
 {
 public:
-    KisXyzF32HDRColorSpace( const KoCtlColorProfile *p);
+    KisXyzF32HDRColorSpace(const KoCtlColorProfile *p);
 
-    virtual KoID colorModelId() const { return XYZAColorModelID; }
-    virtual KoID colorDepthId() const { return Float32BitsColorDepthID; }
-   /**
-     * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter 
-     * to the KoColorSpaceRegistry::colorSpace() functions to obtain this colorspace.
-     * This is the value that the member function id() returns.
-     */
+    virtual KoID colorModelId() const {
+        return XYZAColorModelID;
+    }
+    virtual KoID colorDepthId() const {
+        return Float32BitsColorDepthID;
+    }
+    /**
+      * The ID that identifies this colorspace. Pass this as the colorSpaceId parameter
+      * to the KoColorSpaceRegistry::colorSpace() functions to obtain this colorspace.
+      * This is the value that the member function id() returns.
+      */
     static QString colorSpaceId();
     virtual KoColorSpace* clone() const;
 };
@@ -52,24 +56,41 @@ public:
      * Krita definition for use in .kra files and internally: unchanging name +
      * i18n'able description.
      */
-    virtual QString id() const { return KisXyzF32HDRColorSpace::colorSpaceId(); }
-    virtual QString name() const { return i18n("XYZ (32-bit float/channel) for High Dynamic Range imaging"); }
-    virtual KoID colorModelId() const { return XYZAColorModelID; }
-    virtual KoID colorDepthId() const { return Float32BitsColorDepthID; }
-    virtual bool userVisible() const { return true; }
-    
-    virtual int referenceDepth() const { return 32; }
-    virtual QString colorSpaceEngine() const { return ""; }
-    virtual bool isHdr() const { return true; }
-    virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(const QString& profileName) const
-    {
+    virtual QString id() const {
+        return KisXyzF32HDRColorSpace::colorSpaceId();
+    }
+    virtual QString name() const {
+        return i18n("XYZ (32-bit float/channel) for High Dynamic Range imaging");
+    }
+    virtual KoID colorModelId() const {
+        return XYZAColorModelID;
+    }
+    virtual KoID colorDepthId() const {
+        return Float32BitsColorDepthID;
+    }
+    virtual bool userVisible() const {
+        return true;
+    }
+
+    virtual int referenceDepth() const {
+        return 32;
+    }
+    virtual QString colorSpaceEngine() const {
+        return "";
+    }
+    virtual bool isHdr() const {
+        return true;
+    }
+    virtual KoColorConversionTransformationFactory* createICCColorConversionTransformationFactory(const QString& profileName) const {
         Q_UNUSED(profileName);
         return 0;
     }
 
-    virtual KoColorSpace *createColorSpace( const KoColorProfile * p) const;
+    virtual KoColorSpace *createColorSpace(const KoColorProfile * p) const;
     virtual bool profileIsCompatible(const KoColorProfile* profile) const;
-    QString defaultProfile() const { return "Standard XYZ"; }
+    QString defaultProfile() const {
+        return "Standard XYZ";
+    }
 };
 
 #endif

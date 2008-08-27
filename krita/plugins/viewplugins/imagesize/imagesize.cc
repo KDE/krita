@@ -60,30 +60,29 @@
 #include "kis_filter_strategy.h"
 
 typedef KGenericFactory<ImageSize> ImageSizeFactory;
-K_EXPORT_COMPONENT_FACTORY( kritaimagesize, ImageSizeFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritaimagesize, ImageSizeFactory("krita"))
 
 ImageSize::ImageSize(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
-    if ( parent->inherits("KisView2") )
-    {
+    if (parent->inherits("KisView2")) {
         setComponentData(ImageSizeFactory::componentData());
 
-        setXMLFile(KStandardDirs::locate("data","kritaplugins/imagesize.rc"), true);
+        setXMLFile(KStandardDirs::locate("data", "kritaplugins/imagesize.rc"), true);
 
         KAction *action  = new KAction(i18n("Scale To New Size..."), this);
-        actionCollection()->addAction("imagesize", action );
-        action->setShortcut(QKeySequence(Qt::SHIFT+Qt::Key_S));
+        actionCollection()->addAction("imagesize", action);
+        action->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_S));
         connect(action, SIGNAL(triggered()), this, SLOT(slotImageSize()));
 
-    action  = new KAction(i18n("Scale &Layer..."), this);
-    actionCollection()->addAction("layersize", action );
+        action  = new KAction(i18n("Scale &Layer..."), this);
+        actionCollection()->addAction("layersize", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotLayerSize()));
 
         m_view = (KisView2*) parent;
         // Selection manager takes ownership?
-    action  = new KAction(i18n("&Scale Selection..."), this);
-    actionCollection()->addAction("selectionscale", action );
+        action  = new KAction(i18n("&Scale Selection..."), this);
+        actionCollection()->addAction("selectionscale", action);
         Q_CHECK_PTR(action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotSelectionScale()));
 
@@ -115,9 +114,9 @@ void ImageSize::slotImageSize()
 
         image->setResolution(res, res);
 
-        if(w !=image->width() || h != image->height())
+        if (w != image->width() || h != image->height())
             m_view->imageManager()->scaleCurrentImage((double)w / ((double)(image->width())),
-                        (double)h / ((double)(image->height())), dlgImageSize->filterType());
+                    (double)h / ((double)(image->height())), dlgImageSize->filterType());
     }
 
     delete dlgImageSize;
@@ -179,18 +178,18 @@ void ImageSize::slotSelectionScale()
     dlgSize->setWidth(rc.width());
     dlgSize->setHeight(rc.height());
 
-    KoProgressUpdater pu( m_view->statusBar()->progress() );
+    KoProgressUpdater pu(m_view->statusBar()->progress());
     KoUpdater u = pu.startSubtask();
 
     if (dlgSize->exec() == QDialog::Accepted) {
         qint32 w = dlgSize->width();
         qint32 h = dlgSize->height();
-        KisTransformWorker worker( selection.data(),
-                (double)w / ((double)(rc.width())),
-                (double)h / ((double)(rc.height())),
-                0, 0, 0.0, 0, 0, &u,
-                dlgSize->filterType()
-                );
+        KisTransformWorker worker(selection.data(),
+                                  (double)w / ((double)(rc.width())),
+                                  (double)h / ((double)(rc.height())),
+                                  0, 0, 0.0, 0, 0, &u,
+                                  dlgSize->filterType()
+                                 );
         worker.run();
     }
     delete dlgSize;

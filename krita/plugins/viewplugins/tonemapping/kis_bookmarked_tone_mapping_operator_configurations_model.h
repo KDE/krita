@@ -24,14 +24,15 @@
 class KisToneMappingOperator;
 class KisPropertiesConfiguration;
 
-class  KisBookmarkedToneMappingOperatorConfigurationsModel : public KisBookmarkedConfigurationsModel {
-    public:
-        KisBookmarkedToneMappingOperatorConfigurationsModel(KisPaintDeviceSP thumb, KisToneMappingOperator* op);
-        ~KisBookmarkedToneMappingOperatorConfigurationsModel();
-        KisPropertiesConfiguration* configuration(const QModelIndex &index) const;
-    private:
-        struct Private;
-        Private* const d;
+class  KisBookmarkedToneMappingOperatorConfigurationsModel : public KisBookmarkedConfigurationsModel
+{
+public:
+    KisBookmarkedToneMappingOperatorConfigurationsModel(KisPaintDeviceSP thumb, KisToneMappingOperator* op);
+    ~KisBookmarkedToneMappingOperatorConfigurationsModel();
+    KisPropertiesConfiguration* configuration(const QModelIndex &index) const;
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

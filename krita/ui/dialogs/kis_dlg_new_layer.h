@@ -29,16 +29,17 @@ class QWidget;
 class WdgLayerProperties;
 class KoID;
 
-class NewLayerDialog : public KDialog {
+class NewLayerDialog : public KDialog
+{
 
     Q_OBJECT
 
 public:
     NewLayerDialog(const KoID & colorSpace,
-               const QString & profilename,
-               const QString & deviceName,
-               QWidget *parent = 0,
-               const char *name = 0);
+                   const QString & profilename,
+                   const QString & deviceName,
+                   QWidget *parent = 0,
+                   const char *name = 0);
 
     QString layerName() const;
     KoCompositeOp * compositeOp() const;

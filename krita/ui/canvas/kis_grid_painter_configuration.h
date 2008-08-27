@@ -18,21 +18,22 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_GRID_DRAWER_H
-#define KIS_GRID_DRAWER_H
+#ifndef KIS_GRID_PAINTER_CONFIGURATION_H
+#define KIS_GRID_PAINTER_CONFIGURATION_H
 
 class QPen;
 
-class KisGridPainterConfiguration {
-    public:
-        /**
-         * @return the pen use for drawing the main line of the grid
-         */
-        static QPen mainPen();
-        /**
-         * @return the pen use for drawing the subdivision line of the grid
-         */
-        static QPen subdivisionPen();
+class KisGridPainterConfiguration
+{
+public:
+    /**
+     * @return the pen use for drawing the main line of the grid
+     */
+    static QPen mainPen();
+    /**
+     * @return the pen use for drawing the subdivision line of the grid
+     */
+    static QPen subdivisionPen();
 };
 
 #if 0
@@ -47,7 +48,8 @@ class KisSubPerspectiveGrid;
 class KisDoc2;
 
 
-class KisGridDrawer {
+class KisGridDrawer
+{
 
 public:
 
@@ -61,8 +63,12 @@ public:
 
     virtual void setPen(const QPen& pen) = 0;
     virtual void drawLine(qint32 x1, qint32 y1, qint32 x2, qint32 y2) = 0;
-    virtual void drawLine(const QPointF& p1, const QPointF& p2) { drawLine( p1.toPoint(), p2.toPoint()); }
-    inline void drawLine(const QPoint& p1, const QPoint& p2) { drawLine(p1.x(), p1.y(), p2.x(), p2.y() ); }
+    virtual void drawLine(const QPointF& p1, const QPointF& p2) {
+        drawLine(p1.toPoint(), p2.toPoint());
+    }
+    inline void drawLine(const QPoint& p1, const QPoint& p2) {
+        drawLine(p1.x(), p1.y(), p2.x(), p2.y());
+    }
 
 protected:
 
@@ -72,16 +78,25 @@ protected:
 };
 
 
-class QPainterGridDrawer : public KisGridDrawer {
+class QPainterGridDrawer : public KisGridDrawer
+{
 
 public:
 
     QPainterGridDrawer(KisDoc2* doc, const KoViewConverter * viewConverter);
 
-    void setPainter( QPainter* p) { m_painter = p; }
-    void setPen(const QPen& pen) { m_painter->setPen(pen); }
-    void drawLine(qint32 x1, qint32 y1, qint32 x2, qint32 y2) { m_painter->drawLine(x1, y1, x2, y2); }
-    void drawLine(const QPointF& p1, const QPointF& p2) { m_painter->drawLine( p1, p2); }
+    void setPainter(QPainter* p) {
+        m_painter = p;
+    }
+    void setPen(const QPen& pen) {
+        m_painter->setPen(pen);
+    }
+    void drawLine(qint32 x1, qint32 y1, qint32 x2, qint32 y2) {
+        m_painter->drawLine(x1, y1, x2, y2);
+    }
+    void drawLine(const QPointF& p1, const QPointF& p2) {
+        m_painter->drawLine(p1, p2);
+    }
 
 private:
 

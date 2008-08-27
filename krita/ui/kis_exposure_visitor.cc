@@ -27,7 +27,7 @@
 
 KisExposureVisitor::KisExposureVisitor(double exposure) : m_exposure(exposure)
 {
-    
+
 }
 
 void KisExposureVisitor::setExposureToProfile(KoColorProfile* profile)
@@ -35,9 +35,9 @@ void KisExposureVisitor::setExposureToProfile(KoColorProfile* profile)
     profile->setProperty("exposure", m_exposure);
 }
 
-bool KisExposureVisitor::visit( KisExternalLayer * e)
+bool KisExposureVisitor::visit(KisExternalLayer * e)
 {
-    Q_UNUSED( e );
+    Q_UNUSED(e);
     return true;
 }
 bool KisExposureVisitor::visit(KisPaintLayer *layer)
@@ -58,10 +58,10 @@ bool KisExposureVisitor::visit(KisGroupLayer *layer)
 {
     setExposureToProfile(layer->colorSpace()->profile());
     layer->setDirty();
-    KisLayerSP child = dynamic_cast<KisLayer*>( layer->firstChild().data() );
+    KisLayerSP child = dynamic_cast<KisLayer*>(layer->firstChild().data());
     while (child) {
         child->accept(*this);
-        child = dynamic_cast<KisLayer*>( child->nextSibling().data() );
+        child = dynamic_cast<KisLayer*>(child->nextSibling().data());
     }
     return true;
 }

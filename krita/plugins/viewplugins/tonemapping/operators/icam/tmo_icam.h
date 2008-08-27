@@ -19,10 +19,11 @@
  * @param indep
  */
 
-namespace icam {
+namespace icam
+{
 
-void tmo_icam(const pfs::Array2D *Y, pfs::Array2D *L, 
-  float variance, float variance2, float D, float prescaling, float percentile, bool indep);
+void tmo_icam(const pfs::Array2D *Y, pfs::Array2D *L,
+              float variance, float variance2, float D, float prescaling, float percentile, bool indep);
 
 }
 

@@ -24,22 +24,22 @@
 #include "ui_SizeTransformationEditor.h"
 
 KisSizeTransformation::KisSizeTransformation(KisDynamicSensor* hTransfoParameter, KisDynamicSensor* vTransfoParameter)
-    : KisDynamicTransformation(KisDynamicTransformation::SizeTransformationID),
-      m_horizTransfoParameter(hTransfoParameter), m_vertiTransfoParameter(vTransfoParameter),
-      m_hmax(2.0), m_hmin(0.5), m_vmax(2.0), m_vmin(0.5)
+        : KisDynamicTransformation(KisDynamicTransformation::SizeTransformationID),
+        m_horizTransfoParameter(hTransfoParameter), m_vertiTransfoParameter(vTransfoParameter),
+        m_hmax(2.0), m_hmin(0.5), m_vmax(2.0), m_vmin(0.5)
 {
 }
 KisSizeTransformation::~KisSizeTransformation()
 {
-    if(m_horizTransfoParameter != m_vertiTransfoParameter)
+    if (m_horizTransfoParameter != m_vertiTransfoParameter)
         delete m_vertiTransfoParameter;
     delete m_horizTransfoParameter;
 }
 
 void KisSizeTransformation::transformBrush(KisDynamicShape* dabsrc, const KisPaintInformation& info)
 {
-    dabsrc->resize( m_horizTransfoParameter->parameter(info) *(  m_hmax - m_hmin ) + m_hmin,
-        m_vertiTransfoParameter->parameter(info) * ( m_vmax - m_vmin) + m_vmin);
+    dabsrc->resize(m_horizTransfoParameter->parameter(info) *(m_hmax - m_hmin) + m_hmin,
+                   m_vertiTransfoParameter->parameter(info) * (m_vmax - m_vmin) + m_vmin);
 }
 
 void KisSizeTransformation::transformColoring(KisDynamicColoring* coloringsrc, const KisPaintInformation& info)
@@ -68,42 +68,42 @@ QWidget* KisSizeTransformation::createConfigWidget(QWidget* parent)
     ste.setupUi(editorWidget);
     // Setup the horizontal parameter
     // horizontal sensor
-    connect(ste.comboBoxHorizontalSensor, SIGNAL(sensorChanged(KisDynamicSensor*)), this, SLOT(setHSensor(KisDynamicSensor* )));
+    connect(ste.comboBoxHorizontalSensor, SIGNAL(sensorChanged(KisDynamicSensor*)), this, SLOT(setHSensor(KisDynamicSensor*)));
     ste.comboBoxHorizontalSensor->setCurrent(m_horizTransfoParameter);
     // horizontal maximum
-    ste.spinBoxHorizontalMaximum->setValue( m_hmax);
+    ste.spinBoxHorizontalMaximum->setValue(m_hmax);
     connect(ste.spinBoxHorizontalMaximum, SIGNAL(valueChanged(double)), this, SLOT(setHMaximum(double)));
     // horizontal minimum
-    ste.spinBoxHorizontalMinimum->setValue( m_hmin);
+    ste.spinBoxHorizontalMinimum->setValue(m_hmin);
     connect(ste.spinBoxHorizontalMinimum, SIGNAL(valueChanged(double)), this, SLOT(setHMinimum(double)));
     // Setup the vertical parameter
     // vertical sensor
-    connect(ste.comboBoxVerticalSensor, SIGNAL(sensorChanged(KisDynamicSensor*)), this, SLOT(setVSensor(KisDynamicSensor* )));
+    connect(ste.comboBoxVerticalSensor, SIGNAL(sensorChanged(KisDynamicSensor*)), this, SLOT(setVSensor(KisDynamicSensor*)));
     ste.comboBoxVerticalSensor->setCurrent(m_vertiTransfoParameter);
     // vertical maximum
-    ste.spinBoxVerticalMaximum->setValue( m_hmax);
+    ste.spinBoxVerticalMaximum->setValue(m_hmax);
     connect(ste.spinBoxVerticalMaximum, SIGNAL(valueChanged(double)), this, SLOT(setHMaximum(double)));
     // Vertical minimum
-    ste.spinBoxVerticalMinimum->setValue( m_hmin);
+    ste.spinBoxVerticalMinimum->setValue(m_hmin);
     connect(ste.spinBoxVerticalMinimum, SIGNAL(valueChanged(double)), this, SLOT(setHMinimum(double)));
     return editorWidget;
 }
 
 void KisSizeTransformation::setHMaximum(double v)
 {
-  m_hmax = v;
+    m_hmax = v;
 }
 void KisSizeTransformation::setVMaximum(double v)
 {
-  m_vmax = v;
+    m_vmax = v;
 }
 void KisSizeTransformation::setHMinimum(double v)
 {
-  m_hmin = v;
+    m_hmin = v;
 }
 void KisSizeTransformation::setVMinimum(double v)
 {
-  m_vmin = v;
+    m_vmin = v;
 }
 
 #include "kis_size_transformation.moc"

@@ -22,7 +22,7 @@
 ColorSpot::ColorSpot(QWidget *parent, const KoColor &color) : QToolButton(parent), m_color(color)
 {
     QRgb c = m_color.toQColor().rgba();
-    setPalette(QPalette(c,c));
+    setPalette(QPalette(c, c));
     setAutoFillBackground(true);
     setAutoRepeat(true);
 }
@@ -36,7 +36,7 @@ void ColorSpot::setColor(const KoColor &color)
 {
     m_color = color;
     QRgb c = m_color.toQColor().rgba();
-    setPalette(QPalette(c,c));
+    setPalette(QPalette(c, c));
 }
 
 

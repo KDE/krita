@@ -36,28 +36,28 @@
 
 #include "ui_wdgblur.h"
 
-KisWdgBlur::KisWdgBlur( QWidget * parent) : KisFilterConfigWidget ( parent )
+KisWdgBlur::KisWdgBlur(QWidget * parent) : KisFilterConfigWidget(parent)
 {
     m_widget = new Ui_WdgBlur();
     m_widget->setupUi(this);
     linkSpacingToggled(true);
-    
-    connect( widget()->bnLinkSize, SIGNAL(toggled(bool)), this, SLOT(linkSpacingToggled( bool )));
-    connect( widget()->intHalfWidth, SIGNAL(valueChanged(int)),this,SLOT(spinBoxHalfWidthChanged(int)));
-    connect( widget()->intHalfHeight, SIGNAL(valueChanged(int)),this,SLOT(spinBoxHalfHeightChanged(int)));
 
-    connect( widget()->intStrength, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->intAngle, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->cbShape, SIGNAL( activated(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->bnLinkSize, SIGNAL(toggled(bool)), this, SLOT(linkSpacingToggled(bool)));
+    connect(widget()->intHalfWidth, SIGNAL(valueChanged(int)), this, SLOT(spinBoxHalfWidthChanged(int)));
+    connect(widget()->intHalfHeight, SIGNAL(valueChanged(int)), this, SLOT(spinBoxHalfHeightChanged(int)));
+
+    connect(widget()->intStrength, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->intAngle, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->cbShape, SIGNAL(activated(int)), SIGNAL(sigPleaseUpdatePreview()));
 }
 
 KisFilterConfiguration* KisWdgBlur::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("blur", 1);
-    config->setProperty("halfWidth", widget()->intHalfWidth->value() );
-    config->setProperty("halfHeight", widget()->intHalfWidth->value() );
-    config->setProperty("rotate", widget()->intAngle->value() );
-    config->setProperty("strength", widget()->intStrength->value() );
+    config->setProperty("halfWidth", widget()->intHalfWidth->value());
+    config->setProperty("halfHeight", widget()->intHalfWidth->value());
+    config->setProperty("rotate", widget()->intAngle->value());
+    config->setProperty("strength", widget()->intStrength->value());
     config->setProperty("shape", widget()->cbShape->currentIndex());
     return config;
 }
@@ -65,25 +65,20 @@ KisFilterConfiguration* KisWdgBlur::configuration() const
 void KisWdgBlur::setConfiguration(KisFilterConfiguration* config)
 {
     QVariant value;
-    if (config->getProperty("shape", value))
-    {
-        widget()->cbShape->setCurrentIndex( value.toUInt() );
+    if (config->getProperty("shape", value)) {
+        widget()->cbShape->setCurrentIndex(value.toUInt());
     }
-    if (config->getProperty("halfWidth", value))
-    {
-        widget()->intHalfWidth->setValue( value.toUInt() );
+    if (config->getProperty("halfWidth", value)) {
+        widget()->intHalfWidth->setValue(value.toUInt());
     }
-    if (config->getProperty("halfHeight", value))
-    {
-        widget()->intHalfHeight->setValue( value.toUInt() );
+    if (config->getProperty("halfHeight", value)) {
+        widget()->intHalfHeight->setValue(value.toUInt());
     }
-    if (config->getProperty("rotate", value))
-    {
-        widget()->intAngle->setValue( value.toUInt() );
+    if (config->getProperty("rotate", value)) {
+        widget()->intAngle->setValue(value.toUInt());
     }
-    if (config->getProperty("strength", value))
-    {
-        widget()->intStrength->setValue( value.toUInt() );
+    if (config->getProperty("strength", value)) {
+        widget()->intStrength->setValue(value.toUInt());
     }
 }
 
@@ -93,33 +88,32 @@ void KisWdgBlur::linkSpacingToggled(bool b)
     KoImageResource kir;
     if (b) {
         widget()->bnLinkSize->setIcon(QIcon(kir.chain()));
-    }
-    else {
+    } else {
         widget()->bnLinkSize->setIcon(QIcon(kir.chainBroken()));
     }
 }
 
 void KisWdgBlur::spinBoxHalfWidthChanged(int v)
 {
-    if(m_halfSizeLink) {
+    if (m_halfSizeLink) {
         widget()->intHalfHeight->setValue(v);
     }
-/*    if( widget()->intHalfHeight->value() == v && widget()->cbShape->currentItem() != 1)
-        widget()->intAngle->setEnabled(false);
-    else
-        widget()->intAngle->setEnabled(true);*/
+    /*    if( widget()->intHalfHeight->value() == v && widget()->cbShape->currentItem() != 1)
+            widget()->intAngle->setEnabled(false);
+        else
+            widget()->intAngle->setEnabled(true);*/
     emit sigPleaseUpdatePreview();
 }
 
 void KisWdgBlur::spinBoxHalfHeightChanged(int v)
 {
-    if(m_halfSizeLink) {
+    if (m_halfSizeLink) {
         widget()->intHalfWidth->setValue(v);
     }
-/*    if( widget()->intHalfWidth->value() == v && widget()->cbShape->currentItem() != 1)
-        widget()->intAngle->setEnabled(false);
-    else
-        widget()->intAngle->setEnabled(true);*/
+    /*    if( widget()->intHalfWidth->value() == v && widget()->cbShape->currentItem() != 1)
+            widget()->intAngle->setEnabled(false);
+        else
+            widget()->intAngle->setEnabled(true);*/
     emit sigPleaseUpdatePreview();
 }
 

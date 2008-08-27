@@ -30,17 +30,20 @@ class WdgCImg : public QWidget, public Ui::WdgCImg
 {
     Q_OBJECT
 
-    public:
-        WdgCImg(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgCImg(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
-class KisCImgconfigWidget : public KisFilterConfigWidget {
+class KisCImgconfigWidget : public KisFilterConfigWidget
+{
 
     Q_OBJECT
 
 public:
 
-    KisCImgconfigWidget(QWidget * parent = 0, Qt::WFlags f = 0 );
+    KisCImgconfigWidget(QWidget * parent = 0, Qt::WFlags f = 0);
     virtual ~KisCImgconfigWidget() {}
 
 public:

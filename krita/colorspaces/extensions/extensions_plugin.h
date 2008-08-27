@@ -22,12 +22,13 @@
 
 #include <QObject>
 
-class ExtensionsPlugin : public QObject {
+class ExtensionsPlugin : public QObject
+{
     Q_OBJECT
-    public:
-        ExtensionsPlugin(QObject *parent, const QStringList &);
-        virtual ~ExtensionsPlugin();
-    
+public:
+    ExtensionsPlugin(QObject *parent, const QStringList &);
+    virtual ~ExtensionsPlugin();
+
 };
 
 #endif

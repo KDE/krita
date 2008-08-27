@@ -24,11 +24,11 @@
 
 #include <klocale.h>
 #include <kis_debug.h>
-DlgShrinkSelection::DlgShrinkSelection( QWidget *  parent, const char * name) : super (parent)
+DlgShrinkSelection::DlgShrinkSelection(QWidget *  parent, const char * name) : super(parent)
 {
-    setCaption( i18n("Shrink Selection") );
-    setButtons(  Ok | Cancel );
-    setDefaultButton( Ok );
+    setCaption(i18n("Shrink Selection"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
     setObjectName(name);
 
     m_page = new WdgShrinkSelection(this);

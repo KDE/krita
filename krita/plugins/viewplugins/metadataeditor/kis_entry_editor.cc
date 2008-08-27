@@ -49,10 +49,10 @@ void KisEntryEditor::valueChanged()
     d->object->setProperty(d->propertyName.toAscii(), d->value->asVariant());
     d->object->blockSignals(blocked);
 }
-        
+
 void KisEntryEditor::valueEdited()
 {
-    d->value->setVariant( d->object->property(d->propertyName.toAscii()) );
+    d->value->setVariant(d->object->property(d->propertyName.toAscii()));
     emit valueHasBeenEdited();
 }
 

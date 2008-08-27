@@ -61,15 +61,15 @@
 //#define USE_QT_SCALING
 
 
-class KisQPainterCanvas::Private {
+class KisQPainterCanvas::Private
+{
 public:
     Private(const KoViewConverter *vc)
-        : toolProxy(0),
-          canvas(0),
-          viewConverter(vc),
-          previousEvent( QEvent::TabletRelease, QPoint(), QPoint(), QPointF(), QTabletEvent::NoDevice, 0, 0.0, 0, 0, 0, 0, 0, Qt::NoModifier, Q_INT64_C(932838457459459) )
-        {
-        }
+            : toolProxy(0),
+            canvas(0),
+            viewConverter(vc),
+            previousEvent(QEvent::TabletRelease, QPoint(), QPoint(), QPointF(), QTabletEvent::NoDevice, 0, 0.0, 0, 0, 0, 0, 0, Qt::NoModifier, Q_INT64_C(932838457459459)) {
+    }
 
     KisPrescaledProjectionSP prescaledProjection;
     KoToolProxy * toolProxy;
@@ -83,21 +83,21 @@ public:
 };
 
 KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
-    : QWidget( parent )
-    , m_d( new Private( canvas->viewConverter() ) )
+        : QWidget(parent)
+        , m_d(new Private(canvas->viewConverter()))
 {
     // XXX: Reset pattern size and color when the properties change!
 
     KisConfig cfg;
-    
-    connect( KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
 
     m_d->canvas =  canvas;
     m_d->toolProxy = canvas->toolProxy();
     setAutoFillBackground(true);
     //setAttribute( Qt::WA_OpaquePaintEvent );
     m_d->checkBrush = QBrush(checkImage(cfg.checkSize()));
-    setAcceptDrops( true );
+    setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_InputMethodEnabled, true);
     m_d->blockMouseEvent.setSingleShot(true);
@@ -108,18 +108,18 @@ KisQPainterCanvas::~KisQPainterCanvas()
     delete m_d;
 }
 
-void KisQPainterCanvas::setPrescaledProjection( KisPrescaledProjectionSP prescaledProjection )
+void KisQPainterCanvas::setPrescaledProjection(KisPrescaledProjectionSP prescaledProjection)
 {
     m_d->prescaledProjection = prescaledProjection;
 }
 
-void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
+void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 {
 //     QPixmap pm( ev->rect().size() );
 
     KisConfig cfg;
 
-    dbgRender <<"paintEvent: rect" << ev->rect() <<", doc offset:" << m_d->documentOffset;
+    dbgRender << "paintEvent: rect" << ev->rect() << ", doc offset:" << m_d->documentOffset;
     KisImageSP img = m_d->canvas->image();
     if (img == 0) return;
 
@@ -127,19 +127,19 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
 
     setAutoFillBackground(false);
 
-    QPainter gc( this );
+    QPainter gc(this);
 
 //     gc.translate( -ev->rect().topLeft() );
 
-    gc.setCompositionMode( QPainter::CompositionMode_Source );
+    gc.setCompositionMode(QPainter::CompositionMode_Source);
 
     t.start();
     // Don't draw the checks if we draw a cached pixmap, because we
     // need alpha transparency for checks. The precached pixmap
     // already should contain checks.
-    if ( !cfg.noXRender() ) {
+    if (!cfg.noXRender()) {
 
-        if ( cfg.scrollCheckers() ) {
+        if (cfg.scrollCheckers()) {
 
             QRect fillRect = ev->rect();
 
@@ -154,31 +154,29 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
                 fillRect.adjust(0, m_d->documentOffset.y(), 0, 0);
             }
             gc.save();
-            gc.translate(-m_d->documentOffset );
+            gc.translate(-m_d->documentOffset);
             dbgRender << "qpainter canvas fillRect: " << fillRect;
-            gc.fillRect( fillRect, m_d->checkBrush );
+            gc.fillRect(fillRect, m_d->checkBrush);
             gc.restore();
-        }
-        else {
+        } else {
             // Checks
             dbgRender << "qpainter canvas fillRect: " << ev->rect();
-            gc.fillRect(ev->rect(), m_d->checkBrush );
+            gc.fillRect(ev->rect(), m_d->checkBrush);
         }
-        dbgRender <<"Painting checks:" << t.elapsed();
+        dbgRender << "Painting checks:" << t.elapsed();
     }
     t.restart();
-    gc.setCompositionMode( QPainter::CompositionMode_SourceOver );
+    gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
 
-    if ( cfg.noXRender() ) {
-        gc.drawPixmap( ev->rect(), m_d->prescaledProjection->prescaledPixmap(), ev->rect() );
+    if (cfg.noXRender()) {
+        gc.drawPixmap(ev->rect(), m_d->prescaledProjection->prescaledPixmap(), ev->rect());
+    } else {
+        gc.drawImage(ev->rect(), m_d->prescaledProjection->prescaledQImage(), ev->rect());
     }
-    else {
-        gc.drawImage( ev->rect(), m_d->prescaledProjection->prescaledQImage(), ev->rect() );
-    }
-    dbgRender <<"Drawing image:" << t.elapsed();
+    dbgRender << "Drawing image:" << t.elapsed();
 
 #ifdef DEBUG_REPAINT
-    QColor color = QColor(random()%255, random()%255, random()%255, 150);
+    QColor color = QColor(random() % 255, random() % 255, random() % 255, 150);
     gc.fillRect(ev->rect(), color);
 #endif
 
@@ -189,68 +187,74 @@ void KisQPainterCanvas::paintEvent( QPaintEvent * ev )
     bool drawAnts = true;
     bool drawTools = true;
 
-    drawDecorations(gc, drawAnts, drawTools, m_d->documentOffset, ev->rect(), m_d->canvas );
+    drawDecorations(gc, drawAnts, drawTools, m_d->documentOffset, ev->rect(), m_d->canvas);
 //     m_d->canvas->view()->perspectiveGridManager()->drawGrid( ev->rect(), &gc, false);
 
     gc.end();
 
-/*    QPainter gc2( this );
-    t.restart();
-    gc2.drawPixmap( ev->rect().topLeft(), pm );
-    dbgRender <<"Drawing pixmap on widget:" << t.elapsed();*/
+    /*    QPainter gc2( this );
+        t.restart();
+        gc2.drawPixmap( ev->rect().topLeft(), pm );
+        dbgRender <<"Drawing pixmap on widget:" << t.elapsed();*/
 }
 
-void KisQPainterCanvas::enterEvent( QEvent* e )
+void KisQPainterCanvas::enterEvent(QEvent* e)
 {
-    QWidget::enterEvent( e );
+    QWidget::enterEvent(e);
 }
 
-void KisQPainterCanvas::leaveEvent( QEvent* e )
+void KisQPainterCanvas::leaveEvent(QEvent* e)
 {
-    if ( m_d->tabletDown )
-    {
+    if (m_d->tabletDown) {
         m_d->tabletDown = false;
-        QTabletEvent* fakeEvent = new QTabletEvent( QEvent::TabletRelease, m_d->previousEvent.pos(), m_d->previousEvent.globalPos(), m_d->previousEvent.hiResGlobalPos(), m_d->previousEvent.device(), m_d->previousEvent.pointerType(), m_d->previousEvent.pressure(), m_d->previousEvent.xTilt(), m_d->previousEvent.yTilt(), m_d->previousEvent.tangentialPressure(), m_d->previousEvent.rotation(), m_d->previousEvent.z(), m_d->previousEvent.modifiers(), m_d->previousEvent.uniqueId() );
-        m_d->toolProxy->tabletEvent( fakeEvent , QPointF() ); // HACK this fake event is a work around a bug in Qt which stop sending tablet events when the tablet pen move outside the widget (and you get a nasty surprise when the cursor moves back on the widget especially if you have released your tablet as krita is still in drawing mode)
+        QTabletEvent* fakeEvent = new QTabletEvent(QEvent::TabletRelease, m_d->previousEvent.pos(), m_d->previousEvent.globalPos(), m_d->previousEvent.hiResGlobalPos(), m_d->previousEvent.device(), m_d->previousEvent.pointerType(), m_d->previousEvent.pressure(), m_d->previousEvent.xTilt(), m_d->previousEvent.yTilt(), m_d->previousEvent.tangentialPressure(), m_d->previousEvent.rotation(), m_d->previousEvent.z(), m_d->previousEvent.modifiers(), m_d->previousEvent.uniqueId());
+        m_d->toolProxy->tabletEvent(fakeEvent , QPointF());   // HACK this fake event is a work around a bug in Qt which stop sending tablet events when the tablet pen move outside the widget (and you get a nasty surprise when the cursor moves back on the widget especially if you have released your tablet as krita is still in drawing mode)
     }
-    QWidget::leaveEvent( e );
+    QWidget::leaveEvent(e);
 }
 
-void KisQPainterCanvas::mouseMoveEvent(QMouseEvent *e) {
-    if( m_d->blockMouseEvent.isActive() ) return;
-    m_d->toolProxy->mouseMoveEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
+void KisQPainterCanvas::mouseMoveEvent(QMouseEvent *e)
+{
+    if (m_d->blockMouseEvent.isActive()) return;
+    m_d->toolProxy->mouseMoveEvent(e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset));
 }
 
-void KisQPainterCanvas::contextMenuEvent(QContextMenuEvent *e) {
-    m_d->canvas->view()->unplugActionList( "flake_tool_actions" );
-    m_d->canvas->view()->plugActionList( "flake_tool_actions",
-                                         m_d->toolProxy->popupActionList() );
-    QMenu *menu = dynamic_cast<QMenu*> (m_d->canvas->view()->factory()->container("image_popup", m_d->canvas->view()));
-    if(menu)
-        menu->exec( e->globalPos() );
+void KisQPainterCanvas::contextMenuEvent(QContextMenuEvent *e)
+{
+    m_d->canvas->view()->unplugActionList("flake_tool_actions");
+    m_d->canvas->view()->plugActionList("flake_tool_actions",
+                                        m_d->toolProxy->popupActionList());
+    QMenu *menu = dynamic_cast<QMenu*>(m_d->canvas->view()->factory()->container("image_popup", m_d->canvas->view()));
+    if (menu)
+        menu->exec(e->globalPos());
 }
 
-void KisQPainterCanvas::mousePressEvent(QMouseEvent *e) {
+void KisQPainterCanvas::mousePressEvent(QMouseEvent *e)
+{
     dbgRender << "Mouse press event";
-    if( m_d->blockMouseEvent.isActive() ) return;
-    m_d->toolProxy->mousePressEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
+    if (m_d->blockMouseEvent.isActive()) return;
+    m_d->toolProxy->mousePressEvent(e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset));
 }
 
-void KisQPainterCanvas::mouseReleaseEvent(QMouseEvent *e) {
-    if( m_d->blockMouseEvent.isActive() ) return;
-    m_d->toolProxy->mouseReleaseEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
+void KisQPainterCanvas::mouseReleaseEvent(QMouseEvent *e)
+{
+    if (m_d->blockMouseEvent.isActive()) return;
+    m_d->toolProxy->mouseReleaseEvent(e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset));
 }
 
-void KisQPainterCanvas::mouseDoubleClickEvent(QMouseEvent *e) {
-    if( m_d->blockMouseEvent.isActive() ) return;
-    m_d->toolProxy->mouseDoubleClickEvent( e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset ) );
+void KisQPainterCanvas::mouseDoubleClickEvent(QMouseEvent *e)
+{
+    if (m_d->blockMouseEvent.isActive()) return;
+    m_d->toolProxy->mouseDoubleClickEvent(e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset));
 }
 
-void KisQPainterCanvas::keyPressEvent( QKeyEvent *e ) {
+void KisQPainterCanvas::keyPressEvent(QKeyEvent *e)
+{
     m_d->toolProxy->keyPressEvent(e);
 }
 
-void KisQPainterCanvas::keyReleaseEvent (QKeyEvent *e) {
+void KisQPainterCanvas::keyReleaseEvent(QKeyEvent *e)
+{
     m_d->toolProxy->keyReleaseEvent(e);
 }
 
@@ -264,11 +268,11 @@ void KisQPainterCanvas::inputMethodEvent(QInputMethodEvent *event)
     m_d->toolProxy->inputMethodEvent(event);
 }
 
-void KisQPainterCanvas::tabletEvent( QTabletEvent *e )
+void KisQPainterCanvas::tabletEvent(QTabletEvent *e)
 {
     m_d->blockMouseEvent.start(100);
-    dbgRender <<"tablet event:" << e->pressure() << e->type() << " " << e->device() << " " << e->x() << " " << e->y();
-    switch( e->type() ) {
+    dbgRender << "tablet event:" << e->pressure() << e->type() << " " << e->device() << " " << e->x() << " " << e->y();
+    switch (e->type()) {
     case QEvent::TabletPress:
         m_d->tabletDown = true;
         break;
@@ -287,22 +291,23 @@ void KisQPainterCanvas::tabletEvent( QTabletEvent *e )
     QPointF pos(e->x() + subpixelX + m_d->documentOffset.x(), e->y() + subpixelY + m_d->documentOffset.y());
 
     m_d->previousEvent = *e;
-    m_d->toolProxy->tabletEvent( e, m_d->viewConverter->viewToDocument( pos ) );
+    m_d->toolProxy->tabletEvent(e, m_d->viewConverter->viewToDocument(pos));
 }
 
-void KisQPainterCanvas::wheelEvent( QWheelEvent *e )
+void KisQPainterCanvas::wheelEvent(QWheelEvent *e)
 {
-    m_d->toolProxy->wheelEvent( e, m_d->viewConverter->viewToDocument( e->pos() + m_d->documentOffset ) );
+    m_d->toolProxy->wheelEvent(e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset));
 }
 
-bool KisQPainterCanvas::event (QEvent *event) {
+bool KisQPainterCanvas::event(QEvent *event)
+{
     // we should forward tabs, and let tools decide if they should be used or ignored.
     // if the tool ignores it, it will move focus.
-    if(event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
-        QKeyEvent *keyEvent = static_cast<QKeyEvent*> (event);
-        if(keyEvent->key() == Qt::Key_Backtab)
+    if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        if (keyEvent->key() == Qt::Key_Backtab)
             return true;
-        if(keyEvent->key() == Qt::Key_Tab && event->type() == QEvent::KeyPress) {
+        if (keyEvent->key() == Qt::Key_Tab && event->type() == QEvent::KeyPress) {
             // we loose key-release events, which I think is not an issue.
             keyPressEvent(keyEvent);
             return true;
@@ -316,18 +321,18 @@ KoToolProxy * KisQPainterCanvas::toolProxy()
     return m_d->toolProxy;
 }
 
-void KisQPainterCanvas::documentOffsetMoved( const QPoint & pt )
+void KisQPainterCanvas::documentOffsetMoved(const QPoint & pt)
 {
     dbgRender << "KisQPainterCanvas::documentOffsetMoved " << pt;
     m_d->documentOffset = pt;
-    m_d->prescaledProjection->documentOffsetMoved( pt );
+    m_d->prescaledProjection->documentOffsetMoved(pt);
     update();
 }
 
-void KisQPainterCanvas::resizeEvent( QResizeEvent *e )
+void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
 {
     dbgRender << "KisQPainterCanvas::resizeEvent : " << e->size();
-    QSize size( e->size() );
+    QSize size(e->size());
     if (size.width() <= 0) {
         size.setWidth(1);
     }
@@ -337,13 +342,13 @@ void KisQPainterCanvas::resizeEvent( QResizeEvent *e )
     if (size != e->size()) {
         dbgRender << "Adjusted resize event to" << size;
     }
-    m_d->prescaledProjection->resizePrescaledImage( size );
+    m_d->prescaledProjection->resizePrescaledImage(size);
 }
 
 void KisQPainterCanvas::slotConfigChanged()
 {
     KisConfig cfg;
-    
+
     m_d->checkBrush = QBrush(checkImage(cfg.checkSize()));
 }
 

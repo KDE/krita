@@ -29,20 +29,23 @@ class WdgLayerSize : public QWidget, public Ui::WdgLayerSize
 {
     Q_OBJECT
 
-    public:
-        WdgLayerSize(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgLayerSize(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
 class KisFilterStrategy;
 
-class DlgLayerSize: public KDialog {
+class DlgLayerSize: public KDialog
+{
     typedef KDialog super;
     Q_OBJECT
 
 public:
 
     DlgLayerSize(QWidget * parent = 0,
-             const char* name = 0);
+                 const char* name = 0);
     ~DlgLayerSize();
 
     void setWidth(quint32 w);

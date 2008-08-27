@@ -20,16 +20,17 @@
 #include "kis_paintop_option.h"
 #include <kis_paintop_preset.h>
 
-class KisPaintOpOption::Private {
+class KisPaintOpOption::Private
+{
 public:
     bool checked;
     QString label;
     QWidget * configurationPage;
 };
 
-KisPaintOpOption::KisPaintOpOption( const QString & label, bool checked )
-    : m_checkable( true )
-    , m_d(new Private())
+KisPaintOpOption::KisPaintOpOption(const QString & label, bool checked)
+        : m_checkable(true)
+        , m_d(new Private())
 {
     m_d->checked = checked;
     m_d->label = label;
@@ -46,18 +47,18 @@ QString & KisPaintOpOption::label() const
     return m_d->label;
 }
 
-bool KisPaintOpOption::isChecked () const
+bool KisPaintOpOption::isChecked() const
 {
     return m_d->checked;
 }
 
-void KisPaintOpOption::setChecked ( bool checked )
+void KisPaintOpOption::setChecked(bool checked)
 {
     m_d->checked = checked;
 }
 
 
-void KisPaintOpOption::setConfigurationPage( QWidget * page )
+void KisPaintOpOption::setConfigurationPage(QWidget * page)
 {
     m_d->configurationPage = page;
 }

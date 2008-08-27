@@ -17,7 +17,6 @@
  */
 
 #include "kis_open_raster_stack_save_visitor.h"
-#include <kis_open_raster_stack_save_visitor.h>
 
 #include <QDomElement>
 #include <QImage>
@@ -32,8 +31,7 @@
 #include <generator/kis_generator_layer.h>
 #include "kis_open_raster_save_context.h"
 
-struct KisOpenRasterStackSaveVisitor::Private
-{
+struct KisOpenRasterStackSaveVisitor::Private {
     Private() : currentElement(0) {}
     KisOpenRasterSaveContext* saveContext;
     QDomDocument layerStack;
@@ -60,12 +58,12 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
 
 bool KisOpenRasterStackSaveVisitor::visit(KisPaintLayer *layer)
 {
-    QString filename = d->saveContext->saveDeviceData( layer );
+    QString filename = d->saveContext->saveDeviceData(layer);
 
     QDomElement elt = d->layerStack.createElement("layer");
     saveLayerInfo(elt, layer);
     elt.setAttribute("src", filename);
-    d->currentElement->appendChild( elt );
+    d->currentElement->appendChild(elt);
 
     return true;
 }
@@ -84,18 +82,17 @@ bool KisOpenRasterStackSaveVisitor::visit(KisGroupLayer *layer)
 
     QDomElement elt = d->layerStack.createElement("stack");
     d->currentElement = &elt;
-    saveLayerInfo(elt, layer );
+    saveLayerInfo(elt, layer);
 
-    visitAll( layer );
+    visitAll(layer);
 
-    if( previousElt)
-    {
+    if (previousElt) {
         previousElt->appendChild(elt);
         d->currentElement = previousElt;
     } else {
-        d->layerStack.appendChild( elt );
+        d->layerStack.appendChild(elt);
         d->currentElement = 0;
-        d->saveContext->saveStack( d->layerStack );
+        d->saveContext->saveStack(d->layerStack);
     }
 
     return true;
@@ -105,8 +102,8 @@ bool KisOpenRasterStackSaveVisitor::visit(KisAdjustmentLayer *layer)
 {
     QDomElement elt = d->layerStack.createElement("filter");
     saveLayerInfo(elt, layer);
-    elt.setAttribute("type", "applications:krita:" + layer->filter()->name() );
+    elt.setAttribute("type", "applications:krita:" + layer->filter()->name());
     saveLayerInfo(elt, layer);
-    d->currentElement->appendChild( elt );
+    d->currentElement->appendChild(elt);
     return true;
 }

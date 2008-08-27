@@ -29,10 +29,10 @@ class KoProgressProxy;
 class SimpleNodeAction : public KisNodeAction
 {
     Q_OBJECT
-    
+
 public:
 
-    SimpleNodeAction( QObject * parent, KisNodeSP node, KoProgressProxy * progressBar);
+    SimpleNodeAction(QObject * parent, KisNodeSP node, KoProgressProxy * progressBar);
 public slots:
     void slotTriggered();
 };
@@ -44,7 +44,7 @@ class KisNodeActionTest : public QObject
 public slots:
 
     void updateGUI();
-    
+
 private slots:
 
     void testExecution();

@@ -48,7 +48,7 @@
 
 KisToolSelectBrush::KisToolSelectBrush(KoCanvasBase *canvas)
         : super(canvas, KisCursor::load("tool_brush_selection_cursor.png", 5, 5),
-                i18n( "Selection Brush" ))
+                i18n("Selection Brush"))
 {
     setObjectName("tool_select_brush");
     m_optWidget = 0;
@@ -59,9 +59,9 @@ KisToolSelectBrush::~KisToolSelectBrush()
 {
 }
 
-void KisToolSelectBrush::activate( bool tmp )
+void KisToolSelectBrush::activate(bool tmp)
 {
-    super::activate( tmp );
+    super::activate(tmp);
 
     if (!m_optWidget)
         return;

@@ -20,8 +20,7 @@
 #include "kis_paint_device.h"
 #include "kis_selection.h"
 
-struct KisConstProcessingInformation::Private
-{
+struct KisConstProcessingInformation::Private {
     Private() : device(0), selection(0) {}
     KisPaintDeviceSP device;
     KisSelectionSP selection;
@@ -35,20 +34,20 @@ KisConstProcessingInformation::KisConstProcessingInformation(const KisPaintDevic
     d->topLeft = topLeft;
 }
 
-KisConstProcessingInformation::KisConstProcessingInformation(const KisConstProcessingInformation& _rhs ) : d(new Private)
+KisConstProcessingInformation::KisConstProcessingInformation(const KisConstProcessingInformation& _rhs) : d(new Private)
 {
-  *d = *_rhs.d;
+    *d = *_rhs.d;
 }
 
-KisConstProcessingInformation& KisConstProcessingInformation::operator=(const KisConstProcessingInformation& _rhs )
+KisConstProcessingInformation& KisConstProcessingInformation::operator=(const KisConstProcessingInformation & _rhs)
 {
-  *d = *_rhs.d;
-  return *this;
+    *d = *_rhs.d;
+    return *this;
 }
 
 KisConstProcessingInformation::~KisConstProcessingInformation()
 {
-  delete d;
+    delete d;
 }
 
 const KisPaintDeviceSP KisConstProcessingInformation::paintDevice() const
@@ -66,8 +65,7 @@ const QPoint& KisConstProcessingInformation::topLeft() const
     return d->topLeft;
 }
 
-struct KisProcessingInformation::Private
-{
+struct KisProcessingInformation::Private {
     KisPaintDeviceSP device;
 };
 
@@ -76,20 +74,20 @@ KisProcessingInformation::KisProcessingInformation(KisPaintDeviceSP device, cons
     d->device = device;
 }
 
-KisProcessingInformation::KisProcessingInformation(const KisProcessingInformation& _rhs ) : KisConstProcessingInformation(_rhs), d(new Private(*_rhs.d))
+KisProcessingInformation::KisProcessingInformation(const KisProcessingInformation& _rhs) : KisConstProcessingInformation(_rhs), d(new Private(*_rhs.d))
 {
 }
 
-KisProcessingInformation& KisProcessingInformation::operator=(const KisProcessingInformation& _rhs )
+KisProcessingInformation& KisProcessingInformation::operator=(const KisProcessingInformation & _rhs)
 {
-  *d = *_rhs.d;
-  KisConstProcessingInformation::operator=(_rhs);
-  return *this;
+    *d = *_rhs.d;
+    KisConstProcessingInformation::operator=(_rhs);
+    return *this;
 }
 
 KisProcessingInformation::~KisProcessingInformation()
 {
-  delete d;
+    delete d;
 }
 
 KisPaintDeviceSP KisProcessingInformation::paintDevice()

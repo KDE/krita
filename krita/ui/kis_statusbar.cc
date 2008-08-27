@@ -38,16 +38,15 @@
 #include "kis_view2.h"
 #include "canvas/kis_canvas2.h"
 #include "KoViewConverter.h"
-#include "KoProgressBar.h"
 
 enum {
     IMAGE_SIZE_ID,
     POINTER_POSITION_ID
 };
 
-KisStatusBar::KisStatusBar(KStatusBar * sb, KisView2 * view )
-    : m_view( view )
-    , m_statusbar( sb )
+KisStatusBar::KisStatusBar(KStatusBar * sb, KisView2 * view)
+        : m_view(view)
+        , m_statusbar(sb)
 {
     m_selectionStatusLabel = new QLabel(sb);
     m_selectionStatusLabel->setPixmap(KIcon("tool_rect_selection").pixmap(22));
@@ -62,19 +61,19 @@ KisStatusBar::KisStatusBar(KStatusBar * sb, KisView2 * view )
 
     // XXX: Use the KStatusbar fixed size labels!
     m_statusBarStatusLabel = new KSqueezedTextLabel(sb);
-    connect( KoToolManager::instance(), SIGNAL(changedStatusText(const QString &)),
-             m_statusBarStatusLabel, SLOT(setText(const QString &)) );
-    sb->addWidget(m_statusBarStatusLabel,2);
+    connect(KoToolManager::instance(), SIGNAL(changedStatusText(const QString &)),
+            m_statusBarStatusLabel, SLOT(setText(const QString &)));
+    sb->addWidget(m_statusBarStatusLabel, 2);
 
     m_statusBarProfileLabel = new KSqueezedTextLabel(sb);
-    sb->addWidget(m_statusBarProfileLabel,3);
+    sb->addWidget(m_statusBarProfileLabel, 3);
 
     //int height = m_statusBarProfileLabel->height();
 
     m_progress = new KoProgressBar(sb);
     m_progress->setMaximumWidth(225);
     m_progress->setMinimumWidth(225);
-    m_progress->setMaximumHeight(sb->fontMetrics().height() );
+    m_progress->setMaximumHeight(sb->fontMetrics().height());
     sb->addPermanentWidget(m_progress, 2);
 
     m_progress->hide();
@@ -86,18 +85,19 @@ KisStatusBar::~KisStatusBar()
 
 #define EPSILON 1e-6
 
-void KisStatusBar::setZoom( int zoom )
+void KisStatusBar::setZoom(int zoom)
 {
     Q_UNUSED(zoom);
-/*
-    if (zoom < 1 - EPSILON) {
-        m_statusBarZoomLabel->setText(i18n("Zoom %1%",zoom * 100, 0, 'g', 4));
-    } else {
-        m_statusBarZoomLabel->setText(i18n("Zoom %1%",zoom * 100, 0, 'f', 0));
-    }
-*/}
+    /*
+        if (zoom < 1 - EPSILON) {
+            m_statusBarZoomLabel->setText(i18n("Zoom %1%",zoom * 100, 0, 'g', 4));
+        } else {
+            m_statusBarZoomLabel->setText(i18n("Zoom %1%",zoom * 100, 0, 'f', 0));
+        }
+    */
+}
 
-void KisStatusBar::documentMousePositionChanged( const QPointF &pos )
+void KisStatusBar::documentMousePositionChanged(const QPointF &pos)
 {
     QPoint pixelPos = m_view->image()->documentToIntPixel(pos);
 
@@ -106,28 +106,28 @@ void KisStatusBar::documentMousePositionChanged( const QPointF &pos )
     m_statusbar->changeItem(QString("%1, %2").arg(pixelPos.x()).arg(pixelPos.y()), POINTER_POSITION_ID);
 }
 
-void KisStatusBar::imageSizeChanged( qint32 w, qint32 h )
+void KisStatusBar::imageSizeChanged(qint32 w, qint32 h)
 {
     m_statusbar->changeItem(QString("%1 x %2").arg(w).arg(h), IMAGE_SIZE_ID);
 }
 
-void KisStatusBar::setSelection( KisImageSP img )
+void KisStatusBar::setSelection(KisImageSP img)
 {
-    Q_UNUSED( img );
+    Q_UNUSED(img);
 
     KisSelectionSP selection = m_view->selection();
-    if ( selection ) {
+    if (selection) {
         m_selectionStatusLabel->setEnabled(true);
 
         QRect r = selection->selectedExactRect();
-        m_selectionStatusLabel->setToolTip( i18n("Selection Active: x = %1 y = %2 width = %3 height = %4",r.x(),r.y(), r.width(), r.height()));
+        m_selectionStatusLabel->setToolTip(i18n("Selection Active: x = %1 y = %2 width = %3 height = %4", r.x(), r.y(), r.width(), r.height()));
         return;
     }
     m_selectionStatusLabel->setEnabled(false);
     m_selectionStatusLabel->setToolTip(i18n("No Selection"));
 }
 
-void KisStatusBar::setProfile( KisImageSP img )
+void KisStatusBar::setProfile(KisImageSP img)
 {
     if (m_statusBarProfileLabel == 0) {
         return;
@@ -137,21 +137,20 @@ void KisStatusBar::setProfile( KisImageSP img )
 
     if (img->profile() == 0) {
         m_statusBarProfileLabel->setText(i18n("No profile"));
-    }
-    else {
+    } else {
         m_statusBarProfileLabel->setText(img->colorSpace()->name() + "  " + img->profile()->name());
     }
 
 }
 
-void KisStatusBar::setHelp( const QString &t )
+void KisStatusBar::setHelp(const QString &t)
 {
     Q_UNUSED(t);
 }
 
 void KisStatusBar::updateStatusBarProfileLabel()
 {
-    setProfile( m_view->image() );
+    setProfile(m_view->image());
 }
 
 #include "kis_statusbar.moc"

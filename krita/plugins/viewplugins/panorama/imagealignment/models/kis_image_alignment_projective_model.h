@@ -21,10 +21,11 @@
 class KisMatchedPoint;
 class KisControlPoints;
 
-class KisImageAlignmentProjectiveModel : public KisImageAlignmentModel {
-  public:
+class KisImageAlignmentProjectiveModel : public KisImageAlignmentModel
+{
+public:
     virtual ~KisImageAlignmentProjectiveModel();
-    virtual KisImageAlignmentModel::OptimizationFunction* createOptimizationFunction( const KisControlPoints&, double xc, double yc, int width, int height ) const;
+    virtual KisImageAlignmentModel::OptimizationFunction* createOptimizationFunction(const KisControlPoints&, double xc, double yc, int width, int height) const;
 };
 
 #endif

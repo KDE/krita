@@ -36,10 +36,13 @@ quint8 KisAlphaMaskShape::alphaAt(int x, int y)
 
 quint8 KisAutoMaskShape::alphaAt(int x, int y)
 {
-    return 255 - m_shape->valueAt(x,y);
+    return 255 - m_shape->valueAt(x, y);
 }
 
-KisAutoMaskShape::~KisAutoMaskShape() { if(m_shape) delete m_shape; }
+KisAutoMaskShape::~KisAutoMaskShape()
+{
+    if (m_shape) delete m_shape;
+}
 
 
 KisAlphaMaskShape::KisAlphaMaskShape() {}
@@ -73,9 +76,8 @@ inline void splitCoordinate(double coordinate, qint32 *whole, double *fraction)
 void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc)
 {
 
-    if(!m_dab)
-    {
-      m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+    if (!m_dab) {
+        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
     }
 
 
@@ -87,16 +89,16 @@ void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, K
     qint32 y;
     double yFraction;
 
-    QPointF hotSpot = m_brush->hotSpot( m_scaleX, m_scaleY );
+    QPointF hotSpot = m_brush->hotSpot(m_scaleX, m_scaleY);
     splitCoordinate(pos.x() - hotSpot.x(), &x, &xFraction);
     splitCoordinate(pos.y() - hotSpot.y(), &y, &yFraction);
 
     QRect dabRect = QRect(0, 0, m_brush->maskWidth(m_scaleX, m_rotate),
                           m_brush->maskHeight(m_scaleY, m_rotate));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
-    
-    coloringsrc->colorize( m_dab, dabRect );
-    m_brush->mask(m_dab, m_scaleX, m_scaleY, m_rotate, info, xFraction, yFraction);    if ( painter()->bounds().isValid() ) {
+
+    coloringsrc->colorize(m_dab, dabRect);
+    m_brush->mask(m_dab, m_scaleX, m_scaleY, m_rotate, info, xFraction, yFraction);    if (painter()->bounds().isValid()) {
         dstRect &= painter()->bounds();
     }
 
@@ -123,8 +125,8 @@ void KisDabShape::rotate(double r)
 
 QRect KisDabShape::rect() const
 {
-    int width = m_brush->maskWidth( m_scaleX, m_rotate );
-    int height = m_brush->maskHeight( m_scaleY, m_rotate );
-    QPointF hotSpot = m_brush->hotSpot( m_scaleX, m_scaleY );
-    return QRect( (int)-hotSpot.x(), (int)-hotSpot.y(), width, height);
+    int width = m_brush->maskWidth(m_scaleX, m_rotate);
+    int height = m_brush->maskHeight(m_scaleY, m_rotate);
+    QPointF hotSpot = m_brush->hotSpot(m_scaleX, m_scaleY);
+    return QRect((int) - hotSpot.x(), (int) - hotSpot.y(), width, height);
 }

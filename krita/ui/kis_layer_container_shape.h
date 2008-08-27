@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_LAYER_COLLECTION_H_
-#define KIS_LAYER_COLLECTION_H_
+#ifndef KIS_LAYER_CONTAINER_SHAPE_H_
+#define KIS_LAYER_CONTAINER_SHAPE_H_
 
 #include <QString>
 
@@ -40,7 +40,7 @@ class KRITAUI_EXPORT KisLayerContainerShape : public KoShapeLayer
 
 public:
 
-    KisLayerContainerShape( KoShapeContainer * parent, KisLayerSP groupLayer );
+    KisLayerContainerShape(KoShapeContainer * parent, KisLayerSP groupLayer);
 
     virtual ~KisLayerContainerShape();
 
@@ -52,15 +52,17 @@ public:
     void paintComponent(QPainter &painter, const KoViewConverter &converter);
 
     // KoShape overrides
-    bool isSelectable() const { return false; }
+    bool isSelectable() const {
+        return false;
+    }
 
     QSizeF size() const;
     QRectF boundingRect() const;
 
     /// reimplemented
-    virtual void saveOdf( KoShapeSavingContext & context ) const;
+    virtual void saveOdf(KoShapeSavingContext & context) const;
     // reimplemented
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
 
 private:
     class Private;

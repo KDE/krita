@@ -33,7 +33,8 @@ class QSlider;
 
 class KoCanvasBase;
 
-class KisToolBrush : public KisToolFreehand {
+class KisToolBrush : public KisToolFreehand
+{
     Q_OBJECT
 
 public:
@@ -53,9 +54,9 @@ protected:
 private slots:
 
     void timeoutPaint();
-    void slotSetPaintingMode( int mode );
-    void slotSetSmoothness( int smoothness );
-    void slotSetMagnetism( int magnetism );
+    void slotSetPaintingMode(int mode);
+    void slotSetSmoothness(int smoothness);
+    void slotSetMagnetism(int magnetism);
 
 private:
 
@@ -71,23 +72,23 @@ private:
 };
 
 
-class KisToolBrushFactory : public KoToolFactory {
+class KisToolBrushFactory : public KoToolFactory
+{
 
 public:
     KisToolBrushFactory(QObject *parent, const QStringList&)
-        : KoToolFactory(parent, "KritaShape/KisToolBrush", i18n( "Paint" ))
-        {
-            setToolTip( i18n( "Paint freely" ) );
-            // Temporarily
-            setToolType( TOOL_TYPE_SHAPE );
-            setIcon( "krita_tool_freehand" );
-            setShortcut( KShortcut( Qt::Key_B ) );
-            setPriority( 0 );
-            //setActivationShapeId( KIS_LAYER_SHAPE_ID );
-            setInputDeviceAgnostic(false);
-        }
+            : KoToolFactory(parent, "KritaShape/KisToolBrush", i18n("Paint")) {
+        setToolTip(i18n("Paint freely"));
+        // Temporarily
+        setToolType(TOOL_TYPE_SHAPE);
+        setIcon("krita_tool_freehand");
+        setShortcut(KShortcut(Qt::Key_B));
+        setPriority(0);
+        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        setInputDeviceAgnostic(false);
+    }
 
-    virtual ~KisToolBrushFactory(){}
+    virtual ~KisToolBrushFactory() {}
 
     virtual KoTool * createTool(KoCanvasBase *canvas) {
         return new KisToolBrush(canvas);

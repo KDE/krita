@@ -30,22 +30,30 @@
 class QPointF;
 class KisPainter;
 
-class KisAirbrushOpFactory : public KisPaintOpFactory {
+class KisAirbrushOpFactory : public KisPaintOpFactory
+{
 
 public:
     KisAirbrushOpFactory() {}
     virtual ~KisAirbrushOpFactory() {}
 
     virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
-    virtual QString id() const { return "airbrush"; }
-    virtual QString name() const { return i18n("Pixel Airbrush"); }
-    virtual QString pixmap() { return "krita-airbrush.png"; }
+    virtual QString id() const {
+        return "airbrush";
+    }
+    virtual QString name() const {
+        return i18n("Pixel Airbrush");
+    }
+    virtual QString pixmap() {
+        return "krita-airbrush.png";
+    }
     virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
 };
 
 
-class KisAirbrushOp : public KisBrushBasedPaintOp {
+class KisAirbrushOp : public KisBrushBasedPaintOp
+{
 
 public:
 
@@ -53,7 +61,9 @@ public:
     virtual ~KisAirbrushOp();
 
     // We want to spray even when the pointer doesn't move.
-    virtual bool incremental()  const { return true; }
+    virtual bool incremental()  const {
+        return true;
+    }
 
     void paintAt(const KisPaintInformation& info);
 

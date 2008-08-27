@@ -61,26 +61,27 @@ class KRITAUI_EXPORT KisDoc2 : public KoDocument
     Q_OBJECT
 
 public:
-    KisDoc2(QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false );
+    KisDoc2(QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false);
     virtual ~KisDoc2();
 
 public:
     // Overide KoDocument
-    virtual bool wantExportConfirmation() const { return false; }
+    virtual bool wantExportConfirmation() const {
+        return false;
+    }
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore*);
-    virtual bool loadOdf( KoOdfReadStore & odfStore );
-    virtual bool saveOdf( SavingContext &documentContext );
-    virtual bool loadChildren( KoStore* store);
+    virtual bool loadOdf(KoOdfReadStore & odfStore);
+    virtual bool saveOdf(SavingContext &documentContext);
+    virtual bool loadChildren(KoStore* store);
     virtual bool loadXML(QIODevice *, const KoXmlDocument& doc);
     virtual QByteArray mimeType() const;
     virtual QList<KoDocument::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
-    
-    virtual KParts::Part * hitTest(QWidget * w, const QPoint& pt)
-        {
-            return KoDocument::hitTest(w, pt);
-        }
-        
+
+    virtual KParts::Part * hitTest(QWidget * w, const QPoint& pt) {
+        return KoDocument::hitTest(w, pt);
+    }
+
     virtual KoDocument* hitTest(const QPoint &pos, KoView* view, const QMatrix& matrix = QMatrix());
 
     /**
@@ -99,7 +100,7 @@ public slots:
      * Initialize an empty document using default values
      * @since 1.5
      */
-     virtual void initEmpty();
+    virtual void initEmpty();
 
 public:
 
@@ -122,7 +123,7 @@ public:
      * is not done with KoDocument::insertChild() because that
      * is protected and cannot be called from KisView2.
      */
-    KisChildDoc * createChildDoc( const QRect& rect, KoDocument* childDoc );
+    KisChildDoc * createChildDoc(const QRect& rect, KoDocument* childDoc);
 
     /**
      * Makes an otherwise empty document ready for import/export
@@ -142,12 +143,12 @@ public:
      */
     KoShapeControllerBase * shapeController() const;
 
-    KoShape * shapeForNode( KisNodeSP layer ) const;
+    KoShape * shapeForNode(KisNodeSP layer) const;
 
     /**
      * Add a node to the shape controller
      */
-    KoShape * addShape( const KisNodeSP node);
+    KoShape * addShape(const KisNodeSP node);
 
     /**
      * The layer model provides a light-weight Qt model-view

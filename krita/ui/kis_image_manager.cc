@@ -25,7 +25,6 @@
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kurl.h>
-#include <kstandardaction.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 
@@ -47,19 +46,19 @@
 #include "commands/kis_image_commands.h"
 
 
-KisImageManager::KisImageManager( KisView2 * view)
-    : m_view( view )
+KisImageManager::KisImageManager(KisView2 * view)
+        : m_view(view)
 {
 }
 
-void KisImageManager::setup( KActionCollection * actionCollection )
+void KisImageManager::setup(KActionCollection * actionCollection)
 {
     KAction *action  = new KAction(i18n("I&nsert Image as Layer..."), this);
-    actionCollection->addAction("insert_image_as_layer", action );
+    actionCollection->addAction("insert_image_as_layer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotInsertImageAsLayer()));
 
     action  = new KAction(i18n("Properties..."), this);
-    actionCollection->addAction("img_properties", action );
+    actionCollection->addAction("img_properties", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
 }
 
@@ -99,7 +98,7 @@ qint32 KisImageManager::importImage(const KUrl& urlArg)
         return 0;
 
     for (KUrl::List::iterator it = urls.begin(); it != urls.end(); ++it) {
-        new KisImportCatcher( *it, m_view );
+        new KisImportCatcher(*it, m_view);
     }
 
     m_view->canvas()->update();

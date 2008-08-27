@@ -47,13 +47,14 @@ using namespace ThreadWeaver;
    * The canvas widget catches this signal and schedules an update
      which Qt aggregates into a paint event.
  */
-class KRITAIMAGE_EXPORT KisProjection : public QObject, public KisShared {
+class KRITAIMAGE_EXPORT KisProjection : public QObject, public KisShared
+{
 
     Q_OBJECT
 
 public:
 
-    KisProjection( KisImageWSP image );
+    KisProjection(KisImageWSP image);
     virtual ~KisProjection();
 
     /**
@@ -77,7 +78,7 @@ public:
     /**
        Replace the current rootlayer with the specified rootlayer
     */
-    void setRootLayer( KisGroupLayerSP rootLayer );
+    void setRootLayer(KisGroupLayerSP rootLayer);
 
     /**
      * @return true if there is no recomposition going on or queued
@@ -98,41 +99,41 @@ public:
      *
      * @param roi the region of interest in pixels
      */
-    void setRegionOfInterest( const QRect & roi );
+    void setRegionOfInterest(const QRect & roi);
 
     /**
      * Return the region of interest.
      */
     QRect regionOfInterest();
-    
+
 signals:
 
-    void sigProjectionUpdated( const QRect & );
+    void sigProjectionUpdated(const QRect &);
 
 
 private slots:
 
     void updateSettings();
 
-    void slotUpdateUi( ThreadWeaver::Job* );
+    void slotUpdateUi(ThreadWeaver::Job*);
 
 public slots:
 
     /**
      * Add the specified rect to the recomposition queue
      */
-    void addDirtyRect( const QRect & rect );
+    void addDirtyRect(const QRect & rect);
 
 
 private:
 
     /// Breaks up big rects in separate parts
-    void scheduleRect( const QRect & rc );
+    void scheduleRect(const QRect & rc);
 
 private:
 
-    KisProjection( const KisProjection & );
-    KisProjection & operator=( const KisProjection& );
+    KisProjection(const KisProjection &);
+    KisProjection & operator=(const KisProjection&);
 
     class Private;
     Private * const m_d;

@@ -28,18 +28,15 @@ class TestWidget : public KisFilterConfigWidget
 {
 public:
     TestWidget()
-        : KisFilterConfigWidget(0)
-        {
-        }   
+            : KisFilterConfigWidget(0) {
+    }
 
-    void setConfiguration(KisFilterConfiguration*)
-        {
-        }
+    void setConfiguration(KisFilterConfiguration*) {
+    }
 
-    KisFilterConfiguration* configuration() const
-        {
-            return 0;
-        }
+    KisFilterConfiguration* configuration() const {
+        return 0;
+    }
 };
 
 void KisFilterConfigWidgetTest::testCreation()

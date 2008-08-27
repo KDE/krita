@@ -55,8 +55,8 @@
 
 #include "widgets/imageviewer.h"
 
-KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
-    : PreviewWidgetBase( parent, name )/*, m_image(0)*/
+KisPreviewWidget::KisPreviewWidget(QWidget* parent, const char* name)
+        : PreviewWidgetBase(parent, name)  /*, m_image(0)*/
 {
     m_autoupdate = true;
     m_previewIsDisplayed = true;
@@ -89,8 +89,7 @@ KisPreviewWidget::KisPreviewWidget( QWidget* parent, const char* name )
 void KisPreviewWidget::forceUpdate()
 {
     if (!m_origDevice) return;
-    if(m_previewIsDisplayed)
-    {
+    if (m_previewIsDisplayed) {
         m_groupBox->setTitle(m_origDevice->objectName());
         emit updated();
     }
@@ -98,7 +97,7 @@ void KisPreviewWidget::forceUpdate()
 
 void KisPreviewWidget::slotSetDevice(KisPaintDeviceSP dev)
 {
-    Q_ASSERT( dev );
+    Q_ASSERT(dev);
 
     if (!dev) return;
 
@@ -127,20 +126,19 @@ void KisPreviewWidget::slotUpdate()
 {
     QRect r = m_previewDevice->exactBounds();
     m_scaledPreview = m_previewDevice->convertToQImage(m_profile, 0, 0, r.width(), r.height());
-    if(m_zoom > 1.0)
-    {
+    if (m_zoom > 1.0) {
         int w, h;
-        w = (int) ceil(r.width() * m_zoom );
-        h = (int) ceil(r.height() * m_zoom );
+        w = (int) ceil(r.width() * m_zoom);
+        h = (int) ceil(r.height() * m_zoom);
         m_scaledPreview = m_scaledPreview.scaled(w, h, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
     }
-    if(m_previewIsDisplayed)
-    {
+    if (m_previewIsDisplayed) {
         m_preview->setImage(m_scaledPreview);
     }
 }
 
-void KisPreviewWidget::slotSetAutoUpdate(bool set) {
+void KisPreviewWidget::slotSetAutoUpdate(bool set)
+{
     m_autoupdate = set;
 }
 
@@ -160,8 +158,7 @@ void KisPreviewWidget::setPreviewDisplayed(bool v)
     if (m_scaledPreview.isNull()) return;
 
     m_previewIsDisplayed = v;
-    if(m_previewIsDisplayed)
-    {
+    if (m_previewIsDisplayed) {
         m_groupBox->setTitle(i18n("Preview: ") + m_origDevice->objectName());
         m_preview->setImage(m_scaledPreview);
     } else {
@@ -172,11 +169,12 @@ void KisPreviewWidget::setPreviewDisplayed(bool v)
 
 void KisPreviewWidget::needUpdate()
 {
-    if(m_previewIsDisplayed)
+    if (m_previewIsDisplayed)
         m_groupBox->setTitle(i18n("Preview (needs update)"));
 }
 
-bool KisPreviewWidget::getAutoUpdate()  const {
+bool KisPreviewWidget::getAutoUpdate()  const
+{
     return m_autoupdate;
 }
 
@@ -186,25 +184,22 @@ bool KisPreviewWidget::zoomChanged()
     if (!m_origDevice) return false;
 
     QRect r = m_origDevice->exactBounds();
-    int w = (int) ceil(r.width() * m_zoom );
-    int h = (int) ceil(r.height() * m_zoom );
+    int w = (int) ceil(r.width() * m_zoom);
+    int h = (int) ceil(r.height() * m_zoom);
 
-    if( w == 0 || h == 0 )
+    if (w == 0 || h == 0)
         return false;
 
-    if(m_zoom < 1.0) // if m_zoom > 1.0, we will scale after applying the filter
-    {
+    if (m_zoom < 1.0) { // if m_zoom > 1.0, we will scale after applying the filter
         m_previewDevice = m_origDevice->createThumbnailDevice(w, h);
-    }
-    else {
-        m_previewDevice = new KisPaintDevice( *m_origDevice );
+    } else {
+        m_previewDevice = new KisPaintDevice(*m_origDevice);
     }
 
     m_scaledOriginal = m_previewDevice->convertToQImage(m_profile, 0, 0, w, h);
 
 
-    if(!m_previewIsDisplayed)
-    {
+    if (!m_previewIsDisplayed) {
         m_preview->setImage(m_scaledOriginal);
     }
 
@@ -215,28 +210,31 @@ bool KisPreviewWidget::zoomChanged()
     return true;
 }
 
-void KisPreviewWidget::zoomIn() {
+void KisPreviewWidget::zoomIn()
+{
     double oldZoom = m_zoom;
     if (m_zoom > 0 && m_zoom * 1.5 < 8) {
         m_zoom = m_zoom * 1.5;
-        if( !zoomChanged() )
-	    m_zoom = oldZoom;
+        if (!zoomChanged())
+            m_zoom = oldZoom;
     }
 }
 
-void KisPreviewWidget::zoomOut() {
+void KisPreviewWidget::zoomOut()
+{
     double oldZoom = m_zoom;
-    if (m_zoom > 0 && m_zoom / 1.5 > 1/8) {
+    if (m_zoom > 0 && m_zoom / 1.5 > 1 / 8) {
         m_zoom = m_zoom / 1.5;
-	if( !zoomChanged() )
-	   m_zoom = oldZoom;
-   }
+        if (!zoomChanged())
+            m_zoom = oldZoom;
+    }
 }
 
-void KisPreviewWidget::zoomOneToOne() {
+void KisPreviewWidget::zoomOneToOne()
+{
     double oldZoom = m_zoom;
     m_zoom = 1;
-    if( !zoomChanged() ) m_zoom = oldZoom;
+    if (!zoomChanged()) m_zoom = oldZoom;
 }
 
 

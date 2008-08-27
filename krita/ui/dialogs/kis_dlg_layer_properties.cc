@@ -42,22 +42,21 @@
 #include "widgets/kis_cmb_composite.h"
 #include "widgets/kis_cmb_idlist.h"
 #include "KoColorProfile.h"
-#include "KoColorSpace.h"
 #include "widgets/kis_channelflags_widget.h"
 
 KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
-                                             qint32 opacity,
-                                             const KoCompositeOp* compositeOp,
-                                             const KoColorSpace * colorSpace,
-                                             const QBitArray & channelFlags,
-                                             QWidget *parent, const char *name, Qt::WFlags f)
-    : KDialog(parent)
-    , m_colorSpace( colorSpace )
+        qint32 opacity,
+        const KoCompositeOp* compositeOp,
+        const KoColorSpace * colorSpace,
+        const QBitArray & channelFlags,
+        QWidget *parent, const char *name, Qt::WFlags f)
+        : KDialog(parent)
+        , m_colorSpace(colorSpace)
 {
     Q_UNUSED(f);
-    setCaption( i18n("Layer Properties") );
-    setButtons( Ok | Cancel );
-    setDefaultButton( Ok );
+    setCaption(i18n("Layer Properties"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
 
     setObjectName(name);
     m_page = new WdgLayerProperties(this);
@@ -68,7 +67,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
     setMainWidget(m_page);
 
     m_page->editName->setText(deviceName);
-    connect( m_page->editName, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slotNameChanged( const QString & ) ) );
+    connect(m_page->editName, SIGNAL(textChanged(const QString &)), this, SLOT(slotNameChanged(const QString &)));
 
     m_page->cmbColorSpaces->setCurrent(colorSpace->id());
     m_page->cmbColorSpaces->setEnabled(false);
@@ -86,14 +85,14 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
     m_page->cmbComposite->setCompositeOpList(colorSpace->compositeOps());
     m_page->cmbComposite->setCurrent(compositeOp);
 
-    slotNameChanged( m_page->editName->text() );
+    slotNameChanged(m_page->editName->text());
 
     QVBoxLayout * vbox = new QVBoxLayout;
-    m_channelFlags = new KisChannelFlagsWidget( colorSpace );
-    vbox->addWidget( m_channelFlags );
-    vbox->addStretch( 1 );
-    m_page->grpActiveChannels->setLayout( vbox );
-    m_channelFlags->setChannelFlags( channelFlags );
+    m_channelFlags = new KisChannelFlagsWidget(colorSpace);
+    vbox->addWidget(m_channelFlags);
+    vbox->addStretch(1);
+    m_page->grpActiveChannels->setLayout(vbox);
+    m_channelFlags->setChannelFlags(channelFlags);
 
 }
 
@@ -101,9 +100,9 @@ KisDlgLayerProperties::~KisDlgLayerProperties()
 {
 }
 
-void KisDlgLayerProperties::slotNameChanged( const QString &_text )
+void KisDlgLayerProperties::slotNameChanged(const QString &_text)
 {
-    enableButtonOk( !_text.isEmpty() );
+    enableButtonOk(!_text.isEmpty());
 }
 
 QString KisDlgLayerProperties::getName() const
@@ -119,8 +118,8 @@ int KisDlgLayerProperties::getOpacity() const
         return 0;
 
     opacity = int((opacity * 255.0) / 100 + 0.5);
-    if(opacity>255)
-        opacity=255;
+    if (opacity > 255)
+        opacity = 255;
     return opacity;
 }
 

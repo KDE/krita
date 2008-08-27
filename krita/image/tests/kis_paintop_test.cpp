@@ -27,18 +27,15 @@ class TestPaintOp : public KisPaintOp
 {
 public:
 
-    TestPaintOp( KisPainter * gc)
-        : KisPaintOp( gc )
-        {
-        }
+    TestPaintOp(KisPainter * gc)
+            : KisPaintOp(gc) {
+    }
 
-    void paintAt(const KisPaintInformation&)
-        {
-        }
-    double spacing(double&, double&, double, double) const
-        {
-           return 0.5;
-        }
+    void paintAt(const KisPaintInformation&) {
+    }
+    double spacing(double&, double&, double, double) const {
+        return 0.5;
+    }
 
 
 };
@@ -46,7 +43,7 @@ public:
 void KisPaintopTest::testCreation()
 {
     KisPainter p;
-    TestPaintOp test( &p);
+    TestPaintOp test(&p);
 }
 
 

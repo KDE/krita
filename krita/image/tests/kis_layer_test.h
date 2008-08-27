@@ -25,81 +25,72 @@
 #include "kis_types.h"
 #include "kis_node_visitor.h"
 
-class TestLayer : public KisLayer {
+class TestLayer : public KisLayer
+{
 
     Q_OBJECT
 
 public:
 
-    TestLayer( KisImageWSP image, const QString & name, quint8 opacity )
-        : KisLayer( image, name, opacity )
-        {
-        }
+    TestLayer(KisImageWSP image, const QString & name, quint8 opacity)
+            : KisLayer(image, name, opacity) {
+    }
 
-    KisNodeSP clone() { return new TestLayer(*this); }
-    bool allowAsChild( KisNodeSP ) const { return true; }
+    KisNodeSP clone() {
+        return new TestLayer(*this);
+    }
+    bool allowAsChild(KisNodeSP) const {
+        return true;
+    }
 
-    virtual QString nodeType()
-        {
-            return "TEST";
-        }
+    virtual QString nodeType() {
+        return "TEST";
+    }
 
-    void updateProjection(const QRect&)
-        {
-        }
+    void updateProjection(const QRect&) {
+    }
 
-    KisPaintDeviceSP projection() const
-        {
-            return 0;
-        }
+    KisPaintDeviceSP projection() const {
+        return 0;
+    }
 
-    KisPaintDeviceSP paintDevice() const
-        {
-            return 0;
-        }
+    KisPaintDeviceSP paintDevice() const {
+        return 0;
+    }
 
-    QIcon icon() const
-        {
-            return QIcon();
-        }
+    QIcon icon() const {
+        return QIcon();
+    }
 
-    KisNodeSP clone() const
-        {
-            return new TestLayer(image(), name(), opacity());
-        }
+    KisNodeSP clone() const {
+        return new TestLayer(image(), name(), opacity());
+    }
 
-    qint32 x() const
-        {
-            return 0;
-        }
+    qint32 x() const {
+        return 0;
+    }
 
-    void setX(qint32)
-        {
-        }
+    void setX(qint32) {
+    }
 
-    qint32 y() const
-        {
-            return 0;
-        }
+    qint32 y() const {
+        return 0;
+    }
 
-    void setY(qint32)
-        {
-        }
+    void setY(qint32) {
+    }
 
-    QRect extent() const
-        {
-            return QRect();
-        }
+    QRect extent() const {
+        return QRect();
+    }
 
-    QRect exactBounds() const
-        {
-            return QRect();
-        }
+    QRect exactBounds() const {
+        return QRect();
+    }
 
-    bool accept(KisNodeVisitor& v)
-        {
-            return v.visit( this );
-        }
+    bool accept(KisNodeVisitor& v) {
+        return v.visit(this);
+    }
 
 
 };

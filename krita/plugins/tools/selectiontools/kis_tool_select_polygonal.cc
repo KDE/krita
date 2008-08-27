@@ -49,7 +49,7 @@
 #include "kis_selection_tool_helper.h"
 
 KisToolSelectPolygonal::KisToolSelectPolygonal(KoCanvasBase *canvas)
-    : super(canvas, KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6))
+        : super(canvas, KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6))
 {
     setObjectName("tool_select_polygonal");
     m_dragging = false;
@@ -62,10 +62,10 @@ KisToolSelectPolygonal::~KisToolSelectPolygonal()
 {
 }
 
-void KisToolSelectPolygonal::activate( bool tmp )
+void KisToolSelectPolygonal::activate(bool tmp)
 {
     m_points.clear();
-    super::activate( tmp );
+    super::activate(tmp);
 
     if (!m_optWidget)
         return;
@@ -87,8 +87,7 @@ void KisToolSelectPolygonal::mousePressEvent(KoPointerEvent *event)
 
             m_dragging = true;
 
-            if (m_points.isEmpty())
-            {
+            if (m_points.isEmpty()) {
                 m_dragStart = convertToPixelCoord(event);
                 m_dragEnd = m_dragStart;
                 m_points.append(m_dragStart);
@@ -121,23 +120,23 @@ void KisToolSelectPolygonal::mouseReleaseEvent(KoPointerEvent *event)
         return;
 
     if (m_dragging && event->button() == Qt::LeftButton)  {
-            m_dragging = false;
-            m_points.append (m_dragEnd);
+        m_dragging = false;
+        m_points.append(m_dragEnd);
     }
 
     if (m_dragging && event->button() == Qt::RightButton) {
 
-        }
+    }
 }
 
-void KisToolSelectPolygonal::mouseDoubleClickEvent( KoPointerEvent * )
+void KisToolSelectPolygonal::mouseDoubleClickEvent(KoPointerEvent *)
 {
     finish();
 }
 
 void KisToolSelectPolygonal::keyPressEvent(QKeyEvent *e)
 {
-    if (e->key()==Qt::Key_Escape) {
+    if (e->key() == Qt::Key_Escape) {
         deactivate();
     }
 }
@@ -147,18 +146,18 @@ void KisToolSelectPolygonal::finish()
     if (currentImage()) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
 
-        KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*> ( m_canvas );
-        if ( !kisCanvas )
+        KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(m_canvas);
+        if (!kisCanvas)
             return;
 
         KisSelectionToolHelper helper(kisCanvas, currentNode(), i18n("Polygonal Selection"));
 
-        if ( m_selectionMode == PIXEL_SELECTION ) {
+        if (m_selectionMode == PIXEL_SELECTION) {
 
             KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
 
             KisPainter painter(tmpSel);
-            painter.setBounds( currentImage()->bounds() );
+            painter.setBounds(currentImage()->bounds());
             painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
             painter.setFillStyle(KisPainter::FillStyleForegroundColor);
             painter.setStrokeStyle(KisPainter::StrokeStyleNone);
@@ -170,18 +169,17 @@ void KisToolSelectPolygonal::finish()
 
             QUndoCommand* cmd = helper.selectPixelSelection(tmpSel, m_selectAction);
             m_canvas->addCommand(cmd);
-        }
-        else {
+        } else {
 
-            if(m_points.count() > 1) {
+            if (m_points.count() > 1) {
                 KoPathShape* path = new KoPathShape();
-                path->setShapeId( KoPathShapeId );
+                path->setShapeId(KoPathShapeId);
 
                 QMatrix resolutionMatrix;
-                resolutionMatrix.scale(1/currentImage()->xRes(), 1/currentImage()->yRes());
-                path->moveTo( resolutionMatrix.map(m_points[0]) );
-                for(int i = 1; i < m_points.count(); i++)
-                    path->lineTo( resolutionMatrix.map(m_points[i]) );
+                resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
+                path->moveTo(resolutionMatrix.map(m_points[0]));
+                for (int i = 1; i < m_points.count(); i++)
+                    path->lineTo(resolutionMatrix.map(m_points[i]));
                 path->close();
                 path->normalize();
 
@@ -220,8 +218,7 @@ void KisToolSelectPolygonal::paint(QPainter& gc, const KoViewConverter &converte
     }
     for (vQPointF::iterator it = m_points.begin(); it != m_points.end(); ++it) {
 
-        if (it == m_points.begin())
-        {
+        if (it == m_points.begin()) {
             start = (*it);
         } else {
             end = (*it);
@@ -250,7 +247,7 @@ QWidget* KisToolSelectPolygonal::createOptionWidget()
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setWindowTitle(i18n("Polygonal Selection"));
 
-    connect (m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
+    connect(m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
     connect(m_optWidget, SIGNAL(modeChanged(int)), this, SLOT(slotSetSelectionMode(int)));
 
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
@@ -264,15 +261,17 @@ QWidget* KisToolSelectPolygonal::createOptionWidget()
 
 QWidget* KisToolSelectPolygonal::optionWidget()
 {
-        return m_optWidget;
+    return m_optWidget;
 }
 
-void KisToolSelectPolygonal::slotSetAction(int action) {
+void KisToolSelectPolygonal::slotSetAction(int action)
+{
     if (action >= SELECTION_REPLACE && action <= SELECTION_INTERSECT)
-        m_selectAction =(selectionAction)action;
+        m_selectAction = (selectionAction)action;
 }
 
-void KisToolSelectPolygonal::slotSetSelectionMode(int mode) {
+void KisToolSelectPolygonal::slotSetSelectionMode(int mode)
+{
     m_selectionMode = (selectionMode)mode;
 }
 

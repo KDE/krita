@@ -32,55 +32,56 @@ class KisSerializableConfiguration;
  * This class provides the basic functionality for a model of a bookmark
  * of configurations.
  */
-class KRITAUI_EXPORT KisBookmarkedConfigurationsModel : public QAbstractListModel {
-    public:
-        /**
-         * Initialized thee model with the bookmarks manager
-         */
-        KisBookmarkedConfigurationsModel(KisBookmarkedConfigurationManager*);
-        ~KisBookmarkedConfigurationsModel();
-        /**
-         * @return  the bookmarked configuration manager associated with this model.
-         */
-        KisBookmarkedConfigurationManager* bookmarkedConfigurationManager();
-        /**
-         * @return the number of configurations (the minimum is always 2, the default
-         * configuration and the last used configuration are always present)
-         */
-        virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-        /**
-         * When role == Qt::DisplayRole, this function will return the name of the
-         * configuration.
-         */
-        virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-        virtual bool setData ( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
-        /**
-         * @return the configuration at the given index
-         */
-        KisSerializableConfiguration* configuration(const QModelIndex &index) const;
-        /**
-         * @return true if the configuration at the given index can be removed
-         */
-        virtual bool isIndexDeletable(const QModelIndex &index) const;
-        /**
-         * @return the flags associated to the index
-         */
-        Qt::ItemFlags flags(const QModelIndex & index) const;
-        /**
-         * Insert a new configuration.
-         */
-        virtual void newConfiguration(KLocalizedString baseName, const KisSerializableConfiguration* config);
-        /**
-         * Save a configuration to the bookmark manager.
-         */
-        virtual void saveConfiguration(const QString & name, const KisSerializableConfiguration* config);
-        /**
-         * Delete the configuration at the given index. (if possible)
-         */
-        virtual void deleteIndex(const QModelIndex &index);
-    private:
-        struct Private;
-        Private* const d;
+class KRITAUI_EXPORT KisBookmarkedConfigurationsModel : public QAbstractListModel
+{
+public:
+    /**
+     * Initialized thee model with the bookmarks manager
+     */
+    KisBookmarkedConfigurationsModel(KisBookmarkedConfigurationManager*);
+    ~KisBookmarkedConfigurationsModel();
+    /**
+     * @return  the bookmarked configuration manager associated with this model.
+     */
+    KisBookmarkedConfigurationManager* bookmarkedConfigurationManager();
+    /**
+     * @return the number of configurations (the minimum is always 2, the default
+     * configuration and the last used configuration are always present)
+     */
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    /**
+     * When role == Qt::DisplayRole, this function will return the name of the
+     * configuration.
+     */
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
+    /**
+     * @return the configuration at the given index
+     */
+    KisSerializableConfiguration* configuration(const QModelIndex &index) const;
+    /**
+     * @return true if the configuration at the given index can be removed
+     */
+    virtual bool isIndexDeletable(const QModelIndex &index) const;
+    /**
+     * @return the flags associated to the index
+     */
+    Qt::ItemFlags flags(const QModelIndex & index) const;
+    /**
+     * Insert a new configuration.
+     */
+    virtual void newConfiguration(KLocalizedString baseName, const KisSerializableConfiguration* config);
+    /**
+     * Save a configuration to the bookmark manager.
+     */
+    virtual void saveConfiguration(const QString & name, const KisSerializableConfiguration* config);
+    /**
+     * Delete the configuration at the given index. (if possible)
+     */
+    virtual void deleteIndex(const QModelIndex &index);
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif

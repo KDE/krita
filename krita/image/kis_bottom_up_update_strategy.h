@@ -31,7 +31,7 @@ class QRect;
 class QRegion;
 
 /**
- * The bottom-up projection update strategy filters the dirty marking 
+ * The bottom-up projection update strategy filters the dirty marking
  * down to the root node, and starts a projection thread from there,
  * marking nodes clean as it goes
  */
@@ -41,16 +41,16 @@ class KRITAIMAGE_EXPORT KisBottomUpUpdateStrategy : public QObject, public KisPr
 
 public:
 
-    KisBottomUpUpdateStrategy( KisNodeWSP node );
+    KisBottomUpUpdateStrategy(KisNodeWSP node);
 
     ~KisBottomUpUpdateStrategy();
 
 public:
 
-    void setDirty( const QRect & rc );
+    void setDirty(const QRect & rc);
 
     virtual void setImage(KisImageSP image);
-    
+
     /**
        Lock the projection: we will add new rects to the dirty region,
        but not composite until unlocked
@@ -62,7 +62,7 @@ public:
        dirty region and emit projectionUpdated signals
     */
     void unlock();
-    
+
 public: // Extensions for this strategy
     /**
      * @return true if any part of this layer has been marked dirty
@@ -73,12 +73,12 @@ public: // Extensions for this strategy
      *  @return true if the given rect overlaps with the dirty region
      *  of this node
      */
-    bool isDirty( const QRect & rect ) const;
+    bool isDirty(const QRect & rect) const;
 
     /**
      * Mark the specified area as clean
      */
-    void setClean( const QRect & rc );
+    void setClean(const QRect & rc);
 
     /**
      * Mark the whole layer as clean
@@ -88,15 +88,15 @@ public: // Extensions for this strategy
     /**
      * @return the region from the given rect that is dirty.
      */
-    QRegion dirtyRegion( const QRect & rc );
+    QRegion dirtyRegion(const QRect & rc);
 
 signals:
 
-    void rectDirtied( const QRect & rc );
+    void rectDirtied(const QRect & rc);
 
 protected:
 
-    virtual KisPaintDeviceSP updateGroupLayerProjection( const QRect & rc, KisPaintDeviceSP projection );
+    virtual KisPaintDeviceSP updateGroupLayerProjection(const QRect & rc, KisPaintDeviceSP projection);
 
 private:
 

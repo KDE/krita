@@ -32,7 +32,8 @@ class KoColorSpace;
 class MixerCanvas;
 class MixerTool;
 
-class KisPainterlyMixer : public QWidget, private Ui::KisPainterlyMixer {
+class KisPainterlyMixer : public QWidget, private Ui::KisPainterlyMixer
+{
     Q_OBJECT
 
 public:

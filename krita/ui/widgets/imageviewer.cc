@@ -34,9 +34,9 @@
 #include <kis_cursor.h>
 
 ImageViewer::ImageViewer(QWidget *widget, const char * name)
-    : Q3ScrollView(widget, name)
-    , m_isDragging(false)
-    , m_image(QPixmap())
+        : Q3ScrollView(widget, name)
+        , m_isDragging(false)
+        , m_image(QPixmap())
 {
     m_label = new QLabel(viewport());
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
@@ -49,13 +49,13 @@ void ImageViewer::setImage(QImage & image)
     m_image = QPixmap::fromImage(image);
     m_label->setPixmap(m_image);
     m_label->setFixedSize(m_image.width(), m_image.height());
-    resizeContents( m_image.width(), m_image.height() );
+    resizeContents(m_image.width(), m_image.height());
     repaintContents(false);
 }
 
 void ImageViewer::contentsMousePressEvent(QMouseEvent *event)
 {
-    if(Qt::LeftButton == event->button()) {
+    if (Qt::LeftButton == event->button()) {
         setCursor(KisCursor::closedHandCursor());
         m_currentPos = event->globalPos();
         m_isDragging = true;
@@ -64,7 +64,7 @@ void ImageViewer::contentsMousePressEvent(QMouseEvent *event)
 
 void ImageViewer::contentsMouseReleaseEvent(QMouseEvent *event)
 {
-    if(Qt::LeftButton == event->button()) {
+    if (Qt::LeftButton == event->button()) {
         setCursor(KisCursor::handCursor());
         m_currentPos = event->globalPos();
         m_isDragging = false;
@@ -73,7 +73,7 @@ void ImageViewer::contentsMouseReleaseEvent(QMouseEvent *event)
 
 void ImageViewer::contentsMouseMoveEvent(QMouseEvent *event)
 {
-    if(m_isDragging) {
+    if (m_isDragging) {
         QPoint delta = m_currentPos - event->globalPos();
         scrollBy(delta.x(), delta.y());
         m_currentPos = event->globalPos();

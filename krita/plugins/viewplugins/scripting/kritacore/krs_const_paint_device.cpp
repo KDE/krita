@@ -38,8 +38,8 @@
 using namespace Scripting;
 
 ConstPaintDevice::ConstPaintDevice(KisPaintDeviceSP device, KisDoc2* doc)
-    : m_device(device)
-    , m_doc(doc)
+        : m_device(device)
+        , m_doc(doc)
 {
     setObjectName("KritaLayer");
 }
@@ -95,27 +95,26 @@ QObject* ConstPaintDevice::createHistogram(const QString& histoname, uint typenr
     */
 
     enumHistogramType type ;
-    switch(typenr)
-    {
-        case 1:
-            type = LOGARITHMIC;
-            break;
-        case 0:
-        default:
-            type = LINEAR;
-            break;
+    switch (typenr) {
+    case 1:
+        type = LOGARITHMIC;
+        break;
+    case 0:
+    default:
+        type = LINEAR;
+        break;
     }
 
-    if(factory && factory->isCompatibleWith( paintDevice()->colorSpace() ))
+    if (factory && factory->isCompatibleWith(paintDevice()->colorSpace()))
         return new Histogram(this, factory->generate() , type);
 
-    kWarning(41011) << QString("An error has occurred in %1\n%2").arg("createHistogram").arg( QString("The histogram %1 is not available").arg(histoname) );
+    kWarning(41011) << QString("An error has occurred in %1\n%2").arg("createHistogram").arg(QString("The histogram %1 is not available").arg(histoname));
     return 0;
 }
 
 QObject* ConstPaintDevice::fastWaveletTransformation()
 {
-    KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value( paintDevice()->colorSpace()->mathToolboxId().id() );
+    KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value(paintDevice()->colorSpace()->mathToolboxId().id());
     QRect rect = paintDevice()->exactBounds();
     KisMathToolbox::KisWavelet* wav = mathToolbox->fastWaveletTransformation(paintDevice(), rect);
     return new Wavelet(wav);
@@ -124,7 +123,7 @@ QObject* ConstPaintDevice::fastWaveletTransformation()
 QObject* ConstPaintDevice::clone()
 {
     KisPaintDeviceSP pl = new KisPaintDevice(*paintDevice());
-    return new ConstPaintDevice( pl);
+    return new ConstPaintDevice(pl);
 }
 
 #if 0
@@ -144,7 +143,7 @@ QByteArray ConstPaintDevice::bytes()
     quint8* data = new quint8[size];
     Q_CHECK_PTR(data);
     paintDevice()->readBytes(data, 0, 0, w, h);
-    for(int i = 0; i < size; ++i)
+    for (int i = 0; i < size; ++i)
         out << data[i];
     delete [] data;
 
@@ -158,7 +157,7 @@ bool ConstPaintDevice::setBytes(const QByteArray& bytearray)
     const int h = height();
     const int size = w * h * pixelsize;
 
-    if(size < 0 || bytearray.size() < size)
+    if (size < 0 || bytearray.size() < size)
         return false;
 
     QBuffer buffer(&bytearray);
@@ -167,7 +166,7 @@ bool ConstPaintDevice::setBytes(const QByteArray& bytearray)
 
     quint8* data = new quint8[size];
     Q_CHECK_PTR(data);
-    for(int i = 0; i < size; ++i)
+    for (int i = 0; i < size; ++i)
         in >> data[i];
     paintDevice()->writeBytes(data, 0, 0, w, h);
     delete [] data;

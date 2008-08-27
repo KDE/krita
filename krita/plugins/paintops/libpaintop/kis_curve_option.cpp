@@ -19,21 +19,22 @@
 #include "kis_curve_option.h"
 #include "widgets/kcurve.h"
 
-KisCurveOption::KisCurveOption( const QString & label )
-    : KisPaintOpOption( label )
-    , m_customCurve( false )
+KisCurveOption::KisCurveOption(const QString & label)
+        : KisPaintOpOption(label)
+        , m_customCurve(false)
 {
     m_curveWidget = new KCurve();
     m_curveWidget->hide();
     setConfigurationPage(m_curveWidget);
-    m_curve = QVector<double>( 255, 0.0 );
-    connect( m_curveWidget, SIGNAL( modified() ), this, SLOT( transferCurve() ) );
+    m_curve = QVector<double>(255, 0.0);
+    connect(m_curveWidget, SIGNAL(modified()), this, SLOT(transferCurve()));
 }
 
-void KisCurveOption::transferCurve() {
+void KisCurveOption::transferCurve()
+{
     double value;
     for (int i = 0; i < 256; i++) {
-        value = m_curveWidget->getCurveValue( i / 255.0);
+        value = m_curveWidget->getCurveValue(i / 255.0);
         if (value < PRESSURE_MIN)
             m_curve[i] = PRESSURE_MIN;
         else if (value > PRESSURE_MAX)

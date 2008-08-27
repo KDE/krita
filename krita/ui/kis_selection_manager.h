@@ -40,7 +40,8 @@ class KisClipboard;
  * The selection manager is responsible selections
  * and the clipboard.
  */
-class KRITAUI_EXPORT KisSelectionManager : public QObject {
+class KRITAUI_EXPORT KisSelectionManager : public QObject
+{
 
     Q_OBJECT
 
@@ -88,8 +89,8 @@ public slots:
     void shapeSelectionChanged();
 
 public:
-    void grow (qint32 xradius, qint32 yradius);
-    void shrink (qint32 xradius, qint32 yradius, bool edge_lock);
+    void grow(qint32 xradius, qint32 yradius);
+    void shrink(qint32 xradius, qint32 yradius, bool edge_lock);
     void border(qint32 xradius, qint32 yradius);
     // the following functions are needed for the siox tool
     // they might be also useful on its own
@@ -103,9 +104,9 @@ private:
     void updateStatusBar();
     bool selectionIsActive();
 
-    void computeBorder (qint32  *circ, qint32  xradius, qint32  yradius);
-    inline void rotatePointers (quint8  **p, quint32 n);
-    void computeTransition (quint8* transition, quint8** buf, qint32 width);
+    void computeBorder(qint32  *circ, qint32  xradius, qint32  yradius);
+    inline void rotatePointers(quint8  **p, quint32 n);
+    void computeTransition(quint8* transition, quint8** buf, qint32 width);
 
     void updateSimpleOutline();
 

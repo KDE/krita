@@ -25,16 +25,19 @@
 #include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"
 
-KisBoundary::KisBoundary(KisPaintDeviceSP dev) {
+KisBoundary::KisBoundary(KisPaintDeviceSP dev)
+{
     m_device = dev;
     m_fuzzyness = 255 / 2;
 }
 
-bool KisBoundary::isDark(quint8 val) {
+bool KisBoundary::isDark(quint8 val)
+{
     return val < m_fuzzyness;
 }
 
-void KisBoundary::generateBoundary(int w, int h) {
+void KisBoundary::generateBoundary(int w, int h)
+{
     if (!m_device)
         return;
 

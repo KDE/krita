@@ -34,33 +34,33 @@
 #include "kis_basic_dynamic_program_editor.h"
 
 
-class Factory {
-    public:
-        Factory()
-        {
-            KisDynamicShapeProgramFactoryRegistry::instance()->add( new KisBasicDynamicProgramFactory );
-        }
+class Factory
+{
+public:
+    Factory() {
+        KisDynamicShapeProgramFactoryRegistry::instance()->add(new KisBasicDynamicProgramFactory);
+    }
 };
 
 static Factory factory;
 
 KisBasicDynamicProgram::KisBasicDynamicProgram(const QString& name) : KisDynamicShapeProgram(name, "basicshape"),
-    m_sizeEnabled(false),
-    m_sizeMinimum(0),
-    m_sizeMaximum(200),
-    m_sizeJitter(0),
-    m_sizeSensor(0),
-    m_angleEnabled(false),
-    m_angleJitter(0),
-    m_angleSensor(0),
-    m_scatterEnabled(false),
-    m_scatterAmount(0),
-    m_scatterJitter(0),
-    m_scatterSensor(0),
-    m_enableCout(false),
-    m_countCount(1),
-    m_countJitter(0),
-    m_countSensor(0)
+        m_sizeEnabled(false),
+        m_sizeMinimum(0),
+        m_sizeMaximum(200),
+        m_sizeJitter(0),
+        m_sizeSensor(0),
+        m_angleEnabled(false),
+        m_angleJitter(0),
+        m_angleSensor(0),
+        m_scatterEnabled(false),
+        m_scatterAmount(0),
+        m_scatterJitter(0),
+        m_scatterSensor(0),
+        m_enableCout(false),
+        m_countCount(1),
+        m_countJitter(0),
+        m_countSensor(0)
 {
 }
 
@@ -74,42 +74,38 @@ KisBasicDynamicProgram::~KisBasicDynamicProgram()
 
 inline double jitter(int amount, double v)
 {
-    v *= 1.0 + double(rand() - RAND_MAX / 2 ) * amount / (RAND_MAX * 50) ;
-    if(v >= 1.0) v= 1.0;
+    v *= 1.0 + double(rand() - RAND_MAX / 2) * amount / (RAND_MAX * 50) ;
+    if (v >= 1.0) v = 1.0;
     return v;
 }
 
-KisDynamicScattering KisBasicDynamicProgram::scattering( const KisPaintInformation& info ) const
+KisDynamicScattering KisBasicDynamicProgram::scattering(const KisPaintInformation& info) const
 {
     int count = 1;
     double distance = 0.0;
-    
-    if( m_scatterEnabled )
-    {
-        double v = jitter( m_scatterJitter, m_scatterSensor->parameter( info ) );
+
+    if (m_scatterEnabled) {
+        double v = jitter(m_scatterJitter, m_scatterSensor->parameter(info));
         distance = v * info.movement().norm() * m_scatterAmount * 0.01;
     }
-    if( m_enableCout )
-    {
-        double v = jitter( m_countJitter, m_countSensor->parameter( info ) );
-        count = (int)ceil( m_countCount * v );
+    if (m_enableCout) {
+        double v = jitter(m_countJitter, m_countSensor->parameter(info));
+        count = (int)ceil(m_countCount * v);
     }
     return KisDynamicScattering(count, distance);
 }
 
 void KisBasicDynamicProgram::apply(KisDynamicShape* shape, const KisPaintInformation& info) const
 {
-    if(m_sizeEnabled)
-    {
-        double v = jitter( m_sizeJitter, m_sizeSensor->parameter( info ) );
-        v = m_sizeMinimum * (1.0 -v) + m_sizeMaximum * v;
+    if (m_sizeEnabled) {
+        double v = jitter(m_sizeJitter, m_sizeSensor->parameter(info));
+        v = m_sizeMinimum * (1.0 - v) + m_sizeMaximum * v;
         v *= 0.01;
-        shape->resize( v, v);
+        shape->resize(v, v);
     }
-    if(m_angleEnabled)
-    {
-        double v = jitter( m_angleJitter, m_angleSensor->parameter( info ) );
-        shape->rotate( v * 2 * M_PI );
+    if (m_angleEnabled) {
+        double v = jitter(m_angleJitter, m_angleSensor->parameter(info));
+        shape->rotate(v * 2 * M_PI);
     }
 }
 
@@ -124,22 +120,21 @@ void KisBasicDynamicProgram::fromXML(const QDomElement& elt)
     while (!n.isNull()) {
         QDomElement e = n.toElement();
         if (!e.isNull()) {
-            if( e.tagName() == "params")
-            {
+            if (e.tagName() == "params") {
                 KisPropertiesConfiguration kpc;
                 kpc.fromXML(e);
-                setEnableSize(kpc.getBool( "sizeEnabled", false) );
-                setSizeMinimum(kpc.getInt( "sizeMinimum", 0) );
-                setSizeMaximum(kpc.getInt( "sizeMaximum", 200) );
-                setSizeJitter(kpc.getInt( "sizeJitter", 0) );
-                setEnableAngle(kpc.getBool( "angleEnabled", false) );
-                setAngleJitter(kpc.getInt( "angleJitter", 0) );
-                setEnableScatter(kpc.getBool( "scatterEnabled", false) );
-                setScatterJitter(kpc.getInt( "scatterJitter", 0) );
-                setScatterAmount(kpc.getInt( "scatterAmount", 0) );
-                setEnableCount(kpc.getInt( "countEnabled", 0) );
-                setCountCount(kpc.getInt( "countCount", 0) );
-                setCountJitter(kpc.getInt( "countJitter", 0) );
+                setEnableSize(kpc.getBool("sizeEnabled", false));
+                setSizeMinimum(kpc.getInt("sizeMinimum", 0));
+                setSizeMaximum(kpc.getInt("sizeMaximum", 200));
+                setSizeJitter(kpc.getInt("sizeJitter", 0));
+                setEnableAngle(kpc.getBool("angleEnabled", false));
+                setAngleJitter(kpc.getInt("angleJitter", 0));
+                setEnableScatter(kpc.getBool("scatterEnabled", false));
+                setScatterJitter(kpc.getInt("scatterJitter", 0));
+                setScatterAmount(kpc.getInt("scatterAmount", 0));
+                setEnableCount(kpc.getInt("countEnabled", 0));
+                setCountCount(kpc.getInt("countCount", 0));
+                setCountJitter(kpc.getInt("countJitter", 0));
             } else if (e.tagName() == "sizeSensor") {
                 m_sizeSensor = KisDynamicSensor::createFromXML(e);
             } else if (e.tagName() == "angleSensor") {
@@ -170,32 +165,28 @@ void KisBasicDynamicProgram::toXML(QDomDocument& doc, QDomElement& rootElt) cons
     kpc.setProperty("isCountEnabled", QVariant(isCountEnabled()));
     kpc.setProperty("countCount", QVariant(countCount()));
     kpc.setProperty("countJitter", QVariant(countJitter()));
-    QDomElement paramsElt = doc.createElement( "params" );
-    rootElt.appendChild( paramsElt );
-    kpc.toXML( doc, paramsElt);
-    if(m_sizeSensor)
-    {
-        QDomElement eSensor = doc.createElement( "sizeSensor" );
-        m_sizeSensor->toXML( doc, eSensor);
-        rootElt.appendChild( eSensor );
+    QDomElement paramsElt = doc.createElement("params");
+    rootElt.appendChild(paramsElt);
+    kpc.toXML(doc, paramsElt);
+    if (m_sizeSensor) {
+        QDomElement eSensor = doc.createElement("sizeSensor");
+        m_sizeSensor->toXML(doc, eSensor);
+        rootElt.appendChild(eSensor);
     }
-    if(m_angleSensor)
-    {
-        QDomElement eSensor = doc.createElement( "angleSensor" );
-        m_angleSensor->toXML( doc, eSensor);
-        rootElt.appendChild( eSensor );
+    if (m_angleSensor) {
+        QDomElement eSensor = doc.createElement("angleSensor");
+        m_angleSensor->toXML(doc, eSensor);
+        rootElt.appendChild(eSensor);
     }
-    if(m_scatterSensor)
-    {
-        QDomElement eSensor = doc.createElement( "scatterSensor" );
-        m_scatterSensor->toXML( doc, eSensor);
-        rootElt.appendChild( eSensor );
+    if (m_scatterSensor) {
+        QDomElement eSensor = doc.createElement("scatterSensor");
+        m_scatterSensor->toXML(doc, eSensor);
+        rootElt.appendChild(eSensor);
     }
-    if(m_countSensor)
-    {
-        QDomElement eSensor = doc.createElement( "countSensor" );
-        m_countSensor->toXML( doc, eSensor);
-        rootElt.appendChild( eSensor );
+    if (m_countSensor) {
+        QDomElement eSensor = doc.createElement("countSensor");
+        m_countSensor->toXML(doc, eSensor);
+        rootElt.appendChild(eSensor);
     }
     KisDynamicShapeProgram::toXML(doc, rootElt);
 }
@@ -375,7 +366,7 @@ void KisBasicDynamicProgram::setCountSensor(KisDynamicSensor* s)
 //--- KisBasicDynamicProgramFactory ---//
 
 KisBasicDynamicProgramFactory::KisBasicDynamicProgramFactory() :
-    KisDynamicShapeProgramFactory("basicshape", i18n("Basic"))
+        KisDynamicShapeProgramFactory("basicshape", i18n("Basic"))
 {
 }
 

@@ -36,7 +36,8 @@ class KisProjectionUpdateStrategy;
  * NOTE: your subclasses must have the Q_OBJECT declaration, even if
  * you do not define new signals or slots.
  */
-class KRITAIMAGE_EXPORT KisNode : public KisBaseNode {
+class KRITAIMAGE_EXPORT KisNode : public KisBaseNode
+{
 
     Q_OBJECT
 
@@ -54,7 +55,7 @@ public:
      * Create a copy of this node. The copy will not have a parent
      * node.
      */
-    KisNode( const KisNode & rhs );
+    KisNode(const KisNode & rhs);
 private:
     void init();
 public:
@@ -76,9 +77,9 @@ protected:
      * @return false if the given node is not allowed as a subclass to
      * this node
      */
-    virtual bool allowAsChild( KisNodeSP ) const = 0;
+    virtual bool allowAsChild(KisNodeSP) const = 0;
 
-public:        
+public:
 
     /**
      * @return the update strategy
@@ -105,7 +106,7 @@ public:
      * this percolates up to parent nodes all the way to the root
      * node, if propagate is true;
      */
-    virtual void setDirty( const QRegion & region);
+    virtual void setDirty(const QRegion & region);
 
 public: // Graph methods
 
@@ -119,7 +120,7 @@ public: // Graph methods
      * Set the graph listener for this node. The graphlistener will be
      * informed before and after the list of child nodes has changed.
      */
-    void setGraphListener( KisNodeGraphListener * graphListener );
+    void setGraphListener(KisNodeGraphListener * graphListener);
 
     /**
      * Returns the parent node of this node. This is 0 only for a root
@@ -166,7 +167,7 @@ public: // Graph methods
      *
      * @return 0 if there is no node at this index.
      */
-    KisNodeSP at( quint32 index ) const;
+    KisNodeSP at(quint32 index) const;
 
     /**
      * Retrieve the index of the specified child node.
@@ -174,7 +175,7 @@ public: // Graph methods
      * @return -1 if the specified node is not a child node of this
      * node.
      */
-    int index( const KisNodeSP node ) const;
+    int index(const KisNodeSP node) const;
 
 
     /**
@@ -187,7 +188,7 @@ public: // Graph methods
      * @param properties. if not empty, only nodes for which
      * KisNodeBase::check(properties) returns true will be returned.
      */
-    QList<KisNodeSP> childNodes( const QStringList & nodeTypes, const KoProperties & properties ) const;
+    QList<KisNodeSP> childNodes(const QStringList & nodeTypes, const KoProperties & properties) const;
 
 
 protected:
@@ -219,27 +220,27 @@ private:
     /**
      * Set the parent of this node.
      */
-    void setParent( KisNodeSP parent );
+    void setParent(KisNodeSP parent);
 
     /**
      * Add the specified node above the specified node. If aboveThis
      * is 0, the node is added at the bottom.
      */
-    bool add( KisNodeSP newNode, KisNodeSP aboveThis );
+    bool add(KisNodeSP newNode, KisNodeSP aboveThis);
 
     /**
      * Removes the node at the specified index from the child nodes.
      *
      * @return false if there is no node at this index
      */
-    bool remove( quint32 index );
+    bool remove(quint32 index);
 
     /**
      * Removes the node from the child nodes.
      *
      * @return false if there's no such node in this node.
      */
-    bool remove( KisNodeSP node );
+    bool remove(KisNodeSP node);
 
 
 private:
@@ -249,6 +250,6 @@ private:
 
 };
 
-Q_DECLARE_METATYPE( KisNodeSP )
+Q_DECLARE_METATYPE(KisNodeSP)
 
 #endif

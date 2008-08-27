@@ -31,25 +31,24 @@
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
 
-struct KisMask::Private
-{
+struct KisMask::Private {
     KisSelectionSP selection;
 };
 
-KisMask::KisMask( const QString & name )
-    : KisNode()
-    , m_d( new Private() )
+KisMask::KisMask(const QString & name)
+        : KisNode()
+        , m_d(new Private())
 {
-    setName( name );
+    setName(name);
     m_d->selection = new KisSelection();
 }
 
 KisMask::KisMask(const KisMask& rhs)
-    : KisNode( rhs )
-    , m_d( new Private() )
+        : KisNode(rhs)
+        , m_d(new Private())
 {
-    setName( rhs.name() );
-    m_d->selection = new KisSelection( *rhs.m_d->selection.data() );
+    setName(rhs.name());
+    m_d->selection = new KisSelection(*rhs.m_d->selection.data());
 }
 
 KisMask::~KisMask()
@@ -64,19 +63,19 @@ KoDocumentSectionModel::PropertyList KisMask::sectionModelProperties() const
     return l;
 }
 
-void KisMask::setSectionModelProperties( const KoDocumentSectionModel::PropertyList &properties )
+void KisMask::setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties)
 {
-    setActive( properties.at( 2 ).state.toBool() );
+    setActive(properties.at(2).state.toBool());
 }
 
 bool KisMask::active() const
 {
-    return nodeProperties().boolProperty( "active", true );
+    return nodeProperties().boolProperty("active", true);
 }
 
-void KisMask::setActive( bool active )
+void KisMask::setActive(bool active)
 {
-    nodeProperties().setProperty( "active", active );
+    nodeProperties().setProperty("active", active);
 }
 
 KisSelectionSP KisMask::selection() const
@@ -89,52 +88,52 @@ KisPaintDeviceSP KisMask::paintDevice() const
     return m_d->selection->getOrCreatePixelSelection();
 }
 
-void KisMask::setSelection( KisSelectionSP selection )
+void KisMask::setSelection(KisSelectionSP selection)
 {
     m_d->selection = selection;
 }
 
-void KisMask::select( const QRect & rc, quint8 selectedness )
+void KisMask::select(const QRect & rc, quint8 selectedness)
 {
-    Q_ASSERT( m_d->selection );
+    Q_ASSERT(m_d->selection);
     KisPixelSelectionSP psel = m_d->selection->getOrCreatePixelSelection();
-    psel->select( rc, selectedness );
-    m_d->selection->updateProjection( rc );
+    psel->select(rc, selectedness);
+    m_d->selection->updateProjection(rc);
 }
 
 QRect KisMask::extent() const
 {
-    Q_ASSERT( m_d->selection );
+    Q_ASSERT(m_d->selection);
     return m_d->selection->selectedRect();
 }
 
 QRect KisMask::exactBounds() const
 {
-    Q_ASSERT( m_d->selection );
+    Q_ASSERT(m_d->selection);
     return m_d->selection->selectedExactRect();
 }
 
 qint32 KisMask::x() const
 {
-    Q_ASSERT( m_d->selection );
+    Q_ASSERT(m_d->selection);
     return m_d->selection->x();
 }
 
 void KisMask::setX(qint32 x)
 {
-    Q_ASSERT( m_d->selection );
+    Q_ASSERT(m_d->selection);
     m_d->selection->setX(x);
 }
 
 qint32 KisMask::y() const
 {
-    Q_ASSERT( m_d->selection );
+    Q_ASSERT(m_d->selection);
     return m_d->selection->y();
 }
 
 void KisMask::setY(qint32 y)
 {
-    Q_ASSERT( m_d->selection );
+    Q_ASSERT(m_d->selection);
     m_d->selection->setY(y);
 }
 

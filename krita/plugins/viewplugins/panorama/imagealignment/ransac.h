@@ -22,94 +22,82 @@
 #include <algorithm>
 
 template<class _Tmodel_, class _TmodelStaticParam_, class _Tdata_>
-class Ransac {
-  public:
+class Ransac
+{
+public:
     /**
      * @param nbFit number of point to fit the model
      * @param nbGood
      * @param iter number of iterations
      */
-    Ransac( uint _nbGood, uint _iter, _TmodelStaticParam_* params) :
-        m_nbGood(_nbGood), m_iter(_iter), m_params(params)
-    {
+    Ransac(uint _nbGood, uint _iter, _TmodelStaticParam_* params) :
+            m_nbGood(_nbGood), m_iter(_iter), m_params(params) {
 
     }
-    ~Ransac()
-    {
+    ~Ransac() {
         delete m_params;
     }
     /**
      */
-    std::list<_Tmodel_*> findModels(const std::vector<_Tdata_>& _data )
-    {
-      std::list<_Tmodel_*> models;
-      if( _data.size() < _Tmodel_::nbFit())
-      {
-        std::cerr << "Not enough data a minimum of " << _Tmodel_::nbFit() << " is required but " << _data.size() << " werer provided" << std::endl;
-        return models;
-      }
-      for(uint i = 0; i < m_iter; i++)
-      {
+    std::list<_Tmodel_*> findModels(const std::vector<_Tdata_>& _data) {
+        std::list<_Tmodel_*> models;
+        if (_data.size() < _Tmodel_::nbFit()) {
+            std::cerr << "Not enough data a minimum of " << _Tmodel_::nbFit() << " is required but " << _data.size() << " werer provided" << std::endl;
+            return models;
+        }
+        for (uint i = 0; i < m_iter; i++) {
 //         std::cerr << "Iteration " << i << " out of " << m_iter << std::endl;
-        std::vector<_Tdata_> samples;
-        // Initialize a random samples list
-        for (uint is = 0 ; is < _Tmodel_::nbFit() ; ) {
-          int idx = (int)( ((double)rand() * _data.size()) / RAND_MAX );
+            std::vector<_Tdata_> samples;
+            // Initialize a random samples list
+            for (uint is = 0 ; is < _Tmodel_::nbFit() ;) {
+                int idx = (int)(((double)rand() * _data.size()) / RAND_MAX);
 //           std::cerr << idx << " " << _data.size() << std::endl;
-          _Tdata_ sample = _data[ idx ];
-          if(std::find(samples.begin(), samples.end(), sample) == samples.end())
-          {
-            samples.push_back(sample);
-            ++is;
-          }
-        }
-        // Create a model and see if the samples fit
-        _Tmodel_* model = new _Tmodel_( samples, m_params);
-        if( model->isValid() )
-        { // The model is valid
-          // Check non-sample data for points that fit the model
-          std::vector<_Tdata_> gooddata;
-          double fittingerror = 0.0;
-          for( typename std::vector<_Tdata_>::const_iterator it = _data.begin();
-               it != _data.end(); ++it)
-          {
-            if( std::find(samples.begin(), samples.end(), *it) == samples.end())
-            { // Not a sample
-              double error = model->fittingError( *it ); // Check fitting error
+                _Tdata_ sample = _data[ idx ];
+                if (std::find(samples.begin(), samples.end(), sample) == samples.end()) {
+                    samples.push_back(sample);
+                    ++is;
+                }
+            }
+            // Create a model and see if the samples fit
+            _Tmodel_* model = new _Tmodel_(samples, m_params);
+            if (model->isValid()) { // The model is valid
+                // Check non-sample data for points that fit the model
+                std::vector<_Tdata_> gooddata;
+                double fittingerror = 0.0;
+                for (typename std::vector<_Tdata_>::const_iterator it = _data.begin();
+                        it != _data.end(); ++it) {
+                    if (std::find(samples.begin(), samples.end(), *it) == samples.end()) { // Not a sample
+                        double error = model->fittingError(*it);   // Check fitting error
 //               std::cerr << error << std::endl;
-              if( error < model->threshold() )
-              {
-                gooddata.push_back( *it );
-                fittingerror += error;
-              }
-            }
-          }
-          // Check if there is enough good data
-          if( gooddata.size() > m_nbGood)
-          {
-            model->addData( gooddata.begin(), gooddata.end() );
-            if(model->isValid())
-            {
-              models.push_back( model );
+                        if (error < model->threshold()) {
+                            gooddata.push_back(*it);
+                            fittingerror += error;
+                        }
+                    }
+                }
+                // Check if there is enough good data
+                if (gooddata.size() > m_nbGood) {
+                    model->addData(gooddata.begin(), gooddata.end());
+                    if (model->isValid()) {
+                        models.push_back(model);
+                    } else {
+                        delete model;
+                    }
+                }
             } else {
-              delete model;
+                // Invalid model delete it
+                delete model;
             }
-          }
-        } else {
-          // Invalid model delete it
-          delete model;
         }
-      }
-      // Sort the models list
-      models.sort( compModel);
-      return models;
+        // Sort the models list
+        models.sort(compModel);
+        return models;
     }
-  private:
-    static bool compModel(_Tmodel_* m1, _Tmodel_* m2)
-    {
-      return m1->fittingErrorSum() < m2->fittingErrorSum();
+private:
+    static bool compModel(_Tmodel_* m1, _Tmodel_* m2) {
+        return m1->fittingErrorSum() < m2->fittingErrorSum();
     }
-  private:
+private:
     uint m_nbGood, m_iter;
     _TmodelStaticParam_* m_params;
 };

@@ -44,19 +44,19 @@ void KisTreeViewPopup::setModel(QAbstractItemModel* model)
     d->view->setModel(model);
 }
 
-void KisTreeViewPopup::resizeEvent( QResizeEvent * event )
+void KisTreeViewPopup::resizeEvent(QResizeEvent * event)
 {
-    setPopupWidgetWidth( event->size().width() );
+    setPopupWidgetWidth(event->size().width());
 }
 
 void KisTreeViewPopup::setCurrentIndex(const QModelIndex& idx)
 {
-    setText( idx.data(Qt::DisplayRole).toString() );
+    setText(idx.data(Qt::DisplayRole).toString());
     hidePopupWidget();
-    double v = d->view->blockSignals( true );
-    d->view->setCurrentIndex( idx );
-    d->view->blockSignals( v );
-    emit( currentItemChanged( idx ) );
+    double v = d->view->blockSignals(true);
+    d->view->setCurrentIndex(idx);
+    d->view->blockSignals(v);
+    emit(currentItemChanged(idx));
 }
 
 #include "kis_tree_view_popup.moc"

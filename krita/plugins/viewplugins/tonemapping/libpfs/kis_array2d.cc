@@ -33,19 +33,19 @@ struct Array2DImpl::Private {
     KoColorSpace* colorSpace;
 };
 
-Array2DImpl::Array2DImpl( int cols, int rows) : d(new Private)
+Array2DImpl::Array2DImpl(int cols, int rows) : d(new Private)
 {
     d->colorSpace = new KisGenericColorSpace<float, 1>();
     init(0, 0, cols, rows, 0, new KisPaintDevice(d->colorSpace));
 }
 
-Array2DImpl::Array2DImpl( QRect r, int index, KisPaintDeviceSP device ) : d(new Private)
+Array2DImpl::Array2DImpl(QRect r, int index, KisPaintDeviceSP device) : d(new Private)
 {
     d->colorSpace = 0;
     init(r.x(), r.y(), r.width(), r.height(), index, device);
 }
 
-void Array2DImpl::init( int sx, int sy, int cols, int rows, int index, KisPaintDeviceSP device )
+void Array2DImpl::init(int sx, int sy, int cols, int rows, int index, KisPaintDeviceSP device)
 {
     Q_ASSERT(device);
     d->sx = sx;
@@ -54,7 +54,7 @@ void Array2DImpl::init( int sx, int sy, int cols, int rows, int index, KisPaintD
     d->rows = rows;
     d->index = index;
     d->device = device;
-    d->randomAccessor = new KisRandomAccessor( d->device->createRandomAccessor(0,0) );
+    d->randomAccessor = new KisRandomAccessor(d->device->createRandomAccessor(0, 0));
 }
 
 Array2DImpl::~Array2DImpl()
@@ -65,10 +65,14 @@ Array2DImpl::~Array2DImpl()
 }
 
 int Array2DImpl::getCols() const
-{ return d->cols; }
+{
+    return d->cols;
+}
 
 int Array2DImpl::getRows() const
-{ return d->rows; }
+{
+    return d->rows;
+}
 
 int Array2DImpl::colToDevice(int col) const
 {
@@ -82,31 +86,31 @@ int Array2DImpl::rowToDevice(int row) const
     return row + d->sy;
 }
 
-float& Array2DImpl::operator()( int col, int row )
+float& Array2DImpl::operator()(int col, int row)
 {
-    d->randomAccessor->moveTo(colToDevice(col), rowToDevice(row) );
+    d->randomAccessor->moveTo(colToDevice(col), rowToDevice(row));
     return *(reinterpret_cast<float*>(d->randomAccessor->rawData()) + d->index);
 }
 
-const float& Array2DImpl::operator()( int col, int row ) const
+const float& Array2DImpl::operator()(int col, int row) const
 {
-    d->randomAccessor->moveTo(colToDevice(col), rowToDevice(row) );
+    d->randomAccessor->moveTo(colToDevice(col), rowToDevice(row));
     return *(reinterpret_cast<const float*>(d->randomAccessor->oldRawData()) + d->index);
 }
 
-float& Array2DImpl::operator()( int index )
+float& Array2DImpl::operator()(int index)
 {
     int col = index % d->cols;
     int row = index / d->rows;
-    d->randomAccessor->moveTo(colToDevice(col), rowToDevice(row) );
+    d->randomAccessor->moveTo(colToDevice(col), rowToDevice(row));
     return *(reinterpret_cast<float*>(d->randomAccessor->rawData()) + d->index);
 }
 
-const float& Array2DImpl::operator()( int index ) const
+const float& Array2DImpl::operator()(int index) const
 {
     int col = index % d->cols;
     int row = index / d->rows;
-    d->randomAccessor->moveTo(colToDevice(col), rowToDevice(row) );
+    d->randomAccessor->moveTo(colToDevice(col), rowToDevice(row));
     return *(reinterpret_cast<const float*>(d->randomAccessor->oldRawData()) + d->index);
 }
 

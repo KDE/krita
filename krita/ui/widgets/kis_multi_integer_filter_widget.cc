@@ -33,7 +33,7 @@ KisDelayedActionIntegerInput::KisDelayedActionIntegerInput(QWidget * parent, con
     m_timer->setObjectName(name);
     m_timer->setSingleShot(true);
     connect(m_timer, SIGNAL(timeout()), SLOT(slotValueChanged()));
-    connect(this, SIGNAL(valueChanged( int )), SLOT(slotTimeToUpdate()));
+    connect(this, SIGNAL(valueChanged(int)), SLOT(slotTimeToUpdate()));
 }
 
 void KisDelayedActionIntegerInput::slotTimeToUpdate()
@@ -51,38 +51,37 @@ void KisDelayedActionIntegerInput::cancelDelayedSignal()
     m_timer->stop();
 }
 
-KisIntegerWidgetParam::KisIntegerWidgetParam(  qint32 nmin, qint32 nmax, qint32 ninitvalue, const QString & label, const QString & nname) :
-    min(nmin),
-    max(nmax),
-    initvalue(ninitvalue),
-    label(label),
-    name(nname)
+KisIntegerWidgetParam::KisIntegerWidgetParam(qint32 nmin, qint32 nmax, qint32 ninitvalue, const QString & label, const QString & nname) :
+        min(nmin),
+        max(nmax),
+        initvalue(ninitvalue),
+        label(label),
+        name(nname)
 {
 }
 
 KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(const QString & filterid, QWidget * parent,
-                                                         const QString & caption,
-                                                         vKisIntegerWidgetParam iwparam)
-    : KisFilterConfigWidget( parent),  m_filterid(filterid)
+        const QString & caption,
+        vKisIntegerWidgetParam iwparam)
+        : KisFilterConfigWidget(parent),  m_filterid(filterid)
 {
     m_nbintegerWidgets = iwparam.size();
     this->setWindowTitle(caption);
 
     QGridLayout *widgetLayout = new QGridLayout(this);
-    widgetLayout->setColumnStretch ( 1, 1 );
+    widgetLayout->setColumnStretch(1, 1);
 
     m_integerWidgets = new KisDelayedActionIntegerInput*[ m_nbintegerWidgets ];
 
-    for( qint32 i = 0; i < m_nbintegerWidgets; ++i)
-    {
+    for (qint32 i = 0; i < m_nbintegerWidgets; ++i) {
         m_integerWidgets[i] = new KisDelayedActionIntegerInput(this, iwparam[i].name);
         m_integerWidgets[i]->setRange(iwparam[i].min, iwparam[i].max);
-        m_integerWidgets[i]->setValue(iwparam[i].initvalue );
+        m_integerWidgets[i]->setValue(iwparam[i].initvalue);
         m_integerWidgets[i]->cancelDelayedSignal();
 
-        connect(m_integerWidgets[i], SIGNAL(valueChangedDelayed( int )), SIGNAL(sigPleaseUpdatePreview()));
+        connect(m_integerWidgets[i], SIGNAL(valueChangedDelayed(int)), SIGNAL(sigPleaseUpdatePreview()));
 
-        QLabel* lbl = new QLabel(iwparam[i].label+':', this);
+        QLabel* lbl = new QLabel(iwparam[i].label + ':', this);
         widgetLayout->addWidget(lbl, i , 0);
 
         widgetLayout->addWidget(m_integerWidgets[i], i , 1);
@@ -91,9 +90,9 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(const QString & filteri
     widgetLayout->addItem(sp, m_nbintegerWidgets, 0);
 }
 
-void KisMultiIntegerFilterWidget::setConfiguration( KisFilterConfiguration * config )
+void KisMultiIntegerFilterWidget::setConfiguration(KisFilterConfiguration * config)
 {
-    if ( !config ) return;
+    if (!config) return;
 
     for (int i = 0; i < nbValues(); ++i) {
         KisDelayedActionIntegerInput *  w = m_integerWidgets[i];

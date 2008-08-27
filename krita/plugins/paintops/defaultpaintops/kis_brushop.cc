@@ -56,7 +56,8 @@
 #include <kis_paint_action_type_option.h>
 
 
-class KisBrushOpSettings : public QObject, public KisPaintOpSettings {
+class KisBrushOpSettings : public QObject, public KisPaintOpSettings
+{
     Q_OBJECT
 
 public:
@@ -64,8 +65,7 @@ public:
     using KisPaintOpSettings::toXML;
 
     KisBrushOpSettings(QWidget *parent)
-        : KisPaintOpSettings()
-    {
+            : KisPaintOpSettings() {
         m_optionsWidget = new KisPaintOpOptionsWidget(parent);
         m_optionsWidget->setObjectName("brush option widget");
 
@@ -82,8 +82,7 @@ public:
         m_optionsWidget->addPaintOpOption(m_paintActionTypeOption);
     }
 
-    virtual ~KisBrushOpSettings()
-    {
+    virtual ~KisBrushOpSettings() {
         delete m_brushOption;
         delete m_sizeOption;
         delete m_opacityOption;
@@ -91,36 +90,32 @@ public:
         delete m_paintActionTypeOption;
     }
 
-    void fromXML(const QDomElement& elt)
-    {
-    #if 0
+    void fromXML(const QDomElement& elt) {
+#if 0
         QDomElement e = elt.firstChildElement("Params");
-        if(!e.isNull())
-        {
+        if (!e.isNull()) {
             KisPropertiesConfiguration kpc;
             kpc.fromXML(e);
-            m_size->setChecked( kpc.getBool( "PressureSize", false) );
-            m_opacity->setChecked( kpc.getBool( "PressureOpacity", false) );
-            m_darken->setChecked( kpc.getBool( "PressureDarken", false) );
-            m_customSize = kpc.getBool( "CustomSize", false);
-            m_customOpacity = kpc.getBool( "CustomOpacity", false);
-            m_customDarken = kpc.getBool( "CustomDarken", false);
-            for(int i = 0; i < 256; i++)
-            {
-                if( m_customSize )
-                    m_sizeCurve[i] = kpc.getDouble( QString("SizeCurve%0").arg(i), i / 255.0 );
-                if( m_customOpacity )
-                    m_opacityCurve[i] = kpc.getDouble( QString("OpacityCurve%0").arg(i), i / 255.0 );
-                if( m_customDarken )
-                    m_darkenCurve[i] = kpc.getDouble( QString("DarkenCurve%0").arg(i), i / 255.0 );
+            m_size->setChecked(kpc.getBool("PressureSize", false));
+            m_opacity->setChecked(kpc.getBool("PressureOpacity", false));
+            m_darken->setChecked(kpc.getBool("PressureDarken", false));
+            m_customSize = kpc.getBool("CustomSize", false);
+            m_customOpacity = kpc.getBool("CustomOpacity", false);
+            m_customDarken = kpc.getBool("CustomDarken", false);
+            for (int i = 0; i < 256; i++) {
+                if (m_customSize)
+                    m_sizeCurve[i] = kpc.getDouble(QString("SizeCurve%0").arg(i), i / 255.0);
+                if (m_customOpacity)
+                    m_opacityCurve[i] = kpc.getDouble(QString("OpacityCurve%0").arg(i), i / 255.0);
+                if (m_customDarken)
+                    m_darkenCurve[i] = kpc.getDouble(QString("DarkenCurve%0").arg(i), i / 255.0);
             }
         }
-    #endif
+#endif
     }
 
-    void toXML(QDomDocument& doc, QDomElement& rootElt) const
-    {
-    #if 0
+    void toXML(QDomDocument& doc, QDomElement& rootElt) const {
+#if 0
         KisPropertiesConfiguration kpc;
         kpc.setProperty("PressureSize", m_size->isChecked());
         kpc.setProperty("PressureOpacity", m_opacity->isChecked());
@@ -129,31 +124,29 @@ public:
         kpc.setProperty("CustomOpacity", m_customOpacity);
         kpc.setProperty("CustomDarken", m_customDarken);
 
-        for(int i = 0; i < 256; i++)
-        {
-            if( m_customSize )
-                kpc.setProperty( QString("SizeCurve%0").arg(i), m_sizeCurve[i] );
-            if( m_customOpacity )
-                kpc.setProperty( QString("OpacityCurve%0").arg(i), m_opacityCurve[i] );
-            if( m_customDarken )
-                kpc.setProperty( QString("DarkenCurve%0").arg(i), m_darkenCurve[i] );
+        for (int i = 0; i < 256; i++) {
+            if (m_customSize)
+                kpc.setProperty(QString("SizeCurve%0").arg(i), m_sizeCurve[i]);
+            if (m_customOpacity)
+                kpc.setProperty(QString("OpacityCurve%0").arg(i), m_opacityCurve[i]);
+            if (m_customDarken)
+                kpc.setProperty(QString("DarkenCurve%0").arg(i), m_darkenCurve[i]);
         }
 
-        QDomElement paramsElt = doc.createElement( "Params" );
-        rootElt.appendChild( paramsElt );
-        kpc.toXML( doc, paramsElt);
-    #endif
+        QDomElement paramsElt = doc.createElement("Params");
+        rootElt.appendChild(paramsElt);
+        kpc.toXML(doc, paramsElt);
+#endif
     }
 
 
-    KisPaintOpSettingsSP clone() const
-    {
+    KisPaintOpSettingsSP clone() const {
 
         KisBrushOpSettings* s = new KisBrushOpSettings(0);
-    #if 0
-        s->m_size->setChecked( m_size->isChecked() );
-        s->m_opacity->setChecked( m_opacity->isChecked() );
-        s->m_darken->setChecked( m_darken->isChecked() );
+#if 0
+        s->m_size->setChecked(m_size->isChecked());
+        s->m_opacity->setChecked(m_opacity->isChecked());
+        s->m_darken->setChecked(m_darken->isChecked());
         s->m_customSize = m_customSize;
         s->m_customOpacity = m_customOpacity;
         s->m_customDarken = m_customDarken;
@@ -161,13 +154,15 @@ public:
         memcpy(s->m_opacityCurve, m_opacityCurve, 256*sizeof(double));
         memcpy(s->m_darkenCurve, m_darkenCurve, 256*sizeof(double));
 
-    #endif
+#endif
         return s;
 
     }
 
 
-    virtual QWidget* widget() const { Q_ASSERT(m_optionsWidget); return m_optionsWidget; }
+    virtual QWidget* widget() const {
+        Q_ASSERT(m_optionsWidget); return m_optionsWidget;
+    }
 
 public:
 
@@ -183,9 +178,9 @@ public:
 
 
 KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettingsSP settings,
-                                         KisPainter * painter, KisImageSP image)
+        KisPainter * painter, KisImageSP image)
 {
-    Q_UNUSED( image );
+    Q_UNUSED(image);
 
     const KisBrushOpSettings *brushopSettings = dynamic_cast<const KisBrushOpSettings *>(settings.data());
     Q_ASSERT(settings != 0 || brushopSettings != 0);
@@ -212,8 +207,8 @@ KisPaintOpSettingsSP KisBrushOpFactory::settings(KisImageSP image)
 
 
 KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
-    : KisBrushBasedPaintOp(painter)
-    , settings(settings)
+        : KisBrushBasedPaintOp(painter)
+        , settings(settings)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
@@ -247,12 +242,12 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
     if (!brush) return;
 
     KisPaintInformation adjustedInfo = settings->m_sizeOption->apply(info);
-    if (! brush->canPaintFor(adjustedInfo) )
+    if (! brush->canPaintFor(adjustedInfo))
         return;
 
     KisPaintDeviceSP device = painter()->device();
-    double pScale = KisPaintOp::scaleForPressure( adjustedInfo.pressure() ); // TODO: why is there scale and pScale that seems to contains the same things ?
-    QPointF hotSpot = brush->hotSpot( pScale, pScale );
+    double pScale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());   // TODO: why is there scale and pScale that seems to contains the same things ?
+    QPointF hotSpot = brush->hotSpot(pScale, pScale);
     QPointF pt = info.pos() - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
@@ -271,13 +266,13 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
     quint8 origOpacity = settings->m_opacityOption->apply(painter(), info.pressure());
     KoColor origColor = settings->m_darkenOption->apply(painter(), info.pressure());
 
-    double scale = KisPaintOp::scaleForPressure( adjustedInfo.pressure() );
+    double scale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());
 
     QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
 
-    if ( painter()->bounds().isValid() ) {
+    if (painter()->bounds().isValid()) {
         dstRect &= painter()->bounds();
     }
 
@@ -290,11 +285,10 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
 
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         dab = brush->image(device->colorSpace(), scale, 0.0, adjustedInfo, xFraction, yFraction);
-    }
-    else {
-        dab = cachedDab( );
+    } else {
+        dab = cachedDab();
         KoColor color = painter()->paintColor();
-        color.convertTo( dab->colorSpace() );
+        color.convertTo(dab->colorSpace());
         brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
     }
 
@@ -307,15 +301,15 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
 
 double KisBrushOp::paintLine(const KisPaintInformation &pi1,
                              const KisPaintInformation &pi2,
-                             double savedDist )
+                             double savedDist)
 {
     KisPaintInformation adjustedInfo1(pi1);
     KisPaintInformation adjustedInfo2(pi2);
-    if ( !settings->m_sizeOption->isChecked()) {
-        adjustedInfo1.setPressure( PRESSURE_DEFAULT );
-        adjustedInfo2.setPressure( PRESSURE_DEFAULT );
+    if (!settings->m_sizeOption->isChecked()) {
+        adjustedInfo1.setPressure(PRESSURE_DEFAULT);
+        adjustedInfo2.setPressure(PRESSURE_DEFAULT);
     }
-    return KisPaintOp::paintLine( adjustedInfo1, adjustedInfo2, savedDist );
+    return KisPaintOp::paintLine(adjustedInfo1, adjustedInfo2, savedDist);
 }
 
 #include "kis_brushop.moc"

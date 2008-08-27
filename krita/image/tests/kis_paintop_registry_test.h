@@ -27,9 +27,6 @@ class KisPaintopRegistryTest : public QObject
 private slots:
 
     void testCreation();
-    // Check that at least the default paintops are available
-    void testDefaultPaintops();
-
 };
 
 

@@ -27,10 +27,10 @@
 #include "widgets/kis_item_chooser.h"
 
 KisResourceMediator::KisResourceMediator(KisItemChooser *chooser,
-                     KoAbstractResourceServerAdapter* rServerAdapter,
-                     QObject *parent,
-                     const char *name)
-    : QObject(parent), m_chooser(chooser), m_rServerAdapter(rServerAdapter)
+        KoAbstractResourceServerAdapter* rServerAdapter,
+        QObject *parent,
+        const char *name)
+        : QObject(parent), m_chooser(chooser), m_rServerAdapter(rServerAdapter)
 {
     setObjectName(name);
 
@@ -38,10 +38,10 @@ KisResourceMediator::KisResourceMediator(KisItemChooser *chooser,
     Q_ASSERT(rServerAdapter);
 
     connect(m_chooser, SIGNAL(selected(QTableWidgetItem*)), SLOT(setActiveItem(QTableWidgetItem*)));
-    connect(m_chooser, SIGNAL(deleteClicked() ), this, SLOT( deleteActiveResource() ) );
+    connect(m_chooser, SIGNAL(deleteClicked()), this, SLOT(deleteActiveResource()));
 
-    connect(m_rServerAdapter, SIGNAL(resourceAdded(KoResource*) ), this, SLOT( rServerAddedResource(KoResource*) ) );
-    connect(m_rServerAdapter, SIGNAL(removingResource(KoResource*) ), this, SLOT( rServerRemovingResource(KoResource*) ) );
+    connect(m_rServerAdapter, SIGNAL(resourceAdded(KoResource*)), this, SLOT(rServerAddedResource(KoResource*)));
+    connect(m_rServerAdapter, SIGNAL(removingResource(KoResource*)), this, SLOT(rServerRemovingResource(KoResource*)));
     m_rServerAdapter->connectToResourceServer();
 }
 
@@ -51,7 +51,7 @@ KisResourceMediator::~KisResourceMediator()
 
 KoResource *KisResourceMediator::currentResource() const
 {
-    if(! m_chooser->currentItem() )
+    if (! m_chooser->currentItem())
         return 0;
 
     Q_ASSERT(dynamic_cast<KoResourceItem*>(m_chooser->currentItem()));
@@ -60,8 +60,7 @@ KoResource *KisResourceMediator::currentResource() const
 
 KoResourceItem *KisResourceMediator::itemFor(KoResource *r) const
 {
-    if (m_items.contains(r))
-    {
+    if (m_items.contains(r)) {
         return m_items[r];
     }
     return 0;
@@ -97,7 +96,7 @@ void KisResourceMediator::setActiveItem(QTableWidgetItem *item)
 void KisResourceMediator::deleteActiveResource()
 {
     KoResource* r = currentResource();
-    if(!itemFor(r))
+    if (!itemFor(r))
         return;
 
     m_rServerAdapter->removeResource(r);
@@ -128,7 +127,7 @@ void KisResourceMediator::rServerAddedResource(KoResource *resource)
 void KisResourceMediator::rServerRemovingResource(KoResource *resource)
 {
     KoResourceItem *item = itemFor(resource);
-    if(item)
+    if (item)
         removeResourceItem(item);
 }
 

@@ -28,11 +28,11 @@ class KisView2;
 class SpecificColorSelectorPlugin : public KParts::Plugin
 {
     Q_OBJECT
-    public:
-        SpecificColorSelectorPlugin(QObject *parent, const QStringList &);
-        virtual ~SpecificColorSelectorPlugin();
-    private:
-        KisView2* m_view;
+public:
+    SpecificColorSelectorPlugin(QObject *parent, const QStringList &);
+    virtual ~SpecificColorSelectorPlugin();
+private:
+    KisView2* m_view;
 };
 
 #endif

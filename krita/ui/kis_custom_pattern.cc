@@ -41,7 +41,7 @@
 #include "kis_paint_layer.h"
 
 KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisView2* view)
-    : KisWdgCustomPattern(parent, name), m_view(view)
+        : KisWdgCustomPattern(parent, name), m_view(view)
 {
     Q_ASSERT(m_view);
     setWindowTitle(caption);
@@ -58,16 +58,19 @@ KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QStr
     connect(exportButton, SIGNAL(pressed()), this, SLOT(slotExport()));
 }
 
-KisCustomPattern::~KisCustomPattern() {
+KisCustomPattern::~KisCustomPattern()
+{
     delete m_pattern;
     delete m_rServerAdapter;
 }
 
-void KisCustomPattern::showEvent(QShowEvent *) {
+void KisCustomPattern::showEvent(QShowEvent *)
+{
     slotUpdateCurrentPattern(0);
 }
 
-void KisCustomPattern::slotUpdateCurrentPattern(int) {
+void KisCustomPattern::slotUpdateCurrentPattern(int)
+{
     delete m_pattern;
     m_pattern = 0;
     if (m_view && m_view->image()) {
@@ -77,11 +80,13 @@ void KisCustomPattern::slotUpdateCurrentPattern(int) {
     }
 }
 
-void KisCustomPattern::slotExport() {
+void KisCustomPattern::slotExport()
+{
     ;
 }
 
-void KisCustomPattern::slotAddPredefined() {
+void KisCustomPattern::slotAddPredefined()
+{
     if (!m_pattern)
         return;
 
@@ -109,7 +114,8 @@ void KisCustomPattern::slotAddPredefined() {
         m_rServerAdapter->addResource(m_pattern->clone());
 }
 
-void KisCustomPattern::slotUsePattern() {
+void KisCustomPattern::slotUsePattern()
+{
     if (!m_pattern)
         return;
     KisPattern* copy = m_pattern->clone();
@@ -119,7 +125,8 @@ void KisCustomPattern::slotUsePattern() {
     emit(activatedResource(copy));
 }
 
-void KisCustomPattern::createPattern() {
+void KisCustomPattern::createPattern()
+{
     KisImageSP img = m_view->image();
 
     if (!img)

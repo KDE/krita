@@ -26,15 +26,18 @@ class WdgHistogram : public QWidget, public Ui::WdgHistogram
 {
     Q_OBJECT
 
-    public:
-        WdgHistogram(QWidget *parent) : QWidget(parent) { setupUi(this); }
+public:
+    WdgHistogram(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
 };
 
 /**
  * The histogram widget takes a paint device or an image and
  * draws a histogram for the given KisHistogram.
  */
-class KisHistogramWidget : public WdgHistogram {
+class KisHistogramWidget : public WdgHistogram
+{
     typedef WdgHistogram super;
     Q_OBJECT
 

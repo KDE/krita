@@ -32,7 +32,8 @@ class KoColorSpace;
  * KisLayer::nextSibling() moves towards higher indices, from the top to the bottom layer; prevSibling() the reverse.
  * (Implementation detail: internally, the indices are reversed, for speed.)
  **/
-class KRITAIMAGE_EXPORT KisGroupLayer : public KisLayer {
+class KRITAIMAGE_EXPORT KisGroupLayer : public KisLayer
+{
 
     Q_OBJECT
 
@@ -41,12 +42,11 @@ public:
     KisGroupLayer(const KisGroupLayer& rhs);
     virtual ~KisGroupLayer();
 
-    KisNodeSP clone() const
-    {
+    KisNodeSP clone() const {
         return KisNodeSP(new KisGroupLayer(*this));
     }
 
-    bool allowAsChild( KisNodeSP ) const;
+    bool allowAsChild(KisNodeSP) const;
 
     QIcon icon() const;
 
@@ -125,8 +125,8 @@ public:
 
 signals:
 
-    void regionDirtied( const QRegion & );
-    void rectDirtied( const QRect & );
+    void regionDirtied(const QRegion &);
+    void rectDirtied(const QRect &);
     void settingsUpdated();
 
 private:

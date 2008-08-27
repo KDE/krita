@@ -26,37 +26,41 @@
 class KisFilterMax : public KisFilter
 {
 public:
-        
+
     KisFilterMax();
 
     using KisFilter::process;
-    
+
     void process(KisConstProcessingInformation src,
                  KisProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
-        ) const;
+                ) const;
 
-    static inline KoID id() { return KoID("maximize", i18n("Maximize Channel")); }
-    
+    static inline KoID id() {
+        return KoID("maximize", i18n("Maximize Channel"));
+    }
+
 };
 
 class KisFilterMin : public KisFilter
 {
-    public:
-        KisFilterMin();
-    public:
+public:
+    KisFilterMin();
+public:
 
     using KisFilter::process;
-    
+
     void process(KisConstProcessingInformation src,
                  KisProcessingInformation dst,
                  const QSize& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
-        ) const;
-    static inline KoID id() { return KoID("minimize", i18n("Minimize Channel")); }
+                ) const;
+    static inline KoID id() {
+        return KoID("minimize", i18n("Minimize Channel"));
+    }
 };
 
 #endif

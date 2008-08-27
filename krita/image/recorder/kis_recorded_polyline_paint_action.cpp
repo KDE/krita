@@ -44,21 +44,21 @@ struct KisRecordedPolyLinePaintAction::Private {
 };
 
 KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(const QString & name,
-                                                               KisNodeSP node,
-                                                               const KisPaintOpPresetSP paintOpPreset,
-                                                               KoColor foregroundColor,
-                                                               KoColor backgroundColor,
-                                                               int opacity,
-                                                               bool paintIncremental,
-                                                               const KoCompositeOp * compositeOp)
-    : KisRecordedPaintAction(name, "PolyLinePaintAction", node, paintOpPreset, foregroundColor,
-                             backgroundColor, opacity, paintIncremental, compositeOp)
-    , d(new Private)
+        KisNodeSP node,
+        const KisPaintOpPresetSP paintOpPreset,
+        KoColor foregroundColor,
+        KoColor backgroundColor,
+        int opacity,
+        bool paintIncremental,
+        const KoCompositeOp * compositeOp)
+        : KisRecordedPaintAction(name, "PolyLinePaintAction", node, paintOpPreset, foregroundColor,
+                                 backgroundColor, opacity, paintIncremental, compositeOp)
+        , d(new Private)
 {
 }
 
 KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(const KisRecordedPolyLinePaintAction& rhs)
-    : KisRecordedPaintAction(rhs), d(new Private(*rhs.d))
+        : KisRecordedPaintAction(rhs), d(new Private(*rhs.d))
 {
 
 }
@@ -76,23 +76,21 @@ void KisRecordedPolyLinePaintAction::addPoint(const KisPaintInformation& info)
 void KisRecordedPolyLinePaintAction::playPaint(KisPainter* painter) const
 {
     dbgUI << "play poly line paint with " << d->infos.size() << " points";
-    if(d->infos.size() <= 0) return;
+    if (d->infos.size() <= 0) return;
     painter->paintAt(d->infos[0]);
     double savedDist = 0.0;
-    for(int i = 0; i < d->infos.size() - 1; i++)
-    {
+    for (int i = 0; i < d->infos.size() - 1; i++) {
         dbgUI << d->infos[i].pos() << " to " << d->infos[i+1].pos();
-        savedDist = painter->paintLine(d->infos[i],d->infos[i+1], savedDist);
+        savedDist = painter->paintLine(d->infos[i], d->infos[i+1], savedDist);
     }
 }
 
 void KisRecordedPolyLinePaintAction::toXML(QDomDocument& doc, QDomElement& elt) const
 {
-    KisRecordedPaintAction::toXML(doc,elt);
-    QDomElement waypointsElt = doc.createElement( "Waypoints");
-    foreach(KisPaintInformation info, d->infos)
-    {
-        QDomElement infoElt = doc.createElement( "Waypoint");
+    KisRecordedPaintAction::toXML(doc, elt);
+    QDomElement waypointsElt = doc.createElement("Waypoints");
+    foreach(KisPaintInformation info, d->infos) {
+        QDomElement infoElt = doc.createElement("Waypoint");
         info.toXML(doc, infoElt);
         waypointsElt.appendChild(infoElt);
     }
@@ -107,7 +105,7 @@ KisRecordedAction* KisRecordedPolyLinePaintAction::clone() const
 
 
 KisRecordedPolyLinePaintActionFactory::KisRecordedPolyLinePaintActionFactory() :
-    KisRecordedPaintActionFactory("PolyLinePaintAction")
+        KisRecordedPaintActionFactory("PolyLinePaintAction")
 {
 }
 
@@ -118,6 +116,8 @@ KisRecordedPolyLinePaintActionFactory::~KisRecordedPolyLinePaintActionFactory()
 
 KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(KisImageSP img, const QDomElement& elt)
 {
+    Q_UNUSED(img);
+    Q_UNUSED(elt);
 #if 0
     QString name = elt.attribute("name");
     KisNodeSP node = KisRecordedActionFactory::indexPathToNode(img, elt.attribute("node"));
@@ -125,50 +125,43 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(KisImageSP img
     int opacity = elt.attribute("opacity", "100").toInt();
     bool paintIncremental = elt.attribute("paintIncremental", "1").toInt();
 
-    const KoCompositeOp * compositeOp = node->paintDevice()->colorSpace()->compositeOp( elt.attribute("compositeOp"));
-    if(!compositeOp) {
-        compositeOp = node->paintDevice()->colorSpace()->compositeOp( COMPOSITE_OVER );
+    const KoCompositeOp * compositeOp = node->paintDevice()->colorSpace()->compositeOp(elt.attribute("compositeOp"));
+    if (!compositeOp) {
+        compositeOp = node->paintDevice()->colorSpace()->compositeOp(COMPOSITE_OVER);
     }
 
 
     KisPaintOpSettingsSP settings = 0;
     QDomElement settingsElt = elt.firstChildElement("PaintOpSettings");
-    if(!settingsElt.isNull())
-    {
+    if (!settingsElt.isNull()) {
         settings = settingsFromXML(paintOpId, settingsElt, img);
-    }
-    else {
+    } else {
         dbgUI << "No <PaintOpSettings /> found";
     }
 
     KisBrush* brush = 0;
 
     QDomElement brushElt = elt.firstChildElement("Brush");
-    if(!brushElt.isNull())
-    {
+    if (!brushElt.isNull()) {
         brush = brushFromXML(brushElt);
-    }
-    else {
+    } else {
         dbgUI << "Warning: no <Brush /> found";
     }
 
     QDomElement backgroundColorElt = elt.firstChildElement("BackgroundColor");
     KoColor bC;
-    if(!backgroundColorElt.isNull())
-    {
-        bC = KoColor::fromXML( backgroundColorElt.firstChildElement(""), Integer8BitsColorDepthID.id(), QHash<QString,QString>() );
-        bC.setOpacity( 255 );
+    if (!backgroundColorElt.isNull()) {
+        bC = KoColor::fromXML(backgroundColorElt.firstChildElement(""), Integer8BitsColorDepthID.id(), QHash<QString, QString>());
+        bC.setOpacity(255);
         dbgUI << "Background color : " << bC.toQColor();
-    }
-    else {
+    } else {
         dbgUI << "Warning: no <BackgroundColor /> found";
     }
     QDomElement foregroundColorElt = elt.firstChildElement("ForegroundColor");
     KoColor fC;
-    if(!foregroundColorElt.isNull())
-    {
-        fC = KoColor::fromXML( foregroundColorElt.firstChildElement(""), Integer8BitsColorDepthID.id(), QHash<QString,QString>() );
-        fC.setOpacity( 255 );
+    if (!foregroundColorElt.isNull()) {
+        fC = KoColor::fromXML(foregroundColorElt.firstChildElement(""), Integer8BitsColorDepthID.id(), QHash<QString, QString>());
+        fC.setOpacity(255);
         dbgUI << "Foreground color : " << fC.toQColor();
     } else {
         dbgUI << "Warning: no <ForegroundColor /> found";
@@ -177,22 +170,19 @@ KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(KisImageSP img
     KisRecordedPolyLinePaintAction* rplpa = new KisRecordedPolyLinePaintAction(name, node, brush, paintOpId, settings, fC, bC, opacity, paintIncremental, compositeOp);
 
     QDomElement wpElt = elt.firstChildElement("Waypoints");
-    if(!wpElt.isNull())
-    {
+    if (!wpElt.isNull()) {
         QDomNode nWp = wpElt.firstChild();
-        while(!nWp.isNull())
-        {
+        while (!nWp.isNull()) {
             QDomElement eWp = nWp.toElement();
-            if(!eWp.isNull() && eWp.tagName() == "Waypoint")
-            {
-                rplpa->addPoint( KisPaintInformation::fromXML(eWp) );
+            if (!eWp.isNull() && eWp.tagName() == "Waypoint") {
+                rplpa->addPoint(KisPaintInformation::fromXML(eWp));
             }
             nWp = nWp.nextSibling();
         }
-    }
-    else {
+    } else {
         dbgUI << "Warning: no <Waypoints /> found";
     }
     return rplpa;
 #endif
+    return 0;
 }

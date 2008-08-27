@@ -24,11 +24,12 @@
 
 class KisDynamicBrush;
 
-class DYNAMIC_BRUSH_EXPORT KisDynamicBrushRegistry : public KoGenericRegistry<KisDynamicBrush *> {
+class DYNAMIC_BRUSH_EXPORT KisDynamicBrushRegistry : public KoGenericRegistry<KisDynamicBrush *>
+{
 
-  protected:
+protected:
     void init();
-  public:
+public:
     /**
      * @return an instance of the KisDynamicBrushRegistry
      * Creates an instance if that has never happened before and returns the singleton instance.
@@ -37,9 +38,13 @@ class DYNAMIC_BRUSH_EXPORT KisDynamicBrushRegistry : public KoGenericRegistry<Ki
     /**
      * @return the currently selected dynamic brush
      */
-    inline KisDynamicBrush* current() { return m_current; }
-    inline void setCurrent(KisDynamicBrush* c) { m_current = c; }
-  private:
+    inline KisDynamicBrush* current() {
+        return m_current;
+    }
+    inline void setCurrent(KisDynamicBrush* c) {
+        m_current = c;
+    }
+private:
     static KisDynamicBrushRegistry *singleton;
     KisDynamicBrush* m_current;
 };

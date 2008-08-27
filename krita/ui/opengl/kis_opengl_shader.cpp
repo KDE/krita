@@ -25,7 +25,6 @@
 
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
-#include <kis_debug.h>
 
 #include "kis_factory2.h"
 #include "opengl/kis_opengl.h"
@@ -41,7 +40,7 @@ KisOpenGLShader::KisOpenGLShader(GLenum shaderType)
     KIS_OPENGL_PRINT_ERROR();
 
     if (m_shader == 0) {
-        dbgUI <<"Failed to create shader";
+        dbgUI << "Failed to create shader";
     }
 }
 
@@ -72,8 +71,8 @@ void KisOpenGLShader::loadSourceCodeFromCStrings(GLsizei numSourceCodeStrings, c
         if (compiled) {
             m_valid = true;
         } else {
-            dbgUI <<"Failed to compile shader";
-            dbgUI <<"Info log:" << getInfoLog();
+            dbgUI << "Failed to compile shader";
+            dbgUI << "Info log:" << getInfoLog();
         }
     }
 }
@@ -83,14 +82,14 @@ void KisOpenGLShader::loadSourceCodeFromFile(const QString & sourceCodeFilename)
     QString fullFilename = KisFactory2::componentData().dirs()->findResource("kis_shaders", sourceCodeFilename);
 
     if (fullFilename.isNull()) {
-        dbgUI <<"Failed to find shader source code file:" << sourceCodeFilename;
+        dbgUI << "Failed to find shader source code file:" << sourceCodeFilename;
         return;
     }
 
     QFile sourceCodeFile(fullFilename);
 
     if (!sourceCodeFile.open(IO_ReadOnly)) {
-        dbgUI <<"Unable to open shader source code file:" << fullFilename;
+        dbgUI << "Unable to open shader source code file:" << fullFilename;
         return;
     }
 
@@ -108,7 +107,7 @@ void KisOpenGLShader::loadSourceCodeFromFile(const QString & sourceCodeFilename)
     }
 
     if (sourceCodeStrings.isEmpty()) {
-        dbgUI <<"Shader source code file is empty:" << fullFilename;
+        dbgUI << "Shader source code file is empty:" << fullFilename;
         return;
     }
 
@@ -120,7 +119,7 @@ void KisOpenGLShader::loadSourceCodeFromQString(QString sourceCodeString)
     QByteArray string = sourceCodeString.toAscii();
 
     if (string.length() == 0) {
-        dbgUI <<"Shader source code vector is empty";
+        dbgUI << "Shader source code vector is empty";
         return;
     }
     GLint length = string.length();

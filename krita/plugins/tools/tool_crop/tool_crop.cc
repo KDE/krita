@@ -39,11 +39,11 @@
 #include <KoToolRegistry.h>
 
 typedef KGenericFactory<ToolCrop> ToolCropFactory;
-K_EXPORT_COMPONENT_FACTORY( kritatoolcrop, ToolCropFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY(kritatoolcrop, ToolCropFactory("krita"))
 
 
 ToolCrop::ToolCrop(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+        : KParts::Plugin(parent)
 {
     setComponentData(ToolCropFactory::componentData());
 

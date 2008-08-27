@@ -22,23 +22,22 @@
 
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
-#include "kis_selection.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_undo_adapter.h"
 
 KisSelectedTransaction::KisSelectedTransaction(const QString& name, KisNodeSP node, QUndoCommand* parent)
-   : KisTransaction(name, node->paintDevice(), parent)
-   , m_selTransaction(0)
-   , m_hadSelection(false /*device->hasSelection()*/)
+        : KisTransaction(name, node->paintDevice(), parent)
+        , m_selTransaction(0)
+        , m_hadSelection(false /*device->hasSelection()*/)
 {
     m_layer = dynamic_cast<KisLayer*>(node.data());
-    while ( !m_layer && node->parent() ) {
+    while (!m_layer && node->parent()) {
         m_layer = dynamic_cast<KisLayer*>(node->parent().data());
         node = node->parent();
     }
 
-    if( m_layer->selection())
+    if (m_layer->selection())
         m_selTransaction = new KisTransaction(name, KisPaintDeviceSP(m_layer->selection()->getOrCreatePixelSelection().data()));
 //     if(! m_hadSelection) {
 //         m_device->deselect(); // let us not be the cause of select
@@ -54,26 +53,25 @@ KisSelectedTransaction::~KisSelectedTransaction()
 void KisSelectedTransaction::redo()
 {
     //QUndoStack calls redo(), so the first call needs to be blocked
-    if(m_firstRedo)
-    {
+    if (m_firstRedo) {
         m_firstRedo = false;
 
-        if(m_selTransaction)
+        if (m_selTransaction)
             m_selTransaction->redo();
         return;
     }
 
     KisTransaction::redo();
 
-    if(m_selTransaction)
+    if (m_selTransaction)
         m_selTransaction->redo();
 //     if(m_redoHasSelection)
 //         m_device->selection();
 //     else
 //         m_device->deselect();
 
-     m_layer->setDirty(m_layer->image()->bounds());
-     m_layer->image()->undoAdapter()->emitSelectionChanged();
+    m_layer->setDirty(m_layer->image()->bounds());
+    m_layer->image()->undoAdapter()->emitSelectionChanged();
 }
 
 void KisSelectedTransaction::undo()
@@ -82,7 +80,7 @@ void KisSelectedTransaction::undo()
 
     KisTransaction::undo();
 
-    if(m_selTransaction)
+    if (m_selTransaction)
         m_selTransaction->undo();
 //     if(m_hadSelection)
 //         m_device->selection();

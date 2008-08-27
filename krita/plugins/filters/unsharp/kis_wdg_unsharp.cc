@@ -31,30 +31,30 @@
 
 #include "ui_wdgunsharp.h"
 
-KisWdgUnsharp::KisWdgUnsharp(QWidget * parent) : KisFilterConfigWidget ( parent )
+KisWdgUnsharp::KisWdgUnsharp(QWidget * parent) : KisFilterConfigWidget(parent)
 {
     m_widget = new Ui_WdgUnsharp();
     m_widget->setupUi(this);
 
-    connect( widget()->intHalfSize, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->doubleAmount, SIGNAL( valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));
-    connect( widget()->intThreshold, SIGNAL( valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->intHalfSize, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->doubleAmount, SIGNAL(valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->intThreshold, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
 }
 
 void KisWdgUnsharp::setConfiguration(KisFilterConfiguration* config)
 {
     QVariant value;
-    widget()->intHalfSize->setValue( (config->getProperty("halfSize", value)) ? value.toUInt() : 4 );
-    widget()->doubleAmount->setValue( (config->getProperty("amount", value)) ? value.toDouble() : 0.1 );
-    widget()->intThreshold->setValue( (config->getProperty("threshold", value)) ? value.toUInt() : 20 );
+    widget()->intHalfSize->setValue((config->getProperty("halfSize", value)) ? value.toUInt() : 4);
+    widget()->doubleAmount->setValue((config->getProperty("amount", value)) ? value.toDouble() : 0.1);
+    widget()->intThreshold->setValue((config->getProperty("threshold", value)) ? value.toUInt() : 20);
 }
 
 KisFilterConfiguration* KisWdgUnsharp::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("unsharp", 1);
-    config->setProperty("halfSize", widget()->intHalfSize->value() );
-    config->setProperty("amount", widget()->doubleAmount->value() );
-    config->setProperty("threshold", widget()->intThreshold->value() );
+    config->setProperty("halfSize", widget()->intHalfSize->value());
+    config->setProperty("amount", widget()->doubleAmount->value());
+    config->setProperty("threshold", widget()->intThreshold->value());
     return config;
 }
 

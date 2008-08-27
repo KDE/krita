@@ -27,21 +27,18 @@
 
 KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(0.0), m_length(30), m_periodic(true), m_previousPos(KisVector2D::Zero())
 {
-    
+
 }
 
 double KisDynamicSensorTime::parameter(const KisPaintInformation&  pi)
 {
     m_time += pi.movement().norm();
-    if( m_time > m_length)
-    {
-        if(m_periodic)
-        {
+    if (m_time > m_length) {
+        if (m_periodic) {
             do {
                 m_time -= m_length; // TODO: replace by a modulo when I am a little bit more awake
-            } while(m_time > m_length);
-        } else
-        {
+            } while (m_time > m_length);
+        } else {
             m_time = m_length;
         }
     }
@@ -64,11 +61,11 @@ QWidget* KisDynamicSensorTime::createConfigurationWidget(QWidget* parent, KisSen
     Ui_SensorTimeConfiguration stc;
     stc.setupUi(wdg);
     stc.checkBoxRepeat->setChecked(m_periodic);
-    connect(stc.checkBoxRepeat, SIGNAL( toggled ( bool )), SLOT(setPeriodic(bool )));
-    connect(stc.checkBoxRepeat, SIGNAL( toggled ( bool )), ss, SIGNAL(parametersChanged()));
+    connect(stc.checkBoxRepeat, SIGNAL(toggled(bool)), SLOT(setPeriodic(bool)));
+    connect(stc.checkBoxRepeat, SIGNAL(toggled(bool)), ss, SIGNAL(parametersChanged()));
     stc.spinBoxLength->setValue(m_length);
-    connect(stc.spinBoxLength, SIGNAL(valueChanged ( int )), SLOT(setLength(int )));
-    connect(stc.spinBoxLength, SIGNAL(valueChanged ( int )), ss, SIGNAL(parametersChanged()));
+    connect(stc.spinBoxLength, SIGNAL(valueChanged(int)), SLOT(setLength(int)));
+    connect(stc.spinBoxLength, SIGNAL(valueChanged(int)), ss, SIGNAL(parametersChanged()));
     return wdg;
 }
 
@@ -81,8 +78,8 @@ void KisDynamicSensorTime::toXML(QDomDocument& doc, QDomElement& e) const
 
 void KisDynamicSensorTime::fromXML(const QDomElement& e)
 {
-    m_periodic = e.attribute("periodic","0").toInt();
-    m_length = e.attribute("length","30").toInt();
+    m_periodic = e.attribute("periodic", "0").toInt();
+    m_length = e.attribute("length", "30").toInt();
 }
 
 #include "kis_dynamic_sensor_time.moc"

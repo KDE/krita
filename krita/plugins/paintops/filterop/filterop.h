@@ -21,10 +21,11 @@
 
 #include <kparts/plugin.h>
 
-class FilterOp : public KParts::Plugin {
-    public:
-        FilterOp(QObject *parent, const QStringList &);
-        virtual ~FilterOp();
+class FilterOp : public KParts::Plugin
+{
+public:
+    FilterOp(QObject *parent, const QStringList &);
+    virtual ~FilterOp();
 };
 
 #endif

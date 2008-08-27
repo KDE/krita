@@ -28,7 +28,8 @@
  * A class that provides an easy interface having a paint device's tiles come directly from some tile. Note that
  * this class fills the tile WIHTOUT ANY REGARD TO THE COLORSPACE!
  */
-class KRITAIMAGE_EXPORT KisTileSourceFile : public virtual KisTileStoreFromFile, public virtual KisDataManagerProxy {
+class KRITAIMAGE_EXPORT KisTileSourceFile : public virtual KisTileStoreFromFile, public virtual KisDataManagerProxy
+{
 protected: // Subclasses should implement these:
     virtual const quint8* getColumnData(qint32 col) = 0; /// the callee takes ownership of the returned, it should be delete[]able
     virtual qint32 width() = 0;
@@ -39,7 +40,7 @@ public:
     KisTileSourceFile();
     virtual ~KisTileSourceFile();
 public: // Tile store
-  public: // Tile management
+public: // Tile management
     KisTileStoreData* registerTileData(const KisSharedTileData* tile);
     void deregisterTileData(const KisSharedTileData* tile); // Deletes its TileInfo*
 
@@ -48,7 +49,7 @@ public: // Tile store
 
     KisSharedTileData* degradedTileDataForSharing(KisSharedTileData* tileData);
 
-  public: // Pool management
+public: // Pool management
     void requestTileData(KisSharedTileData* tileData);
     void dontNeedTileData(KisSharedTileData* tileData);
 public: // Proxy
@@ -62,7 +63,9 @@ private:
     QMutex m_cacheMutex;
     struct CacheLine {
         CacheLine(const quint8* d) : data(d) {}
-        ~CacheLine() { delete[] data; }
+        ~CacheLine() {
+            delete[] data;
+        }
         const quint8* data;
     };
     QCache<qint32, CacheLine> m_decodingCache; // column -> data (takes ownership)

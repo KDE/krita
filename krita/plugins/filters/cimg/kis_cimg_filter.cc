@@ -58,7 +58,7 @@ typedef unsigned char uchar;
 
 
 KisCImgFilterConfiguration::KisCImgFilterConfiguration()
-    : KisFilterConfiguration("cimg", 1)
+        : KisFilterConfiguration("cimg", 1)
 {
     nb_iter = 1;
     dt = 20.0;
@@ -74,7 +74,7 @@ KisCImgFilterConfiguration::KisCImgFilterConfiguration()
 
 void KisCImgFilterConfiguration::fromXML(const QString & s)
 {
-    KisFilterConfiguration::fromXML( s );
+    KisFilterConfiguration::fromXML(s);
 
     nb_iter = getInt("nb_iter", 1);
     dt = getDouble("dt", 20.0);
@@ -108,14 +108,13 @@ QString KisCImgFilterConfiguration::toString()
 }
 
 KisCImgFilter::KisCImgFilter()
-: KisFilter(id(), KisFilter::CategoryEnhance, i18n("&CImg Image Restoration...")),
-      eigen(CImg<>(2,1), CImg<>(2,2))
+        : KisFilter(id(), KisFilter::CategoryEnhance, i18n("&CImg Image Restoration...")),
+        eigen(CImg<>(2, 1), CImg<>(2, 2))
 {
-    setSupportsPainting( false );
-    setSupportsPreview( false );
+    setSupportsPainting(false);
+    setSupportsPreview(false);
     const KoColorSpace* rgb16CS = KoColorSpaceRegistry::instance()->rgb16();
-    if(rgb16CS)
-    {
+    if (rgb16CS) {
         setColorSpaceIndependence(TO_RGBA16);
     } else {
         setColorSpaceIndependence(TO_RGBA8);
@@ -170,11 +169,11 @@ KisCImgFilter::KisCImgFilter()
 
 
 void KisCImgFilter::process(KisConstProcessingInformation src,
-                 KisProcessingInformation dst,
-                 const QSize& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-        ) const
+                            KisProcessingInformation dst,
+                            const QSize& size,
+                            const KisFilterConfiguration* config,
+                            KoUpdater* progressUpdater
+                           ) const
 {
     Q_UNUSED(src);
     Q_UNUSED(dst);
@@ -187,7 +186,7 @@ void KisCImgFilter::process(KisConstProcessingInformation src,
     qint32 width = rect.width();
     qint32 height = rect.height();
 
-     // Copy the src data into a CImg type image with three channels and no alpha.
+    // Copy the src data into a CImg type image with three channels and no alpha.
     // XXX: This means that a CImg is always rgba; find the quickest way to get 8-bit rgb from any colorspace & find a way
     //      to warn in the gui of loss of precision. XXX: Add this to the ColorSpaceAPI doc.
 
@@ -196,8 +195,7 @@ void KisCImgFilter::process(KisConstProcessingInformation src,
     KoColorSpace * cs = src->colorSpace();
     KoColorSpace* rgb16CS = KoColorSpaceRegistry::instance()->colorSpace("RGBA16", 0);
     KisPaintDeviceSP srcRGB16;
-    if(rgb16CS)
-    {
+    if (rgb16CS) {
         srcRGB16 = new KisPaintDevice(*src.data());
         srcRGB16->convertTo(rgb16CS);
         KisRectConstIteratorPixel it = srcRGB16->createRectConstIterator(rect.x(), rect.y(), rect.width(), rect.height());
@@ -236,22 +234,21 @@ void KisCImgFilter::process(KisConstProcessingInformation src,
 
     KisCImgFilterConfiguration * cfg = (KisCImgFilterConfiguration*)configuration;
 
-        nb_iter = cfg->nb_iter;
-        dt = cfg->dt;
-        dlength = cfg->dlength;
-        dtheta = cfg->dtheta;
-        sigma = cfg->sigma;
-        power1 = cfg->power1;
-        power2 = cfg->power2;
-        gauss_prec = cfg->gauss_prec;
-        onormalize = cfg->onormalize;
-        linear = cfg->linear;
+    nb_iter = cfg->nb_iter;
+    dt = cfg->dt;
+    dlength = cfg->dlength;
+    dtheta = cfg->dtheta;
+    sigma = cfg->sigma;
+    power1 = cfg->power1;
+    power2 = cfg->power2;
+    gauss_prec = cfg->gauss_prec;
+    onormalize = cfg->onormalize;
+    linear = cfg->linear;
 
     if (process() && !cancelRequested()) {
 
 
-        if(rgb16CS)
-        {
+        if (rgb16CS) {
             {
                 KisRectIteratorPixel it = srcRGB16->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
                 while (!it.isDone()) {
@@ -269,7 +266,7 @@ void KisCImgFilter::process(KisConstProcessingInformation src,
             }
             srcRGB16->convertTo(cs);
             KisPainter p(dst);
-            p.bitBlt(rect.x(), rect.y(), COMPOSITE_OVER, srcRGB16, rect.x(), rect.y(), rect.width(), rect.height() );
+            p.bitBlt(rect.x(), rect.y(), COMPOSITE_OVER, srcRGB16, rect.x(), rect.y(), rect.width(), rect.height());
         } else {
             KisRectIteratorPixel it = dst->createRectIterator(rect.x(), rect.y(), rect.width(), rect.height());
 
@@ -303,9 +300,9 @@ void KisCImgFilter::process(KisConstProcessingInformation src,
 void get_geom(const char *geom, int &geom_w, int &geom_h)
 {
     char tmp[16];
-    std::sscanf(geom,"%d%7[^0-9]%d%7[^0-9]",&geom_w,tmp,&geom_h,tmp+1);
-    if (tmp[0]=='%') geom_w=-geom_w;
-    if (tmp[1]=='%') geom_h=-geom_h;
+    std::sscanf(geom, "%d%7[^0-9]%d%7[^0-9]", &geom_w, tmp, &geom_h, tmp + 1);
+    if (tmp[0] == '%') geom_w = -geom_w;
+    if (tmp[1] == '%') geom_h = -geom_h;
 }
 
 
@@ -313,7 +310,7 @@ void get_geom(const char *geom, int &geom_w, int &geom_h)
 
 void KisCImgFilter::cleanup()
 {
-    img0 = flow = G = dest = sum= W = CImg<>();
+    img0 = flow = G = dest = sum = W = CImg<>();
     mask = CImg<uchar> ();
 }
 
@@ -321,8 +318,7 @@ void KisCImgFilter::cleanup()
 
 bool KisCImgFilter::prepare()
 {
-    if (!restore && !inpaint && !resize && !visuflow)
-    {
+    if (!restore && !inpaint && !resize && !visuflow) {
         // XXX: Do KDE messagebox
         // g_message ("You must specify one of the restore, inpaint, resize or flow mode !");
         return false;
@@ -339,9 +335,9 @@ bool KisCImgFilter::prepare()
 
     // Init images
     //------------
-    dest = CImg<>(img.width,img.height,1,img.dim);
-    sum = CImg<>(img.width,img.height,1);
-    W = CImg<>(img.width,img.height,1,2);
+    dest = CImg<>(img.width, img.height, 1, img.dim);
+    sum = CImg<>(img.width, img.height, 1);
+    W = CImg<>(img.width, img.height, 1, 2);
 
     return true;
 }
@@ -350,8 +346,7 @@ bool KisCImgFilter::prepare()
 
 bool KisCImgFilter::check_args()
 {
-    if (power2 < power1)
-    {
+    if (power2 < power1) {
         // XXX: Do KDE messagebox
         // g_message ("Error : p2<p1 !");
         return false;
@@ -366,7 +361,7 @@ bool KisCImgFilter::prepare_restore()
     CImgStats stats(img, false);
     img.normalize((float)stats.min, (float)stats.max);
     img0 = img;
-    G = CImg<>(img.width,img.height,1,3);
+    G = CImg<>(img.width, img.height, 1, 3);
     return true;
 }
 
@@ -376,8 +371,7 @@ bool KisCImgFilter::prepare_inpaint()
 {
     // TODO: dead function
     const char *file_m         = NULL; //cimg_option("-m",(const char*)NULL,"Input inpainting mask");
-    if (!file_m)
-    {
+    if (!file_m) {
         // XXX: Do KDE messagebox
         // g_message ("You need to specify an inpainting mask (option '-m') !");
         return false;
@@ -385,65 +379,75 @@ bool KisCImgFilter::prepare_inpaint()
 
     const unsigned int dilate  = 0; //cimg_option("-dilate",0,"Inpainting mask dilatation");
     const unsigned int ip_init = 3; //cimg_option("-init",3,"Inpainting init (0=black, 1=white, 2=noise, 3=unchanged, 4=interpol)");
-    if (cimg::strncasecmp("block",file_m,5))
+    if (cimg::strncasecmp("block", file_m, 5))
         mask = CImg<uchar>(file_m);
     else {
-        int l=16; std::sscanf(file_m,"block%d",&l);
-        mask = CImg<uchar>(img.width/l,img.height/l);
-        cimg_mapXY(mask,x,y) mask(x,y)=(x+y)%2;
+        int l = 16; std::sscanf(file_m, "block%d", &l);
+        mask = CImg<uchar>(img.width / l, img.height / l);
+        cimg_mapXY(mask, x, y) mask(x, y) = (x + y) % 2;
     }
-    mask.resize(img.width,img.height,1,1);
+    mask.resize(img.width, img.height, 1, 1);
     if (dilate) mask.dilate(dilate);
     switch (ip_init) {
-    case 0 : { cimg_mapXYV(img,x,y,k) if (mask(x,y)) img(x,y,k) = 0; } break;
-    case 1 : { cimg_mapXYV(img,x,y,k) if (mask(x,y)) img(x,y,k) = 255; } break;
-    case 2 : { cimg_mapXYV(img,x,y,k) if (mask(x,y)) img(x,y,k) = (float)(255*cimg::rand()); } break;
+    case 0 : {
+        cimg_mapXYV(img,x,y,k) if (mask(x,y)) img(x,y,k) = 0;
+    }
+    break;
+    case 1 : {
+        cimg_mapXYV(img,x,y,k) if (mask(x,y)) img(x,y,k) = 255;
+    }
+    break;
+    case 2 : {
+        cimg_mapXYV(img,x,y,k) if (mask(x,y)) img(x,y,k) = (float)(255*cimg::rand());
+    }
+    break;
     case 3 : break;
     case 4 : {
-        CImg<uchar> tmask(mask),ntmask(tmask);
-        CImg_3x3(M,uchar);
-        CImg_3x3(I,float);
-        while (CImgStats(ntmask,false).max>0) {
-            cimg_map3x3(tmask,x,y,0,0,M) if (Mcc && (!Mpc || !Mnc || !Mcp || !Mcn)) {
-                const float ccp = Mcp?0.0f:1.0f, cpc = Mpc?0.0f:1.0f,
-                    cnc = Mnc?0.0f:1.0f, ccn = Mcn?0.0f:1.0f, csum = ccp + cpc + cnc + ccn;
-                cimg_mapV(img,k) {
-                    cimg_get3x3(img,x,y,0,k,I);
-                    img(x,y,k) = (ccp*Icp + cpc*Ipc + cnc*Inc + ccn*Icn)/csum;
+        CImg<uchar> tmask(mask), ntmask(tmask);
+        CImg_3x3(M, uchar);
+        CImg_3x3(I, float);
+        while (CImgStats(ntmask, false).max > 0) {
+            cimg_map3x3(tmask, x, y, 0, 0, M) if (Mcc && (!Mpc || !Mnc || !Mcp || !Mcn)) {
+                const float ccp = Mcp ? 0.0f : 1.0f, cpc = Mpc ? 0.0f : 1.0f,
+                                  cnc = Mnc ? 0.0f : 1.0f, ccn = Mcn ? 0.0f : 1.0f, csum = ccp + cpc + cnc + ccn;
+                cimg_mapV(img, k) {
+                    cimg_get3x3(img, x, y, 0, k, I);
+                    img(x, y, k) = (ccp * Icp + cpc * Ipc + cnc * Inc + ccn * Icn) / csum;
                 }
-                ntmask(x,y) = 0;
+                ntmask(x, y) = 0;
             }
             tmask = ntmask;
         }
-    } break;
+    }
+    break;
     default: break;
     }
-    img0=img;
-    G = CImg<>(img.width,img.height,1,3,0);
-    CImg_3x3(g,uchar);
-    CImg_3x3(I,float);
-    cimg_map3x3(mask,x,y,0,0,g) if (!gcc && !(gnc-gcc) && !(gcc-gpc) && !(gcn-gcc) && !(gcc-gcp)) cimg_mapV(img,k) {
-        cimg_get3x3(img,x,y,0,k,I);
-        const float ix = 0.5f*(Inc-Ipc), iy = 0.5f*(Icn-Icp);
-        G(x,y,0)+= ix*ix; G(x,y,1)+= ix*iy; G(x,y,2)+= iy*iy;
+    img0 = img;
+    G = CImg<>(img.width, img.height, 1, 3, 0);
+    CImg_3x3(g, uchar);
+    CImg_3x3(I, float);
+    cimg_map3x3(mask, x, y, 0, 0, g) if (!gcc && !(gnc - gcc) && !(gcc - gpc) && !(gcn - gcc) && !(gcc - gcp)) cimg_mapV(img, k) {
+        cimg_get3x3(img, x, y, 0, k, I);
+        const float ix = 0.5f * (Inc - Ipc), iy = 0.5f * (Icn - Icp);
+        G(x, y, 0) += ix * ix; G(x, y, 1) += ix * iy; G(x, y, 2) += iy * iy;
     }
     G.blur(sigma);
-    { cimg_mapXY(G,x,y)
-        {
-            G.get_tensor(x,y).symeigen(eigen(0),eigen(1));
+    {
+        cimg_mapXY(G, x, y) {
+            G.get_tensor(x, y).symeigen(eigen(0), eigen(1));
             const float
-                l1 = eigen(0)[0],
-                l2 = eigen(0)[1],
-                u = eigen(1)[0],
-                v = eigen(1)[1],
-                ng = (float)std::sqrt(l1+l2),
-                n1 = (float)(1.0/std::pow(1+ng,power1)),
-                n2 = (float)(1.0/std::pow(1+ng,power2)),
-                sr1 = (float)std::sqrt(n1),
-                sr2 = (float)std::sqrt(n2);
-            G(x,y,0) = sr1*u*u + sr2*v*v;
-            G(x,y,1) = u*v*(sr1-sr2);
-            G(x,y,2) = sr1*v*v + sr2*u*u;
+            l1 = eigen(0)[0],
+                 l2 = eigen(0)[1],
+                      u = eigen(1)[0],
+                          v = eigen(1)[1],
+                              ng = (float)std::sqrt(l1 + l2),
+                                   n1 = (float)(1.0 / std::pow(1 + ng, power1)),
+                                        n2 = (float)(1.0 / std::pow(1 + ng, power2)),
+                                             sr1 = (float)std::sqrt(n1),
+                                                   sr2 = (float)std::sqrt(n2);
+            G(x, y, 0) = sr1 * u * u + sr2 * v * v;
+            G(x, y, 1) = u * v * (sr1 - sr2);
+            G(x, y, 2) = sr1 * v * v + sr2 * u * u;
         }
     }
     return true;
@@ -456,12 +460,12 @@ bool KisCImgFilter::prepare_resize()
     const char *geom  = NULL; //cimg_option("-g",(const char*)NULL,"Output image geometry");
     const bool anchor = true; //cimg_option("-anchor",true,"Anchor original pixels");
     if (!geom) throw CImgArgumentException("You need to specify an output geomety (option -g)");
-    int w,h; get_geom(geom,w,h);
-    mask = CImg<uchar>(img.width,img.height,1,1,255);
-    if (!anchor) mask.resize(w,h,1,1,1); else mask = ~mask.resize(w,h,1,1,4);
-    img0 = img.get_resize(w,h,1,-100,1);
-    img.resize(w,h,1,-100,3);
-    G = CImg<>(img.width,img.height,1,3);
+    int w, h; get_geom(geom, w, h);
+    mask = CImg<uchar>(img.width, img.height, 1, 1, 255);
+    if (!anchor) mask.resize(w, h, 1, 1, 1); else mask = ~mask.resize(w, h, 1, 1, 4);
+    img0 = img.get_resize(w, h, 1, -100, 1);
+    img.resize(w, h, 1, -100, 3);
+    G = CImg<>(img.width, img.height, 1, 3);
     return true;
 }
 
@@ -473,33 +477,33 @@ bool KisCImgFilter::prepare_visuflow()
     //const char *file_i   = (const char *)NULL; //cimg_option("-i",(const char*)NULL,"Input init image");
     const bool normalize = false; //cimg_option("-norm",false,"Normalize input flow");
 
-    int w,h; get_geom(geom,w,h);
-    if (!cimg::strcasecmp(visuflow,"circle")) { // Create a circular vector flow
-        flow = CImg<>(400,400,1,2);
-        cimg_mapXY(flow,x,y) {
-            const float ang = (float)(std::atan2(y-0.5*flow.dimy(),x-0.5*flow.dimx()));
-            flow(x,y,0) = -(float)std::sin(ang);
-            flow(x,y,1) = (float)std::cos(ang);
+    int w, h; get_geom(geom, w, h);
+    if (!cimg::strcasecmp(visuflow, "circle")) { // Create a circular vector flow
+        flow = CImg<>(400, 400, 1, 2);
+        cimg_mapXY(flow, x, y) {
+            const float ang = (float)(std::atan2(y - 0.5 * flow.dimy(), x - 0.5 * flow.dimx()));
+            flow(x, y, 0) = -(float)std::sin(ang);
+            flow(x, y, 1) = (float)std::cos(ang);
         }
     }
-    if (!cimg::strcasecmp(visuflow,"radial")) { // Create a radial vector flow
-        flow = CImg<>(400,400,1,2);
-        cimg_mapXY(flow,x,y) {
-            const float ang = (float)(std::atan2(y-0.5*flow.dimy(),x-0.5*flow.dimx()));
-            flow(x,y,0) = (float)std::cos(ang);
-            flow(x,y,1) = (float)std::sin(ang);
+    if (!cimg::strcasecmp(visuflow, "radial")) { // Create a radial vector flow
+        flow = CImg<>(400, 400, 1, 2);
+        cimg_mapXY(flow, x, y) {
+            const float ang = (float)(std::atan2(y - 0.5 * flow.dimy(), x - 0.5 * flow.dimx()));
+            flow(x, y, 0) = (float)std::cos(ang);
+            flow(x, y, 1) = (float)std::sin(ang);
         }
     }
     if (!flow.data) flow = CImg<>(visuflow);
-    flow.resize(w,h,1,2,3);
+    flow.resize(w, h, 1, 2, 3);
     if (normalize) flow.orientation_pointwise();
     /*    if (file_i) img = CImg<>(file_i);
           else img = CImg<>(flow.width,flow.height,1,1,0).noise(100,2); */
-    img0=img;
+    img0 = img;
     img0.fill(0);
-    float color[3]={255,255,255};
-    img0.draw_quiver(flow,color,15,-10);
-    G = CImg<>(img.width,img.height,1,3);
+    float color[3] = {255, 255, 255};
+    img0.draw_quiver(flow, color, 15, -10);
+    G = CImg<>(img.width, img.height, 1, 3);
     return true;
 }
 
@@ -508,11 +512,11 @@ bool KisCImgFilter::prepare_visuflow()
 void KisCImgFilter::compute_smoothed_tensor()
 {
     if (visuflow || inpaint) return;
-    CImg_3x3(I,float);
+    CImg_3x3(I, float);
     G.fill(0);
-    cimg_mapV(img,k) cimg_map3x3(img,x,y,0,k,I) {
-        const float ix = 0.5f*(Inc-Ipc), iy = 0.5f*(Icn-Icp);
-        G(x,y,0)+= ix*ix; G(x,y,1)+= ix*iy; G(x,y,2)+= iy*iy;
+    cimg_mapV(img, k) cimg_map3x3(img, x, y, 0, k, I) {
+        const float ix = 0.5f * (Inc - Ipc), iy = 0.5f * (Icn - Icp);
+        G(x, y, 0) += ix * ix; G(x, y, 1) += ix * iy; G(x, y, 2) += iy * iy;
     }
     G.blur(sigma);
 }
@@ -521,31 +525,31 @@ void KisCImgFilter::compute_smoothed_tensor()
 
 void KisCImgFilter::compute_normalized_tensor()
 {
-    if (restore || resize) cimg_mapXY(G,x,y) {
-        G.get_tensor(x,y).symeigen(eigen(0),eigen(1));
+    if (restore || resize) cimg_mapXY(G, x, y) {
+        G.get_tensor(x, y).symeigen(eigen(0), eigen(1));
         const float
-            l1 = eigen(0)[0],
-            l2 = eigen(0)[1],
-            u = eigen(1)[0],
-            v = eigen(1)[1],
-            n1 = (float)(1.0/std::pow(1.0f+l1+l2,0.5f*power1)),
-            n2 = (float)(1.0/std::pow(1.0f+l1+l2,0.5f*power2));
-        G(x,y,0) = n1*u*u + n2*v*v;
-        G(x,y,1) = u*v*(n1-n2);
-        G(x,y,2) = n1*v*v + n2*u*u;
+        l1 = eigen(0)[0],
+             l2 = eigen(0)[1],
+                  u = eigen(1)[0],
+                      v = eigen(1)[1],
+                          n1 = (float)(1.0 / std::pow(1.0f + l1 + l2, 0.5f * power1)),
+                               n2 = (float)(1.0 / std::pow(1.0f + l1 + l2, 0.5f * power2));
+        G(x, y, 0) = n1 * u * u + n2 * v * v;
+        G(x, y, 1) = u * v * (n1 - n2);
+        G(x, y, 2) = n1 * v * v + n2 * u * u;
     }
-    if (visuflow) cimg_mapXY(G,x,y) {
+    if (visuflow) cimg_mapXY(G, x, y) {
         const float
-            u = flow(x,y,0),
-            v = flow(x,y,1),
-            n = (float)std::pow(u*u+v*v,0.25f),
-            nn = n<1e-5?1:n;
-        G(x,y,0) = u*u/nn;
-        G(x,y,1) = u*v/nn;
-        G(x,y,2) = v*v/nn;
+        u = flow(x, y, 0),
+            v = flow(x, y, 1),
+                n = (float)std::pow(u * u + v * v, 0.25f),
+                    nn = n < 1e-5 ? 1 : n;
+        G(x, y, 0) = u * u / nn;
+        G(x, y, 1) = u * v / nn;
+        G(x, y, 2) = v * v / nn;
     }
 
-    const CImgStats stats(G,false);
+    const CImgStats stats(G, false);
     G /= cimg::max(std::fabs(stats.max), std::fabs(stats.min));
 }
 
@@ -553,15 +557,15 @@ void KisCImgFilter::compute_normalized_tensor()
 
 void KisCImgFilter::compute_W(float cost, float sint)
 {
-    cimg_mapXY(W,x,y) {
+    cimg_mapXY(W, x, y) {
         const float
-            a = G(x,y,0),
-            b = G(x,y,1),
-            c = G(x,y,2),
-            u = a*cost + b*sint,
-            v = b*cost + c*sint;
-        W(x,y,0) = u;
-        W(x,y,1) = v;
+        a = G(x, y, 0),
+            b = G(x, y, 1),
+                c = G(x, y, 2),
+                    u = a * cost + b * sint,
+                        v = b * cost + c * sint;
+        W(x, y, 0) = u;
+        W(x, y, 1) = v;
     }
 }
 
@@ -569,51 +573,59 @@ void KisCImgFilter::compute_W(float cost, float sint)
 
 void KisCImgFilter::compute_LIC_back_forward(int x, int y)
 {
-    float l, X,Y, cu, cv, lsum=0;
+    float l, X, Y, cu, cv, lsum = 0;
     const float
-        fsigma2 = 2*dt*(W(x,y,0)*W(x,y,0) + W(x,y,1)*W(x,y,1)),
-        length = gauss_prec*(float)std::sqrt(fsigma2);
+    fsigma2 = 2 * dt * (W(x, y, 0) * W(x, y, 0) + W(x, y, 1) * W(x, y, 1)),
+              length = gauss_prec * (float)std::sqrt(fsigma2);
 
     if (linear) {
 
         // Integrate with linear interpolation
-        cu = W(x,y,0); cv = W(x,y,1); X=(float)x; Y=(float)y;
-        for (l=0; l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=dlength) {
-            float u = (float)(W.linear_pix2d(X,Y,0)), v = (float)(W.linear_pix2d(X,Y,1));
-            const float coef = (float)std::exp(-l*l/fsigma2);
-            if ((cu*u+cv*v)<0) { u=-u; v=-v; }
-            cimg_mapV(dest,k) dest(x,y,k)+=(float)(coef*img.linear_pix2d(X,Y,k));
-            X+=dlength*u; Y+=dlength*v; cu=u; cv=v; lsum+=coef;
+        cu = W(x, y, 0); cv = W(x, y, 1); X = (float)x; Y = (float)y;
+        for (l = 0; l<length && X >= 0 && Y >= 0 && X <= W.dimx() - 1 && Y <= W.dimy() - 1; l += dlength) {
+            float u = (float)(W.linear_pix2d(X, Y, 0)), v = (float)(W.linear_pix2d(X, Y, 1));
+            const float coef = (float)std::exp(-l * l / fsigma2);
+            if ((cu*u + cv*v) < 0) {
+                u = -u; v = -v;
+            }
+            cimg_mapV(dest, k) dest(x, y, k) += (float)(coef * img.linear_pix2d(X, Y, k));
+            X += dlength * u; Y += dlength * v; cu = u; cv = v; lsum += coef;
         }
-        cu = W(x,y,0); cv = W(x,y,1); X=x-dlength*cu; Y=y-dlength*cv;
-        for (l=dlength; l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=dlength) {
-            float u = (float)(W.linear_pix2d(X,Y,0)), v = (float)(W.linear_pix2d(X,Y,1));
-            const float coef = (float)std::exp(-l*l/fsigma2);
-            if ((cu*u+cv*v)<0) { u=-u; v=-v; }
-            cimg_mapV(dest,k) dest(x,y,k)+=(float)(coef*img.linear_pix2d(X,Y,k));
-            X-=dlength*u; Y-=dlength*v; cu=u; cv=v; lsum+=coef;
+        cu = W(x, y, 0); cv = W(x, y, 1); X = x - dlength * cu; Y = y - dlength * cv;
+        for (l = dlength; l<length && X >= 0 && Y >= 0 && X <= W.dimx() - 1 && Y <= W.dimy() - 1; l += dlength) {
+            float u = (float)(W.linear_pix2d(X, Y, 0)), v = (float)(W.linear_pix2d(X, Y, 1));
+            const float coef = (float)std::exp(-l * l / fsigma2);
+            if ((cu*u + cv*v) < 0) {
+                u = -u; v = -v;
+            }
+            cimg_mapV(dest, k) dest(x, y, k) += (float)(coef * img.linear_pix2d(X, Y, k));
+            X -= dlength * u; Y -= dlength * v; cu = u; cv = v; lsum += coef;
         }
     } else {
 
         // Integrate with non linear interpolation
-        cu = W(x,y,0); cv = W(x,y,1); X=(float)x; Y=(float)y;
-        for (l=0; l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=dlength) {
-            float u = W((int)X,(int)Y,0), v = W((int)X,(int)Y,1);
-            const float coef = (float)std::exp(-l*l/fsigma2);
-            if ((cu*u+cv*v)<0) { u=-u; v=-v; }
-            cimg_mapV(dest,k) dest(x,y,k)+=(float)(coef*img.linear_pix2d(X,Y,k));
-            X+=dlength*u; Y+=dlength*v; cu=u; cv=v; lsum+=coef;
+        cu = W(x, y, 0); cv = W(x, y, 1); X = (float)x; Y = (float)y;
+        for (l = 0; l<length && X >= 0 && Y >= 0 && X <= W.dimx() - 1 && Y <= W.dimy() - 1; l += dlength) {
+            float u = W((int)X, (int)Y, 0), v = W((int)X, (int)Y, 1);
+            const float coef = (float)std::exp(-l * l / fsigma2);
+            if ((cu*u + cv*v) < 0) {
+                u = -u; v = -v;
+            }
+            cimg_mapV(dest, k) dest(x, y, k) += (float)(coef * img.linear_pix2d(X, Y, k));
+            X += dlength * u; Y += dlength * v; cu = u; cv = v; lsum += coef;
         }
-        cu = W(x,y,0); cv = W(x,y,1); X=x-dlength*cu; Y=y-dlength*cv;
-        for (l=dlength; l<length && X>=0 && Y>=0 && X<=W.dimx()-1 && Y<=W.dimy()-1; l+=dlength) {
-            float u = W((int)X,(int)Y,0), v = W((int)X,(int)Y,1);
-            const float coef = (float)std::exp(-l*l/fsigma2);
-            if ((cu*u+cv*v)<0) { u=-u; v=-v; }
-            cimg_mapV(dest,k) dest(x,y,k)+=(float)(coef*img.linear_pix2d(X,Y,k));
-            X-=dlength*u; Y-=dlength*v; cu=u; cv=v; lsum+=coef;
+        cu = W(x, y, 0); cv = W(x, y, 1); X = x - dlength * cu; Y = y - dlength * cv;
+        for (l = dlength; l<length && X >= 0 && Y >= 0 && X <= W.dimx() - 1 && Y <= W.dimy() - 1; l += dlength) {
+            float u = W((int)X, (int)Y, 0), v = W((int)X, (int)Y, 1);
+            const float coef = (float)std::exp(-l * l / fsigma2);
+            if ((cu*u + cv*v) < 0) {
+                u = -u; v = -v;
+            }
+            cimg_mapV(dest, k) dest(x, y, k) += (float)(coef * img.linear_pix2d(X, Y, k));
+            X -= dlength * u; Y -= dlength * v; cu = u; cv = v; lsum += coef;
         }
     }
-    sum(x,y)+=lsum;
+    sum(x, y) += lsum;
 }
 
 //----------------------------------------------------------------------------
@@ -622,19 +634,17 @@ void KisCImgFilter::compute_LIC(int &progressSteps)
 {
     dest.fill(0);
     sum.fill(0);
-    for (float theta=(180%(int)dtheta)/2.0f; theta<180; theta+=dtheta)
-    {
+    for (float theta = (180 % (int)dtheta) / 2.0f; theta < 180; theta += dtheta) {
         const float
-            rad = (float)(theta*cimg::PI/180.0),
-            cost = (float)std::cos(rad),
-            sint = (float)std::sin(rad);
+        rad = (float)(theta * cimg::PI / 180.0),
+              cost = (float)std::cos(rad),
+                     sint = (float)std::sin(rad);
 
         // Compute vector field w = sqrt(T)*a_alpha
         compute_W(cost, sint);
 
         // Compute the LIC along w in backward and forward directions
-        cimg_mapXY(dest,x,y)
-        {
+        cimg_mapXY(dest, x, y) {
 //             setProgress(progressSteps);
 //             progressSteps++;
 //
@@ -642,7 +652,7 @@ void KisCImgFilter::compute_LIC(int &progressSteps)
 //                 return;
 //             }
 
-            if (!mask.data || mask(x,y)) compute_LIC_back_forward(x,y);
+            if (!mask.data || mask(x, y)) compute_LIC_back_forward(x, y);
         }
     }
 
@@ -652,56 +662,54 @@ void KisCImgFilter::compute_LIC(int &progressSteps)
 
 void KisCImgFilter::compute_average_LIC()
 {
-    cimg_mapXY(dest,x,y)
-    {
-        if (sum(x,y)>0)
-            cimg_mapV(dest,k) dest(x,y,k) /= sum(x,y);
+    cimg_mapXY(dest, x, y) {
+        if (sum(x, y) > 0)
+            cimg_mapV(dest, k) dest(x, y, k) /= sum(x, y);
         else
-            cimg_mapV(dest,k) dest(x,y,k) = img(x,y,k);
+            cimg_mapV(dest, k) dest(x, y, k) = img(x, y, k);
     }
 }
 
 
 bool KisCImgFilter::process()
 {
-        if (!prepare()) return false;
+    if (!prepare()) return false;
 
 //     setProgressTotalSteps(dest.width * dest.height * nb_iter * (int)ceil(180 / dtheta));
 //     setProgressStage(i18n("Applying image restoration filter..."), 0);
 
-        //-------------------------------------
-        // Begin regularization PDE iterations
-        //-------------------------------------
-        int progressSteps = 0;
-        for (unsigned int iter=0; iter<nb_iter; iter++)
-        {
-                // Compute smoothed structure tensor field G
-                compute_smoothed_tensor();
+    //-------------------------------------
+    // Begin regularization PDE iterations
+    //-------------------------------------
+    int progressSteps = 0;
+    for (unsigned int iter = 0; iter < nb_iter; iter++) {
+        // Compute smoothed structure tensor field G
+        compute_smoothed_tensor();
 
-                // Compute normalized tensor field sqrt(T) in G
-                compute_normalized_tensor();
+        // Compute normalized tensor field sqrt(T) in G
+        compute_normalized_tensor();
 
-                // Compute LIC's along different angle projections a_\alpha
-                compute_LIC(progressSteps);
+        // Compute LIC's along different angle projections a_\alpha
+        compute_LIC(progressSteps);
 
 //         if (cancelRequested()) {
 //             break;
 //         }
 
-                // Average all the LIC's
-                compute_average_LIC();
+        // Average all the LIC's
+        compute_average_LIC();
 
-                // Next step
-                img = dest;
-        }
+        // Next step
+        img = dest;
+    }
 
 //     setProgressDone();
-        // Save result and end program
-        //-----------------------------
-        if (visuflow) dest.mul(flow.get_norm_pointwise()).normalize(0,255);
-        if (onormalize) dest.normalize(0,255);
-        cleanup();
-        return true;
+    // Save result and end program
+    //-----------------------------
+    if (visuflow) dest.mul(flow.get_norm_pointwise()).normalize(0, 255);
+    if (onormalize) dest.normalize(0, 255);
+    cleanup();
+    return true;
 }
 
 KisFilterConfigWidget * KisCImgFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP, const KisImageSP) const
@@ -712,8 +720,7 @@ KisFilterConfigWidget * KisCImgFilter::createConfigurationWidget(QWidget* parent
 KisFilterConfiguration* KisCImgFilter::configuration(QWidget* nwidget)
 {
     KisCImgconfigWidget * widget = (KisCImgconfigWidget *) nwidget;
-    if( widget == 0 )
-    {
+    if (widget == 0) {
         KisCImgFilterConfiguration * cfg = new KisCImgFilterConfiguration();
         Q_CHECK_PTR(cfg);
         return cfg;

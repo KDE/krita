@@ -45,19 +45,19 @@ class KisAirbrushOpSettings : public KisPaintOpSettings
 public:
 
     KisAirbrushOpSettings(QWidget *parent)
-        : KisPaintOpSettings()
-        {
-            m_optionsWidget = new KisPaintOpOptionsWidget( parent );
-        }
+            : KisPaintOpSettings() {
+        m_optionsWidget = new KisPaintOpOptionsWidget(parent);
+    }
 
-    KisPaintOpSettingsSP clone() const
-        {
-            KisPaintOpSettings * c = new KisAirbrushOpSettings( 0 );
-            c->fromXML(toXML());
-            return c;
-        }
+    KisPaintOpSettingsSP clone() const {
+        KisPaintOpSettings * c = new KisAirbrushOpSettings(0);
+        c->fromXML(toXML());
+        return c;
+    }
 
-    QWidget * widget() const { return m_optionsWidget; }
+    QWidget * widget() const {
+        return m_optionsWidget;
+    }
 private:
     KisPaintOpOptionsWidget *m_optionsWidget;
 };
@@ -66,8 +66,8 @@ private:
 
 KisPaintOp * KisAirbrushOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image)
 {
-    Q_UNUSED( settings );
-    Q_UNUSED( image );
+    Q_UNUSED(settings);
+    Q_UNUSED(image);
     KisPaintOp * op = new KisAirbrushOp(painter);
     Q_CHECK_PTR(op);
     return op;
@@ -86,7 +86,7 @@ KisPaintOpSettingsSP KisAirbrushOpFactory::settings(KisImageSP image)
 
 
 KisAirbrushOp::KisAirbrushOp(KisPainter * painter)
-    : KisBrushBasedPaintOp(painter)
+        : KisBrushBasedPaintOp(painter)
 {
 }
 
@@ -138,11 +138,11 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
     if (!device) return;
 
     KisBrushSP brush = m_brush;
-    if (! brush->canPaintFor(info) )
+    if (! brush->canPaintFor(info))
         return;
     KisPaintDeviceSP dab = 0;
 
-    double scale = KisPaintOp::scaleForPressure( info.pressure() );
+    double scale = KisPaintOp::scaleForPressure(info.pressure());
     QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 
@@ -156,18 +156,17 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
 
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         dab = brush->image(device->colorSpace(), scale, 0.0 , info, xFraction, yFraction);
-    }
-    else {
-        dab = cachedDab( );
+    } else {
+        dab = cachedDab();
         KoColor color = painter()->paintColor();
-        color.convertTo( dab->colorSpace() );
+        color.convertTo(dab->colorSpace());
         brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
     }
 
     QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
-    if ( painter()->bounds().isValid() ) {
+    if (painter()->bounds().isValid()) {
         dstRect &= painter()->bounds();
     }
 

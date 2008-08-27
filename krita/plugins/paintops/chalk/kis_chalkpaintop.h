@@ -33,22 +33,30 @@ class QPointF;
 class KisPainter;
 class KisChalkOpSettings;
 
-class KisChalkPaintOpFactory : public KisPaintOpFactory {
+class KisChalkPaintOpFactory : public KisPaintOpFactory
+{
 
 public:
     KisChalkPaintOpFactory() {}
     virtual ~KisChalkPaintOpFactory() {}
 
     virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
-    virtual QString id() const { return "chalkbrush"; }
-    virtual QString name() const { return i18n("Chalk-e brush"); }
-    virtual QString pixmap() { return "krita-chalk.png"; }
+    virtual QString id() const {
+        return "chalkbrush";
+    }
+    virtual QString name() const {
+        return i18n("Chalk-e brush");
+    }
+    virtual QString pixmap() {
+        return "krita-chalk.png";
+    }
     virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
 };
 
 
-class KisChalkPaintOp : public KisPaintOp {
+class KisChalkPaintOp : public KisPaintOp
+{
 
 public:
 
@@ -57,8 +65,7 @@ public:
 
     void paintAt(const KisPaintInformation& info);
 
-    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const
-    {
+    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
         Q_UNUSED(xSpacing);
         Q_UNUSED(ySpacing);
         Q_UNUSED(pressure1);
@@ -71,13 +78,13 @@ public:
 
 private:
     QColor c;
-	QPointF m_previousPoint;
-	KisImageSP m_image;
-	bool newStrokeFlag;
-	//Stroke stroke;
-	KisPaintDeviceSP dab;
+    QPointF m_previousPoint;
+    KisImageSP m_image;
+    bool newStrokeFlag;
+    //Stroke stroke;
+    KisPaintDeviceSP dab;
     QMutex m_mutex;
-	Brush m_mybrush;
+    Brush m_mybrush;
 };
 
 #endif // KIS_CHALKPAINTOP_H_

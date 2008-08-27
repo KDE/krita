@@ -23,50 +23,45 @@
 #define SRC_TO_DST(v) (KoColorSpaceMaths<typename _src_CSTraits_::channels_type, typename _dst_CSTraits_::channels_type >::scaleToA(v))
 
 template<typename _src_CSTraits_, typename _dst_CSTraits_>
-class KisYCbCrToRgbColorConversionTransformation : public KoColorConversionTransformation {
-    public:
-        KisYCbCrToRgbColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs) : KoColorConversionTransformation(srcCs, dstCs)
-        {
+class KisYCbCrToRgbColorConversionTransformation : public KoColorConversionTransformation
+{
+public:
+    KisYCbCrToRgbColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs) : KoColorConversionTransformation(srcCs, dstCs) {
+    }
+    virtual void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const {
+        const typename _src_CSTraits_::Pixel* src = reinterpret_cast< const typename _src_CSTraits_::Pixel*>(srcU8);
+        typename _dst_CSTraits_::Pixel* dst = reinterpret_cast<typename _dst_CSTraits_::Pixel*>(dstU8);
+        while (nPixels > 0) {
+            dst->red = SRC_TO_DST(_src_CSTraits_::computeRed(src->Y, src->Cb, src->Cr));
+            dst->green = SRC_TO_DST(_src_CSTraits_::computeGreen(src->Y, src->Cb, src->Cr));
+            dst->blue = SRC_TO_DST(_src_CSTraits_::computeBlue(src->Y, src->Cb, src->Cr));
+            dst->alpha = SRC_TO_DST(src->alpha);
+            src ++;
+            dst ++;
+            nPixels--;
         }
-        virtual void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
-        {
-            const typename _src_CSTraits_::Pixel* src = reinterpret_cast< const typename _src_CSTraits_::Pixel*>(srcU8);
-            typename _dst_CSTraits_::Pixel* dst = reinterpret_cast<typename _dst_CSTraits_::Pixel*>(dstU8);
-            while(nPixels > 0)
-            {
-                dst->red = SRC_TO_DST(_src_CSTraits_::computeRed( src->Y, src->Cb, src->Cr));
-                dst->green = SRC_TO_DST(_src_CSTraits_::computeGreen( src->Y, src->Cb, src->Cr));
-                dst->blue = SRC_TO_DST(_src_CSTraits_::computeBlue( src->Y, src->Cb, src->Cr));
-                dst->alpha = SRC_TO_DST(src->alpha);
-                src ++;
-                dst ++;
-                nPixels--;
-            }
-        }
+    }
 };
 
 template<typename _src_CSTraits_, typename _dst_CSTraits_>
-class KisYCbCrToRgbColorConversionTransformationFactory : public KoColorConversionTransformationFactory {
-    public:
-        KisYCbCrToRgbColorConversionTransformationFactory(QString _srcColorModelId, QString _srcDepthId, QString _dstColorModelId, QString _dstDepthId) : KoColorConversionTransformationFactory(_srcColorModelId,  _srcDepthId, "", _dstColorModelId, _dstDepthId, "sRGB built-in - (lcms internal)")
-        {}
-        virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const
-        {
-            Q_UNUSED(renderingIntent);
-            Q_ASSERT(canBeSource(srcColorSpace));
-            Q_ASSERT(canBeDestination(dstColorSpace));
-            return new KisYCbCrToRgbColorConversionTransformation<_src_CSTraits_, _dst_CSTraits_>(srcColorSpace, dstColorSpace);
-        }
-        virtual bool conserveColorInformation() const
-        {
-            return true;
-        }
-        virtual bool conserveDynamicRange() const
-        {
-            return false;
-        }
-    private:
-        bool hdr;
+class KisYCbCrToRgbColorConversionTransformationFactory : public KoColorConversionTransformationFactory
+{
+public:
+    KisYCbCrToRgbColorConversionTransformationFactory(QString _srcColorModelId, QString _srcDepthId, QString _dstColorModelId, QString _dstDepthId) : KoColorConversionTransformationFactory(_srcColorModelId,  _srcDepthId, "", _dstColorModelId, _dstDepthId, "sRGB built-in - (lcms internal)") {}
+    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const {
+        Q_UNUSED(renderingIntent);
+        Q_ASSERT(canBeSource(srcColorSpace));
+        Q_ASSERT(canBeDestination(dstColorSpace));
+        return new KisYCbCrToRgbColorConversionTransformation<_src_CSTraits_, _dst_CSTraits_>(srcColorSpace, dstColorSpace);
+    }
+    virtual bool conserveColorInformation() const {
+        return true;
+    }
+    virtual bool conserveDynamicRange() const {
+        return false;
+    }
+private:
+    bool hdr;
 };
 
 #endif

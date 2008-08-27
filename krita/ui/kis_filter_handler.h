@@ -32,7 +32,8 @@ class QRect;
 /**
  * Show the dialog for a certain filter and apply the filters
  */
-class KisFilterHandler : public QObject {
+class KisFilterHandler : public QObject
+{
 
     Q_OBJECT
 

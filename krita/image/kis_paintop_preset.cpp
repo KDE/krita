@@ -31,23 +31,22 @@
 #include "kis_paint_device.h"
 #include "kis_image.h"
 
-struct KisPaintOpPreset::Private
-{
+struct KisPaintOpPreset::Private {
     KisPaintOpSettingsSP settings;
     QImage img;
 };
 
 
 KisPaintOpPreset::KisPaintOpPreset()
-   : KoResource(QString())
-   , m_d(new Private)
+        : KoResource(QString())
+        , m_d(new Private)
 {
     m_d->settings = 0;
 }
 
 KisPaintOpPreset::KisPaintOpPreset(const QString & fileName)
- : KoResource(fileName)
- , m_d(new Private)
+        : KoResource(fileName)
+        , m_d(new Private)
 {
 }
 
@@ -59,12 +58,12 @@ KisPaintOpPreset::~KisPaintOpPreset()
 KisPaintOpPresetSP KisPaintOpPreset::clone() const
 {
     KisPaintOpPreset * preset = new KisPaintOpPreset();
-    if ( settings() ) {
-        preset->setSettings( settings()->clone() );
+    if (settings()) {
+        preset->setSettings(settings()->clone());
     }
-    preset->setPaintOp( paintOp() );
-    preset->setName( name() );
-    preset->setValid( valid() );
+    preset->setPaintOp(paintOp());
+    preset->setName(name());
+    preset->setValid(valid());
 
     return preset;
 }
@@ -111,14 +110,14 @@ bool KisPaintOpPreset::save()
         return false;
 
     QFile f(filename());
-    f.open( QIODevice::WriteOnly );
-    f.write( m_d->settings->toXML().toUtf8() );
+    f.open(QIODevice::WriteOnly);
+    f.write(m_d->settings->toXML().toUtf8());
     f.close();
     return true;
 }
 
 QImage KisPaintOpPreset::img() const
-    {
+{
     return m_d->img;
 }
 
@@ -137,8 +136,8 @@ void KisPaintOpPreset::updateImg()
     KisPaintInformation i2(QPointF(50, 25), PRESSURE_MAX);
     KisPaintInformation i3(QPointF(100, 25), PRESSURE_MIN);
 
-    gc.paintBezierCurve(i1, QPointF(25, 0), QPointF(25,0), i2);
-    gc.paintBezierCurve(i2, QPointF(75, 0), QPointF(75,0), i3);
+    gc.paintBezierCurve(i1, QPointF(25, 0), QPointF(25, 0), i2);
+    gc.paintBezierCurve(i2, QPointF(75, 0), QPointF(75, 0), i3);
     gc.end();
 
 }

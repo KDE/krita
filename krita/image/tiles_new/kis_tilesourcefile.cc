@@ -15,21 +15,23 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
-#include "kis_tile.h"
 #include "kis_tilesourcefile.h"
+#include "kis_tile.h"
+
 
 KisTileSourceFile::KisTileSourceFile()
-    : m_decodingCache(2*KisTile::HEIGHT) /* ### make configurable? */
+        : m_decodingCache(2*KisTile::HEIGHT) /* ### make configurable? */
 {
     ;
 }
 
-KisTileSourceFile::~KisTileSourceFile() {
+KisTileSourceFile::~KisTileSourceFile()
+{
     ;
 }
 
-const quint8* KisTileSourceFile::getCacheLine(qint32 col) {
+const quint8* KisTileSourceFile::getCacheLine(qint32 col)
+{
     CacheLine* line = m_decodingCache.object(col);
     if (line)
         return line->data;
@@ -40,7 +42,8 @@ const quint8* KisTileSourceFile::getCacheLine(qint32 col) {
     return data;
 }
 
-KisTile* KisTileSourceFile::getTileDataAt(qint32 col, qint32 row, bool write, KisTile* defaultTile) {
+KisTile* KisTileSourceFile::getTileDataAt(qint32 col, qint32 row, bool write, KisTile* defaultTile)
+{
     if (col < 0 || row < 0)
         return 0;
 
@@ -122,28 +125,33 @@ KisTile* KisTileSourceFile::getTileDataAt(qint32 col, qint32 row, bool write, Ki
 }
 
 
-KisTileStoreData* KisTileSourceFile::registerTileData(const KisSharedTileData* tile) {
+KisTileStoreData* KisTileSourceFile::registerTileData(const KisSharedTileData* tile)
+{
     // This could add info about the origin of the tile, for speading up (re)reading, I guess?
     return 0;
 }
-void KisTileSourceFile::deregisterTileData(const KisSharedTileData* tile) {
+void KisTileSourceFile::deregisterTileData(const KisSharedTileData* tile)
+{
     ; // don't recursively call delete here (~KisSharedTileData calls us again)
 }
 
-KisSharedTileData* KisTileSourceFile::degradedTileDataForSharing(KisSharedTileData* tileData) {
+KisSharedTileData* KisTileSourceFile::degradedTileDataForSharing(KisSharedTileData* tileData)
+{
     return new KisSharedTileData(defaultTileStore(), tileData->tileSize, tileData->pixelSize);
 }
 
 void KisTileSourceFile::ensureTileLoaded(KisSharedTileData* tile) {}
 void KisTileSourceFile::maySwapTile(KisSharedTileData* tile) {}
 
-void KisTileSourceFile::requestTileData(KisSharedTileData* tileData) {
+void KisTileSourceFile::requestTileData(KisSharedTileData* tileData)
+{
     // Gets called from KisSharedTileData constructor
     Q_ASSERT(!tileData->data);
     tileData->data = new quint8[pixelSize() * KisTile::WIDTH * KisTile::HEIGHT];
 }
 
-void KisTileSourceFile::dontNeedTileData(KisSharedTileData* tileData) {
+void KisTileSourceFile::dontNeedTileData(KisSharedTileData* tileData)
+{
     delete[] tileData->data;
     tileData->data = 0;
 }

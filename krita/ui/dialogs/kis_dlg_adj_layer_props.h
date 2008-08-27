@@ -47,20 +47,20 @@ public:
      * @param parent the widget parent of this dialog
      * @param name the QObject name, if any
      */
-    KisDlgAdjLayerProps( KisPaintDeviceSP paintDevice,
-                         const KisImageSP image,
-                         KisFilterConfiguration * configuration,
-                         const QString & layerName,
-                         const QString & caption,
-                         QWidget *parent = 0,
-                         const char *name = 0);
+    KisDlgAdjLayerProps(KisPaintDeviceSP paintDevice,
+                        const KisImageSP image,
+                        KisFilterConfiguration * configuration,
+                        const QString & layerName,
+                        const QString & caption,
+                        QWidget *parent = 0,
+                        const char *name = 0);
 
     KisFilterConfiguration * filterConfiguration() const;
     QString layerName() const;
 
 protected slots:
 
-    void slotNameChanged( const QString & );
+    void slotNameChanged(const QString &);
 
 private:
     KisPaintDeviceSP m_paintDevice;

@@ -24,8 +24,8 @@
  * @param low size in pixels of smallest scale (should be kept at 1)
  * @param high size in pixels of largest scale (default 1.6^8 = 43)
  */
-void tmo_reinhard02(const pfs::Array2D *Y, pfs::Array2D *L, 
-  bool use_scales, float key, float phi, 
-  int num, int low, int high, bool temporal_coherent );
+void tmo_reinhard02(const pfs::Array2D *Y, pfs::Array2D *L,
+                    bool use_scales, float key, float phi,
+                    int num, int low, int high, bool temporal_coherent);
 
 #endif /* _tmo_reinhard02_h_ */

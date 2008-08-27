@@ -19,8 +19,8 @@
 #ifndef KIS_OPENGL_CANVAS_2_H
 #define KIS_OPENGL_CANVAS_2_H
 
-#include "config-opengl.h"
-#include "config-glew.h"
+#include <config-opengl.h>
+#include <config-glew.h>
 
 #ifdef HAVE_OPENGL
 
@@ -56,7 +56,7 @@ class KRITAUI_EXPORT KisOpenGLCanvas2 : public QGLWidget, public KisAbstractCanv
 
 public:
 
-    KisOpenGLCanvas2( KisCanvas2 * canvas, QWidget * parent, KisOpenGLImageTexturesSP imageTextures);
+    KisOpenGLCanvas2(KisCanvas2 * canvas, QWidget * parent, KisOpenGLImageTexturesSP imageTextures);
 
     virtual ~KisOpenGLCanvas2();
 
@@ -70,14 +70,14 @@ public:
 public: // QWidget
 
     /// reimplemented method from superclass
-    void enterEvent( QEvent* e );
+    void enterEvent(QEvent* e);
 
     /// reimplemented method from superclass
-    void leaveEvent( QEvent* e );
+    void leaveEvent(QEvent* e);
 
 
     /// reimplemented method from superclass
-    void keyPressEvent( QKeyEvent *e );
+    void keyPressEvent(QKeyEvent *e);
 
     /// reimplemented method from superclass
     void mouseMoveEvent(QMouseEvent *e);
@@ -95,16 +95,16 @@ public: // QWidget
     void mouseDoubleClickEvent(QMouseEvent *e);
 
     /// reimplemented method from superclass
-    void keyReleaseEvent (QKeyEvent *e);
+    void keyReleaseEvent(QKeyEvent *e);
 
     /// reimplemented method from superclass
     //void paintEvent(QPaintEvent * ev);
 
     /// reimplemented method from superclass
-    void tabletEvent( QTabletEvent *e );
+    void tabletEvent(QTabletEvent *e);
 
     /// reimplemented method from superclass
-    void wheelEvent( QWheelEvent *e );
+    void wheelEvent(QWheelEvent *e);
 
     /// reimplemented method from superclass
     bool event(QEvent *event);
@@ -123,11 +123,13 @@ protected:
 
 public: // KisAbstractCanvasWidget
 
-    QWidget * widget() { return this; }
+    QWidget * widget() {
+        return this;
+    }
 
     KoToolProxy * toolProxy();
 
-    void documentOffsetMoved( const QPoint & pt );
+    void documentOffsetMoved(const QPoint & pt);
 
 private:
     class Private;

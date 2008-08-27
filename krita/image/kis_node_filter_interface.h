@@ -24,8 +24,9 @@ class KisFilterConfiguration;
 /**
  * Define an interface for nodes that are associated with a filter.
  */
-class KisNodeFilterInterface {
-  public:
+class KisNodeFilterInterface
+{
+public:
     virtual ~KisNodeFilterInterface() {}
     /**
      * @return the filter configuration associated with this node

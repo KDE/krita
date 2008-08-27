@@ -27,8 +27,7 @@
 #include "kis_interest_points_detector.h"
 
 struct KisMatch {
-    KisMatch(const KisInterestPoint* _ref, const KisInterestPoint* _match, double _strength) : ref(_ref), match(_match), strength(_strength)
-    {
+    KisMatch(const KisInterestPoint* _ref, const KisInterestPoint* _match, double _strength) : ref(_ref), match(_match), strength(_strength) {
     }
     const KisInterestPoint* ref;
     const KisInterestPoint* match;

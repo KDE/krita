@@ -31,7 +31,7 @@ class KisLayer;
 
 /// the base command for commands altering a layer
 class KRITAIMAGE_EXPORT KisLayerCommand
-    : public QUndoCommand
+            : public QUndoCommand
 {
 
 public:
@@ -49,7 +49,8 @@ protected:
 
 
 /// The command for setting the layer opacity
-class KRITAIMAGE_EXPORT KisLayerOpacityCommand : public KisLayerCommand {
+class KRITAIMAGE_EXPORT KisLayerOpacityCommand : public KisLayerCommand
+{
 
 public:
     /**
@@ -70,7 +71,8 @@ private:
 
 
 /// The command for setting the composite op
-class KRITAIMAGE_EXPORT KisLayerCompositeOpCommand : public KisLayerCommand {
+class KRITAIMAGE_EXPORT KisLayerCompositeOpCommand : public KisLayerCommand
+{
 
 public:
     /**

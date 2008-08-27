@@ -27,17 +27,17 @@
 #include "kis_icon_item.h"
 
 KisItemChooser::KisItemChooser(QWidget *parent, const char *name)
-    : QWidget(parent)
+        : QWidget(parent)
 {
     setObjectName(name);
-/*    m_frame = new QVBox(this);
-    m_frame->setFrameStyle(QFrame::Panel | QFrame::Sunken);*/
+    /*    m_frame = new QVBox(this);
+        m_frame->setFrameStyle(QFrame::Panel | QFrame::Sunken);*/
     m_chooser = new KoResourceItemChooser(this);
     m_chooser->setMinimumSize(200, 150);
 
-    connect( m_chooser, SIGNAL(selected(QTableWidgetItem*)), this, SLOT(slotItemSelected(QTableWidgetItem*)));
-    connect( m_chooser, SIGNAL( importClicked() ), this, SIGNAL( importClicked() ) );
-    connect( m_chooser, SIGNAL( deleteClicked() ), this, SIGNAL( deleteClicked() ) );
+    connect(m_chooser, SIGNAL(selected(QTableWidgetItem*)), this, SLOT(slotItemSelected(QTableWidgetItem*)));
+    connect(m_chooser, SIGNAL(importClicked()), this, SIGNAL(importClicked()));
+    connect(m_chooser, SIGNAL(deleteClicked()), this, SIGNAL(deleteClicked()));
 }
 
 KisItemChooser::~KisItemChooser()
@@ -78,8 +78,8 @@ void KisItemChooser::addItem(KoResourceItem *item)
 
 void KisItemChooser::addItems(const QList<KoResourceItem *>& items)
 {
-    foreach (KoResourceItem *item, items)
-        m_chooser->addItem(item);
+    foreach(KoResourceItem *item, items)
+    m_chooser->addItem(item);
 }
 
 QWidget *KisItemChooser::chooserWidget() const

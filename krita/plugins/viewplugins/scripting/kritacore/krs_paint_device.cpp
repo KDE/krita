@@ -39,10 +39,10 @@
 
 using namespace Scripting;
 
-PaintDevice::PaintDevice( KisPaintDeviceSP device, KisDoc2* doc)
-    : ConstPaintDevice(device, doc)
-    , m_device(device)
-    , m_cmd(0)
+PaintDevice::PaintDevice(KisPaintDeviceSP device, KisDoc2* doc)
+        : ConstPaintDevice(device, doc)
+        , m_device(device)
+        , m_cmd(0)
 {
     setObjectName("KritaLayer");
 }
@@ -55,8 +55,7 @@ PaintDevice::~PaintDevice()
 bool PaintDevice::convertToColorSpace(const QString& colorspacename)
 {
     const KoColorSpace * dstCS = KoColorSpaceRegistry::instance()->colorSpace(colorspacename, 0);
-    if(!dstCS)
-    {
+    if (!dstCS) {
         kWarning(41011) << QString("ColorSpace %1 is not available, please check your installation.").arg(colorspacename) << endl;
         return false;
     }
@@ -89,8 +88,7 @@ QObject* PaintDevice::createPainter()
 
 void PaintDevice::beginPainting(const QString& name)
 {
-    if(m_cmd != 0)
-    {
+    if (m_cmd != 0) {
         delete m_cmd;
     }
     m_cmd = new KisTransaction(name, paintDevice());
@@ -99,13 +97,11 @@ void PaintDevice::beginPainting(const QString& name)
 
 void PaintDevice::endPainting()
 {
-    if(doc() !=0)
-    {
+    if (doc() != 0) {
         doc()->setModified(true);
         m_device->setDirty();
     }
-    if(m_cmd != 0)
-    {
+    if (m_cmd != 0) {
         doc()->image()->undoAdapter()->addCommand(m_cmd);
     }
 }
@@ -113,13 +109,13 @@ void PaintDevice::endPainting()
 bool PaintDevice::fastWaveletUntransformation(QObject* wavelet)
 {
     Wavelet* wav = dynamic_cast< Wavelet* >(wavelet);
-    if(! wav) {
+    if (! wav) {
         kWarning(41011) << "The passed argument is not a valid Wavelet-object." << endl;
         return false;
     }
-    KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value( paintDevice()->colorSpace()->mathToolboxId().id() );
+    KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value(paintDevice()->colorSpace()->mathToolboxId().id());
     QRect rect = paintDevice()->exactBounds();
-    mathToolbox->fastWaveletUntransformation( paintDevice(), rect, wav->wavelet() );
+    mathToolbox->fastWaveletUntransformation(paintDevice(), rect, wav->wavelet());
     return true;
 }
 
@@ -140,7 +136,7 @@ QByteArray PaintDevice::bytes()
     quint8* data = new quint8[size];
     Q_CHECK_PTR(data);
     paintDevice()->readBytes(data, 0, 0, w, h);
-    for(int i = 0; i < size; ++i)
+    for (int i = 0; i < size; ++i)
         out << data[i];
     delete [] data;
 
@@ -154,7 +150,7 @@ bool PaintDevice::setBytes(const QByteArray& bytearray)
     const int h = height();
     const int size = w * h * pixelsize;
 
-    if(size < 0 || bytearray.size() < size)
+    if (size < 0 || bytearray.size() < size)
         return false;
 
     QBuffer buffer(&bytearray);
@@ -163,7 +159,7 @@ bool PaintDevice::setBytes(const QByteArray& bytearray)
 
     quint8* data = new quint8[size];
     Q_CHECK_PTR(data);
-    for(int i = 0; i < size; ++i)
+    for (int i = 0; i < size; ++i)
         in >> data[i];
     paintDevice()->writeBytes(data, 0, 0, w, h);
     delete [] data;

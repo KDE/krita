@@ -25,9 +25,9 @@
 class Bristle{
 
 public:
-	Bristle(float x, float y,float length);
-	Bristle();
-	~Bristle();
+    Bristle(float x, float y,float length);
+    Bristle();
+    ~Bristle();
 
     inline float x(){
         return m_x;
@@ -61,29 +61,29 @@ public:
         return std::sqrt(m_x*m_x + m_y*m_y);
     }
 
-	inline void setX(float x){ m_x = x; }
-	inline void setY(float y){ m_y = y; }
+    inline void setX(float x){ m_x = x; }
+    inline void setY(float y){ m_y = y; }
 
     void setLength(float length);
     void setColor(KoColor color);
 
-	void addInk(float value);	
-	void removeInk(float value); 
-	void setInkAmount(float inkAmount);
+    void addInk(float value);
+    void removeInk(float value);
+    void setInkAmount(float inkAmount);
 
 private:
     void init (float x, float y, float length);
- 
-	// coordinates of bristle
-	float m_x;
-	float m_y;
-	float m_length; // z - coordinate
-	KoColor m_color;
-	float m_inkAmount;
+
+    // coordinates of bristle
+    float m_x;
+    float m_y;
+    float m_length; // z - coordinate
+    KoColor m_color;
+    float m_inkAmount;
 
     // new dimension in bristle
     int m_counter;
-	
+
 };
 
 #endif

@@ -21,24 +21,24 @@ class StrokeSample{
 
 
 public:
-	StrokeSample(float x,float y,float pressure,float tiltX, float tiltY,float rotation);
-	StrokeSample();
-	~StrokeSample();
+    StrokeSample(float x,float y,float pressure,float tiltX, float tiltY,float rotation);
+    StrokeSample();
+    ~StrokeSample();
 
-	float x();
-	float y();
-	float pressure();
-	float tiltX();
-	float tiltY();
-	float rotation();
+    float x();
+    float y();
+    float pressure();
+    float tiltX();
+    float tiltY();
+    float rotation();
 
 private:
-	float m_x;
-	float m_y;
-	float m_pressure;
-	float m_tiltX;
-	float m_tiltY;
-	float m_rotation;
+    float m_x;
+    float m_y;
+    float m_pressure;
+    float m_tiltX;
+    float m_tiltY;
+    float m_rotation;
 };
 
 #endif // _STROKE_SAMPLE_H_

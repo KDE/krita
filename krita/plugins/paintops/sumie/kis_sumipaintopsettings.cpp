@@ -41,7 +41,7 @@ KisSumiPaintOpSettings::KisSumiPaintOpSettings(QWidget * parent )
     m_curveSamples = m_options->inkAmountSpinBox->value();
 
     QObject::connect(m_options->previewBtn, SIGNAL(clicked()),
-                      this, SLOT( updateImg() ) );
+                     this, SLOT( updateImg() ) );
 }
 
 KisPaintOpSettingsSP KisSumiPaintOpSettings::clone() const
@@ -80,11 +80,11 @@ void KisSumiPaintOpSettings::updateImg(){
     int height = label->height();
 
 /*    QPointF p1(0,0);
-    KisPaintInformation pi1(p1, 0.5);
-    QPointF p2(width,height);
-    KisPaintInformation pi2(p2, 1.0);
+      KisPaintInformation pi1(p1, 0.5);
+      QPointF p2(width,height);
+      KisPaintInformation pi2(p2, 1.0);
 
-    painter.paintLine(pi1,pi2);*/
+      painter.paintLine(pi1,pi2);*/
     painter.end();
 
     QPointF p1(1.0/6.0*width,2.0/3.0*height);
@@ -136,14 +136,14 @@ void KisSumiPaintOpSettings::updateImg(){
     mydevice->extent(xx,yy,ww,hh);
 
 /*    dbgPlugins << "Coords extend()";
-    dbgPlugins << xx << " " << yy << " " << ww << " " << hh;
-    dbgPlugins << mydevice->extent();*/
+      dbgPlugins << xx << " " << yy << " " << ww << " " << hh;
+      dbgPlugins << mydevice->extent();*/
     QImage img = mydevice->convertToQImage(0,xx,yy,ww,hh);
 
 /*    const QString filePath("/tmp/sumi-e-preview.png");
-    bool r = img.save(filePath);
+      bool r = img.save(filePath);
 
-    dbgPlugins << "saved to?: "<< r << " " << filePath;*/
+      dbgPlugins << "saved to?: "<< r << " " << filePath;*/
     QPixmap pixmap = QPixmap::fromImage( img );
 
     Q_CHECK_PTR(label);

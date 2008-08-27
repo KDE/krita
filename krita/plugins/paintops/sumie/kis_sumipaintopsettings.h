@@ -44,26 +44,26 @@ public:
     virtual void fromXML(const QDomElement&);
     virtual void toXML(QDomDocument&, QDomElement&) const;
 
-	QList<float> * curve() const;
-	int radius() const;
-	double sigma() const;
-	int brushDimension() const;
-	int inkAmount() const;
-	bool mousePressure() const;
+    QList<float> * curve() const;
+    int radius() const;
+    double sigma() const;
+    int brushDimension() const;
+    int inkAmount() const;
+    bool mousePressure() const;
 
     double shearFactor() const;
     double randomFactor() const;
     double scaleFactor() const;
 
 public slots:
-	void updateImg();
+    void updateImg();
 
 private:
     Ui::WdgSumieOptions* m_options;
     QWidget * m_optionsWidget;
 
-	int m_curveSamples;
-	QList<QPointF> m_curveData;
+    int m_curveSamples;
+    QList<QPointF> m_curveData;
 };
 
 #endif

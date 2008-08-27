@@ -35,27 +35,27 @@
 class Brush{
 
 public:
-	Brush(const BrushShape &initialShape, KoColor inkColor);
-	Brush();
-	~Brush();
-	Brush(KoColor inkColor, BrushShape shape);
-	void paint(KisPaintDeviceSP dev, const KisPaintInformation &info);
-	void paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const KisPaintInformation &pi2);
-	void setInkDepletion(QList<float> *curveData);
-	void setInkColor(const KoColor &color);
-	void addStrokeSample(StrokeSample sample);
-	void addStrokeSample(float x,float y,float pressure,float tiltX, float tiltY,float rotation);
+    Brush(const BrushShape &initialShape, KoColor inkColor);
+    Brush();
+    ~Brush();
+    Brush(KoColor inkColor, BrushShape shape);
+    void paint(KisPaintDeviceSP dev, const KisPaintInformation &info);
+    void paintLine(KisPaintDeviceSP dev,const KisPaintInformation &pi1, const KisPaintInformation &pi2);
+    void setInkDepletion(QList<float> *curveData);
+    void setInkColor(const KoColor &color);
+    void addStrokeSample(StrokeSample sample);
+    void addStrokeSample(float x,float y,float pressure,float tiltX, float tiltY,float rotation);
 
-	void repositionBristles(double angle, double slope);
-	void rotateBristles(double angle);
+    void repositionBristles(double angle, double slope);
+    void rotateBristles(double angle);
 
-	double getAngleDelta(const KisPaintInformation& info);
+    double getAngleDelta(const KisPaintInformation& info);
 
-	void setRadius(int radius);
-	void setSigma(double sigma);
-	void setBrushShape(BrushShape brushShape);
-	double computeMousePressure(double distance);
-	void enableMousePressure(bool enable);
+    void setRadius(int radius);
+    void setSigma(double sigma);
+    void setBrushShape(BrushShape brushShape);
+    double computeMousePressure(double distance);
+    void enableMousePressure(bool enable);
 
     void setShear(double shearFactor){ m_shearFactor = shearFactor; }
     void setRandom(double randomFactor){ m_randomFactor = randomFactor; }
@@ -66,31 +66,31 @@ public:
     void addBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color);
 
 private:
-	QVector<Bristle> m_bristles;
-	QVector<StrokeSample> m_stroke;
-	QList<float> m_inkDepletion; // array
+    QVector<Bristle> m_bristles;
+    QVector<StrokeSample> m_stroke;
+    QList<float> m_inkDepletion; // array
     QTransform m_transform;
 
 
-	BrushShape m_initialShape;
-	KoColor m_inkColor;
+    BrushShape m_initialShape;
+    KoColor m_inkColor;
 
     KisPaintDeviceSP m_dev;
     KisRandomAccessor * m_accessor;
     quint32 m_pixelSize;
 
-	int m_counter;
+    int m_counter;
 
-	int m_radius;
-	double m_sigma;
+    int m_radius;
+    double m_sigma;
 
-	double m_lastAngle;
-	double m_lastSlope;
+    double m_lastAngle;
+    double m_lastSlope;
 
-	double m_angle;
-	double m_oldPressure;
+    double m_angle;
+    double m_oldPressure;
 
-	bool m_mousePressureEnabled;
+    bool m_mousePressureEnabled;
 
     double m_scaleFactor;
     double m_randomFactor;

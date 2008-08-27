@@ -23,7 +23,7 @@
 #include <QGridLayout>
 
 #include <knuminput.h>
-#include <filter/kis_filter_config_widget.h>
+#include <kis_config_widget.h>
 #include <filter/kis_filter_configuration.h>
 #include <klocale.h>
 
@@ -64,7 +64,7 @@ KisDoubleWidgetParam::KisDoubleWidgetParam(double nmin, double nmax, double nini
 }
 
 KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(const QString & filterid, QWidget * parent, const QString & caption, vKisDoubleWidgetParam dwparam)
-        : KisFilterConfigWidget(parent), m_filterid(filterid)
+        : KisConfigWidget(parent), m_filterid(filterid)
 {
     m_nbdoubleWidgets = dwparam.size();
 
@@ -93,7 +93,7 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(const QString & filterid,
 
 }
 
-void KisMultiDoubleFilterWidget::setConfiguration(KisFilterConfiguration * config)
+void KisMultiDoubleFilterWidget::setConfiguration(KisPropertiesConfiguration * config)
 {
     if (!config) return;
 
@@ -107,7 +107,7 @@ void KisMultiDoubleFilterWidget::setConfiguration(KisFilterConfiguration * confi
     }
 }
 
-KisFilterConfiguration* KisMultiDoubleFilterWidget::configuration() const
+KisPropertiesConfiguration* KisMultiDoubleFilterWidget::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration(m_filterid, 0);
     for (int i = 0; i < nbValues(); ++i) {

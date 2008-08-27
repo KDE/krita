@@ -31,7 +31,7 @@
 class QPointF;
 class KisPainter;
 class KisFilterConfiguration;
-class KisFilterConfigWidget;
+class KisConfigWidget;
 class Ui_FilterOpOptions;
 class KoID;
 class QGridLayout;

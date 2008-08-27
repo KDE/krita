@@ -21,7 +21,7 @@
 #ifndef KIS_WDG_FAST_COLORTRANSFER_H
 #define KIS_WDG_FAST COLORTRANSFER_H
 
-#include <filter/kis_filter_config_widget.h>
+#include <kis_config_widget.h>
 
 class KisFilter;
 class Ui_WdgFastColorTransfer;
@@ -29,16 +29,16 @@ class Ui_WdgFastColorTransfer;
 /**
  @author Cyrille Berger <cberger@cberger.net>
 */
-class KisWdgFastColorTransfer : public KisFilterConfigWidget
+class KisWdgFastColorTransfer : public KisConfigWidget
 {
 public:
     KisWdgFastColorTransfer(QWidget * parent);
     ~KisWdgFastColorTransfer();
-    virtual void setConfiguration(KisFilterConfiguration*);
+    virtual void setConfiguration(KisPropertiesConfiguration*);
     inline const Ui_WdgFastColorTransfer* widget() const {
         return m_widget;
     }
-    virtual KisFilterConfiguration* configuration() const;
+    virtual KisPropertiesConfiguration* configuration() const;
 private:
     Ui_WdgFastColorTransfer* m_widget;
 };

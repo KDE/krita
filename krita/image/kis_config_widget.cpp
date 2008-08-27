@@ -16,15 +16,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "filter/kis_filter_config_widget.h"
+#include "kis_config_widget.h"
 
-KisFilterConfigWidget::KisFilterConfigWidget(QWidget * parent, Qt::WFlags f)
+KisConfigWidget::KisConfigWidget(QWidget * parent, Qt::WFlags f)
         : QWidget(parent, f)
 {
 }
 
-KisFilterConfigWidget::~KisFilterConfigWidget()
+KisConfigWidget::~KisConfigWidget()
 {
 }
 
-#include "kis_filter_config_widget.moc"
+#include "kis_config_widget.moc"

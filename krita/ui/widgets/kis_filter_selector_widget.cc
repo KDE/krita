@@ -29,7 +29,7 @@
 #include <kis_paint_device.h>
 
 #include <filter/kis_filter.h>
-#include <filter/kis_filter_config_widget.h>
+#include <kis_config_widget.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_image.h>
 
@@ -41,7 +41,7 @@
 
 struct KisFilterSelectorWidget::Private {
     QWidget* currentCentralWidget;
-    KisFilterConfigWidget* currentFilterConfigurationWidget;
+    KisConfigWidget* currentFilterConfigurationWidget;
     KisFilterSP currentFilter;
     KisImageSP image;
     KisPaintDeviceSP paintDevice;
@@ -114,7 +114,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
         d->uiFilterSelector.filtersSelector->blockSignals(v);
     }
 
-    KisFilterConfigWidget* widget =
+    KisConfigWidget* widget =
         d->currentFilter->createConfigurationWidget(d->uiFilterSelector.centralWidgetHolder, d->paintDevice, d->image);
 
     if (!widget) { // No widget, so display a label instead
@@ -175,12 +175,16 @@ void KisFilterSelectorWidget::editConfigurations()
 KisFilterConfiguration* KisFilterSelectorWidget::configuration()
 {
     if (d->currentFilterConfigurationWidget) {
-        return d->currentFilterConfigurationWidget->configuration();
+        KisFilterConfiguration * config
+            = dynamic_cast<KisFilterConfiguration*>(d->currentFilterConfigurationWidget->configuration());
+        if (config) {
+            return config;
+        }
     } else if (d->currentFilter) {
         return d->currentFilter->defaultConfiguration(d->paintDevice);
-    } else {
-        return 0;
     }
+    return 0;
+
 }
 
 #include "kis_filter_selector_widget.moc"

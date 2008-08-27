@@ -22,28 +22,28 @@
 
 
 #include "filter/kis_filter_configuration.h"
-#include "filter/kis_filter_config_widget.h"
+#include "kis_config_widget.h"
 
-class TestWidget : public KisFilterConfigWidget
+class TestWidget : public KisConfigWidget
 {
 public:
     TestWidget()
-            : KisFilterConfigWidget(0) {
+            : KisConfigWidget(0) {
     }
 
-    void setConfiguration(KisFilterConfiguration*) {
+    void setConfiguration( KisPropertiesConfiguration *) {
     }
 
-    KisFilterConfiguration* configuration() const {
+    KisPropertiesConfiguration * configuration() const {
         return 0;
     }
 };
 
-void KisFilterConfigWidgetTest::testCreation()
+void KisConfigWidgetTest::testCreation()
 {
     TestWidget test;
 }
 
 
-QTEST_KDEMAIN(KisFilterConfigWidgetTest, GUI)
+QTEST_KDEMAIN(KisConfigWidgetTest, GUI)
 #include "kis_filter_config_widget_test.moc"

@@ -23,7 +23,7 @@
 
 #include "kis_paint_device.h"
 #include "filter/kis_filter.h"
-#include "filter/kis_filter_config_widget.h"
+#include "kis_config_widget.h"
 
 class KisRoundCornersFilter : public KisFilter
 {
@@ -43,7 +43,7 @@ public:
     }
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
 private:
 };
 

@@ -93,7 +93,7 @@ KisFilterConfiguration* KisFilterLensCorrection::factoryConfiguration(const KisP
     return config;
 }
 
-KisFilterConfigWidget * KisFilterLensCorrection::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP , const KisImageSP) const
+KisConfigWidget * KisFilterLensCorrection::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP , const KisImageSP) const
 {
     return new KisWdgLensCorrection((KisFilter*)this, (QWidget*)parent);
 }

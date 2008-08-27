@@ -44,7 +44,7 @@ KisFilterColorToAlpha::KisFilterColorToAlpha() : KisFilter(id(), CategoryColors,
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisFilterConfigWidget * KisFilterColorToAlpha::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageSP image) const
+KisConfigWidget * KisFilterColorToAlpha::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageSP image) const
 {
     Q_UNUSED(image);
     return new KisWdgColorToAlpha(parent);

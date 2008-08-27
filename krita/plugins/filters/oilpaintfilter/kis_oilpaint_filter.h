@@ -22,7 +22,7 @@
 #define _KIS_OILPAINT_FILTER_H_
 
 #include "filter/kis_filter.h"
-#include "filter/kis_filter_config_widget.h"
+#include "kis_config_widget.h"
 
 class KisOilPaintFilter : public KisFilter
 {
@@ -44,7 +44,7 @@ public:
 
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
 
 private:
     void OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP dst, const QPoint& srcTopLeft, const QPoint& dstTopLeft, int w, int h, int BrushSize, int Smoothness) const;

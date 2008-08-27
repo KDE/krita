@@ -33,8 +33,9 @@ KisBoolWidgetParam::KisBoolWidgetParam(bool ninitvalue, const QString & nlabel, 
 
 }
 
-KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(const QString & filterid, QWidget * parent, const QString & caption, vKisBoolWidgetParam iwparam) :
-        KisFilterConfigWidget(parent), m_filterid(filterid)
+KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(const QString & filterid, QWidget * parent, const QString & caption, vKisBoolWidgetParam iwparam)
+    : KisConfigWidget(parent)
+     , m_filterid(filterid)
 {
     qint32 nbboolWidgets = iwparam.size();
 
@@ -57,10 +58,9 @@ KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(const QString & filterid, QWi
 }
 
 
-void KisMultiBoolFilterWidget::setConfiguration(KisFilterConfiguration * config)
+void KisMultiBoolFilterWidget::setConfiguration(KisPropertiesConfiguration * config)
 {
     if (!config) return;
-
     for (int i = 0; i < nbValues(); ++i) {
         double val = config->getBool(m_boolWidgets[i]->objectName());
         m_boolWidgets[i]->setChecked(val);
@@ -68,7 +68,7 @@ void KisMultiBoolFilterWidget::setConfiguration(KisFilterConfiguration * config)
 }
 
 
-KisFilterConfiguration* KisMultiBoolFilterWidget::configuration() const
+KisPropertiesConfiguration* KisMultiBoolFilterWidget::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration(m_filterid, 0);
     for (int i = 0; i < nbValues(); ++i) {

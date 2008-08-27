@@ -1,4 +1,5 @@
 /*
+ *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
  *  Copyright (c) 2004-2006 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -15,41 +16,44 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef _KIS_FILTER_CONFIG_WIDGET_H_
-#define _KIS_FILTER_CONFIG_WIDGET_H_
+#ifndef _KIS_CONFIG_WIDGET_H_
+#define _KIS_CONFIG_WIDGET_H_
 
 #include <QWidget>
 #include <krita_export.h>
 
-
-class KisFilterConfiguration;
+class KisPropertiesConfiguration;
 
 /**
- * Empty base class. Filters can build their own configuration widgets that
- * inherit this class. The configuration widget can emit sigPleaseUpdatePreview
- * when it wants the preview in the filter dialog to be updated.
+ * Empty base class. Configurable resources like filters, paintops etc.
+ * can build their own configuration widgets that inherit this class.
+ * The configuration widget should emit sigPleaseUpdatePreview
+ * when it wants a preview updated.
+ *
+ * Also, this class is designed to have a single instance of a certain configuration
+ * widget that can be reset and unset
  */
-class KRITAIMAGE_EXPORT KisFilterConfigWidget : public QWidget
+class KRITAIMAGE_EXPORT KisConfigWidget : public QWidget
 {
 
     Q_OBJECT
 
 protected:
 
-    KisFilterConfigWidget(QWidget * parent, Qt::WFlags f = 0);
+    KisConfigWidget(QWidget * parent, Qt::WFlags f = 0);
 
 public:
-    virtual ~KisFilterConfigWidget();
+    virtual ~KisConfigWidget();
 
     /**
-     * @param config the configuration for this filter widget.
+     * @param config the configuration for this configuration widget.
      */
-    virtual void setConfiguration(KisFilterConfiguration * config) = 0;
+    virtual void setConfiguration(KisPropertiesConfiguration * config) = 0;
 
     /**
-     * @return the filter configuration
+     * @return the configuration
      */
-    virtual KisFilterConfiguration* configuration() const = 0;
+    virtual KisPropertiesConfiguration* configuration() const = 0;
 
 signals:
 

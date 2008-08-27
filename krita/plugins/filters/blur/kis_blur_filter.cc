@@ -45,7 +45,7 @@ KisBlurFilter::KisBlurFilter() : KisFilter(id(), CategoryBlur, i18n("&Blur..."))
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisFilterConfigWidget * KisBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageSP image) const
+KisConfigWidget * KisBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageSP image) const
 {
     Q_UNUSED(image)
     return new KisWdgBlur(parent);

@@ -31,7 +31,7 @@
 
 #include "ui_wdgunsharp.h"
 
-KisWdgUnsharp::KisWdgUnsharp(QWidget * parent) : KisFilterConfigWidget(parent)
+KisWdgUnsharp::KisWdgUnsharp(QWidget * parent) : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgUnsharp();
     m_widget->setupUi(this);
@@ -41,7 +41,7 @@ KisWdgUnsharp::KisWdgUnsharp(QWidget * parent) : KisFilterConfigWidget(parent)
     connect(widget()->intThreshold, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
 }
 
-void KisWdgUnsharp::setConfiguration(KisFilterConfiguration* config)
+void KisWdgUnsharp::setConfiguration(KisPropertiesConfiguration* config)
 {
     QVariant value;
     widget()->intHalfSize->setValue((config->getProperty("halfSize", value)) ? value.toUInt() : 4);
@@ -49,7 +49,7 @@ void KisWdgUnsharp::setConfiguration(KisFilterConfiguration* config)
     widget()->intThreshold->setValue((config->getProperty("threshold", value)) ? value.toUInt() : 20);
 }
 
-KisFilterConfiguration* KisWdgUnsharp::configuration() const
+KisPropertiesConfiguration* KisWdgUnsharp::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("unsharp", 1);
     config->setProperty("halfSize", widget()->intHalfSize->value());

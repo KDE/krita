@@ -29,7 +29,7 @@
 #include <kis_paint_device.h>
 #include <generator/kis_generator.h>
 #include <generator/kis_generator_registry.h>
-#include <filter/kis_filter_config_widget.h>
+#include <kis_config_widget.h>
 #include <filter/kis_filter_configuration.h>
 #include <KoColorSpaceRegistry.h>
 
@@ -118,7 +118,7 @@ void KisWdgGenerator::setConfiguration(KisFilterConfiguration * config)
         if (item->generator->id() == config->name()) {
             // match!
             slotGeneratorActivated(i);
-            KisFilterConfigWidget * wdg = dynamic_cast<KisFilterConfigWidget*>(d->centralWidget);
+            KisConfigWidget * wdg = dynamic_cast<KisConfigWidget*>(d->centralWidget);
             if (wdg) {
                 wdg->setConfiguration(config);
             }
@@ -129,13 +129,15 @@ void KisWdgGenerator::setConfiguration(KisFilterConfiguration * config)
 
 KisFilterConfiguration * KisWdgGenerator::configuration()
 {
-    KisFilterConfigWidget * wdg = dynamic_cast<KisFilterConfigWidget*>(d->centralWidget);
+    KisConfigWidget * wdg = dynamic_cast<KisConfigWidget*>(d->centralWidget);
     if (wdg) {
-        return wdg->configuration();
-    } else {
-        return 0;
+        KisFilterConfiguration * config
+            = dynamic_cast<KisFilterConfiguration*>(wdg->configuration());
+        if (config) {
+            return config;
+        }
     }
-
+    return 0;
 }
 
 void KisWdgGenerator::slotGeneratorActivated(int row)
@@ -152,7 +154,7 @@ void KisWdgGenerator::slotGeneratorActivated(int row)
 
         delete d->centralWidget;
 
-        KisFilterConfigWidget* widget =
+        KisConfigWidget* widget =
             d->currentGenerator->createConfigurationWidget(d->uiWdgGenerators.centralWidgetHolder,
                     d->dev);
 

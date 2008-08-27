@@ -33,7 +33,7 @@
 
 #include "ui_wdgcolortoalphabase.h"
 
-KisWdgColorToAlpha::KisWdgColorToAlpha(QWidget * parent) : KisFilterConfigWidget(parent)
+KisWdgColorToAlpha::KisWdgColorToAlpha(QWidget * parent) : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgColorToAlphaBase();
     m_widget->setupUi(this);
@@ -41,7 +41,7 @@ KisWdgColorToAlpha::KisWdgColorToAlpha(QWidget * parent) : KisFilterConfigWidget
     connect(m_widget->intThreshold, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
 }
 
-void KisWdgColorToAlpha::setConfiguration(KisFilterConfiguration* config)
+void KisWdgColorToAlpha::setConfiguration(KisPropertiesConfiguration* config)
 {
     QVariant value;
     if (config->getProperty("targetcolor", value)) {
@@ -52,7 +52,7 @@ void KisWdgColorToAlpha::setConfiguration(KisFilterConfiguration* config)
     }
 }
 
-KisFilterConfiguration* KisWdgColorToAlpha::configuration() const
+KisPropertiesConfiguration* KisWdgColorToAlpha::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("colortoalpha", 1);
     config->setProperty("targetcolor", widget()->colorTarget->color());

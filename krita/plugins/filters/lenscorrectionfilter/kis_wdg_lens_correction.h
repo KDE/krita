@@ -21,12 +21,12 @@
 #ifndef KIS_WDG_LENS_CORRECTION_H
 #define KIS_WDG_LENS_CORRECTION_H
 
-#include <filter/kis_filter_config_widget.h>
+#include <kis_config_widget.h>
 
 class Ui_WdgLensCorrectionOptions;
 class KisFilter;
 
-class KisWdgLensCorrection : public KisFilterConfigWidget
+class KisWdgLensCorrection : public KisConfigWidget
 {
     Q_OBJECT
 public:
@@ -36,8 +36,8 @@ public:
     inline const Ui_WdgLensCorrectionOptions* widget() const {
         return m_widget;
     }
-    virtual void setConfiguration(KisFilterConfiguration*);
-    virtual KisFilterConfiguration* configuration() const;
+    virtual void setConfiguration(KisPropertiesConfiguration*);
+    virtual KisPropertiesConfiguration* configuration() const;
 private:
     Ui_WdgLensCorrectionOptions* m_widget;
 };

@@ -375,7 +375,7 @@ void KisFilterBumpmap::process(KisConstProcessingInformation srcInfo,
     delete [] bm_row3;
 }
 
-KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image) const
+KisConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image) const
 {
     KisBumpmapConfigWidget * w = new KisBumpmapConfigWidget(dev, image, parent);
 
@@ -384,7 +384,7 @@ KisFilterConfigWidget * KisFilterBumpmap::createConfigurationWidget(QWidget* par
 
 
 KisBumpmapConfigWidget::KisBumpmapConfigWidget(const KisPaintDeviceSP dev, const KisImageSP image, QWidget * parent, Qt::WFlags f)
-        : KisFilterConfigWidget(parent, f)
+        : KisConfigWidget(parent, f)
         , m_device(dev)
         , m_image(image)
 {
@@ -406,7 +406,7 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(const KisPaintDeviceSP dev, const
 
 }
 
-void KisBumpmapConfigWidget::setConfiguration(KisFilterConfiguration * cfg)
+void KisBumpmapConfigWidget::setConfiguration(KisPropertiesConfiguration * cfg)
 {
     if (!cfg) return;
 
@@ -439,7 +439,7 @@ void KisBumpmapConfigWidget::setConfiguration(KisFilterConfiguration * cfg)
     }
 }
 
-KisFilterConfiguration* KisBumpmapConfigWidget::configuration() const
+KisPropertiesConfiguration* KisBumpmapConfigWidget::configuration() const
 {
     KisFilterConfiguration * cfg = new KisFilterConfiguration("bumpmap", 2);
     //cfg->setProperty("bumpmap", m_page->txtSourceLayer->text());

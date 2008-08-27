@@ -30,7 +30,7 @@
 #include "ui_wdgrandompickoptions.h"
 
 KisWdgRandomPick::KisWdgRandomPick(KisFilter* /*nfilter*/, QWidget* parent)
-        : KisFilterConfigWidget(parent)
+        : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgRandomPickOptions();
     m_widget->setupUi(this);
@@ -47,7 +47,7 @@ KisWdgRandomPick::~KisWdgRandomPick()
 {
 }
 
-void KisWdgRandomPick::setConfiguration(KisFilterConfiguration* config)
+void KisWdgRandomPick::setConfiguration(KisPropertiesConfiguration* config)
 {
     QVariant value;
     if (config->getProperty("level", value)) {
@@ -62,7 +62,7 @@ void KisWdgRandomPick::setConfiguration(KisFilterConfiguration* config)
 }
 
 
-KisFilterConfiguration* KisWdgRandomPick::configuration() const
+KisPropertiesConfiguration* KisWdgRandomPick::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("randompick", 1);
     config->setProperty("level", this->widget()->intLevel->value());

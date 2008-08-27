@@ -40,7 +40,7 @@
 #include "KoColorTransformation.h"
 #include "KoCompositeOp.h"
 
-#include "filter/kis_filter_config_widget.h"
+#include "kis_config_widget.h"
 
 #include "kis_bookmarked_configuration_manager.h"
 #include "kis_paint_device.h"
@@ -169,7 +169,7 @@ KisBrightnessContrastFilter::KisBrightnessContrastFilter()
 
 }
 
-KisFilterConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, const KisImageSP image) const
+KisConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, const KisImageSP image) const
 {
     Q_UNUSED(image);
     return new KisBrightnessContrastConfigWidget(parent, dev);
@@ -272,7 +272,7 @@ void KisBrightnessContrastFilter::process(KisConstProcessingInformation srcInfo,
 }
 
 KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)
-        : KisFilterConfigWidget(parent, f)
+        : KisConfigWidget(parent, f)
 {
     int i;
     int height;
@@ -356,7 +356,7 @@ KisBrightnessContrastFilterConfiguration * KisBrightnessContrastConfigWidget::co
     return cfg;
 }
 
-void KisBrightnessContrastConfigWidget::setConfiguration(KisFilterConfiguration * config)
+void KisBrightnessContrastConfigWidget::setConfiguration(KisPropertiesConfiguration * config)
 {
     KisBrightnessContrastFilterConfiguration * cfg = dynamic_cast<KisBrightnessContrastFilterConfiguration *>(config);
     Q_ASSERT(cfg);

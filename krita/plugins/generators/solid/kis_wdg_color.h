@@ -21,11 +21,11 @@
 #ifndef KIS_WDG_COLOR_H
 #define KIS_WDG_COLOR_H
 
-#include <filter/kis_filter_config_widget.h>
+#include <kis_config_widget.h>
 
 class Ui_WdgColorOptions;
 
-class KisWdgColor : public KisFilterConfigWidget
+class KisWdgColor : public KisConfigWidget
 {
     Q_OBJECT
 public:
@@ -35,8 +35,8 @@ public:
     inline const Ui_WdgColorOptions* widget() const {
         return m_widget;
     }
-    virtual void setConfiguration(KisFilterConfiguration*);
-    virtual KisFilterConfiguration* configuration() const;
+    virtual void setConfiguration(KisPropertiesConfiguration*);
+    virtual KisPropertiesConfiguration* configuration() const;
 private:
     Ui_WdgColorOptions* m_widget;
 };

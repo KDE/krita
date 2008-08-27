@@ -32,7 +32,7 @@
 #include "kis_cimg_filter.h"
 
 KisCImgconfigWidget::KisCImgconfigWidget(QWidget * parent, Qt::WFlags f)
-        : KisFilterConfigWidget(parent, f)
+        : KisConfigWidget(parent, f)
 {
     m_page = new WdgCImg(this);
     Q_CHECK_PTR(m_page);
@@ -55,7 +55,7 @@ KisCImgconfigWidget::KisCImgconfigWidget(QWidget * parent, Qt::WFlags f)
 }
 
 
-KisFilterConfiguration* KisCImgconfigWidget::configuration() const
+KisPropertiesConfiguration* KisCImgconfigWidget::configuration() const
 {
     KisCImgFilterConfiguration * cfg = new KisCImgFilterConfiguration();
     Q_CHECK_PTR(cfg);
@@ -75,7 +75,7 @@ KisFilterConfiguration* KisCImgconfigWidget::configuration() const
 
 }
 
-void KisCImgconfigWidget::setConfiguration(KisFilterConfiguration * config)
+void KisCImgconfigWidget::setConfiguration(KisPropertiesConfiguration * config)
 {
     KisCImgFilterConfiguration * cfg = dynamic_cast<KisCImgFilterConfiguration*>(config);
     if (!cfg) return;

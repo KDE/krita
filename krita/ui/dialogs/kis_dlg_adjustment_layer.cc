@@ -29,7 +29,7 @@
 #include <klineedit.h>
 
 #include "filter/kis_filter.h"
-#include "filter/kis_filter_config_widget.h"
+#include "kis_config_widget.h"
 #include "filter/kis_filter_configuration.h"
 #include "kis_paint_device.h"
 #include "widgets/kis_previewwidget.h"

@@ -24,7 +24,7 @@
 #include <QList>
 
 #include "filter/kis_filter.h"
-#include "filter/kis_filter_config_widget.h"
+#include "kis_config_widget.h"
 #include "ui_wdg_brightness_contrast.h"
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
@@ -85,8 +85,8 @@ public:
     }
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
-    virtual KisFilterConfiguration * configuration() {
+    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
+    virtual KisPropertiesConfiguration * configuration() {
         return new KisBrightnessContrastFilterConfiguration();
     }
 
@@ -94,7 +94,7 @@ public:
 };
 
 
-class KisBrightnessContrastConfigWidget : public KisFilterConfigWidget
+class KisBrightnessContrastConfigWidget : public KisConfigWidget
 {
 
 public:
@@ -102,7 +102,7 @@ public:
     virtual ~KisBrightnessContrastConfigWidget() {}
 
     virtual KisBrightnessContrastFilterConfiguration * configuration() const;
-    virtual void setConfiguration(KisFilterConfiguration * config);
+    virtual void setConfiguration(KisPropertiesConfiguration* config);
     WdgBrightnessContrast * m_page;
 };
 

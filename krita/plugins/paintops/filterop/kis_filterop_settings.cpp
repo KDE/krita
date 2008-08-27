@@ -34,7 +34,7 @@
 #include <kis_painter.h>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
-#include <filter/kis_filter_config_widget.h>
+#include <kis_config_widget.h>
 #include <kis_processing_information.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_node.h>
@@ -85,7 +85,7 @@ void KisFilterOpSettings::setNode(KisNodeSP node)
         // which happens because the first configuration settings is
         // created before any layer is selected in the view
         if (!m_currentFilterConfigWidget ||
-                (m_currentFilterConfigWidget && m_currentFilterConfigWidget->configuration()->isCompatible(m_paintDevice))) {
+            (m_currentFilterConfigWidget && static_cast<KisFilterConfiguration*>(m_currentFilterConfigWidget->configuration())->isCompatible(m_paintDevice))) {
             if (m_currentFilter) {
                 setCurrentFilter(KoID(m_currentFilter->id()));
             }
@@ -135,7 +135,7 @@ const KisFilterSP KisFilterOpSettings::filter() const
 KisFilterConfiguration* KisFilterOpSettings::filterConfig() const
 {
     if (!m_currentFilterConfigWidget) return 0;
-    return m_currentFilterConfigWidget->configuration();
+    return static_cast<KisFilterConfiguration*>(m_currentFilterConfigWidget->configuration());
 }
 
 bool KisFilterOpSettings::ignoreAlpha() const
@@ -179,7 +179,7 @@ void KisFilterOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
     QDomElement filterElt = doc.createElement("Filter");
     rootElt.appendChild(filterElt);
     if (m_currentFilterConfigWidget) {
-        KisFilterConfiguration* config = m_currentFilterConfigWidget->configuration();
+        KisPropertiesConfiguration* config = m_currentFilterConfigWidget->configuration();
         config->toXML(doc, filterElt);
         delete config;
     }

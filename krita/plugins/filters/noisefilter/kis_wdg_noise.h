@@ -21,12 +21,12 @@
 #ifndef KIS_WDG_NOISE_H
 #define KIS_WDG_NOISE_H
 
-#include <filter/kis_filter_config_widget.h>
+#include <kis_config_widget.h>
 
 class Ui_WdgNoiseOptions;
 class KisFilter;
 
-class KisWdgNoise : public KisFilterConfigWidget
+class KisWdgNoise : public KisConfigWidget
 {
     Q_OBJECT
 public:
@@ -36,8 +36,8 @@ public:
     inline const Ui_WdgNoiseOptions* widget() const {
         return m_widget;
     }
-    virtual void setConfiguration(KisFilterConfiguration*);
-    virtual KisFilterConfiguration* configuration() const;
+    virtual void setConfiguration(KisPropertiesConfiguration*);
+    virtual KisPropertiesConfiguration* configuration() const;
 private:
     Ui_WdgNoiseOptions* m_widget;
     int m_seedThreshold, m_seedRed, m_seedGreen, m_seedBlue;

@@ -35,7 +35,7 @@ KisHSVAdjustmentFilter::KisHSVAdjustmentFilter()
     setSupportsIncrementalPainting(false);
 }
 
-KisFilterConfigWidget * KisHSVAdjustmentFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image) const
+KisConfigWidget * KisHSVAdjustmentFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image) const
 {
     Q_UNUSED(dev);
     Q_UNUSED(image);
@@ -99,7 +99,7 @@ KisFilterConfiguration* KisHSVAdjustmentFilter::factoryConfiguration(const KisPa
 
 }
 
-KisHSVConfigWidget::KisHSVConfigWidget(QWidget * parent, Qt::WFlags f) : KisFilterConfigWidget(parent, f)
+KisHSVConfigWidget::KisHSVConfigWidget(QWidget * parent, Qt::WFlags f) : KisConfigWidget(parent, f)
 {
     m_page = new Ui_WdgHSVAdjustment();
     m_page->setupUi(this);
@@ -113,7 +113,7 @@ KisHSVConfigWidget::~KisHSVConfigWidget()
     delete m_page;
 }
 
-KisFilterConfiguration * KisHSVConfigWidget::configuration() const
+KisPropertiesConfiguration * KisHSVConfigWidget::configuration() const
 {
     KisFilterConfiguration* c = new KisFilterConfiguration(KisHSVAdjustmentFilter::id().id(), 0);
     c->setProperty("h", m_page->hue->value());
@@ -122,7 +122,7 @@ KisFilterConfiguration * KisHSVConfigWidget::configuration() const
     return c;
 }
 
-void KisHSVConfigWidget::setConfiguration(KisFilterConfiguration * config)
+void KisHSVConfigWidget::setConfiguration(KisPropertiesConfiguration * config)
 {
     m_page->hue->setValue(config->getInt("h", 0));
     m_page->saturation->setValue(config->getInt("s", 0));

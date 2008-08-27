@@ -25,8 +25,9 @@
 #include <QVector>
 
 #include "krita_export.h"
-#include <filter/kis_filter_config_widget.h>
+#include <kis_config_widget.h>
 
+class KisPropertiesConfiguration;
 
 struct KisBoolWidgetParam {
     KRITAUI_EXPORT KisBoolWidgetParam(bool ninitvalue, const QString & label, const QString & name);
@@ -38,21 +39,30 @@ struct KisBoolWidgetParam {
 
 typedef std::vector<KisBoolWidgetParam> vKisBoolWidgetParam;
 
-class KRITAUI_EXPORT KisMultiBoolFilterWidget : public KisFilterConfigWidget
+class KRITAUI_EXPORT KisMultiBoolFilterWidget : public KisConfigWidget
 {
     Q_OBJECT
+
 public:
+
     KisMultiBoolFilterWidget(const QString & filterid, QWidget * parent,  const QString & caption, vKisBoolWidgetParam iwparam);
-    virtual void setConfiguration(KisFilterConfiguration * cfg);
-    virtual KisFilterConfiguration* configuration() const;
+
+    virtual void setConfiguration(KisPropertiesConfiguration* cfg);
+
+    virtual KisPropertiesConfiguration* configuration() const;
+
 public:
+
     inline qint32 nbValues() const {
         return m_boolWidgets.count();
     }
+
     inline bool valueAt(qint32 i) const {
         return m_boolWidgets[i]->isChecked();
     }
+
 private:
+
     QVector<QCheckBox*> m_boolWidgets;
     QString m_filterid;
 };

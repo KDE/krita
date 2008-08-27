@@ -26,7 +26,7 @@
 #include <klineedit.h>
 
 
-#include "filter/kis_filter_config_widget.h"
+#include "kis_config_widget.h"
 #include "kis_transaction.h"
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
@@ -111,10 +111,14 @@ void KisDlgAdjLayerProps::slotNameChanged(const QString & text)
 
 KisFilterConfiguration * KisDlgAdjLayerProps::filterConfiguration() const
 {
-    if (m_currentConfigWidget)
-        return m_currentConfigWidget->configuration();
-    else
-        return m_currentFilter->defaultConfiguration(m_paintDevice);
+    if (m_currentConfigWidget) {
+        KisFilterConfiguration * config
+            = dynamic_cast<KisFilterConfiguration*>(m_currentConfigWidget->configuration());
+        if (config) {
+            return config;
+        }
+    }
+    return m_currentFilter->defaultConfiguration(m_paintDevice);
 }
 
 QString KisDlgAdjLayerProps::layerName() const

@@ -36,7 +36,7 @@
 
 #include "ui_wdgblur.h"
 
-KisWdgBlur::KisWdgBlur(QWidget * parent) : KisFilterConfigWidget(parent)
+KisWdgBlur::KisWdgBlur(QWidget * parent) : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgBlur();
     m_widget->setupUi(this);
@@ -51,7 +51,7 @@ KisWdgBlur::KisWdgBlur(QWidget * parent) : KisFilterConfigWidget(parent)
     connect(widget()->cbShape, SIGNAL(activated(int)), SIGNAL(sigPleaseUpdatePreview()));
 }
 
-KisFilterConfiguration* KisWdgBlur::configuration() const
+KisPropertiesConfiguration* KisWdgBlur::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("blur", 1);
     config->setProperty("halfWidth", widget()->intHalfWidth->value());
@@ -62,7 +62,7 @@ KisFilterConfiguration* KisWdgBlur::configuration() const
     return config;
 }
 
-void KisWdgBlur::setConfiguration(KisFilterConfiguration* config)
+void KisWdgBlur::setConfiguration(KisPropertiesConfiguration* config)
 {
     QVariant value;
     if (config->getProperty("shape", value)) {

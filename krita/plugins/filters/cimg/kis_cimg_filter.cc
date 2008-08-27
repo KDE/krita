@@ -712,7 +712,7 @@ bool KisCImgFilter::process()
     return true;
 }
 
-KisFilterConfigWidget * KisCImgFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP, const KisImageSP) const
+KisConfigWidget * KisCImgFilter::createConfigurationWidget(QWidget* parent, KisPaintDeviceSP, const KisImageSP) const
 {
     return new KisCImgconfigWidget(parent);
 }
@@ -726,6 +726,6 @@ KisFilterConfiguration* KisCImgFilter::configuration(QWidget* nwidget)
         return cfg;
 
     } else {
-        return widget->configuration();
+        return static_cast<KisFilterConfiguration*>(widget->configuration());
     }
 }

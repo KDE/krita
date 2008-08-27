@@ -55,7 +55,6 @@ set(kritaimage_LIB_SRCS
    commands/kis_selection_commands.cc
    filter/kis_filter.cc
    filter/kis_filter_configuration.cc
-   filter/kis_filter_config_widget.cc
    filter/kis_filter_job.cpp
    filter/kis_filter_registry.cc
    generator/kis_generator.cpp
@@ -70,6 +69,7 @@ set(kritaimage_LIB_SRCS
    kis_bottom_up_update_strategy.cpp
    kis_boundary.cc
    kis_clone_layer.cpp
+   kis_config_widget.cpp
    kis_convolution_kernel.cc
    kis_convolution_painter.cc
    kis_effect_mask.cc

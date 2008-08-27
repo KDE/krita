@@ -29,7 +29,7 @@ class QLabel;
 class KisPreviewWidget;
 class KisFilterConfiguration;
 class QGroupBox;
-class KisFilterConfigWidget;
+class KisConfigWidget;
 class KLineEdit;
 class KisNodeFilterInterface;
 #include "kis_types.h"

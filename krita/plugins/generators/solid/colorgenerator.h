@@ -24,7 +24,7 @@
 #include <kparts/plugin.h>
 #include "generator/kis_generator.h"
 
-class KisFilterConfigWidget;
+class KisConfigWidget;
 
 class KritaColorGenerator : public KParts::Plugin
 {
@@ -51,7 +51,7 @@ public:
         return KoID("color", i18n("Color"));
     }
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
 };
 
 #endif

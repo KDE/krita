@@ -29,7 +29,7 @@
 #include "ui_wdgcoloroptions.h"
 
 KisWdgColor::KisWdgColor(QWidget* parent)
-        : KisFilterConfigWidget(parent)
+        : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgColorOptions();
     m_widget->setupUi(this);
@@ -39,7 +39,7 @@ KisWdgColor::~KisWdgColor()
 {
 }
 
-void KisWdgColor::setConfiguration(KisFilterConfiguration* config)
+void KisWdgColor::setConfiguration(KisPropertiesConfiguration* config)
 {
     QVariant value;
     if (config->getProperty("color", value)) {
@@ -50,7 +50,7 @@ void KisWdgColor::setConfiguration(KisFilterConfiguration* config)
     }
 }
 
-KisFilterConfiguration* KisWdgColor::configuration() const
+KisPropertiesConfiguration* KisWdgColor::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("color", 1);
     KoColor c;

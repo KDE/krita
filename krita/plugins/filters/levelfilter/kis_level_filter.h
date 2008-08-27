@@ -23,7 +23,7 @@
 
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
-#include "filter/kis_filter_config_widget.h"
+#include "kis_config_widget.h"
 #include "ui_wdg_level.h"
 
 class WdgLevel;
@@ -66,7 +66,7 @@ public:
 public:
 
 //     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
 
     using KisFilter::process;
 
@@ -84,15 +84,15 @@ public:
 };
 
 
-class KisLevelConfigWidget : public KisFilterConfigWidget
+class KisLevelConfigWidget : public KisConfigWidget
 {
     Q_OBJECT
 public:
     KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev);
     virtual ~KisLevelConfigWidget();
 
-    virtual KisFilterConfiguration* configuration() const;
-    void setConfiguration(KisFilterConfiguration * config);
+    virtual KisPropertiesConfiguration* configuration() const;
+    void setConfiguration(KisPropertiesConfiguration* config);
     Ui::WdgLevel m_page;
 
 protected slots:

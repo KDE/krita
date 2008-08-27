@@ -24,7 +24,7 @@
 #include <kparts/plugin.h>
 #include "filter/kis_filter.h"
 
-class KisFilterConfigWidget;
+class KisConfigWidget;
 
 class KritaNoiseFilter : public KParts::Plugin
 {
@@ -51,7 +51,7 @@ public:
         return KoID("noise", i18n("Noise"));
     }
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
 };
 
 #endif

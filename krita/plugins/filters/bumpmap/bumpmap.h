@@ -27,7 +27,7 @@
 
 #include <kis_types.h>
 #include <filter/kis_filter.h>
-#include "filter/kis_filter_config_widget.h"
+#include "kis_config_widget.h"
 
 #include "ui_wdgbumpmap.h"
 
@@ -96,11 +96,11 @@ public:
         return false;
     }
 
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
 };
 
-class KisBumpmapConfigWidget : public KisFilterConfigWidget
+class KisBumpmapConfigWidget : public KisConfigWidget
 {
 
     Q_OBJECT
@@ -109,8 +109,8 @@ public:
     KisBumpmapConfigWidget(const KisPaintDeviceSP dev, const KisImageSP image, QWidget * parent, Qt::WFlags f = 0);
     virtual ~KisBumpmapConfigWidget() {}
 
-    void setConfiguration(KisFilterConfiguration * config);
-    KisFilterConfiguration* configuration() const;
+    void setConfiguration(KisPropertiesConfiguration* config);
+    KisPropertiesConfiguration* configuration() const;
 
     BumpmapWidget * m_page;
 

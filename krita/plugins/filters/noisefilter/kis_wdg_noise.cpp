@@ -30,7 +30,7 @@
 #include "ui_wdgnoiseoptions.h"
 
 KisWdgNoise::KisWdgNoise(KisFilter* /*nfilter*/, QWidget* parent)
-        : KisFilterConfigWidget(parent)
+        : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgNoiseOptions();
     m_widget->setupUi(this);
@@ -47,7 +47,7 @@ KisWdgNoise::~KisWdgNoise()
 {
 }
 
-void KisWdgNoise::setConfiguration(KisFilterConfiguration* config)
+void KisWdgNoise::setConfiguration(KisPropertiesConfiguration* config)
 {
     QVariant value;
     if (config->getProperty("level", value)) {
@@ -58,7 +58,7 @@ void KisWdgNoise::setConfiguration(KisFilterConfiguration* config)
     }
 }
 
-KisFilterConfiguration* KisWdgNoise::configuration() const
+KisPropertiesConfiguration* KisWdgNoise::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("noise", 1);
     config->setProperty("level", this->widget()->intLevel->value());

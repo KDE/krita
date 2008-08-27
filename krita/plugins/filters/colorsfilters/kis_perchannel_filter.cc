@@ -35,7 +35,7 @@
 #include <KoProgressUpdater.h>
 
 #include "kis_bookmarked_configuration_manager.h"
-#include "filter/kis_filter_config_widget.h"
+#include "kis_config_widget.h"
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
@@ -200,7 +200,7 @@ KisPerChannelFilter::KisPerChannelFilter() : KisFilter(id(), CategoryAdjust, i18
                        new KisPerChannelFilterConfigurationFactory()));
 }
 
-KisFilterConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceSP dev, const KisImageSP image) const
+KisConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, KisPaintDeviceSP dev, const KisImageSP image) const
 {
     Q_UNUSED(image);
     return new KisPerChannelConfigWidget(parent, dev);
@@ -336,7 +336,7 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
 }
 
 KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)
-        : KisFilterConfigWidget(parent, f)
+        : KisConfigWidget(parent, f)
 {
     Q_ASSERT(dev);
     int i;
@@ -393,7 +393,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     setActiveChannel(0);
 }
 
-KisFilterConfiguration * KisPerChannelConfigWidget::configuration() const
+KisPropertiesConfiguration * KisPerChannelConfigWidget::configuration() const
 {
     int nCh = m_dev->colorSpace()->colorChannelCount();
     KisPerChannelFilterConfiguration * cfg = new KisPerChannelFilterConfiguration(nCh);
@@ -420,7 +420,7 @@ KisFilterConfiguration * KisPerChannelConfigWidget::configuration() const
     return cfg;
 }
 
-void KisPerChannelConfigWidget::setConfiguration(KisFilterConfiguration * config)
+void KisPerChannelConfigWidget::setConfiguration(KisPropertiesConfiguration * config)
 {
     KisPerChannelFilterConfiguration * cfg = dynamic_cast<KisPerChannelFilterConfiguration *>(config);
     if (!cfg)

@@ -27,7 +27,7 @@
 #include "ui_wdgwaveoptions.h"
 
 KisWdgWave::KisWdgWave(KisFilter* /*nfilter*/, QWidget* parent)
-        : KisFilterConfigWidget(parent)
+        : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgWaveOptions();
     m_widget->setupUi(this);
@@ -46,7 +46,7 @@ KisWdgWave::~KisWdgWave()
 {
 }
 
-void KisWdgWave::setConfiguration(KisFilterConfiguration* config)
+void KisWdgWave::setConfiguration(KisPropertiesConfiguration* config)
 {
     QVariant value;
     if (config->getProperty("horizontalwavelength", value)) {
@@ -75,7 +75,7 @@ void KisWdgWave::setConfiguration(KisFilterConfiguration* config)
     }
 }
 
-KisFilterConfiguration* KisWdgWave::configuration() const
+KisPropertiesConfiguration* KisWdgWave::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("wave", 1);
     config->setProperty("horizontalwavelength", this->widget()->intHWavelength->value());

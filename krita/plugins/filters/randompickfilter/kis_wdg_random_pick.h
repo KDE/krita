@@ -21,12 +21,12 @@
 #ifndef KIS_WDG_RANDOMPICK_H
 #define KIS_WDG_RANDOMPICK_H
 
-#include <filter/kis_filter_config_widget.h>
+#include <kis_config_widget.h>
 
 class Ui_WdgRandomPickOptions;
 class KisFilter;
 
-class KisWdgRandomPick : public KisFilterConfigWidget
+class KisWdgRandomPick : public KisConfigWidget
 {
     Q_OBJECT
 public:
@@ -36,8 +36,8 @@ public:
     inline const Ui_WdgRandomPickOptions* widget() const {
         return m_widget;
     }
-    virtual void setConfiguration(KisFilterConfiguration*);
-    virtual KisFilterConfiguration* configuration() const;
+    virtual void setConfiguration(KisPropertiesConfiguration*);
+    virtual KisPropertiesConfiguration* configuration() const;
 private:
     Ui_WdgRandomPickOptions* m_widget;
     int m_seedH, m_seedV, m_seedThreshold;

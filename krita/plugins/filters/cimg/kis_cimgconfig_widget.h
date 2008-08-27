@@ -24,7 +24,7 @@
 
 #include "ui_wdg_cimg.h"
 #include "filter/kis_filter.h"
-#include "filter/kis_filter_config_widget.h"
+#include "kis_config_widget.h"
 
 class WdgCImg : public QWidget, public Ui::WdgCImg
 {
@@ -36,7 +36,7 @@ public:
     }
 };
 
-class KisCImgconfigWidget : public KisFilterConfigWidget
+class KisCImgconfigWidget : public KisConfigWidget
 {
 
     Q_OBJECT
@@ -48,8 +48,8 @@ public:
 
 public:
 
-    KisFilterConfiguration* configuration() const;
-    void setConfiguration(KisFilterConfiguration * config);
+    KisPropertiesConfiguration* configuration() const;
+    void setConfiguration(KisPropertiesConfiguration* config);
 
 private:
     WdgCImg * m_page;

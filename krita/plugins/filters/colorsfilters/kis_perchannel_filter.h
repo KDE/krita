@@ -26,7 +26,7 @@
 
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
-#include "filter/kis_filter_config_widget.h"
+#include "kis_config_widget.h"
 
 #include "ui_wdg_perchannel.h"
 
@@ -76,7 +76,7 @@ class KisPerChannelFilter
 public:
     KisPerChannelFilter();
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev, const KisImageSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev, const KisImageSP image = 0) const;
 
     using KisFilter::process;
     void process(KisConstProcessingInformation src,
@@ -91,7 +91,7 @@ public:
 private:
 };
 
-class KisPerChannelConfigWidget : public KisFilterConfigWidget
+class KisPerChannelConfigWidget : public KisConfigWidget
 {
 
     Q_OBJECT
@@ -100,8 +100,8 @@ public:
     KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f = 0);
     virtual ~KisPerChannelConfigWidget() {}
 
-    virtual void setConfiguration(KisFilterConfiguration * config);
-    virtual KisFilterConfiguration * configuration() const;
+    virtual void setConfiguration(KisPropertiesConfiguration* config);
+    virtual KisPropertiesConfiguration * configuration() const;
 
 private slots:
     virtual void setActiveChannel(int ch);

@@ -145,7 +145,7 @@ void KisRoundCornersFilter::process(KisConstProcessingInformation srcInfo,
     }
 }
 
-KisFilterConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageSP) const
+KisConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageSP) const
 {
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(2, 100, 30, i18n("Radius"), "radius"));

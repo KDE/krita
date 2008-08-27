@@ -37,7 +37,7 @@
 #include <kis_painter.h>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
-#include <filter/kis_filter_config_widget.h>
+#include <kis_config_widget.h>
 #include <kis_processing_information.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_node.h>

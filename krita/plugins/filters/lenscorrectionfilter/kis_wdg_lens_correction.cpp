@@ -29,7 +29,7 @@
 #include "ui_wdglenscorrectionoptions.h"
 
 KisWdgLensCorrection::KisWdgLensCorrection(KisFilter* /*nfilter*/, QWidget* parent)
-        : KisFilterConfigWidget(parent)
+        : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgLensCorrectionOptions();
     m_widget->setupUi(this);
@@ -45,7 +45,7 @@ KisWdgLensCorrection::~KisWdgLensCorrection()
 {
 }
 
-void KisWdgLensCorrection::setConfiguration(KisFilterConfiguration* config)
+void KisWdgLensCorrection::setConfiguration(KisPropertiesConfiguration* config)
 {
     QVariant value;
     if (config->getProperty("xcenter", value)) {
@@ -65,7 +65,7 @@ void KisWdgLensCorrection::setConfiguration(KisFilterConfiguration* config)
     }
 }
 
-KisFilterConfiguration* KisWdgLensCorrection::configuration() const
+KisPropertiesConfiguration* KisWdgLensCorrection::configuration() const
 {
     QVariant value;
     KisFilterConfiguration* config = new KisFilterConfiguration("lenscorrection", 1);

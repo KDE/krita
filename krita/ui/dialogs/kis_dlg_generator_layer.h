@@ -28,7 +28,7 @@ class QLabel;
 class KisPreviewWidget;
 class KisFilterConfiguration;
 class QGroupBox;
-class KisFilterConfigWidget;
+class KisConfigWidget;
 class KLineEdit;
 
 #include "ui_wdgdlggeneratorlayer.h"
@@ -62,7 +62,7 @@ protected slots:
 private:
 
     Ui_WdgDlgGeneratorLayer dlgWidget;
-    KisFilterConfigWidget * m_currentConfigWidget;
+    KisConfigWidget * m_currentConfigWidget;
     KisGeneratorSP m_currentGenerator;
     bool m_customName;
     bool m_freezeName;

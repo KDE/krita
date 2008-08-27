@@ -21,12 +21,12 @@
 #ifndef _KIS_WDG_UNSHARP_H_
 #define _KIS_WDG_UNSHARP_H_
 
-#include <filter/kis_filter_config_widget.h>
+#include <kis_config_widget.h>
 
 class KisFilter;
 class Ui_WdgUnsharp;
 
-class KisWdgUnsharp : public KisFilterConfigWidget
+class KisWdgUnsharp : public KisConfigWidget
 {
     Q_OBJECT
 public:
@@ -34,8 +34,8 @@ public:
     inline const Ui_WdgUnsharp* widget() const {
         return m_widget;
     }
-    virtual void setConfiguration(KisFilterConfiguration*);
-    virtual KisFilterConfiguration* configuration() const;
+    virtual void setConfiguration(KisPropertiesConfiguration*);
+    virtual KisPropertiesConfiguration* configuration() const;
 private:
     Ui_WdgUnsharp* m_widget;
 };

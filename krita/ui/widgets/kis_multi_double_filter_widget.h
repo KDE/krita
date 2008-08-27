@@ -21,7 +21,7 @@
 
 #include <vector>
 #include <knuminput.h>
-#include <filter/kis_filter_config_widget.h>
+#include <kis_config_widget.h>
 #include "krita_export.h"
 
 class KisDelayedActionDoubleInput : public KDoubleNumInput
@@ -57,13 +57,13 @@ struct KRITAUI_EXPORT KisDoubleWidgetParam {
 
 typedef std::vector<KisDoubleWidgetParam> vKisDoubleWidgetParam;
 
-class KRITAUI_EXPORT KisMultiDoubleFilterWidget : public KisFilterConfigWidget
+class KRITAUI_EXPORT KisMultiDoubleFilterWidget : public KisConfigWidget
 {
     Q_OBJECT
 public:
     KisMultiDoubleFilterWidget(const QString & filterid, QWidget * parent, const QString & caption, vKisDoubleWidgetParam dwparam);
-    virtual void setConfiguration(KisFilterConfiguration * cfg);
-    virtual KisFilterConfiguration* configuration() const;
+    virtual void setConfiguration(KisPropertiesConfiguration * cfg);
+    virtual KisPropertiesConfiguration* configuration() const;
 public:
     inline qint32 nbValues() const {
         return m_nbdoubleWidgets;

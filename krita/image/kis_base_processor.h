@@ -39,7 +39,7 @@ class KoUpdater;
 
 class KisBookmarkedConfigurationManager;
 class KisFilterConfiguration;
-class KisFilterConfigWidget;
+class KisConfigWidget;
 
 /**
  * Base class for classes that process areas of pixels.
@@ -118,7 +118,7 @@ public:
      * @param parent the Qt owner widget of this widget
      * @param dev the paintdevice this filter will act on
      */
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
     // "Support" functions
 public:
     /**

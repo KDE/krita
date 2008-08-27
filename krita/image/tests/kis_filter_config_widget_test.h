@@ -21,7 +21,7 @@
 
 #include <QtTest/QtTest>
 
-class KisFilterConfigWidgetTest : public QObject
+class KisConfigWidgetTest : public QObject
 {
     Q_OBJECT
 private slots:

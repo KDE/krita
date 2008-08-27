@@ -21,12 +21,12 @@
 #ifndef _KIS_WDG_COLOR_TO_ALPHA_H_
 #define _KIS_WDG_COLOR_TO_ALPHA_H_
 
-#include <filter/kis_filter_config_widget.h>
+#include <kis_config_widget.h>
 
 class KisFilter;
 class Ui_WdgColorToAlphaBase;
 
-class KisWdgColorToAlpha : public KisFilterConfigWidget
+class KisWdgColorToAlpha : public KisConfigWidget
 {
     Q_OBJECT
 public:
@@ -34,8 +34,8 @@ public:
     inline const Ui_WdgColorToAlphaBase* widget() const {
         return m_widget;
     }
-    virtual void setConfiguration(KisFilterConfiguration*);
-    virtual KisFilterConfiguration* configuration() const;
+    virtual void setConfiguration(KisPropertiesConfiguration*);
+    virtual KisPropertiesConfiguration* configuration() const;
 private:
     Ui_WdgColorToAlphaBase* m_widget;
 };

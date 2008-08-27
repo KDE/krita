@@ -63,7 +63,7 @@ KisIntegerWidgetParam::KisIntegerWidgetParam(qint32 nmin, qint32 nmax, qint32 ni
 KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(const QString & filterid, QWidget * parent,
         const QString & caption,
         vKisIntegerWidgetParam iwparam)
-        : KisFilterConfigWidget(parent),  m_filterid(filterid)
+        : KisConfigWidget(parent),  m_filterid(filterid)
 {
     m_nbintegerWidgets = iwparam.size();
     this->setWindowTitle(caption);
@@ -90,7 +90,7 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(const QString & filteri
     widgetLayout->addItem(sp, m_nbintegerWidgets, 0);
 }
 
-void KisMultiIntegerFilterWidget::setConfiguration(KisFilterConfiguration * config)
+void KisMultiIntegerFilterWidget::setConfiguration(KisPropertiesConfiguration * config)
 {
     if (!config) return;
 
@@ -104,7 +104,7 @@ void KisMultiIntegerFilterWidget::setConfiguration(KisFilterConfiguration * conf
     }
 }
 
-KisFilterConfiguration* KisMultiIntegerFilterWidget::configuration() const
+KisPropertiesConfiguration* KisMultiIntegerFilterWidget::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration(m_filterid, 0);
     for (int i = 0; i < nbValues(); ++i) {

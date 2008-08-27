@@ -22,7 +22,7 @@
 #include <vector>
 
 #include <knuminput.h>
-#include <filter/kis_filter_config_widget.h>
+#include <kis_config_widget.h>
 #include "krita_export.h"
 
 class KisDelayedActionIntegerInput : public KIntNumInput
@@ -61,14 +61,14 @@ struct KisIntegerWidgetParam {
 
 typedef std::vector<KisIntegerWidgetParam> vKisIntegerWidgetParam;
 
-class KRITAUI_EXPORT KisMultiIntegerFilterWidget : public KisFilterConfigWidget
+class KRITAUI_EXPORT KisMultiIntegerFilterWidget : public KisConfigWidget
 {
     Q_OBJECT
 public:
     KisMultiIntegerFilterWidget(const QString & filterid, QWidget * parent, const QString & caption, vKisIntegerWidgetParam iwparam);
 
-    virtual void setConfiguration(KisFilterConfiguration * config);
-    virtual KisFilterConfiguration* configuration() const;
+    virtual void setConfiguration(KisPropertiesConfiguration * config);
+    virtual KisPropertiesConfiguration* configuration() const;
 
 public:
     inline qint32 nbValues() const {

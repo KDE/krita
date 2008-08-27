@@ -28,7 +28,7 @@ class QDomDocument;
 class QGridLayout;
 class Ui_FilterOpOptions;
 class KoID;
-class KisFilterConfigWidget;
+class KisConfigWidget;
 
 class KisFilterOpSettings : public QObject, public KisPaintOpSettings
 {
@@ -76,7 +76,7 @@ private:
     QGridLayout* m_layout;
     const KisFilterSP m_currentFilter;
     KisPaintDeviceSP m_paintDevice;
-    KisFilterConfigWidget* m_currentFilterConfigWidget;
+    KisConfigWidget* m_currentFilterConfigWidget;
     KisImageSP m_image;
 
 };

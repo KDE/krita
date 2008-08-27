@@ -58,7 +58,7 @@ KisLevelFilter::~KisLevelFilter()
 {
 }
 
-KisFilterConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image) const
+KisConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image) const
 {
     Q_UNUSED(image);
     return new KisLevelConfigWidget(parent, dev);
@@ -175,7 +175,7 @@ void KisLevelFilter::process(KisConstProcessingInformation srcInfo,
 }
 
 KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev)
-        : KisFilterConfigWidget(parent)
+        : KisConfigWidget(parent)
 {
     m_page.setupUi(this);
     histogram = NULL;
@@ -260,7 +260,7 @@ void KisLevelConfigWidget::drawHistogram(bool logarithmic)
     m_page.histview->setPixmap(pix);
 }
 
-KisFilterConfiguration * KisLevelConfigWidget::configuration() const
+KisPropertiesConfiguration * KisLevelConfigWidget::configuration() const
 {
     KisFilterConfiguration * config = new KisFilterConfiguration(KisLevelFilter::id().id(), 1);
 
@@ -273,7 +273,7 @@ KisFilterConfiguration * KisLevelConfigWidget::configuration() const
     return config;
 }
 
-void KisLevelConfigWidget::setConfiguration(KisFilterConfiguration * config)
+void KisLevelConfigWidget::setConfiguration(KisPropertiesConfiguration * config)
 {
     QVariant value;
     if (config->getProperty("blackvalue", value)) {

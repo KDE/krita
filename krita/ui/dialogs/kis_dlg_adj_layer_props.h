@@ -24,7 +24,7 @@ class KLineEdit;
 
 class KisFilter;
 class KisFilterConfiguration;
-class KisFilterConfigWidget;
+class KisConfigWidget;
 class KisImage;
 class KisAdjustmentLayer;
 
@@ -65,7 +65,7 @@ protected slots:
 private:
     KisPaintDeviceSP m_paintDevice;
     KisImage * m_image;
-    KisFilterConfigWidget * m_currentConfigWidget;
+    KisConfigWidget * m_currentConfigWidget;
     KisFilter* m_currentFilter;
     KisFilterConfiguration * m_currentConfiguration;
     KisAdjustmentLayer * m_layer;

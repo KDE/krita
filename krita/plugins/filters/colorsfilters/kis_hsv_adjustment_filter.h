@@ -24,7 +24,7 @@
 #include <QList>
 
 #include "filter/kis_filter.h"
-#include "filter/kis_filter_config_widget.h"
+#include "kis_config_widget.h"
 #include "ui_wdg_hsv_adjustment.h"
 
 class QWidget;
@@ -42,7 +42,7 @@ public:
 
 public:
 
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
 
     using KisFilter::process;
 
@@ -60,15 +60,15 @@ public:
 };
 
 
-class KisHSVConfigWidget : public KisFilterConfigWidget
+class KisHSVConfigWidget : public KisConfigWidget
 {
 
 public:
     KisHSVConfigWidget(QWidget * parent, Qt::WFlags f = 0);
     virtual ~KisHSVConfigWidget();
 
-    virtual KisFilterConfiguration * configuration() const;
-    virtual void setConfiguration(KisFilterConfiguration * config);
+    virtual KisPropertiesConfiguration * configuration() const;
+    virtual void setConfiguration(KisPropertiesConfiguration* config);
     Ui_WdgHSVAdjustment * m_page;
 };
 

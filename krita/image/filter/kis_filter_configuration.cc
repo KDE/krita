@@ -31,7 +31,7 @@
 #include "KoID.h"
 #include "kis_types.h"
 
-#include "filter/kis_filter_config_widget.h"
+#include "kis_config_widget.h"
 
 struct KisFilterConfiguration::Private {
     QString name;

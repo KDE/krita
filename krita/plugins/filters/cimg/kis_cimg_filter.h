@@ -22,7 +22,7 @@
 #define _KIS_CIMG_FILTER_H_
 
 #include "filter/kis_filter.h"
-#include "filter/kis_filter_config_widget.h"
+#include "kis_config_widget.h"
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
@@ -74,9 +74,9 @@ public:
     }
 
 public:
-    virtual KisFilterConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev, const KisImageSP image = 0) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, KisPaintDeviceSP dev, const KisImageSP image = 0) const;
     virtual KisFilterConfiguration * configuration(QWidget*);
-    virtual KisFilterConfiguration * configuration() {
+    virtual KisPropertiesConfiguration * configuration() {
         return new KisCImgFilterConfiguration();
     }
 private:

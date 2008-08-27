@@ -68,7 +68,7 @@ KisBrushServer::KisBrushServer()
     m_brushServer = new BrushResourceServer();
     brushThread = new KoResourceLoaderThread(m_brushServer, "*.gbr:*.gih");
     connect(brushThread, SIGNAL(finished()), this, SLOT(brushThreadDone()));
-    brushThread->start();
+    brushThread->run();
 }
 
 KisBrushServer::~KisBrushServer()

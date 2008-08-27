@@ -39,9 +39,6 @@ KisSumiPaintOpSettings::KisSumiPaintOpSettings(QWidget * parent)
     m_options->setupUi(m_optionsWidget);
 
     m_curveSamples = m_options->inkAmountSpinBox->value();
-
-    QObject::connect(m_options->previewBtn, SIGNAL(clicked()),
-                     this, SLOT(updateImg()));
 }
 
 KisPaintOpSettingsSP KisSumiPaintOpSettings::clone() const

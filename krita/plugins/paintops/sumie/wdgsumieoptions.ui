@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>460</width>
-    <height>522</height>
+    <height>327</height>
    </rect>
   </property>
   <property name="minimumSize" >
@@ -227,7 +227,7 @@
      </item>
     </layout>
    </item>
-   <item row="4" column="0" >
+   <item row="2" column="0" >
     <spacer name="verticalSpacer" >
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
@@ -258,61 +258,7 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="0" >
-    <widget class="QGroupBox" name="previewGroupBox" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize" >
-      <size>
-       <width>0</width>
-       <height>130</height>
-      </size>
-     </property>
-     <property name="title" >
-      <string/>
-     </property>
-     <widget class="QLabel" name="previewLbl" >
-      <property name="geometry" >
-       <rect>
-        <x>9</x>
-        <y>34</y>
-        <width>410</width>
-        <height>100</height>
-       </rect>
-      </property>
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize" >
-       <size>
-        <width>410</width>
-        <height>100</height>
-       </size>
-      </property>
-      <property name="text" >
-       <string/>
-      </property>
-     </widget>
-    </widget>
-   </item>
-   <item row="3" column="0" >
-    <widget class="QPushButton" name="previewBtn" >
-     <property name="text" >
-      <string>Preview</string>
-     </property>
-    </widget>
-   </item>
   </layout>
-  <zorder>groupBox</zorder>
-  <zorder>previewGroupBox</zorder>
-  <zorder>previewBtn</zorder>
  </widget>
  <customwidgets>
   <customwidget>

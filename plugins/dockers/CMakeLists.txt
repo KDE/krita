@@ -46,7 +46,19 @@ add_subdirectory( strokedocker/pics )
 
 kde4_add_plugin(kofficedockers ${kofficedockers_SRCS})
 
-target_link_libraries(kofficedockers koguiutils komain)
+target_link_libraries(
+    kofficedockers
+    koguiutils
+    komain
+    flake
+    kstore
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KIO_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS kofficedockers DESTINATION ${PLUGIN_INSTALL_DIR})
 

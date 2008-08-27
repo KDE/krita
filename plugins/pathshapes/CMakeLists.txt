@@ -38,7 +38,17 @@ kde4_add_ui_files(pathshapes_PART_SRCS
 )
 kde4_add_plugin(pathshapes ${pathshapes_PART_SRCS})
 
-target_link_libraries(pathshapes flake koguiutils)
+target_link_libraries(
+    pathshapes
+    flake
+    koguiutils
+    komain
+    kstore
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
+    )
 
 install(TARGETS pathshapes  DESTINATION ${PLUGIN_INSTALL_DIR})
 

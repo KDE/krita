@@ -31,13 +31,13 @@ class KoStyleStack::KoStyleStackPrivate
 };
 
 KoStyleStack::KoStyleStack()
-    : m_styleNSURI( KoXmlNS::style ), m_foNSURI( KoXmlNS::fo ), d( 0 )
+        : m_styleNSURI(KoXmlNS::style), m_foNSURI(KoXmlNS::fo), d(0)
 {
     clear();
 }
 
-KoStyleStack::KoStyleStack( const char* styleNSURI, const char* foNSURI )
-    : m_propertiesTagName( "properties" ), m_styleNSURI( styleNSURI ), m_foNSURI( foNSURI ), d( 0 )
+KoStyleStack::KoStyleStack(const char* styleNSURI, const char* foNSURI)
+        : m_propertiesTagName("properties"), m_styleNSURI(styleNSURI), m_foNSURI(foNSURI), d(0)
 {
     clear();
 }
@@ -51,84 +51,80 @@ void KoStyleStack::clear()
 {
     m_stack.clear();
 #ifdef DEBUG_STYLESTACK
-    kDebug(30003) <<"clear!";
+    kDebug(30003) << "clear!";
 #endif
 }
 
 void KoStyleStack::save()
 {
-    m_marks.push( m_stack.count() );
+    m_marks.push(m_stack.count());
 #ifdef DEBUG_STYLESTACK
-    kDebug(30003) <<"save (level" << m_marks.count() <<") -> index" << m_stack.count();
+    kDebug(30003) << "save (level" << m_marks.count() << ") -> index" << m_stack.count();
 #endif
 }
 
 void KoStyleStack::restore()
 {
-    Q_ASSERT( !m_marks.isEmpty() );
+    Q_ASSERT(!m_marks.isEmpty());
     int toIndex = m_marks.pop();
 #ifdef DEBUG_STYLESTACK
-    kDebug(30003) <<"restore (level" << m_marks.count()+1 <<") -> to index" << toIndex;
+    kDebug(30003) << "restore (level" << m_marks.count() + 1 << ") -> to index" << toIndex;
 #endif
-    Q_ASSERT( toIndex > -1 );
-    Q_ASSERT( toIndex <= (int)m_stack.count() ); // If equal, nothing to remove. If greater, bug.
-    for ( int index = (int)m_stack.count() - 1; index >= toIndex; --index )
+    Q_ASSERT(toIndex > -1);
+    Q_ASSERT(toIndex <= (int)m_stack.count());   // If equal, nothing to remove. If greater, bug.
+    for (int index = (int)m_stack.count() - 1; index >= toIndex; --index)
         m_stack.pop_back();
 }
 
 void KoStyleStack::pop()
 {
-    Q_ASSERT( !m_stack.isEmpty() );
+    Q_ASSERT(!m_stack.isEmpty());
     m_stack.pop_back();
 #ifdef DEBUG_STYLESTACK
-    kDebug(30003) <<"pop -> count=" << m_stack.count();
+    kDebug(30003) << "pop -> count=" << m_stack.count();
 #endif
 }
 
-void KoStyleStack::push( const KoXmlElement& style )
+void KoStyleStack::push(const KoXmlElement& style)
 {
-    m_stack.append( style );
+    m_stack.append(style);
 #ifdef DEBUG_STYLESTACK
-    kDebug(30003) <<"pushed" << style.attributeNS( m_styleNSURI,"name", QString() ) <<" -> count=" << m_stack.count();
+    kDebug(30003) << "pushed" << style.attributeNS(m_styleNSURI, "name", QString()) << " -> count=" << m_stack.count();
 #endif
 }
 
-QString KoStyleStack::property( const char* nsURI, const char* name, const char* detail ) const
+QString KoStyleStack::property(const char* nsURI, const char* name, const char* detail) const
 {
-    QString fullName( name );
-    if ( detail )
-    {
+    QString fullName(name);
+    if (detail) {
         fullName += '-';
         fullName += detail;
     }
     QList<KoXmlElement>::ConstIterator it = m_stack.end();
-    while ( it != m_stack.begin() )
-    {
+    while (it != m_stack.begin()) {
         --it;
-        KoXmlElement properties = KoXml::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
-        if ( detail && properties.hasAttributeNS( nsURI, fullName ) )
-            return properties.attributeNS( nsURI, fullName, QString() );
-        if ( properties.hasAttributeNS( nsURI, name ) )
-            return properties.attributeNS( nsURI, name, QString() );
+        KoXmlElement properties = KoXml::namedItemNS(*it, m_styleNSURI, m_propertiesTagName);
+        if (detail && properties.hasAttributeNS(nsURI, fullName))
+            return properties.attributeNS(nsURI, fullName, QString());
+        if (properties.hasAttributeNS(nsURI, name))
+            return properties.attributeNS(nsURI, name, QString());
     }
     return QString();
 }
 
-bool KoStyleStack::hasProperty( const char* nsURI, const char* name, const char* detail ) const
+bool KoStyleStack::hasProperty(const char* nsURI, const char* name, const char* detail) const
 {
-    QString fullName( name );
-    if ( detail )
-    {
+    QString fullName(name);
+    if (detail) {
         fullName += '-';
         fullName += detail;
     }
     QList<KoXmlElement>::ConstIterator it = m_stack.end();
-    while ( it != m_stack.begin() )
-    {
+    while (it != m_stack.begin()) {
         --it;
-        const KoXmlElement properties = KoXml::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
-        if ( properties.hasAttributeNS( nsURI, name ) ||
-             ( detail && properties.hasAttributeNS( nsURI, fullName ) ) )
+        const KoXmlElement properties = KoXml::namedItemNS(*it, m_styleNSURI, m_propertiesTagName);
+        if (properties.hasAttributeNS(nsURI, name) ||
+                (detail && properties.hasAttributeNS(nsURI, fullName)))
             return true;
     }
     return false;
@@ -142,22 +138,20 @@ qreal KoStyleStack::fontSize(const qreal defaultFontPointSize) const
     qreal percent = 1;
     QList<KoXmlElement>::ConstIterator it = m_stack.end(); // reverse iterator
 
-    while ( it != m_stack.begin() )
-    {
+    while (it != m_stack.begin()) {
         --it;
-        KoXmlElement properties = KoXml::namedItemNS( *it, m_styleNSURI, m_propertiesTagName ).toElement();
-        if ( properties.hasAttributeNS( m_foNSURI, name ) ) {
-            const QString value = properties.attributeNS( m_foNSURI, name, QString() );
-            if ( value.endsWith( '%' ) ) {
+        KoXmlElement properties = KoXml::namedItemNS(*it, m_styleNSURI, m_propertiesTagName).toElement();
+        if (properties.hasAttributeNS(m_foNSURI, name)) {
+            const QString value = properties.attributeNS(m_foNSURI, name, QString());
+            if (value.endsWith('%')) {
                 //sebsauer, 20070609, the specs don't say that we have to calc them together but
                 //just that we are looking for a valid parent fontsize. So, let's only take the
                 //first percent definition into account and keep on to seek for a valid parent,
                 //percent *= value.left( value.length() - 1 ).toDouble() / 100.0;
                 if (percent == 1)
-                    percent = value.left( value.length() - 1 ).toDouble() / 100.0;
-            }
-            else
-                return percent * KoUnit::parseValue( value ); // e.g. 12pt
+                    percent = value.left(value.length() - 1).toDouble() / 100.0;
+            } else
+                return percent * KoUnit::parseValue(value);   // e.g. 12pt
         }
     }
 
@@ -165,73 +159,69 @@ qreal KoStyleStack::fontSize(const qreal defaultFontPointSize) const
     return percent * defaultFontPointSize;
 }
 
-bool KoStyleStack::hasChildNode( const char* nsURI, const char* localName ) const
+bool KoStyleStack::hasChildNode(const char* nsURI, const char* localName) const
 {
     QList<KoXmlElement>::ConstIterator it = m_stack.end();
-    while ( it != m_stack.begin() )
-    {
+    while (it != m_stack.begin()) {
         --it;
-        KoXmlElement properties = KoXml::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
-        if ( !KoXml::namedItemNS( properties, nsURI, localName ).isNull() )
+        KoXmlElement properties = KoXml::namedItemNS(*it, m_styleNSURI, m_propertiesTagName);
+        if (!KoXml::namedItemNS(properties, nsURI, localName).isNull())
             return true;
     }
 
     return false;
 }
 
-KoXmlElement KoStyleStack::childNode( const char* nsURI, const char* localName) const
+KoXmlElement KoStyleStack::childNode(const char* nsURI, const char* localName) const
 {
     QList<KoXmlElement>::ConstIterator it = m_stack.end();
 
-    while ( it != m_stack.begin() )
-    {
+    while (it != m_stack.begin()) {
         --it;
-        KoXmlElement properties = KoXml::namedItemNS( *it, m_styleNSURI, m_propertiesTagName );
-        KoXmlElement e = KoXml::namedItemNS( properties, nsURI, localName );
-        if ( !e.isNull() )
+        KoXmlElement properties = KoXml::namedItemNS(*it, m_styleNSURI, m_propertiesTagName);
+        KoXmlElement e = KoXml::namedItemNS(properties, nsURI, localName);
+        if (!e.isNull())
             return e;
     }
 
     return KoXmlElement();          // a null element
 }
 
-bool KoStyleStack::isUserStyle( const KoXmlElement& e, const QString& family ) const
+bool KoStyleStack::isUserStyle(const KoXmlElement& e, const QString& family) const
 {
-    if ( e.attributeNS( m_styleNSURI, "family", QString() ) != family )
+    if (e.attributeNS(m_styleNSURI, "family", QString()) != family)
         return false;
     const KoXmlElement parent = e.parentNode().toElement();
     //kDebug(30003) <<"tagName=" << e.tagName() <<" parent-tagName=" << parent.tagName();
     return parent.localName() == "styles" /*&& parent.namespaceURI() == KoXmlNS::office*/;
 }
 
-QString KoStyleStack::userStyleName( const QString& family ) const
+QString KoStyleStack::userStyleName(const QString& family) const
 {
     QList<KoXmlElement>::ConstIterator it = m_stack.end();
-    while ( it != m_stack.begin() )
-    {
+    while (it != m_stack.begin()) {
         --it;
         //kDebug(30003) << (*it).attributeNS( m_styleNSURI,"name", QString());
-        if ( isUserStyle( *it, family ) )
-            return (*it).attributeNS( m_styleNSURI, "name", QString() );
+        if (isUserStyle(*it, family))
+            return (*it).attributeNS(m_styleNSURI, "name", QString());
     }
     // Can this ever happen?
     return "Standard";
 }
 
-QString KoStyleStack::userStyleDisplayName( const QString& family ) const
+QString KoStyleStack::userStyleDisplayName(const QString& family) const
 {
     QList<KoXmlElement>::ConstIterator it = m_stack.end();
-    while ( it != m_stack.begin() )
-    {
+    while (it != m_stack.begin()) {
         --it;
         //kDebug(30003) << (*it).attributeNS( m_styleNSURI,"display-name");
-        if ( isUserStyle( *it, family ) )
-            return (*it).attributeNS( m_styleNSURI, "display-name", QString() );
+        if (isUserStyle(*it, family))
+            return (*it).attributeNS(m_styleNSURI, "display-name", QString());
     }
     return QString(); // no display name, this can happen since it's optional
 }
 
-void KoStyleStack::setTypeProperties( const char* typeProperties )
+void KoStyleStack::setTypeProperties(const char* typeProperties)
 {
-    m_propertiesTagName = typeProperties == 0 ? QByteArray( "properties" ) : ( QByteArray( typeProperties ) + "-properties" );
+    m_propertiesTagName = typeProperties == 0 ? QByteArray("properties") : (QByteArray(typeProperties) + "-properties");
 }

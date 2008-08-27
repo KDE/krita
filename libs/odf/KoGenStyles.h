@@ -104,7 +104,7 @@ public:
      * @return the name for this style
      * @todo ### rename lookup to insert
      */
-    QString lookup( const KoGenStyle& style, const QString& name = QString(), int flags = NoFlag );
+    QString lookup(const KoGenStyle& style, const QString& name = QString(), int flags = NoFlag);
 
     /**
      * Return the entire collection of styles
@@ -121,12 +121,12 @@ public:
      * otherwise only those NOT marked for styles.xml.
      * @see lookup
      */
-    QList<NamedStyle> styles( int type, bool markedForStylesXml = false ) const;
+    QList<NamedStyle> styles(int type, bool markedForStylesXml = false) const;
 
     /**
      * @return an existing style by name
      */
-    const KoGenStyle* style( const QString& name ) const;
+    const KoGenStyle* style(const QString& name) const;
 
     /**
      * @return an existing style by name, which can be modified.
@@ -135,7 +135,7 @@ public:
      * Only do this if you know for sure no other 'user' of that style will
      * be affected.
      */
-    KoGenStyle* styleForModification( const QString& name );
+    KoGenStyle* styleForModification(const QString& name);
 
     /**
      * Mark a given automatic style as being needed in styles.xml.
@@ -149,7 +149,7 @@ public:
      *
      * @see styles, KoGenStyle::setAutoStyleInStylesDotXml
      */
-    void markStyleForStylesXml( const QString& name );
+    void markStyleForStylesXml(const QString& name);
 
     /**
      * add a font face declaration
@@ -157,7 +157,7 @@ public:
      * see odf 2.6 Font Face Declarations
      * and odf 14.6 Font Face Declaration
      */
-    void addFontFace( const QString& fontName );
+    void addFontFace(const QString& fontName);
 
     /**
      * Outputs debug information
@@ -174,18 +174,18 @@ public:
      * @param mainfestwriter
      * @return if it was successful
      */
-    bool saveOdfStylesDotXml( KoStore* store, KoXmlWriter* manifestWriter );
+    bool saveOdfStylesDotXml(KoStore* store, KoXmlWriter* manifestWriter);
 
     /**
      * Save automatic styles.
      *
-     * This creates the office:automatic-styles tag containing all 
+     * This creates the office:automatic-styles tag containing all
      * automatic styles.
      *
      * @param xmlWriter
      * @param stylesDotXml
      */
-    void saveOdfAutomaticStyles( KoXmlWriter* xmlWriter, bool stylesDotXml ) const;
+    void saveOdfAutomaticStyles(KoXmlWriter* xmlWriter, bool stylesDotXml) const;
 
     /**
      * Save document styles.
@@ -194,7 +194,7 @@ public:
      *
      * @param xmlWriter
      */
-    void saveOdfDocumentStyles( KoXmlWriter* xmlWriter ) const;
+    void saveOdfDocumentStyles(KoXmlWriter* xmlWriter) const;
 
     /**
      * Save master styles.
@@ -203,18 +203,18 @@ public:
      *
      * @param xmlWriter
      */
-    void saveOdfMasterStyles( KoXmlWriter* xmlWriter ) const;
+    void saveOdfMasterStyles(KoXmlWriter* xmlWriter) const;
 
     /**
      * Save font face declarations
      *
-     * This creates the office:font-face-decls tag containing all font face 
+     * This creates the office:font-face-decls tag containing all font face
      * declarations
      */
-    void saveOdfFontFaceDecls( KoXmlWriter* xmlWriter ) const;
+    void saveOdfFontFaceDecls(KoXmlWriter* xmlWriter) const;
 
 private:
-    QString makeUniqueName( const QString& base, int flags ) const;
+    QString makeUniqueName(const QString& base, int flags) const;
 
     class Private;
     Private * const d;

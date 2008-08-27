@@ -37,29 +37,29 @@ public:
 
     /**
      * Get the mime type
-     * 
+     *
      * @param documentType the document type
      * @return the mime type used for the given document type
      */
-    static const char * mimeType( DocumentType documentType );
+    static const char * mimeType(DocumentType documentType);
 
     /**
      * Get the mime type
-     * 
+     *
      * @param documentType the document type
      * @return the mime type used for templates of the given document type
      */
-    static const char * templateMimeType( DocumentType documentType );
+    static const char * templateMimeType(DocumentType documentType);
 
     /**
      * Get the mime type
-     * 
+     *
      * @param documentType the document type
      * @param withNamespace if true the namespace before the element is also returned
      *                      if false only the element is returned
      * @return the body element name for the given document type
      */
-    static const char * bodyContentElement( DocumentType documentType, bool withNamespace );
+    static const char * bodyContentElement(DocumentType documentType, bool withNamespace);
 
 private:
     struct DocumentData {

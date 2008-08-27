@@ -45,15 +45,23 @@ public:
      * @param styles reference to the KoOdfStylesReader parsed by KoDocument
      * @param store pointer to store, if available, for e.g. loading images.
      */
-    explicit KoOdfLoadingContext( KoOdfStylesReader& stylesReader, KoStore* store );
+    explicit KoOdfLoadingContext(KoOdfStylesReader& stylesReader, KoStore* store);
     virtual ~KoOdfLoadingContext();
 
-    KoStore* store() { return m_store; }
+    KoStore* store() {
+        return m_store;
+    }
 
-    KoOdfStylesReader& stylesReader() { return m_stylesReader; }
-    KoStyleStack& styleStack() { return m_styleStack; }
+    KoOdfStylesReader& stylesReader() {
+        return m_stylesReader;
+    }
+    KoStyleStack& styleStack() {
+        return m_styleStack;
+    }
 
-    const KoXmlDocument& manifestDocument() const { return m_manifestDoc; }
+    const KoXmlDocument& manifestDocument() const {
+        return m_manifestDoc;
+    }
 
     /// Return the <meta:generator> of the document, e.g. "KOffice/1.4.0a"
     QString generator() const;
@@ -70,7 +78,7 @@ public:
      * @param attrName the name of the attribute to read
      * @param family the style family used for this object
      */
-    void fillStyleStack( const KoXmlElement& element, const char* nsURI, const char* attrName, const char* family );
+    void fillStyleStack(const KoXmlElement& element, const char* nsURI, const char* attrName, const char* family);
 
     /**
      * Add @p style to the stack, as well as all its parent styles
@@ -86,12 +94,16 @@ public:
      *
      * Usually you would call fillStyleStack() instead.
      */
-    void addStyles( const KoXmlElement* style, const char* family, bool usingStylesAutoStyles = false );
+    void addStyles(const KoXmlElement* style, const char* family, bool usingStylesAutoStyles = false);
 
     /// Set to true while loading headers and footers, to remember to use auto styles
     /// from styles.xml
-    void setUseStylesAutoStyles( bool useStylesAutoStyles ) { m_useStylesAutoStyles = useStylesAutoStyles; }
-    bool useStylesAutoStyles() const { return m_useStylesAutoStyles; }
+    void setUseStylesAutoStyles(bool useStylesAutoStyles) {
+        m_useStylesAutoStyles = useStylesAutoStyles;
+    }
+    bool useStylesAutoStyles() const {
+        return m_useStylesAutoStyles;
+    }
 
 private:
     void parseMeta() const;

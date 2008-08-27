@@ -36,15 +36,15 @@ public:
     KoOdfPaste();
     virtual ~KoOdfPaste();
 
-    bool paste( KoOdf::DocumentType documentType, const QMimeData * data );
+    bool paste(KoOdf::DocumentType documentType, const QMimeData * data);
     /**
      * This is an overloaded member function, provided for convenience. It differs
      * from the above function only in what argument(s) it accepts.
      */
-    bool paste( KoOdf::DocumentType documentType, QByteArray &data );
+    bool paste(KoOdf::DocumentType documentType, QByteArray &data);
 
 protected:
-    virtual bool process( const KoXmlElement & body, KoOdfReadStore & odfStore ) = 0;
+    virtual bool process(const KoXmlElement & body, KoOdfReadStore & odfStore) = 0;
 };
 
 #endif /* KOODFPASTE_H */

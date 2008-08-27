@@ -25,24 +25,24 @@ class KoOasisSettings::Private
 {
 };
 
-KoOasisSettings::KoOasisSettings( const KoXmlDocument& doc )
-    : m_settingsElement( KoXml::namedItemNS( doc.documentElement(), KoXmlNS::office, "settings" ) ),
-      m_configNSURI( KoXmlNS::config )
-    , d( 0 )
+KoOasisSettings::KoOasisSettings(const KoXmlDocument& doc)
+        : m_settingsElement(KoXml::namedItemNS(doc.documentElement(), KoXmlNS::office, "settings")),
+        m_configNSURI(KoXmlNS::config)
+        , d(0)
 {
     const KoXmlElement contents = doc.documentElement();
-    if ( m_settingsElement.isNull() )
-        kDebug(30003) <<" document doesn't have tag 'office:settings'";
+    if (m_settingsElement.isNull())
+        kDebug(30003) << " document doesn't have tag 'office:settings'";
 }
 
-KoOasisSettings::KoOasisSettings( const KoXmlDocument& doc, const char* officeNSURI, const char* configNSURI )
-    : m_settingsElement( KoXml::namedItemNS( doc.documentElement(), officeNSURI, "settings" ) ),
-      m_configNSURI( configNSURI )
-    , d( 0 )
+KoOasisSettings::KoOasisSettings(const KoXmlDocument& doc, const char* officeNSURI, const char* configNSURI)
+        : m_settingsElement(KoXml::namedItemNS(doc.documentElement(), officeNSURI, "settings")),
+        m_configNSURI(configNSURI)
+        , d(0)
 {
     const KoXmlElement contents = doc.documentElement();
-    if ( m_settingsElement.isNull() )
-        kDebug(30003) <<" document doesn't have tag 'office:settings'";
+    if (m_settingsElement.isNull())
+        kDebug(30003) << " document doesn't have tag 'office:settings'";
 }
 
 KoOasisSettings::~KoOasisSettings()
@@ -50,96 +50,84 @@ KoOasisSettings::~KoOasisSettings()
     delete d;
 }
 
-KoOasisSettings::Items KoOasisSettings::itemSet( const QString& itemSetName ) const
+KoOasisSettings::Items KoOasisSettings::itemSet(const QString& itemSetName) const
 {
     KoXmlElement e;
-    forEachElement( e, m_settingsElement )
-    {
-        if ( e.localName() == "config-item-set" &&
-             e.namespaceURI() == m_configNSURI &&
-             e.attributeNS( m_configNSURI, "name", QString() ) == itemSetName )
-        {
-            return Items( e, this );
+    forEachElement(e, m_settingsElement) {
+        if (e.localName() == "config-item-set" &&
+                e.namespaceURI() == m_configNSURI &&
+                e.attributeNS(m_configNSURI, "name", QString()) == itemSetName) {
+            return Items(e, this);
         }
     }
 
-    return Items( KoXmlElement(), this );
+    return Items(KoXmlElement(), this);
 }
 
-KoOasisSettings::IndexedMap KoOasisSettings::Items::indexedMap( const QString& itemMapName ) const
+KoOasisSettings::IndexedMap KoOasisSettings::Items::indexedMap(const QString& itemMapName) const
 {
     KoXmlElement configItem;
-    forEachElement( configItem, m_element )
-    {
-        if ( configItem.localName() == "config-item-map-indexed" &&
-             configItem.namespaceURI() == m_settings->m_configNSURI &&
-             configItem.attributeNS( m_settings->m_configNSURI, "name", QString() ) == itemMapName )
-        {
-            return IndexedMap( configItem, m_settings );
+    forEachElement(configItem, m_element) {
+        if (configItem.localName() == "config-item-map-indexed" &&
+                configItem.namespaceURI() == m_settings->m_configNSURI &&
+                configItem.attributeNS(m_settings->m_configNSURI, "name", QString()) == itemMapName) {
+            return IndexedMap(configItem, m_settings);
         }
     }
-    return IndexedMap( KoXmlElement(), m_settings );
+    return IndexedMap(KoXmlElement(), m_settings);
 }
 
-KoOasisSettings::NamedMap KoOasisSettings::Items::namedMap( const QString& itemMapName ) const
+KoOasisSettings::NamedMap KoOasisSettings::Items::namedMap(const QString& itemMapName) const
 {
     KoXmlElement configItem;
-    forEachElement( configItem, m_element )
-    {
-        if ( configItem.localName() == "config-item-map-named" &&
-             configItem.namespaceURI() == m_settings->m_configNSURI &&
-             configItem.attributeNS( m_settings->m_configNSURI, "name", QString() ) == itemMapName )
-        {
-            return NamedMap( configItem, m_settings );
+    forEachElement(configItem, m_element) {
+        if (configItem.localName() == "config-item-map-named" &&
+                configItem.namespaceURI() == m_settings->m_configNSURI &&
+                configItem.attributeNS(m_settings->m_configNSURI, "name", QString()) == itemMapName) {
+            return NamedMap(configItem, m_settings);
         }
     }
-    return NamedMap( KoXmlElement(), m_settings );
+    return NamedMap(KoXmlElement(), m_settings);
 }
 
-KoOasisSettings::Items KoOasisSettings::IndexedMap::entry( int entryIndex ) const
+KoOasisSettings::Items KoOasisSettings::IndexedMap::entry(int entryIndex) const
 {
     int i = 0;
     KoXmlElement entry;
-    forEachElement( entry, m_element )
-    {
-        if ( entry.localName() == "config-item-map-entry" &&
-             entry.namespaceURI() == m_settings->m_configNSURI )
-        {
-            if ( i == entryIndex )
-                return Items( entry, m_settings );
+    forEachElement(entry, m_element) {
+        if (entry.localName() == "config-item-map-entry" &&
+                entry.namespaceURI() == m_settings->m_configNSURI) {
+            if (i == entryIndex)
+                return Items(entry, m_settings);
             else
                 ++i;
         }
     }
-    return Items( KoXmlElement(), m_settings );
+    return Items(KoXmlElement(), m_settings);
 }
 
-KoOasisSettings::Items KoOasisSettings::NamedMap::entry( const QString& entryName ) const
+KoOasisSettings::Items KoOasisSettings::NamedMap::entry(const QString& entryName) const
 {
     KoXmlElement entry;
-    forEachElement( entry, m_element )
-    {
-        if ( entry.localName() == "config-item-map-entry" &&
-             entry.namespaceURI() == m_settings->m_configNSURI &&
-             entry.attributeNS( m_settings->m_configNSURI, "name", QString() ) == entryName )
-        {
-            return Items( entry, m_settings );
+    forEachElement(entry, m_element) {
+        if (entry.localName() == "config-item-map-entry" &&
+                entry.namespaceURI() == m_settings->m_configNSURI &&
+                entry.attributeNS(m_settings->m_configNSURI, "name", QString()) == entryName) {
+            return Items(entry, m_settings);
         }
     }
-    return Items( KoXmlElement(), m_settings );
+    return Items(KoXmlElement(), m_settings);
 }
 
 // helper method
-QString KoOasisSettings::Items::findConfigItem( const KoXmlElement& element,
-                                                const QString& item, bool* ok ) const
+QString KoOasisSettings::Items::findConfigItem(const KoXmlElement& element,
+        const QString& item, bool* ok) const
 {
     KoXmlElement it;
-    forEachElement( it, element )
-    {
-        if ( it.localName() == "config-item" &&
-             it.namespaceURI() == m_settings->m_configNSURI &&
-             it.attributeNS( m_settings->m_configNSURI, "name", QString() ) == item )
-        {
+    forEachElement(it, element) {
+        if (it.localName() == "config-item" &&
+                it.namespaceURI() == m_settings->m_configNSURI &&
+                it.attributeNS(m_settings->m_configNSURI, "name", QString()) == item) {
             *ok = true;
             return it.text();
         }
@@ -149,87 +137,87 @@ QString KoOasisSettings::Items::findConfigItem( const KoXmlElement& element,
 }
 
 
-QString KoOasisSettings::Items::findConfigItem( const QString& item, bool* ok ) const
+QString KoOasisSettings::Items::findConfigItem(const QString& item, bool* ok) const
 {
-    return findConfigItem( m_element, item, ok );
+    return findConfigItem(m_element, item, ok);
 }
 
 #if 0 // does anyone need this one? passing a default value does the job, too
-bool KoOasisSettings::Items::hasConfigItem( const QString& configName ) const
+bool KoOasisSettings::Items::hasConfigItem(const QString& configName) const
 {
     bool ok;
-    (void)findConfigItem( configName, &ok );
+    (void)findConfigItem(configName, &ok);
     return ok;
 }
 #endif
 
-QString KoOasisSettings::Items::parseConfigItemString( const QString& configName, const QString& defValue ) const
+QString KoOasisSettings::Items::parseConfigItemString(const QString& configName, const QString& defValue) const
 {
     bool ok;
-    const QString str = findConfigItem( configName, &ok );
+    const QString str = findConfigItem(configName, &ok);
     return ok ? str : defValue;
 }
 
-int KoOasisSettings::Items::parseConfigItemInt( const QString& configName, int defValue ) const
+int KoOasisSettings::Items::parseConfigItemInt(const QString& configName, int defValue) const
 {
     bool ok;
-    const QString str = findConfigItem( configName, &ok );
+    const QString str = findConfigItem(configName, &ok);
     int value;
-    if ( ok ) {
-        value = str.toInt( &ok );
-        if ( ok )
+    if (ok) {
+        value = str.toInt(&ok);
+        if (ok)
             return value;
     }
     return defValue;
 }
 
-qreal KoOasisSettings::Items::parseConfigItemDouble( const QString& configName, qreal defValue ) const
+qreal KoOasisSettings::Items::parseConfigItemDouble(const QString& configName, qreal defValue) const
 {
     bool ok;
-    const QString str = findConfigItem( configName, &ok );
+    const QString str = findConfigItem(configName, &ok);
     qreal value;
-    if ( ok ) {
-        value = str.toDouble( &ok );
-        if ( ok )
+    if (ok) {
+        value = str.toDouble(&ok);
+        if (ok)
             return value;
     }
     return defValue;
 }
 
-bool KoOasisSettings::Items::parseConfigItemBool( const QString& configName, bool defValue ) const
+bool KoOasisSettings::Items::parseConfigItemBool(const QString& configName, bool defValue) const
 {
     bool ok;
-    const QString str = findConfigItem( configName, &ok );
-    if( ! ok )
+    const QString str = findConfigItem(configName, &ok);
+    if (! ok)
         return defValue;
-    if ( str == "true" )
+    if (str == "true")
         return true;
-    else if ( str == "false" )
+    else if (str == "false")
         return false;
     return defValue;
 }
 
-short KoOasisSettings::Items::parseConfigItemShort( const QString& configName, short defValue ) const
+short KoOasisSettings::Items::parseConfigItemShort(const QString& configName, short defValue) const
 {
     bool ok;
-    const QString str = findConfigItem( configName, &ok );
+    const QString str = findConfigItem(configName, &ok);
     short value;
-    if ( ok ) {
-        value = str.toShort( &ok );
-        if ( ok )
+    if (ok) {
+        value = str.toShort(&ok);
+        if (ok)
             return value;
     }
     return defValue;
 }
 
-long KoOasisSettings::Items::parseConfigItemLong( const QString& configName, long defValue ) const
+long KoOasisSettings::Items::parseConfigItemLong(const QString& configName, long defValue) const
 {
     bool ok;
-    const QString str = findConfigItem( configName, &ok );
+    const QString str = findConfigItem(configName, &ok);
     long value;
-    if ( ok ) {
-        value = str.toLong( &ok );
-        if ( ok )
+    if (ok) {
+        value = str.toLong(&ok);
+        if (ok)
             return value;
     }
     return defValue;

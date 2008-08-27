@@ -66,7 +66,7 @@ public:
     /**
      * Create a style stack based on other namespaces than OASIS - used for OOo-1.1 import.
      */
-    KoStyleStack( const char* styleNSURI, const char* foNSURI );
+    KoStyleStack(const char* styleNSURI, const char* foNSURI);
     virtual ~KoStyleStack();
 
     /**
@@ -93,32 +93,32 @@ public:
     /**
      * Pushes the new style onto the stack.
      */
-    void push( const KoXmlElement& style );
+    void push(const KoXmlElement& style);
 
     /**
      * Check if any of the styles on the stack has an attribute called 'name'-'detail'
      * where detail is e.g. left, right, top or bottom.
      * This allows to also find 'name' alone (e.g. padding implies padding-left, padding-right etc.)
      */
-    bool hasProperty( const char* nsURI, const char* localName, const char* detail = 0 ) const;
+    bool hasProperty(const char* nsURI, const char* localName, const char* detail = 0) const;
 
     /**
      * Search for the attribute called 'name', starting on top of the stack,
      * and return it.
      */
-    QString property( const char* nsURI, const char* localName, const char* detail = 0 ) const;
+    QString property(const char* nsURI, const char* localName, const char* detail = 0) const;
 
     /**
      * Check if any of the styles on the stack has a child element called 'localName' in the namespace 'nsURI'.
      */
-    bool hasChildNode( const char* nsURI, const char* localName ) const;
+    bool hasChildNode(const char* nsURI, const char* localName) const;
 
     /**
      * Search for a child element which has a child element called 'localName'
      * in the namespace 'nsURI' starting on top of the stack,
      * and return it.
      */
-    KoXmlElement childNode( const char* nsURI, const char* localName ) const;
+    KoXmlElement childNode(const char* nsURI, const char* localName) const;
 
     /**
      * Special case for the current font size, due to special handling of fo:font-size="115%".
@@ -131,13 +131,13 @@ public:
      * This is used to know e.g. which user-style is associated with the current paragraph.
      * There could be none though.
      */
-    QString userStyleName( const QString& family ) const;
+    QString userStyleName(const QString& family) const;
 
     /**
      * Return the display name of the style specified by the user,
      * i.e. not an auto style
      */
-    QString userStyleDisplayName( const QString& family ) const;
+    QString userStyleDisplayName(const QString& family) const;
 
     /**
      * Set the type of properties that will be looked for.
@@ -146,10 +146,10 @@ public:
      * If @p typeProperties is 0, the stylestack is reset to look for "properties"
      * as it does by default.
      */
-    void setTypeProperties( const char* typeProperties );
+    void setTypeProperties(const char* typeProperties);
 
 private:
-    bool isUserStyle( const KoXmlElement& e, const QString& family ) const;
+    bool isUserStyle(const KoXmlElement& e, const QString& family) const;
 
 private:
     /// For save/restore: stack of "marks". Each mark is an index in m_stack.
@@ -170,8 +170,8 @@ private:
     KoStyleStackPrivate * const d;
 
     // forbidden
-    void operator=( const KoStyleStack& );
-    KoStyleStack( const KoStyleStack& );
+    void operator=(const KoStyleStack&);
+    KoStyleStack(const KoStyleStack&);
 };
 
 #endif /* KOSTYLESTACK_H */

@@ -24,7 +24,8 @@
 /**
  * Repository of XML namespaces used for OASIS documents.
  */
-class KOODF_EXPORT KoXmlNS {
+class KOODF_EXPORT KoXmlNS
+{
 public:
     static const char* const office;
     static const char* const meta;

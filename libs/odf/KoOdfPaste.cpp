@@ -39,42 +39,42 @@ KoOdfPaste::~KoOdfPaste()
 {
 }
 
-bool KoOdfPaste::paste( KoOdf::DocumentType documentType, const QMimeData * data )
+bool KoOdfPaste::paste(KoOdf::DocumentType documentType, const QMimeData * data)
 {
-    QByteArray arr = data->data( KoOdf::mimeType( documentType ) );
+    QByteArray arr = data->data(KoOdf::mimeType(documentType));
     return paste(documentType, arr);
 }
 
-bool KoOdfPaste::paste( KoOdf::DocumentType documentType, QByteArray &arr )
+bool KoOdfPaste::paste(KoOdf::DocumentType documentType, QByteArray &arr)
 {
     if (arr.isEmpty())
         return false;
 
     QByteArray *bytes = &arr;
-    QBuffer buffer( bytes );
-    KoStore * store = KoStore::createStore( &buffer, KoStore::Read );
-    KoOdfReadStore odfStore( store );
+    QBuffer buffer(bytes);
+    KoStore * store = KoStore::createStore(&buffer, KoStore::Read);
+    KoOdfReadStore odfStore(store);
 
     QString errorMessage;
-    if ( ! odfStore.loadAndParse( errorMessage ) ) {
+    if (! odfStore.loadAndParse(errorMessage)) {
         kError() << "loading and parsing failed:" << errorMessage << endl;
         return false;
     }
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
-    KoXmlElement realBody( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
+    KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
 
-    if ( realBody.isNull() ) {
+    if (realBody.isNull()) {
         kError() << "No body tag found!" << endl;
         return false;
     }
 
-    KoXmlElement body = KoXml::namedItemNS( realBody, KoXmlNS::office, KoOdf::bodyContentElement( documentType, false ) );
+    KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, KoOdf::bodyContentElement(documentType, false));
 
-    if ( body.isNull() ) {
-        kError() << "No" << KoOdf::bodyContentElement( documentType, true ) << "tag found!" << endl;
+    if (body.isNull()) {
+        kError() << "No" << KoOdf::bodyContentElement(documentType, true) << "tag found!" << endl;
         return false;
     }
 
-    return process( body, odfStore );
+    return process(body, odfStore);
 }

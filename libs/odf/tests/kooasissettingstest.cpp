@@ -22,76 +22,77 @@
 #include <assert.h>
 #include <QString>
 
-void testSelectItemSet( KoOasisSettings& settings )
+void testSelectItemSet(KoOasisSettings& settings)
 {
-    KoOasisSettings::Items items = settings.itemSet( "notexist" );
-    assert( items.isNull() );
-    items = settings.itemSet( "view-settings" );
-    assert( !items.isNull() );
-    kDebug() <<"testSelectItemSet OK";
+    KoOasisSettings::Items items = settings.itemSet("notexist");
+    assert(items.isNull());
+    items = settings.itemSet("view-settings");
+    assert(!items.isNull());
+    kDebug() << "testSelectItemSet OK";
 }
 
-void testParseConfigItemString( KoOasisSettings& settings )
+void testParseConfigItemString(KoOasisSettings& settings)
 {
-    KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
-    const QString unit = viewSettings.parseConfigItemString( "unit" );
-    qDebug( "%s", qPrintable( unit ) );
-    assert( unit == "mm" );
-    kDebug() <<"testParseConfigItemString OK";
+    KoOasisSettings::Items viewSettings = settings.itemSet("view-settings");
+    const QString unit = viewSettings.parseConfigItemString("unit");
+    qDebug("%s", qPrintable(unit));
+    assert(unit == "mm");
+    kDebug() << "testParseConfigItemString OK";
 }
 
-void testIndexedMap( KoOasisSettings& settings )
+void testIndexedMap(KoOasisSettings& settings)
 {
-    KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
-    assert( !viewSettings.isNull() );
-    KoOasisSettings::IndexedMap viewMap = viewSettings.indexedMap( "Views" );
-    assert( !viewMap.isNull() );
-    KoOasisSettings::Items firstView = viewMap.entry( 0 );
-    assert( !firstView.isNull() );
-    const short zoomFactor = firstView.parseConfigItemShort( "ZoomFactor" );
-    assert( zoomFactor == 100 );
-    KoOasisSettings::Items secondView = viewMap.entry( 1 );
-    assert( secondView.isNull() );
-    kDebug() <<"testIndexedMap OK";
+    KoOasisSettings::Items viewSettings = settings.itemSet("view-settings");
+    assert(!viewSettings.isNull());
+    KoOasisSettings::IndexedMap viewMap = viewSettings.indexedMap("Views");
+    assert(!viewMap.isNull());
+    KoOasisSettings::Items firstView = viewMap.entry(0);
+    assert(!firstView.isNull());
+    const short zoomFactor = firstView.parseConfigItemShort("ZoomFactor");
+    assert(zoomFactor == 100);
+    KoOasisSettings::Items secondView = viewMap.entry(1);
+    assert(secondView.isNull());
+    kDebug() << "testIndexedMap OK";
 }
 
-void testNamedMap( KoOasisSettings& settings )
+void testNamedMap(KoOasisSettings& settings)
 {
-    KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
-    assert( !viewSettings.isNull() );
-    KoOasisSettings::NamedMap viewMap = viewSettings.namedMap( "NamedMap" );
-    assert( !viewMap.isNull() );
-    KoOasisSettings::Items foo = viewMap.entry( "foo" );
-    assert( !foo.isNull() );
-    const int zoomFactor = foo.parseConfigItemShort( "ZoomFactor" );
-    assert( zoomFactor == 100 );
-    KoOasisSettings::Items secondView = viewMap.entry( "foobar" );
-    assert( secondView.isNull() );
-    kDebug() <<"testNamedMap OK";
+    KoOasisSettings::Items viewSettings = settings.itemSet("view-settings");
+    assert(!viewSettings.isNull());
+    KoOasisSettings::NamedMap viewMap = viewSettings.namedMap("NamedMap");
+    assert(!viewMap.isNull());
+    KoOasisSettings::Items foo = viewMap.entry("foo");
+    assert(!foo.isNull());
+    const int zoomFactor = foo.parseConfigItemShort("ZoomFactor");
+    assert(zoomFactor == 100);
+    KoOasisSettings::Items secondView = viewMap.entry("foobar");
+    assert(secondView.isNull());
+    kDebug() << "testNamedMap OK";
 }
 
-int main( int, char** ) {
+int main(int, char**)
+{
 
     const QString xml = "\
-<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
-<office:document-settings xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" xmlns:config=\"urn:oasis:names:tc:opendocument:xmlns:config:1.0\"> \
- <office:settings> \
-  <config:config-item-set config:name=\"view-settings\"> \
-    <config:config-item config:name=\"unit\" config:type=\"string\">mm</config:config-item> \
-    <config:config-item-map-indexed config:name=\"Views\"> \
-      <config:config-item-map-entry> \
-        <config:config-item config:name=\"ZoomFactor\" config:type=\"short\">100</config:config-item> \
-      </config:config-item-map-entry> \
-    </config:config-item-map-indexed> \
-    <config:config-item-map-named config:name=\"NamedMap\"> \
-      <config:config-item-map-entry config:name=\"foo\"> \
-        <config:config-item config:name=\"ZoomFactor\" config:type=\"int\">100</config:config-item> \
-      </config:config-item-map-entry> \
-    </config:config-item-map-named> \
-  </config:config-item-set> \
- </office:settings> \
-</office:document-settings> \
-";
+                        <?xml version=\"1.0\" encoding=\"UTF-8\"?> \
+                        <office:document-settings xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" xmlns:config=\"urn:oasis:names:tc:opendocument:xmlns:config:1.0\"> \
+                        <office:settings> \
+                        <config:config-item-set config:name=\"view-settings\"> \
+                        <config:config-item config:name=\"unit\" config:type=\"string\">mm</config:config-item> \
+                        <config:config-item-map-indexed config:name=\"Views\"> \
+                        <config:config-item-map-entry> \
+                        <config:config-item config:name=\"ZoomFactor\" config:type=\"short\">100</config:config-item> \
+                        </config:config-item-map-entry> \
+                        </config:config-item-map-indexed> \
+                        <config:config-item-map-named config:name=\"NamedMap\"> \
+                        <config:config-item-map-entry config:name=\"foo\"> \
+                        <config:config-item config:name=\"ZoomFactor\" config:type=\"int\">100</config:config-item> \
+                        </config:config-item-map-entry> \
+                        </config:config-item-map-named> \
+                        </config:config-item-set> \
+                        </office:settings> \
+                        </office:document-settings> \
+                        ";
 
     KoXmlDocument doc;
     bool ok = doc.setContent( xml, true /* namespace processing */ );

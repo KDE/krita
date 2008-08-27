@@ -51,22 +51,23 @@
  *
  * @author David Faure <faure@kde.org>
  */
-namespace KoDom {
+namespace KoDom
+{
 
-    /**
-     * A namespace-aware version of QDomNode::namedItem(),
-     * which also takes care of casting to a QDomElement.
-     * Use this when a domelement is known to have only *one* child element
-     * with a given tagname.
-     *
-     * Note: do *NOT* use getElementsByTagNameNS, it's recursive!
-     */
-    KOODF_EXPORT KoXmlElement namedItemNS( const KoXmlNode& node, const char* nsURI, const char* localName );
+/**
+ * A namespace-aware version of QDomNode::namedItem(),
+ * which also takes care of casting to a QDomElement.
+ * Use this when a domelement is known to have only *one* child element
+ * with a given tagname.
+ *
+ * Note: do *NOT* use getElementsByTagNameNS, it's recursive!
+ */
+KOODF_EXPORT KoXmlElement namedItemNS(const KoXmlNode& node, const char* nsURI, const char* localName);
 
 }
 #if 0
 #define forEachElement( elem, parent ) \
-      for ( QDomNode _node = parent.firstChild(); !_node.isNull(); _node = _node.nextSibling() ) \
+    for ( QDomNode _node = parent.firstChild(); !_node.isNull(); _node = _node.nextSibling() ) \
         if ( !( elem = _node.toElement() ).isNull() )
 #endif
 #endif /* KODOM_H */

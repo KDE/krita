@@ -39,14 +39,14 @@ class KOODF_EXPORT KoOdfReadStore
 {
 public:
     /// @param store recontents the property of the caller
-    explicit KoOdfReadStore( KoStore* store );
+    explicit KoOdfReadStore(KoStore* store);
 
     ~KoOdfReadStore();
 
     /**
      * setup the XML reader, so that we don't have to duplicate the code.
      */
-    static void setupXmlReader( QXmlSimpleReader& reader, bool namespaceProcessing = false );
+    static void setupXmlReader(QXmlSimpleReader& reader, bool namespaceProcessing = false);
 
     /**
      * Get the store
@@ -95,23 +95,23 @@ public:
      * @return true if loading and parsing was successful, false otherwise. In case of an error
      * the errorMessage is updated accordingly.
      */
-    bool loadAndParse( QString & errorMessage );
+    bool loadAndParse(QString & errorMessage);
 
-    /** 
+    /**
      * Load a file from an odf store
      */
-    bool loadAndParse( const QString& fileName, KoXmlDocument& doc, QString& errorMessage );
+    bool loadAndParse(const QString& fileName, KoXmlDocument& doc, QString& errorMessage);
 
-    /** 
+    /**
      * Load a file and parse from a QIODevice
      * filename argument is just used for debug message
      */
-    static bool loadAndParse( QIODevice* fileDevice, KoXmlDocument& doc, QString& errorMessage, const QString& fileName );
+    static bool loadAndParse(QIODevice* fileDevice, KoXmlDocument& doc, QString& errorMessage, const QString& fileName);
 
     /**
      * Get mimetype from full path, using the manifest
      */
-    static QString mimeForPath( const KoXmlDocument& doc, const QString& fullPath );
+    static QString mimeForPath(const KoXmlDocument& doc, const QString& fullPath);
 
 private:
     struct Private;

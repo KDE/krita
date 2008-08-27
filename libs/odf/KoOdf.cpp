@@ -32,17 +32,17 @@ KoOdf::DocumentData KoOdf::sm_documentData[] = {
 //"application/vnd.oasis.opendocument.text-master"
 //"application/vnd.oasis.opendocument.text-web"
 
-const char * KoOdf::mimeType( DocumentType documentType )
+const char * KoOdf::mimeType(DocumentType documentType)
 {
     return sm_documentData[documentType].mimeType;
 }
 
-const char * KoOdf::templateMimeType( DocumentType documentType )
+const char * KoOdf::templateMimeType(DocumentType documentType)
 {
     return sm_documentData[documentType].templateMimeType;
 }
 
-const char * KoOdf::bodyContentElement( DocumentType documentType, bool withNamespace )
+const char * KoOdf::bodyContentElement(DocumentType documentType, bool withNamespace)
 {
     return withNamespace ? sm_documentData[documentType].bodyContentElement : sm_documentData[documentType].bodyContentElement + 7;
 }

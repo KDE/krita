@@ -23,26 +23,27 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-void testMimeForPath( KoXmlDocument& doc )
+void testMimeForPath(KoXmlDocument& doc)
 {
-    QString mime = KoOdfReadStore::mimeForPath( doc, "Object 1" );
+    QString mime = KoOdfReadStore::mimeForPath(doc, "Object 1");
     kDebug() << mime;
-    assert( !mime.isNull() );
-    assert( !mime.isEmpty() );
-    assert( mime == "application/vnd.oasis.opendocument.text" );
-    kDebug() <<"testMimeForPath OK";
+    assert(!mime.isNull());
+    assert(!mime.isEmpty());
+    assert(mime == "application/vnd.oasis.opendocument.text");
+    kDebug() << "testMimeForPath OK";
 }
 
-int main( int, char** ) {
+int main(int, char**)
+{
 
     const Q3CString xml = "\
-<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\
-<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\">\n\
- <manifest:file-entry manifest:media-type=\"application/vnd.oasis.opendocument.text\" manifest:full-path=\"/\"/>\n\
- <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"content.xml\"/>\n\
- <manifest:file-entry manifest:media-type=\"application/vnd.oasis.opendocument.text\" manifest:full-path=\"Object 1\"/>\n\
-</manifest:manifest> \
-";
+                          <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\
+                          <manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\">\n\
+                          <manifest:file-entry manifest:media-type=\"application/vnd.oasis.opendocument.text\" manifest:full-path=\"/\"/>\n\
+                          <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"content.xml\"/>\n\
+                          <manifest:file-entry manifest:media-type=\"application/vnd.oasis.opendocument.text\" manifest:full-path=\"Object 1\"/>\n\
+                          </manifest:manifest> \
+                          ";
 
     KoXmlDocument doc;
     QString errorMsg;
@@ -50,8 +51,8 @@ int main( int, char** ) {
     bool ok = doc.setContent( xml, true /* namespace processing */, &errorMsg, &errorLine, &errorColumn );
     if ( !ok ) {
         kError() << "Parsing error! Aborting!" << endl
-            << " In line: " << errorLine << ", column: " << errorColumn << endl
-            << " Error message: " << errorMsg << endl;
+        << " In line: " << errorLine << ", column: " << errorColumn << endl
+        << " Error message: " << errorMsg << endl;
         return 1;
     }
 

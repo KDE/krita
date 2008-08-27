@@ -50,8 +50,7 @@ public:
     };
     /// Prefix and suffix are always included into formatStr. Having them as separate fields simply
     /// allows to extract them from formatStr, to display them in separate widgets.
-    struct NumericStyleFormat
-    {
+    struct NumericStyleFormat {
         QString formatStr;
         QString prefix;
         QString suffix;
@@ -60,31 +59,31 @@ public:
         QString currencySymbol;
     };
 
-    static QPair<QString, NumericStyleFormat> loadOdfNumberStyle( const KoXmlElement& parent );
+    static QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement& parent);
 
-    static QString saveOdfDateStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat,
-                                       const QString &_prefix = QString() , const QString &_suffix= QString() );
-    static QString saveOdfTimeStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat,
-                                       const QString &_prefix = QString() , const QString &_suffix= QString() );
-    static QString saveOdfFractionStyle( KoGenStyles &mainStyles, const QString & _format,
-                                           const QString &_prefix = QString() , const QString &_suffix= QString() );
-    static QString saveOdfScientificStyle( KoGenStyles &mainStyles, const QString & _format,
-                                             const QString &_prefix = QString() , const QString &_suffix= QString() );
-    static QString saveOdfNumberStyle( KoGenStyles &mainStyles, const QString & _format,
-                                         const QString &_prefix = QString() , const QString &_suffix= QString() );
-    static QString saveOdfPercentageStyle( KoGenStyles &mainStyles, const QString & _format,
-                                             const QString &_prefix = QString() , const QString &_suffix= QString() );
-    static QString saveOdfCurrencyStyle( KoGenStyles &mainStyles, const QString & _format, const QString &symbol,
-                                           const QString &_prefix = QString() , const QString &_suffix= QString() );
-    static QString saveOdfTextStyle( KoGenStyles &mainStyles, const QString & _format,
-                                       const QString &_prefix = QString() , const QString &_suffix= QString() );
+    static QString saveOdfDateStyle(KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat,
+                                    const QString &_prefix = QString() , const QString &_suffix = QString());
+    static QString saveOdfTimeStyle(KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat,
+                                    const QString &_prefix = QString() , const QString &_suffix = QString());
+    static QString saveOdfFractionStyle(KoGenStyles &mainStyles, const QString & _format,
+                                        const QString &_prefix = QString() , const QString &_suffix = QString());
+    static QString saveOdfScientificStyle(KoGenStyles &mainStyles, const QString & _format,
+                                          const QString &_prefix = QString() , const QString &_suffix = QString());
+    static QString saveOdfNumberStyle(KoGenStyles &mainStyles, const QString & _format,
+                                      const QString &_prefix = QString() , const QString &_suffix = QString());
+    static QString saveOdfPercentageStyle(KoGenStyles &mainStyles, const QString & _format,
+                                          const QString &_prefix = QString() , const QString &_suffix = QString());
+    static QString saveOdfCurrencyStyle(KoGenStyles &mainStyles, const QString & _format, const QString &symbol,
+                                        const QString &_prefix = QString() , const QString &_suffix = QString());
+    static QString saveOdfTextStyle(KoGenStyles &mainStyles, const QString & _format,
+                                    const QString &_prefix = QString() , const QString &_suffix = QString());
 
 private:
-    static bool saveOdfTimeFormat( KoXmlWriter &elementWriter, QString & format, QString & text, bool &antislash );
-    static void parseOdfDateKlocale(KoXmlWriter &elementWriter, QString & format, QString & text );
-    static bool saveOdfKlocaleTimeFormat( KoXmlWriter &elementWriter, QString & format, QString & text );
-    static void parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString & format, QString & text );
-    static void addKofficeNumericStyleExtension( KoXmlWriter & elementWriter, const QString &_suffix, const QString &_prefix );
+    static bool saveOdfTimeFormat(KoXmlWriter &elementWriter, QString & format, QString & text, bool &antislash);
+    static void parseOdfDateKlocale(KoXmlWriter &elementWriter, QString & format, QString & text);
+    static bool saveOdfKlocaleTimeFormat(KoXmlWriter &elementWriter, QString & format, QString & text);
+    static void parseOdfTimeKlocale(KoXmlWriter &elementWriter, QString & format, QString & text);
+    static void addKofficeNumericStyleExtension(KoXmlWriter & elementWriter, const QString &_suffix, const QString &_prefix);
 };
 
 #endif // KOODFNUMBERSTYLES_H

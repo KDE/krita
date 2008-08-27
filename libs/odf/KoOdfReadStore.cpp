@@ -28,11 +28,9 @@
 #include "KoOdfStylesReader.h"
 #include "KoXmlNS.h"
 
-struct KoOdfReadStore::Private
-{
-    Private( KoStore * store )
-    : store( store )
-    {}
+struct KoOdfReadStore::Private {
+    Private(KoStore * store)
+            : store(store) {}
 
     KoStore * store;
     KoOdfStylesReader stylesReader;
@@ -42,8 +40,8 @@ struct KoOdfReadStore::Private
     KoXmlDocument settingsDoc;
 };
 
-KoOdfReadStore::KoOdfReadStore( KoStore* store )
-: d( new Private( store ) )
+KoOdfReadStore::KoOdfReadStore(KoStore* store)
+        : d(new Private(store))
 {
 }
 
@@ -52,19 +50,16 @@ KoOdfReadStore::~KoOdfReadStore()
     delete d;
 }
 
-void KoOdfReadStore::setupXmlReader( QXmlSimpleReader& reader, bool namespaceProcessing )
+void KoOdfReadStore::setupXmlReader(QXmlSimpleReader& reader, bool namespaceProcessing)
 {
-    if ( namespaceProcessing )
-    {
-        reader.setFeature( "http://xml.org/sax/features/namespaces", true );
-        reader.setFeature( "http://xml.org/sax/features/namespace-prefixes", false );
+    if (namespaceProcessing) {
+        reader.setFeature("http://xml.org/sax/features/namespaces", true);
+        reader.setFeature("http://xml.org/sax/features/namespace-prefixes", false);
+    } else {
+        reader.setFeature("http://xml.org/sax/features/namespaces", false);
+        reader.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
     }
-    else
-    {
-        reader.setFeature( "http://xml.org/sax/features/namespaces", false );
-        reader.setFeature( "http://xml.org/sax/features/namespace-prefixes", true );
-    }
-    reader.setFeature( "http://trolltech.com/xml/features/report-whitespace-only-CharData", true );
+    reader.setFeature("http://trolltech.com/xml/features/report-whitespace-only-CharData", true);
 }
 
 KoStore * KoOdfReadStore::store() const
@@ -87,17 +82,17 @@ const KoXmlDocument & KoOdfReadStore::settingsDoc() const
     return d->settingsDoc;
 }
 
-bool KoOdfReadStore::loadAndParse( QString & errorMessage )
+bool KoOdfReadStore::loadAndParse(QString & errorMessage)
 {
-    if ( !loadAndParse( "content.xml", d->contentDoc, errorMessage ) ) {
+    if (!loadAndParse("content.xml", d->contentDoc, errorMessage)) {
         return false;
     }
 
-    loadAndParse( "styles.xml", d->stylesDoc, errorMessage );
+    loadAndParse("styles.xml", d->stylesDoc, errorMessage);
     // Load styles from style.xml
-    d->stylesReader.createStyleMap( d->stylesDoc, true );
+    d->stylesReader.createStyleMap(d->stylesDoc, true);
     // Also load styles from content.xml
-    d->stylesReader.createStyleMap( d->contentDoc, false );
+    d->stylesReader.createStyleMap(d->contentDoc, false);
 
     // TODO post 1.4, pass manifestDoc to the apps so that they don't have to do it themselves
     // (when calling KoDocumentChild::loadOasisDocument)
@@ -106,34 +101,33 @@ bool KoOdfReadStore::loadAndParse( QString & errorMessage )
     //if ( !oasisStore.loadAndParse( "tar:/META-INF/manifest.xml", manifestDoc, d->lastErrorMessage ) )
     //    return false;
 
-    if ( d->store->hasFile( "settings.xml" ) ) {
-        loadAndParse( "settings.xml", d->settingsDoc, errorMessage );
+    if (d->store->hasFile("settings.xml")) {
+        loadAndParse("settings.xml", d->settingsDoc, errorMessage);
     }
     return true;
 }
 
-bool KoOdfReadStore::loadAndParse( const QString& fileName, KoXmlDocument& doc, QString& errorMessage )
+bool KoOdfReadStore::loadAndParse(const QString& fileName, KoXmlDocument& doc, QString& errorMessage)
 {
     //kDebug(30003) <<"loadAndParse: Trying to open" << fileName;
-    if ( !d->store ) {
-        kWarning( 30003 ) << "No store backend";
-        errorMessage = i18n( "No store backend" );
+    if (!d->store) {
+        kWarning(30003) << "No store backend";
+        errorMessage = i18n("No store backend");
         return false;
     }
 
-    if ( !d->store->open(fileName) )
-    {
+    if (!d->store->open(fileName)) {
         kWarning(30003) << "Entry " << fileName << " not found!";
-        errorMessage = i18n( "Could not find %1", fileName );
+        errorMessage = i18n("Could not find %1", fileName);
         return false;
     }
 
-    bool ok = loadAndParse( d->store->device(), doc, errorMessage, fileName );
+    bool ok = loadAndParse(d->store->device(), doc, errorMessage, fileName);
     d->store->close();
     return ok;
 }
 
-bool KoOdfReadStore::loadAndParse( QIODevice* fileDevice, KoXmlDocument& doc, QString& errorMessage, const QString& fileName )
+bool KoOdfReadStore::loadAndParse(QIODevice* fileDevice, KoXmlDocument& doc, QString& errorMessage, const QString& fileName)
 {
     // Error variables for QDomDocument::setContent
     QString errorMsg;
@@ -143,37 +137,32 @@ bool KoOdfReadStore::loadAndParse( QIODevice* fileDevice, KoXmlDocument& doc, QS
     // we activate the "report-whitespace-only-CharData" feature.
     // Unfortunately this leads to lots of whitespace text nodes in between real
     // elements in the rest of the document, watch out for that.
-    QXmlInputSource source( fileDevice );
+    QXmlInputSource source(fileDevice);
     // Copied from QDomDocumentPrivate::setContent, to change the whitespace thing
     QXmlSimpleReader reader;
-    setupXmlReader( reader, true /*namespaceProcessing*/ );
+    setupXmlReader(reader, true /*namespaceProcessing*/);
 
-    bool ok = doc.setContent( &source, &reader, &errorMsg, &errorLine, &errorColumn );
-    if ( !ok )
-    {
+    bool ok = doc.setContent(&source, &reader, &errorMsg, &errorLine, &errorColumn);
+    if (!ok) {
         kError(30003) << "Parsing error in " << fileName << "! Aborting!" << endl
-                       << " In line: " << errorLine << ", column: " << errorColumn << endl
-                       << " Error message: " << errorMsg << endl;
-        errorMessage = i18n( "Parsing error in the main document at line %1, column %2\nError message: %3"
-                       ,errorLine ,errorColumn ,i18n ( "QXml", errorMsg ) );
-    }
-    else
-    {
-        kDebug(30003) <<"File" << fileName <<" loaded and parsed";
+        << " In line: " << errorLine << ", column: " << errorColumn << endl
+        << " Error message: " << errorMsg << endl;
+        errorMessage = i18n("Parsing error in the main document at line %1, column %2\nError message: %3"
+                            , errorLine , errorColumn , i18n("QXml", errorMsg));
+    } else {
+        kDebug(30003) << "File" << fileName << " loaded and parsed";
     }
     return ok;
 }
 
-QString KoOdfReadStore::mimeForPath( const KoXmlDocument& doc, const QString& fullPath )
+QString KoOdfReadStore::mimeForPath(const KoXmlDocument& doc, const QString& fullPath)
 {
     KoXmlElement docElem = doc.documentElement();
     KoXmlElement elem;
-    forEachElement( elem, docElem )
-    {
-        if ( elem.localName() == "file-entry" && elem.namespaceURI() == KoXmlNS::manifest )
-        {
-            if ( elem.attributeNS( KoXmlNS::manifest, "full-path", QString() ) == fullPath )
-                return elem.attributeNS( KoXmlNS::manifest, "media-type", QString() );
+    forEachElement(elem, docElem) {
+        if (elem.localName() == "file-entry" && elem.namespaceURI() == KoXmlNS::manifest) {
+            if (elem.attributeNS(KoXmlNS::manifest, "full-path", QString()) == fullPath)
+                return elem.attributeNS(KoXmlNS::manifest, "media-type", QString());
         }
     }
     return QString();

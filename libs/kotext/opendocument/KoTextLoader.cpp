@@ -89,6 +89,9 @@ class KoTextLoader::Private
 
         KoStyleManager *styleManager;
 
+        int loadSpanLevel;
+        int loadSpanInitialPos;
+
         explicit Private( KoShapeLoadingContext & context )
         : context( context )
         , textSharedData( 0 )
@@ -103,7 +106,9 @@ class KoTextLoader::Private
         , currentListStyle ( 0 )
         , currentListLevel( 1 )
         , isList ( false )
-        , styleManager(0)
+        , styleManager(0),
+        loadSpanLevel(0),
+        loadSpanInitialPos(0)
         {
             dt.start();
         }
@@ -319,15 +324,7 @@ void KoTextLoader::loadParagraph( const KoXmlElement& element, QTextCursor& curs
     QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
 
     bool stripLeadingSpace = true;
-    int pos = cursor.position();
     loadSpan( element, cursor, &stripLeadingSpace );
-    if (cursor.position() > pos) { // ok something was loaded
-        QTextCursor tempCursor(cursor);
-        tempCursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, 1); // select last char loaded
-        if (tempCursor.selectedText() == " " && stripLeadingSpace) {            // if it's a collapsed blankspace
-            tempCursor.removeSelectedText();                                    // remove it (ODF1.1 §5.1.1)
-        }
-    }
     cursor.setCharFormat( cf ); // restore the cursor char format
 }
 
@@ -372,15 +369,7 @@ void KoTextLoader::loadHeading( const KoXmlElement& element, QTextCursor& cursor
     QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
 
     bool stripLeadingSpace = true;
-    int pos = cursor.position();
-    loadSpan( element, cursor, &stripLeadingSpace );
-    if (cursor.position() > pos) { // ok something was loaded
-        QTextCursor tempCursor(cursor);
-        tempCursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, 1); // select last char loaded
-        if (tempCursor.selectedText() == " " && stripLeadingSpace) {            // if it's a collapsed blankspace
-            tempCursor.removeSelectedText();                                    // remove it
-        }
-    }
+    loadSpan(element, cursor, &stripLeadingSpace);
     cursor.setCharFormat( cf ); // restore the cursor char format
 }
 
@@ -519,9 +508,12 @@ static QString normalizeWhitespace( const QString& in, bool leadingSpace )
     return text;
 }
 
-void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, bool* stripLeadingSpace )
+void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, bool *stripLeadingSpace )
 {
-    Q_ASSERT( stripLeadingSpace );
+    Q_ASSERT(stripLeadingSpace);
+    if (d->loadSpanLevel++ == 0)
+        d->loadSpanInitialPos = cursor.position();
+
     for ( KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling() )
     {
         KoXmlElement ts = node.toElement();
@@ -532,17 +524,26 @@ void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, b
         if ( node.isText() ) {
             QString text = node.toText().data();
             #ifdef KOOPENDOCUMENTLOADER_DEBUG
-                kDebug(32500) <<"  <text> localName=" << localName <<" parent.localName="<<element.localName()<<" text=" << text;
+                kDebug(32500) <<"  <text> localName=" << localName <<" parent.localName="<<element.localName()<<" text=" << text
+                        << text.length();
             #endif
-            text = normalizeWhitespace( text.replace('\n', QChar::LineSeparator), *stripLeadingSpace );
+            text = normalizeWhitespace( text, *stripLeadingSpace );
 
             if ( !text.isEmpty() ) {
                 // if present text ends with a space,
                 // we can remove the leading space in the next text
                 *stripLeadingSpace = text[text.length() - 1].isSpace();
-            }
+                cursor.insertText( text );
 
-            cursor.insertText( text );
+                if (d->loadSpanLevel == 1 && node.nextSibling().isNull()
+                    && cursor.position() > d->loadSpanInitialPos) {
+                    QTextCursor tempCursor(cursor);
+                    tempCursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, 1); // select last char loaded
+                    if (tempCursor.selectedText() == " " && *stripLeadingSpace) {            // if it's a collapsed blankspace
+                        tempCursor.removeSelectedText();                                    // remove it
+                    }
+                }
+            }
         }
         else if ( isTextNS && localName == "span" ) // text:span
         {
@@ -683,6 +684,7 @@ void KoTextLoader::loadSpan( const KoXmlElement& element, QTextCursor& cursor, b
 #endif
         }
     }
+    --d->loadSpanLevel;
 }
 
 void KoTextLoader::loadTable( const KoXmlElement& tableElem, QTextCursor& cursor )

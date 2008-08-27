@@ -102,7 +102,7 @@ private:
     /**
     * Load the span from the \p element into the \p cursor .
     */
-    void loadSpan( const KoXmlElement& element, QTextCursor& cursor, bool* stripLeadingSpace );
+    void loadSpan( const KoXmlElement& element, QTextCursor& cursor, bool *leadingSpace );
 
     /**
      * Load the table from the \p element into the \p cursor.

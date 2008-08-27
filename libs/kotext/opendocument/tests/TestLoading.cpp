@@ -581,12 +581,14 @@ void TestLoading::cleanup()
 void TestLoading::addData()
 {
     QTest::newRow("bulletedList") << "TextContents/Lists/bulletedList";
-    QTest::newRow("numberedList") << "TextContents/Lists/numberedList";
     QTest::newRow("embeddedBulletedList") << "TextContents/Lists/embeddedBulletedList";
+    QTest::newRow("numberedList") << "TextContents/Lists/numberedList";
 
     QTest::newRow("boldAndItalic") << "TextContents/TextFormatting/boldAndItalic";
+
     QTest::newRow("attributedText") << "TextContents/Paragraph/attributedText";
     QTest::newRow("basicContents") << "TextContents/Paragraph/basicContents";
+    QTest::newRow("whitespace") << "TextContents/Paragraph/whitespace";
 
     QTest::newRow("fontSize1") << "TextContents/TextFormatting/fontSize";
 

@@ -56,7 +56,7 @@ public:
      *
      * @param findDirection The find direction helper that can be used for highlighting
      */
-    virtual bool foundMatch( QTextCursor & cursor, FindDirection * findDirection ) = 0;
+    virtual bool foundMatch(QTextCursor & cursor, FindDirection * findDirection) = 0;
 };
 
 #endif /* KOFINDSTRATEGYBASE_H */

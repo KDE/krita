@@ -27,7 +27,8 @@ class KoInlineTextObjectManager;
 /**
  * helper class
  */
-class InsertTextReferenceAction : public InsertVariableActionBase {
+class InsertTextReferenceAction : public InsertVariableActionBase
+{
 public:
     InsertTextReferenceAction(KoCanvasBase *canvas, const KoInlineTextObjectManager *manager);
 

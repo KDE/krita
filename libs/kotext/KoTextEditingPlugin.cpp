@@ -32,15 +32,17 @@ public:
 };
 
 KoTextEditingPlugin::KoTextEditingPlugin()
-    : d(new Private())
+        : d(new Private())
 {
 }
 
-KoTextEditingPlugin::~KoTextEditingPlugin() {
+KoTextEditingPlugin::~KoTextEditingPlugin()
+{
     delete d;
 }
 
-void KoTextEditingPlugin::selectWord(QTextCursor &cursor, int cursorPosition) const {
+void KoTextEditingPlugin::selectWord(QTextCursor &cursor, int cursorPosition) const
+{
     cursor.setPosition(cursorPosition);
     QTextBlock block = cursor.block();
     cursor.setPosition(block.position());
@@ -49,15 +51,14 @@ void KoTextEditingPlugin::selectWord(QTextCursor &cursor, int cursorPosition) co
     int pos = 0;
     bool space = false;
     QString::Iterator iter = string.begin();
-    while(iter != string.end()) {
-        if(iter->isSpace()) {
-            if(space) ;// double spaces belong to the previous word
-            else if(pos < cursorPosition)
+    while (iter != string.end()) {
+        if (iter->isSpace()) {
+            if (space) ;// double spaces belong to the previous word
+            else if (pos < cursorPosition)
                 cursor.setPosition(pos + block.position() + 1); // +1 because we don't want to set it on the space itself
             else
                 space = true;
-        }
-        else if(space)
+        } else if (space)
             break;
         pos++;
         iter++;
@@ -65,7 +66,8 @@ void KoTextEditingPlugin::selectWord(QTextCursor &cursor, int cursorPosition) co
     cursor.setPosition(pos + block.position(), QTextCursor::KeepAnchor);
 }
 
-QString KoTextEditingPlugin::paragraph(QTextDocument *document, int cursorPosition) const {
+QString KoTextEditingPlugin::paragraph(QTextDocument *document, int cursorPosition) const
+{
     QTextBlock block = document->findBlock(cursorPosition);
     return block.text();
 }
@@ -75,28 +77,29 @@ void KoTextEditingPlugin::addAction(const QString &name, QAction *action)
     d->actionCollection.insert(name, action);
 }
 
-void KoTextEditingPlugin::checkSection(QTextDocument *document, int startPosition, int endPosition) {
+void KoTextEditingPlugin::checkSection(QTextDocument *document, int startPosition, int endPosition)
+{
     QTextBlock block = document->findBlock(startPosition);
     int pos = block.position();
-    while(true) {
-        if(!block.contains(startPosition-1) && !block.contains(endPosition+1)) // only parags that are completely in
+    while (true) {
+        if (!block.contains(startPosition - 1) && !block.contains(endPosition + 1)) // only parags that are completely in
             finishedParagraph(document, block.position());
 
         QString text = block.text();
         bool space = true;
         QString::Iterator iter = text.begin();
-        while(pos < endPosition && iter != text.end()) {
+        while (pos < endPosition && iter != text.end()) {
             bool isSpace = iter->isSpace();
-            if(pos >= startPosition && space && !isSpace) // for each word, call finishedWord
+            if (pos >= startPosition && space && !isSpace) // for each word, call finishedWord
                 finishedWord(document, pos);
-            else if(!isSpace && pos == startPosition)
+            else if (!isSpace && pos == startPosition)
                 finishedWord(document, startPosition);
             space = isSpace;
             pos++;
             iter++;
         }
 
-        if(! (block.isValid() && block.position() + block.length() < endPosition))
+        if (!(block.isValid() && block.position() + block.length() < endPosition))
             break;
         block = block.next();
     }

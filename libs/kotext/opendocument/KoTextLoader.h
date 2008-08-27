@@ -54,7 +54,7 @@ public:
     *
     * @param context The context the KoTextLoader is called in
     */
-    explicit KoTextLoader( KoShapeLoadingContext & context );
+    explicit KoTextLoader(KoShapeLoadingContext & context);
 
     /**
     * Destructor.
@@ -67,7 +67,7 @@ public:
     * This method got called e.g. at the \a KoTextShapeData::loadOdf() method if a TextShape
     * instance likes to load an ODF element.
     */
-    void loadBody( const KoXmlElement& element, QTextCursor& cursor );
+    void loadBody(const KoXmlElement& element, QTextCursor& cursor);
 
 Q_SIGNALS:
 
@@ -82,39 +82,39 @@ private:
     /**
     * Load the paragraph from the \p element into the \p cursor .
     */
-    void loadParagraph( const KoXmlElement& element, QTextCursor& cursor );
+    void loadParagraph(const KoXmlElement& element, QTextCursor& cursor);
 
     /**
     * Load the heading from the \p element into the \p cursor .
     */
-    void loadHeading( const KoXmlElement& element, QTextCursor& cursor );
+    void loadHeading(const KoXmlElement& element, QTextCursor& cursor);
 
     /**
     * Load the list from the \p element into the \p cursor .
     */
-    void loadList( const KoXmlElement& element, QTextCursor& cursor );
+    void loadList(const KoXmlElement& element, QTextCursor& cursor);
 
     /**
     * Load the section from the \p element into the \p cursor .
     */
-    void loadSection( const KoXmlElement& element, QTextCursor& cursor );
+    void loadSection(const KoXmlElement& element, QTextCursor& cursor);
 
     /**
     * Load the span from the \p element into the \p cursor .
     */
-    void loadSpan( const KoXmlElement& element, QTextCursor& cursor, bool *leadingSpace );
+    void loadSpan(const KoXmlElement& element, QTextCursor& cursor, bool *leadingSpace);
 
     /**
      * Load the table from the \p element into the \p cursor.
      *
      * The table and its contents are placed in a new shape.
      */
-    void loadTable( const KoXmlElement& element, QTextCursor& cursor );
+    void loadTable(const KoXmlElement& element, QTextCursor& cursor);
 
     /**
      * Load a note \p element into the \p cursor.
      */
-    void loadNote( const KoXmlElement& element, QTextCursor& cursor );
+    void loadNote(const KoXmlElement& element, QTextCursor& cursor);
 
     /**
     * Load the frame element \p element into the \p cursor .
@@ -126,7 +126,7 @@ private:
     * frameloader.loadFrame(context, parent, cursor);
     * \endcode
     */
-    void loadFrame( const KoXmlElement& element, QTextCursor& cursor );
+    void loadFrame(const KoXmlElement& element, QTextCursor& cursor);
 
     /**
     * This is called in loadBody before reading the body starts.

@@ -27,12 +27,12 @@
 /// \internal d-pointer class.
 class KoTextLoadingContext::Private
 {
-    public:
-        KoTextLoader* loader;
+public:
+    KoTextLoader* loader;
 };
 
-KoTextLoadingContext::KoTextLoadingContext( KoTextLoader* loader, KoOdfStylesReader& stylesReader, KoStore* store )
-    : KoOdfLoadingContext( stylesReader, store ), d(new Private())
+KoTextLoadingContext::KoTextLoadingContext(KoTextLoader* loader, KoOdfStylesReader& stylesReader, KoStore* store)
+        : KoOdfLoadingContext(stylesReader, store), d(new Private())
 {
     d->loader = loader;
 }
@@ -48,55 +48,53 @@ KoTextLoader* KoTextLoadingContext::loader() const
 }
 
 #if 0 //1.6:
-static KoXmlElement findListLevelStyle( const KoXmlElement& fullListStyle, int level )
+static KoXmlElement findListLevelStyle(const KoXmlElement& fullListStyle, int level)
 {
-    for ( KoXmlNode n = fullListStyle.firstChild(); !n.isNull(); n = n.nextSibling() )
-    {
-       const KoXmlElement listLevelItem = n.toElement();
-       if ( listLevelItem.attributeNS( KoXmlNS::text, "level", QString() ).toInt() == level )
-           return listLevelItem;
+    for (KoXmlNode n = fullListStyle.firstChild(); !n.isNull(); n = n.nextSibling()) {
+        const KoXmlElement listLevelItem = n.toElement();
+        if (listLevelItem.attributeNS(KoXmlNS::text, "level", QString()).toInt() == level)
+            return listLevelItem;
     }
     return KoXmlElement();
 }
 
-bool KoOasisContext::pushListLevelStyle( const QString& listStyleName, int level )
+bool KoOasisContext::pushListLevelStyle(const QString& listStyleName, int level)
 {
     KoXmlElement* fullListStyle = stylesReader().listStyles()[listStyleName];
-    if ( !fullListStyle ) {
+    if (!fullListStyle) {
         kWarning(32500) << "List style " << listStyleName << " not found!";
         return false;
-    }
-    else
-        return pushListLevelStyle( listStyleName, *fullListStyle, level );
+    } else
+        return pushListLevelStyle(listStyleName, *fullListStyle, level);
 }
 
-bool KoOasisContext::pushOutlineListLevelStyle( int level )
+bool KoOasisContext::pushOutlineListLevelStyle(int level)
 {
-    KoXmlElement outlineStyle = KoXml::namedItemNS( stylesReader().officeStyle(), KoXmlNS::text, "outline-style" );
-    return pushListLevelStyle( "<outline-style>", outlineStyle, level );
+    KoXmlElement outlineStyle = KoXml::namedItemNS(stylesReader().officeStyle(), KoXmlNS::text, "outline-style");
+    return pushListLevelStyle("<outline-style>", outlineStyle, level);
 }
 
-bool KoOasisContext::pushListLevelStyle( const QString& listStyleName, // for debug only
-                                         const KoXmlElement& fullListStyle, int level )
+bool KoOasisContext::pushListLevelStyle(const QString& listStyleName,  // for debug only
+                                        const KoXmlElement& fullListStyle, int level)
 {
     // Find applicable list-level-style for level
     int i = level;
     KoXmlElement listLevelStyle;
-    while ( i > 0 && listLevelStyle.isNull() ) {
-        listLevelStyle = findListLevelStyle( fullListStyle, i );
+    while (i > 0 && listLevelStyle.isNull()) {
+        listLevelStyle = findListLevelStyle(fullListStyle, i);
         --i;
     }
-    if ( listLevelStyle.isNull() ) {
+    if (listLevelStyle.isNull()) {
         kWarning(32500) << "List level style for level " << level << " in list style " << listStyleName << " not found!";
         return false;
     }
     //kDebug(32500) <<"Pushing list-level-style from list-style" << listStyleName <<" level" << level;
-    m_listStyleStack.push( listLevelStyle );
+    m_listStyleStack.push(listLevelStyle);
     return true;
 }
 
-void KoOasisContext::setCursorPosition( KoTextParag* cursorTextParagraph,
-                                        int cursorTextIndex )
+void KoOasisContext::setCursorPosition(KoTextParag* cursorTextParagraph,
+                                       int cursorTextIndex)
 {
     m_cursorTextParagraph = cursorTextParagraph;
     m_cursorTextIndex = cursorTextIndex;

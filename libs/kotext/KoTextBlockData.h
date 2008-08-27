@@ -29,7 +29,8 @@ class KoTextBlockBorderData;
  * This class is used to store properties for KoText layouting inside Qt QTextBlock
  * instances.
  */
-class KOTEXT_EXPORT KoTextBlockData : public QTextBlockUserData {
+class KOTEXT_EXPORT KoTextBlockData : public QTextBlockUserData
+{
 public:
     /**
      * Supplemental data to allow advanced tabs to be used for layout and painting.
@@ -104,11 +105,11 @@ public:
      * See ODF Spec 1.1, §14.1, Outline Numbering Level, but also other parts of the specification.
      */
     int outlineLevel() const;
-    
+
     /**
      * Change this block outline level
      */
-    void setOutlineLevel (int outline);
+    void setOutlineLevel(int outline);
 private:
     class Private;
     Private * const d;

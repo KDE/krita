@@ -21,16 +21,16 @@
 
 #include <KoProperties.h>
 
-class InlineObjectFactoryPrivate {
+class InlineObjectFactoryPrivate
+{
 public:
     InlineObjectFactoryPrivate(const QString &identifier)
-        : id(identifier)
-    {
+            : id(identifier) {
     }
 
     ~InlineObjectFactoryPrivate() {
         foreach(KoInlineObjectTemplate t, templates)
-            delete t.properties;
+        delete t.properties;
         templates.clear();
     }
 
@@ -40,24 +40,28 @@ public:
 };
 
 KoInlineObjectFactory::KoInlineObjectFactory(QObject *parent, const QString &id)
-    : QObject(parent)
-    , d( new InlineObjectFactoryPrivate(id) )
+        : QObject(parent)
+        , d(new InlineObjectFactoryPrivate(id))
 {
 }
 
-KoInlineObjectFactory::~KoInlineObjectFactory() {
+KoInlineObjectFactory::~KoInlineObjectFactory()
+{
     delete d;
 }
 
-const QString &KoInlineObjectFactory::id() const {
+const QString &KoInlineObjectFactory::id() const
+{
     return d->id;
 }
 
-const QList<KoInlineObjectTemplate> KoInlineObjectFactory::templates() const {
+const QList<KoInlineObjectTemplate> KoInlineObjectFactory::templates() const
+{
     return d->templates;
 }
 
-void KoInlineObjectFactory::addTemplate(const KoInlineObjectTemplate &params) {
+void KoInlineObjectFactory::addTemplate(const KoInlineObjectTemplate &params)
+{
     d->templates.append(params);
 }
 

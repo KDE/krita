@@ -30,12 +30,12 @@ class KoCanvasBase;
 class KOTEXT_EXPORT KoTextPaste : public KoOdfPaste
 {
 public:
-    KoTextPaste( KoTextShapeData * shapeData, QTextCursor & cursor, KoCanvasBase * canvas );
+    KoTextPaste(KoTextShapeData * shapeData, QTextCursor & cursor, KoCanvasBase * canvas);
     virtual ~KoTextPaste();
 
 protected:
-        /// reimplemented
-    virtual bool process( const KoXmlElement & body, KoOdfReadStore & odfStore );
+    /// reimplemented
+    virtual bool process(const KoXmlElement & body, KoOdfReadStore & odfStore);
 
     struct Private;
     Private * const d;

@@ -40,16 +40,17 @@ class QAction;
  * KoTextDocumentLayout for that specific textDocument, your inline text object will get painted
  * properly.
  */
-class KOTEXT_EXPORT KoInlineTextObjectManager : public QObject {
+class KOTEXT_EXPORT KoInlineTextObjectManager : public QObject
+{
     Q_OBJECT
 // TODO, when to delete the inlineObject s
 public:
-     /// Constructor
+    /// Constructor
     explicit KoInlineTextObjectManager(QObject *parent = 0);
 
     /**
      * Retrieve a formerly added inline object based on the format.
-     * @param format the textCharFormat 
+     * @param format the textCharFormat
      */
     KoInlineObject *inlineTextObject(const QTextCharFormat &format) const;
     /**
@@ -132,8 +133,8 @@ public:
     QList<KoTextLocator*> textLocators() const;
 
 public slots:
-    void documentInformationUpdated (const QString &info, const QString &data);
-    
+    void documentInformationUpdated(const QString &info, const QString &data);
+
 signals:
     /**
      * Emitted whenever a propery is set and it turns out to be changed.

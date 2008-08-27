@@ -69,7 +69,7 @@ public:
     * \param styles The styles used for loading.
     * \param store The storage backend we are reading from.
     */
-    explicit KoTextLoadingContext( KoTextLoader* loader, KoOdfStylesReader& stylesReader, KoStore* store );
+    explicit KoTextLoadingContext(KoTextLoader* loader, KoOdfStylesReader& stylesReader, KoStore* store);
 
     /**
     * Destructor.
@@ -82,30 +82,42 @@ public:
     KoTextLoader* loader() const;
 
 #if 0 //1.6:
-    KoVariableCollection& variableCollection() { return m_varColl; }
+    KoVariableCollection& variableCollection() {
+        return m_varColl;
+    }
 
     ///// List handling
 
-    KoListStyleStack& listStyleStack() { return m_listStyleStack; }
-    QString currentListStyleName() const { return m_currentListStyleName; }
-    void setCurrentListStyleName( const QString& s ) { m_currentListStyleName = s; }
+    KoListStyleStack& listStyleStack() {
+        return m_listStyleStack;
+    }
+    QString currentListStyleName() const {
+        return m_currentListStyleName;
+    }
+    void setCurrentListStyleName(const QString& s) {
+        m_currentListStyleName = s;
+    }
 
     /// Used for lists (numbered paragraphs)
     /// @return true on success (a list style was found and pushed)
-    bool pushListLevelStyle( const QString& listStyleName, int level );
+    bool pushListLevelStyle(const QString& listStyleName, int level);
     /// Used for outline levels
-    bool pushOutlineListLevelStyle( int level );
+    bool pushOutlineListLevelStyle(int level);
 
     /// Set cursor position (set by KoTextParag upon finding the processing instruction)
-    void setCursorPosition( KoTextParag* cursorTextParagraph,
-                            int cursorTextIndex );
+    void setCursorPosition(KoTextParag* cursorTextParagraph,
+                           int cursorTextIndex);
 
-    KoTextParag* cursorTextParagraph() const { return m_cursorTextParagraph; }
-    int cursorTextIndex() const { return m_cursorTextIndex; }
+    KoTextParag* cursorTextParagraph() const {
+        return m_cursorTextParagraph;
+    }
+    int cursorTextIndex() const {
+        return m_cursorTextIndex;
+    }
 
 private:
     /// @return true on success (a list style was found and pushed)
-    bool pushListLevelStyle( const QString& listStyleName, const KoXmlElement& fullListStyle, int level );
+    bool pushListLevelStyle(const QString& listStyleName, const KoXmlElement& fullListStyle, int level);
 
     KoListStyleStack m_listStyleStack;
     QString m_currentListStyleName;

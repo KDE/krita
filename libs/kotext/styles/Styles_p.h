@@ -24,7 +24,7 @@
 #include <QVariant>
 #include <QMap>
 
-class StylePrivate 
+class StylePrivate
 {
 public:
     StylePrivate();
@@ -40,10 +40,12 @@ public:
     void copyMissing(const QMap<int, QVariant> &other);
     void removeDuplicates(const StylePrivate *other);
     void removeDuplicates(const QMap<int, QVariant> &other);
-    void clearAll() { m_properties.clear(); }
+    void clearAll() {
+        m_properties.clear();
+    }
     QList<int> keys();
-    bool operator==( const StylePrivate &other ) const;
-    bool operator!=( const StylePrivate &other ) const;
+    bool operator==(const StylePrivate &other) const;
+    bool operator!=(const StylePrivate &other) const;
     bool isEmpty() const;
 
     void copy(const QMap<int, QVariant> &other);

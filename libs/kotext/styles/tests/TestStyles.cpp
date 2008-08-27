@@ -20,7 +20,8 @@
 #include <styles/KoParagraphStyle.h>
 #include <QDebug>
 
-void TestStyles::testStyleInheritance() {
+void TestStyles::testStyleInheritance()
+{
     KoParagraphStyle style1;
     style1.setTopMargin(10.0);
     QCOMPARE(style1.topMargin(), 10.0);
@@ -46,7 +47,8 @@ void TestStyles::testStyleInheritance() {
     QCOMPARE(style1.topMargin(), 12.0);
 }
 
-void TestStyles::testChangeParent() {
+void TestStyles::testChangeParent()
+{
     KoParagraphStyle style1;
     style1.setTopMargin(10);
 
@@ -78,7 +80,8 @@ void TestStyles::testChangeParent() {
     QCOMPARE(style3.topMargin(), 10.0);
 }
 
-void TestStyles::testTabsStorage() {
+void TestStyles::testTabsStorage()
+{
     KoParagraphStyle paragStyle;
 
     QList<KoText::Tab> tabs;

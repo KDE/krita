@@ -39,7 +39,8 @@ class KoGenStyle;
  * typically just one pargraph-style since that style can be reused on various
  * paragraphs.
  */
-class  KOTEXT_EXPORT KoListStyle {
+class  KOTEXT_EXPORT KoListStyle
+{
 public:
     /// This list is used to specify what kind of list-style to use
     enum Style {
@@ -89,13 +90,13 @@ public:
         AbjadMinor, ///< A lesser known version of the Abjad sequence.
         ArabicAlphabet
 
-         // TODO look at css 3 for things like hebrew counters
-         // TODO allow a bitmap 'bullet'
+        // TODO look at css 3 for things like hebrew counters
+        // TODO allow a bitmap 'bullet'
     };
 
     /// further properties
     enum Property {
-        ListItemPrefix = QTextFormat::UserProperty+1000, ///< The text to be printed before the listItem
+        ListItemPrefix = QTextFormat::UserProperty + 1000, ///< The text to be printed before the listItem
         ListItemSuffix, ///< The text to be printed after the listItem
         StartValue,     ///< First value to use
         Level,          ///< list nesting level, is 1 or higher, or zero when implied
@@ -190,7 +191,7 @@ public:
     /**
      * Save the style to a KoGenStyle object using the OpenDocument format
      */
-    void saveOdf( KoGenStyle &style );
+    void saveOdf(KoGenStyle &style);
 
 protected:
     friend class KoParagraphStyle;

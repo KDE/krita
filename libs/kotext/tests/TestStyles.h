@@ -4,7 +4,8 @@
 #include <QObject>
 #include <qtest_kde.h>
 
-class TestStyles : public QObject {
+class TestStyles : public QObject
+{
     Q_OBJECT
 public:
     TestStyles() {}

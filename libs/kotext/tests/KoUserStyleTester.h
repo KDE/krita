@@ -21,7 +21,8 @@
 
 #include <QObject>
 
-class KoUserStyleTester : public QObject {
+class KoUserStyleTester : public QObject
+{
     Q_OBJECT
 private slots:
     void testEmptyCollection();

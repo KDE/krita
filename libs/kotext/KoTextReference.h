@@ -31,14 +31,15 @@ class KoTextLocator;
  * This effectively means that the reference will print the page number (for example) of where the
  * locator is and keep it updated automatically.
  */
-class KoTextReference : public KoVariable {
+class KoTextReference : public KoVariable
+{
 public:
     /**
      * Constructor; please don't use directly as the KoInlineTextObjectManager will supply an action
      * to create one.
      * @param indexId the index of the inline object that is the locator.  See KoInlineObject::id()
      */
-    KoTextReference( int indexId );
+    KoTextReference(int indexId);
     ~KoTextReference();
 
     /// reimplemented method from superclass

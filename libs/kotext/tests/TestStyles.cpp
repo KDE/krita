@@ -95,6 +95,6 @@ void TestStyles::testCopyParagraphStyle()
     QCOMPARE(newStyle.rightMargin(), 20.);
 }
 
-QTEST_KDEMAIN(TestStyles,GUI)
+QTEST_KDEMAIN(TestStyles, GUI)
 
 #include "TestStyles.moc"

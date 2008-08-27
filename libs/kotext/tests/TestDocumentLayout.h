@@ -13,7 +13,8 @@
 class MockTextShape;
 class QTextDocument;
 
-class TestDocumentLayout : public QObject {
+class TestDocumentLayout : public QObject
+{
     Q_OBJECT
 public:
     TestDocumentLayout() {}
@@ -34,8 +35,9 @@ private:
     QString loremIpsum;
 };
 
-class MockTextShape : public KoShape {
-  public:
+class MockTextShape : public KoShape
+{
+public:
     MockTextShape() {
         KoTextShapeData *textShapeData = new KoTextShapeData();
         setUserData(textShapeData);
@@ -47,8 +49,10 @@ class MockTextShape : public KoShape {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
     }
-    virtual void saveOdf( KoShapeSavingContext & ) const {}
-    virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return true; }
+    virtual void saveOdf(KoShapeSavingContext &) const {}
+    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) {
+        return true;
+    }
     KoTextDocumentLayout *layout;
 };
 

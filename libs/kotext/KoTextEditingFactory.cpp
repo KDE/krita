@@ -19,12 +19,12 @@
 
 #include "KoTextEditingFactory.h"
 
-class KoTextEditingFactory::Private {
+class KoTextEditingFactory::Private
+{
 public:
     Private(const QString &identifier)
-        : id(identifier),
-        showInMenu(false)
-    {
+            : id(identifier),
+            showInMenu(false) {
     }
 
     const QString id;
@@ -33,32 +33,38 @@ public:
 };
 
 KoTextEditingFactory::KoTextEditingFactory(QObject *parent, const QString &id)
-    : QObject(parent)
-    , d( new Private(id) )
+        : QObject(parent)
+        , d(new Private(id))
 {
 }
 
-KoTextEditingFactory::~KoTextEditingFactory() {
+KoTextEditingFactory::~KoTextEditingFactory()
+{
     delete d;
 }
 
-QString KoTextEditingFactory::id() const {
+QString KoTextEditingFactory::id() const
+{
     return d->id;
 }
 
-bool KoTextEditingFactory::showInMenu() const {
+bool KoTextEditingFactory::showInMenu() const
+{
     return d->showInMenu;
 }
 
-void KoTextEditingFactory::setShowInMenu(bool show) {
+void KoTextEditingFactory::setShowInMenu(bool show)
+{
     d->showInMenu = show;
 }
 
-QString KoTextEditingFactory::title() const {
+QString KoTextEditingFactory::title() const
+{
     return d->title;
 }
 
-void KoTextEditingFactory::setTitle(const QString &title) {
+void KoTextEditingFactory::setTitle(const QString &title)
+{
     d->title = title;
 }
 

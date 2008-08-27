@@ -29,7 +29,8 @@ class KoVariable;
 /**
  * helper class
  */
-class InsertVariableActionBase : public KAction {
+class InsertVariableActionBase : public KAction
+{
     Q_OBJECT
 public:
     InsertVariableActionBase(KoCanvasBase *canvas, const QString &name);

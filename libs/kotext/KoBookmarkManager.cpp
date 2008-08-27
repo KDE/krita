@@ -23,7 +23,8 @@
 #include <KDebug>
 #include <QHash>
 
-class KoBookmarkManagerPrivate {
+class KoBookmarkManagerPrivate
+{
 public:
     KoBookmarkManagerPrivate() { }
     QHash<QString, KoBookmark*> bookmarkHash;
@@ -32,7 +33,7 @@ public:
 };
 
 KoBookmarkManager::KoBookmarkManager()
-    : d(new KoBookmarkManagerPrivate)
+        : d(new KoBookmarkManagerPrivate)
 {
 }
 
@@ -41,12 +42,14 @@ KoBookmarkManager::~KoBookmarkManager()
     delete d;
 }
 
-void KoBookmarkManager::insert(const QString &name, KoBookmark *bookmark) {
+void KoBookmarkManager::insert(const QString &name, KoBookmark *bookmark)
+{
     d->bookmarkHash[name] = bookmark;
     d->bookmarkNameList.append(name);
 }
 
-void KoBookmarkManager::remove(const QString &name) {
+void KoBookmarkManager::remove(const QString &name)
+{
     d->bookmarkHash.remove(name);
     d->bookmarkNameList.removeAt(d->bookmarkNameList.indexOf(name));
 }
@@ -68,12 +71,14 @@ void KoBookmarkManager::rename(const QString &oldName, const QString &newName)
     }
 }
 
-KoBookmark *KoBookmarkManager::retrieveBookmark(const QString &name) {
+KoBookmark *KoBookmarkManager::retrieveBookmark(const QString &name)
+{
     KoBookmark *bookmark = d->bookmarkHash.value(name);
     return bookmark;
 }
 
-QList<QString> KoBookmarkManager::bookmarkNameList() {
+QList<QString> KoBookmarkManager::bookmarkNameList()
+{
     return d->bookmarkNameList;
 }
 

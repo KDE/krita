@@ -50,7 +50,8 @@ struct KOTEXT_EXPORT KoInlineObjectTemplate {
  * access to the object-type.
  * @see KoInlineObjectRegistry
  */
-class KOTEXT_EXPORT KoInlineObjectFactory : public QObject {
+class KOTEXT_EXPORT KoInlineObjectFactory : public QObject
+{
     Q_OBJECT
 public:
     /// The type of inlineObject this factory creates.
@@ -83,7 +84,9 @@ public:
      * The main purpose is to group plugins per type in, for example, a menu.
      * The default returns Other which means it will not be shown in any menu.
      */
-    virtual ObjectType type() const { return Other; }
+    virtual ObjectType type() const {
+        return Other;
+    }
 
     /**
      * Return all the templates this factory knows about.

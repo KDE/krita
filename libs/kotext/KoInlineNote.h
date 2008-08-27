@@ -29,7 +29,8 @@ class KoShapeLoadingContext;
  * This object is an inline object, which means it is anchored in the text-flow and it can hold note info.
  * Typical notes that use this are Footnotes and Endnotes.
  */
-class KOTEXT_EXPORT KoInlineNote : public KoInlineObject {
+class KOTEXT_EXPORT KoInlineNote : public KoInlineObject
+{
 public:
     /// The type of note specifies how the application will use the text from the note.
     enum Type {
@@ -61,7 +62,7 @@ public:
      * @param id the new id
      */
     void setId(const QString &id);
-    
+
     /// return the current text
     QString text() const;
     /// return the current label
@@ -82,20 +83,20 @@ public:
     /// return the type of note.
     Type type() const;
 
-    bool loadOdf( const KoXmlElement & element );
+    bool loadOdf(const KoXmlElement & element);
     ///reimplemented
-    void saveOdf( KoShapeSavingContext & context );
+    void saveOdf(KoShapeSavingContext & context);
 
 protected:
     /// reimplemented
     virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
-            int posInDocument, const QTextCharFormat &format);
+                                int posInDocument, const QTextCharFormat &format);
     /// reimplemented
     virtual void resize(const QTextDocument *document, QTextInlineObject object,
-            int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
     /// reimplemented
-    virtual void paint (QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-            const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
+    virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
+                       const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
 private:
     class Private;

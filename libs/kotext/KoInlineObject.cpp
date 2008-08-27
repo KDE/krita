@@ -21,13 +21,13 @@
 #include "KoTextDocumentLayout.h"
 #include "KoShapeSavingContext.h"
 
-class InlineObjectPrivate {
+class InlineObjectPrivate
+{
 public:
     InlineObjectPrivate()
-        : manager(0),
-        id(-1),
-        propertyChangeListener(0)
-    {
+            : manager(0),
+            id(-1),
+            propertyChangeListener(0) {
     }
 
     KoInlineTextObjectManager *manager;
@@ -37,59 +37,71 @@ public:
 };
 
 KoInlineObject::KoInlineObject(bool propertyChangeListener)
-    : d( new InlineObjectPrivate )
+        : d(new InlineObjectPrivate)
 {
     d->propertyChangeListener = propertyChangeListener;
 }
 
-KoInlineObject::~KoInlineObject() {
+KoInlineObject::~KoInlineObject()
+{
     delete d;
 }
 
-void KoInlineObject::setManager(KoInlineTextObjectManager *manager) {
+void KoInlineObject::setManager(KoInlineTextObjectManager *manager)
+{
     d->manager = manager;
 }
 
-KoInlineTextObjectManager *KoInlineObject::manager() {
+KoInlineTextObjectManager *KoInlineObject::manager()
+{
     return d->manager;
 }
 
-void KoInlineObject::saveOdf(KoShapeSavingContext & context) {
+void KoInlineObject::saveOdf(KoShapeSavingContext & context)
+{
     Q_UNUSED(context);
 }
 
-void KoInlineObject::propertyChanged(Property key, const QVariant &value) {
+void KoInlineObject::propertyChanged(Property key, const QVariant &value)
+{
     Q_UNUSED(key);
     Q_UNUSED(value);
 }
 
-int KoInlineObject::id() const {
+int KoInlineObject::id() const
+{
     return d->id;
 }
-void KoInlineObject::setId(int id) {
+void KoInlineObject::setId(int id)
+{
     d->id = id;
 }
 
-bool KoInlineObject::propertyChangeListener() const {
+bool KoInlineObject::propertyChangeListener() const
+{
     return d->propertyChangeListener;
 }
 
-QVariantMap KoInlineObject::attributes() const {
+QVariantMap KoInlineObject::attributes() const
+{
     return d->attributes;
 }
 
-QVariant KoInlineObject::attribute(const QString& name, const QVariant& defaultValue) {
+QVariant KoInlineObject::attribute(const QString& name, const QVariant& defaultValue)
+{
     return d->attributes.contains(name) ? d->attributes[name] : defaultValue;
 }
 
-void KoInlineObject::setAttribute(const QString& name, const QVariant& value) {
+void KoInlineObject::setAttribute(const QString& name, const QVariant& value)
+{
     d->attributes[name] = value;
 }
 
 //static
-KoShape * KoInlineObject::shapeForPosition(const QTextDocument *document, int position) {
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (document->documentLayout());
-    if(lay == 0)
+KoShape * KoInlineObject::shapeForPosition(const QTextDocument *document, int position)
+{
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(document->documentLayout());
+    if (lay == 0)
         return 0;
     return lay->shapeForPosition(position);
 }

@@ -40,32 +40,33 @@ class QUndoCommand;
  * a word and then moves the cursor out of the word, a similar approach happens with the
  * finishedParagraph(), it will only be called after the cursor has been moved out of the paragraph.
  */
-class KOTEXT_EXPORT KoTextEditingPlugin : public QObject {
+class KOTEXT_EXPORT KoTextEditingPlugin : public QObject
+{
     Q_OBJECT
 public:
     /// constructor
     KoTextEditingPlugin();
     virtual ~KoTextEditingPlugin();
 
-   /**
-    * This method will be called when the user makes at least one change to
-    * a word and then moves the cursor out of the word.
-    * You are free to alter the word via the textDocument.  Be aware that operations should be done
-    * via a QTextCursor and should retain any formatting already present on the text.
-    * @param document the text document that was altered.
-    * @param cursorPosition the last altered position in the word.
-    */
+    /**
+     * This method will be called when the user makes at least one change to
+     * a word and then moves the cursor out of the word.
+     * You are free to alter the word via the textDocument.  Be aware that operations should be done
+     * via a QTextCursor and should retain any formatting already present on the text.
+     * @param document the text document that was altered.
+     * @param cursorPosition the last altered position in the word.
+     */
     virtual void finishedWord(QTextDocument *document, int cursorPosition) = 0;
 
-   /**
-    * This method will be called when the user makes at least one change to
-    * a paragraph and then moves the cursor out of the paragraph.
-    * You are free to alter the paragraph via the textDocument.  Be aware that operations should be done
-    * via a QTextCursor and should retain any formatting already present on the text.
-    * Note that finishedWord() is always called just prior to the call to this method.
-    * @param document the text document that was altered.
-    * @param cursorPosition the last altered position in the paragraph.
-    */
+    /**
+     * This method will be called when the user makes at least one change to
+     * a paragraph and then moves the cursor out of the paragraph.
+     * You are free to alter the paragraph via the textDocument.  Be aware that operations should be done
+     * via a QTextCursor and should retain any formatting already present on the text.
+     * Note that finishedWord() is always called just prior to the call to this method.
+     * @param document the text document that was altered.
+     * @param cursorPosition the last altered position in the paragraph.
+     */
     virtual void finishedParagraph(QTextDocument *document, int cursorPosition) = 0;
 
     /**

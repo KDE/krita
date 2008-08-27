@@ -29,18 +29,17 @@
 class NonClosingFindDialog : public KFindDialog
 {
 public:
-    NonClosingFindDialog( QWidget *parent )
-    : KFindDialog( parent )
-    {}
+    NonClosingFindDialog(QWidget *parent)
+            : KFindDialog(parent) {}
 
     virtual void accept() {}
 };
 
-KoFindStrategy::KoFindStrategy( QWidget * parent )
-: m_dialog( new NonClosingFindDialog( parent ) )
-, m_matches( 0 )
+KoFindStrategy::KoFindStrategy(QWidget * parent)
+        : m_dialog(new NonClosingFindDialog(parent))
+        , m_matches(0)
 {
-    m_dialog->setOptions( KFind::FromCursor );
+    m_dialog->setOptions(KFind::FromCursor);
 }
 
 KoFindStrategy::~KoFindStrategy()
@@ -59,13 +58,13 @@ void KoFindStrategy::reset()
 
 void KoFindStrategy::displayFinalDialog()
 {
-    KMessageBox::information( m_dialog, m_matches ? i18np( "Found 1 match", "Found %1 matches", m_matches ) : i18n( "Found no match" ) );
+    KMessageBox::information(m_dialog, m_matches ? i18np("Found 1 match", "Found %1 matches", m_matches) : i18n("Found no match"));
     reset();
 }
 
-bool KoFindStrategy::foundMatch( QTextCursor & cursor, FindDirection * findDirection )
+bool KoFindStrategy::foundMatch(QTextCursor & cursor, FindDirection * findDirection)
 {
     ++m_matches;
-    findDirection->select( cursor );
+    findDirection->select(cursor);
     return false;
 }

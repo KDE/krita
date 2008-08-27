@@ -16,7 +16,7 @@
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the 
+ * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
@@ -37,38 +37,39 @@
 #define __HYPHEN_H__
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif /* __cplusplus */
 
-typedef struct _HyphenDict HyphenDict;
-typedef struct _HyphenState HyphenState;
-typedef struct _HyphenTrans HyphenTrans;
+    typedef struct _HyphenDict HyphenDict;
+    typedef struct _HyphenState HyphenState;
+    typedef struct _HyphenTrans HyphenTrans;
 #define MAX_CHARS 256
 #define MAX_NAME 20
 
-struct _HyphenDict {
-  int num_states;
-  char cset[MAX_NAME];
-  HyphenState *states;
-};
+    struct _HyphenDict {
+        int num_states;
+        char cset[MAX_NAME];
+        HyphenState *states;
+    };
 
-struct _HyphenState {
-  char *match;
-  int fallback_state;
-  int num_trans;
-  HyphenTrans *trans;
-};
+    struct _HyphenState {
+        char *match;
+        int fallback_state;
+        int num_trans;
+        HyphenTrans *trans;
+    };
 
-struct _HyphenTrans {
-  char ch;
-  int new_state;
-};
+    struct _HyphenTrans {
+        char ch;
+        int new_state;
+    };
 
-HyphenDict *hnj_hyphen_load (const char *fn);
-void hnj_hyphen_free (HyphenDict *dict);
-int hnj_hyphen_hyphenate (HyphenDict *dict,
-			   const char *word, int word_size,
-			   char *hyphens);
+    HyphenDict *hnj_hyphen_load(const char *fn);
+    void hnj_hyphen_free(HyphenDict *dict);
+    int hnj_hyphen_hyphenate(HyphenDict *dict,
+                             const char *word, int word_size,
+                             char *hyphens);
 
 #ifdef __cplusplus
 }

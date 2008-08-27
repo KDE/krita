@@ -24,42 +24,42 @@
 #include "kovariabletest.h"
 #include "../IsoDuration.h"
 
-QTEST_KDEMAIN( KoVariableTest, NoGUI )
+QTEST_KDEMAIN(KoVariableTest, NoGUI)
 
 void KoVariableTest::testMinutes()
 {
     int minutes = 145;
-    QString str = minutesToISODuration( minutes );
-    int result = ISODurationToMinutes( str );
-    qDebug( "%d minutes -> %s -> %d", minutes, qPrintable(str), result );
-    QCOMPARE( result, minutes );
+    QString str = minutesToISODuration(minutes);
+    int result = ISODurationToMinutes(str);
+    qDebug("%d minutes -> %s -> %d", minutes, qPrintable(str), result);
+    QCOMPARE(result, minutes);
 }
 
 void KoVariableTest::testNegativeMinutes()
 {
     int minutes = -15;
-    QString str = minutesToISODuration( minutes );
-    int result = ISODurationToMinutes( str );
-    qDebug( "%d minutes -> %s -> %d", minutes, qPrintable(str), result );
-    QCOMPARE( result, minutes );
+    QString str = minutesToISODuration(minutes);
+    int result = ISODurationToMinutes(str);
+    qDebug("%d minutes -> %s -> %d", minutes, qPrintable(str), result);
+    QCOMPARE(result, minutes);
 }
 
 void KoVariableTest::testDays()
 {
     int days = 14;
-    QString str = daysToISODuration( days );
-    int result = ISODurationToDays( str );
-    qDebug( "%d days -> %s -> %d", days, qPrintable(str), result );
-    QCOMPARE( result, days );
+    QString str = daysToISODuration(days);
+    int result = ISODurationToDays(str);
+    qDebug("%d days -> %s -> %d", days, qPrintable(str), result);
+    QCOMPARE(result, days);
 }
 
 void KoVariableTest::testNegativeDays()
 {
     int days = -14;
-    QString str = daysToISODuration( days );
-    int result = ISODurationToDays( str );
-    qDebug( "%d days -> %s -> %d", days, qPrintable(str), result );
-    QCOMPARE( result, days );
+    QString str = daysToISODuration(days);
+    int result = ISODurationToDays(str);
+    qDebug("%d days -> %s -> %d", days, qPrintable(str), result);
+    QCOMPARE(result, days);
 }
 
 #include "kovariabletest.moc"

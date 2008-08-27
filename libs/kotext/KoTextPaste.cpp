@@ -28,21 +28,19 @@
 #include "KoTextShapeData.h"
 #include "opendocument/KoTextLoader.h"
 
-struct KoTextPaste::Private
-{
-    Private( KoTextShapeData * shapeData, QTextCursor & cursor, KoCanvasBase * canvas )
-    : shapeData( shapeData )
-    , cursor( cursor )
-    , canvas( canvas )
-    {}
+struct KoTextPaste::Private {
+    Private(KoTextShapeData * shapeData, QTextCursor & cursor, KoCanvasBase * canvas)
+            : shapeData(shapeData)
+            , cursor(cursor)
+            , canvas(canvas) {}
 
     KoTextShapeData * shapeData;
     QTextCursor & cursor;
     KoCanvasBase * canvas;
 };
 
-KoTextPaste::KoTextPaste( KoTextShapeData * shapeData, QTextCursor & cursor, KoCanvasBase * canvas )
-: d( new Private( shapeData, cursor, canvas ) )
+KoTextPaste::KoTextPaste(KoTextShapeData * shapeData, QTextCursor & cursor, KoCanvasBase * canvas)
+        : d(new Private(shapeData, cursor, canvas))
 {
 }
 
@@ -51,14 +49,14 @@ KoTextPaste::~KoTextPaste()
     delete d;
 }
 
-bool KoTextPaste::process( const KoXmlElement & body, KoOdfReadStore & odfStore )
+bool KoTextPaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
 {
-    KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store() );
-    KoShapeLoadingContext context( loadingContext, d->canvas->shapeController()->shapeControllerBase() );
+    KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
+    KoShapeLoadingContext context(loadingContext, d->canvas->shapeController()->shapeControllerBase());
 
-    KoTextLoader loader( context );
+    KoTextLoader loader(context);
 
-    loader.loadBody( body, d->cursor ); // now let's load the body from the ODF KoXmlElement.
+    loader.loadBody(body, d->cursor);   // now let's load the body from the ODF KoXmlElement.
 
     return true;
 }

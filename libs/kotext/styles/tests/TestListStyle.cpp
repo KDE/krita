@@ -8,7 +8,8 @@
 #include <QTextDocument>
 #include <QTextCursor>
 
-void TestListStyle::testListStyle() {
+void TestListStyle::testListStyle()
+{
     KoListStyle ls;
     KoListLevelProperties llp = ls.levelProperties(2);
     QCOMPARE(llp.level(), 2);
@@ -33,7 +34,7 @@ void TestListStyle::testListStyle() {
     QVERIFY(block.textList());
     QTextList *textList = block.textList();
     QTextListFormat format = textList->format();
-    QCOMPARE(format.intProperty(QTextListFormat::ListStyle), (int) (KoListStyle::AlphaLowerItem));
+    QCOMPARE(format.intProperty(QTextListFormat::ListStyle), (int)(KoListStyle::AlphaLowerItem));
 
     block = block.next();
     QVERIFY(block.isValid());
@@ -45,7 +46,7 @@ void TestListStyle::testListStyle() {
     QVERIFY(block.textList());
     textList = block.textList();
     format = textList->format();
-    QCOMPARE(format.intProperty(QTextListFormat::ListStyle), (int) (KoListStyle::AlphaLowerItem));
+    QCOMPARE(format.intProperty(QTextListFormat::ListStyle), (int)(KoListStyle::AlphaLowerItem));
 
 }
 

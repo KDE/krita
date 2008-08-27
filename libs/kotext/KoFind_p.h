@@ -35,12 +35,12 @@ class QTextDocument;
 class QVariant;
 class QWidget;
 
-class KoFindPrivate 
+class KoFindPrivate
 {
 public:
-    KoFindPrivate( KoFind *find, KoCanvasResourceProvider *crp, QWidget *w );
+    KoFindPrivate(KoFind *find, KoCanvasResourceProvider *crp, QWidget *w);
 
-    void resourceChanged( int key, const QVariant &variant );
+    void resourceChanged(int key, const QVariant &variant);
 
     void findActivated();
 
@@ -59,8 +59,8 @@ public:
     QAction *findNext;
     QAction *findPrev;
 
-    void findDocumentSetNext( QTextDocument * document );
-    void findDocumentSetPrevious( QTextDocument * document );
+    void findDocumentSetNext(QTextDocument * document);
+    void findDocumentSetPrevious(QTextDocument * document);
 
 protected:
     void parseSettingsAndFind();

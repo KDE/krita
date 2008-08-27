@@ -63,12 +63,12 @@
 /// \internal d-pointer class.
 class KoTextFrameLoader::Private
 {
-    public:
-        KoTextLoader* loader;
+public:
+    KoTextLoader* loader;
 };
 
 KoTextFrameLoader::KoTextFrameLoader(KoTextLoader* loader)
-    : d(new Private())
+        : d(new Private())
 {
     d->loader = loader;
 }
@@ -80,19 +80,17 @@ KoTextFrameLoader::~KoTextFrameLoader()
 
 void KoTextFrameLoader::loadFrame(KoTextLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor)
 {
-    for(KoXmlNode node = frameElem.firstChild(); !node.isNull(); node = node.nextSibling()) {
+    for (KoXmlNode node = frameElem.firstChild(); !node.isNull(); node = node.nextSibling()) {
         KoXmlElement ts = node.toElement();
-        if( ts.isNull() ) continue;
-        const QString localName( ts.localName() );
+        if (ts.isNull()) continue;
+        const QString localName(ts.localName());
         //const bool isTextNS = ( ts.namespaceURI() == KoXmlNS::text );
-        const bool isDrawNS = ( ts.namespaceURI() == KoXmlNS::draw );
+        const bool isDrawNS = (ts.namespaceURI() == KoXmlNS::draw);
         if (isDrawNS && localName == "image") {
             loadImage(context, frameElem, ts, cursor);
-        }
-        else if (isDrawNS && localName == "text-box") {
+        } else if (isDrawNS && localName == "text-box") {
             loadTextBox(context, frameElem, ts, cursor);
-        }
-        else {
+        } else {
             kWarning(32500) << "KoTextFrameLoader::loadFrame Unhandled frame: " << localName;
         }
     }
@@ -103,7 +101,7 @@ void KoTextFrameLoader::loadImage(KoTextLoadingContext& context, const KoXmlElem
     const KoXmlElement frameElem = _frameElem;
     const KoXmlElement imageElem = _imageElem;
     KoShape* shape = loadImageShape(context, frameElem, imageElem, cursor);
-    if( ! shape ) {
+    if (! shape) {
         kWarning(32500) << "KoTextFrameLoader::loadImage Failed to create picture shape";
         return;
     }
@@ -114,7 +112,7 @@ void KoTextFrameLoader::loadTextBox(KoTextLoadingContext& context, const KoXmlEl
     const KoXmlElement frameElem = _frameElem;
     const KoXmlElement textElem = _textElem;
     KoShape* shape = loadTextShape(context, frameElem, textElem, cursor);
-    if( ! shape ) {
+    if (! shape) {
         kWarning(32500) << "KoTextFrameLoader::loadTextBox Failed to create text shape";
         return;
     }

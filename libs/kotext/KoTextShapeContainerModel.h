@@ -31,7 +31,8 @@ class KoTextAnchor;
  * All anchored frames are children of the text shape, and they get positioned
  * by the text layouter (only KWord at this time).
  */
-class KOTEXT_EXPORT KoTextShapeContainerModel : public KoShapeContainerModel {
+class KOTEXT_EXPORT KoTextShapeContainerModel : public KoShapeContainerModel
+{
 public:
     /// constructor
     KoTextShapeContainerModel();

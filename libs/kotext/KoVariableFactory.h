@@ -31,8 +31,7 @@ class KoVariable;
 class KoProperties;
 
 /// A template used in the KoVariableFactory
-struct KOTEXT_EXPORT KoVariableTemplate
-{
+struct KOTEXT_EXPORT KoVariableTemplate {
     QString id;         ///< The id of the inlineObject
     QString name;       ///< The name to be shown for this template
     //QString toolTip;    ///< The tooltip text for the template
@@ -59,13 +58,13 @@ public:
      * @param parent the parent QObject for memory management usage.
      * @param id a string that will be used internally for referencing the variable-type.
      */
-    KoVariableFactory( const QString &id );
+    KoVariableFactory(const QString &id);
     virtual ~KoVariableFactory();
 
     /**
      * Create a new instance of an inline object.
      */
-    virtual KoVariable * createVariable( const KoProperties *properties ) const = 0;
+    virtual KoVariable * createVariable(const KoProperties *properties) const = 0;
 
     /**
      * Create an empty variable that can be loaded.
@@ -88,7 +87,9 @@ public:
 
     const QString & odfNameSpace() const;
 #ifdef KDE_FULL_TEMPLATE_EXPORT_INSTANTIATION
-    QString name() const { Q_ASSERT(0); return QString(); }
+    QString name() const {
+        Q_ASSERT(0); return QString();
+    }
 #endif
 protected:
     /**
@@ -96,9 +97,9 @@ protected:
      * using the createInlineObject() method.
      * @param params The new template this factory knows to produce
      */
-    void addTemplate( const KoVariableTemplate &params );
+    void addTemplate(const KoVariableTemplate &params);
 
-    void setOdfElementNames( const QString & nameSpace, const QStringList & names );
+    void setOdfElementNames(const QString & nameSpace, const QStringList & names);
 
 private:
     class Private;

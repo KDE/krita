@@ -28,19 +28,20 @@
 #include "KoFind_p.h"
 
 KoFind::KoFind(QWidget *parent, KoCanvasResourceProvider *provider, KActionCollection *ac)
-: QObject(parent)
-, d( new KoFindPrivate( this, provider, parent ) )
+        : QObject(parent)
+        , d(new KoFindPrivate(this, provider, parent))
 {
-    connect(provider, SIGNAL(resourceChanged(int,const QVariant&)), this, SLOT(resourceChanged(int,const QVariant& )));
-    ac->addAction(KStandardAction::Find, "edit_find", this, SLOT( findActivated() ));
-    d->findNext = ac->addAction(KStandardAction::FindNext, "edit_findnext", this, SLOT( findNextActivated() ));
+    connect(provider, SIGNAL(resourceChanged(int, const QVariant&)), this, SLOT(resourceChanged(int, const QVariant&)));
+    ac->addAction(KStandardAction::Find, "edit_find", this, SLOT(findActivated()));
+    d->findNext = ac->addAction(KStandardAction::FindNext, "edit_findnext", this, SLOT(findNextActivated()));
     d->findNext->setEnabled(false);
-    d->findPrev = ac->addAction(KStandardAction::FindPrev, "edit_findprevious", this, SLOT( findPreviousActivated() ));
+    d->findPrev = ac->addAction(KStandardAction::FindPrev, "edit_findprevious", this, SLOT(findPreviousActivated()));
     d->findPrev->setEnabled(false);
-    ac->addAction(KStandardAction::Replace, "edit_replace", this, SLOT( replaceActivated() ));
+    ac->addAction(KStandardAction::Replace, "edit_replace", this, SLOT(replaceActivated()));
 }
 
-KoFind::~KoFind() {
+KoFind::~KoFind()
+{
     delete d;
 }
 

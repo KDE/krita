@@ -19,11 +19,12 @@
 #include "KoTextBlockData.h"
 #include "KoTextBlockBorderData.h"
 
-class KoTextBlockData::Private {
+class KoTextBlockData::Private
+{
 public:
     Private() : counterWidth(0), counterSpacing(0), border(0), outline(0) {}
     ~Private() {
-        if(border && border->removeUser() == 0)
+        if (border && border->removeUser() == 0)
             delete border;
     }
     qreal counterWidth;
@@ -36,76 +37,92 @@ public:
 };
 
 KoTextBlockData::KoTextBlockData()
-    : d(new Private())
+        : d(new Private())
 {
     d->counterWidth = -1.0;
 }
 
-KoTextBlockData::~KoTextBlockData() {
+KoTextBlockData::~KoTextBlockData()
+{
     delete d;
 }
 
-bool KoTextBlockData::hasCounterData() const {
+bool KoTextBlockData::hasCounterData() const
+{
     return d->counterWidth >= 0 && !d->counterText.isNull();
 }
 
-qreal KoTextBlockData::counterWidth() const {
+qreal KoTextBlockData::counterWidth() const
+{
     return qMax(qreal(0), d->counterWidth);
 }
 
-void KoTextBlockData::setBorder(KoTextBlockBorderData *border) {
-    if(d->border && d->border->removeUser() == 0)
+void KoTextBlockData::setBorder(KoTextBlockBorderData *border)
+{
+    if (d->border && d->border->removeUser() == 0)
         delete d->border;
     d->border = border;
-    if(d->border)
+    if (d->border)
         d->border->addUser();
 }
 
-void KoTextBlockData::setCounterWidth(qreal width) {
+void KoTextBlockData::setCounterWidth(qreal width)
+{
     d->counterWidth = width;
 }
 
-qreal KoTextBlockData::counterSpacing() const {
+qreal KoTextBlockData::counterSpacing() const
+{
     return d->counterSpacing;
 }
 
-void KoTextBlockData::setCounterSpacing(qreal spacing) {
+void KoTextBlockData::setCounterSpacing(qreal spacing)
+{
     d->counterSpacing = spacing;
 }
 
-void KoTextBlockData::setCounterText(const QString &text) {
+void KoTextBlockData::setCounterText(const QString &text)
+{
     d->counterText = text;
 }
 
-QString KoTextBlockData::counterText() const {
+QString KoTextBlockData::counterText() const
+{
     return d->counterText;
 }
 
-void KoTextBlockData::setPartialCounterText(const QString &text) {
+void KoTextBlockData::setPartialCounterText(const QString &text)
+{
     d->partialCounterText = text;
 }
 
-const QString &KoTextBlockData::partialCounterText() const {
+const QString &KoTextBlockData::partialCounterText() const
+{
     return d->partialCounterText;
 }
 
-void KoTextBlockData::setCounterPosition(QPointF position) {
+void KoTextBlockData::setCounterPosition(QPointF position)
+{
     d->counterPos = position;
 }
 
-const QPointF &KoTextBlockData::counterPosition() const {
+const QPointF &KoTextBlockData::counterPosition() const
+{
     return d->counterPos;
 }
 
-KoTextBlockBorderData *KoTextBlockData::border() const {
+KoTextBlockBorderData *KoTextBlockData::border() const
+{
     return d->border;
 }
 
-int KoTextBlockData::outlineLevel() const {
+int KoTextBlockData::outlineLevel() const
+{
     return d->outline;
 }
 
-void KoTextBlockData::setOutlineLevel (int outline) {
+void KoTextBlockData::setOutlineLevel(int outline)
+{
     d->outline = outline;
 }
 

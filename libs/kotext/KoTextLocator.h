@@ -32,7 +32,8 @@ class KoTextReference;
  * After inserting this locator you can request things like pageNumber() and chapter() for the
  * place where the locator has been positioned in the document.
  */
-class KOTEXT_EXPORT KoTextLocator : public KoInlineObject {
+class KOTEXT_EXPORT KoTextLocator : public KoInlineObject
+{
 public:
     /// constructor
     KoTextLocator();
@@ -40,13 +41,13 @@ public:
 
     /// reimplemented from super
     virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
-            int posInDocument, const QTextCharFormat &format);
+                                int posInDocument, const QTextCharFormat &format);
     /// reimplemented from super
     virtual void resize(const QTextDocument *document, QTextInlineObject object,
-            int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
     /// reimplemented from super
-    virtual void paint (QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-            const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
+    virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
+                       const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
     /// returns the text of the paragraph that is the first chapter before the index.
     QString chapter() const;

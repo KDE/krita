@@ -44,7 +44,8 @@ class VariablePrivate;
  * is used as text.  This class is pretty boring in that it has just a setValue() to alter the
  * text shown; we depend on plugin writers to create more exciting ways to update variables.
  */
-class KOTEXT_EXPORT KoVariable : public KoInlineObject {
+class KOTEXT_EXPORT KoVariable : public KoInlineObject
+{
 public:
     /**
      * Constructor.
@@ -69,19 +70,25 @@ public:
      * attributes from the ODF file (if applicable), so it would be useful to synchronize
      * the property names based on that.
      */
-    virtual void setProperties(const KoProperties *props) { Q_UNUSED(props); }
+    virtual void setProperties(const KoProperties *props) {
+        Q_UNUSED(props);
+    }
 
     /**
      * If this variable has user-editable options it should provide a widget that is capable
      * of manipulating these options so the text-tool can use it to show that to the user.
      * Note that all manipulations should have a direct effect on the variable itself.
      */
-    virtual QWidget *createOptionsWidget() { return 0; }
+    virtual QWidget *createOptionsWidget() {
+        return 0;
+    }
 
     /**
      * TODO make abstract when it is implemented in all variables
      */
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context ) { return false;}
+    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context) {
+        return false;
+    }
 
 protected:
     /**
@@ -100,11 +107,11 @@ protected:
 
 private:
     void updatePosition(const QTextDocument *document, QTextInlineObject object,
-            int posInDocument, const QTextCharFormat &format);
+                        int posInDocument, const QTextCharFormat &format);
     void resize(const QTextDocument *document, QTextInlineObject object,
-            int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
-    void paint (QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-            const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
+                int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+    void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
+               const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
 private:
     VariablePrivate * const d;

@@ -33,14 +33,13 @@ class KoVariableRegistry::Singleton
 {
 public:
     Singleton()
-    : initDone( false )
-    {}
+            : initDone(false) {}
 
     KoVariableRegistry q;
     bool initDone;
 };
 
-K_GLOBAL_STATIC( KoVariableRegistry::Singleton, singleton )
+K_GLOBAL_STATIC(KoVariableRegistry::Singleton, singleton)
 
 class KoVariableRegistry::Private
 {
@@ -49,13 +48,13 @@ public:
 };
 
 KoVariableRegistry::KoVariableRegistry()
-:d( new Private() )
+        : d(new Private())
 {
 }
 
 KoVariableRegistry::~KoVariableRegistry()
 {
-    delete( d );
+    delete(d);
 }
 
 void KoVariableRegistry::init()
@@ -64,23 +63,22 @@ void KoVariableRegistry::init()
     config.whiteList = "TextVariablePlugins";
     config.blacklist = "TextVariablePluginsDisabled";
     config.group = "koffice";
-    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Text-Variable"),
-                                      QString::fromLatin1("[X-KoText-MinVersion] <= 0"), config);
+    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Text-Variable"),
+                                     QString::fromLatin1("[X-KoText-MinVersion] <= 0"), config);
 
     QList<KoVariableFactory*> factories = values();
     kDebug(32500) << "factories count" << factories.size();
-    foreach ( KoVariableFactory * factory, factories ) {
+    foreach(KoVariableFactory * factory, factories) {
         kDebug(32500) << factory->id();
         QString nameSpace = factory->odfNameSpace();
-        if ( nameSpace.isEmpty() || factory->odfElementNames().isEmpty() ) {
-            kDebug(32500) <<"Variable factory" << factory->id() <<" does not have odfNameSpace defined, ignoring";
-        }
-        else {
-            foreach( QString elementName, factory->odfElementNames() ) {
-                d->factories.insert( QPair<QString, QString>( nameSpace, elementName ), factory );
+        if (nameSpace.isEmpty() || factory->odfElementNames().isEmpty()) {
+            kDebug(32500) << "Variable factory" << factory->id() << " does not have odfNameSpace defined, ignoring";
+        } else {
+            foreach(QString elementName, factory->odfElementNames()) {
+                d->factories.insert(QPair<QString, QString>(nameSpace, elementName), factory);
 
-                kDebug(32500) <<"Inserting variable factory" << factory->id() <<" for"
-                              << nameSpace << ":" << elementName;
+                kDebug(32500) << "Inserting variable factory" << factory->id() << " for"
+                << nameSpace << ":" << elementName;
             }
         }
     }
@@ -89,38 +87,38 @@ void KoVariableRegistry::init()
 
 KoVariableRegistry* KoVariableRegistry::instance()
 {
-    KoVariableRegistry * registry = &( singleton->q );
-    if ( ! singleton->initDone ) {
+    KoVariableRegistry * registry = &(singleton->q);
+    if (! singleton->initDone) {
         singleton->initDone = true;
         registry->init();
     }
     return registry;
 }
 
-KoVariable * KoVariableRegistry::createFromOdf( const KoXmlElement & e, KoShapeLoadingContext & context ) const
+KoVariable * KoVariableRegistry::createFromOdf(const KoXmlElement & e, KoShapeLoadingContext & context) const
 {
-    kDebug(32500) <<"Going to check for" << e.namespaceURI() << ":" << e.tagName();
+    kDebug(32500) << "Going to check for" << e.namespaceURI() << ":" << e.tagName();
 
     KoVariable * variable = 0;
 
-    KoVariableFactory * factory = d->factories.value( QPair<QString, QString>( e.namespaceURI(), e.tagName() ) );
+    KoVariableFactory * factory = d->factories.value(QPair<QString, QString>(e.namespaceURI(), e.tagName()));
 
-    if ( factory ) {
+    if (factory) {
         variable = factory->createVariable();
-        if ( variable ) {
-            variable->loadOdf( e, context );
+        if (variable) {
+            variable->loadOdf(e, context);
         }
     }
 
     return variable;
 }
 
-QList<QAction*> KoVariableRegistry::createInsertVariableActions( KoCanvasBase *host ) const
+QList<QAction*> KoVariableRegistry::createInsertVariableActions(KoCanvasBase *host) const
 {
     QList<QAction*> answer;
-    foreach( KoVariableFactory * factory, values()) {
-        foreach( KoVariableTemplate templ, factory->templates() ) {
-            answer.append( new InsertVariableAction( host, factory, templ ) );
+    foreach(KoVariableFactory * factory, values()) {
+        foreach(KoVariableTemplate templ, factory->templates()) {
+            answer.append(new InsertVariableAction(host, factory, templ));
         }
     }
     return answer;

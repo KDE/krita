@@ -21,35 +21,39 @@
 #include "KoTextLocator.h"
 #include "KoInlineTextObjectManager.h"
 
-KoTextReference::KoTextReference( int indexId )
-    : KoVariable(),
-    m_indexId(indexId)
+KoTextReference::KoTextReference(int indexId)
+        : KoVariable(),
+        m_indexId(indexId)
 {
 }
 
-KoTextReference::~KoTextReference() {
+KoTextReference::~KoTextReference()
+{
     KoTextLocator *loc = locator();
-    if(loc)
+    if (loc)
         loc->removeListener(this);
 }
 
-void KoTextReference::variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument) {
+void KoTextReference::variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument)
+{
     Q_UNUSED(shape);
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
     Q_ASSERT(manager());
     KoTextLocator *loc = locator();
-    if(loc)
+    if (loc)
         setValue(QString::number(loc->pageNumber()));
     else
         setValue("NOREF"); // anything smarter to point to a broken reference?
 }
 
-void KoTextReference::setup() {
+void KoTextReference::setup()
+{
     locator()->addListener(this);
     variableMoved(0, 0, 0);
 }
 
-KoTextLocator* KoTextReference::locator() {
-    return dynamic_cast<KoTextLocator*> (manager()->inlineTextObject(m_indexId));
+KoTextLocator* KoTextReference::locator()
+{
+    return dynamic_cast<KoTextLocator*>(manager()->inlineTextObject(m_indexId));
 }

@@ -3,7 +3,8 @@
 #include "styles/KoParagraphStyle.h"
 #include "KoTextBlockBorderData.h"
 
-void TestBorder::testBorder() {
+void TestBorder::testBorder()
+{
     KoParagraphStyle style;
     style.setLeftBorderWidth(4.0);
     style.setLeftBorderSpacing(2.0);
@@ -20,11 +21,11 @@ void TestBorder::testBorder() {
     QCOMPARE(QRectF(10, 10, 100, 80), data.rect());
 
     data.setEdge(KoTextBlockBorderData::Left, format, KoParagraphStyle::LeftBorderStyle,
-        KoParagraphStyle::LeftBorderWidth, KoParagraphStyle::LeftBorderColor,
-        KoParagraphStyle::LeftBorderSpacing, KoParagraphStyle::LeftInnerBorderWidth);
+                 KoParagraphStyle::LeftBorderWidth, KoParagraphStyle::LeftBorderColor,
+                 KoParagraphStyle::LeftBorderSpacing, KoParagraphStyle::LeftInnerBorderWidth);
     data.setEdge(KoTextBlockBorderData::Top, format, KoParagraphStyle::TopBorderStyle,
-        KoParagraphStyle::TopBorderWidth, KoParagraphStyle::TopBorderColor,
-        KoParagraphStyle::TopBorderSpacing, KoParagraphStyle::TopInnerBorderWidth);
+                 KoParagraphStyle::TopBorderWidth, KoParagraphStyle::TopBorderColor,
+                 KoParagraphStyle::TopBorderSpacing, KoParagraphStyle::TopInnerBorderWidth);
 
     QCOMPARE(QRectF(10, 10, 100, 80), data.rect());
     QCOMPARE(7., data.inset(KoTextBlockBorderData::Left));

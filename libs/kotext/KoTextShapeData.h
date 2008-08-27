@@ -43,7 +43,8 @@ class KoInlineObject;
  * multiple instances of this shape data) can share one QTextDocument by providing a
  * different view on (a different part of) the QTextDocument.
  */
-class KOTEXT_EXPORT KoTextShapeData : public KoShapeUserData {
+class KOTEXT_EXPORT KoTextShapeData : public KoShapeUserData
+{
     Q_OBJECT
 public:
     /// constructor

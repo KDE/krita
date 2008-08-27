@@ -49,25 +49,25 @@
 
 #include "KoTextDebug.h"
 
-class KoTextShapeDataPrivate {
+class KoTextShapeDataPrivate
+{
 public:
     KoTextShapeDataPrivate()
-        : document(0),
-        ownsDocument(true),
-        dirty(true),
-        offset(0.0),
-        position(-1),
-        endPosition(-1),
-        direction(KoText::AutoDirection),
-        pageNumberProvider(0)
-    {
+            : document(0),
+            ownsDocument(true),
+            dirty(true),
+            offset(0.0),
+            position(-1),
+            endPosition(-1),
+            direction(KoText::AutoDirection),
+            pageNumberProvider(0) {
     }
 
     QString saveParagraphStyle(KoShapeSavingContext &context, const KoStyleManager *manager, const QTextBlock &block);
     QString saveCharacterStyle(KoShapeSavingContext &context, const KoStyleManager *manager,
                                const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat);
     QHash<QTextList *, QString> saveListStyles(KoShapeSavingContext &context, const KoStyleManager *manager,
-                                               QTextBlock block, int to);
+            QTextBlock block, int to);
 
     QTextDocument *document;
     bool ownsDocument, dirty;
@@ -80,115 +80,136 @@ public:
 
 
 KoTextShapeData::KoTextShapeData()
-: d(new KoTextShapeDataPrivate())
+        : d(new KoTextShapeDataPrivate())
 {
     setDocument(new QTextDocument, true);
 }
 
-KoTextShapeData::~KoTextShapeData() {
-    if(d->ownsDocument)
+KoTextShapeData::~KoTextShapeData()
+{
+    if (d->ownsDocument)
         delete d->document;
     delete d;
 }
 
-void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnership) {
+void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnership)
+{
     Q_ASSERT(document);
-    if(d->ownsDocument && document != d->document)
+    if (d->ownsDocument && document != d->document)
         delete d->document;
     d->document = document;
     // The following avoids the normal case where the glyph metrices are rounded to integers and
     // hinted to the screen by freetype, which you of course don't want for WYSIWYG
-    if(! d->document->useDesignMetrics())
+    if (! d->document->useDesignMetrics())
         d->document->setUseDesignMetrics(true);
     d->ownsDocument = transferOwnership;
     d->document->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false));
 }
 
-QTextDocument *KoTextShapeData::document() {
+QTextDocument *KoTextShapeData::document()
+{
     return d->document;
 }
 
-qreal KoTextShapeData::documentOffset() const {
+qreal KoTextShapeData::documentOffset() const
+{
     return d->offset;
 }
 
-void KoTextShapeData::setDocumentOffset(qreal offset) {
+void KoTextShapeData::setDocumentOffset(qreal offset)
+{
     d->offset = offset;
 }
 
-int KoTextShapeData::position() const {
+int KoTextShapeData::position() const
+{
     return d->position;
 }
 
-void KoTextShapeData::setPosition(int position) {
+void KoTextShapeData::setPosition(int position)
+{
     d->position = position;
 }
 
-int KoTextShapeData::endPosition() const {
+int KoTextShapeData::endPosition() const
+{
     return d->endPosition;
 }
 
-void KoTextShapeData::setEndPosition(int position) {
+void KoTextShapeData::setEndPosition(int position)
+{
     d->endPosition = position;
 }
 
-void KoTextShapeData::foul() {
+void KoTextShapeData::foul()
+{
     d->dirty = true;
 }
 
-void KoTextShapeData::wipe() {
+void KoTextShapeData::wipe()
+{
     d->dirty = false;
 }
 
-bool KoTextShapeData::isDirty() const {
+bool KoTextShapeData::isDirty() const
+{
     return d->dirty;
 }
 
-void KoTextShapeData::fireResizeEvent() {
+void KoTextShapeData::fireResizeEvent()
+{
     emit relayout();
 }
 
-void KoTextShapeData::setShapeMargins(const KoInsets &margins) {
+void KoTextShapeData::setShapeMargins(const KoInsets &margins)
+{
     d->margins = margins;
 }
 
-KoInsets KoTextShapeData::shapeMargins() const {
+KoInsets KoTextShapeData::shapeMargins() const
+{
     return d->margins;
 }
 
-void KoTextShapeData::setPageDirection(KoText::Direction direction) {
+void KoTextShapeData::setPageDirection(KoText::Direction direction)
+{
     d->direction = direction;
 }
 
-KoText::Direction KoTextShapeData::pageDirection() const {
+KoText::Direction KoTextShapeData::pageDirection() const
+{
     return d->direction;
 }
 
-void KoTextShapeData::setPageNumberProvider(QObject* pagenumprovider) {
+void KoTextShapeData::setPageNumberProvider(QObject* pagenumprovider)
+{
     d->pageNumberProvider = pagenumprovider;
 }
 
-QObject* KoTextShapeData::pageNumberProvider() const {
+QObject* KoTextShapeData::pageNumberProvider() const
+{
     return d->pageNumberProvider;
 }
 
-int KoTextShapeData::pageNumber(KoInlineObject* inlineObject) {
+int KoTextShapeData::pageNumber(KoInlineObject* inlineObject)
+{
     Q_ASSERT(d->pageNumberProvider);
     int pagenumber = -1;
     bool ok = QMetaObject::invokeMethod(
-        d->pageNumberProvider, "pageNumber", Qt::DirectConnection,
-        Q_RETURN_ARG(int,pagenumber), Q_ARG(KoInlineObject*,inlineObject)
-    );
+                  d->pageNumberProvider, "pageNumber", Qt::DirectConnection,
+                  Q_RETURN_ARG(int, pagenumber), Q_ARG(KoInlineObject*, inlineObject)
+              );
     Q_ASSERT(ok);
     return pagenumber;
 }
 
-bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context) {
-    KoTextLoader loader( context );
+bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context)
+{
+    KoTextLoader loader(context);
 
-    QTextCursor cursor( document() );
+    QTextCursor cursor(document());
     document()->clear();
-    loader.loadBody( element, cursor ); // now let's load the body from the ODF KoXmlElement.
+    loader.loadBody(element, cursor);   // now let's load the body from the ODF KoXmlElement.
 
     return true;
 }
@@ -230,7 +251,7 @@ QString KoTextShapeDataPrivate::saveParagraphStyle(KoShapeSavingContext &context
 }
 
 QString KoTextShapeDataPrivate::saveCharacterStyle(KoShapeSavingContext &context, const KoStyleManager *styleManager,
-                                                     const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat)
+        const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat)
 {
     Q_ASSERT(styleManager);
     KoCharacterStyle *defaultCharStyle = styleManager->defaultParagraphStyle()->characterStyle();
@@ -257,12 +278,12 @@ QString KoTextShapeDataPrivate::saveCharacterStyle(KoShapeSavingContext &context
     } else { // There are manual changes... We'll have to store them then
         KoGenStyle style(KoGenStyle::StyleAuto, "text", originalCharStyle != defaultCharStyle ? internalName : "" /*parent*/);
         if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
-           style.setAutoStyleInStylesDotXml(true);
+            style.setAutoStyleInStylesDotXml(true);
         charStyle.removeDuplicates(*originalCharStyle);
         charStyle.removeDuplicates(blockCharFormat);
         if (!charStyle.isEmpty()) {
-           charStyle.saveOdf(style);
-           generatedName = context.mainStyles().lookup(style, "T");
+            charStyle.saveOdf(style);
+            generatedName = context.mainStyles().lookup(style, "T");
         }
     }
 
@@ -270,7 +291,7 @@ QString KoTextShapeDataPrivate::saveCharacterStyle(KoShapeSavingContext &context
 }
 
 QHash<QTextList *, QString> KoTextShapeDataPrivate::saveListStyles(KoShapeSavingContext &context, const KoStyleManager *styleManager,
-                                                                       QTextBlock block, int to)
+        QTextBlock block, int to)
 {
     QSet<KoListStyle *> generatedListStyles;
     QHash<QTextList *, QString> listStyles;
@@ -291,7 +312,8 @@ QHash<QTextList *, QString> KoTextShapeDataPrivate::saveListStyles(KoShapeSaving
     return listStyles;
 }
 
-void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to, bool saveDefaultStyles) const {
+void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to, bool saveDefaultStyles) const
+{
     KoXmlWriter *writer = &context.xmlWriter();
     QTextBlock block = d->document->findBlock(from);
 
@@ -304,10 +326,10 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to, 
         styleManager->saveOdfDefaultStyles(context.mainStyles());
 
     QHash<QTextList *, QString> listStyles = d->saveListStyles(context, styleManager, block, to);
-    QList<QTextList*> textLists;	// Store the current lists being stored.
+    QList<QTextList*> textLists; // Store the current lists being stored.
     KoListStyle *currentListStyle = 0;
 
-    while(block.isValid() && ((to == -1) || (block.position() < to))) {
+    while (block.isValid() && ((to == -1) || (block.position() < to))) {
         if ((block.begin().atEnd()) && (!block.next().isValid()))   // Do not add an extra empty line at the end...
             break;
 
@@ -329,8 +351,8 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to, 
                     }
                     currentListStyle = listStyle;
                 } else if (!textLists.isEmpty()) // sublists should be written within a list-item
-                    writer->startElement( "text:list-item", false );
-                writer->startElement( "text:list", false );
+                    writer->startElement("text:list-item", false);
+                writer->startElement("text:list", false);
                 writer->addAttribute("text:style-name", listStyles[textList]);
                 textLists.append(textList);
             } else if (textList != textLists.last()) {
@@ -340,7 +362,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to, 
                     writer->endElement(); // </text:list-element>
                 }
             }
-            writer->startElement( "text:list-item", false );
+            writer->startElement("text:list-item", false);
         } else {
             // Close any remaining list...
             while (!textLists.isEmpty()) {
@@ -352,10 +374,10 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to, 
             }
         }
         if (isHeading) {
-            writer->startElement( "text:h", false );
-            writer->addAttribute( "text:outline-level", blockData->outlineLevel() );
+            writer->startElement("text:h", false);
+            writer->addAttribute("text:outline-level", blockData->outlineLevel());
         } else {
-            writer->startElement( "text:p", false );
+            writer->startElement("text:p", false);
         }
 
         // Write the block format
@@ -408,8 +430,8 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to, 
 
         writer->endElement();
 
-	    if (block.textList() && !isHeading)	// We must check if we need to close a previously-opened text:list node.
-	        writer->endElement();
+        if (block.textList() && !isHeading) // We must check if we need to close a previously-opened text:list node.
+            writer->endElement();
 
         block = block.next();
     } // while

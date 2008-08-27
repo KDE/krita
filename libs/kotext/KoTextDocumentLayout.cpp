@@ -36,40 +36,71 @@
 #include <QTextList>
 #include <QTimer>
 
-class LayoutStateDummy : public KoTextDocumentLayout::LayoutState {
+class LayoutStateDummy : public KoTextDocumentLayout::LayoutState
+{
 public:
     LayoutStateDummy() : m_styleManager(0) {}
-    bool start() { return false; }
+    bool start() {
+        return false;
+    }
     void end() {}
     void reset() {}
-    bool interrupted() { return false; }
-    int numColumns() { return 0; }
-    qreal width() { return 0; }
-    qreal x() { return 0; }
-    qreal y() { return 0; }
-    qreal docOffsetInShape() const { return 0; }
-    bool addLine(QTextLine &) { return false; }
-    bool nextParag() { return false; }
-    bool previousParag() { return false; }
-    qreal documentOffsetInShape() { return 0; }
+    bool interrupted() {
+        return false;
+    }
+    int numColumns() {
+        return 0;
+    }
+    qreal width() {
+        return 0;
+    }
+    qreal x() {
+        return 0;
+    }
+    qreal y() {
+        return 0;
+    }
+    qreal docOffsetInShape() const {
+        return 0;
+    }
+    bool addLine(QTextLine &) {
+        return false;
+    }
+    bool nextParag() {
+        return false;
+    }
+    bool previousParag() {
+        return false;
+    }
+    qreal documentOffsetInShape() {
+        return 0;
+    }
     void draw(QPainter *, const KoTextDocumentLayout::PaintContext &) {}
-    KoStyleManager *styleManager() const { return m_styleManager; }
-    void setStyleManager(KoStyleManager *sm) { m_styleManager = sm; }
-    bool setFollowupShape(KoShape *) { return false; }
+    KoStyleManager *styleManager() const {
+        return m_styleManager;
+    }
+    void setStyleManager(KoStyleManager *sm) {
+        m_styleManager = sm;
+    }
+    bool setFollowupShape(KoShape *) {
+        return false;
+    }
     void clearTillEnd() {}
-    int cursorPosition() const { return 0; }
+    int cursorPosition() const {
+        return 0;
+    }
     void registerInlineObject(const QTextInlineObject &) {}
 
     KoStyleManager *m_styleManager;
 };
 
-class KoTextDocumentLayout::Private {
+class KoTextDocumentLayout::Private
+{
 public:
     Private(KoTextDocumentLayout *parent_)
-        : inlineTextObjectManager(0),
-        scheduled(false),
-        parent(parent_)
-    {
+            : inlineTextObjectManager(0),
+            scheduled(false),
+            parent(parent_) {
     }
 
     void relayoutPrivate() {
@@ -86,27 +117,29 @@ public:
 
 // ------------------- KoTextDocumentLayout --------------------
 KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextDocumentLayout::LayoutState *layout)
-    : QAbstractTextDocumentLayout(doc),
-    m_state(layout),
-    d(new Private(this))
+        : QAbstractTextDocumentLayout(doc),
+        m_state(layout),
+        d(new Private(this))
 {
     d->paintDevice = new KoPostscriptPaintDevice();
-    setPaintDevice( d->paintDevice );
-    if(m_state == 0)
+    setPaintDevice(d->paintDevice);
+    if (m_state == 0)
         m_state = new LayoutStateDummy();
 }
 
-KoTextDocumentLayout::~KoTextDocumentLayout() {
+KoTextDocumentLayout::~KoTextDocumentLayout()
+{
     delete d->paintDevice;
     delete d;
     delete m_state;
     m_state = 0;
 }
 
-void KoTextDocumentLayout::setLayout(LayoutState *layout) {
+void KoTextDocumentLayout::setLayout(LayoutState *layout)
+{
     Q_ASSERT(layout);
     KoStyleManager *sm = 0;
-    if(m_state)
+    if (m_state)
         sm = m_state->styleManager();
     delete m_state;
     m_state = layout;
@@ -114,95 +147,106 @@ void KoTextDocumentLayout::setLayout(LayoutState *layout) {
     scheduleLayout();
 }
 
-bool KoTextDocumentLayout::hasLayouter() const {
-    if(dynamic_cast<LayoutStateDummy*> (m_state) != 0)
+bool KoTextDocumentLayout::hasLayouter() const
+{
+    if (dynamic_cast<LayoutStateDummy*>(m_state) != 0)
         return false;
-    if(m_state == 0)
+    if (m_state == 0)
         return false;
     return true;
 }
 
-void KoTextDocumentLayout::addShape(KoShape *shape) {
+void KoTextDocumentLayout::addShape(KoShape *shape)
+{
     d->shapes.append(shape);
 
-    KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (shape->userData());
-    if(data) {
+    KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(shape->userData());
+    if (data) {
         data->foul();
         m_state->reset();
     }
 }
 
-void KoTextDocumentLayout::setStyleManager(KoStyleManager *sm) {
+void KoTextDocumentLayout::setStyleManager(KoStyleManager *sm)
+{
     m_state->setStyleManager(sm);
-    if(document()->isEmpty()) {
+    if (document()->isEmpty()) {
         QTextBlock block = document()->begin();
-        if(block.blockFormat().intProperty(KoParagraphStyle::StyleId) < 100)
+        if (block.blockFormat().intProperty(KoParagraphStyle::StyleId) < 100)
             sm->defaultParagraphStyle()->applyStyle(block);
     }
 }
 
-void KoTextDocumentLayout::setInlineObjectTextManager(KoInlineTextObjectManager *iom) {
+void KoTextDocumentLayout::setInlineObjectTextManager(KoInlineTextObjectManager *iom)
+{
     d->inlineTextObjectManager = iom;
 }
 
-KoInlineTextObjectManager *KoTextDocumentLayout::inlineObjectTextManager() {
+KoInlineTextObjectManager *KoTextDocumentLayout::inlineObjectTextManager()
+{
     return d->inlineTextObjectManager;
 }
 
-QRectF KoTextDocumentLayout::blockBoundingRect(const QTextBlock &block) const {
+QRectF KoTextDocumentLayout::blockBoundingRect(const QTextBlock &block) const
+{
     // nobody calls this code and I have no way of implementing it anyway...
     Q_UNUSED(block);
     //kWarning() << "KoTextDocumentLayout::blockBoundingRect is not implemented";
     return QRectF(0, 0, 10, 10);
 }
 
-QSizeF KoTextDocumentLayout::documentSize() const {
+QSizeF KoTextDocumentLayout::documentSize() const
+{
     // nobody calls this code and I have no way of implementing it anyway...
     kWarning() << "KoTextDocumentLayout::documentSize is not implemented";
     return QSizeF(10, 10);
 }
 
-void KoTextDocumentLayout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext &context) {
+void KoTextDocumentLayout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext &context)
+{
     PaintContext pc;
     pc.textContext = context;
     m_state->draw(painter, pc);
 }
 
-void KoTextDocumentLayout::draw ( QPainter * painter, const KoTextDocumentLayout::PaintContext & context) {
+void KoTextDocumentLayout::draw(QPainter * painter, const KoTextDocumentLayout::PaintContext & context)
+{
     m_state->draw(painter, context);
 }
 
-QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame *frame) const {
+QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame *frame) const
+{
     Q_UNUSED(frame);
     // nobody calls this code and I have no way of implementing it anyway...
     kWarning() << "KoTextDocumentLayout::frameBoundingRect is not implemented";
     return QRectF(0, 0, 10, 10);
 }
 
-int KoTextDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const {
+int KoTextDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
+{
     // kDebug(32500) <<"hitTest[" << point.x() <<"," << point.y() <<"]";
     QTextBlock block = document()->begin();
     int position = -1;
-    while(block.isValid()) {
+    while (block.isValid()) {
         QTextLayout *layout = block.layout();
-        if(point.y() > layout->boundingRect().bottom()) {
-            position = block.position() + block.length() -1;
+        if (point.y() > layout->boundingRect().bottom()) {
+            position = block.position() + block.length() - 1;
             block = block.next();
             continue;
         }
-        for(int i=0; i < layout->lineCount(); i++) {
+        for (int i = 0; i < layout->lineCount(); i++) {
             QTextLine line = layout->lineAt(i);
             // kDebug(32500) <<" + line[" << line.textStart() <<"]:" << line.y() <<"-" << line.height();
-            if(point.y() > line.y() + line.height()) {
+            if (point.y() > line.y() + line.height()) {
                 position = line.textStart() + line.textLength();
                 continue;
             }
-            if(accuracy == Qt::ExactHit && point.y() < line.y()) // between lines
+            if (accuracy == Qt::ExactHit && point.y() < line.y()) // between lines
                 return -1;
-            if(accuracy == Qt::ExactHit && // left or right of line
+            if (accuracy == Qt::ExactHit && // left or right of line
                     (point.x() < line.x() || point.x() > line.x() + line.width()))
                 return -1;
-            if(point.x() > line.width() && layout->textOption().textDirection() == Qt::RightToLeft) {
+            if (point.x() > line.width() && layout->textOption().textDirection() == Qt::RightToLeft) {
                 // totally right of RTL text means the position is the start of the text.
                 return block.position() + line.textStart();
             }
@@ -210,25 +254,27 @@ int KoTextDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accu
         }
         block = block.next();
     }
-    if(accuracy == Qt::ExactHit)
+    if (accuracy == Qt::ExactHit)
         return -1;
     return position;
 }
 
-int KoTextDocumentLayout::pageCount () const {
+int KoTextDocumentLayout::pageCount() const
+{
     return 1;
 }
 
-void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int charsAdded) {
+void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int charsAdded)
+{
     Q_UNUSED(charsAdded);
     Q_UNUSED(charsRemoved);
-    if(shapes().count() == 0) // nothing to do.
+    if (shapes().count() == 0) // nothing to do.
         return;
 
     foreach(KoShape *shape, shapes()) {
-        KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (shape->userData());
+        KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(shape->userData());
         Q_ASSERT(data);
-        if(data && data->position() <= position && data->endPosition() >= position) {
+        if (data && data->position() <= position && data->endPosition() >= position) {
             // found our (first) shape to re-layout
             data->foul();
             m_state->reset();
@@ -238,86 +284,98 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
     }
     // if still here; then the change was not in any frame, lets relayout the last for now.
     KoShape *shape = shapes().last();
-    KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (shape->userData());
+    KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(shape->userData());
     Q_ASSERT(data);
     data->foul();
     m_state->reset();
     scheduleLayout();
 }
 
-void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format) {
+void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format)
+{
     Q_ASSERT(format.isCharFormat());
-    if(d->inlineTextObjectManager == 0)
+    if (d->inlineTextObjectManager == 0)
         return;
     QTextCharFormat cf = format.toCharFormat();
     KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
-    if(obj)
+    if (obj)
         obj->paint(*painter, paintDevice(), document(), rect, object, position, cf);
 }
 
-void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format) {
+void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format)
+{
     Q_ASSERT(format.isCharFormat());
-    if(d->inlineTextObjectManager == 0)
+    if (d->inlineTextObjectManager == 0)
         return;
     QTextCharFormat cf = format.toCharFormat();
     KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
-    if(obj)
+    if (obj)
         obj->updatePosition(document(), item, position, cf);
 }
 
-void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format) {
+void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format)
+{
     Q_ASSERT(format.isCharFormat());
-    if(d->inlineTextObjectManager == 0)
+    if (d->inlineTextObjectManager == 0)
         return;
     QTextCharFormat cf = format.toCharFormat();
     KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
-    if(obj) {
+    if (obj) {
         obj->resize(document(), item, position, cf, paintDevice());
         m_state->registerInlineObject(item);
     }
 }
 
-void KoTextDocumentLayout::scheduleLayout() {
-    if(d->scheduled)
+void KoTextDocumentLayout::scheduleLayout()
+{
+    if (d->scheduled)
         return;
     interruptLayout();
     d->scheduled = true;
     QTimer::singleShot(0, this, SLOT(relayoutPrivate()));
 }
 
-void KoTextDocumentLayout::relayout() {
+void KoTextDocumentLayout::relayout()
+{
     layout();
 }
 
-void KoTextDocumentLayout::interruptLayout() {
+void KoTextDocumentLayout::interruptLayout()
+{
     m_state->reset();
 }
 
-void KoTextDocumentLayout::layout() {
+void KoTextDocumentLayout::layout()
+{
     d->scheduled = false;
 //kDebug(32500) <<"KoTextDocumentLayout::layout";
-    class End {
+    class End
+    {
     public:
-        End(LayoutState *state) { m_state = state; }
-        ~End() { m_state->end(); }
+        End(LayoutState *state) {
+            m_state = state;
+        }
+        ~End() {
+            m_state->end();
+        }
     private:
         LayoutState *m_state;
     };
     End ender(m_state); // poor mans finally{}
 
-    if(! m_state->start())
+    if (! m_state->start())
         return;
     bool newParagraph = true;
-    while(m_state->shape) {
+    while (m_state->shape) {
         QTextLine line = m_state->layout->createLine();
         if (!line.isValid()) { // end of parag
             qreal posY = m_state->y();
             bool moreText = m_state->nextParag();
-            if(m_state->shape && m_state->y() > posY)
+            if (m_state->shape && m_state->y() > posY)
                 m_state->shape->update(QRectF(0, posY,
-                            m_state->shape->size().width(), m_state->y() - posY));
+                                              m_state->shape->size().width(), m_state->y() - posY));
 
-            if(! moreText)
+            if (! moreText)
                 return; // done!
             newParagraph = true;
             continue;
@@ -328,9 +386,9 @@ void KoTextDocumentLayout::layout() {
         else
             line.setLineWidth(m_state->width());
         line.setPosition(QPointF(m_state->x(), m_state->y()));
-        while(m_state->addLine(line)) {
-            if(m_state->shape == 0) { // shape is full!
-                line.setPosition(QPointF(0, m_state->y()+20));
+        while (m_state->addLine(line)) {
+            if (m_state->shape == 0) { // shape is full!
+                line.setPosition(QPointF(0, m_state->y() + 20));
                 return; // done!
             }
             line.setLineWidth(m_state->width());
@@ -345,20 +403,23 @@ void KoTextDocumentLayout::layout() {
     }
 }
 
-QList<KoShape*> KoTextDocumentLayout::shapes() const {
+QList<KoShape*> KoTextDocumentLayout::shapes() const
+{
     return d->shapes;
 }
 
-KoStyleManager *KoTextDocumentLayout::styleManager() const {
+KoStyleManager *KoTextDocumentLayout::styleManager() const
+{
     return m_state->styleManager();
 }
 
-KoShape* KoTextDocumentLayout::shapeForPosition(int position) const {
+KoShape* KoTextDocumentLayout::shapeForPosition(int position) const
+{
     foreach(KoShape *shape, shapes()) {
-        KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (shape->userData());
-        if(data == 0)
+        KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(shape->userData());
+        if (data == 0)
             continue;
-        if(data->position() <= position && (data->endPosition() == -1 || data->endPosition() > position))
+        if (data->position() <= position && (data->endPosition() == -1 || data->endPosition() > position))
             return shape;
     }
     return 0;

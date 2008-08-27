@@ -16,7 +16,7 @@
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the 
+ * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
@@ -36,11 +36,11 @@
 /* wrappers for malloc */
 
 void *
-hnj_malloc (int size);
+hnj_malloc(int size);
 
 void *
-hnj_realloc (void *p, int size);
+hnj_realloc(void *p, int size);
 
 void
-hnj_free (void *p);
+hnj_free(void *p);
 

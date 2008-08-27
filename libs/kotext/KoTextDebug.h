@@ -50,11 +50,11 @@ public:
     static QString paraAttributes(const KoParagraphStyle &style);
     static QString listAttributes(const QTextListFormat &format);
     static QString inlineObjectAttributes(const QTextCharFormat &textFormat);
-    
+
 private:
     KoTextDebug();
-    KoTextDebug( const KoTextDebug& );
-    KoTextDebug operator=( const KoTextDebug& );
+    KoTextDebug(const KoTextDebug&);
+    KoTextDebug operator=(const KoTextDebug&);
 
     static const QTextDocument *document;
     static int depth;

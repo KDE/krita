@@ -36,35 +36,35 @@
 
 #include <KoRuler.h>
 
-static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2) {
+static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2)
+{
     return tab1.position < tab2.position;
 }
 
-class KoRulerController::Private {
+class KoRulerController::Private
+{
 public:
     Private(KoRuler *r, KoCanvasResourceProvider *crp)
-        : ruler(r),
-        resourceProvider(crp),
-        lastPosition(-1),
-        originalTabIndex(-2),
-        currentTabIndex(-2)
-    {
+            : ruler(r),
+            resourceProvider(crp),
+            lastPosition(-1),
+            originalTabIndex(-2),
+            currentTabIndex(-2) {
     }
 
-    void canvasResourceChanged(int key)
-    {
-        if(key != KoText::CurrentTextPosition && key != KoText::CurrentTextDocument)
-           return;
+    void canvasResourceChanged(int key) {
+        if (key != KoText::CurrentTextPosition && key != KoText::CurrentTextDocument)
+            return;
 
         QTextBlock block = currentBlock();
-        if(! block.isValid()) {
+        if (! block.isValid()) {
             ruler->setShowIndents(false);
             ruler->setShowTabs(false);
             return;
         }
         ruler->setShowIndents(true);
         ruler->setShowTabs(true);
-        if(block.position() <= lastPosition && block.position() + block.length() > lastPosition)
+        if (block.position() <= lastPosition && block.position() + block.length() > lastPosition)
             return; // nothing changed.
         lastPosition = block.position();
         currentTabIndex = -2;
@@ -80,7 +80,7 @@ public:
 
         QList<KoRuler::Tab> tabs;
         QVariant variant = format.property(KoParagraphStyle::TabPositions);
-        if(! variant.isNull()) {
+        if (! variant.isNull()) {
             foreach(QVariant var, qvariant_cast<QList<QVariant> >(variant)) {
                 KoText::Tab textTab = var.value<KoText::Tab>();
                 KoRuler::Tab tab;
@@ -92,10 +92,9 @@ public:
         ruler->updateTabs(tabs);
     }
 
-    void indentsChanged()
-    {
+    void indentsChanged() {
         QTextBlock block = currentBlock();
-        if(! block.isValid())
+        if (! block.isValid())
             return;
         QTextCursor cursor(block);
         QTextBlockFormat bf = cursor.blockFormat();
@@ -105,13 +104,12 @@ public:
         cursor.setBlockFormat(bf);
     }
 
-    void tabChanged(int originalIndex, KoRuler::Tab *tab)
-    {
+    void tabChanged(int originalIndex, KoRuler::Tab *tab) {
         QVariant docVar = resourceProvider->resource(KoText::CurrentTextDocument);
-        if(docVar.isNull())
+        if (docVar.isNull())
             return;
-        QTextDocument *doc = static_cast<QTextDocument*> (docVar.value<void*>());
-        if(doc == 0)
+        QTextDocument *doc = static_cast<QTextDocument*>(docVar.value<void*>());
+        if (doc == 0)
             return;
         const int position = resourceProvider->intResource(KoText::CurrentTextPosition);
         const int anchor = resourceProvider->intResource(KoText::CurrentTextAnchor);
@@ -127,16 +125,14 @@ public:
             if (originalTabIndex >= 0) { // modification
                 currentTab = tabList[originalTabIndex];
                 currentTabIndex = originalTabIndex;
-            }
-            else if (originalTabIndex == -1 && tab) { // new tab.
+            } else if (originalTabIndex == -1 && tab) { // new tab.
                 currentTab = KoText::Tab();
                 currentTab.type = tab->type;
                 if (tab->type == QTextOption::DelimiterTab)
                     currentTab.delimiter = QLocale::system().decimalPoint(); // TODO check language of text
                 currentTabIndex = tabList.count();
                 tabList << currentTab;
-            }
-            else {
+            } else {
                 kWarning(32500) << "Unexpected input from tabChanged signal";
                 Q_ASSERT(false);
                 return;
@@ -149,11 +145,9 @@ public:
             if (currentTabIndex == -2) { // add the new tab to the list, sorting in.
                 currentTabIndex = tabList.count();
                 tabList << currentTab;
-            }
-            else
+            } else
                 tabList.replace(currentTabIndex, currentTab);
-        }
-        else if (currentTabIndex >= 0) { // lets remove it.
+        } else if (currentTabIndex >= 0) { // lets remove it.
             tabList.removeAt(currentTabIndex);
             currentTabIndex = -2;
         }
@@ -162,7 +156,7 @@ public:
         QList<KoText::Tab> sortedList = tabList;
         qSort(sortedList.begin(), sortedList.end(), compareTabs);
         QList<QVariant> list;
-        foreach (KoText::Tab tab, sortedList) {
+        foreach(KoText::Tab tab, sortedList) {
             QVariant v;
             v.setValue(tab);
             list.append(v);
@@ -171,19 +165,17 @@ public:
         cursor.mergeBlockFormat(bf);
     }
 
-    QTextBlock currentBlock()
-    {
+    QTextBlock currentBlock() {
         QVariant docVar = resourceProvider->resource(KoText::CurrentTextDocument);
-        if(docVar.isNull())
+        if (docVar.isNull())
             return QTextBlock();
-        QTextDocument *doc = static_cast<QTextDocument*> (docVar.value<void*>());
-        if(doc == 0)
+        QTextDocument *doc = static_cast<QTextDocument*>(docVar.value<void*>());
+        if (doc == 0)
             return QTextBlock();
         return doc->findBlock(resourceProvider->intResource(KoText::CurrentTextPosition));
     }
 
-    void tabChangeInitiated()
-    {
+    void tabChangeInitiated() {
         tabList.clear();
         originalTabIndex = -2;
     }
@@ -198,13 +190,13 @@ private:
 };
 
 KoRulerController::KoRulerController(KoRuler *horizontalRuler, KoCanvasResourceProvider *crp)
-    : QObject(horizontalRuler),
-    d(new Private(horizontalRuler, crp))
+        : QObject(horizontalRuler),
+        d(new Private(horizontalRuler, crp))
 {
     connect(crp, SIGNAL(resourceChanged(int, const QVariant &)), this, SLOT(canvasResourceChanged(int)));
     connect(horizontalRuler, SIGNAL(indentsChanged(bool)), this, SLOT(indentsChanged()));
     connect(horizontalRuler, SIGNAL(aboutToChange()), this, SLOT(tabChangeInitiated()));
-    connect(horizontalRuler, SIGNAL(tabChanged(int,KoRuler::Tab*)), this, SLOT(tabChanged(int,KoRuler::Tab*)));
+    connect(horizontalRuler, SIGNAL(tabChanged(int, KoRuler::Tab*)), this, SLOT(tabChanged(int, KoRuler::Tab*)));
 }
 
 KoRulerController::~KoRulerController()

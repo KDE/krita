@@ -32,7 +32,8 @@ class KoCanvasResourceProvider;
  * The code to do this is pretty trivial; just instantiate this class and you can
  * forget about it.  It'll do what you want.
  */
-class KOTEXT_EXPORT KoRulerController : public QObject {
+class KOTEXT_EXPORT KoRulerController : public QObject
+{
     Q_OBJECT
 public:
     /**
@@ -50,7 +51,7 @@ private:
 
     Q_PRIVATE_SLOT(d, void canvasResourceChanged(int))
     Q_PRIVATE_SLOT(d, void indentsChanged())
-    Q_PRIVATE_SLOT(d, void tabChanged(int,KoRuler::Tab *tab))
+    Q_PRIVATE_SLOT(d, void tabChanged(int, KoRuler::Tab *tab))
     Q_PRIVATE_SLOT(d, void tabChangeInitiated())
 };
 

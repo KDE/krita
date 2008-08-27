@@ -52,7 +52,8 @@ class KoShape;
  * The position of the shape relative to the anchor is called the offset. It's loaded by loadOdfFromShape().
  * @see KWAnchorStrategy for more information about the layout of anchors/shapes in KWord.
  */
-class KOTEXT_EXPORT KoTextAnchor : public KoInlineObject {
+class KOTEXT_EXPORT KoTextAnchor : public KoInlineObject
+{
 public:
     /// the vertical alignment options for the shape this anchor holds.
     enum AnchorVertical {
@@ -73,7 +74,7 @@ public:
         FurtherFromBinding, ///< Like Left when on an even page, or Right otherwise.
         HorizontalOffset    ///< Move the anchor to be an exact horizontal distance from the the anchor.
     };
-    
+
     /// the anchor type we are using
     enum AnchorType {
         Page,               ///< Relative to the page
@@ -118,7 +119,7 @@ public:
 
     /// returns the cursor position in the document where this anchor is positioned.
     int positionInDocument() const;
-    
+
     /// returns the page number in case this is a page anchor
     int pageNumber() const;
 
@@ -127,13 +128,13 @@ public:
 
     /// reimplemented from KoInlineObject
     virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
-            int posInDocument, const QTextCharFormat &format);
+                                int posInDocument, const QTextCharFormat &format);
     /// reimplemented from KoInlineObject
     virtual void resize(const QTextDocument *document, QTextInlineObject object,
-            int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
     /// reimplemented from KoInlineObject
-    virtual void paint (QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-            const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
+    virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
+                       const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
     /// return the offset of the shape from the anchor.
     const QPointF &offset() const;
@@ -141,9 +142,9 @@ public:
     void setOffset(const QPointF &offset);
 
     /// Load the additional attributes.
-    bool loadOdfFromShape ();
+    bool loadOdfFromShape();
     /// Save the additional attributes.
-    void saveOdf (KoShapeSavingContext & context);
+    void saveOdf(KoShapeSavingContext & context);
 
 private:
     class Private;

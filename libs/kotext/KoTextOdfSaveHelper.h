@@ -29,7 +29,7 @@ class KoTextShapeData;
 class KOTEXT_EXPORT KoTextOdfSaveHelper : public KoDragOdfSaveHelper
 {
 public:
-    KoTextOdfSaveHelper( KoTextShapeData * shapeData, int from, int to );
+    KoTextOdfSaveHelper(KoTextShapeData * shapeData, int from, int to);
     virtual ~KoTextOdfSaveHelper();
 
     /// reimplemented

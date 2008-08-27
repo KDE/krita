@@ -30,7 +30,8 @@ class KoInlineTextObjectManager;
 /**
  * helper class
  */
-class InsertNamedVariableAction : public InsertVariableActionBase {
+class InsertNamedVariableAction : public InsertVariableActionBase
+{
 public:
     InsertNamedVariableAction(KoCanvasBase *canvas, const KoInlineTextObjectManager *manager, const QString &name);
 

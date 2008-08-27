@@ -27,31 +27,34 @@
 #include <kdebug.h>
 #include <k3staticdeleter.h>
 
-void KoInlineObjectRegistry::init() {
+void KoInlineObjectRegistry::init()
+{
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "TextInlinePlugins";
     config.blacklist = "TextInlinePluginsDisabled";
     config.group = "koffice";
-    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Text-InlineObject"),
-                                      QString::fromLatin1("[X-KoText-MinVersion] <= 0"), config);
+    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Text-InlineObject"),
+                                     QString::fromLatin1("[X-KoText-MinVersion] <= 0"), config);
 }
 
 KoInlineObjectRegistry *KoInlineObjectRegistry::s_instance = 0;
 static K3StaticDeleter<KoInlineObjectRegistry> staticInlineObjectRegistryDeleter;
 
-KoInlineObjectRegistry* KoInlineObjectRegistry::instance() {
-    if(KoInlineObjectRegistry::s_instance == 0) {
+KoInlineObjectRegistry* KoInlineObjectRegistry::instance()
+{
+    if (KoInlineObjectRegistry::s_instance == 0) {
         staticInlineObjectRegistryDeleter.setObject(s_instance, new KoInlineObjectRegistry());
         KoInlineObjectRegistry::s_instance->init();
     }
     return KoInlineObjectRegistry::s_instance;
 }
 
-QList<QAction*> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase *host) const {
+QList<QAction*> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase *host) const
+{
     QList<QAction*> answer;
     foreach(QString key, keys()) {
         KoInlineObjectFactory *factory = value(key);
-        if(factory->type() == KoInlineObjectFactory::TextVariable) {
+        if (factory->type() == KoInlineObjectFactory::TextVariable) {
             foreach(KoInlineObjectTemplate templ, factory->templates()) {
                 //answer.append(new InsertVariableAction(host, factory, templ));
             }

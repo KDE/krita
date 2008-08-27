@@ -40,14 +40,14 @@ static K3StaticDeleter<KoHyphenator> kohyphensd;
 
 KoHyphenator* KoHyphenator::self()
 {
-    if ( !s_self )
-        kohyphensd.setObject( s_self, new KoHyphenator );
+    if (!s_self)
+        kohyphensd.setObject(s_self, new KoHyphenator);
     return s_self;
 }
 
 KoHyphenator::KoHyphenator()
 {
-/*  Reading config for dictionary encodings from file...*/
+    /*  Reading config for dictionary encodings from file...*/
 
     QString path = KGlobal::dirs()->findResource("data", "koffice/hyphdicts/dicts.xml");
 #ifdef DEBUG_HYPHENATOR
@@ -58,27 +58,25 @@ KoHyphenator::KoHyphenator()
     if (!path.isNull())
         f = new QFile(path);
     else
-        throw KoHyphenatorException( "Could not create KoHyphenator instance." );
+        throw KoHyphenatorException("Could not create KoHyphenator instance.");
 
     QDomDocument config;
     QDomNodeList records;
     config.setContent(f);
 
     for (QDomNode n = config.firstChild(); !n.isNull(); n = n.nextSibling())
-        if (n.nodeName() == "dicts")
-        {
+        if (n.nodeName() == "dicts") {
             records = n.childNodes();
-            for (int i = 0; i < records.count(); i++)
-            {
+            for (int i = 0; i < records.count(); i++) {
                 QDomNamedNodeMap attr = records.item(i).attributes();
                 if (attr.contains("lang") && attr.contains("encoding")) {
                     QString lang = attr.namedItem("lang").nodeValue();
                     QString encoding = attr.namedItem("encoding").nodeValue();
 #ifdef DEBUG_HYPHENATOR
-                    kDebug(32500) <<"KoHyphenator: found lang=" << lang <<" encoding=" << encoding;
+                    kDebug(32500) << "KoHyphenator: found lang=" << lang << " encoding=" << encoding;
 #endif
-                    encodings.insert( lang,
-                                      EncodingStruct( encoding.toLatin1() ) );
+                    encodings.insert(lang,
+                                     EncodingStruct(encoding.toLatin1()));
                 }
             }
         }
@@ -88,8 +86,7 @@ KoHyphenator::KoHyphenator()
 
 KoHyphenator::~KoHyphenator()
 {
-    for (QMap<QString, HyphenDict*>::iterator it = dicts.begin(); it != dicts.end(); ++it)
-    {
+    for (QMap<QString, HyphenDict*>::iterator it = dicts.begin(); it != dicts.end(); ++it) {
         if ((*it) != 0)
             hnj_hyphen_free((*it));
     }
@@ -98,13 +95,10 @@ KoHyphenator::~KoHyphenator()
 char *KoHyphenator::hyphens(const QString& str, const QString& lang) const
 {
     char *x = new char[str.length()+1];
-    try
-    {
+    try {
         QTextCodec *codec = codecForLang(lang);
         hnj_hyphen_hyphenate(dict(lang), (const char *)(codec->fromUnicode(str)), str.length(), x);
-    }
-    catch (KoHyphenatorException &e)
-    {
+    } catch (KoHyphenatorException &e) {
 #ifdef DEBUG_HYPHENATOR
         kDebug(32500) << e.message().latin1();
 #endif
@@ -119,13 +113,10 @@ QString KoHyphenator::hyphenate(const QString& str, const QString& lang) const
 {
     char* x = new char[str.length()+1];
     QString res = str;
-    try
-    {
+    try {
         QTextCodec *codec = codecForLang(lang);
         hnj_hyphen_hyphenate(dict(lang), (const char *)(codec->fromUnicode(str)), str.length(), x);
-    }
-    catch (KoHyphenatorException &e)
-    {
+    } catch (KoHyphenatorException &e) {
 #ifdef DEBUG_HYPHENATOR
         kDebug(32500) << e.message();
 #endif
@@ -134,14 +125,12 @@ QString KoHyphenator::hyphenate(const QString& str, const QString& lang) const
     }
     int i = 0, j = 0;
     int len = strlen(x);
-    for (; i < len; i++)
-    {
+    for (; i < len; i++) {
 #ifdef DEBUG_HYPHENATOR
-        kDebug(32500) <<"loop: i=" << i <<", j=" << j <<", x=" << x <<", res=" << res;
+        kDebug(32500) << "loop: i=" << i << ", j=" << j << ", x=" << x << ", res=" << res;
 #endif
-        if ((x[i] % 2) != 0)
-        {
-            res.insert(j+1, QChar(0xad));
+        if ((x[i] % 2) != 0) {
+            res.insert(j + 1, QChar(0xad));
             j++;
         }
         j++;
@@ -153,14 +142,14 @@ QString KoHyphenator::hyphenate(const QString& str, const QString& lang) const
 bool KoHyphenator::checkHyphenPos(const QString& str, int pos, const QString& lang) const
 {
 #ifdef DEBUG_HYPHENATOR
-    kDebug(32500) <<"string:" << str;
+    kDebug(32500) << "string:" << str;
 #endif
 
     char *hyph = hyphens(str, lang);
 
 #ifdef DEBUG_HYPHENATOR
-    kDebug(32500) <<"result:" << hyph;
-    kDebug(32500) <<"checked position:" << pos;
+    kDebug(32500) << "result:" << hyph;
+    kDebug(32500) << "checked position:" << pos;
 #endif
     bool ret = ((hyph[pos] % 2) != 0);
     delete[] hyph;
@@ -169,41 +158,35 @@ bool KoHyphenator::checkHyphenPos(const QString& str, int pos, const QString& la
 
 HyphenDict *KoHyphenator::dict(const QString &_lang) const
 {
-    QString lang( _lang );
+    QString lang(_lang);
     //only load dictionary when encoding info is present
-    if (encodings.find(lang) == encodings.end())
-    {
+    if (encodings.find(lang) == encodings.end()) {
         int underscore = lang.indexOf('_');
-        if ( underscore > -1 ) {
-            lang.truncate( underscore );
+        if (underscore > -1) {
+            lang.truncate(underscore);
             if (encodings.find(lang) == encodings.end())
-                throw KoHyphenatorException( QString("No dictionary for %1").arg(lang) );
-        }
-        else
-            throw KoHyphenatorException( QString("No dictionary for %1").arg(lang) );
+                throw KoHyphenatorException(QString("No dictionary for %1").arg(lang));
+        } else
+            throw KoHyphenatorException(QString("No dictionary for %1").arg(lang));
     }
-    if (dicts.find(lang) == dicts.end())
-    {
+    if (dicts.find(lang) == dicts.end()) {
 #ifdef DEBUG_HYPHENATOR
-        kDebug(32500) <<"Searching dictionary for '" << lang <<"' language...";
+        kDebug(32500) << "Searching dictionary for '" << lang << "' language...";
 #endif
         QString path = KGlobal::dirs()->findResource("data", "koffice/hyphdicts/hyph_" + lang + ".dic");
-        if (!path.isNull())
-        {
+        if (!path.isNull()) {
 #ifdef DEBUG_HYPHENATOR
-            kDebug(32500) <<"Loading dictionary for '" << lang <<"' language: path =" << path;
+            kDebug(32500) << "Loading dictionary for '" << lang << "' language: path =" << path;
 #endif
-            const_cast<KoHyphenator*>(this)->dicts.insert( lang, hnj_hyphen_load(QFile::encodeName(path)) );
-            if (dicts.find(lang) == dicts.end())
-            {
+            const_cast<KoHyphenator*>(this)->dicts.insert(lang, hnj_hyphen_load(QFile::encodeName(path)));
+            if (dicts.find(lang) == dicts.end()) {
 #ifdef DEBUG_HYPHENATOR
-                kDebug(32500) <<"No dictionary loaded";
+                kDebug(32500) << "No dictionary loaded";
 #endif
-                throw(KoHyphenatorException( QString("Could not load dictionary for the language: %1").arg(lang) ));
+                throw(KoHyphenatorException(QString("Could not load dictionary for the language: %1").arg(lang)));
             }
-        }
-        else
-            throw(KoHyphenatorException( QString("Could not load dictionary for the language: %1").arg(lang) ));
+        } else
+            throw(KoHyphenatorException(QString("Could not load dictionary for the language: %1").arg(lang)));
     }
     return dicts[lang];
 }
@@ -211,18 +194,16 @@ HyphenDict *KoHyphenator::dict(const QString &_lang) const
 QTextCodec* KoHyphenator::codecForLang(const QString& lang) const
 {
     EncodingMap::Iterator it = encodings.find(lang);
-    if (it == encodings.end())
-    {
+    if (it == encodings.end()) {
         int underscore = lang.indexOf('_');
-        if ( underscore > -1 ) {
-            QString _lang( lang );
-            _lang.truncate( underscore );
+        if (underscore > -1) {
+            QString _lang(lang);
+            _lang.truncate(underscore);
             it = encodings.find(_lang);
         }
     }
-    if (it != encodings.end())
-    {
-        if ( (*it).codec )
+    if (it != encodings.end()) {
+        if ((*it).codec)
             return (*it).codec;
         (*it).codec = QTextCodec::codecForName((*it).encoding);
         return (*it).codec;

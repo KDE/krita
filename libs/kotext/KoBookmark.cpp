@@ -30,7 +30,8 @@
 
 #include <KDebug>
 
-class KoBookmark::Private {
+class KoBookmark::Private
+{
 public:
     Private(const QTextDocument *doc) : document(doc) { }
     const QTextDocument *document;
@@ -42,8 +43,8 @@ public:
 };
 
 KoBookmark::KoBookmark(const QString &name, const QTextDocument *document)
-    : KoInlineObject(false),
-    d(new Private(document))
+        : KoInlineObject(false),
+        d(new Private(document))
 {
     d->selection = false;
     d->endBookmark = 0;
@@ -70,14 +71,16 @@ void KoBookmark::saveOdf(KoShapeSavingContext &context)
     writer->endElement();
 }
 
-void KoBookmark::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format) {
+void KoBookmark::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
+{
     Q_UNUSED(object);
     Q_UNUSED(format);
     d->document = document;
     d->posInDocument = posInDocument;
 }
 
-void KoBookmark::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) {
+void KoBookmark::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
+{
     Q_UNUSED(object);
     Q_UNUSED(pd);
     Q_UNUSED(format);
@@ -85,7 +88,8 @@ void KoBookmark::resize(const QTextDocument *document, QTextInlineObject object,
     Q_UNUSED(posInDocument);
 }
 
-void KoBookmark::paint (QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &, QTextInlineObject , int , const QTextCharFormat &) {
+void KoBookmark::paint(QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &, QTextInlineObject , int , const QTextCharFormat &)
+{
     // nothing to paint.
 }
 
@@ -115,12 +119,14 @@ KoBookmark::BookmarkType KoBookmark::type()
     return d->type;
 }
 
-void KoBookmark::setEndBookmark(KoBookmark *bookmark) {
+void KoBookmark::setEndBookmark(KoBookmark *bookmark)
+{
     d->endBookmark = bookmark;
     d->selection = true;
 }
 
-KoBookmark *KoBookmark::endBookmark() {
+KoBookmark *KoBookmark::endBookmark()
+{
     return d->endBookmark;
 }
 
@@ -129,11 +135,13 @@ KoShape *KoBookmark::shape()
     return shapeForPosition(d->document, d->posInDocument);
 }
 
-int KoBookmark::position() {
+int KoBookmark::position()
+{
     return d->posInDocument;
 }
 
-bool KoBookmark::hasSelection() {
+bool KoBookmark::hasSelection()
+{
     return d->selection;
 }
 

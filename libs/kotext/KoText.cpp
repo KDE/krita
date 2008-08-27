@@ -22,41 +22,44 @@
 
 using namespace KoText;
 
-QStringList KoText::underlineTypeList() {
+QStringList KoText::underlineTypeList()
+{
     QStringList lst;
-    lst <<i18nc("Underline Style", "None");
-    lst <<i18nc("Underline Style", "Single");
-    lst <<i18nc("Underline Style", "Double");
+    lst << i18nc("Underline Style", "None");
+    lst << i18nc("Underline Style", "Single");
+    lst << i18nc("Underline Style", "Double");
     return lst;
 }
 
-QStringList KoText::underlineStyleList() {
+QStringList KoText::underlineStyleList()
+{
     QStringList lst;
-    lst <<"_________";   // solid
-    lst <<"___ ___ __";  // dash
-    lst <<"_ _ _ _ _ _"; // dot
-    lst <<"___ _ ___ _"; // dash_dot
-    lst <<"___ _ _ ___"; // dash_dot_dot
-    lst <<"~~~~~~~"; // wavy lines
+    lst << "_________";  // solid
+    lst << "___ ___ __"; // dash
+    lst << "_ _ _ _ _ _"; // dot
+    lst << "___ _ ___ _"; // dash_dot
+    lst << "___ _ _ ___"; // dash_dot_dot
+    lst << "~~~~~~~"; // wavy lines
     return lst;
 }
 
 KoText::Tab::Tab()
-    : position(0.),
-    type(QTextOption::LeftTab),
-    leaderType(KoCharacterStyle::NoLineType),
-    leaderStyle(KoCharacterStyle::NoLineStyle),
-    leaderWeight(KoCharacterStyle::AutoLineWeight),
-    leaderWidth(0)
+        : position(0.),
+        type(QTextOption::LeftTab),
+        leaderType(KoCharacterStyle::NoLineType),
+        leaderStyle(KoCharacterStyle::NoLineStyle),
+        leaderWeight(KoCharacterStyle::AutoLineWeight),
+        leaderWidth(0)
 {
 }
 
-bool KoText::Tab::operator==(const Tab &other) const {
+bool KoText::Tab::operator==(const Tab &other) const
+{
     return other.position == position &&
-        other.type == type &&
-        other.delimiter == delimiter &&
-        other.leaderStyle == leaderStyle &&
-        other.leaderColor == leaderColor &&
-        other.leaderText == leaderText ;
+           other.type == type &&
+           other.delimiter == delimiter &&
+           other.leaderStyle == leaderStyle &&
+           other.leaderColor == leaderColor &&
+           other.leaderText == leaderText ;
 }
 

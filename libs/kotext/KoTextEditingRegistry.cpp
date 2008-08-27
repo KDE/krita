@@ -23,20 +23,22 @@
 
 #include <k3staticdeleter.h>
 
-void KoTextEditingRegistry::init() {
+void KoTextEditingRegistry::init()
+{
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "TextEditingPlugins";
     config.blacklist = "TextEditingPluginsDisabled";
     config.group = "koffice";
-    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Text-EditingPlugin"),
-                                      QString::fromLatin1("[X-KoText-MinVersion] <= 0"), config);
+    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Text-EditingPlugin"),
+                                     QString::fromLatin1("[X-KoText-MinVersion] <= 0"), config);
 }
 
 KoTextEditingRegistry *KoTextEditingRegistry::s_instance = 0;
 static K3StaticDeleter<KoTextEditingRegistry> staticShapeRegistryDeleter;
 
-KoTextEditingRegistry* KoTextEditingRegistry::instance() {
-    if(KoTextEditingRegistry::s_instance == 0) {
+KoTextEditingRegistry* KoTextEditingRegistry::instance()
+{
+    if (KoTextEditingRegistry::s_instance == 0) {
         staticShapeRegistryDeleter.setObject(s_instance, new KoTextEditingRegistry());
         KoTextEditingRegistry::s_instance->init();
     }

@@ -34,54 +34,55 @@
 /**
  * Generic namespace of the KOffice Text library for helper methods and data.
  */
-namespace KoText {
-    KOTEXT_EXPORT QStringList underlineTypeList();
-    KOTEXT_EXPORT QStringList underlineStyleList();
+namespace KoText
+{
+KOTEXT_EXPORT QStringList underlineTypeList();
+KOTEXT_EXPORT QStringList underlineStyleList();
 
-    /// This enum contains values to be used as keys in the KoCanvasResourceProvider
-    enum Options {
-        ShowTextFrames =  278622039, ///< boolean that enables painting of frame outlines
-        ShowSpaces,         ///< boolean that enables painting of spaces
-        ShowTabs,           ///< boolean that enables painting of tabs
-        ShowEnters,         ///< boolean that enables painting of enters (linefeed chars)
-        ShowSpecialCharacters,  ///< boolean that enables painting of special characters (nbsp etc)
-        BidiDocument = 493038196,
-        CurrentTextDocument = 382490375, ///< set by the text plugin whenever the document is changed
-        CurrentTextPosition = 183523,   ///<  used by the text plugin whenever the position is changed
-        CurrentTextAnchor = 341899485,   ///<  used by the text plugin whenever the anchor-position is changed
-        SelectedTextPosition = 21314576,   ///<  used by the text plugin whenever the alternative selection is changed
-        ///  used by the text plugin whenever the alternative selection anchor-position is changed
-        SelectedTextAnchor = 3344189
-    };
+/// This enum contains values to be used as keys in the KoCanvasResourceProvider
+enum Options {
+    ShowTextFrames =  278622039, ///< boolean that enables painting of frame outlines
+    ShowSpaces,         ///< boolean that enables painting of spaces
+    ShowTabs,           ///< boolean that enables painting of tabs
+    ShowEnters,         ///< boolean that enables painting of enters (linefeed chars)
+    ShowSpecialCharacters,  ///< boolean that enables painting of special characters (nbsp etc)
+    BidiDocument = 493038196,
+    CurrentTextDocument = 382490375, ///< set by the text plugin whenever the document is changed
+    CurrentTextPosition = 183523,   ///<  used by the text plugin whenever the position is changed
+    CurrentTextAnchor = 341899485,   ///<  used by the text plugin whenever the anchor-position is changed
+    SelectedTextPosition = 21314576,   ///<  used by the text plugin whenever the alternative selection is changed
+    ///  used by the text plugin whenever the alternative selection anchor-position is changed
+    SelectedTextAnchor = 3344189
+};
 
-    /// For paragraphs each tab definition is represented by this struct.
-    struct KOTEXT_EXPORT Tab {
-        Tab();
-        qreal position;    ///< distance in point from the start of the text-shape
-        QTextOption::TabType type;       ///< Determine which type is used.
-        QChar delimiter;    ///< If type is DelimitorTab; tab until this char was found in the text.
-        KoCharacterStyle::LineType leaderType; // none/single/double
-        KoCharacterStyle::LineStyle leaderStyle; // solid/dotted/dash/...
-        KoCharacterStyle::LineWeight leaderWeight; // auto/bold/thin/length/percentage/...
-        qreal leaderWidth; // the width value if length/percentage
-        QColor leaderColor; ///< if color is valid, then use this instead of the (current) text color
-        QString leaderText;   ///< character to print as the leader (filler of the tabbed space)
+/// For paragraphs each tab definition is represented by this struct.
+struct KOTEXT_EXPORT Tab {
+    Tab();
+    qreal position;    ///< distance in point from the start of the text-shape
+    QTextOption::TabType type;       ///< Determine which type is used.
+    QChar delimiter;    ///< If type is DelimitorTab; tab until this char was found in the text.
+    KoCharacterStyle::LineType leaderType; // none/single/double
+    KoCharacterStyle::LineStyle leaderStyle; // solid/dotted/dash/...
+    KoCharacterStyle::LineWeight leaderWeight; // auto/bold/thin/length/percentage/...
+    qreal leaderWidth; // the width value if length/percentage
+    QColor leaderColor; ///< if color is valid, then use this instead of the (current) text color
+    QString leaderText;   ///< character to print as the leader (filler of the tabbed space)
 
-        bool operator==(const Tab &tab) const;
-    };
+    bool operator==(const Tab &tab) const;
+};
 
-    /// Text in this object will be positioned according to the direction.
-    enum Direction {
-        AutoDirection,      ///< Take the direction from the text.
-        LeftRightTopBottom, ///< Text layout for most western languages
-        RightLeftTopBottom, ///< Text layout for langauges like Hebrew
-        TopBottomRightLeft,  ///< Vertical text layout.
-        PerhapsLeftRightTopBottom,
-        PerhapsRightLeftTopBottom
-    };
+/// Text in this object will be positioned according to the direction.
+enum Direction {
+    AutoDirection,      ///< Take the direction from the text.
+    LeftRightTopBottom, ///< Text layout for most western languages
+    RightLeftTopBottom, ///< Text layout for langauges like Hebrew
+    TopBottomRightLeft,  ///< Vertical text layout.
+    PerhapsLeftRightTopBottom,
+    PerhapsRightLeftTopBottom
+};
 
 }
 
-Q_DECLARE_METATYPE( KoText::Tab )
+Q_DECLARE_METATYPE(KoText::Tab)
 
 #endif

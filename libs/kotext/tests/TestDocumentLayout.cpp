@@ -4,7 +4,8 @@
 #include <kdebug.h>
 #include <kcomponentdata.h>
 
-void TestDocumentLayout::initTestCase() {
+void TestDocumentLayout::initTestCase()
+{
     shape1 = 0;
     doc = 0;
     layout = 0;
@@ -12,7 +13,8 @@ void TestDocumentLayout::initTestCase() {
     loremIpsum = QString("Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.");
 }
 
-void TestDocumentLayout::initForNewTest(const QString &initText) {
+void TestDocumentLayout::initForNewTest(const QString &initText)
+{
     // this leaks memory like mad, but who cares ;)
     shape1 = new MockTextShape();
     shape1->setSize(QSizeF(200, 1000));
@@ -20,25 +22,26 @@ void TestDocumentLayout::initForNewTest(const QString &initText) {
     // this leaks memory like mad, but who cares ;)
     doc = shape1->layout->document();
     Q_ASSERT(doc);
-    layout = dynamic_cast<KoTextDocumentLayout*> (doc->documentLayout());
+    layout = dynamic_cast<KoTextDocumentLayout*>(doc->documentLayout());
     Q_ASSERT(layout);
 }
 
-void TestDocumentLayout:: testHitTest() {
+void TestDocumentLayout:: testHitTest()
+{
     // init a basic document with 3 parags.
     initForNewTest();
     doc->setHtml("<p>lsdjflkdsjf lsdkjf lsdlflksejrl sdflsd flksjdf lksjrpdslfjfsdhtwkr[ivxxmvlwerponldsjf;dslflkjsorindfsn;epsdf</p><p>sldkfnwerpodsnf</p><p>sldkjfnpqwrdsf</p>");
     QTextBlock block = doc->begin();
-    qreal offset=50.0;
+    qreal offset = 50.0;
     qreal lineHeight = 0;
-    int lines = 0, parag=0;
+    int lines = 0, parag = 0;
     qreal paragOffets[3];
-    while(1) {
-        if(!block.isValid()) break;
+    while (1) {
+        if (!block.isValid()) break;
         paragOffets[parag++] = offset;
         QTextLayout *txtLayout = block.layout();
         txtLayout->beginLayout();
-        while(1) {
+        while (1) {
             QTextLine line = txtLayout->createLine();
             if (!line.isValid()) break;
             lines++;
@@ -64,8 +67,8 @@ void TestDocumentLayout:: testHitTest() {
     QCOMPARE(layout->hitTest(QPointF(20, 50), Qt::ExactHit), 0);
 
     // below line 1
-    QCOMPARE(layout->hitTest(QPointF(20, 51+lineHeight), Qt::ExactHit), -1);
-    QVERIFY(layout->hitTest(QPointF(20, 51+lineHeight), Qt::FuzzyHit) > 0); // line 2
+    QCOMPARE(layout->hitTest(QPointF(20, 51 + lineHeight), Qt::ExactHit), -1);
+    QVERIFY(layout->hitTest(QPointF(20, 51 + lineHeight), Qt::FuzzyHit) > 0); // line 2
 
     // parag2
     QCOMPARE(layout->hitTest(QPointF(20, paragOffets[1]), Qt::ExactHit), 109);
@@ -73,6 +76,6 @@ void TestDocumentLayout:: testHitTest() {
     QVERIFY(layout->hitTest(QPointF(20, paragOffets[1] + 20), Qt::FuzzyHit) > 109);
 }
 
-QTEST_KDEMAIN(TestDocumentLayout,GUI)
+QTEST_KDEMAIN(TestDocumentLayout, GUI)
 
 #include "TestDocumentLayout.moc"

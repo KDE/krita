@@ -31,7 +31,7 @@ struct KoVariableTemplate;
 class InsertVariableAction : public InsertVariableActionBase
 {
 public:
-    InsertVariableAction( KoCanvasBase *base, KoVariableFactory *factory, const KoVariableTemplate &templ );
+    InsertVariableAction(KoCanvasBase *base, KoVariableFactory *factory, const KoVariableTemplate &templ);
 
 private:
     virtual KoVariable * createVariable();

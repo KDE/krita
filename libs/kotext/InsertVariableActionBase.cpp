@@ -29,24 +29,25 @@
 #include <KDebug>
 
 InsertVariableActionBase::InsertVariableActionBase(KoCanvasBase *canvas, const QString &name)
-    : KAction(name, canvas->canvasWidget()),
-    m_canvas(canvas)
+        : KAction(name, canvas->canvasWidget()),
+        m_canvas(canvas)
 {
     connect(this, SIGNAL(triggered(bool)), this, SLOT(activated()));
 }
 
-InsertVariableActionBase::~InsertVariableActionBase() {
+InsertVariableActionBase::~InsertVariableActionBase()
+{
 }
 
-void InsertVariableActionBase::activated() {
+void InsertVariableActionBase::activated()
+{
     Q_ASSERT(m_canvas->toolProxy());
     KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (m_canvas->toolProxy()->selection());
-    if(handler) {
+    if (handler) {
         KoVariable *variable = createVariable();
-        if(variable)
+        if (variable)
             handler->insertInlineObject(variable);
-    }
-    else
+    } else
         kWarning(32500) << "InsertVariableAction: No texttool selected while trying to insert variable\n";
 }
 

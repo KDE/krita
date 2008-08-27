@@ -43,11 +43,13 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
-static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2) {
+static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2)
+{
     return tab1.position < tab2.position;
 }
 
-class KoParagraphStyle::Private {
+class KoParagraphStyle::Private
+{
 public:
     Private() : charStyle(0), listStyle(0), parent(0), next(0), stylesPrivate(0) {}
 
@@ -71,42 +73,45 @@ public:
 };
 
 KoParagraphStyle::KoParagraphStyle()
-: d(new Private())
+        : d(new Private())
 {
     d->charStyle = new KoCharacterStyle(this);
     d->stylesPrivate = new StylePrivate();
 }
 
 KoParagraphStyle::KoParagraphStyle(const KoParagraphStyle &orig)
-    : QObject(),
-    d(new Private())
+        : QObject(),
+        d(new Private())
 {
     d->stylesPrivate = new StylePrivate(*orig.d->stylesPrivate);
     d->name = orig.name();
     d->charStyle = orig.d->charStyle;
     d->next = orig.d->next;
     d->parent = orig.d->parent;
-    if(orig.d->listStyle)
+    if (orig.d->listStyle)
         setListStyle(*orig.d->listStyle);
 }
 
 KoParagraphStyle::KoParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat)
-    : QObject(),
-    d(new Private())
+        : QObject(),
+        d(new Private())
 {
     d->stylesPrivate = new StylePrivate(blockFormat.properties());
     d->charStyle = new KoCharacterStyle(charFormat, this);
 }
 
-KoParagraphStyle::~KoParagraphStyle() {
+KoParagraphStyle::~KoParagraphStyle()
+{
     delete d;
 }
 
-void KoParagraphStyle::setParent(KoParagraphStyle *parent) {
+void KoParagraphStyle::setParent(KoParagraphStyle *parent)
+{
     d->parent = parent;
 }
 
-void KoParagraphStyle::setProperty(int key, const QVariant &value) {
+void KoParagraphStyle::setProperty(int key, const QVariant &value)
+{
     if (d->parent) {
         QVariant var = d->parent->value(key);
         if (!var.isNull() && var == value) { // same as parent, so its actually a reset.
@@ -117,45 +122,52 @@ void KoParagraphStyle::setProperty(int key, const QVariant &value) {
     d->stylesPrivate->add(key, value);
 }
 
-void KoParagraphStyle::remove(int key) {
+void KoParagraphStyle::remove(int key)
+{
     d->stylesPrivate->remove(key);
 }
 
-QVariant KoParagraphStyle::value(int key) const {
+QVariant KoParagraphStyle::value(int key) const
+{
     QVariant var = d->stylesPrivate->value(key);
-    if(var.isNull() && d->parent)
+    if (var.isNull() && d->parent)
         var = d->parent->value(key);
     return var;
 }
 
-bool KoParagraphStyle::hasProperty(int key) const {
+bool KoParagraphStyle::hasProperty(int key) const
+{
     return d->stylesPrivate->contains(key);
 }
 
-qreal KoParagraphStyle::propertyDouble(int key) const {
+qreal KoParagraphStyle::propertyDouble(int key) const
+{
     QVariant variant = value(key);
-    if(variant.isNull())
+    if (variant.isNull())
         return 0.0;
     return variant.toDouble();
 }
 
-int KoParagraphStyle::propertyInt(int key) const {
+int KoParagraphStyle::propertyInt(int key) const
+{
     QVariant variant = value(key);
-    if(variant.isNull())
+    if (variant.isNull())
         return 0;
     return variant.toInt();
 }
 
-bool KoParagraphStyle::propertyBoolean(int key) const {
+bool KoParagraphStyle::propertyBoolean(int key) const
+{
     QVariant variant = value(key);
-    if(variant.isNull())
+    if (variant.isNull())
         return false;
     return variant.toBool();
 }
 
-QColor KoParagraphStyle::propertyColor(int key) const {
+QColor KoParagraphStyle::propertyColor(int key) const
+{
     QVariant variant = value(key);
-    if(variant.isNull()) {
+    if (variant.isNull()) {
         QColor color;
         return color;
     }
@@ -175,12 +187,13 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
     }
 }
 
-void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const {
+void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
+{
     QTextCursor cursor(block);
     QTextBlockFormat format = cursor.blockFormat();
     applyStyle(format);
     cursor.setBlockFormat(format);
-    if(d->charStyle)
+    if (d->charStyle)
         d->charStyle->applyStyle(block);
 
     if (applyListStyle) {
@@ -189,680 +202,806 @@ void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const 
         } else {
             if (block.textList())
                 block.textList()->remove(block);
-            KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
-            if(data)
+            KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+            if (data)
                 data->setCounterWidth(-1);
         }
     }
 }
 
-void KoParagraphStyle::setListStyle(const KoListStyle &style) {
-    if(d->listStyle)
+void KoParagraphStyle::setListStyle(const KoListStyle &style)
+{
+    if (d->listStyle)
         delete d->listStyle;
     d->listStyle = new KoListStyle(style);
 }
 
-void KoParagraphStyle::removeListStyle() {
+void KoParagraphStyle::removeListStyle()
+{
     delete d->listStyle;
     d->listStyle = 0;
 }
 
-static KoParagraphStyle::BorderStyle oasisBorderStyle(const QString& borderstyle) {
-    if ( borderstyle == "none" )
+static KoParagraphStyle::BorderStyle oasisBorderStyle(const QString& borderstyle)
+{
+    if (borderstyle == "none")
         return KoParagraphStyle::BorderNone;
-    if ( borderstyle == "dashed" )
+    if (borderstyle == "dashed")
         return KoParagraphStyle::BorderDashed;
-    if ( borderstyle == "dotted" )
+    if (borderstyle == "dotted")
         return KoParagraphStyle::BorderDotted;
-    if ( borderstyle == "dot-dash" )
+    if (borderstyle == "dot-dash")
         return KoParagraphStyle::BorderDashDotPattern;
-    if ( borderstyle == "dot-dot-dash" )
+    if (borderstyle == "dot-dot-dash")
         return KoParagraphStyle::BorderDashDotDotPattern;
-    if ( borderstyle == "double" )
+    if (borderstyle == "double")
         return KoParagraphStyle::BorderDouble;
-    if ( borderstyle == "groove" ) // NOT OASIS COMPATIBLE
+    if (borderstyle == "groove")   // NOT OASIS COMPATIBLE
         return KoParagraphStyle::BorderGroove;
-    if ( borderstyle == "ridge" ) // NOT OASIS COMPATIBLE
+    if (borderstyle == "ridge")   // NOT OASIS COMPATIBLE
         return KoParagraphStyle::BorderRidge;
-    if ( borderstyle == "inset" ) // NOT OASIS COMPATIBLE
+    if (borderstyle == "inset")   // NOT OASIS COMPATIBLE
         return KoParagraphStyle::BorderInset;
-    if ( borderstyle == "outset" ) // NOT OASIS COMPATIBLE
+    if (borderstyle == "outset")   // NOT OASIS COMPATIBLE
         return KoParagraphStyle::BorderOutset;
     return KoParagraphStyle::BorderSolid; // not needed to handle "solid" since it's the default
 }
-static QString odfBorderStyleString(const KoParagraphStyle::BorderStyle borderstyle) {
+static QString odfBorderStyleString(const KoParagraphStyle::BorderStyle borderstyle)
+{
     switch (borderstyle) {
-        case KoParagraphStyle::BorderDashed:
-            return QString("dashed");
-        case KoParagraphStyle::BorderDotted:
-            return QString("dotted");
-        case KoParagraphStyle::BorderDashDotPattern:
-            return QString("dot-dash"); // not odf
-        case KoParagraphStyle::BorderDashDotDotPattern:
-            return QString("dot-dot-dash"); // not odf
-        case KoParagraphStyle::BorderDouble:
-            return QString("double");
-        case KoParagraphStyle::BorderGroove:
-            return QString("groove");
-        case KoParagraphStyle::BorderRidge:
-            return QString("ridge");
-        case KoParagraphStyle::BorderInset:
-            return QString("inset");
-        case KoParagraphStyle::BorderOutset:
-            return QString("outset");
-        case KoParagraphStyle::BorderSolid:
-            return QString("solid");
-        default:
-        case KoParagraphStyle::BorderNone:
-            return QString("none");
+    case KoParagraphStyle::BorderDashed:
+        return QString("dashed");
+    case KoParagraphStyle::BorderDotted:
+        return QString("dotted");
+    case KoParagraphStyle::BorderDashDotPattern:
+        return QString("dot-dash"); // not odf
+    case KoParagraphStyle::BorderDashDotDotPattern:
+        return QString("dot-dot-dash"); // not odf
+    case KoParagraphStyle::BorderDouble:
+        return QString("double");
+    case KoParagraphStyle::BorderGroove:
+        return QString("groove");
+    case KoParagraphStyle::BorderRidge:
+        return QString("ridge");
+    case KoParagraphStyle::BorderInset:
+        return QString("inset");
+    case KoParagraphStyle::BorderOutset:
+        return QString("outset");
+    case KoParagraphStyle::BorderSolid:
+        return QString("solid");
+    default:
+    case KoParagraphStyle::BorderNone:
+        return QString("none");
     }
 }
 
-void KoParagraphStyle::setLineHeightPercent(int lineHeight) {
+void KoParagraphStyle::setLineHeightPercent(int lineHeight)
+{
     setProperty(PercentLineHeight, lineHeight);
 }
 
-int KoParagraphStyle::lineHeightPercent() const {
+int KoParagraphStyle::lineHeightPercent() const
+{
     return propertyInt(PercentLineHeight);
 }
 
-void KoParagraphStyle::setLineHeightAbsolute(qreal height) {
+void KoParagraphStyle::setLineHeightAbsolute(qreal height)
+{
     setProperty(FixedLineHeight, height);
 }
 
-qreal KoParagraphStyle::lineHeightAbsolute() const {
+qreal KoParagraphStyle::lineHeightAbsolute() const
+{
     return propertyDouble(FixedLineHeight);
 }
 
-void KoParagraphStyle::setMinimumLineHeight(qreal height) {
+void KoParagraphStyle::setMinimumLineHeight(qreal height)
+{
     setProperty(MinimumLineHeight, height);
 }
 
-qreal KoParagraphStyle::minimumLineHeight() const {
+qreal KoParagraphStyle::minimumLineHeight() const
+{
     return propertyDouble(MinimumLineHeight);
 }
 
-void KoParagraphStyle::setLineSpacing(qreal spacing) {
+void KoParagraphStyle::setLineSpacing(qreal spacing)
+{
     setProperty(LineSpacing, spacing);
 }
 
-qreal KoParagraphStyle::lineSpacing() const {
+qreal KoParagraphStyle::lineSpacing() const
+{
     return propertyDouble(LineSpacing);
 }
 
-void KoParagraphStyle::setLineSpacingFromFont(bool on) {
+void KoParagraphStyle::setLineSpacingFromFont(bool on)
+{
     setProperty(LineSpacingFromFont, on);
 }
 
-bool KoParagraphStyle::lineSpacingFromFont() const {
+bool KoParagraphStyle::lineSpacingFromFont() const
+{
     return propertyBoolean(LineSpacingFromFont);
 }
 
-void KoParagraphStyle::setAlignLastLine(Qt::Alignment alignment ) {
+void KoParagraphStyle::setAlignLastLine(Qt::Alignment alignment)
+{
     setProperty(AlignLastLine, (int) alignment);
 }
 
-Qt::Alignment KoParagraphStyle::alignLastLine() const {
-    return static_cast<Qt::Alignment> (propertyInt(QTextFormat::BlockAlignment));
+Qt::Alignment KoParagraphStyle::alignLastLine() const
+{
+    return static_cast<Qt::Alignment>(propertyInt(QTextFormat::BlockAlignment));
 }
 
-void KoParagraphStyle::setWidowThreshold(int lines) {
+void KoParagraphStyle::setWidowThreshold(int lines)
+{
     setProperty(WidowThreshold, lines);
 }
 
-int KoParagraphStyle::widowThreshold() const {
+int KoParagraphStyle::widowThreshold() const
+{
     return propertyInt(WidowThreshold);
 }
 
-void KoParagraphStyle::setOrphanThreshold(int lines) {
+void KoParagraphStyle::setOrphanThreshold(int lines)
+{
     setProperty(OrphanThreshold, lines);
 }
 
-int KoParagraphStyle::orphanThreshold() const {
+int KoParagraphStyle::orphanThreshold() const
+{
     return propertyInt(OrphanThreshold);
 }
 
-void KoParagraphStyle::setDropCaps(bool on) {
+void KoParagraphStyle::setDropCaps(bool on)
+{
     setProperty(DropCaps, on);
 }
 
-bool KoParagraphStyle::dropCaps() const {
+bool KoParagraphStyle::dropCaps() const
+{
     return propertyBoolean(DropCaps);
 }
 
-void KoParagraphStyle::setDropCapsLength(int characters) {
+void KoParagraphStyle::setDropCapsLength(int characters)
+{
     setProperty(DropCapsLength, characters);
 }
 
-int KoParagraphStyle::dropCapsLength() const {
+int KoParagraphStyle::dropCapsLength() const
+{
     return propertyInt(DropCapsLength);
 }
 
-void KoParagraphStyle::setDropCapsLines(int lines) {
+void KoParagraphStyle::setDropCapsLines(int lines)
+{
     setProperty(DropCapsLines, lines);
 }
 
-int KoParagraphStyle::dropCapsLines() const {
+int KoParagraphStyle::dropCapsLines() const
+{
     return propertyInt(DropCapsLines);
 }
 
-void KoParagraphStyle::setDropCapsDistance(qreal distance) {
+void KoParagraphStyle::setDropCapsDistance(qreal distance)
+{
     setProperty(DropCapsDistance, distance);
 }
 
-qreal KoParagraphStyle::dropCapsDistance() const {
+qreal KoParagraphStyle::dropCapsDistance() const
+{
     return propertyDouble(DropCapsDistance);
 }
 
-void KoParagraphStyle::setFollowDocBaseline(bool on) {
+void KoParagraphStyle::setFollowDocBaseline(bool on)
+{
     setProperty(FollowDocBaseline, on);
 }
 
-bool KoParagraphStyle::followDocBaseline() const {
+bool KoParagraphStyle::followDocBaseline() const
+{
     return propertyBoolean(FollowDocBaseline);
 }
 
-void KoParagraphStyle::setBreakBefore(bool on) {
+void KoParagraphStyle::setBreakBefore(bool on)
+{
     setProperty(BreakBefore, on);
 }
 
-bool KoParagraphStyle::breakBefore() {
+bool KoParagraphStyle::breakBefore()
+{
     return propertyBoolean(BreakBefore);
 }
 
-void KoParagraphStyle::setBreakAfter(bool on) {
+void KoParagraphStyle::setBreakAfter(bool on)
+{
     setProperty(BreakAfter, on);
 }
 
-bool KoParagraphStyle::breakAfter() {
+bool KoParagraphStyle::breakAfter()
+{
     return propertyBoolean(BreakAfter);
 }
 
-void KoParagraphStyle::setLeftPadding(qreal padding) {
+void KoParagraphStyle::setLeftPadding(qreal padding)
+{
     setProperty(LeftPadding, padding);
 }
 
-qreal KoParagraphStyle::leftPadding() {
+qreal KoParagraphStyle::leftPadding()
+{
     return propertyDouble(LeftPadding);
 }
 
-void KoParagraphStyle::setTopPadding(qreal padding) {
+void KoParagraphStyle::setTopPadding(qreal padding)
+{
     setProperty(TopPadding, padding);
 }
 
-qreal KoParagraphStyle::topPadding() {
+qreal KoParagraphStyle::topPadding()
+{
     return propertyDouble(TopPadding);
 }
 
-void KoParagraphStyle::setRightPadding(qreal padding) {
+void KoParagraphStyle::setRightPadding(qreal padding)
+{
     setProperty(RightPadding, padding);
 }
 
-qreal KoParagraphStyle::rightPadding() {
+qreal KoParagraphStyle::rightPadding()
+{
     return propertyDouble(RightPadding);
 }
 
-void KoParagraphStyle::setBottomPadding(qreal padding) {
+void KoParagraphStyle::setBottomPadding(qreal padding)
+{
     setProperty(BottomPadding, padding);
 }
 
-qreal KoParagraphStyle::bottomPadding() {
+qreal KoParagraphStyle::bottomPadding()
+{
     return propertyDouble(BottomPadding);
 }
 
-void KoParagraphStyle::setPadding(qreal padding) {
+void KoParagraphStyle::setPadding(qreal padding)
+{
     setBottomPadding(padding);
     setTopPadding(padding);
     setRightPadding(padding);
     setLeftPadding(padding);
 }
 
-void KoParagraphStyle::setLeftBorderWidth(qreal width) {
+void KoParagraphStyle::setLeftBorderWidth(qreal width)
+{
     setProperty(LeftBorderWidth, width);
 }
 
-qreal KoParagraphStyle::leftBorderWidth() {
+qreal KoParagraphStyle::leftBorderWidth()
+{
     return propertyDouble(LeftBorderWidth);
 }
 
-void KoParagraphStyle::setLeftInnerBorderWidth(qreal width) {
+void KoParagraphStyle::setLeftInnerBorderWidth(qreal width)
+{
     setProperty(LeftInnerBorderWidth, width);
 }
 
-qreal KoParagraphStyle::leftInnerBorderWidth() {
+qreal KoParagraphStyle::leftInnerBorderWidth()
+{
     return propertyDouble(LeftInnerBorderWidth);
 }
 
-void KoParagraphStyle::setLeftBorderSpacing(qreal width) {
+void KoParagraphStyle::setLeftBorderSpacing(qreal width)
+{
     setProperty(LeftBorderSpacing, width);
 }
 
-qreal KoParagraphStyle::leftBorderSpacing() {
+qreal KoParagraphStyle::leftBorderSpacing()
+{
     return propertyDouble(LeftBorderSpacing);
 }
 
-void KoParagraphStyle::setLeftBorderStyle(KoParagraphStyle::BorderStyle style) {
+void KoParagraphStyle::setLeftBorderStyle(KoParagraphStyle::BorderStyle style)
+{
     setProperty(LeftBorderStyle, style);
 }
 
-KoParagraphStyle::BorderStyle KoParagraphStyle::leftBorderStyle() {
-    return static_cast<KoParagraphStyle::BorderStyle> (propertyInt(LeftBorderStyle));
+KoParagraphStyle::BorderStyle KoParagraphStyle::leftBorderStyle()
+{
+    return static_cast<KoParagraphStyle::BorderStyle>(propertyInt(LeftBorderStyle));
 }
 
-void KoParagraphStyle::setLeftBorderColor(const QColor& color) {
+void KoParagraphStyle::setLeftBorderColor(const QColor& color)
+{
     setProperty(LeftBorderColor, color);
 }
 
-QColor KoParagraphStyle::leftBorderColor() {
+QColor KoParagraphStyle::leftBorderColor()
+{
     return propertyColor(LeftBorderColor);
 }
 
-void KoParagraphStyle::setTopBorderWidth(qreal width) {
+void KoParagraphStyle::setTopBorderWidth(qreal width)
+{
     setProperty(TopBorderWidth, width);
 }
 
-qreal KoParagraphStyle::topBorderWidth() {
+qreal KoParagraphStyle::topBorderWidth()
+{
     return propertyDouble(TopBorderWidth);
 }
 
-void KoParagraphStyle::setTopInnerBorderWidth(qreal width) {
+void KoParagraphStyle::setTopInnerBorderWidth(qreal width)
+{
     setProperty(TopInnerBorderWidth, width);
 }
 
-qreal KoParagraphStyle::topInnerBorderWidth() {
+qreal KoParagraphStyle::topInnerBorderWidth()
+{
     return propertyDouble(TopInnerBorderWidth);
 }
 
-void KoParagraphStyle::setTopBorderSpacing(qreal width) {
+void KoParagraphStyle::setTopBorderSpacing(qreal width)
+{
     setProperty(TopBorderSpacing, width);
 }
 
-qreal KoParagraphStyle::topBorderSpacing() {
+qreal KoParagraphStyle::topBorderSpacing()
+{
     return propertyDouble(TopBorderSpacing);
 }
 
-void KoParagraphStyle::setTopBorderStyle(KoParagraphStyle::BorderStyle style) {
+void KoParagraphStyle::setTopBorderStyle(KoParagraphStyle::BorderStyle style)
+{
     setProperty(TopBorderStyle, style);
 }
 
-KoParagraphStyle::BorderStyle KoParagraphStyle::topBorderStyle() {
-    return static_cast<KoParagraphStyle::BorderStyle> (propertyInt(TopBorderStyle));
+KoParagraphStyle::BorderStyle KoParagraphStyle::topBorderStyle()
+{
+    return static_cast<KoParagraphStyle::BorderStyle>(propertyInt(TopBorderStyle));
 }
 
-void KoParagraphStyle::setTopBorderColor(const QColor& color) {
+void KoParagraphStyle::setTopBorderColor(const QColor& color)
+{
     setProperty(TopBorderColor, color);
 }
 
-QColor KoParagraphStyle::topBorderColor() {
+QColor KoParagraphStyle::topBorderColor()
+{
     return propertyColor(TopBorderColor);
 }
 
-void KoParagraphStyle::setRightBorderWidth(qreal width) {
+void KoParagraphStyle::setRightBorderWidth(qreal width)
+{
     setProperty(RightBorderWidth, width);
 }
 
-qreal KoParagraphStyle::rightBorderWidth() {
+qreal KoParagraphStyle::rightBorderWidth()
+{
     return propertyDouble(RightBorderWidth);
 }
 
-void KoParagraphStyle::setRightInnerBorderWidth(qreal width) {
+void KoParagraphStyle::setRightInnerBorderWidth(qreal width)
+{
     setProperty(RightInnerBorderWidth, width);
 }
 
-qreal KoParagraphStyle::rightInnerBorderWidth() {
+qreal KoParagraphStyle::rightInnerBorderWidth()
+{
     return propertyDouble(RightInnerBorderWidth);
 }
 
-void KoParagraphStyle::setRightBorderSpacing(qreal width) {
+void KoParagraphStyle::setRightBorderSpacing(qreal width)
+{
     setProperty(RightBorderSpacing, width);
 }
 
-qreal KoParagraphStyle::rightBorderSpacing() {
+qreal KoParagraphStyle::rightBorderSpacing()
+{
     return propertyDouble(RightBorderSpacing);
 }
 
-void KoParagraphStyle::setRightBorderStyle(KoParagraphStyle::BorderStyle style) {
+void KoParagraphStyle::setRightBorderStyle(KoParagraphStyle::BorderStyle style)
+{
     setProperty(RightBorderStyle, style);
 }
 
-KoParagraphStyle::BorderStyle KoParagraphStyle::rightBorderStyle() {
-    return static_cast<KoParagraphStyle::BorderStyle> (propertyInt(RightBorderStyle));
+KoParagraphStyle::BorderStyle KoParagraphStyle::rightBorderStyle()
+{
+    return static_cast<KoParagraphStyle::BorderStyle>(propertyInt(RightBorderStyle));
 }
 
-void KoParagraphStyle::setRightBorderColor(const QColor& color) {
+void KoParagraphStyle::setRightBorderColor(const QColor& color)
+{
     setProperty(RightBorderColor, color);
 }
 
-QColor KoParagraphStyle::rightBorderColor() {
+QColor KoParagraphStyle::rightBorderColor()
+{
     return propertyColor(RightBorderColor);
 }
 
-void KoParagraphStyle::setBottomBorderWidth(qreal width) {
+void KoParagraphStyle::setBottomBorderWidth(qreal width)
+{
     setProperty(BottomBorderWidth, width);
 }
 
-qreal KoParagraphStyle::bottomBorderWidth() {
+qreal KoParagraphStyle::bottomBorderWidth()
+{
     return propertyDouble(BottomBorderWidth);
 }
 
-void KoParagraphStyle::setBottomInnerBorderWidth(qreal width) {
+void KoParagraphStyle::setBottomInnerBorderWidth(qreal width)
+{
     setProperty(BottomInnerBorderWidth, width);
 }
 
-qreal KoParagraphStyle::bottomInnerBorderWidth() {
+qreal KoParagraphStyle::bottomInnerBorderWidth()
+{
     return propertyDouble(BottomInnerBorderWidth);
 }
 
-void KoParagraphStyle::setBottomBorderSpacing(qreal width) {
+void KoParagraphStyle::setBottomBorderSpacing(qreal width)
+{
     setProperty(BottomBorderSpacing, width);
 }
 
-qreal KoParagraphStyle::bottomBorderSpacing() {
+qreal KoParagraphStyle::bottomBorderSpacing()
+{
     return propertyDouble(BottomBorderSpacing);
 }
 
-void KoParagraphStyle::setBottomBorderStyle(KoParagraphStyle::BorderStyle style) {
+void KoParagraphStyle::setBottomBorderStyle(KoParagraphStyle::BorderStyle style)
+{
     setProperty(BottomBorderStyle, style);
 }
 
-KoParagraphStyle::BorderStyle KoParagraphStyle::bottomBorderStyle() {
-    return static_cast<KoParagraphStyle::BorderStyle> (propertyInt(BottomBorderStyle));
+KoParagraphStyle::BorderStyle KoParagraphStyle::bottomBorderStyle()
+{
+    return static_cast<KoParagraphStyle::BorderStyle>(propertyInt(BottomBorderStyle));
 }
 
-void KoParagraphStyle::setBottomBorderColor(const QColor& color) {
+void KoParagraphStyle::setBottomBorderColor(const QColor& color)
+{
     setProperty(BottomBorderColor, color);
 }
 
-QColor KoParagraphStyle::bottomBorderColor() {
+QColor KoParagraphStyle::bottomBorderColor()
+{
     return propertyColor(BottomBorderColor);
 }
 
-void KoParagraphStyle::setTopMargin(qreal topMargin) {
+void KoParagraphStyle::setTopMargin(qreal topMargin)
+{
     setProperty(QTextFormat::BlockTopMargin, topMargin);
 }
 
-qreal KoParagraphStyle::topMargin() const {
+qreal KoParagraphStyle::topMargin() const
+{
     return propertyDouble(QTextFormat::BlockTopMargin);
 }
 
-void KoParagraphStyle::setBottomMargin (qreal margin) {
+void KoParagraphStyle::setBottomMargin(qreal margin)
+{
     setProperty(QTextFormat::BlockBottomMargin, margin);
 }
 
-qreal KoParagraphStyle::bottomMargin () const {
+qreal KoParagraphStyle::bottomMargin() const
+{
     return propertyDouble(QTextFormat::BlockBottomMargin);
 }
 
-void KoParagraphStyle::setLeftMargin (qreal margin) {
+void KoParagraphStyle::setLeftMargin(qreal margin)
+{
     setProperty(QTextFormat::BlockLeftMargin, margin);
 }
 
-qreal KoParagraphStyle::leftMargin () const {
+qreal KoParagraphStyle::leftMargin() const
+{
     return propertyDouble(QTextFormat::BlockLeftMargin);
 }
 
-void KoParagraphStyle::setRightMargin (qreal margin) {
+void KoParagraphStyle::setRightMargin(qreal margin)
+{
     setProperty(QTextFormat::BlockRightMargin, margin);
 }
 
-qreal KoParagraphStyle::rightMargin () const {
+qreal KoParagraphStyle::rightMargin() const
+{
     return propertyDouble(QTextFormat::BlockRightMargin);
 }
 
-void KoParagraphStyle::setMargin (qreal margin) {
+void KoParagraphStyle::setMargin(qreal margin)
+{
     setTopMargin(margin);
     setBottomMargin(margin);
     setLeftMargin(margin);
     setRightMargin(margin);
 }
 
-void KoParagraphStyle::setAlignment (Qt::Alignment alignment) {
+void KoParagraphStyle::setAlignment(Qt::Alignment alignment)
+{
 
     setProperty(QTextFormat::BlockAlignment, (int) alignment);
 
 }
 
-Qt::Alignment KoParagraphStyle::alignment () const {
-    return static_cast<Qt::Alignment> (propertyInt(QTextFormat::BlockAlignment));
+Qt::Alignment KoParagraphStyle::alignment() const
+{
+    return static_cast<Qt::Alignment>(propertyInt(QTextFormat::BlockAlignment));
 }
 
-void KoParagraphStyle::setTextIndent (qreal margin) {
+void KoParagraphStyle::setTextIndent(qreal margin)
+{
     setProperty(QTextFormat::TextIndent, margin);
 }
 
-qreal KoParagraphStyle::textIndent () const {
+qreal KoParagraphStyle::textIndent() const
+{
     return propertyDouble(QTextFormat::TextIndent);
 }
 
-void KoParagraphStyle::setAutoTextIndent (bool on) {
+void KoParagraphStyle::setAutoTextIndent(bool on)
+{
     setProperty(KoParagraphStyle::AutoTextIndent, on);
 }
 
-bool KoParagraphStyle::autoTextIndent () const {
+bool KoParagraphStyle::autoTextIndent() const
+{
     return propertyBoolean(KoParagraphStyle::AutoTextIndent);
 }
 
-void KoParagraphStyle::setNonBreakableLines(bool on) {
+void KoParagraphStyle::setNonBreakableLines(bool on)
+{
     setProperty(QTextFormat::BlockNonBreakableLines, on);
 }
 
-bool KoParagraphStyle::nonBreakableLines() const {
+bool KoParagraphStyle::nonBreakableLines() const
+{
     return propertyBoolean(QTextFormat::BlockNonBreakableLines);
 }
 
-KoParagraphStyle *KoParagraphStyle::parent() const {
+KoParagraphStyle *KoParagraphStyle::parent() const
+{
     return d->parent;
 }
 
-void KoParagraphStyle::setNextStyle(int next) {
+void KoParagraphStyle::setNextStyle(int next)
+{
     d->next = next;
 }
 
-int KoParagraphStyle::nextStyle() const {
+int KoParagraphStyle::nextStyle() const
+{
     return d->next;
 }
 
-QString KoParagraphStyle::name() const {
+QString KoParagraphStyle::name() const
+{
     return d->name;
 }
 
-void KoParagraphStyle::setName(const QString &name) {
+void KoParagraphStyle::setName(const QString &name)
+{
     if (name == d->name)
         return;
     d->name = name;
     emit nameChanged(name);
 }
 
-int KoParagraphStyle::styleId() const {
+int KoParagraphStyle::styleId() const
+{
     return propertyInt(StyleId);
 }
 
-void KoParagraphStyle::setStyleId(int id) {
-    setProperty(StyleId, id); if(d->next == 0) d->next=id;
+void KoParagraphStyle::setStyleId(int id)
+{
+    setProperty(StyleId, id); if (d->next == 0) d->next = id;
 }
 
-QString KoParagraphStyle::masterPageName() const {
+QString KoParagraphStyle::masterPageName() const
+{
     return value(MasterPageName).toString();
 }
 
-void KoParagraphStyle::setMasterPageName(const QString& name) {
+void KoParagraphStyle::setMasterPageName(const QString& name)
+{
     setProperty(MasterPageName, name);
 }
 
-void KoParagraphStyle::setListStartValue(int value) {
+void KoParagraphStyle::setListStartValue(int value)
+{
     setProperty(ListStartValue, value);
 }
 
-int KoParagraphStyle::listStartValue() const {
+int KoParagraphStyle::listStartValue() const
+{
     return propertyInt(ListStartValue);
 }
 
-void KoParagraphStyle::setRestartListNumbering(bool on) {
+void KoParagraphStyle::setRestartListNumbering(bool on)
+{
     setProperty(RestartListNumbering, on);
 }
 
-bool KoParagraphStyle::restartListNumbering() {
+bool KoParagraphStyle::restartListNumbering()
+{
     return propertyBoolean(RestartListNumbering);
 }
 
-void KoParagraphStyle::setListLevel(int value) {
+void KoParagraphStyle::setListLevel(int value)
+{
     setProperty(ListLevel, value);
 }
 
-int KoParagraphStyle::listLevel() const {
+int KoParagraphStyle::listLevel() const
+{
     return propertyInt(ListLevel);
 }
 
-void KoParagraphStyle::setIsListHeader(bool on) {
+void KoParagraphStyle::setIsListHeader(bool on)
+{
     setProperty(IsListHeader, on);
 }
 
-bool KoParagraphStyle::isListHeader() const {
+bool KoParagraphStyle::isListHeader() const
+{
     return propertyBoolean(IsListHeader);
 }
 
-KoCharacterStyle *KoParagraphStyle::characterStyle() {
+KoCharacterStyle *KoParagraphStyle::characterStyle()
+{
     return d->charStyle;
 }
 
-const KoCharacterStyle *KoParagraphStyle::characterStyle() const {
+const KoCharacterStyle *KoParagraphStyle::characterStyle() const
+{
     return d->charStyle;
 }
 
-void KoParagraphStyle::setCharacterStyle(KoCharacterStyle *style) {
+void KoParagraphStyle::setCharacterStyle(KoCharacterStyle *style)
+{
     d->charStyle = style;
 }
 
-KoListStyle KoParagraphStyle::listStyle() const {
-    if(d->listStyle)
+KoListStyle KoParagraphStyle::listStyle() const
+{
+    if (d->listStyle)
         return KoListStyle(*d->listStyle);
     return KoListStyle(0); // an invalid one
 }
 
-KoText::Direction KoParagraphStyle::textProgressionDirection() const {
-    return static_cast<KoText::Direction> (propertyInt(TextProgressionDirection));
+KoText::Direction KoParagraphStyle::textProgressionDirection() const
+{
+    return static_cast<KoText::Direction>(propertyInt(TextProgressionDirection));
 }
 
-void KoParagraphStyle::setTextProgressionDirection(KoText::Direction dir) {
+void KoParagraphStyle::setTextProgressionDirection(KoText::Direction dir)
+{
     setProperty(TextProgressionDirection, dir);
 }
 
-void KoParagraphStyle::setBackground (const QBrush &brush) {
+void KoParagraphStyle::setBackground(const QBrush &brush)
+{
     d->setProperty(QTextFormat::BackgroundBrush, brush);
 }
 
-void KoParagraphStyle::clearBackground() {
+void KoParagraphStyle::clearBackground()
+{
     d->stylesPrivate->remove(QTextCharFormat::BackgroundBrush);
 }
 
-QBrush KoParagraphStyle::background() const {
+QBrush KoParagraphStyle::background() const
+{
     QVariant variant = d->stylesPrivate->value(QTextFormat::BackgroundBrush);
 
-    if(variant.isNull()) {
+    if (variant.isNull()) {
         QBrush brush;
         return brush;
     }
     return qvariant_cast<QBrush>(variant);
 }
 
-void KoParagraphStyle::loadOdf( const KoXmlElement* element, KoOdfLoadingContext & context )
+void KoParagraphStyle::loadOdf(const KoXmlElement* element, KoOdfLoadingContext & context)
 {
-    d->name = element->attributeNS( KoXmlNS::style, "display-name", QString() );
+    d->name = element->attributeNS(KoXmlNS::style, "display-name", QString());
     // if no style:display-name is given us the style:name
-    if ( d->name.isEmpty() ) {
-        d->name = element->attributeNS( KoXmlNS::style, "name", QString() );
+    if (d->name.isEmpty()) {
+        d->name = element->attributeNS(KoXmlNS::style, "name", QString());
     }
 
 #if 0 //1.6:
     // OOo hack:
     //m_bOutline = name.startsWith( "Heading" );
     // real OASIS solution:
-    bool m_bOutline = element->hasAttributeNS( KoXmlNS::style, "default-outline-level" );
+    bool m_bOutline = element->hasAttributeNS(KoXmlNS::style, "default-outline-level");
 #endif
     context.styleStack().save();
-    context.addStyles( element, "paragraph" ); // Load all parents - only because we don't support inheritance.
+    context.addStyles(element, "paragraph");   // Load all parents - only because we don't support inheritance.
 
     //setParent( d->stylemanager->defaultParagraphStyle() );
 
-    QString masterPage = element->attributeNS( KoXmlNS::style, "master-page-name", QString() );
-    if ( ! masterPage.isNull() ) {
+    QString masterPage = element->attributeNS(KoXmlNS::style, "master-page-name", QString());
+    if (! masterPage.isNull()) {
         setMasterPageName(masterPage);
     }
 
     //1.6: KoTextFormat::load
     KoCharacterStyle *charstyle = characterStyle();
-    context.styleStack().setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
-    charstyle->loadOdf( context ); // load the KoCharacterStyle from the stylestack
+    context.styleStack().setTypeProperties("text");   // load all style attributes from "style:text-properties"
+    charstyle->loadOdf(context);   // load the KoCharacterStyle from the stylestack
 
     //1.6: KoTextParag::loadOasis => KoParagLayout::loadOasisParagLayout
-    context.styleStack().setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
-    loadOdfProperties( context.styleStack() ); // load the KoParagraphStyle from the stylestack
+    context.styleStack().setTypeProperties("paragraph");   // load all style attributes from "style:paragraph-properties"
+    loadOdfProperties(context.styleStack());   // load the KoParagraphStyle from the stylestack
 
     context.styleStack().restore();
 }
 
-void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
+void KoParagraphStyle::loadOdfProperties(KoStyleStack& styleStack)
 {
     // in 1.6 this was defined at KoParagLayout::loadOasisParagLayout(KoParagLayout&, KoOasisContext&)
 
-    if ( styleStack.hasProperty( KoXmlNS::style, "writing-mode" ) ) { // http://www.w3.org/TR/2004/WD-xsl11-20041216/#writing-mode
+    if (styleStack.hasProperty(KoXmlNS::style, "writing-mode")) {     // http://www.w3.org/TR/2004/WD-xsl11-20041216/#writing-mode
         // LTR is lr-tb. RTL is rl-tb
-        QString writingMode = styleStack.property( KoXmlNS::style, "writing-mode" );
-        if(writingMode == "lr" || writingMode == "lr-tb")
+        QString writingMode = styleStack.property(KoXmlNS::style, "writing-mode");
+        if (writingMode == "lr" || writingMode == "lr-tb")
             setTextProgressionDirection(KoText::LeftRightTopBottom);
-        else if(writingMode == "rl" || writingMode == "rl-tb")
+        else if (writingMode == "rl" || writingMode == "rl-tb")
             setTextProgressionDirection(KoText::RightLeftTopBottom);
-        else if(writingMode == "tb" || writingMode == "tb-rl")
+        else if (writingMode == "tb" || writingMode == "tb-rl")
             setTextProgressionDirection(KoText::TopBottomRightLeft);
         else
             setTextProgressionDirection(KoText::AutoDirection);
     }
 
     // Alignment
-    if ( styleStack.hasProperty( KoXmlNS::fo, "text-align" ) ) {
-        QString align = styleStack.property( KoXmlNS::fo, "text-align" );
+    if (styleStack.hasProperty(KoXmlNS::fo, "text-align")) {
+        QString align = styleStack.property(KoXmlNS::fo, "text-align");
         Qt::Alignment alignment = Qt::AlignAuto;
-        if ( align == "left" )
+        if (align == "left")
             alignment = Qt::AlignLeft | Qt::AlignAbsolute;
-        else if ( align == "right" )
+        else if (align == "right")
             alignment = Qt::AlignRight | Qt::AlignAbsolute;
-        else if ( align == "start" )
+        else if (align == "start")
             alignment = Qt::AlignLeading;
-        else if ( align == "end" )
+        else if (align == "end")
             alignment = Qt::AlignTrailing;
-        else if ( align == "center" )
+        else if (align == "center")
             alignment = Qt::AlignHCenter;
-        else if ( align == "justify" )
+        else if (align == "justify")
             alignment = Qt::AlignJustify;
         setAlignment(alignment);
     }
 
 
     // Spacing (padding)
-    if ( styleStack.hasProperty( KoXmlNS::fo, "padding-left" ) )
-        setLeftPadding( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "padding-left" ) ) );
-    if ( styleStack.hasProperty( KoXmlNS::fo, "padding-right" ) )
-        setRightPadding( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "padding-right" ) ) );
-    if ( styleStack.hasProperty( KoXmlNS::fo, "padding-top" ) )
-        setTopPadding( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "padding-top" ) ) );
-    if ( styleStack.hasProperty( KoXmlNS::fo, "padding-bottom" ) )
-        setBottomPadding( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "padding-bottom" ) ) );
-    if ( styleStack.hasProperty( KoXmlNS::fo, "padding" ) )
-        setPadding( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "padding" ) ) );
+    if (styleStack.hasProperty(KoXmlNS::fo, "padding-left"))
+        setLeftPadding(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "padding-left")));
+    if (styleStack.hasProperty(KoXmlNS::fo, "padding-right"))
+        setRightPadding(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "padding-right")));
+    if (styleStack.hasProperty(KoXmlNS::fo, "padding-top"))
+        setTopPadding(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "padding-top")));
+    if (styleStack.hasProperty(KoXmlNS::fo, "padding-bottom"))
+        setBottomPadding(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "padding-bottom")));
+    if (styleStack.hasProperty(KoXmlNS::fo, "padding"))
+        setPadding(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "padding")));
 
     // Indentation (margin)
-    bool hasMarginLeft = styleStack.hasProperty( KoXmlNS::fo, "margin-left" );
-    bool hasMarginRight = styleStack.hasProperty( KoXmlNS::fo, "margin-right" );
-    if ( hasMarginLeft )
-        setLeftMargin( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-left" ) ) );
-    if ( hasMarginRight )
-        setRightMargin( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-right" ) ) );
-    if ( styleStack.hasProperty( KoXmlNS::fo, "margin-top" ) )
-        setTopMargin( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-top" ) ) );
-    if ( styleStack.hasProperty( KoXmlNS::fo, "margin-bottom" ) )
-        setBottomMargin( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-bottom" ) ) );
-    if ( styleStack.hasProperty( KoXmlNS::fo, "margin" ) ) {
-        setMargin( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin" ) ) );
+    bool hasMarginLeft = styleStack.hasProperty(KoXmlNS::fo, "margin-left");
+    bool hasMarginRight = styleStack.hasProperty(KoXmlNS::fo, "margin-right");
+    if (hasMarginLeft)
+        setLeftMargin(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-left")));
+    if (hasMarginRight)
+        setRightMargin(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-right")));
+    if (styleStack.hasProperty(KoXmlNS::fo, "margin-top"))
+        setTopMargin(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-top")));
+    if (styleStack.hasProperty(KoXmlNS::fo, "margin-bottom"))
+        setBottomMargin(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-bottom")));
+    if (styleStack.hasProperty(KoXmlNS::fo, "margin")) {
+        setMargin(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin")));
         hasMarginLeft = true;
         hasMarginRight = true;
     }
@@ -871,73 +1010,71 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
     // OOo is not assuming this. Commenting this line thus allow more OpenDocuments to be supported, including a
     // testcase from the ODF test suite. See §15.5.18 in the spec.
     //if ( hasMarginLeft || hasMarginRight ) {
-        // style:auto-text-indent takes precedence
-        if ( styleStack.hasProperty(KoXmlNS::style, "auto-text-indent") &&
-             styleStack.property(KoXmlNS::style, "auto-text-indent") != "false" ) {
-            // "indented by a value that is based on the current font size"
-            const QString autotextindent = styleStack.property(KoXmlNS::style, "auto-text-indent");
-            if ( autotextindent == "true" ) {
-                setAutoTextIndent( true );
-            }
+    // style:auto-text-indent takes precedence
+    if (styleStack.hasProperty(KoXmlNS::style, "auto-text-indent") &&
+            styleStack.property(KoXmlNS::style, "auto-text-indent") != "false") {
+        // "indented by a value that is based on the current font size"
+        const QString autotextindent = styleStack.property(KoXmlNS::style, "auto-text-indent");
+        if (autotextindent == "true") {
+            setAutoTextIndent(true);
         }
-        else if ( styleStack.hasProperty(KoXmlNS::fo, "text-indent") ) {
-            setTextIndent( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "text-indent") ) );
-        }
+    } else if (styleStack.hasProperty(KoXmlNS::fo, "text-indent")) {
+        setTextIndent(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "text-indent")));
+    }
 
     //}
 
     // Line spacing
-    if( styleStack.hasProperty( KoXmlNS::fo, "line-height") ) {  // 3.11.1
+    if (styleStack.hasProperty(KoXmlNS::fo, "line-height")) {    // 3.11.1
         // Fixed line height
-        QString value = styleStack.property( KoXmlNS::fo, "line-height" );
-        if ( value != "normal" ) {
-            if ( value.indexOf('%') > -1 ) // percent value
-                setLineHeightPercent( value.remove( '%' ).toInt() );
+        QString value = styleStack.property(KoXmlNS::fo, "line-height");
+        if (value != "normal") {
+            if (value.indexOf('%') > -1)   // percent value
+                setLineHeightPercent(value.remove('%').toInt());
             else // fixed value
-                setLineHeightAbsolute( KoUnit::parseValue( value ) );
+                setLineHeightAbsolute(KoUnit::parseValue(value));
         }
     } // Line-height-at-least is mutually exclusive with line-height
-    else if ( styleStack.hasProperty( KoXmlNS::style, "line-height-at-least") ) { // 3.11.2
-        setMinimumLineHeight( KoUnit::parseValue( styleStack.property( KoXmlNS::style, "line-height-at-least" ) ) );
+    else if (styleStack.hasProperty(KoXmlNS::style, "line-height-at-least")) {    // 3.11.2
+        setMinimumLineHeight(KoUnit::parseValue(styleStack.property(KoXmlNS::style, "line-height-at-least")));
     } // Line-spacing is mutually exclusive with line-height and line-height-at-least
-    else if ( styleStack.hasProperty( KoXmlNS::style, "line-spacing") ) { // 3.11.3
-        setLineSpacing( KoUnit::parseValue( styleStack.property( KoXmlNS::style, "line-spacing" ) ) );
+    else if (styleStack.hasProperty(KoXmlNS::style, "line-spacing")) {    // 3.11.3
+        setLineSpacing(KoUnit::parseValue(styleStack.property(KoXmlNS::style, "line-spacing")));
     }
 
     // Tabulators
-    if ( styleStack.hasProperty( KoXmlNS::style, "tab-stop-distance" ) ) {
-        qreal tabStopDistance = KoUnit::parseValue( styleStack.property( KoXmlNS::style, "tab-stop-distance" ) );
+    if (styleStack.hasProperty(KoXmlNS::style, "tab-stop-distance")) {
+        qreal tabStopDistance = KoUnit::parseValue(styleStack.property(KoXmlNS::style, "tab-stop-distance"));
         if (tabStopDistance > 0)
             setTabStopDistance(tabStopDistance);
     }
-    if ( styleStack.hasChildNode( KoXmlNS::style, "tab-stops" ) ) { // 3.11.10
+    if (styleStack.hasChildNode(KoXmlNS::style, "tab-stops")) {     // 3.11.10
         QList<KoText::Tab> tabList;
-        KoXmlElement tabStops = styleStack.childNode( KoXmlNS::style, "tab-stops" );
+        KoXmlElement tabStops = styleStack.childNode(KoXmlNS::style, "tab-stops");
         KoXmlElement tabStop;
-        forEachElement( tabStop, tabStops )
-        {
-            Q_ASSERT( tabStop.localName() == "tab-stop" );
+        forEachElement(tabStop, tabStops) {
+            Q_ASSERT(tabStop.localName() == "tab-stop");
             // Tab position
             KoText::Tab tab;
-            tab.position = KoUnit::parseValue( tabStop.attributeNS( KoXmlNS::style, "position", QString() ) );
+            tab.position = KoUnit::parseValue(tabStop.attributeNS(KoXmlNS::style, "position", QString()));
             kDebug(32500) << "tab position " << tab.position;
             // Tab stop positions in the XML are relative to the left-margin
             // Equivalently, relative to the left end of our textshape
             // Tab type (left/right/center/char)
-            const QString type = tabStop.attributeNS( KoXmlNS::style, "type", QString() );
-            if ( type == "center" )
+            const QString type = tabStop.attributeNS(KoXmlNS::style, "type", QString());
+            if (type == "center")
                 tab.type = QTextOption::CenterTab;
-            else if ( type == "right" )
+            else if (type == "right")
                 tab.type = QTextOption::RightTab;
-            else if ( type == "char" )
+            else if (type == "char")
                 tab.type = QTextOption::DelimiterTab;
             else //if ( type == "left" )
                 tab.type = QTextOption::LeftTab;
 
             // Tab delimiter char
-            if ( tab.type == QTextOption::DelimiterTab ) {
-                QString delimiterChar = tabStop.attributeNS( KoXmlNS::style, "char", QString() ); // single character
-                if ( !delimiterChar.isEmpty() ) {
+            if (tab.type == QTextOption::DelimiterTab) {
+                QString delimiterChar = tabStop.attributeNS(KoXmlNS::style, "char", QString());   // single character
+                if (!delimiterChar.isEmpty()) {
                     tab.delimiter = delimiterChar[0];
                 } else {
                     // this is invalid. fallback to left-tabbing.
@@ -945,34 +1082,34 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
                 }
             }
 
-            QString leaderType = tabStop.attributeNS( KoXmlNS::style, "leader-type", QString() );
-            if ( leaderType.isEmpty() || leaderType == "none" ) {
+            QString leaderType = tabStop.attributeNS(KoXmlNS::style, "leader-type", QString());
+            if (leaderType.isEmpty() || leaderType == "none") {
                 tab.leaderType = KoCharacterStyle::NoLineType;
             } else {
-                if ( leaderType == "single" )
+                if (leaderType == "single")
                     tab.leaderType = KoCharacterStyle::SingleLine;
-                else if ( leaderType == "double" )
+                else if (leaderType == "double")
                     tab.leaderType = KoCharacterStyle::DoubleLine;
                 // change default leaderStyle
                 tab.leaderStyle = KoCharacterStyle::SolidLine;
             }
 
-            QString leaderStyle = tabStop.attributeNS( KoXmlNS::style, "leader-style", QString() );
-            if ( leaderStyle == "none" )
+            QString leaderStyle = tabStop.attributeNS(KoXmlNS::style, "leader-style", QString());
+            if (leaderStyle == "none")
                 tab.leaderStyle = KoCharacterStyle::NoLineStyle;
-            else if ( leaderStyle == "solid" )
+            else if (leaderStyle == "solid")
                 tab.leaderStyle = KoCharacterStyle::SolidLine;
-            else if ( leaderStyle == "dotted" )
+            else if (leaderStyle == "dotted")
                 tab.leaderStyle = KoCharacterStyle::DottedLine;
-            else if ( leaderStyle == "dash")
+            else if (leaderStyle == "dash")
                 tab.leaderStyle = KoCharacterStyle::DashLine;
-            else if ( leaderStyle == "long-dash" )
+            else if (leaderStyle == "long-dash")
                 tab.leaderStyle = KoCharacterStyle::LongDashLine;
-            else if ( leaderStyle == "dot-dash" )
+            else if (leaderStyle == "dot-dash")
                 tab.leaderStyle = KoCharacterStyle::DotDashLine;
-            else if ( leaderStyle == "dot-dot-dash" )
+            else if (leaderStyle == "dot-dot-dash")
                 tab.leaderStyle = KoCharacterStyle::DotDotDashLine;
-            else if ( leaderStyle == "wave" )
+            else if (leaderStyle == "wave")
                 tab.leaderStyle = KoCharacterStyle::WaveLine;
 
             if (tab.leaderType == KoCharacterStyle::NoLineType && tab.leaderStyle != KoCharacterStyle::NoLineStyle) {
@@ -986,11 +1123,11 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
                     tab.leaderType = KoCharacterStyle::SingleLine;
             }
 
-            QString leaderColor = tabStop.attributeNS( KoXmlNS::style, "leader-color", QString() );
-            if ( leaderColor != "font-color" )
+            QString leaderColor = tabStop.attributeNS(KoXmlNS::style, "leader-color", QString());
+            if (leaderColor != "font-color")
                 tab.leaderColor = QColor(leaderColor); // if invalid color (the default), will use text color
 
-            QString width = tabStop.attributeNS( KoXmlNS::style, "leader-width", QString() );
+            QString width = tabStop.attributeNS(KoXmlNS::style, "leader-width", QString());
             if (width.isEmpty() || width == "auto")
                 tab.leaderWeight = KoCharacterStyle::AutoLineWeight;
             else if (width == "normal")
@@ -1007,168 +1144,164 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
                 tab.leaderWeight = KoCharacterStyle::ThickLineWeight;
             else if (width.endsWith('%')) {
                 tab.leaderWeight = KoCharacterStyle::PercentLineWeight;
-                tab.leaderWidth = width.mid(0, width.length()-1).toDouble();
+                tab.leaderWidth = width.mid(0, width.length() - 1).toDouble();
             } else if (width[width.length()-1].isNumber()) {
                 tab.leaderWeight = KoCharacterStyle::PercentLineWeight;
                 tab.leaderWidth = 100 * width.toDouble();
             } else {
                 tab.leaderWeight = KoCharacterStyle::LengthLineWeight;
-                tab.leaderWidth = KoUnit::parseValue( width );
+                tab.leaderWidth = KoUnit::parseValue(width);
             }
 
-            tab.leaderText = tabStop.attributeNS( KoXmlNS::style, "leader-text", QString() );
+            tab.leaderText = tabStop.attributeNS(KoXmlNS::style, "leader-text", QString());
 
 #if 0
-            else
-            {
+            else {
                 // Fallback: convert leaderChar's unicode value
-                QString leaderChar = tabStop.attributeNS( KoXmlNS::style, "leader-text", QString() );
-                if ( !leaderChar.isEmpty() )
-                {
+                QString leaderChar = tabStop.attributeNS(KoXmlNS::style, "leader-text", QString());
+                if (!leaderChar.isEmpty()) {
                     QChar ch = leaderChar[0];
                     switch (ch.latin1()) {
-                        case '.':
-                            tab.filling = TF_DOTS; break;
-                        case '-':
-                        case '_':  // TODO in KWord: differentiate --- and ___
-                            tab.filling = TF_LINE; break;
-                        default:
-                            // KWord doesn't have support for "any char" as filling.
-                            break;
+                    case '.':
+                        tab.filling = TF_DOTS; break;
+                    case '-':
+                    case '_':  // TODO in KWord: differentiate --- and ___
+                        tab.filling = TF_LINE; break;
+                    default:
+                        // KWord doesn't have support for "any char" as filling.
+                        break;
                     }
                 }
             }
 #endif
-            tabList.append( tab );
+            tabList.append(tab);
         } //for
         setTabPositions(tabList);
     }
 
 #if 0
-    layout.joinBorder = !( styleStack.property( KoXmlNS::style, "join-border") == "false" );
+    layout.joinBorder = !(styleStack.property(KoXmlNS::style, "join-border") == "false");
 #endif
 
     // Borders
-    if ( styleStack.hasProperty( KoXmlNS::fo, "border", "left") ) {
-        QString border = styleStack.property( KoXmlNS::fo, "border", "left" );
-        if ( !border.isEmpty() && border!="none" && border!="hidden") {
+    if (styleStack.hasProperty(KoXmlNS::fo, "border", "left")) {
+        QString border = styleStack.property(KoXmlNS::fo, "border", "left");
+        if (!border.isEmpty() && border != "none" && border != "hidden") {
             // ## isn't it faster to use QStringList::split than parse it 3 times?
             QString borderwidth = border.section(' ', 0, 0);
             QString borderstyle = border.section(' ', 1, 1);
             QString bordercolor = border.section(' ', 2, 2);
 
-            setLeftBorderWidth( KoUnit::parseValue( borderwidth, 1.0 ) );
+            setLeftBorderWidth(KoUnit::parseValue(borderwidth, 1.0));
             //setLeftInnerBorderWidth(qreal width);
             //setLeftBorderSpacing(qreal width);
-            setLeftBorderStyle( oasisBorderStyle(borderstyle) );
-            setLeftBorderColor( QColor(bordercolor) );
+            setLeftBorderStyle(oasisBorderStyle(borderstyle));
+            setLeftBorderColor(QColor(bordercolor));
         }
     }
-    if ( styleStack.hasProperty( KoXmlNS::fo, "border","top") ) {
-        QString border = styleStack.property( KoXmlNS::fo, "border", "top" );
-        if ( !border.isEmpty() && border!="none" && border!="hidden" ) {
-            setTopBorderWidth( KoUnit::parseValue( border.section(' ',0,0), 1.0 ) );
-            setTopBorderStyle( oasisBorderStyle(border.section(' ',1,1)) );
-            setTopBorderColor( QColor(border.section(' ',2,2)) );
+    if (styleStack.hasProperty(KoXmlNS::fo, "border", "top")) {
+        QString border = styleStack.property(KoXmlNS::fo, "border", "top");
+        if (!border.isEmpty() && border != "none" && border != "hidden") {
+            setTopBorderWidth(KoUnit::parseValue(border.section(' ', 0, 0), 1.0));
+            setTopBorderStyle(oasisBorderStyle(border.section(' ', 1, 1)));
+            setTopBorderColor(QColor(border.section(' ', 2, 2)));
         }
     }
-    if ( styleStack.hasProperty( KoXmlNS::fo, "border","right") ) {
-        QString border = styleStack.property( KoXmlNS::fo, "border", "right" );
-        if ( !border.isEmpty() && border!="none" && border!="hidden") {
-            setRightBorderWidth( KoUnit::parseValue( border.section(' ',0,0), 1.0 ) );
-            setRightBorderStyle( oasisBorderStyle(border.section(' ',1,1)) );
-            setRightBorderColor( QColor(border.section(' ',2,2)) );
+    if (styleStack.hasProperty(KoXmlNS::fo, "border", "right")) {
+        QString border = styleStack.property(KoXmlNS::fo, "border", "right");
+        if (!border.isEmpty() && border != "none" && border != "hidden") {
+            setRightBorderWidth(KoUnit::parseValue(border.section(' ', 0, 0), 1.0));
+            setRightBorderStyle(oasisBorderStyle(border.section(' ', 1, 1)));
+            setRightBorderColor(QColor(border.section(' ', 2, 2)));
         }
     }
-    if ( styleStack.hasProperty( KoXmlNS::fo, "border", "bottom") ) {
-        QString border = styleStack.property( KoXmlNS::fo, "border", "bottom" );
-        if ( !border.isEmpty() && border!="none" && border!="hidden") {
-            setBottomBorderWidth( KoUnit::parseValue( border.section(' ',0,0), 1.0 ) );
-            setBottomBorderStyle( oasisBorderStyle(border.section(' ',1,1)) );
-            setBottomBorderColor( QColor(border.section(' ',2,2)) );
+    if (styleStack.hasProperty(KoXmlNS::fo, "border", "bottom")) {
+        QString border = styleStack.property(KoXmlNS::fo, "border", "bottom");
+        if (!border.isEmpty() && border != "none" && border != "hidden") {
+            setBottomBorderWidth(KoUnit::parseValue(border.section(' ', 0, 0), 1.0));
+            setBottomBorderStyle(oasisBorderStyle(border.section(' ', 1, 1)));
+            setBottomBorderColor(QColor(border.section(' ', 2, 2)));
         }
     }
-    if ( styleStack.hasProperty( KoXmlNS::style, "border-line-width", "left") ) {
-        QString borderLineWidth = styleStack.property( KoXmlNS::style, "border-line-width", "left" );
-        if ( !borderLineWidth.isEmpty() && borderLineWidth!="none" && borderLineWidth!="hidden") {
+    if (styleStack.hasProperty(KoXmlNS::style, "border-line-width", "left")) {
+        QString borderLineWidth = styleStack.property(KoXmlNS::style, "border-line-width", "left");
+        if (!borderLineWidth.isEmpty() && borderLineWidth != "none" && borderLineWidth != "hidden") {
             QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
-            setLeftInnerBorderWidth( KoUnit::parseValue( blw[0], 0.1 ) );
-            setLeftBorderSpacing( KoUnit::parseValue( blw[1], 1.0 ) );
-            setLeftBorderWidth( KoUnit::parseValue( blw[2], 0.1 ) );
+            setLeftInnerBorderWidth(KoUnit::parseValue(blw[0], 0.1));
+            setLeftBorderSpacing(KoUnit::parseValue(blw[1], 1.0));
+            setLeftBorderWidth(KoUnit::parseValue(blw[2], 0.1));
         }
     }
-    if ( styleStack.hasProperty( KoXmlNS::style, "border-line-width", "top") ) {
-        QString borderLineWidth = styleStack.property( KoXmlNS::style, "border-line-width", "top" );
-        if ( !borderLineWidth.isEmpty() && borderLineWidth!="none" && borderLineWidth!="hidden") {
+    if (styleStack.hasProperty(KoXmlNS::style, "border-line-width", "top")) {
+        QString borderLineWidth = styleStack.property(KoXmlNS::style, "border-line-width", "top");
+        if (!borderLineWidth.isEmpty() && borderLineWidth != "none" && borderLineWidth != "hidden") {
             QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
-            setTopInnerBorderWidth( KoUnit::parseValue( blw[0], 0.1 ) );
-            setTopBorderSpacing( KoUnit::parseValue( blw[1], 1.0 ) );
-            setTopBorderWidth( KoUnit::parseValue( blw[2], 0.1 ) );
+            setTopInnerBorderWidth(KoUnit::parseValue(blw[0], 0.1));
+            setTopBorderSpacing(KoUnit::parseValue(blw[1], 1.0));
+            setTopBorderWidth(KoUnit::parseValue(blw[2], 0.1));
         }
     }
-    if ( styleStack.hasProperty( KoXmlNS::style, "border-line-width", "right") ) {
-        QString borderLineWidth = styleStack.property( KoXmlNS::style, "border-line-width", "right" );
-        if ( !borderLineWidth.isEmpty() && borderLineWidth!="none" && borderLineWidth!="hidden") {
+    if (styleStack.hasProperty(KoXmlNS::style, "border-line-width", "right")) {
+        QString borderLineWidth = styleStack.property(KoXmlNS::style, "border-line-width", "right");
+        if (!borderLineWidth.isEmpty() && borderLineWidth != "none" && borderLineWidth != "hidden") {
             QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
-            setRightInnerBorderWidth( KoUnit::parseValue( blw[0], 0.1 ) );
-            setRightBorderSpacing( KoUnit::parseValue( blw[1], 1.0 ) );
-            setRightBorderWidth( KoUnit::parseValue( blw[2], 0.1 ) );
+            setRightInnerBorderWidth(KoUnit::parseValue(blw[0], 0.1));
+            setRightBorderSpacing(KoUnit::parseValue(blw[1], 1.0));
+            setRightBorderWidth(KoUnit::parseValue(blw[2], 0.1));
         }
     }
-    if ( styleStack.hasProperty( KoXmlNS::style, "border-line-width", "bottom") ) {
-        QString borderLineWidth = styleStack.property( KoXmlNS::style, "border-line-width", "bottom" );
-        if ( !borderLineWidth.isEmpty() && borderLineWidth!="none" && borderLineWidth!="hidden") {
+    if (styleStack.hasProperty(KoXmlNS::style, "border-line-width", "bottom")) {
+        QString borderLineWidth = styleStack.property(KoXmlNS::style, "border-line-width", "bottom");
+        if (!borderLineWidth.isEmpty() && borderLineWidth != "none" && borderLineWidth != "hidden") {
             QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
-            setBottomInnerBorderWidth( KoUnit::parseValue( blw[0], 0.1 ) );
-            setBottomBorderSpacing( KoUnit::parseValue( blw[1], 1.0 ) );
-            setBottomBorderWidth( KoUnit::parseValue( blw[2], 0.1 ) );
+            setBottomInnerBorderWidth(KoUnit::parseValue(blw[0], 0.1));
+            setBottomBorderSpacing(KoUnit::parseValue(blw[1], 1.0));
+            setBottomBorderWidth(KoUnit::parseValue(blw[2], 0.1));
         }
     }
 
     // drop caps
-    if ( styleStack.hasChildNode( KoXmlNS::style, "drop-cap" ) ) {
-        KoXmlElement dropCap = styleStack.childNode( KoXmlNS::style, "drop-cap" );
+    if (styleStack.hasChildNode(KoXmlNS::style, "drop-cap")) {
+        KoXmlElement dropCap = styleStack.childNode(KoXmlNS::style, "drop-cap");
         setDropCaps(true);
-        const QString length = dropCap.attributeNS( KoXmlNS::style, "length", QString("1") );
+        const QString length = dropCap.attributeNS(KoXmlNS::style, "length", QString("1"));
         if (length.toLower() == "word") {
             setDropCapsLength(-1); // -1 indicates drop caps of the whole first word
         } else {
             setDropCapsLength(length.toInt());
         }
-        const QString lines = dropCap.attributeNS( KoXmlNS::style, "lines", QString("1") );
+        const QString lines = dropCap.attributeNS(KoXmlNS::style, "lines", QString("1"));
         setDropCapsLines(lines.toInt());
-        const qreal distance = KoUnit::parseValue( dropCap.attributeNS( KoXmlNS::style, "distance", QString() ) );
+        const qreal distance = KoUnit::parseValue(dropCap.attributeNS(KoXmlNS::style, "distance", QString()));
         setDropCapsDistance(distance);
     }
 
     // Page breaking
 #if 0
     int pageBreaking = 0;
-    if( styleStack.hasProperty( KoXmlNS::fo, "break-before") ||
-            styleStack.hasProperty( KoXmlNS::fo, "break-after") ||
-            styleStack.hasProperty( KoXmlNS::fo, "keep-together") ||
-            styleStack.hasProperty( KoXmlNS::style, "keep-with-next") ||
-            styleStack.hasProperty( KoXmlNS::fo, "keep-with-next") )
-    {
-        if ( styleStack.hasProperty( KoXmlNS::fo, "break-before") ) { // 3.11.24
+    if (styleStack.hasProperty(KoXmlNS::fo, "break-before") ||
+            styleStack.hasProperty(KoXmlNS::fo, "break-after") ||
+            styleStack.hasProperty(KoXmlNS::fo, "keep-together") ||
+            styleStack.hasProperty(KoXmlNS::style, "keep-with-next") ||
+            styleStack.hasProperty(KoXmlNS::fo, "keep-with-next")) {
+        if (styleStack.hasProperty(KoXmlNS::fo, "break-before")) {    // 3.11.24
             // TODO in KWord: implement difference between "column" and "page"
-            if ( styleStack.property( KoXmlNS::fo, "break-before" ) != "auto" )
+            if (styleStack.property(KoXmlNS::fo, "break-before") != "auto")
                 pageBreaking |= KoParagLayout::HardFrameBreakBefore;
-        }
-        else if ( styleStack.hasProperty( KoXmlNS::fo, "break-after") ) { // 3.11.24
+        } else if (styleStack.hasProperty(KoXmlNS::fo, "break-after")) {   // 3.11.24
             // TODO in KWord: implement difference between "column" and "page"
-            if ( styleStack.property( KoXmlNS::fo, "break-after" ) != "auto" )
+            if (styleStack.property(KoXmlNS::fo, "break-after") != "auto")
                 pageBreaking |= KoParagLayout::HardFrameBreakAfter;
         }
 
-        if ( styleStack.hasProperty( KoXmlNS::fo, "keep-together" ) ) { // was style:break-inside in OOo-1.1, renamed in OASIS
-            if ( styleStack.property( KoXmlNS::fo, "keep-together" ) != "auto" )
+        if (styleStack.hasProperty(KoXmlNS::fo, "keep-together")) {     // was style:break-inside in OOo-1.1, renamed in OASIS
+            if (styleStack.property(KoXmlNS::fo, "keep-together") != "auto")
                 pageBreaking |= KoParagLayout::KeepLinesTogether;
         }
-        if ( styleStack.hasProperty( KoXmlNS::fo, "keep-with-next" ) ) {
+        if (styleStack.hasProperty(KoXmlNS::fo, "keep-with-next")) {
             // OASIS spec says it's "auto"/"always", not a boolean.
-            QString val = styleStack.property( KoXmlNS::fo, "keep-with-next" );
-            if ( val == "true" || val == "always" )
+            QString val = styleStack.property(KoXmlNS::fo, "keep-with-next");
+            if (val == "true" || val == "always")
                 pageBreaking |= KoParagLayout::KeepWithNext;
         }
     }
@@ -1176,12 +1309,12 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
 #else
 
     // The fo:break-before and fo:break-after attributes insert a page or column break before or after a paragraph.
-    if( styleStack.hasProperty( KoXmlNS::fo, "break-before") ) {
-        if ( styleStack.property( KoXmlNS::fo, "break-before" ) != "auto" )
+    if (styleStack.hasProperty(KoXmlNS::fo, "break-before")) {
+        if (styleStack.property(KoXmlNS::fo, "break-before") != "auto")
             setBreakBefore(true);
     }
-    if( styleStack.hasProperty( KoXmlNS::fo, "break-after") ) {
-        if ( styleStack.property( KoXmlNS::fo, "break-after" ) != "auto" )
+    if (styleStack.hasProperty(KoXmlNS::fo, "break-after")) {
+        if (styleStack.property(KoXmlNS::fo, "break-after") != "auto")
             setBreakAfter(true);
     }
 
@@ -1190,16 +1323,16 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
 #if 0
     // Paragraph background color -  fo:background-color
     // The background color for parts of a paragraph that have no text underneath
-    if ( styleStack.hasProperty( KoXmlNS::fo, "background-color" ) ) {
-        QString bgColor = styleStack.property( KoXmlNS::fo, "background-color");
+    if (styleStack.hasProperty(KoXmlNS::fo, "background-color")) {
+        QString bgColor = styleStack.property(KoXmlNS::fo, "background-color");
         if (bgColor != "transparent")
-            layout.backgroundColor.setNamedColor( bgColor );
+            layout.backgroundColor.setNamedColor(bgColor);
     }
 #endif
 
     // The fo:background-color attribute specifies the background color of a paragraph.
-    if ( styleStack.hasProperty( KoXmlNS::fo, "background-color") ) {
-        const QString bgcolor = styleStack.property( KoXmlNS::fo, "background-color");
+    if (styleStack.hasProperty(KoXmlNS::fo, "background-color")) {
+        const QString bgcolor = styleStack.property(KoXmlNS::fo, "background-color");
         QBrush brush = background();
         if (bgcolor == "transparent")
             brush.setStyle(Qt::NoBrush);
@@ -1219,7 +1352,8 @@ void KoParagraphStyle::loadOdfProperties( KoStyleStack& styleStack )
 
 }
 
-void KoParagraphStyle::setTabPositions(const QList<KoText::Tab> &tabs) {
+void KoParagraphStyle::setTabPositions(const QList<KoText::Tab> &tabs)
+{
     QList<KoText::Tab> newTabs = tabs;
     qSort(newTabs.begin(), newTabs.end(), compareTabs);
     QList<QVariant> list;
@@ -1231,9 +1365,10 @@ void KoParagraphStyle::setTabPositions(const QList<KoText::Tab> &tabs) {
     setProperty(TabPositions, list);
 }
 
-QList<KoText::Tab> KoParagraphStyle::tabPositions() const {
+QList<KoText::Tab> KoParagraphStyle::tabPositions() const
+{
     QVariant variant = value(TabPositions);
-    if(variant.isNull())
+    if (variant.isNull())
         return QList<KoText::Tab>();
     QList<KoText::Tab> answer;
     foreach(QVariant tab, qvariant_cast<QList<QVariant> >(variant)) {
@@ -1242,50 +1377,54 @@ QList<KoText::Tab> KoParagraphStyle::tabPositions() const {
     return answer;
 }
 
-void KoParagraphStyle::setTabStopDistance(qreal value) {
+void KoParagraphStyle::setTabStopDistance(qreal value)
+{
     setProperty(TabStopDistance, value);
 }
 
-qreal KoParagraphStyle::tabStopDistance() const {
+qreal KoParagraphStyle::tabStopDistance() const
+{
     return propertyDouble(TabStopDistance);
 }
 
-void KoParagraphStyle::copyProperties(const KoParagraphStyle *style) {
+void KoParagraphStyle::copyProperties(const KoParagraphStyle *style)
+{
     d->stylesPrivate->copy(*style->d->stylesPrivate);
     setName(style->name()); // make sure we emit property change
     if (d->charStyle)
         delete d->charStyle;
     d->charStyle = style->d->charStyle;
     d->next = style->d->next;
-    if(style->d->listStyle)
+    if (style->d->listStyle)
         setListStyle(*style->d->listStyle);
 }
 
 // static
-KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block) {
+KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block)
+{
     QTextBlockFormat format = block.blockFormat();
     KoParagraphStyle *answer = 0;
     KoCharacterStyle *charStyle = 0;
     int styleId = format.intProperty(StyleId);
-    if(styleId > 0) {
-        KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (block.document()->documentLayout());
-        if(layout) {
+    if (styleId > 0) {
+        KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(block.document()->documentLayout());
+        if (layout) {
             KoStyleManager *sm = layout->styleManager();
-            if(sm) {
+            if (sm) {
                 KoParagraphStyle *style = sm->paragraphStyle(styleId);
-                if(style)
+                if (style)
                     answer = new KoParagraphStyle(*style);
                 charStyle = sm->characterStyle(format.intProperty(KoCharacterStyle::StyleId));
             }
         }
     }
-    if(answer == 0) {
+    if (answer == 0) {
         answer = new KoParagraphStyle();
         delete answer->characterStyle();
     }
     answer->d->charStyle = charStyle;
 
-    if(block.textList())
+    if (block.textList())
         answer->d->listStyle = KoListStyle::fromTextList(block.textList());
 
     QMap<int, QVariant> properties = format.properties();
@@ -1327,7 +1466,7 @@ void KoParagraphStyle::removeDuplicates(const KoParagraphStyle &other)
         d->charStyle->removeDuplicates(*other.d->charStyle);
 }
 
-void KoParagraphStyle::saveOdf( KoGenStyle & style )
+void KoParagraphStyle::saveOdf(KoGenStyle & style)
 {
     if (d->charStyle) {
         d->charStyle->saveOdf(style);
@@ -1336,11 +1475,11 @@ void KoParagraphStyle::saveOdf( KoGenStyle & style )
         d->listStyle->saveOdf(style);
     }
     // only custom style have a displayname. automatic styles don't have a name set.
-    if ( !d->name.isEmpty() ) {
-        style.addAttribute( "style:display-name", d->name );
+    if (!d->name.isEmpty()) {
+        style.addAttribute("style:display-name", d->name);
     }
     QList<int> keys = d->stylesPrivate->keys();
-    foreach (int key, keys) {
+    foreach(int key, keys) {
         if (key == QTextFormat::BlockAlignment) {
             int alignValue = 0;
             bool ok = false;
@@ -1390,7 +1529,7 @@ void KoParagraphStyle::saveOdf( KoGenStyle & style )
                 style.addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::ParagraphType);
             else
                 style.addProperty("fo:background-color", "transparent", KoGenStyle::ParagraphType);
-        // Padding
+            // Padding
         } else if (key == KoParagraphStyle::LeftPadding) {
             style.addPropertyPt("fo:padding-left", leftPadding(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::RightPadding) {
@@ -1399,7 +1538,7 @@ void KoParagraphStyle::saveOdf( KoGenStyle & style )
             style.addPropertyPt("fo:padding-top", topPadding(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::BottomPadding) {
             style.addPropertyPt("fo:padding-bottom", bottomPadding(), KoGenStyle::ParagraphType);
-        // Margin
+            // Margin
         } else if (key == QTextFormat::BlockLeftMargin) {
             style.addPropertyPt("fo:margin-left", leftMargin(), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BlockRightMargin) {
@@ -1408,7 +1547,7 @@ void KoParagraphStyle::saveOdf( KoGenStyle & style )
             style.addPropertyPt("fo:margin-top", topMargin(), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BlockBottomMargin) {
             style.addPropertyPt("fo:margin-bottom", bottomMargin(), KoGenStyle::ParagraphType);
-        // Line spacing
+            // Line spacing
         } else if (key == KoParagraphStyle::MinimumLineHeight) {
             style.addPropertyPt("style:line-height-at-least", minimumLineHeight(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::LineSpacing) {
@@ -1427,17 +1566,17 @@ void KoParagraphStyle::saveOdf( KoGenStyle & style )
     }
     // save border stuff
     QString leftBorder = QString("%1pt %2 %3").arg(QString::number(leftBorderWidth()),
-                                                   odfBorderStyleString(leftBorderStyle()),
-                                                   leftBorderColor().name());
+                         odfBorderStyleString(leftBorderStyle()),
+                         leftBorderColor().name());
     QString rightBorder = QString("%1pt %2 %3").arg(QString::number(rightBorderWidth()),
-                                                    odfBorderStyleString(rightBorderStyle()),
-                                                    rightBorderColor().name());
+                          odfBorderStyleString(rightBorderStyle()),
+                          rightBorderColor().name());
     QString topBorder = QString("%1pt %2 %3").arg(QString::number(topBorderWidth()),
-                                                  odfBorderStyleString(topBorderStyle()),
-                                                  topBorderColor().name());
+                        odfBorderStyleString(topBorderStyle()),
+                        topBorderColor().name());
     QString bottomBorder = QString("%1pt %2 %3").arg(QString::number(bottomBorderWidth()),
-                                                     odfBorderStyleString(bottomBorderStyle()),
-                                                     bottomBorderColor().name());
+                           odfBorderStyleString(bottomBorderStyle()),
+                           bottomBorderColor().name());
     if (leftBorder == rightBorder && leftBorder == topBorder && leftBorder == bottomBorder) {
         if (leftBorderWidth() > 0 && leftBorderStyle() != KoParagraphStyle::BorderNone)
             style.addProperty("fo:border", leftBorder, KoGenStyle::ParagraphType);
@@ -1452,24 +1591,24 @@ void KoParagraphStyle::saveOdf( KoGenStyle & style )
             style.addProperty("fo:border-bottom", bottomBorder, KoGenStyle::ParagraphType);
     }
     QString leftBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(leftInnerBorderWidth()),
-                                                                QString::number(leftBorderSpacing()),
-                                                                QString::number(leftBorderWidth()) );
+                                  QString::number(leftBorderSpacing()),
+                                  QString::number(leftBorderWidth()));
     QString rightBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(rightInnerBorderWidth()),
-                                                                 QString::number(rightBorderSpacing()),
-                                                                 QString::number(rightBorderWidth()) );
+                                   QString::number(rightBorderSpacing()),
+                                   QString::number(rightBorderWidth()));
     QString topBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(topInnerBorderWidth()),
-                                                               QString::number(topBorderSpacing()),
-                                                               QString::number(topBorderWidth()) );
+                                 QString::number(topBorderSpacing()),
+                                 QString::number(topBorderWidth()));
     QString bottomBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(bottomInnerBorderWidth()),
-                                                                  QString::number(bottomBorderSpacing()),
-                                                                  QString::number(bottomBorderWidth()) );
+                                    QString::number(bottomBorderSpacing()),
+                                    QString::number(bottomBorderWidth()));
     if (leftBorderLineWidth == rightBorderLineWidth &&
-        leftBorderLineWidth == topBorderLineWidth &&
-        leftBorderLineWidth == bottomBorderLineWidth &&
-        leftBorderStyle() == KoParagraphStyle::BorderDouble &&
-        rightBorderStyle() == KoParagraphStyle::BorderDouble &&
-        topBorderStyle() == KoParagraphStyle::BorderDouble &&
-        bottomBorderStyle() == KoParagraphStyle::BorderDouble) {
+            leftBorderLineWidth == topBorderLineWidth &&
+            leftBorderLineWidth == bottomBorderLineWidth &&
+            leftBorderStyle() == KoParagraphStyle::BorderDouble &&
+            rightBorderStyle() == KoParagraphStyle::BorderDouble &&
+            topBorderStyle() == KoParagraphStyle::BorderDouble &&
+            bottomBorderStyle() == KoParagraphStyle::BorderDouble) {
         style.addProperty("style:border-line-width", leftBorderLineWidth, KoGenStyle::ParagraphType);
     } else {
         if (leftBorderStyle() == KoParagraphStyle::BorderDouble)
@@ -1488,7 +1627,7 @@ void KoParagraphStyle::saveOdf( KoGenStyle & style )
         KoXmlWriter elementWriter(&buf);
         elementWriter.startElement("style:drop-cap");
         elementWriter.addAttribute("style:lines", QString::number(dropCapsLines()));
-        elementWriter.addAttribute("style:length", dropCapsLength()<0? "word" : QString::number(dropCapsLength()));
+        elementWriter.addAttribute("style:length", dropCapsLength() < 0 ? "word" : QString::number(dropCapsLength()));
         if (dropCapsDistance())
             elementWriter.addAttributePt("style:distance", dropCapsDistance());
         elementWriter.endElement();
@@ -1496,7 +1635,7 @@ void KoParagraphStyle::saveOdf( KoGenStyle & style )
         style.addChildElement("style:drop-cap", elementContents);
     }
     if (tabPositions().count() > 0) {
-        QMap<int,QString> tabTypeMap, leaderTypeMap, leaderStyleMap, leaderWeightMap;
+        QMap<int, QString> tabTypeMap, leaderTypeMap, leaderStyleMap, leaderWeightMap;
         tabTypeMap[QTextOption::LeftTab] = "left";
         tabTypeMap[QTextOption::RightTab] = "right";
         tabTypeMap[QTextOption::CenterTab] = "center";
@@ -1524,7 +1663,7 @@ void KoParagraphStyle::saveOdf( KoGenStyle & style )
         buf.open(QIODevice::WriteOnly);
         KoXmlWriter elementWriter(&buf);
         elementWriter.startElement("style:tab-stops");
-        foreach (KoText::Tab tab, tabPositions()) {
+        foreach(KoText::Tab tab, tabPositions()) {
             elementWriter.startElement("style:tab-stop");
             elementWriter.addAttributePt("style:position", tab.position);
             if (!tabTypeMap[tab.type].isEmpty())

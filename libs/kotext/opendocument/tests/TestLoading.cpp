@@ -91,7 +91,7 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
         if (!expectedImageFormat.isValid()) {
             qDebug() << "compareFragments: actualDocument has unexpected image at " << actualFragment.text();
             return false;
-         }
+        }
         return true; // FIXME: Compare the image formats
     } else {
         if (expectedImageFormat.isValid()) {
@@ -102,43 +102,43 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
 
     // this should really be actualFormat.properties() == expectedFormat.properties()
     bool equal = actualFormat.font() == expectedFormat.font()
-           && actualFormat.property(KoCharacterStyle::FontCharset).toString()
+                 && actualFormat.property(KoCharacterStyle::FontCharset).toString()
                  == expectedFormat.property(KoCharacterStyle::FontCharset).toString()
-           && actualFormat.font().styleHint() == expectedFormat.font().styleHint() // test this explicity since font == ignores it
-           && actualFormat.foreground() == expectedFormat.foreground()
-           && actualFormat.background() == expectedFormat.background()
+                 && actualFormat.font().styleHint() == expectedFormat.font().styleHint() // test this explicity since font == ignores it
+                 && actualFormat.foreground() == expectedFormat.foreground()
+                 && actualFormat.background() == expectedFormat.background()
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
-           && actualFormat.fontCapitalization() == expectedFormat.fontCapitalization()
+                 && actualFormat.fontCapitalization() == expectedFormat.fontCapitalization()
 #endif
-           && actualFormat.underlineColor() == expectedFormat.underlineColor()
-           && actualFormat.textOutline() == expectedFormat.textOutline()
-           && actualFormat.property(KoCharacterStyle::UnderlineStyle).toInt()
-                  == expectedFormat.property(KoCharacterStyle::UnderlineStyle).toInt()
-           && actualFormat.property(KoCharacterStyle::UnderlineMode).toInt()
-                  == expectedFormat.property(KoCharacterStyle::UnderlineMode).toInt()
-           && actualFormat.property(KoCharacterStyle::UnderlineWeight).toInt()
-                  == expectedFormat.property(KoCharacterStyle::UnderlineWeight).toInt()
-           && actualFormat.property(KoCharacterStyle::UnderlineWidth).toDouble()
-                  == expectedFormat.property(KoCharacterStyle::UnderlineWidth).toDouble()
-           && qvariant_cast<QColor>(actualFormat.property(KoCharacterStyle::StrikeOutColor))
-                  == qvariant_cast<QColor>(expectedFormat.property(KoCharacterStyle::StrikeOutColor))
-           && actualFormat.property(KoCharacterStyle::StrikeOutStyle).toInt()
-                  == expectedFormat.property(KoCharacterStyle::StrikeOutStyle).toInt()
-           && actualFormat.property(KoCharacterStyle::StrikeOutType).toInt()
-                  == expectedFormat.property(KoCharacterStyle::StrikeOutType).toInt()
-           && actualFormat.property(KoCharacterStyle::StrikeOutMode).toInt()
-                  == expectedFormat.property(KoCharacterStyle::StrikeOutMode).toInt()
-           && actualFormat.property(KoCharacterStyle::StrikeOutWeight).toInt()
-                  == expectedFormat.property(KoCharacterStyle::StrikeOutWeight).toInt()
-           && actualFormat.property(KoCharacterStyle::StrikeOutWidth).toDouble()
-                  == expectedFormat.property(KoCharacterStyle::StrikeOutWidth).toDouble()
-           && actualFormat.property(KoCharacterStyle::StrikeOutText).toString()
-                  == expectedFormat.property(KoCharacterStyle::StrikeOutText).toString()
-           && actualFormat.property(KoCharacterStyle::Country).toString()
-                  == expectedFormat.property(KoCharacterStyle::Country).toString()
-           && actualFormat.property(KoCharacterStyle::Language).toString()
-                  == expectedFormat.property(KoCharacterStyle::Language).toString()
-           && actualFormat.verticalAlignment() == expectedFormat.verticalAlignment(); // FIXME: Compare other properties
+                 && actualFormat.underlineColor() == expectedFormat.underlineColor()
+                 && actualFormat.textOutline() == expectedFormat.textOutline()
+                 && actualFormat.property(KoCharacterStyle::UnderlineStyle).toInt()
+                 == expectedFormat.property(KoCharacterStyle::UnderlineStyle).toInt()
+                 && actualFormat.property(KoCharacterStyle::UnderlineMode).toInt()
+                 == expectedFormat.property(KoCharacterStyle::UnderlineMode).toInt()
+                 && actualFormat.property(KoCharacterStyle::UnderlineWeight).toInt()
+                 == expectedFormat.property(KoCharacterStyle::UnderlineWeight).toInt()
+                 && actualFormat.property(KoCharacterStyle::UnderlineWidth).toDouble()
+                 == expectedFormat.property(KoCharacterStyle::UnderlineWidth).toDouble()
+                 && qvariant_cast<QColor>(actualFormat.property(KoCharacterStyle::StrikeOutColor))
+                 == qvariant_cast<QColor>(expectedFormat.property(KoCharacterStyle::StrikeOutColor))
+                 && actualFormat.property(KoCharacterStyle::StrikeOutStyle).toInt()
+                 == expectedFormat.property(KoCharacterStyle::StrikeOutStyle).toInt()
+                 && actualFormat.property(KoCharacterStyle::StrikeOutType).toInt()
+                 == expectedFormat.property(KoCharacterStyle::StrikeOutType).toInt()
+                 && actualFormat.property(KoCharacterStyle::StrikeOutMode).toInt()
+                 == expectedFormat.property(KoCharacterStyle::StrikeOutMode).toInt()
+                 && actualFormat.property(KoCharacterStyle::StrikeOutWeight).toInt()
+                 == expectedFormat.property(KoCharacterStyle::StrikeOutWeight).toInt()
+                 && actualFormat.property(KoCharacterStyle::StrikeOutWidth).toDouble()
+                 == expectedFormat.property(KoCharacterStyle::StrikeOutWidth).toDouble()
+                 && actualFormat.property(KoCharacterStyle::StrikeOutText).toString()
+                 == expectedFormat.property(KoCharacterStyle::StrikeOutText).toString()
+                 && actualFormat.property(KoCharacterStyle::Country).toString()
+                 == expectedFormat.property(KoCharacterStyle::Country).toString()
+                 && actualFormat.property(KoCharacterStyle::Language).toString()
+                 == expectedFormat.property(KoCharacterStyle::Language).toString()
+                 && actualFormat.verticalAlignment() == expectedFormat.verticalAlignment(); // FIXME: Compare other properties
 
     if (!equal) {
         qDebug() << "Actual property:   " << KoTextDebug::textAttributes(actualFormat);
@@ -149,36 +149,38 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
     return equal;
 }
 
-static bool compareTabProperties(QVariant actualTabs, QVariant expectedTabs) {
+static bool compareTabProperties(QVariant actualTabs, QVariant expectedTabs)
+{
     QList<QVariant> actualTabList = qvariant_cast<QList<QVariant> >(actualTabs);
     QList<QVariant> expectedTabList = qvariant_cast<QList<QVariant> >(expectedTabs);
     if (actualTabList.count() != expectedTabList.count())
         return false;
-    for (int i = 0; i<actualTabList.count(); i++) {
+    for (int i = 0; i < actualTabList.count(); i++) {
         KoText::Tab actualTab = actualTabList[i].value<KoText::Tab>();
         KoText::Tab expectedTab = expectedTabList[i].value<KoText::Tab>();
         if (actualTab.position != expectedTab.position
-            || actualTab.type != expectedTab.type
-            || actualTab.delimiter != expectedTab.delimiter
-            || actualTab.leaderType != expectedTab.leaderType
-            || actualTab.leaderStyle != expectedTab.leaderStyle
-            || actualTab.leaderColor != expectedTab.leaderColor
-            || actualTab.leaderWeight != expectedTab.leaderWeight
-            || actualTab.leaderWidth != expectedTab.leaderWidth
-            || actualTab.leaderText != expectedTab.leaderText
-            ) {
+                || actualTab.type != expectedTab.type
+                || actualTab.delimiter != expectedTab.delimiter
+                || actualTab.leaderType != expectedTab.leaderType
+                || actualTab.leaderStyle != expectedTab.leaderStyle
+                || actualTab.leaderColor != expectedTab.leaderColor
+                || actualTab.leaderWeight != expectedTab.leaderWeight
+                || actualTab.leaderWidth != expectedTab.leaderWidth
+                || actualTab.leaderText != expectedTab.leaderText
+           ) {
             return false;
         }
     }
     return true;
 }
 
-static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTextBlockFormat &expectedFormat) {
+static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTextBlockFormat &expectedFormat)
+{
     if (actualFormat.background() != expectedFormat.background()
-        || actualFormat.alignment() != expectedFormat.alignment()
-        || actualFormat.indent() != expectedFormat.indent()
-        || actualFormat.textIndent() != expectedFormat.textIndent()
-        || actualFormat.foreground() != expectedFormat.foreground()) {
+            || actualFormat.alignment() != expectedFormat.alignment()
+            || actualFormat.indent() != expectedFormat.indent()
+            || actualFormat.textIndent() != expectedFormat.textIndent()
+            || actualFormat.foreground() != expectedFormat.foreground()) {
         return false;
     }
     // check custom properties
@@ -188,14 +190,14 @@ static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTex
     allPropertyIds << expectedProperty.keys();
     bool match = true;
     foreach(int id, allPropertyIds) {
-      QString key, value;
+        QString key, value;
         switch (id) {
         case KoParagraphStyle::AutoTextIndent:
         case KoParagraphStyle::DropCaps:
         case KoParagraphStyle::DropCapsLines:
         case KoParagraphStyle::DropCapsLength:
             if (actualProperty[id].toInt() != expectedProperty[id].toInt())
-              match = false;
+                match = false;
             break;
         case KoParagraphStyle::LeftBorderWidth:
         case KoParagraphStyle::TopBorderWidth:
@@ -216,12 +218,12 @@ static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTex
         case QTextFormat::BlockTopMargin:
         case QTextFormat::BlockBottomMargin:
             if (abs(actualProperty[id].toDouble() - expectedProperty[id].toDouble()) > 1e-10)
-              // just checking if it's equal results in floating point errors
-              match = false;
+                // just checking if it's equal results in floating point errors
+                match = false;
             break;
         case KoParagraphStyle::TabPositions:
             if (!compareTabProperties(actualProperty[id], expectedProperty[id]))
-              match = false;
+                match = false;
             break;
         }
         if (!match) {
@@ -254,10 +256,10 @@ static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expec
             return false;
         }
         if (!compareListFormats(actualList->format(), expectedList->format())
-            || (actualList->itemNumber(actualBlock) != expectedList->itemNumber(expectedBlock))) {
+                || (actualList->itemNumber(actualBlock) != expectedList->itemNumber(expectedBlock))) {
             qDebug() << "compareBlocks: list properties mismatch at " << actualBlock.text()
-                     << KoTextDebug::listAttributes(actualList->format()) << KoTextDebug::listAttributes(expectedList->format())
-                     << actualList->itemNumber(actualBlock) << expectedList->itemNumber(expectedBlock);
+            << KoTextDebug::listAttributes(actualList->format()) << KoTextDebug::listAttributes(expectedList->format())
+            << actualList->itemNumber(actualBlock) << expectedList->itemNumber(expectedBlock);
             return false;
         }
     } else {
@@ -269,14 +271,14 @@ static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expec
         QTextBlockFormat actualFormat = actualBlock.blockFormat();
         QTextBlockFormat expectedFormat = expectedBlock.blockFormat();
         if (!compareBlockFormats(actualFormat, expectedFormat)) {
-                qDebug() << "compareBlock: block properties mismatch at " << actualBlock.text();
-                return false;
+            qDebug() << "compareBlock: block properties mismatch at " << actualBlock.text();
+            return false;
         }
     }
 
     QTextBlock::Iterator actualIterator = actualBlock.begin();
     QTextBlock::Iterator expectedIterator = expectedBlock.begin();
-    for(; !actualIterator.atEnd() && !expectedIterator.atEnd(); ++actualIterator, ++expectedIterator) {
+    for (; !actualIterator.atEnd() && !expectedIterator.atEnd(); ++actualIterator, ++expectedIterator) {
         QTextFragment actualFragment = actualIterator.fragment();
         QTextFragment expectedFragment = expectedIterator.fragment();
         if (actualFragment.isValid()) {
@@ -381,7 +383,7 @@ static QScriptValue evaluate(QScriptEngine *engine, const QString &script)
     if (engine->hasUncaughtException()) {
         QStringList backtrace = engine->uncaughtExceptionBacktrace();
         qDebug("    %s\n%s\n", qPrintable(r.toString()),
-                qPrintable(backtrace.join("\n")));
+               qPrintable(backtrace.join("\n")));
     }
     return r;
 }
@@ -509,11 +511,11 @@ void QScriptValueToKoTextTab(const QScriptValue &obj, KoTextTab &tab)
     tab.position = obj.property("position").toNumber();
     tab.type = (
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
-              QTextOption::
+                   QTextOption::
 #else
-              KoText::
+                   KoText::
 #endif
-                      TabType) obj.property("type").toInt32();
+                   TabType) obj.property("type").toInt32();
     tab.delimiter = obj.property("delimiter").toString()[0];
     tab.leaderType = (KoCharacterStyle::LineType) obj.property("leaderType").toInt32();
     tab.leaderStyle = (KoCharacterStyle::LineStyle) obj.property("leaderStyle").toInt32();

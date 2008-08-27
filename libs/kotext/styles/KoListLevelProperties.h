@@ -34,7 +34,8 @@ class KoXmlWriter;
 /**
  * Properties per list level.
  */
-class KOTEXT_EXPORT KoListLevelProperties {
+class KOTEXT_EXPORT KoListLevelProperties
+{
 public:
     /// Constructor
     explicit KoListLevelProperties();
@@ -127,11 +128,11 @@ public:
      * Load the properties from the \p style using the OpenDocument format.
      */
     void loadOdf(KoOdfLoadingContext& context, const KoXmlElement& style);
-    
+
     /**
      * Save the properties of the style using the OpenDocument format
      */
-    void saveOdf (KoXmlWriter *writer) const;
+    void saveOdf(KoXmlWriter *writer) const;
 
 private:
     void setProperty(int key, const QVariant &value);

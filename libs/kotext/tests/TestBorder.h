@@ -4,7 +4,8 @@
 #include <QObject>
 #include <QtTest/QtTest>
 
-class TestBorder : public QObject {
+class TestBorder : public QObject
+{
     Q_OBJECT
 public:
     TestBorder() {}

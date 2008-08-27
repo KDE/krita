@@ -29,7 +29,7 @@ class KoStore;
 class KoTextShapeData;
 class KComponentData;
 
-class TestLoading : public QObject 
+class TestLoading : public QObject
 {
     Q_OBJECT
 public:

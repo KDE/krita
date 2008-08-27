@@ -44,7 +44,8 @@ class KoShapeSavingContext;
  *
  * @see KoInlineTextObjectManager
  */
-class KOTEXT_EXPORT KoInlineObject {
+class KOTEXT_EXPORT KoInlineObject
+{
 public:
     enum Property {
         DocumentURL,
@@ -114,8 +115,8 @@ public:
      * Save this inlineObject as ODF
      * @param context the context for saving.
      */
-    virtual void saveOdf (KoShapeSavingContext & context);
-    
+    virtual void saveOdf(KoShapeSavingContext & context);
+
     /**
      * Update position of the inline object.
      * This is called each time the paragraph this inline object is in is re-layouted giving you the opportunity
@@ -126,7 +127,7 @@ public:
      * @param format the character format for the inline object.
      */
     virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
-            int posInDocument, const QTextCharFormat &format) = 0;
+                                int posInDocument, const QTextCharFormat &format) = 0;
 
     /**
      * Update the size of the inline object.
@@ -144,7 +145,7 @@ public:
      *  classes so the inline object can be reused on any paintdevice.
      */
     virtual void resize(const QTextDocument *document, QTextInlineObject object,
-            int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) = 0;
+                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) = 0;
 
     /**
      * Paint the inline-object-base using the provided painter within the rectangle specified by rect.
@@ -159,8 +160,8 @@ public:
      * @param rect the rectangle inside which the variable can paint itself.  Painting outside the rect
      *    will give varous problems with regards to repainting issues.
      */
-    virtual void paint (QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-            const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format) = 0;
+    virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
+                       const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format) = 0;
 
     /**
      * Overwrite this if you are interrested in propertychanges.

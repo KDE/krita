@@ -52,12 +52,12 @@ public:
     static KoVariableRegistry * instance();
 
     /**
-     * Use the element to find out which variable plugin can load it, and returns the loaded 
+     * Use the element to find out which variable plugin can load it, and returns the loaded
      * variable. The element expected is one of 'text:subject', 'text:date' / etc.
      *
      * @returns the variable or 0 if no variable could be created
      */
-    KoVariable * createFromOdf( const KoXmlElement & e, KoShapeLoadingContext & context ) const;
+    KoVariable * createFromOdf(const KoXmlElement & e, KoShapeLoadingContext & context) const;
 
     /**
      * Create a list of actions that can be used to plug into a menu, for example.
@@ -70,7 +70,7 @@ public:
      *  actions as a parent (for memory management purposes) as well.
      * @see KoInlineTextObjectManager::createInsertVariableActions()
      */
-    QList<QAction*> createInsertVariableActions( KoCanvasBase *host ) const;
+    QList<QAction*> createInsertVariableActions(KoCanvasBase *host) const;
 
 private:
     static KoVariableRegistry *s_instance;

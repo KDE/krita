@@ -46,12 +46,13 @@ class KoGenStyle;
  * equals styleId() of that style.
  * @see KoStyleManager
  */
-class KOTEXT_EXPORT KoCharacterStyle : public QObject {
+class KOTEXT_EXPORT KoCharacterStyle : public QObject
+{
     Q_OBJECT
 public:
     /// list of character style properties we can store in a QCharFormat
     enum Property {
-        StyleId = QTextFormat::UserProperty+1, ///< The id stored in the charFormat to link the text to this style.
+        StyleId = QTextFormat::UserProperty + 1, ///< The id stored in the charFormat to link the text to this style.
         HasHyphenation,
         FontId,
         StrikeOutStyle,
@@ -71,7 +72,7 @@ public:
         Country,
         FontCharset,
         DropCapsAdditionalFormatting, // to identify the purpose of the additionalFormatting
-                                     // set on the layout. is not copied during applyStyle().
+        // set on the layout. is not copied during applyStyle().
         InlineInstanceId = 577297549 // Internal: Reserved for KoInlineTextObjectManager
     };
 
@@ -82,7 +83,7 @@ public:
         DoubleLine
     };
 
-    /// list of possible line style. 
+    /// list of possible line style.
     enum LineStyle {
         NoLineStyle = Qt::NoPen,
         SolidLine = Qt::SolidLine,
@@ -129,37 +130,37 @@ public:
     QFont font() const;
 
     /// See similar named method on QTextCharFormat
-    void setFontFamily (const QString &family);
+    void setFontFamily(const QString &family);
     /// See similar named method on QTextCharFormat
-    QString fontFamily () const;
+    QString fontFamily() const;
     /// See similar named method on QTextCharFormat
-    void setFontPointSize (qreal size);
+    void setFontPointSize(qreal size);
     /// See similar named method on QTextCharFormat
-    qreal fontPointSize () const;
+    qreal fontPointSize() const;
     /// See similar named method on QTextCharFormat
-    void setFontWeight (int weight);
+    void setFontWeight(int weight);
     /// See similar named method on QTextCharFormat
-    int fontWeight () const;
+    int fontWeight() const;
     /// See similar named method on QTextCharFormat
-    void setFontItalic (bool italic);
+    void setFontItalic(bool italic);
     /// See similar named method on QTextCharFormat
-    bool fontItalic () const;
+    bool fontItalic() const;
     /// See similar named method on QTextCharFormat
-    void setFontOverline (bool overline);
+    void setFontOverline(bool overline);
     /// See similar named method on QTextCharFormat
-    bool fontOverline () const;
+    bool fontOverline() const;
     /// See similar named method on QTextCharFormat
-    void setFontFixedPitch (bool fixedPitch);
+    void setFontFixedPitch(bool fixedPitch);
     /// See similar named method on QTextCharFormat
-    bool fontFixedPitch () const;
+    bool fontFixedPitch() const;
     /// See similar named method on QTextCharFormat
-    void setVerticalAlignment (QTextCharFormat::VerticalAlignment alignment);
+    void setVerticalAlignment(QTextCharFormat::VerticalAlignment alignment);
     /// See similar named method on QTextCharFormat
-    QTextCharFormat::VerticalAlignment verticalAlignment () const;
+    QTextCharFormat::VerticalAlignment verticalAlignment() const;
     /// See similar named method on QTextCharFormat
-    void setTextOutline (const QPen &pen);
+    void setTextOutline(const QPen &pen);
     /// See similar named method on QTextCharFormat
-    QPen textOutline () const;
+    QPen textOutline() const;
     /// See similar named method on QTextCharFormat
     void setFontLetterSpacing(qreal spacing);
     /// See similar named method on QTextCharFormat
@@ -184,35 +185,35 @@ public:
     bool fontKerning() const;
 #endif
     /// See similar named method on QTextCharFormat
-    void setBackground (const QBrush &brush);
+    void setBackground(const QBrush &brush);
     /// See similar named method on QTextCharFormat
-    QBrush background () const;
+    QBrush background() const;
     /// See similar named method on QTextCharFormat
-    void clearBackground ();
+    void clearBackground();
 
     /// See similar named method on QTextCharFormat
-    void setForeground (const QBrush &brush);
+    void setForeground(const QBrush &brush);
     /// See similar named method on QTextCharFormat
-    QBrush foreground () const;
+    QBrush foreground() const;
     /// See similar named method on QTextCharFormat
-    void clearForeground ();
+    void clearForeground();
 
     /// Apply a font strike out style to this KoCharacterStyle
-    void setStrikeOutStyle (LineStyle style);
+    void setStrikeOutStyle(LineStyle style);
     /// Get the current font strike out style of this KoCharacterStyle
-    LineStyle strikeOutStyle () const;
+    LineStyle strikeOutStyle() const;
     /// Apply a font strike out width to this KoCharacterStyle
-    void setStrikeOutWidth (LineWeight weight, qreal width);
+    void setStrikeOutWidth(LineWeight weight, qreal width);
     /// Get the current font strike out width of this KoCharacterStyle
-    void strikeOutWidth (LineWeight& weight, qreal& width) const;
+    void strikeOutWidth(LineWeight& weight, qreal& width) const;
     /// Apply a font strike out color to this KoCharacterStyle
-    void setStrikeOutColor (const QColor &color);
+    void setStrikeOutColor(const QColor &color);
     /// Get the current font strike out color of this KoCharacterStyle
-    QColor strikeOutColor () const;
+    QColor strikeOutColor() const;
     /// Apply a font strike out color to this KoCharacterStyle
-    void setStrikeOutType (LineType lineType);
+    void setStrikeOutType(LineType lineType);
     /// Get the current font strike out color of this KoCharacterStyle
-    LineType strikeOutType () const;
+    LineType strikeOutType() const;
     /// Apply a strike out mode of this KoCharacterStyle
     void setStrikeOutMode(LineMode lineMode);
     /// Get the current strike out mode of this KoCharacterStyle
@@ -223,21 +224,21 @@ public:
     QString strikeOutText() const;
 
     /// Apply a font underline style to this KoCharacterStyle
-    void setUnderlineStyle (LineStyle style);
+    void setUnderlineStyle(LineStyle style);
     /// Get the current font underline style of this KoCharacterStyle
-    LineStyle underlineStyle () const;
+    LineStyle underlineStyle() const;
     /// Apply a font underline width to this KoCharacterStyle
-    void setUnderlineWidth (LineWeight weight, qreal width);
+    void setUnderlineWidth(LineWeight weight, qreal width);
     /// Get the current font underline width of this KoCharacterStyle
-    void underlineWidth (LineWeight& weight, qreal& width) const;
+    void underlineWidth(LineWeight& weight, qreal& width) const;
     /// Apply a font underline color to this KoCharacterStyle
-    void setUnderlineColor (const QColor &color);
+    void setUnderlineColor(const QColor &color);
     /// Get the current font underline color of this KoCharacterStyle
-    QColor underlineColor () const;
+    QColor underlineColor() const;
     /// Apply a font underline color to this KoCharacterStyle
-    void setUnderlineType (LineType lineType);
+    void setUnderlineType(LineType lineType);
     /// Get the current font underline color of this KoCharacterStyle
-    LineType underlineType () const;
+    LineType underlineType() const;
     /// Apply a underline mode to this KoCharacterStyle
     void setUnderlineMode(LineMode mode);
     /// Get the current underline mode of this KoCharacterStyle
@@ -295,19 +296,19 @@ public:
     /// return true if this style has a non-default value set for the Property
     bool hasProperty(int key) const;
 
-    bool operator==( const KoCharacterStyle &other ) const;
+    bool operator==(const KoCharacterStyle &other) const;
 
     /*
      * Removes properties from this style that have the same value in other style.
      */
-    void removeDuplicates ( const KoCharacterStyle &other );
+    void removeDuplicates(const KoCharacterStyle &other);
 
     /*
      * Removes properties from this style that have the same value in other format.
      */
     void removeDuplicates(const QTextCharFormat &other_format);
 
-    void saveOdf( KoGenStyle &style );
+    void saveOdf(KoGenStyle &style);
 
     /**
      * Returns true if this style has no properties set. Else, returns false.

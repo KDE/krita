@@ -38,7 +38,8 @@ class KoVariableManagerPrivate;
  * inserted into the document.
  * @see KoInlineTextObjectManager::createInsertVariableActions()
  */
-class KOTEXT_EXPORT KoVariableManager {
+class KOTEXT_EXPORT KoVariableManager
+{
 public:
     /// constructor
     explicit KoVariableManager(KoInlineTextObjectManager *inlineObjectManager);

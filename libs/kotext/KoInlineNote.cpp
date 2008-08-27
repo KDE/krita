@@ -29,7 +29,8 @@
 #include <QFontMetricsF>
 #include <QTextOption>
 
-class KoInlineNote::Private {
+class KoInlineNote::Private
+{
 public:
     Private(KoInlineNote::Type t) : autoNumbering(false), type(t) {}
     QString text, label, id;
@@ -38,73 +39,86 @@ public:
 };
 
 KoInlineNote::KoInlineNote(Type type)
-    : d(new Private(type))
+        : d(new Private(type))
 {
 }
 
-KoInlineNote::~KoInlineNote() {
+KoInlineNote::~KoInlineNote()
+{
     delete d;
 }
 
-void KoInlineNote::setText(const QString &text) {
+void KoInlineNote::setText(const QString &text)
+{
     d->text = text;
 }
 
-void KoInlineNote::setLabel(const QString &text) {
+void KoInlineNote::setLabel(const QString &text)
+{
     d->label = text;
 }
 
-void KoInlineNote::setId(const QString &id) {
+void KoInlineNote::setId(const QString &id)
+{
     d->id = id;
 }
 
-QString KoInlineNote::text() const {
+QString KoInlineNote::text() const
+{
     return d->text;
 }
 
-QString KoInlineNote::label() const {
+QString KoInlineNote::label() const
+{
     return d->label;
 }
 
-QString KoInlineNote::id() const {
+QString KoInlineNote::id() const
+{
     return d->id;
 }
 
-bool KoInlineNote::autoNumbering() const {
+bool KoInlineNote::autoNumbering() const
+{
     return d->autoNumbering;
 }
 
-void KoInlineNote::setAutoNumbering(bool on) {
+void KoInlineNote::setAutoNumbering(bool on)
+{
     d->autoNumbering = on;
 }
 
-KoInlineNote::Type KoInlineNote::type() const {
+KoInlineNote::Type KoInlineNote::type() const
+{
     return d->type;
 }
 
-void KoInlineNote::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format) {
+void KoInlineNote::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
+{
     Q_UNUSED(document);
     Q_UNUSED(object);
     Q_UNUSED(posInDocument);
     Q_UNUSED(format);
 }
 
-void KoInlineNote::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) {
-    if(d->label.isEmpty())
+void KoInlineNote::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
+{
+    if (d->label.isEmpty())
         return;
     Q_ASSERT(format.isCharFormat());
     QFontMetricsF fm(format.font(), pd);
-    object.setWidth( fm.width(d->label) );
+    object.setWidth(fm.width(d->label));
     object.setAscent(fm.ascent());
     object.setDescent(fm.descent());
 }
 
-void KoInlineNote::paint (QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format) {
+void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
+{
     Q_UNUSED(document);
     Q_UNUSED(object);
     Q_UNUSED(posInDocument);
 
-    if(d->label.isEmpty())
+    if (d->label.isEmpty())
         return;
 
     QFont font(format.font(), pd);
@@ -112,8 +126,8 @@ void KoInlineNote::paint (QPainter &painter, QPaintDevice *pd, const QTextDocume
     layout.setCacheEnabled(true);
     QList<QTextLayout::FormatRange> layouts;
     QTextLayout::FormatRange range;
-    range.start=0;
-    range.length=d->label.length();
+    range.start = 0;
+    range.length = d->label.length();
     range.format = format;
     range.format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
     layouts.append(range);
@@ -128,12 +142,12 @@ void KoInlineNote::paint (QPainter &painter, QPaintDevice *pd, const QTextDocume
     layout.draw(&painter, rect.topLeft());
 }
 
-bool KoInlineNote::loadOdf (const KoXmlElement & element)
+bool KoInlineNote::loadOdf(const KoXmlElement & element)
 {
     if (element.namespaceURI() != KoXmlNS::text || element.localName() != "note")
         return false;
 
-    QString className = element.attributeNS ( KoXmlNS::text, "note-class");
+    QString className = element.attributeNS(KoXmlNS::text, "note-class");
     if (className == "footnote")
         d->type = Footnote;
     else if (className == "endnote")
@@ -141,8 +155,8 @@ bool KoInlineNote::loadOdf (const KoXmlElement & element)
     else
         return false;
 
-    d->id = element.attributeNS ( KoXmlNS::text, "id");
-    for ( KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling() ) {
+    d->id = element.attributeNS(KoXmlNS::text, "id");
+    for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
         setAutoNumbering(false);
         KoXmlElement ts = node.toElement();
         if (ts.namespaceURI() != KoXmlNS::text)
@@ -150,13 +164,13 @@ bool KoInlineNote::loadOdf (const KoXmlElement & element)
         if (ts.localName() == "note-body") {
             d->text = "";
             KoXmlNode node = ts.firstChild();
-            while( !node.isNull() ) {
+            while (!node.isNull()) {
                 KoXmlElement commentElement = node.toElement();
-                if( !commentElement.isNull() ) {
-                    if( commentElement.localName() == "p" && commentElement.namespaceURI() == KoXmlNS::text ) {
-                        if( !d->text.isEmpty() )
-                            d->text.append( '\n' );
-                        d->text.append( commentElement.text() );
+                if (!commentElement.isNull()) {
+                    if (commentElement.localName() == "p" && commentElement.namespaceURI() == KoXmlNS::text) {
+                        if (!d->text.isEmpty())
+                            d->text.append('\n');
+                        d->text.append(commentElement.text());
                     }
                 }
                 node = node.nextSibling();
@@ -173,7 +187,7 @@ bool KoInlineNote::loadOdf (const KoXmlElement & element)
     return true;
 }
 
-void KoInlineNote::saveOdf( KoShapeSavingContext & context )
+void KoInlineNote::saveOdf(KoShapeSavingContext & context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
     writer->startElement("text:note", false);

@@ -32,7 +32,8 @@ class KoTextEditingPlugin;
  * allow the creation of the text-editing-class from that plugin.
  * @see KoTextEditingRegistry
  */
-class KOTEXT_EXPORT KoTextEditingFactory : public QObject {
+class KOTEXT_EXPORT KoTextEditingFactory : public QObject
+{
     Q_OBJECT
 public:
     /**

@@ -22,7 +22,8 @@
 #include <QObject>
 #include <QtTest/QtTest>
 
-class TestStyles : public QObject {
+class TestStyles : public QObject
+{
     Q_OBJECT
 private slots: // tests
     void testStyleInheritance();

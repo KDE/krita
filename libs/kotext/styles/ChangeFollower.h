@@ -30,9 +30,10 @@
  * it will deregister itself from the stylemanager.
  * If the stylemanager died before that time, it will not do anything.
  */
-class ChangeFollower : public QObject {
+class ChangeFollower : public QObject
+{
 
-Q_OBJECT 
+    Q_OBJECT
 
 public:
     /**
@@ -61,7 +62,9 @@ public:
      */
     void processUpdates(const QList<int> &changedStyles);
     /// return the document this follower is following.
-    const QTextDocument *document() const { return m_document; }
+    const QTextDocument *document() const {
+        return m_document;
+    }
 
 private:
     QTextDocument *m_document;

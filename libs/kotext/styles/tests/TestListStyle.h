@@ -8,7 +8,8 @@
 //   #include <KoTextDocumentLayout.h>
 //   #include <KoShape.h>
 //
-class TestListStyle : public QObject {
+class TestListStyle : public QObject
+{
     Q_OBJECT
 public:
     TestListStyle() {}

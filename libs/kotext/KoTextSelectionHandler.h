@@ -37,7 +37,8 @@ class QTextCursor;
 /**
  * The public class that is able to manipulate selected text.
  */
-class KOTEXT_EXPORT KoTextSelectionHandler : public KoToolSelection {
+class KOTEXT_EXPORT KoTextSelectionHandler : public KoToolSelection
+{
     Q_OBJECT
 public:
     explicit KoTextSelectionHandler(QObject *parent = 0);

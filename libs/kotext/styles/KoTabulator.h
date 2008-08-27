@@ -52,23 +52,23 @@ struct KoTabulator {
     */
     QChar alignChar;
 
-    bool operator==( const KoTabulator & t ) const {
-        return QABS( ptPos - t.ptPos ) < 1E-4 && type == t.type &&
-               filling == t.filling && QABS( ptWidth - t.ptWidth ) < 1E-4;
-}
-    bool operator!=( const KoTabulator & t ) const {
+    bool operator==(const KoTabulator & t) const {
+        return QABS(ptPos - t.ptPos) < 1E-4 && type == t.type &&
+               filling == t.filling && QABS(ptWidth - t.ptWidth) < 1E-4;
+    }
+    bool operator!=(const KoTabulator & t) const {
         return !operator==(t);
-}
+    }
     // Operators used for sorting
-    bool operator < ( const KoTabulator & t ) const {
+    bool operator < (const KoTabulator & t) const {
         return ptPos < t.ptPos;
-}
-    bool operator <= ( const KoTabulator & t ) const {
+    }
+    bool operator <= (const KoTabulator & t) const {
         return ptPos <= t.ptPos;
-}
-    bool operator > ( const KoTabulator & t ) const {
+    }
+    bool operator > (const KoTabulator & t) const {
         return ptPos > t.ptPos;
-}
+    }
 };
 
 typedef QList<KoTabulator> KoTabulatorList;

@@ -27,14 +27,11 @@
 class KoVariableFactory::Private
 {
 public:
-    Private( const QString & id )
-    : id ( id )
-    {}
+    Private(const QString & id)
+            : id(id) {}
 
-    ~Private()
-    {
-        foreach ( KoVariableTemplate t, templates )
-        {
+    ~Private() {
+        foreach(KoVariableTemplate t, templates) {
             delete t.properties;
         }
     }
@@ -45,8 +42,8 @@ public:
     QStringList odfElementNames;
 };
 
-KoVariableFactory::KoVariableFactory( const QString & id )
-: d( new Private( id ) )
+KoVariableFactory::KoVariableFactory(const QString & id)
+        : d(new Private(id))
 {
 }
 
@@ -65,7 +62,7 @@ const QList<KoVariableTemplate> KoVariableFactory::templates() const
     return d->templates;
 }
 
-void KoVariableFactory::addTemplate( const KoVariableTemplate &params )
+void KoVariableFactory::addTemplate(const KoVariableTemplate &params)
 {
     d->templates.append(params);
 }
@@ -80,7 +77,7 @@ const QString & KoVariableFactory::odfNameSpace() const
     return d->odfNameSpace;
 }
 
-void KoVariableFactory::setOdfElementNames( const QString & nameSpace, const QStringList & names )
+void KoVariableFactory::setOdfElementNames(const QString & nameSpace, const QStringList & names)
 {
     d->odfNameSpace = nameSpace;
     d->odfElementNames = names;

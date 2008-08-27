@@ -30,7 +30,7 @@ class QWidget;
 class KoFindStrategy : public KoFindStrategyBase
 {
 public:
-    KoFindStrategy( QWidget * parent );
+    KoFindStrategy(QWidget * parent);
     virtual ~KoFindStrategy();
 
     /// reimplemented
@@ -43,7 +43,7 @@ public:
     virtual void displayFinalDialog();
 
     /// reimplemented
-    virtual bool foundMatch( QTextCursor & cursor, FindDirection * findDirection );
+    virtual bool foundMatch(QTextCursor & cursor, FindDirection * findDirection);
 
 private:
     KFindDialog * m_dialog;

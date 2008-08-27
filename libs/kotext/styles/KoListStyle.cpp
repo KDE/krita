@@ -31,18 +31,19 @@
 #include <QTextCursor>
 #include <QBuffer>
 
-class KoListStyle::Private {
+class KoListStyle::Private
+{
 public:
     Private() : styleId(0), refCount(1) { }
 
     QTextList *textList(int level, const QTextDocument *doc) {
-        if(! textLists.contains(level))
+        if (! textLists.contains(level))
             return 0;
         QMap<const QTextDocument*, QPointer<QTextList> > map = textLists[level];
-        if(! map.contains(doc))
+        if (! map.contains(doc))
             return 0;
         QPointer<QTextList> pointer = map[doc];
-        if(pointer.isNull())
+        if (pointer.isNull())
             return 0;
         return pointer;
     }
@@ -61,45 +62,49 @@ public:
 };
 
 KoListStyle::KoListStyle()
-    : d( new Private())
+        : d(new Private())
 {
 }
 
 KoListStyle::KoListStyle(const KoListStyle &orig)
-    : d( orig.d )
+        : d(orig.d)
 {
     d->refCount++;
 }
 
 KoListStyle::KoListStyle(int)
-    : d(0)
+        : d(0)
 {
 }
 
-KoListStyle::~KoListStyle() {
-    if(d && --d->refCount == 0)
+KoListStyle::~KoListStyle()
+{
+    if (d && --d->refCount == 0)
         delete d;
 }
 
-bool KoListStyle::operator==(const KoListStyle &other) const {
+bool KoListStyle::operator==(const KoListStyle &other) const
+{
     foreach(int level, d->levels.keys()) {
-        if(! other.hasLevelProperties(level))
+        if (! other.hasLevelProperties(level))
             return false;
-        if(!(other.levelProperties(level) == d->levels[level]))
+        if (!(other.levelProperties(level) == d->levels[level]))
             return false;
     }
     foreach(int level, other.d->levels.keys()) {
-        if(! hasLevelProperties(level))
+        if (! hasLevelProperties(level))
             return false;
     }
     return true;
 }
 
-QString KoListStyle::name() const {
+QString KoListStyle::name() const
+{
     return d->name;
 }
 
-void KoListStyle::setName(const QString &name) {
+void KoListStyle::setName(const QString &name)
+{
     d->name = name;
 }
 
@@ -111,15 +116,16 @@ int KoListStyle::styleId() const
 void KoListStyle::setStyleId(int id)
 {
     d->styleId = id;
-    foreach (int level, d->levels.keys()) {
+    foreach(int level, d->levels.keys()) {
         d->levels[level].setStyleId(id);
     }
 }
 
-KoListLevelProperties KoListStyle::levelProperties(int level) const {
-    if(d->levels.contains(level))
+KoListLevelProperties KoListStyle::levelProperties(int level) const
+{
+    if (d->levels.contains(level))
         return d->levels.value(level);
-    if(d->levels.count()) {
+    if (d->levels.count()) {
         KoListLevelProperties llp = d->levels.begin().value();
         llp.setLevel(level);
         return llp;
@@ -133,40 +139,44 @@ KoListLevelProperties KoListStyle::levelProperties(int level) const {
     return llp;
 }
 
-void KoListStyle::setLevelProperties(const KoListLevelProperties &properties) {
+void KoListStyle::setLevelProperties(const KoListLevelProperties &properties)
+{
     d->levels.insert(properties.level(), properties);
 
     // find all QTextList objects and apply the changed style on them.
-    if(! d->textLists.contains(properties.level()))
+    if (! d->textLists.contains(properties.level()))
         return;
     QMap<const QTextDocument*, QPointer<QTextList> > map = d->textLists.value(properties.level());
     foreach(QPointer<QTextList> list, map) {
-        if(list.isNull()) continue;
+        if (list.isNull()) continue;
         QTextListFormat format = list->format();
         properties.applyStyle(format);
         list->setFormat(format);
 
         QTextBlock tb = list->item(0);
-        if(tb.isValid()) { // invalidate the counter part
-            KoTextBlockData *userData = dynamic_cast<KoTextBlockData*> (tb.userData());
-            if(userData)
+        if (tb.isValid()) { // invalidate the counter part
+            KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(tb.userData());
+            if (userData)
                 userData->setCounterWidth(-1.0);
         }
     }
 }
 
-bool KoListStyle::hasLevelProperties(int level) const {
+bool KoListStyle::hasLevelProperties(int level) const
+{
     return d->levels.contains(level);
 }
 
-void KoListStyle::removeLevelProperties(int level) {
+void KoListStyle::removeLevelProperties(int level)
+{
     d->levels.remove(level);
 }
 
-void KoListStyle::applyStyle(const QTextBlock &block, int level) {
+void KoListStyle::applyStyle(const QTextBlock &block, int level)
+{
     Q_ASSERT(isValid());
-    if(level == 0) { // illegal level; fetch the first proper level we have
-        if(d->levels.count())
+    if (level == 0) { // illegal level; fetch the first proper level we have
+        if (d->levels.count())
             level = d->levels.keys().first();
         else // just go for default, then
             level = 1;
@@ -175,18 +185,18 @@ void KoListStyle::applyStyle(const QTextBlock &block, int level) {
     const bool contains = hasLevelProperties(level);
 
     QTextList *textList = d->textList(level, block.document());
-    if(textList && block.textList() && block.textList() != textList) // remove old one
+    if (textList && block.textList() && block.textList() != textList) // remove old one
         block.textList()->remove(block);
-    if(block.textList() == 0 && textList) { // add if new
+    if (block.textList() == 0 && textList) { // add if new
         textList->add(block);
     }
-    if(block.textList() && textList == 0) {
+    if (block.textList() && textList == 0) {
         textList = block.textList(); // missed it ?
         d->setTextList(level, block.document(), textList);
     }
 
     QTextListFormat format;
-    if(block.textList())
+    if (block.textList())
         format = block.textList()->format();
 
     KoListLevelProperties llp = this->levelProperties(level);
@@ -194,31 +204,32 @@ void KoListStyle::applyStyle(const QTextBlock &block, int level) {
         llp.setStyleId(d->styleId);
     llp.applyStyle(format);
 
-    if(textList) {
+    if (textList) {
         textList->setFormat(format);
         QTextBlock tb = textList->item(0);
-        if(tb.isValid()) { // invalidate the counter part
-            KoTextBlockData *userData = dynamic_cast<KoTextBlockData*> (tb.userData());
-            if(userData)
+        if (tb.isValid()) { // invalidate the counter part
+            KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(tb.userData());
+            if (userData)
                 userData->setCounterWidth(-1.0);
         }
-    }
-    else { // does not exist yet, this is the first parag that uses it :)
+    } else { // does not exist yet, this is the first parag that uses it :)
         QTextCursor cursor(block);
         textList = cursor.createList(format);
         d->setTextList(level, block.document(), textList);
     }
 
-    if(contains)
+    if (contains)
         d->levels.insert(level, llp);
 }
 
-bool KoListStyle::isValid() const {
+bool KoListStyle::isValid() const
+{
     return d != 0;
 }
 
 // static
-KoListStyle* KoListStyle::fromTextList(QTextList *list) {
+KoListStyle* KoListStyle::fromTextList(QTextList *list)
+{
     KoListStyle *answer = new KoListStyle();
     KoListLevelProperties llp = KoListLevelProperties::fromTextList(list);
     answer->setLevelProperties(llp);
@@ -247,13 +258,13 @@ void KoListStyle::loadOdf(KoOdfLoadingContext& context, const KoXmlElement& styl
 void KoListStyle::saveOdf(KoGenStyle &style)
 {
     QBuffer buffer;
-    buffer.open( QIODevice::WriteOnly );
-    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
     QMapIterator<int, KoListLevelProperties> it(d->levels);
     while (it.hasNext()) {
-	it.next();
-	it.value().saveOdf(&elementWriter);
+        it.next();
+        it.value().saveOdf(&elementWriter);
     }
-    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
-    style.addChildElement( "text-list-level-style-content", elementContents );
+    QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+    style.addChildElement("text-list-level-style-content", elementContents);
 }

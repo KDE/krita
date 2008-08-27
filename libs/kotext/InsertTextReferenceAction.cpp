@@ -31,12 +31,13 @@
 #include <QLabel>
 
 InsertTextReferenceAction::InsertTextReferenceAction(KoCanvasBase *canvas, const KoInlineTextObjectManager *manager)
-    : InsertVariableActionBase(canvas, i18n("Text Reference")),
-    m_manager(manager)
+        : InsertVariableActionBase(canvas, i18n("Text Reference")),
+        m_manager(manager)
 {
 }
 
-KoVariable *InsertTextReferenceAction::createVariable() {
+KoVariable *InsertTextReferenceAction::createVariable()
+{
     QWidget *widget = new QWidget();
     QVBoxLayout *lay = new QVBoxLayout(widget);
     widget->setLayout(lay);
@@ -47,7 +48,7 @@ KoVariable *InsertTextReferenceAction::createVariable() {
     QList<KoTextLocator*> textLocators = m_manager->textLocators();
     QStringList selectionList;
     foreach(KoTextLocator* locator, textLocators)
-        selectionList << locator->word() + '(' + QString::number(locator->pageNumber()) + ')';
+    selectionList << locator->word() + '(' + QString::number(locator->pageNumber()) + ')';
     QListWidget *list = new QListWidget(widget);
     lay->addWidget(list);
     list->addItems(selectionList);
@@ -57,10 +58,10 @@ KoVariable *InsertTextReferenceAction::createVariable() {
     dialog->addPage(widget, "");
 
     KoVariable *variable = 0;
-    if(dialog->exec() == KPageDialog::Accepted) {
+    if (dialog->exec() == KPageDialog::Accepted) {
         KoTextLocator *locator = textLocators[list->currentRow()];
         Q_ASSERT(locator);
-        variable = new KoTextReference( locator->id() );
+        variable = new KoTextReference(locator->id());
     }
     delete dialog;
     return variable;

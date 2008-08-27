@@ -46,11 +46,12 @@ class KoOdfLoadingContext;
  * a specific KoParagraphStyle.
  * @see KoStyleManager
  */
-class KOTEXT_EXPORT KoParagraphStyle : public QObject {
+class KOTEXT_EXPORT KoParagraphStyle : public QObject
+{
     Q_OBJECT
 public:
     enum Property {
-        StyleId = QTextFormat::UserProperty+1,
+        StyleId = QTextFormat::UserProperty + 1,
         // Linespacing properties
         PercentLineHeight,  ///< this propery is used for a percentage of the highest character on that line
         FixedLineHeight,    ///< this propery is used to use a non-default line height
@@ -111,14 +112,14 @@ public:
         AutoTextIndent,         ///< bool, says whether the paragraph is auto-indented or not
 
         TabStopDistance,        ///< Double, Length. specifies that there's a tab stop every n inches
-                                ///< (after the last of the TabPositions, if any)
+        ///< (after the last of the TabPositions, if any)
         TabPositions,           ///< A list of tab positions
         TextProgressionDirection,
 
         MasterPageName,         ///< Optional name of the master-page.
         StartNewList            ///< Boolean marker to indicate that a new list starts from this block, even if
-                                ///< it's part of an existing QTextList. (This is nothing related to ODF; exists
-                                ///< because of how lists are handled in KOffice. See KoListStyle.)
+        ///< it's part of an existing QTextList. (This is nothing related to ODF; exists
+        ///< because of how lists are handled in KOffice. See KoListStyle.)
 
 // do 15.5.24
 // continue at 15.5.28
@@ -209,7 +210,7 @@ public:
      * There are only 3 valid options, Left, Center and Justified. (where Left will
      * be right aligned for RTL text).
      */
-    void setAlignLastLine(Qt::Alignment alignment );
+    void setAlignLastLine(Qt::Alignment alignment);
     /**
      * @see setAlignLastLine
      */
@@ -298,12 +299,12 @@ public:
     bool followDocBaseline() const;
 
     /// See similar named method on QTextBlockFormat
-    void setBackground (const QBrush &brush);
+    void setBackground(const QBrush &brush);
     /// See similar named method on QTextBlockFormat
-    QBrush background () const;
+    QBrush background() const;
     /// See similar named method on QTextBlockFormat
-    void clearBackground ();
-    
+    void clearBackground();
+
     void setBreakBefore(bool on);
     bool breakBefore();
     void setBreakAfter(bool on);
@@ -368,41 +369,41 @@ public:
     /// duplicated property from QTextBlockFormat
     qreal topMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setBottomMargin (qreal margin);
+    void setBottomMargin(qreal margin);
     /// duplicated property from QTextBlockFormat
-    qreal bottomMargin () const;
+    qreal bottomMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setLeftMargin (qreal margin);
+    void setLeftMargin(qreal margin);
     /// duplicated property from QTextBlockFormat
-    qreal leftMargin () const;
+    qreal leftMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setRightMargin (qreal margin);
+    void setRightMargin(qreal margin);
     /// duplicated property from QTextBlockFormat
-    qreal rightMargin () const;
+    qreal rightMargin() const;
     /// set the margin around the paragraph, making the margin on all sides equal.
-    void setMargin (qreal margin);
+    void setMargin(qreal margin);
 
     void setIsListHeader(bool on);
     bool isListHeader() const;
 
     /// duplicated property from QTextBlockFormat
-    void setAlignment (Qt::Alignment alignment);
+    void setAlignment(Qt::Alignment alignment);
     /// duplicated property from QTextBlockFormat
-    Qt::Alignment alignment () const;
+    Qt::Alignment alignment() const;
     /// duplicated property from QTextBlockFormat
-    void setTextIndent (qreal margin);
+    void setTextIndent(qreal margin);
     /// duplicated property from QTextBlockFormat
-    qreal textIndent () const;
+    qreal textIndent() const;
     /// Custom KoParagraphStyle property for auto-text-indent
-    void setAutoTextIndent (bool on);
-    bool autoTextIndent () const;
+    void setAutoTextIndent(bool on);
+    bool autoTextIndent() const;
 
 #if 0
-as this is a duplicate of leftMargin, lets make it very clear we are using that one.
+    as this is a duplicate of leftMargin, lets make it very clear we are using that one.
     /// duplicated property from QTextBlockFormat
-    void setIndent (int indent);
+    void setIndent(int indent);
     /// duplicated property from QTextBlockFormat
-    int indent () const;
+    int indent() const;
 #endif
     /// duplicated property from QTextBlockFormat
     void setNonBreakableLines(bool on);
@@ -511,23 +512,23 @@ as this is a duplicate of leftMargin, lets make it very clear we are using that 
     void remove(int key);
 
     /// Compare the paragraph, character and list properties of this style with the other
-    bool operator==( const KoParagraphStyle &other ) const;
+    bool operator==(const KoParagraphStyle &other) const;
     /// Compare the paragraph properties of this style with other
     bool compareParagraphProperties(const KoParagraphStyle &other) const;
     /// Compare the character properties of this style with other
     bool compareCharacterProperties(const KoParagraphStyle &other) const;
 
-    void removeDuplicates ( const KoParagraphStyle &other );
+    void removeDuplicates(const KoParagraphStyle &other);
 
     /**
      * Load the style form the element
      *
      * @param context the odf loading context
-     * @param element the element containing the 
+     * @param element the element containing the
      */
-    void loadOdf( const KoXmlElement* element, KoOdfLoadingContext & context );
+    void loadOdf(const KoXmlElement* element, KoOdfLoadingContext & context);
 
-    void saveOdf( KoGenStyle &style );
+    void saveOdf(KoGenStyle &style);
 
     /**
      * Returns true if this paragraph style has the property set.
@@ -560,7 +561,7 @@ private:
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
-    void loadOdfProperties( KoStyleStack& styleStack );
+    void loadOdfProperties(KoStyleStack& styleStack);
     qreal propertyDouble(int key) const;
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;

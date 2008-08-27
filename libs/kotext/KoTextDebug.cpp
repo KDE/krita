@@ -77,7 +77,7 @@ static QString fontProperties(const QTextCharFormat &textFormat)
         case QTextFormat::FontCapitalization:
             fontProps.append(QString("caps %1").arg(properties[id].toInt()));
             break;
-         case KoCharacterStyle::FontCharset:
+        case KoCharacterStyle::FontCharset:
             fontProps.append(properties[id].toString());
             break;
 #if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
@@ -165,7 +165,7 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
         KoCharacterStyle *characterStyle = lay->styleManager()->characterStyle(id);
         attrs.append(" characterStyle=\"id:").append(QString::number(id));
         if (characterStyle)
-             attrs.append(" name:").append(characterStyle->name());
+            attrs.append(" name:").append(characterStyle->name());
         attrs.append("\"");
     }
 
@@ -191,7 +191,7 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
             else
                 value = pen.color().name();
             break;
-                                       }
+        }
         case KoCharacterStyle::UnderlineStyle:
             key = "underlinestyle";
             value = QString::number(properties[id].toInt());
@@ -260,7 +260,7 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
             key = "indent";
             value = QString::number(properties[id].toInt());
             break;
-       case KoCharacterStyle::Country:
+        case KoCharacterStyle::Country:
             key = "country";
             value = properties[id].toString();
             break;
@@ -293,7 +293,7 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
         KoParagraphStyle *paragraphStyle = lay->styleManager()->paragraphStyle(id);
         attrs.append(" paragraphStyle=\"id:").append(QString::number(id));
         if (paragraphStyle)
-             attrs.append(" name:").append(paragraphStyle->name());
+            attrs.append(" name:").append(paragraphStyle->name());
         attrs.append("\"");
     }
 
@@ -303,7 +303,7 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
         switch (id) {
         case KoParagraphStyle::AutoTextIndent:
             key = "autotextindent";
-            value = properties[id].toBool()? "true" : "false" ;
+            value = properties[id].toBool() ? "true" : "false" ;
             break;
 #ifdef PARAGRAPH_BORDER_DEBUG // because it tends to get annoyingly long :)
         case KoParagraphStyle::LeftBorderWidth:
@@ -413,7 +413,7 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
         KoListStyle *listStyle = lay->styleManager()->listStyle(id);
         attrs.append(" listStyle=\"id:").append(QString::number(id));
         if (listStyle)
-             attrs.append(" name:").append(listStyle->name());
+            attrs.append(" name:").append(listStyle->name());
         attrs.append("\"");
     }
 
@@ -434,47 +434,47 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
             value = properties[id].toString();
             break;
         case KoListStyle::ListItemSuffix:
-             key = "suffix";
-             value = properties[id].toString();
-             break;
+            key = "suffix";
+            value = properties[id].toString();
+            break;
         case KoListStyle::StartValue:
-             key = "start-value";
-             value = QString::number(properties[id].toInt());
-             break;
+            key = "start-value";
+            value = QString::number(properties[id].toInt());
+            break;
         case KoListStyle::Level:
-             key = "level";
-             value = QString::number(properties[id].toInt());
-             break;
-       case KoListStyle::DisplayLevel:
-             key = "display-level";
-             value = QString::number(properties[id].toInt());
-             break;
-       case KoListStyle::CharacterStyleId:
-             key = "charstyleid";
-             value = QString::number(properties[id].toInt());
-             break;
-       case KoListStyle::Alignment:
-             key = "alignment";
-             value = QString::number(properties[id].toInt());
-             break;
-       case KoListStyle::BulletSize:
-             key = "bullet-size";
-             value = QString::number(properties[id].toInt());
-             break;
-       case KoListStyle::BulletCharacter:
-             key = "bullet-char";
-             value = properties[id].toString();
-             break;
-       case KoListStyle::LetterSynchronization:
-             key = "letter-sync";
-             value = QString::number(properties[id].toInt());
-             break;
-       case KoListStyle::StyleId:
-             key = "styleid";
-             value = QString::number(properties[id].toInt());
-             break;
+            key = "level";
+            value = QString::number(properties[id].toInt());
+            break;
+        case KoListStyle::DisplayLevel:
+            key = "display-level";
+            value = QString::number(properties[id].toInt());
+            break;
+        case KoListStyle::CharacterStyleId:
+            key = "charstyleid";
+            value = QString::number(properties[id].toInt());
+            break;
+        case KoListStyle::Alignment:
+            key = "alignment";
+            value = QString::number(properties[id].toInt());
+            break;
+        case KoListStyle::BulletSize:
+            key = "bullet-size";
+            value = QString::number(properties[id].toInt());
+            break;
+        case KoListStyle::BulletCharacter:
+            key = "bullet-char";
+            value = properties[id].toString();
+            break;
+        case KoListStyle::LetterSynchronization:
+            key = "letter-sync";
+            value = QString::number(properties[id].toInt());
+            break;
+        case KoListStyle::StyleId:
+            key = "styleid";
+            value = QString::number(properties[id].toInt());
+            break;
         default:
-             break;
+            break;
         }
         if (!key.isEmpty())
             attrs.append(" ").append(key).append("=\"").append(value).append("\"");
@@ -520,15 +520,15 @@ void KoTextDebug::dumpBlock(const QTextBlock &block)
 
     QTextList *list = block.textList();
     if (list) {
-        attrs.append(" list=\"item:").append(QString::number(list->itemNumber(block)+1)).append('/')
-              .append(QString::number(list->count()));
+        attrs.append(" list=\"item:").append(QString::number(list->itemNumber(block) + 1)).append('/')
+        .append(QString::number(list->count()));
         attrs.append(listAttributes(list->format()));
     }
 
     qDebug("%*s<block%s>", depth, " ", qPrintable(attrs));
 
     QTextBlock::Iterator iterator = block.begin();
-    for(; !iterator.atEnd() && !iterator.atEnd(); ++iterator) {
+    for (; !iterator.atEnd() && !iterator.atEnd(); ++iterator) {
         QTextFragment fragment = iterator.fragment();
         if (fragment.isValid()) {
             dumpFragment(fragment);
@@ -564,7 +564,7 @@ void KoTextDebug::dumpFragment(const QTextFragment &fragment)
         QString cf = textAttributes(charFormat);
 
         qDebug("%*s<fragment%s>", depth, " ", qPrintable(cf));
-        qDebug("%*s|%s|", depth+INDENT, " ", qPrintable(fragment.text()));
+        qDebug("%*s|%s|", depth + INDENT, " ", qPrintable(fragment.text()));
         qDebug("%*s%s", depth, " ", "</fragment>");
     }
 

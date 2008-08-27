@@ -28,12 +28,15 @@
 #include "hyphen.h"
 #include "../kotext_export.h"
 
-class KoHyphenatorException{
+class KoHyphenatorException
+{
 public:
-        explicit KoHyphenatorException(const QString& MessageText): messageText(MessageText) {}
-        QString message() const { return messageText; }
+    explicit KoHyphenatorException(const QString& MessageText): messageText(MessageText) {}
+    QString message() const {
+        return messageText;
+    }
 private:
-        QString messageText;
+    QString messageText;
 };
 
 /**
@@ -55,77 +58,78 @@ private:
  * chars (0xad) or char* in format of hnj_hyphen_hyphenate() function from
  * libhnj library.
  */
-class KOTEXT_EXPORT KoHyphenator{ // exported for unit-test
+class KOTEXT_EXPORT KoHyphenator  // exported for unit-test
+{
 public:
-        /**
-         * Returns the single KoHyphenator instance (singleton pattern)
-         * Beware that this might throw an exception in case of an installation problem!
-         * Catch KoHyphenatorExceptions!
-         */
-        static KoHyphenator* self();
+    /**
+     * Returns the single KoHyphenator instance (singleton pattern)
+     * Beware that this might throw an exception in case of an installation problem!
+     * Catch KoHyphenatorExceptions!
+     */
+    static KoHyphenator* self();
 
-        ~KoHyphenator();
+    ~KoHyphenator();
 
-        /**
-         * Checks if the letter in position pos is placed before the hyphen.
-         *
-         * Can be used to check if the line break at given position
-         * should be forced and automatic hyphen added.
-         */
-        bool checkHyphenPos(const QString& str, int pos, const QString& lang) const;
+    /**
+     * Checks if the letter in position pos is placed before the hyphen.
+     *
+     * Can be used to check if the line break at given position
+     * should be forced and automatic hyphen added.
+     */
+    bool checkHyphenPos(const QString& str, int pos, const QString& lang) const;
 
-        /**
-         * Returns the pointer to the string in hnj_hyphen_hyphenate() format
-         * (that is hyphenation function from underlying libhnj library).
-         *
-         * The string is array of integer numbers. Each odd number marks
-         * that hyphen can be added after the character in the position
-         * of that number. The returned string must be deleted with "delete[] x;"
-         *
-         * For example, for the string "example" the returning value is "01224400".
-         *
-         * @param str String to be hyphenated.
-         *
-         * @param lang Language for the hyphenation dictionary to be loaded.
-         * Language: two chars containing the ISO 639-1 code
-         * (for example "en", "uk", etc.) (could be lang_COUNTRY as well).
-        */
-        char *hyphens(const QString& str, const QString& lang) const;
+    /**
+     * Returns the pointer to the string in hnj_hyphen_hyphenate() format
+     * (that is hyphenation function from underlying libhnj library).
+     *
+     * The string is array of integer numbers. Each odd number marks
+     * that hyphen can be added after the character in the position
+     * of that number. The returned string must be deleted with "delete[] x;"
+     *
+     * For example, for the string "example" the returning value is "01224400".
+     *
+     * @param str String to be hyphenated.
+     *
+     * @param lang Language for the hyphenation dictionary to be loaded.
+     * Language: two chars containing the ISO 639-1 code
+     * (for example "en", "uk", etc.) (could be lang_COUNTRY as well).
+    */
+    char *hyphens(const QString& str, const QString& lang) const;
 
-        /**
-         * Hyphenates the string str and returns the string with
-         * hyphenation marks in it.
-         *
-         * @param str String to be hyphenated.
-         *
-         * @param lang Language for the hyphenation dictionary to be loaded.
-         * Language: two chars containing the ISO 639-1 code
-         * (for example "en", "uk", etc.) (could be lang_COUNTRY as well).
-         */
-        QString hyphenate(const QString& str, const QString& lang) const;
+    /**
+     * Hyphenates the string str and returns the string with
+     * hyphenation marks in it.
+     *
+     * @param str String to be hyphenated.
+     *
+     * @param lang Language for the hyphenation dictionary to be loaded.
+     * Language: two chars containing the ISO 639-1 code
+     * (for example "en", "uk", etc.) (could be lang_COUNTRY as well).
+     */
+    QString hyphenate(const QString& str, const QString& lang) const;
 
 private:
-        /**
-         * @return the encoding of dictionary for the language @p lang.
-         */
-        QTextCodec* codecForLang(const QString& lang) const;
+    /**
+     * @return the encoding of dictionary for the language @p lang.
+     */
+    QTextCodec* codecForLang(const QString& lang) const;
 
-        KoHyphenator();
-        HyphenDict *dict(const QString &lang) const;
+    KoHyphenator();
+    HyphenDict *dict(const QString &lang) const;
 
-        QMap<QString, HyphenDict*> dicts;
-        struct EncodingStruct {
-            EncodingStruct() // for QMap
+    QMap<QString, HyphenDict*> dicts;
+    struct EncodingStruct {
+        EncodingStruct() // for QMap
                 : encoding(), codec(0L) {}
-            EncodingStruct(const QByteArray& _encoding)
+        EncodingStruct(const QByteArray& _encoding)
                 : encoding(_encoding), codec(0L) {}
-            QByteArray encoding;
-            QTextCodec* codec;
-        };
-        typedef QMap<QString, EncodingStruct> EncodingMap;
-        mutable EncodingMap encodings; // key is the language code
+        QByteArray encoding;
+        QTextCodec* codec;
+    };
+    typedef QMap<QString, EncodingStruct> EncodingMap;
+    mutable EncodingMap encodings; // key is the language code
 
-        static KoHyphenator* s_self;
+    static KoHyphenator* s_self;
 };
 
 #endif

@@ -28,13 +28,13 @@
 #include <QTextDocument>
 #include <QTextInlineObject>
 
-class VariablePrivate {
+class VariablePrivate
+{
 public:
     VariablePrivate()
-        : modified(true),
-        document(0),
-        lastPositionInDocument(-1)
-    {
+            : modified(true),
+            document(0),
+            lastPositionInDocument(-1) {
     }
     QString value;
     bool modified;
@@ -43,28 +43,31 @@ public:
 };
 
 KoVariable::KoVariable(bool propertyChangeListener)
-    : KoInlineObject(propertyChangeListener)
-    , d( new VariablePrivate )
+        : KoInlineObject(propertyChangeListener)
+        , d(new VariablePrivate)
 {
 }
 
-KoVariable::~KoVariable() {
+KoVariable::~KoVariable()
+{
     delete d;
 }
 
-void KoVariable::setValue(const QString &value) {
-    if(d->value == value)
+void KoVariable::setValue(const QString &value)
+{
+    if (d->value == value)
         return;
     d->value = value;
     d->modified = true;
-    if(d->document) {
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (d->document->documentLayout());
-        if(lay)
+    if (d->document) {
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(d->document->documentLayout());
+        if (lay)
             lay->documentChanged(d->lastPositionInDocument, 0, 0);
     }
 }
 
-void KoVariable::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat & format ) {
+void KoVariable::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat & format)
+{
     d->document = document;
     d->lastPositionInDocument = posInDocument;
     Q_UNUSED(object);
@@ -73,20 +76,22 @@ void KoVariable::updatePosition(const QTextDocument *document, QTextInlineObject
     variableMoved(shapeForPosition(d->document, posInDocument), d->document, posInDocument);
 }
 
-void KoVariable::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) {
+void KoVariable::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
+{
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
-    if(d->modified == false)
+    if (d->modified == false)
         return;
     Q_ASSERT(format.isCharFormat());
     QFontMetricsF fm(format.font(), pd);
-    object.setWidth( fm.width(d->value) );
+    object.setWidth(fm.width(d->value));
     object.setAscent(fm.ascent());
     object.setDescent(fm.descent());
     d->modified = true;
 }
 
-void KoVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format) {
+void KoVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
+{
     Q_UNUSED(document);
     Q_UNUSED(object);
     Q_UNUSED(posInDocument);
@@ -97,8 +102,8 @@ void KoVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument 
     layout.setCacheEnabled(true);
     QList<QTextLayout::FormatRange> layouts;
     QTextLayout::FormatRange range;
-    range.start=0;
-    range.length=d->value.length();
+    range.start = 0;
+    range.length = d->value.length();
     range.format = format;
     layouts.append(range);
     layout.setAdditionalFormats(layouts);
@@ -112,16 +117,19 @@ void KoVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument 
     layout.draw(&painter, rect.topLeft());
 }
 
-void KoVariable::variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument) {
+void KoVariable::variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument)
+{
     Q_UNUSED(shape);
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
 }
 
-const QString &KoVariable::value() const {
+const QString &KoVariable::value() const
+{
     return d->value;
 }
 
-int KoVariable::positionInDocument() const {
+int KoVariable::positionInDocument() const
+{
     return d->lastPositionInDocument;
 }

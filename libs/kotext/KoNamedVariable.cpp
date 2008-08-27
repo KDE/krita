@@ -22,18 +22,20 @@
 #include <KoProperties.h>
 
 KoNamedVariable::KoNamedVariable(Property key, const QString &name)
-    : KoVariable(true),
-    m_name(name),
-    m_key(key)
+        : KoVariable(true),
+        m_name(name),
+        m_key(key)
 {
 }
 
-void KoNamedVariable::propertyChanged(Property property, const QVariant &value) {
-    if(property == m_key)
-        setValue( qvariant_cast<QString>(value) );
+void KoNamedVariable::propertyChanged(Property property, const QVariant &value)
+{
+    if (property == m_key)
+        setValue(qvariant_cast<QString>(value));
 }
 
-void KoNamedVariable::setup() {
+void KoNamedVariable::setup()
+{
     setValue(manager()->stringProperty(m_key));
 }
 

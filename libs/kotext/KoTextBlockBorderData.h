@@ -33,9 +33,10 @@
  * cause on text-layout is stored in here.
  * An instance of this class is owned by the KoTextBlockData and this class is being refcounted
  * to allow multiple paragraphs to share one border.
- * 
+ *
  */
-class KOTEXT_EXPORT KoTextBlockBorderData {
+class KOTEXT_EXPORT KoTextBlockBorderData
+{
 public:
     /// Enum used to differentiate between the 4 types of borders this class maintains
     enum Side {
@@ -75,12 +76,12 @@ public:
      * @param style the border style for this side.
      * @param width the thickness of the border-line.
      * @param color the property for the color of the border-line(s).
-     * @param space the amount of spacing between the outer border and the inner border in case of style being double 
+     * @param space the amount of spacing between the outer border and the inner border in case of style being double
      * @param innerWidth the thickness of the inner border-line in case of style being double
      */
     void setEdge(Side side, const QTextBlockFormat &bf, KoParagraphStyle::Property style,
-            KoParagraphStyle::Property width, KoParagraphStyle::Property color,
-            KoParagraphStyle::Property space, KoParagraphStyle::Property innerWidth);
+                 KoParagraphStyle::Property width, KoParagraphStyle::Property color,
+                 KoParagraphStyle::Property space, KoParagraphStyle::Property innerWidth);
 
     /**
      * @return true if there has been at least one border set.

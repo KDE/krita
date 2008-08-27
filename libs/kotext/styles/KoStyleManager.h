@@ -59,7 +59,7 @@ public:
     /**
      * Save document styles
      */
-    void saveOdf( KoGenStyles& mainStyles );
+    void saveOdf(KoGenStyles& mainStyles);
 
     /**
      * Save the default-style styles
@@ -98,9 +98,9 @@ public:
      * registered documents will be updated to reflect that change.
      */
     void add(QTextDocument *document);
-     /**
-      * Remove a previously registered document.
-      */
+    /**
+     * Remove a previously registered document.
+     */
     void remove(QTextDocument *document);
 
     /**
@@ -184,10 +184,10 @@ public:
     QList<KoListStyle*> listStyles() const;
 
     /// reimplemented
-    virtual bool completeLoading( KoStore *store);
+    virtual bool completeLoading(KoStore *store);
 
     /// reimplemented
-    virtual bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter );
+    virtual bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter);
 
 signals:
     void styleAdded(KoParagraphStyle*);

@@ -28,32 +28,34 @@
 #include <kdebug.h>
 
 ChangeFollower::ChangeFollower(QTextDocument *parent, KoStyleManager *manager)
-    : QObject(parent),
-    m_document(parent),
-    m_styleManager(manager)
+        : QObject(parent),
+        m_document(parent),
+        m_styleManager(manager)
 {
 }
 
-ChangeFollower::~ChangeFollower() {
-    if(m_styleManager)
+ChangeFollower::~ChangeFollower()
+{
+    if (m_styleManager)
         m_styleManager->remove(this);
 }
 
-void ChangeFollower::processUpdates(const QList<int> &changedStyles) {
-    if(m_styleManager == 0) {
+void ChangeFollower::processUpdates(const QList<int> &changedStyles)
+{
+    if (m_styleManager == 0) {
         // since the stylemanager would be the one calling this method, I doubt this
         // will ever happen.  But better safe than sorry..
         deleteLater();
         return;
     }
 
-    QTextCursor cursor (m_document);
+    QTextCursor cursor(m_document);
     QTextBlock block = cursor.block();
-    while(block.isValid()) {
+    while (block.isValid()) {
         QTextBlockFormat bf = block.blockFormat();
         int id = bf.intProperty(KoParagraphStyle::StyleId);
-        if(id > 0 && changedStyles.contains(id)) {
-            cursor.setPosition( block.position() );
+        if (id > 0 && changedStyles.contains(id)) {
+            cursor.setPosition(block.position());
             KoParagraphStyle *style = m_styleManager->paragraphStyle(id);
             Q_ASSERT(style);
 
@@ -61,11 +63,11 @@ void ChangeFollower::processUpdates(const QList<int> &changedStyles) {
             cursor.setBlockFormat(bf);
         }
         QTextBlock::iterator iter = block.begin();
-        while(! iter.atEnd()) {
+        while (! iter.atEnd()) {
             QTextFragment fragment = iter.fragment();
             QTextCharFormat cf = fragment.charFormat();
             id = cf.intProperty(KoCharacterStyle::StyleId);
-            if(id > 0 && changedStyles.contains(id)) {
+            if (id > 0 && changedStyles.contains(id)) {
                 // create selection
                 cursor.setPosition(fragment.position());
                 cursor.setPosition(fragment.position() + fragment.length(), QTextCursor::KeepAnchor);
@@ -79,26 +81,26 @@ void ChangeFollower::processUpdates(const QList<int> &changedStyles) {
         }
         block = block.next();
     }
-/*  I think we want to look at Qt to see if this _much_ faster way can ever work.
-    foreach(QTextFormat format, m_document->allFormats()) {
-        int id = format.intProperty(KoParagraphStyle::StyleId);
-        if(id <= 0)
-            continue;
-        if(changedStyles.contains(id)) {
-            if(format.isBlockFormat()) { // aka parag
-                KoParagraphStyle *style = m_styleManager->paragraphStyle(id);
-                Q_ASSERT(style);
-                QTextBlockFormat bf = format.toBlockFormat();
-                style->applyStyle(bf);
+    /*  I think we want to look at Qt to see if this _much_ faster way can ever work.
+        foreach(QTextFormat format, m_document->allFormats()) {
+            int id = format.intProperty(KoParagraphStyle::StyleId);
+            if(id <= 0)
+                continue;
+            if(changedStyles.contains(id)) {
+                if(format.isBlockFormat()) { // aka parag
+                    KoParagraphStyle *style = m_styleManager->paragraphStyle(id);
+                    Q_ASSERT(style);
+                    QTextBlockFormat bf = format.toBlockFormat();
+                    style->applyStyle(bf);
+                }
+                else if(format.isCharFormat()) {
+                    KoCharacterStyle *style = m_styleManager->characterStyle(id);
+                    Q_ASSERT(style);
+                    QTextCharFormat cf = format.toCharFormat();
+                    style->applyStyle(cf);
+                }
             }
-            else if(format.isCharFormat()) {
-                KoCharacterStyle *style = m_styleManager->characterStyle(id);
-                Q_ASSERT(style);
-                QTextCharFormat cf = format.toCharFormat();
-                style->applyStyle(cf);
-            }
-        }
-    } */
+        } */
 }
 
 #include "ChangeFollower.moc"

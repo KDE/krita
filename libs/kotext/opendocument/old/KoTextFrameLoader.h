@@ -42,65 +42,65 @@ class QTextCursor;
  */
 class KOTEXT_EXPORT KoTextFrameLoader
 {
-    public:
-        explicit KoTextFrameLoader(KoTextLoader* loader);
-        virtual ~KoTextFrameLoader();
+public:
+    explicit KoTextFrameLoader(KoTextLoader* loader);
+    virtual ~KoTextFrameLoader();
 
-        /**
-        * Load the frame element \p frameElem into the \p cursor .
-        */
-        virtual void loadFrame(KoTextLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor);
+    /**
+    * Load the frame element \p frameElem into the \p cursor .
+    */
+    virtual void loadFrame(KoTextLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor);
 
-        /**
-        * Load the image frame into the \p cursor .
-        */
-        virtual void loadImage(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor);
+    /**
+    * Load the image frame into the \p cursor .
+    */
+    virtual void loadImage(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor);
 
-        /**
-         * Load the text frame into the \p cursor .
-         */
-        virtual void loadTextBox(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& textElem, QTextCursor& cursor);
+    /**
+     * Load the text frame into the \p cursor .
+     */
+    virtual void loadTextBox(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& textElem, QTextCursor& cursor);
 
-        /**
-        * Load the image and return a KoShape instance for it.
-        *
-        * The following code provides a sample how loading an image may work. You may
-        * also like to take a look at KWord how KWImageFrame is used there to lazy
-        * load the image.
-        * \code
-        * KoShapeFactory *factory = KoShapeRegistry::instance()->value("PictureShape");
-        * KoShape *shape = factory ? factory->createDefaultShape() : 0;
-        * if( ! shape ) return 0;
-        * KoStore* store = context.store();
-        * QString href = imageElem.attribute("href");
-        * if( ! store->hasFile(href) ) return shape;
-        * if( store->isOpen() ) return shape;
-        * if( ! store->open(href) ) return shape;
-        * KoImageCollection* imagecollection = new KoImageCollection();
-        * imagecollection->loadFromStore(store);
-        * KoImageData* imagedata = new KoImageData(imagecollection);
-        * //bool ok = imagedata->loadFromStore( store->device() );
-        * shape->setUserData( imagedata );
-        * store->close();
-        * \endcode
-        */
-        virtual KoShape* loadImageShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor);
+    /**
+    * Load the image and return a KoShape instance for it.
+    *
+    * The following code provides a sample how loading an image may work. You may
+    * also like to take a look at KWord how KWImageFrame is used there to lazy
+    * load the image.
+    * \code
+    * KoShapeFactory *factory = KoShapeRegistry::instance()->value("PictureShape");
+    * KoShape *shape = factory ? factory->createDefaultShape() : 0;
+    * if( ! shape ) return 0;
+    * KoStore* store = context.store();
+    * QString href = imageElem.attribute("href");
+    * if( ! store->hasFile(href) ) return shape;
+    * if( store->isOpen() ) return shape;
+    * if( ! store->open(href) ) return shape;
+    * KoImageCollection* imagecollection = new KoImageCollection();
+    * imagecollection->loadFromStore(store);
+    * KoImageData* imagedata = new KoImageData(imagecollection);
+    * //bool ok = imagedata->loadFromStore( store->device() );
+    * shape->setUserData( imagedata );
+    * store->close();
+    * \endcode
+    */
+    virtual KoShape* loadImageShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor);
 
-        /**
-         * Load the content of a text shape.
-         */
-        virtual KoShape* loadTextShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& textElem, QTextCursor& cursor);
+    /**
+     * Load the content of a text shape.
+     */
+    virtual KoShape* loadTextShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& textElem, QTextCursor& cursor);
 
-        /**
-         * Load the content of a table shape.
-         */
-         virtual KoShape * loadTableShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& textElem, QTextCursor& cursor);
+    /**
+     * Load the content of a table shape.
+     */
+    virtual KoShape * loadTableShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& textElem, QTextCursor& cursor);
 
-    private:
-        /// \internal d-pointer class.
-        class Private;
-        /// \internal d-pointer instance.
-        Private* const d;
+private:
+    /// \internal d-pointer class.
+    class Private;
+    /// \internal d-pointer instance.
+    Private* const d;
 };
 
 #endif

@@ -63,7 +63,7 @@ public:
 int KoStyleManager::Private::s_stylesNumber = 100;
 
 KoStyleManager::KoStyleManager(QObject *parent)
-    : QObject(parent), d(new Private())
+        : QObject(parent), d(new Private())
 {
     d->defaultParagraphStyle = new KoParagraphStyle();
     d->defaultParagraphStyle->setName(i18n("Default"));
@@ -79,7 +79,8 @@ KoStyleManager::KoStyleManager(QObject *parent)
     d->defaultListStyle = new KoListStyle;
 }
 
-KoStyleManager::~KoStyleManager() {
+KoStyleManager::~KoStyleManager()
+{
     delete d;
 }
 
@@ -91,36 +92,36 @@ void KoStyleManager::saveOdfDefaultStyles(KoGenStyles &mainStyles)
     mainStyles.lookup(style);
 }
 
-void KoStyleManager::saveOdf( KoGenStyles& mainStyles )
+void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
 {
     saveOdfDefaultStyles(mainStyles);
 
-    foreach ( KoParagraphStyle *paragraphStyle, d->paragStyles ) {
+    foreach(KoParagraphStyle *paragraphStyle, d->paragStyles) {
         if (paragraphStyle == d->defaultParagraphStyle)
             continue;
 
-        QString name( QString( QUrl::toPercentEncoding( paragraphStyle->name(), "", " " ) ).replace( "%", "_" ) );
-        if ( name.isEmpty() ) {
+        QString name(QString(QUrl::toPercentEncoding(paragraphStyle->name(), "", " ")).replace("%", "_"));
+        if (name.isEmpty()) {
             name = "P";
         }
 
-        KoGenStyle style( KoGenStyle::StyleUser, "paragraph" );
-        paragraphStyle->saveOdf( style );
-        mainStyles.lookup( style, name );
+        KoGenStyle style(KoGenStyle::StyleUser, "paragraph");
+        paragraphStyle->saveOdf(style);
+        mainStyles.lookup(style, name);
     }
 
-    foreach ( KoCharacterStyle *characterStyle, d->charStyles ) {
+    foreach(KoCharacterStyle *characterStyle, d->charStyles) {
         if (characterStyle == d->defaultParagraphStyle->characterStyle())
             continue;
 
-        QString name( QString( QUrl::toPercentEncoding( characterStyle->name(), "", " " ) ).replace( "%", "_" ) );
-        if ( name.isEmpty() ) {
+        QString name(QString(QUrl::toPercentEncoding(characterStyle->name(), "", " ")).replace("%", "_"));
+        if (name.isEmpty()) {
             name = "T";
         }
 
-        KoGenStyle style( KoGenStyle::StyleUser, "text" );
-        characterStyle->saveOdf( style );
-        mainStyles.lookup( style, name );
+        KoGenStyle style(KoGenStyle::StyleUser, "text");
+        characterStyle->saveOdf(style);
+        mainStyles.lookup(style, name);
     }
 
     foreach(KoListStyle *listStyle, d->listStyles) {
@@ -136,23 +137,25 @@ void KoStyleManager::saveOdf( KoGenStyles& mainStyles )
     }
 }
 
-void KoStyleManager::add(KoCharacterStyle *style) {
-    if(d->charStyles.contains(style))
+void KoStyleManager::add(KoCharacterStyle *style)
+{
+    if (d->charStyles.contains(style))
         return;
-    style->setStyleId( d->s_stylesNumber++ );
+    style->setStyleId(d->s_stylesNumber++);
     d->charStyles.append(style);
 
     emit styleAdded(style);
 }
 
-void KoStyleManager::add(KoParagraphStyle *style) {
-    if(d->paragStyles.contains(style))
+void KoStyleManager::add(KoParagraphStyle *style)
+{
+    if (d->paragStyles.contains(style))
         return;
-    style->setStyleId( d->s_stylesNumber++ );
+    style->setStyleId(d->s_stylesNumber++);
     d->paragStyles.append(style);
-    if(style->characterStyle()) {
+    if (style->characterStyle()) {
         add(style->characterStyle());
-        if(style->characterStyle()->name().isEmpty())
+        if (style->characterStyle()->name().isEmpty())
             style->characterStyle()->setName(style->name());
     }
 
@@ -161,7 +164,7 @@ void KoStyleManager::add(KoParagraphStyle *style) {
 
 void KoStyleManager::add(KoListStyle *style)
 {
-    if(d->listStyles.contains(style))
+    if (d->listStyles.contains(style))
         return;
     style->setStyleId(d->s_stylesNumber++);
     d->listStyles.append(style);
@@ -176,13 +179,15 @@ void KoStyleManager::addAutomaticListStyle(KoListStyle *style)
     d->automaticListStyles.append(style);
 }
 
-void KoStyleManager::remove(KoCharacterStyle *style) {
-    if(d->charStyles.removeAll(style))
+void KoStyleManager::remove(KoCharacterStyle *style)
+{
+    if (d->charStyles.removeAll(style))
         emit styleRemoved(style);
 }
 
-void KoStyleManager::remove(KoParagraphStyle *style) {
-    if(d->paragStyles.removeAll(style))
+void KoStyleManager::remove(KoParagraphStyle *style)
+{
+    if (d->paragStyles.removeAll(style))
         emit styleRemoved(style);
 }
 
@@ -192,41 +197,45 @@ void KoStyleManager::remove(KoListStyle *style)
         emit styleRemoved(style);
 }
 
-void KoStyleManager::remove(ChangeFollower *cf) {
+void KoStyleManager::remove(ChangeFollower *cf)
+{
     d->documentUpdaterProxies.removeAll(cf);
 }
 
-void KoStyleManager::alteredStyle(const KoParagraphStyle *style) {
+void KoStyleManager::alteredStyle(const KoParagraphStyle *style)
+{
     Q_ASSERT(style);
     int id = style->styleId();
-    if(id <= 0) {
+    if (id <= 0) {
         kWarning(32500) << "alteredStyle received from a non registered style!";
         return;
     }
-    if(! d->updateQueue.contains(id))
+    if (! d->updateQueue.contains(id))
         d->updateQueue.append(id);
     requestFireUpdate();
 
     // check if anyone that uses 'style' as a parent needs to be flagged as changed as well.
     foreach(KoParagraphStyle *ps, d->paragStyles) {
-        if(ps->parent() == style)
+        if (ps->parent() == style)
             alteredStyle(ps);
     }
 }
 
-void KoStyleManager::alteredStyle(const KoCharacterStyle *style) {
+void KoStyleManager::alteredStyle(const KoCharacterStyle *style)
+{
     Q_ASSERT(style);
     int id = style->styleId();
-    if(id <= 0) {
+    if (id <= 0) {
         kWarning(32500) << "alteredStyle received from a non registered style!";
         return;
     }
-    if(! d->updateQueue.contains(id))
+    if (! d->updateQueue.contains(id))
         d->updateQueue.append(id);
     requestFireUpdate();
 }
 
-void KoStyleManager::alteredStyle(const KoListStyle *style) {
+void KoStyleManager::alteredStyle(const KoListStyle *style)
+{
     Q_ASSERT(style);
     int id = style->styleId();
     if (id <= 0) {
@@ -238,7 +247,8 @@ void KoStyleManager::alteredStyle(const KoListStyle *style) {
     requestFireUpdate();
 }
 
-void KoStyleManager::updateAlteredStyles() {
+void KoStyleManager::updateAlteredStyles()
+{
     foreach(ChangeFollower *cf, d->documentUpdaterProxies) {
         cf->processUpdates(d->updateQueue);
     }
@@ -246,16 +256,18 @@ void KoStyleManager::updateAlteredStyles() {
     d->updateTriggered = false;
 }
 
-void KoStyleManager::requestFireUpdate() {
-    if(d->updateTriggered)
+void KoStyleManager::requestFireUpdate()
+{
+    if (d->updateTriggered)
         return;
     QTimer::singleShot(0, this, SLOT(updateAlteredStyles()));
     d->updateTriggered = true;
 }
 
-void KoStyleManager::add(QTextDocument *document) {
+void KoStyleManager::add(QTextDocument *document)
+{
     foreach(ChangeFollower *cf, d->documentUpdaterProxies) {
-        if(cf->document() == document) {
+        if (cf->document() == document) {
             return; // already present.
         }
     }
@@ -263,26 +275,29 @@ void KoStyleManager::add(QTextDocument *document) {
     d->documentUpdaterProxies.append(cf);
 }
 
-void KoStyleManager::remove(QTextDocument *document) {
+void KoStyleManager::remove(QTextDocument *document)
+{
     foreach(ChangeFollower *cf, d->documentUpdaterProxies) {
-        if(cf->document() == document) {
+        if (cf->document() == document) {
             d->documentUpdaterProxies.removeAll(cf);
             return;
         }
     }
 }
 
-KoCharacterStyle *KoStyleManager::characterStyle(int id) const {
+KoCharacterStyle *KoStyleManager::characterStyle(int id) const
+{
     foreach(KoCharacterStyle *style, d->charStyles) {
-        if(style->styleId() == id)
+        if (style->styleId() == id)
             return style;
     }
     return 0;
 }
 
-KoParagraphStyle *KoStyleManager::paragraphStyle(int id) const {
+KoParagraphStyle *KoStyleManager::paragraphStyle(int id) const
+{
     foreach(KoParagraphStyle *style, d->paragStyles) {
-        if(style->styleId() == id)
+        if (style->styleId() == id)
             return style;
     }
     return 0;
@@ -312,17 +327,19 @@ KoListStyle *KoStyleManager::listStyle(int id, bool *automatic) const
     return 0;
 }
 
-KoCharacterStyle *KoStyleManager::characterStyle(const QString &name) const {
+KoCharacterStyle *KoStyleManager::characterStyle(const QString &name) const
+{
     foreach(KoCharacterStyle *style, d->charStyles) {
-        if(style->name() == name)
+        if (style->name() == name)
             return style;
     }
     return 0;
 }
 
-KoParagraphStyle *KoStyleManager::paragraphStyle(const QString &name) const {
+KoParagraphStyle *KoStyleManager::paragraphStyle(const QString &name) const
+{
     foreach(KoParagraphStyle *style, d->paragStyles) {
-        if(style->name() == name)
+        if (style->name() == name)
             return style;
     }
     return 0;
@@ -337,7 +354,8 @@ KoListStyle *KoStyleManager::listStyle(const QString &name) const
     return 0;
 }
 
-KoParagraphStyle *KoStyleManager::defaultParagraphStyle() const {
+KoParagraphStyle *KoStyleManager::defaultParagraphStyle() const
+{
     return d->defaultParagraphStyle;
 }
 
@@ -357,11 +375,13 @@ KoListStyle *KoStyleManager::outlineStyle() const
     return d->outlineStyle;
 }
 
-QList<KoCharacterStyle*> KoStyleManager::characterStyles() const {
+QList<KoCharacterStyle*> KoStyleManager::characterStyles() const
+{
     return d->charStyles;
 }
 
-QList<KoParagraphStyle*> KoStyleManager::paragraphStyles() const {
+QList<KoParagraphStyle*> KoStyleManager::paragraphStyles() const
+{
     return d->paragStyles;
 }
 
@@ -370,12 +390,12 @@ QList<KoListStyle*> KoStyleManager::listStyles() const
     return d->listStyles;
 }
 
-bool KoStyleManager::completeLoading( KoStore *)
+bool KoStyleManager::completeLoading(KoStore *)
 {
     return true;
 }
 
-bool KoStyleManager::completeSaving( KoStore *, KoXmlWriter * )
+bool KoStyleManager::completeSaving(KoStore *, KoXmlWriter *)
 {
     return true;
 }

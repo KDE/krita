@@ -58,9 +58,6 @@ KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
 
 KisPaintOpOptionsWidget::~KisPaintOpOptionsWidget()
 {
-    foreach(KisPaintOpOption* option, m_d->paintOpOptions) {
-        delete option;
-    }
     delete m_d;
 }
 
@@ -80,6 +77,7 @@ void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption * option)
 
 void KisPaintOpOptionsWidget::changePage(QListWidgetItem *current, QListWidgetItem *previous)
 {
+    Q_UNUSED(previous);
     m_d->optionsStack->setCurrentIndex(m_d->optionsList->row(current));
 }
 

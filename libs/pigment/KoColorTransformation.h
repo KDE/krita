@@ -25,6 +25,9 @@
 #include <QVariant>
 #include <qglobal.h>
 
+#include "pigment_export.h"
+
+
 /**
  * This is the base class of all color transform that takes one pixel in input
  * and one pixel in output.
@@ -40,9 +43,9 @@
  * transfo->transform( pixelsSrc, pixelsDst, nbpixels );
  * @endcode
  */
-class KoColorTransformation {
+class PIGMENTCMS_EXPORT KoColorTransformation {
   public:
-    virtual ~KoColorTransformation() {}
+    virtual ~KoColorTransformation();
     /**
      * This function apply the transformation on a given number of pixels.
      *
@@ -57,10 +60,14 @@ class KoColorTransformation {
 
     /**
      * Update the parameters of a cached transformation object.
-     *
-     * XXX: The default implementation is empty for now.
+     * The default implementation recursively call \ref setParameter
      */
-    virtual void setParameters(const QHash<QString, QVariant> & parameters) { Q_UNUSED(parameters) };
+    virtual void setParameters(const QHash<QString, QVariant> & parameters);
+    /**
+     * Update one parameter of a cached transformation object.
+     *
+     */
+    virtual void setParameter(const QString& name, const QVariant& parameter);
 };
 
 #endif

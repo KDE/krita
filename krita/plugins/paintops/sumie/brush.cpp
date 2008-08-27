@@ -253,6 +253,7 @@ void Brush::paintLine(KisPaintDeviceSP dev, const KisPaintInformation &pi1, cons
     params["v"] = 0.0;
 
     QString saturation("s");
+    QVariant saturationVariant;
 
     KoColorTransformation* transfo;
     transfo = m_dev->colorSpace()->createColorTransformation("hsv_adjustment", params);
@@ -334,14 +335,14 @@ void Brush::paintLine(KisPaintDeviceSP dev, const KisPaintInformation &pi1, cons
             }
 
             // saturation XXX: make option
-            if (0) {
-                params[saturation] = (
+            if (1) {
+                saturationVariant = (
                                          pressure *
                                          bristle->length() *
                                          bristle->inkAmount() *
                                          (1.0 - inkDeplation)) - 1.0;
 
-                transfo->setParameters(params);
+                transfo->setParameter(saturation, saturationVariant);
             }
             transfo->transform(m_inkColor.data(), brColor.data() , 1);
 

@@ -46,6 +46,7 @@ set(pigmentcms_SRCS
     KoColorSpaceEngine.cpp
     KoColorSpaceMaths.cpp
     KoColorSpaceRegistry.cpp
+    KoColorTransformation.cpp
     KoColorTransformationFactory.cpp
     KoColorTransformationFactoryRegistry.cpp
     KoCompositeOp.cpp

@@ -109,18 +109,16 @@ public:
         }
     }
 
-    virtual void setParameters(const QHash<QString, QVariant> & parameters) {
-
-        if (parameters.contains("h")) {
-            m_adj_h = parameters["h"].toDouble();
+    virtual void setParameter(const QString& name, const QVariant& parameter) {
+        if( name == "h") {
+            m_adj_h = parameter.toDouble();
         }
-        if (parameters.contains("s")) {
-            m_adj_s = parameters["s"].toDouble();
+        else if (name == "s") {
+            m_adj_s = parameter.toDouble();
         }
-        if (parameters.contains("v")) {
-            m_adj_v = parameters["v"].toDouble();
+        else if (name == "v") {
+            m_adj_v = parameter.toDouble();
         }
-
     }
 
 private:

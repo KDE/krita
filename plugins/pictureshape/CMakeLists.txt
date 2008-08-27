@@ -12,7 +12,15 @@ SET (pictureshape_LIB_SRCS
 
 kde4_add_plugin(pictureshape ${pictureshape_LIB_SRCS})
 
-target_link_libraries(pictureshape flake koguiutils)
+target_link_libraries(
+    pictureshape
+    flake
+    koguiutils
+    kstore
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KIO_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    )
 install(TARGETS pictureshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

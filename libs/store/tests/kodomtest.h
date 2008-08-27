@@ -28,7 +28,7 @@ class KoDomTest: public QObject
 {
     Q_OBJECT
 private slots:
-    void initTestCase ();
+    void initTestCase();
     void testQDom();
     void testKoDom();
 private:

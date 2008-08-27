@@ -30,62 +30,76 @@
 class KoStoreDevice : public QIODevice
 {
 public:
-  /// Note: KoStore::open() should be called before calling this.
-  explicit KoStoreDevice( KoStore * store ) : m_store(store) {
-      // koffice-1.x behavior compat: a KoStoreDevice is automatically open
-      setOpenMode( m_store->mode() == KoStore::Read ? QIODevice::ReadOnly : QIODevice::WriteOnly );
-  }
-  ~KoStoreDevice() {}
+    /// Note: KoStore::open() should be called before calling this.
+    explicit KoStoreDevice(KoStore * store) : m_store(store) {
+        // koffice-1.x behavior compat: a KoStoreDevice is automatically open
+        setOpenMode(m_store->mode() == KoStore::Read ? QIODevice::ReadOnly : QIODevice::WriteOnly);
+    }
+    ~KoStoreDevice() {}
 
-  virtual bool isSequential() const { return true; }
+    virtual bool isSequential() const {
+        return true;
+    }
 
-  virtual bool open( OpenMode m ) {
-    setOpenMode(m);
-    if ( m & QIODevice::ReadOnly )
-      return ( m_store->mode() == KoStore::Read );
-    if ( m & QIODevice::WriteOnly )
-      return ( m_store->mode() == KoStore::Write );
-    return false;
-  }
-  virtual void close() {}
+    virtual bool open(OpenMode m) {
+        setOpenMode(m);
+        if (m & QIODevice::ReadOnly)
+            return (m_store->mode() == KoStore::Read);
+        if (m & QIODevice::WriteOnly)
+            return (m_store->mode() == KoStore::Write);
+        return false;
+    }
+    virtual void close() {}
 
-  qint64 size() const {
-    if ( m_store->mode() == KoStore::Read )
-      return m_store->size();
-    else
-      return 0xffffffff;
-  }
+    qint64 size() const {
+        if (m_store->mode() == KoStore::Read)
+            return m_store->size();
+        else
+            return 0xffffffff;
+    }
 
-  virtual qint64 readData( char *data, qint64 maxlen ) { return m_store->read(data, maxlen); }
-  virtual qint64 writeData( const char *data, qint64 len ) { return m_store->write( data, len ); }
+    virtual qint64 readData(char *data, qint64 maxlen) {
+        return m_store->read(data, maxlen);
+    }
+    virtual qint64 writeData(const char *data, qint64 len) {
+        return m_store->write(data, len);
+    }
 
 #if 0
-  int getch() {
-    char c[2];
-    if ( m_store->read(c, 1) == -1)
-      return -1;
-    else
-      return c[0];
-  }
-  int putch( int _c ) {
-    char c[2];
-    c[0] = _c;
-    c[1] = 0;
-    if (m_store->write( c, 1 ) == 1)
-      return _c;
-    else
-      return -1;
-  }
-  int ungetch( int ) { return -1; } // unsupported
+    int getch() {
+        char c[2];
+        if (m_store->read(c, 1) == -1)
+            return -1;
+        else
+            return c[0];
+    }
+    int putch(int _c) {
+        char c[2];
+        c[0] = _c;
+        c[1] = 0;
+        if (m_store->write(c, 1) == 1)
+            return _c;
+        else
+            return -1;
+    }
+    int ungetch(int) {
+        return -1;
+    } // unsupported
 #endif
 
-  // See QIODevice
-  virtual qint64 pos() const { return m_store->pos(); }
-  virtual bool seek( qint64 pos ) { return m_store->seek(pos); }
-  virtual bool atEnd() const { return m_store->atEnd(); }
+    // See QIODevice
+    virtual qint64 pos() const {
+        return m_store->pos();
+    }
+    virtual bool seek(qint64 pos) {
+        return m_store->seek(pos);
+    }
+    virtual bool atEnd() const {
+        return m_store->atEnd();
+    }
 
 protected:
-  KoStore * m_store;
+    KoStore * m_store;
 };
 
 #endif

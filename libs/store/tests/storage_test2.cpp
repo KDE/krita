@@ -28,31 +28,33 @@
 
 #include <string.h>
 
-namespace {
-    const char* const test1 = "This test checks whether we're able to write to some arbitrary directory.\n";
-    const char* const testDir = "0";
-    const char* const testDirResult = "0/";
-    const char* const test2 = "This time we try to append the given relative path to the current dir.\n";
-    const char* const test3 = "<xml>Hello World</xml>";
-    const char* const testDir2 = "test2/with/a";
-    const char* const testDir2Result = "0/test2/with/a/";
-    const char* const test4 = "<xml>Heureka, it works</xml>";
+namespace
+{
+const char* const test1 = "This test checks whether we're able to write to some arbitrary directory.\n";
+const char* const testDir = "0";
+const char* const testDirResult = "0/";
+const char* const test2 = "This time we try to append the given relative path to the current dir.\n";
+const char* const test3 = "<xml>Hello World</xml>";
+const char* const testDir2 = "test2/with/a";
+const char* const testDir2Result = "0/test2/with/a/";
+const char* const test4 = "<xml>Heureka, it works</xml>";
 
-    const char* const badStorage = "Ooops, bad storage???";
-    const char* const unableToOpen = "Couldn't open storage!";
-    const char* const brokenPath = "Path handling broken!";
-    const char* const unableToRead = "Couldn't read stream back!";
+const char* const badStorage = "Ooops, bad storage???";
+const char* const unableToOpen = "Couldn't open storage!";
+const char* const brokenPath = "Path handling broken!";
+const char* const unableToRead = "Couldn't read stream back!";
 }
 
-char getch( QIODevice * dev ) {
+char getch(QIODevice * dev)
+{
     char c = 0;
-    dev->getChar( &c );
+    dev->getChar(&c);
     return c;
 }
 
-int cleanUp( KoStore* store, const QString& testFile, const char* error )
+int cleanUp(KoStore* store, const QString& testFile, const char* error)
 {
-    QFile::remove( testFile );
+    QFile::remove(testFile);
     delete store;
     kDebug() << error;
     return 1;
@@ -60,81 +62,79 @@ int cleanUp( KoStore* store, const QString& testFile, const char* error )
 
 #define DATALEN 64
 
-int test( const char* testName, KoStore::Backend backend, const QString& testFile )
+int test(const char* testName, KoStore::Backend backend, const QString& testFile)
 {
-    if ( QFile::exists( testFile ) )
-        QFile::remove( testFile );
-    QDir dirTest( testFile );
-    if ( dirTest.exists() ) {
-        system( QByteArray( "rm -rf " ) + QFile::encodeName( testFile ) ); // QDir::rmdir isn't recursive! (EEEEK! system! *cries*)
+    if (QFile::exists(testFile))
+        QFile::remove(testFile);
+    QDir dirTest(testFile);
+    if (dirTest.exists()) {
+        system(QByteArray("rm -rf ") + QFile::encodeName(testFile));       // QDir::rmdir isn't recursive! (EEEEK! system! *cries*)
     }
 
-    kDebug() <<"======================="<<testName<<"====================================";
-    KoStore* store = KoStore::createStore( testFile, KoStore::Write, "", backend );
-    if ( store->bad() )
-        return cleanUp( store, testFile, badStorage );
+    kDebug() << "=======================" << testName << "====================================";
+    KoStore* store = KoStore::createStore(testFile, KoStore::Write, "", backend);
+    if (store->bad())
+        return cleanUp(store, testFile, badStorage);
 
     // Write
-    if ( store->open( "layer" ) ) {
+    if (store->open("layer")) {
         char str[DATALEN];
 
         sprintf(str, "1,2,3,4\n");
-        store->write(str,strlen(str));
+        store->write(str, strlen(str));
         memset(str, '\0', DATALEN);
         store->write(str, DATALEN);
 
         store->close();
-    }
-    else
-        return cleanUp( store, testFile, unableToOpen );
+    } else
+        return cleanUp(store, testFile, unableToOpen);
 
-    if ( store->isOpen() )
+    if (store->isOpen())
         store->close();
     delete store;
 
-    kDebug() <<"===========================================================";
+    kDebug() << "===========================================================";
 
-    store = KoStore::createStore( testFile, KoStore::Read, "", backend );
-    if ( store->bad() )
-        return cleanUp( store, testFile, badStorage );
+    store = KoStore::createStore(testFile, KoStore::Read, "", backend);
+    if (store->bad())
+        return cleanUp(store, testFile, badStorage);
 
     // Read back
-    if ( store->open( "layer" ) ) {
+    if (store->open("layer")) {
         char str[DATALEN];
         QIODevice *stream = store->device(); // << Possible suspect!
 
         stream->readLine(str, DATALEN);      // << as is this
         qint64 len = store->read(str, DATALEN);
         if (len != DATALEN) {
-            kDebug() <<"Final length was too small:" << len <<" <" << DATALEN;
+            kDebug() << "Final length was too small:" << len << " <" << DATALEN;
             return 1;
         }
 
         store->close();
-    }
-    else
-        return cleanUp( store, testFile, unableToOpen );
+    } else
+        return cleanUp(store, testFile, unableToOpen);
 
-    if ( store->isOpen() )
+    if (store->isOpen())
         store->close();
     delete store;
 
-    QFile::remove( testFile );
+    QFile::remove(testFile);
 
-    kDebug() <<"===========================================================";
+    kDebug() << "===========================================================";
     return 0;
 }
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-    KCmdLineArgs::init( argc, argv, "storage_test2", 0, ki18n("Storage Test 2"), "1" , ki18n("A test for the KoStore classes, in particular a Krita-induced bug testcase"));
+    KCmdLineArgs::init(argc, argv, "storage_test2", 0, ki18n("Storage Test 2"), "1" , ki18n("A test for the KoStore classes, in particular a Krita-induced bug testcase"));
     //KApplication::disableAutoDcopRegistration();
     KApplication app(false);
 
-    if ( test( "Tar", KoStore::Tar, "test.tgz" ) != 0 )
-      return 1;
-    if ( test( "Directory", KoStore::Directory, "testdir/maindoc.xml" ) != 0 )
-      return 1;
-    if ( test( "Zip", KoStore::Zip, "test.zip" ) != 0 )
-      return 1;
+    if (test("Tar", KoStore::Tar, "test.tgz") != 0)
+        return 1;
+    if (test("Directory", KoStore::Directory, "testdir/maindoc.xml") != 0)
+        return 1;
+    if (test("Zip", KoStore::Zip, "test.zip") != 0)
+        return 1;
 }

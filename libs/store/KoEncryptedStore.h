@@ -37,9 +37,9 @@ struct KoEncryptedStore_EncryptionData;
 class KoEncryptedStore : public KoStoreBase
 {
 public:
-    KoEncryptedStore( const QString & filename, Mode mode, const QByteArray & appIdentification );
-    KoEncryptedStore( QIODevice *dev, Mode mode, const QByteArray & appIdentification );
-    KoEncryptedStore( QWidget* window, const KUrl& url, const QString & filename, Mode _mode, const QByteArray & appIdentification );
+    KoEncryptedStore(const QString & filename, Mode mode, const QByteArray & appIdentification);
+    KoEncryptedStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification);
+    KoEncryptedStore(QWidget* window, const KUrl& url, const QString & filename, Mode _mode, const QByteArray & appIdentification);
     ~KoEncryptedStore();
 
     /*
@@ -52,7 +52,7 @@ public:
      *
      * @return  True if the password was set
      */
-    virtual bool setPassword( const QString& password );
+    virtual bool setPassword(const QString& password);
 
     /*
      * Returns whether a store opened for reading is actually encrypted.
@@ -60,27 +60,27 @@ public:
      *
      * @return  True if the store is encrypted.
      */
-    virtual bool isEncrypted( );
+    virtual bool isEncrypted();
 
 protected:
 
     using KoStore::init;
 
-    virtual bool init( Mode mode, const QByteArray& appIdentification );
-    virtual bool doFinalize( );
-    virtual bool openWrite( const QString& name );
-    virtual bool openRead( const QString& name );
+    virtual bool init(Mode mode, const QByteArray& appIdentification);
+    virtual bool doFinalize();
+    virtual bool openWrite(const QString& name);
+    virtual bool openRead(const QString& name);
     virtual bool closeWrite();
     virtual bool closeRead();
-    virtual bool enterRelativeDirectory( const QString& dirName );
-    virtual bool enterAbsoluteDirectory( const QString& path );
-    virtual bool fileExists( const QString& absPath ) const;
+    virtual bool enterRelativeDirectory(const QString& dirName);
+    virtual bool enterAbsoluteDirectory(const QString& path);
+    virtual bool fileExists(const QString& absPath) const;
 
     /**
      * Tries and find a password for this document in KWallet.
      * Uses m_filename as base for finding the password and stores it in m_password if found.
      */
-    void findPasswordInKWallet( );
+    void findPasswordInKWallet();
 
     /*
      * Retrieves the password used to encrypt or decrypt the store. Note that
@@ -89,19 +89,19 @@ protected:
      *
      * @return  The password this store is encrypted with.
      */
-    virtual QString password( );
+    virtual QString password();
 
     /**
      * Stores the password for this document in KWallet.
      * Uses m_filename as base for storing the password and stores the value in m_password.
      */
-    void savePasswordInKWallet( );
+    void savePasswordInKWallet();
 
 private:
-    QCA::SecureArray decryptFile( QCA::SecureArray & encryptedFile, KoEncryptedStore_EncryptionData & encData, QCA::SecureArray & password );
+    QCA::SecureArray decryptFile(QCA::SecureArray & encryptedFile, KoEncryptedStore_EncryptionData & encData, QCA::SecureArray & password);
 
     /** returns true if the file should be encrypted, false otherwise **/
-    bool isToBeEncrypted( const QString& fullpath );
+    bool isToBeEncrypted(const QString& fullpath);
 
 protected:
     QCA::Initializer m_qcaInit;

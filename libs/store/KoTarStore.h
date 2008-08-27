@@ -31,26 +31,28 @@ class KUrl;
 class KoTarStore : public KoStoreBase
 {
 public:
-    KoTarStore( const QString & _filename, Mode _mode, const QByteArray & appIdentification );
-    KoTarStore( QIODevice *dev, Mode mode, const QByteArray & appIdentification );
+    KoTarStore(const QString & _filename, Mode _mode, const QByteArray & appIdentification);
+    KoTarStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification);
     /**
      * KUrl-constructor
      * @todo saving not completely implemented (fixed temporary file)
      */
-    KoTarStore( QWidget* window, const KUrl& url, const QString & _filename, Mode _mode, const QByteArray & appIdentification );
+    KoTarStore(QWidget* window, const KUrl& url, const QString & _filename, Mode _mode, const QByteArray & appIdentification);
     ~KoTarStore();
 protected:
-    virtual bool init( Mode _mode );
+    virtual bool init(Mode _mode);
     virtual bool doFinalize();
-    virtual bool openWrite( const QString& name );
-    virtual bool openRead( const QString& name );
+    virtual bool openWrite(const QString& name);
+    virtual bool openRead(const QString& name);
     virtual bool closeWrite();
-    virtual bool closeRead() { return true; }
-    virtual bool enterRelativeDirectory( const QString& dirName );
-    virtual bool enterAbsoluteDirectory( const QString& path );
-    virtual bool fileExists( const QString& absPath ) const;
+    virtual bool closeRead() {
+        return true;
+    }
+    virtual bool enterRelativeDirectory(const QString& dirName);
+    virtual bool enterAbsoluteDirectory(const QString& path);
+    virtual bool fileExists(const QString& absPath) const;
 
-    static QByteArray completeMagic( const QByteArray& appMimetype );
+    static QByteArray completeMagic(const QByteArray& appMimetype);
 
     /// The tar archive
     KTar * m_pTar;

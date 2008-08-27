@@ -34,7 +34,7 @@ public:
     KoStoreBase();
     virtual ~KoStoreBase(void);
 public:
-    enum FileMode { /*Bad=0,*/ Local=1, RemoteRead, RemoteWrite };
+    enum FileMode { /*Bad=0,*/ Local = 1, RemoteRead, RemoteWrite };
 
 protected:
     /**

@@ -41,7 +41,7 @@ public:
      * Create a KoXmlWriter instance to write out an XML document into
      * the given QIODevice.
      */
-    explicit KoXmlWriter( QIODevice* dev, int indentLevel = 0 );
+    explicit KoXmlWriter(QIODevice* dev, int indentLevel = 0);
 
     /// Destructor
     ~KoXmlWriter();
@@ -55,7 +55,7 @@ public:
      * @param publicId the public identifier, e.g. "-//OpenOffice.org//DTD OfficeDocument 1.0//EN"
      * @param systemId the system identifier, e.g. "office.dtd" or a full URL to it.
      */
-    void startDocument( const char* rootElemName, const char* publicId = 0, const char* systemId = 0 );
+    void startDocument(const char* rootElemName, const char* publicId = 0, const char* systemId = 0);
 
     /// Call this to terminate an XML document.
     void endDocument();
@@ -68,61 +68,61 @@ public:
      * @param indentInside if set to false, there will be no indentation inside
      * this tag. This is useful for elements where whitespace matters.
      */
-    void startElement( const char* tagName, bool indentInside = true );
+    void startElement(const char* tagName, bool indentInside = true);
 
     /**
      * Overloaded version of addAttribute( const char*, const char* ),
      * which is a bit slower because it needs to convert @p value to utf8 first.
      */
-    inline void addAttribute( const char* attrName, const QString& value ) {
-        addAttribute( attrName, value.toUtf8() );
+    inline void addAttribute(const char* attrName, const QString& value) {
+        addAttribute(attrName, value.toUtf8());
     }
     /**
      * Add an attribute whose value is an integer
      */
-    inline void addAttribute( const char* attrName, int value ) {
-        addAttribute( attrName, QByteArray::number( value ) );
+    inline void addAttribute(const char* attrName, int value) {
+        addAttribute(attrName, QByteArray::number(value));
     }
     /**
      * Add an attribute whose value is an unsigned integer
      */
-    inline void addAttribute( const char* attrName, uint value ) {
-        addAttribute( attrName, QByteArray::number( value ) );
+    inline void addAttribute(const char* attrName, uint value) {
+        addAttribute(attrName, QByteArray::number(value));
     }
     /**
      * Add an attribute whose value is a floating point number
      * The number is written out with the highest possible precision
      * (unlike QString::number and setNum, which default to 6 digits)
      */
-    void addAttribute( const char* attrName, double value );
+    void addAttribute(const char* attrName, double value);
     /**
      * Add an attribute whose value is a floating point number
      * The number is written out with the highest possible precision
      * (unlike QString::number and setNum, which default to 6 digits)
      */
-    void addAttribute( const char* attrName, float value );
+    void addAttribute(const char* attrName, float value);
     /**
      * Add an attribute which represents a distance, measured in pt
      * The number is written out with the highest possible precision
      * (unlike QString::number and setNum, which default to 6 digits),
      * and the unit name ("pt") is appended to it.
      */
-    void addAttributePt( const char* attrName, double value );
+    void addAttributePt(const char* attrName, double value);
     /**
      * Add an attribute which represents a distance, measured in pt
      * The number is written out with the highest possible precision
      * (unlike QString::number and setNum, which default to 6 digits),
      * and the unit name ("pt") is appended to it.
      */
-    void addAttributePt( const char* attrName, float value );
+    void addAttributePt(const char* attrName, float value);
 
     /// Overloaded version of the one taking a const char* argument, for convenience
-    void addAttribute( const char* attrName, const QByteArray& value );
+    void addAttribute(const char* attrName, const QByteArray& value);
 
     /**
      * Add an attribute to the current element.
      */
-    void addAttribute( const char* attrName, const char* value );
+    void addAttribute(const char* attrName, const char* value);
     /**
      * Terminate the current element. After this you should start a new one (sibling),
      * add a sibling text node, or close another one (end of siblings).
@@ -132,11 +132,11 @@ public:
      * Overloaded version of addTextNode( const char* ),
      * which is a bit slower because it needs to convert @p str to utf8 first.
      */
-    inline void addTextNode( const QString& str ) {
-        addTextNode( str.toUtf8() );
+    inline void addTextNode(const QString& str) {
+        addTextNode(str.toUtf8());
     }
     /// Overloaded version of the one taking a const char* argument
-    void addTextNode( const QByteArray& cstr );
+    void addTextNode(const QByteArray& cstr);
     /**
      * @brief Adds a text node as a child of the current element.
      *
@@ -144,7 +144,7 @@ public:
      * E.g. addTextNode( "foo" ) inside a \<p\> element gives \<p\>foo\</p\>,
      * and startElement( "b" ); endElement( "b" ); addTextNode( "foo" ) gives \<p\>\<b/\>foo\</p\>
      */
-    void addTextNode( const char* cstr );
+    void addTextNode(const char* cstr);
 
     /**
      * @brief Adds a processing instruction
@@ -155,7 +155,7 @@ public:
      * Processing instructions are used in XML to keep processor-specific
      * information in the text of the document.
      */
-    void addProcessingInstruction( const char* cstr );
+    void addProcessingInstruction(const char* cstr);
 
     /**
      * This is quite a special-purpose method, not for everyday use.
@@ -163,7 +163,7 @@ public:
      * as a child of the current element. The string is supposed to be escaped
      * for XML already, so it will usually come from another KoXmlWriter.
      */
-    void addCompleteElement( const char* cstr );
+    void addCompleteElement(const char* cstr);
 
     /**
      * This is quite a special-purpose method, not for everyday use.
@@ -172,7 +172,7 @@ public:
      * for XML already, so it will usually come from another KoXmlWriter.
      * This is usually used with KTempFile.
      */
-    void addCompleteElement( QIODevice* dev );
+    void addCompleteElement(QIODevice* dev);
 
     // #### Maybe we want to subclass KoXmlWriter for manifest files.
     /**
@@ -182,25 +182,25 @@ public:
      * when we add support for encrypting/signing.
      * @note OASIS-specific
      */
-    void addManifestEntry( const QString& fullPath, const QString& mediaType );
+    void addManifestEntry(const QString& fullPath, const QString& mediaType);
 
     /**
      * Special helper for writing config item into settings.xml
      * @note OASIS-specific
      */
-    void addConfigItem( const QString & configName, const QString& value );
+    void addConfigItem(const QString & configName, const QString& value);
     /// @note OASIS-specific
-    void addConfigItem( const QString & configName, bool value );
+    void addConfigItem(const QString & configName, bool value);
     /// @note OASIS-specific
-    void addConfigItem( const QString & configName, int value );
+    void addConfigItem(const QString & configName, int value);
     /// @note OASIS-specific
-    void addConfigItem( const QString & configName, double value );
+    void addConfigItem(const QString & configName, double value);
     /// @note OASIS-specific
-    void addConfigItem( const QString & configName, float value );
+    void addConfigItem(const QString & configName, float value);
     /// @note OASIS-specific
-    void addConfigItem( const QString & configName, long value );
+    void addConfigItem(const QString & configName, long value);
     /// @note OASIS-specific
-    void addConfigItem( const QString & configName, short value );
+    void addConfigItem(const QString & configName, short value);
 
     // TODO addConfigItem for datetime and base64Binary
 
@@ -214,14 +214,14 @@ public:
      *
      * @note OASIS-specific
      */
-    void addTextSpan( const QString& text );
+    void addTextSpan(const QString& text);
     /**
      * Overloaded version of addTextSpan which takes an additional tabCache map.
      * @param text the text to write
      * @param tabCache optional map allowing to find a tab for a given character index
      * @note OASIS-specific
      */
-    void addTextSpan( const QString& text, const QMap<int, int>& tabCache );
+    void addTextSpan(const QString& text, const QMap<int, int>& tabCache);
 
     /**
      * @return the current indentation level.
@@ -236,9 +236,9 @@ public:
 
 private:
     struct Tag {
-        Tag( const char* t = 0, bool ind = true )
-            : tagName( t ), hasChildren( false ), lastChildIsText( false ),
-              openingTagClosed( false ), indentInside( ind ) {}
+        Tag(const char* t = 0, bool ind = true)
+                : tagName(t), hasChildren(false), lastChildIsText(false),
+                openingTagClosed(false), indentInside(ind) {}
         const char* tagName;
         bool hasChildren; ///< element or text children
         bool lastChildIsText; ///< last child is a text node
@@ -251,22 +251,22 @@ private:
 
     // writeCString is much faster than writeString.
     // Try to use it as much as possible, especially with constants.
-    void writeString( const QString& str );
+    void writeString(const QString& str);
 
     // TODO check return value!!!
-    inline void writeCString( const char* cstr ) {
-        device()->write( cstr, qstrlen( cstr ) );
+    inline void writeCString(const char* cstr) {
+        device()->write(cstr, qstrlen(cstr));
     }
-    inline void writeChar( char c ) {
-        device()->putChar( c );
+    inline void writeChar(char c) {
+        device()->putChar(c);
     }
-    inline void closeStartElement( Tag& tag ) {
-        if ( !tag.openingTagClosed ) {
+    inline void closeStartElement(Tag& tag) {
+        if (!tag.openingTagClosed) {
             tag.openingTagClosed = true;
-            writeChar( '>' );
+            writeChar('>');
         }
     }
-    char* escapeForXML( const char* source, int length ) const;
+    char* escapeForXML(const char* source, int length) const;
     bool prepareForChild();
     void prepareForTextNode();
     void init();
@@ -274,8 +274,8 @@ private:
     class Private;
     Private * const d;
 
-    KoXmlWriter( const KoXmlWriter & ); // forbidden
-    KoXmlWriter& operator=( const KoXmlWriter & ); // forbidden
+    KoXmlWriter(const KoXmlWriter &);   // forbidden
+    KoXmlWriter& operator=(const KoXmlWriter &);   // forbidden
 };
 
 #endif /* XMLWRITER_H */

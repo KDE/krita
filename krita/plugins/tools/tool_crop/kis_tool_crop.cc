@@ -50,7 +50,7 @@
 #include <kis_crop_visitor.h>
 
 KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
-        : super(canvas, KisCursor::load("tool_crop_cursor.png", 6, 6))
+        : KisTool(canvas, KisCursor::load("tool_crop_cursor.png", 6, 6))
 {
     setObjectName("tool_crop");
     m_selecting = false;
@@ -66,7 +66,7 @@ KisToolCrop::~KisToolCrop()
 
 void KisToolCrop::activate(bool tmp)
 {
-    super::activate(tmp);
+    KisTool::activate(tmp);
 
     KisSelectionSP sel = currentSelection();
     if (sel) {

@@ -41,7 +41,7 @@
 #include <kis_paintop_preset.h>
 
 KisToolPolyline::KisToolPolyline(KoCanvasBase * canvas)
-        : super(canvas, KisCursor::load("tool_polyline_cursor.png", 6, 6)),
+        : KisToolPaint(canvas, KisCursor::load("tool_polyline_cursor.png", 6, 6)),
         m_dragging(false)
 {
     setObjectName("tool_polyline");

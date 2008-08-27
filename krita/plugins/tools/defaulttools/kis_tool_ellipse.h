@@ -37,7 +37,6 @@ class KoCanvasBase;
 class KisToolEllipse : public KisToolShape
 {
 
-    typedef KisToolShape super;
     Q_OBJECT
 
 public:

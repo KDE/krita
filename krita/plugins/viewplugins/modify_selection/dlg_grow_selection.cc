@@ -24,7 +24,8 @@
 
 #include <klocale.h>
 #include <kis_debug.h>
-DlgGrowSelection::DlgGrowSelection(QWidget *  parent, const char * name) : super(parent)
+DlgGrowSelection::DlgGrowSelection(QWidget *  parent, const char * name)
+        : KDialog(parent)
 {
     setCaption(i18n("Grow Selection"));
     setButtons(Ok | Cancel);

@@ -390,15 +390,15 @@ bool KisCImgFilter::prepare_inpaint()
     if (dilate) mask.dilate(dilate);
     switch (ip_init) {
     case 0 : {
-        cimg_mapXYV(img,x,y,k) if (mask(x,y)) img(x,y,k) = 0;
+        cimg_mapXYV(img, x, y, k) if (mask(x, y)) img(x, y, k) = 0;
     }
     break;
     case 1 : {
-        cimg_mapXYV(img,x,y,k) if (mask(x,y)) img(x,y,k) = 255;
+        cimg_mapXYV(img, x, y, k) if (mask(x, y)) img(x, y, k) = 255;
     }
     break;
     case 2 : {
-        cimg_mapXYV(img,x,y,k) if (mask(x,y)) img(x,y,k) = (float)(255*cimg::rand());
+        cimg_mapXYV(img, x, y, k) if (mask(x, y)) img(x, y, k) = (float)(255 * cimg::rand());
     }
     break;
     case 3 : break;

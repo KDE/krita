@@ -63,7 +63,6 @@ class KisToolMeasure : public KisTool
 {
 
     Q_OBJECT
-    typedef KisTool super;
 
 public:
     KisToolMeasure(KoCanvasBase * canvas);

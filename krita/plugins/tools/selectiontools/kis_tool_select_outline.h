@@ -36,7 +36,6 @@ class KisSelectionOptions;
 class KisToolSelectOutline : public KisTool
 {
 
-    typedef KisTool super;
     Q_OBJECT
 public:
     KisToolSelectOutline(KoCanvasBase *canvas);
@@ -70,7 +69,7 @@ private:
 
 class KisToolSelectOutlineFactory : public KoToolFactory
 {
-    typedef KoToolFactory super;
+
 public:
     KisToolSelectOutlineFactory(QObject *parent, const QStringList&)
             : KoToolFactory(parent, "KisToolSelectOutline", i18n("Outline Selection")) {

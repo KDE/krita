@@ -44,8 +44,6 @@ namespace
 
 class KisPaintDeviceCommand : public QUndoCommand
 {
-    typedef QUndoCommand super;
-
 public:
     KisPaintDeviceCommand(const QString& name, KisPaintDeviceSP paintDevice);
     virtual ~KisPaintDeviceCommand() {}
@@ -57,7 +55,7 @@ protected:
 };
 
 KisPaintDeviceCommand::KisPaintDeviceCommand(const QString& name, KisPaintDeviceSP paintDevice) :
-        super(name), m_paintDevice(paintDevice)
+        QUndoCommand(name), m_paintDevice(paintDevice)
 {
 }
 
@@ -70,13 +68,12 @@ void KisPaintDeviceCommand::setUndo(bool undo)
 
 class KisConvertLayerTypeCmd : public KisPaintDeviceCommand
 {
-    typedef KisPaintDeviceCommand super;
 
 public:
     KisConvertLayerTypeCmd(KisPaintDeviceSP paintDevice,
                            KisDataManagerSP beforeData, const KoColorSpace * beforeColorSpace,
-                           KisDataManagerSP afterData, const KoColorSpace * afterColorSpace
-                          ) : super(i18n("Convert Layer Type"), paintDevice) {
+                           KisDataManagerSP afterData, const KoColorSpace * afterColorSpace)
+            : KisPaintDeviceCommand(i18n("Convert Layer Type"), paintDevice) {
         m_beforeData = beforeData;
         m_beforeColorSpace = beforeColorSpace;
         m_afterData = afterData;

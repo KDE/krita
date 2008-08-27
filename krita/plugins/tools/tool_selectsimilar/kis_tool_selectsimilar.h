@@ -40,7 +40,6 @@ class KisToolSelectSimilar : public KisTool
 {
 
     Q_OBJECT
-    typedef KisTool super;
 
 public:
     KisToolSelectSimilar(KoCanvasBase * canvas);

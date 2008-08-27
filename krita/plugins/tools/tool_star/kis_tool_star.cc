@@ -43,7 +43,7 @@
 #include "kis_selection.h"
 
 KisToolStar::KisToolStar(KoCanvasBase * canvas)
-        : super(canvas, KisCursor::load("tool_star_cursor.png", 6, 6)),
+        : KisToolShape(canvas, KisCursor::load("tool_star_cursor.png", 6, 6)),
         m_dragging(false)
 {
     setObjectName("tool_star");
@@ -180,7 +180,7 @@ QRectF KisToolStar::boundingRect()
 
 QWidget* KisToolStar::createOptionWidget()
 {
-    QWidget *widget = super::createOptionWidget();
+    QWidget *widget = KisToolShape::createOptionWidget();
 
     m_optWidget = new WdgToolStar(widget);
     Q_CHECK_PTR(m_optWidget);
@@ -188,7 +188,7 @@ QWidget* KisToolStar::createOptionWidget()
     m_optWidget->ratioSpinBox->setValue(m_innerOuterRatio);
 
     QGridLayout *optionLayout = new QGridLayout(widget);
-    super::addOptionWidgetLayout(optionLayout);
+    KisToolShape::addOptionWidgetLayout(optionLayout);
 
     optionLayout->addWidget(m_optWidget, 0, 0);
 

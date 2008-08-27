@@ -31,7 +31,6 @@ class KoCanvasBase;
 class KisToolMove : public KisTool
 {
 
-    typedef KisTool super;
     Q_OBJECT
 
 public:

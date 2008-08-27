@@ -42,7 +42,6 @@ class KoCanvasBase;
 class KisToolFill : public KisToolPaint
 {
 
-    typedef KisToolPaint super;
     Q_OBJECT
 
 public:

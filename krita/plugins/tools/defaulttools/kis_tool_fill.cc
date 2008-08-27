@@ -192,7 +192,7 @@ void KisToolFill::mouseReleaseEvent(KoPointerEvent *e)
 
 QWidget* KisToolFill::createOptionWidget()
 {
-    //QWidget *widget = super::createOptionWidget(parent);
+    //QWidget *widget = KisToolPaint::createOptionWidget(parent);
     QWidget *widget = KisToolPaint::createOptionWidget();
 
     m_lbThreshold = new QLabel(i18n("Threshold: "), widget);

@@ -38,8 +38,6 @@ const int PREFERCONTROLSOPTION = SHIFTOPTION;
 class KisCurveBezier : public KisCurve
 {
 
-    typedef KisCurve super;
-
     void recursiveCurve(const QPointF& P1, const QPointF& P2, const QPointF& P3,
                         const QPointF& P4, int level, iterator it);
     QPointF midpoint(const QPointF&, const QPointF&);
@@ -48,7 +46,7 @@ class KisCurveBezier : public KisCurve
 
 public:
 
-    KisCurveBezier() : super() {
+    KisCurveBezier() : KisCurve() {
         m_maxLevel = 5;
     }
 
@@ -75,7 +73,6 @@ public:
 class KisToolBezier : public KisToolCurve
 {
 
-    typedef KisToolCurve super;
     Q_OBJECT
 
 public:

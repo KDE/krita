@@ -39,7 +39,6 @@ public:
 class KisToolStar : public KisToolShape
 {
 
-    typedef KisToolShape super;
     Q_OBJECT
 
 public:

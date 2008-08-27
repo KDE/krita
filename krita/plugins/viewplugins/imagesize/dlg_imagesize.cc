@@ -31,7 +31,7 @@
 #include <kis_filter_strategy.h>// XXX: I'm really real bad at arithmetic, let alone math. Here
 // be rounding errors. (Boudewijn)
 DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolution)
-        : super(parent)
+        : KDialog(parent)
 {
     setCaption(i18n("Scale To New Size"));
     setButtons(Ok | Cancel);

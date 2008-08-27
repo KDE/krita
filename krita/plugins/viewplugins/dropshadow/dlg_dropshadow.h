@@ -44,7 +44,7 @@ public:
  */
 class DlgDropshadow: public KDialog
 {
-    typedef KDialog super;
+
     Q_OBJECT
 
 public:

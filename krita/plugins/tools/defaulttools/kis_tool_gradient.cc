@@ -64,7 +64,7 @@
 #endif
 
 KisToolGradient::KisToolGradient(KoCanvasBase * canvas)
-        : super(canvas, KisCursor::load("tool_gradient_cursor.png", 6, 6)),
+        : KisToolPaint(canvas, KisCursor::load("tool_gradient_cursor.png", 6, 6)),
         m_dragging(false)
 {
     setObjectName("tool_gradient");
@@ -329,7 +329,7 @@ void KisToolGradient::paintLine(QPainter& gc)
 
 QWidget* KisToolGradient::createOptionWidget()
 {
-    QWidget *widget = super::createOptionWidget();
+    QWidget *widget = KisToolPaint::createOptionWidget();
     Q_CHECK_PTR(widget);
 
     m_lbShape = new QLabel(i18n("Shape:"), widget);

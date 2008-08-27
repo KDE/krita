@@ -31,7 +31,7 @@
 // be rounding errors. (Boudewijn)
 DlgLayerSize::DlgLayerSize(QWidget *  parent,
                            const char * name)
-        : super(parent)
+        : KDialog(parent)
 {
     setCaption(i18n("Image Size"));
     setButtons(Ok | Cancel);

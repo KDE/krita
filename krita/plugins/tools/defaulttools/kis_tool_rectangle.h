@@ -42,7 +42,6 @@ class KoCanvasBase;
 class KisToolRectangle : public KisToolShape
 {
 
-    typedef KisToolShape super;
     Q_OBJECT
 
 public:

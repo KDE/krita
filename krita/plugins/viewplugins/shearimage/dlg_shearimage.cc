@@ -24,9 +24,10 @@
 
 #include <klocale.h>
 #include <kis_debug.h>
+
 DlgShearImage::DlgShearImage(QWidget *  parent,
                              const char * name)
-        : super(parent)
+        : KDialog(parent)
 {
     setCaption(i18n("Shear Image"));
     setButtons(Ok | Cancel);

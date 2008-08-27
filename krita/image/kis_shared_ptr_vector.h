@@ -34,31 +34,31 @@ template <class T>
 class KisSharedPtrVector : public QVector< KisSharedPtr<T> >
 {
 
-    typedef QVector< KisSharedPtr<T> > super;
+    typedef QVector< KisSharedPtr<T> > SharedPtrVector;
 
 public:
     KisSharedPtrVector() {}
 
     void pop_back() {
-        if (!super::empty()) {
-            super::back() = 0;
-            super::pop_back();
+        if (!SharedPtrVector::empty()) {
+            SharedPtrVector::back() = 0;
+            SharedPtrVector::pop_back();
         }
     }
 
-    typename super::iterator erase(typename super::iterator it) {
+    typename SharedPtrVector::iterator erase(typename SharedPtrVector::iterator it) {
         *it = 0;
-        return super::erase(it);
+        return SharedPtrVector::erase(it);
     }
 
-    typename super::iterator erase(typename super::iterator first, typename super::iterator last) {
+    typename SharedPtrVector::iterator erase(typename SharedPtrVector::iterator first, typename SharedPtrVector::iterator last) {
         qFill(first, last, 0);
-        return super::erase(first, last);
+        return SharedPtrVector::erase(first, last);
     }
 
     bool contains(KisSharedPtr<T> ptr) const {
-        for (int i = 0, n = super::count(); i < n; ++i)
-            if (super::at(i) == ptr)
+        for (int i = 0, n = SharedPtrVector::count(); i < n; ++i)
+            if (SharedPtrVector::at(i) == ptr)
                 return true;
         return false;
     }

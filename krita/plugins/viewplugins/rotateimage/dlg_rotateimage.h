@@ -43,7 +43,7 @@ public:
 
 class DlgRotateImage: public KDialog
 {
-    typedef KDialog super;
+
     Q_OBJECT
 
 public:

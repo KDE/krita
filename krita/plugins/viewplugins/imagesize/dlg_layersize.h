@@ -39,7 +39,7 @@ class KisFilterStrategy;
 
 class DlgLayerSize: public KDialog
 {
-    typedef KDialog super;
+
     Q_OBJECT
 
 public:

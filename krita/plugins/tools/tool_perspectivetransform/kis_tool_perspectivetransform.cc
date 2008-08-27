@@ -58,8 +58,6 @@ namespace
 {
 class PerspectiveTransformCmd : public KisSelectedTransaction
 {
-    typedef KisSelectedTransaction super;
-
 public:
     PerspectiveTransformCmd(KisToolPerspectiveTransform *tool, KisPaintDeviceSP device, KisPaintDeviceSP origDevice,  QPointF topleft, QPointF topright, QPointF bottomleft, QPointF bottomright, KisSelectionSP origSel, QRect initialRect);
     virtual ~PerspectiveTransformCmd();
@@ -82,7 +80,7 @@ private:
 };
 
 PerspectiveTransformCmd::PerspectiveTransformCmd(KisToolPerspectiveTransform *tool, KisPaintDeviceSP device, KisPaintDeviceSP origDevice, QPointF topleft, QPointF topright, QPointF bottomleft, QPointF bottomright, KisSelectionSP origSel, QRect initialRect) :
-        super(i18n("Perspective Transform"), device), m_initialRect(initialRect)
+        KisSelectedTransaction(i18n("Perspective Transform"), device), m_initialRect(initialRect)
         , m_topleft(topleft), m_topright(topright), m_bottomleft(bottomleft), m_bottomright(bottomright)
         , m_tool(tool), m_origSelection(origSel), m_device(device), m_origDevice(origDevice)
 {
@@ -108,12 +106,12 @@ KisSelectionSP PerspectiveTransformCmd::origSelection(QRect& initialRect) const
 
 void PerspectiveTransformCmd::execute()
 {
-    super::execute();
+    KisSelectedTransaction::execute();
 }
 
 void PerspectiveTransformCmd::unexecute()
 {
-    super::unexecute();
+    KisSelectedTransaction::unexecute();
 }
 
 KisPaintDeviceSP PerspectiveTransformCmd::theDevice()
@@ -128,7 +126,7 @@ KisPaintDeviceSP PerspectiveTransformCmd::origDevice()
 }
 
 KisToolPerspectiveTransform::KisToolPerspectiveTransform()
-        : super(i18n("Perspective Transform"))
+        : KisToolNonPaint(i18n("Perspective Transform"))
 {
     setName("tool_perspectivetransform");
     setCursor(KisCursor::selectCursor());
@@ -159,7 +157,7 @@ void KisToolPerspectiveTransform::deactivate()
 
 void KisToolPerspectiveTransform::activate()
 {
-    super::activate();
+    KisToolNonPaint::activate();
     m_currentSelectedPoint = 0;
     if (m_subject && m_currentImage && currentNode()->paintDevice()) {
         //connect(m_subject, commandExecuted(K3Command *c), this, notifyCommandAdded( KCommand * c));

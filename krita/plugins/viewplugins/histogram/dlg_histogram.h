@@ -34,7 +34,6 @@ class KisHistogramWidget;
  */
 class DlgHistogram: public KDialog
 {
-    typedef KDialog super;
     Q_OBJECT
 
 public:

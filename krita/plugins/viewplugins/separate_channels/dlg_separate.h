@@ -38,7 +38,7 @@ public:
  */
 class DlgSeparate: public KDialog
 {
-    typedef KDialog super;
+
     Q_OBJECT
 
 public:

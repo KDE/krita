@@ -29,7 +29,6 @@
 class KisToolBezierSelect : public KisToolBezier
 {
 
-    typedef KisToolBezier super;
     Q_OBJECT
 
 public:

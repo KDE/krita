@@ -35,7 +35,6 @@ class KisSelectionOptions;
 class KisToolSelectElliptical : public KisTool
 {
 
-    typedef KisTool super;
     Q_OBJECT
 
 public:

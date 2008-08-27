@@ -51,7 +51,7 @@
 #include "kis_curve_framework.h"
 
 KisToolBezierPaint::KisToolBezierPaint()
-        : super(i18n("Bezier Painting Tool"))
+        : KisToolBezier(i18n("Bezier Painting Tool"))
 {
     setName("tool_bezier_paint");
     m_cursor = "tool_bezier_cursor.png";
@@ -80,7 +80,7 @@ KisCurve::iterator KisToolBezierPaint::paintPoint(KisPainter& painter, KisCurve:
         }
         break;
     default:
-        point = super::paintPoint(painter, point);
+        point = KisToolBezier::paintPoint(painter, point);
     }
 
     return point;

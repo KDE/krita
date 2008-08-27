@@ -36,7 +36,7 @@ public:
 
 class DlgShrinkSelection: public KDialog
 {
-    typedef KDialog super;
+
     Q_OBJECT
 
 public:

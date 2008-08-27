@@ -26,7 +26,7 @@
 #include <kis_debug.h>
 DlgRotateImage::DlgRotateImage(QWidget *  parent,
                                const char * name)
-        : super(parent)
+        : KDialog(parent)
 {
     setCaption(i18n("Rotate Image"));
     setButtons(Ok | Cancel);

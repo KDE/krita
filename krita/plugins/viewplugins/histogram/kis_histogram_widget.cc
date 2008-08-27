@@ -41,7 +41,7 @@
 
 
 KisHistogramWidget::KisHistogramWidget(QWidget *parent, const char *name)
-        : super(parent)
+        : WdgHistogram(parent)
 {
     setObjectName(name);
     m_from = 0.0;

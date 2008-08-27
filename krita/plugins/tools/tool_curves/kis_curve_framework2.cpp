@@ -30,11 +30,10 @@ typedef QMutableListIterator<KisCurvePoint> KisBaseIterator;
 class KisCurveIterator : public KisBaseIterator
 {
 
-    typedef KisBaseIterator super;
 
 public:
 
-    KisCurveIterator(KoPointList& base) : super(base) {
+    KisCurveIterator(KoPointList& base) : KisBaseIterator(base) {
         return;
     }
     ~KisCurveIterator() {

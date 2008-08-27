@@ -42,8 +42,8 @@
 #include "kis_undo_adapter.h"
 
 KisToolSelectEraser::KisToolSelectEraser(KoCanvasBase *canvas)
-        : super(canvas, KisCursor::load("tool_eraser_selection_cursor.png", 5, 5),
-                i18n("Selection Eraser"))
+        : KisToolFreehand(canvas, KisCursor::load("tool_eraser_selection_cursor.png", 5, 5),
+                  i18n("Selection Eraser"))
 {
     setObjectName("tool_select_eraser");
     m_optWidget = 0;
@@ -56,7 +56,7 @@ KisToolSelectEraser::~KisToolSelectEraser()
 
 void KisToolSelectEraser::activate(bool tmp)
 {
-    super::activate(tmp);
+    KisToolFreehand::activate(tmp);
 
     if (!m_optWidget)
         return;
@@ -100,7 +100,7 @@ void KisToolSelectEraser::initPaint(KoPointerEvent */*e*/)
 
 void KisToolSelectEraser::endPaint()
 {
-    super::endPaint();
+    KisToolFreehand::endPaint();
 }
 
 QWidget* KisToolSelectEraser::createOptionWidget()

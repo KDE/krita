@@ -37,7 +37,6 @@ class KisSelectionOptions;
 class KisToolSelectBrush : public KisToolFreehand
 {
     Q_OBJECT
-    typedef KisToolFreehand super;
 
 public:
     KisToolSelectBrush(KoCanvasBase *canvas);

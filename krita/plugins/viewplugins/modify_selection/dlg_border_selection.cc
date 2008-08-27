@@ -24,7 +24,9 @@
 
 #include <klocale.h>
 #include <kis_debug.h>
-DlgBorderSelection::DlgBorderSelection(QWidget *  parent, const char * name) : super(parent)
+
+DlgBorderSelection::DlgBorderSelection(QWidget *  parent, const char * name)
+        : KDialog(parent)
 {
     setCaption(i18n("Border Selection"));
     setButtons(Ok | Cancel);

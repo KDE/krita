@@ -49,7 +49,7 @@
 #include "kis_selection_tool_helper.h"
 
 KisToolSelectPolygonal::KisToolSelectPolygonal(KoCanvasBase *canvas)
-        : super(canvas, KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6))
+        : KisTool(canvas, KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6))
 {
     setObjectName("tool_select_polygonal");
     m_dragging = false;
@@ -65,7 +65,7 @@ KisToolSelectPolygonal::~KisToolSelectPolygonal()
 void KisToolSelectPolygonal::activate(bool tmp)
 {
     m_points.clear();
-    super::activate(tmp);
+    KisTool::activate(tmp);
 
     if (!m_optWidget)
         return;

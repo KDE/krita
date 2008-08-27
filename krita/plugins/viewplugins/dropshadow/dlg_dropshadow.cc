@@ -37,7 +37,7 @@ DlgDropshadow::DlgDropshadow(const QString & /*imageCS*/,
                              const QString & /*layerCS*/,
                              QWidget *  parent,
                              const char * name)
-        : super(parent)
+        : KDialog(parent)
 {
     setCaption(i18n("Drop Shadow"));
     setButtons(Ok | Cancel);

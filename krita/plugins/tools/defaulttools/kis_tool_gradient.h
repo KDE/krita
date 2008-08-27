@@ -52,7 +52,6 @@ class KisToolGradient : public KisToolPaint
 {
 
     Q_OBJECT
-    typedef KisToolPaint super;
 
 public:
     KisToolGradient(KoCanvasBase * canvas);

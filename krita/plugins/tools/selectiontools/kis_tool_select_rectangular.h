@@ -33,7 +33,6 @@ class KoCanvasBase;
 class KisToolSelectRectangular : public KisTool
 {
 
-    typedef KisTool super;
     Q_OBJECT
 
 public:

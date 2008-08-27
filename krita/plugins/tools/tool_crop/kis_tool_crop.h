@@ -52,7 +52,6 @@ public:
 class KisToolCrop : public KisTool
 {
 
-    typedef KisTool super;
     Q_OBJECT
 
 public:

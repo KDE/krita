@@ -38,7 +38,6 @@ class KisSelectionOptions;
 class KisToolSelectContiguous : public KisTool
 {
 
-    typedef KisTool super;
     Q_OBJECT
 
 public:

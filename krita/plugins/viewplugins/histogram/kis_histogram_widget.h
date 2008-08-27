@@ -38,7 +38,7 @@ public:
  */
 class KisHistogramWidget : public WdgHistogram
 {
-    typedef WdgHistogram super;
+
     Q_OBJECT
 
 public:

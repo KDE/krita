@@ -48,11 +48,9 @@
 class KisCurveExample : public KisCurve
 {
 
-    typedef KisCurve super;
-
 public:
 
-    KisCurveExample() : super() {}
+    KisCurveExample() : KisCurve() {}
 
     ~KisCurveExample() {}
 
@@ -66,7 +64,7 @@ KisCurve::iterator KisCurveExample::pushPivot(const QPointF& point)
 }
 
 KisToolExample::KisToolExample()
-        : super(i18n("Tool for Curves - Example"))
+        : KisToolCurve(i18n("Tool for Curves - Example"))
 {
     setName("tool_example");
     m_cursor = "tool_example_cursor.png";

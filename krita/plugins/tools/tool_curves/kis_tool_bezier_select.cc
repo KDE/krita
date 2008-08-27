@@ -54,7 +54,7 @@
 
 
 KisToolBezierSelect::KisToolBezierSelect()
-        : super(i18n("Bezier Selection Tool"))
+        : KisToolBezier(i18n("Bezier Selection Tool"))
 {
     setName("tool_bezier_select");
     m_cursor = "tool_bezier_cursor.png";

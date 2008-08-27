@@ -24,7 +24,8 @@
 
 #include <klocale.h>
 #include <kis_debug.h>
-DlgShrinkSelection::DlgShrinkSelection(QWidget *  parent, const char * name) : super(parent)
+DlgShrinkSelection::DlgShrinkSelection(QWidget *  parent, const char * name)
+        : KDialog(parent)
 {
     setCaption(i18n("Shrink Selection"));
     setButtons(Ok | Cancel);

@@ -37,8 +37,6 @@ typedef Q3ValueVector<GrayCol> GrayMatrix;
 class KisCurveMagnetic : public KisCurve
 {
 
-    typedef KisCurve super;
-
     KisToolMagnetic *m_parent;
 
     void reduceMatrix(QRect&, GrayMatrix&, int, int, int, int);
@@ -65,7 +63,6 @@ public:
 class KisToolMagnetic : public KisToolCurve
 {
 
-    typedef KisToolCurve super;
     Q_OBJECT
 
     friend class KisCurveMagnetic;

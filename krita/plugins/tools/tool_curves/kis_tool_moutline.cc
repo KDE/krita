@@ -52,6 +52,7 @@
 #include "kis_paintop_registry.h"
 #include "kis_convolution_painter.h"
 #include "canvas/kis_canvas.h"
+
 using namespace std;
 
 #define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))
@@ -540,7 +541,7 @@ void KisCurveMagnetic::nonMaxSupp(const GrayMatrix& magnitude, const GrayMatrix&
 }
 
 KisToolMagnetic::KisToolMagnetic()
-        : super("Magnetic Outline Tool")
+        : KisToolCurve("Magnetic Outline Tool")
 {
     setName("tool_moutline");
     setCursor(KisCursor::load("tool_moutline_cursor.png", 6, 6));
@@ -565,7 +566,7 @@ KisToolMagnetic::~KisToolMagnetic()
 
 void KisToolMagnetic::activate()
 {
-    super::activate();
+    KisToolCurve::activate();
     if (!m_derived) {
         m_derived = new KisCurveMagnetic(this);
         m_curve = m_derived;
@@ -612,7 +613,7 @@ void KisToolMagnetic::keyPress(QKeyEvent *event)
         }
         draw(false);
     } else
-        super::keyPress(event);
+        KisToolCurve::keyPress(event);
 }
 
 void KisToolMagnetic::buttonRelease(KoPointerEvent *event)
@@ -625,7 +626,7 @@ void KisToolMagnetic::buttonRelease(KoPointerEvent *event)
         m_editingMode = true;
         draw(m_current);
     }
-    super::buttonRelease(event);
+    KisToolCurve::buttonRelease(event);
 }
 
 void KisToolMagnetic::buttonPress(KoPointerEvent *event)
@@ -751,7 +752,7 @@ void KisToolMagnetic::slotSetDistance(int dist)
 
 QWidget* KisToolMagnetic::createOptionWidget()
 {
-    m_optWidget = super::createOptionWidget(parent);
+    m_optWidget = KisToolCurve::createOptionWidget(parent);
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
     QGridLayout *box = new QGridLayout(l, 2, 2, 3);
     box->setColStretch(0, 1);

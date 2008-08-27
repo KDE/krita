@@ -166,8 +166,9 @@ quint32 matchColors(const QColor & c, enumAction action)
 
     return MIN_SELECTED;
 }
+
 DlgColorRange::DlgColorRange(KisView2 * view, KisPaintDeviceSP dev, QWidget *  parent, const char * name)
-        : super(parent)
+        : KDialog(parent)
         , m_transaction(0)
 {
     setCaption(i18n("Color Range"));

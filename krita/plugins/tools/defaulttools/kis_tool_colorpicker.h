@@ -43,7 +43,6 @@ class KisToolColorPicker : public KisTool
 {
 
     Q_OBJECT
-    typedef KisTool super;
 
 public:
     KisToolColorPicker(KoCanvasBase* canvas);

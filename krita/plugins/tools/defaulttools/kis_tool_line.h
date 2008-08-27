@@ -42,7 +42,6 @@ class KisToolLine : public KisToolPaint
 {
 
     Q_OBJECT
-    typedef KisToolPaint super;
 
 public:
     KisToolLine(KoCanvasBase * canvas);

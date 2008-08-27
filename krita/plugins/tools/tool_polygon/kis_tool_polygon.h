@@ -29,7 +29,6 @@ class KoCanvasBase;
 class KisToolPolygon : public KisToolShape
 {
 
-    typedef KisToolShape super;
     Q_OBJECT
 
 public:

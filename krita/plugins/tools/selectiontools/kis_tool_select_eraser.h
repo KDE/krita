@@ -36,7 +36,6 @@ class KisSelectionOptions;
 class KisToolSelectEraser : public KisToolFreehand
 {
     Q_OBJECT
-    typedef KisToolFreehand super;
 
 public:
     KisToolSelectEraser(KoCanvasBase *canvas);
@@ -57,7 +56,7 @@ private:
 
 class KisToolSelectEraserFactory : public KoToolFactory
 {
-    typedef KoToolFactory super;
+
 public:
     KisToolSelectEraserFactory(QObject *parent, const QStringList&)
             : KoToolFactory(parent,  "KisToolSelectEraser", i18n("Selection Eraser")) {

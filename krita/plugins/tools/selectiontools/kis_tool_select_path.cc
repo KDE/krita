@@ -61,7 +61,7 @@ KisToolSelectPath::~KisToolSelectPath()
 
 void KisToolSelectPath::activate(bool tmp)
 {
-    super::activate(tmp);
+    KoCreatePathTool::activate(tmp);
 
     if (!m_optWidget)
         return;

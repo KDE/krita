@@ -42,8 +42,8 @@ class WdgToolPerspectiveTransform;
 class KisToolPerspectiveTransform : public KisToolNonPaint, KisCommandHistoryListener
 {
 
-    typedef KisToolNonPaint super;
     Q_OBJECT
+
     enum InterractionMode { DRAWRECTINTERRACTION, EDITRECTINTERRACTION };
     enum HandleSelected { NOHANDLE, TOPHANDLE, BOTTOMHANDLE, RIGHTHANDLE, LEFTHANDLE, MIDDLEHANDLE };
 public:

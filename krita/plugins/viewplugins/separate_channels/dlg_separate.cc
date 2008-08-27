@@ -34,9 +34,9 @@ DlgSeparate::DlgSeparate(const QString & imageCS,
                          const QString & layerCS,
                          QWidget *  parent,
                          const char * name)
-        : super(parent),
-        m_imageCS(imageCS),
-        m_layerCS(layerCS)
+        : KDialog(parent)
+        , m_imageCS(imageCS)
+        , m_layerCS(layerCS)
 {
     setObjectName(name);
     setCaption(i18n("Separate Image"));

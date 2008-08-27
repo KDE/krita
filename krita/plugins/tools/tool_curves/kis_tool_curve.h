@@ -44,7 +44,7 @@ double pointToSegmentDistance(const QPointF& p, const QPointF& l0, const QPointF
 class KisToolCurve : public KisToolPaint
 {
 
-    typedef KisToolPaint super;
+
     Q_OBJECT
 
 public:

@@ -49,7 +49,7 @@
 #include "kis_selection_tool_helper.h"
 
 KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
-        : super(canvas, KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6))
+        : KisTool(canvas, KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6))
 {
     setObjectName("tool_select_contiguous");
     m_optWidget = 0;
@@ -64,7 +64,7 @@ KisToolSelectContiguous::~KisToolSelectContiguous()
 
 void KisToolSelectContiguous::activate(bool tmp)
 {
-    super::activate(tmp);
+    KisTool::activate(tmp);
 
     if (!m_optWidget)
         return;

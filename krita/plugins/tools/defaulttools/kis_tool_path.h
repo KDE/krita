@@ -31,7 +31,6 @@ class KoCanvasBase;
 class KisToolPath : public KoCreatePathTool
 {
 
-    typedef KoCreatePathTool super;
     Q_OBJECT
 
 public:

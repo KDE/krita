@@ -36,11 +36,15 @@ public:
     }
     virtual void setConfiguration(KisFilterConfiguration*);
     virtual KisFilterConfiguration* configuration() const;
+
 private slots:
+
     void linkSpacingToggled(bool);
     void spinBoxHalfWidthChanged(int);
     void spinBoxHalfHeightChanged(int);
+
 private:
+
     bool m_halfSizeLink;
     Ui_WdgBlur* m_widget;
 };

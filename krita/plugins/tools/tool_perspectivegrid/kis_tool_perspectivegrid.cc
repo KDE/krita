@@ -46,7 +46,7 @@
 #include <canvas/kis_canvas2.h>
 
 KisToolPerspectiveGrid::KisToolPerspectiveGrid(KoCanvasBase * canvas)
-        : super(canvas, KisCursor::arrowCursor()), m_handleSize(13), m_handleHalfSize(6), m_canvas(dynamic_cast<KisCanvas2*>(canvas))
+        : KisTool(canvas, KisCursor::arrowCursor()), m_handleSize(13), m_handleHalfSize(6), m_canvas(dynamic_cast<KisCanvas2*>(canvas))
 {
     Q_ASSERT(m_canvas);
     setObjectName("tool_perspectivegrid");
@@ -70,7 +70,7 @@ void KisToolPerspectiveGrid::activate(bool)
         m_canvas->view()->perspectiveGridManager()->setVisible(true);
         m_canvas->updateCanvas(); // TODO only the correct rect
     }
-    super::activate();
+    KisTool::activate();
 }
 
 void KisToolPerspectiveGrid::deactivate()

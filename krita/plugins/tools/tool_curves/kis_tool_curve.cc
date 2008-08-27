@@ -60,7 +60,7 @@ QRect KisToolCurve::selectedPivotRect(const QPointF& pos)
 }
 
 KisToolCurve::KisToolCurve(const QString& UIName)
-        : super(UIName)
+        : KisToolPaint(UIName)
 {
     m_UIName = UIName;
     m_currentImage = 0;
@@ -535,7 +535,7 @@ void KisToolCurve::selectCurve()
 QWidget* KisToolCurve::createOptionWidget()
 {
     if (toolType() == TOOL_SHAPE || toolType() == TOOL_FREEHAND)
-        return super::createOptionWidget(parent);
+        return KisToolPaint::createOptionWidget(parent);
     else if (toolType() == TOOL_SELECT)
         return createSelectionOptionWidget(parent);
     else
@@ -568,7 +568,7 @@ QWidget* KisToolCurve::optionWidget()
     if (toolType() == TOOL_SELECT)
         return m_optWidget;
     else
-        return super::optionWidget();
+        return KisToolPaint::optionWidget();
 }
 
 #include "kis_tool_curve.moc"

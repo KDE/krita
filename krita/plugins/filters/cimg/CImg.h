@@ -4545,15 +4545,15 @@ public:
         if (dimx != width || dimy != height) {
             switch (cimg::X11attr().nb_bits) {
             case 8: {
-                unsigned char foo; _resize(foo,dimx,dimy,redraw);
+                unsigned char foo; _resize(foo, dimx, dimy, redraw);
             }
             break;
             case 16: {
-                unsigned short foo; _resize(foo,dimx,dimy,redraw);
+                unsigned short foo; _resize(foo, dimx, dimy, redraw);
             }
             break;
             default: {
-                unsigned int foo; _resize(foo,dimx,dimy,redraw);
+                unsigned int foo; _resize(foo, dimx, dimy, redraw);
             }
             break;
             }
@@ -8535,11 +8535,11 @@ template<typename T> struct CImg {
                 v0 >= dim || v1 >= dim || x1 < x0 || y1 < y0 || z1 < z0 || v1 < v0)
             switch (border_condition) {
             case false: {
-                cimg_mapXYZV(dest,x,y,z,v) dest(x,y,z,v) = pix4d(x0+x,y0+y,z0+z,v0+v,0);
+                cimg_mapXYZV(dest, x, y, z, v) dest(x, y, z, v) = pix4d(x0 + x, y0 + y, z0 + z, v0 + v, 0);
             }
             break;
             default: {
-                cimg_mapXYZV(dest,x,y,z,v) dest(x,y,z,v) = pix4d(x0+x,y0+y,z0+z,v0+v);
+                cimg_mapXYZV(dest, x, y, z, v) dest(x, y, z, v) = pix4d(x0 + x, y0 + y, z0 + z, v0 + v);
             }
             break;
             }
@@ -13462,15 +13462,15 @@ template<typename T> struct CImg {
             Y = new double[cimg::max(width,height,depth)];
             switch (cimg::uncase(axe)) {
             case 'x': if (width>1)  {
-                    offset = 1;            nb = width;  cimg_mapYZV(*this,y,z,k) cimg_deriche_map(0,y,z,k,nb,offset,T);
+                    offset = 1;            nb = width;  cimg_mapYZV(*this, y, z, k) cimg_deriche_map(0, y, z, k, nb, offset, T);
                 }
                 break;
             case 'y': if (height>1) {
-                    offset = width;        nb = height; cimg_mapXZV(*this,x,z,k) cimg_deriche_map(x,0,z,k,nb,offset,T);
+                    offset = width;        nb = height; cimg_mapXZV(*this, x, z, k) cimg_deriche_map(x, 0, z, k, nb, offset, T);
                 }
                 break;
             case 'z': if (depth>1)  {
-                    offset = width*height; nb = depth;  cimg_mapXYV(*this,x,y,k) cimg_deriche_map(x,y,0,k,nb,offset,T);
+                    offset = width * height; nb = depth;  cimg_mapXYV(*this, x, y, k) cimg_deriche_map(x, y, 0, k, nb, offset, T);
                 }
                 break;
             default: throw CImgArgumentException("CImg<%s>::deriche() : unknow axe '%c', must be 'x','y' or 'z'",pixel_type(),axe);
@@ -14823,7 +14823,7 @@ template<typename T> struct CImg {
             if (vec.size() < width*width) vec.assign(width, width);
             switch (width) {
             case 1: {
-                val[0]=(t)(*this)[0]; vec[0]=(t)1;
+                val[0] = (t)(*this)[0]; vec[0] = (t)1;
             }
             break;
             case 2: {
@@ -18993,19 +18993,19 @@ template<typename T> struct CImgl {
             res.assign(dx, dy, dz, dv, 0);
             switch (cimg::uncase(align)) {
             case 'p' : {
-                cimgl_map(*this,ll) {
-                    res.draw_image((*this)[ll],pos,0,0,0); pos+=(*this)[ll].width;
+                cimgl_map(*this, ll) {
+                    res.draw_image((*this)[ll], pos, 0, 0, 0); pos += (*this)[ll].width;
                 }
             }
             break;
             case 'n' : {
-                cimgl_map(*this,ll) {
+                cimgl_map(*this, ll) {
                     res.draw_image((*this)[ll], pos, dy - (*this)[ll].height, dz - (*this)[ll].depth, dv - (*this)[ll].dim); pos += (*this)[ll].width;
                 }
             }
             break;
             default  : {
-                cimgl_map(*this,ll) {
+                cimgl_map(*this, ll) {
                     res.draw_image((*this)[ll], pos, (dy - (*this)[ll].height) / 2, (dz - (*this)[ll].depth) / 2, (dv - (*this)[ll].dim) / 2);
                     pos += (*this)[ll].width;
                 }
@@ -19025,19 +19025,19 @@ template<typename T> struct CImgl {
             res.assign(dx, dy, dz, dv, 0);
             switch (cimg::uncase(align)) {
             case 'p': {
-                cimgl_map(*this,ll) {
-                    res.draw_image((*this)[ll],0,pos,0,0); pos+=(*this)[ll].height;
+                cimgl_map(*this, ll) {
+                    res.draw_image((*this)[ll], 0, pos, 0, 0); pos += (*this)[ll].height;
                 }
             }
             break;
             case 'n': {
-                cimgl_map(*this,ll) {
+                cimgl_map(*this, ll) {
                     res.draw_image((*this)[ll], dx - (*this)[ll].width, pos, dz - (*this)[ll].depth, dv - (*this)[ll].dim); pos += (*this)[ll].height;
                 }
             }
             break;
             default : {
-                cimgl_map(*this,ll) {
+                cimgl_map(*this, ll) {
                     res.draw_image((*this)[ll], (dx - (*this)[ll].width) / 2, pos, (dz - (*this)[ll].depth) / 2, (dv - (*this)[ll].dim) / 2);
                     pos += (*this)[ll].height;
                 }
@@ -19057,19 +19057,19 @@ template<typename T> struct CImgl {
             res.assign(dx, dy, dz, dv, 0);
             switch (cimg::uncase(align)) {
             case 'p': {
-                cimgl_map(*this,ll) {
-                    res.draw_image((*this)[ll],0,0,pos,0); pos+=(*this)[ll].depth;
+                cimgl_map(*this, ll) {
+                    res.draw_image((*this)[ll], 0, 0, pos, 0); pos += (*this)[ll].depth;
                 }
             }
             break;
             case 'n': {
-                cimgl_map(*this,ll) {
+                cimgl_map(*this, ll) {
                     res.draw_image((*this)[ll], dx - (*this)[ll].width, dy - (*this)[ll].height, pos, dv - (*this)[ll].dim); pos += (*this)[ll].depth;
                 }
             }
             break;
             case 'c': {
-                cimgl_map(*this,ll) {
+                cimgl_map(*this, ll) {
                     res.draw_image((*this)[ll], (dx - (*this)[ll].width) / 2, (dy - (*this)[ll].height) / 2, pos, (dv - (*this)[ll].dim) / 2);
                     pos += (*this)[ll].depth;
                 }
@@ -19089,19 +19089,19 @@ template<typename T> struct CImgl {
             res.assign(dx, dy, dz, dv, 0);
             switch (cimg::uncase(align)) {
             case 'p': {
-                cimgl_map(*this,ll) {
-                    res.draw_image((*this)[ll],0,0,0,pos); pos+=(*this)[ll].dim;
+                cimgl_map(*this, ll) {
+                    res.draw_image((*this)[ll], 0, 0, 0, pos); pos += (*this)[ll].dim;
                 }
             }
             break;
             case 'n': {
-                cimgl_map(*this,ll) {
+                cimgl_map(*this, ll) {
                     res.draw_image((*this)[ll], dx - (*this)[ll].width, dy - (*this)[ll].height, dz - (*this)[ll].depth, pos); pos += (*this)[ll].dim;
                 }
             }
             break;
             case 'c': {
-                cimgl_map(*this,ll) {
+                cimgl_map(*this, ll) {
                     res.draw_image((*this)[ll], (dx - (*this)[ll].width) / 2, (dy - (*this)[ll].height) / 2, (dz - (*this)[ll].depth) / 2, pos);
                     pos += (*this)[ll].dim;
                 }

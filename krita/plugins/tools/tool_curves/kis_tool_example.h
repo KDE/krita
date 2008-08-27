@@ -31,7 +31,6 @@ class QPointF;
 class KisToolExample : public KisToolCurve
 {
 
-    typedef KisToolCurve super;
     Q_OBJECT
 
 public:

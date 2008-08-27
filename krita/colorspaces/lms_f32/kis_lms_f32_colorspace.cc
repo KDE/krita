@@ -152,7 +152,7 @@ int KisLmsAF32ColorSpaceFactory::referenceDepth() const
 
 KoColorConversionTransformationFactory* KisLmsAF32ColorSpaceFactory::createICCColorConversionTransformationFactory(const QString& profileName) const
 {
-    Q_UNUSED( profileName );
+    Q_UNUSED(profileName);
     return 0;
 }
 

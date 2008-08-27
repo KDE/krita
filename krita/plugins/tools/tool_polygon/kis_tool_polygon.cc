@@ -41,7 +41,7 @@
 
 
 KisToolPolygon::KisToolPolygon(KoCanvasBase *canvas)
-        : super(canvas, KisCursor::load("tool_polygon_cursor.png", 6, 6)),
+        : KisToolShape(canvas, KisCursor::load("tool_polygon_cursor.png", 6, 6)),
         m_dragging(false)
 {
     setObjectName("tool_polygon");

@@ -35,7 +35,6 @@
 class KisToolPolyline : public KisToolPaint
 {
 
-    typedef KisToolPaint super;
     Q_OBJECT
 
 public:

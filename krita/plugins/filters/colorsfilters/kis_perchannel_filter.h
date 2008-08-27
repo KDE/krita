@@ -94,7 +94,6 @@ private:
 class KisPerChannelConfigWidget : public KisFilterConfigWidget
 {
 
-    typedef KisFilterConfigWidget super;
     Q_OBJECT
 
 public:

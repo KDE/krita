@@ -35,7 +35,7 @@ class KisToolPerspectiveGrid : public KisTool
         MODE_DRAGING_NODE, // In this mode one node is translated
         MODE_DRAGING_TRANSLATING_TWONODES // This mode is used when creating a new sub perspective grid
     };
-    typedef KisTool super;
+
 public:
     KisToolPerspectiveGrid(KoCanvasBase * canvas);
     virtual ~KisToolPerspectiveGrid();

@@ -34,7 +34,6 @@ class KisSelectionOptions;
 class KisToolSelectPolygonal : public KisTool
 {
 
-    typedef KisTool super;
     Q_OBJECT
 public:
     KisToolSelectPolygonal(KoCanvasBase *canvas);

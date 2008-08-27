@@ -63,7 +63,7 @@ public:
 */
 class DlgColorRange: public KDialog
 {
-    typedef KDialog super;
+
     Q_OBJECT
 
 public:

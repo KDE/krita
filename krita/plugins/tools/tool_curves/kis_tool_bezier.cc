@@ -285,7 +285,7 @@ void KisCurveBezier::deletePivot(KisCurve::iterator it)
 }
 
 KisToolBezier::KisToolBezier(const QString& UIName)
-        : super(UIName)
+        : KisToolCurve(UIName)
 {
     m_derivated = new KisCurveBezier;
     m_curve = m_derivated;

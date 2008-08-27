@@ -25,6 +25,8 @@
 #include <QDomDocument>
 #include <Eigen/Array>
 
+#include <KDebug>
+
 void KisPaintInformationTest::testCreation()
 {
     KisPaintInformation test;
@@ -39,16 +41,16 @@ void KisPaintInformationTest::testSerialisation()
     doc.appendChild(root);
     test.toXML(doc, root);
     KisPaintInformation testUnS = KisPaintInformation::fromXML(root);
-    QVERIFY(test.pos().x() == testUnS.pos().x());
-    QVERIFY(test.pos().y() == testUnS.pos().y());
-    QVERIFY(test.pressure() == testUnS.pressure());
-    QVERIFY(test.xTilt() == testUnS.xTilt());
-    QVERIFY(test.yTilt() == testUnS.yTilt());
-    QVERIFY(test.movement().x() == testUnS.movement().x());
-    QVERIFY(test.movement().y() == testUnS.movement().y());
-    QVERIFY(test.angle() == testUnS.angle());
-    QVERIFY(test.rotation() == testUnS.rotation());
-    QVERIFY(test.tangentialPressure() == testUnS.tangentialPressure());
+    QCOMPARE(test.pos().x() , testUnS.pos().x());
+    QCOMPARE(test.pos().y() , testUnS.pos().y());
+    QCOMPARE(test.pressure() , testUnS.pressure());
+    QCOMPARE(test.xTilt() , testUnS.xTilt());
+    QCOMPARE(test.yTilt() , testUnS.yTilt());
+    QCOMPARE(test.movement().x() , testUnS.movement().x());
+    QCOMPARE(test.movement().y() , testUnS.movement().y());
+    QCOMPARE(test.angle() , testUnS.angle());
+    QCOMPARE(test.rotation() , testUnS.rotation());
+    QCOMPARE(test.tangentialPressure() , testUnS.tangentialPressure());
 }
 
 

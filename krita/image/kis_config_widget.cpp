@@ -15,16 +15,30 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QTimer>
 
 #include "kis_config_widget.h"
 
 KisConfigWidget::KisConfigWidget(QWidget * parent, Qt::WFlags f)
         : QWidget(parent, f)
 {
+    m_timer.setSingleShot(true);
+    connect(&m_timer, SIGNAL(timeout()), SLOT(slotConfigChanged()));
+    connect(this, SIGNAL(sigConfigChanged()), SLOT(kickTimer()));
 }
 
 KisConfigWidget::~KisConfigWidget()
 {
+}
+
+void KisConfigWidget::slotConfigChanged()
+{
+    emit sigPleaseUpdatePreview();
+}
+
+void KisConfigWidget::kickTimer()
+{
+    m_timer.start(50);
 }
 
 #include "kis_config_widget.moc"

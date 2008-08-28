@@ -46,9 +46,9 @@ KisWdgBlur::KisWdgBlur(QWidget * parent) : KisConfigWidget(parent)
     connect(widget()->intHalfWidth, SIGNAL(valueChanged(int)), this, SLOT(spinBoxHalfWidthChanged(int)));
     connect(widget()->intHalfHeight, SIGNAL(valueChanged(int)), this, SLOT(spinBoxHalfHeightChanged(int)));
 
-    connect(widget()->intStrength, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect(widget()->intAngle, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect(widget()->cbShape, SIGNAL(activated(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->intStrength, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
+    connect(widget()->intAngle, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
+    connect(widget()->cbShape, SIGNAL(activated(int)), SIGNAL(sigConfigChanged()));
 }
 
 KisPropertiesConfiguration* KisWdgBlur::configuration() const
@@ -102,7 +102,7 @@ void KisWdgBlur::spinBoxHalfWidthChanged(int v)
             widget()->intAngle->setEnabled(false);
         else
             widget()->intAngle->setEnabled(true);*/
-    emit sigPleaseUpdatePreview();
+    emit sigConfigChanged();
 }
 
 void KisWdgBlur::spinBoxHalfHeightChanged(int v)
@@ -114,7 +114,7 @@ void KisWdgBlur::spinBoxHalfHeightChanged(int v)
             widget()->intAngle->setEnabled(false);
         else
             widget()->intAngle->setEnabled(true);*/
-    emit sigPleaseUpdatePreview();
+    emit sigConfigChanged();
 }
 
 #include "kis_wdg_blur.moc"

@@ -22,16 +22,21 @@
 #include <QWidget>
 #include <krita_export.h>
 
+#include <QTimer>
+
 class KisPropertiesConfiguration;
 
 /**
  * Empty base class. Configurable resources like filters, paintops etc.
  * can build their own configuration widgets that inherit this class.
- * The configuration widget should emit sigPleaseUpdatePreview
- * when it wants a preview updated.
+ * The configuration widget should emit sigConfigChanged
+ * when it wants a preview updated; there is a timer that
+ * waits a little time to see if there are more changes coming
+ * and then emits sigPleaseUpdatePreview.
  *
- * Also, this class is designed to have a single instance of a certain configuration
- * widget that can be reset and unset
+ * Also, this class is designed to have a single instance
+ * of a certain configuration widget that can be reset and
+ * unset
  */
 class KRITAIMAGE_EXPORT KisConfigWidget : public QWidget
 {
@@ -58,10 +63,25 @@ public:
 signals:
 
     /**
-     * Subclasses should emit this signal whenever the preview should be
-     * be recalculated.
+     * emitted whenever it makes sense to update the preview
      */
     void sigPleaseUpdatePreview();
+
+    /**
+     * Subclasses should emit this signal whenever the preview should be
+     * be recalculated. This kicks of a timer, so it's perfectly fine
+     * to connect this to the changed signals of the widgets in your configuration
+     * widget.
+     */
+    void sigConfigChanged();
+
+private slots:
+
+    void slotConfigChanged();
+    void kickTimer();
+
+private:
+    QTimer m_timer;
 };
 
 

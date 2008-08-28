@@ -52,10 +52,6 @@ protected slots:
 
     void createMask();
 
-private slots:
-
-    void kickTimer();
-
 signals:
 
     void sigPleaseApplyFilter(KisNodeSP, KisFilterConfiguration*);

@@ -1,3 +1,5 @@
+* make base settings widget with preview signal and use that in all paintop settings
+* make paintop settings not own widget, but load/save from a single widget created by the factory
 * refactor kisbrush based paintops to share the brush selector and various pressure curve responses through libpaintop
 * move filter setting into libpaintop
 * move paintop preview code to preset

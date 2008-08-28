@@ -35,8 +35,8 @@ KisWdgNoise::KisWdgNoise(KisFilter* /*nfilter*/, QWidget* parent)
     m_widget = new Ui_WdgNoiseOptions();
     m_widget->setupUi(this);
 
-    connect(widget()->intLevel, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect(widget()->intOpacity, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->intLevel, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
+    connect(widget()->intOpacity, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
     m_seedThreshold = rand();
     m_seedRed = rand();
     m_seedGreen = rand();

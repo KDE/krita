@@ -34,11 +34,11 @@ KisWdgLensCorrection::KisWdgLensCorrection(KisFilter* /*nfilter*/, QWidget* pare
     m_widget = new Ui_WdgLensCorrectionOptions();
     m_widget->setupUi(this);
 
-    connect(widget()->intXCenter, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect(widget()->intYCenter, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect(widget()->dblCorrectionNearCenter, SIGNAL(valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));
-    connect(widget()->dblCorrectionNearEdges, SIGNAL(valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));
-    connect(widget()->dblBrightness, SIGNAL(valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(widget()->intXCenter, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
+    connect(widget()->intYCenter, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
+    connect(widget()->dblCorrectionNearCenter, SIGNAL(valueChanged(double)), SIGNAL(sigConfigChanged()));
+    connect(widget()->dblCorrectionNearEdges, SIGNAL(valueChanged(double)), SIGNAL(sigConfigChanged()));
+    connect(widget()->dblBrightness, SIGNAL(valueChanged(double)), SIGNAL(sigConfigChanged()));
 }
 
 KisWdgLensCorrection::~KisWdgLensCorrection()

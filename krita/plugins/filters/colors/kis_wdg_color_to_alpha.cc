@@ -37,8 +37,8 @@ KisWdgColorToAlpha::KisWdgColorToAlpha(QWidget * parent) : KisConfigWidget(paren
 {
     m_widget = new Ui_WdgColorToAlphaBase();
     m_widget->setupUi(this);
-    connect(m_widget->colorTarget, SIGNAL(changed(const QColor&)), SIGNAL(sigPleaseUpdatePreview()));
-    connect(m_widget->intThreshold, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(m_widget->colorTarget, SIGNAL(changed(const QColor&)), SIGNAL(sigConfigChanged()));
+    connect(m_widget->intThreshold, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
 }
 
 void KisWdgColorToAlpha::setConfiguration(KisPropertiesConfiguration* config)

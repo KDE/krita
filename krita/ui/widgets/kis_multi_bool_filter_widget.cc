@@ -50,7 +50,7 @@ KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(const QString & filterid, QWi
         cb->setObjectName(iwparam[i].name);
         cb->setChecked(iwparam[i].initvalue);
         cb->setText(iwparam[i].label);
-        connect(cb, SIGNAL(toggled(bool)), SIGNAL(sigPleaseUpdatePreview()));
+        connect(cb, SIGNAL(toggled(bool)), SIGNAL(sigConfigChanged()));
         widgetLayout->addWidget(cb);
         m_boolWidgets.append(cb);
     }

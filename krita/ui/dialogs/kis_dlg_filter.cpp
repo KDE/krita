@@ -20,8 +20,6 @@
 
 #include "kis_dlg_filter.h"
 
-#include <QTimer>
-
 // From krita/image
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
@@ -44,7 +42,6 @@ struct KisFilterDialog::Private {
     Ui_FilterDialog uiFilterDialog;
     KisFilterMaskSP mask;
     KisNodeSP node;
-    QTimer timer;
     KisImageSP image;
 };
 
@@ -74,7 +71,7 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageSP ima
     }
     d->uiFilterDialog.filterSelection->setPaintDevice(d->node->paintDevice());
     d->uiFilterDialog.filterSelection->setImage(d->image);
-    d->timer.setSingleShot(true);
+
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(close()));
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(apply()));
@@ -82,9 +79,8 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageSP ima
     connect(d->uiFilterDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(close()));
     connect(d->uiFilterDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(reject()));
 
+    connect(d->uiFilterDialog.filterSelection, SIGNAL(configurationChanged()), SLOT(updatePreview()));
 
-    connect(d->uiFilterDialog.filterSelection, SIGNAL(configurationChanged()), SLOT(kickTimer()));
-    connect(&d->timer, SIGNAL(timeout()), SLOT(updatePreview()));
 }
 
 KisFilterDialog::~KisFilterDialog()
@@ -140,9 +136,5 @@ void KisFilterDialog::createMask()
     }
 }
 
-void KisFilterDialog::kickTimer()
-{
-    d->timer.start(50);
-}
 
 #include "kis_dlg_filter.moc"

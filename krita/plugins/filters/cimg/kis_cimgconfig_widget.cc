@@ -42,16 +42,16 @@ KisCImgconfigWidget::KisCImgconfigWidget(QWidget * parent, Qt::WFlags f)
 
     l->addWidget(m_page);
 
-    connect(m_page->numDetail, SIGNAL(valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));
-    connect(m_page->numGradient, SIGNAL(valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));
-    connect(m_page->numTimeStep, SIGNAL(valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));
-    connect(m_page->numBlur, SIGNAL(valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));
-    connect(m_page->numBlurIterations, SIGNAL(valueChanged(int)), SIGNAL(sigPleaseUpdatePreview()));
-    connect(m_page->numAngularStep, SIGNAL(valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));
-    connect(m_page->numIntegralStep, SIGNAL(valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));
-    connect(m_page->numGaussian, SIGNAL(valueChanged(double)), SIGNAL(sigPleaseUpdatePreview()));
-    connect(m_page->chkLinearInterpolation, SIGNAL(toggled(bool)), SIGNAL(sigPleaseUpdatePreview()));
-    connect(m_page->chkNormalize, SIGNAL(toggled(bool)), SIGNAL(sigPleaseUpdatePreview()));
+    connect(m_page->numDetail, SIGNAL(valueChanged(double)), SIGNAL(sigConfigChanged()));
+    connect(m_page->numGradient, SIGNAL(valueChanged(double)), SIGNAL(sigConfigChanged()));
+    connect(m_page->numTimeStep, SIGNAL(valueChanged(double)), SIGNAL(sigConfigChanged()));
+    connect(m_page->numBlur, SIGNAL(valueChanged(double)), SIGNAL(sigConfigChanged()));
+    connect(m_page->numBlurIterations, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
+    connect(m_page->numAngularStep, SIGNAL(valueChanged(double)), SIGNAL(sigConfigChanged()));
+    connect(m_page->numIntegralStep, SIGNAL(valueChanged(double)), SIGNAL(sigConfigChanged()));
+    connect(m_page->numGaussian, SIGNAL(valueChanged(double)), SIGNAL(sigConfigChanged()));
+    connect(m_page->chkLinearInterpolation, SIGNAL(toggled(bool)), SIGNAL(sigConfigChanged()));
+    connect(m_page->chkNormalize, SIGNAL(toggled(bool)), SIGNAL(sigConfigChanged()));
 }
 
 

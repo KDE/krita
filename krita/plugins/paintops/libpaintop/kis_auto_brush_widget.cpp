@@ -89,7 +89,6 @@ void KisAutoBrushWidget::paramChanged()
 
     }
     m_autoBrush = new KisAutoBrush(kas);
-    kDebug() << m_autoBrush;
 
     m_brush = m_autoBrush->img();
 
@@ -109,7 +108,6 @@ void KisAutoBrushWidget::paramChanged()
 
     QPixmap p = QPixmap::fromImage(pi);
     brushPreview->setIcon(QIcon(p));
-    kDebug() << m_autoBrush;
 }
 void KisAutoBrushWidget::spinBoxWidthChanged(int a)
 {
@@ -168,8 +166,6 @@ void KisAutoBrushWidget::linkFadeToggled(bool b)
 
 KisBrushSP KisAutoBrushWidget::brush()
 {
-    kDebug() << this;
-    kDebug() << m_autoBrush;
     return m_autoBrush;
 }
 

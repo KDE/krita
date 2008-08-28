@@ -356,7 +356,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
 
     l->addWidget(m_page);
     height = 256;
-    connect(m_page->kCurve, SIGNAL(modified()), SIGNAL(sigPleaseUpdatePreview()));
+    connect(m_page->kCurve, SIGNAL(modified()), SIGNAL(sigConfigChanged()));
 
     // Fill in the channel chooser
     QList<KoChannelInfo *> channels = dev->colorSpace()->channels();

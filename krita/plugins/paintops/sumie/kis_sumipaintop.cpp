@@ -31,6 +31,7 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoInputDevice.h>
+#include <KoCompositeOp.h>
 
 #include <kis_image.h>
 #include <kis_debug.h>
@@ -141,8 +142,8 @@ double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
 
     QRect rc = dab->extent();
     //qDebug() << rc;
-    painter()->bitBlt(rc.topLeft(), dab, rc);
-    //painter()->bltSelection(x, y, painter()->compositeOp(), dab, painter()->opacity(), x, y, 1, 1);
+    //painter()->bitBlt(rc.topLeft(), dab, rc);
+    painter()->bltSelection(rc.x(), rc.y(), device->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN), dab, painter()->opacity(), rc.x(), rc.y(), rc.width(), rc.height());
     // who knows what should be here
     return 0;
 }

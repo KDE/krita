@@ -148,14 +148,17 @@ set(kritaimage_LIB_SRCS
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
-target_link_libraries(kritaimage kstore ${KDE4_KPARTS_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTGUI_LIBRARY} ${QT_QTXML_LIBRARY} ${KDE4_KDECORE_LIBS} pigmentcms komain koguiutils koresources ${KDE4_THREADWEAVER_LIBRARIES} )
+target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} ${KDE4_KDE3SUPPORT_LIBS} koguiutils ${KDE4_THREADWEAVER_LIBRARIES} )
 
 if(OPENEXR_FOUND)
   target_link_libraries(kritaimage  ${OPENEXR_LIBRARIES})
 endif(OPENEXR_FOUND)
 
 
-set_target_properties(kritaimage PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(kritaimage PROPERTIES
+    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "koguiutils;${KDE4_KPARTS_LIBS};${QT_QT3SUPPORT_LIBRARY}"
+)
 install(TARGETS kritaimage  DESTINATION ${LIB_INSTALL_DIR})
 
 

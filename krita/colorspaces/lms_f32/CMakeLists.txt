@@ -10,7 +10,7 @@ kde4_add_plugin(krita_lms_f32_plugin ${krita_lms_f32_plugin_PART_SRCS})
 
 
 
-target_link_libraries(krita_lms_f32_plugin  ${KDE4_KDECORE_LIBS} pigmentcms )
+target_link_libraries(krita_lms_f32_plugin pigmentcms )
 
 install(TARGETS krita_lms_f32_plugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 

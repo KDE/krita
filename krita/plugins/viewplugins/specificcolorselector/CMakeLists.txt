@@ -5,7 +5,7 @@ set(KRITA_SPECIFICCOLORSELECTOR_PART_SRCS specificcolorselector.cc specificcolor
 
 kde4_add_plugin(kritaspecificcolorselector ${KRITA_SPECIFICCOLORSELECTOR_PART_SRCS})
 
-target_link_libraries(kritaspecificcolorselector kritaui)
+target_link_libraries(kritaspecificcolorselector kritaui ${OPENEXR_LIBRARIES})
 
 install(TARGETS kritaspecificcolorselector  DESTINATION ${PLUGIN_INSTALL_DIR})
 

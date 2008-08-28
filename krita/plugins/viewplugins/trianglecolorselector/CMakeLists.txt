@@ -6,7 +6,7 @@ set(kritatrianglecolorselector_PART_SRCS trianglecolorselector.cc kis_triangle_c
 
 kde4_add_plugin(kritatrianglecolorselector ${kritatrianglecolorselector_PART_SRCS})
 
-target_link_libraries(kritatrianglecolorselector koguiutils kritaui )
+target_link_libraries(kritatrianglecolorselector kritaui )
 
 install(TARGETS kritatrianglecolorselector  DESTINATION ${PLUGIN_INSTALL_DIR})
 

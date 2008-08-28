@@ -27,7 +27,6 @@
 #include <kis_paintop.h>
 #include <kis_types.h>
 
-#include "lines.h"
 #include "brush.h"
 
 #include "kis_sumipaintopsettings.h"

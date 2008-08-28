@@ -200,3 +200,38 @@ double KisSumiPaintOpSettings::scaleFactor() const
 {
     return m_options->scaleBox->value();
 }
+
+bool KisSumiPaintOpSettings::useSaturation() const
+{
+    return m_options->saturationCBox->isChecked();
+}
+
+bool KisSumiPaintOpSettings::useOpacity() const
+{
+    return m_options->opacityCBox->isChecked();
+}
+
+bool KisSumiPaintOpSettings::useWeights() const
+{
+    return m_options->weightSaturationCBox->isChecked();
+}
+
+int KisSumiPaintOpSettings::pressureWeight() const
+{
+    return m_options->pressureSlider->value();
+}
+
+int KisSumiPaintOpSettings::bristleLengthWeight() const
+{
+    return m_options->bristleLengthSlider->value();
+}
+
+int KisSumiPaintOpSettings::bristleInkAmountWeight() const 
+{
+    return m_options->bristleInkAmountSlider->value();
+}
+
+int KisSumiPaintOpSettings::inkDepletionWeight() const 
+{
+    return m_options->inkDepletionSlider->value();
+}

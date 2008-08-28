@@ -30,6 +30,7 @@ public:
     ~BrushShape();
     void fromGaussian(int radius, float sigma);
     void fromLine(int radius, float sigma);
+    void fromBitMap(const char* fileName);
     void tresholdBristles(double treshold);
 
     QVector<Bristle> getBristles();

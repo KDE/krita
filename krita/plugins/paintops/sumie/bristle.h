@@ -70,7 +70,7 @@ public:
     }
 
     void setLength(float length);
-    void setColor(KoColor color);
+    void setColor(const KoColor &color);
 
     void addInk(float value);
     void removeInk(float value);

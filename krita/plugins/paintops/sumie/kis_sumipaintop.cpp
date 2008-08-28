@@ -46,7 +46,6 @@
 
 #include "kis_datamanager.h"
 
-#include "lines.h"
 #include "brush.h"
 #include "brush_shape.h"
 
@@ -101,6 +100,18 @@ KisSumiPaintOp::KisSumiPaintOp(const KisSumiPaintOpSettings *settings, KisPainte
     m_brush.setRandom(settings->randomFactor());
     m_brush.setShear(settings->shearFactor());
     // delete??
+
+    m_brush.enableWeights(settings->useWeights());
+    m_brush.enableOpacity(settings->useOpacity());
+    m_brush.enableSaturation(settings->useSaturation());
+
+    if (settings->useWeights()){
+        // TODO : improve the way the weights can be set..
+        m_brush.setBristleInkAmountWeight( settings->bristleInkAmountWeight()/100.0 );
+        m_brush.setBristleLengthWeight( settings->bristleLengthWeight()/100.0 );
+        m_brush.setInkDepletionWeight( settings->inkDepletionWeight()/100.0 );
+        m_brush.setPressureWeight( settings->pressureWeight()/100.0 );
+    }
 }
 
 KisSumiPaintOp::~KisSumiPaintOp()
@@ -116,7 +127,6 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist)
 {
     QMutexLocker locker(&m_mutex);
-
     Q_UNUSED(savedDist);
 
     if (!painter()) return -1;
@@ -124,61 +134,15 @@ double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
     KisPaintDeviceSP device = painter()->device();
     if (!device) return -1;
 
-//     if ( newStrokeFlag ) {
-//         newStrokeFlag = false;
-//     } else
-//     {
-
     dab = cachedDab();
     dab->clear();
-
-    Lines line;
-    //line.drawDDAALine(dab, pi1.pos().x(), pi1.pos().y(), pi2.pos().x(), pi2.pos().y(), painter()->paintColor());
-    //line.drawThickLine(dab, pi1.pos().x(), pi1.pos().y(), pi2.pos().x(), pi2.pos().y(),painter()->paintColor(),painter()->paintColor(), 2*pi1.pressure(), 20*pi2.pressure() );
-    //line.drawWuLine(dab, pi1.pos().x(), pi1.pos().y(), pi2.pos().x(), pi2.pos().y(), painter()->paintColor());
-
-// testing lines in every direction (circle of lines)
-    /* int x, y;
-      float phase = 0.0;
-
-      for (float theta= phase; theta<360+phase; theta += 10 )
-      {
-      x = (int)(100.0*cos(theta*3.14/180.0)+pi1.pos().x());
-      y = (int)(-100.0*sin(theta*3.14/180.0)+pi1.pos().y());
-      line.drawDDALine(dab, x, y, pi1.pos().x(), pi1.pos().y(), painter()->paintColor());
-      //line.drawThickLine(dab, x, y, pi1.pos().x(), pi1.pos().y(),painter()->paintColor(),painter()->paintColor(), 1, 1);
-    //   line.drawWuLine(dab, x,y ,pi1.pos().x(), pi1.pos().y(), painter()->paintColor());
-    //painter()->drawThickLine(QPointF(x, y), QPointF(pi1.pos().x(), pi1.pos().y()), 1, 1);
-
-    }
-
-    phase = 0.0;
-    for (float theta= phase; theta<360+phase; theta += 10 )
-    {
-    x = (int)(100.0*cos(theta*3.14/180.0)+pi2.pos().x());
-    y = (int)(-100.0*sin(theta*3.14/180.0)+pi2.pos().y());
-    //line.drawWuLine(dab, x, y, pi2.pos().x(), pi2.pos().y(), painter()->paintColor());
-    //line.drawDDAALine(dab, x, y, pi2.pos().x(), pi2.pos().y(), painter()->paintColor());
-    }
-
-    */
-//     dbgPlugins << "Start coords:";
-//
-//   dbgPlugins << pi1.pos().x();
-//     dbgPlugins << pi1.pos().y();
-//     dbgPlugins << "End coords:";
-//     dbgPlugins << pi2.pos().x();
-//     dbgPlugins << pi2.pos().y();
-//     dbgPlugins << "--------------";
-
 
     m_brush.paintLine(dab, pi1, pi2);
 
     QRect rc = dab->extent();
-//    qDebug() << rc;
+    //qDebug() << rc;
     painter()->bitBlt(rc.topLeft(), dab, rc);
-
-//     } newStroke
     //painter()->bltSelection(x, y, painter()->compositeOp(), dab, painter()->opacity(), x, y, 1, 1);
+    // who knows what should be here
     return 0;
 }

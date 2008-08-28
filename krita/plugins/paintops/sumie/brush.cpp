@@ -18,7 +18,6 @@
 
 #include "brush.h"
 #include "brush_shape.h"
-#include "lines.h"
 #include "gauss.h"
 #include "trajectory.h"
 
@@ -43,34 +42,47 @@ const float radToDeg = 57.29578;
 #define drand48 rand
 #endif
 
-Brush::Brush(const BrushShape &initialShape, KoColor inkColor)
+Brush::Brush(const BrushShape &initialShape,const KoColor &inkColor)
 {
-    m_initialShape = initialShape;
-    m_inkColor = inkColor;
-    m_counter = 0;
+    setBrushShape(initialShape);
+    setInkColor(inkColor);
+    initDefaultValues();
 }
 
 Brush::Brush()
 {
+    initDefaultValues();
+
+    //TODO clean up this code
+    BrushShape bs;
     m_radius = 20;
     m_sigma = 20.f;
+    //bs.fromGaussian( m_radius, m_sigma );
+    bs.fromLine(m_radius, m_sigma);
+    setBrushShape(bs);
+}
 
+void Brush::initDefaultValues()
+{
     m_counter = 0;
     m_lastAngle = 0.0;
     m_oldPressure = 0.0f;
 
-    BrushShape bs;
-    //bs.fromGaussian( m_radius, m_sigma );
-    bs.fromLine(m_radius, m_sigma);
+    m_useSaturation = false;
+    m_useOpacity = true;
+    m_useWeights = false;
 
-    setBrushShape(bs);
+    // equally set weights
+    m_bristleLengthWeight = 1.0/4.0;
+    m_bristleInkAmountWeight = 1.0/4.0;
+    m_pressureWeight = 1.0/4.0;
+    m_inkDepletionWeight = 1.0/4.0;
 }
 
 void Brush::setBrushShape(BrushShape brushShape)
 {
     m_initialShape = brushShape;
     //dbgPlugins << "radius in setBrushShape: " << brushShape.width()/2 << endl;
-
     m_bristles = brushShape.getBristles();
 }
 
@@ -100,100 +112,9 @@ void Brush::setInkDepletion(QList<float> *curveData)
 
 void Brush::paint(KisPaintDeviceSP dev, const KisPaintInformation &info)
 {
+    // TODO lets paint footprint of the brush here
     Q_UNUSED(dev)
     Q_UNUSED(info)
-    /*    m_counter++;
-
-    Bristle *bristle;
-    KoColor brColor;
-    int x = info.pos().x();
-    int y = info.pos().y();
-
-    qint32 pixelSize = m_dev->colorSpace()->pixelSize();
-    KisRandomAccessor accessor = m_dev->createRandomAccessor( x,y );
-
-    double inkDeplation;
-    if ( m_counter >= m_inkDepletion.size()-1 ){
-    inkDeplation = m_inkDepletion[m_inkDepletion.size() - 1];
-    }else{
-    inkDeplation = m_inkDepletion[m_counter];
-    }
-
-    QHash<QString, QVariant> params;
-    params["h"] = 0.0;
-    params["s"] = 0.0;
-    params["v"] = 0.0;
-    KoColorTransformation* transfo;
-
-    double pressure = 1.0f;//computeMousePressure(info);
-
-    BrushShape bs;
-    bs.fromLine(m_initialShape.radius()+(int)(pressure+0.5) , m_initialShape.sigma() );
-    setBrushShape(bs);
-
-    dbgPlugins << "pressure: " << (int)(pressure+0.5) << endl;
-    dbgPlugins << "pressure: " << pressure << endl;
-
-    //     dbgPlugins << m_counter ;
-
-    int dx, dy; // used for counting the coords of bristles relative to the center of the brush
-    bool rotate = true;
-
-    float angleDistance = m_lastAngle - info.angle();
-    float angleDec;
-
-    if (angleDistance < 0){
-    angleDec = +0.1;
-    } else
-    {
-    angleDec = -0.1;
-    }
-
-
-    */
-    /*
-     * MAIN LOOP *HIGHLY* careful
-     */
-    /*    while ( rotate )
-          {
-          for ( int i=0;i<m_bristles.size();i++ )
-          {
-    //             if (m_bristles[i].distanceCenter() > m_radius || drand48() <0.5){
-    //                 continue;
-    //             }
-    bristle = &m_bristles[i];
-    brColor = bristle->color();
-
-    // saturation
-    params["s"] = - ( 1.0 - ( info.pressure() * bristle->length() * bristle->inkAmount() ) );
-    transfo = m_dev->colorSpace()->createColorTransformation ( "hsv_adjustment", params );
-    transfo->transform ( m_inkColor.data(), brColor.data() , 1 );
-
-    // opacity
-    brColor.setOpacity ( static_cast<int> ( 255.0* pressure*bristle->length() * bristle->inkAmount() * ( 1.0 - inkDeplation ) ) );
-
-    dx = ( int ) ( x+bristle->x() );
-    dy = ( int ) ( y+bristle->y() );
-
-    accessor.moveTo ( dx,dy );
-    memcpy ( accessor.rawData(), brColor.data(), pixelSize );
-
-    bristle->setInkAmount ( 1.0 - inkDeplation - pressure );
-    //bristle->setColor(brColor);
-    }
-
-    */
-    return;
-    //TODO When the angle is wide, paint every bristle
-    /*if (m_lastAngle == info.angle() || safeCounter > 12)
-      rotate = false;
-      else
-      {
-      m_lastAngle = m_lastAngle + angleDec;
-      rotateBristles(m_lastAngle);
-      safeCounter++;
-      }*/
-//     }
 }
 
 
@@ -272,7 +193,6 @@ void Brush::paintLine(KisPaintDeviceSP dev, const KisPaintInformation &pi1, cons
         bristle = &m_bristles[i];
 
         double fx1, fy1, fx2, fy2;
-
         double rndFactor = m_randomFactor;
         double scaleFactor = m_scaleFactor;
         double shearFactor = m_shearFactor;
@@ -326,6 +246,7 @@ void Brush::paintLine(KisPaintDeviceSP dev, const KisPaintInformation &pi1, cons
         int brpathSize = bristlePath.size();
         int inkDepletionSize = m_inkDepletion.size();
 
+
         for (int i = 0;i < brpathSize ; i++) {
             bristleCounter = bristle->increment();
             if (bristleCounter >= inkDepletionSize - 1) {
@@ -334,31 +255,54 @@ void Brush::paintLine(KisPaintDeviceSP dev, const KisPaintInformation &pi1, cons
                 inkDeplation = m_inkDepletion[bristleCounter];
             }
 
-            // saturation XXX: make option
-            if (1) {
-                saturationVariant = (
+            // saturation transformation of the bristle ink color
+            if (m_useSaturation){
+                if (m_useWeights){
+
+                    // new weighted way (experiment)
+                    saturationVariant = ( 
+                        (pressure*m_pressureWeight)+
+                        (bristle->length()*m_bristleLengthWeight)+
+                        (bristle->inkAmount()*m_bristleInkAmountWeight)+
+                        ((1.0 - inkDeplation)*m_inkDepletionWeight))-1.0;
+                }else
+                {
+                    // old way of computing saturation
+                    saturationVariant = (
                                          pressure *
                                          bristle->length() *
                                          bristle->inkAmount() *
                                          (1.0 - inkDeplation)) - 1.0;
 
+                }
                 transfo->setParameter(saturation, saturationVariant);
+                transfo->transform(m_inkColor.data(), brColor.data() , 1);
             }
-            transfo->transform(m_inkColor.data(), brColor.data() , 1);
 
-            // opacity
-            double opacity =
-                255.0 *
-                pressure *
-                bristle->length() *
-                bristle->inkAmount() *
-                (1.0 - inkDeplation);
+            // opacity transformation of the bristle color
+            if (m_useOpacity){
+                double opacity = 255.0;
+                if (m_useWeights){
+                    opacity = (
+                        (pressure*m_pressureWeight)+
+                        (bristle->length()*m_bristleLengthWeight)+
+                        (bristle->inkAmount()*m_bristleInkAmountWeight)+
+                        ((1.0 - inkDeplation)*m_inkDepletionWeight))*255.0;
 
-            brColor.setOpacity(static_cast<int>(opacity));
-            //dbgPlugins << "opacity: "<< brColor.opacity();
+                }else{
+                    opacity =
+                        255.0 *
+                        pressure *
+                        bristle->length() *
+                        bristle->inkAmount() *
+                        (1.0 - inkDeplation);
+                }
+                //dbgPlugins << "opacity: "<< brColor.opacity();
+                brColor.setOpacity(static_cast<int>(opacity));
+            }
 
             QPointF *bristlePos = &bristlePath[i];
-//                 putBristle(bristle, bristlePos->x(), bristlePos->y(), brColor);
+            //putBristle(bristle, bristlePos->x(), bristlePos->y(), brColor);
             addBristleInk(bristle, bristlePos->x(), bristlePos->y(), brColor);
             bristle->setInkAmount(1.0 - inkDeplation);
         }
@@ -372,9 +316,7 @@ void Brush::paintLine(KisPaintDeviceSP dev, const KisPaintInformation &pi1, cons
 
     }
     rotateBristles(-(angle + 1.57));
-
-//         repositionBristles(angle,slope);
-
+    //repositionBristles(angle,slope);
     m_dev = 0;
     m_accessor = 0;
 }

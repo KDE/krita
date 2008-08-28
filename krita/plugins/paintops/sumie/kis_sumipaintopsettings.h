@@ -54,6 +54,15 @@ public:
     int inkAmount() const;
     bool mousePressure() const;
 
+    bool useSaturation() const;
+    bool useOpacity() const;
+    bool useWeights() const;
+
+    int pressureWeight() const;
+    int bristleLengthWeight() const;
+    int bristleInkAmountWeight() const;
+    int inkDepletionWeight() const;
+
     double shearFactor() const;
     double randomFactor() const;
     double scaleFactor() const;

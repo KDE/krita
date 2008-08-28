@@ -36,10 +36,9 @@ class Brush
 {
 
 public:
-    Brush(const BrushShape &initialShape, KoColor inkColor);
+    Brush(const BrushShape &initialShape,const KoColor &inkColor);
     Brush();
     ~Brush();
-    Brush(KoColor inkColor, BrushShape shape);
     void paint(KisPaintDeviceSP dev, const KisPaintInformation &info);
     void paintLine(KisPaintDeviceSP dev, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
     void setInkDepletion(QList<float> *curveData);
@@ -68,9 +67,35 @@ public:
         m_scaleFactor = scaleFactor;
     }
 
+    void enableWeights(bool useWeights){
+        m_useWeights = useWeights;
+    }
+    void enableSaturation(bool useSaturation){
+        m_useSaturation = useSaturation;
+    }
+    void enableOpacity(bool useOpacity){
+        m_useOpacity = useOpacity;
+    }
+
+
+    void setPressureWeight(double pressureWeight){
+        m_pressureWeight = pressureWeight;
+    }
+    void setBristleLengthWeight(double bristleLengthWeight){
+        m_bristleLengthWeight = bristleLengthWeight;
+    }
+    void setBristleInkAmountWeight(double bristleInkAmountWeight)
+    {
+        m_bristleInkAmountWeight = bristleInkAmountWeight;
+    }
+    void setInkDepletionWeight(double inkDepletionWeight){
+        m_inkDepletionWeight = inkDepletionWeight;
+    }
+
     /// paints single bristle
     void putBristle(Bristle *bristle, float wx, float wy, const KoColor &color);
     void addBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color);
+    void initDefaultValues();
 
 private:
     QVector<Bristle> m_bristles;
@@ -85,6 +110,7 @@ private:
     KisPaintDeviceSP m_dev;
     KisRandomAccessor * m_accessor;
     quint32 m_pixelSize;
+
 
     int m_counter;
 
@@ -103,6 +129,14 @@ private:
     double m_randomFactor;
     double m_shearFactor;
 
+    double m_pressureWeight;
+    double m_bristleLengthWeight;
+    double m_bristleInkAmountWeight;
+    double m_inkDepletionWeight;
+
+    bool m_useWeights;
+    bool m_useSaturation;
+    bool m_useOpacity;
 };
 
 #endif

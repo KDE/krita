@@ -17,7 +17,10 @@
  */
 
 #include "brush_shape.h"
+
 #include <QVector>
+#include <QImage>
+
 #include <cmath>
 #include "kis_debug.h"
 
@@ -84,8 +87,7 @@ void BrushShape::fromGaussian(int radius, float sigma)
 
 }
 
-void BrushShape::fromLine(int radius, float sigma)
-{
+void BrushShape::fromLine(int radius, float sigma){
     m_radius = radius;
     m_sigma = sigma;
 
@@ -115,6 +117,34 @@ void BrushShape::fromLine(int radius, float sigma)
         result = (m_bristles[x].length() - minLen) / dist;
         m_bristles[x].setLength(result);
     }
+}
+
+void BrushShape::fromBitMap(const char* fileName){
+    QImage image(fileName,0);
+    if ( image.isNull() ){
+        dbgPlugins << "Image not loaded!";
+        return;
+    }
+
+    m_radius = -1;
+    m_sigma = -1;
+
+    m_width = image.width();
+    m_height = image.height();
+
+    int x_radius = m_width/2;
+    int y_radius = m_height/2;
+
+    QColor pixelColor;
+    for (int x=-x_radius;x<x_radius;x++){
+        for (int y=-y_radius;y<y_radius;y++)
+        {
+            pixelColor.setRgba( image.pixel(x+x_radius,y+y_radius) );
+            Bristle b(x,y , (float)pixelColor.value()/255.0f); // using value from image as length of bristle
+            m_bristles.append(b);
+        }
+    }
+
 }
 
 QVector<Bristle> BrushShape::getBristles()

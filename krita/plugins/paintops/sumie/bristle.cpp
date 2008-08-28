@@ -67,7 +67,7 @@ void Bristle::setInkAmount(float inkAmount)
     m_inkAmount = inkAmount;
 }
 
-void Bristle::setColor(KoColor color)
+void Bristle::setColor(const KoColor &color)
 {
     m_color = color;
 }

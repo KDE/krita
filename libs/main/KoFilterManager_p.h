@@ -30,14 +30,14 @@ class K3ListBox;
 
 class KoFilterChooser : public KDialog
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-    KoFilterChooser (QWidget *parent, const QStringList &mimeTypes,
-                     const QString &nativeFormat = QString(), const KUrl &url = KUrl());
-    ~KoFilterChooser ();
+    KoFilterChooser(QWidget *parent, const QStringList &mimeTypes,
+                    const QString &nativeFormat = QString(), const KUrl &url = KUrl());
+    ~KoFilterChooser();
 
-    QString filterSelected ();
+    QString filterSelected();
 
 private:
     QStringList m_mimeTypes;

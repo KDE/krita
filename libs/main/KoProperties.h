@@ -32,7 +32,8 @@ class QDomElement;
  * A KoProperties is the (de-)serializable representation of
  * a key-value map. The serialisation format is XML.
  */
-class KOMAIN_EXPORT KoProperties {
+class KOMAIN_EXPORT KoProperties
+{
 public:
 
     /**
@@ -91,7 +92,7 @@ public:
      * @brief Create a serialized version of these properties (as XML) with root as the root element.
      * @param root as the root element in the generated XML.
      */
-    QString store( const QString & root );
+    QString store(const QString & root);
 
     void save(QDomElement &root) const;
 
@@ -167,14 +168,14 @@ public:
      * Returns true if the specified key is present in this properties
      * object.
      */
-    bool contains( const QString & key ) const;
+    bool contains(const QString & key) const;
 
     /**
      * Returns the value assocatied with the specified key if this
      * properties object contains the specified key; otherwise return
      * an empty QVariant.
      */
-    QVariant value( const QString & key ) const;
+    QVariant value(const QString & key) const;
 
     bool operator==(const KoProperties &other) const;
 

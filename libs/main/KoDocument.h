@@ -74,15 +74,14 @@ class KOMAIN_EXPORT KoDocument : public KParts::ReadWritePart
 {
     Q_OBJECT
 //     Q_PROPERTY( QByteArray dcopObjectId READ dcopObjectId)
-    Q_PROPERTY( bool backupFile READ backupFile WRITE setBackupFile )
+    Q_PROPERTY(bool backupFile READ backupFile WRITE setBackupFile)
 
 public:
     // context passed on saving to saveOdf
     struct SavingContext {
-        SavingContext( KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & embeddedSaver )
-        : odfStore( odfStore )
-        , embeddedSaver( embeddedSaver )
-        {}
+        SavingContext(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & embeddedSaver)
+                : odfStore(odfStore)
+                , embeddedSaver(embeddedSaver) {}
 
         KoOdfWriteStore & odfStore;
         KoEmbeddedDocumentSaver & embeddedSaver;
@@ -102,9 +101,9 @@ public:
      *        (KoViewWrapperWidget) which is a child of @p parentWidget.
      *        This widget can be retrieved by calling widget().
      */
-    KoDocument( QWidget* parentWidget,
-                QObject* parent,
-                bool singleViewMode = false );
+    KoDocument(QWidget* parentWidget,
+               QObject* parent,
+               bool singleViewMode = false);
 
     /**
      *  Destructor.
@@ -140,7 +139,7 @@ public:
      * @see KXMLGUIClient::actionCollection
      * @see KoView::action
      */
-    virtual QAction *action( const QDomElement &element ) const;
+    virtual QAction *action(const QDomElement &element) const;
 
     /**
      * Returns the DOM document which describes the GUI of the
@@ -151,13 +150,13 @@ public:
     /**
      * @internal
      */
-    virtual void setManager( KParts::PartManager *manager );
+    virtual void setManager(KParts::PartManager *manager);
 
     /**
      * Reimplemented from KParts::ReadWritePart for internal reasons
      * (for the autosave functionality)
      */
-    virtual bool openUrl( const KUrl & url );
+    virtual bool openUrl(const KUrl & url);
 
     /**
      * Opens the document given by @p url, without storing the URL
@@ -169,7 +168,7 @@ public:
      *       Open operation (in any reimplementation of openUrl() or openFile())
      *       call isImporting().
      */
-    bool importDocument( const KUrl &url );
+    bool importDocument(const KUrl &url);
 
     /**
      * Saves the document as @p url without changing the state of the
@@ -181,7 +180,7 @@ public:
      *       from an ordinary Save operation (in any reimplementation of
      *       saveFile()) call isExporting().
      */
-    bool exportDocument( const KUrl &url );
+    bool exportDocument(const KUrl &url);
 
     /**
      * @brief Sets whether the document can be edited or is read only.
@@ -190,7 +189,7 @@ public:
      * KoView::updateReadWrite is called for every attached
      * view.
      */
-    virtual void setReadWrite( bool readwrite = true );
+    virtual void setReadWrite(bool readwrite = true);
 
     /**
      * @brief Used by KoApplication, and by KoMainWindow, when no document exists yet.
@@ -202,7 +201,7 @@ public:
      * @see KService
      * @see KDesktopFile
      */
-    static QByteArray readNativeFormatMimeType( const KComponentData &instance = KComponentData() );
+    static QByteArray readNativeFormatMimeType(const KComponentData &instance = KComponentData());
 
     /**
      * Used by KoMainWindow, when no document exists yet.
@@ -214,14 +213,14 @@ public:
      * @see KService
      * @see KDesktopFile
      */
-    static QStringList readExtraNativeMimeTypes( const KComponentData &instance = KComponentData() );
+    static QStringList readExtraNativeMimeTypes(const KComponentData &instance = KComponentData());
 
     /**
      * With the help of @p instance or KApplication::componentData() this
      * method figures out which .desktop file matches this application,
      * and returns the KService instance for it.
      */
-    static KService::Ptr readNativeService( const KComponentData &instance = KComponentData() );
+    static KService::Ptr readNativeService(const KComponentData &instance = KComponentData());
 
     /**
      * To be preferred when a document exists. It is fast when calling
@@ -239,7 +238,7 @@ public:
     QByteArray nativeOasisMimeType() const;
 
     /// Checks whether a given mimetype can be handled natively.
-    bool isNativeFormat( const QByteArray& mimetype ) const;
+    bool isNativeFormat(const QByteArray& mimetype) const;
 
     /// Returns a list of the mimetypes considered "native", i.e. which can
     /// be saved by KoDocument without a filter, in *addition* to the main one
@@ -247,11 +246,11 @@ public:
 
     /// Enum values used by specialOutputFlag - note that it's a bitfield for supportedSpecialFormats
     enum { /*SaveAsKOffice1dot1 = 1,*/ // old and removed
-           SaveAsDirectoryStore = 2,
-           SaveAsFlatXML = 4,
-           SaveEncrypted = 8
-           // bitfield! next value is 16
-         };
+        SaveAsDirectoryStore = 2,
+        SaveAsFlatXML = 4,
+        SaveEncrypted = 8
+                        // bitfield! next value is 16
+    };
 
     /**
      * Return the set of SupportedSpecialFormats that the application wants to
@@ -270,7 +269,7 @@ public:
      * When choosing "save as" this is also the mime type
      * selected by default.
      */
-    void setMimeType( const QByteArray & mimeType );
+    void setMimeType(const QByteArray & mimeType);
 
     /**
      * @brief Set the format in which the document should be saved.
@@ -281,7 +280,7 @@ public:
      * @param mimeType the mime type (format) to use.
      * @param specialOutputFlag is for "save as older version" etc.
      */
-    void setOutputMimeType( const QByteArray & mimeType, int specialOutputFlag = 0 );
+    void setOutputMimeType(const QByteArray & mimeType, int specialOutputFlag = 0);
     QByteArray outputMimeType() const;
     int specialOutputFlag() const;
 
@@ -298,8 +297,8 @@ public:
      * @param exporting specifies whether this is the setting for a
      * File --> Export or File --> Save/Save As operation.
      */
-    bool confirmNonNativeSave( const bool exporting ) const;
-    void setConfirmNonNativeSave( const bool exporting, const bool on );
+    bool confirmNonNativeSave(const bool exporting) const;
+    void setConfirmNonNativeSave(const bool exporting, const bool on);
 
     virtual bool wantExportConfirmation() const;
 
@@ -309,7 +308,7 @@ public:
      * If you asked the user about something and he chose "Cancel",
      * set the message to the magic string "USER_CANCELED", to skip the error dialog.
      */
-    void setErrorMessage( const QString& errMsg );
+    void setErrorMessage(const QString& errMsg);
 
     /**
      * Return the last error message. Usually KoDocument takes care of
@@ -335,7 +334,7 @@ public:
     /**
      *  Create a new view for the document.
      */
-    KoView *createView( QWidget *parent = 0 );
+    KoView *createView(QWidget *parent = 0);
 
     /**
      * Adds a view to the document.
@@ -343,12 +342,12 @@ public:
      * This calls KoView::updateReadWrite to tell the new view
      * whether the document is readonly or not.
      */
-    virtual void addView( KoView *view );
+    virtual void addView(KoView *view);
 
     /**
      * Removes a view of the document.
      */
-    virtual void removeView( KoView *view );
+    virtual void removeView(KoView *view);
 
     /**
      * @return a list of views this document is displayed in
@@ -363,7 +362,7 @@ public:
     /**
      * Reimplemented from KParts::Part
      */
-    virtual KParts::Part *hitTest( QWidget *widget, const QPoint &globalPos );
+    virtual KParts::Part *hitTest(QWidget *widget, const QPoint &globalPos);
 
     /**
      *  Find the most nested child document which contains the
@@ -382,7 +381,7 @@ public:
      *
      *  @return Pointer to the document under the mouse at that position
      */
-    virtual KoDocument *hitTest( const QPoint &pos, KoView* view, const QMatrix& matrix = QMatrix() );
+    virtual KoDocument *hitTest(const QPoint &pos, KoView* view, const QMatrix& matrix = QMatrix());
 
     /**
      *  Paints the whole document into the given painter object.
@@ -391,13 +390,13 @@ public:
      *  @param rect        The rect that should be used in the painter object.
      *  @param view        The KoView is needed to fiddle about with the active widget, when painting children.
      */
-    virtual void paintEverything( QPainter &painter, const QRect &rect, KoView *view = 0);
+    virtual void paintEverything(QPainter &painter, const QRect &rect, KoView *view = 0);
 
     /**
      * @brief Generates a preview picture of the document
      * @note The preview is used in the File Dialog and also to create the Thumbnail
      */
-    virtual QPixmap generatePreview( const QSize& size );
+    virtual QPixmap generatePreview(const QSize& size);
 
     /**
      *  Paints all of the documents children into the given painter object.
@@ -408,7 +407,7 @@ public:
      *
      *  @see #paintChild #paintEverything #paintContent
      */
-    virtual void paintChildren( QPainter &painter, const QRect &rect, KoView *view);
+    virtual void paintChildren(QPainter &painter, const QRect &rect, KoView *view);
 
     /**
      *  Paint a given child. Normally called by paintChildren().
@@ -419,7 +418,7 @@ public:
      *
      *  @see #paintEverything #paintChildren #paintContent
      */
-    virtual void paintChild( KoDocumentChild *child, QPainter &painter, KoView *view);
+    virtual void paintChild(KoDocumentChild *child, QPainter &painter, KoView *view);
 
     /**
      *  Paints the data itself. Normally called by paintEverything(). It does not
@@ -431,7 +430,7 @@ public:
      *
      *  @see #paintEverything
      */
-    virtual void paintContent( QPainter &painter, const QRect &rect) = 0;
+    virtual void paintContent(QPainter &painter, const QRect &rect) = 0;
 
     /**
      * Called by koApplication to check for an autosave file in $HOME
@@ -455,7 +454,9 @@ public:
     /**
      *  @return true if the document is empty.
      */
-    virtual bool isEmpty() const { return m_bEmpty; }
+    virtual bool isEmpty() const {
+        return m_bEmpty;
+    }
 
     /**
      *  @brief Sets the document to empty.
@@ -465,7 +466,9 @@ public:
      *
      *  @see isEmpty()
      */
-    virtual void setEmpty() { m_bEmpty = true; }
+    virtual void setEmpty() {
+        m_bEmpty = true;
+    }
 
     /**
      *  @brief Loads a document from a store.
@@ -475,20 +478,20 @@ public:
      *  @param store The store to load from
      *  @param url An internal url, like tar:/1/2
      */
-    virtual bool loadFromStore( KoStore* store, const QString& url );
+    virtual bool loadFromStore(KoStore* store, const QString& url);
 
     /**
      *  @brief Loads an OASIS document from a store.
      *  This is used for both the main document and embedded objects.
      */
-    virtual bool loadOasisFromStore( KoStore* store );
+    virtual bool loadOasisFromStore(KoStore* store);
 
     /**
      *  @brief Saves a document to a store.
      *
      *  You should not have to reimplement this - but call it in saveChildren().
      */
-    virtual bool saveToStore( KoStore* store, const QString& path );
+    virtual bool saveToStore(KoStore* store, const QString& path);
 
     /**
      *  Reimplement this method to load the contents of your %KOffice document,
@@ -498,7 +501,7 @@ public:
      *  for the cases where some pre-processing is needed, like kpresenter's kprconverter.
      *  Note that the QIODevice could be 0L, when called from an import filter.
      */
-    virtual bool loadXML( QIODevice *, const KoXmlDocument & doc ) = 0;
+    virtual bool loadXML(QIODevice *, const KoXmlDocument & doc) = 0;
 
     /**
      *  Reimplement this method to load the contents of your %KOffice document,
@@ -506,13 +509,13 @@ public:
      *  you can find them in the odfStore.styles(). The store can be used
      *  to load images and embedded documents.
      */
-    virtual bool loadOdf( KoOdfReadStore & odfStore ) = 0;
+    virtual bool loadOdf(KoOdfReadStore & odfStore) = 0;
 
     /**
      *  Reimplement this method to save the contents of your %KOffice document,
      *  using the ODF format.
      */
-    virtual bool saveOdf( SavingContext & documentContext ) = 0;
+    virtual bool saveOdf(SavingContext & documentContext) = 0;
 
     /**
      *  Reimplement this to save the contents of the %KOffice document into
@@ -527,7 +530,7 @@ public:
      *  @param version the DTD version (usually the application's version).
      *  @deprecated use KoOdfWriteStore::createOasisXmlWriter instead
      */
-    KDE_DEPRECATED QDomDocument createDomDocument( const QString& tagName, const QString& version ) const;
+    KDE_DEPRECATED QDomDocument createDomDocument(const QString& tagName, const QString& version) const;
 
     /**
      *  Return a correctly created QDomDocument for an old (1.3-style) %KOffice document,
@@ -537,7 +540,7 @@ public:
      *  @param tagName the name of the tag for the root element, e.g. DOC for kword/kpresenter.
      *  @param version the DTD version (usually the application's version).
      */
-    static QDomDocument createDomDocument( const QString& appName, const QString& tagName, const QString& version );
+    static QDomDocument createDomDocument(const QString& appName, const QString& tagName, const QString& version);
 
     /**
      *  The first thing to do in loadOasis is get hold of the office:body tag, then its child.
@@ -545,14 +548,14 @@ public:
      *  This method returns a translated name for the type of document,
      *  e.g. i18n("Word Processing") for office:text.
      */
-    static QString tagNameToDocumentType( const QString& localName );
+    static QString tagNameToDocumentType(const QString& localName);
 
     /**
      *  Save the document. The default implementation is to call
      *  saveXML(). This method exists only for applications that
      *  don't use QDomDocument for saving, i.e. kword and kpresenter.
      */
-    virtual bool saveToStream( QIODevice * dev );
+    virtual bool saveToStream(QIODevice * dev);
 
     /**
      *  Loads a document in the native format from a given URL.
@@ -560,20 +563,20 @@ public:
      *
      *  @param file the file to load - usually KReadOnlyPart::m_file or the result of a filter
      */
-    virtual bool loadNativeFormat( const QString & file );
+    virtual bool loadNativeFormat(const QString & file);
 
     /**
      *  Saves the document in native format, to a given file
      *  You should never have to reimplement.
      *  Made public for writing templates.
      */
-    virtual bool saveNativeFormat( const QString & file );
+    virtual bool saveNativeFormat(const QString & file);
 
     /**
      * Activate/deactivate/configure the autosave feature.
      * @param delay in seconds, 0 to disable
      */
-    void setAutoSave( int delay );
+    void setAutoSave(int delay);
 
     /**
      * Checks whether the document is currently in the process of autosaving
@@ -585,14 +588,14 @@ public:
      * and offer to open it. This is usually true, but can be turned off
      * (e.g. for the preview module).
      */
-    void setCheckAutoSaveFile( bool b );
+    void setCheckAutoSaveFile(bool b);
 
     /**
      * Set whether the next openUrl call should show error message boxes in case
      * of errors. This is usually the case, but e.g. not when generating thumbnail
      * previews.
      */
-    void setAutoErrorHandlingEnabled( bool b );
+    void setAutoErrorHandlingEnabled(bool b);
 
     /**
      * Checks whether error message boxes should be shown.
@@ -603,7 +606,9 @@ public:
      * Retrieve the default value for autosave in seconds.
      * Called by the applications to use the correct default in their config
      */
-    static int defaultAutoSave() { return s_defaultAutoSave; }
+    static int defaultAutoSave() {
+        return s_defaultAutoSave;
+    }
 
     /**
      * @return the list of all children. Do not modify the
@@ -618,7 +623,7 @@ public:
      * This is a convenience function. You could get the same result
      * by traversing the list returned by children().
      */
-    KoDocumentChild *child( KoDocument *doc );
+    KoDocumentChild *child(KoDocument *doc);
 
     /**
      * @return the information concerning this document.
@@ -626,8 +631,8 @@ public:
      */
     KoDocumentInfo *documentInfo() const;
 
-    void setViewBuildDocument( KoView *view, const QDomDocument &doc );
-    QDomDocument viewBuildDocument( KoView *view );
+    void setViewBuildDocument(KoView *view, const QDomDocument &doc);
+    QDomDocument viewBuildDocument(KoView *view);
 
     /**
      * Appends the shell to the list of shells which show this
@@ -636,13 +641,13 @@ public:
      * This method is automatically called from KoMainWindow::setRootDocument,
      * so you do not need to call it.
      */
-    virtual void addShell( KoMainWindow *shell );
+    virtual void addShell(KoMainWindow *shell);
 
     /**
      * Removes the shell from the list. That happens automatically if the shell changes its
      * root document. Usually you do not need to call this method.
      */
-    virtual void removeShell( KoMainWindow *shell );
+    virtual void removeShell(KoMainWindow *shell);
 
     /**
      * @return the list of shells for the main window
@@ -657,7 +662,9 @@ public:
     /**
      * @return the list of all the currently opened documents
      */
-    static Q3PtrList<KoDocument> *documentList() { return s_documentList; }
+    static Q3PtrList<KoDocument> *documentList() {
+        return s_documentList;
+    }
 
     /**
      * @brief Return a DCOP interface for this document
@@ -675,7 +682,9 @@ public:
     /**
      * Signal the progress of operations such as loading or saving.
      */
-    void emitProgress( int value ) { emit sigProgress( value ); }
+    void emitProgress(int value) {
+        emit sigProgress(value);
+    }
 
     bool isInOperation() const;
     virtual void emitBeginOperation();
@@ -700,7 +709,7 @@ public:
      */
     void removeAutoSaveFiles();
 
-    void setBackupFile( bool _b );
+    void setBackupFile(bool _b);
 
     bool backupFile()const;
 
@@ -730,12 +739,12 @@ public:
      *      doc->saveExternalChildren();
      * @endcode
      */
-    void setDoNotSaveExtDoc( bool on = true );
+    void setDoNotSaveExtDoc(bool on = true);
 
     /**
      * Sets the backup path of the document
      */
-    void setBackupPath( const QString & _path );
+    void setBackupPath(const QString & _path);
 
     /**
      * @return path to the backup document
@@ -747,15 +756,15 @@ public:
      * and thus should control the title caption.
      * Also resets current flag for all parents.
      */
-    void setCurrent( bool on = true );
+    void setCurrent(bool on = true);
 
     /**
      * Sets current flag for this document and all its parents
      */
-    void forceCurrent( bool on );
+    void forceCurrent(bool on);
     bool isCurrent() const;
 
-    void setTitleModified( const QString &caption, bool mod );
+    void setTitleModified(const QString &caption, bool mod);
 
     /**
      * Sets the document URL to empty URL
@@ -763,12 +772,14 @@ public:
      * After using loadNativeFormat on a template, one wants
      * to set the url to KUrl()
      */
-    void resetURL() { setUrl(KUrl()); setLocalFilePath(QString()); }
+    void resetURL() {
+        setUrl(KUrl()); setLocalFilePath(QString());
+    }
 
     /**
      * Set when you want an external embedded document to be stored internally
      */
-    void setStoreInternal( bool i );
+    void setStoreInternal(bool i);
 
     /**
      * @return true when external embedded documents are stored internally
@@ -780,12 +791,14 @@ public:
     /**
      * @internal (public for KoMainWindow)
      */
-    void setMimeTypeAfterLoading( const QString& mimeType );
+    void setMimeTypeAfterLoading(const QString& mimeType);
 
     /**
      * @return returns the number of pages in the document.
      */
-    virtual int pageCount() const { return 1; }
+    virtual int pageCount() const {
+        return 1;
+    }
 
     /**
      * Returns the unit used to display all measures/distances.
@@ -795,7 +808,7 @@ public:
     /**
      * Sets the unit used to display all measures/distances.
      */
-    void setUnit( KoUnit u );
+    void setUnit(KoUnit u);
 
     /**
      * Returns the name of the unit used to display all measures/distances.
@@ -824,18 +837,22 @@ public:
 
     QList<KoVersionInfo> &versionList();
 
-    bool loadNativeFormatFromStore( QByteArray &data );
+    bool loadNativeFormatFromStore(QByteArray &data);
 
     /**
     Adds a new version and then saves the whole document.
     * @param comment the comment for the version
     * @return true on success, otherwise false
     */
-    bool addVersion( const QString& comment );
+    bool addVersion(const QString& comment);
 
-    KoGridData &gridData() {return m_gridData;}
+    KoGridData &gridData() {
+        return m_gridData;
+    }
 
-    KoGuidesData &guidesData() {return m_guidesData;}
+    KoGuidesData &guidesData() {
+        return m_guidesData;
+    }
 
     using ReadWritePart::setUrl;
     using ReadWritePart::localFilePath;
@@ -857,7 +874,7 @@ public slots:
      * Begins recording of a macro command. At the end endMacro needs to be called.
      * @param text command description
      */
-    virtual void beginMacro( const QString & text );
+    virtual void beginMacro(const QString & text);
 
     /**
      * Ends the recording of a macro command.
@@ -868,7 +885,7 @@ public slots:
      *  Sets the modified flag on the document. This means that it has
      *  to be saved or not before deleting it.
      */
-    virtual void setModified( bool _mod );
+    virtual void setModified(bool _mod);
 
     /**
      * Called by the undo stack when the document is saved or all changes has been undone
@@ -893,20 +910,20 @@ signals:
      * usually just want to redraw this child. In this case you can ignore the parameter
      * passed by the signal.
      */
-    void childChanged( KoDocumentChild *child );
+    void childChanged(KoDocumentChild *child);
 
     /**
      * Progress info while loading or saving. The value is in percents (i.e. a number between 0 and 100)
      * Your KoDocument-derived class should emit the signal now and then during load/save.
      * KoMainWindow will take care of displaying a progress bar automatically.
      */
-    void sigProgress( int value );
+    void sigProgress(int value);
 
     /**
      * Emitted e.g. at the beginning of a save operation
      * This is emitted by KoDocument and used by KoView to display a statusbar message
      */
-    void statusBarMessage( const QString& text );
+    void statusBarMessage(const QString& text);
 
     /**
      * Emitted e.g. at the end of a save operation
@@ -920,7 +937,7 @@ signals:
     /**
     * Emitted when the document is modified
     */
-    void modified( bool );
+    void modified(bool);
 
     void closeEmbedInitDialog();
 
@@ -929,12 +946,12 @@ protected slots:
      * This slot loads an existing file and deletes the start up widget.
      * @param url the file to load
      */
-    virtual void openExistingFile( const KUrl& url );
+    virtual void openExistingFile(const KUrl& url);
     /**
      * This slot loads a template and deletes the start up widget.
      * @param url the template to load
      */
-    virtual void openTemplate( const KUrl& url );
+    virtual void openTemplate(const KUrl& url);
 
     void deleteOpenPaneDelayed();
 
@@ -942,8 +959,7 @@ protected:
     /**
      * Struct used in the list created by createCustomDocumentWidgets()
      */
-    struct CustomDocumentWidgetItem
-    {
+    struct CustomDocumentWidgetItem {
         /// Pointer to the custom document widget
         QWidget* widget;
         /// title used in the sidebar. If left empty it will be displayed as "Custom Document"
@@ -957,9 +973,9 @@ protected:
     */
     QString newObjectName();
 
-    QString autoSaveFile( const QString & path ) const;
+    QString autoSaveFile(const QString & path) const;
 
-    virtual KoView *createViewInstance( QWidget *parent ) = 0;
+    virtual KoView *createViewInstance(QWidget *parent) = 0;
 
     /**
      *  Loads a document from KReadOnlyPart::m_file (KParts takes care of downloading
@@ -1012,14 +1028,14 @@ protected:
      *  return true;
      *  @endcode
      */
-    virtual bool loadChildren( KoStore* );
+    virtual bool loadChildren(KoStore*);
 
     /**
      *  Saves all internal children (only!).
      *  @see saveExternalChildren if you have external children.
      *  Returns true on success.
      */
-    virtual bool saveChildren( KoStore* store );
+    virtual bool saveChildren(KoStore* store);
 
     /**
      *  Saves all internal children (only!), to the store, using the OASIS format.
@@ -1027,14 +1043,14 @@ protected:
      *  @see saveExternalChildren if you have external children.
      *  Returns true on success.
      */
-    virtual bool saveChildrenOdf( SavingContext & documentContext );
+    virtual bool saveChildrenOdf(SavingContext & documentContext);
 
     /**
      *  Overload this function if you have to load additional files
      *  from a store. This function is called after loadXML()
      *  and after loadChildren() have been called.
      */
-    virtual bool completeLoading( KoStore* store );
+    virtual bool completeLoading(KoStore* store);
 
     /**
      *  If you want to write additional files to a store,
@@ -1046,7 +1062,7 @@ protected:
      *  But do this ONLY if the document is not stored extern (see isStoredExtern() ).
      *  If it is, then the pictures should be saved to tar:/pictures.
      */
-    virtual bool completeSaving( KoStore* store);
+    virtual bool completeSaving(KoStore* store);
 
     /**
      * Inserts the new child in the list of children and emits the
@@ -1059,10 +1075,12 @@ protected:
      *
      * @see #isModified
      */
-    virtual void insertChild( KoDocumentChild *child );
+    virtual void insertChild(KoDocumentChild *child);
 
     /** @internal */
-    virtual void setModified() { KParts::ReadWritePart::setModified(); }
+    virtual void setModified() {
+        KParts::ReadWritePart::setModified();
+    }
 
     KoPageLayout m_pageLayout;
 
@@ -1095,14 +1113,14 @@ protected:
      * @param instance the KComponentData to be used for KConfig data
      * @param templateType the template-type (group) that should be selected on creation.
      */
-    KoOpenPane* createOpenPane( QWidget* parent, const KComponentData &instance,
-                                const QString& templateType = QString());
+    KoOpenPane* createOpenPane(QWidget* parent, const KComponentData &instance,
+                               const QString& templateType = QString());
 
 private slots:
-    void slotChildChanged( KoChild *c );
+    void slotChildChanged(KoChild *c);
     void slotChildDestroyed();
     void slotAutoSave();
-    void slotStarted( KIO::Job* );
+    void slotStarted(KIO::Job*);
     void startCustomDocument();
     /**
      * Removes the open widget showed at application start up.
@@ -1110,15 +1128,17 @@ private slots:
     void deleteOpenPane();
 
 private:
-    virtual void insertChild(QObject *) { Q_ASSERT( 0 ); } // avoid compiler warning, but don't call deprecated insertChild() in QObject
+    virtual void insertChild(QObject *) {
+        Q_ASSERT(0);
+    } // avoid compiler warning, but don't call deprecated insertChild() in QObject
 
     KService::Ptr nativeService();
-    bool oldLoadAndParse( KoStore* store, const QString& filename, KoXmlDocument& doc );
-    bool loadNativeFormatFromStore( const QString& file );
-    bool loadNativeFormatFromStoreInternal( KoStore * store );
+    bool oldLoadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc);
+    bool loadNativeFormatFromStore(const QString& file);
+    bool loadNativeFormatFromStoreInternal(KoStore * store);
 
-    bool savePreview( KoStore* store );
-    bool saveOasisPreview( KoStore* store, KoXmlWriter* manifestWriter );
+    bool savePreview(KoStore* store);
+    bool saveOasisPreview(KoStore* store, KoXmlWriter* manifestWriter);
     class Private;
     Private * const d;
     KService::Ptr m_nativeService;

@@ -28,79 +28,77 @@
 class KoChild::KoChildPrivate
 {
 public:
-  KoChildPrivate()
-  {
-      m_contentsX = m_contentsY = 0;
-  }
-  ~KoChildPrivate()
-  {
-  }
+    KoChildPrivate() {
+        m_contentsX = m_contentsY = 0;
+    }
+    ~KoChildPrivate() {
+    }
 
-  QRect m_geometry;
+    QRect m_geometry;
 
-  qreal m_rotation;
-  qreal m_shearX;
-  qreal m_shearY;
-  QPoint m_rotationPoint;
-  qreal m_scaleX;
-  qreal m_scaleY;
-  QMatrix m_matrix;
-  bool m_lock;
-  QPolygon m_old;
-  int m_contentsX;
-  int m_contentsY;
+    qreal m_rotation;
+    qreal m_shearX;
+    qreal m_shearY;
+    QPoint m_rotationPoint;
+    qreal m_scaleX;
+    qreal m_scaleY;
+    QMatrix m_matrix;
+    bool m_lock;
+    QPolygon m_old;
+    int m_contentsX;
+    int m_contentsY;
 };
 
-KoChild::KoChild( QObject *parent, const char* /*name*/ )
-  : QObject( parent )
-  , d( new KoChildPrivate )
+KoChild::KoChild(QObject *parent, const char* /*name*/)
+        : QObject(parent)
+        , d(new KoChildPrivate)
 {
-  d->m_scaleX = d->m_scaleY = 1.0;
-  d->m_shearX = d->m_shearY = 0.0;
-  d->m_rotation = 0.0;
-  d->m_lock = false;
+    d->m_scaleX = d->m_scaleY = 1.0;
+    d->m_shearX = d->m_shearY = 0.0;
+    d->m_rotation = 0.0;
+    d->m_lock = false;
 
-  updateMatrix();
+    updateMatrix();
 }
 
 KoChild::~KoChild()
 {
-  delete d;
+    delete d;
 }
 
-void KoChild::setGeometry( const QRect &rect, bool noEmit )
+void KoChild::setGeometry(const QRect &rect, bool noEmit)
 {
-  if ( !d->m_lock )
-    d->m_old = framePointArray();
+    if (!d->m_lock)
+        d->m_old = framePointArray();
 
-  d->m_geometry = rect;
+    d->m_geometry = rect;
 
-  // Embedded objects should have a minimum size of 3, so they can be selected
-  if( d->m_geometry.width() < 3 )
-    d->m_geometry.setWidth( 3 );
+    // Embedded objects should have a minimum size of 3, so they can be selected
+    if (d->m_geometry.width() < 3)
+        d->m_geometry.setWidth(3);
 
-  if( d->m_geometry.height() < 3 )
-    d->m_geometry.setHeight( 3 );
+    if (d->m_geometry.height() < 3)
+        d->m_geometry.setHeight(3);
 
-  updateMatrix();
+    updateMatrix();
 
-  if ( !d->m_lock && !noEmit )
-    emit changed( this );
+    if (!d->m_lock && !noEmit)
+        emit changed(this);
 }
 
 QRect KoChild::geometry() const
 {
-  return d->m_geometry;
+    return d->m_geometry;
 }
 
-QRegion KoChild::region( const QMatrix &matrix ) const
+QRegion KoChild::region(const QMatrix &matrix) const
 {
-  return QRegion( pointArray( matrix ) );
+    return QRegion(pointArray(matrix));
 }
 
-QPolygon KoChild::pointArray( const QMatrix &matrix ) const
+QPolygon KoChild::pointArray(const QMatrix &matrix) const
 {
-  return pointArray( QRect( 0, 0, d->m_geometry.width(), d->m_geometry.height() ), matrix );
+    return pointArray(QRect(0, 0, d->m_geometry.width(), d->m_geometry.height()), matrix);
 }
 
 //bool KoChild::contains( const QPoint &point ) const
@@ -110,120 +108,120 @@ QPolygon KoChild::pointArray( const QMatrix &matrix ) const
 
 QRect KoChild::boundingRect() const
 {
-  return pointArray().boundingRect();
+    return pointArray().boundingRect();
 }
 
 bool KoChild::isRectangle() const
 {
-  return !( d->m_shearX != 0.0 || d->m_shearY != 0.0 || d->m_rotation != 0.0 );
+    return !(d->m_shearX != 0.0 || d->m_shearY != 0.0 || d->m_rotation != 0.0);
 }
 
-void KoChild::setClipRegion( QPainter &painter, bool combine )
+void KoChild::setClipRegion(QPainter &painter, bool combine)
 {
-  painter.setClipping( true );
-  if ( combine && !painter.clipRegion().isEmpty() )
-    painter.setClipRegion( region( painter.matrix() ).intersect( painter.clipRegion() ) );
-  else
-    painter.setClipRegion( region( painter.matrix() ) );
+    painter.setClipping(true);
+    if (combine && !painter.clipRegion().isEmpty())
+        painter.setClipRegion(region(painter.matrix()).intersect(painter.clipRegion()));
+    else
+        painter.setClipRegion(region(painter.matrix()));
 }
 
-void KoChild::setScaling( qreal x, qreal y )
+void KoChild::setScaling(qreal x, qreal y)
 {
-  if ( !d->m_lock )
-    d->m_old = framePointArray();
+    if (!d->m_lock)
+        d->m_old = framePointArray();
 
-  d->m_scaleX = x;
-  d->m_scaleY = y;
+    d->m_scaleX = x;
+    d->m_scaleY = y;
 
-  // why is that commented out? (Simon)
-  // This is commented out, because KoChild::transform() scales
-  // the world matrix explicitly and updateMatrix() doesn't even
-  // handle scaling (Werner)
-  //updateMatrix()
+    // why is that commented out? (Simon)
+    // This is commented out, because KoChild::transform() scales
+    // the world matrix explicitly and updateMatrix() doesn't even
+    // handle scaling (Werner)
+    //updateMatrix()
 
-  if ( !d->m_lock )
-    emit changed( this );
+    if (!d->m_lock)
+        emit changed(this);
 }
 
 qreal KoChild::xScaling() const
 {
-  return d->m_scaleX;
+    return d->m_scaleX;
 }
 
 qreal KoChild::yScaling() const
 {
-  return d->m_scaleY;
+    return d->m_scaleY;
 }
 
-void KoChild::setShearing( qreal x, qreal y )
+void KoChild::setShearing(qreal x, qreal y)
 {
-  if ( !d->m_lock )
-    d->m_old = framePointArray();
+    if (!d->m_lock)
+        d->m_old = framePointArray();
 
-  d->m_shearX = x;
-  d->m_shearY = y;
+    d->m_shearX = x;
+    d->m_shearY = y;
 
-  updateMatrix();
+    updateMatrix();
 
-  if ( !d->m_lock )
-    emit changed( this );
+    if (!d->m_lock)
+        emit changed(this);
 }
 
 qreal KoChild::xShearing() const
 {
-  return d->m_shearX;
+    return d->m_shearX;
 }
 
 qreal KoChild::yShearing() const
 {
-  return d->m_shearY;
+    return d->m_shearY;
 }
 
-void KoChild::setRotation( qreal rot )
+void KoChild::setRotation(qreal rot)
 {
-  if ( !d->m_lock )
-    d->m_old = framePointArray();
+    if (!d->m_lock)
+        d->m_old = framePointArray();
 
-  d->m_rotation = rot;
-  updateMatrix();
+    d->m_rotation = rot;
+    updateMatrix();
 
-  if ( !d->m_lock )
-    emit changed( this );
+    if (!d->m_lock)
+        emit changed(this);
 }
 
 qreal KoChild::rotation() const
 {
-  return d->m_rotation;
+    return d->m_rotation;
 }
 
-void KoChild::setRotationPoint( const QPoint &pos )
+void KoChild::setRotationPoint(const QPoint &pos)
 {
-  if ( !d->m_lock )
-    d->m_old = framePointArray();
+    if (!d->m_lock)
+        d->m_old = framePointArray();
 
-  d->m_rotationPoint = pos;
-  updateMatrix();
+    d->m_rotationPoint = pos;
+    updateMatrix();
 
-  if ( !d->m_lock )
-    emit changed( this );
+    if (!d->m_lock)
+        emit changed(this);
 }
 
 QPoint KoChild::rotationPoint() const
 {
-  return d->m_rotationPoint;
+    return d->m_rotationPoint;
 }
 
-void KoChild::transform( QPainter &painter )
+void KoChild::transform(QPainter &painter)
 {
-    setClipRegion( painter, true );
+    setClipRegion(painter, true);
 
     QMatrix m = painter.matrix();
     m = d->m_matrix * m;
-    m.scale( d->m_scaleX, d->m_scaleY );
-    painter.setMatrix( m );
+    m.scale(d->m_scaleX, d->m_scaleY);
+    painter.setMatrix(m);
 }
 
-void KoChild::setContentsPos( int x, int y )
+void KoChild::setContentsPos(int x, int y)
 {
     d->m_contentsX = x;
     d->m_contentsY = y;
@@ -231,125 +229,125 @@ void KoChild::setContentsPos( int x, int y )
 
 QRect KoChild::contentRect() const
 {
-  return QRect( d->m_contentsX, d->m_contentsY, int(d->m_geometry.width() / d->m_scaleX),
-                int(d->m_geometry.height() / d->m_scaleY) );
+    return QRect(d->m_contentsX, d->m_contentsY, int(d->m_geometry.width() / d->m_scaleX),
+                 int(d->m_geometry.height() / d->m_scaleY));
 }
 
-QPolygon KoChild::framePointArray( const QMatrix &matrix ) const
+QPolygon KoChild::framePointArray(const QMatrix &matrix) const
 {
-  return pointArray( QRect( -6, -6, d->m_geometry.width() + 12, d->m_geometry.height() + 12 ), matrix );
+    return pointArray(QRect(-6, -6, d->m_geometry.width() + 12, d->m_geometry.height() + 12), matrix);
 }
 
-QRegion KoChild::frameRegion( const QMatrix &matrix, bool solid ) const
+QRegion KoChild::frameRegion(const QMatrix &matrix, bool solid) const
 {
-  const QPolygon arr = framePointArray( matrix );
-  const QRegion frameReg( arr );
+    const QPolygon arr = framePointArray(matrix);
+    const QRegion frameReg(arr);
 
-  if ( solid )
-    return frameReg;
+    if (solid)
+        return frameReg;
 
-  const QRegion reg = region( matrix );
-  return frameReg.subtract( reg );
+    const QRegion reg = region(matrix);
+    return frameReg.subtract(reg);
 }
 
-QPolygon KoChild::pointArray( const QRect &r, const QMatrix &matrix ) const
+QPolygon KoChild::pointArray(const QRect &r, const QMatrix &matrix) const
 {
-  QPoint topleft = d->m_matrix.map( QPoint( r.left(), r.top() ) );
-  QPoint topright = d->m_matrix.map( QPoint( r.right(), r.top() ) );
-  QPoint bottomleft = d->m_matrix.map( QPoint( r.left(), r.bottom() ) );
-  QPoint bottomright = d->m_matrix.map( QPoint( r.right(), r.bottom() ) );
+    QPoint topleft = d->m_matrix.map(QPoint(r.left(), r.top()));
+    QPoint topright = d->m_matrix.map(QPoint(r.right(), r.top()));
+    QPoint bottomleft = d->m_matrix.map(QPoint(r.left(), r.bottom()));
+    QPoint bottomright = d->m_matrix.map(QPoint(r.right(), r.bottom()));
 
-  QPolygon arr( 4 );
-  arr.setPoint( 0, topleft );
-  arr.setPoint( 1, topright );
-  arr.setPoint( 2, bottomright );
-  arr.setPoint( 3, bottomleft );
+    QPolygon arr(4);
+    arr.setPoint(0, topleft);
+    arr.setPoint(1, topright);
+    arr.setPoint(2, bottomright);
+    arr.setPoint(3, bottomleft);
 
-  for( int i = 0; i < 4; ++i )
-      arr.setPoint( i, matrix.map( arr.point( i ) ) );
+    for (int i = 0; i < 4; ++i)
+        arr.setPoint(i, matrix.map(arr.point(i)));
 
-  return arr;
+    return arr;
 }
 
 void KoChild::updateMatrix()
 {
-  QMatrix r;
-  r.rotate( - d->m_rotation );
-  QPoint p = r.map( QPoint( d->m_rotationPoint.x(),
-			    d->m_rotationPoint.y() ) );
+    QMatrix r;
+    r.rotate(- d->m_rotation);
+    QPoint p = r.map(QPoint(d->m_rotationPoint.x(),
+                            d->m_rotationPoint.y()));
 
-  QMatrix m;
-  m.rotate( d->m_rotation );
-  m.translate( -d->m_rotationPoint.x() + d->m_geometry.x(), -d->m_rotationPoint.y() + d->m_geometry.y() );
-  m.translate( p.x(), p.y() );
-  m.shear( d->m_shearX, d->m_shearY );
+    QMatrix m;
+    m.rotate(d->m_rotation);
+    m.translate(-d->m_rotationPoint.x() + d->m_geometry.x(), -d->m_rotationPoint.y() + d->m_geometry.y());
+    m.translate(p.x(), p.y());
+    m.shear(d->m_shearX, d->m_shearY);
 
-  d->m_matrix = m;
+    d->m_matrix = m;
 }
 
 QMatrix KoChild::matrix() const
 {
-  return d->m_matrix;
+    return d->m_matrix;
 }
 
 void KoChild::lock()
 {
-  if ( d->m_lock )
-    return;
+    if (d->m_lock)
+        return;
 
-  d->m_old = framePointArray();
-  d->m_lock = true;
+    d->m_old = framePointArray();
+    d->m_lock = true;
 }
 
 void KoChild::unlock()
 {
-  if ( !d->m_lock )
-    return;
+    if (!d->m_lock)
+        return;
 
-  d->m_lock = false;
-  emit changed( this );
+    d->m_lock = false;
+    emit changed(this);
 }
 
 bool KoChild::locked() const
 {
-  return d->m_lock;
+    return d->m_lock;
 }
 
-QPolygon KoChild::oldPointArray( const QMatrix &matrix )
+QPolygon KoChild::oldPointArray(const QMatrix &matrix)
 {
-  QPolygon arr = d->m_old;
+    QPolygon arr = d->m_old;
 
-  for( int i = 0; i < 4; ++i )
-      arr.setPoint( i, matrix.map( arr.point( i ) ) );
+    for (int i = 0; i < 4; ++i)
+        arr.setPoint(i, matrix.map(arr.point(i)));
 
-  return arr;
+    return arr;
 }
 
-KoChild::Gadget KoChild::gadgetHitTest( const QPoint &p )
+KoChild::Gadget KoChild::gadgetHitTest(const QPoint &p)
 {
-  if ( !frameRegion().contains( p ) )
-    return NoGadget;
+    if (!frameRegion().contains(p))
+        return NoGadget;
 
-  if ( QRegion( pointArray( QRect( -5, -5, 5, 5 ) ) ).contains( p ) )
-      return TopLeft;
-  if ( QRegion( pointArray( QRect( d->m_geometry.width() / 2 - 3, -5, 5, 5 ) ) ).contains( p ) )
-      return TopMid;
-  if ( QRegion( pointArray( QRect( d->m_geometry.width(), -5, 5, 5 ) ) ).contains( p ) )
-      return TopRight;
-  if ( QRegion( pointArray( QRect( -5, d->m_geometry.height() / 2 - 3, 5, 5 ) ) ).contains( p ) )
-      return MidLeft;
-  if ( QRegion( pointArray( QRect( -5, d->m_geometry.height(), 5, 5 ) ) ).contains( p ) )
-      return BottomLeft;
-  if ( QRegion( pointArray( QRect( d->m_geometry.width() / 2 - 3,
-				   d->m_geometry.height(), 5, 5 ) ) ).contains( p ) )
-    return BottomMid;
-  if ( QRegion( pointArray( QRect( d->m_geometry.width(), d->m_geometry.height(), 5, 5 ) ) ).contains( p ) )
-      return BottomRight;
-  if ( QRegion( pointArray( QRect( d->m_geometry.width(),
-				   d->m_geometry.height() / 2 - 3, 5, 5 ) ) ).contains( p ) )
-    return MidRight;
+    if (QRegion(pointArray(QRect(-5, -5, 5, 5))).contains(p))
+        return TopLeft;
+    if (QRegion(pointArray(QRect(d->m_geometry.width() / 2 - 3, -5, 5, 5))).contains(p))
+        return TopMid;
+    if (QRegion(pointArray(QRect(d->m_geometry.width(), -5, 5, 5))).contains(p))
+        return TopRight;
+    if (QRegion(pointArray(QRect(-5, d->m_geometry.height() / 2 - 3, 5, 5))).contains(p))
+        return MidLeft;
+    if (QRegion(pointArray(QRect(-5, d->m_geometry.height(), 5, 5))).contains(p))
+        return BottomLeft;
+    if (QRegion(pointArray(QRect(d->m_geometry.width() / 2 - 3,
+                                 d->m_geometry.height(), 5, 5))).contains(p))
+        return BottomMid;
+    if (QRegion(pointArray(QRect(d->m_geometry.width(), d->m_geometry.height(), 5, 5))).contains(p))
+        return BottomRight;
+    if (QRegion(pointArray(QRect(d->m_geometry.width(),
+                                 d->m_geometry.height() / 2 - 3, 5, 5))).contains(p))
+        return MidRight;
 
-  return Move;
+    return Move;
 }
 
 #include <KoChild.moc>

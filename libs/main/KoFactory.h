@@ -25,14 +25,14 @@
 
 class KOMAIN_EXPORT KoFactory : public KParts::Factory
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  explicit KoFactory( QObject *parent = 0, const char *name = 0 );
-  virtual ~KoFactory();
+    explicit KoFactory(QObject *parent = 0, const char *name = 0);
+    virtual ~KoFactory();
 
 private:
-  class KoFactoryPrivate;
-  KoFactoryPrivate * const d;
+    class KoFactoryPrivate;
+    KoFactoryPrivate * const d;
 };
 
 #endif

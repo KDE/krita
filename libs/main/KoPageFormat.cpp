@@ -41,8 +41,7 @@
 #define PG_US_EXECUTIVE_WIDTH   191.0
 #define PG_US_EXECUTIVE_HEIGHT  254.0
 
-struct PageFormatInfo
-{
+struct PageFormatInfo {
     KoPageFormat::Format format;
     QPrinter::PageSize qprinter;
     const char* shortName; // Short name
@@ -56,8 +55,7 @@ struct PageFormatInfo
 // http://en.wikipedia.org/wiki/Paper_size can help
 // - the comments "should be..." indicates the exact values if the inch sizes would be multiplied by 25.4 mm/inch
 
-const PageFormatInfo pageFormatInfo[]=
-{
+const PageFormatInfo pageFormatInfo[] = {
     { KoPageFormat::IsoA3Size,       QPrinter::A3,        "A3",        I18N_NOOP("ISO A3"),       297.0,  420.0 },
     { KoPageFormat::IsoA4Size,       QPrinter::A4,        "A4",        I18N_NOOP("ISO A4"),       210.0,  297.0 },
     { KoPageFormat::IsoA5Size,       QPrinter::A5,        "A5",        I18N_NOOP("ISO A5"),       148.0,  210.0 },
@@ -87,60 +85,56 @@ const PageFormatInfo pageFormatInfo[]=
     { KoPageFormat::UsFolioSize,     QPrinter::Folio,     "Folio",     I18N_NOOP("US Folio"),     210.0,  330.0 }, // should be 209.54 mm x 330.2 mm
     { KoPageFormat::UsLedgerSize,    QPrinter::Ledger,    "Ledger",    I18N_NOOP("US Ledger"),    432.0,  279.0 }, // should be 431.8 mm x 297.4 mm
     { KoPageFormat::UsTabloidSize,   QPrinter::Tabloid,   "Tabloid",   I18N_NOOP("US Tabloid"),   279.0,  432.0 },  // should be 297.4 mm x 431.8 mm
-    { (KoPageFormat::Format) -1,  (QPrinter::PageSize) -1,   "",   "",   -1,  -1 }
+    {(KoPageFormat::Format) - 1, (QPrinter::PageSize) - 1,   "",   "",   -1,  -1 }
 };
 
-QPrinter::PageSize KoPageFormat::printerPageSize( KoPageFormat::Format format )
+QPrinter::PageSize KoPageFormat::printerPageSize(KoPageFormat::Format format)
 {
-    if ( format == ScreenSize )
-    {
+    if (format == ScreenSize) {
         kWarning() << "You use the page layout SCREEN. Printing in ISO A4 Landscape.";
         return QPrinter::A4;
     }
-    if ( format == CustomSize )
-    {
+    if (format == CustomSize) {
         kWarning() << "The used page layout (Custom) is not supported by KQPrinter. Printing in A4.";
         return QPrinter::A4;
     }
     return pageFormatInfo[ format ].qprinter;
 }
 
-qreal KoPageFormat::width( Format format, Orientation orientation )
+qreal KoPageFormat::width(Format format, Orientation orientation)
 {
-    if ( orientation == Landscape )
-        return height( format, Portrait );
+    if (orientation == Landscape)
+        return height(format, Portrait);
     return pageFormatInfo[ format ].width;
 }
 
-qreal KoPageFormat::height( Format format, Orientation orientation )
+qreal KoPageFormat::height(Format format, Orientation orientation)
 {
-    if ( orientation == Landscape )
-        return width( format, Portrait );
+    if (orientation == Landscape)
+        return width(format, Portrait);
     return pageFormatInfo[ format ].height;
 }
 
-KoPageFormat::Format KoPageFormat::guessFormat( qreal width, qreal height )
+KoPageFormat::Format KoPageFormat::guessFormat(qreal width, qreal height)
 {
-    for(int i=0; pageFormatInfo[i].format != -1 ;i++)
-    {
+    for (int i = 0; pageFormatInfo[i].format != -1 ;i++) {
         // We have some tolerance. 1pt is a third of a mm, this is
         // barely noticeable for a page size.
-        if ( qAbs( width - pageFormatInfo[i].width ) < 1.0 && qAbs( height - pageFormatInfo[i].height ) < 1.0 )
+        if (qAbs(width - pageFormatInfo[i].width) < 1.0 && qAbs(height - pageFormatInfo[i].height) < 1.0)
             return static_cast<Format>(i);
     }
     return CustomSize;
 }
 
-QString KoPageFormat::formatString( Format format )
+QString KoPageFormat::formatString(Format format)
 {
-    return QString::fromLatin1( pageFormatInfo[ format ].shortName );
+    return QString::fromLatin1(pageFormatInfo[ format ].shortName);
 }
 
-KoPageFormat::Format KoPageFormat::formatFromString( const QString & string )
+KoPageFormat::Format KoPageFormat::formatFromString(const QString & string)
 {
-    for(int i=0; pageFormatInfo[i].format != -1 ;i++)
-    {
-        if (string == QString::fromLatin1( pageFormatInfo[ i ].shortName ))
+    for (int i = 0; pageFormatInfo[i].format != -1 ;i++) {
+        if (string == QString::fromLatin1(pageFormatInfo[ i ].shortName))
             return pageFormatInfo[ i ].format;
     }
     // We do not know the format name, so we have a custom format
@@ -150,25 +144,23 @@ KoPageFormat::Format KoPageFormat::formatFromString( const QString & string )
 KoPageFormat::Format KoPageFormat::defaultFormat()
 {
     int qprinter = KGlobal::locale()->pageSize();
-    for(int i=0; pageFormatInfo[i].format != -1 ;i++)
-    {
-        if ( pageFormatInfo[ i ].qprinter == qprinter )
+    for (int i = 0; pageFormatInfo[i].format != -1 ;i++) {
+        if (pageFormatInfo[ i ].qprinter == qprinter)
             return static_cast<Format>(i);
     }
     return IsoA4Size;
 }
 
-QString KoPageFormat::name( Format format )
+QString KoPageFormat::name(Format format)
 {
-    return i18n( pageFormatInfo[ format ].descriptiveName );
+    return i18n(pageFormatInfo[ format ].descriptiveName);
 }
 
 QStringList KoPageFormat::allFormats()
 {
     QStringList lst;
-    for(int i=0; pageFormatInfo[i].format != -1 ;i++)
-    {
-        lst << i18n( pageFormatInfo[ i ].descriptiveName );
+    for (int i = 0; pageFormatInfo[i].format != -1 ;i++) {
+        lst << i18n(pageFormatInfo[ i ].descriptiveName);
     }
     return lst;
 }

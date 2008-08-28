@@ -30,7 +30,8 @@ class QEvent;
 class KoAction;
 
 /// private class that schedules the action worker stuff.
-class ActionJob : public ThreadWeaver::Job {
+class ActionJob : public ThreadWeaver::Job
+{
     Q_OBJECT
 public:
     enum Enable {
@@ -40,8 +41,12 @@ public:
     };
     ActionJob(KoAction *parent, Enable enable, const QVariant &params);
 
-    const KoAction *action() const { return m_action; }
-    bool started() const { return m_started; }
+    const KoAction *action() const {
+        return m_action;
+    }
+    bool started() const {
+        return m_started;
+    }
 
     void run();
 

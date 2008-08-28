@@ -26,40 +26,42 @@
 #include <QThread>
 #include <KDebug>
 
-class ActionJobEvent : public QEvent {
+class ActionJobEvent : public QEvent
+{
 public:
     ActionJobEvent() : QEvent(QEvent::User) {}
 };
 
 ActionJob::ActionJob(KoAction *parent, Enable enable, const QVariant &params)
-    : Job(0), // don't pass a parent since QObject refuses to work when you pass a parent thats in a different thread
-    m_action(parent),
-    m_enable(enable),
-    m_started(false),
-    m_params(params)
+        : Job(0), // don't pass a parent since QObject refuses to work when you pass a parent thats in a different thread
+        m_action(parent),
+        m_enable(enable),
+        m_started(false),
+        m_params(params)
 {
     connect(this, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(deleteLater()), Qt::DirectConnection);
     moveToThread(QCoreApplication::instance()->thread());
 }
 
-void ActionJob::run() {
+void ActionJob::run()
+{
     m_started = true;
-    if(m_action.isNull())
+    if (m_action.isNull())
         return;
     m_action->doAction(m_params);
-    if(m_action.isNull())
+    if (m_action.isNull())
         return;
-    switch(m_enable) {
-        case EnableOn:
-            m_action->setEnabled(true);
-            break;
-        case EnableOff:
-            m_action->setEnabled(false);
-            break;
-        case EnableNoChange:
-            break;
+    switch (m_enable) {
+    case EnableOn:
+        m_action->setEnabled(true);
+        break;
+    case EnableOff:
+        m_action->setEnabled(false);
+        break;
+    case EnableNoChange:
+        break;
     }
-    if(QThread::currentThread() == QCoreApplication::instance()->thread())
+    if (QThread::currentThread() == QCoreApplication::instance()->thread())
         m_action->doActionUi(m_params);
     else {
         // do it in the main thread.
@@ -70,10 +72,11 @@ void ActionJob::run() {
     }
 }
 
-bool ActionJob::event(QEvent *e) {
-    ActionJobEvent *event = dynamic_cast<ActionJobEvent*> (e);
-    if(event) {
-        if(! m_action.isNull())
+bool ActionJob::event(QEvent *e)
+{
+    ActionJobEvent *event = dynamic_cast<ActionJobEvent*>(e);
+    if (event) {
+        if (! m_action.isNull())
             m_action->doActionUi(m_params);
         m_mutex.lock(); // wait for the above to start waiting on us.
         m_waiter.wakeAll();

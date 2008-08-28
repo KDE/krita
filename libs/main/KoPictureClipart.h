@@ -95,7 +95,7 @@ protected:
      * Draw a QPicture
      */
     void drawQPicture(QPicture& clipart, QPainter& painter,
-        int x, int y, int width, int height, int sx, int sy, int sw, int sh);
+                      int x, int y, int width, int height, int sx, int sy, int sw, int sh);
 protected:
     QPicture m_clipart; ///< The clipart as QPicture
     QByteArray m_rawData; ///< Copy of the loaded image file

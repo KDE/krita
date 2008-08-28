@@ -32,24 +32,23 @@ class QDomElement;
 
 namespace KoPictureType
 {
-    /**
-     * QPicture version used by KoPictureClipart
-     *
-     * Possible values:
-     * \li 3 for Qt 2.1.x and later Qt 2.x
-     * \li 4 for Qt 3.0
-     * \li 5 for Qt 3.1 and later Qt 3.x
-     * \li -1 for current Qt
-     */
-    const int formatVersionQPicture=-1;
+/**
+ * QPicture version used by KoPictureClipart
+ *
+ * Possible values:
+ * \li 3 for Qt 2.1.x and later Qt 2.x
+ * \li 4 for Qt 3.0
+ * \li 5 for Qt 3.1 and later Qt 3.x
+ * \li -1 for current Qt
+ */
+const int formatVersionQPicture = -1;
 
-    enum Type
-    {
-        TypeUnknown = 0,    ///< Unknown or not-an-image @see KoPictureBase
-        TypeImage,          ///< Image, QImage-based @see KoPictureImage
-        TypeEps,            ///< Encapsulated Postscript @see KoPictureEps
-        TypeClipart        ///< Clipart, QPicture-based @see KoPictureClipart
-    };
+enum Type {
+    TypeUnknown = 0,    ///< Unknown or not-an-image @see KoPictureBase
+    TypeImage,          ///< Image, QImage-based @see KoPictureImage
+    TypeEps,            ///< Encapsulated Postscript @see KoPictureEps
+    TypeClipart        ///< Clipart, QPicture-based @see KoPictureClipart
+};
 }
 
 /**
@@ -65,7 +64,7 @@ namespace KoPictureType
  *
  * @note This behaviour is also needed for re-saving KWord files having \<FORMAT id="2"\>. When saving again,
  * these files get a \<KEY\> element as child of \<PIXMAPS\> but not one as child of \<FORMAT\> and \<IMAGE\>.
- * Therefore we need to be careful that the key remains compatible to default values 
+ * Therefore we need to be careful that the key remains compatible to default values
  * (another good reason for the *NIX epoch)
  *
  * @note In case of a remote path, the "original path" is the name of the temporary file that was
@@ -86,34 +85,34 @@ public:
      * to update the file and import it into the application again, without
      * the application reusing the old copy from the collection.
      */
-    KoPictureKey( const QString &fn, const QDateTime &mod );
+    KoPictureKey(const QString &fn, const QDateTime &mod);
 
     /**
-     * Constructs a key from a filename 
+     * Constructs a key from a filename
      * @note The modification date is set to 1970-01-01
      */
-    explicit KoPictureKey( const QString &fn );
+    explicit KoPictureKey(const QString &fn);
 
     /**
      * Copy constructor
      */
-    KoPictureKey( const KoPictureKey &key );
+    KoPictureKey(const KoPictureKey &key);
 
     /**
      * Assignment operator
      */
-    KoPictureKey &operator=( const KoPictureKey &key );
+    KoPictureKey &operator=(const KoPictureKey &key);
 
     /**
      * Comparison operator
      */
-    bool operator==( const KoPictureKey &key ) const;
+    bool operator==(const KoPictureKey &key) const;
 
     /**
-     * Comparison operator 
+     * Comparison operator
      * @note Used for sorting in the collection's map
      */
-    bool operator<( const KoPictureKey &key ) const;
+    bool operator<(const KoPictureKey &key) const;
 
     /**
      * Convert this key into a string representation of it
@@ -123,27 +122,31 @@ public:
     /**
      * Save this key in XML (as %KOffice 1.3)
      */
-    void saveAttributes( QDomElement &elem ) const;
+    void saveAttributes(QDomElement &elem) const;
 
     /**
      * Load this key from XML (as %KOffice 1.3)
      */
-    void loadAttributes( const QDomElement &elem );
+    void loadAttributes(const QDomElement &elem);
 
     /**
      * First part of the key: the filename
      */
-    QString filename() const { return m_filename; }
+    QString filename() const {
+        return m_filename;
+    }
 
     /**
      * Second part of the key: the modification date
      */
-    QDateTime lastModified() const { return m_lastModified; }
+    QDateTime lastModified() const {
+        return m_lastModified;
+    }
 
     /**
      * Sets the key according to @p filename, including modification time
      */
-    void setKeyFromFile (const QString& filename);
+    void setKeyFromFile(const QString& filename);
 
 protected:
     QString m_filename;

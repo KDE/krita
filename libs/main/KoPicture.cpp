@@ -38,7 +38,7 @@ uint KoPicture::uniqueValue = 0;
 
 KoPicture::KoPicture(void) : m_sharedData(NULL)
 {
-  m_uniqueName = "Pictures"+ QString::number(uniqueValue++);
+    m_uniqueName = "Pictures" + QString::number(uniqueValue++);
 }
 
 KoPicture::~KoPicture(void)
@@ -48,38 +48,38 @@ KoPicture::~KoPicture(void)
 
 QString KoPicture::uniqueName() const
 {
-  return m_uniqueName;
+    return m_uniqueName;
 }
 
 KoPicture::KoPicture(const KoPicture &other)
 {
-    m_sharedData=NULL;
-    (*this)=other;
+    m_sharedData = NULL;
+    (*this) = other;
 }
 
-void KoPicture::assignPictureId( uint _id)
+void KoPicture::assignPictureId(uint _id)
 {
-    if ( m_sharedData )
+    if (m_sharedData)
         m_sharedData->assignPictureId(_id);
 }
 
 QString KoPicture::uniquePictureId() const
 {
-    if ( m_sharedData )
+    if (m_sharedData)
         return m_sharedData->uniquePictureId();
     else
         return QString();
 }
 
-KoPicture& KoPicture::operator=( const KoPicture &other )
+KoPicture& KoPicture::operator=(const KoPicture & other)
 {
     //kDebug(30003) <<"KoPicture::= before";
     if (other.m_sharedData)
         other.linkSharedData();
     if (m_sharedData)
         unlinkSharedData();
-    m_sharedData=other.m_sharedData;
-    m_key=other.m_key;
+    m_sharedData = other.m_sharedData;
+    m_key = other.m_key;
     //kDebug(30003) <<"KoPicture::= after";
     return *this;
 }
@@ -89,7 +89,7 @@ void KoPicture::unlinkSharedData(void)
     if (m_sharedData && m_sharedData->deref())
         delete m_sharedData;
 
-    m_sharedData=NULL;
+    m_sharedData = NULL;
 }
 
 void KoPicture::linkSharedData(void) const
@@ -100,9 +100,8 @@ void KoPicture::linkSharedData(void) const
 
 void KoPicture::createSharedData(void)
 {
-    if (!m_sharedData)
-    {
-        m_sharedData=new KoPictureShared();
+    if (!m_sharedData) {
+        m_sharedData = new KoPictureShared();
         // Do not call m_sharedData->ref()
     }
 }
@@ -121,7 +120,7 @@ KoPictureKey KoPicture::getKey(void) const
 
 void KoPicture::setKey(const KoPictureKey& key)
 {
-    m_key=key;
+    m_key = key;
 }
 
 
@@ -136,22 +135,20 @@ void KoPicture::draw(QPainter& painter, int x, int y, int width, int height, int
 {
     if (m_sharedData)
         m_sharedData->draw(painter, x, y, width, height, sx, sy, sw, sh, fastMode);
-    else
-    {
+    else {
         // Draw a white box
         kWarning(30003) << "Drawing white rectangle! (KoPicture::draw)";
         painter.save();
         painter.setBrush(QColor(255, 255, 255));
-        painter.drawRect(x,y,width,height);
+        painter.drawRect(x, y, width, height);
         painter.restore();
     }
 }
 
 bool KoPicture::loadXpm(QIODevice* io)
 {
-    kDebug(30003) <<"KoPicture::loadXpm";
-    if (!io)
-    {
+    kDebug(30003) << "KoPicture::loadXpm";
+    if (!io) {
         kError(30003) << "No QIODevice!" << endl;
         return false;
     }
@@ -168,10 +165,10 @@ bool KoPicture::save(QIODevice* io) const
     return false;
 }
 
-bool KoPicture::saveAsBase64( KoXmlWriter& writer ) const
+bool KoPicture::saveAsBase64(KoXmlWriter& writer) const
 {
-    if ( m_sharedData )
-        return m_sharedData->saveAsBase64( writer );
+    if (m_sharedData)
+        return m_sharedData->saveAsBase64(writer);
     return false;
 }
 
@@ -202,30 +199,30 @@ QString KoPicture::getMimeType(void) const
 
 bool KoPicture::load(QIODevice* io, const QString& extension)
 {
-    kDebug(30003) <<"KoPicture::load(QIODevice*, const QString&)" << extension;
+    kDebug(30003) << "KoPicture::load(QIODevice*, const QString&)" << extension;
     createSharedData();
 
-    return m_sharedData->load(io,extension);
+    return m_sharedData->load(io, extension);
 }
 
 bool KoPicture::loadFromFile(const QString& fileName)
 {
-    kDebug(30003) <<"KoPicture::loadFromFile" << fileName;
+    kDebug(30003) << "KoPicture::loadFromFile" << fileName;
     createSharedData();
     return m_sharedData->loadFromFile(fileName);
 }
 
-bool KoPicture::loadFromBase64( const QByteArray& str )
+bool KoPicture::loadFromBase64(const QByteArray& str)
 {
     createSharedData();
-    return m_sharedData->loadFromBase64( str );
+    return m_sharedData->loadFromBase64(str);
 }
 
 QSize KoPicture::getOriginalSize(void) const
 {
     if (m_sharedData)
         return m_sharedData->getOriginalSize();
-    return QSize(0,0);
+    return QSize(0, 0);
 }
 
 QPixmap KoPicture::generatePixmap(const QSize& size, bool smoothScale)
@@ -237,39 +234,38 @@ QPixmap KoPicture::generatePixmap(const QSize& size, bool smoothScale)
 
 bool KoPicture::setKeyAndDownloadPicture(const KUrl& url, QWidget *window)
 {
-    bool result=false;
+    bool result = false;
 
     QString tmpFileName;
-    if ( KIO::NetAccess::download(url, tmpFileName, window) )
-    {
+    if (KIO::NetAccess::download(url, tmpFileName, window)) {
         KoPictureKey key;
-        key.setKeyFromFile( tmpFileName );
-        setKey( key );
-        result=loadFromFile( tmpFileName );
-        KIO::NetAccess::removeTempFile( tmpFileName );
+        key.setKeyFromFile(tmpFileName);
+        setKey(key);
+        result = loadFromFile(tmpFileName);
+        KIO::NetAccess::removeTempFile(tmpFileName);
     }
 
     return result;
 }
 
-Q3DragObject* KoPicture::dragObject( QWidget *dragSource, const char *name )
+Q3DragObject* KoPicture::dragObject(QWidget *dragSource, const char *name)
 {
     if (m_sharedData)
-        return m_sharedData->dragObject( dragSource, name );
+        return m_sharedData->dragObject(dragSource, name);
     return 0L;
 }
 
 QImage KoPicture::generateImage(const QSize& size)
 {
     if (m_sharedData)
-        return m_sharedData->generateImage( size );
+        return m_sharedData->generateImage(size);
     return QImage();
 }
 
 bool KoPicture::hasAlphaBuffer() const
 {
     if (m_sharedData)
-       return m_sharedData->hasAlphaBuffer();
+        return m_sharedData->hasAlphaBuffer();
     return false;
 }
 

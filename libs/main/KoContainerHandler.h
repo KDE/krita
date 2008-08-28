@@ -46,7 +46,7 @@ class KOMAIN_EXPORT KoEventHandler : public QObject
 {
     Q_OBJECT
 public:
-    explicit KoEventHandler( QObject* target );
+    explicit KoEventHandler(QObject* target);
     ~KoEventHandler();
 
     QObject* target();
@@ -63,13 +63,13 @@ class KoPartResizeHandler : public KoEventHandler
 {
     Q_OBJECT
 public:
-    KoPartResizeHandler( QWidget* widget, const QMatrix& matrix, KoView* view, KoChild* child,
-                       KoChild::Gadget gadget, const QPoint& point );
+    KoPartResizeHandler(QWidget* widget, const QMatrix& matrix, KoView* view, KoChild* child,
+                        KoChild::Gadget gadget, const QPoint& point);
     ~KoPartResizeHandler();
 
 protected:
     void repaint(QRegion &rgn);
-    bool eventFilter( QObject*, QEvent* );
+    bool eventFilter(QObject*, QEvent*);
 
 private:
     KoPartResizeHandlerPrivate * const d;
@@ -83,12 +83,12 @@ class KoPartMoveHandler : public KoEventHandler
 {
     Q_OBJECT
 public:
-    KoPartMoveHandler( QWidget* widget, const QMatrix& matrix, KoView* view, KoChild* child,
-                     const QPoint& point );
+    KoPartMoveHandler(QWidget* widget, const QMatrix& matrix, KoView* view, KoChild* child,
+                      const QPoint& point);
     ~KoPartMoveHandler();
 
 protected:
-    bool eventFilter( QObject*, QEvent* );
+    bool eventFilter(QObject*, QEvent*);
 
 private:
     KoPartMoveHandlerPrivate * const d;
@@ -112,7 +112,7 @@ class KOMAIN_EXPORT KoContainerHandler : public KoEventHandler
 {
     Q_OBJECT
 public:
-    KoContainerHandler( KoView* view, QWidget* widget );
+    KoContainerHandler(KoView* view, QWidget* widget);
     ~KoContainerHandler();
 
 Q_SIGNALS:
@@ -120,15 +120,15 @@ Q_SIGNALS:
      * Emitted if the user wants to open the popup menu for some
      * child object.
      */
-    void popupMenu( KoChild*, const QPoint& global_pos );
+    void popupMenu(KoChild*, const QPoint& global_pos);
 
     /**
       * Emitted if the user pressed the delete key whilst a child was selected
       */
-    void deleteChild( KoChild* );
+    void deleteChild(KoChild*);
 
 protected:
-    bool eventFilter( QObject*, QEvent* );
+    bool eventFilter(QObject*, QEvent*);
 
 private:
     /// This is a little helper function to get rid of some duplicated code

@@ -26,22 +26,35 @@
  * Generic command to set a property on an object.
  * This variant is for simple types, where the setter method takes a value.
  */
-template<class Property, class Object, void (Object::* Function) (Property)> class KoSetBasicPropCommand : public KNamedCommand {
+template < class Property, class Object, void (Object::* Function)(Property) > class KoSetBasicPropCommand : public KNamedCommand
+{
 
 public:
     KoSetBasicPropCommand(Object *object, const QString &name) : KNamedCommand(name), m_object(object) {}
     KoSetBasicPropCommand(Object *object, const QString &name,
-               const Property &oldProperty, const Property &newProperty) : KNamedCommand(name),
-        m_object(object), m_oldProperty(oldProperty), m_newProperty(newProperty) {}
+                          const Property &oldProperty, const Property &newProperty) : KNamedCommand(name),
+            m_object(object), m_oldProperty(oldProperty), m_newProperty(newProperty) {}
     virtual ~KoSetBasicPropCommand() {}
 
-    virtual void execute() { if(m_object) (m_object->*Function)(m_newProperty); }
-    virtual void unexecute() { if(m_object) (m_object->*Function)(m_oldProperty); }
+    virtual void execute() {
+        if (m_object)(m_object->*Function)(m_newProperty);
+    }
+    virtual void unexecute() {
+        if (m_object)(m_object->*Function)(m_oldProperty);
+    }
 
-    void setOldProperty(const Property &oldProperty) { m_oldProperty=oldProperty; }
-    const Property &oldProperty() const { return m_oldProperty; }
-    void setNewProperty(const Property &newProperty) { m_newProperty=newProperty; }
-    const Property &newProperty() const { return m_newProperty; }
+    void setOldProperty(const Property &oldProperty) {
+        m_oldProperty = oldProperty;
+    }
+    const Property &oldProperty() const {
+        return m_oldProperty;
+    }
+    void setNewProperty(const Property &newProperty) {
+        m_newProperty = newProperty;
+    }
+    const Property &newProperty() const {
+        return m_newProperty;
+    }
 
 private:
     // Don't copy or assign this stuff
@@ -56,22 +69,35 @@ private:
  * Generic command to set a property on an object.
  * This variant is for non-trivial types, where the setter method takes a const reference.
  */
-template<class Property, class Object, void (Object::* Function) (const Property &)> class KoSetPropCommand : public KNamedCommand {
+template < class Property, class Object, void (Object::* Function)(const Property &) > class KoSetPropCommand : public KNamedCommand
+{
 
 public:
     KoSetPropCommand(Object *object, const QString &name) : KNamedCommand(name), m_object(object) {}
     KoSetPropCommand(Object *object, const QString &name,
-               const Property &oldProperty, const Property &newProperty) : KNamedCommand(name),
-        m_object(object), m_oldProperty(oldProperty), m_newProperty(newProperty) {}
+                     const Property &oldProperty, const Property &newProperty) : KNamedCommand(name),
+            m_object(object), m_oldProperty(oldProperty), m_newProperty(newProperty) {}
     virtual ~KoSetPropCommand() {}
 
-    virtual void execute() { if(m_object) (m_object->*Function)(m_newProperty); }
-    virtual void unexecute() { if(m_object) (m_object->*Function)(m_oldProperty); }
+    virtual void execute() {
+        if (m_object)(m_object->*Function)(m_newProperty);
+    }
+    virtual void unexecute() {
+        if (m_object)(m_object->*Function)(m_oldProperty);
+    }
 
-    void setOldProperty(const Property &oldProperty) { m_oldProperty=oldProperty; }
-    const Property &oldProperty() const { return m_oldProperty; }
-    void setNewProperty(const Property &newProperty) { m_newProperty=newProperty; }
-    const Property &newProperty() const { return m_newProperty; }
+    void setOldProperty(const Property &oldProperty) {
+        m_oldProperty = oldProperty;
+    }
+    const Property &oldProperty() const {
+        return m_oldProperty;
+    }
+    void setNewProperty(const Property &newProperty) {
+        m_newProperty = newProperty;
+    }
+    const Property &newProperty() const {
+        return m_newProperty;
+    }
 
 private:
     // Don't copy or assign this stuff

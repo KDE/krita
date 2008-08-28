@@ -56,22 +56,22 @@ bool KoPictureClipart::isNull(void) const
 }
 
 void KoPictureClipart::drawQPicture(QPicture& clipart, QPainter& painter,
-    int x, int y, int width, int height, int sx, int sy, int sw, int sh)
+                                    int x, int y, int width, int height, int sx, int sy, int sw, int sh)
 {
-    kDebug(30003) <<"Drawing KoPictureClipart" << this;
-    kDebug(30003) <<"  x=" << x <<" y=" << y <<" width=" << width <<" height=" << height;
-    kDebug(30003) <<"  sx=" << sx <<" sy=" << sy <<" sw=" << sw <<" sh=" << sh;
+    kDebug(30003) << "Drawing KoPictureClipart" << this;
+    kDebug(30003) << "  x=" << x << " y=" << y << " width=" << width << " height=" << height;
+    kDebug(30003) << "  sx=" << sx << " sy=" << sy << " sw=" << sw << " sh=" << sh;
     painter.save();
     // Thanks to Harri, Qt3 makes it much easier than Qt2 ;)
     QRect br = clipart.boundingRect();
-    kDebug(30003) <<"  Bounding rect." << br;
+    kDebug(30003) << "  Bounding rect." << br;
 
-    painter.translate(x,y); // Translating must be done before scaling!
-    if ( br.width() && br.height() )
-        painter.scale(qreal(width)/qreal(br.width()),qreal(height)/qreal(br.height()));
+    painter.translate(x, y); // Translating must be done before scaling!
+    if (br.width() && br.height())
+        painter.scale(qreal(width) / qreal(br.width()), qreal(height) / qreal(br.height()));
     else
         kWarning(30003) << "Null bounding rectangle: " << br.width() << " x " << br.height();
-    painter.drawPicture(0,0,clipart);
+    painter.drawPicture(0, 0, clipart);
     painter.restore();
 }
 
@@ -83,23 +83,18 @@ void KoPictureClipart::draw(QPainter& painter, int x, int y, int width, int heig
 bool KoPictureClipart::loadData(const QByteArray& array, const QString& extension)
 {
     // Second, create the original clipart
-    kDebug(30003) <<"Trying to load clipart... (Size:" << m_rawData.size() <<")";
-    m_rawData=array;
-    QBuffer buffer( &m_rawData );
+    kDebug(30003) << "Trying to load clipart... (Size:" << m_rawData.size() << ")";
+    m_rawData = array;
+    QBuffer buffer(&m_rawData);
     buffer.open(QIODevice::ReadOnly);
     bool check = true;
-    if (extension=="svg")
-    {
-        if (!m_clipart.load(&buffer, "svg"))
-        {
+    if (extension == "svg") {
+        if (!m_clipart.load(&buffer, "svg")) {
             kWarning(30003) << "Loading SVG has failed! (KoPictureClipart::load)";
             check = false;
         }
-    }
-    else
-    {
-        if (!m_clipart.load(&buffer, NULL))
-        {
+    } else {
+        if (!m_clipart.load(&buffer, NULL)) {
             kWarning(30003) << "Loading QPicture has failed! (KoPictureClipart::load)";
             check = false;
         }
@@ -111,8 +106,8 @@ bool KoPictureClipart::loadData(const QByteArray& array, const QString& extensio
 bool KoPictureClipart::save(QIODevice* io) const
 {
     // We save the raw data, as the SVG supposrt in QPicture is poor
-    qint64 size=io->write(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
-    return (size==m_rawData.size());
+    qint64 size = io->write(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
+    return (size == m_rawData.size());
 }
 
 QSize KoPictureClipart::getOriginalSize(void) const
@@ -126,21 +121,21 @@ QPixmap KoPictureClipart::generatePixmap(const QSize& size, bool /*smoothScale*/
     QPixmap pixmap(size);
     QPainter p;
 
-    p.begin( &pixmap );
-    p.setBackground( QBrush( Qt::white ) );
-    pixmap.fill( Qt::white );
+    p.begin(&pixmap);
+    p.setBackground(QBrush(Qt::white));
+    pixmap.fill(Qt::white);
 
     QRect br = m_clipart.boundingRect();
-    if ( br.width() && br.height() )
-        p.scale( (qreal)pixmap.width() / (qreal)br.width(), (qreal)pixmap.height() / (qreal)br.height() );
-    p.drawPicture( 0, 0, m_clipart );
+    if (br.width() && br.height())
+        p.scale((qreal)pixmap.width() / (qreal)br.width(), (qreal)pixmap.height() / (qreal)br.height());
+    p.drawPicture(0, 0, m_clipart);
     p.end();
     return pixmap;
 }
 
 QString KoPictureClipart::getMimeType(const QString& extension) const
 {
-    if (extension=="svg")
+    if (extension == "svg")
         return "image/svg+xml";
     else
         return "image/x-vnd.trolltech.qpicture";

@@ -36,15 +36,15 @@ class KoFileDialog : public KFileDialog
 {
     Q_OBJECT
 public:
-    KoFileDialog( const QString& startDir, QWidget *parent);
-    void setSpecialMimeFilter( QStringList& mimeFilter,
-                               const QString& currentFormat, const int specialOutputFlag,
-                               const QString& nativeFormat,
-                               int supportedSpecialFormats );
+    KoFileDialog(const QString& startDir, QWidget *parent);
+    void setSpecialMimeFilter(QStringList& mimeFilter,
+                              const QString& currentFormat, const int specialOutputFlag,
+                              const QString& nativeFormat,
+                              int supportedSpecialFormats);
     int specialEntrySelected();
 
 private slots:
-    void slotChangedfilter( int index );
+    void slotChangedfilter(int index);
 
 private:
     Q3ValueVector<int> m_specialFormats;

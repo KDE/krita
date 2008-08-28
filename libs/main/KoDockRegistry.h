@@ -35,7 +35,8 @@
  *
  * @see KoCanvasObserver
  */
-class KOMAIN_EXPORT KoDockRegistry : public QObject, public KoGenericRegistry<KoDockFactory*> {
+class KOMAIN_EXPORT KoDockRegistry : public QObject, public KoGenericRegistry<KoDockFactory*>
+{
     Q_OBJECT
 
 public:

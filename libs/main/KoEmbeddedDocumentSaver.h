@@ -38,17 +38,17 @@ public:
     ~KoEmbeddedDocumentSaver();
 
     /**
-     * Adds the object specific attibutes to the tag, but does NOT 
+     * Adds the object specific attibutes to the tag, but does NOT
      * write the content of the embedded document. Saving of the
-     * embedded documents themselves is done in @ref save. This 
+     * embedded documents themselves is done in @ref save. This
      * function should be called from within KoDocument::saveOasis.
      */
-    void embedDocument( KoXmlWriter &writer, KoDocument * doc );
+    void embedDocument(KoXmlWriter &writer, KoDocument * doc);
 
     /**
      * Save all embedded documents to the store.
      */
-    bool saveEmbeddedDocuments( KoDocument::SavingContext & documentContext );
+    bool saveEmbeddedDocuments(KoDocument::SavingContext & documentContext);
 
 private:
     QList<KoDocument *> m_documents;

@@ -65,7 +65,8 @@ public:
                             ParsingError, InternalError, UnexpectedEOF,
                             UnexpectedOpcode, UserCancelled, OutOfMemory,
                             PasswordProtected,
-                            JustInCaseSomeBrokenCompilerUsesLessThanAByte = 255 };
+                            JustInCaseSomeBrokenCompilerUsesLessThanAByte = 255
+                          };
 
     virtual ~KoFilter();
 
@@ -80,7 +81,7 @@ public:
      * @return The error status, see the @ref #ConversionStatus enum.
      *         KoFilter::OK means that everything is alright.
      */
-    virtual ConversionStatus convert( const QByteArray& from, const QByteArray& to ) = 0;
+    virtual ConversionStatus convert(const QByteArray& from, const QByteArray& to) = 0;
 
 signals:
     /**
@@ -90,13 +91,13 @@ signals:
      * @param value The actual progress state. Should always remain in
      * the range 1..100.
      */
-    void sigProgress( int value );
+    void sigProgress(int value);
 
 protected:
     /**
      * This is the constructor your filter has to call, obviously.
      */
-    KoFilter( QObject* parent = 0 );
+    KoFilter(QObject* parent = 0);
 
     /**
      * Use this pointer to access all information about input/output
@@ -106,8 +107,8 @@ protected:
     KoFilterChain* m_chain;
 
 private:
-    KoFilter( const KoFilter& rhs );
-    KoFilter& operator=( const KoFilter& rhs );
+    KoFilter(const KoFilter& rhs);
+    KoFilter& operator=(const KoFilter& rhs);
 
     class Private;
     Private * const d;
@@ -167,7 +168,7 @@ public:
      * and so on. Note that you should only pass the pure extension
      * and not a whole pattern like "*.doc" or so.
      */
-    static QString mimeTypeByExtension( const QString& extension );
+    static QString mimeTypeByExtension(const QString& extension);
 
 protected:
     /**
@@ -197,9 +198,9 @@ protected:
      * @return The number of the part (can be used to refer to the part from
      *         within the embedding filter).
      */
-    int embedPart( const QByteArray& from, QByteArray& to,
-                   KoFilter::ConversionStatus& status,
-                   const QString& key = QString() );
+    int embedPart(const QByteArray& from, QByteArray& to,
+                  KoFilter::ConversionStatus& status,
+                  const QString& key = QString());
 
     /**
      * Method to perform "internal" embedding of parts in olefilter-style.
@@ -211,7 +212,7 @@ protected:
      * @param key The key we use to store reference/mimetype of your new part
      * @param mimeType The mimetype of the part you're about to embed
      */
-    void startInternalEmbedding( const QString& key, const QByteArray& mimeType );
+    void startInternalEmbedding(const QString& key, const QByteArray& mimeType);
 
     /**
      * This method signals the end of an internal embedding session.
@@ -230,7 +231,7 @@ protected:
      * @return The reference or -1 if we didn't find a part with the
      *         given key
      */
-    int internalPartReference( const QString& key ) const;
+    int internalPartReference(const QString& key) const;
 
     /**
      * Query the internal part map for the mimetype of the part
@@ -240,7 +241,7 @@ protected:
      * @return The mimetype, might be empty if the part matching
      *         the given key doesn't exist.
      */
-    QByteArray internalPartMimeType( const QString& key ) const;
+    QByteArray internalPartMimeType(const QString& key) const;
 
 private:
     /**
@@ -248,9 +249,8 @@ private:
      * for internal parts. This is all we need to locate a part.
      * @internal
      */
-    struct PartReference
-    {
-        PartReference( int index = -1, const QByteArray& mimeType = "" );
+    struct PartReference {
+        PartReference(int index = -1, const QByteArray& mimeType = "");
         bool isValid() const;
 
         int m_index;
@@ -264,8 +264,7 @@ private:
      * embedding level.
      * @internal
      */
-    struct PartState
-    {
+    struct PartState {
         PartState();
 
         int m_lruPartIndex;
@@ -273,9 +272,9 @@ private:
     };
 
     /// Better do not copy the filters
-    KoEmbeddingFilter( const KoEmbeddingFilter& rhs );
+    KoEmbeddingFilter(const KoEmbeddingFilter& rhs);
     /// Better do not assign the filters
-    KoEmbeddingFilter& operator=( const KoEmbeddingFilter& rhs );
+    KoEmbeddingFilter& operator=(const KoEmbeddingFilter& rhs);
 
     /**
      * This method will be called by @ref #embedPart as soon as it
@@ -287,14 +286,14 @@ private:
      *
      * @param file An already opened file
      */
-    virtual void savePartContents( QIODevice* file );
+    virtual void savePartContents(QIODevice* file);
 
     /**
      * Internal methods to support the start/endInternalEmbedding
      * methods (we have to change directories and stuff).
      * These methods are declared friends of the KoFilterChain
      */
-    void filterChainEnterDirectory( const QString& directory ) const;
+    void filterChainEnterDirectory(const QString& directory) const;
     /**
      * Internal methods to support the start/endInternalEmbedding
      * methods (we have to change directories and stuff).

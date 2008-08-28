@@ -42,56 +42,56 @@
 #include <QTextEdit>
 
 
-KoVersionDialog::KoVersionDialog( QWidget* parent, KoDocument *doc  )
-    : KDialog( parent )
+KoVersionDialog::KoVersionDialog(QWidget* parent, KoDocument *doc)
+        : KDialog(parent)
 {
-  setCaption( i18n("Version") );
-  setButtons( Close );
-  setDefaultButton( Close );
-  m_doc = doc;
+    setCaption(i18n("Version"));
+    setButtons(Close);
+    setDefaultButton(Close);
+    m_doc = doc;
 
-  QWidget* page = new QWidget( this );
-  setMainWidget( page );
-  setModal( true );
+    QWidget* page = new QWidget(this);
+    setMainWidget(page);
+    setModal(true);
 
-  QGridLayout* grid1 = new QGridLayout( page );
-  grid1->setMargin(KDialog::marginHint());
-  grid1->setSpacing(KDialog::spacingHint());
+    QGridLayout* grid1 = new QGridLayout(page);
+    grid1->setMargin(KDialog::marginHint());
+    grid1->setSpacing(KDialog::spacingHint());
 
-  list=new QTreeWidget(page);
-  list->setColumnCount( 3 );
-  QStringList h;
-  h.append( i18n("Date & Time") );
-  h.append( i18n("Saved By") );
-  h.append( i18n("Comment") );
-  list->setHeaderLabels( h );
+    list = new QTreeWidget(page);
+    list->setColumnCount(3);
+    QStringList h;
+    h.append(i18n("Date & Time"));
+    h.append(i18n("Saved By"));
+    h.append(i18n("Comment"));
+    list->setHeaderLabels(h);
 
-  updateVersionList();
+    updateVersionList();
 
-  grid1->addWidget(list,0,0,9,1);
+    grid1->addWidget(list, 0, 0, 9, 1);
 
-  m_pAdd=new QPushButton(i18n("&Add"),page);
-  grid1->addWidget(m_pAdd,1,2);
+    m_pAdd = new QPushButton(i18n("&Add"), page);
+    grid1->addWidget(m_pAdd, 1, 2);
 
-  m_pRemove=new QPushButton(i18n("&Remove"),page);
-  grid1->addWidget(m_pRemove,2,2);
+    m_pRemove = new QPushButton(i18n("&Remove"), page);
+    grid1->addWidget(m_pRemove, 2, 2);
 
-  m_pModify=new QPushButton(i18n("&Modify"),page);
-  grid1->addWidget(m_pModify,3,2);
+    m_pModify = new QPushButton(i18n("&Modify"), page);
+    grid1->addWidget(m_pModify, 3, 2);
 
-  m_pOpen=new QPushButton(i18n("&Open"),page);
-  grid1->addWidget(m_pOpen,4,2);
+    m_pOpen = new QPushButton(i18n("&Open"), page);
+    grid1->addWidget(m_pOpen, 4, 2);
 
 
-  connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
-  connect( m_pAdd, SIGNAL( clicked() ), this, SLOT( slotAdd() ) );
-  connect( m_pOpen, SIGNAL( clicked() ), this, SLOT( slotOpen() ) );
-  connect( m_pModify, SIGNAL( clicked() ), this, SLOT( slotModify() ) );
-  connect( list, SIGNAL( itemActivated( QTreeWidgetItem *, int ) ), this, SLOT( slotOpen() ) );
+    connect(m_pRemove, SIGNAL(clicked()), this, SLOT(slotRemove()));
+    connect(m_pAdd, SIGNAL(clicked()), this, SLOT(slotAdd()));
+    connect(m_pOpen, SIGNAL(clicked()), this, SLOT(slotOpen()));
+    connect(m_pModify, SIGNAL(clicked()), this, SLOT(slotModify()));
+    connect(list, SIGNAL(itemActivated(QTreeWidgetItem *, int)), this, SLOT(slotOpen()));
 
-  updateButton();
+    updateButton();
 
-  resize( 600, 250 );
+    resize(600, 250);
 
 }
 
@@ -101,83 +101,78 @@ KoVersionDialog::~KoVersionDialog()
 
 void KoVersionDialog::updateVersionList()
 {
-  list->clear();
-  // add all versions to the tree widget
-  QList<KoVersionInfo> versions = m_doc->versionList();
-  QList<QTreeWidgetItem *> items;
-  for (int i = 0; i < versions.size(); ++i)
-  {
-    QStringList l;
-    l.append( versions.at(i).date.toString() );
-    l.append( versions.at(i).saved_by );
-    l.append( versions.at(i).comment );
-    items.append( new QTreeWidgetItem( l ) );
-  }
-  list->insertTopLevelItems(0, items );
+    list->clear();
+    // add all versions to the tree widget
+    QList<KoVersionInfo> versions = m_doc->versionList();
+    QList<QTreeWidgetItem *> items;
+    for (int i = 0; i < versions.size(); ++i) {
+        QStringList l;
+        l.append(versions.at(i).date.toString());
+        l.append(versions.at(i).saved_by);
+        l.append(versions.at(i).comment);
+        items.append(new QTreeWidgetItem(l));
+    }
+    list->insertTopLevelItems(0, items);
 }
 
 
 void KoVersionDialog::updateButton()
 {
 #if 0
-    bool state = ( list->currentItem() >= 0 );
-    m_pRemove->setEnabled( state );
+    bool state = (list->currentItem() >= 0);
+    m_pRemove->setEnabled(state);
 #endif
 }
 
 void KoVersionDialog::slotAdd()
 {
-  KoVersionModifyDialog * dlg = new KoVersionModifyDialog( this, 0 );
-  if ( !dlg->exec() )
-  {
+    KoVersionModifyDialog * dlg = new KoVersionModifyDialog(this, 0);
+    if (!dlg->exec()) {
+        delete dlg;
+        return;
+    }
+
+    if (!m_doc->addVersion(dlg->comment()))
+        KMessageBox::error(this, i18n("A new version could not be added"));
+
     delete dlg;
-    return;
-  }
 
-  if ( !m_doc->addVersion( dlg->comment() ) )
-    KMessageBox::error( this, i18n("A new version could not be added") );
-
-  delete dlg;
-
-  updateVersionList();
+    updateVersionList();
 }
 
 void KoVersionDialog::slotRemove()
 {
-  if ( !list->currentItem() )
-    return;
+    if (!list->currentItem())
+        return;
 
-  for (int i = 0; i < m_doc->versionList().size(); ++i) {
-    if ( m_doc->versionList().at(i).date.toString() == list->currentItem()->text(0) )
-    {
-      m_doc->versionList().takeAt(i);
-      delete list->currentItem();
-      return;
+    for (int i = 0; i < m_doc->versionList().size(); ++i) {
+        if (m_doc->versionList().at(i).date.toString() == list->currentItem()->text(0)) {
+            m_doc->versionList().takeAt(i);
+            delete list->currentItem();
+            return;
+        }
     }
-  }
 }
 
 void KoVersionDialog::slotModify()
 {
-    if ( !list->currentItem() )
+    if (!list->currentItem())
         return;
 
     KoVersionInfo *version = 0;
     for (int i = 0; i < m_doc->versionList().size(); ++i) {
-      if ( m_doc->versionList().at(i).date.toString() == list->currentItem()->text(0) )
-      {
-        version = &m_doc->versionList()[i];
-        break;
-      }
+        if (m_doc->versionList().at(i).date.toString() == list->currentItem()->text(0)) {
+            version = &m_doc->versionList()[i];
+            break;
+        }
     }
-    if ( !version )
-      return;
+    if (!version)
+        return;
 
-    KoVersionModifyDialog * dlg = new KoVersionModifyDialog( this, version );
-    if ( dlg->exec() )
-    {
-      version->comment = dlg->comment();
-      list->currentItem()->setText(2, version->comment );
+    KoVersionModifyDialog * dlg = new KoVersionModifyDialog(this, version);
+    if (dlg->exec()) {
+        version->comment = dlg->comment();
+        list->currentItem()->setText(2, version->comment);
     }
     delete dlg;
 
@@ -185,75 +180,72 @@ void KoVersionDialog::slotModify()
 
 void KoVersionDialog::slotOpen()
 {
-  if ( !list->currentItem() )
-    return;
+    if (!list->currentItem())
+        return;
 
-  KoVersionInfo *version = 0;
-  for (int i = 0; i < m_doc->versionList().size(); ++i) {
-    if ( m_doc->versionList().at(i).date.toString() == list->currentItem()->text(0) )
-    {
-      version = &m_doc->versionList()[i];
-      break;
+    KoVersionInfo *version = 0;
+    for (int i = 0; i < m_doc->versionList().size(); ++i) {
+        if (m_doc->versionList().at(i).date.toString() == list->currentItem()->text(0)) {
+            version = &m_doc->versionList()[i];
+            break;
+        }
     }
-  }
-  if ( !version )
-    return;
+    if (!version)
+        return;
 
     KTemporaryFile tmp;
     tmp.setAutoRemove(false);
     tmp.open();
-    tmp.write( version->data );
+    tmp.write(version->data);
     tmp.flush();
-    tmp.setPermissions( QFile::ReadUser );
+    tmp.setPermissions(QFile::ReadUser);
     tmp.flush();
 
-    if ( !m_doc->shells().isEmpty() ) //open the version in a new window if possible
-    {
-        KoDocumentEntry entry = KoDocumentEntry( KoDocument::readNativeService() );
+    if (!m_doc->shells().isEmpty()) { //open the version in a new window if possible
+        KoDocumentEntry entry = KoDocumentEntry(KoDocument::readNativeService());
         QString errorMsg;
-        KoDocument* doc = entry.createDoc( &errorMsg );
-        if ( !doc ) {
-          if ( !errorMsg.isEmpty() )
-            KMessageBox::error( 0, errorMsg );
-          return;
+        KoDocument* doc = entry.createDoc(&errorMsg);
+        if (!doc) {
+            if (!errorMsg.isEmpty())
+                KMessageBox::error(0, errorMsg);
+            return;
         }
-        KoMainWindow *shell = new KoMainWindow( doc->componentData() );
-        shell->openDocument( tmp.fileName() );
+        KoMainWindow *shell = new KoMainWindow(doc->componentData());
+        shell->openDocument(tmp.fileName());
         shell->show();
-    }
-    else
-        m_doc->openUrl( tmp.fileName() );
+    } else
+        m_doc->openUrl(tmp.fileName());
 
     tmp.setAutoRemove(true);
-    slotButtonClicked( Close );
+    slotButtonClicked(Close);
 }
 
-KoVersionModifyDialog::KoVersionModifyDialog(  QWidget* parent, KoVersionInfo *info )
-    : KDialog( parent  )
+KoVersionModifyDialog::KoVersionModifyDialog(QWidget* parent, KoVersionInfo *info)
+        : KDialog(parent)
 {
-    setCaption( i18n("Comment") );
-    setButtons( Ok | Cancel );
-    setDefaultButton( Ok );
-    setModal( true );
+    setCaption(i18n("Comment"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
+    setModal(true);
 
-    QWidget* page = new QWidget( this );
-    setMainWidget( page );
+    QWidget* page = new QWidget(this);
+    setMainWidget(page);
 
-    QVBoxLayout *grid1 = new QVBoxLayout( page );
+    QVBoxLayout *grid1 = new QVBoxLayout(page);
     grid1->setMargin(KDialog::marginHint());
     grid1->setSpacing(KDialog::spacingHint());
 
-    QLabel *l = new QLabel( page );
-    if ( info )
-        l->setText( i18n("Date: %1", info->date.toString() ) );
+    QLabel *l = new QLabel(page);
+    if (info)
+        l->setText(i18n("Date: %1", info->date.toString()));
     else
-        l->setText( i18n("Date: %1", QDateTime::currentDateTime().toString( Qt::ISODate ) ) );
-    grid1->addWidget( l );
+        l->setText(i18n("Date: %1", QDateTime::currentDateTime().toString(Qt::ISODate)));
+    grid1->addWidget(l);
 
-    m_textEdit = new QTextEdit( page );
-    if ( info )
-        m_textEdit->setText( info->comment );
-    grid1->addWidget( m_textEdit );
+    m_textEdit = new QTextEdit(page);
+    if (info)
+        m_textEdit->setText(info->comment);
+    grid1->addWidget(m_textEdit);
 
 }
 

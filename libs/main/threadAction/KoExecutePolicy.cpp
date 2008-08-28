@@ -29,16 +29,17 @@
 
 using namespace ThreadWeaver;
 
-void KoOnlyLastPolicy::schedule(KoAction *action, KoJobsListPolicy *jobsList, const QVariant &params) {
-    if(action->weaver() == 0) {
+void KoOnlyLastPolicy::schedule(KoAction *action, KoJobsListPolicy *jobsList, const QVariant &params)
+{
+    if (action->weaver() == 0) {
         kWarning(30003) << "Action has no weaver set, ignoring scheduling request";
         return;
     }
     jobsList->lock();
     foreach(Job *job, jobsList->jobs()) {
-        ActionJob *aj = dynamic_cast<ActionJob*> (job);
-        if(aj && aj->action() == action) {
-            if(! aj->started()) {
+        ActionJob *aj = dynamic_cast<ActionJob*>(job);
+        if (aj && aj->action() == action) {
+            if (! aj->started()) {
                 action->weaver()->dequeue(aj);
                 jobsList->free(aj);
             }
@@ -46,34 +47,37 @@ void KoOnlyLastPolicy::schedule(KoAction *action, KoJobsListPolicy *jobsList, co
     }
     jobsList->unlock();
     ActionJob *job = new ActionJob(action, action->isEnabled() ? ActionJob::EnableOn :
-            ActionJob::EnableOff, params);
+                                   ActionJob::EnableOff, params);
     job->assignQueuePolicy(jobsList);
     jobsList->addJob(job);
     action->weaver()->enqueue(job);
 }
 
-void KoDirectPolicy::schedule(KoAction *action, KoJobsListPolicy *jobsList, const QVariant &params) {
+void KoDirectPolicy::schedule(KoAction *action, KoJobsListPolicy *jobsList, const QVariant &params)
+{
     Q_UNUSED(jobsList);
     ActionJob *job = new ActionJob(action, ActionJob::EnableNoChange, params);
     job->run();
     // job will delete itself
 }
 
-void KoQueuedPolicy::schedule(KoAction *action, KoJobsListPolicy *jobsList, const QVariant &params) {
-    if(action->weaver() == 0) {
+void KoQueuedPolicy::schedule(KoAction *action, KoJobsListPolicy *jobsList, const QVariant &params)
+{
+    if (action->weaver() == 0) {
         kWarning(30003) << "Action has no weaver set, ignoring scheduling request";
         return;
     }
     ActionJob *job = new ActionJob(action, action->isEnabled() ? ActionJob::EnableOn :
-            ActionJob::EnableOff, params);
+                                   ActionJob::EnableOff, params);
     job->assignQueuePolicy(jobsList);
     jobsList->addJob(job);
     action->setEnabled(false);
     action->weaver()->enqueue(job);
 }
 
-void KoSimpleQueuedPolicy::schedule(KoAction *action, KoJobsListPolicy *jobsList, const QVariant &params) {
-    if(action->weaver() == 0) {
+void KoSimpleQueuedPolicy::schedule(KoAction *action, KoJobsListPolicy *jobsList, const QVariant &params)
+{
+    if (action->weaver() == 0) {
         kWarning(30003) << "Action has no weaver set, ignoring scheduling request";
         return;
     }

@@ -35,8 +35,8 @@ class KoRecentDocumentsPanePrivate;
  */
 class KoRecentDocumentsPane : public KoDetailsPane
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     /**
      * Constructor.
      * @param parent the parent widget
@@ -46,7 +46,7 @@ class KoRecentDocumentsPane : public KoDetailsPane
     KoRecentDocumentsPane(QWidget* parent, const KComponentData &_componentData, const QString& header);
     ~KoRecentDocumentsPane();
 
-  protected slots:
+protected slots:
     void selectionChanged(const QModelIndex& index);
     void openFile();
     void openFile(const QModelIndex& index);
@@ -54,7 +54,7 @@ class KoRecentDocumentsPane : public KoDetailsPane
     void previewResult(KJob* job);
     void updatePreview(const KFileItem& fileItem, const QPixmap& preview);
 
-  private:
+private:
     KoRecentDocumentsPanePrivate * const d;
 };
 

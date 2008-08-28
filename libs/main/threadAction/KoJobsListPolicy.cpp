@@ -23,18 +23,20 @@
 
 using namespace ThreadWeaver;
 
-KoJobsListPolicy::KoJobsListPolicy() : mutex(QMutex::Recursive) {
+KoJobsListPolicy::KoJobsListPolicy() : mutex(QMutex::Recursive)
+{
 }
 
-KoJobsListPolicy::~KoJobsListPolicy() {
+KoJobsListPolicy::~KoJobsListPolicy()
+{
     foreach(Job *job , m_jobs)
-        job->removeQueuePolicy(this);
+    job->removeQueuePolicy(this);
 }
 
-bool KoJobsListPolicy::canRun (Job *job) {
+bool KoJobsListPolicy::canRun(Job *job)
+{
     QMutexLocker ml(&mutex);
-    if( canRunMutex.tryLock() )
-    {
+    if (canRunMutex.tryLock()) {
         bool rc = m_jobs.isEmpty() || m_jobs[0] == job;
         canRunMutex.unlock();
         return rc;
@@ -43,36 +45,42 @@ bool KoJobsListPolicy::canRun (Job *job) {
     }
 }
 
-void KoJobsListPolicy::free (Job *job) {
+void KoJobsListPolicy::free(Job *job)
+{
     Q_UNUSED(job);
     release(job);
 }
 
-void KoJobsListPolicy::release (Job *job) {
+void KoJobsListPolicy::release(Job *job)
+{
     QMutexLocker ml(&mutex);
-    Q_ASSERT(m_jobs.contains( job ));
+    Q_ASSERT(m_jobs.contains(job));
     m_jobs.removeAll(job);
     job->removeQueuePolicy(this);
 }
 
-void KoJobsListPolicy::destructed (Job *job) {
+void KoJobsListPolicy::destructed(Job *job)
+{
     release(job);
 }
 
-const QList<Job*> KoJobsListPolicy::jobs() {
+const QList<Job*> KoJobsListPolicy::jobs()
+{
     QList<Job*> answer;
     QMutexLocker ml(&mutex);
     foreach(Job *job, m_jobs)
-        answer.append(job);
+    answer.append(job);
     return answer;
 }
 
-void KoJobsListPolicy::addJob(Job *job) {
+void KoJobsListPolicy::addJob(Job *job)
+{
     QMutexLocker ml(&mutex);
     m_jobs.append(job);
 }
 
-int KoJobsListPolicy::count() {
+int KoJobsListPolicy::count()
+{
     QMutexLocker ml(&mutex);
     int i = m_jobs.count();
     return i;
@@ -81,6 +89,6 @@ int KoJobsListPolicy::count() {
 ThreadWeaver::Job* KoJobsListPolicy::firstJob()
 {
     QMutexLocker ml(&mutex);
-    if(m_jobs.isEmpty()) return 0;
+    if (m_jobs.isEmpty()) return 0;
     return m_jobs[0];
 }

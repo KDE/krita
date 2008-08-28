@@ -22,19 +22,23 @@
 
 #include "KoExecutePolicy.h"
 
-class KoOnlyLastPolicy : public KoExecutePolicy {
+class KoOnlyLastPolicy : public KoExecutePolicy
+{
     void schedule(KoAction *action, KoJobsListPolicy *jobsList, const QVariant &params);
 };
 
-class KoDirectPolicy : public KoExecutePolicy {
+class KoDirectPolicy : public KoExecutePolicy
+{
     void schedule(KoAction *action, KoJobsListPolicy *jobsList, const QVariant &params);
 };
 
-class KoQueuedPolicy : public KoExecutePolicy {
+class KoQueuedPolicy : public KoExecutePolicy
+{
     void schedule(KoAction *action, KoJobsListPolicy *jobsList, const QVariant &params);
 };
 
-class KoSimpleQueuedPolicy : public KoExecutePolicy {
+class KoSimpleQueuedPolicy : public KoExecutePolicy
+{
     void schedule(KoAction *action, KoJobsListPolicy *jobsList, const QVariant &params);
 };
 

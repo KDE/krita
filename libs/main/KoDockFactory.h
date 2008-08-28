@@ -53,13 +53,17 @@ public:
     virtual DockPosition defaultDockPosition() const = 0;
 
     /// Returns true if the dock widget should get a collapsable header.
-    virtual bool isCollapsable() const { return true; }
-    
+    virtual bool isCollapsable() const {
+        return true;
+    }
+
     /**
      * In case the docker is collapsable, returns true if the dock widget
      * will start collapsed by default.
      */
-    virtual bool defaultCollapsed() const { return false; }
+    virtual bool defaultCollapsed() const {
+        return false;
+    }
 
     /// Creates the dock widget
     /// @return the created dock widget
@@ -68,7 +72,9 @@ public:
 #ifdef Q_CC_MSVC
     /// @cond PRIVATE
     /// Dummy method, needed only when used with KoGenericRegistry under msvc.
-    QString name() const { return QString(); }
+    QString name() const {
+        return QString();
+    }
     /// @endcond
 #endif
 };

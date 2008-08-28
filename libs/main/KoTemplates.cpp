@@ -41,33 +41,33 @@
 KoTemplate::KoTemplate(const QString &name, const QString &description, const QString &file,
                        const QString &picture, const QString &fileName, const QString &_measureSystem,
                        bool hidden, bool touched) :
-    m_name(name), m_descr(description), m_file(file), m_picture(picture), m_fileName(fileName),
-    m_hidden(hidden), m_touched(touched), m_cached(false), m_measureSystem(_measureSystem)
+        m_name(name), m_descr(description), m_file(file), m_picture(picture), m_fileName(fileName),
+        m_hidden(hidden), m_touched(touched), m_cached(false), m_measureSystem(_measureSystem)
 {
 }
 
-const QPixmap &KoTemplate::loadPicture( const KComponentData &componentData ) {
-    if(m_cached)
+const QPixmap &KoTemplate::loadPicture(const KComponentData &componentData)
+{
+    if (m_cached)
         return m_pixmap;
-    m_cached=true;
-    if ( m_picture[ 0 ] == '/' )
-    {
+    m_cached = true;
+    if (m_picture[ 0 ] == '/') {
         // ### TODO: use the class KoPicture instead of QImage to support non-image pictures
-        QImage img( m_picture );
+        QImage img(m_picture);
         if (img.isNull()) {
             kWarning() << "Couldn't find icon " << m_picture;
-            m_pixmap=QPixmap();
+            m_pixmap = QPixmap();
             return m_pixmap;
         }
         const int maxHeightWidth = 128; // ### TODO: some people would surely like to have 128x128
         if (img.width() > maxHeightWidth || img.height() > maxHeightWidth) {
-            img = img.scaled( maxHeightWidth, maxHeightWidth, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation );
+            img = img.scaled(maxHeightWidth, maxHeightWidth, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
         }
         m_pixmap = QPixmap::fromImage(img);
         return m_pixmap;
     } else { // relative path
         KIconLoader iconLoader(componentData);
-        m_pixmap = iconLoader.loadIcon( m_picture, KIconLoader::Desktop, 128 );
+        m_pixmap = iconLoader.loadIcon(m_picture, KIconLoader::Desktop, 128);
         return m_pixmap;
     }
 }
@@ -75,56 +75,59 @@ const QPixmap &KoTemplate::loadPicture( const KComponentData &componentData ) {
 
 KoTemplateGroup::KoTemplateGroup(const QString &name, const QString &dir,
                                  int _sortingWeight, bool touched) :
-    m_name(name), m_touched(touched), m_sortingWeight(_sortingWeight)
+        m_name(name), m_touched(touched), m_sortingWeight(_sortingWeight)
 {
     m_dirs.append(dir);
     m_templates.setAutoDelete(true);
 }
 
-bool KoTemplateGroup::isHidden() const {
+bool KoTemplateGroup::isHidden() const
+{
 
     Q3PtrListIterator<KoTemplate> it(m_templates);
-    bool hidden=true;
-    while(it.current()!=0L && hidden) {
-        hidden=it.current()->isHidden();
+    bool hidden = true;
+    while (it.current() != 0L && hidden) {
+        hidden = it.current()->isHidden();
         ++it;
     }
     return hidden;
 }
 
-void KoTemplateGroup::setHidden(bool hidden) const {
+void KoTemplateGroup::setHidden(bool hidden) const
+{
 
     Q3PtrListIterator<KoTemplate> it(m_templates);
-    for( ; it.current()!=0L; ++it)
+    for (; it.current() != 0L; ++it)
         it.current()->setHidden(hidden);
-    m_touched=true;
+    m_touched = true;
 }
 
-bool KoTemplateGroup::add(KoTemplate *t, bool force, bool touch) {
+bool KoTemplateGroup::add(KoTemplate *t, bool force, bool touch)
+{
 
-    KoTemplate *myTemplate=find(t->name());
-    if(myTemplate==0L) {
+    KoTemplate *myTemplate = find(t->name());
+    if (myTemplate == 0L) {
         m_templates.append(t);
-        m_touched=touch;
+        m_touched = touch;
         return true;
-    }
-    else if(myTemplate && force) {
+    } else if (myTemplate && force) {
         //kDebug( 30003 ) <<"removing :" << myTemplate->fileName();
-        QFile::remove( myTemplate->fileName()  );
-        QFile::remove( myTemplate->picture() );
-        QFile::remove( myTemplate->file() );
+        QFile::remove(myTemplate->fileName());
+        QFile::remove(myTemplate->picture());
+        QFile::remove(myTemplate->file());
         m_templates.removeRef(myTemplate);
         m_templates.append(t);
-        m_touched=touch;
+        m_touched = touch;
         return true;
     }
     return false;
 }
 
-KoTemplate *KoTemplateGroup::find(const QString &name) const {
+KoTemplate *KoTemplateGroup::find(const QString &name) const
+{
 
     Q3PtrListIterator<KoTemplate> it(m_templates);
-    while(it.current() && it.current()->name()!=name)
+    while (it.current() && it.current()->name() != name)
         ++it;
     return it.current();
 }
@@ -132,56 +135,57 @@ KoTemplate *KoTemplateGroup::find(const QString &name) const {
 
 KoTemplateTree::KoTemplateTree(const QByteArray &templateType,
                                const KComponentData &componentData, bool readTree) :
-    m_templateType(templateType), m_componentData(componentData), m_defaultGroup(0L),
-    m_defaultTemplate(0L) {
+        m_templateType(templateType), m_componentData(componentData), m_defaultGroup(0L),
+        m_defaultTemplate(0L)
+{
 
     m_groups.setAutoDelete(true);
-    if(readTree)
+    if (readTree)
         readTemplateTree();
 }
 
-void KoTemplateTree::readTemplateTree() {
+void KoTemplateTree::readTemplateTree()
+{
 
     readGroups();
     readTemplates();
 }
 
-void KoTemplateTree::writeTemplateTree() {
-    QString localDir=m_componentData.dirs()->saveLocation(m_templateType);
+void KoTemplateTree::writeTemplateTree()
+{
+    QString localDir = m_componentData.dirs()->saveLocation(m_templateType);
 
-    for(KoTemplateGroup *group=m_groups.first(); group!=0L; group=m_groups.next()) {
+    for (KoTemplateGroup *group = m_groups.first(); group != 0L; group = m_groups.next()) {
         //kDebug( 30003 ) <<"---------------------------------";
         //kDebug( 30003 ) <<"group:" << group->name();
 
-        bool touched=false;
-        for(KoTemplate *t=group->first(); t!=0L && !touched && !group->touched(); t=group->next())
-            touched=t->touched();
+        bool touched = false;
+        for (KoTemplate *t = group->first(); t != 0L && !touched && !group->touched(); t = group->next())
+            touched = t->touched();
 
-        if(group->touched() || touched) {
+        if (group->touched() || touched) {
             //kDebug( 30003 ) <<"touched";
-            if(!group->isHidden()) {
+            if (!group->isHidden()) {
                 //kDebug( 30003 ) <<"not hidden";
-                KStandardDirs::makeDir(localDir+group->name()); // create the local group dir
-            }
-            else {
+                KStandardDirs::makeDir(localDir + group->name()); // create the local group dir
+            } else {
                 //kDebug( 30003 ) <<"hidden";
-                if(group->dirs().count()==1 && group->dirs().contains(localDir)) {
+                if (group->dirs().count() == 1 && group->dirs().contains(localDir)) {
                     //kDebug( 30003 ) <<"local only";
                     KIO::NetAccess::del(group->dirs().first(), 0);
                     //kDebug( 30003 ) <<"removing:" << group->dirs().first();
-                }
-                else {
+                } else {
                     //kDebug( 30003 ) <<"global";
-                    KStandardDirs::makeDir(localDir+group->name());
+                    KStandardDirs::makeDir(localDir + group->name());
                 }
             }
         }
-        for(KoTemplate *t=group->first(); t!=0L; t=group->next()) {
-            if(t->touched()) {
+        for (KoTemplate *t = group->first(); t != 0L; t = group->next()) {
+            if (t->touched()) {
                 //kDebug( 30003 ) <<"++template:" << t->name();
                 writeTemplate(t, group, localDir);
             }
-            if(t->isHidden() && t->touched() ) {
+            if (t->isHidden() && t->touched()) {
                 //kDebug( 30003 ) <<"+++ delete local template ##############";
                 writeTemplate(t, group, localDir);
                 QFile::remove(t->file());
@@ -191,70 +195,74 @@ void KoTemplateTree::writeTemplateTree() {
     }
 }
 
-void KoTemplateTree::add(KoTemplateGroup *g) {
+void KoTemplateTree::add(KoTemplateGroup *g)
+{
 
-    KoTemplateGroup *group=find(g->name());
-    if(group==0L)
+    KoTemplateGroup *group = find(g->name());
+    if (group == 0L)
         m_groups.append(g);
     else
         group->addDir(g->dirs().first()); // "...there can be only one..." (Queen)
 }
 
-KoTemplateGroup *KoTemplateTree::find(const QString &name) const {
+KoTemplateGroup *KoTemplateTree::find(const QString &name) const
+{
 
     Q3PtrListIterator<KoTemplateGroup> it(m_groups);
-    while(it.current() && it.current()->name()!=name)
+    while (it.current() && it.current()->name() != name)
         ++it;
     return it.current();
 }
 
-void KoTemplateTree::readGroups() {
+void KoTemplateTree::readGroups()
+{
 
     QStringList dirs = m_componentData.dirs()->resourceDirs(m_templateType);
     foreach(QString dirName, dirs) {
         //kDebug( 30003 ) <<"dir:" << *it;
         QDir dir(dirName);
         // avoid the annoying warning
-        if(!dir.exists())
+        if (!dir.exists())
             continue;
-        QStringList templateDirs=dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+        QStringList templateDirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
         foreach(QString templateDirName, templateDirs) {
-            QDir templateDir(dirName+templateDirName);
+            QDir templateDir(dirName + templateDirName);
             QString name = templateDirName;
             QString defaultTab;
             int sortingWeight = 1000;
-            if(templateDir.exists(".directory")) {
+            if (templateDir.exists(".directory")) {
                 KDesktopFile config(templateDir.absoluteFilePath(".directory"));
                 KConfigGroup dg = config.desktopGroup();
-                name=dg.readEntry("Name");
-                defaultTab=dg.readEntry("X-KDE-DefaultTab");
-                sortingWeight=dg.readEntry("X-KDE-SortingWeight", 1000);
+                name = dg.readEntry("Name");
+                defaultTab = dg.readEntry("X-KDE-DefaultTab");
+                sortingWeight = dg.readEntry("X-KDE-SortingWeight", 1000);
                 //kDebug( 30003 ) <<"name:" << name;
             }
             KoTemplateGroup *g = new KoTemplateGroup(name, templateDir.absolutePath() + QDir::separator(), sortingWeight);
             add(g);
-            if(defaultTab == "true")
-                m_defaultGroup=g;
+            if (defaultTab == "true")
+                m_defaultGroup = g;
         }
     }
 }
 
-void KoTemplateTree::readTemplates() {
+void KoTemplateTree::readTemplates()
+{
     QString dontShow = "imperial";
 
-    if(KGlobal::locale()->pageSize() == QPrinter::Letter) {
+    if (KGlobal::locale()->pageSize() == QPrinter::Letter) {
         dontShow = "metric";
     }
 
     Q3PtrListIterator<KoTemplateGroup> groupIt(m_groups);
-    for( ; groupIt.current()!=0L; ++groupIt) {
-        QStringList dirs=groupIt.current()->dirs();
-        for(QStringList::ConstIterator it=dirs.begin(); it!=dirs.end(); ++it) {
+    for (; groupIt.current() != 0L; ++groupIt) {
+        QStringList dirs = groupIt.current()->dirs();
+        for (QStringList::ConstIterator it = dirs.begin(); it != dirs.end(); ++it) {
             QDir d(*it);
-            if( !d.exists() )
+            if (!d.exists())
                 continue;
-            QStringList files=d.entryList( QDir::Files | QDir::Readable, QDir::Name );
-            for(int i = 0; i < files.count(); ++i) {
+            QStringList files = d.entryList(QDir::Files | QDir::Readable, QDir::Name);
+            for (int i = 0; i < files.count(); ++i) {
                 QString filePath = *it + files[i];
                 //kDebug( 30003 ) <<"filePath:" << filePath;
                 QString icon;
@@ -262,7 +270,7 @@ void KoTemplateTree::readTemplates() {
                 QString description;
                 QString hidden_str;
                 QString fileName;
-                bool hidden=false;
+                bool hidden = false;
                 bool defaultTemplate = false;
                 QString templatePath;
                 QString measureSystem;
@@ -270,41 +278,41 @@ void KoTemplateTree::readTemplates() {
                 // Otherwise (or if no name in it?) use file name
                 if (KDesktopFile::isDesktopFile(filePath)) {
                     KConfig _config(filePath, KConfig::SimpleConfig);
-                    KConfigGroup config( &_config, "Desktop Entry" );
-                    if (config.readEntry("Type")=="Link") {
-                        text=config.readEntry("Name");
-                        fileName=filePath;
-                        description=config.readEntry("Comment");
+                    KConfigGroup config(&_config, "Desktop Entry");
+                    if (config.readEntry("Type") == "Link") {
+                        text = config.readEntry("Name");
+                        fileName = filePath;
+                        description = config.readEntry("Comment");
                         //kDebug( 30003 ) <<"name:" << text;
-                        icon=config.readEntry("Icon");
-                        if(icon[0]!='/' && // allow absolute paths for icons
-                           QFile::exists(*it+icon)) // allow icons from icontheme
-                            icon=*it+icon;
+                        icon = config.readEntry("Icon");
+                        if (icon[0] != '/' && // allow absolute paths for icons
+                                QFile::exists(*it + icon)) // allow icons from icontheme
+                            icon = *it + icon;
                         //kDebug( 30003 ) <<"icon2:" << icon;
-                        hidden=config.readEntry("X-KDE-Hidden", false);
+                        hidden = config.readEntry("X-KDE-Hidden", false);
                         defaultTemplate = config.readEntry("X-KDE-DefaultTemplate", false);
-                        measureSystem=config.readEntry("X-KDE-MeasureSystem").toLower();
+                        measureSystem = config.readEntry("X-KDE-MeasureSystem").toLower();
 
                         // Don't add a template that is for the wrong measure system
-                        if(measureSystem == dontShow)
+                        if (measureSystem == dontShow)
                             continue;
 
                         //kDebug( 30003 ) <<"hidden:" << hidden_str;
-                        templatePath=config.readPathEntry("URL", QString());
+                        templatePath = config.readPathEntry("URL", QString());
                         //kDebug( 30003 ) <<"Link to :" << templatePath;
-                        if(templatePath[0]!='/') {
-                            if(templatePath.left(6)=="file:/") // I doubt this will happen
-                                templatePath=templatePath.right(templatePath.length()-6);
+                        if (templatePath[0] != '/') {
+                            if (templatePath.left(6) == "file:/") // I doubt this will happen
+                                templatePath = templatePath.right(templatePath.length() - 6);
                             //else
                             //  kDebug( 30003 ) <<"dirname=" << *it;
-                            templatePath=*it+templatePath;
+                            templatePath = *it + templatePath;
                             //kDebug( 30003 ) <<"templatePath:" << templatePath;
                         }
                     } else
                         continue; // Invalid
                 }
                 // The else if and the else branch are here for compat. with the old system
-                else if ( files[i].right(4) != ".png" )
+                else if (files[i].right(4) != ".png")
                     // Ignore everything that is not a PNG file
                     continue;
                 else {
@@ -315,12 +323,12 @@ void KoTemplateTree::readTemplates() {
                     templatePath = filePath; // Note that we store the .png file as the template !
                     // That's the way it's always been done. Then the app replaces the extension...
                 }
-                KoTemplate *t=new KoTemplate(text, description, templatePath, icon, fileName,
-                                             measureSystem, hidden);
+                KoTemplate *t = new KoTemplate(text, description, templatePath, icon, fileName,
+                                               measureSystem, hidden);
                 groupIt.current()->add(t, false, false); // false -> we aren't a "user", false -> don't
-                                                         // "touch" the group to avoid useless
-                                                         // creation of dirs in .kde/blah/...
-                if ( defaultTemplate )
+                // "touch" the group to avoid useless
+                // creation of dirs in .kde/blah/...
+                if (defaultTemplate)
                     m_defaultTemplate = t;
             }
         }
@@ -328,34 +336,32 @@ void KoTemplateTree::readTemplates() {
 }
 
 void KoTemplateTree::writeTemplate(KoTemplate *t, KoTemplateGroup *group,
-                                   const QString &localDir) {
+                                   const QString &localDir)
+{
     QString fileName;
-    if ( t->isHidden() )
-    {
+    if (t->isHidden()) {
         fileName = t->fileName();
         // try to remove the file
-        if ( QFile::remove(fileName) || !QFile::exists(fileName) )
-        {
-            QFile::remove( t->name() );
-            QFile::remove( t->picture() );
+        if (QFile::remove(fileName) || !QFile::exists(fileName)) {
+            QFile::remove(t->name());
+            QFile::remove(t->picture());
             return;
         }
     }
     // be sure that the template's file name is unique so we don't overwrite an other
     QString const path = localDir + group->name() + '/';
-    QString const name = KoTemplates::trimmed( t->name() );
+    QString const name = KoTemplates::trimmed(t->name());
     fileName = path + name + ".desktop";
-    if ( t->isHidden() && QFile::exists(fileName) )
+    if (t->isHidden() && QFile::exists(fileName))
         return;
     QString fill;
-    while ( KIO::NetAccess::exists( fileName, true, 0 ) )
-    {
+    while (KIO::NetAccess::exists(fileName, true, 0)) {
         fill += '_';
         fileName = path + fill + name + ".desktop";
     }
 
-    KConfig _config( fileName, KConfig::SimpleConfig);
-    KConfigGroup config( &_config, "Desktop Entry" );
+    KConfig _config(fileName, KConfig::SimpleConfig);
+    KConfigGroup config(&_config, "Desktop Entry");
     config.writeEntry("Type", "Link");
     config.writePathEntry("URL", t->file());
     config.writeEntry("Name", t->name());
@@ -363,14 +369,16 @@ void KoTemplateTree::writeTemplate(KoTemplate *t, KoTemplateGroup *group,
     config.writeEntry("X-KDE-Hidden", t->isHidden());
 }
 
-namespace KoTemplates {
-QString trimmed(const QString &string) {
+namespace KoTemplates
+{
+QString trimmed(const QString &string)
+{
 
     QString ret;
-    for(int i = 0; i < string.length(); ++i) {
+    for (int i = 0; i < string.length(); ++i) {
         QChar tmp(string[i]);
-        if(!tmp.isSpace())
-            ret+=tmp;
+        if (!tmp.isSpace())
+            ret += tmp;
     }
     return ret;
 }

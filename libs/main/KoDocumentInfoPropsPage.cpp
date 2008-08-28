@@ -50,16 +50,16 @@ public:
     const KArchiveFile *m_docInfoFile;
 };
 
-KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props,
-        const QStringList & )
-    : KPropertiesDialogPlugin( props )
-    , d( new KoDocumentInfoPropsPagePrivate )
+KoDocumentInfoPropsPage::KoDocumentInfoPropsPage(KPropertiesDialog *props,
+        const QStringList &)
+        : KPropertiesDialogPlugin(props)
+        , d(new KoDocumentInfoPropsPagePrivate)
 {
-    d->m_info = new KoDocumentInfo( this );
+    d->m_info = new KoDocumentInfo(this);
     d->m_url = props->item().url();
     d->m_dlg = 0;
 
-    if ( !d->m_url.isLocalFile() )
+    if (!d->m_url.isLocalFile())
         return;
 
     d->m_dst = 0;
@@ -67,34 +67,33 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props,
 #ifdef __GNUC__
 #warning TODO port this to KoStore !!!
 #endif
-    d->m_src = new KTar( d->m_url.path(), "application/x-gzip" );
+    d->m_src = new KTar(d->m_url.path(), "application/x-gzip");
 
-    if ( !d->m_src->open( QIODevice::ReadOnly ) )
+    if (!d->m_src->open(QIODevice::ReadOnly))
         return;
 
     const KArchiveDirectory *root = d->m_src->directory();
-    if ( !root )
+    if (!root)
         return;
 
-    const KArchiveEntry *entry = root->entry( "documentinfo.xml" );
+    const KArchiveEntry *entry = root->entry("documentinfo.xml");
 
-    if ( entry && entry->isFile() )
-    {
-        d->m_docInfoFile = static_cast<const KArchiveFile *>( entry );
+    if (entry && entry->isFile()) {
+        d->m_docInfoFile = static_cast<const KArchiveFile *>(entry);
 
         QByteArray data = d->m_docInfoFile->data();
-        QBuffer buffer( &data );
-        buffer.open( QIODevice::ReadOnly );
+        QBuffer buffer(&data);
+        buffer.open(QIODevice::ReadOnly);
 
         KoXmlDocument doc;
-        doc.setContent( &buffer );
+        doc.setContent(&buffer);
 
-        d->m_info->load( doc );
+        d->m_info->load(doc);
     }
 
-    d->m_dlg = new KoDocumentInfoDlg( props, d->m_info );
-    connect( d->m_dlg, SIGNAL( changed() ),
-            this, SIGNAL( changed() ) );
+    d->m_dlg = new KoDocumentInfoDlg(props, d->m_info);
+    connect(d->m_dlg, SIGNAL(changed()),
+            this, SIGNAL(changed()));
 }
 
 KoDocumentInfoPropsPage::~KoDocumentInfoPropsPage()
@@ -109,7 +108,7 @@ KoDocumentInfoPropsPage::~KoDocumentInfoPropsPage()
 void KoDocumentInfoPropsPage::applyChanges()
 {
     const KArchiveDirectory *root = d->m_src->directory();
-    if ( !root )
+    if (!root)
         return;
 
     QFileInfo fileInfo(d->m_url.path());
@@ -117,23 +116,22 @@ void KoDocumentInfoPropsPage::applyChanges()
     KTemporaryFile tempFile;
     tempFile.setPrefix(d->m_url.path());
 
-    if ( !tempFile.open() )
+    if (!tempFile.open())
         return;
     tempFile.setPermissions(fileInfo.permissions());
 
-    d->m_dst = new KTar( tempFile.fileName(), "application/x-gzip" );
+    d->m_dst = new KTar(tempFile.fileName(), "application/x-gzip");
 
-    if ( !d->m_dst->open( QIODevice::WriteOnly ) )
+    if (!d->m_dst->open(QIODevice::WriteOnly))
         return;
 
-    KMimeType::Ptr mimeType = KMimeType::findByUrl( d->m_url, 0, true );
-    if ( mimeType && dynamic_cast<KFilterDev *>( d->m_dst->device() ) != 0 )
-    {
-        QByteArray appIdentification( "KOffice " ); // We are limited in the number of chars.
+    KMimeType::Ptr mimeType = KMimeType::findByUrl(d->m_url, 0, true);
+    if (mimeType && dynamic_cast<KFilterDev *>(d->m_dst->device()) != 0) {
+        QByteArray appIdentification("KOffice ");   // We are limited in the number of chars.
         appIdentification += mimeType->name().toLatin1();
         appIdentification += '\004'; // Two magic bytes to make the identification
         appIdentification += '\006'; // more reliable (DF)
-        d->m_dst->setOrigFileName( appIdentification );
+        d->m_dst->setOrigFileName(appIdentification);
     }
 
     bool docInfoSaved = false;
@@ -141,71 +139,64 @@ void KoDocumentInfoPropsPage::applyChanges()
     QStringList entries = root->entries();
     QStringList::ConstIterator it = entries.begin();
     QStringList::ConstIterator end = entries.end();
-    for (; it != end; ++it )
-    {
-        const KArchiveEntry *entry = root->entry( *it );
+    for (; it != end; ++it) {
+        const KArchiveEntry *entry = root->entry(*it);
 
-        assert( entry );
+        assert(entry);
 
-        if ( entry->name() == "documentinfo.xml" ||
-                ( !docInfoSaved && !entries.contains( "documentinfo.xml" ) ) )
-        {
+        if (entry->name() == "documentinfo.xml" ||
+                (!docInfoSaved && !entries.contains("documentinfo.xml"))) {
             d->m_dlg->slotApply();
 
             QBuffer buffer;
-            buffer.open( QIODevice::WriteOnly );
-            QTextStream str( &buffer );
+            buffer.open(QIODevice::WriteOnly);
+            QTextStream str(&buffer);
             str << d->m_info->save();
             buffer.close();
 
-            kDebug( 30003 ) <<"writing documentinfo.xml";
-            d->m_dst->writeFile( "documentinfo.xml", entry->user(), entry->group(),
-                    buffer.buffer().data(), buffer.buffer().size() );
+            kDebug(30003) << "writing documentinfo.xml";
+            d->m_dst->writeFile("documentinfo.xml", entry->user(), entry->group(),
+                                buffer.buffer().data(), buffer.buffer().size());
 
             docInfoSaved = true;
-        }
-        else
-            copy( QString(), entry );
+        } else
+            copy(QString(), entry);
     }
 
     d->m_dst->close();
 
     QDir dir;
-    dir.rename( tempFile.fileName(), d->m_url.path() );
+    dir.rename(tempFile.fileName(), d->m_url.path());
 
     delete d->m_dst;
     d->m_dst = 0;
 }
 
-void KoDocumentInfoPropsPage::copy( const QString &path, const KArchiveEntry *entry )
+void KoDocumentInfoPropsPage::copy(const QString &path, const KArchiveEntry *entry)
 {
-    kDebug( 30003 ) <<"copy" << entry->name();
-    if ( entry->isFile() )
-    {
-        const KArchiveFile *file = static_cast<const KArchiveFile *>( entry );
-        kDebug( 30003 ) <<"file :" << entry->name();
-        kDebug( 30003 ) <<"full path is:" << path << entry->name();
-        d->m_dst->writeFile( path + entry->name(), entry->user(), entry->group(),
-                file->data().data(), file->size() );
-    }
-    else
-    {
-        const KArchiveDirectory *dir = static_cast<const KArchiveDirectory*>( entry );
-        kDebug( 30003 ) <<"dir :" << entry->name();
-        kDebug( 30003 ) <<"full path is:" << path << entry->name();
+    kDebug(30003) << "copy" << entry->name();
+    if (entry->isFile()) {
+        const KArchiveFile *file = static_cast<const KArchiveFile *>(entry);
+        kDebug(30003) << "file :" << entry->name();
+        kDebug(30003) << "full path is:" << path << entry->name();
+        d->m_dst->writeFile(path + entry->name(), entry->user(), entry->group(),
+                            file->data().data(), file->size());
+    } else {
+        const KArchiveDirectory *dir = static_cast<const KArchiveDirectory*>(entry);
+        kDebug(30003) << "dir :" << entry->name();
+        kDebug(30003) << "full path is:" << path << entry->name();
 
         QString p = path + entry->name();
-        if ( p != "/" )
-        {
-            d->m_dst->writeDir( p, entry->user(), entry->group() );
-            p.append( "/" );
+        if (p != "/") {
+            d->m_dst->writeDir(p, entry->user(), entry->group());
+            p.append("/");
         }
 
         QStringList entries = dir->entries();
         QStringList::ConstIterator it = entries.begin();
         QStringList::ConstIterator end = entries.end();
-        for (; it != end; ++it )
-            copy( p, dir->entry( *it ) );
+        for (; it != end; ++it)
+            copy(p, dir->entry(*it));
     }
 }
 

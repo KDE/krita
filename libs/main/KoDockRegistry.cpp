@@ -23,15 +23,17 @@
 
 #include <k3staticdeleter.h>
 
-KoDockRegistry::KoDockRegistry() {
+KoDockRegistry::KoDockRegistry()
+{
 }
 
-void KoDockRegistry::init() {
+void KoDockRegistry::init()
+{
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "DockerPlugins";
     config.blacklist = "DockerPluginsDisabled";
     config.group = "koffice";
-    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Dock"),
+    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Dock"),
                                      QString::fromLatin1("[X-Flake-MinVersion] <= 0"),
                                      config);
 }
@@ -46,7 +48,7 @@ static K3StaticDeleter<KoDockRegistry> staticToolRegistryDeleter;
 
 KoDockRegistry* KoDockRegistry::instance()
 {
-    if(KoDockRegistry::s_instance == 0) {
+    if (KoDockRegistry::s_instance == 0) {
         staticToolRegistryDeleter.setObject(s_instance, new KoDockRegistry());
         KoDockRegistry::s_instance->init();
     }

@@ -66,7 +66,9 @@ public:
     /**
      * Comparison operator
      */
-    bool operator==(const KoPicture& other) const { return m_key==other.m_key; }
+    bool operator==(const KoPicture& other) const {
+        return m_key == other.m_key;
+    }
 
     /**
      * Returns type of the picture.
@@ -111,7 +113,7 @@ public:
      * @param name name for the QDragObject
      * @return 0L if the picture is null, or if a dragobject for it isn't implemented [yet]
      */
-    Q3DragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
+    Q3DragObject* dragObject(QWidget *dragSource = 0L, const char *name = 0L);
 
     bool load(QIODevice* io, const QString& extension);
 
@@ -131,7 +133,7 @@ public:
      *  writer.endElement();
      * @endcode
      */
-    bool saveAsBase64( KoXmlWriter& writer ) const;
+    bool saveAsBase64(KoXmlWriter& writer) const;
 
     /**
      * @return the image extension (e.g. png)
@@ -228,7 +230,7 @@ public:
     void clearCache(void);
 
     QString uniquePictureId() const;
-    void assignPictureId( uint _id);
+    void assignPictureId(uint _id);
 
 protected:
     /**

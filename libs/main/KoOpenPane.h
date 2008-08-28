@@ -34,9 +34,9 @@ class KUrl;
 
 class KoOpenPane : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     /**
      * Constructor
      * @param parent the parent widget
@@ -59,14 +59,14 @@ class KoOpenPane : public QWidget
      */
     void addCustomDocumentWidget(QWidget *widget, const QString& title = QString(), const QString& icon = QString());
 
-  protected slots:
+protected slots:
     void selectionChanged(Q3ListViewItem* item);
     void itemClicked(Q3ListViewItem* item);
 
     /// Saves the splitter sizes for KoDetailsPaneBase based panes
     void saveSplitterSizes(KoDetailsPane* sender, const QList<int>& sizes);
 
-  signals:
+signals:
     void openExistingFile(const KUrl&);
     void openTemplate(const KUrl&);
 
@@ -76,18 +76,18 @@ class KoOpenPane : public QWidget
     /// Emitted when one of the detail panes have changed it's splitter
     void splitterResized(KoDetailsPane* sender, const QList<int>& sizes);
 
-  protected:
+protected:
     void initRecentDocs();
-     /**
-      * Populate the list with all templates the user can choose.
-      * @param templateType the template-type (group) that should be selected on creation.
-      */
+    /**
+     * Populate the list with all templates the user can choose.
+     * @param templateType the template-type (group) that should be selected on creation.
+     */
     void initTemplates(const QString& templateType);
     void initExistingFilesPane();
 
     void updateSectionListMaxHeight();
 
-  private:
+private:
     KoOpenPanePrivate * const d;
 };
 

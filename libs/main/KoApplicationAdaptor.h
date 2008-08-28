@@ -35,37 +35,37 @@ class QStringList;
  */
 class KOMAIN_EXPORT KoApplicationAdaptor : public QDBusAbstractAdaptor
 {
-  Q_OBJECT
-  Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.application")
+    Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.application")
 public:
-   explicit KoApplicationAdaptor(QObject *parent);
-   virtual ~KoApplicationAdaptor();
+    explicit KoApplicationAdaptor(QObject *parent);
+    virtual ~KoApplicationAdaptor();
 
 public Q_SLOTS: // METHODS
-  /**
-   * Creates a new document for the given native mimetype
-   * Use it to create a shell and to load an existing file, if any
-   */
-   Q_SCRIPTABLE QString createDocument( const QString &nativeFormat );
+    /**
+     * Creates a new document for the given native mimetype
+     * Use it to create a shell and to load an existing file, if any
+     */
+    Q_SCRIPTABLE QString createDocument(const QString &nativeFormat);
 
-  /**
-   * @return a list of references to all the documents
-   * (see KoDocumentIface)
-   */
-   Q_SCRIPTABLE QStringList getDocuments();
+    /**
+     * @return a list of references to all the documents
+     * (see KoDocumentIface)
+     */
+    Q_SCRIPTABLE QStringList getDocuments();
 
-  /**
-   * @return a list of references to all the views
-   * (see KoViewIface)
-   * Convenience method to avoid iterating over all documents to get all the views.
-   */
-   Q_SCRIPTABLE QStringList getViews();
+    /**
+     * @return a list of references to all the views
+     * (see KoViewIface)
+     * Convenience method to avoid iterating over all documents to get all the views.
+     */
+    Q_SCRIPTABLE QStringList getViews();
 
-  /**
-   * @return a list of references to all the windows
-   * (see KoMainWindowIface)
-   */
-   Q_SCRIPTABLE QStringList getWindows();
+    /**
+     * @return a list of references to all the windows
+     * (see KoMainWindowIface)
+     */
+    Q_SCRIPTABLE QStringList getWindows();
 };
 
 #endif

@@ -25,13 +25,21 @@
 #include <time.h>
 
 struct Node {
-    Node( unsigned int key ) : m_key( key ), m_index( 0 ) {}
+    Node(unsigned int key) : m_key(key), m_index(0) {}
 
-    unsigned int key() const { return m_key; }
-    void setKey( unsigned int key ) { m_key = key; }
+    unsigned int key() const {
+        return m_key;
+    }
+    void setKey(unsigned int key) {
+        m_key = key;
+    }
 
-    int index() const { return m_index; }
-    void setIndex( int i ) { m_index = i; }
+    int index() const {
+        return m_index;
+    }
+    void setIndex(int i) {
+        m_index = i;
+    }
 private:
     unsigned int m_key;
     int m_index;
@@ -39,47 +47,48 @@ private:
 
 static const char* const keys[] = { "one",  "two", "three",  "four", "five",
                                     "six", "seven", "eight", "nine", "ten",
-                                    "eleven", "twelve", 0 };
+                                    "eleven", "twelve", 0
+                                  };
 
-int main( int /*argc*/, char ** /*argv*/ )
+int main(int /*argc*/, char ** /*argv*/)
 {
     Q3PtrList<Node> list;
-    list.setAutoDelete( true );
+    list.setAutoDelete(true);
     Q3AsciiDict<Node> dict;
 
     KOffice::PriorityQueue<Node> queue;
 
-    srand( time( 0 ) );
-    for ( int i = 0; i < 12; ++i ) {
-        Node *n = new Node( rand() % 20 );
-        list.append( n );
-        queue.insert( n );
+    srand(time(0));
+    for (int i = 0; i < 12; ++i) {
+        Node *n = new Node(rand() % 20);
+        list.append(n);
+        queue.insert(n);
         // Check whether the AsciiDict CTOR is okay
-        Node *n2 = new Node( *n );
-        dict.insert( keys[ i ], n2 );
+        Node *n2 = new Node(*n);
+        dict.insert(keys[ i ], n2);
     }
 
-    kDebug() <<"##### Queue 1:";
+    kDebug() << "##### Queue 1:";
     queue.dump();
 
-    kDebug() <<"##### Queue 2:";
-    KOffice::PriorityQueue<Node> queue2( dict );
+    kDebug() << "##### Queue 2:";
+    KOffice::PriorityQueue<Node> queue2(dict);
     queue2.dump();
 
-    Node *n = list.at( 6 );
-    kDebug() <<"##### Decreasing node:" << n->key() <<" at" << n->index();
-    n->setKey( 2 );
-    queue.keyDecreased( n );
+    Node *n = list.at(6);
+    kDebug() << "##### Decreasing node:" << n->key() << " at" << n->index();
+    n->setKey(2);
+    queue.keyDecreased(n);
     queue.dump();
 
-    n = list.at( 2 );
-    kDebug() <<"##### Decreasing node:" << n->key() <<" at" << n->index();
-    n->setKey( 0 );
-    queue.keyDecreased( n );
+    n = list.at(2);
+    kDebug() << "##### Decreasing node:" << n->key() << " at" << n->index();
+    n->setKey(0);
+    queue.keyDecreased(n);
     queue.dump();
 
     n = queue.extractMinimum();
-    while ( n ) {
+    while (n) {
         queue.dump();
         n = queue.extractMinimum();
     }

@@ -31,39 +31,39 @@ class KoFramePrivate;
 
 class KoFrame : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  enum State { Inactive, Selected, Active };
+    enum State { Inactive, Selected, Active };
 
-  explicit KoFrame( QWidget *parent, const char *name = 0 );
-  virtual ~KoFrame();
+    explicit KoFrame(QWidget *parent, const char *name = 0);
+    virtual ~KoFrame();
 
-  virtual void setView( KoView *view );
-  virtual KoView *view() const;
+    virtual void setView(KoView *view);
+    virtual KoView *view() const;
 
-  virtual void setState( State s );
-  virtual State state() const;
+    virtual void setState(State s);
+    virtual State state() const;
 
-  virtual int leftBorder() const;
-  virtual int rightBorder() const;
-  virtual int topBorder() const;
-  virtual int bottomBorder() const;
+    virtual int leftBorder() const;
+    virtual int rightBorder() const;
+    virtual int topBorder() const;
+    virtual int bottomBorder() const;
 
-  virtual int border() const;
+    virtual int border() const;
 
 signals:
-  void geometryChanged();
+    void geometryChanged();
 
 protected:
-  virtual void paintEvent( QPaintEvent* );
-  virtual void mousePressEvent( QMouseEvent* );
-  virtual void mouseMoveEvent( QMouseEvent* );
-  virtual void mouseReleaseEvent( QMouseEvent* );
-  virtual void resizeEvent( QResizeEvent* );
-  virtual bool eventFilter( QObject*, QEvent* );
+    virtual void paintEvent(QPaintEvent*);
+    virtual void mousePressEvent(QMouseEvent*);
+    virtual void mouseMoveEvent(QMouseEvent*);
+    virtual void mouseReleaseEvent(QMouseEvent*);
+    virtual void resizeEvent(QResizeEvent*);
+    virtual bool eventFilter(QObject*, QEvent*);
 
 private:
-  KoFramePrivate * const d;
+    KoFramePrivate * const d;
 };
 
 #endif

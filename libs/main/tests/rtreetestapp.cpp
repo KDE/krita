@@ -37,23 +37,23 @@ int main(int argc, char *argv[])
     return app.exec();
 }
 
-Canvas::Canvas( )
-: QWidget()
-, m_zoom( 1 )    
-, m_rtree( 4, 2 )
+Canvas::Canvas()
+        : QWidget()
+        , m_zoom(1)
+        , m_rtree(4, 2)
 //, m_rtree( 2, 1 )
-, m_tool( 0 )
-, m_createTool( this )    
-, m_selectTool( this )    
-, m_removeTool( this )    
-, m_file( "data.trc" )    
-, m_listId( 0 )
-, m_paintTree( false )
+        , m_tool(0)
+        , m_createTool(this)
+        , m_selectTool(this)
+        , m_removeTool(this)
+        , m_file("data.trc")
+        , m_listId(0)
+        , m_paintTree(false)
 {
     m_tool = &m_createTool;
     setBackgroundRole(QPalette::Base);
-    m_file.open( QIODevice::WriteOnly | QIODevice::Unbuffered );
-    m_out.setDevice( &m_file );
+    m_file.open(QIODevice::WriteOnly | QIODevice::Unbuffered);
+    m_out.setDevice(&m_file);
 }
 
 void Canvas::updateCanvas()
@@ -61,37 +61,33 @@ void Canvas::updateCanvas()
     update();
 }
 
-void Canvas::insert( QRectF & rect )
+void Canvas::insert(QRectF & rect)
 {
     m_out << "i " << rect.left() << " " << rect.top() << " " << rect.width() << " " << rect.height() << endl;
-    Data * data = new Data( rect );
-    m_rects.insert( data );
-    m_rtree.insert( rect, data );
+    Data * data = new Data(rect);
+    m_rects.insert(data);
+    m_rtree.insert(rect, data);
     update();
 }
 
-void Canvas::select( QRectF & rect )
+void Canvas::select(QRectF & rect)
 {
-    if ( rect.isEmpty() )
-    {
-        m_found = m_rtree.contains( rect.topLeft() );
-    }
-    else
-    {
-        m_found = m_rtree.intersects( rect );
+    if (rect.isEmpty()) {
+        m_found = m_rtree.contains(rect.topLeft());
+    } else {
+        m_found = m_rtree.intersects(rect);
     }
     update();
 }
 
-void Canvas::remove( QRectF & rect )
+void Canvas::remove(QRectF & rect)
 {
     m_out << "r " << rect.left() << " " << rect.top() << " " << rect.width() << " " << rect.height() << endl;
     m_found = QList<Data *>();
-    QList<Data *> remove = m_rtree.intersects( rect );
-    foreach ( Data * data, remove )
-    {
-        m_rtree.remove( data );
-        m_rects.remove( data );
+    QList<Data *> remove = m_rtree.intersects(rect);
+    foreach(Data * data, remove) {
+        m_rtree.remove(data);
+        m_rects.remove(data);
         delete data;
     }
     update();
@@ -101,66 +97,56 @@ void Canvas::clear()
 {
     m_out << "c" << endl;
     m_rtree.clear();
-    qDeleteAll( m_rects );
+    qDeleteAll(m_rects);
     m_rects.clear();
     update();
 }
 
 void Canvas::replay()
 {
-    if ( QCoreApplication::arguments().size() > 1 )
-    {
-        QString filename( QCoreApplication::arguments().at( 1 ) );
+    if (QCoreApplication::arguments().size() > 1) {
+        QString filename(QCoreApplication::arguments().at(1));
         qDebug() << "parameter:" << filename;
-        QFile file( filename ); 
-        file.open( QIODevice::ReadOnly | QIODevice::Text );
-        QTextStream in( &file );
-        while ( !in.atEnd() ) 
-        {
-            m_list.push_back( in.readLine() );
+        QFile file(filename);
+        file.open(QIODevice::ReadOnly | QIODevice::Text);
+        QTextStream in(&file);
+        while (!in.atEnd()) {
+            m_list.push_back(in.readLine());
         }
         qDebug() << "commands:" << m_list.size();
         m_listId = 0;
-        QTimer::singleShot( 1000, this, SLOT( replayStep() ) );
+        QTimer::singleShot(1000, this, SLOT(replayStep()));
     }
 }
 
 void Canvas::replayStep()
 {
 
-    QString line = m_list.at( m_listId++ );
+    QString line = m_list.at(m_listId++);
     qDebug() << "Line:" << line;
-    QStringList values = line.split( " " );
-    if ( values[0] == "c" )
-    {
+    QStringList values = line.split(" ");
+    if (values[0] == "c") {
         clear();
-    }
-    else
-    {
+    } else {
         int left = values[1].toInt();
         int top = values[2].toInt();
         int right = values[3].toInt();
         int bottom = values[4].toInt();
-        QRectF rect( left, top, right, bottom );
-        if ( values[0] == "i" )
-        {
-            insert( rect );
-        }
-        else if ( values[0] == "r" )
-        {
-            remove( rect );
+        QRectF rect(left, top, right, bottom);
+        if (values[0] == "i") {
+            insert(rect);
+        } else if (values[0] == "r") {
+            remove(rect);
         }
     }
 
     update();
-    if ( m_listId < m_list.size() )
-    {
+    if (m_listId < m_list.size()) {
         int sleep = 1000;
-        if ( QCoreApplication::arguments().size() >= 3 )
-        {
-            sleep = QCoreApplication::arguments().at( 2 ).toInt();
+        if (QCoreApplication::arguments().size() >= 3) {
+            sleep = QCoreApplication::arguments().at(2).toInt();
         }
-        QTimer::singleShot( sleep, this, SLOT( replayStep() ) );
+        QTimer::singleShot(sleep, this, SLOT(replayStep()));
     }
 }
 
@@ -169,66 +155,60 @@ void Canvas::debug()
     m_rtree.debug();
 }
 
-void Canvas::paintTree( bool paintTree )
+void Canvas::paintTree(bool paintTree)
 {
     m_paintTree = paintTree;
     update();
 }
-   
+
 void Canvas::paintEvent(QPaintEvent * e)
 {
-    Q_UNUSED( e );
-    QPainter p( this );
+    Q_UNUSED(e);
+    QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing);
     p.scale(m_zoom, m_zoom);
-    
-    if ( m_tool )
-        m_tool->paint( p );
 
-    QPen pen( Qt::black );
-    p.setPen( pen );
-    foreach ( Data * data, m_rects )
-    {
-        data->paint( p );
+    if (m_tool)
+        m_tool->paint(p);
+
+    QPen pen(Qt::black);
+    p.setPen(pen);
+    foreach(Data * data, m_rects) {
+        data->paint(p);
     }
 
-    if ( m_paintTree )
-    {
-        m_rtree.paint( p );
+    if (m_paintTree) {
+        m_rtree.paint(p);
     }
 
-    foreach ( Data * data, m_found )
-    {
-        QColor c( Qt::yellow );
-        c.setAlphaF( 0.1 );
-        QBrush brush( c );
-        p.setBrush( brush );
-        p.drawRect( data->boundingBox() );
+    foreach(Data * data, m_found) {
+        QColor c(Qt::yellow);
+        c.setAlphaF(0.1);
+        QBrush brush(c);
+        p.setBrush(brush);
+        p.drawRect(data->boundingBox());
     }
 }
 
 void Canvas::mouseMoveEvent(QMouseEvent *e)
 {
-    if ( m_tool )
-    {
-        m_tool->mouseMoveEvent( e );
+    if (m_tool) {
+        m_tool->mouseMoveEvent(e);
     }
 }
 
 
 void Canvas::mousePressEvent(QMouseEvent *e)
 {
-    if ( m_tool )
-    {
-        m_tool->mousePressEvent( e );
+    if (m_tool) {
+        m_tool->mousePressEvent(e);
     }
 }
 
 void Canvas::mouseReleaseEvent(QMouseEvent *e)
 {
-    if ( m_tool )
-    {
-        m_tool->mouseReleaseEvent( e );
+    if (m_tool) {
+        m_tool->mouseReleaseEvent(e);
     }
 }
 
@@ -251,8 +231,8 @@ MainWindow::MainWindow()
 {
     m_canvas = new Canvas();
     setCentralWidget(m_canvas);
-    m_canvas->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
-    resize( 640, 480 );
+    m_canvas->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    resize(640, 480);
     createActions();
     createMenus();
     createToolBars();
@@ -267,8 +247,8 @@ MainWindow::MainWindow()
 
 void MainWindow::about()
 {
-   QMessageBox::about(this, tr("About test"),
-            tr("R-Tree Library Test Application"));
+    QMessageBox::about(this, tr("About test"),
+                       tr("R-Tree Library Test Application"));
 }
 
 void MainWindow::createActions()
@@ -288,35 +268,35 @@ void MainWindow::createActions()
 
     m_insertAct = new QAction(tr("&Insert"), this);
     m_insertAct->setStatusTip(tr("Insert Object"));
-    connect(m_insertAct, SIGNAL(triggered()), m_canvas, SLOT( selectInsertTool() ) );
+    connect(m_insertAct, SIGNAL(triggered()), m_canvas, SLOT(selectInsertTool()));
 
     m_selectAct = new QAction(tr("&Select"), this);
     m_selectAct->setStatusTip(tr("Select Objects"));
-    connect(m_selectAct, SIGNAL(triggered()), m_canvas, SLOT( selectSelectTool() ) );
+    connect(m_selectAct, SIGNAL(triggered()), m_canvas, SLOT(selectSelectTool()));
 
     m_removeAct = new QAction(tr("&Remove"), this);
     m_removeAct->setStatusTip(tr("Remove Object"));
-    connect(m_removeAct, SIGNAL(triggered()), m_canvas, SLOT( selectRemoveTool() ) );
+    connect(m_removeAct, SIGNAL(triggered()), m_canvas, SLOT(selectRemoveTool()));
 
     m_clearAct = new QAction(tr("&Clear"), this);
     m_clearAct->setStatusTip(tr("Clear Object"));
-    connect(m_clearAct, SIGNAL(triggered()), m_canvas, SLOT( clear() ) );
+    connect(m_clearAct, SIGNAL(triggered()), m_canvas, SLOT(clear()));
 
     m_replayAct = new QAction(tr("&Replay"), this);
     m_replayAct->setShortcut(QKeySequence(tr("Ctrl+R")));
     m_replayAct->setStatusTip(tr("Replay"));
-    connect(m_replayAct, SIGNAL(triggered()), m_canvas, SLOT( replay() ) );
+    connect(m_replayAct, SIGNAL(triggered()), m_canvas, SLOT(replay()));
 
     m_debugAct = new QAction(tr("&Debug"), this);
     m_debugAct->setShortcut(QKeySequence(tr("Ctrl+D")));
     m_debugAct->setStatusTip(tr("Debug"));
-    connect(m_debugAct, SIGNAL(triggered()), m_canvas, SLOT( debug() ) );
+    connect(m_debugAct, SIGNAL(triggered()), m_canvas, SLOT(debug()));
 
     m_paintTreeAct = new QAction(tr("&Paint Tree"), this);
     m_paintTreeAct->setShortcut(QKeySequence(tr("Ctrl+P")));
     m_paintTreeAct->setStatusTip(tr("Paint Tree"));
-    m_paintTreeAct->setCheckable( true );
-    connect(m_paintTreeAct, SIGNAL(toggled( bool )), m_canvas, SLOT( paintTree( bool ) ) );
+    m_paintTreeAct->setCheckable(true);
+    connect(m_paintTreeAct, SIGNAL(toggled(bool)), m_canvas, SLOT(paintTree(bool)));
 }
 
 void MainWindow::createMenus()

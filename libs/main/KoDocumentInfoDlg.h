@@ -46,15 +46,15 @@ class KoDocumentInfo;
 
 class KOMAIN_EXPORT KoDocumentInfoDlg : public KPageDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     /**
      * The constructor
      * @param parent a pointer to the parent widget
      * @param docInfo a pointer to the shown KoDocumentInfo
      */
-    KoDocumentInfoDlg( QWidget *parent, KoDocumentInfo* docInfo );
+    KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo* docInfo);
 
     /** The destructor */
     virtual ~KoDocumentInfoDlg();
@@ -62,11 +62,11 @@ class KOMAIN_EXPORT KoDocumentInfoDlg : public KPageDialog
     /** Returns true if the document was saved when the dialog was closed */
     bool isDocumentSaved();
 
-  public slots:
+public slots:
     /** Connected to the okClicked() signal */
     void slotApply();
 
-  private slots:
+private slots:
     /** Connected with clicked() from pbReset - Reset parts of the metadata */
     void slotResetMetaData();
     /** Connected with clicked() from pbEncrypt - Toggle the encryption of the document */
@@ -78,7 +78,7 @@ class KOMAIN_EXPORT KoDocumentInfoDlg : public KPageDialog
     /** Saves the document with changed encryption */
     void slotSaveEncryption();
 
-  private:
+private:
     /** Sets up the aboutWidget and fills the widgets with content */
     void initAboutTab();
     /** Sets up the authorWidget and fills the widgets with content */

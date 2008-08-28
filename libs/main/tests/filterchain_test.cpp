@@ -24,85 +24,85 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-int main( int /*argc*/, char ** /*argv*/ )
+int main(int /*argc*/, char ** /*argv*/)
 {
-    KComponentData componentData( "filterchain_test" );  // we need an instance when using the trader
-    KOffice::Graph g( "application/x-kspread" );
+    KComponentData componentData("filterchain_test");    // we need an instance when using the trader
+    KOffice::Graph g("application/x-kspread");
     g.dump();
-    g.setSourceMimeType( "application/x-kword" );
+    g.setSourceMimeType("application/x-kword");
     g.dump();
 
-    KoFilterManager *manager = new KoFilterManager( 0 );
-    kDebug() <<"Trying to build some filter chains...";
-    Q3CString mimeType( "foo/bar" );
-    KoFilterChain::Ptr chain = g.chain( manager, mimeType );
-    if ( !chain )
-        kDebug() <<"Chain for 'foo/bar' is not available, OK";
+    KoFilterManager *manager = new KoFilterManager(0);
+    kDebug() << "Trying to build some filter chains...";
+    Q3CString mimeType("foo/bar");
+    KoFilterChain::Ptr chain = g.chain(manager, mimeType);
+    if (!chain)
+        kDebug() << "Chain for 'foo/bar' is not available, OK";
     else {
         kError() << "Chain for 'foo/bar' is available!" << endl;
         chain->dump();
     }
 
     mimeType = "application/x-krita";
-    chain = g.chain( manager, mimeType );
-    if ( !chain )
-        kDebug() <<"Chain for 'application/x-krita' is not available, OK";
+    chain = g.chain(manager, mimeType);
+    if (!chain)
+        kDebug() << "Chain for 'application/x-krita' is not available, OK";
     else {
         kError() << "Chain 'application/x-krita' is available!" << endl;
         chain->dump();
     }
 
     mimeType = "text/csv";
-    chain = g.chain( manager, mimeType );
-    if ( !chain )
+    chain = g.chain(manager, mimeType);
+    if (!chain)
         kError() << "Chain for 'text/csv' is not available!" << endl;
     else {
-        kDebug() <<"Chain for 'text/csv' is available, OK";
+        kDebug() << "Chain for 'text/csv' is available, OK";
         chain->dump();
     }
 
     // Try to find the closest KOffice part
     mimeType = "";
-    chain = g.chain( manager, mimeType );
-    if ( !chain )
-        kDebug() <<"It was already a KOffice part, OK";
+    chain = g.chain(manager, mimeType);
+    if (!chain)
+        kDebug() << "It was already a KOffice part, OK";
     else
         kError() << "We really got a chain? ugh :}" << endl;
 
-    g.setSourceMimeType( "text/csv" );
+    g.setSourceMimeType("text/csv");
     mimeType = "";
-    chain = g.chain( manager, mimeType );
-    if ( !chain )
+    chain = g.chain(manager, mimeType);
+    if (!chain)
         kError() << "Hmm... why didn't we find a chain?" << endl;
     else {
-        kDebug() <<"Chain for 'text/csv' -> closest part is available ("
-                  << mimeType << "), OK" << endl;
+        kDebug() << "Chain for 'text/csv' -> closest part is available ("
+        << mimeType << "), OK" << endl;
         chain->dump();
     }
 
-    kDebug() <<"Checking mimeFilter() for Import:";
-    QStringList list = KoFilterManager::mimeFilter( "application/x-kword",  KoFilterManager::Import );
+    kDebug() << "Checking mimeFilter() for Import:";
+    QStringList list = KoFilterManager::mimeFilter("application/x-kword",  KoFilterManager::Import);
     QStringList::ConstIterator it = list.begin();
     QStringList::ConstIterator end = list.end();
-    for ( ; it != end; ++it )
-        kDebug() <<"" << *it;
-    kDebug() <<"" << list.count() <<" entries.";
+    for (; it != end; ++it)
+        kDebug() << "" << *it;
+    kDebug() << "" << list.count() << " entries.";
 
-    kDebug() <<"Checking mimeFilter() for Export:";
-    list = KoFilterManager::mimeFilter( "application/x-kword",  KoFilterManager::Export );
+    kDebug() << "Checking mimeFilter() for Export:";
+    list = KoFilterManager::mimeFilter("application/x-kword",  KoFilterManager::Export);
     it = list.begin();
     end = list.end();
-    for ( ; it != end; ++it )
-        kDebug() <<"" << *it;
-    kDebug() <<"" << list.count() <<" entries.";
+    for (; it != end; ++it)
+        kDebug() << "" << *it;
+    kDebug() << "" << list.count() << " entries.";
 
-    kDebug() <<"Checking KoShell's mimeFilter():";
+    kDebug() << "Checking KoShell's mimeFilter():";
     list = KoFilterManager::mimeFilter();
     it = list.begin();
     end = list.end();
-    for ( ; it != end; ++it )
-        kDebug() <<"" << *it;
-    kDebug() <<"" << list.count() <<" entries.";
+    for (; it != end; ++it)
+        kDebug() << "" << *it;
+    kDebug() << "" << list.count() << " entries.";
 
     delete manager;
     return 0;

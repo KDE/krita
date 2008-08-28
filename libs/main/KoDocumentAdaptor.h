@@ -40,11 +40,11 @@ class KoDocument;
  */
 class KOMAIN_EXPORT KoDocumentAdaptor : public QDBusAbstractAdaptor
 {
-  Q_OBJECT
-  Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.document")
+    Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.document")
 public:
 
-    explicit KoDocumentAdaptor( KoDocument * doc);
+    explicit KoDocumentAdaptor(KoDocument * doc);
     ~KoDocumentAdaptor();
 
 public Q_SLOTS: // METHODS
@@ -58,7 +58,7 @@ public Q_SLOTS: // METHODS
      * Warning: this is asynchronous. The document might not be loaded yet when
      * this call returns. See isLoading.
      */
-    Q_SCRIPTABLE void openUrl( const QString & url );
+    Q_SCRIPTABLE void openUrl(const QString & url);
 
     /**
      * @return TRUE is the document is still loading
@@ -78,7 +78,7 @@ public Q_SLOTS: // METHODS
     /**
      * @return a DCOP reference (DCOPRef) to the view with index @p idx
      */
-    Q_SCRIPTABLE QString view( int idx );
+    Q_SCRIPTABLE QString view(int idx);
 
     /**
      * DCOP-action proxy
@@ -101,9 +101,9 @@ public Q_SLOTS: // METHODS
     /**
      * Saves the document under a new name
      */
-    Q_SCRIPTABLE void saveAs( const QString & url );
+    Q_SCRIPTABLE void saveAs(const QString & url);
 
-    Q_SCRIPTABLE void setOutputMimeType( const QByteArray & mimetype );
+    Q_SCRIPTABLE void setOutputMimeType(const QByteArray & mimetype);
 
     Q_SCRIPTABLE QString documentInfoAuthorName() const;
     Q_SCRIPTABLE QString documentInfoEmail() const;
@@ -136,7 +136,7 @@ public Q_SLOTS: // METHODS
     Q_SCRIPTABLE void setDocumentInfoStreet(const QString &text);
     Q_SCRIPTABLE void setDocumentInfoAbstract(const QString &text);
     Q_SCRIPTABLE void setDocumentInfoInitial(const QString & text);
-    Q_SCRIPTABLE void setDocumentInfoKeywords(const QString & text );
+    Q_SCRIPTABLE void setDocumentInfoKeywords(const QString & text);
     Q_SCRIPTABLE void setDocumentInfoSubject(const QString & text);
     Q_SCRIPTABLE void setDocumentInfoAuthorPosition(const QString & text);
 

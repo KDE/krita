@@ -52,7 +52,8 @@ class KoExecutePolicy;
  *
  * Notice that the default version uses the SimpleQueuedPolicy.
  */
-class KOMAIN_EXPORT KoAction : public QObject {
+class KOMAIN_EXPORT KoAction : public QObject
+{
     Q_OBJECT
 public:
     /**

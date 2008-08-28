@@ -28,32 +28,53 @@
 #include <kcomponentdata.h>
 
 /** @internal */
-class KOMAIN_EXPORT KoTemplate {
+class KOMAIN_EXPORT KoTemplate
+{
 
 public:
     explicit KoTemplate(const QString &name,
-               const QString &description=QString(),
-               const QString &file=QString(),
-               const QString &picture=QString(),
-               const QString &fileName=QString(),
-               const QString &_measureSystem=QString(),
-               bool hidden=false, bool touched=false);
+                        const QString &description = QString(),
+                        const QString &file = QString(),
+                        const QString &picture = QString(),
+                        const QString &fileName = QString(),
+                        const QString &_measureSystem = QString(),
+                        bool hidden = false, bool touched = false);
     ~KoTemplate() {}
 
-    QString name() const { return m_name; }
-    QString description() const { return m_descr; }
-    QString file() const { return m_file; }
-    QString picture() const { return m_picture; }
-    QString fileName() const { return m_fileName; }
-    const QPixmap &loadPicture( const KComponentData &instance );
+    QString name() const {
+        return m_name;
+    }
+    QString description() const {
+        return m_descr;
+    }
+    QString file() const {
+        return m_file;
+    }
+    QString picture() const {
+        return m_picture;
+    }
+    QString fileName() const {
+        return m_fileName;
+    }
+    const QPixmap &loadPicture(const KComponentData &instance);
 
-    bool isHidden() const { return m_hidden; }
-    void setHidden(bool hidden=true) { m_hidden=hidden; m_touched=true; }
+    bool isHidden() const {
+        return m_hidden;
+    }
+    void setHidden(bool hidden = true) {
+        m_hidden = hidden; m_touched = true;
+    }
 
-    bool touched() const { return m_touched; }
+    bool touched() const {
+        return m_touched;
+    }
 
-    QString measureSystem() const { return m_measureSystem; }
-    void setMeasureSystem(const QString& system) { m_measureSystem = system; }
+    QString measureSystem() const {
+        return m_measureSystem;
+    }
+    void setMeasureSystem(const QString& system) {
+        m_measureSystem = system;
+    }
 
 private:
     QString m_name, m_descr, m_file, m_picture, m_fileName;
@@ -65,35 +86,58 @@ private:
 };
 
 
-class KOMAIN_EXPORT KoTemplateGroup {
+class KOMAIN_EXPORT KoTemplateGroup
+{
 
 public:
     explicit KoTemplateGroup(const QString &name,
-                    const QString &dir=QString(),
-                    int _sortingWeight=0,
-                    bool touched=false);
+                             const QString &dir = QString(),
+                             int _sortingWeight = 0,
+                             bool touched = false);
     ~KoTemplateGroup() {}
 
-    QString name() const { return m_name; }
-    QStringList dirs() const { return m_dirs; }
-    void addDir(const QString &dir) { m_dirs.append(dir); m_touched=true; }
-    int sortingWeight() const { return m_sortingWeight; }
-    void setSortingWeight(int weight) { m_sortingWeight = weight; }
+    QString name() const {
+        return m_name;
+    }
+    QStringList dirs() const {
+        return m_dirs;
+    }
+    void addDir(const QString &dir) {
+        m_dirs.append(dir); m_touched = true;
+    }
+    int sortingWeight() const {
+        return m_sortingWeight;
+    }
+    void setSortingWeight(int weight) {
+        m_sortingWeight = weight;
+    }
     /// If all children are hidden, we are hidden too
     bool isHidden() const;
     /// if we should hide, we hide all the children
-    void setHidden(bool hidden=true) const;
+    void setHidden(bool hidden = true) const;
 
-    KoTemplate *first() { return m_templates.first(); }
-    KoTemplate *next() { return m_templates.next(); }
-    KoTemplate *last() { return m_templates.last(); }
-    KoTemplate *prev() { return m_templates.prev(); }
-    KoTemplate *current() { return m_templates.current(); }
+    KoTemplate *first() {
+        return m_templates.first();
+    }
+    KoTemplate *next() {
+        return m_templates.next();
+    }
+    KoTemplate *last() {
+        return m_templates.last();
+    }
+    KoTemplate *prev() {
+        return m_templates.prev();
+    }
+    KoTemplate *current() {
+        return m_templates.current();
+    }
 
-    bool add(KoTemplate *t, bool force=false, bool touch=true);
+    bool add(KoTemplate *t, bool force = false, bool touch = true);
     KoTemplate *find(const QString &name) const;
 
-    bool touched() const { return m_touched; }
+    bool touched() const {
+        return m_touched;
+    }
 
 private:
     QString m_name;
@@ -104,35 +148,54 @@ private:
 };
 
 
-class KOMAIN_EXPORT KoTemplateTree {
+class KOMAIN_EXPORT KoTemplateTree
+{
 
 public:
     KoTemplateTree(const QByteArray &templateType, const KComponentData &instance,
-		   bool readTree=false);
+                   bool readTree = false);
     ~KoTemplateTree() {}
 
-    QByteArray templateType() const { return m_templateType; }
-    KComponentData componentData() const { return m_componentData; }
+    QByteArray templateType() const {
+        return m_templateType;
+    }
+    KComponentData componentData() const {
+        return m_componentData;
+    }
     void readTemplateTree();
     void writeTemplateTree();
 
-    KoTemplateGroup *first() { return m_groups.first(); }
-    KoTemplateGroup *next() { return m_groups.next(); }
-    KoTemplateGroup *last() { return m_groups.last(); }
-    KoTemplateGroup *prev() { return m_groups.prev(); }
-    KoTemplateGroup *current() { return m_groups.current(); }
+    KoTemplateGroup *first() {
+        return m_groups.first();
+    }
+    KoTemplateGroup *next() {
+        return m_groups.next();
+    }
+    KoTemplateGroup *last() {
+        return m_groups.last();
+    }
+    KoTemplateGroup *prev() {
+        return m_groups.prev();
+    }
+    KoTemplateGroup *current() {
+        return m_groups.current();
+    }
 
     void add(KoTemplateGroup *g);
     KoTemplateGroup *find(const QString &name) const;
 
-    KoTemplateGroup *defaultGroup() const { return m_defaultGroup; }
-    KoTemplate *defaultTemplate() const { return m_defaultTemplate; }
+    KoTemplateGroup *defaultGroup() const {
+        return m_defaultGroup;
+    }
+    KoTemplate *defaultTemplate() const {
+        return m_defaultTemplate;
+    }
 
 private:
     void readGroups();
     void readTemplates();
     void writeTemplate(KoTemplate *t, KoTemplateGroup *group,
-		       const QString &localDir);
+                       const QString &localDir);
 
     QByteArray m_templateType;
     KComponentData m_componentData;
@@ -142,7 +205,8 @@ private:
 };
 
 
-namespace KoTemplates {
+namespace KoTemplates
+{
 KOMAIN_EXPORT QString trimmed(const QString &string);
 }
 

@@ -30,8 +30,8 @@ class KoDetailsPanePrivate;
 
 class KoDetailsPane : public QWidget, public Ui_KoDetailsPaneBase
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     KoDetailsPane(QWidget* parent, const KComponentData &_componentData, const QString& header);
     virtual ~KoDetailsPane();
 
@@ -42,18 +42,18 @@ class KoDetailsPane : public QWidget, public Ui_KoDetailsPaneBase
     /// @return the model used in the document list
     QStandardItemModel* model() const;
 
-  signals:
+signals:
     /// Emitted when a file is requested to be opened
     void openUrl(const KUrl&);
 
     /// This is used to keep all splitters in different details panes synced
     void splitterResized(KoDetailsPane* sender, const QList<int>& sizes);
 
-  public slots:
+public slots:
     /// This is used to keep all splitters in different details panes synced
     void resizeSplitter(KoDetailsPane* sender, const QList<int>& sizes);
 
-  protected slots:
+protected slots:
     /// This is called when the selection in the listview changed
     virtual void selectionChanged(const QModelIndex& index) = 0;
     virtual void openFile();
@@ -61,7 +61,7 @@ class KoDetailsPane : public QWidget, public Ui_KoDetailsPaneBase
 
     void changePalette();
 
-  private:
+private:
     KoDetailsPanePrivate * const d;
 };
 

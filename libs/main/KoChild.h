@@ -41,257 +41,258 @@
  */
 class KOMAIN_EXPORT KoChild : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
 
-  /**
-   * The gadget generally identifies where a child has been hit (generally
-   * by the mouse pointer).
-   * Based on this information different actions can be taken, for example
-   * moving the child or opening a context menu. NoGadget means that
-   * this child has not been hit.
-   *
-   * @see #gadgetHitTest
-   */
-  enum Gadget { NoGadget, TopLeft, TopMid, TopRight, MidLeft, MidRight,
-		BottomLeft, BottomMid, BottomRight, Move };
+    /**
+     * The gadget generally identifies where a child has been hit (generally
+     * by the mouse pointer).
+     * Based on this information different actions can be taken, for example
+     * moving the child or opening a context menu. NoGadget means that
+     * this child has not been hit.
+     *
+     * @see #gadgetHitTest
+     */
+    enum Gadget { NoGadget, TopLeft, TopMid, TopRight, MidLeft, MidRight,
+                  BottomLeft, BottomMid, BottomRight, Move
+                };
 
-  explicit KoChild( QObject *parent = 0, const char *name = 0 );
-  virtual ~KoChild();
+    explicit KoChild(QObject *parent = 0, const char *name = 0);
+    virtual ~KoChild();
 
-  /**
-   *  Sets a new geometry for this child document.
-   *  Use noEmit = true if you do not want the 'changed'-signal to be emitted
-   */
-  void setGeometry( const QRect &rect, bool noEmit = false );
+    /**
+     *  Sets a new geometry for this child document.
+     *  Use noEmit = true if you do not want the 'changed'-signal to be emitted
+     */
+    void setGeometry(const QRect &rect, bool noEmit = false);
 
-  /**
-   * @return the rectangle that would be used to display this
-   *         child document if the child is not rotated or
-   *         subject to some other geometric transformation.
-   *         The rectangle is in the coordinate system of the parent,
-   *         using unzoomed coordinates in points.
-   *
-   * @see #setGeometry
-   */
-  QRect geometry() const;
+    /**
+     * @return the rectangle that would be used to display this
+     *         child document if the child is not rotated or
+     *         subject to some other geometric transformation.
+     *         The rectangle is in the coordinate system of the parent,
+     *         using unzoomed coordinates in points.
+     *
+     * @see #setGeometry
+     */
+    QRect geometry() const;
 
-  /**
-   * @return the region of this child part relative to the
-   *         coordinate system of the parent.
-   *         The region is transformed with the passed
-   *         matrix.
-   */
-  virtual QRegion region( const QMatrix& = QMatrix() ) const;
+    /**
+     * @return the region of this child part relative to the
+     *         coordinate system of the parent.
+     *         The region is transformed with the passed
+     *         matrix.
+     */
+    virtual QRegion region(const QMatrix& = QMatrix()) const;
 
-  /**
-   * @return the polygon which surrounds the child part. The points
-   *         are in coordinates of the parent.
-   *         The points are transformed with the
-   *         passed matrix.
-   */
-  virtual QPolygon pointArray( const QMatrix &matrix = QMatrix() ) const;
+    /**
+     * @return the polygon which surrounds the child part. The points
+     *         are in coordinates of the parent.
+     *         The points are transformed with the
+     *         passed matrix.
+     */
+    virtual QPolygon pointArray(const QMatrix &matrix = QMatrix()) const;
 
-  /**
-   * Tests whether the part contains a certain point. The point is
-   * in the coordinate system of the parent.
-   */
-  //virtual bool contains( const QPoint& ) const;
+    /**
+     * Tests whether the part contains a certain point. The point is
+     * in the coordinate system of the parent.
+     */
+    //virtual bool contains( const QPoint& ) const;
 
-  /**
-   * @return the effective bounding rect after all transformations.
-   *         The coordinates of the rectangle are in the coordinate system
-   *         of the parent.
-   */
-  QRect boundingRect() const;
+    /**
+     * @return the effective bounding rect after all transformations.
+     *         The coordinates of the rectangle are in the coordinate system
+     *         of the parent.
+     */
+    QRect boundingRect() const;
 
-  /**
-   * Scales the content of the child part. However, that does not
-   * affect the size of the child part.
-   */
-  virtual void setScaling( qreal x, qreal y );
+    /**
+     * Scales the content of the child part. However, that does not
+     * affect the size of the child part.
+     */
+    virtual void setScaling(qreal x, qreal y);
 
-  /**
-   * @return the x axis scaling of the child part
-   */
-  virtual qreal xScaling() const;
+    /**
+     * @return the x axis scaling of the child part
+     */
+    virtual qreal xScaling() const;
 
-  /**
-   * @return the y axis scaling of the child part
-   */
-  virtual qreal yScaling() const;
+    /**
+     * @return the y axis scaling of the child part
+     */
+    virtual qreal yScaling() const;
 
-  /**
-   * Shears the content of the child part.
-   */
-  virtual void setShearing( qreal x, qreal y );
+    /**
+     * Shears the content of the child part.
+     */
+    virtual void setShearing(qreal x, qreal y);
 
-  /**
-   * @return the x axis shearing of the child part
-   */
-  virtual qreal xShearing() const;
+    /**
+     * @return the x axis shearing of the child part
+     */
+    virtual qreal xShearing() const;
 
-  /**
-   * @return the y axis shearing of the child part
-   */
-  virtual qreal yShearing() const;
+    /**
+     * @return the y axis shearing of the child part
+     */
+    virtual qreal yShearing() const;
 
-  /**
-   * Sets the angle of rotation.
-   */
-  virtual void setRotation( qreal );
+    /**
+     * Sets the angle of rotation.
+     */
+    virtual void setRotation(qreal);
 
-  /**
-   * @return the angle of rotation
-   */
-  virtual qreal rotation() const;
+    /**
+     * @return the angle of rotation
+     */
+    virtual qreal rotation() const;
 
-  /**
-   * Sets the center of the rotation to the point @p pos.
-   */
-  virtual void setRotationPoint( const QPoint& pos );
+    /**
+     * Sets the center of the rotation to the point @p pos.
+     */
+    virtual void setRotationPoint(const QPoint& pos);
 
-  /**
-   * @return the center of the rotation
-   */
-  virtual QPoint rotationPoint() const;
+    /**
+     * @return the center of the rotation
+     */
+    virtual QPoint rotationPoint() const;
 
-  /**
-   * @return true if the child part is an orthogonal rectangle relative
-   *         to its parents coordinate system.
-   */
-  bool isRectangle() const;
+    /**
+     * @return true if the child part is an orthogonal rectangle relative
+     *         to its parents coordinate system.
+     */
+    bool isRectangle() const;
 
-  /**
-   * Sets the clip region of the painter, so that only pixels of the
-   * child part can be drawn.
-   *
-   * @param painter the painter do modify.
-   * @param combine tells whether the new clip region is an intersection
-   *        of the current region with the child's region or whether only
-   *        the child's region is set.
-   */
-  virtual void setClipRegion( QPainter& painter, bool combine = true );
+    /**
+     * Sets the clip region of the painter, so that only pixels of the
+     * child part can be drawn.
+     *
+     * @param painter the painter do modify.
+     * @param combine tells whether the new clip region is an intersection
+     *        of the current region with the child's region or whether only
+     *        the child's region is set.
+     */
+    virtual void setClipRegion(QPainter& painter, bool combine = true);
 
-  /**
-   * Transforms the painter (its worldmatrix and the clipping)
-   * in such a way that the painter can be passed to the child part
-   * for drawing.
-   */
-  virtual void transform( QPainter& painter );
+    /**
+     * Transforms the painter (its worldmatrix and the clipping)
+     * in such a way that the painter can be passed to the child part
+     * for drawing.
+     */
+    virtual void transform(QPainter& painter);
 
-  /**
-   * Sets the position of the content relative to the child frame.
-   * This can be used to create a border between the frame border
-   * and the actual content.
-   */
-  virtual void setContentsPos( int x, int y );
+    /**
+     * Sets the position of the content relative to the child frame.
+     * This can be used to create a border between the frame border
+     * and the actual content.
+     */
+    virtual void setContentsPos(int x, int y);
 
-  /**
-   * @return the contents rectangle that is visible.
-   *         This value depends on the scaling and the geometry.
-   *         This is the value that is passed to KoDocument::paintContent.
-   *
-   * @see #xScaling #geometry
-   */
-  virtual QRect contentRect() const;
+    /**
+     * @return the contents rectangle that is visible.
+     *         This value depends on the scaling and the geometry.
+     *         This is the value that is passed to KoDocument::paintContent.
+     *
+     * @see #xScaling #geometry
+     */
+    virtual QRect contentRect() const;
 
-  /**
-   * @return the region of the child frame.
-   *         If solid is set to true the complete area of the child region
-   *         is returned, otherwise only the child border is returned.
-   */
-  virtual QRegion frameRegion( const QMatrix& matrix = QMatrix(), bool solid = false ) const;
+    /**
+     * @return the region of the child frame.
+     *         If solid is set to true the complete area of the child region
+     *         is returned, otherwise only the child border is returned.
+     */
+    virtual QRegion frameRegion(const QMatrix& matrix = QMatrix(), bool solid = false) const;
 
-  /**
-   * @return the frame geometry including a border (6 pixels) as a point
-   *         array with 4 points, one for each corner, transformed by given matrix.
-   */
-  virtual QPolygon framePointArray( const QMatrix &matrix = QMatrix() ) const;
+    /**
+     * @return the frame geometry including a border (6 pixels) as a point
+     *         array with 4 points, one for each corner, transformed by given matrix.
+     */
+    virtual QPolygon framePointArray(const QMatrix &matrix = QMatrix()) const;
 
-  /**
-   * @return the current transformation of this child as matrix.
-   *         This includes translation, scale, rotation, shearing.
-   *
-   * @see #updateMatrix
-   */
-  virtual QMatrix matrix() const;
+    /**
+     * @return the current transformation of this child as matrix.
+     *         This includes translation, scale, rotation, shearing.
+     *
+     * @see #updateMatrix
+     */
+    virtual QMatrix matrix() const;
 
-  /**
-   * Locks this child and stores the current transformation.
-   * A locked child does not emit changed signals.
-   *
-   * This is useful if a series of changes are done on this
-   * child and only the final result is of interest (GUI updating,...).
-   *
-   * @see #locked #unlock
-   */
-  void lock();
+    /**
+     * Locks this child and stores the current transformation.
+     * A locked child does not emit changed signals.
+     *
+     * This is useful if a series of changes are done on this
+     * child and only the final result is of interest (GUI updating,...).
+     *
+     * @see #locked #unlock
+     */
+    void lock();
 
-  /**
-   * Unlocks this child and emits a changed signal.
-   */
-  void unlock();
+    /**
+     * Unlocks this child and emits a changed signal.
+     */
+    void unlock();
 
-  /**
-   * If the child is locked, geometry changes
-   * (including scaling, rotation, ...) are not backed up.
-   *
-   * As long as this child is locked, the backed up
-   * geometry state can be recovered with oldPointArray.
-   *
-   * @return true when this child is locked.
-   *
-   * @see #locked #unlock #oldPointArray
-   */
-  bool locked() const;
+    /**
+     * If the child is locked, geometry changes
+     * (including scaling, rotation, ...) are not backed up.
+     *
+     * As long as this child is locked, the backed up
+     * geometry state can be recovered with oldPointArray.
+     *
+     * @return true when this child is locked.
+     *
+     * @see #locked #unlock #oldPointArray
+     */
+    bool locked() const;
 
-  /**
-   * @return the backed up geometry transformed by given matrix.
-   */
-  virtual QPolygon oldPointArray( const QMatrix &matrix );
+    /**
+     * @return the backed up geometry transformed by given matrix.
+     */
+    virtual QPolygon oldPointArray(const QMatrix &matrix);
 
-  /**
-   * Different actions are taken depending on where a child frame is
-   * hit. Two gadgets are known: one for the border (5 pixels) and one
-   * for the inner area.
-   * @return the gadget identification for the hit area.
-   * @param p the hit position.
-   *
-   * @see #Gadget
-   */
-  virtual Gadget gadgetHitTest( const QPoint& p );
+    /**
+     * Different actions are taken depending on where a child frame is
+     * hit. Two gadgets are known: one for the border (5 pixels) and one
+     * for the inner area.
+     * @return the gadget identification for the hit area.
+     * @param p the hit position.
+     *
+     * @see #Gadget
+     */
+    virtual Gadget gadgetHitTest(const QPoint& p);
 
 Q_SIGNALS:
 
-  /**
-   * Emitted every time this child changes, but only if this child is not
-   * locked.
-   * @see #locked
-   */
-  void changed( KoChild *thisChild );
+    /**
+     * Emitted every time this child changes, but only if this child is not
+     * locked.
+     * @see #locked
+     */
+    void changed(KoChild *thisChild);
 
 protected:
 
-  /**
-   * @return point array with the 4 corners of given rectangle, which is
-   *         transformed by given matrix.
-   *
-   *  @param matrix the transformation of r.
-   *  @param r the rectangle for which the point array should be created.
-   */
-  virtual QPolygon pointArray( const QRect& r, const QMatrix& matrix = QMatrix() ) const;
+    /**
+     * @return point array with the 4 corners of given rectangle, which is
+     *         transformed by given matrix.
+     *
+     *  @param matrix the transformation of r.
+     *  @param r the rectangle for which the point array should be created.
+     */
+    virtual QPolygon pointArray(const QRect& r, const QMatrix& matrix = QMatrix()) const;
 
-  /**
-   * Stores the current transformation of this child into a matrix.
-   *
-   * @see #matrix
-   */
-  virtual void updateMatrix();
+    /**
+     * Stores the current transformation of this child into a matrix.
+     *
+     * @see #matrix
+     */
+    virtual void updateMatrix();
 private:
 
-  class KoChildPrivate;
-  KoChildPrivate * const d;
+    class KoChildPrivate;
+    KoChildPrivate * const d;
 };
 
 #endif

@@ -25,9 +25,9 @@
 #include "kcomponentdata.h"
 #include <kdebug.h>
 
-int main( int /*argc*/, char ** /*argv*/ )
+int main(int /*argc*/, char ** /*argv*/)
 {
-    KComponentData componentData( "filter_graph" );  // we need an instance when using the trader
+    KComponentData componentData("filter_graph");    // we need an instance when using the trader
 
     QByteArray output = "digraph filters {\n";
 
@@ -38,68 +38,68 @@ int main( int /*argc*/, char ** /*argv*/ )
     QList<QString> vertices; // to keep track of already inserted values, not performance critical
 
     // Make sure that all available parts are added to the graph
-    const QList<KoDocumentEntry> parts( KoDocumentEntry::query(KoDocumentEntry::AllEntries) );
-    QList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
-    QList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
+    const QList<KoDocumentEntry> parts(KoDocumentEntry::query(KoDocumentEntry::AllEntries));
+    QList<KoDocumentEntry>::ConstIterator partIt(parts.begin());
+    QList<KoDocumentEntry>::ConstIterator partEnd(parts.end());
 
-    while ( partIt != partEnd ) {
+    while (partIt != partEnd) {
         //kDebug() << ( *partIt ).service()->desktopEntryName();
-        QStringList nativeMimeTypes = ( *partIt ).service()->property( "X-KDE-ExtraNativeMimeTypes" ).toStringList();
-        nativeMimeTypes += ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString();
+        QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes").toStringList();
+        nativeMimeTypes += (*partIt).service()->property("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.begin();
         QStringList::ConstIterator end = nativeMimeTypes.end();
-        for ( ; it != end; ++it ) {
+        for (; it != end; ++it) {
             QString key = *it;
             //kDebug() <<"" << key;
-            if ( !key.isEmpty() ) {
+            if (!key.isEmpty()) {
                 output += "    \"";
                 output += key.toLatin1();
                 output += "\" [shape=box, style=filled, fillcolor=lightblue];\n";
-                if ( ! vertices.contains( key ) )
-                    vertices.append( key );
+                if (! vertices.contains(key))
+                    vertices.append(key);
             }
         }
         ++partIt;
     }
 
-    const QList<KoFilterEntry::Ptr> filters( KoFilterEntry::query() ); // no constraint here - we want *all* :)
+    const QList<KoFilterEntry::Ptr> filters(KoFilterEntry::query());   // no constraint here - we want *all* :)
     QList<KoFilterEntry::Ptr>::ConstIterator it = filters.begin();
     QList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
 
-    for ( ; it != end; ++it ) {
-        kDebug() <<"import" << ( *it )->import <<" export" << ( *it )->export_;
+    for (; it != end; ++it) {
+        kDebug() << "import" << (*it)->import << " export" << (*it)->export_;
         // First add the "starting points"
-        QStringList::ConstIterator importIt = ( *it )->import.begin();
-        QStringList::ConstIterator importEnd = ( *it )->import.end();
-        for ( ; importIt != importEnd; ++importIt ) {
+        QStringList::ConstIterator importIt = (*it)->import.begin();
+        QStringList::ConstIterator importEnd = (*it)->import.end();
+        for (; importIt != importEnd; ++importIt) {
             // already there?
-            if ( ! vertices.contains( *importIt ) ) {
-                vertices.append( *importIt );
+            if (! vertices.contains(*importIt)) {
+                vertices.append(*importIt);
                 output += "    \"";
-                output += ( *importIt ).toLatin1();
+                output += (*importIt).toLatin1();
                 output += "\";\n";
             }
         }
 
-        QStringList::ConstIterator exportIt = ( *it )->export_.begin();
-        QStringList::ConstIterator exportEnd = ( *it )->export_.end();
+        QStringList::ConstIterator exportIt = (*it)->export_.begin();
+        QStringList::ConstIterator exportEnd = (*it)->export_.end();
 
-        for ( ; exportIt != exportEnd; ++exportIt ) {
+        for (; exportIt != exportEnd; ++exportIt) {
             // First make sure the export vertex is in place
-            if ( ! vertices.contains( *exportIt ) ) {
+            if (! vertices.contains(*exportIt)) {
                 output += "    \"";
-                output += ( *exportIt ).toLatin1();
+                output += (*exportIt).toLatin1();
                 output += "\";\n";
-                vertices.append( *exportIt );
+                vertices.append(*exportIt);
             }
             // Then create the appropriate edges
-            importIt = ( *it )->import.begin();
-            for ( ; importIt != importEnd; ++importIt ) {
+            importIt = (*it)->import.begin();
+            for (; importIt != importEnd; ++importIt) {
                 output += "    \"";
-                output += ( *importIt ).toLatin1();
+                output += (*importIt).toLatin1();
                 output += "\" -> \"";
-                output += ( *exportIt ).toLatin1();
-                if ( KoFilterManager::filterAvailable( *it ) )
+                output += (*exportIt).toLatin1();
+                if (KoFilterManager::filterAvailable(*it))
                     output += "\";\n";
                 else
                     output += "\" [style=dotted];\n";
@@ -109,9 +109,9 @@ int main( int /*argc*/, char ** /*argv*/ )
 
     output += "}\n";
 
-    QFile f( "graph.dot" );
-    if ( f.open( QIODevice::WriteOnly ) )
-        f.write( output );
+    QFile f("graph.dot");
+    if (f.open(QIODevice::WriteOnly))
+        f.write(output);
     f.close();
     return 0;
 }

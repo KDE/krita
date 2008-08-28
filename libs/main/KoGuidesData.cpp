@@ -29,19 +29,16 @@
 class KoGuidesData::Private
 {
 public:
-    Private() : showGuideLines(true), guidesColor( Qt::lightGray ) {}
+    Private() : showGuideLines(true), guidesColor(Qt::lightGray) {}
 
-    void parseHelpLine( const QString &text )
-    {
+    void parseHelpLine(const QString &text) {
         //<config:config-item config:name="SnapLinesDrawing" config:type="string">V7939H1139</config:config-item>
         QString str;
-        int newPos = text.length()-1; //start to element = 1
-        for ( int pos = text.length()-1; pos >=0;--pos )
-        {
-            if ( text[pos]=='P' )
-            {
+        int newPos = text.length() - 1; //start to element = 1
+        for (int pos = text.length() - 1; pos >= 0;--pos) {
+            if (text[pos] == 'P') {
                 //point element
-                str = text.mid( pos+1, ( newPos-pos ) );
+                str = text.mid(pos + 1, (newPos - pos));
                 /*
                 QStringList listVal = QStringList::split( ",", str );
                 int posX = ( listVal[0].toInt()/100 );
@@ -49,26 +46,22 @@ public:
                 point.setAttribute("posX", MM_TO_POINT(  posX ));
                 point.setAttribute("posY", MM_TO_POINT(  posY ));
                 */
-                newPos = pos-1;
-            }
-            else if ( text[pos]=='V' )
-            {
+                newPos = pos - 1;
+            } else if (text[pos] == 'V') {
                 //vertical element
-                str = text.mid( pos+1, ( newPos-pos ) );
+                str = text.mid(pos + 1, (newPos - pos));
                 //kDebug(30518)<<" vertical  :"<< str;
                 qreal posX = str.toDouble() / 100.0;
-                vertGuideLines.append( MM_TO_POINT( posX ) );
+                vertGuideLines.append(MM_TO_POINT(posX));
 
-                newPos = ( pos-1 );
-            }
-            else if ( text[pos]=='H' )
-            {
+                newPos = (pos - 1);
+            } else if (text[pos] == 'H') {
                 //horizontal element
-                str = text.mid( pos+1, ( newPos-pos ) );
+                str = text.mid(pos + 1, (newPos - pos));
                 qreal posY = str.toDouble() / 100.0;
-                horzGuideLines.append( MM_TO_POINT(  posY ) );
+                horzGuideLines.append(MM_TO_POINT(posY));
 
-                newPos = pos-1;
+                newPos = pos - 1;
             }
         }
     }
@@ -82,7 +75,7 @@ public:
 };
 
 KoGuidesData::KoGuidesData()
- : d( new Private() )
+        : d(new Private())
 {
 }
 
@@ -91,42 +84,39 @@ KoGuidesData::~KoGuidesData()
     delete d;
 }
 
-void KoGuidesData::setHorizontalGuideLines( const QList<qreal> &lines )
+void KoGuidesData::setHorizontalGuideLines(const QList<qreal> &lines)
 {
     d->horzGuideLines = lines;
 }
 
-void KoGuidesData::setVerticalGuideLines( const QList<qreal> &lines )
+void KoGuidesData::setVerticalGuideLines(const QList<qreal> &lines)
 {
     d->vertGuideLines = lines;
 }
 
-void KoGuidesData::setGuideLines( const QList<qreal> &horizontalLines, const QList<qreal> &verticalLines)
+void KoGuidesData::setGuideLines(const QList<qreal> &horizontalLines, const QList<qreal> &verticalLines)
 {
     d->horzGuideLines = horizontalLines;
     d->vertGuideLines = verticalLines;
 }
 
-void KoGuidesData::addGuideLine( Qt::Orientation o, qreal pos )
+void KoGuidesData::addGuideLine(Qt::Orientation o, qreal pos)
 {
-    if ( o == Qt::Horizontal )
-    {
-        d->horzGuideLines.append( pos );
-    }
-    else
-    {
-        d->vertGuideLines.append( pos );
+    if (o == Qt::Horizontal) {
+        d->horzGuideLines.append(pos);
+    } else {
+        d->vertGuideLines.append(pos);
     }
 }
 
-bool KoGuidesData::showGuideLines() const 
-{ 
-  return d->showGuideLines; 
+bool KoGuidesData::showGuideLines() const
+{
+    return d->showGuideLines;
 }
 
-void KoGuidesData::setShowGuideLines( bool show )
+void KoGuidesData::setShowGuideLines(bool show)
 {
-  d->showGuideLines=show;
+    d->showGuideLines = show;
 }
 
 QList<qreal> KoGuidesData::horizontalGuideLines() const
@@ -141,27 +131,25 @@ QList<qreal> KoGuidesData::verticalGuideLines() const
 
 void KoGuidesData::paintGuides(QPainter &painter, const KoViewConverter &converter, const QRectF &area) const
 {
-    if( ! showGuideLines() )
+    if (! showGuideLines())
         return;
 
-    painter.setPen( d->guidesColor );
-    foreach( qreal guide, d->horzGuideLines )
-    {
-        if( guide < area.top() || guide > area.bottom() )
+    painter.setPen(d->guidesColor);
+    foreach(qreal guide, d->horzGuideLines) {
+        if (guide < area.top() || guide > area.bottom())
             continue;
-        painter.drawLine( converter.documentToView( QPointF( area.left(), guide ) ),
-                          converter.documentToView( QPointF( area.right(), guide ) ) );
+        painter.drawLine(converter.documentToView(QPointF(area.left(), guide)),
+                         converter.documentToView(QPointF(area.right(), guide)));
     }
-    foreach( qreal guide, d->vertGuideLines )
-    {
-        if( guide < area.left() || guide > area.right() )
+    foreach(qreal guide, d->vertGuideLines) {
+        if (guide < area.left() || guide > area.right())
             continue;
-        painter.drawLine( converter.documentToView( QPointF( guide, area.top() ) ),
-                          converter.documentToView( QPointF( guide, area.bottom() ) ) );
+        painter.drawLine(converter.documentToView(QPointF(guide, area.top())),
+                         converter.documentToView(QPointF(guide, area.bottom())));
     }
 }
 
-void KoGuidesData::setGuidesColor( const QColor &color )
+void KoGuidesData::setGuidesColor(const QColor &color)
 {
     d->guidesColor = color;
 }
@@ -171,50 +159,48 @@ QColor KoGuidesData::guidesColor() const
     return d->guidesColor;
 }
 
-bool KoGuidesData::loadOdfSettings( const KoXmlDocument & settingsDoc )
+bool KoGuidesData::loadOdfSettings(const KoXmlDocument & settingsDoc)
 {
     d->vertGuideLines.clear();
     d->horzGuideLines.clear();
 
-    KoOasisSettings settings( settingsDoc );
-    KoOasisSettings::Items viewSettings = settings.itemSet( "ooo:view-settings" );
-    if( viewSettings.isNull() )
+    KoOasisSettings settings(settingsDoc);
+    KoOasisSettings::Items viewSettings = settings.itemSet("ooo:view-settings");
+    if (viewSettings.isNull())
         return false;
 
-    KoOasisSettings::IndexedMap viewMap = viewSettings.indexedMap( "Views" );
-    if( viewMap.isNull() )
+    KoOasisSettings::IndexedMap viewMap = viewSettings.indexedMap("Views");
+    if (viewMap.isNull())
         return false;
 
-    KoOasisSettings::Items firstView = viewMap.entry( 0 );
-    if( firstView.isNull() )
+    KoOasisSettings::Items firstView = viewMap.entry(0);
+    if (firstView.isNull())
         return false;
 
-    QString str = firstView.parseConfigItemString( "SnapLinesDrawing" );
-    if ( !str.isEmpty() )
-        d->parseHelpLine( str );
+    QString str = firstView.parseConfigItemString("SnapLinesDrawing");
+    if (!str.isEmpty())
+        d->parseHelpLine(str);
 
     return true;
 }
 
-void KoGuidesData::saveOdfSettings( KoXmlWriter &settingsWriter )
+void KoGuidesData::saveOdfSettings(KoXmlWriter &settingsWriter)
 {
-    settingsWriter.startElement( "config:config-item" );
-    settingsWriter.addAttribute( "config:name", "SnapLinesDrawing" );
-    settingsWriter.addAttribute( "config:type", "string" );
+    settingsWriter.startElement("config:config-item");
+    settingsWriter.addAttribute("config:name", "SnapLinesDrawing");
+    settingsWriter.addAttribute("config:type", "string");
 
     QString lineStr;
 
-    foreach( qreal h, d->horzGuideLines )
-    {
-        int tmpY = static_cast<int>( POINT_TO_MM( h * 100.0 ) );
-        lineStr += 'H' + QString::number( tmpY );
+    foreach(qreal h, d->horzGuideLines) {
+        int tmpY = static_cast<int>(POINT_TO_MM(h * 100.0));
+        lineStr += 'H' + QString::number(tmpY);
     }
-    foreach( qreal v, d->vertGuideLines )
-    {
-        int tmpX = static_cast<int>( POINT_TO_MM( v * 100.0 ) );
-        lineStr += 'V' + QString::number( tmpX );
+    foreach(qreal v, d->vertGuideLines) {
+        int tmpX = static_cast<int>(POINT_TO_MM(v * 100.0));
+        lineStr += 'V' + QString::number(tmpX);
     }
 
-    settingsWriter.addTextNode( lineStr );
+    settingsWriter.addTextNode(lineStr);
     settingsWriter.endElement(); // config:config-item
 }

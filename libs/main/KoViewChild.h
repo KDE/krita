@@ -33,31 +33,33 @@ class KoFrame;
 class KoViewChild : public KoChild
 {
     Q_OBJECT
-    public:
-        KoViewChild( KoDocumentChild *child, KoView *_parentView );
-        virtual ~KoViewChild();
+public:
+    KoViewChild(KoDocumentChild *child, KoView *_parentView);
+    virtual ~KoViewChild();
 
-        KoDocumentChild *documentChild() const;
-        KoView *parentView() const;
-        KoFrame *frame() const;
+    KoDocumentChild *documentChild() const;
+    KoView *parentView() const;
+    KoFrame *frame() const;
 
-        void setInitialFrameGeometry();
+    void setInitialFrameGeometry();
 
-    public slots:
+public slots:
 
-        // Call this when the view transformations change
-        void reposition() { slotDocGeometryChanged(); }
+    // Call this when the view transformations change
+    void reposition() {
+        slotDocGeometryChanged();
+    }
 
-    private slots:
-        void slotFrameGeometryChanged();
-        void slotDocGeometryChanged();
+private slots:
+    void slotFrameGeometryChanged();
+    void slotDocGeometryChanged();
 
-    private:
-        QPointer<KoDocumentChild> m_child;
-        QPointer<KoFrame> m_frame;
-        QPointer<KoView> m_parentView;
-        class KoViewChildPrivate;
-        KoViewChildPrivate * const d;
+private:
+    QPointer<KoDocumentChild> m_child;
+    QPointer<KoFrame> m_frame;
+    QPointer<KoView> m_parentView;
+    class KoViewChildPrivate;
+    KoViewChildPrivate * const d;
 };
 
 #endif

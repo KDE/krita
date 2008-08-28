@@ -40,28 +40,28 @@ class KoOdfLoadingContext;
 class KOMAIN_EXPORT KoOdfGraphicStyles
 {
 public:
-    static void saveOasisFillStyle( KoGenStyle &styleFill, KoGenStyles& mainStyles, const QBrush & brush );
+    static void saveOasisFillStyle(KoGenStyle &styleFill, KoGenStyles& mainStyles, const QBrush & brush);
 
-    static QString saveOasisHatchStyle( KoGenStyles& mainStyles, const QBrush &brush );
+    static QString saveOasisHatchStyle(KoGenStyles& mainStyles, const QBrush &brush);
 
     /// Saves gradient style of brush into mainStyles and returns the styles name
-    static QString saveOasisGradientStyle( KoGenStyles &mainStyles, const QBrush &brush );
+    static QString saveOasisGradientStyle(KoGenStyles &mainStyles, const QBrush &brush);
 
     /// Loads gradient style from style stack and stylesReader adapted to the given size and returns a brush
-    static QBrush loadOasisGradientStyle( const KoStyleStack &styleStack, const KoOdfStylesReader & stylesReader, const QSizeF &size );
+    static QBrush loadOasisGradientStyle(const KoStyleStack &styleStack, const KoOdfStylesReader & stylesReader, const QSizeF &size);
 
     /// Loads pattern style from style stack and oasisstyle adapted to the given size
-    static QBrush loadOasisPatternStyle( const KoStyleStack &styleStack, KoOdfLoadingContext & context, const QSizeF &size );
+    static QBrush loadOasisPatternStyle(const KoStyleStack &styleStack, KoOdfLoadingContext & context, const QSizeF &size);
 
-    static QBrush loadOasisFillStyle( const KoStyleStack &styleStack, const QString & fill,  const KoOdfStylesReader & stylesReader );
+    static QBrush loadOasisFillStyle(const KoStyleStack &styleStack, const QString & fill,  const KoOdfStylesReader & stylesReader);
 
-    static QPen loadOasisStrokeStyle( const KoStyleStack &styleStack, const QString & stroke, const KoOdfStylesReader & stylesReader );
+    static QPen loadOasisStrokeStyle(const KoStyleStack &styleStack, const QString & stroke, const KoOdfStylesReader & stylesReader);
 
     /// Helper function to parse a transformation attribute
-    static QMatrix loadTransformation( const QString &transformation );
+    static QMatrix loadTransformation(const QString &transformation);
 
     /// Helper function to create a transformation attribute
-    static QString saveTransformation( const QMatrix &transformation, bool appendTranslateUnit=true );
+    static QString saveTransformation(const QMatrix &transformation, bool appendTranslateUnit = true);
 };
 
 #endif /* KOODFGRAPHICSTYLES_H */

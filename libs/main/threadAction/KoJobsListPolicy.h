@@ -30,7 +30,8 @@ class ThreadWeaver::Job;
  * This class holds a list of jobs that will be handled sequentially while allowing
  * a not-yet-executing job to be removed from the queue.
  */
-class KoJobsListPolicy : public ThreadWeaver::QueuePolicy {
+class KoJobsListPolicy : public ThreadWeaver::QueuePolicy
+{
 public:
     /// constructor
     KoJobsListPolicy();
@@ -39,13 +40,13 @@ public:
     void addJob(ThreadWeaver::Job *job);
 
     /// reimplemented method
-    bool canRun (ThreadWeaver::Job *job);
+    bool canRun(ThreadWeaver::Job *job);
     /// reimplemented method
-    void free (ThreadWeaver::Job *job);
+    void free(ThreadWeaver::Job *job);
     /// reimplemented method
-    void release (ThreadWeaver::Job *job);
+    void release(ThreadWeaver::Job *job);
     /// reimplemented method
-    void destructed (ThreadWeaver::Job *job);
+    void destructed(ThreadWeaver::Job *job);
 
     /**
      * return a (copy of) the list of jobs.
@@ -59,18 +60,22 @@ public:
 
     /// @return the first job on the list
     ThreadWeaver::Job* firstJob();
-    
+
     /**
      * lock this policy from modifications by other threads. Will also disallow new
      * jobs to be started.
      * You should call unlock() afterwards.
      */
-    void lock() { writeMutex.lock(); canRunMutex.lock(); }
+    void lock() {
+        writeMutex.lock(); canRunMutex.lock();
+    }
     /**
      * unlock.
      * @see lock()
      */
-    void unlock() { writeMutex.unlock(); canRunMutex.unlock(); }
+    void unlock() {
+        writeMutex.unlock(); canRunMutex.unlock();
+    }
 
 private:
     QList<ThreadWeaver::Job*> m_jobs;

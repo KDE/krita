@@ -35,17 +35,17 @@ class QMenu;
 class Data
 {
 public:
-    Data(  QRectF rect )
-        : m_rect(  rect )
-        {}
+    Data(QRectF rect)
+            : m_rect(rect) {}
 
-    QRectF boundingBox() { return m_rect; }
-    void paint(  QPainter & p )
-    {
+    QRectF boundingBox() {
+        return m_rect;
+    }
+    void paint(QPainter & p) {
         p.save();
-        QPen pen(  Qt::black );
-        p.setPen(  pen );
-        p.drawRect(  m_rect );
+        QPen pen(Qt::black);
+        p.setPen(pen);
+        p.drawRect(m_rect);
         p.restore();
     }
 
@@ -63,9 +63,9 @@ public:
     virtual ~Canvas() {}
 
     void updateCanvas();
-    void insert( QRectF & rect );
-    void select( QRectF & rect );
-    void remove( QRectF & rect );
+    void insert(QRectF & rect);
+    void select(QRectF & rect);
+    void remove(QRectF & rect);
 
 public slots:
     void selectInsertTool();
@@ -76,9 +76,9 @@ public slots:
     void replay();
     void debug();
     void replayStep();
-    void paintTree( bool paintTree );
+    void paintTree(bool paintTree);
 
-protected: 
+protected:
     void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);

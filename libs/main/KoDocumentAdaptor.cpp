@@ -32,8 +32,8 @@
 #include <Q3PtrList>
 
 
-KoDocumentAdaptor::KoDocumentAdaptor( KoDocument * doc )
-    : QDBusAbstractAdaptor( doc )
+KoDocumentAdaptor::KoDocumentAdaptor(KoDocument * doc)
+        : QDBusAbstractAdaptor(doc)
 {
     setAutoRelaySignals(true);
     m_pDoc = doc;
@@ -45,39 +45,39 @@ KoDocumentAdaptor::~KoDocumentAdaptor()
 //     delete m_actionProxy;
 }
 
-void KoDocumentAdaptor::openUrl( const QString & url )
+void KoDocumentAdaptor::openUrl(const QString & url)
 {
-  m_pDoc->openUrl( KUrl( url ) );
+    m_pDoc->openUrl(KUrl(url));
 }
 
 bool KoDocumentAdaptor::isLoading()
 {
-  return m_pDoc->isLoading();
+    return m_pDoc->isLoading();
 }
 
 QString KoDocumentAdaptor::url()
 {
-  return m_pDoc->url().url();
+    return m_pDoc->url().url();
 }
 
 bool KoDocumentAdaptor::isModified()
 {
-  return m_pDoc->isModified();
+    return m_pDoc->isModified();
 }
 
 int KoDocumentAdaptor::viewCount()
 {
-  return m_pDoc->viewCount();
+    return m_pDoc->viewCount();
 }
 
-QString KoDocumentAdaptor::view( int idx )
+QString KoDocumentAdaptor::view(int idx)
 {
-  QList<KoView*> views = m_pDoc->views();
-  KoView *v = views.at( idx );
-  if ( !v )
-    return QString();
+    QList<KoView*> views = m_pDoc->views();
+    KoView *v = views.at(idx);
+    if (!v)
+        return QString();
 
-  return v->objectName();
+    return v->objectName();
 }
 
 // DCOPRef KoDocumentAdaptor::action( const DCOPCString &name )
@@ -93,13 +93,13 @@ QStringList KoDocumentAdaptor::actions()
 //     Q3ValueList<KAction *>::ConstIterator end = lst.end();
 //     for (; it != end; ++it )
 //         res.append( (*it)->objectName().toUtf8() );
-// 
+//
 //     return res;
     QStringList tmp_actions;
     QList<QAction*> lst = m_pDoc->actionCollection()->actions();
-    foreach( QAction* it, lst ) {
+    foreach(QAction* it, lst) {
         if (it->isEnabled())
-            tmp_actions.append( it->objectName() );
+            tmp_actions.append(it->objectName());
     }
     return tmp_actions;
 }
@@ -114,201 +114,201 @@ void KoDocumentAdaptor::save()
     m_pDoc->save();
 }
 
-void KoDocumentAdaptor::saveAs( const QString & url )
+void KoDocumentAdaptor::saveAs(const QString & url)
 {
-    m_pDoc->saveAs( KUrl( url ) );
+    m_pDoc->saveAs(KUrl(url));
     m_pDoc->waitSaveComplete(); // see ReadWritePart
 }
 
-void KoDocumentAdaptor::setOutputMimeType( const QByteArray& mimetype )
+void KoDocumentAdaptor::setOutputMimeType(const QByteArray& mimetype)
 {
-    m_pDoc->setOutputMimeType( mimetype );
+    m_pDoc->setOutputMimeType(mimetype);
 }
 
 QString KoDocumentAdaptor::documentInfoAuthorName() const
 {
-    return m_pDoc->documentInfo()->authorInfo( "creator" );
+    return m_pDoc->documentInfo()->authorInfo("creator");
 }
 
 QString KoDocumentAdaptor::documentInfoEmail() const
 {
-    return m_pDoc->documentInfo()->authorInfo( "email" );
+    return m_pDoc->documentInfo()->authorInfo("email");
 }
 
 QString KoDocumentAdaptor::documentInfoCompanyName() const
 {
-    return m_pDoc->documentInfo()->authorInfo( "company" );
+    return m_pDoc->documentInfo()->authorInfo("company");
 }
 
 QString KoDocumentAdaptor::documentInfoTelephone() const
 {
-    kDebug(30003)<<" Keep compatibility with koffice <= 1.3 : use documentInfoTelephoneWork";
+    kDebug(30003) << " Keep compatibility with koffice <= 1.3 : use documentInfoTelephoneWork";
     return documentInfoTelephoneWork();
 }
 
 QString KoDocumentAdaptor::documentInfoTelephoneWork() const
 {
-    return m_pDoc->documentInfo()->authorInfo( "telephone-work" );
+    return m_pDoc->documentInfo()->authorInfo("telephone-work");
 }
 
 QString KoDocumentAdaptor::documentInfoTelephoneHome() const
 {
-    return m_pDoc->documentInfo()->authorInfo( "telephone-home" );
+    return m_pDoc->documentInfo()->authorInfo("telephone-home");
 }
 
 
 QString KoDocumentAdaptor::documentInfoFax() const
 {
-    return m_pDoc->documentInfo()->authorInfo( "fax" );
+    return m_pDoc->documentInfo()->authorInfo("fax");
 
 }
 QString KoDocumentAdaptor::documentInfoCountry() const
 {
-    return m_pDoc->documentInfo()->authorInfo( "country" );
+    return m_pDoc->documentInfo()->authorInfo("country");
 
 }
 QString KoDocumentAdaptor::documentInfoPostalCode() const
 {
-    return m_pDoc->documentInfo()->authorInfo( "postal-code" );
+    return m_pDoc->documentInfo()->authorInfo("postal-code");
 
 }
 QString KoDocumentAdaptor::documentInfoCity() const
 {
-    return m_pDoc->documentInfo()->authorInfo( "city" );
+    return m_pDoc->documentInfo()->authorInfo("city");
 }
 
 QString KoDocumentAdaptor::documentInfoInitial() const
 {
-    return m_pDoc->documentInfo()->authorInfo( "initial" );
+    return m_pDoc->documentInfo()->authorInfo("initial");
 }
 
 QString KoDocumentAdaptor::documentInfoAuthorPostion() const
 {
-    return m_pDoc->documentInfo()->authorInfo( "position" );
+    return m_pDoc->documentInfo()->authorInfo("position");
 }
 
 QString KoDocumentAdaptor::documentInfoStreet() const
 {
-    return m_pDoc->documentInfo()->authorInfo( "street" );
+    return m_pDoc->documentInfo()->authorInfo("street");
 }
 
 QString KoDocumentAdaptor::documentInfoTitle() const
 {
-    return m_pDoc->documentInfo()->aboutInfo( "title" );
+    return m_pDoc->documentInfo()->aboutInfo("title");
 }
 
 QString KoDocumentAdaptor::documentInfoAbstract() const
 {
-    return m_pDoc->documentInfo()->aboutInfo( "comments" );
+    return m_pDoc->documentInfo()->aboutInfo("comments");
 }
 
 QString KoDocumentAdaptor::documentInfoKeywords() const
 {
-    return m_pDoc->documentInfo()->aboutInfo( "keywords" );
+    return m_pDoc->documentInfo()->aboutInfo("keywords");
 }
 
 QString KoDocumentAdaptor::documentInfoSubject() const
 {
-    return m_pDoc->documentInfo()->aboutInfo( "subject" );
+    return m_pDoc->documentInfo()->aboutInfo("subject");
 }
-void KoDocumentAdaptor::setDocumentInfoKeywords(const QString & text )
+void KoDocumentAdaptor::setDocumentInfoKeywords(const QString & text)
 {
-    m_pDoc->documentInfo()->setAboutInfo( "keywords", text );
+    m_pDoc->documentInfo()->setAboutInfo("keywords", text);
 }
 
 void KoDocumentAdaptor::setDocumentInfoSubject(const QString & text)
 {
-    m_pDoc->documentInfo()->setAboutInfo( "subject", text );
+    m_pDoc->documentInfo()->setAboutInfo("subject", text);
 }
 
 void KoDocumentAdaptor::setDocumentInfoAuthorName(const QString & text)
 {
-    m_pDoc->documentInfo()->setAuthorInfo( "creator", text );
+    m_pDoc->documentInfo()->setAuthorInfo("creator", text);
 }
 
 void KoDocumentAdaptor::setDocumentInfoEmail(const QString &text)
 {
-    m_pDoc->documentInfo()->setAuthorInfo( "email", text );
+    m_pDoc->documentInfo()->setAuthorInfo("email", text);
 }
 
 void KoDocumentAdaptor::setDocumentInfoCompanyName(const QString &text)
 {
-    m_pDoc->documentInfo()->setAuthorInfo( "company", text );
+    m_pDoc->documentInfo()->setAuthorInfo("company", text);
 }
 
 void KoDocumentAdaptor::setDocumentInfoAuthorPosition(const QString &text)
 {
-    m_pDoc->documentInfo()->setAuthorInfo( "position", text );
+    m_pDoc->documentInfo()->setAuthorInfo("position", text);
 }
 
 
 void KoDocumentAdaptor::setDocumentInfoTelephone(const QString &text)
 {
-    kDebug(30003)<<"Keep compatibility with koffice <= 1.3 : use setDocumentInfoTelephoneWork";
+    kDebug(30003) << "Keep compatibility with koffice <= 1.3 : use setDocumentInfoTelephoneWork";
     setDocumentInfoTelephoneWork(text);
 }
 
 void KoDocumentAdaptor::setDocumentInfoTelephoneWork(const QString &text)
 {
-    m_pDoc->documentInfo()->setAuthorInfo( "telephone-work", text );
+    m_pDoc->documentInfo()->setAuthorInfo("telephone-work", text);
 }
 
 void KoDocumentAdaptor::setDocumentInfoTelephoneHome(const QString &text)
 {
-    m_pDoc->documentInfo()->setAuthorInfo( "telephone", text );
+    m_pDoc->documentInfo()->setAuthorInfo("telephone", text);
 }
 
 void KoDocumentAdaptor::setDocumentInfoFax(const QString &text)
 {
-    m_pDoc->documentInfo()->setAuthorInfo( "fax", text );
+    m_pDoc->documentInfo()->setAuthorInfo("fax", text);
 }
 
 void KoDocumentAdaptor::setDocumentInfoCountry(const QString &text)
 {
-    m_pDoc->documentInfo()->setAuthorInfo( "country", text );
+    m_pDoc->documentInfo()->setAuthorInfo("country", text);
 }
 
 void KoDocumentAdaptor::setDocumentInfoTitle(const QString & text)
 {
-    m_pDoc->documentInfo()->setAboutInfo( "title", text );
+    m_pDoc->documentInfo()->setAboutInfo("title", text);
 }
 
 void KoDocumentAdaptor::setDocumentInfoPostalCode(const QString &text)
 {
-    m_pDoc->documentInfo()->setAuthorInfo( "postal-code", text );
+    m_pDoc->documentInfo()->setAuthorInfo("postal-code", text);
 }
 
 void KoDocumentAdaptor::setDocumentInfoCity(const QString & text)
 {
-    m_pDoc->documentInfo()->setAuthorInfo( "city", text );
+    m_pDoc->documentInfo()->setAuthorInfo("city", text);
 }
 
 void KoDocumentAdaptor::setDocumentInfoInitial(const QString & text)
 {
-    m_pDoc->documentInfo()->setAuthorInfo( "initial", text );
+    m_pDoc->documentInfo()->setAuthorInfo("initial", text);
 }
 
 void KoDocumentAdaptor::setDocumentInfoStreet(const QString &text)
 {
-    m_pDoc->documentInfo()->setAuthorInfo( "street", text );
+    m_pDoc->documentInfo()->setAuthorInfo("street", text);
 }
 
 void KoDocumentAdaptor::setDocumentInfoAbstract(const QString &text)
 {
-    m_pDoc->documentInfo()->setAboutInfo( "comments", text );
+    m_pDoc->documentInfo()->setAboutInfo("comments", text);
 }
 
 // DCOPCStringList KoDocumentAdaptor::functionsDynamic()
 // {
 //     return DCOPObject::functionsDynamic() + KDCOPPropertyProxy::functions( m_pDoc );
 // }
-// 
+//
 // bool KoDocumentAdaptor::processDynamic( const DCOPCString &fun, const QByteArray &data,
 //                                       DCOPCString& replyType, QByteArray &replyData )
 // {
 //     if ( KDCOPPropertyProxy::isPropertyRequest( fun, m_pDoc ) )
 //         return KDCOPPropertyProxy::processPropertyRequest( fun, data, replyType, replyData, m_pDoc );
-// 
+//
 //     return DCOPObject::processDynamic( fun, data, replyType, replyData );
 // }
 

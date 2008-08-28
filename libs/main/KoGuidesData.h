@@ -44,20 +44,20 @@ public:
      * @param horizontalLines a list of positions of the horizontal guide lines
      * @param verticalLines a list of positions of the vertical guide lines
      */
-    void setGuideLines( const QList<qreal> &horizontalLines, const QList<qreal> &verticalLines);
+    void setGuideLines(const QList<qreal> &horizontalLines, const QList<qreal> &verticalLines);
     /**
      * @brief Set the positions of the horizontal guide lines
      *
      * @param lines a list of positions of the horizontal guide lines
      */
-    void setHorizontalGuideLines( const QList<qreal> &lines );
+    void setHorizontalGuideLines(const QList<qreal> &lines);
 
     /**
      * @brief Set the positions of the vertical guide lines
      *
      * @param lines a list of positions of the vertical guide lines
      */
-    void setVerticalGuideLines( const QList<qreal> &lines );
+    void setVerticalGuideLines(const QList<qreal> &lines);
 
     /**
      * @brief Add a guide line
@@ -65,7 +65,7 @@ public:
      * @param p the orientation of the guide line
      * @param p the position of the guide line
      */
-    void addGuideLine( Qt::Orientation o, qreal pos );
+    void addGuideLine(Qt::Orientation o, qreal pos);
 
     /**
      * @brief Display or not guide lines
@@ -75,12 +75,12 @@ public:
     /**
      * @param show display or not guide line
      */
-    void setShowGuideLines( bool show );
+    void setShowGuideLines(bool show);
 
-     /// Returns the list of horizontal guide lines.
+    /// Returns the list of horizontal guide lines.
     QList<qreal> horizontalGuideLines() const;
 
-     /// Returns the list of vertical guide lines.
+    /// Returns the list of vertical guide lines.
     QList<qreal> verticalGuideLines() const;
 
     /**
@@ -96,16 +96,16 @@ public:
      * Sets the color of the guide lines.
      * @param color the new guides color
      */
-    void setGuidesColor( const QColor &color );
+    void setGuidesColor(const QColor &color);
 
     /// Returns the color of the guide lines.
     QColor guidesColor() const;
 
     /// Loads guide lines from the given setting xml document
-    bool loadOdfSettings( const KoXmlDocument & settingsDoc );
+    bool loadOdfSettings(const KoXmlDocument & settingsDoc);
 
     /// Saves guide lines to the given settings xml writer
-    void saveOdfSettings( KoXmlWriter &settingsWriter );
+    void saveOdfSettings(KoXmlWriter &settingsWriter);
 
 private:
     class Private;

@@ -25,14 +25,14 @@
 
 #include <QAction>
 
-class UnitChangeAction : public QAction {
+class UnitChangeAction : public QAction
+{
     Q_OBJECT
 public:
     UnitChangeAction(KoUnit::Unit unit, QObject *parent, KoDocument *document)
-        : QAction(KoUnit::unitDescription(KoUnit(unit)), parent),
-        m_document(document),
-        m_unit(unit)
-    {
+            : QAction(KoUnit::unitDescription(KoUnit(unit)), parent),
+            m_document(document),
+            m_unit(unit) {
         connect(this, SIGNAL(triggered(bool)), SLOT(activated()));
     }
 

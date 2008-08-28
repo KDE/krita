@@ -33,7 +33,7 @@ class QSize;
 class QIODevice;
 class Q3DragObject;
 
-const char NULL_MIME_TYPE[]="application/x-zerosize";
+const char NULL_MIME_TYPE[] = "application/x-zerosize";
 
 // TODO: fix documentation
 
@@ -85,7 +85,7 @@ public:
      * @param dragSource must be 0 when copying to the clipboard
      * @return 0L if the picture is null!
      */
-    virtual Q3DragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
+    virtual Q3DragObject* dragObject(QWidget *dragSource = 0L, const char *name = 0L);
 
     virtual bool load(QIODevice* io, const QString& extension);
 
@@ -101,7 +101,7 @@ public:
      * OASIS FlatXML support:
      * Save picture as base64-encoded data into an XML writer.
      */
-    virtual bool saveAsBase64( KoXmlWriter& writer ) const;
+    virtual bool saveAsBase64(KoXmlWriter& writer) const;
 
     virtual QSize getOriginalSize(void) const;
 
@@ -117,12 +117,13 @@ public:
      */
     virtual QImage generateImage(const QSize& size);
 
-    virtual bool hasAlphaBuffer() const
-        { return false; }
-    virtual void setAlphaBuffer(bool /*enable*/)
-        { }
-    virtual QImage createAlphaMask(Qt::ImageConversionFlags = Qt::AutoColor) const
-        { return QImage(); }
+    virtual bool hasAlphaBuffer() const {
+        return false;
+    }
+    virtual void setAlphaBuffer(bool /*enable*/) { }
+    virtual QImage createAlphaMask(Qt::ImageConversionFlags = Qt::AutoColor) const {
+        return QImage();
+    }
 
     virtual void clearCache(void);
 };

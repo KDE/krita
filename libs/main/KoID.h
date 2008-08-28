@@ -30,16 +30,21 @@
  * A KoID is a combination of a user-visible string and a string that uniquely
  * identifies a given resource across languages.
  */
-class KoID {
+class KoID
+{
 public:
     KoID() : m_id(), m_name() {}
 
     explicit KoID(const QString & id, const QString & name = QString())
-        : m_id(id),
-          m_name(name) {}
+            : m_id(id),
+            m_name(name) {}
 
-    QString id() const { return m_id; }
-    QString name() const { return m_name; }
+    QString id() const {
+        return m_id;
+    }
+    QString name() const {
+        return m_name;
+    }
 
     friend inline bool operator==(const KoID &, const KoID &);
     friend inline bool operator!=(const KoID &, const KoID &);
@@ -53,11 +58,11 @@ private:
 
 };
 
-Q_DECLARE_METATYPE( KoID )
+Q_DECLARE_METATYPE(KoID)
 
 inline bool operator==(const KoID &v1, const KoID &v2)
 {
-     return v1.m_id == v2.m_id;
+    return v1.m_id == v2.m_id;
 }
 
 inline bool operator!=(const KoID &v1, const KoID &v2)
@@ -79,7 +84,7 @@ inline bool operator>(const KoID &v1, const KoID &v2)
 
 inline QDebug operator<<(QDebug dbg, const KoID &id)
 {
-    dbg.nospace() << id.name() << " (" << id.id() <<" )";
+    dbg.nospace() << id.name() << " (" << id.id() << " )";
 
     return dbg.space();
 }

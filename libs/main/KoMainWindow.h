@@ -39,7 +39,7 @@ class QLabel;
 
 namespace KParts
 {
-  class PartManager;
+class PartManager;
 }
 
 /**
@@ -61,7 +61,7 @@ public:
      *
      *  Initializes a KOffice main window (with its basic GUI etc.).
      */
-    explicit KoMainWindow( const KComponentData &instance );
+    explicit KoMainWindow(const KComponentData &instance);
 
     /**
      *  Destructor.
@@ -72,13 +72,13 @@ public:
      * Called when a document is assigned to this mainwindow.
      * This creates a view for this document, makes it the active part, etc.
      */
-    virtual void setRootDocument( KoDocument *doc );
+    virtual void setRootDocument(KoDocument *doc);
 
     /**
      * This is used to handle the document used at start up before it actually
      * added as root document.
      */
-    void setDocToOpen( KoDocument *doc );
+    void setDocToOpen(KoDocument *doc);
 
     /**
      * Update caption from document info - call when document info
@@ -99,7 +99,7 @@ public:
      * The application should call this to show or hide a toolbar.
      * It also takes care of the corresponding action in the settings menu.
      */
-    void showToolbar( const char * tbName, bool shown );
+    void showToolbar(const char * tbName, bool shown);
 
     /**
      * @return TRUE if the toolbar @p tbName is visible
@@ -120,7 +120,7 @@ public:
     /**
      * The document opened a URL -> store into recent documents list.
      */
-    void addRecentURL( const KUrl& url );
+    void addRecentURL(const KUrl& url);
 
     /**
      * Load the desired document and show it.
@@ -128,14 +128,14 @@ public:
      *
      * @return TRUE on success.
      */
-    virtual bool openDocument( const KUrl & url );
+    virtual bool openDocument(const KUrl & url);
 
     /**
      * Load the URL into this document (and make it root doc after loading)
      *
      * Special method for KoApplication::start, don't use.
      */
-    bool openDocument( KoDocument *newdoc, const KUrl & url );
+    bool openDocument(KoDocument *newdoc, const KUrl & url);
 
 //     virtual DCOPObject * dcopObject();
 
@@ -147,11 +147,11 @@ public:
     /**
      * Updates the window caption based on the document info and path.
      */
-    virtual void updateCaption( const QString & caption, bool mod );
+    virtual void updateCaption(const QString & caption, bool mod);
     void updateReloadFileAction(KoDocument *doc);
     void updateVersionsFileAction(KoDocument *doc);
 
-    void setReadWrite( bool readwrite );
+    void setReadWrite(bool readwrite);
 
     /**
      * Returns the dockwidget specified by the @p factory. If the dock widget doesn't exist yet it's created.
@@ -171,7 +171,7 @@ signals:
     void documentSaved();
     /// This signals is emmitted before the save dialog is shown
     void saveDialogShown();
-    
+
     /// This signal is emitted right after the docker states have been succefully restored from config
     void restoringDone();
 
@@ -207,7 +207,7 @@ public slots:
      *  If the current document is empty, the opened document replaces it.
      *  If not a new shell will be opened for showing the opened file.
      */
-    virtual void slotFileOpenRecent( const KUrl & );
+    virtual void slotFileOpenRecent(const KUrl &);
 
     /**
      *  Saves the current document with the current name.
@@ -260,7 +260,7 @@ public slots:
     /**
      *  Shows or hides a toolbar
      */
-    virtual void slotToolbarToggled( bool toggle );
+    virtual void slotToolbarToggled(bool toggle);
 
     /**
      * View splitting stuff
@@ -320,12 +320,12 @@ protected: // protected methods are mostly for koshell, it's the only one derivi
     enum InitDocFlags { /*InitDocAppStarting, */ InitDocFileNew, InitDocFileClose /*, InitDocEmbedded, InitDocEmpty*/ };
 
     /// Helper method for slotFileNew and slotFileClose
-    void chooseNewDocument( InitDocFlags initDocFlags );
+    void chooseNewDocument(InitDocFlags initDocFlags);
     /**
      * Special method for KOShell, to allow switching the root
      * document (and its views) among a set of them.
      */
-    void setRootDocumentDirect( KoDocument *doc, const Q3PtrList<KoView> & views );
+    void setRootDocumentDirect(KoDocument *doc, const Q3PtrList<KoView> & views);
 
     /**
      * Create a new empty document.
@@ -343,17 +343,17 @@ protected: // protected methods are mostly for koshell, it's the only one derivi
      *         (don't display anything in this case, the error dialog box is also implemented here
      *         but restore the original URL in slotFileSaveAs)
      */
-    virtual bool saveDocument( bool saveas = false, bool silent = false );
+    virtual bool saveDocument(bool saveas = false, bool silent = false);
 
-    virtual void closeEvent( QCloseEvent * e );
-    virtual void resizeEvent( QResizeEvent * e );
+    virtual void closeEvent(QCloseEvent * e);
+    virtual void resizeEvent(QResizeEvent * e);
 
     /**
      * Ask user about saving changes to the document upon exit.
      */
     virtual bool queryClose();
 
-    virtual bool openDocumentInternal( const KUrl & url, KoDocument * newdoc = 0L );
+    virtual bool openDocumentInternal(const KUrl & url, KoDocument * newdoc = 0L);
 
     /**
      * Returns whether or not the current slotFileSave[As]() or saveDocument()
@@ -383,11 +383,11 @@ protected: // protected methods are mostly for koshell, it's the only one derivi
     KRecentFilesAction *recentAction() const;
 
 protected slots:
-    virtual void slotActivePartChanged( KParts::Part *newPart );
+    virtual void slotActivePartChanged(KParts::Part *newPart);
 
 private slots:
     void slotLoadCompleted();
-    void slotLoadCanceled (const QString &);
+    void slotLoadCanceled(const QString &);
     void slotSaveCompleted();
     void slotSaveCanceled(const QString &);
     void forceDockTabFonts();
@@ -399,7 +399,7 @@ private:
      *
      * @return true if the document should be saved
      */
-    bool exportConfirmation( const QByteArray &outputFormat );
+    bool exportConfirmation(const QByteArray &outputFormat);
 
     void saveWindowSettings();
 

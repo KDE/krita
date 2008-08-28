@@ -97,12 +97,12 @@ public:
     virtual void clearCache(void);
 protected:
     QPixmap getPixmap(QImage& image);
-    void scaleAndCreatePixmap(const QSize& size, bool fastMode, const int resolutionx, const int resolutiony );
-    QImage scaleWithGhostScript( const QSize& size, const int resolutionx, const int resolutiony );
-    bool extractPostScriptStream( void );
+    void scaleAndCreatePixmap(const QSize& size, bool fastMode, const int resolutionx, const int resolutiony);
+    QImage scaleWithGhostScript(const QSize& size, const int resolutionx, const int resolutiony);
+    bool extractPostScriptStream(void);
 
 private:
-    int tryScaleWithGhostScript(QImage &image, const QSize& size, const int resolutionx, const int resolutiony, const char* device );
+    int tryScaleWithGhostScript(QImage &image, const QSize& size, const int resolutionx, const int resolutiony, const char* device);
     /**
      * @brief Read a line from a PostScript stream in a QByteArray
      *
@@ -117,7 +117,7 @@ private:
      *   to skip an eventual Line Feed at the start of this line
      * @return the read line
      */
-    QString readLine( const QByteArray& array, const uint start, const uint length, uint& pos, bool& lastCharWasCr );
+    QString readLine(const QByteArray& array, const uint start, const uint length, uint& pos, bool& lastCharWasCr);
 
 private:
     /**

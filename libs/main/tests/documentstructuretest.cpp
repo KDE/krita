@@ -34,7 +34,7 @@
 #include <kcomponentdata.h>
 
 // May the testing begin
-DocumentStructureTest::DocumentStructureTest() 
+DocumentStructureTest::DocumentStructureTest()
 {
     componentData = new KComponentData("DocumentStructureTest");
 }
@@ -100,7 +100,7 @@ void DocumentStructureTest::rootAttributes()
     delete documentInfo;
 }
 
-void DocumentStructureTest::predefinedMetaData() 
+void DocumentStructureTest::predefinedMetaData()
 {
     QString odt = QString(FILES_DATA_DIR) + "/DocumentStructure/predefined.odt";
     QVERIFY(QFile(odt).exists());

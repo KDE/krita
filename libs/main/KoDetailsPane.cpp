@@ -33,12 +33,10 @@ class KoDetailsPanePrivate
 {
 public:
     KoDetailsPanePrivate(const KComponentData &componentData)
-        : m_componentData(componentData)
-    {
+            : m_componentData(componentData) {
         m_model = new QStandardItemModel;
     }
-    ~KoDetailsPanePrivate()
-    {
+    ~KoDetailsPanePrivate() {
         delete m_model;
     }
 
@@ -47,90 +45,90 @@ public:
 };
 
 KoDetailsPane::KoDetailsPane(QWidget* parent, const KComponentData &_componentData, const QString& header)
-  : QWidget(parent),
-    Ui_KoDetailsPaneBase(),
-    d(new KoDetailsPanePrivate(_componentData))
+        : QWidget(parent),
+        Ui_KoDetailsPaneBase(),
+        d(new KoDetailsPanePrivate(_componentData))
 {
-  d->m_model->setHorizontalHeaderItem(0, new QStandardItem(header));
+    d->m_model->setHorizontalHeaderItem(0, new QStandardItem(header));
 
-  setupUi(this);
+    setupUi(this);
 
-  m_previewLabel->installEventFilter(this);
-  m_documentList->installEventFilter(this);
-  m_documentList->setIconSize(QSize(64, 64));
-  m_documentList->setModel(d->m_model);
+    m_previewLabel->installEventFilter(this);
+    m_documentList->installEventFilter(this);
+    m_documentList->setIconSize(QSize(64, 64));
+    m_documentList->setModel(d->m_model);
 
-  changePalette();
+    changePalette();
 
-  connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SLOT(changePalette()));
+    connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SLOT(changePalette()));
 
-  connect(m_documentList->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
-          this, SLOT(selectionChanged(const QModelIndex&)));
-  connect(m_documentList, SIGNAL(doubleClicked(const QModelIndex&)),
-          this, SLOT(openFile(const QModelIndex&)));
-  connect(m_openButton, SIGNAL(clicked()), this, SLOT(openFile()));
+    connect(m_documentList->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+            this, SLOT(selectionChanged(const QModelIndex&)));
+    connect(m_documentList, SIGNAL(doubleClicked(const QModelIndex&)),
+            this, SLOT(openFile(const QModelIndex&)));
+    connect(m_openButton, SIGNAL(clicked()), this, SLOT(openFile()));
 }
 
 KoDetailsPane::~KoDetailsPane()
 {
-  delete d;
+    delete d;
 }
 
 KComponentData KoDetailsPane::componentData()
 {
-  return d->m_componentData;
+    return d->m_componentData;
 }
 
 bool KoDetailsPane::eventFilter(QObject* watched, QEvent* e)
 {
-  if(watched == m_previewLabel) {
-    if(e->type() == QEvent::MouseButtonDblClick) {
-      openFile();
-    }
-  }
-
-  if(watched == m_documentList) {
-    if((e->type() == QEvent::Resize) && isVisible()) {
-      emit splitterResized(this, m_splitter->sizes());
+    if (watched == m_previewLabel) {
+        if (e->type() == QEvent::MouseButtonDblClick) {
+            openFile();
+        }
     }
 
-    if((e->type() == QEvent::KeyPress)) {
-      QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
+    if (watched == m_documentList) {
+        if ((e->type() == QEvent::Resize) && isVisible()) {
+            emit splitterResized(this, m_splitter->sizes());
+        }
 
-      if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
-        openFile();
-      }
+        if ((e->type() == QEvent::KeyPress)) {
+            QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
+
+            if (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
+                openFile();
+            }
+        }
     }
-  }
 
-  return false;
+    return false;
 }
 
 void KoDetailsPane::resizeSplitter(KoDetailsPane* sender, const QList<int>& sizes)
 {
-  if(sender == this)
-  return;
+    if (sender == this)
+        return;
 
-  m_splitter->setSizes(sizes);
+    m_splitter->setSizes(sizes);
 }
 
 void KoDetailsPane::openFile()
 {
-  QModelIndex index = m_documentList->selectionModel()->currentIndex();
-  openFile(index);
+    QModelIndex index = m_documentList->selectionModel()->currentIndex();
+    openFile(index);
 }
 
 void KoDetailsPane::changePalette()
 {
-  QPalette p = qApp ? qApp->palette() : palette();
-  p.setBrush(QColorGroup::Base, QColor(Qt::transparent));
-  p.setColor(QColorGroup::Text, p.color(QPalette::Normal, QColorGroup::Foreground));
-  m_detailsLabel->setPalette(p);
+    QPalette p = qApp ? qApp->palette() : palette();
+    p.setBrush(QColorGroup::Base, QColor(Qt::transparent));
+    p.setColor(QColorGroup::Text, p.color(QPalette::Normal, QColorGroup::Foreground));
+    m_detailsLabel->setPalette(p);
 }
 
 QStandardItemModel* KoDetailsPane::model() const
 {
-  return d->m_model;
+    return d->m_model;
 }
 
 #include "KoDetailsPane.moc"

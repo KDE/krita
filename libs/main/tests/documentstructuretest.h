@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef DOCUMENTINFOTEST_H 
+#ifndef DOCUMENTINFOTEST_H
 #define DOCUMENTINFOTEST_H
 
 #include <QObject>
@@ -25,7 +25,7 @@
 class KoStore;
 class KComponentData;
 
-class DocumentStructureTest : public QObject 
+class DocumentStructureTest : public QObject
 {
     Q_OBJECT
 public:

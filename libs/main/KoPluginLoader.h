@@ -111,7 +111,7 @@ public:
      * @param config when passing a valid config only the wanted plugins are actually loaded
      * @return a list of services (by library name) that were not know in the config
      */
-    void load(const QString & serviceType, const QString & versionString = QString(), const PluginsConfig &config = PluginsConfig() );
+    void load(const QString & serviceType, const QString & versionString = QString(), const PluginsConfig &config = PluginsConfig());
 
 private:
     KoPluginLoader();

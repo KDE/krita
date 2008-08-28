@@ -32,13 +32,13 @@
 #include <QStringList>
 
 KoExistingDocumentPane::KoExistingDocumentPane(QWidget* parent)
-    : QWidget(parent)
+        : QWidget(parent)
 {
     QGridLayout* layout = new QGridLayout(this);
     layout->setSpacing(KDialog::spacingHint());
     layout->setMargin(0);
     const QStringList mimeFilter = KoFilterManager::mimeFilter(KoDocument::readNativeFormatMimeType(),
-            KoFilterManager::Import, KoDocument::readExtraNativeMimeTypes());
+                                   KoFilterManager::Import, KoDocument::readExtraNativeMimeTypes());
 
     m_fileWidget = new KFileWidget(KUrl("kfiledialog:///OpenDialog"), this);
     m_fileWidget->setOperationMode(KFileWidget::Opening);

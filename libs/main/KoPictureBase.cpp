@@ -39,11 +39,10 @@ static int s_useSlowResizeMode = -1; // unset
 KoPictureBase::KoPictureBase(void)
 {
     // Slow mode can be very slow, especially at high zoom levels -> configurable
-    if ( s_useSlowResizeMode == -1 )
-    {
-        KConfigGroup group( KGlobal::config(), "KOfficeImage" );
-        s_useSlowResizeMode = group.readEntry( "HighResolution", 1 );
-        kDebug(30003) <<"HighResolution =" << s_useSlowResizeMode;
+    if (s_useSlowResizeMode == -1) {
+        KConfigGroup group(KGlobal::config(), "KOfficeImage");
+        s_useSlowResizeMode = group.readEntry("HighResolution", 1);
+        kDebug(30003) << "HighResolution =" << s_useSlowResizeMode;
     }
 }
 
@@ -71,8 +70,8 @@ void KoPictureBase::draw(QPainter& painter, int x, int y, int width, int height,
     // Draw a light red box (easier DEBUG)
     kWarning(30003) << "Drawing light red rectangle! (KoPictureBase::draw)";
     painter.save();
-    painter.setBrush(QColor(128,0,0));
-    painter.drawRect(x,y,width,height);
+    painter.setBrush(QColor(128, 0, 0));
+    painter.drawRect(x, y, width, height);
     painter.restore();
 }
 
@@ -93,20 +92,20 @@ bool KoPictureBase::save(QIODevice*) const
     return false;
 }
 
-bool KoPictureBase::saveAsBase64( KoXmlWriter& writer ) const
+bool KoPictureBase::saveAsBase64(KoXmlWriter& writer) const
 {
     QBuffer buffer;
     buffer.open(QIODevice::ReadWrite);
-    if ( !save( &buffer ) )
+    if (!save(&buffer))
         return false;
     QByteArray encoded = buffer.buffer().toBase64();
-    writer.addTextNode( encoded );
+    writer.addTextNode(encoded);
     return true;
 }
 
 QSize KoPictureBase::getOriginalSize(void) const
 {
-    return QSize(0,0);
+    return QSize(0, 0);
 }
 
 QPixmap KoPictureBase::generatePixmap(const QSize&, bool /*smoothScale*/)
@@ -124,18 +123,18 @@ bool KoPictureBase::isSlowResizeModeAllowed(void) const
     return s_useSlowResizeMode != 0;
 }
 
-Q3DragObject* KoPictureBase::dragObject( QWidget * dragSource, const char * name )
+Q3DragObject* KoPictureBase::dragObject(QWidget * dragSource, const char * name)
 {
-    QImage image (generateImage(getOriginalSize()));
+    QImage image(generateImage(getOriginalSize()));
     if (image.isNull())
         return 0L;
     else
-        return new Q3ImageDrag( image, dragSource, name );
+        return new Q3ImageDrag(image, dragSource, name);
 }
 
 QImage KoPictureBase::generateImage(const QSize& size)
 {
-    return generatePixmap(size,true).toImage();
+    return generatePixmap(size, true).toImage();
 }
 
 void KoPictureBase::clearCache(void)

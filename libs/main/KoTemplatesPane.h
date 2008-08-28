@@ -35,8 +35,8 @@ class KoTemplatesPanePrivate;
 class KoTemplatesPane : public KoDetailsPane
 {
 
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     /**
      * Constructor.
      * @param parent the parent widget
@@ -53,11 +53,11 @@ class KoTemplatesPane : public KoDetailsPane
     /// Returns true if a template in this group was the last one selected
     bool isSelected();
 
-  signals:
+signals:
     /// Emitted when the always use checkbox is selected
     void alwaysUseChanged(KoTemplatesPane* sender, const QString& alwaysUse);
 
-  protected slots:
+protected slots:
     void selectionChanged(const QModelIndex& index);
 
     void openFile();
@@ -65,7 +65,7 @@ class KoTemplatesPane : public KoDetailsPane
     void alwaysUseClicked();
     void changeAlwaysUseTemplate(KoTemplatesPane* sender, const QString& alwaysUse);
 
-  private:
+private:
     KoTemplatesPanePrivate * const d;
 };
 

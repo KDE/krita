@@ -32,7 +32,7 @@
 #include "KoView.h"
 
 KoApplicationAdaptor::KoApplicationAdaptor(QObject *parent)
-   : QDBusAbstractAdaptor(parent)
+        : QDBusAbstractAdaptor(parent)
 {
     // constructor
     setAutoRelaySignals(true);
@@ -43,16 +43,15 @@ KoApplicationAdaptor::~KoApplicationAdaptor()
     // destructor
 }
 
-QString KoApplicationAdaptor::createDocument( const QString &nativeFormat )
+QString KoApplicationAdaptor::createDocument(const QString &nativeFormat)
 {
-    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( nativeFormat );
-    if ( entry.isEmpty() )
-    {
-        KMessageBox::questionYesNo( 0, i18n( "Unknown KOffice MimeType %1. Check your installation.", nativeFormat ) );
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(nativeFormat);
+    if (entry.isEmpty()) {
+        KMessageBox::questionYesNo(0, i18n("Unknown KOffice MimeType %1. Check your installation.", nativeFormat));
         return QString();
     }
-    KoDocument* doc = entry.createDoc( 0 );
-    if ( doc )
+    KoDocument* doc = entry.createDoc(0);
+    if (doc)
         return '/' + doc->objectName();
     else
         return QString();
@@ -62,11 +61,10 @@ QStringList KoApplicationAdaptor::getDocuments()
 {
     QStringList lst;
     Q3PtrList<KoDocument> *documents = KoDocument::documentList();
-    if ( documents )
-    {
-      Q3PtrListIterator<KoDocument> it( *documents );
-      for (; it.current(); ++it )
-        lst.append( '/' + it.current()->objectName() );
+    if (documents) {
+        Q3PtrListIterator<KoDocument> it(*documents);
+        for (; it.current(); ++it)
+            lst.append('/' + it.current()->objectName());
     }
     return lst;
 }
@@ -75,14 +73,12 @@ QStringList KoApplicationAdaptor::getViews()
 {
     QStringList lst;
     Q3PtrList<KoDocument> *documents = KoDocument::documentList();
-    if ( documents )
-    {
-      Q3PtrListIterator<KoDocument> it( *documents );
-      for (; it.current(); ++it )
-      {
-          foreach ( KoView* view, it.current()->views() )
-              lst.append( '/' + view->objectName() );
-      }
+    if (documents) {
+        Q3PtrListIterator<KoDocument> it(*documents);
+        for (; it.current(); ++it) {
+            foreach(KoView* view, it.current()->views())
+            lst.append('/' + view->objectName());
+        }
     }
     return lst;
 }
@@ -91,10 +87,9 @@ QStringList KoApplicationAdaptor::getWindows()
 {
     QStringList lst;
     QList<KMainWindow*> mainWindows = KMainWindow::memberList();
-    if ( !mainWindows.isEmpty() )
-    {
-        foreach ( KMainWindow* mainWindow, mainWindows )
-            lst.append( static_cast<KoMainWindow*>(mainWindow)->objectName() );
+    if (!mainWindows.isEmpty()) {
+        foreach(KMainWindow* mainWindow, mainWindows)
+        lst.append(static_cast<KoMainWindow*>(mainWindow)->objectName());
     }
     return lst;
 }

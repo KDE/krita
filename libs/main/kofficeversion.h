@@ -29,7 +29,7 @@
 #define KOFFICE_MAKE_VERSION( a,b,c ) (((a) << 16) | ((b) << 8) | (c))
 
 #define KOFFICE_VERSION \
-  KOFFICE_MAKE_VERSION(KOFFICE_VERSION_MAJOR,KOFFICE_VERSION_MINOR,KOFFICE_VERSION_RELEASE)
+    KOFFICE_MAKE_VERSION(KOFFICE_VERSION_MAJOR,KOFFICE_VERSION_MINOR,KOFFICE_VERSION_RELEASE)
 
 #define KOFFICE_IS_VERSION(a,b,c) ( KOFFICE_VERSION >= KOFFICE_MAKE_VERSION(a,b,c) )
 
@@ -38,37 +38,37 @@
  */
 namespace KOffice
 {
-    /**
-     * Returns the encoded number of KOffice's version, see the KOFFICE_VERSION macro.
-     * In contrary to that macro this function returns the number of the actually
-     * installed KOffice version, not the number of the KOffice version that was
-     * installed when the program was compiled.
-     * @return the version number, encoded in a single uint
-     */
-    unsigned int version();
-    /**
-     * Returns the major number of KOffice's version, e.g.
-     * 1 for KOffice 1.2.3.
-     * @return the major version number
-     */
-    unsigned int versionMajor();
-    /**
-     * Returns the minor number of KOffice's version, e.g.
-     * 2 for KOffice 1.2.3.
-     * @return the minor version number
-     */
-    unsigned int versionMinor();
-    /**
-     * Returns the release of KOffice's version, e.g.
-     * 3 for KOffice 1.2.3.
-     * @return the release number
-     */
-    unsigned int versionRelease();
-    /**
-     * Returns the KOffice version as string, e.g. "1.2.3".
-     * @return the KOffice version. You can keep the string forever
-     */
-    const char *versionString();
+/**
+ * Returns the encoded number of KOffice's version, see the KOFFICE_VERSION macro.
+ * In contrary to that macro this function returns the number of the actually
+ * installed KOffice version, not the number of the KOffice version that was
+ * installed when the program was compiled.
+ * @return the version number, encoded in a single uint
+ */
+unsigned int version();
+/**
+ * Returns the major number of KOffice's version, e.g.
+ * 1 for KOffice 1.2.3.
+ * @return the major version number
+ */
+unsigned int versionMajor();
+/**
+ * Returns the minor number of KOffice's version, e.g.
+ * 2 for KOffice 1.2.3.
+ * @return the minor version number
+ */
+unsigned int versionMinor();
+/**
+ * Returns the release of KOffice's version, e.g.
+ * 3 for KOffice 1.2.3.
+ * @return the release number
+ */
+unsigned int versionRelease();
+/**
+ * Returns the KOffice version as string, e.g. "1.2.3".
+ * @return the KOffice version. You can keep the string forever
+ */
+const char *versionString();
 }
 
 #endif // _KOFFICE_VERSION_H_

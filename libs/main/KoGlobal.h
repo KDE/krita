@@ -64,7 +64,7 @@ public:
         return self()->m_dpiY;
     }
     /// @internal, for KoApplication
-    static void setDPI( int x, int y );
+    static void setDPI(int x, int y);
 
     /// Return the list of available languages, in their displayable form
     /// (translated names)
@@ -77,9 +77,9 @@ public:
         return self()->_listOfLanguageTags();
     }
     /// For a given language display name, return its tag
-    static QString tagOfLanguage( const QString & _lang );
+    static QString tagOfLanguage(const QString & _lang);
     /// For a given language tag, return its display name
-    static QString languageFromTag( const QString &_lang );
+    static QString languageFromTag(const QString &_lang);
 
     ~KoGlobal();
 

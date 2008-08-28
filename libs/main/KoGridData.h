@@ -79,27 +79,27 @@ public:
      * @param color the color of grid.
      * @see gridColor()
      */
-     void setGridColor( const QColor & color );
+    void setGridColor(const QColor & color);
 
     /**
      * return if grid is visible.
      * @return if grid is visible.
      * @see setShowGrid()
      */
-     bool showGrid() const;
+    bool showGrid() const;
 
     /**
      * Set the show grid status.
      * @param showGrid set if grid will be visible.
      * @see showGrid()
      */
-     void setShowGrid ( bool showGrid );
+    void setShowGrid(bool showGrid);
 
     /// Loads grid data from the given setting xml document
-    bool loadOdfSettings( const KoXmlDocument & settingsDoc );
+    bool loadOdfSettings(const KoXmlDocument & settingsDoc);
 
     /// Saves grid data to the given settings xml writer
-    void saveOdfSettings( KoXmlWriter &settingsWriter );
+    void saveOdfSettings(KoXmlWriter &settingsWriter);
 
     /**
       * Paint the grid
@@ -107,7 +107,7 @@ public:
       * @param converter the view converter
       * @param area the area in need of updating
      */
-     void paintGrid(QPainter &painter, const KoViewConverter &converter, const QRectF &area) const;
+    void paintGrid(QPainter &painter, const KoViewConverter &converter, const QRectF &area) const;
 
 private:
     class Private;

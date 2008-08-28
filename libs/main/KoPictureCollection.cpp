@@ -35,18 +35,17 @@
 //#define DEBUG_PICTURES
 
 KoPictureCollection::KoPictureCollection()
-    : d( 0 )
+        : d(0)
 {
 }
 
 KoPicture KoPictureCollection::findPicture(const KoPictureKey& key) const
 {
 #ifdef DEBUG_PICTURES
-    kDebug(30003) <<"KoPictureCollection::findPicture" << key.toString();
+    kDebug(30003) << "KoPictureCollection::findPicture" << key.toString();
 #endif
-    ConstIterator it = find( key );
-    if ( it == end() )
-    {
+    ConstIterator it = find(key);
+    if (it == end()) {
         KoPicture picture;
         picture.setKey(key);
         return picture;
@@ -59,15 +58,14 @@ KoPicture KoPictureCollection::findPicture(const KoPictureKey& key) const
 KoPicture KoPictureCollection::insertPicture(const KoPictureKey& key, const KoPicture& picture)
 {
 #ifdef DEBUG_PICTURES
-    kDebug(30003) <<"KoPictureCollection::insertPicture" << key.toString();
+    kDebug(30003) << "KoPictureCollection::insertPicture" << key.toString();
 #endif
     KoPicture c = findPicture(key);
-    if (c.isNull())
-    {
+    if (c.isNull()) {
 #ifdef DEBUG_PICTURES
-        kDebug(30003) <<"KoPictureCollection::insertPicture not found -> inserting";
+        kDebug(30003) << "KoPictureCollection::insertPicture not found -> inserting";
 #endif
-        c=picture;
+        c = picture;
         c.setKey(key); // Be sure that the key is correctly set in the KoPicture!
         insert(key, c);
     }
@@ -82,7 +80,7 @@ KoPicture KoPictureCollection::insertPicture(const KoPicture& picture)
 KoPicture KoPictureCollection::downloadPicture(const KUrl& url, QWidget *window)
 {
 #ifdef DEBUG_PICTURES
-    kDebug(30003) <<"KoPictureCollection::downloadPicture" << url.prettyUrl();
+    kDebug(30003) << "KoPictureCollection::downloadPicture" << url.prettyUrl();
 #endif
 
     // If it is a local file, we can check the last modification date, so we should better use loadPicture
@@ -95,7 +93,7 @@ KoPicture KoPictureCollection::downloadPicture(const KUrl& url, QWidget *window)
 
     KoPicture pic;
 #ifdef DEBUG_PICTURES
-    kDebug(30003) <<"Trying to download picture from file" << url.prettyUrl();
+    kDebug(30003) << "Trying to download picture from file" << url.prettyUrl();
 #endif
 
     if (pic.setKeyAndDownloadPicture(url, window))
@@ -109,17 +107,16 @@ KoPicture KoPictureCollection::downloadPicture(const KUrl& url, QWidget *window)
 KoPicture KoPictureCollection::loadPicture(const QString& fileName)
 {
 #ifdef DEBUG_PICTURES
-    kDebug(30003) <<"KoPictureCollection::loadPicture" << fileName;
+    kDebug(30003) << "KoPictureCollection::loadPicture" << fileName;
 #endif
     // Check the last modified date of the file, as it is now.
     KoPictureKey key;
     key.setKeyFromFile(fileName);
 
     KoPicture c = findPicture(key);
-    if (c.isNull())
-    {
+    if (c.isNull()) {
 #ifdef DEBUG_PICTURES
-        kDebug(30003) <<"Trying to load picture from file" << fileName;
+        kDebug(30003) << "Trying to load picture from file" << fileName;
 #endif
         if (c.loadFromFile(fileName))
             insertPicture(key, c);
@@ -133,47 +130,44 @@ QString KoPictureCollection::getFileName(const Type pictureType, KoPicture& pict
 {
     QString storeURL;
     // ### TODO: remove "cliparts" when KPresenter is ready for it
-    if (pictureType==CollectionClipart)
-        storeURL="cliparts/clipart";
+    if (pictureType == CollectionClipart)
+        storeURL = "cliparts/clipart";
     else
-        storeURL="pictures/picture";
-    storeURL+=QString::number(++counter);
-    storeURL+='.';
-    storeURL+=picture.getExtension();
+        storeURL = "pictures/picture";
+    storeURL += QString::number(++counter);
+    storeURL += '.';
+    storeURL += picture.getExtension();
     return storeURL;
 }
 
 QString KoPictureCollection::getOasisFileName(const KoPicture& picture) const
 {
-    QString storeURL( "Pictures/");
-    if ( !picture.uniquePictureId().isEmpty() )
-        storeURL+=picture.uniquePictureId();
+    QString storeURL("Pictures/");
+    if (!picture.uniquePictureId().isEmpty())
+        storeURL += picture.uniquePictureId();
     else
-        storeURL+=picture.getKey().toString();
-    storeURL+='.';
-    storeURL+=picture.getExtension();
+        storeURL += picture.getKey().toString();
+    storeURL += '.';
+    storeURL += picture.getExtension();
     return storeURL;
 }
 
 bool KoPictureCollection::saveToStore(const Type pictureType, KoStore *store, const Q3ValueList<KoPictureKey>& keys)
 {
-    int counter=0;
+    int counter = 0;
     Q3ValueList<KoPictureKey>::const_iterator it = keys.begin();
-    for ( ; it != keys.end(); ++it )
-    {
-        KoPicture c = findPicture( *it );
+    for (; it != keys.end(); ++it) {
+        KoPicture c = findPicture(*it);
         if (c.isNull())
             kWarning(30003) << "Picture " << (*it).toString() << " not found in collection !";
-        else
-        {
-            QString storeURL=getFileName(pictureType, c, counter);
+        else {
+            QString storeURL = getFileName(pictureType, c, counter);
 
-            if (store->open(storeURL))
-            {
+            if (store->open(storeURL)) {
                 KoStoreDevice dev(store);
-                if ( ! c.save(&dev) )
+                if (! c.save(&dev))
                     return false; // e.g. bad image?
-                if ( !store->close() )
+                if (!store->close())
                     return false; // e.g. disk full
             }
         }
@@ -181,25 +175,22 @@ bool KoPictureCollection::saveToStore(const Type pictureType, KoStore *store, co
     return true;
 }
 
-bool KoPictureCollection::saveOasisToStore( KoStore *store, Q3ValueList<KoPictureKey> keys, KoXmlWriter* manifestWriter )
+bool KoPictureCollection::saveOasisToStore(KoStore *store, Q3ValueList<KoPictureKey> keys, KoXmlWriter* manifestWriter)
 {
     Q3ValueList<KoPictureKey>::Iterator it = keys.begin();
-    for ( ; it != keys.end(); ++it )
-    {
-        KoPicture c = findPicture( *it );
+    for (; it != keys.end(); ++it) {
+        KoPicture c = findPicture(*it);
         if (c.isNull())
             kWarning(30003) << "Picture " << (*it).toString() << " not found in collection !";
-        else
-        {
-            QString storeURL( getOasisFileName(c) );
-            if (store->open(storeURL))
-            {
+        else {
+            QString storeURL(getOasisFileName(c));
+            if (store->open(storeURL)) {
                 KoStoreDevice dev(store);
-                if ( ! c.save(&dev) )
+                if (! c.save(&dev))
                     return false; // e.g. bad image?
-                if ( !store->close() )
+                if (!store->close())
                     return false; // e.g. disk full
-                manifestWriter->addManifestEntry( storeURL, c.getMimeType() );
+                manifestWriter->addManifestEntry(storeURL, c.getMimeType());
             }
         }
     }
@@ -209,22 +200,20 @@ bool KoPictureCollection::saveOasisToStore( KoStore *store, Q3ValueList<KoPictur
 QDomElement KoPictureCollection::saveXML(const Type pictureType, QDomDocument &doc, Q3ValueList<KoPictureKey> keys)
 {
     QString strElementName("PICTURES");
-    if (pictureType==CollectionImage)
-        strElementName="PIXMAPS";
-    else if (pictureType==CollectionClipart)
-        strElementName="CLIPARTS";
-    QDomElement cliparts = doc.createElement( strElementName );
-    int counter=0;
+    if (pictureType == CollectionImage)
+        strElementName = "PIXMAPS";
+    else if (pictureType == CollectionClipart)
+        strElementName = "CLIPARTS";
+    QDomElement cliparts = doc.createElement(strElementName);
+    int counter = 0;
     Q3ValueList<KoPictureKey>::Iterator it = keys.begin();
-    for ( ; it != keys.end(); ++it )
-    {
-        KoPicture picture = findPicture( *it );
-        if ( picture.isNull() )
+    for (; it != keys.end(); ++it) {
+        KoPicture picture = findPicture(*it);
+        if (picture.isNull())
             kWarning(30003) << "Picture " << (*it).toString() << " not found in collection !";
-        else
-        {
-            QString pictureName=getFileName(pictureType, picture, counter);
-            QDomElement keyElem = doc.createElement( "KEY" );
+        else {
+            QString pictureName = getFileName(pictureType, picture, counter);
+            QDomElement keyElem = doc.createElement("KEY");
             cliparts.appendChild(keyElem);
             (*it).saveAttributes(keyElem);
             keyElem.setAttribute("name", pictureName);
@@ -233,16 +222,14 @@ QDomElement KoPictureCollection::saveXML(const Type pictureType, QDomDocument &d
     return cliparts;
 }
 
-void KoPictureCollection::readXML( QDomElement& pixmapsElem, QMap <KoPictureKey, QString>& map )
+void KoPictureCollection::readXML(QDomElement& pixmapsElem, QMap <KoPictureKey, QString>& map)
 {
-    for( QDomNode n = pixmapsElem.firstChild();
-         !n.isNull();
-         n = n.nextSibling() )
-    {
+    for (QDomNode n = pixmapsElem.firstChild();
+            !n.isNull();
+            n = n.nextSibling()) {
         QDomElement keyElement = n.toElement();
         if (keyElement.isNull()) continue;
-        if (keyElement.tagName()=="KEY")
-        {
+        if (keyElement.tagName() == "KEY") {
             KoPictureKey key;
             key.loadAttributes(keyElement);
             map.insert(key, keyElement.attribute("name"));
@@ -251,54 +238,48 @@ void KoPictureCollection::readXML( QDomElement& pixmapsElem, QMap <KoPictureKey,
 }
 
 
-KoPictureCollection::StoreMap KoPictureCollection::readXML( QDomElement& pixmapsElem )
+KoPictureCollection::StoreMap KoPictureCollection::readXML(QDomElement& pixmapsElem)
 {
     StoreMap map;
     readXML(pixmapsElem, map);
     return map;
 }
 
-void KoPictureCollection::readFromStore( KoStore * store, const StoreMap & storeMap )
+void KoPictureCollection::readFromStore(KoStore * store, const StoreMap & storeMap)
 {
 #ifdef DEBUG_PICTURES
-    kDebug(30003) <<"KoPictureCollection::readFromStore" << store;
+    kDebug(30003) << "KoPictureCollection::readFromStore" << store;
 #endif
     StoreMap::ConstIterator it = storeMap.begin();
-    for ( ; it != storeMap.end(); ++it )
-    {
+    for (; it != storeMap.end(); ++it) {
         KoPicture c = findPicture(it.key());
-        if(!c.isNull())
-        {
+        if (!c.isNull()) {
             // Do not load a file that we already have!
             //kDebug(30003) << store;
             continue;
         }
-        QString u( it.value() );
-        if( u.isEmpty() )
-        {
+        QString u(it.value());
+        if (u.isEmpty()) {
             // old naming I suppose ?
-            u=it.key().toString();
+            u = it.key().toString();
         }
 
         KoPicture picture;
 
-        if( !store->open( u ))
-        {
-            u.prepend( "file:" );
-            if (!store->open( u ))
-            {
+        if (!store->open(u)) {
+            u.prepend("file:");
+            if (!store->open(u)) {
                 kWarning(30003) << "Could load neither from store nor from file: " << it.value();
                 return;
             }
         }
 
-        const int pos = u.lastIndexOf( '.' );
-        if (pos==-1)
-        {
+        const int pos = u.lastIndexOf('.');
+        if (pos == -1) {
             kError(30003) << "File with no extension! Not supported!" << endl;
             return;
         }
-        const QString extension(u.mid(pos+1));
+        const QString extension(u.mid(pos + 1));
 
         KoStoreDevice dev(store);
         picture.load(&dev, extension);
@@ -312,10 +293,9 @@ void KoPictureCollection::readFromStore( KoStore * store, const StoreMap & store
 KoPicture KoPictureCollection::findOrLoad(const QString& fileName, const QDateTime& dateTime)
 {
     // As now all KoPictureKey objects have a valid QDateTime, we must do it without a date/time check.
-    ConstIterator it = find( KoPictureKey ( fileName, dateTime ) );
-    if ( it == end() )
-    {
-        return loadPicture( fileName );
+    ConstIterator it = find(KoPictureKey(fileName, dateTime));
+    if (it == end()) {
+        return loadPicture(fileName);
     }
     return *it;
 }
@@ -324,8 +304,7 @@ void KoPictureCollection::assignUniqueIds()
 {
     uint idx = 0;
     Iterator it;
-    for ( it = begin(); it != end(); ++it, ++idx )
-    {
+    for (it = begin(); it != end(); ++it, ++idx) {
         it.value().assignPictureId(idx);
     }
 }

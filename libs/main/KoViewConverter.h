@@ -30,7 +30,8 @@
  * we are painting, and a conversion to the normalized coordinate system if we
  * receive mouse events so we can figure out which KoShape object was touched.
  */
-class KoViewConverter {
+class KoViewConverter
+{
 public:
     KoViewConverter() {}
     virtual ~KoViewConverter() {}
@@ -39,67 +40,67 @@ public:
      * Convert a coordinate in pt to pixels.
      * @param documentPoint the point in the document coordinate system of a KoShape.
      */
-    virtual QPointF documentToView( const QPointF &documentPoint ) const = 0;
+    virtual QPointF documentToView(const QPointF &documentPoint) const = 0;
 
     /**
      * Convert a coordinate in pixels to pt.
      * @param viewPoint the point in the coordinate system of the widget, or window.
      */
-    virtual QPointF viewToDocument( const QPointF &viewPoint ) const = 0;
+    virtual QPointF viewToDocument(const QPointF &viewPoint) const = 0;
 
     /**
      * Convert a rectangle in pt to pixels.
      * @param documentRect the rect in the document coordinate system of a KoShape.
      */
-    virtual QRectF documentToView( const QRectF &documentRect ) const = 0;
+    virtual QRectF documentToView(const QRectF &documentRect) const = 0;
 
     /**
      * Convert a rectangle in pixels to pt.
      * @param viewRect the rect in the coordinate system of the widget, or window.
      */
-    virtual QRectF viewToDocument( const QRectF &viewRect ) const = 0;
+    virtual QRectF viewToDocument(const QRectF &viewRect) const = 0;
 
     /**
      * Convert a size in pt to pixels.
      * @param documentSize the size in pt.
      * @return the size in pixels.
      */
-    virtual QSizeF documentToView( const QSizeF& documentSize ) const = 0;
+    virtual QSizeF documentToView(const QSizeF& documentSize) const = 0;
 
     /**
      * Convert a size in pixels to pt.
      * @param viewSize the size in pixels.
      * @return the size in pt.
      */
-    virtual QSizeF viewToDocument( const QSizeF& viewSize ) const = 0;
+    virtual QSizeF viewToDocument(const QSizeF& viewSize) const = 0;
 
     /**
      * Convert a single x coordinate in pt to pixels.
      * @param documentX the x coordinate in pt.
      * @return the x coordinate in pixels.
      */
-    virtual qreal documentToViewX( qreal documentX ) const = 0;
+    virtual qreal documentToViewX(qreal documentX) const = 0;
 
     /**
      * Convert a single y coordinate in pt to pixels.
      * @param documentY the y coordinate in pt.
      * @return the y coordinate in pixels.
      */
-    virtual qreal documentToViewY( qreal documentY ) const = 0;
+    virtual qreal documentToViewY(qreal documentY) const = 0;
 
     /**
      * Convert a single x coordinate in pixels to pt.
      * @param viewX the x coordinate in pixels.
      * @return the x coordinate in pt.
      */
-    virtual qreal viewToDocumentX( qreal viewX ) const = 0;
+    virtual qreal viewToDocumentX(qreal viewX) const = 0;
 
     /**
      * Convert a single y coordinate in pixels to pt.
      * @param viewY the y coordinate in pixels.
      * @return the y coordinate in pt.
      */
-    virtual qreal viewToDocumentY( qreal viewY ) const = 0;
+    virtual qreal viewToDocumentY(qreal viewY) const = 0;
 
     /**
      * Retrieve the zoom levels of the individual x and y axes.

@@ -21,14 +21,15 @@
 
 #include <QtGui/QDockWidget>
 
-class KoDockWidgetTitleBar : public QWidget {
+class KoDockWidgetTitleBar : public QWidget
+{
     Q_OBJECT
 public:
     KoDockWidgetTitleBar(QDockWidget* dockWidget);
     virtual ~KoDockWidgetTitleBar();
 
     virtual QSize minimumSizeHint() const; ///< reimplemented from QWidget
-    virtual QSize sizeHint () const; ///< reimplemented from QWidget
+    virtual QSize sizeHint() const;  ///< reimplemented from QWidget
 
     void setCollapsed(bool collapsed);
 

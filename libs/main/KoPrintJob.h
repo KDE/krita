@@ -38,7 +38,8 @@ class QWidget;
  * The printjob can thus see startPrinting() called more then once, and the implementation
  * of that signal should honor the removePolicy passed to it.
  */
-class KOMAIN_EXPORT KoPrintJob : public QObject {
+class KOMAIN_EXPORT KoPrintJob : public QObject
+{
     Q_OBJECT
 public:
     /**
@@ -60,8 +61,12 @@ public:
     /// retuns will be shown in the print dialog.
     virtual QList<QWidget*> createOptionWidgets() const = 0;
 
-    virtual int documentFirstPage() const { return 1; }
-    virtual int documentLastPage() const { return 1; }
+    virtual int documentFirstPage() const {
+        return 1;
+    }
+    virtual int documentLastPage() const {
+        return 1;
+    }
 
     virtual QAbstractPrintDialog::PrintDialogOptions printDialogOptions() const;
 

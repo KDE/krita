@@ -55,7 +55,8 @@
  * @endcode
  */
 template<typename T>
-class KoGenericRegistry {
+class KoGenericRegistry
+{
 public:
     KoGenericRegistry() { }
     virtual ~KoGenericRegistry() { }
@@ -65,8 +66,7 @@ public:
      * add an object to the registry
      * @param item the item to add (NOTE: T must have an QString id() const   function)
      */
-    void add(T item)
-    {
+    void add(T item) {
         m_hash.insert(item->id(), item);
     }
 
@@ -75,15 +75,14 @@ public:
      * @param id the id of the object
      * @param item the item to add
      */
-    void add(const QString &id, T item)
-    {
+    void add(const QString &id, T item) {
         m_hash.insert(id, item);
     }
 
     /**
      * This function remove an item from the registry
      */
-    void remove (const QString &id) {
+    void remove(const QString &id) {
         m_hash.remove(id);
     }
 
@@ -93,8 +92,7 @@ public:
      *
      * @param id the id
      */
-    T get(const QString& id) const
-    {
+    T get(const QString& id) const {
         return value(id);
     }
 
@@ -119,13 +117,12 @@ public:
      * This function return a list of all the keys in KoID format by using the name() method
      * on the objects stored in the registry.
      */
-    QList<KoID> listKeys() const
-    {
+    QList<KoID> listKeys() const {
         QList<KoID> answer;
         typename QHash<QString, T>::const_iterator it = m_hash.begin();
 
         // we do not use foreach() here because of GCC 3.3.x bug
-        for ( ; it != m_hash.end(); ++it )
+        for (; it != m_hash.end(); ++it)
             answer.append(KoID(it.key(), it.value()->name()));
         return answer;
     }

@@ -43,7 +43,7 @@ class KOMAIN_EXPORT KoPictureCollection : public QMap<KoPictureKey, KoPicture>
 public:
     enum Type {
         /// collection with mixed pictures
-        CollectionPicture=0,
+        CollectionPicture = 0,
         /// collection with images only
         CollectionImage,
         /// collection with cliparts only
@@ -55,18 +55,18 @@ public:
     /**
      * Looks for a clipart in the collection, returns a new KoPicture with that key if not found.
      */
-    KoPicture findPicture( const KoPictureKey &key ) const;
+    KoPicture findPicture(const KoPictureKey &key) const;
 
     /**
      * Inserts a picture into the collection, if not already there
      */
-    KoPicture insertPicture( const KoPictureKey& key, const KoPicture& picture );
+    KoPicture insertPicture(const KoPictureKey& key, const KoPicture& picture);
 
     /**
      * Inserts a picture into the collection, if not already there
      * Same as above, but takes the key from the @p picture
      */
-    KoPicture insertPicture( const KoPicture& picture );
+    KoPicture insertPicture(const KoPicture& picture);
 
     /**
      * @brief Download a possibly remote file
@@ -86,7 +86,7 @@ public:
      * for this clipart. If this key maps to an existing clipart in the
      * collection, then this picture is returned, otherwise the file is loaded.
      */
-    KoPicture loadPicture( const QString &fileName );
+    KoPicture loadPicture(const QString &fileName);
 
     /**
      * Save the used picturess from the collection into the store
@@ -99,7 +99,7 @@ public:
      *
      * @todo Reduce lameness of dox for pictureType.
      */
-    bool saveToStore(const Type pictureType, KoStore * store, const Q3ValueList<KoPictureKey>& keys );
+    bool saveToStore(const Type pictureType, KoStore * store, const Q3ValueList<KoPictureKey>& keys);
 
     /**
      * Generate the &lt;PICTURES&gt;, &lt;PIXMAPS> or &lt;CLIPARTS> tag, that saves the key and the related
@@ -110,9 +110,9 @@ public:
      * @param keys the list of keys
      */
     QDomElement saveXML(const Type pictureType, QDomDocument &doc,
-        Q3ValueList<KoPictureKey> keys );
+                        Q3ValueList<KoPictureKey> keys);
 
-    bool saveOasisToStore( KoStore *store, Q3ValueList<KoPictureKey> keys, KoXmlWriter* manifestWriter );
+    bool saveOasisToStore(KoStore *store, Q3ValueList<KoPictureKey> keys, KoXmlWriter* manifestWriter);
 
 
     typedef QMap<KoPictureKey, QString> StoreMap;
@@ -123,19 +123,19 @@ public:
      *
      * @param pixmapsElem the &lt;PICTURES&gt;, &lt;PIXMAPS> or &lt;CLIPARTS> element
      */
-    StoreMap readXML( QDomElement &pixmapsElem );
+    StoreMap readXML(QDomElement &pixmapsElem);
 
     /**
      * Helper method for @ref #readFromStore
      */
-    void readXML( QDomElement& pixmapsElem, QMap <KoPictureKey, QString>& map );
+    void readXML(QDomElement& pixmapsElem, QMap <KoPictureKey, QString>& map);
 
     /**
      * Read all pictures from the store, into this collection
      * The map comes from @ref #readXML, and is used to find which pictures
      * to load, and which key to associate them.
      */
-    void readFromStore( KoStore * store, const StoreMap & storeMap );
+    void readFromStore(KoStore * store, const StoreMap & storeMap);
 
     /**
      * @deprecated

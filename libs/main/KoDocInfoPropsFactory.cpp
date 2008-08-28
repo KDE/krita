@@ -24,4 +24,4 @@
 #include <kgenericfactory.h>
 
 typedef KGenericFactory<KoDocumentInfoPropsPage, KPropertiesDialog> PropsDlgFactory;
-K_EXPORT_COMPONENT_FACTORY( kodocinfopropspage, PropsDlgFactory( "koffice" ) )
+K_EXPORT_COMPONENT_FACTORY(kodocinfopropspage, PropsDlgFactory("koffice"))

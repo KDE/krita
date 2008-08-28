@@ -45,22 +45,22 @@ static K3StaticDeleter<KoGlobal> sdg;
 
 KoGlobal* KoGlobal::self()
 {
-    if ( !s_global )
-        sdg.setObject( s_global, new KoGlobal );
+    if (!s_global)
+        sdg.setObject(s_global, new KoGlobal);
     return s_global;
 }
 
 KoGlobal::KoGlobal()
-    : m_pointSize( -1 ), m_kofficeConfig( 0L )
+        : m_pointSize(-1), m_kofficeConfig(0L)
 {
     // XXX: locale() apparently can be 0 when running from unittests
-    if ( KGlobal::locale() ) {
+    if (KGlobal::locale()) {
         // Install the libkoffice* translations
         KGlobal::locale()->insertCatalog("koffice");
     }
 
     // When runnint unittests, there is not necessarily a main component
-    if ( KGlobal::hasMainComponent() ) {
+    if (KGlobal::hasMainComponent()) {
         // Tell KStandardDirs about the koffice prefix
         KGlobal::dirs()->addPrefix(KOFFICEPREFIX);
     }
@@ -87,13 +87,12 @@ QFont KoGlobal::_defaultFont()
 {
     QFont font = KGlobalSettings::generalFont();
     // we have to use QFontInfo, in case the font was specified with a pixel size
-    if ( font.pointSize() == -1 )
-    {
+    if (font.pointSize() == -1) {
         // cache size into m_pointSize, since QFontInfo loads the font -> slow
-        if ( m_pointSize == -1 )
+        if (m_pointSize == -1)
             m_pointSize = QFontInfo(font).pointSize();
-        Q_ASSERT( m_pointSize != -1 );
-        font.setPointSize( m_pointSize );
+        Q_ASSERT(m_pointSize != -1);
+        font.setPointSize(m_pointSize);
     }
     //kDebug( 30003 )<<"QFontInfo(font).pointSize() :"<<QFontInfo(font).pointSize();
     //kDebug( 30003 )<<"font.name() :"<<font.family ();
@@ -102,14 +101,14 @@ QFont KoGlobal::_defaultFont()
 
 QStringList KoGlobal::_listOfLanguageTags()
 {
-    if ( m_langMap.isEmpty() )
+    if (m_langMap.isEmpty())
         createListOfLanguages();
     return m_langMap.values();
 }
 
 QStringList KoGlobal::_listOfLanguages()
 {
-    if ( m_langMap.empty() )
+    if (m_langMap.empty())
         createListOfLanguages();
     return m_langMap.keys();
 }
@@ -121,18 +120,17 @@ void KoGlobal::createListOfLanguages()
 
     QMap<QString, bool> seenLanguages;
     const QStringList langlist = config.groupList();
-    for ( QStringList::ConstIterator itall = langlist.begin();
-          itall != langlist.end(); ++itall )
-    {
+    for (QStringList::ConstIterator itall = langlist.begin();
+            itall != langlist.end(); ++itall) {
         const QString tag = *itall;
         const QString name = config.group(tag).readEntry("Name", tag);
         // e.g. name is "French" and tag is "fr"
 
         // The QMap does the sorting on the display-name, so that
         // comboboxes are sorted.
-        m_langMap.insert( name, tag );
+        m_langMap.insert(name, tag);
 
-        seenLanguages.insert( tag, true );
+        seenLanguages.insert(tag, true);
     }
 
     // Also take a look at the installed translations.
@@ -140,23 +138,22 @@ void KoGlobal::createListOfLanguages()
     // currently have en_GB or en_US etc.
 
     const QStringList translationList = KGlobal::dirs()->findAllResources("locale",
-                                                            QString::fromLatin1("*/entry.desktop"));
-    for ( QStringList::ConstIterator it = translationList.begin();
-          it != translationList.end(); ++it )
-    {
+                                        QString::fromLatin1("*/entry.desktop"));
+    for (QStringList::ConstIterator it = translationList.begin();
+            it != translationList.end(); ++it) {
         // Extract the language tag from the directory name
         QString tag = *it;
         int index = tag.lastIndexOf('/');
         tag = tag.left(index);
         index = tag.lastIndexOf('/');
-        tag = tag.mid(index+1);
+        tag = tag.mid(index + 1);
 
-        if ( seenLanguages.find( tag ) == seenLanguages.end() ) {
+        if (seenLanguages.find(tag) == seenLanguages.end()) {
             KConfig entry(*it, KConfig::SimpleConfig);
 
             const QString name = entry.group("KCM Locale").readEntry("Name", tag);
             // e.g. name is "US English" and tag is "en_US"
-            m_langMap.insert( name, tag );
+            m_langMap.insert(name, tag);
 
             // enable this if writing a third way of finding languages below
             //seenLanguages.insert( tag, true );
@@ -169,22 +166,22 @@ void KoGlobal::createListOfLanguages()
     // How to add them?
 }
 
-QString KoGlobal::tagOfLanguage( const QString & _lang)
+QString KoGlobal::tagOfLanguage(const QString & _lang)
 {
     const LanguageMap& map = self()->m_langMap;
-    QMap<QString,QString>::ConstIterator it = map.find( _lang );
-    if ( it != map.end() )
+    QMap<QString, QString>::ConstIterator it = map.find(_lang);
+    if (it != map.end())
         return *it;
     return QString();
 }
 
-QString KoGlobal::languageFromTag( const QString &langTag )
+QString KoGlobal::languageFromTag(const QString &langTag)
 {
     const LanguageMap& map = self()->m_langMap;
-    QMap<QString,QString>::ConstIterator it = map.begin();
-    const QMap<QString,QString>::ConstIterator end = map.end();
-    for ( ; it != end; ++it )
-        if ( it.value() == langTag )
+    QMap<QString, QString>::ConstIterator it = map.begin();
+    const QMap<QString, QString>::ConstIterator end = map.end();
+    for (; it != end; ++it)
+        if (it.value() == langTag)
             return it.key();
 
     // Language code not found. Better return the code (tag) than nothing.
@@ -193,13 +190,13 @@ QString KoGlobal::languageFromTag( const QString &langTag )
 
 KConfig* KoGlobal::_kofficeConfig()
 {
-    if ( !m_kofficeConfig ) {
-        m_kofficeConfig = new KConfig( "kofficerc" );
+    if (!m_kofficeConfig) {
+        m_kofficeConfig = new KConfig("kofficerc");
     }
     return m_kofficeConfig;
 }
 
-void KoGlobal::setDPI( int x, int y )
+void KoGlobal::setDPI(int x, int y)
 {
     //kDebug( 30003 ) << x <<"," << y;
     KoGlobal* s = self();

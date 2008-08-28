@@ -29,8 +29,8 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 
-KoViewAdaptor::KoViewAdaptor( KoView *view )
-    : QDBusAbstractAdaptor(view)
+KoViewAdaptor::KoViewAdaptor(KoView *view)
+        : QDBusAbstractAdaptor(view)
 {
     setAutoRelaySignals(true);
     m_pView = view;
@@ -63,13 +63,13 @@ QStringList KoViewAdaptor::actions()
 //     Q3ValueList<KAction *>::ConstIterator end = lst.end();
 //     for (; it != end; ++it )
 //         res.append( (*it)->objectName().toUtf8() );
-// 
+//
 //     return res;
     QStringList tmp_actions;
     QList<QAction*> lst = m_pView->actionCollection()->actions();
-    foreach( QAction* it, lst ) {
+    foreach(QAction* it, lst) {
         if (it->isEnabled())
-            tmp_actions.append( it->objectName() );
+            tmp_actions.append(it->objectName());
     }
     return tmp_actions;
 }

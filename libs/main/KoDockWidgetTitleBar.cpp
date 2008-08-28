@@ -42,7 +42,9 @@ public:
     KoDockWidgetTitleBarButton(KoDockWidgetTitleBar *titleBar);
 
     QSize sizeHint() const;
-    inline QSize minimumSizeHint() const { return sizeHint(); }
+    inline QSize minimumSizeHint() const {
+        return sizeHint();
+    }
 
     virtual void enterEvent(QEvent *event);
     virtual void leaveEvent(QEvent *event);
@@ -50,7 +52,7 @@ public:
 };
 
 KoDockWidgetTitleBarButton::KoDockWidgetTitleBarButton(KoDockWidgetTitleBar *titleBar)
-    : QAbstractButton(titleBar)
+        : QAbstractButton(titleBar)
 {
     setFocusPolicy(Qt::NoFocus);
 }
@@ -83,12 +85,12 @@ void KoDockWidgetTitleBarButton::leaveEvent(QEvent *event)
 void KoDockWidgetTitleBarButton::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
-    
+
     QRect r = rect();
     QStyleOptionToolButton opt;
     opt.init(this);
     opt.state |= QStyle::State_AutoRaise;
-    
+
     if (isEnabled() && underMouse() && !isChecked() && !isDown())
         opt.state |= QStyle::State_Raised;
     if (isChecked())
@@ -96,7 +98,7 @@ void KoDockWidgetTitleBarButton::paintEvent(QPaintEvent *)
     if (isDown())
         opt.state |= QStyle::State_Sunken;
     style()->drawPrimitive(QStyle::PE_PanelButtonTool, &opt, &p, this);
-    
+
     opt.icon = icon();
     opt.subControls = 0;
     opt.activeSubControls = 0;
@@ -108,7 +110,8 @@ void KoDockWidgetTitleBarButton::paintEvent(QPaintEvent *)
 }
 
 
-class KoDockWidgetTitleBar::Private {
+class KoDockWidgetTitleBar::Private
+{
 public:
     Private(KoDockWidgetTitleBar* thePublic) : thePublic(thePublic),
             openIcon("arrow-down"), closeIcon("arrow-right") {}
@@ -124,27 +127,27 @@ public:
 };
 
 KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
-    : QWidget(dockWidget), d(new Private(this))
-{  
+        : QWidget(dockWidget), d(new Private(this))
+{
     QDockWidget *q = dockWidget;
 
     d->floatButton = new KoDockWidgetTitleBarButton(this);
     d->floatButton->setIcon(q->style()->standardIcon(QStyle::SP_TitleBarNormalButton, 0, q));
     connect(d->floatButton, SIGNAL(clicked()), SLOT(toggleFloating()));
     d->floatButton->setVisible(true);
-    
+
     d->closeButton = new KoDockWidgetTitleBarButton(this);
     d->closeButton->setIcon(q->style()->standardIcon(QStyle::SP_TitleBarCloseButton, 0, q));
     connect(d->closeButton, SIGNAL(clicked()), q, SLOT(close()));
     d->closeButton->setVisible(true);
-    
+
     d->collapseButton = new KoDockWidgetTitleBarButton(this);
     d->collapseButton->setIcon(d->openIcon);
     connect(d->collapseButton, SIGNAL(clicked()), SLOT(toggleCollapsed()));
     d->collapseButton->setVisible(true);
-    
+
     connect(dockWidget, SIGNAL(featuresChanged(QDockWidget::DockWidgetFeatures)), SLOT(featuresChanged(QDockWidget::DockWidgetFeatures)));
-    
+
     d->featuresChanged(0);
 }
 
@@ -178,13 +181,13 @@ QSize KoDockWidgetTitleBar::sizeHint() const
     if (d->collapseButton) {
         hideSize = d->collapseButton->sizeHint();
     }
-    
+
     int buttonHeight = qMax(qMax(closeSize.height(), floatSize.height()), hideSize.height()) + 2;
     int buttonWidth = closeSize.width() + floatSize.width() + hideSize.width();
-    
+
     // get font size
     QFontMetrics titleFontMetrics = q->fontMetrics();
-    int fontHeight = titleFontMetrics.lineSpacing() + 2*mw;
+    int fontHeight = titleFontMetrics.lineSpacing() + 2 * mw;
 
     int height = qMax(buttonHeight, fontHeight);
     return QSize(buttonWidth + height + 4*mw + 2*fw, height);
@@ -212,26 +215,26 @@ void KoDockWidgetTitleBar::paintEvent(QPaintEvent*)
 void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
 {
     QDockWidget *q = qobject_cast<QDockWidget*>(parentWidget());
-    int fw = q->isFloating() ? q->style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, 0, q) : 0;    
+    int fw = q->isFloating() ? q->style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, 0, q) : 0;
     QStyleOptionDockWidgetV2 opt;
     opt.initFrom(q);
     opt.rect = QRect(QPoint(fw, fw), QSize(geometry().width() - (fw * 2), geometry().height() - (fw * 2)));
     opt.title = q->windowTitle();
     opt.closable = hasFeature(q, QDockWidget::DockWidgetClosable);
     opt.floatable = hasFeature(q, QDockWidget::DockWidgetFloatable);
-    
+
     QRect floatRect = q->style()->subElementRect(QStyle::SE_DockWidgetFloatButton, &opt, q);
     if (!floatRect.isNull())
         d->floatButton->setGeometry(floatRect);
-    
+
     QRect closeRect = q->style()->subElementRect(QStyle::SE_DockWidgetCloseButton, &opt, q);
     if (!closeRect.isNull())
         d->closeButton->setGeometry(closeRect);
-    
+
     int top = fw;
     if (!floatRect.isNull()) top = floatRect.y();
     else if (!closeRect.isNull()) top = closeRect.y();
-    
+
     QSize size = d->collapseButton->size();
     if (!closeRect.isNull()) {
         size = d->closeButton->size();

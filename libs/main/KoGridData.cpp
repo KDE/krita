@@ -30,15 +30,15 @@
 
 #define DEFAULT_GRID_SIZE_MM 5.0
 
-class KoGridData::Private {
+class KoGridData::Private
+{
 public:
     Private()
-     :snapToGrid(false),
-      showGrid(false),
-      gridX(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
-      gridY(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
-      gridColor(Qt::lightGray)
-    {
+            : snapToGrid(false),
+            showGrid(false),
+            gridX(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
+            gridY(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
+            gridColor(Qt::lightGray) {
     }
 
     bool snapToGrid;
@@ -48,145 +48,142 @@ public:
 };
 
 KoGridData::KoGridData()
-    : d(new Private())
+        : d(new Private())
 {
 }
 
-KoGridData::~KoGridData() {
+KoGridData::~KoGridData()
+{
     delete d;
 }
 
 qreal KoGridData::gridX() const
 {
-   return d->gridX;
+    return d->gridX;
 }
 
 qreal KoGridData::gridY() const
 {
-  return d->gridY;
+    return d->gridY;
 }
 
 void KoGridData::setGrid(qreal x, qreal y)
 {
-   d->gridX = x;
-   d->gridY = y;
+    d->gridX = x;
+    d->gridY = y;
 }
 
 bool KoGridData::snapToGrid() const
 {
-   return d->snapToGrid;
+    return d->snapToGrid;
 }
 
 void KoGridData::setSnapToGrid(bool on)
 {
-   d->snapToGrid = on;
+    d->snapToGrid = on;
 }
 
 QColor KoGridData::gridColor() const
 {
-  return d->gridColor;
+    return d->gridColor;
 }
 
-void KoGridData::setGridColor( const QColor & color)
+void KoGridData::setGridColor(const QColor & color)
 {
-  d->gridColor=color;
+    d->gridColor = color;
 }
 
 bool KoGridData::showGrid() const
 {
-  return d->showGrid;
+    return d->showGrid;
 }
 
-void KoGridData::setShowGrid ( bool showGrid )
+void KoGridData::setShowGrid(bool showGrid)
 {
-  d->showGrid = showGrid;
+    d->showGrid = showGrid;
 }
 
 void KoGridData::paintGrid(QPainter &painter, const KoViewConverter &converter, const QRectF &area) const
 {
-    if( ! showGrid() )
+    if (! showGrid())
         return;
 
-    painter.setPen( gridColor() );
+    painter.setPen(gridColor());
 
     qreal x = 0.0;
     do {
-        painter.drawLine( converter.documentToView( QPointF( x, area.top() ) ),
-                          converter.documentToView( QPointF( x, area.bottom() ) ) );
+        painter.drawLine(converter.documentToView(QPointF(x, area.top())),
+                         converter.documentToView(QPointF(x, area.bottom())));
         x += gridX();
-    } while( x <= area.right() );
+    } while (x <= area.right());
 
     x = - gridX();
-    while( x >= area.left() )
-    {
-        painter.drawLine( converter.documentToView( QPointF( x, area.top() ) ),
-                          converter.documentToView( QPointF( x, area.bottom() ) ) );
+    while (x >= area.left()) {
+        painter.drawLine(converter.documentToView(QPointF(x, area.top())),
+                         converter.documentToView(QPointF(x, area.bottom())));
         x -= gridX();
     };
 
     qreal y = 0.0;
     do {
-        painter.drawLine( converter.documentToView( QPointF( area.left(), y ) ),
-                          converter.documentToView( QPointF( area.right(), y ) ) );
+        painter.drawLine(converter.documentToView(QPointF(area.left(), y)),
+                         converter.documentToView(QPointF(area.right(), y)));
         y += gridY();
-    } while( y <= area.bottom() );
+    } while (y <= area.bottom());
 
     y = - gridY();
-    while( y >= area.top() )
-    {
-        painter.drawLine( converter.documentToView( QPointF( area.left(), y ) ),
-                          converter.documentToView( QPointF( area.right(), y ) ) );
+    while (y >= area.top()) {
+        painter.drawLine(converter.documentToView(QPointF(area.left(), y)),
+                         converter.documentToView(QPointF(area.right(), y)));
         y -= gridY();
     };
 }
 
-bool KoGridData::loadOdfSettings( const KoXmlDocument & settingsDoc )
+bool KoGridData::loadOdfSettings(const KoXmlDocument & settingsDoc)
 {
-    KoOasisSettings settings( settingsDoc );
-    KoOasisSettings::Items viewSettings = settings.itemSet( "ooo:view-settings" );
-    if( viewSettings.isNull() )
+    KoOasisSettings settings(settingsDoc);
+    KoOasisSettings::Items viewSettings = settings.itemSet("ooo:view-settings");
+    if (viewSettings.isNull())
         return false;
 
-    KoOasisSettings::IndexedMap viewMap = viewSettings.indexedMap( "Views" );
-    if( viewMap.isNull() )
+    KoOasisSettings::IndexedMap viewMap = viewSettings.indexedMap("Views");
+    if (viewMap.isNull())
         return false;
 
-    KoOasisSettings::Items firstView = viewMap.entry( 0 );
-    if( firstView.isNull() )
+    KoOasisSettings::Items firstView = viewMap.entry(0);
+    if (firstView.isNull())
         return false;
 
-    qreal gridX = firstView.parseConfigItemInt( "GridFineWidth", DEFAULT_GRID_SIZE_MM );
-    qreal gridY = firstView.parseConfigItemInt( "GridFineHeight", DEFAULT_GRID_SIZE_MM );
-    d->gridX = MM_TO_POINT( gridX / 100.0 );
-    d->gridY = MM_TO_POINT( gridY / 100.0 );
-    d->snapToGrid = firstView.parseConfigItemBool( "IsSnapToGrid" );
+    qreal gridX = firstView.parseConfigItemInt("GridFineWidth", DEFAULT_GRID_SIZE_MM);
+    qreal gridY = firstView.parseConfigItemInt("GridFineHeight", DEFAULT_GRID_SIZE_MM);
+    d->gridX = MM_TO_POINT(gridX / 100.0);
+    d->gridY = MM_TO_POINT(gridY / 100.0);
+    d->snapToGrid = firstView.parseConfigItemBool("IsSnapToGrid");
 
     return true;
 }
 
-void KoGridData::saveOdfSettings( KoXmlWriter &settingsWriter )
+void KoGridData::saveOdfSettings(KoXmlWriter &settingsWriter)
 {
-    settingsWriter.startElement( "config:config-item" );
-    settingsWriter.addAttribute( "config:name", "IsSnapToGrid" );
-    settingsWriter.addAttribute( "config:type", "boolean" );
-    settingsWriter.addTextNode( d->snapToGrid ? "true" : "false" );
+    settingsWriter.startElement("config:config-item");
+    settingsWriter.addAttribute("config:name", "IsSnapToGrid");
+    settingsWriter.addAttribute("config:type", "boolean");
+    settingsWriter.addTextNode(d->snapToGrid ? "true" : "false");
     settingsWriter.endElement();
 
-    if( d->gridX >= 0.0 )
-    {
-        settingsWriter.startElement( "config:config-item" );
-        settingsWriter.addAttribute( "config:name", "GridFineWidth" );
-        settingsWriter.addAttribute( "config:type", "int" );
-        settingsWriter.addTextNode( QString::number( static_cast<int>( POINT_TO_MM( d->gridX * 100.0 ) ) ) );
+    if (d->gridX >= 0.0) {
+        settingsWriter.startElement("config:config-item");
+        settingsWriter.addAttribute("config:name", "GridFineWidth");
+        settingsWriter.addAttribute("config:type", "int");
+        settingsWriter.addTextNode(QString::number(static_cast<int>(POINT_TO_MM(d->gridX * 100.0))));
         settingsWriter.endElement();
     }
 
-    if( d->gridY >= 0.0 )
-    {
-        settingsWriter.startElement( "config:config-item" );
-        settingsWriter.addAttribute( "config:name", "GridFineHeight" );
-        settingsWriter.addAttribute( "config:type", "int" );
-        settingsWriter.addTextNode( QString::number( static_cast<int>( POINT_TO_MM( d->gridY * 100.0 ) ) ) );
+    if (d->gridY >= 0.0) {
+        settingsWriter.startElement("config:config-item");
+        settingsWriter.addAttribute("config:name", "GridFineHeight");
+        settingsWriter.addAttribute("config:type", "int");
+        settingsWriter.addTextNode(QString::number(static_cast<int>(POINT_TO_MM(d->gridY * 100.0))));
         settingsWriter.endElement();
     }
 }

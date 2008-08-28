@@ -94,10 +94,10 @@ public:
      * @param dragSource must be 0 when copying to the clipboard
      * @return 0L if the picture is null!
      */
-    Q3DragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
+    Q3DragObject* dragObject(QWidget *dragSource = 0L, const char *name = 0L);
 
     bool load(QIODevice* io, const QString& extension);
-    bool loadFromBase64( const QByteArray& str );
+    bool loadFromBase64(const QByteArray& str);
 
     /**
      * Save picture into a QIODevice
@@ -109,7 +109,7 @@ public:
      * OASIS FlatXML support:
      * Save picture as base64-encoded data into an XML writer.
      */
-    bool saveAsBase64( KoXmlWriter& writer ) const;
+    bool saveAsBase64(KoXmlWriter& writer) const;
 
     void setExtension(const QString& extension);
 
@@ -173,7 +173,7 @@ public:
     void clearCache(void);
 
     QString uniquePictureId() const;
-    void assignPictureId( uint _id);
+    void assignPictureId(uint _id);
 
 protected:
     /**
@@ -183,7 +183,7 @@ protected:
     bool loadTmp(QIODevice* io);
 
     /// Find type of image, create base accordingly, and load data
-    bool identifyAndLoad( const QByteArray& data );
+    bool identifyAndLoad(const QByteArray& data);
 
     /**
      * @internal
@@ -195,7 +195,7 @@ protected:
      * @param mimeType mimetype of the (de-)compressor
      * @param extension extension of the uncompressed file
      */
-    bool loadCompressed( QIODevice* io, const QString& mimeType, const QString& extension );
+    bool loadCompressed(QIODevice* io, const QString& mimeType, const QString& extension);
 
 protected:
     KoPictureBase* m_base;

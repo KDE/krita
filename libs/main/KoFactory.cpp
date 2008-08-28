@@ -22,24 +22,22 @@
 class KoFactory::KoFactoryPrivate
 {
 public:
-  KoFactoryPrivate()
-  {
-  }
-  ~KoFactoryPrivate()
-  {
-  }
+    KoFactoryPrivate() {
+    }
+    ~KoFactoryPrivate() {
+    }
 };
 
-KoFactory::KoFactory( QObject *parent, const char *name )
-  : KParts::Factory( parent )
-  , d( 0 )
+KoFactory::KoFactory(QObject *parent, const char *name)
+        : KParts::Factory(parent)
+        , d(0)
 {
-	setObjectName(name);
+    setObjectName(name);
 }
 
 KoFactory::~KoFactory()
 {
-  delete d;
+    delete d;
 }
 
 #include <KoFactory.moc>

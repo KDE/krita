@@ -73,7 +73,7 @@ public:
      */
     virtual void draw(QPainter& painter, int x, int y, int width, int height, int sx = 0, int sy = 0, int sw = -1, int sh = -1, bool fastMode = false);
 
-    virtual Q3DragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
+    virtual Q3DragObject* dragObject(QWidget *dragSource = 0L, const char *name = 0L);
 
     virtual bool loadData(const QByteArray& array, const QString& extension);
 
@@ -92,29 +92,28 @@ public:
     virtual QImage generateImage(const QSize& size);
 
     // TODO: Rename to hasAlphaChannel() ?
-    virtual bool hasAlphaBuffer() const
-        { return m_originalImage.hasAlphaChannel(); }
+    virtual bool hasAlphaBuffer() const {
+        return m_originalImage.hasAlphaChannel();
+    }
 
     // TODO: Rename to setAlphaChannel() ?
-    virtual void setAlphaBuffer(bool enable)
-        {   if(enable) 
-            {
-                m_originalImage.convertToFormat(QImage::Format_ARGB32);
-            }
-            else 
-            {
-                m_originalImage.convertToFormat(QImage::Format_RGB32);
-            }
+    virtual void setAlphaBuffer(bool enable) {
+        if (enable) {
+            m_originalImage.convertToFormat(QImage::Format_ARGB32);
+        } else {
+            m_originalImage.convertToFormat(QImage::Format_RGB32);
         }
+    }
 
-    virtual QImage createAlphaMask(Qt::ImageConversionFlags flags = Qt::AutoColor) const
-        { return m_originalImage.createAlphaMask(flags); }
+    virtual QImage createAlphaMask(Qt::ImageConversionFlags flags = Qt::AutoColor) const {
+        return m_originalImage.createAlphaMask(flags);
+    }
 
     virtual void clearCache(void);
 
 protected:
     QPixmap getPixmap(QImage& image);
-    void scaleAndCreatePixmap(const QSize& size, bool fastMode=false);
+    void scaleAndCreatePixmap(const QSize& size, bool fastMode = false);
 
 private:
     QImage  m_originalImage; ///< Image as Qimage

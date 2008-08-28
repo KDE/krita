@@ -29,18 +29,18 @@ class KFileWidget;
 class KoExistingDocumentPane : public QWidget
 {
     Q_OBJECT
-    public:
-        explicit KoExistingDocumentPane(QWidget* parent);
+public:
+    explicit KoExistingDocumentPane(QWidget* parent);
 
-    public slots:
-        void onAccepted();
+public slots:
+    void onAccepted();
 
-    signals:
-        void openExistingUrl(const KUrl& url);
+signals:
+    void openExistingUrl(const KUrl& url);
 
-    private:
-        KFileWidget* m_fileWidget;
-        KPushButton* m_openButton;
+private:
+    KFileWidget* m_fileWidget;
+    KPushButton* m_openButton;
 };
 
 #endif //KOEXISTINGDOCUMENTPANE_H

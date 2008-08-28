@@ -32,8 +32,7 @@
  * This structure defines the page layout, including
  * its size in points, its format (e.g. A4), orientation, unit, margins etc.
  */
-struct KoPageLayout
-{
+struct KoPageLayout {
     /** Page format */
     KoPageFormat::Format format;
     /** Page orientation */
@@ -56,8 +55,8 @@ struct KoPageLayout
     /// margin on page-binding edge
     qreal bindingSide;
 
-    bool operator==( const KoPageLayout& l ) const {
-       return ( width == l.width &&
+    bool operator==(const KoPageLayout& l) const {
+        return (width == l.width &&
                 height == l.height &&
                 left == l.left &&
                 right == l.right &&
@@ -66,8 +65,8 @@ struct KoPageLayout
                 pageEdge == l.pageEdge &&
                 bindingSide == l.bindingSide);
     }
-    bool operator!=( const KoPageLayout& l ) const {
-        return !( (*this) == l );
+    bool operator!=(const KoPageLayout& l) const {
+        return !((*this) == l);
     }
 
     /**
@@ -88,8 +87,7 @@ struct KoPageLayout
 };
 
 /** structure for header-footer */
-struct KoHeadFoot
-{
+struct KoHeadFoot {
     QString headLeft;
     QString headMid;
     QString headRight;
@@ -99,15 +97,14 @@ struct KoHeadFoot
 };
 
 /** structure for columns */
-struct KoColumns
-{
+struct KoColumns {
     int columns;
     qreal columnSpacing;
-    bool operator==( const KoColumns& rhs ) const {
+    bool operator==(const KoColumns& rhs) const {
         return columns == rhs.columns &&
                qAbs(columnSpacing - rhs.columnSpacing) <= 1E-10;
     }
-    bool operator!=( const KoColumns& rhs ) const {
+    bool operator!=(const KoColumns& rhs) const {
         return columns != rhs.columns ||
                qAbs(columnSpacing - rhs.columnSpacing) > 1E-10;
     }

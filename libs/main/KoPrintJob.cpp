@@ -22,7 +22,7 @@
 #include <QWidget>
 
 KoPrintJob::KoPrintJob(QObject *parent)
-    : QObject(parent)
+        : QObject(parent)
 {
 }
 

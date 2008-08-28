@@ -36,7 +36,7 @@
 #include <QtDBus/QtDBus>
 #include <QFile>
 
-void qt_generate_epsf( bool b );
+void qt_generate_epsf(bool b);
 
 bool KoApplication::m_starting = true;
 
@@ -50,8 +50,8 @@ public:
 };
 
 KoApplication::KoApplication()
-    : KApplication( initHack() )
-    , d( new KoApplicationPrivate )
+        : KApplication(initHack())
+        , d(new KoApplicationPrivate)
 {
     // Tell the iconloader about share/apps/koffice/icons
     KIconLoader::global()->addAppDir("koffice");
@@ -77,7 +77,7 @@ bool KoApplication::initHack()
     options.add("print", ki18n("Only print and exit"));
     options.add("template", ki18n("Open a new document with a template"));
     options.add("dpi <dpiX,dpiY>", ki18n("Override display DPI"));
-    KCmdLineArgs::addCmdLineOptions( options, ki18n("KOffice"), "koffice", "kde" );
+    KCmdLineArgs::addCmdLineOptions(options, ki18n("KOffice"), "koffice", "kde");
     return true;
 }
 
@@ -93,136 +93,132 @@ public:
 bool KoApplication::start()
 {
     ResetStarting resetStarting; // reset m_starting to false when we're done
-    Q_UNUSED( resetStarting );
+    Q_UNUSED(resetStarting);
 
     // Find the *.desktop file corresponding to the kapp instance name
-    KoDocumentEntry entry = KoDocumentEntry( KoDocument::readNativeService() );
-    if ( entry.isEmpty() )
-    {
-        kError( 30003 ) << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
-        kError( 30003 ) << "Run 'kde4-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current shell." << endl;
-        kError( 30003 ) << "Check your installation (did you install KOffice in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
+    KoDocumentEntry entry = KoDocumentEntry(KoDocument::readNativeService());
+    if (entry.isEmpty()) {
+        kError(30003) << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
+        kError(30003) << "Run 'kde4-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current shell." << endl;
+        kError(30003) << "Check your installation (did you install KOffice in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
         return false;
     }
 
     // Get the command line arguments which we have to parse
-    KCmdLineArgs *args= KCmdLineArgs::parsedArgs();
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     int argsCount = args->count();
 
     KCmdLineArgs *koargs = KCmdLineArgs::parsedArgs("koffice");
-    QString dpiValues = koargs->getOption( "dpi" );
-    if ( !dpiValues.isEmpty() ) {
-        int sep = dpiValues.indexOf( QRegExp( "[x, ]" ) );
+    QString dpiValues = koargs->getOption("dpi");
+    if (!dpiValues.isEmpty()) {
+        int sep = dpiValues.indexOf(QRegExp("[x, ]"));
         int dpiX;
         int dpiY = 0;
         bool ok = true;
-        if ( sep != -1 ) {
-            dpiY = dpiValues.mid( sep+1 ).toInt( &ok );
-            dpiValues.truncate( sep );
+        if (sep != -1) {
+            dpiY = dpiValues.mid(sep + 1).toInt(&ok);
+            dpiValues.truncate(sep);
         }
-        if ( ok ) {
-            dpiX = dpiValues.toInt( &ok );
-            if ( ok ) {
-                if ( !dpiY ) dpiY = dpiX;
-                KoGlobal::setDPI( dpiX, dpiY );
+        if (ok) {
+            dpiX = dpiValues.toInt(&ok);
+            if (ok) {
+                if (!dpiY) dpiY = dpiX;
+                KoGlobal::setDPI(dpiX, dpiY);
             }
         }
     }
 
     // No argument -> create an empty document
-    if ( !argsCount ) {
+    if (!argsCount) {
         QString errorMsg;
-        KoDocument* doc = entry.createDoc( &errorMsg );
-        if ( !doc ) {
-            if ( !errorMsg.isEmpty() )
-                KMessageBox::error( 0, errorMsg );
+        KoDocument* doc = entry.createDoc(&errorMsg);
+        if (!doc) {
+            if (!errorMsg.isEmpty())
+                KMessageBox::error(0, errorMsg);
             return false;
         }
-        KoMainWindow *shell = new KoMainWindow( doc->componentData() );
+        KoMainWindow *shell = new KoMainWindow(doc->componentData());
         shell->show();
         QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
         // for initDoc to fill in the recent docs list
         // and for KoDocument::slotStarted
-        doc->addShell( shell );
+        doc->addShell(shell);
 
-        if ( doc->checkAutoSaveFile() ) {
-          shell->setRootDocument( doc );
+        if (doc->checkAutoSaveFile()) {
+            shell->setRootDocument(doc);
         } else {
-          doc->showStartUpWidget( shell );
+            doc->showStartUpWidget(shell);
         }
 
         // FIXME This needs to be moved someplace else
-	QObject::disconnect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
+        QObject::disconnect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
     } else {
         bool print = koargs->isSet("print");
-	bool doTemplate = koargs->isSet("template");
+        bool doTemplate = koargs->isSet("template");
         koargs->clear();
 
         // Loop through arguments
 
-        short int n=0; // number of documents open
+        short int n = 0; // number of documents open
         short int nPrinted = 0;
-        for(int i=0; i < argsCount; i++ )
-        {
+        for (int i = 0; i < argsCount; i++) {
             // For now create an empty document
             QString errorMsg;
-            KoDocument* doc = entry.createDoc( &errorMsg, 0 );
-            if ( doc )
-            {
+            KoDocument* doc = entry.createDoc(&errorMsg, 0);
+            if (doc) {
                 // show a shell asap
-                KoMainWindow *shell = new KoMainWindow( doc->componentData() );
+                KoMainWindow *shell = new KoMainWindow(doc->componentData());
                 if (!print)
                     shell->show();
-		// are we just trying to open a template?
-		if ( doTemplate ) {
-		  QStringList paths;
-		  if ( args->url(i).isLocalFile() && QFile::exists(args->url(i).path()) )
-		  {
-		    paths << QString(args->url(i).path());
-		    kDebug(30003) <<"using full path...";
-		  } else {
-		     QString desktopName(args->arg(i));
-		     QString appName = KGlobal::mainComponent().componentName();
+                // are we just trying to open a template?
+                if (doTemplate) {
+                    QStringList paths;
+                    if (args->url(i).isLocalFile() && QFile::exists(args->url(i).path())) {
+                        paths << QString(args->url(i).path());
+                        kDebug(30003) << "using full path...";
+                    } else {
+                        QString desktopName(args->arg(i));
+                        QString appName = KGlobal::mainComponent().componentName();
 
-		     paths = KGlobal::dirs()->findAllResources("data", appName +"/templates/*/" + desktopName );
-		     if ( paths.isEmpty()) {
-			   paths = KGlobal::dirs()->findAllResources("data", appName +"/templates/" + desktopName );
-	             }
-		     if ( paths.isEmpty()) {
-		        KMessageBox::error(0L, i18n("No template found for: %1 ", desktopName) );
-		        delete shell;
-		     } else if ( paths.count() > 1 ) {
-		        KMessageBox::error(0L,  i18n("Too many templates found for: %1", desktopName) );
-		        delete shell;
-		     }
-		  }
+                        paths = KGlobal::dirs()->findAllResources("data", appName + "/templates/*/" + desktopName);
+                        if (paths.isEmpty()) {
+                            paths = KGlobal::dirs()->findAllResources("data", appName + "/templates/" + desktopName);
+                        }
+                        if (paths.isEmpty()) {
+                            KMessageBox::error(0L, i18n("No template found for: %1 ", desktopName));
+                            delete shell;
+                        } else if (paths.count() > 1) {
+                            KMessageBox::error(0L,  i18n("Too many templates found for: %1", desktopName));
+                            delete shell;
+                        }
+                    }
 
-                  if ( !paths.isEmpty() ) {
-		     KUrl templateBase;
-		     templateBase.setPath(paths[0]);
-		     KDesktopFile templateInfo(paths[0]);
+                    if (!paths.isEmpty()) {
+                        KUrl templateBase;
+                        templateBase.setPath(paths[0]);
+                        KDesktopFile templateInfo(paths[0]);
 
-		     QString templateName = templateInfo.readUrl();
-		     KUrl templateURL;
-		     templateURL.setPath( templateBase.directory() + '/' + templateName );
-		     if ( shell->openDocument(doc, templateURL )) {
-		       doc->resetURL();
-		       doc->setEmpty();
-                       doc->setTitleModified();
-		       kDebug(30003) <<"Template loaded...";
-		       n++;
-		     } else {
-		        KMessageBox::error(0L, i18n("Template %1 failed to load.", templateURL.prettyUrl()) );
- 		        delete shell;
-		     }
-		  }
-                // now try to load
-                } else if ( shell->openDocument( doc, args->url(i) ) ) {
-                    if ( print ) {
+                        QString templateName = templateInfo.readUrl();
+                        KUrl templateURL;
+                        templateURL.setPath(templateBase.directory() + '/' + templateName);
+                        if (shell->openDocument(doc, templateURL)) {
+                            doc->resetURL();
+                            doc->setEmpty();
+                            doc->setTitleModified();
+                            kDebug(30003) << "Template loaded...";
+                            n++;
+                        } else {
+                            KMessageBox::error(0L, i18n("Template %1 failed to load.", templateURL.prettyUrl()));
+                            delete shell;
+                        }
+                    }
+                    // now try to load
+                } else if (shell->openDocument(doc, args->url(i))) {
+                    if (print) {
                         shell->slotFilePrint();
                         // delete shell; done by ~KoDocument
                         nPrinted++;
-		    } else {
+                    } else {
                         // Normal case, success
                         n++;
                     }
@@ -233,7 +229,7 @@ bool KoApplication::start()
                 }
             }
         }
-        if ( print )
+        if (print)
             return nPrinted > 0;
         if (n == 0) // no doc, e.g. all URLs were malformed
             return false;

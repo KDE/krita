@@ -33,7 +33,7 @@ class KoVersionDialog : public KDialog
 {
     Q_OBJECT
 public:
-    KoVersionDialog(  QWidget* parent, KoDocument *doc );
+    KoVersionDialog(QWidget* parent, KoDocument *doc);
     ~KoVersionDialog();
 
 public slots:
@@ -60,7 +60,7 @@ class KoVersionModifyDialog : public KDialog
 {
     Q_OBJECT
 public:
-    explicit KoVersionModifyDialog(  QWidget* parent, KoVersionInfo *info=0 );
+    explicit KoVersionModifyDialog(QWidget* parent, KoVersionInfo *info = 0);
 
     QString comment() const;
 

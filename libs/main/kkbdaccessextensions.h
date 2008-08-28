@@ -109,51 +109,51 @@ class KKbdAccessExtensions : public QObject
     // TODO: A .moc isn't really needed right now, but see TODO in eventFilter method.
     // Q_PROPERTY(int stepSize READ stepSize WRITE setStepSize)
 
-    public:
-        /** Constructor.
-        *   @param ac the actionCollection this object works on.
-        *   @param parent the parent for memory management puroposes
-        */
-        explicit KKbdAccessExtensions(KActionCollection *ac, QObject *parent = 0);
+public:
+    /** Constructor.
+    *   @param ac the actionCollection this object works on.
+    *   @param parent the parent for memory management puroposes
+    */
+    explicit KKbdAccessExtensions(KActionCollection *ac, QObject *parent = 0);
 
-        /** Destructor. */
-        virtual ~KKbdAccessExtensions();
+    /** Destructor. */
+    virtual ~KKbdAccessExtensions();
 
-        /** Returns number of pixels panel is sized for each arrow key pressed.  Default is 10. */
-        int stepSize() const;
-        /** Sets number of pixels panel is sized for each arrow key pressed. */
-        void setStepSize(int s);
+    /** Returns number of pixels panel is sized for each arrow key pressed.  Default is 10. */
+    int stepSize() const;
+    /** Sets number of pixels panel is sized for each arrow key pressed. */
+    void setStepSize(int s);
 
-    protected:
-        /** Event filter installed on kapp object. */
-        bool eventFilter( QObject *o, QEvent *e );
+protected:
+    /** Event filter installed on kapp object. */
+    bool eventFilter(QObject *o, QEvent *e);
 
-        /** Retrieves a list of all Splitter and DockArea widgets in the application. */
-        QWidgetList* getAllPanels();
-        /** Advances to the next Panel handle.  If not currently in resizing mode,
-            turns it on. */
-        void nextHandle();
-        /** Moves to the previous Panel handle.  If not currently in resizing mode,
-            turns it on. */
-        void prevHandle();
-        /** Exits Sizing mode. */
-        void exitSizing();
-        /** Moves panel handle based on key pressed. */
-        void resizePanelFromKey(int key, int state);
-        /** Moves panel handle based on deltaX and deltaY and state of keyboard modifier keys. */
-        void resizePanel(int dx, int dy, int state);
-        /** Displays the sizer icon. */
-        void showIcon();
-        /** Hides the sizer icon. */
-        void hideIcon();
+    /** Retrieves a list of all Splitter and DockArea widgets in the application. */
+    QWidgetList* getAllPanels();
+    /** Advances to the next Panel handle.  If not currently in resizing mode,
+        turns it on. */
+    void nextHandle();
+    /** Moves to the previous Panel handle.  If not currently in resizing mode,
+        turns it on. */
+    void prevHandle();
+    /** Exits Sizing mode. */
+    void exitSizing();
+    /** Moves panel handle based on key pressed. */
+    void resizePanelFromKey(int key, int state);
+    /** Moves panel handle based on deltaX and deltaY and state of keyboard modifier keys. */
+    void resizePanel(int dx, int dy, int state);
+    /** Displays the sizer icon. */
+    void showIcon();
+    /** Hides the sizer icon. */
+    void hideIcon();
 
-        /** Displays the access keys. */
-        void displayAccessKeys();
-        /** Handles an access keypress. */
-        bool handleAccessKey( const QKeyEvent* ev );
+    /** Displays the access keys. */
+    void displayAccessKeys();
+    /** Handles an access keypress. */
+    bool handleAccessKey(const QKeyEvent* ev);
 
-    private:
-        KKbdAccessExtensionsPrivate * const d;
+private:
+    KKbdAccessExtensionsPrivate * const d;
 };
 
 /** Provides a way to sort QLabelss using a QValueList based on their screen position. */
@@ -162,8 +162,10 @@ class KSortedLabel
 public:
     KSortedLabel(QLabel* l);
     KSortedLabel();    // default constructor
-    bool operator<( const KSortedLabel& l) const;
-    QLabel* label() const { return m_l; }
+    bool operator<(const KSortedLabel& l) const;
+    QLabel* label() const {
+        return m_l;
+    }
 
 private:
     QLabel* m_l;

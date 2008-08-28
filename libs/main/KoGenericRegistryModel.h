@@ -26,39 +26,40 @@
 
 /**
  * This is a model that you can use to display the content of a registry.
- * 
+ *
  * @param T is the type of the data in the registry
  */
 template<typename T>
-class KoGenericRegistryModel : public QAbstractListModel {
+class KoGenericRegistryModel : public QAbstractListModel
+{
 
-    public:
-    
-        KoGenericRegistryModel(KoGenericRegistry<T>* registry);
-        
-        virtual ~KoGenericRegistryModel();
-        
-    public:
-    
-        /**
-         * @return the number of elements in the registry
-         */
-        virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-        
-        /**
-         * When role == Qt::DisplayRole, this function will return the name of the
-         * element.
-         */
-        virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-        
-        /**
-         * @return the element at the given index
-         */
-        T get(const QModelIndex &index) const;
-        
-    private:
-    
-        KoGenericRegistry<T>* m_registry;
+public:
+
+    KoGenericRegistryModel(KoGenericRegistry<T>* registry);
+
+    virtual ~KoGenericRegistryModel();
+
+public:
+
+    /**
+     * @return the number of elements in the registry
+     */
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+
+    /**
+     * When role == Qt::DisplayRole, this function will return the name of the
+     * element.
+     */
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+
+    /**
+     * @return the element at the given index
+     */
+    T get(const QModelIndex &index) const;
+
+private:
+
+    KoGenericRegistry<T>* m_registry;
 };
 
 // -- Implementation --
@@ -81,13 +82,11 @@ int KoGenericRegistryModel<T>::rowCount(const QModelIndex &/*parent*/) const
 template<typename T>
 QVariant KoGenericRegistryModel<T>::data(const QModelIndex &index, int role) const
 {
-    if(!index.isValid())
-    {
+    if (!index.isValid()) {
         return QVariant();
     }
-    if(role == Qt::DisplayRole || role == Qt::EditRole)
-    {
-        return QVariant( get(index)->name() );
+    if (role == Qt::DisplayRole || role == Qt::EditRole) {
+        return QVariant(get(index)->name());
     }
     return QVariant();
 }
@@ -95,7 +94,7 @@ QVariant KoGenericRegistryModel<T>::data(const QModelIndex &index, int role) con
 template<typename T>
 T KoGenericRegistryModel<T>::get(const QModelIndex &index) const
 {
-    return m_registry->get( m_registry->keys()[index.row()]);
+    return m_registry->get(m_registry->keys()[index.row()]);
 }
 
 #endif

@@ -24,7 +24,8 @@
 #include <KoExecutePolicy.h>
 #include <threadweaver/ThreadWeaver.h>
 
-class TestAction::Notifier {
+class TestAction::Notifier
+{
 public:
     Notifier() : count(0) {}
     void notify() {
@@ -38,16 +39,18 @@ public:
 };
 
 TestAction::TestAction()
-    : m_notifier(new TestAction::Notifier())
+        : m_notifier(new TestAction::Notifier())
 {
 }
 
-TestAction::~TestAction() {
+TestAction::~TestAction()
+{
     delete m_notifier;
     m_notifier = 0;
 }
 
-void TestAction::test() {
+void TestAction::test()
+{
     m_notifier->count = 0;
     KoAction action;
     action.setExecutePolicy(KoExecutePolicy::directPolicy);
@@ -58,10 +61,11 @@ void TestAction::test() {
     QCOMPARE(m_notifier->count, 1);
 
     KoExecutePolicy *policies[4] = { KoExecutePolicy::onlyLastPolicy,
-        KoExecutePolicy::queuedPolicy,
-        KoExecutePolicy::directPolicy,
-        KoExecutePolicy::simpleQueuedPolicy };
-    for(int i=0; i < 4; i++) {
+                                     KoExecutePolicy::queuedPolicy,
+                                     KoExecutePolicy::directPolicy,
+                                     KoExecutePolicy::simpleQueuedPolicy
+                                   };
+    for (int i = 0; i < 4; i++) {
         action.setExecutePolicy(policies[i]);
         m_notifier->count = 0;
         //qDebug() << " test " << i+1;
@@ -89,10 +93,11 @@ void TestAction::testExecuteTwice()
     QCOMPARE(m_notifier->count, 1);
 
     KoExecutePolicy *policies[4] = { KoExecutePolicy::onlyLastPolicy,
-        KoExecutePolicy::queuedPolicy,
-        KoExecutePolicy::directPolicy,
-        KoExecutePolicy::simpleQueuedPolicy };
-    for(int i=0; i < 4; i++) {
+                                     KoExecutePolicy::queuedPolicy,
+                                     KoExecutePolicy::directPolicy,
+                                     KoExecutePolicy::simpleQueuedPolicy
+                                   };
+    for (int i = 0; i < 4; i++) {
         action.setExecutePolicy(policies[i]);
         m_notifier->count = 0;
         //qDebug() << " test " << i+1;

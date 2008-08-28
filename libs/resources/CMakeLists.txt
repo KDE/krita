@@ -16,9 +16,12 @@ set(koresources_LIB_SRCS
 
 kde4_add_library(koresources SHARED ${koresources_LIB_SRCS})
 
-target_link_libraries(koresources  ${KDE4_KDECORE_LIBS} ${QT_QTXML_LIBRARY} ${QT_QTGUI_LIBRARY} pigmentcms)
+target_link_libraries(koresources pigmentcms)
 
-set_target_properties(koresources PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(koresources PROPERTIES
+    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "pigmentcms"
+)
 install(TARGETS koresources  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES 

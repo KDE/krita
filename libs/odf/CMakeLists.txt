@@ -27,9 +27,12 @@ set(koodf_LIB_SRCS
 
 kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})
 
-target_link_libraries(koodf kstore ${KDE4_KDECORE_LIBS} ${QT_QTXML_LIBRARY})
+target_link_libraries(koodf kstore)
 
-set_target_properties(koodf PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(koodf PROPERTIES
+    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "kstore"
+)
 install(TARGETS koodf ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 

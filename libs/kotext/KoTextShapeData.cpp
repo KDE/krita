@@ -44,7 +44,6 @@
 #include "styles/KoListLevelProperties.h"
 #include "KoTextDocumentLayout.h"
 #include "KoTextBlockData.h"
-#include "KoTextDocument.h"
 
 #include "opendocument/KoTextLoader.h"
 
@@ -322,7 +321,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to, 
     Q_ASSERT(layout);
     Q_ASSERT(layout->inlineObjectTextManager());
 
-    KoStyleManager *styleManager = KoTextDocument(d->document).styleManager();
+    KoStyleManager *styleManager = layout->styleManager();
     if (styleManager && saveDefaultStyles)
         styleManager->saveOdfDefaultStyles(context.mainStyles());
 

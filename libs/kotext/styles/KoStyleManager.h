@@ -25,7 +25,6 @@
 #include "kotext_export.h"
 
 #include <QObject>
-#include <QMetaType>
 #include <KoDataCenter.h>
 
 class QTextDocument;
@@ -237,7 +236,5 @@ private:
     class Private;
     Private* const d;
 };
-
-Q_DECLARE_METATYPE(KoStyleManager*)
 
 #endif

@@ -28,7 +28,6 @@
 #include "KoListLevelProperties.h"
 #include "KoGenStyle.h"
 #include "Styles_p.h"
-#include "KoTextDocument.h"
 
 #include <KDebug>
 
@@ -1408,12 +1407,15 @@ KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block)
     KoCharacterStyle *charStyle = 0;
     int styleId = format.intProperty(StyleId);
     if (styleId > 0) {
-        KoStyleManager *sm = KoTextDocument(block.document()).styleManager();
-        if (sm) {
-            KoParagraphStyle *style = sm->paragraphStyle(styleId);
-            if (style)
-                answer = new KoParagraphStyle(*style);
-            charStyle = sm->characterStyle(format.intProperty(KoCharacterStyle::StyleId));
+        KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(block.document()->documentLayout());
+        if (layout) {
+            KoStyleManager *sm = layout->styleManager();
+            if (sm) {
+                KoParagraphStyle *style = sm->paragraphStyle(styleId);
+                if (style)
+                    answer = new KoParagraphStyle(*style);
+                charStyle = sm->characterStyle(format.intProperty(KoCharacterStyle::StyleId));
+            }
         }
     }
     if (answer == 0) {

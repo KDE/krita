@@ -54,7 +54,6 @@
 #include <KoDrag.h>
 #include <KoOdf.h>
 #include <KoTextPaste.h>
-#include <KoTextDocument.h>
 
 #include <kdebug.h>
 #include <KStandardShortcut>
@@ -1060,8 +1059,13 @@ void TextTool::updateActions()
 void TextTool::updateStyleManager()
 {
     Q_ASSERT(m_textShapeData);
-    KoStyleManager *styleManager = KoTextDocument(m_textShapeData->document()).styleManager();
-    emit styleManagerChanged(styleManager);
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    if (lay)
+        emit styleManagerChanged(lay->styleManager());
+    else {
+        emit styleManagerChanged(0);
+        kWarning(32500) << "Shape does not have a KoTextDocumentLayout\n";
+    }
 }
 
 void TextTool::activate(bool temporary)
@@ -1478,14 +1482,15 @@ void TextTool::stopMacro()
 
 void TextTool::showStyleManager()
 {
-    KoStyleManager *styleManager = KoTextDocument(m_textShapeData->document()).styleManager();
-    Q_ASSERT(styleManager);
-    if (!styleManager)
-        return;  //don't crash
-    StyleManagerDialog *dia = new StyleManagerDialog(m_canvas->canvasWidget());
-    dia->setStyleManager(styleManager);
-    dia->setUnit(m_canvas->unit());
-    dia->show();
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    if (lay) {
+        Q_ASSERT(lay->styleManager());
+        if (! lay->styleManager()) return;  //don't crash
+        StyleManagerDialog *dia = new StyleManagerDialog(m_canvas->canvasWidget());
+        dia->setStyleManager(lay->styleManager());
+        dia->setUnit(m_canvas->unit());
+        dia->show();
+    }
 }
 
 void TextTool::startTextEditingPlugin(const QString &pluginId)

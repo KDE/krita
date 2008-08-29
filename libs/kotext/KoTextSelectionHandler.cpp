@@ -28,7 +28,6 @@
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoCharacterStyle.h"
 #include "styles/KoStyleManager.h"
-#include "KoTextDocument.h"
 
 #include <kdebug.h>
 #include <KLocale>
@@ -280,9 +279,11 @@ void KoTextSelectionHandler::decreaseFontSize()
 
 void KoTextSelectionHandler::setDefaultFormat()
 {
-    KoTextDocument koDocument(d->textShapeData->document());
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(d->textShapeData->document()->documentLayout());
+    if (!layout)
+        return;
     emit startMacro(i18n("Set default format"));
-    if (KoStyleManager *styleManager = koDocument.styleManager()) {
+    if (KoStyleManager *styleManager = layout->styleManager()) {
         KoCharacterStyle *defaultCharStyle = styleManager->defaultParagraphStyle()->characterStyle();
         QTextCharFormat defaultFormat;
         defaultCharStyle->applyStyle(defaultFormat);
@@ -434,16 +435,15 @@ QTextCursor KoTextSelectionHandler::caret() const
 void KoTextSelectionHandler::nextParagraph()
 {
     emit startMacro(i18n("Insert Linebreak"));
-    KoTextDocument koDocument(d->textShapeData->document());
-    KoStyleManager *styleManager = koDocument.styleManager();
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(d->textShapeData->document()->documentLayout());
     KoParagraphStyle *nextStyle = 0;
-    if (styleManager) {
+    if (lay && lay->styleManager()) {
         int id = d->caret->blockFormat().intProperty(KoParagraphStyle::StyleId);
-        KoParagraphStyle *currentStyle = styleManager->paragraphStyle(id);
+        KoParagraphStyle *currentStyle = lay->styleManager()->paragraphStyle(id);
         if (currentStyle == 0) // not a style based parag.  Lets make the next one correct.
-            nextStyle = styleManager->defaultParagraphStyle();
+            nextStyle = lay->styleManager()->defaultParagraphStyle();
         else
-            nextStyle = styleManager->paragraphStyle(currentStyle->nextStyle());
+            nextStyle = lay->styleManager()->paragraphStyle(currentStyle->nextStyle());
         Q_ASSERT(nextStyle);
         if (currentStyle == nextStyle)
             nextStyle = 0;

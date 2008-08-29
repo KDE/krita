@@ -3,7 +3,8 @@
 #include <TextChanges.h>
 #include <TextChange.h>
 
-void TestChangesDatabase::testInsert() {
+void TestChangesDatabase::testInsert()
+{
     TextChanges changes;
     changes.inserted(100, "foobar");
     const TextChange *change = changes.first();
@@ -39,7 +40,8 @@ void TestChangesDatabase::testInsert() {
     QCOMPARE(change2->formerPosition(), 200);
 }
 
-void TestChangesDatabase::testRemove() {
+void TestChangesDatabase::testRemove()
+{
     TextChanges changes;
     changes.changed(100, "foobar", "");
     const TextChange *change = changes.first();
@@ -72,12 +74,14 @@ void TestChangesDatabase::testRemove() {
     QCOMPARE(change2->formerPosition(), 200);
 }
 
-void TestChangesDatabase::testSplit() {
+void TestChangesDatabase::testSplit()
+{
     TextChanges changes;
     // test the insertion of a big change and then the revert of a part of that change.
 }
 
-void TestChangesDatabase::testMerge() {
+void TestChangesDatabase::testMerge()
+{
     TextChanges changes;
     changes.inserted(1, "a");
 

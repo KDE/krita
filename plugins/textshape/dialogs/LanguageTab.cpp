@@ -28,12 +28,12 @@
 
 #include "LanguageTab.moc"
 
-LanguageTab::LanguageTab( /*KSpell2::Loader::Ptr loader,*/ QWidget* parent, Qt::WFlags fl ) 
-        : QWidget( parent )
+LanguageTab::LanguageTab(/*KSpell2::Loader::Ptr loader,*/ QWidget* parent, Qt::WFlags fl)
+        : QWidget(parent)
 {
     widget.setupUi(this);
 
-    Q_UNUSED( fl );
+    Q_UNUSED(fl);
 
     widget.languageListSearchLine->setListWidget(widget.languageList);
 
@@ -42,26 +42,23 @@ LanguageTab::LanguageTab( /*KSpell2::Loader::Ptr loader,*/ QWidget* parent, Qt::
     const QStringList langTags = KoGlobal::listOfLanguageTags();
     QSet<QString> spellCheckLanguages;
 #if 0 //Port it
-    if ( loader )
+    if (loader)
         spellCheckLanguages = QSet<QString>::fromList(loader->languages());
 #endif
     QStringList::ConstIterator itName = langNames.begin();
     QStringList::ConstIterator itTag = langTags.begin();
-    for ( ; itName != langNames.end() && itTag != langTags.end(); ++itName, ++itTag )
-    {
-        if ( spellCheckLanguages.contains( *itTag ) )
-        {
+    for (; itName != langNames.end() && itTag != langTags.end(); ++itName, ++itTag) {
+        if (spellCheckLanguages.contains(*itTag)) {
             QListWidgetItem* item = new QListWidgetItem();
-            item->setText( *itName );
-            item->setIcon( SmallIcon("tools-check-spelling") );
+            item->setText(*itName);
+            item->setIcon(SmallIcon("tools-check-spelling"));
 
-            widget.languageList->addItem(item); 
-        }
-        else
-            widget.languageList->addItem( *itName );
+            widget.languageList->addItem(item);
+        } else
+            widget.languageList->addItem(*itName);
     }
-    connect( widget.languageList, SIGNAL( currentItemChanged( QListWidgetItem*,QListWidgetItem* ) ), 
-            this, SIGNAL( languageChanged() ) );
+    connect(widget.languageList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
+            this, SIGNAL(languageChanged()));
 }
 
 LanguageTab::~LanguageTab()
@@ -73,17 +70,16 @@ QString LanguageTab::language() const
     if (!widget.languageList->currentItem())
         return QString();
 
-    return KoGlobal::tagOfLanguage( widget.languageList->currentItem()->text() );
+    return KoGlobal::tagOfLanguage(widget.languageList->currentItem()->text());
 }
 
-void LanguageTab::setLanguage( const QString &item )
+void LanguageTab::setLanguage(const QString &item)
 {
     const QString& name = KoGlobal::languageFromTag(item);
 
     QList<QListWidgetItem*> items = widget.languageList->findItems(name,
-                                                            Qt::MatchFixedString);
-    if ( !items.isEmpty() )
-    {
+                                    Qt::MatchFixedString);
+    if (!items.isEmpty()) {
         widget.languageList->setCurrentItem(items.first());
         widget.languageList->scrollToItem(items.first());
     }

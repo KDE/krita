@@ -29,10 +29,10 @@
 #include <QTextLayout>
 
 SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
-    : QWidget(parent),
-    m_blockSignals(false),
-    m_tool(tool),
-    m_directionButtonState(Auto)
+        : QWidget(parent),
+        m_blockSignals(false),
+        m_tool(tool),
+        m_directionButtonState(Auto)
 {
     widget.setupUi(this);
     widget.bold->setDefaultAction(tool->action("format_bold"));
@@ -41,11 +41,10 @@ SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
     widget.underline->setDefaultAction(tool->action("format_underline"));
     // RTL layout will reverse the button order, but the align left/right then get mixed up.
     // this makes sure that whatever happens the 'align left' is to the left of the 'align right'
-    if(QApplication::isRightToLeft()) {
+    if (QApplication::isRightToLeft()) {
         widget.alignLeft->setDefaultAction(tool->action("format_alignright"));
         widget.alignRight->setDefaultAction(tool->action("format_alignleft"));
-    }
-    else {
+    } else {
         widget.alignLeft->setDefaultAction(tool->action("format_alignleft"));
         widget.alignRight->setDefaultAction(tool->action("format_alignright"));
     }
@@ -65,28 +64,34 @@ SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
     connect(widget.reversedText, SIGNAL(clicked()), this, SLOT(directionChangeRequested()));
 }
 
-void SimpleStyleWidget::fillListsCombobox() {
+void SimpleStyleWidget::fillListsCombobox()
+{
     // we would maybe want to pass a language to this, to include localized list counting strategies.
 
     widget.listType->clear();
     foreach(Lists::ListStyleItem item, Lists::genericListStyleItems())
-        widget.listType->addItem(item.name, static_cast<int> (item.style));
+    widget.listType->addItem(item.name, static_cast<int>(item.style));
 }
 
-void SimpleStyleWidget::setCurrentBlock(const QTextBlock &block) {
+void SimpleStyleWidget::setCurrentBlock(const QTextBlock &block)
+{
     m_currentBlock = block;
     m_blockSignals = true;
     struct Finally {
-        Finally(SimpleStyleWidget *p) { parent = p; }
-        ~Finally() { parent->m_blockSignals = false; }
+        Finally(SimpleStyleWidget *p) {
+            parent = p;
+        }
+        ~Finally() {
+            parent->m_blockSignals = false;
+        }
         SimpleStyleWidget *parent;
     };
     Finally finally(this);
 
     widget.reversedText->setVisible(m_tool->isBidiDocument());
     QTextLayout *layout = block.layout();
-    if(layout) {
-        switch(layout->textOption().textDirection()) {
+    if (layout) {
+        switch (layout->textOption().textDirection()) {
         case Qt::LeftToRight: updateDirection(LTR); break;
         case Qt::RightToLeft: updateDirection(RTL); break;
         }
@@ -96,7 +101,7 @@ void SimpleStyleWidget::setCurrentBlock(const QTextBlock &block) {
     fillListsCombobox();
 
     QTextList *list = block.textList();
-    if(list == 0) {
+    if (list == 0) {
         widget.listType->setCurrentIndex(0); // the item 'NONE'
         return;
     }
@@ -107,23 +112,24 @@ void SimpleStyleWidget::setCurrentBlock(const QTextBlock &block) {
 
     QTextListFormat format = list->format();
     int style = format.intProperty(QTextListFormat::ListStyle);
-    for(int i=0; i < widget.listType->count(); i++) {
-        if(widget.listType->itemData(i).toInt() == style) {
+    for (int i = 0; i < widget.listType->count(); i++) {
+        if (widget.listType->itemData(i).toInt() == style) {
             widget.listType->setCurrentIndex(i);
             return;
         }
     }
 
     foreach(Lists::ListStyleItem item, Lists::otherlistStyleItems()) {
-        if(item.style == style) {
-            widget.listType->addItem(item.name, static_cast<int> (item.style));
-            widget.listType->setCurrentIndex(widget.listType->count()-1);
+        if (item.style == style) {
+            widget.listType->addItem(item.name, static_cast<int>(item.style));
+            widget.listType->setCurrentIndex(widget.listType->count() - 1);
             return;
         }
     }
 }
 
-void SimpleStyleWidget::setStyleManager(KoStyleManager *sm) {
+void SimpleStyleWidget::setStyleManager(KoStyleManager *sm)
+{
     m_styleManager = sm;
 }
 
@@ -131,19 +137,21 @@ void SimpleStyleWidget::setCurrentFormat(const QTextCharFormat& format)
 {
 }
 
-void SimpleStyleWidget::listStyleChanged(int row) {
-    if(m_blockSignals) return;
+void SimpleStyleWidget::listStyleChanged(int row)
+{
+    if (m_blockSignals) return;
 
-    m_tool->addCommand( new ChangeListCommand (m_currentBlock,
-                static_cast<KoListStyle::Style> (widget.listType->itemData(row).toInt())));
+    m_tool->addCommand(new ChangeListCommand(m_currentBlock,
+                       static_cast<KoListStyle::Style>(widget.listType->itemData(row).toInt())));
 }
 
-void SimpleStyleWidget::directionChangeRequested() {
+void SimpleStyleWidget::directionChangeRequested()
+{
     QTextCursor cursor(m_currentBlock);
     QTextBlockFormat format = cursor.blockFormat();
-    KoText::Direction dir = static_cast<KoText::Direction> (format.intProperty(
-                KoParagraphStyle::TextProgressionDirection));
-    switch(dir) {
+    KoText::Direction dir = static_cast<KoText::Direction>(format.intProperty(
+                                KoParagraphStyle::TextProgressionDirection));
+    switch (dir) {
     case KoText::PerhapsLeftRightTopBottom:
     case KoText::LeftRightTopBottom:
         format.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::RightLeftTopBottom);
@@ -164,21 +172,22 @@ void SimpleStyleWidget::directionChangeRequested() {
     cursor.setBlockFormat(format);
 }
 
-void SimpleStyleWidget::updateDirection(DirectionButtonState state) {
-    if(m_directionButtonState == state) return;
+void SimpleStyleWidget::updateDirection(DirectionButtonState state)
+{
+    if (m_directionButtonState == state) return;
     m_directionButtonState = state;
     QString buttonText;
-    switch(state) {
-        case LTR:
-            buttonText = i18nc("Short for LeftToRight", "LTR");
-            break;
-        case RTL:
-            buttonText = i18nc("Short for RightToLeft", "RTL");
-            break;
-        default:
-        case Auto:
-            buttonText = i18nc("Automatic direction detection", "Auto");
-            break;
+    switch (state) {
+    case LTR:
+        buttonText = i18nc("Short for LeftToRight", "LTR");
+        break;
+    case RTL:
+        buttonText = i18nc("Short for RightToLeft", "RTL");
+        break;
+    default:
+    case Auto:
+        buttonText = i18nc("Automatic direction detection", "Auto");
+        break;
     }
     widget.reversedText->setText(buttonText);
 }

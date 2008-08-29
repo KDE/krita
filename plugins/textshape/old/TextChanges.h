@@ -24,7 +24,8 @@
 class TextChange;
 class QString;
 
-class TextChanges {
+class TextChanges
+{
 public:
     TextChanges();
     ~TextChanges();
@@ -34,7 +35,9 @@ public:
     /// return true if the current text and formatting for the parameter section is already in our database
     bool hasText(int position, int length) const;
 
-    const TextChange *first() const { return m_root; }
+    const TextChange *first() const {
+        return m_root;
+    }
     QMap<int, const TextChange*> changes() const;
 
 private:

@@ -4,7 +4,8 @@
 #include <QObject>
 #include <QtTest>
 
-class TestChangeListCommand : public QObject {
+class TestChangeListCommand : public QObject
+{
     Q_OBJECT
 public:
     TestChangeListCommand() {}

@@ -31,16 +31,16 @@
 
 
 Ruler::Ruler(QObject *parent)
-    : QObject(parent),
-    m_value(0.0),
-    m_oldValue(0.0),
-    m_stepValue(10.0),
-    m_minValue(-std::numeric_limits<qreal>::infinity()),
-    m_maxValue(std::numeric_limits<qreal>::infinity()),
-    m_active(false),
-    m_focused(false),
-    m_highlighted(false),
-    m_options(noOptions)
+        : QObject(parent),
+        m_value(0.0),
+        m_oldValue(0.0),
+        m_stepValue(10.0),
+        m_minValue(-std::numeric_limits<qreal>::infinity()),
+        m_maxValue(std::numeric_limits<qreal>::infinity()),
+        m_active(false),
+        m_focused(false),
+        m_highlighted(false),
+        m_options(noOptions)
 {}
 
 void Ruler::setUnit(KoUnit unit)
@@ -49,31 +49,31 @@ void Ruler::setUnit(KoUnit unit)
 
     // approximately 15 points seems to be a good value for the step size
     switch (m_unit.indexInList(false)) {
-        case KoUnit::Millimeter:
-            setStepValue(14.17325288515625502486); // 5.0 mm
-            break;
-        case KoUnit::Point:
-            setStepValue(15.0); // 15 pt
-            break;
-        case KoUnit::Inch:
-            setStepValue(14.399999999998848); // 0.2 inch
-            break;
-        case KoUnit::Centimeter:
-            setStepValue(14.17325288515625502486); // 0.5 cm
-            break;
-        case KoUnit::Decimeter:
-            setStepValue(14.17325288515625502486); // 0.05 dm
-            break;
-        case KoUnit::Pica:
-            setStepValue(15.00000006000000024); // 1.25 pica
-            break;
-        case KoUnit::Cicero:
-            setStepValue(12.84010270181826254741); // 1 cicero
-            break;
-        case KoUnit::Pixel:
-        default:
-            setStepValue(15.0);
-            break;
+    case KoUnit::Millimeter:
+        setStepValue(14.17325288515625502486); // 5.0 mm
+        break;
+    case KoUnit::Point:
+        setStepValue(15.0); // 15 pt
+        break;
+    case KoUnit::Inch:
+        setStepValue(14.399999999998848); // 0.2 inch
+        break;
+    case KoUnit::Centimeter:
+        setStepValue(14.17325288515625502486); // 0.5 cm
+        break;
+    case KoUnit::Decimeter:
+        setStepValue(14.17325288515625502486); // 0.05 dm
+        break;
+    case KoUnit::Pica:
+        setStepValue(15.00000006000000024); // 1.25 pica
+        break;
+    case KoUnit::Cicero:
+        setStepValue(12.84010270181826254741); // 1 cicero
+        break;
+    case KoUnit::Pixel:
+    default:
+        setStepValue(15.0);
+        break;
     }
 }
 
@@ -111,11 +111,9 @@ void Ruler::moveTo(qreal value, bool smooth)
     else {
         if (smooth || m_stepValue == 0.0) {
             newValue = value;
-        }
-        else if (value > 0.0) {
+        } else if (value > 0.0) {
             newValue = value - fmod(value + m_stepValue * 0.5, m_stepValue) + m_stepValue * 0.5;
-        }
-        else {
+        } else {
             newValue = value - fmod(value - m_stepValue * 0.5, m_stepValue) - m_stepValue * 0.5;
         }
     }
@@ -156,8 +154,7 @@ void Ruler::setActive(bool active)
         m_active = false;
         m_oldValue = m_value;
         emit valueChanged(m_value);
-    }
-    else if (m_active != active) {
+    } else if (m_active != active) {
         m_active = active;
         emit needsRepaint();
     }

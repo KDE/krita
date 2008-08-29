@@ -57,9 +57,11 @@ public:
     virtual void undo();
 
     /// reimplemnted from QUndoCommand
-    virtual int id() const { return 58450687; }
+    virtual int id() const {
+        return 58450687;
+    }
     /// reimplemnted from QUndoCommand
-    virtual bool mergeWith (const QUndoCommand *other);
+    virtual bool mergeWith(const QUndoCommand *other);
 
 private:
     void storeOldProperties();

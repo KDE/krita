@@ -23,7 +23,8 @@
 #include <KoToolFactory.h>
 
 
-class TextToolFactory : public KoToolFactory {
+class TextToolFactory : public KoToolFactory
+{
     Q_OBJECT
 public:
     explicit TextToolFactory(QObject *parent);

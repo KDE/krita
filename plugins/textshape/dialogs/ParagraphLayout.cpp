@@ -22,20 +22,21 @@
 #include <KoParagraphStyle.h>
 
 ParagraphLayout::ParagraphLayout(QWidget *parent)
-    : QWidget(parent)
+        : QWidget(parent)
 {
     widget.setupUi(this);
 }
 
-void ParagraphLayout::open(KoParagraphStyle *style) {
+void ParagraphLayout::open(KoParagraphStyle *style)
+{
     m_style = style;
-    switch(style->alignment()) {
-        case Qt::AlignRight: widget.right->setChecked(true); break;
-        case Qt::AlignHCenter: widget.center->setChecked(true); break;
-        case Qt::AlignJustify: widget.justify->setChecked(true); break;
-        case Qt::AlignLeft:
-        default:
-           widget.left->setChecked(true); break;
+    switch (style->alignment()) {
+    case Qt::AlignRight: widget.right->setChecked(true); break;
+    case Qt::AlignHCenter: widget.center->setChecked(true); break;
+    case Qt::AlignJustify: widget.justify->setChecked(true); break;
+    case Qt::AlignLeft:
+    default:
+        widget.left->setChecked(true); break;
     }
 
     widget.keepTogether->setChecked(style->nonBreakableLines());
@@ -43,13 +44,14 @@ void ParagraphLayout::open(KoParagraphStyle *style) {
     widget.breakAfter->setChecked(style->breakAfter());
 }
 
-void ParagraphLayout::save() {
+void ParagraphLayout::save()
+{
     Qt::Alignment align;
-    if(widget.right->isChecked())
+    if (widget.right->isChecked())
         align = Qt::AlignRight;
-    else if(widget.center->isChecked())
+    else if (widget.center->isChecked())
         align = Qt::AlignHCenter;
-    else if(widget.justify->isChecked())
+    else if (widget.justify->isChecked())
         align = Qt::AlignJustify;
     else
         align = Qt::AlignLeft;

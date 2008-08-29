@@ -31,7 +31,7 @@ class FontLayoutTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit FontLayoutTab( bool withSubSuperScript, QWidget* parent=0);
+    explicit FontLayoutTab(bool withSubSuperScript, QWidget* parent = 0);
     ~FontLayoutTab() {}
 
     void open(KoCharacterStyle *style);

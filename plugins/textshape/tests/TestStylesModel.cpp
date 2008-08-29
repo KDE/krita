@@ -28,11 +28,17 @@ class MockModel : public StylesModel
 {
 public:
     MockModel(KoStyleManager *manager, QObject *parent = 0)
-        : StylesModel(manager, parent) { }
+            : StylesModel(manager, parent) { }
 
-    void publicRecalculate() { StylesModel::recalculate(); }
-    QList<int> rootStyleIds() { return m_styleList; }
-    QMultiHash<int, int> relations() { return m_relations; }
+    void publicRecalculate() {
+        StylesModel::recalculate();
+    }
+    QList<int> rootStyleIds() {
+        return m_styleList;
+    }
+    QMultiHash<int, int> relations() {
+        return m_relations;
+    }
 };
 
 void TestStylesModel::init()
@@ -75,7 +81,7 @@ void TestStylesModel::testPrecalcCache()
     foreach(int id, children) {
         KoParagraphStyle *head = manager->paragraphStyle(id);
         QVERIFY(head);
-        QVERIFY( head->name().startsWith("Head ") );
+        QVERIFY(head->name().startsWith("Head "));
     }
 }
 

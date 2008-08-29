@@ -29,7 +29,8 @@
 
 class KoParagraphStyle;
 
-class ParagraphBulletsNumbers : public QWidget {
+class ParagraphBulletsNumbers : public QWidget
+{
     Q_OBJECT
 public:
     ParagraphBulletsNumbers(QWidget *parent);

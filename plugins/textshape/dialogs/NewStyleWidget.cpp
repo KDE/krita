@@ -23,7 +23,7 @@
 #include <KoCharacterStyle.h>
 
 NewStyleWidget::NewStyleWidget(QWidget *parent)
-    : QWidget(parent)
+        : QWidget(parent)
 {
     widget.setupUi(this);
 
@@ -34,13 +34,13 @@ NewStyleWidget::NewStyleWidget(QWidget *parent)
     connect(widget.create, SIGNAL(pressed()), this, SLOT(createButtonPressed()));
 }
 
-void NewStyleWidget::createButtonPressed() {
-    if(widget.character->isChecked()) {
+void NewStyleWidget::createButtonPressed()
+{
+    if (widget.character->isChecked()) {
         KoCharacterStyle *style = new KoCharacterStyle();
         style->setName(widget.name->text());
         emit newCharacterStyle(style);
-    }
-    else {
+    } else {
         KoParagraphStyle *style = new KoParagraphStyle();
         style->setName(widget.name->text());
         emit newParagraphStyle(style);

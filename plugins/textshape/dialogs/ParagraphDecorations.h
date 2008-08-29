@@ -30,7 +30,7 @@ class ParagraphDecorations : public QWidget
     Q_OBJECT
 
 public:
-    explicit ParagraphDecorations( QWidget* parent=0);
+    explicit ParagraphDecorations(QWidget* parent = 0);
     ~ParagraphDecorations() {}
 
     void open(KoParagraphStyle *style);
@@ -38,7 +38,9 @@ public:
 
 private slots:
     void clearBackgroundColor();
-    void backgroundColorChanged() { m_backgroundColorReset = false; m_backgroundColorChanged = true; }
+    void backgroundColorChanged() {
+        m_backgroundColorReset = false; m_backgroundColorChanged = true;
+    }
 
 private:
     Ui::ParagraphDecorations widget;

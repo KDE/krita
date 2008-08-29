@@ -23,8 +23,8 @@
 #include <kfontdialog.h>
 #include <QVBoxLayout>
 
-FontTab::FontTab( QWidget* parent)
-        : QWidget( parent)
+FontTab::FontTab(QWidget* parent)
+        : QWidget(parent)
 {
     QLayout *layout = new QVBoxLayout(this);
     setLayout(layout);
@@ -32,11 +32,11 @@ FontTab::FontTab( QWidget* parent)
     QStringList list;
     KFontChooser::getFontList(list, KFontChooser::SmoothScalableFonts);
     m_fontChooser = new KFontChooser(this, false, list, false);
-    m_fontChooser->setSampleBoxVisible( false );
+    m_fontChooser->setSampleBoxVisible(false);
 
     layout->addWidget(m_fontChooser);
 
-    connect( m_fontChooser, SIGNAL( fontSelected( const QFont & ) ), this, SIGNAL( fontChanged( const QFont & ) ) );
+    connect(m_fontChooser, SIGNAL(fontSelected(const QFont &)), this, SIGNAL(fontChanged(const QFont &)));
 }
 
 QFont FontTab::font()
@@ -44,9 +44,9 @@ QFont FontTab::font()
     return m_fontChooser->font();
 }
 
-void FontTab::setFont( const QFont &font )
+void FontTab::setFont(const QFont &font)
 {
-    m_fontChooser->setFont( font );
+    m_fontChooser->setFont(font);
 }
 
 /*

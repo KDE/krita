@@ -27,11 +27,11 @@ class LanguageTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit LanguageTab( /*KSpell2::Loader::Ptr loader = KSpell2::Loader::Ptr()*/ QWidget* parent=0, Qt::WFlags fl=0 );
+    explicit LanguageTab(/*KSpell2::Loader::Ptr loader = KSpell2::Loader::Ptr()*/ QWidget* parent = 0, Qt::WFlags fl = 0);
     ~LanguageTab();
 
     QString language() const;
-    void setLanguage( const QString &item );
+    void setLanguage(const QString &item);
 
 signals:
     void languageChanged();

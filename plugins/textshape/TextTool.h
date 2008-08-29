@@ -49,30 +49,31 @@ class KFontAction;
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
  */
-class TextTool : public KoTool {
+class TextTool : public KoTool
+{
     Q_OBJECT
 public:
     explicit TextTool(KoCanvasBase *canvas);
     ~TextTool();
 
     /// reimplemented from superclass
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
     /// reimplemented from superclass
-    virtual void mousePressEvent( KoPointerEvent *event ) ;
+    virtual void mousePressEvent(KoPointerEvent *event) ;
     /// reimplemented from superclass
-    virtual void mouseDoubleClickEvent( KoPointerEvent *event );
+    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
     /// reimplemented from superclass
-    virtual void mouseMoveEvent( KoPointerEvent *event );
+    virtual void mouseMoveEvent(KoPointerEvent *event);
     /// reimplemented from superclass
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
     /// reimplemented from superclass
     virtual void keyPressEvent(QKeyEvent *event);
     /// reimplemented from superclass
     virtual void keyReleaseEvent(QKeyEvent *event);
 
     /// reimplemented from superclass
-    virtual void activate (bool temporary=false);
+    virtual void activate(bool temporary = false);
     /// reimplemented from superclass
     virtual void deactivate();
     /// reimplemented from superclass
@@ -103,7 +104,7 @@ public slots:
     /// add a command to the undo stack, executing it as well.
     void addCommand(QUndoCommand *command);
     /// reimplemented from KoTool
-    virtual void resourceChanged (int key, const QVariant &res);
+    virtual void resourceChanged(int key, const QVariant &res);
 
 signals:
     /// emitted every time a different styleManager is set.

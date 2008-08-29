@@ -29,12 +29,12 @@ enum Position {
     Custom
 };
 
-CharacterStyleOptions::CharacterStyleOptions( bool withSubSuperScript, QWidget* parent)
-        : QWidget( parent), m_style(0)
+CharacterStyleOptions::CharacterStyleOptions(bool withSubSuperScript, QWidget* parent)
+        : QWidget(parent), m_style(0)
 {
     widget.setupUi(this);
 
-    if ( !withSubSuperScript ) widget.positionGroup->setVisible(false);
+    if (!withSubSuperScript) widget.positionGroup->setVisible(false);
 
     // sigh, we could do this in designer in Qt3 :(
     m_buttonGroup = new QButtonGroup(this);
@@ -48,42 +48,44 @@ CharacterStyleOptions::CharacterStyleOptions( bool withSubSuperScript, QWidget* 
     widget.offsetLabel->setVisible(false);
 }
 
-void CharacterStyleOptions::open(KoCharacterStyle *style) {
+void CharacterStyleOptions::open(KoCharacterStyle *style)
+{
     m_style = style;
-    if(m_style == 0)
+    if (m_style == 0)
         return;
-    switch(style->verticalAlignment()) {
-        case QTextCharFormat::AlignSuperScript:
-            m_buttonGroup->button(Superscript)->setChecked(true);
-            break;
-        case QTextCharFormat::AlignSubScript:
-            m_buttonGroup->button(Subscript)->setChecked(true);
-            break;
-        default:
-            // TODO check if its custom instead.
-            m_buttonGroup->button(Normal)->setChecked(true);
+    switch (style->verticalAlignment()) {
+    case QTextCharFormat::AlignSuperScript:
+        m_buttonGroup->button(Superscript)->setChecked(true);
+        break;
+    case QTextCharFormat::AlignSubScript:
+        m_buttonGroup->button(Subscript)->setChecked(true);
+        break;
+    default:
+        // TODO check if its custom instead.
+        m_buttonGroup->button(Normal)->setChecked(true);
     }
 
     widget.hyphenate->setChecked(style->hasHyphenation());
 }
 
-void CharacterStyleOptions::save() {
-    if(m_style == 0)
+void CharacterStyleOptions::save()
+{
+    if (m_style == 0)
         return;
     QTextCharFormat::VerticalAlignment va;
 
-    switch(m_buttonGroup->checkedId()) {
-        case Subscript:
-            va = QTextCharFormat::AlignSubScript;
-            break;
-        case Superscript:
-            va = QTextCharFormat::AlignSuperScript;
-            break;
-        case Custom:
-            // fallthrough..
-        default:
-            va = QTextCharFormat::AlignNormal;
-            // TODO also handle custom
+    switch (m_buttonGroup->checkedId()) {
+    case Subscript:
+        va = QTextCharFormat::AlignSubScript;
+        break;
+    case Superscript:
+        va = QTextCharFormat::AlignSuperScript;
+        break;
+    case Custom:
+        // fallthrough..
+    default:
+        va = QTextCharFormat::AlignNormal;
+        // TODO also handle custom
     }
     m_style->setVerticalAlignment(va);
     m_style->setHasHyphenation(widget.hyphenate->isChecked());

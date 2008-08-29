@@ -26,7 +26,8 @@
 
 class KoParagraphStyle;
 
-class ParagraphLayout : public QWidget {
+class ParagraphLayout : public QWidget
+{
     Q_OBJECT
 public:
     ParagraphLayout(QWidget *parent);

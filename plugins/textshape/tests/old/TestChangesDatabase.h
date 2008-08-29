@@ -4,7 +4,8 @@
 #include <QObject>
 #include <QtTest>
 
-class TestChangesDatabase : public QObject {
+class TestChangesDatabase : public QObject
+{
     Q_OBJECT
 public:
     TestChangesDatabase() {}

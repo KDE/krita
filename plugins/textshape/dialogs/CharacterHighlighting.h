@@ -30,14 +30,14 @@ class CharacterHighlighting : public QWidget
     Q_OBJECT
 
 public:
-    explicit CharacterHighlighting(QWidget* parent=0);
+    explicit CharacterHighlighting(QWidget* parent = 0);
     ~CharacterHighlighting() {}
 
     void open(KoCharacterStyle *style);
     void save();
 
 private slots:
-    void underlineChanged( int item );
+    void underlineChanged(int item);
 
 private:
     Ui::CharacterHighlighting widget;

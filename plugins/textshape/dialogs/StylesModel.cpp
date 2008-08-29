@@ -28,18 +28,18 @@
 #include <KIcon>
 
 StylesModel::StylesModel(KoStyleManager *manager, QObject *parent)
-    : QAbstractItemModel(parent),
-    m_styleManager(0),
-    m_currentParagraphStyle(0),
-    m_currentCharacterStyle(0),
-    m_pureParagraphStyle(true),
-    m_pureCharacterStyle(true),
-    m_styleMapper(new QSignalMapper(this))
+        : QAbstractItemModel(parent),
+        m_styleManager(0),
+        m_currentParagraphStyle(0),
+        m_currentCharacterStyle(0),
+        m_pureParagraphStyle(true),
+        m_pureCharacterStyle(true),
+        m_styleMapper(new QSignalMapper(this))
 {
     setStyleManager(manager);
     m_paragIcon = KIcon("kotext-paragraph");
     m_charIcon = KIcon("kotext-character");
-    connect (m_styleMapper, SIGNAL(mapped(int)), this, SLOT(updateName(int)));
+    connect(m_styleMapper, SIGNAL(mapped(int)), this, SLOT(updateName(int)));
 }
 
 StylesModel::~StylesModel()
@@ -60,7 +60,7 @@ void StylesModel::recalculate()
     QSet<int> characterStyles;
     treeRoot << m_styleManager->defaultParagraphStyle()->styleId();
     paragraphStyles << treeRoot[0];
-    foreach (KoParagraphStyle *style, m_styleManager->paragraphStyles()) {
+    foreach(KoParagraphStyle *style, m_styleManager->paragraphStyles()) {
         KoParagraphStyle *root = style;
         while (root->parent()) {
             const int key = root->parent()->styleId();
@@ -82,14 +82,14 @@ void StylesModel::recalculate()
         paragraphStyles << root->styleId();
     }
 
-    foreach (KoCharacterStyle *style, m_styleManager->characterStyles()) {
+    foreach(KoCharacterStyle *style, m_styleManager->characterStyles()) {
         if (! characterStyles.contains(style->styleId()))
-        treeRoot << style->styleId();
+            treeRoot << style->styleId();
     }
 
     int firstChangedRow = -1;
     int index = 0;
-    foreach (int rootId, treeRoot) {
+    foreach(int rootId, treeRoot) {
         if (index >= m_styleList.count()) {
             if (firstChangedRow == -1)
                 firstChangedRow = index;
@@ -105,8 +105,7 @@ void StylesModel::recalculate()
         int maxRow = qMax(m_styleList.count(), treeRoot.count()) - 1;
         m_styleList = treeRoot;
         emit dataChanged(createIndex(firstChangedRow, 0, 0), createIndex(maxRow, 1, 0));
-    }
-    else {
+    } else {
         m_styleList = treeRoot;
         layoutChanged();
     }
@@ -254,7 +253,7 @@ Qt::ItemFlags StylesModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return 0;
-    return (Qt::ItemIsDragEnabled|Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+    return (Qt::ItemIsDragEnabled | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 }
 
 void StylesModel::setCurrentParagraphStyle(int styleId, bool unchanged)
@@ -296,9 +295,9 @@ KoCharacterStyle *StylesModel::characterStyleForIndex(const QModelIndex &index) 
 
 void StylesModel::setStyleManager(KoStyleManager *sm)
 {
-    if(sm == m_styleManager)
+    if (sm == m_styleManager)
         return;
-    if(m_styleManager) {
+    if (m_styleManager) {
         disconnect(sm, SIGNAL(styleAdded(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
         disconnect(sm, SIGNAL(styleAdded(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
         disconnect(sm, SIGNAL(styleRemoved(KoParagraphStyle*)), this, SLOT(removeParagraphStyle(KoParagraphStyle*)));
@@ -306,17 +305,17 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
     }
     m_styleManager = sm;
     recalculate();
-    if(m_styleManager == 0)
+    if (m_styleManager == 0)
         return;
     connect(sm, SIGNAL(styleAdded(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
     connect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
     connect(sm, SIGNAL(styleAdded(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
     connect(sm, SIGNAL(styleRemoved(KoParagraphStyle*)), this, SLOT(removeParagraphStyle(KoParagraphStyle*)));
 
-    foreach (KoParagraphStyle *style, m_styleManager->paragraphStyles())
-        addParagraphStyle(style);
-    foreach (KoCharacterStyle *style, m_styleManager->characterStyles())
-        addCharacterStyle(style);
+    foreach(KoParagraphStyle *style, m_styleManager->paragraphStyles())
+    addParagraphStyle(style);
+    foreach(KoCharacterStyle *style, m_styleManager->characterStyles())
+    addCharacterStyle(style);
 }
 
 // called when the stylemanager adds a style

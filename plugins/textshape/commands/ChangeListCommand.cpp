@@ -25,45 +25,40 @@
 #include <KDebug>
 
 ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style style, QUndoCommand *parent)
-: TextCommandBase( parent ),
-    m_block(block),
-    m_listStyle(0)
+        : TextCommandBase(parent),
+        m_block(block),
+        m_listStyle(0)
 {
 // kDebug() <<"ChangeListCommand" << style;
     Q_ASSERT(block.isValid());
     storeOldProperties();
 
-    if(style != KoListStyle::NoItem) {
+    if (style != KoListStyle::NoItem) {
         QTextBlock prev = block.previous();
-        if(prev.isValid() && prev.textList()) {
+        if (prev.isValid() && prev.textList()) {
             QTextListFormat format = prev.textList()->format();
-            if(format.intProperty(QTextListFormat::ListStyle) == static_cast<int> (style))
-{ //kDebug() <<" merge with prev";
+            if (format.intProperty(QTextListFormat::ListStyle) == static_cast<int>(style)) { //kDebug() <<" merge with prev";
                 m_listStyle = KoListStyle::fromTextList(prev.textList());
-}
+            }
         }
         QTextBlock next = block.next();
-        if(m_listStyle == 0 && next.isValid() && next.textList()) {
+        if (m_listStyle == 0 && next.isValid() && next.textList()) {
             QTextListFormat format = next.textList()->format();
-            if(format.intProperty(QTextListFormat::ListStyle) == static_cast<int> (style))
-{ //kDebug() <<" merge with next";
+            if (format.intProperty(QTextListFormat::ListStyle) == static_cast<int>(style)) { //kDebug() <<" merge with next";
                 m_listStyle = KoListStyle::fromTextList(next.textList());
-}
+            }
         }
-        if(m_listStyle == 0) { // create a new one
+        if (m_listStyle == 0) { // create a new one
             m_listStyle = new KoListStyle();
             KoListLevelProperties llp;
-            if(block.textList()) // find out current list-level / etc
-{
+            if (block.textList()) { // find out current list-level / etc
                 llp = KoListLevelProperties::fromTextList(block.textList());
- //kDebug() <<" reuse current (level:" << llp.level() <<")";
-}
-            else
-{ //kDebug() <<" create new level 1";
-                 llp = m_listStyle->levelProperties(1);
-}
+//kDebug() <<" reuse current (level:" << llp.level() <<")";
+            } else { //kDebug() <<" create new level 1";
+                llp = m_listStyle->levelProperties(1);
+            }
             llp.setStyle(style);
-            if(style == KoListStyle::SquareItem || style == KoListStyle::DiscItem ||
+            if (style == KoListStyle::SquareItem || style == KoListStyle::DiscItem ||
                     style == KoListStyle::CircleItem || style == KoListStyle::BoxItem ||
                     style == KoListStyle::RhombusItem || style == KoListStyle::HeavyCheckMarkItem ||
                     style == KoListStyle::BallotXItem || style == KoListStyle::RightArrowItem ||
@@ -75,50 +70,53 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
         }
     }
 
-    setText( i18n("Change List") );
+    setText(i18n("Change List"));
 }
 
 ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle style, bool exact, QUndoCommand *parent)
-: TextCommandBase( parent ),
-    m_block(block)
+        : TextCommandBase(parent),
+        m_block(block)
 {
     Q_ASSERT(block.isValid());
     Q_ASSERT(style.isValid());
     storeOldProperties();
-    if(! exact) {
+    if (! exact) {
         // search for similar ones in the next / prev parags.
         // TODO
     }
     m_listStyle = new KoListStyle(style);
-    setText( i18n("Change List") );
+    setText(i18n("Change List"));
 }
 
-void ChangeListCommand::storeOldProperties() {
-    if(m_block.textList())
+void ChangeListCommand::storeOldProperties()
+{
+    if (m_block.textList())
         m_formerProperties = KoListLevelProperties::fromTextList(m_block.textList());
     else
         m_formerProperties.setStyle(KoListStyle::NoItem);
 }
 
-ChangeListCommand::~ChangeListCommand() {
+ChangeListCommand::~ChangeListCommand()
+{
     delete m_listStyle;
 }
 
-void ChangeListCommand::redo() {
+void ChangeListCommand::redo()
+{
     TextCommandBase::redo();
     UndoRedoFinalizer finalizer(this, m_tool);
-    if(m_listStyle == 0) { // no list item (anymore)
+    if (m_listStyle == 0) { // no list item (anymore)
         QTextList *list = m_block.textList();
-        if(list == 0) // nothing to do!
+        if (list == 0) // nothing to do!
             return;
         bool shouldReset = list->count() > 1;
         list->remove(m_block);
-        if( shouldReset )
+        if (shouldReset)
             recalcList(list->item(0));
         return;
     }
 
-    if(m_block.textList() && m_block.textList()->count() != 1) { // we need to split the list.
+    if (m_block.textList() && m_block.textList()->count() != 1) { // we need to split the list.
         QTextList *list = m_block.textList();
         list->remove(m_block);
         recalcList(list->item(0));
@@ -127,32 +125,35 @@ void ChangeListCommand::redo() {
     recalcList(m_block);
 }
 
-void ChangeListCommand::recalcList(const QTextBlock &block) const {
-    KoTextBlockData *userData = dynamic_cast<KoTextBlockData*> (block.userData());
-    if(userData)
+void ChangeListCommand::recalcList(const QTextBlock &block) const
+{
+    KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(block.userData());
+    if (userData)
         userData->setCounterWidth(-1.0);
 }
 
-void ChangeListCommand::undo() {
+void ChangeListCommand::undo()
+{
     TextCommandBase::undo();
     UndoRedoFinalizer finalizer(this, m_tool);
 
-    if(m_formerProperties.style() == KoListStyle::NoItem)
+    if (m_formerProperties.style() == KoListStyle::NoItem)
         return;
     Q_ASSERT(m_block.textList());
     QTextListFormat format;
     m_formerProperties.applyStyle(format);
     m_block.textList()->setFormat(format);
-    KoTextBlockData *userData = dynamic_cast<KoTextBlockData*> (m_block.userData());
-    if(userData) // force a recalc of my listitem.
+    KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_block.userData());
+    if (userData) // force a recalc of my listitem.
         userData->setCounterWidth(-1.0);
 }
 
-bool ChangeListCommand::mergeWith (const QUndoCommand *other) {
-    const ChangeListCommand *clc = dynamic_cast<const ChangeListCommand*> (other);
-    if(clc == 0)
+bool ChangeListCommand::mergeWith(const QUndoCommand *other)
+{
+    const ChangeListCommand *clc = dynamic_cast<const ChangeListCommand*>(other);
+    if (clc == 0)
         return false;
-    if(clc->m_block != m_block)
+    if (clc->m_block != m_block)
         return false;
 
     m_formerProperties = clc->m_formerProperties;

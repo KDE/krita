@@ -35,7 +35,7 @@ void RulerFragment::moveTo(const QPointF &point, bool smoothMovement) const
 QLineF RulerFragment::labelConnector() const
 {
     qreal value = m_ruler->value();
-    return m_matrix.map(QLineF(value/2.0, m_width/2.0, value/2.0, m_width/2.0 + 1.0));
+    return m_matrix.map(QLineF(value / 2.0, m_width / 2.0, value / 2.0, m_width / 2.0 + 1.0));
 }
 
 void RulerFragment::paint(QPainter &painter) const
@@ -78,13 +78,12 @@ void RulerFragment::paint(QPainter &painter) const
 
     painter.drawLine(QLineF(value, 0.0, value, m_width));
 
-    painter.drawLine(QLineF(0.0, m_width/2.0, value, m_width/2.0));
+    painter.drawLine(QLineF(0.0, m_width / 2.0, value, m_width / 2.0));
 
     if (value >= 0.0) {
-        paintArrow(painter, QPointF(value, m_width/2.0), 0.0, value);
-    }
-    else {
-        paintArrow(painter, QPointF(value, m_width/2.0), 180.0, -value);
+        paintArrow(painter, QPointF(value, m_width / 2.0), 0.0, value);
+    } else {
+        paintArrow(painter, QPointF(value, m_width / 2.0), 180.0, -value);
     }
 
     painter.restore();

@@ -33,7 +33,8 @@ class ParagraphLayout;
 class KoParagraphStyle;
 
 /// A dialog to show the settings for a paragraph
-class ParagraphSettingsDialog : public KPageDialog {
+class ParagraphSettingsDialog : public KPageDialog
+{
     Q_OBJECT
 public:
     explicit ParagraphSettingsDialog(QWidget *parent, TextTool *tool);
@@ -56,7 +57,7 @@ private slots:
 private:
     void accept();
     void reject();
-    void showEvent (QShowEvent *);
+    void showEvent(QShowEvent *);
 
     ParagraphIndentSpacing *m_paragraphIndentSpacing;
     ParagraphLayout *m_paragraphLayout;

@@ -26,10 +26,10 @@
 
 #include <kgenericfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(textshape, KGenericFactory<TextPlugin>( "TextShape" ) )
+K_EXPORT_COMPONENT_FACTORY(textshape, KGenericFactory<TextPlugin>("TextShape"))
 
 TextPlugin::TextPlugin(QObject * parent, const QStringList &)
-    : QObject(parent)
+        : QObject(parent)
 {
     KoToolRegistry::instance()->add(new TextToolFactory(parent));
     KoToolRegistry::instance()->add(new ParagraphToolFactory(parent));

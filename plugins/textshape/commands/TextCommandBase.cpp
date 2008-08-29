@@ -20,24 +20,28 @@
 #include "TextCommandBase.h"
 #include "TextTool.h"
 
-void TextCommandBase::redo() {
+void TextCommandBase::redo()
+{
     QUndoCommand::redo();
-    if(m_tool)
+    if (m_tool)
         m_tool->m_allowAddUndoCommand = false;
 }
 
-void TextCommandBase::undo() {
+void TextCommandBase::undo()
+{
     QUndoCommand::undo();
-    if(m_tool)
+    if (m_tool)
         m_tool->m_allowAddUndoCommand = false;
 }
 
-void TextCommandBase::setAllow(bool set) {
+void TextCommandBase::setAllow(bool set)
+{
     if (m_tool)
         m_tool->m_allowAddUndoCommand = set;
 }
 
-TextCommandBase::UndoRedoFinalizer::~UndoRedoFinalizer() {
-    if(m_parent)
+TextCommandBase::UndoRedoFinalizer::~UndoRedoFinalizer()
+{
+    if (m_parent)
         m_parent->setAllow(true);
 }

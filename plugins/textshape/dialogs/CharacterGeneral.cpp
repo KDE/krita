@@ -27,15 +27,15 @@
 #include <kfontdialog.h>
 
 CharacterGeneral::CharacterGeneral(QWidget *parent)
-    :QWidget(parent),
-    m_blockSignals(false),
-    m_style(0)
+        : QWidget(parent),
+        m_blockSignals(false),
+        m_style(0)
 {
     widget.setupUi(this);
 
-    m_styleOptions = new CharacterStyleOptions (true, this);
-    m_characterDecorations = new CharacterDecorations (this);
-    m_characterHighlighting = new CharacterHighlighting (this);
+    m_styleOptions = new CharacterStyleOptions(true, this);
+    m_characterDecorations = new CharacterDecorations(this);
+    m_characterHighlighting = new CharacterHighlighting(this);
 
     QWidget *fonts = new QWidget(this);
     QLayout *layout = new QVBoxLayout(fonts);
@@ -44,7 +44,7 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
     QStringList list;
     KFontChooser::getFontList(list, KFontChooser::SmoothScalableFonts);
     m_fontChooser = new KFontChooser(this, false, list, false);
-    m_fontChooser->setSampleBoxVisible( false );
+    m_fontChooser->setSampleBoxVisible(false);
     layout->addWidget(m_fontChooser);
 
     widget.tabs->addTab(fonts, i18n("Font"));
@@ -53,14 +53,15 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
     widget.tabs->addTab(m_styleOptions, i18n("Layout"));
     // TODO language
 
-    connect(widget.name, SIGNAL(textChanged (const QString &)), this, SIGNAL(nameChanged(const QString&)));
-    connect(widget.name, SIGNAL(textChanged (const QString &)), this, SLOT(setName(const QString&)));
+    connect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
+    connect(widget.name, SIGNAL(textChanged(const QString &)), this, SLOT(setName(const QString&)));
     //connect( m_fontChooser, SIGNAL( fontSelected( const QFont & ) ), this, SIGNAL( fontChanged( const QFont & ) ) );
 }
 
-void CharacterGeneral::setStyle(KoCharacterStyle *style) {
+void CharacterGeneral::setStyle(KoCharacterStyle *style)
+{
     m_style = style;
-    if(m_style == 0)
+    if (m_style == 0)
         return;
     m_blockSignals = true;
 
@@ -73,8 +74,9 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style) {
     m_blockSignals = false;
 }
 
-void CharacterGeneral::save() {
-    if(m_style == 0) return;
+void CharacterGeneral::save()
+{
+    if (m_style == 0) return;
     m_characterDecorations->save();
     m_characterHighlighting->save();
     m_styleOptions->save();
@@ -85,11 +87,13 @@ void CharacterGeneral::save() {
     m_style->setFontItalic(font.italic());
 }
 
-void CharacterGeneral::switchToGeneralTab() {
+void CharacterGeneral::switchToGeneralTab()
+{
     widget.tabs->setCurrentIndex(0);
 }
 
-void CharacterGeneral::setName(const QString &name) {
+void CharacterGeneral::setName(const QString &name)
+{
     m_style->setName(name);
 }
 

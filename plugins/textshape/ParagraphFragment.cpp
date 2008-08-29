@@ -30,7 +30,7 @@
 #include <QTextLayout>
 
 ParagraphFragment::ParagraphFragment(Ruler* rulers, TextShape *textShape, QTextBlock textBlock, KoParagraphStyle *style)
-    : m_textShape(textShape)
+        : m_textShape(textShape)
 {
     for (int ruler = 0; ruler != maxRuler; ++ruler) {
         m_rulerFragments[ruler].setRuler(&rulers[ruler]);
@@ -56,8 +56,8 @@ void ParagraphFragment::initDimensions(QTextBlock textBlock, KoParagraphStyle *p
     m_firstLine = layout->lineAt(0).rect();
     m_firstLine.setRight(m_border.right() - paragraphStyle->rightMargin());
 
-    // counter rectangle 
-    KoTextBlockData *blockData = static_cast<KoTextBlockData*> (textBlock.userData());
+    // counter rectangle
+    KoTextBlockData *blockData = static_cast<KoTextBlockData*>(textBlock.userData());
     if (blockData != NULL) {
         m_counter = QRectF(blockData->counterPosition(), QSizeF(blockData->counterWidth() - blockData->counterSpacing(), m_firstLine.height()));
     }
@@ -65,8 +65,7 @@ void ParagraphFragment::initDimensions(QTextBlock textBlock, KoParagraphStyle *p
     // folowing lines rectangle
     if (!m_isSingleLine) {
         m_followingLines = QRectF(layout->lineAt(1).rect().topLeft(), layout->lineAt(layout->lineCount() - 1).rect().bottomRight());
-    }
-    else {
+    } else {
         m_followingLines = m_firstLine;
     }
 
@@ -186,9 +185,9 @@ QRectF ParagraphFragment::dirtyRectangle() const
     if (m_textShape == NULL)
         return QRectF();
 
-    QRectF boundingRect( QPointF(0, 0), textShape()->size() );
+    QRectF boundingRect(QPointF(0, 0), textShape()->size());
 
-    if(textShape()->border()) {
+    if (textShape()->border()) {
         KoInsets insets;
         textShape()->border()->borderInsets(textShape(), insets);
         boundingRect.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
@@ -205,7 +204,7 @@ QRectF ParagraphFragment::dirtyRectangle() const
 
 qreal ParagraphFragment::shapeTop() const
 {
-    KoTextShapeData *textShapeData = static_cast<KoTextShapeData*> (textShape()->userData());
+    KoTextShapeData *textShapeData = static_cast<KoTextShapeData*>(textShape()->userData());
 
     return textShapeData->documentOffset();
 }

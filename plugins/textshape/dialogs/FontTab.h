@@ -31,16 +31,16 @@ class FontTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit FontTab(QWidget* parent=0);
+    explicit FontTab(QWidget* parent = 0);
     ~FontTab() {}
 
     QFont font();
 
 public slots:
-    void setFont( const QFont &font );
+    void setFont(const QFont &font);
 
 signals:
-    void fontChanged( const QFont &font );
+    void fontChanged(const QFont &font);
 
 private:
     KFontChooser *m_fontChooser;

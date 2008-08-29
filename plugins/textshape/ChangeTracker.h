@@ -24,7 +24,8 @@
 class QTextDocument;
 class TextTool;
 
-class ChangeTracker : public QObject {
+class ChangeTracker : public QObject
+{
     Q_OBJECT
 public:
     ChangeTracker(TextTool *parent);
@@ -34,7 +35,7 @@ public:
     void notifyForUndo();
 
 private slots:
-    void contentsChange (int from, int charsRemoves, int charsAdded);
+    void contentsChange(int from, int charsRemoves, int charsAdded);
 
 private:
     QTextDocument *m_document;

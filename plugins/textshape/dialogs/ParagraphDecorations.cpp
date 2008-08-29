@@ -22,17 +22,18 @@
 
 #include <KDebug>
 
-ParagraphDecorations::ParagraphDecorations( QWidget* parent )
-    : QWidget( parent ),
-    m_style(0)
+ParagraphDecorations::ParagraphDecorations(QWidget* parent)
+        : QWidget(parent),
+        m_style(0)
 {
     widget.setupUi(this);
 
-    connect(widget.backgroundColor, SIGNAL(changed(const QColor&)), this, SLOT( backgroundColorChanged()));
+    connect(widget.backgroundColor, SIGNAL(changed(const QColor&)), this, SLOT(backgroundColorChanged()));
     connect(widget.resetBackgroundColor, SIGNAL(clicked()), this, SLOT(clearBackgroundColor()));
 }
 
-void ParagraphDecorations::open(KoParagraphStyle *style) {
+void ParagraphDecorations::open(KoParagraphStyle *style)
+{
     m_style = style;
     m_backgroundColorChanged = false;
     m_backgroundColorReset = ! m_style->hasProperty(QTextFormat::BackgroundBrush);
@@ -43,19 +44,21 @@ void ParagraphDecorations::open(KoParagraphStyle *style) {
     }
 }
 
-void ParagraphDecorations::save() const {
+void ParagraphDecorations::save() const
+{
     Q_ASSERT(m_style);
-    if(m_backgroundColorReset) {
-        // clearing the property doesn't work since ParagraphSettingsDialog does a mergeBlockFormat 
+    if (m_backgroundColorReset) {
+        // clearing the property doesn't work since ParagraphSettingsDialog does a mergeBlockFormat
         // so we'll set it to an invalid brush instead
         QBrush brush;
         m_style->setBackground(brush);
-    } else if(m_backgroundColorChanged) {
+    } else if (m_backgroundColorChanged) {
         m_style->setBackground(QBrush(widget.backgroundColor->color()));
     }
 }
 
-void ParagraphDecorations::clearBackgroundColor() {
+void ParagraphDecorations::clearBackgroundColor()
+{
     widget.backgroundColor->setColor(widget.backgroundColor->defaultColor());
     m_backgroundColorReset = true;
 }

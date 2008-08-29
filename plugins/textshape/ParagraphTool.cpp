@@ -69,10 +69,10 @@ bool shapeContainsBlock(const TextShape *textShape, QTextBlock textBlock)
     QTextLayout *layout = textBlock.layout();
     qreal blockStart = layout->lineAt(0).y();
 
-    QTextLine endLine = layout->lineAt(layout->lineCount()-1);
+    QTextLine endLine = layout->lineAt(layout->lineCount() - 1);
     qreal blockEnd = endLine.y() + endLine.height();
 
-    KoTextShapeData *textShapeData = static_cast<KoTextShapeData*> (textShape->userData());
+    KoTextShapeData *textShapeData = static_cast<KoTextShapeData*>(textShape->userData());
     qreal shapeStart = textShapeData->documentOffset();
     qreal shapeEnd = shapeStart + textShape->size().height();
 
@@ -80,13 +80,13 @@ bool shapeContainsBlock(const TextShape *textShape, QTextBlock textBlock)
 }
 
 ParagraphTool::ParagraphTool(KoCanvasBase *canvas)
-    : KoTool(canvas),
-    m_paragraphStyle(NULL),
-    m_activeRuler(noRuler),
-    m_focusedRuler(noRuler),
-    m_highlightedRuler(noRuler),
-    m_needsRepaint(false),
-    m_smoothMovement(false)
+        : KoTool(canvas),
+        m_paragraphStyle(NULL),
+        m_activeRuler(noRuler),
+        m_focusedRuler(noRuler),
+        m_highlightedRuler(noRuler),
+        m_needsRepaint(false),
+        m_smoothMovement(false)
 {
     initializeRuler(m_rulers[firstIndentRuler]);
     initializeRuler(m_rulers[followingIndentRuler]);
@@ -194,13 +194,11 @@ void ParagraphTool::paintLabel(QPainter &painter, const KoViewConverter &convert
         ruler = m_activeRuler;
         fragment = m_activeFragment;
         foregroundColor = m_rulers[ruler].activeColor();
-    }
-    else if (hasHighlightedRuler()) {
+    } else if (hasHighlightedRuler()) {
         ruler = m_highlightedRuler;
         fragment = m_highlightedFragment;
         foregroundColor = m_rulers[ruler].highlightColor();
-    }
-    else {
+    } else {
         return;
     }
 
@@ -223,8 +221,7 @@ void ParagraphTool::paintLabel(QPainter &painter, const KoViewConverter &convert
     if (abs(connector.dx()) > abs(connector.dy())) {
         qreal halfWidth = connector.dy() < 0.0 ? label.width() / 2.0 : -label.width() / 2.0;
         label.adjust(halfWidth, 0.0, halfWidth, 0.0);
-    }
-    else {
+    } else {
         qreal halfHeight = connector.dy() >= 0.0 ? label.height() / 2.0 : -label.height() / 2.0;
         label.adjust(0.0, halfHeight, 0.0, halfHeight);
     }
@@ -241,7 +238,7 @@ void ParagraphTool::paint(QPainter &painter, const KoViewConverter &converter)
     if (!hasActiveTextBlock())
         return;
 
-    foreach (const ParagraphFragment &fragment, m_fragments) {
+    foreach(const ParagraphFragment &fragment, m_fragments) {
         fragment.paint(painter, converter);
     }
 
@@ -258,7 +255,7 @@ void ParagraphTool::repaintDecorations()
     // repaint area
     QRectF repaintRectangle = m_storedRepaintRectangle;
     m_storedRepaintRectangle = QRectF();
-    foreach (const ParagraphFragment &fragment, m_fragments) {
+    foreach(const ParagraphFragment &fragment, m_fragments) {
         m_storedRepaintRectangle |= fragment.dirtyRectangle();
     }
     repaintRectangle |= m_storedRepaintRectangle;
@@ -280,7 +277,7 @@ bool ParagraphTool::createFragments()
     KoTextDocumentLayout *layout = static_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout());
 
     QList<KoShape*> shapes = layout->shapes();
-    foreach (KoShape *shape, shapes) {
+    foreach(KoShape *shape, shapes) {
         if (shapeContainsBlock(static_cast<TextShape*>(shape), textBlock())) {
             m_fragments << ParagraphFragment(m_rulers, static_cast<TextShape*>(shape), textBlock(), m_paragraphStyle);
         }
@@ -300,8 +297,7 @@ void ParagraphTool::updateLayout()
 
     if (createFragments()) {
         loadRulers();
-    }
-    else {
+    } else {
         deactivateTextBlock();
     }
 
@@ -312,13 +308,13 @@ void ParagraphTool::updateLayout()
 // return true if successful
 bool ParagraphTool::activateTextBlockAt(const QPointF &point)
 {
-    TextShape *textShape = dynamic_cast<TextShape*> (canvas()->shapeManager()->shapeAt(point));
+    TextShape *textShape = dynamic_cast<TextShape*>(canvas()->shapeManager()->shapeAt(point));
     if (!textShape) {
         // the shape below the mouse position is not a text shape
         return false;
     }
 
-    KoTextShapeData *textShapeData = static_cast<KoTextShapeData*> (textShape->userData());
+    KoTextShapeData *textShapeData = static_cast<KoTextShapeData*>(textShape->userData());
     QTextDocument *document = textShapeData->document();
 
     int position = document->documentLayout()->hitTest(textShape->convertScreenPos(point), Qt::ExactHit);
@@ -345,8 +341,7 @@ bool ParagraphTool::activateTextBlockAt(const QPointF &point)
         loadRulers();
         emit styleNameChanged(styleName());
 
-    }
-    else {
+    } else {
         deactivateTextBlock();
         return false;
     }
@@ -376,7 +371,7 @@ bool ParagraphTool::activateRulerAt(const QPointF &point)
         return false;
     }
 
-    foreach (const ParagraphFragment &fragment, m_fragments) {
+    foreach(const ParagraphFragment &fragment, m_fragments) {
         RulerIndex ruler = fragment.hitTest(point);
         if (ruler != noRuler) {
             activateRuler(ruler, fragment);
@@ -463,15 +458,14 @@ void ParagraphTool::highlightRulerAt(const QPointF &point)
         // check if we are still over the same element
         if (m_highlightedFragment->hitTest((RulerIndex)m_highlightedRuler, point)) {
             return;
-        }
-        else {
+        } else {
             // stop hovering over the element
             dehighlightRuler();
         }
     }
 
     // check if we are hovering over a new control
-    foreach (const ParagraphFragment &fragment, m_fragments) {
+    foreach(const ParagraphFragment &fragment, m_fragments) {
         RulerIndex ruler = fragment.hitTest(point);
         if (ruler != noRuler) {
             m_highlightedRuler = ruler;
@@ -499,20 +493,16 @@ void ParagraphTool::applyParentStyleToActiveRuler()
     if (m_activeRuler == firstIndentRuler) {
         m_paragraphStyle->remove(QTextFormat::TextIndent);
         m_rulers[m_activeRuler].setValue(m_paragraphStyle->textIndent());
-    }
-    else if (m_activeRuler == followingIndentRuler) {
+    } else if (m_activeRuler == followingIndentRuler) {
         m_paragraphStyle->remove(QTextFormat::BlockLeftMargin);
         m_rulers[m_activeRuler].setValue(m_paragraphStyle->leftMargin());
-    }
-    else if (m_activeRuler == rightMarginRuler) {
+    } else if (m_activeRuler == rightMarginRuler) {
         m_paragraphStyle->remove(QTextFormat::BlockRightMargin);
         m_rulers[m_activeRuler].setValue(m_paragraphStyle->rightMargin());
-    }
-    else if (m_activeRuler == topMarginRuler) {
+    } else if (m_activeRuler == topMarginRuler) {
         m_paragraphStyle->remove(QTextFormat::BlockTopMargin);
         m_rulers[m_activeRuler].setValue(m_paragraphStyle->topMargin());
-    }
-    else if (m_activeRuler == bottomMarginRuler) {
+    } else if (m_activeRuler == bottomMarginRuler) {
         m_paragraphStyle->remove(QTextFormat::BlockBottomMargin);
         m_rulers[m_activeRuler].setValue(m_paragraphStyle->bottomMargin());
     }
@@ -538,17 +528,14 @@ void ParagraphTool::mousePressEvent(KoPointerEvent *event)
 
             if (hasFocusedRuler()) {
                 defocusRuler();
-            }
-            else {
+            } else {
                 deactivateTextBlock();
                 activateTextBlockAt(event->point);
             }
         }
-    }
-    else if (event->button() == Qt::RightButton) {
+    } else if (event->button() == Qt::RightButton) {
         resetActiveRuler();
-    }
-    else if(event->button() == Qt::MidButton) {
+    } else if (event->button() == Qt::MidButton) {
         applyParentStyleToActiveRuler();
     }
 
@@ -573,8 +560,7 @@ void ParagraphTool::mouseMoveEvent(KoPointerEvent *event)
     if (hasActiveTextBlock()) {
         if (hasActiveRuler()) {
             moveActiveRulerTo(event->point);
-        }
-        else {
+        } else {
             highlightRulerAt(event->point);
         }
 
@@ -586,60 +572,58 @@ void ParagraphTool::keyPressEvent(QKeyEvent *event)
 {
     if (hasActiveRuler()) {
         switch (event->key()) {
-            case Qt::Key_Shift:
-                toggleSmoothMovement();
-                break;
-            case Qt::Key_Escape:
-                resetActiveRuler();
-                break;
-            case Qt::Key_Delete:
-            case Qt::Key_BackSpace:
-                applyParentStyleToActiveRuler();
-                break;
-            default:
-                break;
+        case Qt::Key_Shift:
+            toggleSmoothMovement();
+            break;
+        case Qt::Key_Escape:
+            resetActiveRuler();
+            break;
+        case Qt::Key_Delete:
+        case Qt::Key_BackSpace:
+            applyParentStyleToActiveRuler();
+            break;
+        default:
+            break;
         }
-    }
-    else if (hasFocusedRuler()) {
+    } else if (hasFocusedRuler()) {
         switch (event->key()) {
-            case Qt::Key_Plus:
-                focusedRuler().increaseByStep();
-                break;
-            case Qt::Key_Minus:
-                focusedRuler().decreaseByStep();
-                break;
-            case Qt::Key_PageUp:
-                break;
-            case Qt::Key_PageDown:
-                break;
-            case Qt::Key_Tab:
-                focusNextRuler();
-                break;
-            default:
-                break;
+        case Qt::Key_Plus:
+            focusedRuler().increaseByStep();
+            break;
+        case Qt::Key_Minus:
+            focusedRuler().decreaseByStep();
+            break;
+        case Qt::Key_PageUp:
+            break;
+        case Qt::Key_PageDown:
+            break;
+        case Qt::Key_Tab:
+            focusNextRuler();
+            break;
+        default:
+            break;
         }
-    }
-    else {
+    } else {
         switch (event->key()) {
-            case Qt::Key_Tab:
-                focusRuler(topMarginRuler);
-                break;
-            default:
-                break;
+        case Qt::Key_Tab:
+            focusRuler(topMarginRuler);
+            break;
+        default:
+            break;
         }
     }
-        
+
 
     repaintDecorations();
 }
 
-void ParagraphTool::keyReleaseEvent( QKeyEvent *event)
+void ParagraphTool::keyReleaseEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Shift)
         toggleSmoothMovement();
 }
 
-void  ParagraphTool::activate( bool )
+void  ParagraphTool::activate(bool)
 {
     // don't know why force=true is needed and what it does,
     // but almost everyone else uses it...

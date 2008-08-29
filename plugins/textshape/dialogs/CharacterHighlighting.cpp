@@ -23,57 +23,59 @@
 #include <KoText.h>
 #include <KoCharacterStyle.h>
 
-CharacterHighlighting::CharacterHighlighting( QWidget* parent)
-    : QWidget ( parent)
+CharacterHighlighting::CharacterHighlighting(QWidget* parent)
+        : QWidget(parent)
 {
     widget.setupUi(this);
 
-    widget.underlineStyle->addItems( KoText::underlineTypeList() );
-    widget.underlineLineStyle->addItems( KoText::underlineStyleList() );
+    widget.underlineStyle->addItems(KoText::underlineTypeList());
+    widget.underlineLineStyle->addItems(KoText::underlineStyleList());
 
-    connect( widget.underlineStyle, SIGNAL( activated( int ) ), this, SLOT( underlineChanged( int ) ) );
+    connect(widget.underlineStyle, SIGNAL(activated(int)), this, SLOT(underlineChanged(int)));
 }
 
-void CharacterHighlighting::underlineChanged(int item) {
+void CharacterHighlighting::underlineChanged(int item)
+{
     widget.underlineLineStyle->setEnabled(item != 0);
     widget.underlineColor->setEnabled(item != 0);
 }
 
-void CharacterHighlighting::open(KoCharacterStyle *style) {
+void CharacterHighlighting::open(KoCharacterStyle *style)
+{
     m_style = style;
-    if(m_style == 0)
+    if (m_style == 0)
         return;
 
     widget.underlineStyle->setCurrentIndex(1);
-    switch(style->underlineStyle()) {
-        case KoCharacterStyle::DashLine:
-            widget.underlineLineStyle->setCurrentIndex(1);
-            break;
-        case KoCharacterStyle::DottedLine:
-            widget.underlineLineStyle->setCurrentIndex(2);
-            break;
-        case KoCharacterStyle::DotDashLine:
-            widget.underlineLineStyle->setCurrentIndex(3);
-            break;
-        case KoCharacterStyle::DotDotDashLine:
-            widget.underlineLineStyle->setCurrentIndex(4);
-            break;
-        case KoCharacterStyle::WaveLine:
-            widget.underlineLineStyle->setCurrentIndex(5);
-            break;
-        case KoCharacterStyle::SolidLine:
-        default:
-            widget.underlineStyle->setCurrentIndex(0);
-            break;
+    switch (style->underlineStyle()) {
+    case KoCharacterStyle::DashLine:
+        widget.underlineLineStyle->setCurrentIndex(1);
+        break;
+    case KoCharacterStyle::DottedLine:
+        widget.underlineLineStyle->setCurrentIndex(2);
+        break;
+    case KoCharacterStyle::DotDashLine:
+        widget.underlineLineStyle->setCurrentIndex(3);
+        break;
+    case KoCharacterStyle::DotDotDashLine:
+        widget.underlineLineStyle->setCurrentIndex(4);
+        break;
+    case KoCharacterStyle::WaveLine:
+        widget.underlineLineStyle->setCurrentIndex(5);
+        break;
+    case KoCharacterStyle::SolidLine:
+    default:
+        widget.underlineStyle->setCurrentIndex(0);
+        break;
     }
-    widget.underlineStyle->setCurrentIndex( style->underlineType() );
+    widget.underlineStyle->setCurrentIndex(style->underlineType());
 
-    switch(style->fontCapitalization()) {
-        case QFont::MixedCase: widget.normal->setChecked(true); break;
-        case QFont::SmallCaps: widget.smallcaps->setChecked(true); break;
-        case QFont::AllUppercase: widget.uppercase->setChecked(true); break;
-        case QFont::AllLowercase: widget.lowercase->setChecked(true); break;
-        case QFont::Capitalize: widget.capitalize->setChecked(true); break;
+    switch (style->fontCapitalization()) {
+    case QFont::MixedCase: widget.normal->setChecked(true); break;
+    case QFont::SmallCaps: widget.smallcaps->setChecked(true); break;
+    case QFont::AllUppercase: widget.uppercase->setChecked(true); break;
+    case QFont::AllLowercase: widget.lowercase->setChecked(true); break;
+    case QFont::Capitalize: widget.capitalize->setChecked(true); break;
     }
 
     underlineChanged(widget.underlineStyle->currentIndex());
@@ -82,27 +84,27 @@ void CharacterHighlighting::open(KoCharacterStyle *style) {
     widget.strikethrough->setChecked(style->strikeOutStyle() != KoCharacterStyle::NoLineStyle);
 }
 
-void CharacterHighlighting::save() {
-    if(m_style == 0)
+void CharacterHighlighting::save()
+{
+    if (m_style == 0)
         return;
     if (widget.underlineStyle->currentIndex() == 0) {
         m_style->setUnderlineType(KoCharacterStyle::NoLineType);
         m_style->setUnderlineStyle(KoCharacterStyle::NoLineStyle);
-    }
-    else {
-        m_style->setUnderlineType( static_cast<KoCharacterStyle::LineType>(widget.underlineStyle->currentIndex()));
+    } else {
+        m_style->setUnderlineType(static_cast<KoCharacterStyle::LineType>(widget.underlineStyle->currentIndex()));
         KoCharacterStyle::LineStyle style;
-        switch(widget.underlineLineStyle->currentIndex()) {
-            case 1: style = KoCharacterStyle::DashLine; break;
-            case 2: style = KoCharacterStyle::DottedLine; break;
-            case 3: style = KoCharacterStyle::DotDashLine; break;
-            case 4: style = KoCharacterStyle::DotDotDashLine; break;
-            case 5: style = KoCharacterStyle::WaveLine; break;
-            case 0:
-            default:
-                style = KoCharacterStyle::SolidLine; break;
+        switch (widget.underlineLineStyle->currentIndex()) {
+        case 1: style = KoCharacterStyle::DashLine; break;
+        case 2: style = KoCharacterStyle::DottedLine; break;
+        case 3: style = KoCharacterStyle::DotDashLine; break;
+        case 4: style = KoCharacterStyle::DotDotDashLine; break;
+        case 5: style = KoCharacterStyle::WaveLine; break;
+        case 0:
+        default:
+            style = KoCharacterStyle::SolidLine; break;
         }
-        m_style->setUnderlineStyle( style);
+        m_style->setUnderlineStyle(style);
         m_style->setUnderlineColor(widget.underlineColor->color());
     }
 

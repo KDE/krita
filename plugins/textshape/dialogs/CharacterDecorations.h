@@ -30,7 +30,7 @@ class CharacterDecorations : public QWidget
     Q_OBJECT
 
 public:
-    explicit CharacterDecorations( QWidget* parent=0);
+    explicit CharacterDecorations(QWidget* parent = 0);
     ~CharacterDecorations() {}
 
     void open(KoCharacterStyle *style);
@@ -39,8 +39,12 @@ public:
 private slots:
     void clearTextColor();
     void clearBackgroundColor();
-    void textColorChanged() { m_textColorReset = false; m_textColorChanged = true; }
-    void backgroundColorChanged() { m_backgroundColorReset = false; m_backgroundColorChanged = true; }
+    void textColorChanged() {
+        m_textColorReset = false; m_textColorChanged = true;
+    }
+    void backgroundColorChanged() {
+        m_backgroundColorReset = false; m_backgroundColorChanged = true;
+    }
 
 private:
     Ui::CharacterDecorations widget;

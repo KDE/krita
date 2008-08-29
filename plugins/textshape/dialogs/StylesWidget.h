@@ -32,7 +32,8 @@ class KoCharacterStyle;
 class QListWidgetItem;
 class StylesModel;
 
-class StylesWidget : public QWidget {
+class StylesWidget : public QWidget
+{
     Q_OBJECT
 public:
     explicit StylesWidget(QWidget *parent = 0);

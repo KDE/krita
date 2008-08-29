@@ -30,13 +30,13 @@ enum Position {
     Custom
 };
 
-FontLayoutTab::FontLayoutTab( bool withSubSuperScript, QWidget* parent)
-: QWidget( parent),
-m_style(0)
+FontLayoutTab::FontLayoutTab(bool withSubSuperScript, QWidget* parent)
+        : QWidget(parent),
+        m_style(0)
 {
     widget.setupUi(this);
 
-    if ( !withSubSuperScript ) widget.positionGroup->setVisible(false);
+    if (!withSubSuperScript) widget.positionGroup->setVisible(false);
 
     // sigh, we could do this in designer in Qt3 :(
     m_buttonGroup = new QButtonGroup(this);
@@ -50,10 +50,11 @@ m_style(0)
     widget.offsetLabel->setVisible(false);
 }
 
-void FontLayoutTab::open(KoCharacterStyle *style) {
+void FontLayoutTab::open(KoCharacterStyle *style)
+{
     m_style = style;
     Q_ASSERT(m_style);
-    switch(m_style->verticalAlignment()) {
+    switch (m_style->verticalAlignment()) {
     case QTextCharFormat::AlignSuperScript:
         m_buttonGroup->button(Superscript)->setChecked(true);
         break;
@@ -68,26 +69,27 @@ void FontLayoutTab::open(KoCharacterStyle *style) {
     widget.hyphenate->setChecked(m_style->hasHyphenation());
 }
 
-void FontLayoutTab::save() {
+void FontLayoutTab::save()
+{
     Q_ASSERT(m_style);
     QTextCharFormat::VerticalAlignment va;
 
-    switch(m_buttonGroup->checkedId()) {
-        case Subscript:
-            va = QTextCharFormat::AlignSubScript;
-            break;
-        case Superscript:
-            va = QTextCharFormat::AlignSuperScript;
-            break;
-        case Custom:
-            // fallthrough..
-        default:
-            va = QTextCharFormat::AlignNormal;
-            // TODO also handle custom
+    switch (m_buttonGroup->checkedId()) {
+    case Subscript:
+        va = QTextCharFormat::AlignSubScript;
+        break;
+    case Superscript:
+        va = QTextCharFormat::AlignSuperScript;
+        break;
+    case Custom:
+        // fallthrough..
+    default:
+        va = QTextCharFormat::AlignNormal;
+        // TODO also handle custom
     }
     m_style->setVerticalAlignment(va);
 
-    m_style->setHasHyphenation( widget.hyphenate->isChecked());
+    m_style->setHasHyphenation(widget.hyphenate->isChecked());
 }
 
 #include "FontLayoutTab.moc"

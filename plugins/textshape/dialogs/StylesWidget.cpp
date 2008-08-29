@@ -32,10 +32,10 @@
 #include <QRadioButton>
 
 StylesWidget::StylesWidget(QWidget *parent)
-    : QWidget(parent),
-    m_styleManager(0),
-    m_stylesModel( new StylesModel(0, this) ),
-    m_blockSignals(false)
+        : QWidget(parent),
+        m_styleManager(0),
+        m_stylesModel(new StylesModel(0, this)),
+        m_blockSignals(false)
 {
     widget.setupUi(this);
     widget.stylesView->setModel(m_stylesModel);
@@ -43,10 +43,10 @@ StylesWidget::StylesWidget(QWidget *parent)
     widget.stylesView->header()->resizeSection(1, 16);
     widget.stylesView->header()->hide();
 
-    widget.newStyle->setIcon( KIcon("list-add") );
-    widget.deleteStyle->setIcon( KIcon("list-remove") );
-    widget.modifyStyle->setIcon( KIcon("configure") );
-    widget.applyStyle->setIcon( KIcon("dialog-ok-apply") );
+    widget.newStyle->setIcon(KIcon("list-add"));
+    widget.deleteStyle->setIcon(KIcon("list-remove"));
+    widget.modifyStyle->setIcon(KIcon("configure"));
+    widget.applyStyle->setIcon(KIcon("dialog-ok-apply"));
 
     setCurrent(QModelIndex()); // register that we don't have a selection at startup
 
@@ -74,7 +74,7 @@ void StylesWidget::setCurrentFormat(const QTextBlockFormat &format)
     if (m_styleManager)
         usedStyle = m_styleManager->paragraphStyle(id);
     if (usedStyle) {
-        foreach (int property, m_currentBlockFormat.properties().keys()) {
+        foreach(int property, m_currentBlockFormat.properties().keys()) {
             if (property == QTextFormat::ObjectIndex)
                 continue;
             if (m_currentBlockFormat.property(property) != usedStyle->value(property)) {
@@ -91,7 +91,7 @@ void StylesWidget::setCurrentFormat(const QTextBlockFormat &format)
 
 void StylesWidget::setCurrentFormat(const QTextCharFormat &format)
 {
-    if(format == m_currentCharFormat)
+    if (format == m_currentCharFormat)
         return;
     m_currentCharFormat = format;
 
@@ -101,7 +101,7 @@ void StylesWidget::setCurrentFormat(const QTextCharFormat &format)
     if (m_styleManager)
         usedStyle = m_styleManager->characterStyle(id);
     if (usedStyle) {
-        foreach (int property, m_currentCharFormat.properties().keys()) {
+        foreach(int property, m_currentCharFormat.properties().keys()) {
             if (property == QTextFormat::ObjectIndex)
                 continue;
             if (m_currentCharFormat.property(property) != usedStyle->value(property)) {
@@ -131,7 +131,7 @@ void StylesWidget::newStyleClicked()
     lay->addRow(0, cr);
     root->setLayout(lay);
 
-    dialog->setCaption( i18n("Create New Style"));
+    dialog->setCaption(i18n("Create New Style"));
     dialog->setMainWidget(root);
     if (dialog->exec() == KDialog::Accepted) {
         QString styleName = name->text();
@@ -141,8 +141,7 @@ void StylesWidget::newStyleClicked()
             KoCharacterStyle *style = new KoCharacterStyle();
             style->setName(styleName);
             m_styleManager->add(style);
-        }
-        else {
+        } else {
             KoParagraphStyle *style = new KoParagraphStyle();
             style->setName(styleName);
             m_styleManager->add(style);
@@ -153,7 +152,7 @@ void StylesWidget::newStyleClicked()
 void StylesWidget::deleteStyleClicked()
 {
     QModelIndex index = widget.stylesView->currentIndex();
-    Q_ASSERT (index.isValid());
+    Q_ASSERT(index.isValid());
     widget.stylesView->clearSelection();
     KoParagraphStyle *paragraphStyle = m_stylesModel->paragraphStyleForIndex(index);
     if (paragraphStyle) {
@@ -168,15 +167,14 @@ void StylesWidget::deleteStyleClicked()
         }
         if (!inUse)
             m_styleManager->remove(s);
-    }
-    else
+    } else
         m_styleManager->remove(m_stylesModel->characterStyleForIndex(index));
 }
 
 void StylesWidget::editStyle()
 {
     QModelIndex index = widget.stylesView->currentIndex();
-    Q_ASSERT (index.isValid());
+    Q_ASSERT(index.isValid());
     KoParagraphStyle *paragraphStyle = m_stylesModel->paragraphStyleForIndex(index);
     KoCharacterStyle *characterStyle = 0;
     if (paragraphStyle == 0)
@@ -189,8 +187,7 @@ void StylesWidget::editStyle()
         p->setStyle(paragraphStyle);
         // TODO get KoUnit from somewhere and set that on p
         widget = p;
-    }
-    else if (characterStyle) {
+    } else if (characterStyle) {
         CharacterGeneral *c = new CharacterGeneral;
         c->setStyle(characterStyle);
         widget = c;
@@ -198,7 +195,7 @@ void StylesWidget::editStyle()
 
     if (widget) {
         KDialog *dialog = new KDialog(this);
-        dialog->setCaption( paragraphStyle ? i18n("Edit Paragraph Style") : i18n ("Edit Character Style"));
+        dialog->setCaption(paragraphStyle ? i18n("Edit Paragraph Style") : i18n("Edit Character Style"));
         dialog->setMainWidget(widget);
         connect(dialog, SIGNAL(okClicked()), widget, SLOT(save()));
         dialog->exec();
@@ -209,7 +206,7 @@ void StylesWidget::editStyle()
 void StylesWidget::applyStyle()
 {
     QModelIndex index = widget.stylesView->currentIndex();
-    Q_ASSERT (index.isValid());
+    Q_ASSERT(index.isValid());
     KoParagraphStyle *paragraphStyle = m_stylesModel->paragraphStyleForIndex(index);
     if (paragraphStyle) {
         emit paragraphStyleSelected(paragraphStyle);
@@ -225,8 +222,8 @@ void StylesWidget::applyStyle()
 
 void StylesWidget::setCurrent(const QModelIndex &index)
 {
-    widget.modifyStyle->setEnabled( index.isValid() );
-    widget.applyStyle->setEnabled( index.isValid() );
+    widget.modifyStyle->setEnabled(index.isValid());
+    widget.applyStyle->setEnabled(index.isValid());
 
     bool canDelete = index.isValid();
     if (canDelete) {

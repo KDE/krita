@@ -34,17 +34,17 @@
 
 
 ParagraphSettingsDialog::ParagraphSettingsDialog(QWidget *parent, TextTool *tool)
-    : KPageDialog(parent),
-    m_tool(tool),
-    m_style(0),
-    m_ownStyle(false),
-    m_visited(false)
+        : KPageDialog(parent),
+        m_tool(tool),
+        m_style(0),
+        m_ownStyle(false),
+        m_visited(false)
 {
     setFaceType(KPageDialog::Tabbed);
-    m_paragraphIndentSpacing = new ParagraphIndentSpacing (this);
-    m_paragraphLayout = new ParagraphLayout (this);
-    m_paragraphBulletsNumbers = new ParagraphBulletsNumbers (this);
-    m_paragraphDecorations = new ParagraphDecorations (this);
+    m_paragraphIndentSpacing = new ParagraphIndentSpacing(this);
+    m_paragraphLayout = new ParagraphLayout(this);
+    m_paragraphBulletsNumbers = new ParagraphBulletsNumbers(this);
+    m_paragraphDecorations = new ParagraphDecorations(this);
 
     addPage(m_paragraphIndentSpacing, "Indent/Spacing");
     addPage(m_paragraphLayout, "General Layout");
@@ -52,13 +52,15 @@ ParagraphSettingsDialog::ParagraphSettingsDialog(QWidget *parent, TextTool *tool
     addPage(m_paragraphDecorations, "Decorations");
 }
 
-ParagraphSettingsDialog::~ParagraphSettingsDialog() {
-    if(m_ownStyle)
+ParagraphSettingsDialog::~ParagraphSettingsDialog()
+{
+    if (m_ownStyle)
         delete m_style;
 }
 
-void ParagraphSettingsDialog::accept() {
-    if(m_style) {
+void ParagraphSettingsDialog::accept()
+{
+    if (m_style) {
         emit startMacro(i18n("Paragraph Settings\n"));
         m_paragraphIndentSpacing->save();
         m_paragraphLayout->save();
@@ -68,13 +70,12 @@ void ParagraphSettingsDialog::accept() {
         QTextBlockFormat format;
         m_style->applyStyle(format);
         m_cursor.mergeBlockFormat(format);
-        if(m_style->listStyle().isValid()) {
+        if (m_style->listStyle().isValid()) {
             ChangeListCommand *cmd = new ChangeListCommand(m_cursor.block(), m_style->listStyle());
             m_tool->addCommand(cmd);
-        }
-        else {
+        } else {
             QTextList *list = m_cursor.block().textList();
-            if(list) { // then remove it.
+            if (list) { // then remove it.
                 list->remove(m_cursor.block());
             }
         }
@@ -86,18 +87,21 @@ void ParagraphSettingsDialog::accept() {
     deleteLater();
 }
 
-void ParagraphSettingsDialog::reject() {
+void ParagraphSettingsDialog::reject()
+{
     KDialog::reject();
     deleteLater();
 }
 
-void ParagraphSettingsDialog::open(const QTextCursor &cursor) {
+void ParagraphSettingsDialog::open(const QTextCursor &cursor)
+{
     m_cursor = cursor;
     m_ownStyle = true;
-    open( KoParagraphStyle::fromBlock(m_cursor.block()) );
+    open(KoParagraphStyle::fromBlock(m_cursor.block()));
 }
 
-void ParagraphSettingsDialog::open(KoParagraphStyle *style) {
+void ParagraphSettingsDialog::open(KoParagraphStyle *style)
+{
     m_style = style;
     m_paragraphIndentSpacing->open(style);
     m_paragraphLayout->open(style);
@@ -105,19 +109,22 @@ void ParagraphSettingsDialog::open(KoParagraphStyle *style) {
     m_paragraphDecorations->open(style);
 }
 
-void ParagraphSettingsDialog::setUnit(const KoUnit &unit) {
+void ParagraphSettingsDialog::setUnit(const KoUnit &unit)
+{
     m_paragraphIndentSpacing->setUnit(unit);
-   // m_paragraphDecorations->setUnit(unit);
+    // m_paragraphDecorations->setUnit(unit);
 }
 
-void ParagraphSettingsDialog::showEvent (QShowEvent *e) {
+void ParagraphSettingsDialog::showEvent(QShowEvent *e)
+{
     KDialog::showEvent(e);
-    if(m_visited) return;
+    if (m_visited) return;
     m_visited = true;
     QTimer::singleShot(0, this, SLOT(visit()));
 }
 
-void ParagraphSettingsDialog::visit() {
+void ParagraphSettingsDialog::visit()
+{
     KoLayoutVisitor visitor;
     visitor.visit(m_paragraphBulletsNumbers);
     visitor.visit(m_paragraphLayout);

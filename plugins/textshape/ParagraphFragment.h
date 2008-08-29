@@ -30,8 +30,7 @@
 class KoParagraphStyle;
 
 // this enum defines the order in which the rulers will be focused when tab is pressed
-typedef enum
-{
+typedef enum {
     topMarginRuler,
     rightMarginRuler,
     bottomMarginRuler,
@@ -88,7 +87,9 @@ protected:
     QPointF mapTextToDocument(QPointF point) const;
     QLineF mapTextToDocument(QLineF line) const;
 
-    TextShape *textShape() const { Q_ASSERT(m_textShape != NULL); return m_textShape; }
+    TextShape *textShape() const {
+        Q_ASSERT(m_textShape != NULL); return m_textShape;
+    }
 
 private:
     TextShape *m_textShape;
@@ -97,9 +98,9 @@ private:
     bool m_paintSeparator;
 
     QRectF m_counter,
-           m_firstLine,
-           m_followingLines,
-           m_border;
+    m_firstLine,
+    m_followingLines,
+    m_border;
 
     RulerFragment m_rulerFragments[maxRuler];
 };

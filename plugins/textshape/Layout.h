@@ -36,7 +36,8 @@ class TextShape;
 /**
  * The document layouter for KoText style docs.
  */
-class Layout : public KoTextDocumentLayout::LayoutState {
+class Layout : public KoTextDocumentLayout::LayoutState
+{
 public:
     explicit Layout(KoTextDocumentLayout *parent);
     /// start layouting, return false when there is nothing to do
@@ -68,13 +69,17 @@ public:
     virtual void draw(QPainter *painter, const KoTextDocumentLayout::PaintContext & context);
 
     virtual void setStyleManager(KoStyleManager *sm);
-    virtual KoStyleManager *styleManager() const { return m_styleManager; }
+    virtual KoStyleManager *styleManager() const {
+        return m_styleManager;
+    }
 
     /// reimplemented from superclass
     virtual void clearTillEnd();
 
     /// set default tab size for this document
-    virtual void setTabSpacing(qreal spacing) { m_defaultTabSizing = spacing; }
+    virtual void setTabSpacing(qreal spacing) {
+        m_defaultTabSizing = spacing;
+    }
 
 private:
     void updateBorders();
@@ -86,7 +91,7 @@ private:
     void drawListItem(QPainter *painter, const QTextBlock &block);
     void decorateParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter);
     void decorateTabs(QPainter *painter, const QVariantList& tabList, const QTextLine &line, const QTextFragment& currentFragment, int startOfBlock);
-    
+
     qreal inlineCharHeight(const QTextFragment &fragment);
     qreal findFootnote(const QTextLine &line);
 
@@ -114,11 +119,13 @@ private:
 
     // tab setting
     qreal m_defaultTabSizing;
-    int m_currentTabStop; // = n, where we should be looking from the nth tab stop onwards when 
-                          // we decorate the tab for the text of a fragment
+    int m_currentTabStop; // = n, where we should be looking from the nth tab stop onwards when
+    // we decorate the tab for the text of a fragment
     int m_dropCapsNChars, m_dropCapsAffectsNMoreLines;
     qreal m_dropCapsAffectedLineWidthAdjust, m_y_justBelowDropCaps;
-    int numColumns() { return m_dropCapsNChars; }
+    int numColumns() {
+        return m_dropCapsNChars;
+    }
 };
 
 #endif

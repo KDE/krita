@@ -20,14 +20,14 @@
 
 #include "FontDecorations.h"
 
-FontDecorations::FontDecorations( QWidget* parent )
-    : QWidget( parent ),
-    m_style(0)
+FontDecorations::FontDecorations(QWidget* parent)
+        : QWidget(parent),
+        m_style(0)
 {
     widget.setupUi(this);
 
     connect(widget.textColor, SIGNAL(changed(const QColor&)), this, SLOT(textColorChanged()));
-    connect(widget.backgroundColor, SIGNAL(changed(const QColor&)), this, SLOT( backgroundColorChanged()));
+    connect(widget.backgroundColor, SIGNAL(changed(const QColor&)), this, SLOT(backgroundColorChanged()));
 
     connect(widget.resetTextColor, SIGNAL(clicked()), this, SLOT(clearTextColor()));
     connect(widget.resetBackground, SIGNAL(clicked()), this, SLOT(clearBackgroundColor()));
@@ -35,7 +35,8 @@ FontDecorations::FontDecorations( QWidget* parent )
     widget.shadowGroupBox->setVisible(false);
 }
 
-void FontDecorations::open(KoCharacterStyle *style) {
+void FontDecorations::open(KoCharacterStyle *style)
+{
     m_style = style;
     m_textColorChanged = false;
     m_backgroundColorChanged = false;
@@ -53,24 +54,27 @@ void FontDecorations::open(KoCharacterStyle *style) {
     }
 }
 
-void FontDecorations::save() const {
+void FontDecorations::save() const
+{
     Q_ASSERT(m_style);
-    if(m_backgroundColorReset)
+    if (m_backgroundColorReset)
         m_style->clearBackground();
-    else if(m_backgroundColorChanged)
+    else if (m_backgroundColorChanged)
         m_style->setBackground(QBrush(widget.backgroundColor->color()));
-    if(m_textColorReset)
+    if (m_textColorReset)
         m_style->clearForeground();
-    else if(m_textColorChanged)
+    else if (m_textColorChanged)
         m_style->setForeground(QBrush(widget.textColor->color()));
 }
 
-void FontDecorations::clearTextColor() {
+void FontDecorations::clearTextColor()
+{
     widget.textColor->setColor(widget.textColor->defaultColor());
     m_textColorReset = true;
 }
 
-void FontDecorations::clearBackgroundColor() {
+void FontDecorations::clearBackgroundColor()
+{
     widget.backgroundColor->setColor(widget.backgroundColor->defaultColor());
     m_backgroundColorReset = true;
 }

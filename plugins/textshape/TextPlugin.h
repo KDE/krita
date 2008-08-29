@@ -21,7 +21,8 @@
 
 #include <QObject>
 
-class TextPlugin : public QObject {
+class TextPlugin : public QObject
+{
     Q_OBJECT
 
 public:

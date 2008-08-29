@@ -26,14 +26,14 @@
 #include <QPushButton>
 
 InsertCharacter::InsertCharacter(QWidget *parent)
-    : QDockWidget(i18n("Special Characters"))
+        : QDockWidget(i18n("Special Characters"))
 {
     QWidget *specialCharacterWidget = new QWidget();
     QGridLayout *lay = new QGridLayout(specialCharacterWidget);
     lay->setMargin(6);
     m_charSelector = new KCharSelect(specialCharacterWidget,
-            KCharSelect::SearchLine | KCharSelect::FontCombo | KCharSelect::BlockCombos |
-            KCharSelect::CharacterTable | KCharSelect::DetailBrowser);
+                                     KCharSelect::SearchLine | KCharSelect::FontCombo | KCharSelect::BlockCombos |
+                                     KCharSelect::CharacterTable | KCharSelect::DetailBrowser);
     lay->addWidget(m_charSelector, 0, 0, 1, 3);
     QPushButton *insert = new QPushButton(i18n("Insert"), specialCharacterWidget);
     lay->addWidget(insert, 1, 1);
@@ -43,10 +43,10 @@ InsertCharacter::InsertCharacter(QWidget *parent)
 
     setObjectName("insertSpecialCharacter");
     setWidget(specialCharacterWidget);
-    while(parent->parentWidget())
+    while (parent->parentWidget())
         parent = parent->parentWidget();
-    QMainWindow *mw = dynamic_cast<QMainWindow*> (parent);
-    if(mw)
+    QMainWindow *mw = dynamic_cast<QMainWindow*>(parent);
+    if (mw)
         mw->addDockWidget(Qt::TopDockWidgetArea, this);
     setFloating(true);
 
@@ -55,7 +55,8 @@ InsertCharacter::InsertCharacter(QWidget *parent)
     connect(m_charSelector, SIGNAL(charSelected(QChar)), this, SLOT(insertCharacter()));
 }
 
-void InsertCharacter::insertCharacter() {
+void InsertCharacter::insertCharacter()
+{
     emit insertCharacter(QString(m_charSelector->currentChar()));
 }
 

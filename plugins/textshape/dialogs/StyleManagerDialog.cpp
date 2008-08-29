@@ -21,7 +21,7 @@
 #include "StyleManager.h"
 
 StyleManagerDialog::StyleManagerDialog(QWidget *parent)
-    : KDialog(parent)
+        : KDialog(parent)
 {
     setButtons(Ok | Cancel | Apply);
     m_styleManagerWidget = new StyleManager(this);
@@ -30,25 +30,30 @@ StyleManagerDialog::StyleManagerDialog(QWidget *parent)
     connect(this, SIGNAL(applyClicked()), m_styleManagerWidget, SLOT(save()));
 }
 
-StyleManagerDialog::~StyleManagerDialog() {
+StyleManagerDialog::~StyleManagerDialog()
+{
 }
 
-void StyleManagerDialog::accept() {
+void StyleManagerDialog::accept()
+{
     m_styleManagerWidget->save();
     KDialog::accept();
     deleteLater();
 }
 
-void StyleManagerDialog::reject() {
+void StyleManagerDialog::reject()
+{
     KDialog::reject();
     deleteLater();
 }
 
-void StyleManagerDialog::setStyleManager(KoStyleManager *sm) {
+void StyleManagerDialog::setStyleManager(KoStyleManager *sm)
+{
     m_styleManagerWidget->setStyleManager(sm);
 }
 
-void StyleManagerDialog::setUnit(const KoUnit &unit) {
+void StyleManagerDialog::setUnit(const KoUnit &unit)
+{
     m_styleManagerWidget->setUnit(unit);
 }
 

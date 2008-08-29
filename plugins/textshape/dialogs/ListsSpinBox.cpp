@@ -21,51 +21,54 @@
 
 #include "ListItemsHelper.h"
 
-ListsSpinBox::ListsSpinBox( QWidget *parent)
-    : QSpinBox(parent),
-    m_type(KoListStyle::DecimalItem),
-    m_letterSynchronization(false)
+ListsSpinBox::ListsSpinBox(QWidget *parent)
+        : QSpinBox(parent),
+        m_type(KoListStyle::DecimalItem),
+        m_letterSynchronization(false)
 {
 }
 
-void ListsSpinBox::setCounterType(KoListStyle::Style type) {
+void ListsSpinBox::setCounterType(KoListStyle::Style type)
+{
     m_type = type;
     update();
 }
 
-int ListsSpinBox::valueFromText(const QString &text) const {
+int ListsSpinBox::valueFromText(const QString &text) const
+{
     return 0;
 }
 
-QString ListsSpinBox::textFromValue(int value) const {
-    switch( m_type ) {
-        case KoListStyle::DecimalItem:
-            return QString::number(value);
-        case KoListStyle::AlphaLowerItem:
-            return Lists::intToAlpha(value, Lists::Lowercase, m_letterSynchronization);
-        case KoListStyle::UpperAlphaItem:
-            return Lists::intToAlpha(value, Lists::Uppercase, m_letterSynchronization);
-        case KoListStyle::RomanLowerItem:
-            return Lists::intToRoman(value);
-        case KoListStyle::UpperRomanItem:
-            return Lists::intToRoman(value).toUpper();
-        case KoListStyle::Bengali:
-        case KoListStyle::Gujarati:
-        case KoListStyle::Gurumukhi:
-        case KoListStyle::Kannada:
-        case KoListStyle::Malayalam:
-        case KoListStyle::Oriya:
-        case KoListStyle::Tamil:
-        case KoListStyle::Telugu:
-        case KoListStyle::Tibetan:
-        case KoListStyle::Thai:
-            return Lists::intToScript(value, m_type);
-        case KoListStyle::Abjad:
-        case KoListStyle::ArabicAlphabet:
-        case KoListStyle::AbjadMinor:
-            return Lists::intToScriptList(value, m_type);
-        default:  // others we ignore.
-            return "X";
+QString ListsSpinBox::textFromValue(int value) const
+{
+    switch (m_type) {
+    case KoListStyle::DecimalItem:
+        return QString::number(value);
+    case KoListStyle::AlphaLowerItem:
+        return Lists::intToAlpha(value, Lists::Lowercase, m_letterSynchronization);
+    case KoListStyle::UpperAlphaItem:
+        return Lists::intToAlpha(value, Lists::Uppercase, m_letterSynchronization);
+    case KoListStyle::RomanLowerItem:
+        return Lists::intToRoman(value);
+    case KoListStyle::UpperRomanItem:
+        return Lists::intToRoman(value).toUpper();
+    case KoListStyle::Bengali:
+    case KoListStyle::Gujarati:
+    case KoListStyle::Gurumukhi:
+    case KoListStyle::Kannada:
+    case KoListStyle::Malayalam:
+    case KoListStyle::Oriya:
+    case KoListStyle::Tamil:
+    case KoListStyle::Telugu:
+    case KoListStyle::Tibetan:
+    case KoListStyle::Thai:
+        return Lists::intToScript(value, m_type);
+    case KoListStyle::Abjad:
+    case KoListStyle::ArabicAlphabet:
+    case KoListStyle::AbjadMinor:
+        return Lists::intToScriptList(value, m_type);
+    default:  // others we ignore.
+        return "X";
     }
 }
 

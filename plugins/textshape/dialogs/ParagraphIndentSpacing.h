@@ -28,7 +28,8 @@
 
 class KoParagraphStyle;
 
-class ParagraphIndentSpacing : public QWidget {
+class ParagraphIndentSpacing : public QWidget
+{
     Q_OBJECT
 public:
     ParagraphIndentSpacing(QWidget *parent);

@@ -22,7 +22,8 @@
 #include <QDockWidget>
 class KCharSelect;
 
-class InsertCharacter : public QDockWidget {
+class InsertCharacter : public QDockWidget
+{
     Q_OBJECT
 public:
     InsertCharacter(QWidget *parent);

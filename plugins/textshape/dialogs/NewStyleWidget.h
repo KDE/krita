@@ -27,7 +27,8 @@
 class KoParagraphStyle;
 class KoCharacterStyle;
 
-class NewStyleWidget : public QWidget {
+class NewStyleWidget : public QWidget
+{
     Q_OBJECT
 public:
     NewStyleWidget(QWidget *parent = 0);

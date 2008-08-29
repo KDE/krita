@@ -47,9 +47,8 @@ public:
     RulerFragment() : m_ruler(NULL), m_visible(true) {}
 
     RulerFragment(Ruler *ruler)
-       : m_ruler(ruler),
-       m_visible(true)
-    {}
+            : m_ruler(ruler),
+            m_visible(true) {}
 
     ~RulerFragment() {}
 
@@ -61,19 +60,29 @@ public:
 
     void paint(QPainter &painter) const;
 
-    void setRuler(Ruler *ruler) { m_ruler = ruler; }
+    void setRuler(Ruler *ruler) {
+        m_ruler = ruler;
+    }
     void setBaseline(const QLineF &baseline);
 
-    bool isVisible() const { return m_visible; }
+    bool isVisible() const {
+        return m_visible;
+    }
     void setVisible(bool visible);
 
 protected:
     void paintArrow(QPainter &painter, const QPointF &tip, const qreal angle, qreal value) const;
 
     // some convenience methods for rendering the arrow
-    static qreal arrowSize() { return 10.0; }
-    static qreal arrowDiagonal() { return arrowSize() / sqrt(2.0) / 2.0; }
-    static qreal arrowMinimumValue() { return arrowDiagonal() *2.0 + 2.0; }
+    static qreal arrowSize() {
+        return 10.0;
+    }
+    static qreal arrowDiagonal() {
+        return arrowSize() / sqrt(2.0) / 2.0;
+    }
+    static qreal arrowMinimumValue() {
+        return arrowDiagonal() *2.0 + 2.0;
+    }
 
 private:
     Ruler *m_ruler;

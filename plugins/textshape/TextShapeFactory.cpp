@@ -30,11 +30,11 @@
 #include <KoStyleManager.h>
 
 TextShapeFactory::TextShapeFactory(QObject *parent)
-    : KoShapeFactory(parent, TextShape_SHAPEID, i18n("Text"))
+        : KoShapeFactory(parent, TextShape_SHAPEID, i18n("Text"))
 {
     setToolTip(i18n("A shape that shows text"));
-    setOdfElementNames( KoXmlNS::draw, QStringList( "text-box" ) );
-    setLoadingPriority( 1 );
+    setOdfElementNames(KoXmlNS::draw, QStringList("text-box"));
+    setLoadingPriority(1);
 
     KoShapeTemplate t;
     t.name = i18n("Text");
@@ -46,15 +46,17 @@ TextShapeFactory::TextShapeFactory(QObject *parent)
     addTemplate(t);
 }
 
-KoShape *TextShapeFactory::createDefaultShape() const {
+KoShape *TextShapeFactory::createDefaultShape() const
+{
     TextShape *text = new TextShape();
     return text;
 }
 
-KoShape *TextShapeFactory::createShape(const KoProperties * params) const {
+KoShape *TextShapeFactory::createShape(const KoProperties * params) const
+{
     TextShape *shape = new TextShape();
     shape->setSize(QSizeF(300, 200));
-    shape->setDemoText( params->boolProperty("demo") );
+    shape->setDemoText(params->boolProperty("demo"));
     shape->addConnectionPoint(QPointF(0, 0));
     shape->addConnectionPoint(QPointF(150, 100));
     shape->addConnectionPoint(QPointF(0, 200));
@@ -64,10 +66,10 @@ KoShape *TextShapeFactory::createShape(const KoProperties * params) const {
 
 bool TextShapeFactory::supports(const KoXmlElement & e) const
 {
-    return ( e.localName() == "text-box" && e.namespaceURI() == KoXmlNS::draw );
+    return (e.localName() == "text-box" && e.namespaceURI() == KoXmlNS::draw);
 }
 
-void TextShapeFactory::populateDataCenterMap( QMap<QString, KoDataCenter *>  & dataCenterMap )
+void TextShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter *>  & dataCenterMap)
 {
     dataCenterMap["StyleManager"] = new KoStyleManager();
 }

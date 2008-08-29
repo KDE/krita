@@ -26,26 +26,27 @@
 #include <KoParagraphStyle.h>
 
 ParagraphGeneral::ParagraphGeneral(QWidget *parent)
-    :QWidget(parent),
-    m_blockSignals(false),
-    m_style(0)
+        : QWidget(parent),
+        m_blockSignals(false),
+        m_style(0)
 {
     widget.setupUi(this);
 
-    m_paragraphIndentSpacing = new ParagraphIndentSpacing (this);
-    m_paragraphLayout = new ParagraphLayout (this);
-    m_paragraphBulletsNumbers = new ParagraphBulletsNumbers (this);
+    m_paragraphIndentSpacing = new ParagraphIndentSpacing(this);
+    m_paragraphLayout = new ParagraphLayout(this);
+    m_paragraphBulletsNumbers = new ParagraphBulletsNumbers(this);
 
     widget.tabs->addTab(m_paragraphIndentSpacing, i18n("Indent/Spacing"));
     widget.tabs->addTab(m_paragraphLayout, i18n("General Layout"));
     widget.tabs->addTab(m_paragraphBulletsNumbers, i18n("Bullets/Numbers"));
 
-    connect(widget.name, SIGNAL(textChanged (const QString &)), this, SIGNAL(nameChanged(const QString&)));
+    connect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
 }
 
-void ParagraphGeneral::setStyle(KoParagraphStyle *style) {
+void ParagraphGeneral::setStyle(KoParagraphStyle *style)
+{
     m_style = style;
-    if(m_style == 0)
+    if (m_style == 0)
         return;
     m_blockSignals = true;
 
@@ -55,19 +56,19 @@ void ParagraphGeneral::setStyle(KoParagraphStyle *style) {
     foreach(KoParagraphStyle *s, m_paragraphStyles) {
         KoParagraphStyle *parent = s;
         bool ok = true;
-        while(ok && parent) {
+        while (ok && parent) {
             ok = parent->styleId() != style->styleId();
             parent = parent->parent();
         }
-        if(! ok) continue; // can't inherit from myself, even indirectly.
+        if (! ok) continue; // can't inherit from myself, even indirectly.
 
         widget.inheritStyle->addItem(s->name(), s->styleId());
-        if(s == style->parent())
-            widget.inheritStyle->setCurrentIndex( widget.inheritStyle->count()-1 );
+        if (s == style->parent())
+            widget.inheritStyle->setCurrentIndex(widget.inheritStyle->count() - 1);
     }
     widget.name->setText(style->name());
-    for(int i=0; i < widget.nextStyle->count(); i++) {
-        if(widget.nextStyle->itemData(i).toInt() == style->nextStyle()) {
+    for (int i = 0; i < widget.nextStyle->count(); i++) {
+        if (widget.nextStyle->itemData(i).toInt() == style->nextStyle()) {
             widget.nextStyle->setCurrentIndex(i);
             break;
         }
@@ -80,18 +81,21 @@ void ParagraphGeneral::setStyle(KoParagraphStyle *style) {
     m_blockSignals = false;
 }
 
-void ParagraphGeneral::setParagraphStyles(const QList<KoParagraphStyle*> styles) {
+void ParagraphGeneral::setParagraphStyles(const QList<KoParagraphStyle*> styles)
+{
     m_paragraphStyles = styles;
     foreach(KoParagraphStyle *style, m_paragraphStyles)
-        widget.nextStyle->addItem(style->name(), style->styleId());
+    widget.nextStyle->addItem(style->name(), style->styleId());
 }
 
-void ParagraphGeneral::setUnit(const KoUnit &unit) {
+void ParagraphGeneral::setUnit(const KoUnit &unit)
+{
     m_paragraphIndentSpacing->setUnit(unit);
 }
 
-void ParagraphGeneral::save() {
-    if(m_style == 0) return;
+void ParagraphGeneral::save()
+{
+    if (m_style == 0) return;
     m_paragraphIndentSpacing->save();
     m_paragraphLayout->save();
     m_paragraphBulletsNumbers->save();
@@ -99,11 +103,11 @@ void ParagraphGeneral::save() {
     m_style->setName(widget.name->text());
     m_style->setNextStyle(widget.nextStyle->itemData(widget.nextStyle->currentIndex()).toInt());
     int parentStyleId = widget.inheritStyle->itemData(widget.inheritStyle->currentIndex()).toInt();
-    if(parentStyleId == 0)
+    if (parentStyleId == 0)
         m_style->setParent(0);
     else {
         foreach(KoParagraphStyle *style, m_paragraphStyles) {
-            if(style->styleId() == parentStyleId) {
+            if (style->styleId() == parentStyleId) {
                 m_style->setParent(style);
                 break;
             }
@@ -111,7 +115,8 @@ void ParagraphGeneral::save() {
     }
 }
 
-void ParagraphGeneral::switchToGeneralTab() {
+void ParagraphGeneral::switchToGeneralTab()
+{
     widget.tabs->setCurrentIndex(0);
 }
 

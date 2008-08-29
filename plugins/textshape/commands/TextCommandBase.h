@@ -44,13 +44,16 @@ void MyCommand::undo() {
 @endcode
  * @see TextTool::addCommand()
  */
-class TextCommandBase : public QUndoCommand {
+class TextCommandBase : public QUndoCommand
+{
 public:
     /// constructor
     TextCommandBase(QUndoCommand *parent) : QUndoCommand(parent), m_tool(0) {}
     virtual ~TextCommandBase() {}
     /// method called by the tool.
-    void setTool(TextTool *tool) { m_tool = tool; }
+    void setTool(TextTool *tool) {
+        m_tool = tool;
+    }
 
     // reimplemented from QUndoCommand
     virtual void redo();
@@ -60,11 +63,12 @@ public:
     /// Sets the m_allowAddUndoCommand of the associated tool
     void setAllow(bool set);
 protected:
-    class UndoRedoFinalizer {
-      public:
+    class UndoRedoFinalizer
+    {
+    public:
         UndoRedoFinalizer(TextCommandBase* parent, TextTool *tool) : m_parent(parent), m_tool(tool) {}
         ~UndoRedoFinalizer();
-      private:
+    private:
         TextCommandBase* m_parent;
         TextTool *m_tool;
     };

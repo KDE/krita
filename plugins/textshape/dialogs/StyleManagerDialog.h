@@ -25,7 +25,8 @@ class StyleManager;
 class KoStyleManager;
 class KoUnit;
 
-class StyleManagerDialog : public KDialog {
+class StyleManagerDialog : public KDialog
+{
     Q_OBJECT
 public:
     explicit StyleManagerDialog(QWidget *parent);

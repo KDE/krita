@@ -39,7 +39,9 @@ class FontDia : public KDialog
 public:
     explicit FontDia(const QTextCursor &cursor, QWidget* parent = 0);
 
-    KoCharacterStyle style() const { return m_style; }
+    KoCharacterStyle style() const {
+        return m_style;
+    }
 
 protected slots:
     void slotReset();

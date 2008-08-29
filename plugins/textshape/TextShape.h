@@ -61,7 +61,9 @@ public:
      */
     void setDemoText(bool on);
     /// return if the content of this shape is demo text.
-    bool demoText() const { return m_demoText; }
+    bool demoText() const {
+        return m_demoText;
+    }
 
     /**
      * From KoShape reimplemented method to load the TextShape from ODF.
@@ -74,7 +76,7 @@ public:
      * @param element element which represents the shape in odf.
      * @return false if loading failed.
      */
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
 
     /**
      * From KoShape reimplemented method to store the TextShape data as ODF.
@@ -84,17 +86,21 @@ public:
     virtual void saveOdf(KoShapeSavingContext & context) const;
 
     /// reimplemented
-    virtual void init( QMap<QString, KoDataCenter *>  dataCenterMap );
+    virtual void init(QMap<QString, KoDataCenter *>  dataCenterMap);
 
-    KoTextShapeData *textShapeData() { return m_textShapeData; }
+    KoTextShapeData *textShapeData() {
+        return m_textShapeData;
+    }
 
-    bool hasFootnoteDocument() { return m_footnotes != 0; }
+    bool hasFootnoteDocument() {
+        return m_footnotes != 0;
+    }
     QTextDocument *footnoteDocument();
 
     void markLayoutDone();
 
 protected:
-    virtual bool loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context );
+    virtual bool loadOdfFrameElement(const KoXmlElement & element, KoShapeLoadingContext & context);
 
 private:
     void shapeChanged(ChangeType type);

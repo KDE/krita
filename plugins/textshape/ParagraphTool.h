@@ -42,7 +42,8 @@ class QTextLayout;
  * It displays all paragraph formatting parameters directly on the canvas
  * and allows to modify them, too.
  */
-class ParagraphTool : public KoTool {
+class ParagraphTool : public KoTool
+{
     Q_OBJECT
 public:
     explicit ParagraphTool(KoCanvasBase *canvas);
@@ -54,22 +55,22 @@ public:
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
     // reimplemented from superclass
-    virtual void mousePressEvent( KoPointerEvent *event );
+    virtual void mousePressEvent(KoPointerEvent *event);
 
     // reimplemented from superclass
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
 
     // reimplemented from superclass
-    virtual void mouseMoveEvent( KoPointerEvent *event );
+    virtual void mouseMoveEvent(KoPointerEvent *event);
 
     // reimplemented from superclass
-    virtual void keyPressEvent( QKeyEvent *event );
+    virtual void keyPressEvent(QKeyEvent *event);
 
     // reimplemented from superclass
-    virtual void keyReleaseEvent( QKeyEvent *event );
+    virtual void keyReleaseEvent(QKeyEvent *event);
 
     // reimplemented from superclass
-    virtual void activate (bool temporary=false);
+    virtual void activate(bool temporary = false);
 
     // reimplemented from superclass
     virtual void deactivate();
@@ -79,7 +80,7 @@ public:
 public slots:
     // should be called when any of the rulers needs a repaint
     void scheduleRepaint();
-    
+
     // should be called when the value of any of the rulers changed
     void updateLayout();
 
@@ -91,9 +92,13 @@ public slots:
     // return that name, otherwise return QString()
     QString styleName();
 
-    void toggleSmoothMovement() { m_smoothMovement = !m_smoothMovement; emit smoothMovementChanged(m_smoothMovement); }
+    void toggleSmoothMovement() {
+        m_smoothMovement = !m_smoothMovement; emit smoothMovementChanged(m_smoothMovement);
+    }
 
-    void setSmoothMovement(bool smoothMovement) { m_smoothMovement = smoothMovement; }
+    void setSmoothMovement(bool smoothMovement) {
+        m_smoothMovement = smoothMovement;
+    }
 
 signals:
     void styleNameChanged(const QString&);
@@ -120,33 +125,55 @@ protected:
     // (for example use clicked somwhere else)
     void deactivateTextBlock();
 
-    bool hasActiveTextBlock() const { return !m_activeCursor.isNull(); }
+    bool hasActiveTextBlock() const {
+        return !m_activeCursor.isNull();
+    }
 
-    bool hasActiveRuler() const { return m_activeRuler != noRuler; }
+    bool hasActiveRuler() const {
+        return m_activeRuler != noRuler;
+    }
     void activateRuler(RulerIndex ruler, const ParagraphFragment &fragment);
     bool activateRulerAt(const QPointF &point);
     void deactivateRuler();
     void resetActiveRuler();
     void moveActiveRulerTo(const QPointF &point);
 
-    Ruler &focusedRuler() { return m_rulers[m_focusedRuler]; }
-    bool hasFocusedRuler() const { return m_focusedRuler >= 0 && m_focusedRuler < maxRuler; }
+    Ruler &focusedRuler() {
+        return m_rulers[m_focusedRuler];
+    }
+    bool hasFocusedRuler() const {
+        return m_focusedRuler >= 0 && m_focusedRuler < maxRuler;
+    }
     void focusRuler(RulerIndex ruler);
-    void focusNextRuler() { focusRuler((RulerIndex)(((int)m_focusedRuler + 1)%maxRuler)); }
+    void focusNextRuler() {
+        focusRuler((RulerIndex)(((int)m_focusedRuler + 1) % maxRuler));
+    }
     void defocusRuler();
 
-    bool hasHighlightedRuler() const {return m_highlightedRuler != noRuler;}
+    bool hasHighlightedRuler() const {
+        return m_highlightedRuler != noRuler;
+    }
     void highlightRulerAt(const QPointF &point);
     void dehighlightRuler();
 
-    bool smoothMovement() { return m_smoothMovement; }
+    bool smoothMovement() {
+        return m_smoothMovement;
+    }
 
     // internal convencience methods
-    QTextBlock textBlock() const { Q_ASSERT(m_activeCursor.block().isValid()); return m_activeCursor.block(); }
+    QTextBlock textBlock() const {
+        Q_ASSERT(m_activeCursor.block().isValid()); return m_activeCursor.block();
+    }
 
-    QTextBlockFormat blockFormat() const { return textBlock().blockFormat(); }
-    QTextCharFormat charFormat() const { return textBlock().charFormat(); }
-    QTextLayout *textLayout() const { return textBlock().layout(); }
+    QTextBlockFormat blockFormat() const {
+        return textBlock().blockFormat();
+    }
+    QTextCharFormat charFormat() const {
+        return textBlock().charFormat();
+    }
+    QTextLayout *textLayout() const {
+        return textBlock().layout();
+    }
 
 private:
     QTextCursor m_activeCursor;
@@ -155,19 +182,19 @@ private:
     QVector<ParagraphFragment> m_fragments;
 
     const ParagraphFragment *m_activeFragment,
-                            *m_highlightedFragment;
+    *m_highlightedFragment;
 
     Ruler m_rulers[maxRuler];
 
     RulerIndex m_activeRuler,
-               m_focusedRuler,
-               m_highlightedRuler;
+    m_focusedRuler,
+    m_highlightedRuler;
 
     QPointF m_mousePosition;
     QRectF m_storedRepaintRectangle;
 
     bool m_needsRepaint,
-         m_smoothMovement;
+    m_smoothMovement;
 
 };
 

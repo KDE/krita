@@ -8,7 +8,8 @@
 #include <QTextCursor>
 #include <QTextList>
 
-void TestChangeListCommand::addList() {
+void TestChangeListCommand::addList()
+{
     QTextDocument doc;
     QTextCursor cursor(&doc);
     cursor.insertText("Root\nparag1\nparag2\nparag3\nparag4\n");
@@ -40,13 +41,14 @@ void TestChangeListCommand::addList() {
     QVERIFY(block.textList() != tl);
 }
 
-void TestChangeListCommand::removeList() {
+void TestChangeListCommand::removeList()
+{
     QTextDocument doc;
     QTextCursor cursor(&doc);
     cursor.insertText("Root\nparag1\nparag2\nparag3\nparag4\n");
     KoListStyle style;
     QTextBlock block = doc.begin().next();
-    while(block.isValid()) {
+    while (block.isValid()) {
         style.applyStyle(block);
         block = block.next();
     }
@@ -82,7 +84,8 @@ void TestChangeListCommand::removeList() {
     QVERIFY(block.textList() == 0);
 }
 
-void TestChangeListCommand::joinList() {
+void TestChangeListCommand::joinList()
+{
     QTextDocument doc;
     QTextCursor cursor(&doc);
     cursor.insertText("Root\nparag1\nparag2\nparag3\nparag4\n");
@@ -106,7 +109,8 @@ void TestChangeListCommand::joinList() {
     QCOMPARE(block.textList(), tl);
 }
 
-void TestChangeListCommand::joinList2() {
+void TestChangeListCommand::joinList2()
+{
     // test usecase of joining with the one before and the one after based on similar styles.
     QTextDocument doc;
     QTextCursor cursor(&doc);
@@ -150,7 +154,8 @@ void TestChangeListCommand::joinList2() {
     QCOMPARE(numberedList->format().intProperty(QTextListFormat::ListStyle), (int) KoListStyle::DecimalItem);
 }
 
-void TestChangeListCommand::splitList() {
+void TestChangeListCommand::splitList()
+{
     // assume I start with;
     // 1 paragA
     // 1.1 paragB
@@ -173,13 +178,13 @@ void TestChangeListCommand::splitList() {
     style2.applyStyle(block);
 
     QTextBlock paragA = doc.begin().next();
-    QVERIFY (paragA.textList());
+    QVERIFY(paragA.textList());
     QTextBlock paragB = paragA.next();
-    QVERIFY (paragB.textList());
-    QVERIFY (paragB.textList() != paragA.textList());
+    QVERIFY(paragB.textList());
+    QVERIFY(paragB.textList() != paragA.textList());
     QTextBlock paragC = paragB.next();
-    QVERIFY (paragC.textList());
-    QCOMPARE (paragC.textList(), paragB.textList());
+    QVERIFY(paragC.textList());
+    QCOMPARE(paragC.textList(), paragB.textList());
 
     QTextList *tl = paragB.textList();
     ChangeListCommand clc(paragB, KoListStyle::AlphaLowerItem);

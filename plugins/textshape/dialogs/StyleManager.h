@@ -30,7 +30,8 @@ class QListWidgetItem;
 class KoParagraphStyle;
 class KoCharacterStyle;
 
-class StyleManager : public QWidget {
+class StyleManager : public QWidget
+{
     Q_OBJECT
 public:
     StyleManager(QWidget *parent = 0);

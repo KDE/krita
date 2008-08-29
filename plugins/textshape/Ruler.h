@@ -44,7 +44,9 @@ public:
 
     ~Ruler() {}
 
-    KoUnit unit() const { return m_unit; }
+    KoUnit unit() const {
+        return m_unit;
+    }
     void setUnit(KoUnit unit);
 
     qreal value() const;
@@ -53,13 +55,21 @@ public:
     void moveTo(qreal value, bool smooth);
     void resetValue();
 
-    qreal oldValue() const { return m_oldValue; }
-    void setOldValue(qreal value) { m_oldValue = value; }
+    qreal oldValue() const {
+        return m_oldValue;
+    }
+    void setOldValue(qreal value) {
+        m_oldValue = value;
+    }
 
     // distance in points between steps when moving the ruler,
     // set this to 0.0 to disable stepping
-    qreal stepValue() const { return m_stepValue; }
-    void setStepValue(qreal stepValue) { m_stepValue = stepValue; }
+    qreal stepValue() const {
+        return m_stepValue;
+    }
+    void setStepValue(qreal stepValue) {
+        m_stepValue = stepValue;
+    }
 
     // the ruler cannot be dragged to a value lower than this value
     qreal minimumValue() const;
@@ -70,30 +80,52 @@ public:
     void setMaximumValue(qreal value);
 
     // these options specify how the ruler will be drawn
-    enum Options{
+    enum Options {
         noOptions = 0,
-        drawSides = 1<<0
+        drawSides = 1 << 0
     };
 
-    int options() const { return m_options; }
-    void setOptions(int options) { m_options = m_options | options; }
+    int options() const {
+        return m_options;
+    }
+    void setOptions(int options) {
+        m_options = m_options | options;
+    }
 
-    bool isActive() const { return m_active; }
+    bool isActive() const {
+        return m_active;
+    }
     void setActive(bool active);
 
-    bool isFocused() const { return m_focused; }
+    bool isFocused() const {
+        return m_focused;
+    }
     void setFocused(bool focused);
 
-    bool isHighlighted() const { return m_highlighted; }
+    bool isHighlighted() const {
+        return m_highlighted;
+    }
     void setHighlighted(bool highlighted);
 
-    void increaseByStep() { setValue(value() + stepValue()); emit valueChanged(value()); }
-    void decreaseByStep() { setValue(value() - stepValue()); emit valueChanged(value()); }
+    void increaseByStep() {
+        setValue(value() + stepValue()); emit valueChanged(value());
+    }
+    void decreaseByStep() {
+        setValue(value() - stepValue()); emit valueChanged(value());
+    }
 
-    QColor activeColor() const { return QColor(100, 148, 255); }
-    QColor highlightColor() const { return QColor(78, 117, 201); }
-    QColor normalColor() const { return QColor(100, 100, 100); }
-    QColor focusColor() const { return QColor(100, 148, 255); }
+    QColor activeColor() const {
+        return QColor(100, 148, 255);
+    }
+    QColor highlightColor() const {
+        return QColor(78, 117, 201);
+    }
+    QColor normalColor() const {
+        return QColor(100, 100, 100);
+    }
+    QColor focusColor() const {
+        return QColor(100, 148, 255);
+    }
 
 signals:
     // emitted when value has been changed via the user interface

@@ -31,7 +31,7 @@ class CharacterStyleOptions : public QWidget
     Q_OBJECT
 
 public:
-    explicit CharacterStyleOptions( bool withSubSuperScript, QWidget* parent=0);
+    explicit CharacterStyleOptions(bool withSubSuperScript, QWidget* parent = 0);
     ~CharacterStyleOptions() {}
 
     void open(KoCharacterStyle *style);

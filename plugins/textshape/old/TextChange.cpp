@@ -20,72 +20,85 @@
 
 
 TextChange::TextChange()
-    : m_formerPosition(0), m_position(0), m_previous(0), m_next(0)
+        : m_formerPosition(0), m_position(0), m_previous(0), m_next(0)
 {
 }
 
-int TextChange::length() const {
+int TextChange::length() const
+{
     return m_after.length() - m_before.length();
 }
 
-int TextChange::formerPosition() const {
+int TextChange::formerPosition() const
+{
     return m_formerPosition;
 }
 
-int TextChange::position() const {
+int TextChange::position() const
+{
     return m_position;
 }
 
-int TextChange::formerLength() const {
+int TextChange::formerLength() const
+{
     // TODO
-return -1;
+    return -1;
 }
 
-void TextChange::setPosition(int pos) {
+void TextChange::setPosition(int pos)
+{
     m_position = pos;
     m_formerPosition = pos;
 }
 
-void TextChange::setOldText(const QString &old) {
+void TextChange::setOldText(const QString &old)
+{
     m_before = old;
 }
 
-void TextChange::setNewText(const QString &current) {
+void TextChange::setNewText(const QString &current)
+{
     m_after = current;
 }
 
-void TextChange::setPrevious(TextChange *item) {
+void TextChange::setPrevious(TextChange *item)
+{
     m_previous = item;
 }
 
-void TextChange::setNext(TextChange *item) {
+void TextChange::setNext(TextChange *item)
+{
     m_next = item;
 }
 
-void TextChange::move(int length) {
+void TextChange::move(int length)
+{
     m_position += length;
-    if(m_next)
+    if (m_next)
         m_next->move(length);
 }
 
-void TextChange::insertBefore(TextChange *node) {
+void TextChange::insertBefore(TextChange *node)
+{
     move(node->length());
     node->setPrevious(previous());
     node->setNext(this);
     setPrevious(node);
-    if(node->previous())
+    if (node->previous())
         node->previous()->setNext(node);
 }
 
-void TextChange::insertAfter(TextChange *node) {
+void TextChange::insertAfter(TextChange *node)
+{
     node->setPrevious(this);
     node->setNext(next());
     setNext(node);
-    if(node->next())
+    if (node->next())
         node->next()->setPrevious(node);
 }
 
-void TextChange::merge(TextChange *other) {
+void TextChange::merge(TextChange *other)
+{
     // make sure the start of 'other' is within this change instance
     Q_ASSERT(other->position() >= position() && other->position() <= position() + length());
 

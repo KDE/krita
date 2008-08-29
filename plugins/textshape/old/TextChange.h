@@ -21,7 +21,8 @@
 
 #include <QString>
 
-class TextChange {
+class TextChange
+{
 public:
     TextChange();
     int formerLength() const;
@@ -29,13 +30,25 @@ public:
     int formerPosition() const;
     int position() const;
 
-    TextChange *next() { return m_next; }
-    const TextChange *next() const { return m_next; }
-    TextChange *previous() { return m_previous; }
-    const TextChange *previous() const { return m_previous; }
+    TextChange *next() {
+        return m_next;
+    }
+    const TextChange *next() const {
+        return m_next;
+    }
+    TextChange *previous() {
+        return m_previous;
+    }
+    const TextChange *previous() const {
+        return m_previous;
+    }
 
-    QString before() const { return m_before; }
-    QString after() const { return m_after; }
+    QString before() const {
+        return m_before;
+    }
+    QString after() const {
+        return m_after;
+    }
 
     void setPosition(int pos);
     void setOldText(const QString &old);

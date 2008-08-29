@@ -20,15 +20,23 @@
 #include "TextShape.h"
 
 #define synchronized(T) QMutex T; \
- for(Finalizer finalizer(T); finalizer.loop(); finalizer.inc())
+    for(Finalizer finalizer(T); finalizer.loop(); finalizer.inc())
 
 struct Finalizer {
-    Finalizer(QMutex &lock) : l(&lock), b(1) { l->lock(); }
-    ~Finalizer() { l->unlock(); }
+    Finalizer(QMutex &lock) : l(&lock), b(1) {
+        l->lock();
+    }
+    ~Finalizer() {
+        l->unlock();
+    }
     QMutex *l;
     short b;
-    short loop() { return b; }
-    void inc() { --b; }
+    short loop() {
+        return b;
+    }
+    void inc() {
+        --b;
+    }
 };
 
 #include "Layout.h"
@@ -60,10 +68,10 @@ struct Finalizer {
 
 
 TextShape::TextShape()
-: KoShapeContainer(new KoTextShapeContainerModel())
-, KoFrameShape(KoXmlNS::draw, "text-box")
-, m_footnotes(0)
-, m_demoText(false)
+        : KoShapeContainer(new KoTextShapeContainerModel())
+        , KoFrameShape(KoXmlNS::draw, "text-box")
+        , m_footnotes(0)
+        , m_demoText(false)
 {
     setShapeId(TextShape_SHAPEID);
     m_textShapeData = new KoTextShapeData();
@@ -79,21 +87,21 @@ TextShape::TextShape()
     lay->connect(m_textShapeData, SIGNAL(relayout()), SLOT(scheduleLayout()));
 }
 
-TextShape::~TextShape() {
+TextShape::~TextShape()
+{
     delete m_footnotes;
 }
 
 void TextShape::setDemoText(bool on)
 {
-    if(on) {
-        QTextCursor cursor (m_textShapeData->document());
-        for (int i=0; i < 10; i ++)
+    if (on) {
+        QTextCursor cursor(m_textShapeData->document());
+        for (int i = 0; i < 10; i ++)
             cursor.insertText("Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.\n");
-    }
-    else if(m_demoText) {
+    } else if (m_demoText) {
         m_textShapeData->document()->clear();
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
-        if(lay && lay->styleManager()) {
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+        if (lay && lay->styleManager()) {
             QTextBlock block = m_textShapeData->document()->begin();
             lay->styleManager()->defaultParagraphStyle()->applyStyle(block);
         }
@@ -103,19 +111,18 @@ void TextShape::setDemoText(bool on)
 
 void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
-    if( background() )
-    {
+    if (background()) {
         QPainterPath p;
-        p.addRect( converter.documentToView(QRectF(QPointF(0.0,0.0), size()) ) );
-        background()->paint( painter, p );
+        p.addRect(converter.documentToView(QRectF(QPointF(0.0, 0.0), size())));
+        background()->paint(painter, p);
     }
     QTextDocument *doc = m_textShapeData->document();
     Q_ASSERT(doc);
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (doc->documentLayout());
-    if(m_textShapeData->endPosition() < 0) { // not layouted yet.
-        if(lay == 0)
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(doc->documentLayout());
+    if (m_textShapeData->endPosition() < 0) { // not layouted yet.
+        if (lay == 0)
             kWarning(32500) << "Painting shape that doesn't have a kotext doc-layout, which can't work\n";
-        else if(! lay->hasLayouter())
+        else if (! lay->hasLayouter())
             lay->setLayout(new Layout(lay));
         return;
     }
@@ -129,12 +136,12 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     painter.setClipRect(QRectF(QPointF(0, 0), size()), Qt::IntersectClip);
     painter.save();
     painter.translate(0, -m_textShapeData->documentOffset());
-    lay->draw( &painter, context);
+    lay->draw(&painter, context);
     painter.restore();
 
-    if(m_footnotes) {
+    if (m_footnotes) {
         painter.translate(0, size().height() - m_footnotes->size().height());
-        m_footnotes->documentLayout()->draw( &painter, pc);
+        m_footnotes->documentLayout()->draw(&painter, pc);
     }
 }
 
@@ -146,10 +153,10 @@ QPointF TextShape::convertScreenPos(const QPointF &point)
 
 void TextShape::shapeChanged(ChangeType type)
 {
-    if(type == PositionChanged || type == SizeChanged || type == CollisionDetected) {
+    if (type == PositionChanged || type == SizeChanged || type == CollisionDetected) {
         m_textShapeData->foul();
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
-        if(lay)
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+        if (lay)
             lay->interruptLayout();
         m_textShapeData->fireResizeEvent();
     }
@@ -159,15 +166,15 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
 {
     bool showTextFrames = canvas->resourceProvider()->boolResource(KoText::ShowTextFrames);
 
-    if(showTextFrames) {
+    if (showTextFrames) {
         painter.save();
         applyConversion(painter, converter);
-        if(qAbs(rotation()) > 1)
+        if (qAbs(rotation()) > 1)
             painter.setRenderHint(QPainter::Antialiasing);
 
         QPen pen(QColor(210, 210, 210));
-        QPointF onePixel = converter.viewToDocument( QPointF(1.0, 1.0));
-        pen.setWidthF( onePixel.y() );
+        QPointF onePixel = converter.viewToDocument(QPointF(1.0, 1.0));
+        pen.setWidthF(onePixel.y());
         painter.setPen(pen);
 
         QPointF tl(0.0, 0.0);
@@ -175,37 +182,35 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
         painter.drawLine(tl, rect.topRight());
         painter.drawLine(rect.bottomLeft(), rect.bottomRight());
 
-        pen.setWidthF( onePixel.x() );
+        pen.setWidthF(onePixel.x());
         painter.setPen(pen);
         painter.drawLine(rect.topRight(), rect.bottomRight());
         painter.drawLine(tl, rect.bottomLeft());
         painter.restore();
     }
 
-    if(m_demoText) return;
-    if(m_textShapeData->endPosition() < 0) return;
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
-    if(showTextFrames && lay) {
+    if (m_demoText) return;
+    if (m_textShapeData->endPosition() < 0) return;
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    if (showTextFrames && lay) {
         QList< KoShape * > shapes = lay->shapes();
         // Get the bottom of the text.
         bool moreText = false;
-        qreal max = m_textShapeData->documentOffset()+size().height();
+        qreal max = m_textShapeData->documentOffset() + size().height();
         qreal bottom = 0.0;
         QTextBlock block = m_textShapeData->document()->begin();
-        while(block.isValid()) {
+        while (block.isValid()) {
             QTextLayout *tl = block.layout();
-            if(tl == 0) {
+            if (tl == 0) {
                 moreText = true;
                 break;
-            }
-            else if(tl->lineCount() == 0) {
+            } else if (tl->lineCount() == 0) {
                 moreText = true;
                 break;
-            }
-            else {
-                QTextLine line = tl->lineAt(tl->lineCount()-1);
+            } else {
+                QTextLine line = tl->lineAt(tl->lineCount() - 1);
                 bottom = qMax(bottom, line.position().y() + line.height());
-                if(bottom > max) {
+                if (bottom > max) {
                     moreText = true;
                     break;
                 }
@@ -213,21 +218,20 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
             block = block.next();
         }
 
-        if(! moreText) { // draw bottom of text.  Makes it easier to see where the text ends
+        if (! moreText) { // draw bottom of text.  Makes it easier to see where the text ends
             QPen pen(Qt::blue); // TODO make configurable?
             painter.setPen(pen);
 
             QPointF endPoint = converter.documentToView(QPointF(size().width(),
-                        bottom - m_textShapeData->documentOffset()));
-            endPoint.setX(endPoint.x() -1);
-            if(endPoint.y() > 0)
+                               bottom - m_textShapeData->documentOffset()));
+            endPoint.setX(endPoint.x() - 1);
+            if (endPoint.y() > 0)
                 painter.drawLine(QPointF(0, endPoint.y()), endPoint);
-        }
-        else if(shapes.count() <= 1 || shapes.last() == this) { // there is invisible text left.
+        } else if (shapes.count() <= 1 || shapes.last() == this) { // there is invisible text left.
             QPoint bottomRight = converter.documentToView(QPointF(size().width(), size().height())).toPoint();
             QPen pen(Qt::red); // TODO make configurable?
             painter.setPen(pen);
-            QPoint topLeft = bottomRight - QPoint(15,15);
+            QPoint topLeft = bottomRight - QPoint(15, 15);
             painter.drawRect(QRect(topLeft, QSize(13, 13)));
             pen.setWidth(2);
             painter.setPen(pen);
@@ -242,42 +246,42 @@ void TextShape::saveOdf(KoShapeSavingContext & context) const
     KoXmlWriter & writer = context.xmlWriter();
     //fo:min-height="120pt" draw:chain-next-name="Framesetje-2"
 
-    writer.startElement( "draw:frame" );
-    saveOdfAttributes( context, OdfAllAttributes );
-    writer.startElement( "draw:text-box" );
+    writer.startElement("draw:frame");
+    saveOdfAttributes(context, OdfAllAttributes);
+    writer.startElement("draw:text-box");
     m_textShapeData->saveOdf(context);
     writer.endElement(); // draw:text-box
-    saveOdfCommonChildElements( context );
+    saveOdfCommonChildElements(context);
     writer.endElement(); // draw:frame
 }
 
-bool TextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+bool TextShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
-    loadOdfAttributes( element, context, OdfAllAttributes );
-    return loadOdfFrame( element, context );
+    loadOdfAttributes(element, context, OdfAllAttributes);
+    return loadOdfFrame(element, context);
 }
 
-bool TextShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context )
+bool TextShape::loadOdfFrameElement(const KoXmlElement & element, KoShapeLoadingContext & context)
 {
     return m_textShapeData->loadOdf(element, context);
 }
 
-void TextShape::init( QMap<QString, KoDataCenter *>  dataCenterMap )
+void TextShape::init(QMap<QString, KoDataCenter *>  dataCenterMap)
 {
-    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>( dataCenterMap["StyleManager"] );
+    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>(dataCenterMap["StyleManager"]);
 
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> ( m_textShapeData->document()->documentLayout() );
-    if ( lay ) {
-        lay->setStyleManager( styleManager );
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    if (lay) {
+        lay->setStyleManager(styleManager);
     }
 }
 
 QTextDocument *TextShape::footnoteDocument()
 {
-    if(m_footnotes == 0) {
+    if (m_footnotes == 0) {
         m_footnotes = new QTextDocument();
         m_footnotes->setUseDesignMetrics(true);
-        m_footnotes->documentLayout()->setPaintDevice( new KoPostscriptPaintDevice() );
+        m_footnotes->documentLayout()->setPaintDevice(new KoPostscriptPaintDevice());
         m_footnotes->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false));
         m_footnotes->setPageSize(size());
     }
@@ -294,7 +298,7 @@ void TextShape::markLayoutDone()
 void TextShape::waitUntilReady() const
 {
     synchronized(m_mutex) {
-        if(m_textShapeData->isDirty()) {
+        if (m_textShapeData->isDirty()) {
             m_textShapeData->fireResizeEvent(); // triggers a relayout
             m_waiter.wait(&m_mutex);
         }

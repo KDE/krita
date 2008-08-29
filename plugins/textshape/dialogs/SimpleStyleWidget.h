@@ -27,7 +27,8 @@
 class TextTool;
 class KoStyleManager;
 
-class SimpleStyleWidget : public QWidget {
+class SimpleStyleWidget : public QWidget
+{
     Q_OBJECT
 public:
     explicit SimpleStyleWidget(TextTool *tool, QWidget *parent = 0);

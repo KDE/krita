@@ -25,7 +25,8 @@
 
 class KoShape;
 
-class TextShapeFactory : public KoShapeFactory {
+class TextShapeFactory : public KoShapeFactory
+{
     Q_OBJECT
 
 public:
@@ -36,7 +37,7 @@ public:
     KoShape *createDefaultShape() const;
     KoShape *createShape(const KoProperties * params) const;
     virtual bool supports(const KoXmlElement & e) const;
-    virtual void populateDataCenterMap( QMap<QString, KoDataCenter *>  & dataCenterMap );
+    virtual void populateDataCenterMap(QMap<QString, KoDataCenter *>  & dataCenterMap);
 };
 
 #endif

@@ -31,7 +31,8 @@ class ParagraphBulletsNumbers;
 class ParagraphIndentSpacing;
 class ParagraphLayout;
 
-class ParagraphGeneral : public QWidget {
+class ParagraphGeneral : public QWidget
+{
     Q_OBJECT
 public:
     ParagraphGeneral(QWidget *parent = 0);

@@ -27,30 +27,32 @@
 
 class QTextList;
 
-namespace Lists {
-    enum Capitalisation { Lowercase, Uppercase };
-    struct ListStyleItem {
-        ListStyleItem(const QString &name_, KoListStyle::Style style_) {
-            name = name_;
-            style = style_;
-        }
-        KoListStyle::Style style;
-        QString name;
-    };
+namespace Lists
+{
+enum Capitalisation { Lowercase, Uppercase };
+struct ListStyleItem {
+    ListStyleItem(const QString &name_, KoListStyle::Style style_) {
+        name = name_;
+        style = style_;
+    }
+    KoListStyle::Style style;
+    QString name;
+};
 
-    QString intToRoman( int n );
-    QString intToAlpha( int n, Capitalisation caps, bool letterSynchronization );
-    QString intToScript(int n, KoListStyle::Style type);
-    QString intToScriptList(int n, KoListStyle::Style type);
+QString intToRoman(int n);
+QString intToAlpha(int n, Capitalisation caps, bool letterSynchronization);
+QString intToScript(int n, KoListStyle::Style type);
+QString intToScriptList(int n, KoListStyle::Style type);
 
-    /// return international list items (bullets/arabic/roman)
-    QList<ListStyleItem> genericListStyleItems();
-    /// return non-latin list items (bullets/arabic/roman)
-    QList<ListStyleItem> otherlistStyleItems(); // we may want to split this method up into different world regions.
+/// return international list items (bullets/arabic/roman)
+QList<ListStyleItem> genericListStyleItems();
+/// return non-latin list items (bullets/arabic/roman)
+QList<ListStyleItem> otherlistStyleItems(); // we may want to split this method up into different world regions.
 }
 
 /// \internal helper class for calculating text-lists prefixes and indents
-class ListItemsHelper {
+class ListItemsHelper
+{
 public:
     ListItemsHelper(QTextList *textList, const QFont &font);
     ~ListItemsHelper() {}

@@ -20,7 +20,8 @@ class QTextLayout;
 
 #define ROUNDING 0.126
 
-class TestDocumentLayout : public QObject {
+class TestDocumentLayout : public QObject
+{
     Q_OBJECT
 public:
     TestDocumentLayout() {}
@@ -91,17 +92,20 @@ private:
     Layout *m_textLayout;
 };
 
-class MockTextShape : public TextShape {
-  public:
+class MockTextShape : public TextShape
+{
+public:
     MockTextShape() {
-        layout = dynamic_cast<KoTextDocumentLayout*> (textShapeData()->document()->documentLayout());
+        layout = dynamic_cast<KoTextDocumentLayout*>(textShapeData()->document()->documentLayout());
     }
     void paint(QPainter &painter, const KoViewConverter &converter) {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
     }
-    virtual void saveOdf( KoShapeSavingContext & ) const {}
-    virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return true; }
+    virtual void saveOdf(KoShapeSavingContext &) const {}
+    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) {
+        return true;
+    }
     KoTextDocumentLayout *layout;
 };
 

@@ -24,19 +24,21 @@
 #include <klocale.h>
 
 TextToolFactory::TextToolFactory(QObject *parent)
-: KoToolFactory(parent, "TextToolFactory_ID", i18n("Text tool"))
+        : KoToolFactory(parent, "TextToolFactory_ID", i18n("Text tool"))
 {
-    setToolTip (i18n("Text editing tool"));
-    setToolType (dynamicToolType());
-    setIcon ("draw-text");
-    setPriority (1);
-    setActivationShapeId (TextShape_SHAPEID);
+    setToolTip(i18n("Text editing tool"));
+    setToolType(dynamicToolType());
+    setIcon("draw-text");
+    setPriority(1);
+    setActivationShapeId(TextShape_SHAPEID);
 }
 
-TextToolFactory::~TextToolFactory() {
+TextToolFactory::~TextToolFactory()
+{
 }
 
-KoTool * TextToolFactory::createTool(KoCanvasBase *canvas) {
+KoTool * TextToolFactory::createTool(KoCanvasBase *canvas)
+{
     return new TextTool(canvas);
 }
 

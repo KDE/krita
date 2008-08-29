@@ -31,42 +31,42 @@
 #include <kfontdialog.h>
 
 FontDia::FontDia(const QTextCursor &cursor, QWidget* parent)
-    : KDialog(parent),
-      m_cursor(cursor),
-      m_initialFormat(cursor.charFormat()),
-      m_style(m_initialFormat)
+        : KDialog(parent),
+        m_cursor(cursor),
+        m_initialFormat(cursor.charFormat()),
+        m_style(m_initialFormat)
 {
-    setCaption(i18n("Select Font") );
-    setModal( true );
-    setButtons(Ok|Cancel|Reset|Apply);
-    setDefaultButton( Ok );
+    setCaption(i18n("Select Font"));
+    setModal(true);
+    setButtons(Ok | Cancel | Reset | Apply);
+    setDefaultButton(Ok);
 
-    KVBox *mainWidget = new KVBox( this );
-    KHBox *mainHBox = new KHBox( mainWidget );
+    KVBox *mainWidget = new KVBox(this);
+    KHBox *mainHBox = new KHBox(mainWidget);
 
-    QTabWidget *fontTabWidget = new QTabWidget( mainHBox );
+    QTabWidget *fontTabWidget = new QTabWidget(mainHBox);
 
     // Font tab
     m_fontTab = new FontTab(this);
     fontTabWidget->addTab(m_fontTab, i18n("Font"));
 
-/*  connect( fontTab, SIGNAL( familyChanged() ), this, SLOT( slotFontFamilyChanged() ) );
-    connect( fontTab, SIGNAL( boldChanged() ), this, SLOT( slotFontBoldChanged() ) );
-    connect( fontTab, SIGNAL( italicChanged() ), this, SLOT( slotFontItalicChanged() ) );
-    connect( fontTab, SIGNAL( sizeChanged() ), this, SLOT( slotFontSizeChanged() ) );
-*/
+    /*  connect( fontTab, SIGNAL( familyChanged() ), this, SLOT( slotFontFamilyChanged() ) );
+        connect( fontTab, SIGNAL( boldChanged() ), this, SLOT( slotFontBoldChanged() ) );
+        connect( fontTab, SIGNAL( italicChanged() ), this, SLOT( slotFontItalicChanged() ) );
+        connect( fontTab, SIGNAL( sizeChanged() ), this, SLOT( slotFontSizeChanged() ) );
+    */
 
     //Highlighting tab
-    m_highlightingTab = new CharacterHighlighting( this );
-    fontTabWidget->addTab( m_highlightingTab, i18n( "Highlighting" ) );
+    m_highlightingTab = new CharacterHighlighting(this);
+    fontTabWidget->addTab(m_highlightingTab, i18n("Highlighting"));
 
     //Decoration tab
-    m_decorationTab = new FontDecorations( this );
-    fontTabWidget->addTab( m_decorationTab, i18n( "Decoration" ) );
+    m_decorationTab = new FontDecorations(this);
+    fontTabWidget->addTab(m_decorationTab, i18n("Decoration"));
 
     //Layout tab
-    m_layoutTab = new FontLayoutTab( true, this );
-    fontTabWidget->addTab( m_layoutTab, i18n( "Layout" ) );
+    m_layoutTab = new FontLayoutTab(true, this);
+    fontTabWidget->addTab(m_layoutTab, i18n("Layout"));
 
     //Language tab
     m_languageTab = new LanguageTab(this);
@@ -78,11 +78,11 @@ FontDia::FontDia(const QTextCursor &cursor, QWidget* parent)
     //Preview
     //fontDiaPreview = new KoFontDiaPreview( mainWidget );
 
-    setMainWidget( mainWidget );
+    setMainWidget(mainWidget);
 
-    connect( this, SIGNAL( applyClicked() ), this, SLOT( slotApply() ) );
-    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
-    connect( this, SIGNAL( resetClicked() ), this, SLOT( slotReset() ) );
+    connect(this, SIGNAL(applyClicked()), this, SLOT(slotApply()));
+    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(this, SIGNAL(resetClicked()), this, SLOT(slotReset()));
     initTabs();
 }
 

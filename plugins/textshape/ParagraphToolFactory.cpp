@@ -23,8 +23,8 @@
 
 #include <klocale.h>
 
-ParagraphToolFactory::ParagraphToolFactory( QObject *parent )
-: KoToolFactory(parent, "ParagraphToolFactory_ID", i18n("Paragraph tool"))
+ParagraphToolFactory::ParagraphToolFactory(QObject *parent)
+        : KoToolFactory(parent, "ParagraphToolFactory_ID", i18n("Paragraph tool"))
 {
     setToolTip(i18n("Paragraph tool"));
     setToolType(dynamicToolType());
@@ -33,10 +33,12 @@ ParagraphToolFactory::ParagraphToolFactory( QObject *parent )
     setActivationShapeId(TextShape_SHAPEID);
 }
 
-ParagraphToolFactory::~ParagraphToolFactory() {
+ParagraphToolFactory::~ParagraphToolFactory()
+{
 }
 
-KoTool * ParagraphToolFactory::createTool( KoCanvasBase *canvas ) {
+KoTool * ParagraphToolFactory::createTool(KoCanvasBase *canvas)
+{
     return new ParagraphTool(canvas);
 }
 

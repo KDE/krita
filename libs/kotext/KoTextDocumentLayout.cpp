@@ -167,16 +167,6 @@ void KoTextDocumentLayout::addShape(KoShape *shape)
     }
 }
 
-void KoTextDocumentLayout::setStyleManager(KoStyleManager *sm)
-{
-    m_state->setStyleManager(sm);
-    if (document()->isEmpty()) {
-        QTextBlock block = document()->begin();
-        if (block.blockFormat().intProperty(KoParagraphStyle::StyleId) < 100)
-            sm->defaultParagraphStyle()->applyStyle(block);
-    }
-}
-
 void KoTextDocumentLayout::setInlineObjectTextManager(KoInlineTextObjectManager *iom)
 {
     d->inlineTextObjectManager = iom;
@@ -406,11 +396,6 @@ void KoTextDocumentLayout::layout()
 QList<KoShape*> KoTextDocumentLayout::shapes() const
 {
     return d->shapes;
-}
-
-KoStyleManager *KoTextDocumentLayout::styleManager() const
-{
-    return m_state->styleManager();
 }
 
 KoShape* KoTextDocumentLayout::shapeForPosition(int position) const

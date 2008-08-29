@@ -56,6 +56,7 @@
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextSharedLoadingData.h>
+#include <KoTextDocument.h>
 
 typedef KoText::Tab KoTextTab;
 // because in a QtScript, I don't seem to be able to use a namespaced type
@@ -691,7 +692,7 @@ QTextDocument *TestLoading::documentFromOdt(const QString &odt)
     textShapeData->setDocument(document, false /* ownership */);
     KoTextDocumentLayout *layout = new KoTextDocumentLayout(textShapeData->document());
     layout->setInlineObjectTextManager(new KoInlineTextObjectManager(layout)); // required while saving
-    layout->setStyleManager(styleManager);
+    KoTextDocument(document).setStyleManager(styleManager);
     textShapeData->document()->setDocumentLayout(layout);
 
     if (!textShapeData->loadOdf(body, shapeLoadingContext)) {
@@ -743,7 +744,7 @@ QString TestLoading::documentToOdt(QTextDocument *document)
         textShapeData->document()->setDocumentLayout(layout);
         layout->setInlineObjectTextManager(new KoInlineTextObjectManager(layout)); // required while saving
         KoStyleManager *styleManager = new KoStyleManager;
-        layout->setStyleManager(styleManager);
+        KoTextDocument(textShapeData->document()).setStyleManager(styleManager);
     }
     textShapeData->saveOdf(context);
 

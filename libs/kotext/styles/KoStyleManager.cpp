@@ -24,6 +24,7 @@
 #include "KoListStyle.h"
 #include "KoListLevelProperties.h"
 #include "ChangeFollower.h"
+#include "KoTextDocument.h"
 
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>

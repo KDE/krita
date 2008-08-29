@@ -6,6 +6,7 @@
 #include <KoStyleManager.h>
 #include <KoTextBlockData.h>
 #include <KoTextBlockBorderData.h>
+#include <KoTextDocument.h>
 
 #include <QtGui>
 
@@ -39,7 +40,7 @@ void TestDocumentLayout::initForNewTest(const QString &initText)
     m_textLayout = new Layout(layout);
     layout->setLayout(m_textLayout);
     styleManager = new KoStyleManager();
-    layout->setStyleManager(styleManager);
+    KoTextDocument(doc).setStyleManager(styleManager);
 
     QTextBlock block = doc->begin();
     if (initText.length() > 0) {

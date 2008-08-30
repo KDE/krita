@@ -133,7 +133,7 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
     }
 }
 
-void KisCanvas2::gridSize(double *horizontal, double *vertical) const
+void KisCanvas2::gridSize(qreal *horizontal, qreal *vertical) const
 {
     Q_ASSERT(horizontal);
     Q_ASSERT(vertical);

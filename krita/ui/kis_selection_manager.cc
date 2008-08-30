@@ -1667,7 +1667,7 @@ void KisSelectionManager::paint(QPainter& gc, const KoViewConverter &converter)
     if (selection && selection->isDeselected())
         return;
 
-    double sx, sy;
+    qreal sx, sy;
     converter.zoom(&sx, &sy);
 
     if (selection && selection->hasPixelSelection()) {

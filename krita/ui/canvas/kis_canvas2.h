@@ -69,7 +69,7 @@ public:
 
 public: // KoCanvasBase implementation
 
-    void gridSize(double *horizontal, double *vertical) const;
+    void gridSize(qreal *horizontal, qreal *vertical) const;
 
     bool snapToGrid() const;
 

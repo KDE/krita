@@ -244,7 +244,7 @@ public:
         return 0;
     }
 
-    virtual KoColorTransformation *createDarkenAdjustment(qint32 , bool , double) const {
+    virtual KoColorTransformation *createDarkenAdjustment(qint32 , bool , qreal) const {
         return 0;
     }
 

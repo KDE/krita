@@ -45,12 +45,12 @@ public:
     /// Does _nothing_, use addRegionsToBinAsync
     virtual void addRegionToBin(const quint8 *, const quint8*, quint32, const KoColorSpace *) {}
     virtual void addRegionsToBinAsync();
-    virtual QString positionToString(double pos) const {
+    virtual QString positionToString(qreal pos) const {
         return m_source->at(0)->positionToString(pos);
     }
 
-    virtual void setView(double, double) {} // No view support
-    virtual double maximalZoom() const {
+    virtual void setView(qreal, qreal) {} // No view support
+    virtual qreal maximalZoom() const {
         return 1.0;
     }
 

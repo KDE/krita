@@ -61,27 +61,27 @@ public:
     QSizeF viewToDocument(const QSizeF& viewSize) const;
 
     /// convert from flake to krita units
-    inline double documentToViewX(double documentX) const {
+    inline qreal documentToViewX(qreal documentX) const {
         return documentX * m_image->xRes();
     }
 
     /// convert from flake to krita units
-    inline double documentToViewY(double documentY) const {
+    inline qreal documentToViewY(qreal documentY) const {
         return documentY * m_image->yRes();
     }
 
     /// convert from krita to flake units
-    inline double viewToDocumentX(double viewX) const {
+    inline qreal viewToDocumentX(qreal viewX) const {
         return viewX / m_image->xRes();
     }
 
     /// convert from krita to flake units
-    inline double viewToDocumentY(double viewY) const {
+    inline qreal viewToDocumentY(qreal viewY) const {
         return viewY / m_image->yRes();
     }
 
     /// reimplemented from superclass
-    void zoom(double *zoomX, double *zoomY) const;
+    void zoom(qreal *zoomX, qreal *zoomY) const;
 
 private:
     const KisImageSP m_image;

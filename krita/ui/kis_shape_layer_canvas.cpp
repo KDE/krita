@@ -54,7 +54,7 @@ KisShapeLayerCanvas::~KisShapeLayerCanvas()
 {
 }
 
-void KisShapeLayerCanvas::gridSize(double *horizontal, double *vertical) const
+void KisShapeLayerCanvas::gridSize(qreal *horizontal, qreal *vertical) const
 {
     Q_ASSERT(false); // This should never be called as this canvas should have no tools.
     Q_UNUSED(horizontal);
@@ -89,7 +89,7 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
     r.adjust(-2, -2, 2, 2); // for antialias
     m_dirty += r;
     if (! m_repaintTriggered) {
-        double x, y;
+        qreal x, y;
         m_viewConverter->zoom(&x, &y);
         m_antialias = x < 3 || y < 3;
 

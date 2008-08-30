@@ -130,27 +130,27 @@ void Brush::paintLine(KisPaintDeviceSP dev, const KisPaintInformation &pi1, cons
 
     m_counter++;
 
-    double dx = pi2.pos().x() - pi1.pos().x();
-    double dy = pi2.pos().y() - pi1.pos().y();
+    qreal dx = pi2.pos().x() - pi1.pos().x();
+    qreal dy = pi2.pos().y() - pi1.pos().y();
 
-    double x1 = pi1.pos().x();
-    double y1 = pi1.pos().y();
+    qreal x1 = pi1.pos().x();
+    qreal y1 = pi1.pos().y();
 
-    double x2 = pi2.pos().x();
-    double y2 = pi2.pos().y();
+    qreal x2 = pi2.pos().x();
+    qreal y2 = pi2.pos().y();
 
-    double angle = atan2(dy, dx);
+    qreal angle = atan2(dy, dx);
     //dbgPlugins << "angle: " << angle;
 
-    /*    double slope = 0.0;
+    /*    qreal slope = 0.0;
           if (dx != 0){
           slope = dy / dx;
           } */
 //     dbgPlugins << "slope: " << slope;
 
-    double distance = sqrt(dx * dx + dy * dy);
+    qreal distance = sqrt(dx * dx + dy * dy);
 
-    double pressure = pi2.pressure();
+    qreal pressure = pi2.pressure();
     if (m_mousePressureEnabled && pi1.pressure() == 0.5) { // it is mouse
         pressure = 1.0 - computeMousePressure(distance);
     } else { // leave it as it is
@@ -166,7 +166,7 @@ void Brush::paintLine(KisPaintDeviceSP dev, const KisPaintInformation &pi1, cons
     m_accessor = &accessor;
     m_dev = dev;
 
-    double inkDeplation;
+    qreal inkDeplation;
 
     QHash<QString, QVariant> params;
     params["h"] = 0.0;
@@ -192,20 +192,20 @@ void Brush::paintLine(KisPaintDeviceSP dev, const KisPaintInformation &pi1, cons
                       }*/
         bristle = &m_bristles[i];
 
-        double fx1, fy1, fx2, fy2;
-        double rndFactor = m_randomFactor;
-        double scaleFactor = m_scaleFactor;
-        double shearFactor = m_shearFactor;
+        qreal fx1, fy1, fx2, fy2;
+        qreal rndFactor = m_randomFactor;
+        qreal scaleFactor = m_scaleFactor;
+        qreal shearFactor = m_shearFactor;
 
-        double randomX = drand48();
-        double randomY = drand48();
+        qreal randomX = drand48();
+        qreal randomY = drand48();
         randomX -= 0.5;
         randomY -= 0.5;
         randomX *= rndFactor;
         randomY *= rndFactor;
 
-        double scale = pressure * scaleFactor;
-        double shear = pressure * shearFactor;
+        qreal scale = pressure * scaleFactor;
+        qreal shear = pressure * shearFactor;
 
         m_transform.reset();
         m_transform.scale(scale, scale);
@@ -281,7 +281,7 @@ void Brush::paintLine(KisPaintDeviceSP dev, const KisPaintInformation &pi1, cons
 
             // opacity transformation of the bristle color
             if (m_useOpacity){
-                double opacity = 255.0;
+                qreal opacity = 255.0;
                 if (m_useWeights){
                     opacity = (
                         (pressure*m_pressureWeight)+

@@ -122,7 +122,7 @@ void KisToolStar::paint(QPainter& gc, const KoViewConverter &converter)
     if (!m_dragging)
         return;
 
-    double sx, sy;
+    qreal sx, sy;
     converter.zoom(&sx, &sy);
 
     gc.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());

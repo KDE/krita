@@ -513,7 +513,7 @@ void KisView2::createGUI()
 
     KConfigGroup group(KGlobal::config(), "GUI");
     QFont dockWidgetFont  = KGlobalSettings::generalFont();
-    double pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
+    qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
     pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
     dockWidgetFont.setPointSizeF(pointSize);
 

@@ -60,7 +60,7 @@ QSizeF KisImageViewConverter::viewToDocument(const QSizeF &viewSize) const
     return QSizeF(viewToDocumentX(viewSize.width()), viewToDocumentY(viewSize.height()));
 }
 
-void KisImageViewConverter::zoom(double *zoomX, double *zoomY) const
+void KisImageViewConverter::zoom(qreal *zoomX, qreal *zoomY) const
 {
     Q_ASSERT(zoomX);
     Q_ASSERT(zoomY);

@@ -106,7 +106,7 @@ KisToolMeasure::~KisToolMeasure()
 
 void KisToolMeasure::paint(QPainter& gc, const KoViewConverter &converter)
 {
-    double sx, sy;
+    qreal sx, sy;
     converter.zoom(&sx, &sy);
 
     if (!currentImage()) return;

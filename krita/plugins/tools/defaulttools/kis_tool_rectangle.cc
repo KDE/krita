@@ -56,7 +56,7 @@ KisToolRectangle::~KisToolRectangle()
 
 void KisToolRectangle::paint(QPainter& gc, const KoViewConverter &converter)
 {
-    double sx, sy;
+    qreal sx, sy;
     converter.zoom(&sx, &sy);
     if (!currentImage()) {
         kWarning() << "No currentImage!";

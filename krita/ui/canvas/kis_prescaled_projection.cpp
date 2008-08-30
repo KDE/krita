@@ -513,16 +513,16 @@ void KisPrescaledProjection::drawScaledImage(const QRect & rc,  QPainter & gc, b
     Q_ASSERT(m_d->viewConverter);
 
     // get the x and y zoom level
-    double zoomX, zoomY;
+    qreal zoomX, zoomY;
     m_d->viewConverter->zoom(&zoomX, &zoomY);
 
     // Get the KisImage resolution
-    double xRes = m_d->image->xRes();
-    double yRes = m_d->image->yRes();
+    qreal xRes = m_d->image->xRes();
+    qreal yRes = m_d->image->yRes();
 
     // Compute the scale factors
-    double scaleX = zoomX / xRes;
-    double scaleY = zoomY / yRes;
+    qreal scaleX = zoomX / xRes;
+    qreal scaleY = zoomY / yRes;
 
     // Size of the image in KisImage pixels
     QSize imagePixelSize(m_d->image->width(), m_d->image->height());

@@ -75,7 +75,7 @@ protected:
 // Implement KoCanvasBase
 public:
     // These methods are not needed.
-    void gridSize(double *, double *) const {
+    void gridSize(qreal *, qreal *) const {
         Q_ASSERT(false);
     }
     bool snapToGrid() const {

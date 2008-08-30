@@ -34,7 +34,7 @@ KisShapeSelectionCanvas::~KisShapeSelectionCanvas()
 {
 }
 
-void KisShapeSelectionCanvas::gridSize(double *horizontal, double *vertical) const
+void KisShapeSelectionCanvas::gridSize(qreal *horizontal, qreal *vertical) const
 {
     Q_ASSERT(false); // This should never be called as this canvas should have no tools.
     Q_UNUSED(horizontal);

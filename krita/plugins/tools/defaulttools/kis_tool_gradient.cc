@@ -159,7 +159,7 @@ void KisToolGradient::paint(QPainter &painter, const KoViewConverter &converter)
         } else
 #endif
         {
-            double sx, sy;
+            qreal sx, sy;
             converter.zoom(&sx, &sy);
             painter.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
             paintLine(painter);

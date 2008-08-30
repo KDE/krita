@@ -22,4 +22,7 @@ cursor.insertText("Foo  Bar");
 cursor.insertBlock();
 cursor.insertText("Foo ");
 
+cursor.insertBlock();
+cursor.insertText(" Foo");
+
 return document;

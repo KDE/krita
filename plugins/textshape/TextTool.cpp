@@ -521,12 +521,10 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     }
 }
 
-void TextTool::updateSelectedShape(KoPointerEvent *event)
+void TextTool::updateSelectedShape(const QPointF &point)
 {
-    const bool canMoveCaret = event->button() == Qt::LeftButton;
-
-    if (canMoveCaret && ! m_textShape->boundingRect().contains(event->point)) {
-        QRectF area(event->point, QSizeF(1, 1));
+    if (! m_textShape->boundingRect().contains(point)) {
+        QRectF area(point, QSizeF(1, 1));
         repaintSelection();
         foreach(KoShape *shape, m_canvas->shapeManager()->shapesAt(area, true)) {
             TextShape *textShape = dynamic_cast<TextShape*>(shape);
@@ -543,7 +541,8 @@ void TextTool::updateSelectedShape(KoPointerEvent *event)
 
 void TextTool::mousePressEvent(KoPointerEvent *event)
 {
-    updateSelectedShape(event);
+    if (event->button() != Qt::RightButton)
+        updateSelectedShape(event->point);
     KoSelection *selection = m_canvas->shapeManager()->selection();
     if (!selection->isSelected(m_textShape)) {
         selection->deselectAll();
@@ -746,7 +745,8 @@ void TextTool::mouseDoubleClickEvent(KoPointerEvent *event)
 void TextTool::mouseMoveEvent(KoPointerEvent *event)
 {
     useCursor(Qt::IBeamCursor);
-    updateSelectedShape(event);
+    if (event->buttons())
+        updateSelectedShape(event->point);
 
     int position = pointToPosition(event->point);
 

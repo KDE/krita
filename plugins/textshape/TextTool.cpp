@@ -463,8 +463,8 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                 continue;
             KoTextShapeData *data = ts->textShapeData();
             // check if shape contains some of the selection, if not, skip
-            if (!(data->endPosition() >= selectStart && data->position()  <= selectEnd
-                    || data->position() <= selectStart && data->endPosition() >= selectEnd))
+            if (!( (data->endPosition() >= selectStart && data->position()) <= selectEnd
+                    || (data->position() <= selectStart && data->endPosition() >= selectEnd)) )
                 continue;
             if (painter.hasClipping()) {
                 QRect rect = converter.documentToView(ts->boundingRect()).toRect();

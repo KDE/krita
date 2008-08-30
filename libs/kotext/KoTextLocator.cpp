@@ -21,6 +21,7 @@
 #include "KoTextBlockData.h"
 #include "KoTextShapeData.h"
 #include "KoTextReference.h"
+#include "KoTextPage.h"
 #include "styles/KoListStyle.h"
 
 #include <KoShape.h>
@@ -35,7 +36,7 @@
 class KoTextLocator::Private
 {
 public:
-    Private(KoTextLocator *q) : q(q), document(0), dirty(false), cursorPosition(0), chapterPosition(-1), pageNumber(1) { }
+    Private(KoTextLocator *q) : q(q), document(0), dirty(false), cursorPosition(0), chapterPosition(-1), pageNumber(0) { }
     void update() {
         if (dirty == false)
             return;
@@ -65,7 +66,8 @@ public:
             pageNumber = -1;
         else {
             KoTextShapeData *data = static_cast<KoTextShapeData*>(shape->userData());
-            pageNumber = data->pageNumber(q);
+            KoTextPage* page = data->page();
+            pageNumber = page->pageNumber();
         }
         if (pageTmp != pageNumber || chapterTmp != chapterPosition) {
             foreach(KoTextReference* reference, listeners)

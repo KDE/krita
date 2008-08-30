@@ -20,7 +20,6 @@
  */
 
 #include "KoTextShapeData.h"
-#include <KoXmlWriter.h>
 
 #include <KDebug>
 #include <QUrl>
@@ -34,7 +33,9 @@
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
 
+#include "KoTextPage.h"
 #include "KoInlineObject.h"
 #include "KoInlineTextObjectManager.h"
 #include "styles/KoStyleManager.h"
@@ -61,7 +62,7 @@ public:
             position(-1),
             endPosition(-1),
             direction(KoText::AutoDirection),
-            pageNumberProvider(0) {
+            textpage(0) {
     }
 
     QString saveParagraphStyle(KoShapeSavingContext &context, const KoStyleManager *manager, const QTextBlock &block);
@@ -76,7 +77,7 @@ public:
     int position, endPosition;
     KoInsets margins;
     KoText::Direction direction;
-    QPointer<QObject> pageNumberProvider;
+    KoTextPage *textpage;
 };
 
 
@@ -182,26 +183,14 @@ KoText::Direction KoTextShapeData::pageDirection() const
     return d->direction;
 }
 
-void KoTextShapeData::setPageNumberProvider(QObject* pagenumprovider)
+void KoTextShapeData::setPage(KoTextPage* textpage)
 {
-    d->pageNumberProvider = pagenumprovider;
+    d->textpage = textpage;
 }
 
-QObject* KoTextShapeData::pageNumberProvider() const
+KoTextPage* KoTextShapeData::page() const
 {
-    return d->pageNumberProvider;
-}
-
-int KoTextShapeData::pageNumber(KoInlineObject* inlineObject)
-{
-    Q_ASSERT(d->pageNumberProvider);
-    int pagenumber = -1;
-    bool ok = QMetaObject::invokeMethod(
-                  d->pageNumberProvider, "pageNumber", Qt::DirectConnection,
-                  Q_RETURN_ARG(int, pagenumber), Q_ARG(KoInlineObject*, inlineObject)
-              );
-    Q_ASSERT(ok);
-    return pagenumber;
+    return d->textpage;
 }
 
 bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context)

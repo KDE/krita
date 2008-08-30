@@ -32,7 +32,7 @@ class KoXmlWriter;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoTextShapeDataPrivate;
-class KoInlineObject;
+class KoTextPage;
 
 /**
  * The data store that is held by each KoTextShape instance.
@@ -121,13 +121,10 @@ public:
      */
     KoInsets shapeMargins() const;
 
-//TODO probably it would be better to go with an interface for that...
     /// Set the provider that does provide us the number of the page this shape will appear on.
-    void setPageNumberProvider(QObject* pagenumprovider);
+    void setPage(KoTextPage* textpage);
     /// Returns the provider that does provide us the number of the page this shape will appear on.
-    QObject* pageNumberProvider() const;
-    /// Returns the number of the page for the \a KoInlineObject instance.
-    int pageNumber(KoInlineObject* inlineObject);
+    KoTextPage* page() const;
 
     /**
     * Load the TextShape from ODF.

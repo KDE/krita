@@ -56,6 +56,9 @@ private:
     void variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument);
 
     PageType m_type;
+    int m_pageselect;
+    int m_pageadjust;
+    bool m_fixed;
 };
 
 #endif

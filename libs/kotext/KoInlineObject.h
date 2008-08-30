@@ -195,13 +195,6 @@ public:
      */
     bool propertyChangeListener() const;
 
-    /// @return all attributes.
-    QVariantMap attributes() const;
-    /// @return the attribute defined with \p name .
-    QVariant attribute(const QString& name, const QVariant& defaultValue = QVariant());
-    /// Set the attribute defined with \p name to value \p value .
-    void setAttribute(const QString& name, const QVariant& value);
-
 protected:
     /**
      * We allow a text document to be shown in more than one shape; which brings up the need to figure out

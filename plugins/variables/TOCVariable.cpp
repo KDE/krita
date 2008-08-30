@@ -39,6 +39,7 @@
 #include <KoTextLoader.h>
 #include <KoTextSharedLoadingData.h>
 #include <KoTextBlockData.h>
+#include <KoTextPage.h>
 
 TOCVariable::TOCVariable()
     : KoVariable(true), currentDoc(0), source(TOCSource(this))
@@ -140,7 +141,7 @@ void TOCSource::buildFromDocument (const QTextDocument *source, QTextCursor *tar
                         KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData *>(shape->userData());
                         target->insertText("TOC entry " + 
                             QString::number(blockData->outlineLevel()) + " :" + block.text() +
-                            ";page" + QString::number(shapeData->pageNumber(m_variable))
+                            ";page" + QString::number(shapeData->page()->pageNumber() + 1)
                         );
                         target->insertBlock();
                     }

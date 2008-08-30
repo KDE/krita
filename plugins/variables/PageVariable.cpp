@@ -29,10 +29,13 @@
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
+#include <KoTextPage.h>
 
 PageVariable::PageVariable()
     : KoVariable(true),
-    m_type(PageCount)
+    m_type(PageCount),
+    m_pageselect(0),
+    m_pageadjust(0)
 {
 }
 
@@ -63,9 +66,10 @@ void PageVariable::variableMoved(const KoShape *shape, const QTextDocument *docu
         case PageCount:
             break;
         case PageNumber:
-            if (KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData *>(shape ? shape->userData() : 0)) {
-                if (value().isEmpty() || ! attribute("fixed").toBool()) {
-                    const int pagenumber = shapeData->pageNumber(this);
+            if (value().isEmpty() || ! m_fixed) {
+                if (KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData *>(shape ? shape->userData() : 0)) {
+                    KoTextPage* page = shapeData->page();
+                    const int pagenumber = page->pageNumber(m_pageselect, m_pageadjust);
                     setValue(pagenumber >= 0 ? QString::number(pagenumber + 1) : QString());
                 }
             }
@@ -84,18 +88,20 @@ void PageVariable::saveOdf( KoShapeSavingContext & context )
             writer->endElement();
             break;
         case PageNumber:
-            // <text:page-number text:select-page="current" >3</text:page-number>
+            // <text:page-number text:select-page="current" text:page-adjust="2" text:fixed="true">3</text:page-number>
             writer->startElement("text:page-number", false);
 
-            const QString selectpage = attribute("select-page").toString();
-            if (! selectpage.isEmpty())
-                writer->addAttribute("text:select-page", selectpage);
+            if(m_pageadjust == 0)
+                writer->addAttribute("text:select-page", "current");
+            else if(m_pageadjust == -1)
+                writer->addAttribute("text:select-page", "previous");
+            else if(m_pageadjust == 1)
+                writer->addAttribute("text:select-page", "next");
 
-            const int pageadjust = attribute("page-adjust").toInt();
-            if (pageadjust != 0)
-                writer->addAttribute("text:page-adjust", pageadjust);
+            if (m_pageadjust != 0)
+                writer->addAttribute("text:page-adjust", QString::number(m_pageadjust));
 
-            if (attribute("fixed").toBool())
+            if (m_fixed)
                 writer->addAttribute("text:fixed", "true");
 
             writer->addTextNode(value());
@@ -114,23 +120,26 @@ bool PageVariable::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
     else if ( localName == "page-number" ) {
         m_type = PageNumber;
 
+        // The text:select-page attribute is used to display the number of the previous or the following
+        // page rather than the number of the current page.
+        QString pageselect = element.attributeNS( KoXmlNS::text, "select-page", QString() );
+        if (pageselect == "previous")
+            m_pageselect = -1;
+        else if (pageselect == "next")
+            m_pageselect = 1;
+        else // "current"
+            m_pageselect = 0;
+
         // The value of a page number field can be adjusted by a specified number, allowing the display
         // of page numbers of following or preceding pages. The adjustment amount is specified using
         // the text:page-adjust attribute.
-        const int pageadjust = element.attributeNS( KoXmlNS::text, "page-adjust", QString() ).toInt();
-        setAttribute("page-adjust", pageadjust);
-
-        // The text:select-page attribute is used to display the number of the previous or the following
-        // page rather than the number of the current page.
-        const QString selectpage = element.attributeNS( KoXmlNS::text, "select-page", QString() );
-        setAttribute("select-page", selectpage);
+        m_pageadjust = element.attributeNS( KoXmlNS::text, "page-adjust", QString() ).toInt();
 
         // The text:fixed attribute specifies whether or not the value of a field element is fixed. If
         // the value of a field is fixed, the value of the field element to which this attribute is
         // attached is preserved in all future edits of the document. If the value of the field is not
         // fixed, the value of the field may be replaced by a new value when the document is edited.
-        const bool fixed = element.attributeNS( KoXmlNS::text, "fixed", QString() ) == "true";
-        setAttribute("fixed", fixed);
+        m_fixed = element.attributeNS( KoXmlNS::text, "fixed", QString() ) == "true";
     }
     return true;
 }

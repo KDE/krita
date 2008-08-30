@@ -467,7 +467,7 @@ void KisMaskManager::maskProperties()
             cmd->redo();
             m_view->undoAdapter()->addCommand(cmd);
             m_view->document()->setModified(true);
-            mask->setDirty(selection->selectedExactRect());
+            mask->setDirty(mask->extent());
         }
     } else if (m_activeMask->inherits("KisFilterMask")) {
         KisFilterMask * mask = static_cast<KisFilterMask*>(m_activeMask.data());
@@ -492,7 +492,7 @@ void KisMaskManager::maskProperties()
             cmd->redo();
             m_view->undoAdapter()->addCommand(cmd);
             m_view->document()->setModified(true);
-            mask->setDirty(selection->selectedExactRect());
+            mask->setDirty();
         }
     } else {
         // Not much to show for transparency or selection masks?

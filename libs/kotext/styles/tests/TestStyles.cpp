@@ -64,20 +64,22 @@ void TestStyles::testChangeParent()
     QCOMPARE(style1.topMargin(), 10.0);
     QCOMPARE(style3.topMargin(), 10.0);
 
-    // test that separating will leave the child with exactly the same dataset
+    // test that separating will leave the child with exactly the same dataset 
+    // as it had before the inheritance
     style3.setParent(0);
     QCOMPARE(style1.topMargin(), 10.0);
-    QCOMPARE(style3.topMargin(), 10.0);
+    QCOMPARE(style3.topMargin(), 0.0); // we hadn't explicitly set the margin on style3
 
     // test adding it to another will not destroy any data
     style3.setParent(&style1);
-    QCOMPARE(style1.topMargin(), 10.0);
-    QCOMPARE(style2.topMargin(), 20.0);
-    QCOMPARE(style3.topMargin(), 10.0);
+    QCOMPARE(style1.topMargin(), 10.0); // from style1
+    QCOMPARE(style2.topMargin(), 20.0); // from style2
+    QCOMPARE(style3.topMargin(), 10.0); // inherited from style1
 
-    // Due to the "don't destroy data" above style3 will no longer follow any parent.
+    // Check that style3 now starts following the parent since it does not have
+    // the property set
     style3.setParent(&style2);
-    QCOMPARE(style3.topMargin(), 10.0);
+    QCOMPARE(style3.topMargin(), 20.0); // inherited from style2
 }
 
 void TestStyles::testTabsStorage()

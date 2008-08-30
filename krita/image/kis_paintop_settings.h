@@ -66,6 +66,11 @@ public:
     virtual void setNode(KisNodeSP node);
 
     /**
+     * @return the node the paintop is working on.
+     */
+    KisNodeSP node();
+
+    /**
      * @return a pointer to the widget displaying the settings
      */
     virtual QWidget* widget() const = 0;

@@ -46,9 +46,13 @@ void KisPaintOpSettings::activate()
 {
 }
 
-void KDE_DEPRECATED KisPaintOpSettings::setNode(KisNodeSP node)
+void KisPaintOpSettings::setNode(KisNodeSP node)
 {
     d->node = node;
 }
 
+KisNodeSP KisPaintOpSettings::node()
+{
+    return d->node;
+}
 

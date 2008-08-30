@@ -39,7 +39,7 @@
 class LayoutStateDummy : public KoTextDocumentLayout::LayoutState
 {
 public:
-    LayoutStateDummy() : m_styleManager(0) {}
+    LayoutStateDummy() {}
     bool start() {
         return false;
     }
@@ -76,12 +76,7 @@ public:
         return 0;
     }
     void draw(QPainter *, const KoTextDocumentLayout::PaintContext &) {}
-    KoStyleManager *styleManager() const {
-        return m_styleManager;
-    }
-    void setStyleManager(KoStyleManager *sm) {
-        m_styleManager = sm;
-    }
+
     bool setFollowupShape(KoShape *) {
         return false;
     }
@@ -90,8 +85,6 @@ public:
         return 0;
     }
     void registerInlineObject(const QTextInlineObject &) {}
-
-    KoStyleManager *m_styleManager;
 };
 
 class KoTextDocumentLayout::Private
@@ -138,12 +131,7 @@ KoTextDocumentLayout::~KoTextDocumentLayout()
 void KoTextDocumentLayout::setLayout(LayoutState *layout)
 {
     Q_ASSERT(layout);
-    KoStyleManager *sm = 0;
-    if (m_state)
-        sm = m_state->styleManager();
-    delete m_state;
     m_state = layout;
-    m_state->setStyleManager(sm);
     scheduleLayout();
 }
 
@@ -164,16 +152,6 @@ void KoTextDocumentLayout::addShape(KoShape *shape)
     if (data) {
         data->foul();
         m_state->reset();
-    }
-}
-
-void KoTextDocumentLayout::setStyleManager(KoStyleManager *sm)
-{
-    m_state->setStyleManager(sm);
-    if (document()->isEmpty()) {
-        QTextBlock block = document()->begin();
-        if (block.blockFormat().intProperty(KoParagraphStyle::StyleId) < 100)
-            sm->defaultParagraphStyle()->applyStyle(block);
     }
 }
 
@@ -406,11 +384,6 @@ void KoTextDocumentLayout::layout()
 QList<KoShape*> KoTextDocumentLayout::shapes() const
 {
     return d->shapes;
-}
-
-KoStyleManager *KoTextDocumentLayout::styleManager() const
-{
-    return m_state->styleManager();
 }
 
 KoShape* KoTextDocumentLayout::shapeForPosition(int position) const

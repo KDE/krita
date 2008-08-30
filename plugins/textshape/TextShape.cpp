@@ -58,6 +58,7 @@ struct Finalizer {
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoShapeBackground.h>
+#include <KoTextDocument.h>
 
 #include <QTextLayout>
 #include <QFont>
@@ -99,11 +100,12 @@ void TextShape::setDemoText(bool on)
         for (int i = 0; i < 10; i ++)
             cursor.insertText("Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.\n");
     } else if (m_demoText) {
-        m_textShapeData->document()->clear();
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-        if (lay && lay->styleManager()) {
+        KoTextDocument document(m_textShapeData->document());
+        document.clearText();
+        KoStyleManager *styleManager = document.styleManager();
+        if (styleManager) {
             QTextBlock block = m_textShapeData->document()->begin();
-            lay->styleManager()->defaultParagraphStyle()->applyStyle(block);
+            styleManager->defaultParagraphStyle()->applyStyle(block);
         }
     }
     m_demoText = on;
@@ -268,12 +270,8 @@ bool TextShape::loadOdfFrameElement(const KoXmlElement & element, KoShapeLoading
 
 void TextShape::init(QMap<QString, KoDataCenter *>  dataCenterMap)
 {
-    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>(dataCenterMap["StyleManager"]);
-
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-    if (lay) {
-        lay->setStyleManager(styleManager);
-    }
+    KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(dataCenterMap["StyleManager"]);
+    KoTextDocument(m_textShapeData->document()).setStyleManager(styleManager);
 }
 
 QTextDocument *TextShape::footnoteDocument()

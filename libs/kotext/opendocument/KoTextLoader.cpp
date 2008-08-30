@@ -56,6 +56,7 @@
 #include "styles/KoListStyle.h"
 #include "styles/KoListLevelProperties.h"
 #include "KoTextSharedLoadingData.h"
+#include "KoTextDocument.h"
 
 // KDE + Qt includes
 #include <QTextCursor>
@@ -152,10 +153,7 @@ void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
     kDebug(32500) << "";
 
     const QTextDocument *document = cursor.block().document();
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout *>(document->documentLayout());
-    if (layout) {
-        d->styleManager = layout->styleManager();
-    }
+    d->styleManager = KoTextDocument(document).styleManager();
 
     if ((document->isEmpty()) && (d->styleManager)) {
         QTextBlock block = cursor.block();

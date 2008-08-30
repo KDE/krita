@@ -44,6 +44,7 @@
 #include "styles/KoListLevelProperties.h"
 #include "KoTextDocumentLayout.h"
 #include "KoTextBlockData.h"
+#include "KoTextDocument.h"
 
 #include "opendocument/KoTextLoader.h"
 
@@ -208,7 +209,8 @@ bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContex
     KoTextLoader loader(context);
 
     QTextCursor cursor(document());
-    document()->clear();
+    cursor.select(QTextCursor::Document);
+    cursor.removeSelectedText();
     loader.loadBody(element, cursor);   // now let's load the body from the ODF KoXmlElement.
 
     return true;
@@ -321,7 +323,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to, 
     Q_ASSERT(layout);
     Q_ASSERT(layout->inlineObjectTextManager());
 
-    KoStyleManager *styleManager = layout->styleManager();
+    KoStyleManager *styleManager = KoTextDocument(d->document).styleManager();
     if (styleManager && saveDefaultStyles)
         styleManager->saveOdfDefaultStyles(context.mainStyles());
 

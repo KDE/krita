@@ -36,6 +36,7 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoShape.h>
 #include <KoUnit.h>
+#include <KoTextDocument.h>
 
 #include <KDebug>
 #include <QTextList>
@@ -63,6 +64,7 @@ Layout::Layout(KoTextDocumentLayout *parent)
 
 bool Layout::start()
 {
+    m_styleManager = KoTextDocument(m_parent->document()).styleManager();
     if (m_reset)
         resetPrivate();
     else if (shape)
@@ -479,8 +481,11 @@ void Layout::nextShape()
     m_data->foul(); // make dirty since this one needs relayout at this point.
     m_textShape = dynamic_cast<TextShape*>(shape);
     Q_ASSERT(m_textShape);
-    if (m_textShape->hasFootnoteDocument())
-        m_textShape->footnoteDocument()->clear();
+    if (m_textShape->hasFootnoteDocument()) {
+        QTextCursor cursor(m_textShape->footnoteDocument());
+        cursor.select(QTextCursor::Document);
+        cursor.removeSelectedText();
+    }
     m_shapeBorder = shape->borderInsets();
     m_y += m_shapeBorder.top;
 }
@@ -596,8 +601,11 @@ void Layout::resetPrivate()
 
     m_textShape = dynamic_cast<TextShape*>(shape);
     Q_ASSERT(m_textShape);
-    if (m_textShape->hasFootnoteDocument())
-        m_textShape->footnoteDocument()->clear();
+    if (m_textShape->hasFootnoteDocument()) {
+        QTextCursor cursor(m_textShape->footnoteDocument());
+        cursor.select(QTextCursor::Document);
+        cursor.removeSelectedText();
+    }
     m_demoText = m_textShape->demoText();
     m_data = dynamic_cast<KoTextShapeData*>(shape->userData());
     m_shapeBorder = shape->borderInsets();
@@ -1330,9 +1338,3 @@ qreal Layout::findFootnote(const QTextLine &line)
         return m_textShape->footnoteDocument()->size().height();
     return 0;
 }
-
-void Layout::setStyleManager(KoStyleManager *sm)
-{
-    m_styleManager = sm;
-}
-

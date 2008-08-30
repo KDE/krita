@@ -68,11 +68,6 @@ public:
     /// paint the document
     virtual void draw(QPainter *painter, const KoTextDocumentLayout::PaintContext & context);
 
-    virtual void setStyleManager(KoStyleManager *sm);
-    virtual KoStyleManager *styleManager() const {
-        return m_styleManager;
-    }
-
     /// reimplemented from superclass
     virtual void clearTillEnd();
 

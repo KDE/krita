@@ -57,13 +57,6 @@ public:
     explicit KoTextDocumentLayout(QTextDocument *document, KoTextDocumentLayout::LayoutState *layout = 0);
     virtual ~KoTextDocumentLayout();
 
-    /**
-     * While the text document is standalone, the text can refer to the character
-     * and paragraph styles, and doing so is needed in doing proper text-layout.
-     * Setting the stylemanager on this layouter is therefor required if there is one.
-     */
-    void setStyleManager(KoStyleManager *sm);
-
     /// set the layoutState for this document layout
     void setLayout(LayoutState *layout);
 
@@ -122,9 +115,6 @@ public:
 
     /// return the list of shapes that will be used to run all the text into.
     virtual QList<KoShape*> shapes() const;
-
-    /// return the current styleManager.  Can be 0 if none set.
-    KoStyleManager *styleManager() const;
 
     /**
      * This inner class is an interface that allows the KoTextDocumentLayout to do rough layout
@@ -190,13 +180,6 @@ public:
         KoShape *shape;
         /// The current paragraph layout.
         QTextLayout *layout;
-
-    protected:
-        friend class KoTextDocumentLayout;
-        /// see KoTextDocumentLayout::setStyleManager()
-        virtual void setStyleManager(KoStyleManager *sm) = 0;
-        /// see KoTextDocumentLayout::styleManager()
-        virtual KoStyleManager *styleManager() const = 0;
     };
 
     /**

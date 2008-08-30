@@ -28,6 +28,7 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     KoTextDocumentLayout.cpp
     KoTextOdfSaveHelper.cpp
     KoTextPaste.cpp
+    KoTextDocument.cpp
 
     KoTextEditingRegistry.cpp
     KoTextEditingFactory.cpp

@@ -40,7 +40,7 @@ public:
     Brush();
     ~Brush();
     void paint(KisPaintDeviceSP dev, const KisPaintInformation &info);
-    void paintLine(KisPaintDeviceSP dev, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
+    void paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
     void setInkDepletion(QList<float> *curveData);
     void setInkColor(const KoColor &color);
     void addStrokeSample(StrokeSample sample);
@@ -94,7 +94,9 @@ public:
 
     /// paints single bristle
     void putBristle(Bristle *bristle, float wx, float wy, const KoColor &color);
+    void mixCMY(double x, double y, int cyan, int magenta, int yellow,double weight);
     void addBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color);
+    void oldAddBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color);
     void initDefaultValues();
 
 private:
@@ -107,10 +109,15 @@ private:
     BrushShape m_initialShape;
     KoColor m_inkColor;
 
+    // temporary device
     KisPaintDeviceSP m_dev;
     KisRandomAccessor * m_accessor;
     quint32 m_pixelSize;
 
+    // painter()->device()
+    KisPaintDeviceSP m_layer;
+    KisRandomAccessor * m_layerAccessor;
+    quint32 m_layerPixelSize;
 
     int m_counter;
 

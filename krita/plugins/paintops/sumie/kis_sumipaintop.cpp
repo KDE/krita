@@ -138,12 +138,13 @@ double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
     dab = cachedDab();
     dab->clear();
 
-    m_brush.paintLine(dab, pi1, pi2);
+    m_brush.paintLine(dab,device, pi1, pi2);
 
     QRect rc = dab->extent();
     //qDebug() << rc;
-    //painter()->bitBlt(rc.topLeft(), dab, rc);
-    painter()->bltSelection(rc.x(), rc.y(), device->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN), dab, painter()->opacity(), rc.x(), rc.y(), rc.width(), rc.height());
+    painter()->bitBlt(rc.topLeft(), dab, rc);
+
+    /*painter()->bltSelection(rc.x(), rc.y(), device->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN), dab, painter()->opacity(), rc.x(), rc.y(), rc.width(), rc.height());*/
     // who knows what should be here
     return 0;
 }

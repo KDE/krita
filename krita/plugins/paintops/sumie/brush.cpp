@@ -118,7 +118,7 @@ void Brush::paint(KisPaintDeviceSP dev, const KisPaintInformation &info)
 }
 
 
-void Brush::paintLine(KisPaintDeviceSP dev, const KisPaintInformation &pi1, const KisPaintInformation &pi2)
+void Brush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2)
 {
     /*
       Q_CHECK_PTR(m_accessor);
@@ -126,7 +126,6 @@ void Brush::paintLine(KisPaintDeviceSP dev, const KisPaintInformation &pi1, cons
       Q_CHECK_PTR(m_dev);
       dbgPlugins << "PaintDevice passed...";
     */
-
 
     m_counter++;
 
@@ -165,6 +164,22 @@ void Brush::paintLine(KisPaintDeviceSP dev, const KisPaintInformation &pi1, cons
     m_pixelSize = dev->colorSpace()->pixelSize();
     m_accessor = &accessor;
     m_dev = dev;
+
+
+    KisRandomAccessor laccessor = layer->createRandomAccessor((int)x1, (int)y1);
+    m_layerAccessor = &laccessor;
+    m_layerPixelSize = layer->colorSpace()->pixelSize();
+    m_layer = layer;
+
+    // see rgb value
+    /*QColor rgbcolor;
+    m_layerAccessor->moveTo(x1,y1);
+    m_layer->colorSpace()->toQColor(m_layerAccessor->rawData(), &rgbcolor);
+    dbgPlugins << "Red : "<< rgbcolor.red();
+    dbgPlugins << "Green : "<< rgbcolor.green();
+    dbgPlugins << "Blue : "<< rgbcolor.blue();
+
+    return;*/
 
     qreal inkDeplation;
 
@@ -225,20 +240,12 @@ void Brush::paintLine(KisPaintDeviceSP dev, const KisPaintInformation &pi1, cons
         fx2 += x2;
         fy2 += y2;
 
-        /*            fx1 =  ( randomFactor + x1 + bristle->x()* scale );
-                      fy1 =  ( randomFactor + y1 + bristle->y()* scale );
-
-                      fx2 =  ( randomFactor + x2 + bristle->x()* scale );
-                      fy2 =  ( randomFactor + y2 + bristle->y()* scale );*/
-
         ix1 = (int)fx1;
         iy1 = (int)fy1;
         ix2 = (int)fx2;
         iy2 = (int)fy2;
 
         // paint between first and last dab
-        //lines.drawLine(m_dev, ix1, iy1, ix2, iy2, brColor);
-
         bristlePath = trajectory.getLinearTrajectory(QPointF(fx1, fy1), QPointF(fx2, fy2), 1.0);
 
         brColor = bristle->color();
@@ -302,17 +309,19 @@ void Brush::paintLine(KisPaintDeviceSP dev, const KisPaintInformation &pi1, cons
             }
 
             QPointF *bristlePos = &bristlePath[i];
-            //putBristle(bristle, bristlePos->x(), bristlePos->y(), brColor);
             addBristleInk(bristle, bristlePos->x(), bristlePos->y(), brColor);
+
+            /*
+            // some kind of nice weighted bidirectional painting
+            // FIXME: 8-bit specific
+            QColor qcolor;
+            brColor.toQColor(&qcolor);
+            // instead of magic constant use pressure
+            //mixCMY(bristlePos->x(), bristlePos->y(), qcolor.cyan(), qcolor.magenta(), qcolor.yellow(), 0.20);
+            mixCMY(bristlePos->x(), bristlePos->y(), qcolor.cyan(), qcolor.magenta(), qcolor.yellow(), pressure*0.30);
+            */
             bristle->setInkAmount(1.0 - inkDeplation);
         }
-        //dbgPlugins << "path size" << path.size();
-
-        // paint start bristle
-        //putBristle(ix1, iy1, brColor);
-        // paint end bristle
-        //putBristle(ix2,iy2, brColor);
-        // set ink amount for next paint
 
     }
     rotateBristles(-(angle + 1.57));
@@ -365,14 +374,38 @@ Brush::~Brush()
           }*/
 }
 
-
+// TODO: Use KisPaintOpSettings::node() instead of painter()-device();
+// I suppose that this does not work the way we want...
 void Brush::addBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color)
+{
+    KoMixColorsOp * mixOp = m_dev->colorSpace()->mixColorsOp();
+    m_accessor->moveTo((int)wx, (int)wy);
+    m_layerAccessor->moveTo((int)wx, (int)wy);
+
+    const quint8 *colors[2];
+    colors[0] = color.data();
+    // now this reads pixels when incremental paint used!
+    colors[1] = m_layerAccessor->rawData(); 
+
+    qint16 colorWeights[2];
+
+    colorWeights[0] = static_cast<quint8>(color.opacity());
+    colorWeights[1] = static_cast<quint8>(255 - color.opacity());
+    // draw on dab -- temporary device
+    mixOp->mixColors(colors, colorWeights, 2, m_accessor->rawData());
+
+    //memcpy ( m_accessor->rawData(), color.data(), m_pixelSize );
+    // bristle delivered some ink
+    bristle->upIncrement();
+}
+
+void Brush::oldAddBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color)
 {
     KoMixColorsOp * mixOp = m_dev->colorSpace()->mixColorsOp();
     m_accessor->moveTo((int)wx, (int)wy);
     const quint8 *colors[2];
     colors[0] = color.data();
-    colors[1] = m_accessor->rawData();
+    colors[1] = m_accessor->rawData(); // this is always (0,0,0) in RGB
 
     qint16 colorWeights[2];
 
@@ -380,11 +413,151 @@ void Brush::addBristleInk(Bristle *bristle, float wx, float wy, const KoColor &c
     colorWeights[1] = static_cast<quint8>(255 - color.opacity());
     mixOp->mixColors(colors, colorWeights, 2, m_accessor->rawData());
 
-    //memcpy ( m_accessor->rawData(), c.data(), m_pixelSize );
+    //memcpy ( m_accessor->rawData(), color.data(), m_pixelSize );
     // bristle delivered some ink
     bristle->upIncrement();
-
 }
+
+
+// FIXME : 8 bit specific
+// Description: this reads pixel from layer and mix CMY color with weight
+// Here is the question : is this for paintOp or for compositeOp?
+void Brush::mixCMY(double x, double y, int cyan, int magenta, int yellow,double weight){
+    int MAX_CHANNEL_VALUE = 256;
+    int nred, ngreen, nblue;
+
+    int ix = (int)x;
+    int nextX = ix + 1;
+    int iy = (int)y;
+    int nextY = iy + 1;
+
+    double nextXdist = (double)nextX - x;
+    double xDist = 1.0f - nextXdist;
+
+    double nextYdist = (double)nextY - y;
+    double yDist = 1.0f - nextYdist;
+
+    QColor layerQColor;
+    QColor result;
+    KoColor kcolor( m_dev->colorSpace() );
+
+    // ============
+    double brightness = MAX_CHANNEL_VALUE * nextXdist * nextYdist * weight;
+    m_layerAccessor->moveTo(ix,iy);
+    m_layer->colorSpace()->toQColor(m_layerAccessor->rawData(), &layerQColor);
+
+    nred = (int)(layerQColor.red()*MAX_CHANNEL_VALUE - brightness * cyan);
+    if(nred < 0)
+        nred = 0;
+
+    ngreen = (int)(layerQColor.green()*MAX_CHANNEL_VALUE - brightness * magenta);
+        if(ngreen < 0)
+            ngreen = 0;
+
+    nblue = (int)(layerQColor.blue()*MAX_CHANNEL_VALUE - brightness * yellow);
+    if(nblue < 0)
+        nblue = 0;
+
+    result.setRgb(
+        nred / MAX_CHANNEL_VALUE, 
+        ngreen / MAX_CHANNEL_VALUE, 
+        nblue / MAX_CHANNEL_VALUE, 
+        MAX_CHANNEL_VALUE -1 );
+
+    kcolor.fromQColor(result);
+    m_accessor->moveTo(ix,iy);
+    memcpy ( m_accessor->rawData(), kcolor.data(), m_pixelSize );
+
+
+    // ============
+    brightness = MAX_CHANNEL_VALUE * xDist * nextYdist * weight;
+    m_layerAccessor->moveTo(nextX, iy);
+    m_layer->colorSpace()->toQColor(m_layerAccessor->rawData(), &layerQColor);
+
+    nred = (int)(layerQColor.red()*MAX_CHANNEL_VALUE - brightness * cyan);
+        if(nred < 0)
+            nred = 0;
+
+    ngreen = (int)(layerQColor.green()*MAX_CHANNEL_VALUE - brightness * magenta);
+        if(ngreen < 0)
+            ngreen = 0;
+
+    nblue = (int)(layerQColor.blue()*MAX_CHANNEL_VALUE - brightness * yellow);
+        if(nblue < 0)
+            nblue = 0;
+
+    result.setRgb(
+        nred / MAX_CHANNEL_VALUE, 
+        ngreen / MAX_CHANNEL_VALUE, 
+        nblue / MAX_CHANNEL_VALUE, 
+        MAX_CHANNEL_VALUE -1 );
+
+    kcolor.fromQColor(result);
+    m_accessor->moveTo(nextX, iy);
+    memcpy ( m_accessor->rawData(), kcolor.data(), m_pixelSize );
+
+
+    // ============
+    brightness = MAX_CHANNEL_VALUE * nextXdist * yDist * weight;
+    m_layerAccessor->moveTo(ix, nextY);
+    m_layer->colorSpace()->toQColor(m_layerAccessor->rawData(), &layerQColor);
+
+    nred = (int)(layerQColor.red()*MAX_CHANNEL_VALUE - brightness * cyan);
+    if(nred < 0){
+        nred = 0;
+    }
+
+    ngreen = (int)(layerQColor.green()*MAX_CHANNEL_VALUE - brightness * magenta);
+    if(ngreen < 0){
+        ngreen = 0;
+    }
+
+    nblue = (int)(layerQColor.blue()*MAX_CHANNEL_VALUE - brightness * yellow);
+    if(nblue < 0){
+        nblue = 0;
+    }
+
+    result.setRgb(
+        nred / MAX_CHANNEL_VALUE, 
+        ngreen / MAX_CHANNEL_VALUE, 
+        nblue / MAX_CHANNEL_VALUE, 
+        MAX_CHANNEL_VALUE -1 );
+
+    kcolor.fromQColor(result);
+    m_accessor->moveTo(ix, nextY);
+    memcpy ( m_accessor->rawData(), kcolor.data(), m_pixelSize );
+
+    // ============
+    brightness = MAX_CHANNEL_VALUE * xDist * yDist * weight;
+    m_layerAccessor->moveTo(nextX, nextY);
+    m_layer->colorSpace()->toQColor(m_layerAccessor->rawData(), &layerQColor);
+
+    nred = (int)(layerQColor.red()*MAX_CHANNEL_VALUE - brightness * cyan);
+    if(nred < 0){
+        nred = 0;
+    }
+
+    ngreen = (int)(layerQColor.green()*MAX_CHANNEL_VALUE - brightness * magenta);
+    if(ngreen < 0){
+        ngreen = 0;
+    }
+
+    nblue = (int)(layerQColor.blue()*MAX_CHANNEL_VALUE - brightness * yellow);
+    if(nblue< 0){
+        nblue= 0;
+    }
+
+    result.setRgb(
+        nred / MAX_CHANNEL_VALUE, 
+        ngreen / MAX_CHANNEL_VALUE, 
+        nblue / MAX_CHANNEL_VALUE, 
+        MAX_CHANNEL_VALUE -1 );
+
+    kcolor.fromQColor(result);
+    m_accessor->moveTo(nextX, nextY);
+    memcpy ( m_accessor->rawData(), kcolor.data(), m_pixelSize );
+}
+
 
 void Brush::putBristle(Bristle *bristle, float wx, float wy, const KoColor &color)
 {

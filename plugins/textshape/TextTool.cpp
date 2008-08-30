@@ -490,6 +490,8 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     foreach(TextShape *ts, shapesToPaint) {
         KoTextShapeData *data = ts->textShapeData();
         Q_ASSERT(data);
+        if (data->endPosition() == -1)
+            continue;
 
         painter.save();
         painter.setMatrix(painter.matrix() * ts->absoluteTransformation(&converter));
@@ -1198,6 +1200,8 @@ void TextTool::repaintSelection(int startPosition, int endPosition)
 
 QRectF TextTool::textRect(int startPosition, int endPosition) const
 {
+    Q_ASSERT(startPosition >= 0);
+    Q_ASSERT(endPosition >= 0);
     if (startPosition > endPosition)
         qSwap(startPosition, endPosition);
     QTextBlock block = m_textShapeData->document()->findBlock(startPosition);

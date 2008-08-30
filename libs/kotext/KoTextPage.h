@@ -65,9 +65,6 @@ public:
     //pages cause after page1 a blank page got added (may depend on pageSide()).
     //int pageCount()
 
-    //for text:page-continuation (text:page-continuation-string);
-    //QString pageContinuation(SelectPage select = SelectCurrentPage)
-
 };
 
 #endif

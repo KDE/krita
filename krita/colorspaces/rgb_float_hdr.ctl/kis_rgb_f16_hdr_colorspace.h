@@ -25,7 +25,7 @@
 
 #include "kis_rgb_float_hdr_colorspace.h"
 
-typedef KoRgbTraits<float> RgbF16Traits;
+typedef KoRgbTraits<half> RgbF16Traits;
 
 class KisRgbF16HDRColorSpace : public KisRgbFloatHDRColorSpace<RgbF16Traits>
 {

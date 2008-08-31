@@ -173,11 +173,11 @@ bool KoPADocument::saveOdf( SavingContext & documentContext )
     //add manifest line for content.xml
     documentContext.odfStore.manifestWriter()->addManifestEntry( "content.xml", "text/xml" );
 
-    if ( !paContext.saveDataCenter( documentContext.odfStore.store(), documentContext.odfStore.manifestWriter() ) ) {
+    if ( ! mainStyles.saveOdfStylesDotXml( documentContext.odfStore.store(), documentContext.odfStore.manifestWriter() ) ) {
         return false;
     }
 
-    return mainStyles.saveOdfStylesDotXml( documentContext.odfStore.store(), documentContext.odfStore.manifestWriter() );
+    return paContext.saveDataCenter( documentContext.odfStore.store(), documentContext.odfStore.manifestWriter() );
 }
 
 bool KoPADocument::completeSaving( KoStore* store)

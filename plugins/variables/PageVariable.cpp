@@ -109,11 +109,11 @@ void PageVariable::saveOdf( KoShapeSavingContext & context )
             // <text:page-number text:select-page="current" text:page-adjust="2" text:fixed="true">3</text:page-number>
             writer->startElement("text:page-number", false);
 
-            if(m_pageadjust == 0)
+            if(m_pageselect == 0)
                 writer->addAttribute("text:select-page", "current");
-            else if(m_pageadjust == -1)
+            else if(m_pageselect == -1)
                 writer->addAttribute("text:select-page", "previous");
-            else if(m_pageadjust == 1)
+            else if(m_pageselect == 1)
                 writer->addAttribute("text:select-page", "next");
 
             if (m_pageadjust != 0)
@@ -129,9 +129,9 @@ void PageVariable::saveOdf( KoShapeSavingContext & context )
             // <text:page-continuation-string text:select-page="previous">The Text</text:page-continuation-string>
             writer->startElement("page-continuation-string", false);
 
-            if(m_pageadjust == -1)
+            if(m_pageselect == -1)
                 writer->addAttribute("text:select-page", "previous");
-            else if(m_pageadjust == 1)
+            else if(m_pageselect == 1)
                 writer->addAttribute("text:select-page", "next");
 
             writer->addTextNode(m_continuation);

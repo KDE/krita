@@ -34,7 +34,7 @@ PageVariableFactory::PageVariableFactory()
     var1.id = "pagecount";
     var1.name = i18n("Page Count");
     KoProperties *props = new KoProperties();
-    props->setProperty("count", true);
+    props->setProperty("vartype", 1);
     var1.properties = props;
     addTemplate(var1);
 
@@ -42,12 +42,20 @@ PageVariableFactory::PageVariableFactory()
     var2.id = "pagenumber";
     var2.name = i18n("Page Number");
     props = new KoProperties();
-    props->setProperty("count", false);
+    props->setProperty("vartype", 2);
     var2.properties = props;
     addTemplate(var2);
 
+    //KoVariableTemplate var3;
+    //var3.id = "pagecontinuation";
+    //var3.name = i18n("Page Continuation");
+    //props = new KoProperties();
+    //props->setProperty("vartype", 3);
+    //var3.properties = props;
+    //addTemplate(var3);
+
     QStringList elementNames;
-    elementNames << "page-count" << "page-number";
+    elementNames << "page-count" << "page-number" << "page-continuation-string";
     setOdfElementNames( KoXmlNS::text, elementNames );
 }
 

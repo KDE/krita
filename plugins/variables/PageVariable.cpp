@@ -40,10 +40,19 @@ PageVariable::PageVariable()
 }
 
 void PageVariable::setProperties(const KoProperties *props) {
-    if (props->boolProperty("count")) {
-        m_type = PageCount;
-    } else {
-        m_type = PageNumber;
+    switch(props->intProperty("vartype")) {
+        case 1:
+            m_type = PageCount;
+            break;
+        case 2:
+            m_type = PageNumber;
+            break;
+        case 3:
+            m_type = PageContinuation;
+            break;
+        default:
+            Q_ASSERT(false);
+            break;
     }
 }
 
@@ -55,6 +64,8 @@ void PageVariable::propertyChanged(Property property, const QVariant &value) {
             }
             break;
         case PageNumber:
+            break;
+        case PageContinuation:
             break;
     }
 }
@@ -72,6 +83,13 @@ void PageVariable::variableMoved(const KoShape *shape, const QTextDocument *docu
                     const int pagenumber = page->pageNumber(m_pageselect, m_pageadjust);
                     setValue(pagenumber >= 0 ? QString::number(pagenumber + 1) : QString());
                 }
+            }
+            break;
+        case PageContinuation:
+            if (KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData *>(shape ? shape->userData() : 0)) {
+                KoTextPage* page = shapeData->page();
+                const int pagenumber = page->pageNumber(m_pageselect);
+                setValue(pagenumber >= 0 ? m_continuation : QString());
             }
             break;
     }
@@ -107,6 +125,18 @@ void PageVariable::saveOdf( KoShapeSavingContext & context )
             writer->addTextNode(value());
             writer->endElement();
             break;
+        case PageContinuation:
+            // <text:page-continuation-string text:select-page="previous">The Text</text:page-continuation-string>
+            writer->startElement("page-continuation-string", false);
+
+            if(m_pageadjust == -1)
+                writer->addAttribute("text:select-page", "previous");
+            else if(m_pageadjust == 1)
+                writer->addAttribute("text:select-page", "next");
+
+            writer->addTextNode(m_continuation);
+            writer->endElement();
+            break;
     }
 }
 
@@ -140,6 +170,22 @@ bool PageVariable::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
         // attached is preserved in all future edits of the document. If the value of the field is not
         // fixed, the value of the field may be replaced by a new value when the document is edited.
         m_fixed = element.attributeNS( KoXmlNS::text, "fixed", QString() ) == "true";
+    }
+    else if ( localName == "page-continuation-string" ) {
+        m_type = PageContinuation;
+
+        // This attribute specifies whether to check for a previous or next page and if the page exists, the
+        // continuation text is printed.
+        QString pageselect = element.attributeNS( KoXmlNS::text, "select-page", QString() );
+        if (pageselect == "previous")
+            m_pageselect = -1;
+        else if (pageselect == "next")
+            m_pageselect = 1;
+        else // should not happen
+            m_pageselect = 0;
+
+        // The text to display
+        m_continuation = element.text();
     }
     return true;
 }

@@ -102,9 +102,9 @@ static double paintBezierCurve(KisPaintOp *paintOp,
                                const double savedDist)
 {
     qreal newDistance;
-    LineEquation line(&pi1.pos(), &pi2.pos());
-    qreal d1 = line.distance(control1);
-    qreal d2 = line.distance(control2);
+    LineEquation line = LineEquation::Through(toKisVector2D(pi1.pos()), toKisVector2D(pi2.pos()));
+    qreal d1 = line.absDistance(control1);
+    qreal d2 = line.absDistance(control2);
 
     if (d1 < BEZIER_FLATNESS_THRESHOLD && d2 < BEZIER_FLATNESS_THRESHOLD) {
         newDistance = paintOp->paintLine(pi1, pi2, savedDist);

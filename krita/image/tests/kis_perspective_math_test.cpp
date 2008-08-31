@@ -46,34 +46,5 @@ void KisPerspectiveMathTest::testComputeMatrixTransfo()
     }
 }
 
-
-void KisPerspectiveMathTest::testLines()
-{
-    for (int i = 0; i < 10; i++) {
-        KisVector2D center = KisVector2D::Random();
-        KisVector2D u = KisVector2D::Random();
-        KisVector2D v = KisVector2D::Random();
-        qreal a = Eigen::ei_random<qreal>();
-
-        QPointF pu  = toQPointF(center + u);
-        QPointF pau = toQPointF(center + a * u);
-        QPointF pv  = toQPointF(center + v);
-        QPointF pav = toQPointF(center + a * v);
-
-        LineEquation line_u(&pu, &pau);
-        LineEquation line_v(&pv, &pav);
-
-        // the line equations should be normalized so that a^2+b^2=1
-        QVERIFY(Eigen::ei_isApprox(line_u.a()*line_u.a() + line_u.b()*line_u.b(), qreal(1)));
-        QVERIFY(Eigen::ei_isApprox(line_v.a()*line_v.a() + line_v.b()*line_v.b(), qreal(1)));
-
-        KisVector2D result = line_u.intersection(line_v);
-
-        // the lines should intersect at the point we called "center"
-        QVERIFY(result.isApprox(center));
-    }
-}
-
-
 QTEST_KDEMAIN(KisPerspectiveMathTest, GUI)
 #include "kis_perspective_math_test.moc"

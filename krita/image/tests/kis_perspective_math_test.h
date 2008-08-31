@@ -27,7 +27,6 @@ class KisPerspectiveMathTest : public QObject
 private slots:
 
     void testComputeMatrixTransfo();
-    void testLines();
 
 };
 

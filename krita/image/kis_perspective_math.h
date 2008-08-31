@@ -21,53 +21,18 @@
 #ifndef _KIS_PERSPECTIVE_MATH_H_
 #define _KIS_PERSPECTIVE_MATH_H_
 
-#include <QPointF>
-
 #include "kis_vec.h"
+#include <QPointF>
+#include <Eigen/Geometry>
+
 typedef Eigen::Matrix<qreal, 3, 3> Matrix3qreal;
 typedef Eigen::Matrix<qreal, 9, 9> Matrix9qreal;
 typedef Eigen::Matrix<qreal, 9, 1> Vector9qreal;
+typedef Eigen::Hyperplane<qreal, 2> LineEquation;
 
 #include <krita_export.h>
 
 class QRect;
-
-class KRITAIMAGE_EXPORT LineEquation
-{
-private:
-    // a*x + b*y = c. We normalize a and b so that a^2+b^2=1. This makes computing the line equation
-    // slightly more complex, but simplifies computing intersections and point-to-line-distance.
-    KisVector2D m_normal; // the coords of this vector are a and b. The norm of this vector is 1.
-    qreal m_c;
-    void compute(const KisVector2D& p1, const KisVector2D& p2);
-
-public:
-    inline LineEquation(const KisVector2D& p1, const KisVector2D& p2) {
-        compute(p1, p2);
-    }
-    inline LineEquation(const QPointF* p1, const QPointF* p2) {
-        compute(toKisVector2D(*p1), toKisVector2D(*p2));
-    }
-    KisVector2D intersection(const LineEquation& other) const;
-    inline qreal distance(const KisVector2D& p) const {
-        return std::abs(normal().dot(p) - c());
-    }
-    inline qreal distance(const QPointF& p) const {
-        return distance(toKisVector2D(p));
-    }
-    inline const qreal& a() const {
-        return m_normal.coeff(0);
-    }
-    inline const qreal& b() const {
-        return m_normal.coeff(1);
-    }
-    inline const qreal& c() const {
-        return m_c;
-    }
-    inline const KisVector2D normal() const {
-        return m_normal;
-    }
-};
 
 class KRITAIMAGE_EXPORT KisPerspectiveMath
 {

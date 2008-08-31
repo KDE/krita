@@ -102,7 +102,8 @@ KisSubPerspectiveGrid::~KisSubPerspectiveGrid()
 
 QPointF KisSubPerspectiveGrid::computeVanishingPoint(KisPerspectiveGridNodeSP p11, KisPerspectiveGridNodeSP p12, KisPerspectiveGridNodeSP p21, KisPerspectiveGridNodeSP p22)
 {
-    return toQPointF(LineEquation(p11, p12).intersection(LineEquation(p21, p22)));
+    return toQPointF(LineEquation::Through(toKisVector2D(*p11), toKisVector2D(*p12))
+           .intersection(LineEquation::Through(toKisVector2D(*p21), toKisVector2D(*p22))));
 }
 
 bool KisSubPerspectiveGrid::contains(const QPointF p) const

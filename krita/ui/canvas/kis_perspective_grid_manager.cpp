@@ -131,26 +131,26 @@ void KisPerspectiveGridManager::drawDecoration(QPainter& gc, const QPoint& docum
             // 4 -> bottom-left corner
             // d12 line from top-left to top-right
             // note that the notion of top-left is purely theorical
-            LineEquation d12(grid->topLeft().data(), grid->topRight().data()) ;
+            LineEquation d12 = LineEquation::Through(toKisVector2D(*grid->topLeft()), toKisVector2D(*grid->topRight()));
             QPointF v12 = QPointF(*grid->topLeft() - *grid->topRight());
             v12.setX(v12.x() / grid->subdivisions()); v12.setY(v12.y() / grid->subdivisions());
-            LineEquation d23(grid->topRight().data(), grid->bottomRight().data());
+            LineEquation d23 = LineEquation::Through(toKisVector2D(*grid->topRight()), toKisVector2D(*grid->bottomRight()));
             QPointF v23 = QPointF(*grid->topRight() - *grid->bottomRight());
             v23.setX(v23.x() / grid->subdivisions()); v23.setY(v23.y() / grid->subdivisions());
-            LineEquation d34(grid->bottomRight().data(), grid->bottomLeft().data());
-            LineEquation d41(grid->bottomLeft().data(), grid->topLeft().data());
+            LineEquation d34 = LineEquation::Through(toKisVector2D(*grid->bottomRight()), toKisVector2D(*grid->bottomLeft()));
+            LineEquation d41 = LineEquation::Through(toKisVector2D(*grid->bottomLeft()), toKisVector2D(*grid->topLeft()));
 
             KisVector2D horizVanishingPoint = d12.intersection(d34);
             KisVector2D vertVanishingPoint = d23.intersection(d41);
 
             for (int i = 1; i < grid->subdivisions(); i ++) {
                 KisVector2D pol1 = toKisVector2D(*grid->topRight() + i * v12);
-                LineEquation d1(pol1, vertVanishingPoint);
+                LineEquation d1 = LineEquation::Through(pol1, vertVanishingPoint);
                 KisVector2D pol1b =  d1.intersection(d34);
                 gc.drawLine(pixelToView(toQPointF(pol1)), pixelToView(toQPointF(pol1b)));
 
                 KisVector2D pol2 = toKisVector2D(*grid->bottomRight() + i * v23);
-                LineEquation d2(pol2, horizVanishingPoint);
+                LineEquation d2 = LineEquation::Through(pol2, horizVanishingPoint);
                 KisVector2D pol2b = d2.intersection(d41);
                 gc.drawLine(pixelToView(toQPointF(pol2)), pixelToView(toQPointF(pol2b)));
             }

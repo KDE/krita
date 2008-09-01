@@ -333,7 +333,7 @@ void TestDocumentLayout::testMultipageMargins()
     block = block.next();
     h1.applyStyle(block);
 
-    shape1->setSize(QSizeF(200, 14.4 + 100 + 20 + 12 + 5)); // 5 for fun..
+    shape1->setSize(QSizeF(200, 14.4 + 100 + 20 + 14.4 + 5)); // 5 for fun..
     KoShape *shape2 = new MockTextShape();
     shape2->setSize(QSizeF(120, 1000));
     layout->addShape(shape2);

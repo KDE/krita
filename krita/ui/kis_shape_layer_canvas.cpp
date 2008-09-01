@@ -105,8 +105,8 @@ void KisShapeLayerCanvas::repaint()
     img.fill(0);
     QPainter p(&img);
 
-    if (m_antialias)
-        p.setRenderHint(QPainter::Antialiasing);
+    p.setRenderHint(QPainter::Antialiasing, m_antialias);
+    p.setRenderHint(QPainter::TextAntialiasing, m_antialias);
     p.translate(-r.x(), -r.y());
     p.setClipRect(r);
 #ifdef DEBUG_REPAINT

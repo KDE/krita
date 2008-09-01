@@ -33,7 +33,7 @@ class KOTEXT_EXPORT KoTextPage
 public:
 
     /// Destructor.
-    virtual ~KoTextPage() {}
+    virtual ~KoTextPage();
 
     /**
      * Returns the number of this page for display purposes.

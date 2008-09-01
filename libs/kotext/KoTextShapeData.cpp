@@ -62,7 +62,8 @@ public:
             position(-1),
             endPosition(-1),
             direction(KoText::AutoDirection),
-            textpage(0) {
+            textpage(0)
+    {
     }
 
     QString saveParagraphStyle(KoShapeSavingContext &context, const KoStyleManager *manager, const QTextBlock &block);

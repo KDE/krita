@@ -100,8 +100,11 @@ bool PictureShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeLoa
 
     if ( m_imageCollection ) {
         const QString href = element.attribute("href");
-        KoImageData * data = new KoImageData( m_imageCollection, href);
-        setUserData( data );
+        // this can happen in case it is a presentation:placeholder
+        if ( !href.isEmpty() ) {
+            KoImageData * data = new KoImageData( m_imageCollection, href);
+            setUserData( data );
+        }
     }
 
     return true;

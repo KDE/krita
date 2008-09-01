@@ -42,6 +42,7 @@
 #include "kis_debug.h"
 #include "kis_layer.h"
 #include "kis_image.h"
+#include "kis_config_widget.h"
 
 KisPaintOpRegistry * KisPaintOpRegistry::m_singleton = 0;
 

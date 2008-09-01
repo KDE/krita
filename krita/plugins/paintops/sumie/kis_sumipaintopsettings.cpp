@@ -31,10 +31,32 @@
 #include <KoColor.h>
 #include <qdebug.h>
 
+class KisSumiOpWidget : public KisConfigWidget
+{
+public:
+    KisSumiOpWidget()
+        : KisConfigWidget()
+    {
+    }
+
+    virtual ~KisSumiOpWidget(){}
+
+    virtual void setConfiguration(KisPropertiesConfiguration * config)
+    {
+    }
+
+    virtual KisPropertiesConfiguration* configuration() const
+    {
+        return 0;
+    }
+
+};
+
+
 KisSumiPaintOpSettings::KisSumiPaintOpSettings(QWidget * parent)
         : KisPaintOpSettings()
 {
-    m_optionsWidget = new QWidget(parent);
+    m_optionsWidget = new KisSumiOpWidget();
     m_options = new Ui::WdgSumieOptions();
     m_options->setupUi(m_optionsWidget);
 
@@ -226,12 +248,12 @@ int KisSumiPaintOpSettings::bristleLengthWeight() const
     return m_options->bristleLengthSlider->value();
 }
 
-int KisSumiPaintOpSettings::bristleInkAmountWeight() const 
+int KisSumiPaintOpSettings::bristleInkAmountWeight() const
 {
     return m_options->bristleInkAmountSlider->value();
 }
 
-int KisSumiPaintOpSettings::inkDepletionWeight() const 
+int KisSumiPaintOpSettings::inkDepletionWeight() const
 {
     return m_options->inkDepletionSlider->value();
 }

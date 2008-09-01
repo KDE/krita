@@ -60,7 +60,7 @@ public:
         return c;
     }
 
-    QWidget * widget() const {
+    KisConfigWidget * widget() const {
         return m_optionsWidget;
     }
 

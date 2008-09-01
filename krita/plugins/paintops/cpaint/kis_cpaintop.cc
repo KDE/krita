@@ -32,7 +32,7 @@
 #include <kis_brush.h>
 #include <kis_global.h>
 #include <kis_paint_device.h>
-
+#include <kis_config_widget.h>
 #include <kis_painter.h>
 #include <kis_types.h>
 #include <kis_paintop.h>
@@ -48,6 +48,26 @@
 #include "bristle.h"
 
 
+class KisCPaintOpWidget : public KisConfigWidget
+{
+public:
+    KisCPaintOpWidget()
+        : KisConfigWidget()
+    {
+    }
+
+    virtual ~KisCPaintOpWidget(){}
+
+    virtual void setConfiguration(KisPropertiesConfiguration * config)
+    {
+    }
+
+    virtual KisPropertiesConfiguration* configuration() const
+    {
+        return 0;
+    }
+
+};
 KisCPaintOpFactory::KisCPaintOpFactory()
 {
     m_brushes.resize(6);
@@ -110,7 +130,7 @@ KisCPaintOpSettings::KisCPaintOpSettings(QWidget * parent,  Q3ValueVector<Brush*
         : KisPaintOpSettings()
 {
     m_brushes = brushes;
-    m_optionsWidget = new QWidget(parent);
+    m_optionsWidget = new KisCPaintOpWidget();
     m_options = new Ui::WdgCPaintOptions();
     m_options->setupUi(m_optionsWidget);
     m_options->intInk->setMinimum(0);

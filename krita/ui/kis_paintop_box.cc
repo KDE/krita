@@ -44,6 +44,7 @@
 #include <kis_layer.h>
 #include <kis_resource_server_provider.h>
 #include <kis_paintop_settings.h>
+#include <kis_config_widget.h>
 #include <kis_image.h>
 #include <kis_node.h>
 #include "kis_node_manager.h"

@@ -25,7 +25,7 @@
 #include "kis_shared.h"
 #include "kis_properties_configuration.h"
 
-class QWidget;
+class KisConfigWidget;
 class KoPointerEvent;
 
 
@@ -73,12 +73,13 @@ public:
     /**
      * @return a pointer to the widget displaying the settings
      */
-    virtual QWidget* widget() const = 0;
+    virtual KisConfigWidget* widget() const = 0;
 
     /**
      * Call this function when the paint op is selected or the tool is activated
      */
     virtual void activate();
+
 
 private:
     struct Private;

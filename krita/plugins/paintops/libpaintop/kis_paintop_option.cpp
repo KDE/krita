@@ -26,6 +26,7 @@ public:
     bool checked;
     QString label;
     QWidget * configurationPage;
+    QVector<bool> actuators;
 };
 
 KisPaintOpOption::KisPaintOpOption(const QString & label, bool checked)

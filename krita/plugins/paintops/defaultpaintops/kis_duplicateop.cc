@@ -35,20 +35,40 @@
 #include <KoInputDevice.h>
 #include <KoCompositeOp.h>
 
-#include "kis_image.h"
-#include "kis_brush.h"
-#include "kis_global.h"
-#include "kis_paint_device.h"
-#include "kis_painter.h"
-#include "kis_types.h"
+#include <kis_config_widget.h>
+#include <kis_image.h>
+#include <kis_brush.h>
+#include <kis_global.h>
+#include <kis_paint_device.h>
+#include <kis_painter.h>
+#include <kis_types.h>
 
-#include "kis_paintop.h"
-#include "kis_iterators_pixel.h"
-#include "kis_selection.h"
-#include "kis_perspective_grid.h"
-#include "kis_random_sub_accessor.h"
+#include <kis_paintop.h>
+#include <kis_iterators_pixel.h>
+#include <kis_selection.h>
+#include <kis_perspective_grid.h>
+#include <kis_random_sub_accessor.h>
 
 #include "ui_wdgduplicateop.h"
+
+class KisDuplicateOpWidget : public KisConfigWidget
+{
+public:
+    KisDuplicateOpWidget()
+        : KisConfigWidget()
+    {
+    }
+
+    virtual void setConfiguration(KisPropertiesConfiguration * config)
+    {
+    }
+
+    virtual KisPropertiesConfiguration* configuration() const
+    {
+        return 0;
+    }
+
+};
 
 
 class KisDuplicateOpSettings : public QObject, public KisPaintOpSettings
@@ -61,19 +81,19 @@ public:
     KisDuplicateOpSettings(QWidget* parent, KisImageSP image) :
             QObject(parent),
             KisPaintOpSettings(),
-            m_optionsWidget(new QWidget(parent)),
-            m_uiOptions(new Ui_DuplicateOpOptionsWidget()),
+            m_optionsWidget(new KisDuplicateOpWidget()),
+            m_uiOptions( new Ui_DuplicateOpOptionsWidget()),
             m_image(image),
-            m_isOffsetNotUptodate(true) {
+            m_isOffsetNotUptodate(true)
+    {
         m_uiOptions->setupUi(m_optionsWidget);
-
     }
 
     ~KisDuplicateOpSettings() {
         delete m_uiOptions;
     }
 
-    virtual QWidget *widget() const {
+    virtual KisConfigWidget *widget() const {
         return m_optionsWidget;
     }
 
@@ -138,7 +158,7 @@ public:
     }
 
 private:
-    QWidget* m_optionsWidget;
+    KisConfigWidget* m_optionsWidget;
     Ui_DuplicateOpOptionsWidget* m_uiOptions;
     KisImageSP m_image;
     bool m_isOffsetNotUptodate;

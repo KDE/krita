@@ -20,7 +20,7 @@
 #ifndef KIS_SUMIPAINTOP_SETTINGS_H_
 #define KIS_SUMIPAINTOP_SETTINGS_H_
 
-#include <QWidget>
+#include <kis_config_widget.h>
 
 #include <kis_paintop.h>
 
@@ -37,7 +37,7 @@ public:
 
     virtual KisPaintOpSettingsSP clone() const;
 
-    QWidget * widget() const {
+    KisConfigWidget * widget() const {
         return m_optionsWidget;
     }
 
@@ -72,7 +72,7 @@ public slots:
 
 private:
     Ui::WdgSumieOptions* m_options;
-    QWidget * m_optionsWidget;
+    KisConfigWidget * m_optionsWidget;
 
     int m_curveSamples;
     QList<QPointF> m_curveData;

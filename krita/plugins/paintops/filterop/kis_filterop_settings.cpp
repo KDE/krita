@@ -45,12 +45,33 @@
 #include <kis_paintop_settings.h>
 #include "ui_FilterOpOptionsWidget.h"
 
+class KisFilterOpWidget : public KisConfigWidget
+{
+public:
+    KisFilterOpWidget()
+        : KisConfigWidget()
+    {
+    }
+
+    virtual ~KisFilterOpWidget(){}
+
+    virtual void setConfiguration(KisPropertiesConfiguration * config)
+    {
+    }
+
+    virtual KisPropertiesConfiguration* configuration() const
+    {
+        return 0;
+    }
+
+};
+
 
 
 KisFilterOpSettings::KisFilterOpSettings(QWidget* parent, KisImageSP image)
         : QObject(parent)
         , KisPaintOpSettings()
-        , m_optionsWidget(new QWidget(parent))
+        , m_optionsWidget(new KisFilterOpWidget())
         , m_uiOptions(new Ui_FilterOpOptions())
         , m_currentFilterConfigWidget(0)
         , m_image(image)

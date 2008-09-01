@@ -39,6 +39,7 @@
 
 #include <kis_paintop_settings.h>
 #include <kis_paintop_options_widget.h>
+#include <kis_config_widget.h>
 
 class KisAirbrushOpSettings : public KisPaintOpSettings
 {
@@ -55,9 +56,10 @@ public:
         return c;
     }
 
-    QWidget * widget() const {
+    KisConfigWidget * widget() const {
         return m_optionsWidget;
     }
+
 private:
     KisPaintOpOptionsWidget *m_optionsWidget;
 };

@@ -85,7 +85,7 @@ public:
     virtual void fromXML(const QDomElement&);
     virtual void toXML(QDomDocument&, QDomElement&) const;
 
-    virtual QWidget *widget() const {
+    virtual KisConfigWidget* widget() const {
         return m_optionsWidget;
     }
 

@@ -39,7 +39,7 @@ public:
 };
 
 KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
-        : QWidget(parent)
+        : KisConfigWidget(parent)
         , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsWidget");

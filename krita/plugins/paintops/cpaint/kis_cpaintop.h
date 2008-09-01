@@ -32,7 +32,7 @@ class QPointF;
 class KisPainter;
 class Brush;
 class Stroke;
-
+class KisConfigWidget;
 
 class KisCPaintOpFactory : public KisPaintOpFactory
 {
@@ -73,7 +73,7 @@ public:
     int ink() const;
     int water() const;
 
-    QWidget * widget() const {
+    KisConfigWidget * widget() const {
         return m_optionsWidget;
     }
 
@@ -92,7 +92,7 @@ private:
 
     Q3ValueVector<Brush*> m_brushes;
     Ui::WdgCPaintOptions * m_options;
-    QWidget * m_optionsWidget;
+    KisConfigWidget * m_optionsWidget;
 };
 
 

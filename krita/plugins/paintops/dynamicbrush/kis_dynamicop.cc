@@ -38,7 +38,7 @@
 #include <kis_brush.h>
 #include <kis_global.h>
 #include <KoInputDevice.h>
-
+#include <kis_config_widget.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
 #include <kis_paintop.h>
@@ -57,6 +57,28 @@
 #include "shapes/kis_bristle_shape.h"
 #include "shapes/kis_dab_shape.h"
 
+class KisDynamicOpWidget : public KisConfigWidget
+{
+public:
+    KisDynamicOpWidget()
+        : KisConfigWidget()
+    {
+    }
+
+    virtual ~KisDynamicOpWidget(){}
+
+    virtual void setConfiguration(KisPropertiesConfiguration * config)
+    {
+    }
+
+    virtual KisPropertiesConfiguration* configuration() const
+    {
+        return 0;
+    }
+
+};
+
+
 class KisDynamicOpSettings : public QObject, public KisPaintOpSettings
 {
     Q_OBJECT
@@ -64,7 +86,7 @@ public:
     KisDynamicOpSettings(QWidget* parent, KisBookmarkedConfigurationManager* shapeConfigurationManager, KisBookmarkedConfigurationManager* coloringConfigurationManager);
     virtual ~KisDynamicOpSettings();
     virtual KisPaintOpSettingsSP clone() const;
-    virtual QWidget *widget() const {
+    virtual KisConfigWidget *widget() const {
         return m_optionsWidget;
     }
     /// @return a brush with the current shapes, coloring and program
@@ -76,7 +98,7 @@ public:
     using KisPaintOpSettings::toXML;
     virtual void toXML(QDomDocument&, QDomElement&) const;
 private:
-    QWidget* m_optionsWidget;
+    KisConfigWidget* m_optionsWidget;
     Ui_DynamicBrushOptions* m_uiOptions;
     KisBookmarkedConfigurationsModel* m_shapeBookmarksModel;
     KisBookmarkedConfigurationsModel* m_coloringBookmarksModel;
@@ -112,7 +134,7 @@ KisPaintOpSettingsSP KisDynamicOpFactory::settings(KisImageSP image)
 KisDynamicOpSettings::KisDynamicOpSettings(QWidget* parent, KisBookmarkedConfigurationManager* shapeBookmarksManager, KisBookmarkedConfigurationManager* coloringBookmarksManager) :
         QObject(parent),
         KisPaintOpSettings(),
-        m_optionsWidget(new QWidget(parent)),
+        m_optionsWidget(new KisDynamicOpWidget()),
         m_uiOptions(new Ui_DynamicBrushOptions()),
         m_shapeBookmarksModel(new KisBookmarkedConfigurationsModel(shapeBookmarksManager)),
         m_coloringBookmarksModel(new KisBookmarkedConfigurationsModel(coloringBookmarksManager))

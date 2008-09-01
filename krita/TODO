@@ -142,6 +142,8 @@ BR  * Show no cursor option
         * fix painting with sharpen filter
         *  Small tiles: makes circles, otherwise effect is fun
 BR  * Implement paintop presets and preset editor (necessary to make mixer canvas not break)
+      Also: get http://filsd.deviantart.com/art/GIMP-possible-Defaut-set-92263636 as default 
+      brush set.
 
 * View Plugins
 

@@ -62,6 +62,11 @@ public:
         Q_UNUSED(preset);
     }
 
+    /**
+     * re-implement this to handle actuator events.
+     */
+    //virtual void actuate(KRITA_PAINTOP_OPTION_ACTUATOR actuator);
+
 protected:
 
     bool m_checkable;

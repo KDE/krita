@@ -42,6 +42,7 @@
 #include <kis_paintop_options_widget.h>
 
 
+
 class KisChalkOpSettings : public KisPaintOpSettings
 {
 public:
@@ -57,7 +58,7 @@ public:
         return c;
     }
 
-    QWidget * widget() const {
+    KisConfigWidget * widget() const {
         return m_optionsWidget;
     }
 

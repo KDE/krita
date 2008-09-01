@@ -20,7 +20,7 @@
 
 #include "kis_types.h"
 #include "kis_paintop_settings.h"
-
+class KisConfigWidget;
 class QWidget;
 class KisFilterConfiguration;
 class QDomElement;
@@ -43,7 +43,7 @@ public:
 
     virtual KisPaintOpSettingsSP clone() const;
 
-    virtual QWidget *widget() const {
+    virtual KisConfigWidget *widget() const {
         return m_optionsWidget;
     }
 
@@ -71,7 +71,7 @@ private:
 
 private:
 
-    QWidget* m_optionsWidget;
+    KisConfigWidget* m_optionsWidget;
     Ui_FilterOpOptions* m_uiOptions;
     QGridLayout* m_layout;
     const KisFilterSP m_currentFilter;

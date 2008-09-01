@@ -19,8 +19,8 @@
 #ifndef KIS_PAINTOP_OPTIONS_WIDGET_H
 #define KIS_PAINTOP_OPTIONS_WIDGET_H
 
-#include <QWidget>
 #include <krita_export.h>
+#include <kis_config_widget.h>
 
 class QString;
 class KisPaintOpOption;
@@ -37,7 +37,7 @@ class QListWidgetItem;
  * and has a popdown button that shows a settings widget.
  *
  */
-class KRITAUI_EXPORT KisPaintOpOptionsWidget : public QWidget
+class KRITAUI_EXPORT KisPaintOpOptionsWidget : public KisConfigWidget
 {
 
     Q_OBJECT
@@ -49,6 +49,11 @@ public:
     ~KisPaintOpOptionsWidget();
 
     void addPaintOpOption(KisPaintOpOption * option);
+
+    virtual void setConfiguration(KisPropertiesConfiguration * config) {}
+
+    virtual KisPropertiesConfiguration* configuration() const { return 0; }
+
 
 private slots:
 

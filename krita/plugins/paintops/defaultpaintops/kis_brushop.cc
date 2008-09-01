@@ -160,7 +160,7 @@ public:
     }
 
 
-    virtual QWidget* widget() const {
+    virtual KisConfigWidget * widget() const {
         Q_ASSERT(m_optionsWidget); return m_optionsWidget;
     }
 

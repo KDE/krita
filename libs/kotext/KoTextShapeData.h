@@ -121,9 +121,9 @@ public:
      */
     KoInsets shapeMargins() const;
 
-    /// Set the provider that does provide us the number of the page this shape will appear on.
+    /// Set the provider that provides us the number of the \p page this shape is on.
     void setPage(KoTextPage* textpage);
-    /// Returns the provider that does provide us the number of the page this shape will appear on.
+    /// Returns the provider that provides us the number of the page this shape is on.
     KoTextPage* page() const;
 
     /**

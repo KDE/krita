@@ -27,6 +27,7 @@
  *
  * The KWord KWPage class does implement this interface to provide
  * application specific functionality for single pages.
+ * @see KoTextShapeData::setPage();
  */
 class KOTEXT_EXPORT KoTextPage
 {
@@ -51,10 +52,10 @@ public:
      * implements the ODF text:select-page attribute.
      * \param adjustment The value of the page number will be adjusted by this
      * specified number and if there exist a page with the resulting value it's
-     * page number got returned else -1 will be returned. This implements the
+     * page number gets returned otherwise -1 will be returned. This implements the
      * ODF text:page-adjust attribute.
-     * \return the number of the page starting with zero or -1 if the number is
-     * invalid.
+     * \return the user visible page number, or -1 if the page referenced does not
+     * exist.
      */
     virtual int pageNumber(int select = 0, int adjustment = 0) const = 0;
 

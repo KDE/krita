@@ -101,12 +101,6 @@ bool KisShapeLayer::allowAsChild(KisNodeSP node) const
         return false;
 }
 
-void KisShapeLayer::paintComponent(QPainter &painter, const KoViewConverter &converter)
-{
-    Q_UNUSED(converter);
-    Q_UNUSED(painter);
-}
-
 void KisShapeLayer::addChild(KoShape *object)
 {
     KoShapeLayer::addChild(object);

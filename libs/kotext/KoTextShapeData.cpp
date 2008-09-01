@@ -304,7 +304,7 @@ QHash<QTextList *, QString> KoTextShapeDataPrivate::saveListStyles(KoShapeSaving
     return listStyles;
 }
 
-void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to, bool saveDefaultStyles) const
+void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) const
 {
     KoXmlWriter *writer = &context.xmlWriter();
     QTextBlock block = d->document->findBlock(from);
@@ -314,8 +314,6 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to, 
     Q_ASSERT(layout->inlineObjectTextManager());
 
     KoStyleManager *styleManager = KoTextDocument(d->document).styleManager();
-    if (styleManager && saveDefaultStyles)
-        styleManager->saveOdfDefaultStyles(context.mainStyles());
 
     QHash<QTextList *, QString> listStyles = d->saveListStyles(context, styleManager, block, to);
     QList<QTextList*> textLists; // Store the current lists being stored.

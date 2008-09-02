@@ -108,7 +108,7 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
 
         KoGenStyle style(KoGenStyle::StyleUser, "paragraph");
         paragraphStyle->saveOdf(style);
-        mainStyles.lookup(style, name);
+        mainStyles.lookup(style, name, KoGenStyles::DontForceNumbering);
     }
 
     foreach(KoCharacterStyle *characterStyle, d->charStyles) {
@@ -122,7 +122,7 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
 
         KoGenStyle style(KoGenStyle::StyleUser, "text");
         characterStyle->saveOdf(style);
-        mainStyles.lookup(style, name);
+        mainStyles.lookup(style, name, KoGenStyles::DontForceNumbering);
     }
 
     foreach(KoListStyle *listStyle, d->listStyles) {
@@ -134,7 +134,7 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
 
         KoGenStyle style(KoGenStyle::StyleList);
         listStyle->saveOdf(style);
-        mainStyles.lookup(style, name);
+        mainStyles.lookup(style, name, KoGenStyles::DontForceNumbering);
     }
 }
 

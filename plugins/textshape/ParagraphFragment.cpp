@@ -62,7 +62,7 @@ void ParagraphFragment::initDimensions(QTextBlock textBlock, KoParagraphStyle *p
         m_counter = QRectF(blockData->counterPosition(), QSizeF(blockData->counterWidth() - blockData->counterSpacing(), m_firstLine.height()));
     }
 
-    // folowing lines rectangle
+    // following lines rectangle
     if (!m_isSingleLine) {
         m_followingLines = QRectF(layout->lineAt(1).rect().topLeft(), layout->lineAt(layout->lineCount() - 1).rect().bottomRight());
     } else {

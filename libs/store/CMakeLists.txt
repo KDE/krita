@@ -11,7 +11,7 @@ add_subdirectory( tests )
 
 ########### next target ###############
 
-set(kstore_LIB_SRCS 
+set(kostore_LIB_SRCS 
    KoStore.cpp 
    KoTarStore.cpp 
    KoDirectoryStore.cpp 
@@ -23,20 +23,20 @@ set(kstore_LIB_SRCS
    )
 
 
-kde4_add_library(kstore SHARED ${kstore_LIB_SRCS})
+kde4_add_library(kostore SHARED ${kostore_LIB_SRCS})
 
-target_link_libraries(kstore ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY} ${QT_QTCORE_LIBRARY})
+target_link_libraries(kostore ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY} ${QT_QTCORE_LIBRARY})
 
 if( QCA2_FOUND )
-target_link_libraries(kstore ${QCA2_LIBRARIES})
+target_link_libraries(kostore ${QCA2_LIBRARIES})
 endif( QCA2_FOUND )
 
-set_target_properties(kstore PROPERTIES 
+set_target_properties(kostore PROPERTIES 
    VERSION ${GENERIC_KOFFICE_LIB_VERSION} 
    SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} 
    ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "${QT_QTCORE_LIBRARY};${QT_QTXML_LIBRARY};${KDE4_KDECORE_LIBS}"
 )
-install(TARGETS kstore  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kostore  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############

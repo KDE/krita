@@ -21,7 +21,7 @@ target_link_libraries(
     simpletextshape
     flake
     komain
-    kstore
+    kostore
     ${KDE4_KDEUI_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}

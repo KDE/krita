@@ -25,7 +25,7 @@ kde4_add_plugin(textvariables ${textvariables_SRCS})
 target_link_libraries(
     textvariables
     kotext
-    kstore
+    kostore
     koodf
     komain 
     flake

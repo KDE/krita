@@ -79,7 +79,7 @@ target_link_libraries(
     koguiutils
     kotext
     komain
-    kstore
+    kostore
     pigmentcms
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}

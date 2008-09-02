@@ -51,7 +51,7 @@ target_link_libraries(
     koguiutils
     komain
     flake
-    kstore
+    kostore
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}

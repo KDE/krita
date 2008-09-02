@@ -93,7 +93,7 @@ target_link_libraries(
     musicshape
     flake
     koguiutils
-    kstore
+    kostore
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}
     ${QT_QTCORE_LIBRARY}

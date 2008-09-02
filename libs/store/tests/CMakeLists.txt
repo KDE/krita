@@ -5,7 +5,7 @@ set(storage_test_SRCS storage_test.cpp )
 
 kde4_add_unit_test(storage_test TESTNAME libs-store-storage_test ${storage_test_SRCS})
 
-target_link_libraries(storage_test  ${KDE4_KDECORE_LIBS} kstore )
+target_link_libraries(storage_test  ${KDE4_KDECORE_LIBS} kostore )
 
 ########### next target ###############
 
@@ -14,7 +14,7 @@ set(storage_test2_SRCS storage_test2.cpp )
 
 kde4_add_unit_test(storage_test2 TESTNAME libs-store-storage_test2 ${storage_test2_SRCS})
 
-target_link_libraries(storage_test2  ${KDE4_KDECORE_LIBS} kstore )
+target_link_libraries(storage_test2  ${KDE4_KDECORE_LIBS} kostore )
 
 ########### next target ###############
 
@@ -23,7 +23,7 @@ set(xmlwritertest_SRCS xmlwritertest.cpp )
 
 kde4_add_unit_test(xmlwritertest TESTNAME libs-store-xmlwritertest ${xmlwritertest_SRCS})
 
-target_link_libraries(xmlwritertest  ${KDE4_KDECORE_LIBS} kstore ${QT_QT3SUPPORT_LIBRARY})
+target_link_libraries(xmlwritertest  ${KDE4_KDECORE_LIBS} kostore ${QT_QT3SUPPORT_LIBRARY})
 
 ########### next target ###############
 
@@ -32,7 +32,7 @@ set(koxmlreader_SRCS koxmlreadertest.cpp )
 
 kde4_add_unit_test(koxmlreadertest TESTNAME libs-store-koxmlreadertest ${koxmlreader_SRCS})
 
-target_link_libraries(koxmlreadertest kstore ${QT_QTTEST_LIBRARY} )
+target_link_libraries(koxmlreadertest kostore ${QT_QTTEST_LIBRARY} )
 
 ########### next target ###############
 
@@ -41,7 +41,7 @@ set(storedroptest_SRCS storedroptest.cpp )
 
 kde4_add_executable(storedroptest TEST ${storedroptest_SRCS})
 
-target_link_libraries(storedroptest  ${KDE4_KDECORE_LIBS} kstore ${QT_QT3SUPPORT_LIBRARY})
+target_link_libraries(storedroptest  ${KDE4_KDECORE_LIBS} kostore ${QT_QT3SUPPORT_LIBRARY})
 
 ########### next target ###############
 
@@ -50,6 +50,6 @@ set(kodomtest_SRCS kodomtest.cpp )
 
 kde4_add_unit_test(kodomtest TESTNAME libs-store-kodomtest ${kodomtest_SRCS})
 
-target_link_libraries(kodomtest ${KDE4_KDECORE_LIBS} kstore ${QT_QTTEST_LIBRARY} )
+target_link_libraries(kodomtest ${KDE4_KDECORE_LIBS} kostore ${QT_QTTEST_LIBRARY} )
 
 ########### end ###############

@@ -16,7 +16,7 @@ target_link_libraries(
     pictureshape
     flake
     koguiutils
-    kstore
+    kostore
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KIO_LIBS}
     ${QT_QTCORE_LIBRARY}

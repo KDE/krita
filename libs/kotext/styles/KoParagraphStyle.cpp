@@ -907,11 +907,11 @@ QBrush KoParagraphStyle::background() const
 
 void KoParagraphStyle::loadOdf(const KoXmlElement* element, KoOdfLoadingContext & context)
 {
-    d->name = element->attributeNS(KoXmlNS::style, "display-name", QString());
-    // if no style:display-name is given us the style:name
-    if (d->name.isEmpty()) {
+    if (element->hasAttributeNS(KoXmlNS::style, "display-name"))
+        d->name = element->attributeNS(KoXmlNS::style, "display-name", QString());
+
+    if (d->name.isEmpty()) // if no style:display-name is given us the style:name
         d->name = element->attributeNS(KoXmlNS::style, "name", QString());
-    }
 
 #if 0 //1.6:
     // OOo hack:

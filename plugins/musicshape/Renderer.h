@@ -54,8 +54,8 @@ public:
     void renderElement(QPainter& painter, MusicCore::VoiceElement* element, MusicCore::Voice* voice, const QPointF& pos, RenderState& state,  const QColor& color = Qt::black);
     void renderStaffElement(QPainter& painter, MusicCore::StaffElement* element, const QPointF& pos, RenderState& state, const QColor& color = Qt::black);
 
-    void renderClef(QPainter& painter, MusicCore::Clef* clef, const QPointF& pos, RenderState& state, const QColor& color = Qt::black);
-    void renderKeySignature(QPainter& painter, MusicCore::KeySignature* keySignature, const QPointF& pos, RenderState& state, const QColor& color = Qt::black);
+    void renderClef(QPainter& painter, MusicCore::Clef* clef, const QPointF& pos, RenderState& state, const QColor& color = Qt::black, bool ignoreOwnPos = false);
+    void renderKeySignature(QPainter& painter, MusicCore::KeySignature* keySignature, const QPointF& pos, RenderState& state, const QColor& color = Qt::black, bool ignoreOwnPos = false);
     void renderTimeSignature(QPainter& painter, MusicCore::TimeSignature* timeSignature, const QPointF& pos, const QColor& color = Qt::black);
     void renderChord(QPainter& painter, MusicCore::Chord* chord, MusicCore::Voice* voice, const QPointF& ref, const QColor& color = Qt::black);
     void renderRest(QPainter& painter, MusicCore::Duration duration, const QPointF& pos, const QColor& color = Qt::black);

@@ -77,12 +77,12 @@ void MusicRenderer::renderSheet(QPainter& painter, Sheet* sheet, int firstSystem
                 RenderState foo;
                 qreal x = 15;
                 if (clef) {
-                    renderClef(painter, clef, QPointF(x, by), foo);
+                    renderClef(painter, clef, QPointF(x, by), foo, Qt::black, true);
                     x += clef->width() + 15;
                 }
                 KeySignature* ks = staff->lastKeySignatureChange(b);
                 if (ks) {
-                    renderKeySignature(painter, ks, QPointF(x, by), foo);
+                    renderKeySignature(painter, ks, QPointF(x, by), foo, Qt::black, true);
                 }
             }
         }
@@ -224,17 +224,17 @@ void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElemen
 }
 
 
-void MusicRenderer::renderClef(QPainter& painter, Clef *c, const QPointF& pos, RenderState& state, const QColor& color)
+void MusicRenderer::renderClef(QPainter& painter, Clef *c, const QPointF& pos, RenderState& state, const QColor& color, bool ignoreOwnPos)
 {
     state.clef = c;
     Staff* s = c->staff();
-    m_style->renderClef(painter, pos.x() + c->x(), pos.y() + s->top() + (s->lineCount() - c->line()) * s->lineSpacing(), c->shape());
+    m_style->renderClef(painter, pos.x() + (ignoreOwnPos ? 0 : c->x()), pos.y() + s->top() + (s->lineCount() - c->line()) * s->lineSpacing(), c->shape());
 }
 
-void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, const QPointF& pos, RenderState& state, const QColor& color)
+void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, const QPointF& pos, RenderState& state, const QColor& color, bool ignoreOwnPos)
 {
     Staff * s = ks->staff();
-    qreal curx = pos.x() + ks->x();
+    qreal curx = pos.x() + (ignoreOwnPos ? 0 : ks->x());
     // draw naturals for sharps
     int idx = 3;
     for (int i = 0; i < 7; i++) {

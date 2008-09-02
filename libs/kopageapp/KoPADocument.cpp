@@ -162,6 +162,8 @@ bool KoPADocument::saveOdf( SavingContext & documentContext )
 
     KoPASavingContext paContext( *bodyWriter, mainStyles, documentContext.embeddedSaver, 1, KoShapeSavingContext::Store );
 
+    saveOdfDocumentStyles( paContext );
+
     if ( !saveOdfPages( paContext, d->pages, d->masterPages ) ) {
         return false;
     }
@@ -248,6 +250,13 @@ bool KoPADocument::saveOdfPages( KoPASavingContext &paContext, QList<KoPAPageBas
     bodyWriter.endElement(); // office:body
 
     return true;
+}
+
+void KoPADocument::saveOdfDocumentStyles( KoPASavingContext & context )
+{
+    KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>( dataCenterMap()["StyleManager"] );
+    Q_ASSERT( styleManager );
+    styleManager->saveOdf( context.mainStyles() );
 }
 
 KoPAPageBase* KoPADocument::pageByIndex( int index, bool masterPage ) const

@@ -181,7 +181,7 @@ public:
     void setRulersVisible(bool visible);
     bool rulersVisible() const;
 
-    QMap<QString, KoDataCenter *>  dataCenterMap(  );
+    QMap<QString, KoDataCenter *>  dataCenterMap();
 
     /**
      * Get the page on which the shape is located
@@ -209,6 +209,11 @@ protected:
 
     virtual KoView *createViewInstance( QWidget *parent ) = 0;
     virtual const char *odfTagName( bool withNamespace ) = 0;
+
+    /**
+     * Save document styles
+     */
+    virtual void saveOdfDocumentStyles( KoPASavingContext & context );
 
     /**
      * This function is called by at the end of addShape. This is used 

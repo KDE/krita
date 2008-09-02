@@ -111,7 +111,7 @@ signals:
   /**
    * Signal aspectModeChanged is triggered when the user toggles the widget.
    * Nothing else happens except that this signal is emitted.
-   * @param status Wether the special aspect mode is on
+   * @param status Whether the special aspect mode is on
    */
   void aspectModeChanged( bool status );
 

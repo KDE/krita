@@ -80,7 +80,7 @@ public:
     /**
      * Get if master shapes should be displayed
      *
-     * For master pages this allways returns false
+     * For master pages this always returns false
      *
      * @return true if master shapes should be displayed
      */

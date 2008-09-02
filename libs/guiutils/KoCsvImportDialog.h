@@ -61,12 +61,12 @@ public:
     void setData(const QByteArray& data);
 
     /**
-     * \return wether the first row is a header row
+     * \return whether the first row is a header row
      */
     bool firstRowContainHeaders() const;
 
     /**
-     * \return wether the first column is a header column
+     * \return whether the first column is a header column
      */
     bool firstColContainHeaders() const;
 

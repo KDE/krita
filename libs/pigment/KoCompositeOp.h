@@ -74,7 +74,7 @@ public:
      * @param id the identifiant for this composite op (not user visible)
      * @param description an user visible string describing this composite operation
      * @param category the name of the category where to put that composite op when displayed
-     * @param userVisible define wether or not that composite op should be visible in an user
+     * @param userVisible define whether or not that composite op should be visible in an user
      *                    interface
      */
     KoCompositeOp(const KoColorSpace * cs, const QString& id, const QString& description, const QString & category = "", const bool userVisible = true);
@@ -93,7 +93,7 @@ public:
      */
     const KoColorSpace * colorSpace() const;
     /**
-     * @return wether this composite op should be visible in the user interface
+     * @return whether this composite op should be visible in the user interface
      */
     bool userVisible() const;
     /**

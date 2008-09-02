@@ -86,7 +86,7 @@ KoShape * KoShapeTraversal::nextShapeStep( const KoShape * current, const KoShap
         Q_ASSERT( it != shapes.end() );
 
         if ( it == shapes.end() ) {
-            kWarning(30010) << "the shape is not in the list of childs of his parent";
+            kWarning(30010) << "the shape is not in the list of children of his parent";
             return 0;
         }
 
@@ -132,7 +132,7 @@ KoShape * KoShapeTraversal::previousShapeStep( const KoShape * current, const Ko
             Q_ASSERT( it != shapes.end() );
 
             if ( it == shapes.end() ) {
-                kWarning(30010) << "the shape is not in the list of childs of his parent";
+                kWarning(30010) << "the shape is not in the list of children of his parent";
                 return 0;
             }
 

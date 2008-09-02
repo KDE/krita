@@ -156,7 +156,7 @@ void KoSelection::select(KoShape * object, bool recursive)
         d->selectGroupChildren( group );
 
     if ( recursive ) {
-        // recursively select all parents and their childs upwards the hierarchy
+        // recursively select all parents and their children upwards the hierarchy
         KoShapeContainer *parent = object->parent();
         while( parent ) {
             KoShapeGroup *parentGroup = dynamic_cast<KoShapeGroup*>(parent);

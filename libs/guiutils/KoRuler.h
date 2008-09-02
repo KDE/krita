@@ -145,7 +145,7 @@ public:
           */
         void setEndIndent(qreal indent);
 
-        /** Set wether the ruler should show the current mouse position.
+        /** Set whether the ruler should show the current mouse position.
           * Update the position with updateMouseCoordinate().
           * @param show show mouse position if true. Default is false.
           */

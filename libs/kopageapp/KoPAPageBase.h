@@ -95,7 +95,7 @@ protected:
     /**
      * @param paContext the pageapp saving context
      */
-    void saveOdfPageContent( KoPASavingContext & paContext ) const;
+    virtual void saveOdfPageContent( KoPASavingContext & paContext ) const;
 
     /**
      * @brief Save the shapes of a page

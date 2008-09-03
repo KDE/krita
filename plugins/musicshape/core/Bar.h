@@ -116,10 +116,10 @@ public:
      * Returns the desired size of this bar. The desired size is the space all the elements in this bar would ideally use.
      */
     qreal naturalSize() const;
-    
+
+     // number of noteheads of space to associate with shortest note in a measure
     qreal sizeFactor() const;
-    qreal desiredSizeFactor() const;
-    
+
     /**
      * Returns the number of staff elements in the given staff in this bar.
      */

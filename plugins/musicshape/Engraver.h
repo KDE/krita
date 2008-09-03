@@ -36,7 +36,8 @@ class Engraver {
 public:
     Engraver();
     void engraveSheet(MusicCore::Sheet* sheet, int firstSystem, QSizeF size, bool engraveBars = true, int* lastSystem=0);
-    void engraveBar(MusicCore::Bar* bar);
+    void engraveBar(MusicCore::Bar* bar, qreal sizeFactor = 1.0);
+    qreal engraveBars(MusicCore::Sheet* sheet, int firstBar, int lastBar, qreal sizeFactor);
     void rebeamBar(MusicCore::Part* part, MusicCore::VoiceBar* bar);
 };
 

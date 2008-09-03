@@ -44,6 +44,7 @@ Bar::Bar(Sheet* sheet) : QObject(sheet), d(new Private)
     d->size = 0;
     setSize(100);
     d->prefix = 0;
+    d->sizeFactor = 2.0;
 }
 
 Bar::~Bar()
@@ -194,7 +195,7 @@ void Bar::removeStaffElement(StaffElement* element, bool deleteElement)
 
 qreal Bar::sizeFactor() const
 {
-    return 2.0; // number of noteheads of space to associate with shortest note in a measure
+    return d->sizeFactor;
 }
 
 } // namespace MusicCore

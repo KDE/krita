@@ -49,7 +49,7 @@ Engraver::Engraver()
 {
 }
 
-void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool engraveBars, int* lastSystem)
+void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool doEngraveBars, int* lastSystem)
 {
     *lastSystem = -1;
     int firstBar = 0;
@@ -59,7 +59,7 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
 
     kDebug() << "Engraving from firstSystem:" << firstSystem << "firstBar:" << firstBar;
 
-    if (engraveBars) {
+    if (doEngraveBars || true) {
         // engrave all bars in the sheet
         for (int i = firstBar; i < sheet->barCount(); i++) {
             engraveBar(sheet->bar(i));
@@ -93,12 +93,37 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
             if (prevPrefixPlaced) {
                 fixed -= sheet->bar(lastStart)->prefix();
             }
-            // now scale factor is (available width - fixed) / scalable width;
-            qreal factor = (lineWidth - fixed) / scalable;
+
+            // if line is too width, half sizefactor until it is small enough
+            qreal minFactor = 1.0;
+            if (scalable + fixed > lineWidth) {
+                for (int lim = 0; lim < 32; lim++) {
+                    minFactor /= 2;
+                    qreal newSize = engraveBars(sheet, lastStart, i-1, minFactor);
+                    if (newSize <= lineWidth) break;
+                }
+            }
+            // double sizefactor until line becomes too width
+            qreal maxFactor = 2.0;
+            for (int lim = 0; lim < 32; lim++) {
+                qreal newSize = engraveBars(sheet, lastStart, i-1, maxFactor);
+                if (newSize >= lineWidth) break;
+                maxFactor *= 2;
+            }
+            // now binary search between min and max factor for ideal factor
+            while (minFactor < maxFactor - 1e-4) {
+                qreal middle = (minFactor + maxFactor) / 2;
+                qreal newSize = engraveBars(sheet, lastStart, i-1, middle);
+                if (newSize > lineWidth) {
+                    maxFactor = middle;
+                } else {
+                    minFactor = middle;
+                }
+            }
+
             QPointF sp = sheet->bar(lastStart)->position() - QPointF(sheet->bar(lastStart)->prefix(), 0);
             for (int j = lastStart; j < i; j++) {
-                //sheet->bar(j)->setPosition(sp + QPointF(sheet->bar(j)->prefix(), 0));
-                //sheet->bar(j)->setSize(sheet->bar(j)->desiredSize() * factor);
+                sheet->bar(j)->setPosition(sp + QPointF(sheet->bar(j)->prefix(), 0));
                 sp.setX(sp.x() + sheet->bar(j)->size() + sheet->bar(j)->prefix());
             }
             lastStart = i;
@@ -169,6 +194,16 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
     }
 
     sheet->setStaffSystemCount(curSystem+1);
+}
+
+qreal Engraver::engraveBars(Sheet* sheet, int firstBar, int lastBar, qreal sizeFactor)
+{
+    qreal size = 0;
+    for (int i = firstBar; i <= lastBar; i++) {
+        engraveBar(sheet->bar(i), sizeFactor);
+        size += sheet->bar(i)->size() + sheet->bar(i)->prefix();
+    }
+    return size;
 }
 
 struct Simultanity {
@@ -261,7 +296,7 @@ static void collectSimultanities(Sheet* sheet, int barIdx, QList<Simultanity>& s
     }
 }
 
-void Engraver::engraveBar(Bar* bar)
+void Engraver::engraveBar(Bar* bar, qreal sizeFactor)
 {
 
     Sheet* sheet = bar->sheet();
@@ -273,7 +308,7 @@ void Engraver::engraveBar(Bar* bar)
     collectSimultanities(sheet, barIdx, simultanities, shortestNoteLength);
 
     // 'T' in the formula
-    qreal baseFactor = bar->sizeFactor() - log2((qreal) qMin(shortestNoteLength, (int) Note8Length) / WholeLength);
+    qreal baseFactor = bar->sizeFactor() * sizeFactor - log2((qreal) qMin(shortestNoteLength, (int) Note8Length) / WholeLength);
 
     // assign space to simultanities according to durations
     for (int i = 0; i < simultanities.size(); i++) {

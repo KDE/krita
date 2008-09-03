@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=tonemapping
 Name[ca]=mapejat de tons
+Name[de]=Dynamikkompression
 Name[el]=αντιστοίχηση τόνου
 Name[es]=asignación de tonos
 Name[gl]=tonemapping 
@@ -16,6 +17,7 @@ Name[ta]=ஓத்தமைவு
 Name[x-test]=xxtonemappingxx
 Comment=tonemapping
 Comment[ca]=mapejat de tons
+Comment[de]=Dynamikkompression
 Comment[el]=αντιστοίχηση τόνου
 Comment[es]=asignación de tonos
 Comment[hi]=टोनमैपिंग

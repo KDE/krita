@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=SmallColorSelector
 Name[ca]=SelectorDeColorPetit
+Name[de]=Kleiner Farbwähler
 Name[et]=Väike värvivalija
 Name[gl]=PequenoSelectorDeCores
 Name[hi]=छोटारंगचयनक
@@ -16,6 +17,7 @@ Name[x-test]=xxSmallColorSelectorxx
 Name[zh_TW]=小型顏色選擇器
 Comment=SmallColorSelector
 Comment[ca]=SelectorDeColorPetit
+Comment[de]=Kleiner Farbwähler
 Comment[et]=Väike värvivalija
 Comment[gl]=PequenoSelectorDeCores
 Comment[hi]=छोटारंगचयनक

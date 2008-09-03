@@ -2,6 +2,7 @@
 Name=Levels
 Name[br]=Liveoù
 Name[da]=Niveauer
+Name[de]=Stufen
 Name[et]=Tasemed
 Name[hr]=Razine
 Name[hu]=Szintek
@@ -18,6 +19,7 @@ Name[zh_TW]=等級
 Comment=Levels
 Comment[br]=Liveoù
 Comment[da]=Niveauer
+Comment[de]=Stufen
 Comment[et]=Tasemed
 Comment[hr]=Razine
 Comment[hu]=Szintek

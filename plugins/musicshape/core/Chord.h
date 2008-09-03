@@ -130,6 +130,7 @@ public:
      */
     virtual qreal height() const;
     virtual qreal width() const;
+    virtual qreal beatline() const;
     
     qreal stemX() const;
     qreal centerX() const;

@@ -89,8 +89,7 @@ public:
     /**
      * Returns the beatline of this element. This is an x position relative to the start of the element.
      */
-    qreal beatline() const;
-    
+    virtual qreal beatline() const;
 public slots:
     /**
      * Sets the x position of this musical element.

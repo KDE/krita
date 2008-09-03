@@ -136,9 +136,36 @@ qreal Chord::width() const
     if (haveAccidentals) {
         w += 10;
     }
-    const_cast<Chord*>(this)->setBeatline(haveAccidentals ? 10.0 : 0.0);
 
     return w;
+}
+
+qreal Chord::beatline() const
+{
+    qreal bl = 0;
+
+    int lastPitch = INT_MIN;
+    bool hasConflict = false;
+    bool haveAccidentals = false;
+
+    foreach (Note* n, d->notes) {
+        int pitch = n->pitch();
+        if (pitch == lastPitch+1) {
+            hasConflict = true;
+        }
+        lastPitch = pitch;
+
+        if (n->drawAccidentals()) {
+            haveAccidentals = true;
+        }
+    }
+
+    if (hasConflict) bl += 6;
+    if (haveAccidentals) {
+        bl += 10;
+    }
+
+    return bl;
 }
 
 Duration Chord::duration() const

@@ -331,7 +331,7 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, Voice* voice, c
     qreal topy = 1e9, bottomy = -1e9;
     Staff* topStaff = 0, *bottomStaff = 0;
 
-    qreal mainNoteX = (chord->stemDirection() == StemUp ? x : chord->stemX());
+    qreal mainNoteX = (chord->stemDirection() == StemUp ? chord->stemX() - 6 : chord->stemX());
     qreal alternateNoteX = mainNoteX + (chord->stemDirection() == StemUp ? 6 : -6);
     bool prevAlternate = false;
     qreal maxNoteX = 0;
@@ -394,7 +394,7 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, Voice* voice, c
 
         // render accidentals
         if (n->drawAccidentals()) {
-            m_style->renderAccidental( painter, ref.x() + x - 10, ref.y() + /*chord->y() +*/ s->top() + line * s->lineSpacing() / 2, n->accidentals(), color );
+            m_style->renderAccidental( painter, ref.x() + x, ref.y() + /*chord->y() +*/ s->top() + line * s->lineSpacing() / 2, n->accidentals(), color );
         }
 
         dots.insert(s, line);

@@ -309,18 +309,24 @@ qreal Chord::stemX() const
 {
     int lastPitch = INT_MIN;
     bool hasConflict = false;
+    bool haveAccidentals = false;
+
     foreach (Note* n, d->notes) {
         int pitch = n->pitch();
         if (pitch == lastPitch+1) {
             hasConflict = true;
-            break;
         }
         lastPitch = pitch;
+
+        if (n->drawAccidentals()) {
+            haveAccidentals = true;
+        }
     }
+
     if (hasConflict) {
-        return x() + 6;
+        return x() + 6 + (haveAccidentals ? 10 : 0);
     } else {
-        return x() + (d->stemDirection == StemUp ? 6 : 0);
+        return x() + (d->stemDirection == StemUp ? 6 : 0) + (haveAccidentals ? 10 : 0);
     }
 }
 

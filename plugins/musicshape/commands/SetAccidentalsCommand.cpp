@@ -36,6 +36,7 @@ void SetAccidentalsCommand::redo()
 {
     m_note->setAccidentals(m_newAccidentals);
     m_note->chord()->voiceBar()->updateAccidentals();
+    m_shape->engrave();
     m_shape->update();
 }
 
@@ -43,5 +44,6 @@ void SetAccidentalsCommand::undo()
 {
     m_note->setAccidentals(m_oldAccidentals);
     m_note->chord()->voiceBar()->updateAccidentals();
+    m_shape->engrave();
     m_shape->update();
 }

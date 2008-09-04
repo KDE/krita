@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>322</width>
-    <height>403</height>
+    <width>340</width>
+    <height>415</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -28,14 +28,6 @@
       <number>1</number>
      </property>
      <widget class="QWidget" name="brushTab" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>534</width>
-        <height>363</height>
-       </rect>
-      </property>
       <attribute name="title" >
        <string>Brush Shape</string>
       </attribute>
@@ -169,6 +161,19 @@
             <string>Experimental Params</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_3" >
+            <item row="3" column="1" >
+             <spacer name="verticalSpacer_3" >
+              <property name="orientation" >
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0" >
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
             <item row="0" column="0" >
              <widget class="QLabel" name="label" >
               <property name="text" >
@@ -220,27 +225,7 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="1" >
-             <spacer name="verticalSpacer_3" >
-              <property name="orientation" >
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0" >
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
            </layout>
-           <zorder>label</zorder>
-           <zorder>scaleBox</zorder>
-           <zorder>label_2</zorder>
-           <zorder>shearBox</zorder>
-           <zorder>label_3</zorder>
-           <zorder>rndBox</zorder>
-           <zorder>verticalSpacer</zorder>
           </widget>
          </item>
         </layout>
@@ -248,14 +233,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="inkTab" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>306</width>
-        <height>363</height>
-       </rect>
-      </property>
       <attribute name="title" >
        <string>Ink depletion</string>
       </attribute>
@@ -315,9 +292,6 @@
            </layout>
           </item>
          </layout>
-         <zorder>layoutWidget</zorder>
-         <zorder>layoutWidget</zorder>
-         <zorder>layoutWidget</zorder>
         </widget>
        </item>
        <item row="1" column="0" >
@@ -356,60 +330,13 @@
              <string>pressure weight</string>
             </property>
             <property name="minimum" >
-             <number>-100</number>
+             <number>0</number>
             </property>
             <property name="maximum" >
              <number>100</number>
             </property>
-            <property name="orientation" >
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="tickPosition" >
-             <enum>QSlider::TicksBelow</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2" >
-           <widget class="QSlider" name="bristleLengthSlider" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="toolTip" >
-             <string>bristle length weight</string>
-            </property>
-            <property name="minimum" >
-             <number>-100</number>
-            </property>
-            <property name="maximum" >
-             <number>100</number>
-            </property>
-            <property name="orientation" >
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="tickPosition" >
-             <enum>QSlider::TicksBelow</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3" >
-           <widget class="QSlider" name="bristleInkAmountSlider" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="toolTip" >
-             <string>Bristle ink amount weight</string>
-            </property>
-            <property name="minimum" >
-             <number>-100</number>
-            </property>
-            <property name="maximum" >
-             <number>100</number>
+            <property name="value" >
+             <number>50</number>
             </property>
             <property name="orientation" >
              <enum>Qt::Vertical</enum>
@@ -431,10 +358,69 @@
              <string>Ink depletion curve weight</string>
             </property>
             <property name="minimum" >
-             <number>-100</number>
+             <number>0</number>
             </property>
             <property name="maximum" >
              <number>100</number>
+            </property>
+            <property name="value" >
+             <number>50</number>
+            </property>
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="tickPosition" >
+             <enum>QSlider::TicksBelow</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" >
+           <widget class="QSlider" name="bristleLengthSlider" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip" >
+             <string>bristle length weight</string>
+            </property>
+            <property name="minimum" >
+             <number>0</number>
+            </property>
+            <property name="maximum" >
+             <number>100</number>
+            </property>
+            <property name="value" >
+             <number>50</number>
+            </property>
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="tickPosition" >
+             <enum>QSlider::TicksBelow</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3" >
+           <widget class="QSlider" name="bristleInkAmountSlider" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip" >
+             <string>Bristle ink amount weight</string>
+            </property>
+            <property name="minimum" >
+             <number>0</number>
+            </property>
+            <property name="maximum" >
+             <number>100</number>
+            </property>
+            <property name="value" >
+             <number>50</number>
             </property>
             <property name="orientation" >
              <enum>Qt::Vertical</enum>
@@ -456,7 +442,6 @@
          <zorder>inkDepletionSlider</zorder>
          <zorder>bristleLengthSlider</zorder>
          <zorder>bristleInkAmountSlider</zorder>
-         <zorder>weightSaturationCBox</zorder>
          <zorder>weightSaturationCBox</zorder>
         </widget>
        </item>

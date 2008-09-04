@@ -142,9 +142,9 @@ double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
 
     QRect rc = dab->extent();
     //qDebug() << rc;
-    painter()->bitBlt(rc.topLeft(), dab, rc);
+    //painter()->bitBlt(rc.topLeft(), dab, rc);
 
-    /*painter()->bltSelection(rc.x(), rc.y(), device->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN), dab, painter()->opacity(), rc.x(), rc.y(), rc.width(), rc.height());*/
+    painter()->bltSelection(rc.x(), rc.y(), device->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN), dab, painter()->opacity(), rc.x(), rc.y(), rc.width(), rc.height());
     // who knows what should be here
     return 0;
 }

@@ -52,17 +52,15 @@ static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2)
 class KoParagraphStyle::Private
 {
 public:
-    Private() : charStyle(0), listStyle(0), parent(0), next(0), stylesPrivate(0) {}
+    Private() : charStyle(0), listStyle(0), parent(0), next(0) {}
 
     ~Private() {
-        delete stylesPrivate;
-        stylesPrivate = 0;
         charStyle = 0; // QObject will delete it.
         delete listStyle;
     }
 
     void setProperty(int key, const QVariant &value) {
-        stylesPrivate->add(key, value);
+        stylesPrivate.add(key, value);
     }
 
     QString name;
@@ -70,21 +68,20 @@ public:
     KoListStyle *listStyle;
     KoParagraphStyle *parent;
     int next;
-    StylePrivate *stylesPrivate;
+    StylePrivate stylesPrivate;
 };
 
 KoParagraphStyle::KoParagraphStyle(QObject *parent)
         : QObject(parent), d(new Private())
 {
     d->charStyle = new KoCharacterStyle(this);
-    d->stylesPrivate = new StylePrivate();
 }
 
 KoParagraphStyle::KoParagraphStyle(const KoParagraphStyle &orig, QObject *parent)
         : QObject(parent),
         d(new Private())
 {
-    d->stylesPrivate = new StylePrivate(*orig.d->stylesPrivate);
+    d->stylesPrivate = orig.d->stylesPrivate;
     d->name = orig.name();
     d->charStyle = orig.d->charStyle;
     d->next = orig.d->next;
@@ -97,7 +94,7 @@ KoParagraphStyle::KoParagraphStyle(const QTextBlockFormat &blockFormat, const QT
         : QObject(parent),
         d(new Private())
 {
-    d->stylesPrivate = new StylePrivate(blockFormat.properties());
+    d->stylesPrivate = blockFormat.properties();
     d->charStyle = new KoCharacterStyle(charFormat, this);
 }
 
@@ -116,21 +113,21 @@ void KoParagraphStyle::setProperty(int key, const QVariant &value)
     if (d->parent) {
         QVariant var = d->parent->value(key);
         if (!var.isNull() && var == value) { // same as parent, so its actually a reset.
-            d->stylesPrivate->remove(key);
+            d->stylesPrivate.remove(key);
             return;
         }
     }
-    d->stylesPrivate->add(key, value);
+    d->stylesPrivate.add(key, value);
 }
 
 void KoParagraphStyle::remove(int key)
 {
-    d->stylesPrivate->remove(key);
+    d->stylesPrivate.remove(key);
 }
 
 QVariant KoParagraphStyle::value(int key) const
 {
-    QVariant var = d->stylesPrivate->value(key);
+    QVariant var = d->stylesPrivate.value(key);
     if (var.isNull() && d->parent)
         var = d->parent->value(key);
     return var;
@@ -138,7 +135,7 @@ QVariant KoParagraphStyle::value(int key) const
 
 bool KoParagraphStyle::hasProperty(int key) const
 {
-    return d->stylesPrivate->contains(key);
+    return d->stylesPrivate.contains(key);
 }
 
 qreal KoParagraphStyle::propertyDouble(int key) const
@@ -181,9 +178,9 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
     if (d->parent) {
         d->parent->applyStyle(format);
     }
-    QList<int> keys = d->stylesPrivate->keys();
+    QList<int> keys = d->stylesPrivate.keys();
     for (int i = 0; i < keys.count(); i++) {
-        QVariant variant = d->stylesPrivate->value(keys[i]);
+        QVariant variant = d->stylesPrivate.value(keys[i]);
         format.setProperty(keys[i], variant);
     }
 }
@@ -891,12 +888,12 @@ void KoParagraphStyle::setBackground(const QBrush &brush)
 
 void KoParagraphStyle::clearBackground()
 {
-    d->stylesPrivate->remove(QTextCharFormat::BackgroundBrush);
+    d->stylesPrivate.remove(QTextCharFormat::BackgroundBrush);
 }
 
 QBrush KoParagraphStyle::background() const
 {
-    QVariant variant = d->stylesPrivate->value(QTextFormat::BackgroundBrush);
+    QVariant variant = d->stylesPrivate.value(QTextFormat::BackgroundBrush);
 
     if (variant.isNull()) {
         QBrush brush;
@@ -1390,7 +1387,7 @@ qreal KoParagraphStyle::tabStopDistance() const
 
 void KoParagraphStyle::copyProperties(const KoParagraphStyle *style)
 {
-    d->stylesPrivate->copy(*style->d->stylesPrivate);
+    d->stylesPrivate.copy(style->d->stylesPrivate);
     setName(style->name()); // make sure we emit property change
     if (d->charStyle)
         delete d->charStyle;
@@ -1436,7 +1433,7 @@ KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block)
 
 bool KoParagraphStyle::compareParagraphProperties(const KoParagraphStyle &other) const
 {
-    return *other.d->stylesPrivate == *d->stylesPrivate;
+    return other.d->stylesPrivate == d->stylesPrivate;
 }
 
 bool KoParagraphStyle::compareCharacterProperties(const KoParagraphStyle &other) const
@@ -1459,7 +1456,7 @@ bool KoParagraphStyle::operator==(const KoParagraphStyle &other) const
 
 void KoParagraphStyle::removeDuplicates(const KoParagraphStyle &other)
 {
-    d->stylesPrivate->removeDuplicates(*other.d->stylesPrivate);
+    d->stylesPrivate.removeDuplicates(other.d->stylesPrivate);
     if (d->charStyle && other.d->charStyle)
         d->charStyle->removeDuplicates(*other.d->charStyle);
 }
@@ -1476,12 +1473,12 @@ void KoParagraphStyle::saveOdf(KoGenStyle & style)
     if (!d->name.isEmpty()) {
         style.addAttribute("style:display-name", d->name);
     }
-    QList<int> keys = d->stylesPrivate->keys();
+    QList<int> keys = d->stylesPrivate.keys();
     foreach(int key, keys) {
         if (key == QTextFormat::BlockAlignment) {
             int alignValue = 0;
             bool ok = false;
-            alignValue = d->stylesPrivate->value(key).toInt(&ok);
+            alignValue = d->stylesPrivate.value(key).toInt(&ok);
             if (ok) {
                 Qt::Alignment alignment = (Qt::Alignment) alignValue;
                 QString align = "";
@@ -1503,7 +1500,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle & style)
         } else if (key == KoParagraphStyle::TextProgressionDirection) {
             int directionValue = 0;
             bool ok = false;
-            directionValue = d->stylesPrivate->value(key).toInt(&ok);
+            directionValue = d->stylesPrivate.value(key).toInt(&ok);
             if (ok) {
                 QString direction = "";
                 if (directionValue == KoText::LeftRightTopBottom)

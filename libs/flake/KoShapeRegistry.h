@@ -70,12 +70,8 @@ private:
 
     KoShape * createShapeInternal( const KoXmlElement & fullElement, KoShapeLoadingContext & context, const KoXmlElement & element ) const;
 
-private:
-    static KoShapeRegistry *s_singleton;
-
     class Private;
     Private * const d;
-
 };
 
 #endif

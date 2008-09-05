@@ -36,18 +36,13 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
-#include <k3staticdeleter.h>
 #include <kimageio.h>
 
 
-KoGlobal* KoGlobal::s_global = 0L;
-static K3StaticDeleter<KoGlobal> sdg;
-
 KoGlobal* KoGlobal::self()
 {
-    if (!s_global)
-        sdg.setObject(s_global, new KoGlobal);
-    return s_global;
+    K_GLOBAL_STATIC(KoGlobal, s_instance)
+    return s_instance;
 }
 
 KoGlobal::KoGlobal()

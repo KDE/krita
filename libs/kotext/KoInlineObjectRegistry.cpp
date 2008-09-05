@@ -24,8 +24,8 @@
 #include <KoCanvasBase.h>
 #include <KoPluginLoader.h>
 
-#include <kdebug.h>
-#include <k3staticdeleter.h>
+#include <KDebug>
+#include <KGlobal>
 
 void KoInlineObjectRegistry::init()
 {
@@ -37,16 +37,13 @@ void KoInlineObjectRegistry::init()
                                      QString::fromLatin1("[X-KoText-MinVersion] <= 0"), config);
 }
 
-KoInlineObjectRegistry *KoInlineObjectRegistry::s_instance = 0;
-static K3StaticDeleter<KoInlineObjectRegistry> staticInlineObjectRegistryDeleter;
-
 KoInlineObjectRegistry* KoInlineObjectRegistry::instance()
 {
-    if (KoInlineObjectRegistry::s_instance == 0) {
-        staticInlineObjectRegistryDeleter.setObject(s_instance, new KoInlineObjectRegistry());
-        KoInlineObjectRegistry::s_instance->init();
+    K_GLOBAL_STATIC(KoInlineObjectRegistry, s_instance)
+    if (!s_instance.exists()) {
+        s_instance->init();
     }
-    return KoInlineObjectRegistry::s_instance;
+    return s_instance;
 }
 
 QList<QAction*> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase *host) const

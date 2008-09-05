@@ -264,8 +264,6 @@ private slots:
 private:
     class Private;
     Private *const d;
-
-    static KoToolManager* s_instance;
 };
 
 #endif

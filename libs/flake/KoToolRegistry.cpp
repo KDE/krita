@@ -19,7 +19,7 @@
  */
 
 #include "KoToolRegistry.h"
-#include <k3staticdeleter.h>
+#include <KGlobal>
 
 #include <KoPluginLoader.h>
 
@@ -45,17 +45,13 @@ KoToolRegistry::~KoToolRegistry()
 {
 }
 
-// static
-KoToolRegistry *KoToolRegistry::s_instance = 0;
-static K3StaticDeleter<KoToolRegistry> staticToolRegistryDeleter;
-
 KoToolRegistry* KoToolRegistry::instance()
 {
-    if (KoToolRegistry::s_instance == 0) {
-        staticToolRegistryDeleter.setObject(s_instance, new KoToolRegistry());
-        KoToolRegistry::s_instance->init();
+    K_GLOBAL_STATIC(KoToolRegistry, s_instance)
+    if (!s_instance.exists()) {
+        s_instance->init();
     }
-    return KoToolRegistry::s_instance;
+    return s_instance;
 }
 
 #include "KoToolRegistry.moc"

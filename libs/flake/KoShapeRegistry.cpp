@@ -37,8 +37,8 @@
 #include <QMultiMap>
 #include <QPainter>
 
-#include <kdebug.h>
-#include <k3staticdeleter.h>
+#include <KDebug>
+#include <KGlobal>
 
 class KoShapeRegistry::Private
 {
@@ -106,17 +106,13 @@ void KoShapeRegistry::init()
     }
 }
 
-KoShapeRegistry *KoShapeRegistry::s_singleton = 0;
-static K3StaticDeleter<KoShapeRegistry> staticShapeRegistryDeleter;
-
 KoShapeRegistry* KoShapeRegistry::instance()
 {
-    if (KoShapeRegistry::s_singleton == 0)
-    {
-        staticShapeRegistryDeleter.setObject(s_singleton, new KoShapeRegistry());
-        KoShapeRegistry::s_singleton->init();
+    K_GLOBAL_STATIC(KoShapeRegistry, s_instance)
+    if (!s_instance.exists()) {
+        s_instance->init();
     }
-    return KoShapeRegistry::s_singleton;
+    return s_instance;
 }
 
 KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoadingContext & context) const

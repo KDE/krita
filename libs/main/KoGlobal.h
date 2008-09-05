@@ -100,9 +100,6 @@ private:
     int m_dpiY;
     // No BC problem here, constructor is private, feel free to add members
 
-    // Singleton pattern. Maybe this should even be refcounted, so
-    // that it gets cleaned up when closing all koffice parts in e.g. konqueror?
-    static KoGlobal* s_global;
     friend class this_is_a_singleton; // work around gcc warning
 };
 

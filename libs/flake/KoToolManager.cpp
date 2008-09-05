@@ -59,7 +59,7 @@
 #include <QTimer>
 #include <kactioncollection.h>
 #include <kdebug.h>
-#include <k3staticdeleter.h>
+#include <kglobal.h>
 #include <kaction.h>
 #include <QStack>
 #include <QLabel>
@@ -757,14 +757,9 @@ void KoToolManager::injectDeviceEvent( KoDeviceEvent * event )
     }
 }
 
-//static
-KoToolManager* KoToolManager::s_instance = 0;
-static K3StaticDeleter<KoToolManager> staticToolManagerDeleter;
-
 KoToolManager* KoToolManager::instance()
 {
-    if (s_instance == 0)
-        staticToolManagerDeleter.setObject(s_instance, new KoToolManager());
+    K_GLOBAL_STATIC(KoToolManager, s_instance)
     return s_instance;
 }
 

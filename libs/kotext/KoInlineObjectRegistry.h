@@ -64,9 +64,6 @@ public:
 private:
     KoInlineObjectRegistry() {}
     void init();
-
-private:
-    static KoInlineObjectRegistry *s_instance;
 };
 
 #endif

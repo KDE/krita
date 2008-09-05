@@ -47,9 +47,6 @@ public:
 private:
     KoTextEditingRegistry() {}
     void init();
-
-private:
-    static KoTextEditingRegistry *s_instance;
 };
 
 #endif

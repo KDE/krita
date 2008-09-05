@@ -26,7 +26,7 @@
 #include <kdebug.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
-#include <k3staticdeleter.h>
+#include <KGlobal>
 #include <KConfig>
 #include <KConfigGroup>
 
@@ -48,15 +48,10 @@ KoPluginLoader::~KoPluginLoader()
     delete d;
 }
 
-KoPluginLoader *KoPluginLoader::Private::singleton = 0;
-static K3StaticDeleter<KoPluginLoader> pluginLoaderStatic;
-
 KoPluginLoader* KoPluginLoader::instance()
 {
-    if (KoPluginLoader::Private::singleton == 0) {
-        pluginLoaderStatic.setObject(Private::singleton, new KoPluginLoader());
-    }
-    return KoPluginLoader::Private::singleton;
+    K_GLOBAL_STATIC(KoPluginLoader, s_instance)
+    return s_instance;
 }
 
 void KoPluginLoader::load(const QString & serviceType, const QString & versionString, const PluginsConfig &config)

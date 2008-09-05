@@ -29,20 +29,15 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <k3staticdeleter.h>
 #include <kdebug.h>
 
 
 //#define DEBUG_HYPHENATOR 1
 
-KoHyphenator* KoHyphenator::s_self;
-static K3StaticDeleter<KoHyphenator> kohyphensd;
-
 KoHyphenator* KoHyphenator::self()
 {
-    if (!s_self)
-        kohyphensd.setObject(s_self, new KoHyphenator);
-    return s_self;
+    K_GLOBAL_STATIC(KoHyphenator, s_instance)
+    return s_instance;
 }
 
 KoHyphenator::KoHyphenator()

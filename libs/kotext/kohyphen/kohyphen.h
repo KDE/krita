@@ -128,8 +128,6 @@ private:
     };
     typedef QMap<QString, EncodingStruct> EncodingMap;
     mutable EncodingMap encodings; // key is the language code
-
-    static KoHyphenator* s_self;
 };
 
 #endif

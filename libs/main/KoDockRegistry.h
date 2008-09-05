@@ -53,8 +53,6 @@ private:
     KoDockRegistry(const KoDockRegistry&);
     KoDockRegistry operator=(const KoDockRegistry&);
     void init();
-
-    static KoDockRegistry *s_instance;
 };
 
 #endif

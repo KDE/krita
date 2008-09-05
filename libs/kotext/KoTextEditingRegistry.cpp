@@ -21,7 +21,7 @@
 
 #include <KoPluginLoader.h>
 
-#include <k3staticdeleter.h>
+#include <KGlobal>
 
 void KoTextEditingRegistry::init()
 {
@@ -33,16 +33,13 @@ void KoTextEditingRegistry::init()
                                      QString::fromLatin1("[X-KoText-MinVersion] <= 0"), config);
 }
 
-KoTextEditingRegistry *KoTextEditingRegistry::s_instance = 0;
-static K3StaticDeleter<KoTextEditingRegistry> staticShapeRegistryDeleter;
-
 KoTextEditingRegistry* KoTextEditingRegistry::instance()
 {
-    if (KoTextEditingRegistry::s_instance == 0) {
-        staticShapeRegistryDeleter.setObject(s_instance, new KoTextEditingRegistry());
-        KoTextEditingRegistry::s_instance->init();
+    K_GLOBAL_STATIC(KoTextEditingRegistry, s_instance)
+    if (!s_instance.exists()) {
+        s_instance->init();
     }
-    return KoTextEditingRegistry::s_instance;
+    return s_instance;
 }
 
 #include "KoTextEditingRegistry.moc"

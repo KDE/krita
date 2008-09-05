@@ -45,9 +45,6 @@ private:
     KoShapeBorderRegistry(const KoShapeBorderRegistry&);
     KoShapeBorderRegistry operator=(const KoShapeBorderRegistry&);
     void init();
-
-private:
-    static KoShapeBorderRegistry *m_singleton;
 };
 
 #endif

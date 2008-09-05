@@ -50,8 +50,6 @@ private:
     KoDeviceRegistry(const KoDeviceRegistry&);
     KoDeviceRegistry operator=(const KoDeviceRegistry&);
     void init();
-
-    static KoDeviceRegistry *s_instance;
 };
 
 #endif // KODEVICEREGISTRY_H

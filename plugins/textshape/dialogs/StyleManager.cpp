@@ -130,8 +130,8 @@ void StyleManager::setStyle(QListWidgetItem *item, QListWidgetItem *previous)
             if (m_alteredCharacterStyles.contains(styleId))
                 style = m_alteredCharacterStyles.value(styleId);
             else {
-                style = m_styleManager->characterStyle(styleId);
-                style = new KoCharacterStyle(*style);
+                style = new KoCharacterStyle;
+                style->copyProperties(m_styleManager->characterStyle(styleId));
                 m_alteredCharacterStyles.insert(styleId, style);
             }
             widget.characterStylePage->setStyle(style);

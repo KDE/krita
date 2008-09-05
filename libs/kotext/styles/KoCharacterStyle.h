@@ -120,8 +120,6 @@ public:
      */
     explicit KoCharacterStyle(QObject *parent = 0);
     /// Copy constructor
-    KoCharacterStyle(const KoCharacterStyle &other, QObject *parent = 0);
-    /// Copy constructor
     KoCharacterStyle(const QTextCharFormat &format, QObject *parent = 0);
     /// Destructor
     ~KoCharacterStyle();
@@ -259,6 +257,7 @@ public:
     void copyProperties(const KoCharacterStyle *style);
     void copyProperties(const QTextCharFormat &format);
 
+    KoCharacterStyle *clone(QObject *parent = 0);
 
     /// return the name of the style.
     QString name() const;

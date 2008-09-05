@@ -409,10 +409,10 @@ public:
     bool nonBreakableLines() const;
 
     /// set the parent style this one inherits its unset properties from.
-    void setParent(KoParagraphStyle *parent);
+    void setParentStyle(KoParagraphStyle *parent);
 
     /// return the parent style
-    KoParagraphStyle *parent() const;
+    KoParagraphStyle *parentStyle() const;
 
     /// the 'next' style is the one used when the user creates a new paragrap after this one.
     void setNextStyle(int next);

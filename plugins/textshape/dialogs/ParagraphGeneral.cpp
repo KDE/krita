@@ -58,7 +58,7 @@ void ParagraphGeneral::setStyle(KoParagraphStyle *style)
         bool ok = true;
         while (ok && parent) {
             ok = parent->styleId() != style->styleId();
-            parent = parent->parent();
+            parent = parent->parentStyle();
         }
         if (! ok) continue; // can't inherit from myself, even indirectly.
 
@@ -104,11 +104,11 @@ void ParagraphGeneral::save()
     m_style->setNextStyle(widget.nextStyle->itemData(widget.nextStyle->currentIndex()).toInt());
     int parentStyleId = widget.inheritStyle->itemData(widget.inheritStyle->currentIndex()).toInt();
     if (parentStyleId == 0)
-        m_style->setParent(0);
+        m_style->setParentStyle(0);
     else {
         foreach(KoParagraphStyle *style, m_paragraphStyles) {
             if (style->styleId() == parentStyleId) {
-                m_style->setParent(style);
+                m_style->setParentStyle(style);
                 break;
             }
         }

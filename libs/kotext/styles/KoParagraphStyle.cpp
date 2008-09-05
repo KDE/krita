@@ -52,7 +52,7 @@ static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2)
 class KoParagraphStyle::Private
 {
 public:
-    Private() : charStyle(0), listStyle(0), parent(0), next(0) {}
+    Private() : charStyle(0), listStyle(0), parentStyle(0), next(0) {}
 
     ~Private() {
     }
@@ -64,7 +64,7 @@ public:
     QString name;
     KoCharacterStyle *charStyle;
     KoListStyle *listStyle;
-    KoParagraphStyle *parent;
+    KoParagraphStyle *parentStyle;
     int next;
     StylePrivate stylesPrivate;
 };
@@ -88,15 +88,15 @@ KoParagraphStyle::~KoParagraphStyle()
     delete d;
 }
 
-void KoParagraphStyle::setParent(KoParagraphStyle *parent)
+void KoParagraphStyle::setParentStyle(KoParagraphStyle *parent)
 {
-    d->parent = parent;
+    d->parentStyle = parent;
 }
 
 void KoParagraphStyle::setProperty(int key, const QVariant &value)
 {
-    if (d->parent) {
-        QVariant var = d->parent->value(key);
+    if (d->parentStyle) {
+        QVariant var = d->parentStyle->value(key);
         if (!var.isNull() && var == value) { // same as parent, so its actually a reset.
             d->stylesPrivate.remove(key);
             return;
@@ -113,8 +113,8 @@ void KoParagraphStyle::remove(int key)
 QVariant KoParagraphStyle::value(int key) const
 {
     QVariant var = d->stylesPrivate.value(key);
-    if (var.isNull() && d->parent)
-        var = d->parent->value(key);
+    if (var.isNull() && d->parentStyle)
+        var = d->parentStyle->value(key);
     return var;
 }
 
@@ -160,8 +160,8 @@ QColor KoParagraphStyle::propertyColor(int key) const
 void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
 {
     format = QTextBlockFormat();
-    if (d->parent) {
-        d->parent->applyStyle(format);
+    if (d->parentStyle) {
+        d->parentStyle->applyStyle(format);
     }
     QList<int> keys = d->stylesPrivate.keys();
     for (int i = 0; i < keys.count(); i++) {
@@ -733,9 +733,9 @@ bool KoParagraphStyle::nonBreakableLines() const
     return propertyBoolean(QTextFormat::BlockNonBreakableLines);
 }
 
-KoParagraphStyle *KoParagraphStyle::parent() const
+KoParagraphStyle *KoParagraphStyle::parentStyle() const
 {
-    return d->parent;
+    return d->parentStyle;
 }
 
 void KoParagraphStyle::setNextStyle(int next)
@@ -1376,7 +1376,7 @@ void KoParagraphStyle::copyProperties(const KoParagraphStyle *style)
         delete d->charStyle;
     d->charStyle = style->d->charStyle;
     d->next = style->d->next;
-    d->parent = style->d->parent;
+    d->parentStyle = style->d->parentStyle;
     d->listStyle = style->d->listStyle;
 }
 

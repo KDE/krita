@@ -39,10 +39,7 @@ class KoStyleManager::Private
 public:
     Private() : updateTriggered(false), defaultParagraphStyle(0), defaultListStyle(0), outlineStyle(0) { }
     ~Private() {
-        delete defaultListStyle;
-        delete outlineStyle;
         qDeleteAll(automaticListStyles);
-        // ##: Who deletes the rest of the stuff?
     }
     static int s_stylesNumber; // For giving out unique numbers to the styles for referencing
 
@@ -77,7 +74,7 @@ KoStyleManager::KoStyleManager(QObject *parent)
     add(d->defaultParagraphStyle);
 
     // Modify the KoListLevelProperties constructor to provide defaults for the list-style
-    d->defaultListStyle = new KoListStyle;
+    d->defaultListStyle = new KoListStyle(this);
 }
 
 KoStyleManager::~KoStyleManager()
@@ -142,6 +139,7 @@ void KoStyleManager::add(KoCharacterStyle *style)
 {
     if (d->charStyles.contains(style))
         return;
+    style->setParent(this);
     style->setStyleId(d->s_stylesNumber++);
     d->charStyles.append(style);
 
@@ -152,6 +150,7 @@ void KoStyleManager::add(KoParagraphStyle *style)
 {
     if (d->paragStyles.contains(style))
         return;
+    style->setParent(this);
     style->setStyleId(d->s_stylesNumber++);
     d->paragStyles.append(style);
     if (style->characterStyle()) {
@@ -167,6 +166,7 @@ void KoStyleManager::add(KoListStyle *style)
 {
     if (d->listStyles.contains(style))
         return;
+    style->setParent(this);
     style->setStyleId(d->s_stylesNumber++);
     d->listStyles.append(style);
     emit styleAdded(style);
@@ -217,7 +217,7 @@ void KoStyleManager::alteredStyle(const KoParagraphStyle *style)
 
     // check if anyone that uses 'style' as a parent needs to be flagged as changed as well.
     foreach(KoParagraphStyle *ps, d->paragStyles) {
-        if (ps->parent() == style)
+        if (ps->parentStyle() == style)
             alteredStyle(ps);
     }
 }
@@ -367,7 +367,9 @@ KoListStyle *KoStyleManager::defaultListStyle() const
 
 void KoStyleManager::setOutlineStyle(KoListStyle* listStyle)
 {
-    delete d->outlineStyle;
+    if (d->outlineStyle && d->outlineStyle->parent() == this)
+        delete d->outlineStyle;
+    listStyle->setParent(this);
     d->outlineStyle = listStyle;
 }
 

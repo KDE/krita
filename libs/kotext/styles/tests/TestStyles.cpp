@@ -28,7 +28,7 @@ void TestStyles::testStyleInheritance()
     QCOMPARE(style1.topMargin(), 10.0);
 
     KoParagraphStyle style2;
-    style2.setParent(&style1);
+    style2.setParentStyle(&style1);
 
     QCOMPARE(style2.topMargin(), 10.0);
     style2.setTopMargin(20.0);
@@ -56,30 +56,30 @@ void TestStyles::testChangeParent()
     KoParagraphStyle style2;
     style2.setTopMargin(20);
 
-    style2.setParent(&style1);
+    style2.setParentStyle(&style1);
     QCOMPARE(style1.topMargin(), 10.0);
     QCOMPARE(style2.topMargin(), 20.0);
 
     KoParagraphStyle style3;
-    style3.setParent(&style1);
+    style3.setParentStyle(&style1);
     QCOMPARE(style1.topMargin(), 10.0);
     QCOMPARE(style3.topMargin(), 10.0);
 
     // test that separating will leave the child with exactly the same dataset
     // as it had before the inheritance
-    style3.setParent(0);
+    style3.setParentStyle(0);
     QCOMPARE(style1.topMargin(), 10.0);
     QCOMPARE(style3.topMargin(), 0.0); // we hadn't explicitly set the margin on style3
 
     // test adding it to another will not destroy any data
-    style3.setParent(&style1);
+    style3.setParentStyle(&style1);
     QCOMPARE(style1.topMargin(), 10.0); // from style1
     QCOMPARE(style2.topMargin(), 20.0); // from style2
     QCOMPARE(style3.topMargin(), 10.0); // inherited from style1
 
     // Check that style3 now starts following the parent since it does not have
     // the property set
-    style3.setParent(&style2);
+    style3.setParentStyle(&style2);
     QCOMPARE(style3.topMargin(), 20.0); // inherited from style2
 }
 
@@ -129,8 +129,8 @@ void TestStyles::testApplyParagraphStyleWithParent()
     KoParagraphStyle style3;
     style3.setStyleId(1004);
 
-    style3.setParent(&style2);
-    style2.setParent(&style1);
+    style3.setParentStyle(&style2);
+    style2.setParentStyle(&style1);
 
     style1.setAlignment(Qt::AlignRight);
     QCOMPARE(style1.alignment(), Qt::AlignRight);
@@ -184,7 +184,7 @@ void TestStyles::testCopyParagraphStyle()
 {
     KoParagraphStyle style1;
     KoParagraphStyle style2;
-    style2.setParent(&style1);
+    style2.setParentStyle(&style1);
 
     style1.setLeftMargin(10.);
     style1.setRightMargin(30.);

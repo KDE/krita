@@ -178,7 +178,7 @@ QString ParagraphTool::styleName()
         if (!name.isNull() && !name.isEmpty()) {
             return name;
         }
-        style = style->parent();
+        style = style->parentStyle();
     }
 
     return QString(i18n("None"));

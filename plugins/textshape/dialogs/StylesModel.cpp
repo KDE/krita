@@ -62,8 +62,8 @@ void StylesModel::recalculate()
     paragraphStyles << treeRoot[0];
     foreach(KoParagraphStyle *style, m_styleManager->paragraphStyles()) {
         KoParagraphStyle *root = style;
-        while (root->parent()) {
-            const int key = root->parent()->styleId();
+        while (root->parentStyle()) {
+            const int key = root->parentStyle()->styleId();
             // the multiHash has the nasty habit or returning an inverted list, so lets 'sort in' by inserting them again
             QList<int> prevValues = m_relations.values(key);
             m_relations.remove(key);
@@ -72,7 +72,7 @@ void StylesModel::recalculate()
                 m_relations.insert(key, prevValues.takeLast());
 
             characterStyles << root->characterStyle()->styleId();
-            root = root->parent();
+            root = root->parentStyle();
         }
         Q_ASSERT(root);
         Q_ASSERT(root->characterStyle());
@@ -147,8 +147,8 @@ QModelIndex StylesModel::parent(const QModelIndex &child) const
         if (m_styleList.contains(id)) // is the root, parent is invalid.
             return QModelIndex();
         KoParagraphStyle *childStyle = m_styleManager->paragraphStyle(id);
-        if (childStyle && childStyle->parent())
-            createIndex(0, 0, childStyle->parent()->styleId());
+        if (childStyle && childStyle->parentStyle())
+            createIndex(0, 0, childStyle->parentStyle()->styleId());
 
         // this is stupid; forcing me to return a parent implies I can't have one node multiple times in a tree!
         // and most real-life data models actually don't allow traversal in two ways :(

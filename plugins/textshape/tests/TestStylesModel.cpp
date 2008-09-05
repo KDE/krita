@@ -106,16 +106,16 @@ void TestStylesModel::fillManager()
     ps = new KoParagraphStyle();
     ps->setName("headers");
     KoParagraphStyle *head = new KoParagraphStyle();
-    head->setParent(ps);
+    head->setParentStyle(ps);
     head->setName("Head 1");
     manager->add(head);
     head = new KoParagraphStyle();
-    head->setParent(ps);
+    head->setParentStyle(ps);
     head->setName("Head 2");
     manager->add(head);
     manager->add(ps);
     head = new KoParagraphStyle();
-    head->setParent(ps);
+    head->setParentStyle(ps);
     head->setName("Head 3");
     manager->add(head);
 

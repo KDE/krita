@@ -73,15 +73,15 @@ public:
     StylePrivate *stylesPrivate;
 };
 
-KoParagraphStyle::KoParagraphStyle()
-        : d(new Private())
+KoParagraphStyle::KoParagraphStyle(QObject *parent)
+        : QObject(parent), d(new Private())
 {
     d->charStyle = new KoCharacterStyle(this);
     d->stylesPrivate = new StylePrivate();
 }
 
-KoParagraphStyle::KoParagraphStyle(const KoParagraphStyle &orig)
-        : QObject(),
+KoParagraphStyle::KoParagraphStyle(const KoParagraphStyle &orig, QObject *parent)
+        : QObject(parent),
         d(new Private())
 {
     d->stylesPrivate = new StylePrivate(*orig.d->stylesPrivate);
@@ -93,8 +93,8 @@ KoParagraphStyle::KoParagraphStyle(const KoParagraphStyle &orig)
         setListStyle(*orig.d->listStyle);
 }
 
-KoParagraphStyle::KoParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat)
-        : QObject(),
+KoParagraphStyle::KoParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat, QObject *parent)
+        : QObject(parent),
         d(new Private())
 {
     d->stylesPrivate = new StylePrivate(blockFormat.properties());

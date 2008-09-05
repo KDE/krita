@@ -143,11 +143,11 @@ public:
     };
 
     /// Constructor
-    KoParagraphStyle();
+    KoParagraphStyle(QObject *parent = 0);
     /// Copy constructor
-    KoParagraphStyle(const KoParagraphStyle &orig);
+    KoParagraphStyle(const KoParagraphStyle &orig, QObject *parent = 0);
     /// Copy constructor
-    KoParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat);
+    KoParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat, QObject *parent = 0);
     /// Destructor
     ~KoParagraphStyle();
 

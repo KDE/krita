@@ -66,7 +66,7 @@ int KoStyleManager::Private::s_stylesNumber = 100;
 KoStyleManager::KoStyleManager(QObject *parent)
         : QObject(parent), d(new Private())
 {
-    d->defaultParagraphStyle = new KoParagraphStyle();
+    d->defaultParagraphStyle = new KoParagraphStyle(this);
     d->defaultParagraphStyle->setName(i18n("Default"));
     KoCharacterStyle *charStyle = d->defaultParagraphStyle->characterStyle();
     charStyle->setName(i18n("Default"));

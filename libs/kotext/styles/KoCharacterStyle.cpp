@@ -88,7 +88,7 @@ KoCharacterStyle::KoCharacterStyle(QObject *parent)
 KoCharacterStyle::KoCharacterStyle(const KoCharacterStyle &style, QObject *parent)
         : QObject(parent), d(new Private())
 {
-    d->stylesPrivate->copyMissing(style.d->stylesPrivate);
+    d->stylesPrivate->copyMissing(*style.d->stylesPrivate);
     d->name = style.name();
 }
 
@@ -997,7 +997,7 @@ bool KoCharacterStyle::operator==(const KoCharacterStyle &other) const
 
 void KoCharacterStyle::removeDuplicates(const KoCharacterStyle &other)
 {
-    this->d->stylesPrivate->removeDuplicates(other.d->stylesPrivate);
+    this->d->stylesPrivate->removeDuplicates(*other.d->stylesPrivate);
 }
 
 void KoCharacterStyle::removeDuplicates(const QTextCharFormat &otherFormat)

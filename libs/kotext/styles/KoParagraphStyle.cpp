@@ -1459,7 +1459,7 @@ bool KoParagraphStyle::operator==(const KoParagraphStyle &other) const
 
 void KoParagraphStyle::removeDuplicates(const KoParagraphStyle &other)
 {
-    this->d->stylesPrivate->removeDuplicates(other.d->stylesPrivate);
+    d->stylesPrivate->removeDuplicates(*other.d->stylesPrivate);
     if (d->charStyle && other.d->charStyle)
         d->charStyle->removeDuplicates(*other.d->charStyle);
 }

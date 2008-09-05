@@ -36,9 +36,9 @@ public:
     void remove(int key);
     const QVariant value(int key) const;
     bool contains(int key) const;
-    void copyMissing(const StylePrivate *other);
+    void copyMissing(const StylePrivate &other);
     void copyMissing(const QMap<int, QVariant> &other);
-    void removeDuplicates(const StylePrivate *other);
+    void removeDuplicates(const StylePrivate &other);
     void removeDuplicates(const QMap<int, QVariant> &other);
     void clearAll() {
         m_properties.clear();

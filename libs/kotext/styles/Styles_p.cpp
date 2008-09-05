@@ -65,11 +65,11 @@ bool StylePrivate::isEmpty() const
     return m_properties.isEmpty();
 }
 
-void StylePrivate::copyMissing(const StylePrivate *other)
+void StylePrivate::copyMissing(const StylePrivate &other)
 {
-    foreach(int key, other->m_properties.keys()) {
-        if (! m_properties.contains(key))
-            m_properties.insert(key, other->value(key));
+    foreach(int key, other.m_properties.keys()) {
+        if (!m_properties.contains(key))
+            m_properties.insert(key, other.value(key));
     }
 }
 
@@ -81,10 +81,10 @@ void StylePrivate::copyMissing(const QMap<int, QVariant> &other)
     }
 }
 
-void StylePrivate::removeDuplicates(const StylePrivate *other)
+void StylePrivate::removeDuplicates(const StylePrivate &other)
 {
-    foreach(int key, other->m_properties.keys()) {
-        if (m_properties.value(key) == other->value(key))
+    foreach(int key, other.m_properties.keys()) {
+        if (m_properties.value(key) == other.value(key))
             m_properties.remove(key);
     }
 }

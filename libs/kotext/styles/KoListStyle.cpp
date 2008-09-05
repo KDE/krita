@@ -93,6 +93,13 @@ void KoListStyle::copyProperties(KoListStyle *other)
     setName(other->name());
 }
 
+KoListStyle *KoListStyle::clone(QObject *parent)
+{
+    KoListStyle *newStyle = new KoListStyle(parent);
+    newStyle->copyProperties(this);
+    return newStyle;
+}
+
 QString KoListStyle::name() const
 {
     return d->name;

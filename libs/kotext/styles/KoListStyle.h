@@ -189,7 +189,11 @@ public:
      */
     void saveOdf(KoGenStyle &style);
 
+    /// copy all the properties from the other style to this style, effectively duplicating it.
     void copyProperties(KoListStyle *other);
+
+    /// creates a clone of this style with the specified parent
+    KoListStyle *clone(QObject *parent = 0);
 
 signals:
     void nameChanged(const QString &newName);

@@ -39,8 +39,9 @@ class KoGenStyle;
  * typically just one pargraph-style since that style can be reused on various
  * paragraphs.
  */
-class  KOTEXT_EXPORT KoListStyle
+class  KOTEXT_EXPORT KoListStyle : public QObject
 {
+    Q_OBJECT
 public:
     /// This list is used to specify what kind of list-style to use
     enum Style {
@@ -192,6 +193,9 @@ public:
      * Save the style to a KoGenStyle object using the OpenDocument format
      */
     void saveOdf(KoGenStyle &style);
+
+signals:
+    void nameChanged(const QString &newName);
 
 protected:
     friend class KoParagraphStyle;

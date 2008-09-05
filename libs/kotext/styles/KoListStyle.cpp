@@ -34,7 +34,7 @@
 class KoListStyle::Private
 {
 public:
-    Private() : styleId(0), refCount(1) { }
+    Private() : styleId(0) { }
 
     QTextList *textList(int level, const QTextDocument *doc) {
         if (! textLists.contains(level))
@@ -58,7 +58,6 @@ public:
     int styleId;
     QMap<int, KoListLevelProperties> levels;
     QMap<int, QMap<const QTextDocument*, QPointer<QTextList> > > textLists;
-    int refCount;
 };
 
 KoListStyle::KoListStyle()
@@ -69,7 +68,6 @@ KoListStyle::KoListStyle()
 KoListStyle::KoListStyle(const KoListStyle &orig)
         : d(orig.d)
 {
-    d->refCount++;
 }
 
 KoListStyle::KoListStyle(int)
@@ -79,8 +77,7 @@ KoListStyle::KoListStyle(int)
 
 KoListStyle::~KoListStyle()
 {
-    if (d && --d->refCount == 0)
-        delete d;
+    delete d;
 }
 
 bool KoListStyle::operator==(const KoListStyle &other) const
@@ -105,7 +102,10 @@ QString KoListStyle::name() const
 
 void KoListStyle::setName(const QString &name)
 {
+    if (d->name == name)
+        return;
     d->name = name;
+    emit nameChanged(d->name);
 }
 
 int KoListStyle::styleId() const

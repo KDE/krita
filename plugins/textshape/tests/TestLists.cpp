@@ -21,7 +21,7 @@ void TestDocumentLayout::testBasicList()
     KoListStyle listStyle;
     KoListLevelProperties level1;
     listStyle.setLevelProperties(level1);
-    style.setListStyle(listStyle);
+    style.setListStyle(&listStyle);
     style.applyStyle(block); // make this a listStyle
     QVERIFY(block.textList());
     QCOMPARE(block.textList()->format().intProperty(QTextListFormat::ListStyle), (int) KoListStyle::DiscItem);
@@ -68,7 +68,7 @@ void TestDocumentLayout::testNumberedList()
     KoListLevelProperties llp;
     llp.setStyle(KoListStyle::DecimalItem);
     listStyle.setLevelProperties(llp);
-    style.setListStyle(listStyle);
+    style.setListStyle(&listStyle);
 
     QTextList *previous = 0;
     int i;
@@ -169,7 +169,7 @@ void TestDocumentLayout::testInterruptedLists()
     llp.setStyle(KoListStyle::DecimalItem);
     llp.setListItemSuffix(".");
     listStyle.setLevelProperties(llp);
-    style.setListStyle(listStyle);
+    style.setListStyle(&listStyle);
 
     QTextBlock block = doc->begin();
     style.applyStyle(block);
@@ -249,27 +249,27 @@ void TestDocumentLayout::testNestedLists()
     llp.setStyle(KoListStyle::DecimalItem);
 
     listStyle.setLevelProperties(llp);
-    h1.setListStyle(listStyle);
+    h1.setListStyle(&listStyle);
 
     KoListStyle listStyle2;
     llp.setLevel(2);
     llp.setListItemSuffix(".");
     listStyle2.setLevelProperties(llp);
-    h2.setListStyle(listStyle2);
+    h2.setListStyle(&listStyle2);
     // purpusfully leave this one out, as it should default to the only known one: // h2.setListLevel(2);
 
     llp.setLevel(3);
     llp.setListItemSuffix("");
     KoListStyle listStyle3;
     listStyle3.setLevelProperties(llp);
-    h3.setListStyle(listStyle3);
+    h3.setListStyle(&listStyle3);
     h3.setListLevel(3);
 
     KoListStyle listStyle4;
     llp.setLevel(4);
     llp.setDisplayLevel(2);
     listStyle4.setLevelProperties(llp);
-    h4.setListStyle(listStyle4);
+    h4.setListStyle(&listStyle4);
     h4.setListLevel(4);
 
     QTextBlock block = doc->begin().next();
@@ -333,13 +333,13 @@ void TestDocumentLayout::testAutoRestartList()
     KoListLevelProperties llp = listStyle.levelProperties(1);
     llp.setStyle(KoListStyle::DecimalItem);
     listStyle.setLevelProperties(llp);
-    h1.setListStyle(listStyle);
+    h1.setListStyle(&listStyle);
 
     KoListStyle listStyle2;
     KoListLevelProperties llp2 = listStyle2.levelProperties(2);
     llp2.setStyle(KoListStyle::DecimalItem);
     listStyle2.setLevelProperties(llp2);
-    h2.setListStyle(listStyle2);
+    h2.setListStyle(&listStyle2);
 
     QTextBlock block = doc->begin();
     h1.applyStyle(block);
@@ -371,9 +371,9 @@ void TestDocumentLayout::testListParagraphIndent()
     h2.setTextIndent(10);
 
     KoListStyle listStyle;
-    h1.setListStyle(listStyle);
+    h1.setListStyle(&listStyle);
     KoListStyle listStyle2;
-    h2.setListStyle(listStyle2);
+    h2.setListStyle(&listStyle2);
 
     QTextBlock block = doc->begin();
     h1.applyStyle(block);
@@ -409,7 +409,7 @@ void TestDocumentLayout::testRestartNumbering()
     KoListLevelProperties llp;
     llp.setStyle(KoListStyle::DecimalItem);
     listStyle.setLevelProperties(llp);
-    h1.setListStyle(listStyle);
+    h1.setListStyle(&listStyle);
 
     QTextBlock block = doc->begin();
     while (block.isValid()) {
@@ -450,7 +450,7 @@ void TestDocumentLayout::testRightToLeftList()
     KoListLevelProperties llp = listStyle.levelProperties(1);
     llp.setStyle(KoListStyle::DecimalItem);
     listStyle.setLevelProperties(llp);
-    h1.setListStyle(listStyle);
+    h1.setListStyle(&listStyle);
 
     QTextBlock block = doc->begin();
     h1.applyStyle(block);
@@ -484,7 +484,7 @@ void TestDocumentLayout::testLetterSynchronization()
     llp.setLetterSynchronization(true);
     llp.setStartValue(25);
     listStyle.setLevelProperties(llp);
-    h1.setListStyle(listStyle);
+    h1.setListStyle(&listStyle);
 
     QTextBlock block = doc->begin();
     while (block.isValid()) {

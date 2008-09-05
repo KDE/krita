@@ -117,9 +117,7 @@ public:
      * Constructor
      * Create a new list style which uses numbered (KoListStyle::ListDecimal) listitems.
      */
-    explicit KoListStyle();
-    /// Copy constructor
-    KoListStyle(const KoListStyle &orig);
+    explicit KoListStyle(QObject *parent = 0);
 
     /// Destructor
     ~KoListStyle();
@@ -170,9 +168,6 @@ public:
     /// set a user-visible name on the style.
     void setName(const QString &name);
 
-    bool isValid() const;
-
-
     /**
      * Apply this style to a block by adding the block to the proper list.
      */
@@ -194,13 +189,10 @@ public:
      */
     void saveOdf(KoGenStyle &style);
 
+    void copyProperties(KoListStyle *other);
+
 signals:
     void nameChanged(const QString &newName);
-
-protected:
-    friend class KoParagraphStyle;
-    void apply(const KoListStyle &other);
-    explicit KoListStyle(int);
 
 private:
     class Private;

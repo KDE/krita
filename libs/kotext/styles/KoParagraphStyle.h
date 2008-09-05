@@ -494,14 +494,14 @@ public:
      * @see setListStyle()
      * @see removeListStyle()
      */
-    KoListStyle listStyle() const;
+    KoListStyle *listStyle() const;
     /**
      * Set a new liststyle on this paragraph style, making all paragraphs that use this style
      *  automatically be part of the list.
      * @see setListStyle()
      * @see removeListStyle()
      */
-    void setListStyle(const KoListStyle &style);
+    void setListStyle(KoListStyle *style);
     /**
      * Remove any set list style on this paragraphs style.
      * Stops all paragraphs that follow this style from being a list item.

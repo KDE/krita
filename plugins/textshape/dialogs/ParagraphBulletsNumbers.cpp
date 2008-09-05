@@ -56,15 +56,15 @@ void ParagraphBulletsNumbers::addStyle(const Lists::ListStyleItem &lsi)
 void ParagraphBulletsNumbers::open(KoParagraphStyle *style)
 {
     m_paragStyle = style;
-    KoListStyle listStyle = style->listStyle();
-    widget.listPropertiesPane->setEnabled(listStyle.isValid());
+    KoListStyle *listStyle = style->listStyle();
+    widget.listPropertiesPane->setEnabled(listStyle != 0);
     widget.customCharacter->setText("-");
-    if (!listStyle.isValid()) {
+    if (listStyle == 0) {
         widget.listTypes->setCurrentRow(0);
         return;
     }
 
-    KoListLevelProperties llp = listStyle.levelProperties(m_paragStyle->listLevel());
+    KoListLevelProperties llp = listStyle->levelProperties(m_paragStyle->listLevel());
     m_previousLevel = llp.level();
     widget.prefix->setText(llp.listItemPrefix());
     widget.suffix->setText(llp.listItemSuffix());
@@ -105,15 +105,15 @@ void ParagraphBulletsNumbers::save()
     Q_ASSERT(m_paragStyle);
     KoListStyle::Style style = m_mapping[widget.listTypes->currentRow()];
     if (style == KoListStyle::NoItem) {
-        m_paragStyle->removeListStyle();
+        m_paragStyle->setListStyle(0);
         return;
     }
-    if (! m_paragStyle->listStyle().isValid()) {
-        KoListStyle ls;
-        m_paragStyle->setListStyle(ls);
+    if (m_paragStyle->listStyle() == 0) {
+        KoListStyle *listStyle = new KoListStyle(m_paragStyle);
+        m_paragStyle->setListStyle(listStyle);
     }
-    KoListStyle listStyle = m_paragStyle->listStyle();
-    KoListLevelProperties llp = listStyle.levelProperties(widget.depth->value());
+    KoListStyle *listStyle = m_paragStyle->listStyle();
+    KoListLevelProperties llp = listStyle->levelProperties(widget.depth->value());
     llp.setStyle(style);
     llp.setLevel(widget.depth->value());
     llp.setDisplayLevel(widget.levels->value());
@@ -133,8 +133,8 @@ void ParagraphBulletsNumbers::save()
     }
     llp.setAlignment(align);
     if (llp.level() != m_previousLevel)
-        listStyle.removeLevelProperties(m_previousLevel);
-    listStyle.setLevelProperties(llp);
+        listStyle->removeLevelProperties(m_previousLevel);
+    listStyle->setLevelProperties(llp);
     m_paragStyle->setListLevel(llp.level());
 }
 

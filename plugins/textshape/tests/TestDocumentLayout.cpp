@@ -730,7 +730,7 @@ void TestDocumentLayout::testBorderData()
     KoListLevelProperties llp = listStyle.levelProperties(1);
     llp.setStyle(KoListStyle::DecimalItem);
     listStyle.setLevelProperties(llp);
-    style.setListStyle(listStyle);
+    style.setListStyle(&listStyle);
     style.setLeftBorderWidth(3);
 
     QTextBlock block = doc->begin().next();

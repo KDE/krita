@@ -60,18 +60,8 @@ public:
     QMap<int, QMap<const QTextDocument*, QPointer<QTextList> > > textLists;
 };
 
-KoListStyle::KoListStyle()
-        : d(new Private())
-{
-}
-
-KoListStyle::KoListStyle(const KoListStyle &orig)
-        : d(orig.d)
-{
-}
-
-KoListStyle::KoListStyle(int)
-        : d(0)
+KoListStyle::KoListStyle(QObject *parent)
+        : QObject(parent), d(new Private())
 {
 }
 
@@ -93,6 +83,14 @@ bool KoListStyle::operator==(const KoListStyle &other) const
             return false;
     }
     return true;
+}
+
+void KoListStyle::copyProperties(KoListStyle *other)
+{
+    d->styleId = other->d->styleId;
+    d->levels = other->d->levels;
+    d->textLists = other->d->textLists;
+    setName(other->name());
 }
 
 QString KoListStyle::name() const
@@ -174,7 +172,6 @@ void KoListStyle::removeLevelProperties(int level)
 
 void KoListStyle::applyStyle(const QTextBlock &block, int level)
 {
-    Q_ASSERT(isValid());
     if (level == 0) { // illegal level; fetch the first proper level we have
         if (d->levels.count())
             level = d->levels.keys().first();
@@ -220,11 +217,6 @@ void KoListStyle::applyStyle(const QTextBlock &block, int level)
 
     if (contains)
         d->levels.insert(level, llp);
-}
-
-bool KoListStyle::isValid() const
-{
-    return d != 0;
 }
 
 // static

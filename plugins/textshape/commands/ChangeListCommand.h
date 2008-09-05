@@ -48,7 +48,7 @@ public:
      * @param exact if true then the actual style 'style' should be set, if false we possibly  merge with another similar style that is near the block
      * @param parent the parent undo command for macro functionality
      */
-    ChangeListCommand(const QTextBlock &block, KoListStyle style, bool exact = true, QUndoCommand *parent = 0);
+    ChangeListCommand(const QTextBlock &block, KoListStyle *style, bool exact = true, QUndoCommand *parent = 0);
     ~ChangeListCommand();
 
     /// redo the command

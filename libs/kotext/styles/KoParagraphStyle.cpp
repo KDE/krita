@@ -55,8 +55,6 @@ public:
     Private() : charStyle(0), listStyle(0), parent(0), next(0) {}
 
     ~Private() {
-        charStyle = 0; // QObject will delete it.
-        delete listStyle;
     }
 
     void setProperty(int key, const QVariant &value) {
@@ -192,19 +190,6 @@ void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
                 data->setCounterWidth(-1);
         }
     }
-}
-
-void KoParagraphStyle::setListStyle(const KoListStyle &style)
-{
-    if (d->listStyle)
-        delete d->listStyle;
-    d->listStyle = new KoListStyle(style);
-}
-
-void KoParagraphStyle::removeListStyle()
-{
-    delete d->listStyle;
-    d->listStyle = 0;
 }
 
 static KoParagraphStyle::BorderStyle oasisBorderStyle(const QString& borderstyle)
@@ -848,14 +833,25 @@ const KoCharacterStyle *KoParagraphStyle::characterStyle() const
 
 void KoParagraphStyle::setCharacterStyle(KoCharacterStyle *style)
 {
+    if (d->charStyle == style)
+        return;
+    if (d->charStyle && d->charStyle->parent() == this)
+        delete d->charStyle;
     d->charStyle = style;
 }
 
-KoListStyle KoParagraphStyle::listStyle() const
+KoListStyle *KoParagraphStyle::listStyle() const
 {
-    if (d->listStyle)
-        return KoListStyle(*d->listStyle);
-    return KoListStyle(0); // an invalid one
+    return d->listStyle;
+}
+
+void KoParagraphStyle::setListStyle(KoListStyle *style)
+{
+    if (d->listStyle == style)
+        return;
+    if (d->listStyle && d->listStyle->parent() == this)
+        delete d->listStyle;
+    d->listStyle = style;
 }
 
 KoText::Direction KoParagraphStyle::textProgressionDirection() const
@@ -1381,8 +1377,7 @@ void KoParagraphStyle::copyProperties(const KoParagraphStyle *style)
     d->charStyle = style->d->charStyle;
     d->next = style->d->next;
     d->parent = style->d->parent;
-    if (style->d->listStyle)
-        setListStyle(*style->d->listStyle);
+    d->listStyle = style->d->listStyle;
 }
 
 KoParagraphStyle *KoParagraphStyle::clone(QObject *parent)

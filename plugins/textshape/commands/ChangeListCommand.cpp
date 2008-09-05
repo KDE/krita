@@ -73,18 +73,19 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
     setText(i18n("Change List"));
 }
 
-ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle style, bool exact, QUndoCommand *parent)
+ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle *style, bool exact, QUndoCommand *parent)
         : TextCommandBase(parent),
         m_block(block)
 {
     Q_ASSERT(block.isValid());
-    Q_ASSERT(style.isValid());
+    Q_ASSERT(style);
     storeOldProperties();
     if (! exact) {
         // search for similar ones in the next / prev parags.
         // TODO
     }
-    m_listStyle = new KoListStyle(style);
+    m_listStyle = new KoListStyle;
+    m_listStyle->copyProperties(style);
     setText(i18n("Change List"));
 }
 

@@ -70,7 +70,7 @@ void ParagraphSettingsDialog::accept()
         QTextBlockFormat format;
         m_style->applyStyle(format);
         m_cursor.mergeBlockFormat(format);
-        if (m_style->listStyle().isValid()) {
+        if (m_style->listStyle()) {
             ChangeListCommand *cmd = new ChangeListCommand(m_cursor.block(), m_style->listStyle());
             m_tool->addCommand(cmd);
         } else {

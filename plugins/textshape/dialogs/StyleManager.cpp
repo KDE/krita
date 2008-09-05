@@ -114,8 +114,8 @@ void StyleManager::setStyle(QListWidgetItem *item, QListWidgetItem *previous)
         if (m_alteredParagraphStyles.contains(styleId))
             style = m_alteredParagraphStyles.value(styleId);
         else {
-            style = m_styleManager->paragraphStyle(styleId);
-            style = new KoParagraphStyle(*style);
+            style = new KoParagraphStyle;
+            style->copyProperties(m_styleManager->paragraphStyle(styleId));
             m_alteredParagraphStyles.insert(styleId, style);
         }
         widget.paragraphStylePage->setStyle(style);

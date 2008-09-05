@@ -65,7 +65,7 @@ void TestStyles::testChangeParent()
     QCOMPARE(style1.topMargin(), 10.0);
     QCOMPARE(style3.topMargin(), 10.0);
 
-    // test that separating will leave the child with exactly the same dataset 
+    // test that separating will leave the child with exactly the same dataset
     // as it had before the inheritance
     style3.setParent(0);
     QCOMPARE(style1.topMargin(), 10.0);
@@ -190,8 +190,8 @@ void TestStyles::testCopyParagraphStyle()
     style1.setRightMargin(30.);
     style2.setRightMargin(20.);
 
-    // the assignment operator should take the *effective* style.
-    KoParagraphStyle newStyle = style2;
+    KoParagraphStyle newStyle;
+    newStyle.copyProperties(&style2);
     QCOMPARE(newStyle.leftMargin(), 10.);
     QCOMPARE(newStyle.rightMargin(), 20.);
 }

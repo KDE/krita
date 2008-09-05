@@ -77,19 +77,6 @@ KoParagraphStyle::KoParagraphStyle(QObject *parent)
     d->charStyle = new KoCharacterStyle(this);
 }
 
-KoParagraphStyle::KoParagraphStyle(const KoParagraphStyle &orig, QObject *parent)
-        : QObject(parent),
-        d(new Private())
-{
-    d->stylesPrivate = orig.d->stylesPrivate;
-    d->name = orig.name();
-    d->charStyle = orig.d->charStyle;
-    d->next = orig.d->next;
-    d->parent = orig.d->parent;
-    if (orig.d->listStyle)
-        setListStyle(*orig.d->listStyle);
-}
-
 KoParagraphStyle::KoParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat, QObject *parent)
         : QObject(parent),
         d(new Private())
@@ -1389,12 +1376,20 @@ void KoParagraphStyle::copyProperties(const KoParagraphStyle *style)
 {
     d->stylesPrivate = style->d->stylesPrivate;
     setName(style->name()); // make sure we emit property change
-    if (d->charStyle)
+    if (d->charStyle && d->charStyle->parent() == this)
         delete d->charStyle;
     d->charStyle = style->d->charStyle;
     d->next = style->d->next;
+    d->parent = style->d->parent;
     if (style->d->listStyle)
         setListStyle(*style->d->listStyle);
+}
+
+KoParagraphStyle *KoParagraphStyle::clone(QObject *parent)
+{
+    KoParagraphStyle *newStyle = new KoParagraphStyle(parent);
+    newStyle->copyProperties(this);
+    return newStyle;
 }
 
 // static
@@ -1408,8 +1403,10 @@ KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block)
         KoStyleManager *sm = KoTextDocument(block.document()).styleManager();
         if (sm) {
             KoParagraphStyle *style = sm->paragraphStyle(styleId);
-            if (style)
-                answer = new KoParagraphStyle(*style);
+            if (style) {
+                answer = new KoParagraphStyle;
+                answer->copyProperties(style);
+            }
             charStyle = sm->characterStyle(format.intProperty(KoCharacterStyle::StyleId));
         }
     }

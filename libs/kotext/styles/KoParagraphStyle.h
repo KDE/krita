@@ -145,8 +145,6 @@ public:
     /// Constructor
     KoParagraphStyle(QObject *parent = 0);
     /// Copy constructor
-    KoParagraphStyle(const KoParagraphStyle &orig, QObject *parent = 0);
-    /// Copy constructor
     KoParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat, QObject *parent = 0);
     /// Destructor
     ~KoParagraphStyle();
@@ -466,6 +464,9 @@ public:
 
     /// copy all the properties from the other style to this style, effectively duplicating it.
     void copyProperties(const KoParagraphStyle *style);
+
+    /// creates a clone of this style with the sepcified parent
+    KoParagraphStyle *clone(QObject *parent = 0);
 
     /**
      * Apply this style to a blockFormat by copying all properties from this, and parent

@@ -21,6 +21,7 @@
 #define KOTEXTDOCUMENT_H
 
 #include <QTextDocument>
+#include <QUrl>
 
 class KoStyleManager;
 
@@ -42,11 +43,6 @@ public:
     /// Destructor
     ~KoTextDocument();
 
-    /// Enum (type) used to add resources using QTextDocument::addResource()
-    enum ResourceType {
-        StyleManager = QTextDocument::UserResource
-    };
-
     /// Returns the document that was passed in the constructor
     QTextDocument *document() const;
 
@@ -61,6 +57,12 @@ public:
      * function does not clear the resources of the QTextDocument.
      */
     void clearText();
+
+    /// Enum (type) used to add resources using QTextDocument::addResource()
+    enum ResourceType {
+        StyleManager = QTextDocument::UserResource
+    };
+    static const QUrl StyleManagerURL;
 
 private:
     QTextDocument *m_document;

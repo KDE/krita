@@ -27,6 +27,8 @@
 #include "styles/KoStyleManager.h"
 #include "KoTextDocument.h"
 
+const QUrl KoTextDocument::StyleManagerURL = QUrl("kotext://stylemanager");
+
 KoTextDocument::KoTextDocument(QTextDocument *document)
 : m_document(document)
 {
@@ -50,12 +52,12 @@ void KoTextDocument::setStyleManager(KoStyleManager *sm)
 {
     QVariant v;
     v.setValue(sm);
-    m_document->addResource(KoTextDocument::StyleManager, QUrl(), v);
+    m_document->addResource(KoTextDocument::StyleManager, StyleManagerURL, v);
 }
 
 KoStyleManager *KoTextDocument::styleManager() const
 {
-    QVariant resource = m_document->resource(KoTextDocument::StyleManager, QUrl());
+    QVariant resource = m_document->resource(KoTextDocument::StyleManager, StyleManagerURL);
     return resource.value<KoStyleManager *>();
 }
 

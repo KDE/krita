@@ -98,13 +98,13 @@ KoCharacterStyle::KoCharacterStyle(const QTextCharFormat &format, QObject *paren
 
 void KoCharacterStyle::copyProperties(const KoCharacterStyle *style)
 {
-    d->stylesPrivate.copy(style->d->stylesPrivate);
+    d->stylesPrivate = style->d->stylesPrivate;
     setName(style->name()); // make sure we emit property change
 }
 
 void KoCharacterStyle::copyProperties(const QTextCharFormat &format)
 {
-    d->stylesPrivate.copy(format.properties());
+    d->stylesPrivate = format.properties();
 }
 
 KoCharacterStyle::~KoCharacterStyle()

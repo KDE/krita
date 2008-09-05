@@ -31,11 +31,9 @@ class KoListLevelProperties::Private
 {
 public:
     StylePrivate stylesPrivate;
-    //QMap<const QTextDocument*, QPointer<QTextList> > textLists;
 
     void copy(Private *other) {
         stylesPrivate = other->stylesPrivate;
-        //textLists = other->textLists;
     }
 };
 
@@ -260,7 +258,7 @@ void KoListLevelProperties::setLetterSynchronization(bool on)
 KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list)
 {
     KoListLevelProperties llp;
-    llp.d->stylesPrivate.copy(list->format().properties());
+    llp.d->stylesPrivate = list->format().properties();
     return llp;
 }
 

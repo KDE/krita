@@ -48,9 +48,6 @@ public:
     bool operator!=(const StylePrivate &other) const;
     bool isEmpty() const;
 
-    void copy(const QMap<int, QVariant> &other);
-    void copy(const StylePrivate &other);
-
 private:
     QMap<int, QVariant> m_properties;
 };

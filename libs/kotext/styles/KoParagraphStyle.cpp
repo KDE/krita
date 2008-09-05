@@ -1387,7 +1387,7 @@ qreal KoParagraphStyle::tabStopDistance() const
 
 void KoParagraphStyle::copyProperties(const KoParagraphStyle *style)
 {
-    d->stylesPrivate.copy(style->d->stylesPrivate);
+    d->stylesPrivate = style->d->stylesPrivate;
     setName(style->name()); // make sure we emit property change
     if (d->charStyle)
         delete d->charStyle;

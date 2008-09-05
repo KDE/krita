@@ -502,11 +502,6 @@ public:
      * @see removeListStyle()
      */
     void setListStyle(KoListStyle *style);
-    /**
-     * Remove any set list style on this paragraphs style.
-     * Stops all paragraphs that follow this style from being a list item.
-     */
-    void removeListStyle();
 
     static KoParagraphStyle *fromBlock(const QTextBlock &block);
 

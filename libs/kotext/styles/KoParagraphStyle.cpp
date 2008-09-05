@@ -1374,7 +1374,7 @@ void KoParagraphStyle::copyProperties(const KoParagraphStyle *style)
     setName(style->name()); // make sure we emit property change
     if (d->charStyle && d->charStyle->parent() == this)
         delete d->charStyle;
-    d->charStyle = style->d->charStyle;
+    d->charStyle = style->d->charStyle->clone(this);
     d->next = style->d->next;
     d->parentStyle = style->d->parentStyle;
     d->listStyle = style->d->listStyle;

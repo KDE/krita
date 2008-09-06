@@ -79,7 +79,6 @@ KisBrushSelectionWidget::~KisBrushSelectionWidget()
 KisBrushSP KisBrushSelectionWidget::brush()
 {
     KisBrushSP theBrush;
-    kDebug() << m_brushesTab->currentIndex();
     switch (m_brushesTab->currentIndex()) {
     case 0:
         theBrush = m_autoBrushWidget->brush();
@@ -96,7 +95,6 @@ KisBrushSP KisBrushSelectionWidget::brush()
     default:
         ;
     }
-    kDebug() << theBrush;
     return theBrush;
 
 }

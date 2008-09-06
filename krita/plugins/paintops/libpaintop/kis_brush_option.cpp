@@ -32,6 +32,5 @@ KisBrushOption::KisBrushOption()
 
 KisBrushSP KisBrushOption::brush()
 {
-    kDebug() << m_brushSelectionWidget->brush()->name();
     return m_brushSelectionWidget->brush();
 }

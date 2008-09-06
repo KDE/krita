@@ -145,15 +145,15 @@ void KisCustomBrush::createBrush()
             devices[0].push_back(paint->paintDevice().data());
         layer = dynamic_cast<KisLayer*>(layer->nextSibling().data());
     }
-    QVector<KisPipeBrushParasite::SelectionMode> modes;
+    QVector<KisParasite::SelectionMode> modes;
 
     switch (comboBox2->currentIndex()) {
-    case 0: modes.push_back(KisPipeBrushParasite::Constant); break;
-    case 1: modes.push_back(KisPipeBrushParasite::Random); break;
-    case 2: modes.push_back(KisPipeBrushParasite::Incremental); break;
-    case 3: modes.push_back(KisPipeBrushParasite::Pressure); break;
-    case 4: modes.push_back(KisPipeBrushParasite::Angular); break;
-    default: modes.push_back(KisPipeBrushParasite::Incremental);
+    case 0: modes.push_back(KisParasite::Constant); break;
+    case 1: modes.push_back(KisParasite::Random); break;
+    case 2: modes.push_back(KisParasite::Incremental); break;
+    case 3: modes.push_back(KisParasite::Pressure); break;
+    case 4: modes.push_back(KisParasite::Angular); break;
+    default: modes.push_back(KisParasite::Incremental);
     }
 
     m_brush = new KisImagePipeBrush(m_image->objectName(), w, h, devices, modes);

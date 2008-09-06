@@ -12,6 +12,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_custom_brush.cc
     kis_filter_option.cpp
     kis_imagepipe_brush.cc
+    kis_imagepipe_brush_p.cpp
     kis_paintop_option.cpp
     kis_paintop_options_widget.cpp
     kis_pressure_darken_option.cpp
@@ -27,6 +28,7 @@ kde4_add_ui_files(kritalibpaintop_LIB_SRCS
     wdgautobrush.ui
     wdgcustombrush.ui
     wdgtextbrush.ui
+    wdgincremental.ui
 )
 
 kde4_add_library(kritalibpaintop SHARED ${kritalibpaintop_LIB_SRCS} )

@@ -18,9 +18,29 @@
 #include "kis_paint_action_type_option.h"
 #include <klocale.h>
 
-KisPaintActionTypeOption::KisPaintActionTypeOption()
-        : KisPaintOpOption(i18n("Paint deposition"), false)
+#include <QWidget>
+#include <QRadioButton>
+
+#include "ui_wdgincremental.h"
+
+class KisPaintActionWidget: public QWidget, public Ui::WdgIncremental
 {
+public:
+    KisPaintActionWidget(QWidget *parent = 0)
+        : QWidget(parent)
+    {
+        setupUi(this);
+    }
+};
+
+
+KisPaintActionTypeOption::KisPaintActionTypeOption()
+        : KisPaintOpOption(i18n("Painting Mode"), false)
+{
+    m_checkable = false;
+    m_optionWidget = new KisPaintActionWidget();
+    m_optionWidget->hide();
+    setConfigurationPage(m_optionWidget);
 }
 
 
@@ -29,3 +49,15 @@ KisPaintActionTypeOption::~KisPaintActionTypeOption()
 }
 
 
+enumPaintActionType KisPaintActionTypeOption::paintActionType()
+{
+    if ( m_optionWidget->radioBuildup->isChecked() ) {
+        return BUILDUP;
+    }
+    else if ( m_optionWidget->radioBuildup->isChecked() ) {
+        return WASH;
+    }
+    else {
+        return WASH;
+    }
+}

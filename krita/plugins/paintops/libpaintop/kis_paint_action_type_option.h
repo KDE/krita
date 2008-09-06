@@ -21,6 +21,14 @@
 #include <kis_paintop_option.h>
 #include <krita_export.h>
 
+class KisPaintActionWidget;
+
+enum enumPaintActionType {
+    BUILDUP,
+    WASH,
+    FRINGED // not used yet
+};
+
 /**
  * Allows the user to choose between three types of paint action:
  * * incremental (going over the same spot in one stroke makes it darker)
@@ -33,6 +41,12 @@ public:
     KisPaintActionTypeOption();
 
     ~KisPaintActionTypeOption();
+
+    enumPaintActionType paintActionType();
+
+private:
+
+    KisPaintActionWidget * m_optionWidget;
 
 };
 

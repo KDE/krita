@@ -203,9 +203,6 @@ KisPaintOpSettingsSP KisBrushOpFactory::settings(KisImageSP image)
     return new KisBrushOpSettings(0);
 }
 
-
-
-
 KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
         : KisBrushBasedPaintOp(painter)
         , settings(settings)

@@ -267,7 +267,7 @@ void Brush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPain
                 if (m_useWeights){
 
                     // new weighted way (experiment)
-                    saturationVariant = ( 
+                    saturationVariant = (
                         (pressure*m_pressureWeight)+
                         (bristle->length()*m_bristleLengthWeight)+
                         (bristle->inkAmount()*m_bristleInkAmountWeight)+
@@ -311,15 +311,15 @@ void Brush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPain
             QPointF *bristlePos = &bristlePath[i];
             addBristleInk(bristle, bristlePos->x(), bristlePos->y(), brColor);
 
-            /*
+#if 0
             // some kind of nice weighted bidirectional painting
             // FIXME: 8-bit specific
-            QColor qcolor;
+            QColor qcolor; // Creating a qcolor in a loop is very slow
             brColor.toQColor(&qcolor);
             // instead of magic constant use pressure
             //mixCMY(bristlePos->x(), bristlePos->y(), qcolor.cyan(), qcolor.magenta(), qcolor.yellow(), 0.20);
             mixCMY(bristlePos->x(), bristlePos->y(), qcolor.cyan(), qcolor.magenta(), qcolor.yellow(), pressure*0.30);
-            */
+#endif
             bristle->setInkAmount(1.0 - inkDeplation);
         }
 
@@ -385,7 +385,7 @@ void Brush::addBristleInk(Bristle *bristle, float wx, float wy, const KoColor &c
     const quint8 *colors[2];
     colors[0] = color.data();
     // now this reads pixels when incremental paint used!
-    colors[1] = m_layerAccessor->rawData(); 
+    colors[1] = m_layerAccessor->rawData();
 
     qint16 colorWeights[2];
 
@@ -459,9 +459,9 @@ void Brush::mixCMY(double x, double y, int cyan, int magenta, int yellow,double 
         nblue = 0;
 
     result.setRgb(
-        nred / MAX_CHANNEL_VALUE, 
-        ngreen / MAX_CHANNEL_VALUE, 
-        nblue / MAX_CHANNEL_VALUE, 
+        nred / MAX_CHANNEL_VALUE,
+        ngreen / MAX_CHANNEL_VALUE,
+        nblue / MAX_CHANNEL_VALUE,
         MAX_CHANNEL_VALUE -1 );
 
     kcolor.fromQColor(result);
@@ -487,9 +487,9 @@ void Brush::mixCMY(double x, double y, int cyan, int magenta, int yellow,double 
             nblue = 0;
 
     result.setRgb(
-        nred / MAX_CHANNEL_VALUE, 
-        ngreen / MAX_CHANNEL_VALUE, 
-        nblue / MAX_CHANNEL_VALUE, 
+        nred / MAX_CHANNEL_VALUE,
+        ngreen / MAX_CHANNEL_VALUE,
+        nblue / MAX_CHANNEL_VALUE,
         MAX_CHANNEL_VALUE -1 );
 
     kcolor.fromQColor(result);
@@ -518,9 +518,9 @@ void Brush::mixCMY(double x, double y, int cyan, int magenta, int yellow,double 
     }
 
     result.setRgb(
-        nred / MAX_CHANNEL_VALUE, 
-        ngreen / MAX_CHANNEL_VALUE, 
-        nblue / MAX_CHANNEL_VALUE, 
+        nred / MAX_CHANNEL_VALUE,
+        ngreen / MAX_CHANNEL_VALUE,
+        nblue / MAX_CHANNEL_VALUE,
         MAX_CHANNEL_VALUE -1 );
 
     kcolor.fromQColor(result);
@@ -548,9 +548,9 @@ void Brush::mixCMY(double x, double y, int cyan, int magenta, int yellow,double 
     }
 
     result.setRgb(
-        nred / MAX_CHANNEL_VALUE, 
-        ngreen / MAX_CHANNEL_VALUE, 
-        nblue / MAX_CHANNEL_VALUE, 
+        nred / MAX_CHANNEL_VALUE,
+        ngreen / MAX_CHANNEL_VALUE,
+        nblue / MAX_CHANNEL_VALUE,
         MAX_CHANNEL_VALUE -1 );
 
     kcolor.fromQColor(result);

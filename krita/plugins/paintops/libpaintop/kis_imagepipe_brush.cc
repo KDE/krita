@@ -18,173 +18,74 @@
  */
 
 #include "kis_imagepipe_brush.h"
-#include <math.h>
-#include <limits.h>
+#include "kis_imagepipe_brush_p.h"
 
-#include <QImage>
-#include <QPoint>
-#include <QVector>
-#include <QFile>
-#include <QRegExp>
-#include <QStringList>
-#include <QTextStream>
+class KisImagePipeBrush::Private {
+public:
 
-#include <kis_debug.h>
-#include <klocale.h>
-#include <krandom.h>
+    QString name;
+    QString parasiteString; // Contains instructions on how to use the brush
+    mutable KisPipeBrushParasite parasite;
+    qint32 numOfBrushes;
+    mutable quint32 currentBrush;
 
-#include "KoColorSpaceRegistry.h"
+    QByteArray data;
+    mutable QList<KisBrush *> brushes;
 
-#include "kis_global.h"
-#include "kis_paint_device.h"
-#include "kis_brush.h"
-#include "kis_layer.h"
-#include "kis_boundary.h"
+    enumBrushType brushType;
+};
 
-KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
+KisImagePipeBrush::KisImagePipeBrush(const QString& filename)
+    : KisBrush(filename)
+    , m_d( new Private() )
 {
-    needsMovement = false;
-    QRegExp basicSplitter(" ");
-    QRegExp parasiteSplitter(":");
-    QStringList parasites = source.split(basicSplitter, QString::SkipEmptyParts);
-    for (int i = 0; i < parasites.count(); i++) {
-        QStringList splitted = parasites.at(i).split(parasiteSplitter, QString::SkipEmptyParts);
-        if (splitted.count() != 2) {
-            kWarning(41001) << "Wrong count for this parasite key/value:" << parasites.at(i);
-            continue;
-        }
-        QString index = splitted.at(0);
-        if (index == "dim") {
-            dim = (splitted.at(1)).toInt();
-            if (dim < 1 || dim > MaxDim) {
-                dim = 1;
-            }
-        } else if (index.startsWith("sel")) {
-            int selIndex = index.mid(strlen("sel")).toInt();
-            if (selIndex >= 0 && selIndex < dim) {
-                QString selectionMode = splitted.at(1);
-                if (selectionMode == "incremental")
-                    selection[selIndex] = Incremental;
-                else if (selectionMode == "angular") {
-                    selection[selIndex] = Angular;
-                    needsMovement = true;
-                } else if (selectionMode == "random")
-                    selection[selIndex] = Random;
-                else if (selectionMode == "pressure")
-                    selection[selIndex] = Pressure;
-                else if (selectionMode == "xtilt")
-                    selection[selIndex] = TiltX;
-                else if (selectionMode == "ytilt")
-                    selection[selIndex] = TiltY;
-                else
-                    selection[selIndex] = Constant;
-            } else {
-                kWarning(41001) << "Sel: wrong index: " << selIndex << "(dim = " << dim << ")";
-            }
-        } else if (index.startsWith("rank")) {
-            int rankIndex = index.mid(strlen("rank")).toInt();
-            if (rankIndex < 0 || rankIndex > dim) {
-                kWarning(41001) << "Rankindex out of range: " << rankIndex;
-                continue;
-            }
-            rank[rankIndex] = (splitted.at(1)).toInt();
-        } else if (index == "ncells") {
-            ncells = (splitted.at(1)).toInt();
-            if (ncells < 1) {
-                kWarning(41001) << "ncells out of range: " << ncells;
-                ncells = 1;
-            }
-        }
-    }
-
-    for (int i = 0; i < dim; i++) {
-        index[i] = 0;
-    }
-
-    setBrushesCount();
-}
-
-void KisPipeBrushParasite::setBrushesCount()
-{
-    // I assume ncells is correct. If it isn't, complain to the parasite header.
-    brushesCount[0] = ncells / rank[0];
-    for (int i = 1; i < dim; i++) {
-        brushesCount[i] = brushesCount[i-1] / rank[i];
-    }
-}
-
-bool KisPipeBrushParasite::saveToDevice(QIODevice* dev) const
-{
-    // write out something like
-    // <count> ncells:<count> dim:<dim> rank0:<rank0> sel0:<sel0> <...>
-
-    QTextStream stream(dev);
-    /// FIXME things like step, placement and so are not added (nor loaded, as a matter of fact)
-    stream << ncells << " ncells:" << ncells << " dim:" << dim;
-
-    for (int i = 0; i < dim; i++) {
-        stream << " rank" << i << ":" << rank[i] << " sel" << i << ":";
-        switch (selection[i]) {
-        case Constant: stream << "constant"; break;
-        case Incremental: stream << "incremental"; break;
-        case Angular: stream << "angular"; break;
-        case Velocity: stream << "velocity"; break;
-        case Random: stream << "random"; break;
-        case Pressure: stream << "pressure"; break;
-        case TiltX: stream << "xtilt"; break;
-        case TiltY: stream << "ytilt"; break;
-        }
-    }
-
-    return true;
-}
-
-KisImagePipeBrush::KisImagePipeBrush(const QString& filename) : KisBrush(filename)
-{
-    m_brushType = INVALID;
-    m_numOfBrushes = 0;
-    m_currentBrush = 0;
+    qDebug() << filename;
+    m_d->brushType = INVALID;
+    m_d->numOfBrushes = 0;
+    m_d->currentBrush = 0;
 }
 
 KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
                                      QVector< QVector<KisPaintDevice*> > devices,
-                                     QVector<KisPipeBrushParasite::SelectionMode> modes)
-        : KisBrush("")
+                                     QVector<KisParasite::SelectionMode > modes)
+    : KisBrush("")
+    , m_d( new Private() )
 {
     Q_ASSERT(devices.count() == modes.count());
     Q_ASSERT(devices.count() > 0);
     Q_ASSERT(devices.count() < 2); // XXX Multidimensionals not supported yet, change to MaxDim!
 
     setName(name);
-
-    m_parasite.dim = devices.count();
+    qDebug() << name;
+    m_d->parasite.dim = devices.count();
     // XXX Change for multidim! :
-    m_parasite.ncells = devices.at(0).count();
-    m_parasite.rank[0] = m_parasite.ncells;
-    m_parasite.selection[0] = modes.at(0);
+    m_d->parasite.ncells = devices.at(0).count();
+    m_d->parasite.rank[0] = m_d->parasite.ncells;
+    m_d->parasite.selection[0] = modes.at(0);
     // XXX needsmovement!
 
-    m_parasite.setBrushesCount();
+    m_d->parasite.setBrushesCount();
 
     for (int i = 0; i < devices.at(0).count(); i++) {
-        m_brushes.append(new KisBrush(devices.at(0).at(i), 0, 0, w, h));
+        m_d->brushes.append(new KisBrush(devices.at(0).at(i), 0, 0, w, h));
     }
 
-    setImage(m_brushes.at(0)->img());
+    setImage(m_d->brushes.at(0)->img());
 
-    m_brushType = PIPE_IMAGE;
+    m_d->brushType = PIPE_IMAGE;
 }
 
 KisImagePipeBrush::~KisImagePipeBrush()
 {
-    qDeleteAll(m_brushes);
+    qDeleteAll(m_d->brushes);
+    delete m_d;
 }
 
 bool KisImagePipeBrush::load()
 {
     QFile file(filename());
     file.open(QIODevice::ReadOnly);
-    m_data = file.readAll();
+    m_d->data = file.readAll();
     file.close();
     return init();
 }
@@ -199,8 +100,8 @@ bool KisImagePipeBrush::init()
 
     qint32 i = 0;
 
-    while (m_data[i] != '\n' && i < m_data.size()) {
-        line1.append(m_data[i]);
+    while (m_d->data[i] != '\n' && i < m_d->data.size()) {
+        line1.append(m_d->data[i]);
         i++;
     }
     setName(QString::fromUtf8(line1, line1.size()));
@@ -211,41 +112,41 @@ bool KisImagePipeBrush::init()
 
     // XXX: This stuff is in utf-8, too.
     QByteArray line2;
-    while (m_data[i] != '\n' && i < m_data.size()) {
-        line2.append(m_data[i]);
+    while (m_d->data[i] != '\n' && i < m_d->data.size()) {
+        line2.append(m_d->data[i]);
         i++;
     }
 
     QString paramline = QString::fromUtf8(line2, line2.size());
-    qint32 m_numOfBrushes = paramline.left(paramline.indexOf(' ')).toUInt();
-    m_parasite = paramline.mid(paramline.indexOf(' ') + 1);
+    m_d->numOfBrushes = paramline.left(paramline.indexOf(' ')).toUInt();
+    m_d->parasite = paramline.mid(paramline.indexOf(' ') + 1);
     i++; // Skip past the second newline
 
     qint32 numOfBrushes = 0;
-    while (numOfBrushes < m_numOfBrushes && i < m_data.size()) {
+    while (numOfBrushes < m_d->numOfBrushes && i < m_d->data.size()) {
         KisBrush * brush = new KisBrush(name() + '_' + QString().setNum(numOfBrushes),
-                                        m_data,
+                                        m_d->data,
                                         i);
         Q_CHECK_PTR(brush);
 
-        m_brushes.append(brush);
+        m_d->brushes.append(brush);
 
         numOfBrushes++;
     }
 
-    if (!m_brushes.isEmpty()) {
+    if (!m_d->brushes.isEmpty()) {
         setValid(true);
-        if (m_brushes.at(0)->brushType() == MASK) {
-            m_brushType = PIPE_MASK;
+        if (m_d->brushes.at(0)->brushType() == MASK) {
+            m_d->brushType = PIPE_MASK;
         } else {
-            m_brushType = PIPE_IMAGE;
+            m_d->brushType = PIPE_IMAGE;
         }
-        setSpacing(m_brushes.at(m_brushes.count() - 1)->spacing());
-        setWidth(m_brushes.at(0)->width());
-        setHeight(m_brushes.at(0)->height());
+        setSpacing(m_d->brushes.at(m_d->brushes.count() - 1)->spacing());
+        setWidth(m_d->brushes.at(0)->width());
+        setHeight(m_d->brushes.at(0)->height());
     }
 
-    m_data.resize(0);
+    m_d->data.resize(0);
     return true;
 }
 
@@ -264,7 +165,7 @@ bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
     char const* name = utf8Name.data();
     int len = qstrlen(name);
 
-    if (parasite().dim != 1) {
+    if (m_d->parasite.dim != 1) {
         kWarning(41001) << "Save to file for pipe brushes with dim != not yet supported!";
         return false;
     }
@@ -282,15 +183,15 @@ bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
         return false;
 
     // Write the parasite (also writes number of brushes)
-    if (!m_parasite.saveToDevice(dev))
+    if (!m_d->parasite.saveToDevice(dev))
         return false;
 
     if (dev->putChar('\n') == -1)
         return false;
 
     // <gbr brushes>
-    for (int i = 0; i < m_brushes.count(); i++)
-        if (!m_brushes.at(i)->saveToDevice(dev))
+    for (int i = 0; i < m_d->brushes.count(); i++)
+        if (!m_d->brushes.at(i)->saveToDevice(dev))
             return false;
 
     return true;
@@ -298,10 +199,10 @@ bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
 
 QImage KisImagePipeBrush::img() const
 {
-    if (m_brushes.isEmpty()) {
+    if (m_d->brushes.isEmpty()) {
         return QImage();
     } else {
-        return m_brushes.at(0)->img();
+        return m_d->brushes.at(0)->img();
     }
 }
 
@@ -311,40 +212,40 @@ void KisImagePipeBrush::generateMask(KisPaintDeviceSP dst, KisBrush::ColoringInf
     Q_UNUSED(scaleX);
     Q_UNUSED(scaleY);
     Q_UNUSED(angle);
-    if (m_brushes.isEmpty()) return;
+    if (m_d->brushes.isEmpty()) return;
     selectNextBrush(info);
-    m_brushes.at(m_currentBrush)->generateMask(dst, src, 1.0, 1.0, 0.0, info, subPixelX, subPixelY);
+    m_d->brushes.at(m_d->currentBrush)->generateMask(dst, src, 1.0, 1.0, 0.0, info, subPixelX, subPixelY);
 }
 
 KisPaintDeviceSP KisImagePipeBrush::image(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
     Q_UNUSED(scale);
     Q_UNUSED(angle);
-    if (m_brushes.isEmpty()) return KisPaintDeviceSP(0);
+    if (m_d->brushes.isEmpty()) return KisPaintDeviceSP(0);
     selectNextBrush(info);
-    return m_brushes.at(m_currentBrush)->image(colorSpace, 1.0, 0.0, info, subPixelX, subPixelY);
+    return m_d->brushes.at(m_d->currentBrush)->image(colorSpace, 1.0, 0.0, info, subPixelX, subPixelY);
 }
 
 void KisImagePipeBrush::setParasiteString(const QString& parasite)
 {
-    m_parasiteString = parasite;
-    m_parasite = KisPipeBrushParasite(parasite);
+    m_d->parasiteString = parasite;
+    m_d->parasite = KisPipeBrushParasite(parasite);
 }
 
 
 enumBrushType KisImagePipeBrush::brushType() const
 {
-    if (m_brushType == PIPE_IMAGE && useColorAsMask()) {
+    if (m_d->brushType == PIPE_IMAGE && useColorAsMask()) {
         return PIPE_MASK;
     } else {
-        return m_brushType;
+        return m_d->brushType;
     }
 }
 
 bool KisImagePipeBrush::useColorAsMask() const
 {
-    if (m_brushes.count() > 0) {
-        return m_brushes.at(0)->useColorAsMask();
+    if (m_d->brushes.count() > 0) {
+        return m_d->brushes.at(0)->useColorAsMask();
     } else {
         return false;
     }
@@ -352,15 +253,15 @@ bool KisImagePipeBrush::useColorAsMask() const
 
 void KisImagePipeBrush::setUseColorAsMask(bool useColorAsMask)
 {
-    for (int i = 0; i < m_brushes.count(); i++) {
-        m_brushes.at(i)->setUseColorAsMask(useColorAsMask);
+    for (int i = 0; i < m_d->brushes.count(); i++) {
+        m_d->brushes.at(i)->setUseColorAsMask(useColorAsMask);
     }
 }
 
 bool KisImagePipeBrush::hasColor() const
 {
-    if (m_brushes.count() > 0) {
-        return m_brushes.at(0)->hasColor();
+    if (m_d->brushes.count() > 0) {
+        return m_d->brushes.at(0)->hasColor();
     } else {
         return false;
     }
@@ -368,57 +269,57 @@ bool KisImagePipeBrush::hasColor() const
 
 KisBoundary KisImagePipeBrush::boundary()
 {
-    Q_ASSERT(!m_brushes.isEmpty());
-    return m_brushes.at(0)->boundary();
+    Q_ASSERT(!m_d->brushes.isEmpty());
+    return m_d->brushes.at(0)->boundary();
 }
 
 void KisImagePipeBrush::selectNextBrush(const KisPaintInformation& info) const
 {
-    m_currentBrush = 0;
+    m_d->currentBrush = 0;
     double angle;
-    for (int i = 0; i < m_parasite.dim; i++) {
-        int index = m_parasite.index[i];
-        switch (m_parasite.selection[i]) {
-        case KisPipeBrushParasite::Constant: break;
-        case KisPipeBrushParasite::Incremental:
-            index = (index + 1) % m_parasite.rank[i]; break;
-        case KisPipeBrushParasite::Random:
-            index = int(float(m_parasite.rank[i]) * KRandom::random() / RAND_MAX); break;
-        case KisPipeBrushParasite::Pressure:
-            index = static_cast<int>(info.pressure() * (m_parasite.rank[i] - 1) + 0.5); break;
-        case KisPipeBrushParasite::Angular:
-            // + M_PI_2 to be compatible with the gimp
+    for (int i = 0; i < m_d->parasite.dim; i++) {
+        int index = m_d->parasite.index[i];
+        switch (m_d->parasite.selection[i]) {
+        case KisParasite::Constant: break;
+        case KisParasite::Incremental:
+            index = (index + 1) % m_d->parasite.rank[i]; break;
+        case KisParasite::Random:
+            index = int(float(m_d->parasite.rank[i]) * KRandom::random() / RAND_MAX); break;
+        case KisParasite::Pressure:
+            index = static_cast<int>(info.pressure() * (m_d->parasite.rank[i] - 1) + 0.5); break;
+        case KisParasite::Angular:
+            // + m_d->PI_2 to be compatible with the gimp
             angle = info.angle() + M_PI_2;
             // We need to be in the [0..2*Pi[ interval so that we can more nicely select it
             if (angle < 0)
                 angle += 2.0 * M_PI;
             else if (angle > 2.0 * M_PI)
                 angle -= 2.0 * M_PI;
-            index = static_cast<int>(angle / (2.0 * M_PI) * m_parasite.rank[i]);
+            index = static_cast<int>(angle / (2.0 * M_PI) * m_d->parasite.rank[i]);
             break;
         default:
-            kWarning(41001) << "This parasite selectionMode has not been implemented. Reselecting"
+            kWarning(41001) << "This parasite KisParasite::SelectionMode has not been implemented. Reselecting"
             << " to Incremental";
-            m_parasite.selection[i] = KisPipeBrushParasite::Incremental;
+            m_d->parasite.selection[i] = KisParasite::Incremental;
             index = 0;
         }
-        m_parasite.index[i] = index;
-        m_currentBrush += m_parasite.brushesCount[i] * index;
+        m_d->parasite.index[i] = index;
+        m_d->currentBrush += m_d->parasite.brushesCount[i] * index;
     }
 }
 
 bool KisImagePipeBrush::canPaintFor(const KisPaintInformation& info)
 {
     if (info.movement().isMuchSmallerThan(1) // FIXME the 1 here is completely arbitrary. What is the correct order of magnitude?
-            && m_parasite.needsMovement)
+            && m_d->parasite.needsMovement)
         return false;
     return true;
 }
 
 void KisImagePipeBrush::makeMaskImage()
 {
-    for (int i = 0; i < m_brushes.count(); i++)
-        m_brushes.at(i)->makeMaskImage();
+    for (int i = 0; i < m_d->brushes.count(); i++)
+        m_d->brushes.at(i)->makeMaskImage();
 
     setBrushType(PIPE_MASK);
     setUseColorAsMask(false);
@@ -430,15 +331,15 @@ KisImagePipeBrush* KisImagePipeBrush::clone() const
 
     // XXX Multidimensionals not supported yet, change together with the constructor...
     QVector< QVector<KisPaintDevice*> > devices;
-    QVector<KisPipeBrushParasite::SelectionMode> modes;
+    QVector<KisParasite::SelectionMode > modes;
 
     devices.push_back(QVector<KisPaintDevice*>());
-    modes.push_back(m_parasite.selection[0]);
+    modes.push_back(m_d->parasite.selection[0]);
 
-    for (int i = 0; i < m_brushes.count(); i++) {
+    for (int i = 0; i < m_d->brushes.count(); i++) {
         KisPaintDevice* pd = new KisPaintDevice(
             KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0), "clone pd");
-        pd->convertFromQImage(m_brushes.at(i)->img(), "");
+        pd->convertFromQImage(m_d->brushes.at(i)->img(), "");
         devices[0].append(pd);
     }
 

@@ -59,7 +59,6 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
                 kWarning(41001) << "Sel: wrong index: " << selIndex << "(dim = " << dim << ")";
             }
         } else if (index.startsWith("rank")) {
-            qDebug() << splitted;
             int rankIndex = index.mid(strlen("rank")).toInt();
             if (rankIndex < 0 || rankIndex > dim) {
                 kWarning(41001) << "Rankindex out of range: " << rankIndex;
@@ -85,8 +84,6 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
 void KisPipeBrushParasite::setBrushesCount()
 {
     // I assume ncells is correct. If it isn't, complain to the parasite header.
-    qDebug() << "ncells: " << ncells;
-    qDebug() << "dim : " << dim;
     brushesCount[0] = ncells / rank[0];
     for (int i = 1; i < dim; i++) {
         if (rank[i] == 0) {

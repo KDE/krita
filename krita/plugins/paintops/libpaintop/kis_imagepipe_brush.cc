@@ -39,7 +39,6 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& filename)
     : KisBrush(filename)
     , m_d( new Private() )
 {
-    qDebug() << filename;
     m_d->brushType = INVALID;
     m_d->numOfBrushes = 0;
     m_d->currentBrush = 0;
@@ -56,7 +55,6 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
     Q_ASSERT(devices.count() < 2); // XXX Multidimensionals not supported yet, change to MaxDim!
 
     setName(name);
-    qDebug() << name;
     m_d->parasite.dim = devices.count();
     // XXX Change for multidim! :
     m_d->parasite.ncells = devices.at(0).count();

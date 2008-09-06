@@ -87,7 +87,7 @@ void KisPipeBrushParasite::setBrushesCount()
     brushesCount[0] = ncells / rank[0];
     for (int i = 1; i < dim; i++) {
         if (rank[i] == 0) {
-           brushesCount[i] = brushesCount[i-1] / rank[0];
+           brushesCount[i] = brushesCount[i-1];
         }
         else {
            brushesCount[i] = brushesCount[i-1] / rank[i];

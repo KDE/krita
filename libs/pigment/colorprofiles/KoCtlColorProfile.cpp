@@ -246,11 +246,11 @@ void KoCtlColorProfile::decodeConversions(QDomElement& elt)
                     ci.destinationColorModelID = eOut.attribute("colorModel");
                     ci.destinationColorDepthID = generateDepthID(eOut.attribute("depth"), eOut.attribute("type") );
                     ci.destinationProfile = eOut.attribute("profile");
-                    if( ci.sourceColorModelID == colorModel() and ci.sourceColorDepthID == colorDepth() and ci.sourceProfile == "" )
+                    if( ci.sourceColorModelID == colorModel() and ci.sourceColorDepthID == colorDepth() and ci.sourceProfile.isEmpty())
                     {
                         ci.sourceProfile = name();
                         d->conversionInfos.push_back( ci );
-                    } else if( ci.destinationColorModelID == colorModel() and ci.destinationColorDepthID == colorDepth() and ci.destinationProfile == "" )
+                    } else if( ci.destinationColorModelID == colorModel() and ci.destinationColorDepthID == colorDepth() and ci.destinationProfile.isEmpty() )
                     {
                         ci.destinationProfile = name();
                         d->conversionInfos.push_back( ci );

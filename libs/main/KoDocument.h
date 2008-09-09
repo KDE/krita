@@ -22,9 +22,9 @@
 #ifndef KODOCUMENT_H
 #define KODOCUMENT_H
 
-#include <QDateTime>
-#include <QMatrix>
-#include <Q3PtrList>
+#include <QtCore/QDateTime>
+#include <QtGui/QMatrix>
+#include <Qt3Support/Q3PtrList>
 
 #include <kparts/part.h>
 #include <kservice.h>

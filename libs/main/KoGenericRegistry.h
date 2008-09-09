@@ -24,9 +24,9 @@
 #include "KoID.h"
 
 #include <kdemacros.h>
-#include <QList>
-#include <QString>
-#include <QHash>
+#include <QtCore/QList>
+#include <QtCore/QString>
+#include <QtCore/QHash>
 
 /**
  * Base class for registry objects.

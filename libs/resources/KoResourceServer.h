@@ -23,10 +23,10 @@
 #ifndef KORESOURCESERVER_H
 #define KORESOURCESERVER_H
 
-#include <QString>
-#include <QStringList>
-#include <QList>
-#include <QFileInfo>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
+#include <QtCore/QList>
+#include <QtCore/QFileInfo>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>

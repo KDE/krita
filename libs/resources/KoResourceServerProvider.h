@@ -24,7 +24,7 @@
 
 #include <koresource_export.h>
 
-#include <QThread>
+#include <QtCore/QThread>
 
 #include "KoResourceServer.h"
 #include "KoPattern.h"

@@ -23,7 +23,7 @@
 #define KPROPERTY_FACTORY_H
 
 #include "koproperty_global.h"
-#include <QObject>
+#include <QtCore/QObject>
 
 namespace KoProperty
 {

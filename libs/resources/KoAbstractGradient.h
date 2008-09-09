@@ -18,7 +18,7 @@
 #ifndef KOABSTRACTGRADIENT_H
 #define KOABSTRACTGRADIENT_H
 
-#include <QGradient>
+#include <QtGui/QGradient>
 
 #include "KoColor.h"
 #include "KoColorSpace.h"

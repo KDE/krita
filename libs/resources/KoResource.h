@@ -19,9 +19,9 @@
 #ifndef KORESOURCE_H
 #define KORESOURCE_H
 
-#include <QImage>
-#include <QObject>
-#include <QString>
+#include <QtGui/QImage>
+#include <QtCore/QObject>
+#include <QtCore/QString>
 #include <koresource_export.h>
 
 class QDomDocument;

@@ -25,7 +25,7 @@
 
 #include <kparts/mainwindow.h>
 
-#include <Q3PtrList>
+#include <Qt3Support/Q3PtrList>
 
 class KoMainWindowPrivate;
 class KoDocument;

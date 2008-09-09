@@ -18,8 +18,8 @@
 #ifndef KOSTOPGRADIENT_H
 #define KOSTOPGRADIENT_H
 
-#include <QPair>
-#include <QGradient>
+#include <QtCore/QPair>
+#include <QtGui/QGradient>
 
 #include "KoColor.h"
 #include "KoAbstractGradient.h"

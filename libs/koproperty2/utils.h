@@ -20,8 +20,8 @@
 #ifndef KPROPERTY_UTILS_H
 #define KPROPERTY_UTILS_H
 
-#include <qmap.h>
-#include <qwidget.h>
+#include <QtCore/QMap>
+#include <QtGui/QWidget>
 
 namespace KoProperty
 {

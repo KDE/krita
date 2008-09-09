@@ -107,7 +107,7 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
         {
             Node* n = nodeFor( modelId, depthId, profile->name());
             n->init( csf );
-            if( csf->colorSpaceEngine() != "")
+            if( !csf->colorSpaceEngine().isEmpty())
             {
                 KoColorSpaceEngine* engine = KoColorSpaceEngineRegistry::instance()->get( csf->colorSpaceEngine() );
                 Q_ASSERT(engine);

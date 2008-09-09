@@ -22,8 +22,8 @@
 #ifndef KOSEGMENTGRADIENT_H
 #define KOSEGMENTGRADIENT_H
 
-#include <QList>
-#include <QColor>
+#include <QtCore/QList>
+#include <QtGui/QColor>
 
 #include <kio/job.h>
 

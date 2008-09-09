@@ -22,13 +22,13 @@
 #ifndef KPROPERTY_PROPERTYEDITOR_H
 #define KPROPERTY_PROPERTYEDITOR_H
 
-#include <QPointer>
+#include <QtCore/QPointer>
 //Added by qt3to4:
-#include <QMouseEvent>
-#include <QResizeEvent>
-#include <QKeyEvent>
-#include <QEvent>
-#include <QByteArray>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QResizeEvent>
+#include <QtGui/QKeyEvent>
+#include <QtCore/QEvent>
+#include <QtCore/QByteArray>
 #include "koproperty_global.h"
 
 #include <k3listview.h>

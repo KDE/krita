@@ -22,10 +22,10 @@
 #define __KKBDACCESSEXTENSIONS_H__
 
 // Qt includes.
-#include <QObject>
-#include <QLabel>
-#include <QKeyEvent>
-#include <QEvent>
+#include <QtCore/QObject>
+#include <QtGui/QLabel>
+#include <QtGui/QKeyEvent>
+#include <QtCore/QEvent>
 
 class KKbdAccessExtensionsPrivate;
 class KActionCollection;

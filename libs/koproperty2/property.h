@@ -22,9 +22,9 @@
 #ifndef KPROPERTY_PROPERTY_H
 #define KPROPERTY_PROPERTY_H
 
-#include <QVariant>
-#include <QStringList>
-#include <QByteArray>
+#include <QtCore/QVariant>
+#include <QtCore/QStringList>
+#include <QtCore/QByteArray>
 #include "koproperty_global.h"
 
 template<class U> class Q3AsciiDict;

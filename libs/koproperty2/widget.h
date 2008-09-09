@@ -21,10 +21,10 @@
 #ifndef KPROPERTY_PROPERTYWIDGET_H
 #define KPROPERTY_PROPERTYWIDGET_H
 
-#include <QWidget>
+#include <QtGui/QWidget>
 //Added by qt3to4:
-#include <QResizeEvent>
-#include <QEvent>
+#include <QtGui/QResizeEvent>
+#include <QtCore/QEvent>
 #include "koproperty_global.h"
 
 namespace KoProperty

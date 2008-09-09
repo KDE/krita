@@ -24,9 +24,9 @@
 
 #include "../widget.h"
 #include "combobox.h"
-#include <QPixmap>
-#include <QResizeEvent>
-#include <QEvent>
+#include <QtGui/QPixmap>
+#include <QtGui/QResizeEvent>
+#include <QtCore/QEvent>
 
 class QToolButton;
 

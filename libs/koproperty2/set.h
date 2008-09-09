@@ -23,11 +23,11 @@
 #define KPROPERTY_SET_H
 
 #include "koproperty_global.h"
-#include <QObject>
-#include <q3asciidict.h>
-#include <QByteArray>
-#include <QStringList>
-#include <QMap>
+#include <QtCore/QObject>
+#include <Qt3Support/Q3AsciiDict>
+#include <QtCore/QByteArray>
+#include <QtCore/QStringList>
+#include <QtCore/QMap>
 
 namespace KoProperty
 {

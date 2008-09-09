@@ -23,9 +23,9 @@
 
 #include "../widget.h"
 
-#include <QVariant>
+#include <QtCore/QVariant>
 //Added by qt3to4:
-#include <QLabel>
+#include <QtGui/QLabel>
 
 template<class U, class T> class QMap;
 

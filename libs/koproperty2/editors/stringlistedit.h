@@ -23,7 +23,7 @@
 
 #include "../widget.h"
 
-#include <QStringList>
+#include <QtCore/QStringList>
 
 class QLineEdit;
 class QPushButton;

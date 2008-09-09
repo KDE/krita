@@ -20,9 +20,9 @@
 #ifndef __koffice_filter_h__
 #define __koffice_filter_h__
 
-#include <QObject>
-#include <QMap>
-#include <q3ptrstack.h>
+#include <QtCore/QObject>
+#include <QtCore/QMap>
+#include <Qt3Support/Q3PtrStack>
 #include "komain_export.h"
 class QIODevice;
 class KoFilterChain;

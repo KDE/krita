@@ -20,9 +20,9 @@
 #ifndef __koPicture_h__
 #define __koPicture_h__
 
-#include <QString>
-#include <QIODevice>
-#include <QPixmap>
+#include <QtCore/QString>
+#include <QtCore/QIODevice>
+#include <QtGui/QPixmap>
 #include "komain_export.h"
 
 #include "KoPictureKey.h"

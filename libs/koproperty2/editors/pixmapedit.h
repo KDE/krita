@@ -23,12 +23,12 @@
 #define KPROPERTY_PIXMAPEDIT_H
 
 #include "../widget.h"
-#include <QPixmap>
-#include <QVariant>
+#include <QtGui/QPixmap>
+#include <QtCore/QVariant>
 //Added by qt3to4:
-#include <QLabel>
-#include <QResizeEvent>
-#include <QEvent>
+#include <QtGui/QLabel>
+#include <QtGui/QResizeEvent>
+#include <QtCore/QEvent>
 
 class QLabel;
 class QPushButton;

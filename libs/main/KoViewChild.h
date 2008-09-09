@@ -21,7 +21,7 @@
 
 #include <KoChild.h>
 
-#include <QPointer>
+#include <QtCore/QPointer>
 
 class KoDocumentChild;
 class KoView;

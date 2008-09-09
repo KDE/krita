@@ -21,11 +21,11 @@
 #ifndef __koStore_h_
 #define __koStore_h_
 
-#include <QString>
-#include <QStringList>
-#include <QIODevice>
-#include <QStack>
-#include <QByteArray>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
+#include <QtCore/QIODevice>
+#include <QtCore/QStack>
+#include <QtCore/QByteArray>
 #include "kostore_export.h"
 
 class QWidget;

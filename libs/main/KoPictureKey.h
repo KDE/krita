@@ -20,8 +20,8 @@
 #ifndef __koPictureKey_h__
 #define __koPictureKey_h__
 
-#include <QString>
-#include <QDateTime>
+#include <QtCore/QString>
+#include <QtCore/QDateTime>
 #include "komain_export.h"
 /**
  * \file KoPictureKey.h

@@ -20,7 +20,7 @@
 #ifndef KODOCKFACTORY_H
 #define KODOCKFACTORY_H
 
-#include <QString>
+#include <QtCore/QString>
 
 #include "komain_export.h"
 

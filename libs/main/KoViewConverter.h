@@ -20,8 +20,8 @@
 #ifndef KOVIEWCONVERTER_H
 #define KOVIEWCONVERTER_H
 
-#include <QPointF>
-#include <QRectF>
+#include <QtCore/QPointF>
+#include <QtCore/QRectF>
 
 /**
  * The interface for view conversions.

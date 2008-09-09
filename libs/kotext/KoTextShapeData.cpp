@@ -220,7 +220,7 @@ QString KoTextShapeDataPrivate::saveParagraphStyle(KoShapeSavingContext &context
 
     QString generatedName;
     QString displayName = originalParagraphStyle->name();
-    QString internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace("%", "_");
+    QString internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace('%', '_');
 
     // we'll convert the blockFormat to a KoParagraphStyle to check for local changes.
     KoParagraphStyle paragStyle(blockFormat, charFormat);
@@ -254,7 +254,7 @@ QString KoTextShapeDataPrivate::saveCharacterStyle(KoShapeSavingContext &context
 
     QString generatedName;
     QString displayName = originalCharStyle->name();
-    QString internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace("%", "_");
+    QString internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace('%', '_');
 
     KoCharacterStyle charStyle(charFormat);
     // we'll convert it to a KoCharacterStyle to check for local changes.

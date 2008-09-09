@@ -121,7 +121,7 @@ bool KoSegmentGradient::init()
 
         QString segmentText = fileContent.readLine();
         QTextStream segmentFields(&segmentText);
-        QStringList values = segmentText.split(" ");
+        QStringList values = segmentText.split(' ');
 
         qreal leftOffset = values[0].toDouble();
         qreal middleOffset = values[1].toDouble();

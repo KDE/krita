@@ -255,7 +255,7 @@ bool KoDocumentInfo::saveOasisAboutInfo(KoXmlWriter &xmlWriter)
     foreach(QString tag, m_aboutTags) {
         if (!aboutInfo(tag).isEmpty() || tag == "title") {
             if (tag == "keyword") {
-                foreach(QString tmp, aboutInfo("keyword").split(";")) {
+                foreach(QString tmp, aboutInfo("keyword").split(';')) {
                     xmlWriter.startElement("meta:keyword");
                     xmlWriter.addTextNode(tmp);
                     xmlWriter.endElement();

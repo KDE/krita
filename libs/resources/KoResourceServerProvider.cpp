@@ -74,7 +74,7 @@ void KoResourceLoaderThread::run()
 
 QStringList KoResourceLoaderThread::getFileNames( const QString & extensions)
 {
-    QStringList extensionList = extensions.split(":");
+    QStringList extensionList = extensions.split(':');
     QStringList fileNames;
 
     foreach (QString extension, extensionList) {

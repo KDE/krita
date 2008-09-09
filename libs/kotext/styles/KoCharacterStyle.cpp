@@ -719,7 +719,7 @@ void KoCharacterStyle::loadOdf(KoOdfLoadingContext& context)
 
     if (! fontName.isNull()) {
         // Hmm, the remove "'" could break it's in the middle of the fontname...
-        fontName = fontName.remove("'");
+        fontName = fontName.remove(''');
 
         // 'Thorndale' is not known outside OpenOffice so we substitute it
         // with 'Times New Roman' that looks nearly the same.

@@ -98,7 +98,7 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
         if (paragraphStyle == d->defaultParagraphStyle)
             continue;
 
-        QString name(QString(QUrl::toPercentEncoding(paragraphStyle->name(), "", " ")).replace("%", "_"));
+        QString name(QString(QUrl::toPercentEncoding(paragraphStyle->name(), "", " ")).replace('%', '_'));
         if (name.isEmpty()) {
             name = "P";
         }
@@ -112,7 +112,7 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
         if (characterStyle == d->defaultParagraphStyle->characterStyle())
             continue;
 
-        QString name(QString(QUrl::toPercentEncoding(characterStyle->name(), "", " ")).replace("%", "_"));
+        QString name(QString(QUrl::toPercentEncoding(characterStyle->name(), "", " ")).replace('%', '_'));
         if (name.isEmpty()) {
             name = "T";
         }
@@ -125,7 +125,7 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
     foreach(KoListStyle *listStyle, d->listStyles) {
         if (listStyle == d->defaultListStyle)
             continue;
-        QString name(QString(QUrl::toPercentEncoding(listStyle->name(), "", " ")).replace("%", "_"));
+        QString name(QString(QUrl::toPercentEncoding(listStyle->name(), "", " ")).replace('%', '_'));
         if (name.isEmpty())
             name = "L";
 

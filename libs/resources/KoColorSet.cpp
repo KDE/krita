@@ -156,7 +156,7 @@ bool KoColorSet::init()
         // XXX: No checks for wrong input yet!
         quint32 index = 0;
 
-        QStringList lines = s.split("\n", QString::SkipEmptyParts);
+        QStringList lines = s.split('\n', QString::SkipEmptyParts);
 
         if (lines.size() < 3) {
             return false;
@@ -193,7 +193,7 @@ bool KoColorSet::init()
             }
             else if (!lines[i].isEmpty())
             {
-                QStringList a = lines[i].replace(QChar('\t'), " ").split(" ", QString::SkipEmptyParts);
+                QStringList a = lines[i].replace(QChar('\t'), " ").split(' ', QString::SkipEmptyParts);
 
                 if (a.count() < 3)
                 {

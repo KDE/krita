@@ -31,11 +31,17 @@ EditorView::EditorView(QWidget* parent)
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     setAnimated(false);
     setAllColumnsShowFocus(true);
+    setEditTriggers(QAbstractItemView::AllEditTriggers);
 }
 
 EditorView::~EditorView()
 {
 }
+
+/*bool EditorView::edit( const QModelIndex & index, EditTrigger trigger, QEvent * event )
+{
+    QTreeView::edit( index, trigger, event );
+}*/
 
 
 #if 0

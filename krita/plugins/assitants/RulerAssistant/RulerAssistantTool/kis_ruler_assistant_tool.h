@@ -1,0 +1,68 @@
+#ifndef _KIS_TOOL_HUMANBODYTOOL_H_
+#define _KIS_TOOL_HUMANBODYTOOL_H_
+
+#include <kis_tool.h>
+#include <KoToolFactory.h>
+
+class RulerDecoration;
+class KisCanvas2;
+class ConstraintSolver;
+
+class KisRulerAssistantTool : public KisTool {
+    Q_OBJECT
+    enum Mode {
+        MODE_NOTHING,
+        MODE_POINT1DRAGING,
+        MODE_POINT2DRAGING
+    };
+public:
+    KisRulerAssistantTool(KoCanvasBase * canvas);
+    virtual ~KisRulerAssistantTool();
+
+    virtual quint32 priority() { return 3; }
+    virtual void mousePressEvent(KoPointerEvent *event);
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
+
+    QWidget* createOptionWidget();
+    virtual QWidget* optionWidget();
+
+public slots:
+    virtual void activate(bool temp = false);
+    void deactivate();
+
+protected:
+    
+    virtual void paint(QPainter& gc, const KoViewConverter &converter);
+
+protected:
+    KisCanvas2* m_canvas;
+    RulerDecoration* m_rulerDecoration;
+    Mode m_mode;
+    QWidget* m_widget;
+};
+
+
+class KisRulerAssistantToolFactory : public KoToolFactory {
+public:
+    KisRulerAssistantToolFactory(QObject *parent, const QStringList&)
+        : KoToolFactory(parent, "KisRulerAssistantTool", i18n( "Ruler Assistant" ))
+        {
+            setToolTip( i18n( "Ruler assistant editor tool" ) );
+            setToolType( TOOL_TYPE_VIEW );
+            setIcon( "tool_rulerassistanttool" );
+            setPriority( 0 );
+        };
+
+
+    virtual ~KisRulerAssistantToolFactory() {}
+
+    virtual KoTool * createTool(KoCanvasBase * canvas) {
+        return new KisRulerAssistantTool(canvas);
+    }
+
+};
+
+
+#endif
+

@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=RulerAssistantTool
+X-KDE-ServiceTypes=Krita/Tool
+Type=Service
+X-KDE-Library=kritarulerassistanttool
+X-Krita-Version=3

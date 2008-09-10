@@ -452,6 +452,7 @@ void KoTextSelectionHandler::nextParagraph()
     d->caret->insertBlock();
     QTextBlockFormat bf = d->caret->blockFormat();
     bf.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
+    bf.clearProperty(KoParagraphStyle::ListStartValue);
     d->caret->setBlockFormat(bf);
     if (nextStyle) {
         QTextBlock block = d->caret->block();

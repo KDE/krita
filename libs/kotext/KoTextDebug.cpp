@@ -160,7 +160,7 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
         return attrs;
     }
 
-    KoStyleManager *styleManager = KoTextDocument(document).styleManager();
+    KoStyleManager *styleManager = document ? KoTextDocument(document).styleManager() : 0;
     if (styleManager) {
         int id = textFormat.intProperty(KoCharacterStyle::StyleId);
         KoCharacterStyle *characterStyle = styleManager->characterStyle(id);

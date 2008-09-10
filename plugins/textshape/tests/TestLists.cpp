@@ -322,7 +322,7 @@ void TestDocumentLayout::testNestedLists()
 
 void TestDocumentLayout::testAutoRestartList()
 {
-    initForNewTest("Humans\nGhandi\nEinstein\nInventions\nCar\nToilet\nLaboratory\n");
+    initForNewTest("Humans\nGandhi\nEinstein\nInventions\nCar\nToilet\nLaboratory\n");
 
     KoParagraphStyle h1;
     styleManager->add(&h1);

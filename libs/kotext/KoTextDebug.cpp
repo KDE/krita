@@ -98,6 +98,7 @@ static QString fontProperties(const QTextCharFormat &textFormat)
 
 void KoTextDebug::dumpDocument(const QTextDocument *doc)
 {
+    Q_ASSERT(doc);
     document = doc;
     qDebug() << QString("<document defaultfont=\"%1\">").arg(doc->defaultFont().toString());
     dumpFrame(document->rootFrame());
@@ -407,7 +408,7 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
 QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
 {
     QString attrs;
-    KoStyleManager *styleManager = KoTextDocument(document).styleManager();
+    KoStyleManager *styleManager = document ? KoTextDocument(document).styleManager() : 0;
     if (styleManager) {
         int id = listFormat.intProperty(KoListStyle::StyleId);
         KoListStyle *listStyle = styleManager->listStyle(id);

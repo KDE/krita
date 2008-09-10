@@ -169,4 +169,9 @@ void KoShapeFactory::setOdfElementNames( const QString & nameSpace, const QStrin
     d->odfElementNames = names;
 }
 
+bool KoShapeFactory::hidden() const
+{
+    return false;
+}
+
 #include "KoShapeFactory.moc"

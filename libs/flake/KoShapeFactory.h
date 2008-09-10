@@ -226,6 +226,13 @@ public:
     /// started at argument element. ('draw:line' / 'draw:frame' / etc)
     virtual bool supports(const KoXmlElement & e) const;
 
+    /**
+     * This functions decides if the shape should be shown in the 
+     * shape selector or not.
+     * The default implementation returns false.
+     */
+    virtual bool hidden() const;
+
 protected:
 
     /**

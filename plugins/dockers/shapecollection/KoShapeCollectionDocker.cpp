@@ -174,6 +174,10 @@ void KoShapeCollectionDocker::loadDefaultShapes()
 
     foreach(QString id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactory *factory = KoShapeRegistry::instance()->value(id);
+        // don't show hidden factories
+        if ( factory->hidden() ) {
+            continue;
+        }
         bool oneAdded = false;
 
         foreach(KoShapeTemplate shapeTemplate, factory->templates()) {

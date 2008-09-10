@@ -78,7 +78,14 @@ Qt::ItemFlags EditorDataModel::flags(const QModelIndex &index) const
     if (col == 0)
         return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 
-    return Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    Qt::ItemFlags f = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    Property *prop = getItem(index);
+    if (prop) {
+//        if (!prop->children()) {
+            f |= Qt::ItemIsEditable;
+//        }
+    }
+    return f;
 }
 
 Property *EditorDataModel::getItem(const QModelIndex &index) const

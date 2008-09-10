@@ -19,7 +19,124 @@
 
 #include "EditorView.h"
 
+#include <QtGui/QStyledItemDelegate>
+#include <QtGui/QLabel>
+#include <QtGui/QItemEditorFactory>
+#include <QtGui/QStandardItemEditorCreator>
+
+#include <KLocale>
+
 using namespace KoProperty;
+
+static const char RECTEDIT_MASK[] = "%1,%2 %3x%4";
+
+class RectEdit : public QLabel
+{
+    Q_OBJECT
+    Q_PROPERTY(QRect value READ value WRITE setValue USER true)
+public:
+    RectEdit(QWidget *parent = 0);
+    ~RectEdit();
+    QRect value() const;
+    void setValue(const QRect& value);
+private:
+    QRect m_rect;
+};
+
+RectEdit::RectEdit(QWidget *parent)
+ : QLabel(parent)
+{
+    setTextInteractionFlags(Qt::TextSelectableByMouse);
+}
+
+RectEdit::~RectEdit()
+{
+}
+
+QRect RectEdit::value() const
+{
+    return m_rect;
+}
+
+void RectEdit::setValue(const QRect& value)
+{
+    m_rect = value;
+    setText(QString::fromLatin1(RECTEDIT_MASK)
+        .arg(value.x())
+        .arg(value.y())
+        .arg(value.width())
+        .arg(value.height()));
+    setToolTip(i18n("Position: %1, %2\nSize: %3 x %4")
+        .arg(value.x())
+        .arg(value.y())
+        .arg(value.width())
+        .arg(value.height()));
+}
+
+//----------
+
+class ItemEditorFactory : public QItemEditorFactory
+{
+public:
+    ItemEditorFactory();
+    virtual ~ItemEditorFactory();
+};
+
+ItemEditorFactory::ItemEditorFactory()
+{
+     QItemEditorCreatorBase *creator = new QStandardItemEditorCreator<RectEdit>();
+     registerEditor(QVariant::Rect, creator);
+}
+
+ItemEditorFactory::~ItemEditorFactory()
+{
+}
+
+//----------
+
+class ItemDelegate : public QStyledItemDelegate
+{
+public:
+    ItemDelegate(QObject *parent);
+    virtual ~ItemDelegate();
+    virtual void paint(QPainter *painter, 
+        const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem &option,
+        const QModelIndex &index) const;
+    virtual QWidget * createEditor(QWidget *parent, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+};
+
+ItemDelegate::ItemDelegate(QObject *parent)
+: QStyledItemDelegate(parent)
+{
+    setItemEditorFactory( new ItemEditorFactory() );
+}
+
+ItemDelegate::~ItemDelegate()
+{
+}
+
+void ItemDelegate::paint(QPainter *painter, 
+                               const QStyleOptionViewItem &option,
+                               const QModelIndex &index) const
+{
+    QStyledItemDelegate::paint(painter, option, index);
+}
+
+QSize ItemDelegate::sizeHint(const QStyleOptionViewItem &option,
+                                   const QModelIndex &index) const
+{
+    return QStyledItemDelegate::sizeHint(option, index);
+}
+
+QWidget * ItemDelegate::createEditor(QWidget * parent, 
+    const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    return QStyledItemDelegate::createEditor(parent, option, index);
+}
+
+//----------
 
 EditorView::EditorView(QWidget* parent)
         : QTreeView(parent)
@@ -32,6 +149,7 @@ EditorView::EditorView(QWidget* parent)
     setAnimated(false);
     setAllColumnsShowFocus(true);
     setEditTriggers(QAbstractItemView::AllEditTriggers);
+    setItemDelegate(new ItemDelegate(this));
 }
 
 EditorView::~EditorView()

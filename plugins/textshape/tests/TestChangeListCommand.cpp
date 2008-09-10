@@ -3,6 +3,8 @@
 
 #include <KoListStyle.h>
 #include <KoListLevelProperties.h>
+#include <KoStyleManager.h>
+#include <KoTextDocument.h>
 
 #include <QTextDocument>
 #include <QTextCursor>
@@ -11,6 +13,7 @@
 void TestChangeListCommand::addList()
 {
     QTextDocument doc;
+    KoTextDocument(&doc).setStyleManager(new KoStyleManager);
     QTextCursor cursor(&doc);
     cursor.insertText("Root\nparag1\nparag2\nparag3\nparag4\n");
 
@@ -44,6 +47,7 @@ void TestChangeListCommand::addList()
 void TestChangeListCommand::removeList()
 {
     QTextDocument doc;
+    KoTextDocument(&doc).setStyleManager(new KoStyleManager);
     QTextCursor cursor(&doc);
     cursor.insertText("Root\nparag1\nparag2\nparag3\nparag4\n");
     KoListStyle style;
@@ -87,6 +91,7 @@ void TestChangeListCommand::removeList()
 void TestChangeListCommand::joinList()
 {
     QTextDocument doc;
+    KoTextDocument(&doc).setStyleManager(new KoStyleManager);
     QTextCursor cursor(&doc);
     cursor.insertText("Root\nparag1\nparag2\nparag3\nparag4\n");
     KoListStyle style;
@@ -113,6 +118,7 @@ void TestChangeListCommand::joinList2()
 {
     // test usecase of joining with the one before and the one after based on similar styles.
     QTextDocument doc;
+    KoTextDocument(&doc).setStyleManager(new KoStyleManager);
     QTextCursor cursor(&doc);
     cursor.insertText("Root\nparag1\nparag2\nparag3\nparag4");
     KoListStyle style;
@@ -163,6 +169,7 @@ void TestChangeListCommand::splitList()
     // now I change parag 'B' to '1.a'  then C should have 1.1 as a numbering. I.e. we should split an existing list.
 
     QTextDocument doc;
+    KoTextDocument(&doc).setStyleManager(new KoStyleManager);
     QTextCursor cursor(&doc);
     cursor.insertText("Root\nparagA\nparagB\nparagC");
     QTextBlock block = doc.begin().next();

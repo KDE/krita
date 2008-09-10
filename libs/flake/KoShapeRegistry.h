@@ -30,6 +30,7 @@
 #include "flake_export.h"
 
 class KoShape;
+class KoShapeFactory;
 class KoShapeLoadingContext;
 
 
@@ -54,6 +55,14 @@ public:
     static KoShapeRegistry * instance();
 
     /**
+     * Add shape factory for a shape that is not a plugin
+     * This can be used also if you want to have a shape only in one application
+     *
+     * @param factory The factory of the shape
+     */
+    void addFactory( KoShapeFactory * factory );
+
+    /**
      * Use the element to find out which flake plugin can load it, and
      * returns the loaded shape. The element expected is one of
      * 'draw:line', 'draw:frame' / etc.
@@ -67,6 +76,8 @@ private:
     KoShapeRegistry(const KoShapeRegistry&);
     KoShapeRegistry operator=(const KoShapeRegistry&);
     void init();
+
+    void insertFactory( KoShapeFactory * factory );
 
     KoShape * createShapeInternal( const KoXmlElement & fullElement, KoShapeLoadingContext & context, const KoXmlElement & element ) const;
 

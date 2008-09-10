@@ -83,26 +83,7 @@ void KoShapeRegistry::init()
 
     QList<KoShapeFactory*> factories = values();
     for ( int i = 0; i < factories.size(); ++i ) {
-        KoShapeFactory * factory = factories[i];
-        if ( factory->odfNameSpace().isEmpty() || factory->odfElementNames().isEmpty() )
-        {
-            kDebug(30006) <<"Shape factory" << factory->id() <<" does not have OdfNamespace defined, ignoring";
-        }
-        else {
-            foreach( QString elementName, factory->odfElementNames() ) {
-
-                QPair<QString, QString> p ( factory->odfNameSpace(), elementName );
-
-                QMultiMap<int, KoShapeFactory*> priorityMap = d->factoryMap[p];
-
-                d->factoryMap[p].insert( factory->loadingPriority(), factory );
-
-                kDebug(30006) <<"Inserting factory" << factory->id() <<" for"
-                         << p << " with priority "
-                         << factory->loadingPriority() << " into factoryMap making "
-                         << d->factoryMap[p].size() << " entries. " << endl;
-            }
-        }
+        insertFactory( factories[i] );
     }
 }
 
@@ -113,6 +94,35 @@ KoShapeRegistry* KoShapeRegistry::instance()
         s_instance->init();
     }
     return s_instance;
+}
+
+void KoShapeRegistry::addFactory( KoShapeFactory * factory )
+{
+    add( factory );
+    insertFactory( factory );
+}
+
+void KoShapeRegistry::insertFactory( KoShapeFactory * factory )
+{
+    if ( factory->odfNameSpace().isEmpty() || factory->odfElementNames().isEmpty() )
+    {
+        kDebug(30006) <<"Shape factory" << factory->id() <<" does not have OdfNamespace defined, ignoring";
+    }
+    else {
+        foreach( QString elementName, factory->odfElementNames() ) {
+
+            QPair<QString, QString> p ( factory->odfNameSpace(), elementName );
+
+            QMultiMap<int, KoShapeFactory*> priorityMap = d->factoryMap[p];
+
+            d->factoryMap[p].insert( factory->loadingPriority(), factory );
+
+            kDebug(30006) <<"Inserting factory" << factory->id() <<" for"
+                << p << " with priority "
+                << factory->loadingPriority() << " into factoryMap making "
+                << d->factoryMap[p].size() << " entries. " << endl;
+        }
+    }
 }
 
 KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoadingContext & context) const

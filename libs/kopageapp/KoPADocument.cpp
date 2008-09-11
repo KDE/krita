@@ -333,6 +333,7 @@ void KoPADocument::addShape( KoShape * shape )
 
     emit shapeAdded( shape );
 
+    page->shapeAdded( shape );
     postAddShape( page, shape );
 }
 
@@ -357,6 +358,7 @@ void KoPADocument::removeShape( KoShape *shape )
 
     emit shapeRemoved( shape );
 
+    page->shapeRemoved( shape );
     postRemoveShape( page, shape );
 }
 

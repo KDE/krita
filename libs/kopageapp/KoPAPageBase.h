@@ -91,6 +91,22 @@ public:
     /// reimplemented
     virtual QSizeF size() const;
 
+    /**
+     * This function is called after a shape is added to the document on this page
+     * The default implementation is empty.
+     *
+     * @param shape The shape that was added
+     */
+    virtual void shapeAdded( KoShape * shape );
+
+    /**
+     * This function is called after a shape is removed from the document off this page
+     * The default implementation is empty.
+     *
+     * @param shape The shape that was removed
+     */
+    virtual void shapeRemoved( KoShape * shape );
+
 protected:
     /**
      * @param paContext the pageapp saving context

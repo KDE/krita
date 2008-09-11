@@ -190,3 +190,11 @@ QSizeF KoPAPageBase::size() const
     const KoPageLayout layout = pageLayout();
     return QSize( layout.width, layout.height );
 }
+
+void KoPAPageBase::shapeAdded( KoShape * shape )
+{
+}
+
+void KoPAPageBase::shapeRemoved( KoShape * shape )
+{
+}

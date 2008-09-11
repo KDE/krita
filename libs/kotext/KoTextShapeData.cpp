@@ -355,7 +355,8 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                     writer->endElement(); // </text:list-element>
                 }
             }
-            writer->startElement("text:list-item", false);
+            const bool listHeader = block.blockFormat().boolProperty(KoParagraphStyle::IsListHeader);
+            writer->startElement(listHeader ? "text:list-header" : "text:list-item", false);
         } else {
             // Close any remaining list...
             while (!textLists.isEmpty()) {

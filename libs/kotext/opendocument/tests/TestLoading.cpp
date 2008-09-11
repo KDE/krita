@@ -194,6 +194,7 @@ static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTex
         QString key, value;
         switch (id) {
         case KoParagraphStyle::UnnumberedListItem:
+        case KoParagraphStyle::IsListHeader:
             if (actualProperty[id].toInt() != expectedProperty[id].toBool())
                 match = false;
             break;
@@ -589,9 +590,10 @@ void TestLoading::addData()
 {
     QTest::newRow("bulletedList") << "TextContents/Lists/bulletedList";
     QTest::newRow("embeddedBulletedList") << "TextContents/Lists/embeddedBulletedList";
+    QTest::newRow("listHeader") << "TextContents/Lists/listHeader";
+    QTest::newRow("multipleParagraphs") << "TextContents/Lists/multipleParagraphs";
     QTest::newRow("numberedList") << "TextContents/Lists/numberedList";
     QTest::newRow("startValue") << "TextContents/Lists/startValue";
-    QTest::newRow("multipleParagraphs") << "TextContents/Lists/multipleParagraphs";
 
     QTest::newRow("boldAndItalic") << "TextContents/TextFormatting/boldAndItalic";
 

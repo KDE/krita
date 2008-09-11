@@ -400,6 +400,9 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
             key = "unnumbered-list-item";
             value = QString::number(properties[id].toBool());
             break;
+        case KoParagraphStyle::IsListHeader:
+            key = "list-header";
+            value = "1";
         default:
             break;
         }

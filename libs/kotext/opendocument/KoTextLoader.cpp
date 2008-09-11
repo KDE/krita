@@ -395,7 +395,12 @@ void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
     KoXmlElement e;
     bool firstTime = true;
     forEachElement(e, element) {
-        if (e.isNull() || (e.tagName() != "list-item") || (e.namespaceURI() != KoXmlNS::text))
+        if (e.isNull() || e.namespaceURI() != KoXmlNS::text)
+            continue;
+
+        const bool listHeader = e.tagName() == "list-header";
+
+        if (e.tagName() != "list-item" && !listHeader)
             continue;
 
         if (!firstTime) {
@@ -411,13 +416,17 @@ void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
         if (!current.textList())
             d->currentList->add(current, level);
 
+        QTextBlockFormat blockFormat;
+        if (listHeader)
+            blockFormat.setProperty(KoParagraphStyle::IsListHeader, true);
+
         if (current != cursor.block()) {
             // mark intermediate paragraphs as unnumbered items
             QTextCursor c(current);
             do {
                 c.movePosition(QTextCursor::NextBlock);
                 QTextBlockFormat blockFormat;
-                blockFormat.setProperty(KoParagraphStyle::UnnumberedListItem, true);
+                blockFormat.setProperty(listHeader ? KoParagraphStyle::IsListHeader : KoParagraphStyle::UnnumberedListItem, true);
                 c.mergeBlockFormat(blockFormat);
                 d->currentList->add(c.block(), level);
             } while (c.block() != cursor.block());
@@ -425,10 +434,10 @@ void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
 
         if (e.hasAttributeNS(KoXmlNS::text, "start-value")) {
             int startValue = e.attributeNS(KoXmlNS::text, "start-value", QString()).toInt();
-            QTextBlockFormat blockFormat;
             blockFormat.setProperty(KoParagraphStyle::ListStartValue, startValue);
-            cursor.mergeBlockFormat(blockFormat);
         }
+
+        cursor.mergeBlockFormat(blockFormat);
     }
 
     --d->currentListLevel;

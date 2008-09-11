@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=RulerAssistantTool
+Name[el]=Εργαλείο βοηθού κανόνα
+Name[sv]=Linjalguideverktyg
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritarulerassistanttool

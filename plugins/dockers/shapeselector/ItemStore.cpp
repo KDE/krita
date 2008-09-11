@@ -276,6 +276,8 @@ QRectF ItemStore::loadShapeTypes()
 
     foreach(QString id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactory *factory = KoShapeRegistry::instance()->value(id);
+        if (factory->hidden())
+            continue;
         bool oneAdded=false;
         foreach(KoShapeTemplate shapeTemplate, factory->templates()) {
             oneAdded=true;

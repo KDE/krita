@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -85,6 +86,11 @@ bool KoListStyle::operator==(const KoListStyle &other) const
     return true;
 }
 
+bool KoListStyle::operator!=(const KoListStyle &other) const
+{
+    return !KoListStyle::operator==(other);
+}
+
 void KoListStyle::copyProperties(KoListStyle *other)
 {
     d->styleId = other->d->styleId;
@@ -142,6 +148,14 @@ KoListLevelProperties KoListStyle::levelProperties(int level) const
     llp.setStyle(KoListStyle::DecimalItem);
     llp.setListItemSuffix(".");
     return llp;
+}
+
+QTextListFormat KoListStyle::listFormat(int level)
+{
+    KoListLevelProperties llp = levelProperties(level);
+    QTextListFormat format;
+    llp.applyStyle(format);
+    return format;
 }
 
 void KoListStyle::setLevelProperties(const KoListLevelProperties &properties)

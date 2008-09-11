@@ -23,6 +23,8 @@
 #include <QTextDocument>
 #include <QUrl>
 
+#include "KoList.h"
+
 class KoStyleManager;
 
 /**
@@ -52,6 +54,21 @@ public:
     /// Returns the style manager
     KoStyleManager *styleManager() const;
 
+    /// Sets the lists of the document
+    void setLists(const QList<KoList *> &lists);
+
+    /// Returns the lists in the document
+    QList<KoList *> lists() const;
+
+    /// Adds a list to the document
+    void addList(KoList *list);
+
+    /// Removes a list from the document
+    void removeList(KoList *list);
+
+    /// Returns the KoList that holds \a block; 0 if block is not part of any list
+    KoList *list(const QTextBlock &block) const;
+
     /**
      * Clears the text in the document. Unlike QTextDocument::clear(), this
      * function does not clear the resources of the QTextDocument.
@@ -60,9 +77,11 @@ public:
 
     /// Enum (type) used to add resources using QTextDocument::addResource()
     enum ResourceType {
-        StyleManager = QTextDocument::UserResource
+        StyleManager = QTextDocument::UserResource,
+        Lists
     };
     static const QUrl StyleManagerURL;
+    static const QUrl ListsURL;
 
 private:
     QTextDocument *m_document;

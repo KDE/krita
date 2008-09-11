@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -122,6 +123,9 @@ public:
     /// Destructor
     ~KoListStyle();
 
+    /// creates a clone of this style with the specified parent
+    KoListStyle *clone(QObject *parent = 0);
+
     /// each style has a unique ID (non persistent) given out by the styleManager
     int styleId() const;
 
@@ -162,6 +166,8 @@ public:
      */
     void removeLevelProperties(int level);
 
+    QTextListFormat listFormat(int level);
+
     /// return the name of the style.
     QString name() const;
 
@@ -174,6 +180,7 @@ public:
     void applyStyle(const QTextBlock &block, int level = 0);
 
     bool operator==(const KoListStyle &other) const;
+    bool operator!=(const KoListStyle &other) const;
 
     /// create a new KoListStyle with the properties from the param list.
     static KoListStyle* fromTextList(QTextList *list);
@@ -191,9 +198,6 @@ public:
 
     /// copy all the properties from the other style to this style, effectively duplicating it.
     void copyProperties(KoListStyle *other);
-
-    /// creates a clone of this style with the specified parent
-    KoListStyle *clone(QObject *parent = 0);
 
 signals:
     void nameChanged(const QString &newName);

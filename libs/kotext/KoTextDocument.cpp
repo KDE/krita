@@ -26,8 +26,10 @@
 
 #include "styles/KoStyleManager.h"
 #include "KoTextDocument.h"
+#include "KoList.h"
 
 const QUrl KoTextDocument::StyleManagerURL = QUrl("kotext://stylemanager");
+const QUrl KoTextDocument::ListsURL = QUrl("kotext://lists");
 
 KoTextDocument::KoTextDocument(QTextDocument *document)
 : m_document(document)
@@ -61,6 +63,52 @@ KoStyleManager *KoTextDocument::styleManager() const
 {
     QVariant resource = m_document->resource(KoTextDocument::StyleManager, StyleManagerURL);
     return resource.value<KoStyleManager *>();
+}
+
+void KoTextDocument::setLists(const QList<KoList *> &lists)
+{
+    QVariant v;
+    v.setValue(lists);
+    m_document->addResource(KoTextDocument::Lists, ListsURL, v);
+}
+
+QList<KoList *> KoTextDocument::lists() const
+{
+    QVariant resource = m_document->resource(KoTextDocument::Lists, ListsURL);
+    return resource.value<QList<KoList *> >();
+}
+
+void KoTextDocument::addList(KoList *list)
+{
+    Q_ASSERT(list);
+    list->setParent(m_document);
+    QList<KoList *> l = lists();
+    if (l.contains(list))
+        return;
+    l.append(list);
+    setLists(l);
+}
+
+void KoTextDocument::removeList(KoList *list)
+{
+    QList<KoList *> l = lists();
+    if (l.contains(list)) {
+        l.removeAll(list);
+        setLists(l);
+    }
+}
+
+KoList *KoTextDocument::list(const QTextBlock &block) const
+{
+    QTextList *textList = block.textList();
+    if (!textList)
+        return 0;
+    // FIXME: this is horrible.
+    foreach(KoList *l, lists()) {
+        if (l->textLists().contains(textList))
+            return l;
+    }
+    return 0;
 }
 
 void KoTextDocument::clearText()

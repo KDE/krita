@@ -250,7 +250,7 @@ public:
         const qreal current = format.fontPointSize();
         int prev = 1;
         foreach(int pt, defaultSizes) {
-            if (type == Grow && pt > current || type == Shrink && pt >= current) {
+            if ((type == Grow && pt > current) || (type == Shrink && pt >= current)) {
                 format.setFontPointSize(type == Grow ? pt : prev);
                 return;
             }

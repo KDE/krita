@@ -411,6 +411,18 @@ void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
         if (!current.textList())
             d->currentList->add(current, level);
 
+        if (current != cursor.block()) {
+            // mark intermediate paragraphs as unnumbered items
+            QTextCursor c(current);
+            do {
+                c.movePosition(QTextCursor::NextBlock);
+                QTextBlockFormat blockFormat;
+                blockFormat.setProperty(KoParagraphStyle::UnnumberedListItem, true);
+                c.mergeBlockFormat(blockFormat);
+                d->currentList->add(c.block(), level);
+            } while (c.block() != cursor.block());
+        }
+
         if (e.hasAttributeNS(KoXmlNS::text, "start-value")) {
             int startValue = e.attributeNS(KoXmlNS::text, "start-value", QString()).toInt();
             QTextBlockFormat blockFormat;

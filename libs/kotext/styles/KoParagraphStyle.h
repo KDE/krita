@@ -109,6 +109,7 @@ public:
         RestartListNumbering,   ///< boolean to indicate that this paragraph will have numbering restart at the list-start. Ignored if this is not a list.
         ListLevel,               ///< int with the list-level that the paragraph will get when this is a list
         IsListHeader,           ///< bool, if true the paragraph shows up as a list item, but w/o a list label.
+        UnnumberedListItem,     ///< bool. if true this paragraph is part of a list but is not numbered
 
         AutoTextIndent,         ///< bool, says whether the paragraph is auto-indented or not
 

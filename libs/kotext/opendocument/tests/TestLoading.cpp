@@ -193,6 +193,10 @@ static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTex
     foreach(int id, allPropertyIds) {
         QString key, value;
         switch (id) {
+        case KoParagraphStyle::UnnumberedListItem:
+            if (actualProperty[id].toInt() != expectedProperty[id].toBool())
+                match = false;
+            break;
         case KoParagraphStyle::AutoTextIndent:
         case KoParagraphStyle::DropCaps:
         case KoParagraphStyle::DropCapsLines:
@@ -268,13 +272,13 @@ static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expec
             qDebug() << "compareBlock: Expecting  list in actualDocument at " << actualBlock.text();
             return false;
         }
-        // this should really be actualBlock.blockFormat().properties() == expectedBlock.blockFormat().properties()
-        QTextBlockFormat actualFormat = actualBlock.blockFormat();
-        QTextBlockFormat expectedFormat = expectedBlock.blockFormat();
-        if (!compareBlockFormats(actualFormat, expectedFormat)) {
-            qDebug() << "compareBlock: block properties mismatch at " << actualBlock.text();
-            return false;
-        }
+    }
+    // this should really be actualBlock.blockFormat().properties() == expectedBlock.blockFormat().properties()
+    QTextBlockFormat actualFormat = actualBlock.blockFormat();
+    QTextBlockFormat expectedFormat = expectedBlock.blockFormat();
+    if (!compareBlockFormats(actualFormat, expectedFormat)) {
+        qDebug() << "compareBlock: block properties mismatch at " << actualBlock.text();
+        return false;
     }
 
     QTextBlock::Iterator actualIterator = actualBlock.begin();
@@ -587,6 +591,7 @@ void TestLoading::addData()
     QTest::newRow("embeddedBulletedList") << "TextContents/Lists/embeddedBulletedList";
     QTest::newRow("numberedList") << "TextContents/Lists/numberedList";
     QTest::newRow("startValue") << "TextContents/Lists/startValue";
+    QTest::newRow("multipleParagraphs") << "TextContents/Lists/multipleParagraphs";
 
     QTest::newRow("boldAndItalic") << "TextContents/TextFormatting/boldAndItalic";
 

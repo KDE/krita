@@ -288,7 +288,7 @@ QString KoTextDebug::paraAttributes(const KoParagraphStyle &style)
 QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
 {
     QString attrs;
-    KoStyleManager *styleManager = KoTextDocument(document).styleManager();
+    KoStyleManager *styleManager = document ? KoTextDocument(document).styleManager() : 0;
     if (styleManager) {
         int id = blockFormat.intProperty(KoParagraphStyle::StyleId);
         KoParagraphStyle *paragraphStyle = styleManager->paragraphStyle(id);
@@ -395,6 +395,10 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
             value = QString::number(properties[id].toDouble());
             if (value != "0")
                 key = "block-right-margin";
+            break;
+        case KoParagraphStyle::UnnumberedListItem:
+            key = "unnumbered-list-item";
+            value = QString::number(properties[id].toBool());
             break;
         default:
             break;

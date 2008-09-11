@@ -205,7 +205,7 @@ private:
     friend class ChangeTracker;
     TextShape *m_textShape;
     KoTextShapeData *m_textShapeData;
-    QTextCursor m_textCursor;
+    QTextCursor m_caret;
     ChangeTracker *m_changeTracker;
     KoTextSelectionHandler m_selectionHandler;
     bool m_allowActions;

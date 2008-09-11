@@ -285,21 +285,23 @@ QString KoTextShapeDataPrivate::saveCharacterStyle(KoShapeSavingContext &context
 QHash<QTextList *, QString> KoTextShapeDataPrivate::saveListStyles(KoShapeSavingContext &context, const KoStyleManager *styleManager,
         QTextBlock block, int to)
 {
-    QSet<KoListStyle *> generatedListStyles;
+    Q_UNUSED(styleManager);
+    QSet<KoList *> generatedLists;
     QHash<QTextList *, QString> listStyles;
+    KoTextDocument document(block.document());
+
     for (;block.isValid() && ((to == -1) || (block.position() < to)); block = block.next()) {
-        QTextList *textList = block.textList();
-        if (!textList)
+        KoList *list = document.list(block);
+        Q_ASSERT(!block.textList() || list);
+        if (!list || generatedLists.contains(list))
             continue;
-        bool automatic;
-        KoListStyle *listStyle = styleManager->listStyle(textList->format().property(KoListStyle::StyleId).toInt(), &automatic);
-        if (!listStyle || generatedListStyles.contains(listStyle))
-            continue;
+        KoListStyle *listStyle = list->style();
+        bool automatic = listStyle->styleId() == 0;
         KoGenStyle style(automatic ? KoGenStyle::StyleListAuto : KoGenStyle::StyleList);
         listStyle->saveOdf(style);
         QString generatedName = context.mainStyles().lookup(style, listStyle->name());
-        listStyles[textList] = generatedName;
-        generatedListStyles.insert(listStyle);
+        listStyles[block.textList()] = generatedName;
+        generatedLists.insert(list);
     }
     return listStyles;
 }
@@ -313,11 +315,12 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
     Q_ASSERT(layout);
     Q_ASSERT(layout->inlineObjectTextManager());
 
+    KoTextDocument document(d->document);
     KoStyleManager *styleManager = KoTextDocument(d->document).styleManager();
 
     QHash<QTextList *, QString> listStyles = d->saveListStyles(context, styleManager, block, to);
     QList<QTextList*> textLists; // Store the current lists being stored.
-    KoListStyle *currentListStyle = 0;
+    KoList *currentList = 0;
 
     while (block.isValid() && ((to == -1) || (block.position() < to))) {
         if ((block.begin().atEnd()) && (!block.next().isValid()))   // Do not add an extra empty line at the end...
@@ -330,8 +333,8 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
         QTextList *textList = block.textList();
         if (textList && !isHeading) {
             if (!textLists.contains(textList)) {
-                KoListStyle *listStyle = styleManager->listStyle(textList->format().property(KoListStyle::StyleId).toInt());
-                if (currentListStyle != listStyle) {
+                KoList *list = document.list(block);
+                if (currentList != list) {
                     while (!textLists.isEmpty()) {
                         textLists.removeLast();
                         writer->endElement(); // </text:list>
@@ -339,7 +342,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                             writer->endElement(); // </text:list-element>
                         }
                     }
-                    currentListStyle = listStyle;
+                    currentList = list;
                 } else if (!textLists.isEmpty()) // sublists should be written within a list-item
                     writer->startElement("text:list-item", false);
                 writer->startElement("text:list", false);

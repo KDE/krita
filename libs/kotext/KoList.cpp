@@ -22,6 +22,7 @@
 #include "styles/KoListLevelProperties.h"
 #include "KoTextBlockData.h"
 #include "styles/KoParagraphStyle.h"
+#include "styles/KoStyleManager.h"
 
 #include <KDebug>
 
@@ -54,8 +55,9 @@ KoList::KoList(const QTextDocument *document, KoListStyle *style)
     : QObject(const_cast<QTextDocument *>(document)), d(new Private(document))
 {
     Q_ASSERT(document);
-    Q_ASSERT(style);
-    d->style = style->clone(this);
+    KoStyleManager *styleManager = KoTextDocument(document).styleManager();
+    Q_ASSERT(styleManager);
+    d->style = style ? style->clone(this) : styleManager->defaultListStyle();
     KoTextDocument(document).addList(this);
 }
 

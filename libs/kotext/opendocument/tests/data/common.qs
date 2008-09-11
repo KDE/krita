@@ -67,7 +67,6 @@ KoParagraphStyle.TabStopDistance = ++i;
 KoParagraphStyle.TabPositions = ++i;
 KoParagraphStyle.TextProgressionDirection = ++i;
 KoParagraphStyle.MasterPageName = ++i;
-KoParagraphStyle.StartNewList = ++i;
 
 // enum KoParagraphStyle.BorderStyle
 KoParagraphStyle.BorderNone = 0;

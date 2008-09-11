@@ -182,9 +182,6 @@ public:
     bool operator==(const KoListStyle &other) const;
     bool operator!=(const KoListStyle &other) const;
 
-    /// create a new KoListStyle with the properties from the param list.
-    static KoListStyle* fromTextList(QTextList *list);
-
     /**
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.

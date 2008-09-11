@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,6 +24,7 @@
 #include "TextCommandBase.h"
 
 #include <KoListStyle.h>
+#include <KoList.h>
 #include <KoListLevelProperties.h>
 
 #include <QTextBlock>
@@ -68,7 +70,7 @@ private:
     void recalcList(const QTextBlock &block) const;
 
     QTextBlock m_block;
-    KoListStyle *m_listStyle;
+    KoList *m_list;
     KoListLevelProperties m_formerProperties;
 };
 

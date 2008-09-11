@@ -52,7 +52,7 @@ static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2)
 class KoParagraphStyle::Private
 {
 public:
-    Private() : charStyle(0), listStyle(0), parentStyle(0), next(0) {}
+    Private() : charStyle(0), listStyle(0), parentStyle(0), list(0), next(0) {}
 
     ~Private() {
     }
@@ -65,6 +65,7 @@ public:
     KoCharacterStyle *charStyle;
     KoListStyle *listStyle;
     KoParagraphStyle *parentStyle;
+    KoList *list;
     int next;
     StylePrivate stylesPrivate;
 };
@@ -201,7 +202,9 @@ void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
 
     if (applyListStyle) {
         if (d->listStyle) {
-            d->listStyle->applyStyle(block, listLevel());
+            if (!d->list)
+                d->list = new KoList(block.document(), d->listStyle);
+            d->list->add(block, listLevel());
         } else {
             if (block.textList())
                 block.textList()->remove(block);

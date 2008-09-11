@@ -75,12 +75,32 @@ KoParagraphStyle::KoParagraphStyle(QObject *parent)
     d->charStyle = new KoCharacterStyle(this);
 }
 
-KoParagraphStyle::KoParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat, QObject *parent)
+KoParagraphStyle::KoParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &blockCharFormat, QObject *parent)
         : QObject(parent),
         d(new Private())
 {
     d->stylesPrivate = blockFormat.properties();
-    d->charStyle = new KoCharacterStyle(charFormat, this);
+    d->charStyle = new KoCharacterStyle(blockCharFormat, this);
+}
+
+KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block, QObject *parent)
+{
+    QTextBlockFormat blockFormat = block.blockFormat();
+    QTextCursor cursor(block);
+    KoParagraphStyle *answer = new KoParagraphStyle(blockFormat, cursor.blockCharFormat(), parent);
+
+    int listStyleId = blockFormat.intProperty(ListStyleId);
+    KoStyleManager *sm = KoTextDocument(block.document()).styleManager();
+    if (KoListStyle *listStyle = sm->listStyle(listStyleId)) {
+        answer->setListStyle(listStyle->clone(answer));
+    } else if (block.textList()) {
+        KoListLevelProperties llp = KoListLevelProperties::fromTextList(block.textList());
+        KoListStyle *listStyle = new KoListStyle(answer);
+        listStyle->setLevelProperties(llp);
+        answer->setListStyle(listStyle);
+    }
+
+    return answer;
 }
 
 KoParagraphStyle::~KoParagraphStyle()
@@ -1385,42 +1405,6 @@ KoParagraphStyle *KoParagraphStyle::clone(QObject *parent)
     KoParagraphStyle *newStyle = new KoParagraphStyle(parent);
     newStyle->copyProperties(this);
     return newStyle;
-}
-
-// static
-KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block)
-{
-    QTextBlockFormat format = block.blockFormat();
-    KoParagraphStyle *answer = 0;
-    KoCharacterStyle *charStyle = 0;
-    int styleId = format.intProperty(StyleId);
-    if (styleId > 0) {
-        KoStyleManager *sm = KoTextDocument(block.document()).styleManager();
-        if (sm) {
-            KoParagraphStyle *style = sm->paragraphStyle(styleId);
-            if (style) {
-                answer = new KoParagraphStyle;
-                answer->copyProperties(style);
-            }
-            charStyle = sm->characterStyle(format.intProperty(KoCharacterStyle::StyleId));
-        }
-    }
-    if (answer == 0) {
-        answer = new KoParagraphStyle();
-        delete answer->characterStyle();
-    }
-    answer->d->charStyle = charStyle;
-
-    if (block.textList())
-        answer->d->listStyle = KoListStyle::fromTextList(block.textList());
-
-    QMap<int, QVariant> properties = format.properties();
-    QList<int> keys = properties.keys();
-    for (int i = 0; i < keys.count(); i++) {
-        answer->setProperty(keys[i], properties.value(keys[i]));
-    }
-
-    return answer;
 }
 
 bool KoParagraphStyle::compareParagraphProperties(const KoParagraphStyle &other) const

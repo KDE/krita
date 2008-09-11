@@ -104,6 +104,7 @@ public:
         BottomBorderColor,      ///< The border Color
 
         // lists
+        ListStyleId,            ///< Style Id of associated list style
         ListStartValue,         ///< Int with the list-value that that parag will have. Ignored if this is not a list.
         RestartListNumbering,   ///< boolean to indicate that this paragraph will have numbering restart at the list-start. Ignored if this is not a list.
         ListLevel,               ///< int with the list-level that the paragraph will get when this is a list
@@ -118,8 +119,8 @@ public:
 
         MasterPageName,         ///< Optional name of the master-page.
         StartNewList            ///< Boolean marker to indicate that a new list starts from this block, even if
-        ///< it's part of an existing QTextList. (This is nothing related to ODF; exists
-        ///< because of how lists are handled in KOffice. See KoListStyle.)
+                                ///< it's part of an existing QTextList. (This is nothing related to ODF; exists
+                                ///< because of how lists are handled in KOffice. See KoListStyle.)
 
 // do 15.5.24
 // continue at 15.5.28
@@ -144,10 +145,16 @@ public:
 
     /// Constructor
     KoParagraphStyle(QObject *parent = 0);
-    /// Copy constructor
-    KoParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat, QObject *parent = 0);
+    /// Creates a KoParagraphStyle with the given block format, the block character format and \a parent
+    KoParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &blockCharFormat, QObject *parent = 0);
     /// Destructor
     ~KoParagraphStyle();
+
+    /// Creates a KoParagraphStyle that represents the formatting of \a block.
+    static KoParagraphStyle *fromBlock(const QTextBlock &block, QObject *parent = 0);
+
+    /// creates a clone of this style with the sepcified parent
+    KoParagraphStyle *clone(QObject *parent = 0);
 
     //  ***** Linespacing
     /**
@@ -465,9 +472,6 @@ public:
     /// copy all the properties from the other style to this style, effectively duplicating it.
     void copyProperties(const KoParagraphStyle *style);
 
-    /// creates a clone of this style with the sepcified parent
-    KoParagraphStyle *clone(QObject *parent = 0);
-
     /**
      * Apply this style to a blockFormat by copying all properties from this, and parent
      * styles to the target block format.  Note that the character format will not be applied
@@ -502,8 +506,6 @@ public:
      * @see removeListStyle()
      */
     void setListStyle(KoListStyle *style);
-
-    static KoParagraphStyle *fromBlock(const QTextBlock &block);
 
     void remove(int key);
 

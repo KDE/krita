@@ -97,11 +97,12 @@ void ParagraphSettingsDialog::open(const QTextCursor &cursor)
 {
     m_cursor = cursor;
     m_ownStyle = true;
-    open(KoParagraphStyle::fromBlock(m_cursor.block()));
+    open(KoParagraphStyle::fromBlock(cursor.block(), this));
 }
 
 void ParagraphSettingsDialog::open(KoParagraphStyle *style)
 {
+    delete m_style;
     m_style = style;
     m_paragraphIndentSpacing->open(style);
     m_paragraphLayout->open(style);

@@ -224,6 +224,15 @@ void KoListStyle::applyStyle(const QTextBlock &block, int level)
 
     if (contains)
         d->levels.insert(level, llp);
+
+    QTextCursor cursor(block);
+    QTextBlockFormat blockFormat = cursor.blockFormat();
+    if (d->styleId) {
+        blockFormat.setProperty(KoParagraphStyle::ListStyleId, d->styleId);
+    } else {
+        blockFormat.clearProperty(KoParagraphStyle::ListStyleId);
+    }
+    cursor.setBlockFormat(blockFormat);
 }
 
 // static

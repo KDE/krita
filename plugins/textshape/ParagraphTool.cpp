@@ -335,7 +335,8 @@ bool ParagraphTool::activateTextBlockAt(const QPointF &point)
     }
 
     m_activeCursor = QTextCursor(block);
-    m_paragraphStyle = KoParagraphStyle::fromBlock(block);
+    delete m_paragraphStyle;
+    m_paragraphStyle = KoParagraphStyle::fromBlock(m_activeCursor.block(), this);
 
     if (createFragments()) {
         loadRulers();

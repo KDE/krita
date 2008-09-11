@@ -57,8 +57,9 @@ KoParagraphStyle.BottomInnerBorderWidth = ++i;
 KoParagraphStyle.BottomBorderSpacing = ++i;
 KoParagraphStyle.BottomBorderStyle = ++i;
 KoParagraphStyle.BottomBorderColor = ++i;
-KoParagraphStyle.ExplicitListValue = ++i;
-KoParagraphStyle.RestartListNumbering = ++i;
+KoParagraphStyle.ListStyleId = ++i;
+KoParagraphStyle.ListStartValue = ++i;      
+KoParagraphStyle.RestartListNumbering = ++i;   
 KoParagraphStyle.ListLevel = ++i;
 KoParagraphStyle.IsListHeader = ++i;
 KoParagraphStyle.AutoTextIndent = ++i;
@@ -66,7 +67,7 @@ KoParagraphStyle.TabStopDistance = ++i;
 KoParagraphStyle.TabPositions = ++i;
 KoParagraphStyle.TextProgressionDirection = ++i;
 KoParagraphStyle.MasterPageName = ++i;
-
+KoParagraphStyle.StartNewList = ++i;
 
 // enum KoParagraphStyle.BorderStyle
 KoParagraphStyle.BorderNone = 0;

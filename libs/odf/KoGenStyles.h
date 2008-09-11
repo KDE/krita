@@ -20,10 +20,10 @@
 #ifndef KOGENSTYLES_H
 #define KOGENSTYLES_H
 
-#include <QList>
-#include <QMap>
-#include <QSet>
-#include <QString>
+#include <QtCore/QList>
+#include <QtCore/QMap>
+#include <QtCore/QSet>
+#include <QtCore/QString>
 #include "koodf_export.h"
 #include "KoGenStyle.h"
 

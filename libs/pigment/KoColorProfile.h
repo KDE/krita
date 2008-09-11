@@ -20,8 +20,8 @@
 #ifndef _KO_COLOR_PROFILE_H_
 #define _KO_COLOR_PROFILE_H_
 
-#include <QString>
-#include <QVariant>
+#include <QtCore/QString>
+#include <QtCore/QVariant>
 
 #include "pigment_export.h"
 

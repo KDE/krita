@@ -19,8 +19,8 @@
 #ifndef KOCHANNELINFO_H_
 #define KOCHANNELINFO_H_
 
-#include <QColor>
-#include "qstring.h"
+#include <QtGui/QColor>
+#include <QtCore/QString>
 #include "ksharedptr.h"
 
 /**

@@ -22,9 +22,9 @@
 class KoOdfStylesReader;
 class KoStore;
 
-#include <QMap>
+#include <QtCore/QMap>
 #include "koodf_export.h"
-#include <QStringList>
+#include <QtCore/QStringList>
 #include <KoStyleStack.h>
 #include <KoXmlReader.h>
 

@@ -20,8 +20,8 @@
 
 #ifndef KOUNIT_H
 #define KOUNIT_H
-#include <QString>
-#include <QStringList>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
 #include <math.h> // for floor
 #include "koodf_export.h"
 

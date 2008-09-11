@@ -23,7 +23,7 @@
 class KoColorSpace;
 class KoColorConversionTransformation;
 
-#include <QString>
+#include <QtCore/QString>
 #include <KoColorConversionTransformationAbstractFactory.h>
 
 /**

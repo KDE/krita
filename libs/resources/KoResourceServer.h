@@ -36,8 +36,8 @@
 #include "KoResourceServerObserver.h"
 
 #include "koresource_export.h"
-#include <QMutex>
-#include <QMutexLocker>
+#include <QtCore/QMutex>
+#include <QtCore/QMutexLocker>
 #include <KDebug>
 
 class KoResource;

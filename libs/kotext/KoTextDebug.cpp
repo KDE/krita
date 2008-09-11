@@ -481,6 +481,10 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
             key = "styleid";
             value = QString::number(properties[id].toInt());
             break;
+        case KoListStyle::ContinueNumbering:
+            key = "continue-numbering";
+            value = QString::number(properties[id].toInt());
+            break;
         default:
             break;
         }

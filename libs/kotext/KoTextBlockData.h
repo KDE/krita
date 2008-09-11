@@ -68,10 +68,21 @@ public:
     /// return the exact text that will be painted as the counter
     QString counterText() const;
 
+    /** sets the index that is used at this level.
+     * If this represents a paragraph with counter 3.1, then the text is the 1.
+     * If this represents a paragraph with counter IV.V, then the index is 5.
+     */
+    void setCounterIndex(int index);
+    /// returns the index for the counter at this level
+    int counterIndex() const;
+
     /**
-     * set the text that is used for the counter at this level.
-     * If this represents a parag with counter 3.1 then the text is the '1'
+     * set the text that is used for the counter at this level. the text is formatted
+     * depending on the language/style.
+     * If this represents a parag with counter 3.1 then the text is the '1'..
+     * If this represents a paragraph with counter IV.V, then the text is V.
      * since the rest is not dependent on this parag, but only its location in the text
+     *
      */
     void setPartialCounterText(const QString &text);
     /// return the partial text for this paragraphs counter

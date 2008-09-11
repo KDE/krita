@@ -184,6 +184,7 @@ KoListStyle.ListId = i++;
 KoListStyle.IsOutline = i++;
 KoListStyle.LetterSynchronization = i++;
 KoListStyle.StyleId = i++;
+KoListStyle.ContinueNumbering = i++;
 
 KoListStyle.SquareItem = QTextListFormat.ListSquare;
 KoListStyle.DiscItem = QTextListFormat.ListDisc;

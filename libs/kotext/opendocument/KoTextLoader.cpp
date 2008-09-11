@@ -381,6 +381,11 @@ void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
 
     int level = d->currentListLevel++;
 
+    if (element.hasAttributeNS(KoXmlNS::text, "continue-numbering")) {
+        const QString continueNumbering = element.attributeNS(KoXmlNS::text, "continue-numbering", QString());
+        d->currentList->setContinueNumbering(level, continueNumbering == "true");
+    }
+
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
     if (d->currentListStyle)
         kDebug(32500) << "styleName =" << styleName << "listStyle =" << d->currentListStyle->name()

@@ -40,6 +40,10 @@ public:
     /// Destructor
     ~KoList();
 
+    enum {
+        ContinueNumbering = 1
+    };
+
     /// Adds \a block to \a level of this list
     void add(const QTextBlock &block, int level);
 
@@ -72,6 +76,9 @@ public:
 
     /// Decreases level of block
     void decreaseLevel(const QTextBlock &block);
+
+    void setContinueNumbering(int level, bool enable);
+    bool continueNumbering(int level) const;
 
 private:
     class Private;

@@ -22,7 +22,7 @@
 class KoTextBlockData::Private
 {
 public:
-    Private() : counterWidth(0), counterSpacing(0), border(0), outline(0) {}
+    Private() : counterWidth(0), counterSpacing(0), counterIndex(1), border(0), outline(0) {}
     ~Private() {
         if (border && border->removeUser() == 0)
             delete border;
@@ -31,6 +31,7 @@ public:
     qreal counterSpacing;
     QString counterText;
     QString partialCounterText;
+    int counterIndex;
     QPointF counterPos;
     KoTextBlockBorderData *border;
     int outline;
@@ -99,6 +100,16 @@ void KoTextBlockData::setPartialCounterText(const QString &text)
 const QString &KoTextBlockData::partialCounterText() const
 {
     return d->partialCounterText;
+}
+
+void KoTextBlockData::setCounterIndex(int index)
+{
+    d->counterIndex = index;
+}
+
+int KoTextBlockData::counterIndex() const
+{
+    return d->counterIndex;
 }
 
 void KoTextBlockData::setCounterPosition(QPointF position)

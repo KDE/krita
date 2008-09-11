@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,6 +23,8 @@
 #include <KoTextBlockData.h>
 #include <KoListStyle.h>
 #include <KoParagraphStyle.h>
+#include <KoTextDocument.h>
+#include <KoList.h>
 
 #include <KDebug>
 #include <KLocale>
@@ -226,7 +229,6 @@ void ListItemsHelper::recalculate()
     QTextListFormat format = m_textList->format();
     const KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(m_textList->format().style());
 
-    int index = format.intProperty(KoListStyle::StartValue);
     QString prefix = format.stringProperty(KoListStyle::ListItemPrefix);
     QString suffix = format.stringProperty(KoListStyle::ListItemSuffix);
     const int level = format.intProperty(KoListStyle::Level);
@@ -235,6 +237,27 @@ void ListItemsHelper::recalculate()
         dp = level;
     const int displayLevel = dp;
 
+    int startValue = format.intProperty(KoListStyle::StartValue);
+    if (format.boolProperty(KoListStyle::ContinueNumbering)) {
+        // Look for the index of a previous list of the same numbering style and level
+        for (QTextBlock tb = m_textList->item(0).previous(); tb.isValid(); tb = tb.previous()) {
+            if (!tb.textList() || tb.textList() == m_textList)
+                continue; // no list here or it's the same list; keep looking
+
+            QTextListFormat otherFormat = tb.textList()->format();
+            if (otherFormat.intProperty(KoListStyle::Level) != level)
+                break; // found a different list but of a different level
+
+            if (otherFormat.style() == format.style()) {
+                if (KoTextBlockData *data = dynamic_cast<KoTextBlockData *>(tb.userData()))
+                    startValue = data->counterIndex() + 1; // Start from previous list value + 1
+            }
+
+            break;
+        }
+    }
+
+    int index = startValue;
     QList<QTextList*> sublistsToRecalculate;
     for (int i = 0; i < m_textList->count(); i++) {
         QTextBlock tb = m_textList->item(i);
@@ -266,7 +289,7 @@ void ListItemsHelper::recalculate()
             if (b.textList() == 0)
                 continue;
             if (b.textList()->format().intProperty(KoListStyle::Level) < level) {
-                index = format.intProperty(KoListStyle::StartValue);
+                index = startValue;
                 break;
             }
         }
@@ -307,6 +330,7 @@ void ListItemsHelper::recalculate()
                 }
             }
         }
+
         if ((listStyle == KoListStyle::DecimalItem || listStyle == KoListStyle::AlphaLowerItem ||
                 listStyle == KoListStyle::UpperAlphaItem ||
                 listStyle == KoListStyle::RomanLowerItem ||
@@ -381,6 +405,7 @@ void ListItemsHelper::recalculate()
             calcWidth = false;
         }
         data->setPartialCounterText(partialCounterText);
+        data->setCounterIndex(index);
         item += partialCounterText;
         if (calcWidth)
             width = qMax(width, m_fm.width(item));

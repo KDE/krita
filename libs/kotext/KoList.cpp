@@ -28,11 +28,13 @@
 
 #include <QTextCursor>
 #include <QPointer>
+#include <QBitArray>
 
 class KoList::Private
 {
 public:
-    Private(const QTextDocument *document) : style(0), textLists(10), document(document)
+    Private(const QTextDocument *document)
+    : style(0), textLists(10), document(document)
     {
     }
 
@@ -49,6 +51,7 @@ public:
     KoListStyle *style;
     QVector<QPointer<QTextList> > textLists;
     const QTextDocument *document;
+    QMap<int, QVariant> properties;
 };
 
 KoList::KoList(const QTextDocument *document, KoListStyle *style)
@@ -113,7 +116,10 @@ void KoList::add(const QTextBlock &block, int level)
     QTextList *textList = d->textLists.value(level-1);
     if (!textList) {
         QTextCursor cursor(block);
-        QTextList *list = cursor.createList(d->style->listFormat(level));
+        QTextListFormat format = d->style->listFormat(level);
+        if (continueNumbering(level))
+            format.setProperty(KoListStyle::ContinueNumbering, true);
+        QTextList *list = cursor.createList(format);
         d->textLists[level-1] = list;
     } else {
         textList->add(block);
@@ -177,4 +183,38 @@ void KoList::increaseLevel(const QTextBlock &block)
 void KoList::decreaseLevel(const QTextBlock &block)
 {
     Q_ASSERT(KoTextDocument(block.document()).list(block) == this);
+}
+
+void KoList::setContinueNumbering(int level, bool enable)
+{
+    Q_ASSERT(level > 0 && level <= 10);
+    level = qMax(qMin(level, 10), 1);
+
+    QBitArray bitArray = d->properties[ContinueNumbering].toBitArray();
+    if (bitArray.isEmpty())
+        bitArray.resize(10);
+    bitArray.setBit(level-1, enable);
+    d->properties[ContinueNumbering] = bitArray;
+
+    QTextList *textList = d->textLists[level-1];
+    if (!textList)
+        return;
+    QTextListFormat format = textList->format();
+    if (enable) {
+        format.setProperty(KoListStyle::ContinueNumbering, true);
+    } else {
+        format.clearProperty(KoListStyle::ContinueNumbering);
+    }
+    textList->setFormat(format);
+}
+
+bool KoList::continueNumbering(int level) const
+{
+    Q_ASSERT(level > 0 && level <= 10);
+    level = qMax(qMin(level, 10), 1);
+
+    QBitArray bitArray = d->properties.value(ContinueNumbering).toBitArray();
+    if (bitArray.isEmpty())
+        return false;
+    return bitArray.testBit(level-1);
 }

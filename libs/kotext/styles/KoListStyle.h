@@ -111,7 +111,8 @@ public:
         ListId,         ///< A group of lists together are called 1 (user intended) list in ODF. Store the listId here
         IsOutline,      ///< If true then this list is an outline list (for header paragraphs)
         LetterSynchronization, ///< If letters are used for numbering, when true increment all at the same time. (aa, bb)
-        StyleId         ///< The id stored in the listFormat to link the list to this style.
+        StyleId,        ///< The id stored in the listFormat to link the list to this style.
+        ContinueNumbering /// Continue numbering this list from the counter of a previous list
     };
 
     /**

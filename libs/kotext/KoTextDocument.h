@@ -69,6 +69,9 @@ public:
     /// Returns the KoList that holds \a block; 0 if block is not part of any list
     KoList *list(const QTextBlock &block) const;
 
+    /// Returns the KoList that holds \a list
+    KoList *list(QTextList *textList) const;
+
     /**
      * Clears the text in the document. Unlike QTextDocument::clear(), this
      * function does not clear the resources of the QTextDocument.

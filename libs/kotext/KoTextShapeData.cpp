@@ -347,6 +347,9 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) 
                     writer->startElement("text:list-item", false);
                 writer->startElement("text:list", false);
                 writer->addAttribute("text:style-name", listStyles[textList]);
+                if (textList->format().hasProperty(KoListStyle::ContinueNumbering))
+                    writer->addAttribute("text:continue-numbering",
+                                         textList->format().boolProperty(KoListStyle::ContinueNumbering) ? "true" : "false");
                 textLists.append(textList);
             } else if (textList != textLists.last()) {
                 while ((!textLists.isEmpty()) && (textList != textLists.last())) {

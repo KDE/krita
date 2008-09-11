@@ -253,6 +253,15 @@ void KoListLevelProperties::setLetterSynchronization(bool on)
     setProperty(KoListStyle::LetterSynchronization, on);
 }
 
+void KoListLevelProperties::setContinueNumbering(bool enable)
+{
+    setProperty(KoListStyle::ContinueNumbering, enable);
+}
+
+bool KoListLevelProperties::continueNumbering() const
+{
+    return propertyBoolean(KoListStyle::ContinueNumbering);
+}
 
 // static
 KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list)

@@ -103,11 +103,17 @@ KoList *KoTextDocument::list(const QTextBlock &block) const
     QTextList *textList = block.textList();
     if (!textList)
         return 0;
+    return list(textList);
+}
+
+KoList *KoTextDocument::list(QTextList *textList) const
+{
     // FIXME: this is horrible.
     foreach(KoList *l, lists()) {
         if (l->textLists().contains(textList))
             return l;
     }
+    Q_ASSERT(false);
     return 0;
 }
 

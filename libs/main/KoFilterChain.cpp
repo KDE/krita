@@ -402,11 +402,11 @@ void KoFilterChain::manageIO()
         delete m_inputTempFile;  // autodelete
         m_inputTempFile = 0;
     }
-    m_inputFile = QString();
+    m_inputFile.clear();
 
     if (!m_outputFile.isEmpty()) {
         m_inputFile = m_outputFile;
-        m_outputFile = QString();
+        m_outputFile.clear();
         m_inputTempFile = m_outputTempFile;
         m_outputTempFile = 0;
 
@@ -459,13 +459,13 @@ void KoFilterChain::inputFileHelper(KoDocument* document, const QString& alterna
         if (!createTempFile(&m_inputTempFile)) {
             delete m_inputTempFile;
             m_inputTempFile = 0;
-            m_inputFile = QString();
+            m_inputFile.clear();
             return;
         }
         if (!document->saveNativeFormat(m_inputTempFile->fileName())) {
             delete m_inputTempFile;
             m_inputTempFile = 0;
-            m_inputFile = QString();
+            m_inputFile.clear();
             return;
         }
         m_inputFile = m_inputTempFile->fileName();
@@ -478,7 +478,7 @@ void KoFilterChain::outputFileHelper(bool autoDelete)
     if (!createTempFile(&m_outputTempFile, autoDelete)) {
         delete m_outputTempFile;
         m_outputTempFile = 0;
-        m_outputFile = QString();
+        m_outputFile.clear();
     } else
         m_outputFile = m_outputTempFile->fileName();
 }

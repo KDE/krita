@@ -762,7 +762,7 @@ public:
         valueHash.clear();
         valueList.clear();
         groups.clear();
-        docType = QString();
+        docType.clear();
 
         // reserve index #0
         cacheString(QString());
@@ -1024,9 +1024,9 @@ bool KoXmlHandler::startDocument()
 {
     // just for sanity
     cdata = false;
-    entityName = QString();
+    entityName.clear();
 
-    errorMsg = QString();
+    errorMsg.clear();
     errorLine = 0;
     errorColumn = 0;
 

@@ -141,7 +141,7 @@ void KoTemplatesPane::alwaysUseClicked()
     QStandardItem* item = model()->itemFromIndex(m_documentList->selectionModel()->currentIndex());
 
     if (!m_alwaysUseCheckBox->isChecked()) {
-        d->m_alwaysUseTemplate = QString();
+        d->m_alwaysUseTemplate.clear();
     } else {
         d->m_alwaysUseTemplate = item->data(Qt::UserRole + 1).toString();
     }

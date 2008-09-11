@@ -315,7 +315,7 @@ void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlEle
             default:
                 QChar customBulletChar = bulletChar[0];
                 kDebug(32500) << "Unhandled bullet code 0x" << QString::number((uint)customBulletChar.unicode(), 16);
-                kDebug(32500) << "Should use the style =>" << style.attributeNS(KoXmlNS::text, "style-name", QString::null) << "<=";
+                kDebug(32500) << "Should use the style =>" << style.attributeNS(KoXmlNS::text, "style-name", QString()) << "<=";
                 setStyle(KoListStyle::CustomCharItem);
                 /*
                 QString customBulletFont;

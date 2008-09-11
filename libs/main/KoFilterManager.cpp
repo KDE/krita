@@ -230,7 +230,7 @@ QString KoFilterManager::importDocument(const QString& url, KoFilter::Conversion
     // Okay, let's invoke the filters one after the other
     m_direction = Import; // vital information!
     m_importUrl = url;  // We want to load that file
-    m_exportUrl = QString();  // This is null for sure, as embedded stuff isn't
+    m_exportUrl.clear();  // This is null for sure, as embedded stuff isn't
     // allowed to use that method
     status = chain->invokeChain();
 

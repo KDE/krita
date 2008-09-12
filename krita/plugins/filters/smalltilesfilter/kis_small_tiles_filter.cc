@@ -59,6 +59,7 @@ KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::Category
     setSupportsPainting(true);
     setSupportsPreview(true);
     setSupportsIncrementalPainting(false);
+    setSupportsThreading(false);
 }
 
 void KisSmallTilesFilter::process(KisConstProcessingInformation srcInfo,
@@ -94,10 +95,7 @@ void KisSmallTilesFilter::process(KisConstProcessingInformation srcInfo,
     }
     if (tile.isNull()) return;
 
-    // XXX: does anyone knows why we need a temporary device ?
-    KisPaintDeviceSP scratch = new KisPaintDevice(src->colorSpace());
-
-    KisPainter gc(scratch);
+    KisPainter gc(dst);
 
     if (progressUpdater) {
         progressUpdater->setRange(0, numberOfTiles);
@@ -106,26 +104,23 @@ void KisSmallTilesFilter::process(KisConstProcessingInformation srcInfo,
     for (uint y = 0; y < numberOfTiles; ++y) {
         for (uint x = 0; x < numberOfTiles; ++x) {
             // XXX make composite op and opacity configurable
-            gc.bitBlt(w * x, h * y, COMPOSITE_COPY, tile, 0, 0, w, h);
-            if (progressUpdater) progressUpdater->setValue(y);
+            if (srcInfo.selection()) {
+                gc.bltSelection(w * x, h * y, COMPOSITE_OVER, tile, srcInfo.selection(), OPACITY_OPAQUE,
+                                0, 0, w, h);
+            }
+            else {
+                gc.bitBlt(w * x, h * y, COMPOSITE_OVER, tile, OPACITY_OPAQUE, 0, 0, w, h);
+            }
         }
+        if (progressUpdater) progressUpdater->setValue(y);
     }
     gc.end();
-
-    gc.begin(dst);
-    if (srcInfo.selection()) {
-        gc.bltSelection(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_OVER, scratch, srcInfo.selection(), OPACITY_OPAQUE, 0, 0, size.width(), size.height());
-    } else {
-        gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_OVER, scratch, OPACITY_OPAQUE, 0, 0, size.width(), size.height());
-    }
-    gc.end();
-
 }
 
 KisConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, const KisImageSP) const
 {
     vKisIntegerWidgetParam param;
-    param.push_back(KisIntegerWidgetParam(2, 5, 1, i18n("Number of tiles"), "smalltiles"));
+    param.push_back(KisIntegerWidgetParam(2, 5, 1, i18n("Number of tiles"), "numberOfTiles"));
     return new KisMultiIntegerFilterWidget(id().id(),  parent,  id().id(),  param);
 
 }
@@ -133,6 +128,6 @@ KisConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent
 KisFilterConfiguration* KisSmallTilesFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("smalltiles", 1);
-    config->setProperty("smalltiles", 2);
+    config->setProperty("numberOfTiles", 2);
     return config;
 }

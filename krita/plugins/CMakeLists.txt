@@ -1,4 +1,4 @@
-add_subdirectory( assitants )
+add_subdirectory( assistants )
 add_subdirectory( filters )
 add_subdirectory( tools )
 add_subdirectory( viewplugins )

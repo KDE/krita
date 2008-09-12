@@ -114,10 +114,7 @@ void ChangeListCommand::redo()
     TextCommandBase::redo();
     UndoRedoFinalizer finalizer(this, m_tool);
     if (m_list == 0) { // no list item (anymore)
-        if (QTextList *list = m_block.textList()) {
-            list->remove(m_block);
-            recalcList(m_block);
-        }
+        KoList::remove(m_block);
     } else {
         m_list->add(m_block, 0);
     }

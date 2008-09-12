@@ -47,8 +47,8 @@ public:
     /// Adds \a block to \a level of this list
     void add(const QTextBlock &block, int level);
 
-    /// Removes \a block from this list
-    void remove(const QTextBlock &block);
+    /// Removes \a block from any KoList the block is a part of
+    static void remove(const QTextBlock &block);
 
     /**
      * Adds \a block to a list that follows \a style at \a level. If the block is

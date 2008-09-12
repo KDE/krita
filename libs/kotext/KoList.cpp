@@ -42,7 +42,7 @@ public:
     {
     }
 
-    void invalidate(const QTextBlock &block)
+    static void invalidate(const QTextBlock &block)
     {
         if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(block.userData()))
             userData->setCounterWidth(-1.0);
@@ -142,7 +142,7 @@ void KoList::remove(const QTextBlock &block)
     QTextList *textList = block.textList();
     if (textList)
         textList->remove(block);
-    d->invalidate(block);
+    Private::invalidate(block);
 }
 
 void KoList::setStyle(KoListStyle *style)

@@ -139,9 +139,17 @@ void KoList::add(const QTextBlock &block, int level)
 
 void KoList::remove(const QTextBlock &block)
 {
-    QTextList *textList = block.textList();
-    if (textList)
+    if (QTextList *textList = block.textList()) {
+        // invalidate the list before we remove the item
+        // (since the list might disappear if the block is the only item)
+        for (int i = 0; i < textList->count(); i++) {
+            if (textList->item(i) != block) {
+                Private::invalidate(textList->item(i));
+                break;
+            }
+        }
         textList->remove(block);
+    }
     Private::invalidate(block);
 }
 

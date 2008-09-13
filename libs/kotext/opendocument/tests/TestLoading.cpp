@@ -202,6 +202,7 @@ static bool compareBlockFormats(const QTextBlockFormat &actualFormat, const QTex
         case KoParagraphStyle::DropCaps:
         case KoParagraphStyle::DropCapsLines:
         case KoParagraphStyle::DropCapsLength:
+        case KoParagraphStyle::ListLevel:
             if (actualProperty[id].toInt() != expectedProperty[id].toInt())
                 match = false;
             break;
@@ -258,7 +259,7 @@ static bool compareBlocks(const QTextBlock &actualBlock, const QTextBlock &expec
 
     if (actualList) {
         if (!expectedList) {
-            qDebug() << "compareBlocks: Unexpected list in actualDocument at " << actualBlock.text();
+            qDebug() << "compareBlocks: Unexpected list in actualDocument at " << actualBlock.text() << expectedBlock.text();
             return false;
         }
         if (!compareListFormats(actualList->format(), expectedList->format())
@@ -594,6 +595,7 @@ void TestLoading::addData()
     QTest::newRow("listHeader") << "TextContents/Lists/listHeader";
     QTest::newRow("multipleParagraphs") << "TextContents/Lists/multipleParagraphs";
     QTest::newRow("numberedList") << "TextContents/Lists/numberedList";
+    QTest::newRow("numberedParagraph") << "TextContents/Lists/numberedParagraph";
     QTest::newRow("startValue") << "TextContents/Lists/startValue";
 
     QTest::newRow("boldAndItalic") << "TextContents/TextFormatting/boldAndItalic";

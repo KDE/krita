@@ -368,18 +368,28 @@ void KoTextLoader::loadHeading(const KoXmlElement& element, QTextCursor& cursor)
 
 void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
 {
+    const bool numberedParagraph = element.localName() == "numbered-paragraph";
+
     QString styleName = element.attributeNS(KoXmlNS::text, "style-name", QString());
-
     KoListStyle *listStyle = d->textSharedData->listStyle(styleName, d->stylesDotXml);
-    if (!listStyle)
-        listStyle = d->currentListStyle;
 
-    if (!d->currentList || listStyle != d->currentListStyle)
-        d->currentList = new KoList(cursor.block().document(), listStyle);
+    int level;
 
-    d->currentListStyle = listStyle;
+    if (numberedParagraph) {
+        d->currentList = d->list(cursor.block().document(), listStyle);
+        d->currentListStyle = listStyle;
+        level = element.attributeNS(KoXmlNS::text, "level", "1").toInt();
+    } else {
+        if (!listStyle)
+            listStyle = d->currentListStyle;
 
-    int level = d->currentListLevel++;
+        if (!d->currentList || listStyle != d->currentListStyle)
+            d->currentList = new KoList(cursor.block().document(), listStyle);
+
+        d->currentListStyle = listStyle;
+
+        level = d->currentListLevel++;
+    }
 
     if (element.hasAttributeNS(KoXmlNS::text, "continue-numbering")) {
         const QString continueNumbering = element.attributeNS(KoXmlNS::text, "continue-numbering", QString());
@@ -405,7 +415,7 @@ void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
 
         const bool listHeader = e.tagName() == "list-header";
 
-        if (e.tagName() != "list-item" && !listHeader)
+        if (!numberedParagraph && e.tagName() != "list-item" && !listHeader)
             continue;
 
         if (!firstTime) {
@@ -416,12 +426,22 @@ void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
 
         QTextBlock current = cursor.block();
 
-        loadBody(e, cursor);
+        QTextBlockFormat blockFormat;
+
+        if (numberedParagraph) {
+            if (e.localName() == "p") {
+                loadParagraph(e, cursor);
+            } else if (e.localName() == "h") {
+                loadHeading(e, cursor);
+            }
+            blockFormat.setProperty(KoParagraphStyle::ListLevel, level);
+        } else {
+            loadBody(e, cursor);
+        }
 
         if (!current.textList())
             d->currentList->add(current, level);
 
-        QTextBlockFormat blockFormat;
         if (listHeader)
             blockFormat.setProperty(KoParagraphStyle::IsListHeader, true);
 
@@ -445,8 +465,7 @@ void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
         cursor.mergeBlockFormat(blockFormat);
     }
 
-    --d->currentListLevel;
-    if (d->currentListLevel == 1) {
+    if (numberedParagraph || --d->currentListLevel == 1) {
         d->currentListStyle = 0;
         d->currentList = 0;
     }

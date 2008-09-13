@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=RulerAssistantView
 Name[el]=Προβολή βοηθού κανόνα
+Name[nds]=Linealenhölper-Ansicht
 Name[sv]=Linjalguidevy
 Comment=RulerAssistantView
 Comment[el]=Προβολή βοηθού κανόνα
+Comment[nds]=Linealenhölper-Ansicht
 Comment[sv]=Linjalguidevy
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service

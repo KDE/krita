@@ -32,7 +32,7 @@ public:
     ~InfoVariableFactory();
 
     /// reimplemented
-    KoVariable * createVariable( const KoProperties *properties ) const;
+    KoVariable * createVariable(const KoProperties *properties) const;
     /// reimplemented
     KoVariable * createVariable() const;
 };

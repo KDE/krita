@@ -27,22 +27,25 @@
 #include <KoXmlWriter.h>
 
 InfoVariable::InfoVariable()
-    : KoVariable(true),
-    m_type(KoInlineObject::DocumentURL)
+        : KoVariable(true),
+        m_type(KoInlineObject::DocumentURL)
 {
 }
 
-void InfoVariable::setProperties(const KoProperties *props) {
+void InfoVariable::setProperties(const KoProperties *props)
+{
     m_type = (Property) props->property("property").value<int>();
 }
 
-void InfoVariable::propertyChanged(Property property, const QVariant &value) {
+void InfoVariable::propertyChanged(Property property, const QVariant &value)
+{
     if (property == m_type) {
         setValue(value.toString());
     }
 }
 
-void InfoVariable::saveOdf (KoShapeSavingContext & context) {
+void InfoVariable::saveOdf(KoShapeSavingContext & context)
+{
     KoXmlWriter *writer = &context.xmlWriter();
     QString nodeName;
     if (m_type == KoInlineObject::Title)
@@ -58,17 +61,15 @@ void InfoVariable::saveOdf (KoShapeSavingContext & context) {
     }
 }
 
-bool InfoVariable::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
+bool InfoVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context)
 {
-    const QString localName( element.localName() );
+    const QString localName(element.localName());
 
-    if ( localName == "title" ) {
+    if (localName == "title") {
         m_type = KoInlineObject::Title;
-    }
-    else if ( localName == "subject" ) {
+    } else if (localName == "subject") {
         m_type = KoInlineObject::Subject;
-    }
-    else if ( localName == "keywords" ) {
+    } else if (localName == "keywords") {
         m_type = KoInlineObject::Keywords;
     }
 

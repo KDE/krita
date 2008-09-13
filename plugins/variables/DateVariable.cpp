@@ -31,13 +31,13 @@
 #include <KoOdfStylesReader.h>
 
 DateVariable::DateVariable(DateType type)
-: KoVariable()
-, m_type(type)
-, m_displayType(Custom)
-, m_daysOffset(0)
-, m_monthsOffset(0)
-, m_yearsOffset(0)
-, m_secsOffset(0)
+        : KoVariable()
+        , m_type(type)
+        , m_displayType(Custom)
+        , m_daysOffset(0)
+        , m_monthsOffset(0)
+        , m_yearsOffset(0)
+        , m_secsOffset(0)
 {
     m_time = QDateTime::currentDateTime();
 }
@@ -46,7 +46,7 @@ DateVariable::~DateVariable()
 {
 }
 
-void DateVariable::saveOdf( KoShapeSavingContext & context )
+void DateVariable::saveOdf(KoShapeSavingContext & context)
 {
     // TODO support data-style-name
     KoXmlWriter *writer = &context.xmlWriter();
@@ -69,43 +69,40 @@ void DateVariable::saveOdf( KoShapeSavingContext & context )
     writer->endElement();
 }
 
-bool DateVariable::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
+bool DateVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context)
 {
-    const QString localName( element.localName() );
+    const QString localName(element.localName());
     QString dateFormat = "";
-    QString dataStyle = element.attributeNS( KoXmlNS::style, "data-style-name" );
-    if ( !dataStyle.isEmpty() ) {
-        if ( context.odfLoadingContext().stylesReader().dataFormats().contains( dataStyle ) ) {
-            KoOdfNumberStyles::NumericStyleFormat dataFormat = context.odfLoadingContext().stylesReader().dataFormats().value( dataStyle );
+    QString dataStyle = element.attributeNS(KoXmlNS::style, "data-style-name");
+    if (!dataStyle.isEmpty()) {
+        if (context.odfLoadingContext().stylesReader().dataFormats().contains(dataStyle)) {
+            KoOdfNumberStyles::NumericStyleFormat dataFormat = context.odfLoadingContext().stylesReader().dataFormats().value(dataStyle);
             dateFormat = dataFormat.prefix + dataFormat.formatStr + dataFormat.suffix;
         }
     }
 
     //dateProperties.setProperty("fixed", QVariant(element.attributeNS(KoXmlNS::text, "fixed") == "true"));
-    if ( element.attributeNS( KoXmlNS::text, "fixed", "false" ) == "true" ) {
+    if (element.attributeNS(KoXmlNS::text, "fixed", "false") == "true") {
         m_type = Fixed;
-    }
-    else {
+    } else {
         m_type = AutoUpdate;
     }
 
     //dateProperties.setProperty("time", element.attributeNS(KoXmlNS::text, localName + "-value"));
-    const QString value( element.attributeNS(KoXmlNS::text, localName + "-value", "" ) );
-    if ( !value.isEmpty() ) {
-        m_time = QDateTime::fromString( value, Qt::ISODate );
-    }
-    else {
+    const QString value(element.attributeNS(KoXmlNS::text, localName + "-value", ""));
+    if (!value.isEmpty()) {
+        m_time = QDateTime::fromString(value, Qt::ISODate);
+    } else {
         //TODO see 6.2.1 Date Fields
     }
 
     //dateProperties.setProperty("definition", dateFormat);
     m_definition = dateFormat;
 
-    if ( dateFormat.isEmpty() )
-        if ( localName == "time" ) {
+    if (dateFormat.isEmpty())
+        if (localName == "time") {
             m_displayType = Time;
-        }
-        else {
+        } else {
             m_displayType = Date;
         }
     else {
@@ -113,8 +110,8 @@ bool DateVariable::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
     }
 
     //dateProperties.setProperty("adjust", element.attributeNS(KoXmlNS::text, localName + "-adjust"));
-    const QString adjust( element.attributeNS( KoXmlNS::text, localName + "-adjust", "" ) );
-    adjustTime( adjust );
+    const QString adjust(element.attributeNS(KoXmlNS::text, localName + "-adjust", ""));
+    adjustTime(adjust);
     update();
     return true;
 }
@@ -135,15 +132,15 @@ void DateVariable::setProperties(const KoProperties *props)
         m_displayType = Date;
     else if (displayTypeProp == "time")
         m_displayType = Time;
-    adjustTime( props->stringProperty("adjust") );
+    adjustTime(props->stringProperty("adjust"));
     update();
 }
 
 QWidget *DateVariable::createOptionsWidget()
 {
-    switch(m_type) {
-        case Fixed:
-            return new FixedDateFormat(this);
+    switch (m_type) {
+    case Fixed:
+        return new FixedDateFormat(this);
     }
     return 0;
 }
@@ -181,32 +178,32 @@ void DateVariable::setYearsOffset(int offset)
 void DateVariable::update()
 {
     QDateTime target;
-    switch(m_type) {
-        case Fixed:
-            target = m_time;
-            break;
-        case AutoUpdate:
-            target = QDateTime::currentDateTime();
-            break;
+    switch (m_type) {
+    case Fixed:
+        target = m_time;
+        break;
+    case AutoUpdate:
+        target = QDateTime::currentDateTime();
+        break;
     }
     target = target.addSecs(m_secsOffset);
     target = target.addDays(m_daysOffset);
     target = target.addMonths(m_monthsOffset);
     target = target.addYears(m_yearsOffset);
     switch (m_displayType) {
-        case Custom:
-            setValue(target.toString(m_definition));
-            break;
-        case Time:
-            setValue(target.time().toString(Qt::LocalDate));
-            break;
-        case Date:
-            setValue(target.date().toString(Qt::LocalDate));
-            break;
+    case Custom:
+        setValue(target.toString(m_definition));
+        break;
+    case Time:
+        setValue(target.time().toString(Qt::LocalDate));
+        break;
+    case Date:
+        setValue(target.date().toString(Qt::LocalDate));
+        break;
     }
 }
 
-void DateVariable::adjustTime( const QString & value )
+void DateVariable::adjustTime(const QString & value)
 {
     if (!value.isEmpty()) {
         m_daysOffset = 0;
@@ -214,14 +211,14 @@ void DateVariable::adjustTime( const QString & value )
         m_yearsOffset = 0;
         m_secsOffset = 0;
         int multiplier = 1;
-        if ( value.contains("-") ) {
+        if (value.contains("-")) {
             multiplier = -1;
         }
         QString timePart;
         QString datePart;
-        QStringList parts = value.mid( value.indexOf('P') + 1 ).split('T');
+        QStringList parts = value.mid(value.indexOf('P') + 1).split('T');
         datePart = parts[0];
-        if ( parts.size() > 1 ) {
+        if (parts.size() > 1) {
             timePart = parts[1];
         }
         QRegExp rx("([0-9]+)([DHMSY])");
@@ -234,11 +231,9 @@ void DateVariable::adjustTime( const QString & value )
                 if (valueOk) {
                     if (rx.cap(2) == "H") {
                         m_secsOffset += multiplier * 3600 * value;
-                    }
-                    else if (rx.cap(2) == "M") {
+                    } else if (rx.cap(2) == "M") {
                         m_secsOffset += multiplier * 60 * value;
-                    }
-                    else if (rx.cap(2) == "S") {
+                    } else if (rx.cap(2) == "S") {
                         m_secsOffset += multiplier * value;
                     }
                 }
@@ -247,16 +242,14 @@ void DateVariable::adjustTime( const QString & value )
         }
         if (!datePart.isEmpty()) {
             int pos = 0;
-            while ( ( pos = rx.indexIn( datePart, pos ) ) != -1 ) {
+            while ((pos = rx.indexIn(datePart, pos)) != -1) {
                 value = rx.cap(1).toInt(&valueOk);
                 if (valueOk) {
                     if (rx.cap(2) == "Y") {
                         m_yearsOffset += multiplier * value;
-                    }
-                    else if (rx.cap(2) == "M") {
+                    } else if (rx.cap(2) == "M") {
                         m_monthsOffset += multiplier * value;
-                    }
-                    else if (rx.cap(2) == "D") {
+                    } else if (rx.cap(2) == "D") {
                         m_daysOffset += multiplier * value;
                     }
                 }

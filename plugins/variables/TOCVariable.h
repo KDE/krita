@@ -30,9 +30,11 @@ class TOCVariable;
 class TOCSourceTemplate
 {
 public:
-    int outlineLevel() const { return m_outlineLevel; }
-    bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
-    void saveOdf( KoShapeSavingContext & context );
+    int outlineLevel() const {
+        return m_outlineLevel;
+    }
+    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context);
+    void saveOdf(KoShapeSavingContext & context);
 private:
     int m_outlineLevel;
     KoParagraphStyle *m_style;
@@ -46,11 +48,15 @@ class TOCSource
 {
 public:
     explicit TOCSource(TOCVariable* v) : m_variable(v) {}
-    bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
-    void saveOdf( KoShapeSavingContext & context );
-    const QList<TOCSourceTemplate> &sources() { return m_sources; }
-    int outlineLevel() const { return m_outlineLevel; }
-    void buildFromDocument (const QTextDocument *source, QTextCursor *target);
+    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context);
+    void saveOdf(KoShapeSavingContext & context);
+    const QList<TOCSourceTemplate> &sources() {
+        return m_sources;
+    }
+    int outlineLevel() const {
+        return m_outlineLevel;
+    }
+    void buildFromDocument(const QTextDocument *source, QTextCursor *target);
 private:
     TOCVariable* m_variable;
     QString m_titleTemplate;
@@ -76,22 +82,22 @@ public:
     void propertyChanged(Property property, const QVariant &value);
 
     /// reimplmented
-    void saveOdf( KoShapeSavingContext & context );
+    void saveOdf(KoShapeSavingContext & context);
 
     ///reimplemented
-    bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
+    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context);
 
     ///reimplemented
-    void update( );
+    void update();
 private:
     void variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument);
 
     /// reimplemented
     void resize(const QTextDocument *document, QTextInlineObject object,
-            int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+                int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
     /// reimplemented
-    void paint (QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-            const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
+    void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
+               const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
     QTextDocument indexBody;
     const QTextDocument *currentDoc;

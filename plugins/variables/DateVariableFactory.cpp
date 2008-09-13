@@ -27,7 +27,7 @@
 #include <klocale.h>
 
 DateVariableFactory::DateVariableFactory()
-: KoVariableFactory( "date" )
+        : KoVariableFactory("date")
 {
     KoVariableTemplate var;
     var.id = "fixed";
@@ -40,23 +40,23 @@ DateVariableFactory::DateVariableFactory()
 
     QStringList elementNames;
     elementNames << "date" << "time";
-    setOdfElementNames( KoXmlNS::text, elementNames );
+    setOdfElementNames(KoXmlNS::text, elementNames);
 }
 
 DateVariableFactory::~DateVariableFactory()
 {
 }
 
-KoVariable * DateVariableFactory::createVariable( const KoProperties *properties ) const
+KoVariable * DateVariableFactory::createVariable(const KoProperties *properties) const
 {
     DateVariable *var = new DateVariable(static_cast<DateVariable::DateType>
-            (properties->intProperty("id", DateVariable::Fixed)));
+                                         (properties->intProperty("id", DateVariable::Fixed)));
     var->setProperties(properties);
     return var;
 }
 
 KoVariable * DateVariableFactory::createVariable() const
 {
-    DateVariable *var = new DateVariable( DateVariable::Fixed );
+    DateVariable *var = new DateVariable(DateVariable::Fixed);
     return var;
 }

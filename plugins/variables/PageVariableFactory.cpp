@@ -28,7 +28,7 @@
 #include <kdebug.h>
 
 PageVariableFactory::PageVariableFactory()
-: KoVariableFactory( "page" )
+        : KoVariableFactory("page")
 {
     KoVariableTemplate var1;
     var1.id = "pagecount";
@@ -56,7 +56,7 @@ PageVariableFactory::PageVariableFactory()
 
     QStringList elementNames;
     elementNames << "page-count" << "page-number" << "page-continuation-string";
-    setOdfElementNames( KoXmlNS::text, elementNames );
+    setOdfElementNames(KoXmlNS::text, elementNames);
 }
 
 PageVariableFactory::~PageVariableFactory()

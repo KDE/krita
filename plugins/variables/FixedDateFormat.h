@@ -27,7 +27,8 @@ class DateVariable;
 class QListWidgetItem;
 class QMenu;
 
-class FixedDateFormat : public QWidget {
+class FixedDateFormat : public QWidget
+{
     Q_OBJECT
 public:
     explicit FixedDateFormat(DateVariable *variable);

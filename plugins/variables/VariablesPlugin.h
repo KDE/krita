@@ -21,11 +21,12 @@
 
 #include <QObject>
 
-class VariablesPlugin : public QObject {
+class VariablesPlugin : public QObject
+{
     Q_OBJECT
 
 public:
-    VariablesPlugin(QObject * parent,  const QStringList & );
+    VariablesPlugin(QObject * parent,  const QStringList &);
     ~VariablesPlugin() {}
 };
 

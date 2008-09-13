@@ -27,15 +27,15 @@
 #include <KoVariableRegistry.h>
 
 K_EXPORT_COMPONENT_FACTORY(textvariables,
-                           KGenericFactory<VariablesPlugin>( "VariablesPlugin" ) )
+                           KGenericFactory<VariablesPlugin>("VariablesPlugin"))
 
-VariablesPlugin::VariablesPlugin( QObject *parent, const QStringList& )
-: QObject(parent)
+VariablesPlugin::VariablesPlugin(QObject *parent, const QStringList&)
+        : QObject(parent)
 {
-    KoVariableRegistry::instance()->add( new PageVariableFactory() );
-    KoVariableRegistry::instance()->add( new DateVariableFactory() );
-    KoVariableRegistry::instance()->add( new InfoVariableFactory() );
-    KoVariableRegistry::instance()->add( new TOCVariableFactory() );
+    KoVariableRegistry::instance()->add(new PageVariableFactory());
+    KoVariableRegistry::instance()->add(new DateVariableFactory());
+    KoVariableRegistry::instance()->add(new InfoVariableFactory());
+    KoVariableRegistry::instance()->add(new TOCVariableFactory());
 }
 
 #include "VariablesPlugin.moc"

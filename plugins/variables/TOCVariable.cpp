@@ -42,7 +42,7 @@
 #include <KoTextPage.h>
 
 TOCVariable::TOCVariable()
-    : KoVariable(true), currentDoc(0), source(TOCSource(this))
+        : KoVariable(true), currentDoc(0), source(TOCSource(this))
 {
 }
 
@@ -66,16 +66,16 @@ void TOCVariable::variableMoved(const KoShape *shape, const QTextDocument *docum
 //update();
 }
 
-void TOCSourceTemplate::saveOdf( KoShapeSavingContext & context )
+void TOCSourceTemplate::saveOdf(KoShapeSavingContext & context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
     writer->startElement("text:table-of-content-entry-template");
     writer->addAttribute("text:outline-level", m_outlineLevel);
     // writer->addAttribute("text:style-name", "something"); // I don't remember this, sorry.
-    writer->endElement();	// text:table-of-content-entry-template
+    writer->endElement(); // text:table-of-content-entry-template
 }
 
-void TOCSource::saveOdf( KoShapeSavingContext & context )
+void TOCSource::saveOdf(KoShapeSavingContext & context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
     writer->startElement("text:table-of-content-source");
@@ -83,15 +83,14 @@ void TOCSource::saveOdf( KoShapeSavingContext & context )
     writer->startElement("text:index-title-template");
     // writer->addAttribute("text:style-name", "something"); // I don't remember this, sorry.
     writer->addTextNode(m_titleTemplate);
-    writer->endElement();	// text:index-title-template
-    foreach ( TOCSourceTemplate tpl, m_sources )
-    {
+    writer->endElement(); // text:index-title-template
+    foreach(TOCSourceTemplate tpl, m_sources) {
         tpl.saveOdf(context);
     }
     writer->endElement();
 }
 
-void TOCVariable::saveOdf( KoShapeSavingContext & context )
+void TOCVariable::saveOdf(KoShapeSavingContext & context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
     writer->startElement("text:table-of-content");
@@ -100,12 +99,12 @@ void TOCVariable::saveOdf( KoShapeSavingContext & context )
     writer->startElement("text:index-body");
     // Wonderful, store the index-body here... But what about the text:index-title thing ?
     writer->addTextNode("Work in progress, sorry, you must refresh your table of content manually after saving it.");
-    
-    writer->endElement();	// text:index-body
-    writer->endElement();	// text:table-of-content
+
+    writer->endElement(); // text:index-body
+    writer->endElement(); // text:table-of-content
 }
 
-void TOCSource::buildFromDocument (const QTextDocument *source, QTextCursor *target)
+void TOCSource::buildFromDocument(const QTextDocument *source, QTextCursor *target)
 {
     QTextBlock block;
 
@@ -113,36 +112,29 @@ void TOCSource::buildFromDocument (const QTextDocument *source, QTextCursor *tar
     // First, insert our TOC title.
     target->insertText(m_titleTemplate);
     target->insertBlock();
-    if (m_titleStyle)
-    {
+    if (m_titleStyle) {
         block = target->block().previous();
         m_titleStyle->applyStyle(block, true);
     }
     // Ok, look in the document, find the title... :)
     KoTextDocumentLayout *docLayout = dynamic_cast<KoTextDocumentLayout*>(source->documentLayout());
-    if (!docLayout)
-    {
+    if (!docLayout) {
         kDebug() << "No layout for the document ??? I cancel.";
         return;
     }
     block = source->begin();
-    while (block.isValid())
-    {
-        if (block.userData())
-        {
+    while (block.isValid()) {
+        if (block.userData()) {
             KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
-            if (blockData)
-            {
-                if (blockData->outlineLevel() > 0)
-                {
+            if (blockData) {
+                if (blockData->outlineLevel() > 0) {
                     KoShape *shape = docLayout->shapeForPosition(block.position());
-                    if (shape)
-                    {
+                    if (shape) {
                         KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData *>(shape->userData());
-                        target->insertText("TOC entry " + 
-                            QString::number(blockData->outlineLevel()) + " :" + block.text() +
-                            ";page" + QString::number(shapeData->page()->pageNumber() + 1)
-                        );
+                        target->insertText("TOC entry " +
+                                           QString::number(blockData->outlineLevel()) + " :" + block.text() +
+                                           ";page" + QString::number(shapeData->page()->pageNumber() + 1)
+                                          );
                         target->insertBlock();
                     }
                 }
@@ -153,83 +145,72 @@ void TOCSource::buildFromDocument (const QTextDocument *source, QTextCursor *tar
     target->endEditBlock();
 }
 
-bool TOCSourceTemplate::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
+bool TOCSourceTemplate::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context)
 {
-    KoSharedLoadingData * sharedData = context.sharedData( KOTEXT_SHARED_LOADING_ID );
+    KoSharedLoadingData * sharedData = context.sharedData(KOTEXT_SHARED_LOADING_ID);
     KoTextSharedLoadingData * textSharedData;
-    if ( sharedData ) {
-        textSharedData = dynamic_cast<KoTextSharedLoadingData *>( sharedData );
+    if (sharedData) {
+        textSharedData = dynamic_cast<KoTextSharedLoadingData *>(sharedData);
     }
-    m_style = textSharedData->paragraphStyle(element.attributeNS( KoXmlNS::text, "style-name", ""), false);
-    if ( !m_style ) {
-        m_style = textSharedData->paragraphStyle(element.attributeNS( KoXmlNS::text, "style-name", ""), true);
+    m_style = textSharedData->paragraphStyle(element.attributeNS(KoXmlNS::text, "style-name", ""), false);
+    if (!m_style) {
+        m_style = textSharedData->paragraphStyle(element.attributeNS(KoXmlNS::text, "style-name", ""), true);
     }
-    m_outlineLevel = element.attributeNS( KoXmlNS::text, "outline-level", "10").toInt();
+    m_outlineLevel = element.attributeNS(KoXmlNS::text, "outline-level", "10").toInt();
     return true;
 }
 
-bool TOCSource::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
+bool TOCSource::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context)
 {
-    KoSharedLoadingData * sharedData = context.sharedData( KOTEXT_SHARED_LOADING_ID );
+    KoSharedLoadingData * sharedData = context.sharedData(KOTEXT_SHARED_LOADING_ID);
     KoTextSharedLoadingData * textSharedData;
-    if ( sharedData ) {
-        textSharedData = dynamic_cast<KoTextSharedLoadingData *>( sharedData );
+    if (sharedData) {
+        textSharedData = dynamic_cast<KoTextSharedLoadingData *>(sharedData);
     }
 
-    m_outlineLevel = element.attributeNS( KoXmlNS::text, "outline-level", "10").toInt();
+    m_outlineLevel = element.attributeNS(KoXmlNS::text, "outline-level", "10").toInt();
     KoXmlElement e;
-    forEachElement( e, element )
-    {
+    forEachElement(e, element) {
         if (e.namespaceURI() != KoXmlNS::text)
             continue;
-        if (e.tagName() == "table-of-content-entry-template")
-        {
+        if (e.tagName() == "table-of-content-entry-template") {
             TOCSourceTemplate tpl;
-            tpl.loadOdf( e, context );
+            tpl.loadOdf(e, context);
             m_sources << tpl;
-        }
-        else if (e.tagName() == "index-title-template")
-        {
+        } else if (e.tagName() == "index-title-template") {
             m_titleTemplate = e.text();
-            m_titleStyle = textSharedData->paragraphStyle(e.attributeNS( KoXmlNS::text, "style-name", ""), false);
-            if ( !m_titleStyle )
-            {
-                m_titleStyle = textSharedData->paragraphStyle(e.attributeNS( KoXmlNS::text, "style-name", ""), true);
+            m_titleStyle = textSharedData->paragraphStyle(e.attributeNS(KoXmlNS::text, "style-name", ""), false);
+            if (!m_titleStyle) {
+                m_titleStyle = textSharedData->paragraphStyle(e.attributeNS(KoXmlNS::text, "style-name", ""), true);
             }
         }
     }
     return true;
 }
 
-bool TOCVariable::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
+bool TOCVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context)
 {
-    KoSharedLoadingData * sharedData = context.sharedData( KOTEXT_SHARED_LOADING_ID );
+    KoSharedLoadingData * sharedData = context.sharedData(KOTEXT_SHARED_LOADING_ID);
     KoTextSharedLoadingData * textSharedData;
-    if ( sharedData ) {
-        textSharedData = dynamic_cast<KoTextSharedLoadingData *>( sharedData );
+    if (sharedData) {
+        textSharedData = dynamic_cast<KoTextSharedLoadingData *>(sharedData);
     }
 
     KoXmlElement e;
-    forEachElement( e, element )
-    {
+    forEachElement(e, element) {
         //kDebug() << e.namespaceURI() << e.tagName();
         if (e.namespaceURI() != KoXmlNS::text)
             continue;
-        if (e.tagName() == "table-of-content-source")
-        {
+        if (e.tagName() == "table-of-content-source") {
             source.loadOdf(e, context);
-        }
-        else if (e.tagName() == "index-body")
-        {
+        } else if (e.tagName() == "index-body") {
             KoTextLoader indexLoader(context);
             QTextCursor cursor(&indexBody);
             KoXmlElement bodyElem;
-            forEachElement( bodyElem, e )
-            {
+            forEachElement(bodyElem, e) {
                 if (bodyElem.namespaceURI() != KoXmlNS::text)
                     continue;
-                if (bodyElem.tagName() == "index-title")
-                {
+                if (bodyElem.tagName() == "index-title") {
                     indexLoader.loadBody(bodyElem, cursor);
                     break;
                 }
@@ -246,9 +227,9 @@ void TOCVariable::resize(const QTextDocument *document, QTextInlineObject object
     Q_UNUSED(posInDocument);
     Q_ASSERT(format.isCharFormat());
     QFontMetricsF fm(format.font(), pd);
-    object.setWidth( indexBody.documentLayout()->documentSize().width() );
+    object.setWidth(indexBody.documentLayout()->documentSize().width());
     object.setAscent(fm.ascent());
-    object.setDescent(fm.descent() + indexBody.documentLayout()->documentSize().height());	// HACK ? Who said hack ? It's clean of course... :/
+    object.setDescent(fm.descent() + indexBody.documentLayout()->documentSize().height()); // HACK ? Who said hack ? It's clean of course... :/
 }
 
 void TOCVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
@@ -265,7 +246,7 @@ void TOCVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument
     painter.translate(QPointF(2, 2) - rect.topLeft());
 }
 
-void TOCVariable::update( )
+void TOCVariable::update()
 {
     if (!currentDoc)
         return;

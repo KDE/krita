@@ -48,10 +48,10 @@ public:
     void propertyChanged(Property property, const QVariant &value);
 
     /// reimplmented
-    void saveOdf( KoShapeSavingContext & context );
+    void saveOdf(KoShapeSavingContext & context);
 
     ///reimplemented
-    bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
+    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context);
 
 private:
     void variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument);

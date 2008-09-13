@@ -26,7 +26,7 @@
 #include <kdebug.h>
 
 TOCVariableFactory::TOCVariableFactory()
-: KoVariableFactory( "TOC" )
+        : KoVariableFactory("TOC")
 {
     /*KoVariableTemplate var1;
     var1.id = "pagecount";
@@ -46,7 +46,7 @@ TOCVariableFactory::TOCVariableFactory()
 
     QStringList elementNames;
     elementNames << "table-of-content";
-    setOdfElementNames( KoXmlNS::text, elementNames );
+    setOdfElementNames(KoXmlNS::text, elementNames);
 }
 
 TOCVariableFactory::~TOCVariableFactory()

@@ -48,37 +48,47 @@ public:
     /**
      * Constructor.
      */
-    explicit DateVariable( DateType type );
+    explicit DateVariable(DateType type);
     virtual ~DateVariable();
 
     ///reimplemented
-    void saveOdf( KoShapeSavingContext & context );
+    void saveOdf(KoShapeSavingContext & context);
 
     ///reimplemented
-    bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
+    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context);
 
-    void setProperties( const KoProperties *props );
+    void setProperties(const KoProperties *props);
 
     QWidget *createOptionsWidget();
 
-    QString definition() const { return m_definition; }
+    QString definition() const {
+        return m_definition;
+    }
     void setDefinition(const QString &definition);
 
-    int daysOffset() const { return m_daysOffset; }
+    int daysOffset() const {
+        return m_daysOffset;
+    }
     void setDaysOffset(int daysOffset);
 
-    int monthsOffset() const { return m_monthsOffset; }
+    int monthsOffset() const {
+        return m_monthsOffset;
+    }
     void setMonthsOffset(int monthsOffset);
 
-    int yearsOffset() const { return m_yearsOffset; }
+    int yearsOffset() const {
+        return m_yearsOffset;
+    }
     void setYearsOffset(int yearsOffset);
 
-    int secsOffset() const { return m_secsOffset; }
+    int secsOffset() const {
+        return m_secsOffset;
+    }
     void setSecsOffset(int secsOffset);
 
 private:
     void update();
-    void adjustTime( const QString & adjustTime );
+    void adjustTime(const QString & adjustTime);
 
     DateType m_type;
     DisplayType m_displayType;

@@ -25,15 +25,16 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-static void createTimeAction(QMenu *parent, const QString &title, const QString &data) {
-    QAction *action = new QAction(title, parent );
+static void createTimeAction(QMenu *parent, const QString &title, const QString &data)
+{
+    QAction *action = new QAction(title, parent);
     action->setData(data);
     parent->addAction(action);
 }
 
 FixedDateFormat::FixedDateFormat(DateVariable *variable)
-    : m_variable(variable),
-    m_popup(0)
+        : m_variable(variable),
+        m_popup(0)
 {
     widget.setupUi(this);
 
@@ -41,80 +42,83 @@ FixedDateFormat::FixedDateFormat(DateVariable *variable)
     widget.customPage->layout()->setMargin(0);
 
     QStringList listDateFormat;
-    listDateFormat<<i18n("Locale date format");
-    listDateFormat<<i18n("Short locale date format");
-    listDateFormat<<i18n("Locale date & time format");
-    listDateFormat<<i18n("Short locale date & time format");
-    listDateFormat<<"dd/MM/yy";
-    listDateFormat<<"dd/MM/yyyy";
-    listDateFormat<<"MMM dd,yy";
-    listDateFormat<<"MMM dd,yyyy";
-    listDateFormat<<"dd.MMM.yyyy";
-    listDateFormat<<"MMMM dd, yyyy";
-    listDateFormat<<"ddd, MMM dd,yy";
-    listDateFormat<<"dddd, MMM dd,yy";
-    listDateFormat<<"MM-dd";
-    listDateFormat<<"yyyy-MM-dd";
-    listDateFormat<<"dd/yy";
-    listDateFormat<<"MMMM";
-    listDateFormat<<"yyyy-MM-dd hh:mm";
-    listDateFormat<<"dd.MMM.yyyy hh:mm";
-    listDateFormat<<"MMM dd,yyyy h:mm AP";
-    listDateFormat<<"yyyy-MM-ddThh:mm:ss"; // ISO 8601
+    listDateFormat << i18n("Locale date format");
+    listDateFormat << i18n("Short locale date format");
+    listDateFormat << i18n("Locale date & time format");
+    listDateFormat << i18n("Short locale date & time format");
+    listDateFormat << "dd/MM/yy";
+    listDateFormat << "dd/MM/yyyy";
+    listDateFormat << "MMM dd,yy";
+    listDateFormat << "MMM dd,yyyy";
+    listDateFormat << "dd.MMM.yyyy";
+    listDateFormat << "MMMM dd, yyyy";
+    listDateFormat << "ddd, MMM dd,yy";
+    listDateFormat << "dddd, MMM dd,yy";
+    listDateFormat << "MM-dd";
+    listDateFormat << "yyyy-MM-dd";
+    listDateFormat << "dd/yy";
+    listDateFormat << "MMMM";
+    listDateFormat << "yyyy-MM-dd hh:mm";
+    listDateFormat << "dd.MMM.yyyy hh:mm";
+    listDateFormat << "MMM dd,yyyy h:mm AP";
+    listDateFormat << "yyyy-MM-ddThh:mm:ss"; // ISO 8601
     widget.formatList->addItems(listDateFormat);
     widget.customString->setText(variable->definition());
 
     int index = listDateFormat.indexOf(variable->definition());
-    if(index >= 0) {
+    if (index >= 0) {
         widget.widgetStack->setCurrentWidget(widget.normalPage);
         widget.formatList->setItemSelected(widget.formatList->item(index), true);
-    }
-    else {
+    } else {
         widget.widgetStack->setCurrentWidget(widget.customPage);
         widget.custom->setChecked(true);
     }
 
     widget.formatButton->setIcon(KIcon("list-add"));
 
-    connect (widget.custom, SIGNAL(stateChanged(int)), this, SLOT(customClicked(int)));
-    connect (widget.formatList, SIGNAL(itemPressed(QListWidgetItem*)), this, SLOT(listClicked(QListWidgetItem*)));
-    connect (widget.correction, SIGNAL(valueChanged(int)), this, SLOT(offsetChanged(int)));
-    connect (widget.formatButton, SIGNAL(clicked()), this, SLOT(insertCustomButtonPressed()));
-    connect (widget.customString, SIGNAL(textChanged(const QString&)), this, SLOT(customTextChanged(const QString&)));
+    connect(widget.custom, SIGNAL(stateChanged(int)), this, SLOT(customClicked(int)));
+    connect(widget.formatList, SIGNAL(itemPressed(QListWidgetItem*)), this, SLOT(listClicked(QListWidgetItem*)));
+    connect(widget.correction, SIGNAL(valueChanged(int)), this, SLOT(offsetChanged(int)));
+    connect(widget.formatButton, SIGNAL(clicked()), this, SLOT(insertCustomButtonPressed()));
+    connect(widget.customString, SIGNAL(textChanged(const QString&)), this, SLOT(customTextChanged(const QString&)));
 }
 
-void FixedDateFormat::customClicked(int state) {
-    if(state == Qt::Unchecked)
+void FixedDateFormat::customClicked(int state)
+{
+    if (state == Qt::Unchecked)
         widget.widgetStack->setCurrentWidget(widget.normalPage);
     else
         widget.widgetStack->setCurrentWidget(widget.customPage);
 }
 
-void FixedDateFormat::listClicked(QListWidgetItem *item) {
+void FixedDateFormat::listClicked(QListWidgetItem *item)
+{
     // TODO parse out the first two values...
     QString format;
-    switch(widget.formatList->row(item)) {
-        case 0: format = KGlobal::locale()->dateFormat(); break;
-        case 1: format = KGlobal::locale()->dateFormatShort(); break;
-        case 2:
-            format = KGlobal::locale()->dateFormat() +' '+ KGlobal::locale()->timeFormat();
-            break;
-        case 3:
-            format = KGlobal::locale()->dateFormatShort() +' '+ KGlobal::locale()->timeFormat();
-            break;
-        default:
-            format = item->text();
+    switch (widget.formatList->row(item)) {
+    case 0: format = KGlobal::locale()->dateFormat(); break;
+    case 1: format = KGlobal::locale()->dateFormatShort(); break;
+    case 2:
+        format = KGlobal::locale()->dateFormat() + ' ' + KGlobal::locale()->timeFormat();
+        break;
+    case 3:
+        format = KGlobal::locale()->dateFormatShort() + ' ' + KGlobal::locale()->timeFormat();
+        break;
+    default:
+        format = item->text();
     }
     m_variable->setDefinition(format);
     widget.customString->setText(format);
 }
 
-void FixedDateFormat::offsetChanged(int offset) {
+void FixedDateFormat::offsetChanged(int offset)
+{
     m_variable->setDaysOffset(offset);
 }
 
-void FixedDateFormat::insertCustomButtonPressed() {
-    if(m_popup == 0) {
+void FixedDateFormat::insertCustomButtonPressed()
+{
+    if (m_popup == 0) {
         m_popup = new QMenu(this);
         QMenu *day = new QMenu(i18n("Day"), m_popup);
         QMenu *month = new QMenu(i18n("Month"), m_popup);
@@ -131,39 +135,40 @@ void FixedDateFormat::insertCustomButtonPressed() {
 
         createTimeAction(day, i18n("Flexible Digits (1-31)"), "d");
         createTimeAction(day, i18n("2 Digits (01-31)"), "dd");
-        createTimeAction(day, i18n( "Abbreviated Name"), "ddd");
-        createTimeAction(day, i18n( "Long Name"), "dddd");
-        createTimeAction( month, i18n("Flexible Digits (1-12)" ), "M" );
-        createTimeAction( month, i18n("2 Digits (01-12)" ), "MM" );
-        createTimeAction( month, i18n("Abbreviated Name" ), "MMM" );
-        createTimeAction( month, i18n("Long Name" ), "MMMM" );
-        createTimeAction( month, i18n("Possessive Abbreviated Name" ), "PPP" );
-        createTimeAction( month, i18n("Possessive Long Name" ), "PPPP" );
-        createTimeAction( year, i18n("2 Digits (01-99)" ), "yy" );
-        createTimeAction( year, i18n("4 Digits" ), "yyyy" );
-        createTimeAction( hour, i18n("Flexible Digits (1-23)" ), "h" );
-        createTimeAction( hour, i18n("2 Digits (01-23)" ), "hh" );
-        createTimeAction( minute, i18n("Flexible Digits (1-59)" ), "m" );
-        createTimeAction( minute, i18n("2 Digits (01-59)" ), "mm" );
-        createTimeAction( second, i18n("Flexible Digits (1-59)" ), "s" );
-        createTimeAction( second, i18n("2 Digits (01-59)" ), "sss" );
-        createTimeAction( m_popup, i18n("am/pm" ), "ap" );
-        createTimeAction( m_popup, i18n("AM/PM" ), "AP" );
+        createTimeAction(day, i18n("Abbreviated Name"), "ddd");
+        createTimeAction(day, i18n("Long Name"), "dddd");
+        createTimeAction(month, i18n("Flexible Digits (1-12)"), "M");
+        createTimeAction(month, i18n("2 Digits (01-12)"), "MM");
+        createTimeAction(month, i18n("Abbreviated Name"), "MMM");
+        createTimeAction(month, i18n("Long Name"), "MMMM");
+        createTimeAction(month, i18n("Possessive Abbreviated Name"), "PPP");
+        createTimeAction(month, i18n("Possessive Long Name"), "PPPP");
+        createTimeAction(year, i18n("2 Digits (01-99)"), "yy");
+        createTimeAction(year, i18n("4 Digits"), "yyyy");
+        createTimeAction(hour, i18n("Flexible Digits (1-23)"), "h");
+        createTimeAction(hour, i18n("2 Digits (01-23)"), "hh");
+        createTimeAction(minute, i18n("Flexible Digits (1-59)"), "m");
+        createTimeAction(minute, i18n("2 Digits (01-59)"), "mm");
+        createTimeAction(second, i18n("Flexible Digits (1-59)"), "s");
+        createTimeAction(second, i18n("2 Digits (01-59)"), "sss");
+        createTimeAction(m_popup, i18n("am/pm"), "ap");
+        createTimeAction(m_popup, i18n("AM/PM"), "AP");
     }
     QPoint position = widget.formatButton->mapToGlobal(QPoint(0, widget.formatButton->height()));
     QAction *action = m_popup->exec(position);
-    if(action)
+    if (action)
         widget.customString->insert(qvariant_cast<QString>(action->data()));
 }
 
-void FixedDateFormat::customTextChanged(const QString& text) {
+void FixedDateFormat::customTextChanged(const QString& text)
+{
     m_variable->setDefinition(text);
 
-    if(widget.custom->isChecked()) {
+    if (widget.custom->isChecked()) {
         // altering the custom text will deselect the list item so the user can easilly switch
         // back by selecting one.
         QListWidgetItem * item = widget.formatList->currentItem();
-        if(item) // deselect it.
+        if (item) // deselect it.
             widget.formatList->setItemSelected(item, false);
     }
 }

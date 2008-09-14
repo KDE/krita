@@ -400,7 +400,11 @@ bool SimpleTextShape::putOnPath( KoPathShape * path )
     // use the paths outline converted to document coordinates as the baseline
     m_baseline = m_path->absoluteTransformation(0).map( m_path->outline() );
 
+    // reset transformation
+    setTransformation( QMatrix() );
     updateSizeAndPosition();
+    // move to correct position
+    setAbsolutePosition( m_outlineOrigin, KoFlake::TopLeftCorner );
     update();
 
     return true;
@@ -416,7 +420,12 @@ bool SimpleTextShape::putOnPath( const QPainterPath &path )
         m_path->removeDependee( this );
     m_path = 0;
     m_baseline = path;
+
+    // reset transformation
+    setTransformation( QMatrix() );
     updateSizeAndPosition();
+    // move to correct position
+    setAbsolutePosition( m_outlineOrigin, KoFlake::TopLeftCorner );
     update();
 
     return true;
@@ -495,8 +504,7 @@ void SimpleTextShape::getCharPositionAt( unsigned int charNum, QPointF &pos ) co
 {
     if( isOnPath() ) {
         qreal t = m_charOffsets[ qMin( int( charNum ), m_charOffsets.size() ) ];
-        pos = m_baseline.pointAtPercent( t );
-        pos -= absolutePosition( KoFlake::TopLeftCorner );
+        pos = m_baseline.pointAtPercent( t ) - m_outlineOrigin;
     } else {
         QFontMetrics metrics( m_font );
         uint l = m_text.length();
@@ -518,29 +526,37 @@ void SimpleTextShape::getCharExtentsAt( unsigned int charNum, QRectF &extents ) 
     extents = QRectF( 0, 0, w, metrics.height() );
 }
 
-void SimpleTextShape::updateSizeAndPosition()
+void SimpleTextShape::updateSizeAndPosition( bool global )
 {
     createOutline();
 
     QRectF bbox = m_outline.boundingRect();
 
+    // calculate the offset we have to apply to keep our position
+    QPointF offset = m_outlineOrigin - bbox.topLeft();
+
+    // cache topleft corner of baseline path
+    m_outlineOrigin = bbox.topLeft();
+
     if( isOnPath() )
     {
         // the outline position is in document coordinates
         // so we adjust our position
-        setAbsolutePosition( bbox.topLeft(), KoFlake::TopLeftCorner );
+        QMatrix m;
+        m.translate( -offset.x(), -offset.y() );
+        global ? applyAbsoluteTransformation( m ) : applyTransformation( m );
     }
     else
     {
         // the text outlines baseline is at 0,0
-        m_baselineOffset = -bbox.topLeft().y();
+        m_baselineOffset = -m_outlineOrigin.y();
     }
 
     setSize( bbox.size() );
 
     // map outline to shape coordinate system
     QMatrix normalizeMatrix;
-    normalizeMatrix.translate( -bbox.topLeft().x(), -bbox.topLeft().y() );
+    normalizeMatrix.translate( -m_outlineOrigin.x(), -m_outlineOrigin.y() );
     m_outline = normalizeMatrix.map( m_outline );
 }
 
@@ -571,7 +587,7 @@ void SimpleTextShape::notifyShapeChanged( KoShape * shape, ChangeType type )
             update();
             // use the paths outline converted to document coordinates as the baseline
             m_baseline = m_path->absoluteTransformation(0).map( m_path->outline() );
-            updateSizeAndPosition();
+            updateSizeAndPosition( true );
             update();
         }
     }

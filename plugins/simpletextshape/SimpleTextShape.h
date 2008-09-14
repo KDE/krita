@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Rob Buis <buis@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -44,9 +44,9 @@ public:
     SimpleTextShape();
     virtual ~SimpleTextShape();
 
-    /// reimplemented to be empty (this shape is fully non-printing)
-    void paint(QPainter &painter, const KoViewConverter &converter);
     /// reimplemented
+    void paint(QPainter &painter, const KoViewConverter &converter);
+    /// reimplemented to be empty (this shape is fully printing)
     void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
     /// reimplemented
     virtual void saveOdf(KoShapeSavingContext & context) const;
@@ -115,30 +115,41 @@ public:
     /// Returns a pointer to the shape used as baseline
     const KoPathShape * baselineShape() const;
 
+    /// Removes a range of text from the given index
     QString removeRange( unsigned int index, unsigned int nr );
+    
+    /// Adds a range of text at the given index
     void addRange( unsigned int index, const QString &text );
 
+    /// Gets the angle of the char with the given index
     void getCharAngleAt( unsigned int charNum, qreal &angle ) const;
+
+    /// Gets the position of the char with the given index
     void getCharPositionAt( unsigned int charNum, QPointF &pos ) const;
+
+    /// Gets the extents of the char with the given index
     void getCharExtentsAt( unsigned int charNum, QRectF &extents ) const;
 
 private:
-    void updateSizeAndPosition();
-    void cacheGlyphOutlines();
-    bool pathHasChanged() const;
+    /// reimplemented from KoShape
     virtual void notifyShapeChanged( KoShape * shape, ChangeType type );
 
+    void updateSizeAndPosition( bool global = false );
+    void cacheGlyphOutlines();
+    bool pathHasChanged() const;
     void createOutline();
+
     QString m_text; ///< the text content
     QFont m_font; ///< the font to use for drawing
     KoPathShape * m_path; ///< the path shape we are attached to
     QList<QPainterPath> m_charOutlines; ///< cached character oulines
     qreal m_startOffset; ///< the offset from the attached path start point
     qreal m_baselineOffset; ///< the y-offset from the top-left corner to the baseline
-    QPainterPath m_outline; ///< the actual outline
-    QPainterPath m_baseline; ///< the baseline path the text is on
+    QPointF m_outlineOrigin; ///< the top-left corner of the non-normalized text outline
+    QPainterPath m_outline; ///< the actual text outline
+    QPainterPath m_baseline; ///< the baseline path the text is put on
     TextAnchor m_textAnchor; ///< the actual text anchor
-    QVector<qreal> m_charOffsets;
+    QVector<qreal> m_charOffsets; ///< char positions [0..1] on baseline path
 };
 
 #endif // SIMPLETEXTSHAPE_H

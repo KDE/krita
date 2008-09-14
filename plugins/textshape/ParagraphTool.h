@@ -29,12 +29,9 @@
 #include <QTextBlock>
 #include <QVector>
 
-class TextShape;
-
 class KoParagraphStyle;
 class KoCanvasBase;
 
-class QAbstractTextDocumentLayout;
 class QTextLayout;
 
 /**

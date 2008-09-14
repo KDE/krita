@@ -19,7 +19,6 @@
 
 #include "ParagraphToolFactory.h"
 #include "ParagraphTool.h"
-#include "TextShape.h"
 
 #include <klocale.h>
 
@@ -30,7 +29,7 @@ ParagraphToolFactory::ParagraphToolFactory(QObject *parent)
     setToolType(dynamicToolType());
     setIcon("draw-text");
     setPriority(2);
-    setActivationShapeId(TextShape_SHAPEID);
+    setActivationShapeId("TextShapeID");
 }
 
 ParagraphToolFactory::~ParagraphToolFactory()

@@ -20,14 +20,14 @@
 #ifndef PARAGRAPHFRAGMENT_H
 #define PARAGRAPHFRAGMENT_H
 
-#include "TextShape.h"
-
 #include "Ruler.h"
 #include "RulerFragment.h"
 
 #include <QRectF>
+#include <QTextBlock>
 
 class KoParagraphStyle;
+class KoShape;
 
 // this enum defines the order in which the rulers will be focused when tab is pressed
 typedef enum {
@@ -50,7 +50,7 @@ class ParagraphFragment
 {
 public:
     ParagraphFragment() {};
-    ParagraphFragment(Ruler* rulers, TextShape *textShape, QTextBlock textBlock, KoParagraphStyle *style);
+    ParagraphFragment(Ruler* rulers, KoShape *shape, QTextBlock textBlock, KoParagraphStyle *style);
 
     ~ParagraphFragment() {};
 
@@ -87,12 +87,13 @@ protected:
     QPointF mapTextToDocument(QPointF point) const;
     QLineF mapTextToDocument(QLineF line) const;
 
-    TextShape *textShape() const {
-        Q_ASSERT(m_textShape != NULL); return m_textShape;
+    KoShape *shape() const {
+        Q_ASSERT(m_shape != NULL);
+        return m_shape;
     }
 
 private:
-    TextShape *m_textShape;
+    KoShape *m_shape;
 
     bool m_isSingleLine;
     bool m_paintSeparator;

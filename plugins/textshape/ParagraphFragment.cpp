@@ -20,6 +20,7 @@
 #include "ParagraphFragment.h"
 
 #include <KoParagraphStyle.h>
+#include <KoShape.h>
 #include <KoShapeBorderModel.h>
 #include <KoTextBlockData.h>
 #include <KoTextShapeData.h>
@@ -29,8 +30,8 @@
 #include <QTextBlock>
 #include <QTextLayout>
 
-ParagraphFragment::ParagraphFragment(Ruler* rulers, TextShape *textShape, QTextBlock textBlock, KoParagraphStyle *style)
-        : m_textShape(textShape)
+ParagraphFragment::ParagraphFragment(Ruler* rulers, KoShape *shape, QTextBlock textBlock, KoParagraphStyle *style)
+        : m_shape(shape)
 {
     for (int ruler = 0; ruler != maxRuler; ++ruler) {
         m_rulerFragments[ruler].setRuler(&rulers[ruler]);
@@ -50,7 +51,7 @@ void ParagraphFragment::initDimensions(QTextBlock textBlock, KoParagraphStyle *p
 
     // border rectangle left and right
     m_border.setLeft(0.0);
-    m_border.setRight(m_textShape->size().width());
+    m_border.setRight(shape()->size().width());
 
     // first line rectangle
     m_firstLine = layout->lineAt(0).rect();
@@ -163,7 +164,7 @@ void ParagraphFragment::paint(QPainter &painter, const KoViewConverter &converte
 
     // transform painter from view coordinate system to shape
     // coordinate system
-    painter.setMatrix(textShape()->absoluteTransformation(&converter) * painter.matrix());
+    painter.setMatrix(shape()->absoluteTransformation(&converter) * painter.matrix());
     KoShape::applyConversion(painter, converter);
     painter.translate(0.0, -shapeTop());
 
@@ -182,14 +183,14 @@ void ParagraphFragment::paint(QPainter &painter, const KoViewConverter &converte
 
 QRectF ParagraphFragment::dirtyRectangle() const
 {
-    if (m_textShape == NULL)
+    if (m_shape == NULL)
         return QRectF();
 
-    QRectF boundingRect(QPointF(0, 0), textShape()->size());
+    QRectF boundingRect(QPointF(0, 0), shape()->size());
 
-    if (textShape()->border()) {
+    if (shape()->border()) {
         KoInsets insets;
-        textShape()->border()->borderInsets(textShape(), insets);
+        shape()->border()->borderInsets(shape(), insets);
         boundingRect.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
 
@@ -197,40 +198,43 @@ QRectF ParagraphFragment::dirtyRectangle() const
     // (although we can't be sure about the label)
     boundingRect.adjust(-50.0, -50.0, 50.0, 50.0);
 
-    boundingRect = textShape()->absoluteTransformation(0).mapRect(boundingRect);
+    boundingRect = shape()->absoluteTransformation(0).mapRect(boundingRect);
 
     return boundingRect;
 }
 
 qreal ParagraphFragment::shapeTop() const
 {
-    KoTextShapeData *textShapeData = static_cast<KoTextShapeData*>(textShape()->userData());
+    KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape()->userData());
+    if (textShapeData == NULL) {
+        return 0;
+    }
 
     return textShapeData->documentOffset();
 }
 
 qreal ParagraphFragment::shapeBottom() const
 {
-    return shapeTop() + textShape()->size().height();
+    return shapeTop() + shape()->size().height();
 }
 
 QPointF ParagraphFragment::mapDocumentToText(QPointF point) const
 {
-    QMatrix matrix = textShape()->absoluteTransformation(NULL);
+    QMatrix matrix = shape()->absoluteTransformation(NULL);
     matrix.translate(0.0, -shapeTop());
     return matrix.inverted().map(point);
 }
 
 QPointF ParagraphFragment::mapTextToDocument(QPointF point) const
 {
-    QMatrix matrix = textShape()->absoluteTransformation(NULL);
+    QMatrix matrix = shape()->absoluteTransformation(NULL);
     matrix.translate(0.0, -shapeTop());
     return matrix.map(point);
 }
 
 QLineF ParagraphFragment::mapTextToDocument(QLineF line) const
 {
-    QMatrix matrix = textShape()->absoluteTransformation(NULL);
+    QMatrix matrix = shape()->absoluteTransformation(NULL);
     matrix.translate(0.0, -shapeTop());
     return matrix.map(line);
 }

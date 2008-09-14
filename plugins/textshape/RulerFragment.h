@@ -20,12 +20,8 @@
 #ifndef RULERCONTROL_H
 #define RULERCONTROL_H
 
-#include "TextShape.h"
-
 #include <QLineF>
 #include <QMatrix>
-
-#include <cmath>
 
 class Ruler;
 
@@ -74,15 +70,9 @@ protected:
     void paintArrow(QPainter &painter, const QPointF &tip, const qreal angle, qreal value) const;
 
     // some convenience methods for rendering the arrow
-    static qreal arrowSize() {
-        return 10.0;
-    }
-    static qreal arrowDiagonal() {
-        return arrowSize() / sqrt(2.0) / 2.0;
-    }
-    static qreal arrowMinimumValue() {
-        return arrowDiagonal() *2.0 + 2.0;
-    }
+    static qreal arrowSize();
+    static qreal arrowDiagonal();
+    static qreal arrowMinimumValue();
 
 private:
     Ruler *m_ruler;

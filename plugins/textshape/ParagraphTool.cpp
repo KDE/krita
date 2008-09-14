@@ -19,17 +19,17 @@
 
 #include "ParagraphTool.h"
 
-#include "TextShape.h"
-#include "dialogs/ParagraphSettingsDialog.h"
-
 #include <KoCanvasBase.h>
 #include <KoParagraphStyle.h>
 #include <KoPointerEvent.h>
+#include <KoShape.h>
 #include <KoShapeManager.h>
 #include <KoStyleManager.h>
 #include <KoTextBlockData.h>
+#include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
 #include <KoUnit.h>
+#include <KoViewConverter.h>
 
 #include <KDebug>
 #include <KLocalizedString>
@@ -40,6 +40,7 @@
 #include <QColor>
 #include <QGridLayout>
 #include <QLabel>
+#include <QPainter>
 #include <QString>
 #include <QTextBlock>
 #include <QTextDocument>
@@ -64,7 +65,7 @@
  * - think about a method to give instructions to the users
  *   (the bubble used by okular might be a good way to do this)
  */
-bool shapeContainsBlock(const TextShape *textShape, QTextBlock textBlock)
+bool shapeContainsBlock(const KoShape *shape, QTextBlock textBlock)
 {
     QTextLayout *layout = textBlock.layout();
     qreal blockStart = layout->lineAt(0).y();
@@ -72,9 +73,13 @@ bool shapeContainsBlock(const TextShape *textShape, QTextBlock textBlock)
     QTextLine endLine = layout->lineAt(layout->lineCount() - 1);
     qreal blockEnd = endLine.y() + endLine.height();
 
-    KoTextShapeData *textShapeData = static_cast<KoTextShapeData*>(textShape->userData());
+    KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
+    if (textShapeData == NULL) {
+        return false;
+    }
+
     qreal shapeStart = textShapeData->documentOffset();
-    qreal shapeEnd = shapeStart + textShape->size().height();
+    qreal shapeEnd = shapeStart + shape->size().height();
 
     return (blockEnd >= shapeStart && blockStart < shapeEnd);
 }
@@ -275,11 +280,14 @@ bool ParagraphTool::createFragments()
     m_fragments.clear();
 
     KoTextDocumentLayout *layout = static_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout());
+    if (layout == NULL) {
+        return false;
+    }
 
     QList<KoShape*> shapes = layout->shapes();
     foreach(KoShape *shape, shapes) {
-        if (shapeContainsBlock(static_cast<TextShape*>(shape), textBlock())) {
-            m_fragments << ParagraphFragment(m_rulers, static_cast<TextShape*>(shape), textBlock(), m_paragraphStyle);
+        if (shapeContainsBlock(shape, textBlock())) {
+            m_fragments << ParagraphFragment(m_rulers, shape, textBlock(), m_paragraphStyle);
         }
     }
 
@@ -308,16 +316,23 @@ void ParagraphTool::updateLayout()
 // return true if successful
 bool ParagraphTool::activateTextBlockAt(const QPointF &point)
 {
-    TextShape *textShape = dynamic_cast<TextShape*>(canvas()->shapeManager()->shapeAt(point));
-    if (!textShape) {
+    KoShape *shape = dynamic_cast<KoShape*>(canvas()->shapeManager()->shapeAt(point));
+    if (shape == NULL) {
         // the shape below the mouse position is not a text shape
         return false;
     }
 
-    KoTextShapeData *textShapeData = static_cast<KoTextShapeData*>(textShape->userData());
+    KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
+    if (textShapeData == NULL) {
+        return false;
+    }
+
     QTextDocument *document = textShapeData->document();
 
-    int position = document->documentLayout()->hitTest(textShape->convertScreenPos(point), Qt::ExactHit);
+    QPointF p = shape->transformation().inverted().map(point);
+    p += QPointF(0.0, textShapeData->documentOffset());
+
+    int position = document->documentLayout()->hitTest(p, Qt::ExactHit);
     if (position == -1) {
         // there is no text below the mouse position
         return false;

@@ -21,6 +21,10 @@
 
 #include "Ruler.h"
 
+#include <QPainter>
+
+#include <cmath>
+
 bool RulerFragment::hitTest(const QPointF &point) const
 {
     QRectF rect(m_ruler->value() - 5.0, 0.0, 10.0, m_width);
@@ -124,4 +128,17 @@ void RulerFragment::setVisible(bool visible)
 {
     m_visible = visible;
 }
+
+qreal RulerFragment::arrowSize() {
+    return 10.0;
+}
+
+qreal RulerFragment::arrowDiagonal() {
+    return arrowSize() / sqrt(2.0) / 2.0;
+}
+
+qreal RulerFragment::arrowMinimumValue() {
+    return arrowDiagonal() *2.0 + 2.0;
+}
+
 

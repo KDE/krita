@@ -172,6 +172,8 @@ bool KoPAPageBase::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &
         }
     }
 
+    loadOdfPageExtra(element, paContext);
+
     return true;
 }
 
@@ -183,6 +185,12 @@ void KoPAPageBase::loadOdfPageTag( const KoXmlElement &element,
     if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) {
         setBackground( loadOdfFill( element, loadingContext ) );
     }
+}
+
+void KoPAPageBase::loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext & loadingContext )
+{
+    Q_UNUSED( element );
+    Q_UNUSED( loadingContext );
 }
 
 QSizeF KoPAPageBase::size() const

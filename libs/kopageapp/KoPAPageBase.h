@@ -169,6 +169,17 @@ protected:
      * @param paContext the pageapp loading context
      */
     virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );
+
+    /**
+     * @brief Load extra page data
+     *
+     * This method gets called after all shapes of the page are loaded. 
+     * The default implentation is empty
+     *
+     * @param element the page element
+     * @param paContext the pageapp loading context
+     */
+    virtual void loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext & loadingContext );
 };
 
 #endif /* KOPAPAGEBASE_H */

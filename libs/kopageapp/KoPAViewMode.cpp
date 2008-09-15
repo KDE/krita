@@ -82,3 +82,4 @@ void KoPAViewMode::removeShape( KoShape *shape )
     Q_UNUSED( shape );
 }
 
+#include "KoPAViewMode.moc"

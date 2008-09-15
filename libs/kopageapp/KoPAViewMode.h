@@ -22,6 +22,8 @@
 
 #include "kopageapp_export.h"
 
+#include <QObject>
+
 class KoPAView;
 class KoPACanvas;
 class KoPAPageBase;
@@ -35,8 +37,10 @@ class QKeyEvent;
 class QWheelEvent;
 class QPointF;
 
-class KOPAGEAPP_EXPORT KoPAViewMode
+class KOPAGEAPP_EXPORT KoPAViewMode : public QObject
 {
+
+    Q_OBJECT
 public:
     KoPAViewMode( KoPAView * view, KoPACanvas * canvas );
     virtual ~KoPAViewMode();

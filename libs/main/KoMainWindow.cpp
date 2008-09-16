@@ -500,6 +500,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc)
 
     if (oldRootDoc && oldRootDoc->viewCount() == 0) {
         //kDebug(30003) <<"No more views, deleting old doc" << oldRootDoc;
+        oldRootDoc->clearUndoHistory();
         delete oldRootDoc;
     }
 
@@ -1197,6 +1198,7 @@ void KoMainWindow::chooseNewDocument(InitDocFlags initDocFlags)
 
     if (doc) {
         setRootDocument(0);
+        d->m_rootDoc->clearUndoHistory();
         delete d->m_rootDoc;
         d->m_rootDoc = 0;
     }
@@ -1285,6 +1287,7 @@ void KoMainWindow::slotFileClose()
     if (queryClose()) {
         saveWindowSettings();
         setRootDocument(0);   // don't delete this shell when deleting the document
+        d->m_rootDoc->clearUndoHistory();
         delete d->m_rootDoc;
         d->m_rootDoc = 0;
         chooseNewDocument(InitDocFileClose);
@@ -1775,6 +1778,7 @@ void KoMainWindow::slotReloadFile()
     KUrl url = pDoc->url();
     if (pDoc && !pDoc->isEmpty()) {
         setRootDocument(0L);   // don't delete this shell when deleting the document
+        d->m_rootDoc->clearUndoHistory();
         delete d->m_rootDoc;
         d->m_rootDoc = 0L;
     }

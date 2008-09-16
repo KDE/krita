@@ -85,6 +85,7 @@ KoPADocument::~KoPADocument()
     saveConfig();
     qDeleteAll( d->pages );
     qDeleteAll( d->masterPages );
+    clearUndoHistory();
     qDeleteAll( d->dataCenterMap );
     delete d;
 }

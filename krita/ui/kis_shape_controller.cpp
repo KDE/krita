@@ -97,6 +97,7 @@ KisShapeController::~KisShapeController()
         }
         m_d->nodeShapes.clear();
     */
+    m_d->doc->clearUndoHistory();
     qDeleteAll(m_d->dataCenterMap);
 
     delete m_d;

@@ -854,6 +854,8 @@ public:
         return m_guidesData;
     }
 
+    void clearUndoHistory();
+
     using ReadWritePart::setUrl;
     using ReadWritePart::localFilePath;
     using ReadWritePart::setLocalFilePath;

@@ -2693,5 +2693,10 @@ void KoDocument::setDocumentClean(bool clean)
     setModified(!clean);
 }
 
+void KoDocument::clearUndoHistory()
+{
+    d->m_undoStack->clear();
+}
+
 #include "KoDocument_p.moc"
 #include "KoDocument.moc"

@@ -16,7 +16,6 @@ target_link_libraries(
     kopabackgroundtool
     koguiutils
     flake
-    kpresenterprivate
     kopageapp
     ${KDE4_KDECORE_LIBS}
     ${KDE4_PHONON_LIBRARY}

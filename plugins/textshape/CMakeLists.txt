@@ -15,11 +15,6 @@ SET ( textshape_SRCS
     TextToolFactory.cpp
     Layout.cpp
     ListItemsHelper.cpp
-    ParagraphTool.cpp
-    ParagraphToolFactory.cpp
-    ParagraphFragment.cpp
-    RulerFragment.cpp
-    Ruler.cpp
 
     ChangeTracker.cpp
 

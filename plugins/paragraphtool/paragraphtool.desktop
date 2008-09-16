@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Paragraph Tool
+X-KDE-ServiceTypes=KOffice/Flake
+Type=Service
+X-KDE-Library=paragraphtool
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1

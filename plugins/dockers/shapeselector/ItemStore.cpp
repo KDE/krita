@@ -106,6 +106,8 @@ void ItemStorePrivate::addUser(KoShapeManager *sm)
 void ItemStorePrivate::removeUser(KoShapeManager *sm)
 {
     shapeManagers.removeAll(sm);
+    // remove all shapes from this shape manager to avoid a crash later
+    sm->setShapes( QList<KoShape *>() );
     KConfigGroup conf = KoGlobal::kofficeConfig()->group("ShapeSelectorPlugin");
     const int previouslyConfiguredBooks = conf.readEntry("books", 0);
     conf.writeEntry("books", folders.size());

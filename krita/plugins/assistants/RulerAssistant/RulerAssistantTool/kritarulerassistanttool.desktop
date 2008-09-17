@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=RulerAssistantTool
 Name[el]=Εργαλείο βοηθού κανόνα
+Name[it]=Strumento dell'assistente dei righelli
 Name[nds]=Linealenhölper-Warktüüch
 Name[sv]=Linjalguideverktyg
+Name[zh_TW]=尺規小助手工具
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritarulerassistanttool

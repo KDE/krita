@@ -1,12 +1,16 @@
 [Desktop Entry]
 Name=RulerAssistantView
 Name[el]=Προβολή βοηθού κανόνα
+Name[it]=Vista dell'assistente dei righelli
 Name[nds]=Linealenhölper-Ansicht
 Name[sv]=Linjalguidevy
+Name[zh_TW]=尺規小助手檢視
 Comment=RulerAssistantView
 Comment[el]=Προβολή βοηθού κανόνα
+Comment[it]=Vista dell'assistente dei righelli
 Comment[nds]=Linealenhölper-Ansicht
 Comment[sv]=Linjalguidevy
+Comment[zh_TW]=尺規小助手檢視
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritarulerassistantview

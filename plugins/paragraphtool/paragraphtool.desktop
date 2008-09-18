@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Paragraph Tool
+Name[pt]=Ferramenta de Parágrafos
+Name[pt_BR]=Ferramenta de Parágrafos
+Name[sv]=Styckesverktyg
+Name[uk]=Інструмент абзаців
+Name[zh_TW]=段落工具
 X-KDE-ServiceTypes=KOffice/Flake
 Type=Service
 X-KDE-Library=paragraphtool

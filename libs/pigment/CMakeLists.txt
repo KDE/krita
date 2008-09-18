@@ -75,7 +75,7 @@ kde4_add_library(pigmentcms SHARED ${pigmentcms_SRCS})
 target_link_libraries(
     pigmentcms
     komain
-    lcms
+    ${LCMS_LIBRARIES}
     ${KDE4_KPARTS_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${X11_X11_LIB}

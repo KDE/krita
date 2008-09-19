@@ -24,7 +24,7 @@
 
 class KisMaskGenerator;
 
-class KRITAUI_EXPORT KisAutoBrush : public KisBrush
+class PAINTOP_EXPORT KisAutoBrush : public KisBrush
 {
 public:
     KisAutoBrush(KisMaskGenerator* img);

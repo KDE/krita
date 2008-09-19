@@ -30,7 +30,7 @@ class KisBrushSelectionWidget;
  * The brush option allows the user to select a particular brush
  * footprint for suitable paintops
  */
-class KRITAUI_EXPORT KisBrushOption : public KisPaintOpOption
+class PAINTOP_EXPORT KisBrushOption : public KisPaintOpOption
 {
 public:
 

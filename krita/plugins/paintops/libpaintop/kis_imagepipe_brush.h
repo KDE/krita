@@ -45,7 +45,7 @@ namespace KisParasite {
     };
 }
 
-class KRITAUI_EXPORT KisImagePipeBrush : public KisBrush
+class PAINTOP_EXPORT KisImagePipeBrush : public KisBrush
 {
 
     Q_OBJECT

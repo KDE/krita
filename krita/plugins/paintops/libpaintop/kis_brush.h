@@ -55,7 +55,7 @@ class KisBrush;
  * A brush factory can create a new brush instance based
  * on a filename and a brush id or just a brush id.
  */
-class KRITAUI_EXPORT KisBrushFactory : public KisShared
+class PAINTOP_EXPORT KisBrushFactory : public KisShared
 {
 
 public:
@@ -78,7 +78,7 @@ public:
 };
 
 
-class KRITAIMAGE_EXPORT KisBrush : public KoResource, public KisShared
+class PAINTOP_EXPORT KisBrush : public KoResource, public KisShared
 {
 
     class ScaledBrush;

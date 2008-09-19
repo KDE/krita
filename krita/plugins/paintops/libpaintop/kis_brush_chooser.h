@@ -30,7 +30,7 @@ class KisResourceMediator;
 class KoResource;
 
 
-class KRITAUI_EXPORT KisBrushChooser : public KisItemChooser
+class PAINTOP_EXPORT KisBrushChooser : public KisItemChooser
 {
 
     Q_OBJECT

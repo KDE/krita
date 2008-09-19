@@ -25,7 +25,7 @@
 #include "ui_wdgautobrush.h"
 #include <kis_auto_brush.h>
 
-class KRITAUI_EXPORT KisWdgAutobrush : public QWidget, public Ui::KisWdgAutobrush
+class PAINTOP_EXPORT KisWdgAutobrush : public QWidget, public Ui::KisWdgAutobrush
 {
     Q_OBJECT
 
@@ -35,7 +35,7 @@ public:
     }
 };
 
-class KRITAUI_EXPORT KisAutoBrushWidget : public KisWdgAutobrush
+class PAINTOP_EXPORT KisAutoBrushWidget : public KisWdgAutobrush
 {
     Q_OBJECT
 public:

@@ -28,7 +28,7 @@
  * The pressure opacity option defines a curve that is used to
  * calculate the effect of pressure on the size of the dab
  */
-class KRITAUI_EXPORT KisPressureSizeOption : public KisCurveOption
+class PAINTOP_EXPORT KisPressureSizeOption : public KisCurveOption
 {
 public:
     KisPressureSizeOption();

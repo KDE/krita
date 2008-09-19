@@ -30,7 +30,7 @@ class KisPainter;
  * The pressure opacity option defines a curve that is used to
  * calculate the effect of pressure on the darkness of the dab
  */
-class KRITAUI_EXPORT KisPressureDarkenOption : public KisCurveOption
+class PAINTOP_EXPORT KisPressureDarkenOption : public KisCurveOption
 {
 public:
 

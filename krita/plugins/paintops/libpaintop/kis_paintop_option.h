@@ -33,7 +33,7 @@
  *
  * Options are disabled by default.
  */
-class KRITAUI_EXPORT KisPaintOpOption
+class PAINTOP_EXPORT KisPaintOpOption
 {
 
 public:

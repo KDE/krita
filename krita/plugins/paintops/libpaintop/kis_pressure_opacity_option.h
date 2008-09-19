@@ -28,7 +28,7 @@ class KisPainter;
  * The pressure opacity option defines a curve that is used to
  * calculate the effect of pressure on opacity
  */
-class KRITAUI_EXPORT KisPressureOpacityOption : public KisCurveOption
+class PAINTOP_EXPORT KisPressureOpacityOption : public KisCurveOption
 {
 public:
 

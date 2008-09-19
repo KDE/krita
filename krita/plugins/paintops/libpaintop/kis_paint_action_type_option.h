@@ -35,7 +35,7 @@ enum enumPaintActionType {
  * * indirect (like photoshop and gimp)
  * * rate (staying in the same spot makes it darker)
  */
-class KRITAUI_EXPORT KisPaintActionTypeOption : public KisPaintOpOption
+class PAINTOP_EXPORT KisPaintActionTypeOption : public KisPaintOpOption
 {
 public:
     KisPaintActionTypeOption();

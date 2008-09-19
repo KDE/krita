@@ -83,7 +83,6 @@ KisFilterConfiguration* KisColorGenerator::factoryConfiguration(const KisPaintDe
     QVariant v;
     v.setValue(KoColor());
     config->setProperty("color", v);
-    config->setProperty("opacity", 100);
     return config;
 }
 
@@ -107,12 +106,11 @@ void KisColorGenerator::generate(KisProcessingInformation dstInfo,
 
     QVariant value;
     KoColor c = (config && config->getProperty("color", value)) ? value.value<KoColor>() : KoColor();
-    int opacity = (config && config->getProperty("opacity", value)) ? value.toInt() : 100;
 
     KisFillPainter gc(dst);
     gc.setProgress(progressUpdater);
     gc.setChannelFlags(config->channelFlags());
-    gc.setOpacity(opacity);
+    gc.setOpacity(100);
     gc.setSelection(dstInfo.selection());
     gc.fillRect(QRect(dstInfo.topLeft(), size), c);
     gc.end();

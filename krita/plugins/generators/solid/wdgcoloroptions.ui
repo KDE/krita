@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>158</width>
-    <height>76</height>
+    <height>78</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout" >
@@ -39,17 +39,7 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="label_2" >
-     <property name="text" >
-      <string>&amp;Opacity:</string>
-     </property>
-     <property name="buddy" >
-      <cstring>intOpacity</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1" >
+   <item row="1" column="1" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
@@ -65,9 +55,6 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="2" >
-    <widget class="KoSliderCombo" native="1" name="intOpacity" />
-   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
@@ -77,11 +64,6 @@
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KoSliderCombo</class>
-   <extends>QWidget</extends>
-   <header>KoSliderCombo.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

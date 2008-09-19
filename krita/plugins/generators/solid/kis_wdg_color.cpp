@@ -45,9 +45,6 @@ void KisWdgColor::setConfiguration(KisPropertiesConfiguration* config)
     if (config->getProperty("color", value)) {
         widget()->bnColor->setColor(value.value<KoColor>().toQColor());
     }
-    if (config->getProperty("opacity", value)) {
-        widget()->intOpacity->setValue(value.toUInt());
-    }
 }
 
 KisPropertiesConfiguration* KisWdgColor::configuration() const
@@ -58,7 +55,6 @@ KisPropertiesConfiguration* KisWdgColor::configuration() const
     QVariant v;
     v.setValue(c);
     config->setProperty("color", v);
-    config->setProperty("opacity", this->widget()->intOpacity->value());
     return config;
 }
 

@@ -13,7 +13,7 @@ kde4_add_library(koffice_graya_u16 SHARED ${koffice_graya_u16_LIB_SRCS})
 target_link_libraries(
     koffice_graya_u16
     pigmentcms
-    lcms
+    ${LCMS_LIBRARIES}
     ${KDE4_KDECORE_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}

@@ -15,7 +15,7 @@ kde4_add_library(kofficegrayau8colorspace SHARED ${kofficegrayau8colorspace_LIB_
 target_link_libraries(
     kofficegrayau8colorspace
     pigmentcms
-    lcms
+    ${LCMS_LIBRARIES}
     ${KDE4_KDECORE_LIBS} 
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}

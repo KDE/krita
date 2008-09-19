@@ -26,7 +26,7 @@ KisFilterOption::KisFilterOption()
 {
 }
 
-const KisFilterSP KisFilterOption::KisFilterOption::filter() const
+const KisFilterSP KisFilterOption::filter() const
 {
     return 0;
 }

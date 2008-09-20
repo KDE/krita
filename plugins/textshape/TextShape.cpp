@@ -268,7 +268,7 @@ bool TextShape::loadOdfFrameElement(const KoXmlElement & element, KoShapeLoading
     return m_textShapeData->loadOdf(element, context);
 }
 
-void TextShape::init(QMap<QString, KoDataCenter *>  dataCenterMap)
+void TextShape::init(const QMap<QString, KoDataCenter *> & dataCenterMap)
 {
     KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(dataCenterMap["StyleManager"]);
     KoTextDocument(m_textShapeData->document()).setStyleManager(styleManager);

@@ -47,7 +47,7 @@ public:
     bool loadFromUrl( KUrl & );
 
     /// reimplemented
-    void init(QMap<QString, KoDataCenter *>  dataCenterMap);
+    void init(const QMap<QString, KoDataCenter *> & dataCenterMap);
 
 protected:
     virtual bool loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context );

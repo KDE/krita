@@ -126,7 +126,7 @@ bool PictureShape::loadFromUrl( KUrl &url )
     return false;
 }
 
-void PictureShape::init(QMap<QString, KoDataCenter *>  dataCenterMap)
+void PictureShape::init(const QMap<QString, KoDataCenter *> & dataCenterMap)
 {
     m_imageCollection = (KoImageCollection *)dataCenterMap["ImageCollection"];
 }

@@ -86,7 +86,7 @@ public:
     virtual void saveOdf(KoShapeSavingContext & context) const;
 
     /// reimplemented
-    virtual void init(QMap<QString, KoDataCenter *>  dataCenterMap);
+    virtual void init(const QMap<QString, KoDataCenter *> & dataCenterMap);
 
     KoTextShapeData *textShapeData() {
         return m_textShapeData;

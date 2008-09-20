@@ -198,7 +198,7 @@ public:
      * might want.
      * The default implementation does nothing.
      */
-    virtual void init( QMap<QString, KoDataCenter *> dataCenterMap ) {Q_UNUSED(dataCenterMap)};
+    virtual void init( const QMap<QString, KoDataCenter *> & dataCenterMap );
 
     /**
      * @brief Scale the shape using the zero-point which is the top-left corner.

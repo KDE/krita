@@ -1115,6 +1115,11 @@ void KoShape::saveOdfCommonChildElements( KoShapeSavingContext &context ) const
 
 // end loading & saving methods
 
+void KoShape::init( const QMap<QString, KoDataCenter *> & dataCenterMap )
+{
+    Q_UNUSED(dataCenterMap);
+};
+
 
 // static
 void KoShape::applyConversion(QPainter &painter, const KoViewConverter &converter)

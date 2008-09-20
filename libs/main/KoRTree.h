@@ -362,7 +362,7 @@ void KoRTree<T>::insertHelper(const QRectF& bb, const T& data, int id)
     if (nbb.isNull()) {
         nbb.setWidth(0.0001);
         nbb.setHeight(0.0001);
-        kWarning(30003) <<  "KoRTree::insert bouningBox isNull setting size to" << nbb.size();
+        kWarning(30003) <<  "KoRTree::insert boundingBox isNull setting size to" << nbb.size();
     }
 
     LeafNode * leaf = m_root->chooseLeaf(nbb);

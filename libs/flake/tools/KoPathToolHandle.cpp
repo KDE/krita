@@ -58,13 +58,13 @@ void PointHandle::paint( QPainter &painter, const KoViewConverter &converter )
     painter.setMatrix( m_activePoint->parent()->absoluteTransformation(&converter) * painter.matrix() );
     KoShape::applyConversion( painter, converter );
 
-    QRectF handle = m_tool->handleRect( QPoint(0,0) );
     KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>( m_tool->selection() );
 
     KoPathPoint::KoPointType type = KoPathPoint::Node;
     if ( selection && selection->contains( m_activePoint ) )
         type = KoPathPoint::All;
-    m_activePoint->paint( painter, handle.size(), type );
+    int handleRadius = m_tool->canvas()->resourceProvider()->handleRadius();
+    m_activePoint->paint( painter, handleRadius, type );
     painter.restore();
 }
 

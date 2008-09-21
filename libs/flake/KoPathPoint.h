@@ -210,13 +210,12 @@ public:
     /**
      * Paints the path point with the actual brush and pen
      * @param painter used for painting the shape point
-     * @param size the drawing size of the shape point
+     * @param handleRadius size of point handles in pixel
      * @param types the points which should be painted
      * @param active If true only the given active points are painted
      *               If false all given points are used.
      */
-    //void paint(QPainter &painter, const QSizeF &size, bool selected );
-    void paint(QPainter &painter, const QSizeF &size, KoPointTypes types, bool active = true );
+    void paint(QPainter &painter, int handleRadius, KoPointTypes types, bool active = true );
 
     /**
      * @brief Sets the parent path shape.

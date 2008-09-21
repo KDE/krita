@@ -312,10 +312,7 @@ void KoPathShape::paintPoints( QPainter &painter, const KoViewConverter &convert
     {
         KoSubpath::const_iterator it( ( *pathIt )->begin() );
         for ( ; it != ( *pathIt )->end(); ++it )
-        {
-            KoPathPoint *point = ( *it );
-            point->paint( painter, handle.size(), KoPathPoint::Node );
-        }
+            ( *it )->paint( painter, handleRadius, KoPathPoint::Node );
     }
 }
 

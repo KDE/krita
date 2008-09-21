@@ -254,9 +254,9 @@ void KoPathPoint::map( const QMatrix &matrix, bool mapGroup )
         d->shape->notifyChanged();
 }
 
-void KoPathPoint::paint( QPainter &painter, const QSizeF &size, KoPointTypes types, bool active )
+void KoPathPoint::paint( QPainter &painter, int handleRadius, KoPointTypes types, bool active )
 {
-    QRectF handle( QPointF( -0.5 * size.width(), -0.5 * size.height() ), size );
+    QRectF handle( -handleRadius, -handleRadius, 2*handleRadius, 2*handleRadius );
 
     bool drawControlPoint1 = types & ControlPoint1 && ( !active || activeControlPoint1() );
     bool drawControlPoint2 = types & ControlPoint2 && ( !active || activeControlPoint2() );
@@ -268,31 +268,38 @@ void KoPathPoint::paint( QPainter &painter, const QSizeF &size, KoPointTypes typ
     if ( drawControlPoint1 )
         painter.drawLine( point(), controlPoint1() );
 
+    
+    QMatrix worldMatrix = painter.worldMatrix();
+
+    painter.setWorldMatrix( QMatrix() );
+    
     // the point is lowest 
     if ( types & Node )
     {
         if ( properties() & IsSmooth )
-            painter.drawRect( handle.translated( point() ) );
+            painter.drawRect( handle.translated( worldMatrix.map( point() ) ) );
         else if ( properties() & IsSymmetric )
         {
             QMatrix matrix;
             matrix.rotate( 45.0 );
             QPolygonF poly( handle );
             poly = matrix.map( poly );
-            poly.translate( point() );
+            poly.translate( worldMatrix.map( point() ) );
             painter.drawPolygon( poly );
         }
         else
-            painter.drawEllipse( handle.translated( point() ) );
+            painter.drawEllipse( handle.translated( worldMatrix.map( point() ) ) );
     }
 
     // then comes control point 2
     if ( drawControlPoint2 )
-        painter.drawEllipse( handle.translated( controlPoint2() ) );
-
+        painter.drawEllipse( handle.translated( worldMatrix.map( controlPoint2() ) ) );
+    
     // then comes control point 1
     if ( drawControlPoint1 )
-        painter.drawEllipse( handle.translated( controlPoint1() ) );
+        painter.drawEllipse( handle.translated( worldMatrix.map( controlPoint1() ) ) );
+    
+    painter.setWorldMatrix( worldMatrix );
 }
 
 void KoPathPoint::setParent( KoPathShape* parent )

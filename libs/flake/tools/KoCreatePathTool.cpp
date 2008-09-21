@@ -80,7 +80,7 @@ void KoCreatePathTool::paint( QPainter &painter, const KoViewConverter &converte
         if ( pointIsBeingDragged || firstPoint )
         {
             const bool onlyPaintActivePoints = false;
-            m_activePoint->paint( painter, handle.size(), 
+            m_activePoint->paint( painter, m_handleRadius, 
                                   KoPathPoint::ControlPoint1 | KoPathPoint::ControlPoint2,
                                   onlyPaintActivePoints );
         }
@@ -93,7 +93,7 @@ void KoCreatePathTool::paint( QPainter &painter, const KoViewConverter &converte
         else
             painter.setBrush( Qt::white ); //TODO make configurable
 
-        m_firstPoint->paint( painter, handle.size(), KoPathPoint::Node );
+        m_firstPoint->paint( painter, m_handleRadius, KoPathPoint::Node );
 
         painter.restore();
     }

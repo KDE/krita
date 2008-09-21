@@ -991,53 +991,74 @@ QMatrix KoShape::parseOdfTransform( const QString &transform )
         if (subtransform[0].startsWith(';') || subtransform[0].startsWith(','))
             subtransform[0] = subtransform[0].right(subtransform[0].length() - 1);
 
-        if (subtransform[0] == "rotate")
+        QString cmd = subtransform[0].toLower();
+        
+        if (cmd == "rotate")
         {
-            // TODO find out what oo2 really does when rotating, it seems severly broken
+            QMatrix rotMatrix;
             if (params.count() == 3)
             {
                 qreal x = KoUnit::parseValue( params[1] );
                 qreal y = KoUnit::parseValue( params[2] );
 
-                matrix.translate(x, y);
+                rotMatrix.translate(x, y);
                 // oo2 rotates by radians
-                matrix.rotate( params[0].toDouble()*180.0/M_PI );
-                matrix.translate(-x, -y);
+                rotMatrix.rotate( -params[0].toDouble()*180.0/M_PI );
+                rotMatrix.translate(-x, -y);
             }
             else
             {
                 // oo2 rotates by radians
-                matrix.rotate( params[0].toDouble()*180.0/M_PI );
+                rotMatrix.rotate( -params[0].toDouble()*180.0/M_PI );
             }
+            matrix = matrix * rotMatrix;
         }
-        else if (subtransform[0] == "translate")
+        else if (cmd == "translate")
         {
+            QMatrix moveMatrix;
             if (params.count() == 2)
             {
                 qreal x = KoUnit::parseValue( params[0] );
                 qreal y = KoUnit::parseValue( params[1] );
-                matrix.translate(x, y);
+                moveMatrix.translate(x, y);
             }
             else    // Spec : if only one param given, assume 2nd param to be 0
-                matrix.translate( KoUnit::parseValue( params[0] ) , 0);
+                moveMatrix.translate( KoUnit::parseValue( params[0] ) , 0);
+            matrix = matrix * moveMatrix;
         }
-        else if (subtransform[0] == "scale")
+        else if (cmd == "scale")
         {
+            QMatrix scaleMatrix;
             if (params.count() == 2)
-                matrix.scale(params[0].toDouble(), params[1].toDouble());
+                scaleMatrix.scale(params[0].toDouble(), params[1].toDouble());
             else    // Spec : if only one param given, assume uniform scaling
-                matrix.scale(params[0].toDouble(), params[0].toDouble());
+                scaleMatrix.scale(params[0].toDouble(), params[0].toDouble());
+            matrix = matrix * scaleMatrix;
         }
-        else if (subtransform[0] == "skewx")
-            matrix.shear(tan(params[0].toDouble()), 0.0F);
-        else if (subtransform[0] == "skewy")
-            matrix.shear(tan(params[0].toDouble()), 0.0F);
-        else if (subtransform[0] == "skewy")
-            matrix.shear(0.0F, tan(params[0].toDouble()));
-        else if (subtransform[0] == "matrix")
+        else if (cmd == "skewx")
         {
+            QPointF p = absolutePosition( KoFlake::TopLeftCorner );
+            QMatrix shearMatrix;
+            shearMatrix.translate( p.x(), p.y() );
+            shearMatrix.shear(tan(-params[0].toDouble()), 0.0F);
+            shearMatrix.translate( -p.x(), -p.y() );
+            matrix = matrix * shearMatrix;
+        }
+        else if (cmd == "skewy")
+        {
+            QPointF p = absolutePosition( KoFlake::TopLeftCorner );
+            QMatrix shearMatrix;
+            shearMatrix.translate( p.x(), p.y() );
+            shearMatrix.shear(0.0F, tan(-params[0].toDouble()));
+            shearMatrix.translate( -p.x(), -p.y() );
+            matrix = matrix * shearMatrix;
+        }
+        else if (cmd == "matrix")
+        {
+            QMatrix m;
             if (params.count() >= 6)
-                matrix.setMatrix(params[0].toDouble(), params[1].toDouble(), params[2].toDouble(), params[3].toDouble(), KoUnit::parseValue( params[4] ), KoUnit::parseValue( params[5] ) );
+                m.setMatrix(params[0].toDouble(), params[1].toDouble(), params[2].toDouble(), params[3].toDouble(), KoUnit::parseValue( params[4] ), KoUnit::parseValue( params[5] ) );
+            matrix = matrix * m;
         }
     }
 

@@ -122,14 +122,15 @@ bool KoPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &
         loader.parseSvg( element.attributeNS( KoXmlNS::svg, "d" ), true );
     }
 
+    normalize();
+    setTransformation( QMatrix() );
+
     QPointF pos;
     pos.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString() ) ) );
     pos.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString() ) ) );
     setPosition( pos );
 
     applyViewboxTransformation( element );
-
-    normalize();
 
     loadOdfAttributes( element, context, OdfTransformation );
 

@@ -51,6 +51,7 @@ struct KoTriangleColorSelector::Private {
     bool updateAllowed;
     CurrentHandle handle;
     qreal triangleHandleSize;
+    bool invalidTriangle;
 };
 
 KoTriangleColorSelector::KoTriangleColorSelector(QWidget* parent) : QWidget(parent), d(new Private)
@@ -63,6 +64,7 @@ KoTriangleColorSelector::KoTriangleColorSelector(QWidget* parent) : QWidget(pare
     d->updateAllowed = true;
     setMouseTracking( true );
     updateTriangleCircleParameters();
+    d->invalidTriangle = true;
 }
 
 KoTriangleColorSelector::~KoTriangleColorSelector()
@@ -89,6 +91,10 @@ void KoTriangleColorSelector::updateTriangleCircleParameters()
 
 void KoTriangleColorSelector::paintEvent( QPaintEvent * event )
 {
+    if( d->invalidTriangle )
+    {
+      generateTriangle();
+    }
     Q_UNUSED(event);
     QPainter p(this);
     p.setRenderHint(QPainter::SmoothPixmapTransform);
@@ -141,7 +147,7 @@ void KoTriangleColorSelector::setHue(int h)
     h = qBound(0, h, 360);
     d->hue = h;
     tellColorChanged();
-    generateTriangle();
+    d->invalidTriangle = true;
     update();
 }
 
@@ -155,7 +161,7 @@ void KoTriangleColorSelector::setValue(int v)
     v = qBound(0, v, 255);
     d->value = v;
     tellColorChanged();
-    generateTriangle();
+    d->invalidTriangle = true;
     update();
 }
 
@@ -169,7 +175,7 @@ void KoTriangleColorSelector::setSaturation(int s)
     s = qBound(0, s, 255);
     d->saturation = s;
     tellColorChanged();
-    generateTriangle();
+    d->invalidTriangle = true;
     update();
 }
 
@@ -182,7 +188,7 @@ void KoTriangleColorSelector::setHSV(int h, int s, int v)
     d->value = v;
     d->saturation = s;
     tellColorChanged();
-    generateTriangle();
+    d->invalidTriangle = true;
     update();
 }
 
@@ -201,7 +207,7 @@ void KoTriangleColorSelector::setQColor(const QColor& c)
         rgb_to_hsv( c.red(), c.green(), c.blue(), &hue, &d->saturation, &d->value);
         if( hue >= 0 && hue <= 360)
             d->hue = hue;
-        generateTriangle();
+        d->invalidTriangle = true;
         update();
     }
 }
@@ -211,7 +217,7 @@ void KoTriangleColorSelector::resizeEvent( QResizeEvent * event )
     QWidget::resizeEvent( event );
     updateTriangleCircleParameters();
     generateWheel();
-    generateTriangle();
+    d->invalidTriangle = true;
 }
 
 inline qreal pow2(qreal v)
@@ -264,6 +270,7 @@ void KoTriangleColorSelector::generateTriangle()
     }
     
     d->trianglePixmap = QPixmap::fromImage(img);
+    d->invalidTriangle = false;
 }
 
 void KoTriangleColorSelector::generateWheel()

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +25,7 @@
 #include "flake_export.h"
 
 #include <QList>
+#include <QMap>
 
 class KoCanvasBase;
 class KoShape;
@@ -109,6 +110,13 @@ public:
      * @return pointer to requested data center if it exist, else null
      */
     KoDataCenter * dataCenter( const QString &dataCenterName );
+
+    /**
+     * @brief Get the dataCenterMap used in the shape controller base
+     *
+     * @return The data center map
+     */
+    QMap<QString, KoDataCenter *> dataCenterMap();
 
 private:
     /**

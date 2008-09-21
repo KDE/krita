@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
  * Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
-   Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -75,12 +76,26 @@ KoShape * KoShapeFactory::createDefaultShapeAndInit( KoShapeControllerBase * sha
     return shape;
 }
 
+KoShape * KoShapeFactory::createDefaultShapeAndInit( const QMap<QString, KoDataCenter *> & dataCenterMap ) const
+{
+    KoShape * shape = createDefaultShape();
+    shape->init( dataCenterMap );
+    return shape;
+}
+
 KoShape * KoShapeFactory::createShapeAndInit( const KoProperties * params, KoShapeControllerBase *shapeController ) const
 {
     KoShape * shape = createShape( params );
     if ( shape && shapeController ) {
         shape->init( shapeController->dataCenterMap() );
     }
+    return shape;
+}
+
+KoShape * KoShapeFactory::createShapeAndInit(const KoProperties * params, const QMap<QString, KoDataCenter *> & dataCenterMap ) const
+{
+    KoShape * shape = createShape( params );
+    shape->init( dataCenterMap );
     return shape;
 }
 

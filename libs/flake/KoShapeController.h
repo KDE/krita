@@ -119,17 +119,6 @@ public:
     QMap<QString, KoDataCenter *> dataCenterMap();
 
 private:
-    /**
-     * @brief Get the shapeControllerBase
-     */
-    KoShapeControllerBase * shapeControllerBase();
-
-    // allowing accsess to shapeControllerBase
-    friend class KoShapePaste;
-    friend class KoTextPaste;
-
-    friend class Viewport;
-    friend class KoCreateShapeStrategy;
     class Private;
     Private * const d;
 };

@@ -138,10 +138,10 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
         if (isTemplate) {
             KoProperties props;
             props.load(properties);
-            m_draggedShape = factory->createShapeAndInit( &props, m_parent->canvas()->shapeController()->shapeControllerBase() );
+            m_draggedShape = factory->createShapeAndInit( &props, m_parent->canvas()->shapeController()->dataCenterMap() );
         }
         else
-            m_draggedShape = factory->createDefaultShapeAndInit( m_parent->canvas()->shapeController()->shapeControllerBase() );
+            m_draggedShape = factory->createDefaultShapeAndInit( m_parent->canvas()->shapeController()->dataCenterMap() );
 
         Q_ASSERT(m_draggedShape);
         if (!m_draggedShape) return;

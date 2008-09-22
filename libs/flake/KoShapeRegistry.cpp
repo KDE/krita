@@ -182,7 +182,7 @@ KoShape * KoShapeRegistry::createShapeInternal( const KoXmlElement & fullElement
         KoShapeFactory * factory = factories[i];
         if ( factory->supports( element ) ) {
 
-            KoShape * shape = factory->createDefaultShapeAndInit( context.shapeController() );
+            KoShape * shape = factory->createDefaultShapeAndInit( context.dataCenterMap() );
 
             if ( shape->shapeId().isEmpty() )
                 shape->setShapeId(factory->id());

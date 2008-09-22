@@ -24,6 +24,7 @@
 #include <KoShapeOdfSaveHelper.h>
 #include <KoOdf.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeControllerBase.h>
 #include <KoOdfLoadingContext.h>
 #include <KoStore.h>
 #include <KoOdfReadStore.h>
@@ -88,7 +89,7 @@ KoShape* KoCollectionShapeFactory::createDefaultShape( KoShapeControllerBase * s
         }
 
         KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
-        KoShapeLoadingContext context(loadingContext, shapeController);
+        KoShapeLoadingContext context(loadingContext, shapeController->dataCenterMap());
 
         KoXmlElement element;
 

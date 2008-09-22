@@ -249,8 +249,10 @@ void KoOdfCollectionLoader::loadNativeFile(const QString& path)
     }
 
     KoOdfLoadingContext* m_loadingContext = new KoOdfLoadingContext(m_odfStore->styles(), m_odfStore->store());
-    // it ok here to pass 0 as shape controller as we don't have a document
-    m_shapeLoadingContext = new KoShapeLoadingContext(*m_loadingContext, 0);
+    // it ok here to pass an empty dataCenterMap as we don't have a document
+    // tz: not sure if that is 100% correct what if an image is loaded in the collection it needs a image collection
+    QMap<QString, KoDataCenter *> dataCenterMap;
+    m_shapeLoadingContext = new KoShapeLoadingContext(*m_loadingContext, dataCenterMap);
 
     KoXmlElement content = m_odfStore->contentDoc().documentElement();
     KoXmlElement realBody ( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );

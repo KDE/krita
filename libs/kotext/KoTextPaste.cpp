@@ -52,7 +52,7 @@ KoTextPaste::~KoTextPaste()
 bool KoTextPaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
 {
     KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
-    KoShapeLoadingContext context(loadingContext, d->canvas->shapeController()->shapeControllerBase());
+    KoShapeLoadingContext context(loadingContext, d->canvas->shapeController()->dataCenterMap());
 
     KoTextLoader loader(context);
 

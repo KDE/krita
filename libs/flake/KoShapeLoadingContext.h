@@ -73,10 +73,10 @@ public:
     /**
      * constructor
      * @param context the context created for generic ODF loading.
-     * @param shapeController the shape controller. This is used to call KoShapeControllerBase::shapeCreated
-     *        during loading. Please leave 0 only when you are 100% sure you don't need it.
+     * @param dataCenterMap the data center map of the shape controller. This is used in calling KoShape::init
+     *        during loading.
      */
-    KoShapeLoadingContext( KoOdfLoadingContext & context, KoShapeControllerBase * shapeController );
+    KoShapeLoadingContext( KoOdfLoadingContext & context, const QMap<QString, KoDataCenter *> & dataCenterMap );
 
     /// destructor
     ~KoShapeLoadingContext();
@@ -164,22 +164,19 @@ public:
     static QSet<AdditionalAttributeData> additionalAttributeData();
 
     /**
-     * Get a data center from the KoShapeControllerBase
+     * Get a data center
      *
      * If the data center is not found 0 is returned 
      */
     KoDataCenter * dataCenter( const QString & dataCenterName );
 
-private:
     /**
-     * Get the shape controller
-     *
-     * @see KoShapeControllerBase::shapeCreated
+     * Get a data center map
      */
-    KoShapeControllerBase * shapeController() const;
+    QMap<QString, KoDataCenter *> dataCenterMap() const;
 
+private:
     // to allow only the KoShapeRegistry access to the KoShapeControllerBase
-    friend class KoShapeRegistry;
     class Private;
     Private * const d;
 };

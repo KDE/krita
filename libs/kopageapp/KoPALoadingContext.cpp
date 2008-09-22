@@ -23,8 +23,8 @@
 
 #include "KoPAMasterPage.h"
 
-KoPALoadingContext::KoPALoadingContext( KoOdfLoadingContext &context, KoShapeControllerBase * shapeController )
-: KoShapeLoadingContext( context, shapeController )
+KoPALoadingContext::KoPALoadingContext( KoOdfLoadingContext &context, const QMap<QString, KoDataCenter *> & dataCenterMap )
+: KoShapeLoadingContext( context, dataCenterMap )
 {
 }
 

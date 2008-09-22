@@ -108,7 +108,7 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
 {
     emit sigProgress( 0 );
     KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store() );
-    KoPALoadingContext paContext( loadingContext, this );
+    KoPALoadingContext paContext( loadingContext, dataCenterMap() );
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
     KoXmlElement realBody ( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );

@@ -116,7 +116,8 @@ void TestKoShapeFactory::testOdfElement()
     // sensibly filled.
     KoOdfStylesReader stylesReader;
     KoOdfLoadingContext odfContext(stylesReader, 0);
-    KoShapeLoadingContext shapeContext( odfContext, 0 );
+    QMap<QString, KoDataCenter *> dataCenterMap;
+    KoShapeLoadingContext shapeContext( odfContext, dataCenterMap );
 
     QVERIFY( shape->loadOdf( pathElement, shapeContext ) );
 

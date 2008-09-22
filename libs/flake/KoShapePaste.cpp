@@ -60,7 +60,7 @@ KoShapePaste::~KoShapePaste()
 bool KoShapePaste::process( const KoXmlElement & body, KoOdfReadStore & odfStore )
 {
     KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store() );
-    KoShapeLoadingContext context( loadingContext, d->canvas->shapeController()->shapeControllerBase() );
+    KoShapeLoadingContext context( loadingContext, d->canvas->shapeController()->dataCenterMap() );
 
     context.setZIndex( d->zIndex );
 

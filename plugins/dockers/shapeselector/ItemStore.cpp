@@ -336,7 +336,7 @@ KoShape *ItemStore::createShapeFromPaste(QByteArray &bytes)
         bool process( const KoXmlElement & body, KoOdfReadStore & odfStore )
         {
             KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store() );
-            KoShapeLoadingContext context( loadingContext, m_shapeController );
+            KoShapeLoadingContext context( loadingContext, m_shapeController->dataCenterMap() );
 
             KoXmlElement element;
             forEachElement( element, body )

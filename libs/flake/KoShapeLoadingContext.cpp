@@ -38,10 +38,10 @@ static QSet<KoShapeLoadingContext::AdditionalAttributeData> s_additionlAttribute
 class KoShapeLoadingContext::Private
 {
 public:
-    Private( KoOdfLoadingContext &c, KoShapeControllerBase * sc )
+    Private( KoOdfLoadingContext &c, const QMap<QString, KoDataCenter *> & dataCenterMap )
     : context( c )
     , zIndex( 0 )
-    , shapeController( sc )
+    , dataCenterMap( dataCenterMap )
     {}
     ~Private()
     {
@@ -56,11 +56,11 @@ public:
     QMap<QString, KoSharedLoadingData*> sharedData;
     QMap<KoShape*, int> zIndices;
     int zIndex;
-    KoShapeControllerBase * shapeController;
+    QMap<QString, KoDataCenter *> dataCenterMap;
 };
 
-KoShapeLoadingContext::KoShapeLoadingContext( KoOdfLoadingContext & context, KoShapeControllerBase * shapeController )
-: d( new Private( context, shapeController ) )
+KoShapeLoadingContext::KoShapeLoadingContext( KoOdfLoadingContext & context, const QMap<QString, KoDataCenter *> & dataCenterMap )
+: d( new Private( context, dataCenterMap ) )
 {
 }
 
@@ -96,11 +96,7 @@ KoShape * KoShapeLoadingContext::shapeById( const QString & id )
 
 KoImageCollection * KoShapeLoadingContext::imageCollection()
 {
-    if ( ! d->shapeController )
-        return 0;
-
-    QMap<QString, KoDataCenter *>  dataCenterMap = d->shapeController->dataCenterMap();
-    return dynamic_cast<KoImageCollection*>( dataCenterMap.value( "ImageCollection", 0 ) );
+    return dynamic_cast<KoImageCollection*>( d->dataCenterMap.value( "ImageCollection", 0 ) );
 }
 
 int KoShapeLoadingContext::zIndex()
@@ -158,10 +154,10 @@ QSet<KoShapeLoadingContext::AdditionalAttributeData> KoShapeLoadingContext::addi
 
 KoDataCenter * KoShapeLoadingContext::dataCenter( const QString & dataCenterName )
 {
-    return d->shapeController->dataCenterMap().value( dataCenterName, 0 );
+    return d->dataCenterMap.value( dataCenterName, 0 );
 }
 
-KoShapeControllerBase * KoShapeLoadingContext::shapeController() const
+QMap<QString, KoDataCenter *> KoShapeLoadingContext::dataCenterMap() const
 {
-    return d->shapeController;
+    return d->dataCenterMap;
 }

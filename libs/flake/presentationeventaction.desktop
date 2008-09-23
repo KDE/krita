@@ -11,6 +11,7 @@ Name[pt]='Plugin' de Acções do Evento da Apresentação
 Name[pt_BR]=Plugin de Ações do Evento da Apresentação
 Name[sv]=Insticksprogram med händelseåtgärd för presentation
 Name[uk]=Додаток реакції на події у презентації
+Name[x-test]=xxPresentation Event Action Pluginxx
 Name[zh_TW]=展示事件動作外掛程式
 Type=ServiceType
 X-KDE-ServiceType=KOffice/PresentationEventAction
@@ -26,6 +27,7 @@ Comment[pt]=Um 'plugin' que contém uma acção de eventos de apresentação
 Comment[pt_BR]=Um plugin que contém uma ação de evento de apresentação
 Comment[sv]=Ett insticksprogram som innehåller en händelseåtgärd för en presentation
 Comment[uk]=Додаток, що містить реакцію на подію у презентації
+Comment[x-test]=xxA plugin that contains a presentation event actionxx
 Comment[zh_TW]=包含展示事件動作的外掛程式
 [PropertyDef::X-PresentationEventAction-MinVersion]
 Type=int

@@ -6,6 +6,7 @@ Name[pt]=Ferramenta de Fundo das Aplicações da Página
 Name[pt_BR]=Ferramenta de Fundo das Aplicações da Página
 Name[sv]=Bakgrundsverktyg för sidanvändning
 Name[uk]=Програма для роботи з тлом сторінки
+Name[x-test]=xxPage Application Background Toolxx
 Name[zh_TW]=頁面應用程式背景工具
 X-KDE-ServiceTypes=KOffice/Tool
 Type=Service

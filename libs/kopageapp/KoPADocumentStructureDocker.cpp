@@ -254,6 +254,7 @@ void KoPADocumentStructureDocker::addLayer()
     if( ok )
     {
         KoShapeLayer* layer = new KoShapeLayer();
+        layer->setParent( m_canvas->koPAView()->activePage() );
         layer->setName( name );
         QUndoCommand *cmd = new KoShapeCreateCommand( m_canvas->document(), layer, 0 );
         cmd->setText( i18n( "Create Layer") );

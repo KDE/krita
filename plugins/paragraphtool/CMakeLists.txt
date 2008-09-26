@@ -1,6 +1,6 @@
 project( paragraphPlugin )
 
-include_directories( ${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/)
+include_directories( ${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES} )
 
 ########### Flake Plugin library ###############
 
@@ -11,7 +11,14 @@ SET ( paragraphtool_SRCS
     ParagraphFragment.cpp
     Ruler.cpp
     RulerFragment.cpp
+
+    dialogs/OptionWidget.cpp
 )
+
+kde4_add_ui_files(
+    paragraphtool_SRCS
+    dialogs/OptionWidget.ui
+    )
 
 kde4_add_plugin(paragraphtool ${paragraphtool_SRCS})
 

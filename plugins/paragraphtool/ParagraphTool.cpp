@@ -18,6 +18,7 @@
  */
 
 #include "ParagraphTool.h"
+#include "dialogs/OptionWidget.h"
 
 #include <KoCanvasBase.h>
 #include <KoParagraphStyle.h>
@@ -123,30 +124,14 @@ void ParagraphTool::initializeRuler(Ruler &ruler, int options)
 
 QWidget *ParagraphTool::createOptionWidget()
 {
-    // TODO: move this to a ui file, can't do right now, because Qt's
-    // designer is broken on my system
-    QWidget *widget = new QWidget();
-    QGridLayout *layout = new QGridLayout;
+    OptionWidget *optionWidget = new OptionWidget();
 
-    QLabel *styleNameLabel = new QLabel(i18n("Paragraph Style:"));
-    layout->addWidget(styleNameLabel, 0, 0);
+    connect(this, SIGNAL(styleNameChanged(const QString&)), optionWidget, SLOT(setStyleName(const QString &)));
 
-    QLabel *styleName = new QLabel(i18n("n/a"));
-    layout->addWidget(styleName, 0, 1);
-    connect(this, SIGNAL(styleNameChanged(const QString&)), styleName, SLOT(setText(const QString &)));
+    connect(this, SIGNAL(smoothMovementChanged(bool)), optionWidget, SLOT(setSmoothMovement(bool)));
+    connect(optionWidget, SIGNAL(smoothMovementChanged(bool)), this, SLOT(setSmoothMovement(bool)));
 
-    QCheckBox *applyToParent = new QCheckBox(i18n("Apply to all of paragraphs of this style"));
-    applyToParent->setDisabled(true);
-    layout->addWidget(applyToParent, 2, 0, 1, -1);
-
-    QCheckBox *smoothCheckBox = new QCheckBox(i18n("Enable Smooth Movement"));
-    layout->addWidget(smoothCheckBox, 1, 0, 1, -1);
-    connect(this, SIGNAL(smoothMovementChanged(bool)), smoothCheckBox, SLOT(setChecked(bool)));
-    connect(smoothCheckBox, SIGNAL(clicked(bool)), this, SLOT(setSmoothMovement(bool)));
-
-    layout->setRowStretch(3, 1);
-    widget->setLayout(layout);
-    return widget;
+    return optionWidget;
 }
 
 void ParagraphTool::loadRulers()

@@ -87,6 +87,11 @@ public:
     bool saveOdfPages( KoPASavingContext & paContext, QList<KoPAPageBase *> &pages, QList<KoPAPageBase *> &masterPages );
 
     /**
+     * Save document styles
+     */
+    virtual void saveOdfDocumentStyles( KoPASavingContext & context );
+
+    /**
      * Get page by index.
      *
      * @param index of the page
@@ -209,11 +214,6 @@ protected:
 
     virtual KoView *createViewInstance( QWidget *parent ) = 0;
     virtual const char *odfTagName( bool withNamespace ) = 0;
-
-    /**
-     * Save document styles
-     */
-    virtual void saveOdfDocumentStyles( KoPASavingContext & context );
 
     /**
      * This function is called by at the end of addShape. This is used 

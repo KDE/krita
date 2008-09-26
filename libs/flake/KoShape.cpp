@@ -1139,7 +1139,7 @@ void KoShape::saveOdfCommonChildElements( KoShapeSavingContext &context ) const
 void KoShape::init( const QMap<QString, KoDataCenter *> & dataCenterMap )
 {
     Q_UNUSED(dataCenterMap);
-};
+}
 
 
 // static

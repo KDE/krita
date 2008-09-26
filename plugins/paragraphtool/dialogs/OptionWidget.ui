@@ -43,35 +43,55 @@
     </widget>
    </item>
    <item row="1" column="0" colspan="2" >
-    <widget class="KSeparator" name="kseparator" />
+    <widget class="QFrame" name="buttonFrame1" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="frameShape" >
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <layout class="QGridLayout" name="_2" >
+      <property name="horizontalSpacing" >
+       <number>0</number>
+      </property>
+      <property name="margin" >
+       <number>0</number>
+      </property>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label" >
+        <property name="text" >
+         <string>Align:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QToolButton" name="alignLeft" >
+        <property name="autoRaise" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2" >
+       <widget class="QToolButton" name="alignCenter" >
+        <property name="autoRaise" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3" >
+       <widget class="QToolButton" name="alignRight" >
+        <property name="autoRaise" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item row="2" column="0" colspan="2" >
-    <widget class="QCheckBox" name="applyToParent" >
-     <property name="text" >
-      <string>Apply to all paragraphs of this style</string>
-     </property>
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-       <horstretch>1</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="2" >
-    <widget class="QCheckBox" name="smoothCheckBox" >
-     <property name="text" >
-      <string>Enable Smooth Movement</string>
-     </property>
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-       <horstretch>1</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" colspan="2" >
     <spacer name="verticalSpacer" >
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
@@ -89,6 +109,35 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="3" column="0" colspan="2" >
+    <widget class="KSeparator" name="kseparator" />
+   </item>
+   <item row="4" column="0" colspan="2" >
+    <widget class="QCheckBox" name="applyToParent" >
+     <property name="text" >
+      <string>Apply to all paragraphs of this style</string>
+     </property>
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+       <horstretch>1</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="2" >
+    <widget class="QCheckBox" name="smoothCheckBox" >
+     <property name="text" >
+      <string>Enable Smooth Movement</string>
+     </property>
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+       <horstretch>1</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

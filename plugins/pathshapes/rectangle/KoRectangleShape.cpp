@@ -47,7 +47,7 @@ KoRectangleShape::~KoRectangleShape()
 
 bool KoRectangleShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
-    loadOdfAttributes( element, context, OdfMandatories | OdfSize | OdfAdditionalAttributes | OdfCommonChildElements );
+    loadOdfAttributes( element, context, OdfMandatories | OdfGeometry | OdfAdditionalAttributes | OdfCommonChildElements );
 
     if( element.hasAttributeNS( KoXmlNS::svg, "rx" ) && element.hasAttributeNS( KoXmlNS::svg, "ry" ) )
     {

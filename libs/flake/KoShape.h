@@ -755,12 +755,21 @@ protected:
     enum OdfAttribute {
         OdfTransformation = 1,       ///< Store transformation information
         OdfSize = 2,                 ///< Store size information
-        OdfAdditionalAttributes = 4, ///< Store additional attributes of shape
-        OdfMandatories = 8,          ///< Id, z-index, layer and style
-        OdfCommonChildElements = 16, ///< event actions and connection points
+        OdfPosition = 8,             ///< Store position
+        OdfAdditionalAttributes = 4, ///< Store additional attributes of the shape
+        OdfCommonChildElements = 16, ///< Event actions and connection points
+        OdfLayer = 64,               ///< Store layer name
+        OdfStyle = 128,              ///< Store the style
+        OdfId = 256,                 ///< Store the unique ID
+        OdfName = 512,               ///< Store the name of the shape
+        OdfZIndex = 1024,            ///< This only loads the z-index; when saving, it is reflected by the order of the shapes.
 
+        /// A mask for all mandatory attributes
+        OdfMandatories = OdfLayer | OdfStyle | OdfId | OdfName | OdfZIndex,
+        /// A mask for geometry attributes
+        OdfGeometry = OdfPosition | OdfSize,
         /// A mask for all the attributes
-        OdfAllAttributes = OdfTransformation | OdfSize | OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements
+        OdfAllAttributes = OdfTransformation | OdfGeometry | OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements
     };
 
     /**

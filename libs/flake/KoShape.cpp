@@ -826,40 +826,57 @@ void KoShape::loadStyle( const KoXmlElement & element, KoShapeLoadingContext &co
 
 bool KoShape::loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingContext &context, int attributes )
 {
-    if ( attributes & OdfSize ) {
-        QPointF pos;
-        pos.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString() ) ) );
-        pos.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString() ) ) );
+    if ( attributes & OdfPosition ) {
+        QPointF pos( position() );
+        if ( element.hasAttributeNS( KoXmlNS::svg, "x" ) )
+            pos.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString() ) ) );
+        if ( element.hasAttributeNS( KoXmlNS::svg, "y" ) )
+            pos.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString() ) ) );
         setPosition( pos );
-
-        QSizeF size;
-        size.setWidth( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString() ) ) );
-        size.setHeight( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString() ) ) );
-        setSize( size );
     }
 
-    if ( attributes & OdfMandatories ) {
+    if ( attributes & OdfSize ) {
+        QSizeF s( size() );
+        if ( element.hasAttributeNS( KoXmlNS::svg, "width" ) )
+            s.setWidth( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString() ) ) );
+        if ( element.hasAttributeNS( KoXmlNS::svg, "height" ) )
+            s.setHeight( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString() ) ) );
+        setSize( s );
+    }
+
+    if ( attributes & OdfLayer ) {
         if ( element.hasAttributeNS( KoXmlNS::draw, "layer" ) ) {
             KoShapeLayer * layer = context.layer( element.attributeNS( KoXmlNS::draw, "layer" ) );
             if ( layer ) {
                 setParent( layer );
             }
         }
+    }
+
+    if ( attributes & OdfId ) {
         if ( element.hasAttributeNS( KoXmlNS::draw, "id" ) ) {
             QString id = element.attributeNS( KoXmlNS::draw, "id" );
             if ( !id.isNull() ) {
                 context.addShapeId( this, id );
             }
         }
+    }
+
+    if ( attributes & OdfZIndex ) {
         if ( element.hasAttributeNS( KoXmlNS::draw, "z-index" ) ) {
             context.addShapeZIndex( this, element.attributeNS( KoXmlNS::draw, "z-index" ).toInt() );
         }
         setZIndex( context.zIndex() );
+    }
+
+    if ( attributes & OdfName ) {
 
         if ( element.hasAttributeNS( KoXmlNS::draw, "name" ) ) {
             setName( element.attributeNS( KoXmlNS::draw, "name" ) );
         }
+    }
 
+    if ( attributes & OdfStyle ) {
         loadStyle( element, context );
     }
 
@@ -1067,7 +1084,7 @@ QMatrix KoShape::parseOdfTransform( const QString &transform )
 
 void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) const
 {
-    if (attributes & OdfMandatories) {
+    if ( attributes & OdfStyle ) {
         KoGenStyle style;
         // all items that should be written to 'draw:frame' and any other 'draw:' object that inherits this shape
         if ( context.isSet( KoShapeSavingContext::PresentationShape ) ) {
@@ -1078,29 +1095,40 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
             style = KoGenStyle( KoGenStyle::StyleGraphicAuto, "graphic" );
             context.xmlWriter().addAttribute( "draw:style-name", saveStyle( style, context ) );
         }
+    }
 
+    if ( attributes & OdfId )  {
         if ( context.isSet( KoShapeSavingContext::DrawId ) )
         {
             context.xmlWriter().addAttribute( "draw:id", context.drawId( this ) );
         }
+    }
 
+    if ( attributes & OdfName ) {
         if ( ! name().isEmpty() )
             context.xmlWriter().addAttribute( "draw:name", name() );
+    }
 
+    if ( attributes & OdfLayer ) {
         if (d->parent && dynamic_cast<KoShapeLayer*> (d->parent))
             context.xmlWriter().addAttribute("draw:layer", d->parent->name());
     }
 
-    if (attributes & OdfSize) {
-        QSizeF s( size() );
+    if ( attributes & OdfSize ) {
+        const QSizeF s( size() );
         context.xmlWriter().addAttributePt( "svg:width", s.width() );
         context.xmlWriter().addAttributePt( "svg:height", s.height() );
-        // the position is hidden in the transformation
-        context.xmlWriter().addAttributePt( "svg:x", 0.0 );
-        context.xmlWriter().addAttributePt( "svg:y", 0.0 );
     }
 
-    if (attributes & OdfTransformation) {
+    // The position is implicitly stored in the transformation matrix
+    // if the transformation is saved as well
+    if ( (attributes & OdfPosition) && !(attributes & OdfTransformation) ) {
+        const QPointF p( position() );
+        context.xmlWriter().addAttributePt( "svg:x", p.x() );
+        context.xmlWriter().addAttributePt( "svg:y", p.y() );
+    }
+
+    if ( attributes & OdfTransformation ) {
         QMatrix matrix = absoluteTransformation(0);
         if ( ! matrix.isIdentity() )
         {

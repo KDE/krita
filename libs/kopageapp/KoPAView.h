@@ -26,7 +26,6 @@
 #include <KoZoomHandler.h>
 #include <KoRuler.h>
 #include "KoPageApp.h"
-#include "KoPADocumentStructureDocker.h"
 #include "kopageapp_export.h"
 
 class KoCanvasController;
@@ -36,6 +35,7 @@ class KoPADocument;
 class KToggleAction;
 class KoPAPageBase;
 class KoPAViewMode;
+class KoPADocumentStructureDocker;
 class KoShapeManager;
 class KoZoomAction;
 class KoZoomController;

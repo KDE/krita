@@ -56,6 +56,7 @@ KoPADocumentModel::KoPADocumentModel( QObject* parent, KoPADocument *document )
 
 void KoPADocumentModel::update()
 {
+    emit layoutAboutToBeChanged();
     emit layoutChanged();
 }
 
@@ -467,6 +468,7 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
             if( ! toplevelShapes.count() )
                 return false;
 
+            emit layoutAboutToBeChanged();
             beginInsertRows( parent, group->childCount(), group->childCount()+toplevelShapes.count() );
 
             QUndoCommand * cmd = new QUndoCommand();
@@ -480,12 +482,14 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
             canvasController->canvas()->addCommand( cmd );
 
             endInsertRows();
+            emit layoutChanged();
         }
         else
         {
             kDebug(30010) <<"KoPADocumentModel::dropMimeData parent = container";
             if( toplevelShapes.count() )
             {
+                emit layoutAboutToBeChanged();
                 beginInsertRows( parent, container->childCount(), container->childCount()+toplevelShapes.count() );
 
                 QUndoCommand * cmd = new QUndoCommand();
@@ -509,6 +513,7 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
                 canvasController->canvas()->addCommand( cmd );
 
                 endInsertRows();
+                emit layoutChanged();
             }
             else if( layers.count() )
             {
@@ -578,7 +583,7 @@ void KoPADocumentModel::setDocument( KoPADocument* document )
         connect( m_document, SIGNAL(shapeRemoved( KoShape* ) ), this, SLOT( update() ) );
     }
 
-    update();
+    reset();
 }
 
 void KoPADocumentModel::setMasterMode(bool master)

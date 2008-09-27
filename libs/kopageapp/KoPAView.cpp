@@ -42,12 +42,14 @@
 #include <KoSelection.h>
 #include <KoToolDockerFactory.h>
 #include <KoToolDocker.h>
+#include <KoMainWindow.h>
 #include <KoDockerManager.h>
 #include <KoShapeLayer.h>
 #include <KoRulerController.h>
 #include <KoDrag.h>
 #include <KoShapeDeleteCommand.h>
 
+#include "KoPADocumentStructureDocker.h"
 #include "KoShapeTraversal.h"
 #include "KoPACanvas.h"
 #include "KoPADocument.h"
@@ -71,6 +73,7 @@
 #include <kactioncollection.h>
 #include <kstatusbar.h>
 #include <kparts/event.h>
+#include <kparts/partmanager.h>
 
 KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
 : KoView( document, parent )
@@ -172,8 +175,11 @@ void KoPAView::initGUI()
     connect(m_canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
             m_canvas, SLOT(setDocumentOffset(const QPoint&)));
 
-    KoPADocumentStructureDockerFactory structureDockerFactory( m_canvas, KoDocumentSectionView::ThumbnailMode );
+    KoPADocumentStructureDockerFactory structureDockerFactory( KoDocumentSectionView::ThumbnailMode );
     m_documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( createDockWidget( &structureDockerFactory ) );
+    m_documentStructureDocker->setPart( m_doc );
+    connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),
+             m_documentStructureDocker, SLOT( setPart( KParts::Part * ) ) );
     // connect(m_documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), this, SLOT(updateActivePage(KoPAPageBase*)));
 
     KoToolManager::instance()->requestToolActivation( m_canvasController );

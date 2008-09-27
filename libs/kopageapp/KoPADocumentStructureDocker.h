@@ -27,17 +27,22 @@
 
 class KoShape;
 class KoShapeLayer;
+class KoPADocument;
 class KoPADocumentModel;
 class QModelIndex;
 class KoPAPageBase;
-class KoPACanvas;
 class QAction;
 class QButtonGroup;
+
+namespace KParts
+{
+    class Part;
+}
 
 class KoPADocumentStructureDockerFactory : public KoDockFactory
 {
 public:
-    KoPADocumentStructureDockerFactory( KoPACanvas* canvas, KoDocumentSectionView::DisplayMode mode );
+    KoPADocumentStructureDockerFactory( KoDocumentSectionView::DisplayMode mode );
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
@@ -48,7 +53,6 @@ public:
     }
 
 private:
-    KoPACanvas* m_canvas;
     KoDocumentSectionView::DisplayMode m_mode;
 };
 
@@ -59,7 +63,7 @@ Q_OBJECT
 public:
     explicit KoPADocumentStructureDocker( KoDocumentSectionView::DisplayMode mode, QWidget* parent = 0 );
     virtual ~KoPADocumentStructureDocker();
-    
+
     virtual void setCanvas( KoCanvasBase* canvas);
     void setActivePage(KoPAPageBase *page);
     void setMasterMode(bool master);
@@ -69,6 +73,7 @@ signals:
 
 public slots:
     void updateView();
+    void setPart( KParts::Part * part );
 
 private slots:
     void slotButtonClicked( int buttonId );
@@ -91,7 +96,7 @@ private:
     KoDocumentSectionView::DisplayMode viewModeFromString( const QString& mode );
     QString viewModeToString( KoDocumentSectionView::DisplayMode mode );
 
-    KoPACanvas* m_canvas;
+    KoPADocument * m_doc;
     KoDocumentSectionView *m_sectionView;
     KoPADocumentModel *m_model;
     QHash<KoDocumentSectionView::DisplayMode, QAction*> m_viewModeActions;

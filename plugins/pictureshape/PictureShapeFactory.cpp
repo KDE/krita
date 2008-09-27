@@ -29,9 +29,9 @@
 #include <kdebug.h>
 
 PictureShapeFactory::PictureShapeFactory( QObject* parent)
-    : KoShapeFactory( parent, PICTURESHAPEID, i18n( "Picture Shape" ) )
+    : KoShapeFactory( parent, PICTURESHAPEID, i18n( "Image" ) )
 {
-    setToolTip( i18n( "A shape which displays a picture" ) );
+    setToolTip( i18n( "Image shape that can display jpg, png etc." ) );
     setIcon( "x-shape-image" );
     setOdfElementNames( KoXmlNS::draw, QStringList( "image" ) );
     setLoadingPriority( 1 );

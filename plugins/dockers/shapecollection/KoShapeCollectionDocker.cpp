@@ -52,6 +52,24 @@
 #include <QMenu>
 #include <QPainter>
 
+//This class is needed so that the menu returns a sizehint based on the layout and not on the number (0) of menu items
+class CollectionMenu : public QMenu
+{
+    public:
+        CollectionMenu();
+        virtual QSize sizeHint() const;
+};
+
+CollectionMenu::CollectionMenu()
+ : QMenu(0)
+{
+}
+QSize CollectionMenu::sizeHint() const
+{
+    return layout()->sizeHint();
+}
+
+
 //
 // KoShapeCollectionDockerFactory
 //
@@ -86,18 +104,19 @@ KoShapeCollectionDocker::KoShapeCollectionDocker(QWidget* parent)
     QGridLayout* mainLayout = new QGridLayout(mainWidget);
     setWidget(mainWidget);
 
-    m_quickView = new QListView (0);
+    m_quickView = new QListView ();
     mainLayout->addWidget(m_quickView, 0, 0);
     m_quickView->setViewMode(QListView::IconMode);
     m_quickView->setDragDropMode(QListView::DragOnly);
     m_quickView->setSelectionMode(QListView::SingleSelection);
     m_quickView->setResizeMode(QListView::Adjust);
     m_quickView->setFlow(QListView::LeftToRight);
-    m_quickView->setGridSize(QSize(32, 32));
+    m_quickView->setGridSize(QSize(40, 44));
     m_quickView->setFixedSize (QSize(5*32+10,32+10));
     m_quickView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_quickView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_quickView->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_quickView->setTextElideMode(Qt::ElideNone);
 
     connect(m_quickView, SIGNAL(clicked(const QModelIndex&)),
             this, SLOT(activateShapeCreationToolFromQuick(const QModelIndex&)));
@@ -112,7 +131,7 @@ KoShapeCollectionDocker::KoShapeCollectionDocker(QWidget* parent)
 
     mainLayout->setColumnStretch (2, 10);
     
-    m_moreShapesContainer = new QMenu(0);
+    m_moreShapesContainer = new CollectionMenu();
     m_moreShapes->setMenu(m_moreShapesContainer);
     m_moreShapes->setPopupMode(QToolButton::InstantPopup);
     QGridLayout *containerLayout = new QGridLayout(m_moreShapesContainer);
@@ -184,6 +203,7 @@ void KoShapeCollectionDocker::loadDefaultShapes()
             oneAdded = true;
             KoCollectionItem temp;
             temp.id = shapeTemplate.id;
+            temp.name = shapeTemplate.name;
             temp.toolTip = shapeTemplate.toolTip;
             temp.icon = KIcon(shapeTemplate.icon);
             temp.properties = shapeTemplate.properties;
@@ -198,6 +218,7 @@ void KoShapeCollectionDocker::loadDefaultShapes()
         if(!oneAdded) {
             KoCollectionItem temp;
             temp.id = factory->id();
+            temp.name = factory->name();
             temp.toolTip = factory->toolTip();
             temp.icon = KIcon(factory->icon());
             temp.properties = 0;
@@ -219,8 +240,8 @@ void KoShapeCollectionDocker::loadDefaultShapes()
     m_quickView->setModel(quickModel);
 
     int fw = m_quickView->frameWidth();
-    m_quickView->setMaximumSize(QSize(quickCount*32+2*fw+2,32+2*fw+2));
-    m_quickView->setMinimumSize(QSize(quickCount*32+2*fw+2,32+2*fw+2));
+    m_quickView->setMaximumSize(QSize(quickCount*40+2*fw+1,44+2*fw+1));
+    m_quickView->setMinimumSize(QSize(quickCount*40+2*fw+1,44+2*fw+1));
 }
 
 void KoShapeCollectionDocker::activateShapeCreationToolFromQuick(const QModelIndex& index)

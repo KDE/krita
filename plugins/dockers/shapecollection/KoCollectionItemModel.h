@@ -38,6 +38,7 @@ struct KoCollectionItem
     };
 
     QString id;
+    QString name;
     QString toolTip;
     QIcon icon;
     KoProperties* properties;

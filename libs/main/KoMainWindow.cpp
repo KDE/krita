@@ -555,8 +555,8 @@ void KoMainWindow::addRecentURL(const KUrl& url)
         bool ok = true;
         if (url.isLocalFile()) {
             QString path = url.path(KUrl::RemoveTrailingSlash);
-            QStringList tmpDirs = KGlobal::dirs()->resourceDirs("tmp");
-            for (QStringList::Iterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it)
+            const QStringList tmpDirs = KGlobal::dirs()->resourceDirs("tmp");
+            for (QStringList::ConstIterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it)
                 if (path.contains(*it))
                     ok = false; // it's in the tmp resource
             if (ok)

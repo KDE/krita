@@ -98,8 +98,8 @@ bool KoPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &
         points.remove( '\r' );
         points.remove( '\n' );
         bool firstPoint = true;
-        QStringList coordinateList = points.split( ' ' );
-        for( QStringList::Iterator it = coordinateList.begin(); it != coordinateList.end(); ++it)
+        const QStringList coordinateList = points.split( ' ' );
+        for( QStringList::ConstIterator it = coordinateList.begin(); it != coordinateList.end(); ++it)
         {
             QPointF point;
             point.setX( (*it).toDouble() );

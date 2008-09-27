@@ -400,8 +400,8 @@ void KoToolBox::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setBrush(palette().shadow());
 
-    QList<Section*> sections = d->sections.values();
-    QList<Section*>::iterator iterator = sections.begin();
+    const QList<Section*> sections = d->sections.values();
+    QList<Section*>::const_iterator iterator = sections.begin();
     int halfSpacing = layout()->spacing();
     if (halfSpacing > 0)
         halfSpacing /= 2;
@@ -409,7 +409,7 @@ void KoToolBox::paintEvent(QPaintEvent *)
         Section *section = *iterator;
         const int bottom = section->y() + section->height();
         const int right = section->x() + section->width();
-        QList<Section*>::iterator iter = iterator;
+        QList<Section*>::const_iterator iter = iterator;
         ++iter;
         while (iter != sections.end()) {
             Section *other = *iter;

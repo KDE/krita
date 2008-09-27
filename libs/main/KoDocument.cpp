@@ -1425,9 +1425,9 @@ bool KoDocument::openFile()
     if (typeName == "application/x-trash") {
         QString path = u.path();
         KMimeType::Ptr mime = KMimeType::mimeType(typeName);
-        QStringList patterns = mime ? mime->patterns() : QStringList();
+        const QStringList patterns = mime ? mime->patterns() : QStringList();
         // Find the extension that makes it a backup file, and remove it
-        for (QStringList::Iterator it = patterns.begin(); it != patterns.end(); ++it) {
+        for (QStringList::ConstIterator it = patterns.begin(); it != patterns.end(); ++it) {
             QString ext = *it;
             if (!ext.isEmpty() && ext[0] == '*') {
                 ext.remove(0, 1);

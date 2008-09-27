@@ -520,8 +520,8 @@ QStringList KoStore::addLocalDirectory(const QString &dirPath, const QString &de
     if (!dir.exists())
         return QStringList();
 
-    QStringList files = dir.entryList();
-    for (QStringList::Iterator it = files.begin(); it != files.end(); ++it) {
+    const QStringList files = dir.entryList();
+    for (QStringList::ConstIterator it = files.begin(); it != files.end(); ++it) {
         if (*it != dot && *it != dotdot) {
             QString currentFile = dirPath + '/' + *it;
             QString dest = destName.isEmpty() ? *it : (destName + '/' + *it);

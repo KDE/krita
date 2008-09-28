@@ -1140,6 +1140,12 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
         }
     }
 
+    if ( attributes & OdfViewbox ) {
+        const QSizeF s( size() );
+        QString viewBox = QString("0 0 %1 %2").arg(qRound(s.width())).arg(qRound(s.height()));
+        context.xmlWriter().addAttribute( "svg:viewBox", viewBox );
+    }
+
     if ( attributes & OdfAdditionalAttributes ) {
         QMap<QByteArray, QString>::const_iterator it( d->additionalAttributes.constBegin() );
         for ( ; it != d->additionalAttributes.constEnd(); ++it ) {

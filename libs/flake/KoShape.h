@@ -763,6 +763,7 @@ protected:
         OdfId = 256,                 ///< Store the unique ID
         OdfName = 512,               ///< Store the name of the shape
         OdfZIndex = 1024,            ///< This only loads the z-index; when saving, it is reflected by the order of the shapes.
+        OdfViewbox = 2048,           ///< Store the viewbox
 
         /// A mask for all mandatory attributes
         OdfMandatories = OdfLayer | OdfStyle | OdfId | OdfName | OdfZIndex,

@@ -65,7 +65,7 @@ KoPathShape::~KoPathShape()
 void KoPathShape::saveOdf( KoShapeSavingContext & context ) const
 {
     context.xmlWriter().startElement( "draw:path" );
-    saveOdfAttributes( context, OdfAllAttributes );
+    saveOdfAttributes( context, OdfAllAttributes | OdfViewbox );
 
     context.xmlWriter().addAttribute( "svg:d", toString( QMatrix() ) );
 

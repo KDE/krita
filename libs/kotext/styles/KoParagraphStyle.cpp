@@ -1449,7 +1449,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle & style)
         d->listStyle->saveOdf(style);
     }
     // only custom style have a displayname. automatic styles don't have a name set.
-    if (!d->name.isEmpty()) {
+    if (!d->name.isEmpty() && !style.isDefaultStyle()) {
         style.addAttribute("style:display-name", d->name);
     }
     QList<int> keys = d->stylesPrivate.keys();

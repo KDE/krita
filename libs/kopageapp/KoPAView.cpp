@@ -381,6 +381,9 @@ void KoPAView::setMasterMode( bool master )
     m_viewMode->setMasterMode( master );
     m_documentStructureDocker->setMasterMode(master);
     m_actionMasterPage->setEnabled(!master);
+
+    QList<KoPAPageBase*> pages = m_doc->pages( master );
+    m_actionDeletePage->setEnabled( pages.size() > 1 );
 }
 
 KoShapeManager* KoPAView::shapeManager() const

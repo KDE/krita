@@ -58,9 +58,13 @@ KoList::KoList(const QTextDocument *document, KoListStyle *style)
     : QObject(const_cast<QTextDocument *>(document)), d(new Private(document))
 {
     Q_ASSERT(document);
-    KoStyleManager *styleManager = KoTextDocument(document).styleManager();
-    Q_ASSERT(styleManager);
-    d->style = style ? style->clone(this) : styleManager->defaultListStyle();
+    if (style) {
+        d->style = style->clone(this);
+    } else {
+        KoStyleManager *styleManager = KoTextDocument(document).styleManager();
+        Q_ASSERT(styleManager);
+        d->style = styleManager->defaultListStyle();
+    }
     KoTextDocument(document).addList(this);
 }
 

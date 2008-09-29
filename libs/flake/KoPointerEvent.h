@@ -48,7 +48,7 @@ public:
      * @param ev the mouse event that is the base of this event.
      * @param pnt the zoomed point in the normal coordinate system.
      */
-    KoPointerEvent( QMouseEvent *ev, const QPointF &pnt );
+    KoPointerEvent(QMouseEvent *ev, const QPointF &pnt);
 
     /**
      * Constructor.
@@ -56,7 +56,7 @@ public:
      * @param ev the tablet event that is the base of this event.
      * @param pnt the zoomed point in the normal coordinate system.
      */
-    KoPointerEvent( QTabletEvent *ev, const QPointF &pnt );
+    KoPointerEvent(QTabletEvent *ev, const QPointF &pnt);
 
     /**
      * Constructor.
@@ -64,9 +64,9 @@ public:
      * @param ev the tablet event that is the base of this event.
      * @param pnt the zoomed point in the normal coordinate system.
      */
-    KoPointerEvent( QWheelEvent *ev, const QPointF &pnt );
+    KoPointerEvent(QWheelEvent *ev, const QPointF &pnt);
 
-    KoPointerEvent( KoDeviceEvent * ev, int x, int y, int z = 0, int rx = 0, int ry = 0, int rz = 0 );
+    KoPointerEvent(KoDeviceEvent * ev, int x, int y, int z = 0, int rx = 0, int ry = 0, int rz = 0);
 
     ~KoPointerEvent();
 
@@ -75,48 +75,58 @@ public:
      * Acceptance signifies that you have handled this event and found it useful, the effect
      * of that will be that the event will not be handled to other event handlers.
      */
-    inline void accept() { m_event->accept(); }
+    inline void accept() {
+        m_event->accept();
+    }
 
     /**
      * For classes that are handed this event, you can choose to ignore this event.
      * Ignoring this event means you have not handled it and want to allow other event
      * handlers to try to handle it.
      */
-    inline void ignore() { m_event->ignore(); }
+    inline void ignore() {
+        m_event->ignore();
+    }
 
     /**
      * Returns the keyboard modifier flags that existed immediately before the event occurred.
      * See also QApplication::keyboardModifiers().
      */
-    Qt::KeyboardModifiers modifiers () const { return m_event->modifiers(); }
+    Qt::KeyboardModifiers modifiers() const {
+        return m_event->modifiers();
+    }
 
     /// return if the event has been accepted.
-    inline bool isAccepted () const { return m_event->isAccepted(); }
+    inline bool isAccepted() const {
+        return m_event->isAccepted();
+    }
 
     /// return if this event was spontaneous (see QMouseEvent::spontaneous())
-    inline bool spontaneous () const { return m_event->spontaneous(); }
+    inline bool spontaneous() const {
+        return m_event->spontaneous();
+    }
 
     /// return button pressed (see QMouseEvent::button());
-    Qt::MouseButton button () const;
+    Qt::MouseButton button() const;
 
     /// return buttons pressed (see QMouseEvent::buttons());
-    Qt::MouseButtons buttons () const;
+    Qt::MouseButtons buttons() const;
 
     /// Return the position screen coordinates
     const QPoint & globalPos();
 
     /// return the position in widget coordinates
-    const QPoint & pos () const;
+    const QPoint & pos() const;
 
     /**
      * return the pressure (or a default value). The range is 0.0 - 1.0
      * and the default pressure (this is the pressure that will be given
      * when you use something like the mouse) is 0.5
      */
-    qreal pressure () const;
+    qreal pressure() const;
 
     /// return the rotation (or a default value)
-    qreal rotation () const;
+    qreal rotation() const;
 
     /**
      * return the tangential pressure  (or a default value)
@@ -125,13 +135,13 @@ public:
      * only move in the positive direction from the neutral position. If the device
      * does not support tangential pressure, this value is always 0.0.
      */
-    qreal tangentialPressure () const;
+    qreal tangentialPressure() const;
 
     /**
      * Return the x position in widget coordinates.
      * @see point
      */
-    int x () const;
+    int x() const;
 
     /**
      * Returns the angle between the device (a pen, for example) and the
@@ -139,13 +149,13 @@ public:
      * towards the tablet's physical right. The angle is in the range -60
      * to +60 degrees. The default value is 0.
      */
-    int xTilt () const;
+    int xTilt() const;
 
     /**
      * Return the y position in widget coordinates.
      * @see point
      */
-    int y () const;
+    int y() const;
 
     /**
      * Returns the angle between the device (a pen, for example) and the
@@ -153,14 +163,14 @@ public:
      * towards the tablet's physical right. The angle is in the range -60
      * to +60 degrees. The default value is 0.
      */
-    int yTilt () const;
+    int yTilt() const;
 
     /**
      * Returns the z position of the device. Typically this is represented
      * by a wheel on a 4D Mouse. If the device does not support a Z-axis,
      * this value is always zero. This is <em>not</em> the same as pressure.
      */
-    int z () const;
+    int z() const;
 
     /**
      * Returns the distance that the wheel is rotated, in eights of a degree, or 0 otherwise.

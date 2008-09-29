@@ -37,11 +37,11 @@ class KoPathTool;
 class KoPathConnectionPointStrategy : public KoParameterChangeStrategy
 {
 public:
-    KoPathConnectionPointStrategy( KoPathTool *tool, KoCanvasBase *canvas,
-                                   KoConnectionShape * parameterShape, int handleId );
+    KoPathConnectionPointStrategy(KoPathTool *tool, KoCanvasBase *canvas,
+                                  KoConnectionShape * parameterShape, int handleId);
     virtual ~KoPathConnectionPointStrategy();
-    virtual void handleMouseMove( const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers );
-    virtual void finishInteraction( Qt::KeyboardModifiers modifiers );
+    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
+    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
     virtual QUndoCommand* createCommand();
 
 private:

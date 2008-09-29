@@ -29,7 +29,7 @@ public:
 };
 
 KoShapeBackground::KoShapeBackground()
-    : d( new Private() )
+        : d(new Private())
 {
 }
 

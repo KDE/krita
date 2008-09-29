@@ -22,7 +22,8 @@
 /**
  * Flake reference
  */
-class KoFlake {
+class KoFlake
+{
 public:
     /// the selection type for KoSelection::selectedObjects()
     enum SelectionType {

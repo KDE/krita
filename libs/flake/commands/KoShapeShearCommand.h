@@ -29,7 +29,8 @@
 class KoShape;
 
 /// The undo / redo command for shape shearing.
-class FLAKE_EXPORT KoShapeShearCommand : public QUndoCommand {
+class FLAKE_EXPORT KoShapeShearCommand : public QUndoCommand
+{
 public:
     /**
      * Comand to rotate a selection of shapes.  Note that it just alters the rotated
@@ -45,9 +46,9 @@ public:
      */
     KoShapeShearCommand(const QList<KoShape*> &shapes, QList<qreal> &previousShearXs, QList<qreal> &previousShearYs, QList<qreal> &newShearXs, QList<qreal> &newShearYs, QUndoCommand *parent = 0);
     /// redo the command
-    void redo ();
+    void redo();
     /// revert the actions done in redo
-    void undo ();
+    void undo();
 private:
     QList<KoShape*> m_shapes;
     QList<qreal> m_previousShearXs, m_previousShearYs, m_newShearXs, m_newShearYs;

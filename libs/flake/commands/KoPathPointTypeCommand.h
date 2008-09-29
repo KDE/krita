@@ -34,8 +34,7 @@ class FLAKE_TEST_EXPORT KoPathPointTypeCommand : public KoPathBaseCommand
 {
 public:
     /// The type of the point
-    enum PointType
-    {
+    enum PointType {
         Corner,
         Smooth,
         Symmetric,
@@ -48,7 +47,7 @@ public:
      * @param pointType the new point type to set
      * @param parent the parent command used for macro commands
      */
-    KoPathPointTypeCommand( const QList<KoPathPointData> & pointDataList, PointType pointType, QUndoCommand *parent = 0 );
+    KoPathPointTypeCommand(const QList<KoPathPointData> & pointDataList, PointType pointType, QUndoCommand *parent = 0);
     ~KoPathPointTypeCommand();
 
     /// redo the command
@@ -58,11 +57,9 @@ public:
 
 private:
     // used for storing the data for undo
-    struct PointData
-    {
-        PointData( const KoPathPointData pointData )
-        : m_pointData( pointData )
-        {}
+    struct PointData {
+        PointData(const KoPathPointData pointData)
+                : m_pointData(pointData) {}
         KoPathPointData m_pointData;
         // old control points in document coordinates
         QPointF m_oldControlPoint1;
@@ -72,8 +69,8 @@ private:
         bool m_hadControlPoint2;
     };
 
-    bool appendPointData( KoPathPointData data );
-    void undoChanges( const QList<PointData> &data );
+    bool appendPointData(KoPathPointData data);
+    void undoChanges(const QList<PointData> &data);
 
     PointType m_pointType;
     QList<PointData> m_oldPointData;

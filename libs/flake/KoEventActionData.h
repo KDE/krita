@@ -33,7 +33,7 @@ class KoEventAction;
 class FLAKE_EXPORT KoEventActionData
 {
 public:
-    KoEventActionData( KoShape * shape, KoEventAction * eventAction );
+    KoEventActionData(KoShape * shape, KoEventAction * eventAction);
     virtual ~KoEventActionData();
 
     /**

@@ -24,7 +24,7 @@
 #include <QThread>
 
 ShapeDeleter::ShapeDeleter(KoShape *shape)
-    : m_shape(shape)
+        : m_shape(shape)
 {
     moveToThread(QCoreApplication::instance()->thread());
     deleteLater();

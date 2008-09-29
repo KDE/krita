@@ -39,7 +39,7 @@ public:
     };
 
     /// Constructs a new device event of the given type
-    KoDeviceEvent( Type type );
+    KoDeviceEvent(Type type);
 
     virtual ~KoDeviceEvent();
 
@@ -52,9 +52,9 @@ public:
     Qt::MouseButtons buttons() const;
 
     /// Sets the device button causing the event
-    void setButton( Qt::MouseButton );
+    void setButton(Qt::MouseButton);
     /// Sets the device button state
-    void setButtons( Qt::MouseButtons );
+    void setButtons(Qt::MouseButtons);
 
 protected:
     KoPointerEvent * m_event;

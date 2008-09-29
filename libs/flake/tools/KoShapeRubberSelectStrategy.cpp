@@ -30,10 +30,10 @@
 #include "KoCanvasBase.h"
 #include "KoTool.h"
 
-KoShapeRubberSelectStrategy::KoShapeRubberSelectStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, bool useSnapToGrid )
-: KoInteractionStrategy(tool, canvas )
-, m_selectRect(clicked, QSizeF(0, 0))
-, m_useSnapToGrid (useSnapToGrid)
+KoShapeRubberSelectStrategy::KoShapeRubberSelectStrategy(KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, bool useSnapToGrid)
+        : KoInteractionStrategy(tool, canvas)
+        , m_selectRect(clicked, QSizeF(0, 0))
+        , m_useSnapToGrid(useSnapToGrid)
 {
 }
 
@@ -41,21 +41,21 @@ KoShapeRubberSelectStrategy::~KoShapeRubberSelectStrategy()
 {
 }
 
-void KoShapeRubberSelectStrategy::paint( QPainter &painter, const KoViewConverter &converter)
+void KoShapeRubberSelectStrategy::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    painter.setRenderHint( QPainter::Antialiasing, false );
+    painter.setRenderHint(QPainter::Antialiasing, false);
 
-    QColor selectColor( Qt::blue ); // TODO make configurable
-    selectColor.setAlphaF( 0.5 );
-    QBrush sb( selectColor, Qt::SolidPattern );
-    painter.setPen( QPen( sb, 0 ) );
-    painter.setBrush( sb );
+    QColor selectColor(Qt::blue);   // TODO make configurable
+    selectColor.setAlphaF(0.5);
+    QBrush sb(selectColor, Qt::SolidPattern);
+    painter.setPen(QPen(sb, 0));
+    painter.setBrush(sb);
     QRectF paintRect = converter.documentToView(m_selectRect);
     paintRect = paintRect.normalized();
-    paintRect.adjust( 0., -0.5, 0.5, 0. );
+    paintRect.adjust(0., -0.5, 0.5, 0.);
     if (painter.hasClipping())
         paintRect = paintRect.intersect(painter.clipRegion().boundingRect());
-    painter.drawRect( paintRect );
+    painter.drawRect(paintRect);
 }
 
 void KoShapeRubberSelectStrategy::handleMouseMove(const QPointF &p, Qt::KeyboardModifiers modifiers)
@@ -72,22 +72,22 @@ void KoShapeRubberSelectStrategy::handleMouseMove(const QPointF &p, Qt::Keyboard
     }
     m_lastPos = point;
     QPointF old = m_selectRect.bottomRight();
-    m_selectRect.setBottomRight( point );
-/*
-    +---------------|--+
-    |               |  |    We need to figure out rects A and B based on the two points. BUT
-    |          old  | A|    we need to do that even if the points are switched places
-    |             \ |  |    (i.e. the rect got smaller) and even if the rect is mirrored
-    +---------------+  |    in either the horizontal or vertical axis.
-    |       B          |
-    +------------------+
-                        `- point
-*/
+    m_selectRect.setBottomRight(point);
+    /*
+        +---------------|--+
+        |               |  |    We need to figure out rects A and B based on the two points. BUT
+        |          old  | A|    we need to do that even if the points are switched places
+        |             \ |  |    (i.e. the rect got smaller) and even if the rect is mirrored
+        +---------------+  |    in either the horizontal or vertical axis.
+        |       B          |
+        +------------------+
+                            `- point
+    */
     QPointF x1 = old;
     x1.setY(m_selectRect.topLeft().y());
     qreal h1 = point.y() - x1.y();
     qreal h2 = old.y() - x1.y();
-    QRectF A(x1, QSizeF(point.x() - x1.x(), point.y() < m_selectRect.top() ? qMin(h1, h2) : qMax (h1, h2) ));
+    QRectF A(x1, QSizeF(point.x() - x1.x(), point.y() < m_selectRect.top() ? qMin(h1, h2) : qMax(h1, h2)));
     A = A.normalized();
     m_canvas->updateCanvas(A);
 
@@ -100,16 +100,15 @@ void KoShapeRubberSelectStrategy::handleMouseMove(const QPointF &p, Qt::Keyboard
     m_canvas->updateCanvas(B);
 }
 
-void KoShapeRubberSelectStrategy::finishInteraction( Qt::KeyboardModifiers modifiers )
+void KoShapeRubberSelectStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
-    Q_UNUSED( modifiers );
+    Q_UNUSED(modifiers);
     KoSelection * selection = m_canvas->shapeManager()->selection();
-    QList<KoShape *> shapes( m_canvas->shapeManager()->shapesAt( m_selectRect ) );
-    foreach ( KoShape * shape, shapes )
-    {
-        if (! (shape->isSelectable() && shape->isVisible()))
+    QList<KoShape *> shapes(m_canvas->shapeManager()->shapesAt(m_selectRect));
+    foreach(KoShape * shape, shapes) {
+        if (!(shape->isSelectable() && shape->isVisible()))
             continue;
-        selection->select( shape );
+        selection->select(shape);
     }
     m_parent->repaintDecorations();
     m_canvas->updateCanvas(m_selectRect.normalized());

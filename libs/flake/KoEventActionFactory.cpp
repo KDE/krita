@@ -22,17 +22,16 @@
 class KoEventActionFactory::Private
 {
 public:
-    Private( const QString & id, const QString & action )
-    : id( id )
-    , action( action )
-    {}
+    Private(const QString & id, const QString & action)
+            : id(id)
+            , action(action) {}
 
     const QString id;
     const QString action;
 };
 
-KoEventActionFactory::KoEventActionFactory( const QString &id, const QString & action )
-: d( new Private( id, action ) )
+KoEventActionFactory::KoEventActionFactory(const QString &id, const QString & action)
+        : d(new Private(id, action))
 {
 }
 

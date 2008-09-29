@@ -23,7 +23,8 @@
 #include <KoToolFactory.h>
 
 /// Factory for the KoPathTool
-class KoPathToolFactory : public KoToolFactory {
+class KoPathToolFactory : public KoToolFactory
+{
     Q_OBJECT
 public:
     KoPathToolFactory(QObject *parent);

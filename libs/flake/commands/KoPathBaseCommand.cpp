@@ -21,22 +21,21 @@
 #include "KoPathBaseCommand.h"
 #include "KoPathShape.h"
 
-KoPathBaseCommand::KoPathBaseCommand( QUndoCommand *parent )
-: QUndoCommand( parent )
+KoPathBaseCommand::KoPathBaseCommand(QUndoCommand *parent)
+        : QUndoCommand(parent)
 {
 }
 
-KoPathBaseCommand::KoPathBaseCommand( KoPathShape *shape, QUndoCommand *parent )
-: QUndoCommand( parent )
+KoPathBaseCommand::KoPathBaseCommand(KoPathShape *shape, QUndoCommand *parent)
+        : QUndoCommand(parent)
 {
-    m_shapes.insert( shape );
+    m_shapes.insert(shape);
 }
 
-void KoPathBaseCommand::repaint( bool normalizeShapes )
+void KoPathBaseCommand::repaint(bool normalizeShapes)
 {
-    foreach( KoPathShape *shape, m_shapes )
-    {
-        if ( normalizeShapes )
+    foreach(KoPathShape *shape, m_shapes) {
+        if (normalizeShapes)
             shape->normalize();
         shape->update();
     }

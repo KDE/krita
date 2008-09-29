@@ -28,12 +28,12 @@
 #include <KoXmlNS.h>
 
 KoShapeLayer::KoShapeLayer()
-: KoShapeContainer(new SimpleShapeContainerModel())
+        : KoShapeContainer(new SimpleShapeContainerModel())
 {
     setSelectable(false);
 }
 
-bool KoShapeLayer::hitTest( const QPointF &position ) const
+bool KoShapeLayer::hitTest(const QPointF &position) const
 {
     Q_UNUSED(position);
     return false;
@@ -43,41 +43,40 @@ QRectF KoShapeLayer::boundingRect() const
 {
     QRectF bb;
 
-    foreach( KoShape* shape, iterator() )
-    {
+    foreach(KoShape* shape, iterator()) {
         if (bb.isEmpty())
-             bb = shape->boundingRect();
+            bb = shape->boundingRect();
         else
-            bb = bb.unite( shape->boundingRect() );
+            bb = bb.unite(shape->boundingRect());
     }
 
     return bb;
 }
 
-void KoShapeLayer::saveOdf( KoShapeSavingContext & context ) const
+void KoShapeLayer::saveOdf(KoShapeSavingContext & context) const
 {
     // save later according to parag 9.1.3
-    context.addLayerForSaving( this );
+    context.addLayerForSaving(this);
 
     QList<KoShape*> shapes = iterator();
-    qSort( shapes.begin(), shapes.end(), KoShape::compareShapeZIndex );
+    qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
-    foreach(KoShape* shape, shapes ) {
+    foreach(KoShape* shape, shapes) {
         shape->saveOdf(context);
     }
 }
 
-bool KoShapeLayer::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+bool KoShapeLayer::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
     // set layer name
-    setName( element.attributeNS( KoXmlNS::draw, "name" ) );
+    setName(element.attributeNS(KoXmlNS::draw, "name"));
     // layer locking
-    setLocked( element.attributeNS( KoXmlNS::draw, "protected", "false" ) == "true" );
+    setLocked(element.attributeNS(KoXmlNS::draw, "protected", "false") == "true");
     // layer visibility
-    setVisible( element.attributeNS( KoXmlNS::draw, "display", "false" ) != "none" );
+    setVisible(element.attributeNS(KoXmlNS::draw, "display", "false") != "none");
 
     // add layer by name into shape context
-    context.addLayer( this, name() );
+    context.addLayer(this, name());
 
     return true;
 }

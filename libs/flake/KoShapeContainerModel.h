@@ -36,7 +36,8 @@ class KoShapeContainer;
  * for the KoShapeContainer.
  * @see KoShapeContainer
  */
-class FLAKE_EXPORT KoShapeContainerModel {
+class FLAKE_EXPORT KoShapeContainerModel
+{
 public:
     /// default constructor
     KoShapeContainerModel() {}
@@ -110,7 +111,9 @@ public:
      * @param child the child of this container that the user is trying to move.
      * @param move the distance that the user proposes to move child from the current position.
      */
-    virtual void proposeMove(KoShape *child, QPointF &move) { Q_UNUSED(child); Q_UNUSED(move); }
+    virtual void proposeMove(KoShape *child, QPointF &move) {
+        Q_UNUSED(child); Q_UNUSED(move);
+    }
 
     /**
      * This method is called when one of the child shapes has been modified.

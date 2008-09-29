@@ -35,10 +35,10 @@ public:
      * Factory to create events
      *
      * @param id The id of the event action
-     * @param action Only presentation event actions need to set the action. It is not used 
+     * @param action Only presentation event actions need to set the action. It is not used
      *               for script event actions.
      */
-    explicit KoEventActionFactory( const QString &id, const QString & action = QString("") );
+    explicit KoEventActionFactory(const QString &id, const QString & action = QString(""));
     virtual ~KoEventActionFactory();
 
     /**

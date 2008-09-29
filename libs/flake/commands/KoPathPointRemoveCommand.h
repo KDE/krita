@@ -37,14 +37,14 @@ public:
      * @brief Create command for removing points from path shapes
      *
      * This will create the command for removing points from path shapes. If all
-     * points from a path shape are deleted it will delete the path shape. If all 
+     * points from a path shape are deleted it will delete the path shape. If all
      * points from a subpath are deleted it will delete the subpath.
      *
      * @param pointDataList List of point data to remove
      * @param shapeController shape controller in charge
      * @param parent the parent command used for macro commands
      */
-    static QUndoCommand * createCommand( const QList<KoPathPointData> & pointDataList, KoShapeController * shapeController, QUndoCommand *parent = 0 );
+    static QUndoCommand * createCommand(const QList<KoPathPointData> & pointDataList, KoShapeController * shapeController, QUndoCommand *parent = 0);
 
     /**
      * @brief Command to remove a points from path shapes
@@ -54,7 +54,7 @@ public:
      * @param pointDataList List of point data to remove.
      * @param parent the parent command used for macro commands
      */
-    explicit KoPathPointRemoveCommand( const QList<KoPathPointData> & pointDataList, QUndoCommand *parent = 0 );
+    explicit KoPathPointRemoveCommand(const QList<KoPathPointData> & pointDataList, QUndoCommand *parent = 0);
     ~KoPathPointRemoveCommand();
 
     /// redo the command

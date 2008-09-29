@@ -1,7 +1,8 @@
 #include "TestShapeContainer.h"
 #include "MockShapes.h"
 
-void TestShapeContainer::testModel() {
+void TestShapeContainer::testModel()
+{
     MockContainerModel *model = new MockContainerModel();
     MockContainer container(model);
     MockShape *shape1 = new MockShape();
@@ -21,7 +22,7 @@ void TestShapeContainer::testModel() {
     QCOMPARE(model->childChangedCalled(), 3);
     QCOMPARE(model->proposeMoveCalled(), 0);
 
-    shape1->setAbsolutePosition( shape1->absolutePosition() + QPointF(10.,40.) );
+    shape1->setAbsolutePosition(shape1->absolutePosition() + QPointF(10., 40.));
     QCOMPARE(model->containerChangedCalled(), 0);
     QCOMPARE(model->childChangedCalled(), 5); // we get a generic Matrix as well as a position change...
     QCOMPARE(model->proposeMoveCalled(), 0);

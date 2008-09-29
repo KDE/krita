@@ -35,11 +35,11 @@ class QPainter;
 class KoPathToolHandle
 {
 public:
-    KoPathToolHandle( KoPathTool *tool );
+    KoPathToolHandle(KoPathTool *tool);
     virtual ~KoPathToolHandle();
-    virtual void paint( QPainter &painter, const KoViewConverter &converter ) = 0;
+    virtual void paint(QPainter &painter, const KoViewConverter &converter) = 0;
     virtual void repaint() const = 0;
-    virtual KoInteractionStrategy * handleMousePress( KoPointerEvent *event ) = 0;
+    virtual KoInteractionStrategy * handleMousePress(KoPointerEvent *event) = 0;
     // test if handle is still valid
     virtual bool check() = 0;
 
@@ -50,10 +50,10 @@ protected:
 class PointHandle : public KoPathToolHandle
 {
 public:
-    PointHandle( KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint::KoPointType activePointType );
-    void paint( QPainter &painter, const KoViewConverter &converter );
+    PointHandle(KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint::KoPointType activePointType);
+    void paint(QPainter &painter, const KoViewConverter &converter);
     void repaint() const;
-    KoInteractionStrategy * handleMousePress( KoPointerEvent *event );
+    KoInteractionStrategy * handleMousePress(KoPointerEvent *event);
     bool check();
     KoPathPoint * activePoint() const;
     KoPathPoint::KoPointType activePointType() const;
@@ -65,10 +65,10 @@ private:
 class ParameterHandle : public KoPathToolHandle
 {
 public:
-    ParameterHandle( KoPathTool *tool, KoParameterShape *parameterShape, int handleId );
-    void paint( QPainter &painter, const KoViewConverter &converter );
+    ParameterHandle(KoPathTool *tool, KoParameterShape *parameterShape, int handleId);
+    void paint(QPainter &painter, const KoViewConverter &converter);
     void repaint() const;
-    KoInteractionStrategy * handleMousePress( KoPointerEvent *event );
+    KoInteractionStrategy * handleMousePress(KoPointerEvent *event);
     bool check();
 protected:
     KoParameterShape *m_parameterShape;
@@ -78,11 +78,11 @@ protected:
 class ConnectionHandle : public ParameterHandle
 {
 public:
-    ConnectionHandle( KoPathTool *tool, KoParameterShape *parameterShape, int handleId );
+    ConnectionHandle(KoPathTool *tool, KoParameterShape *parameterShape, int handleId);
 
     // XXX: Later: create a paint even to distinguish a connection
     // handle  from another handle type
-    KoInteractionStrategy * handleMousePress( KoPointerEvent *event );
+    KoInteractionStrategy * handleMousePress(KoPointerEvent *event);
 };
 
 #endif // KOPATHTOOLHANDLE_H

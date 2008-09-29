@@ -35,7 +35,8 @@
  * XXX: Make it possible for this class to load not just flake tools,
    but also the app-specific KoTool-based tools. (BSAR)
  */
-class FLAKE_EXPORT KoToolRegistry : public QObject, public KoGenericRegistry<KoToolFactory*> {
+class FLAKE_EXPORT KoToolRegistry : public QObject, public KoGenericRegistry<KoToolFactory*>
+{
     Q_OBJECT
 
 public:

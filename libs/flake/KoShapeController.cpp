@@ -43,16 +43,16 @@ public:
     KoCanvasBase *canvas;
     KoShapeControllerBase *shapeController;
 
-    QUndoCommand* addShape( KoShape *shape, bool showDialog, QUndoCommand *parent) {
+    QUndoCommand* addShape(KoShape *shape, bool showDialog, QUndoCommand *parent) {
         Q_ASSERT(canvas->shapeManager());
 
         if (showDialog) {
-            KoShapeFactory *factory = KoShapeRegistry::instance()->value( shape->shapeId() );
+            KoShapeFactory *factory = KoShapeRegistry::instance()->value(shape->shapeId());
             Q_ASSERT(factory);
-            int z=0;
+            int z = 0;
             foreach(KoShape *sh, canvas->shapeManager()->shapes())
-                z = qMax(z, sh->zIndex());
-            shape->setZIndex(z+1);
+            z = qMax(z, sh->zIndex());
+            shape->setZIndex(z + 1);
 
             // show config dialog.
             KPageDialog *dialog = new KPageDialog(canvas->canvasWidget());
@@ -62,13 +62,13 @@ public:
             QList<KoShapeConfigFactory*> panels = factory->panelFactories();
             qSort(panels.begin(), panels.end(), KoShapeConfigFactory::compare);
             QList<KoShapeConfigWidgetBase*> widgets;
-            foreach (KoShapeConfigFactory *panelFactory, panels) {
-                if (! panelFactory->showForShapeId( shape->shapeId() ) )
+            foreach(KoShapeConfigFactory *panelFactory, panels) {
+                if (! panelFactory->showForShapeId(shape->shapeId()))
                     continue;
                 KoShapeConfigWidgetBase *widget = panelFactory->createConfigWidget(shape);
                 if (widget == 0)
                     continue;
-                if ( ! widget->showOnShapeCreate() ) {
+                if (! widget->showOnShapeCreate()) {
                     delete widget;
                     continue;
                 }
@@ -79,7 +79,7 @@ public:
                 pageCount ++;
             }
             foreach(KoShapeConfigWidgetBase* panel, factory->createShapeOptionPanels()) {
-                if ( ! panel->showOnShapeCreate() )
+                if (! panel->showOnShapeCreate())
                     continue;
                 panel->open(shape);
                 widgets.append(panel);
@@ -98,23 +98,22 @@ public:
                     return 0;
                 }
                 foreach(KoShapeConfigWidgetBase *widget, widgets)
-                    widget->save();
+                widget->save();
             }
             delete dialog;
         }
 
         // set the active layer as parent if there is not yet a parent.
-        if ( !shape->parent() )
-        {
-            shape->setParent( canvas->shapeManager()->selection()->activeLayer() );
+        if (!shape->parent()) {
+            shape->setParent(canvas->shapeManager()->selection()->activeLayer());
         }
 
-        return new KoShapeCreateCommand( shapeController, shape, parent );
+        return new KoShapeCreateCommand(shapeController, shape, parent);
     }
 };
 
-KoShapeController::KoShapeController( KoCanvasBase *canvas, KoShapeControllerBase *shapeController )
-    : d(new Private())
+KoShapeController::KoShapeController(KoCanvasBase *canvas, KoShapeControllerBase *shapeController)
+        : d(new Private())
 {
     d->canvas = canvas;
     d->shapeController = shapeController;
@@ -125,24 +124,24 @@ KoShapeController::~KoShapeController()
     delete d;
 }
 
-QUndoCommand* KoShapeController::addShape( KoShape *shape, QUndoCommand *parent )
+QUndoCommand* KoShapeController::addShape(KoShape *shape, QUndoCommand *parent)
 {
     return d->addShape(shape, true, parent);
 }
 
-QUndoCommand* KoShapeController::addShapeDirect( KoShape *shape, QUndoCommand *parent)
+QUndoCommand* KoShapeController::addShapeDirect(KoShape *shape, QUndoCommand *parent)
 {
     return d->addShape(shape, false, parent);
 }
 
-QUndoCommand* KoShapeController::removeShape( KoShape *shape, QUndoCommand *parent  )
+QUndoCommand* KoShapeController::removeShape(KoShape *shape, QUndoCommand *parent)
 {
-    return new KoShapeDeleteCommand( d->shapeController, shape, parent );
+    return new KoShapeDeleteCommand(d->shapeController, shape, parent);
 }
 
-QUndoCommand* KoShapeController::removeShapes( const QList<KoShape*> &shapes, QUndoCommand *parent )
+QUndoCommand* KoShapeController::removeShapes(const QList<KoShape*> &shapes, QUndoCommand *parent)
 {
-    return new KoShapeDeleteCommand( d->shapeController, shapes, parent );
+    return new KoShapeDeleteCommand(d->shapeController, shapes, parent);
 }
 
 void KoShapeController::setShapeControllerBase(KoShapeControllerBase* shapeControllerBase)
@@ -150,9 +149,9 @@ void KoShapeController::setShapeControllerBase(KoShapeControllerBase* shapeContr
     d->shapeController = shapeControllerBase;
 }
 
-KoDataCenter * KoShapeController::dataCenter( const QString &dataCenterName )
+KoDataCenter * KoShapeController::dataCenter(const QString &dataCenterName)
 {
-    return d->shapeController->dataCenterMap().value( dataCenterName, 0 );
+    return d->shapeController->dataCenterMap().value(dataCenterName, 0);
 }
 
 QMap<QString, KoDataCenter *> KoShapeController::dataCenterMap()

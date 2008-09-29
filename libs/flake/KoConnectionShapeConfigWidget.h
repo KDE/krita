@@ -35,7 +35,9 @@ public:
     /// reimplemented
     virtual void save();
     /// reimplemented
-    virtual bool showOnShapeCreate() { return false; }
+    virtual bool showOnShapeCreate() {
+        return false;
+    }
     /// reimplemented
     virtual QUndoCommand * createCommand();
 private:

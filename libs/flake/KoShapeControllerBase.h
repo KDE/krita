@@ -25,7 +25,7 @@
 
 #include <QtGlobal>
 #include <QMap>
- 
+
 class KoShape;
 class KoImageCollection;
 class KoDataCenter;
@@ -35,7 +35,8 @@ class KoDataCenter;
  * that controls the shapes should implement.  This tends to be the document.
  * @see KoShapeDeleteCommand, KoShapeCreateCommand
  */
-class KoShapeControllerBase {
+class KoShapeControllerBase
+{
 public:
     KoShapeControllerBase() { }
     virtual ~KoShapeControllerBase() { }
@@ -46,21 +47,21 @@ public:
      * if the shape is one that should be currently shown on screen.
      * @param shape the new shape
      */
-    virtual void addShape( KoShape* shape ) = 0;
+    virtual void addShape(KoShape* shape) = 0;
 
     /**
      * Remove a shape from the shape controllers control, allowing it to be deleted shortly after
      * The controller should remove the shape from all the ShapeManager instance(s) manually
      * @param shape the shape to remove
      */
-    virtual void removeShape( KoShape* shape ) = 0;
+    virtual void removeShape(KoShape* shape) = 0;
 
     /**
      * This method returns a map of KoDataCenter classes.
      * Typically some class-factories have created DataCenters and added them to this map.
      * This map is started from scratch with each new document (ehem KoShapeControllerBase)
      */
-    virtual QMap<QString, KoDataCenter *>  dataCenterMap(  ) = 0;
+    virtual QMap<QString, KoDataCenter *>  dataCenterMap() = 0;
 };
 
 #endif

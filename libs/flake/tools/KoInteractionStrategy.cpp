@@ -43,14 +43,14 @@ void KoInteractionStrategy::cancelInteraction()
 }
 
 KoInteractionStrategy::KoInteractionStrategy(KoTool *parent, KoCanvasBase *canvas)
-: m_parent(parent)
-, m_canvas(canvas)
+        : m_parent(parent)
+        , m_canvas(canvas)
 {
 }
 
 KoInteractionStrategy::~KoInteractionStrategy()
 {
-    m_parent->setStatusText( "" );
+    m_parent->setStatusText("");
 }
 
 void KoInteractionStrategy::applyGrid(QPointF &point)
@@ -63,31 +63,31 @@ void KoInteractionStrategy::applyGrid(QPointF &point)
 
     // we want to snap to the nearest grid point, so calculate
     // the grid rows/columns before and after the points position
-    int col = static_cast<int>( point.x() / gridX + 1e-10 );
-    int nextCol = col+1;
-    int row = static_cast<int>( point.y() / gridY + 1e-10 );
+    int col = static_cast<int>(point.x() / gridX + 1e-10);
+    int nextCol = col + 1;
+    int row = static_cast<int>(point.y() / gridY + 1e-10);
     int nextRow = row + 1;
 
     // now check which grid line has less distance to the point
-    if ( qAbs( col * gridX - point.x() ) > qAbs( nextCol * gridX - point.x() ) )
+    if (qAbs(col * gridX - point.x()) > qAbs(nextCol * gridX - point.x()))
         col = nextCol;
-    if ( qAbs( row * gridY - point.y() ) > qAbs( nextRow * gridY - point.y() ) )
+    if (qAbs(row * gridY - point.y()) > qAbs(nextRow * gridY - point.y()))
         row = nextRow;
 
-    point.setX( col * gridX );
-    point.setY( row * gridY );
+    point.setX(col * gridX);
+    point.setY(row * gridY);
 }
 
-QPointF KoInteractionStrategy::snapToGrid( const QPointF &point, Qt::KeyboardModifiers modifiers )
+QPointF KoInteractionStrategy::snapToGrid(const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
-    if ( ! m_canvas->snapToGrid() || (modifiers & Qt::ShiftModifier) )
+    if (! m_canvas->snapToGrid() || (modifiers & Qt::ShiftModifier))
         return point;
     QPointF p = point;
     applyGrid(p);
     return p;
 }
 
-void KoInteractionStrategy::handleCustomEvent( KoPointerEvent * event )
+void KoInteractionStrategy::handleCustomEvent(KoPointerEvent * event)
 {
     Q_UNUSED(event);
 }

@@ -46,7 +46,8 @@ class QInputMethodEvent;
  * The implementator of KoToolProxy should be solely responsible
  * for knowing which tool is currently in the user's hands.
  */
-class FLAKE_EXPORT KoToolProxy : public QObject {
+class FLAKE_EXPORT KoToolProxy : public QObject
+{
     Q_OBJECT
 public:
     /**
@@ -58,25 +59,25 @@ public:
     ~KoToolProxy();
 
     /// Forwarded to the current KoTool
-    void paint( QPainter &painter, const KoViewConverter &converter );
+    void paint(QPainter &painter, const KoViewConverter &converter);
     /// Forwarded to the current KoTool
     void repaintDecorations();
     /// Forwarded to the current KoTool
-    void tabletEvent( QTabletEvent *event, const QPointF &point );
+    void tabletEvent(QTabletEvent *event, const QPointF &point);
     /// Forwarded to the current KoTool
-    void mousePressEvent( QMouseEvent *event, const QPointF &point  );
+    void mousePressEvent(QMouseEvent *event, const QPointF &point);
     /// Forwarded to the current KoTool
-    void mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point  );
+    void mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point);
     /// Forwarded to the current KoTool
-    void mouseMoveEvent( QMouseEvent *event, const QPointF &point  );
+    void mouseMoveEvent(QMouseEvent *event, const QPointF &point);
     /// Forwarded to the current KoTool
-    void mouseReleaseEvent( QMouseEvent *event, const QPointF &point  );
+    void mouseReleaseEvent(QMouseEvent *event, const QPointF &point);
     /// Forwarded to the current KoTool
     void keyPressEvent(QKeyEvent *event);
     /// Forwarded to the current KoTool
     void keyReleaseEvent(QKeyEvent *event);
     /// Forwarded to the current KoTool
-    void wheelEvent ( QWheelEvent * event, const QPointF &point  );
+    void wheelEvent(QWheelEvent * event, const QPointF &point);
     /// Forwarded to the current KoTool
     QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
     /// Forwarded to the current KoTool

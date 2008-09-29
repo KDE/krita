@@ -23,46 +23,45 @@
 
 KoConnectionShapeConfigWidget::KoConnectionShapeConfigWidget()
 {
-    widget.setupUi( this );
+    widget.setupUi(this);
 
     widget.connectionType->clear();
-    widget.connectionType->addItem( i18n("Standard") );
-    widget.connectionType->addItem( i18n("Lines") );
-    widget.connectionType->addItem( i18n("Straight") );
-    widget.connectionType->addItem( i18n("Curve") );
+    widget.connectionType->addItem(i18n("Standard"));
+    widget.connectionType->addItem(i18n("Lines"));
+    widget.connectionType->addItem(i18n("Straight"));
+    widget.connectionType->addItem(i18n("Curve"));
 
-    connect( widget.connectionType, SIGNAL(currentIndexChanged(int)), this, SIGNAL(propertyChanged()));
+    connect(widget.connectionType, SIGNAL(currentIndexChanged(int)), this, SIGNAL(propertyChanged()));
 }
 
 void KoConnectionShapeConfigWidget::open(KoShape *shape)
 {
-    m_connection = dynamic_cast<KoConnectionShape*>( shape );
-    if ( ! m_connection )
+    m_connection = dynamic_cast<KoConnectionShape*>(shape);
+    if (! m_connection)
         return;
 
-    widget.connectionType->blockSignals( true );
+    widget.connectionType->blockSignals(true);
 
-    widget.connectionType->setCurrentIndex( m_connection->connectionType() );
+    widget.connectionType->setCurrentIndex(m_connection->connectionType());
 
-    widget.connectionType->blockSignals( false );
+    widget.connectionType->blockSignals(false);
 }
 
 void KoConnectionShapeConfigWidget::save()
 {
-    if ( ! m_connection )
+    if (! m_connection)
         return;
 
-    m_connection->setConnectionType( static_cast<KoConnectionShape::Type>( widget.connectionType->currentIndex() ) );
+    m_connection->setConnectionType(static_cast<KoConnectionShape::Type>(widget.connectionType->currentIndex()));
 }
 
 QUndoCommand * KoConnectionShapeConfigWidget::createCommand()
 {
-    if ( ! m_connection )
+    if (! m_connection)
         return 0;
-    else
-    {
-        KoConnectionShape::Type type = static_cast<KoConnectionShape::Type>( widget.connectionType->currentIndex() );
-        return new KoConnectionShapeTypeCommand( m_connection, type );
+    else {
+        KoConnectionShape::Type type = static_cast<KoConnectionShape::Type>(widget.connectionType->currentIndex());
+        return new KoConnectionShapeTypeCommand(m_connection, type);
     }
 }
 

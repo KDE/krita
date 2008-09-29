@@ -51,7 +51,8 @@ K_EXPORT_COMPONENT_FACTORY(myLibrary,
 </pre>
 
  */
-class FLAKE_EXPORT KoToolFactory : public QObject {
+class FLAKE_EXPORT KoToolFactory : public QObject
+{
     Q_OBJECT
 
 public:
@@ -172,7 +173,9 @@ public:
      * @see toolType()
      * @see setToolType()
      */
-    static QString mainToolType() { return "main"; }
+    static QString mainToolType() {
+        return "main";
+    }
     /**
      * Returns the dynamic toolType
      * Each tool has a toolType which it uses to be grouped in the toolbox.
@@ -184,7 +187,9 @@ public:
      * @see toolType()
      * @see setToolType()
      */
-    static QString dynamicToolType() { return "dynamic"; }
+    static QString dynamicToolType() {
+        return "dynamic";
+    }
 
 protected:
     /**

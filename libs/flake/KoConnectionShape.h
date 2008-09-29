@@ -27,7 +27,7 @@
 #define KOCONNECTIONSHAPEID "KoConnectionShape"
 
 /// A connection to a connection point of a shape
-typedef QPair<KoShape*,int> KoConnection;
+typedef QPair<KoShape*, int> KoConnection;
 
 class KoConnectionShape : public KoParameterShape
 {
@@ -43,25 +43,24 @@ public:
     virtual ~KoConnectionShape();
 
     // reimplemented
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
+    virtual void paint(QPainter& painter, const KoViewConverter& converter);
 
     // reimplemented
-    virtual void saveOdf( KoShapeSavingContext & context ) const;
+    virtual void saveOdf(KoShapeSavingContext & context) const;
 
     // reimplemented
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
 
     // reimplemented
-    inline QString pathShapeId() const
-        {
-            return KOCONNECTIONSHAPEID;
-        }
+    inline QString pathShapeId() const {
+        return KOCONNECTIONSHAPEID;
+    }
 
     /// Sets the first shape the connector is connected to
-    void setConnection1( KoShape * shape1, int connectionPointIndex );
+    void setConnection1(KoShape * shape1, int connectionPointIndex);
 
     /// Sets the second shape the connector is connected to
-    void setConnection2( KoShape * shape2, int connectionPointIndex );
+    void setConnection2(KoShape * shape2, int connectionPointIndex);
 
     /// Returns the connection to the first shape
     KoConnection connection1() const;
@@ -76,37 +75,37 @@ public:
     Type connectionType() const;
 
     /// Sets the connection type
-    void setConnectionType( Type connectionType );
+    void setConnectionType(Type connectionType);
 protected:
 
     /// reimplemented
-    void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
+    void moveHandleAction(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
 
     /// reimplemented
-    void updatePath( const QSizeF &size );
+    void updatePath(const QSizeF &size);
 
     /// reimplemented
     virtual void shapeChanged(ChangeType type);
 
     /// Returns if given handle is connected to a shape
-    bool handleConnected( int handleId ) const;
+    bool handleConnected(int handleId) const;
 
     /// Returns escape direction of given handle
-    QPointF escapeDirection( int handleId ) const;
+    QPointF escapeDirection(int handleId) const;
 
     /// Checks if rays from given points into given directions intersect
-    bool intersects( const QPointF &p1, const QPointF &d1, const QPointF &p2, const QPointF &d2, QPointF &isect );
+    bool intersects(const QPointF &p1, const QPointF &d1, const QPointF &p2, const QPointF &d2, QPointF &isect);
 
     /// Returns perpendicular direction from given point p1 and direction d1 toward point p2
-    QPointF perpendicularDirection( const QPointF &p1, const QPointF &d1, const QPointF &p2 );
+    QPointF perpendicularDirection(const QPointF &p1, const QPointF &d1, const QPointF &p2);
 
 private:
 
     // reimplemented
-    virtual void notifyShapeChanged( KoShape * shape, ChangeType type );
+    virtual void notifyShapeChanged(KoShape * shape, ChangeType type);
 
-    qreal scalarProd( const QPointF &v1, const QPointF &v2 );
-    qreal crossProd( const QPointF &v1, const QPointF &v2 );
+    qreal scalarProd(const QPointF &v1, const QPointF &v2);
+    qreal crossProd(const QPointF &v1, const QPointF &v2);
 
     struct Private;
     Private * const d;

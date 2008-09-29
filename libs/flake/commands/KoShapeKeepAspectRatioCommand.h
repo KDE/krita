@@ -32,26 +32,26 @@ class KoShape;
  */
 class FLAKE_EXPORT KoShapeKeepAspectRatioCommand : public QUndoCommand
 {
-    public:
-        /**
-         * Constructor
-         * @param shapes the shapes affected by the command
-         * @param oldKeepAspectRatio the old settings
-         * @param newKeepAspectRatio the new settings
-         * @param parent the parent command
-         */
-        KoShapeKeepAspectRatioCommand(const QList<KoShape*>& shapes, const QList<bool>& oldKeepAspectRatio, const QList<bool>& newKeepAspectRatio, QUndoCommand* parent = 0);
-        ~KoShapeKeepAspectRatioCommand();
+public:
+    /**
+     * Constructor
+     * @param shapes the shapes affected by the command
+     * @param oldKeepAspectRatio the old settings
+     * @param newKeepAspectRatio the new settings
+     * @param parent the parent command
+     */
+    KoShapeKeepAspectRatioCommand(const QList<KoShape*>& shapes, const QList<bool>& oldKeepAspectRatio, const QList<bool>& newKeepAspectRatio, QUndoCommand* parent = 0);
+    ~KoShapeKeepAspectRatioCommand();
 
-        /// Execute the command
-        virtual void redo();
-        /// Unexecute the command
-        virtual void undo();
+    /// Execute the command
+    virtual void redo();
+    /// Unexecute the command
+    virtual void undo();
 
-    private:
-        QList<KoShape*> m_shapes;
-        QList<bool> m_oldKeepAspectRatio;
-        QList<bool> m_newKeepAspectRatio;
+private:
+    QList<KoShape*> m_shapes;
+    QList<bool> m_oldKeepAspectRatio;
+    QList<bool> m_newKeepAspectRatio;
 };
 
 #endif

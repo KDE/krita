@@ -50,7 +50,8 @@ class KoGuidesData;
  * should implement. Flake tools know about the canvas, so they can
  * do things like scroll, redraw, set a cursor etc.
  */
-class FLAKE_EXPORT KoCanvasBase {
+class FLAKE_EXPORT KoCanvasBase
+{
 
 public:
 
@@ -59,7 +60,7 @@ public:
      * @param shapeControllerBase the implementation of the shapeController that the
      *   application provides to allow shapes to be added in multiple views.
      */
-    explicit KoCanvasBase( KoShapeControllerBase * shapeControllerBase );
+    explicit KoCanvasBase(KoShapeControllerBase * shapeControllerBase);
     virtual ~KoCanvasBase();
 
 public:
@@ -144,7 +145,9 @@ public:
      * By default the origin of the canvas widget and the position of the
      * document origin are coincident, thus an empty point is returned.
      */
-    virtual QPoint documentOrigin() const { return QPoint(0,0); }
+    virtual QPoint documentOrigin() const {
+        return QPoint(0, 0);
+    }
 
     /**
      * This method should somehow call QWidget::updateMicroFocus() on the canvas widget.

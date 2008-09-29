@@ -3,7 +3,8 @@
 
 #include <QtTest/QtTest>
 
-class TestShapePainting : public QObject {
+class TestShapePainting : public QObject
+{
     Q_OBJECT
 private slots:
 

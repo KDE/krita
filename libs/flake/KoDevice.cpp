@@ -22,15 +22,14 @@
 class KoDevice::Private
 {
 public:
-    Private( const QString &devId )
-    : id( devId )
-    {
+    Private(const QString &devId)
+            : id(devId) {
     }
     const QString id;
 };
 
-KoDevice::KoDevice( QObject * parent, const QString &id )
-    : QObject( parent ), d( new Private( id ) )
+KoDevice::KoDevice(QObject * parent, const QString &id)
+        : QObject(parent), d(new Private(id))
 {
 }
 

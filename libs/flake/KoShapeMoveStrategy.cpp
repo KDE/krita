@@ -36,20 +36,20 @@
 #include <QMouseEvent>
 #include <QPainterPath>
 
-KoShapeMoveStrategy::KoShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked)
-: KoInteractionStrategy(tool, canvas)
-, m_initialTopLeft(99999, 99999)
-, m_start(clicked)
+KoShapeMoveStrategy::KoShapeMoveStrategy(KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked)
+        : KoInteractionStrategy(tool, canvas)
+        , m_initialTopLeft(99999, 99999)
+        , m_start(clicked)
 {
     QList<KoShape*> selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection);
     QRectF boundingRect;
     foreach(KoShape *shape, selectedShapes) {
-        if ( ! isEditable( shape ) )
+        if (! isEditable(shape))
             continue;
         m_selectedShapes << shape;
         m_previousPositions << shape->position();
         m_newPositions << shape->position();
-        boundingRect = boundingRect.unite( shape->boundingRect() );
+        boundingRect = boundingRect.unite(shape->boundingRect());
     }
     m_initialTopLeft = boundingRect.topLeft();
     m_initialSelectionPosition = canvas->shapeManager()->selection()->position();
@@ -75,13 +75,13 @@ void KoShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
     Q_ASSERT(m_newPositions.count());
 
     m_diff = diff;
-    int i=0;
+    int i = 0;
     foreach(KoShape *shape, m_selectedShapes) {
         diff = m_previousPositions.at(i) + m_diff - shape->position();
         if (shape->parent())
             shape->parent()->model()->proposeMove(shape, diff);
         m_canvas->clipToDocument(shape, diff);
-        QPointF newPos (shape->position() + diff);
+        QPointF newPos(shape->position() + diff);
         m_newPositions[i] = newPos;
         shape->update();
         shape->setPosition(newPos);
@@ -98,10 +98,10 @@ QUndoCommand* KoShapeMoveStrategy::createCommand()
     return new KoShapeMoveCommand(m_selectedShapes, m_previousPositions, m_newPositions);
 }
 
-void KoShapeMoveStrategy::paint( QPainter &painter, const KoViewConverter &converter)
+void KoShapeMoveStrategy::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    SelectionDecorator decorator (KoFlake::NoHandle, false, false);
+    SelectionDecorator decorator(KoFlake::NoHandle, false, false);
     decorator.setSelection(m_canvas->shapeManager()->selection());
-    decorator.setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
+    decorator.setHandleRadius(m_canvas->resourceProvider()->handleRadius());
     decorator.paint(painter, converter);
 }

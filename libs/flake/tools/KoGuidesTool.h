@@ -34,17 +34,17 @@ class FLAKE_EXPORT KoGuidesTool : public KoTool
     Q_OBJECT
 
 public:
-    explicit KoGuidesTool( KoCanvasBase * canvas );
+    explicit KoGuidesTool(KoCanvasBase * canvas);
     virtual ~KoGuidesTool();
 
     /// Sets a new guide line to be added
-    virtual void addGuideLine( Qt::Orientation orientation, qreal position ) = 0;
+    virtual void addGuideLine(Qt::Orientation orientation, qreal position) = 0;
 
     /// Sets an existing guide line to be moved
-    virtual void moveGuideLine( Qt::Orientation orientation, uint index ) = 0;
+    virtual void moveGuideLine(Qt::Orientation orientation, uint index) = 0;
 
     /// Sets an existing guide line to be edited
-    virtual void editGuideLine( Qt::Orientation orientation, uint index ) = 0;
+    virtual void editGuideLine(Qt::Orientation orientation, uint index) = 0;
 };
 
 #endif // KOGUIDESTOOL_H

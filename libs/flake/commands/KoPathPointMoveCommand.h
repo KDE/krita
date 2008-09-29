@@ -37,7 +37,7 @@ public:
      * @param offset the offset by which the point is moved in document coordinates
      * @param parent the parent command used for macro commands
      */
-    KoPathPointMoveCommand( const KoPathShapePointMap &pointMap, const QPointF &offset, QUndoCommand *parent = 0 );
+    KoPathPointMoveCommand(const KoPathShapePointMap &pointMap, const QPointF &offset, QUndoCommand *parent = 0);
 
     /// redo the command
     void redo();

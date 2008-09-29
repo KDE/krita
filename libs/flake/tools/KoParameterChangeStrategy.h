@@ -36,11 +36,13 @@ public:
      * @param parameterShape the parametric shapes the strategy is working on
      * @param handleId the id of the handle to modify
      */
-    KoParameterChangeStrategy( KoTool *tool, KoCanvasBase *canvas, KoParameterShape * parameterShape, int handleId );
+    KoParameterChangeStrategy(KoTool *tool, KoCanvasBase *canvas, KoParameterShape * parameterShape, int handleId);
     virtual ~KoParameterChangeStrategy();
 
-    virtual void handleMouseMove( const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers );
-    virtual void finishInteraction( Qt::KeyboardModifiers modifiers ) { Q_UNUSED( modifiers ); }
+    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
+    virtual void finishInteraction(Qt::KeyboardModifiers modifiers) {
+        Q_UNUSED(modifiers);
+    }
     virtual QUndoCommand* createCommand();
 
 private:

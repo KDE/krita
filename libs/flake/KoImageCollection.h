@@ -29,7 +29,8 @@ class KoStore;
 /**
  * An collection of KoImageData objects to allow loading and saving them all together to the KoStore.
  */
-class FLAKE_EXPORT KoImageCollection : public KoDataCenter {
+class FLAKE_EXPORT KoImageCollection : public KoDataCenter
+{
 public:
     /// constructor
     KoImageCollection();
@@ -46,7 +47,7 @@ public:
      * and have a recognized KoImageData::storeHref().
      * @return returns true if save was successful (no images failed).
      */
-    bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter );
+    bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter);
 
 protected:
     friend class KoImageData;

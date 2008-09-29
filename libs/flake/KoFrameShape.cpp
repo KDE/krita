@@ -22,19 +22,17 @@
 #include <KoXmlReader.h>
 #include <kdebug.h>
 
-struct KoFrameShape::Private
-{
-    Private( const char * ns, const char * tag )
-    : ns( ns )
-    , tag( tag )
-    {}
+struct KoFrameShape::Private {
+    Private(const char * ns, const char * tag)
+            : ns(ns)
+            , tag(tag) {}
 
     const char * ns;
     const char * tag;
 };
 
-KoFrameShape::KoFrameShape( const char * ns, const char * tag )
-: d( new Private( ns, tag ) )
+KoFrameShape::KoFrameShape(const char * ns, const char * tag)
+        : d(new Private(ns, tag))
 {
 }
 
@@ -43,13 +41,13 @@ KoFrameShape::~KoFrameShape()
     delete d;
 }
 
-bool KoFrameShape::loadOdfFrame( const KoXmlElement & element, KoShapeLoadingContext &context )
+bool KoFrameShape::loadOdfFrame(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
-    const KoXmlElement & frameElement( KoXml::namedItemNS( element, d->ns, d->tag ) );
-    if ( frameElement.isNull() ) {
+    const KoXmlElement & frameElement(KoXml::namedItemNS(element, d->ns, d->tag));
+    if (frameElement.isNull()) {
         kError() << "frame element" << d->tag << "not found" << endl;
         return false;
     }
 
-    return loadOdfFrameElement( frameElement, context );
+    return loadOdfFrameElement(frameElement, context);
 }

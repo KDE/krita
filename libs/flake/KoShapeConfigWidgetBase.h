@@ -45,7 +45,8 @@ class QUndoCommand;
  * the param shape.  After the user ok-ed the dialog the save() will be called
  * to allow the widget to apply all settings from the widget to the shape.
  */
-class FLAKE_EXPORT KoShapeConfigWidgetBase : public QWidget {
+class FLAKE_EXPORT KoShapeConfigWidgetBase : public QWidget
+{
     Q_OBJECT
 public:
     /**

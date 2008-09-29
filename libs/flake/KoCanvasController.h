@@ -54,7 +54,8 @@ class KoCanvasBase;
  * bottom? Now it's one config setting.
  *
  */
-class FLAKE_EXPORT KoCanvasController : public QAbstractScrollArea {
+class FLAKE_EXPORT KoCanvasController : public QAbstractScrollArea
+{
     Q_OBJECT
 public:
     /// An enum to alter the positioning and size of the canvas insize the canvas controller
@@ -75,7 +76,7 @@ public:
     /**
      * Reimplemented from QAbstractScrollArea.
      */
-    void scrollContentsBy ( int dx, int dy );
+    void scrollContentsBy(int dx, int dy);
 
     /**
      * Set the shadow option -- by default the canvas controller draws
@@ -84,7 +85,7 @@ public:
      *
      * @param drawShadow if true, the shadow is drawn, if false, not
      */
-    void setDrawShadow( bool drawShadow );
+    void setDrawShadow(bool drawShadow);
 
     /**
      * Set the new canvas to be shown as a child
@@ -133,7 +134,7 @@ public:
      * Sets the how the canvas behaves if the zoomed document becomes smaller than the viewport.
      * @param mode the new canvas mode, CanvasMode::Centered is the default value
      */
-    void setCanvasMode( CanvasMode mode );
+    void setCanvasMode(CanvasMode mode);
 
     /// Returns the current canvas mode
     CanvasMode canvasMode() const;
@@ -150,7 +151,7 @@ public:
      * @param rect the rectangle to make visible
      * @param smooth if true the viewport translation will make be just enough to ensure visibility, no more.
      */
-    void ensureVisible( const QRectF &rect, bool smooth = false );
+    void ensureVisible(const QRectF &rect, bool smooth = false);
 
     /**
      * @brief Scrolls the content of the canvas so that the given shape is visible.
@@ -159,7 +160,7 @@ public:
      *
      * @param shape the shape to make visible
      */
-    void ensureVisible( KoShape *shape );
+    void ensureVisible(KoShape *shape);
 
     /**
      * will cause the toolOptionWidgetsChanged to be emitted and all
@@ -197,7 +198,7 @@ public:
      * @param center the position to zoom around
      * @param zoom the zoom to apply
      */
-    void zoomBy(const QPoint &center, qreal zoom );
+    void zoomBy(const QPoint &center, qreal zoom);
 
     /**
      * @brief zoom so that rect is exactly visible (as close as possible)
@@ -224,7 +225,7 @@ public:
      * Sets the preferred center point in pixels.
      * @param viewPoint the new preferred center
      */
-    void setPreferredCenter( const QPoint &viewPoint );
+    void setPreferredCenter(const QPoint &viewPoint);
 
     /// Returns the currently set preferred center point in pixels
     QPoint preferredCenter() const;
@@ -263,19 +264,19 @@ signals:
      * Emitted when the cursor is moved over the canvas widget.
      * @param pos the position in widget pixels.
      */
-    void canvasMousePositionChanged(const QPoint & pos );
+    void canvasMousePositionChanged(const QPoint & pos);
 
     /**
      * Emitted when the cursor is moved over the canvas widget.
      * @param pos the position in document coordinates.
      */
-    void documentMousePositionChanged(const QPointF & pos );
+    void documentMousePositionChanged(const QPointF & pos);
 
     /**
      * Emitted when the entire controller size changes
      * @param size the size in widget pixels.
      */
-    void sizeChanged(const QSize & size );
+    void sizeChanged(const QSize & size);
 
     /**
      * Emit the new tool option widgets to be used with this canvas.
@@ -288,7 +289,7 @@ signals:
      * @param point the new top-left point from which the document should
      * be drawn.
      */
-    void moveDocumentOffset( const QPoint &point );
+    void moveDocumentOffset(const QPoint &point);
 
     /**
      * Emitted when zoomTo have calculated a factor by which the zoom should change,
@@ -297,7 +298,7 @@ signals:
      *
      * @param factor by how much the zoom needs to change.
      */
-    void zoomBy( const qreal factor );
+    void zoomBy(const qreal factor);
 
 public slots:
 
@@ -308,14 +309,14 @@ public slots:
      * @param recalculateCenter if true the offset in the document we center on after calling
      *      recenterPreferred() will be recalculated for the new document size so the visual offset stays the same.
      */
-    void setDocumentSize( const QSize &newSize, bool recalculateCenter = true);
+    void setDocumentSize(const QSize &newSize, bool recalculateCenter = true);
 
     /**
      * Starts adding a new guide line. The guides tool is activated
      * which then handles placing the new guide line according to the
      * mouse movement.
      */
-    void addGuideLine( Qt::Orientation orientation, int viewPosition );
+    void addGuideLine(Qt::Orientation orientation, int viewPosition);
 
 protected slots:
 
@@ -327,19 +328,19 @@ protected slots:
 
 protected:
     /// reimplemented from QWidget
-    virtual void paintEvent( QPaintEvent * event );
+    virtual void paintEvent(QPaintEvent * event);
     /// reimplemented from QWidget
     virtual void resizeEvent(QResizeEvent * resizeEvent);
     /// reimplemented from QWidget
-    virtual void dragEnterEvent( QDragEnterEvent * event );
+    virtual void dragEnterEvent(QDragEnterEvent * event);
     /// reimplemented from QWidget
-    virtual void dropEvent( QDropEvent *event );
+    virtual void dropEvent(QDropEvent *event);
     /// reimplemented from QWidget
-    virtual void dragMoveEvent ( QDragMoveEvent *event );
+    virtual void dragMoveEvent(QDragMoveEvent *event);
     /// reimplemented from QWidget
-    virtual void dragLeaveEvent( QDragLeaveEvent *event );
+    virtual void dragLeaveEvent(QDragLeaveEvent *event);
     /// reimplemented from QWidget
-    virtual void wheelEvent( QWheelEvent *event );
+    virtual void wheelEvent(QWheelEvent *event);
     /// reimplemented from QWidget
     virtual void keyPressEvent(QKeyEvent *event);
 

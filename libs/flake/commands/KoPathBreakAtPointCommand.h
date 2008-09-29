@@ -39,7 +39,7 @@ public:
      * @param pointDataList List of point data where the path should be split.
      * @param parent the parent command used for macro commands
      */
-    explicit KoPathBreakAtPointCommand( const QList<KoPathPointData> & pointDataList, QUndoCommand *parent = 0 );
+    explicit KoPathBreakAtPointCommand(const QList<KoPathPointData> & pointDataList, QUndoCommand *parent = 0);
     ~KoPathBreakAtPointCommand();
 
     /// redo the command
@@ -49,7 +49,7 @@ public:
 private:
     QList<KoPathPointData> m_pointDataList;
     QList<KoPathPoint*> m_points;
-    // used for storing where to open the subpath. In case it not used for the open 
+    // used for storing where to open the subpath. In case it not used for the open
     // status use .second to the store offset caused by a open of a subpath.
     QList<KoPathPointIndex> m_closedIndex;
     bool m_deletePoints;

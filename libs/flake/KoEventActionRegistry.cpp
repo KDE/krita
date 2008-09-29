@@ -33,14 +33,13 @@ class KoEventActionRegistry::Singleton
 {
 public:
     Singleton()
-    : initDone( false )
-    {}
+            : initDone(false) {}
 
     KoEventActionRegistry q;
     bool initDone;
 };
 
-K_GLOBAL_STATIC( KoEventActionRegistry::Singleton, singleton )
+K_GLOBAL_STATIC(KoEventActionRegistry::Singleton, singleton)
 
 class KoEventActionRegistry::Private
 {
@@ -52,8 +51,8 @@ public:
 
 KoEventActionRegistry * KoEventActionRegistry::instance()
 {
-    KoEventActionRegistry * registry = &( singleton->q );
-    if ( ! singleton->initDone ) {
+    KoEventActionRegistry * registry = &(singleton->q);
+    if (! singleton->initDone) {
         singleton->initDone = true;
         registry->init();
     }
@@ -61,7 +60,7 @@ KoEventActionRegistry * KoEventActionRegistry::instance()
 }
 
 KoEventActionRegistry::KoEventActionRegistry()
-:d( new Private() )
+        : d(new Private())
 {
 }
 
@@ -70,18 +69,18 @@ KoEventActionRegistry::~KoEventActionRegistry()
     delete d;
 }
 
-void KoEventActionRegistry::addPresentationEventAction( KoEventActionFactory * factory )
+void KoEventActionRegistry::addPresentationEventAction(KoEventActionFactory * factory)
 {
     const QString & action = factory->action();
-    if ( ! action.isEmpty() ) {
-        d->presentationEventActionFactories.insert( factory->id(), factory );
-        d->presentationEventActions.insert( action, factory );
+    if (! action.isEmpty()) {
+        d->presentationEventActionFactories.insert(factory->id(), factory);
+        d->presentationEventActions.insert(action, factory);
     }
 }
 
-void KoEventActionRegistry::addScriptEventAction( KoEventActionFactory * factory )
+void KoEventActionRegistry::addScriptEventAction(KoEventActionFactory * factory)
 {
-    d->scriptEventActionFactories.insert( factory->id(), factory );
+    d->scriptEventActionFactories.insert(factory->id(), factory);
 }
 
 QList<KoEventActionFactory *> KoEventActionRegistry::presentationEventActions()
@@ -100,57 +99,51 @@ void KoEventActionRegistry::init()
     config.whiteList = "PresentationEventActionPlugins";
     config.blacklist = "PresentationEventActionPluginsDisabled";
     config.group = "koffice";
-    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/PresentationEventAction"),
-                                      QString::fromLatin1("[X-PresentationEventAction-MinVersion] <= 0"),
-                                      config);
+    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/PresentationEventAction"),
+                                     QString::fromLatin1("[X-PresentationEventAction-MinVersion] <= 0"),
+                                     config);
 
     config.whiteList = "ScriptEventActionPlugins";
     config.blacklist = "ScriptEventActionPluginsDisabled";
-    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/ScriptEventAction"),
-                                      QString::fromLatin1("[X-ScriptEventAction-MinVersion] <= 0"),
-                                      config);
+    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/ScriptEventAction"),
+                                     QString::fromLatin1("[X-ScriptEventAction-MinVersion] <= 0"),
+                                     config);
 }
 
-QList<KoEventAction*> KoEventActionRegistry::createEventActionsFromOdf( const KoXmlElement & e, KoShapeLoadingContext & context ) const
+QList<KoEventAction*> KoEventActionRegistry::createEventActionsFromOdf(const KoXmlElement & e, KoShapeLoadingContext & context) const
 {
     QList<KoEventAction *> eventActions;
 
-    if ( e.namespaceURI() == KoXmlNS::office && e.tagName() == "event-listeners" ) {
+    if (e.namespaceURI() == KoXmlNS::office && e.tagName() == "event-listeners") {
         KoXmlElement element;
-        forEachElement( element, e ) {
-            if ( element.tagName() == "event-listener" ) {
-                if ( element.namespaceURI() == KoXmlNS::presentation ) {
-                    QString action( element.attributeNS( KoXmlNS::presentation, "action", QString() ) );
-                    QHash<QString, KoEventActionFactory *>::const_iterator it( d->presentationEventActions.find( action ) );
+        forEachElement(element, e) {
+            if (element.tagName() == "event-listener") {
+                if (element.namespaceURI() == KoXmlNS::presentation) {
+                    QString action(element.attributeNS(KoXmlNS::presentation, "action", QString()));
+                    QHash<QString, KoEventActionFactory *>::const_iterator it(d->presentationEventActions.find(action));
 
-                    if ( it != d->presentationEventActions.end() ) {
+                    if (it != d->presentationEventActions.end()) {
                         KoEventAction * eventAction = it.value()->createEventAction();
-                        if ( eventAction ) {
-                            if ( eventAction->loadOdf( element, context ) ) {
-                                eventActions.append( eventAction );
-                            }
-                            else {
+                        if (eventAction) {
+                            if (eventAction->loadOdf(element, context)) {
+                                eventActions.append(eventAction);
+                            } else {
                                 delete eventAction;
                             }
                         }
-                    }
-                    else {
+                    } else {
                         kWarning(30006) << "presentation:event-listerer action = " << action << "not supported";
                     }
-                }
-                else if ( element.namespaceURI() == KoXmlNS::script ) {
+                } else if (element.namespaceURI() == KoXmlNS::script) {
                     // TODO
-                }
-                else {
+                } else {
                     kWarning(30006) << "element" << e.namespaceURI() << e.tagName() << "not supported";
                 }
-            }
-            else {
+            } else {
                 kWarning(30006) << "element" << e.namespaceURI() << e.tagName() << "not supported";
             }
         }
-    }
-    else {
+    } else {
         kWarning(30006) << "office:event-listeners not found got:" << e.namespaceURI() << e.tagName();
     }
 

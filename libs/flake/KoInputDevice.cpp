@@ -22,12 +22,11 @@
 class KoInputDevice::Private
 {
 public:
-    Private( QTabletEvent::TabletDevice d, QTabletEvent::PointerType p, qint64 id, bool m)
-        : device(d),
-        pointer(p),
-        uniqueTabletId(id),
-        mouse(m)
-    {
+    Private(QTabletEvent::TabletDevice d, QTabletEvent::PointerType p, qint64 id, bool m)
+            : device(d),
+            pointer(p),
+            uniqueTabletId(id),
+            mouse(m) {
     }
     QTabletEvent::TabletDevice device;
     QTabletEvent::PointerType pointer;
@@ -36,17 +35,17 @@ public:
 };
 
 KoInputDevice::KoInputDevice(QTabletEvent::TabletDevice device, QTabletEvent::PointerType pointer, qint64 uniqueTabletId)
-    : d(new Private(device, pointer, uniqueTabletId, false))
+        : d(new Private(device, pointer, uniqueTabletId, false))
 {
 }
 
 KoInputDevice::KoInputDevice()
-    : d(new Private(QTabletEvent::NoDevice, QTabletEvent::UnknownPointer, -1, true))
+        : d(new Private(QTabletEvent::NoDevice, QTabletEvent::UnknownPointer, -1, true))
 {
 }
 
 KoInputDevice::KoInputDevice(const KoInputDevice &other)
-    : d(new Private(other.d->device, other.d->pointer, other.d->uniqueTabletId, other.d->mouse))
+        : d(new Private(other.d->device, other.d->pointer, other.d->uniqueTabletId, other.d->mouse))
 {
 }
 
@@ -80,15 +79,15 @@ bool KoInputDevice::isMouse() const
 bool KoInputDevice::operator==(const KoInputDevice &other) const
 {
     return d->device == other.d->device && d->pointer == other.d->pointer &&
-        d->uniqueTabletId == other.d->uniqueTabletId && d->mouse == other.d->mouse;
+           d->uniqueTabletId == other.d->uniqueTabletId && d->mouse == other.d->mouse;
 }
 
 bool KoInputDevice::operator!=(const KoInputDevice &other) const
 {
-    return ! (operator==(other));
+    return !(operator==(other));
 }
 
-KoInputDevice & KoInputDevice::operator=(const KoInputDevice &other)
+KoInputDevice & KoInputDevice::operator=(const KoInputDevice & other)
 {
     d->device = other.d->device;
     d->pointer = other.d->pointer;

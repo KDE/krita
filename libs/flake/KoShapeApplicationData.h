@@ -36,7 +36,8 @@
  * Each subclass should provide a reimplementation of the destructor to ensure that
  * any private data is automatically cleaned up when user data objects are deleted.
  */
-class FLAKE_EXPORT KoShapeApplicationData {
+class FLAKE_EXPORT KoShapeApplicationData
+{
 public:
     virtual ~KoShapeApplicationData() {}
 };

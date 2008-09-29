@@ -27,24 +27,24 @@
 #include <KoXmlNS.h>
 
 KoPathShapeFactory::KoPathShapeFactory(QObject *parent, const QStringList&)
-    : KoShapeFactory(parent, KoPathShapeId, i18n("A simple path shape"))
+        : KoShapeFactory(parent, KoPathShapeId, i18n("A simple path shape"))
 {
     setToolTip("A simple path shape");
     setIcon("pathshape");
     QStringList elementNames;
     elementNames << "path" << "line" << "polyline" << "polygon";
-    setOdfElementNames(KoXmlNS::draw, elementNames );
-    setLoadingPriority( 0 );
+    setOdfElementNames(KoXmlNS::draw, elementNames);
+    setLoadingPriority(0);
 }
 
 KoShape * KoPathShapeFactory::createDefaultShape() const
 {
     KoPathShape* path = new KoPathShape();
-    path->moveTo( QPointF( 0, 50 ) );
-    path->curveTo( QPointF( 0, 120 ), QPointF( 50, 120 ), QPointF( 50, 50 ) );
-    path->curveTo( QPointF( 50, -20 ), QPointF( 100, -20 ), QPointF( 100, 50 ) );
+    path->moveTo(QPointF(0, 50));
+    path->curveTo(QPointF(0, 120), QPointF(50, 120), QPointF(50, 50));
+    path->curveTo(QPointF(50, -20), QPointF(100, -20), QPointF(100, 50));
     path->normalize();
-    path->setBorder( new KoLineBorder( 1.0 ) );
+    path->setBorder(new KoLineBorder(1.0));
     return path;
 }
 
@@ -56,26 +56,25 @@ KoShape * KoPathShapeFactory::createShape(const KoProperties * params) const
 
 bool KoPathShapeFactory::supports(const KoXmlElement & e) const
 {
-    if ( e.localName() == "path" && e.namespaceURI() == KoXmlNS::draw )
+    if (e.localName() == "path" && e.namespaceURI() == KoXmlNS::draw)
         return true;
-    if ( e.localName() == "line" && e.namespaceURI() == KoXmlNS::draw )
+    if (e.localName() == "line" && e.namespaceURI() == KoXmlNS::draw)
         return true;
-    if ( e.localName() == "polyline" && e.namespaceURI() == KoXmlNS::draw )
+    if (e.localName() == "polyline" && e.namespaceURI() == KoXmlNS::draw)
         return true;
-    if ( e.localName() == "polygon" && e.namespaceURI() == KoXmlNS::draw )
+    if (e.localName() == "polygon" && e.namespaceURI() == KoXmlNS::draw)
         return true;
 
     return false;
 }
 
-void KoPathShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter *>   & dataCenterMap) 
+void KoPathShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter *>   & dataCenterMap)
 {
     // as we need an image collection for the pattern background
     // we want to make sure that there is always an image collection
     // added to the data center map, in case the picture shape plugin
     // is not loaded
-    if ( ! dataCenterMap.contains( "ImageCollection" ) )
-    {
+    if (! dataCenterMap.contains("ImageCollection")) {
         KoImageCollection *imgCol = new KoImageCollection();
         dataCenterMap["ImageCollection"] = imgCol;
     }

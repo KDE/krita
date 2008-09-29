@@ -43,12 +43,12 @@ class FLAKE_TEST_EXPORT KoPathToolSelection : public KoToolSelection
     Q_OBJECT
 
 public:
-    explicit KoPathToolSelection( KoPathTool * tool );
+    explicit KoPathToolSelection(KoPathTool * tool);
 
     ~KoPathToolSelection();
 
     /// @brief Draw the selected points
-    void paint( QPainter &painter, const KoViewConverter &converter );
+    void paint(QPainter &painter, const KoViewConverter &converter);
 
     /**
     * @brief Add a point to the selection
@@ -56,14 +56,14 @@ public:
     * @param point to add to the selection
     * @param clear if true the selection will be cleared before adding the point
     */
-    void add( KoPathPoint * point, bool clear );
+    void add(KoPathPoint * point, bool clear);
 
     /**
     * @brief Remove a point form the selection
     *
     * @param point to remove from the selection
     */
-    void remove( KoPathPoint * point );
+    void remove(KoPathPoint * point);
 
     /**
     * @brief Clear the selection
@@ -76,7 +76,7 @@ public:
      * @param rect the selection rectangle in document coordinates
      * @param clearSelection if set clear the current selection before the selection
      */
-    void selectPoints( const QRectF &rect, bool clearSelection );
+    void selectPoints(const QRectF &rect, bool clearSelection);
 
     /**
     * @brief Get the number of path objects in the selection
@@ -97,7 +97,7 @@ public:
     *
     * @return true when the point is in the selection, false otherwise
     */
-    bool contains( KoPathPoint * point );
+    bool contains(KoPathPoint * point);
 
     /**
     * @brief Get all selected points
@@ -132,7 +132,7 @@ public:
     QList<KoPathShape*> selectedShapes() const;
 
     /// Sets list of selected shapes
-    void setSelectedShapes( const QList<KoPathShape*> shapes );
+    void setSelectedShapes(const QList<KoPathShape*> shapes);
 
     /**
     * @brief trigger a repaint

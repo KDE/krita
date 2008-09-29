@@ -22,7 +22,7 @@
 #ifndef KODEFRUBBERSELECT_H
 #define KODEFRUBBERSELECT_H
 
-#include "KoInteractionStrategy.h" 
+#include "KoInteractionStrategy.h"
 
 #include <QRectF>
 
@@ -50,13 +50,15 @@ public:
      * @param clicked the initial point that the user depressed (in pt).
      * @param useSnapToGrid use the snap-to-grid settings while doing the rubberstamp.
      */
-    KoShapeRubberSelectStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, bool useSnapToGrid = false );
+    KoShapeRubberSelectStrategy(KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, bool useSnapToGrid = false);
     virtual ~KoShapeRubberSelectStrategy();
 
-    void paint( QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter);
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    virtual QUndoCommand* createCommand() { return 0; }
-    virtual void finishInteraction( Qt::KeyboardModifiers modifiers );
+    virtual QUndoCommand* createCommand() {
+        return 0;
+    }
+    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
 
 protected:
     /**

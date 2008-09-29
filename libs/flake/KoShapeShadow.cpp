@@ -30,8 +30,7 @@ class KoShapeShadow::Private
 {
 public:
     Private()
-    : offset(10,10), color(Qt::black), visible(true), refCount(0)
-    {
+            : offset(10, 10), color(Qt::black), visible(true), refCount(0) {
     }
     QPointF offset;
     QColor color;
@@ -40,7 +39,7 @@ public:
 };
 
 KoShapeShadow::KoShapeShadow()
-    : d( new Private() )
+        : d(new Private())
 {
 }
 
@@ -49,40 +48,40 @@ KoShapeShadow::~KoShapeShadow()
     delete d;
 }
 
-void KoShapeShadow::fillStyle( KoGenStyle &style, KoShapeSavingContext &context )
+void KoShapeShadow::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
 {
-    Q_UNUSED( context );
+    Q_UNUSED(context);
 
-    style.addProperty( "draw:shadow", d->visible ? "visible" : "hidden" );
-    style.addProperty( "draw:shadow-color", d->color.name() );
-    if ( d->color.alphaF() != 1.0 )
-        style.addProperty( "draw:shadow-opacity", QString("%1%").arg( d->color.alphaF() * 100.0 ) );
-    style.addProperty( "draw:shadow-offset-x", QString("%1pt").arg( d->offset.x() ) );
-    style.addProperty( "draw:shadow-offset-y", QString("%1pt").arg( d->offset.y() ) );
+    style.addProperty("draw:shadow", d->visible ? "visible" : "hidden");
+    style.addProperty("draw:shadow-color", d->color.name());
+    if (d->color.alphaF() != 1.0)
+        style.addProperty("draw:shadow-opacity", QString("%1%").arg(d->color.alphaF() * 100.0));
+    style.addProperty("draw:shadow-offset-x", QString("%1pt").arg(d->offset.x()));
+    style.addProperty("draw:shadow-offset-y", QString("%1pt").arg(d->offset.y()));
 }
 
 void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
 {
-    if ( ! d->visible )
+    if (! d->visible)
         return;
 
-    KoShape::applyConversion( painter, converter );
+    KoShape::applyConversion(painter, converter);
 
-    painter.setPen( d->color );
-    if ( shape->background() )
-        painter.setBrush( QBrush(d->color) );
+    painter.setPen(d->color);
+    if (shape->background())
+        painter.setBrush(QBrush(d->color));
     QMatrix tm;
-    tm.translate( d->offset.x(), d->offset.y() );
+    tm.translate(d->offset.x(), d->offset.y());
     QMatrix tr = shape->absoluteTransformation(&converter);
-    painter.setMatrix( tr * tm * tr.inverted() * painter.matrix() );
-    QPainterPath path( shape->outline() );
-    KoPathShape * pathShape = dynamic_cast<KoPathShape*>( shape );
-    if ( pathShape )
-        path.setFillRule( pathShape->fillRule() );
-    painter.drawPath( path );
+    painter.setMatrix(tr * tm * tr.inverted() * painter.matrix());
+    QPainterPath path(shape->outline());
+    KoPathShape * pathShape = dynamic_cast<KoPathShape*>(shape);
+    if (pathShape)
+        path.setFillRule(pathShape->fillRule());
+    painter.drawPath(path);
 }
 
-void KoShapeShadow::setOffset( const QPointF & offset )
+void KoShapeShadow::setOffset(const QPointF & offset)
 {
     d->offset = offset;
 }
@@ -92,7 +91,7 @@ QPointF KoShapeShadow::offset() const
     return d->offset;
 }
 
-void KoShapeShadow::setColor( const QColor &color )
+void KoShapeShadow::setColor(const QColor &color)
 {
     d->color = color;
 }
@@ -102,7 +101,7 @@ QColor KoShapeShadow::color() const
     return d->color;
 }
 
-void KoShapeShadow::setVisibility( bool visible )
+void KoShapeShadow::setVisibility(bool visible)
 {
     d->visible = visible;
 }
@@ -112,17 +111,17 @@ bool KoShapeShadow::isVisible() const
     return d->visible;
 }
 
-void KoShapeShadow::insets( const KoShape *shape, KoInsets &insets )
+void KoShapeShadow::insets(const KoShape *shape, KoInsets &insets)
 {
-    if ( ! d->visible )
+    if (! d->visible)
         return;
 
-    Q_UNUSED( shape );
+    Q_UNUSED(shape);
 
-    insets.left = ( d->offset.x() < 0.0 ) ? qAbs(d->offset.x()) : 0.0;
-    insets.top = ( d->offset.y() < 0.0 ) ? qAbs(d->offset.y()) : 0.0;
-    insets.right = ( d->offset.x() > 0.0 ) ? d->offset.x() : 0.0;
-    insets.bottom = ( d->offset.y() > 0.0 ) ? d->offset.y() : 0.0;
+    insets.left = (d->offset.x() < 0.0) ? qAbs(d->offset.x()) : 0.0;
+    insets.top = (d->offset.y() < 0.0) ? qAbs(d->offset.y()) : 0.0;
+    insets.right = (d->offset.x() > 0.0) ? d->offset.x() : 0.0;
+    insets.bottom = (d->offset.y() > 0.0) ? d->offset.y() : 0.0;
 }
 
 void KoShapeShadow::addUser()

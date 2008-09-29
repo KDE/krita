@@ -24,27 +24,27 @@
 #include <klocale.h>
 
 KoShapeShearCommand::KoShapeShearCommand(const QList<KoShape*> &shapes, QList<qreal> &previousShearXs, QList<qreal> &previousShearYs, QList<qreal> &newShearXs, QList<qreal> &newShearYs, QUndoCommand *parent)
-: QUndoCommand(parent)
-, m_shapes(shapes)
-, m_previousShearXs(previousShearXs)
-, m_previousShearYs(previousShearYs)
-, m_newShearXs(newShearXs)
-, m_newShearYs(newShearYs)
+        : QUndoCommand(parent)
+        , m_shapes(shapes)
+        , m_previousShearXs(previousShearXs)
+        , m_previousShearYs(previousShearYs)
+        , m_newShearXs(newShearXs)
+        , m_newShearYs(newShearYs)
 {
     Q_ASSERT(m_shapes.count() == m_previousShearXs.count());
     Q_ASSERT(m_shapes.count() == m_previousShearYs.count());
     Q_ASSERT(m_shapes.count() == m_newShearXs.count());
     Q_ASSERT(m_shapes.count() == m_newShearYs.count());
 
-    setText(i18n( "Shear shapes" ));
+    setText(i18n("Shear shapes"));
 }
 
 void KoShapeShearCommand::redo()
 {
     QUndoCommand::redo();
-    for(int i=0; i < m_shapes.count(); i++) {
+    for (int i = 0; i < m_shapes.count(); i++) {
         m_shapes.at(i)->update();
-        m_shapes.at(i)->setShear( m_newShearXs.at(i), m_newShearYs.at(i));
+        m_shapes.at(i)->setShear(m_newShearXs.at(i), m_newShearYs.at(i));
         m_shapes.at(i)->update();
     }
 }
@@ -52,9 +52,9 @@ void KoShapeShearCommand::redo()
 void KoShapeShearCommand::undo()
 {
     QUndoCommand::undo();
-    for(int i=0; i < m_shapes.count(); i++) {
+    for (int i = 0; i < m_shapes.count(); i++) {
         m_shapes.at(i)->update();
-        m_shapes.at(i)->setShear( m_previousShearXs.at(i), m_previousShearYs.at(i) );
+        m_shapes.at(i)->setShear(m_previousShearXs.at(i), m_previousShearYs.at(i));
         m_shapes.at(i)->update();
     }
 }

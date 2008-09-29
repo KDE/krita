@@ -9,12 +9,13 @@
 
 #include <kcomponentdata.h>
 
-void TestShapeAt::test() {
+void TestShapeAt::test()
+{
     MockShape shape1;
     MockShape shape2;
     MockShape shape3;
 
-    KComponentData componentData( "TestShapeAt" );  // we need an instance for that canvas
+    KComponentData componentData("TestShapeAt");    // we need an instance for that canvas
 
     MockCanvas canvas;
     KoShapeManager manager(&canvas);
@@ -27,8 +28,8 @@ void TestShapeAt::test() {
     QVERIFY(manager.shapeAt(QPointF(110, 140)) != 0);
     QVERIFY(manager.shapeAt(QPointF(100, 100)) != 0);
     QVERIFY(manager.shapeAt(QPointF(100, 100), KoFlake::Selected) == 0);
-    QVERIFY(manager.shapeAt(QPointF(100, 100), KoFlake::Unselected) != 0 );
-    QVERIFY(manager.shapeAt(QPointF(100, 100), KoFlake::NextUnselected) != 0 );
+    QVERIFY(manager.shapeAt(QPointF(100, 100), KoFlake::Unselected) != 0);
+    QVERIFY(manager.shapeAt(QPointF(100, 100), KoFlake::NextUnselected) != 0);
 
     shape2.setPosition(QPointF(80, 80));
     shape2.setSize(QSizeF(50, 50));

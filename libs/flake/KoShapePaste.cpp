@@ -34,21 +34,19 @@
 #include "KoShapeRegistry.h"
 #include "commands/KoShapeCreateCommand.h"
 
-struct KoShapePaste::Private
-{
-    Private( KoCanvasBase * canvas, int zIndex, KoShapeContainer * parent )
-    : canvas( canvas )
-    , zIndex( zIndex )
-    , parent( parent )
-    {}
+struct KoShapePaste::Private {
+    Private(KoCanvasBase * canvas, int zIndex, KoShapeContainer * parent)
+            : canvas(canvas)
+            , zIndex(zIndex)
+            , parent(parent) {}
 
     KoCanvasBase * canvas;
     int zIndex;
     KoShapeContainer * parent;
 };
 
-KoShapePaste::KoShapePaste( KoCanvasBase * canvas, int zIndex, KoShapeContainer * parent )
-: d( new Private( canvas, zIndex, parent ) )
+KoShapePaste::KoShapePaste(KoCanvasBase * canvas, int zIndex, KoShapeContainer * parent)
+        : d(new Private(canvas, zIndex, parent))
 {
 }
 
@@ -57,31 +55,30 @@ KoShapePaste::~KoShapePaste()
     delete d;
 }
 
-bool KoShapePaste::process( const KoXmlElement & body, KoOdfReadStore & odfStore )
+bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
 {
-    KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store() );
-    KoShapeLoadingContext context( loadingContext, d->canvas->shapeController()->dataCenterMap() );
+    KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
+    KoShapeLoadingContext context(loadingContext, d->canvas->shapeController()->dataCenterMap());
 
-    context.setZIndex( d->zIndex );
+    context.setZIndex(d->zIndex);
 
-    QUndoCommand * cmd = new QUndoCommand( i18n( "Paste Shapes" ) );
+    QUndoCommand * cmd = new QUndoCommand(i18n("Paste Shapes"));
 
     // TODO if this is a text create a text shape and load the text inside the new shape.
     KoXmlElement element;
-    forEachElement( element, body )
-    {
-        kDebug(30006) <<"loading shape" << element.localName();
+    forEachElement(element, body) {
+        kDebug(30006) << "loading shape" << element.localName();
 
-        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( element, context );
-        if ( shape ) {
-            if ( ! shape->parent() ) {
-                shape->setParent( d->parent );
+        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(element, context);
+        if (shape) {
+            if (! shape->parent()) {
+                shape->setParent(d->parent);
             }
             d->canvas->shapeController()->addShapeDirect(shape, cmd);
         }
     }
 
-    d->canvas->addCommand( cmd );
+    d->canvas->addCommand(cmd);
 
     return true;
 }

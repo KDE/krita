@@ -30,16 +30,15 @@
 class KoShapeFactory::Private
 {
 public:
-    Private( const QString &i, const QString &n )
-        : id(i)
-        , name(n)
-        , loadingPriority( 0 )
-        {
-        }
+    Private(const QString &i, const QString &n)
+            : id(i)
+            , name(n)
+            , loadingPriority(0) {
+    }
 
     ~Private() {
         foreach(KoShapeTemplate t, templates)
-            delete t.properties;
+        delete t.properties;
         templates.clear();
     }
 
@@ -57,8 +56,8 @@ public:
 
 
 KoShapeFactory::KoShapeFactory(QObject *parent, const QString &id, const QString &name)
-    : QObject(parent),
-    d(new Private(id, name))
+        : QObject(parent),
+        d(new Private(id, name))
 {
 }
 
@@ -67,35 +66,35 @@ KoShapeFactory::~KoShapeFactory()
     delete d;
 }
 
-KoShape * KoShapeFactory::createDefaultShapeAndInit( KoShapeControllerBase * shapeController ) const
+KoShape * KoShapeFactory::createDefaultShapeAndInit(KoShapeControllerBase * shapeController) const
 {
     KoShape * shape = createDefaultShape();
-    if ( shape && shapeController ) {
-        shape->init( shapeController->dataCenterMap() );
+    if (shape && shapeController) {
+        shape->init(shapeController->dataCenterMap());
     }
     return shape;
 }
 
-KoShape * KoShapeFactory::createDefaultShapeAndInit( const QMap<QString, KoDataCenter *> & dataCenterMap ) const
+KoShape * KoShapeFactory::createDefaultShapeAndInit(const QMap<QString, KoDataCenter *> & dataCenterMap) const
 {
     KoShape * shape = createDefaultShape();
-    shape->init( dataCenterMap );
+    shape->init(dataCenterMap);
     return shape;
 }
 
-KoShape * KoShapeFactory::createShapeAndInit( const KoProperties * params, KoShapeControllerBase *shapeController ) const
+KoShape * KoShapeFactory::createShapeAndInit(const KoProperties * params, KoShapeControllerBase *shapeController) const
 {
-    KoShape * shape = createShape( params );
-    if ( shape && shapeController ) {
-        shape->init( shapeController->dataCenterMap() );
+    KoShape * shape = createShape(params);
+    if (shape && shapeController) {
+        shape->init(shapeController->dataCenterMap());
     }
     return shape;
 }
 
-KoShape * KoShapeFactory::createShapeAndInit(const KoProperties * params, const QMap<QString, KoDataCenter *> & dataCenterMap ) const
+KoShape * KoShapeFactory::createShapeAndInit(const KoProperties * params, const QMap<QString, KoDataCenter *> & dataCenterMap) const
 {
-    KoShape * shape = createShape( params );
-    shape->init( dataCenterMap );
+    KoShape * shape = createShape(params);
+    shape->init(dataCenterMap);
     return shape;
 }
 
@@ -131,7 +130,7 @@ const QString & KoShapeFactory::odfNameSpace() const
 
 bool KoShapeFactory::supports(const KoXmlElement & e) const
 {
-    Q_UNUSED( e );
+    Q_UNUSED(e);
     // XXX: Remove this and replace with a pure virtual once
     // everything has implemented it.
     return false;
@@ -173,12 +172,12 @@ const QList<KoShapeTemplate> KoShapeFactory::templates() const
     return d->templates;
 }
 
-void KoShapeFactory::setLoadingPriority( quint32 priority )
+void KoShapeFactory::setLoadingPriority(quint32 priority)
 {
     d->loadingPriority = priority;
 }
 
-void KoShapeFactory::setOdfElementNames( const QString & nameSpace, const QStringList & names )
+void KoShapeFactory::setOdfElementNames(const QString & nameSpace, const QStringList & names)
 {
     d->odfNameSpace = nameSpace;
     d->odfElementNames = names;

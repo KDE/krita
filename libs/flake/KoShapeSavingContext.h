@@ -7,12 +7,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
@@ -48,8 +48,7 @@ public:
     enum SavingMode { Store, Flat };
 
     /// The Style used for saving the shape
-    enum ShapeSavingOption
-    {
+    enum ShapeSavingOption {
         /**
          * If set the style of family presentation is used, when not set the
          * family graphic is used.
@@ -70,17 +69,17 @@ public:
          */
         UniqueMasterPages = 8
     };
-    Q_DECLARE_FLAGS( KoShapeSavingOptions, ShapeSavingOption )
+    Q_DECLARE_FLAGS(KoShapeSavingOptions, ShapeSavingOption)
 
     /**
      * @brief Constructor
      * @param xmlWriter used for writing the xml
      * @param mainStyles for saving the styles
-     * @param embeddedSaver for saving embedded documents 
+     * @param embeddedSaver for saving embedded documents
      * @param savingMode either Store (a KoStore will be used) or Flat (all data must be inline in the XML)
      */
-    KoShapeSavingContext( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles,
-                          KoEmbeddedDocumentSaver& embeddedSaver, SavingMode savingMode = Store );
+    KoShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles& mainStyles,
+                         KoEmbeddedDocumentSaver& embeddedSaver, SavingMode savingMode = Store);
     virtual ~KoShapeSavingContext();
 
     /**
@@ -93,17 +92,17 @@ public:
     /**
      * @brief Set the xml writer
      *
-     * Change the xmlWriter that is used in the Context e.g. for saving to styles.xml 
+     * Change the xmlWriter that is used in the Context e.g. for saving to styles.xml
      * instead of content.xml
      *
      * @param xmlWriter to use
      */
-    void setXmlWriter( KoXmlWriter & xmlWriter );
+    void setXmlWriter(KoXmlWriter & xmlWriter);
 
     /**
      * @brief Get the main styles
      *
-     * @return main styles 
+     * @return main styles
      */
     KoGenStyles & mainStyles();
 
@@ -119,20 +118,20 @@ public:
      *
      * @return ture if the option is set, false otherwise
      */
-    bool isSet( ShapeSavingOption option ) const;
+    bool isSet(ShapeSavingOption option) const;
 
     /**
      * @brief Set the options to use
      *
      * @param options to use
      */
-    void setOptions( KoShapeSavingOptions options );
+    void setOptions(KoShapeSavingOptions options);
 
     /// add an option to the set of options stored on this context, will leave the other options intact.
-    void addOption( ShapeSavingOption option);
+    void addOption(ShapeSavingOption option);
 
     /// remove an option, will leave the other options intact.
-    void removeOption( ShapeSavingOption option);
+    void removeOption(ShapeSavingOption option);
 
     /**
      * @brief Get the options used
@@ -151,7 +150,7 @@ public:
      *
      * @return the draw id for the shape or and empty string if it was not found
      */
-    const QString drawId( const KoShape * shape, bool insert = true );
+    const QString drawId(const KoShape * shape, bool insert = true);
 
     /**
      * @brief Clear out all given draw ids
@@ -167,12 +166,12 @@ public:
      * Adds a layer to save into a layer-set in styles.xml according to 9.1.2/9.1.3 odf spec
      * @param layer the layer to save
      */
-    void addLayerForSaving( const KoShapeLayer * layer );
+    void addLayerForSaving(const KoShapeLayer * layer);
 
     /**
      * Saves the layers added with addLayerForSaving to the xml writer
      */
-    void saveLayerSet( KoXmlWriter * xmlWriter ) const;
+    void saveLayerSet(KoXmlWriter * xmlWriter) const;
 
     /**
      * Adds a pixmap for saving into the Pictures subfolder within the odf file
@@ -181,24 +180,24 @@ public:
      * @param pixmap the pixmap to save
      * @return the filename of the pixmap to refer to
      */
-    QString addImageForSaving( const QPixmap &pixmap );
+    QString addImageForSaving(const QPixmap &pixmap);
 
     /**
      * Saves images added with addImageForSaving to the store
      */
-    bool saveImages( KoStore *store, KoXmlWriter* manifestWriter ) const;
+    bool saveImages(KoStore *store, KoXmlWriter* manifestWriter) const;
 
     /**
      * Add data center
      */
-    void addDataCenter( KoDataCenter * dataCenter );
+    void addDataCenter(KoDataCenter * dataCenter);
 
     /**
      * Save the data centers
      *
      * This calls KoDataCenter::completeSaving()
      */
-    bool saveDataCenter( KoStore *store, KoXmlWriter* manifestWriter );
+    bool saveDataCenter(KoStore *store, KoXmlWriter* manifestWriter);
 
     /**
      * Add shared data
@@ -210,14 +209,14 @@ public:
      * The ownership of the added data is passed to the context. The KoShapeSavingContext will
      * delete the added data when it is destroyed.
      *
-     * Data inserted for a specific id will not be overwritten by calling addSharedData with 
+     * Data inserted for a specific id will not be overwritten by calling addSharedData with
      * the same id again.
      *
      * You get an assertion when the id is already existing.
      *
      * @see KoSharedSavingData
      */
-    void addSharedData( const QString & id, KoSharedSavingData * data );
+    void addSharedData(const QString & id, KoSharedSavingData * data);
 
     /**
      * Get the shared data.
@@ -227,7 +226,7 @@ public:
      * @param id The id used to identify the shared data.
      * @return The shared data for the id or 0 if there is no shared data for the id.
      */
-    KoSharedSavingData * sharedData( const QString & id ) const;
+    KoSharedSavingData * sharedData(const QString & id) const;
 
 private:
     KoXmlWriter *m_xmlWriter;
@@ -244,6 +243,6 @@ private:
     SavingMode m_savingMode;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( KoShapeSavingContext::KoShapeSavingOptions )
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoShapeSavingContext::KoShapeSavingOptions)
 
 #endif // KOSHAPESAVINGCONTEXT_H

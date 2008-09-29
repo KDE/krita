@@ -33,7 +33,7 @@ public:
      * @param type the connection type
      * @param parent the optional parent command
      */
-    KoConnectionShapeTypeCommand( KoConnectionShape * connection, KoConnectionShape::Type type, QUndoCommand *parent = 0 );
+    KoConnectionShapeTypeCommand(KoConnectionShape * connection, KoConnectionShape::Type type, QUndoCommand *parent = 0);
     /// redo the command
     virtual void redo();
     /// revert the actions done in redo

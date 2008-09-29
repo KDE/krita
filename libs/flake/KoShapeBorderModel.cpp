@@ -27,7 +27,7 @@ public:
 };
 
 KoShapeBorderModel::KoShapeBorderModel()
-    : d(new Private())
+        : d(new Private())
 {
 }
 

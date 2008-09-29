@@ -86,7 +86,7 @@ class KoEventAction;
  *   <li>through an associated tool,
  *   <li>through a factory
  * </ul>
- * 
+ *
  * <h1>Shape interaction notifications</h1>
  * We had several notification methods that allow your shape to be notified of changes in other
  * shapes positions or rotation etc.
@@ -166,7 +166,7 @@ public:
      *
      * @return false if loading failed
      */
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) = 0;
+    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context) = 0;
 
     /**
      * @brief store the shape data as ODF XML.
@@ -174,7 +174,7 @@ public:
      * OpenDocument 9.2 Drawing Shapes.
      * @see saveOdfAttributes
      */
-    virtual void saveOdf( KoShapeSavingContext & context ) const = 0;
+    virtual void saveOdf(KoShapeSavingContext & context) const = 0;
 
     /**
      * This method can be used while saving the shape as ODF to add the data
@@ -184,21 +184,21 @@ public:
      * @param attributes a number of OdfAttribute items to state which attributes to save.
      * @see saveOdf
      */
-    void saveOdfAttributes( KoShapeSavingContext &context, int attributes ) const;
+    void saveOdfAttributes(KoShapeSavingContext &context, int attributes) const;
 
     /**
      * This method can be used while saving the shape as Odf to add common child elements
      *
      * The office:event-listeners and draw:glue-point are saved.
      */
-    void saveOdfCommonChildElements( KoShapeSavingContext &context ) const;
+    void saveOdfCommonChildElements(KoShapeSavingContext &context) const;
 
     /**
      * After the shape has been created this method is called so it can get access to any DataCenter it
      * might want.
      * The default implementation does nothing.
      */
-    virtual void init( const QMap<QString, KoDataCenter *> & dataCenterMap );
+    virtual void init(const QMap<QString, KoDataCenter *> & dataCenterMap);
 
     /**
      * @brief Scale the shape using the zero-point which is the top-left corner.
@@ -207,7 +207,7 @@ public:
      * @param sx scale in x direction
      * @param sy scale in y direction
      */
-    void setScale( qreal sx, qreal sy );
+    void setScale(qreal sx, qreal sy);
 
     /**
      * @brief Rotate the shape (relative)
@@ -216,7 +216,7 @@ public:
      *
      * @param angle change the angle of rotation increasing it with 'angle' degrees
      */
-    void rotate( qreal angle );
+    void rotate(qreal angle);
 
     /**
      * Return the current rotation in degrees.
@@ -232,7 +232,7 @@ public:
      * @param sx shear in x direction
      * @param sy shear in y direction
      */
-    void setShear( qreal sx, qreal sy );
+    void setShear(qreal sx, qreal sy);
 
     /**
      * @brief Resize the shape
@@ -243,7 +243,7 @@ public:
      * Easiest example of this difference is that using this method will not distort the
      * size of pattern-fills and borders.
      */
-    virtual void setSize( const QSizeF &size );
+    virtual void setSize(const QSizeF &size);
 
     /**
      * @brief Get the size of the shape in pt.
@@ -259,7 +259,7 @@ public:
      *
      * @param position the new position of the shape
      */
-    virtual void setPosition( const QPointF &position );
+    virtual void setPosition(const QPointF &position);
 
     /**
      * @brief Get the position of the shape in pt
@@ -273,7 +273,7 @@ public:
      * @param position the position where the user clicked.
      * @return true when it hits.
      */
-    virtual bool hitTest( const QPointF &position ) const;
+    virtual bool hitTest(const QPointF &position) const;
 
     /**
      * @brief Get the bounding box of the shape
@@ -294,7 +294,7 @@ public:
      *   The point does not have to be inside the boundings rectangle.  The point is in pt,
      *   just like the rest of the KoShape class uses.
      */
-    void addConnectionPoint( const QPointF &point );
+    void addConnectionPoint(const QPointF &point);
 
     /**
      * Return a list of the connection points that have been added to this shape.
@@ -303,14 +303,14 @@ public:
     QList<QPointF> connectionPoints() const;
 
     /**
-     * Add a event action 
+     * Add a event action
      */
-    void addEventAction( KoEventAction * action );
+    void addEventAction(KoEventAction * action);
 
     /**
      * Remove a event action
      */
-    void removeEventAction( KoEventAction * action );
+    void removeEventAction(KoEventAction * action);
 
     /**
      * Get all event actions
@@ -319,13 +319,13 @@ public:
 
     /**
      * Set the background of the shape.
-     * A shape background can be a plain color, a gradient, a pattern, be fully transparent 
+     * A shape background can be a plain color, a gradient, a pattern, be fully transparent
      * or have a complex fill.
-     * Setting such a background will allow the shape to be filled and will be able to tell 
+     * Setting such a background will allow the shape to be filled and will be able to tell
      * if it is transparent or not.
      * @param background the new shape background.
      */
-    void setBackground ( KoShapeBackground * background );
+    void setBackground(KoShapeBackground * background);
     /**
      * return the brush used to paint te background of this shape with.
      * A QBrush can have a plain color, be fully transparent or have a complex fill.
@@ -379,14 +379,14 @@ public:
      * @param recursive when true, checks visibility recursively
      * @return current visibility state of this shape.
      */
-    bool isVisible( bool recursive = false ) const;
+    bool isVisible(bool recursive = false) const;
 
     /**
      * Changes the shape to be printable or not. The default is true.
      *
      * If a Shape's print flag is true, the shape will be printed. If
      * false, the shape will not be printed. If a shape is not visible (@see isVisible),
-     * it isPrinted will return false, too. 
+     * it isPrinted will return false, too.
      */
     void setPrintable(bool on);
 
@@ -492,7 +492,7 @@ public:
     KoInsets borderInsets() const;
 
     /// Sets the new shadow, removing the old one
-    void setShadow( KoShapeShadow * shadow );
+    void setShadow(KoShapeShadow * shadow);
 
     /// Returns the currently set shadow or 0 if there is now shadow set
     KoShapeShadow * shadow() const;
@@ -595,13 +595,13 @@ public:
      *
      * @param matrix the transformation matrix to apply
      */
-    void applyAbsoluteTransformation(const QMatrix &matrix );
+    void applyAbsoluteTransformation(const QMatrix &matrix);
 
     /**
      * Sets a new transformation matrix describing the local transformations on this shape.
      * @param matrix the new transformation matrix
      */
-    void setTransformation( const QMatrix &matrix );
+    void setTransformation(const QMatrix &matrix);
 
     /// Returns the shapes local transformation matrix
     QMatrix transformation() const;
@@ -613,7 +613,7 @@ public:
      *
      * @param matrix the transformation matrix to apply
      */
-    void applyTransformation( const QMatrix &matrix );
+    void applyTransformation(const QMatrix &matrix);
 
     /**
      * Copy all the settings from the parameter shape and apply them to this shape.
@@ -637,28 +637,28 @@ public:
      * @param point in shape coordinates
      * @return point in document coordinates
      */
-    QPointF shapeToDocument( const QPointF &point ) const;
+    QPointF shapeToDocument(const QPointF &point) const;
 
     /**
      * @brief Transforms rect from shape coordinates to document coordinates
      * @param rect in shape coordinates
      * @return rect in document coordinates
      */
-    QRectF shapeToDocument( const QRectF &rect ) const;
+    QRectF shapeToDocument(const QRectF &rect) const;
 
     /**
      * @brief Transforms point from document coordinates to shape coordinates
      * @param point in document coordinates
      * @return point in shape coordinates
      */
-    QPointF documentToShape( const QPointF &point ) const;
+    QPointF documentToShape(const QPointF &point) const;
 
     /**
      * @brief Transform rect from document coordinates to shape coordinates
      * @param rect in document coordinates
      * @return rect in shape coordinates
      */
-    QRectF documentToShape( const QRectF &rect ) const;
+    QRectF documentToShape(const QRectF &rect) const;
 
     /**
      * Returns the name of the shape.
@@ -670,7 +670,7 @@ public:
      * Sets the name of the shape.
      * @param name the new shape name
      */
-    void setName( const QString & name );
+    void setName(const QString & name);
 
     /**
      * Update the position of the shape in the tree of the KoShapeManager.
@@ -700,14 +700,14 @@ public:
     /// checks recursively if the shape or one of its parents is not visible or locked
     bool isEditable() const;
 
-        /// Removes connection point with given index
-    void removeConnectionPoint( int index );
+    /// Removes connection point with given index
+    void removeConnectionPoint(int index);
 
     /// Adds a shape which depends on this shape
-    void addDependee( KoShape * shape );
+    void addDependee(KoShape * shape);
 
     /// Removes as shape depending on this shape
-    void removeDependee( KoShape * shape );
+    void removeDependee(KoShape * shape);
 
     /// Returns additional snap data the shape wants to have snapping to
     virtual KoSnapData snapData() const;
@@ -721,14 +721,14 @@ public:
      * @param name The name of the attribute in the following form prefix:tag e.g. presentation:placeholder
      * @param value The value of the attribute
      */
-    void setAdditionalAttribute( const char * name, const QString & value );
+    void setAdditionalAttribute(const char * name, const QString & value);
 
     /**
      * Remove additional attribute
      *
      * @param name The name of the attribute in the following form prefix:tag e.g. presentation:placeholder
      */
-    void removeAdditionalAttribute( const char * name );
+    void removeAdditionalAttribute(const char * name);
 
     /**
      * Check if additional attribute is set
@@ -737,7 +737,7 @@ public:
      *
      * @return true if there is a attribute with prefix:tag set, false otherwise
      */
-    bool hasAdditionalAttribute( const char * name );
+    bool hasAdditionalAttribute(const char * name);
 
     /**
      * Get additional attribute
@@ -746,11 +746,11 @@ public:
      *
      * @return The value of the attribute if it exists or a null string if not found.
      */
-    QString additionalAttribute( const char * name );
+    QString additionalAttribute(const char * name);
 
 protected:
 
-/* ** loading saving helper methods */
+    /* ** loading saving helper methods */
     /// attributes from ODF 1.1 chapter 9.2.15 Common Drawing Shape Attributes
     enum OdfAttribute {
         OdfTransformation = 1,       ///< Store transformation information
@@ -780,14 +780,14 @@ protected:
      * @param element element which represents the shape in odf
      * @param attributes a number of OdfAttribute items to state which attributes to load.
      */
-    bool loadOdfAttributes( const KoXmlElement & element, KoShapeLoadingContext &context, int attributes );
+    bool loadOdfAttributes(const KoXmlElement & element, KoShapeLoadingContext &context, int attributes);
 
     /**
      * Parses the transformation attribute from the given string
      * @param transform the transform attribute string
      * @return the resulting transformation matrix
      */
-    QMatrix parseOdfTransform( const QString &transform );
+    QMatrix parseOdfTransform(const QString &transform);
 
     /**
      * @brief Saves the style used for the shape
@@ -800,7 +800,7 @@ protected:
      * @return the name of the style
      * @see saveOdf
      */
-    virtual QString saveStyle( KoGenStyle &style, KoShapeSavingContext &context ) const;
+    virtual QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
 
     /**
      * Loads the stroke and fill style from the given element.
@@ -808,24 +808,24 @@ protected:
      * @param element the xml element to  load the style from
      * @param context the loading context used for loading
      */
-    virtual void loadStyle( const KoXmlElement & element, KoShapeLoadingContext &context );
+    virtual void loadStyle(const KoXmlElement & element, KoShapeLoadingContext &context);
 
     /// Loads the fill style
     //QBrush loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext & context );
-    KoShapeBackground * loadOdfFill( const KoXmlElement & element, KoShapeLoadingContext & context );
+    KoShapeBackground * loadOdfFill(const KoXmlElement & element, KoShapeLoadingContext & context);
 
     /// Loads the stroke style
-    KoShapeBorderModel * loadOdfStroke( const KoXmlElement & element, KoShapeLoadingContext & context );
+    KoShapeBorderModel * loadOdfStroke(const KoXmlElement & element, KoShapeLoadingContext & context);
 
     /// Loads the shadow style
-    KoShapeShadow * loadOdfShadow( const KoXmlElement & element, KoShapeLoadingContext & context );
+    KoShapeShadow * loadOdfShadow(const KoXmlElement & element, KoShapeLoadingContext & context);
 
     /**
      * Fills the style stack and returns the value of the given style property (e.g fill, stroke).
      */
-    QString getStyleProperty( const char *property, const KoXmlElement & element, KoShapeLoadingContext & context );
+    QString getStyleProperty(const char *property, const KoXmlElement & element, KoShapeLoadingContext & context);
 
-/* ** end loading saving */
+    /* ** end loading saving */
 
 
     /**
@@ -833,10 +833,12 @@ protected:
      * This is called whenever the shape, position rotation or scale properties were altered.
      * @param type an indicator which type was changed.
      */
-    virtual void shapeChanged(ChangeType type) { Q_UNUSED(type); }
+    virtual void shapeChanged(ChangeType type) {
+        Q_UNUSED(type);
+    }
 
     /// This is called whenever a shape this shape depends on has changed
-    virtual void notifyShapeChanged( KoShape * shape, ChangeType type );
+    virtual void notifyShapeChanged(KoShape * shape, ChangeType type);
 
     /**
      * Set the property collision detection.
@@ -856,8 +858,8 @@ protected:
 
 private:
     friend class KoShapeManager;
-    void addShapeManager( KoShapeManager * manager );
-    void removeShapeManager( KoShapeManager * manager );
+    void addShapeManager(KoShapeManager * manager);
+    void removeShapeManager(KoShapeManager * manager);
 
     class Private;
     friend class Private;

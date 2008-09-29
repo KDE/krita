@@ -25,14 +25,15 @@
 
 class KoZoomTool;
 
-class KoZoomToolWidget : public QWidget, Ui::ZoomToolWidget {
+class KoZoomToolWidget : public QWidget, Ui::ZoomToolWidget
+{
     Q_OBJECT
 public:
-    explicit KoZoomToolWidget( KoZoomTool* tool, QWidget *parent = 0 );
+    explicit KoZoomToolWidget(KoZoomTool* tool, QWidget *parent = 0);
     ~KoZoomToolWidget();
 
 protected:
-    bool eventFilter( QObject* object, QEvent* event );
+    bool eventFilter(QObject* object, QEvent* event);
 
 private slots:
     void changeZoomMode();

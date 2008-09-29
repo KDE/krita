@@ -37,7 +37,7 @@ ToolHelper::ToolHelper(KoToolFactory *tool)
 QToolButton* ToolHelper::createButton()
 {
     QToolButton *but = new QToolButton();
-    but->setIcon(KIcon( m_toolFactory->icon() ).pixmap(22));
+    but->setIcon(KIcon(m_toolFactory->icon()).pixmap(22));
     but->setToolTip(m_toolFactory->toolTip());
     connect(but, SIGNAL(clicked()), this, SLOT(buttonPressed()));
     return but;
@@ -99,8 +99,8 @@ bool ToolHelper::canCreateTool(KoCanvasBase *canvas) const
 
 //   ************ Connector **********
 Connector::Connector(KoShapeManager *parent)
-    : QObject(parent),
-    m_shapeManager(parent)
+        : QObject(parent),
+        m_shapeManager(parent)
 {
     connect(m_shapeManager, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 }

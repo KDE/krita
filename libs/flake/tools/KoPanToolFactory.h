@@ -24,7 +24,8 @@
 #include "KoToolFactory.h"
 
 /// Factory for the KoPanTool
-class KoPanToolFactory : public KoToolFactory {
+class KoPanToolFactory : public KoToolFactory
+{
 public:
     /// constructor
     KoPanToolFactory(QObject *parent);

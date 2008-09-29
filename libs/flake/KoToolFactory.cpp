@@ -23,11 +23,10 @@ class KoToolFactory::Private
 {
 public:
     Private(const QString &i, const QString &n)
-        : priority(100),
-        inputDeviceAgnostic(true),
-        id(i),
-        name(n)
-    {
+            : priority(100),
+            inputDeviceAgnostic(true),
+            id(i),
+            name(n) {
     }
     int priority;
     bool inputDeviceAgnostic;
@@ -41,8 +40,8 @@ public:
 
 
 KoToolFactory::KoToolFactory(QObject *parent, const QString &id, const QString &name)
-    : QObject(parent),
-    d(new Private(id, name))
+        : QObject(parent),
+        d(new Private(id, name))
 {
 }
 

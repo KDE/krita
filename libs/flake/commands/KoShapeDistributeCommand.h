@@ -34,8 +34,7 @@ class FLAKE_EXPORT KoShapeDistributeCommand : public QUndoCommand
 {
 public:
     /// The different options to ditribute with this command
-    enum Distribute
-    {
+    enum Distribute {
         HorizontalCenterDistribution,   ///< Horizontal centered
         HorizontalGapsDistribution,     ///< Horizontal Gaps
         HorizontalLeftDistribution,     ///< Horizontal Left
@@ -52,15 +51,15 @@ public:
      * @param boundingRect the rect the shapes will be distributed in
      * @param parent the parent command used for macro commands
      */
-    KoShapeDistributeCommand( const QList<KoShape*> &shapes, Distribute distribute, QRectF boundingRect,
-                              QUndoCommand *parent = 0 );
+    KoShapeDistributeCommand(const QList<KoShape*> &shapes, Distribute distribute, QRectF boundingRect,
+                             QUndoCommand *parent = 0);
     virtual ~KoShapeDistributeCommand();
     /// redo the command
     virtual void redo();
     /// revert the actions done in redo
     virtual void undo();
 private:
-    qreal getAvailableSpace( KoShape *first, KoShape *last, qreal extent, QRectF boundingRect );
+    qreal getAvailableSpace(KoShape *first, KoShape *last, qreal extent, QRectF boundingRect);
 
     class Private;
     Private * const d;

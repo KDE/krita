@@ -31,7 +31,7 @@ class KoToolPrivate
 {
 public:
     KoToolPrivate()
-        : previousCursor(Qt::ArrowCursor) { }
+            : previousCursor(Qt::ArrowCursor) { }
 
     QMap<QString, QWidget *> optionWidgets; ///< the optionwidgets associated witth this tool
     QCursor previousCursor;
@@ -40,25 +40,25 @@ public:
     QList<QAction*> popupActionList;
 };
 
-KoTool::KoTool(KoCanvasBase *canvas )
-    : m_canvas(canvas),
-    d(new KoToolPrivate())
+KoTool::KoTool(KoCanvasBase *canvas)
+        : m_canvas(canvas),
+        d(new KoToolPrivate())
 {
     if (m_canvas) { // in the case of KoToolManagers dummytool it can be zero :(
         KoCanvasResourceProvider * crp = m_canvas->resourceProvider();
         Q_ASSERT_X(crp, "KoTool::KoTool", "No KoCanvasResourceProvider");
         if (crp)
-            connect( m_canvas->resourceProvider(), SIGNAL( resourceChanged(int, const QVariant & ) ),
-                 this, SLOT( resourceChanged( int, const QVariant &  ) ) );
+            connect(m_canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant &)),
+                    this, SLOT(resourceChanged(int, const QVariant &)));
     }
 }
 
 KoTool::~KoTool()
 {
-/*TODO change this to map behaviour
-    if (d->optionWidget && !d->optionWidget->parentWidget())
-        delete d->optionWidget;
-*/
+    /*TODO change this to map behaviour
+        if (d->optionWidget && !d->optionWidget->parentWidget())
+            delete d->optionWidget;
+    */
     delete d;
 }
 
@@ -71,10 +71,10 @@ void KoTool::deactivate()
 {
 }
 
-void KoTool::resourceChanged( int key, const QVariant & res )
+void KoTool::resourceChanged(int key, const QVariant & res)
 {
-    Q_UNUSED( key );
-    Q_UNUSED( res );
+    Q_UNUSED(key);
+    Q_UNUSED(res);
 }
 
 bool KoTool::wantsAutoScroll()
@@ -82,7 +82,7 @@ bool KoTool::wantsAutoScroll()
     return true;
 }
 
-void KoTool::mouseDoubleClickEvent( KoPointerEvent *event )
+void KoTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
     event->ignore();
 }
@@ -97,7 +97,7 @@ void KoTool::keyReleaseEvent(QKeyEvent *e)
     e->ignore();
 }
 
-void KoTool::wheelEvent( KoPointerEvent * e )
+void KoTool::wheelEvent(KoPointerEvent * e)
 {
     e->ignore();
 }
@@ -107,9 +107,9 @@ QVariant KoTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConver
     if (m_canvas->canvasWidget() == 0)
         return QVariant();
 
-    switch(query) {
+    switch (query) {
     case Qt::ImMicroFocus:
-        return QRect(m_canvas->canvasWidget()->width()/2, 0, 1, m_canvas->canvasWidget()->height());
+        return QRect(m_canvas->canvasWidget()->width() / 2, 0, 1, m_canvas->canvasWidget()->height());
     case Qt::ImFont:
         return m_canvas->canvasWidget()->font();
     default:
@@ -117,7 +117,7 @@ QVariant KoTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConver
     }
 }
 
-void KoTool::inputMethodEvent (QInputMethodEvent * event)
+void KoTool::inputMethodEvent(QInputMethodEvent * event)
 {
     if (! event->commitString().isEmpty()) {
         QKeyEvent ke(QEvent::KeyPress, -1, 0, event->commitString());
@@ -126,17 +126,17 @@ void KoTool::inputMethodEvent (QInputMethodEvent * event)
     event->accept();
 }
 
-void KoTool::customPressEvent( KoPointerEvent * event )
+void KoTool::customPressEvent(KoPointerEvent * event)
 {
     event->ignore();
 }
 
-void KoTool::customReleaseEvent( KoPointerEvent * event )
+void KoTool::customReleaseEvent(KoPointerEvent * event)
 {
     event->ignore();
 }
 
-void KoTool::customMoveEvent( KoPointerEvent * event )
+void KoTool::customMoveEvent(KoPointerEvent * event)
 {
     event->ignore();
 }
@@ -146,8 +146,8 @@ void KoTool::useCursor(QCursor cursor, bool force)
     if (!force && cursor.shape() != Qt::BitmapCursor && cursor.shape() == d->previousCursor.shape())
         return;
 
-    if (!force && cursor.shape()==Qt::BitmapCursor && d->previousCursor.shape()==Qt::BitmapCursor &&
-                cursor.pixmap().cacheKey() == d->previousCursor.pixmap().cacheKey())
+    if (!force && cursor.shape() == Qt::BitmapCursor && d->previousCursor.shape() == Qt::BitmapCursor &&
+            cursor.pixmap().cacheKey() == d->previousCursor.pixmap().cacheKey())
         return;
 
     d->previousCursor = cursor;
@@ -185,7 +185,7 @@ QWidget * KoTool::createOptionWidget()
 QMap<QString, QWidget *>  KoTool::createOptionWidgets()
 {
     QMap<QString, QWidget *> ow;
-    if(QWidget *widget = createOptionWidget())
+    if (QWidget *widget = createOptionWidget())
         ow.insert(i18n("Tool Options"), widget);
     return ow;
 }
@@ -230,9 +230,9 @@ KoCanvasBase * KoTool::canvas() const
     return m_canvas;
 }
 
-void KoTool::setStatusText( const QString &statusText )
+void KoTool::setStatusText(const QString &statusText)
 {
-    emit statusTextChanged( statusText );
+    emit statusTextChanged(statusText);
 }
 
 #include "KoTool.moc"

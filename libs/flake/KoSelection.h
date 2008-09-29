@@ -49,7 +49,8 @@ class KoShapeLayer;
  * A selection, however, should not be selectable. We need to think
  * a little about the interaction here.
  */
-class FLAKE_EXPORT KoSelection : public QObject, public KoShape {
+class FLAKE_EXPORT KoSelection : public QObject, public KoShape
+{
     Q_OBJECT
 
 public:
@@ -57,14 +58,14 @@ public:
     KoSelection();
     virtual ~KoSelection();
 
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
     /**
      * Adds an object to the selection.
      *
      * If the object is a KoShapeGroup all of its child objects are automatically added
      * to the selection.
-     * If the object has no parent or is not a KoShapeGroup, only the given object is 
+     * If the object has no parent or is not a KoShapeGroup, only the given object is
      * added to the selection.
      * If the given object is a child of a KoShapeGroup and recursive selection is enabled
      * the all parents and their child object up to the toplevel KoShapeGroup are added to
@@ -73,14 +74,14 @@ public:
      * @param object the object to add to the selection
      * @param recursive enables recursively selecting shapes of parent groups
      */
-    void select(KoShape * object, bool recursive = true );
+    void select(KoShape * object, bool recursive = true);
 
     /**
      * Removes a selected object.
      *
      * If the object is a KoShapeGroup all of its child objects are automatically removed
      * from the selection.
-     * If the object has no parent or is not a KoShapeGroup, only the given object is 
+     * If the object has no parent or is not a KoShapeGroup, only the given object is
      * removed from the selection.
      * If the given object is a child of a KoShapeGroup and recursive selection is enabled
      * the all parents and their child object up to the toplevel KoShapeGroup are removed
@@ -115,7 +116,7 @@ public:
     /// return the selection count, i.e. the number of all selected shapes
     int count() const;
 
-    virtual bool hitTest( const QPointF &position ) const;
+    virtual bool hitTest(const QPointF &position) const;
 
     virtual QRectF boundingRect() const;
 
@@ -123,7 +124,7 @@ public:
      * Sets the currently active layer.
      * @param layer the new active layer
      */
-    void setActiveLayer( KoShapeLayer* layer );
+    void setActiveLayer(KoShapeLayer* layer);
 
     /**
      * Returns a currently active layer.
@@ -140,8 +141,8 @@ signals:
     void selectionChanged();
 
 private:
-    virtual void saveOdf( KoShapeSavingContext & ) const;
-    virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &);
+    virtual void saveOdf(KoShapeSavingContext &) const;
+    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &);
 
     Q_PRIVATE_SLOT(d, void selectionChangedEvent())
 

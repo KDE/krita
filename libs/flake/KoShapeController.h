@@ -50,7 +50,7 @@ public:
      * @param canvas the canvas this controller works for.
      * @param shapeController the application provided shapeControllerBase that we can call.
      */
-    KoShapeController( KoCanvasBase *canvas, KoShapeControllerBase *shapeController );
+    KoShapeController(KoCanvasBase *canvas, KoShapeControllerBase *shapeController);
     /// destructor
     ~KoShapeController();
 
@@ -59,11 +59,11 @@ public:
      *
      * @param shape to add to the document
      * @param parent the parent command if the resulting command is a compound undo command.
-     * 
-     * @return command which will insert the shape into the document or 0 if the 
+     *
+     * @return command which will insert the shape into the document or 0 if the
      *         insertion was cancelled. The command is not yet executed.
      */
-    QUndoCommand* addShape( KoShape *shape, QUndoCommand *parent = 0 );
+    QUndoCommand* addShape(KoShape *shape, QUndoCommand *parent = 0);
 
     /**
      * @brief Add a shape to the document, skipping any dialogs or other user interaction.
@@ -73,29 +73,29 @@ public:
      *
      * @return command which will insert the shape into the document. The command is not yet executed.
      */
-    QUndoCommand* addShapeDirect( KoShape *shape, QUndoCommand *parent = 0 );
+    QUndoCommand* addShapeDirect(KoShape *shape, QUndoCommand *parent = 0);
 
     /**
      * @brief Remove a shape from the document.
      *
      * @param shape to remove from the document
      * @param parent the parent command if the resulting command is a compound undo command.
-     * 
+     *
      * @return command which will remove the shape from the document.
      *         The command is not yet executed.
      */
-    QUndoCommand* removeShape( KoShape *shape, QUndoCommand *parent = 0 );
+    QUndoCommand* removeShape(KoShape *shape, QUndoCommand *parent = 0);
 
     /**
      * Remove a shape from the document.
      *
      * @param shapes the set of shapes to remove from the document
      * @param parent the parent command if the resulting command is a compound undo command.
-     * 
+     *
      * @return command which will remove the shape from the document.
      *         The command is not yet executed.
      */
-    QUndoCommand* removeShapes( const QList<KoShape*> &shapes, QUndoCommand *parent = 0 );
+    QUndoCommand* removeShapes(const QList<KoShape*> &shapes, QUndoCommand *parent = 0);
 
     /**
      * @brief Set the KoShapeControllerBase used to add/remove shapes
@@ -109,7 +109,7 @@ public:
      *
      * @return pointer to requested data center if it exist, else null
      */
-    KoDataCenter * dataCenter( const QString &dataCenterName );
+    KoDataCenter * dataCenter(const QString &dataCenterName);
 
     /**
      * @brief Get the dataCenterMap used in the shape controller base

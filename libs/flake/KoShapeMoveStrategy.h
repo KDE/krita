@@ -41,13 +41,15 @@ public:
      * @param canvas the canvas interface which will supply things like a selection object
      * @param clicked the initial point that the user depressed (in pt).
      */
-    KoShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked );
+    KoShapeMoveStrategy(KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked);
     virtual ~KoShapeMoveStrategy() {}
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     QUndoCommand* createCommand();
-    void finishInteraction( Qt::KeyboardModifiers modifiers ) { Q_UNUSED( modifiers ); }
-    virtual void paint( QPainter &painter, const KoViewConverter &converter);
+    void finishInteraction(Qt::KeyboardModifiers modifiers) {
+        Q_UNUSED(modifiers);
+    }
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
 private:
     QList<QPointF> m_previousPositions;

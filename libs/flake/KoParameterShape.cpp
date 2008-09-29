@@ -31,7 +31,7 @@ public:
 };
 
 KoParameterShape::KoParameterShape()
-    : d(new Private())
+        : d(new Private())
 {
 }
 
@@ -40,31 +40,28 @@ KoParameterShape::~KoParameterShape()
     delete d;
 }
 
-void KoParameterShape::moveHandle( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers )
+void KoParameterShape::moveHandle(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers)
 {
-    if ( handleId >= m_handles.size() )
-    {
+    if (handleId >= m_handles.size()) {
         kWarning(30006) << "handleId out of bounds";
         return;
     }
 
     update();
     // function to do special stuff
-    moveHandleAction( handleId, documentToShape( point ), modifiers );
+    moveHandleAction(handleId, documentToShape(point), modifiers);
 
-    updatePath( size() );
+    updatePath(size());
     update();
 }
 
 
-int KoParameterShape::handleIdAt( const QRectF & rect ) const
+int KoParameterShape::handleIdAt(const QRectF & rect) const
 {
     int handle = -1;
 
-    for ( int i = 0; i < m_handles.size(); ++i )
-    {
-        if ( rect.contains( m_handles.at( i ) ) )
-        {
+    for (int i = 0; i < m_handles.size(); ++i) {
+        if (rect.contains(m_handles.at(i))) {
             handle = i;
             break;
         }
@@ -72,70 +69,67 @@ int KoParameterShape::handleIdAt( const QRectF & rect ) const
     return handle;
 }
 
-QPointF KoParameterShape::handlePosition( int handleId )
+QPointF KoParameterShape::handlePosition(int handleId)
 {
     return m_handles[handleId];
 }
 
-void KoParameterShape::paintHandles( QPainter & painter, const KoViewConverter & converter, int handleRadius )
+void KoParameterShape::paintHandles(QPainter & painter, const KoViewConverter & converter, int handleRadius)
 {
-    applyConversion( painter, converter );
+    applyConversion(painter, converter);
 
     QMatrix worldMatrix = painter.worldMatrix();
-    painter.setMatrix( QMatrix() );
+    painter.setMatrix(QMatrix());
 
     QMatrix matrix;
-    matrix.rotate( 45.0 );
-    QPolygonF poly( handleRect( QPointF( 0, 0 ), handleRadius ) );
-    poly = matrix.map( poly );
+    matrix.rotate(45.0);
+    QPolygonF poly(handleRect(QPointF(0, 0), handleRadius));
+    poly = matrix.map(poly);
 
-    QList<QPointF>::const_iterator it( m_handles.begin() );
-    for ( ; it != m_handles.end(); ++it ) 
-    {
-        QPointF moveVector = worldMatrix.map( *it );
-        poly.translate( moveVector.x(), moveVector.y() );
-        painter.drawPolygon( poly );
-        poly.translate( -moveVector.x(), -moveVector.y() );
+    QList<QPointF>::const_iterator it(m_handles.begin());
+    for (; it != m_handles.end(); ++it) {
+        QPointF moveVector = worldMatrix.map(*it);
+        poly.translate(moveVector.x(), moveVector.y());
+        painter.drawPolygon(poly);
+        poly.translate(-moveVector.x(), -moveVector.y());
     }
 }
 
-void KoParameterShape::paintHandle( QPainter & painter, const KoViewConverter & converter, int handleId, int handleRadius )
+void KoParameterShape::paintHandle(QPainter & painter, const KoViewConverter & converter, int handleId, int handleRadius)
 {
-    applyConversion( painter, converter );
+    applyConversion(painter, converter);
 
     QMatrix worldMatrix = painter.worldMatrix();
-    painter.setMatrix( QMatrix() );
+    painter.setMatrix(QMatrix());
 
     QMatrix matrix;
-    matrix.rotate( 45.0 );
-    QPolygonF poly( handleRect( QPointF( 0, 0 ), handleRadius ) );
-    poly = matrix.map( poly );
-    poly.translate( worldMatrix.map( m_handles[handleId] ) );
-    painter.drawPolygon( poly );
+    matrix.rotate(45.0);
+    QPolygonF poly(handleRect(QPointF(0, 0), handleRadius));
+    poly = matrix.map(poly);
+    poly.translate(worldMatrix.map(m_handles[handleId]));
+    painter.drawPolygon(poly);
 }
 
-void KoParameterShape::setSize( const QSizeF &newSize )
+void KoParameterShape::setSize(const QSizeF &newSize)
 {
     QSizeF oldSize = size();
-    QMatrix matrix( newSize.width() / oldSize.width(), 0, 0, newSize.height() / oldSize.height(), 0, 0 );
+    QMatrix matrix(newSize.width() / oldSize.width(), 0, 0, newSize.height() / oldSize.height(), 0, 0);
 
-    for( int i = 0; i < m_handles.size(); ++i )
-    {
-        m_handles[i] = matrix.map( m_handles[i] );
+    for (int i = 0; i < m_handles.size(); ++i) {
+        m_handles[i] = matrix.map(m_handles[i]);
     }
 
-    KoPathShape::setSize( newSize );
+    KoPathShape::setSize(newSize);
 }
 
 QPointF KoParameterShape::normalize()
 {
-    QPointF offset( KoPathShape::normalize() );
+    QPointF offset(KoPathShape::normalize());
     QMatrix matrix;
-    matrix.translate( -offset.x(), -offset.y() );
+    matrix.translate(-offset.x(), -offset.y());
 
-    for( int i = 0; i < m_handles.size(); ++i )
-    {
-        m_handles[i] = matrix.map( m_handles[i] );
+    for (int i = 0; i < m_handles.size(); ++i) {
+        m_handles[i] = matrix.map(m_handles[i]);
     }
 
     return offset;
@@ -146,7 +140,7 @@ bool KoParameterShape::isParametricShape() const
     return !d->modified;
 }
 
-void KoParameterShape::setModified( bool modified )
+void KoParameterShape::setModified(bool modified)
 {
     d->modified = modified;
 }

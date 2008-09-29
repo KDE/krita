@@ -32,7 +32,7 @@ QList<QPointF> KoSnapData::snapPoints() const
     return m_points;
 }
 
-void KoSnapData::setSnapPoints( const QList<QPointF> &snapPoints )
+void KoSnapData::setSnapPoints(const QList<QPointF> &snapPoints)
 {
     m_points = snapPoints;
 }
@@ -42,7 +42,7 @@ QList<KoPathSegment> KoSnapData::snapSegments() const
     return m_segments;
 }
 
-void KoSnapData::setSnapSegments( const QList<KoPathSegment> &snapSegments )
+void KoSnapData::setSnapSegments(const QList<KoPathSegment> &snapSegments)
 {
     m_segments = snapSegments;
 }

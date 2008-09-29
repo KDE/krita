@@ -42,13 +42,15 @@ public:
      * @param clicked the initial point that the user depressed (in pt).
      * @param direction the handle that was grabbed
      */
-    KoShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, KoFlake::SelectionHandle direction );
+    KoShapeShearStrategy(KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, KoFlake::SelectionHandle direction);
     virtual ~KoShapeShearStrategy() {}
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     QUndoCommand* createCommand();
-    void finishInteraction( Qt::KeyboardModifiers modifiers ) { Q_UNUSED( modifiers ); }
-    virtual void paint( QPainter &painter, const KoViewConverter &converter);
+    void finishInteraction(Qt::KeyboardModifiers modifiers) {
+        Q_UNUSED(modifiers);
+    }
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
 private:
     QPointF m_start;

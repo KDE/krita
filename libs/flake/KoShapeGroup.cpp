@@ -30,9 +30,9 @@
 #include <QPainter>
 
 KoShapeGroup::KoShapeGroup()
-: KoShapeContainer(new SimpleShapeContainerModel())
+        : KoShapeContainer(new SimpleShapeContainerModel())
 {
-    setSize( QSizeF(0,0) );
+    setSize(QSizeF(0, 0));
 }
 
 void KoShapeGroup::paintComponent(QPainter &painter, const KoViewConverter &converter)
@@ -41,7 +41,7 @@ void KoShapeGroup::paintComponent(QPainter &painter, const KoViewConverter &conv
     Q_UNUSED(converter);
 }
 
-bool KoShapeGroup::hitTest( const QPointF &position ) const
+bool KoShapeGroup::hitTest(const QPointF &position) const
 {
     Q_UNUSED(position);
     return false;
@@ -50,58 +50,54 @@ bool KoShapeGroup::hitTest( const QPointF &position ) const
 void KoShapeGroup::childCountChanged()
 {
     QRectF br = boundingRect();
-    setAbsolutePosition( br.topLeft(), KoFlake::TopLeftCorner );
-    setSize( br.size() );
+    setAbsolutePosition(br.topLeft(), KoFlake::TopLeftCorner);
+    setSize(br.size());
 }
 
-void KoShapeGroup::saveOdf( KoShapeSavingContext & context ) const
+void KoShapeGroup::saveOdf(KoShapeSavingContext & context) const
 {
-    context.xmlWriter().startElement( "draw:g" );
-    saveOdfAttributes( context, (OdfMandatories ^ OdfLayer) | OdfAdditionalAttributes );
-    context.xmlWriter().addAttributePt( "svg:y", position().y() );
+    context.xmlWriter().startElement("draw:g");
+    saveOdfAttributes(context, (OdfMandatories ^ OdfLayer) | OdfAdditionalAttributes);
+    context.xmlWriter().addAttributePt("svg:y", position().y());
 
     QList<KoShape*> shapes = iterator();
-    qSort( shapes.begin(), shapes.end(), KoShape::compareShapeZIndex );
+    qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
-    foreach(KoShape* shape, shapes ) {
+    foreach(KoShape* shape, shapes) {
         shape->saveOdf(context);
     }
 
-    saveOdfCommonChildElements( context );
+    saveOdfCommonChildElements(context);
     context.xmlWriter().endElement();
 }
 
-bool KoShapeGroup::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
-    loadOdfAttributes( element, context, OdfMandatories | OdfAdditionalAttributes | OdfCommonChildElements);
+    loadOdfAttributes(element, context, OdfMandatories | OdfAdditionalAttributes | OdfCommonChildElements);
 
     KoXmlElement child;
-    forEachElement( child, element )
-    {
-        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, context );
-        if ( shape )
-        {
-            addChild( shape );
+    forEachElement(child, element) {
+        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
+        if (shape) {
+            addChild(shape);
         }
     }
 
     QRectF bound;
     bool boundInitialized = false;
-    foreach( KoShape * shape, iterator() )
-    {
-        if ( ! boundInitialized ) {
+    foreach(KoShape * shape, iterator()) {
+        if (! boundInitialized) {
             bound = shape->boundingRect();
             boundInitialized = true;
-        }
-        else
-            bound = bound.united( shape->boundingRect() );
+        } else
+            bound = bound.united(shape->boundingRect());
     }
 
-    setSize( bound.size() );
-    setPosition( bound.topLeft() );
+    setSize(bound.size());
+    setPosition(bound.topLeft());
 
-    foreach( KoShape * shape, iterator() )
-        shape->setAbsolutePosition( shape->absolutePosition() - bound.topLeft() );
+    foreach(KoShape * shape, iterator())
+    shape->setAbsolutePosition(shape->absolutePosition() - bound.topLeft());
 
     return true;
 }

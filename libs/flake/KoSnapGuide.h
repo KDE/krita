@@ -42,39 +42,39 @@ class FLAKE_EXPORT KoSnapGuide
 public:
 
     /// Creates the snap guide to work on the given canvas
-    KoSnapGuide( KoCanvasBase * canvas );
+    KoSnapGuide(KoCanvasBase * canvas);
 
     virtual ~KoSnapGuide();
 
     /// snaps the mouse position, returns if mouse was snapped
-    QPointF snap( const QPointF &mousePosition, Qt::KeyboardModifiers modifiers );
+    QPointF snap(const QPointF &mousePosition, Qt::KeyboardModifiers modifiers);
 
     /// paints the guide
-    void paint( QPainter &painter, const KoViewConverter &converter );
+    void paint(QPainter &painter, const KoViewConverter &converter);
 
     /// returns the bounding rect of the guide
     QRectF boundingRect();
 
     /// Adds an additional shape to snap to (useful when creating a path)
-    void setEditedShape( KoShape * shape );
+    void setEditedShape(KoShape * shape);
 
     /// returns the extra shapes to use
     KoShape * editedShape() const;
 
-    /// enables the strategies used for snapping 
-    void enableSnapStrategies( int strategies );
+    /// enables the strategies used for snapping
+    void enableSnapStrategies(int strategies);
 
     /// returns the enabled snap strategies
     int enabledSnapStrategies() const;
 
     /// enables the snapping guides
-    void enableSnapping( bool on );
+    void enableSnapping(bool on);
 
     /// returns if snapping is enabled
     bool isSnapping() const;
 
     /// sets the snap distances in pixels
-    void setSnapDistance( int distance );
+    void setSnapDistance(int distance);
 
     /// returns the snap distance in pixels
     int snapDistance() const;
@@ -83,13 +83,13 @@ public:
     KoCanvasBase * canvas() const;
 
     /// Sets a list of path points to ignore
-    void setIgnoredPathPoints( const QList<KoPathPoint*> &ignoredPoints );
+    void setIgnoredPathPoints(const QList<KoPathPoint*> &ignoredPoints);
 
     /// Returns list of ignored points
     QList<KoPathPoint*> ignoredPathPoints() const;
 
     /// Sets list of ignored shapes
-    void setIgnoredShapes( const QList<KoShape*> &ignoredShapes );
+    void setIgnoredShapes(const QList<KoShape*> &ignoredShapes);
 
     /// Returns list of ignored shapes
     QList<KoShape*> ignoredShapes() const;
@@ -114,22 +114,22 @@ private:
 class KoSnapProxy
 {
 public:
-    KoSnapProxy( KoSnapGuide * snapGuide );
+    KoSnapProxy(KoSnapGuide * snapGuide);
 
     /// returns list of points in given rectangle in document coordinates
-    QList<QPointF> pointsInRect( const QRectF &rect );
+    QList<QPointF> pointsInRect(const QRectF &rect);
 
     /// returns list of shape in given rectangle in document coordinates
-    QList<KoShape*> shapesInRect( const QRectF &rect, bool omitEditedShape = false );
+    QList<KoShape*> shapesInRect(const QRectF &rect, bool omitEditedShape = false);
 
     /// returns list of points from given shape
-    QList<QPointF> pointsFromShape( KoShape * shape );
+    QList<QPointF> pointsFromShape(KoShape * shape);
 
     /// returns list of points in given rectangle in document coordinates
-    QList<KoPathSegment> segmentsInRect( const QRectF &rect );
+    QList<KoPathSegment> segmentsInRect(const QRectF &rect);
 
     /// returns list of all shapes
-    QList<KoShape*> shapes( bool omitEditedShape = false );
+    QList<KoShape*> shapes(bool omitEditedShape = false);
 
     /// returns canvas we are working on
     KoCanvasBase * canvas();

@@ -49,10 +49,10 @@ class KoDataCenter;
  */
 struct FLAKE_EXPORT KoShapeTemplate {
     KoShapeTemplate() {
-        id="";
-        name="";
-        toolTip="";
-        icon="";
+        id = "";
+        name = "";
+        toolTip = "";
+        icon = "";
         properties = 0;
     }
     QString id;         ///< The id of the shape
@@ -88,7 +88,8 @@ public:
  * After you created the factory you should create a plugin that can announce the factory to the
  * KoShapeRegistry.  See the KoPluginLoader as well.
  */
-class FLAKE_EXPORT KoShapeFactory : public QObject {
+class FLAKE_EXPORT KoShapeFactory : public QObject
+{
     Q_OBJECT
 public:
 
@@ -120,7 +121,7 @@ public:
      * @see KoShapeFactory::createDefaultShape
      * @see KoShape::init
      */
-    KoShape * createDefaultShapeAndInit( KoShapeControllerBase * shapeController ) const;
+    KoShape * createDefaultShapeAndInit(KoShapeControllerBase * shapeController) const;
 
     /**
      * This method should be called to create a shape that the user gets when doing a base insert.
@@ -129,7 +130,7 @@ public:
      * This function will call init on the shape with the dataCenterMap that was given. You
      * should make sure to pass the dataCenterMap so that all works as expected.
      * However in some cases it is ok to not pass the shapeController e.g. when it is only
-     * a temporary shape that will not be inserted in the document. The shape can then set 
+     * a temporary shape that will not be inserted in the document. The shape can then set
      * things that e.g. need to be available during loading of the shape.
      * This method internally calls createShape( params );
      *
@@ -140,7 +141,7 @@ public:
      * @see KoShapeFactory::createDefaultShape
      * @see KoShape::init
      */
-    KoShape * createDefaultShapeAndInit( const QMap<QString, KoDataCenter *> & dataCenterMap ) const;
+    KoShape * createDefaultShapeAndInit(const QMap<QString, KoDataCenter *> & dataCenterMap) const;
 
     /**
      * This method should be called to create a shape based on a set of properties that are
@@ -162,7 +163,7 @@ public:
      * @see KoShapeTemplate::properties
      * @see KoShape::init
      */
-    KoShape * createShapeAndInit(const KoProperties * params, KoShapeControllerBase *shapeController ) const;
+    KoShape * createShapeAndInit(const KoProperties * params, KoShapeControllerBase *shapeController) const;
 
     /**
      * This method should be called to create a shape based on a set of properties that are
@@ -184,7 +185,7 @@ public:
      * @see KoShapeTemplate::properties
      * @see KoShape::init
      */
-    KoShape * createShapeAndInit(const KoProperties * params, const QMap<QString, KoDataCenter *> & dataCenterMap ) const;
+    KoShape * createShapeAndInit(const KoProperties * params, const QMap<QString, KoDataCenter *> & dataCenterMap) const;
 
     /**
      * Create a list of option panels to show on creating a new shape.
@@ -224,9 +225,11 @@ public:
     /**
      * pouplates the dataCenterMap with any datacenters the shapes might need.
      * The default implementation does nothing
-     * @param dataCenterMap The map which the shapeControllerBase owns. 
+     * @param dataCenterMap The map which the shapeControllerBase owns.
      */
-    virtual void populateDataCenterMap(QMap<QString, KoDataCenter *>   & dataCenterMap) {Q_UNUSED(dataCenterMap)}
+    virtual void populateDataCenterMap(QMap<QString, KoDataCenter *>   & dataCenterMap) {
+        Q_UNUSED(dataCenterMap)
+    }
     /**
      * return the id for the shape this factory creates.
      * @return the id for the shape this factory creates.
@@ -269,7 +272,7 @@ public:
     virtual bool supports(const KoXmlElement & e) const;
 
     /**
-     * This functions decides if the shape should be shown in the 
+     * This functions decides if the shape should be shown in the
      * shape selector or not.
      * The default implementation returns false.
      */
@@ -321,7 +324,7 @@ protected:
      * the shape is more specific which means it will be earlier in
      * the queue to try loading a particular odf element.
      */
-    void setLoadingPriority( quint32 priority );
+    void setLoadingPriority(quint32 priority);
 
     /**
      * Set the name used for quick checking whether this shapefactory
@@ -334,7 +337,7 @@ protected:
      * @param elementNames the name of the element itself, like "draw"
      *
      */
-    void setOdfElementNames( const QString & nameSpace, const QStringList & elementNames );
+    void setOdfElementNames(const QString & nameSpace, const QStringList & elementNames);
 
 private:
     class Private;

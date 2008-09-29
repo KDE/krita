@@ -27,19 +27,16 @@ class KoPathCombineCommand::Private
 {
 public:
     Private(KoShapeControllerBase *c, const QList<KoPathShape*> &p)
-        : controller(c),
-        paths(p),
-        combinedPath( 0 ),
-        isCombined( false )
-    {
+            : controller(c),
+            paths(p),
+            combinedPath(0),
+            isCombined(false) {
     }
     ~Private() {
-        if ( isCombined && controller )
-        {
-            foreach( KoPathShape* path, paths )
-                delete path;
-        }
-        else
+        if (isCombined && controller) {
+            foreach(KoPathShape* path, paths)
+            delete path;
+        } else
             delete combinedPath;
     }
 
@@ -49,12 +46,12 @@ public:
     bool isCombined;
 };
 
-KoPathCombineCommand::KoPathCombineCommand( KoShapeControllerBase *controller,
-        const QList<KoPathShape*> &paths, QUndoCommand *parent )
-    : QUndoCommand( parent ),
-    d(new Private(controller, paths))
+KoPathCombineCommand::KoPathCombineCommand(KoShapeControllerBase *controller,
+        const QList<KoPathShape*> &paths, QUndoCommand *parent)
+        : QUndoCommand(parent),
+        d(new Private(controller, paths))
 {
-    setText( i18n( "Combine paths" ) );
+    setText(i18n("Combine paths"));
 }
 
 KoPathCombineCommand::~KoPathCombineCommand()
@@ -65,47 +62,43 @@ KoPathCombineCommand::~KoPathCombineCommand()
 void KoPathCombineCommand::redo()
 {
     QUndoCommand::redo();
-    if ( ! d->paths.size() )
+    if (! d->paths.size())
         return;
 
-    if ( ! d->combinedPath )
-    {
+    if (! d->combinedPath) {
         d->combinedPath = new KoPathShape();
         KoShapeContainer * parent = d->paths.first()->parent();
         if (parent)
             parent->addChild(d->combinedPath);
-        d->combinedPath->setBorder( d->paths.first()->border() );
-        d->combinedPath->setShapeId( d->paths.first()->shapeId() );
+        d->combinedPath->setBorder(d->paths.first()->border());
+        d->combinedPath->setShapeId(d->paths.first()->shapeId());
         // combine the paths
-        foreach( KoPathShape* path, d->paths )
-            d->combinedPath->combine( path );
+        foreach(KoPathShape* path, d->paths)
+        d->combinedPath->combine(path);
     }
 
     d->isCombined = true;
 
-    if ( d->controller )
-    {
-        foreach( KoPathShape* p, d->paths )
-            d->controller->removeShape( p );
+    if (d->controller) {
+        foreach(KoPathShape* p, d->paths)
+        d->controller->removeShape(p);
 
-        d->controller->addShape( d->combinedPath );
+        d->controller->addShape(d->combinedPath);
     }
 }
 
 void KoPathCombineCommand::undo()
 {
     QUndoCommand::undo();
-    if ( ! d->paths.size() )
+    if (! d->paths.size())
         return;
 
     d->isCombined = false;
 
-    if ( d->controller )
-    {
-        d->controller->removeShape( d->combinedPath );
-        foreach( KoPathShape* p, d->paths )
-        {
-            d->controller->addShape( p );
+    if (d->controller) {
+        d->controller->removeShape(d->combinedPath);
+        foreach(KoPathShape* p, d->paths) {
+            d->controller->addShape(p);
         }
     }
 }

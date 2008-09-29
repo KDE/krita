@@ -29,8 +29,7 @@
 class KoColorBackground::Private
 {
 public:
-    Private()
-    {
+    Private() {
         color = Qt::black;
         style = Qt::SolidPattern;
     };
@@ -39,14 +38,14 @@ public:
 };
 
 KoColorBackground::KoColorBackground()
-    : d( new Private() )
+        : d(new Private())
 {
 }
 
-KoColorBackground::KoColorBackground( const QColor &color, Qt::BrushStyle style )
-    : d( new Private() )
+KoColorBackground::KoColorBackground(const QColor &color, Qt::BrushStyle style)
+        : d(new Private())
 {
-    if ( style < Qt::SolidPattern || style >= Qt::LinearGradientPattern )
+    if (style < Qt::SolidPattern || style >= Qt::LinearGradientPattern)
         style = Qt::SolidPattern;
     d->style = style;
     d->color = color;
@@ -67,27 +66,26 @@ Qt::BrushStyle KoColorBackground::style() const
     return d->style;
 }
 
-void KoColorBackground::paint( QPainter &painter, const QPainterPath &fillPath ) const
+void KoColorBackground::paint(QPainter &painter, const QPainterPath &fillPath) const
 {
-    painter.setBrush( QBrush( d->color, d->style ) );
-    painter.drawPath( fillPath );
+    painter.setBrush(QBrush(d->color, d->style));
+    painter.drawPath(fillPath);
 }
 
-void KoColorBackground::fillStyle( KoGenStyle &style, KoShapeSavingContext &context )
+void KoColorBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
 {
-    KoOdfGraphicStyles::saveOasisFillStyle( style, context.mainStyles(), QBrush( d->color, d->style ) );
+    KoOdfGraphicStyles::saveOasisFillStyle(style, context.mainStyles(), QBrush(d->color, d->style));
 }
 
-bool KoColorBackground::loadStyle( KoOdfLoadingContext & context, const QSizeF & )
+bool KoColorBackground::loadStyle(KoOdfLoadingContext & context, const QSizeF &)
 {
     KoStyleStack &styleStack = context.styleStack();
-    if ( ! styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) 
+    if (! styleStack.hasProperty(KoXmlNS::draw, "fill"))
         return false;
 
-    QString fillStyle = styleStack.property( KoXmlNS::draw, "fill" );
-    if ( fillStyle == "solid" || fillStyle == "hatch" )
-    {
-        QBrush brush = KoOdfGraphicStyles::loadOasisFillStyle( styleStack, fillStyle, context.stylesReader() );
+    QString fillStyle = styleStack.property(KoXmlNS::draw, "fill");
+    if (fillStyle == "solid" || fillStyle == "hatch") {
+        QBrush brush = KoOdfGraphicStyles::loadOasisFillStyle(styleStack, fillStyle, context.stylesReader());
         d->color = brush.color();
         d->style = brush.style();
         return true;

@@ -26,7 +26,8 @@
 
 class KoPathTool;
 
-class PathToolOptionWidget : public QWidget {
+class PathToolOptionWidget : public QWidget
+{
     Q_OBJECT
 public:
     enum Type {

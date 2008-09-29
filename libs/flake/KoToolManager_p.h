@@ -34,7 +34,8 @@ class KoShape;
 class QToolButton;
 
 /// \internal
-class ToolHelper : public QObject {
+class ToolHelper : public QObject
+{
     Q_OBJECT
 public:
     explicit ToolHelper(KoToolFactory *tool);
@@ -50,7 +51,9 @@ public:
     /// wrapper around KoToolFactory::priority();
     int priority() const;
     KoTool *createTool(KoCanvasBase *canvas) const;
-    int uniqueId() const { return m_uniqueId; }
+    int uniqueId() const {
+        return m_uniqueId;
+    }
     /// wrapper around KoToolFactory::shortcut()
     KShortcut shortcut() const;
     /// wrapper around KoToolFactory::inputDeviceAgnostic()
@@ -72,7 +75,8 @@ private:
 
 /// \internal
 /// Helper class to transform a simple signal selection changed into a signal with a parameter
-class Connector : public QObject {
+class Connector : public QObject
+{
     Q_OBJECT
 public:
     explicit Connector(KoShapeManager *parent);

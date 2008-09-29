@@ -38,12 +38,12 @@ public:
     KoShapeLayer();
     /// empty implementation, as the layer itself is not visible
     virtual void paintComponent(QPainter &, const KoViewConverter &) {}
-    virtual bool hitTest( const QPointF &position ) const;
+    virtual bool hitTest(const QPointF &position) const;
     virtual QRectF boundingRect() const;
     /// reimplemented from KoShape
-    virtual void saveOdf( KoShapeSavingContext & context ) const;
+    virtual void saveOdf(KoShapeSavingContext & context) const;
     // reimplemented
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
 };
 
 #endif // __KOSHAPELAYER_H__

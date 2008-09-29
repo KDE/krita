@@ -35,7 +35,8 @@ class KoShapeConfigWidgetBase;
  * @see KoShapeFactory::panelFactories()
  * @see KoShapeConfigWidgetBase
  */
-class FLAKE_EXPORT KoShapeConfigFactory {
+class FLAKE_EXPORT KoShapeConfigFactory
+{
 public:
     /// default constructor
     KoShapeConfigFactory() {}
@@ -55,14 +56,18 @@ public:
      * one will be shown.
      * Higher sorting numbers will be shown first. The default is 1.
      */
-    virtual int sortingOrder() const { return 1; }
+    virtual int sortingOrder() const {
+        return 1;
+    }
 
     /**
      * Return true if the createConfigWidget() should be called at all for a shape of
      * the specified type.
      * @param id an ID like the KoShapeFactory::shapeId()
      */
-    virtual bool showForShapeId(const QString &id) const { Q_UNUSED(id); return true; }
+    virtual bool showForShapeId(const QString &id) const {
+        Q_UNUSED(id); return true;
+    }
 
 
     /// \internal a compare for sorting.

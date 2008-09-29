@@ -20,7 +20,7 @@
 #include "KoDragOdfSaveHelper.h"
 
 KoDragOdfSaveHelper::KoDragOdfSaveHelper()
-: m_context( 0 )
+        : m_context(0)
 {
 }
 KoDragOdfSaveHelper::~KoDragOdfSaveHelper()
@@ -28,10 +28,10 @@ KoDragOdfSaveHelper::~KoDragOdfSaveHelper()
     delete m_context;
 }
 
-KoShapeSavingContext * KoDragOdfSaveHelper::context( KoXmlWriter * bodyWriter, KoGenStyles & mainStyles,
-                                                     KoEmbeddedDocumentSaver & embeddedSaver )
+KoShapeSavingContext * KoDragOdfSaveHelper::context(KoXmlWriter * bodyWriter, KoGenStyles & mainStyles,
+        KoEmbeddedDocumentSaver & embeddedSaver)
 {
-    Q_ASSERT( m_context == 0 );
-    m_context = new KoShapeSavingContext( *bodyWriter, mainStyles, embeddedSaver );
+    Q_ASSERT(m_context == 0);
+    m_context = new KoShapeSavingContext(*bodyWriter, mainStyles, embeddedSaver);
     return m_context;
 }

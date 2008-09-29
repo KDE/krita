@@ -28,27 +28,27 @@ class KoPathShape;
 class FLAKE_EXPORT KoPathShapeLoader : public KoSvgPathParser
 {
 public:
-    KoPathShapeLoader( KoPathShape * path );
+    KoPathShapeLoader(KoPathShape * path);
     ~KoPathShapeLoader();
 
     /// reimplemented
-    virtual void svgMoveTo( qreal x1, qreal y1, bool abs = true );
+    virtual void svgMoveTo(qreal x1, qreal y1, bool abs = true);
     /// reimplemented
-    virtual void svgLineTo( qreal x1, qreal y1, bool abs = true );
-        /// reimplemented
-    virtual void svgLineToHorizontal( qreal x, bool abs = true );
-        /// reimplemented
-    virtual void svgLineToVertical( qreal y, bool abs = true );
-        /// reimplemented
-    virtual void svgCurveToCubic( qreal x1, qreal y1, qreal x2, qreal y2, qreal x, qreal y, bool abs = true );
+    virtual void svgLineTo(qreal x1, qreal y1, bool abs = true);
     /// reimplemented
-    virtual void svgCurveToCubicSmooth( qreal x, qreal y, qreal x2, qreal y2, bool abs = true );
+    virtual void svgLineToHorizontal(qreal x, bool abs = true);
     /// reimplemented
-    virtual void svgCurveToQuadratic( qreal x, qreal y, qreal x1, qreal y1, bool abs = true );
+    virtual void svgLineToVertical(qreal y, bool abs = true);
     /// reimplemented
-    virtual void svgCurveToQuadraticSmooth( qreal x, qreal y, bool abs = true );
+    virtual void svgCurveToCubic(qreal x1, qreal y1, qreal x2, qreal y2, qreal x, qreal y, bool abs = true);
     /// reimplemented
-    virtual void svgArcTo( qreal x, qreal y, qreal r1, qreal r2, qreal angle, bool largeArcFlag, bool sweepFlag, bool abs = true );
+    virtual void svgCurveToCubicSmooth(qreal x, qreal y, qreal x2, qreal y2, bool abs = true);
+    /// reimplemented
+    virtual void svgCurveToQuadratic(qreal x, qreal y, qreal x1, qreal y1, bool abs = true);
+    /// reimplemented
+    virtual void svgCurveToQuadraticSmooth(qreal x, qreal y, bool abs = true);
+    /// reimplemented
+    virtual void svgArcTo(qreal x, qreal y, qreal r1, qreal r2, qreal angle, bool largeArcFlag, bool sweepFlag, bool abs = true);
     /// reimplemented
     virtual void svgClosePath();
 

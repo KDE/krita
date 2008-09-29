@@ -30,8 +30,8 @@
 #include <kdebug.h>
 
 KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
-    : KoInteractionTool( canvas ),
-    m_temporary(false)
+        : KoInteractionTool(canvas),
+        m_temporary(false)
 {
     QPixmap inPixmap, outPixmap;
     inPixmap.load(KStandardDirs::locate("data", "koffice/icons/zoom_in_cursor.png"));
@@ -40,20 +40,20 @@ KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
     m_outCursor = QCursor(outPixmap, 4, 4);
 }
 
-void KoZoomTool::wheelEvent ( KoPointerEvent * event )
+void KoZoomTool::wheelEvent(KoPointerEvent * event)
 {
     // Let KoCanvasController handle this
     event->ignore();
 }
 
-void KoZoomTool::mouseReleaseEvent( KoPointerEvent *event )
+void KoZoomTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     KoInteractionTool::mouseReleaseEvent(event);
     if (m_temporary)
         emit KoTool::done();
 }
 
-void KoZoomTool::mouseMoveEvent( KoPointerEvent *event )
+void KoZoomTool::mouseMoveEvent(KoPointerEvent *event)
 {
     if (event->modifiers() & Qt::ControlModifier)
         useCursor(m_outCursor);
@@ -61,7 +61,7 @@ void KoZoomTool::mouseMoveEvent( KoPointerEvent *event )
         useCursor(m_inCursor);
 
     if (m_currentStrategy)
-        m_currentStrategy->handleMouseMove( event->point, event->modifiers() );
+        m_currentStrategy->handleMouseMove(event->point, event->modifiers());
 }
 
 void KoZoomTool::keyPressEvent(QKeyEvent *event)
@@ -91,7 +91,7 @@ void KoZoomTool::activate(bool temporary)
     useCursor(m_inCursor, true);
 }
 
-void KoZoomTool::mouseDoubleClickEvent( KoPointerEvent *event )
+void KoZoomTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
     mousePressEvent(event);
 }
@@ -106,6 +106,6 @@ KoInteractionStrategy *KoZoomTool::createStrategy(KoPointerEvent *event)
 
 QWidget* KoZoomTool::createOptionWidget()
 {
-    return new KoZoomToolWidget( this );
+    return new KoZoomToolWidget(this);
 }
 

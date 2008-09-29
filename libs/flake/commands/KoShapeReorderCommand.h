@@ -31,7 +31,8 @@ class KoShape;
 class KoShapeManager;
 
 /// This command allows you to change the zIndex of a number of shapes.
-class FLAKE_EXPORT KoShapeReorderCommand : public QUndoCommand {
+class FLAKE_EXPORT KoShapeReorderCommand : public QUndoCommand
+{
 public:
     /**
      * Constructor.
@@ -62,9 +63,9 @@ public:
             MoveShapeType move, QUndoCommand *parent = 0);
 
     /// redo the command
-    void redo ();
+    void redo();
     /// revert the actions done in redo
-    void undo ();
+    void undo();
 
 private:
     QList<KoShape*> m_shapes;

@@ -24,7 +24,8 @@
 #include "KoToolFactory.h"
 
 /// The factory for the KoCreateShapesTool
-class KoCreateShapesToolFactory : public KoToolFactory {
+class KoCreateShapesToolFactory : public KoToolFactory
+{
 public:
     /// Constructor
     KoCreateShapesToolFactory(QObject *parent);

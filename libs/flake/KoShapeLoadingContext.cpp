@@ -28,9 +28,9 @@
 
 #include <kdebug.h>
 
-uint qHash( const KoShapeLoadingContext::AdditionalAttributeData & attributeData )
+uint qHash(const KoShapeLoadingContext::AdditionalAttributeData & attributeData)
 {
-    return qHash( attributeData.name );
+    return qHash(attributeData.name);
 }
 
 static QSet<KoShapeLoadingContext::AdditionalAttributeData> s_additionlAttributes;
@@ -38,15 +38,12 @@ static QSet<KoShapeLoadingContext::AdditionalAttributeData> s_additionlAttribute
 class KoShapeLoadingContext::Private
 {
 public:
-    Private( KoOdfLoadingContext &c, const QMap<QString, KoDataCenter *> & dataCenterMap )
-    : context( c )
-    , zIndex( 0 )
-    , dataCenterMap( dataCenterMap )
-    {}
-    ~Private()
-    {
-        foreach ( KoSharedLoadingData * data, sharedData )
-        {
+    Private(KoOdfLoadingContext &c, const QMap<QString, KoDataCenter *> & dataCenterMap)
+            : context(c)
+            , zIndex(0)
+            , dataCenterMap(dataCenterMap) {}
+    ~Private() {
+        foreach(KoSharedLoadingData * data, sharedData) {
             delete data;
         }
     }
@@ -59,8 +56,8 @@ public:
     QMap<QString, KoDataCenter *> dataCenterMap;
 };
 
-KoShapeLoadingContext::KoShapeLoadingContext( KoOdfLoadingContext & context, const QMap<QString, KoDataCenter *> & dataCenterMap )
-: d( new Private( context, dataCenterMap ) )
+KoShapeLoadingContext::KoShapeLoadingContext(KoOdfLoadingContext & context, const QMap<QString, KoDataCenter *> & dataCenterMap)
+        : d(new Private(context, dataCenterMap))
 {
 }
 
@@ -74,29 +71,29 @@ KoOdfLoadingContext & KoShapeLoadingContext::odfLoadingContext()
     return d->context;
 }
 
-KoShapeLayer * KoShapeLoadingContext::layer( const QString & layerName )
+KoShapeLayer * KoShapeLoadingContext::layer(const QString & layerName)
 {
-   return d->layers.value( layerName, 0 );
+    return d->layers.value(layerName, 0);
 }
 
-void KoShapeLoadingContext::addLayer( KoShapeLayer * layer, const QString & layerName )
+void KoShapeLoadingContext::addLayer(KoShapeLayer * layer, const QString & layerName)
 {
     d->layers[ layerName ] = layer;
 }
 
-void KoShapeLoadingContext::addShapeId( KoShape * shape, const QString & id )
+void KoShapeLoadingContext::addShapeId(KoShape * shape, const QString & id)
 {
-    d->drawIds.insert( id, shape );
+    d->drawIds.insert(id, shape);
 }
 
-KoShape * KoShapeLoadingContext::shapeById( const QString & id )
+KoShape * KoShapeLoadingContext::shapeById(const QString & id)
 {
-   return d->drawIds.value( id, 0 );
+    return d->drawIds.value(id, 0);
 }
 
 KoImageCollection * KoShapeLoadingContext::imageCollection()
 {
-    return dynamic_cast<KoImageCollection*>( d->dataCenterMap.value( "ImageCollection", 0 ) );
+    return dynamic_cast<KoImageCollection*>(d->dataCenterMap.value("ImageCollection", 0));
 }
 
 int KoShapeLoadingContext::zIndex()
@@ -104,14 +101,14 @@ int KoShapeLoadingContext::zIndex()
     return d->zIndex++;
 }
 
-void KoShapeLoadingContext::setZIndex( int index )
+void KoShapeLoadingContext::setZIndex(int index)
 {
     d->zIndex = index;
 }
 
-void KoShapeLoadingContext::addShapeZIndex( KoShape * shape, int index )
+void KoShapeLoadingContext::addShapeZIndex(KoShape * shape, int index)
 {
-    d->zIndices.insert( shape, index );
+    d->zIndices.insert(shape, index);
 }
 
 const QMap<KoShape*, int> & KoShapeLoadingContext::shapeZIndices()
@@ -119,32 +116,31 @@ const QMap<KoShape*, int> & KoShapeLoadingContext::shapeZIndices()
     return d->zIndices;
 }
 
-void KoShapeLoadingContext::addSharedData( const QString & id, KoSharedLoadingData * data )
+void KoShapeLoadingContext::addSharedData(const QString & id, KoSharedLoadingData * data)
 {
-    QMap<QString, KoSharedLoadingData*>::iterator it( d->sharedData.find( id ) );
+    QMap<QString, KoSharedLoadingData*>::iterator it(d->sharedData.find(id));
     // data will not be overwritten
-    if ( it == d->sharedData.end() ) {
-        d->sharedData.insert( id, data );
-    }
-    else {
+    if (it == d->sharedData.end()) {
+        d->sharedData.insert(id, data);
+    } else {
         kWarning(30006) << "The id" << id << "is already registered. Data not inserted";
-        Q_ASSERT( it == d->sharedData.end() );
+        Q_ASSERT(it == d->sharedData.end());
     }
 }
 
-KoSharedLoadingData * KoShapeLoadingContext::sharedData( const QString & id ) const
+KoSharedLoadingData * KoShapeLoadingContext::sharedData(const QString & id) const
 {
     KoSharedLoadingData * data = 0;
-    QMap<QString, KoSharedLoadingData*>::const_iterator it( d->sharedData.find( id ) );
-    if ( it != d->sharedData.end() ) {
+    QMap<QString, KoSharedLoadingData*>::const_iterator it(d->sharedData.find(id));
+    if (it != d->sharedData.end()) {
         data = it.value();
     }
     return data;
 }
 
-void KoShapeLoadingContext::addAdditionalAttributeData( const AdditionalAttributeData & attributeData )
+void KoShapeLoadingContext::addAdditionalAttributeData(const AdditionalAttributeData & attributeData)
 {
-    s_additionlAttributes.insert( attributeData );
+    s_additionlAttributes.insert(attributeData);
 }
 
 QSet<KoShapeLoadingContext::AdditionalAttributeData> KoShapeLoadingContext::additionalAttributeData()
@@ -152,9 +148,9 @@ QSet<KoShapeLoadingContext::AdditionalAttributeData> KoShapeLoadingContext::addi
     return s_additionlAttributes;
 }
 
-KoDataCenter * KoShapeLoadingContext::dataCenter( const QString & dataCenterName )
+KoDataCenter * KoShapeLoadingContext::dataCenter(const QString & dataCenterName)
 {
-    return d->dataCenterMap.value( dataCenterName, 0 );
+    return d->dataCenterMap.value(dataCenterName, 0);
 }
 
 QMap<QString, KoDataCenter *> KoShapeLoadingContext::dataCenterMap() const

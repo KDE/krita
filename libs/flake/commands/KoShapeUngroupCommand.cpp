@@ -24,24 +24,24 @@
 #include <klocale.h>
 
 KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, QList<KoShape *> shapes, QUndoCommand *parent)
-: KoShapeGroupCommand(parent)
+        : KoShapeGroupCommand(parent)
 {
     m_shapes = shapes;
     m_container = container;
     foreach(KoShape *shape, m_shapes) {
-        m_clipped.append( m_container->childClipped(shape) );
-        m_oldParents.append( m_container->parent() );
+        m_clipped.append(m_container->childClipped(shape));
+        m_oldParents.append(m_container->parent());
     }
 
-    setText(i18n( "Ungroup shapes" ));
+    setText(i18n("Ungroup shapes"));
 }
 
-void KoShapeUngroupCommand::redo ()
+void KoShapeUngroupCommand::redo()
 {
     KoShapeGroupCommand::undo();
 }
 
-void KoShapeUngroupCommand::undo ()
+void KoShapeUngroupCommand::undo()
 {
     KoShapeGroupCommand::redo();
 }

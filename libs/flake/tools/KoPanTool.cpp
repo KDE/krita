@@ -28,9 +28,9 @@
 #include <kdebug.h>
 
 KoPanTool::KoPanTool(KoCanvasBase *canvas)
-    : KoTool(canvas),
-    m_controller(0),
-    m_temporary(false)
+        : KoTool(canvas),
+        m_controller(0),
+        m_temporary(false)
 {
 }
 
@@ -39,28 +39,28 @@ bool KoPanTool::wantsAutoScroll()
     return false;
 }
 
-void KoPanTool::mousePressEvent( KoPointerEvent *event )
+void KoPanTool::mousePressEvent(KoPointerEvent *event)
 {
-    m_lastPosition = documentToViewport( event->point );
+    m_lastPosition = documentToViewport(event->point);
     event->accept();
     useCursor(QCursor(Qt::ClosedHandCursor));
 }
 
-void KoPanTool::mouseMoveEvent( KoPointerEvent *event )
+void KoPanTool::mouseMoveEvent(KoPointerEvent *event)
 {
     Q_ASSERT(m_controller);
     if (event->buttons() == 0)
         return;
     event->accept();
 
-    QPointF actualPosition = documentToViewport( event->point );
-    QPointF distance( m_lastPosition - actualPosition );
+    QPointF actualPosition = documentToViewport(event->point);
+    QPointF distance(m_lastPosition - actualPosition);
     m_controller->pan(distance.toPoint());
 
     m_lastPosition = actualPosition;
 }
 
-void KoPanTool::mouseReleaseEvent( KoPointerEvent *event )
+void KoPanTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     event->accept();
     useCursor(QCursor(Qt::OpenHandCursor));
@@ -82,17 +82,17 @@ void KoPanTool::activate(bool temporary)
     useCursor(QCursor(Qt::OpenHandCursor), true);
 }
 
-void KoPanTool::customMoveEvent( KoPointerEvent * event )
+void KoPanTool::customMoveEvent(KoPointerEvent * event)
 {
-    m_controller->pan( QPoint( -event->x(), -event->y() ) );
+    m_controller->pan(QPoint(-event->x(), -event->y()));
     event->accept();
 }
 
-QPointF KoPanTool::documentToViewport( const QPointF &p )
+QPointF KoPanTool::documentToViewport(const QPointF &p)
 {
-    QPointF viewportPoint = m_canvas->viewConverter()->documentToView( p );
+    QPointF viewportPoint = m_canvas->viewConverter()->documentToView(p);
     viewportPoint += m_canvas->documentOrigin();
-    viewportPoint += QPoint( m_controller->canvasOffsetX(), m_controller->canvasOffsetY() );
+    viewportPoint += QPoint(m_controller->canvasOffsetX(), m_controller->canvasOffsetY());
 
     return viewportPoint;
 }

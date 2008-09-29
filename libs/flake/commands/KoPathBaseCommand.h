@@ -27,22 +27,23 @@
 class KoPathShape;
 
 /// the base command for commands altering a path shape
-class KoPathBaseCommand : public QUndoCommand {
+class KoPathBaseCommand : public QUndoCommand
+{
 public:
     /**
      * @param parent the parent command used for macro commands
      */
-    explicit KoPathBaseCommand( QUndoCommand *parent = 0 );
+    explicit KoPathBaseCommand(QUndoCommand *parent = 0);
     /** initialize the base command with a single shape
      * @param parent the parent command used for macro commands
      */
-    explicit KoPathBaseCommand( KoPathShape *shape, QUndoCommand *parent = 0 );
+    explicit KoPathBaseCommand(KoPathShape *shape, QUndoCommand *parent = 0);
 protected:
     /**
      * Shedules repainting of all shapes control point rects.
      * @param normalizeShapes controls if paths are normalized before painting
      */
-    void repaint( bool normalizeShapes );
+    void repaint(bool normalizeShapes);
 
     QSet<KoPathShape*> m_shapes; ///< the shapes the command operates on
 };

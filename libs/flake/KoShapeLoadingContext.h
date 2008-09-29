@@ -47,26 +47,23 @@ public:
      * Struct to store data about additional attributes that should be loaded during
      * the shape loading.
      *
-     * Make sure all parameters point to const char * that stay around. e.g. The a KoXmlNS or 
-     * a "tag" defined string e.g. 
+     * Make sure all parameters point to const char * that stay around. e.g. The a KoXmlNS or
+     * a "tag" defined string e.g.
      * AdditionalAttributeData( KoXmlNS::presentation, "placeholder", presentation:placeholder" )
      */
-    struct AdditionalAttributeData
-    {
-        AdditionalAttributeData( const char * const ns, const char * const tag, const char * name )
-        : ns( ns )
-        , tag( tag )
-        , name( name )
-        {
+    struct AdditionalAttributeData {
+        AdditionalAttributeData(const char * const ns, const char * const tag, const char * name)
+                : ns(ns)
+                , tag(tag)
+                , name(name) {
         }
 
         const char * const ns;
         const char * const tag;
         const char * const name;
 
-        bool operator==( const AdditionalAttributeData & other ) const
-        {
-            return ( qstrcmp( name, other.name ) == 0 );
+        bool operator==(const AdditionalAttributeData & other) const {
+            return (qstrcmp(name, other.name) == 0);
         }
     };
 
@@ -76,7 +73,7 @@ public:
      * @param dataCenterMap the data center map of the shape controller. This is used in calling KoShape::init
      *        during loading.
      */
-    KoShapeLoadingContext( KoOdfLoadingContext & context, const QMap<QString, KoDataCenter *> & dataCenterMap );
+    KoShapeLoadingContext(KoOdfLoadingContext & context, const QMap<QString, KoDataCenter *> & dataCenterMap);
 
     /// destructor
     ~KoShapeLoadingContext();
@@ -85,14 +82,14 @@ public:
     KoOdfLoadingContext & odfLoadingContext();
 
     /// Returns layer referenced by given name
-    KoShapeLayer * layer( const QString & layerName );
+    KoShapeLayer * layer(const QString & layerName);
     /// Adds a new layer to be referenced by the given name later
-    void addLayer( KoShapeLayer * layer, const QString & layerName );
+    void addLayer(KoShapeLayer * layer, const QString & layerName);
 
     /// register the id for a specific shape
-    void addShapeId( KoShape * shape, const QString & id );
+    void addShapeId(KoShape * shape, const QString & id);
     /// return the shape formerly registered using addShapeId()
-    KoShape * shapeById( const QString & id );
+    KoShape * shapeById(const QString & id);
 
     /// Returns the image collection for loading images
     KoImageCollection * imageCollection();
@@ -101,15 +98,15 @@ public:
     int zIndex();
 
     /// Set z-index
-    void setZIndex( int index );
+    void setZIndex(int index);
 
     /**
-     * Add the z-index 
-     * 
+     * Add the z-index
+     *
      * Used for document which use the z-index instead of the order of the shapes
      * in the document.
      */
-    void addShapeZIndex( KoShape * shape, int index );
+    void addShapeZIndex(KoShape * shape, int index);
 
     /// Get the save z-indices
     const QMap<KoShape*, int> & shapeZIndices();
@@ -118,20 +115,20 @@ public:
      * Add shared data
      *
      * This can be use to pass data between shapes on loading. E.g. The decoded text styles
-     * of the TextShape. With that the styles only have to be read once and can be used in 
+     * of the TextShape. With that the styles only have to be read once and can be used in
      * all shapes that also need them.
      *
      * The ownership of the added data is passed to teh context. The KoShapeLoadingContext will
      * delete the added data when it is destroyed.
      *
-     * Data inserted for a specific id will not be overwritten by calling addSharedData with 
+     * Data inserted for a specific id will not be overwritten by calling addSharedData with
      * the same id again.
      *
      * You get an assertion when the id is already existing.
      *
      * @see KoSharedLoadingData
      */
-    void addSharedData( const QString & id, KoSharedLoadingData * data );
+    void addSharedData(const QString & id, KoSharedLoadingData * data);
 
     /**
      * Get the shared data.
@@ -141,24 +138,24 @@ public:
      * @param id The id used to identify the shared data.
      * @return The shared data for the id or 0 if there is no shared data for the id.
      */
-    KoSharedLoadingData * sharedData( const QString & id ) const;
+    KoSharedLoadingData * sharedData(const QString & id) const;
 
     /**
      * @brief Add an additional attribute that should be loaded during shape loading
      *
-     * An application can use that to set the data for additional attributes that should be 
+     * An application can use that to set the data for additional attributes that should be
      * loaded during shape loading.
      * If attribute is set it will not change if set again. The tag is used to differentiate
      * the attributes
      *
      * @param attributeData The data describing the additional attribute data
      */
-    static void addAdditionalAttributeData( const AdditionalAttributeData & attributeData );
+    static void addAdditionalAttributeData(const AdditionalAttributeData & attributeData);
 
     /**
      * @brief Get the additional attribute data for loading of a shape
      *
-     * This is used by KoShape::loadOdfAttributes to load all additional attributes defined 
+     * This is used by KoShape::loadOdfAttributes to load all additional attributes defined
      * in the returned set.
      */
     static QSet<AdditionalAttributeData> additionalAttributeData();
@@ -166,9 +163,9 @@ public:
     /**
      * Get a data center
      *
-     * If the data center is not found 0 is returned 
+     * If the data center is not found 0 is returned
      */
-    KoDataCenter * dataCenter( const QString & dataCenterName );
+    KoDataCenter * dataCenter(const QString & dataCenterName);
 
     /**
      * Get a data center map

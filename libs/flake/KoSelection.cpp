@@ -40,8 +40,8 @@ public:
     KoShapeLayer *activeLayer;
 
     void requestSelectionChangedEvent();
-    void selectGroupChildren( KoShapeGroup *group );
-    void deselectGroupChildren( KoShapeGroup *group );
+    void selectGroupChildren(KoShapeGroup *group);
+    void deselectGroupChildren(KoShapeGroup *group);
 
     void selectionChangedEvent();
 
@@ -52,23 +52,21 @@ public:
 
 QRectF KoSelection::Private::sizeRect() const
 {
-    bool first=true;
+    bool first = true;
     QRectF bb;
 
     QMatrix itmat = q->absoluteTransformation(0).inverted();
 
-    if ( !selectedShapes.isEmpty() )
-    {
+    if (!selectedShapes.isEmpty()) {
         QList<KoShape*>::const_iterator it = selectedShapes.begin();
-        for ( ; it != selectedShapes.end(); ++it ) {
-            if ( dynamic_cast<KoShapeGroup*>( *it ))
+        for (; it != selectedShapes.end(); ++it) {
+            if (dynamic_cast<KoShapeGroup*>(*it))
                 continue;
             if (first) {
-                bb = ((*it)->absoluteTransformation(0) * itmat).mapRect(QRectF(QPointF(),(*it)->size()));
+                bb = ((*it)->absoluteTransformation(0) * itmat).mapRect(QRectF(QPointF(), (*it)->size()));
                 first = false;
-            }
-            else
-                bb = bb.unite( ((*it)->absoluteTransformation(0) * itmat).mapRect(QRectF(QPointF(),(*it)->size())) );
+            } else
+                bb = bb.unite(((*it)->absoluteTransformation(0) * itmat).mapRect(QRectF(QPointF(), (*it)->size())));
         }
     }
 
@@ -86,47 +84,47 @@ void KoSelection::Private::requestSelectionChangedEvent()
 void KoSelection::Private::selectionChangedEvent()
 {
     eventTriggered = false;
-    q->setScale(1,1);
+    q->setScale(1, 1);
     //just as well use the oppertunity to update the size and position
     q->updateSizeAndPosition();
     emit q->selectionChanged();
 }
 
-void KoSelection::Private::selectGroupChildren( KoShapeGroup *group )
+void KoSelection::Private::selectGroupChildren(KoShapeGroup *group)
 {
-    if ( ! group )
+    if (! group)
         return;
 
     foreach(KoShape *shape, group->iterator()) {
-        if ( selectedShapes.contains(shape))
+        if (selectedShapes.contains(shape))
             continue;
         selectedShapes << shape;
 
-        KoShapeGroup* childGroup = dynamic_cast<KoShapeGroup*>( shape );
-        if ( childGroup )
-            selectGroupChildren( childGroup );
+        KoShapeGroup* childGroup = dynamic_cast<KoShapeGroup*>(shape);
+        if (childGroup)
+            selectGroupChildren(childGroup);
     }
 }
 
-void KoSelection::Private::deselectGroupChildren( KoShapeGroup *group )
+void KoSelection::Private::deselectGroupChildren(KoShapeGroup *group)
 {
-    if ( ! group )
+    if (! group)
         return;
 
-    foreach( KoShape *shape, group->iterator() ) {
-        if ( selectedShapes.contains( shape ) )
-            selectedShapes.removeAll( shape );
+    foreach(KoShape *shape, group->iterator()) {
+        if (selectedShapes.contains(shape))
+            selectedShapes.removeAll(shape);
 
-        KoShapeGroup* childGroup = dynamic_cast<KoShapeGroup*>( shape );
-        if ( childGroup )
-            deselectGroupChildren( childGroup );
+        KoShapeGroup* childGroup = dynamic_cast<KoShapeGroup*>(shape);
+        if (childGroup)
+            deselectGroupChildren(childGroup);
     }
 }
 
 ////////////
 
 KoSelection::KoSelection()
-    : d(new Private(this))
+        : d(new Private(this))
 {
 }
 
@@ -135,7 +133,7 @@ KoSelection::~KoSelection()
     delete d;
 }
 
-void KoSelection::paint( QPainter &painter, const KoViewConverter &converter)
+void KoSelection::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
@@ -152,27 +150,27 @@ void KoSelection::select(KoShape * object, bool recursive)
 
     // automatically recursively select all child shapes downwards in the hierarchy
     KoShapeGroup* group = dynamic_cast<KoShapeGroup*>(object);
-    if ( group )
-        d->selectGroupChildren( group );
+    if (group)
+        d->selectGroupChildren(group);
 
-    if ( recursive ) {
+    if (recursive) {
         // recursively select all parents and their children upwards the hierarchy
         KoShapeContainer *parent = object->parent();
-        while( parent ) {
+        while (parent) {
             KoShapeGroup *parentGroup = dynamic_cast<KoShapeGroup*>(parent);
-            if ( ! parentGroup ) break;
-            if ( ! d->selectedShapes.contains(parentGroup) ) {
+            if (! parentGroup) break;
+            if (! d->selectedShapes.contains(parentGroup)) {
                 d->selectedShapes << parentGroup;
-                d->selectGroupChildren( parentGroup );
+                d->selectGroupChildren(parentGroup);
             }
             parent = parentGroup->parent();
         }
     }
 
     if (d->selectedShapes.count() == 1)
-        setTransformation( object->absoluteTransformation(0) );
+        setTransformation(object->absoluteTransformation(0));
     else
-        setTransformation( QMatrix() );
+        setTransformation(QMatrix());
 
     updateSizeAndPosition();
 
@@ -184,22 +182,22 @@ void KoSelection::deselect(KoShape * object, bool recursive)
     if (! d->selectedShapes.contains(object))
         return;
 
-    d->selectedShapes.removeAll( object );
+    d->selectedShapes.removeAll(object);
 
     KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(object);
-    if ( recursive ) {
+    if (recursive) {
         // recursively find the top group upwards int the hierarchy
-        KoShapeGroup * parentGroup = dynamic_cast<KoShapeGroup*>( object->parent() );
-        while( parentGroup ) {
+        KoShapeGroup * parentGroup = dynamic_cast<KoShapeGroup*>(object->parent());
+        while (parentGroup) {
             group = parentGroup;
-            parentGroup = dynamic_cast<KoShapeGroup*>( parentGroup->parent() );
+            parentGroup = dynamic_cast<KoShapeGroup*>(parentGroup->parent());
         }
     }
-    if ( group )
-        d->deselectGroupChildren( group );
+    if (group)
+        d->deselectGroupChildren(group);
 
     if (count() == 1)
-        setTransformation( firstSelectedShape()->absoluteTransformation(0) );
+        setTransformation(firstSelectedShape()->absoluteTransformation(0));
 
     d->requestSelectionChangedEvent();
 }
@@ -207,7 +205,7 @@ void KoSelection::deselect(KoShape * object, bool recursive)
 void KoSelection::deselectAll()
 {
     // reset the transformation matrix of the selection
-    setTransformation( QMatrix() );
+    setTransformation(QMatrix());
 
     if (d->selectedShapes.isEmpty())
         return;
@@ -218,21 +216,19 @@ void KoSelection::deselectAll()
 int KoSelection::count() const
 {
     int count = 0;
-    foreach (KoShape *shape, d->selectedShapes)
-        if (dynamic_cast<KoShapeGroup*> (shape) == 0)
-            ++count;
+    foreach(KoShape *shape, d->selectedShapes)
+    if (dynamic_cast<KoShapeGroup*>(shape) == 0)
+        ++count;
     return count;
 }
 
-bool KoSelection::hitTest( const QPointF &position ) const
+bool KoSelection::hitTest(const QPointF &position) const
 {
-    if ( count() > 1 )
-    {
-        QRectF bb( boundingRect() );
-        return bb.contains( position );
-    }
-    else if ( count() == 1 )
-        return ( *d->selectedShapes.begin() )->hitTest( position );
+    if (count() > 1) {
+        QRectF bb(boundingRect());
+        return bb.contains(position);
+    } else if (count() == 1)
+        return (*d->selectedShapes.begin())->hitTest(position);
     else // count == 0
         return false;
 }
@@ -240,14 +236,14 @@ void KoSelection::updateSizeAndPosition()
 {
     QRectF bb = d->sizeRect();
     QMatrix matrix = absoluteTransformation(0);
-    setSize( bb.size() );
-    QPointF p = matrix.map(bb.topLeft() + matrix.inverted().map( position()) );
-    setPosition( p );
+    setSize(bb.size());
+    QPointF p = matrix.map(bb.topLeft() + matrix.inverted().map(position()));
+    setPosition(p);
 }
 
 QRectF KoSelection::boundingRect() const
 {
-    return absoluteTransformation(0).mapRect( d->sizeRect() );
+    return absoluteTransformation(0).mapRect(d->sizeRect());
 }
 
 const QList<KoShape*> KoSelection::selectedShapes(KoFlake::SelectionType strip) const
@@ -255,7 +251,7 @@ const QList<KoShape*> KoSelection::selectedShapes(KoFlake::SelectionType strip) 
     QList<KoShape*> answer;
     // strip the child objects when there is also a parent included.
     bool doStripping = strip == KoFlake::StrippedSelection;
-    foreach (KoShape *shape, d->selectedShapes) {
+    foreach(KoShape *shape, d->selectedShapes) {
         KoShapeContainer *container = shape->parent();
         if (strip != KoFlake::TopLevelSelection && dynamic_cast<KoShapeGroup*>(shape))
             // since a KoShapeGroup
@@ -263,7 +259,7 @@ const QList<KoShape*> KoSelection::selectedShapes(KoFlake::SelectionType strip) 
             // is selected we will only return its children.
             continue;
         bool add = true;
-        while(doStripping && add && container) {
+        while (doStripping && add && container) {
             if (dynamic_cast<KoShapeGroup*>(container) == 0 && d->selectedShapes.contains(container))
                 add = false;
             container = container->parent();
@@ -282,8 +278,8 @@ bool KoSelection::isSelected(const KoShape *object) const
         return true;
 
     foreach(KoShape *shape, d->selectedShapes)
-        if (shape == object)
-            return true;
+    if (shape == object)
+        return true;
 
     return false;
 }
@@ -296,7 +292,7 @@ KoShape *KoSelection::firstSelectedShape(KoFlake::SelectionType strip) const
     return *(set.begin());
 }
 
-void KoSelection::setActiveLayer( KoShapeLayer* layer )
+void KoSelection::setActiveLayer(KoShapeLayer* layer)
 {
     d->activeLayer = layer;
 }
@@ -306,11 +302,11 @@ KoShapeLayer* KoSelection::activeLayer() const
     return d->activeLayer;
 }
 
-void KoSelection::saveOdf( KoShapeSavingContext & ) const
+void KoSelection::saveOdf(KoShapeSavingContext &) const
 {
 }
 
-bool KoSelection::loadOdf( const KoXmlElement &, KoShapeLoadingContext &)
+bool KoSelection::loadOdf(const KoXmlElement &, KoShapeLoadingContext &)
 {
     return true;
 }

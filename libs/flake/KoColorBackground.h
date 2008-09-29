@@ -33,7 +33,7 @@ public:
     KoColorBackground();
 
     /// Creates background from given color and style
-    explicit KoColorBackground( const QColor &color, Qt::BrushStyle style = Qt::SolidPattern );
+    explicit KoColorBackground(const QColor &color, Qt::BrushStyle style = Qt::SolidPattern);
 
     virtual ~KoColorBackground();
 
@@ -44,11 +44,11 @@ public:
     Qt::BrushStyle style() const;
 
     // reimplemented from KoShapeBackground
-    virtual void paint( QPainter &painter, const QPainterPath &fillPath ) const;
+    virtual void paint(QPainter &painter, const QPainterPath &fillPath) const;
     // reimplemented from KoShapeBackground
-    virtual void fillStyle( KoGenStyle &style, KoShapeSavingContext &context );
+    virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context);
     // reimplemented from KoShapeBackground
-    virtual bool loadStyle( KoOdfLoadingContext & context, const QSizeF &shapeSize );
+    virtual bool loadStyle(KoOdfLoadingContext & context, const QSizeF &shapeSize);
 
 private:
     class Private;

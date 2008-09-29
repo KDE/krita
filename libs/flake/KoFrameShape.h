@@ -39,8 +39,8 @@ class KoShapeLoadingContext;
  * </draw:frame>
  * @endcode
  *
- * The loading code of the shape gets passed the draw:frame element. Out of this element the 
- * odf attributes can be loaded. Then it calls loadOdfFrame which loads the correct frame element 
+ * The loading code of the shape gets passed the draw:frame element. Out of this element the
+ * odf attributes can be loaded. Then it calls loadOdfFrame which loads the correct frame element
  * the object supports. The loading of the frame element is done in the loadOdfFrameElement.
  *
  * @code
@@ -61,7 +61,7 @@ public:
     * \param ns The namespace. E.g. KoXmlNS::draw
     * \param tag The tag-name. E.g. "image"
     */
-    KoFrameShape( const char * ns, const char * tag );
+    KoFrameShape(const char * ns, const char * tag);
 
     /**
     * Destructor.
@@ -72,7 +72,7 @@ public:
     * Loads the content of the draw:frame element and it's children. This
     * method calls the abstract loadOdfFrameElement() method.
     */
-    virtual bool loadOdfFrame( const KoXmlElement & element, KoShapeLoadingContext &context );
+    virtual bool loadOdfFrame(const KoXmlElement & element, KoShapeLoadingContext &context);
 
 protected:
 
@@ -80,7 +80,7 @@ protected:
     * Abstract method to handle loading of the defined inner element like
     * e.g. the draw:image element.
     */
-    virtual bool loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context ) = 0;
+    virtual bool loadOdfFrameElement(const KoXmlElement & element, KoShapeLoadingContext & context) = 0;
 
 private:
     struct Private;

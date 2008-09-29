@@ -22,7 +22,7 @@
 #include <QtTest/QtTest>
 
 class TestPathShape : public QObject
-                      
+
 {
     Q_OBJECT
 private slots:

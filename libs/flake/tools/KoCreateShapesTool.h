@@ -43,13 +43,13 @@ public:
      * Create a new tool; typically not called by applications, only by the KoToolManager
      * @param canvas the canvas this tool works for.
      */
-    explicit KoCreateShapesTool( KoCanvasBase *canvas );
+    explicit KoCreateShapesTool(KoCanvasBase *canvas);
     /// destructor
     virtual ~KoCreateShapesTool();
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
-    virtual void activate( bool temporary = false );
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    virtual void activate(bool temporary = false);
 
-    void paint( QPainter &painter, const KoViewConverter &converter );
+    void paint(QPainter &painter, const KoViewConverter &converter);
 
     /**
      * Each shape-type has an Id; as found in KoShapeFactory::id().id(), to choose which
@@ -57,7 +57,7 @@ public:
      * create the new shape.
      * @param id the SHAPEID of the to be generated shape
      */
-    void setShapeId( const QString &id );
+    void setShapeId(const QString &id);
     /**
      * return the shape Id that is to be created.
      * @return the shape Id that is to be created.
@@ -69,7 +69,7 @@ public:
      * create.
      * @param properties the properties or 0 if the default shape should be created.
      */
-    void setShapeProperties( KoProperties *properties );
+    void setShapeProperties(KoProperties *properties);
     /**
      * return the properties to be used for creating the next shape
      * @return the properties to be used for creating the next shape

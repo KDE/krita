@@ -55,8 +55,9 @@ public:
      * Reimplement this if the action needs to draw a "blob" on the canvas;
      * that is, a transient decoration like a rubber band.
      */
-    virtual void paint( QPainter &painter, const KoViewConverter &converter) {
-        Q_UNUSED(painter); Q_UNUSED(converter); }
+    virtual void paint(QPainter &painter, const KoViewConverter &converter) {
+        Q_UNUSED(painter); Q_UNUSED(converter);
+    }
     /**
      * Extending classes should implement this method to update the selectedShapes
      * based on the new mouse position.
@@ -70,7 +71,7 @@ public:
      * based on the new pointer event. The default implementations does nothing.
      * @param event the new pointer event
      */
-    virtual void handleCustomEvent( KoPointerEvent * event );
+    virtual void handleCustomEvent(KoPointerEvent * event);
 
     /**
      * For interactions that are undo-able this method should be implemented to return such
@@ -86,7 +87,7 @@ public:
     /**
      * Override to make final changes to the data on the end of an interaction.
      */
-    virtual void finishInteraction( Qt::KeyboardModifiers modifiers ) = 0;
+    virtual void finishInteraction(Qt::KeyboardModifiers modifiers) = 0;
 
 protected:
     /// protected constructor. Use the createStrategy method()
@@ -103,7 +104,7 @@ protected:
      * @param point the original point
      * @return the argument point, potentially changed.
      */
-    QPointF snapToGrid( const QPointF &point, Qt::KeyboardModifiers modifiers );
+    QPointF snapToGrid(const QPointF &point, Qt::KeyboardModifiers modifiers);
 
 protected: // members
     KoTool *m_parent; ///< the KoTool instance that controls this strategy.

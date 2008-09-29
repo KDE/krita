@@ -32,23 +32,21 @@ void KoDeviceRegistry::init()
     config.whiteList = "DevicePlugins";
     config.blacklist = "DevicePluginsDisabled";
     config.group = "koffice";
-    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Device"),
-                                      QString::fromLatin1("[X-Flake-MinVersion] <= 0"));
+    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Device"),
+                                     QString::fromLatin1("[X-Flake-MinVersion] <= 0"));
 
-    foreach( QString id, keys() )
-    {
+    foreach(QString id, keys()) {
         KoDevice * d = value(id);
-        if ( d )
+        if (d)
             d->start();
     }
 }
 
 KoDeviceRegistry::~KoDeviceRegistry()
 {
-    foreach( QString id, keys() )
-    {
+    foreach(QString id, keys()) {
         KoDevice * d = value(id);
-        if ( d )
+        if (d)
             d->stop();
     }
 }

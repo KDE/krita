@@ -26,23 +26,23 @@
 #include <limits.h>
 
 KoShapeReorderCommand::KoShapeReorderCommand(const QList<KoShape*> &shapes, QList<int> &newIndexes, QUndoCommand *parent)
-: QUndoCommand(parent)
-, m_shapes(shapes)
-, m_newIndexes(newIndexes)
+        : QUndoCommand(parent)
+        , m_shapes(shapes)
+        , m_newIndexes(newIndexes)
 {
     Q_ASSERT(m_shapes.count() == m_newIndexes.count());
     foreach(KoShape *shape, shapes)
-        m_previousIndexes.append(shape->zIndex());
+    m_previousIndexes.append(shape->zIndex());
 
-    setText(i18n( "Reorder shapes" ));
+    setText(i18n("Reorder shapes"));
 }
 
 void KoShapeReorderCommand::redo()
 {
     QUndoCommand::redo();
-    for(int i=0; i < m_shapes.count(); i++) {
+    for (int i = 0; i < m_shapes.count(); i++) {
         m_shapes.at(i)->update();
-        m_shapes.at(i)->setZIndex( m_newIndexes.at(i) );
+        m_shapes.at(i)->setZIndex(m_newIndexes.at(i));
         m_shapes.at(i)->update();
     }
 }
@@ -50,9 +50,9 @@ void KoShapeReorderCommand::redo()
 void KoShapeReorderCommand::undo()
 {
     QUndoCommand::undo();
-    for(int i=0; i < m_shapes.count(); i++) {
+    for (int i = 0; i < m_shapes.count(); i++) {
         m_shapes.at(i)->update();
-        m_shapes.at(i)->setZIndex( m_previousIndexes.at(i) );
+        m_shapes.at(i)->setZIndex(m_previousIndexes.at(i));
         m_shapes.at(i)->update();
     }
 }
@@ -66,48 +66,45 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*
         // for each shape create a 'stack' and then move the shape up/down
         // since two indexes can not collide we may need to change the zIndex of a number
         // of other shapes in the stack as well.
-        QList<KoShape*> sortedShapes( manager->shapesAt(shape->boundingRect(), false) );
-        if ( sortedShapes.count() == 0 )
+        QList<KoShape*> sortedShapes(manager->shapesAt(shape->boundingRect(), false));
+        if (sortedShapes.count() == 0)
             continue;
         qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
         if (move == BringToFront) {
             KoShape *top = *(--sortedShapes.end());
             changedShapes.append(shape);
-            newIndexes.append(top->zIndex()+1);
-        }
-        else if (move == SendToBack) {
+            newIndexes.append(top->zIndex() + 1);
+        } else if (move == SendToBack) {
             KoShape *bottom = (*sortedShapes.begin());
             changedShapes.append(shape);
-            newIndexes.append(bottom->zIndex()-1);
-        }
-        else {
+            newIndexes.append(bottom->zIndex() - 1);
+        } else {
             QList<KoShape*>::Iterator iter = sortedShapes.begin();
-            while((*iter) != shape && iter != sortedShapes.end())
+            while ((*iter) != shape && iter != sortedShapes.end())
                 iter++;
-            if ( iter == sortedShapes.end() )
+            if (iter == sortedShapes.end())
                 continue;
 
             if (move == RaiseShape) {
                 if (++iter == sortedShapes.end()) continue; // already at top
-                int newIndex = (*iter)->zIndex()+1;
+                int newIndex = (*iter)->zIndex() + 1;
                 changedShapes.append(shape);
                 newIndexes.append(newIndex);
                 ++iter; // skip the one we want to get above.
-                while(iter != sortedShapes.end() && newIndex <= (*iter)->zIndex()) {
+                while (iter != sortedShapes.end() && newIndex <= (*iter)->zIndex()) {
                     changedShapes.append(*iter);
                     newIndexes.append(++newIndex);
                     iter++;
                 }
-            }
-            else if (move == LowerShape) {
+            } else if (move == LowerShape) {
                 if (iter == sortedShapes.begin()) continue; // already at bottom
                 iter--; // go to the one below
-                int newIndex = (*iter)->zIndex()-1;
+                int newIndex = (*iter)->zIndex() - 1;
                 changedShapes.append(shape);
                 newIndexes.append(newIndex);
                 if (iter == sortedShapes.begin()) continue; // moved to the bottom
                 --iter; // skip the one we want to get below
-                while(iter != sortedShapes.begin() && newIndex >= (*iter)->zIndex()) {
+                while (iter != sortedShapes.begin() && newIndex >= (*iter)->zIndex()) {
                     changedShapes.append(*iter);
                     newIndexes.append(--newIndex);
                     iter--;

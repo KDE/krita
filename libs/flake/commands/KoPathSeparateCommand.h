@@ -38,8 +38,8 @@ public:
      * @param paths the list of paths to separate
      * @param parent the parent command used for macro commands
      */
-    KoPathSeparateCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths,
-                           QUndoCommand *parent = 0 );
+    KoPathSeparateCommand(KoShapeControllerBase *controller, const QList<KoPathShape*> &paths,
+                          QUndoCommand *parent = 0);
     virtual ~KoPathSeparateCommand();
     /// redo the command
     void redo();

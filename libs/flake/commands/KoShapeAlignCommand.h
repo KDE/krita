@@ -30,11 +30,11 @@
 class KoShape;
 
 /// The undo / redo command for aligning shapes
-class FLAKE_EXPORT KoShapeAlignCommand : public QUndoCommand {
+class FLAKE_EXPORT KoShapeAlignCommand : public QUndoCommand
+{
 public:
     /// The different alignment options for this command
-    enum Align
-    {
+    enum Align {
         HorizontalLeftAlignment,    ///< Align left
         HorizontalCenterAlignment,  ///< Align Centered horizontally
         HorizontalRightAlignment,   ///< Align Right
@@ -49,7 +49,7 @@ public:
      * @param boundingRect the rect the shape will be aligned in
      * @param parent the parent command used for macro commands
      */
-    KoShapeAlignCommand( const QList<KoShape*> &shapes, Align align, QRectF boundingRect, QUndoCommand *parent = 0 );
+    KoShapeAlignCommand(const QList<KoShape*> &shapes, Align align, QRectF boundingRect, QUndoCommand *parent = 0);
     virtual ~KoShapeAlignCommand();
     /// redo the command
     virtual void redo();

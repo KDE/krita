@@ -94,7 +94,8 @@ class KoGuidesTool;
    the tool stuff.)
 
  */
-class FLAKE_EXPORT KoToolManager : public QObject {
+class FLAKE_EXPORT KoToolManager : public QObject
+{
     Q_OBJECT
 
 public:
@@ -144,7 +145,7 @@ public:
      *    who's tool you want.
      * @see addController()
      */
-    KoGuidesTool * guidesTool( KoCanvasBase * canvas ) const;
+    KoGuidesTool * guidesTool(KoCanvasBase * canvas) const;
 
     /// @return the currently active pointing device
     KoInputDevice currentInputDevice() const;
@@ -173,10 +174,10 @@ public:
     QList<Button> createToolList(KoCanvasBase *canvas) const;
 
     /// Request tool activation for the given canvas controller
-    void requestToolActivation( KoCanvasController * controller );
+    void requestToolActivation(KoCanvasController * controller);
 
     /// Injects an input event from a plugin based input device
-    void injectDeviceEvent( KoDeviceEvent * event );
+    void injectDeviceEvent(KoDeviceEvent * event);
 
 public slots:
     /**
@@ -211,13 +212,13 @@ signals:
      * Emitted whenever the active canvas changed.
      * @param canvas the new activated canvas (might be 0)
      */
-    void changedCanvas( const KoCanvasBase * canvas );
+    void changedCanvas(const KoCanvasBase * canvas);
 
     /**
      * Emitted whenever the active tool changes the status text.
      * @param statusText the new status text
      */
-    void changedStatusText( const QString &statusText );
+    void changedStatusText(const QString &statusText);
 
 protected:
     friend class KoToolProxy;

@@ -32,15 +32,15 @@ class SnapGuideConfigWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit SnapGuideConfigWidget( KoSnapGuide * snapGuide, QWidget *parent = 0);
+    explicit SnapGuideConfigWidget(KoSnapGuide * snapGuide, QWidget *parent = 0);
     ~SnapGuideConfigWidget();
 private slots:
-    void snappingEnabled( int state );
+    void snappingEnabled(int state);
     void strategyChanged();
-    void distanceChanged( int distance );
+    void distanceChanged(int distance);
     void updateControls();
 private:
-    virtual void showEvent( QShowEvent * event );
+    virtual void showEvent(QShowEvent * event);
 
     Ui_SnapGuideConfigWidget widget;
     KoSnapGuide * m_snapGuide;

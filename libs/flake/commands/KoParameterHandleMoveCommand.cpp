@@ -23,15 +23,15 @@
 #include "KoParameterShape.h"
 #include <klocale.h>
 
-KoParameterHandleMoveCommand::KoParameterHandleMoveCommand( KoParameterShape *shape, int handleId, const QPointF &startPoint, const QPointF &endPoint, Qt::KeyboardModifiers keyModifiers, QUndoCommand *parent )
-: QUndoCommand( parent )
-, m_shape( shape )
-, m_handleId( handleId )
-, m_startPoint( startPoint )
-, m_endPoint( endPoint )
-, m_keyModifiers( keyModifiers )
+KoParameterHandleMoveCommand::KoParameterHandleMoveCommand(KoParameterShape *shape, int handleId, const QPointF &startPoint, const QPointF &endPoint, Qt::KeyboardModifiers keyModifiers, QUndoCommand *parent)
+        : QUndoCommand(parent)
+        , m_shape(shape)
+        , m_handleId(handleId)
+        , m_startPoint(startPoint)
+        , m_endPoint(endPoint)
+        , m_keyModifiers(keyModifiers)
 {
-    setText( i18n( "Change parameter" ) );
+    setText(i18n("Change parameter"));
 }
 
 KoParameterHandleMoveCommand::~KoParameterHandleMoveCommand()
@@ -43,7 +43,7 @@ void KoParameterHandleMoveCommand::redo()
 {
     QUndoCommand::redo();
     m_shape->update();
-    m_shape->moveHandle( m_handleId, m_endPoint, m_keyModifiers );
+    m_shape->moveHandle(m_handleId, m_endPoint, m_keyModifiers);
     m_shape->update();
 }
 
@@ -52,7 +52,7 @@ void KoParameterHandleMoveCommand::undo()
 {
     QUndoCommand::undo();
     m_shape->update();
-    m_shape->moveHandle( m_handleId, m_startPoint );
+    m_shape->moveHandle(m_handleId, m_startPoint);
     m_shape->update();
 }
 

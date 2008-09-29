@@ -23,13 +23,13 @@
 #include "KoPathPoint.h"
 #include <klocale.h>
 
-KoPathPointMoveCommand::KoPathPointMoveCommand( const KoPathShapePointMap &pointMap, const QPointF &offset, QUndoCommand *parent )
-: QUndoCommand( parent )
-, m_pointMap( pointMap )
-, m_offset( offset )
-,m_undoCalled(true)
+KoPathPointMoveCommand::KoPathPointMoveCommand(const KoPathShapePointMap &pointMap, const QPointF &offset, QUndoCommand *parent)
+        : QUndoCommand(parent)
+        , m_pointMap(pointMap)
+        , m_offset(offset)
+        , m_undoCalled(true)
 {
-    setText( i18n( "Move points" ) );
+    setText(i18n("Move points"));
 }
 
 void KoPathPointMoveCommand::redo()
@@ -37,18 +37,16 @@ void KoPathPointMoveCommand::redo()
     QUndoCommand::redo();
     if (! m_undoCalled)
         return;
-    KoPathShapePointMap::iterator it( m_pointMap.begin() );
-    for ( ; it != m_pointMap.end(); ++it )
-    {
-        QPointF offset = it.key()->documentToShape( m_offset ) - it.key()->documentToShape( QPointF( 0, 0 ) );
+    KoPathShapePointMap::iterator it(m_pointMap.begin());
+    for (; it != m_pointMap.end(); ++it) {
+        QPointF offset = it.key()->documentToShape(m_offset) - it.key()->documentToShape(QPointF(0, 0));
         QMatrix matrix;
-        matrix.translate( offset.x(), offset.y() );
+        matrix.translate(offset.x(), offset.y());
 
         // repaint old bounding rect
         it.key()->update();
-        foreach( KoPathPoint *p, it.value() )
-        {
-            p->map( matrix, true );
+        foreach(KoPathPoint *p, it.value()) {
+            p->map(matrix, true);
         }
         it.key()->normalize();
         // repaint new bounding rect

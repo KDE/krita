@@ -29,24 +29,24 @@
 #include <klocale.h>
 #include <KoLineBorder.h>
 
-KoConnectionShapeFactory::KoConnectionShapeFactory( QObject* parent)
-    : KoShapeFactory( parent, KOCONNECTIONSHAPEID, i18n( "Tie" ) )
+KoConnectionShapeFactory::KoConnectionShapeFactory(QObject* parent)
+        : KoShapeFactory(parent, KOCONNECTIONSHAPEID, i18n("Tie"))
 {
-    setToolTip( i18n( "A connection between two other shapes" ) );
+    setToolTip(i18n("A connection between two other shapes"));
     setIcon("x-shape-connection");
-    setOdfElementNames( KoXmlNS::draw, QStringList( "connector" ) );
-    setLoadingPriority( 1 );
+    setOdfElementNames(KoXmlNS::draw, QStringList("connector"));
+    setLoadingPriority(1);
 }
 
 KoShape* KoConnectionShapeFactory::createDefaultShape() const
 {
     KoConnectionShape * shape = new KoConnectionShape();
-    shape->setBorder( new KoLineBorder() );
-    shape->setShapeId( KoPathShapeId );
+    shape->setBorder(new KoLineBorder());
+    shape->setShapeId(KoPathShapeId);
     return shape;
 }
 
-KoShape* KoConnectionShapeFactory::createShape( const KoProperties* params ) const
+KoShape* KoConnectionShapeFactory::createShape(const KoProperties* params) const
 {
     Q_UNUSED(params);
     return createDefaultShape();
@@ -54,12 +54,12 @@ KoShape* KoConnectionShapeFactory::createShape( const KoProperties* params ) con
 
 bool KoConnectionShapeFactory::supports(const KoXmlElement & e) const
 {
-    return ( e.localName() == "connector" && e.namespaceURI() == KoXmlNS::draw );
+    return (e.localName() == "connector" && e.namespaceURI() == KoXmlNS::draw);
 }
 
 QList<KoShapeConfigWidgetBase*> KoConnectionShapeFactory::createShapeOptionPanels()
 {
     QList<KoShapeConfigWidgetBase*> panels;
-    panels.append( new KoConnectionShapeConfigWidget() );
+    panels.append(new KoConnectionShapeConfigWidget());
     return panels;
 }

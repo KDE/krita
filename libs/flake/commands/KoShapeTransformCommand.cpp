@@ -35,12 +35,12 @@ public:
     QList<QMatrix> newState;
 };
 
-KoShapeTransformCommand::KoShapeTransformCommand( const QList<KoShape*> &shapes, const QList<QMatrix> &oldState, const QList<QMatrix> &newState, QUndoCommand * parent )
-    : QUndoCommand(parent),
-    d( new Private(shapes))
+KoShapeTransformCommand::KoShapeTransformCommand(const QList<KoShape*> &shapes, const QList<QMatrix> &oldState, const QList<QMatrix> &newState, QUndoCommand * parent)
+        : QUndoCommand(parent),
+        d(new Private(shapes))
 {
-    Q_ASSERT( shapes.count() == oldState.count() );
-    Q_ASSERT( shapes.count() == newState.count() );
+    Q_ASSERT(shapes.count() == oldState.count());
+    Q_ASSERT(shapes.count() == newState.count());
     d->oldState = oldState;
     d->newState = newState;
 }
@@ -55,11 +55,10 @@ void KoShapeTransformCommand::redo()
     QUndoCommand::redo();
 
     const int shapeCount = d->shapes.count();
-    for( int i = 0; i < shapeCount; ++i )
-    {
+    for (int i = 0; i < shapeCount; ++i) {
         KoShape * shape = d->shapes[i];
         shape->update();
-        shape->setTransformation( d->newState[i] );
+        shape->setTransformation(d->newState[i]);
         shape->update();
     }
 }
@@ -69,11 +68,10 @@ void KoShapeTransformCommand::undo()
     QUndoCommand::undo();
 
     const int shapeCount = d->shapes.count();
-    for( int i = 0; i < shapeCount; ++i )
-    {
+    for (int i = 0; i < shapeCount; ++i) {
         KoShape * shape = d->shapes[i];
         shape->update();
-        shape->setTransformation( d->oldState[i] );
+        shape->setTransformation(d->oldState[i]);
         shape->update();
     }
 }

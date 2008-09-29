@@ -30,8 +30,8 @@ public:
 };
 
 KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions, QUndoCommand *parent)
-: QUndoCommand( parent ),
-    d(new Private())
+        : QUndoCommand(parent),
+        d(new Private())
 {
     d->shapes = shapes;
     d->previousPositions = previousPositions;
@@ -39,7 +39,7 @@ KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPoi
     Q_ASSERT(d->shapes.count() == d->previousPositions.count());
     Q_ASSERT(d->shapes.count() == d->newPositions.count());
 
-    setText( i18n( "Move shapes" ) );
+    setText(i18n("Move shapes"));
 }
 
 KoShapeMoveCommand::~KoShapeMoveCommand()
@@ -50,9 +50,9 @@ KoShapeMoveCommand::~KoShapeMoveCommand()
 void KoShapeMoveCommand::redo()
 {
     QUndoCommand::redo();
-    for(int i=0; i < d->shapes.count(); i++) {
+    for (int i = 0; i < d->shapes.count(); i++) {
         d->shapes.at(i)->update();
-        d->shapes.at(i)->setPosition( d->newPositions.at(i) );
+        d->shapes.at(i)->setPosition(d->newPositions.at(i));
         d->shapes.at(i)->update();
     }
 }
@@ -60,9 +60,9 @@ void KoShapeMoveCommand::redo()
 void KoShapeMoveCommand::undo()
 {
     QUndoCommand::undo();
-    for(int i=0; i < d->shapes.count(); i++) {
+    for (int i = 0; i < d->shapes.count(); i++) {
         d->shapes.at(i)->update();
-        d->shapes.at(i)->setPosition( d->previousPositions.at(i) );
+        d->shapes.at(i)->setPosition(d->previousPositions.at(i));
         d->shapes.at(i)->update();
     }
 }

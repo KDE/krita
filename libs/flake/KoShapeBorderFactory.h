@@ -25,7 +25,8 @@
 
 class KoShapeBorderModel;
 
-class FLAKE_EXPORT KoShapeBorderFactory : public QObject {
+class FLAKE_EXPORT KoShapeBorderFactory : public QObject
+{
     Q_OBJECT
 public:
 

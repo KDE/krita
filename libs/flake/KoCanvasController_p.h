@@ -25,7 +25,8 @@
 
 #include <QWidget>
 
-class Viewport : public QWidget {
+class Viewport : public QWidget
+{
     Q_OBJECT
 
 public:
@@ -33,30 +34,32 @@ public:
     Viewport(KoCanvasController *parent);
     ~Viewport() {}
 
-    void setCanvas( QWidget *canvas );
-    QWidget *canvas() { return m_canvas; }
-    void setDocumentSize( const QSize &size );
+    void setCanvas(QWidget *canvas);
+    QWidget *canvas() {
+        return m_canvas;
+    }
+    void setDocumentSize(const QSize &size);
 
     /**
      * When true, a shadow is drawn around the canvas widet.
      */
-    void setDrawShadow( bool drawShadow );
+    void setDrawShadow(bool drawShadow);
 
 public slots:
-    void documentOffsetMoved( const QPoint &);
+    void documentOffsetMoved(const QPoint &);
 
 public:
 
-    void handleDragEnterEvent( QDragEnterEvent *event );
-    void handleDropEvent( QDropEvent *event );
-    void handleDragMoveEvent ( QDragMoveEvent *event );
-    void handleDragLeaveEvent( QDragLeaveEvent *event );
-    void handlePaintEvent( QPainter & gc, QPaintEvent *event );
+    void handleDragEnterEvent(QDragEnterEvent *event);
+    void handleDropEvent(QDropEvent *event);
+    void handleDragMoveEvent(QDragMoveEvent *event);
+    void handleDragLeaveEvent(QDragLeaveEvent *event);
+    void handlePaintEvent(QPainter & gc, QPaintEvent *event);
 
 private:
 
-    QPointF correctPosition( const QPoint &point ) const;
-    void repaint( KoShape *shape );
+    QPointF correctPosition(const QPoint &point) const;
+    void repaint(KoShape *shape);
 
     /**
        Decides whether the containing canvas widget should be as

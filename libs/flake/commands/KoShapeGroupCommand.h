@@ -32,7 +32,8 @@ class KoShapeGroup;
 class KoShapeContainer;
 
 /// The undo / redo command for grouping shapes
-class FLAKE_EXPORT KoShapeGroupCommand : public QUndoCommand {
+class FLAKE_EXPORT KoShapeGroupCommand : public QUndoCommand
+{
 public:
     /**
      * Command to group a set of shapes into a predefined container.
@@ -43,7 +44,7 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoShapeGroupCommand(KoShapeContainer *container, QList<KoShape *> shapes, QList<bool> clipped,
-                          QUndoCommand *parent = 0);
+                        QUndoCommand *parent = 0);
     /**
      * Command to group a set of shapes into a predefined container.
      * Convenience constructor since KoShapeGroup does not allow clipping.
@@ -54,9 +55,9 @@ public:
     KoShapeGroupCommand(KoShapeGroup *container, QList<KoShape *> shapes, QUndoCommand *parent = 0);
     virtual ~KoShapeGroupCommand() { }
     /// redo the command
-    virtual void redo ();
+    virtual void redo();
     /// revert the actions done in redo
-    virtual void undo ();
+    virtual void undo();
 
 protected:
     KoShapeGroupCommand(QUndoCommand* parent = 0); ///< protected constructor for child classes

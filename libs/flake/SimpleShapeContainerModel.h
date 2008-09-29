@@ -22,17 +22,20 @@
 #include "KoShapeContainerModel.h"
 
 /// \internal
-class SimpleShapeContainerModel: public KoShapeContainerModel {
+class SimpleShapeContainerModel: public KoShapeContainerModel
+{
 public:
     SimpleShapeContainerModel() {}
     ~SimpleShapeContainerModel() {}
     void add(KoShape *child) {
-        if(m_members.contains(child))
+        if (m_members.contains(child))
             return;
         m_members.append(child);
     }
-    void setClipping(const KoShape *, bool ) { }
-    bool childClipped(const KoShape *) const { return false; }
+    void setClipping(const KoShape *, bool) { }
+    bool childClipped(const KoShape *) const {
+        return false;
+    }
     void remove(KoShape *child) {
         m_members.removeAll(child);
     }
@@ -43,7 +46,7 @@ public:
         return QList<KoShape*>(m_members);
     }
     void containerChanged(KoShapeContainer *) { }
-    void childChanged(KoShape *, KoShape::ChangeType ) { }
+    void childChanged(KoShape *, KoShape::ChangeType) { }
     bool isChildLocked(const KoShape *child) const {
         Q_ASSERT(child->parent());
         return child->isLocked() || child->parent()->isLocked();

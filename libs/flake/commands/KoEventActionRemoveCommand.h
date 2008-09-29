@@ -29,7 +29,7 @@ class KoEventAction;
 class FLAKE_EXPORT KoEventActionRemoveCommand : public QUndoCommand
 {
 public:
-    KoEventActionRemoveCommand( KoShape * shape, KoEventAction * eventAction, QUndoCommand *parent = 0 );
+    KoEventActionRemoveCommand(KoShape * shape, KoEventAction * eventAction, QUndoCommand *parent = 0);
     virtual ~KoEventActionRemoveCommand();
 
     /// redo the command

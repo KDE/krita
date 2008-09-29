@@ -40,12 +40,12 @@ public:
      * @param zIndex The highest currently existing zIndex.
      * @param parent The parent under which the shapes will be pasted
      */
-    KoShapePaste( KoCanvasBase * canvas, int zIndex, KoShapeContainer * parent );
+    KoShapePaste(KoCanvasBase * canvas, int zIndex, KoShapeContainer * parent);
     virtual ~KoShapePaste();
 
 protected:
     /// reimplemented
-    virtual bool process( const KoXmlElement & body, KoOdfReadStore & odfStore );
+    virtual bool process(const KoXmlElement & body, KoOdfReadStore & odfStore);
 
     struct Private;
     Private * const d;

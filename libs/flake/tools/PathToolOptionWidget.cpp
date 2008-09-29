@@ -21,7 +21,7 @@
 #include "KoPathTool.h"
 
 PathToolOptionWidget::PathToolOptionWidget(KoPathTool *tool, QWidget *parent)
-    : QWidget(parent), m_tool(tool)
+        : QWidget(parent), m_tool(tool)
 {
     widget.setupUi(this);
     widget.corner->setDefaultAction(tool->action("pathpoint-corner"));
@@ -48,7 +48,7 @@ PathToolOptionWidget::~PathToolOptionWidget()
 void PathToolOptionWidget::setSelectionType(int type)
 {
     const bool plain = type & PlainPath;
-    if ( plain )
+    if (plain)
         widget.stackedWidget->setCurrentIndex(0);
     else
         widget.stackedWidget->setCurrentIndex(1);

@@ -24,15 +24,14 @@
 class KoEventAction::Private
 {
 public:
-    Private( const QString & id )
-    : id( id )
-    {}
+    Private(const QString & id)
+            : id(id) {}
 
     QString id;
 };
 
-KoEventAction::KoEventAction( const QString & id )
-: d( new Private( id ) )
+KoEventAction::KoEventAction(const QString & id)
+        : d(new Private(id))
 {
 }
 

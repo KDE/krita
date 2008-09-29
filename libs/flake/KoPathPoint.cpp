@@ -32,10 +32,9 @@
 class KoPathPoint::Private
 {
 public:
-    Private() 
-        : shape(0), properties(Normal), pointGroup(0)
-        , activeControlPoint1(false), activeControlPoint2(false)
-    {}
+    Private()
+            : shape(0), properties(Normal), pointGroup(0)
+            , activeControlPoint1(false), activeControlPoint2(false) {}
     KoPathShape * shape;
     QPointF point;
     QPointF controlPoint1;
@@ -46,8 +45,8 @@ public:
     bool activeControlPoint2;
 };
 
-KoPathPoint::KoPathPoint( const KoPathPoint & pathPoint )
-: d(new Private())
+KoPathPoint::KoPathPoint(const KoPathPoint & pathPoint)
+        : d(new Private())
 {
     d->shape = pathPoint.d->shape;
     d->point = pathPoint.d->point;
@@ -59,12 +58,12 @@ KoPathPoint::KoPathPoint( const KoPathPoint & pathPoint )
 }
 
 KoPathPoint::KoPathPoint()
-    : d(new Private())
+        : d(new Private())
 {
 }
 
-KoPathPoint::KoPathPoint( KoPathShape * path, const QPointF & point, KoPointProperties properties)
-    : d(new Private())
+KoPathPoint::KoPathPoint(KoPathShape * path, const QPointF & point, KoPointProperties properties)
+        : d(new Private())
 {
     d->shape = path;
     d->point = point;
@@ -76,9 +75,9 @@ KoPathPoint::~KoPathPoint()
     delete d;
 }
 
-KoPathPoint& KoPathPoint::operator=( const KoPathPoint &rhs )
+KoPathPoint& KoPathPoint::operator=(const KoPathPoint & rhs)
 {
-    if ( this == &rhs )
+    if (this == &rhs)
         return (*this);
 
     d->shape = rhs.d->shape;
@@ -93,43 +92,43 @@ KoPathPoint& KoPathPoint::operator=( const KoPathPoint &rhs )
     return (*this);
 }
 
-bool KoPathPoint::operator == ( const KoPathPoint &rhs ) const
+bool KoPathPoint::operator == (const KoPathPoint &rhs) const
 {
-    if ( d->point != rhs.d->point )
+    if (d->point != rhs.d->point)
         return false;
-    if ( d->controlPoint1 != rhs.d->controlPoint1 )
+    if (d->controlPoint1 != rhs.d->controlPoint1)
         return false;
-    if ( d->controlPoint2 != rhs.d->controlPoint2 )
+    if (d->controlPoint2 != rhs.d->controlPoint2)
         return false;
-    if ( d->properties != rhs.d->properties )
+    if (d->properties != rhs.d->properties)
         return false;
-    if ( d->activeControlPoint1 != rhs.d->activeControlPoint1 )
+    if (d->activeControlPoint1 != rhs.d->activeControlPoint1)
         return false;
-    if ( d->activeControlPoint2 != rhs.d->activeControlPoint2 )
+    if (d->activeControlPoint2 != rhs.d->activeControlPoint2)
         return false;
     return true;
 }
 
-void KoPathPoint::setPoint( const QPointF & point ) 
+void KoPathPoint::setPoint(const QPointF & point)
 {
     d->point = point;
-    if ( d->shape )
+    if (d->shape)
         d->shape->notifyChanged();
 }
 
-void KoPathPoint::setControlPoint1( const QPointF & point ) 
+void KoPathPoint::setControlPoint1(const QPointF & point)
 {
     d->controlPoint1 = point;
     d->activeControlPoint1 = true;
-    if ( d->shape )
+    if (d->shape)
         d->shape->notifyChanged();
 }
 
-void KoPathPoint::setControlPoint2( const QPointF & point )
+void KoPathPoint::setControlPoint2(const QPointF & point)
 {
     d->controlPoint2 = point;
     d->activeControlPoint2 = true;
-    if ( d->shape )
+    if (d->shape)
         d->shape->notifyChanged();
 }
 
@@ -138,7 +137,7 @@ void KoPathPoint::removeControlPoint1()
     d->activeControlPoint1 = false;
     d->properties &= ~IsSmooth;
     d->properties &= ~IsSymmetric;
-    if ( d->shape )
+    if (d->shape)
         d->shape->notifyChanged();
 }
 
@@ -147,75 +146,71 @@ void KoPathPoint::removeControlPoint2()
     d->activeControlPoint2 = false;
     d->properties &= ~IsSmooth;
     d->properties &= ~IsSymmetric;
-    if ( d->shape )
+    if (d->shape)
         d->shape->notifyChanged();
 }
 
-void KoPathPoint::setProperties( KoPointProperties properties ) 
+void KoPathPoint::setProperties(KoPointProperties properties)
 {
-    if ( ! activeControlPoint1() || ! activeControlPoint2() )
-    {
+    if (! activeControlPoint1() || ! activeControlPoint2()) {
         // strip smooth and symmetric flags if points has not two control points
         properties &= ~IsSmooth;
         properties &= ~IsSymmetric;
     }
     d->properties = properties;
     // CloseSubpath only allowed with StartSubpath or StopSubpath
-    if ( (d->properties & StartSubpath) == 0 && (d->properties & StopSubpath) == 0 )
+    if ((d->properties & StartSubpath) == 0 && (d->properties & StopSubpath) == 0)
         d->properties &= ~CloseSubpath;
 
-    if ( d->shape )
+    if (d->shape)
         d->shape->notifyChanged();
 }
 
-void KoPathPoint::setProperty( KoPointProperty property )
+void KoPathPoint::setProperty(KoPointProperty property)
 {
-    switch( property )
-    {
-        case StartSubpath:
-        case StopSubpath:
-        case CloseSubpath:
-            // nothing special to do here
-            break;
-        case IsSmooth:
-            if ( ! activeControlPoint1() || ! activeControlPoint2() )
-                return;
-            d->properties &= ~IsSymmetric;
+    switch (property) {
+    case StartSubpath:
+    case StopSubpath:
+    case CloseSubpath:
+        // nothing special to do here
         break;
-        case IsSymmetric:
-            if ( ! activeControlPoint1() || ! activeControlPoint2() )
-                return;
-            d->properties &= ~IsSmooth;
+    case IsSmooth:
+        if (! activeControlPoint1() || ! activeControlPoint2())
+            return;
+        d->properties &= ~IsSymmetric;
         break;
-        default: return;
+    case IsSymmetric:
+        if (! activeControlPoint1() || ! activeControlPoint2())
+            return;
+        d->properties &= ~IsSmooth;
+        break;
+    default: return;
     }
     d->properties |= property;
 }
 
-void KoPathPoint::unsetProperty( KoPointProperty property )
+void KoPathPoint::unsetProperty(KoPointProperty property)
 {
-    switch( property )
-    {
-        case StartSubpath:
-            if ( d->properties & StartSubpath && (d->properties & StopSubpath) == 0 )
-                d->properties &= ~CloseSubpath;
+    switch (property) {
+    case StartSubpath:
+        if (d->properties & StartSubpath && (d->properties & StopSubpath) == 0)
+            d->properties &= ~CloseSubpath;
         break;
-        case StopSubpath:
-            if ( d->properties & StopSubpath && (d->properties & StartSubpath) == 0 )
-                d->properties &= ~CloseSubpath;
+    case StopSubpath:
+        if (d->properties & StopSubpath && (d->properties & StartSubpath) == 0)
+            d->properties &= ~CloseSubpath;
         break;
-        case CloseSubpath:
-            if ( d->properties & StartSubpath || d->properties & StopSubpath )
-            {
-                d->properties &= ~IsSmooth;
-                d->properties &= ~IsSymmetric;
-            }
+    case CloseSubpath:
+        if (d->properties & StartSubpath || d->properties & StopSubpath) {
+            d->properties &= ~IsSmooth;
+            d->properties &= ~IsSymmetric;
+        }
         break;
-        case IsSmooth:
-        case IsSymmetric:
-            // no others depend on these
+    case IsSmooth:
+    case IsSymmetric:
+        // no others depend on these
         break;
-        default: return;
+    default: return;
     }
     d->properties &= ~property;
 }
@@ -223,7 +218,7 @@ void KoPathPoint::unsetProperty( KoPointProperty property )
 bool KoPathPoint::activeControlPoint1() const
 {
     // only start point on closed subpaths can have a controlPoint1
-    if ( (d->properties & StartSubpath) && (d->properties & CloseSubpath) == 0 )
+    if ((d->properties & StartSubpath) && (d->properties & CloseSubpath) == 0)
         return false;
 
     return d->activeControlPoint1;
@@ -232,108 +227,100 @@ bool KoPathPoint::activeControlPoint1() const
 bool KoPathPoint::activeControlPoint2() const
 {
     // only end point on closed subpaths can have a controlPoint2
-    if ( (d->properties & StopSubpath) && (d->properties & CloseSubpath) == 0 )
+    if ((d->properties & StopSubpath) && (d->properties & CloseSubpath) == 0)
         return false;
 
     return d->activeControlPoint2;
 }
 
-void KoPathPoint::map( const QMatrix &matrix, bool mapGroup )
-{ 
-    if ( d->pointGroup && mapGroup )
-    {
-        d->pointGroup->map( matrix );
+void KoPathPoint::map(const QMatrix &matrix, bool mapGroup)
+{
+    if (d->pointGroup && mapGroup) {
+        d->pointGroup->map(matrix);
+    } else {
+        d->point = matrix.map(d->point);
+        d->controlPoint1 = matrix.map(d->controlPoint1);
+        d->controlPoint2 = matrix.map(d->controlPoint2);
     }
-    else
-    {
-        d->point = matrix.map( d->point ); 
-        d->controlPoint1 = matrix.map( d->controlPoint1 );
-        d->controlPoint2 = matrix.map( d->controlPoint2 );
-    }
-    if ( d->shape )
+    if (d->shape)
         d->shape->notifyChanged();
 }
 
-void KoPathPoint::paint( QPainter &painter, int handleRadius, KoPointTypes types, bool active )
+void KoPathPoint::paint(QPainter &painter, int handleRadius, KoPointTypes types, bool active)
 {
-    QRectF handle( -handleRadius, -handleRadius, 2*handleRadius, 2*handleRadius );
+    QRectF handle(-handleRadius, -handleRadius, 2*handleRadius, 2*handleRadius);
 
-    bool drawControlPoint1 = types & ControlPoint1 && ( !active || activeControlPoint1() );
-    bool drawControlPoint2 = types & ControlPoint2 && ( !active || activeControlPoint2() );
+    bool drawControlPoint1 = types & ControlPoint1 && (!active || activeControlPoint1());
+    bool drawControlPoint2 = types & ControlPoint2 && (!active || activeControlPoint2());
 
     // draw lines at the bottom
-    if ( drawControlPoint2 )
-        painter.drawLine( point(), controlPoint2() );
+    if (drawControlPoint2)
+        painter.drawLine(point(), controlPoint2());
 
-    if ( drawControlPoint1 )
-        painter.drawLine( point(), controlPoint1() );
+    if (drawControlPoint1)
+        painter.drawLine(point(), controlPoint1());
 
-    
+
     QMatrix worldMatrix = painter.worldMatrix();
 
-    painter.setWorldMatrix( QMatrix() );
-    
-    // the point is lowest 
-    if ( types & Node )
-    {
-        if ( properties() & IsSmooth )
-            painter.drawRect( handle.translated( worldMatrix.map( point() ) ) );
-        else if ( properties() & IsSymmetric )
-        {
+    painter.setWorldMatrix(QMatrix());
+
+    // the point is lowest
+    if (types & Node) {
+        if (properties() & IsSmooth)
+            painter.drawRect(handle.translated(worldMatrix.map(point())));
+        else if (properties() & IsSymmetric) {
             QMatrix matrix;
-            matrix.rotate( 45.0 );
-            QPolygonF poly( handle );
-            poly = matrix.map( poly );
-            poly.translate( worldMatrix.map( point() ) );
-            painter.drawPolygon( poly );
-        }
-        else
-            painter.drawEllipse( handle.translated( worldMatrix.map( point() ) ) );
+            matrix.rotate(45.0);
+            QPolygonF poly(handle);
+            poly = matrix.map(poly);
+            poly.translate(worldMatrix.map(point()));
+            painter.drawPolygon(poly);
+        } else
+            painter.drawEllipse(handle.translated(worldMatrix.map(point())));
     }
 
     // then comes control point 2
-    if ( drawControlPoint2 )
-        painter.drawEllipse( handle.translated( worldMatrix.map( controlPoint2() ) ) );
-    
+    if (drawControlPoint2)
+        painter.drawEllipse(handle.translated(worldMatrix.map(controlPoint2())));
+
     // then comes control point 1
-    if ( drawControlPoint1 )
-        painter.drawEllipse( handle.translated( worldMatrix.map( controlPoint1() ) ) );
-    
-    painter.setWorldMatrix( worldMatrix );
+    if (drawControlPoint1)
+        painter.drawEllipse(handle.translated(worldMatrix.map(controlPoint1())));
+
+    painter.setWorldMatrix(worldMatrix);
 }
 
-void KoPathPoint::setParent( KoPathShape* parent )
+void KoPathPoint::setParent(KoPathShape* parent)
 {
     // don't set to zero
     //Q_ASSERT( parent );
     d->shape = parent;
 }
 
-QRectF KoPathPoint::boundingRect( bool active ) const
+QRectF KoPathPoint::boundingRect(bool active) const
 {
-    QRectF rect( d->point, QSize( 1, 1 ) );
-    if ( !active && activeControlPoint1() )
-    {
-        QRectF r1( d->point, QSize( 1, 1 ) );
-        r1.setBottomRight( d->controlPoint1 );
-        rect = rect.unite( r1 );
+    QRectF rect(d->point, QSize(1, 1));
+    if (!active && activeControlPoint1()) {
+        QRectF r1(d->point, QSize(1, 1));
+        r1.setBottomRight(d->controlPoint1);
+        rect = rect.unite(r1);
     }
-    if ( !active && activeControlPoint2() )
-    {
-        QRectF r2( d->point, QSize( 1, 1 ) );
-        r2.setBottomRight( d->controlPoint2 );
-        rect = rect.unite( r2 );
+    if (!active && activeControlPoint2()) {
+        QRectF r2(d->point, QSize(1, 1));
+        r2.setBottomRight(d->controlPoint2);
+        rect = rect.unite(r2);
     }
-    if ( d->shape )
-        return d->shape->shapeToDocument( rect );
+    if (d->shape)
+        return d->shape->shapeToDocument(rect);
     else
         return rect;
 }
 
 void KoPathPoint::reverse()
 {
-    qSwap( d->controlPoint1, d->controlPoint2 );
-    qSwap( d->activeControlPoint1, d->activeControlPoint2 );
+    qSwap(d->controlPoint1, d->controlPoint2);
+    qSwap(d->activeControlPoint1, d->activeControlPoint2);
     KoPointProperties newProps = Normal;
     newProps |= d->properties & IsSmooth;
     newProps |= d->properties & IsSymmetric;
@@ -343,69 +330,62 @@ void KoPathPoint::reverse()
     d->properties = newProps;
 }
 
-bool KoPathPoint::isSmooth( KoPathPoint * prev, KoPathPoint * next ) const
+bool KoPathPoint::isSmooth(KoPathPoint * prev, KoPathPoint * next) const
 {
     QPointF t1, t2;
 
-    if ( activeControlPoint1() )
-    {
+    if (activeControlPoint1()) {
         t1 = point() - controlPoint1();
-    }
-    else
-    {
+    } else {
         // we need the previous path point but there is none provided
-        if ( ! prev )
+        if (! prev)
             return false;
-        if ( prev->activeControlPoint2() )
+        if (prev->activeControlPoint2())
             t1 = point() - prev->controlPoint2();
         else
             t1 = point() - prev->point();
     }
 
-    if ( activeControlPoint2() )
-    {
+    if (activeControlPoint2()) {
         t2 = controlPoint2() - point();
-    }
-    else
-    {
+    } else {
         // we need the next path point but there is none provided
-        if ( ! next )
+        if (! next)
             return false;
-        if ( next->activeControlPoint1() )
+        if (next->activeControlPoint1())
             t2 = next->controlPoint1() - point();
         else
             t2 = next->point() - point();
     }
 
     // normalize tangent vectors
-    qreal l1 = sqrt( t1.x()*t1.x() + t1.y()*t1.y() );
-    qreal l2 = sqrt( t2.x()*t2.x() + t2.y()*t2.y() );
-    if ( qFuzzyCompare( l1 + 1, qreal(1.0) ) || qFuzzyCompare( l2 + 1, qreal(1.0) ) )
+    qreal l1 = sqrt(t1.x() * t1.x() + t1.y() * t1.y());
+    qreal l2 = sqrt(t2.x() * t2.x() + t2.y() * t2.y());
+    if (qFuzzyCompare(l1 + 1, qreal(1.0)) || qFuzzyCompare(l2 + 1, qreal(1.0)))
         return true;
 
     t1 /= l1;
     t2 /= l2;
 
-    qreal scalar = t1.x()*t2.x() + t1.y()*t2.y();
+    qreal scalar = t1.x() * t2.x() + t1.y() * t2.y();
     // tangents are parallel if t1*t2 = |t1|*|t2|
-    return qFuzzyCompare( scalar, qreal(1.0) );
+    return qFuzzyCompare(scalar, qreal(1.0));
 }
 
 void KoPathPoint::removeFromGroup()
-{ 
-    if ( d->pointGroup ) 
-        d->pointGroup->remove( this ); 
-    d->pointGroup = 0; 
+{
+    if (d->pointGroup)
+        d->pointGroup->remove(this);
+    d->pointGroup = 0;
 }
 
-void KoPathPoint::addToGroup( KoPointGroup *pointGroup ) 
-{ 
-    if ( d->pointGroup && d->pointGroup != pointGroup )
-    {
+void KoPathPoint::addToGroup(KoPointGroup *pointGroup)
+{
+    if (d->pointGroup && d->pointGroup != pointGroup) {
         //TODO error message as this should not happen
         removeFromGroup();
     }
-    d->pointGroup = pointGroup; 
+    d->pointGroup = pointGroup;
 }
 
 KoPathPoint::KoPointProperties KoPathPoint::properties() const

@@ -36,10 +36,10 @@ public:
     /**
      * Constructor
      *
-     * @param shapes The list of shapes to save. If the shapes contain 
+     * @param shapes The list of shapes to save. If the shapes contain
      *               children these are also saved.
      */
-    KoShapeOdfSaveHelper( QList<KoShape *> shapes );
+    KoShapeOdfSaveHelper(QList<KoShape *> shapes);
     virtual ~KoShapeOdfSaveHelper();
 
     /// reimplemented

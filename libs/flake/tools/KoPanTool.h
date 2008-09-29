@@ -31,7 +31,8 @@ class KoCanvasController;
 /**
  * This is the tool that allows you to move the canvas by dragging it and 'panning' around.
  */
-class KoPanTool : public KoTool {
+class KoPanTool : public KoTool
+{
 public:
     /**
      * Constructor.
@@ -42,11 +43,11 @@ public:
     /// reimplemented from superclass
     virtual bool wantsAutoScroll();
     /// reimplemented from superclass
-    virtual void mousePressEvent( KoPointerEvent *event );
+    virtual void mousePressEvent(KoPointerEvent *event);
     /// reimplemented from superclass
-    virtual void mouseMoveEvent( KoPointerEvent *event );
+    virtual void mouseMoveEvent(KoPointerEvent *event);
     /// reimplemented from superclass
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
     /// reimplemented from superclass
     virtual void keyPressEvent(QKeyEvent *event);
     /// reimplemented from superclass
@@ -54,13 +55,15 @@ public:
     /// reimplemented from superclass
     virtual void activate(bool temporary = false);
     /// reimplemented method
-    virtual void customMoveEvent( KoPointerEvent * event );
+    virtual void customMoveEvent(KoPointerEvent * event);
 
     /// set the canvasController this tool works on.
-    void setCanvasController(KoCanvasController *controller) { m_controller = controller; }
+    void setCanvasController(KoCanvasController *controller) {
+        m_controller = controller;
+    }
 
 private:
-    QPointF documentToViewport( const QPointF &p );
+    QPointF documentToViewport(const QPointF &p);
     KoCanvasController *m_controller;
     QPointF m_lastPosition;
     bool m_temporary;

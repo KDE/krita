@@ -21,20 +21,19 @@
 #include "KoSubpathRemoveCommand.h"
 #include <klocale.h>
 
-KoSubpathRemoveCommand::KoSubpathRemoveCommand( KoPathShape *pathShape, int subpathIndex, QUndoCommand *parent )
-: QUndoCommand( parent )
-, m_pathShape( pathShape )
-, m_subpathIndex( subpathIndex )
-, m_subpath( 0 )
+KoSubpathRemoveCommand::KoSubpathRemoveCommand(KoPathShape *pathShape, int subpathIndex, QUndoCommand *parent)
+        : QUndoCommand(parent)
+        , m_pathShape(pathShape)
+        , m_subpathIndex(subpathIndex)
+        , m_subpath(0)
 {
-    setText( i18n( "Remove subpath" ) );
+    setText(i18n("Remove subpath"));
 }
 
 KoSubpathRemoveCommand::~KoSubpathRemoveCommand()
 {
-    if ( m_subpath )
-    {
-        qDeleteAll( *m_subpath );
+    if (m_subpath) {
+        qDeleteAll(*m_subpath);
         delete m_subpath;
     }
 }
@@ -43,16 +42,14 @@ void KoSubpathRemoveCommand::redo()
 {
     QUndoCommand::redo();
     m_pathShape->update();
-    m_subpath = m_pathShape->removeSubpath( m_subpathIndex );
-    if ( m_subpath )
-    {
+    m_subpath = m_pathShape->removeSubpath(m_subpathIndex);
+    if (m_subpath) {
         QPointF offset = m_pathShape->normalize();
 
         QMatrix matrix;
-        matrix.translate( -offset.x(), -offset.y() );
-        foreach ( KoPathPoint *point, *m_subpath )
-        {
-            point->map( matrix );
+        matrix.translate(-offset.x(), -offset.y());
+        foreach(KoPathPoint *point, *m_subpath) {
+            point->map(matrix);
         }
         m_pathShape->update();
     }
@@ -61,9 +58,8 @@ void KoSubpathRemoveCommand::redo()
 void KoSubpathRemoveCommand::undo()
 {
     QUndoCommand::undo();
-    if ( m_subpath )
-    {
-        m_pathShape->addSubpath( m_subpath, m_subpathIndex );
+    if (m_subpath) {
+        m_pathShape->addSubpath(m_subpath, m_subpathIndex);
         m_pathShape->normalize();
         m_pathShape->update();
         m_subpath = 0;

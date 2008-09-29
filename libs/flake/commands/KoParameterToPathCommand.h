@@ -39,13 +39,13 @@ public:
      * @param shape the shape this command works on
      * @param parent the parent command if this is a compound undo command.
      */
-    explicit KoParameterToPathCommand( KoParameterShape *shape, QUndoCommand *parent = 0 );
+    explicit KoParameterToPathCommand(KoParameterShape *shape, QUndoCommand *parent = 0);
     /**
      * Constructor.
      * @param shapes the list of shapes this command works on
      * @param parent the parent command if this is a compound undo command.
      */
-    explicit KoParameterToPathCommand( const QList<KoParameterShape*> &shapes, QUndoCommand *parent = 0 );
+    explicit KoParameterToPathCommand(const QList<KoParameterShape*> &shapes, QUndoCommand *parent = 0);
     virtual ~KoParameterToPathCommand();
 
     /// redo the command
@@ -54,7 +54,7 @@ public:
     void undo();
 private:
     void initialize();
-    void copyPath( KoPathShape * dst, KoPathShape * src );
+    void copyPath(KoPathShape * dst, KoPathShape * src);
     QList<KoParameterShape*> m_shapes;
     QList<KoPathShape*> m_copies;
 };

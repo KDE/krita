@@ -19,8 +19,8 @@
 
 #include "KoEventActionWidget.h"
 
-KoEventActionWidget::KoEventActionWidget( QWidget * parent )
-: QWidget( parent )
+KoEventActionWidget::KoEventActionWidget(QWidget * parent)
+        : QWidget(parent)
 {
 }
 

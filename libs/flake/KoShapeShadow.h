@@ -42,7 +42,7 @@ public:
      * @param style object
      * @param context used for saving
      */
-    void fillStyle( KoGenStyle &style, KoShapeSavingContext &context );
+    void fillStyle(KoGenStyle &style, KoShapeSavingContext &context);
 
     /**
      * Paints the shadow of the shape.
@@ -57,7 +57,7 @@ public:
      * Sets the shadow offset from the topleft corner of the shape
      * @param offset the shadow offset
      */
-    void setOffset( const QPointF & offset );
+    void setOffset(const QPointF & offset);
 
     /// Returns the shadow offset
     QPointF offset() const;
@@ -66,19 +66,19 @@ public:
      * Sets the shadow color, including the shadow opacity.
      * @param color the shadow color and opacity
      */
-    void setColor( const QColor &color );
+    void setColor(const QColor &color);
 
     /// Returns the shadow color including opacity
     QColor color() const;
 
     /// Sets the shadow visibility
-    void setVisibility( bool visible );
+    void setVisibility(bool visible);
 
     /// Returns if shadow is visible
     bool isVisible() const;
 
     /// Returns the insets of the shadow
-    void insets( const KoShape *shape, KoInsets &insets );
+    void insets(const KoShape *shape, KoInsets &insets);
 
     /// Increase reference counter
     void addUser();

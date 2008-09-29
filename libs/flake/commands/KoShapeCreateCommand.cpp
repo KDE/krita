@@ -29,14 +29,13 @@ class KoShapeCreateCommand::Private
 {
 public:
     Private(KoShapeControllerBase *c, KoShape *s)
-        : controller(c),
-        shape(s),
-        shapeParent( shape->parent() ),
-        deleteShape(true)
-    {
+            : controller(c),
+            shape(s),
+            shapeParent(shape->parent()),
+            deleteShape(true) {
     }
     ~Private() {
-        if ( shape && deleteShape )
+        if (shape && deleteShape)
             delete shape;
     }
 
@@ -46,11 +45,11 @@ public:
     bool deleteShape;
 };
 
-KoShapeCreateCommand::KoShapeCreateCommand( KoShapeControllerBase *controller, KoShape *shape, QUndoCommand *parent )
-    : QUndoCommand( parent ),
-    d(new Private(controller, shape))
+KoShapeCreateCommand::KoShapeCreateCommand(KoShapeControllerBase *controller, KoShape *shape, QUndoCommand *parent)
+        : QUndoCommand(parent),
+        d(new Private(controller, shape))
 {
-    setText( i18n( "Create shape" ) );
+    setText(i18n("Create shape"));
 }
 
 KoShapeCreateCommand::~KoShapeCreateCommand()
@@ -58,40 +57,40 @@ KoShapeCreateCommand::~KoShapeCreateCommand()
     delete d;
 }
 
-void KoShapeCreateCommand::redo ()
+void KoShapeCreateCommand::redo()
 {
     QUndoCommand::redo();
     Q_ASSERT(d->shape);
     Q_ASSERT(d->controller);
-    if ( d->shapeParent )
-        d->shapeParent->addChild( d->shape );
+    if (d->shapeParent)
+        d->shapeParent->addChild(d->shape);
     // the parent has to be there when it is added to the KoShapeControllerBase
     recurse(d->shape, Add);
     d->deleteShape = false;
 }
 
-void KoShapeCreateCommand::undo ()
+void KoShapeCreateCommand::undo()
 {
     QUndoCommand::undo();
     Q_ASSERT(d->shape);
     Q_ASSERT(d->controller);
     // the parent has to be there when it is removed from the KoShapeControllerBase
     recurse(d->shape, Remove);
-    if ( d->shapeParent )
-        d->shapeParent->removeChild( d->shape );
+    if (d->shapeParent)
+        d->shapeParent->removeChild(d->shape);
     d->deleteShape = true;
 }
 
 void KoShapeCreateCommand::recurse(KoShape *shape, const AddRemove ar)
 {
     if (ar == Remove)
-        d->controller->removeShape( d->shape );
+        d->controller->removeShape(d->shape);
     else
-        d->controller->addShape( d->shape );
+        d->controller->addShape(d->shape);
 
-    KoShapeContainer *container = dynamic_cast<KoShapeContainer*> (shape);
+    KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
     if (container) {
         foreach(KoShape *child, container->iterator())
-            recurse(child, ar);
+        recurse(child, ar);
     }
 }

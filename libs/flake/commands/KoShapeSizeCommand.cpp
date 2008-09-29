@@ -30,8 +30,8 @@ public:
 };
 
 KoShapeSizeCommand::KoShapeSizeCommand(const QList<KoShape*> &shapes, QList<QSizeF> &previousSizes, QList<QSizeF> &newSizes, QUndoCommand *parent)
-: QUndoCommand(parent),
-    d(new Private())
+        : QUndoCommand(parent),
+        d(new Private())
 {
     d->previousSizes = previousSizes;
     d->newSizes = newSizes;
@@ -39,7 +39,7 @@ KoShapeSizeCommand::KoShapeSizeCommand(const QList<KoShape*> &shapes, QList<QSiz
     Q_ASSERT(d->shapes.count() == d->previousSizes.count());
     Q_ASSERT(d->shapes.count() == d->newSizes.count());
 
-    setText(i18n( "Resize shapes" ));
+    setText(i18n("Resize shapes"));
 }
 
 KoShapeSizeCommand::~KoShapeSizeCommand()
@@ -47,10 +47,10 @@ KoShapeSizeCommand::~KoShapeSizeCommand()
     delete d;
 }
 
-void KoShapeSizeCommand::redo ()
+void KoShapeSizeCommand::redo()
 {
     QUndoCommand::redo();
-    int i=0;
+    int i = 0;
     foreach(KoShape *shape, d->shapes) {
         shape->update();
         shape->setSize(d->newSizes[i++]);
@@ -58,10 +58,10 @@ void KoShapeSizeCommand::redo ()
     }
 }
 
-void KoShapeSizeCommand::undo ()
+void KoShapeSizeCommand::undo()
 {
     QUndoCommand::undo();
-    int i=0;
+    int i = 0;
     foreach(KoShape *shape, d->shapes) {
         shape->update();
         shape->setSize(d->previousSizes[i++]);

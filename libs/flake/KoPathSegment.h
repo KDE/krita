@@ -33,25 +33,25 @@ class QMatrix;
 class FLAKE_EXPORT KoPathSegment
 {
 public:
-    /** 
+    /**
     * Creates a new segment from the given path points
     * It takes ownership of the path points which do not have a
     * parent path shape set.
     */
-    explicit KoPathSegment( KoPathPoint * first = 0, KoPathPoint * second = 0);
+    explicit KoPathSegment(KoPathPoint * first = 0, KoPathPoint * second = 0);
 
     /// Constructs segment by copying another segment
-    KoPathSegment( const KoPathSegment & segment );
+    KoPathSegment(const KoPathSegment & segment);
 
     /// Creates a new line segment
-    KoPathSegment( const QPointF &p0, const QPointF &p1 );
+    KoPathSegment(const QPointF &p0, const QPointF &p1);
     /// Creates a new quadratic segment
-    KoPathSegment( const QPointF &p0, const QPointF &p1, const QPointF &p2 );
+    KoPathSegment(const QPointF &p0, const QPointF &p1, const QPointF &p2);
     /// Creates a new cubic segment
-    KoPathSegment( const QPointF &p0, const QPointF &p1, const QPointF &p2, const QPointF &p3 );
+    KoPathSegment(const QPointF &p0, const QPointF &p1, const QPointF &p2, const QPointF &p3);
 
     /// Assigns segment
-    KoPathSegment& operator=( const KoPathSegment &rhs );
+    KoPathSegment& operator=(const KoPathSegment &rhs);
 
     /// Destroys the path segment
     ~KoPathSegment();
@@ -60,34 +60,34 @@ public:
     KoPathPoint * first() const;
 
     /// Sets the first segment point
-    void setFirst( KoPathPoint * first );
+    void setFirst(KoPathPoint * first);
 
     /// Returns the second point of the segment
     KoPathPoint * second() const;
 
     /// Sets the second segment point
-    void setSecond( KoPathPoint * second );
+    void setSecond(KoPathPoint * second);
 
     /// Returns if segment is valid, e.g. has two valid points
     bool isValid() const;
 
     /// Compare operator
-    bool operator == ( const KoPathSegment &rhs ) const;
+    bool operator == (const KoPathSegment &rhs) const;
 
     /// Returns the degree of the segment: 1 = line, 2 = quadratic, 3 = cubic, -1 = invalid
     int degree() const;
 
     /// Returns list of intersections with the given path segment
-    QList<QPointF> intersections( const KoPathSegment &segment ) const;
+    QList<QPointF> intersections(const KoPathSegment &segment) const;
 
     /// Returns the convex hull polygon of the segment
     QList<QPointF> convexHull() const;
 
-    /// Splits segment at given position returning the two resulting segments 
-    QPair<KoPathSegment, KoPathSegment> splitAt( qreal t ) const;
+    /// Splits segment at given position returning the two resulting segments
+    QPair<KoPathSegment, KoPathSegment> splitAt(qreal t) const;
 
     /// Returns point at given t
-    QPointF pointAt( qreal t ) const;
+    QPointF pointAt(qreal t) const;
 
     /// Returns the axis aligned tight bounding rect
     QRectF boundingRect() const;
@@ -96,16 +96,16 @@ public:
     QRectF controlPointRect() const;
 
     /// Returns transformed segment
-    KoPathSegment mapped( const QMatrix & matrix ) const;
+    KoPathSegment mapped(const QMatrix & matrix) const;
 
     /// Returns cubic bezier curve segment of this segment
     KoPathSegment toCubic() const;
 
-    /** 
+    /**
      * Returns the length of the path segment
      * @param error the error tolerance
      */
-    qreal length( qreal error = 0.005 ) const;
+    qreal length(qreal error = 0.005) const;
 
     /**
      * Returns segment length at given parameter
@@ -116,20 +116,20 @@ public:
      * @param t curve parameter to get length at
      * @param error the error tolerance
      */
-    qreal lengthAt( qreal t, qreal error = 0.005 ) const;
+    qreal lengthAt(qreal t, qreal error = 0.005) const;
 
     /**
      * Returns the curve parameter at the given length of the segment
      * @param length the length to get the curve parameter for
      * @param tolerance the length error tolerance
      */
-    qreal paramAtLength( qreal length, qreal tolerance = 0.001 ) const;
+    qreal paramAtLength(qreal length, qreal tolerance = 0.001) const;
 
     /**
      * Checks if the segment is flat, i.e. the height smaller then the given tolerance
      * @param tolerance the flatness tolerance
      */
-    bool isFlat( qreal tolerance = 0.01 ) const;
+    bool isFlat(qreal tolerance = 0.01) const;
 
     /// Returns ordered list of control points
     QList<QPointF> controlPoints() const;
@@ -138,13 +138,13 @@ public:
 
 private:
     /// calculates signed distance of given point from segment chord
-    qreal distanceFromChord( const QPointF &point ) const;
+    qreal distanceFromChord(const QPointF &point) const;
 
     /// Returns the chord length, i.e. the distance between first and last control point
     qreal chordLength() const;
 
     /// Returns intersection of lines if one exists
-    QList<QPointF> linesIntersection( const KoPathSegment &segment ) const;
+    QList<QPointF> linesIntersection(const KoPathSegment &segment) const;
 
     /// Returns parameters for curve extrema
     QList<qreal> extrema() const;
@@ -158,7 +158,7 @@ private:
      * @param p4 the second control point at t
      * @param p3 the new control point of the segment end (for cubic curbes only)
      */
-    void deCasteljau( qreal t, QPointF *p1, QPointF *p2, QPointF *p3, QPointF *p4, QPointF *p5 ) const;
+    void deCasteljau(qreal t, QPointF *p1, QPointF *p2, QPointF *p3, QPointF *p4, QPointF *p5) const;
 
     class Private;
     Private * const d;

@@ -21,101 +21,90 @@
 #include "KoPathPointInsertCommand.h"
 #include <klocale.h>
 
-KoPathPointInsertCommand::KoPathPointInsertCommand( const QList<KoPathPointData> & pointDataList, qreal insertPosition, QUndoCommand *parent )
-: QUndoCommand( parent )
-, m_deletePoints( true )
+KoPathPointInsertCommand::KoPathPointInsertCommand(const QList<KoPathPointData> & pointDataList, qreal insertPosition, QUndoCommand *parent)
+        : QUndoCommand(parent)
+        , m_deletePoints(true)
 {
-    if ( insertPosition < 0 )
+    if (insertPosition < 0)
         insertPosition = 0;
-    if ( insertPosition > 1 )
+    if (insertPosition > 1)
         insertPosition = 1;
 
     //TODO the list needs to be sorted
 
-    QList<KoPathPointData>::const_iterator it( pointDataList.begin() );
-    for ( ; it != pointDataList.end(); ++it )
-    {
+    QList<KoPathPointData>::const_iterator it(pointDataList.begin());
+    for (; it != pointDataList.end(); ++it) {
         KoPathShape * pathShape = it->pathShape;
 
-        KoPathSegment segment = pathShape->segmentByIndex( it->pointIndex );
+        KoPathSegment segment = pathShape->segmentByIndex(it->pointIndex);
 
         // should not happen but to be sure
-        if ( ! segment.isValid() )
+        if (! segment.isValid())
             continue;
 
-        m_pointDataList.append( *it );
-        if ( segment.first()->activeControlPoint2() || segment.second()->activeControlPoint1() )
-        {
-            QPointF q[4] =
-            {
-               segment.first()->point(),
-               segment.first()->activeControlPoint2() ? segment.first()->controlPoint2() : segment.first()->point(),
-               segment.second()->activeControlPoint1() ? segment.second()->controlPoint1() : segment.second()->point(),
-               segment.second()->point()
+        m_pointDataList.append(*it);
+        if (segment.first()->activeControlPoint2() || segment.second()->activeControlPoint1()) {
+            QPointF q[4] = {
+                segment.first()->point(),
+                segment.first()->activeControlPoint2() ? segment.first()->controlPoint2() : segment.first()->point(),
+                segment.second()->activeControlPoint1() ? segment.second()->controlPoint1() : segment.second()->point(),
+                segment.second()->point()
             };
 
             QPointF p[3];
             // the De Casteljau algorithm.
-            for( unsigned short j = 1; j <= 3; ++j )
-            {
-                for( unsigned short i = 0; i <= 3 - j; ++i )
-                {
-                    q[i] = ( 1.0 - insertPosition ) * q[i] + insertPosition * q[i + 1];
+            for (unsigned short j = 1; j <= 3; ++j) {
+                for (unsigned short i = 0; i <= 3 - j; ++i) {
+                    q[i] = (1.0 - insertPosition) * q[i] + insertPosition * q[i + 1];
                 }
                 // modify the new segment.
                 p[j - 1] = q[0];
             }
-            KoPathPoint * splitPoint = new KoPathPoint( pathShape, p[2] );
-            splitPoint->setControlPoint1( p[1] );
-            splitPoint->setControlPoint2( q[1] );
+            KoPathPoint * splitPoint = new KoPathPoint(pathShape, p[2]);
+            splitPoint->setControlPoint1(p[1]);
+            splitPoint->setControlPoint2(q[1]);
 
-            m_points.append( splitPoint );
-            m_controlPoints.append( QPair<QPointF, QPointF>( p[0], q[2] ) );
-        }
-        else
-        {
-            QPointF splitPointPos = segment.first()->point() + insertPosition * ( segment.second()->point() - segment.first()->point());
-            m_points.append( new KoPathPoint( pathShape, splitPointPos ) );
-            m_controlPoints.append( QPair<QPointF, QPointF>( segment.first()->controlPoint2(), segment.second()->controlPoint1() ) );
+            m_points.append(splitPoint);
+            m_controlPoints.append(QPair<QPointF, QPointF>(p[0], q[2]));
+        } else {
+            QPointF splitPointPos = segment.first()->point() + insertPosition * (segment.second()->point() - segment.first()->point());
+            m_points.append(new KoPathPoint(pathShape, splitPointPos));
+            m_controlPoints.append(QPair<QPointF, QPointF>(segment.first()->controlPoint2(), segment.second()->controlPoint1()));
         }
     }
 }
 
 KoPathPointInsertCommand::~KoPathPointInsertCommand()
 {
-    if ( m_deletePoints )
-    {
-        qDeleteAll( m_points );
+    if (m_deletePoints) {
+        qDeleteAll(m_points);
     }
 }
 
 void KoPathPointInsertCommand::redo()
 {
     QUndoCommand::redo();
-    for ( int i = m_pointDataList.size() - 1; i >= 0; --i )
-    {
-        KoPathPointData pointData = m_pointDataList.at( i );
+    for (int i = m_pointDataList.size() - 1; i >= 0; --i) {
+        KoPathPointData pointData = m_pointDataList.at(i);
         KoPathShape * pathShape = pointData.pathShape;
 
-        KoPathSegment segment = pathShape->segmentByIndex( pointData.pointIndex );
+        KoPathSegment segment = pathShape->segmentByIndex(pointData.pointIndex);
 
         ++pointData.pointIndex.second;
 
-        if ( segment.first()->activeControlPoint2() )
-        {
+        if (segment.first()->activeControlPoint2()) {
             QPointF controlPoint2 = segment.first()->controlPoint2();
-            qSwap( controlPoint2, m_controlPoints[i].first );
-            segment.first()->setControlPoint2( controlPoint2 );
+            qSwap(controlPoint2, m_controlPoints[i].first);
+            segment.first()->setControlPoint2(controlPoint2);
         }
 
-        if ( segment.second()->activeControlPoint1() )
-        {
+        if (segment.second()->activeControlPoint1()) {
             QPointF controlPoint1 = segment.second()->controlPoint1();
-            qSwap( controlPoint1, m_controlPoints[i].second );
-            segment.second()->setControlPoint1( controlPoint1 );
+            qSwap(controlPoint1, m_controlPoints[i].second);
+            segment.second()->setControlPoint1(controlPoint1);
         }
 
-        pathShape->insertPoint( m_points.at( i ), pointData.pointIndex );
+        pathShape->insertPoint(m_points.at(i), pointData.pointIndex);
         pathShape->update();
     }
     m_deletePoints = false;
@@ -124,36 +113,32 @@ void KoPathPointInsertCommand::redo()
 void KoPathPointInsertCommand::undo()
 {
     QUndoCommand::undo();
-    for ( int i = 0; i < m_pointDataList.size(); ++i )
-    {
-        const KoPathPointData &pdBefore = m_pointDataList.at( i );
+    for (int i = 0; i < m_pointDataList.size(); ++i) {
+        const KoPathPointData &pdBefore = m_pointDataList.at(i);
         KoPathShape * pathShape = pdBefore.pathShape;
         KoPathPointIndex piAfter = pdBefore.pointIndex;
         ++piAfter.second;
 
-        KoPathPoint * before = pathShape->pointByIndex( pdBefore.pointIndex );
+        KoPathPoint * before = pathShape->pointByIndex(pdBefore.pointIndex);
 
-        m_points[i] = pathShape->removePoint( piAfter );
+        m_points[i] = pathShape->removePoint(piAfter);
 
-        if ( m_points[i]->properties() & KoPathPoint::CloseSubpath )
-        {
+        if (m_points[i]->properties() & KoPathPoint::CloseSubpath) {
             piAfter.second = 0;
         }
 
-        KoPathPoint * after = pathShape->pointByIndex( piAfter );
+        KoPathPoint * after = pathShape->pointByIndex(piAfter);
 
-        if ( before->activeControlPoint2() )
-        {
+        if (before->activeControlPoint2()) {
             QPointF controlPoint2 = before->controlPoint2();
-            qSwap( controlPoint2, m_controlPoints[i].first );
-            before->setControlPoint2( controlPoint2 );
+            qSwap(controlPoint2, m_controlPoints[i].first);
+            before->setControlPoint2(controlPoint2);
         }
 
-        if ( after->activeControlPoint1() )
-        {
+        if (after->activeControlPoint1()) {
             QPointF controlPoint1 = after->controlPoint1();
-            qSwap( controlPoint1, m_controlPoints[i].second );
-            after->setControlPoint1( controlPoint1 );
+            qSwap(controlPoint1, m_controlPoints[i].second);
+            after->setControlPoint1(controlPoint1);
         }
         pathShape->update();
     }

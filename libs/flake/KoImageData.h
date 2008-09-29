@@ -43,7 +43,8 @@ class QIODevice;
  * Such plugins are suggested to not make a copy of the pixmap data, but use the fact that this
  * image data caches one for every request to pixmap()
  */
-class FLAKE_EXPORT KoImageData : public KoShapeUserData {
+class FLAKE_EXPORT KoImageData : public KoShapeUserData
+{
 public:
     /**
      * The image quality that the pixmap() method will render to.
@@ -71,7 +72,7 @@ public:
      * @param collection the image collection which will do the loading of the image data for us.
      * @param href the url of the image in the store.
      */
-    explicit KoImageData(KoImageCollection *collection, QString href="");
+    explicit KoImageData(KoImageCollection *collection, QString href = "");
 
     /**
      * copy constructor using ref-counting.
@@ -116,7 +117,7 @@ public:
      * Sets an image to store.
      * @param image the image to store
      */
-    void setImage( const QImage &image );
+    void setImage(const QImage &image);
 
     /**
      * Tags this image to be saved and returns the href for reference in the xml.

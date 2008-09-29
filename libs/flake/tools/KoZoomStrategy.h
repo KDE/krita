@@ -29,7 +29,8 @@ class KoZoomTool;
  * //internal
  * This is a strategy for the KoZoomTool which will be used to do the actual zooming
  */
-class KoZoomStrategy : public KoShapeRubberSelectStrategy {
+class KoZoomStrategy : public KoShapeRubberSelectStrategy
+{
 public:
     /**
      * constructor
@@ -37,12 +38,12 @@ public:
      * @param controller the canvas controller that wraps the canvas the tool is acting on.
      * @param clicked the location (in documnet points) where the interaction starts.
      */
-    KoZoomStrategy( KoZoomTool *tool, KoCanvasController *controller, const QPointF &clicked );
+    KoZoomStrategy(KoZoomTool *tool, KoCanvasController *controller, const QPointF &clicked);
 
     void forceZoomOut();
 
     /// Execute the zoom
-    virtual void finishInteraction( Qt::KeyboardModifiers modifiers );
+    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
     virtual void cancelInteraction();
 private:
     KoCanvasController *m_controller;

@@ -35,18 +35,17 @@ class KoPointGroup;
 /**
  * @brief A KoPathPoint represents a point in a path.
  *
- * A KoPathPoint stores a point in a path. Additional to this point 
- * 2 control points are stored. 
- * controlPoint1 is used to describe the second point of a cubic 
- * bezier ending at the point. controlPoint2 is used to describe the 
+ * A KoPathPoint stores a point in a path. Additional to this point
+ * 2 control points are stored.
+ * controlPoint1 is used to describe the second point of a cubic
+ * bezier ending at the point. controlPoint2 is used to describe the
  * first point of a cubic bezier curve starting at the point.
  */
 class FLAKE_EXPORT KoPathPoint
 {
 public:
     /// property enum
-    enum KoPointProperty
-    {
+    enum KoPointProperty {
         Normal = 0, ///< it has no control points
         StartSubpath = 1, ///< it starts a new subpath by a moveTo command
         StopSubpath = 2, ///< it stops a subpath (last point of subpath)
@@ -54,7 +53,7 @@ public:
         IsSmooth = 16, ///< it is smooth, both control points on a line through the point
         IsSymmetric = 32 ///< it is symmetric, like smooth but control points have same distance to point
     };
-    Q_DECLARE_FLAGS( KoPointProperties, KoPointProperty )
+    Q_DECLARE_FLAGS(KoPointProperties, KoPointProperty)
 
     /// the type for identifying part of a KoPathPoint
     enum KoPointType {
@@ -63,7 +62,7 @@ public:
         ControlPoint2 = 4,  ///< the second control point
         All = 7
     };
-    Q_DECLARE_FLAGS( KoPointTypes, KoPointType )
+    Q_DECLARE_FLAGS(KoPointTypes, KoPointType)
 
     /// Default constructor
     KoPathPoint();
@@ -75,20 +74,20 @@ public:
      * @param point the position relative to the shape origin
      * @param properties describing the point
      */
-    KoPathPoint( KoPathShape * path, const QPointF & point, KoPointProperties properties = Normal );
+    KoPathPoint(KoPathShape * path, const QPointF & point, KoPointProperties properties = Normal);
 
     /**
      * @brief Copy Constructor
      */
-    KoPathPoint( const KoPathPoint & pathPoint );
+    KoPathPoint(const KoPathPoint & pathPoint);
 
     /**
      * @brief Assignment operator.
      */
-    KoPathPoint& operator=( const KoPathPoint &rhs );
+    KoPathPoint& operator=(const KoPathPoint &rhs);
 
     /// Compare operator
-    bool operator == ( const KoPathPoint &rhs ) const;
+    bool operator == (const KoPathPoint &rhs) const;
 
     /**
      * @brief Destructor
@@ -125,21 +124,21 @@ public:
      *
      * @param point to set
      */
-    void setPoint( const QPointF & point );
+    void setPoint(const QPointF & point);
 
     /**
      * @brief Set the control point 1
      *
      * @param point to set
      */
-    void setControlPoint1( const QPointF & point );
+    void setControlPoint1(const QPointF & point);
 
     /**
      * @brief Set the control point 2
      *
      * @param point to set
      */
-    void setControlPoint2( const QPointF & point );
+    void setControlPoint2(const QPointF & point);
 
     /// Removes the first control point
     void removeControlPoint1();
@@ -158,19 +157,19 @@ public:
      * @brief Set the properties of a point
      * @param properties the new properties
      */
-    void setProperties( KoPointProperties properties );
+    void setProperties(KoPointProperties properties);
 
     /**
      * @brief Sets a single property of a point.
      * @param property the property to set
      */
-    void setProperty( KoPointProperty property );
+    void setProperty(KoPointProperty property);
 
     /**
      * @brief Removes a property from the point.
-     * @param property the property to remove 
+     * @param property the property to remove
      */
-    void unsetProperty( KoPointProperty property );
+    void unsetProperty(KoPointProperty property);
 
     /**
      * @brief Checks if there is a controlPoint1
@@ -200,12 +199,12 @@ public:
      * @brief apply matrix on the point
      *
      * This does a matrix multiplication on all points of the point
-     * 
-     * @param matrix which will be applied to all points 
-     * @param mapGroup true when the matrix should be also applied to 
+     *
+     * @param matrix which will be applied to all points
+     * @param mapGroup true when the matrix should be also applied to
      *                 all points of the group the point belongs to
      */
-    void map( const QMatrix &matrix, bool mapGroup = false );
+    void map(const QMatrix &matrix, bool mapGroup = false);
 
     /**
      * Paints the path point with the actual brush and pen
@@ -215,13 +214,13 @@ public:
      * @param active If true only the given active points are painted
      *               If false all given points are used.
      */
-    void paint(QPainter &painter, int handleRadius, KoPointTypes types, bool active = true );
+    void paint(QPainter &painter, int handleRadius, KoPointTypes types, bool active = true);
 
     /**
      * @brief Sets the parent path shape.
      * @param parent the new parent path shape
      */
-    void setParent( KoPathShape* parent );
+    void setParent(KoPathShape* parent);
 
     /**
      * @brief Get the path shape the point belongs to
@@ -231,15 +230,15 @@ public:
 
     /**
      * @brief Get the bounding rect of the point.
-     * 
-     * This takes into account if there are controlpoints 
+     *
+     * This takes into account if there are controlpoints
      *
      * @param active If true only the active points are used in calculation
      *               of the bounding rectangle. If false all points are used.
      *
      * @return bounding rect in document coordinates
      */
-    QRectF boundingRect( bool active = true ) const;
+    QRectF boundingRect(bool active = true) const;
 
     /**
      * @brief Reverses the path point.
@@ -252,9 +251,9 @@ public:
 
     /**
      * Returns if this point is a smooth join of adjacent path segments.
-     * 
+     *
      * The smoothess is defined by the parallelness of the tangents emanating
-     * from the knot point, i.e. the normalized vectors from the knot to the 
+     * from the knot point, i.e. the normalized vectors from the knot to the
      * first and second control point.
      * The previous and next path points are used to determine the smoothness
      * in case this path point has not two control points.
@@ -262,13 +261,13 @@ public:
      * @param prev the previous path point
      * @param next the next path point
      */
-    bool isSmooth( KoPathPoint * prev, KoPathPoint * next ) const;
+    bool isSmooth(KoPathPoint * prev, KoPathPoint * next) const;
 
 protected:
     friend class KoPointGroup;
     friend class KoPathShape;
     void removeFromGroup();
-    void addToGroup( KoPointGroup *pointGroup );
+    void addToGroup(KoPointGroup *pointGroup);
     KoPointGroup * group();
 private:
     class Private;
@@ -278,12 +277,12 @@ private:
 //   /// a KoSubpath contains a path from a moveTo until a close or a new moveTo
 //   typedef QList<KoPathPoint *> KoSubpath;
 //   typedef QList<KoSubpath *> KoSubpathList;
-//   /// A KoPathSegment is a pair two neighboring KoPathPoints 
+//   /// A KoPathSegment is a pair two neighboring KoPathPoints
 //   typedef QPair<KoPathPoint*,KoPathPoint*> KoPathSegment;
 //   /// The position of a path point within a path shape
 //   typedef QPair<KoSubpath*, int> KoPointPosition;
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( KoPathPoint::KoPointProperties )
-Q_DECLARE_OPERATORS_FOR_FLAGS( KoPathPoint::KoPointTypes )
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoPathPoint::KoPointProperties)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoPathPoint::KoPointTypes)
 
 #endif

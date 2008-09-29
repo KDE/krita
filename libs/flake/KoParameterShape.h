@@ -57,7 +57,7 @@ public:
      * @param point to move the handle to in document coordinates
      * @param modifiers used during move to point
      */
-    virtual void moveHandle( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
+    virtual void moveHandle(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
 
     /**
      * @brief Get the handleId in the rect
@@ -65,14 +65,14 @@ public:
      * @param rect in shape coordinates
      * @return id of the found handle or -1 if one was found
      */
-    virtual int handleIdAt( const QRectF & rect ) const;
+    virtual int handleIdAt(const QRectF & rect) const;
 
     /**
-     * @brief Get the handle position 
-     * 
+     * @brief Get the handle position
+     *
      * @param handleId for which ti get the position in shape coordinates
      */
-    virtual QPointF handlePosition( int handleId );
+    virtual QPointF handlePosition(int handleId);
 
     /**
      * @brief Paint the handles
@@ -81,7 +81,7 @@ public:
      * @param converter the view converter for applying the actual zoom
      * @param handleRadius the radius of the handles used for painting
      */
-    virtual void paintHandles( QPainter & painter, const KoViewConverter & converter, int handleRadius );
+    virtual void paintHandles(QPainter & painter, const KoViewConverter & converter, int handleRadius);
 
     /**
      * @brief Paint the given handles
@@ -91,14 +91,14 @@ public:
      * @param handleId of the handle which should be repainted
      * @param handleRadius the radius of the handle used for painting
      */
-    virtual void paintHandle( QPainter & painter, const KoViewConverter & converter, int handleId, int handleRadius );
+    virtual void paintHandle(QPainter & painter, const KoViewConverter & converter, int handleId, int handleRadius);
 
-    virtual void setSize( const QSizeF &size );
+    virtual void setSize(const QSizeF &size);
 
     /**
-     * @brief Check if object is a parametric shape 
+     * @brief Check if object is a parametric shape
      *
-     * It is no longer a parametric shape when the path was manipulated 
+     * It is no longer a parametric shape when the path was manipulated
      *
      * @return true if it is a parametic shape, false otherwise
      */
@@ -106,13 +106,13 @@ public:
 
     /**
      * @brief Set the modified status.
-     * 
-     * After the state is set to modified it is no longer possible to work 
+     *
+     * After the state is set to modified it is no longer possible to work
      * with parameters on this shape.
      *
      * @param modified the modification state
      */
-    void setModified( bool modified );
+    void setModified(bool modified);
 
     virtual QPointF normalize();
 
@@ -126,14 +126,14 @@ protected:
      * @param point to move the handle to in shape coordinates
      * @param modifiers used during move to point
      */
-    virtual void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier ) = 0;
+    virtual void moveHandleAction(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier) = 0;
 
     /**
      * @brief Update the path of the parameter shape
      *
      * @param size of the shape
      */
-    virtual void updatePath( const QSizeF &size ) = 0;
+    virtual void updatePath(const QSizeF &size) = 0;
 
     /// the handles that the user can grab and change
     QList<QPointF> m_handles;

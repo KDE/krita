@@ -22,32 +22,29 @@
 #include "KoPointGroup.h"
 #include "KoPathPoint.h"
 
-void KoPointGroup::add( KoPathPoint * point )
-{ 
-    m_points.insert( point ); 
-    point->addToGroup( this );
+void KoPointGroup::add(KoPathPoint * point)
+{
+    m_points.insert(point);
+    point->addToGroup(this);
 }
 
-void KoPointGroup::remove( KoPathPoint * point )
-{ 
-    if ( m_points.remove( point ) ) 
-    {    
+void KoPointGroup::remove(KoPathPoint * point)
+{
+    if (m_points.remove(point)) {
         point->removeFromGroup();
-        if ( m_points.size() == 1 )
-        {
-            ( * m_points.begin() )->removeFromGroup();
+        if (m_points.size() == 1) {
+            (* m_points.begin())->removeFromGroup();
             //commit suicide as it is no longer used
             delete this;
         }
     }
 }
 
-void KoPointGroup::map( const QMatrix &matrix )
+void KoPointGroup::map(const QMatrix &matrix)
 {
     QSet<KoPathPoint *>::iterator it = m_points.begin();
-    for ( ; it != m_points.end(); ++it )
-    {
-        ( *it )->map( matrix, false );
+    for (; it != m_points.end(); ++it) {
+        (*it)->map(matrix, false);
     }
 }
 

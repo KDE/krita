@@ -32,7 +32,8 @@ class KoCreateShapesTool;
 /**
  * A strategy for the KoCreateShapesTool.
  */
-class KoCreateShapeStrategy : public KoShapeRubberSelectStrategy {
+class KoCreateShapeStrategy : public KoShapeRubberSelectStrategy
+{
 public:
     /**
      * Constructor that starts to create a new shape.
@@ -40,12 +41,12 @@ public:
      * @param canvas the canvas interface which will supply things like a selection object
      * @param clicked the initial point that the user depressed (in pt).
      */
-    KoCreateShapeStrategy( KoCreateShapesTool *tool, KoCanvasBase *canvas, const QPointF &clicked );
+    KoCreateShapeStrategy(KoCreateShapesTool *tool, KoCanvasBase *canvas, const QPointF &clicked);
     virtual ~KoCreateShapeStrategy() {}
 
-    void finishInteraction( Qt::KeyboardModifiers modifiers );
+    void finishInteraction(Qt::KeyboardModifiers modifiers);
     QUndoCommand* createCommand();
-    void paint( QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter);
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
 
 private:

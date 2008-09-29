@@ -30,7 +30,7 @@ class KoTool;
 /**
  * This is the base class for actions that are executed on events.
  *
- * See ODF: 
+ * See ODF:
  * 9.9 Presentation Events
  * Many objects inside a presentation document support special presentation events. For example, a
  * user can advance the presentation one frame when he clicks on an object with a corresponding
@@ -48,16 +48,16 @@ class KoTool;
 class FLAKE_EXPORT KoEventAction
 {
 public:
-    KoEventAction( const QString & id );
+    KoEventAction(const QString & id);
     virtual ~KoEventAction();
 
     const QString & id() const;
 
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) = 0;
-    virtual void saveOdf( KoShapeSavingContext & context ) const = 0;
+    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context) = 0;
+    virtual void saveOdf(KoShapeSavingContext & context) const = 0;
 
-    virtual void execute( KoTool * tool ) = 0;
-    virtual void finish( KoTool * tool ) = 0;
+    virtual void execute(KoTool * tool) = 0;
+    virtual void finish(KoTool * tool) = 0;
 
 private:
     class Private;

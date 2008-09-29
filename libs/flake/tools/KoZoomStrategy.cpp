@@ -25,18 +25,18 @@
 
 #include <kdebug.h>
 
-KoZoomStrategy::KoZoomStrategy( KoZoomTool *tool, KoCanvasController *controller, const QPointF &clicked)
-: KoShapeRubberSelectStrategy(tool, controller->canvas(), clicked, false),
-    m_controller(controller),
-    m_forceZoomOut(false)
+KoZoomStrategy::KoZoomStrategy(KoZoomTool *tool, KoCanvasController *controller, const QPointF &clicked)
+        : KoShapeRubberSelectStrategy(tool, controller->canvas(), clicked, false),
+        m_controller(controller),
+        m_forceZoomOut(false)
 {
 }
 
-void KoZoomStrategy::finishInteraction( Qt::KeyboardModifiers modifiers )
+void KoZoomStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
     QRect pixelRect = m_controller->canvas()->viewConverter()->documentToView(selectRect()).toRect();
-    pixelRect.translate( m_controller->canvas()->documentOrigin() );
-    if ( m_forceZoomOut || modifiers & Qt::ControlModifier)
+    pixelRect.translate(m_controller->canvas()->documentOrigin());
+    if (m_forceZoomOut || modifiers & Qt::ControlModifier)
         m_controller->zoomOut(pixelRect.center());
     else if (pixelRect.width() > 5 && pixelRect.height() > 5)
         m_controller->zoomTo(pixelRect);

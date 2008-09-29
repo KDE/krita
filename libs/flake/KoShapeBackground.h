@@ -41,7 +41,7 @@ public:
     virtual ~KoShapeBackground();
 
     /// Paints the background using the given fill path
-    virtual void paint( QPainter &painter, const QPainterPath &fillPath ) const = 0;
+    virtual void paint(QPainter &painter, const QPainterPath &fillPath) const = 0;
 
     /// Returns if the background has some transparency.
     virtual bool hasTransparency();
@@ -51,10 +51,10 @@ public:
      * @param style object
      * @param context used for saving
      */
-    virtual void fillStyle( KoGenStyle &style, KoShapeSavingContext &context ) = 0;
+    virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) = 0;
 
     /// load background from odf styles
-    virtual bool loadStyle( KoOdfLoadingContext & context, const QSizeF &shapeSize ) = 0;
+    virtual bool loadStyle(KoOdfLoadingContext & context, const QSizeF &shapeSize) = 0;
 
     /// refcounting
     void addUser();

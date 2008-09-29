@@ -46,7 +46,7 @@ class KoShapeContainerModel;
  *
  * <p>Each child can optionally be said to be 'clipped' by the container.
  * This feature will give the effect that if the child has a size and
- * position outside the container, parts outside the container will not be shown. 
+ * position outside the container, parts outside the container will not be shown.
  * This is especially useful
  * for showing cutouts of content, like images, without changing the actual content.
  *
@@ -65,7 +65,8 @@ class KoShapeContainerModel;
  * and the width of the individual columns gets too small, the model can choose to
  * remove a child or add one when the width allows another column.
  */
-class FLAKE_EXPORT KoShapeContainer : public KoShape {
+class FLAKE_EXPORT KoShapeContainer : public KoShape
+{
 
 public:
 

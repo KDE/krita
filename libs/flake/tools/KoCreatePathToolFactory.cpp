@@ -28,7 +28,7 @@
 #include <QPixmap>
 
 KoCreatePathToolFactory::KoCreatePathToolFactory(QObject *parent)
-: KoToolFactory(parent, KoCreatePathTool_ID, i18n("Create Path"))
+        : KoToolFactory(parent, KoCreatePathTool_ID, i18n("Create Path"))
 {
     setToolTip(i18n("Create Path"));
     setToolType(mainToolType());
@@ -37,11 +37,11 @@ KoCreatePathToolFactory::KoCreatePathToolFactory(QObject *parent)
     setActivationShapeId("flake/always");
 }
 
-KoCreatePathToolFactory::~KoCreatePathToolFactory() 
+KoCreatePathToolFactory::~KoCreatePathToolFactory()
 {
 }
 
-KoTool* KoCreatePathToolFactory::createTool(KoCanvasBase *canvas) 
+KoTool* KoCreatePathToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KoCreatePathTool(canvas);
 }

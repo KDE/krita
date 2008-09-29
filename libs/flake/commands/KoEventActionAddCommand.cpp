@@ -23,29 +23,29 @@
 #include "KoShape.h"
 #include "KoEventAction.h"
 
-KoEventActionAddCommand::KoEventActionAddCommand( KoShape * shape, KoEventAction * eventAction, QUndoCommand *parent )
-: QUndoCommand( parent )
-, m_shape( shape )
-, m_eventAction( eventAction )
-, m_deleteEventAction( true )
+KoEventActionAddCommand::KoEventActionAddCommand(KoShape * shape, KoEventAction * eventAction, QUndoCommand *parent)
+        : QUndoCommand(parent)
+        , m_shape(shape)
+        , m_eventAction(eventAction)
+        , m_deleteEventAction(true)
 {
 }
 
 KoEventActionAddCommand::~KoEventActionAddCommand()
 {
-    if ( m_deleteEventAction ) {
+    if (m_deleteEventAction) {
         delete m_eventAction;
     }
 }
 
 void KoEventActionAddCommand::redo()
 {
-    m_shape->addEventAction( m_eventAction );
+    m_shape->addEventAction(m_eventAction);
     m_deleteEventAction = false;
 }
 
 void KoEventActionAddCommand::undo()
 {
-    m_shape->removeEventAction( m_eventAction );
+    m_shape->removeEventAction(m_eventAction);
     m_deleteEventAction = true;
 }

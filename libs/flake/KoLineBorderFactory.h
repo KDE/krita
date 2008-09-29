@@ -21,7 +21,8 @@
 
 #include "KoShapeBorderFactory.h"
 
-class KoLineBorderFactory : public KoShapeBorderFactory {
+class KoLineBorderFactory : public KoShapeBorderFactory
+{
 public:
     KoLineBorderFactory(QObject *parent);
 

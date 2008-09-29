@@ -20,7 +20,7 @@
 #include "KoShapeConfigWidgetBase.h"
 
 KoShapeConfigWidgetBase::KoShapeConfigWidgetBase()
-    : m_resourceProvider( 0 ) 
+        : m_resourceProvider(0)
 {
 }
 

@@ -37,7 +37,7 @@ public:
      * @param subpathIndex the index. See KoPathShape::removeSubpath()
      * @param parent the parent command if the resulting command is a compound undo command.
      */
-    KoSubpathRemoveCommand( KoPathShape *pathShape, int subpathIndex, QUndoCommand *parent = 0 );
+    KoSubpathRemoveCommand(KoPathShape *pathShape, int subpathIndex, QUndoCommand *parent = 0);
     ~KoSubpathRemoveCommand();
 
     /// redo the command

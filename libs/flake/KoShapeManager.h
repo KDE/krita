@@ -70,7 +70,7 @@ public:
      * @param shapes the new shapes to manage.
      * @param repaint if true it will trigger a repaint of the shapes
      */
-    void setShapes( const QList<KoShape *> &shapes, bool repaint = true );
+    void setShapes(const QList<KoShape *> &shapes, bool repaint = true);
 
     /// returns the list of maintained shapes
     const QList<KoShape *> & shapes() const;
@@ -97,7 +97,7 @@ public:
      * @param forPrint if true, make sure only actual content is drawn and no decorations.
      * @param converter to convert between document and view coordinates.
      */
-    virtual void paint( QPainter &painter, const KoViewConverter &converter, bool forPrint );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, bool forPrint);
 
     /**
      * Returns the shape located at a specific point in the document.
@@ -107,14 +107,14 @@ public:
      * @param selection controls which shape is returned when more than one shape is at the specific point
      * @param omitHiddenShapes if true, only visible shapes are considered
      */
-    KoShape * shapeAt( const QPointF &position, KoFlake::ShapeSelection selection = KoFlake::ShapeOnTop, bool omitHiddenShapes = true );
+    KoShape * shapeAt(const QPointF &position, KoFlake::ShapeSelection selection = KoFlake::ShapeOnTop, bool omitHiddenShapes = true);
 
     /**
      * Returns the shapes which intersects the specific rect in the document.
      * @param rect the rectangle in the document coordinate system.
      * @param omitHiddenShapes if true, only visible shapes are considered
      */
-    QList<KoShape *> shapesAt( const QRectF &rect, bool omitHiddenShapes = true );
+    QList<KoShape *> shapesAt(const QRectF &rect, bool omitHiddenShapes = true);
 
     /**
      * Request a repaint to be queued.
@@ -128,7 +128,7 @@ public:
      * @param selectionHandles if true; find out if the shape is selected and repaint its
      *   selection handles at the same time.
      */
-    void update( QRectF &rect, const KoShape *shape = 0, bool selectionHandles = false );
+    void update(QRectF &rect, const KoShape *shape = 0, bool selectionHandles = false);
 
     /**
      * Update the tree for finding the shapes.
@@ -137,7 +137,7 @@ public:
      * will be merged into one.
      * @param shape the shape to updated its position in the tree.
      */
-    void notifyShapeChanged( KoShape * shape );
+    void notifyShapeChanged(KoShape * shape);
 
     /**
      * Switch to editing the shape that is at the position of the event.
@@ -148,25 +148,25 @@ public:
     void suggestChangeTool(KoPointerEvent *event);
 
     /**
-     * Paint a shape 
+     * Paint a shape
      *
      * @param shape the shape to paint
      * @param painter the painter to paint to.
      * @param converter to convert between document and view coordinates.
      * @param forPrint if true, make sure only actual content is drawn and no decorations.
      */
-    void paintShape( KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint );
+    void paintShape(KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint);
 
     /**
      * Set the strategy of the KoShapeManager
      *
      * This can be used to change the behaviour of the painting of the shapes.
-     * @param strategy the new strategy. The given strategy has to be allocared 
+     * @param strategy the new strategy. The given strategy has to be allocared
      *        on the stack and you the ownership will be taken by the shape manager.
-     *        The shape manager will delete the last set strategy when you set a 
+     *        The shape manager will delete the last set strategy when you set a
      *        new one.
      */
-    void setPaintingStrategy( KoShapeManagerPaintingStrategy * strategy );
+    void setPaintingStrategy(KoShapeManagerPaintingStrategy * strategy);
 
 private:
     /**
@@ -174,7 +174,7 @@ private:
      * @param shape the shape to add
      * @param repaint if true it will tigger a repaint of the shape
      */
-    void add(KoShape *shape, bool repaint );
+    void add(KoShape *shape, bool repaint);
 
     /**
      * Update the tree when there are shapes in m_aggregate4update. This is done so not all

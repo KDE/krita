@@ -25,16 +25,15 @@ class KoDeviceEvent::Private
 {
 public:
     Private()
-    : button(Qt::NoButton), buttons(Qt::NoButton)
-    {}
+            : button(Qt::NoButton), buttons(Qt::NoButton) {}
 
     KoDeviceEvent::Type type;
     Qt::MouseButton button;
     Qt::MouseButtons buttons;
 };
 
-KoDeviceEvent::KoDeviceEvent( Type type )
-    : QInputEvent( static_cast<QEvent::Type>(type) ), m_event(0), d( new Private() )
+KoDeviceEvent::KoDeviceEvent(Type type)
+        : QInputEvent(static_cast<QEvent::Type>(type)), m_event(0), d(new Private())
 {
     modState = QApplication::keyboardModifiers();
 }
@@ -50,17 +49,17 @@ Qt::MouseButton KoDeviceEvent::button() const
     return d->button;
 }
 
-Qt::MouseButtons KoDeviceEvent::buttons () const
+Qt::MouseButtons KoDeviceEvent::buttons() const
 {
     return d->buttons;
 }
 
-void KoDeviceEvent::setButton( Qt::MouseButton b )
+void KoDeviceEvent::setButton(Qt::MouseButton b)
 {
     d->button = b;
 }
 
-void KoDeviceEvent::setButtons( Qt::MouseButtons b )
+void KoDeviceEvent::setButtons(Qt::MouseButtons b)
 {
     d->buttons = b;
 }

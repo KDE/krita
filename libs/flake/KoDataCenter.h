@@ -33,7 +33,8 @@ class KoXmlWriter;
  * This abstraction is done so that shapes can get access to any possible type of data center.
  * The KoShapeControillerBase has a method that returns a map of data centers
  */
-class KoDataCenter {
+class KoDataCenter
+{
 public:
     KoDataCenter() { }
     virtual ~KoDataCenter() { }
@@ -46,7 +47,7 @@ public:
     /**
      * Save any remaining binary blobs
      */
-    virtual bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter ) = 0;
+    virtual bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter) = 0;
 };
 
 #endif

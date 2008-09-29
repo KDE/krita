@@ -24,13 +24,13 @@
 #include <klocale.h>
 
 KoPathToolFactory::KoPathToolFactory(QObject *parent)
-: KoToolFactory(parent, "PathToolFactoryId", i18n("Path tool"))
+        : KoToolFactory(parent, "PathToolFactoryId", i18n("Path tool"))
 {
-    setToolTip (i18n("Path editing tool"));
-    setToolType (dynamicToolType());
-    setIcon ("editpath");
-    setPriority (2);
-    setActivationShapeId (KoPathShapeId);
+    setToolTip(i18n("Path editing tool"));
+    setToolType(dynamicToolType());
+    setIcon("editpath");
+    setPriority(2);
+    setActivationShapeId(KoPathShapeId);
 }
 
 KoPathToolFactory::~KoPathToolFactory()

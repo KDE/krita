@@ -33,12 +33,12 @@ void KoToolRegistry::init()
     config.whiteList = "FlakePlugins";
     config.blacklist = "FlakePluginsDisabled";
     config.group = "koffice";
-    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Flake"),
-                                      QString::fromLatin1("[X-Flake-MinVersion] <= 0"));
+    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Flake"),
+                                     QString::fromLatin1("[X-Flake-MinVersion] <= 0"));
     config.whiteList = "ToolPlugins";
     config.blacklist = "ToolPluginsDisabled";
-    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Tool"),
-                                      QString::fromLatin1("[X-Flake-MinVersion] <= 0"));
+    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Tool"),
+                                     QString::fromLatin1("[X-Flake-MinVersion] <= 0"));
 }
 
 KoToolRegistry::~KoToolRegistry()

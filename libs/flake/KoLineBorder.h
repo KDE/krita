@@ -35,13 +35,14 @@ class KoViewConverter;
 /**
  * A border for shapes that draws a single line around the object.
  */
-class FLAKE_EXPORT KoLineBorder : public KoShapeBorderModel {
+class FLAKE_EXPORT KoLineBorder : public KoShapeBorderModel
+{
 public:
     /// Constructor for a thin line in black
     KoLineBorder();
 
     /// Copy constructor
-    KoLineBorder( const KoLineBorder &other );
+    KoLineBorder(const KoLineBorder &other);
 
     /**
      * Constructor for a lineBorder
@@ -52,46 +53,46 @@ public:
     virtual ~KoLineBorder();
 
     /// Assignment operator
-    KoLineBorder& operator = ( const KoLineBorder &rhs );
+    KoLineBorder& operator = (const KoLineBorder &rhs);
 
     /// Sets the lines cap style
-    void setCapStyle( Qt::PenCapStyle style );
+    void setCapStyle(Qt::PenCapStyle style);
     /// Returns the lines cap style
     Qt::PenCapStyle capStyle() const;
     /// Sets the lines join style
-    void setJoinStyle( Qt::PenJoinStyle style );
+    void setJoinStyle(Qt::PenJoinStyle style);
     /// Returns the lines join style
     Qt::PenJoinStyle joinStyle() const;
     /// Sets the line width
-    void setLineWidth( qreal lineWidth );
+    void setLineWidth(qreal lineWidth);
     /// Returns the line width
     qreal lineWidth() const;
     /// Sets the miter limit
-    void setMiterLimit( qreal miterLimit );
+    void setMiterLimit(qreal miterLimit);
     /// Returns the miter limit
     qreal miterLimit() const;
     /// Sets the line style
-    void setLineStyle( Qt::PenStyle style, const QVector<qreal> &dashes );
+    void setLineStyle(Qt::PenStyle style, const QVector<qreal> &dashes);
     /// Returns the line style
     Qt::PenStyle lineStyle() const;
     /// Returns the line dashes
     QVector<qreal> lineDashes() const;
     /// Sets the dash offset
-    void setDashOffset( qreal dashOffset );
+    void setDashOffset(qreal dashOffset);
     /// Returns the dash offset
     qreal dashOffset() const;
 
     /// Returns the color
     const QColor & color() const;
     /// Sets the color
-    void setColor( const QColor & color );
+    void setColor(const QColor & color);
 
     /// Sets the strokes brush used to fill strokes of this border
-    void setLineBrush( const QBrush & brush );
+    void setLineBrush(const QBrush & brush);
     /// Returns the strokes brush
     QBrush lineBrush() const;
 
-    virtual void fillStyle( KoGenStyle &style, KoShapeSavingContext &context );
+    virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context);
     virtual void borderInsets(const KoShape *shape, KoInsets &insets);
     virtual bool hasTransparency();
     virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter);

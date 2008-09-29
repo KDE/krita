@@ -39,7 +39,7 @@ class QRectF;
 class FLAKE_EXPORT KoShapeManagerPaintingStrategy
 {
 public:
-    KoShapeManagerPaintingStrategy( KoShapeManager * shapeManager );
+    KoShapeManagerPaintingStrategy(KoShapeManager * shapeManager);
     virtual ~KoShapeManagerPaintingStrategy();
 
     /**
@@ -50,14 +50,14 @@ public:
      * @param converter to convert between document and view coordinates.
      * @param forPrint if true, make sure only actual content is drawn and no decorations.
      */
-    virtual void paint( KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint );
+    virtual void paint(KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint);
 
     /**
      * Adapt the rect the shape occupies
      *
      * @param rect rect which will be updated to give the rect the shape occupies.
      */
-    virtual void adapt( KoShape * shape, QRectF & rect );
+    virtual void adapt(KoShape * shape, QRectF & rect);
 
 protected:
     KoShapeManager * shapeManager();

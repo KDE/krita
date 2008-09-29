@@ -7,12 +7,13 @@
 
 #include <kcomponentdata.h>
 
-void TestShapePainting::testPaintShape() {
+void TestShapePainting::testPaintShape()
+{
     MockShape shape1;
     MockShape shape2;
     MockContainer container;
 
-    KComponentData componentData( "TestShapePainting" );  // we need an instance for that canvas
+    KComponentData componentData("TestShapePainting");    // we need an instance for that canvas
 
     container.addChild(&shape1);
     container.addChild(&shape2);
@@ -66,7 +67,8 @@ void TestShapePainting::testPaintShape() {
     QCOMPARE(container.paintedCount, 1);
 }
 
-void TestShapePainting::testPaintHiddenShape() {
+void TestShapePainting::testPaintHiddenShape()
+{
     MockShape shape;
     MockContainer fourth;
     MockContainer thirth;

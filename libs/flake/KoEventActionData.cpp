@@ -23,17 +23,16 @@
 class KoEventActionData::Private
 {
 public:
-    Private( KoShape * shape, KoEventAction * eventAction )
-    : shape( shape )
-    , eventAction( eventAction )
-    {}
+    Private(KoShape * shape, KoEventAction * eventAction)
+            : shape(shape)
+            , eventAction(eventAction) {}
 
     KoShape * shape;
     KoEventAction * eventAction;
 };
 
-KoEventActionData::KoEventActionData( KoShape * shape, KoEventAction * eventAction )
-: d( new Private( shape, eventAction ) )
+KoEventActionData::KoEventActionData(KoShape * shape, KoEventAction * eventAction)
+        : d(new Private(shape, eventAction))
 {
 }
 

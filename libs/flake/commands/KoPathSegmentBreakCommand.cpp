@@ -22,26 +22,22 @@
 #include <klocale.h>
 #include <math.h>
 
-KoPathSegmentBreakCommand::KoPathSegmentBreakCommand( const KoPathPointData & pointData, QUndoCommand *parent )
-: QUndoCommand( parent )
-, m_pointData( pointData )
-, m_startIndex( -1, -1 )
-, m_broken( false )
+KoPathSegmentBreakCommand::KoPathSegmentBreakCommand(const KoPathPointData & pointData, QUndoCommand *parent)
+        : QUndoCommand(parent)
+        , m_pointData(pointData)
+        , m_startIndex(-1, -1)
+        , m_broken(false)
 {
-    if ( m_pointData.pathShape->isClosedSubpath( m_pointData.pointIndex.first ) )
-    {
+    if (m_pointData.pathShape->isClosedSubpath(m_pointData.pointIndex.first)) {
         m_startIndex = m_pointData.pointIndex;
-        KoPathPoint * before = m_pointData.pathShape->pointByIndex( m_startIndex );
-        if ( before->properties() & KoPathPoint::CloseSubpath )
-        {
+        KoPathPoint * before = m_pointData.pathShape->pointByIndex(m_startIndex);
+        if (before->properties() & KoPathPoint::CloseSubpath) {
             m_startIndex.second = 0;
-        }
-        else
-        {
+        } else {
             ++m_startIndex.second;
         }
     }
-    setText( i18n( "Break subpath" ) );
+    setText(i18n("Break subpath"));
 }
 
 KoPathSegmentBreakCommand::~KoPathSegmentBreakCommand()
@@ -53,17 +49,13 @@ void KoPathSegmentBreakCommand::redo()
     QUndoCommand::redo();
     // a repaint before is needed as the shape can shrink during the break
     m_pointData.pathShape->update();
-    if ( m_startIndex.first != -1 )
-    {
-        m_startIndex = m_pointData.pathShape->openSubpath( m_startIndex );
+    if (m_startIndex.first != -1) {
+        m_startIndex = m_pointData.pathShape->openSubpath(m_startIndex);
         m_pointData.pathShape->normalize();
         m_pointData.pathShape->update();
-    }
-    else
-    {
-        m_broken = m_pointData.pathShape->breakAfter( m_pointData.pointIndex );
-        if ( m_broken )
-        {
+    } else {
+        m_broken = m_pointData.pathShape->breakAfter(m_pointData.pointIndex);
+        if (m_broken) {
             m_pointData.pathShape->normalize();
             m_pointData.pathShape->update();
         }
@@ -73,15 +65,12 @@ void KoPathSegmentBreakCommand::redo()
 void KoPathSegmentBreakCommand::undo()
 {
     QUndoCommand::undo();
-    if ( m_startIndex.first != -1 )
-    {
-        m_startIndex = m_pointData.pathShape->closeSubpath( m_startIndex );
+    if (m_startIndex.first != -1) {
+        m_startIndex = m_pointData.pathShape->closeSubpath(m_startIndex);
         m_pointData.pathShape->normalize();
         m_pointData.pathShape->update();
-    }
-    else if ( m_broken )
-    {
-        m_pointData.pathShape->join( m_pointData.pointIndex.first );
+    } else if (m_broken) {
+        m_pointData.pathShape->join(m_pointData.pointIndex.first);
         m_pointData.pathShape->normalize();
         m_pointData.pathShape->update();
     }

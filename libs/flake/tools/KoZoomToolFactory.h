@@ -24,7 +24,8 @@
 #include "KoToolFactory.h"
 
 /// Factory for the KoZoomTool
-class KoZoomToolFactory : public KoToolFactory {
+class KoZoomToolFactory : public KoToolFactory
+{
 public:
     /// constructor
     KoZoomToolFactory(QObject *parent);

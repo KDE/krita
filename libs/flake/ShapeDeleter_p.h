@@ -28,7 +28,8 @@ class KoShape;
  * It will do the actual delete in the main-thread, no matter which thread it has been
  * created in.
  */
-class ShapeDeleter : public QObject {
+class ShapeDeleter : public QObject
+{
     Q_OBJECT
 public:
     /**

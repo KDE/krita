@@ -34,10 +34,10 @@ class KoCanvasBase;
 class KoPathPointMoveStrategy : public KoInteractionStrategy
 {
 public:
-    KoPathPointMoveStrategy( KoPathTool *tool, KoCanvasBase *canvas, const QPointF &pos );
+    KoPathPointMoveStrategy(KoPathTool *tool, KoCanvasBase *canvas, const QPointF &pos);
     virtual ~KoPathPointMoveStrategy();
-    virtual void handleMouseMove( const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers );
-    virtual void finishInteraction( Qt::KeyboardModifiers modifiers ); 
+    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
+    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
     virtual QUndoCommand* createCommand();
 
 private:

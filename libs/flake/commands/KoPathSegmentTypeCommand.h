@@ -32,8 +32,7 @@ class KoPathSegmentTypeCommand : public QUndoCommand
 {
 public:
     /// Segment Types
-    enum SegmentType
-    {
+    enum SegmentType {
         Curve = 1,
         Line = 2
     };
@@ -44,7 +43,7 @@ public:
      * @param segmentType to which the segements should be changed to
      * @param parent the parent command used for macro commands
      */
-    KoPathSegmentTypeCommand( const QList<KoPathPointData> & pointDataList, SegmentType segmentType, QUndoCommand *parent = 0 );
+    KoPathSegmentTypeCommand(const QList<KoPathPointData> & pointDataList, SegmentType segmentType, QUndoCommand *parent = 0);
     ~KoPathSegmentTypeCommand();
 
     /// redo the command
@@ -54,8 +53,7 @@ public:
 
 private:
     // used for storing the data for undo
-    struct SegmentTypeData
-    {
+    struct SegmentTypeData {
         // old control points in document coordinates
         QPointF m_controlPoint1;
         QPointF m_controlPoint2;

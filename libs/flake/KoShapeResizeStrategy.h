@@ -39,13 +39,15 @@ public:
     /**
      * Constructor
      */
-    KoShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, KoFlake::SelectionHandle direction );
+    KoShapeResizeStrategy(KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, KoFlake::SelectionHandle direction);
     virtual ~KoShapeResizeStrategy() {}
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     QUndoCommand* createCommand();
-    void finishInteraction( Qt::KeyboardModifiers modifiers ) { Q_UNUSED(modifiers); }
-    virtual void paint( QPainter &painter, const KoViewConverter &converter);
+    void finishInteraction(Qt::KeyboardModifiers modifiers) {
+        Q_UNUSED(modifiers);
+    }
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
 private:
     QPointF m_start;

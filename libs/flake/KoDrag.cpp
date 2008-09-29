@@ -39,102 +39,99 @@
 #include "KoDragOdfSaveHelper.h"
 
 KoDrag::KoDrag()
-: m_mimeData( 0 )
+        : m_mimeData(0)
 {
 }
 
 KoDrag::~KoDrag()
 {
-    if ( m_mimeData == 0 ) {
+    if (m_mimeData == 0) {
         delete m_mimeData;
     }
 }
 
-bool KoDrag::setOdf( const char * mimeType, KoDragOdfSaveHelper &helper )
+bool KoDrag::setOdf(const char * mimeType, KoDragOdfSaveHelper &helper)
 {
-    struct Finally
-    {
+    struct Finally {
         Finally(KoStore *s) : store(s) { }
-        ~Finally()
-        {
+        ~Finally() {
             delete store;
         }
         KoStore *store;
     };
 
     QBuffer buffer;
-    KoStore* store = KoStore::createStore( &buffer, KoStore::Write, mimeType );
+    KoStore* store = KoStore::createStore(&buffer, KoStore::Write, mimeType);
     Finally finally(store); // delete store when we exit this scope
-    Q_ASSERT( store );
-    Q_ASSERT( !store->bad() );
+    Q_ASSERT(store);
+    Q_ASSERT(!store->bad());
 
-    KoOdfWriteStore odfStore( store );
+    KoOdfWriteStore odfStore(store);
     KoEmbeddedDocumentSaver embeddedSaver;
 
-    KoXmlWriter* manifestWriter = odfStore.manifestWriter( mimeType );
+    KoXmlWriter* manifestWriter = odfStore.manifestWriter(mimeType);
     KoXmlWriter* contentWriter = odfStore.contentWriter();
 
-    if ( !contentWriter ) {
+    if (!contentWriter) {
         return false;
     }
 
     KoGenStyles mainStyles;
     KoXmlWriter* bodyWriter = odfStore.bodyWriter();
-    KoShapeSavingContext * context = helper.context( bodyWriter, mainStyles, embeddedSaver );
+    KoShapeSavingContext * context = helper.context(bodyWriter, mainStyles, embeddedSaver);
 
-    if ( !helper.writeBody() ) {
+    if (!helper.writeBody()) {
         return false;
     }
 
-    mainStyles.saveOdfAutomaticStyles( contentWriter, false );
+    mainStyles.saveOdfAutomaticStyles(contentWriter, false);
 
     odfStore.closeContentWriter();
 
     //add manifest line for content.xml
-    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
+    manifestWriter->addManifestEntry("content.xml", "text/xml");
 
 
-    if ( !mainStyles.saveOdfStylesDotXml( store, manifestWriter ) ) {
+    if (!mainStyles.saveOdfStylesDotXml(store, manifestWriter)) {
         return false;
     }
 
-    if ( !context->saveDataCenter( store, manifestWriter ) ) {
-        kDebug(30006) <<"save data centers failed";
+    if (!context->saveDataCenter(store, manifestWriter)) {
+        kDebug(30006) << "save data centers failed";
         return false;
     }
 
     // Save embedded objects
-    KoDocument::SavingContext documentContext( odfStore, embeddedSaver );
-    if ( !embeddedSaver.saveEmbeddedDocuments( documentContext ) )
-    {
-        kDebug(30006) <<"save embedded documents failed";
+    KoDocument::SavingContext documentContext(odfStore, embeddedSaver);
+    if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
+        kDebug(30006) << "save embedded documents failed";
         return false;
     }
 
     // Write out manifest file
-    if ( !odfStore.closeManifestWriter() ) {
+    if (!odfStore.closeManifestWriter()) {
         return false;
     }
 
     delete store; // make sure the buffer if fully flushed.
     finally.store = 0;
-    setData( mimeType, buffer.buffer() );
+    setData(mimeType, buffer.buffer());
 
     return true;
 }
 
-void KoDrag::setData( const QString & mimeType, const QByteArray & data )
+void KoDrag::setData(const QString & mimeType, const QByteArray & data)
 {
-    if ( m_mimeData == 0 ) {
+    if (m_mimeData == 0) {
         m_mimeData = new QMimeData();
     }
-    m_mimeData->setData( mimeType, data );
+    m_mimeData->setData(mimeType, data);
 }
 
 void KoDrag::addToClipboard()
 {
-    if ( m_mimeData ) {
-        QApplication::clipboard()->setMimeData( m_mimeData );
+    if (m_mimeData) {
+        QApplication::clipboard()->setMimeData(m_mimeData);
         m_mimeData = 0;
     }
 }

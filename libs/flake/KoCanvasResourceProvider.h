@@ -36,31 +36,32 @@ class KoShape;
  * properties, like current foreground color, current background
  * color and more.
  */
-namespace KoCanvasResource {
+namespace KoCanvasResource
+{
 
-    /**
-     * This enum holds identifiers to the resources that can be stored in here.
-     */
-    enum CanvasResource {
-        ForegroundColor,    ///< The active forground color selected for this canvas.
-        BackgroundColor,    ///< The active background color selected for this canvas.
-        CompositeOperation,
-        CompositeOpacity,
-        HandleRadius,       ///< The handle radius used for drawing handles of any kind
-        PageSize,           ///< The size of the (current) page in postscript points.
-        DocumentIsLoading,  ///< A boolean that is set to true while loading is happening.
-        Unit,               ///< The unit of this canvas has changed
-        HotPosition,        ///< The hot position has changed
-        CurrentPage,        ///< The current page has changed
-        KarbonStart = 1000,      ///< Base number for karbon specific values.
-        KexiStart = 2000,        ///< Base number for kexi specific values.
-        KivioStart = 3000,       ///< Base number for kivio specific values.
-        KPlatoStart = 4000,      ///< Base number for kplato specific values.
-        KPresenterStart = 5000,  ///< Base number for kpresenter specific values.
-        KritaStart = 6000,       ///< Base number for krita specific values.
-        KSpreadStart = 7000,     ///< Base number for kspread specific values.
-        KWordStart = 8000        ///< Base number for kword specific values.
-    };
+/**
+ * This enum holds identifiers to the resources that can be stored in here.
+ */
+enum CanvasResource {
+    ForegroundColor,    ///< The active forground color selected for this canvas.
+    BackgroundColor,    ///< The active background color selected for this canvas.
+    CompositeOperation,
+    CompositeOpacity,
+    HandleRadius,       ///< The handle radius used for drawing handles of any kind
+    PageSize,           ///< The size of the (current) page in postscript points.
+    DocumentIsLoading,  ///< A boolean that is set to true while loading is happening.
+    Unit,               ///< The unit of this canvas has changed
+    HotPosition,        ///< The hot position has changed
+    CurrentPage,        ///< The current page has changed
+    KarbonStart = 1000,      ///< Base number for karbon specific values.
+    KexiStart = 2000,        ///< Base number for kexi specific values.
+    KivioStart = 3000,       ///< Base number for kivio specific values.
+    KPlatoStart = 4000,      ///< Base number for kplato specific values.
+    KPresenterStart = 5000,  ///< Base number for kpresenter specific values.
+    KritaStart = 6000,       ///< Base number for krita specific values.
+    KSpreadStart = 7000,     ///< Base number for kspread specific values.
+    KWordStart = 8000        ///< Base number for kword specific values.
+};
 
 }
 
@@ -70,7 +71,8 @@ namespace KoCanvasResource {
  * color and more. All tools belonging to the current canvas are
  * notified when a Resource changes (is set).
  */
-class FLAKE_EXPORT KoCanvasResourceProvider : public QObject {
+class FLAKE_EXPORT KoCanvasResourceProvider : public QObject
+{
 
     Q_OBJECT
 
@@ -88,25 +90,25 @@ public:
      * @param key the integer key, based on KoCanvasResource::CanvasResource
      * @param value the new value for the key.
      */
-    void setResource( int key, const QVariant & value );
+    void setResource(int key, const QVariant & value);
     /**
      * Set a resource of type KoColor.
      * @param key the integer key, based on KoCanvasResource::CanvasResource
      * @param color the new value for the key.
      */
-    void setResource( int key, const KoColor & color );
+    void setResource(int key, const KoColor & color);
     /**
      * Set a resource of type KoId.
      * @param key the integer key, based on KoCanvasResource::CanvasResource
      * @param id the new value for the key.
      */
-    void setResource( int key, const KoID & id );
+    void setResource(int key, const KoID & id);
     /**
      * Set a resource of type KoShape*.
      * @param key the integer key, based on KoCanvasResource::CanvasResource
      * @param id the new value for the key.
      */
-    void setResource( int key, KoShape* shape );
+    void setResource(int key, KoShape* shape);
 
     /**
      * Returns a qvariant containing the specified resource or a standard one if the
@@ -119,7 +121,7 @@ public:
      * Set the foregroundColor resource.
      * @param color the new foreground color
      */
-    void setForegroundColor( const KoColor & color );
+    void setForegroundColor(const KoColor & color);
     /**
      * Return the foregroundColor
      */
@@ -129,7 +131,7 @@ public:
      * Set the backgroundColor resource.
      * @param color the new background color
      */
-    void setBackgroundColor( const KoColor & color );
+    void setBackgroundColor(const KoColor & color);
     /**
      * Return the backgroundColor
      */
@@ -140,11 +142,11 @@ public:
      * use this property to alter the radius that a circular handle should have on screen.
      * @param handleSize the radius in pixels.
      */
-    void setHandleRadius( int handleSize );
+    void setHandleRadius(int handleSize);
     /// Returns the actual handle radius
     int handleRadius();
 
-    /** 
+    /**
      * Sets that the new unit of this canvas has changed
      * The actual unit can be obtained directly from the canvas
      */
@@ -172,7 +174,7 @@ public:
      * Return the resource determined by param key as a KoColor.
      * @param key the indentifying key for the resource.
      */
-    KoColor koColorResource( int key );
+    KoColor koColorResource(int key);
 
     /**
      * Return the resource determined by param key as a KoID.
@@ -184,7 +186,7 @@ public:
      * Return the resource determined by param key as a pointer to a KoShape.
      * @param key the indentifying key for the resource.
      */
-    KoShape * koShapeResource( int key );
+    KoShape * koShapeResource(int key);
 
     /**
      * Return the resource determined by param key as a QString .

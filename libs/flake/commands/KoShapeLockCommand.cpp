@@ -24,7 +24,7 @@
 #include <klocale.h>
 
 KoShapeLockCommand::KoShapeLockCommand(const QList<KoShape*> &shapes, const QList<bool> &oldLock, const QList<bool> &newLock, QUndoCommand *parent)
-: QUndoCommand( parent )
+        : QUndoCommand(parent)
 {
     m_shapes = shapes;
     m_oldLock = oldLock;
@@ -33,7 +33,7 @@ KoShapeLockCommand::KoShapeLockCommand(const QList<KoShape*> &shapes, const QLis
     Q_ASSERT(m_shapes.count() == m_oldLock.count());
     Q_ASSERT(m_shapes.count() == m_newLock.count());
 
-    setText( i18n("Lock shapes") );
+    setText(i18n("Lock shapes"));
 }
 
 KoShapeLockCommand::~KoShapeLockCommand()
@@ -43,7 +43,7 @@ KoShapeLockCommand::~KoShapeLockCommand()
 void KoShapeLockCommand::redo()
 {
     QUndoCommand::redo();
-    for(int i = 0; i < m_shapes.count(); ++i) {
+    for (int i = 0; i < m_shapes.count(); ++i) {
         m_shapes[i]->setLocked(m_newLock[i]);
     }
 }
@@ -51,7 +51,7 @@ void KoShapeLockCommand::redo()
 void KoShapeLockCommand::undo()
 {
     QUndoCommand::undo();
-    for(int i = 0; i < m_shapes.count(); ++i) {
+    for (int i = 0; i < m_shapes.count(); ++i) {
         m_shapes[i]->setLocked(m_oldLock[i]);
     }
 }

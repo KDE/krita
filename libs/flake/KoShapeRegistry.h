@@ -60,7 +60,7 @@ public:
      *
      * @param factory The factory of the shape
      */
-    void addFactory( KoShapeFactory * factory );
+    void addFactory(KoShapeFactory * factory);
 
     /**
      * Use the element to find out which flake plugin can load it, and
@@ -77,9 +77,9 @@ private:
     KoShapeRegistry operator=(const KoShapeRegistry&);
     void init();
 
-    void insertFactory( KoShapeFactory * factory );
+    void insertFactory(KoShapeFactory * factory);
 
-    KoShape * createShapeInternal( const KoXmlElement & fullElement, KoShapeLoadingContext & context, const KoXmlElement & element ) const;
+    KoShape * createShapeInternal(const KoXmlElement & fullElement, KoShapeLoadingContext & context, const KoXmlElement & element) const;
 
     class Private;
     Private * const d;

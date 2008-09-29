@@ -37,23 +37,25 @@ public:
      * Create a new tool; typically not called by applications, only by the KoToolManager
      * @param canvas the canvas this tool works for.
      */
-    explicit KoZoomTool( KoCanvasBase *canvas );
+    explicit KoZoomTool(KoCanvasBase *canvas);
     /// reimplemented method
-    virtual void wheelEvent ( KoPointerEvent * event );
+    virtual void wheelEvent(KoPointerEvent * event);
     /// reimplemented method
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
     /// reimplemented method
-    virtual void mouseMoveEvent( KoPointerEvent *event );
+    virtual void mouseMoveEvent(KoPointerEvent *event);
     /// reimplemented method
-    virtual void keyPressEvent( QKeyEvent *event );
+    virtual void keyPressEvent(QKeyEvent *event);
     /// reimplemented method
-    virtual void keyReleaseEvent( QKeyEvent *event );
+    virtual void keyReleaseEvent(QKeyEvent *event);
     /// reimplemented method
     virtual void activate(bool temporary = false);
     /// reimplemented method
-    virtual void mouseDoubleClickEvent( KoPointerEvent *event );
+    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
 
-    void setCanvasController(KoCanvasController *controller) { m_controller = controller; }
+    void setCanvasController(KoCanvasController *controller) {
+        m_controller = controller;
+    }
 
 protected:
     QWidget* createOptionWidget();

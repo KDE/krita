@@ -20,15 +20,15 @@
 #include "KoConnectionShapeTypeCommand.h"
 #include <klocale.h>
 
-KoConnectionShapeTypeCommand::KoConnectionShapeTypeCommand( 
-        KoConnectionShape * connection, KoConnectionShape::Type type, QUndoCommand *parent )
-    : QUndoCommand( parent )
-    , m_connection(connection)
-    , m_newType(type)
+KoConnectionShapeTypeCommand::KoConnectionShapeTypeCommand(
+    KoConnectionShape * connection, KoConnectionShape::Type type, QUndoCommand *parent)
+        : QUndoCommand(parent)
+        , m_connection(connection)
+        , m_newType(type)
 {
     Q_ASSERT(m_connection);
 
-    setText( i18n("Change Connection") );
+    setText(i18n("Change Connection"));
 
     m_oldType = m_connection->connectionType();
 }
@@ -39,8 +39,8 @@ void KoConnectionShapeTypeCommand::redo()
 
     m_connection->update();
 
-    if ( m_oldType != m_newType )
-        m_connection->setConnectionType( m_newType );
+    if (m_oldType != m_newType)
+        m_connection->setConnectionType(m_newType);
 
     m_connection->update();
 }
@@ -51,8 +51,8 @@ void KoConnectionShapeTypeCommand::undo()
 
     m_connection->update();
 
-    if ( m_oldType != m_newType )
-        m_connection->setConnectionType( m_oldType );
+    if (m_oldType != m_newType)
+        m_connection->setConnectionType(m_oldType);
 
     m_connection->update();
 }

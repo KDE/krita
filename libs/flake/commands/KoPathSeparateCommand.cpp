@@ -27,22 +27,18 @@ class KoPathSeparateCommand::Private
 {
 public:
     Private(KoShapeControllerBase *c, const QList<KoPathShape*> &p)
-        : controller(c),
-        paths(p),
-        isSeparated( false )
-    {
+            : controller(c),
+            paths(p),
+            isSeparated(false) {
     }
 
     ~Private() {
-        if ( isSeparated && controller )
-        {
-            foreach( KoPathShape* p, paths )
-                delete p;
-        }
-        else
-        {
-            foreach( KoPathShape* p, separatedPaths )
-                delete p;
+        if (isSeparated && controller) {
+            foreach(KoPathShape* p, paths)
+            delete p;
+        } else {
+            foreach(KoPathShape* p, separatedPaths)
+            delete p;
         }
     }
 
@@ -53,11 +49,11 @@ public:
 };
 
 
-KoPathSeparateCommand::KoPathSeparateCommand( KoShapeControllerBase *controller, const QList<KoPathShape*> &paths, QUndoCommand *parent )
-    : QUndoCommand( parent ),
-    d(new Private(controller, paths))
+KoPathSeparateCommand::KoPathSeparateCommand(KoShapeControllerBase *controller, const QList<KoPathShape*> &paths, QUndoCommand *parent)
+        : QUndoCommand(parent),
+        d(new Private(controller, paths))
 {
-    setText( i18n( "Separate paths" ) );
+    setText(i18n("Separate paths"));
 }
 
 KoPathSeparateCommand::~KoPathSeparateCommand()
@@ -68,42 +64,38 @@ KoPathSeparateCommand::~KoPathSeparateCommand()
 void KoPathSeparateCommand::redo()
 {
     QUndoCommand::redo();
-    if ( d->separatedPaths.isEmpty() )
-    {
-        foreach( KoPathShape* p, d->paths )
-        {
+    if (d->separatedPaths.isEmpty()) {
+        foreach(KoPathShape* p, d->paths) {
             QList<KoPathShape*> separatedPaths;
-            if ( p->separate( separatedPaths ) )
+            if (p->separate(separatedPaths))
                 d->separatedPaths << separatedPaths;
         }
     }
 
     d->isSeparated = true;
 
-    if ( d->controller )
-    {
-        foreach( KoPathShape* p, d->paths )
-            d->controller->removeShape( p );
-        foreach( KoPathShape *p, d->separatedPaths )
-            d->controller->addShape( p );
+    if (d->controller) {
+        foreach(KoPathShape* p, d->paths)
+        d->controller->removeShape(p);
+        foreach(KoPathShape *p, d->separatedPaths)
+        d->controller->addShape(p);
     }
-    foreach( KoPathShape* p, d->paths )
-        p->update();
+    foreach(KoPathShape* p, d->paths)
+    p->update();
 }
 
 void KoPathSeparateCommand::undo()
 {
     QUndoCommand::undo();
-    if ( d->controller )
-    {
-        foreach( KoPathShape *p, d->separatedPaths )
-            d->controller->removeShape( p );
-        foreach( KoPathShape* p, d->paths )
-            d->controller->addShape( p );
+    if (d->controller) {
+        foreach(KoPathShape *p, d->separatedPaths)
+        d->controller->removeShape(p);
+        foreach(KoPathShape* p, d->paths)
+        d->controller->addShape(p);
     }
 
     d->isSeparated = false;
 
-    foreach( KoPathShape* p, d->paths )
-        p->update();
+    foreach(KoPathShape* p, d->paths)
+    p->update();
 }

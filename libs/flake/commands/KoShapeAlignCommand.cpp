@@ -36,17 +36,17 @@ public:
     KoShapeMoveCommand *command;
 };
 
-KoShapeAlignCommand::KoShapeAlignCommand( const QList<KoShape*> &shapes, Align align, QRectF boundingRect,
-                                          QUndoCommand *parent )
-: QUndoCommand( parent ),
-    d(new Private())
+KoShapeAlignCommand::KoShapeAlignCommand(const QList<KoShape*> &shapes, Align align, QRectF boundingRect,
+        QUndoCommand *parent)
+        : QUndoCommand(parent),
+        d(new Private())
 {
     QList<QPointF> previousPositions;
     QList<QPointF> newPositions;
     QPointF position;
     QPointF delta;
     QRectF bRect;
-    foreach( KoShape *shape, shapes ) {
+    foreach(KoShape *shape, shapes) {
 //   if (dynamic_cast<KoShapeGroup*> (shape))
 //       kDebug(30006) <<"Found Group";
 //   else if (dynamic_cast<KoShapeContainer*> (shape))
@@ -56,26 +56,25 @@ KoShapeAlignCommand::KoShapeAlignCommand( const QList<KoShape*> &shapes, Align a
         position = shape->position();
         previousPositions  << position;
         bRect = shape->boundingRect();
-        switch( align )
-        {
-            case HorizontalLeftAlignment:
-                delta = QPointF( boundingRect.left(), bRect.y()) - bRect.topLeft();
-                break;
-            case HorizontalCenterAlignment:
-                delta = QPointF( boundingRect.center().x() - bRect.width()/2, bRect.y()) - bRect.topLeft();
-                break;
-            case HorizontalRightAlignment:
-                delta = QPointF( boundingRect.right() - bRect.width(), bRect.y()) - bRect.topLeft();
-                break;
-            case VerticalTopAlignment:
-                delta = QPointF( bRect.x(), boundingRect.top()) - bRect.topLeft();
-                break;
-            case VerticalCenterAlignment:
-                delta = QPointF(  bRect.x(), boundingRect.center().y() - bRect.height()/2) - bRect.topLeft();
-                break;
-            case VerticalBottomAlignment:
-                delta = QPointF(  bRect.x(), boundingRect.bottom() - bRect.height()) - bRect.topLeft();
-                break;
+        switch (align) {
+        case HorizontalLeftAlignment:
+            delta = QPointF(boundingRect.left(), bRect.y()) - bRect.topLeft();
+            break;
+        case HorizontalCenterAlignment:
+            delta = QPointF(boundingRect.center().x() - bRect.width() / 2, bRect.y()) - bRect.topLeft();
+            break;
+        case HorizontalRightAlignment:
+            delta = QPointF(boundingRect.right() - bRect.width(), bRect.y()) - bRect.topLeft();
+            break;
+        case VerticalTopAlignment:
+            delta = QPointF(bRect.x(), boundingRect.top()) - bRect.topLeft();
+            break;
+        case VerticalCenterAlignment:
+            delta = QPointF(bRect.x(), boundingRect.center().y() - bRect.height() / 2) - bRect.topLeft();
+            break;
+        case VerticalBottomAlignment:
+            delta = QPointF(bRect.x(), boundingRect.bottom() - bRect.height()) - bRect.topLeft();
+            break;
         };
         newPositions  << position + delta;
 //kDebug(30006) <<"-> moving" <<  position.x() <<"," << position.y() <<" to" <<
@@ -83,7 +82,7 @@ KoShapeAlignCommand::KoShapeAlignCommand( const QList<KoShape*> &shapes, Align a
     }
     d->command = new KoShapeMoveCommand(shapes, previousPositions, newPositions);
 
-    setText( i18n( "Align shapes" ) );
+    setText(i18n("Align shapes"));
 }
 
 KoShapeAlignCommand::~KoShapeAlignCommand()

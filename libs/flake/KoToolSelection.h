@@ -28,7 +28,8 @@
  * This object is provided for applications to operate on that selection.  Copy paste
  * come to mind, but also marking the selected text bold.
  */
-class FLAKE_EXPORT KoToolSelection : public QObject {
+class FLAKE_EXPORT KoToolSelection : public QObject
+{
     Q_OBJECT
 public:
     /**
@@ -39,7 +40,9 @@ public:
     virtual ~KoToolSelection();
 
     /// return true if the tool currently has something selected that can be copied or deleted
-    virtual bool hasSelection() { return false; }
+    virtual bool hasSelection() {
+        return false;
+    }
 };
 
 #endif

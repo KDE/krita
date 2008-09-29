@@ -20,8 +20,8 @@
 #include "KoGuidesTool.h"
 #include "KoCanvasBase.h"
 
-KoGuidesTool::KoGuidesTool( KoCanvasBase * canvas )
-    : KoTool( canvas )
+KoGuidesTool::KoGuidesTool(KoCanvasBase * canvas)
+        : KoTool(canvas)
 {
 }
 

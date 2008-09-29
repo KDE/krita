@@ -39,7 +39,7 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoShapeLockCommand(const QList<KoShape*> &shapes, const QList<bool> &oldLock, const QList<bool> &newLock,
-                        QUndoCommand *parent = 0);
+                       QUndoCommand *parent = 0);
     ~KoShapeLockCommand();
 
     /// redo the command

@@ -33,7 +33,7 @@ public:
 };
 
 KoImageCollection::KoImageCollection()
-    : d(new Private())
+        : d(new Private())
 {
 }
 
@@ -74,19 +74,18 @@ bool KoImageCollection::completeLoading(KoStore *store)
     return true;
 }
 
-bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter * manifestWriter )
+bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter * manifestWriter)
 {
     foreach(KoImageData *image, d->images) {
-        if (image->isTaggedForSaving())
-        {
+        if (image->isTaggedForSaving()) {
             if (! store->open(image->storeHref()))
                 return false;
             bool ok = image->saveToFile(new KoStoreDevice(store));
             store->close();
             if (! ok)
                 return false;
-            const QString mimetype( KMimeType::findByPath( image->storeHref(), 0 ,true )->name() );
-            manifestWriter->addManifestEntry( image->storeHref(), mimetype );
+            const QString mimetype(KMimeType::findByPath(image->storeHref(), 0 , true)->name());
+            manifestWriter->addManifestEntry(image->storeHref(), mimetype);
         }
     }
     return true;

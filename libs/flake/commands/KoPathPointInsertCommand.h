@@ -36,14 +36,14 @@ public:
      * Command to insert path points.
      *
      * This splits the segments at the given position by inserting new points.
-     * The De Casteljau algorithm is used for calculating the position of the new 
+     * The De Casteljau algorithm is used for calculating the position of the new
      * points.
      *
      * @param pointDataList describing the segments to split
      * @param insertPosition the position to insert at [0..1]
      * @param parent the parent command used for macro commands
      */
-    KoPathPointInsertCommand( const QList<KoPathPointData> & pointDataList, qreal insertPosition, QUndoCommand *parent = 0 );
+    KoPathPointInsertCommand(const QList<KoPathPointData> & pointDataList, qreal insertPosition, QUndoCommand *parent = 0);
     virtual ~KoPathPointInsertCommand();
 
     /// redo the command

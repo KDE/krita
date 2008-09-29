@@ -49,7 +49,7 @@ public:
 };
 
 KoShapeRegistry::KoShapeRegistry()
-    : d(new Private())
+        : d(new Private())
 {
 }
 
@@ -64,9 +64,9 @@ void KoShapeRegistry::init()
     config.whiteList = "FlakePlugins";
     config.blacklist = "FlakePluginsDisabled";
     config.group = "koffice";
-    KoPluginLoader::instance()->load( QString::fromLatin1("KOffice/Flake"),
-                                      QString::fromLatin1("[X-Flake-MinVersion] <= 0"),
-                                      config);
+    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Flake"),
+                                     QString::fromLatin1("[X-Flake-MinVersion] <= 0"),
+                                     config);
     config.whiteList = "ShapePlugins";
     config.blacklist = "ShapePluginsDisabled";
     KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Shape"),
@@ -74,16 +74,16 @@ void KoShapeRegistry::init()
                                      config);
 
     // Also add our hard-coded basic shape
-    add( new KoPathShapeFactory(this, QStringList()) );
-    add( new KoConnectionShapeFactory( this ) );
+    add(new KoPathShapeFactory(this, QStringList()));
+    add(new KoConnectionShapeFactory(this));
 
     // Now all shape factories are registered with us, determine their
     // assocated odf tagname & priority and prepare ourselves for
     // loading ODF.
 
     QList<KoShapeFactory*> factories = values();
-    for ( int i = 0; i < factories.size(); ++i ) {
-        insertFactory( factories[i] );
+    for (int i = 0; i < factories.size(); ++i) {
+        insertFactory(factories[i]);
     }
 }
 
@@ -96,102 +96,98 @@ KoShapeRegistry* KoShapeRegistry::instance()
     return s_instance;
 }
 
-void KoShapeRegistry::addFactory( KoShapeFactory * factory )
+void KoShapeRegistry::addFactory(KoShapeFactory * factory)
 {
-    add( factory );
-    insertFactory( factory );
+    add(factory);
+    insertFactory(factory);
 }
 
-void KoShapeRegistry::insertFactory( KoShapeFactory * factory )
+void KoShapeRegistry::insertFactory(KoShapeFactory * factory)
 {
-    if ( factory->odfNameSpace().isEmpty() || factory->odfElementNames().isEmpty() )
-    {
-        kDebug(30006) <<"Shape factory" << factory->id() <<" does not have OdfNamespace defined, ignoring";
-    }
-    else {
-        foreach( QString elementName, factory->odfElementNames() ) {
+    if (factory->odfNameSpace().isEmpty() || factory->odfElementNames().isEmpty()) {
+        kDebug(30006) << "Shape factory" << factory->id() << " does not have OdfNamespace defined, ignoring";
+    } else {
+        foreach(QString elementName, factory->odfElementNames()) {
 
-            QPair<QString, QString> p ( factory->odfNameSpace(), elementName );
+            QPair<QString, QString> p(factory->odfNameSpace(), elementName);
 
             QMultiMap<int, KoShapeFactory*> priorityMap = d->factoryMap[p];
 
-            d->factoryMap[p].insert( factory->loadingPriority(), factory );
+            d->factoryMap[p].insert(factory->loadingPriority(), factory);
 
-            kDebug(30006) <<"Inserting factory" << factory->id() <<" for"
-                << p << " with priority "
-                << factory->loadingPriority() << " into factoryMap making "
-                << d->factoryMap[p].size() << " entries. " << endl;
+            kDebug(30006) << "Inserting factory" << factory->id() << " for"
+            << p << " with priority "
+            << factory->loadingPriority() << " into factoryMap making "
+            << d->factoryMap[p].size() << " entries. " << endl;
         }
     }
 }
 
 KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoadingContext & context) const
 {
-    kDebug(30006) <<"Going to check for" << e.namespaceURI() <<":" << e.tagName();
+    kDebug(30006) << "Going to check for" << e.namespaceURI() << ":" << e.tagName();
 
     // If the element is in a frame, the frame is already added by the
     // application and we only want to create a shape from the
     // embedded element. The very first shape we create is accepted.
     // XXX: we might want to have some code to determine which is the
     // "best" of the creatable shapes.
-    if ( e.tagName() == "frame" && e.namespaceURI() == KoXmlNS::draw ) {
+    if (e.tagName() == "frame" && e.namespaceURI() == KoXmlNS::draw) {
 
         KoXmlElement element;
-        forEachElement( element, e ) {
-            KoShape * shape = createShapeInternal( e, context, element );
-            if ( shape ) {
+        forEachElement(element, e) {
+            KoShape * shape = createShapeInternal(e, context, element);
+            if (shape) {
                 return shape;
             }
         }
     }
     // Hardwire the group shape into the loading as it should not appear
     // in the shape selector
-    else if ( e.localName() == "g" && e.namespaceURI() == KoXmlNS::draw )
-    {
+    else if (e.localName() == "g" && e.namespaceURI() == KoXmlNS::draw) {
         KoShapeGroup * group = new KoShapeGroup();
 
         context.odfLoadingContext().styleStack().save();
-        bool loaded = group->loadOdf( e, context );
+        bool loaded = group->loadOdf(e, context);
         context.odfLoadingContext().styleStack().restore();
 
-        if ( loaded )
+        if (loaded)
             return group;
 
         delete group;
-    }
-    else {
-        return createShapeInternal( e, context, e );
+    } else {
+        return createShapeInternal(e, context, e);
     }
 
     return 0;
 }
 
-KoShape * KoShapeRegistry::createShapeInternal( const KoXmlElement & fullElement, KoShapeLoadingContext & context, const KoXmlElement & element ) const
+KoShape * KoShapeRegistry::createShapeInternal(const KoXmlElement & fullElement, KoShapeLoadingContext & context, const KoXmlElement & element) const
 {
     QPair<QString, QString> p = QPair<QString, QString>(element.namespaceURI(), element.tagName());
     kDebug(30006) << p;
 
-    if ( !d->factoryMap.contains( p ) ) return 0;
+    if (!d->factoryMap.contains(p)) return 0;
 
-    QMultiMap<int,KoShapeFactory*> priorityMap = d->factoryMap[p];
+    QMultiMap<int, KoShapeFactory*> priorityMap = d->factoryMap[p];
     QList<KoShapeFactory*> factories = priorityMap.values();
 
     // Higher numbers are more specific, map is sorted by keys
-    for ( int i = factories.size() - 1; i >= 0; --i ) {
+    for (int i = factories.size() - 1; i >= 0; --i) {
 
         KoShapeFactory * factory = factories[i];
-        if ( factory->supports( element ) ) {
+        if (factory->supports(element)) {
 
-            KoShape * shape = factory->createDefaultShapeAndInit( context.dataCenterMap() );
+            KoShape * shape = factory->createDefaultShapeAndInit(context.dataCenterMap());
 
-            if ( shape->shapeId().isEmpty() )
+            if (shape->shapeId().isEmpty())
                 shape->setShapeId(factory->id());
 
             context.odfLoadingContext().styleStack().save();
-            bool loaded = shape->loadOdf( fullElement, context );
+            bool loaded = shape->loadOdf(fullElement, context);
             context.odfLoadingContext().styleStack().restore();
 
-            if ( loaded )
+            if (loaded)
                 return shape;
 
             // Maybe a shape with a lower priority can load our

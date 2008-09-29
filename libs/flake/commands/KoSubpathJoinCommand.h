@@ -39,7 +39,7 @@ public:
      * @param pointData2 the data of the second point to join
      * @param parent the parent command used for macro commands
      */
-    KoSubpathJoinCommand( const KoPathPointData &pointData1, const KoPathPointData &pointData2, QUndoCommand *parent = 0 );
+    KoSubpathJoinCommand(const KoPathPointData &pointData1, const KoPathPointData &pointData2, QUndoCommand *parent = 0);
     ~KoSubpathJoinCommand();
 
     /// redo the command
@@ -55,8 +55,7 @@ private:
     QPointF m_oldControlPoint2;
     KoPathPoint::KoPointProperties m_oldProperties1;
     KoPathPoint::KoPointProperties m_oldProperties2;
-    enum Reverse
-    {
+    enum Reverse {
         ReverseFirst = 1,
         ReverseSecond = 2
     };

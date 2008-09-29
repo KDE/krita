@@ -35,28 +35,28 @@ class QRectF;
 /**
  * Tool for creating path shapes.
  */
-class FLAKE_EXPORT KoCreatePathTool : public KoTool 
+class FLAKE_EXPORT KoCreatePathTool : public KoTool
 {
 public:
     /**
      * Constructor for the tool that allows you to create new paths by hand.
      * @param canvas the canvas this tool will be working for.
      */
-    explicit KoCreatePathTool( KoCanvasBase * canvas );
+    explicit KoCreatePathTool(KoCanvasBase * canvas);
     virtual ~KoCreatePathTool();
 
-    void paint( QPainter &painter, const KoViewConverter &converter );
+    void paint(QPainter &painter, const KoViewConverter &converter);
 
-    void mousePressEvent( KoPointerEvent *event );
-    void mouseDoubleClickEvent( KoPointerEvent *event );
-    void mouseMoveEvent( KoPointerEvent *event );
-    void mouseReleaseEvent( KoPointerEvent *event );
+    void mousePressEvent(KoPointerEvent *event);
+    void mouseDoubleClickEvent(KoPointerEvent *event);
+    void mouseMoveEvent(KoPointerEvent *event);
+    void mouseReleaseEvent(KoPointerEvent *event);
     virtual void keyPressEvent(QKeyEvent *event);
 
 public slots:
-    void activate( bool temporary = false );
+    void activate(bool temporary = false);
     virtual void deactivate();
-    void resourceChanged( int key, const QVariant & res );
+    void resourceChanged(int key, const QVariant & res);
 
 protected:
     /// add path shape to document
@@ -67,7 +67,7 @@ protected:
     KoPathShape *m_shape;
 
 private:
-    QRectF handleRect( const QPointF &p );
+    QRectF handleRect(const QPointF &p);
     void repaintActivePoint();
 
     KoPathPoint *m_activePoint;

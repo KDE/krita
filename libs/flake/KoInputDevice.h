@@ -33,7 +33,8 @@
  * separately and be given their own tool instance to do their work.
  * @see KoToolFactory::inputDeviceAgnostic()
  */
-class FLAKE_EXPORT KoInputDevice {
+class FLAKE_EXPORT KoInputDevice
+{
 public:
     /**
      * Copy constructor.
@@ -91,13 +92,13 @@ private:
     Private * const d;
 };
 
-inline uint qHash( const KoInputDevice & key )
+inline uint qHash(const KoInputDevice & key)
 {
-    return qHash( QString(":%1:%2:%3:%4")
-                  .arg( key.device() )
-                  .arg( key.pointer() )
-                  .arg( key.uniqueTabletId() )
-                  .arg( key.isMouse() ) );
+    return qHash(QString(":%1:%2:%3:%4")
+                 .arg(key.device())
+                 .arg(key.pointer())
+                 .arg(key.uniqueTabletId())
+                 .arg(key.isMouse()));
 }
 
 #endif

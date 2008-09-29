@@ -37,31 +37,32 @@ class KoPathToolHandle;
 class QAction;
 
 /// The tool for editing a KoPathShape or a KoParameterShape
-class FLAKE_TEST_EXPORT KoPathTool : public KoTool {
+class FLAKE_TEST_EXPORT KoPathTool : public KoTool
+{
     Q_OBJECT
 public:
     explicit KoPathTool(KoCanvasBase *canvas);
     ~KoPathTool();
 
     /// reimplemented
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
     /// reimplemented
     virtual void repaintDecorations();
 
     /// reimplemented
-    virtual void mousePressEvent( KoPointerEvent *event );
+    virtual void mousePressEvent(KoPointerEvent *event);
     /// reimplemented
-    virtual void mouseMoveEvent( KoPointerEvent *event );
+    virtual void mouseMoveEvent(KoPointerEvent *event);
     /// reimplemented
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
     /// reimplemented
     virtual void keyPressEvent(QKeyEvent *event);
     /// reimplemented
     virtual void keyReleaseEvent(QKeyEvent *event);
 
     /// reimplemented
-    virtual void activate (bool temporary=false);
+    virtual void activate(bool temporary = false);
     /// reimplemented
     virtual void deactivate();
 
@@ -76,10 +77,10 @@ public:
      * The position is expected to be in document coordinates.
      * @return the handle rectangle in document coordinates
      */
-    QRectF handleRect( const QPointF &p );
+    QRectF handleRect(const QPointF &p);
 
     /// repaints the specified rect
-    void repaint( const QRectF &repaintRect );
+    void repaint(const QRectF &repaintRect);
 
 signals:
     void typeChanged(int types);
@@ -96,7 +97,7 @@ private:
     QPointF m_lastPoint;
 
 private slots:
-    void pointTypeChanged( QAction *type );
+    void pointTypeChanged(QAction *type);
     void insertPoints();
     void removePoints();
     void segmentToLine();
@@ -105,7 +106,7 @@ private slots:
     void joinPoints();
     void breakAtPoint();
     void breakAtSegment();
-    void resourceChanged( int key, const QVariant & res );
+    void resourceChanged(int key, const QVariant & res);
     void pointSelectionChanged();
     void updateActions();
     void pointToLine();

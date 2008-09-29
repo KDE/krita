@@ -68,9 +68,11 @@ public:
 private:
     void storeOldProperties();
     void recalcList(const QTextBlock &block) const;
+    KoListLevelProperties listLevelProperties(KoListStyle::Style style) const;
 
     QTextBlock m_block;
     KoList *m_list;
+    KoListStyle::Style m_style;
     KoListLevelProperties m_formerProperties;
 };
 

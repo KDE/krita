@@ -29,7 +29,8 @@
 ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style style, QUndoCommand *parent)
         : TextCommandBase(parent),
         m_block(block),
-        m_list(0)
+        m_list(0),
+        m_style(style)
 {
 // kDebug() <<"ChangeListCommand" << style;
     Q_ASSERT(block.isValid());
@@ -37,8 +38,9 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
     KoTextDocument document(block.document());
 
     if (style != KoListStyle::NoItem) {
+        m_list = document.list(block);
         QTextBlock prev = block.previous();
-        if (prev.isValid() && prev.textList()) {
+        if (m_list == 0 && prev.isValid() && prev.textList()) {
             QTextListFormat format = prev.textList()->format();
             if (format.intProperty(QTextListFormat::ListStyle) == static_cast<int>(style)) { //kDebug() <<" merge with prev";
                 m_list = document.list(prev);
@@ -52,22 +54,8 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
             }
         }
         if (m_list == 0) { // create a new one
-            KoListLevelProperties llp;
-            if (block.textList()) { // find out current list-level / etc
-                llp = KoListLevelProperties::fromTextList(block.textList());
-//kDebug() <<" reuse current (level:" << llp.level() <<")";
-            }
-            llp.setStyle(style);
-            if (style == KoListStyle::SquareItem || style == KoListStyle::DiscItem ||
-                    style == KoListStyle::CircleItem || style == KoListStyle::BoxItem ||
-                    style == KoListStyle::RhombusItem || style == KoListStyle::HeavyCheckMarkItem ||
-                    style == KoListStyle::BallotXItem || style == KoListStyle::RightArrowItem ||
-                    style == KoListStyle::RightArrowHeadItem)
-                llp.setListItemSuffix(""); // for non-numbered items, remove any suffix.
-            else
-                llp.setListItemSuffix("."); // for numbered items, add a trailing dot.
             KoListStyle listStyle;
-            listStyle.setLevelProperties(llp);
+            listStyle.setLevelProperties(listLevelProperties(style));
             m_list = new KoList(block.document(), &listStyle);
         }
     }
@@ -90,6 +78,10 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle *style
     setText(i18n("Change List"));
 }
 
+ChangeListCommand::~ChangeListCommand()
+{
+}
+
 void ChangeListCommand::storeOldProperties()
 {
     if (m_block.textList())
@@ -98,8 +90,19 @@ void ChangeListCommand::storeOldProperties()
         m_formerProperties.setStyle(KoListStyle::NoItem);
 }
 
-ChangeListCommand::~ChangeListCommand()
+KoListLevelProperties ChangeListCommand::listLevelProperties(KoListStyle::Style style) const
 {
+    KoListLevelProperties llp;
+    llp.setStyle(style);
+    if (style == KoListStyle::SquareItem || style == KoListStyle::DiscItem 
+        || style == KoListStyle::CircleItem || style == KoListStyle::BoxItem 
+        || style == KoListStyle::RhombusItem || style == KoListStyle::HeavyCheckMarkItem 
+        || style == KoListStyle::BallotXItem || style == KoListStyle::RightArrowItem 
+        || style == KoListStyle::RightArrowHeadItem)
+        llp.setListItemSuffix(""); // for non-numbered items, remove any suffix.
+    else
+        llp.setListItemSuffix("."); // for numbered items, add a trailing dot.
+    return llp;
 }
 
 void ChangeListCommand::recalcList(const QTextBlock &block) const
@@ -115,6 +118,11 @@ void ChangeListCommand::redo()
     UndoRedoFinalizer finalizer(this, m_tool);
     if (m_list == 0) { // no list item (anymore)
         KoList::remove(m_block);
+    } else if (m_block.textList()) {
+        KoListStyle *listStyle = m_list->style();
+        KoListLevelProperties llp = listStyle->levelProperties(1);
+        if (llp.style() != m_style)
+            listStyle->setLevelProperties(listLevelProperties(m_style));
     } else {
         m_list->add(m_block, 0);
     }

@@ -66,9 +66,9 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
                 llp.setListItemSuffix(""); // for non-numbered items, remove any suffix.
             else
                 llp.setListItemSuffix("."); // for numbered items, add a trailing dot.
-            KoListStyle style;
-            style.setLevelProperties(llp);
-            m_list = new KoList(block.document(), &style);
+            KoListStyle listStyle;
+            listStyle.setLevelProperties(llp);
+            m_list = new KoList(block.document(), &listStyle);
         }
     }
 

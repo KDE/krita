@@ -83,6 +83,8 @@ public:
 private:
     class Private;
     Private *d;
+
+    Q_PRIVATE_SLOT(d, void styleChanged(int))
 };
 
 Q_DECLARE_METATYPE(KoList*)

@@ -33,8 +33,8 @@
 class KoList::Private
 {
 public:
-    Private(const QTextDocument *document)
-    : style(0), textLists(10), document(document)
+    Private(KoList *q, const QTextDocument *document)
+    : q(q), style(0), textLists(10), document(document)
     {
     }
 
@@ -48,23 +48,24 @@ public:
             userData->setCounterWidth(-1.0);
     }
 
+    void styleChanged(int level)
+    {
+        Q_UNUSED(level);
+        q->setStyle(style);
+    }
+
+    KoList *q;
     KoListStyle *style;
     QVector<QPointer<QTextList> > textLists;
     const QTextDocument *document;
     QMap<int, QVariant> properties;
-};
-
+}
+;
 KoList::KoList(const QTextDocument *document, KoListStyle *style)
-    : QObject(const_cast<QTextDocument *>(document)), d(new Private(document))
+    : QObject(const_cast<QTextDocument *>(document)), d(new Private(this, document))
 {
     Q_ASSERT(document);
-    if (style) {
-        d->style = style->clone(this);
-    } else {
-        KoStyleManager *styleManager = KoTextDocument(document).styleManager();
-        Q_ASSERT(styleManager);
-        d->style = styleManager->defaultListStyle();
-    }
+    setStyle(style);
     KoTextDocument(document).addList(this);
 }
 
@@ -105,6 +106,9 @@ KoList *KoList::applyStyle(const QTextBlock &block, KoListStyle *style, int leve
 
 void KoList::add(const QTextBlock &block, int level)
 {
+    if (!block.isValid())
+        return;
+
     if (level == 0) { // fetch the first proper level we have
         level = 1; // if nothing works...
         for (int i = 1; i <= 10; i++) {
@@ -159,8 +163,18 @@ void KoList::remove(const QTextBlock &block)
 
 void KoList::setStyle(KoListStyle *style)
 {
-    delete d->style;
-    d->style = style->clone(this);
+    if (style == 0) {
+        KoStyleManager *styleManager = KoTextDocument(d->document).styleManager();
+        Q_ASSERT(styleManager);
+        style = styleManager->defaultListStyle();
+    }
+
+    if (style != d->style) {
+        disconnect(d->style, 0, this, 0);
+        d->style = style->clone(this);
+        connect(d->style, SIGNAL(styleChanged(int)), this, SLOT(styleChanged(int)));
+    }
+
     for (int i = 0; i < d->textLists.count(); i++) {
         QTextList *textList = d->textLists[i];
         if (!textList)
@@ -169,7 +183,7 @@ void KoList::setStyle(KoListStyle *style)
         QTextListFormat format;
         properties.applyStyle(format);
         textList->setFormat(format);
-        // invalidate the block data too?
+        d->invalidate(textList->item(0));
     }
 }
 
@@ -230,3 +244,6 @@ bool KoList::continueNumbering(int level) const
         return false;
     return bitArray.testBit(level-1);
 }
+
+#include "KoList.moc"
+

@@ -199,6 +199,7 @@ public:
 
 signals:
     void nameChanged(const QString &newName);
+    void styleChanged(int level);
 
 private:
     class Private;

@@ -142,6 +142,7 @@ QTextListFormat KoListStyle::listFormat(int level)
 void KoListStyle::setLevelProperties(const KoListLevelProperties &properties)
 {
     d->levels.insert(properties.level(), properties);
+    emit styleChanged(properties.level());
 }
 
 bool KoListStyle::hasLevelProperties(int level) const

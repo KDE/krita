@@ -76,6 +76,7 @@
 #include <QTimer>
 #include <QUndoCommand>
 #include <QSignalMapper>
+#include <QTextDocumentFragment>
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoShapeSavingContext.h>
@@ -657,7 +658,9 @@ void TextTool::copy() const
     KoTextOdfSaveHelper saveHelper(m_textShapeData, from, to);
     KoDrag drag;
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
-    // TODO add also a text version to the clipboard
+    QTextDocumentFragment fragment = m_caret.selection();
+    drag.setData("text/html", fragment.toHtml("utf-8").toUtf8());
+    drag.setData("text/plain", fragment.toPlainText().toUtf8());
     drag.addToClipboard();
 }
 

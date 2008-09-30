@@ -124,20 +124,16 @@ void TOCSource::buildFromDocument(const QTextDocument *source, QTextCursor *targ
     }
     block = source->begin();
     while (block.isValid()) {
-        if (block.userData()) {
-            KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
-            if (blockData) {
-                if (blockData->outlineLevel() > 0) {
-                    KoShape *shape = docLayout->shapeForPosition(block.position());
-                    if (shape) {
-                        KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData *>(shape->userData());
-                        target->insertText("TOC entry " +
-                                           QString::number(blockData->outlineLevel()) + " :" + block.text() +
-                                           ";page" + QString::number(shapeData->page()->pageNumber() + 1)
-                                          );
-                        target->insertBlock();
-                    }
-                }
+        int outlineLevel = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
+        if (outlineLevel > 0) {
+            KoShape *shape = docLayout->shapeForPosition(block.position());
+            if (shape) {
+                KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData *>(shape->userData());
+                target->insertText("TOC entry " +
+                                   QString::number(outlineLevel) + " :" + block.text() +
+                                   ";page" + QString::number(shapeData->page()->pageNumber() + 1)
+                                  );
+                target->insertBlock();
             }
         }
         block = block.next();

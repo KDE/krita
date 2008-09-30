@@ -834,6 +834,16 @@ int KoParagraphStyle::listLevel() const
     return propertyInt(ListLevel);
 }
 
+void KoParagraphStyle::setOutlineLevel(int outline)
+{
+    setProperty(OutlineLevel, outline);
+}
+
+int KoParagraphStyle::outlineLevel() const
+{
+    return propertyInt(OutlineLevel);
+}
+
 void KoParagraphStyle::setIsListHeader(bool on)
 {
     setProperty(IsListHeader, on);

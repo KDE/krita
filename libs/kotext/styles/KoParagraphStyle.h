@@ -118,8 +118,9 @@ public:
         TabPositions,           ///< A list of tab positions
         TextProgressionDirection,
 
-        MasterPageName         ///< Optional name of the master-page
-
+        MasterPageName,         ///< Optional name of the master-page
+        
+        OutlineLevel            ///< Outline level for headings
 // do 15.5.24
 // continue at 15.5.28
     };
@@ -466,6 +467,18 @@ public:
     void setListLevel(int value);
     /// return the list level.
     int listLevel() const;
+
+    /**
+     * Return the outline level of this block, or 0 if it's not a heading.
+     * This information is here and not in the styles because the OpenDocument specification says so.
+     * See ODF Spec 1.1, §14.1, Outline Numbering Level, but also other parts of the specification.
+     */
+    int outlineLevel() const;
+
+    /**
+     * Change this block outline level
+     */
+    void setOutlineLevel(int outline);
 
     /// copy all the properties from the other style to this style, effectively duplicating it.
     void copyProperties(const KoParagraphStyle *style);

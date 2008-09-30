@@ -147,11 +147,10 @@ QHash<QTextList *, QString> KoTextWriter::saveListStyles(QTextBlock block, int t
 
 void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
 {
-    KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
-    if (blockData && blockData->outlineLevel() > 0) {
-        KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
+    int outlineLevel = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
+    if (outlineLevel > 0) {
         m_writer->startElement("text:h", false);
-        m_writer->addAttribute("text:outline-level", blockData->outlineLevel());
+        m_writer->addAttribute("text:outline-level", outlineLevel);
     } else {
         m_writer->startElement("text:p", false);
     }
@@ -224,10 +223,7 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
         if ((block.begin().atEnd()) && (!block.next().isValid()))   // Do not add an extra empty line at the end...
             break;
 
-        bool isHeading = false;
-        KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
-        if (blockData)
-            isHeading = (blockData->outlineLevel() > 0);
+        bool isHeading = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel) > 0;
         QTextList *textList = block.textList();
         if (textList && !isHeading) {
             if (!textLists.contains(textList)) {

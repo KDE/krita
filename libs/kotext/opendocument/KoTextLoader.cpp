@@ -341,15 +341,9 @@ void KoTextLoader::loadHeading(const KoXmlElement& element, QTextCursor& cursor)
         kWarning(32500) << "paragraph style " << styleName << " not found";
     }
 
-    KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
-    if (!blockData) {
-        // Ok, we must create the KoTextBlockData for this block. Quite logical indeed... Except if KoParagraphStyle does create the block data for us ?
-        blockData = new KoTextBlockData();
-        block.setUserData(blockData);
-    }
-    if (blockData) {
-        blockData->setOutlineLevel(level);
-    }
+    QTextBlockFormat blockFormat;
+    blockFormat.setProperty(KoParagraphStyle::OutlineLevel, level);
+    cursor.mergeBlockFormat(blockFormat);
 
     if (!d->currentList) { // apply <text:outline-style> (if present) only if heading is not within a <text:list>
         KoListStyle *outlineStyle = d->styleManager->outlineStyle();

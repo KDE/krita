@@ -27,27 +27,18 @@
 #include <QTextBlock>
 #include <QPointer>
 #include <QMetaObject>
+#include <QTextCursor>
 
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoShapeLoadingContext.h>
-#include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 
 #include "KoTextPage.h"
-#include "KoInlineObject.h"
-#include "KoInlineTextObjectManager.h"
-#include "styles/KoStyleManager.h"
-#include "styles/KoCharacterStyle.h"
-#include "styles/KoParagraphStyle.h"
-#include "styles/KoListStyle.h"
-#include "styles/KoListLevelProperties.h"
-#include "KoTextDocumentLayout.h"
-#include "KoTextBlockData.h"
-#include "KoTextDocument.h"
 
 #include "opendocument/KoTextLoader.h"
+#include "opendocument/KoTextWriter.h"
 
 #include "KoTextDebug.h"
 
@@ -65,12 +56,6 @@ public:
             textpage(0)
     {
     }
-
-    QString saveParagraphStyle(KoShapeSavingContext &context, const KoStyleManager *manager, const QTextBlock &block);
-    QString saveCharacterStyle(KoShapeSavingContext &context, const KoStyleManager *manager,
-                               const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat);
-    QHash<QTextList *, QString> saveListStyles(KoShapeSavingContext &context, const KoStyleManager *manager,
-            QTextBlock block, int to);
 
     QTextDocument *document;
     bool ownsDocument, dirty;
@@ -206,241 +191,10 @@ bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContex
     return true;
 }
 
-QString KoTextShapeDataPrivate::saveParagraphStyle(KoShapeSavingContext &context, const KoStyleManager *styleManager, const QTextBlock &block)
+void KoTextShapeData::saveOdf(KoShapeSavingContext &context, int from, int to) const
 {
-    Q_ASSERT(styleManager);
-    KoParagraphStyle *defaultParagraphStyle = styleManager->defaultParagraphStyle();
-
-    QTextBlockFormat blockFormat = block.blockFormat();
-    QTextCharFormat charFormat = QTextCursor(block).blockCharFormat(); // fix this after TT Task 219905
-
-    KoParagraphStyle *originalParagraphStyle = styleManager->paragraphStyle(blockFormat.intProperty(KoParagraphStyle::StyleId));
-    if (!originalParagraphStyle)
-        originalParagraphStyle = defaultParagraphStyle;
-
-    QString generatedName;
-    QString displayName = originalParagraphStyle->name();
-    QString internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace('%', '_');
-
-    // we'll convert the blockFormat to a KoParagraphStyle to check for local changes.
-    KoParagraphStyle paragStyle(blockFormat, charFormat);
-    if (paragStyle == (*originalParagraphStyle)) { // This is the real, unmodified character style.
-        if (originalParagraphStyle != defaultParagraphStyle) {
-            KoGenStyle style(KoGenStyle::StyleUser, "paragraph");
-            originalParagraphStyle->saveOdf(style);
-            generatedName = context.mainStyles().lookup(style, internalName, KoGenStyles::DontForceNumbering);
-        }
-    } else { // There are manual changes... We'll have to store them then
-        KoGenStyle style(KoGenStyle::StyleAuto, "paragraph", internalName);
-        if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
-            style.setAutoStyleInStylesDotXml(true);
-        if (originalParagraphStyle)
-            paragStyle.removeDuplicates(*originalParagraphStyle);
-        paragStyle.saveOdf(style);
-        generatedName = context.mainStyles().lookup(style, "P");
-    }
-    return generatedName;
-}
-
-QString KoTextShapeDataPrivate::saveCharacterStyle(KoShapeSavingContext &context, const KoStyleManager *styleManager,
-        const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat)
-{
-    Q_ASSERT(styleManager);
-    KoCharacterStyle *defaultCharStyle = styleManager->defaultParagraphStyle()->characterStyle();
-
-    KoCharacterStyle *originalCharStyle = styleManager->characterStyle(charFormat.intProperty(KoCharacterStyle::StyleId));
-    if (!originalCharStyle)
-        originalCharStyle = defaultCharStyle;
-
-    QString generatedName;
-    QString displayName = originalCharStyle->name();
-    QString internalName = QString(QUrl::toPercentEncoding(displayName, "", " ")).replace('%', '_');
-
-    KoCharacterStyle charStyle(charFormat);
-    // we'll convert it to a KoCharacterStyle to check for local changes.
-    if (charStyle == (*originalCharStyle)) { // This is the real, unmodified character style.
-        if (originalCharStyle != defaultCharStyle) {
-            charStyle.removeDuplicates(blockCharFormat);
-            if (!charStyle.isEmpty()) {
-                KoGenStyle style(KoGenStyle::StyleUser, "text");
-                originalCharStyle->saveOdf(style);
-                generatedName = context.mainStyles().lookup(style, internalName, KoGenStyles::DontForceNumbering);
-            }
-        }
-    } else { // There are manual changes... We'll have to store them then
-        KoGenStyle style(KoGenStyle::StyleAuto, "text", originalCharStyle != defaultCharStyle ? internalName : "" /*parent*/);
-        if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
-            style.setAutoStyleInStylesDotXml(true);
-        charStyle.removeDuplicates(*originalCharStyle);
-        charStyle.removeDuplicates(blockCharFormat);
-        if (!charStyle.isEmpty()) {
-            charStyle.saveOdf(style);
-            generatedName = context.mainStyles().lookup(style, "T");
-        }
-    }
-
-    return generatedName;
-}
-
-QHash<QTextList *, QString> KoTextShapeDataPrivate::saveListStyles(KoShapeSavingContext &context, const KoStyleManager *styleManager,
-        QTextBlock block, int to)
-{
-    Q_UNUSED(styleManager);
-    QSet<KoList *> generatedLists;
-    QHash<QTextList *, QString> listStyles;
-    KoTextDocument document(block.document());
-
-    for (;block.isValid() && ((to == -1) || (block.position() < to)); block = block.next()) {
-        KoList *list = document.list(block);
-        Q_ASSERT(!block.textList() || list);
-        if (!list || generatedLists.contains(list))
-            continue;
-        KoListStyle *listStyle = list->style();
-        bool automatic = listStyle->styleId() == 0;
-        KoGenStyle style(automatic ? KoGenStyle::StyleListAuto : KoGenStyle::StyleList);
-        listStyle->saveOdf(style);
-        QString generatedName = context.mainStyles().lookup(style, listStyle->name());
-        listStyles[block.textList()] = generatedName;
-        generatedLists.insert(list);
-    }
-    return listStyles;
-}
-
-void KoTextShapeData::saveOdf(KoShapeSavingContext & context, int from, int to) const
-{
-    KoXmlWriter *writer = &context.xmlWriter();
-    QTextBlock block = d->document->findBlock(from);
-
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(d->document->documentLayout());
-    Q_ASSERT(layout);
-    Q_ASSERT(layout->inlineObjectTextManager());
-
-    KoTextDocument document(d->document);
-    KoStyleManager *styleManager = KoTextDocument(d->document).styleManager();
-
-    QHash<QTextList *, QString> listStyles = d->saveListStyles(context, styleManager, block, to);
-    QList<QTextList*> textLists; // Store the current lists being stored.
-    KoList *currentList = 0;
-
-    while (block.isValid() && ((to == -1) || (block.position() < to))) {
-        if ((block.begin().atEnd()) && (!block.next().isValid()))   // Do not add an extra empty line at the end...
-            break;
-
-        bool isHeading = false;
-        KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
-        if (blockData)
-            isHeading = (blockData->outlineLevel() > 0);
-        QTextList *textList = block.textList();
-        if (textList && !isHeading) {
-            if (!textLists.contains(textList)) {
-                KoList *list = document.list(block);
-                if (currentList != list) {
-                    while (!textLists.isEmpty()) {
-                        textLists.removeLast();
-                        writer->endElement(); // </text:list>
-                        if (!textLists.isEmpty()) {
-                            writer->endElement(); // </text:list-element>
-                        }
-                    }
-                    currentList = list;
-                } else if (!textLists.isEmpty()) // sublists should be written within a list-item
-                    writer->startElement("text:list-item", false);
-                writer->startElement("text:list", false);
-                writer->addAttribute("text:style-name", listStyles[textList]);
-                if (textList->format().hasProperty(KoListStyle::ContinueNumbering))
-                    writer->addAttribute("text:continue-numbering",
-                                         textList->format().boolProperty(KoListStyle::ContinueNumbering) ? "true" : "false");
-                textLists.append(textList);
-            } else if (textList != textLists.last()) {
-                while ((!textLists.isEmpty()) && (textList != textLists.last())) {
-                    textLists.removeLast();
-                    writer->endElement(); // </text:list>
-                    writer->endElement(); // </text:list-element>
-                }
-            }
-            const bool listHeader = block.blockFormat().boolProperty(KoParagraphStyle::IsListHeader);
-            writer->startElement(listHeader ? "text:list-header" : "text:list-item", false);
-        } else {
-            // Close any remaining list...
-            while (!textLists.isEmpty()) {
-                textLists.removeLast();
-                writer->endElement(); // </text:list>
-                if (!textLists.isEmpty()) {
-                    writer->endElement(); // </text:list-element>
-                }
-            }
-        }
-        if (isHeading) {
-            writer->startElement("text:h", false);
-            writer->addAttribute("text:outline-level", blockData->outlineLevel());
-        } else {
-            writer->startElement("text:p", false);
-        }
-
-        // Write the block format
-        QString styleName = d->saveParagraphStyle(context, styleManager, block);
-        if (!styleName.isEmpty())
-            writer->addAttribute("text:style-name", styleName);
-
-        // Write the fragments and their formats
-        QTextCursor cursor(block);
-        QTextCharFormat blockCharFormat = cursor.blockCharFormat(); // Fix this after TT task 219905
-
-        QTextBlock::iterator it;
-        for (it = block.begin(); !(it.atEnd()); ++it) {
-            QTextFragment currentFragment = it.fragment();
-            const int fragmentStart = currentFragment.position();
-            const int fragmentEnd = fragmentStart + currentFragment.length();
-            if (to != -1 && fragmentStart >= to)
-                break;
-            if (currentFragment.isValid()) {
-                QTextCharFormat charFormat = currentFragment.charFormat();
-                KoInlineObject *inlineObject = layout->inlineObjectTextManager()->inlineTextObject((const QTextCharFormat &)charFormat);
-                if (inlineObject) {
-                    inlineObject->saveOdf(context);
-                } else {
-                    QString styleName = d->saveCharacterStyle(context, styleManager, charFormat, blockCharFormat);
-
-                    if (charFormat.isAnchor()) {
-                        writer->startElement("text:a", false);
-                        writer->addAttribute("xlink:type", "simple");
-                        writer->addAttribute("xlink:href", charFormat.anchorHref());
-                    } else if (!styleName.isEmpty()) {
-                        writer->startElement("text:span", false);
-                        writer->addAttribute("text:style-name", styleName);
-                    }
-
-                    QString text = currentFragment.text();
-                    int spanFrom = fragmentStart >= from ? 0 : from;
-                    int spanTo = to == -1 ? fragmentEnd : (fragmentEnd > to ? to : fragmentEnd);
-                    if (spanFrom != fragmentStart || spanTo != fragmentEnd) { // avoid mid, if possible
-                        writer->addTextSpan(text.mid(spanFrom - fragmentStart, spanTo - spanFrom));
-                    } else {
-                        writer->addTextSpan(text);
-                    }
-
-                    if (!styleName.isEmpty() || charFormat.isAnchor())
-                        writer->endElement();
-                } // if (inlineObject)
-            } // if (fragment.valid())
-        } // foeach(fragment)
-
-        writer->endElement();
-
-        if (block.textList() && !isHeading) // We must check if we need to close a previously-opened text:list node.
-            writer->endElement();
-
-        block = block.next();
-    } // while
-
-    // Close any remaining lists
-    while (!textLists.isEmpty()) {
-        textLists.removeLast();
-        writer->endElement(); // </text:list>
-        if (!textLists.isEmpty()) {
-            writer->endElement(); // </text:list-element>
-        }
-    }
+    KoTextWriter writer(context);
+    writer.write(d->document, from, to);
 }
 
 #include "KoTextShapeData.moc"

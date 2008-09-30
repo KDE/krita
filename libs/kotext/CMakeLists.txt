@@ -74,6 +74,7 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
 
     opendocument/KoTextSharedLoadingData.cpp
     opendocument/KoTextLoader.cpp
+    opendocument/KoTextWriter.cpp
 )
 
 

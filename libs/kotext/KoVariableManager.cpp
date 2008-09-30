@@ -74,6 +74,7 @@ void KoVariableManager::remove(const QString &name)
 
 int KoVariableManager::usageCount(const QString &name) const
 {
+    Q_UNUSED(name);
     // TODO
     return 0;
 }

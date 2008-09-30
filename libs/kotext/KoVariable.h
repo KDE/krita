@@ -92,7 +92,9 @@ public:
      *
      * @return false if loading failed
      */
-    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context) {
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) {
+        Q_UNUSED(element);
+        Q_UNUSED(context)
         return false;
     }
 

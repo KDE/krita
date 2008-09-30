@@ -467,6 +467,8 @@ void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
 
 void KoTextLoader::loadSection(const KoXmlElement& sectionElem, QTextCursor& cursor)
 {
+    Q_UNUSED(sectionElem);
+    Q_UNUSED(cursor);
 }
 
 void KoTextLoader::loadNote(const KoXmlElement& noteElem, QTextCursor& cursor)
@@ -477,7 +479,7 @@ void KoTextLoader::loadNote(const KoXmlElement& noteElem, QTextCursor& cursor)
         KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
         if (note->loadOdf(noteElem)) {
             KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
-            layout->inlineObjectTextManager()->insertInlineObject(cursor, note);
+            textObjectManager->insertInlineObject(cursor, note);
         } else {
             kDebug(32500) << "Error while loading the note !";
         }
@@ -620,10 +622,10 @@ void KoTextLoader::loadSpan(const KoXmlElement& element, QTextCursor& cursor, bo
                     bookmark->setType(KoBookmark::StartBookmark);
                 else if (localName == "bookmark-end") {
                     bookmark->setType(KoBookmark::EndBookmark);
-                    KoBookmark *startBookmark = layout->inlineObjectTextManager()->bookmarkManager()->retrieveBookmark(bookmarkName);
+                    KoBookmark *startBookmark = textObjectManager->bookmarkManager()->retrieveBookmark(bookmarkName);
                     startBookmark->setEndBookmark(bookmark);
                 }
-                layout->inlineObjectTextManager()->insertInlineObject(cursor, bookmark);
+                textObjectManager->insertInlineObject(cursor, bookmark);
             }
         } else if (isTextNS && localName == "number") { // text:number
             /*                ODF Spec, §4.1.1, Formatted Heading Numbering

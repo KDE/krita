@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2009 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,6 +29,7 @@
 #include "dialogs/FontDia.h"
 #include "commands/TextCommandBase.h"
 #include "commands/ChangeListCommand.h"
+#include "commands/ListItemNumberingCommand.h"
 
 #include <KoAction.h>
 #include <KoExecutePolicy.h>
@@ -787,7 +789,12 @@ void TextTool::keyPressEvent(QKeyEvent *event)
     int destinationPosition = -1; // for those cases where the moveOperation is not relevant;
     QTextCursor::MoveOperation moveOperation = QTextCursor::NoMove;
     if (event->key() == Qt::Key_Backspace) {
-        if (! m_caret.hasSelection() && m_caret.block().textList() && m_caret.block().length() == 1) {
+        if (!m_caret.hasSelection() && m_caret.block().textList() && (m_caret.position() == m_caret.block().position())
+            && !m_caret.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
+            // backspace at beginning of numbered list item, makes it unnumbered
+            ListItemNumberingCommand *lin = new ListItemNumberingCommand(m_caret.block(), false);
+            addCommand(lin);
+        } else if (!m_caret.hasSelection() && m_caret.block().textList() && m_caret.block().length() == 1) {
             // backspace on numbered, empty parag, removes numbering.
             ChangeListCommand *clc = new ChangeListCommand(m_caret.block(), KoListStyle::NoItem);
             addCommand(clc);

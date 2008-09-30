@@ -43,6 +43,7 @@ SET ( textshape_SRCS
     dialogs/LanguageTab.cpp
 
     commands/ChangeListCommand.cpp
+    commands/ListItemNumberingCommand.cpp
     commands/TextCommandBase.cpp
 )
 

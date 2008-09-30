@@ -789,15 +789,16 @@ void TextTool::keyPressEvent(QKeyEvent *event)
     int destinationPosition = -1; // for those cases where the moveOperation is not relevant;
     QTextCursor::MoveOperation moveOperation = QTextCursor::NoMove;
     if (event->key() == Qt::Key_Backspace) {
-        if (!m_caret.hasSelection() && m_caret.block().textList() && (m_caret.position() == m_caret.block().position())
-            && !m_caret.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
-            // backspace at beginning of numbered list item, makes it unnumbered
-            ListItemNumberingCommand *lin = new ListItemNumberingCommand(m_caret.block(), false);
-            addCommand(lin);
-        } else if (!m_caret.hasSelection() && m_caret.block().textList() && m_caret.block().length() == 1) {
-            // backspace on numbered, empty parag, removes numbering.
-            ChangeListCommand *clc = new ChangeListCommand(m_caret.block(), KoListStyle::NoItem);
-            addCommand(clc);
+        if (!m_caret.hasSelection() && m_caret.block().textList() && (m_caret.position() == m_caret.block().position())) {
+            if (!m_caret.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
+                // backspace at beginning of numbered list item, makes it unnumbered
+                ListItemNumberingCommand *lin = new ListItemNumberingCommand(m_caret.block(), false);
+                addCommand(lin);
+            } else {
+                // backspace on numbered, empty parag, removes numbering.
+                ChangeListCommand *clc = new ChangeListCommand(m_caret.block(), KoListStyle::NoItem);
+                addCommand(clc);
+            }
         } else {
             if (!m_caret.hasSelection() && event->modifiers() & Qt::ControlModifier) // delete prev word.
                 m_caret.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);

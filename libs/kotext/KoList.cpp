@@ -180,7 +180,7 @@ void KoList::setStyle(KoListStyle *style)
         QTextList *textList = d->textLists[i];
         if (!textList)
             continue;
-        KoListLevelProperties properties = d->style->levelProperties(i);
+        KoListLevelProperties properties = d->style->levelProperties(i+1);
         QTextListFormat format;
         properties.applyStyle(format);
         textList->setFormat(format);

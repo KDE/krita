@@ -200,7 +200,7 @@ void TestChangeListCommand::splitList()
     QVERIFY(doc.begin().textList() == 0);
     QVERIFY(paragA.textList());
     QTextList *newTextList = paragB.textList();
-    QVERIFY(newTextList != tl);
+    QVERIFY(newTextList == tl);
     QCOMPARE(paragC.textList(), tl);
 
     QCOMPARE(tl->format().intProperty(KoListStyle::Level), 2);

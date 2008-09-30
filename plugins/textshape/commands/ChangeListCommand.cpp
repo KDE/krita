@@ -120,9 +120,12 @@ void ChangeListCommand::redo()
         KoList::remove(m_block);
     } else if (m_block.textList()) {
         KoListStyle *listStyle = m_list->style();
-        KoListLevelProperties llp = listStyle->levelProperties(1);
-        if (llp.style() != m_style)
-            listStyle->setLevelProperties(listLevelProperties(m_style));
+        int level = m_block.textList()->format().intProperty(KoListStyle::Level);
+        KoListLevelProperties llp = listStyle->levelProperties(level);
+        if (llp.style() != m_style) {
+            llp.setStyle(m_style);
+            listStyle->setLevelProperties(llp);
+        }
     } else {
         m_list->add(m_block, 0);
     }

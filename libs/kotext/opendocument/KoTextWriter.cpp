@@ -262,7 +262,15 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
             }
         }
 
-        saveParagraph(block, from, to);
+        while (true) {
+            saveParagraph(block, from, to);
+            QTextBlock nextBlock = block.next();
+            if (!nextBlock.isValid() || !((to == -1) || (nextBlock.position() < to)))
+                break;
+            if (!nextBlock.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem))
+                break;
+            block = nextBlock;
+        }
 
         if (block.textList() && !isHeading) // We must check if we need to close a previously-opened text:list node.
             m_writer->endElement();

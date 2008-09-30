@@ -170,7 +170,8 @@ void KoList::setStyle(KoListStyle *style)
     }
 
     if (style != d->style) {
-        disconnect(d->style, 0, this, 0);
+        if (d->style)
+            disconnect(d->style, 0, this, 0);
         d->style = style->clone(this);
         connect(d->style, SIGNAL(styleChanged(int)), this, SLOT(styleChanged(int)));
     }

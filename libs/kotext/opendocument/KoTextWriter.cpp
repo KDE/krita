@@ -220,9 +220,6 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
     KoList *currentList = 0;
 
     while (block.isValid() && ((to == -1) || (block.position() < to))) {
-        if ((block.begin().atEnd()) && (!block.next().isValid()))   // Do not add an extra empty line at the end...
-            break;
-
         bool isHeading = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel) > 0;
         QTextList *textList = block.textList();
         if (textList && !isHeading) {
@@ -264,7 +261,7 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
                 }
             }
         }
-        
+
         saveParagraph(block, from, to);
 
         if (block.textList() && !isHeading) // We must check if we need to close a previously-opened text:list node.

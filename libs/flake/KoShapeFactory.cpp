@@ -46,6 +46,7 @@ public:
     QList<KoShapeConfigFactory*> configPanels;
     const QString id;
     const QString name;
+    QString family;
     QString tooltip;
     QString iconName;
     quint32 loadingPriority;
@@ -113,6 +114,11 @@ QString KoShapeFactory::name() const
     return d->name;
 }
 
+QString KoShapeFactory::family() const
+{
+    return d->family;
+}
+
 quint32 KoShapeFactory::loadingPriority() const
 {
     return d->loadingPriority;
@@ -150,6 +156,11 @@ void KoShapeFactory::setToolTip(const QString & tooltip)
 void KoShapeFactory::setIcon(const QString & iconName)
 {
     d->iconName = iconName;
+}
+
+void KoShapeFactory::setFamily(const QString & family)
+{
+    d->family = family;
 }
 
 QString KoShapeFactory::id() const

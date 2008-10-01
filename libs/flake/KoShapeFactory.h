@@ -57,6 +57,7 @@ struct FLAKE_EXPORT KoShapeTemplate {
     }
     QString id;         ///< The id of the shape
     QString name;       ///< The name to be shown for this template
+    QString family;       ///< The family of the shape (possible values are: "funny","arrow")
     QString toolTip;    ///< The tooltip text for the template
     QString icon;       ///< Icon name
     /**
@@ -98,7 +99,7 @@ public:
      * @param parent the parent QObject for memory management usage.
      * @param id a string that will be used internally for referencing the shape, for
      *   example for use by the KoTool::activateTemporary.
-     * @param name the user visible name of the tool this factory creates.
+     * @param name the user visible name of the shape this factory creates.
      */
     KoShapeFactory(QObject *parent, const QString &id, const QString &name);
     virtual ~KoShapeFactory();
@@ -255,7 +256,11 @@ public:
      * @return the user visible (and translated) name to be seen by the user.
      */
     QString name() const;
-
+    /**
+     * return the non-visible name of the family the default shape belongs to.
+     * @return the family name.
+     */
+    QString family() const;
     /// lower prio means the shape is more generic and will be checked later
     quint32 loadingPriority() const;
 
@@ -318,6 +323,13 @@ protected:
      * @see KIconLoader
      */
     void setIcon(const QString & iconName);
+
+    /**
+     * Set the family name of the default shape
+     * @param family the family name of the default shape this factory creates.
+     *   for example "funny", "arrows", "geometrics". Use "" for default
+     */
+    void setFamily(const QString &family);
 
     /**
      * Set the loading priority for this icon; higher priority means

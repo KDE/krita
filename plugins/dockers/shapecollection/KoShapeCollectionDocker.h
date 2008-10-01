@@ -43,6 +43,8 @@ class KoCollectionItemModel;
 class KoShape;
 class KComboBox;
 class QListView;
+class QListWidget;
+class QListWidgetItem;
 class QToolButton;
 class QMenu;
 
@@ -62,7 +64,7 @@ class KoShapeCollectionDocker : public QDockWidget
         /**
          * Changes the current shape collection
          */
-        void setCurrentShapeCollection(int index);
+        void activateShapeCollection(QListWidgetItem *item);
 
         /**
          * Called when a collection is added from the add collection menu
@@ -102,13 +104,13 @@ class KoShapeCollectionDocker : public QDockWidget
         void scanCollectionDir(const QString& dirName, QMenu* menu);
 
     private:
-        KComboBox* m_collectionsCombo;
-        QToolButton* m_moreShapes;
+        QListView *m_quickView;
+        QToolButton *m_moreShapes;
         QMenu* m_moreShapesContainer;
-        QListView* m_quickView;
-        QListView* m_collectionView;
-        QToolButton* m_closeCollectionButton;
-        QToolButton* m_addCollectionButton;
+        QListWidget *m_collectionChooser;
+        QListView *m_collectionView;
+        QToolButton *m_closeCollectionButton;
+        QToolButton *m_addCollectionButton;
 
         QMap<QString, KoCollectionItemModel*> m_modelMap;
 };

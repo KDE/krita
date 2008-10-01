@@ -66,6 +66,7 @@ class KoCollectionItemModel : public QAbstractListModel
 
     private:
         QList<KoCollectionItem> m_shapeTemplateList;
+        QString m_family;
 };
 
 #endif //KIVIOSHAPETEMPLATEMODEL_H

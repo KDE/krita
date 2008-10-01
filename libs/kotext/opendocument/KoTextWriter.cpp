@@ -267,7 +267,7 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
             QTextBlock nextBlock = block.next();
             if (!nextBlock.isValid() || !((to == -1) || (nextBlock.position() < to)))
                 break;
-            if (!nextBlock.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem))
+            if (!nextBlock.textList() || !nextBlock.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem))
                 break;
             block = nextBlock;
         }

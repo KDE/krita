@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef SIMPLETEXTSHAPE_H
-#define SIMPLETEXTSHAPE_H
+#ifndef ARTISTICTEXTSHAPE_H
+#define ARTISTICTEXTSHAPE_H
 
 #include <KoShape.h>
 
@@ -28,9 +28,9 @@
 class QPainter;
 class KoPathShape;
 
-#define SimpleTextShapeID "SimpleText"
+#define ArtisticTextShapeID "ArtisticText"
 
-class SimpleTextShape : public KoShape
+class ArtisticTextShape : public KoShape
 {
 public:
     enum TextAnchor { AnchorStart, AnchorMiddle, AnchorEnd };
@@ -41,8 +41,8 @@ public:
         OnPathShape  ///< baseline is the outline of a path shape
     };
 
-    SimpleTextShape();
-    virtual ~SimpleTextShape();
+    ArtisticTextShape();
+    virtual ~ArtisticTextShape();
 
     /// reimplemented
     void paint(QPainter &painter, const KoViewConverter &converter);
@@ -152,4 +152,4 @@ private:
     QVector<qreal> m_charOffsets; ///< char positions [0..1] on baseline path
 };
 
-#endif // SIMPLETEXTSHAPE_H
+#endif // ARTISTICTEXTSHAPE_H

@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "SimpleTextShape.h"
+#include "ArtisticTextShape.h"
 
 #include <KoPathShape.h>
 #include <KoGlobal.h>
@@ -40,23 +40,23 @@
 #define FROM_PS_SIZE(x) (72.0 / KoGlobal::dpiY() * x)
 #define TO_PS_SIZE(x) ( KoGlobal::dpiY() / 72.0 * x)
 
-SimpleTextShape::SimpleTextShape()
-    : m_text( i18n( "Simple Text" ) ), m_font( "ComicSans", FROM_PS_SIZE(20) )
+ArtisticTextShape::ArtisticTextShape()
+    : m_text( i18n( "Artistic Text" ) ), m_font( "ComicSans", FROM_PS_SIZE(20) )
     , m_path(0), m_startOffset(0.0), m_baselineOffset(0.0)
     , m_textAnchor( AnchorStart )
 {
-    setShapeId( SimpleTextShapeID );
+    setShapeId( ArtisticTextShapeID );
     cacheGlyphOutlines();
     updateSizeAndPosition();
 }
 
-SimpleTextShape::~SimpleTextShape()
+ArtisticTextShape::~ArtisticTextShape()
 {
     if( m_path )
         m_path->removeDependee( this );
 }
 
-void SimpleTextShape::paint(QPainter &painter, const KoViewConverter &converter)
+void ArtisticTextShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
     applyConversion( painter, converter );
     painter.setFont( m_font );
@@ -64,11 +64,11 @@ void SimpleTextShape::paint(QPainter &painter, const KoViewConverter &converter)
         background()->paint( painter, outline() );
 }
 
-void SimpleTextShape::paintDecorations(QPainter &/*painter*/, const KoViewConverter &/*converter*/, const KoCanvasBase * /*canvas*/)
+void ArtisticTextShape::paintDecorations(QPainter &/*painter*/, const KoViewConverter &/*converter*/, const KoCanvasBase * /*canvas*/)
 {
 }
 
-void SimpleTextShape::saveOdf(KoShapeSavingContext &context) const
+void ArtisticTextShape::saveOdf(KoShapeSavingContext &context) const
 {
     context.xmlWriter().startElement("draw:custom-shape");
     saveOdfAttributes( context, OdfAllAttributes );
@@ -86,25 +86,25 @@ void SimpleTextShape::saveOdf(KoShapeSavingContext &context) const
         drawData += "font-style:italic;";
 
     qreal anchorOffset = 0.0;
-    if( m_textAnchor == SimpleTextShape::AnchorMiddle )
+    if( m_textAnchor == ArtisticTextShape::AnchorMiddle )
     {
         anchorOffset += 0.5 * size().width();
         drawData += "text-anchor:middle;";
     }
-    else if( m_textAnchor == SimpleTextShape::AnchorEnd )
+    else if( m_textAnchor == ArtisticTextShape::AnchorEnd )
     {
         anchorOffset += size().width();
         drawData += "text-anchor:end;";
     }
 
     // check if we are set on a path
-    if( layout() == SimpleTextShape::OnPathShape )
+    if( layout() == ArtisticTextShape::OnPathShape )
     {
         /// TODO: we have to make sure that the path shape is saved before
         drawData += "textPath:" + context.drawId( m_path ) +';';
         drawData += QString( "startOffset:%1%;").arg( m_startOffset * 100.0 );
     }
-    else if( layout() == SimpleTextShape::OnPath )
+    else if( layout() == ArtisticTextShape::OnPath )
     {
         KoPathShape * baseline = KoPathShape::fromQPainterPath( m_baseline );
         QMatrix offsetMatrix;
@@ -130,7 +130,7 @@ void SimpleTextShape::saveOdf(KoShapeSavingContext &context) const
     context.xmlWriter().endElement(); // draw:custom-shape
 }
 
-bool SimpleTextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
+bool ArtisticTextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
     QString drawEngine = element.attributeNS( KoXmlNS::draw, "engine", "" );
     if( drawEngine.isEmpty() || drawEngine != "svg:text" )
@@ -203,12 +203,12 @@ bool SimpleTextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingConte
     return true;
 }
 
-QSizeF SimpleTextShape::size() const
+QSizeF ArtisticTextShape::size() const
 {
     return outline().boundingRect().size();
 }
 
-void SimpleTextShape::setSize( const QSizeF &newSize )
+void ArtisticTextShape::setSize( const QSizeF &newSize )
 {
     QSizeF oldSize = size();
     if ( !oldSize.isNull() ) {
@@ -222,12 +222,12 @@ void SimpleTextShape::setSize( const QSizeF &newSize )
     }
 }
 
-const QPainterPath SimpleTextShape::outline() const
+const QPainterPath ArtisticTextShape::outline() const
 {
     return m_outline;
 }
 
-void SimpleTextShape::createOutline()
+void ArtisticTextShape::createOutline()
 {
     m_outline = QPainterPath();
 
@@ -290,7 +290,7 @@ void SimpleTextShape::createOutline()
     }
 }
 
-void SimpleTextShape::setText( const QString & text )
+void ArtisticTextShape::setText( const QString & text )
 {
     if( m_text == text )
         return;
@@ -302,12 +302,12 @@ void SimpleTextShape::setText( const QString & text )
     update();
 }
 
-QString SimpleTextShape::text() const
+QString ArtisticTextShape::text() const
 {
     return m_text;
 }
 
-void SimpleTextShape::setFont( const QFont & font )
+void ArtisticTextShape::setFont( const QFont & font )
 {
     if( m_font == font )
         return;
@@ -320,14 +320,14 @@ void SimpleTextShape::setFont( const QFont & font )
     update();
 }
 
-QFont SimpleTextShape::font() const
+QFont ArtisticTextShape::font() const
 {
     QFont font( m_font );
     font.setPointSizeF( TO_PS_SIZE( font.pointSizeF() ) );
     return font;
 }
 
-void SimpleTextShape::setStartOffset( qreal offset )
+void ArtisticTextShape::setStartOffset( qreal offset )
 {
     if( m_startOffset == offset )
         return;
@@ -340,17 +340,17 @@ void SimpleTextShape::setStartOffset( qreal offset )
     update();
 }
 
-qreal SimpleTextShape::startOffset() const
+qreal ArtisticTextShape::startOffset() const
 {
     return m_startOffset;
 }
 
-qreal SimpleTextShape::baselineOffset() const
+qreal ArtisticTextShape::baselineOffset() const
 {
     return m_baselineOffset;
 }
 
-void SimpleTextShape::setTextAnchor( TextAnchor anchor )
+void ArtisticTextShape::setTextAnchor( TextAnchor anchor )
 {
     if( anchor == m_textAnchor )
         return;
@@ -380,12 +380,12 @@ void SimpleTextShape::setTextAnchor( TextAnchor anchor )
     update();
 }
 
-SimpleTextShape::TextAnchor SimpleTextShape::textAnchor() const
+ArtisticTextShape::TextAnchor ArtisticTextShape::textAnchor() const
 {
     return m_textAnchor;
 }
 
-bool SimpleTextShape::putOnPath( KoPathShape * path )
+bool ArtisticTextShape::putOnPath( KoPathShape * path )
 {
     if( ! path )
         return false;
@@ -410,7 +410,7 @@ bool SimpleTextShape::putOnPath( KoPathShape * path )
     return true;
 }
 
-bool SimpleTextShape::putOnPath( const QPainterPath &path )
+bool ArtisticTextShape::putOnPath( const QPainterPath &path )
 {
     if( path.isEmpty() )
         return false;
@@ -431,7 +431,7 @@ bool SimpleTextShape::putOnPath( const QPainterPath &path )
     return true;
 }
 
-void SimpleTextShape::removeFromPath()
+void ArtisticTextShape::removeFromPath()
 {
     update();
     if( m_path )
@@ -442,12 +442,12 @@ void SimpleTextShape::removeFromPath()
     update();
 }
 
-bool SimpleTextShape::isOnPath() const
+bool ArtisticTextShape::isOnPath() const
 {
     return (m_path != 0 || ! m_baseline.isEmpty() );
 }
 
-SimpleTextShape::LayoutMode SimpleTextShape::layout() const
+ArtisticTextShape::LayoutMode ArtisticTextShape::layout() const
 {
     if( m_path )
         return OnPathShape;
@@ -458,17 +458,17 @@ SimpleTextShape::LayoutMode SimpleTextShape::layout() const
 }
 
 
-QPainterPath SimpleTextShape::baseline() const
+QPainterPath ArtisticTextShape::baseline() const
 {
     return m_baseline;
 }
 
-const KoPathShape * SimpleTextShape::baselineShape() const
+const KoPathShape * ArtisticTextShape::baselineShape() const
 {
     return m_path;
 }
 
-QString SimpleTextShape::removeRange( unsigned int from, unsigned int nr )
+QString ArtisticTextShape::removeRange( unsigned int from, unsigned int nr )
 {
     update();
     QString ret = m_text.mid( from, nr );
@@ -480,7 +480,7 @@ QString SimpleTextShape::removeRange( unsigned int from, unsigned int nr )
     return ret;
 }
 
-void SimpleTextShape::addRange( unsigned int index, const QString &str )
+void ArtisticTextShape::addRange( unsigned int index, const QString &str )
 {
     update();
     m_text.insert( index, str );
@@ -490,7 +490,7 @@ void SimpleTextShape::addRange( unsigned int index, const QString &str )
     notifyChanged();
 }
 
-void SimpleTextShape::getCharAngleAt( unsigned int charNum, qreal &angle ) const
+void ArtisticTextShape::getCharAngleAt( unsigned int charNum, qreal &angle ) const
 {
     if( isOnPath() ) {
 	qreal t = m_charOffsets[ qMin( int( charNum ), m_charOffsets.size() ) ];
@@ -500,7 +500,7 @@ void SimpleTextShape::getCharAngleAt( unsigned int charNum, qreal &angle ) const
     }
 }
 
-void SimpleTextShape::getCharPositionAt( unsigned int charNum, QPointF &pos ) const
+void ArtisticTextShape::getCharPositionAt( unsigned int charNum, QPointF &pos ) const
 {
     if( isOnPath() ) {
         qreal t = m_charOffsets[ qMin( int( charNum ), m_charOffsets.size() ) ];
@@ -519,14 +519,14 @@ void SimpleTextShape::getCharPositionAt( unsigned int charNum, QPointF &pos ) co
     }
 }
 
-void SimpleTextShape::getCharExtentsAt( unsigned int charNum, QRectF &extents ) const
+void ArtisticTextShape::getCharExtentsAt( unsigned int charNum, QRectF &extents ) const
 {
     QFontMetrics metrics( m_font );
     int w = metrics.charWidth( m_text, qMin( int( charNum ), m_text.length() - 1 ) );
     extents = QRectF( 0, 0, w, metrics.height() );
 }
 
-void SimpleTextShape::updateSizeAndPosition( bool global )
+void ArtisticTextShape::updateSizeAndPosition( bool global )
 {
     createOutline();
 
@@ -560,7 +560,7 @@ void SimpleTextShape::updateSizeAndPosition( bool global )
     m_outline = normalizeMatrix.map( m_outline );
 }
 
-void SimpleTextShape::cacheGlyphOutlines()
+void ArtisticTextShape::cacheGlyphOutlines()
 {
     m_charOutlines.clear();
 
@@ -574,7 +574,7 @@ void SimpleTextShape::cacheGlyphOutlines()
     }
 }
 
-void SimpleTextShape::notifyShapeChanged( KoShape * shape, ChangeType type )
+void ArtisticTextShape::notifyShapeChanged( KoShape * shape, ChangeType type )
 {
     if( shape == m_path )
     {

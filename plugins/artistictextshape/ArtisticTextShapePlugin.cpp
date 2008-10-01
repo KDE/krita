@@ -17,18 +17,26 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef SIMPLETEXTSHAPEPLUGIN_H
-#define SIMPLETEXTSHAPEPLUGIN_H
+#include "ArtisticTextShapePlugin.h"
+#include "ArtisticTextShapeFactory.h"
+#include "ArtisticTextToolFactory.h"
 
-#include <QObject>
+#include <KoShapeRegistry.h>
+#include <KoToolRegistry.h>
 
-class SimpleTextShapePlugin : public QObject 
+#include <kgenericfactory.h>
+
+K_EXPORT_COMPONENT_FACTORY(artistictextshape, KGenericFactory<ArtisticTextShapePlugin>( "ArtisticTextShape" ) )
+
+ArtisticTextShapePlugin::ArtisticTextShapePlugin( QObject * parent, const QStringList & )
+    : QObject(parent)
 {
-    Q_OBJECT
+    KoShapeRegistry::instance()->add( new ArtisticTextShapeFactory( parent ) );
+    KoToolRegistry::instance()->add( new ArtisticTextToolFactory( parent ) );
+}
 
-public:
-    SimpleTextShapePlugin( QObject * parent, const QStringList & );
-    ~SimpleTextShapePlugin();
-};
+ArtisticTextShapePlugin::~ArtisticTextShapePlugin()
+{
+}
 
-#endif // SIMPLETEXTSHAPEPLUGIN_H
+#include "ArtisticTextShapePlugin.moc"

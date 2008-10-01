@@ -17,17 +17,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "SimpleTextShapeFactory.h"
-#include "SimpleTextShape.h"
-#include "SimpleTextShapeConfigWidget.h"
+#include "ArtisticTextShapeFactory.h"
+#include "ArtisticTextShape.h"
+#include "ArtisticTextShapeConfigWidget.h"
 
 #include <KoXmlNS.h>
 #include <KoColorBackground.h>
 
 #include <klocale.h>
 
-SimpleTextShapeFactory::SimpleTextShapeFactory(QObject *parent)
-    : KoShapeFactory(parent, SimpleTextShapeID, i18n("SimpleTextShape"))
+ArtisticTextShapeFactory::ArtisticTextShapeFactory(QObject *parent)
+    : KoShapeFactory(parent, ArtisticTextShapeID, i18n("ArtisticTextShape"))
 {
     setToolTip(i18n("A shape which shows a single text line"));
     setIcon( "text" );
@@ -35,28 +35,28 @@ SimpleTextShapeFactory::SimpleTextShapeFactory(QObject *parent)
     setOdfElementNames( KoXmlNS::draw, QStringList( "custom-shape" ) );
 }
 
-KoShape *SimpleTextShapeFactory::createDefaultShape() const
+KoShape *ArtisticTextShapeFactory::createDefaultShape() const
 {
-    SimpleTextShape * text = new SimpleTextShape();
+    ArtisticTextShape * text = new ArtisticTextShape();
     text->setBackground( new KoColorBackground( QColor( Qt::black) ) );
     return text;
 }
 
-KoShape *SimpleTextShapeFactory::createShape(const KoProperties *) const
+KoShape *ArtisticTextShapeFactory::createShape(const KoProperties *) const
 {
     return createDefaultShape();
 }
 
-QList<KoShapeConfigWidgetBase*> SimpleTextShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase*> ArtisticTextShapeFactory::createShapeOptionPanels()
 {
     QList<KoShapeConfigWidgetBase*> answer;
-    answer.append( new SimpleTextShapeConfigWidget() );
+    answer.append( new ArtisticTextShapeConfigWidget() );
     return answer;
 }
 
-bool SimpleTextShapeFactory::supports(const KoXmlElement & e) const
+bool ArtisticTextShapeFactory::supports(const KoXmlElement & e) const
 {
     return ( e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw );
 }
 
-#include "SimpleTextShapeFactory.moc"
+#include "ArtisticTextShapeFactory.moc"

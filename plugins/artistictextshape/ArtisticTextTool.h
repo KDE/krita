@@ -18,10 +18,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef SIMPLETEXTTOOL_H
-#define SIMPLETEXTTOOL_H
+#ifndef ARTISTICTEXTTOOL_H
+#define ARTISTICTEXTTOOL_H
 
-#include "SimpleTextShape.h"
+#include "ArtisticTextShape.h"
 
 #include <KoTool.h>
 
@@ -30,13 +30,13 @@
 
 class QAction;
 
-/// This is the tool for the simple text shape.
-class SimpleTextTool : public KoTool 
+/// This is the tool for the artistic text shape.
+class ArtisticTextTool : public KoTool 
 {
     Q_OBJECT
 public:
-    explicit SimpleTextTool(KoCanvasBase *canvas);
-    ~SimpleTextTool();
+    explicit ArtisticTextTool(KoCanvasBase *canvas);
+    ~ArtisticTextTool();
 
     /// reimplemented
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
@@ -76,7 +76,7 @@ private:
 class AddTextRange : public QUndoCommand
 {
 public:
-    AddTextRange( SimpleTextTool *tool, const QString &text, unsigned int from )
+    AddTextRange( ArtisticTextTool *tool, const QString &text, unsigned int from )
         : m_tool( tool ), m_text( text ), m_from( from )
     {
         m_shape = tool->m_currentShape;
@@ -108,8 +108,8 @@ public:
 	}
     }
 private:
-    SimpleTextTool *m_tool;
-    SimpleTextShape *m_shape;
+    ArtisticTextTool *m_tool;
+    ArtisticTextShape *m_shape;
     QString m_text;
     unsigned int m_from;
 };
@@ -117,7 +117,7 @@ private:
 class RemoveTextRange : public QUndoCommand
 {
 public:
-    RemoveTextRange( SimpleTextTool *tool, int from, unsigned int nr )
+    RemoveTextRange( ArtisticTextTool *tool, int from, unsigned int nr )
         : m_tool( tool ), m_from( from ), m_nr( nr )
     {
         m_shape = tool->m_currentShape;
@@ -151,8 +151,8 @@ public:
     }
 
 private:
-    SimpleTextTool *m_tool;
-    SimpleTextShape *m_shape;
+    ArtisticTextTool *m_tool;
+    ArtisticTextShape *m_shape;
     int m_from;
     unsigned int m_nr;
     QString m_text;
@@ -164,7 +164,7 @@ private:
     void createTextCursorShape();
     void updateTextCursorArea() const;
 
-    SimpleTextShape * m_currentShape;
+    ArtisticTextShape * m_currentShape;
     KoPathShape * m_path;
     KoPathShape * m_tmpPath;
     QPainterPath m_textCursorShape;
@@ -179,4 +179,4 @@ private:
     QString m_currentText;
 };
 
-#endif // SIMPLETEXTTOOL_H
+#endif // ARTISTICTEXTTOOL_H

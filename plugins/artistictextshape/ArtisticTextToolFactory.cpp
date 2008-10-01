@@ -17,26 +17,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "SimpleTextShapePlugin.h"
-#include "SimpleTextShapeFactory.h"
-#include "SimpleTextToolFactory.h"
+#include "ArtisticTextToolFactory.h"
+#include "ArtisticTextTool.h"
+#include "ArtisticTextShape.h"
 
-#include <KoShapeRegistry.h>
-#include <KoToolRegistry.h>
+#include <klocale.h>
 
-#include <kgenericfactory.h>
-
-K_EXPORT_COMPONENT_FACTORY(simpletextshape, KGenericFactory<SimpleTextShapePlugin>( "SimpleTextShape" ) )
-
-SimpleTextShapePlugin::SimpleTextShapePlugin( QObject * parent, const QStringList & )
-    : QObject(parent)
+ArtisticTextToolFactory::ArtisticTextToolFactory( QObject *parent )
+    : KoToolFactory(parent, "ArtisticTextToolFactoryID", i18n("Artistic Text Tool"))
 {
-    KoShapeRegistry::instance()->add( new SimpleTextShapeFactory( parent ) );
-    KoToolRegistry::instance()->add( new SimpleTextToolFactory( parent ) );
+    setToolTip( i18n("Artistic Text Editing Tool") );
+    setToolType( dynamicToolType() );
+    //setIcon ("");
+    setPriority( 1 );
+    setActivationShapeId( ArtisticTextShapeID );
 }
 
-SimpleTextShapePlugin::~SimpleTextShapePlugin()
+ArtisticTextToolFactory::~ArtisticTextToolFactory()
 {
 }
 
-#include "SimpleTextShapePlugin.moc"
+KoTool * ArtisticTextToolFactory::createTool( KoCanvasBase * canvas )
+{
+    return new ArtisticTextTool( canvas );
+}
+
+#include "ArtisticTextToolFactory.moc"

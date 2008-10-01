@@ -17,19 +17,30 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef SIMPLETEXTTOOLFACTORY_H
-#define SIMPLETEXTTOOLFACTORY_H
+#ifndef ARTISTICTEXTSHAPEFACTORY_H
+#define ARTISTICTEXTSHAPEFACTORY_H
 
-#include <KoToolFactory.h>
+#include <KoShapeFactory.h>
 
-class SimpleTextToolFactory : public KoToolFactory
+class KoShape;
+
+class ArtisticTextShapeFactory : public KoShapeFactory
 {
-    Q_OBJECT
-    public:
-        explicit SimpleTextToolFactory( QObject *parent );
-        ~SimpleTextToolFactory();
+    using KoShapeFactory::createDefaultShape;
+    using KoShapeFactory::createShape;
 
-        KoTool * createTool( KoCanvasBase *canvas );
+    Q_OBJECT
+
+public:
+    explicit ArtisticTextShapeFactory(QObject *parent);
+    ~ArtisticTextShapeFactory() {}
+
+    KoShape *createDefaultShape() const;
+    KoShape *createShape(const KoProperties * params) const;
+    // reimplemented from KoShapeFactory
+    virtual bool supports(const KoXmlElement & e) const;
+
+    QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };
 
-#endif // SIMPLETEXTTOOLFACTORY_H
+#endif // ARTISTICTEXTSHAPEFACTORY_H

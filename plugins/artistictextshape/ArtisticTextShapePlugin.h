@@ -17,29 +17,18 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "SimpleTextToolFactory.h"
-#include "SimpleTextTool.h"
-#include "SimpleTextShape.h"
+#ifndef ARTISTICTEXTSHAPEPLUGIN_H
+#define ARTISTICTEXTSHAPEPLUGIN_H
 
-#include <klocale.h>
+#include <QObject>
 
-SimpleTextToolFactory::SimpleTextToolFactory( QObject *parent )
-    : KoToolFactory(parent, "SimpleTextToolFactoryID", i18n("Simple Text Tool"))
+class ArtisticTextShapePlugin : public QObject 
 {
-    setToolTip( i18n("Simple Text Editing Tool") );
-    setToolType( dynamicToolType() );
-    //setIcon ("");
-    setPriority( 1 );
-    setActivationShapeId( SimpleTextShapeID );
-}
+    Q_OBJECT
 
-SimpleTextToolFactory::~SimpleTextToolFactory()
-{
-}
+public:
+    ArtisticTextShapePlugin( QObject * parent, const QStringList & );
+    ~ArtisticTextShapePlugin();
+};
 
-KoTool * SimpleTextToolFactory::createTool( KoCanvasBase * canvas )
-{
-    return new SimpleTextTool( canvas );
-}
-
-#include "SimpleTextToolFactory.moc"
+#endif // ARTISTICTEXTSHAPEPLUGIN_H

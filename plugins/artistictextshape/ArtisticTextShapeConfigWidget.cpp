@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "SimpleTextShapeConfigWidget.h"
-#include "SimpleTextShape.h"
+#include "ArtisticTextShapeConfigWidget.h"
+#include "ArtisticTextShape.h"
 #include <QtGui/QButtonGroup>
 
 #include <KoCanvasController.h>
@@ -27,7 +27,7 @@
 #include <KoShapeManager.h>
 #include <KoCanvasBase.h>
 
-SimpleTextShapeConfigWidget::SimpleTextShapeConfigWidget()
+ArtisticTextShapeConfigWidget::ArtisticTextShapeConfigWidget()
     : m_shape(0), m_anchorGroup(0)
 {
     widget.setupUi( this );
@@ -64,7 +64,7 @@ SimpleTextShapeConfigWidget::SimpleTextShapeConfigWidget()
     }
 }
 
-void SimpleTextShapeConfigWidget::blockChildSignals( bool block )
+void ArtisticTextShapeConfigWidget::blockChildSignals( bool block )
 {
     widget.fontFamily->blockSignals( block );
     widget.fontSize->blockSignals( block );
@@ -75,9 +75,9 @@ void SimpleTextShapeConfigWidget::blockChildSignals( bool block )
     m_anchorGroup->blockSignals( block );
 }
 
-void SimpleTextShapeConfigWidget::open(KoShape *shape)
+void ArtisticTextShapeConfigWidget::open(KoShape *shape)
 {
-    m_shape = dynamic_cast<SimpleTextShape*>( shape );
+    m_shape = dynamic_cast<ArtisticTextShape*>( shape );
     if( ! m_shape )
         return;
 
@@ -94,9 +94,9 @@ void SimpleTextShapeConfigWidget::open(KoShape *shape)
     widget.fontFamily->setFont( font );
     widget.bold->setChecked( font.bold() );
     widget.italic->setChecked( font.italic() );
-    if( m_shape->textAnchor() == SimpleTextShape::AnchorStart )
+    if( m_shape->textAnchor() == ArtisticTextShape::AnchorStart )
         widget.anchorStart->setChecked( true );
-    else if( m_shape->textAnchor() == SimpleTextShape::AnchorMiddle )
+    else if( m_shape->textAnchor() == ArtisticTextShape::AnchorMiddle )
         widget.anchorMiddle->setChecked( true );
     else
         widget.anchorEnd->setChecked( true );
@@ -107,7 +107,7 @@ void SimpleTextShapeConfigWidget::open(KoShape *shape)
     blockChildSignals( false );
 }
 
-void SimpleTextShapeConfigWidget::save()
+void ArtisticTextShapeConfigWidget::save()
 {
     if( ! m_shape )
         return;
@@ -125,13 +125,13 @@ void SimpleTextShapeConfigWidget::save()
 	} else if ( font != m_shape->font() ) {
             canvas->addCommand( new ChangeFont( this, font ) );
 	} else {
-	    SimpleTextShape::TextAnchor anchor;
+	    ArtisticTextShape::TextAnchor anchor;
             if ( widget.anchorStart->isChecked() )
-                anchor = SimpleTextShape::AnchorStart;
+                anchor = ArtisticTextShape::AnchorStart;
             else if ( widget.anchorMiddle->isChecked() )
-                anchor = SimpleTextShape::AnchorMiddle;
+                anchor = ArtisticTextShape::AnchorMiddle;
             else
-                anchor = SimpleTextShape::AnchorEnd;
+                anchor = ArtisticTextShape::AnchorEnd;
             if ( anchor != m_shape->textAnchor() ) {
                 canvas->addCommand( new ChangeAnchor( this, anchor ) );
 	    }
@@ -141,14 +141,14 @@ void SimpleTextShapeConfigWidget::save()
     m_shape->setStartOffset( static_cast<qreal>(widget.startOffset->value()) / 100.0 );
 }
 
-QUndoCommand * SimpleTextShapeConfigWidget::createCommand()
+QUndoCommand * ArtisticTextShapeConfigWidget::createCommand()
 {
     save();
 
     return 0;
 }
 
-void SimpleTextShapeConfigWidget::slotTextChanged()
+void ArtisticTextShapeConfigWidget::slotTextChanged()
 {
     if ( ! m_shape )
         return;

@@ -18,24 +18,24 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef SIMPLETEXTSHAPECONFIGWIDGET_H
-#define SIMPLETEXTSHAPECONFIGWIDGET_H
+#ifndef ARTISTICTEXTSHAPECONFIGWIDGET_H
+#define ARTISTICTEXTSHAPECONFIGWIDGET_H
 
-#include "ui_SimpleTextShapeConfigWidget.h"
+#include "ui_ArtisticTextShapeConfigWidget.h"
 
-#include "SimpleTextShape.h"
+#include "ArtisticTextShape.h"
 
 #include <KoShapeConfigWidgetBase.h>
 
 #include <QUndoCommand>
 
-class SimpleTextShape;
+class ArtisticTextShape;
 
-class SimpleTextShapeConfigWidget : public KoShapeConfigWidgetBase
+class ArtisticTextShapeConfigWidget : public KoShapeConfigWidgetBase
 {
     Q_OBJECT
 public:
-    SimpleTextShapeConfigWidget();
+    ArtisticTextShapeConfigWidget();
     /// reimplemented
     virtual void open(KoShape *shape);
     /// reimplemented
@@ -51,7 +51,7 @@ private:
     class ChangeFont : public QUndoCommand
     {
     public:
-        ChangeFont( SimpleTextShapeConfigWidget *widget, const QFont &font )
+        ChangeFont( ArtisticTextShapeConfigWidget *widget, const QFont &font )
             : m_widget( widget ), m_font( font )
         {
             m_shape = widget->m_shape;
@@ -73,15 +73,15 @@ private:
             }
         }
     private:
-        SimpleTextShapeConfigWidget *m_widget;
-        SimpleTextShape *m_shape;
+        ArtisticTextShapeConfigWidget *m_widget;
+        ArtisticTextShape *m_shape;
         QFont m_font;
         QFont m_oldFont;
     };
     class ChangeText : public QUndoCommand
     {
     public:
-        ChangeText( SimpleTextShapeConfigWidget *widget, const QString &text )
+        ChangeText( ArtisticTextShapeConfigWidget *widget, const QString &text )
             : m_widget( widget ), m_text( text )
         {
             m_shape = widget->m_shape;
@@ -103,15 +103,15 @@ private:
             }
         }
     private:
-        SimpleTextShapeConfigWidget *m_widget;
-        SimpleTextShape *m_shape;
+        ArtisticTextShapeConfigWidget *m_widget;
+        ArtisticTextShape *m_shape;
         QString m_text;
         QString m_oldText;
     };
     class ChangeAnchor : public QUndoCommand
     {
     public:
-        ChangeAnchor( SimpleTextShapeConfigWidget *widget, SimpleTextShape::TextAnchor anchor )
+        ChangeAnchor( ArtisticTextShapeConfigWidget *widget, ArtisticTextShape::TextAnchor anchor )
             : m_widget( widget ), m_anchor( anchor )
         {
             m_shape = widget->m_shape;
@@ -133,17 +133,17 @@ private:
             }
         }
     private:
-        SimpleTextShapeConfigWidget *m_widget;
-        SimpleTextShape *m_shape;
-        SimpleTextShape::TextAnchor m_anchor;
-        SimpleTextShape::TextAnchor m_oldAnchor;
+        ArtisticTextShapeConfigWidget *m_widget;
+        ArtisticTextShape *m_shape;
+        ArtisticTextShape::TextAnchor m_anchor;
+        ArtisticTextShape::TextAnchor m_oldAnchor;
     };
 
 private:
     void blockChildSignals( bool block );
-    Ui::SimpleTextShapeConfigWidget widget;
-    SimpleTextShape * m_shape;
+    Ui::ArtisticTextShapeConfigWidget widget;
+    ArtisticTextShape * m_shape;
     QButtonGroup * m_anchorGroup;
 };
 
-#endif // SIMPLETEXTSHAPECONFIGWIDGET_H
+#endif // ARTISTICTEXTSHAPECONFIGWIDGET_H

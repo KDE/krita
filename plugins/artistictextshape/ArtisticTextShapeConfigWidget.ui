@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>SimpleTextShapeConfigWidget</class>
- <widget class="QWidget" name="SimpleTextShapeConfigWidget" >
+ <class>ArtisticTextShapeConfigWidget</class>
+ <widget class="QWidget" name="ArtisticTextShapeConfigWidget" >
   <property name="geometry" >
    <rect>
     <x>0</x>

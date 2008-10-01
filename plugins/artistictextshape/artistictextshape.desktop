@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=Simple Text Shape
+Name=Artistic Text Shape
 Name[ca]=Forma simple de text
 Name[de]=Einfaches Text-Objekt
 Name[el]=Απλό σχήμα κειμένου
@@ -21,10 +21,10 @@ Name[sv]=Enkel textform
 Name[ta]=சிறிய உரை வடிவம்
 Name[tr]=Basit Metin Şekli
 Name[uk]=Проста текстова форма
-Name[x-test]=xxSimple Text Shapexx
+Name[x-test]=xxArtistic Text Shapexx
 Name[zh_TW]=簡單文字元件
 X-KDE-ServiceTypes=KOffice/Shape
 Type=Service
-X-KDE-Library=simpletextshape
+X-KDE-Library=artistictextshape
 X-Flake-MinVersion=0
 X-Flake-PluginVersion=1

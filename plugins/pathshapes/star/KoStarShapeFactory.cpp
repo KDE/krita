@@ -41,6 +41,7 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
     KoShapeTemplate t;
     t.id = KoPathShapeId;
     t.name = i18n("Star");
+    t.family = "geometric";
     t.toolTip = i18n("A star");
     t.icon = "star-shape";
     KoProperties *props = new KoProperties();
@@ -53,6 +54,7 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
 
     t.id = KoPathShapeId;
     t.name = i18n("Flower");
+    t.family = "funny";
     t.toolTip = i18n("A flower");
     t.icon = "flower-shape";
     props = new KoProperties();
@@ -68,6 +70,7 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
 
     t.id = KoPathShapeId;
     t.name = i18n("Pentagon");
+    t.family = "geometric";
     t.toolTip = i18n("A pentagon");
     t.icon = "pentagon-shape";
     props = new KoProperties();
@@ -82,6 +85,7 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
 
     t.id = KoPathShapeId;
     t.name = i18n("Hexagon");
+    t.family = "geometric";
     t.toolTip = i18n("A hexagon");
     t.icon = "hexagon-shape";
     props = new KoProperties();

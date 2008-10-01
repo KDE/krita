@@ -29,10 +29,11 @@
 
 
 KoEllipseShapeFactory::KoEllipseShapeFactory( QObject *parent )
-: KoShapeFactory( parent, KoEllipseShapeId, i18n( "A ellipse shape" ) )
+: KoShapeFactory( parent, KoEllipseShapeId, i18n( "Ellipse" ) )
 {
     setToolTip( i18n( "An ellipse" ) );
     setIcon("ellipse-shape");
+    setFamily("geometric");
     QStringList elementNames;
     elementNames << "ellipse" << "circle";
     setOdfElementNames( KoXmlNS::draw, elementNames );

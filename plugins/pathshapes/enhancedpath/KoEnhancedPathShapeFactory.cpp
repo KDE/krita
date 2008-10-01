@@ -154,7 +154,8 @@ void KoEnhancedPathShapeFactory::addCross()
 
     KoShapeTemplate t;
     t.id = KoPathShapeId;
-    t.name = i18n("Enhanced Path");
+    t.name = i18n("Cross");
+    t.family = "funny";
     t.toolTip = i18n("A cross");
     t.icon = "cross-shape";
     t.properties = dataToProperties( modifiers, commands, handles, formulae );
@@ -186,7 +187,8 @@ void KoEnhancedPathShapeFactory::addArrow()
 
     KoShapeTemplate t;
     t.id = KoPathShapeId;
-    t.name = i18n("Enhanced Path");
+    t.name = i18n("Arrow");
+    t.family = "arrow";
     t.toolTip = i18n("An arrow");
     t.icon = "arrow-right-koffice";
     t.properties = dataToProperties( modifiers, commands, handles, formulae );
@@ -262,7 +264,8 @@ void KoEnhancedPathShapeFactory::addCallout()
 
     KoShapeTemplate t;
     t.id = KoPathShapeId;
-    t.name = i18n("Enhanced Path");
+    t.name = i18n("Callout");
+    t.family = "funny";
     t.toolTip = i18n("A callout");
     t.icon = "callout-shape";
     t.properties = dataToProperties( modifiers, commands, handles, formulae );
@@ -305,8 +308,9 @@ void KoEnhancedPathShapeFactory::addSmiley()
 
     KoShapeTemplate t;
     t.id = KoPathShapeId;
-    t.name = i18n("Enhanced Path");
-    t.toolTip = i18n("A smiley");
+    t.name = i18n("Smiley");
+    t.family = "funny";
+    t.toolTip = i18n("Smiley");
     t.icon = "smiley-shape";
     t.properties = dataToProperties( modifiers, commands, handles, formulae );
     t.properties->setProperty( "viewBox", QRectF( 0, 0, 21600, 21600 ) );
@@ -382,7 +386,8 @@ void KoEnhancedPathShapeFactory::addCircularArrow()
 
     KoShapeTemplate t;
     t.id = KoPathShapeId;
-    t.name = i18n("Enhanced Path");
+    t.name = i18n("Circular Arrow");
+    t.family = "arrow";
     t.toolTip = i18n("A circular-arrow");
     t.icon = "circular-arrow-shape";
     t.properties = dataToProperties( modifiers, commands, handles, formulae );
@@ -425,7 +430,8 @@ void KoEnhancedPathShapeFactory::addGearhead()
 
     KoShapeTemplate t;
     t.id = KoPathShapeId;
-    t.name = i18n("Enhanced Path");
+    t.name = i18n("Gearhead");
+    t.family = "funny";
     t.toolTip = i18n("A gearhead");
     t.icon = "gearhead-shape";
     t.properties = dataToProperties( QString(), commands, ListType(), ComplexType() );

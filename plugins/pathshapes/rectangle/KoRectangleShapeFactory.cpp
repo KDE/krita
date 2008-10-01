@@ -32,6 +32,7 @@ KoRectangleShapeFactory::KoRectangleShapeFactory( QObject *parent )
 {
     setToolTip( i18n( "A rectangle" ) );
     setIcon("rectangle-shape");
+    setFamily("geometrics");
     setOdfElementNames( KoXmlNS::draw, QStringList( "rect" ) );
     setLoadingPriority( 1 );
 }

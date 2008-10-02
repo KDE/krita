@@ -444,6 +444,8 @@ void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
             QTextCursor c(current);
             do {
                 c.movePosition(QTextCursor::NextBlock);
+                if (c.block().textList()) // a sublist
+                    break;
                 QTextBlockFormat blockFormat;
                 blockFormat.setProperty(listHeader ? KoParagraphStyle::IsListHeader : KoParagraphStyle::UnnumberedListItem, true);
                 c.mergeBlockFormat(blockFormat);

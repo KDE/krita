@@ -593,6 +593,7 @@ void TestLoading::addData()
     QTest::newRow("continueNumbering") << "TextContents/Lists/continueNumbering";
     QTest::newRow("embeddedBulletedList") << "TextContents/Lists/embeddedBulletedList";
     QTest::newRow("listHeader") << "TextContents/Lists/listHeader";
+    QTest::newRow("multilevelList") << "TextContents/Lists/multilevelList";
     QTest::newRow("multipleParagraphs") << "TextContents/Lists/multipleParagraphs";
     QTest::newRow("numberedList") << "TextContents/Lists/numberedList";
     QTest::newRow("numberedParagraph") << "TextContents/Lists/numberedParagraph";

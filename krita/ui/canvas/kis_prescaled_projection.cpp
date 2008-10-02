@@ -553,7 +553,7 @@ void KisPrescaledProjection::drawScaledImage(const QRect & rc,  QPainter & gc, b
     rcFromAligned.setCoords(alignedImageRect.left(), alignedImageRect.top(),
                             alignedImageRect.right(), alignedImageRect.bottom());
     rcFromAligned.setCoords(alignedImageRect.left() / xRes, alignedImageRect.top() / yRes,
-                            (alignedImageRect.right() + 1.0) / xRes, (alignedImageRect.bottom() + 1.0) / yRes);
+                            (alignedImageRect.right() /*+ 1.0*/) / xRes, (alignedImageRect.bottom() /*+ 1.0*/) / yRes);
     m_d->viewConverter->documentToViewY(rcFromAligned.height());
     rcFromAligned = m_d->viewConverter->documentToView(rcFromAligned).translated(-m_d->documentOffset) ;
 
@@ -561,8 +561,10 @@ void KisPrescaledProjection::drawScaledImage(const QRect & rc,  QPainter & gc, b
     if (m_d->cacheKisImageAsQImage && m_d->unscaledCache.isNull()) {
         updateUnscaledCache(alignedImageRect);
     }
+    
+    QPointF rcTopLeftUnscaled(rcFromAligned.topLeft().x() / scaleX, rcFromAligned.topLeft().y() / scaleY);
 
-#if 0
+#if 1
     dbgRender << "#####################################";
     dbgRender << " xRed = " << xRes << " yRes = " << yRes;
     dbgRender << " m_d->viewConverter->documentToView( imageRect ) = " << m_d->viewConverter->documentToView(imageRect);
@@ -578,10 +580,10 @@ void KisPrescaledProjection::drawScaledImage(const QRect & rc,  QPainter & gc, b
     dbgRender << " drawRect = " << drawRect;
     dbgRender << " rc = " << rc;
     dbgRender << " dstSize = " << dstSize;
+    dbgRender << " rcTopLeftUnscaled = " << rcTopLeftUnscaled;
     dbgRender << "#####################################";
 #endif
 
-    QPointF rcTopLeftUnscaled(rcFromAligned.topLeft().x() / scaleX, rcFromAligned.topLeft().y() / scaleY);
     // And now for deciding what to do and when -- the complicated bit
     if (scaleX > 1.0 - EPSILON && scaleY > 1.0 - EPSILON) {
 
@@ -622,10 +624,11 @@ void KisPrescaledProjection::drawScaledImage(const QRect & rc,  QPainter & gc, b
             } else {
                 // Else, let QPainter do the scaling, like we did in 1.6
                 dbgRender << "1.6 way " << rcTopLeftUnscaled << " " << scaleX << " " << scaleY << " " << rcFromAligned.topLeft() << " " << alignedImageRect << endl;
+                Q_ASSERT( !(m_d->useNearestNeighbour || !m_d->cacheKisImageAsQImage) );
                 gc.save();
                 gc.scale(scaleX, scaleY);
-                gc.setCompositionMode(QPainter::CompositionMode_SourceOver);   // HACK since 4.4, the rounding when drawing an image in nearest neighborg mode has changed, and without this tiny lines appear on the canvas when scrolling on a non multiple of 2 scale (superior to 200%)
-                gc.drawImage(rcTopLeftUnscaled, img);
+                gc.setCompositionMode(QPainter::CompositionMode_Source);
+                gc.drawImage(rcTopLeftUnscaled, m_d->unscaledCache, alignedImageRect);
                 gc.restore();
             }
         }

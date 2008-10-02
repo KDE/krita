@@ -95,23 +95,23 @@ public:
     int loadSpanLevel;
     int loadSpanInitialPos;
 
-    explicit Private(KoShapeLoadingContext & context)
-            : context(context)
-            , textSharedData(0)
+    explicit Private(KoShapeLoadingContext &context)
+            : context(context),
+              textSharedData(0),
             // stylesDotXml says from where the office:automatic-styles are to be picked from:
             // the content.xml or the styles.xml (in a multidocument scenario). It does not
             // decide from where the office:styles are to be picked (always picked from styles.xml).
             // For our use here, stylesDotXml is always false (see ODF1.1 spec §2.1).
-            , stylesDotXml(context.odfLoadingContext().useStylesAutoStyles())
-            , bodyProgressTotal(0)
-            , bodyProgressValue(0)
-            , lastElapsed(0)
-            , currentList(0)
-            , currentListStyle(0)
-            , currentListLevel(1)
-            , styleManager(0),
-            loadSpanLevel(0),
-            loadSpanInitialPos(0) {
+              stylesDotXml(context.odfLoadingContext().useStylesAutoStyles()),
+              bodyProgressTotal(0),
+              bodyProgressValue(0),
+              lastElapsed(0),
+              currentList(0),
+              currentListStyle(0),
+              currentListLevel(1),
+              styleManager(0),
+              loadSpanLevel(0),
+              loadSpanInitialPos(0) {
         dt.start();
     }
 
@@ -602,9 +602,6 @@ void KoTextLoader::loadSpan(const KoXmlElement& element, QTextCursor& cursor, bo
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
             kDebug(32500) << "  <line-break> Node localName=" << localName;
 #endif
-            //QTextBlockFormat emptyTbf;
-            //QTextCharFormat emptyCf;
-            //cursor.insertBlock(emptyTbf, emptyCf);
             cursor.insertText("\n");
         }
         // text:bookmark, text:bookmark-start and text:bookmark-end

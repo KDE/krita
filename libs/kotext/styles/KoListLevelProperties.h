@@ -115,6 +115,11 @@ public:
     /// returns whether this list continues numbering from a previous list of the same style
     bool continueNumbering() const;
 
+    /// sets the indentation of paragraph
+    void setIndent(qreal value);
+    /// returns the indentation of paragraphs
+    qreal indent() const;
+
     bool operator==(const KoListLevelProperties &other) const;
     KoListLevelProperties & operator=(const KoListLevelProperties &other);
 

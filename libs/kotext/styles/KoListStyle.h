@@ -112,7 +112,8 @@ public:
         IsOutline,      ///< If true then this list is an outline list (for header paragraphs)
         LetterSynchronization, ///< If letters are used for numbering, when true increment all at the same time. (aa, bb)
         StyleId,        ///< The id stored in the listFormat to link the list to this style.
-        ContinueNumbering /// Continue numbering this list from the counter of a previous list
+        ContinueNumbering, ///< Continue numbering this list from the counter of a previous list
+        Indent          ///< The space (margin) to include for all paragraphs
     };
 
     /**

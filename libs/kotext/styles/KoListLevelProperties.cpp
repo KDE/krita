@@ -21,11 +21,14 @@
 #include "KoListLevelProperties.h"
 #include "Styles_p.h"
 
+#include <float.h>
+
 #include <kdebug.h>
 
 #include <KoXmlNS.h>
 #include <KoOdfLoadingContext.h>
 #include <KoXmlWriter.h>
+#include <KoUnit.h>
 
 class KoListLevelProperties::Private
 {
@@ -263,6 +266,16 @@ bool KoListLevelProperties::continueNumbering() const
     return propertyBoolean(KoListStyle::ContinueNumbering);
 }
 
+void KoListLevelProperties::setIndent(qreal value)
+{
+    setProperty(KoListStyle::Indent, value);
+}
+
+qreal KoListLevelProperties::indent() const
+{
+    return propertyDouble(KoListStyle::Indent);
+}
+
 // static
 KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list)
 {
@@ -386,8 +399,11 @@ void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlEle
     }
 
     setLevel(level);
-    if (! displayLevel.isNull())
+    if (!displayLevel.isNull())
         setDisplayLevel(displayLevel.toInt());
+
+    if (style.hasAttributeNS(KoXmlNS::text, "space-before"))
+        setIndent(KoUnit::parseValue(style.attributeNS(KoXmlNS::text, "space-before")));
 }
 
 void KoListLevelProperties::saveOdf(KoXmlWriter *writer) const
@@ -449,6 +465,13 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer) const
             }
         }
         writer->addAttribute("text:bullet-char", QChar(bullet));
+    }
+
+    if (d->stylesPrivate.contains(KoListStyle::Indent)) {
+        QString str;
+        str.setNum(indent(), 'f', DBL_DIG);
+        str += "pt";
+        writer->addAttribute("text:space-before", str);
     }
 
     kDebug() << "Key KoListStyle::ListItemPrefix :" << d->stylesPrivate.value(KoListStyle::ListItemPrefix);

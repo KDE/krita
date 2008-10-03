@@ -439,26 +439,23 @@ void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
         if (listHeader)
             blockFormat.setProperty(KoParagraphStyle::IsListHeader, true);
 
-        if (current != cursor.block()) {
-            // mark intermediate paragraphs as unnumbered items
-            QTextCursor c(current);
-            do {
-                c.movePosition(QTextCursor::NextBlock);
-                if (c.block().textList()) // a sublist
-                    break;
-                QTextBlockFormat blockFormat;
-                blockFormat.setProperty(listHeader ? KoParagraphStyle::IsListHeader : KoParagraphStyle::UnnumberedListItem, true);
-                c.mergeBlockFormat(blockFormat);
-                d->currentList->add(c.block(), level);
-            } while (c.block() != cursor.block());
-        }
-
         if (e.hasAttributeNS(KoXmlNS::text, "start-value")) {
             int startValue = e.attributeNS(KoXmlNS::text, "start-value", QString()).toInt();
             blockFormat.setProperty(KoParagraphStyle::ListStartValue, startValue);
         }
 
-        cursor.mergeBlockFormat(blockFormat);
+        // mark intermediate paragraphs as unnumbered items
+        QTextCursor c(current);
+        c.mergeBlockFormat(blockFormat);
+        while (c.block() != cursor.block()) {
+            c.movePosition(QTextCursor::NextBlock);
+            if (c.block().textList()) // a sublist
+                break;
+            blockFormat = c.blockFormat();
+            blockFormat.setProperty(listHeader ? KoParagraphStyle::IsListHeader : KoParagraphStyle::UnnumberedListItem, true);
+            c.setBlockFormat(blockFormat);
+            d->currentList->add(c.block(), level);
+        }
     }
 
     if (numberedParagraph || --d->currentListLevel == 1) {

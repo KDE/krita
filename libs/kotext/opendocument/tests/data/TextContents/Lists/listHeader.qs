@@ -18,5 +18,7 @@ cursor.insertText("This is an example of list header.", defaultListItemFormat);
 cursor.insertBlock();
 cursor.mergeBlockFormat(headerFormat);
 cursor.insertText("This is an example of list header.", defaultListItemFormat);
+cursor.insertBlock();
+cursor.insertText("This is an example of multi-paragraph list header.", defaultListItemFormat);
 
 return document;

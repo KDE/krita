@@ -249,7 +249,8 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
                     m_writer->endElement(); // </text:list-element>
                 }
             }
-            const bool listHeader = block.blockFormat().boolProperty(KoParagraphStyle::IsListHeader);
+            const bool listHeader = block.blockFormat().boolProperty(KoParagraphStyle::IsListHeader)
+                                    || block.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem);
             m_writer->startElement(listHeader ? "text:list-header" : "text:list-item", false);
         } else {
             // Close any remaining list...
@@ -262,14 +263,19 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
             }
         }
 
-        while (true) {
-            saveParagraph(block, from, to);
-            QTextBlock nextBlock = block.next();
-            if (!nextBlock.isValid() || !((to == -1) || (nextBlock.position() < to)))
-                break;
-            if (!nextBlock.textList() || !nextBlock.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem))
-                break;
-            block = nextBlock;
+        saveParagraph(block, from, to);
+
+        if (!textLists.isEmpty()) {
+            // we are generating a text:list-item. Look forward and generate unnumbered list items.
+            while (true) {
+                QTextBlock nextBlock = block.next();
+                if (!nextBlock.isValid() || !((to == -1) || (nextBlock.position() < to)))
+                    break;
+                if (!nextBlock.textList() || !nextBlock.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem))
+                    break;
+                block = nextBlock;
+                saveParagraph(block, from, to);
+            }
         }
 
         if (block.textList() && !isHeading) // We must check if we need to close a previously-opened text:list node.

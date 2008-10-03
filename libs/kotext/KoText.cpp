@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C)  2006 Thomas Zander <zander@kde.org>
+ * Copyright (C)  2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -61,5 +62,41 @@ bool KoText::Tab::operator==(const Tab &other) const
            other.leaderStyle == leaderStyle &&
            other.leaderColor == leaderColor &&
            other.leaderText == leaderText ;
+}
+
+Qt::Alignment KoText::alignmentFromString(const QString &align)
+{
+    Qt::Alignment alignment = Qt::AlignAuto;
+    if (align == "left")
+        alignment = Qt::AlignLeft | Qt::AlignAbsolute;
+    else if (align == "right")
+        alignment = Qt::AlignRight | Qt::AlignAbsolute;
+    else if (align == "start")
+        alignment = Qt::AlignLeading;
+    else if (align == "end")
+        alignment = Qt::AlignTrailing;
+    else if (align == "center")
+        alignment = Qt::AlignHCenter;
+    else if (align == "justify")
+        alignment = Qt::AlignJustify;
+    return alignment;
+}
+
+QString KoText::alignmentToString(Qt::Alignment alignment)
+{
+    QString align = "";
+    if (alignment == (Qt::AlignLeft | Qt::AlignAbsolute))
+        align = "left";
+    else if (alignment == (Qt::AlignRight | Qt::AlignAbsolute))
+        align = "right";
+    else if (alignment == Qt::AlignLeading)
+        align = "start";
+    else if (alignment == Qt::AlignTrailing)
+        align = "end";
+    else if (alignment == Qt::AlignHCenter)
+        align = "center";
+    else if (alignment == Qt::AlignJustify)
+        align = "justify";
+    return align;
 }
 

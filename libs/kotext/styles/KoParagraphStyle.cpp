@@ -973,23 +973,8 @@ void KoParagraphStyle::loadOdfProperties(KoStyleStack& styleStack)
 
     // Alignment
     if (styleStack.hasProperty(KoXmlNS::fo, "text-align")) {
-        QString align = styleStack.property(KoXmlNS::fo, "text-align");
-        Qt::Alignment alignment = Qt::AlignAuto;
-        if (align == "left")
-            alignment = Qt::AlignLeft | Qt::AlignAbsolute;
-        else if (align == "right")
-            alignment = Qt::AlignRight | Qt::AlignAbsolute;
-        else if (align == "start")
-            alignment = Qt::AlignLeading;
-        else if (align == "end")
-            alignment = Qt::AlignTrailing;
-        else if (align == "center")
-            alignment = Qt::AlignHCenter;
-        else if (align == "justify")
-            alignment = Qt::AlignJustify;
-        setAlignment(alignment);
+        setAlignment(KoText::alignmentFromString(styleStack.property(KoXmlNS::fo, "text-align")));
     }
-
 
     // Spacing (padding)
     if (styleStack.hasProperty(KoXmlNS::fo, "padding-left"))
@@ -1470,19 +1455,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle & style)
             alignValue = d->stylesPrivate.value(key).toInt(&ok);
             if (ok) {
                 Qt::Alignment alignment = (Qt::Alignment) alignValue;
-                QString align = "";
-                if (alignment == (Qt::AlignLeft | Qt::AlignAbsolute))
-                    align = "left";
-                else if (alignment == (Qt::AlignRight | Qt::AlignAbsolute))
-                    align = "right";
-                else if (alignment == Qt::AlignLeading)
-                    align = "start";
-                else if (alignment == Qt::AlignTrailing)
-                    align = "end";
-                else if (alignment == Qt::AlignHCenter)
-                    align = "center";
-                else if (alignment == Qt::AlignJustify)
-                    align = "justify";
+                QString align = KoText::alignmentToString(alignment);
                 if (!align.isEmpty())
                     style.addProperty("fo:text-align", align, KoGenStyle::ParagraphType);
             }

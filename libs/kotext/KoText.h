@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C)  2006 Thomas Zander <zander@kde.org>
+ * Copyright (C)  2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,6 +39,8 @@ namespace KoText
 {
 KOTEXT_EXPORT QStringList underlineTypeList();
 KOTEXT_EXPORT QStringList underlineStyleList();
+KOTEXT_EXPORT Qt::Alignment alignmentFromString(const QString &align);
+KOTEXT_EXPORT QString alignmentToString(Qt::Alignment align);
 
 /// This enum contains values to be used as keys in the KoCanvasResourceProvider
 enum Options {

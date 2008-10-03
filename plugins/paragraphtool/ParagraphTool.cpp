@@ -66,7 +66,7 @@
  * - think about a method to give instructions to the users
  *   (the bubble used by okular might be a good way to do this)
  */
-bool shapeContainsBlock(const KoShape *shape, QTextBlock textBlock)
+static bool shapeContainsBlock(const KoShape *shape, QTextBlock textBlock)
 {
     QTextLayout *layout = textBlock.layout();
     qreal blockStart = layout->lineAt(0).y();
@@ -87,6 +87,7 @@ bool shapeContainsBlock(const KoShape *shape, QTextBlock textBlock)
 
 ParagraphTool::ParagraphTool(KoCanvasBase *canvas)
         : KoTool(canvas),
+        m_paragraphHighlighter(this, canvas),
         m_paragraphStyle(NULL),
         m_activeRuler(noRuler),
         m_focusedRuler(noRuler),
@@ -225,19 +226,25 @@ void ParagraphTool::paintLabel(QPainter &painter, const KoViewConverter &convert
 
 void ParagraphTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if (!hasActiveTextBlock())
-        return;
+    m_needsRepaint = false;
 
-    foreach(const ParagraphFragment &fragment, m_fragments) {
-        fragment.paint(painter, converter);
+    if (hasActiveTextBlock()) {
+        foreach(const ParagraphFragment &fragment, m_fragments) {
+            fragment.paint(painter, converter);
+        }
+
+        paintLabel(painter, converter);
     }
 
-    paintLabel(painter, converter);
+    if (m_paragraphHighlighter.hasActiveTextBlock()
+            && m_paragraphHighlighter.textBlock() != textBlock()) {
+        m_paragraphHighlighter.paint(painter, converter);
+    }
 }
 
 void ParagraphTool::repaintDecorations()
 {
-    if (!m_needsRepaint) {
+    if (!needsRepaint() && !m_paragraphHighlighter.needsRepaint()) {
         return;
     }
 
@@ -248,16 +255,22 @@ void ParagraphTool::repaintDecorations()
     foreach(const ParagraphFragment &fragment, m_fragments) {
         m_storedRepaintRectangle |= fragment.dirtyRectangle();
     }
+    repaintRectangle |= m_paragraphHighlighter.dirtyRectangle();
     repaintRectangle |= m_storedRepaintRectangle;
 
-    canvas()->updateCanvas(repaintRectangle);
+    kDebug() << repaintRectangle;
 
-    m_needsRepaint = false;
+    canvas()->updateCanvas(repaintRectangle);
 }
 
 void ParagraphTool::scheduleRepaint()
 {
     m_needsRepaint = true;
+}
+
+bool ParagraphTool::needsRepaint() const
+{
+    return m_needsRepaint;
 }
 
 bool ParagraphTool::createFragments()
@@ -519,6 +532,8 @@ void ParagraphTool::applyParentStyleToActiveRuler()
 
 void ParagraphTool::mousePressEvent(KoPointerEvent *event)
 {
+    m_paragraphHighlighter.mousePressEvent(event);
+
     m_mousePosition = event->point;
 
     if (event->button() == Qt::LeftButton) {
@@ -545,6 +560,8 @@ void ParagraphTool::mousePressEvent(KoPointerEvent *event)
 
 void ParagraphTool::mouseReleaseEvent(KoPointerEvent *event)
 {
+    m_paragraphHighlighter.mouseReleaseEvent(event);
+
     m_mousePosition = event->point;
 
     if (hasActiveTextBlock()) {
@@ -556,6 +573,8 @@ void ParagraphTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void ParagraphTool::mouseMoveEvent(KoPointerEvent *event)
 {
+    m_paragraphHighlighter.mouseMoveEvent(event);
+
     m_mousePosition = event->point;
 
     if (hasActiveTextBlock()) {
@@ -565,8 +584,9 @@ void ParagraphTool::mouseMoveEvent(KoPointerEvent *event)
             highlightRulerAt(event->point);
         }
 
-        repaintDecorations();
     }
+
+    repaintDecorations();
 }
 
 void ParagraphTool::keyPressEvent(QKeyEvent *event)
@@ -613,7 +633,6 @@ void ParagraphTool::keyPressEvent(QKeyEvent *event)
             break;
         }
     }
-
 
     repaintDecorations();
 }

@@ -21,6 +21,7 @@
 #define PARAGRAPHTOOL_H
 
 #include "ParagraphFragment.h"
+#include "ParagraphHighlighter.h"
 #include "Ruler.h"
 
 #include <KoTool.h>
@@ -77,6 +78,7 @@ public:
 public slots:
     // should be called when any of the rulers needs a repaint
     void scheduleRepaint();
+    bool needsRepaint() const;
 
     // should be called when the value of any of the rulers changed
     void updateLayout();
@@ -159,7 +161,7 @@ protected:
 
     // internal convencience methods
     QTextBlock textBlock() const {
-        Q_ASSERT(m_activeCursor.block().isValid()); return m_activeCursor.block();
+        return m_activeCursor.block();
     }
 
     QTextBlockFormat blockFormat() const {
@@ -173,6 +175,7 @@ protected:
     }
 
 private:
+    ParagraphHighlighter m_paragraphHighlighter;
     QTextCursor m_activeCursor;
     KoParagraphStyle *m_paragraphStyle;
 

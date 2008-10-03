@@ -97,7 +97,7 @@ qreal Layout::width()
     if (m_newParag)
         ptWidth -= resolveTextIndent();
     if (m_newParag && m_blockData)
-        ptWidth -= m_blockData->counterWidth() + m_blockData->counterSpacing();
+        ptWidth -= listIndent();
     ptWidth -= m_borderInsets.left + m_borderInsets.right + m_shapeBorder.right;
     ptWidth -= m_dropCapsAffectedLineWidthAdjust;
     return ptWidth;
@@ -438,10 +438,11 @@ bool Layout::nextParag()
         // Also after we account for indents etc so the y() pos is correct.
         if (m_isRtl)
             m_blockData->setCounterPosition(QPointF(shape->size().width() - m_borderInsets.right -
-                                                    m_shapeBorder.right - m_format.leftMargin() - m_blockData->counterWidth(), y()));
+                                                    m_shapeBorder.right - m_format.leftMargin() - listIndent(), y()));
         else
             m_blockData->setCounterPosition(QPointF(m_borderInsets.left + m_shapeBorder.left +
-                                                    m_format.textIndent() + m_format.leftMargin() , y()));
+                                                    m_format.textIndent() + m_format.leftMargin() +
+                                                    textList->format().doubleProperty(KoListStyle::Indent), y()));
     }
 
     return true;
@@ -519,9 +520,12 @@ qreal Layout::listIndent()
 {
     if (m_blockData == 0)
         return 0;
+    qreal indent = 0;
+    if (m_block.textList())
+        indent = m_block.textList()->format().doubleProperty(KoListStyle::Indent);
     if (m_isRtl)
-        return 0;
-    return m_blockData->counterWidth();
+        return indent;
+    return m_blockData->counterWidth() + indent;
 }
 
 void Layout::resetPrivate()

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Artistic Text Shape
+Name[uk]=Форма-художній текст
 X-KDE-ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=artistictextshape

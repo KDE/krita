@@ -277,6 +277,16 @@ qreal KoListLevelProperties::indent() const
     return propertyDouble(KoListStyle::Indent);
 }
 
+void KoListLevelProperties::setMinimumDistance(qreal value)
+{
+    setProperty(KoListStyle::MinimumDistance, value);
+}
+
+qreal KoListLevelProperties::minimumDistance() const
+{
+    return propertyDouble(KoListStyle::MinimumDistance);
+}
+
 // static
 KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list)
 {
@@ -417,6 +427,9 @@ void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlEle
 
             if (property.hasAttributeNS(KoXmlNS::fo, "text-align"))
                 setAlignment(KoText::alignmentFromString(property.attributeNS(KoXmlNS::fo, "text-align")));
+
+            if (property.hasAttributeNS(KoXmlNS::text, "min-label-distance"))
+                setMinimumWidth(KoUnit::parseValue(property.attributeNS(KoXmlNS::text, "min-label-distance")));
         } else if (localName == "text-properties") {
             // TODO
         }
@@ -502,6 +515,9 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer) const
 
     if (d->stylesPrivate.contains(KoListStyle::Alignment))
         writer->addAttribute("fo:text-align", KoText::alignmentToString(alignment()));
+
+    if (d->stylesPrivate.contains(KoListStyle::MinimumDistance))
+        writer->addAttribute("text:min-label-distance", toPoint(minimumDistance()));
 
     writer->endElement(); // list-level-properties
 

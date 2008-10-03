@@ -120,6 +120,11 @@ public:
     /// returns the indentation of paragraphs
     qreal indent() const;
 
+    /// sets the minimum distance between the counter and the text
+    void setMinimumDistance(qreal value);
+    /// returns the minimum distance between the counter and text
+    qreal minimumDistance() const;
+
     bool operator==(const KoListLevelProperties &other) const;
     KoListLevelProperties & operator=(const KoListLevelProperties &other);
 

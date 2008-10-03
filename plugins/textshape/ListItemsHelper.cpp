@@ -225,12 +225,11 @@ ListItemsHelper::ListItemsHelper(QTextList *textList, const QFont &font)
 void ListItemsHelper::recalculate()
 {
     //kDebug(32500) <<"ListItemsHelper::recalculate";
-    qreal width = 0.0;
-    QTextListFormat format = m_textList->format();
+    const QTextListFormat format = m_textList->format();
     const KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(m_textList->format().style());
 
-    QString prefix = format.stringProperty(KoListStyle::ListItemPrefix);
-    QString suffix = format.stringProperty(KoListStyle::ListItemSuffix);
+    const QString prefix = format.stringProperty(KoListStyle::ListItemPrefix);
+    const QString suffix = format.stringProperty(KoListStyle::ListItemSuffix);
     const int level = format.intProperty(KoListStyle::Level);
     int dp = format.intProperty(KoListStyle::DisplayLevel);
     if (dp > level || dp == 0)
@@ -259,6 +258,7 @@ void ListItemsHelper::recalculate()
 
     int index = startValue;
     QList<QTextList*> sublistsToRecalculate;
+    qreal width = format.doubleProperty(KoListStyle::MinimumWidth);
     for (int i = 0; i < m_textList->count(); i++) {
         QTextBlock tb = m_textList->item(i);
         //kDebug(32500) <<" *" << tb.text();

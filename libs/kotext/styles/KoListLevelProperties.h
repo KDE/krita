@@ -92,7 +92,7 @@ public:
     /// set the minimum width (in pt) of the list label for all items in this list
     void setMinimumWidth(qreal width);
     /// return the minimum width (in pt) of the list label for all items in this list
-    qreal minimumWidth();
+    qreal minimumWidth() const;
     /// set the listId used by all list-styles that together make 1 user defined list in an ODF file.
     void setListId(const QString &listId);
     /// return the listId used by all list-styles that together make 1 user defined list in an ODF file.

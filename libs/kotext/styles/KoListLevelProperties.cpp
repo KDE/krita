@@ -225,7 +225,7 @@ void KoListLevelProperties::setMinimumWidth(qreal width)
     setProperty(KoListStyle::MinimumWidth, width);
 }
 
-qreal KoListLevelProperties::minimumWidth()
+qreal KoListLevelProperties::minimumWidth() const
 {
     return propertyDouble(KoListStyle::MinimumWidth);
 }
@@ -402,8 +402,29 @@ void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlEle
     if (!displayLevel.isNull())
         setDisplayLevel(displayLevel.toInt());
 
-    if (style.hasAttributeNS(KoXmlNS::text, "space-before"))
-        setIndent(KoUnit::parseValue(style.attributeNS(KoXmlNS::text, "space-before")));
+    KoXmlElement property;
+    forEachElement(property, style) {
+        if (property.namespaceURI() != KoXmlNS::style)
+            continue;
+        const QString localName = property.localName();
+        if (localName == "list-level-properties") {
+            if (property.hasAttributeNS(KoXmlNS::text, "space-before"))
+                setIndent(KoUnit::parseValue(property.attributeNS(KoXmlNS::text, "space-before")));
+
+            if (property.hasAttributeNS(KoXmlNS::text, "min-label-width"))
+                setMinimumWidth(KoUnit::parseValue(property.attributeNS(KoXmlNS::text, "min-label-width")));
+        } else if (localName == "text-properties") {
+            // TODO
+        }
+    }
+}
+
+static QString toPoint(qreal number)
+{
+    QString str;
+    str.setNum(number, 'f', DBL_DIG);
+    str += "pt";
+    return str;
 }
 
 void KoListLevelProperties::saveOdf(KoXmlWriter *writer) const
@@ -467,12 +488,15 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer) const
         writer->addAttribute("text:bullet-char", QChar(bullet));
     }
 
-    if (d->stylesPrivate.contains(KoListStyle::Indent)) {
-        QString str;
-        str.setNum(indent(), 'f', DBL_DIG);
-        str += "pt";
-        writer->addAttribute("text:space-before", str);
-    }
+    writer->startElement("style:list-level-properties", false);
+
+    if (d->stylesPrivate.contains(KoListStyle::Indent))
+        writer->addAttribute("text:space-before", toPoint(indent()));
+
+    if (d->stylesPrivate.contains(KoListStyle::MinimumWidth))
+        writer->addAttribute("text:min-label-width", toPoint(minimumWidth()));
+
+    writer->endElement(); // list-level-properties
 
     kDebug() << "Key KoListStyle::ListItemPrefix :" << d->stylesPrivate.value(KoListStyle::ListItemPrefix);
     kDebug() << "Key KoListStyle::ListItemSuffix :" << d->stylesPrivate.value(KoListStyle::ListItemSuffix);

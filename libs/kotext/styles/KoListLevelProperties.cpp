@@ -29,6 +29,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoXmlWriter.h>
 #include <KoUnit.h>
+#include <KoText.h>
 
 class KoListLevelProperties::Private
 {
@@ -413,6 +414,9 @@ void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlEle
 
             if (property.hasAttributeNS(KoXmlNS::text, "min-label-width"))
                 setMinimumWidth(KoUnit::parseValue(property.attributeNS(KoXmlNS::text, "min-label-width")));
+
+            if (property.hasAttributeNS(KoXmlNS::fo, "text-align"))
+                setAlignment(KoText::alignmentFromString(property.attributeNS(KoXmlNS::fo, "text-align")));
         } else if (localName == "text-properties") {
             // TODO
         }
@@ -495,6 +499,9 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer) const
 
     if (d->stylesPrivate.contains(KoListStyle::MinimumWidth))
         writer->addAttribute("text:min-label-width", toPoint(minimumWidth()));
+
+    if (d->stylesPrivate.contains(KoListStyle::Alignment))
+        writer->addAttribute("fo:text-align", KoText::alignmentToString(alignment()));
 
     writer->endElement(); // list-level-properties
 

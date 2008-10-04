@@ -34,7 +34,7 @@ ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
     foreach(Lists::ListStyleItem item, Lists::genericListStyleItems())
     addStyle(item);
     addStyle(Lists::ListStyleItem(i18n("Custom Bullet"), KoListStyle::CustomCharItem));
-    foreach(Lists::ListStyleItem item, Lists::otherlistStyleItems())
+    foreach(Lists::ListStyleItem item, Lists::otherListStyleItems())
     addStyle(item);
 
     widget.alignment->addItem(i18nc("Automatic horizontal alignment", "Auto"));

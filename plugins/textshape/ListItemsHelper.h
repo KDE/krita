@@ -47,7 +47,7 @@ QString intToScriptList(int n, KoListStyle::Style type);
 /// return international list items (bullets/arabic/roman)
 QList<ListStyleItem> genericListStyleItems();
 /// return non-latin list items (bullets/arabic/roman)
-QList<ListStyleItem> otherlistStyleItems(); // we may want to split this method up into different world regions.
+QList<ListStyleItem> otherListStyleItems(); // we may want to split this method up into different world regions.
 }
 
 /// \internal helper class for calculating text-lists prefixes and indents

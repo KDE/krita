@@ -119,7 +119,7 @@ void SimpleStyleWidget::setCurrentBlock(const QTextBlock &block)
         }
     }
 
-    foreach(Lists::ListStyleItem item, Lists::otherlistStyleItems()) {
+    foreach(Lists::ListStyleItem item, Lists::otherListStyleItems()) {
         if (item.style == style) {
             widget.listType->addItem(item.name, static_cast<int>(item.style));
             widget.listType->setCurrentIndex(widget.listType->count() - 1);

@@ -194,7 +194,7 @@ QList<ListStyleItem> Lists::genericListStyleItems()
     return answer;
 }
 
-QList<ListStyleItem> Lists::otherlistStyleItems()
+QList<ListStyleItem> Lists::otherListStyleItems()
 {
     QList<ListStyleItem> answer;
     answer.append(ListStyleItem(i18n("Bengali"), KoListStyle::Bengali));

@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Artistic Text Shape
+Name[it]=Forma di testo artistica
+Name[kk]=Көркем мәтін пішіні
+Name[pt]=Forma de Texto Artístico
+Name[pt_BR]=Forma de Texto Artístico
 Name[uk]=Форма-художній текст
 X-KDE-ServiceTypes=KOffice/Shape
 Type=Service

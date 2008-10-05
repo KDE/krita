@@ -368,7 +368,7 @@ void KoPADocument::postRemoveShape( KoPAPageBase * page, KoShape * shape )
     Q_UNUSED( shape );
 }
 
-QMap<QString, KoDataCenter *> KoPADocument::dataCenterMap()
+QMap<QString, KoDataCenter *> KoPADocument::dataCenterMap() const
 {
     return d->dataCenterMap;
 }

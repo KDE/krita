@@ -41,9 +41,9 @@ class QMenu;
 
 class DummyShapeController : public KoShapeControllerBase {
 public:
-    void addShape( KoShape* ) {}
-    void removeShape( KoShape* ) {}
-    QMap<QString, KoDataCenter *>  dataCenterMap()  { return QMap<QString,KoDataCenter*>(); }
+    virtual void addShape( KoShape* ) {}
+    virtual void removeShape( KoShape* ) {}
+    virtual QMap<QString, KoDataCenter *>  dataCenterMap() const { return QMap<QString,KoDataCenter*>(); }
 };
 
 class Canvas : public QWidget, public KoCanvasBase {

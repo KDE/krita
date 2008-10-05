@@ -61,7 +61,7 @@ public:
      * Typically some class-factories have created DataCenters and added them to this map.
      * This map is started from scratch with each new document (ehem KoShapeControllerBase)
      */
-    virtual QMap<QString, KoDataCenter *>  dataCenterMap() = 0;
+    virtual QMap<QString, KoDataCenter *>  dataCenterMap() const = 0;
 };
 
 #endif

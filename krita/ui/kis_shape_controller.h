@@ -51,7 +51,7 @@ public:
     void setImage(KisImageSP image);
     KoShape * shapeForNode(KisNodeSP layer) const;
     void setInitialShapeForView(KisView2 * view);
-    QMap<QString, KoDataCenter *> dataCenterMap();
+    virtual QMap<QString, KoDataCenter *> dataCenterMap() const;
 
 private:
 

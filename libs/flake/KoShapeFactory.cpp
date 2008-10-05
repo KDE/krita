@@ -67,7 +67,7 @@ KoShapeFactory::~KoShapeFactory()
     delete d;
 }
 
-KoShape * KoShapeFactory::createDefaultShapeAndInit(KoShapeControllerBase * shapeController) const
+KoShape * KoShapeFactory::createDefaultShapeAndInit(const KoShapeControllerBase * shapeController) const
 {
     KoShape * shape = createDefaultShape();
     if (shape && shapeController) {
@@ -83,7 +83,7 @@ KoShape * KoShapeFactory::createDefaultShapeAndInit(const QMap<QString, KoDataCe
     return shape;
 }
 
-KoShape * KoShapeFactory::createShapeAndInit(const KoProperties * params, KoShapeControllerBase *shapeController) const
+KoShape * KoShapeFactory::createShapeAndInit(const KoProperties * params, const KoShapeControllerBase *shapeController) const
 {
     KoShape * shape = createShape(params);
     if (shape && shapeController) {

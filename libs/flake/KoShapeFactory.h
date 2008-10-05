@@ -122,7 +122,7 @@ public:
      * @see KoShapeFactory::createDefaultShape
      * @see KoShape::init
      */
-    KoShape * createDefaultShapeAndInit(KoShapeControllerBase * shapeController) const;
+    KoShape * createDefaultShapeAndInit(const KoShapeControllerBase * shapeController) const;
 
     /**
      * This method should be called to create a shape that the user gets when doing a base insert.
@@ -164,7 +164,7 @@ public:
      * @see KoShapeTemplate::properties
      * @see KoShape::init
      */
-    KoShape * createShapeAndInit(const KoProperties * params, KoShapeControllerBase *shapeController) const;
+    KoShape * createShapeAndInit(const KoProperties * params, const KoShapeControllerBase *shapeController) const;
 
     /**
      * This method should be called to create a shape based on a set of properties that are

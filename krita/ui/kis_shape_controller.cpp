@@ -279,7 +279,7 @@ void KisShapeController::addShape(KoShape* shape)
     m_d->doc->setModified(true);
 }
 
-QMap<QString, KoDataCenter *> KisShapeController::dataCenterMap()
+QMap<QString, KoDataCenter *> KisShapeController::dataCenterMap() const
 {
     return m_d->dataCenterMap;
 }

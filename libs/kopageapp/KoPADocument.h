@@ -186,7 +186,7 @@ public:
     void setRulersVisible(bool visible);
     bool rulersVisible() const;
 
-    QMap<QString, KoDataCenter *>  dataCenterMap();
+    virtual QMap<QString, KoDataCenter *>  dataCenterMap() const;
 
     /**
      * Get the page on which the shape is located

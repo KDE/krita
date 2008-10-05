@@ -30,12 +30,11 @@
 
 RulerDecoration::RulerDecoration(KisView2* _view, Ruler* _ruler) : KisCanvasDecoration("ruler", i18n("Ruler decoration"), _view), m_ruler(_ruler),m_edition( false)
 {
-    kDebug() << m_ruler << "========================================";
 }
 
 RulerDecoration::~RulerDecoration()
 {
-    
+
 }
 
 inline double angle( const QPointF& p1, const QPointF& p2)
@@ -56,7 +55,6 @@ void RulerDecoration::setEdition( bool v )
 
 void RulerDecoration::drawDecoration(QPainter& _painter, const QPoint & documentOffset, const QRect& _area, const KoViewConverter &_converter)
 {
-    kDebug() << m_ruler << "========================================";
     Q_UNUSED(_area);
     // Draw the gradient
     _painter.save();

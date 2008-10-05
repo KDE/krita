@@ -44,7 +44,6 @@ K_EXPORT_COMPONENT_FACTORY( kritarulerassistantview, RulerAssistantViewPluginFac
 RulerAssistantViewPlugin::RulerAssistantViewPlugin(QObject *parent, const QStringList &)
     : KParts::Plugin(parent)
 {
-    kDebug() << "RulerAssistantViewPlugin";
     if ( parent->inherits("KisView2") )
     {
         m_view = (KisView2*) parent;
@@ -55,7 +54,7 @@ RulerAssistantViewPlugin::RulerAssistantViewPlugin(QObject *parent, const QStrin
 
         RulerAssistant* ra = new RulerAssistant;
         KisPaintingAssistant::setCurrentAssistant( ra );
-        
+
         RulerDecoration* hbd = new RulerDecoration( m_view, ra->ruler() );
         m_view->canvasBase()->addDecoration( hbd );
         KAction *action  = new KAction(i18n("&Show ruler assistant"), this);

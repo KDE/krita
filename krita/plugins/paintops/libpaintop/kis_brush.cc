@@ -543,7 +543,8 @@ void KisBrush::mask(KisPaintDeviceSP dst, const KisPaintDeviceSP src, double sca
 }
 
 
-KisPaintDeviceSP KisBrush::image(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
+KisPaintDeviceSP KisBrush::image(const KoColorSpace * colorSpace, double scale, double angle,
+                                 const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
     Q_UNUSED(colorSpace);
     Q_UNUSED(info);

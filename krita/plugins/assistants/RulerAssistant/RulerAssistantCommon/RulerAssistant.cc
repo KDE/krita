@@ -26,18 +26,15 @@ RulerAssistant::RulerAssistant()
     : KisPaintingAssistant("ruler", i18n("Ruler assistant")),
       m_ruler( new Ruler)
 {
-    kDebug() << m_ruler << "========================================";
 }
 
 QPointF RulerAssistant::adjustPosition( const QPointF& pt)
 {
-    kDebug() << m_ruler << "========================================";
     QPointF project = m_ruler->project( pt );
     return m_ruler->project( pt );
 }
 
 Ruler* RulerAssistant::ruler()
 {
-    kDebug() << m_ruler << "========================================";
     return m_ruler;
 }

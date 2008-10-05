@@ -222,7 +222,6 @@ void KisTileStoreMemory::requestTileData(KisSharedTileData* tileData)
     }*/
     QMutexLocker dataLock(&(tileData->lock));
     tileData->data = new quint8[m_tileSize * tileData->pixelSize];
-    //kDebug() << "Requested " << tileData->data;
 }
 
 void KisTileStoreMemory::dontNeedTileData(KisSharedTileData* tileData)
@@ -316,7 +315,6 @@ quint8* KisTileStoreMemory::findTileFor(qint32 pixelSize)
             try {
                 m_pools[i] = new quint8[pixelSize * m_tileSize * m_tilesPerPool];
             } catch (std::bad_alloc) {
-                kDebug() << ">>>>>>> Could not allocated memory" << pixelSize << "" << m_tileSize << "" << m_tilesPerPool;
                 // XXX: bart! What shall we do here?
                 abort();
             }

@@ -80,7 +80,6 @@ KisTileSwapper::~KisTileSwapper()
     m_waitLock.lock();
     m_waitCondition.wakeAll();
     m_waitLock.unlock();
-    kDebug() << "Shutting down KisTileSwapper";
     wait(); // ### Right?
 
     foreach(KisSharedTileData* tileData, m_swapList) {
@@ -145,7 +144,6 @@ void KisTileSwapper::run()
                 // TODO: When we add the m_store to the tileData, call deregister here!
                 tileData->lock.unlock();
                 fromSwappableList(tileData);
-                //kDebug() << "Removing from swap: " << tileData->data;
                 delete tileData;
                 continue;
             }
@@ -339,7 +337,6 @@ void KisTileSwapper::swapTileData(KisSharedTileData* tileData)   // LOCKED
     }
 
     if (!memInfo || !tileData->data) {
-        kDebug() << "Odd, trying to swap tiledata that has not yet been initialized...";
         // ### This basically means this got deleted from the swap queue, are we sure that it will be able to get swapped again?
         return;
     }
@@ -376,7 +373,6 @@ void KisTileSwapper::swapTileData(KisSharedTileData* tileData)   // LOCKED
         // ### tile pools
         delete[] tileData->data;
 
-        //kDebug() << "Swapped out " << tileData->data;
         tileData->data = 0;
     } else {
         Q_ASSERT(memInfo->onFile);
@@ -389,7 +385,6 @@ void KisTileSwapper::swapTileData(KisSharedTileData* tileData)   // LOCKED
 
         // munmap it
         munmap(tileData->data, tileData->tileSize);
-        //kDebug() << "Munmapped " << tileData->data;
         tileData->data = 0;
     }
 

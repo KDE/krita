@@ -51,7 +51,6 @@ void KisRulerAssistantTool::activate(bool )
     // Add code here to initialize your tool when it got activated
     KisTool::activate();
     m_rulerDecoration = dynamic_cast<RulerDecoration*>(m_canvas->decoration("ruler"));
-    kDebug() << m_rulerDecoration << m_canvas->decoration("ruler");
     Q_ASSERT(m_rulerDecoration);
     m_rulerDecoration->setVisible( true);
 }
@@ -72,12 +71,10 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
 {
   if( norm2(event->point - m_rulerDecoration->ruler()->point1() ) < 10)
   {
-      kDebug() << "kikoo 1";
       m_mode = MODE_POINT1DRAGING;
       m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
   } else if( norm2(event->point - m_rulerDecoration->ruler()->point2() ) < 10 )
   {
-      kDebug() << "kikoo 2";
       m_mode = MODE_POINT2DRAGING;
       m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
   } else {

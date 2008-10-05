@@ -232,9 +232,9 @@ void ListItemsHelper::recalculate()
     const QString suffix = format.stringProperty(KoListStyle::ListItemSuffix);
     const int level = format.intProperty(KoListStyle::Level);
     int dp = format.intProperty(KoListStyle::DisplayLevel);
-    if (dp > level || dp == 0)
+    if (dp > level)
         dp = level;
-    const int displayLevel = dp;
+    const int displayLevel = dp ? dp : 1;
 
     int startValue = format.intProperty(KoListStyle::StartValue);
     if (format.boolProperty(KoListStyle::ContinueNumbering)) {

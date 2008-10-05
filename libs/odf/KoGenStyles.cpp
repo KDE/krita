@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
    Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -84,6 +85,8 @@ static const unsigned int numAutoStyleData = sizeof(autoStyleData) / sizeof(*aut
 class KoGenStyles::Private
 {
 public:
+    Private(KoGenStyles *q) : q(q) { }
+
     /// style definition -> name
     StyleMap styleMap;
 
@@ -100,10 +103,14 @@ public:
 
     /// font faces
     QSet<QString> fontFaces;
+
+    StyleMap::iterator insertStyle(const KoGenStyle &style, const QString &name, int flags);
+
+    KoGenStyles *q;
 };
 
 KoGenStyles::KoGenStyles()
-        : d(new Private)
+        : d(new Private(this))
 {
 }
 
@@ -127,6 +134,12 @@ QString KoGenStyles::lookup(const KoGenStyle& style, const QString& name, int fl
         // default styles don't have a name
         return QString("");
     }
+
+    if (flags & AllowDuplicates) {
+        StyleMap::iterator it = d->insertStyle(style, name, flags);
+        return it.value();
+    }
+
     StyleMap::iterator it = d->styleMap.find(style);
     if (it == d->styleMap.end()) {
         // Not found, try if this style is in fact equal to its parent (the find above
@@ -156,23 +169,29 @@ QString KoGenStyles::lookup(const KoGenStyle& style, const QString& name, int fl
             }
         }
 
-        QString styleName(name);
-        if (styleName.isEmpty()) {
-            styleName = 'A'; // for "auto".
-            flags &= ~DontForceNumbering; // i.e. force numbering
-        }
-        styleName = makeUniqueName(styleName, flags);
-        if (style.autoStyleInStylesDotXml())
-            d->autoStylesInStylesDotXml.insert(styleName);
-        else
-            d->styleNames.insert(styleName);
-        it = d->styleMap.insert(style, styleName);
-        NamedStyle s;
-        s.style = &it.key();
-        s.name = styleName;
-        d->styleArray.append(s);
+        it = d->insertStyle(style, name, flags);
     }
     return it.value();
+}
+
+KoGenStyles::StyleMap::iterator KoGenStyles::Private::insertStyle(const KoGenStyle &style, const QString &name, int flags)
+{
+    QString styleName(name);
+    if (styleName.isEmpty()) {
+        styleName = 'A'; // for "auto".
+        flags &= ~DontForceNumbering; // i.e. force numbering
+    }
+    styleName = q->makeUniqueName(styleName, flags);
+    if (style.autoStyleInStylesDotXml())
+        autoStylesInStylesDotXml.insert(styleName);
+    else
+        styleNames.insert(styleName);
+    KoGenStyles::StyleMap::iterator it = styleMap.insert(style, styleName);
+    NamedStyle s;
+    s.style = &it.key();
+    s.name = styleName;
+    styleArray.append(s);
+    return it;
 }
 
 KoGenStyles::StyleMap KoGenStyles::styles() const

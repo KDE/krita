@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -144,6 +145,36 @@ void TestKoGenStyles::testLookup()
         QList<KoGenStyles::NamedStyle> contentXmlStyles = coll.styles(KoGenStyle::StyleAuto, false);
         QCOMPARE(contentXmlStyles.count(), 1);
     }
+}
+
+void TestKoGenStyles::testLookupFlags()
+{
+    KoGenStyles coll;
+
+    KoGenStyle first(KoGenStyle::StyleAuto, "paragraph");
+    first.addAttribute("style:master-page-name", "Standard");
+    first.addProperty("style:page-number", "0");
+
+    QString styleName = coll.lookup(first, "P", KoGenStyles::DontForceNumbering);
+    QCOMPARE(styleName, QString("P"));
+
+    styleName = coll.lookup(first, "P", KoGenStyles::ForceNumbering);
+    QCOMPARE(styleName, QString("P"));
+
+    KoGenStyle second(KoGenStyle::StyleAuto, "paragraph");
+    second.addProperty("fo:text-align", "left");
+
+    styleName = coll.lookup(second, "P", KoGenStyles::ForceNumbering);
+    QCOMPARE(styleName, QString("P1"));
+
+    styleName = coll.lookup(second, "P", KoGenStyles::AllowDuplicates);
+    QCOMPARE(styleName, QString("P2"));
+
+    styleName = coll.lookup(second, "P", KoGenStyles::AllowDuplicates | KoGenStyles::ForceNumbering);
+    QCOMPARE(styleName, QString("P3"));
+
+    styleName = coll.lookup(second, "P", KoGenStyles::AllowDuplicates | KoGenStyles::DontForceNumbering);
+    QCOMPARE(styleName, QString("P4"));
 }
 
 void TestKoGenStyles::testWriteStyle()

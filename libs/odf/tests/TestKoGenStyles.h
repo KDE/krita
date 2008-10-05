@@ -26,6 +26,7 @@ class TestKoGenStyles : public QObject
     Q_OBJECT
 private slots:
     void testLookup();
+    void testLookupFlags();
     void testDefaultStyle();
     void testUserStyles();
     void testWriteStyle();

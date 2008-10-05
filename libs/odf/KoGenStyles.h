@@ -22,6 +22,7 @@
 
 #include <QtCore/QList>
 #include <QtCore/QMap>
+#include <QtCore/QMultiMap>
 #include <QtCore/QSet>
 #include <QtCore/QString>
 #include "koodf_export.h"
@@ -65,7 +66,7 @@ public:
         QString name;
     };
 
-    typedef QMap<KoGenStyle, QString> StyleMap;
+    typedef QMultiMap<KoGenStyle, QString> StyleMap;
     typedef QSet<QString> NameMap;
     typedef QList<NamedStyle> StyleArray;
 
@@ -79,12 +80,15 @@ public:
      * If DontForceNumbering is set, the first name that will be tried is "name", and only if
      * that one exists, then "name1" is tried. Set DontForceNumbering if the name given as
      * argument is supposed to be the full style name.
-     *
+     * If AllowDuplicates is set, a unique style name is generated even if a similiar KoGenStyle
+     * already exists. In other words, the collection will now contain two equal KoGenStyle
+     * and generate them with different style names.
      */
     enum Flags { // bitfield
         NoFlag = 0,
         ForceNumbering = 0, // it's the default anyway
-        DontForceNumbering = 1
+        DontForceNumbering = 1,
+        AllowDuplicates = 2
     };
     // KDE4 TODO: use QFlags and change the arg type in lookup
 

@@ -178,7 +178,13 @@ KoGenStyles::StyleMap::iterator KoGenStyles::Private::insertStyle(const KoGenSty
 {
     QString styleName(name);
     if (styleName.isEmpty()) {
-        styleName = 'A'; // for "auto".
+        switch (style.type()) {
+        case KoGenStyle::StyleAuto: styleName = 'P'; break;
+        case KoGenStyle::StyleListAuto: styleName = 'L'; break;
+        case KoGenStyle::StyleTextAuto: styleName = 'T'; break;
+        default:
+            styleName = 'A'; // for "auto".
+        }
         flags &= ~DontForceNumbering; // i.e. force numbering
     }
     styleName = q->makeUniqueName(styleName, flags);

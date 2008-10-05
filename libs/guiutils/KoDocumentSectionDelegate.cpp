@@ -111,6 +111,11 @@ bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *mode
         const QRect ir = iconsRect( option, index ).translated( option.rect.topLeft() ),
                     tr = textRect( option, index ).translated( option.rect.topLeft() );
 
+        if( !( me->modifiers() & Qt::ControlModifier) && !( me->modifiers() & Qt::ShiftModifier ) )
+        {
+            d->view->setCurrentIndex( index );
+        }
+
         if( ir.isValid() && ir.contains( me->pos() ) )
         {
             const int iconWidth = option.decorationSize.width();
@@ -132,15 +137,11 @@ bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *mode
             }
             return true;
         }
-
         else if( tr.isValid() && tr.contains( me->pos() ) && ( option.state & QStyle::State_HasFocus ) )
         {
             d->view->edit( index );
             return true;
         }
-
-        if( !( me->modifiers() & Qt::ControlModifier) && !( me->modifiers() & Qt::ShiftModifier ) )
-            d->view->setCurrentIndex( index );
     }
 
     else if( e->type() == QEvent::ToolTip )

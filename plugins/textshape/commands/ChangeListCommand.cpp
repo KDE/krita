@@ -94,14 +94,10 @@ KoListLevelProperties ChangeListCommand::listLevelProperties(KoListStyle::Style 
 {
     KoListLevelProperties llp;
     llp.setStyle(style);
-    if (style == KoListStyle::SquareItem || style == KoListStyle::DiscItem 
-        || style == KoListStyle::CircleItem || style == KoListStyle::BoxItem 
-        || style == KoListStyle::RhombusItem || style == KoListStyle::HeavyCheckMarkItem 
-        || style == KoListStyle::BallotXItem || style == KoListStyle::RightArrowItem 
-        || style == KoListStyle::RightArrowHeadItem)
-        llp.setListItemSuffix(""); // for non-numbered items, remove any suffix.
-    else
+    if (KoListStyle::isNumberingStyle(style))
         llp.setListItemSuffix("."); // for numbered items, add a trailing dot.
+    else
+        llp.setListItemSuffix(""); // for non-numbered items, remove any suffix.
     return llp;
 }
 

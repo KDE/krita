@@ -191,3 +191,14 @@ void KoListStyle::saveOdf(KoGenStyle &style)
     QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
     style.addChildElement("text-list-level-style-content", elementContents);
 }
+
+bool KoListStyle::isNumberingStyle(int style)
+{
+    return !(style == KoListStyle::SquareItem || style == KoListStyle::DiscItem 
+             || style == KoListStyle::CircleItem || style == KoListStyle::BoxItem 
+             || style == KoListStyle::RhombusItem || style == KoListStyle::HeavyCheckMarkItem 
+             || style == KoListStyle::BallotXItem || style == KoListStyle::RightArrowItem 
+             || style == KoListStyle::RightArrowHeadItem || style == KoListStyle::NoItem
+             || style == KoListStyle::CustomCharItem);
+}
+

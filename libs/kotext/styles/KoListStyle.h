@@ -199,6 +199,8 @@ public:
     /// copy all the properties from the other style to this style, effectively duplicating it.
     void copyProperties(KoListStyle *other);
 
+    /// returns true if style is a numbering style
+    static bool isNumberingStyle(int style);
 signals:
     void nameChanged(const QString &newName);
     void styleChanged(int level);

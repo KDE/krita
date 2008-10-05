@@ -107,9 +107,6 @@ public: // QWidget
     void wheelEvent(QWheelEvent *e);
 
     /// reimplemented method from superclass
-    bool event(QEvent *event);
-
-    /// reimplemented method from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
 
     /// reimplemented method from superclass

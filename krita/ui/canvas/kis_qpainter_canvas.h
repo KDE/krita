@@ -93,9 +93,6 @@ public: // QWidget
     void wheelEvent(QWheelEvent *e);
 
     /// reimplemented method from superclass
-    bool event(QEvent *event);
-
-    /// reimplemented method from superclass
     void resizeEvent(QResizeEvent *e);
 
     /// reimplemented method from superclass

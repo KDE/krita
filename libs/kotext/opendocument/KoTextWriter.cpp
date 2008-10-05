@@ -220,7 +220,8 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
     KoList *currentList = 0;
 
     while (block.isValid() && ((to == -1) || (block.position() < to))) {
-        bool isHeading = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel) > 0;
+        QTextBlockFormat blockFormat = block.blockFormat();
+        bool isHeading = blockFormat.intProperty(KoParagraphStyle::OutlineLevel) > 0;
         QTextList *textList = block.textList();
         if (textList && !isHeading) {
             if (!textLists.contains(textList)) {
@@ -249,8 +250,8 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
                     m_writer->endElement(); // </text:list-element>
                 }
             }
-            const bool listHeader = block.blockFormat().boolProperty(KoParagraphStyle::IsListHeader)
-                                    || block.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem);
+            const bool listHeader = blockFormat.boolProperty(KoParagraphStyle::IsListHeader)
+                                    || blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem);
             m_writer->startElement(listHeader ? "text:list-header" : "text:list-item", false);
         } else {
             // Close any remaining list...

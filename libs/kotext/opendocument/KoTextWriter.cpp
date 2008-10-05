@@ -253,6 +253,13 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
             const bool listHeader = blockFormat.boolProperty(KoParagraphStyle::IsListHeader)
                                     || blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem);
             m_writer->startElement(listHeader ? "text:list-header" : "text:list-item", false);
+            if (KoListStyle::isNumberingStyle(textList->format().style())) {
+                if (KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData())) {
+                    m_writer->startElement("text:number", false);
+                    m_writer->addTextSpan(blockData->counterText());
+                    m_writer->endElement();
+                }
+            }
         } else {
             // Close any remaining list...
             while (!textLists.isEmpty()) {

@@ -64,64 +64,68 @@ KoFlake::Position SelectionDecorator::hotPosition()
 }
 
 void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &converter) {
-    QPen pen( Qt::green );
-    QPolygonF outline;
-
+    QRectF handleArea;
     painter.save();
 
-    painter.setPen( pen );
+    // save the original painter transformation
+    QMatrix painterMatrix = painter.worldMatrix();
+
+    painter.setPen( Qt::green );
     bool editable=false;
     foreach(KoShape *shape, m_selection->selectedShapes(KoFlake::StrippedSelection)) {
+        // apply the shape transformation on top of the old painter transformation
+        painter.setWorldMatrix( shape->absoluteTransformation(&converter) * painterMatrix );
+        // apply the zoom factor
+        KoShape::applyConversion( painter, converter );
+        // draw the shape bounding rect
+        painter.drawRect( QRectF( QPointF(), shape->size() ) );
 
-
-        QMatrix matrix = shape->absoluteTransformation(0);
-        outline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), shape->size())));
-        for(int i =0; i<outline.count(); i++)
-            outline[i] = converter.documentToView(outline.value(i));
-
-        // position the points in the middle of the pixels
-        // for sharper on-screen rendering
-        outline = outline.toPolygon();
-        outline.translate(0.5,0.5);
-
-        painter.drawPolygon(outline);
         if(!shape->isLocked())
             editable = true;
     }
-    painter.restore();
 
     if(m_selection->count()>1)
     {
-        QMatrix matrix = m_selection->absoluteTransformation(0);
-        outline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), m_selection->size())));
-        for(int i =0; i<outline.count(); i++)
-            outline[i] = converter.documentToView(outline.value(i));
-        pen = QPen( Qt::blue );
-        painter.setPen(pen);
-        painter.drawPolygon(outline);
+        // more than one shape selected, so we need to draw the selection bounding rect
+        painter.setPen( Qt::blue );
+        // apply the selection transformation on top of the old painter transformation
+        painter.setWorldMatrix( m_selection->absoluteTransformation(&converter) * painterMatrix );
+        // apply the zoom factor
+        KoShape::applyConversion( painter, converter );
+        // draw the selection bounding rect
+        painter.drawRect( QRectF( QPointF(), m_selection->size() ) );
+        // save the selection bounding rect for later drawing the selection handles
+        handleArea = QRectF( QPointF(), m_selection->size() );
     }
     else if( m_selection->firstSelectedShape() )
-    {
-        QMatrix matrix = m_selection->firstSelectedShape()->absoluteTransformation(0);
-        outline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), m_selection->firstSelectedShape()->size())));
-        for(int i =0; i<outline.count(); i++)
-            outline[i] = converter.documentToView(outline.value(i));
+    {   
+        // only one shape selected, so we compose the correct painter matrix
+        painter.setWorldMatrix( m_selection->firstSelectedShape()->absoluteTransformation(&converter) * painterMatrix );
+        KoShape::applyConversion( painter, converter );
+        // save the only selected shapes bounding rect for later drawing the handles
+        handleArea = QRectF( QPointF(), m_selection->firstSelectedShape()->size() );
     }
 
+    painterMatrix = painter.worldMatrix();
+
+    painter.restore();
+
+    // if we have no editable shape selected there is no need drawing the selection handles
     if( !editable)
         return;
 
+    painter.save();
+
+    painter.setMatrix( QMatrix() );
     painter.setRenderHint( QPainter::Antialiasing, false );
 
-    pen = QPen( Qt::black );
-    pen.setWidth(1);
-    painter.setPen(pen);
+    painter.setPen(Qt::black);
     painter.setBrush(Qt::yellow);
+
+    QPolygonF outline = painterMatrix.map( handleArea );
 
     // the 8 move rects
     QRectF rect( QPointF(0.5,0.5), QSizeF(2*m_handleRadius,2*m_handleRadius) );
-    pen.setWidthF(0);
-    painter.setPen(pen);
     rect.moveCenter(outline.value(0));
     painter.drawRect(rect);
     rect.moveCenter(outline.value(1));
@@ -141,10 +145,19 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
 
     // draw the hot position
     painter.setBrush(Qt::red);
-    QPointF pos = m_selection->absolutePosition( m_hotPosition );
-    rect.moveCenter( converter.documentToView( pos ) );
+    QPointF pos;
+    switch( m_hotPosition )
+    {
+    case KoFlake::TopLeftCorner: pos = handleArea.topLeft(); break;
+    case KoFlake::TopRightCorner: pos = handleArea.topRight(); break;
+    case KoFlake::BottomLeftCorner: pos = handleArea.bottomLeft(); break;
+    case KoFlake::BottomRightCorner: pos = handleArea.bottomRight(); break;
+    case KoFlake::CenteredPosition: pos = handleArea.center(); break;
+    }
+    rect.moveCenter( painterMatrix.map( pos ) );
     painter.drawRect(rect);
 
+    painter.restore();
 
 #if 0
     // draw the move arrow(s)

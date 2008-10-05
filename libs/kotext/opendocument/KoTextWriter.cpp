@@ -138,7 +138,7 @@ QHash<QTextList *, QString> KoTextWriter::saveListStyles(QTextBlock block, int t
         bool automatic = listStyle->styleId() == 0;
         KoGenStyle style(automatic ? KoGenStyle::StyleListAuto : KoGenStyle::StyleList);
         listStyle->saveOdf(style);
-        QString generatedName = m_context.mainStyles().lookup(style, listStyle->name());
+        QString generatedName = m_context.mainStyles().lookup(style, listStyle->name(), KoGenStyles::AllowDuplicates);
         listStyles[block.textList()] = generatedName;
         generatedLists.insert(list);
     }

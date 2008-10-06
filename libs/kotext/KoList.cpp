@@ -199,20 +199,6 @@ bool KoList::contains(QTextList *list) const
     return list && d->textLists.contains(list);
 }
 
-void KoList::increaseLevel(const QTextBlock &block)
-{
-    Q_ASSERT(KoTextDocument(block.document()).list(block) == this);
-    QTextList *textList = block.textList();
-    int currentLevel = d->textLists.indexOf(textList) + 1;
-    Q_ASSERT(currentLevel != 0);
-    add(block, currentLevel + 1);
-}
-
-void KoList::decreaseLevel(const QTextBlock &block)
-{
-    Q_ASSERT(KoTextDocument(block.document()).list(block) == this);
-}
-
 void KoList::setContinueNumbering(int level, bool enable)
 {
     Q_ASSERT(level > 0 && level <= 10);

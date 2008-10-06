@@ -71,12 +71,6 @@ public:
     /// Returns the QTextLists that form this list
     QVector<QPointer<QTextList> > textLists() const;
 
-    /// Increases level of block
-    void increaseLevel(const QTextBlock &block);
-
-    /// Decreases level of block
-    void decreaseLevel(const QTextBlock &block);
-
     void setContinueNumbering(int level, bool enable);
     bool continueNumbering(int level) const;
 

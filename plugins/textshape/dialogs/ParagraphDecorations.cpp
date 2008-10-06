@@ -36,7 +36,7 @@ void ParagraphDecorations::open(KoParagraphStyle *style)
 {
     m_style = style;
     m_backgroundColorChanged = false;
-    m_backgroundColorReset = ! m_style->hasProperty(QTextFormat::BackgroundBrush);
+    m_backgroundColorReset = m_style->background().style() == Qt::NoBrush;
     if (m_backgroundColorReset) {
         clearBackgroundColor();
     } else {

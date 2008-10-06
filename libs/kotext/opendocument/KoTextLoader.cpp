@@ -88,6 +88,8 @@ public:
     KoList *currentList;
     KoListStyle *currentListStyle;
     int currentListLevel;
+    // Two lists that follow the same style are considered as one for numbering purposes
+    // This hash keeps all the lists that have the same style in one KoList.
     QHash<KoListStyle *, KoList *> lists;
 
     KoStyleManager *styleManager;
@@ -377,9 +379,7 @@ void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
         if (!listStyle)
             listStyle = d->currentListStyle;
 
-        if (!d->currentList || listStyle != d->currentListStyle)
-            d->currentList = new KoList(cursor.block().document(), listStyle);
-
+        d->currentList = d->list(cursor.block().document(), listStyle);
         d->currentListStyle = listStyle;
 
         level = d->currentListLevel++;

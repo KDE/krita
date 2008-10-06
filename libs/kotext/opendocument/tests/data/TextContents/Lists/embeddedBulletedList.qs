@@ -15,7 +15,7 @@ cursor.insertBlock();
 cursor.insertText("This is an example of embedded bulleted list", defaultListItemFormat);
 
 cursor.insertBlock();
-var list2 = cursor.createList(listFormat1);
+list1.add(cursor.block());
 cursor.insertText("This is an example of embedded bulleted list", defaultListItemFormat);
 cursor.insertBlock();
 cursor.insertText("This is an example of embedded bulleted list", defaultListItemFormat);

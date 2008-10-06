@@ -107,7 +107,7 @@ public:
         ListStyleId,            ///< Style Id of associated list style
         ListStartValue,         ///< Int with the list-value that that parag will have. Ignored if this is not a list.
         RestartListNumbering,   ///< boolean to indicate that this paragraph will have numbering restart at the list-start. Ignored if this is not a list.
-        ListLevel,               ///< int with the list-level that the paragraph will get when this is a list
+        ListLevel,               ///< int with the list-level that the paragraph will get when this is a list (numbered paragraphs)
         IsListHeader,           ///< bool, if true the paragraph shows up as a list item, but w/o a list label.
         UnnumberedListItem,     ///< bool. if true this paragraph is part of a list but is not numbered
 

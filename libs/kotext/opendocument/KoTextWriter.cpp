@@ -130,24 +130,38 @@ QHash<QTextList *, QString> KoTextWriter::saveListStyles(QTextBlock block, int t
     KoTextDocument document(block.document());
 
     for (;block.isValid() && ((to == -1) || (block.position() < to)); block = block.next()) {
-        KoList *list = document.list(block);
-        Q_ASSERT(!block.textList() || list);
-        if (!list || generatedLists.contains(list))
+        QTextList *textList = block.textList();
+        if (!textList)
             continue;
-        KoListStyle *listStyle = list->style();
-        bool automatic = listStyle->styleId() == 0;
-        KoGenStyle style(automatic ? KoGenStyle::StyleListAuto : KoGenStyle::StyleList);
-        listStyle->saveOdf(style);
-        QString generatedName = m_context.mainStyles().lookup(style, listStyle->name(), KoGenStyles::AllowDuplicates);
-        listStyles[block.textList()] = generatedName;
-        generatedLists.insert(list);
+        if (KoList *list = document.list(block)) {
+            if (generatedLists.contains(list))
+                continue;
+            KoListStyle *listStyle = list->style();
+            bool automatic = listStyle->styleId() == 0;
+            KoGenStyle style(automatic ? KoGenStyle::StyleListAuto : KoGenStyle::StyleList);
+            listStyle->saveOdf(style);
+            QString generatedName = m_context.mainStyles().lookup(style, listStyle->name(), KoGenStyles::AllowDuplicates);
+            listStyles[textList] = generatedName;
+            generatedLists.insert(list);
+        } else {
+            if (listStyles.contains(textList))
+                continue;
+            KoListLevelProperties llp = KoListLevelProperties::fromTextList(textList);
+            KoGenStyle style(KoGenStyle::StyleListAuto);
+            KoListStyle listStyle;
+            listStyle.setLevelProperties(llp);
+            listStyle.saveOdf(style);
+            QString generatedName = m_context.mainStyles().lookup(style, listStyle.name());
+            listStyles[textList] = generatedName;
+        }
     }
     return listStyles;
 }
 
 void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
 {
-    int outlineLevel = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
+    QTextBlockFormat blockFormat = block.blockFormat();
+    int outlineLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
     if (outlineLevel > 0) {
         m_writer->startElement("text:h", false);
         m_writer->addAttribute("text:outline-level", outlineLevel);
@@ -221,9 +235,13 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
 
     while (block.isValid() && ((to == -1) || (block.position() < to))) {
         QTextBlockFormat blockFormat = block.blockFormat();
-        bool isHeading = blockFormat.intProperty(KoParagraphStyle::OutlineLevel) > 0;
         QTextList *textList = block.textList();
-        if (textList && !isHeading) {
+        int headingLevel = 0, numberedParagraphLevel = 0;
+        if (textList) {
+            headingLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
+            numberedParagraphLevel = blockFormat.intProperty(KoParagraphStyle::ListLevel);
+        }
+        if (textList && !headingLevel && !numberedParagraphLevel) {
             if (!textLists.contains(textList)) {
                 KoList *list = textDocument.list(block);
                 if (currentList != list) {
@@ -269,11 +287,17 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
                     m_writer->endElement(); // </text:list-element>
                 }
             }
+
+            if (textList && numberedParagraphLevel) {
+                m_writer->startElement("text:numbered-paragraph", false);
+                m_writer->addAttribute("text:level", numberedParagraphLevel);
+                m_writer->addAttribute("text:style-name", listStyles.value(textList));
+            }
         }
 
         saveParagraph(block, from, to);
 
-        if (!textLists.isEmpty()) {
+        if (!textLists.isEmpty() || numberedParagraphLevel) {
             // we are generating a text:list-item. Look forward and generate unnumbered list items.
             while (true) {
                 QTextBlock nextBlock = block.next();
@@ -286,7 +310,8 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
             }
         }
 
-        if (block.textList() && !isHeading) // We must check if we need to close a previously-opened text:list node.
+        // We must check if we need to close a previously-opened text:list node.
+        if ((block.textList() && !headingLevel) || numberedParagraphLevel)
             m_writer->endElement();
 
         block = block.next();

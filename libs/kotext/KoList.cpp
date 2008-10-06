@@ -140,6 +140,7 @@ void KoList::add(const QTextBlock &block, int level)
     } else {
         blockFormat.clearProperty(KoParagraphStyle::ListStyleId);
     }
+    blockFormat.clearProperty(KoParagraphStyle::ListLevel);
     cursor.setBlockFormat(blockFormat);
 
     d->invalidate(block);

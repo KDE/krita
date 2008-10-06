@@ -26,6 +26,7 @@
 
 #include "styles/KoStyleManager.h"
 #include "KoTextDocument.h"
+#include "styles/KoParagraphStyle.h"
 #include "KoList.h"
 
 const QUrl KoTextDocument::StyleManagerURL = QUrl("kotext://stylemanager");
@@ -100,6 +101,8 @@ void KoTextDocument::removeList(KoList *list)
 
 KoList *KoTextDocument::list(const QTextBlock &block) const
 {
+    if (block.blockFormat().hasProperty(KoParagraphStyle::ListLevel))
+        return 0;
     QTextList *textList = block.textList();
     if (!textList)
         return 0;
@@ -113,7 +116,6 @@ KoList *KoTextDocument::list(QTextList *textList) const
         if (l->textLists().contains(textList))
             return l;
     }
-    Q_ASSERT(false);
     return 0;
 }
 

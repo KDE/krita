@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2009 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,6 +29,7 @@
 #include "dialogs/FontDia.h"
 #include "commands/TextCommandBase.h"
 #include "commands/ChangeListCommand.h"
+#include "commands/ChangeListLevelCommand.h"
 #include "commands/ListItemNumberingCommand.h"
 
 #include <KoAction.h>
@@ -809,6 +810,13 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             editingPluginEvents();
         }
         ensureCursorVisible();
+    } else if ((event->key() == Qt::Key_Tab || event->key() == Qt::Key_BackTab)
+               && !m_caret.hasSelection() && m_caret.block().textList() && (m_caret.position() == m_caret.block().position())) {
+        ChangeListLevelCommand::CommandType type = 
+            event->key() == Qt::Key_Tab ? ChangeListLevelCommand::IncreaseLevel : ChangeListLevelCommand::DecreaseLevel;
+        ChangeListLevelCommand *cll = new ChangeListLevelCommand(m_caret.block(), type, 1);
+        addCommand(cll);
+        editingPluginEvents();
     } else if (event->key() == Qt::Key_Delete) {
         if (!m_caret.hasSelection() && event->modifiers() & Qt::ControlModifier) // delete next word.
             m_caret.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);

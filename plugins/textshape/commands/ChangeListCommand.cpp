@@ -54,8 +54,11 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
             }
         }
         if (m_list == 0) { // create a new one
+            KoListLevelProperties llp = listLevelProperties(style);
+            llp.setIndent(15);
+            llp.setLevel(1);
             KoListStyle listStyle;
-            listStyle.setLevelProperties(listLevelProperties(style));
+            listStyle.setLevelProperties(llp);
             m_list = new KoList(block.document(), &listStyle);
         }
     }

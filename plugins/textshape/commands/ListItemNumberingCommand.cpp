@@ -72,7 +72,7 @@ bool ListItemNumberingCommand::mergeWith(const QUndoCommand *other)
     const ListItemNumberingCommand *cmd = dynamic_cast<const ListItemNumberingCommand *>(other);
     if (!cmd)
         return false;
-    if (m_block == cmd->m_block)
+    if (m_block != cmd->m_block)
         return false;
     m_numbered = cmd->m_numbered;
     return true;

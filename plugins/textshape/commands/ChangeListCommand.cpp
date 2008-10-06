@@ -22,6 +22,9 @@
 
 #include <KoTextBlockData.h>
 #include <KoTextDocument.h>
+#include <QTextCursor>
+
+#include <KoParagraphStyle.h>
 
 #include <KLocale>
 #include <KDebug>
@@ -42,14 +45,16 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
         QTextBlock prev = block.previous();
         if (m_list == 0 && prev.isValid() && prev.textList()) {
             QTextListFormat format = prev.textList()->format();
-            if (format.intProperty(QTextListFormat::ListStyle) == static_cast<int>(style)) { //kDebug() <<" merge with prev";
+            if (format.intProperty(QTextListFormat::ListStyle) == static_cast<int>(style)
+                && format.intProperty(KoListStyle::Level) == 1) { // merge with prev block
                 m_list = document.list(prev);
             }
         }
         QTextBlock next = block.next();
         if (m_list == 0 && next.isValid() && next.textList()) {
             QTextListFormat format = next.textList()->format();
-            if (format.intProperty(QTextListFormat::ListStyle) == static_cast<int>(style)) { //kDebug() <<" merge with next";
+            if (format.intProperty(QTextListFormat::ListStyle) == static_cast<int>(style)
+                && format.intProperty(KoListStyle::Level) == 1) { // merge with next block
                 m_list = document.list(next);
             }
         }
@@ -119,6 +124,10 @@ void ChangeListCommand::redo()
         }
     } else {
         m_list->add(m_block, 0);
+        QTextCursor cursor(m_block);
+        QTextBlockFormat format = m_block.blockFormat();
+        format.clearProperty(KoParagraphStyle::UnnumberedListItem);
+        cursor.setBlockFormat(format);
     }
 }
 

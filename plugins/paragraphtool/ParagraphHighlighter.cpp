@@ -91,13 +91,20 @@ void ParagraphHighlighter::paint(QPainter &painter, const KoViewConverter &conve
 
         painter.save();
 
+        qreal shapeTop = textShapeData->documentOffset();
+        qreal shapeBottom = textShapeData->documentOffset() + shape->size().height();
+
         painter.setPen(Qt::black);
         painter.setMatrix(shape->absoluteTransformation(&converter) * painter.matrix());
         KoShape::applyConversion(painter, converter);
-        painter.translate(0.0, -textShapeData->documentOffset());
+        painter.translate(0.0, -shapeTop);
 
         QTextLayout *layout = textBlock().layout();
-        painter.drawRect(layout->boundingRect());
+        QRectF rectangle = layout->boundingRect();
+
+        rectangle.setTop(qMax(rectangle.top(), shapeTop));
+        rectangle.setBottom(qMin(rectangle.bottom(), shapeBottom));
+        painter.drawRect(rectangle);
 
         painter.restore();
     }

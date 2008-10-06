@@ -54,9 +54,11 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
             }
         }
         if (m_list == 0) { // create a new one
-            KoListLevelProperties llp = listLevelProperties(style);
-            llp.setIndent(15);
+            KoListLevelProperties llp;
             llp.setLevel(1);
+            llp.setStyle(m_style);
+            llp.setIndent(15);
+            llp.setListItemSuffix(KoListStyle::isNumberingStyle(style) ? "." : "");
             KoListStyle listStyle;
             listStyle.setLevelProperties(llp);
             m_list = new KoList(block.document(), &listStyle);
@@ -93,17 +95,6 @@ void ChangeListCommand::storeOldProperties()
         m_formerProperties.setStyle(KoListStyle::NoItem);
 }
 
-KoListLevelProperties ChangeListCommand::listLevelProperties(KoListStyle::Style style) const
-{
-    KoListLevelProperties llp;
-    llp.setStyle(style);
-    if (KoListStyle::isNumberingStyle(style))
-        llp.setListItemSuffix("."); // for numbered items, add a trailing dot.
-    else
-        llp.setListItemSuffix(""); // for non-numbered items, remove any suffix.
-    return llp;
-}
-
 void ChangeListCommand::recalcList(const QTextBlock &block) const
 {
     KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(block.userData());
@@ -123,6 +114,7 @@ void ChangeListCommand::redo()
         KoListLevelProperties llp = listStyle->levelProperties(level);
         if (llp.style() != m_style) {
             llp.setStyle(m_style);
+            llp.setListItemSuffix(KoListStyle::isNumberingStyle(m_style) ? "." : "");
             listStyle->setLevelProperties(llp);
         }
     } else {

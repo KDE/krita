@@ -254,12 +254,14 @@ void TestDocumentLayout::testNestedLists()
     KoListStyle listStyle2;
     llp.setLevel(2);
     llp.setListItemSuffix(".");
+    llp.setDisplayLevel(2);
     listStyle2.setLevelProperties(llp);
     h2.setListStyle(&listStyle2);
     // purpusfully leave this one out, as it should default to the only known one: // h2.setListLevel(2);
 
     llp.setLevel(3);
     llp.setListItemSuffix("");
+    llp.setDisplayLevel(3);
     KoListStyle listStyle3;
     listStyle3.setLevelProperties(llp);
     h3.setListStyle(&listStyle3);
@@ -338,6 +340,7 @@ void TestDocumentLayout::testAutoRestartList()
     KoListStyle listStyle2;
     KoListLevelProperties llp2 = listStyle2.levelProperties(2);
     llp2.setStyle(KoListStyle::DecimalItem);
+    llp2.setDisplayLevel(2);
     listStyle2.setLevelProperties(llp2);
     h2.setListStyle(&listStyle2);
 

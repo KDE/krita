@@ -117,6 +117,7 @@ KoListLevelProperties KoListStyle::levelProperties(int level) const
 {
     if (d->levels.contains(level))
         return d->levels.value(level);
+    level = qMax(1, level);
     if (d->levels.count()) {
         KoListLevelProperties llp = d->levels.begin().value();
         llp.setLevel(level);
@@ -141,8 +142,9 @@ QTextListFormat KoListStyle::listFormat(int level)
 
 void KoListStyle::setLevelProperties(const KoListLevelProperties &properties)
 {
-    d->levels.insert(properties.level(), properties);
-    emit styleChanged(properties.level());
+    int level = qMax(1, properties.level());
+    d->levels.insert(level, properties);
+    emit styleChanged(level);
 }
 
 bool KoListStyle::hasLevelProperties(int level) const

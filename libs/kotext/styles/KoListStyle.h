@@ -76,7 +76,7 @@ public:
         RightArrowItem,
         /// three-d top-lighted rightwards arrowhead
         RightArrowHeadItem,
-        /// use an unicode char for the numbering
+        /// use an unicode char for the bullet
         CustomCharItem,
         Bengali,    ///< Bengali characters for normal 10-base counting
         Gujarati,   ///< Gujarati characters for normal 10-base counting

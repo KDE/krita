@@ -84,7 +84,7 @@ KisToolFreehand::~KisToolFreehand()
 
 void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
 {
-    dbgUI << "mousePressEvent" << m_mode;
+//    dbgUI << "mousePressEvent" << m_mode;
 //     if (!currentImage())
 //    return;
 
@@ -126,7 +126,7 @@ inline double angle(const QPointF& p1, const QPointF& p2)
 
 void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 {
-    dbgUI << "mouseMoveEvent " << m_mode << " " << e->button() << " " << e->buttons();
+//    dbgUI << "mouseMoveEvent " << m_mode << " " << e->button() << " " << e->buttons();
     if (m_mode == PAINT) {
         QPointF pos = convertToPixelCoord(e);
 
@@ -184,7 +184,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 
 void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 {
-    dbgUI << "mouseReleaseEvent" << m_mode << " " << e->button() << " " << e->button();
+//    dbgUI << "mouseReleaseEvent" << m_mode << " " << e->button() << " " << e->button();
     if (e->button() == Qt::LeftButton && m_mode == PAINT) {
         endPaint();
     } else {
@@ -194,7 +194,7 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 
 void KisToolFreehand::initPaint(KoPointerEvent *)
 {
-    dbgUI << "initPaint";
+//    dbgUI << "initPaint";
     if (!currentNode() || !currentNode()->paintDevice())
         return;
 
@@ -281,7 +281,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
 
 void KisToolFreehand::endPaint()
 {
-    dbgUI << "endPaint";
+//    dbgUI << "endPaint";
     m_mode = HOVER;
     m_executor->finish();
 
@@ -370,7 +370,7 @@ void KisToolFreehand::paintBezierCurve(const KisPaintInformation &pi1,
 void KisToolFreehand::queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* /*previousJob*/)
 {
     m_paintJobs.append(job);
-    dbgUI << "Queue length:" << m_executor->queueLength();
+//    dbgUI << "Queue length:" << m_executor->queueLength();
     m_executor->postJob(job);
 }
 

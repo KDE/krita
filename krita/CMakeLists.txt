@@ -51,6 +51,7 @@ if (SHOULD_BUILD_KRITA)
         ${CMAKE_SOURCE_DIR}/krita/image
         ${CMAKE_SOURCE_DIR}/krita/image/tiles
         ${CMAKE_SOURCE_DIR}/krita/ui
+        ${CMAKE_SOURCE_DIR}/krita/ui/tool
         ${CMAKE_SOURCE_DIR}/krita/colorspaces/rgb_u8
 
         # For generated files from .ui

@@ -135,7 +135,6 @@ void KisTool::resourceChanged(int key, const QVariant & v)
     case(KisCanvasResourceProvider::CurrentPaintOpPreset):
         d->currentPaintOpPreset =
             m_canvas->resourceProvider()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-        dbgUI << "paintop changed " << d->currentPaintOpPreset;
         break;
     case(KisCanvasResourceProvider::HdrExposure):
         d->currentExposure = static_cast<float>(v.toDouble());
@@ -273,7 +272,6 @@ KoAbstractGradient * KisTool::currentGradient()
 
 KisPaintOpPresetSP KisTool::currentPaintOpPreset()
 {
-    dbgUI << d->currentPaintOpPreset;
     return d->currentPaintOpPreset;
 }
 

@@ -74,18 +74,19 @@ set(kritaui_LIB_SRCS
     kra/kis_savexml_visitor.cc
     kis_selection_manager.cc 
     kis_selection_options.cc
-    kis_selection_tool_helper.cpp 
     kis_shape_controller.cpp
     kis_shape_layer_canvas.cpp 
     kis_shape_layer.cc 
     kis_shape_selection.cpp
     kis_shape_selection_model.cpp 
     kis_statusbar.cc 
-    kis_tool.cc 
-    kis_tool_freehand.cc 
-    kis_tool_freehand_p.cpp
-    kis_tool_paint.cc 
-    kis_tool_shape.cc kis_view2.cpp 
+    tool/kis_selection_tool_helper.cpp 
+    tool/kis_tool.cc 
+    tool/kis_tool_freehand.cc 
+    tool/kis_tool_freehand_p.cpp
+    tool/kis_tool_paint.cc 
+    tool/kis_tool_shape.cc 
+    kis_view2.cpp 
     kis_zoom_manager.cc
     kis_shape_selection_canvas.cpp
     kobirdeyepanel.cpp 

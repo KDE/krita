@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_
-#define KIS_STRATEGY_COLORSPACE_GRAYSCALE_H_
+#ifndef KIS_GRAY_COLORSPACE_H_
+#define KIS_GRAY_COLORSPACE_H_
 
 #include <klocale.h>
 #include <pigment_gray_u8_export.h>

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,10 +33,11 @@ ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
     widget.setupUi(this);
 
     foreach(Lists::ListStyleItem item, Lists::genericListStyleItems())
-    addStyle(item);
+        addStyle(item);
     addStyle(Lists::ListStyleItem(i18n("Custom Bullet"), KoListStyle::CustomCharItem));
+    m_blankCharIndex = addStyle(Lists::ListStyleItem(i18n("No Bullet"), KoListStyle::CustomCharItem));
     foreach(Lists::ListStyleItem item, Lists::otherListStyleItems())
-    addStyle(item);
+        addStyle(item);
 
     widget.alignment->addItem(i18nc("Automatic horizontal alignment", "Auto"));
     widget.alignment->addItem(i18nc("Text alignment", "Left"));
@@ -47,10 +49,11 @@ ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
     connect(widget.letterSynchronization, SIGNAL(toggled(bool)), widget.startValue, SLOT(setLetterSynchronization(bool)));
 }
 
-void ParagraphBulletsNumbers::addStyle(const Lists::ListStyleItem &lsi)
+int ParagraphBulletsNumbers::addStyle(const Lists::ListStyleItem &lsi)
 {
     m_mapping.insert(widget.listTypes->count(), lsi.style);
     widget.listTypes->addItem(lsi.name);
+    return widget.listTypes->count() - 1;
 }
 
 void ParagraphBulletsNumbers::open(KoParagraphStyle *style)
@@ -103,7 +106,8 @@ void ParagraphBulletsNumbers::save()
 {
     kDebug() << "ParagraphBulletsNumbers::save";
     Q_ASSERT(m_paragStyle);
-    KoListStyle::Style style = m_mapping[widget.listTypes->currentRow()];
+    const int currentRow = widget.listTypes->currentRow();
+    KoListStyle::Style style = m_mapping[currentRow];
     if (style == KoListStyle::None) {
         m_paragStyle->setListStyle(0);
         return;
@@ -121,6 +125,8 @@ void ParagraphBulletsNumbers::save()
     llp.setListItemPrefix(widget.prefix->text());
     llp.setListItemSuffix(widget.suffix->text());
     llp.setLetterSynchronization(widget.letterSynchronization->isVisible() && widget.letterSynchronization->isChecked());
+    if (style == KoListStyle::CustomCharItem)
+        llp.setBulletCharacter(currentRow == m_blankCharIndex ? QChar() : widget.customCharacter->text().at(0));
 
     Qt::Alignment align;
     switch (widget.alignment->currentIndex()) {
@@ -165,6 +171,8 @@ void ParagraphBulletsNumbers::styleChanged(int index)
         widget.startValue->setValue(value + 1);
         widget.startValue->setValue(value); // surely to trigger a change event.
     }
+
+    widget.customCharacter->setEnabled(style == KoListStyle::CustomCharItem && index != m_blankCharIndex);
     widget.letterSynchronization->setVisible(showLetterSynchronization);
     widget.listPropertiesPane->setEnabled(style != KoListStyle::None);
 }

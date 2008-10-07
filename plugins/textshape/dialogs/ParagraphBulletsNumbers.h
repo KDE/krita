@@ -39,7 +39,7 @@ public:
 
     void save();
 
-    void addStyle(const Lists::ListStyleItem &lsi);
+    int addStyle(const Lists::ListStyleItem &lsi);
 
 private slots:
     void styleChanged(int);
@@ -51,6 +51,7 @@ private:
     KoParagraphStyle *m_paragStyle;
     QHash<int, KoListStyle::Style> m_mapping;
     int m_previousLevel;
+    int m_blankCharIndex;
 };
 
 #endif

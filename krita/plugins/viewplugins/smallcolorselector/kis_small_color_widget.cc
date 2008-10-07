@@ -138,7 +138,6 @@ void KisSmallColorWidget::paintEvent(QPaintEvent * event)
     p.drawRect(QRectF(-1.5, 0 , 3.0, height()));
     p.restore();
     // Draw Saturation / Value handle
-    p.save();
     p.setPen(QPen(Qt::white, 1.0));
     p.setBrush(color());
     p.translate(d->saturation * d->rectangleWidth / 255.0 + width() - d->rectangleWidth,

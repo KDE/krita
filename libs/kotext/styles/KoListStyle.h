@@ -58,8 +58,8 @@ public:
         AlphaLowerItem = QTextListFormat::ListLowerAlpha,
         /// use alpha numbering (A, B, C, ... AA, AB, ...)
         UpperAlphaItem = QTextListFormat::ListUpperAlpha,
-        /// don't draw a list item, just the prefix/suffix
-        NoItem = 1,
+        /// invalid list style
+        None = 1,
         /// use lower roman counting.  (i, ii, iii, iv, ...)
         RomanLowerItem,
         /// use upper roman counting.  (I, II, III, IV, ...)

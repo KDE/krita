@@ -60,7 +60,7 @@ void TestChangeListCommand::removeList()
     block = doc.begin().next();
     QVERIFY(block.textList()); // init, we should not have to test KoListStyle here ;)
 
-    ChangeListCommand clc(block, KoListStyle::NoItem);
+    ChangeListCommand clc(block, KoListStyle::None);
     clc.redo();
 
     block = doc.begin();
@@ -74,7 +74,7 @@ void TestChangeListCommand::removeList()
     block = block.next();
     QVERIFY(block.textList());
 
-    ChangeListCommand clc2(block, KoListStyle::NoItem);
+    ChangeListCommand clc2(block, KoListStyle::None);
     clc2.redo();
     block = doc.begin();
     QVERIFY(block.textList() == 0);

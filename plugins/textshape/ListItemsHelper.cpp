@@ -176,7 +176,7 @@ QString Lists::intToScriptList(int n, KoListStyle::Style type)
 QList<ListStyleItem> Lists::genericListStyleItems()
 {
     QList<ListStyleItem> answer;
-    answer.append(ListStyleItem(i18nc("Text list-style", "None"), KoListStyle::NoItem));
+    answer.append(ListStyleItem(i18nc("Text list-style", "None"), KoListStyle::None));
     answer.append(ListStyleItem(i18n("Arabic"), KoListStyle::DecimalItem));
     answer.append(ListStyleItem(i18n("Lower Alphabetical"), KoListStyle::AlphaLowerItem));
     answer.append(ListStyleItem(i18n("Upper Alphabetical"), KoListStyle::UpperAlphaItem));
@@ -380,7 +380,7 @@ void ListItemsHelper::recalculate()
             item = QString(QChar(format.intProperty(KoListStyle::BulletCharacter)));
             width = m_fm.width(item);
             break;
-        case KoListStyle::NoItem:
+        case KoListStyle::None:
             calcWidth = false;
             width =  10.0; // simple indenting
             break;

@@ -313,7 +313,8 @@ void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlEle
         QString bulletChar = style.isNull() ? QString() : style.attributeNS(KoXmlNS::text, "bullet-char", QString());
         kDebug(32500) << "style.localName()=" << style.localName() << "level=" << level << "displayLevel=" << displayLevel << "bulletChar=" << bulletChar;
         if (bulletChar.isEmpty()) {  // list without any visible bullets
-            setStyle(KoListStyle::NoItem);
+            setStyle(KoListStyle::CustomCharItem);
+            setBulletCharacter(QChar());
         } else { // try to determinate the bullet we should use
             switch (bulletChar[0].unicode()) {
             case 0x2022: // bullet, a small disc -> circle
@@ -375,7 +376,8 @@ void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlEle
         const QString format = style.attributeNS(KoXmlNS::style, "num-format", QString());
         kDebug(32500) << "style.localName()=" << style.localName() << "level=" << level << "displayLevel=" << displayLevel << "format=" << format;
         if (format.isEmpty()) {
-            setStyle(KoListStyle::NoItem);
+            setStyle(KoListStyle::CustomCharItem);
+            setBulletCharacter(QChar());
         } else {
             if (format[0] == '1')
                 setStyle(KoListStyle::DecimalItem);

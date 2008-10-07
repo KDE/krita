@@ -40,7 +40,7 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
     storeOldProperties();
     KoTextDocument document(block.document());
 
-    if (style != KoListStyle::NoItem) {
+    if (style != KoListStyle::None) {
         m_list = document.list(block);
         QTextBlock prev = block.previous();
         if (m_list == 0 && prev.isValid() && prev.textList()) {
@@ -97,7 +97,7 @@ void ChangeListCommand::storeOldProperties()
     if (m_block.textList())
         m_formerProperties = KoListLevelProperties::fromTextList(m_block.textList());
     else
-        m_formerProperties.setStyle(KoListStyle::NoItem);
+        m_formerProperties.setStyle(KoListStyle::None);
 }
 
 void ChangeListCommand::recalcList(const QTextBlock &block) const
@@ -136,7 +136,7 @@ void ChangeListCommand::undo()
     TextCommandBase::undo();
     UndoRedoFinalizer finalizer(this, m_tool);
 
-    if (m_formerProperties.style() == KoListStyle::NoItem)
+    if (m_formerProperties.style() == KoListStyle::None)
         return;
     Q_ASSERT(m_block.textList());
     QTextListFormat format;

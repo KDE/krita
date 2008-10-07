@@ -104,7 +104,7 @@ void ParagraphBulletsNumbers::save()
     kDebug() << "ParagraphBulletsNumbers::save";
     Q_ASSERT(m_paragStyle);
     KoListStyle::Style style = m_mapping[widget.listTypes->currentRow()];
-    if (style == KoListStyle::NoItem) {
+    if (style == KoListStyle::None) {
         m_paragStyle->setListStyle(0);
         return;
     }
@@ -149,7 +149,7 @@ void ParagraphBulletsNumbers::styleChanged(int index)
     case KoListStyle::CircleItem:
     case KoListStyle::BoxItem:
     case KoListStyle::CustomCharItem:
-    case KoListStyle::NoItem:
+    case KoListStyle::None:
         widget.startValue->setCounterType(KoListStyle::DecimalItem);
         widget.startValue->setValue(1);
         widget.startValue->setEnabled(false);
@@ -166,7 +166,7 @@ void ParagraphBulletsNumbers::styleChanged(int index)
         widget.startValue->setValue(value); // surely to trigger a change event.
     }
     widget.letterSynchronization->setVisible(showLetterSynchronization);
-    widget.listPropertiesPane->setEnabled(style != KoListStyle::NoItem);
+    widget.listPropertiesPane->setEnabled(style != KoListStyle::None);
 }
 
 void ParagraphBulletsNumbers::customCharButtonPressed()

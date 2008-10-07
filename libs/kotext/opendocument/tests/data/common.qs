@@ -195,7 +195,7 @@ KoListStyle.AlphaLowerItem = QTextListFormat.ListLowerAlpha;
 KoListStyle.UpperAlphaItem = QTextListFormat.ListUpperAlpha;
 
 i = 1;
-KoListStyle.NoItem = i++;
+KoListStyle.None = i++;
 KoListStyle.RomanLowerItem = i++;
 KoListStyle.UpperRomanItem = i++;
 KoListStyle.BoxItem = i++;

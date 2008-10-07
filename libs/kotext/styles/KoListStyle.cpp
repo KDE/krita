@@ -200,7 +200,7 @@ bool KoListStyle::isNumberingStyle(int style)
              || style == KoListStyle::CircleItem || style == KoListStyle::BoxItem 
              || style == KoListStyle::RhombusItem || style == KoListStyle::HeavyCheckMarkItem 
              || style == KoListStyle::BallotXItem || style == KoListStyle::RightArrowItem 
-             || style == KoListStyle::RightArrowHeadItem || style == KoListStyle::NoItem
+             || style == KoListStyle::RightArrowHeadItem
              || style == KoListStyle::CustomCharItem);
 }
 

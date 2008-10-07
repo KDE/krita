@@ -274,6 +274,7 @@ Post 2.0
     * implement paintops that take painterly overlays into account
     * Create architecture that lets paintop re-use the painting algorithm of other paintops
       without having to daisy-chain other paintops.
+    * "bloat" and "pinch" paintop
 
 
 * View Plugins

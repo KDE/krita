@@ -45,7 +45,7 @@ struct KoColorSpace::Private {
     KoConvolutionOp* convolutionOp;
     QThreadStorage< QVector<quint8>* > conversionCache;
 
-    
+
     mutable KoColorConversionTransformation* transfoToRGBA16;
     mutable KoColorConversionTransformation* transfoFromRGBA16;
     mutable KoColorConversionTransformation* transfoToLABA16;
@@ -173,8 +173,10 @@ const KoCompositeOp * KoColorSpace::compositeOp(const QString & id) const
 {
     if ( d->compositeOps.contains( id ) )
         return d->compositeOps.value( id );
-    else
+    else {
+        kWarning() << "Asking for non-existent composite operation " << id << ", returning " << COMPOSITE_OVER;
         return d->compositeOps.value( COMPOSITE_OVER );
+    }
 }
 
 void KoColorSpace::addCompositeOp(const KoCompositeOp * op)
@@ -326,7 +328,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
         return;
 
     if (!(*this == *srcSpace)) {
-        
+
         quint32 len = pixelSize() * rows * cols;
 
         QVector<quint8> * conversionCache = threadLocalConversionCache(len);

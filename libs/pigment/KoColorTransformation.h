@@ -60,9 +60,10 @@ class PIGMENTCMS_EXPORT KoColorTransformation {
 
     /**
      * Update the parameters of a cached transformation object.
-     * The default implementation recursively call \ref setParameter
+     * The default implementation recursively calls \ref setParameter
      */
     virtual void setParameters(const QHash<QString, QVariant> & parameters);
+
     /**
      * Update one parameter of a cached transformation object.
      *

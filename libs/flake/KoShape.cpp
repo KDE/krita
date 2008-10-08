@@ -295,22 +295,21 @@ QMatrix KoShape::absoluteTransformation(const KoViewConverter *converter) const
         if (container->childClipped(this))
             matrix = container->absoluteTransformation(0);
         else {
-            // childs trasformations are relative to the parents position
-            QRectF containerRect( QPointF(), container->size() );
-            QPointF containerPos = container->absolutePosition() - containerRect.center();
+            QSizeF containerSize = container->size();
+            QPointF containerPos = container->absolutePosition() - QPointF(0.5 * containerSize.width(), 0.5 * containerSize.height());
+            if (converter)
+                containerPos = converter->documentToView(containerPos);
             matrix.translate(containerPos.x(), containerPos.y());
         }
     }
 
-    QMatrix scaleMatrix;
-    // calculate the scaling if a view converter is given
     if (converter) {
-        qreal zoomX, zoomY;
-        converter->zoom(&zoomX, &zoomY);
-        scaleMatrix.scale(zoomX, zoomY);
+        QPointF pos = d->localMatrix.map(QPointF());
+        QPointF trans = converter->documentToView(pos) - pos;
+        matrix.translate(trans.x(), trans.y());
     }
-    
-    return d->localMatrix * matrix * scaleMatrix;
+
+    return d->localMatrix * matrix;
 }
 
 void KoShape::applyAbsoluteTransformation(const QMatrix &matrix)
@@ -1141,11 +1140,9 @@ void KoShape::init(const QMap<QString, KoDataCenter *> & dataCenterMap)
 // static
 void KoShape::applyConversion(QPainter &painter, const KoViewConverter &converter)
 {
-    /*
     qreal zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
     painter.scale(zoomX, zoomY);
-    */
 }
 
 QPointF KoShape::shapeToDocument(const QPointF &point) const

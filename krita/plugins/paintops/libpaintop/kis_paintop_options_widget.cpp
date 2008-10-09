@@ -45,8 +45,15 @@ KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
     setObjectName("KisPaintOpPresetsWidget");
     QHBoxLayout * layout = new QHBoxLayout(this);
     m_d->optionsList = new QListWidget(this);
-    m_d->optionsList->setMinimumWidth(128);
+    m_d->optionsList->setFixedWidth(128);
+    QSizePolicy policy =  QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
+    policy.setHorizontalStretch( 0 );
+    m_d->optionsList->setSizePolicy( policy );
+
     m_d->optionsStack = new QStackedWidget(this);
+    policy = QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
+    policy.setHorizontalStretch( 3 );
+    m_d->optionsStack->setSizePolicy( policy );
     layout->addWidget(m_d->optionsList);
     layout->addWidget(m_d->optionsStack);
 

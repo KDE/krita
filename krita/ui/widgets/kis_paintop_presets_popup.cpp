@@ -58,7 +58,11 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(QWidget * parent)
     m_d->uiWdgPaintOpPresets.setupUi(this);
 
     m_d->layout = new QGridLayout(m_d->uiWdgPaintOpPresets.frmOptionWidgetContainer);
+    m_d->layout->setSizeConstraint( QLayout::SetFixedSize );
+    setLayout( m_d->layout );
+
     m_d->settingsWidget = 0;
+    setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 }
 
 
@@ -74,13 +78,17 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
         m_d->settingsWidget->hide();
         m_d->uiWdgPaintOpPresets.frmOptionWidgetContainer->updateGeometry();
     }
+    m_d->layout->update();
+    updateGeometry();
+
     if (!widget) return;
 
     widget->setFont(m_d->smallFont);
 
     m_d->settingsWidget = widget;
+    m_d->settingsWidget->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
     m_d->layout->addWidget(widget);
-    updateGeometry();
+
     m_d->layout->update();
     widget->show();
 

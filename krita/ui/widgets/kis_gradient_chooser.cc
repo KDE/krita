@@ -48,13 +48,16 @@ KisCustomGradientDialog::KisCustomGradientDialog(KisView2 * view, QWidget * pare
     connect(m_page, SIGNAL(activatedResource(KoResource *)), view->resourceProvider(), SLOT(slotGradientActivated(KoResource*)));
 }
 
-KisGradientChooser::KisGradientChooser(KisView2 * view, QWidget *parent, const char *name) : KisItemChooser(parent, name)
+KisGradientChooser::KisGradientChooser(KisView2 * view, QWidget *parent, const char *name)
+    : QFrame(parent, name)
 {
     m_lbName = new QLabel();
 
+    m_itemChooser = new KisItemChooser();
+    m_itemChooser->setFixedSize( 250, 250 );
+    connect( m_itemChooser, SIGNAL( update( QTableWidgetItem* ) ), this, SLOT( update( QTableWidgetItem* ) ) );
     m_customGradient = new QPushButton(i18n("Custom Gradient..."));
     m_customGradient->setObjectName("custom gradient button");
-
     KisCustomGradientDialog * autogradient = new KisCustomGradientDialog(view, 0, "autogradient");
     connect(m_customGradient, SIGNAL(clicked()), autogradient, SLOT(show()));
 
@@ -62,8 +65,9 @@ KisGradientChooser::KisGradientChooser(KisView2 * view, QWidget *parent, const c
     mainLayout->setObjectName("main layout");
     mainLayout->setMargin(2);
     mainLayout->addWidget(m_lbName);
-    mainLayout->addWidget(chooserWidget(), 10);
+    mainLayout->addWidget(m_itemChooser, 10);
     mainLayout->addWidget(m_customGradient, 10);
+
     setLayout(mainLayout);
 
     connect(this, SIGNAL(importClicked()), this, SLOT(slotImportGradient()));

@@ -29,6 +29,7 @@ KisIconWidget::KisIconWidget(QWidget *parent, const char *name)
 {
     setObjectName(name);
     m_item = 0;
+    setFixedSize( QSize( 26, 26 ) );
 }
 
 void KisIconWidget::slotSetItem(QTableWidgetItem& item)

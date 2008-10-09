@@ -193,9 +193,9 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     else
         setXMLFile("krita.rc");
 
-    if (mainWindow())
-        actionCollection()->addAction(KStandardAction::KeyBindings, "keybindings", mainWindow()->guiFactory(), SLOT(configureShortcuts()));
-
+    if (mainWindow()) {
+         actionCollection()->addAction(KStandardAction::KeyBindings, "keybindings", mainWindow()->guiFactory(), SLOT(configureShortcuts()));
+    }
     m_d->doc = doc;
     m_d->viewConverter = new KoZoomHandler();
     m_d->canvasController = new KoCanvasController(this);

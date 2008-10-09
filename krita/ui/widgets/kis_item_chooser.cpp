@@ -18,6 +18,8 @@
 
 #include "kis_item_chooser.h"
 
+#include <QHBoxLayout>
+
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <KoResourceItemChooser.h>
@@ -30,11 +32,9 @@ KisItemChooser::KisItemChooser(QWidget *parent, const char *name)
         : QWidget(parent)
 {
     setObjectName(name);
-    /*    m_frame = new QVBox(this);
-        m_frame->setFrameStyle(QFrame::Panel | QFrame::Sunken);*/
+    QHBoxLayout * layout = new QHBoxLayout(this);
     m_chooser = new KoResourceItemChooser(this);
-    m_chooser->setMinimumSize(200, 150);
-
+    layout->addWidget( m_chooser );
     connect(m_chooser, SIGNAL(selected(QTableWidgetItem*)), this, SLOT(slotItemSelected(QTableWidgetItem*)));
     connect(m_chooser, SIGNAL(importClicked()), this, SIGNAL(importClicked()));
     connect(m_chooser, SIGNAL(deleteClicked()), this, SIGNAL(deleteClicked()));
@@ -47,7 +47,7 @@ KisItemChooser::~KisItemChooser()
 void KisItemChooser::setCurrent(QTableWidgetItem *item)
 {
     m_chooser->setCurrent(item);
-    update(item);
+    emit( update(item) );
 }
 
 void KisItemChooser::setCurrent(int index)
@@ -67,7 +67,7 @@ QTableWidgetItem* KisItemChooser::currentItem()
 
 void KisItemChooser::slotItemSelected(QTableWidgetItem *item)
 {
-    update(item);
+    emit update(item);
     emit selected(currentItem());
 }
 

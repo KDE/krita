@@ -33,18 +33,22 @@
 #include "kis_pattern.h"
 #include "kis_resource_server_provider.h"
 
-KisPatternChooser::KisPatternChooser(QWidget *parent, const char *name) : KisItemChooser(parent, name)
+KisPatternChooser::KisPatternChooser(QWidget *parent, const char *name)
+    : QFrame(parent)
 {
     m_lbName = new QLabel(this);
 
+    m_itemChooser = new KisItemChooser();
+    m_itemChooser->setFixedSize( 250, 250 );
+    connect( m_itemChooser, SIGNAL( update( QTableWidgetItem* ) ), this, SLOT( update( QTableWidgetItem* ) ) );
+
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setObjectName("main layout");
-    mainLayout->setMargin(2);
-    mainLayout->setSpacing(2);
-
+    mainLayout->setMargin( 2 );
     mainLayout->addWidget(m_lbName);
-    mainLayout->addWidget(chooserWidget(), 10);
+    mainLayout->addWidget(m_itemChooser, 10);
 
+    setLayout( mainLayout );
     connect(this, SIGNAL(importClicked()), this, SLOT(slotImportPattern()));
 }
 

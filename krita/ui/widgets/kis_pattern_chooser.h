@@ -18,11 +18,12 @@
 #ifndef KIS_PATTERN_CHOOSER_H_
 #define KIS_PATTERN_CHOOSER_H_
 
+#include <QFrame>
 #include "kis_item_chooser.h"
 
 class QLabel;
 
-class KisPatternChooser : public KisItemChooser
+class KisPatternChooser : public QFrame
 {
 
     Q_OBJECT
@@ -31,14 +32,18 @@ public:
     KisPatternChooser(QWidget *parent = 0, const char *name = 0);
     virtual ~KisPatternChooser();
 
+    KisItemChooser* itemChooser() {
+        return m_itemChooser;
+    }
+
+
 private slots:
     void slotImportPattern();
-
-protected:
-    virtual void update(QTableWidgetItem *item);
+    void update(QTableWidgetItem *item);
 
 private:
     QLabel *m_lbName;
+    KisItemChooser * m_itemChooser;
 };
 
 #endif // KIS_PATTERN_CHOOSER_H_

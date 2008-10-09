@@ -36,18 +36,11 @@ struct KisPopupButton::Private {
 
 KisPopupButton::KisPopupButton(QWidget* parent) : QPushButton(parent), d(new Private)
 {
-    d->frame = new QFrame();
-    d->frame->setFrameStyle(QFrame::Box | QFrame::Plain);
-    d->frame->setWindowFlags(Qt::Popup);
-    d->frameLayout = new QHBoxLayout(d->frame);
-    d->frameLayout->setMargin(0);
-    setPopupWidget(new QWidget);
     connect(this, SIGNAL(released()), SLOT(showPopupWidget()));
 }
 
 KisPopupButton::~KisPopupButton()
 {
-    delete d->frame;
     delete d;
 }
 
@@ -64,14 +57,20 @@ void KisPopupButton::setAlwaysVisible(bool v)
 void KisPopupButton::setPopupWidget(QWidget* widget)
 {
     delete d->popupWidget;
+    delete d->frame;
     if (widget) {
+        d->frame = new QFrame(this);
+        d->frame->setFrameStyle(QFrame::Box | QFrame::Plain);
+        d->frame->setWindowFlags(Qt::Popup);
+        d->frameLayout = new QHBoxLayout(d->frame);
+        d->frameLayout->setMargin(0);
+        d->frameLayout->setSizeConstraint( QLayout::SetFixedSize );
+        d->frame->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
         d->popupWidget = widget;
         d->popupWidget->setParent(d->frame);
-    } else {
-        d->popupWidget = new QWidget(d->frame);
+        d->frameLayout->addWidget(d->popupWidget);
     }
-    d->frameLayout->addWidget(d->popupWidget);
-}
+}\
 
 void KisPopupButton::setPopupWidgetWidth(int w)
 {
@@ -81,7 +80,7 @@ void KisPopupButton::setPopupWidgetWidth(int w)
 void KisPopupButton::showPopupWidget()
 {
     if (d->popupWidget) {
-        QSize popSize = d->frame->size();
+        QSize popSize = d->popupWidget->size();
         QRect popupRect(this->mapToGlobal(QPoint(0, this->size().height())), popSize);
 
         // Make sure the popup is not drawn outside the screen area

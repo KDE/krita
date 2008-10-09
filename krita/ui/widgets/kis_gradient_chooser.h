@@ -20,12 +20,16 @@
 
 #include <kdialog.h>
 
-#include "kis_item_chooser.h"
+#include <QFrame>
 
 class QLabel;
 class QPushButton;
 class KisView2;
 class KisAutogradient;
+class QTableWidgetItem;
+
+#include "kis_item_chooser.h"
+
 class KisCustomGradientDialog : public KDialog
 {
 
@@ -41,7 +45,7 @@ private:
 
 };
 
-class KisGradientChooser : public KisItemChooser
+class KisGradientChooser : public QFrame
 {
 
     Q_OBJECT
@@ -51,14 +55,18 @@ public:
     KisGradientChooser(KisView2 * view, QWidget *parent = 0, const char *name = 0);
     virtual ~KisGradientChooser();
 
+    KisItemChooser* itemChooser() {
+        return m_itemChooser;
+    }
+
 private slots:
     void slotImportGradient();
 
-protected:
     virtual void update(QTableWidgetItem *item);
 
 private:
     QLabel *m_lbName;
+    KisItemChooser * m_itemChooser;
     QPushButton * m_customGradient;
 };
 

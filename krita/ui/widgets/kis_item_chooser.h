@@ -57,13 +57,9 @@ signals:
     void selected(QTableWidgetItem *item);
     void importClicked();
     void deleteClicked();
-
+    void update( QTableWidgetItem* );
 protected:
 
-    /**
-     * Reimplement update() to extract that information and fill the appropriate widgets
-     */
-    virtual void update(QTableWidgetItem *item) = 0;
     QWidget *chooserWidget() const;
 
 private slots:

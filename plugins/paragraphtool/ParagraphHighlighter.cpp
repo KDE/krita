@@ -87,8 +87,6 @@ void ParagraphHighlighter::paint(QPainter &painter, const KoViewConverter &conve
         KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
         assert(textShapeData != NULL);
 
-        kDebug() << "Shape Rectangle: " << shape->boundingRect();
-
         painter.save();
 
         qreal shapeTop = textShapeData->documentOffset();
@@ -129,8 +127,6 @@ QRectF ParagraphHighlighter::dirtyRectangle()
         m_storedRepaintRectangle = m_storedRepaintRectangle | shape->boundingRect();
     }
     repaintRectangle |= m_storedRepaintRectangle;
-
-    kDebug() << repaintRectangle;
 
     return repaintRectangle;
 }

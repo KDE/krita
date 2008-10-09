@@ -61,6 +61,13 @@ public:
     {
     }
 
+    ~RadioLayout()
+    {
+        foreach( Item item, items )
+            delete item.child;
+        items.clear();
+    }
+
     void setGeometry (const QRect &geom) {
         QSize prefSize = calcSizes();
 

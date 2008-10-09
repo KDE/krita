@@ -46,6 +46,8 @@ KoSnapGuide::KoSnapGuide(KoCanvasBase * canvas)
 
 KoSnapGuide::~KoSnapGuide()
 {
+    qDeleteAll( m_strategies );
+    m_strategies.clear();
 }
 
 void KoSnapGuide::setEditedShape(KoShape * shape)

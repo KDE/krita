@@ -121,6 +121,11 @@ bool KoListLevelProperties::operator==(const KoListLevelProperties &other) const
     return d->stylesPrivate == other.d->stylesPrivate;
 }
 
+bool KoListLevelProperties::operator!=(const KoListLevelProperties &other) const
+{
+    return d->stylesPrivate != other.d->stylesPrivate;
+}
+
 void KoListLevelProperties::setListItemPrefix(const QString &prefix)
 {
     setProperty(KoListStyle::ListItemPrefix, prefix);
@@ -291,6 +296,10 @@ qreal KoListLevelProperties::minimumDistance() const
 KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list)
 {
     KoListLevelProperties llp;
+    if (!list) {
+        llp.setStyle(KoListStyle::None);
+        return llp;
+    }
     llp.d->stylesPrivate = list->format().properties();
     return llp;
 }

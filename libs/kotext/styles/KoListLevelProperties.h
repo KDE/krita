@@ -126,6 +126,7 @@ public:
     qreal minimumDistance() const;
 
     bool operator==(const KoListLevelProperties &other) const;
+    bool operator!=(const KoListLevelProperties &other) const;
     KoListLevelProperties & operator=(const KoListLevelProperties &other);
 
     /**

@@ -65,6 +65,12 @@ QTableWidgetItem* KisItemChooser::currentItem()
     return m_chooser->currentItem();
 }
 
+void KisItemChooser::selectItem( QTableWidgetItem* item )
+{
+    emit selected( item );
+}
+
+
 void KisItemChooser::slotItemSelected(QTableWidgetItem *item)
 {
     emit update(item);

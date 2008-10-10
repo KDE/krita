@@ -39,7 +39,7 @@
 #include "kis_brush.h"
 
 KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
-        : KisItemChooser(parent, name)
+        : QWidget(parent, name)
 {
     m_lbSpacing = new QLabel(i18n("Spacing: "), this);
     m_slSpacing = new KisDoubleWidget(0.0, 10, this, "double_widget");
@@ -52,13 +52,16 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 
     m_lbName = new QLabel(this);
 
+    m_itemChooser = new KisItemChooser( this );
+    connect( m_itemChooser, SIGNAL( update( QTableWidgetItem* ) ), this, SLOT( update( QTableWidgetItem* ) ) );
+
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setObjectName("main layout");
     mainLayout->setMargin(2);
     mainLayout->setSpacing(2);
 
     mainLayout->addWidget(m_lbName);
-    mainLayout->addWidget(chooserWidget(), 10);
+    mainLayout->addWidget(m_itemChooser, 10);
 
     QGridLayout *spacingLayout = new QGridLayout();
 
@@ -69,12 +72,12 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 
     spacingLayout->addWidget(m_chkColorMask, 1, 0, 1, 2);
 
-    connect(this, SIGNAL(importClicked()), this, SLOT(slotImportBrush()));
+    connect(m_itemChooser, SIGNAL(importClicked()), this, SLOT(slotImportBrush()));
 
     KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
     KoResourceServerAdapter<KisBrush>* rServerAdapter = new KoResourceServerAdapter<KisBrush>(rServer);
 
-    m_brushMediator = new KisResourceMediator(this, rServerAdapter, this);
+    m_brushMediator = new KisResourceMediator(m_itemChooser, rServerAdapter, this);
     connect(m_brushMediator, SIGNAL(activatedResource(KoResource*)),
             this , SLOT(slotActivatedBrush(KoResource*)));
 }
@@ -86,7 +89,7 @@ KisBrushChooser::~KisBrushChooser()
 
 void KisBrushChooser::slotSetItemSpacing(double spacingValue)
 {
-    KoResourceItem *item = static_cast<KoResourceItem *>(currentItem());
+    KoResourceItem *item = static_cast<KoResourceItem *>(m_itemChooser->currentItem());
 
     if (item) {
         KisBrush *brush = static_cast<KisBrush *>(item->resource());
@@ -96,13 +99,12 @@ void KisBrushChooser::slotSetItemSpacing(double spacingValue)
 
 void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
 {
-    KoResourceItem *item = static_cast<KoResourceItem *>(currentItem());
+    KoResourceItem *item = static_cast<KoResourceItem *>(m_itemChooser->currentItem());
 
     if (item) {
         KisBrush *brush = static_cast<KisBrush *>(item->resource());
         brush->setUseColorAsMask(useColorAsMask);
-//         item->updatePixmaps();
-        emit selected(currentItem());
+        m_itemChooser->selectItem(m_itemChooser->currentItem());
     }
 }
 

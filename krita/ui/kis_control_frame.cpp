@@ -94,7 +94,7 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
 
     /**** Temporary hack to test the KoDualColorButton ***/
     KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->fgColor(), view, view);
-    action  = new KAction(i18n("&Painter's Tools"), this);
+    action  = new KAction(i18n("&Color"), this);
     view->actionCollection()->addAction("dual", action);
     action->setDefaultWidget(dual);
     connect(dual, SIGNAL(foregroundColorChanged(const KoColor &)), view->resourceProvider(), SLOT(slotSetFGColor(const KoColor &)));

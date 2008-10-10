@@ -28,6 +28,9 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 
+#include <widgets/kis_item_chooser.h>
+#include <kis_image.h>
+
 #include "kis_brush.h"
 #include "kis_auto_brush.h"
 #include "kis_imagepipe_brush.h"
@@ -35,7 +38,6 @@
 #include "kis_auto_brush_widget.h"
 #include "kis_custom_brush.h"
 #include "kis_text_brush.h"
-#include <kis_image.h>
 
 KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
         : QWidget(parent)
@@ -67,7 +69,7 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
 
     setLayout(l);
 
-    m_brushChooser->setCurrent(0);
+    m_brushChooser->itemChooser()->setCurrent(0);
     m_autoBrushWidget->activate();
 }
 

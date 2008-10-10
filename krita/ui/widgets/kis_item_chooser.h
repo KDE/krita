@@ -48,6 +48,7 @@ public:
     void setCurrent(int index);
 
     void removeItem(KoResourceItem *item);
+    void selectItem( QTableWidgetItem* item );
 
 public slots:
     void addItem(KoResourceItem *item);
@@ -58,6 +59,7 @@ signals:
     void importClicked();
     void deleteClicked();
     void update( QTableWidgetItem* );
+
 protected:
 
     QWidget *chooserWidget() const;

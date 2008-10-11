@@ -27,6 +27,7 @@
 #include <QAction>
 #include <QLabel>
 #include <QLayout>
+#include <QStyle>
 #include <QStylePainter>
 #include <QStyleOptionFrame>
 
@@ -114,7 +115,7 @@ class KoDockWidgetTitleBar::Private
 {
 public:
     Private(KoDockWidgetTitleBar* thePublic) : thePublic(thePublic),
-            openIcon("arrow-down"), closeIcon("arrow-right") {}
+            openIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarShadeButton)), closeIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarUnshadeButton)) {if (openIcon.isNull()) openIcon= KIcon("arrow-down");if (closeIcon.isNull()) closeIcon= KIcon("arrow-right");}
     KoDockWidgetTitleBar* thePublic;
     KIcon openIcon, closeIcon;
     QAbstractButton* closeButton;
@@ -264,6 +265,7 @@ void KoDockWidgetTitleBar::Private::toggleCollapsed()
     QDockWidget *q = qobject_cast<QDockWidget*>(thePublic->parentWidget());
     if (q == 0) // there does not *have* to be anything on the dockwidget.
         return;
+    q->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX); // will be overwritten again next
     q->widget()->setVisible(q->widget()->isHidden());
     collapseButton->setIcon(q->widget()->isHidden() ? closeIcon : openIcon);
 }

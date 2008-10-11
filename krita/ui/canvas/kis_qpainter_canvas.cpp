@@ -76,6 +76,7 @@ public:
     KisCanvas2 * canvas;
     const KoViewConverter * viewConverter;
     QBrush checkBrush;
+    /// the offset of the view in the document, expressed in the view reference (not in the document reference)
     QPoint documentOffset;
     bool tabletDown;
     QTabletEvent previousEvent;

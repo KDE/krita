@@ -180,15 +180,14 @@ void KisGridManager::drawDecoration(QPainter& gc, const QPoint& documentOffset, 
     QPen subdivisionPen = KisGridPainterConfiguration::subdivisionPen();
     quint32 i = subdivision - (offsetx / hspacing) % (subdivision + 1);
 
-    QPointF bottomRight = viewToPixel(area.bottomRight());
-    QPointF topLeft = viewToPixel(area.topLeft());
-    QPointF pixelOffset =  m_view->document()->image()->documentToPixel(documentOffset);
+    QPointF bottomRight = viewToPixel(area.bottomRight() + documentOffset);
+    QPointF topLeft = viewToPixel(area.topLeft() + documentOffset);
 
-    dbgRender << "topLeft = " << topLeft << " bottomRight = " << bottomRight << " pixelOffset = " << pixelOffset;
+    dbgRender << "area = " << area << "topLeft = " << topLeft << " bottomRight = " << bottomRight << " documentOffset = " << documentOffset;
 
     double x = offsetx % hspacing;
     dbgRender << " x = " << x << " hspacing = " << hspacing;
-    while (x <= bottomRight.x() + pixelOffset.x()) {
+    while (x <= bottomRight.x() ) {
         if (i == subdivision) {
             gc.setPen(mainPen);
             i = 0;
@@ -199,8 +198,8 @@ void KisGridManager::drawDecoration(QPainter& gc, const QPoint& documentOffset, 
         if (x >= topLeft.x()) {
             // Always draw the full line otherwise the line stippling varies
             // with the location of area and we get glitchy patterns.
-//             dbgRender << pixelToView( QPointF( x, topLeft.y() ) ) << " " << pixelToView( QPointF( x, bottomRight.y() ) );
-            gc.drawLine(pixelToView(QPointF(x, topLeft.y())), pixelToView(QPointF(x, bottomRight.y() + pixelOffset.y())));
+            dbgRender << pixelToView( QPointF( x, topLeft.y() ) ) << " " << pixelToView( QPointF( x, bottomRight.y() ) ) << (bottomRight.y() );
+            gc.drawLine(pixelToView(QPointF(x, topLeft.y())), pixelToView(QPointF(x, bottomRight.y() )));
         }
         x += hspacing;
     }
@@ -208,7 +207,7 @@ void KisGridManager::drawDecoration(QPainter& gc, const QPoint& documentOffset, 
     i = subdivision - (offsety / vspacing) % (subdivision + 1);
     double y = offsety % vspacing;
     dbgRender << " y = " << x << " vspacing = " << vspacing;
-    while (y <= bottomRight.y() + pixelOffset.y()) {
+    while (y <= bottomRight.y() ) {
         if (i == subdivision) {
             gc.setPen(mainPen);
             i = 0;
@@ -217,7 +216,7 @@ void KisGridManager::drawDecoration(QPainter& gc, const QPoint& documentOffset, 
             i++;
         }
         if (y >= topLeft.y()) {
-            gc.drawLine(pixelToView(QPointF(topLeft.x(), y)), pixelToView(QPointF(bottomRight.x() + pixelOffset.x() , y)));
+            gc.drawLine(pixelToView(QPointF(topLeft.x(), y)), pixelToView(QPointF(bottomRight.x(), y)));
         }
         y += vspacing;
     }

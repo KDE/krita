@@ -143,7 +143,7 @@ void KoSelection::select(KoShape * object, bool recursive)
 {
     Q_ASSERT(object != this);
     Q_ASSERT(object);
-    if (! object->isSelectable() || ! object->isVisible(false))
+    if (! object->isSelectable() || ! object->isVisible(true))
         return;
     if (!d->selectedShapes.contains(object))
         d->selectedShapes << object;

@@ -185,6 +185,7 @@ ItemStore::ItemStore(KoShapeManager *shapeManager)
 ItemStore::~ItemStore()
 {
     s_itemStorePrivate()->removeUser(m_shapeManager);
+    delete m_shapeManager;
 }
 
 void ItemStore::addFolder(FolderShape *folder)

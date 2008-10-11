@@ -41,6 +41,12 @@ public:
     {
     }
 
+    ~SectionLayout()
+    {
+        qDeleteAll( m_items );
+        m_items.clear();
+    }
+
     void addButton(QAbstractButton *button, int priority)
     {
         addChildWidget(button);
@@ -161,6 +167,12 @@ public:
         : QLayout(parent)
     {
         setSpacing(6);
+    }
+
+    ~ToolBoxLayout()
+    {
+        qDeleteAll( m_sections );
+        m_sections.clear();
     }
 
     QSize sizeHint() const

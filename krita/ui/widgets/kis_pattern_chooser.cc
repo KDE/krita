@@ -49,7 +49,7 @@ KisPatternChooser::KisPatternChooser(QWidget *parent, const char *name)
     mainLayout->addWidget(m_itemChooser, 10);
 
     setLayout( mainLayout );
-    connect(this, SIGNAL(importClicked()), this, SLOT(slotImportPattern()));
+    connect( m_itemChooser, SIGNAL(importClicked()), this, SLOT(slotImportPattern()));
 }
 
 KisPatternChooser::~KisPatternChooser()

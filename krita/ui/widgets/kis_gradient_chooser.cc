@@ -70,7 +70,7 @@ KisGradientChooser::KisGradientChooser(KisView2 * view, QWidget *parent, const c
 
     setLayout(mainLayout);
 
-    connect(this, SIGNAL(importClicked()), this, SLOT(slotImportGradient()));
+    connect( m_itemChooser, SIGNAL(importClicked()), this, SLOT(slotImportGradient()));
 }
 
 KisGradientChooser::~KisGradientChooser()

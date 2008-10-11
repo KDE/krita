@@ -25,7 +25,7 @@ KoUniColorDialog::KoUniColorDialog(KoColor &initialColor, QWidget *parent)
 
     m_chooser = new KoUniColorChooser( );
     m_chooser->setColor(initialColor);
-    addPage( m_chooser, "My Test Page");
+    addPage( m_chooser, tr( "Color Selector") );
 }
 
 KoColor KoUniColorDialog::color()

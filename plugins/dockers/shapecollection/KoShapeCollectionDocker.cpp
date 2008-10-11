@@ -57,12 +57,12 @@
 class CollectionMenu : public QMenu
 {
     public:
-        CollectionMenu();
+        CollectionMenu(QWidget * parent = 0);
         virtual QSize sizeHint() const;
 };
 
-CollectionMenu::CollectionMenu()
- : QMenu(0)
+CollectionMenu::CollectionMenu(QWidget * parent)
+ : QMenu(parent)
 {
 }
 QSize CollectionMenu::sizeHint() const
@@ -106,7 +106,7 @@ KoShapeCollectionDocker::KoShapeCollectionDocker(QWidget* parent)
     mainLayout->setMargin(0);
     setWidget(mainWidget);
 
-    m_quickView = new QListView ();
+    m_quickView = new QListView (mainWidget);
     mainLayout->addWidget(m_quickView, 0, 0);
     m_quickView->setViewMode(QListView::IconMode);
     m_quickView->setDragDropMode(QListView::DragOnly);
@@ -133,13 +133,13 @@ KoShapeCollectionDocker::KoShapeCollectionDocker(QWidget* parent)
 
     mainLayout->setColumnStretch (2, 10);
 
-    m_moreShapesContainer = new CollectionMenu();
+    m_moreShapesContainer = new CollectionMenu(mainWidget);
     m_moreShapes->setMenu(m_moreShapesContainer);
     m_moreShapes->setPopupMode(QToolButton::InstantPopup);
     QGridLayout *containerLayout = new QGridLayout(m_moreShapesContainer);
     containerLayout->setMargin(4);
 
-    m_collectionChooser = new QListWidget (0);
+    m_collectionChooser = new QListWidget (m_moreShapesContainer);
     containerLayout->addWidget(m_collectionChooser, 0, 0, 1, 2);
     m_collectionChooser->setViewMode(QListView::IconMode);
     m_collectionChooser->setSelectionMode(QListView::SingleSelection);
@@ -152,7 +152,7 @@ KoShapeCollectionDocker::KoShapeCollectionDocker(QWidget* parent)
             this, SLOT(activateShapeCollection(QListWidgetItem *)));
 
 
-    m_addCollectionButton = new QToolButton ();
+    m_addCollectionButton = new QToolButton (m_moreShapesContainer);
     containerLayout->addWidget(m_addCollectionButton, 1, 0);
     m_addCollectionButton->setIcon(SmallIcon("list-add"));
     m_addCollectionButton->setIconSize(QSize(16, 16));
@@ -160,7 +160,7 @@ KoShapeCollectionDocker::KoShapeCollectionDocker(QWidget* parent)
     m_addCollectionButton->setPopupMode(QToolButton::InstantPopup);
     m_addCollectionButton->setVisible(false);
 
-    m_closeCollectionButton = new QToolButton ();
+    m_closeCollectionButton = new QToolButton (m_moreShapesContainer);
     containerLayout->addWidget(m_closeCollectionButton, 1, 1);
     m_closeCollectionButton->setIcon(SmallIcon("list-remove"));
     m_closeCollectionButton->setIconSize(QSize(16, 16));
@@ -175,7 +175,7 @@ KoShapeCollectionDocker::KoShapeCollectionDocker(QWidget* parent)
         buildAddCollectionMenu();
     }
 
-    m_collectionView = new QListView (0);
+    m_collectionView = new QListView (m_moreShapesContainer);
     containerLayout->addWidget(m_collectionView, 0, 2, -1, 1);
     m_collectionView->setViewMode(QListView::IconMode);
     m_collectionView->setDragDropMode(QListView::DragOnly);

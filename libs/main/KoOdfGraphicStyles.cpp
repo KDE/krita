@@ -42,12 +42,6 @@
 void KoOdfGraphicStyles::saveOasisFillStyle(KoGenStyle &styleFill, KoGenStyles& mainStyles, const QBrush & brush)
 {
     switch (brush.style()) {
-    case Qt::SolidPattern:
-        styleFill.addProperty("draw:fill", "solid");
-        styleFill.addProperty("draw:fill-color", brush.color().name());
-        if (! brush.isOpaque())
-            styleFill.addProperty("draw:opacity", QString("%1%").arg(brush.color().alphaF() * 100.0));
-        break;
     case Qt::Dense1Pattern:
         styleFill.addProperty("draw:transparency", "94%");
         styleFill.addProperty("draw:fill", "solid");
@@ -89,9 +83,24 @@ void KoOdfGraphicStyles::saveOasisFillStyle(KoGenStyle &styleFill, KoGenStyles& 
         styleFill.addProperty("draw:fill", "gradient");
         styleFill.addProperty("draw:fill-gradient-name", saveOasisGradientStyle(mainStyles, brush));
         break;
-    default: //otherstyle
+    case Qt::HorPattern:
+    case Qt::VerPattern:
+    case Qt::CrossPattern:
+    case Qt::BDiagPattern:
+    case Qt::FDiagPattern:
+    case Qt::DiagCrossPattern:
         styleFill.addProperty("draw:fill", "hatch");
         styleFill.addProperty("draw:fill-hatch-name", saveOasisHatchStyle(mainStyles, brush));
+        break;
+    case Qt::SolidPattern:
+        styleFill.addProperty("draw:fill", "solid");
+        styleFill.addProperty("draw:fill-color", brush.color().name());
+        if (! brush.isOpaque())
+            styleFill.addProperty("draw:opacity", QString("%1%").arg(brush.color().alphaF() * 100.0));
+        break;
+    case Qt::NoBrush:
+    default:
+        styleFill.addProperty("draw:fill", "none");
         break;
     }
 }

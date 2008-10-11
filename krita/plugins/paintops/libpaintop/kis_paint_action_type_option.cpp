@@ -61,3 +61,4 @@ enumPaintActionType KisPaintActionTypeOption::paintActionType()
         return WASH;
     }
 }
+

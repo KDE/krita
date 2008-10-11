@@ -257,3 +257,4 @@ int KisSumiPaintOpSettings::inkDepletionWeight() const
 {
     return m_options->inkDepletionSlider->value();
 }
+

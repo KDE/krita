@@ -388,10 +388,10 @@ bool ParagraphTool::activateRulerAt(const QPointF &point)
         return false;
     }
 
-    for (int i = 0; i != m_fragments.size(); ++i) {
-        RulerIndex ruler = m_fragments[i].hitTest(point);
-        if (ruler != noRuler) {
-            activateRuler(ruler, m_fragments[i].rulerFragment(ruler));
+    for (int ruler = 0; ruler != maxRuler; ++ruler) {
+        RulerFragment *fragment = m_rulers[ruler].hitTest(point);
+        if (fragment != NULL) {
+            activateRuler(static_cast<RulerIndex>(ruler), fragment);
             return true;
         }
     }
@@ -483,11 +483,11 @@ void ParagraphTool::highlightRulerAt(const QPointF &point)
     }
 
     // check if we are hovering over a new control
-    for (int i = 0; i != m_fragments.size(); ++i) {
-        RulerIndex ruler = m_fragments[i].hitTest(point);
-        if (ruler != noRuler) {
-            m_highlightedRuler = ruler;
-            m_highlightedRulerFragment = m_fragments[i].rulerFragment(m_highlightedRuler);
+    for (int ruler = 0; ruler != maxRuler; ++ruler) {
+        RulerFragment *fragment = m_rulers[ruler].hitTest(point);
+        if (fragment != NULL) {
+            m_highlightedRuler = static_cast<RulerIndex>(ruler);
+            m_highlightedRulerFragment = fragment;
             m_rulers[m_highlightedRuler].setHighlighted(true);
             break;
         }

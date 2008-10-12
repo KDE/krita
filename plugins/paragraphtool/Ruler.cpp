@@ -172,3 +172,13 @@ void Ruler::setHighlighted(bool highlighted)
     emit needsRepaint();
 }
 
+RulerFragment *Ruler::hitTest(const QPointF &point)
+{
+    for (int fragment = 0; fragment != m_fragments.size(); ++fragment) {
+        if (m_fragments[fragment].hitTest(point)) {
+            return &m_fragments[fragment];
+        }
+    }
+
+    return NULL;
+}

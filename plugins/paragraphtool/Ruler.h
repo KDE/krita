@@ -138,6 +138,8 @@ public:
         m_fragments.clear();
     }
 
+    RulerFragment *hitTest(const QPointF &point);
+
 signals:
     // emitted when value has been changed via the user interface
     // (in contrast to via the setValue() method)

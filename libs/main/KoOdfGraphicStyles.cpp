@@ -105,6 +105,55 @@ void KoOdfGraphicStyles::saveOasisFillStyle(KoGenStyle &styleFill, KoGenStyles& 
     }
 }
 
+void KoOdfGraphicStyles::saveOasisStrokeStyle(KoGenStyle &styleStroke, KoGenStyles &mainStyles, const QPen &pen)
+{
+    // TODO implement all possibilities
+    switch (pen.style()) {
+    case Qt::NoPen:
+        styleStroke.addProperty("draw:stroke", "none");
+        return;
+    case Qt::SolidLine:
+        styleStroke.addProperty("draw:stroke", "solid");
+        break;
+    default: { // must be a dashed line
+        styleStroke.addProperty("draw:stroke", "dash");
+        // save stroke dash (14.14.7) which is severly limited, but still
+        KoGenStyle dashStyle(KoGenStyle::StyleStrokeDash);
+        dashStyle.addAttribute("draw:style", "rect");
+        QVector<qreal> dashes = pen.dashPattern();
+        dashStyle.addAttribute("draw:dots1", static_cast<int>(1));
+        dashStyle.addAttributePt("draw:dots1-length", dashes[0]*pen.widthF());
+        dashStyle.addAttributePt("draw:distance", dashes[1]*pen.widthF());
+        if (dashes.size() > 2) {
+            dashStyle.addAttribute("draw:dots2", static_cast<int>(1));
+            dashStyle.addAttributePt("draw:dots2-length", dashes[2]*pen.widthF());
+        }
+        QString dashStyleName = mainStyles.lookup(dashStyle, "dash");
+        styleStroke.addProperty("draw:stroke-dash", dashStyleName);
+        break;
+    }
+    }
+
+    styleStroke.addProperty("svg:stroke-color", pen.color().name());
+    styleStroke.addProperty("svg:stroke-opacity", QString("%1").arg(pen.color().alphaF()));
+    styleStroke.addPropertyPt("svg:stroke-width", pen.widthF());
+
+    switch (pen.joinStyle()) {
+    case Qt::MiterJoin:
+        styleStroke.addProperty("draw:stroke-linejoin", "miter");
+        break;
+    case Qt::BevelJoin:
+        styleStroke.addProperty("draw:stroke-linejoin", "bevel");
+        break;
+    case Qt::RoundJoin:
+        styleStroke.addProperty("draw:stroke-linejoin", "round");
+        break;
+    default:
+        styleStroke.addProperty("draw:stroke-linejoin", "miter");
+        break;
+    }
+}
+
 QString KoOdfGraphicStyles::saveOasisHatchStyle(KoGenStyles& mainStyles, const QBrush &brush)
 {
     KoGenStyle hatchStyle(KoGenStyle::StyleHatch /*no family name*/);

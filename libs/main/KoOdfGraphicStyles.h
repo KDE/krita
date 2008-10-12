@@ -42,6 +42,8 @@ class KOMAIN_EXPORT KoOdfGraphicStyles
 public:
     static void saveOasisFillStyle(KoGenStyle &styleFill, KoGenStyles& mainStyles, const QBrush & brush);
 
+    static void saveOasisStrokeStyle(KoGenStyle &styleStroke, KoGenStyles &mainStyles, const QPen &pen);
+
     static QString saveOasisHatchStyle(KoGenStyles& mainStyles, const QBrush &brush);
 
     /// Saves gradient style of brush into mainStyles and returns the styles name

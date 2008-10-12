@@ -55,7 +55,7 @@ public:
     ~ParagraphFragment() {};
 
     // paint all rulers for this shape
-    void paint(QPainter &painter, const KoViewConverter &converter) const;
+    void paint(QPainter &painter) const;
 
     // returns the rectangle which needs to be repainted to fully refresh
     // the display for this shape currently this is the bounding rectangle

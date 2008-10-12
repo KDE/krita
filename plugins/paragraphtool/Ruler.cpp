@@ -182,3 +182,11 @@ RulerFragment *Ruler::hitTest(const QPointF &point)
 
     return NULL;
 }
+
+void Ruler::paint(QPainter &painter) const
+{
+    for (int fragment = 0; fragment != m_fragments.size(); ++fragment) {
+        m_fragments[fragment].paint(painter);
+    }
+}
+

@@ -121,26 +121,11 @@ void ParagraphFragment::initRulers()
     m_rulers[bottomMarginRuler].addFragment(m_rulerFragments[bottomMarginRuler]);
 }
 
-void ParagraphFragment::paint(QPainter &painter, const KoViewConverter &converter) const
+void ParagraphFragment::paint(QPainter &painter) const
 {
-    painter.save();
-
-    // transform painter from view coordinate system to document coordinate system
-    QPointF trans = converter.documentToView(QPointF(1.0, 1.0));
-    QMatrix matrix = QMatrix().translate(trans.x(), trans.y());
-    painter.setMatrix(matrix * painter.matrix());
-    KoShape::applyConversion(painter, converter);
-    painter.setPen(Qt::darkGray);
-
     if (m_paintSeparator) {
         painter.drawLine(mapTextToDocument(QLineF(m_border.left(), m_firstLine.bottom(), m_firstLine.right(), m_firstLine.bottom())));
     }
-
-    for (int ruler = 0; ruler != maxRuler; ++ruler) {
-        m_rulerFragments[ruler].paint(painter);
-    }
-
-    painter.restore();
 }
 
 QRectF ParagraphFragment::dirtyRectangle() const

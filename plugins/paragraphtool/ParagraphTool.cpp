@@ -229,9 +229,24 @@ void ParagraphTool::paint(QPainter &painter, const KoViewConverter &converter)
     m_needsRepaint = false;
 
     if (hasActiveTextBlock()) {
-        foreach(ParagraphFragment fragment, m_fragments) {
-            fragment.paint(painter, converter);
+        painter.save();
+
+        // transform painter from view coordinate system to document coordinate system
+        QPointF trans = converter.documentToView(QPointF(1.0, 1.0));
+        QMatrix matrix = QMatrix().translate(trans.x(), trans.y());
+        painter.setMatrix(matrix * painter.matrix());
+        KoShape::applyConversion(painter, converter);
+        painter.setPen(Qt::darkGray);
+
+        foreach (const ParagraphFragment &fragment, m_fragments) {
+            fragment.paint(painter);
         }
+
+        for (int ruler = 0; ruler != maxRuler; ++ruler) {
+            m_rulers[ruler].paint(painter);
+        }
+
+        painter.restore();
 
         paintLabel(painter, converter);
     }

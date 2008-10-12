@@ -140,6 +140,8 @@ public:
 
     RulerFragment *hitTest(const QPointF &point);
 
+    void paint(QPainter &painter) const;
+
 signals:
     // emitted when value has been changed via the user interface
     // (in contrast to via the setValue() method)

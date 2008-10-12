@@ -27,6 +27,8 @@
 #include "KoCanvasBase.h"
 #include "KoCanvasController.h"
 #include "KoShapeManager.h"
+#include "KoSelection.h"
+#include "KoShapeLayer.h"
 
 #include <kdebug.h>
 #include <QTimer>
@@ -116,6 +118,18 @@ public:
             return;
         hasSelection = newSelection;
         emit parent->selectionChanged(hasSelection);
+    }
+
+    bool isActiveLayerEditable()
+    {
+        if( ! activeTool )
+            return false;
+        
+        KoShapeManager * shapeManager = activeTool->canvas()->shapeManager();
+        KoShapeLayer * activeLayer = shapeManager->selection()->activeLayer();
+        if( activeLayer && ! activeLayer->isEditable() )
+            return false;
+        return true;
     }
 
     KoTool *activeTool;
@@ -298,7 +312,8 @@ QHash<QString, QAction*> KoToolProxy::actions() const
 
 void KoToolProxy::cut()
 {
-    if (d->activeTool)
+    // TODO maybe move checking the active layer to KoPasteController ?
+    if (d->activeTool && d->isActiveLayerEditable())
         d->activeTool->cut();
 }
 void KoToolProxy::copy() const
@@ -309,7 +324,8 @@ void KoToolProxy::copy() const
 
 bool KoToolProxy::paste()
 {
-    if (d->activeTool)
+    // TODO maybe move checking the active layer to KoPasteController ?
+    if (d->activeTool && d->isActiveLayerEditable())
         return d->activeTool->paste();
     return false;
 }

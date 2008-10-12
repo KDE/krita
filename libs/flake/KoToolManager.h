@@ -203,6 +203,11 @@ signals:
      */
     void toolCodesSelected(const KoCanvasController *canvas, QList<QString> types);
 
+    /**
+     * Emitted after the current layer changed either its properties or to a new layer.
+     * @param canvas the currently active canvas.
+     * @param layer the layer that is selected.
+     */
     void currentLayerChanged(const KoCanvasController *canvas, const KoShapeLayer* layer);
 
     /**

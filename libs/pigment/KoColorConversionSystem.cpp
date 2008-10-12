@@ -150,6 +150,54 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
     }
 }
 
+void KoColorConversionSystem::insertColorProfile( const KoColorProfile* _profile )
+{
+  dbgPigmentCCS << _profile->name();
+  const QList< const KoColorSpaceFactory* >& factories = KoColorSpaceRegistry::instance()->colorSpacesFor( _profile );
+  foreach( const KoColorSpaceFactory* factory, factories )
+  {
+      QString modelId = factory->colorModelId().id();
+      QString depthId = factory->colorDepthId().id();
+      Node* n = nodeFor( modelId, depthId, _profile->name());
+      n->init( factory );
+      if( not factory->colorSpaceEngine().isEmpty())
+      {
+          KoColorSpaceEngine* engine = KoColorSpaceEngineRegistry::instance()->get( factory->colorSpaceEngine() );
+          Q_ASSERT(engine);
+          Node* engineNode = d->graph[ NodeKey( engine->id(), engine->id(), engine->id() ) ];
+          Q_ASSERT( engineNode );
+          connectToEngine(n, engineNode );
+      }
+      QList<KoColorConversionTransformationFactory*> cctfs = factory->colorConversionLinks();
+      foreach(KoColorConversionTransformationFactory* cctf, cctfs)
+      {
+          Node* srcNode = nodeFor(cctf->srcColorModelId(), cctf->srcColorDepthId(), cctf->srcProfile());
+          Q_ASSERT(srcNode);
+          Node* dstNode = nodeFor(cctf->dstColorModelId(), cctf->dstColorDepthId(), cctf->dstProfile());
+          Q_ASSERT(dstNode);
+          if( srcNode == n or dstNode == n )
+          {
+              // Check if the two nodes are already connected
+              Vertex* v = vertexBetween(srcNode, dstNode);
+              // If the vertex doesn't already exist, then create it
+              if(not v)
+              {
+                  v = createVertex(srcNode, dstNode);
+              }
+              Q_ASSERT(v); // we should have one now
+              if(dstNode->modelId == modelId and dstNode->depthId == depthId )
+              {
+                  v->setFactoryFromDst(cctf);
+              }
+              if(srcNode->modelId == modelId and srcNode->depthId == depthId )
+              {
+                  v->setFactoryFromSrc(cctf);
+              }
+         }
+      }
+  }
+}
+
 const KoColorSpace* KoColorConversionSystem::defaultColorSpaceForNode(const Node* node) const
 {
     return KoColorSpaceRegistry::instance()->colorSpace( KoColorSpaceRegistry::instance()->colorSpaceId( node->modelId, node->depthId ), node->profileName );

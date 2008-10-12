@@ -20,10 +20,12 @@
 #ifndef _KO_COLOR_CONVERSION_SYSTEM_H_
 #define _KO_COLOR_CONVERSION_SYSTEM_H_
 
+class KoColorProfile;
 class KoColorSpace;
 class KoColorSpaceFactory;
 class KoColorSpaceEngine;
 class KoID;
+
 #include "KoColorConversionTransformation.h"
 
 #include <QList>
@@ -58,6 +60,8 @@ class PIGMENTCMS_EXPORT KoColorConversionSystem {
          * to the graph of transformation.
          */
         void insertColorSpace(const KoColorSpaceFactory*);
+        
+        void insertColorProfile( const KoColorProfile* );
         /**
          * This function is called by the color space to create a color conversion
          * between two color space. This function search in the graph of transformations

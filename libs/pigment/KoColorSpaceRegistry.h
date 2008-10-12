@@ -79,7 +79,8 @@ public:
      * @param profile the new profile to be registered so it can be combined with
      *  colorspaces.
      */
-    void addProfile(KoColorProfile * profile);
+    void addProfile(KoColorProfile* profile);
+    void addProfile(const KoColorProfile* profile);
 
     /**
      * Return a profile by its given name, or 0 if none registered.
@@ -109,6 +110,11 @@ public:
      * @return a list of profiles for the factory
      */
     QList<const KoColorProfile *>  profilesFor(const KoID& id);
+    
+    /**
+     * @return a list of color spaces compatible with this profile
+     */
+    QList<const KoColorSpaceFactory*> colorSpacesFor( const KoColorProfile* _profile);
 
     /**
      * Return the list of profiles for a colorspace with the argument id.

@@ -266,6 +266,19 @@ QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const KoColorSp
     return profiles;
 }
 
+QList<const KoColorSpaceFactory*> KoColorSpaceRegistry::colorSpacesFor( const KoColorProfile* _profile)
+{
+    QList<const KoColorSpaceFactory*> csfs;
+    foreach( KoColorSpaceFactory* csf, values() )
+    {
+        if( csf->profileIsCompatible( _profile ) )
+        {
+            csfs.push_back( csf );
+        }
+    }
+    return csfs;
+}
+
 QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const KoID& id)
 {
     return profilesFor(id.id());
@@ -275,16 +288,24 @@ void KoColorSpaceRegistry::addProfile(KoColorProfile *p)
 {
       if (p->valid()) {
           d->profileMap[p->name()] = p;
+          d->colorConversionSystem->insertColorProfile( p );
       }
 }
 
+void KoColorSpaceRegistry::addProfile(const KoColorProfile* profile)
+{
+  addProfile( profile->clone() );
+}
+
 void KoColorSpaceRegistry::addPaintDeviceAction(const KoColorSpace* cs,
-        KisPaintDeviceAction* action) {
+        KisPaintDeviceAction* action)
+{
     d->paintDevActionMap[cs->id()].append(action);
 }
 
 QList<KisPaintDeviceAction *>
-KoColorSpaceRegistry::paintDeviceActionsFor(const KoColorSpace* cs) {
+KoColorSpaceRegistry::paintDeviceActionsFor(const KoColorSpace* cs)
+{
     return d->paintDevActionMap[cs->id()];
 }
 
@@ -351,6 +372,11 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         if(isCached( csID, profile->name() ) )
         {
             cs = colorSpace( csID, profile->name());
+        }
+        
+        if( not d->profileMap.contains( profile->name() ) )
+        {
+          addProfile( profile );
         }
 
         if(!cs)

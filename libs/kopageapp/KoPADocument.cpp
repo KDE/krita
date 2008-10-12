@@ -91,8 +91,10 @@ KoPADocument::~KoPADocument()
 
 void KoPADocument::paintContent( QPainter &painter, const QRect &rect)
 {
-    Q_UNUSED( painter );
-    Q_UNUSED( rect );
+    KoPAPageBase * page = pageByIndex( 0, false );
+    Q_ASSERT( page );
+    QPixmap thumbnail = page->thumbnail( rect.size() );
+    painter.drawPixmap( rect, thumbnail );
 }
 
 bool KoPADocument::loadXML( QIODevice *, const KoXmlDocument & doc )

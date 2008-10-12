@@ -179,15 +179,18 @@ void ParagraphTool::paintLabel(QPainter &painter, const KoViewConverter &convert
 {
     RulerIndex ruler;
     ParagraphFragment *fragment;
+    RulerFragment *rulerFragment;
     QColor foregroundColor;
 
     if (hasActiveRuler()) {
         ruler = m_activeRuler;
         fragment = m_activeFragment;
+        rulerFragment = m_activeRulerFragment;
         foregroundColor = m_rulers[ruler].activeColor();
     } else if (hasHighlightedRuler()) {
         ruler = m_highlightedRuler;
         fragment = m_highlightedFragment;
+        rulerFragment = m_highlightedRulerFragment;
         foregroundColor = m_rulers[ruler].highlightColor();
     } else {
         return;
@@ -195,7 +198,7 @@ void ParagraphTool::paintLabel(QPainter &painter, const KoViewConverter &convert
 
     painter.save();
 
-    QLineF unmapped(fragment->rulerFragment(ruler)->labelConnector());
+    QLineF unmapped(rulerFragment->labelConnector());
     QLineF connector(converter.documentToView(unmapped.p1()), converter.documentToView(unmapped.p2()));
     connector.setLength(10.0);
 
@@ -397,6 +400,7 @@ bool ParagraphTool::activateRulerAt(const QPointF &point)
     }
 
     m_activeRuler = noRuler;
+    m_activeRulerFragment = NULL;
     return false;
 }
 
@@ -404,6 +408,7 @@ void ParagraphTool::activateRuler(RulerIndex ruler, ParagraphFragment &fragment)
 {
     m_activeRuler = ruler;
     m_activeFragment = &fragment;
+    m_activeRulerFragment = m_activeFragment->rulerFragment(m_activeRuler);
     m_rulers[m_activeRuler].setActive(true);
 
     // disable hovering if we have an active ruler
@@ -421,6 +426,7 @@ void ParagraphTool::deactivateRuler()
 
     RulerIndex activeRuler = m_activeRuler;
     m_activeRuler = noRuler;
+    m_activeRulerFragment = NULL;
     m_rulers[activeRuler].setActive(false);
 
     focusRuler(activeRuler);
@@ -440,7 +446,7 @@ void ParagraphTool::resetActiveRuler()
 
 void ParagraphTool::moveActiveRulerTo(const QPointF &point)
 {
-    m_activeFragment->rulerFragment(m_activeRuler)->moveTo(point, smoothMovement());
+    m_activeRulerFragment->moveTo(point, smoothMovement());
 }
 
 void ParagraphTool::focusRuler(RulerIndex ruler)
@@ -472,7 +478,7 @@ void ParagraphTool::highlightRulerAt(const QPointF &point)
     // check if we were already hovering over an element
     if (hasHighlightedRuler()) {
         // check if we are still over the same element
-        if (m_highlightedFragment->rulerFragment(m_highlightedRuler)->hitTest(point)) {
+        if (m_highlightedRulerFragment->hitTest(point)) {
             return;
         } else {
             // stop hovering over the element
@@ -486,6 +492,7 @@ void ParagraphTool::highlightRulerAt(const QPointF &point)
         if (ruler != noRuler) {
             m_highlightedRuler = ruler;
             m_highlightedFragment = &m_fragments[i];
+            m_highlightedRulerFragment = m_highlightedFragment->rulerFragment(m_highlightedRuler);
             m_rulers[m_highlightedRuler].setHighlighted(true);
             break;
         }
@@ -497,6 +504,7 @@ void ParagraphTool::dehighlightRuler()
     if (hasHighlightedRuler()) {
         m_rulers[m_highlightedRuler].setHighlighted(false);
         m_highlightedRuler = noRuler;
+        m_highlightedRulerFragment = NULL;
     }
 }
 

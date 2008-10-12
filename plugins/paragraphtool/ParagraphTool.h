@@ -190,6 +190,9 @@ private:
     m_focusedRuler,
     m_highlightedRuler;
 
+    RulerFragment *m_activeRulerFragment;
+    RulerFragment *m_highlightedRulerFragment;
+
     QPointF m_mousePosition;
     QRectF m_storedRepaintRectangle;
 

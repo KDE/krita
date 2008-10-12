@@ -56,6 +56,10 @@ public:
 
     void paint(QPainter &painter) const;
 
+    Ruler *ruler() {
+        return m_ruler;
+    }
+
     void setRuler(Ruler *ruler) {
         m_ruler = ruler;
     }

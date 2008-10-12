@@ -131,7 +131,7 @@ protected:
     bool hasActiveRuler() const {
         return m_activeRuler != noRuler;
     }
-    void activateRuler(RulerIndex ruler, const ParagraphFragment &fragment);
+    void activateRuler(RulerIndex ruler, ParagraphFragment &fragment);
     bool activateRulerAt(const QPointF &point);
     void deactivateRuler();
     void resetActiveRuler();
@@ -181,8 +181,8 @@ private:
 
     QVector<ParagraphFragment> m_fragments;
 
-    const ParagraphFragment *m_activeFragment,
-    *m_highlightedFragment;
+    ParagraphFragment *m_activeFragment;
+    ParagraphFragment *m_highlightedFragment;
 
     Ruler m_rulers[maxRuler];
 

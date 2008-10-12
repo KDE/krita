@@ -31,7 +31,7 @@ bool RulerFragment::hitTest(const QPointF &point) const
     return rect.contains(m_matrix.inverted().map(point));
 }
 
-void RulerFragment::moveTo(const QPointF &point, bool smoothMovement) const
+void RulerFragment::moveTo(const QPointF &point, bool smoothMovement)
 {
     m_ruler->moveTo(m_matrix.inverted().map(point).x(), smoothMovement);
 }

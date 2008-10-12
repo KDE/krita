@@ -178,7 +178,7 @@ QString ParagraphTool::styleName()
 void ParagraphTool::paintLabel(QPainter &painter, const KoViewConverter &converter) const
 {
     RulerIndex ruler;
-    const ParagraphFragment *fragment;
+    ParagraphFragment *fragment;
     QColor foregroundColor;
 
     if (hasActiveRuler()) {
@@ -195,7 +195,7 @@ void ParagraphTool::paintLabel(QPainter &painter, const KoViewConverter &convert
 
     painter.save();
 
-    QLineF unmapped(fragment->labelConnector(ruler));
+    QLineF unmapped(fragment->rulerFragment(ruler)->labelConnector());
     QLineF connector(converter.documentToView(unmapped.p1()), converter.documentToView(unmapped.p2()));
     connector.setLength(10.0);
 
@@ -229,7 +229,7 @@ void ParagraphTool::paint(QPainter &painter, const KoViewConverter &converter)
     m_needsRepaint = false;
 
     if (hasActiveTextBlock()) {
-        foreach(const ParagraphFragment &fragment, m_fragments) {
+        foreach(ParagraphFragment fragment, m_fragments) {
             fragment.paint(painter, converter);
         }
 
@@ -252,7 +252,7 @@ void ParagraphTool::repaintDecorations()
     // repaint area
     QRectF repaintRectangle = m_storedRepaintRectangle;
     m_storedRepaintRectangle = QRectF();
-    foreach(const ParagraphFragment &fragment, m_fragments) {
+    foreach(ParagraphFragment fragment, m_fragments) {
         m_storedRepaintRectangle |= fragment.dirtyRectangle();
     }
     repaintRectangle |= m_paragraphHighlighter.dirtyRectangle();
@@ -388,10 +388,10 @@ bool ParagraphTool::activateRulerAt(const QPointF &point)
         return false;
     }
 
-    foreach(const ParagraphFragment &fragment, m_fragments) {
-        RulerIndex ruler = fragment.hitTest(point);
+    for (int i = 0; i != m_fragments.size(); ++i) {
+        RulerIndex ruler = m_fragments[i].hitTest(point);
         if (ruler != noRuler) {
-            activateRuler(ruler, fragment);
+            activateRuler(ruler, m_fragments[i]);
             return true;
         }
     }
@@ -400,7 +400,7 @@ bool ParagraphTool::activateRulerAt(const QPointF &point)
     return false;
 }
 
-void ParagraphTool::activateRuler(RulerIndex ruler, const ParagraphFragment &fragment)
+void ParagraphTool::activateRuler(RulerIndex ruler, ParagraphFragment &fragment)
 {
     m_activeRuler = ruler;
     m_activeFragment = &fragment;
@@ -440,7 +440,7 @@ void ParagraphTool::resetActiveRuler()
 
 void ParagraphTool::moveActiveRulerTo(const QPointF &point)
 {
-    m_activeFragment->moveRulerTo(m_activeRuler, point, smoothMovement());
+    m_activeFragment->rulerFragment(m_activeRuler)->moveTo(point, smoothMovement());
 }
 
 void ParagraphTool::focusRuler(RulerIndex ruler)
@@ -472,7 +472,7 @@ void ParagraphTool::highlightRulerAt(const QPointF &point)
     // check if we were already hovering over an element
     if (hasHighlightedRuler()) {
         // check if we are still over the same element
-        if (m_highlightedFragment->hitTest((RulerIndex)m_highlightedRuler, point)) {
+        if (m_highlightedFragment->rulerFragment(m_highlightedRuler)->hitTest(point)) {
             return;
         } else {
             // stop hovering over the element
@@ -481,11 +481,11 @@ void ParagraphTool::highlightRulerAt(const QPointF &point)
     }
 
     // check if we are hovering over a new control
-    foreach(const ParagraphFragment &fragment, m_fragments) {
-        RulerIndex ruler = fragment.hitTest(point);
+    for (int i = 0; i != m_fragments.size(); ++i) {
+        RulerIndex ruler = m_fragments[i].hitTest(point);
         if (ruler != noRuler) {
             m_highlightedRuler = ruler;
-            m_highlightedFragment = &fragment;
+            m_highlightedFragment = &m_fragments[i];
             m_rulers[m_highlightedRuler].setHighlighted(true);
             break;
         }

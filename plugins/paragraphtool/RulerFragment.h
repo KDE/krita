@@ -50,7 +50,7 @@ public:
 
     bool hitTest(const QPointF &point) const;
 
-    void moveTo(const QPointF &point, bool smoothMovement) const;
+    void moveTo(const QPointF &point, bool smoothMovement);
 
     QLineF labelConnector() const;
 

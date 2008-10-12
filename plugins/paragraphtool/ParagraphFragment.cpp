@@ -132,22 +132,6 @@ RulerIndex ParagraphFragment::hitTest(const QPointF &point) const
     return noRuler;
 }
 
-bool ParagraphFragment::hitTest(RulerIndex ruler, const QPointF &point) const
-{
-    return m_rulerFragments[ruler].hitTest(point);
-}
-
-void ParagraphFragment::moveRulerTo(RulerIndex ruler, const QPointF &point, bool smoothMovement) const
-{
-    m_rulerFragments[ruler].moveTo(point, smoothMovement);
-}
-
-
-QLineF ParagraphFragment::labelConnector(RulerIndex ruler) const
-{
-    return m_rulerFragments[ruler].labelConnector();
-}
-
 void ParagraphFragment::paint(QPainter &painter, const KoViewConverter &converter) const
 {
     painter.save();

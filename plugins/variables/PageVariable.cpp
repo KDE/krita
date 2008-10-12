@@ -29,12 +29,11 @@
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
-#include <KoTextPage.h>
 
 PageVariable::PageVariable()
         : KoVariable(true),
         m_type(PageCount),
-        m_pageselect(0),
+        m_pageselect(KoTextPage::CurrentPage),
         m_pageadjust(0)
 {
 }
@@ -118,11 +117,11 @@ void PageVariable::saveOdf(KoShapeSavingContext & context)
         // <text:page-number text:select-page="current" text:page-adjust="2" text:fixed="true">3</text:page-number>
         writer->startElement("text:page-number", false);
 
-        if (m_pageselect == 0)
+        if (m_pageselect == KoTextPage::CurrentPage)
             writer->addAttribute("text:select-page", "current");
-        else if (m_pageselect == -1)
+        else if (m_pageselect == KoTextPage::PreviousPage)
             writer->addAttribute("text:select-page", "previous");
-        else if (m_pageselect == 1)
+        else if (m_pageselect == KoTextPage::NextPage)
             writer->addAttribute("text:select-page", "next");
 
         if (m_pageadjust != 0)
@@ -138,9 +137,9 @@ void PageVariable::saveOdf(KoShapeSavingContext & context)
         // <text:page-continuation-string text:select-page="previous">The Text</text:page-continuation-string>
         writer->startElement("page-continuation-string", false);
 
-        if (m_pageselect == -1)
+        if (m_pageselect == KoTextPage::PreviousPage)
             writer->addAttribute("text:select-page", "previous");
-        else if (m_pageselect == 1)
+        else if (m_pageselect == KoTextPage::NextPage)
             writer->addAttribute("text:select-page", "next");
 
         writer->addTextNode(m_continuation);
@@ -162,11 +161,11 @@ bool PageVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
         // page rather than the number of the current page.
         QString pageselect = element.attributeNS(KoXmlNS::text, "select-page", QString());
         if (pageselect == "previous")
-            m_pageselect = -1;
+            m_pageselect = KoTextPage::PreviousPage;
         else if (pageselect == "next")
-            m_pageselect = 1;
+            m_pageselect = KoTextPage::NextPage;
         else // "current"
-            m_pageselect = 0;
+            m_pageselect = KoTextPage::CurrentPage;
 
         // The value of a page number field can be adjusted by a specified number, allowing the display
         // of page numbers of following or preceding pages. The adjustment amount is specified using
@@ -185,11 +184,11 @@ bool PageVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
         // continuation text is printed.
         QString pageselect = element.attributeNS(KoXmlNS::text, "select-page", QString());
         if (pageselect == "previous")
-            m_pageselect = -1;
+            m_pageselect = KoTextPage::PreviousPage;
         else if (pageselect == "next")
-            m_pageselect = 1;
-        else // should not happen
-            m_pageselect = 0;
+            m_pageselect = KoTextPage::NextPage;
+        else
+            m_pageselect = KoTextPage::CurrentPage;
 
         // The text to display
         m_continuation = element.text();

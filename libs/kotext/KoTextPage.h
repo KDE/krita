@@ -36,6 +36,12 @@ public:
     /// Destructor.
     virtual ~KoTextPage();
 
+    enum PageSelection {
+        PreviousPage = -1,
+        CurrentPage = 0,
+        NextPage = 1
+    };
+
     /**
      * Returns the number of this page for display purposes.
      *
@@ -46,18 +52,17 @@ public:
      * \endcode
      *
      * \param select Defines the offset of the page to select for the
-     * resulting page number. 0 means the current page, -1 the previous and
-     * +1 the next page. If such a page does not exist, then -1 will be
+     * resulting page number.  If such a page does not exist, then -1 will be
      * returned before the adjustment will be taken into account. This
      * implements the ODF text:select-page attribute.
      * \param adjustment The value of the page number will be adjusted by this
      * specified number and if there exist a page with the resulting value it's
-     * page number gets returned otherwise -1 will be returned. This implements the
+     * page number gets returned, otherwise -1 will be returned. This implements the
      * ODF text:page-adjust attribute.
      * \return the user visible page number, or -1 if the page referenced does not
      * exist.
      */
-    virtual int pageNumber(int select = 0, int adjustment = 0) const = 0;
+    virtual int pageNumber(PageSelection select = CurrentPage, int adjustment = 0) const = 0;
 
     //TODO we may also need;
 

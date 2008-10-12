@@ -75,6 +75,7 @@ KoTextShapeData::KoTextShapeData()
 
 KoTextShapeData::~KoTextShapeData()
 {
+    delete d->textpage;
     if (d->ownsDocument)
         delete d->document;
     delete d;
@@ -171,6 +172,7 @@ KoText::Direction KoTextShapeData::pageDirection() const
 
 void KoTextShapeData::setPage(KoTextPage* textpage)
 {
+    delete d->textpage;
     d->textpage = textpage;
 }
 

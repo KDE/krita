@@ -97,7 +97,7 @@ private:
     QPointF m_lastPoint;
 
 private slots:
-    void pointTypeChanged(KAction *type);
+    void pointTypeChanged(QAction *type);
     void insertPoints();
     void removePoints();
     void segmentToLine();

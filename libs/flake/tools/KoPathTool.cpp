@@ -137,7 +137,7 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
     addAction("convert-to-path", m_actionConvertToPath);
     connect(m_actionConvertToPath, SIGNAL(triggered()), this, SLOT(convertToPath()));
 
-    connect(points, SIGNAL(triggered(KAction*)), this, SLOT(pointTypeChanged(KAction*)));
+    connect(points, SIGNAL(triggered(QAction*)), this, SLOT(pointTypeChanged(QAction*)));
     connect(&m_pointSelection, SIGNAL(selectionChanged()), this, SLOT(pointSelectionChanged()));
 
     QBitmap b = QBitmap::fromData(QSize(16, 16), needle_bits);
@@ -172,7 +172,7 @@ QMap<QString, QWidget *>  KoPathTool::createOptionWidgets()
     return map;
 }
 
-void KoPathTool::pointTypeChanged(KAction *type)
+void KoPathTool::pointTypeChanged(QAction *type)
 {
     if (!m_pointSelection.hasSelection()) {
         QList<KoPathPointData> selectedPoints = m_pointSelection.selectedPointsData();

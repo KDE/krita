@@ -54,9 +54,6 @@ public:
 
     ~ParagraphFragment() {};
 
-    // return the first ruler at the point
-    RulerIndex hitTest(const QPointF &point) const;
-
     // paint all rulers for this shape
     void paint(QPainter &painter, const KoViewConverter &converter) const;
 

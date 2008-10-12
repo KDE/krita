@@ -121,17 +121,6 @@ void ParagraphFragment::initRulers()
     m_rulers[bottomMarginRuler].addFragment(m_rulerFragments[bottomMarginRuler]);
 }
 
-RulerIndex ParagraphFragment::hitTest(const QPointF &point) const
-{
-    for (int ruler = 0; ruler != maxRuler; ++ruler) {
-        if (m_rulerFragments[ruler].hitTest(point)) {
-            return static_cast<RulerIndex>(ruler);
-        }
-    }
-
-    return noRuler;
-}
-
 void ParagraphFragment::paint(QPainter &painter, const KoViewConverter &converter) const
 {
     painter.save();

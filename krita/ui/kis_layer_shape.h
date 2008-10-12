@@ -19,6 +19,8 @@
 #ifndef KIS_LAYER_SHAPE_H_
 #define KIS_LAYER_SHAPE_H_
 
+#include <QObject>
+
 #include <KoShapeLayer.h>
 #include <KoShape.h>
 #include <KoViewConverter.h>
@@ -32,9 +34,9 @@
    A KisLayerShape is a flake wrapper around adjustment layers or paint
    layers. A layershape can only have a KisMaskShape as its descendant.
  */
-class KRITAUI_EXPORT KisLayerShape : public KoShapeContainer
+class KRITAUI_EXPORT KisLayerShape : public QObject, public KoShapeContainer
 {
-
+    Q_OBJECT
 public:
 
     KisLayerShape(KoShapeContainer * parent, KisLayerSP layer);
@@ -59,7 +61,9 @@ public:
     virtual void saveOdf(KoShapeSavingContext & context) const;
     // reimplemented
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
-
+private slots:
+    void setLayerVisible( bool );
+    void setLayerLocked( bool );
 private:
     class Private;
     Private * const m_d;

@@ -40,8 +40,11 @@ KisLayerShape::KisLayerShape(KoShapeContainer * parent, KisLayerSP layer)
     Q_ASSERT(layer->image());
 
     setShapeId(KIS_LAYER_SHAPE_ID);
-    setParent(parent);
+    KoShape::setParent(parent);
     parent->addChild(this);
+    
+    connect( layer, SIGNAL(visibilityChanged( bool )), SLOT( setLayerVisible( bool ) ) );
+    connect( layer, SIGNAL(lockingChanged( bool )), SLOT( setLayerLocked( bool ) ) );
 }
 
 KisLayerShape::~KisLayerShape()
@@ -126,3 +129,15 @@ bool KisLayerShape::loadOdf(const KoXmlElement & /*element*/, KoShapeLoadingCont
 {
     return false; // TODO
 }
+
+void KisLayerShape::setLayerVisible( bool v)
+{
+    setVisible( v );
+}
+
+void KisLayerShape::setLayerLocked( bool v)
+{
+    setLocked( v );
+}
+
+#include "kis_layer_shape.moc"

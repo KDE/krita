@@ -126,6 +126,7 @@ bool KisBaseNode::visible() const
 void KisBaseNode::setVisible(bool visible)
 {
     m_d->properties.setProperty("visible", visible);
+    emit( visibilityChanged( visible ) );
 }
 
 bool KisBaseNode::locked() const
@@ -136,6 +137,7 @@ bool KisBaseNode::locked() const
 void KisBaseNode::setLocked(bool locked)
 {
     m_d->properties.setProperty("locked", locked);
+    emit( lockingChanged( locked ) );
 }
 
 #include "kis_base_node.moc"

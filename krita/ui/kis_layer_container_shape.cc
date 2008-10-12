@@ -41,8 +41,11 @@ KisLayerContainerShape::KisLayerContainerShape(KoShapeContainer *parent, KisLaye
 {
     m_d->groupLayer = groupLayer;
 
-    setParent(parent);
+    KoShape::setParent(parent);
     setShapeId(KIS_LAYER_CONTAINER_ID);
+    
+    connect( groupLayer, SIGNAL(visibilityChanged( bool )), SLOT( setLayerVisible( bool ) ) );
+    connect( groupLayer, SIGNAL(lockingChanged( bool )), SLOT( setLayerLocked( bool ) ) );
 }
 
 KisLayerContainerShape::~KisLayerContainerShape()
@@ -91,3 +94,15 @@ bool KisLayerContainerShape::loadOdf(const KoXmlElement & /*element*/, KoShapeLo
 {
     return false; // TODO
 }
+
+void KisLayerContainerShape::setLayerVisible( bool v)
+{
+    setVisible( v );
+}
+
+void KisLayerContainerShape::setLayerLocked( bool v)
+{
+    setLocked( v );
+}
+
+#include "kis_layer_container_shape.moc"

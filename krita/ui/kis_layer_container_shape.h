@@ -19,6 +19,8 @@
 #ifndef KIS_LAYER_CONTAINER_SHAPE_H_
 #define KIS_LAYER_CONTAINER_SHAPE_H_
 
+#include <QObject>
+
 #include <QString>
 
 #include <KoShapeLayer.h>
@@ -35,9 +37,9 @@ const QString KIS_LAYER_CONTAINER_ID = "KisLayerContainerShapeID";
    KisGroupLayer. It contains any number of layers, including other
    group layers.
  */
-class KRITAUI_EXPORT KisLayerContainerShape : public KoShapeLayer
+class KRITAUI_EXPORT KisLayerContainerShape : public QObject, public KoShapeLayer
 {
-
+    Q_OBJECT
 public:
 
     KisLayerContainerShape(KoShapeContainer * parent, KisLayerSP groupLayer);
@@ -63,7 +65,9 @@ public:
     virtual void saveOdf(KoShapeSavingContext & context) const;
     // reimplemented
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
-
+private slots:
+    void setLayerVisible( bool );
+    void setLayerLocked( bool );
 private:
     class Private;
     Private * const m_d;

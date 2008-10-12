@@ -249,8 +249,16 @@ public:
     virtual QRect exactBounds() const {
         return QRect();
     }
+signals:
+    /**
+     * This signal is emitted when the visibility of the layer is changed with \ref setVisible.
+     */
+    void visibilityChanged( bool );
 
-
+    /**
+     * This signal is emitted when the node is locked or unlocked with \ref setLocked.
+     */
+    void lockingChanged( bool );
 private:
 
     class Private;

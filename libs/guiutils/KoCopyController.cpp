@@ -29,19 +29,23 @@
 
 class KoCopyController::Private {
 public:
-    Private(KoCopyController *p, KoCanvasBase *c, QAction *a) : parent(p), canvas(c), action(a) {
+    Private(KoCopyController *p, KoCanvasBase *c, QAction *a) : parent(p), canvas(c), action(a)
+    {
         appHasSelection = false;
     }
 
-    void copy() { // request to start the actual copy
-        if(canvas->toolProxy()->selection() && canvas->toolProxy()->selection()->hasSelection())
+    // request to start the actual copy
+    void copy()
+    {
+        if (canvas->toolProxy()->selection() && canvas->toolProxy()->selection()->hasSelection())
             // means the copy can be done by a flake tool
             canvas->toolProxy()->copy();
         else // if not; then the application gets a request to do the copy
             emit parent->copyRequested();
     }
 
-    void selectionChanged(bool hasSelection) {
+    void selectionChanged(bool hasSelection)
+{
         action->setEnabled(appHasSelection || hasSelection);
     }
 
@@ -60,14 +64,16 @@ KoCopyController::KoCopyController(KoCanvasBase *canvas, QAction *copyAction)
     hasSelection(false);
 }
 
-KoCopyController::~KoCopyController() {
+KoCopyController::~KoCopyController()
+{
     delete d;
 }
 
-void KoCopyController::hasSelection(bool selection) {
+void KoCopyController::hasSelection(bool selection)
+{
     d->appHasSelection = selection;
     d->action->setEnabled(d->appHasSelection ||
-            d->canvas->toolProxy()->selection() && d->canvas->toolProxy()->selection()->hasSelection());
+            (d->canvas->toolProxy()->selection() && d->canvas->toolProxy()->selection()->hasSelection()));
 }
 
 #include "KoCopyController.moc"

@@ -64,6 +64,8 @@ public:
 
     RulerFragment *rulerFragment(RulerIndex ruler) { return &m_rulerFragments[ruler]; }
 
+    KoShape *shape() const { return m_shape; }
+
 protected:
     void initDimensions(QTextBlock textBlock, KoParagraphStyle *paragraphStyle);
     void initRulers();
@@ -74,11 +76,6 @@ protected:
 
     QPointF mapTextToDocument(QPointF point) const;
     QLineF mapTextToDocument(QLineF line) const;
-
-    KoShape *shape() const {
-        Q_ASSERT(m_shape != NULL);
-        return m_shape;
-    }
 
 private:
     KoShape *m_shape;

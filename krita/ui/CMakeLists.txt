@@ -73,7 +73,6 @@ set(kritaui_LIB_SRCS
     kis_resource_server_provider.cpp 
     kra/kis_savexml_visitor.cc
     kis_selection_manager.cc 
-    kis_selection_options.cc
     kis_shape_controller.cpp
     kis_shape_layer_canvas.cpp 
     kis_shape_layer.cc 
@@ -85,7 +84,8 @@ set(kritaui_LIB_SRCS
     tool/kis_tool_freehand.cc 
     tool/kis_tool_freehand_p.cpp
     tool/kis_tool_paint.cc 
-    tool/kis_tool_shape.cc 
+    tool/kis_tool_shape.cc
+    tool/kis_selection_options.cc 
     kis_view2.cpp 
     kis_zoom_manager.cc
     kis_shape_selection_canvas.cpp

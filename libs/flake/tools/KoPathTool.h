@@ -34,7 +34,7 @@ class KoCanvasBase;
 class KoInteractionStrategy;
 class KoPathToolHandle;
 
-class QAction;
+class KAction;
 
 /// The tool for editing a KoPathShape or a KoParameterShape
 class FLAKE_TEST_EXPORT KoPathTool : public KoTool
@@ -97,7 +97,7 @@ private:
     QPointF m_lastPoint;
 
 private slots:
-    void pointTypeChanged(QAction *type);
+    void pointTypeChanged(KAction *type);
     void insertPoints();
     void removePoints();
     void segmentToLine();
@@ -126,20 +126,20 @@ private:
 
     QButtonGroup *m_pointTypeGroup;
 
-    QAction *m_actionPathPointCorner;
-    QAction *m_actionPathPointSmooth;
-    QAction *m_actionPathPointSymmetric;
-    QAction *m_actionCurvePoint;
-    QAction *m_actionLinePoint;
-    QAction *m_actionLineSegment;
-    QAction *m_actionCurveSegment;
-    QAction *m_actionAddPoint;
-    QAction *m_actionRemovePoint;
-    QAction *m_actionBreakPoint;
-    QAction *m_actionBreakSegment;
-    QAction *m_actionJoinSegment;
-    QAction *m_actionMergePoints;
-    QAction *m_actionConvertToPath;
+    KAction *m_actionPathPointCorner;
+    KAction *m_actionPathPointSmooth;
+    KAction *m_actionPathPointSymmetric;
+    KAction *m_actionCurvePoint;
+    KAction *m_actionLinePoint;
+    KAction *m_actionLineSegment;
+    KAction *m_actionCurveSegment;
+    KAction *m_actionAddPoint;
+    KAction *m_actionRemovePoint;
+    KAction *m_actionBreakPoint;
+    KAction *m_actionBreakSegment;
+    KAction *m_actionJoinSegment;
+    KAction *m_actionMergePoints;
+    KAction *m_actionConvertToPath;
     QCursor m_selectCursor;
     QCursor m_moveCursor;
 };

@@ -32,6 +32,7 @@ class KoViewConverter;
 class KoToolSelection;
 class KoToolPrivate;
 
+class KAction;
 class QAction;
 class QKeyEvent;
 class QWidget;
@@ -111,12 +112,12 @@ public:
     /**
      * Retrieves the entire collection of actions for the tool.
      */
-    QHash<QString, QAction*> actions() const;
+    QHash<QString, KAction*> actions() const;
 
     /**
      * Retrieve an action by name.
      */
-    QAction *action(const QString &name) const;
+    KAction *action(const QString &name) const;
 
     /**
      * Called when (one of) the mouse or stylus buttons is pressed.
@@ -386,7 +387,7 @@ protected:
      * @param name The name by which the action be retrieved again from the collection.
      * @param action The action to add.
      */
-    void addAction(const QString &name, QAction *action);
+    void addAction(const QString &name, KAction *action);
 
     /**
      * Set the list of actions to be used as popup menu.

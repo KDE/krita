@@ -27,6 +27,7 @@
 #include <kicon.h>
 #include <KFileDialog>
 #include <KInputDialog>
+#include <KAction>
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -80,15 +81,15 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     QActionGroup* actionGroup = new QActionGroup(this);
     connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(activeActionChanged(QAction*)));
 
-    QAction* importAction = new QAction(KIcon("document-import"), i18n("Import"), this);
+    KAction* importAction = new KAction(KIcon("document-import"), i18n("Import"), this);
     addAction("import", importAction);
     connect(importAction, SIGNAL(triggered()), this, SLOT(importSheet()));
 
-    QAction* exportAction = new QAction(KIcon("document-export"), i18n("Export"), this);
+    KAction* exportAction = new KAction(KIcon("document-export"), i18n("Export"), this);
     addAction("export", exportAction);
     connect(exportAction, SIGNAL(triggered()), this, SLOT(exportSheet()));
 
-    QAction* addBars = new QAction(KIcon("list-add"), i18n("Add measures"), this);
+    KAction* addBars = new KAction(KIcon("list-add"), i18n("Add measures"), this);
     addAction("add_bars", addBars);
     connect(addBars, SIGNAL(triggered()), this, SLOT(addBars()));
 
@@ -218,7 +219,7 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
 
     QList<QAction*> contextMenu;
 
-    QAction* clefAction = new QAction(i18n("Clef"), this);
+    KAction* clefAction = new KAction(i18n("Clef"), this);
     clefAction->setMenu(clefMenu);
     contextMenu.append(clefAction);
 
@@ -246,7 +247,7 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     tsMenu->addAction(action = new TimeSignatureAction(this, 12, 8));
     connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
 
-    QAction* timeSigAction = new QAction(i18n("Time signature"), this);
+    KAction* timeSigAction = new KAction(i18n("Time signature"), this);
     timeSigAction->setMenu(tsMenu);
     contextMenu.append(timeSigAction);
 
@@ -275,11 +276,11 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     ksMenu->addAction(action = new KeySignatureAction(this));
     connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
 
-    QAction* keySigAction = new QAction(i18n("Key signature"), this);
+    KAction* keySigAction = new KAction(i18n("Key signature"), this);
     keySigAction->setMenu(ksMenu);
     contextMenu.append(keySigAction);
 
-    QAction* removeBarAction = new RemoveBarAction(this);
+    KAction* removeBarAction = new RemoveBarAction(this);
     connect(removeBarAction, SIGNAL(triggered()), this, SLOT(actionTriggered()));
     contextMenu.append(removeBarAction);
 

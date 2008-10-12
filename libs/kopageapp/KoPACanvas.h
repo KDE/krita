@@ -28,7 +28,7 @@
 
 class KoPAView;
 class KoPADocument;
-class QAction;
+class KAction;
 
 /// Widget that shows a KoPAPage
 class KOPAGEAPP_EXPORT KoPACanvas : public QWidget, public KoCanvasBase

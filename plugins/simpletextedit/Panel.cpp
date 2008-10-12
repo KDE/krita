@@ -30,7 +30,7 @@
 #include <KDebug>
 #include <KLocale>
 #include <KIcon>
-#include <QAction>
+#include <KAction>
 
 Panel::Panel(QWidget *parent)
     :QDockWidget(i18n("Format"), parent),
@@ -52,17 +52,17 @@ Panel::Panel(QWidget *parent)
     stylesGroup->addButton(widget.style2);
     stylesGroup->addButton(widget.style3);
 
-    m_style1 = new QAction(i18n("Style Sans Serif"), this);
+    m_style1 = new KAction(i18n("Style Sans Serif"), this);
     m_style1->setToolTip( i18n("Set the current text to use a Sans Serif style") );
     m_style1->setCheckable( true );
     connect (m_style1, SIGNAL(triggered()), this, SLOT(style1ButtonClicked()));
 
-    m_style2 = new QAction(i18n("Style Serif"), this);
+    m_style2 = new KAction(i18n("Style Serif"), this);
     m_style2->setToolTip( i18n("Set the current text to use a Serif style") );
     m_style2->setCheckable( true );
     connect (m_style2, SIGNAL(triggered()), this, SLOT(style2ButtonClicked()));
 
-    m_style3 = new QAction(i18n("Style Script"), this);
+    m_style3 = new KAction(i18n("Style Script"), this);
     m_style3->setToolTip( i18n("Set the current text to use a Script style") );
     m_style3->setCheckable( true );
     connect (m_style3, SIGNAL(triggered()), this, SLOT(style3ButtonClicked()));
@@ -90,7 +90,7 @@ void Panel::toolChangeDetected(const QString &toolId) {
     delete m_parent;
     m_parent = new QObject(this);
     // current tool is the text tool
-    QHash<QString, QAction *> actions = m_canvas->toolProxy()->actions();
+    QHash<QString, KAction *> actions = m_canvas->toolProxy()->actions();
     applyAction(actions.value("format_bold"), widget.bold, "bold", false);
     applyAction(actions.value("format_italic"), widget.italic, "italic", false);
     applyAction(actions.value("format_underline"), widget.underline, "underline", false);
@@ -146,7 +146,7 @@ void Panel::resourceChanged (int key, const QVariant &value) {
     }
 }
 
-void Panel::applyAction(QAction *action, QToolButton *button, const QString &iconName, bool partOfGroup) {
+void Panel::applyAction(KAction *action, QToolButton *button, const QString &iconName, bool partOfGroup) {
     Q_ASSERT(button);
     button->setEnabled(action);
     button->setIconSize(QSize(42, 42));
@@ -157,7 +157,7 @@ void Panel::applyAction(QAction *action, QToolButton *button, const QString &ico
         return;
     }
 
-    QAction *newAction = new QAction(m_parent);
+    KAction *newAction = new KAction(m_parent);
     newAction->setToolTip(action->toolTip());
     newAction->setIcon(icon);
     newAction->setWhatsThis(action->whatsThis());

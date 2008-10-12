@@ -42,7 +42,7 @@
 
 using namespace MusicCore;
 
-static QIcon getIcon(int accidentals)
+static KIcon getIcon(int accidentals)
 {
     switch (accidentals) {
         case -2: return KIcon("music-doubleflat");

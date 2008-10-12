@@ -132,8 +132,8 @@ public:
             uniqueToolIds.insert(tl, tool->uniqueId());
             toolsHash.insert(tool->id(), tl);
             tl->setObjectName(tool->id());
-            foreach(QAction *action, tl->actions().values())
-            action->setEnabled(false);
+            foreach(KAction *action, tl->actions().values())
+                action->setEnabled(false);
             KoZoomTool *zoomTool = dynamic_cast<KoZoomTool*>(tl);
             if (zoomTool)
                 zoomTool->setCanvasController(controller);
@@ -242,7 +242,7 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
     }
     CanvasData *cd = d->canvasses.value(controller).first();
     foreach(KoTool *tool, cd->allTools) {
-        QHash<QString, QAction*> actions = tool->actions();
+        QHash<QString, KAction*> actions = tool->actions();
         foreach(QString name, actions.keys())
         ac->addAction(name, actions[name]);
     }
@@ -320,8 +320,8 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary)
     }
 
     if (newActiveTool) {
-        foreach(QAction *action, d->canvasData->activeTool->actions().values())
-        action->setEnabled(false);
+        foreach(KAction *action, d->canvasData->activeTool->actions().values())
+            action->setEnabled(false);
         // repaint the decorations before we deactivate the tool as it might deleted
         // data needed for the repaint
         d->canvasData->activeTool->deactivate();
@@ -352,7 +352,7 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary)
 
     // we expect the tool to emit a cursor on activation.  This is for quick-fail :)
     d->canvasData->canvas->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
-    foreach(QAction *action, d->canvasData->activeTool->actions().values()) {
+    foreach(KAction *action, d->canvasData->activeTool->actions().values()) {
         action->setEnabled(true);
         d->canvasData->canvas->addAction(action);
     }

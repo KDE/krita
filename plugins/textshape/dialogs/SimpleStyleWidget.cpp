@@ -21,6 +21,7 @@
 #include "../ListItemsHelper.h"
 #include "../commands/ChangeListCommand.h"
 
+#include <KAction>
 #include <KoTextBlockData.h>
 #include <KoParagraphStyle.h>
 

@@ -41,7 +41,7 @@ public:
 };
 
 KoColorSetAction::KoColorSetAction(QObject *parent)
-    : QAction(parent),
+    : KAction(parent),
     d(new KoColorSetActionPrivate())
 {
     d->menu = new QMenu();

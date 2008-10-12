@@ -26,6 +26,7 @@
 #include <QKeyEvent>
 #include <QMenu>
 
+#include <kaction.h>
 #include <kicon.h>
 #include <klocale.h>
 #include <kis_debug.h>
@@ -46,10 +47,10 @@ KisToolPolyline::KisToolPolyline(KoCanvasBase * canvas)
 {
     setObjectName("tool_polyline");
 
-    QAction *action = new QAction(i18n("&Finish Polyline"), this);
+    KAction *action = new KAction(i18n("&Finish Polyline"), this);
     addAction("finish_polyline", action);
     connect(action, SIGNAL(triggered()), this, SLOT(finish()));
-    action = new QAction(KIcon("dialog-cancel"), i18n("&Cancel"), this);
+    action = new KAction(KIcon("dialog-cancel"), i18n("&Cancel"), this);
     addAction("cancel_polyline", action);
     connect(action, SIGNAL(triggered()), this, SLOT(cancel()));
 

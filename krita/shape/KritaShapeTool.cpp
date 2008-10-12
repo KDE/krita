@@ -24,7 +24,7 @@
 #include <QImage>
 #include <QAction>
 
-#include <kis_debug.h>
+#include <KAction>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <KFileDialog>
@@ -35,6 +35,7 @@
 #include <KoImageData.h>
 
 #include "KritaShape.h"
+#include <kis_debug.h>
 
 
 #include "KritaShapeTool.moc"
@@ -67,7 +68,7 @@ void KritaShapeTool::activate(bool temporary)
     // Create an action to set the krita shape to a simple qimage
     // shape.
     // XXX: find better description!
-    QAction * action = new QAction(i18n("Convert Color Managed Image to unmanaged Image"), this);
+    KAction * action = new KAction(i18n("Convert Color Managed Image to unmanaged Image"), this);
     addAction("convert_to_qimage", action);
     action->setToolTip(i18n("Remove color management from this image and convert to RGB."));
     connect(action, SIGNAL(triggered()), this, SLOT(textDefaultFormat()));

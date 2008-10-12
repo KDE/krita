@@ -27,6 +27,7 @@
 
 #include <KLocale>
 #include <KDebug>
+#include <KAction>
 
 #include <KoCharacterStyle.h>
 #include <KoCanvasResourceProvider.h>
@@ -42,7 +43,7 @@ SpellCheck::SpellCheck()
     m_documentIsLoading(false)
 {
     /* setup actions for this plugin */
-    QAction *configureAction = new QAction(i18n("Configure &Spell Checking..."), this);
+    KAction *configureAction = new KAction(i18n("Configure &Spell Checking..."), this);
     connect(configureAction, SIGNAL(triggered()), this, SLOT(configureSpellCheck()));
     addAction("tool_configure_spellcheck", configureAction);
 

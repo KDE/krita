@@ -30,7 +30,7 @@
 
 #include <kxmlguifactory.h>
 
-#include <QAction>
+#include <KAction>
 #include <QMenu>
 #include <QMouseEvent>
 

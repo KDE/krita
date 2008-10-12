@@ -26,6 +26,7 @@
 
 #include <QPainter>
 
+class KAction;
 class QAction;
 class QMouseEvent;
 class QKeyEvent;
@@ -91,7 +92,7 @@ public:
      * Retrieves the entire collection of actions for the active tool
      * or an empty hash if there is no active tool yet.
      */
-    QHash<QString, QAction*> actions() const;
+    QHash<QString, KAction*> actions() const;
 
     /**
      * Proxies for KoTool::selection()

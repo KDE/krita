@@ -35,7 +35,7 @@ public:
 
     QMap<QString, QWidget *> optionWidgets; ///< the optionwidgets associated witth this tool
     QCursor previousCursor;
-    QHash<QString, QAction*> actionCollection;
+    QHash<QString, KAction*> actionCollection;
     QString toolId;
     QList<QAction*> popupActionList;
 };
@@ -162,17 +162,17 @@ QMap<QString, QWidget *> KoTool::optionWidgets()
     return d->optionWidgets;
 }
 
-void KoTool::addAction(const QString &name, QAction *action)
+void KoTool::addAction(const QString &name, KAction *action)
 {
     d->actionCollection.insert(name, action);
 }
 
-QHash<QString, QAction*> KoTool::actions() const
+QHash<QString, KAction*> KoTool::actions() const
 {
     return d->actionCollection;
 }
 
-QAction *KoTool::action(const QString &name) const
+KAction *KoTool::action(const QString &name) const
 {
     return d->actionCollection[name];
 }

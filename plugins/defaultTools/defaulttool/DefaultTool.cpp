@@ -51,7 +51,7 @@
 #include <KoSnapGuide.h>
 #include <tools/KoGuidesTool.h>
 
-#include <QAction>
+#include <KAction>
 #include <QKeyEvent>
 #include <QClipboard>
 #include <kstandarddirs.h>
@@ -185,63 +185,63 @@ bool DefaultTool::wantsAutoScroll()
 
 void DefaultTool::setupActions()
 {
-    QAction* actionBringToFront = new QAction( KIcon( "bring_forward" ),
+    KAction* actionBringToFront = new KAction( KIcon( "bring_forward" ),
                                                i18n( "Bring to &Front" ), this );
     addAction( "object_move_totop", actionBringToFront );
     actionBringToFront->setShortcut( QKeySequence( "Ctrl+Shift+]" ) );
     connect(actionBringToFront, SIGNAL(triggered()), this, SLOT(selectionBringToFront()));
 
-    QAction* actionRaise = new QAction( KIcon( "raise" ), i18n( "&Raise" ), this );
+    KAction* actionRaise = new KAction( KIcon( "raise" ), i18n( "&Raise" ), this );
     addAction( "object_move_up", actionRaise );
     actionRaise->setShortcut( QKeySequence( "Ctrl+]" ) );
     connect(actionRaise, SIGNAL(triggered()), this, SLOT(selectionMoveUp()));
 
-    QAction* actionLower = new QAction( KIcon( "lower" ), i18n( "&Lower" ), this );
+    KAction* actionLower = new KAction( KIcon( "lower" ), i18n( "&Lower" ), this );
     addAction( "object_move_down", actionLower );
     actionLower->setShortcut( QKeySequence( "Ctrl+[" ) );
     connect(actionLower, SIGNAL(triggered()), this, SLOT(selectionMoveDown()));
 
-    QAction* actionSendToBack = new QAction( KIcon( "send_backward" ),
+    KAction* actionSendToBack = new KAction( KIcon( "send_backward" ),
                                              i18n( "Send to &Back" ), this );
     addAction( "object_move_tobottom", actionSendToBack );
     actionSendToBack->setShortcut( QKeySequence( "Ctrl+Shift+[" ) );
     connect(actionSendToBack, SIGNAL(triggered()), this, SLOT(selectionSendToBack()));
 
-    QAction* actionAlignLeft = new QAction( KIcon( "aoleft" ),
+    KAction* actionAlignLeft = new KAction( KIcon( "aoleft" ),
                                             i18n( "Align Left" ), this );
     addAction( "object_align_horizontal_left", actionAlignLeft );
     connect(actionAlignLeft, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalLeft()));
 
-    QAction* actionAlignCenter = new QAction( KIcon( "aocenterh" ),
+    KAction* actionAlignCenter = new KAction( KIcon( "aocenterh" ),
                                               i18n( "Horizontally Center" ), this );
     addAction( "object_align_horizontal_center", actionAlignCenter );
     connect(actionAlignCenter, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalCenter()));
 
-    QAction* actionAlignRight = new QAction( KIcon( "aoright" ),
+    KAction* actionAlignRight = new KAction( KIcon( "aoright" ),
                                              i18n( "Align Right" ), this );
     addAction( "object_align_horizontal_right", actionAlignRight );
     connect(actionAlignRight, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalRight()));
 
-    QAction* actionAlignTop = new QAction( KIcon( "aotop" ), i18n( "Align Top" ), this );
+    KAction* actionAlignTop = new KAction( KIcon( "aotop" ), i18n( "Align Top" ), this );
     addAction( "object_align_vertical_top", actionAlignTop );
     connect(actionAlignTop, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalTop()));
 
-    QAction* actionAlignMiddle = new QAction( KIcon( "aocenterv" ),
+    KAction* actionAlignMiddle = new KAction( KIcon( "aocenterv" ),
                                               i18n( "Vertically Center" ), this );
     addAction( "object_align_vertical_center", actionAlignMiddle );
     connect(actionAlignMiddle, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalCenter()));
 
-    QAction* actionAlignBottom = new QAction( KIcon( "aobottom" ),
+    KAction* actionAlignBottom = new KAction( KIcon( "aobottom" ),
                                               i18n( "Align Bottom" ), this );
     addAction( "object_align_vertical_bottom", actionAlignBottom );
     connect(actionAlignBottom, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalBottom()));
 
-    QAction* actionGroupBottom = new QAction( KIcon( "group" ),
+    KAction* actionGroupBottom = new KAction( KIcon( "group" ),
                                               i18n( "Group" ), this );
     addAction( "object_group", actionGroupBottom );
     connect(actionGroupBottom, SIGNAL(triggered()), this, SLOT(selectionGroup()));
 
-    QAction* actionUngroupBottom = new QAction( KIcon( "ungroup" ),
+    KAction* actionUngroupBottom = new KAction( KIcon( "ungroup" ),
                                                 i18n( "Ungroup" ), this );
     addAction( "object_ungroup", actionUngroupBottom );
     connect(actionUngroupBottom, SIGNAL(triggered()), this, SLOT(selectionUngroup()));

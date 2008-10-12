@@ -40,7 +40,6 @@ class KoShapeManager;
 class KoZoomAction;
 class KoZoomController;
 class QTextDocument;
-class QAction;
 
 /// Creates a view with a KoPACanvas and rulers
 class KOPAGEAPP_EXPORT KoPAView : public KoView
@@ -216,7 +215,7 @@ private:
     KoZoomController * m_zoomController;
     KoZoomHandler m_zoomHandler;
 
-    QAction *m_editPaste;
+    KAction *m_editPaste;
     KAction *m_deleteSelectionAction;
 
     KToggleAction *m_actionViewSnapToGrid;

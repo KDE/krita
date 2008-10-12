@@ -46,10 +46,10 @@ KisToolPolygon::KisToolPolygon(KoCanvasBase *canvas)
 {
     setObjectName("tool_polygon");
 
-    QAction *action = new QAction(i18n("&Finish Polygon"), this);
+    KAction *action = new KAction(i18n("&Finish Polygon"), this);
     addAction("finish_polygon", action);
     connect(action, SIGNAL(triggered()), this, SLOT(finish()));
-    action = new QAction(KIcon("dialog-cancel"), i18n("&Cancel"), this);
+    action = new KAction(KIcon("dialog-cancel"), i18n("&Cancel"), this);
     addAction("cancel_polygon", action);
     connect(action, SIGNAL(triggered()), this, SLOT(cancel()));
 

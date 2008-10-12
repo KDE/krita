@@ -70,7 +70,7 @@
 #include <KMessageBox>
 #include <KRun>
 #include <QAbstractTextDocumentLayout>
-#include <QAction>
+#include <KAction>
 #include <QBuffer>
 #include <QKeyEvent>
 #include <QPointer>
@@ -137,86 +137,86 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_currentCommandHasChildren(false),
         m_specialCharacterDocker(0)
 {
-    m_actionFormatBold  = new QAction(KIcon("format-text-bold"), i18n("Bold"), this);
+    m_actionFormatBold  = new KAction(KIcon("format-text-bold"), i18n("Bold"), this);
     addAction("format_bold", m_actionFormatBold);
     m_actionFormatBold->setShortcut(Qt::CTRL + Qt::Key_B);
     m_actionFormatBold->setCheckable(true);
     connect(m_actionFormatBold, SIGNAL(triggered(bool)), &m_selectionHandler, SLOT(bold(bool)));
 
-    m_actionFormatItalic  = new QAction(KIcon("format-text-italic"), i18n("Italic"), this);
+    m_actionFormatItalic  = new KAction(KIcon("format-text-italic"), i18n("Italic"), this);
     addAction("format_italic", m_actionFormatItalic);
     m_actionFormatItalic->setShortcut(Qt::CTRL + Qt::Key_I);
     m_actionFormatItalic->setCheckable(true);
     connect(m_actionFormatItalic, SIGNAL(triggered(bool)), &m_selectionHandler, SLOT(italic(bool)));
 
-    m_actionFormatUnderline  = new QAction(KIcon("format-text-underline"), i18nc("Text formatting", "Underline"), this);
+    m_actionFormatUnderline  = new KAction(KIcon("format-text-underline"), i18nc("Text formatting", "Underline"), this);
     addAction("format_underline", m_actionFormatUnderline);
     m_actionFormatUnderline->setShortcut(Qt::CTRL + Qt::Key_U);
     m_actionFormatUnderline->setCheckable(true);
     connect(m_actionFormatUnderline, SIGNAL(triggered(bool)), &m_selectionHandler, SLOT(underline(bool)));
 
-    m_actionFormatStrikeOut  = new QAction(KIcon("format-text-strikethrough"), i18n("Strike Out"), this);
+    m_actionFormatStrikeOut  = new KAction(KIcon("format-text-strikethrough"), i18n("Strike Out"), this);
     addAction("format_strike", m_actionFormatStrikeOut);
     m_actionFormatStrikeOut->setCheckable(true);
     connect(m_actionFormatStrikeOut, SIGNAL(triggered(bool)), &m_selectionHandler, SLOT(strikeOut(bool)));
 
     QActionGroup *alignmentGroup = new QActionGroup(this);
-    m_actionAlignLeft  = new QAction(KIcon("format-justify-left"), i18n("Align Left"), this);
+    m_actionAlignLeft  = new KAction(KIcon("format-justify-left"), i18n("Align Left"), this);
     addAction("format_alignleft", m_actionAlignLeft);
     m_actionAlignLeft->setShortcut(Qt::CTRL + Qt::Key_L);
     m_actionAlignLeft->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignLeft);
     connect(m_actionAlignLeft, SIGNAL(triggered(bool)), this, SLOT(alignLeft()));
 
-    m_actionAlignRight  = new QAction(KIcon("format-justify-right"), i18n("Align Right"), this);
+    m_actionAlignRight  = new KAction(KIcon("format-justify-right"), i18n("Align Right"), this);
     addAction("format_alignright", m_actionAlignRight);
     m_actionAlignRight->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_R);
     m_actionAlignRight->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignRight);
     connect(m_actionAlignRight, SIGNAL(triggered(bool)), this, SLOT(alignRight()));
 
-    m_actionAlignCenter  = new QAction(KIcon("format-justify-center"), i18n("Align Center"), this);
+    m_actionAlignCenter  = new KAction(KIcon("format-justify-center"), i18n("Align Center"), this);
     addAction("format_aligncenter", m_actionAlignCenter);
     m_actionAlignCenter->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_C);
     m_actionAlignCenter->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignCenter);
     connect(m_actionAlignCenter, SIGNAL(triggered(bool)), this, SLOT(alignCenter()));
 
-    m_actionAlignBlock  = new QAction(KIcon("format-justify-fill"), i18n("Align Block"), this);
+    m_actionAlignBlock  = new KAction(KIcon("format-justify-fill"), i18n("Align Block"), this);
     addAction("format_alignblock", m_actionAlignBlock);
     m_actionAlignBlock->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_R);
     m_actionAlignBlock->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignBlock);
     connect(m_actionAlignBlock, SIGNAL(triggered(bool)), this, SLOT(alignBlock()));
 
-    m_actionFormatSuper = new QAction(KIcon("format-text-superscript"), i18n("Superscript"), this);
+    m_actionFormatSuper = new KAction(KIcon("format-text-superscript"), i18n("Superscript"), this);
     addAction("format_super", m_actionFormatSuper);
     m_actionFormatSuper->setCheckable(true);
     connect(m_actionFormatSuper, SIGNAL(triggered(bool)), this, SLOT(superScript(bool)));
 
-    m_actionFormatSub = new QAction(KIcon("format-text-subscript"), i18n("Subscript"), this);
+    m_actionFormatSub = new KAction(KIcon("format-text-subscript"), i18n("Subscript"), this);
     addAction("format_sub", m_actionFormatSub);
     m_actionFormatSub->setCheckable(true);
     connect(m_actionFormatSub, SIGNAL(triggered(bool)), this, SLOT(subScript(bool)));
 
-    QAction *action = new QAction(
+    KAction *action = new KAction(
         KIcon(QApplication::isRightToLeft() ? "format-indent-less" : "format-indent-more"),
         i18n("Increase Indent"), this);
     addAction("format_increaseindent", action);
     connect(action, SIGNAL(triggered()), this, SLOT(increaseIndent()));
 
-    m_actionFormatDecreaseIndent = new QAction(
+    m_actionFormatDecreaseIndent = new KAction(
         KIcon(QApplication::isRightToLeft() ? "format-indent-more" : "format-indent-less"),
         i18n("Decrease Indent"), this);
     addAction("format_decreaseindent", m_actionFormatDecreaseIndent);
     connect(m_actionFormatDecreaseIndent, SIGNAL(triggered()), this, SLOT(decreaseIndent()));
 
-    action = new QAction(i18n("Increase Font Size"), this);
+    action = new KAction(i18n("Increase Font Size"), this);
     action->setShortcut(Qt::CTRL + Qt::Key_Greater);
     addAction("fontsizeup", action);
     connect(action, SIGNAL(triggered()), &m_selectionHandler, SLOT(increaseFontSize()));
 
-    action = new QAction(i18n("Decrease Font Size"), this);
+    action = new KAction(i18n("Decrease Font Size"), this);
     action->setShortcut(Qt::CTRL + Qt::Key_Less);
     addAction("fontsizedown", action);
     connect(action, SIGNAL(triggered()), &m_selectionHandler, SLOT(decreaseFontSize()));
@@ -289,32 +289,32 @@ TextTool::TextTool(KoCanvasBase *canvas)
 
 
     // ------------------- Actions with a key binding and no GUI item
-    action  = new QAction(i18n("Insert Non-Breaking Space"), this);
+    action  = new KAction(i18n("Insert Non-Breaking Space"), this);
     addAction("nonbreaking_space", action);
     action->setShortcut(Qt::CTRL + Qt::Key_Space);
     connect(action, SIGNAL(triggered()), this, SLOT(nonbreakingSpace()));
 
-    action  = new QAction(i18n("Insert Non-Breaking Hyphen"), this);
+    action  = new KAction(i18n("Insert Non-Breaking Hyphen"), this);
     addAction("nonbreaking_hyphen", action);
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Minus);
     connect(action, SIGNAL(triggered()), this, SLOT(nonbreakingHyphen()));
 
-    action  = new QAction(i18n("Insert Index"), this);
+    action  = new KAction(i18n("Insert Index"), this);
     action->setShortcut(Qt::CTRL + Qt::Key_T);
     addAction("insert_index", action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertIndexMarker()));
 
-    action  = new QAction(i18n("Insert Soft Hyphen"), this);
+    action  = new KAction(i18n("Insert Soft Hyphen"), this);
     addAction("soft_hyphen", action);
     //action->setShortcut( Qt::CTRL+Qt::Key_Minus); // TODO this one is also used for the kde-global zoom-out :(
     connect(action, SIGNAL(triggered()), this, SLOT(softHyphen()));
 
-    action  = new QAction(i18n("Line Break"), this);
+    action  = new KAction(i18n("Line Break"), this);
     addAction("line_break", action);
     action->setShortcut(Qt::SHIFT + Qt::Key_Return);
     connect(action, SIGNAL(triggered()), this, SLOT(lineBreak()));
 
-    action  = new QAction(i18n("Font..."), this);
+    action  = new KAction(i18n("Font..."), this);
     addAction("format_font", action);
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_F);
     action->setToolTip(i18n("Change character size, font, boldface, italics etc."));
@@ -338,7 +338,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     addAction("format_backgroundcolor", m_actionFormatBackgroundColor);
     connect(m_actionFormatBackgroundColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setBackgroundColor(const KoColor &)));
 
-    action = new QAction(i18n("Default Format"), this);
+    action = new KAction(i18n("Default Format"), this);
     addAction("text_default", action);
     action->setToolTip(i18n("Change text attributes to their default values"));
     connect(action, SIGNAL(triggered()), this, SLOT(setDefaultFormat()));
@@ -364,27 +364,27 @@ TextTool::TextTool(KoCanvasBase *canvas)
     foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins.values()) {
         connect(plugin, SIGNAL(startMacro(const QString &)), this, SLOT(startMacro(const QString &)));
         connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
-        QHash<QString, QAction*> actions = plugin->actions();
-        QHash<QString, QAction*>::iterator i = actions.begin();
+        QHash<QString, KAction*> actions = plugin->actions();
+        QHash<QString, KAction*>::iterator i = actions.begin();
         while (i != actions.end()) {
             addAction(i.key(), i.value());
             i++;
         }
     }
 
-    action = new QAction(i18n("Paragraph..."), this);
+    action = new KAction(i18n("Paragraph..."), this);
     addAction("format_paragraph", action);
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_P);
     action->setToolTip(i18n("Change paragraph margins, text flow, borders, bullets, numbering etc."));
     action->setWhatsThis(i18n("Change paragraph margins, text flow, borders, bullets, numbering etc.<p>Select text in multiple paragraphs to change the formatting of all selected paragraphs.<p>If no text is selected, the paragraph where the cursor is located will be changed.</p>"));
     connect(action, SIGNAL(triggered()), this, SLOT(formatParagraph()));
 
-    action = new QAction(i18n("Record"), this);
+    action = new KAction(i18n("Record"), this);
     action->setCheckable(true);
     addAction("edit_record_changes", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toggleTrackChanges(bool)));
 
-    action = new QAction(i18n("Style Manager"), this);
+    action = new KAction(i18n("Style Manager"), this);
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_S);
     action->setToolTip(i18n("Change attributes of styles"));
     action->setWhatsThis(i18n("Change font and paragraph attributes of styles.<p>Multiple styles can be changed using the dialog box."));
@@ -394,7 +394,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     action = KStandardAction::selectAll(this, SLOT(selectAll()), this);
     addAction("edit_selectall", action);
 
-    action = new QAction(i18n("Special Character..."), this);
+    action = new KAction(i18n("Special Character..."), this);
     action->setIcon(KIcon("character-set"));
     action->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_C);
     addAction("insert_specialchar", action);
@@ -418,7 +418,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     foreach(QString key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
         if (factory->showInMenu()) {
-            QAction *a = new QAction(factory->title(), this);
+            KAction *a = new KAction(factory->title(), this);
             connect(a, SIGNAL(triggered()), signalMapper, SLOT(map()));
             signalMapper->setMapping(a, factory->id());
             list.append(a);

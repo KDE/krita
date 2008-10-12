@@ -27,12 +27,12 @@
 #include <KoTool.h>
 
 #include <QTextCursor>
-#include <QAction>
 #include <QHash>
 #include <QTextBlock>
 #include <QTimer>
 #include <QClipboard>
 
+class KAction;
 class KoAction;
 class KoStyleManager;
 class KoTextEditingPlugin;
@@ -218,18 +218,18 @@ private:
 
     QTimer m_caretTimer;
     bool m_caretTimerState;
-    QAction *m_actionFormatBold;
-    QAction *m_actionFormatItalic;
-    QAction *m_actionFormatUnderline;
-    QAction *m_actionFormatStrikeOut;
-    QAction *m_actionAlignLeft;
-    QAction *m_actionAlignRight;
-    QAction *m_actionAlignCenter;
-    QAction *m_actionAlignBlock;
-    QAction *m_actionFormatSuper;
-    QAction *m_actionFormatSub;
-    QAction *m_actionFormatIncreaseIndent;
-    QAction *m_actionFormatDecreaseIndent;
+    KAction *m_actionFormatBold;
+    KAction *m_actionFormatItalic;
+    KAction *m_actionFormatUnderline;
+    KAction *m_actionFormatStrikeOut;
+    KAction *m_actionAlignLeft;
+    KAction *m_actionAlignRight;
+    KAction *m_actionAlignCenter;
+    KAction *m_actionAlignBlock;
+    KAction *m_actionFormatSuper;
+    KAction *m_actionFormatSub;
+    KAction *m_actionFormatIncreaseIndent;
+    KAction *m_actionFormatDecreaseIndent;
     KFontSizeAction *m_actionFormatFontSize;
     KFontAction *m_actionFormatFontFamily;
     KoColorSetAction *m_actionFormatTextColor;

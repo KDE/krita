@@ -21,7 +21,7 @@
 #ifndef KOCOLORSETACTION_H
 #define KOCOLORSETACTION_H
 
-#include <QAction>
+#include <KAction>
 
 #include "koguiutils_export.h"
 
@@ -32,7 +32,7 @@ class KoColor;
  * @see KoColorSetAction
  */
 
-class KOGUIUTILS_EXPORT KoColorSetAction : public QAction
+class KOGUIUTILS_EXPORT KoColorSetAction : public KAction
 {
     Q_OBJECT
 

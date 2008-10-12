@@ -34,10 +34,10 @@
 #include <KoViewConverter.h>
 
 #include <KDebug>
+#include <KAction>
 #include <KLocalizedString>
 
 #include <QAbstractTextDocumentLayout>
-#include <QAction>
 #include <QCheckBox>
 #include <QColor>
 #include <QGridLayout>
@@ -102,7 +102,7 @@ ParagraphTool::ParagraphTool(KoCanvasBase *canvas)
     initializeRuler(m_rulers[topMarginRuler], Ruler::drawSides);
     initializeRuler(m_rulers[bottomMarginRuler], Ruler::drawSides);
 
-    QAction *action = new QAction(i18n("Apply parent style to ruler"), this);
+    KAction *action = new KAction(i18n("Apply parent style to ruler"), this);
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_P);
     addAction("apply_parent_style_to_active_ruler", action);
     connect(action, SIGNAL(triggered()), this, SLOT(applyParentStyleToActiveRuler()));

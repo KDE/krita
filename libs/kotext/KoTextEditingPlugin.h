@@ -24,7 +24,7 @@
 #include <QHash>
 #include "kotext_export.h"
 
-class QAction;
+class KAction;
 class QTextDocument;
 class QTextCursor;
 class QUndoCommand;
@@ -83,7 +83,7 @@ public:
     /**
      * Retrieves the entire collection of actions for the plugin
      */
-    QHash<QString, QAction*> actions() const;
+    QHash<QString, KAction*> actions() const;
 
 signals:
     /// emitted when a series of commands is started that together need to become 1 undo action.
@@ -123,7 +123,7 @@ protected:
      * @param name The name by which the action be retrieved again from the collection.
      * @param action The action to add.
      */
-    void addAction(const QString &name, QAction *action);
+    void addAction(const QString &name, KAction *action);
 
 private:
     class Private;

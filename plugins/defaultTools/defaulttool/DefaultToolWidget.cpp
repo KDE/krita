@@ -31,6 +31,7 @@
 #include <commands/KoShapeTransformCommand.h>
 #include "SelectionDecorator.h"
 
+#include <KAction>
 #include <QSize>
 #include <QtGui/QRadioButton>
 #include <QtGui/QLabel>

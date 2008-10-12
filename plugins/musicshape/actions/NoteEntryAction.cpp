@@ -42,7 +42,7 @@
 
 using namespace MusicCore;
 
-static QIcon getIcon(Duration duration, bool isRest)
+static KIcon getIcon(Duration duration, bool isRest)
 {
     QString base = isRest ? "music-rest-" : "music-note-";
     switch (duration) {

@@ -28,6 +28,7 @@
 #include "KoShapeManager.h"
 #include "KoSelection.h"
 #include "KoCanvasBase.h"
+#include "KoShapeLayer.h"
 
 #include <KoProperties.h>
 
@@ -104,6 +105,12 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
     if (event->mimeData()->hasFormat(SHAPETEMPLATE_MIMETYPE) ||
             event->mimeData()->hasFormat(SHAPEID_MIMETYPE)) {
 
+        // only allow dropping when active layer is editable
+        KoSelection * selection = m_parent->canvas()->shapeManager()->selection();
+        KoShapeLayer * activeLayer = selection->activeLayer();
+        if( activeLayer && (!activeLayer->isEditable() || activeLayer->isLocked() ) )
+            return;
+    
         QByteArray itemData;
         bool isTemplate = true;
         if (event->mimeData()->hasFormat(SHAPETEMPLATE_MIMETYPE))

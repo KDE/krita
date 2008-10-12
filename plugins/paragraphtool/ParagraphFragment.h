@@ -74,16 +74,16 @@ public:
     // of the shape plus a margin for the arrows on all four sides
     QRectF dirtyRectangle() const;
 
+    RulerFragment *rulerFragment(RulerIndex ruler) { return &m_rulerFragments[ruler]; }
+
 protected:
     void initDimensions(QTextBlock textBlock, KoParagraphStyle *paragraphStyle);
-    void initVisibility();
-    void initBaselines();
+    void initRulers();
 
     // wrapper method for textShapeData->documentOffset()
     qreal shapeTop() const;
     qreal shapeBottom() const;
 
-    QPointF mapDocumentToText(QPointF point) const;
     QPointF mapTextToDocument(QPointF point) const;
     QLineF mapTextToDocument(QLineF line) const;
 
@@ -94,6 +94,7 @@ protected:
 
 private:
     KoShape *m_shape;
+    Ruler *m_rulers;
 
     bool m_isSingleLine;
     bool m_paintSeparator;

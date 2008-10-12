@@ -258,8 +258,6 @@ void ParagraphTool::repaintDecorations()
     repaintRectangle |= m_paragraphHighlighter.dirtyRectangle();
     repaintRectangle |= m_storedRepaintRectangle;
 
-    kDebug() << repaintRectangle;
-
     canvas()->updateCanvas(repaintRectangle);
 }
 
@@ -276,6 +274,11 @@ bool ParagraphTool::needsRepaint() const
 bool ParagraphTool::createFragments()
 {
     m_fragments.clear();
+    m_rulers[firstIndentRuler].clearFragments();
+    m_rulers[followingIndentRuler].clearFragments();
+    m_rulers[rightMarginRuler].clearFragments();
+    m_rulers[topMarginRuler].clearFragments();
+    m_rulers[bottomMarginRuler].clearFragments();
 
     KoTextDocumentLayout *layout = static_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout());
     if (layout == NULL) {
@@ -396,7 +399,6 @@ bool ParagraphTool::activateRulerAt(const QPointF &point)
     m_activeRuler = noRuler;
     return false;
 }
-
 
 void ParagraphTool::activateRuler(RulerIndex ruler, const ParagraphFragment &fragment)
 {

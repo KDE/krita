@@ -20,10 +20,13 @@
 #ifndef RULER_H
 #define RULER_H
 
+#include "RulerFragment.h"
+
 #include <KoUnit.h>
 
 #include <QColor>
 #include <QLineF>
+#include <QList>
 #include <QMatrix>
 #include <QObject>
 
@@ -127,6 +130,14 @@ public:
         return QColor(100, 148, 255);
     }
 
+    void addFragment(RulerFragment fragment) {
+        m_fragments.append(fragment);
+    }
+
+    void clearFragments() {
+        m_fragments.clear();
+    }
+
 signals:
     // emitted when value has been changed via the user interface
     // (in contrast to via the setValue() method)
@@ -136,6 +147,8 @@ signals:
     void needsRepaint();
 
 private:
+    QList<RulerFragment> m_fragments;
+
     // the value of a ruler is the distance between the baseline and
     // the ruler line (the one that can be dragged)
     // all values are always measured in points

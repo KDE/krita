@@ -181,9 +181,6 @@ private:
 
     QVector<ParagraphFragment> m_fragments;
 
-    ParagraphFragment *m_activeFragment;
-    ParagraphFragment *m_highlightedFragment;
-
     Ruler m_rulers[maxRuler];
 
     RulerIndex m_activeRuler,

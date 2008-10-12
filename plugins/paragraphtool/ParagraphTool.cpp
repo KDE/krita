@@ -178,18 +178,15 @@ QString ParagraphTool::styleName()
 void ParagraphTool::paintLabel(QPainter &painter, const KoViewConverter &converter) const
 {
     RulerIndex ruler;
-    ParagraphFragment *fragment;
     RulerFragment *rulerFragment;
     QColor foregroundColor;
 
     if (hasActiveRuler()) {
         ruler = m_activeRuler;
-        fragment = m_activeFragment;
         rulerFragment = m_activeRulerFragment;
         foregroundColor = m_rulers[ruler].activeColor();
     } else if (hasHighlightedRuler()) {
         ruler = m_highlightedRuler;
-        fragment = m_highlightedFragment;
         rulerFragment = m_highlightedRulerFragment;
         foregroundColor = m_rulers[ruler].highlightColor();
     } else {
@@ -407,8 +404,7 @@ bool ParagraphTool::activateRulerAt(const QPointF &point)
 void ParagraphTool::activateRuler(RulerIndex ruler, ParagraphFragment &fragment)
 {
     m_activeRuler = ruler;
-    m_activeFragment = &fragment;
-    m_activeRulerFragment = m_activeFragment->rulerFragment(m_activeRuler);
+    m_activeRulerFragment = fragment.rulerFragment(m_activeRuler);
     m_rulers[m_activeRuler].setActive(true);
 
     // disable hovering if we have an active ruler
@@ -491,8 +487,7 @@ void ParagraphTool::highlightRulerAt(const QPointF &point)
         RulerIndex ruler = m_fragments[i].hitTest(point);
         if (ruler != noRuler) {
             m_highlightedRuler = ruler;
-            m_highlightedFragment = &m_fragments[i];
-            m_highlightedRulerFragment = m_highlightedFragment->rulerFragment(m_highlightedRuler);
+            m_highlightedRulerFragment = m_fragments[i].rulerFragment(m_highlightedRuler);
             m_rulers[m_highlightedRuler].setHighlighted(true);
             break;
         }

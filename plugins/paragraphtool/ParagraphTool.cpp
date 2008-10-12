@@ -24,6 +24,7 @@
 #include <KoParagraphStyle.h>
 #include <KoPointerEvent.h>
 #include <KoShape.h>
+#include <KoShapeBorderModel.h>
 #include <KoShapeManager.h>
 #include <KoStyleManager.h>
 #include <KoTextBlockData.h>
@@ -267,8 +268,22 @@ void ParagraphTool::repaintDecorations()
     // repaint area
     QRectF repaintRectangle = m_storedRepaintRectangle;
     m_storedRepaintRectangle = QRectF();
-    foreach(ParagraphFragment fragment, m_fragments) {
-        m_storedRepaintRectangle |= fragment.dirtyRectangle();
+    foreach(const ParagraphFragment &fragment, m_fragments) {
+        QRectF boundingRect(QPointF(0, 0), fragment.shape()->size());
+
+        if (fragment.shape()->border()) {
+            KoInsets insets;
+            fragment.shape()->border()->borderInsets(fragment.shape(), insets);
+            boundingRect.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
+        }
+
+        // adjust for arrow heads and label
+        // (although we can't be sure about the label)
+        boundingRect.adjust(-50.0, -50.0, 50.0, 50.0);
+
+        boundingRect = fragment.shape()->absoluteTransformation(0).mapRect(boundingRect);
+
+        m_storedRepaintRectangle |= boundingRect;
     }
     repaintRectangle |= m_paragraphHighlighter.dirtyRectangle();
     repaintRectangle |= m_storedRepaintRectangle;

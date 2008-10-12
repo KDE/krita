@@ -128,28 +128,6 @@ void ParagraphFragment::paint(QPainter &painter) const
     }
 }
 
-QRectF ParagraphFragment::dirtyRectangle() const
-{
-    if (m_shape == NULL)
-        return QRectF();
-
-    QRectF boundingRect(QPointF(0, 0), shape()->size());
-
-    if (shape()->border()) {
-        KoInsets insets;
-        shape()->border()->borderInsets(shape(), insets);
-        boundingRect.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
-    }
-
-    // adjust for arrow heads and label
-    // (although we can't be sure about the label)
-    boundingRect.adjust(-50.0, -50.0, 50.0, 50.0);
-
-    boundingRect = shape()->absoluteTransformation(0).mapRect(boundingRect);
-
-    return boundingRect;
-}
-
 qreal ParagraphFragment::shapeTop() const
 {
     KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape()->userData());

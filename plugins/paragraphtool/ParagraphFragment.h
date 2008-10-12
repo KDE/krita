@@ -57,11 +57,6 @@ public:
     // paint all rulers for this shape
     void paint(QPainter &painter) const;
 
-    // returns the rectangle which needs to be repainted to fully refresh
-    // the display for this shape currently this is the bounding rectangle
-    // of the shape plus a margin for the arrows on all four sides
-    QRectF dirtyRectangle() const;
-
     RulerFragment *rulerFragment(RulerIndex ruler) { return &m_rulerFragments[ruler]; }
 
     KoShape *shape() const { return m_shape; }

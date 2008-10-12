@@ -391,7 +391,7 @@ bool ParagraphTool::activateRulerAt(const QPointF &point)
     for (int i = 0; i != m_fragments.size(); ++i) {
         RulerIndex ruler = m_fragments[i].hitTest(point);
         if (ruler != noRuler) {
-            activateRuler(ruler, m_fragments[i]);
+            activateRuler(ruler, m_fragments[i].rulerFragment(ruler));
             return true;
         }
     }
@@ -401,10 +401,10 @@ bool ParagraphTool::activateRulerAt(const QPointF &point)
     return false;
 }
 
-void ParagraphTool::activateRuler(RulerIndex ruler, ParagraphFragment &fragment)
+void ParagraphTool::activateRuler(RulerIndex ruler, RulerFragment *fragment)
 {
     m_activeRuler = ruler;
-    m_activeRulerFragment = fragment.rulerFragment(m_activeRuler);
+    m_activeRulerFragment = fragment;
     m_rulers[m_activeRuler].setActive(true);
 
     // disable hovering if we have an active ruler

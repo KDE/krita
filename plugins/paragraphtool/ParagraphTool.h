@@ -131,7 +131,7 @@ protected:
     bool hasActiveRuler() const {
         return m_activeRuler != noRuler;
     }
-    void activateRuler(RulerIndex ruler, ParagraphFragment &fragment);
+    void activateRuler(RulerIndex ruler, RulerFragment *fragment);
     bool activateRulerAt(const QPointF &point);
     void deactivateRuler();
     void resetActiveRuler();

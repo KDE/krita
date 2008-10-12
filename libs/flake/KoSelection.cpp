@@ -295,6 +295,7 @@ KoShape *KoSelection::firstSelectedShape(KoFlake::SelectionType strip) const
 void KoSelection::setActiveLayer(KoShapeLayer* layer)
 {
     d->activeLayer = layer;
+    emit currentLayerChanged(layer);
 }
 
 KoShapeLayer* KoSelection::activeLayer() const

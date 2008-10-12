@@ -140,6 +140,9 @@ signals:
     /// emitted when the selection is changed
     void selectionChanged();
 
+    /// emitted when the current layer is changed
+    void currentLayerChanged(const KoShapeLayer *layer);
+
 private:
     virtual void saveOdf(KoShapeSavingContext &) const;
     virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &);

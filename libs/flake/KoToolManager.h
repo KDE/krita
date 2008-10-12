@@ -39,6 +39,7 @@ class KoToolProxy;
 class QToolButton;
 class KoDeviceEvent;
 class KoGuidesTool;
+class KoShapeLayer;
 
 /**
  * This class manages the activation and deactivation of tools for
@@ -202,6 +203,8 @@ signals:
      */
     void toolCodesSelected(const KoCanvasController *canvas, QList<QString> types);
 
+    void currentLayerChanged(const KoCanvasController *canvas, const KoShapeLayer* layer);
+
     /**
      * Every time a new input device gets used by a tool, this event is emitted.
      * @param device the new input device that the user picked up.
@@ -219,7 +222,6 @@ signals:
      * @param statusText the new status text
      */
     void changedStatusText(const QString &statusText);
-
 protected:
     friend class KoToolProxy;
     /**
@@ -253,6 +255,7 @@ private:
     void switchTool(const QString &id, bool temporary);
     void postSwitchTool();
     bool eventFilter(QObject *object, QEvent *event);
+
 private slots:
     void toolActivated(ToolHelper *tool);
     void detachCanvas(KoCanvasController *controller);
@@ -261,6 +264,7 @@ private slots:
     void updateCursor(QCursor cursor);
     void switchBackRequested();
     void selectionChanged(QList<KoShape*> shapes);
+    void currentLayerChanged(const KoShapeLayer *layer);
 
 private:
     class Private;

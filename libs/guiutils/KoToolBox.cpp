@@ -21,6 +21,7 @@
 
 #include <KoCanvasController.h>
 #include <KoToolManager.h>
+#include <KoShapeLayer.h>
 
 #include <KDebug>
 #include <QLayout>
@@ -348,6 +349,8 @@ KoToolBox::KoToolBox(KoCanvasController *canvas)
 
     connect(KoToolManager::instance(), SIGNAL(changedTool(const KoCanvasController*, int)),
             this, SLOT(setActiveTool(const KoCanvasController*, int)));
+    connect(KoToolManager::instance(), SIGNAL(currentLayerChanged(const KoCanvasController*,const KoShapeLayer*)),
+            this, SLOT(setCurrentLayer(const KoCanvasController*,const KoShapeLayer*)));
     connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(const KoCanvasController*, QList<QString>)),
             this, SLOT(setButtonsVisible(const KoCanvasController*, QList<QString>)));
 }
@@ -401,6 +404,15 @@ void KoToolBox::setButtonsVisible(const KoCanvasController *canvas, const QList<
         else
             button->setVisible( codes.contains(code) );
     }
+}
+
+void KoToolBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer *layer)
+{
+    if(canvas->canvas() != d->canvas)
+        return;
+    const bool enabled = layer == 0 || (layer->isEditable() && layer->isVisible());
+    foreach (QToolButton *button, d->visibilityCodes.keys())
+        button->setEnabled(enabled);
 }
 
 void KoToolBox::setCanvas(KoCanvasBase *canvas) {

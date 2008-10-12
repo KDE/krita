@@ -25,6 +25,7 @@
 #include "KoToolManager_p.h"
 #include "KoToolRegistry.h"
 #include "KoToolProxy.h"
+#include "KoSelection.h"
 #include "tools/KoCreatePathToolFactory.h"
 #include "tools/KoCreateShapesToolFactory.h"
 #include "tools/KoCreateShapesTool.h"
@@ -444,6 +445,9 @@ void KoToolManager::attachCanvas(KoCanvasController *controller)
     Connector *connector = new Connector(controller->canvas()->shapeManager());
     connect(connector, SIGNAL(selectionChanged(QList<KoShape*>)), this,
             SLOT(selectionChanged(QList<KoShape*>)));
+    connect(controller->canvas()->shapeManager()->selection(),
+            SIGNAL(currentLayerChanged(const KoShapeLayer*)),
+            this, SLOT(currentLayerChanged(const KoShapeLayer*)));
 
     d->canvasData->canvas->activate();
     emit changedCanvas(d->canvasData ? d->canvasData->canvas->canvas() : 0);
@@ -604,6 +608,11 @@ void KoToolManager::selectionChanged(QList<KoShape*> shapes)
     }
 
     emit toolCodesSelected(d->canvasData->canvas, types);
+}
+
+void KoToolManager::currentLayerChanged(const KoShapeLayer* layer)
+{
+    emit currentLayerChanged(d->canvasData->canvas, layer);
 }
 
 KoCanvasController *KoToolManager::activeCanvasController() const

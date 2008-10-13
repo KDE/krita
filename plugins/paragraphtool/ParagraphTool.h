@@ -179,7 +179,7 @@ private:
     QTextCursor m_activeCursor;
     KoParagraphStyle *m_paragraphStyle;
 
-    QVector<ParagraphFragment> m_fragments;
+    QVector<KoShape*> m_shapes;
 
     Ruler m_rulers[maxRuler];
 

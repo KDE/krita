@@ -266,12 +266,12 @@ void ParagraphTool::repaintDecorations()
     // repaint area
     QRectF repaintRectangle = m_storedRepaintRectangle;
     m_storedRepaintRectangle = QRectF();
-    foreach(const ParagraphFragment &fragment, m_fragments) {
-        QRectF boundingRect(QPointF(0, 0), fragment.shape()->size());
+    foreach(KoShape *shape, m_shapes) {
+        QRectF boundingRect(QPointF(0, 0), shape->size());
 
-        if (fragment.shape()->border()) {
+        if (shape->border()) {
             KoInsets insets;
-            fragment.shape()->border()->borderInsets(fragment.shape(), insets);
+            shape->border()->borderInsets(shape, insets);
             boundingRect.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
         }
 
@@ -279,7 +279,7 @@ void ParagraphTool::repaintDecorations()
         // (although we can't be sure about the label)
         boundingRect.adjust(-50.0, -50.0, 50.0, 50.0);
 
-        boundingRect = fragment.shape()->absoluteTransformation(0).mapRect(boundingRect);
+        boundingRect = shape->absoluteTransformation(0).mapRect(boundingRect);
 
         m_storedRepaintRectangle |= boundingRect;
     }
@@ -301,7 +301,7 @@ bool ParagraphTool::needsRepaint() const
 
 bool ParagraphTool::createFragments()
 {
-    m_fragments.clear();
+    m_shapes.clear();
     m_rulers[firstIndentRuler].clearFragments();
     m_rulers[followingIndentRuler].clearFragments();
     m_rulers[rightMarginRuler].clearFragments();
@@ -317,7 +317,8 @@ bool ParagraphTool::createFragments()
     QList<KoShape*> shapes = layout->shapes();
     foreach(KoShape *shape, shapes) {
         if (shapeContainsBlock(shape, textBlock())) {
-            m_fragments << ParagraphFragment(m_rulers, shape, textBlock(), m_paragraphStyle);
+            m_shapes << shape;
+            ParagraphFragment(m_rulers, shape, textBlock(), m_paragraphStyle);
         }
     }
 

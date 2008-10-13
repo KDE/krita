@@ -16,16 +16,7 @@
    <item row="0" column="1" >
     <widget class="QWidget" native="1" name="listPropertiesPane" >
      <layout class="QGridLayout" >
-      <property name="leftMargin" >
-       <number>0</number>
-      </property>
-      <property name="topMargin" >
-       <number>0</number>
-      </property>
-      <property name="rightMargin" >
-       <number>0</number>
-      </property>
-      <property name="bottomMargin" >
+      <property name="margin" >
        <number>0</number>
       </property>
       <item row="0" column="0" colspan="3" >
@@ -103,7 +94,14 @@
          </widget>
         </item>
         <item row="2" column="1" >
-         <widget class="QSpinBox" name="depth" />
+         <widget class="QSpinBox" name="depth" >
+          <property name="minimum" >
+           <number>1</number>
+          </property>
+          <property name="maximum" >
+           <number>10</number>
+          </property>
+         </widget>
         </item>
         <item row="2" column="2" >
          <widget class="QLabel" name="label_7" >
@@ -116,7 +114,11 @@
          </widget>
         </item>
         <item row="2" column="3" >
-         <widget class="QSpinBox" name="levels" />
+         <widget class="QSpinBox" name="levels" >
+          <property name="minimum" >
+           <number>1</number>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -142,7 +144,7 @@
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>251</width>
           <height>20</height>
@@ -162,7 +164,7 @@
         <property name="orientation" >
          <enum>Qt::Vertical</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>331</width>
           <height>124</height>

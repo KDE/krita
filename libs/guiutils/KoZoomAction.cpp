@@ -35,6 +35,7 @@
 #include <QMenu>
 #include <QStatusBar>
 #include <QButtonGroup>
+#include <QComboBox>
 
 #include <klocale.h>
 #include <kicon.h>
@@ -224,8 +225,8 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
         return KSelectAction::createWidget(_parent);
 
     QWidget * group = new QWidget(_parent);
-    group->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     QHBoxLayout *layout = new QHBoxLayout(group);
+    layout->setSizeConstraint(QLayout::SetFixedSize);
     layout->setMargin(0);
     layout->setSpacing(0);
 

@@ -1592,9 +1592,9 @@ void KoMainWindow::slotProgress(int value)
             delete d->m_progress;
             d->m_progress = 0L;
         }
-        statusBar()->setMaximumHeight(statusBar()->height());
+
         d->m_progress = new QProgressBar(statusBar());
-        //d->m_progress->setMaximumHeight(statusBar()->height());
+        d->m_progress->setMaximumHeight(statusBar()->fontMetrics().height());
         statusBar()->addPermanentWidget(d->m_progress);
         d->m_progress->show();
         d->m_firstTime = false;

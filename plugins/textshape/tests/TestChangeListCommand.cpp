@@ -109,7 +109,7 @@ void TestChangeListCommand::joinList()
     block = block.next(); // parag2
     QVERIFY(block.textList() == 0);
 
-    ChangeListCommand clc(block, KoListStyle::DecimalItem);
+    ChangeListCommand clc(block, KoListStyle::DiscItem);
     clc.redo();
     QCOMPARE(block.textList(), tl);
 }
@@ -131,6 +131,7 @@ void TestChangeListCommand::joinList2()
     KoListStyle style2;
     KoListLevelProperties llp;
     llp.setStyle(KoListStyle::DecimalItem);
+    llp.setListItemSuffix(".");
     style2.setLevelProperties(llp);
     block = block.next().next(); // parag4
     style2.applyStyle(block);

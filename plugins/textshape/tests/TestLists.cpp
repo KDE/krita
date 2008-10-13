@@ -334,6 +334,7 @@ void TestDocumentLayout::testAutoRestartList()
     KoListStyle listStyle;
     KoListLevelProperties llp = listStyle.levelProperties(1);
     llp.setStyle(KoListStyle::DecimalItem);
+    llp.setListItemSuffix(".");
     listStyle.setLevelProperties(llp);
     h1.setListStyle(&listStyle);
 
@@ -341,6 +342,7 @@ void TestDocumentLayout::testAutoRestartList()
     KoListLevelProperties llp2 = listStyle2.levelProperties(2);
     llp2.setStyle(KoListStyle::DecimalItem);
     llp2.setDisplayLevel(2);
+    llp2.setListItemSuffix(".");
     listStyle2.setLevelProperties(llp2);
     h2.setListStyle(&listStyle2);
 

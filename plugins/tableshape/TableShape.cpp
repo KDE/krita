@@ -34,10 +34,8 @@
 #include <kdebug.h>
 
 // KOffice
-#include <KoImageData.h>
 #include <KoViewConverter.h>
 #include <KoImageCollection.h>
-#include <KoImageData.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>

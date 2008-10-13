@@ -129,8 +129,8 @@ void KoList::add(const QTextBlock &block, int level)
         QTextListFormat format = d->style->listFormat(level);
         if (continueNumbering(level))
             format.setProperty(KoListStyle::ContinueNumbering, true);
-        QTextList *list = cursor.createList(format);
-        d->textLists[level-1] = list;
+        textList = cursor.createList(format);
+        d->textLists[level-1] = textList;
     } else {
         textList->add(block);
     }

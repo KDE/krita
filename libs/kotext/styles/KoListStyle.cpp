@@ -124,11 +124,9 @@ KoListLevelProperties KoListStyle::levelProperties(int level) const
         return llp;
     }
     KoListLevelProperties llp;
+    llp.setLevel(level);
     if (d->styleId)
         llp.setStyleId(d->styleId);
-    llp.setLevel(level);
-    llp.setStyle(KoListStyle::DecimalItem);
-    llp.setListItemSuffix(".");
     return llp;
 }
 

@@ -35,7 +35,7 @@ class ParagraphBulletsNumbers : public QWidget
 public:
     ParagraphBulletsNumbers(QWidget *parent);
 
-    void open(KoParagraphStyle *style);
+    void open(KoParagraphStyle *style, int level = 0);
 
     void save();
 

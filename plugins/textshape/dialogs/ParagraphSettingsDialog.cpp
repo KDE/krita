@@ -106,7 +106,7 @@ void ParagraphSettingsDialog::open(KoParagraphStyle *style)
     m_style = style;
     m_paragraphIndentSpacing->open(style);
     m_paragraphLayout->open(style);
-    m_paragraphBulletsNumbers->open(style);
+    m_paragraphBulletsNumbers->open(style, KoList::level(m_cursor.block()));
     m_paragraphDecorations->open(style);
 }
 

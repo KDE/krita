@@ -56,7 +56,7 @@ int ParagraphBulletsNumbers::addStyle(const Lists::ListStyleItem &lsi)
     return widget.listTypes->count() - 1;
 }
 
-void ParagraphBulletsNumbers::open(KoParagraphStyle *style)
+void ParagraphBulletsNumbers::open(KoParagraphStyle *style, int level)
 {
     m_paragStyle = style;
     KoListStyle *listStyle = style->listStyle();
@@ -67,7 +67,7 @@ void ParagraphBulletsNumbers::open(KoParagraphStyle *style)
         return;
     }
 
-    KoListLevelProperties llp = listStyle->levelProperties(m_paragStyle->listLevel());
+    KoListLevelProperties llp = listStyle->levelProperties(level);
     m_previousLevel = llp.level();
     widget.prefix->setText(llp.listItemPrefix());
     widget.suffix->setText(llp.listItemSuffix());
@@ -141,7 +141,6 @@ void ParagraphBulletsNumbers::save()
     if (llp.level() != m_previousLevel)
         listStyle->removeLevelProperties(m_previousLevel);
     listStyle->setLevelProperties(llp);
-    m_paragStyle->setListLevel(llp.level());
 }
 
 void ParagraphBulletsNumbers::styleChanged(int index)

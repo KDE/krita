@@ -70,7 +70,8 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle *style
     Q_ASSERT(block.isValid());
     Q_ASSERT(style);
     storeOldProperties();
-    m_list = new KoList(block.document(), style);
+    initLevel();
+    initList(style);
     setText(i18n("Change List"));
 }
 

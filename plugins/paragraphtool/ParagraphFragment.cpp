@@ -114,18 +114,17 @@ void ParagraphFragment::initRulers()
     m_rulerFragments[topMarginRuler].setVisible(top <= m_firstLine.top());
     m_rulerFragments[topMarginRuler].setBaseline(mapTextToDocument(QLineF(m_border.right(), m_border.top(), m_border.left(), m_border.top())));
     m_rulers[topMarginRuler].addFragment(m_rulerFragments[topMarginRuler]);
-
+    kDebug() << mapTextToDocument(QLineF(m_border.right(), m_border.top(), m_border.left(), m_border.top()));
     // bottom margin
     m_rulerFragments[bottomMarginRuler].setVisible(bottom >= m_followingLines.bottom());
     m_rulerFragments[bottomMarginRuler].setBaseline(mapTextToDocument(QLineF(m_border.right(), m_followingLines.bottom(), m_border.left(), m_followingLines.bottom())));
     m_rulers[bottomMarginRuler].addFragment(m_rulerFragments[bottomMarginRuler]);
-}
 
-void ParagraphFragment::paint(QPainter &painter) const
-{
-    if (m_paintSeparator) {
-        painter.drawLine(mapTextToDocument(QLineF(m_border.left(), m_firstLine.bottom(), m_firstLine.right(), m_firstLine.bottom())));
-    }
+    // line spacing
+    m_rulerFragments[lineSpacingRuler].setVisible(m_paintSeparator);
+    kDebug() << mapTextToDocument(QLineF(m_border.left(), m_firstLine.bottom(), m_firstLine.right(), m_firstLine.bottom()));
+    m_rulerFragments[lineSpacingRuler].setBaseline(mapTextToDocument(QLineF(m_firstLine.right(), m_firstLine.bottom(), m_border.left(), m_firstLine.bottom())));
+    m_rulers[lineSpacingRuler].addFragment(m_rulerFragments[lineSpacingRuler]);
 }
 
 qreal ParagraphFragment::shapeTop() const

@@ -101,6 +101,8 @@ ParagraphTool::ParagraphTool(KoCanvasBase *canvas)
     initializeRuler(m_rulers[rightMarginRuler]);
     initializeRuler(m_rulers[topMarginRuler], Ruler::drawSides);
     initializeRuler(m_rulers[bottomMarginRuler], Ruler::drawSides);
+    initializeRuler(m_rulers[lineSpacingRuler]);
+    m_rulers[lineSpacingRuler].setEnabled(false);
 
     KAction *action = new KAction(i18n("Apply parent style to ruler"), this);
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_P);
@@ -239,10 +241,6 @@ void ParagraphTool::paint(QPainter &painter, const KoViewConverter &converter)
         KoShape::applyConversion(painter, converter);
         painter.setPen(Qt::darkGray);
 
-        foreach (const ParagraphFragment &fragment, m_fragments) {
-            fragment.paint(painter);
-        }
-
         for (int ruler = 0; ruler != maxRuler; ++ruler) {
             m_rulers[ruler].paint(painter);
         }
@@ -309,6 +307,7 @@ bool ParagraphTool::createFragments()
     m_rulers[rightMarginRuler].clearFragments();
     m_rulers[topMarginRuler].clearFragments();
     m_rulers[bottomMarginRuler].clearFragments();
+    m_rulers[lineSpacingRuler].clearFragments();
 
     KoTextDocumentLayout *layout = static_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout());
     if (layout == NULL) {

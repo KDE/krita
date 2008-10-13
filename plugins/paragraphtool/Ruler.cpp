@@ -40,6 +40,7 @@ Ruler::Ruler(QObject *parent)
         m_active(false),
         m_focused(false),
         m_highlighted(false),
+        m_enabled(true),
         m_options(noOptions)
 {}
 
@@ -150,6 +151,10 @@ void Ruler::setMaximumValue(qreal value)
 
 void Ruler::setActive(bool active)
 {
+    if (!m_enabled) {
+        return;
+    }
+
     if (m_active == true && active == false && m_oldValue != m_value) {
         m_active = false;
         m_oldValue = m_value;
@@ -172,8 +177,17 @@ void Ruler::setHighlighted(bool highlighted)
     emit needsRepaint();
 }
 
+void Ruler::setEnabled(bool enabled)
+{
+    m_enabled = enabled;
+}
+
 RulerFragment *Ruler::hitTest(const QPointF &point)
 {
+    if (!m_enabled) {
+        return NULL;
+    }
+
     for (int fragment = 0; fragment != m_fragments.size(); ++fragment) {
         if (m_fragments[fragment].hitTest(point)) {
             return &m_fragments[fragment];

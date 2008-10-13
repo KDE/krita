@@ -52,42 +52,55 @@ void RulerFragment::paint(QPainter &painter) const
 
     painter.setWorldMatrix(m_matrix, true);
 
-    qreal oldValue = m_ruler->oldValue();
     qreal value = m_ruler->value();
 
-    // draw dark gray square for old value
-    painter.setPen(QPen(Qt::darkGray));
+    if (m_ruler->isEnabled()) {
+        qreal oldValue = m_ruler->oldValue();
 
-    if (value != 0.0)
-        painter.drawLine(QLineF(0.0, 0.0, 0.0, m_width));
+        // draw dark gray square for old value
+        painter.setPen(QPen(Qt::darkGray));
 
-    if (oldValue != value && oldValue != 0.0)
-        painter.drawLine(QLineF(oldValue, 0.0, oldValue, m_width));
+        if (value != 0.0) {
+            painter.drawLine(QLineF(0.0, 0.0, 0.0, m_width));
+        }
 
-    if (m_ruler->options() & Ruler::drawSides) {
-        painter.drawLine(QLineF(0.0, 0.0, oldValue, 0.0));
-        painter.drawLine(QLineF(0.0, m_width, oldValue, m_width));
-    }
+        if (oldValue != value && oldValue != 0.0) {
+            painter.drawLine(QLineF(oldValue, 0.0, oldValue, m_width));
+        }
 
-    // draw arrow and ruler line for current value
+        if (m_ruler->options() & Ruler::drawSides) {
+            painter.drawLine(QLineF(0.0, 0.0, oldValue, 0.0));
+            painter.drawLine(QLineF(0.0, m_width, oldValue, m_width));
+        }
 
-    if (m_ruler->isActive())
-        painter.setPen(m_ruler->activeColor());
-    else if (m_ruler->isHighlighted())
-        painter.setPen(m_ruler->highlightColor());
-    else if (m_ruler->isFocused())
-        painter.setPen(m_ruler->focusColor());
-    else
-        painter.setPen(m_ruler->normalColor());
+        // draw arrow and ruler line for current value
 
-    painter.drawLine(QLineF(value, 0.0, value, m_width));
+        if (m_ruler->isActive())
+            painter.setPen(m_ruler->activeColor());
+        else if (m_ruler->isHighlighted())
+            painter.setPen(m_ruler->highlightColor());
+        else if (m_ruler->isFocused())
+            painter.setPen(m_ruler->focusColor());
+        else
+            painter.setPen(m_ruler->normalColor());
 
-    painter.drawLine(QLineF(0.0, m_width / 2.0, value, m_width / 2.0));
+        painter.drawLine(QLineF(value, 0.0, value, m_width));
 
-    if (value >= 0.0) {
-        paintArrow(painter, QPointF(value, m_width / 2.0), 0.0, value);
+        painter.drawLine(QLineF(0.0, m_width / 2.0, value, m_width / 2.0));
+
+        if (value >= 0.0) {
+            paintArrow(painter, QPointF(value, m_width / 2.0), 0.0, value);
+        } else {
+            paintArrow(painter, QPointF(value, m_width / 2.0), 180.0, -value);
+        }
+
     } else {
-        paintArrow(painter, QPointF(value, m_width / 2.0), 180.0, -value);
+        // ruler is not enabled
+        painter.setPen(m_ruler->normalColor());
+        painter.drawLine(QLineF(0.0, 0.0, 0.0, m_width));
+        if (value != 0.0) {
+            painter.drawLine(QLineF(value, 0.0, value, m_width));
+        }
     }
 
     painter.restore();

@@ -110,6 +110,11 @@ public:
     }
     void setHighlighted(bool highlighted);
 
+    void setEnabled(bool enabled);
+    bool isEnabled() const {
+        return m_enabled;
+    }
+
     void increaseByStep() {
         setValue(value() + stepValue()); emit valueChanged(value());
     }
@@ -166,6 +171,7 @@ private:
     bool m_active;
     bool m_focused;
     bool m_highlighted;
+    bool m_enabled;
     int m_options;
 };
 

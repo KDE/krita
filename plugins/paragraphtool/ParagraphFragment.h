@@ -36,6 +36,7 @@ typedef enum {
     bottomMarginRuler,
     followingIndentRuler,
     firstIndentRuler,
+    lineSpacingRuler,
     maxRuler,
     noRuler
 } RulerIndex;
@@ -53,9 +54,6 @@ public:
     ParagraphFragment(Ruler* rulers, KoShape *shape, QTextBlock textBlock, KoParagraphStyle *style);
 
     ~ParagraphFragment() {};
-
-    // paint all rulers for this shape
-    void paint(QPainter &painter) const;
 
     RulerFragment *rulerFragment(RulerIndex ruler) { return &m_rulerFragments[ruler]; }
 

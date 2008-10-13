@@ -62,7 +62,6 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
             KoListLevelProperties llp;
             llp.setLevel(1);
             llp.setStyle(m_style);
-            llp.setIndent(15);
             llp.setListItemSuffix(KoListStyle::isNumberingStyle(style) ? "." : "");
             KoListStyle listStyle;
             listStyle.setLevelProperties(llp);

@@ -24,9 +24,9 @@
 #include <KoTextDocument.h>
 #include <KoList.h>
 #include <KoListLevelProperties.h>
+#include <kdebug.h>
 
 #include <QTextCursor>
-#include <QDebug>
 
 ChangeListLevelCommand::ChangeListLevelCommand(const QTextBlock &block, ChangeListLevelCommand::CommandType type, 
                                                int level, QUndoCommand *parent)
@@ -64,23 +64,16 @@ void ChangeListLevelCommand::redo()
     if (!textList)
         return;
     KoList *list = KoTextDocument(m_block.document()).list(textList);
-    if (list) {
-        QTextListFormat format = textList->format();
-        m_oldLevel = format.intProperty(KoListStyle::Level);
-        int newLevel = effectiveLevel(m_oldLevel);
-        if (!list->style()->hasLevelProperties(newLevel)) {
-            KoListLevelProperties llp = list->style()->levelProperties(newLevel);
-            llp.setIndent(newLevel * 15);
-            list->style()->setLevelProperties(llp);
-        }
-        list->add(m_block, newLevel);
-    } else {
-        QTextBlockFormat format = m_block.blockFormat();
-        m_oldLevel = format.intProperty(KoParagraphStyle::ListLevel);
-        format.setProperty(KoParagraphStyle::ListLevel, effectiveLevel(m_oldLevel));
-        QTextCursor cursor(m_block);
-        cursor.setBlockFormat(format);
+    Q_ASSERT(list);
+    m_oldLevel = list->level(m_block);
+    int newLevel = effectiveLevel(m_oldLevel);
+
+    if (!list->style()->hasLevelProperties(newLevel)) {
+        KoListLevelProperties llp = list->style()->levelProperties(newLevel);
+        llp.setIndent((newLevel-1) * 20); // make this configurable
+        list->style()->setLevelProperties(llp);
     }
+    list->add(m_block, newLevel);
 }
 
 void ChangeListLevelCommand::undo()
@@ -92,15 +85,8 @@ void ChangeListLevelCommand::undo()
     if (!textList)
         return;
     KoList *list = KoTextDocument(m_block.document()).list(textList);
-    if (list) {
-        QTextListFormat format = textList->format();
-        list->add(m_block, m_oldLevel);
-    } else {
-        QTextBlockFormat format = m_block.blockFormat();
-        format.setProperty(KoParagraphStyle::ListLevel, m_oldLevel);
-        QTextCursor cursor(m_block);
-        cursor.setBlockFormat(format);
-    }
+    Q_ASSERT(list);
+    list->add(m_block, m_oldLevel);
 }
 
 bool ChangeListLevelCommand::mergeWith(const QUndoCommand *other)

@@ -23,6 +23,7 @@
 #include <KoTextBlockData.h>
 #include <KoTextDocument.h>
 #include <QTextCursor>
+#include <KoTextDebug.h>
 
 #include <KoParagraphStyle.h>
 
@@ -38,7 +39,6 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
         m_level(level),
         m_flags(flags)
 {
-// kDebug() <<"ChangeListCommand" << style;
     Q_ASSERT(block.isValid());
     storeOldProperties();
     initLevel();
@@ -116,12 +116,15 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
     }
 
     if (m_flags & MergeWithAdjacentList) {
+        KoListLevelProperties llp = listStyle->levelProperties(m_level);
+
         // attempt to merge with previous block
         QTextBlock prev = m_block.previous();
         if (prev.isValid() && prev.textList()) {
             QTextListFormat format = prev.textList()->format();
-            if (format.intProperty(QTextListFormat::ListStyle) == static_cast<int>(m_style)
-                && format.intProperty(KoListStyle::Level) == m_level) {
+            QTextListFormat prevFormat;
+            llp.applyStyle(prevFormat);
+            if (prevFormat == format) {
                 m_list = document.list(prev);
                 if (m_list)
                     return;
@@ -132,8 +135,10 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
         QTextBlock next = m_block.next();
         if (next.isValid() && next.textList()) {
             QTextListFormat format = next.textList()->format();
-            if (format.intProperty(QTextListFormat::ListStyle) == static_cast<int>(m_style)
-                && format.intProperty(KoListStyle::Level) == m_level) {
+            QTextListFormat nextFormat;
+            llp.applyStyle(nextFormat);
+
+            if (nextFormat == format) {
                 m_list = document.list(next);
                 if (m_list)
                     return;

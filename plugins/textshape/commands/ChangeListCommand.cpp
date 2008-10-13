@@ -29,33 +29,47 @@
 #include <KLocale>
 #include <KDebug>
 
-ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style style, int level, QUndoCommand *parent)
+ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style style, int level,
+                                     ChangeListCommand::ChangeFlags flags, QUndoCommand *parent)
         : TextCommandBase(parent),
         m_block(block),
         m_list(0),
         m_style(style),
-        m_level(level)
+        m_level(level),
+        m_flags(flags)
 {
 // kDebug() <<"ChangeListCommand" << style;
     Q_ASSERT(block.isValid());
     storeOldProperties();
     initLevel();
-    initList();
+
+    KoListLevelProperties llp;
+    llp.setLevel(m_level);
+    llp.setStyle(m_style);
+    if (KoListStyle::isNumberingStyle(m_style))
+        llp.setListItemSuffix(".");
+    if (m_level > 1)
+        llp.setIndent((m_level-1) * 20); // make this configurable
+    KoListStyle listStyle;
+    listStyle.setLevelProperties(llp);
+
+    initList(&listStyle);
 
     setText(i18n("Change List"));
 }
 
-ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle *style, bool exact, QUndoCommand *parent)
+ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle *style, int level,
+                                     ChangeListCommand::ChangeFlags flags, QUndoCommand *parent)
         : TextCommandBase(parent),
-        m_block(block)
+          m_block(block),
+          m_list(0),
+          m_style(KoListStyle::None),
+          m_level(level),
+          m_flags(flags)
 {
     Q_ASSERT(block.isValid());
     Q_ASSERT(style);
     storeOldProperties();
-    if (! exact) {
-        // search for similar ones in the next / prev parags.
-        // TODO
-    }
     m_list = new KoList(block.document(), style);
     setText(i18n("Change List"));
 }
@@ -87,7 +101,7 @@ void ChangeListCommand::initLevel()
     Q_ASSERT(m_level != 0);
 }
 
-void ChangeListCommand::initList()
+void ChangeListCommand::initList(KoListStyle *listStyle)
 {
     KoTextDocument document(m_block.document());
 
@@ -95,41 +109,40 @@ void ChangeListCommand::initList()
     if (m_style == KoListStyle::None)
         return;
 
-    m_list = document.list(m_block);
-    if (m_list)
-        return;
+    if (m_flags & ModifyExistingList) {
+        m_list = document.list(m_block);
+        if (m_list)
+            return;
+    }
 
-    // attempt to merge with previous block
-    QTextBlock prev = m_block.previous();
-    if (prev.isValid() && prev.textList()) {
-        QTextListFormat format = prev.textList()->format();
-        if (format.intProperty(QTextListFormat::ListStyle) == static_cast<int>(m_style)
-            && format.intProperty(KoListStyle::Level) == m_level) {
-            m_list = document.list(prev);
-            if (m_list)
-                return;
+    if (m_flags & MergeWithAdjacentList) {
+        // attempt to merge with previous block
+        QTextBlock prev = m_block.previous();
+        if (prev.isValid() && prev.textList()) {
+            QTextListFormat format = prev.textList()->format();
+            if (format.intProperty(QTextListFormat::ListStyle) == static_cast<int>(m_style)
+                && format.intProperty(KoListStyle::Level) == m_level) {
+                m_list = document.list(prev);
+                if (m_list)
+                    return;
+            }
+        }
+
+        // attempt to merge with next block
+        QTextBlock next = m_block.next();
+        if (next.isValid() && next.textList()) {
+            QTextListFormat format = next.textList()->format();
+            if (format.intProperty(QTextListFormat::ListStyle) == static_cast<int>(m_style)
+                && format.intProperty(KoListStyle::Level) == m_level) {
+                m_list = document.list(next);
+                if (m_list)
+                    return;
+            }
         }
     }
 
-    // attempt to merge with next block
-    QTextBlock next = m_block.next();
-    if (next.isValid() && next.textList()) {
-        QTextListFormat format = next.textList()->format();
-        if (format.intProperty(QTextListFormat::ListStyle) == static_cast<int>(m_style)
-            && format.intProperty(KoListStyle::Level) == m_level) {
-            m_list = document.list(next);
-            if (m_list)
-                return;
-        }
-    }
-
-    KoListLevelProperties llp;
-    llp.setLevel(m_level);
-    llp.setStyle(m_style);
-    llp.setListItemSuffix(KoListStyle::isNumberingStyle(m_style) ? "." : "");
-    KoListStyle listStyle;
-    listStyle.setLevelProperties(llp);
-    m_list = new KoList(m_block.document(), &listStyle);
+    KoList::Type type = m_flags & CreateNumberedParagraph ? KoList::NumberedParagraph : KoList::TextList;
+    m_list = new KoList(m_block.document(), listStyle, type);
 }
 
 void ChangeListCommand::recalcList(const QTextBlock &block) const
@@ -145,7 +158,7 @@ void ChangeListCommand::redo()
     UndoRedoFinalizer finalizer(this, m_tool);
     if (m_list == 0) { // no list item (anymore)
         KoList::remove(m_block);
-    } else if (m_block.textList()) {
+    } else if ((m_flags & ModifyExistingList) && m_block.textList()) {
         KoListStyle *listStyle = m_list->style();
         KoListLevelProperties llp = listStyle->levelProperties(m_level);
         if (llp.style() != m_style) {

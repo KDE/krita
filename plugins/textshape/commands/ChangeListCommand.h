@@ -35,13 +35,23 @@
 class ChangeListCommand : public TextCommandBase
 {
 public:
+    enum ChangeFlag {
+        ModifyExistingList = 1,
+        MergeWithAdjacentList = 2,
+        Default = ModifyExistingList | MergeWithAdjacentList,
+        CreateNumberedParagraph = 4
+    };
+
+    Q_DECLARE_FLAGS(ChangeFlags, ChangeFlag)
+
     /**
      * Change the list property of 'block'.
      * @param block the paragraph to change the list property of
      * @param style indicates which style to use.
      * @param parent the parent undo command for macro functionality
      */
-    ChangeListCommand(const QTextBlock &block, KoListStyle::Style style, int level = 0, QUndoCommand *parent = 0);
+    ChangeListCommand(const QTextBlock &block, KoListStyle::Style style, int level = 0, 
+                      ChangeFlags flags = Default, QUndoCommand *parent = 0);
 
     /**
      * Change the list property of 'block'.
@@ -50,7 +60,8 @@ public:
      * @param exact if true then the actual style 'style' should be set, if false we possibly  merge with another similar style that is near the block
      * @param parent the parent undo command for macro functionality
      */
-    ChangeListCommand(const QTextBlock &block, KoListStyle *style, bool exact = true, QUndoCommand *parent = 0);
+    ChangeListCommand(const QTextBlock &block, KoListStyle *style, int level = 0,
+                      ChangeFlags flags = Default, QUndoCommand *parent = 0);
     ~ChangeListCommand();
 
     /// redo the command
@@ -69,13 +80,16 @@ private:
     void storeOldProperties();
     void recalcList(const QTextBlock &block) const;
     void initLevel();
-    void initList();
+    void initList(KoListStyle *style);
 
     QTextBlock m_block;
     KoList *m_list;
     KoListStyle::Style m_style;
     int m_level;
+    ChangeFlags m_flags;
     KoListLevelProperties m_formerProperties;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(ChangeListCommand::ChangeFlags);
 
 #endif

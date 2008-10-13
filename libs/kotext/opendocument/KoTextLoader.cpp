@@ -35,7 +35,6 @@
 #include <KoShape.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
-#include <KoImageData.h>
 #include <KoTextAnchor.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextShapeData.h>
@@ -47,7 +46,6 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoVariableRegistry.h>
 #include <KoProperties.h>
-#include <KoImageCollection.h>
 #include <KoTextBlockData.h>
 
 #include "styles/KoStyleManager.h"

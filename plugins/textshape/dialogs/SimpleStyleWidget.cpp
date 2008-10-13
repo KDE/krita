@@ -136,6 +136,7 @@ void SimpleStyleWidget::setStyleManager(KoStyleManager *sm)
 
 void SimpleStyleWidget::setCurrentFormat(const QTextCharFormat& format)
 {
+    Q_UNUSED(format);
 }
 
 void SimpleStyleWidget::listStyleChanged(int row)
@@ -143,7 +144,7 @@ void SimpleStyleWidget::listStyleChanged(int row)
     if (m_blockSignals) return;
 
     m_tool->addCommand(new ChangeListCommand(m_currentBlock,
-                       static_cast<KoListStyle::Style>(widget.listType->itemData(row).toInt())));
+                       static_cast<KoListStyle::Style>(widget.listType->itemData(row).toInt()), 0 /* level */));
 }
 
 void SimpleStyleWidget::directionChangeRequested()

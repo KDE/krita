@@ -797,7 +797,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
                 addCommand(lin);
             } else {
                 // backspace on numbered, empty parag, removes numbering.
-                ChangeListCommand *clc = new ChangeListCommand(m_caret.block(), KoListStyle::None);
+                ChangeListCommand *clc = new ChangeListCommand(m_caret.block(), KoListStyle::None, 0 /* level */);
                 addCommand(clc);
             }
         } else {

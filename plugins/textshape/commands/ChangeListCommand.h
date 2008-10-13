@@ -41,7 +41,7 @@ public:
      * @param style indicates which style to use.
      * @param parent the parent undo command for macro functionality
      */
-    ChangeListCommand(const QTextBlock &block, KoListStyle::Style style, QUndoCommand *parent = 0);
+    ChangeListCommand(const QTextBlock &block, KoListStyle::Style style, int level = 0, QUndoCommand *parent = 0);
 
     /**
      * Change the list property of 'block'.
@@ -68,10 +68,12 @@ public:
 private:
     void storeOldProperties();
     void recalcList(const QTextBlock &block) const;
+    void initLevel();
 
     QTextBlock m_block;
     KoList *m_list;
     KoListStyle::Style m_style;
+    int m_level;
     KoListLevelProperties m_formerProperties;
 };
 

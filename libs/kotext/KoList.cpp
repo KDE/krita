@@ -34,7 +34,7 @@ class KoList::Private
 {
 public:
     Private(KoList *q, const QTextDocument *document)
-    : q(q), style(0), textLists(10), document(document)
+    : q(q), type(KoList::TextList), style(0), textLists(10), document(document)
     {
     }
 
@@ -55,16 +55,18 @@ public:
     }
 
     KoList *q;
+    KoList::Type type;
     KoListStyle *style;
     QVector<QPointer<QTextList> > textLists;
     const QTextDocument *document;
     QMap<int, QVariant> properties;
 }
 ;
-KoList::KoList(const QTextDocument *document, KoListStyle *style)
+KoList::KoList(const QTextDocument *document, KoListStyle *style, KoList::Type type)
     : QObject(const_cast<QTextDocument *>(document)), d(new Private(this, document))
 {
     Q_ASSERT(document);
+    d->type = type;
     setStyle(style);
     KoTextDocument(document).addList(this);
 }
@@ -140,7 +142,11 @@ void KoList::add(const QTextBlock &block, int level)
     } else {
         blockFormat.clearProperty(KoParagraphStyle::ListStyleId);
     }
-    blockFormat.clearProperty(KoParagraphStyle::ListLevel);
+    if (d->type == KoList::TextList) {
+        blockFormat.clearProperty(KoParagraphStyle::ListLevel);
+    } else {
+        blockFormat.setProperty(KoParagraphStyle::ListLevel, level);
+    }
     cursor.setBlockFormat(blockFormat);
 
     d->invalidate(block);

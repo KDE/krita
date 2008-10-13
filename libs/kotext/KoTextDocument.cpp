@@ -101,8 +101,6 @@ void KoTextDocument::removeList(KoList *list)
 
 KoList *KoTextDocument::list(const QTextBlock &block) const
 {
-    if (block.blockFormat().hasProperty(KoParagraphStyle::ListLevel))
-        return 0;
     QTextList *textList = block.textList();
     if (!textList)
         return 0;

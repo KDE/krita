@@ -34,8 +34,13 @@ class KOTEXT_EXPORT KoList : public QObject
 {
     Q_OBJECT
 public:
+    enum Type {
+        TextList,
+        NumberedParagraph
+    };
+
     /// Constructor
-    KoList(const QTextDocument *document, KoListStyle *style);
+    KoList(const QTextDocument *document, KoListStyle *style, Type type = TextList);
 
     /// Destructor
     ~KoList();

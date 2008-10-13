@@ -69,6 +69,7 @@ private:
     void storeOldProperties();
     void recalcList(const QTextBlock &block) const;
     void initLevel();
+    void initList();
 
     QTextBlock m_block;
     KoList *m_list;

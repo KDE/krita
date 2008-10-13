@@ -40,36 +40,7 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
     Q_ASSERT(block.isValid());
     storeOldProperties();
     initLevel();
-    KoTextDocument document(block.document());
-
-    if (style != KoListStyle::None) {
-        m_list = document.list(block);
-        QTextBlock prev = block.previous();
-        if (m_list == 0 && prev.isValid() && prev.textList()) {
-            QTextListFormat format = prev.textList()->format();
-            if (format.intProperty(QTextListFormat::ListStyle) == static_cast<int>(style)
-                && format.intProperty(KoListStyle::Level) == m_level) { // merge with prev block
-                m_list = document.list(prev);
-            }
-        }
-        QTextBlock next = block.next();
-        if (m_list == 0 && next.isValid() && next.textList()) {
-            QTextListFormat format = next.textList()->format();
-            if (format.intProperty(QTextListFormat::ListStyle) == static_cast<int>(style)
-                && format.intProperty(KoListStyle::Level) == m_level) { // merge with next block
-                m_list = document.list(next);
-            }
-        }
-        if (m_list == 0) { // create a new one
-            KoListLevelProperties llp;
-            llp.setLevel(m_level);
-            llp.setStyle(m_style);
-            llp.setListItemSuffix(KoListStyle::isNumberingStyle(style) ? "." : "");
-            KoListStyle listStyle;
-            listStyle.setLevelProperties(llp);
-            m_list = new KoList(block.document(), &listStyle);
-        }
-    }
+    initList();
 
     setText(i18n("Change List"));
 }
@@ -114,6 +85,51 @@ void ChangeListCommand::initLevel()
         m_level = 1;
     }
     Q_ASSERT(m_level != 0);
+}
+
+void ChangeListCommand::initList()
+{
+    KoTextDocument document(m_block.document());
+
+    m_list = 0;
+    if (m_style == KoListStyle::None)
+        return;
+
+    m_list = document.list(m_block);
+    if (m_list)
+        return;
+
+    // attempt to merge with previous block
+    QTextBlock prev = m_block.previous();
+    if (prev.isValid() && prev.textList()) {
+        QTextListFormat format = prev.textList()->format();
+        if (format.intProperty(QTextListFormat::ListStyle) == static_cast<int>(m_style)
+            && format.intProperty(KoListStyle::Level) == m_level) {
+            m_list = document.list(prev);
+            if (m_list)
+                return;
+        }
+    }
+
+    // attempt to merge with next block
+    QTextBlock next = m_block.next();
+    if (next.isValid() && next.textList()) {
+        QTextListFormat format = next.textList()->format();
+        if (format.intProperty(QTextListFormat::ListStyle) == static_cast<int>(m_style)
+            && format.intProperty(KoListStyle::Level) == m_level) {
+            m_list = document.list(next);
+            if (m_list)
+                return;
+        }
+    }
+
+    KoListLevelProperties llp;
+    llp.setLevel(m_level);
+    llp.setStyle(m_style);
+    llp.setListItemSuffix(KoListStyle::isNumberingStyle(m_style) ? "." : "");
+    KoListStyle listStyle;
+    listStyle.setLevelProperties(llp);
+    m_list = new KoList(m_block.document(), &listStyle);
 }
 
 void ChangeListCommand::recalcList(const QTextBlock &block) const

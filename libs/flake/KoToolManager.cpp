@@ -348,7 +348,7 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary)
             this, SIGNAL(changedStatusText(const QString &)));
 
     // emit a empty status text to clear status text from last active tool
-    emit changedStatusText("");
+    emit changedStatusText(QString());
 
     // we expect the tool to emit a cursor on activation.  This is for quick-fail :)
     d->canvasData->canvas->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
@@ -456,7 +456,7 @@ void KoToolManager::attachCanvas(KoCanvasController *controller)
 void KoToolManager::movedFocus(QWidget *from, QWidget *to)
 {
     Q_UNUSED(from);
-    if (to == 0 || d->canvasData && to == d->canvasData->canvas)
+    if (to == 0 || (d->canvasData && to == d->canvasData->canvas))
         return;
 
     KoCanvasController *newCanvas = 0;
@@ -744,11 +744,11 @@ void KoToolManager::registerToolProxy(KoToolProxy *proxy, KoCanvasBase *canvas)
 void KoToolManager::injectDeviceEvent(KoDeviceEvent * event)
 {
     if (d->canvasData->canvas->canvas()) {
-        if (event->type() == KoDeviceEvent::ButtonPressed)
+        if (static_cast<KoDeviceEvent::Type>(event->type()) == KoDeviceEvent::ButtonPressed)
             d->canvasData->activeTool->customPressEvent(event->pointerEvent());
-        else if (event->type() == KoDeviceEvent::ButtonReleased)
+        else if (static_cast<KoDeviceEvent::Type>(event->type()) == KoDeviceEvent::ButtonReleased)
             d->canvasData->activeTool->customReleaseEvent(event->pointerEvent());
-        else if (event->type() ==  KoDeviceEvent::PositionChanged)
+        else if (static_cast<KoDeviceEvent::Type>(event->type()) ==  KoDeviceEvent::PositionChanged)
             d->canvasData->activeTool->customMoveEvent(event->pointerEvent());
     }
 }

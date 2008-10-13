@@ -79,6 +79,8 @@ public:
     void setContinueNumbering(int level, bool enable);
     bool continueNumbering(int level) const;
 
+    static int level(const QTextBlock &block);
+
 private:
     class Private;
     Private *d;

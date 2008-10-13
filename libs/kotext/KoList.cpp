@@ -239,5 +239,17 @@ bool KoList::continueNumbering(int level) const
     return bitArray.testBit(level-1);
 }
 
+int KoList::level(const QTextBlock &block)
+{
+    if (!block.textList())
+        return 0;
+    int l = block.blockFormat().intProperty(KoParagraphStyle::ListLevel);
+    if (!l) { // not a numbered-paragraph
+        QTextListFormat format = block.textList()->format();
+        l = format.intProperty(KoListStyle::Level);
+    }
+    return l;
+}
+
 #include "KoList.moc"
 

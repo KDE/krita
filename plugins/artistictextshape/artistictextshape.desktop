@@ -6,6 +6,7 @@ Name[pt]=Forma de Texto Artístico
 Name[pt_BR]=Forma de Texto Artístico
 Name[sv]=Artistisk textform
 Name[uk]=Форма-художній текст
+Name[zh_TW]=藝術文字元件
 X-KDE-ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=artistictextshape

@@ -38,8 +38,8 @@ public:
     enum ChangeFlag {
         ModifyExistingList = 1,
         MergeWithAdjacentList = 2,
-        Default = ModifyExistingList | MergeWithAdjacentList,
-        CreateNumberedParagraph = 4
+        MergeExactly = 4,
+        CreateNumberedParagraph = 8
     };
 
     Q_DECLARE_FLAGS(ChangeFlags, ChangeFlag)
@@ -51,7 +51,8 @@ public:
      * @param parent the parent undo command for macro functionality
      */
     ChangeListCommand(const QTextBlock &block, KoListStyle::Style style, int level = 0, 
-                      ChangeFlags flags = Default, QUndoCommand *parent = 0);
+                      int flags = ModifyExistingList | MergeWithAdjacentList, 
+                      QUndoCommand *parent = 0);
 
     /**
      * Change the list property of 'block'.
@@ -61,7 +62,8 @@ public:
      * @param parent the parent undo command for macro functionality
      */
     ChangeListCommand(const QTextBlock &block, KoListStyle *style, int level = 0,
-                      ChangeFlags flags = Default, QUndoCommand *parent = 0);
+                      int flags = ModifyExistingList | MergeWithAdjacentList | MergeExactly, 
+                      QUndoCommand *parent = 0);
     ~ChangeListCommand();
 
     /// redo the command
@@ -80,11 +82,12 @@ private:
     void storeOldProperties();
     int detectLevel(int givenLevel);
     void initList(KoListStyle *style, int level);
+    bool formatsEqual(const KoListLevelProperties &llp, const QTextListFormat &format);
 
     QTextBlock m_block;
     KoList *m_list, *m_oldList;
     KoListLevelProperties m_newProperties;
-    ChangeFlags m_flags;
+    int m_flags;
     KoListLevelProperties m_formerProperties;
 };
 

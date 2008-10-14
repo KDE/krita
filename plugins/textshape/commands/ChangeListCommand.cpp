@@ -31,7 +31,7 @@
 #include <KDebug>
 
 ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style style, int level,
-                                     ChangeListCommand::ChangeFlags flags, QUndoCommand *parent)
+                                     int flags, QUndoCommand *parent)
         : TextCommandBase(parent),
         m_block(block),
         m_list(0),
@@ -45,8 +45,10 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
     KoListLevelProperties llp;
     llp.setLevel(level);
     llp.setStyle(style);
-    if (KoListStyle::isNumberingStyle(style))
+    if (KoListStyle::isNumberingStyle(style)) {
+        llp.setStartValue(1);
         llp.setListItemSuffix(".");
+    }
     if (level > 1)
         llp.setIndent((level-1) * 20); // make this configurable
     KoListStyle listStyle;
@@ -58,7 +60,7 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
 }
 
 ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle *style, int level,
-                                     ChangeListCommand::ChangeFlags flags, QUndoCommand *parent)
+                                     int flags, QUndoCommand *parent)
         : TextCommandBase(parent),
           m_block(block),
           m_list(0),
@@ -98,6 +100,17 @@ int ChangeListCommand::detectLevel(int givenLevel)
     return 1;
 }
 
+bool ChangeListCommand::formatsEqual(const KoListLevelProperties &llp, const QTextListFormat &format)
+{
+    if (m_flags & MergeExactly) {
+        QTextListFormat listFormat;
+        llp.applyStyle(listFormat);
+        return listFormat == format;
+    } else {
+        return llp.style() == format.style();
+    }
+}
+
 void ChangeListCommand::initList(KoListStyle *listStyle, int level)
 {
     KoTextDocument document(m_block.document());
@@ -120,10 +133,7 @@ void ChangeListCommand::initList(KoListStyle *listStyle, int level)
         // attempt to merge with previous block
         QTextBlock prev = m_block.previous();
         if (prev.isValid() && prev.textList()) {
-            QTextListFormat format = prev.textList()->format();
-            QTextListFormat prevFormat;
-            llp.applyStyle(prevFormat);
-            if (prevFormat == format) {
+            if (formatsEqual(llp, prev.textList()->format())) {
                 m_list = document.list(prev);
                 if (m_list)
                     return;
@@ -133,11 +143,7 @@ void ChangeListCommand::initList(KoListStyle *listStyle, int level)
         // attempt to merge with next block
         QTextBlock next = m_block.next();
         if (next.isValid() && next.textList()) {
-            QTextListFormat format = next.textList()->format();
-            QTextListFormat nextFormat;
-            llp.applyStyle(nextFormat);
-
-            if (nextFormat == format) {
+            if (formatsEqual(llp, next.textList()->format())) {
                 m_list = document.list(next);
                 if (m_list)
                     return;

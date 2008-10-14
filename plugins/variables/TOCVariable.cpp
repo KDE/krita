@@ -144,10 +144,9 @@ void TOCSource::buildFromDocument(const QTextDocument *source, QTextCursor *targ
 bool TOCSourceTemplate::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context)
 {
     KoSharedLoadingData * sharedData = context.sharedData(KOTEXT_SHARED_LOADING_ID);
-    KoTextSharedLoadingData * textSharedData;
-    if (sharedData) {
-        textSharedData = dynamic_cast<KoTextSharedLoadingData *>(sharedData);
-    }
+    Q_ASSERT( sharedData );
+    KoTextSharedLoadingData * textSharedData = dynamic_cast<KoTextSharedLoadingData *>(sharedData);
+    Q_ASSERT( textSharedData );
     m_style = textSharedData->paragraphStyle(element.attributeNS(KoXmlNS::text, "style-name", ""), false);
     if (!m_style) {
         m_style = textSharedData->paragraphStyle(element.attributeNS(KoXmlNS::text, "style-name", ""), true);

@@ -231,8 +231,14 @@ void ArtisticTextTool::deactivate()
 void ArtisticTextTool::updateActions()
 {
     m_attachPath->setEnabled( m_path != 0 );
-    m_detachPath->setEnabled( m_currentShape->isOnPath() );
-    m_convertText->setEnabled( m_currentShape != 0 );
+    if( m_currentShape )
+    {
+        m_detachPath->setEnabled( m_currentShape->isOnPath() );
+        m_convertText->setEnabled( true );
+    } else {
+        m_detachPath->setEnabled( false );
+        m_convertText->setEnabled( false );
+    }
 }
 
 void ArtisticTextTool::attachPath()

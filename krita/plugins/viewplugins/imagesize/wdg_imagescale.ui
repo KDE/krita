@@ -349,6 +349,9 @@
       </item>
       <item row="2" column="1" >
        <widget class="QCheckBox" name="chkPercentage" >
+        <property name="enabled" >
+         <bool>true</bool>
+        </property>
         <property name="text" >
          <string>sizes as percentage %</string>
         </property>
@@ -356,6 +359,9 @@
       </item>
       <item row="2" column="0" >
        <widget class="QLabel" name="labelPercentage" >
+        <property name="enabled" >
+         <bool>true</bool>
+        </property>
         <property name="text" >
          <string>Specify:</string>
         </property>

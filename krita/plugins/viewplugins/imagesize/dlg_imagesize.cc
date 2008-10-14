@@ -67,6 +67,8 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     slotAspectChanged(true);
 
     m_page->chkPercentage->setEnabled(false);
+    m_page->chkPercentage->hide();
+    m_page->labelPercentage->hide();
 
     setMainWidget(m_page);
     resize(m_page->sizeHint());

@@ -22,6 +22,7 @@
 #include <KoCanvasController.h>
 #include <KoToolManager.h>
 #include <KoShapeLayer.h>
+#include <KoInteractionTool.h>
 
 #include <KDebug>
 #include <QLayout>
@@ -395,7 +396,7 @@ void KoToolBox::setButtonsVisible(const KoCanvasController *canvas, const QList<
         return;
     foreach(QToolButton *button, d->visibilityCodes.keys()) {
         QString code = d->visibilityCodes.value(button);
-        if(code == "flake/always")
+        if (code.startsWith(QLatin1String("flake/")))
             continue;
         if(code.isEmpty()) {
             button->setVisible(true);
@@ -411,8 +412,13 @@ void KoToolBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeL
     if(canvas->canvas() != d->canvas)
         return;
     const bool enabled = layer == 0 || (layer->isEditable() && layer->isVisible());
-    foreach (QToolButton *button, d->visibilityCodes.keys())
+    foreach (QToolButton *button, d->visibilityCodes.keys()) {
+        if (d->visibilityCodes[button] == "flake/always")
+            continue;
+        if (!enabled && button->isChecked())
+            KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
         button->setEnabled(enabled);
+    }
 }
 
 void KoToolBox::setCanvas(KoCanvasBase *canvas) {

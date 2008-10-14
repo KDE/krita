@@ -132,6 +132,11 @@ public:
         <td>'flake/always'</td>
         <td>Tool will always be visible.</td></tr>
      <tr>
+        <td>'main'</td>
+        <td>'flake/edit'</td>
+        <td>Tool will be visible no matter which shape is selected (if any), but only
+            be enabled when the current layer is editable.</td></tr>
+     <tr>
         <td>'dynamic'</td>
         <td>Foo</td>
         <td>Tool will only be visible when shape with shapeId 'Foo' is in the selection.</td></tr>

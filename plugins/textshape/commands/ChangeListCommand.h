@@ -78,12 +78,11 @@ public:
 
 private:
     void storeOldProperties();
-    void recalcList(const QTextBlock &block) const;
     int detectLevel(int givenLevel);
     void initList(KoListStyle *style, int level);
 
     QTextBlock m_block;
-    KoList *m_list;
+    KoList *m_list, *m_oldList;
     KoListLevelProperties m_newProperties;
     ChangeFlags m_flags;
     KoListLevelProperties m_formerProperties;

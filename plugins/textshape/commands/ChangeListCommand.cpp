@@ -35,6 +35,7 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
         : TextCommandBase(parent),
         m_block(block),
         m_list(0),
+        m_oldList(0),
         m_flags(flags)
 {
     Q_ASSERT(block.isValid());
@@ -61,6 +62,7 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle *style
         : TextCommandBase(parent),
           m_block(block),
           m_list(0),
+          m_oldList(0),
           m_flags(flags)
 {
     Q_ASSERT(block.isValid());
@@ -101,6 +103,7 @@ void ChangeListCommand::initList(KoListStyle *listStyle, int level)
     KoTextDocument document(m_block.document());
 
     m_list = 0;
+    m_oldList = document.list(m_block);
     m_newProperties = listStyle->levelProperties(level);
     if (m_newProperties.style() == KoListStyle::None)
         return;
@@ -146,13 +149,6 @@ void ChangeListCommand::initList(KoListStyle *listStyle, int level)
     m_list = new KoList(m_block.document(), listStyle, type);
 }
 
-void ChangeListCommand::recalcList(const QTextBlock &block) const
-{
-    KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(block.userData());
-    if (userData)
-        userData->setCounterWidth(-1.0);
-}
-
 void ChangeListCommand::redo()
 {
     TextCommandBase::redo();
@@ -176,13 +172,14 @@ void ChangeListCommand::undo()
     TextCommandBase::undo();
     UndoRedoFinalizer finalizer(this, m_tool);
 
-    if (m_formerProperties.style() == KoListStyle::None)
-        return;
-    Q_ASSERT(m_block.textList());
-    QTextListFormat format;
-    m_formerProperties.applyStyle(format);
-    m_block.textList()->setFormat(format);
-    recalcList(m_block);
+    if (m_formerProperties.style() == KoListStyle::None) {
+        KoList::remove(m_block);
+    } else if ((m_flags & ModifyExistingList) && m_block.textList()) {
+        KoListStyle *listStyle = m_oldList->style();
+        listStyle->setLevelProperties(m_formerProperties);
+    } else {
+        m_oldList->add(m_block, m_formerProperties.level());
+    }
 }
 
 bool ChangeListCommand::mergeWith(const QUndoCommand *other)

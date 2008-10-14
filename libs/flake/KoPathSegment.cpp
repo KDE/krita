@@ -754,6 +754,9 @@ QPair<KoPathSegment, KoPathSegment> KoPathSegment::splitAt(qreal t) const
 
 void KoPathSegment::deCasteljau(qreal t, QPointF *p1, QPointF *p2, QPointF *p3, QPointF *p4, QPointF *p5) const
 {
+    if( ! isValid() )
+      return;
+    
     int deg = degree();
     QPointF q[4];
 

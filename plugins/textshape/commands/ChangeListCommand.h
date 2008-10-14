@@ -89,6 +89,6 @@ private:
     KoListLevelProperties m_formerProperties;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(ChangeListCommand::ChangeFlags);
+Q_DECLARE_OPERATORS_FOR_FLAGS(ChangeListCommand::ChangeFlags)
 
 #endif

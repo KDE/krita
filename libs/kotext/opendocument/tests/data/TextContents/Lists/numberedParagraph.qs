@@ -6,6 +6,7 @@ var listFormat = QTextListFormat.clone(defaultListFormat);
 listFormat.setStyle(QTextListFormat.ListDecimal);
 setFormatProperty(listFormat, KoListStyle.ListItemSuffix, ".");
 setFormatProperty(listFormat, KoListStyle.StartValue, 1);
+setFormatProperty(listFormat, KoListStyle.DisplayLevel, 1);
 
 var level1Format = QTextBlockFormat.clone(defaultBlockFormat);
 setFormatProperty(level1Format, KoParagraphStyle.ListLevel, 1);
@@ -22,6 +23,7 @@ cursor.insertText("Two", defaultListItemFormat);
 cursor.insertBlock(level2Format);
 var listFormat2 = QTextListFormat.clone(listFormat);
 setFormatProperty(listFormat2, KoListStyle.Level, 2);
+setFormatProperty(listFormat2, KoListStyle.DisplayLevel, 2);
 var list2 = cursor.createList(listFormat2);
 cursor.insertText("Two.One", defaultListItemFormat);
 cursor.insertBlock();

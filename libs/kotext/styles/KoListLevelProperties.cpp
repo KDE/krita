@@ -408,9 +408,8 @@ void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlEle
         const QString suffix = style.attributeNS(KoXmlNS::style, "num-suffix", QString());
         if (! suffix.isNull())
             setListItemSuffix(suffix);
-        const QString startValue = style.attributeNS(KoXmlNS::text, "start-value", QString());
-        if (! startValue.isEmpty())
-            setStartValue(startValue.toInt());
+        const QString startValue = style.attributeNS(KoXmlNS::text, "start-value", QString("1"));
+        setStartValue(startValue.toInt());
     } else { // if not defined, we have do nothing
         kDebug(32500) << "stylename else:" << style.localName() << "level=" << level << "displayLevel=" << displayLevel;
         setStyle(KoListStyle::DecimalItem);

@@ -280,7 +280,7 @@ void AutocorrectConfig::enableAddRemoveButton()
     else
         currentRow = widget.tableWidget->currentRow();
 
-    bool enable;
+    bool enable = false;
     if (currentRow == -1 || find.isEmpty() || replace.isEmpty()) // disable if no text in find/replace
         enable = !(find.isEmpty() || replace.isEmpty());
     else if (find == widget.tableWidget->item(currentRow, 0)->text()) {

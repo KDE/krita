@@ -73,8 +73,13 @@ KoStyleManager::KoStyleManager(QObject *parent)
     charStyle->setFontPointSize(12.0);
     add(d->defaultParagraphStyle);
 
-    // Modify the KoListLevelProperties constructor to provide defaults for the list-style
     d->defaultListStyle = new KoListStyle(this);
+    KoListLevelProperties llp;
+    llp.setLevel(1);
+    llp.setStartValue(1);
+    llp.setStyle(KoListStyle::DecimalItem);
+    llp.setListItemSuffix(".");
+    d->defaultListStyle->setLevelProperties(llp);
 }
 
 KoStyleManager::~KoStyleManager()

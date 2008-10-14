@@ -3,6 +3,7 @@ include("common.qs");
 var listFormat = QTextListFormat.clone(defaultListFormat);
 listFormat.setStyle(QTextListFormat.ListDecimal);
 setFormatProperty(listFormat, KoListStyle.ListItemSuffix, ".");
+setFormatProperty(listFormat, KoListStyle.StartValue, 1);
 var list = cursor.createList(listFormat);
 cursor.insertText("how are you doing.", defaultListItemFormat);
 

@@ -176,6 +176,15 @@ void KoListStyle::loadOdf(KoOdfLoadingContext& context, const KoXmlElement& styl
             properties.setStyleId(d->styleId);
         setLevelProperties(properties);
     }
+
+    if (d->levels.isEmpty()) {
+        KoListLevelProperties llp;
+        llp.setLevel(1);
+        llp.setStartValue(1);
+        llp.setStyle(KoListStyle::DecimalItem);
+        llp.setListItemSuffix(".");
+        setLevelProperties(llp);
+    }
 }
 
 void KoListStyle::saveOdf(KoGenStyle &style)

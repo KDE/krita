@@ -44,9 +44,6 @@ public:
 KoListLevelProperties::KoListLevelProperties()
         : d(new Private())
 {
-    setLevel(1);
-    setStartValue(1);
-    setStyle(KoListStyle::DiscItem);
 }
 
 KoListLevelProperties::KoListLevelProperties(const KoListLevelProperties &other)

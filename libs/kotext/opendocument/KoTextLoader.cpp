@@ -173,7 +173,7 @@ void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
 
     startBody(KoXml::childNodesCount(bodyElem));
     KoXmlElement tag;
-    bool handledTag;
+    bool handledTag = false;
     bool firstTime = true;
     forEachElement(tag, bodyElem) {
         if (! tag.isNull()) {

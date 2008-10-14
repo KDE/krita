@@ -186,12 +186,13 @@ void StyleManager::save()
         KoParagraphStyle *orig = m_styleManager->paragraphStyle(styleId);
         KoParagraphStyle *altered = m_alteredParagraphStyles[styleId];
         if (orig == 0) { // new one
-            QListWidgetItem *item;
+            QListWidgetItem *item = 0;
             for (int i = 0; i < widget.styles->count(); i++) {
                 item = widget.styles->item(i);
                 if (item->data(PARAGRAPH_STYLE).toInt() == altered->styleId())
                     break;
             }
+            Q_ASSERT( item );
             Q_ASSERT(item->data(PARAGRAPH_STYLE).toInt() == altered->styleId()); // assert that the style is in the list
             m_styleManager->add(altered);
             item->setData(PARAGRAPH_STYLE, altered->styleId());

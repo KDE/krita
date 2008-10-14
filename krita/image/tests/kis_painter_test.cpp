@@ -48,16 +48,16 @@ void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)(const KoCo
         QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor(csId);
         if (profiles.size() == 0) {
             const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(csId, 0);
-            if (cs->compositeOp(COMPOSITE_OVER) != 0) {
-                if (cs)(this->*funcPtr)(cs);
+            if (cs && cs->compositeOp(COMPOSITE_OVER) != 0) {
+                (this->*funcPtr)(cs);
             } else {
                 dbgImage << "Cannot bitBlt for cs" << csId;
             }
         } else {
             foreach(const KoColorProfile * profile, profiles) {
                 const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(csId, profile);
-                if (cs->compositeOp(COMPOSITE_OVER) != 0) {
-                    if (cs)(this->*funcPtr)(cs);
+                if (cs && cs->compositeOp(COMPOSITE_OVER) != 0) {
+                    (this->*funcPtr)(cs);
                 } else {
                     dbgImage << "Cannot bitBlt for cs" << csId;
                 }

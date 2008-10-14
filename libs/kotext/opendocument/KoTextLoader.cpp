@@ -479,6 +479,7 @@ void KoTextLoader::loadNote(const KoXmlElement& noteElem, QTextCursor& cursor)
             textObjectManager->insertInlineObject(cursor, note);
         } else {
             kDebug(32500) << "Error while loading the note !";
+            delete note;
         }
     }
 }

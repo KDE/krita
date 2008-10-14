@@ -129,11 +129,15 @@ void TOCSource::buildFromDocument(const QTextDocument *source, QTextCursor *targ
             KoShape *shape = docLayout->shapeForPosition(block.position());
             if (shape) {
                 KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData *>(shape->userData());
-                target->insertText("TOC entry " +
-                                   QString::number(outlineLevel) + " :" + block.text() +
-                                   ";page" + QString::number(shapeData->page()->pageNumber() + 1)
-                                  );
-                target->insertBlock();
+                Q_ASSERT( shapeData );
+                if( shapeData )
+                {
+                    target->insertText("TOC entry " +
+                                       QString::number(outlineLevel) + " :" + block.text() +
+                                       ";page" + QString::number(shapeData->page()->pageNumber() + 1)
+                                      );
+                    target->insertBlock();
+                }
             }
         }
         block = block.next();

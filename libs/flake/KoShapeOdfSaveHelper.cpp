@@ -25,7 +25,7 @@
 
 struct KoShapeOdfSaveHelper::Private {
     Private(QList<KoShape *> shapes)
-            : shapes(shapes) {}
+    : shapes(shapes) {}
 
     QList<KoShape *> shapes;
 };
@@ -48,6 +48,7 @@ bool KoShapeOdfSaveHelper::writeBody()
     bodyWriter.startElement("office:body");
     bodyWriter.startElement(KoOdf::bodyContentElement(KoOdf::Text, true));
 
+    qSort( d->shapes.begin(), d->shapes.end(), KoShape::compareShapeZIndex );
     foreach(KoShape *shape, d->shapes) {
         shape->saveOdf(*m_context);
     }

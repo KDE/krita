@@ -78,7 +78,7 @@ void PictureShape::saveOdf( KoShapeSavingContext & context ) const
     saveOdfAttributes( context, OdfAllAttributes );
     writer.startElement("draw:image");
     // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
-    QString name = context.imageHref(m_imageData);
+    QString name = context.imageHref(data);
     writer.addAttribute("xlink:type", "simple" );
     writer.addAttribute("xlink:show", "embed" );
     writer.addAttribute("xlink:actuate", "onLoad");

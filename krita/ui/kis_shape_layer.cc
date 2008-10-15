@@ -259,7 +259,7 @@ bool KisShapeLayer::saveOdf(KoStore * store) const
 
     manifestWriter->addManifestEntry("settings.xml", "text/xml");
 
-    if (! shapeContext.saveImages(store, manifestWriter))
+    if (! shapeContext.saveDataCenter( documentContext.odfStore.store(), documentContext.odfStore.manifestWriter() ))
         return false;
 
     // Write out manifest file

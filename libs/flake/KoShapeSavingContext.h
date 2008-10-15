@@ -175,20 +175,6 @@ public:
     void saveLayerSet(KoXmlWriter * xmlWriter) const;
 
     /**
-     * Adds a pixmap for saving into the Pictures subfolder within the odf file
-     * Note that images added this way should only be transient images like textures from styles etc
-     * Real images should be added to the ImageCollection
-     * @param pixmap the pixmap to save
-     * @return the filename of the pixmap to refer to
-     */
-    QString addImageForSaving(const QPixmap &pixmap);
-
-    /**
-     * Saves images added with addImageForSaving to the store
-     */
-    bool saveImages(KoStore *store, KoXmlWriter* manifestWriter) const;
-
-    /**
      * Get the image href under which the image will be saved in the store
      */
     QString imageHref(KoImageData * image);
@@ -244,7 +230,6 @@ private:
     KoShapeSavingOptions m_savingOptions;
     QMap<const KoShape *, QString> m_drawIds;
     QList<const KoShapeLayer*> m_layers;
-    QMap<QString, QPixmap> m_pixmaps;
     QSet<KoDataCenter *> m_dataCenter;
     int m_drawId;
     QMap<QString, KoSharedSavingData*> m_sharedData;

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,7 +21,6 @@
 
 #include "PictureShape.h"
 
-#include <KoImageData.h>
 #include <KoViewConverter.h>
 #include <KoImageCollection.h>
 #include <KoImageData.h>
@@ -42,23 +42,25 @@ PictureShape::PictureShape()
     setKeepAspectRatio(true);
 }
 
-PictureShape::~PictureShape() {
+PictureShape::~PictureShape()
+{
 }
 
 void PictureShape::paint( QPainter& painter, const KoViewConverter& converter ) {
     QRectF target = converter.documentToView(QRectF(QPointF(0,0), size()));
 
-    if(m_imageData != userData())
+    if (m_imageData != userData()) {
         m_imageData = dynamic_cast<KoImageData*> (userData());
-
-    if(m_imageData == 0)
-    {
-        painter.fillRect(target, QColor(Qt::gray));
-        return;
     }
 
-    QPixmap pm = m_imageData->pixmap();
-    painter.drawPixmap(target.toRect(), pm, QRect(0, 0, pm.width(), pm.height()));
+    if (m_imageData == 0) {
+        painter.fillRect(target, QColor(Qt::gray));
+    }
+    else {
+        QPixmap pm = m_imageData->pixmap();
+        // TODO only paint the rect that is visible
+        painter.drawPixmap(target.toRect(), pm, QRect(0, 0, pm.width(), pm.height()));
+    }
 }
 
 void PictureShape::saveOdf( KoShapeSavingContext & context ) const
@@ -76,7 +78,7 @@ void PictureShape::saveOdf( KoShapeSavingContext & context ) const
     saveOdfAttributes( context, OdfAllAttributes );
     writer.startElement("draw:image");
     // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
-    QString name = data->tagForSaving();
+    QString name = context.imageHref(m_imageData);
     writer.addAttribute("xlink:type", "simple" );
     writer.addAttribute("xlink:show", "embed" );
     writer.addAttribute("xlink:actuate", "onLoad");
@@ -96,14 +98,13 @@ bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
 
 bool PictureShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
-    Q_UNUSED(context);
-
     if ( m_imageCollection ) {
         const QString href = element.attribute("href");
         // this can happen in case it is a presentation:placeholder
         if ( !href.isEmpty() ) {
-            KoImageData * data = new KoImageData( m_imageCollection, href);
-            setUserData( data );
+            KoStore * store = context.odfLoadingContext().store();
+            KoImageData * data = m_imageCollection->getImage(href, store);
+            setUserData(data);
         }
     }
 
@@ -112,18 +113,12 @@ bool PictureShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeLoa
 
 bool PictureShape::loadFromUrl( KUrl &url )
 {
-    if (url.isLocalFile()) {
-        KoImageData * data = new KoImageData(m_imageCollection);
-
-        QFile *file = new QFile(url.toLocalFile());
-        file->open(QIODevice::ReadOnly);
-        data->loadFromFile(file); //also closes and deletes the file
-
+    KoImageData * data = m_imageCollection->getImage(url);
+    if ( data ) {
         setUserData( data );
         setSize(data->imageSize());
-        return true;
     }
-    return false;
+    return data != 0;
 }
 
 void PictureShape::init(const QMap<QString, KoDataCenter *> & dataCenterMap)

@@ -35,6 +35,7 @@ class KoXmlWriter;
 class KoGenStyles;
 class KoDataCenter;
 class KoEmbeddedDocumentSaver;
+class KoImageData;
 class KoShapeLayer;
 class KoStore;
 class KoSharedSavingData;
@@ -188,6 +189,16 @@ public:
     bool saveImages(KoStore *store, KoXmlWriter* manifestWriter) const;
 
     /**
+     * Get the image href under which the image will be saved in the store
+     */
+    QString imageHref(KoImageData * image);
+
+    /**
+     * Get the images that needs to be saved to the store
+     */
+    QMap<QByteArray, QString> imagesToSave();
+
+    /**
      * Add data center
      */
     void addDataCenter(KoDataCenter * dataCenter);
@@ -237,6 +248,8 @@ private:
     QSet<KoDataCenter *> m_dataCenter;
     int m_drawId;
     QMap<QString, KoSharedSavingData*> m_sharedData;
+    QMap<QByteArray, QString> m_imageNames;
+    int m_imageId;
 
     KoGenStyles& m_mainStyles;
     KoEmbeddedDocumentSaver& m_embeddedSaver;

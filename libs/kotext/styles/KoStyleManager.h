@@ -188,7 +188,7 @@ public:
     virtual bool completeLoading(KoStore *store);
 
     /// reimplemented
-    virtual bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter);
+    virtual bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context);
 
 signals:
     void styleAdded(KoParagraphStyle*);

@@ -22,6 +22,7 @@
 #include "KoShapeSavingContext.h"
 #include "KoShapeLayer.h"
 #include "KoDataCenter.h"
+#include "KoImageData.h"
 
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
@@ -38,6 +39,7 @@ KoShapeSavingContext::KoShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles& 
         : m_xmlWriter(&xmlWriter)
         , m_savingOptions(0)
         , m_drawId(0)
+        , m_imageId(0)
         , m_mainStyles(mainStyles)
         , m_embeddedSaver(embeddedSaver)
         , m_savingMode(savingMode)
@@ -171,6 +173,26 @@ bool KoShapeSavingContext::saveImages(KoStore * store, KoXmlWriter * manifestWri
     return true;
 }
 
+QString KoShapeSavingContext::imageHref(KoImageData * image)
+{
+    QMap<QByteArray, QString>::iterator it(m_imageNames.find(image->key()));
+    if (it == m_imageNames.end()) {
+        QString suffix = image->suffix();
+        if ( suffix.isEmpty() ) {
+            it = m_imageNames.insert(image->key(), QString("Pictures/image%1").arg(++m_imageId));
+        }
+        else {
+            it = m_imageNames.insert(image->key(), QString("Pictures/image%1.%2").arg(++m_imageId).arg(suffix));
+        }
+    }
+    return it.value();
+}
+
+QMap<QByteArray, QString> KoShapeSavingContext::imagesToSave()
+{
+    return m_imageNames;
+}
+
 void KoShapeSavingContext::addDataCenter(KoDataCenter * dataCenter)
 {
     m_dataCenter.insert(dataCenter);
@@ -180,7 +202,7 @@ bool KoShapeSavingContext::saveDataCenter(KoStore *store, KoXmlWriter* manifestW
 {
     bool ok = true;
     foreach(KoDataCenter *dataCenter, m_dataCenter) {
-        ok = ok && dataCenter->completeSaving(store, manifestWriter);
+        ok = ok && dataCenter->completeSaving(store, manifestWriter, this);
         kDebug() << "ok" << ok;
     }
     return ok;

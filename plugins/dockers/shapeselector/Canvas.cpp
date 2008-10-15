@@ -28,7 +28,9 @@
 #include "SelectStrategy.h"
 #include "ShapeSelector.h"
 
+#include <KoDataCenter.h>
 #include <KoShapeManager.h>
+#include <KoShapeRegistry.h>
 #include <KoPointerEvent.h>
 #include <KoSelection.h>
 #include <KoShapeFactory.h> // for the mimetype defines etc
@@ -41,6 +43,19 @@
 #include <QTimer>
 
 #include <KUrl>
+
+DummyShapeController::DummyShapeController()
+{
+    foreach( QString id, KoShapeRegistry::instance()->keys() ) {
+        KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value( id );
+        shapeFactory->populateDataCenterMap( m_dataCenterMap );
+    }
+}
+
+DummyShapeController::~DummyShapeController()
+{
+    qDeleteAll( m_dataCenterMap );
+}
 
 Canvas::Canvas(ShapeSelector *parent)
     : QWidget(parent),

@@ -97,4 +97,10 @@ set(TestPathSegment_test_SRCS TestPathSegment.cpp )
 kde4_add_unit_test(TestPathSegment TESTNAME libs-flake-TestPathSegment ${TestPathSegment_test_SRCS})
 target_link_libraries(TestPathSegment  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(TestImageCollection_test_SRCS TestImageCollection.cpp )
+kde4_add_unit_test(TestImageCollection TESTNAME libs-flake-TestImageCollection ${TestImageCollection_test_SRCS})
+target_link_libraries(TestImageCollection  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
+
 ########### end ###############

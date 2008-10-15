@@ -35,7 +35,6 @@
 
 // KOffice
 #include <KoViewConverter.h>
-#include <KoImageCollection.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>

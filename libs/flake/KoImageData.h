@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,13 +23,19 @@
 
 #include "flake_export.h"
 
+#include <QExplicitlySharedDataPointer>
+
 #include <KoShapeUserData.h>
 
-#include <QPixmap>
-#include <KUrl>
-
-class KoImageCollection;
 class QIODevice;
+class QPixmap;
+class QImage;
+class QSizeF;
+class KUrl;
+class KoImageCollection;
+class KoImageDataPrivate;
+class KoXmlWriter;
+class KoStore;
 
 /**
  * Class meant to hold the full image data so it can be shared between image shapes.
@@ -67,15 +74,14 @@ public:
         SaveInline              ///< Save the image serialized in the content.xml
     };
 
-    /**
-     * constructor
-     * @param collection the image collection which will do the loading of the image data for us.
-     * @param href the url of the image in the store.
-     */
-    explicit KoImageData(KoImageCollection *collection, QString href = "");
+    enum ErrorCode {
+        Success,
+        OpenFailed,
+        LoadFailed
+    };
 
     /**
-     * copy constructor using ref-counting.
+     * copy constructor
      * @param imageData the other one.
      */
     KoImageData(const KoImageData &imageData);
@@ -100,33 +106,56 @@ public:
     QPixmap pixmap();
 
     /**
-     * Return the location of the external file.  Returns an empty URL if there is no external file.
-     * @see image()
-     */
-    KUrl imageLocation() const;
-
-    /**
      * Return the internal store of the image.
-     * Will return a null image if the image is stored externally.
-     * @see imageLocation()
      * @see QImage::isNull()
      */
     const QImage image() const;
 
     /**
-     * Sets an image to store.
-     * @param image the image to store
+     * Save the image data to the param device.
+     * The full file is saved.
+     * @param device the device that is used to get the data from.
+     * @return returns true if load was successful.
      */
-    void setImage(const QImage &image);
+    bool saveToFile(QIODevice & device);
 
     /**
-     * Tags this image to be saved and returns the href for reference in the xml.
-     * @return returns the url-like location this image will be saved to.
+     * The size of the image in points
      */
-    QString tagForSaving();
+    const QSizeF imageSize();
 
-    /// returns the url-like location
-    QString storeHref() const;
+    KoImageData & operator=(const KoImageData &other);
+
+    bool operator==(const KoImageData &other) const;
+
+    /**
+     * Get a unique key of the image
+     *
+     * This is the md5sum of the file 
+     */
+    QByteArray key() const;
+
+    QString suffix() const;
+
+    ErrorCode errorCode() const;
+
+private:
+    /**
+     * Only the image collection is able to create the KoImageData.
+     * This is done to make sure the same images get the same KoImageData::Private pointer 
+     * and reuse it.
+     */
+    friend class KoImageCollection;
+
+    /**
+     * constructor
+     * This is private to only allow the KoImageCollection to create new KoImageData objects
+     *
+     * @param collection the image collection which will do the loading of the image data for us.
+     */
+    KoImageData(KoImageCollection *collection, const QImage & image);
+    KoImageData(KoImageCollection *collection, const KUrl & url);
+    KoImageData(KoImageCollection *collection, const QString & href, KoStore * store);
 
     /**
      * Load the image data from the param device.
@@ -135,36 +164,11 @@ public:
      * @param device the device that is used to get the data from.
      * @return returns true if load was successful.
      */
-    bool loadFromFile(QIODevice *device);
+    bool loadFromFile(QIODevice & device);
 
-    /**
-     * Save the image data to the param device.
-     * The full file is saved.
-     * @param device the device that is used to get the data from.
-     * @return returns true if load was successful.
-     */
-    bool saveToFile(QIODevice *device);
+    void setSuffix(const QString & name);
 
-    /**
-     * Return whether this image have been tagged for saving.
-     * @return returns true if this image should be saved.
-     */
-    bool isTaggedForSaving();
-
-
-    /**
-     * The size of the image in points
-     */
-    const QSizeF imageSize();
-
-    bool operator==(const KoImageData &other) {
-        return other.d == d;
-    }
-
-private:
-    class Private;
-    Private * const d;
+    QExplicitlySharedDataPointer<KoImageDataPrivate> d;
 };
 
 #endif
-

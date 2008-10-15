@@ -403,7 +403,7 @@ bool KoStyleManager::completeLoading(KoStore *)
     return true;
 }
 
-bool KoStyleManager::completeSaving(KoStore *, KoXmlWriter *)
+bool KoStyleManager::completeSaving(KoStore *, KoXmlWriter *, KoShapeSavingContext *)
 {
     return true;
 }

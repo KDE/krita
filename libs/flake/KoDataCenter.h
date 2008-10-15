@@ -3,6 +3,7 @@
    Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2006 Thomas Zander <zander@kde.org>
    Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,8 +26,10 @@
 
 #include <QtGlobal>
 
+class KoShapeSavingContext;
 class KoStore;
 class KoXmlWriter;
+
 /**
  * The data center is for now just a sort of void pointer.
  * The data centers can be stuff like image collection, or stylemanager.
@@ -47,7 +50,7 @@ public:
     /**
      * Save any remaining binary blobs
      */
-    virtual bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter) = 0;
+    virtual bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context) = 0;
 };
 
 #endif

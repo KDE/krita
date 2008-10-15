@@ -9,8 +9,6 @@
 
 #include "kdebug.h"
 
-class KoImageCollection;
-
 class MockShape : public KoShape
 {
 public:

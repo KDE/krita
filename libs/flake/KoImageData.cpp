@@ -2,6 +2,7 @@
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,66 +21,77 @@
  */
 
 #include "KoImageData.h"
-#include "KoImageCollection.h"
 
 #include <KoUnit.h>
 #include <KoStore.h>
+#include <KoStoreDevice.h>
 
-#include <KTemporaryFile>
-#include <KDebug>
-#include <QSizeF>
+#include <ktemporaryfile.h>
+#include <kdebug.h>
+#include <kio/netaccess.h>
+
+#include <QBuffer>
+#include <QCryptographicHash>
 #include <QIODevice>
 #include <QPainter>
 
-class KoImageData::Private
-{
-public:
-    Private(KoImageCollection *c)
-            : refCount(0)
-            , quality(MediumQuality)
-            , collection(c)
-            , tempImageFile(0)
-            , taggedForSaving(false) { }
+#include "KoImageCollection.h"
+#include "KoImageData_p.h"
 
-    ~Private() {
-        delete tempImageFile;
+KoImageData::KoImageData(KoImageCollection *collection, const QImage & image)
+: d(new KoImageDataPrivate(collection))
+{
+    d->image = image;
+    QByteArray ba;
+    QBuffer buffer(&ba);
+    buffer.open(QIODevice::WriteOnly);
+    image.save(&buffer, "PNG"); // use .png for images we get as QImage
+    QCryptographicHash ch(QCryptographicHash::Md5);
+    ch.addData(ba);
+    d->key = ch.result();
+    d->suffix = "png";
+}
+
+KoImageData::KoImageData(KoImageCollection *collection, const KUrl & url)
+: d(new KoImageDataPrivate(collection))
+{
+    QString tmpFile;
+    if ( KIO::NetAccess::download( url, tmpFile, 0 ) ) {
+        QFile file( tmpFile );
+        file.open( QIODevice::ReadOnly );
+        loadFromFile( file );
+        setSuffix(url.prettyUrl());
     }
-    KUrl url;
-    long  modifiedData; // for reloading the image from disk
+    else {
+        kWarning(30006) << "open image " << url.prettyUrl() << "failed";
+        d->errorCode = OpenFailed;
+    }
+}
 
-    int refCount;
-    QSizeF imageSize;
-    ImageQuality quality;
-    QPixmap pixmap;
-    QImage image; // this member holds the data in case the image is embedded.
-    QString storeHref;
-    KoImageCollection *collection;
-    KTemporaryFile *tempImageFile;
-    bool taggedForSaving;
-};
-
-KoImageData::KoImageData(KoImageCollection *collection, QString href)
-        : d(new Private(collection))
+KoImageData::KoImageData(KoImageCollection *collection, const QString & href, KoStore * store)
+: d(new KoImageDataPrivate(collection))
 {
-    Q_ASSERT(collection);
-    collection->addImage(this);
-    d->storeHref = href;
-    Q_ASSERT(d->refCount == 1);
+    if ( store->open(href) ) {
+        // TODO should we use KoStore::extractFile ?
+        KoStoreDevice device(store);
+        loadFromFile(device);
+        setSuffix(href);
+        store->close();
+    }
+    else {
+        kWarning(30006) << "open image " << href << "failed";
+        d->errorCode = OpenFailed;
+    }
 }
 
 KoImageData::KoImageData(const KoImageData &imageData)
-        : KoShapeUserData(),
-        d(imageData.d)
+: KoShapeUserData()
+, d(imageData.d)
 {
-    d->refCount++;
 }
 
 KoImageData::~KoImageData()
 {
-    if (--d->refCount == 0) {
-        d->collection->removeImage(this);
-        delete d;
-    }
 }
 
 void KoImageData::setImageQuality(KoImageData::ImageQuality quality)
@@ -97,163 +109,62 @@ KoImageData::ImageQuality KoImageData::imageQuality() const
 QPixmap KoImageData::pixmap()
 {
     if (d->pixmap.isNull()) {
-        image(); // force loading if only present in a tmp file
+        image(); // force loading if only present if only present as raw data
 
         if (! d->image.isNull()) {
-            int multiplier = 150; // max 150 ppi
             if (d->quality == NoPreviewImage) {
                 d->pixmap = QPixmap(1, 1);
                 QPainter p(&d->pixmap);
                 p.setPen(QPen(Qt::gray));
                 p.drawPoint(0, 0);
                 p.end();
-                return d->pixmap;
             }
-            if (d->quality == LowQuality)
-                multiplier = 50;
-            else if (d->quality == MediumQuality)
-                multiplier = 100;
-            int width = qMin(d->image.width(), qRound(imageSize().width() * multiplier / 72.));
-            int height = qMin(d->image.height(), qRound(imageSize().height() * multiplier / 72.));
-            // kDebug(30004)() <<"  image:" << width <<"x" << height;
+            else {
+                int multiplier = 150; // max 150 ppi
+                if (d->quality == LowQuality)
+                    multiplier = 50;
+                else if (d->quality == MediumQuality)
+                    multiplier = 100;
+                int width = qMin(d->image.width(), qRound(imageSize().width() * multiplier / 72.));
+                int height = qMin(d->image.height(), qRound(imageSize().height() * multiplier / 72.));
+                // kDebug(30006)() <<"  image:" << width <<"x" << height;
 
-            QImage scaled = d->image.scaled(width, height);
-            if (d->tempImageFile) // free memory
-                d->image = QImage();
+                QImage scaled = d->image.scaled(width, height);
+                if (!d->rawData.isEmpty()) { // free memory
+                    d->image = QImage();
+                }
 
-            d->pixmap = QPixmap::fromImage(scaled);
+                d->pixmap = QPixmap::fromImage(scaled);
+            }
         }
     }
     return d->pixmap;
 }
 
-KUrl KoImageData::imageLocation() const
+bool KoImageData::saveToFile(QIODevice & device)
 {
-    return d->url;
+    return d->saveToFile(device);
 }
 
-QString KoImageData::tagForSaving()
+bool KoImageData::loadFromFile(QIODevice & device)
 {
-    static int counter = 0;
-    d->taggedForSaving = true;
-    d->storeHref = QString("Pictures/image%1").arg(counter++);
-    if (d->tempImageFile) {
-        // we should set a suffix, unfortunately the tmp file don'thave a correct one set
-        //d->storeHref +=
-    } else
-        // save as png if we don't have the original file data
-        // also see saveToFile where we again hardcode to "PNG"
-        d->storeHref += ".png";
-
-    return d->storeHref;
-}
-
-QString KoImageData::storeHref() const
-{
-    return d->storeHref;
-}
-
-bool KoImageData::saveToFile(QIODevice *device)
-{
-    if (d->tempImageFile) {
-        if (! d->tempImageFile->open())
-            return false;
-        char * data = new char[32 * 1024];
-        while (true) {
-            bool failed = false;
-            qint64 bytes = d->tempImageFile->read(data, 32 * 1024);
-            if (bytes == 0)
-                break;
-            else if (bytes == -1) {
-                kWarning() << "Failed to read data from the tmpfile\n";
-                failed = true;
-            }
-            while (! failed && bytes > 0) {
-                qint64 written = device->write(data, bytes);
-                if (written < 0) {// error!
-                    kWarning() << "Failed to copy the image from the temp to the store\n";
-                    failed = true;
-                }
-                bytes -= written;
-            }
-            if (failed) { // read or write failed; so lets cleanly abort.
-                delete[] data;
-                return false;
-            }
-        }
-        delete[] data;
-        return true;
-    } else {
-        return d->image.save(device, "PNG");
+    d->rawData = device.readAll();
+    bool loaded = d->image.loadFromData( d->rawData );
+    if ( loaded ) {
+        QCryptographicHash ch(QCryptographicHash::Md5);
+        ch.addData(d->rawData);
+        d->key = ch.result();
     }
-}
-
-bool KoImageData::isTaggedForSaving()
-{
-    return d->taggedForSaving;
-}
-
-
-bool KoImageData::loadFromFile(QIODevice *device)
-{
-    struct Finally {
-        Finally(QIODevice *d) : device(d), bytes(0) {}
-        ~Finally() {
-            delete device;
-            delete[] bytes;
-        }
-        QIODevice *device;
-        char *bytes;
-    };
-    Finally finally(device);
-
-    // remove prev data
-    delete d->tempImageFile;
-    d->tempImageFile = 0;
-    d->image = QImage();
-
-    if (true) { //  right now we tmp file everything device->size() > 25E4) { // larger than 250Kb, save to tmp file.
-        d->tempImageFile = new KTemporaryFile();
-        if (! d->tempImageFile->open())
-            return false;
-        char * data = new char[32 * 1024];
-        finally.bytes = data;
-        while (true) {
-            bool failed = false;
-            qint64 bytes = device->read(data, 32 * 1024);
-            if (bytes == 0)
-                break;
-            else if (bytes == -1) {
-                kWarning() << "Failed to read data from the store\n";
-                failed = true;
-            }
-            while (! failed && bytes > 0) {
-                qint64 written = d->tempImageFile->write(data, bytes);
-                if (written < 0) {// error!
-                    kWarning() << "Failed to copy the image from the store to temp\n";
-                    failed = true;
-                }
-                bytes -= written;
-            }
-            if (failed) { // read or write failed; so lets cleanly abort.
-                delete d->tempImageFile;
-                d->tempImageFile = 0;
-                return false;
-            }
-        }
-        d->url = d->tempImageFile->fileName();
-        d->tempImageFile->close();
-    } else { // small image; just load it in memory.
-        d->image.load(device, 0);
+    else {
+        d->errorCode = LoadFailed;
     }
-    return true;
+    return loaded;
 }
 
-const QSizeF KoImageData:: imageSize()
+const QSizeF KoImageData::imageSize()
 {
     if (!d->imageSize.isValid()) {
         // The imagesize have not yet been calculated
-
         image(); // make sure the image is loaded
 
         if (d->image.dotsPerMeterX())
@@ -271,21 +182,42 @@ const QSizeF KoImageData:: imageSize()
 
 const QImage KoImageData::image() const
 {
-    if (d->image.isNull() && d->tempImageFile) {
-        d->tempImageFile->open();
-        d->image.load(d->tempImageFile, 0);
-        // kDebug(30004)() <<"  orig:" << d->image.width() <<"x" << d->image.height();
-        d->tempImageFile->close();
+    if ( d->image.isNull() ) {
+        d->image.loadFromData( d->rawData );
     }
-
     return d->image;
 }
 
-void KoImageData::setImage(const QImage &image)
+bool KoImageData::operator==(const KoImageData &other) const
 {
-    // remove prev data
-    delete d->tempImageFile;
-    d->tempImageFile = 0;
+    return other.d == d;
+}
 
-    d->image = image;
+KoImageData & KoImageData::operator=(const KoImageData &other)
+{
+    d = other.d;
+    return *this;
+}
+
+QByteArray KoImageData::key() const
+{
+    return d->key;
+}
+
+QString KoImageData::suffix() const
+{
+    return d->suffix;
+}
+
+KoImageData::ErrorCode KoImageData::errorCode() const
+{
+    return d->errorCode;
+}
+
+void KoImageData::setSuffix(const QString & name)
+{
+    QRegExp rx("\\.([^/]+$)"); // TODO does this work on windows or do we have to use \ instead of / for a path seperator?
+    if ( rx.indexIn(name) != -1 ) {
+        d->suffix = rx.cap(1);
+    }
 }

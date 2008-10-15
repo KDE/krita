@@ -16,18 +16,23 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOIMAGECOLLECTION_H
-#define KOIMAGECOLLECTION_H
+#ifndef KOIMAGECOLLECTIONNEW_H
+#define KOIMAGECOLLECTIONNEW_H
 
 #include "flake_export.h"
 
 #include <KoDataCenter.h>
 
-class KoImageData;
+class QImage;
+class KUrl;
 class KoStore;
+class KoImageData;
+class KoImageDataPrivate;
+
 
 /**
  * An collection of KoImageData objects to allow loading and saving them all together to the KoStore.
+ * It also makes sure that if the same image is added to the collection that they share the internal data structure.
  */
 class FLAKE_EXPORT KoImageCollection : public KoDataCenter
 {
@@ -36,28 +41,32 @@ public:
     KoImageCollection();
     ~KoImageCollection();
 
-    /**
-     * Load all images from the store which have a recognized KoImageData::storeHref().
-     * @return returns true if load was successful (no images failed).
-     */
+    /// reimplmented
     bool completeLoading(KoStore *store);
 
     /**
-     * Save all images to the store which are tagged for saving
-     * and have a recognized KoImageData::storeHref().
+     * Save all images to the store which are in the context
      * @return returns true if save was successful (no images failed).
      */
-    bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter);
+    bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context);
+
+    KoImageData * getImage(const QImage & image);
+    KoImageData * getImage(const KUrl & url);
+    KoImageData * getImage(const QString & href, KoStore * store);
+
+    /**
+     * Get the number of images inside the collection
+     */
+    int size() const;
 
 protected:
-    friend class KoImageData;
-    void addImage(KoImageData *image);
-    void removeImage(KoImageData *image);
-
+    void lookup(KoImageData * image);
+    friend class KoImageDataPrivate;
+    void removeImage(KoImageDataPrivate * image);
 
 private:
     class Private;
     Private * const d;
 };
 
-#endif
+#endif // KOIMAGECOLLECTIONNEW_H

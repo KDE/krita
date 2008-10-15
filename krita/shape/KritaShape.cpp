@@ -130,7 +130,7 @@ void KritaShape::waitUntilReady() const
         return;
 
     KoImageData *data = dynamic_cast<KoImageData*>(KoShape::userData());
-    if (data == 0 || !data->imageLocation().isValid())
+    if (data == 0 || data->image().isNull())
         return; // no data available at all, so don't try to wait later on.
 
     KritaShape *me = const_cast<KritaShape*>(this);
@@ -147,10 +147,10 @@ void KritaShape::tryLoadFromImageData(KoImageData *data)
     if (data == 0)
         return;
 
-    KUrl url = data->imageLocation();
+    // TODO maybe we want to use the image rawData for that
     QImage image = data->image();
 
-    if (url.isEmpty() && image.isNull())
+    if (image.isNull())
         return;
 
     delete m_d->doc;
@@ -158,20 +158,16 @@ void KritaShape::tryLoadFromImageData(KoImageData *data)
     m_d->doc = new KisDoc2(0, 0, false);
     connect(m_d->doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
 
-    if (! url.isEmpty())
-        m_d->doc->openUrl(url);
-    else {
-        // Create an empty image
-        KisImageSP img = m_d->doc->newImage(i18n("Converted from KoImageData"), image.width(), image.height(), 0);
+    // Create an empty image
+    KisImageSP img = m_d->doc->newImage(i18n("Converted from KoImageData"), image.width(), image.height(), 0);
 
-        // Convert the QImage to a paint device
-        KisPaintLayer * layer = dynamic_cast<KisPaintLayer*>(img->root()->firstChild().data());
-        if (layer)
-            layer->paintDevice()->convertFromQImage(image, "", 0, 0);
+    // Convert the QImage to a paint device
+    KisPaintLayer * layer = dynamic_cast<KisPaintLayer*>(img->root()->firstChild().data());
+    if (layer)
+        layer->paintDevice()->convertFromQImage(image, "", 0, 0);
 
-        // emits sigLoadingFinished
-        m_d->doc->setCurrentImage(img);
-    }
+    // emits sigLoadingFinished
+    m_d->doc->setCurrentImage(img);
 }
 
 QImage KritaShape::convertToQImage()

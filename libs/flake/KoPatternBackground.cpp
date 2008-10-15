@@ -148,9 +148,7 @@ void KoPatternBackground::setPattern(const QImage &pattern)
     if (d->imageData)
         delete d->imageData;
 
-    d->imageData = new KoImageData(d->imageCollection);
-    if (d->imageData)
-        d->imageData->setImage(pattern);
+    d->imageData = d->imageCollection->getImage(pattern);
 }
 
 QImage KoPatternBackground::pattern()
@@ -233,15 +231,16 @@ KoPatternBackground& KoPatternBackground::operator = (const KoPatternBackground 
     d->tileRepeatOffsetPercent = rhs.d->tileRepeatOffsetPercent;
     d->imageCollection = rhs.d->imageCollection;
 
-    if (d->imageData) {
+    if (rhs.d->imageData) {
+        if (d->imageData) {
+            *(d->imageData) = *(rhs.d->imageData);
+        }
+        else {
+            d->imageData = new KoImageData(*rhs.d->imageData);
+        }
+    } else {
         delete d->imageData;
         d->imageData = 0;
-    }
-
-    if (rhs.d->imageData) {
-        d->imageData = new KoImageData(*(rhs.d->imageData));
-    } else {
-        d->imageData = new KoImageData(rhs.d->imageCollection);
     }
 
     return *this;
@@ -342,7 +341,7 @@ void KoPatternBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &con
     patternStyle.addAttribute("xlink:show", "embed");
     patternStyle.addAttribute("xlink:actuate", "onLoad");
     patternStyle.addAttribute("xlink:type", "simple");
-    patternStyle.addAttribute("xlink:href", d->imageData->tagForSaving());
+    patternStyle.addAttribute("xlink:href", context.imageHref(d->imageData));
 
     QString patternStyleName = context.mainStyles().lookup(patternStyle, "picture");
     context.mainStyles().lookup(style, context.isSet(KoShapeSavingContext::PresentationShape) ? "pr" : "gr");
@@ -373,7 +372,7 @@ bool KoPatternBackground::loadStyle(KoOdfLoadingContext & context, const QSizeF 
         return false;
 
     delete d->imageData;
-    d->imageData = new KoImageData(d->imageCollection, href);
+    d->imageData = d->imageCollection->getImage(href,context.store());
     if (! d->imageData)
         return false;
 

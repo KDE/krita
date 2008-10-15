@@ -27,7 +27,6 @@
 #include <QMap>
 
 class KoShape;
-class KoImageCollection;
 class KoDataCenter;
 
 /**

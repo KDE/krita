@@ -783,7 +783,7 @@ void DefaultTool::repaintDecorations() {
 
 void DefaultTool::copy() const
 {
-    QList<KoShape *> shapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::StrippedSelection );
+    QList<KoShape *> shapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
     if ( !shapes.empty() ) {
         KoShapeOdfSaveHelper saveHelper( shapes );
         KoDrag drag;

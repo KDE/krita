@@ -388,15 +388,24 @@ void KoPADocumentStructureDocker::extractSelectedLayersAndShapes( QList<KoPAPage
     if( selectedItems.count() == 0 )
         return;
 
+    // TODO tz: I don't know what is best:
+    // 1. only make it possible to select one type of object page, layer, shape
+    // 2. don't add shapes when we already have the page/layer/group in the selection
     // separate selected layers and selected shapes
     foreach( QModelIndex index, selectedItems )
     {
         KoShape *shape = static_cast<KoShape*>( index.internalPointer() );
-        KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
-        if( layer )
-            layers.append( layer );
-        else if( ! selectedItems.contains( index.parent() ) )
-            shapes.append( shape );
+        KoPAPageBase * page = dynamic_cast<KoPAPageBase*>( shape );
+        if ( page ) {
+            pages.append( page );
+        }
+        else {
+            KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
+            if( layer )
+                layers.append( layer );
+            else if( ! selectedItems.contains( index.parent() ) )
+                shapes.append( shape );
+        }
     }
 }
 

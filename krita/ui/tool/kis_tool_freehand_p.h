@@ -21,18 +21,14 @@
 #ifndef KIS_TOOL_FREEHAND_P_H
 #define KIS_TOOL_FREEHAND_P_H
 
-#include <QThread>
 #include <QPointF>
-#include <QMutex>
-#include <QQueue>
-#include <QMutexLocker>
+#include <QRunnable>
 
 #include <kis_debug.h>
 #include <kis_paint_information.h>
 
 class KisToolFreehand;
 class KisPainter;
-
 
 /**
  * Private classes for use by the freehand tool
@@ -41,7 +37,7 @@ class KisPainter;
 /**
  * XXX: doc
  */
-class FreehandPaintJob
+class FreehandPaintJob : public QRunnable
 {
 
 public:
@@ -130,63 +126,5 @@ private:
     QPointF m_control2;
 
 };
-
-class FreehandPaintJobExecutor : public QThread
-{
-
-public:
-
-    FreehandPaintJobExecutor()
-            : m_finish(false) {
-    }
-
-    virtual void run() {
-        while (!m_finish || !isEmpty()) {
-            FreehandPaintJob* nextJob = 0;
-            {
-                QMutexLocker lock(&m_mutex_queue);
-                if (m_queue.size() > 0) {
-                    nextJob = m_queue.dequeue();
-                }
-            }
-            if (nextJob) {
-                nextJob->run();
-            } else {
-                msleep(1);
-            }
-        }
-    }
-
-    void postJob(FreehandPaintJob* job) {
-        QMutexLocker lock(&m_mutex_queue);
-        m_queue.enqueue(job);
-    }
-
-    void finish() {
-        m_finish = true;
-        this->wait();
-    }
-
-    bool isEmpty() {
-        QMutexLocker lock(&m_mutex_queue);
-        return m_queue.size() == 0;
-    }
-
-    int queueLength() {
-        QMutexLocker lock(&m_mutex_queue);
-        return m_queue.size();
-    }
-    void start() {
-        m_finish = false;
-        QThread::start();
-    }
-
-private:
-    QQueue<FreehandPaintJob* > m_queue;
-    QMutex m_mutex_queue;
-    bool m_finish;
-};
-
-
 
 #endif

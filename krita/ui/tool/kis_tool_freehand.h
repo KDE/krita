@@ -30,7 +30,7 @@ class KoCanvasBase;
 
 class KisPainter;
 
-class FreehandPaintJobExecutor;
+class QThreadPool;
 class FreehandPaintJob;
 class KisRecordedPolyLinePaintAction;
 class KisRecordedBezierCurvePaintAction;
@@ -113,7 +113,7 @@ private:
     QList<FreehandPaintJob*> m_paintJobs;
     KisRecordedPolyLinePaintAction* m_polyLinePaintAction;
     KisRecordedBezierCurvePaintAction* m_bezierCurvePaintAction;
-    FreehandPaintJobExecutor* m_executor;
+    QThreadPool* m_executor;
 };
 
 

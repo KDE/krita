@@ -30,7 +30,7 @@
 #include <QMutexLocker>
 #include "QPainter"
 #include <QRect>
-#include <QThread>
+#include <QThreadPool>
 #include <QWidget>
 
 #include <kis_debug.h>
@@ -71,7 +71,8 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_paintIncremental = false;
     m_paintOnSelection = false;
     m_paintedOutline = false;
-    m_executor = new FreehandPaintJobExecutor();
+    m_executor = new QThreadPool(this);
+    m_executor->setMaxThreadCount(1);
     m_smooth = false;
     m_assistant = false;
     m_smoothness = 0.5;
@@ -276,15 +277,12 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     } else {
         m_polyLinePaintAction = new KisRecordedPolyLinePaintAction(i18n("Freehand tool"), currentNode(), currentPaintOpPreset(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), m_paintIncremental, m_compositeOp);
     }
-    m_executor->start();
 }
 
 void KisToolFreehand::endPaint()
 {
 //    dbgUI << "endPaint";
     m_mode = HOVER;
-    m_executor->finish();
-
     if (m_painter) {
         // If painting in mouse release, make sure painter
         // is destructed or end()ed
@@ -334,6 +332,7 @@ void KisToolFreehand::endPaint()
         }
         m_paintJobs.clear();
     }
+
     if (m_smooth) {
         if (image())
             image()->actionRecorder()->addAction(*m_bezierCurvePaintAction);
@@ -371,7 +370,7 @@ void KisToolFreehand::queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* /*p
 {
     m_paintJobs.append(job);
 //    dbgUI << "Queue length:" << m_executor->queueLength();
-    m_executor->postJob(job);
+    m_executor->start(job);
 }
 
 void KisToolFreehand::setDirty(const QRegion& region)

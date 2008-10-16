@@ -37,6 +37,7 @@ FreehandPaintJob::FreehandPaintJob(KisToolFreehand* toolFreeHand,
         m_pi2(pi2),
         m_previousPaintJob(previousPaintJob)
 {
+    setAutoDelete(false);
 }
 
 

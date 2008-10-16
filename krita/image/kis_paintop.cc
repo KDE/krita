@@ -21,8 +21,10 @@
  */
 
 #include "kis_paintop.h"
-#include <QWidget>
 
+#include "math.h"
+
+#include <QWidget>
 #include <QString>
 
 #include <KoColor.h>
@@ -106,7 +108,7 @@ static double paintBezierCurve(KisPaintOp *paintOp,
     qreal d1 = line.absDistance(control1);
     qreal d2 = line.absDistance(control2);
 
-    if (d1 < BEZIER_FLATNESS_THRESHOLD && d2 < BEZIER_FLATNESS_THRESHOLD) {
+    if ((d1 < BEZIER_FLATNESS_THRESHOLD && d2 < BEZIER_FLATNESS_THRESHOLD)  || isnan(d1) || isnan(d2)) {
         newDistance = paintOp->paintLine(pi1, pi2, savedDist);
     } else {
         // Midpoint subdivision. See Foley & Van Dam Computer Graphics P.508

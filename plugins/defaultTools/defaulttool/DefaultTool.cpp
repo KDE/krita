@@ -1236,7 +1236,7 @@ void DefaultTool::updateActions()
     action( "object_move_up" )->setEnabled(enable);
     action( "object_move_down" )->setEnabled(enable);
     action( "object_move_tobottom" )->setEnabled(enable);
-    enable = selection->count () > 1;
+    enable = selection->count() > 1 || ( enable && m_canvas->resourceProvider()->hasResource( KoCanvasResource::PageSize ) );
     action( "object_align_horizontal_left" )->setEnabled(enable);
     action( "object_align_horizontal_center" )->setEnabled(enable);
     action( "object_align_horizontal_right" )->setEnabled(enable);

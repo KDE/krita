@@ -135,6 +135,8 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
 
     d->masterPages = loadOdfMasterPages( odfStore.styles().masterPages(), paContext );
     d->pages = loadOdfPages( body, paContext );
+    loadOdfDocumentStyles( paContext );
+
     if ( d->pages.size() > 1 ) {
         setActionEnabled( KoPAView::ActionDeletePage, false );
     }
@@ -259,6 +261,12 @@ void KoPADocument::saveOdfDocumentStyles( KoPASavingContext & context )
     KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>( dataCenterMap()["StyleManager"] );
     Q_ASSERT( styleManager );
     styleManager->saveOdf( context.mainStyles() );
+}
+
+bool KoPADocument::loadOdfDocumentStyles( KoPALoadingContext & context )
+{
+    Q_UNUSED( context );
+    return true;
 }
 
 KoPAPageBase* KoPADocument::pageByIndex( int index, bool masterPage ) const

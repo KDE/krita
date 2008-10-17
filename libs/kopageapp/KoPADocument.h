@@ -92,6 +92,11 @@ public:
     virtual void saveOdfDocumentStyles( KoPASavingContext & context );
 
     /**
+     * Load document styles
+     */
+    virtual bool loadOdfDocumentStyles( KoPALoadingContext & context );
+
+    /**
      * Get page by index.
      *
      * @param index of the page

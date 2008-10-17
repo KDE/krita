@@ -22,7 +22,7 @@
 
 #include "kis_paintop.h"
 
-#include "math.h"
+#include <math.h>
 
 #include <QWidget>
 #include <QString>

@@ -39,12 +39,22 @@ KoPathBreakAtPointCommand::KoPathBreakAtPointCommand(const QList<KoPathPointData
 
     QList<KoPathPointData>::const_iterator it(sortedPointDataList.begin());
     for (; it != sortedPointDataList.end(); ++it) {
-        KoPathPoint *point = it->pathShape->pointByIndex(it->pointIndex);
-        if (point) {
-            m_pointDataList.append(*it);
-            m_points.push_back(new KoPathPoint(*point));
-            m_closedIndex.push_back(KoPathPointIndex(-1, 0));
+        KoPathShape * pathShape = it->pathShape;
+        KoPathPoint * point = pathShape->pointByIndex(it->pointIndex);
+        if( ! point )
+            continue;
+
+        // check if subpath is closed and the point is start or end point of the subpath
+        if( ! pathShape->isClosedSubpath( it->pointIndex.first ) ) {
+            if( it->pointIndex.second == 0 
+                || it->pointIndex.second == pathShape->pointCountSubpath(it->pointIndex.first) ) {
+                continue;
+            }
         }
+        
+        m_pointDataList.append(*it);
+        m_points.push_back(new KoPathPoint(*point));
+        m_closedIndex.push_back(KoPathPointIndex(-1, 0));
     }
 
     KoPathPointData last(0, KoPathPointIndex(-1, -1));

@@ -115,6 +115,7 @@ install( FILES
          KoFallBackColorTransformation.h
          KoIntegerMaths.h
          KoLabDarkenColorTransformation.h
+         KoMixColorsOpImpl.h
          KoHistogramProducer.h
          DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

@@ -142,6 +142,8 @@ protected:
     /// Update page navigation actions
     void updatePageNavigationActions();
 
+    bool isMasterUsed( KoPAPageBase * page );
+
 protected slots:
     void viewSnapToGrid(bool snap);
     void viewGrid(bool show);

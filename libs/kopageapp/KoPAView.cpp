@@ -28,6 +28,7 @@
 #include <QClipboard>
 
 #include <KoCanvasController.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoFind.h>
 #include <KoTextDocumentLayout.h>
 #include <KoToolManager.h>
@@ -427,6 +428,7 @@ void KoPAView::updateActivePage( KoPAPageBase * page )
     QSizeF pageSize( layout.width, layout.height );
     m_zoomController->setPageSize( pageSize );
     m_zoomController->setDocumentSize( pageSize );
+    m_canvas->resourceProvider()->setResource( KoCanvasResource::PageSize, pageSize );
 
     m_canvas->update();
 
@@ -560,8 +562,10 @@ void KoPAView::copyPage()
 
 void KoPAView::deletePage()
 {
-    KoPAPageDeleteCommand * command = new KoPAPageDeleteCommand( m_doc, m_activePage );
-    m_canvas->addCommand( command );
+    if ( !isMasterUsed( m_activePage ) ) {
+        KoPAPageDeleteCommand * command = new KoPAPageDeleteCommand( m_doc, m_activePage );
+        m_canvas->addCommand( command );
+    }
 }
 
 void KoPAView::setActionEnabled( int actions, bool enable )
@@ -771,6 +775,27 @@ void KoPAView::updatePageNavigationActions()
     actionCollection()->action("page_first")->setEnabled(index > 0);
     actionCollection()->action("page_next")->setEnabled(index < pageCount - 1);
     actionCollection()->action("page_last")->setEnabled(index < pageCount - 1);
+}
+
+bool KoPAView::isMasterUsed( KoPAPageBase * page )
+{
+    KoPAMasterPage * master = dynamic_cast<KoPAMasterPage *>( page );
+
+    bool used = false;
+
+    if ( master ) {
+        QList<KoPAPageBase*> pages = m_doc->pages();
+        foreach( KoPAPageBase * page, pages ) {
+            KoPAPage * p = dynamic_cast<KoPAPage *>( page );
+            Q_ASSERT( p );
+            if ( p && p->masterPage() == master ) {
+                used = true;
+                break;
+            }
+        }
+    }
+
+    return used;
 }
 
 #include "KoPAView.moc"

@@ -85,8 +85,10 @@ public slots:
     void feather();
     void toggleDisplaySelection();
 
-    void selectionTimerEvent();
     void shapeSelectionChanged();
+
+signals:
+    void currentSelectionChanged();
 
 public:
     void grow(qint32 xradius, qint32 yradius);
@@ -102,13 +104,11 @@ public:
 private:
     void fill(const KoColor& color, bool fillWithPattern, const QString& transactionText);
     void updateStatusBar();
-    bool selectionIsActive();
+
 
     void computeBorder(qint32  *circ, qint32  xradius, qint32  yradius);
     inline void rotatePointers(quint8  **p, quint32 n);
     void computeTransition(quint8* transition, quint8** buf, qint32 width);
-
-    void updateSimpleOutline();
 
     KisView2 * m_view;
     KisDoc2 * m_doc;
@@ -137,12 +137,6 @@ private:
     KToggleAction *m_toggleDisplaySelection;
 
     QList<QAction*> m_pluginActions;
-
-    QVector<QPolygon> outline;
-    QVector<QPolygon> simpleOutline;
-    QTimer* timer;
-    int offset;
-    QList<QBrush> brushes;
 
 };
 

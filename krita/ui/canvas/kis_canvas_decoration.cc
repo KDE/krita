@@ -74,4 +74,8 @@ void KisCanvasDecoration::paint(QPainter& gc, const QPoint & documentOffset, con
     }
 }
 
+KisView2* KisCanvasDecoration::view() const
+{
+    return d->view;
+}
 #include "kis_canvas_decoration.moc"

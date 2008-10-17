@@ -30,7 +30,7 @@
 #include "../kis_view2.h"
 #include "../kis_selection_manager.h"
 
-void KisAbstractCanvasWidget::drawDecorations(QPainter & gc, bool ants, bool tools,
+void KisAbstractCanvasWidget::drawDecorations(QPainter & gc, bool tools,
         const QPoint & documentOffset,
         const QRect & clipRect,
         KisCanvas2 * canvas)
@@ -48,13 +48,6 @@ void KisAbstractCanvasWidget::drawDecorations(QPainter & gc, bool ants, bool too
     gc.setClipRect(clipRect);
     canvas->globalShapeManager()->paint(gc, *canvas->viewConverter(), false);
     gc.restore();
-
-    //Paint marching ants and selection shapes
-    if (ants) {
-        gc.save();
-        canvas->view()->selectionManager()->paint(gc, *canvas->viewConverter());
-        gc.restore();
-    }
 
     // ask the decorations to paint themselves
     foreach(KisCanvasDecoration* deco, m_decorations) {

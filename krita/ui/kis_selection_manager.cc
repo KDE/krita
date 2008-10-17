@@ -76,6 +76,7 @@
 #include "kis_selection_transaction.h"
 #include "kis_selection_mask.h"
 #include "kis_shape_layer.h"
+#include "kis_selection_decoration.h"
 
 #include "kis_clipboard.h"
 #include "kis_view2.h"
@@ -106,31 +107,14 @@ KisSelectionManager::KisSelectionManager(KisView2 * view, KisDoc2 * doc)
 {
     m_clipboard = KisClipboard::instance();
 
-    QRgb white = QColor(Qt::white).rgb();
-    QRgb black = QColor(Qt::black).rgb();
+//     KoSelection * selection = m_view->canvasBase()->globalShapeManager()->selection();
+//     Q_ASSERT(selection);
+//     connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 
-    for (int i = 0; i < 8; i++) {
-        QImage texture(8, 8, QImage::Format_RGB32);
-        for (int y = 0; y < 8; y++)
-            for (int x = 0; x < 8; x++)
-                texture.setPixel(x, y, ((x + y + i) % 8 < 4) ? black : white);
-
-        QBrush brush;
-        brush.setTextureImage(texture);
-        brushes << brush;
-    }
-
-    offset = 0;
-    timer = new QTimer();
-
-    // XXX: Make sure no timers are running all the time! We need to
-    // provide a signal to tell the selection manager that we've got a
-    // current selection now (global or local).
-    connect(timer, SIGNAL(timeout()), this, SLOT(selectionTimerEvent()));
-
-    KoSelection * selection = m_view->canvasBase()->globalShapeManager()->selection();
-    Q_ASSERT(selection);
-    connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
+    KisSelectionDecoration* decoration = new KisSelectionDecoration( m_view );
+    connect(this, SIGNAL(currentSelectionChanged()), decoration, SLOT(selectionChanged()));
+    decoration->setVisible(true);
+    m_view->canvasBase()->addDecoration( decoration );
 }
 
 KisSelectionManager::~KisSelectionManager()
@@ -378,72 +362,10 @@ void KisSelectionManager::updateStatusBar()
     }
 }
 
-bool KisSelectionManager::selectionIsActive()
-{
-    KisImageSP img = m_view->image();
-    if (img) {
-        if (m_view->selection() && (m_view->selection()->hasPixelSelection() || m_view->selection()->hasShapeSelection())) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 void KisSelectionManager::selectionChanged()
 {
     updateGUI();
-    outline.clear();
-
-    KisSelectionSP selection = m_view->selection();
-    if (selection && !selection->isDeselected()) {
-        if (selection->hasPixelSelection() || selection->hasShapeSelection()) {
-            if (!timer->isActive())
-                timer->start(300);
-        }
-        if (selection->hasPixelSelection()) {
-            KisPixelSelectionSP getOrCreatePixelSelection = selection->getOrCreatePixelSelection();
-            outline = getOrCreatePixelSelection->outline();
-            updateSimpleOutline();
-        }
-    } else
-        timer->stop();
-
-    m_view->canvasBase()->updateCanvas();
-}
-
-void KisSelectionManager::updateSimpleOutline()
-{
-    simpleOutline.clear();
-    foreach(const QPolygon & polygon, outline) {
-        QPolygon simplePolygon;
-
-        simplePolygon << polygon.at(0);
-        QPoint previousDelta = polygon.at(1) - polygon.at(0);
-        QPoint currentDelta;
-        int pointsSinceLastRemoval = 3;
-        for (int i = 1; i < polygon.size() - 1; ++i) {
-
-            //check for left turns and turn them into diagonals
-            currentDelta = polygon.at(i + 1) - polygon.at(i);
-            if ((previousDelta.y() == 1 && currentDelta.x() == 1) || (previousDelta.x() == -1 && currentDelta.y() == 1) ||
-                    (previousDelta.y() == -1 && currentDelta.x() == -1) || (previousDelta.x() == 1 && currentDelta.y() == -1)) {
-                //Turning point found. The point at position i won't be in the simple outline.
-                //If there is a staircase, the points in between will be removed.
-                if (pointsSinceLastRemoval == 2)
-                    simplePolygon.pop_back();
-                pointsSinceLastRemoval = 0;
-
-            } else
-                simplePolygon << polygon.at(i);
-
-            previousDelta = currentDelta;
-            pointsSinceLastRemoval++;
-        }
-        simplePolygon << polygon.at(polygon.size() - 1);
-
-        simpleOutline.push_back(simplePolygon);
-    }
+    emit currentSelectionChanged();
 }
 
 void KisSelectionManager::cut()
@@ -1621,27 +1543,6 @@ void KisSelectionManager::computeTransition(quint8* transition, quint8** buf, qi
         transition[x] = 0;
 }
 
-void KisSelectionManager::selectionTimerEvent()
-{
-    KisSelectionSP selection = m_view->selection();
-    if (!selection) return;
-
-    if (selectionIsActive()) {
-        KisPaintDeviceSP dev = m_view->activeDevice();
-        if (dev) {
-            offset++;
-            if (offset > 7) offset = 0;
-
-            QRect bound = selection->selectedRect();
-            double xRes = m_view->image()->xRes();
-            double yRes = m_view->image()->yRes();
-            QRectF rect(int(bound.left()) / xRes, int(bound.top()) / yRes,
-                        int(1 + bound.right()) / xRes, int(1 + bound.bottom()) / yRes);
-            m_view->canvasBase()->updateCanvas(rect);
-        }
-    }
-}
-
 void KisSelectionManager::shapeSelectionChanged()
 {
     KoShapeManager* shapeManager = m_view->canvasBase()->globalShapeManager();
@@ -1657,70 +1558,6 @@ void KisSelectionManager::shapeSelectionChanged()
             else
                 shape->setBorder(0);
         }
-    }
-}
-
-void KisSelectionManager::paint(QPainter& gc, const KoViewConverter &converter)
-{
-    KisSelectionSP selection = m_view->selection();
-
-    if (selection && selection->isDeselected())
-        return;
-
-    qreal sx, sy;
-    converter.zoom(&sx, &sy);
-
-    if (selection && selection->hasPixelSelection()) {
-
-        QMatrix matrix;
-        matrix.scale(sx / m_view->image()->xRes(), sy / m_view->image()->yRes());
-
-        QMatrix oldWorldMatrix = gc.worldMatrix();
-        gc.setWorldMatrix(matrix, true);
-
-        QTime t;
-        t.start();
-        gc.setRenderHints(0);
-
-        QPen pen(brushes[offset], 0);
-
-        int i = 0;
-        gc.setPen(pen);
-        if (1 / m_view->image()->xRes()*sx < 3)
-            foreach(const QPolygon & polygon, simpleOutline) {
-            gc.drawPolygon(polygon);
-            i++;
-        } else
-            foreach(const QPolygon & polygon, outline) {
-            gc.drawPolygon(polygon);
-            i++;
-        }
-
-        dbgRender << "Polygons :" << i;
-        dbgRender << "Painting marching ants :" << t.elapsed();
-
-        gc.setWorldMatrix(oldWorldMatrix);
-    }
-    if (selection && selection->hasShapeSelection()) {
-        KisShapeSelection* shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
-
-        QVector<qreal> dashes;
-        qreal space = 4;
-        dashes << 4 << space;
-
-        QPainterPathStroker stroker;
-        stroker.setWidth(0);
-        stroker.setDashPattern(dashes);
-        stroker.setDashOffset(offset - 4);
-
-        gc.setRenderHint(QPainter::Antialiasing);
-        QColor outlineColor = Qt::black;
-
-        QMatrix zoomMatrix;
-        zoomMatrix.scale(sx, sy);
-
-        QPainterPath stroke = stroker.createStroke(zoomMatrix.map(shapeSelection->selectionOutline()));
-        gc.fillPath(stroke, outlineColor);
     }
 }
 

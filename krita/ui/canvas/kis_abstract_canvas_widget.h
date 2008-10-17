@@ -51,7 +51,7 @@ public:
     /**
      * Draw the specified decorations on the view.
      */
-    void drawDecorations(QPainter & gc, bool ants, bool tools,
+    void drawDecorations(QPainter & gc, bool tools,
                          const QPoint & documentOffset,
                          const QRect & clipRect,
                          KisCanvas2 * canvas);

@@ -24,6 +24,7 @@
 #include "kis_selection.h"
 #include "kis_undo_adapter.h"
 #include "kis_selection_mask.h"
+#include "kis_pixel_selection.h"
 
 KisSetGlobalSelectionCommand::KisSetGlobalSelectionCommand(KisImageSP image, QUndoCommand * parent, KisSelectionSP selection) :
         QUndoCommand(parent)
@@ -135,6 +136,7 @@ void KisDeselectGlobalSelectionCommand::redo()
     if (!m_newSelection) {
         m_image->setGlobalSelection();
         m_newSelection = m_image->globalSelection();
+        m_newSelection->getOrCreatePixelSelection()->select(m_image->bounds());
         m_newSelection->setDeselected(true);
     } else
         m_image->setGlobalSelection(m_newSelection);

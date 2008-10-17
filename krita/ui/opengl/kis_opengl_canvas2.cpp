@@ -244,12 +244,11 @@ void KisOpenGLCanvas2::paintGL()
 
 
     // XXX: make settable
-    bool drawAnts = true;
     bool drawTools = true;
 
     QPainter gc(this);
 
-    drawDecorations(gc, drawAnts, drawTools,
+    drawDecorations(gc, drawTools,
                     m_d->documentOffset,
                     QRect(QPoint(0, 0), QSize()),
                     m_d->canvas);

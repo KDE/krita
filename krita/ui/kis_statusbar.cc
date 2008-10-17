@@ -116,7 +116,7 @@ void KisStatusBar::setSelection(KisImageSP img)
     Q_UNUSED(img);
 
     KisSelectionSP selection = m_view->selection();
-    if (selection) {
+    if (selection && !selection->isDeselected()) {
         m_selectionStatusLabel->setEnabled(true);
 
         QRect r = selection->selectedExactRect();

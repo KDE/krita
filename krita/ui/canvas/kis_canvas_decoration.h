@@ -61,6 +61,10 @@ public slots:
     void toggleVisibility();
 protected:
     virtual void drawDecoration(QPainter& gc, const QPoint & documentOffset, const QRect& area, const KoViewConverter &converter) = 0;
+    /**
+     * @return the parent KisView
+     */
+    KisView2* view() const;
 private:
     struct Private;
     Private* const d;

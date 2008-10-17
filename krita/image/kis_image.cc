@@ -139,6 +139,7 @@ KisImage::KisImage(const KisImage& rhs)
         m_d->deselectedGlobalSelection = 0;
         setRootLayer(static_cast<KisGroupLayer*>(rhs.m_d->rootLayer->clone().data()));
         m_d->annotations = rhs.m_d->annotations; // XXX the annotations would probably need to be deep-copied        m_d->nserver = new KisNameServer(rhs.m_d->nserver->currentSeed() + 1);
+        m_d->nserver = new KisNameServer( *rhs.m_d->nserver );
         Q_CHECK_PTR(m_d->nserver);
 
     }

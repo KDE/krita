@@ -353,7 +353,7 @@ double KCurve::getCurveValue(double x)
     return getCurveValue(m_points, x);
 }
 
-double KCurve::getCurveValue(const QList<QPointF > &curve, double x)
+double KCurve::getCurveValue(const QList<QPointF >& curve, double x)
 {
     double t;
     QPointF p;

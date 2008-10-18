@@ -35,9 +35,11 @@
 #include "KoColorProfile.h"
 #include "KoCopyColorConversionTransformation.h"
 #include "KoFallBackColorTransformation.h"
+#include "KoUniqueNumberForIdServer.h"
 
 struct KoColorSpace::Private {
     QString id;
+    quint32 idNumber;
     QString name;
     QHash<QString, KoCompositeOp *> compositeOps;
     QList<KoChannelInfo *> channels;
@@ -62,6 +64,7 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp
     : d (new Private())
 {
     d->id = id;
+    d->idNumber = KoUniqueNumberForIdServer::instance()->numberForId( d->id );
     d->name = name;
     d->mixColorsOp = mixColorsOp;
     d->convolutionOp = convolutionOp;
@@ -90,7 +93,7 @@ KoColorSpace::~KoColorSpace()
 bool KoColorSpace::operator==(const KoColorSpace& rhs) const {
     const KoColorProfile* p1 = rhs.profile();
     const KoColorProfile* p2 = profile();
-    return id() == rhs.id() && ((p1 == p2) || (*p1 == *p2 ));
+    return d->idNumber == rhs.d->idNumber && ((p1 == p2) || (*p1 == *p2 ));
 }
 
 QString KoColorSpace::id() const {return d->id;}

@@ -34,6 +34,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoCtlColorConversionTransformation.h>
+#include <KoUniqueNumberForIdServer.h>
 
 #include <GTLCore/PixelDescription.h>
 #include <GTLCore/String.h>
@@ -56,7 +57,9 @@ struct KoCtlColorProfile::Private {
     OpenCTL::Module* module;
     QList<ConversionInfo> conversionInfos;
     QString colorModelID;
+    quint32 colorModelIDNumber;
     QString colorDepthID;
+    quint32 colorDepthIDNumber;
     qreal exposure;
     qreal middleGreyScaleFactor;
 };
@@ -183,7 +186,7 @@ bool KoCtlColorProfile::operator==(const KoColorProfile& p) const
     const KoCtlColorProfile* ctlp = dynamic_cast<const KoCtlColorProfile*>(&p);
     if(ctlp)
     {
-        return ctlp->name() == name() and ctlp->colorModel() == colorModel() and ctlp->colorDepth() == colorDepth();
+        return ctlp->name() == name() and ctlp->d->colorModelIDNumber == d->colorModelIDNumber and ctlp->d->colorDepthIDNumber == d->colorDepthIDNumber;
     } else {
         return false;
     }
@@ -299,7 +302,9 @@ bool KoCtlColorProfile::load()
             {
                 setName(e.attribute("name"));
                 d->colorDepthID = generateDepthID(e.attribute("depth"), e.attribute("type"));
+                d->colorDepthIDNumber = KoUniqueNumberForIdServer::instance()->numberForId( d->colorDepthID );
                 d->colorModelID = e.attribute("colorModel");
+                d->colorModelIDNumber = KoUniqueNumberForIdServer::instance()->numberForId( d->colorModelID );
                 kDebug(DBG_PIGMENT) << "colorModel = " << e.attribute("colorModel");;
             } else if(e.tagName() == "program")
             {

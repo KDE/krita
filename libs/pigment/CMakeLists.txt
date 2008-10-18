@@ -56,6 +56,7 @@ set(pigmentcms_SRCS
     KoIccColorSpaceEngine.cpp
     KoLcmsColorSpace.cpp
     KoMultipleColorConversionTransformation.cpp
+    KoUniqueNumberForIdServer.cpp
     colorprofiles/KoIccColorProfile.cpp
     colorprofiles/KoHdrColorProfile.cpp
     colorprofiles/KoLcmsColorProfileContainer.cpp

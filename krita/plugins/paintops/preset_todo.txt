@@ -4,7 +4,6 @@
 * move filter setting into libpaintop
 * move paintop preview code to preset
 * make loading/saving/editing of presets work
-* move incremental option to paintop settings, instead of tool options.
 * fix mixer canvas to use right paintop preset
 * set a default paintop preset in the canvas resource provider
 * pass image to kis_custom_brush from kis_brush_selection_widget

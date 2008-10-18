@@ -31,8 +31,6 @@
 
 #include "pigment_export.h"
 
-#include "colorprofiles/KoHdrColorProfile.h"
-
 class KoLcmsInfo {
     struct Private {
         DWORD cmType;  // The colorspace type as defined by littlecms

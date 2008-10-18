@@ -147,14 +147,10 @@ QWidget * KisToolBrush::createOptionWidget()
 
     QWidget * optionWidget = KisToolFreehand::createOptionWidget();
 
-    m_chkSmooth = new QCheckBox(i18nc("smooth out the curves while drawing", "Smooth"), optionWidget);
+    m_chkSmooth = new QCheckBox(i18nc("smooth out the curves while drawing", "Smoothness"), optionWidget);
     m_chkSmooth->setObjectName("chkSmooth");
     m_chkSmooth->setChecked(true);
     connect(m_chkSmooth, SIGNAL(toggled(bool)), this, SLOT(setSmooth(bool)));
-
-    QLabel* labelSmoothness = new QLabel(i18n("Smoothness:"), optionWidget);
-    labelSmoothness->setEnabled(false);
-    connect(m_chkSmooth, SIGNAL(toggled(bool)), labelSmoothness, SLOT(setEnabled(bool)));
 
     m_sliderSmoothness = new QSlider(Qt::Horizontal, optionWidget);
     m_sliderSmoothness->setMinimum(0);
@@ -187,7 +183,6 @@ QWidget * KisToolBrush::createOptionWidget()
 
     KisToolFreehand::addOptionWidgetLayout(m_optionLayout);
     m_optionLayout->addWidget(m_chkSmooth, 1, 0);
-    m_optionLayout->addWidget(labelSmoothness, 1, 1);
     m_optionLayout->addWidget(m_sliderSmoothness, 1, 2);
     m_optionLayout->addWidget(m_chkAssistant, 3, 0);
     m_optionLayout->addWidget(m_assistant, 3, 1, 1, 2);

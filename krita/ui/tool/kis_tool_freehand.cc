@@ -96,6 +96,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         return;
 
     if (currentPaintOpPreset() && currentPaintOpPreset()->settings()) {
+        m_paintIncremental = currentPaintOpPreset()->settings()->paintIncremental();
         currentPaintOpPreset()->settings()->mousePressEvent(e);
         if (e->isAccepted()) {
             return;

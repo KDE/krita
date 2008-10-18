@@ -24,6 +24,7 @@
 class KisPaintActionWidget;
 
 enum enumPaintActionType {
+    UNSUPPORTED,
     BUILDUP,
     WASH,
     FRINGED // not used yet

@@ -90,6 +90,8 @@ public:
         delete m_paintActionTypeOption;
     }
 
+    bool paintIncremental() { return m_paintActionTypeOption->paintActionType() == BUILDUP; }
+
     void fromXML(const QDomElement& elt) {
 #if 0
         QDomElement e = elt.firstChildElement("Params");
@@ -219,18 +221,6 @@ KisBrushOp::~KisBrushOp()
 
 void KisBrushOp::paintAt(const KisPaintInformation& info)
 {
-    // Painting should be implemented according to the following algorithm:
-    // retrieve brush
-    // if brush == mask
-    //          retrieve mask
-    // else if brush == image
-    //          retrieve image
-    // subsample (mask | image) for position -- pos should be double!
-    // apply filters to mask (color | gradient | pattern | etc.
-    // composite filtered mask into temporary layer
-    // composite temporary layer into target layer
-    // @see: doc/brush.txt
-
     if (!painter()->device()) return;
 
     KisBrushSP brush = m_brush;

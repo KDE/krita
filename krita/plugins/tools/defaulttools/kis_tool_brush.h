@@ -54,7 +54,6 @@ protected:
 private slots:
 
     void timeoutPaint();
-    void slotSetPaintingMode(int mode);
     void slotSetSmoothness(int smoothness);
     void slotSetMagnetism(int magnetism);
 
@@ -63,7 +62,6 @@ private:
     qint32 m_rate;
     QTimer * m_timer;
     QGridLayout* m_optionLayout;
-    QCheckBox * m_chkDirect;
     QCheckBox * m_chkSmooth;
     QCheckBox * m_chkAssistant;
     QComboBox * m_assistant;

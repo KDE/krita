@@ -131,15 +131,6 @@ void KisToolBrush::leave(QEvent */*e*/)
 }
 #endif
 
-void KisToolBrush::slotSetPaintingMode(int mode)
-{
-    if (mode == QCheckBox::On) {
-        // Direct painting
-        m_paintIncremental = true;
-    } else {
-        m_paintIncremental = false;
-    }
-}
 
 void KisToolBrush::slotSetSmoothness(int smoothness)
 {
@@ -156,14 +147,9 @@ QWidget * KisToolBrush::createOptionWidget()
 
     QWidget * optionWidget = KisToolFreehand::createOptionWidget();
 
-    m_chkDirect = new QCheckBox(i18n("Paint incrementally"), optionWidget);
-    m_chkDirect->setObjectName("chkDirect");
-    m_chkDirect->setChecked(false);
-    connect(m_chkDirect, SIGNAL(stateChanged(int)), this, SLOT(slotSetPaintingMode(int)));
-
     m_chkSmooth = new QCheckBox(i18nc("smooth out the curves while drawing", "Smooth"), optionWidget);
     m_chkSmooth->setObjectName("chkSmooth");
-    m_chkSmooth->setChecked(false);
+    m_chkSmooth->setChecked(true);
     connect(m_chkSmooth, SIGNAL(toggled(bool)), this, SLOT(setSmooth(bool)));
 
     QLabel* labelSmoothness = new QLabel(i18n("Smoothness:"), optionWidget);
@@ -200,7 +186,6 @@ QWidget * KisToolBrush::createOptionWidget()
     m_optionLayout->setSpacing(2);
 
     KisToolFreehand::addOptionWidgetLayout(m_optionLayout);
-    m_optionLayout->addWidget(m_chkDirect, 0, 0, 1, 3);
     m_optionLayout->addWidget(m_chkSmooth, 1, 0);
     m_optionLayout->addWidget(labelSmoothness, 1, 1);
     m_optionLayout->addWidget(m_sliderSmoothness, 1, 2);

@@ -25,7 +25,6 @@
 
 #include <KoColorConversionTransformation.h>
 #include <KoColorConversionTransformationFactory.h>
-#include <KoHdrColorProfile.h>
 
 template< typename _TYPE_, int _N_ >
 class KisKSToRGBColorConversionTransformation : public KoColorConversionTransformation

@@ -118,7 +118,7 @@
             interpreter="ruby"
             file="dockers/palettedocker.rb">
             <property name="defaultDockPosition">Qt::DockBottom</property>
-        </script>-->
+        </script>
         <script
             name="Flipbook Docker"
             text="Flipbook Docker"
@@ -126,14 +126,14 @@
             interpreter="ruby"
             file="dockers/flipbookdocker.rb">
             <property name="defaultDockPosition">Qt::DockRight</property>
-        </script>
+        </script>-->
     </collection>
     <collection name="decorations" text="Canvas decorations" comment="Decorations for the canvas of Krita" enabled="true">
-        <script
+<!--        <script
             name="VanishingPointDecoration"
             text="Vanishing Point Decoration"
             comment="Show some vanishing point"
             interpreter="ruby"
-            file="decorations/VanishingPoints.rb" />
+            file="decorations/VanishingPoints.rb" /> -->
     </collection>
 </KrossScripting>

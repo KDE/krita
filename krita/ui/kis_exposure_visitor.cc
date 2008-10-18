@@ -18,7 +18,7 @@
 
 #include "kis_exposure_visitor.h"
 #include <KoColorSpace.h>
-#include <KoHdrColorProfile.h>
+#include <KoColorProfile.h>
 
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"

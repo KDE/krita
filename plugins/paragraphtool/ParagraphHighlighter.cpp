@@ -20,7 +20,6 @@
 #include "ParagraphHighlighter.h"
 
 #include <KoCanvasBase.h>
-#include <KoPointerEvent.h>
 #include <KoShape.h>
 #include <KoShapeManager.h>
 #include <KoTextDocumentLayout.h>
@@ -130,25 +129,6 @@ QRectF ParagraphHighlighter::dirtyRectangle()
 
     return repaintRectangle;
 }
-
-void ParagraphHighlighter::mousePressEvent(KoPointerEvent *)
-{}
-
-void ParagraphHighlighter::mouseReleaseEvent(KoPointerEvent *)
-{}
-
-void ParagraphHighlighter::mouseMoveEvent(KoPointerEvent *event)
-{
-    m_mousePosition = event->point;
-
-    activateTextBlockAt(event->point);
-}
-
-void ParagraphHighlighter::keyPressEvent(QKeyEvent *)
-{}
-
-void ParagraphHighlighter::keyReleaseEvent(QKeyEvent *)
-{}
 
 QTextBlock ParagraphHighlighter::textBlock() const {
     return m_cursor.block();

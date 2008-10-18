@@ -8,6 +8,7 @@ SET ( paragraphtool_SRCS
     ParagraphPlugin.cpp
     ParagraphToolFactory.cpp
     ParagraphTool.cpp
+    ParagraphEditor.cpp
     ParagraphHighlighter.cpp
     ParagraphFragment.cpp
     Ruler.cpp

@@ -26,7 +26,6 @@
 #include <QPointF>
 
 class KoCanvasBase;
-class KoPointerEvent;
 class KoShape;
 class KoViewConverter;
 
@@ -43,23 +42,7 @@ public:
     explicit ParagraphHighlighter(QObject *parent, KoCanvasBase *canvas);
     ~ParagraphHighlighter();
 
-    // reimplemented from superclass
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
-
-    // reimplemented from superclass
-    virtual void mousePressEvent(KoPointerEvent *event);
-
-    // reimplemented from superclass
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
-
-    // reimplemented from superclass
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-
-    // reimplemented from superclass
-    virtual void keyPressEvent(QKeyEvent *event);
-
-    // reimplemented from superclass
-    virtual void keyReleaseEvent(QKeyEvent *event);
 
     void scheduleRepaint();
     bool needsRepaint() const;
@@ -78,7 +61,6 @@ private:
     KoCanvasBase *m_canvas;
     QList<KoShape*> m_shapes;
     QTextCursor m_cursor;
-    QPointF m_mousePosition;
     QRectF m_storedRepaintRectangle;
 
     bool m_needsRepaint;

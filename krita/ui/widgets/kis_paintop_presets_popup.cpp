@@ -59,7 +59,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(QWidget * parent)
 
     m_d->layout = new QGridLayout(m_d->uiWdgPaintOpPresets.frmOptionWidgetContainer);
     m_d->layout->setSizeConstraint( QLayout::SetFixedSize );
-    setLayout( m_d->layout );
 
     m_d->settingsWidget = 0;
     setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );

@@ -87,7 +87,7 @@ public:
      * @return true if we paint incrementally, false if we paint like Photoshop. By default, paintops
      *      do not support non-incremental.
      */
-    virtual bool paintIncremental() { return false; }
+    virtual bool paintIncremental() { return true; }
 private:
     struct Private;
     Private* const d;

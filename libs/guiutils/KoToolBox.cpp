@@ -415,8 +415,6 @@ void KoToolBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeL
     foreach (QToolButton *button, d->visibilityCodes.keys()) {
         if (d->visibilityCodes[button] == "flake/always")
             continue;
-        if (!enabled && button->isChecked())
-            KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
         button->setEnabled(enabled);
     }
 }

@@ -77,12 +77,19 @@ namespace
 class KoToolProxy::Private
 {
 public:
-    Private(KoToolProxy *p) : activeTool(0), tabletPressed(false), hasSelection(false), controller(0), parent(p) {
+    Private(KoToolProxy *p)
+        : activeTool(0),
+        tabletPressed(false),
+        hasSelection(false),
+        controller(0),
+        parent(p)
+    {
         scrollTimer.setInterval(100);
         mouseLeaveWorkaround = false;
     }
 
-    void timeout() { // Auto scroll the canvas
+    void timeout() // Auto scroll the canvas
+    {
         Q_ASSERT(controller);
         int offsetX = controller->canvasOffsetX();
         int offsetY = controller->canvasOffsetY();
@@ -103,7 +110,8 @@ public:
         activeTool->mouseMoveEvent(&ev);
     }
 
-    void checkAutoScroll(const KoPointerEvent &event) {
+    void checkAutoScroll(const KoPointerEvent &event)
+    {
         if (controller == 0) return;
         if (!activeTool->wantsAutoScroll()) return;
         if (!event.isAccepted()) return;
@@ -113,7 +121,8 @@ public:
             scrollTimer.start();
     }
 
-    void selectionChanged(bool newSelection) {
+    void selectionChanged(bool newSelection)
+    {
         if (hasSelection == newSelection)
             return;
         hasSelection = newSelection;
@@ -124,7 +133,7 @@ public:
     {
         if( ! activeTool )
             return false;
-        
+
         KoShapeManager * shapeManager = activeTool->canvas()->shapeManager();
         KoShapeLayer * activeLayer = shapeManager->selection()->activeLayer();
         if( activeLayer && ! activeLayer->isEditable() )
@@ -291,13 +300,14 @@ KoToolSelection* KoToolProxy::selection()
 
 void KoToolProxy::setActiveTool(KoTool *tool)
 {
-    Q_ASSERT(tool);
     if (d->activeTool)
         disconnect(d->activeTool, SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
     d->activeTool = tool;
-    connect(d->activeTool, SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
-    d->selectionChanged(d->activeTool->selection() && d->activeTool->selection()->hasSelection());
-    emit toolChanged(tool->toolId());
+    if (tool) {
+        connect(d->activeTool, SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
+        d->selectionChanged(d->activeTool->selection() && d->activeTool->selection()->hasSelection());
+        emit toolChanged(tool->toolId());
+    }
 }
 
 void KoToolProxy::setCanvasController(KoCanvasController *controller)
@@ -316,6 +326,7 @@ void KoToolProxy::cut()
     if (d->activeTool && d->isActiveLayerEditable())
         d->activeTool->cut();
 }
+
 void KoToolProxy::copy() const
 {
     if (d->activeTool)

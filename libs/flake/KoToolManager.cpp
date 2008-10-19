@@ -32,6 +32,7 @@
 #include "tools/KoPathToolFactory.h"
 #include "KoCanvasController.h"
 #include "KoShape.h"
+#include "KoShapeLayer.h"
 #include "KoShapeRegistry.h"
 #include "KoShapeManager.h"
 #include "KoCanvasBase.h"
@@ -613,6 +614,10 @@ void KoToolManager::selectionChanged(QList<KoShape*> shapes)
 void KoToolManager::currentLayerChanged(const KoShapeLayer* layer)
 {
     emit currentLayerChanged(d->canvasData->canvas, layer);
+    bool enabled = layer == 0 || (layer->isEditable() && layer->isVisible());
+    KoToolProxy *proxy = d->proxies.value(d->canvasData->canvas->canvas());
+    if (proxy)
+        proxy->setActiveTool(enabled ? d->canvasData->activeTool : 0);
 }
 
 KoCanvasController *KoToolManager::activeCanvasController() const

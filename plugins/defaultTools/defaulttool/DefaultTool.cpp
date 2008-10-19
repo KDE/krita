@@ -1170,7 +1170,6 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event) {
                 handle == KoFlake::BottomLeftHandle || handle == KoFlake::BottomRightHandle )
                 return new ShapeRotateStrategy(this, m_canvas, event->point, event->buttons() );
         }
-        // This is wrong now when there is a single rotated object as you get it also when pressing outside of the object
         if( ! ( selectMultiple || selectNextInStack ) && event->buttons() == Qt::LeftButton ) {
             const QPainterPath outlinePath = select->transformation().map( select->outline() );
             if( outlinePath.contains(event->point))

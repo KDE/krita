@@ -107,9 +107,7 @@ protected:
     bool visitAllInverse(KisNode * node, bool breakOnFail = false) {
         KisNodeSP child = node->lastChild();
         while (child) {
-            dbgKrita << child->name();
             if (!child->accept(*this)) {
-                dbgKrita << " visiting failed";
                 if (breakOnFail)
                     return false;
             }

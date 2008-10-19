@@ -51,7 +51,7 @@ void KisPaintOpSettings::setNode(KisNodeSP node)
     d->node = node;
 }
 
-KisNodeSP KisPaintOpSettings::node()
+KisNodeSP KisPaintOpSettings::node() const
 {
     return d->node;
 }

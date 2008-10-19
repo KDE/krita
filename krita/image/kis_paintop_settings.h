@@ -68,7 +68,7 @@ public:
     /**
      * @return the node the paintop is working on.
      */
-    KisNodeSP node();
+    KisNodeSP node() const;
 
     /**
      * @return a pointer to the widget displaying the settings

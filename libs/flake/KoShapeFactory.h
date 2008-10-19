@@ -122,49 +122,7 @@ public:
      * @see KoShapeFactory::createDefaultShape
      * @see KoShape::init
      */
-    KoShape * createDefaultShapeAndInit(const KoShapeControllerBase * shapeController) const;
-
-    /**
-     * This method should be called to create a shape that the user gets when doing a base insert.
-     * For example from a script or during loading.
-     *
-     * This function will call init on the shape with the dataCenterMap that was given. You
-     * should make sure to pass the dataCenterMap so that all works as expected.
-     * However in some cases it is ok to not pass the shapeController e.g. when it is only
-     * a temporary shape that will not be inserted in the document. The shape can then set
-     * things that e.g. need to be available during loading of the shape.
-     * This method internally calls createShape( params );
-     *
-     * @param dataCenterMap The dataCenterMap of the document.
-     *
-     * @return a new shape
-     *
-     * @see KoShapeFactory::createDefaultShape
-     * @see KoShape::init
-     */
     KoShape * createDefaultShapeAndInit(const QMap<QString, KoDataCenter *> & dataCenterMap) const;
-
-    /**
-     * This method should be called to create a shape based on a set of properties that are
-     * specifically made for this shape-type.
-     *
-     * This function will call init on the shape with the dataCenterMap of the shapeController
-     * that was given. You should make sure to pass the dataCenterMap so that all works as expected.
-     * However in some cases it is ok to not pass the shapeController e.g. when it is only
-     * a temporary shape that will not be inserted in the document. The shape can then set
-     * things that e.g. need to be available during loading of the shape.
-     * This method internally calls createShape( params );
-     *
-     * @param params The properties to used to create the shape
-     * @param shapeController The shape controller for which the shape is created.
-     *
-     * @return a new shape
-     *
-     * @see KoShapeFactory::createShape
-     * @see KoShapeTemplate::properties
-     * @see KoShape::init
-     */
-    KoShape * createShapeAndInit(const KoProperties * params, const KoShapeControllerBase *shapeController) const;
 
     /**
      * This method should be called to create a shape based on a set of properties that are

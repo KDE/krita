@@ -23,7 +23,6 @@
 #include "KoShapeFactory.h"
 #include "KoShape.h"
 #include <KoProperties.h>
-#include "KoShapeControllerBase.h"
 
 #include <kdebug.h>
 
@@ -67,28 +66,10 @@ KoShapeFactory::~KoShapeFactory()
     delete d;
 }
 
-KoShape * KoShapeFactory::createDefaultShapeAndInit(const KoShapeControllerBase * shapeController) const
-{
-    KoShape * shape = createDefaultShape();
-    if (shape && shapeController) {
-        shape->init(shapeController->dataCenterMap());
-    }
-    return shape;
-}
-
 KoShape * KoShapeFactory::createDefaultShapeAndInit(const QMap<QString, KoDataCenter *> & dataCenterMap) const
 {
     KoShape * shape = createDefaultShape();
     shape->init(dataCenterMap);
-    return shape;
-}
-
-KoShape * KoShapeFactory::createShapeAndInit(const KoProperties * params, const KoShapeControllerBase *shapeController) const
-{
-    KoShape * shape = createShape(params);
-    if (shape && shapeController) {
-        shape->init(shapeController->dataCenterMap());
-    }
     return shape;
 }
 

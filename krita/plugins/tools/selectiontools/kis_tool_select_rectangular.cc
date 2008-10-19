@@ -203,7 +203,9 @@ void KisToolSelectRectangular::mouseReleaseEvent(KoPointerEvent *e)
             KoShape* shape;
             KoShapeFactory *rectFactory = KoShapeRegistry::instance()->value("KoRectangleShape");
             if (rectFactory) {
-                shape = rectFactory->createDefaultShapeAndInit(0);
+                // it is ok to use a empty map here as the data is not needed.
+                QMap<QString, KoDataCenter *> dataCenterMap;
+                shape = rectFactory->createDefaultShapeAndInit(dataCenterMap);
                 shape->setSize(documentRect.size());
                 shape->setPosition(documentRect.topLeft());
             } else {

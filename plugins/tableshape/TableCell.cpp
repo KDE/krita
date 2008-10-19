@@ -65,7 +65,10 @@ KoShape * TableCell::createShape( const QString & shapeId )
     KoShapeFactory * factory = KoShapeRegistry::instance()->get(shapeId);
     if (!factory) return 0;
 
-    KoShape * shape = factory->createDefaultShapeAndInit( 0 );
+    Q_ASSERT( 0 );
+    // TODO we need to pass the dataCenterMap of the document here
+    QMap<QString, KoDataCenter *> dataCenterMap;
+    KoShape * shape = factory->createDefaultShapeAndInit( dataCenterMap );
     d->shape = shape;
 
     return d->shape;

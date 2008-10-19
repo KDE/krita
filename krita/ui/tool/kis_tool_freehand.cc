@@ -285,6 +285,8 @@ void KisToolFreehand::endPaint()
 //    dbgUI << "endPaint";
     m_mode = HOVER;
     if (m_painter) {
+      
+        m_executor->waitForDone();
         // If painting in mouse release, make sure painter
         // is destructed or end()ed
 
@@ -371,7 +373,7 @@ void KisToolFreehand::queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* /*p
 {
     m_paintJobs.append(job);
 //    dbgUI << "Queue length:" << m_executor->queueLength();
-    m_executor->start(job);
+    m_executor->start(job, m_paintJobs.size());
 }
 
 void KisToolFreehand::setDirty(const QRegion& region)

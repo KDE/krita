@@ -51,6 +51,7 @@ public:
     virtual ~FreehandPaintJob();
 
     double dragDist() const {
+        Q_ASSERT( m_dragDist >= 0.0 ); // This ensure that FreeHandPaintJob was runned before its drag dist is used
         return m_dragDist;
     }
     virtual void run() = 0;

@@ -141,6 +141,8 @@ void KisFilterHandler::apply(KisNodeSP layer, KisFilterConfiguration* config)
 
     KisTransaction * cmd = 0;
     KoProgressUpdater updater(m_d->view->statusBar()->progress());
+    updater.start( 100, filter->name() );
+    
     if (m_d->view->image()->undo()) cmd = new KisTransaction(filter->name(), m_d->dev);
 
     KisProcessingInformation src(m_d->dev, rect.topLeft(), selection);

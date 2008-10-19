@@ -29,6 +29,7 @@
 #include "KoShapeLoadingContext.h"
 #include "KoShapeShadow.h"
 #include "KoShapeBackground.h"
+#include "KoShapeContainer.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -1140,4 +1141,34 @@ KoPathShape * KoPathShape::fromQPainterPath(const QPainterPath &path)
 
     shape->normalize();
     return shape;
+}
+
+bool KoPathShape::hitTest(const QPointF &position) const
+{
+    if (parent() && parent()->childClipped(this) && ! parent()->hitTest(position))
+        return false;
+
+    QPointF point = absoluteTransformation(0).inverted().map(position);
+    const QPainterPath outlinePath = outline();
+    if (border()) {
+        KoInsets insets;
+        border()->borderInsets(this, insets);
+        QRectF roi( QPointF(-insets.left, -insets.top), QPointF(insets.right, insets.bottom) );
+        roi.moveCenter( point );
+        if( outlinePath.intersects( roi ) || outlinePath.contains( roi ) )
+            return true;
+    } else {
+        if( outlinePath.contains( point ) )
+            return true;
+    }
+    
+    // if there is no shadow we can as well just leave
+    if (! shadow())
+        return false;
+
+    // the shadow has an offset to the shape, so we simply
+    // check if the position minus the shadow offset hits the shape
+    point = absoluteTransformation(0).inverted().map(position - shadow()->offset());
+
+    return outlinePath.contains(point);
 }

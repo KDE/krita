@@ -96,7 +96,9 @@ public:
     virtual QSizeF size() const;
     /// reimplemented
     virtual void setSize(const QSizeF &size);
-
+    /// reimplemented
+    virtual bool hitTest(const QPointF &position) const;
+    
     // reimplemented
     virtual void saveOdf(KoShapeSavingContext & context) const;
     // reimplemented

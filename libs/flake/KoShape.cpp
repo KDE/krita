@@ -249,19 +249,15 @@ bool KoShape::hitTest(const QPointF &position) const
         return false;
 
     QPointF point = absoluteTransformation(0).inverted().map(position);
-    const QPainterPath outlinePath = outline();
+    QRectF bb(QPointF(), size());
     if (d->border) {
         KoInsets insets;
         d->border->borderInsets(this, insets);
-        QRectF roi( QPointF(-insets.left, -insets.top), QPointF(insets.right, insets.bottom) );
-        roi.moveCenter( point );
-        if( outlinePath.intersects( roi ) || outlinePath.contains( roi ) )
-            return true;
-    } else {
-        if( outlinePath.contains( point ) )
-            return true;
+        bb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
     }
-    
+    if (bb.contains(point))
+        return true;
+
     // if there is no shadow we can as well just leave
     if (! d->shadow)
         return false;
@@ -270,7 +266,7 @@ bool KoShape::hitTest(const QPointF &position) const
     // check if the position minus the shadow offset hits the shape
     point = absoluteTransformation(0).inverted().map(position - d->shadow->offset());
 
-    return outlinePath.contains(point);
+    return bb.contains(point);
 }
 
 QRectF KoShape::boundingRect() const

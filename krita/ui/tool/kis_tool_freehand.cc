@@ -339,10 +339,12 @@ void KisToolFreehand::endPaint()
     if (m_smooth) {
         if (image())
             image()->actionRecorder()->addAction(*m_bezierCurvePaintAction);
+        delete m_bezierCurvePaintAction;
         m_bezierCurvePaintAction = 0;
     } else {
         if (image())
             image()->actionRecorder()->addAction(*m_polyLinePaintAction);
+        delete m_polyLinePaintAction;
         m_polyLinePaintAction = 0;
     }
 }

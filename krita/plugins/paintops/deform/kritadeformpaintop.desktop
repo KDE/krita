@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Deform brush
+X-KDE-ServiceTypes=Krita/Paintop
+Type=Service
+X-KDE-Library=kritadeformpaintop
+X-Krita-Version=3

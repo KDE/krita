@@ -1,0 +1,175 @@
+<ui version="4.0" >
+ <class>WdgDeformOptions</class>
+ <widget class="QWidget" name="WdgDeformOptions" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>340</width>
+    <height>415</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <widget class="QLabel" name="deformLabel" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>50</y>
+     <width>332</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font" >
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text" >
+    <string>Deform Mode</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="interpolationChBox" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>210</y>
+     <width>171</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Bilinear interpolation</string>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="growBtn" >
+   <property name="geometry" >
+    <rect>
+     <x>40</x>
+     <y>80</y>
+     <width>109</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Grow</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="shrinkBtn" >
+   <property name="geometry" >
+    <rect>
+     <x>160</x>
+     <y>80</y>
+     <width>109</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Shrink</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="swirlCCWBtn" >
+   <property name="geometry" >
+    <rect>
+     <x>40</x>
+     <y>110</y>
+     <width>109</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Swirl CCW</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="swirlCWBtn" >
+   <property name="geometry" >
+    <rect>
+     <x>160</x>
+     <y>110</y>
+     <width>109</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Swirl CW</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="deformRadiusLbl" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>150</y>
+     <width>332</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font" >
+    <font>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="text" >
+    <string>Deform Radius</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="deformAmountLbl" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>180</y>
+     <width>332</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font" >
+    <font>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="text" >
+    <string>Deform Amount</string>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="deformRadiusSPBox" >
+   <property name="geometry" >
+    <rect>
+     <x>160</x>
+     <y>140</y>
+     <width>62</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="value" >
+    <number>10</number>
+   </property>
+  </widget>
+  <widget class="QDoubleSpinBox" name="deformAmountSPBox" >
+   <property name="geometry" >
+    <rect>
+     <x>160</x>
+     <y>170</y>
+     <width>62</width>
+     <height>29</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

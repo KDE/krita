@@ -82,7 +82,6 @@ void KoDocumentSectionDelegate::paint( QPainter *p, const QStyleOptionViewItem &
     p->save();
     {
         QStyleOptionViewItem option = getOptions( o, index );
-
         p->setFont( option.font );
 
         if( option.state & QStyle::State_Selected )
@@ -99,7 +98,7 @@ void KoDocumentSectionDelegate::paint( QPainter *p, const QStyleOptionViewItem &
 
 bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index )
 {
-    if( e->type() == QEvent::MouseButtonPress || e->type() == QEvent::MouseButtonDblClick )
+    if( ( e->type() == QEvent::MouseButtonPress || e->type() == QEvent::MouseButtonDblClick ) && (index.flags() & Qt::ItemIsEnabled ) )
     {
         QMouseEvent *me = static_cast<QMouseEvent*>( e );
         if( me->button() != Qt::LeftButton )
@@ -411,9 +410,9 @@ void KoDocumentSectionDelegate::drawText( QPainter *p, const QStyleOptionViewIte
     {
         p->setClipRect( r );
         p->translate( r.left(), r.top() );
-        p->setPen( ( option.state & QStyle::State_Selected )
-                   ? option.palette.highlightedText().color()
-                   : option.palette.text().color() );
+        QPalette::ColorGroup cg = ( option.state & QStyle::State_Enabled ) ? QPalette::Active : QPalette::Disabled;
+        QPalette::ColorRole cr = ( option.state & QStyle::State_Selected ) ? QPalette::HighlightedText : QPalette::Text;
+        p->setPen( option.palette.color(cg, cr) );
 
         if( index.data( Model::ActiveRole ).toBool() )
         {
@@ -443,7 +442,7 @@ void KoDocumentSectionDelegate::drawIcons( QPainter *p, const QStyleOptionViewIt
             if( lp[i].isMutable )
             {
                 QIcon icon = lp[i].state.toBool() ? lp[i].onIcon : lp[i].offIcon;
-                p->drawPixmap( x, 0, icon.pixmap( option.decorationSize ) );
+                p->drawPixmap( x, 0, icon.pixmap( option.decorationSize, ( option.state & QStyle::State_Enabled ) ? QIcon::Normal : QIcon::Disabled ) );
                 x += option.decorationSize.width() + d->margin;
             }
     }
@@ -461,12 +460,24 @@ void KoDocumentSectionDelegate::drawThumbnail( QPainter *p, const QStyleOptionVi
         const qreal thumbratio = index.data( Model::AspectRatioRole ).toDouble();
         const int s = ( myratio > thumbratio ) ? r.height() : r.width();
 
-        const QImage i = index.data( int( Model::BeginThumbnailRole ) + s ).value<QImage>();
+        QImage img = index.data( int( Model::BeginThumbnailRole ) + s ).value<QImage>();
+        if( !(option.state & QStyle::State_Enabled ) )
+        {
+          // Make the image grayscale
+          // TODO: if someone feel bored a more optimized version of this would be welcome
+          for( int i = 0; i < img.width(); ++i )
+          {
+            for( int j = 0; j < img.width(); ++j )
+            {
+              img.setPixel( i, j, qGray( img.pixel( i,j ) ) );
+            }
+          }
+        }
         QPoint offset;
-        offset.setX( r.width()/2 - i.width()/2 );
-        offset.setY( r.height()/2 - i.height()/2 );
+        offset.setX( r.width()/2 - img.width()/2 );
+        offset.setY( r.height()/2 - img.height()/2 );
 
-        p->drawImage( r.topLeft() + offset, i );
+        p->drawImage( r.topLeft() + offset, img );
     }
     p->restore();
 }
@@ -480,7 +491,7 @@ void KoDocumentSectionDelegate::drawDecoration( QPainter *p, const QStyleOptionV
         p->setClipRect( r );
         p->translate( r.topLeft() );
         if( !index.data( Qt::DecorationRole ).value<QIcon>().isNull() )
-            p->drawPixmap( 0, 0, index.data( Qt::DecorationRole ).value<QIcon>().pixmap( option.decorationSize ) );
+            p->drawPixmap( 0, 0, index.data( Qt::DecorationRole ).value<QIcon>().pixmap( option.decorationSize, ( option.state & QStyle::State_Enabled ) ? QIcon::Normal : QIcon::Disabled ) );
     }
     p->restore();
 }
@@ -505,6 +516,7 @@ void KoDocumentSectionDelegate::drawProgressBar( QPainter *p, const QStyleOption
             opt.text = i18n("%1 %", opt.progress);
             opt.rect = r;
             opt.orientation = Qt::Horizontal;
+            opt.state = option.state;
             style->drawControl( QStyle::CE_ProgressBar, &opt, p, 0);
         }
         p->restore();

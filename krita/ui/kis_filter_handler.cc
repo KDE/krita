@@ -46,6 +46,7 @@
 #include "kis_threaded_applicator.h"
 #include "filter/kis_filter_job.h"
 #include "filter/kis_filter_registry.h"
+#include "kis_system_locker.h"
 
 struct KisFilterHandler::Private {
 
@@ -122,6 +123,9 @@ void KisFilterHandler::apply(KisNodeSP layer, KisFilterConfiguration* config)
     dbgUI << "Applying a filter";
     if (!layer) return;
 
+    
+    KisSystemLocker l( layer );
+    
     KisFilterSP filter = KisFilterRegistry::instance()->value(config->name());
 
     m_d->dev = layer->paintDevice();

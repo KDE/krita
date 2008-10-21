@@ -318,12 +318,12 @@ void KisNodeTest::testChildNodes()
     KisNodeSP a = new TestNodeA();
     root->add(a, 0);
     a->setVisible(true);
-    a->setLocked(true);
+    a->setUserLocked(true);
 
     KisNodeSP b = new TestNodeB();
     root->add(b, 0);
     b->setVisible(false);
-    b->setLocked(true);
+    b->setUserLocked(true);
 
     KisNodeSP c = new TestNodeC();
     root->add(c, 0);

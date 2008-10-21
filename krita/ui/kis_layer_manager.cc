@@ -242,7 +242,7 @@ void KisLayerManager::updateGUI()
         nvisible = nlayers - img->nHiddenLayers();
     }
 
-    bool enable = img && layer && layer->visible() && !layer->locked();
+    bool enable = img && layer && layer->visible() && !layer->userLocked() && !layer->systemLocked();
 
     m_layerDup->setEnabled(enable);
     m_layerRm->setEnabled(enable);
@@ -337,7 +337,7 @@ void KisLayerManager::layerToggleLocked()
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    layer->setLocked(!layer->locked());
+    layer->setUserLocked(!layer->userLocked());
 }
 
 void KisLayerManager::actLayerVisChanged(int show)

@@ -28,13 +28,15 @@ public:
 
     KoProperties properties;
     KisBaseNodeSP linkedTo;
+    bool systemLocked;
 };
 
 KisBaseNode::KisBaseNode()
         : m_d(new Private())
 {
     setVisible(true);
-    setLocked(false);
+    setUserLocked(false);
+    setSystemLocked(false);
     m_d->linkedTo = 0;
 }
 
@@ -66,7 +68,7 @@ KoDocumentSectionModel::PropertyList KisBaseNode::sectionModelProperties() const
 {
     KoDocumentSectionModel::PropertyList l;
     l << KoDocumentSectionModel::Property(i18n("Visible"), KIcon("visible"), KIcon("novisible"), visible());
-    l << KoDocumentSectionModel::Property(i18n("Locked"), KIcon("locked"), KIcon("unlocked"), locked());
+    l << KoDocumentSectionModel::Property(i18n("Locked"), KIcon("locked"), KIcon("unlocked"), userLocked());
     // XXX: Add linked!
     return l;
 }
@@ -75,7 +77,7 @@ void KisBaseNode::setSectionModelProperties(const KoDocumentSectionModel::Proper
 {
     setVisible(properties.at(0).state.toBool());
     dbgImage << "visible = " << properties.at(0).state.toBool() << " " << visible();
-    setLocked(properties.at(1).state.toBool());
+    setUserLocked(properties.at(1).state.toBool());
 }
 
 KoProperties & KisBaseNode::nodeProperties() const
@@ -129,15 +131,26 @@ void KisBaseNode::setVisible(bool visible)
     emit( visibilityChanged( visible ) );
 }
 
-bool KisBaseNode::locked() const
+bool KisBaseNode::userLocked() const
 {
     return m_d->properties.boolProperty("locked", false);
 }
 
-void KisBaseNode::setLocked(bool locked)
+void KisBaseNode::setUserLocked(bool locked)
 {
     m_d->properties.setProperty("locked", locked);
-    emit( lockingChanged( locked ) );
+    emit( userLockingChanged( locked ) );
+}
+
+bool KisBaseNode::systemLocked() const
+{
+    return m_d->systemLocked;
+}
+
+void KisBaseNode::setSystemLocked(bool locked)
+{
+    m_d->systemLocked = locked;
+    emit( userLockingChanged( locked ) );
 }
 
 #include "kis_base_node.moc"

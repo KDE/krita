@@ -347,7 +347,7 @@ void KisTopDownUpdateStrategy::lock()
        we have to lock the nodes themselves to avoid redirtying while
        updating the projection.
      */
-    m_d->node.data()->setLocked(true);
+    m_d->node.data()->setSystemLocked(true);
     KisNodeSP child = m_d->node->firstChild();
     while (child) {
         static_cast<KisTopDownUpdateStrategy*>(child->updateStrategy())->lock();
@@ -368,7 +368,7 @@ void KisTopDownUpdateStrategy::unlock()
         static_cast<KisTopDownUpdateStrategy*>(child->updateStrategy())->unlock();
         child = child->nextSibling();
     }
-    m_d->node.data()->setLocked(false);
+    m_d->node.data()->setSystemLocked(false);
 }
 
 KisPaintDeviceSP KisTopDownUpdateStrategy::updateGroupLayerProjection(const QRect & rc, KisPaintDeviceSP projection)

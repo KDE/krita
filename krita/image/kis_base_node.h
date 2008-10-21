@@ -45,7 +45,7 @@ class KRITAIMAGE_EXPORT KisBaseNode : public QObject, public KisShared
 
 public:
 
-    enum { Visible = 1, Hidden = 2, Locked = 4, Unlocked = 8, Linked = 16, Unlinked = 32 };
+    enum { Visible = 1, Hidden = 2, UserLocked = 4, UserUnlocked = 8, Linked = 16, Unlinked = 32 };
 
     /**
      * Create a new, empty base node. The node is unnamed, unlocked
@@ -196,14 +196,28 @@ public:
      * Return the locked status of this node. Locked nodes cannot be
      * edited.
      */
-    bool locked() const;
+    bool userLocked() const;
 
     /**
      * Set the locked status of this node. Locked nodes cannot be
      * edited.
      */
-    void setLocked(bool l);
+    void setUserLocked(bool l);
 
+    /**
+     * Return the locked status of this node. System Locked nodes indicates
+     * that an algorithm is processing them and that an other
+     * algorithm need to wait befor accessing it.
+     */
+    bool systemLocked() const;
+
+    /**
+     * Set the locked status of this node. System Locked nodes indicates
+     * that an algorithm is processing them and that an other
+     * algorithm need to wait befor accessing it.
+     */
+    void setSystemLocked(bool l);
+    
     /**
      * @return the x-offset of this layer in the image plane.
      */
@@ -256,9 +270,13 @@ signals:
     void visibilityChanged( bool );
 
     /**
-     * This signal is emitted when the node is locked or unlocked with \ref setLocked.
+     * This signal is emitted when the node is locked or unlocked with \ref setUserLocked.
      */
-    void lockingChanged( bool );
+    void userLockingChanged( bool );
+    /**
+     * This signal is emitted when the node is locked or unlocked with \ref setSystemLocked.
+     */
+    void systemLockingChanged( bool );
 private:
 
     class Private;

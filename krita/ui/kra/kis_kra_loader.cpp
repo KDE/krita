@@ -310,7 +310,7 @@ KisLayerSP KisKraLoader::loadPaintLayer(const KoXmlElement& element, KisImageSP 
 
     layer->setCompositeOp(op);
     layer->setVisible(visible);
-    layer->setLocked(locked);
+    layer->setUserLocked(locked);
     layer->setX(x);
     layer->setY(y);
 
@@ -345,7 +345,7 @@ KisGroupLayerSP KisKraLoader::loadGroupLayer(const KoXmlElement& element, KisIma
     const KoCompositeOp * op = img->colorSpace()->compositeOp(compositeOp);
     layer->setCompositeOp(op);
     layer->setVisible(visible);
-    layer->setLocked(locked);
+    layer->setUserLocked(locked);
     layer->setX(x);
     layer->setY(y);
 
@@ -383,7 +383,7 @@ KisAdjustmentLayerSP KisKraLoader::loadAdjustmentLayer(const KoXmlElement& eleme
     const KoCompositeOp * op = img->colorSpace()->compositeOp(compositeOp);
     layer->setCompositeOp(op);
     layer->setVisible(visible);
-    layer->setLocked(locked);
+    layer->setUserLocked(locked);
     layer->setX(x);
     layer->setY(y);
     layer->setOpacity(opacity);
@@ -406,7 +406,7 @@ KisShapeLayerSP KisKraLoader::loadShapeLayer(const KoXmlElement& elem, KisImageS
     const KoCompositeOp * op = img->colorSpace()->compositeOp(compositeOp);
     layer->setCompositeOp(op);
     static_cast<KisBaseNode*>(layer.data())->setVisible(visible);
-    static_cast<KisBaseNode*>(layer.data())->setLocked(locked);
+    static_cast<KisBaseNode*>(layer.data())->setUserLocked(locked);
     layer->setX(x);
     layer->setY(y);
 

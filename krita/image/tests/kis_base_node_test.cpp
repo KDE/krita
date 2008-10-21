@@ -44,7 +44,7 @@ void KisBaseNodeTest::testCreation()
     QVERIFY(node->name() == node->objectName());
     QVERIFY(node->icon().isNull());
     QVERIFY(node->visible() == true);
-    QVERIFY(node->locked() == false);
+    QVERIFY(node->userLocked() == false);
     QVERIFY(node->x() == 0);
     QVERIFY(node->y() == 0);
 }
@@ -64,13 +64,13 @@ void KisBaseNodeTest::testContract()
     node->setVisible(!node->visible());
     QVERIFY(node->visible() == false);
 
-    node->setLocked(!node->locked());
-    QVERIFY(node->locked() == true);
+    node->setUserLocked(!node->userLocked());
+    QVERIFY(node->userLocked() == true);
 
     KoDocumentSectionModel::PropertyList list = node->sectionModelProperties();
     QVERIFY(list.count() == 2);
     QVERIFY(list.at(0).state == node->visible());
-    QVERIFY(list.at(1).state == node->locked());
+    QVERIFY(list.at(1).state == node->userLocked());
 
     QImage img = node->createThumbnail(10, 10);
     QCOMPARE(img.size(), QSize(10, 10));
@@ -96,7 +96,7 @@ void KisBaseNodeTest::testProperties()
         QVERIFY(!node->check(props));
 
         node->nodeProperties().setProperty("locked", false);
-        QVERIFY(node->locked() == false);
+        QVERIFY(node->userLocked() == false);
     }
     {
         KoProperties props;

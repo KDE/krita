@@ -205,7 +205,7 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     el.setAttribute("opacity", layer->opacity());
     el.setAttribute("compositeop", layer->compositeOp()->id());
     el.setAttribute("visible", layer->visible());
-    el.setAttribute("locked", layer->locked());
+    el.setAttribute("locked", layer->userLocked());
     el.setAttribute("layertype", layerType);
     el.setAttribute("filename", QString("layer%1").arg(m_count));
 
@@ -215,7 +215,7 @@ void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, con
 {
     el.setAttribute("name", mask->KisBaseNode::name());
     el.setAttribute("visible", mask->visible());
-    el.setAttribute("locked", mask->locked());
+    el.setAttribute("locked", mask->userLocked());
     el.setAttribute("masktype", maskType);
     el.setAttribute("filename", QString("mask%1").arg(m_count));
     el.setAttribute("x", mask->x());

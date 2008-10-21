@@ -30,7 +30,7 @@ KisNodeAction::KisNodeAction(QObject * parent, KisNodeSP node, KoProgressProxy *
         , m_d(new Private)
 {
     m_d->node = node;
-    m_d->node->setLocked(true);
+    m_d->node->setSystemLocked(true);
     m_d->updater = new KoProgressUpdater(progressProxy);
     connect(this, SIGNAL(triggered(const QVariant &)), this, SLOT(slotTriggered()), Qt::DirectConnection);
     connect(this, SIGNAL(updateUi(const QVariant &)), this, SLOT(slotUpdateGUI()), Qt::DirectConnection);
@@ -45,7 +45,7 @@ KisNodeAction::~KisNodeAction()
 void KisNodeAction::slotUpdateGUI()
 {
     // XXX: make sure the gui responds to this
-    m_d->node->setLocked(false);
+    m_d->node->setSystemLocked(false);
 }
 
 #include "kis_node_action.moc"

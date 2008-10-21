@@ -47,7 +47,7 @@ void KisLayerTest::testCreation()
     QCOMPARE(layer->image(), image);
     QCOMPARE(layer->colorSpace(), image->colorSpace());
     QCOMPARE(layer->visible(), true);
-    QCOMPARE(layer->locked(), false);
+    QCOMPARE(layer->userLocked(), false);
     QCOMPARE(layer->temporary(), false);
 
     image->addLayer(layer, image->rootLayer());

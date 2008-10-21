@@ -45,7 +45,7 @@ KisLayerContainerShape::KisLayerContainerShape(KoShapeContainer *parent, KisLaye
     setShapeId(KIS_LAYER_CONTAINER_ID);
     
     connect( groupLayer, SIGNAL(visibilityChanged( bool )), SLOT( setLayerVisible( bool ) ) );
-    connect( groupLayer, SIGNAL(lockingChanged( bool )), SLOT( setLayerLocked( bool ) ) );
+    connect( groupLayer, SIGNAL(userLockingChanged( bool )), SLOT( setLayerLocked( bool ) ) );
 }
 
 KisLayerContainerShape::~KisLayerContainerShape()

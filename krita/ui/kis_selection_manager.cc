@@ -253,7 +253,7 @@ void KisSelectionManager::updateGUI()
     if (img && m_view->activeDevice() && m_view->activeLayer()) {
         l = m_view->activeLayer();
 
-        enable = l && !l->locked() && l->visible();
+        enable = l && !l->userLocked() && l->visible();
 #if 0 // XXX_SELECTION (how are we going to handle deselect and
         // reselectt now?
         if (l->inherits("KisAdjustmentLayer")

@@ -44,7 +44,7 @@ KisLayerShape::KisLayerShape(KoShapeContainer * parent, KisLayerSP layer)
     parent->addChild(this);
     
     connect( layer, SIGNAL(visibilityChanged( bool )), SLOT( setLayerVisible( bool ) ) );
-    connect( layer, SIGNAL(lockingChanged( bool )), SLOT( setLayerLocked( bool ) ) );
+    connect( layer, SIGNAL(userLockingChanged( bool )), SLOT( setLayerLocked( bool ) ) );
 }
 
 KisLayerShape::~KisLayerShape()

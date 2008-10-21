@@ -27,7 +27,7 @@
  */
 class KisSystemLocker {
   public:
-    inline KisSystemLocker( KisBaseNode* _node) : m_node( _node )
+    inline KisSystemLocker( KisBaseNodeSP _node) : m_node( _node )
     {
       Q_ASSERT(!_node->systemLocked() );
       m_node->setSystemLocked( true );
@@ -37,7 +37,7 @@ class KisSystemLocker {
       m_node->setSystemLocked( false );
     }
   private:
-    KisBaseNode* m_node;
+    KisBaseNodeSP m_node;
     
 };
 

@@ -67,7 +67,7 @@ public:
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
 private slots:
     void setLayerVisible( bool );
-    void setLayerLocked( bool );
+    void editabilityChanged( );
 private:
     class Private;
     Private * const m_d;

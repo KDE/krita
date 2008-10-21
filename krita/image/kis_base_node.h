@@ -219,6 +219,13 @@ public:
     void setSystemLocked(bool l);
     
     /**
+     * @return true if the node can be edited: if it's visible and neither locked
+     *         by the user nor by the system.
+     *         It's equivalent to ( visible() and not userLocked() and not systemLocked() ).
+     */
+    bool isEditable() const;
+    
+    /**
      * @return the x-offset of this layer in the image plane.
      */
     virtual qint32 x() const {

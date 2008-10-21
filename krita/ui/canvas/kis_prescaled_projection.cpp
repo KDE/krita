@@ -583,6 +583,7 @@ void KisPrescaledProjection::drawScaledImage(const QRect & rc,  QPainter & gc, b
             gc.setRenderHint(QPainter::SmoothPixmapTransform, true);
             gc.scale(scaleXbis, scaleYbis);
             QPointF pt(rcFromAligned.topLeft().x() / scaleXbis, rcFromAligned.topLeft().y() / scaleYbis);
+            
             if (m_d->useQtScaling) {
                 dbgRender << " m_d->useQtScaling";
                 gc.drawImage(pt, croppedImage.scaled(s, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));

@@ -17,6 +17,7 @@
  */
 
 #include "kis_layer_shape.h"
+
 #include <kis_types.h>
 #include <kis_layer.h>
 #include <kis_image.h>
@@ -44,7 +45,8 @@ KisLayerShape::KisLayerShape(KoShapeContainer * parent, KisLayerSP layer)
     parent->addChild(this);
     
     connect( layer, SIGNAL(visibilityChanged( bool )), SLOT( setLayerVisible( bool ) ) );
-    connect( layer, SIGNAL(userLockingChanged( bool )), SLOT( setLayerLocked( bool ) ) );
+    connect( layer, SIGNAL(userLockingChanged( bool )), SLOT( editabilityChanged( ) ) );
+    connect( layer, SIGNAL(systemLockingChanged( bool )), SLOT( editabilityChanged( ) ) );
 }
 
 KisLayerShape::~KisLayerShape()
@@ -135,9 +137,10 @@ void KisLayerShape::setLayerVisible( bool v)
     setVisible( v );
 }
 
-void KisLayerShape::setLayerLocked( bool v)
+void KisLayerShape::editabilityChanged( )
 {
-    setLocked( v );
+    dbgKrita << m_d->layer->isEditable();
+    setLocked( !m_d->layer->isEditable() );
 }
 
 #include "kis_layer_shape.moc"

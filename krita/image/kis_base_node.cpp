@@ -150,7 +150,12 @@ bool KisBaseNode::systemLocked() const
 void KisBaseNode::setSystemLocked(bool locked)
 {
     m_d->systemLocked = locked;
-    emit( userLockingChanged( locked ) );
+    emit( systemLockingChanged( locked ) );
+}
+
+bool KisBaseNode::isEditable() const
+{
+    return ( visible() && !userLocked() && !systemLocked() );
 }
 
 #include "kis_base_node.moc"

@@ -21,8 +21,13 @@
 
 #include <QPainter>
 
+#include <KoCanvasBase.h>
+#include <KoCanvasController.h>
 #include <KoViewConverter.h>
+#include <KoSelection.h>
 #include <KoShapeContainer.h>
+#include <KoToolManager.h>
+#include <KoShapeManager.h>
 
 #include <kis_types.h>
 #include <kis_group_layer.h>
@@ -45,7 +50,8 @@ KisLayerContainerShape::KisLayerContainerShape(KoShapeContainer *parent, KisLaye
     setShapeId(KIS_LAYER_CONTAINER_ID);
     
     connect( groupLayer, SIGNAL(visibilityChanged( bool )), SLOT( setLayerVisible( bool ) ) );
-    connect( groupLayer, SIGNAL(userLockingChanged( bool )), SLOT( setLayerLocked( bool ) ) );
+    connect( groupLayer, SIGNAL(userLockingChanged( bool )), SLOT( editabilityChanged( ) ) );
+    connect( groupLayer, SIGNAL(systemLockingChanged( bool )), SLOT( editabilityChanged( ) ) );
 }
 
 KisLayerContainerShape::~KisLayerContainerShape()
@@ -100,9 +106,20 @@ void KisLayerContainerShape::setLayerVisible( bool v)
     setVisible( v );
 }
 
-void KisLayerContainerShape::setLayerLocked( bool v)
+void KisLayerContainerShape::editabilityChanged( )
 {
-    setLocked( v );
+    dbgKrita << m_d->groupLayer->isEditable();
+    setLocked( !m_d->groupLayer->isEditable() );
+    // The following looks weird but it is needed to update the status of the tools
+    KoCanvasController* canvas = KoToolManager::instance()->activeCanvasController();
+    if( canvas )
+    {
+        KoSelection* selection = canvas->canvas()->shapeManager()->selection();
+        if( selection->activeLayer() == this )
+        {
+            selection->setActiveLayer( this );
+        }
+    }
 }
 
 #include "kis_layer_container_shape.moc"

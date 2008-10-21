@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Deform brush
+Name[pt]=Deformar o pincel
+Name[pt_BR]=Deformar o pincel
+Name[sv]=Deformerande pensel
+Name[uk]=Пензель викривлення
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritadeformpaintop

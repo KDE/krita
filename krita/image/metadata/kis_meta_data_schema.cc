@@ -106,6 +106,7 @@ SchemaRegistry::SchemaRegistry() : d(new Private)
     create(Schema::MakerNoteSchemaUri, "mkn");
     create(Schema::IPTCSchemaUri, "Iptc4xmpCore");
     create(Schema::PhotoshopSchemaUri, "photoshop");
+    create("http://www.hdrsoft.com/tone_mapping_settings", "pmtm"); // TODO this one shouldn't be defined here but added as needed
 }
 
 

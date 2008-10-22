@@ -86,6 +86,7 @@ public:
         setPriority(1);
         setIcon("krita_tool_line");
         setInputDeviceAgnostic(false);
+        setActivationShapeId("flake/edit");
     }
 
     virtual ~KisToolLineFactory() {}

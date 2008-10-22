@@ -96,6 +96,7 @@ public:
         //setShortcut( QKeySequence( Qt::Key_F ) );
         setPriority(14);
         setInputDeviceAgnostic(false);
+        setActivationShapeId("flake/edit");
     }
 
     virtual ~KisToolFillFactory() {}

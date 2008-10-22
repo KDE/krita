@@ -52,6 +52,7 @@ public:
         //setActivationShapeId( KIS_LAYER_SHAPE_ID );
         setIcon("krita_draw_path");
         setPriority(7);
+        setActivationShapeId("flake/edit");
     }
 
     virtual ~KisToolPathFactory() {}

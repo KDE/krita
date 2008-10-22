@@ -71,6 +71,7 @@ public:
         setPriority(11);
         setIcon("krita_tool_move");
         //setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_V ) );
+        setActivationShapeId("flake/edit");
     }
 
     virtual ~KisToolMoveFactory() {}

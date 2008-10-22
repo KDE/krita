@@ -87,6 +87,7 @@ public:
         //setShortcut( Qt::Key_F6 );
         setPriority(2);
         setInputDeviceAgnostic(false);
+        setActivationShapeId("flake/edit");
     }
 
     virtual ~KisToolRectangleFactory() {}

@@ -121,6 +121,7 @@ public:
         setPriority(15);
         //setActivationShapeId( KIS_LAYER_SHAPE_ID );
         setInputDeviceAgnostic(false);
+        setActivationShapeId("flake/edit");
     }
 
     virtual ~KisToolGradientFactory() {}

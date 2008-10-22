@@ -38,7 +38,9 @@ public:
     void paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPaintInformation &info);
     void paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
 
-    void swirl(qreal cursorX,qreal cursorY, qreal alpha, qreal scale );
+    void bilinear_interpolation(double x, double y );
+
+    void swirl(qreal cursorX,qreal cursorY, qreal alpha);
 
     void setRadius( int deformRadius ){
         m_radius = deformRadius;
@@ -56,9 +58,15 @@ public:
         m_image = image;
     }
 
+    void setCounter(int value){
+        m_counter = value;
+    }
+
+
+
 private:
     bool point_interpolation( qreal* x, qreal* y, KisImageSP image );
-
+    void debugColor(const quint8* data);
 
     // width and height for interpolation
     KisImageSP m_image;
@@ -68,11 +76,16 @@ private:
     KisRandomAccessor * m_readAccessor;
     KisRandomAccessor * m_writeAccessor;
     quint32 m_pixelSize;
+    
+    //temporary KoColor for optimalization in bilinear interpolation
+    KoColor * m_tempColor;
 
     int m_radius;
     qreal m_amount;
     bool m_useBilinear;
     int m_action;
+
+    int m_counter;
 };
 
 #endif

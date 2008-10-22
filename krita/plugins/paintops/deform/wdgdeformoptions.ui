@@ -17,8 +17,8 @@
   </property>
   <property name="minimumSize" >
    <size>
-    <width>0</width>
-    <height>0</height>
+    <width>340</width>
+    <height>415</height>
    </size>
   </property>
   <widget class="QLabel" name="deformLabel" >
@@ -107,6 +107,9 @@
    <property name="text" >
     <string>Swirl CW</string>
    </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QLabel" name="deformRadiusLbl" >
    <property name="geometry" >
@@ -155,8 +158,11 @@
      <height>29</height>
     </rect>
    </property>
+   <property name="maximum" >
+    <number>4096</number>
+   </property>
    <property name="value" >
-    <number>10</number>
+    <number>100</number>
    </property>
   </widget>
   <widget class="QDoubleSpinBox" name="deformAmountSPBox" >

@@ -80,7 +80,8 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
     m_deformBrush.setInterpolation( settings->bilinear() );
     m_deformBrush.setAction( settings->deformAction() );
     m_deformBrush.setImage(image);
-    m_dev = painter->device();
+    m_deformBrush.setCounter(1);
+    m_dev = settings->node()->paintDevice();
 }
 
 KisDeformPaintOp::~KisDeformPaintOp()
@@ -105,19 +106,22 @@ void KisDeformPaintOp::paintAt(const KisPaintInformation& info)
 
     dab = cachedDab();
     dab->clear();
-                        //write device, read device, position 
+
+    //write device, read device, position 
     m_deformBrush.paint(dab,device2, info);
 
     QRect rc = dab->extent();
+    qDebug() << rc;
 
-    painter()->bltSelection(
+    /*painter()->bltSelection(
         rc.x(), rc.y(),
         device->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN),
         dab,
         painter()->opacity(),
         rc.x(), rc.y(),
         rc.width(), rc.height());
-
+    */
+    painter()->bitBlt(rc.topLeft(), dab, rc);
 }
 
 

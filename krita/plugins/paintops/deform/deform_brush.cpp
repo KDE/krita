@@ -46,70 +46,134 @@ DeformBrush::~DeformBrush()
 {
 }
 
-void DeformBrush::swirl(qreal cursorX,qreal cursorY, qreal alpha, qreal scale ) {
+void DeformBrush::swirl(qreal cursorX,qreal cursorY, qreal alpha){
+    if (m_action == 3){
+        // CW
+    } else 
+    if (m_action == 4){
+        // CCW
+        alpha = -alpha;
+    }
 
     int curXi = static_cast<int>(cursorX+0.5);
     int curYi = static_cast<int>(cursorY+0.5);
 
+
+    KoColor kcolor( m_dev->colorSpace() );
+    KoColor touchColor( m_dev->colorSpace() );
+    QColor result(255,0,0,25);
+    touchColor.fromQColor(result);
+
+/*    QColor rgbcolor;
+    m_dev->colorSpace()->toQColor(m_readAccessor->rawData(), &rgbcolor);
+    dbgPlugins << "Copy color:";
+    dbgPlugins << "Red : "<< rgbcolor.red();
+    dbgPlugins << "Green : "<< rgbcolor.green();
+    dbgPlugins << "Blue : "<< rgbcolor.blue();
+    dbgPlugins << "Alpha: "<< rgbcolor.alpha();*/
+
     int centerX = m_image->width()  / 2;
     int centerY = m_image->height() / 2;
+    qreal newX, newY;
 
-    //double norm =  sqrt(centerX*centerX + centerY*centerY);
-    //double t = 0.0;    
-
-    qreal newX = 0, newY = 0;
-    qreal rotX = 0, rotY = 0;
+    qreal rotX, rotY;
+    qreal distance;
+    qreal maxdist = sqrt(pow(m_radius,2));
 
     for (int x = curXi - m_radius; x < curXi + m_radius;x++){
         for (int y = curYi - m_radius; y < curYi + m_radius;y++){
-            newX = x - centerX;
-            newY = y - centerY;
-            //t = sqrt(newX*newX + newY*newY);
-            //t /= norma;
-            //rotX = cos(-alpha * t) * newX - sin(-alpha * t) * newY;
-            //rotY = sin(-alpha * t) * newX + cos(-alpha * t) * newY;
 
-            rotX = cos(-alpha) * newX - sin(-alpha ) * newY;
-            rotY = sin(-alpha) * newX + cos(-alpha ) * newY;
+            newX = x - curXi;
+            newY = y - curYi;
 
-            // scale 
-            rotX = newX/scale;
-            rotY = newY/scale;
+            distance = sqrt(newX*newX +newY*newY);
+            if (distance > m_radius) continue;
 
-            newX = rotX + centerX;
-            newY = rotY + centerY;
+            qreal t = distance/maxdist;
+            t = 1.0 - t;
+            rotX = cos(-alpha * t) * newX - sin(-alpha *t) * newY;
+            rotY = sin(-alpha * t) * newX + cos(-alpha *t) * newY;
 
-            if (point_interpolation( &newX, &newY, m_image ) )
-            {
-                // read pixelValue
-                m_readAccessor->moveTo(newX,newY);
-                m_writeAccessor->moveTo(x,y);
-                memcpy(m_writeAccessor->rawData() , m_readAccessor->oldRawData() , m_pixelSize );
+            newX = rotX;
+            newY = rotY;
+
+            newX += curXi;
+            newY += curYi;
+
+            if (m_useBilinear){
+                // fill the result to m_tempColor coz of optimalization [creating KoColor used to be slow..]
+                bilinear_interpolation(newX, newY );
+                m_writeAccessor->moveTo(x, y); 
+                memcpy(m_writeAccessor->rawData(), m_tempColor->data() , m_pixelSize );
+            }else
+            if (point_interpolation(&newX,&newY,m_image)){
+                // copy pixel
+                m_readAccessor->moveTo(newX, newY);
+                m_writeAccessor->moveTo(x, y); 
+
+                memcpy(kcolor.data(), m_readAccessor->oldRawData(), m_pixelSize);
+                //memcpy(m_readAccessor->rawData(), touchColor.data(), m_pixelSize);
+                memcpy(m_writeAccessor->rawData(), kcolor.data(), m_pixelSize );
             }
+
         }
     }
 
 }
 
+
 void DeformBrush::paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPaintInformation &info)
 {
+    
     qreal x1 = info.pos().x();
     qreal y1 = info.pos().y();
 
+    m_dev = layer;
+
+    if (m_useBilinear){
+        // only used when bilinear interepolation checked
+        m_tempColor = new KoColor(m_dev->colorSpace());
+    }
+
     m_pixelSize = dev->colorSpace()->pixelSize();
-    
+
     KisRandomAccessor accessor = dev->createRandomAccessor((int)x1, (int)y1);
     m_writeAccessor = &accessor;
 
     KisRandomAccessor accessor2 = layer->createRandomAccessor((int)x1, (int)y1);
     m_readAccessor = &accessor2;
 
-    m_dev = dev;
+    swirl(x1,y1, (1.0/360*m_counter)*radToDeg);
+    m_counter++;
 
-    swirl(x1,y1,45*radToDeg,1);
 
-    m_dev = 0;
-    //m_accessor = 0;
+//    debug
+//    bilinear_interpolation(x1,y1);
+
+/*    KoColor kcolor( dev->colorSpace() );
+    QColor result(255,0,0,255);
+    kcolor.fromQColor(result);
+    debugColor(kcolor.data());*/
+
+    // debug code
+    /*QColor rgbcolor;
+    m_readAccessor->moveTo((int)x1, (int)y1);
+    layer->colorSpace()->toQColor(m_readAccessor->rawData(), &rgbcolor);
+
+    dbgPlugins << "Red : "<< rgbcolor.red();
+    dbgPlugins << "Green : "<< rgbcolor.green();
+    dbgPlugins << "Blue : "<< rgbcolor.blue();
+    dbgPlugins << "Alpha: "<< rgbcolor.alpha();
+
+    m_writeAccessor->moveTo((int)x1, (int)y1);
+    KoColor kcolor( dev->colorSpace() );
+    QColor result(255,0,0,255);
+    kcolor.fromQColor(result);
+    memcpy(m_writeAccessor->rawData(), kcolor.data(), m_pixelSize );*/
+
+    
+//    swirl(x1,y1,45 * (double)i/steps  * radToDeg,1);
+
 }
 
 
@@ -158,41 +222,67 @@ bool DeformBrush::point_interpolation( qreal* x, qreal* y, KisImageSP image ) {
     return false;
 }
 
-#if 0
-CvScalar bilinear_interpolation( KisPaintDevice dev, double x, double y ) {
-    CvScalar pixel = cvScalar( 0.0 );
-
-    int x1 = (int)floor(u);
-    int y1 = (int)floor(v);
-
-
-    if (  x1 >= 0 && 
-          x1 <= img->width-2 && 
-          y1 >= 0 && 
-          y1 <= img->height-2)
-    {
-
-    CvScalar p11 = cvGet2D (img, y1, x1);
-    CvScalar p12 = cvGet2D (img, y1, x1 +1);
-    CvScalar p21 = cvGet2D (img, y1+1,x1);
-    CvScalar p22 = cvGet2D (img, y1+1, x1+1);
-
-    double x = u - (double)x1; 
-    double y = v - (double)y1;
-      
-    for (int c = 0; c < img->nChannels; c++)
-    {
-      pixel.val[c] = (
-        p11.val[c] * (1.0 - y) * (1.0 - x) +
-        p12.val[c] * (1.0 - y) *  x +
-        p21.val[c] * y * (1.0 - x) +
-        p22.val[c] * y * x
-      );
-    }
-
-    }
-      
-
-      return pixel;
+void DeformBrush::debugColor(const quint8* data){
+    QColor rgbcolor;
+    m_dev->colorSpace()->toQColor(data, &rgbcolor);
+    dbgPlugins << "RGBA: ("
+    << rgbcolor.red() 
+    << ", "<< rgbcolor.green()
+    << ", "<< rgbcolor.blue()
+    << ", "<< rgbcolor.alpha() << ")";
 }
+
+/// result of bilinear interpolation is in m_tempColor
+void DeformBrush::bilinear_interpolation(double x, double y ) {
+    KoMixColorsOp * mixOp = m_dev->colorSpace()->mixColorsOp();
+
+    int ix = (int)floor(x);
+    int iy = (int)floor(y);
+
+    if (  ix >= 0 && 
+          ix <= m_image->width()-2 && 
+          iy >= 0 && 
+          iy <= m_image->height()-2)
+    {
+        const quint8 *colors[4];
+        m_readAccessor->moveTo(ix, iy);
+        colors[0] = m_readAccessor->oldRawData(); //11
+    
+        m_readAccessor->moveTo(ix+1, iy);
+        colors[1] = m_readAccessor->oldRawData(); //12
+    
+        m_readAccessor->moveTo(ix, iy+1);
+        colors[2] = m_readAccessor->oldRawData(); //21
+    
+        m_readAccessor->moveTo(ix+1, iy+1);
+        colors[3] = m_readAccessor->oldRawData();  //22  
+    
+        double x_frac = x - (double)ix; 
+        double y_frac = y - (double)iy;
+
+        qint16 colorWeights[4];
+        int MAX_16BIT = 255;
+
+        colorWeights[0] = static_cast<quint16>( (1.0 - y_frac) * (1.0 - x_frac) * MAX_16BIT); 
+        colorWeights[1] = static_cast<quint16>( (1.0 - y_frac) *  x_frac * MAX_16BIT); 
+        colorWeights[2] = static_cast<quint16>(y_frac * (1.0 - x_frac) * MAX_16BIT);
+        colorWeights[3] = static_cast<quint16>(y_frac * x_frac* MAX_16BIT);
+        mixOp->mixColors(colors, colorWeights, 4, m_tempColor->data() );
+        
+#if 0
+        // debug code
+        debugColor(colors[0]);
+        debugColor(colors[1]);
+        debugColor(colors[2]);
+        debugColor(colors[3]);
+        debugColor(m_tempColor->data() );
+
+        dbgPlugins << "w0,w1,w2,w3: ("
+        << colorWeights[0] 
+        << ", "<< colorWeights[1]
+        << ", "<< colorWeights[2]
+        << ", "<< colorWeights[3] << ")";
 #endif
+
+    }
+}

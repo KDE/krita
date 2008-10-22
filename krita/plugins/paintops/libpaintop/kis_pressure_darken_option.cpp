@@ -23,19 +23,10 @@
 #include <KoColorSpace.h>
 
 KisPressureDarkenOption::KisPressureDarkenOption()
-        : KisCurveOption(i18n("Darken"))
+        : KisCurveOption(i18n("Darken"), "Darken")
 {
 }
 
-void KisPressureDarkenOption::writeOptionSetting(KisPaintOpPresetSP preset) const
-{
-    // XXX
-}
-
-void KisPressureDarkenOption::readOptionSetting(KisPaintOpPresetSP preset)
-{
-    // XXX
-}
 
 KoColor KisPressureDarkenOption::apply(KisPainter * painter, double pressure) const
 {

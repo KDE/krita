@@ -19,9 +19,10 @@
 #include "kis_curve_option.h"
 #include "widgets/kcurve.h"
 
-KisCurveOption::KisCurveOption(const QString & label)
-        : KisPaintOpOption(label)
-        , m_customCurve(false)
+KisCurveOption::KisCurveOption(const QString & label, const QString& name)
+    : KisPaintOpOption(label)
+    , m_customCurve(false)
+    , m_name( name )
 {
     m_curveWidget = new KCurve();
     m_curveWidget->hide();
@@ -43,4 +44,33 @@ void KisCurveOption::transferCurve()
             m_curve[i] = value;
     }
     m_customCurve = true;
+}
+
+
+void KisCurveOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+{
+    if ( m_checkable ) {
+        setting->setProperty( "Pressure" + m_name, isChecked() );
+    }
+    setting->setProperty( "Custom" + m_name, m_customCurve );
+    if ( m_customCurve ) {
+        for (int i = 0; i < 256; i++) {
+            setting->setProperty( QString(m_name + "Curve%1").arg(i), m_curve[i]);
+        }
+    }
+}
+
+void KisCurveOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+{
+    if ( m_checkable ) {
+        setChecked( setting->getBool( "Pressure" + m_name, false ) );
+    }
+    m_customCurve = setting->getBool( "Custom" + m_name, false );
+
+    for (int i = 0; i < 256; i++) {
+        if (m_customCurve) {
+                m_curve[i] = setting->getDouble(QString(m_name + "Curve%0").arg(i), i / 255.0);
+        }
+    }
+
 }

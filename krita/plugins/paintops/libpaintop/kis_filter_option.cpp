@@ -35,3 +35,13 @@ KisFilterConfiguration* KisFilterOption::filterConfig() const
 {
     return 0;
 }
+
+void KisFilterOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+{
+    // XXX: implement
+}
+
+void KisFilterOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+{
+    // XXX: implement
+}

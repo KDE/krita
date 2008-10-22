@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,44 +15,20 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_paintop_factory.h"
 
-#include "kis_paintop_settings.h"
+#include <KoColorSpace.h>
 
-#include <QWidget>
-
-#include <KoPointerEvent.h>
-
-#include "kis_node.h"
-
-struct KisPaintOpSettings::Private {
-    KisNodeSP node;
-};
-
-KisPaintOpSettings::KisPaintOpSettings() : d(new Private)
+KisPaintOpFactory::KisPaintOpFactory()
 {
 }
 
-KisPaintOpSettings::~KisPaintOpSettings()
+bool KisPaintOpFactory::userVisible(const KoColorSpace * cs)
 {
-    delete d;
+    return cs && cs->id() != "WET";
 }
 
-void KisPaintOpSettings::mousePressEvent(KoPointerEvent *e)
+QString KisPaintOpFactory::pixmap()
 {
-    e->ignore();
+    return "";
 }
-
-void KisPaintOpSettings::activate()
-{
-}
-
-void KisPaintOpSettings::setNode(KisNodeSP node)
-{
-    d->node = node;
-}
-
-KisNodeSP KisPaintOpSettings::node() const
-{
-    return d->node;
-}
-

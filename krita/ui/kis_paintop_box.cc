@@ -53,6 +53,7 @@
 #include "kis_factory2.h"
 #include "widgets/kis_preset_widget.h"
 #include "widgets/kis_paintop_presets_popup.h"
+#include <kis_paintop_settings_widget.h>
 
 
 KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name)
@@ -236,6 +237,8 @@ void KisPaintopBox::updateOptionWidget()
 
     if (preset != 0 && preset->settings() && preset->settings()->widget()) {
         m_optionWidget = preset->settings()->widget();
+        // XXX: remove this ugliness in 2.1
+        m_optionWidget->setConfiguration(const_cast<KisPaintOpSettings*>(preset->settings().data()));
         m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
     } else {
         m_presetsPopup->setPaintOpSettingsWidget(0);

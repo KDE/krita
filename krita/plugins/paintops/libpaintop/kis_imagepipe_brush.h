@@ -31,7 +31,10 @@
 
 class QImage;
 
-/** Velocity won't be supported, atm Angular and Tilt aren't either, but have chances of implementation */
+/**
+ * Velocity won't be supported, atm Angular and Tilt aren't either,
+ * but have chances of implementation
+ */
 namespace KisParasite {
     enum SelectionMode {
         Constant,

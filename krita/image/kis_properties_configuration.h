@@ -77,6 +77,9 @@ public:
      */
     virtual QString toXML() const;
 
+
+    bool hasProperty( const QString& name );
+
     /**
      * Set the property with name to value.
      */
@@ -91,18 +94,24 @@ public:
     virtual QVariant getProperty(const QString & name) const;
 
     int getInt(const QString & name, int def = 0) const;
+
     double getDouble(const QString & name, double def = 0.0) const;
+
     bool getBool(const QString & name, bool def = false) const;
+
     QString getString(const QString & name, const QString & def = "") const;
 
     QMap<QString, QVariant> getProperties() const;
 
-protected:
     /// Clear the map of properties
     void clearProperties();
+
 private:
+
     void dump();
+
 private:
+
     struct Private;
     Private* const d;
 };

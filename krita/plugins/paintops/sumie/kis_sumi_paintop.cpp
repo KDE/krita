@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_sumipaintop.h"
-#include "kis_sumipaintopsettings.h"
+#include "kis_sumi_paintop.h"
+#include "kis_sumi_paintop_settings.h"
 
 #include <cmath>
 

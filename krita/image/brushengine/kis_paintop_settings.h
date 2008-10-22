@@ -25,7 +25,7 @@
 #include "kis_shared.h"
 #include "kis_properties_configuration.h"
 
-class KisConfigWidget;
+class KisPaintOpSettingsWidget;
 class KoPointerEvent;
 
 
@@ -42,7 +42,15 @@ class KRITAIMAGE_EXPORT KisPaintOpSettings : public KisPropertiesConfiguration, 
 {
 
 public:
-    KisPaintOpSettings();
+
+    /**
+     * Create a new KisPaintOpSettings instance. For historical
+     * reasons (that should be factored out after the 2.0 release
+     * (XXX), a KisPaintopSettings instance has a pointer to the
+     * KisPaintopSettingsWidget.
+     */
+    KisPaintOpSettings( KisPaintOpSettingsWidget* settingsWidget );
+
     virtual ~KisPaintOpSettings();
 
     /**
@@ -73,7 +81,7 @@ public:
     /**
      * @return a pointer to the widget displaying the settings
      */
-    virtual KisConfigWidget* widget() const = 0;
+    virtual KisPaintOpSettingsWidget* widget() const;
 
     /**
      * Call this function when the paint op is selected or the tool is activated

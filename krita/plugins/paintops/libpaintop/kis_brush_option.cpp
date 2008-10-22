@@ -30,7 +30,18 @@ KisBrushOption::KisBrushOption()
     setConfigurationPage(m_brushSelectionWidget);
 }
 
-KisBrushSP KisBrushOption::brush()
+KisBrushSP KisBrushOption::brush() const
 {
     return m_brushSelectionWidget->brush();
+}
+
+void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+{
+    // XXX: define a serialization format for potato stamps
+}
+
+void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+{
+    // XXX: define a serialization format for potato stamps & a way to
+    // set the active potato stamp correctly
 }

@@ -108,7 +108,7 @@ static double paintBezierCurve(KisPaintOp *paintOp,
     qreal d1 = line.absDistance(control1);
     qreal d2 = line.absDistance(control2);
 
-    if ((d1 < BEZIER_FLATNESS_THRESHOLD && d2 < BEZIER_FLATNESS_THRESHOLD)  
+    if ((d1 < BEZIER_FLATNESS_THRESHOLD && d2 < BEZIER_FLATNESS_THRESHOLD)
             || std::isnan(d1) || std::isnan(d2)) {
         newDistance = paintOp->paintLine(pi1, pi2, savedDist);
     } else {
@@ -241,20 +241,4 @@ double KisPaintOp::scaleForPressure(double pressure)
     }
 
     return scale;
-}
-
-//------------------------ KisPaintOpFactory ------------------------//
-
-KisPaintOpFactory::KisPaintOpFactory()
-{
-}
-
-bool KisPaintOpFactory::userVisible(const KoColorSpace * cs)
-{
-    return cs && cs->id() != "WET";
-}
-
-QString KisPaintOpFactory::pixmap()
-{
-    return "";
 }

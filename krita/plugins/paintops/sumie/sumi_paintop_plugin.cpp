@@ -1,5 +1,5 @@
 /*
- * sumipaintop_plugin.cc -- Part of Krita
+ * sumi_paintop_plugin.cc -- Part of Krita
  *
  * Copyright (c) 2008 Lukáš Tvrdý (lukast.dev@gmail.com)
  *
@@ -18,7 +18,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "sumipaintop_plugin.h"
+#include "sumi_paintop_plugin.h"
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
@@ -28,11 +28,11 @@
 
 #include <kis_paintop_registry.h>
 
-#include "kis_sumipaintop.h"
+#include "kis_sumi_paintop.h"
 #include "kis_global.h"
 
 typedef KGenericFactory<SumiPaintOpPlugin> SumiPaintOpPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritasumipaintop, SumiPaintOpPluginFactory("krita"))
+K_EXPORT_COMPONENT_FACTORY(kritasumi_paintop, SumiPaintOpPluginFactory("krita"))
 
 
 SumiPaintOpPlugin::SumiPaintOpPlugin(QObject *parent, const QStringList &)
@@ -49,4 +49,4 @@ SumiPaintOpPlugin::~SumiPaintOpPlugin()
 {
 }
 
-#include "sumipaintop_plugin.moc"
+#include "sumi_paintop_plugin.moc"

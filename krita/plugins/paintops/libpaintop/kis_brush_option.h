@@ -39,7 +39,12 @@ public:
     /**
      * @return the currently selected brush
      */
-    KisBrushSP brush();
+    KisBrushSP brush() const;
+
+    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+
+    void readOptionSetting(const KisPropertiesConfiguration* setting);
+
 private:
 
     KisBrushSelectionWidget * m_brushSelectionWidget;

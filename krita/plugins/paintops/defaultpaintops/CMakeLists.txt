@@ -1,12 +1,16 @@
+include_directories(brush)
 
 
 set(kritadefaultpaintops_PART_SRCS
 	defaultpaintops_plugin.cc
-	kis_airbrushop.cc
-	kis_brushop.cc
-	kis_duplicateop.cc
-	kis_eraseop.cc
-	kis_penop.cc
+#	kis_airbrushop.cc
+	brush/kis_brushop_factory.cpp
+	brush/kis_brushop_settings.cpp
+	brush/kis_brushop_settings_widget.cpp
+	brush/kis_brushop.cpp
+#	kis_duplicateop.cc
+#	kis_eraseop.cc
+#	kis_penop.cc
 #    kis_smudgeop.cc   
     )
 

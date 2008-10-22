@@ -24,19 +24,10 @@
 #include <KoColorSpace.h>
 
 KisPressureSizeOption::KisPressureSizeOption()
-        : KisCurveOption(i18n("Size"))
+        : KisCurveOption(i18n("Size"), "Size")
 {
 }
 
-void KisPressureSizeOption::writeOptionSetting(KisPaintOpPresetSP preset) const
-{
-    // XXX
-}
-
-void KisPressureSizeOption::readOptionSetting(KisPaintOpPresetSP preset)
-{
-    // XXX
-}
 
 KisPaintInformation KisPressureSizeOption::apply(const KisPaintInformation & info) const
 {

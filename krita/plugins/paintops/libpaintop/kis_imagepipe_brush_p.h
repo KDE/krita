@@ -77,10 +77,13 @@ public:
             selection[i] = KisParasite::Constant;
         }
     }
+
     /// Initializes the brushesCount helper
     void setBrushesCount();
+
     /// Load the parasite from the source string
     KisPipeBrushParasite(const QString& source);
+
     /**
      * Saves a GIMP-compatible representation of this parasite to the device. Also writes the
      * number of brushes (== ncells) (no trailing '\n') */
@@ -88,10 +91,13 @@ public:
 
 
     enum Placement { DefaultPlacement, ConstantPlacement, RandomPlacement };
+
     static int const MaxDim = 4;
+
     //qint32 step;
     qint32 ncells;
     qint32 dim;
+
     // Apparently only used for editing a pipe brush, which we won't at the moment
     // qint32 cols, rows;
     // qint32 cellwidth, cellheight;
@@ -99,11 +105,15 @@ public:
     // paint at someplace else than where your cursor displays it will...
     //Placement placement;
     qint32 rank[MaxDim];
+
     KisParasite::SelectionMode selection[MaxDim];
+
     /// The total count of brushes in each dimension (helper)
     qint32 brushesCount[MaxDim];
+
     /// The current index in each dimension, so that the selection modes know where to start
     qint32 index[MaxDim];
+
     /// If true, the brush won't be painted when there is no motion
     bool needsMovement;
 };

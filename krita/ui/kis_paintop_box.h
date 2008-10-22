@@ -43,6 +43,7 @@ class KisView2;
 class KisCanvasResourceProvider;
 class KisPresetWidget;
 class KisPaintOpPresetsPopup;
+class KisConfigWidget;
 
 /**
  * This widget presents all paintops that a user can paint with.
@@ -91,7 +92,7 @@ private:
     QComboBox * m_cmbPaintopPresets;
 
     QHBoxLayout * m_layout;
-    QWidget * m_optionWidget;
+    KisConfigWidget * m_optionWidget;
     KisPresetWidget * m_presetWidget;
     KisPaintOpPresetsPopup * m_presetsPopup;
     KisView2 * m_view;

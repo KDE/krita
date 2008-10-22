@@ -49,6 +49,7 @@ if (SHOULD_BUILD_KRITA)
         ${CMAKE_CURRENT_BINARY_DIR}
 
         ${CMAKE_SOURCE_DIR}/krita/image
+        ${CMAKE_SOURCE_DIR}/krita/image/brushengine
         ${CMAKE_SOURCE_DIR}/krita/image/tiles
         ${CMAKE_SOURCE_DIR}/krita/ui
         ${CMAKE_SOURCE_DIR}/krita/ui/tool

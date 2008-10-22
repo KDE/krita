@@ -18,7 +18,6 @@
  */
 
 #include "kis_paintop_option.h"
-#include <kis_paintop_preset.h>
 
 class KisPaintOpOption::Private
 {

@@ -26,11 +26,11 @@
 #include <kis_debug.h>
 #include <kgenericfactory.h>
 
-#include "kis_airbrushop.h"
-#include "kis_brushop.h"
-#include "kis_duplicateop.h"
-#include "kis_eraseop.h"
-#include "kis_penop.h"
+//#include "kis_airbrushop.h"
+#include "kis_brushop_factory.h"
+//#include "kis_duplicateop.h"
+//#include "kis_eraseop.h"
+//#include "kis_penop.h"
 //#include "kis_smudgeop.h"
 #include "kis_global.h"
 #include "kis_paintop_registry.h"
@@ -45,11 +45,11 @@ DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const QStringList 
     setComponentData(DefaultPaintOpsPluginFactory::componentData());
 
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisAirbrushOpFactory);
+//    r->add(new KisAirbrushOpFactory);
     r->add(new KisBrushOpFactory);
-    r->add(new KisDuplicateOpFactory);
-    r->add(new KisEraseOpFactory);
-    r->add(new KisPenOpFactory);
+//    r->add(new KisDuplicateOpFactory);
+//    r->add(new KisEraseOpFactory);
+//    r->add(new KisPenOpFactory);
 //    r->add(KisPaintOpFactorySP( new KisSmudgeOpFactory ));
 }
 

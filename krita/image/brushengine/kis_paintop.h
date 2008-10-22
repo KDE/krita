@@ -36,9 +36,9 @@ class KoColorSpace;
 class KoInputDevice;
 class KoPointerEvent;
 
-class KisQImagemask;
 class KisPainter;
 class KisPaintInformation;
+
 /**
  * KisPaintOp are use by tools to draw on a paint device. A paintop takes settings
  * and input information, like pressure, tilt or motion and uses that to draw pixels
@@ -131,45 +131,6 @@ protected:
 private:
     Private* const d;
 };
-/**
- * The paintop factory is responsible for creating paintops of the specified class.
- * If there is an optionWidget, the derived paintop itself must support settings,
- * and it's up to the factory to do that.
- */
-class KRITAIMAGE_EXPORT KisPaintOpFactory  : public KisShared
-{
 
-public:
-    KisPaintOpFactory();
-    virtual ~KisPaintOpFactory() {}
 
-    /**
-     * Create a KisPaintOp with the given settings and painter.
-     * @param settings the settings associated with the input device
-     * @param painter the painter used to draw
-     */
-    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image) = 0;
-    virtual QString id() const = 0;
-    virtual QString name() const = 0;
-
-    /**
-     * The filename of the pixmap we can use to represent this paintop in the ui.
-     */
-    virtual QString pixmap();
-
-    /**
-     * Whether this paintop is internal to a certain tool or can be used
-     * in various tools. If false, it won't show up in the toolchest.
-     * The KoColorSpace argument can be used when certain paintops only support a specific cs
-     */
-    virtual bool userVisible(const KoColorSpace * cs = 0);
-
-    /**
-     * Create and return an settings object for this paintop when used with the
-     * specified input device. The settings object knows how to create a widget.
-     */
-    virtual KisPaintOpSettingsSP settings(QWidget* parent, const KoInputDevice& inputDevice, KisImageSP image) = 0;
-    virtual KisPaintOpSettingsSP settings(KisImageSP image) = 0;
-
-};
 #endif // KIS_PAINTOP_H_

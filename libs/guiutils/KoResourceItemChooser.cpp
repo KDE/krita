@@ -88,7 +88,7 @@ KoResourceItemChooser::KoResourceItemChooser( QWidget *parent )
     //frame = new QHBox( this );
     //frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     m_chooser = new KoResourceChooser( QSize(30,30), this);
-//     m_chooser->setIconSize( QSize(30,30) );
+    m_chooser->setIconSize( QSize(30,30) );
 
     connect( m_chooser, SIGNAL(itemClicked( QTableWidgetItem * ) ), this, SIGNAL( selected( QTableWidgetItem * )));
     connect( m_chooser, SIGNAL(itemDoubleClicked( QTableWidgetItem * ) ), this, SIGNAL( itemDoubleClicked( QTableWidgetItem* ) ) );

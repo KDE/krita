@@ -97,6 +97,12 @@ QString KisPropertiesConfiguration::toXML() const
     return doc.toString();
 }
 
+
+bool KisPropertiesConfiguration::hasProperty( const QString& name )
+{
+    return d->properties.contains( name );
+}
+
 void KisPropertiesConfiguration::setProperty(const QString & name, const QVariant & value)
 {
     if (d->properties.find(name) == d->properties.end()) {

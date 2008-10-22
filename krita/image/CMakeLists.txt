@@ -49,6 +49,12 @@ include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
 
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
+   brushengine/kis_paint_information.cc
+   brushengine/kis_paintop.cc
+   brushengine/kis_paintop_factory.cpp
+   brushengine/kis_paintop_preset.cpp
+   brushengine/kis_paintop_registry.cc
+   brushengine/kis_paintop_settings.cpp
    commands/kis_image_commands.cc
    commands/kis_layer_commands.cc
    commands/kis_node_commands.cc
@@ -86,19 +92,14 @@ set(kritaimage_LIB_SRCS
    kis_mask_generator.cc
    kis_math_toolbox.cpp
    kis_name_server.cpp
-   kis_node_action.cpp
    kis_node.cpp
+   kis_node_action.cpp
    kis_node_facade.cpp
    kis_paint_device.cc
-   kis_painter.cc
-   kis_painterly_overlay_colorspace.cpp
-   kis_painterly_overlay.cpp
-   kis_paint_information.cc
    kis_paint_layer.cc
-   kis_paintop.cc
-   kis_paintop_preset.cpp
-   kis_paintop_registry.cc
-   kis_paintop_settings.cpp
+   kis_painter.cc
+   kis_painterly_overlay.cpp
+   kis_painterly_overlay_colorspace.cpp
    kis_pattern.cc
    kis_perspective_grid.cpp
    kis_perspective_math.cpp
@@ -119,8 +120,8 @@ set(kritaimage_LIB_SRCS
    kis_threaded_applicator.cpp
    kis_top_down_update_strategy.cpp
    kis_transaction.cc
-   kis_transformation_mask.cpp
    kis_transform_worker.cc
+   kis_transformation_mask.cpp
    kis_transparency_mask.cc
    kis_undo_adapter.cc
    metadata/kis_meta_data_entry.cc

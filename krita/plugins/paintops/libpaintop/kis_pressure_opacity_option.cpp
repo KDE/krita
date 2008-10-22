@@ -23,19 +23,10 @@
 #include <KoColorSpace.h>
 
 KisPressureOpacityOption::KisPressureOpacityOption()
-        : KisCurveOption(i18n("Opacity"))
+        : KisCurveOption(i18n("Opacity"), "Opacity")
 {
 }
 
-void KisPressureOpacityOption::writeOptionSetting(KisPaintOpPresetSP preset) const
-{
-    // XXX
-}
-
-void KisPressureOpacityOption::readOptionSetting(KisPaintOpPresetSP preset)
-{
-    // XXX
-}
 
 quint8 KisPressureOpacityOption::apply(KisPainter * painter, double pressure) const
 {

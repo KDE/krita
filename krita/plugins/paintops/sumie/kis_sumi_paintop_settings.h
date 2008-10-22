@@ -37,7 +37,7 @@ public:
 
     virtual KisPaintOpSettingsSP clone() const;
 
-    KisConfigWidget * widget() const {
+    KisPaintOpSettingsWidget * widget() const {
         return m_optionsWidget;
     }
 
@@ -72,7 +72,7 @@ public slots:
 
 private:
     Ui::WdgSumieOptions* m_options;
-    KisConfigWidget * m_optionsWidget;
+    KisPaintOpSettingsWidget * m_optionsWidget;
 
     int m_curveSamples;
     QList<QPointF> m_curveData;

@@ -24,6 +24,7 @@
 #include "KoGenericRegistry.h"
 
 #include "kis_paintop.h"
+#include "kis_paintop_factory.h"
 #include "kis_types.h"
 #include "kis_paintop_settings.h"
 #include "kis_paintop_preset.h"

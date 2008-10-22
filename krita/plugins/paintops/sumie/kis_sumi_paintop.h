@@ -25,11 +25,12 @@
 
 #include <klocale.h>
 #include <kis_paintop.h>
+#include <kis_paintop_factory.h>
 #include <kis_types.h>
 
 #include "brush.h"
 
-#include "kis_sumipaintopsettings.h"
+#include "kis_sumi_paintop_settings.h"
 
 class QPointF;
 class KisPainter;
@@ -38,6 +39,7 @@ class KisSumiPaintOpFactory : public KisPaintOpFactory
 {
 
 public:
+
     KisSumiPaintOpFactory() {}
     virtual ~KisSumiPaintOpFactory() {}
 

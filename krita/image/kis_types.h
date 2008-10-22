@@ -138,9 +138,6 @@ typedef KisSharedPtr<KisHistogram> KisHistogramSP;
 
 typedef QVector<QPoint> vKisSegments;
 
-class KisQImagemask;
-typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
-
 class KisFilter;
 typedef KisSharedPtr<KisFilter> KisFilterSP;
 

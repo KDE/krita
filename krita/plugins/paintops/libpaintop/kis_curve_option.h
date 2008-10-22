@@ -42,7 +42,11 @@ class PAINTOP_EXPORT KisCurveOption : public QObject, public KisPaintOpOption
 
 public:
 
-    KisCurveOption(const QString & label);
+    KisCurveOption(const QString & label, const QString& name);
+
+    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+
+    void readOptionSetting(const KisPropertiesConfiguration* setting);
 
 
 protected:
@@ -69,6 +73,7 @@ private:
     bool m_customCurve;
     KCurve * m_curveWidget;
     QVector<double> m_curve;
+    QString m_name;
 };
 
 #endif

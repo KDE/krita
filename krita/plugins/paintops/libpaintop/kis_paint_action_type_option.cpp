@@ -49,15 +49,28 @@ KisPaintActionTypeOption::~KisPaintActionTypeOption()
 }
 
 
-enumPaintActionType KisPaintActionTypeOption::paintActionType()
+enumPaintActionType KisPaintActionTypeOption::paintActionType() const
 {
     if ( m_optionWidget->radioBuildup->isChecked() ) {
         return BUILDUP;
     }
-    else if ( m_optionWidget->radioBuildup->isChecked() ) {
+    else if ( m_optionWidget->radioWash->isChecked() ) {
         return WASH;
     }
     else {
         return WASH;
     }
 }
+
+void KisPaintActionTypeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+{
+    setting->setProperty( "PaintOpAction", paintActionType() );
+}
+
+void KisPaintActionTypeOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+{
+    enumPaintActionType type = ( enumPaintActionType )setting->getInt( "PaintOpAction", WASH );
+    m_optionWidget->radioBuildup->setChecked( type == BUILDUP );
+    m_optionWidget->radioWash->setChecked( type == WASH );
+}
+

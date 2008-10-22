@@ -23,8 +23,8 @@
 #include <QString>
 #include <QWidget>
 #include <kis_types.h>
-#include <kis_paintop_preset.h>
 #include <krita_export.h>
+#include <kis_properties_configuration.h>
 /**
  * Base interface for paintop options. A paintop option
  * can be enabled/disabled, has a configuration page
@@ -51,15 +51,15 @@ public:
     /**
      * Re-implement this to save the configuration to the paint configuration.
      */
-    virtual void writeOptionSetting(KisPaintOpPresetSP preset) const {
-        Q_UNUSED(preset);
+    virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const {
+        Q_UNUSED(setting);
     }
 
     /**
-     * Re-implement this to read the paintop configuration for this setting
+     * Re-implement this to set te widgets with the values in @param setting.
      */
-    virtual void readOptionSetting(KisPaintOpPresetSP preset) {
-        Q_UNUSED(preset);
+    virtual void readOptionSetting(const KisPropertiesConfiguration* setting) {
+        Q_UNUSED(setting);
     }
 
     /**

@@ -38,6 +38,7 @@
 
 #include "kis_paint_device.h"
 #include "kis_paintop.h"
+#include "kis_paintop_settings_widget.h"
 #include "kis_painter.h"
 #include "kis_debug.h"
 #include "kis_layer.h"

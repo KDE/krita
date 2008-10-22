@@ -43,7 +43,12 @@ public:
 
     ~KisPaintActionTypeOption();
 
-    enumPaintActionType paintActionType();
+    enumPaintActionType paintActionType() const;
+
+    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+
+    void readOptionSetting(const KisPropertiesConfiguration* setting);
+
 
 private:
 

@@ -58,8 +58,6 @@
 #include "kis_config_notifier.h"
 
 //#define DEBUG_REPAINT
-//#define USE_QT_SCALING
-
 
 class KisQPainterCanvas::Private
 {
@@ -93,15 +91,16 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
 
-    m_d->canvas =  canvas;
-    m_d->toolProxy = canvas->toolProxy();
     setAutoFillBackground(true);
-    //setAttribute( Qt::WA_OpaquePaintEvent );
-    m_d->checkBrush = QBrush(checkImage(cfg.checkSize()));
     setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_InputMethodEnabled, true);
+
+    m_d->canvas =  canvas;
+    m_d->toolProxy = canvas->toolProxy();
+    m_d->checkBrush = QBrush(checkImage(cfg.checkSize()));
     m_d->blockMouseEvent.setSingleShot(true);
+    m_d->tabletDown = false;
 }
 
 KisQPainterCanvas::~KisQPainterCanvas()
@@ -116,25 +115,16 @@ void KisQPainterCanvas::setPrescaledProjection(KisPrescaledProjectionSP prescale
 
 void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 {
-//     QPixmap pm( ev->rect().size() );
-
     KisConfig cfg;
 
-    dbgRender << "paintEvent: rect" << ev->rect() << ", doc offset:" << m_d->documentOffset;
     KisImageSP img = m_d->canvas->image();
     if (img == 0) return;
-
-    QTime t;
 
     setAutoFillBackground(false);
 
     QPainter gc(this);
-
-//     gc.translate( -ev->rect().topLeft() );
-
     gc.setCompositionMode(QPainter::CompositionMode_Source);
 
-    t.start();
     // Don't draw the checks if we draw a cached pixmap, because we
     // need alpha transparency for checks. The precached pixmap
     // already should contain checks.
@@ -156,17 +146,13 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
             }
             gc.save();
             gc.translate(-m_d->documentOffset);
-            dbgRender << "qpainter canvas fillRect: " << fillRect;
             gc.fillRect(fillRect, m_d->checkBrush);
             gc.restore();
         } else {
             // Checks
-            dbgRender << "qpainter canvas fillRect: " << ev->rect();
             gc.fillRect(ev->rect(), m_d->checkBrush);
         }
-        dbgRender << "Painting checks:" << t.elapsed();
     }
-    t.restart();
     gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
 
     if (cfg.noXRender()) {
@@ -174,28 +160,15 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     } else {
         gc.drawImage(ev->rect(), m_d->prescaledProjection->prescaledQImage(), ev->rect());
     }
-    dbgRender << "Drawing image:" << t.elapsed();
 
 #ifdef DEBUG_REPAINT
     QColor color = QColor(random() % 255, random() % 255, random() % 255, 150);
     gc.fillRect(ev->rect(), color);
 #endif
-
-    // ask the current layer to paint its selection (and potentially
-    // other things, like wetness and active-layer outline
-
-    // XXX: make settable
-    bool drawTools = true;
-
-    drawDecorations(gc, drawTools, m_d->documentOffset, ev->rect(), m_d->canvas);
-//     m_d->canvas->view()->perspectiveGridManager()->drawGrid( ev->rect(), &gc, false);
+    drawDecorations(gc, true, m_d->documentOffset, ev->rect(), m_d->canvas);
 
     gc.end();
 
-    /*    QPainter gc2( this );
-        t.restart();
-        gc2.drawPixmap( ev->rect().topLeft(), pm );
-        dbgRender <<"Drawing pixmap on widget:" << t.elapsed();*/
 }
 
 void KisQPainterCanvas::enterEvent(QEvent* e)
@@ -207,8 +180,17 @@ void KisQPainterCanvas::leaveEvent(QEvent* e)
 {
     if (m_d->tabletDown) {
         m_d->tabletDown = false;
-        QTabletEvent* fakeEvent = new QTabletEvent(QEvent::TabletRelease, m_d->previousEvent.pos(), m_d->previousEvent.globalPos(), m_d->previousEvent.hiResGlobalPos(), m_d->previousEvent.device(), m_d->previousEvent.pointerType(), m_d->previousEvent.pressure(), m_d->previousEvent.xTilt(), m_d->previousEvent.yTilt(), m_d->previousEvent.tangentialPressure(), m_d->previousEvent.rotation(), m_d->previousEvent.z(), m_d->previousEvent.modifiers(), m_d->previousEvent.uniqueId());
-        m_d->toolProxy->tabletEvent(fakeEvent , QPointF());   // HACK this fake event is a work around a bug in Qt which stop sending tablet events when the tablet pen move outside the widget (and you get a nasty surprise when the cursor moves back on the widget especially if you have released your tablet as krita is still in drawing mode)
+        QTabletEvent* fakeEvent =
+            new QTabletEvent(QEvent::TabletRelease, m_d->previousEvent.pos(),
+                m_d->previousEvent.globalPos(), m_d->previousEvent.hiResGlobalPos(), m_d->previousEvent.device(),
+                m_d->previousEvent.pointerType(), m_d->previousEvent.pressure(), m_d->previousEvent.xTilt(),
+                m_d->previousEvent.yTilt(), m_d->previousEvent.tangentialPressure(), m_d->previousEvent.rotation(),
+                m_d->previousEvent.z(), m_d->previousEvent.modifiers(), m_d->previousEvent.uniqueId());
+
+        // HACK this fake event is a work around a bug in Qt which stops sending tablet events when the
+        // tablet pen move outside the widget (and you get a nasty surprise when the cursor moves back
+        // on the widget especially if you have released your tablet as krita is still in drawing mode)
+        m_d->toolProxy->tabletEvent(fakeEvent , QPointF());
     }
     QWidget::leaveEvent(e);
 }
@@ -231,7 +213,6 @@ void KisQPainterCanvas::contextMenuEvent(QContextMenuEvent *e)
 
 void KisQPainterCanvas::mousePressEvent(QMouseEvent *e)
 {
-    dbgRender << "Mouse press event";
     if (m_d->blockMouseEvent.isActive()) return;
     m_d->toolProxy->mousePressEvent(e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset));
 }
@@ -278,7 +259,6 @@ void KisQPainterCanvas::inputMethodEvent(QInputMethodEvent *event)
 void KisQPainterCanvas::tabletEvent(QTabletEvent *e)
 {
     m_d->blockMouseEvent.start(100);
-    dbgRender << "tablet event:" << e->pressure() << e->type() << " " << e->device() << " " << e->x() << " " << e->y();
     switch (e->type()) {
     case QEvent::TabletPress:
         m_d->tabletDown = true;
@@ -313,7 +293,6 @@ KoToolProxy * KisQPainterCanvas::toolProxy()
 
 void KisQPainterCanvas::documentOffsetMoved(const QPoint & pt)
 {
-    dbgRender << "KisQPainterCanvas::documentOffsetMoved " << pt;
     m_d->documentOffset = pt;
     m_d->prescaledProjection->documentOffsetMoved(pt);
     update();
@@ -321,16 +300,12 @@ void KisQPainterCanvas::documentOffsetMoved(const QPoint & pt)
 
 void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
 {
-    dbgRender << "KisQPainterCanvas::resizeEvent : " << e->size();
     QSize size(e->size());
     if (size.width() <= 0) {
         size.setWidth(1);
     }
     if (size.height() <= 0) {
         size.setHeight(1);
-    }
-    if (size != e->size()) {
-        dbgRender << "Adjusted resize event to" << size;
     }
     m_d->prescaledProjection->resizePrescaledImage(size);
 }

@@ -49,6 +49,7 @@
 KCurve::KCurve(QWidget *parent, Qt::WFlags f)
         : QWidget(parent, f)
 {
+    setObjectName("KCurve");
     m_grab_point_index = -1;
     m_readOnlyMode   = false;
     m_guideVisible   = false;

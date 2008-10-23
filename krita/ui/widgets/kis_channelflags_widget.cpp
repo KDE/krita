@@ -34,7 +34,7 @@ KisChannelFlagsWidget::KisChannelFlagsWidget(const KoColorSpace * colorSpace, QW
         : QScrollArea(parent)
         , m_colorSpace(colorSpace)
 {
-
+    setObjectName("KisChannelFlagsWidget");
     setToolTip("Check the active channels in this layer. Only these channels will be affected by any operation.");
     QWidget * w = new QWidget();
     setBackgroundRole(QPalette::Window);

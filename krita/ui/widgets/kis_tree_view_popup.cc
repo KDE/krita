@@ -31,6 +31,7 @@ struct KisTreeViewPopup::Private {
 
 KisTreeViewPopup::KisTreeViewPopup(QWidget* parent) : KisPopupButton(parent), d(new Private)
 {
+    setObjectName("KisTreeViewPopup");
     d->view = new QTreeView;
     d->view->header()->hide();
     setPopupWidget(d->view);

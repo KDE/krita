@@ -38,6 +38,7 @@ ImageViewer::ImageViewer(QWidget *widget, const char * name)
         , m_isDragging(false)
         , m_image(QPixmap())
 {
+    setObjectName(name);
     m_label = new QLabel(viewport());
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     setCursor(KisCursor::handCursor());

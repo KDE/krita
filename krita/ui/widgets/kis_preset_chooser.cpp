@@ -25,6 +25,7 @@
 KisPresetChooser::KisPresetChooser(QWidget * parent)
         : KisItemChooser(parent)
 {
+    setObjectName("KisPresetChooser");
     setMinimumSize(chooserWidget()->sizeHint());
 }
 

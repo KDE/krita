@@ -36,6 +36,7 @@ struct KisPopupButton::Private {
 
 KisPopupButton::KisPopupButton(QWidget* parent) : QPushButton(parent), d(new Private)
 {
+    setObjectName("KisPopupButton");
     connect(this, SIGNAL(released()), SLOT(showPopupWidget()));
 }
 

@@ -58,7 +58,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32
         : WdgNewImage(parent)
 {
     Q_UNUSED(defColorSpaceName);
-
+    setObjectName("KisCustomImageWidget");
     m_doc = doc;
 
     txtName->setText(imageName);

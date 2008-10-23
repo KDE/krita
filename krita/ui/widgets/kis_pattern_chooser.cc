@@ -36,6 +36,7 @@
 KisPatternChooser::KisPatternChooser(QWidget *parent, const char *name)
     : QFrame(parent)
 {
+    setObjectName(name);
     m_lbName = new QLabel(this);
 
     m_itemChooser = new KisItemChooser();

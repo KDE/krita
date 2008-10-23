@@ -30,6 +30,7 @@ struct KisColorSpaceSelector::Private {
 
 KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent), d(new Private)
 {
+    setObjectName("KisColorSpaceSelector");
     d->colorSpaceSelector = new Ui_WdgColorSpaceSelector;
     d->colorSpaceSelector->setupUi(this);
     d->colorSpaceSelector->cmbColorModels->setIDList(KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::OnlyUserVisible));

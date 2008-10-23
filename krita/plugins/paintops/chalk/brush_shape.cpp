@@ -58,8 +58,6 @@ void BrushShape::fromGaussian(int radius, float maxLength, float sigma)
         }
     }
 
-    // dbgKrita << "total: " << total <<  " " << p << endl << flush;
-
     // normalise
     for (int i = 0;i < gaussLength;i++) {
         m_bristles[i].setLength(m_bristles[i].length() / total);

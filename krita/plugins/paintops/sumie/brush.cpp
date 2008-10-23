@@ -82,7 +82,6 @@ void Brush::initDefaultValues()
 void Brush::setBrushShape(BrushShape brushShape)
 {
     m_initialShape = brushShape;
-    //dbgPlugins << "radius in setBrushShape: " << brushShape.width()/2 << endl;
     m_bristles = brushShape.getBristles();
 }
 
@@ -120,12 +119,6 @@ void Brush::paint(KisPaintDeviceSP dev, const KisPaintInformation &info)
 
 void Brush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2)
 {
-    /*
-      Q_CHECK_PTR(m_accessor);
-      dbgPlugins << "Accessor passed...";
-      Q_CHECK_PTR(m_dev);
-      dbgPlugins << "PaintDevice passed...";
-    */
 
     m_counter++;
 
@@ -139,13 +132,7 @@ void Brush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPain
     qreal y2 = pi2.pos().y();
 
     qreal angle = atan2(dy, dx);
-    //dbgPlugins << "angle: " << angle;
 
-    /*    qreal slope = 0.0;
-          if (dx != 0){
-          slope = dy / dx;
-          } */
-//     dbgPlugins << "slope: " << slope;
 
     qreal distance = sqrt(dx * dx + dy * dy);
 
@@ -155,7 +142,6 @@ void Brush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPain
     } else { // leave it as it is
         pressure = pi1.pressure();
     }
-    //dbgPlugins << "pressure: " << pressure << endl;
 
     Bristle *bristle = 0;
     KoColor brColor;
@@ -170,16 +156,6 @@ void Brush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPain
     m_layerAccessor = &laccessor;
     m_layerPixelSize = layer->colorSpace()->pixelSize();
     m_layer = layer;
-
-    // see rgb value
-    /*QColor rgbcolor;
-    m_layerAccessor->moveTo(x1,y1);
-    m_layer->colorSpace()->toQColor(m_layerAccessor->rawData(), &rgbcolor);
-    dbgPlugins << "Red : "<< rgbcolor.red();
-    dbgPlugins << "Green : "<< rgbcolor.green();
-    dbgPlugins << "Blue : "<< rgbcolor.blue();
-
-    return;*/
 
     qreal inkDeplation;
 
@@ -304,7 +280,6 @@ void Brush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPain
                         bristle->inkAmount() *
                         (1.0 - inkDeplation);
                 }
-                //dbgPlugins << "opacity: "<< brColor.opacity();
                 brColor.setOpacity(static_cast<int>(opacity));
             }
 

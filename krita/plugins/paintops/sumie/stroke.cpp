@@ -727,16 +727,12 @@ void Stroke::drawGSLine(KisPaintDeviceSP image, int x0, int y0, int x1, int y1, 
 // draw the stroke by drawing the old paths, then the new segment
 void Stroke::draw(KisPaintDeviceSP dev)
 {
-    dbgPlugins << "Coordinates" << endl;
-    dbgPlugins << x1 << y1 << x2 << y2 << flush << endl;
 
     if (x1 < 0 || x2 < 0 || y1 < 0 || y2 < 0) {
-        dbgPlugins << "less than zero" << endl;
         return;
     }
 
     if (x1 > 1600 || x2 > 1600 || y1 > 1600 || y2 > 1600) {
-        dbgPlugins << "..just testing , bigger than 1600" << endl;
         return;
     }
     //drawDDALine( dev,(int)x1,(int)y1,(int)x2,(int)y2, m_color.toQColor() );

@@ -69,7 +69,6 @@ void BrushShape::fromGaussian(int radius, float sigma)
         }
     }
 
-    // dbgKrita << "total: " << total <<  " " << p << endl << flush;
     float minLen = m_bristles[0].length();
     float maxLen = m_bristles[gaussLength/2].length();
     float dist = maxLen - minLen;
@@ -122,7 +121,6 @@ void BrushShape::fromLine(int radius, float sigma){
 void BrushShape::fromBitMap(const char* fileName){
     QImage image(fileName,0);
     if ( image.isNull() ){
-        dbgPlugins << "Image not loaded!";
         return;
     }
 

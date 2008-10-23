@@ -41,6 +41,11 @@ public:
      */
     KisBrushSP brush() const;
 
+    void setAutoBrush( bool on );
+    void setPredefinedBrushes( bool on );
+    void setCustomBrush( bool on );
+    void setTextBrush( bool on );
+
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
 
     void readOptionSetting(const KisPropertiesConfiguration* setting);

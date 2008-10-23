@@ -20,7 +20,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_brushop.h"
+#include "kis_eraseop.h"
 
 #include <string.h>
 
@@ -56,11 +56,11 @@
 #include <kis_pressure_size_option.h>
 #include <kis_paint_action_type_option.h>
 
-#include <kis_brushop_settings.h>
-#include <kis_brushop_settings_widget.h>
+#include <kis_eraseop_settings.h>
+#include <kis_eraseop_settings_widget.h>
 
 
-KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
+KisEraseOp::KisEraseOp(const KisEraseOpSettings *settings, KisPainter *painter)
         : KisBrushBasedPaintOp(painter)
         , settings(settings)
 {
@@ -70,11 +70,11 @@ KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
     m_brush = settings->m_optionsWidget->m_brushOption->brush();
 }
 
-KisBrushOp::~KisBrushOp()
+KisEraseOp::~KisEraseOp()
 {
 }
 
-void KisBrushOp::paintAt(const KisPaintInformation& info)
+void KisEraseOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()->device()) return;
 
@@ -141,7 +141,7 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
 
 }
 
-double KisBrushOp::paintLine(const KisPaintInformation &pi1,
+double KisEraseOp::paintLine(const KisPaintInformation &pi1,
                              const KisPaintInformation &pi2,
                              double savedDist)
 {
@@ -153,4 +153,3 @@ double KisBrushOp::paintLine(const KisPaintInformation &pi1,
     }
     return KisPaintOp::paintLine(adjustedInfo1, adjustedInfo2, savedDist);
 }
-

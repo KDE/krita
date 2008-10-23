@@ -101,4 +101,26 @@ KisBrushSP KisBrushSelectionWidget::brush()
 
 }
 
+
+void KisBrushSelectionWidget::setAutoBrush( bool on )
+{
+    m_autoBrushWidget->setVisible( on );
+}
+
+void KisBrushSelectionWidget::setPredefinedBrushes( bool on )
+{
+    m_brushChooser->setVisible( on );
+}
+
+void KisBrushSelectionWidget::setCustomBrush( bool on )
+{
+    m_customBrushWidget->setVisible( on );
+}
+
+void KisBrushSelectionWidget::setTextBrush( bool on )
+{
+    m_textBrushWidget->setVisible( on );
+}
+
+
 #include "kis_brush_selection_widget.moc"

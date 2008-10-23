@@ -43,6 +43,12 @@ public:
 
     KisBrushSP brush();
 
+    void setAutoBrush( bool on );
+    void setPredefinedBrushes( bool on );
+    void setCustomBrush( bool on );
+    void setTextBrush( bool on );
+
+
 private:
 
     QTabWidget * m_brushesTab;

@@ -35,6 +35,28 @@ KisBrushSP KisBrushOption::brush() const
     return m_brushSelectionWidget->brush();
 }
 
+
+void KisBrushOption::setAutoBrush( bool on )
+{
+    m_brushSelectionWidget->setAutoBrush( on );
+}
+
+void KisBrushOption::setPredefinedBrushes( bool on )
+{
+    m_brushSelectionWidget->setPredefinedBrushes( on );
+}
+
+void KisBrushOption::setCustomBrush( bool on )
+{
+    m_brushSelectionWidget->setCustomBrush( on );
+}
+
+void KisBrushOption::setTextBrush( bool on )
+{
+    m_brushSelectionWidget->setTextBrush( on );
+}
+
+
 void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
     // XXX: define a serialization format for potato stamps

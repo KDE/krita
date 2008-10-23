@@ -31,6 +31,9 @@
 
 #include "krita_export.h"
 
+class KisQImagemask;
+typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
+
 class QString;
 class QPoint;
 class QIODevice;

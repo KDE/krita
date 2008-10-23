@@ -117,7 +117,6 @@ private:
     qint32 m_height;
 };
 
-typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
 
 class KisBrush::ScaledBrush
 {

@@ -364,6 +364,16 @@ void KoRTree<T>::insertHelper(const QRectF& bb, const T& data, int id)
         nbb.setHeight(0.0001);
         kWarning(30003) <<  "KoRTree::insert boundingBox isNull setting size to" << nbb.size();
     }
+    else {
+        // This has to be done as QRectF::intersects() return false if the rect does not have any area overlapping.
+        // If there is no width or height there is no area and therefore no overlapping.
+        if ( nbb.width() == 0 ) {
+            nbb.setWidth(0.0001);
+        }
+        if ( nbb.height() == 0 ) {
+            nbb.setHeight(0.0001);
+        }
+    }
 
     LeafNode * leaf = m_root->chooseLeaf(nbb);
     //qDebug() << " leaf" << leaf->nodeId() << nbb;

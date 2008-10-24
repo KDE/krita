@@ -114,12 +114,14 @@ bool KoPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &c
         loader.parseSvg(element.attributeNS(KoXmlNS::svg, "d"), true);
     }
 
-    normalize();
+    QPointF pos = normalize();
     setTransformation(QMatrix());
 
-    QPointF pos;
-    pos.setX(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "x", QString())));
-    pos.setY(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "y", QString())));
+    if (element.hasAttributeNS(KoXmlNS::svg, "x") || element.hasAttributeNS(KoXmlNS::svg, "y")) {
+        pos.setX(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "x", QString())));
+        pos.setY(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "y", QString())));
+    }
+
     setPosition(pos);
 
     applyViewboxTransformation(element);
@@ -146,11 +148,10 @@ void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext 
     // fill the style stack with the shapes style
     if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {
         context.odfLoadingContext().fillStyleStack(element, KoXmlNS::draw, "style-name", "graphic");
-        styleStack.setTypeProperties("graphic");
     } else if (element.hasAttributeNS(KoXmlNS::presentation, "style-name")) {
         context.odfLoadingContext().fillStyleStack(element, KoXmlNS::presentation, "style-name", "presentation");
-        styleStack.setTypeProperties("graphic");
     }
+    styleStack.setTypeProperties("graphic");
 
     if (styleStack.hasProperty(KoXmlNS::svg, "fill-rule")) {
         QString rule = styleStack.property(KoXmlNS::svg, "fill-rule");

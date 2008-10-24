@@ -646,26 +646,26 @@ void KisPrescaledProjection::updateUnscaledCache(const QRect & rc)
     QImage updateImage = m_d->image->convertToQImage(rc.x(), rc.y(), rc.width(), rc.height(),
                          m_d->monitorProfile);
     dbgRender << updateImage.isNull() << " " << updateImage.width() << " " << updateImage.height();
-    if (m_d->showMask && m_d->drawMaskVisualisationOnUnscaledCanvasCache) {
-
-        // XXX: Also visualize the global selection
-
-        KisSelectionSP selection = 0;
-
-        if (m_d->currentNode) {
-            if (m_d->currentNode->inherits("KisMask")) {
-
-                selection = dynamic_cast<const KisMask*>(m_d->currentNode.data())->selection();
-            } else if (m_d->currentNode->inherits("KisLayer")) {
-
-                KisLayerSP layer = dynamic_cast<KisLayer*>(m_d->currentNode.data());
-                if (KisSelectionMaskSP selectionMask = layer->selectionMask()) {
-                    selection = selectionMask->selection();
-                }
-            }
-        }
-        selection->paint(&updateImage, rc);
-    }
+//     if (m_d->showMask && m_d->drawMaskVisualisationOnUnscaledCanvasCache) {
+// 
+//         // XXX: Also visualize the global selection
+// 
+//         KisSelectionSP selection = 0;
+// 
+//         if (m_d->currentNode) {
+//             if (m_d->currentNode->inherits("KisMask")) {
+// 
+//                 selection = dynamic_cast<const KisMask*>(m_d->currentNode.data())->selection();
+//             } else if (m_d->currentNode->inherits("KisLayer")) {
+// 
+//                 KisLayerSP layer = dynamic_cast<KisLayer*>(m_d->currentNode.data());
+//                 if (KisSelectionMaskSP selectionMask = layer->selectionMask()) {
+//                     selection = selectionMask->selection();
+//                 }
+//             }
+//         }
+//         selection->paint(&updateImage, rc);
+//     }
     dbgRender << qAlpha(updateImage.pixel(0, 0));
     p.drawImage(rc.x(), rc.y(), updateImage, 0, 0, rc.width(), rc.height());
     p.end();

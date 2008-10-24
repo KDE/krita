@@ -18,6 +18,7 @@
 #include "kis_selection_decoration.h"
 
 #include <QPainter>
+#include <QVarLengthArray>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -32,9 +33,10 @@
 #include "kis_pixel_selection.h"
 #include "kis_selection_manager.h"
 #include "canvas/kis_canvas2.h"
+#include "kis_canvas_resource_provider.h"
 
 KisSelectionDecoration::KisSelectionDecoration(KisView2* view)
- : KisCanvasDecoration("selection", i18n("Selection decoration"), view)
+ : KisCanvasDecoration("selection", i18n("Selection decoration"), view), m_mode(Mask)
 {
     offset = 0;
     timer = new QTimer(this);
@@ -53,14 +55,27 @@ KisSelectionDecoration::KisSelectionDecoration(KisView2* view)
         brushes << brush;
     }
 
+    int width = KisSelectionDecoration::view()->image()->bounds().width();
+    int height = KisSelectionDecoration::view()->image()->bounds().height();
+    m_image = QImage(width, height, QImage::Format_ARGB32);
+
     // XXX: Make sure no timers are running all the time! We need to
     // provide a signal to tell the selection manager that we've got a
     // current selection now (global or local).
     connect(timer, SIGNAL(timeout()), this, SLOT(selectionTimerEvent()));
+
+    KoCanvasResourceProvider* resourceProvider = view->canvasBase()->resourceProvider();
+    connect(resourceProvider, SIGNAL(resourceChanged(int, const QVariant &)),
+            this, SLOT(resourceChanged(int, const QVariant&)));
 }
 
 KisSelectionDecoration::~KisSelectionDecoration()
 {
+}
+
+void KisSelectionDecoration::setMode(Mode mode)
+{
+    m_mode = mode;
 }
 
 bool KisSelectionDecoration::selectionIsActive()
@@ -77,21 +92,26 @@ bool KisSelectionDecoration::selectionIsActive()
 
 void KisSelectionDecoration::selectionChanged()
 {
-    outline.clear();
-
     KisSelectionSP selection = view()->selection();
-    if (selection && !selection->isDeselected()) {
-        if (selection->hasPixelSelection() || selection->hasShapeSelection()) {
-            if (!timer->isActive())
-                timer->start(300);
-        }
-        if (selection->hasPixelSelection()) {
-            KisPixelSelectionSP getOrCreatePixelSelection = selection->getOrCreatePixelSelection();
-            outline = getOrCreatePixelSelection->outline();
-            updateSimpleOutline();
-        }
-    } else
-        timer->stop();
+
+    if(m_mode == Ants) {
+        outline.clear();
+
+        if (selection && !selection->isDeselected()) {
+            if (selection->hasPixelSelection() || selection->hasShapeSelection()) {
+                if (!timer->isActive())
+                    timer->start(300);
+            }
+            if (selection->hasPixelSelection()) {
+                KisPixelSelectionSP getOrCreatePixelSelection = selection->getOrCreatePixelSelection();
+                outline = getOrCreatePixelSelection->outline();
+                updateSimpleOutline();
+            }
+        } else
+            timer->stop();
+    }
+    else // TODO: optimize this
+        updateMaskVisualisation(view()->image()->bounds());
 
     view()->canvasBase()->updateCanvas();
 }
@@ -165,7 +185,13 @@ void KisSelectionDecoration::drawDecoration(QPainter& painter, const QPoint& doc
     qreal sx, sy;
     converter.zoom(&sx, &sy);
 
-    if (selection && selection->hasPixelSelection()) {
+    if ( m_mode == Mask) {
+        painter.save();
+        painter.scale(sx / view()->image()->xRes(), sy / view()->image()->yRes());
+        painter.drawImage(0, 0, m_image);
+        painter.restore();
+    }
+    if ( m_mode == Ants && selection && selection->hasPixelSelection()) {
 
         QMatrix matrix;
         matrix.scale(sx / view()->image()->xRes(), sy / view()->image()->yRes());
@@ -196,7 +222,7 @@ void KisSelectionDecoration::drawDecoration(QPainter& painter, const QPoint& doc
 
         painter.setWorldMatrix(oldWorldMatrix);
     }
-    if (selection && selection->hasShapeSelection()) {
+    if ( m_mode == Ants && selection && selection->hasShapeSelection()) {
         KisShapeSelection* shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
 
         QVector<qreal> dashes;
@@ -220,7 +246,40 @@ void KisSelectionDecoration::drawDecoration(QPainter& painter, const QPoint& doc
 
         QPainterPath stroke = stroker.createStroke(zoomMatrix.map(shapeSelection->selectionOutline()));
         painter.fillPath(stroke, outlineColor);
+    }
+}
 
+void KisSelectionDecoration::updateMaskVisualisation(const QRect & r)
+{
+    if (m_image.isNull() || !view()->selection()) {
+        return;
+    }
+
+    qint32 width = r.width();
+    qint32 height = r.height();
+
+    QVarLengthArray<quint8> buffer(width*height);
+    view()->selection()->readBytes(&buffer[0], r.x(), r.y(), width, height);
+
+    for (qint32 y = 0; y < height; y++) {
+
+        QRgb *imagePixel = reinterpret_cast<QRgb *>(m_image.scanLine(y));
+        for (qint32 x = 0; x < width; x++) {
+            *imagePixel = qRgba(128, 128, 165, 0.5 * (MAX_SELECTED - buffer[y*width+x]));
+            imagePixel++;
+        }
+    }
+}
+
+void KisSelectionDecoration::resourceChanged(int key, const QVariant & v)
+{
+    if(key == KoCanvasResource::PageSize) {
+        int width = KisSelectionDecoration::view()->image()->bounds().width();
+        int height = KisSelectionDecoration::view()->image()->bounds().height();
+        m_image = QImage(width, height, QImage::Format_ARGB32);
+
+        updateMaskVisualisation(view()->image()->bounds());
+        view()->canvasBase()->updateCanvas();
     }
 }
 

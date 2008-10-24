@@ -26,7 +26,6 @@
 #include <QVector>
 #include <QRect>
 #include <QRegion>
-#include <QVarLengthArray>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
@@ -218,63 +217,6 @@ QRect KisSelection::selectedExactRect() const
             // marked as deselected, there are always by-default-selected pixels
             // around the deselected pixels.
             return QRect(0, 0, qint32_MAX, qint32_MAX);
-        }
-    }
-}
-
-void KisSelection::paint(QImage* img, const QRect & r)
-{
-    if (img->isNull()) {
-        return;
-    }
-
-    qint32 width = r.width();
-    qint32 height = r.height();
-
-    Q_ASSERT(img->width() == width);
-    Q_ASSERT(img->height() == height);
-
-    QVarLengthArray<quint8> buffer(width*height);
-    readBytes(&buffer[0], r.x(), r.y(), width, height);
-
-    for (qint32 y = 0; y < height; y++) {
-
-        QRgb *imagePixel = reinterpret_cast<QRgb *>(img->scanLine(y));
-        for (qint32 x = 0; x < width; x++) {
-
-            quint8 selectedness = buffer[y*width+x];
-
-            if (selectedness != MAX_SELECTED) {
-
-                // this is where we come if the pixels should be blue or bluish
-
-                QRgb srcPixel = *imagePixel;
-                quint8 srcGrey = (qRed(srcPixel) + qGreen(srcPixel) + qBlue(srcPixel)) / 9;
-                quint8 srcAlpha = qAlpha(srcPixel);
-
-                // Color influence is proportional to alphaPixel.
-                srcGrey = UINT8_MULT(srcGrey, srcAlpha);
-
-                QRgb dstPixel;
-
-                if (selectedness == MIN_SELECTED) {
-
-                    // Stop unselected transparent areas from appearing the same
-                    // as selected transparent areas.
-                    quint8 dstAlpha = qMax(srcAlpha, quint8(192));
-                    dstPixel = qRgba(128 + srcGrey, 128 + srcGrey, 165 + srcGrey, dstAlpha);
-
-                } else {
-                    dstPixel = qRgba(UINT8_BLEND(qRed(srcPixel), srcGrey + 128, selectedness),
-                                     UINT8_BLEND(qGreen(srcPixel), srcGrey + 128, selectedness),
-                                     UINT8_BLEND(qBlue(srcPixel), srcGrey + 165, selectedness),
-                                     srcAlpha);
-                }
-
-                *imagePixel = dstPixel;
-            }
-
-            imagePixel++;
         }
     }
 }

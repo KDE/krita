@@ -29,20 +29,31 @@ class KRITAUI_EXPORT KisSelectionDecoration : public KisCanvasDecoration {
 public:
     KisSelectionDecoration(KisView2* view);
     ~KisSelectionDecoration();
+
+    enum Mode {
+        Ants,
+        Mask
+    };
+
+    void setMode(Mode mode);
 protected:
     virtual void drawDecoration(QPainter& gc, const QPoint & documentOffset, const QRect& area, const KoViewConverter &converter);
 public slots:
     void selectionChanged();
     void selectionTimerEvent();
+    void resourceChanged(int key, const QVariant & res);
 private:
     bool selectionIsActive();
     void updateSimpleOutline();
+    void updateMaskVisualisation(const QRect & r);
 private:
     QVector<QPolygon> outline;
     QVector<QPolygon> simpleOutline;
     QTimer* timer;
     int offset;
     QList<QBrush> brushes;
+    QImage m_image;
+    Mode m_mode;
 };
 
 #endif

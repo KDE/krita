@@ -148,12 +148,6 @@ public:
     QRect selectedExactRect() const;
 
     /**
-     * paint a mask-like representation of the selection projection
-     * onto the given QImage.
-     */
-    void paint(QImage* img, const QRect & r);
-
-    /**
      * If the parent paint device is interested in keeping up to date
      * with the dirtyness of this selection, set to true
      */

@@ -97,6 +97,8 @@ public:
 
     double getDouble(const QString & name, double def = 0.0) const;
 
+    float getFloat( const QString& name, float def = 0.0 ) const;
+
     bool getBool(const QString & name, bool def = false) const;
 
     QString getString(const QString & name, const QString & def = "") const;

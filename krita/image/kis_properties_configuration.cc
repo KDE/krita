@@ -151,6 +151,16 @@ double KisPropertiesConfiguration::getDouble(const QString & name, double def) c
         return def;
 }
 
+float KisPropertiesConfiguration::getFloat(const QString & name, float def) const
+{
+    QVariant v = getProperty(name);
+    if (v.isValid())
+        return ( float )v.toDouble();
+    else
+        return def;
+}
+
+
 bool KisPropertiesConfiguration::getBool(const QString & name, bool def) const
 {
     QVariant v = getProperty(name);

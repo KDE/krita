@@ -29,7 +29,8 @@
 #include <kis_paint_information.h>
 
 #include <KoColor.h>
-#include <qdebug.h>
+
+#include "kis_sumi_paintop_settings.h"
 
 KisSumiPaintOpSettingsWidget:: KisSumiPaintOpSettingsWidget()
     : KisPaintOpSettingsWidget()
@@ -39,22 +40,70 @@ KisSumiPaintOpSettingsWidget:: KisSumiPaintOpSettingsWidget()
 
 }
 
-KisSumiPaintOpSettingsWidget::~ KisSumiPaintOpSettingsWidget(){}
+KisSumiPaintOpSettingsWidget::~ KisSumiPaintOpSettingsWidget()
+{
+}
 
 void  KisSumiPaintOpSettingsWidget::setConfiguration(KisPropertiesConfiguration * config)
 {
-    // XXX
+    // XXX: Use a regular curve option here!
+    QList<float> c;
+    int count = config->getInt( "curve_count" );
+    for ( int i = 0; i < count; ++i ) {
+        c << config->getFloat( "ink_curve_" + i );
+    }
+
+    m_options->radiusSpinBox->setValue( config->getInt( "radius" ) );
+    m_options->sigmaSpinBox->setValue( config->getDouble( "sigma" ) );
+    int brushDimensions = config->getInt( "brush_dimension" );
+    if ( brushDimensions == 1 ) {
+        m_options->oneDimBrushBtn->setChecked( true );
+    }
+    else {
+        m_options->twoDimBrushBtn->setChecked( true );
+    }
+    m_options->inkAmountSpinBox->setValue( config->getInt( "ink_amount" ) );
+    m_options->mousePressureCBox->setChecked( config->getBool( "mouse_pressure" ) );
+    m_options->saturationCBox->setChecked( config->getBool( "use_saturation") );
+    m_options->opacityCBox->setChecked( config->getBool( "use_opacity" ) );
+    m_options->weightSaturationCBox->setChecked( config->getBool( "use_weights" ) );
+    m_options->pressureSlider->setValue( config->getInt( "pressure_weight" ) );
+    m_options->bristleLengthSlider->setValue( config->getInt( "bristle_length_weight" ) );
+    m_options->bristleInkAmountSlider->setValue( config->getInt( "bristle_ink_amount_weight" ) );
+    m_options->inkDepletionSlider->setValue( config->getInt( "ink_depletion_weight" ) );
+    m_options->shearBox->setValue( config->getDouble( "shear_factor" ) );
+    m_options->rndBox->setValue( config->getDouble( "random_factor" ) );
+    m_options->scaleBox->setValue( config->getDouble( "scale_factor" ) );
 }
 
 KisPropertiesConfiguration*  KisSumiPaintOpSettingsWidget::configuration() const
 {
-    // XXX
-    return 0;
+    KisSumiPaintOpSettings* settings = new KisSumiPaintOpSettings( const_cast<KisSumiPaintOpSettingsWidget*>( this ) );
+    return settings;
 }
 
 void KisSumiPaintOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration* config ) const
 {
-    // XXX
+    QList<float> c = curve();
+    config->setProperty( "curve_count", c.count() );
+    for ( int i = 0; i < c.count(); ++i ) {
+        config->setProperty( "ink_curve_" + i, c[i] );
+    }
+    config->setProperty( "radius", radius() );
+    config->setProperty( "sigma", sigma() );
+    config->setProperty( "brush_dimension", brushDimension() );
+    config->setProperty( "ink_amount", inkAmount() );
+    config->setProperty( "mouse_pressure", mousePressure() );
+    config->setProperty( "use_saturation", useSaturation() );
+    config->setProperty( "use_opacity", useOpacity() );
+    config->setProperty( "use_weights", useWeights() );
+    config->setProperty( "pressure_weight", pressureWeight() );
+    config->setProperty( "bristle_length_weight", bristleLengthWeight() );
+    config->setProperty( "bristle_ink_amount_weight", bristleInkAmountWeight() );
+    config->setProperty( "ink_depletion_weight", inkDepletionWeight() );
+    config->setProperty( "shear_factor", shearFactor() );
+    config->setProperty( "random_factor", randomFactor() );
+    config->setProperty( "scale_factor", scaleFactor() );
 }
 
 
@@ -78,11 +127,6 @@ double  KisSumiPaintOpSettingsWidget::sigma() const
     return m_options->sigmaSpinBox->value();
 }
 
-bool  KisSumiPaintOpSettingsWidget::mousePressure() const
-{
-    return m_options->mousePressureCBox->isChecked();
-}
-
 int  KisSumiPaintOpSettingsWidget::brushDimension() const
 {
     if (m_options->oneDimBrushBtn->isChecked()) {
@@ -96,19 +140,9 @@ int  KisSumiPaintOpSettingsWidget::inkAmount() const
     return m_options->inkAmountSpinBox->value();
 }
 
-double  KisSumiPaintOpSettingsWidget::shearFactor() const
+bool  KisSumiPaintOpSettingsWidget::mousePressure() const
 {
-    return m_options->shearBox->value();
-}
-
-double  KisSumiPaintOpSettingsWidget::randomFactor() const
-{
-    return m_options->rndBox->value();
-}
-
-double  KisSumiPaintOpSettingsWidget::scaleFactor() const
-{
-    return m_options->scaleBox->value();
+    return m_options->mousePressureCBox->isChecked();
 }
 
 bool  KisSumiPaintOpSettingsWidget::useSaturation() const
@@ -146,3 +180,18 @@ int  KisSumiPaintOpSettingsWidget::inkDepletionWeight() const
     return m_options->inkDepletionSlider->value();
 }
 
+
+double  KisSumiPaintOpSettingsWidget::shearFactor() const
+{
+    return m_options->shearBox->value();
+}
+
+double  KisSumiPaintOpSettingsWidget::randomFactor() const
+{
+    return m_options->rndBox->value();
+}
+
+double  KisSumiPaintOpSettingsWidget::scaleFactor() const
+{
+    return m_options->scaleBox->value();
+}

@@ -44,6 +44,7 @@
 #include "kis_paintop_preset.h"
 #include "kis_paint_information.h"
 #include "kis_vec.h"
+#include "kis_perspective_math.h"
 
 #define BEZIER_FLATNESS_THRESHOLD 0.5
 #define MAXIMUM_SCALE 2

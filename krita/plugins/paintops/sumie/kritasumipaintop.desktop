@@ -19,5 +19,5 @@ Name[x-test]=xxSumi-e brushxx
 Name[zh_TW]=Sumi-e 筆刷
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
-X-KDE-Library=kritasumi_paintop
+X-KDE-Library=kritasumipaintop
 X-Krita-Version=3

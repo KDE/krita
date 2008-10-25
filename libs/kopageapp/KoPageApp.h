@@ -1,7 +1,6 @@
-#ifndef KOPAGEAPP_H
-#define KOPAGEAPP_H
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,6 +17,10 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef KOPAGEAPP_H
+#define KOPAGEAPP_H
+
+#include <KoCanvasResourceProvider.h>
 
 /// add docs please
 namespace KoPageApp
@@ -29,6 +32,13 @@ namespace KoPageApp
         PagePrevious,
         PageNext,
         PageLast
+    };
+
+    /**
+     * This enum holds identifiers to the resources that can be stored in the KoCanvasResourceProvider.
+     */
+    enum CanvasResource {
+        CurrentPage = KoCanvasResource::KoPageAppStart+1 ///< The current page as a KoShape
     };
 }
 

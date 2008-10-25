@@ -20,6 +20,7 @@
  */
 
 #include "DefaultToolWidget.h"
+#include "DefaultTool.h"
 
 #include <KoInteractionTool.h>
 #include <KoCanvasBase.h>
@@ -98,7 +99,7 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
 
 void DefaultToolWidget::positionSelected( KoFlake::Position position )
 {
-    m_tool->canvas()->resourceProvider()->setResource( KoCanvasResource::HotPosition, QVariant(position) );
+    m_tool->canvas()->resourceProvider()->setResource( DefaultTool::HotPosition, QVariant(position) );
     updatePosition();
 }
 
@@ -246,7 +247,7 @@ void DefaultToolWidget::resourceChanged( int key, const QVariant & res )
 {
     if( key == KoCanvasResource::Unit )
         setUnit( m_tool->canvas()->unit() );
-    else if( key == KoCanvasResource::HotPosition )
+    else if( key == DefaultTool::HotPosition )
     {
         if( res.toInt() != positionSelector->position() )
         {

@@ -54,6 +54,10 @@ public:
     explicit DefaultTool( KoCanvasBase *canvas );
     virtual ~DefaultTool();
 
+    enum CanvasResource {
+        HotPosition = 1410100299
+    };
+
 public:
 
     virtual bool wantsAutoScroll();

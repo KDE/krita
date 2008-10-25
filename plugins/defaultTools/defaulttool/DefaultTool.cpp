@@ -709,7 +709,7 @@ void DefaultTool::keyPressEvent(QKeyEvent *event) {
             case Qt::Key_3:
             case Qt::Key_4:
             case Qt::Key_5:
-                m_canvas->resourceProvider()->setResource( KoCanvasResource::HotPosition, event->key()-Qt::Key_1 );
+                m_canvas->resourceProvider()->setResource( HotPosition, event->key()-Qt::Key_1 );
                 event->accept();
                 break;
             default:
@@ -1097,7 +1097,7 @@ QWidget* DefaultTool::createOptionWidget() {
 
 void DefaultTool::resourceChanged( int key, const QVariant & res )
 {
-    if( key == KoCanvasResource::HotPosition )
+    if( key == HotPosition )
     {
         m_hotPosition = static_cast<KoFlake::Position>( res.toInt() );
         repaintDecorations();
@@ -1147,7 +1147,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event) {
             }
         }
         if( m_hotPosition != newHotPosition )
-            m_canvas->resourceProvider()->setResource( KoCanvasResource::HotPosition, newHotPosition );
+            m_canvas->resourceProvider()->setResource( HotPosition, newHotPosition );
         return 0;
     }
 

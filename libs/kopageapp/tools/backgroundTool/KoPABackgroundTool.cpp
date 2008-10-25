@@ -56,12 +56,12 @@ void KoPABackgroundTool::activate( bool temporary )
     Q_UNUSED( temporary );
 
     KoPAView *view = static_cast<KoPACanvas *>(m_canvas)->koPAView();
-    m_canvas->resourceProvider()->setResource( KoCanvasResource::CurrentPage, view->activePage() );
+    m_canvas->resourceProvider()->setResource( KoPageApp::CurrentPage, view->activePage() );
 }
 
 void KoPABackgroundTool::deactivate()
 {
-    m_canvas->resourceProvider()->clearResource( KoCanvasResource::CurrentPage );
+    m_canvas->resourceProvider()->clearResource( KoPageApp::CurrentPage );
 }
 
 void KoPABackgroundTool::mousePressEvent( KoPointerEvent *event )

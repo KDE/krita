@@ -373,7 +373,7 @@ void KoToolBox::addButton(QToolButton *button, const QString &section, int prior
     }
     sectionWidget->addButton(button, priority);
 
-    if(buttonGroupId < 0)
+    if (buttonGroupId < 0)
         d->buttonGroup->addButton(button);
     else
         d->buttonGroup->addButton(button, buttonGroupId);
@@ -381,10 +381,10 @@ void KoToolBox::addButton(QToolButton *button, const QString &section, int prior
 
 void KoToolBox::setActiveTool(const KoCanvasController *canvas, int id)
 {
-    if(canvas->canvas() != d->canvas)
+    if (canvas->canvas() != d->canvas)
         return;
     QAbstractButton *button = d->buttonGroup->button(id);
-    if(button)
+    if (button)
         button->setChecked(true);
     else
         kWarning(30004) << "KoToolBox::setActiveTool(" << id << "): no such button found\n";
@@ -392,13 +392,13 @@ void KoToolBox::setActiveTool(const KoCanvasController *canvas, int id)
 
 void KoToolBox::setButtonsVisible(const KoCanvasController *canvas, const QList<QString> &codes)
 {
-    if(canvas->canvas() != d->canvas)
+    if (canvas->canvas() != d->canvas)
         return;
     foreach(QToolButton *button, d->visibilityCodes.keys()) {
         QString code = d->visibilityCodes.value(button);
         if (code.startsWith(QLatin1String("flake/")))
             continue;
-        if(code.isEmpty()) {
+        if (code.isEmpty()) {
             button->setVisible(true);
             button->setEnabled( codes.count() != 0 );
         }
@@ -409,7 +409,7 @@ void KoToolBox::setButtonsVisible(const KoCanvasController *canvas, const QList<
 
 void KoToolBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer *layer)
 {
-    if(canvas->canvas() != d->canvas)
+    if (canvas->canvas() != d->canvas)
         return;
     const bool enabled = layer == 0 || (layer->isEditable() && layer->isVisible());
     foreach (QToolButton *button, d->visibilityCodes.keys()) {
@@ -419,7 +419,8 @@ void KoToolBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeL
     }
 }
 
-void KoToolBox::setCanvas(KoCanvasBase *canvas) {
+void KoToolBox::setCanvas(KoCanvasBase *canvas)
+{
     d->canvas = canvas;
 }
 

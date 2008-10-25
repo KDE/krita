@@ -68,4 +68,5 @@ QWidget * KisPaintOpOption::configurationPage() const
     return m_d->configurationPage;
 }
 
+#include "kis_paintop_option.moc"
 

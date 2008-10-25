@@ -35,7 +35,7 @@ class KCurve;
  *
  * XXX; Add a reset button!
  */
-class PAINTOP_EXPORT KisCurveOption : public QObject, public KisPaintOpOption
+class PAINTOP_EXPORT KisCurveOption : public KisPaintOpOption
 {
 
     Q_OBJECT

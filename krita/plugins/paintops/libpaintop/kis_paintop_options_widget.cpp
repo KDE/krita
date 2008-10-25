@@ -22,10 +22,13 @@
 
 #include <QList>
 #include <QLabel>
+#include <QMap>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QListWidget>
+#include <QCheckBox>
 #include <QStackedWidget>
-
+#include <klocale.h>
 #include <kis_paintop_preset.h>
 
 class KisPaintOpOptionsWidget::Private
@@ -34,6 +37,7 @@ class KisPaintOpOptionsWidget::Private
 public:
 
     QList<KisPaintOpOption*> paintOpOptions;
+    QMap<QListWidgetItem*, KisPaintOpOption*> widgetOptionMap;
     QListWidget * optionsList;
     QStackedWidget * optionsStack;
 };
@@ -70,15 +74,36 @@ KisPaintOpOptionsWidget::~KisPaintOpOptionsWidget()
 
 void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption * option)
 {
-    // XXX
     if (!option->configurationPage()) return;
 
     m_d->paintOpOptions << option;
-    m_d->optionsStack->addWidget(option->configurationPage());
-    m_d->paintOpOptions << option;
+
+    if ( option->isCheckable() ) {
+        QWidget* w = new QWidget;
+        QVBoxLayout* l = new QVBoxLayout;
+        QCheckBox* c = new QCheckBox( i18n( "Active" ) );
+        c->setChecked( option->isChecked() );
+        connect( c, SIGNAL( toggled(bool) ), option, SLOT( setChecked(bool) ) );
+        l->addWidget( c );
+        l->addWidget( option->configurationPage() );
+        option->configurationPage()->setVisible( true );
+        l->addSpacing( 1 );
+        w->setLayout( l );
+
+        m_d->optionsStack->addWidget( w );
+    }
+    else {
+        m_d->optionsStack->addWidget(option->configurationPage());
+    }
 
     QListWidgetItem * item = new QListWidgetItem(m_d->optionsList);
+    m_d->widgetOptionMap[item] = option;
     item->setText(option->label());
+    Qt::ItemFlags flags = item->flags();
+    if ( option->isCheckable() ) {
+
+        flags |= Qt::ItemIsUserCheckable;
+    }
     item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 }
 
@@ -87,5 +112,6 @@ void KisPaintOpOptionsWidget::changePage(QListWidgetItem *current, QListWidgetIt
     Q_UNUSED(previous);
     m_d->optionsStack->setCurrentIndex(m_d->optionsList->row(current));
 }
+
 
 #include "kis_paintop_options_widget.moc"

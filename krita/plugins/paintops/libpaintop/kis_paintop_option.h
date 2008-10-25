@@ -20,11 +20,13 @@
 #ifndef KIS_PAINTOP_OPTION_H
 #define KIS_PAINTOP_OPTION_H
 
-#include <QString>
-#include <QWidget>
 #include <kis_types.h>
 #include <krita_export.h>
 #include <kis_properties_configuration.h>
+
+class QWidget;
+class QString;
+
 /**
  * Base interface for paintop options. A paintop option
  * can be enabled/disabled, has a configuration page
@@ -33,16 +35,21 @@
  *
  * Options are disabled by default.
  */
-class PAINTOP_EXPORT KisPaintOpOption
+class PAINTOP_EXPORT KisPaintOpOption : public QObject
 {
+    Q_OBJECT
 
 public:
 
-    KisPaintOpOption(const QString & label, bool checked = false);
+    KisPaintOpOption(const QString & label, bool checked = true);
     virtual ~KisPaintOpOption();
 
     QString & label() const;
+    bool isCheckable() { return m_checkable; }
     bool isChecked() const;
+
+public slots:
+
     void setChecked(bool checked);
 
     void setConfigurationPage(QWidget * page);

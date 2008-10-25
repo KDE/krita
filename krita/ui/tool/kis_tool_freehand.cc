@@ -285,7 +285,7 @@ void KisToolFreehand::endPaint()
 //    dbgUI << "endPaint";
     m_mode = HOVER;
     if (m_painter) {
-      
+
         m_executor->waitForDone();
         // If painting in mouse release, make sure painter
         // is destructed or end()ed
@@ -318,7 +318,7 @@ void KisToolFreehand::endPaint()
                 dynamic_cast<KisIndirectPaintingSupport*>(layer.data());
             if (indirect)
                 indirect->setTemporaryTarget(0);
-            m_source->setDirty(painter.dirtyRegion());
+            //m_source->setDirty(painter.dirtyRegion());
 
             m_canvas->addCommand(painter.endTransaction());
         } else {
@@ -380,6 +380,9 @@ void KisToolFreehand::queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* /*p
 
 void KisToolFreehand::setDirty(const QRegion& region)
 {
+    if (region.numRects() < 1)
+        return;
+
     if (!m_paintOnSelection) {
         currentNode()->setDirty(region);
     } else {

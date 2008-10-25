@@ -1,7 +1,9 @@
 set(kritasumi_paintop_PART_SRCS
 	sumi_paintop_plugin.cpp
 	kis_sumi_paintop.cpp
+	kis_sumi_paintop_factory.cpp
 	kis_sumi_paintop_settings.cpp
+	kis_sumi_paintop_settings_widget.cpp
 	stroke_sample.cpp
 	bristle.cpp
 	brush_shape.cpp

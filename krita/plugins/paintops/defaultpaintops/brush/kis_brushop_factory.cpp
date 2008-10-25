@@ -31,7 +31,7 @@
 #include "kis_brushop.h"
 
 KisBrushOpFactory::KisBrushOpFactory()
-    : m_widget( new KisBrushOpSettingsWidget() )
+    : m_widget( new KisBrushOpSettingsWidget )
 {
 }
 

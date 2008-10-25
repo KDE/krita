@@ -17,39 +17,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_SUMIPAINTOP_SETTINGS_H_
-#define KIS_SUMIPAINTOP_SETTINGS_H_
+#ifndef KIS_SUMIPAINTOP_SETTINGS_WIDGET_H_
+#define KIS_SUMIPAINTOP_SETTINGS_WIDGET_H_
 
-#include <QObject>
-#include <QList>
-#include <kis_paintop_settings.h>
-#include <kis_types.h>
+#include <kis_paintop_settings_widget.h>
 
-class QWidget;
-class KisSumiPaintOpSettingsWidget;
-class QDomElement;
-class QDomDocument;
+#include "ui_wdgsumieoptions.h"
+#include "widgets/kis_popup_button.h"
 
-
-class KisSumiPaintOpSettings : public QObject, public KisPaintOpSettings
+class KisSumiPaintOpSettingsWidget : public KisPaintOpSettingsWidget
 {
-    Q_OBJECT
-
 public:
+    KisSumiPaintOpSettingsWidget();
 
+    virtual ~KisSumiPaintOpSettingsWidget();
 
-    KisSumiPaintOpSettings(KisSumiPaintOpSettingsWidget* widget);
-    virtual ~KisSumiPaintOpSettings() {}
+    void setConfiguration(KisPropertiesConfiguration * config);
 
-    bool paintIncremental();
+    KisPropertiesConfiguration* configuration() const;
 
-    using KisPropertiesConfiguration::fromXML;
-    using KisPropertiesConfiguration::toXML;
-
-    virtual void fromXML(const QDomElement&);
-    virtual void toXML(QDomDocument&, QDomElement&) const;
-
-    KisPaintOpSettingsSP clone() const;
+    void writeConfiguration( KisPropertiesConfiguration *config ) const;
 
     QList<float> curve() const;
     int radius() const;
@@ -71,10 +58,10 @@ public:
     double randomFactor() const;
     double scaleFactor() const;
 
-
 private:
-
-    KisSumiPaintOpSettingsWidget* m_options;
+    Ui::WdgSumieOptions* m_options;
+    int m_curveSamples;
+    QList<QPointF> m_curveData;
 };
 
 #endif

@@ -41,7 +41,7 @@ public:
     ~Brush();
     void paint(KisPaintDeviceSP dev, const KisPaintInformation &info);
     void paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
-    void setInkDepletion(QList<float> *curveData);
+    void setInkDepletion(const QList<float>& curveData);
     void setInkColor(const KoColor &color);
     void addStrokeSample(StrokeSample sample);
     void addStrokeSample(float x, float y, float pressure, float tiltX, float tiltY, float rotation);

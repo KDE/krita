@@ -35,40 +35,12 @@
 class QPointF;
 class KisPainter;
 
-class KisSumiPaintOpFactory : public KisPaintOpFactory
-{
-
-public:
-
-    KisSumiPaintOpFactory() {}
-    virtual ~KisSumiPaintOpFactory() {}
-
-    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
-    virtual QString id() const {
-        return "sumibrush";
-    }
-    virtual QString name() const {
-        return i18n("Sumi-e brush");
-    }
-    virtual QString pixmap() {
-        return "krita-sumi.png";
-    }
-    virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
-    virtual KisPaintOpSettingsSP settings(KisImageSP image);
-
-};
-
 class KisSumiPaintOp : public KisPaintOp
 {
 
 public:
     KisSumiPaintOp(const KisSumiPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
     virtual ~KisSumiPaintOp();
-
-    // Do we want to spray even when no movement?
-    virtual bool incremental() const {
-        return false;
-    }
 
     void paintAt(const KisPaintInformation& info);
     double paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist);
@@ -84,11 +56,12 @@ public:
 
 
 private:
+
+    const KisSumiPaintOpSettings* m_settings;
     QColor c;
     QPointF m_previousPoint;
     KisImageSP m_image;
     bool newStrokeFlag;
-    //Stroke stroke;
     KisPaintDeviceSP dab;
     QMutex m_mutex;
     Brush m_brush;

@@ -38,8 +38,8 @@ public:
     using KisPaintOpSettings::toXML;
 
     KisBrushOpSettings( KisBrushOpSettingsWidget* widget );
-
     virtual ~KisBrushOpSettings();
+
     bool paintIncremental();
 
     void fromXML(const QDomElement& elt);

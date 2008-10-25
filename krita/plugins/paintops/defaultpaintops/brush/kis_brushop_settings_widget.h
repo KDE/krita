@@ -39,7 +39,7 @@ public:
 
     KisBrushOpSettingsWidget();
 
-    ~KisBrushOpSettingsWidget();
+    virtual ~KisBrushOpSettingsWidget();
 
     void setConfiguration(KisPropertiesConfiguration * config);
 

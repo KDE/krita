@@ -99,14 +99,13 @@ void Brush::setInkColor(const KoColor &color)
 }
 
 
-void Brush::setInkDepletion(QList<float> *curveData)
+void Brush::setInkDepletion(const QList<float>& curveData)
 {
-    int count = curveData->size();
+    int count = curveData.size();
 
     for (int i = 0; i < count ;i++) {
-        m_inkDepletion.append(curveData->at(i));
+        m_inkDepletion.append(curveData.at(i));
     }
-    delete curveData; // thank you, delete your self
 }
 
 void Brush::paint(KisPaintDeviceSP dev, const KisPaintInformation &info)

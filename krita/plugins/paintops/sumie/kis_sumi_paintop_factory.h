@@ -1,9 +1,6 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2004-2008 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
- *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,39 +17,39 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_BRUSHOP_FACTORY_H_
-#define KIS_BRUSHOP_FACTORY_H_
+#ifndef KIS_SUMIPAINTOP_FACTORY_H_
+#define KIS_SUMIPAINTOP_FACTORY_H_
 
+#include <klocale.h>
 #include <kis_paintop_factory.h>
 #include <kis_types.h>
-#include <klocale.h>
-#include <QString>
 
-class KisPaintOp;
+#include "kis_sumi_paintop_settings.h"
+
 class KisPainter;
-class QWidget;
-class KoInputDevice;
-class KisBrushOpSettingsWidget;
+class KisSumiPaintOpSettings;
+class KisSumiPaintOpSettingsWidget;
 
-class KisBrushOpFactory : public KisPaintOpFactory
+class KisSumiPaintOpFactory : public KisPaintOpFactory
 {
 
 public:
-    KisBrushOpFactory();
-    virtual ~KisBrushOpFactory();
+
+    KisSumiPaintOpFactory();
+    virtual ~KisSumiPaintOpFactory();
 
     virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
 
     virtual QString id() const {
-        return "paintbrush";
+        return "sumibrush";
     }
 
     virtual QString name() const {
-        return i18n("Pixel Brush");
+        return i18n("Sumi-e brush");
     }
 
     virtual QString pixmap() {
-        return "krita-paintbrush.png";
+        return "krita-sumi.png";
     }
 
     virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
@@ -61,7 +58,6 @@ public:
 
 private:
 
-    KisBrushOpSettingsWidget* const m_widget;
+    KisSumiPaintOpSettingsWidget* const m_widget;
 };
-
-#endif // KIS_BRUSHOP_FACTORY_H_
+#endif // KIS_SUMIPAINTOP_FACTORY_H_

@@ -28,7 +28,7 @@
 
 #include <kis_paintop_registry.h>
 
-#include "kis_sumi_paintop.h"
+#include "kis_sumi_paintop_factory.h"
 #include "kis_global.h"
 
 typedef KGenericFactory<SumiPaintOpPlugin> SumiPaintOpPluginFactory;
@@ -38,7 +38,7 @@ K_EXPORT_COMPONENT_FACTORY(kritasumi_paintop, SumiPaintOpPluginFactory("krita"))
 SumiPaintOpPlugin::SumiPaintOpPlugin(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    //
+
     setComponentData(SumiPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
     r->add(new KisSumiPaintOpFactory);

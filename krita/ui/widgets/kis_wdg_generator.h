@@ -49,7 +49,7 @@ public:
 
     void init(KisPaintDeviceSP dev);
 
-    void setConfiguration(KisFilterConfiguration * config);
+    void setConfiguration( const KisFilterConfiguration * config);
 
     KisFilterConfiguration * configuration();
 

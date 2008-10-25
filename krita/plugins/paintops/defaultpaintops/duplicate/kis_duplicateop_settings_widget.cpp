@@ -58,7 +58,7 @@ KisDuplicateOpSettingsWidget::~KisDuplicateOpSettingsWidget()
     delete m_paintActionTypeOption;
 }
 
-void KisDuplicateOpSettingsWidget::setConfiguration(KisPropertiesConfiguration * config)
+void KisDuplicateOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
 {
     m_brushOption->readOptionSetting(config);
     m_sizeOption->readOptionSetting(config);

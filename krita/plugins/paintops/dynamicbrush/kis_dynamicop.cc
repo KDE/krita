@@ -67,7 +67,7 @@ public:
 
     virtual ~KisDynamicOpWidget(){}
 
-    virtual void setConfiguration(KisPropertiesConfiguration * config)
+    virtual void setConfiguration( const KisPropertiesConfiguration * config)
     {
     }
 

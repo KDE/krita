@@ -62,7 +62,7 @@ KisPropertiesConfiguration* KisWdgBlur::configuration() const
     return config;
 }
 
-void KisWdgBlur::setConfiguration(KisPropertiesConfiguration* config)
+void KisWdgBlur::setConfiguration(const KisPropertiesConfiguration* config)
 {
     QVariant value;
     if (config->getProperty("shape", value)) {

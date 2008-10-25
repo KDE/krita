@@ -406,7 +406,7 @@ KisBumpmapConfigWidget::KisBumpmapConfigWidget(const KisPaintDeviceSP dev, const
 
 }
 
-void KisBumpmapConfigWidget::setConfiguration(KisPropertiesConfiguration * cfg)
+void KisBumpmapConfigWidget::setConfiguration(const KisPropertiesConfiguration * cfg)
 {
     if (!cfg) return;
 

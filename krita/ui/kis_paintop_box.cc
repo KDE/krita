@@ -258,6 +258,10 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 
     KisPaintOpPresetSP preset = activePreset(paintop, KoToolManager::instance()->currentInputDevice());
     dbgUI << "active preset for paintop " << paintop.id() << " is " << preset;
+    if(preset->settings()) {
+        // XXX: Clean this up for 2.1, when the settings won't have a pointer to their widget anymore
+        preset->settings()->widget()->setConfiguration(preset->settings());
+    }
     m_resourceProvider->slotPaintOpPresetActivated(preset);
 }
 

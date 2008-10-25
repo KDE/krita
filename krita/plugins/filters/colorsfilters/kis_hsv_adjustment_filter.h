@@ -68,7 +68,7 @@ public:
     virtual ~KisHSVConfigWidget();
 
     virtual KisPropertiesConfiguration * configuration() const;
-    virtual void setConfiguration(KisPropertiesConfiguration* config);
+    virtual void setConfiguration(const KisPropertiesConfiguration* config);
     Ui_WdgHSVAdjustment * m_page;
 };
 

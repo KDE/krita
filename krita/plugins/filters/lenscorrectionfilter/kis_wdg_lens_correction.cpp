@@ -45,7 +45,7 @@ KisWdgLensCorrection::~KisWdgLensCorrection()
 {
 }
 
-void KisWdgLensCorrection::setConfiguration(KisPropertiesConfiguration* config)
+void KisWdgLensCorrection::setConfiguration(const KisPropertiesConfiguration* config)
 {
     QVariant value;
     if (config->getProperty("xcenter", value)) {

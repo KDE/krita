@@ -58,7 +58,7 @@ KisSmudgeOpSettingsWidget::~KisSmudgeOpSettingsWidget()
     delete m_paintActionTypeOption;
 }
 
-void KisSmudgeOpSettingsWidget::setConfiguration(KisPropertiesConfiguration * config)
+void KisSmudgeOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
 {
     m_brushOption->readOptionSetting(config);
     m_sizeOption->readOptionSetting(config);

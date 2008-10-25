@@ -47,7 +47,7 @@ KisWdgRandomPick::~KisWdgRandomPick()
 {
 }
 
-void KisWdgRandomPick::setConfiguration(KisPropertiesConfiguration* config)
+void KisWdgRandomPick::setConfiguration(const KisPropertiesConfiguration* config)
 {
     QVariant value;
     if (config->getProperty("level", value)) {

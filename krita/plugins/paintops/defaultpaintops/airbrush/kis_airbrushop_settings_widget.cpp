@@ -51,7 +51,7 @@ KisAirbrushOpSettingsWidget::~KisAirbrushOpSettingsWidget()
     delete m_brushOption;
 }
 
-void KisAirbrushOpSettingsWidget::setConfiguration(KisPropertiesConfiguration * config)
+void KisAirbrushOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
 {
     m_brushOption->readOptionSetting(config);
 }

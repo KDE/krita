@@ -34,7 +34,7 @@ public:
     inline const Ui_WdgBlur* widget() const {
         return m_widget;
     }
-    virtual void setConfiguration(KisPropertiesConfiguration*);
+    virtual void setConfiguration(const KisPropertiesConfiguration*);
     virtual KisPropertiesConfiguration* configuration() const;
 
 private slots:

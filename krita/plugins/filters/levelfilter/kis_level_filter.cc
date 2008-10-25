@@ -273,7 +273,7 @@ KisPropertiesConfiguration * KisLevelConfigWidget::configuration() const
     return config;
 }
 
-void KisLevelConfigWidget::setConfiguration(KisPropertiesConfiguration * config)
+void KisLevelConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
 {
     QVariant value;
     if (config->getProperty("blackvalue", value)) {

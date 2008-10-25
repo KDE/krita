@@ -111,7 +111,7 @@ void KisWdgGenerator::init(KisPaintDeviceSP dev)
 
 
 
-void KisWdgGenerator::setConfiguration(KisFilterConfiguration * config)
+void KisWdgGenerator::setConfiguration( const KisFilterConfiguration * config)
 {
     for (int i = 0; i < d->uiWdgGenerators.lstGenerators->count(); ++i) {
         KisGeneratorItem * item = static_cast<KisGeneratorItem*>(d->uiWdgGenerators.lstGenerators->item(i));
@@ -163,7 +163,7 @@ void KisWdgGenerator::slotGeneratorActivated(int row)
                                           d->uiWdgGenerators.centralWidgetHolder);
         } else {
             d->centralWidget = widget;
-            widget->setConfiguration(d->currentGenerator->defaultConfiguration(d->dev));
+            widget->setConfiguration( d->currentGenerator->defaultConfiguration(d->dev));
         }
     }
     d->widgetLayout->addWidget(d->centralWidget, 0 , 0);

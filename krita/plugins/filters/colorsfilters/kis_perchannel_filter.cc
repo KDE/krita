@@ -420,9 +420,9 @@ KisPropertiesConfiguration * KisPerChannelConfigWidget::configuration() const
     return cfg;
 }
 
-void KisPerChannelConfigWidget::setConfiguration(KisPropertiesConfiguration * config)
+void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
 {
-    KisPerChannelFilterConfiguration * cfg = dynamic_cast<KisPerChannelFilterConfiguration *>(config);
+    const KisPerChannelFilterConfiguration * cfg = dynamic_cast<const KisPerChannelFilterConfiguration *>(config);
     if (!cfg)
         return;
 

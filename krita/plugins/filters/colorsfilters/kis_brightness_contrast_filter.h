@@ -102,7 +102,7 @@ public:
     virtual ~KisBrightnessContrastConfigWidget() {}
 
     virtual KisBrightnessContrastFilterConfiguration * configuration() const;
-    virtual void setConfiguration(KisPropertiesConfiguration* config);
+    virtual void setConfiguration( const KisPropertiesConfiguration* config);
     WdgBrightnessContrast * m_page;
 };
 

@@ -41,7 +41,7 @@ public:
 
     ~KisSmudgeOpSettingsWidget();
 
-    void setConfiguration(KisPropertiesConfiguration * config);
+    void setConfiguration( const KisPropertiesConfiguration * config);
 
     KisPropertiesConfiguration* configuration() const;
 

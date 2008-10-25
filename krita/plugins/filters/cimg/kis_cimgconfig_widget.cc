@@ -75,9 +75,9 @@ KisPropertiesConfiguration* KisCImgconfigWidget::configuration() const
 
 }
 
-void KisCImgconfigWidget::setConfiguration(KisPropertiesConfiguration * config)
+void KisCImgconfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
 {
-    KisCImgFilterConfiguration * cfg = dynamic_cast<KisCImgFilterConfiguration*>(config);
+    const KisCImgFilterConfiguration * cfg = dynamic_cast<const KisCImgFilterConfiguration*>(config);
     if (!cfg) return;
 
     m_page->numDetail->setValue(cfg->power1);

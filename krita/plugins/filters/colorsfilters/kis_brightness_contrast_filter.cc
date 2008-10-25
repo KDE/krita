@@ -356,9 +356,9 @@ KisBrightnessContrastFilterConfiguration * KisBrightnessContrastConfigWidget::co
     return cfg;
 }
 
-void KisBrightnessContrastConfigWidget::setConfiguration(KisPropertiesConfiguration * config)
+void KisBrightnessContrastConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
 {
-    KisBrightnessContrastFilterConfiguration * cfg = dynamic_cast<KisBrightnessContrastFilterConfiguration *>(config);
+    const KisBrightnessContrastFilterConfiguration * cfg = dynamic_cast<const KisBrightnessContrastFilterConfiguration *>(config);
     Q_ASSERT(cfg);
     m_page->kCurve->setCurve(cfg->curve);
 }

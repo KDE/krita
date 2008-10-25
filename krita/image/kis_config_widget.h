@@ -53,7 +53,7 @@ public:
     /**
      * @param config the configuration for this configuration widget.
      */
-    virtual void setConfiguration(KisPropertiesConfiguration * config) = 0;
+    virtual void setConfiguration(const KisPropertiesConfiguration * config) = 0;
 
     /**
      * @return the configuration

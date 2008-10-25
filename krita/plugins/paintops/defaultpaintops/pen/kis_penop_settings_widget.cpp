@@ -58,7 +58,7 @@ KisPenOpSettingsWidget::~KisPenOpSettingsWidget()
     delete m_paintActionTypeOption;
 }
 
-void KisPenOpSettingsWidget::setConfiguration(KisPropertiesConfiguration * config)
+void KisPenOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
 {
     m_brushOption->readOptionSetting(config);
     m_sizeOption->readOptionSetting(config);

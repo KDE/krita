@@ -92,7 +92,7 @@ public:
     virtual ~KisLevelConfigWidget();
 
     virtual KisPropertiesConfiguration* configuration() const;
-    void setConfiguration(KisPropertiesConfiguration* config);
+    void setConfiguration(const KisPropertiesConfiguration* config);
     Ui::WdgLevel m_page;
 
 protected slots:

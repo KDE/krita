@@ -100,7 +100,7 @@ public:
     KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f = 0);
     virtual ~KisPerChannelConfigWidget() {}
 
-    virtual void setConfiguration(KisPropertiesConfiguration* config);
+    virtual void setConfiguration(const KisPropertiesConfiguration* config);
     virtual KisPropertiesConfiguration * configuration() const;
 
 private slots:

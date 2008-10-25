@@ -49,7 +49,7 @@ public:
 public:
 
     KisPropertiesConfiguration* configuration() const;
-    void setConfiguration(KisPropertiesConfiguration* config);
+    void setConfiguration(const KisPropertiesConfiguration* config);
 
 private:
     WdgCImg * m_page;

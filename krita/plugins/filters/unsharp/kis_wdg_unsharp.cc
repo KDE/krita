@@ -41,7 +41,7 @@ KisWdgUnsharp::KisWdgUnsharp(QWidget * parent) : KisConfigWidget(parent)
     connect(widget()->intThreshold, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
 }
 
-void KisWdgUnsharp::setConfiguration(KisPropertiesConfiguration* config)
+void KisWdgUnsharp::setConfiguration(const KisPropertiesConfiguration* config)
 {
     QVariant value;
     widget()->intHalfSize->setValue((config->getProperty("halfSize", value)) ? value.toUInt() : 4);

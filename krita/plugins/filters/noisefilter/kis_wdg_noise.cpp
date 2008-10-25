@@ -47,7 +47,7 @@ KisWdgNoise::~KisWdgNoise()
 {
 }
 
-void KisWdgNoise::setConfiguration(KisPropertiesConfiguration* config)
+void KisWdgNoise::setConfiguration(const KisPropertiesConfiguration* config)
 {
     QVariant value;
     if (config->getProperty("level", value)) {

@@ -55,7 +55,7 @@ public:
 
     virtual ~KisFilterOpWidget(){}
 
-    virtual void setConfiguration(KisPropertiesConfiguration * config)
+    virtual void setConfiguration( const KisPropertiesConfiguration * config)
     {
     }
 
@@ -171,7 +171,7 @@ KisPaintOpSettingsSP KisFilterOpSettings::clone() const
     s->setCurrentFilter(KoID(m_currentFilter->id()));
     s->m_uiOptions->checkBoxIgnoreAlpha->setChecked(ignoreAlpha());
     if (s->m_currentFilterConfigWidget && m_currentFilterConfigWidget) {
-        s->m_currentFilterConfigWidget->setConfiguration(m_currentFilterConfigWidget->configuration());
+        s->m_currentFilterConfigWidget->setConfiguration( constm_currentFilterConfigWidget->configuration());
     }
     return s;
 }
@@ -188,7 +188,7 @@ void KisFilterOpSettings::fromXML(const QDomElement& elt)
             KisFilterConfiguration * kfc = m_currentFilter->defaultConfiguration(m_paintDevice);
             if (kfc && m_currentFilterConfigWidget) {
                 kfc->fromXML(e);
-                m_currentFilterConfigWidget->setConfiguration(kfc);
+                m_currentFilterConfigWidget->setConfiguration( constkfc);
             }
         }
         m_uiOptions->checkBoxIgnoreAlpha->setChecked(elt.attribute("IgnoreAlpha").toInt(0));

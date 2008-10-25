@@ -58,7 +58,7 @@ KisEraseOpSettingsWidget::~KisEraseOpSettingsWidget()
     delete m_paintActionTypeOption;
 }
 
-void KisEraseOpSettingsWidget::setConfiguration(KisPropertiesConfiguration * config)
+void KisEraseOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
 {
     m_brushOption->readOptionSetting(config);
     m_sizeOption->readOptionSetting(config);

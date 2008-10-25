@@ -109,7 +109,7 @@ public:
     KisBumpmapConfigWidget(const KisPaintDeviceSP dev, const KisImageSP image, QWidget * parent, Qt::WFlags f = 0);
     virtual ~KisBumpmapConfigWidget() {}
 
-    void setConfiguration(KisPropertiesConfiguration* config);
+    void setConfiguration(const KisPropertiesConfiguration* config);
     KisPropertiesConfiguration* configuration() const;
 
     BumpmapWidget * m_page;

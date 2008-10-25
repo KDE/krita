@@ -44,7 +44,7 @@ KisSumiPaintOpSettingsWidget::~ KisSumiPaintOpSettingsWidget()
 {
 }
 
-void  KisSumiPaintOpSettingsWidget::setConfiguration(KisPropertiesConfiguration * config)
+void  KisSumiPaintOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
 {
     // XXX: Use a regular curve option here!
     QList<float> c;

@@ -35,7 +35,7 @@ KisDlgTransformationEffect::KisDlgTransformationEffect(const QString & maskName,
         const char *name)
         : KDialog(parent)
 {
-    setCaption("New Transformation Mask");
+    setCaption(i18n("New Transformation Mask"));
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     setObjectName(name);

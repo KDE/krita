@@ -118,7 +118,7 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
         dstRect &= painter()->bounds();
     }
 
-    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) retuiprn;
+    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
     qint32 sx = dstRect.x() - x;
     qint32 sy = dstRect.y() - y;

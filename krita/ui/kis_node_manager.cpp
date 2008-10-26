@@ -276,7 +276,8 @@ void KisNodeManager::activateNode(KisNodeSP node)
     selection->deselectAll();
     selection->select(shape);
 
-    KoShapeLayer * shapeLayer = dynamic_cast<KoShapeLayer*>(shape->parent());
+    KoShapeLayer * shapeLayer = dynamic_cast<KoShapeLayer*>(shape);
+    Q_ASSERT( shapeLayer );
     if (shapeLayer) {
         shapeLayer->setLocked(node->userLocked());
         shapeLayer->setVisible(node->visible());

@@ -18,6 +18,14 @@
 
 #include "kis_layer_shape.h"
 
+#include <KoCanvasBase.h>
+#include <KoCanvasController.h>
+#include <KoViewConverter.h>
+#include <KoSelection.h>
+#include <KoShapeContainer.h>
+#include <KoToolManager.h>
+#include <KoShapeManager.h>
+
 #include <kis_types.h>
 #include <kis_layer.h>
 #include <kis_image.h>
@@ -33,7 +41,7 @@ public:
 };
 
 KisLayerShape::KisLayerShape(KoShapeContainer * parent, KisLayerSP layer)
-        : KoShapeContainer()
+        : KoShapeLayer()
         , m_d(new Private())
 {
 
@@ -141,6 +149,16 @@ void KisLayerShape::editabilityChanged( )
 {
     dbgKrita << m_d->layer->isEditable();
     setLocked( !m_d->layer->isEditable() );
+    // The following looks weird but it is needed to update the status of the tools
+    KoCanvasController* canvas = KoToolManager::instance()->activeCanvasController();
+    if( canvas )
+    {
+        KoSelection* selection = canvas->canvas()->shapeManager()->selection();
+        if( selection->activeLayer() == this )
+        {
+            selection->setActiveLayer( this );
+        }
+    }
 }
 
 #include "kis_layer_shape.moc"

@@ -34,7 +34,7 @@
    A KisLayerShape is a flake wrapper around adjustment layers or paint
    layers. A layershape can only have a KisMaskShape as its descendant.
  */
-class KRITAUI_EXPORT KisLayerShape : public QObject, public KoShapeContainer
+class KRITAUI_EXPORT KisLayerShape : public QObject, public KoShapeLayer
 {
     Q_OBJECT
 public:

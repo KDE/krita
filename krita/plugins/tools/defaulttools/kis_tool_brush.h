@@ -84,7 +84,6 @@ public:
         setPriority(0);
         //setActivationShapeId( KIS_LAYER_SHAPE_ID );
         setInputDeviceAgnostic(false);
-        setActivationShapeId("flake/edit");
     }
 
     virtual ~KisToolBrushFactory() {}

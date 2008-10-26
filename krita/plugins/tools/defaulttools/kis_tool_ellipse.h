@@ -74,7 +74,6 @@ public:
         setIcon("krita_tool_ellipse");
         setPriority(3);
         setInputDeviceAgnostic(false);
-        setActivationShapeId("flake/edit");
     }
 
     virtual ~KisToolEllipseFactory() {}

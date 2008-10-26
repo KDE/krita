@@ -137,8 +137,8 @@ private:
 
     QAction *m_imgFlatten;
     QAction *m_imgMergeLayer;
-    QAction * m_actionAdjustmentLayer;
-    QAction * m_actionGeneratorLayer;
+    QAction *m_actionAdjustmentLayer;
+    QAction *m_actionGeneratorLayer;
     QAction *m_layerAdd;
     QAction *m_layerAddCloneLayer;
     QAction *m_layerAddShapeLayer;

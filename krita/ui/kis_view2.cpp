@@ -251,7 +251,7 @@ void KisView2::dropEvent(QDropEvent *event)
     if (K3URLDrag::decode(event, urls)) {
         if (urls.count() > 0) {
 
-            KMenu popup(this);
+            KMenu popup;
             popup.setObjectName("drop_popup");
 
             QAction *insertAsNewLayer = new QAction(i18n("Insert as New Layer"), &popup);

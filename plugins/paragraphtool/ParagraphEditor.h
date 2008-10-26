@@ -20,10 +20,10 @@
 #ifndef PARAGRAPHEDITOR_H
 #define PARAGRAPHEDITOR_H
 
+#include "ParagraphBase.h"
 #include "ParagraphFragment.h"
 #include "Ruler.h"
 
-#include <QObject>
 #include <QRectF>
 #include <QTextCursor>
 #include <QTextBlock>
@@ -32,6 +32,7 @@
 class KoParagraphStyle;
 class KoCanvasBase;
 
+class QObject;
 class QPainter;
 class QTextLayout;
 
@@ -40,7 +41,7 @@ class QTextLayout;
  * It displays all paragraph formatting parameters directly on the canvas
  * and allows to modify them, too.
  */
-class ParagraphEditor : public QObject
+class ParagraphEditor : public ParagraphBase
 {
     Q_OBJECT
 public:
@@ -49,7 +50,7 @@ public:
 
     void initializeRuler(Ruler &ruler, int options = 0);
 
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter);
 
     QRectF dirtyRectangle();
 
@@ -63,17 +64,6 @@ public:
     void paintRulers(QPainter &painter, const KoViewConverter &converter, const ParagraphFragment &fragment) const;
 
     bool createFragments();
-
-    // activate the paragraph below the specified cursor position
-    bool activateTextBlockAt(const QPointF &point);
-
-    // deactivate the current text block
-    // (for example use clicked somwhere else)
-    void deactivateTextBlock();
-
-    bool hasActiveTextBlock() const {
-        return !m_activeCursor.isNull();
-    }
 
     bool hasActiveRuler() const {
         return m_activeRuler != noRuler;
@@ -109,10 +99,6 @@ public:
         m_smoothMovement = !m_smoothMovement; emit smoothMovementChanged(m_smoothMovement);
     }
 
-    QTextBlock textBlock() const {
-        return m_activeCursor.block();
-    }
-
     QTextBlockFormat blockFormat() const {
         return textBlock().blockFormat();
     }
@@ -124,10 +110,6 @@ public:
     }
 
 public slots:
-    // should be called when any of the rulers needs a repaint
-    void scheduleRepaint();
-    bool needsRepaint() const;
-
     // should be called when the value of any of the rulers changed
     void updateLayout();
 
@@ -143,16 +125,15 @@ public slots:
         m_smoothMovement = smoothMovement;
     }
 
+protected:
+    void addShapes();
+
 signals:
     void styleNameChanged(const QString&);
     void smoothMovementChanged(bool smooth);
 
 private:
-    KoCanvasBase *m_canvas;
-    QTextCursor m_activeCursor;
     KoParagraphStyle *m_paragraphStyle;
-
-    QVector<KoShape*> m_shapes;
 
     Ruler m_rulers[maxRuler];
 
@@ -165,7 +146,6 @@ private:
 
     QRectF m_storedRepaintRectangle;
 
-    bool m_needsRepaint;
     bool m_smoothMovement;
 
 };

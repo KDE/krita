@@ -20,50 +20,31 @@
 #ifndef PARAGRAPHHIGHLIGHTER_H
 #define PARAGRAPHHIGHLIGHTER_H
 
-#include <QObject>
-#include <QTextBlock>
-#include <QTextCursor>
-#include <QPointF>
+#include "ParagraphBase.h"
+
+#include <QRectF>
 
 class KoCanvasBase;
-class KoShape;
 class KoViewConverter;
 
-class QKeyEvent;
 class QPainter;
 
 /**
  * This tool can be used to highlight a paragraph of text
  */
-class ParagraphHighlighter : public QObject
+class ParagraphHighlighter : public ParagraphBase
 {
     Q_OBJECT
 public:
     explicit ParagraphHighlighter(QObject *parent, KoCanvasBase *canvas);
     ~ParagraphHighlighter();
 
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter);
 
-    void scheduleRepaint();
-    bool needsRepaint() const;
     QRectF dirtyRectangle();
 
-    QTextBlock textBlock() const;
-    bool hasActiveTextBlock() const;
-    void activateTextBlockAt(const QPointF &point);
-    void activateTextBlock(QTextBlock textBlock);
-    void deactivateTextBlock();
-
-protected:
-    void addShapes();
-
 private:
-    KoCanvasBase *m_canvas;
-    QList<KoShape*> m_shapes;
-    QTextCursor m_cursor;
     QRectF m_storedRepaintRectangle;
-
-    bool m_needsRepaint;
 };
 
 #endif

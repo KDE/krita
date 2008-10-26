@@ -59,33 +59,11 @@
  * - think about a method to give instructions to the users
  *   (the bubble used by okular might be a good way to do this)
  */
-static bool shapeContainsBlock(const KoShape *shape, QTextBlock textBlock)
-{
-    QTextLayout *layout = textBlock.layout();
-    qreal blockStart = layout->lineAt(0).y();
-
-    QTextLine endLine = layout->lineAt(layout->lineCount() - 1);
-    qreal blockEnd = endLine.y() + endLine.height();
-
-    KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
-    if (textShapeData == NULL) {
-        return false;
-    }
-
-    qreal shapeStart = textShapeData->documentOffset();
-    qreal shapeEnd = shapeStart + shape->size().height();
-
-    return (blockEnd >= shapeStart && blockStart < shapeEnd);
-}
-
 ParagraphEditor::ParagraphEditor(QObject *parent, KoCanvasBase *canvas)
-        : QObject(parent),
-        m_canvas(canvas),
-        m_paragraphStyle(NULL),
+        : ParagraphBase(parent, canvas),
         m_activeRuler(noRuler),
         m_focusedRuler(noRuler),
         m_highlightedRuler(noRuler),
-        m_needsRepaint(false),
         m_smoothMovement(false)
 {
     initializeRuler(m_rulers[firstIndentRuler]);
@@ -105,7 +83,7 @@ void ParagraphEditor::initializeRuler(Ruler &ruler, int options)
 {
     ruler.setParent(this);
     ruler.setOptions(options);
-    ruler.setUnit(m_canvas->unit());
+    ruler.setUnit(canvas()->unit());
     ruler.setMinimumValue(0.0);
     connect(&ruler, SIGNAL(needsRepaint()),
             this, SLOT(scheduleRepaint()));
@@ -115,11 +93,11 @@ void ParagraphEditor::initializeRuler(Ruler &ruler, int options)
 
 void ParagraphEditor::loadRulers()
 {
-    m_rulers[firstIndentRuler].setValue(m_paragraphStyle->leftMargin() + m_paragraphStyle->textIndent());
-    m_rulers[followingIndentRuler].setValue(m_paragraphStyle->leftMargin());
-    m_rulers[rightMarginRuler].setValue(m_paragraphStyle->rightMargin());
-    m_rulers[topMarginRuler].setValue(m_paragraphStyle->topMargin());
-    m_rulers[bottomMarginRuler].setValue(m_paragraphStyle->bottomMargin());
+    m_rulers[firstIndentRuler].setValue(paragraphStyle()->leftMargin() + paragraphStyle()->textIndent());
+    m_rulers[followingIndentRuler].setValue(paragraphStyle()->leftMargin());
+    m_rulers[rightMarginRuler].setValue(paragraphStyle()->rightMargin());
+    m_rulers[topMarginRuler].setValue(paragraphStyle()->topMargin());
+    m_rulers[bottomMarginRuler].setValue(paragraphStyle()->bottomMargin());
 
     scheduleRepaint();
 }
@@ -127,21 +105,21 @@ void ParagraphEditor::loadRulers()
 
 void ParagraphEditor::saveRulers()
 {
-    m_paragraphStyle->setLeftMargin(m_rulers[followingIndentRuler].value());
-    m_paragraphStyle->setRightMargin(m_rulers[rightMarginRuler].value());
-    m_paragraphStyle->setTopMargin(m_rulers[topMarginRuler].value());
-    m_paragraphStyle->setBottomMargin(m_rulers[bottomMarginRuler].value());
-    m_paragraphStyle->setTextIndent(m_rulers[firstIndentRuler].value() - m_rulers[followingIndentRuler].value());
+    paragraphStyle()->setLeftMargin(m_rulers[followingIndentRuler].value());
+    paragraphStyle()->setRightMargin(m_rulers[rightMarginRuler].value());
+    paragraphStyle()->setTopMargin(m_rulers[topMarginRuler].value());
+    paragraphStyle()->setBottomMargin(m_rulers[bottomMarginRuler].value());
+    paragraphStyle()->setTextIndent(m_rulers[firstIndentRuler].value() - m_rulers[followingIndentRuler].value());
 
     QTextBlockFormat format;
-    m_paragraphStyle->applyStyle(format);
+    paragraphStyle()->applyStyle(format);
 
-    m_activeCursor.mergeBlockFormat(format);
+    cursor().mergeBlockFormat(format);
 }
 
 QString ParagraphEditor::styleName()
 {
-    KoParagraphStyle *style = m_paragraphStyle;
+    KoParagraphStyle *style = paragraphStyle();
     while (style != NULL) {
         QString name = style->name();
         if (!name.isNull() && !name.isEmpty()) {
@@ -236,7 +214,7 @@ QRectF ParagraphEditor::dirtyRectangle()
     // repaint area
     QRectF repaintRectangle = m_storedRepaintRectangle;
     m_storedRepaintRectangle = QRectF();
-    foreach(KoShape *shape, m_shapes) {
+    foreach(KoShape *shape, shapes()) {
         QRectF boundingRect(QPointF(0, 0), shape->size());
 
         if (shape->border()) {
@@ -258,19 +236,8 @@ QRectF ParagraphEditor::dirtyRectangle()
     return repaintRectangle;
 }
 
-void ParagraphEditor::scheduleRepaint()
+void ParagraphEditor::addShapes()
 {
-    m_needsRepaint = true;
-}
-
-bool ParagraphEditor::needsRepaint() const
-{
-    return m_needsRepaint;
-}
-
-bool ParagraphEditor::createFragments()
-{
-    m_shapes.clear();
     m_rulers[firstIndentRuler].clearFragments();
     m_rulers[followingIndentRuler].clearFragments();
     m_rulers[rightMarginRuler].clearFragments();
@@ -278,20 +245,11 @@ bool ParagraphEditor::createFragments()
     m_rulers[bottomMarginRuler].clearFragments();
     m_rulers[lineSpacingRuler].clearFragments();
 
-    KoTextDocumentLayout *layout = static_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout());
-    if (layout == NULL) {
-        return false;
-    }
+    ParagraphBase::addShapes();
 
-    QList<KoShape*> shapes = layout->shapes();
-    foreach(KoShape *shape, shapes) {
-        if (shapeContainsBlock(shape, textBlock())) {
-            m_shapes << shape;
-            ParagraphFragment(m_rulers, shape, textBlock(), m_paragraphStyle);
-        }
+    foreach(KoShape *shape, shapes()) {
+        ParagraphFragment(m_rulers, shape, textBlock(), paragraphStyle());
     }
-
-    return true;
 }
 
 /* slot which is called when the value of one of the rulers changed
@@ -303,80 +261,8 @@ void ParagraphEditor::updateLayout()
 
     static_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout())->layout();
 
-    if (createFragments()) {
-        loadRulers();
-    } else {
-        deactivateTextBlock();
-    }
+    addShapes();
 
-    scheduleRepaint();
-}
-
-// try to find and activate a text block below the mouse position
-// return true if successful
-bool ParagraphEditor::activateTextBlockAt(const QPointF &point)
-{
-    KoShape *shape = dynamic_cast<KoShape*>(m_canvas->shapeManager()->shapeAt(point));
-    if (shape == NULL) {
-        // the shape below the mouse position is not a text shape
-        return false;
-    }
-
-    KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
-    if (textShapeData == NULL) {
-        return false;
-    }
-
-    QTextDocument *document = textShapeData->document();
-
-    QPointF p = shape->transformation().inverted().map(point);
-    p += QPointF(0.0, textShapeData->documentOffset());
-
-    int position = document->documentLayout()->hitTest(p, Qt::ExactHit);
-    if (position == -1) {
-        // there is no text below the mouse position
-        return false;
-    }
-
-    QTextBlock block(document->findBlock(position));
-    if (!block.isValid()) {
-        // the text block is not valid, this shouldn't really happen
-        return false;
-    }
-
-    // the textblock is already activated, no need for a repaint and all that
-    if (hasActiveTextBlock() && block == textBlock()) {
-        return true;
-    }
-
-    m_activeCursor = QTextCursor(block);
-    delete m_paragraphStyle;
-    m_paragraphStyle = KoParagraphStyle::fromBlock(m_activeCursor.block(), this);
-
-    if (createFragments()) {
-        loadRulers();
-        emit styleNameChanged(styleName());
-
-    } else {
-        deactivateTextBlock();
-        return false;
-    }
-
-    return true;
-}
-
-void ParagraphEditor::deactivateTextBlock()
-{
-    if (!hasActiveTextBlock())
-        return;
-
-    emit styleNameChanged(QString(i18n("n/a")));
-
-    deactivateRuler();
-    dehighlightRuler();
-
-    // invalidate active cursor
-    m_activeCursor = QTextCursor();
     scheduleRepaint();
 }
 
@@ -425,7 +311,6 @@ void ParagraphEditor::deactivateRuler()
     m_rulers[activeRuler].setActive(false);
 
     focusRuler(activeRuler);
-
 }
 
 void ParagraphEditor::resetActiveRuler()
@@ -505,20 +390,20 @@ void ParagraphEditor::applyParentStyleToActiveRuler()
     }
 
     if (m_activeRuler == firstIndentRuler) {
-        m_paragraphStyle->remove(QTextFormat::TextIndent);
-        m_rulers[m_activeRuler].setValue(m_paragraphStyle->textIndent());
+        paragraphStyle()->remove(QTextFormat::TextIndent);
+        m_rulers[m_activeRuler].setValue(paragraphStyle()->textIndent());
     } else if (m_activeRuler == followingIndentRuler) {
-        m_paragraphStyle->remove(QTextFormat::BlockLeftMargin);
-        m_rulers[m_activeRuler].setValue(m_paragraphStyle->leftMargin());
+        paragraphStyle()->remove(QTextFormat::BlockLeftMargin);
+        m_rulers[m_activeRuler].setValue(paragraphStyle()->leftMargin());
     } else if (m_activeRuler == rightMarginRuler) {
-        m_paragraphStyle->remove(QTextFormat::BlockRightMargin);
-        m_rulers[m_activeRuler].setValue(m_paragraphStyle->rightMargin());
+        paragraphStyle()->remove(QTextFormat::BlockRightMargin);
+        m_rulers[m_activeRuler].setValue(paragraphStyle()->rightMargin());
     } else if (m_activeRuler == topMarginRuler) {
-        m_paragraphStyle->remove(QTextFormat::BlockTopMargin);
-        m_rulers[m_activeRuler].setValue(m_paragraphStyle->topMargin());
+        paragraphStyle()->remove(QTextFormat::BlockTopMargin);
+        m_rulers[m_activeRuler].setValue(paragraphStyle()->topMargin());
     } else if (m_activeRuler == bottomMarginRuler) {
-        m_paragraphStyle->remove(QTextFormat::BlockBottomMargin);
-        m_rulers[m_activeRuler].setValue(m_paragraphStyle->bottomMargin());
+        paragraphStyle()->remove(QTextFormat::BlockBottomMargin);
+        m_rulers[m_activeRuler].setValue(paragraphStyle()->bottomMargin());
     }
 
     updateLayout();

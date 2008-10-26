@@ -69,7 +69,9 @@ void ParagraphTool::repaintDecorations()
         repaintRectangle |= m_paragraphHighlighter.dirtyRectangle();
     }
 
-    canvas()->updateCanvas(repaintRectangle);
+    if (repaintRectangle != QRectF()) {
+        canvas()->updateCanvas(repaintRectangle);
+    }
 }
 
 void ParagraphTool::mousePressEvent(KoPointerEvent *event)

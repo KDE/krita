@@ -19,56 +19,17 @@
 
 #include "ParagraphHighlighter.h"
 
-#include <KoCanvasBase.h>
 #include <KoShape.h>
-#include <KoShapeManager.h>
-#include <KoTextDocumentLayout.h>
 #include <KoTextShapeData.h>
-
-#include <KDebug>
 
 #include <QAbstractTextDocumentLayout>
 #include <QPainter>
-#include <QTextDocument>
 
 #include <assert.h>
 
-static bool shapeContainsBlock(const KoShape *shape, QTextBlock textBlock)
-{
-    QTextLayout *layout = textBlock.layout();
-    qreal blockStart = layout->lineAt(0).y();
-
-    QTextLine endLine = layout->lineAt(layout->lineCount() - 1);
-    qreal blockEnd = endLine.y() + endLine.height();
-
-    KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
-    if (textShapeData == NULL) {
-        return false;
-    }
-
-    qreal shapeStart = textShapeData->documentOffset();
-    qreal shapeEnd = shapeStart + shape->size().height();
-
-    return (blockEnd >= shapeStart && blockStart < shapeEnd);
-}
-
-void ParagraphHighlighter::addShapes()
-{
-    m_shapes.clear();
-
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout());
-    assert(layout != NULL);
-
-    QList<KoShape*> shapes = layout->shapes();
-    foreach(KoShape *shape, shapes) {
-        if (shapeContainsBlock(shape, textBlock())) {
-            m_shapes << shape;
-        }
-    }
-}
 
 ParagraphHighlighter::ParagraphHighlighter(QObject *parent, KoCanvasBase *canvas)
-        : QObject(parent), m_canvas(canvas)
+        : ParagraphBase(parent, canvas)
 {}
 
 ParagraphHighlighter::~ParagraphHighlighter()
@@ -82,7 +43,7 @@ void ParagraphHighlighter::paint(QPainter &painter, const KoViewConverter &conve
         return;
     }
 
-    foreach (const KoShape *shape, m_shapes) {
+    foreach (const KoShape *shape, shapes()) {
         KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
         assert(textShapeData != NULL);
 
@@ -107,92 +68,16 @@ void ParagraphHighlighter::paint(QPainter &painter, const KoViewConverter &conve
     }
 }
 
-void ParagraphHighlighter::scheduleRepaint()
-{
-    m_needsRepaint = true;
-}
-
-bool ParagraphHighlighter::needsRepaint() const
-{
-    return m_needsRepaint;
-}
-
 QRectF ParagraphHighlighter::dirtyRectangle()
 {
     QRectF repaintRectangle = m_storedRepaintRectangle;
 
     m_storedRepaintRectangle = QRectF();
-    foreach(KoShape *shape, m_shapes) {
+    foreach(KoShape *shape, shapes()) {
         m_storedRepaintRectangle = m_storedRepaintRectangle | shape->boundingRect();
     }
     repaintRectangle |= m_storedRepaintRectangle;
 
     return repaintRectangle;
 }
-
-QTextBlock ParagraphHighlighter::textBlock() const {
-    return m_cursor.block();
-}
-
-bool ParagraphHighlighter::hasActiveTextBlock() const {
-    return !m_cursor.isNull();
-}
-
-void ParagraphHighlighter::activateTextBlockAt(const QPointF &point)
-{
-    KoShape *shape = dynamic_cast<KoShape*>(m_canvas->shapeManager()->shapeAt(point));
-    if (shape == NULL) {
-        // there is no shape below the mouse position
-        deactivateTextBlock();
-        return;
-    }
-
-    KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
-    if (textShapeData == NULL) {
-        // the shape below the mouse position is not a text shape
-        deactivateTextBlock();
-        return;
-    }
-
-    QTextDocument *document = textShapeData->document();
-
-    QPointF p = shape->transformation().inverted().map(point);
-    p += QPointF(0.0, textShapeData->documentOffset());
-
-    int position = document->documentLayout()->hitTest(p, Qt::ExactHit);
-    if (position == -1) {
-        // there is no text below the mouse position
-        deactivateTextBlock();
-        return;
-    }
-
-    QTextBlock newBlock(document->findBlock(position));
-    assert(newBlock.isValid());
-
-    activateTextBlock(newBlock);
-}
-
-void ParagraphHighlighter::activateTextBlock(QTextBlock newBlock)
-{
-    // the textblock is already activated, no need for a repaint and all that
-    if (hasActiveTextBlock() && newBlock == textBlock()) {
-        return;
-    }
-
-    m_cursor = QTextCursor(newBlock);
-    addShapes();
-    scheduleRepaint();
-}
-
-void ParagraphHighlighter::deactivateTextBlock()
-{
-    if (!hasActiveTextBlock())
-        return;
-
-    // invalidate active cursor and delete shapes
-    m_cursor = QTextCursor();
-    m_shapes.clear();
-    scheduleRepaint();
-}
-
 

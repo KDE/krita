@@ -17,6 +17,8 @@ SET ( textshape_SRCS
     ListItemsHelper.cpp
 
     ChangeTracker.cpp
+    TextChanges.cpp
+    TextChange.cpp
 
     dialogs/StylesWidget.cpp
     dialogs/SimpleStyleWidget.cpp

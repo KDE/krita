@@ -125,8 +125,7 @@ bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStor
         }
     }
 
-    // TODO use plural if it is more then one page
-    QUndoCommand * cmd = new QUndoCommand( i18n( "Paste Page" ) );
+    QUndoCommand * cmd = new QUndoCommand( i18np( "Paste Page", "Paste Pages", qMax( masterPages.size(), pages.size() ) ) );
 
     foreach( KoPAPageBase * masterPage, masterPages )
     {

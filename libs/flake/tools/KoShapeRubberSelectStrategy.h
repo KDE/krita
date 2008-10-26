@@ -33,6 +33,7 @@ class QPointF;
 
 class KoCanvasBase;
 class KoTool;
+class KoSnapGuide;
 
 /**
  * Implement the rubber band selection of flake objects.
@@ -71,7 +72,7 @@ protected:
 private:
     QRectF m_selectRect;
     QPointF m_lastPos;
-    bool m_useSnapToGrid;
+    KoSnapGuide * m_snapGuide;
 };
 
 #endif /* KODEFRUBBERSELECT_H */

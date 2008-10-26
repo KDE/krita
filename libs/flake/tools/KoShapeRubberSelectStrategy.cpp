@@ -29,16 +29,22 @@
 #include "KoSelection.h"
 #include "KoCanvasBase.h"
 #include "KoTool.h"
+#include "KoSnapGuide.h"
+#include "KoSnapStrategy.h"
 
 KoShapeRubberSelectStrategy::KoShapeRubberSelectStrategy(KoTool *tool, KoCanvasBase *canvas, const QPointF &clicked, bool useSnapToGrid)
         : KoInteractionStrategy(tool, canvas)
-        , m_selectRect(clicked, QSizeF(0, 0))
-        , m_useSnapToGrid(useSnapToGrid)
+        , m_snapGuide( new KoSnapGuide( canvas ) )
 {
+    m_snapGuide->enableSnapStrategies( KoSnapStrategy::Grid );
+    m_snapGuide->enableSnapping( useSnapToGrid ); 
+
+    m_selectRect = QRectF( m_snapGuide->snap(clicked, 0 ), QSizeF(0, 0) );
 }
 
 KoShapeRubberSelectStrategy::~KoShapeRubberSelectStrategy()
 {
+    delete m_snapGuide;
 }
 
 void KoShapeRubberSelectStrategy::paint(QPainter &painter, const KoViewConverter &converter)
@@ -60,9 +66,7 @@ void KoShapeRubberSelectStrategy::paint(QPainter &painter, const KoViewConverter
 
 void KoShapeRubberSelectStrategy::handleMouseMove(const QPointF &p, Qt::KeyboardModifiers modifiers)
 {
-    QPointF point = p;
-    if (m_useSnapToGrid && (modifiers & Qt::ShiftModifier) == 0)
-        applyGrid(point);
+    QPointF point = m_snapGuide->snap( p, modifiers );
     if ((modifiers & Qt::AltModifier) != 0) {
         m_canvas->updateCanvas(m_selectRect.normalized());
         m_selectRect.moveTopLeft(m_selectRect.topLeft() - (m_lastPos - point));

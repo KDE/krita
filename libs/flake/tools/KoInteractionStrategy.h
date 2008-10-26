@@ -93,19 +93,6 @@ protected:
     /// protected constructor. Use the createStrategy method()
     KoInteractionStrategy(KoTool *parent, KoCanvasBase *canvas);
 
-    /**
-     * Apply the grid settings to the argument point.
-     * @param point this point will be changed to end up on the grid.
-     */
-    void applyGrid(QPointF &point);
-
-    /**
-     * If applicable, apply the grid settings to the argument point.
-     * @param point the original point
-     * @return the argument point, potentially changed.
-     */
-    QPointF snapToGrid(const QPointF &point, Qt::KeyboardModifiers modifiers);
-
 protected: // members
     KoTool *m_parent; ///< the KoTool instance that controls this strategy.
     QList<KoShape*> m_selectedShapes; ///< the objects this strategy will act on.

@@ -150,7 +150,7 @@ public:
         <td>similar to the 'dynamic' items, but segmented in its own section.</td></tr>
      <tr>
         <td></td>
-        <td>always</td> An activation shape id ending with 'always' will make the tool always visible and enabled.</td></tr>
+        <td>always</td> An activation shape id ending with '/always' will make the tool always visible and enabled.</td></tr>
      </table>
      * @see KoShapeFactory::shapeId()
      * @see setActivationShapeId()

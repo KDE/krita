@@ -19,8 +19,8 @@
 #include "kis_curve_option.h"
 #include "widgets/kcurve.h"
 
-KisCurveOption::KisCurveOption(const QString & label, const QString& name)
-    : KisPaintOpOption(label)
+KisCurveOption::KisCurveOption(const QString & label, const QString& name, bool checked)
+    : KisPaintOpOption(label, checked)
     , m_customCurve(false)
     , m_name( name )
 {

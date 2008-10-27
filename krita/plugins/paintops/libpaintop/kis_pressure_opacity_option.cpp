@@ -23,7 +23,7 @@
 #include <KoColorSpace.h>
 
 KisPressureOpacityOption::KisPressureOpacityOption()
-        : KisCurveOption(i18n("Opacity"), "Opacity")
+        : KisCurveOption(i18n("Opacity"), "Opacity", false)
 {
 }
 

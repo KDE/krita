@@ -23,7 +23,7 @@
 #include <KoColorSpace.h>
 
 KisPressureDarkenOption::KisPressureDarkenOption()
-        : KisCurveOption(i18n("Darken"), "Darken")
+        : KisCurveOption(i18n("Darken"), "Darken", false)
 {
 }
 

@@ -230,20 +230,6 @@ void KisPaintopBox::slotCurrentNodeChanged(KisNodeSP node)
     }
 }
 
-void KisPaintopBox::updateOptionWidget()
-{
-    const KisPaintOpPresetSP preset =
-        activePreset(currentPaintop(), KoToolManager::instance()->currentInputDevice());
-
-    if (preset != 0 && preset->settings() && preset->settings()->widget()) {
-        m_optionWidget = preset->settings()->widget();
-        // XXX: remove this ugliness in 2.1
-        m_optionWidget->setConfiguration(const_cast<KisPaintOpSettings*>(preset->settings().data()));
-        m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
-    } else {
-        m_presetsPopup->setPaintOpSettingsWidget(0);
-    }
-}
 
 const KoID& KisPaintopBox::currentPaintop()
 {
@@ -254,10 +240,20 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 {
     m_currentID[KoToolManager::instance()->currentInputDevice()] = paintop;
 
-    updateOptionWidget();
-
-    KisPaintOpPresetSP preset = activePreset(paintop, KoToolManager::instance()->currentInputDevice());
+    const KisPaintOpPresetSP preset =
+        activePreset(currentPaintop(), KoToolManager::instance()->currentInputDevice());
     dbgUI << "active preset for paintop " << paintop.id() << " is " << preset;
+
+    if (preset != 0 && preset->settings() && preset->settings()->widget()) {
+        m_optionWidget = preset->settings()->widget();
+        // XXX: remove this ugliness in 2.1
+        m_optionWidget->setConfiguration(const_cast<KisPaintOpSettings*>(preset->settings().data()));
+        m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
+    } else {
+        m_presetsPopup->setPaintOpSettingsWidget(0);
+    }
+
+
     if(preset->settings()) {
         // XXX: Clean this up for 2.1, when the settings won't have a pointer to their widget anymore
         preset->settings()->widget()->setConfiguration(preset->settings());

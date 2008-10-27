@@ -79,7 +79,6 @@ private slots:
 private:
 
     QPixmap paintopPixmap(const KoID & paintop);
-    void updateOptionWidget();
     const KoID & currentPaintop();
     void setCurrentPaintop(const KoID & paintop);
     KoID defaultPaintop(const KoInputDevice & inputDevice);

@@ -40,50 +40,6 @@ ParagraphBase::ParagraphBase(QObject *parent, KoCanvasBase *canvas)
 ParagraphBase::~ParagraphBase()
 {}
 
-void ParagraphBase::scheduleRepaint()
-{
-    m_needsRepaint = true;
-}
-
-bool ParagraphBase::needsRepaint() const
-{
-    return m_needsRepaint;
-}
-
-void ParagraphBase::addShapes()
-{
-    m_shapes.clear();
-
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout());
-    assert(layout != NULL);
-
-    QList<KoShape*> shapes = layout->shapes();
-    foreach(KoShape *shape, shapes) {
-        if (shapeContainsBlock(shape)) {
-            m_shapes << shape;
-        }
-    }
-}
-
-bool ParagraphBase::shapeContainsBlock(const KoShape *shape)
-{
-    QTextLayout *layout = textBlock().layout();
-    qreal blockStart = layout->lineAt(0).y();
-
-    QTextLine endLine = layout->lineAt(layout->lineCount() - 1);
-    qreal blockEnd = endLine.y() + endLine.height();
-
-    KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
-    if (textShapeData == NULL) {
-        return false;
-    }
-
-    qreal shapeStart = textShapeData->documentOffset();
-    qreal shapeEnd = shapeStart + shape->size().height();
-
-    return (blockEnd >= shapeStart && blockStart < shapeEnd);
-}
-
 QTextBlock ParagraphBase::textBlock() const {
     return m_cursor.block();
 }
@@ -153,4 +109,54 @@ void ParagraphBase::deactivateTextBlock()
 
     scheduleRepaint();
 }
+
+void ParagraphBase::addShapes()
+{
+    m_shapes.clear();
+
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout());
+    assert(layout != NULL);
+
+    QList<KoShape*> shapes = layout->shapes();
+    foreach(KoShape *shape, shapes) {
+        if (shapeContainsBlock(shape)) {
+            m_shapes << shape;
+        }
+    }
+}
+
+bool ParagraphBase::shapeContainsBlock(const KoShape *shape)
+{
+    QTextLayout *layout = textBlock().layout();
+    qreal blockStart = layout->lineAt(0).y();
+
+    QTextLine endLine = layout->lineAt(layout->lineCount() - 1);
+    qreal blockEnd = endLine.y() + endLine.height();
+
+    return (blockEnd >= shapeTop(shape) && blockStart < shapeBottom(shape));
+}
+
+qreal ParagraphBase::shapeTop(const KoShape *shape) const
+{
+    KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
+    assert(textShapeData != NULL);
+
+    return textShapeData->documentOffset();
+}
+
+qreal ParagraphBase::shapeBottom(const KoShape *shape) const
+{
+    return shapeTop(shape) + shape->size().height();
+}
+
+void ParagraphBase::scheduleRepaint()
+{
+    m_needsRepaint = true;
+}
+
+bool ParagraphBase::needsRepaint() const
+{
+    return m_needsRepaint;
+}
+
 

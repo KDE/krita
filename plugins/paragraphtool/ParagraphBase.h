@@ -65,6 +65,9 @@ public:
         return textBlock().layout();
     }
 
+    qreal shapeTop(const KoShape *shape) const;
+    qreal shapeBottom(const KoShape *shape) const;
+
     bool needsRepaint() const;
 
 public slots:

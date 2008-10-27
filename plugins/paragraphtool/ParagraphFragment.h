@@ -65,9 +65,6 @@ protected:
     qreal shapeTop() const;
     qreal shapeBottom() const;
 
-    QPointF mapTextToDocument(QPointF point) const;
-    QLineF mapTextToDocument(QLineF line) const;
-
 private:
     KoShape *m_shape;
     Ruler *m_rulers;

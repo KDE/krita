@@ -84,6 +84,10 @@ void ParagraphFragment::initRulers()
     qreal top(shapeTop());
     qreal bottom(shapeBottom());
 
+    // matrix to map text to document coordinates
+    QMatrix matrix = shape()->absoluteTransformation(NULL);
+    matrix.translate(0.0, -shapeTop());
+
     qreal rightTop = qMax(top, m_firstLine.top());
     qreal followingTop = qMax(top, m_followingLines.top());
     qreal followingBottom = qMin(bottom, m_followingLines.bottom());
@@ -91,37 +95,37 @@ void ParagraphFragment::initRulers()
     // first line
     RulerFragment firstFragment;
     firstFragment.setVisible(top < m_firstLine.bottom());
-    firstFragment.setBaseline(mapTextToDocument(QLineF(m_border.left(), m_firstLine.top(), m_border.left(), m_firstLine.bottom())));
+    firstFragment.setBaseline(matrix.map(QLineF(m_border.left(), m_firstLine.top(), m_border.left(), m_firstLine.bottom())));
     m_rulers[firstIndentRuler].addFragment(firstFragment);
 
     // following lines
     RulerFragment followingFragment;
     followingFragment.setVisible(top < m_followingLines.bottom() && bottom > m_followingLines.top() && !m_isSingleLine);
-    followingFragment.setBaseline(mapTextToDocument(QLineF(m_border.left(), followingTop, m_border.left(), followingBottom)));
+    followingFragment.setBaseline(matrix.map(QLineF(m_border.left(), followingTop, m_border.left(), followingBottom)));
     m_rulers[followingIndentRuler].addFragment(followingFragment);
 
     // right margin
     RulerFragment rightFragment;
     rightFragment.setVisible(true);
-    rightFragment.setBaseline(mapTextToDocument(QLineF(m_border.right(), followingBottom, m_border.right(), rightTop)));
+    rightFragment.setBaseline(matrix.map(QLineF(m_border.right(), followingBottom, m_border.right(), rightTop)));
     m_rulers[rightMarginRuler].addFragment(rightFragment);
 
     // top margin
     RulerFragment topFragment;
     topFragment.setVisible(top <= m_firstLine.top());
-    topFragment.setBaseline(mapTextToDocument(QLineF(m_border.right(), m_border.top(), m_border.left(), m_border.top())));
+    topFragment.setBaseline(matrix.map(QLineF(m_border.right(), m_border.top(), m_border.left(), m_border.top())));
     m_rulers[topMarginRuler].addFragment(topFragment);
 
     // bottom margin
     RulerFragment bottomFragment;
     bottomFragment.setVisible(bottom >= m_followingLines.bottom());
-    bottomFragment.setBaseline(mapTextToDocument(QLineF(m_border.right(), m_followingLines.bottom(), m_border.left(), m_followingLines.bottom())));
+    bottomFragment.setBaseline(matrix.map(QLineF(m_border.right(), m_followingLines.bottom(), m_border.left(), m_followingLines.bottom())));
     m_rulers[bottomMarginRuler].addFragment(bottomFragment);
 
     // line spacing
     RulerFragment lineFragment;
     lineFragment.setVisible(!m_isSingleLine && rightTop != followingTop);
-    lineFragment.setBaseline(mapTextToDocument(QLineF(m_firstLine.right(), m_firstLine.bottom(), m_border.left(), m_firstLine.bottom())));
+    lineFragment.setBaseline(matrix.map(QLineF(m_firstLine.right(), m_firstLine.bottom(), m_border.left(), m_firstLine.bottom())));
     m_rulers[lineSpacingRuler].addFragment(lineFragment);
 }
 
@@ -138,19 +142,5 @@ qreal ParagraphFragment::shapeTop() const
 qreal ParagraphFragment::shapeBottom() const
 {
     return shapeTop() + shape()->size().height();
-}
-
-QPointF ParagraphFragment::mapTextToDocument(QPointF point) const
-{
-    QMatrix matrix = shape()->absoluteTransformation(NULL);
-    matrix.translate(0.0, -shapeTop());
-    return matrix.map(point);
-}
-
-QLineF ParagraphFragment::mapTextToDocument(QLineF line) const
-{
-    QMatrix matrix = shape()->absoluteTransformation(NULL);
-    matrix.translate(0.0, -shapeTop());
-    return matrix.map(line);
 }
 

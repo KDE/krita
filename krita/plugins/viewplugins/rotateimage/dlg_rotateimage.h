@@ -53,7 +53,7 @@ public:
     ~DlgRotateImage();
 
     void setAngle(quint32 w);
-    qint32 angle();
+    double angle();
 
     void setDirection(enumRotationDirection direction);
     enumRotationDirection direction();

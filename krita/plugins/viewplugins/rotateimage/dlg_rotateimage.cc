@@ -79,7 +79,7 @@ void DlgRotateImage::setAngle(quint32 angle)
 
 }
 
-qint32 DlgRotateImage::angle()
+double DlgRotateImage::angle()
 {
     double angle = 0;
     if (m_page->radio90->isChecked()) {
@@ -89,12 +89,12 @@ qint32 DlgRotateImage::angle()
     } else if (m_page->radio270->isChecked()) {
         angle = 270;
     } else {
-        angle = qRound(m_page->doubleCustom->value());
+        angle = m_page->doubleCustom->value();
     }
     if (m_page->radioCW->isChecked()) {
-        return qint32(angle);
+        return angle;
     } else {
-        return qint32(-angle);
+        return -angle;
     }
 }
 

@@ -33,11 +33,6 @@ ParagraphFragment::ParagraphFragment(Ruler* rulers, KoShape *shape, QTextBlock t
         : m_shape(shape),
         m_rulers(rulers)
 {
-    for (int ruler = 0; ruler != maxRuler; ++ruler) {
-        m_rulerFragments[ruler].setRuler(&rulers[ruler]);
-    }
-    m_isSingleLine = (textBlock.layout()->lineCount() == 1);
-
     initDimensions(textBlock, style);
 
     initRulers();
@@ -46,6 +41,8 @@ ParagraphFragment::ParagraphFragment(Ruler* rulers, KoShape *shape, QTextBlock t
 void ParagraphFragment::initDimensions(QTextBlock textBlock, KoParagraphStyle *paragraphStyle)
 {
     QTextLayout *layout = textBlock.layout();
+
+    m_isSingleLine = (layout->lineCount() == 1);
 
     // border rectangle left and right
     m_border.setLeft(0.0);
@@ -91,36 +88,41 @@ void ParagraphFragment::initRulers()
     qreal followingTop = qMax(top, m_followingLines.top());
     qreal followingBottom = qMin(bottom, m_followingLines.bottom());
 
-    m_paintSeparator = !m_isSingleLine && rightTop != followingTop && m_rulerFragments[followingIndentRuler].isVisible();
-
     // first line
-    m_rulerFragments[firstIndentRuler].setVisible(top < m_firstLine.bottom());
-    m_rulerFragments[firstIndentRuler].setBaseline(mapTextToDocument(QLineF(m_border.left(), m_firstLine.top(), m_border.left(), m_firstLine.bottom())));
-    m_rulers[firstIndentRuler].addFragment(m_rulerFragments[firstIndentRuler]);
+    RulerFragment firstFragment;
+    firstFragment.setVisible(top < m_firstLine.bottom());
+    firstFragment.setBaseline(mapTextToDocument(QLineF(m_border.left(), m_firstLine.top(), m_border.left(), m_firstLine.bottom())));
+    m_rulers[firstIndentRuler].addFragment(firstFragment);
 
     // following lines
-    m_rulerFragments[followingIndentRuler].setVisible(top < m_followingLines.bottom() && bottom > m_followingLines.top() && !m_isSingleLine);
-    m_rulerFragments[followingIndentRuler].setBaseline(mapTextToDocument(QLineF(m_border.left(), followingTop, m_border.left(), followingBottom)));
-    m_rulers[followingIndentRuler].addFragment(m_rulerFragments[followingIndentRuler]);
+    RulerFragment followingFragment;
+    followingFragment.setVisible(top < m_followingLines.bottom() && bottom > m_followingLines.top() && !m_isSingleLine);
+    followingFragment.setBaseline(mapTextToDocument(QLineF(m_border.left(), followingTop, m_border.left(), followingBottom)));
+    m_rulers[followingIndentRuler].addFragment(followingFragment);
 
     // right margin
-    m_rulerFragments[rightMarginRuler].setVisible(true);
-    m_rulerFragments[rightMarginRuler].setBaseline(mapTextToDocument(QLineF(m_border.right(), followingBottom, m_border.right(), rightTop)));
-    m_rulers[rightMarginRuler].addFragment(m_rulerFragments[rightMarginRuler]);
+    RulerFragment rightFragment;
+    rightFragment.setVisible(true);
+    rightFragment.setBaseline(mapTextToDocument(QLineF(m_border.right(), followingBottom, m_border.right(), rightTop)));
+    m_rulers[rightMarginRuler].addFragment(rightFragment);
 
     // top margin
-    m_rulerFragments[topMarginRuler].setVisible(top <= m_firstLine.top());
-    m_rulerFragments[topMarginRuler].setBaseline(mapTextToDocument(QLineF(m_border.right(), m_border.top(), m_border.left(), m_border.top())));
-    m_rulers[topMarginRuler].addFragment(m_rulerFragments[topMarginRuler]);
+    RulerFragment topFragment;
+    topFragment.setVisible(top <= m_firstLine.top());
+    topFragment.setBaseline(mapTextToDocument(QLineF(m_border.right(), m_border.top(), m_border.left(), m_border.top())));
+    m_rulers[topMarginRuler].addFragment(topFragment);
+
     // bottom margin
-    m_rulerFragments[bottomMarginRuler].setVisible(bottom >= m_followingLines.bottom());
-    m_rulerFragments[bottomMarginRuler].setBaseline(mapTextToDocument(QLineF(m_border.right(), m_followingLines.bottom(), m_border.left(), m_followingLines.bottom())));
-    m_rulers[bottomMarginRuler].addFragment(m_rulerFragments[bottomMarginRuler]);
+    RulerFragment bottomFragment;
+    bottomFragment.setVisible(bottom >= m_followingLines.bottom());
+    bottomFragment.setBaseline(mapTextToDocument(QLineF(m_border.right(), m_followingLines.bottom(), m_border.left(), m_followingLines.bottom())));
+    m_rulers[bottomMarginRuler].addFragment(bottomFragment);
 
     // line spacing
-    m_rulerFragments[lineSpacingRuler].setVisible(m_paintSeparator);
-    m_rulerFragments[lineSpacingRuler].setBaseline(mapTextToDocument(QLineF(m_firstLine.right(), m_firstLine.bottom(), m_border.left(), m_firstLine.bottom())));
-    m_rulers[lineSpacingRuler].addFragment(m_rulerFragments[lineSpacingRuler]);
+    RulerFragment lineFragment;
+    lineFragment.setVisible(!m_isSingleLine && rightTop != followingTop);
+    lineFragment.setBaseline(mapTextToDocument(QLineF(m_firstLine.right(), m_firstLine.bottom(), m_border.left(), m_firstLine.bottom())));
+    m_rulers[lineSpacingRuler].addFragment(lineFragment);
 }
 
 qreal ParagraphFragment::shapeTop() const

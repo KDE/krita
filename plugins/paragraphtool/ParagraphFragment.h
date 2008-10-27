@@ -55,8 +55,6 @@ public:
 
     ~ParagraphFragment() {};
 
-    RulerFragment *rulerFragment(RulerIndex ruler) { return &m_rulerFragments[ruler]; }
-
     KoShape *shape() const { return m_shape; }
 
 protected:
@@ -75,14 +73,11 @@ private:
     Ruler *m_rulers;
 
     bool m_isSingleLine;
-    bool m_paintSeparator;
 
     QRectF m_counter,
     m_firstLine,
     m_followingLines,
     m_border;
-
-    RulerFragment m_rulerFragments[maxRuler];
 };
 
 #endif

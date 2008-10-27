@@ -250,6 +250,8 @@ void ParagraphEditor::addShapes()
     foreach(KoShape *shape, shapes()) {
         ParagraphFragment(m_rulers, shape, textBlock(), paragraphStyle());
     }
+
+    loadRulers();
 }
 
 /* slot which is called when the value of one of the rulers changed

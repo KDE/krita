@@ -41,11 +41,11 @@ class RulerFragment
 {
 public:
     RulerFragment() : m_ruler(NULL), m_visible(true) {}
-
+/*
     RulerFragment(Ruler *ruler)
             : m_ruler(ruler),
             m_visible(true) {}
-
+*/
     ~RulerFragment() {}
 
     bool hitTest(const QPointF &point) const;

@@ -136,6 +136,7 @@ public:
     }
 
     void addFragment(RulerFragment fragment) {
+        fragment.setRuler(this);
         m_fragments.append(fragment);
     }
 

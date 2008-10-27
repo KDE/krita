@@ -82,8 +82,22 @@ void ParagraphBase::activateTextBlockAt(const QPointF &point)
     activateTextBlock(newBlock);
 }
 
+void ParagraphBase::activatePreviousTextBlock()
+{
+    activateTextBlock(textBlock().previous());
+}
+
+void ParagraphBase::activateNextTextBlock()
+{
+    activateTextBlock(textBlock().next());
+}
+
 void ParagraphBase::activateTextBlock(QTextBlock newBlock)
 {
+    if (!newBlock.isValid()) {
+        return;
+    }
+
     // the textblock is already activated, no need for a repaint and all that
     if (hasActiveTextBlock() && newBlock == textBlock()) {
         return;

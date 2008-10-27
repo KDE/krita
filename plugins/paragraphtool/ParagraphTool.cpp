@@ -23,6 +23,8 @@
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 
+#include <KDebug>
+
 #include <QKeyEvent>
 
 class KoViewConverter;
@@ -137,7 +139,10 @@ void ParagraphTool::keyPressEvent(QKeyEvent *event)
     if (m_paragraphEditor.hasActiveRuler()) {
         switch (event->key()) {
         case Qt::Key_Shift:
-            m_paragraphEditor.toggleSmoothMovement();
+            if (!event->isAutoRepeat()) {
+                kDebug() << "pressed";
+                m_paragraphEditor.toggleSmoothMovement();
+            }
             break;
         case Qt::Key_Escape:
             m_paragraphEditor.resetActiveRuler();
@@ -165,7 +170,10 @@ void ParagraphTool::keyPressEvent(QKeyEvent *event)
         case Qt::Key_PageDown:
             break;
         case Qt::Key_Tab:
-            m_paragraphEditor.focusNextRuler();
+            if (!m_paragraphEditor.focusNextRuler()) {
+                m_paragraphEditor.activateNextTextBlock();
+                m_paragraphEditor.focusFirstRuler();
+            }
             break;
         default:
             break;

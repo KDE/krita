@@ -46,6 +46,10 @@ public:
     // activate the paragraph at the specified position on the canvas
     void activateTextBlockAt(const QPointF &point);
 
+    // cycle through text blocks
+    void activatePreviousTextBlock();
+    void activateNextTextBlock();
+
     void activateTextBlock(QTextBlock newBlock);
 
     // deactivate the current text block

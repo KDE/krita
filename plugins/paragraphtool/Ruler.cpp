@@ -20,6 +20,7 @@
 #include "Ruler.h"
 
 #include <KDebug>
+#include <KLocalizedString>
 
 #include <QColor>
 #include <QPointF>
@@ -32,6 +33,7 @@
 
 Ruler::Ruler(QObject *parent)
         : QObject(parent),
+        m_name(i18n("Distance")),
         m_value(0.0),
         m_oldValue(0.0),
         m_stepValue(10.0),

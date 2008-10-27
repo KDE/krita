@@ -29,6 +29,7 @@
 #include <QList>
 #include <QMatrix>
 #include <QObject>
+#include <QString>
 
 class QPainter;
 class QPointF;
@@ -110,10 +111,10 @@ public:
     }
     void setHighlighted(bool highlighted);
 
-    void setEnabled(bool enabled);
     bool isEnabled() const {
         return m_enabled;
     }
+    void setEnabled(bool enabled);
 
     bool isVisible() const;
 
@@ -150,6 +151,14 @@ public:
 
     void paint(QPainter &painter) const;
 
+    QString name() const {
+        return m_name;
+    }
+    
+    void setName(const QString& name) {
+        m_name = name;
+    }
+
 signals:
     // emitted when value has been changed via the user interface
     // (in contrast to via the setValue() method)
@@ -160,6 +169,7 @@ signals:
 
 private:
     QList<RulerFragment> m_fragments;
+    QString m_name;
 
     // the value of a ruler is the distance between the baseline and
     // the ruler line (the one that can be dragged)

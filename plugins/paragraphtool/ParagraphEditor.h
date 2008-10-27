@@ -48,7 +48,7 @@ public:
     explicit ParagraphEditor(QObject *parent, KoCanvasBase *canvas);
     ~ParagraphEditor();
 
-    void initializeRuler(Ruler &ruler, int options = 0);
+    void initializeRuler(Ruler &ruler, const QString &name, int options = 0);
 
     void paint(QPainter &painter, const KoViewConverter &converter);
 
@@ -81,7 +81,12 @@ public:
         return m_focusedRuler >= 0 && m_focusedRuler < maxRuler;
     }
     void focusRuler(RulerIndex ruler);
-    void focusNextRuler();
+
+    void focusFirstRuler();
+    void focusLastRuler();
+    bool focusPreviousRuler();
+    bool focusNextRuler();
+
     void defocusRuler();
 
     bool hasHighlightedRuler() const {

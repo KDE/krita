@@ -48,12 +48,12 @@ ParagraphEditor::ParagraphEditor(QObject *parent, KoCanvasBase *canvas)
         m_highlightedRuler(noRuler),
         m_smoothMovement(false)
 {
-    initializeRuler(m_rulers[firstIndentRuler]);
-    initializeRuler(m_rulers[followingIndentRuler]);
-    initializeRuler(m_rulers[rightMarginRuler]);
-    initializeRuler(m_rulers[topMarginRuler], Ruler::drawSides);
-    initializeRuler(m_rulers[bottomMarginRuler], Ruler::drawSides);
-    initializeRuler(m_rulers[lineSpacingRuler]);
+    initializeRuler(m_rulers[firstIndentRuler], i18n("First Line:"));
+    initializeRuler(m_rulers[followingIndentRuler], i18n("Left:"));
+    initializeRuler(m_rulers[rightMarginRuler], i18n("Right:"));
+    initializeRuler(m_rulers[topMarginRuler], i18n("Before:"), Ruler::drawSides);
+    initializeRuler(m_rulers[bottomMarginRuler], i18n("After:"), Ruler::drawSides);
+    initializeRuler(m_rulers[lineSpacingRuler], i18n("Line Spacing:"));
     m_rulers[lineSpacingRuler].setEnabled(false);
 }
 
@@ -61,16 +61,15 @@ ParagraphEditor::~ParagraphEditor()
 {}
 
 // helper function to initialize rulers
-void ParagraphEditor::initializeRuler(Ruler &ruler, int options)
+void ParagraphEditor::initializeRuler(Ruler &ruler, const QString &name, int options)
 {
+    ruler.setName(name);
     ruler.setParent(this);
     ruler.setOptions(options);
     ruler.setUnit(canvas()->unit());
     ruler.setMinimumValue(0.0);
-    connect(&ruler, SIGNAL(needsRepaint()),
-            this, SLOT(scheduleRepaint()));
-    connect(&ruler, SIGNAL(valueChanged(qreal)),
-            this, SLOT(updateLayout()));
+    connect(&ruler, SIGNAL(needsRepaint()), this, SLOT(scheduleRepaint()));
+    connect(&ruler, SIGNAL(valueChanged(qreal)), this, SLOT(updateLayout()));
 }
 
 void ParagraphEditor::loadRulers()
@@ -137,7 +136,7 @@ void ParagraphEditor::paintLabel(QPainter &painter, const KoViewConverter &conve
     QLineF connector(converter.documentToView(unmapped.p1()), converter.documentToView(unmapped.p2()));
     connector.setLength(10.0);
 
-    QString text(m_rulers[ruler].valueString());
+    QString text(m_rulers[ruler].name() + " " + m_rulers[ruler].valueString());
 
     painter.setBrush(Qt::white);
     painter.setPen(foregroundColor);
@@ -323,21 +322,49 @@ void ParagraphEditor::focusRuler(RulerIndex ruler)
     m_rulers[m_focusedRuler].setFocused(true);
 }
 
-void ParagraphEditor::focusNextRuler()
+void ParagraphEditor::focusFirstRuler()
 {
-    RulerIndex oldRuler = m_focusedRuler;
+    focusRuler((RulerIndex)0);
+}
+
+void ParagraphEditor::focusLastRuler()
+{
+    focusRuler((RulerIndex)((int)maxRuler-1));
+}
+
+bool ParagraphEditor::focusPreviousRuler()
+{
     RulerIndex newRuler = m_focusedRuler;
 
     do {
-        newRuler = (RulerIndex)(((int)newRuler + 1) % maxRuler);
+        if (newRuler == (RulerIndex)0) {
+            return false;
+        }
+        
+        newRuler = (RulerIndex)((int)newRuler - 1);
+    } while (!m_rulers[newRuler].isVisible() || !m_rulers[newRuler].isEnabled());
 
-        if (newRuler == oldRuler) {
-            return;
+    focusRuler(newRuler);
+
+    return true;
+}
+
+bool ParagraphEditor::focusNextRuler()
+{
+    RulerIndex newRuler = m_focusedRuler;
+
+    do {
+        newRuler = (RulerIndex)((int)newRuler + 1);
+
+        if (newRuler == maxRuler) {
+            return false;
         }
 
     } while (!m_rulers[newRuler].isVisible() || !m_rulers[newRuler].isEnabled());
 
     focusRuler(newRuler);
+
+    return true;
 }
 
 void ParagraphEditor::defocusRuler()

@@ -1,3 +1,4 @@
+- add support for cycling backwards through the rulers
 - add undo support (QTextDocument::undo(QTextCursor*) could help)
 - add accessibility support
 - remove hard-coded colors

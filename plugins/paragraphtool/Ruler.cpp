@@ -182,6 +182,17 @@ void Ruler::setEnabled(bool enabled)
     m_enabled = enabled;
 }
 
+bool Ruler::isVisible() const
+{
+    bool visible = false;
+
+    for (int fragment = 0; fragment != m_fragments.size(); ++fragment) {
+        visible |= m_fragments[fragment].isVisible();
+    }
+
+    return visible;
+}
+
 RulerFragment *Ruler::hitTest(const QPointF &point)
 {
     if (!m_enabled) {

@@ -81,9 +81,7 @@ public:
         return m_focusedRuler >= 0 && m_focusedRuler < maxRuler;
     }
     void focusRuler(RulerIndex ruler);
-    void focusNextRuler() {
-        focusRuler((RulerIndex)(((int)m_focusedRuler + 1) % maxRuler));
-    }
+    void focusNextRuler();
     void defocusRuler();
 
     bool hasHighlightedRuler() const {

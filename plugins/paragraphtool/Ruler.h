@@ -115,6 +115,8 @@ public:
         return m_enabled;
     }
 
+    bool isVisible() const;
+
     void increaseByStep() {
         setValue(value() + stepValue()); emit valueChanged(value());
     }

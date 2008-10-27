@@ -341,6 +341,23 @@ void ParagraphEditor::focusRuler(RulerIndex ruler)
     m_rulers[m_focusedRuler].setFocused(true);
 }
 
+void ParagraphEditor::focusNextRuler()
+{
+    RulerIndex oldRuler = m_focusedRuler;
+    RulerIndex newRuler = m_focusedRuler;
+
+    do {
+        newRuler = (RulerIndex)(((int)newRuler + 1) % maxRuler);
+
+        if (newRuler == oldRuler) {
+            return;
+        }
+
+    } while (!m_rulers[newRuler].isVisible() || !m_rulers[newRuler].isEnabled());
+
+    focusRuler(newRuler);
+}
+
 void ParagraphEditor::defocusRuler()
 {
     if (!hasFocusedRuler()) {

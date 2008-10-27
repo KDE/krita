@@ -243,7 +243,7 @@ void ArtisticTextTool::updateActions()
 
 void ArtisticTextTool::attachPath()
 {
-    if( m_path ) {
+    if( m_path && m_currentShape ) {
         m_blinkingCursor.stop();
         m_showCursor = false;
         updateTextCursorArea();
@@ -254,12 +254,15 @@ void ArtisticTextTool::attachPath()
 
 void ArtisticTextTool::detachPath()
 {
-    if( m_currentShape->isOnPath() )
+    if( m_currentShape && m_currentShape->isOnPath() )
         m_currentShape->removeFromPath();
 }
 
 void ArtisticTextTool::convertText()
 {
+    if( ! m_currentShape )
+        return;
+
     KoPathShape * path = KoPathShape::fromQPainterPath( m_currentShape->outline() );
     path->setParent( m_currentShape->parent() );
     path->setZIndex( m_currentShape->zIndex() );
@@ -272,8 +275,7 @@ void ArtisticTextTool::convertText()
     m_canvas->shapeController()->removeShape( m_currentShape, cmd );
     m_canvas->addCommand( cmd );
 
-    m_currentShape = 0;
-    deactivate();
+    emit done();
 }
 
 QWidget *ArtisticTextTool::createOptionWidget()
@@ -304,7 +306,8 @@ QWidget *ArtisticTextTool::createOptionWidget()
 void ArtisticTextTool::enableTextCursor( bool enable )
 {
     if ( enable ) {
-        setTextCursorInternal( m_currentShape->text().length() );
+        if( m_currentShape )
+            setTextCursorInternal( m_currentShape->text().length() );
         connect( &m_blinkingCursor, SIGNAL(timeout()), this, SLOT(blinkCursor()) );
         m_blinkingCursor.start( 500 );
     } else {
@@ -316,7 +319,8 @@ void ArtisticTextTool::enableTextCursor( bool enable )
 
 void ArtisticTextTool::setTextCursor( int textCursor )
 {
-    if ( m_textCursor == textCursor || textCursor < 0 || textCursor > m_currentShape->text().length() )
+    if ( m_textCursor == textCursor || textCursor < 0 
+    || ! m_currentShape || textCursor > m_currentShape->text().length() )
         return;
 
     setTextCursorInternal( textCursor );
@@ -324,6 +328,9 @@ void ArtisticTextTool::setTextCursor( int textCursor )
 
 void ArtisticTextTool::updateTextCursorArea() const
 {
+    if( ! m_currentShape && m_textCursor > -1 )
+        return;
+
     QRectF bbox = m_textCursorShape.boundingRect();
     QTransform transform( m_currentShape->transformation() );
     QPointF pos;
@@ -343,18 +350,15 @@ void ArtisticTextTool::updateTextCursorArea() const
 
 void ArtisticTextTool::setTextCursorInternal( int textCursor )
 {
-    if ( m_currentShape && m_textCursor > -1 ) {
-        updateTextCursorArea();
-    }
+    updateTextCursorArea();
     m_textCursor = textCursor;
-    if ( m_currentShape && m_textCursor > -1 ) {
-        updateTextCursorArea();
-    }
+    updateTextCursorArea();
 }
 
 void ArtisticTextTool::createTextCursorShape()
 {
-    if ( m_textCursor < 0 ) return;
+    if ( m_textCursor < 0 || ! m_currentShape ) 
+        return;
     m_textCursorShape = QPainterPath();
     QRectF extents;
     m_currentShape->getCharExtentsAt( m_textCursor, extents );

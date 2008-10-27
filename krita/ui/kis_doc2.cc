@@ -234,7 +234,7 @@ bool KisDoc2::saveOdf(SavingContext &documentContext)
     return false;
 }
 
-bool KisDoc2::loadXML(QIODevice *, const KoXmlDocument& doc)
+bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
 {
     KoXmlElement root;
     QString attr;

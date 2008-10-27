@@ -74,7 +74,7 @@ public:
     virtual bool loadOdf(KoOdfReadStore & odfStore);
     virtual bool saveOdf(SavingContext &documentContext);
     virtual bool loadChildren(KoStore* store);
-    virtual bool loadXML(QIODevice *, const KoXmlDocument& doc);
+    virtual bool loadXML(const KoXmlDocument& doc, KoStore* store);
     virtual QByteArray mimeType() const;
     virtual QList<KoDocument::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 

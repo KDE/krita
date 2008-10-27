@@ -1693,7 +1693,7 @@ bool KoDocument::loadNativeFormat(const QString & file)
         KoXmlDocument doc;
         bool res;
         if (doc.setContent(&in, &errorMsg, &errorLine, &errorColumn)) {
-            res = loadXML(&in, doc);
+            res = loadXML(doc, 0);
             if (res)
                 res = completeLoading(0L);
         } else {
@@ -1787,7 +1787,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore * store)
         KoXmlDocument doc;
         bool ok = oldLoadAndParse(store, "root", doc);
         if (ok)
-            ok = loadXML(store->device(), doc);
+            ok = loadXML(doc, store);
         if (!ok) {
             QApplication::restoreOverrideCursor();
             return false;
@@ -1857,7 +1857,7 @@ bool KoDocument::loadFromStore(KoStore* _store, const QString& url)
     if (_store->open(url)) {
         KoXmlDocument doc;
         doc.setContent(_store->device());
-        if (!loadXML(_store->device(), doc)) {
+        if (!loadXML(doc, _store)) {
             _store->close();
             return false;
         }

@@ -97,7 +97,7 @@ void KoPADocument::paintContent( QPainter &painter, const QRect &rect)
     painter.drawPixmap( rect, thumbnail );
 }
 
-bool KoPADocument::loadXML( QIODevice *, const KoXmlDocument & doc )
+bool KoPADocument::loadXML( const KoXmlDocument & doc, KoStore * )
 {
     Q_UNUSED( doc );
 

@@ -49,7 +49,7 @@ public:
 
     void paintContent( QPainter &painter, const QRect &rect);
 
-    bool loadXML( QIODevice *, const KoXmlDocument & doc );
+    bool loadXML( const KoXmlDocument & doc, KoStore *store );
     bool loadOdf( KoOdfReadStore & odfStore );
 
     bool saveOdf( SavingContext & documentContext );

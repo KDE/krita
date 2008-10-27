@@ -494,14 +494,10 @@ public:
     virtual bool saveToStore(KoStore* store, const QString& path);
 
     /**
-     *  Reimplement this method to load the contents of your %KOffice document,
+     *  Reimplement this method to load the contents of your KOffice document,
      *  from the XML document. This is for the pre-Oasis file format (maindoc.xml).
-     *
-     *  You are supposed to use the QDomDocument. The QIODevice is provided only
-     *  for the cases where some pre-processing is needed, like kpresenter's kprconverter.
-     *  Note that the QIODevice could be 0L, when called from an import filter.
      */
-    virtual bool loadXML(QIODevice *, const KoXmlDocument & doc) = 0;
+    virtual bool loadXML(const KoXmlDocument & doc, KoStore * store) = 0;
 
     /**
      *  Reimplement this method to load the contents of your %KOffice document,

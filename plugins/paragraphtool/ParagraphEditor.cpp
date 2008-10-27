@@ -41,10 +41,7 @@
 #include <QTextDocument>
 #include <QTextLine>
 
-/* FIXME:
- * - tab iterates over all rulers, maybe try to restrict to visible rulers
- *
- * TODO:
+/* TODO:
  * - add undo support (QTextDocument::undo(QTextCursor*) could help)
  * - add accessibility support
  * - remove hard-coded colors
@@ -54,8 +51,7 @@
  * - add more feature via the options docker
  * - add proper relayouting
  *   (the tools layouting doesn't flow around other shapes)
- * - highlight the paragraph over which the mouse is currently hovering
- *   (best would be if this included the top and bottom margins, too)
+ * - include top and bottom margin in hover area of paragraphs
  * - think about a method to give instructions to the users
  *   (the bubble used by okular might be a good way to do this)
  */

@@ -41,20 +41,6 @@
 #include <QTextDocument>
 #include <QTextLine>
 
-/* TODO:
- * - add undo support (QTextDocument::undo(QTextCursor*) could help)
- * - add accessibility support
- * - remove hard-coded colors
- *   (use KDE theme or adjust to document/shape background?)
- * - add RTL support
- * - add linespacing support
- * - add more feature via the options docker
- * - add proper relayouting
- *   (the tools layouting doesn't flow around other shapes)
- * - include top and bottom margin in hover area of paragraphs
- * - think about a method to give instructions to the users
- *   (the bubble used by okular might be a good way to do this)
- */
 ParagraphEditor::ParagraphEditor(QObject *parent, KoCanvasBase *canvas)
         : ParagraphBase(parent, canvas),
         m_activeRuler(noRuler),

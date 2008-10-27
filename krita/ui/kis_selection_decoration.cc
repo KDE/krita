@@ -36,7 +36,7 @@
 #include "kis_canvas_resource_provider.h"
 
 KisSelectionDecoration::KisSelectionDecoration(KisView2* view)
- : KisCanvasDecoration("selection", i18n("Selection decoration"), view), m_mode(Mask)
+ : KisCanvasDecoration("selection", i18n("Selection decoration"), view), m_mode(Ants)
 {
     offset = 0;
     timer = new QTimer(this);

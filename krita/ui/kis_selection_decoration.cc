@@ -284,3 +284,4 @@ void KisSelectionDecoration::resourceChanged(int key, const QVariant & v)
 }
 
 #include "kis_selection_decoration.moc"
+

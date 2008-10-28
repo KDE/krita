@@ -20,3 +20,4 @@
 #ifndef KIS_XYZ_F16_HDR_COLORSPACE_H
 #define KIS_XYZ_F16_HDR_COLORSPACE_H
 #endif
+

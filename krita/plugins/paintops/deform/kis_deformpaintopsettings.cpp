@@ -107,3 +107,4 @@ void KisDeformPaintOpSettings::toXML(QDomDocument&, QDomElement&) const
 {
     // XXX: load from xml. See for instance the color adjustment filters
 }
+

@@ -30,7 +30,7 @@ class KoColorConversionCache;
 /**
  * This is the base class of all color transform that convert the color of a pixel
  */
-class PIGMENTCMS_EXPORT KoColorConversionTransformation : KoColorTransformation{
+class PIGMENTCMS_EXPORT KoColorConversionTransformation : public KoColorTransformation{
         friend class KoColorConversionCache;
         struct Private;
     public:

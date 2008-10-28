@@ -166,18 +166,27 @@ bool KoLcmsColorProfileContainer::init()
         d->info = d->productInfo;
 
         // Check if the profile can convert (something->this)
+#if 0
 //         LPMATSHAPER OutMatShaper = cmsBuildOutputMatrixShaper(d->profile);
 //         if( OutMatShaper )
 //         {
 //             d->suitableForOutput = true;
 //         }
+#endif
+#if 0
         cmsCIEXYZTRIPLE Primaries;
 
         if (cmsTakeColorants(&Primaries, d->profile))
         {
             d->suitableForOutput = true;
         }
-
+#endif
+        if( cmsIsTag( d->profile, icSigAToB0Tag) and cmsIsTag( d->profile, icSigAToB1Tag ) and cmsIsTag( d->profile, icSigAToB2Tag ) and cmsIsTag( d->profile, icSigBToA0Tag ) and cmsIsTag( d->profile, icSigBToA1Tag) and cmsIsTag( d->profile, icSigBToA2Tag ) )
+        {
+            d->suitableForOutput = true;
+        } else {
+            d->suitableForOutput = true;
+        }
         return true;
     }
     return false;

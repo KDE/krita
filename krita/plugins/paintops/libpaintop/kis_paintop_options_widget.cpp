@@ -86,7 +86,7 @@ void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption * option)
         connect( c, SIGNAL( toggled(bool) ), option, SLOT( setChecked(bool) ) );
         l->addWidget( c );
         l->addWidget( option->configurationPage() );
-        option->configurationPage()->setVisible( true );
+        //option->configurationPage()->setVisible( true );
         l->addSpacing( 1 );
         w->setLayout( l );
 

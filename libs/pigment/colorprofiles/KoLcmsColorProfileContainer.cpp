@@ -185,7 +185,7 @@ bool KoLcmsColorProfileContainer::init()
         {
             d->suitableForOutput = true;
         } else {
-            d->suitableForOutput = true;
+            d->suitableForOutput = false;
         }
         return true;
     }

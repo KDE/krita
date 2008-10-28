@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 2000-2005 David Faure <faure@kde.org>
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1622,6 +1622,7 @@ bool KoDocument::oldLoadAndParse(KoStore* store, const QString& filename, KoXmlD
     QString errorMsg;
     int errorLine, errorColumn;
     bool ok = doc.setContent(store->device(), &errorMsg, &errorLine, &errorColumn);
+    store->close();
     if (!ok) {
         kError(30003) << "Parsing error in " << filename << "! Aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl
@@ -1630,7 +1631,6 @@ bool KoDocument::oldLoadAndParse(KoStore* store, const QString& filename, KoXmlD
                                    , filename  , errorLine, errorColumn ,
                                    QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0,
                                                                QCoreApplication::UnicodeUTF8));
-        store->close();
         return false;
     }
     kDebug(30003) << "File" << filename << " loaded and parsed";
@@ -1792,7 +1792,6 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore * store)
             QApplication::restoreOverrideCursor();
             return false;
         }
-        store->close();
 
         if (!loadChildren(store)) {
             kError(30003) << "ERROR: Could not load children" << endl;
@@ -1815,7 +1814,6 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore * store)
     } else if (!oasis && store->hasFile("documentinfo.xml")) {
         KoXmlDocument doc;
         if (oldLoadAndParse(store, "documentinfo.xml", doc)) {
-            store->close();
             d->m_docInfo->load(doc);
         }
     } else {

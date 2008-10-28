@@ -515,14 +515,10 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     }
     //TODO: two fixes : one tell the user about the problem and ask for a solution, and two once the kocolorspace include KoColorTransformation, use that instead of hacking a lcms transformation
     // Create the cmsTransform if needed
-    cmsHTRANSFORM transform = 0;
-#if 0
+    KoColorTransformation* transform = 0;
     if (profile && !profile->isSuitableForOutput()) {
-        transform = cmsCreateTransform(profile->profile(), cs->colorSpaceType(),
-                                       cs->profile()->profile() , cs->colorSpaceType(),
-                                       INTENT_PERCEPTUAL, 0);
+        transform = cs->createColorConverter( KoColorSpaceRegistry::instance()->colorSpace(csName, profile) );
     }
-#endif
 
     // Creating the KisImageSP
     if (m_img == 0) {
@@ -619,7 +615,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                 while (!it.isDone()) {
                     quint16 *d = reinterpret_cast<quint16 *>(it.rawData());
                     d[0] = *(src++);
-                    if (transform) cmsDoTransform(transform, d, d, 1);
+                    if (transform) transform->transform( reinterpret_cast<quint8*>(d), reinterpret_cast<quint8*>(d), 1);
                     if (hasalpha) {
                         d[1] = *(src++);
                     } else {
@@ -632,7 +628,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                 while (!it.isDone()) {
                     quint8 *d = it.rawData();
                     d[0] = (quint8)(stream.nextValue() * coeff);
-                    if (transform) cmsDoTransform(transform, d, d, 1);
+                    if (transform) transform->transform( d, d, 1);
                     if (hasalpha) {
                         d[1] = (quint8)(stream.nextValue() * coeff);
                     } else {
@@ -652,7 +648,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                     d[2] = *(src++);
                     d[1] = *(src++);
                     d[0] = *(src++);
-                    if (transform) cmsDoTransform(transform, d, d, 1);
+                    if (transform) transform->transform( reinterpret_cast<quint8 *>(d), reinterpret_cast<quint8*>(d), 1);
                     if (hasalpha) d[3] = *(src++);
                     else d[3] = quint16_MAX;
                     ++it;
@@ -664,7 +660,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                     d[2] = (quint8)(stream.nextValue() * coeff);
                     d[1] = (quint8)(stream.nextValue() * coeff);
                     d[0] = (quint8)(stream.nextValue() * coeff);
-                    if (transform) cmsDoTransform(transform, d, d, 1);
+                    if (transform) transform->transform( d, d, 1);
                     if (hasalpha) d[3] = (quint8)(stream.nextValue() * coeff);
                     else d[3] = UCHAR_MAX;
                     ++it;

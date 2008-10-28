@@ -140,7 +140,6 @@ void ParagraphTool::keyPressEvent(QKeyEvent *event)
         switch (event->key()) {
         case Qt::Key_Shift:
             if (!event->isAutoRepeat()) {
-                kDebug() << "pressed";
                 m_paragraphEditor.toggleSmoothMovement();
             }
             break;

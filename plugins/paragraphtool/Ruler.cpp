@@ -99,7 +99,8 @@ void Ruler::setValue(qreal value)
 
     if (value != m_value) {
         m_value = value;
-        emit needsRepaint();
+        emit valueChanged(m_value);
+//        emit needsRepaint();
     }
 }
 
@@ -193,6 +194,18 @@ bool Ruler::isVisible() const
     }
 
     return visible;
+}
+
+void Ruler::increaseByStep()
+{
+    qreal newValue = qMin(value() + stepValue(), maximumValue());
+    setValue(newValue);
+}
+
+void Ruler::decreaseByStep()
+{
+    qreal newValue = qMax(value() - stepValue(), minimumValue());
+    setValue(newValue);
 }
 
 RulerFragment *Ruler::hitTest(const QPointF &point)

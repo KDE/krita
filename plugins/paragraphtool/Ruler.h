@@ -118,12 +118,8 @@ public:
 
     bool isVisible() const;
 
-    void increaseByStep() {
-        setValue(value() + stepValue()); emit valueChanged(value());
-    }
-    void decreaseByStep() {
-        setValue(value() - stepValue()); emit valueChanged(value());
-    }
+    void increaseByStep();
+    void decreaseByStep();
 
     QColor activeColor() const {
         return QColor(100, 148, 255);

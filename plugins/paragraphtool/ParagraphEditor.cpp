@@ -136,7 +136,7 @@ void ParagraphEditor::paintLabel(QPainter &painter, const KoViewConverter &conve
     QLineF connector(converter.documentToView(unmapped.p1()), converter.documentToView(unmapped.p2()));
     connector.setLength(10.0);
 
-    QString text(m_rulers[ruler].name() + " " + m_rulers[ruler].valueString());
+    QString text(m_rulers[ruler].name() + ' ' + m_rulers[ruler].valueString());
 
     painter.setBrush(Qt::white);
     painter.setPen(foregroundColor);
@@ -275,11 +275,8 @@ void ParagraphEditor::activateRuler(RulerIndex ruler, RulerFragment *fragment)
     m_activeRulerFragment = fragment;
     m_rulers[m_activeRuler].setActive(true);
 
-    // disable hovering if we have an active ruler
-    // hovering over the wrong ruler confuses the user
-    if (hasHighlightedRuler()) {
-        dehighlightRuler();
-    }
+    defocusRuler();
+    dehighlightRuler();
 }
 
 void ParagraphEditor::deactivateRuler()

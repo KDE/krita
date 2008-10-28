@@ -560,9 +560,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                 info->setAuthorInfo("creator", text_ptr[i].text);
             } else if (key.contains("Raw profile type exif")) {
                 decode_meta_data(text_ptr + i, layer->metaData(), "exif", 6);
-            } else if (key.contains(" Raw profile type iptc ")) {
+            } else if (key.contains("Raw profile type iptc ")) {
                 decode_meta_data(text_ptr + i, layer->metaData(), "iptc", 14);
-            } else if (key.contains(" Raw profile type xmp  ")) {
+            } else if (key.contains("Raw profile type xmp  ")) {
                 decode_meta_data(text_ptr + i, layer->metaData(), "xmp", 0);
             }
         }
@@ -961,20 +961,18 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
         }
         // Save XMP
 //         if(options.xmp)
-#if 0
+#if 1
         // TODO enable when XMP support is finiehsed
         {
             dbgFile << "Trying to save exif information";
-            KisMetaData::IOBackend* iptcIO = KisMetaData::IOBackendRegistry::instance()->value("iptc");
-            Q_ASSERT(iptcIO);
+            KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
+            Q_ASSERT(xmpIO);
 
             QBuffer buffer;
-            iptcIO->saveTo(metaData, &buffer, KisMetaData::IOBackend::JpegHeader);
+            xmpIO->saveTo(metaData, &buffer, KisMetaData::IOBackend::JpegHeader);
 
-            dbgFile << "IPTC information size is" << buffer.data().size();
-            writeRawProfile(png_ptr, info_ptr, "iptc", buffer.data()Z);
-            QByteArray exifArray = exiv2.getXmp();
-            writeRawProfile(png_ptr, info_ptr, "xmp", exifArray);
+            dbgFile << "XMP information size is" << buffer.data().size();
+            writeRawProfile(png_ptr, info_ptr, "iptc", buffer.data());
         }
 #endif
     }

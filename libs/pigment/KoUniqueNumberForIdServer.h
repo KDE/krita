@@ -26,7 +26,7 @@ class QString;
 
 /**
  * This class is used to provide an unique number for a given \ref QString .
- * This is usefull for fast comparison of Ids, but the number *should* remains private
+ * This is useful for fast comparison of Ids, but the number *should* remains private
  * especially considering that it changes from one running instance to an other.
  */
 class KoUniqueNumberForIdServer {
@@ -37,7 +37,7 @@ class KoUniqueNumberForIdServer {
     static KoUniqueNumberForIdServer* instance();
     /**
      * @return an unique number for the given \p _id , for two different call to this function
-     *         with the same \p id the function will allways return the same value.
+     *         with the same \p id the function will always return the same value.
      * 
      * @code
      *  KoUniqueNumberForIdServer::instance()->numberForId( "rgb" ) == KoUniqueNumberForIdServer::instance()->numberForId( "rgb" );

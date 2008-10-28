@@ -71,7 +71,7 @@ class KoShapeCollectionDocker : public QDockWidget
          */
         void loadCollection();
 
-        /// Called when an error occured while loading a collection
+        /// Called when an error occurred while loading a collection
         void onLoadingFailed(const QString& reason);
 
         /// Called when loading of a collection is finished

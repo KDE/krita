@@ -216,7 +216,7 @@ KoImageData::ErrorCode KoImageData::errorCode() const
 
 void KoImageData::setSuffix(const QString & name)
 {
-    QRegExp rx("\\.([^/]+$)"); // TODO does this work on windows or do we have to use \ instead of / for a path seperator?
+    QRegExp rx("\\.([^/]+$)"); // TODO does this work on windows or do we have to use \ instead of / for a path separator?
     if ( rx.indexIn(name) != -1 ) {
         d->suffix = rx.cap(1);
     }

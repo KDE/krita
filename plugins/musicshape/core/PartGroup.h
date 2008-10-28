@@ -131,7 +131,7 @@ public slots:
     void setSymbol(GroupSymbol symbol);
 
     /**
-     * Set wether the group should have common bar-lines.
+     * Set whether the group should have common bar-lines.
      *
      * @param commonBarLines true if the group should have common bar-lines
      */

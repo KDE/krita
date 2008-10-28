@@ -29,7 +29,7 @@ class KRITARULERASSISTANTCOMMON_EXPORT RulerDecoration : public KisCanvasDecorat
         RulerDecoration(KisView2* _view, Ruler* _ruler);
         ~RulerDecoration();
         /**
-         * Set to true if the decoration is beeing edited.
+         * Set to true if the decoration is being edited.
          */
         void setEdition( bool v );
         Ruler* ruler() { return m_ruler; }

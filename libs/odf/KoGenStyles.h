@@ -80,7 +80,7 @@ public:
      * If DontForceNumbering is set, the first name that will be tried is "name", and only if
      * that one exists, then "name1" is tried. Set DontForceNumbering if the name given as
      * argument is supposed to be the full style name.
-     * If AllowDuplicates is set, a unique style name is generated even if a similiar KoGenStyle
+     * If AllowDuplicates is set, a unique style name is generated even if a similar KoGenStyle
      * already exists. In other words, the collection will now contain two equal KoGenStyle
      * and generate them with different style names.
      */

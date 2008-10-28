@@ -69,7 +69,7 @@ class KoOdfCollectionLoader : public QObject
 
     signals:
         /**
-         * Emited when the loading failed
+         * Emitted when the loading failed
          * @param reason Reason the loading failed.
          */
         void loadingFailed(const QString& reason);

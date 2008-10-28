@@ -207,14 +207,14 @@ public:
     /**
      * Return the locked status of this node. System Locked nodes indicates
      * that an algorithm is processing them and that an other
-     * algorithm need to wait befor accessing it.
+     * algorithm need to wait before accessing it.
      */
     bool systemLocked() const;
 
     /**
      * Set the locked status of this node. System Locked nodes indicates
      * that an algorithm is processing them and that an other
-     * algorithm need to wait befor accessing it.
+     * algorithm need to wait before accessing it.
      */
     void setSystemLocked(bool l);
     

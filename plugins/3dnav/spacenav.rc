@@ -2,7 +2,7 @@
 <kpartgui library="kritaspacenav" version="1">
 <MenuBar>
     <Menu name="Settings"><text>&amp;Settings</text>
-		<Seperator/>
+		<Separator/>
 		<Action name="spacenav"/>
     </Menu>
 </MenuBar>

@@ -26,10 +26,8 @@
 #include <kis_paintop_options_widget.h>
 
 class KisBrushOption;
-class KisPressureOpacityOption;
-class KisPressureDarkenOption;
 class KisPressureSizeOption;
-class KisPaintActionTypeOption;
+class KisDuplicateOpOption;
 
 class KisDuplicateOpSettingsWidget : public KisPaintOpOptionsWidget {
 
@@ -50,12 +48,9 @@ public:
 
 public:
 
-    KisBrushOption * m_brushOption;
-    KisPressureOpacityOption * m_opacityOption;
-    KisPressureDarkenOption * m_darkenOption;
-    KisPressureSizeOption * m_sizeOption;
-    KisPaintActionTypeOption * m_paintActionTypeOption;
-
+    KisBrushOption* m_brushOption;
+    KisPressureSizeOption* m_sizeOption;
+    KisDuplicateOpOption* m_duplicateOption;
 
 };
 

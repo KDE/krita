@@ -24,23 +24,17 @@
 #define KIS_DUPLICATEOP_H_
 
 #include "kis_brush_based_paintop.h"
-#include <klocale.h>
-#include <QDialog>
-#include <KoColorSpace.h>
 
+#include <klocale.h>
+
+#include <kis_types.h>
 #include <kis_paintop_factory.h>
 #include <kis_paintop_settings.h>
-#include <kis_paintop_options_widget.h>
 
-class KisBrushOption;
-class KisPressureSizeOption;
-class KisPressureDarkenOption;
-class KisPressureOpacityOption;
-class KisPaintActionTypeOption;
+class KisPaintInformation;
 class KisDuplicateOpSettings;
 class KisDuplicateOpSettingsWidget;
 
-class QWidget;
 class QPointF;
 class KisPainter;
 class KCurve;
@@ -56,10 +50,6 @@ public:
     virtual ~KisDuplicateOp();
 
     void paintAt(const KisPaintInformation& info);
-
-    virtual double paintLine(const KisPaintInformation &pi1,
-                             const KisPaintInformation &pi2,
-                             double savedDist = -1);
 
 private:
 

@@ -38,6 +38,7 @@
 
 #include <KoColorTransformation.h>
 #include <KoColor.h>
+#include <KoCompositeOp.h>
 #include <KoInputDevice.h>
 
 #include <widgets/kcurve.h>
@@ -51,7 +52,6 @@
 #include <kis_selection.h>
 #include <kis_brush_option.h>
 #include <kis_paintop_options_widget.h>
-#include <kis_pressure_darken_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_paint_action_type_option.h>
@@ -76,6 +76,26 @@ KisEraseOp::~KisEraseOp()
 
 void KisEraseOp::paintAt(const KisPaintInformation& info)
 {
+// Erasing is traditionally in paint applications one of two things:
+// either it is painting in the 'background' color, or it is replacing
+// all pixels with transparent (black?) pixels.
+//
+// That's what this paint op does for now; however, anyone who has
+// ever worked with paper and soft pencils knows that a sharp piece of
+// eraser rubber is a pretty useful too for making sharp to fuzzy lines
+// in the graphite layer, or equally useful: for smudging skin tones.
+//
+// A smudge tool for Krita is in the making, but when working with
+// a tablet, the eraser tip should be at least as functional as a rubber eraser.
+// That means that only after repeated or forceful application should all the
+// 'paint' or 'graphite' be removed from the surface -- a kind of pressure
+// sensitive, incremental smudge.
+//
+// And there should be an option to not have the eraser work on certain
+// kinds of material. Layers are just a hack for this; putting your ink work
+// in one layer and your pencil in another is not the same as really working
+// with the combination.
+
     if (!painter()->device()) return;
 
     KisBrushSP brush = m_brush;
@@ -106,7 +126,6 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
     KisPaintDeviceSP dab = KisPaintDeviceSP(0);
 
     quint8 origOpacity = settings->m_optionsWidget->m_opacityOption->apply(painter(), info.pressure());
-    KoColor origColor = settings->m_optionsWidget->m_darkenOption->apply(painter(), info.pressure());
 
     double scale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());
 
@@ -134,10 +153,9 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
         brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
     }
 
-    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab, painter()->opacity(), sx, sy, sw, sh);
+    painter()->bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab, painter()->opacity(), sx, sy, sw, sh);
 
     painter()->setOpacity(origOpacity);
-    painter()->setPaintColor(origColor);
 
 }
 

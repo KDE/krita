@@ -25,10 +25,10 @@
 
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
+#include <QPointF>
 
 class QDomElement;
 class KisDuplicateOpSettingsWidget;
-
 class KisDuplicateOpSettings : public QObject, public KisPaintOpSettings
 {
     Q_OBJECT
@@ -37,10 +37,16 @@ public:
     using KisPaintOpSettings::fromXML;
     using KisPaintOpSettings::toXML;
 
-    KisDuplicateOpSettings( KisDuplicateOpSettingsWidget* widget );
+    KisDuplicateOpSettings( KisDuplicateOpSettingsWidget* widget, KisImageSP image );
 
     virtual ~KisDuplicateOpSettings();
     bool paintIncremental();
+
+    QPointF offset() const;
+    void mousePressEvent( KoPointerEvent *e );
+    void activate();
+    bool healing() const;
+    bool perspectiveCorrection() const;
 
     void fromXML(const QDomElement& elt);
     void toXML(QDomDocument& doc, QDomElement& rootElt) const;
@@ -50,6 +56,10 @@ public:
 public:
 
     KisDuplicateOpSettingsWidget *m_optionsWidget;
+    QPointF m_offset;
+    KisImageSP m_image;
+    bool m_isOffsetNotUptodate;
+    QPointF m_position; // Give the position of the last alt-click
 
 };
 

@@ -95,13 +95,9 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines
     // the sub-pixel positioning.
-    qint32 x;
-    double xFraction;
-    qint32 y;
-    double yFraction;
+    qint32 x = qRound( pt.x() );
+    qint32 y = qRound( pt.y() );
 
-    splitCoordinate(pt.x(), &x, &xFraction);
-    splitCoordinate(pt.y(), &y, &yFraction);
 
     KisPaintDeviceSP dab = KisPaintDeviceSP(0);
 
@@ -120,19 +116,30 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
 
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
+    const KoColorSpace * cs = dab->colorSpace();
+
+
+    // Set all alpha > opaque/2 to opaque, the rest to transparent.
+    // XXX: Using 4/10 as the 1x1 circle brush paints nothing with 0.5.
+
+    KisRectIteratorPixel pixelIt = dab->createRectIterator(dabRect.x(), dabRect.y(), dabRect.width(), dabRect.height());
+    while (!pixelIt.isDone()) {
+        quint8 alpha = cs->alpha(pixelIt.rawData());
+
+        if (alpha < (4 * OPACITY_OPAQUE) / 10) {
+            cs->setAlpha(pixelIt.rawData(), OPACITY_TRANSPARENT, 1);
+        } else {
+            cs->setAlpha(pixelIt.rawData(), OPACITY_OPAQUE, 1);
+        }
+
+        ++pixelIt;
+    }
+
     qint32 sx = dstRect.x() - x;
     qint32 sy = dstRect.y() - y;
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
 
-    if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->image(device->colorSpace(), scale, 0.0, adjustedInfo, xFraction, yFraction);
-    } else {
-        dab = cachedDab();
-        KoColor color = painter()->paintColor();
-        color.convertTo(dab->colorSpace());
-        brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
-    }
 
     painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab, painter()->opacity(), sx, sy, sw, sh);
 
@@ -142,8 +149,8 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
 }
 
 double KisPenOp::paintLine(const KisPaintInformation &pi1,
-                             const KisPaintInformation &pi2,
-                             double savedDist)
+                           const KisPaintInformation &pi2,
+                           double savedDist)
 {
     KisPaintInformation adjustedInfo1(pi1);
     KisPaintInformation adjustedInfo2(pi2);

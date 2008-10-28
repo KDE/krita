@@ -63,12 +63,10 @@ KisPaintOpSettingsSP KisDuplicateOpFactory::settings(QWidget * parent, const KoI
     // XXX: store widgets per inputDevice?
     Q_UNUSED( parent );
     Q_UNUSED(inputDevice);
-    Q_UNUSED(image)
-    return new KisDuplicateOpSettings(m_widget);
+    return new KisDuplicateOpSettings(m_widget, image);
 }
 
 KisPaintOpSettingsSP KisDuplicateOpFactory::settings(KisImageSP image)
 {
-    Q_UNUSED(image);
-    return new KisDuplicateOpSettings(m_widget);
+    return new KisDuplicateOpSettings(m_widget, image);
 }

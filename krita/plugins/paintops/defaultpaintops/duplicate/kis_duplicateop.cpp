@@ -38,6 +38,8 @@
 
 #include <KoColorTransformation.h>
 #include <KoColor.h>
+#include <KoColorSpace.h>
+#include <KoCompositeOp.h>
 #include <KoInputDevice.h>
 
 #include <widgets/kcurve.h>
@@ -55,9 +57,11 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_paint_action_type_option.h>
+#include <kis_perspective_grid.h>
+#include <kis_random_sub_accessor.h>
 
-#include <kis_duplicateop_settings.h>
-#include <kis_duplicateop_settings_widget.h>
+#include "kis_duplicateop_settings.h"
+#include "kis_duplicateop_settings_widget.h"
 
 
 KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainter *painter)
@@ -74,22 +78,52 @@ KisDuplicateOp::~KisDuplicateOp()
 {
 }
 
+double KisDuplicateOp::minimizeEnergy(const double* m, double* sol, int w, int h)
+{
+    int rowstride = 3 * w;
+    double err = 0;
+    memcpy(sol, m, 3* sizeof(double) * w);
+    m += rowstride;
+    sol += rowstride;
+    for (int i = 1; i < h - 1; i++) {
+        memcpy(sol, m, 3* sizeof(double));
+        m += 3; sol += 3;
+        for (int j = 3; j < rowstride - 3; j++) {
+            double tmp = *sol;
+            *sol = ((*(m - 3) + *(m + 3) + *(m - rowstride) + *(m + rowstride)) + 2 * *m) / 6;
+            double diff = *sol - tmp;
+            err += diff * diff;
+            m ++; sol ++;
+        }
+        memcpy(sol, m, 3* sizeof(double));
+        m += 3; sol += 3;
+    }
+    memcpy(sol, m, 3* sizeof(double) * w);
+    return err;
+}
+
+#define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
+
+
 void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 {
-    if (!painter()->device()) return;
+    if (!painter()) return;
+    if (!m_duplicateStartIsSet) {
+        m_duplicateStartIsSet = true;
+        m_duplicateStart = info.pos();
+    }
+
+    bool heal = settings->healing();
+
+    if (!source()) return;
 
     KisBrushSP brush = m_brush;
-
-    Q_ASSERT(brush);
     if (!brush) return;
-
-    KisPaintInformation adjustedInfo = settings->m_optionsWidget->m_sizeOption->apply(info);
-    if (! brush->canPaintFor(adjustedInfo))
+    if (! brush->canPaintFor(info))
         return;
 
-    KisPaintDeviceSP device = painter()->device();
-    double pScale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());   // TODO: why is there scale and pScale that seems to contains the same things ?
-    QPointF hotSpot = brush->hotSpot(pScale, pScale);
+    double scale = KisPaintOp::scaleForPressure(info.pressure());
+    QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
@@ -102,17 +136,144 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
+    xFraction = yFraction = 0.0;
 
-    KisPaintDeviceSP dab = KisPaintDeviceSP(0);
+    QPointF srcPointF = pt - settings->offset();
+    QPoint srcPoint = QPoint(x - static_cast<qint32>(settings->offset().x()),
+                             y - static_cast<qint32>(settings->offset().y()));
 
-    quint8 origOpacity = settings->m_optionsWidget->m_opacityOption->apply(painter(), info.pressure());
-    KoColor origColor = settings->m_optionsWidget->m_darkenOption->apply(painter(), info.pressure());
 
-    double scale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());
+    qint32 sw = brush->maskWidth(scale, 0.0);
+    qint32 sh = brush->maskHeight(scale, 0.0);
+
+    if (srcPoint.x() < 0)
+        srcPoint.setX(0);
+
+    if (srcPoint.y() < 0)
+        srcPoint.setY(0);
+    if (!(m_srcdev && !(*m_srcdev->colorSpace() == *source()->colorSpace()))) {
+        m_srcdev = new KisPaintDevice(source()->colorSpace(), "duplicate source dev");
+    }
+    Q_CHECK_PTR(m_srcdev);
+
+    // Perspective correction ?
+    KisPainter copyPainter(m_srcdev);
+    if (settings->perspectiveCorrection()) {
+        Matrix3qreal startM = Matrix3qreal::Identity();
+        Matrix3qreal endM = Matrix3qreal::Identity();
+
+        // First look for the grid corresponding to the start point
+        KisSubPerspectiveGrid* subGridStart = *m_image->perspectiveGrid()->begin();
+        QRect r = QRect(0, 0, m_image->width(), m_image->height());
+
+#if 1
+        if (subGridStart) {
+            startM = KisPerspectiveMath::computeMatrixTransfoFromPerspective(r, *subGridStart->topLeft(), *subGridStart->topRight(), *subGridStart->bottomLeft(), *subGridStart->bottomRight());
+        }
+#endif
+#if 1
+        // Second look for the grid corresponding to the end point
+        KisSubPerspectiveGrid* subGridEnd = *m_image->perspectiveGrid()->begin();
+        if (subGridEnd) {
+            endM = KisPerspectiveMath::computeMatrixTransfoToPerspective(*subGridEnd->topLeft(), *subGridEnd->topRight(), *subGridEnd->bottomLeft(), *subGridEnd->bottomRight(), r);
+        }
+#endif
+
+        // Compute the translation in the perspective transformation space:
+        QPointF positionStartPaintingT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart));
+        QPointF duplicateStartPositionT = KisPerspectiveMath::matProd(endM, QPointF(m_duplicateStart) - QPointF(settings->offset()));
+        QPointF translat = duplicateStartPositionT - positionStartPaintingT;
+        KisRectIteratorPixel dstIt = m_srcdev->createRectIterator(0, 0, sw, sh);
+        KisRandomSubAccessorPixel srcAcc = source()->createRandomSubAccessor();
+        //Action
+        while (!dstIt.isDone()) {
+            if (dstIt.isSelected()) {
+                QPointF p =  KisPerspectiveMath::matProd(startM, KisPerspectiveMath::matProd(endM, QPointF(dstIt.x() + x, dstIt.y() + y)) + translat);
+                srcAcc.moveTo(p);
+                srcAcc.sampledOldRawData(dstIt.rawData());
+            }
+            ++dstIt;
+        }
+
+
+    } else {
+        // Or, copy the source data on the temporary device:
+        copyPainter.bitBlt(0, 0, COMPOSITE_COPY, source(), srcPoint.x(), srcPoint.y(), sw, sh);
+        copyPainter.end();
+    }
+
+    // heal ?
+
+    if (heal) {
+        quint16 dataDevice[4];
+        quint16 dataSrcDev[4];
+        double* matrix = new double[ 3 * sw * sh ];
+        // First divide
+        const KoColorSpace* deviceCs = source()->colorSpace();
+        KisHLineConstIteratorPixel deviceIt = source()->createHLineConstIterator(x, y, sw);
+        KisHLineIteratorPixel srcDevIt = m_srcdev->createHLineIterator(0, 0, sw);
+        double* matrixIt = &matrix[0];
+        for (int j = 0; j < sh; j++) {
+            for (int i = 0; !srcDevIt.isDone(); i++) {
+                deviceCs->toLabA16(deviceIt.rawData(), (quint8*)dataDevice, 1);
+                deviceCs->toLabA16(srcDevIt.rawData(), (quint8*)dataSrcDev, 1);
+                // Division
+                for (int k = 0; k < 3; k++) {
+                    matrixIt[k] = dataDevice[k] / (double)qMax((int)dataSrcDev [k], 1);
+                }
+                ++deviceIt;
+                ++srcDevIt;
+                matrixIt += 3;
+            }
+            deviceIt.nextRow();
+            srcDevIt.nextRow();
+        }
+        // Minimize energy
+        {
+            int iter = 0;
+            double err;
+            double* solution = new double [ 3 * sw * sh ];
+            do {
+                err = minimizeEnergy(&matrix[0], &solution[0], sw, sh);
+                memcpy(&matrix[0], &solution[0], sw * sh * 3 * sizeof(double));
+                iter++;
+            } while (err < 0.00001 && iter < 100);
+            delete [] solution;
+        }
+
+        // Finaly multiply
+        deviceIt = source()->createHLineIterator(x, y, sw);
+        srcDevIt = m_srcdev->createHLineIterator(0, 0, sw);
+        matrixIt = &matrix[0];
+        for (int j = 0; j < sh; j++) {
+            for (int i = 0; !srcDevIt.isDone(); i++) {
+                deviceCs->toLabA16(deviceIt.rawData(), (quint8*)dataDevice, 1);
+                deviceCs->toLabA16(srcDevIt.rawData(), (quint8*)dataSrcDev, 1);
+                // Multiplication
+                for (int k = 0; k < 3; k++) {
+                    dataSrcDev[k] = (int)CLAMP(matrixIt[k] * qMax((int) dataSrcDev[k], 1), 0, 65535);
+                }
+                deviceCs->fromLabA16((quint8*)dataSrcDev, srcDevIt.rawData(), 1);
+                ++deviceIt;
+                ++srcDevIt;
+                matrixIt += 3;
+            }
+            deviceIt.nextRow();
+            srcDevIt.nextRow();
+        }
+        delete [] matrix;
+    }
+
+
+    // Add the dab as selection to the srcdev
+//     KisPainter copySelection(srcdev->selection().data());
+//     copySelection.bitBlt(0, 0, COMPOSITE_OVER, dab, 0, 0, sw, sh);
+//     copySelection.end();
+
+    brush->mask(m_srcdev, scale, scale, 0.0, info, xFraction, yFraction);
 
     QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
-
 
     if (painter()->bounds().isValid()) {
         dstRect &= painter()->bounds();
@@ -122,34 +283,10 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     qint32 sx = dstRect.x() - x;
     qint32 sy = dstRect.y() - y;
-    qint32 sw = dstRect.width();
-    qint32 sh = dstRect.height();
+    sw = dstRect.width();
+    sh = dstRect.height();
 
-    if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->image(device->colorSpace(), scale, 0.0, adjustedInfo, xFraction, yFraction);
-    } else {
-        dab = cachedDab();
-        KoColor color = painter()->paintColor();
-        color.convertTo(dab->colorSpace());
-        brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
-    }
+    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_srcdev, painter()->opacity(), sx, sy, sw, sh);
 
-    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab, painter()->opacity(), sx, sy, sw, sh);
 
-    painter()->setOpacity(origOpacity);
-    painter()->setPaintColor(origColor);
-
-}
-
-double KisDuplicateOp::paintLine(const KisPaintInformation &pi1,
-                             const KisPaintInformation &pi2,
-                             double savedDist)
-{
-    KisPaintInformation adjustedInfo1(pi1);
-    KisPaintInformation adjustedInfo2(pi2);
-    if (!settings->m_optionsWidget->m_sizeOption->isChecked()) {
-        adjustedInfo1.setPressure(PRESSURE_DEFAULT);
-        adjustedInfo2.setPressure(PRESSURE_DEFAULT);
-    }
-    return KisPaintOp::paintLine(adjustedInfo1, adjustedInfo2, savedDist);
 }

@@ -20,6 +20,7 @@ set(kritadefaultpaintops_PART_SRCS
 	duplicate/kis_duplicateop_factory.cpp
 	duplicate/kis_duplicateop_settings.cpp
 	duplicate/kis_duplicateop_settings_widget.cpp
+	duplicate/kis_duplicateop_option.cpp
 	eraser/kis_eraseop.cpp
 	eraser/kis_eraseop_factory.cpp
 	eraser/kis_eraseop_settings.cpp

@@ -92,13 +92,15 @@ void ParagraphTool::mousePressEvent(KoPointerEvent *event)
                 m_paragraphEditor.activateTextBlockAt(m_mousePosition);
             }
         }
-    } else if (event->button() == Qt::RightButton) {
-        m_paragraphEditor.resetActiveRuler();
+    } else {
+        if (event->button() == Qt::RightButton) {
+            m_paragraphEditor.resetActiveRuler();
+        } else if (event->button() == Qt::MidButton) {
+            m_paragraphEditor.applyParentStyleToActiveRuler();
+        }
+
         m_paragraphEditor.deactivateRuler();
         m_paragraphEditor.highlightRulerAt(m_mousePosition);
-    } else if (event->button() == Qt::MidButton) {
-        m_paragraphEditor.applyParentStyleToActiveRuler();
-        m_paragraphEditor.deactivateRuler();
     }
 
     repaintDecorations();

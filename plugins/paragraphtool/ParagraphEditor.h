@@ -60,11 +60,6 @@ public:
     // paint a label at the specified position
     void paintLabel(QPainter &painter, const KoViewConverter &converter) const;
 
-    // paint all rulers for a given fragment
-    void paintRulers(QPainter &painter, const KoViewConverter &converter, const ParagraphFragment &fragment) const;
-
-    bool createFragments();
-
     bool hasActiveRuler() const {
         return m_activeRuler != noRuler;
     }

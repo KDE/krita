@@ -29,7 +29,7 @@ class KisBrushOption;
 class KisPressureOpacityOption;
 class KisPressureDarkenOption;
 class KisPressureSizeOption;
-class KisPaintActionTypeOption;
+class KisPressureRateOption;
 
 class KisSmudgeOpSettingsWidget : public KisPaintOpOptionsWidget {
 
@@ -54,7 +54,7 @@ public:
     KisPressureOpacityOption * m_opacityOption;
     KisPressureDarkenOption * m_darkenOption;
     KisPressureSizeOption * m_sizeOption;
-    KisPaintActionTypeOption * m_paintActionTypeOption;
+    KisPressureRateOption * m_rateOption;
 
 
 };

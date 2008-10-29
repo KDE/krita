@@ -28,6 +28,8 @@
 #include <QDialog>
 #include <KoColorSpace.h>
 
+#include <kis_types.h>
+
 #include <kis_paintop_factory.h>
 #include <kis_paintop_settings.h>
 #include <kis_paintop_options_widget.h>
@@ -62,6 +64,12 @@ public:
 private:
 
     const KisSmudgeOpSettings * settings;
+    bool m_firstRun;
+    KisPaintDeviceSP m_source;
+    KisPaintDeviceSP m_target;
+    KisPaintDeviceSP m_srcdev;
+
+
 };
 
 #endif // KIS_SMUDGEOP_H_

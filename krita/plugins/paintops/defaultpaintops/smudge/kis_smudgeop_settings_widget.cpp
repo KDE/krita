@@ -29,7 +29,7 @@
 #include <kis_pressure_darken_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
-#include <kis_paint_action_type_option.h>
+#include <kis_pressure_rate_option.h>
 
 KisSmudgeOpSettingsWidget::KisSmudgeOpSettingsWidget()
 {
@@ -39,13 +39,13 @@ KisSmudgeOpSettingsWidget::KisSmudgeOpSettingsWidget()
     m_sizeOption = new KisPressureSizeOption();
     m_opacityOption = new KisPressureOpacityOption();
     m_darkenOption = new KisPressureDarkenOption();
-    m_paintActionTypeOption = new KisPaintActionTypeOption();
+    m_rateOption = new KisPressureRateOption();
 
     addPaintOpOption(m_brushOption);
     addPaintOpOption(m_sizeOption);
     addPaintOpOption(m_opacityOption);
     addPaintOpOption(m_darkenOption);
-    addPaintOpOption(m_paintActionTypeOption);
+    addPaintOpOption(m_rateOption);
 
 }
 
@@ -55,7 +55,7 @@ KisSmudgeOpSettingsWidget::~KisSmudgeOpSettingsWidget()
     delete m_sizeOption;
     delete m_opacityOption;
     delete m_darkenOption;
-    delete m_paintActionTypeOption;
+    delete m_rateOption;
 }
 
 void KisSmudgeOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
@@ -64,7 +64,7 @@ void KisSmudgeOpSettingsWidget::setConfiguration( const KisPropertiesConfigurati
     m_sizeOption->readOptionSetting(config);
     m_opacityOption->readOptionSetting(config);
     m_darkenOption->readOptionSetting(config);
-    m_paintActionTypeOption->readOptionSetting(config);
+    m_rateOption->readOptionSetting(config);
 }
 
 KisPropertiesConfiguration* KisSmudgeOpSettingsWidget::configuration() const
@@ -74,7 +74,7 @@ KisPropertiesConfiguration* KisSmudgeOpSettingsWidget::configuration() const
     m_sizeOption->writeOptionSetting(config);
     m_opacityOption->writeOptionSetting(config);
     m_darkenOption->writeOptionSetting(config);
-    m_paintActionTypeOption->writeOptionSetting(config);
+    m_rateOption->writeOptionSetting(config);
     return config;
 }
 
@@ -85,7 +85,7 @@ void KisSmudgeOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *
     m_sizeOption->writeOptionSetting(config);
     m_opacityOption->writeOptionSetting(config);
     m_darkenOption->writeOptionSetting(config);
-    m_paintActionTypeOption->writeOptionSetting(config);
+    m_rateOption->writeOptionSetting(config);
 }
 
 

@@ -33,11 +33,12 @@
 #include <QHBoxLayout>
 #include <qtoolbutton.h>
 
-#include <kis_image.h>
 #include <kis_debug.h>
 
+#include <KoColorSpaceRegistry.h>
 #include <KoColorTransformation.h>
 #include <KoColor.h>
+#include <KoCompositeOp.h>
 #include <KoInputDevice.h>
 
 #include <widgets/kcurve.h>
@@ -51,23 +52,28 @@
 #include <kis_selection.h>
 #include <kis_brush_option.h>
 #include <kis_paintop_options_widget.h>
-#include <kis_pressure_darken_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
-#include <kis_paint_action_type_option.h>
+#include <kis_pressure_rate_option.h>
 
-#include <kis_smudgeop_settings.h>
-#include <kis_smudgeop_settings_widget.h>
-
+#include "kis_smudgeop_settings.h"
+#include "kis_smudgeop_settings_widget.h"
 
 KisSmudgeOp::KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter *painter)
-        : KisBrushBasedPaintOp(painter)
-        , settings(settings)
+    : KisBrushBasedPaintOp(painter)
+    , settings(settings)
+    , m_firstRun( true )
+    , m_target( 0 )
+    , m_srcdev( 0 )
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
     Q_ASSERT(settings->m_optionsWidget->m_brushOption);
     m_brush = settings->m_optionsWidget->m_brushOption->brush();
+    m_source = settings->node()->paintDevice();
+    m_srcdev = new KisPaintDevice(m_source->colorSpace(), "duplicate source dev");
+    m_target = new KisPaintDevice(m_source->colorSpace(), "duplicate target dev");
+
 }
 
 KisSmudgeOp::~KisSmudgeOp()
@@ -88,7 +94,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
         return;
 
     KisPaintDeviceSP device = painter()->device();
-    double pScale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());   // TODO: why is there scale and pScale that seems to contains the same things ?
+    double pScale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());
     QPointF hotSpot = brush->hotSpot(pScale, pScale);
     QPointF pt = info.pos() - hotSpot;
 
@@ -106,39 +112,52 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     KisPaintDeviceSP dab = KisPaintDeviceSP(0);
 
     quint8 origOpacity = settings->m_optionsWidget->m_opacityOption->apply(painter(), info.pressure());
-    KoColor origColor = settings->m_optionsWidget->m_darkenOption->apply(painter(), info.pressure());
 
     double scale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());
 
     QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
-
-
-    if (painter()->bounds().isValid()) {
-        dstRect &= painter()->bounds();
-    }
-
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
-    qint32 sx = dstRect.x() - x;
-    qint32 sy = dstRect.y() - y;
-    qint32 sw = dstRect.width();
-    qint32 sh = dstRect.height();
-
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->image(device->colorSpace(), scale, 0.0, adjustedInfo, xFraction, yFraction);
+        dab = brush->image(device->colorSpace(), pScale, 0.0, adjustedInfo, xFraction, yFraction);
+        dab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
     } else {
         dab = cachedDab();
         KoColor color = painter()->paintColor();
-        color.convertTo(dab->colorSpace());
-        brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
+//        color.convertTo(dab->convertTo(KoColorSpaceRegistry::instance()->alpha8()));
+        brush->mask(dab, color, scale, pScale, 0.0, info, xFraction, yFraction);
     }
 
-    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab, painter()->opacity(), sx, sy, sw, sh);
+
+    qint32 sw = dab->extent().width();
+    qint32 sh = dab->extent().height();
+
+    int opacity = OPACITY_OPAQUE;
+    if (!m_firstRun) {
+        opacity = settings->m_optionsWidget->m_rateOption->apply( opacity, sw, sh, m_srcdev, adjustedInfo.pressure() );
+    } else {
+        m_firstRun = false;
+    }
+
+    KisPainter copyPainter(m_srcdev);
+    copyPainter.bitBlt(0, 0, COMPOSITE_OVER, device, opacity, pt.x(), pt.y(), sw, sh);
+    copyPainter.end();
+
+    m_target = new KisPaintDevice(device->colorSpace(), "duplicate target dev");
+
+    copyPainter.begin(m_target);
+//    copyPainter.bltSelection(0, 0, COMPOSITE_OVER, m_srcdev, dab, OPACITY_OPAQUE, 0, 0, sw, sh);
+    copyPainter.end();
+
+    qint32 sx = dstRect.x() - x;
+    qint32 sy = dstRect.y() - y;
+    sw = dstRect.width();
+    sh = dstRect.height();
+
+    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_target, painter()->opacity(), sx, sy, sw, sh);
 
     painter()->setOpacity(origOpacity);
-    painter()->setPaintColor(origColor);
-
 }
 
 double KisSmudgeOp::paintLine(const KisPaintInformation &pi1,

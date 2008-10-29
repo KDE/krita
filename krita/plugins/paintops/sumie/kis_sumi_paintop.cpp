@@ -110,7 +110,7 @@ double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
     dab = cachedDab();
     dab->clear();
 
-    m_brush.paintLine(dab,device, pi1, pi2);
+    m_brush.paintLine(dab, device, pi1, pi2);
 
     QRect rc = dab->extent();
 

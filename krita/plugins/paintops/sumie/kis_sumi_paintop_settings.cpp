@@ -47,7 +47,7 @@ KisPaintOpSettingsSP KisSumiPaintOpSettings::clone() const
 
 bool KisSumiPaintOpSettings::paintIncremental()
 {
-    return false;
+    return true;
 }
 
 void KisSumiPaintOpSettings::fromXML(const QDomElement& elt)

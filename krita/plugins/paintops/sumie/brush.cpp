@@ -176,7 +176,7 @@ void Brush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPain
     int size = m_bristles.size();
     Trajectory trajectory; // used for interpolation the path of bristles
     QVector<QPointF> bristlePath; // path for single bristle
-    for (int i = 0;i < size;i++) {
+    for (int i = 0; i < size; i++) {
         /*            if (m_bristles[i].distanceCenter() > m_radius || drand48() <0.5){
                       continue;
                       }*/

@@ -21,6 +21,7 @@
 
 //Qt includes
 #include <QMap>
+#include <QLabel>
 
 //KDE includes
 #include <klocale.h>
@@ -85,8 +86,12 @@ QMap<QString, QWidget *> KoPABackgroundTool::createOptionWidgets()
     KoPAMasterPageDocker *masterPageDocker = new KoPAMasterPageDocker();
     masterPageDocker->setView( static_cast<KoPACanvas *>(m_canvas)->koPAView() );
 
+    QLabel dummy1( i18n("Use master background") );
+    QLabel dummy2( i18n("Display shapes of master") );
+    QLabel dummy3( i18n("Set background image") );
+    QLabel dummy4( i18n("Use the styles docker to manipulate the backgound.") );
     QMap<QString, QWidget *> widgets;
-    widgets.insert( i18n("Master page"), masterPageDocker );
+    widgets.insert( i18n("Master Page"), masterPageDocker );
     return widgets;
 }
 

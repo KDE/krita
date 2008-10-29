@@ -40,6 +40,8 @@ public:
 
     virtual int compare(const QTableWidgetItem *other) const;
 
+    virtual QVariant data(int role) const;
+
 protected:
     QImage thumbnail( const QSize &thumbSize ) const;
 

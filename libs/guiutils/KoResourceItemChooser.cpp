@@ -81,6 +81,14 @@ int KoResourceItem::compare(const QTableWidgetItem *o) const
     }
 }
 
+QVariant KoResourceItem::data ( int role ) const
+{
+    if( role == KoResourceChooser::LargeThumbnailRole )
+        return thumbnail( QSize( 100, 100 ));
+
+    return QTableWidgetItem::data( role );
+}
+
 KoResourceItemChooser::KoResourceItemChooser( QWidget *parent )
  : QWidget( parent )
 {

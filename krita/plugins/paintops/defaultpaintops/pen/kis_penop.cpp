@@ -68,6 +68,7 @@ KisPenOp::KisPenOp(const KisPenOpSettings *settings, KisPainter *painter)
     Q_ASSERT(painter);
     Q_ASSERT(settings->m_optionsWidget->m_brushOption);
     m_brush = settings->m_optionsWidget->m_brushOption->brush();
+    Q_ASSERT( m_brush );
 }
 
 KisPenOp::~KisPenOp()
@@ -98,17 +99,25 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
     qint32 x = qRound( pt.x() );
     qint32 y = qRound( pt.y() );
 
-
-    KisPaintDeviceSP dab = KisPaintDeviceSP(0);
-
     quint8 origOpacity = settings->m_optionsWidget->m_opacityOption->apply(painter(), info.pressure());
     KoColor origColor = settings->m_optionsWidget->m_darkenOption->apply(painter(), info.pressure());
 
     double scale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());
 
+    KisPaintDeviceSP dab = KisPaintDeviceSP(0);
+    if (brush->brushType() == IMAGE ||
+            brush->brushType() == PIPE_IMAGE) {
+        dab = brush->image(device->colorSpace(), scale, 0.0, info);
+    } else {
+        // Compute mask without sub-pixel positioning
+        dab = cachedDab();
+        KoColor color = painter()->paintColor();
+        color.convertTo(dab->colorSpace());
+        brush->mask(dab, color, scale, scale, 0.0, info);
+    }
+
     QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
-
 
     if (painter()->bounds().isValid()) {
         dstRect &= painter()->bounds();
@@ -117,7 +126,6 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
 
     const KoColorSpace * cs = dab->colorSpace();
-
 
     // Set all alpha > opaque/2 to opaque, the rest to transparent.
     // XXX: Using 4/10 as the 1x1 circle brush paints nothing with 0.5.
@@ -140,12 +148,9 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
 
-
     painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab, painter()->opacity(), sx, sy, sw, sh);
-
     painter()->setOpacity(origOpacity);
     painter()->setPaintColor(origColor);
-
 }
 
 double KisPenOp::paintLine(const KisPaintInformation &pi1,

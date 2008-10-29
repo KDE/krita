@@ -28,7 +28,6 @@
 class KisBrushOption;
 class KisPressureOpacityOption;
 class KisPressureSizeOption;
-class KisPaintActionTypeOption;
 
 class KisEraseOpSettingsWidget : public KisPaintOpOptionsWidget {
 
@@ -52,9 +51,6 @@ public:
     KisBrushOption * m_brushOption;
     KisPressureOpacityOption * m_opacityOption;
     KisPressureSizeOption * m_sizeOption;
-    KisPaintActionTypeOption * m_paintActionTypeOption;
-
-
 };
 
 

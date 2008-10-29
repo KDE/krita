@@ -37,12 +37,10 @@ KisEraseOpSettingsWidget::KisEraseOpSettingsWidget()
     m_brushOption = new KisBrushOption();
     m_sizeOption = new KisPressureSizeOption();
     m_opacityOption = new KisPressureOpacityOption();
-    m_paintActionTypeOption = new KisPaintActionTypeOption();
 
     addPaintOpOption(m_brushOption);
     addPaintOpOption(m_sizeOption);
     addPaintOpOption(m_opacityOption);
-    addPaintOpOption(m_paintActionTypeOption);
 
 }
 
@@ -51,7 +49,6 @@ KisEraseOpSettingsWidget::~KisEraseOpSettingsWidget()
     delete m_brushOption;
     delete m_sizeOption;
     delete m_opacityOption;
-    delete m_paintActionTypeOption;
 }
 
 void KisEraseOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
@@ -59,7 +56,6 @@ void KisEraseOpSettingsWidget::setConfiguration( const KisPropertiesConfiguratio
     m_brushOption->readOptionSetting(config);
     m_sizeOption->readOptionSetting(config);
     m_opacityOption->readOptionSetting(config);
-    m_paintActionTypeOption->readOptionSetting(config);
 }
 
 KisPropertiesConfiguration* KisEraseOpSettingsWidget::configuration() const
@@ -68,7 +64,6 @@ KisPropertiesConfiguration* KisEraseOpSettingsWidget::configuration() const
     m_brushOption->writeOptionSetting(config);
     m_sizeOption->writeOptionSetting(config);
     m_opacityOption->writeOptionSetting(config);
-    m_paintActionTypeOption->writeOptionSetting(config);
     return config;
 }
 
@@ -78,7 +73,6 @@ void KisEraseOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *c
     m_brushOption->writeOptionSetting(config);
     m_sizeOption->writeOptionSetting(config);
     m_opacityOption->writeOptionSetting(config);
-    m_paintActionTypeOption->writeOptionSetting(config);
 }
 
 

@@ -42,7 +42,7 @@ KisEraseOpSettings::~KisEraseOpSettings() {
 
 bool KisEraseOpSettings::paintIncremental()
 {
-    return m_optionsWidget->m_paintActionTypeOption->paintActionType() == BUILDUP;
+    return true;
 }
 
 void KisEraseOpSettings::fromXML(const QDomElement& elt)

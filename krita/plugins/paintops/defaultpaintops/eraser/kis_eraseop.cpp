@@ -112,9 +112,6 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
     QPointF hotSpot = brush->hotSpot(pScale, pScale);
     QPointF pt = info.pos() - hotSpot;
 
-    // Split the coordinates into integer plus fractional parts. The integer
-    // is where the dab will be positioned and the fractional part determines
-    // the sub-pixel positioning.
     qint32 x;
     double xFraction;
     qint32 y;

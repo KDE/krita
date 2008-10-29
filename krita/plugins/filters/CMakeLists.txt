@@ -22,4 +22,4 @@ add_subdirectory( wavefilter )
 add_subdirectory( cubismfilter )
 add_subdirectory( levelfilter )
 
-message(STATUS "Filters that still need to be fixed: CImg, bumpmap")
+message(STATUS "Filters that still need to be fixed: bumpmap")

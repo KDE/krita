@@ -103,8 +103,6 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    KisPaintDeviceSP dab = KisPaintDeviceSP(0);
-
     quint8 origOpacity = settings->m_optionsWidget->m_opacityOption->apply(painter(), info.pressure());
     KoColor origColor = settings->m_optionsWidget->m_darkenOption->apply(painter(), info.pressure());
 
@@ -125,6 +123,7 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
 
+    KisPaintDeviceSP dab = KisPaintDeviceSP(0);
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         dab = brush->image(device->colorSpace(), scale, 0.0, adjustedInfo, xFraction, yFraction);
     } else {

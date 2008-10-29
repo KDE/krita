@@ -23,6 +23,10 @@
 #include "kis_curve_option.h"
 #include <kis_paint_information.h>
 #include <krita_export.h>
+#include <kis_types.h>
+
+class QSlider;
+class KisPropertiesConfiguration;
 
 /**
  * The pressure opacity option defines a curve that is used to
@@ -33,11 +37,21 @@ class PAINTOP_EXPORT KisPressureRateOption : public KisCurveOption
 public:
     KisPressureRateOption();
 
-    KisPaintInformation apply(const KisPaintInformation & info) const;
+    /**
+     * Set the opacity of the painter based on the rate
+     * and the curve (if checked) and return the old opacity
+     * of the painter.
+     */
+    quint8 apply(quint8 opacity, qint32 sw,  qint32 sh, KisPaintDeviceSP srcDev, double pressure) const;
+
+    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+
+    void readOptionSetting(const KisPropertiesConfiguration* setting);
+
+    int rate() const;
 
 private:
-
-    int m_rate;
+    QSlider* m_rateSlider;
 };
 
 #endif

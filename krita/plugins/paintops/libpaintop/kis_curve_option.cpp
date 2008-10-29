@@ -22,10 +22,9 @@
 KisCurveOption::KisCurveOption(const QString & label, const QString& name, bool checked)
     : KisPaintOpOption(label, checked)
     , m_customCurve(false)
+    , m_curveWidget( new KCurve() )
     , m_name( name )
 {
-    m_curveWidget = new KCurve();
-//    m_curveWidget->hide();
     setConfigurationPage(m_curveWidget);
     m_curve = QVector<double>(256, 0.0);
     connect(m_curveWidget, SIGNAL(modified()), this, SLOT(transferCurve()));

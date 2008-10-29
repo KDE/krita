@@ -68,7 +68,7 @@ private slots:
 
     void transferCurve();
 
-private:
+protected:
 
     bool m_customCurve;
     KCurve * m_curveWidget;

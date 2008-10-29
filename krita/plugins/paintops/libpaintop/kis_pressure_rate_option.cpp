@@ -16,35 +16,86 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 #include "kis_pressure_rate_option.h"
-#include "kis_pressure_opacity_option.h"
+
+#include <QWidget>
+#include <QCheckBox>
+#include <QLabel>
+#include <QSlider>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+
 #include <klocale.h>
-#include <kis_painter.h>
+
+#include <kis_paint_device.h>
+#include <widgets/kcurve.h>
+
 #include <KoColor.h>
 #include <KoColorSpace.h>
 
 KisPressureRateOption::KisPressureRateOption()
-        : KisCurveOption(i18n("Rate"), "Rate")
+    : KisCurveOption(i18n("Rate"), "Rate")
 {
     QWidget* w = new QWidget;
-    QVBoxLayout* l = new QVBoxLayout;
-    QLabel* rateLabel = new QLabel(i18n("Rate: "), m_optionsWidget);
-    QSlider *rateSlider = new QSlider(0, 100, 1, 50, Qt::Horizontal, m_optionsWidget);
+    QLabel* rateLabel = new QLabel(i18n("Rate: "));
+    m_rateSlider = new QSlider(0, 100, 1, 50, Qt::Horizontal);
+    m_rateSlider->setValue( 50 );
+    QHBoxLayout* hl = new QHBoxLayout;
+    hl->addWidget( rateLabel );
+    hl->addWidget( m_rateSlider );
 
+    QVBoxLayout* vl = new QVBoxLayout;
+    vl->addLayout( hl );
+    vl->addWidget( m_curveWidget );
 
+    w->setLayout( vl );
+    setConfigurationPage( w );
+}
+
+int KisPressureRateOption::rate() const
+{
+    return m_rateSlider->value();
+}
+
+void KisPressureRateOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+{
+    KisCurveOption::writeOptionSetting( setting );
+    setting->setProperty( "PressureRate", rate() );
+}
+
+void KisPressureRateOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+{
+    KisCurveOption::readOptionSetting( setting );
+    m_rateSlider->setValue( setting->getInt( "PressureRate" ) );
 }
 
 
-KisPaintInformation KisPressureRateOption::apply(const KisPaintInformation & info) const
+#define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
+
+quint8 KisPressureRateOption::apply( quint8 opacity, qint32 sw,  qint32 sh, KisPaintDeviceSP srcdev, double pressure) const
 {
-    KisPaintInformation adjustedInfo(info);
-    if (!isChecked()) {
-        adjustedInfo.setPressure(PRESSURE_DEFAULT);
-    } else {
+    opacity = rate();
+
+    if (isChecked()) {
         if (customCurve()) {
-            adjustedInfo.setPressure(scaleToCurve(adjustedInfo.pressure()));
+            opacity = CLAMP((quint8)(double(opacity) * scaleToCurve(pressure)),
+                            OPACITY_TRANSPARENT, OPACITY_OPAQUE);
+        } else {
+            opacity = CLAMP((quint8)(double(opacity) * pressure),
+                            OPACITY_TRANSPARENT, OPACITY_OPAQUE);
         }
     }
 
-    return adjustedInfo;
+    KisRectIterator it = srcdev->createRectIterator(0, 0, sw, sh);
+    KoColorSpace* cs = srcdev->colorSpace();
+
+    while (not it.isDone()) {
+        cs->setAlpha(it.rawData(), (cs->alpha(it.rawData()) * opacity) / OPACITY_OPAQUE, 1);
+        ++it;
+    }
+
+    return OPACITY_OPAQUE - opacity;
+
 }
+

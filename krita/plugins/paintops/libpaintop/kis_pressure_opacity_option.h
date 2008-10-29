@@ -34,6 +34,11 @@ public:
 
     KisPressureOpacityOption();
 
+    /**
+     * Set the opacity of the painter based on the pressure
+     * and the curve (if checked) and return the old opacity
+     * of the painter.
+     */
     quint8 apply(KisPainter * painter, double pressure) const;
 
 };

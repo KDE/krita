@@ -18,6 +18,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_pressure_darken_option.cpp
     kis_pressure_opacity_option.cpp
     kis_pressure_size_option.cpp
+    kis_pressure_rate_option.cpp
     kis_text_brush.cc
     kis_brush_server.cpp
     kis_brush_selection_widget.cpp

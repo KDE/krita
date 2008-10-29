@@ -53,7 +53,7 @@ KisDuplicateOpSettings::~KisDuplicateOpSettings() {
 
 bool KisDuplicateOpSettings::paintIncremental()
 {
-    return false;
+    return true;
 }
 
 

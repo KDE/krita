@@ -108,6 +108,7 @@ double KisDuplicateOp::minimizeEnergy(const double* m, double* sol, int w, int h
 void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) return;
+
     if (!m_duplicateStartIsSet) {
         m_duplicateStartIsSet = true;
         m_duplicateStart = info.pos();
@@ -263,12 +264,6 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
         }
         delete [] matrix;
     }
-
-
-    // Add the dab as selection to the srcdev
-//     KisPainter copySelection(srcdev->selection().data());
-//     copySelection.bitBlt(0, 0, COMPOSITE_OVER, dab, 0, 0, sw, sh);
-//     copySelection.end();
 
     brush->mask(m_srcdev, scale, scale, 0.0, info, xFraction, yFraction);
 

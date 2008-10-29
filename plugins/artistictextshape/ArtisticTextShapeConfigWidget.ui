@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>351</width>
+    <width>337</width>
     <height>206</height>
    </rect>
   </property>
@@ -17,21 +17,6 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1" >
-    <widget class="KFontComboBox" name="fontFamily" >
-     <property name="editable" >
-      <bool>false</bool>
-     </property>
-     <property name="sizeAdjustPolicy" >
-      <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
-     </property>
-     <property name="currentFont" >
-      <font>
-       <family>DejaVu Sans</family>
-      </font>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="0" >
     <widget class="QLabel" name="label_2" >
      <property name="text" >
@@ -39,7 +24,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
+   <item row="1" column="2" >
     <widget class="KIntSpinBox" name="fontSize" />
    </item>
    <item row="2" column="0" >
@@ -49,7 +34,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1" >
+   <item row="2" column="2" >
     <widget class="QWidget" native="1" name="widget" >
      <layout class="QHBoxLayout" >
       <item>
@@ -57,7 +42,7 @@
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>61</width>
           <height>29</height>
@@ -91,7 +76,7 @@
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>40</width>
           <height>20</height>
@@ -123,7 +108,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1" >
+   <item row="3" column="2" >
     <widget class="QLineEdit" name="text" />
    </item>
    <item row="4" column="0" >
@@ -133,7 +118,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1" >
+   <item row="4" column="2" >
     <widget class="QSlider" name="startOffset" >
      <property name="maximum" >
       <number>100</number>
@@ -143,12 +128,12 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="1" >
+   <item row="5" column="2" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>269</width>
        <height>21</height>
@@ -156,9 +141,18 @@
      </property>
     </spacer>
    </item>
+   <item row="0" column="2" >
+    <widget class="KFontComboBox" name="fontFamily" >
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KFontComboBox</class>
+   <extends>KComboBox</extends>
+   <header>kfontcombobox.h</header>
+  </customwidget>
   <customwidget>
    <class>KIntSpinBox</class>
    <extends>QSpinBox</extends>

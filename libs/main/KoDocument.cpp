@@ -839,10 +839,10 @@ void KoDocument::paintChild(KoDocumentChild *child, QPainter &painter, KoView *v
             painter.fillRect(-5, h, w + 10, 5, Qt::white);
             painter.fillRect(-5, -5, 5, h + 10, Qt::white);
             painter.fillRect(w, -5, 5, h + 10, Qt::white);
-            painter.fillRect(-5, -5, w + 10, 5, Qt::BDiagPattern);
-            painter.fillRect(-5, h, w + 10, 5, Qt::BDiagPattern);
-            painter.fillRect(-5, -5, 5, h + 10, Qt::BDiagPattern);
-            painter.fillRect(w, -5, 5, h + 10, Qt::BDiagPattern);
+            painter.fillRect(-5, -5, w + 10, 5, QBrush( Qt::BDiagPattern ));
+            painter.fillRect(-5, h, w + 10, 5, QBrush( Qt::BDiagPattern) );
+            painter.fillRect(-5, -5, 5, h + 10, QBrush( Qt::BDiagPattern) );
+            painter.fillRect(w, -5, 5, h + 10, QBrush( Qt::BDiagPattern ));
 
             if (manager->selectedPart() == (KParts::Part *)child->document() &&
                     manager->selectedWidget() == (QWidget *)view) {

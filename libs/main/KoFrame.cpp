@@ -190,7 +190,7 @@ void KoFrame::paintEvent(QPaintEvent*)
     painter.begin(this);
 
     painter.setPen(Qt::black);
-    painter.fillRect(0, 0, width(), height(), Qt::BDiagPattern);
+    painter.fillRect(0, 0, width(), height(), QBrush( Qt::BDiagPattern) );
 
     if (d->m_state == Selected) {
         painter.fillRect(0, 0, 5, 5, Qt::black);

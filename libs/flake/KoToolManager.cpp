@@ -603,8 +603,10 @@ void KoToolManager::selectionChanged(QList<KoShape*> shapes)
     // there needs to be at least one shape for a tool without an activationShapeId
     // to work
     // if not change the current tool to the default tool
-    if (!(d->canvasData->activationShapeId.isNull() && shapes.size() > 0) && d->canvasData->activationShapeId != "flake/always" &&
-            ! types.contains(d->canvasData->activationShapeId)) {
+    if (!(d->canvasData->activationShapeId.isNull() && shapes.size() > 0) 
+    && d->canvasData->activationShapeId != "flake/always" 
+    && d->canvasData->activationShapeId != "flake/edit" 
+    && ! types.contains(d->canvasData->activationShapeId)) {
         switchTool(KoInteractionTool_ID, false);
     }
 

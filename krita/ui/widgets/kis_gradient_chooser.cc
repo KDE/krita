@@ -31,7 +31,6 @@
 
 #include "kis_view2.h"
 #include "kis_global.h"
-#include "kis_icon_item.h"
 #include "kis_autogradient.h"
 #include "kis_canvas_resource_provider.h"
 

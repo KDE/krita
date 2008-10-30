@@ -29,7 +29,6 @@
 #include "KoColorSpace.h"
 
 #include "kis_global.h"
-#include "kis_icon_item.h"
 #include "kis_pattern.h"
 #include "kis_resource_server_provider.h"
 

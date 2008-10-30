@@ -23,7 +23,7 @@ target_link_libraries(
     )
 
 set_target_properties(kofficegrayau8colorspace PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS kofficegrayau8colorspace  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kofficegrayau8colorspace  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### next target ###############

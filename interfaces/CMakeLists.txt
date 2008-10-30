@@ -13,7 +13,7 @@ kde4_add_library(kochart SHARED ${kochart_LIB_SRCS})
 target_link_libraries(kochart ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS}  ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDECORE_LIBS} komain )
 
 set_target_properties(kochart PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS kochart  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kochart  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############

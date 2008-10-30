@@ -111,7 +111,7 @@ if (SHOULD_BUILD_KRITA)
 
     target_link_libraries(kdeinit_krita kritaui)
 
-    install(TARGETS kdeinit_krita DESTINATION ${LIB_INSTALL_DIR})
+    install(TARGETS kdeinit_krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 
     target_link_libraries(krita ${QT_QTCORE_LIBRARY} kdeinit_krita)
 

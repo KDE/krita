@@ -12,5 +12,5 @@ target_link_libraries(kritabasicdynamicshapeprogram kritadynamicbrush)
 
 set_target_properties(kritabasicdynamicshapeprogram PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
-install(TARGETS kritabasicdynamicshapeprogram  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kritabasicdynamicshapeprogram  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

@@ -32,5 +32,5 @@ set_target_properties(kritadynamicbrush
     ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "kritaui"
 )
 
-install(TARGETS kritadynamicbrush  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kritadynamicbrush  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

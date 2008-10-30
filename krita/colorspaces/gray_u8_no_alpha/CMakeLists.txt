@@ -15,7 +15,7 @@ kde4_add_library(kritagrayscale SHARED ${kritagrayscale_LIB_SRCS})
 target_link_libraries(kritagrayscale pigmentcms )
 
 set_target_properties(kritagrayscale PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS kritagrayscale  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kritagrayscale  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### next target ###############

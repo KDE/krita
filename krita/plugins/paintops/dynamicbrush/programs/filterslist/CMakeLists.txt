@@ -22,5 +22,5 @@ target_link_libraries(kritafilterslistdynamicprogram kritadynamicbrush)
 
 set_target_properties(kritafilterslistdynamicprogram PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
-install(TARGETS kritafilterslistdynamicprogram  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kritafilterslistdynamicprogram  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

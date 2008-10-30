@@ -136,8 +136,8 @@ endif(Boost_FOUND)
 if(WIN32)
     set(LIB_INSTALL_DIR ${LIB_INSTALL_DIR}
                         RUNTIME DESTINATION ${BIN_INSTALL_DIR}
-                        LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-                        ARCHIVE DESTINATION ${LIB_INSTALL_DIR} )
+                        LIBRARY ${INSTALL_TARGETS_DEFAULT_ARGS}
+                        ARCHIVE ${INSTALL_TARGETS_DEFAULT_ARGS} )
 endif(WIN32)
 
 add_subdirectory(libs)

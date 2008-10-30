@@ -21,7 +21,7 @@ target_link_libraries(
     )
 
 set_target_properties(koffice_graya_u16 PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS koffice_graya_u16  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS koffice_graya_u16  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### next target ###############

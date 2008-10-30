@@ -12,5 +12,5 @@ target_link_libraries(kritabasicdynamiccoloringprogram kritadynamicbrush)
 
 set_target_properties(kritabasicdynamiccoloringprogram PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
-install(TARGETS kritabasicdynamiccoloringprogram  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kritabasicdynamiccoloringprogram  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

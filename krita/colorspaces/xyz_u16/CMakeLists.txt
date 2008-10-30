@@ -13,7 +13,7 @@ kde4_add_library(krita_xyz_u16 SHARED ${krita_xyz_u16_LIB_SRCS})
 target_link_libraries(krita_xyz_u16 pigmentcms )
 
 set_target_properties(krita_xyz_u16 PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS krita_xyz_u16  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS krita_xyz_u16  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### next target ###############

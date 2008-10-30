@@ -38,5 +38,5 @@ target_link_libraries(kritalibpaintop kritaui)
 
 set_target_properties(kritalibpaintop PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
-install(TARGETS kritalibpaintop  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kritalibpaintop  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

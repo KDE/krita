@@ -343,8 +343,11 @@ void KoPADocument::addShape( KoShape * shape )
 
     emit shapeAdded( shape );
 
-    page->shapeAdded( shape );
-    postAddShape( page, shape );
+    // it can happen in kpresenter notes view that there is no page
+    if ( page ) {
+        page->shapeAdded( shape );
+        postAddShape( page, shape );
+    }
 }
 
 void KoPADocument::postAddShape( KoPAPageBase * page, KoShape * shape )

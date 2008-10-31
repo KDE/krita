@@ -4,7 +4,6 @@
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2008 Emanuele Tamponi <emanuele@valinor.it>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,41 +20,48 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_COMPLEXOP_H_
-#define KIS_COMPLEXOP_H_
+#ifndef KIS_COMPLEXOP_FACTORY_H_
+#define KIS_COMPLEXOP_FACTORY_H_
 
-#include "kis_brush_based_paintop.h"
+#include <kis_paintop_factory.h>
+#include <kis_types.h>
+#include <klocale.h>
+#include <QString>
 
-class KisBrushOption;
-class KisPressureSizeOption;
-class KisPressureDarkenOption;
-class KisPressureOpacityOption;
-class KisPaintActionTypeOption;
-class KisComplexOpSettings;
+class KisPaintOp;
+class KisPainter;
+class QWidget;
+class KoInputDevice;
 class KisComplexOpSettingsWidget;
 
-class QWidget;
-class QPointF;
-class KisPainter;
-class KCurve;
-
-
-class KisComplexOp : public KisBrushBasedPaintOp
+class KisComplexOpFactory : public KisPaintOpFactory
 {
 
 public:
+    KisComplexOpFactory();
+    virtual ~KisComplexOpFactory();
 
-    KisComplexOp(const KisComplexOpSettings *settings, KisPainter * painter);
-    virtual ~KisComplexOp();
+    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
 
-    void paintAt(const KisPaintInformation& info);
-    virtual double paintLine(const KisPaintInformation &pi1,
-                             const KisPaintInformation &pi2,
-                             double savedDist = -1);
+    virtual QString id() const {
+        return "paintbrush";
+    }
+
+    virtual QString name() const {
+        return i18n("Pixel Brush");
+    }
+
+    virtual QString pixmap() {
+        return "krita-paintbrush.png";
+    }
+
+    virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
+
+    virtual KisPaintOpSettingsSP settings(KisImageSP image);
 
 private:
 
-    const KisComplexOpSettings * settings;
+    KisComplexOpSettingsWidget* const m_widget;
 };
 
-#endif // KIS_COMPLEXOP_H_
+#endif // KIS_COMPLEXOP_FACTORY_H_

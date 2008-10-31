@@ -4,7 +4,6 @@
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2008 Emanuele Tamponi <emanuele@valinor.it>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,41 +20,45 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_COMPLEXOP_H_
-#define KIS_COMPLEXOP_H_
+#ifndef KIS_COMPLEXOP_SETTINGS_WIDGET_H_
+#define KIS_COMPLEXOP_SETTINGS_WIDGET_H_
 
-#include "kis_brush_based_paintop.h"
+#include <kis_paintop_options_widget.h>
 
 class KisBrushOption;
-class KisPressureSizeOption;
-class KisPressureDarkenOption;
 class KisPressureOpacityOption;
+class KisPressureDarkenOption;
+class KisPressureSizeOption;
 class KisPaintActionTypeOption;
-class KisComplexOpSettings;
-class KisComplexOpSettingsWidget;
 
-class QWidget;
-class QPointF;
-class KisPainter;
-class KCurve;
+class KisComplexOpSettingsWidget : public KisPaintOpOptionsWidget {
 
-
-class KisComplexOp : public KisBrushBasedPaintOp
-{
+    Q_OBJECT
 
 public:
 
-    KisComplexOp(const KisComplexOpSettings *settings, KisPainter * painter);
-    virtual ~KisComplexOp();
+    KisComplexOpSettingsWidget();
 
-    void paintAt(const KisPaintInformation& info);
-    virtual double paintLine(const KisPaintInformation &pi1,
-                             const KisPaintInformation &pi2,
-                             double savedDist = -1);
+    virtual ~KisComplexOpSettingsWidget();
 
-private:
+    void setConfiguration( const KisPropertiesConfiguration * config);
 
-    const KisComplexOpSettings * settings;
+    KisPropertiesConfiguration* configuration() const;
+
+    void writeConfiguration( KisPropertiesConfiguration *config ) const;
+
+
+public:
+
+    KisBrushOption * m_brushOption;
+    KisPressureOpacityOption * m_opacityOption;
+    KisPressureDarkenOption * m_darkenOption;
+    KisPressureSizeOption * m_sizeOption;
+    KisPaintActionTypeOption * m_paintActionTypeOption;
+
+
 };
 
-#endif // KIS_COMPLEXOP_H_
+
+
+#endif // KIS_COMPLEXOP_SETTINGS_WIDGET_H_

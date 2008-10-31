@@ -17,7 +17,7 @@
  */
 
 #include "complexbrush.h"
-#include "kis_complexop.h"
+#include "kis_complexop_factory.h"
 
 #include <KGenericFactory>
 #include <kis_paintop_registry.h>

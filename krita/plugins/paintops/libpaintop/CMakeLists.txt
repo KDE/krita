@@ -23,6 +23,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_brush_server.cpp
     kis_brush_selection_widget.cpp
     kis_paint_action_type_option.cpp
+    kis_bidirectional_mixing_option.cpp
 )
 
 kde4_add_ui_files(kritalibpaintop_LIB_SRCS

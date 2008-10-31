@@ -20,8 +20,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_eraseop_settings.h"
-#include "kis_eraseop_settings_widget.h"
+#include "kis_complexop_settings.h"
+#include "kis_complexop_settings_widget.h"
 
 #include <kis_brush_option.h>
 #include <kis_paintop_options_widget.h>
@@ -30,7 +30,7 @@
 #include <kis_pressure_size_option.h>
 #include <kis_paint_action_type_option.h>
 
-KisEraseOpSettings::KisEraseOpSettings( KisEraseOpSettingsWidget* widget )
+KisComplexOpSettings::KisComplexOpSettings( KisComplexOpSettingsWidget* widget )
     : KisPaintOpSettings( widget )
 {
     Q_ASSERT( widget );
@@ -40,15 +40,15 @@ KisEraseOpSettings::KisEraseOpSettings( KisEraseOpSettingsWidget* widget )
 
 }
 
-KisEraseOpSettings::~KisEraseOpSettings() {
+KisComplexOpSettings::~KisComplexOpSettings() {
 }
 
-bool KisEraseOpSettings::paintIncremental()
+bool KisComplexOpSettings::paintIncremental()
 {
-    return true;
+    return m_optionsWidget->m_paintActionTypeOption->paintActionType() == BUILDUP;
 }
 
-void KisEraseOpSettings::fromXML(const QDomElement& elt)
+void KisComplexOpSettings::fromXML(const QDomElement& elt)
 {
     // First, call the parent class fromXML to make sure all the
     // properties are saved to the map
@@ -58,7 +58,7 @@ void KisEraseOpSettings::fromXML(const QDomElement& elt)
     m_optionsWidget->setConfiguration( this );
 }
 
-void KisEraseOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
+void KisComplexOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 {
 
     // First, make sure all the option widgets have saved their state
@@ -72,11 +72,11 @@ void KisEraseOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 }
 
 
-KisPaintOpSettingsSP KisEraseOpSettings::clone() const {
+KisPaintOpSettingsSP KisComplexOpSettings::clone() const {
 
     KisPaintOpSettings* settings = dynamic_cast<KisPaintOpSettings*>( m_optionsWidget->configuration() );
     return settings;
 
 }
 
-#include "kis_eraseop_settings.moc"
+#include "kis_complexop_settings.moc"

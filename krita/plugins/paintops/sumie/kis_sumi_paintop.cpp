@@ -103,7 +103,7 @@ double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
     Q_UNUSED(savedDist);
 
     if (!painter()) return -1;
-    //color: painter()->paintColor()
+
     KisPaintDeviceSP device = painter()->device();
     if (!device) return -1;
 

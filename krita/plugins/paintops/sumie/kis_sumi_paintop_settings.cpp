@@ -35,6 +35,8 @@ KisSumiPaintOpSettings::KisSumiPaintOpSettings(KisSumiPaintOpSettingsWidget* set
         : KisPaintOpSettings(settingsWidget)
 {
     m_options = settingsWidget;
+    // Initialize with the default settings from the widget
+    m_options->writeConfiguration( this );
 }
 
 KisPaintOpSettingsSP KisSumiPaintOpSettings::clone() const

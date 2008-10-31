@@ -4,7 +4,6 @@
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2008 Emanuele Tamponi <emanuele@valinor.it>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,41 +20,38 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_COMPLEXOP_H_
-#define KIS_COMPLEXOP_H_
+#ifndef KIS_COMPLEXOP_SETTINGS_H_
+#define KIS_COMPLEXOP_SETTINGS_H_
 
-#include "kis_brush_based_paintop.h"
+#include <kis_paintop_settings.h>
+#include <kis_types.h>
 
-class KisBrushOption;
-class KisPressureSizeOption;
-class KisPressureDarkenOption;
-class KisPressureOpacityOption;
-class KisPaintActionTypeOption;
-class KisComplexOpSettings;
+class QDomElement;
 class KisComplexOpSettingsWidget;
 
-class QWidget;
-class QPointF;
-class KisPainter;
-class KCurve;
-
-
-class KisComplexOp : public KisBrushBasedPaintOp
+class KisComplexOpSettings : public QObject, public KisPaintOpSettings
 {
+    Q_OBJECT
+
+public:
+    using KisPaintOpSettings::fromXML;
+    using KisPaintOpSettings::toXML;
+
+    KisComplexOpSettings( KisComplexOpSettingsWidget* widget );
+    virtual ~KisComplexOpSettings();
+
+    bool paintIncremental();
+
+    void fromXML(const QDomElement& elt);
+    void toXML(QDomDocument& doc, QDomElement& rootElt) const;
+
+    KisPaintOpSettingsSP clone() const;
 
 public:
 
-    KisComplexOp(const KisComplexOpSettings *settings, KisPainter * painter);
-    virtual ~KisComplexOp();
+    KisComplexOpSettingsWidget *m_optionsWidget;
 
-    void paintAt(const KisPaintInformation& info);
-    virtual double paintLine(const KisPaintInformation &pi1,
-                             const KisPaintInformation &pi2,
-                             double savedDist = -1);
-
-private:
-
-    const KisComplexOpSettings * settings;
 };
 
-#endif // KIS_COMPLEXOP_H_
+
+#endif // KIS_COMPLEXOP_SETTINGS_H_

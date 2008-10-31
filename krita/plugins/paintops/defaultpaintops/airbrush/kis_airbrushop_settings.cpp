@@ -35,6 +35,9 @@ KisAirbrushOpSettings::KisAirbrushOpSettings( KisAirbrushOpSettingsWidget* widge
 {
     Q_ASSERT( widget );
     m_optionsWidget = widget;
+    // Initialize with the default settings from the widget
+    m_optionsWidget->writeConfiguration( this );
+
 }
 
 KisAirbrushOpSettings::~KisAirbrushOpSettings() {

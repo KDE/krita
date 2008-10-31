@@ -35,6 +35,8 @@ KisDeformPaintOpSettings::KisDeformPaintOpSettings(KisDeformPaintOpSettingsWidge
         : KisPaintOpSettings(settingsWidget)
 {
     m_options = settingsWidget;
+    // Initialize with the default settings from the widget
+    m_options->writeConfiguration( this );
 }
 
 

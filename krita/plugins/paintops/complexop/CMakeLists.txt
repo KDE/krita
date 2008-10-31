@@ -3,6 +3,9 @@
 set(kritacomplexbrush_PART_SRCS
     complexbrush.cpp
     kis_complexop.cpp
+    kis_complexop_settings.cpp
+    kis_complexop_settings_widget.cpp
+    kis_complexop_factory.cpp
     )
 
 kde4_add_ui_files(kritacomplexbrush_PART_SRCS wdgbrushcurves.ui)

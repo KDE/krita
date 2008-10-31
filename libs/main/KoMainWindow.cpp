@@ -334,12 +334,11 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 
     d->m_orientation  = new KSelectAction(KIcon("view_orientation"), i18n("Splitter &Orientation"), this);
     actionCollection()->addAction("view_splitter_orientation", d->m_orientation);
-    connect(d->m_orientation, SIGNAL(triggered(bool)), this, SLOT(slotSetOrientation()));
+    connect(d->m_orientation, SIGNAL(triggered(int)), this, SLOT(slotSetOrientation()));
     QStringList items;
-    items << i18n("&Vertical")
-    << i18n("&Horizontal");
+    items << i18n("&Horizontal") << i18n("&Vertical");
     d->m_orientation->setItems(items);
-    d->m_orientation->setCurrentItem(static_cast<int>(d->m_splitter->orientation()));
+    d->m_orientation->setCurrentItem(static_cast<int>(d->m_splitter->orientation()-1));
     d->m_splitViewActionList.append(d->m_orientation);
     QAction *sep = new QAction(this);
     sep->setSeparator(true);
@@ -1561,7 +1560,7 @@ void KoMainWindow::viewFullscreen(bool fullScreen)
 void KoMainWindow::slotSetOrientation()
 {
     d->m_splitter->setOrientation(static_cast<Qt::Orientation>
-                                  (d->m_orientation->currentItem()));
+                                  (d->m_orientation->currentItem()+1));
 }
 
 void KoMainWindow::slotProgress(int value)

@@ -29,32 +29,10 @@
 
 #include "deform_brush.h"
 
-#include "kis_deformpaintopsettings.h"
+#include "kis_deform_paintop_settings.h"
 
 class QPointF;
 class KisPainter;
-
-class KisDeformPaintOpFactory : public KisPaintOpFactory
-{
-
-public:
-    KisDeformPaintOpFactory() {}
-    virtual ~KisDeformPaintOpFactory() {}
-
-    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
-    virtual QString id() const {
-        return "deformbrush";
-    }
-    virtual QString name() const {
-        return i18n("Deform brush");
-    }
-    virtual QString pixmap() {
-        return "krita-deform.png";
-    }
-    virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
-    virtual KisPaintOpSettingsSP settings(KisImageSP image);
-
-};
 
 class KisDeformPaintOp : public KisPaintOp
 {

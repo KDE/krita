@@ -16,30 +16,27 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KIS_DEFORM_PAINTOP_SETTINGS_H_
+#define KIS_DEFORM_PAINTOP_SETTINGS_H_
 
-#ifndef KIS_DEFORMPAINTOP_SETTINGS_H_
-#define KIS_DEFORMPAINTOP_SETTINGS_H_
+#include <QObject>
+#include <QList>
+#include <kis_paintop_settings.h>
+#include <kis_types.h>
 
-#include <kis_config_widget.h>
-
-#include <kis_paintop.h>
-
-#include "ui_wdgdeformoptions.h"
-#include "widgets/kis_popup_button.h"
+class QWidget;
+class KisDeformPaintOpSettingsWidget;
+class QDomElement;
+class QDomDocument;
 
 class KisDeformPaintOpSettings : public QObject, public KisPaintOpSettings
 {
     Q_OBJECT
 
 public:
-    KisDeformPaintOpSettings(QWidget * paren);
+    KisDeformPaintOpSettings(KisDeformPaintOpSettingsWidget* widget);
     virtual ~KisDeformPaintOpSettings() {}
-
-    virtual KisPaintOpSettingsSP clone() const;
-
-    KisConfigWidget * widget() const {
-        return m_optionsWidget;
-    }
+    KisPaintOpSettingsSP clone() const;
 
     using KisPropertiesConfiguration::fromXML;
     using KisPropertiesConfiguration::toXML;
@@ -47,13 +44,14 @@ public:
     virtual void fromXML(const QDomElement&);
     virtual void toXML(QDomDocument&, QDomElement&) const;
 
+    bool paintIncremental();
+
     int radius() const;
     double deformAmount() const;
     int deformAction() const;
     bool bilinear() const;
 
 private:
-    Ui::WdgDeformOptions* m_options;
-    KisConfigWidget * m_optionsWidget;
+    KisDeformPaintOpSettingsWidget* m_options;
 };
 #endif

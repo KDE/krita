@@ -1,8 +1,11 @@
 set(kritadeformpaintop_PART_SRCS
-	deformpaintop_plugin.cpp
-	kis_deformpaintop.cpp
-	kis_deformpaintopsettings.cpp
-	deform_brush.cpp	
+    deform_brush.cpp
+	deform_paintop_plugin.cpp
+	kis_deform_paintop.cpp
+	kis_deform_paintop_settings.cpp
+	kis_deform_paintop_factory.cpp
+    kis_deform_paintop_settings.cpp
+    kis_deform_paintop_settings_widget.cpp
     )
 
 kde4_add_ui_files(kritadeformpaintop_PART_SRCS wdgdeformoptions.ui )

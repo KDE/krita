@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_deformpaintop.h"
-#include "kis_deformpaintopsettings.h"
+#include "kis_deform_paintop.h"
+#include "kis_deform_paintop_settings.h"
 
 #include <cmath>
 
@@ -47,29 +47,6 @@
 
 #include "kis_datamanager.h"
 
-
-KisPaintOp * KisDeformPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image = 0)
-{
-    const KisDeformPaintOpSettings *deformSettings = dynamic_cast<const KisDeformPaintOpSettings *>(settings.data());
-    Q_ASSERT(settings == 0 || deformSettings != 0);
-
-    KisPaintOp * op = new KisDeformPaintOp(deformSettings, painter, image);
-    Q_CHECK_PTR(op);
-    return op;
-}
-
-KisPaintOpSettingsSP KisDeformPaintOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
-{
-    Q_UNUSED(inputDevice);
-    Q_UNUSED(image);
-    return new KisDeformPaintOpSettings(parent);
-}
-
-KisPaintOpSettingsSP KisDeformPaintOpFactory::settings(KisImageSP image)
-{
-    Q_UNUSED(image);
-    return new KisDeformPaintOpSettings(0);
-}
 
 KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
         : KisPaintOp(painter)

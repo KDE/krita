@@ -18,7 +18,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "deformpaintop_plugin.h"
+#include "deform_paintop_plugin.h"
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
@@ -28,7 +28,8 @@
 
 #include <kis_paintop_registry.h>
 
-#include "kis_deformpaintop.h"
+#include "kis_deform_paintop.h"
+#include "kis_deform_paintop_factory.h"
 #include "kis_global.h"
 
 typedef KGenericFactory<DeformPaintOpPlugin> DeformPaintOpPluginFactory;
@@ -48,4 +49,4 @@ DeformPaintOpPlugin::~DeformPaintOpPlugin()
 {
 }
 
-#include "deformpaintop_plugin.moc"
+#include "deform_paintop_plugin.moc"

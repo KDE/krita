@@ -32,6 +32,8 @@ set( kopageapp_LIB_SRCS
      commands/KoPAPageDeleteCommand.cpp
      commands/KoPAPageMoveCommand.cpp
      commands/KoPAChangeMasterPageCommand.cpp
+     commands/KoPADisplayMasterShapesCommand.cpp
+     commands/KoPADisplayMasterBackgroundCommand.cpp
      dialogs/KoPAMasterPageDialog.cpp
 )
 

@@ -40,6 +40,7 @@ public:
 
     void bilinear_interpolation(double x, double y );
 
+    void scale(qreal cursorX,qreal cursorY, qreal factor);
     void swirl(qreal cursorX,qreal cursorY, qreal alpha);
 
     void setRadius( int deformRadius ){

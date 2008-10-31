@@ -256,7 +256,7 @@
             <item>
              <widget class="QSpinBox" name="inkAmountSpinBox">
               <property name="value">
-               <number>4096</number>
+               <number>99</number>
               </property>
               <property name="maximum">
                <number>10000</number>
@@ -270,7 +270,7 @@
             <item>
              <widget class="QCheckBox" name="opacityCBox">
               <property name="checked">
-               <bool>true</bool>
+               <bool>false</bool>
               </property>
               <property name="text">
                <string>Opacity</string>

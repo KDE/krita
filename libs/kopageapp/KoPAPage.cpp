@@ -112,6 +112,31 @@ bool KoPAPage::displayMasterShapes()
     return m_pageProperties & DisplayMasterShapes;
 }
 
+void KoPAPage::setDisplayMasterShapes( bool display )
+{
+    if ( display ) {
+        m_pageProperties |= DisplayMasterShapes;
+    }
+    else {
+        m_pageProperties &= ~DisplayMasterShapes;
+    }
+}
+
+bool KoPAPage::displayMasterBackground()
+{
+    return m_pageProperties & UseMasterBackground;
+}
+
+void KoPAPage::setDisplayMasterBackground( bool display )
+{
+    if ( display ) {
+        m_pageProperties |= UseMasterBackground;
+    }
+    else {
+        m_pageProperties &= ~UseMasterBackground;
+    }
+}
+
 QPixmap KoPAPage::thumbnail( const QSize& size )
 {
     // don't paint null pixmap

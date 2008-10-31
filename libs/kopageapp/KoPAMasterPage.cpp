@@ -102,6 +102,22 @@ bool KoPAMasterPage::displayMasterShapes()
     return false;
 }
 
+void KoPAMasterPage::setDisplayMasterShapes( bool display )
+{
+    Q_UNUSED( display );
+}
+
+bool KoPAMasterPage::displayMasterBackground()
+{
+    return false;
+}
+
+void KoPAMasterPage::setDisplayMasterBackground( bool display )
+{
+    Q_UNUSED( display );
+}
+
+
 QPixmap KoPAMasterPage::thumbnail( const QSize& size )
 {
     // don't paint null pixmap

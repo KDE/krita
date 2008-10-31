@@ -86,6 +86,24 @@ public:
      */
     virtual bool displayMasterShapes() = 0;
 
+    /**
+     * Set if the master shapes should be displayed
+     *
+     * For master pages this does nothing
+     */
+    virtual void setDisplayMasterShapes( bool display ) = 0;
+
+    /**
+     * Get if master page background should be used
+     *
+     * For master pages this always returns false
+     *
+     * @return true if master page background should be used
+     */
+    virtual bool displayMasterBackground() = 0;
+
+    virtual void setDisplayMasterBackground( bool display ) = 0;
+
     virtual QPixmap thumbnail( const QSize& size = QSize( 512, 512 ) ) = 0;
 
     /// reimplemented

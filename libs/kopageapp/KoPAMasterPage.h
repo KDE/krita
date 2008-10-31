@@ -46,6 +46,15 @@ public:
     virtual bool displayMasterShapes();
 
     /// reimplemented
+    virtual void setDisplayMasterShapes( bool display );
+
+    /// reimplemented
+    virtual bool displayMasterBackground();
+
+    /// reimplemented
+    virtual void setDisplayMasterBackground( bool display );
+
+    /// reimplemented
     virtual QPixmap thumbnail( const QSize& size = QSize( 512, 512 ) );
 
 protected:

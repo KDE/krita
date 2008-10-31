@@ -36,7 +36,7 @@ KisBidirectionalMixingOption::KisBidirectionalMixingOption()
         : KisPaintOpOption(i18n("Mixing"), false)
 {
     m_checkable = true;
-    m_optionWidget = new QLabel("The mixing option mixes the paint on the brush with that on the canvas.");
+    m_optionWidget = new QLabel(i18n("The mixing option mixes the paint on the brush with that on the canvas."));
     m_optionWidget->hide();
     setConfigurationPage(m_optionWidget);
 }

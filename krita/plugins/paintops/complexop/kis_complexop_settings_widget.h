@@ -30,6 +30,7 @@ class KisPressureOpacityOption;
 class KisPressureDarkenOption;
 class KisPressureSizeOption;
 class KisPaintActionTypeOption;
+class KisBidirectionalMixingOption;
 
 class KisComplexOpSettingsWidget : public KisPaintOpOptionsWidget {
 
@@ -55,6 +56,8 @@ public:
     KisPressureDarkenOption * m_darkenOption;
     KisPressureSizeOption * m_sizeOption;
     KisPaintActionTypeOption * m_paintActionTypeOption;
+    KisBidirectionalMixingOption * m_bidiOption;
+
 
 
 };

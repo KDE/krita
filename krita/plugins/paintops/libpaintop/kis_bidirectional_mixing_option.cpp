@@ -48,6 +48,8 @@ KisBidirectionalMixingOption::~KisBidirectionalMixingOption()
 
 void KisBidirectionalMixingOption::apply(KisPaintDeviceSP dab, KisPaintDeviceSP device, KisPainter* painter, qint32 sx, qint32 sy, qint32 sw, qint32 sh, quint8 pressure, const QRect& dstRect)
 {
+    if (!isChecked()) return;
+
     KoColorSpace *cs = dab->colorSpace();
     KisPaintDeviceSP canvas = new KisPaintDevice(cs);
     KisPainter p(canvas);

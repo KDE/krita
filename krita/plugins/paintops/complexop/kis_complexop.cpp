@@ -56,6 +56,7 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_paint_action_type_option.h>
+#include <kis_bidirectional_mixing_option.h>
 
 #include <kis_complexop_settings.h>
 #include <kis_complexop_settings_widget.h>
@@ -133,6 +134,8 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
         color.convertTo(dab->colorSpace());
         brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
     }
+
+    settings->m_optionsWidget->m_bidiOption->apply(dab, device, painter(), sx, sy, sw, sh, adjustedInfo.pressure(), dstRect);
 
     painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab, painter()->opacity(), sx, sy, sw, sh);
 

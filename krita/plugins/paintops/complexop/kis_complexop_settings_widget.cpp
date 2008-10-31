@@ -30,22 +30,25 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_paint_action_type_option.h>
+#include <kis_bidirectional_mixing_option.h>
 
 KisComplexOpSettingsWidget::KisComplexOpSettingsWidget()
 {
     setObjectName("brush option widget");
 
-    m_brushOption = new KisBrushOption();
-    m_sizeOption = new KisPressureSizeOption();
-    m_opacityOption = new KisPressureOpacityOption();
-    m_darkenOption = new KisPressureDarkenOption();
-    m_paintActionTypeOption = new KisPaintActionTypeOption();
+    m_brushOption = new KisBrushOption;
+    m_sizeOption = new KisPressureSizeOption;
+    m_opacityOption = new KisPressureOpacityOption;
+    m_darkenOption = new KisPressureDarkenOption;
+    m_paintActionTypeOption = new KisPaintActionTypeOption;
+    m_bidiOption = new KisBidirectionalMixingOption;
 
     addPaintOpOption(m_brushOption);
     addPaintOpOption(m_sizeOption);
     addPaintOpOption(m_opacityOption);
     addPaintOpOption(m_darkenOption);
     addPaintOpOption(m_paintActionTypeOption);
+    addPaintOpOption(m_bidiOption);
 
 }
 
@@ -56,6 +59,7 @@ KisComplexOpSettingsWidget::~KisComplexOpSettingsWidget()
     delete m_opacityOption;
     delete m_darkenOption;
     delete m_paintActionTypeOption;
+    delete m_bidiOption;
 }
 
 void KisComplexOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
@@ -65,16 +69,13 @@ void KisComplexOpSettingsWidget::setConfiguration( const KisPropertiesConfigurat
     m_opacityOption->readOptionSetting(config);
     m_darkenOption->readOptionSetting(config);
     m_paintActionTypeOption->readOptionSetting(config);
+    m_bidiOption->readOptionSetting(config);
 }
 
 KisPropertiesConfiguration* KisComplexOpSettingsWidget::configuration() const
 {
     KisComplexOpSettings *config = new KisComplexOpSettings(const_cast<KisComplexOpSettingsWidget*>( this ));
-    m_brushOption->writeOptionSetting(config);
-    m_sizeOption->writeOptionSetting(config);
-    m_opacityOption->writeOptionSetting(config);
-    m_darkenOption->writeOptionSetting(config);
-    m_paintActionTypeOption->writeOptionSetting(config);
+    writeConfiguration(config);
     return config;
 }
 
@@ -86,6 +87,7 @@ void KisComplexOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration 
     m_opacityOption->writeOptionSetting(config);
     m_darkenOption->writeOptionSetting(config);
     m_paintActionTypeOption->writeOptionSetting(config);
+    m_bidiOption->writeOptionSetting(config);
 }
 
 

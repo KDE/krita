@@ -247,7 +247,9 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
     if (preset != 0 && preset->settings() && preset->settings()->widget()) {
         m_optionWidget = preset->settings()->widget();
         // XXX: remove this ugliness in 2.1
-        m_optionWidget->setConfiguration(const_cast<KisPaintOpSettings*>(preset->settings().data()));
+        if ( !preset->settings()->getProperties().isEmpty() ) {
+            m_optionWidget->setConfiguration(const_cast<KisPaintOpSettings*>(preset->settings().data()));
+        }
         m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
     } else {
         m_presetsPopup->setPaintOpSettingsWidget(0);

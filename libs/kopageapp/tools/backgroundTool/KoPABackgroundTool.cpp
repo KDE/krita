@@ -34,6 +34,7 @@
 #include <KoPointerEvent.h>
 
 #include "KoPAMasterPageDocker.h"
+#include "KoPABackgroundToolWidget.h"
 
 KoPABackgroundTool::KoPABackgroundTool( KoCanvasBase *canvas )
 : KoTool( canvas )
@@ -83,15 +84,15 @@ void KoPABackgroundTool::mouseReleaseEvent( KoPointerEvent *event )
 
 QMap<QString, QWidget *> KoPABackgroundTool::createOptionWidgets()
 {
+    KoPABackgroundToolWidget * widget = new KoPABackgroundToolWidget();
+    QMap<QString, QWidget *> widgets;
+    widgets.insert( i18n("Background Tool"), widget );
+    QLabel dummy4( i18n("Use the styles docker to manipulate the backgound.") );
+#if 0
     KoPAMasterPageDocker *masterPageDocker = new KoPAMasterPageDocker();
     masterPageDocker->setView( static_cast<KoPACanvas *>(m_canvas)->koPAView() );
-
-    QLabel dummy1( i18n("Use master background") );
-    QLabel dummy2( i18n("Display shapes of master") );
-    QLabel dummy3( i18n("Set background image") );
-    QLabel dummy4( i18n("Use the styles docker to manipulate the backgound.") );
-    QMap<QString, QWidget *> widgets;
     widgets.insert( i18n("Master Page"), masterPageDocker );
+#endif
     return widgets;
 }
 

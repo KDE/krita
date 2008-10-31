@@ -4,11 +4,15 @@ set(kopabackgroundtool_PART_SRCS
     Plugin.cpp
     KoPABackgroundTool.cpp
     KoPABackgroundToolFactory.cpp
+    KoPABackgroundToolWidget.cpp
     KoPAMasterPageDocker.cpp
-    )
+)
 
 
-#kde4_add_ui_files(kpresentertoolanimation_PART_SRCS wdg_tool_crop.ui)
+kde4_add_ui_files(kopabackgroundtool_PART_SRCS
+    BackgroundToolWidget.ui
+)
+
 
 kde4_add_plugin(kopabackgroundtool ${kopabackgroundtool_PART_SRCS})
 
@@ -21,7 +25,7 @@ target_link_libraries(
     ${KDE4_PHONON_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${QT_QT3SUPPORT_LIBRARY}
-    )
+)
 
 install(TARGETS kopabackgroundtool  DESTINATION ${PLUGIN_INSTALL_DIR})
 

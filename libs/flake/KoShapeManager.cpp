@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -51,6 +51,7 @@ public:
     }
 
     QList<KoShape *> shapes;
+    QList<KoShape *> additionalShapes; // these are shapes that are only handled for updates
     KoSelection * selection;
     KoCanvasBase * canvas;
     KoRTree<KoShape *> tree;
@@ -76,8 +77,12 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
 
 KoShapeManager::~KoShapeManager()
 {
-    foreach(KoShape *shape, d->shapes)
-    shape->removeShapeManager(this);
+    foreach(KoShape *shape, d->shapes) {
+        shape->removeShapeManager(this);
+    }
+    foreach(KoShape *shape, d->additionalShapes) {
+        shape->removeShapeManager(this);
+    }
     delete d;
 }
 
@@ -126,6 +131,17 @@ void KoShapeManager::add(KoShape *shape, bool repaint)
     }
 }
 
+void KoShapeManager::addAdditional(KoShape *shape)
+{
+    if ( shape ) {
+        if (d->additionalShapes.contains(shape)) {
+            return;
+        }
+        shape->addShapeManager(this);
+        d->additionalShapes.append(shape);
+    }
+}
+
 void KoShapeManager::remove(KoShape *shape)
 {
     shape->update();
@@ -142,6 +158,14 @@ void KoShapeManager::remove(KoShape *shape)
         foreach(KoShape* containerShape, container->iterator()) {
             remove(containerShape);
         }
+    }
+}
+
+void KoShapeManager::removeAdditional(KoShape *shape)
+{
+    if ( shape ) {
+        shape->removeShapeManager(this);
+        d->additionalShapes.removeAll(shape);
     }
 }
 
@@ -295,8 +319,9 @@ void KoShapeManager::update(QRectF &rect, const KoShape *shape, bool selectionHa
 void KoShapeManager::notifyShapeChanged(KoShape * shape)
 {
     Q_ASSERT(shape);
-    if (d->aggregate4update.contains(shape))
+    if (d->aggregate4update.contains(shape) || d->additionalShapes.contains(shape)) {
         return;
+    }
     d->aggregate4update.insert(shape);
     d->shapeIndexesBeforeUpdate.insert(shape, shape->zIndex());
 

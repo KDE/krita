@@ -442,7 +442,9 @@ void KoPAView::setActivePage( KoPAPageBase* page )
     if ( !page )
         return;
 
+    shapeManager()->removeAdditional( m_activePage );
     m_activePage = page;
+    shapeManager()->addAdditional( m_activePage );
     QList<KoShape*> shapes = page->iterator();
     shapeManager()->setShapes( shapes, false );
     //Make the top most layer active

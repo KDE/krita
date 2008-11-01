@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -83,10 +83,24 @@ public:
     void add(KoShape *shape);
 
     /**
+     * Add an additional shape to the manager.
+     *
+     * For additional shapes only updates are handled
+     */
+    void addAdditional(KoShape *shape);
+
+    /**
      * Remove a KoShape from this manager
      * @param shape the shape to remove
      */
     void remove(KoShape *shape);
+
+    /**
+     * Remove an additional shape
+     *
+     * For additional shapes only updates are handled
+     */
+    void removeAdditional(KoShape *shape);
 
     /// return the selection shapes for this shapeManager
     KoSelection * selection() const;

@@ -125,17 +125,34 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     } else {
         dab = cachedDab();
         KoColor color = painter()->paintColor();
-//        color.convertTo(dab->convertTo(KoColorSpaceRegistry::instance()->alpha8()));
+        dab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
         brush->mask(dab, color, scale, pScale, 0.0, info, xFraction, yFraction);
     }
-
 
     qint32 sw = dab->extent().width();
     qint32 sh = dab->extent().height();
 
+    /* To smudge, one does the following:
+         * at first, initialize a temporary paint device with a copy of the original (dab-sized piece, really).
+         * all other times:
+             reduce the transparancy of the temporary paint device so as to let it mix gradually
+         * combine the temp device with the piece the brush currently is 'painting', according to a mix (opacity)
+             note that in the first step, this does the actual copying of the data
+         * this combination is then composited upon the actual image
+       TODO: what happened exactly in 1.6 (and should happen now) when the dab resizes halfway due to pressure?
+    */
     int opacity = OPACITY_OPAQUE;
     if (!m_firstRun) {
         opacity = settings->m_optionsWidget->m_rateOption->apply( opacity, sw, sh, m_srcdev, adjustedInfo.pressure() );
+
+        KisRectIterator it = m_srcdev->createRectIterator(0, 0, sw, sh);
+        KoColorSpace* cs = m_srcdev->colorSpace();
+        while(!it.isDone()) {
+            cs->setAlpha(it.rawData(), (cs->alpha(it.rawData()) * opacity) / OPACITY_OPAQUE, 1);
+            ++it;
+        }
+
+        opacity = OPACITY_OPAQUE - opacity;
     } else {
         m_firstRun = false;
     }
@@ -146,8 +163,14 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
 
     m_target = new KisPaintDevice(device->colorSpace(), "duplicate target dev");
 
+    // Looks hacky, but we lost bltMask, or the ability to easily convert alpha8 paintdev to selection?
+    KisSelectionSP dabAsSelection = new KisSelection();
+    copyPainter.begin(dabAsSelection);
+    copyPainter.bitBlt(0, 0, COMPOSITE_COPY, dab, OPACITY_OPAQUE, 0, 0, sw, sh);
+    copyPainter.end();
+
     copyPainter.begin(m_target);
-//    copyPainter.bltSelection(0, 0, COMPOSITE_OVER, m_srcdev, dab, OPACITY_OPAQUE, 0, 0, sw, sh);
+    copyPainter.bltSelection(0, 0, COMPOSITE_OVER, m_srcdev, dabAsSelection, OPACITY_OPAQUE, 0, 0, sw, sh);
     copyPainter.end();
 
     qint32 sx = dstRect.x() - x;
@@ -157,7 +180,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
 
     painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_target, painter()->opacity(), sx, sy, sw, sh);
 
-    painter()->setOpacity(origOpacity);
+    //painter()->setOpacity(origOpacity);
 }
 
 double KisSmudgeOp::paintLine(const KisPaintInformation &pi1,

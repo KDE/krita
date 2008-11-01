@@ -44,7 +44,7 @@ KisSmudgeOpSettings::~KisSmudgeOpSettings() {
 
 bool KisSmudgeOpSettings::paintIncremental()
 {
-    return false;
+    return true;
 }
 
 void KisSmudgeOpSettings::fromXML(const QDomElement& elt)

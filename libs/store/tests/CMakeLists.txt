@@ -5,25 +5,23 @@ set(storage_test_SRCS storage_test.cpp )
 
 kde4_add_unit_test(storage_test TESTNAME libs-store-storage_test ${storage_test_SRCS})
 
-target_link_libraries(storage_test  ${KDE4_KDECORE_LIBS} kostore )
+target_link_libraries(storage_test kostore )
 
 ########### next target ###############
 
 set(storage_test2_SRCS storage_test2.cpp )
 
-
 kde4_add_unit_test(storage_test2 TESTNAME libs-store-storage_test2 ${storage_test2_SRCS})
 
-target_link_libraries(storage_test2  ${KDE4_KDECORE_LIBS} kostore )
+target_link_libraries(storage_test2 kostore )
 
 ########### next target ###############
 
-set(xmlwritertest_SRCS xmlwritertest.cpp )
+set(xmlwritertest_SRCS TestXmlWriter.cpp )
 
+kde4_add_unit_test(TestXmlWriter TESTNAME libs-store-testxmlwriter ${xmlwritertest_SRCS})
 
-kde4_add_unit_test(xmlwritertest TESTNAME libs-store-xmlwritertest ${xmlwritertest_SRCS})
-
-target_link_libraries(xmlwritertest  ${KDE4_KDECORE_LIBS} kostore ${QT_QT3SUPPORT_LIBRARY})
+target_link_libraries(TestXmlWriter kostore ${QT_QTTEST_LIBRARY} ${QT_QT3SUPPORT_LIBRARY})
 
 ########### next target ###############
 
@@ -41,7 +39,7 @@ set(storedroptest_SRCS storedroptest.cpp )
 
 kde4_add_executable(storedroptest TEST ${storedroptest_SRCS})
 
-target_link_libraries(storedroptest  ${KDE4_KDECORE_LIBS} kostore ${QT_QT3SUPPORT_LIBRARY})
+target_link_libraries(storedroptest kostore ${QT_QT3SUPPORT_LIBRARY})
 
 ########### next target ###############
 
@@ -50,6 +48,6 @@ set(kodomtest_SRCS kodomtest.cpp )
 
 kde4_add_unit_test(kodomtest TESTNAME libs-store-kodomtest ${kodomtest_SRCS})
 
-target_link_libraries(kodomtest ${KDE4_KDECORE_LIBS} kostore ${QT_QTTEST_LIBRARY} )
+target_link_libraries(kodomtest kostore ${QT_QTTEST_LIBRARY} )
 
 ########### end ###############

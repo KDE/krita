@@ -31,7 +31,8 @@
 #include <kis_pressure_size_option.h>
 #include <kis_paint_action_type_option.h>
 
-KisPenOpSettingsWidget::KisPenOpSettingsWidget()
+KisPenOpSettingsWidget::KisPenOpSettingsWidget(QWidget* parent)
+    : KisPaintOpOptionsWidget(parent)
 {
     setObjectName("brush option widget");
 

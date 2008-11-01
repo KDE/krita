@@ -20,55 +20,58 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_airbrushop_settings_widget.h"
-#include "kis_airbrushop_settings.h"
+#include "kis_filterop_settings_widget.h"
+#include "kis_filterop_settings.h"
 #include <widgets/kcurve.h>
 #include <kis_properties_configuration.h>
 #include <kis_brush_option.h>
 #include <kis_paintop_options_widget.h>
-#include <kis_pressure_darken_option.h>
-#include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
-#include <kis_paint_action_type_option.h>
+#include <kis_filter_option.h>
 
-KisAirbrushOpSettingsWidget::KisAirbrushOpSettingsWidget(QWidget* parent)
-    : KisPaintOpOptionsWidget(parent)
+KisFilterOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
+    : KisPaintOpSettingsWidget(parent)
 {
-    setObjectName("airbrush option widget");
+    setObjectName("filter option widget");
 
-    m_brushOption = new KisBrushOption();
-
-    m_brushOption->setAutoBrush( true );
-    m_brushOption->setPredefinedBrushes( false );
-    m_brushOption->setCustomBrush( false );
-    m_brushOption->setTextBrush( false );
+    m_brushOption = new KisFilterOption();
+    m_sizeOption = new KisPressureSizeOption();
+    m_filterOption = new KisFilterOption();
 
     addPaintOpOption(m_brushOption);
+    addPaintOpOption(m_sizeOption);
+    addPaintOpOption(m_filterOption);
 
 }
 
-KisAirbrushOpSettingsWidget::~KisAirbrushOpSettingsWidget()
+KisFilterOpSettingsWidget::~KisBrushOpSettingsWidget()
 {
     delete m_brushOption;
+    delete m_sizeOption;
+    delete m_filterOption;
 }
 
-void KisAirbrushOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
+void KisFilterOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
 {
     m_brushOption->readOptionSetting(config);
+    m_sizeOption->readOptionSetting(config);
+    m_filterOption->readOptionSetting(config);
 }
 
-KisPropertiesConfiguration* KisAirbrushOpSettingsWidget::configuration() const
+KisPropertiesConfiguration* KisFilterOpSettingsWidget::configuration() const
 {
-    KisAirbrushOpSettings *config = new KisAirbrushOpSettings(const_cast<KisAirbrushOpSettingsWidget*>( this ));
-    m_brushOption->writeOptionSetting(config);
+    KisFilterOpSettings *config = new KisBrushOpSettings(const_cast<KisBrushOpSettingsWidget*>( this ));
+    writeConfiguration(config);
     return config;
 }
 
-void KisAirbrushOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
+void KisFilterOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
 {
     config->clearProperties();
     m_brushOption->writeOptionSetting(config);
+    m_sizeOption->writeOptionSetting(config);
+    m_filterOption->writeOptionSetting(config);
 }
 
 
-#include "kis_airbrushop_settings_widget.moc"
+#include "kis_filterop_settings_widget.moc"

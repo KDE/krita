@@ -37,7 +37,7 @@ class KisAirbrushOpSettingsWidget : public KisPaintOpOptionsWidget {
 
 public:
 
-    KisAirbrushOpSettingsWidget();
+    KisAirbrushOpSettingsWidget(QWidget* parent = 0);
 
     ~KisAirbrushOpSettingsWidget();
 

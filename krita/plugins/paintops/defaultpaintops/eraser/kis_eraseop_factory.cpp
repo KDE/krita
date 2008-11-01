@@ -31,7 +31,7 @@
 #include "kis_eraseop.h"
 
 KisEraseOpFactory::KisEraseOpFactory()
-    : m_widget( new KisEraseOpSettingsWidget() )
+    : m_widget( new KisEraseOpSettingsWidget)
 {
 }
 

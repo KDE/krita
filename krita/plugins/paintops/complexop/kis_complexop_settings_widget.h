@@ -38,7 +38,7 @@ class KisComplexOpSettingsWidget : public KisPaintOpOptionsWidget {
 
 public:
 
-    KisComplexOpSettingsWidget();
+    KisComplexOpSettingsWidget(QWidget* parent = 0);
 
     virtual ~KisComplexOpSettingsWidget();
 

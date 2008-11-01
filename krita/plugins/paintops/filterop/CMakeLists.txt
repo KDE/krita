@@ -1,17 +1,13 @@
-
-
 set(kritafilterop_PART_SRCS
-    filterop.cc
-    kis_filterop.cc
+    filterop.cpp
+    kis_filterop.cpp
     kis_filterop_settings.cpp
+    kis_filterop_factory.cpp
+    kis_filterop_settings_widget.cpp
     )
 
 
-kde4_add_ui_files(kritafilterop_PART_SRCS FilterOpOptionsWidget.ui)
-
 kde4_add_plugin(kritafilterop ${kritafilterop_PART_SRCS})
-
-
 
 target_link_libraries(kritafilterop kritaui kritalibpaintop)
 
@@ -23,5 +19,5 @@ install(TARGETS kritafilterop  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  kritafilterop.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 install( FILES
-    filterop.png
+    krita-filterop.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/images)

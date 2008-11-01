@@ -32,9 +32,10 @@
 #include <kis_paint_action_type_option.h>
 #include <kis_bidirectional_mixing_option.h>
 
-KisComplexOpSettingsWidget::KisComplexOpSettingsWidget()
+KisComplexOpSettingsWidget::KisComplexOpSettingsWidget(QWidget* parent)
+    : KisPaintOpOptionsWidget(parent)
 {
-    setObjectName("brush option widget");
+    setObjectName("mixing brush option widget");
 
     m_brushOption = new KisBrushOption;
     m_sizeOption = new KisPressureSizeOption;

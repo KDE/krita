@@ -27,7 +27,7 @@
 class KisDeformPaintOpSettingsWidget : public KisPaintOpSettingsWidget
 {
 public:
-    KisDeformPaintOpSettingsWidget();
+    KisDeformPaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisDeformPaintOpSettingsWidget();
 
     void setConfiguration( const KisPropertiesConfiguration * config);

@@ -28,7 +28,7 @@
 class KisSumiPaintOpSettingsWidget : public KisPaintOpSettingsWidget
 {
 public:
-    KisSumiPaintOpSettingsWidget();
+    KisSumiPaintOpSettingsWidget(QWidget* parent = 0);
 
     virtual ~KisSumiPaintOpSettingsWidget();
 

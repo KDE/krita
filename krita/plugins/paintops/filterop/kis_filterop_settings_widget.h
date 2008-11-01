@@ -20,26 +20,24 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_SMUDGEOP_SETTINGS_WIDGET_H_
-#define KIS_SMUDGEOP_SETTINGS_WIDGET_H_
+#ifndef KIS_FILTEROP_SETTINGS_WIDGET_H_
+#define KIS_FILTEROP_SETTINGS_WIDGET_H_
 
 #include <kis_paintop_options_widget.h>
 
 class KisBrushOption;
-class KisPressureOpacityOption;
-class KisPressureDarkenOption;
+class KisFilterOption;
 class KisPressureSizeOption;
-class KisPressureRateOption;
 
-class KisSmudgeOpSettingsWidget : public KisPaintOpOptionsWidget {
+class KisFilterOpSettingsWidget : public KisPaintOpOptionsWidget {
 
     Q_OBJECT
 
 public:
 
-    KisSmudgeOpSettingsWidget(QWidget* parent = 0);
+    KisFilterOpSettingsWidget(QWidget* parent = 0);
 
-    ~KisSmudgeOpSettingsWidget();
+    virtual ~KisFilterOpSettingsWidget();
 
     void setConfiguration( const KisPropertiesConfiguration * config);
 
@@ -47,18 +45,12 @@ public:
 
     void writeConfiguration( KisPropertiesConfiguration *config ) const;
 
-
 public:
 
-    KisBrushOption * m_brushOption;
-    KisPressureOpacityOption * m_opacityOption;
-    KisPressureDarkenOption * m_darkenOption;
+    KisBrushOption* m_brushOption;
+    KisFilterOption* m_filterOption;
     KisPressureSizeOption * m_sizeOption;
-    KisPressureRateOption * m_rateOption;
-
 
 };
 
-
-
-#endif // KIS_SMUDGEOP_SETTINGS_WIDGET_H_
+#endif // KIS_FILTEROP_SETTINGS_WIDGET_H_

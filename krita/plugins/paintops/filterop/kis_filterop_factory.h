@@ -20,45 +20,48 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_SMUDGEOP_SETTINGS_WIDGET_H_
-#define KIS_SMUDGEOP_SETTINGS_WIDGET_H_
+#ifndef KIS_FILTEROP_FACTORY_H_
+#define KIS_FILTEROP_FACTORY_H_
 
-#include <kis_paintop_options_widget.h>
+#include <kis_paintop_factory.h>
+#include <kis_types.h>
+#include <klocale.h>
+#include <QString>
 
-class KisBrushOption;
-class KisPressureOpacityOption;
-class KisPressureDarkenOption;
-class KisPressureSizeOption;
-class KisPressureRateOption;
+class KisPaintOp;
+class KisPainter;
+class QWidget;
+class KoInputDevice;
+class KisFilterOpSettingsWidget;
 
-class KisSmudgeOpSettingsWidget : public KisPaintOpOptionsWidget {
-
-    Q_OBJECT
-
-public:
-
-    KisSmudgeOpSettingsWidget(QWidget* parent = 0);
-
-    ~KisSmudgeOpSettingsWidget();
-
-    void setConfiguration( const KisPropertiesConfiguration * config);
-
-    KisPropertiesConfiguration* configuration() const;
-
-    void writeConfiguration( KisPropertiesConfiguration *config ) const;
-
+class KisFilterOpFactory : public KisPaintOpFactory
+{
 
 public:
+    KisFilterOpFactory();
+    virtual ~KisFilterOpFactory();
 
-    KisBrushOption * m_brushOption;
-    KisPressureOpacityOption * m_opacityOption;
-    KisPressureDarkenOption * m_darkenOption;
-    KisPressureSizeOption * m_sizeOption;
-    KisPressureRateOption * m_rateOption;
+    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
 
+    virtual QString id() const {
+        return "filter";
+    }
 
+    virtual QString name() const {
+        return i18n("Filter Brush");
+    }
+
+    virtual QString pixmap() {
+        return "krita-filterop.png";
+    }
+
+    virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
+
+    virtual KisPaintOpSettingsSP settings(KisImageSP image);
+
+private:
+
+    KisFilterOpSettingsWidget* const m_widget;
 };
 
-
-
-#endif // KIS_SMUDGEOP_SETTINGS_WIDGET_H_
+#endif // KIS_FILTEROP_FACTORY_H_

@@ -37,7 +37,7 @@ class KisBrushOpSettingsWidget : public KisPaintOpOptionsWidget {
 
 public:
 
-    KisBrushOpSettingsWidget();
+    KisBrushOpSettingsWidget(QWidget* parent = 0);
 
     virtual ~KisBrushOpSettingsWidget();
 

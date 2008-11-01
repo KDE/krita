@@ -32,8 +32,8 @@
 
 #include "kis_sumi_paintop_settings.h"
 
-KisSumiPaintOpSettingsWidget:: KisSumiPaintOpSettingsWidget()
-    : KisPaintOpSettingsWidget()
+KisSumiPaintOpSettingsWidget:: KisSumiPaintOpSettingsWidget(QWidget* parent)
+    : KisPaintOpSettingsWidget(parent)
 {
     m_options = new Ui::WdgSumieOptions();
     m_options->setupUi(this);

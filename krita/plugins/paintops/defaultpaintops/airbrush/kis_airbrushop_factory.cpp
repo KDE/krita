@@ -31,7 +31,7 @@
 #include "kis_airbrushop.h"
 
 KisAirbrushOpFactory::KisAirbrushOpFactory()
-    : m_widget( new KisAirbrushOpSettingsWidget() )
+    : m_widget( new KisAirbrushOpSettingsWidget )
 {
 }
 

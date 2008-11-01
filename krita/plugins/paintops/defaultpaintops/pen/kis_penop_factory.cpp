@@ -31,7 +31,7 @@
 #include "kis_penop.h"
 
 KisPenOpFactory::KisPenOpFactory()
-    : m_widget( new KisPenOpSettingsWidget() )
+    : m_widget( new KisPenOpSettingsWidget )
 {
 }
 

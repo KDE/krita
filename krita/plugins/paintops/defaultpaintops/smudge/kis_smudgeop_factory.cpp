@@ -31,7 +31,7 @@
 #include "kis_smudgeop.h"
 
 KisSmudgeOpFactory::KisSmudgeOpFactory()
-    : m_widget( new KisSmudgeOpSettingsWidget() )
+    : m_widget( new KisSmudgeOpSettingsWidget )
 {
 }
 

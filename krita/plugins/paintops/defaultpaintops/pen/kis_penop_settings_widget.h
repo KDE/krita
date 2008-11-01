@@ -37,7 +37,7 @@ class KisPenOpSettingsWidget : public KisPaintOpOptionsWidget {
 
 public:
 
-    KisPenOpSettingsWidget();
+    KisPenOpSettingsWidget(QWidget* parent = 0);
 
     ~KisPenOpSettingsWidget();
 

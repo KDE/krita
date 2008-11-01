@@ -35,7 +35,7 @@ class KisDuplicateOpSettingsWidget : public KisPaintOpOptionsWidget {
 
 public:
 
-    KisDuplicateOpSettingsWidget();
+    KisDuplicateOpSettingsWidget(QWidget* parent = 0);
 
     ~KisDuplicateOpSettingsWidget();
 

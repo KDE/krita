@@ -33,7 +33,8 @@
 #include <kis_pressure_size_option.h>
 
 
-KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget()
+KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget(QWidget* parent)
+    : KisPaintOpOptionsWidget(parent)
 {
     setObjectName("brush option widget");
 

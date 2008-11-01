@@ -20,53 +20,53 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_duplicateop_factory.h"
+#include "kis_filterop_factory.h"
 
 #include <kis_painter.h>
 #include <kis_paintop_settings.h>
 #include <kis_image.h>
 
-#include "kis_duplicateop_settings_widget.h"
-#include "kis_duplicateop_settings.h"
-#include "kis_duplicateop.h"
+#include "kis_filterop_settings_widget.h"
+#include "kis_filterop_settings.h"
+#include "kis_filterop.h"
 
-KisDuplicateOpFactory::KisDuplicateOpFactory()
-    : m_widget( new KisDuplicateOpSettingsWidget)
+KisFilterOpFactory::KisFilterOpFactory()
+    : m_widget( new KisFilterOpSettingsWidget )
+{
+}
+
+KisFilterOpFactory::~KisBrushOpFactory()
 {
 }
 
 
-KisDuplicateOpFactory::~KisDuplicateOpFactory()
-{
-    // XXX? Delete our widget?
-}
-
-
-KisPaintOp * KisDuplicateOpFactory::createOp(const KisPaintOpSettingsSP settings,
+KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettingsSP settings,
                                          KisPainter * painter,
                                          KisImageSP image)
 {
     Q_UNUSED(image);
     Q_ASSERT( settings->widget() );
 
-    const KisDuplicateOpSettings *duplicateopSettings = dynamic_cast<const KisDuplicateOpSettings *>(settings.data());
-    Q_ASSERT(settings != 0 && duplicateopSettings != 0);
-    m_widget->setConfiguration(const_cast<KisDuplicateOpSettings*>(duplicateopSettings));
+    const KisFilterOpSettings *filteropSettings = dynamic_cast<const KisFilterOpSettings *>(settings.data());
+    Q_ASSERT(settings != 0 && filteropSettings != 0);
+    m_widget->setConfiguration(const_cast<KisFilterOpSettings*>(filteropSettings));
 
-    KisPaintOp * op = new KisDuplicateOp(duplicateopSettings, painter);
+    KisPaintOp * op = new KisFilterOp(filteropSettings, painter);
     Q_CHECK_PTR(op);
     return op;
 }
 
-KisPaintOpSettingsSP KisDuplicateOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
+KisPaintOpSettingsSP KisFilterOpFactory::settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image)
 {
     // XXX: store widgets per inputDevice?
     Q_UNUSED( parent );
     Q_UNUSED(inputDevice);
-    return new KisDuplicateOpSettings(m_widget, image);
+    Q_UNUSED(image)
+    return new KisFilterOpSettings(m_widget);
 }
 
-KisPaintOpSettingsSP KisDuplicateOpFactory::settings(KisImageSP image)
+KisPaintOpSettingsSP KisFilterOpFactory::settings(KisImageSP image)
 {
-    return new KisDuplicateOpSettings(m_widget, image);
+    Q_UNUSED(image);
+    return new KisFilterOpSettings(m_widget);
 }

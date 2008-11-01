@@ -31,7 +31,8 @@
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_rate_option.h>
 
-KisSmudgeOpSettingsWidget::KisSmudgeOpSettingsWidget()
+KisSmudgeOpSettingsWidget::KisSmudgeOpSettingsWidget(QWidget* parent)
+    : KisPaintOpOptionsWidget(parent)
 {
     setObjectName("brush option widget");
 

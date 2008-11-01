@@ -26,7 +26,7 @@
 
 #include <kis_paintop_registry.h>
 
-#include "kis_filterop.h"
+#include "kis_filterop_factory.h"
 
 typedef KGenericFactory<FilterOp> FilterOpFactory;
 K_EXPORT_COMPONENT_FACTORY(kritafilterop, FilterOpFactory("krita"))

@@ -35,7 +35,7 @@ class KisEraseOpSettingsWidget : public KisPaintOpOptionsWidget {
 
 public:
 
-    KisEraseOpSettingsWidget();
+    KisEraseOpSettingsWidget(QWidget* parent = 0);
 
     ~KisEraseOpSettingsWidget();
 

@@ -31,6 +31,7 @@ kde4_add_ui_files(kritalibpaintop_LIB_SRCS
     wdgcustombrush.ui
     wdgtextbrush.ui
     wdgincremental.ui
+    wdgfilteroption.ui
 )
 
 kde4_add_library(kritalibpaintop SHARED ${kritalibpaintop_LIB_SRCS} )

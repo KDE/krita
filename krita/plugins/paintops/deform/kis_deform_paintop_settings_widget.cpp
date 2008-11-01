@@ -31,8 +31,8 @@
 
 #include "kis_deform_paintop_settings.h"
 
-KisDeformPaintOpSettingsWidget:: KisDeformPaintOpSettingsWidget()
-    : KisPaintOpSettingsWidget()
+KisDeformPaintOpSettingsWidget:: KisDeformPaintOpSettingsWidget(QWidget* parent)
+    : KisPaintOpSettingsWidget(parent)
 {
     m_options = new Ui::WdgDeformOptions();
     m_options->setupUi(this);

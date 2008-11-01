@@ -85,7 +85,7 @@ public:
     void inputMethodEvent(QInputMethodEvent *event);
     /// Forwarded to the current KoTool
     QList<QAction*> popupActionList() const;
-    ///
+    /// Forwarded to the current KoTool
     void deleteSelection();
 
     /**

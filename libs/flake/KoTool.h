@@ -237,7 +237,7 @@ public:
 
     /**
      * Delete the tools selection.
-     * The default implementation is empty to aid tools that don'e have any selection.
+     * The default implementation is empty to aid tools that don't have any selection.
      * @see selection()
      */
     virtual void deleteSelection();

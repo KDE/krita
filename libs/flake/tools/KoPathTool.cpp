@@ -174,7 +174,7 @@ QMap<QString, QWidget *>  KoPathTool::createOptionWidgets()
 
 void KoPathTool::pointTypeChanged(QAction *type)
 {
-    if (!m_pointSelection.hasSelection()) {
+    if (m_pointSelection.hasSelection()) {
         QList<KoPathPointData> selectedPoints = m_pointSelection.selectedPointsData();
         QList<KoPathPointData> pointToChange;
 
@@ -226,7 +226,7 @@ void KoPathTool::removePoints()
 
 void KoPathTool::pointToLine()
 {
-    if (! m_pointSelection.hasSelection()) {
+    if (m_pointSelection.hasSelection()) {
         QList<KoPathPointData> selectedPoints = m_pointSelection.selectedPointsData();
         QList<KoPathPointData> pointToChange;
 
@@ -246,7 +246,7 @@ void KoPathTool::pointToLine()
 
 void KoPathTool::pointToCurve()
 {
-    if (! m_pointSelection.hasSelection()) {
+    if (m_pointSelection.hasSelection()) {
         QList<KoPathPointData> selectedPoints = m_pointSelection.selectedPointsData();
         QList<KoPathPointData> pointToChange;
 
@@ -321,7 +321,7 @@ void KoPathTool::joinPoints()
 
 void KoPathTool::breakAtPoint()
 {
-    if (!m_pointSelection.hasSelection()) {
+    if (m_pointSelection.hasSelection()) {
         m_canvas->addCommand(new KoPathBreakAtPointCommand(m_pointSelection.selectedPointsData()));
         updateActions();
     }
@@ -655,7 +655,7 @@ void KoPathTool::updateOptionsWidget()
 
 void KoPathTool::updateActions()
 {
-    const bool hasPointsSelected = !m_pointSelection.hasSelection();
+    const bool hasPointsSelected = m_pointSelection.hasSelection();
     m_actionPathPointCorner->setEnabled(hasPointsSelected);
     m_actionPathPointSmooth->setEnabled(hasPointsSelected);
     m_actionPathPointSymmetric->setEnabled(hasPointsSelected);
@@ -708,6 +708,7 @@ void KoPathTool::pointSelectionChanged()
 {
     updateActions();
     m_canvas->snapGuide()->setIgnoredPathPoints(m_pointSelection.selectedPoints().toList());
+    emit selectionChanged(m_pointSelection.hasSelection());
 }
 
 void KoPathTool::repaint(const QRectF &repaintRect)

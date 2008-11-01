@@ -229,7 +229,7 @@ void KoPathToolSelection::update()
 
 bool KoPathToolSelection::hasSelection()
 {
-    return m_selectedPoints.isEmpty();
+    return !m_selectedPoints.isEmpty();
 }
 
 #include "KoPathToolSelection.moc"

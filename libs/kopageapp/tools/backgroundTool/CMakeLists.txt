@@ -18,13 +18,9 @@ kde4_add_plugin(kopabackgroundtool ${kopabackgroundtool_PART_SRCS})
 
 target_link_libraries(
     kopabackgroundtool
-    koguiutils
-    flake
     kopageapp
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KIO_LIBS}
+    ${KDE4_KIO_LIBRARY}
     ${KDE4_PHONON_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
     ${QT_QT3SUPPORT_LIBRARY}
 )
 

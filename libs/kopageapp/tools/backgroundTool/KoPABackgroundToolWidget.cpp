@@ -19,13 +19,26 @@
 
 #include "KoPABackgroundToolWidget.h"
 
+#include <kurl.h>
+#include <kfiledialog.h>
+
 KoPABackgroundToolWidget::KoPABackgroundToolWidget()
 {
     widget.setupUi( this );
+    connect( widget.backgroundImage, SIGNAL( clicked( bool ) ), this, SLOT( setBackgroundImage() ) );
 }
 
 KoPABackgroundToolWidget::~KoPABackgroundToolWidget()
 {
+}
+
+void KoPABackgroundToolWidget::setBackgroundImage()
+{
+    // TODO only make images selectable
+    QString command( i18n( "Change backgound image" ) );
+    KUrl url = KFileDialog::getOpenUrl();
+    if ( !url.isEmpty() ) {
+    }
 }
 
 #include "KoPABackgroundToolWidget.moc"

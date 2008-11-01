@@ -31,6 +31,9 @@ public:
     KoPABackgroundToolWidget();
     virtual ~KoPABackgroundToolWidget();
 
+private slots:
+    void setBackgroundImage();
+
 private:
     Ui::BackgroundToolWidget widget;
 };

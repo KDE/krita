@@ -24,11 +24,13 @@
 
 #include "ui_BackgroundToolWidget.h"
 
+class KoPABackgroundTool;
+
 class KoPABackgroundToolWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KoPABackgroundToolWidget();
+    KoPABackgroundToolWidget( KoPABackgroundTool *tool, QWidget *parent = 0 );
     virtual ~KoPABackgroundToolWidget();
 
 private slots:
@@ -36,6 +38,7 @@ private slots:
 
 private:
     Ui::BackgroundToolWidget widget;
+    KoPABackgroundTool * m_tool;
 };
 
 #endif /* KOPABACKGROUNDTOOLWIDGET_H */

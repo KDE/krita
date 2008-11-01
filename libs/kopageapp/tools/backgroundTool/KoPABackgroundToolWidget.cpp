@@ -21,8 +21,20 @@
 
 #include <kurl.h>
 #include <kfiledialog.h>
+#include <kio/netaccess.h>
 
-KoPABackgroundToolWidget::KoPABackgroundToolWidget()
+#include <KoImageCollection.h>
+#include <KoPatternBackground.h>
+#include <KoCanvasBase.h>
+#include <KoShapeController.h>
+#include <KoShapeBackgroundCommand.h>
+
+#include "KoPABackgroundTool.h"
+#include "KoPageApp.h"
+
+KoPABackgroundToolWidget::KoPABackgroundToolWidget( KoPABackgroundTool *tool, QWidget *parent )
+: QWidget( parent )
+, m_tool( tool )
 {
     widget.setupUi( this );
     connect( widget.backgroundImage, SIGNAL( clicked( bool ) ), this, SLOT( setBackgroundImage() ) );
@@ -35,9 +47,28 @@ KoPABackgroundToolWidget::~KoPABackgroundToolWidget()
 void KoPABackgroundToolWidget::setBackgroundImage()
 {
     // TODO only make images selectable
-    QString command( i18n( "Change backgound image" ) );
+    KoImageCollection * collection = dynamic_cast<KoImageCollection *>( m_tool->canvas()->shapeController()->dataCenter( "ImageCollection" ) );
+    Q_ASSERT( collection );
+    KoShape * page = m_tool->canvas()->resourceProvider()->koShapeResource( KoPageApp::CurrentPage );
+    Q_ASSERT( page );
+    if ( !collection || !page ) {
+        return;
+    }
+
     KUrl url = KFileDialog::getOpenUrl();
     if ( !url.isEmpty() ) {
+        QString tmpFile;
+        if ( KIO::NetAccess::download(  url, tmpFile, 0 ) ) {
+            QImage image( tmpFile );
+            if ( !image.isNull() ) {
+                QUndoCommand * cmd = new QUndoCommand( i18n( "Change backgound image" ) );
+                KoPatternBackground * bg = new KoPatternBackground( collection );
+                bg->setPattern( image );
+                new KoShapeBackgroundCommand( page, bg, cmd );
+                m_tool->canvas()->addCommand( cmd );
+            }
+        }
+
     }
 }
 

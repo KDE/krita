@@ -31,6 +31,7 @@
 #include <KoPACanvas.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoPAView.h>
+#include <KoPAPageBase.h> // this is needed to make setResource work correctly
 #include <KoPointerEvent.h>
 
 #include "KoPAMasterPageDocker.h"
@@ -84,7 +85,7 @@ void KoPABackgroundTool::mouseReleaseEvent( KoPointerEvent *event )
 
 QMap<QString, QWidget *> KoPABackgroundTool::createOptionWidgets()
 {
-    KoPABackgroundToolWidget * widget = new KoPABackgroundToolWidget();
+    KoPABackgroundToolWidget * widget = new KoPABackgroundToolWidget( this );
     QMap<QString, QWidget *> widgets;
     widgets.insert( i18n("Background Tool"), widget );
     QLabel dummy4( i18n("Use the styles docker to manipulate the backgound.") );

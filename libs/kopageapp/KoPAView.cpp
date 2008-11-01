@@ -204,6 +204,7 @@ void KoPAView::initActions()
     m_deleteSelectionAction->setShortcut(QKeySequence("Del"));
     m_deleteSelectionAction->setEnabled(false);
     connect(m_deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
+    connect(m_canvas->toolProxy(), SIGNAL(selectionChanged(bool)), m_deleteSelectionAction, SLOT(setEnabled(bool)));
 
     m_actionViewShowGrid  = new KToggleAction(i18n("Show &Grid"), this);
     m_actionViewShowGrid->setChecked(m_doc->gridData().showGrid());
@@ -510,11 +511,9 @@ void KoPAView::selectionChanged()
         m_verticalRuler->setShowSelectionBorders(true);
         m_horizontalRuler->updateSelectionBorders(boundingRect.x(), boundingRect.right());
         m_verticalRuler->updateSelectionBorders(boundingRect.y(), boundingRect.bottom());
-        m_deleteSelectionAction->setEnabled(true);
     } else {
         m_horizontalRuler->setShowSelectionBorders(false);
         m_verticalRuler->setShowSelectionBorders(false);
-        m_deleteSelectionAction->setEnabled(false);
     }
 }
 

@@ -103,4 +103,10 @@ set(TestImageCollection_test_SRCS TestImageCollection.cpp )
 kde4_add_unit_test(TestImageCollection TESTNAME libs-flake-TestImageCollection ${TestImageCollection_test_SRCS})
 target_link_libraries(TestImageCollection  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(TestCanvasResourceProvider_test_SRCS TestCanvasResourceProvider.cpp )
+kde4_add_unit_test(TestCanvasResourceProvider TESTNAME libs-flake-TestCanvasResourceProvider ${TestCanvasResourceProvider_test_SRCS})
+target_link_libraries(TestCanvasResourceProvider  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
+
 ########### end ###############

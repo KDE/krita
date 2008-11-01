@@ -38,7 +38,10 @@ kde4_add_library(kritalibpaintop SHARED ${kritalibpaintop_LIB_SRCS} )
 
 target_link_libraries(kritalibpaintop kritaui)
 
-set_target_properties(kritalibpaintop PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(kritalibpaintop PROPERTIES
+    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "kritaui"
+)
 
 install(TARGETS kritalibpaintop  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

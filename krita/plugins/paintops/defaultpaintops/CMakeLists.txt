@@ -46,7 +46,7 @@ kde4_add_plugin(kritadefaultpaintops ${kritadefaultpaintops_PART_SRCS})
 
 
 
-target_link_libraries(kritadefaultpaintops kritaui kritalibpaintop)
+target_link_libraries(kritadefaultpaintops kritalibpaintop)
 
 install(TARGETS kritadefaultpaintops  DESTINATION ${PLUGIN_INSTALL_DIR})
 

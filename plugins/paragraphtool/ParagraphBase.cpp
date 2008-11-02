@@ -25,6 +25,8 @@
 #include <KoTextDocumentLayout.h>
 #include <KoTextShapeData.h>
 
+#include <KLocalizedString>
+
 #include <QAbstractTextDocumentLayout>
 #include <QTextDocument>
 
@@ -184,4 +186,17 @@ bool ParagraphBase::needsRepaint() const
     return m_needsRepaint;
 }
 
+QString ParagraphBase::styleName() const
+{
+    KoParagraphStyle *style = paragraphStyle();
+    while (style != NULL) {
+        QString name = style->name();
+        if (!name.isNull() && !name.isEmpty()) {
+            return name;
+        }
+        style = style->parentStyle();
+    }
+
+    return QString(i18n("None"));
+}
 

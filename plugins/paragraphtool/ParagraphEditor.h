@@ -130,16 +130,11 @@ public slots:
     // (essentially deletes the setting)
     void applyParentStyleToActiveRuler();
 
-    // if the parargraph style is inherited from a named paragraph style
-    // return that name, otherwise return QString()
-    QString styleName();
-
     void setSmoothMovement(bool smoothMovement) {
         m_smoothMovement = smoothMovement;
     }
 
 signals:
-    void styleNameChanged(const QString&);
     void smoothMovementChanged(bool smooth);
 
 protected:

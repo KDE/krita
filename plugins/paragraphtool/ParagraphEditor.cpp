@@ -131,20 +131,6 @@ void ParagraphEditor::saveLineSpacing()
     updateLayout();
 }
 
-QString ParagraphEditor::styleName()
-{
-    KoParagraphStyle *style = paragraphStyle();
-    while (style != NULL) {
-        QString name = style->name();
-        if (!name.isNull() && !name.isEmpty()) {
-            return name;
-        }
-        style = style->parentStyle();
-    }
-
-    return QString(i18n("None"));
-}
-
 void ParagraphEditor::paintLabel(QPainter &painter, const KoViewConverter &converter) const
 {
     RulerIndex ruler;
@@ -321,9 +307,6 @@ void ParagraphEditor::addFragments()
     loadRulers();
 }
 
-/* slot which is called when the value of one of the rulers changed
- * causes storing and reloading of the positions and values of the rulers
- * from the file */
 void ParagraphEditor::updateLayout()
 {
     QTextBlockFormat format;

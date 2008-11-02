@@ -77,6 +77,11 @@ public:
 
     bool needsRepaint() const;
 
+    QString styleName() const;
+
+signals:
+    void styleNameChanged(const QString&);
+
 public slots:
     void scheduleRepaint();
 
@@ -85,7 +90,7 @@ protected:
 
     KoCanvasBase *canvas() { return m_canvas; }
     QTextCursor cursor() { return m_cursor; }
-    KoParagraphStyle *paragraphStyle() { return m_paragraphStyle; }
+    KoParagraphStyle *paragraphStyle() const { return m_paragraphStyle; }
 
     QList<ParagraphFragment> fragments() { return m_fragments; }
     virtual void addFragments();

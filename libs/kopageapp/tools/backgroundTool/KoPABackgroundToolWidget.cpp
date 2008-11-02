@@ -32,6 +32,7 @@
 #include "KoPABackgroundTool.h"
 #include "KoPageApp.h"
 #include "KoPAPage.h"
+#include "KoPAView.h"
 #include "commands/KoPADisplayMasterBackgroundCommand.h"
 #include "commands/KoPADisplayMasterShapesCommand.h"
 
@@ -43,10 +44,32 @@ KoPABackgroundToolWidget::KoPABackgroundToolWidget( KoPABackgroundTool *tool, QW
     connect( widget.backgroundImage, SIGNAL( clicked( bool ) ), this, SLOT( setBackgroundImage() ) );
     connect( widget.useMasterBackground, SIGNAL( stateChanged( int ) ), this, SLOT( useMasterBackground( int ) ) );
     connect( widget.displayMasterShapes, SIGNAL( stateChanged( int ) ), this, SLOT( displayMasterShapes( int ) ) );
+
+    connect( m_tool->view(), SIGNAL( activePageChanged() ), this, SLOT( slotActivePageChanged() ) );
+
+    slotActivePageChanged();
 }
 
 KoPABackgroundToolWidget::~KoPABackgroundToolWidget()
 {
+}
+
+void KoPABackgroundToolWidget::slotActivePageChanged()
+{
+    KoPAPageBase * page = m_tool->view()->activePage();
+
+    KoPAPage * normalPage = dynamic_cast<KoPAPage *>( page );
+
+    widget.useMasterBackground->setEnabled( normalPage );
+    widget.displayMasterShapes->setEnabled( normalPage );
+    if ( normalPage ) {
+        widget.useMasterBackground->setChecked( normalPage->displayMasterBackground() );
+        widget.displayMasterShapes->setChecked( normalPage->displayMasterShapes() );
+    }
+    else {
+        widget.useMasterBackground->setChecked( false );
+        widget.displayMasterShapes->setChecked( false );
+    }
 }
 
 void KoPABackgroundToolWidget::setBackgroundImage()

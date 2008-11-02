@@ -89,6 +89,11 @@ void KoPABackgroundTool::slotActivePageChanged()
     m_canvas->resourceProvider()->setResource( KoPageApp::CurrentPage, m_view->activePage() );
 }
 
+KoPAView * KoPABackgroundTool::view() const
+{
+    return m_view;
+}
+
 QMap<QString, QWidget *> KoPABackgroundTool::createOptionWidgets()
 {
     KoPABackgroundToolWidget * widget = new KoPABackgroundToolWidget( this );

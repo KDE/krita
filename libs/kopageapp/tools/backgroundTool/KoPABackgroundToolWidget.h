@@ -33,6 +33,9 @@ public:
     KoPABackgroundToolWidget( KoPABackgroundTool *tool, QWidget *parent = 0 );
     virtual ~KoPABackgroundToolWidget();
 
+public slots:
+    void slotActivePageChanged();
+
 private slots:
     void setBackgroundImage();
     void useMasterBackground( int state );

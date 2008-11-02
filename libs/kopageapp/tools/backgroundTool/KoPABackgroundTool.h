@@ -45,6 +45,8 @@ public:
     ///Reimplemented from KoTool
     virtual void mouseReleaseEvent( KoPointerEvent *event );
 
+    KoPAView * view() const;
+
 public slots:
     void slotActivePageChanged();
 

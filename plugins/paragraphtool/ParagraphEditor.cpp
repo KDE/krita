@@ -49,11 +49,22 @@ ParagraphEditor::ParagraphEditor(QObject *parent, KoCanvasBase *canvas)
         m_smoothMovement(false)
 {
     initializeRuler(m_rulers[firstIndentRuler], i18n("First Line:"));
+    connect(&m_rulers[firstIndentRuler], SIGNAL(valueChanged(qreal)), this, SLOT(saveTextIndent()));
+
     initializeRuler(m_rulers[followingIndentRuler], i18n("Left:"));
+    connect(&m_rulers[followingIndentRuler], SIGNAL(valueChanged(qreal)), this, SLOT(saveLeftMargin()));
+
     initializeRuler(m_rulers[rightMarginRuler], i18n("Right:"));
+    connect(&m_rulers[rightMarginRuler], SIGNAL(valueChanged(qreal)), this, SLOT(saveRightMargin()));
+
     initializeRuler(m_rulers[topMarginRuler], i18n("Before:"), Ruler::drawSides);
+    connect(&m_rulers[topMarginRuler], SIGNAL(valueChanged(qreal)), this, SLOT(saveTopMargin()));
+
     initializeRuler(m_rulers[bottomMarginRuler], i18n("After:"), Ruler::drawSides);
+    connect(&m_rulers[bottomMarginRuler], SIGNAL(valueChanged(qreal)), this, SLOT(saveBottomMargin()));
+
     initializeRuler(m_rulers[lineSpacingRuler], i18n("Line Spacing:"));
+    connect(&m_rulers[lineSpacingRuler], SIGNAL(valueChanged(qreal)), this, SLOT(saveLineSpacing()));
     m_rulers[lineSpacingRuler].setEnabled(false);
 }
 
@@ -69,13 +80,6 @@ void ParagraphEditor::initializeRuler(Ruler &ruler, const QString &name, int opt
     ruler.setUnit(canvas()->unit());
     ruler.setMinimumValue(0.0);
     connect(&ruler, SIGNAL(needsRepaint()), this, SLOT(scheduleRepaint()));
-    connect(&ruler, SIGNAL(valueChanged(qreal)), this, SLOT(updateLayout()));
-}
-
-void ParagraphEditor::activateTextBlock(QTextBlock newBlock, QTextDocument *document)
-{
-    ParagraphBase::activateTextBlock(newBlock, document);
-    updateLayout();
 }
 
 void ParagraphEditor::loadRulers()
@@ -89,19 +93,42 @@ void ParagraphEditor::loadRulers()
     scheduleRepaint();
 }
 
-
-void ParagraphEditor::saveRulers()
+void ParagraphEditor::saveLeftMargin()
 {
     paragraphStyle()->setLeftMargin(m_rulers[followingIndentRuler].value());
+    updateLayout();
+}
+
+void ParagraphEditor::saveRightMargin()
+{
     paragraphStyle()->setRightMargin(m_rulers[rightMarginRuler].value());
+
+    updateLayout();
+}
+void ParagraphEditor::saveTopMargin()
+{
     paragraphStyle()->setTopMargin(m_rulers[topMarginRuler].value());
+
+    updateLayout();
+}
+void ParagraphEditor::saveBottomMargin()
+{
     paragraphStyle()->setBottomMargin(m_rulers[bottomMarginRuler].value());
+
+    updateLayout();
+}
+
+void ParagraphEditor::saveTextIndent()
+{
     paragraphStyle()->setTextIndent(m_rulers[firstIndentRuler].value() - m_rulers[followingIndentRuler].value());
 
-    QTextBlockFormat format;
-    paragraphStyle()->applyStyle(format);
+    updateLayout();
+}
 
-    cursor().mergeBlockFormat(format);
+void ParagraphEditor::saveLineSpacing()
+{
+    paragraphStyle()->setTextIndent(m_rulers[lineSpacingRuler].value() - m_rulers[lineSpacingRuler].value());
+    updateLayout();
 }
 
 QString ParagraphEditor::styleName()
@@ -299,7 +326,10 @@ void ParagraphEditor::addFragments()
  * from the file */
 void ParagraphEditor::updateLayout()
 {
-    saveRulers();
+    QTextBlockFormat format;
+    paragraphStyle()->applyStyle(format);
+
+    cursor().mergeBlockFormat(format);
 
     static_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout())->layout();
 
@@ -476,20 +506,24 @@ void ParagraphEditor::applyParentStyleToActiveRuler()
     if (m_activeRuler == firstIndentRuler) {
         paragraphStyle()->remove(QTextFormat::TextIndent);
         m_rulers[m_activeRuler].setValue(paragraphStyle()->textIndent());
+        saveTextIndent();
     } else if (m_activeRuler == followingIndentRuler) {
         paragraphStyle()->remove(QTextFormat::BlockLeftMargin);
         m_rulers[m_activeRuler].setValue(paragraphStyle()->leftMargin());
+        saveLeftMargin();
     } else if (m_activeRuler == rightMarginRuler) {
         paragraphStyle()->remove(QTextFormat::BlockRightMargin);
         m_rulers[m_activeRuler].setValue(paragraphStyle()->rightMargin());
+        saveRightMargin();
     } else if (m_activeRuler == topMarginRuler) {
         paragraphStyle()->remove(QTextFormat::BlockTopMargin);
         m_rulers[m_activeRuler].setValue(paragraphStyle()->topMargin());
+        saveTopMargin();
     } else if (m_activeRuler == bottomMarginRuler) {
         paragraphStyle()->remove(QTextFormat::BlockBottomMargin);
         m_rulers[m_activeRuler].setValue(paragraphStyle()->bottomMargin());
+        saveBottomMargin();
     }
 
-    updateLayout();
 }
 

@@ -60,8 +60,6 @@ public:
     explicit ParagraphEditor(QObject *parent, KoCanvasBase *canvas);
     ~ParagraphEditor();
 
-    virtual void activateTextBlock(QTextBlock newBlock, QTextDocument *document = NULL);
-
     void initializeRuler(Ruler &ruler, const QString &name, int options = 0);
 
     void paint(QPainter &painter, const KoViewConverter &converter);
@@ -69,7 +67,6 @@ public:
     QRectF dirtyRectangle();
 
     void loadRulers();
-    void saveRulers();
 
     // paint a label at the specified position
     void paintLabel(QPainter &painter, const KoViewConverter &converter) const;
@@ -122,8 +119,12 @@ public:
     }
 
 public slots:
-    // should be called when the value of any of the rulers changed
-    void updateLayout();
+    void saveLeftMargin();
+    void saveRightMargin();
+    void saveTopMargin();
+    void saveBottomMargin();
+    void saveTextIndent();
+    void saveLineSpacing();
 
     // Apply the parent's style to the active ruler
     // (essentially deletes the setting)
@@ -137,12 +138,13 @@ public slots:
         m_smoothMovement = smoothMovement;
     }
 
-protected:
-    void addFragments();
-
 signals:
     void styleNameChanged(const QString&);
     void smoothMovementChanged(bool smooth);
+
+protected:
+    void addFragments();
+    void updateLayout();
 
 private:
     void initRulerFragments(const ParagraphFragment *fragment, Ruler *rulers) const;

@@ -153,7 +153,6 @@ void ParagraphTool::keyPressEvent(QKeyEvent *event)
         case Qt::Key_Delete:
         case Qt::Key_BackSpace:
             m_paragraphEditor.applyParentStyleToActiveRuler();
-            m_paragraphEditor.updateLayout();
             break;
         default:
             break;

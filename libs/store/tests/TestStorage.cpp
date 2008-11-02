@@ -37,6 +37,8 @@ class TestStorage : public QObject
 private slots:
     void storage_data();
     void storage();
+    void storage2_data();
+    void storage2();
 
 private:
     char getch(QIODevice * dev);
@@ -170,7 +172,7 @@ void TestStorage::storage()
     QCOMPARE (store->currentPath(), QString(testDirResult));
 
     QVERIFY (store->open("root"));
-    QCOMPARE (store->size(), (long long) 22);
+    QCOMPARE (store->size(), (qint64) 22);
     dev = store->device();
     QByteArray dataReadBack = dev->read(strlen(test3));
     store->close();
@@ -189,6 +191,66 @@ void TestStorage::storage()
     if (store->isOpen())
         store->close();
     delete store;
+    QFile::remove(testFile);
+}
+
+#define DATALEN 64
+void TestStorage::storage2_data()
+{
+    QTest::addColumn<int>("type");
+    QTest::addColumn<QString>("testFile");
+
+    QTest::newRow("tar") << (int) KoStore::Tar << "test.tgz";
+    QTest::newRow("directory") << (int) KoStore::Directory << "testdir/maindoc.xml";
+    QTest::newRow("zip") << (int) KoStore::Zip <<"test.zip";
+}
+
+void TestStorage::storage2()
+{
+    QFETCH(int, type);
+    QFETCH(QString, testFile);
+    KoStore::Backend backend = static_cast<KoStore::Backend>(type);
+
+    if (QFile::exists(testFile))
+        QFile::remove(testFile);
+
+    QDir dirTest(testFile);
+    if (dirTest.exists()) {
+#ifdef Q_OS_UNIX
+        system(QByteArray("rm -rf ") + QFile::encodeName(testFile));       // QDir::rmdir isn't recursive!
+#else
+        QFAIL("build dir not empty");
+#endif
+    }
+
+    KoStore* store = KoStore::createStore(testFile, KoStore::Write, "", backend);
+    QVERIFY(store->bad() == false);
+
+    // Write
+    QVERIFY (store->open("layer"));
+    char str[DATALEN];
+
+    sprintf(str, "1,2,3,4\n");
+    store->write(str, strlen(str));
+    memset(str, '\0', DATALEN);
+    store->write(str, DATALEN);
+
+    store->close();
+    delete store;
+
+    store = KoStore::createStore(testFile, KoStore::Read, "", backend);
+    QVERIFY(store->bad() == false);
+    // Read back
+    QVERIFY (store->open("layer"));
+    char str2[DATALEN];
+    QIODevice *stream = store->device(); // << Possible suspect!
+
+    stream->readLine(str2, DATALEN);      // << as is this
+    qint64 len = store->read(str2, DATALEN);
+    QCOMPARE(len, (qint64) DATALEN);
+    store->close();
+    delete store;
+
     QFile::remove(testFile);
 }
 

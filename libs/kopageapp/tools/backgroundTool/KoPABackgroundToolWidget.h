@@ -35,6 +35,8 @@ public:
 
 private slots:
     void setBackgroundImage();
+    void useMasterBackground( int state );
+    void displayMasterShapes( int state );
 
 private:
     Ui::BackgroundToolWidget widget;

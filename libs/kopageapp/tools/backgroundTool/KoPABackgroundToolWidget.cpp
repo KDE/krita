@@ -31,6 +31,9 @@
 
 #include "KoPABackgroundTool.h"
 #include "KoPageApp.h"
+#include "KoPAPage.h"
+#include "commands/KoPADisplayMasterBackgroundCommand.h"
+#include "commands/KoPADisplayMasterShapesCommand.h"
 
 KoPABackgroundToolWidget::KoPABackgroundToolWidget( KoPABackgroundTool *tool, QWidget *parent )
 : QWidget( parent )
@@ -38,6 +41,8 @@ KoPABackgroundToolWidget::KoPABackgroundToolWidget( KoPABackgroundTool *tool, QW
 {
     widget.setupUi( this );
     connect( widget.backgroundImage, SIGNAL( clicked( bool ) ), this, SLOT( setBackgroundImage() ) );
+    connect( widget.useMasterBackground, SIGNAL( stateChanged( int ) ), this, SLOT( useMasterBackground( int ) ) );
+    connect( widget.displayMasterShapes, SIGNAL( stateChanged( int ) ), this, SLOT( displayMasterShapes( int ) ) );
 }
 
 KoPABackgroundToolWidget::~KoPABackgroundToolWidget()
@@ -69,6 +74,24 @@ void KoPABackgroundToolWidget::setBackgroundImage()
             }
         }
 
+    }
+}
+
+void KoPABackgroundToolWidget::useMasterBackground( int state )
+{
+    KoPAPage * page = dynamic_cast<KoPAPage *>( m_tool->canvas()->resourceProvider()->koShapeResource( KoPageApp::CurrentPage ) );
+    if ( page ) {
+        KoPADisplayMasterBackgroundCommand * cmd = new KoPADisplayMasterBackgroundCommand( page, state == QCheckBox::On );
+        m_tool->canvas()->addCommand( cmd );
+    }
+}
+
+void KoPABackgroundToolWidget::displayMasterShapes( int state )
+{
+    KoPAPage * page = dynamic_cast<KoPAPage *>( m_tool->canvas()->resourceProvider()->koShapeResource( KoPageApp::CurrentPage ) );
+    if ( page ) {
+        KoPADisplayMasterShapesCommand * cmd = new KoPADisplayMasterShapesCommand( page, state == QCheckBox::On );
+        m_tool->canvas()->addCommand( cmd );
     }
 }
 

@@ -139,7 +139,7 @@ signals:
 
 protected:
     void addFragments();
-    void updateLayout();
+    void applyStyle();
 
 private:
     void initRulerFragments(const ParagraphFragment *fragment, Ruler *rulers) const;

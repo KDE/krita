@@ -96,39 +96,39 @@ void ParagraphEditor::loadRulers()
 void ParagraphEditor::saveLeftMargin()
 {
     paragraphStyle()->setLeftMargin(m_rulers[followingIndentRuler].value());
-    updateLayout();
+    applyStyle();
 }
 
 void ParagraphEditor::saveRightMargin()
 {
     paragraphStyle()->setRightMargin(m_rulers[rightMarginRuler].value());
 
-    updateLayout();
+    applyStyle();
 }
 void ParagraphEditor::saveTopMargin()
 {
     paragraphStyle()->setTopMargin(m_rulers[topMarginRuler].value());
 
-    updateLayout();
+    applyStyle();
 }
 void ParagraphEditor::saveBottomMargin()
 {
     paragraphStyle()->setBottomMargin(m_rulers[bottomMarginRuler].value());
 
-    updateLayout();
+    applyStyle();
 }
 
 void ParagraphEditor::saveTextIndent()
 {
     paragraphStyle()->setTextIndent(m_rulers[firstIndentRuler].value() - m_rulers[followingIndentRuler].value());
 
-    updateLayout();
+    applyStyle();
 }
 
 void ParagraphEditor::saveLineSpacing()
 {
     paragraphStyle()->setTextIndent(m_rulers[lineSpacingRuler].value() - m_rulers[lineSpacingRuler].value());
-    updateLayout();
+    applyStyle();
 }
 
 void ParagraphEditor::paintLabel(QPainter &painter, const KoViewConverter &converter) const
@@ -307,7 +307,7 @@ void ParagraphEditor::addFragments()
     loadRulers();
 }
 
-void ParagraphEditor::updateLayout()
+void ParagraphEditor::applyStyle()
 {
     QTextBlockFormat format;
     paragraphStyle()->applyStyle(format);

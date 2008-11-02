@@ -23,6 +23,7 @@
 //Qt includes
 #include <QMap>
 #include <QLabel>
+#include <QPainter>
 
 //KDE includes
 #include <klocale.h>

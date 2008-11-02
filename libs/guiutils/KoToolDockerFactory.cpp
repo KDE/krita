@@ -21,14 +21,28 @@
 
 #include "KoToolDockerFactory.h"
 
+class KoToolDockerFactory::Private {
+public:
+    Private( int id ) : dockWidgetId(id) {}
+    int dockWidgetId;
+};
+
+KoToolDockerFactory::KoToolDockerFactory( int dockWidgetId )
+: d( new Private(dockWidgetId))
+{
+}
+
+KoToolDockerFactory::~KoToolDockerFactory()
+{
+    delete d;
+}
+
 QString KoToolDockerFactory::id() const
 {
-    static int cnt=0;
-    cnt++;
-    if (cnt==1)
+    if (d->dockWidgetId==0)
         return QString("KoToolOptionsDocker");
     else
-        return QString("KoToolOptionsDocker %1").arg(cnt);
+        return QString("KoToolOptionsDocker %1").arg(d->dockWidgetId+1);
 }
 
 QDockWidget* KoToolDockerFactory::createDockWidget()

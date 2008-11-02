@@ -40,12 +40,11 @@ KoDockerManager::KoDockerManager(KoView *view)
     : QObject(view), d( new Private() )
 {
     d->view = view;
-    KoToolDockerFactory toolDockerFactory;
     for (int i=0; i < NUMDOCKERS; i++) {
+        KoToolDockerFactory toolDockerFactory(i);
         d->toolDocker[i] = qobject_cast<KoToolDocker*>(d->view->createDockWidget(&toolDockerFactory));
     }
     connect(view->shell(), SIGNAL(restoringDone()), this, SLOT(removeUnusedOptionWidgets()));
-
 }
 
 KoDockerManager::~KoDockerManager()

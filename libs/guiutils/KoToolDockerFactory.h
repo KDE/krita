@@ -32,8 +32,8 @@
 class KOGUIUTILS_EXPORT KoToolDockerFactory : public KoDockFactory
 {
 public:
-    KoToolDockerFactory() {}
-    ~KoToolDockerFactory() {}
+    KoToolDockerFactory( int dockWidgetId = 0 );
+    ~KoToolDockerFactory();
 
     /// reimplemented from parent
     virtual QString id() const;
@@ -46,6 +46,9 @@ public:
     {
         return DockRight;
     }
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

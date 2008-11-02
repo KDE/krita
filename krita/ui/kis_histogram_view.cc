@@ -342,8 +342,10 @@ void KisHistogramView::updateHistogram()
                 } else {
                     p.setPen(color);
                 }
-                p.drawLine(i, height, i,
-                           height - int(log((double)m_histogram->getValue(i)) * factor));
+                if (m_histogram->getValue(i) > 0) { // Don't try to calculate log(0)
+                    p.drawLine(i, height, i,
+                               height - int(log((double)m_histogram->getValue(i)) * factor));
+                }
             }
         }
     }

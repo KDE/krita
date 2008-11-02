@@ -20,61 +20,43 @@
 #ifndef PARAGRAPHFRAGMENT_H
 #define PARAGRAPHFRAGMENT_H
 
-#include "Ruler.h"
-#include "RulerFragment.h"
-
 #include <QRectF>
 #include <QTextBlock>
 
 class KoParagraphStyle;
 class KoShape;
 
-// this enum defines the order in which the rulers will be focused when tab is pressed
-typedef enum {
-    topMarginRuler,
-    rightMarginRuler,
-    bottomMarginRuler,
-    followingIndentRuler,
-    firstIndentRuler,
-    lineSpacingRuler,
-    maxRuler,
-    noRuler
-} RulerIndex;
-
 /* ParagraphFragment is used by ParagraphTool to store information about a
  * paragraph which is specific to a shape. As the width of shapes may be
- * different the positions and sizes of its ruler will be different, too.
- * This class takes care of these differences when painting the rulers or
- * when handling input events.
+ * different the width of a single paragraph on different shapes has to be
+ * different, too.
  */
 class ParagraphFragment
 {
 public:
     ParagraphFragment() {};
-    ParagraphFragment(Ruler* rulers, KoShape *shape, QTextBlock textBlock, KoParagraphStyle *style);
+    ParagraphFragment(KoShape *shape, QTextBlock textBlock, KoParagraphStyle *style);
 
     ~ParagraphFragment() {};
 
     KoShape *shape() const { return m_shape; }
 
-protected:
-    void initDimensions(QTextBlock textBlock, KoParagraphStyle *paragraphStyle);
-    void initRulers();
+    QRectF listCounter() const { return m_counter; }
+    QRectF firstLine() const { return m_firstLine; }
+    QRectF followingLines() const { return m_followingLines; }
+    QRectF border() const { return m_border; }
 
-    // wrapper method for textShapeData->documentOffset()
-    qreal shapeTop() const;
-    qreal shapeBottom() const;
+    bool isSingleLine() const { return m_isSingleLine; }
 
 private:
     KoShape *m_shape;
-    Ruler *m_rulers;
-
-    bool m_isSingleLine;
 
     QRectF m_counter,
     m_firstLine,
     m_followingLines,
     m_border;
+
+    bool m_isSingleLine;
 };
 
 #endif

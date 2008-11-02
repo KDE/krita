@@ -34,6 +34,7 @@ ParagraphBase::ParagraphBase(QObject *parent, KoCanvasBase *canvas)
         : QObject(parent),
         m_needsRepaint(false),
         m_canvas(canvas),
+        m_document(NULL),
         m_paragraphStyle(NULL)
 {}
 
@@ -79,7 +80,7 @@ void ParagraphBase::activateTextBlockAt(const QPointF &point)
     QTextBlock newBlock(document->findBlock(position));
     assert(newBlock.isValid());
 
-    activateTextBlock(newBlock);
+    activateTextBlock(newBlock, document);
 }
 
 void ParagraphBase::activatePreviousTextBlock()
@@ -92,7 +93,7 @@ void ParagraphBase::activateNextTextBlock()
     activateTextBlock(textBlock().next());
 }
 
-void ParagraphBase::activateTextBlock(QTextBlock newBlock)
+void ParagraphBase::activateTextBlock(QTextBlock newBlock, QTextDocument *document)
 {
     if (!newBlock.isValid()) {
         return;
@@ -103,11 +104,21 @@ void ParagraphBase::activateTextBlock(QTextBlock newBlock)
         return;
     }
 
+    if (document != NULL) {
+        // we needed to pass in the document pointer separately, as there is no
+        // easy way to get from the cursor to a non-const document pointer
+        // but it doesn't make any sense to pass in a document pointer which is
+        // different to the document the text block belongs to
+        assert(newBlock.document() == document);
+        m_document = document;
+    }
+
     m_cursor = QTextCursor(newBlock);
+
     delete m_paragraphStyle;
     m_paragraphStyle = KoParagraphStyle::fromBlock(m_cursor.block(), this);
 
-    addShapes();
+    addFragments();
 
     scheduleRepaint();
 }
@@ -119,14 +130,14 @@ void ParagraphBase::deactivateTextBlock()
 
     // invalidate active cursor and delete shapes
     m_cursor = QTextCursor();
-    m_shapes.clear();
+    m_fragments.clear();
 
     scheduleRepaint();
 }
 
-void ParagraphBase::addShapes()
+void ParagraphBase::addFragments()
 {
-    m_shapes.clear();
+    m_fragments.clear();
 
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout());
     assert(layout != NULL);
@@ -134,7 +145,7 @@ void ParagraphBase::addShapes()
     QList<KoShape*> shapes = layout->shapes();
     foreach(KoShape *shape, shapes) {
         if (shapeContainsBlock(shape)) {
-            m_shapes << shape;
+            m_fragments << ParagraphFragment(shape, textBlock(), m_paragraphStyle);
         }
     }
 }

@@ -20,6 +20,8 @@
 #ifndef PARAGRAPHBASE_H
 #define PARAGRAPHBASE_H
 
+#include "ParagraphFragment.h"
+
 #include <KoParagraphStyle.h>
 
 #include <QObject>
@@ -34,6 +36,7 @@ class KoCanvasBase;
 class KoShape;
 class KoViewConverter;
 
+class QTextDocument;
 class QTextLayout;
 
 class ParagraphBase : public QObject
@@ -50,7 +53,7 @@ public:
     void activatePreviousTextBlock();
     void activateNextTextBlock();
 
-    void activateTextBlock(QTextBlock newBlock);
+    void activateTextBlock(QTextBlock newBlock, QTextDocument *document = NULL);
 
     // deactivate the current text block
     void deactivateTextBlock();
@@ -84,16 +87,18 @@ protected:
     QTextCursor cursor() { return m_cursor; }
     KoParagraphStyle *paragraphStyle() { return m_paragraphStyle; }
 
-    QList<KoShape*> shapes() { return m_shapes; }
-    virtual void addShapes();
+    QList<ParagraphFragment> fragments() { return m_fragments; }
+    virtual void addFragments();
+
     bool shapeContainsBlock(const KoShape *shape);
 
 private:
     KoCanvasBase *m_canvas;
     QTextCursor m_cursor;
+    QTextDocument *m_document;
     KoParagraphStyle *m_paragraphStyle;
 
-    QList<KoShape*> m_shapes;
+    QList<ParagraphFragment> m_fragments;
 };
 
 #endif

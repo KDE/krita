@@ -36,6 +36,18 @@ class QObject;
 class QPainter;
 class QTextLayout;
 
+// this enum defines the order in which the rulers will be focused when tab is pressed
+typedef enum {
+    topMarginRuler,
+    rightMarginRuler,
+    bottomMarginRuler,
+    followingIndentRuler,
+    firstIndentRuler,
+    lineSpacingRuler,
+    maxRuler,
+    noRuler
+} RulerIndex;
+
 /**
  * This is the tool for editing paragraph formatting
  * It displays all paragraph formatting parameters directly on the canvas
@@ -124,13 +136,15 @@ public slots:
     }
 
 protected:
-    void addShapes();
+    void addFragments();
 
 signals:
     void styleNameChanged(const QString&);
     void smoothMovementChanged(bool smooth);
 
 private:
+    void initRulerFragments(const ParagraphFragment *fragment, Ruler *rulers) const;
+    
     KoParagraphStyle *m_paragraphStyle;
 
     Ruler m_rulers[maxRuler];

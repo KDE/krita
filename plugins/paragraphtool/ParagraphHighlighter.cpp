@@ -43,7 +43,8 @@ void ParagraphHighlighter::paint(QPainter &painter, const KoViewConverter &conve
         return;
     }
 
-    foreach (const KoShape *shape, shapes()) {
+    foreach (const ParagraphFragment &fragment, fragments()) {
+        KoShape *shape = fragment.shape();
         KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
         assert(textShapeData != NULL);
 
@@ -73,8 +74,8 @@ QRectF ParagraphHighlighter::dirtyRectangle()
     QRectF repaintRectangle = m_storedRepaintRectangle;
 
     m_storedRepaintRectangle = QRectF();
-    foreach(KoShape *shape, shapes()) {
-        m_storedRepaintRectangle = m_storedRepaintRectangle | shape->boundingRect();
+    foreach(const ParagraphFragment &fragment, fragments()) {
+        m_storedRepaintRectangle = m_storedRepaintRectangle | fragment.shape()->boundingRect();
     }
     repaintRectangle |= m_storedRepaintRectangle;
 

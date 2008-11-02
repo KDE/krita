@@ -195,14 +195,9 @@ QRectF ParagraphEditor::dirtyRectangle()
     // repaint area
     QRectF repaintRectangle = m_storedRepaintRectangle;
     m_storedRepaintRectangle = QRectF();
-    foreach(KoShape *shape, shapes()) {
+    foreach(const ParagraphFragment &fragment, fragments()) {
+        KoShape *shape = fragment.shape();
         QRectF boundingRect(QPointF(0, 0), shape->size());
-
-        if (shape->border()) {
-            KoInsets insets;
-            shape->border()->borderInsets(shape, insets);
-            boundingRect.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
-        }
 
         // adjust for arrow heads and label
         // (although we can't be sure about the label)
@@ -217,7 +212,65 @@ QRectF ParagraphEditor::dirtyRectangle()
     return repaintRectangle;
 }
 
-void ParagraphEditor::addShapes()
+void ParagraphEditor::initRulerFragments(const ParagraphFragment *fragment, Ruler *rulers) const
+{
+    KoShape *shape = fragment->shape();
+    KoTextShapeData *textShapeData = static_cast<KoTextShapeData*>(shape->userData());
+
+    QRectF border = fragment->border();
+    QRectF firstLine = fragment->firstLine();
+    QRectF followingLines = fragment->followingLines();
+
+    bool isSingleLine = fragment->isSingleLine();
+
+    qreal shapeTop(textShapeData->documentOffset());
+    qreal shapeBottom(shapeTop + shape->size().height());
+
+    // matrix to map text to document coordinates
+    QMatrix matrix = shape->absoluteTransformation(NULL);
+    matrix.translate(0.0, -shapeTop);
+
+    qreal rightTop = qMax(shapeTop, firstLine.top());
+    qreal followingTop = qMax(shapeTop, followingLines.top());
+    qreal followingBottom = qMin(shapeBottom, followingLines.bottom());
+
+    // first line
+    RulerFragment firstFragment;
+    firstFragment.setVisible(shapeTop < firstLine.bottom());
+    firstFragment.setBaseline(matrix.map(QLineF(border.left(), firstLine.top(), border.left(), firstLine.bottom())));
+    rulers[firstIndentRuler].addFragment(firstFragment);
+
+    // following lines
+    RulerFragment followingFragment;
+    followingFragment.setVisible(shapeTop < followingLines.bottom() && shapeBottom > followingLines.top() && !isSingleLine);
+    followingFragment.setBaseline(matrix.map(QLineF(border.left(), followingTop, border.left(), followingBottom)));
+    rulers[followingIndentRuler].addFragment(followingFragment);
+
+    // right margin
+    RulerFragment rightFragment;
+    rightFragment.setVisible(true);
+    rightFragment.setBaseline(matrix.map(QLineF(border.right(), followingBottom, border.right(), rightTop)));
+    rulers[rightMarginRuler].addFragment(rightFragment);
+
+    // top margin
+    RulerFragment topFragment;
+    topFragment.setVisible(shapeTop <= firstLine.top());
+    topFragment.setBaseline(matrix.map(QLineF(border.right(), border.top(), border.left(), border.top())));
+    rulers[topMarginRuler].addFragment(topFragment);
+
+    // bottom margin
+    RulerFragment bottomFragment;
+    bottomFragment.setVisible(shapeBottom >= followingLines.bottom());
+    bottomFragment.setBaseline(matrix.map(QLineF(border.right(), followingLines.bottom(), border.left(), followingLines.bottom())));
+    rulers[bottomMarginRuler].addFragment(bottomFragment);
+
+    // line spacing
+    RulerFragment lineFragment;
+    lineFragment.setVisible(!isSingleLine && rightTop != followingTop);
+    lineFragment.setBaseline(matrix.map(QLineF(firstLine.right(), firstLine.bottom(), border.left(), firstLine.bottom())));
+    rulers[lineSpacingRuler].addFragment(lineFragment);
+}
+void ParagraphEditor::addFragments()
 {
     m_rulers[firstIndentRuler].clearFragments();
     m_rulers[followingIndentRuler].clearFragments();
@@ -226,10 +279,10 @@ void ParagraphEditor::addShapes()
     m_rulers[bottomMarginRuler].clearFragments();
     m_rulers[lineSpacingRuler].clearFragments();
 
-    ParagraphBase::addShapes();
+    ParagraphBase::addFragments();
 
-    foreach(KoShape *shape, shapes()) {
-        ParagraphFragment(m_rulers, shape, textBlock(), paragraphStyle());
+    foreach(const ParagraphFragment &fragment, fragments()) {
+        initRulerFragments(&fragment, m_rulers);
     }
 
     loadRulers();
@@ -244,7 +297,7 @@ void ParagraphEditor::updateLayout()
 
     static_cast<KoTextDocumentLayout*>(textBlock().document()->documentLayout())->layout();
 
-    addShapes();
+    addFragments();
 
     scheduleRepaint();
 }

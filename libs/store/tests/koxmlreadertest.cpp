@@ -2609,6 +2609,8 @@ int main(int argc, char** argv)
         testSimpleOpenDocumentFormula();
 
         //testLargeOpenDocumentSpreadsheet();
+    } else if (QString(argv[1]) == "-xml" ) {
+        return 1; // not supported
     } else {
         QString fname(argv[1]);
         testExternalOpenDocumentSpreadsheet(fname);

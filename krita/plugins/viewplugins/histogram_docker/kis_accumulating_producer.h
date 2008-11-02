@@ -73,6 +73,7 @@ signals:
     void completed();
 
 protected:
+    virtual bool event(QEvent* e);
     /// source already converts external to internal
     virtual int externalToInternal(int ext) {
         return ext;

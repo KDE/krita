@@ -65,7 +65,6 @@ KisImageRasteredCache::~KisImageRasteredCache()
 
 void KisImageRasteredCache::imageUpdated(QRect rc)
 {
-
     QRect r(0, 0, m_width * m_rasterSize, m_height * m_rasterSize);
     r &= rc;
 

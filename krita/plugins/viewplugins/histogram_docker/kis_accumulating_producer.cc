@@ -24,7 +24,7 @@
 #include <QApplication>
 #include <QEvent>
 
-static const int EmitCompletedType = QEvent::User + 1;
+static const QEvent::Type EmitCompletedType = QEvent::Type(QEvent::User + 1);
 
 /**
  * The threaded producer definition in c++ file because this is really an internal affair.
@@ -94,8 +94,16 @@ void KisAccumulatingHistogramProducer::ThreadedProducer::run()
 
     if (!m_stop) {
         // This function is thread-safe; and it takes ownership of the event
-//         emit(completed());
+        QCoreApplication::postEvent(m_source, new QEvent(EmitCompletedType));
     }
+}
+
+bool KisAccumulatingHistogramProducer::event(QEvent* e) {
+    if (e->type() == EmitCompletedType) {
+        emit completed();
+        return true;
+    }
+    return QObject::event(e);
 }
 
 #include "kis_accumulating_producer.moc"

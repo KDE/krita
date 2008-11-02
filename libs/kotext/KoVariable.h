@@ -21,6 +21,10 @@
 #define __KOVARIABLE_H__
 
 // KOffice libs
+#ifdef _MSC_VER
+#include "KoXmlReader.h"
+#include "KoShapeLoadingContext.h"
+#endif
 #include "KoInlineObject.h"
 #include "kotext_export.h"
 

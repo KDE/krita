@@ -106,19 +106,33 @@ void KisLayerContainerShape::setLayerVisible( bool v)
     setVisible( v );
 }
 
+bool recursiveFindActiveLayerInChildren( KoSelection* _selection, KoShapeLayer* _currentLayer )
+{
+    if( _selection->activeLayer() == _currentLayer)
+    {
+        // The following looks weird but it is needed to update the status of the tools
+        _selection->setActiveLayer( _currentLayer );
+        return true;
+    }
+    foreach( KoShape* shape, _currentLayer->iterator() )
+    {
+        KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shape );
+        if(layer && recursiveFindActiveLayerInChildren( _selection, layer ) )
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 void KisLayerContainerShape::editabilityChanged( )
 {
     dbgKrita << m_d->groupLayer->isEditable();
     setLocked( !m_d->groupLayer->isEditable() );
-    // The following looks weird but it is needed to update the status of the tools
     KoCanvasController* canvas = KoToolManager::instance()->activeCanvasController();
     if( canvas )
     {
-        KoSelection* selection = canvas->canvas()->shapeManager()->selection();
-        if( selection->activeLayer() == this )
-        {
-            selection->setActiveLayer( this );
-        }
+        recursiveFindActiveLayerInChildren( canvas->canvas()->shapeManager()->selection(), this );
     }
 }
 

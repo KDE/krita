@@ -145,19 +145,17 @@ void KisLayerShape::setLayerVisible( bool v)
     setVisible( v );
 }
 
+// Defined in KisLayerContainerShape... FIXME (2.1) find a better way to share code between those two classes, or even better merge them
+bool recursiveFindActiveLayerInChildren( KoSelection* _selection, KoShapeLayer* _currentLayer );
+
 void KisLayerShape::editabilityChanged( )
 {
     dbgKrita << m_d->layer->isEditable();
     setLocked( !m_d->layer->isEditable() );
-    // The following looks weird but it is needed to update the status of the tools
     KoCanvasController* canvas = KoToolManager::instance()->activeCanvasController();
     if( canvas )
     {
-        KoSelection* selection = canvas->canvas()->shapeManager()->selection();
-        if( selection->activeLayer() == this )
-        {
-            selection->setActiveLayer( this );
-        }
+        recursiveFindActiveLayerInChildren( canvas->canvas()->shapeManager()->selection(), this );
     }
 }
 

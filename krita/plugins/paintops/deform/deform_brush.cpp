@@ -44,7 +44,7 @@ DeformBrush::DeformBrush()
 
 DeformBrush::~DeformBrush()
 {
-    if (m_distanceTable != NULL){
+    if (m_distanceTable != 0){
         delete[] m_distanceTable;
     }
 

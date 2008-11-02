@@ -14,7 +14,7 @@
     </property>
     <layout class="QVBoxLayout" >
       <item>
-        <widget class="QGroupBox" name="grpType" >
+        <widget class="KButtonGroup" name="grpType" >
           <property name="title" >
             <string>Method</string>
           </property>
@@ -189,6 +189,12 @@
         <verdata>5</verdata>
       </sizepolicy>
       <pixmap>image0</pixmap>
+    </customwidget>
+    <customwidget>
+      <class>KButtonGroup</class>
+      <extends>QGroupBox</extends>
+      <header>kbuttongroup.h</header>
+      <container>1</container>
     </customwidget>
   </customwidgets>
   <images>

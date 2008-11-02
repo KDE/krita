@@ -42,10 +42,11 @@ KoPADisplayMasterShapesCommand::~KoPADisplayMasterShapesCommand()
 void KoPADisplayMasterShapesCommand::redo()
 {
     m_page->setDisplayMasterShapes( m_display );
-    // TODO is a refresh needed
+    m_page->update();
 }
 
 void KoPADisplayMasterShapesCommand::undo()
 {
     m_page->setDisplayMasterShapes( !m_display );
+    m_page->update();
 }

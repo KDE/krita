@@ -42,10 +42,11 @@ KoPADisplayMasterBackgroundCommand::~KoPADisplayMasterBackgroundCommand()
 void KoPADisplayMasterBackgroundCommand::redo()
 {
     m_page->setDisplayMasterBackground( m_display );
-    // TODO is a refresh needed
+    m_page->update();
 }
 
 void KoPADisplayMasterBackgroundCommand::undo()
 {
     m_page->setDisplayMasterBackground( !m_display );
+    m_page->update();
 }

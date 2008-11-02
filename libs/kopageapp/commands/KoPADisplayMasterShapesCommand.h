@@ -22,12 +22,14 @@
 
 #include <QUndoCommand>
 
+#include "kopageapp_export.h"
+
 class KoPAPage;
 
 /**
  * Command to change if master shapes should be displayed
  */
-class KoPADisplayMasterShapesCommand : public QUndoCommand
+class KOPAGEAPP_EXPORT KoPADisplayMasterShapesCommand : public QUndoCommand
 {
 public:
     KoPADisplayMasterShapesCommand( KoPAPage * page, bool display );

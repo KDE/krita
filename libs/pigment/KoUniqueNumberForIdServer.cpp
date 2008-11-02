@@ -20,6 +20,10 @@
 #include "KoUniqueNumberForIdServer.h"
 
 #include <QHash>
+#ifdef Q_CC_MSVC
+#include <iso646.h>
+#endif
+
 
 struct KoUniqueNumberForIdServer::Private
 {

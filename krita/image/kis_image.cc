@@ -329,7 +329,7 @@ void KisImage::lock()
         if (m_d->rootLayer)
             m_d->rootLayer->updateStrategy()->lock();
         m_d->sizeChangedWhileLocked = false;
-        blockSignals(true);
+//         blockSignals(true);
     }
     m_d->lockCount++;
 }
@@ -342,7 +342,7 @@ void KisImage::unlock()
         m_d->lockCount--;
 
         if (m_d->lockCount == 0) {
-            blockSignals(false);
+//             blockSignals(false);
 
             if (m_d->sizeChangedWhileLocked) {
                 emit sigSizeChanged(m_d->width, m_d->height);
@@ -576,7 +576,7 @@ void KisImage::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTr
     m_d->rootLayer->accept(visitor);
 
     unlock();
-
+    
     if (undo()) {
 
         m_d->adapter->addCommand(new KisImageConvertTypeCommand(KisImageSP(this), oldCs, dstColorSpace));

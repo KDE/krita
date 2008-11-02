@@ -15,16 +15,7 @@
      <property name="spacing" >
       <number>6</number>
      </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
+     <property name="margin" >
       <number>0</number>
      </property>
      <item>
@@ -54,7 +45,7 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
        <property name="sizeType" >
         <enum>QSizePolicy::Expanding</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0" >
         <size>
          <width>81</width>
          <height>20</height>
@@ -69,16 +60,7 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
      <property name="spacing" >
       <number>6</number>
      </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
+     <property name="margin" >
       <number>0</number>
      </property>
      <item>
@@ -110,109 +92,6 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
     </layout>
    </item>
    <item row="2" column="0" colspan="2" >
-    <widget class="QCheckBox" name="m_projection" >
-     <property name="toolTip" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If checked, Krita uses more memory but may be faster.&lt;/p>&lt;/body>&lt;/html></string>
-     </property>
-     <property name="whatsThis" >
-      <string>When Krita uses projections, the results of group layers, effect masks and adjustment layers are cached. This takes a lot of memory but speeds up processing considerably.</string>
-     </property>
-     <property name="text" >
-      <string>Use projections for groups and effects</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="2" >
-    <widget class="QCheckBox" name="chkUseBoundingRect" >
-     <property name="text" >
-      <string>Use Bounding Rect of Dirty Area in Projection</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" colspan="2" >
-    <widget class="QCheckBox" name="chkAggregateDirtyRegions" >
-     <property name="text" >
-      <string>Aggregate Dirty Regions</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0" >
-    <widget class="QLabel" name="lblChunkSize" >
-     <property name="text" >
-      <string>Projection Update Chunk Size:</string>
-     </property>
-     <property name="buddy" >
-      <cstring>intChunkSize</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1" >
-    <widget class="KIntNumInput" name="intChunkSize" >
-     <property name="whatsThis" >
-      <string>The maximum number of "tiles" that are kept in memory. For regular RGBA8 images, each tile is about 16 kB in size. Thus, for a value of 500 tiles this usually means about 8 megabytes are used for image data. If you regularly handle large images, a greater value here might be useful.
-Note that this number is only a guideline for Krita, and is not guaranteed to be the actual number of tiles in memory.</string>
-     </property>
-     <widget class="KIntNumInput" name="intChunkSize_2" >
-      <property name="geometry" >
-       <rect>
-        <x>270</x>
-        <y>190</y>
-        <width>129</width>
-        <height>29</height>
-       </rect>
-      </property>
-      <property name="whatsThis" >
-       <string>The maximum number of "tiles" that are kept in memory. For regular RGBA8 images, each tile is about 16 kB in size. Thus, for a value of 500 tiles this usually means about 8 megabytes are used for image data. If you regularly handle large images, a greater value here might be useful.
-Note that this number is only a guideline for Krita, and is not guaranteed to be the actual number of tiles in memory.</string>
-      </property>
-     </widget>
-    </widget>
-   </item>
-   <item row="6" column="0" >
-    <widget class="QLabel" name="label" >
-     <property name="text" >
-      <string>Projection Thread Number:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1" >
-    <widget class="KIntNumInput" name="intNumThreads" >
-     <property name="whatsThis" >
-      <string>The maximum number of "tiles" that are kept in memory. For regular RGBA8 images, each tile is about 16 kB in size. Thus, for a value of 500 tiles this usually means about 8 megabytes are used for image data. If you regularly handle large images, a greater value here might be useful.
-Note that this number is only a guideline for Krita, and is not guaranteed to be the actual number of tiles in memory.</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="0" colspan="2" >
-    <widget class="QCheckBox" name="chkUpdateAllOfQPainterCanvas" >
-     <property name="toolTip" >
-      <string>If checked, the whole canvas is repainted for every change. This is slower, but the bugs in the scaling code don not show up.</string>
-     </property>
-     <property name="text" >
-      <string>Update Whole Canvas</string>
-     </property>
-     <property name="checked" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0" colspan="2" >
-    <widget class="QCheckBox" name="chkUseNearestNeighbour" >
-     <property name="toolTip" >
-      <string>Faster but ugly zooming. Not compatible with OpenGL</string>
-     </property>
-     <property name="whatsThis" >
-      <string>When checked, Krita uses nearest-neighbour pixel sampling. The result is ugly, but because far fewer pixels have to be color-corrected much faster</string>
-     </property>
-     <property name="text" >
-      <string>Fast but ugly zooming</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="0" colspan="2" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
@@ -220,7 +99,7 @@ Note that this number is only a guideline for Krita, and is not guaranteed to be
      <property name="sizeType" >
       <enum>QSizePolicy::Expanding</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>495</width>
        <height>71</height>

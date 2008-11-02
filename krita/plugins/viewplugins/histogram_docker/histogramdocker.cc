@@ -189,7 +189,14 @@ void KritaHistogramDocker::producerChanged(QAction *action)
     if (m_hview) {
         m_hview->setHistogram(m_histogram);
         m_hview->setColor(true);
-        m_hview->setCurrentChannels(KoHistogramProducerSP(m_producer), m_producer->channels());
+        QList<KoChannelInfo *> channels;
+        // Only display color channels
+        for (int i = 0; i < m_producer->channels().count(); i++) {
+            if (m_producer->channels().at(i)->channelType() == KoChannelInfo::COLOR) {
+                channels.append(m_producer->channels().at(i));
+            }
+        }
+        m_hview->setCurrentChannels(KoHistogramProducerSP(m_producer), channels);
 
         connect(m_cache, SIGNAL(cacheUpdated()),
                 new HistogramDockerUpdater(this, m_histogram, m_hview, m_producer), SLOT(updated()));

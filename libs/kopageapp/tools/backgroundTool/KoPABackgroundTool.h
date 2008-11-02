@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Carlos Licea <carlos.licea@kdemail.net>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,6 +23,8 @@
 
 #include <KoTool.h>
 
+class KoPAView;
+
 class KoPABackgroundTool : public KoTool
 {
     Q_OBJECT
@@ -41,9 +44,16 @@ public:
     virtual void mouseMoveEvent( KoPointerEvent *event );
     ///Reimplemented from KoTool
     virtual void mouseReleaseEvent( KoPointerEvent *event );
+
+public slots:
+    void slotActivePageChanged();
+
 protected:
     ///Reimplemented from KoTool
     virtual QMap<QString, QWidget *> createOptionWidgets();
+
+private:
+    KoPAView * m_view;
 };
 
 #endif //KOPABACKGROUNDTOOL_H

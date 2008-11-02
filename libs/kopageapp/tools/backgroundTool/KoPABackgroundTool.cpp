@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Carlos Licea <carlos.licea@kdemail.net>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,7 +26,6 @@
 
 //KDE includes
 #include <klocale.h>
-#include <kdebug.h>
 
 //KOffice includes
 #include <KoPACanvas.h>
@@ -40,6 +40,9 @@
 KoPABackgroundTool::KoPABackgroundTool( KoCanvasBase *canvas )
 : KoTool( canvas )
 {
+    m_view = static_cast<KoPACanvas *>(m_canvas)->koPAView();
+
+    connect( m_view, SIGNAL( activePageChanged() ), this, SLOT( slotActivePageChanged() ) );
 }
 
 KoPABackgroundTool::~KoPABackgroundTool()
@@ -58,8 +61,7 @@ void KoPABackgroundTool::activate( bool temporary )
 {
     Q_UNUSED( temporary );
 
-    KoPAView *view = static_cast<KoPACanvas *>(m_canvas)->koPAView();
-    m_canvas->resourceProvider()->setResource( KoPageApp::CurrentPage, view->activePage() );
+    m_canvas->resourceProvider()->setResource( KoPageApp::CurrentPage, m_view->activePage() );
 }
 
 void KoPABackgroundTool::deactivate()
@@ -82,6 +84,10 @@ void KoPABackgroundTool::mouseReleaseEvent( KoPointerEvent *event )
     event->ignore();
 }
 
+void KoPABackgroundTool::slotActivePageChanged()
+{
+    m_canvas->resourceProvider()->setResource( KoPageApp::CurrentPage, m_view->activePage() );
+}
 
 QMap<QString, QWidget *> KoPABackgroundTool::createOptionWidgets()
 {

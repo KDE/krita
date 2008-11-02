@@ -54,7 +54,7 @@
 #include <kis_paint_layer.h>
 #include <kis_selected_transaction.h>
 #include <kis_selection.h>
-#include <kis_shape_layer.h>
+#include <flake/kis_shape_layer.h>
 #include <kis_shear_visitor.h>
 #include <kis_transform_worker.h>
 #include <kis_undo_adapter.h>

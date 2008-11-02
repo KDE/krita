@@ -29,7 +29,7 @@
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_painter.h>
-#include <kis_shape_layer.h>
+#include <flake/kis_shape_layer.h>
 #include <KoCompositeOp.h>
 #include <KoSelection.h>
 

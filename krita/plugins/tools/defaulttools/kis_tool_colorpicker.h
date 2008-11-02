@@ -25,7 +25,7 @@
 #include "KoToolFactory.h"
 #include "ui_wdgcolorpicker.h"
 #include "kis_tool.h"
-#include <kis_layer_shape.h>
+#include <flake/kis_layer_shape.h>
 class KoResource;
 class KoColorSet;
 

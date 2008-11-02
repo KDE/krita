@@ -23,7 +23,7 @@
 
 #include "kis_tool_shape.h"
 #include "ui_wdg_tool_star.h"
-#include "kis_layer_shape.h"
+#include "flake/kis_layer_shape.h"
 
 
 class WdgToolStar : public QWidget, public Ui::WdgToolStar

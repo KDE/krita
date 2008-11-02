@@ -27,7 +27,7 @@
 #include <QKeyEvent>
 
 #include "kis_tool_paint.h"
-#include "kis_layer_shape.h"
+#include "flake/kis_layer_shape.h"
 
 
 

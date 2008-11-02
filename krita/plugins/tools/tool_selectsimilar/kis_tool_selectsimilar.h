@@ -22,7 +22,7 @@
 #include <kis_tool.h>
 #include <KoToolFactory.h>
 #include <kis_selection.h>
-#include "kis_layer_shape.h"
+#include "flake/kis_layer_shape.h"
 
 class QWidget;
 class KoCanvasBase;

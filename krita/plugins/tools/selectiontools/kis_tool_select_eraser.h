@@ -23,7 +23,7 @@
 
 #include "KoToolFactory.h"
 
-#include "kis_layer_shape.h"
+#include "flake/kis_layer_shape.h"
 #include "kis_tool_freehand.h"
 
 class KisSelectionOptions;

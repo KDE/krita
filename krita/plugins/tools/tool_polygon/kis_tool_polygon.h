@@ -22,7 +22,7 @@
 #define KIS_TOOL_POLYGON_H_
 
 #include "kis_tool_shape.h"
-#include "kis_layer_shape.h"
+#include "flake/kis_layer_shape.h"
 
 class KoCanvasBase;
 

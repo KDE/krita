@@ -71,11 +71,11 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_undo_adapter.h"
 #include "kis_pixel_selection.h"
-#include "kis_shape_selection.h"
+#include "flake/kis_shape_selection.h"
 #include "commands/kis_selection_commands.h"
 #include "kis_selection_transaction.h"
 #include "kis_selection_mask.h"
-#include "kis_shape_layer.h"
+#include "flake/kis_shape_layer.h"
 #include "kis_selection_decoration.h"
 
 #include "kis_clipboard.h"

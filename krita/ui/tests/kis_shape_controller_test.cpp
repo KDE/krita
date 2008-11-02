@@ -37,7 +37,7 @@
 #include "kis_paint_layer.h"
 #include "kis_clone_layer.h"
 #include "kis_group_layer.h"
-#include "kis_shape_controller.h"
+#include "flake/kis_shape_controller.h"
 #include "kis_types.h"
 #include "kis_transparency_mask.h"
 

@@ -79,7 +79,7 @@
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
 #include <kis_selection.h>
-#include <kis_shape_layer.h>
+#include <flake/kis_shape_layer.h>
 
 // Local
 #include "kis_factory2.h"
@@ -91,7 +91,7 @@
 #include "kra/kis_savexml_visitor.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_undo_adapter.h"
-#include "kis_shape_controller.h"
+#include "flake/kis_shape_controller.h"
 #include "kis_node_model.h"
 #include "kra/kis_kra_loader.h"
 

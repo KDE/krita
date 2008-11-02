@@ -32,7 +32,7 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_gradient_painter.h>
-#include <kis_layer_shape.h>
+#include <flake/kis_layer_shape.h>
 
 #include <config-opengl.h>
 #include <config-glew.h>

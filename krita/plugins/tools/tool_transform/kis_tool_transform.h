@@ -30,7 +30,7 @@
 
 #include <kis_undo_adapter.h>
 #include <kis_types.h>
-#include <kis_layer_shape.h>
+#include <flake/kis_layer_shape.h>
 #include <kis_tool.h>
 
 #include "ui_wdg_tool_transform.h"

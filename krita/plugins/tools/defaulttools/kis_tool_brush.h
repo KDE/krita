@@ -23,7 +23,7 @@
 
 #include "KoToolFactory.h"
 
-#include <kis_layer_shape.h>
+#include <flake/kis_layer_shape.h>
 
 class QTimer;
 class QCheckBox;

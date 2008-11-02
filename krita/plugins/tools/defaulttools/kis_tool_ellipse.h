@@ -26,7 +26,7 @@
 #include "kis_tool_shape.h"
 #include "kis_types.h"
 #include "KoToolFactory.h"
-#include "kis_layer_shape.h"
+#include "flake/kis_layer_shape.h"
 
 
 class QPainter;

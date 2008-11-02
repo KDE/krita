@@ -55,12 +55,12 @@ set(kritaui_LIB_SRCS
     kra/kis_kra_save_visitor.cpp 
     kis_label_cursor_pos.cc
     kis_layer_box.cpp 
-    kis_layer_container_shape.cc 
+    flake/kis_layer_container_shape.cc 
     kis_layer_manager.cc
     kis_layermap_visitor.cc 
-    kis_layer_shape.cc 
+    flake/kis_layer_shape.cc 
     kis_mask_manager.cc
-    kis_mask_shape.cc 
+    flake/kis_mask_shape.cc 
     kis_node_manager.cpp 
     kis_node_model.cpp
     kis_painting_assistant.cc 
@@ -73,11 +73,11 @@ set(kritaui_LIB_SRCS
     kra/kis_savexml_visitor.cc
     kis_selection_manager.cc 
     kis_selection_decoration.cc
-    kis_shape_controller.cpp
-    kis_shape_layer_canvas.cpp 
-    kis_shape_layer.cc 
-    kis_shape_selection.cpp
-    kis_shape_selection_model.cpp 
+    flake/kis_shape_controller.cpp
+    flake/kis_shape_layer_canvas.cpp 
+    flake/kis_shape_layer.cc 
+    flake/kis_shape_selection.cpp
+    flake/kis_shape_selection_model.cpp 
     kis_statusbar.cc 
     tool/kis_selection_tool_helper.cpp 
     tool/kis_tool.cc 
@@ -88,7 +88,7 @@ set(kritaui_LIB_SRCS
     tool/kis_selection_options.cc 
     kis_view2.cpp 
     kis_zoom_manager.cc
-    kis_shape_selection_canvas.cpp
+    flake/kis_shape_selection_canvas.cpp
     opengl/kis_opengl_canvas2.cpp
     opengl/kis_opengl.cpp 
     opengl/kis_opengl_image_textures.cpp

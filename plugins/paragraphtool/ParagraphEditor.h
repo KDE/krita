@@ -60,6 +60,8 @@ public:
     explicit ParagraphEditor(QObject *parent, KoCanvasBase *canvas);
     ~ParagraphEditor();
 
+    virtual void activateTextBlock(QTextBlock newBlock, QTextDocument *document = NULL);
+
     void initializeRuler(Ruler &ruler, const QString &name, int options = 0);
 
     void paint(QPainter &painter, const KoViewConverter &converter);

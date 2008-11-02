@@ -72,6 +72,12 @@ void ParagraphEditor::initializeRuler(Ruler &ruler, const QString &name, int opt
     connect(&ruler, SIGNAL(valueChanged(qreal)), this, SLOT(updateLayout()));
 }
 
+void ParagraphEditor::activateTextBlock(QTextBlock newBlock, QTextDocument *document)
+{
+    ParagraphBase::activateTextBlock(newBlock, document);
+    updateLayout();
+}
+
 void ParagraphEditor::loadRulers()
 {
     m_rulers[firstIndentRuler].setValue(paragraphStyle()->leftMargin() + paragraphStyle()->textIndent());

@@ -99,8 +99,7 @@ void Ruler::setValue(qreal value)
 
     if (value != m_value) {
         m_value = value;
-        emit valueChanged(m_value);
-//        emit needsRepaint();
+        emit needsRepaint();
     }
 }
 

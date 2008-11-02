@@ -53,7 +53,7 @@ public:
     void activatePreviousTextBlock();
     void activateNextTextBlock();
 
-    void activateTextBlock(QTextBlock newBlock, QTextDocument *document = NULL);
+    virtual void activateTextBlock(QTextBlock newBlock, QTextDocument *document = NULL);
 
     // deactivate the current text block
     void deactivateTextBlock();

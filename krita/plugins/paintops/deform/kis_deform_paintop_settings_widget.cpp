@@ -47,6 +47,7 @@ void  KisDeformPaintOpSettingsWidget::setConfiguration( const KisPropertiesConfi
     m_options->deformRadiusSPBox->setValue( config->getInt( "radius" ) );
     m_options->deformAmountSPBox->setValue( config->getDouble( "deform_amount" ) );
     m_options->interpolationChBox->setChecked( config->getBool( "bilinear" ) );
+    m_options->addPaintChBox->setChecked( config->getBool( "use_movement_paint" ) );
 
     int deformAction = config->getInt( "deform_action" );
     if ( deformAction == 1 )
@@ -73,6 +74,7 @@ void KisDeformPaintOpSettingsWidget::writeConfiguration( KisPropertiesConfigurat
     config->setProperty( "deform_amount", deformAmount() );
     config->setProperty( "deform_action", deformAction() );
     config->setProperty( "bilinear", bilinear() );
+    config->setProperty( "use_movement_paint", useMovementPaint() );
 }
 
 int  KisDeformPaintOpSettingsWidget::radius() const
@@ -105,4 +107,8 @@ int  KisDeformPaintOpSettingsWidget::deformAction() const
 bool  KisDeformPaintOpSettingsWidget::bilinear() const
 {
     return m_options->interpolationChBox->isChecked();
+}
+
+bool KisDeformPaintOpSettingsWidget::useMovementPaint() const{
+    return m_options->addPaintChBox->isChecked();
 }

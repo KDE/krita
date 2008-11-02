@@ -45,16 +45,22 @@ public:
 
     void setRadius( int deformRadius ){
         m_radius = deformRadius;
+        m_maxdist = sqrt(pow(m_radius,2));
+        precomputeDistances(m_radius);
     }
+
     void setDeformAmount ( qreal deformAmount ){
         m_amount = deformAmount;
     }
+
     void setInterpolation( bool useBilinear ){
         m_useBilinear = useBilinear;
     }
+
     void setAction( int deformAction ){
         m_action = deformAction;
     }
+
     void setImage( KisImageSP image ){
         m_image = image;
     }
@@ -63,11 +69,15 @@ public:
         m_counter = value;
     }
 
-
-
 private:
+    qreal distanceFromCenter(int x, int y)
+    {
+        return m_distanceTable[y*(m_radius+1)+x];
+    }
+
     bool point_interpolation( qreal* x, qreal* y, KisImageSP image );
     void debugColor(const quint8* data);
+    void precomputeDistances(int radius);
 
     // width and height for interpolation
     KisImageSP m_image;
@@ -81,7 +91,10 @@ private:
     //temporary KoColor for optimalization in bilinear interpolation
     KoColor * m_tempColor;
 
+    qreal* m_distanceTable;
+
     int m_radius;
+    qreal m_maxdist;
     qreal m_amount;
     bool m_useBilinear;
     int m_action;

@@ -68,6 +68,11 @@ bool KisDeformPaintOpSettings::bilinear() const
     return m_options->bilinear();
 }
 
+bool KisDeformPaintOpSettings::useMovementPaint() const
+{
+    return m_options->useMovementPaint();
+}
+
 int KisDeformPaintOpSettings::deformAction() const
 {
     return m_options->deformAction();

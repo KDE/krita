@@ -43,7 +43,7 @@ public:
 
     // Do we want to spray even when no movement?
     virtual bool incremental() const {
-        return true;
+        return m_useMovementPaint;
     }
 
     void paintAt(const KisPaintInformation& info);
@@ -64,6 +64,7 @@ private:
     QPointF m_previousPoint;
     KisImageSP m_image;
     bool newStrokeFlag;
+    bool m_useMovementPaint;
     //Stroke stroke;
     KisPaintDeviceSP dab;
     KisPaintDeviceSP m_dev;

@@ -52,6 +52,7 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
         : KisPaintOp(painter)
 {
     m_image = image;
+    m_useMovementPaint = settings->useMovementPaint();
     m_deformBrush.setRadius( settings->radius() );
     m_deformBrush.setDeformAmount ( settings->deformAmount() );
     m_deformBrush.setInterpolation( settings->bilinear() );

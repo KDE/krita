@@ -1,0 +1,8 @@
+TODO:
+	-add KisRandomSubPixelAccessor for bilinear interpolatio
+	-use some Rect Accessor for writing values (random accessor is slow, but needed for reading)
+	-add support for oldRawData too (old version used that, now i use rawData)
+	-add support to GUI to use/not use increment value from m_counter
+	-any wish?
+
+	

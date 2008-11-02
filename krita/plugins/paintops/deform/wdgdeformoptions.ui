@@ -174,6 +174,34 @@
      <height>29</height>
     </rect>
    </property>
+   <property name="minimum" >
+    <double>0.010000000000000</double>
+   </property>
+   <property name="maximum" >
+    <double>1.000000000000000</double>
+   </property>
+   <property name="singleStep" >
+    <double>0.100000000000000</double>
+   </property>
+   <property name="value" >
+    <double>0.200000000000000</double>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="addPaintChBox" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>240</y>
+     <width>201</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Paint even no movement</string>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
   </widget>
  </widget>
  <resources/>

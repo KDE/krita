@@ -44,32 +44,35 @@ DeformBrush::DeformBrush()
 
 DeformBrush::~DeformBrush()
 {
+    if (m_distanceTable != NULL){
+        delete[] m_distanceTable;
+    }
+
 }
 
 void DeformBrush::scale(qreal cursorX,qreal cursorY, qreal factor){
     int curXi = static_cast<int>(cursorX+0.5);
     int curYi = static_cast<int>(cursorY+0.5);
-    KoColor kcolor( m_dev->colorSpace() );
+    //KoColor kcolor( m_dev->colorSpace() );
 
     int centerX = m_image->width()  / 2;
     int centerY = m_image->height() / 2;
     qreal newX, newY;
 
     qreal distance;
-    qreal maxdist = sqrt(pow(m_radius,2));
     qreal scaleFactor;
 
     for (int x = curXi - m_radius; x < curXi + m_radius;x++){
         for (int y = curYi - m_radius; y < curYi + m_radius;y++){
-
             newX = x - curXi;
             newY = y - curYi;
 
-            distance = sqrt(newX*newX +newY*newY);
-            if (distance > m_radius) continue;
+            // normalized distance
+            distance = distanceFromCenter(abs(newX), abs(newY)); 
 
-            qreal t = distance/maxdist;
-            scaleFactor = (1.0 - t)*factor + t;
+            // we want circle
+            if (distance > 1.0) continue;
+            scaleFactor = (1.0 - distance)*factor + distance;
 
             newX /= scaleFactor;
             newY /= scaleFactor;
@@ -88,9 +91,9 @@ void DeformBrush::scale(qreal cursorX,qreal cursorY, qreal factor){
                 m_readAccessor->moveTo(newX, newY);
                 m_writeAccessor->moveTo(x, y); 
 
-                memcpy(kcolor.data(), m_readAccessor->oldRawData(), m_pixelSize);
-                //memcpy(m_readAccessor->rawData(), touchColor.data(), m_pixelSize);
-                memcpy(m_writeAccessor->rawData(), kcolor.data(), m_pixelSize );
+                //memcpy(kcolor.data(), m_readAccessor->rawData(), m_pixelSize);
+                //memcpy(m_writeAccessor->rawData(), kcolor.data(), m_pixelSize );
+                memcpy(m_writeAccessor->rawData(), m_readAccessor->rawData(), m_pixelSize );
             }
 
         }
@@ -101,19 +104,7 @@ void DeformBrush::swirl(qreal cursorX,qreal cursorY, qreal alpha){
     int curXi = static_cast<int>(cursorX+0.5);
     int curYi = static_cast<int>(cursorY+0.5);
 
-
-    KoColor kcolor( m_dev->colorSpace() );
-  /*KoColor touchColor( m_dev->colorSpace() );
-    QColor result(255,0,0,25);
-    touchColor.fromQColor(result);*/
-
-/*    QColor rgbcolor;
-    m_dev->colorSpace()->toQColor(m_readAccessor->rawData(), &rgbcolor);
-    dbgPlugins << "Copy color:";
-    dbgPlugins << "Red : "<< rgbcolor.red();
-    dbgPlugins << "Green : "<< rgbcolor.green();
-    dbgPlugins << "Blue : "<< rgbcolor.blue();
-    dbgPlugins << "Alpha: "<< rgbcolor.alpha();*/
+    //KoColor kcolor( m_dev->colorSpace() );
 
     int centerX = m_image->width()  / 2;
     int centerY = m_image->height() / 2;
@@ -121,21 +112,19 @@ void DeformBrush::swirl(qreal cursorX,qreal cursorY, qreal alpha){
 
     qreal rotX, rotY;
     qreal distance;
-    qreal maxdist = sqrt(pow(m_radius,2));
 
-    for (int x = curXi - m_radius; x < curXi + m_radius;x++){
-        for (int y = curYi - m_radius; y < curYi + m_radius;y++){
+    for (int x = curXi - m_radius; x <= curXi + m_radius;x++){
+        for (int y = curYi - m_radius; y <= curYi + m_radius;y++){
 
             newX = x - curXi;
             newY = y - curYi;
 
-            distance = sqrt(newX*newX +newY*newY);
-            if (distance > m_radius) continue;
+            distance = distanceFromCenter(abs(newX), abs(newY));
+            if (distance > 1.0) continue;
 
-            qreal t = distance/maxdist;
-            t = 1.0 - t;
-            rotX = cos(-alpha * t) * newX - sin(-alpha *t) * newY;
-            rotY = sin(-alpha * t) * newX + cos(-alpha *t) * newY;
+            distance = 1.0 - distance;
+            rotX = cos(-alpha * distance) * newX - sin(-alpha * distance) * newY;
+            rotY = sin(-alpha * distance) * newX + cos(-alpha * distance) * newY;
 
             newX = rotX;
             newY = rotY;
@@ -153,29 +142,22 @@ void DeformBrush::swirl(qreal cursorX,qreal cursorY, qreal alpha){
                 // copy pixel
                 m_readAccessor->moveTo(newX, newY);
                 m_writeAccessor->moveTo(x, y); 
-
-                memcpy(kcolor.data(), m_readAccessor->oldRawData(), m_pixelSize);
-                //memcpy(m_readAccessor->rawData(), touchColor.data(), m_pixelSize);
-                memcpy(m_writeAccessor->rawData(), kcolor.data(), m_pixelSize );
+                memcpy(m_writeAccessor->rawData(), m_readAccessor->rawData(), m_pixelSize );
             }
-
         }
     }
-
 }
 
 
 void DeformBrush::paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPaintInformation &info)
 {
- 
-    dbgPlugins << "action:" << m_action;
-   
     qreal x1 = info.pos().x();
     qreal y1 = info.pos().y();
 
     m_dev = layer;
 
-    if (m_useBilinear){
+    if (m_useBilinear)
+    {
         // only used when bilinear interepolation checked
         m_tempColor = new KoColor(m_dev->colorSpace());
     }
@@ -190,11 +172,13 @@ void DeformBrush::paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPa
 
     if (m_action == 1){
         // grow
-        scale(x1,y1,1.0 + m_counter*m_counter/100.0);
+        //scale(x1,y1,1.0 + m_counter*m_counter/100.0);
+        scale(x1,y1,1.0 + m_amount);
     } else 
     if (m_action == 2){
         // shrink
-        scale(x1,y1,1.0 - m_counter*m_counter/100.0);
+        //scale(x1,y1,1.0 - m_counter*m_counter/100.0);
+        scale(x1,y1,1.0 - m_amount);
     } else 
     if (m_action == 3){
         // CW
@@ -204,37 +188,7 @@ void DeformBrush::paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPa
         // CCW
         swirl(x1,y1, (1.0/360*m_counter) * -radToDeg);
     }
-
     m_counter++;
-
-
-//    debug
-//    bilinear_interpolation(x1,y1);
-
-/*    KoColor kcolor( dev->colorSpace() );
-    QColor result(255,0,0,255);
-    kcolor.fromQColor(result);
-    debugColor(kcolor.data());*/
-
-    // debug code
-    /*QColor rgbcolor;
-    m_readAccessor->moveTo((int)x1, (int)y1);
-    layer->colorSpace()->toQColor(m_readAccessor->rawData(), &rgbcolor);
-
-    dbgPlugins << "Red : "<< rgbcolor.red();
-    dbgPlugins << "Green : "<< rgbcolor.green();
-    dbgPlugins << "Blue : "<< rgbcolor.blue();
-    dbgPlugins << "Alpha: "<< rgbcolor.alpha();
-
-    m_writeAccessor->moveTo((int)x1, (int)y1);
-    KoColor kcolor( dev->colorSpace() );
-    QColor result(255,0,0,255);
-    kcolor.fromQColor(result);
-    memcpy(m_writeAccessor->rawData(), kcolor.data(), m_pixelSize );*/
-
-    
-//    swirl(x1,y1,45 * (double)i/steps  * radToDeg,1);
-
 }
 
 
@@ -293,6 +247,19 @@ void DeformBrush::debugColor(const quint8* data){
     << ", "<< rgbcolor.alpha() << ")";
 }
 
+void DeformBrush::precomputeDistances(int radius){
+    int size = (radius+1)*(radius+1);
+    m_distanceTable = new qreal[size];
+    int pos = 0;
+
+    for (int y = 0;y <= radius; y++)
+        for (int x = 0; x <= radius; x++,pos++)
+        {
+            m_distanceTable[pos] = sqrt(x*x+y*y)/m_maxdist;
+        }
+}
+
+
 /// result of bilinear interpolation is in m_tempColor
 void DeformBrush::bilinear_interpolation(double x, double y ) {
     KoMixColorsOp * mixOp = m_dev->colorSpace()->mixColorsOp();
@@ -307,16 +274,16 @@ void DeformBrush::bilinear_interpolation(double x, double y ) {
     {
         const quint8 *colors[4];
         m_readAccessor->moveTo(ix, iy);
-        colors[0] = m_readAccessor->oldRawData(); //11
+        colors[0] = m_readAccessor->rawData(); //11
     
         m_readAccessor->moveTo(ix+1, iy);
-        colors[1] = m_readAccessor->oldRawData(); //12
+        colors[1] = m_readAccessor->rawData(); //12
     
         m_readAccessor->moveTo(ix, iy+1);
-        colors[2] = m_readAccessor->oldRawData(); //21
+        colors[2] = m_readAccessor->rawData(); //21
     
         m_readAccessor->moveTo(ix+1, iy+1);
-        colors[3] = m_readAccessor->oldRawData();  //22  
+        colors[3] = m_readAccessor->rawData();  //22  
     
         double x_frac = x - (double)ix; 
         double y_frac = y - (double)iy;

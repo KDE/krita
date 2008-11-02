@@ -50,6 +50,7 @@ public:
     double deformAmount() const;
     int deformAction() const;
     bool bilinear() const;
+    bool useMovementPaint() const;
 
 private:
     KisDeformPaintOpSettingsWidget* m_options;

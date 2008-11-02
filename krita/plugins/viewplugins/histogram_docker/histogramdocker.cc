@@ -117,10 +117,12 @@ KritaHistogramDocker::KritaHistogramDocker(QObject *parent, const QStringList&)
         m_hview = new KisHistogramView(m_view);
         m_hview->setHistogram(m_histogram);
         m_hview->setColor(true);
-        m_hview->setCurrentChannels(KoHistogramProducerSP(m_producer), m_producer->channels());
+
+        // At the time we called colorSpaceChanged m_hview was not yet constructed, so producerChanged didn't call this
+        setChannels();
+
         m_hview->setFixedSize(256, 100); // XXX if not it keeps expanding
         m_hview->setWindowTitle(i18n("Histogram"));
-
 
         connect(m_hview, SIGNAL(rightClicked(const QPoint&)),
                 this, SLOT(popupMenu(const QPoint&)));
@@ -147,6 +149,20 @@ KritaHistogramDocker::~KritaHistogramDocker()
 
     if (m_cache)
         m_cache->deleteLater();
+}
+
+void KritaHistogramDocker::setChannels() {
+    m_hview->setHistogram(m_histogram);
+    m_hview->setColor(true);
+    QList<KoChannelInfo *> channels;
+        // Only display color channels
+    for (int i = 0; i < m_producer->channels().count(); i++) {
+        kDebug() << m_producer->channels().at(i)->name();
+        if (m_producer->channels().at(i)->channelType() == KoChannelInfo::COLOR) {
+            channels.append(m_producer->channels().at(i));
+        }
+    }
+    m_hview->setCurrentChannels(KoHistogramProducerSP(m_producer), channels);
 }
 
 void KritaHistogramDocker::producerChanged(QAction *action)
@@ -187,17 +203,7 @@ void KritaHistogramDocker::producerChanged(QAction *action)
                                    KoHistogramProducerSP(m_producer), LOGARITHMIC);
 
     if (m_hview) {
-        m_hview->setHistogram(m_histogram);
-        m_hview->setColor(true);
-        QList<KoChannelInfo *> channels;
-        // Only display color channels
-        for (int i = 0; i < m_producer->channels().count(); i++) {
-            if (m_producer->channels().at(i)->channelType() == KoChannelInfo::COLOR) {
-                channels.append(m_producer->channels().at(i));
-            }
-        }
-        m_hview->setCurrentChannels(KoHistogramProducerSP(m_producer), channels);
-
+        setChannels();
         connect(m_cache, SIGNAL(cacheUpdated()),
                 new HistogramDockerUpdater(this, m_histogram, m_hview, m_producer), SLOT(updated()));
     }

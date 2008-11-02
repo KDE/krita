@@ -46,6 +46,7 @@ private slots:
     void popupMenu(const QPoint & pos);
     void colorSpaceChanged(const KoColorSpace* cs);
 private:
+    void setChannels();
     KoHistogramProducerFactory* m_factory;
     KisCachedHistogramObserver::Producers m_producers;
     KisAccumulatingHistogramProducer* m_producer;

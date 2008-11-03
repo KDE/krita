@@ -190,18 +190,18 @@ public:
     bool m_windowSizeDirty;
     bool m_readOnly;
 
-    QAction *m_paDocInfo;
-    QAction *m_paSave;
-    QAction *m_paSaveAs;
-    QAction *m_paPrint;
-    QAction *m_paPrintPreview;
-    QAction *m_sendfile;
-    QAction *m_exportPdf;
-    QAction *m_paCloseFile;
-    QAction *m_reloadfile;
-    QAction *m_versionsfile;
-    QAction *m_importFile;
-    QAction *m_exportFile;
+    KAction *m_paDocInfo;
+    KAction *m_paSave;
+    KAction *m_paSaveAs;
+    KAction *m_paPrint;
+    KAction *m_paPrintPreview;
+    KAction *m_sendfile;
+    KAction *m_exportPdf;
+    KAction *m_paCloseFile;
+    KAction *m_reloadfile;
+    KAction *m_versionsfile;
+    KAction *m_importFile;
+    KAction *m_exportFile;
     KRecentFilesAction *recent;
 
     bool m_isImporting;
@@ -252,7 +252,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->m_paPrintPreview = actionCollection()->addAction(KStandardAction::PrintPreview,  "file_print_preview", this, SLOT(slotFilePrintPreview()));
 #endif
 
-    d->m_exportPdf  = new QAction(i18n("Export as PDF..."), this);
+    d->m_exportPdf  = new KAction(i18n("Export as PDF..."), this);
     d->m_exportPdf->setIcon(KIcon("application-pdf"));
     actionCollection()->addAction("file_export_pdf", d->m_exportPdf);
     connect(d->m_exportPdf, SIGNAL(triggered()), this, SLOT(slotPrintAndSave()));
@@ -309,14 +309,14 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     new KKbdAccessExtensions(actionCollection(), this);
 
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
-    QAction *closeAllViews  = new KAction(KIcon("window-close"), i18n("&Close All Views"), this);
+    KAction *closeAllViews  = new KAction(KIcon("window-close"), i18n("&Close All Views"), this);
     actionCollection()->addAction("view_closeallviews", closeAllViews);
     closeAllViews->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_W));
     connect(closeAllViews, SIGNAL(triggered(bool)), this, SLOT(slotCloseAllViews()));
     d->m_veryHackyActionList.append(closeAllViews);
 
     // set up the action list for the splitter stuff
-    QAction * splitView  = new KAction(KIcon("view_split"), i18n("&Split View"), this);
+    KAction * splitView  = new KAction(KIcon("view_split"), i18n("&Split View"), this);
     actionCollection()->addAction("view_split", splitView);
     connect(splitView, SIGNAL(triggered(bool)), this, SLOT(slotSplitView()));
     d->m_splitViewActionList.append(splitView);

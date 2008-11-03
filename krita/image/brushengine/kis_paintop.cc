@@ -110,7 +110,11 @@ static double paintBezierCurve(KisPaintOp *paintOp,
     qreal d2 = line.absDistance(control2);
 
     if ((d1 < BEZIER_FLATNESS_THRESHOLD && d2 < BEZIER_FLATNESS_THRESHOLD)
+#ifdef Q_CC_MSVC
+            || isnan(d1) || isnan(d2)) {
+#else
             || std::isnan(d1) || std::isnan(d2)) {
+#endif
         newDistance = paintOp->paintLine(pi1, pi2, savedDist);
     } else {
         // Midpoint subdivision. See Foley & Van Dam Computer Graphics P.508

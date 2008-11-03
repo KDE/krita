@@ -61,7 +61,7 @@
 
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
-        : KisTool(canvas, cursor)
+        : KisTool(canvas, cursor), m_previousNode(0)
 {
     m_optionWidgetLayout = 0;
 
@@ -86,6 +86,20 @@ void KisToolPaint::resourceChanged(int key, const QVariant & v)
     switch (key) {
     case(KisCanvasResourceProvider::CurrentKritaNode):
         updateCompositeOpComboBox();
+        // Deconnect colorspace change of previous node
+        if(m_previousNode)
+        {
+          if( m_previousNode->paintDevice() )
+          {
+            disconnect(m_previousNode->paintDevice().data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SLOT(updateCompositeOpComboBox()));
+          }
+        }
+        // Reconnect colorspace change of node
+        m_previousNode = currentNode();
+        if( m_previousNode->paintDevice() )
+        {
+          connect(m_previousNode->paintDevice().data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), SLOT(updateCompositeOpComboBox()));
+        }
         break;
     default:
         ; // Do nothing

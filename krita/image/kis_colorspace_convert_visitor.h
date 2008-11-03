@@ -165,6 +165,7 @@ bool KisColorSpaceConvertVisitor::visit(KisPaintLayer *layer)
     layer->setChannelFlags(m_emptyChannelFlags);
     layer->setDirty();
     layer->setCompositeOp(m_dstColorSpace->compositeOp(layer->compositeOp()->id()));
+    Q_ASSERT(!layer->temporaryTarget() );
     return true;
 }
 

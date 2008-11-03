@@ -531,9 +531,9 @@ void KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConver
 //     }
 
     setDirty();
+    emit colorSpaceChanged(dstColorSpace);
     delete oldColorSpace;
     delete weaver;
-    // XXX: emit colorSpaceChanged(dstColorSpace);
 }
 
 void KisPaintDevice::setProfile(const KoColorProfile * profile)

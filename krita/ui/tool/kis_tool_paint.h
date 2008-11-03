@@ -91,13 +91,9 @@ protected:
 
     virtual QWidget * createOptionWidget();
 
-private:
-
-    // XXX: Call this when the layer changes (this used to be called in KisCanvasObserver::update)
-    void updateCompositeOpComboBox();
-
 private slots:
 
+    void updateCompositeOpComboBox();
     void slotPopupQuickHelp();
     void slotSetOpacity(qreal opacityPerCent, bool final);
     void slotSetCompositeMode(const KoCompositeOp* compositeOp);
@@ -116,6 +112,7 @@ private:
     KoSliderCombo *m_slOpacity;
     QLabel *m_lbComposite;
     KisCmbComposite *m_cmbComposite;
+    KisNodeSP m_previousNode;
 };
 
 #endif // KIS_TOOL_PAINT_H_

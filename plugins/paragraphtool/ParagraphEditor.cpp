@@ -48,11 +48,11 @@ ParagraphEditor::ParagraphEditor(QObject *parent, KoCanvasBase *canvas)
         m_highlightedRuler(noRuler),
         m_smoothMovement(false)
 {
-    initializeRuler(m_rulers[firstIndentRuler], i18n("First Line:"));
-    connect(&m_rulers[firstIndentRuler], SIGNAL(valueChanged(qreal)), this, SLOT(saveTextIndent()));
+    initializeRuler(m_rulers[textIndentRuler], i18n("First Line:"));
+    connect(&m_rulers[textIndentRuler], SIGNAL(valueChanged(qreal)), this, SLOT(saveTextIndent()));
 
-    initializeRuler(m_rulers[followingIndentRuler], i18n("Left:"));
-    connect(&m_rulers[followingIndentRuler], SIGNAL(valueChanged(qreal)), this, SLOT(saveLeftMargin()));
+    initializeRuler(m_rulers[leftMarginRuler], i18n("Left:"));
+    connect(&m_rulers[leftMarginRuler], SIGNAL(valueChanged(qreal)), this, SLOT(saveLeftMargin()));
 
     initializeRuler(m_rulers[rightMarginRuler], i18n("Right:"));
     connect(&m_rulers[rightMarginRuler], SIGNAL(valueChanged(qreal)), this, SLOT(saveRightMargin()));
@@ -84,8 +84,8 @@ void ParagraphEditor::initializeRuler(Ruler &ruler, const QString &name, int opt
 
 void ParagraphEditor::loadRulers()
 {
-    m_rulers[firstIndentRuler].setValue(paragraphStyle()->leftMargin() + paragraphStyle()->textIndent());
-    m_rulers[followingIndentRuler].setValue(paragraphStyle()->leftMargin());
+    m_rulers[textIndentRuler].setValue(paragraphStyle()->leftMargin() + paragraphStyle()->textIndent());
+    m_rulers[leftMarginRuler].setValue(paragraphStyle()->leftMargin());
     m_rulers[rightMarginRuler].setValue(paragraphStyle()->rightMargin());
     m_rulers[topMarginRuler].setValue(paragraphStyle()->topMargin());
     m_rulers[bottomMarginRuler].setValue(paragraphStyle()->bottomMargin());
@@ -95,7 +95,7 @@ void ParagraphEditor::loadRulers()
 
 void ParagraphEditor::saveLeftMargin()
 {
-    paragraphStyle()->setLeftMargin(m_rulers[followingIndentRuler].value());
+    paragraphStyle()->setLeftMargin(m_rulers[leftMarginRuler].value());
     applyStyle();
 }
 
@@ -105,12 +105,14 @@ void ParagraphEditor::saveRightMargin()
 
     applyStyle();
 }
+
 void ParagraphEditor::saveTopMargin()
 {
     paragraphStyle()->setTopMargin(m_rulers[topMarginRuler].value());
 
     applyStyle();
 }
+
 void ParagraphEditor::saveBottomMargin()
 {
     paragraphStyle()->setBottomMargin(m_rulers[bottomMarginRuler].value());
@@ -120,7 +122,7 @@ void ParagraphEditor::saveBottomMargin()
 
 void ParagraphEditor::saveTextIndent()
 {
-    paragraphStyle()->setTextIndent(m_rulers[firstIndentRuler].value() - m_rulers[followingIndentRuler].value());
+    paragraphStyle()->setTextIndent(m_rulers[textIndentRuler].value() - m_rulers[leftMarginRuler].value());
 
     applyStyle();
 }
@@ -257,13 +259,13 @@ void ParagraphEditor::initRulerFragments(const ParagraphFragment *fragment, Rule
     RulerFragment firstFragment;
     firstFragment.setVisible(shapeTop < firstLine.bottom());
     firstFragment.setBaseline(matrix.map(QLineF(border.left(), firstLine.top(), border.left(), firstLine.bottom())));
-    rulers[firstIndentRuler].addFragment(firstFragment);
+    rulers[textIndentRuler].addFragment(firstFragment);
 
     // following lines
     RulerFragment followingFragment;
     followingFragment.setVisible(shapeTop < followingLines.bottom() && shapeBottom > followingLines.top() && !isSingleLine);
     followingFragment.setBaseline(matrix.map(QLineF(border.left(), followingTop, border.left(), followingBottom)));
-    rulers[followingIndentRuler].addFragment(followingFragment);
+    rulers[leftMarginRuler].addFragment(followingFragment);
 
     // right margin
     RulerFragment rightFragment;
@@ -289,10 +291,11 @@ void ParagraphEditor::initRulerFragments(const ParagraphFragment *fragment, Rule
     lineFragment.setBaseline(matrix.map(QLineF(firstLine.right(), firstLine.bottom(), border.left(), firstLine.bottom())));
     rulers[lineSpacingRuler].addFragment(lineFragment);
 }
+
 void ParagraphEditor::addFragments()
 {
-    m_rulers[firstIndentRuler].clearFragments();
-    m_rulers[followingIndentRuler].clearFragments();
+    m_rulers[textIndentRuler].clearFragments();
+    m_rulers[leftMarginRuler].clearFragments();
     m_rulers[rightMarginRuler].clearFragments();
     m_rulers[topMarginRuler].clearFragments();
     m_rulers[bottomMarginRuler].clearFragments();
@@ -486,11 +489,11 @@ void ParagraphEditor::applyParentStyleToActiveRuler()
         return;
     }
 
-    if (m_activeRuler == firstIndentRuler) {
+    if (m_activeRuler == textIndentRuler) {
         paragraphStyle()->remove(QTextFormat::TextIndent);
         m_rulers[m_activeRuler].setValue(paragraphStyle()->textIndent());
         saveTextIndent();
-    } else if (m_activeRuler == followingIndentRuler) {
+    } else if (m_activeRuler == leftMarginRuler) {
         paragraphStyle()->remove(QTextFormat::BlockLeftMargin);
         m_rulers[m_activeRuler].setValue(paragraphStyle()->leftMargin());
         saveLeftMargin();

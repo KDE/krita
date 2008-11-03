@@ -41,8 +41,8 @@ typedef enum {
     topMarginRuler,
     rightMarginRuler,
     bottomMarginRuler,
-    followingIndentRuler,
-    firstIndentRuler,
+    leftMarginRuler,
+    textIndentRuler,
     lineSpacingRuler,
     maxRuler,
     noRuler

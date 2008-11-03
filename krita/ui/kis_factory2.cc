@@ -41,7 +41,7 @@
 
 #include "kis_aboutdata.h"
 
-#include "kis_shape_selection.h"
+#include "flake/kis_shape_selection.h"
 #include "kis_doc2.h"
 
 

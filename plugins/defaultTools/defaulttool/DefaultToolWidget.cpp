@@ -53,11 +53,11 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
     connect( positionSelector, SIGNAL( positionSelected(KoFlake::Position) ), 
         this, SLOT( positionSelected(KoFlake::Position) ) );
 
-    connect( positionXSpinBox, SIGNAL( editingFinished() ), this, SLOT( positionHasChanged() ) );
-    connect( positionYSpinBox, SIGNAL( editingFinished() ), this, SLOT( positionHasChanged() ) );
+    connect( positionXSpinBox, SIGNAL( valueChangedPt(qreal) ), this, SLOT( positionHasChanged() ) );
+    connect( positionYSpinBox, SIGNAL( valueChangedPt(qreal) ), this, SLOT( positionHasChanged() ) );
 
-    connect( widthSpinBox, SIGNAL( editingFinished() ), this, SLOT( sizeHasChanged() ) );
-    connect( heightSpinBox, SIGNAL( editingFinished() ), this, SLOT( sizeHasChanged() ) );
+    connect( widthSpinBox, SIGNAL( valueChangedPt(qreal) ), this, SLOT( sizeHasChanged() ) );
+    connect( heightSpinBox, SIGNAL( valueChangedPt(qreal) ), this, SLOT( sizeHasChanged() ) );
 
     KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
     connect( selection, SIGNAL( selectionChanged() ), this, SLOT( updatePosition() ) );

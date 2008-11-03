@@ -133,3 +133,7 @@ int KoVariable::positionInDocument() const
 {
     return d->lastPositionInDocument;
 }
+
+bool KoVariable::loadOdf(const KoXmlElement&, KoShapeLoadingContext&)
+{
+}

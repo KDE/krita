@@ -21,10 +21,6 @@
 #define __KOVARIABLE_H__
 
 // KOffice libs
-#ifdef _MSC_VER
-#include "KoXmlReader.h"
-#include "KoShapeLoadingContext.h"
-#endif
 #include "KoInlineObject.h"
 #include "kotext_export.h"
 
@@ -96,11 +92,7 @@ public:
      *
      * @return false if loading failed
      */
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) {
-        Q_UNUSED(element);
-        Q_UNUSED(context)
-        return false;
-    }
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 protected:
     /**

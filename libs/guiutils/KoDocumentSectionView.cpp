@@ -164,8 +164,11 @@ void KoDocumentSectionView::showContextMenu( const QPoint &globalPos, const QMod
 void KoDocumentSectionView::currentChanged( const QModelIndex &current, const QModelIndex &previous )
 {
     super::currentChanged( current, previous );
-    if( current != previous && current.isValid() ) //hack?
-        const_cast<QAbstractItemModel*>( current.model() )->setData( current, true, Model::ActiveRole );
+    if( current != previous /*&& current.isValid()*/ ) //hack?
+    {
+        Q_ASSERT( !current.isValid() || current.model() == model() );
+        model()->setData( current, true, Model::ActiveRole );
+    }
 }
 
 void KoDocumentSectionView::dataChanged( const QModelIndex &topLeft, const QModelIndex &bottomRight )

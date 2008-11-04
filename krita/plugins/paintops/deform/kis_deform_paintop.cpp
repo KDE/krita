@@ -74,32 +74,21 @@ void KisDeformPaintOp::paintAt(const KisPaintInformation& info)
     KisPaintDeviceSP device = painter()->device();
     if (!device) return;
 
-    // m_dev is set in KisDeformPaintOp::KisDeformPaintOp
-    KisPaintDeviceSP device2 = m_dev;
-    if (!device2) {
-        dbgPlugins << "Device -- : NULL probably";
-        return;
-    }
-
-
     dab = cachedDab();
     dab->clear();
 
     //write device, read device, position 
-    m_deformBrush.paint(dab,device2, info);
+    m_deformBrush.paint(dab,m_dev, info);
 
     QRect rc = dab->extent();
-    qDebug() << rc;
 
-    /*painter()->bltSelection(
+    painter()->bltSelection(
         rc.x(), rc.y(),
-        device->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN),
+        painter()->compositeOp(),
         dab,
         painter()->opacity(),
         rc.x(), rc.y(),
         rc.width(), rc.height());
-    */
-    painter()->bitBlt(rc.topLeft(), dab, rc);
 }
 
 

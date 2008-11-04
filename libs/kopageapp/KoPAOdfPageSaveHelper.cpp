@@ -21,6 +21,7 @@
 
 #include <QSet>
 
+#include <KoXmlWriter.h>
 #include "KoPADocument.h"
 #include "KoPAPage.h"
 #include "KoPASavingContext.h"
@@ -66,7 +67,18 @@ bool KoPAOdfPageSaveHelper::writeBody()
     Q_ASSERT( m_context );
     if ( m_context ) {
         m_doc->saveOdfDocumentStyles( *( static_cast<KoPASavingContext*>( m_context ) ) );
-        return m_doc->saveOdfPages( *( static_cast<KoPASavingContext*>( m_context ) ), m_pages, m_masterPages );
+        KoXmlWriter & bodyWriter = static_cast<KoPASavingContext*>( m_context )->xmlWriter();
+        bodyWriter.startElement( "office:body" );
+        bodyWriter.startElement( m_doc->odfTagName( true ) );
+
+        if ( !m_doc->saveOdfPages( *( static_cast<KoPASavingContext*>( m_context ) ), m_pages, m_masterPages ) ) {
+            return false;
+        }
+
+        bodyWriter.endElement(); // office:odfTagName()
+        bodyWriter.endElement(); // office:body
+
+        return true;
     }
     return false;
 }

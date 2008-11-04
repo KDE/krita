@@ -55,6 +55,11 @@ public:
     bool saveOdf( SavingContext & documentContext );
 
     /**
+     * The tag the body is saved in
+     */
+    virtual const char *odfTagName( bool withNamespace ) = 0;
+
+    /**
      * Load master pages
      *
      * @param masterStyles
@@ -218,7 +223,13 @@ protected:
     void insertIntoDataCenterMap(QString key, KoDataCenter *dc);
 
     virtual KoView *createViewInstance( QWidget *parent ) = 0;
-    virtual const char *odfTagName( bool withNamespace ) = 0;
+
+    /**
+     * Save the epilouge
+     *
+     * The default implementation is empty
+     */
+    virtual bool saveOdfEpilogue( KoPASavingContext & paContext );
 
     /**
      * This function is called by at the end of addShape. This is used 

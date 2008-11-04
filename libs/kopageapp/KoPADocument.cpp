@@ -168,9 +168,19 @@ bool KoPADocument::saveOdf( SavingContext & documentContext )
 
     saveOdfDocumentStyles( paContext );
 
+    bodyWriter->startElement( "office:body" );
+    bodyWriter->startElement( odfTagName( true ) );
+
     if ( !saveOdfPages( paContext, d->pages, d->masterPages ) ) {
         return false;
     }
+
+    if ( ! saveOdfEpilogue( paContext ) ) {
+        return false;
+    }
+
+    bodyWriter->endElement(); // office:odfTagName()
+    bodyWriter->endElement(); // office:body
 
     mainStyles.saveOdfAutomaticStyles( contentWriter, false );
 
@@ -238,10 +248,6 @@ bool KoPADocument::saveOdfPages( KoPASavingContext &paContext, QList<KoPAPageBas
         page->saveOdf( paContext );
     }
 
-    KoXmlWriter & bodyWriter = paContext.xmlWriter();
-    bodyWriter.startElement( "office:body" );
-    bodyWriter.startElement( odfTagName( true ) );
-
     paContext.removeOption( KoPASavingContext::AutoStyleInStyleXml );
 
     // save pages
@@ -250,9 +256,12 @@ bool KoPADocument::saveOdfPages( KoPASavingContext &paContext, QList<KoPAPageBas
         paContext.incrementPage();
     }
 
-    bodyWriter.endElement(); // office:odfTagName()
-    bodyWriter.endElement(); // office:body
+    return true;
+}
 
+bool KoPADocument::saveOdfEpilogue( KoPASavingContext & paContext )
+{
+    Q_UNUSED( paContext );
     return true;
 }
 

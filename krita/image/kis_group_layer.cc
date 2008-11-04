@@ -221,8 +221,12 @@ QImage KisGroupLayer::createThumbnail(qint32 w, qint32 h)
 
 void KisGroupLayer::updateProjection(const QRect & rc)
 {
-    m_d->projection = updateStrategy()->updateGroupLayerProjection(rc, m_d->projection);
-
+    if( childCount() == 0 )
+    {
+        m_d->projection->clear();
+    } else {
+        m_d->projection = updateStrategy()->updateGroupLayerProjection(rc, m_d->projection);
+    }
 }
 
 #include "kis_group_layer.moc"

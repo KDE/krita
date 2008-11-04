@@ -261,7 +261,7 @@ bool KisNode::remove(quint32 index)
 
         m_d->nodes.removeAt(index);
 
-        setDirty(); // FIXME Would probably better if we could set a QRect
+        setDirty( removedNode->extent() );
 
         if (m_d->graphListener) m_d->graphListener->nodeHasBeenRemoved(this, index);
 

@@ -22,6 +22,7 @@
 
 #include "kis_penop_factory.h"
 
+#include <KoInputDevice.h>
 #include <kis_painter.h>
 #include <kis_paintop_settings.h>
 #include <kis_image.h>

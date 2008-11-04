@@ -118,13 +118,6 @@ void KisToolSelectPath::addPathShape()
     KisImageSP image = qobject_cast<KisLayer*>(currentNode->parent().data())->image();
     KisPaintDeviceSP dev = currentNode->paintDevice();
 
-    KisSelectionSP selection = image->globalSelection();
-    // XXX: also get global selection!
-    if (selection && currentNode->inherits("KisLayer")) {
-        selection = qobject_cast<KisLayer*>(currentNode.data())->selection();
-    }
-
-
     m_shape->normalize();
 
     KoPathShape *shape = m_shape;
@@ -147,12 +140,6 @@ void KisToolSelectPath::addPathShape()
         painter.setStrokeStyle(KisPainter::StrokeStyleNone);
         painter.setOpacity(OPACITY_OPAQUE);
         painter.setCompositeOp(tmpSel->colorSpace()->compositeOp(COMPOSITE_OVER));
-
-        KisPaintOpPresetSP preset =
-            static_cast<KisPaintOpPreset*>(m_canvas->resourceProvider()->
-                                           resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<void *>());
-        painter.setPaintOpPreset(preset, image);
-
 
         QMatrix matrix;
         matrix.scale(image->xRes(), image->yRes());

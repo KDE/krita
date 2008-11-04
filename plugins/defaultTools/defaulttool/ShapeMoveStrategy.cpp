@@ -55,7 +55,7 @@ ShapeMoveStrategy::ShapeMoveStrategy( KoTool *tool, KoCanvasBase *canvas, const 
     tool->setStatusText( i18n("Press ALT to hold x- or y-position.") );
 }
 
-void ShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers) 
+void ShapeMoveStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
     if(m_selectedShapes.isEmpty())
         return;
@@ -101,6 +101,7 @@ void ShapeMoveStrategy::handleCustomEvent( KoPointerEvent * event )
 
 void ShapeMoveStrategy::moveBy( const QPointF &diff )
 {
+    Q_UNUSED(diff);
     Q_ASSERT(m_newPositions.count());
 
     int i=0;
@@ -119,14 +120,16 @@ void ShapeMoveStrategy::moveBy( const QPointF &diff )
     m_canvas->shapeManager()->selection()->setPosition(m_initialSelectionPosition + m_diff);
 }
 
-QUndoCommand* ShapeMoveStrategy::createCommand() {
+QUndoCommand* ShapeMoveStrategy::createCommand()
+{
     m_canvas->snapGuide()->reset();
     if(m_diff.x() == 0 && m_diff.y() == 0)
         return 0;
     return new KoShapeMoveCommand(m_selectedShapes, m_previousPositions, m_newPositions);
 }
 
-void ShapeMoveStrategy::paint( QPainter &painter, const KoViewConverter &converter) {
+void ShapeMoveStrategy::paint( QPainter &painter, const KoViewConverter &converter)
+{
     SelectionDecorator decorator (KoFlake::NoHandle, false, false);
     decorator.setSelection(m_canvas->shapeManager()->selection());
     decorator.setHandleRadius( m_canvas->resourceProvider()->handleRadius() );

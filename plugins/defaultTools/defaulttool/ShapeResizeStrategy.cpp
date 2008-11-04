@@ -39,7 +39,7 @@ ShapeResizeStrategy::ShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas,
     Q_ASSERT( canvas->shapeManager()->selection()->count() > 0);
     QList<KoShape*> selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     foreach(KoShape *shape, selectedShapes) {
-        if( ! shape->isEditable() )
+        if ( ! shape->isEditable() )
             continue;
         m_selectedShapes << shape;
         m_startPositions << shape->position();
@@ -50,12 +50,12 @@ ShapeResizeStrategy::ShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas,
     m_start = clicked;
 
     KoShape *shp = 0;
-    if(canvas->shapeManager()->selection()->count()>1)
+    if (canvas->shapeManager()->selection()->count()>1)
        shp = canvas->shapeManager()->selection();
-    if(canvas->shapeManager()->selection()->count()==1)
+    if (canvas->shapeManager()->selection()->count()==1)
         shp = canvas->shapeManager()->selection()->firstSelectedShape();
 
-    if( shp )
+    if ( shp )
     {
         m_windMatrix = shp->absoluteTransformation(0);
         m_unwindMatrix = m_windMatrix.inverted();
@@ -109,17 +109,17 @@ void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
     QPointF distance = m_unwindMatrix.map(newPos) - m_unwindMatrix.map( m_start );
 
     qreal zoomX=1, zoomY=1;
-    if(m_left)
+    if (m_left)
         zoomX = (startWidth - distance.x()) / startWidth;
-    else if(m_right)
+    else if (m_right)
         zoomX = (startWidth + distance.x()) / startWidth;
-    if(m_top)
+    if (m_top)
         zoomY = (startHeight - distance.y()) / startHeight;
-    else if(m_bottom)
+    else if (m_bottom)
         zoomY = (startHeight + distance.y()) / startHeight;
-    if(keepAspect) {
+    if (keepAspect) {
         const bool cornerUsed = ((m_bottom?1:0) + (m_top?1:0) + (m_left?1:0) + (m_right?1:0)) == 2;
-        if(cornerUsed && startWidth < startHeight || m_left || m_right)
+        if ((cornerUsed && startWidth < startHeight) || m_left || m_right)
             zoomY = zoomX;
         else
             zoomX = zoomY;
@@ -128,7 +128,7 @@ void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
     bool scaleFromCenter = modifiers & Qt::ControlModifier;
     QPointF move;
 
-    if(scaleFromCenter)
+    if (scaleFromCenter)
         move = QPointF(startWidth / 2.0, startHeight / 2.0);
     else
         move = QPointF(m_left?startWidth:0, m_top?startHeight:0);
@@ -218,11 +218,12 @@ void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zo
     m_scaleMatrix = matrix;
 }
 
-QUndoCommand* ShapeResizeStrategy::createCommand() {
+QUndoCommand* ShapeResizeStrategy::createCommand()
+{
     QList<QSizeF> newSizes;
     QList<QMatrix> transformations;
     const int shapeCount = m_selectedShapes.count();
-    for( int i = 0; i < shapeCount; ++i )
+    for ( int i = 0; i < shapeCount; ++i )
     {
         newSizes << m_selectedShapes[i]->size();
         transformations << m_selectedShapes[i]->transformation();
@@ -233,7 +234,8 @@ QUndoCommand* ShapeResizeStrategy::createCommand() {
     return cmd;
 }
 
-void ShapeResizeStrategy::paint( QPainter &painter, const KoViewConverter &converter) {
+void ShapeResizeStrategy::paint( QPainter &painter, const KoViewConverter &converter)
+{
     SelectionDecorator decorator (KoFlake::NoHandle, false, false);
     decorator.setSelection(m_canvas->shapeManager()->selection());
     decorator.setHandleRadius( m_canvas->resourceProvider()->handleRadius() );

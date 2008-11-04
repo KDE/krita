@@ -23,7 +23,7 @@
 
 class KisDuplicateOpOptionsWidget;
 
-class PAINTOP_EXPORT KisDuplicateOpOption : public KisPaintOpOption
+class KisDuplicateOpOption : public KisPaintOpOption
 {
 public:
     KisDuplicateOpOption();

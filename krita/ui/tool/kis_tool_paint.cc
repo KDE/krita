@@ -96,7 +96,7 @@ void KisToolPaint::resourceChanged(int key, const QVariant & v)
         }
         // Reconnect colorspace change of node
         m_previousNode = currentNode();
-        if( m_previousNode->paintDevice() )
+        if( m_previousNode && m_previousNode->paintDevice() )
         {
           connect(m_previousNode->paintDevice().data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), SLOT(updateCompositeOpComboBox()));
         }

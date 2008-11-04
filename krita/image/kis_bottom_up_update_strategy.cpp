@@ -225,6 +225,7 @@ public:
         dx = sx;
         dy = sy;
 
+//         dev->clear( rc );
         KisPainter gc(m_projection);
         gc.setChannelFlags(layer->channelFlags());
         gc.bitBlt(dx, dy, layer->compositeOp(), dev, layer->opacity(), sx, sy, w, h);

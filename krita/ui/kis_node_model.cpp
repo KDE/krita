@@ -251,9 +251,15 @@ Qt::ItemFlags KisNodeModel::flags(const QModelIndex &index) const
 
 bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    //dbgUI <<"KisNodeModel::setData( index=" << index <<", value=" << value <<", role=" << role;
+    dbgUI <<"KisNodeModel::setData( index=" << index <<", value=" << value <<", role=" << role;
     if (!index.isValid())
+    {
+        if( role == ActiveRole)
+        {
+           emit nodeActivated(0);
+        }
         return false;
+    }
 
     Q_ASSERT(index.model() == this);
     Q_ASSERT(index.internalPointer());

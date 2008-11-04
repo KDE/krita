@@ -92,15 +92,6 @@ public:
     QMap<QString, QWidget *>  optionWidgets();
 
     /**
-     * Quick help is a short help text about the way the tool functions.
-     *
-     * Deprecated: this method may move to KoToolFactory.
-     */
-    virtual KDE_DEPRECATED QString quickHelp() const {
-        return "";
-    }
-
-    /**
      * Returns the internal selection option of this tool.
      * Each tool can have a selection which is private to that tool and the specified shape that it comes with.
      * The default returns 0.

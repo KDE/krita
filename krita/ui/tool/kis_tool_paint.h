@@ -91,6 +91,14 @@ protected:
 
     virtual QWidget * createOptionWidget();
 
+     /** Quick help is a short help text about the way the tool functions.
+     * Deprecated: this method may move to KoToolFactory.
+     */
+    virtual KDE_DEPRECATED QString quickHelp() const {
+        return QString();
+    }
+
+
 private slots:
 
     void updateCompositeOpComboBox();

@@ -20,6 +20,9 @@
 #include "KoPASavingContext.h"
 
 #include <QPixmap>
+#include <QRegExp>
+
+#include "KoPAPage.h"
 
 KoPASavingContext::KoPASavingContext( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, KoEmbeddedDocumentSaver &embeddedSaver,
                                       int page, SavingMode savingMode )
@@ -77,4 +80,24 @@ void KoPASavingContext::setClearDrawIds( bool clear )
 bool KoPASavingContext::isSetClearDrawIds()
 {
     return m_clearDrawIds;
+}
+
+QString KoPASavingContext::pageName( const KoPAPage * page )
+{
+    QString name;
+    QMap<const KoPAPage *, QString>::iterator it( m_pageToNames.find( page ) );
+    if ( it != m_pageToNames.end() ) {
+        name = it.value();
+    }
+    else {
+        name = page->name();
+        QRegExp rx( "^page[0-9]+$" );
+        if ( name.isEmpty() || m_pageNames.contains( name ) || rx.search( name ) != -1 ) {
+            name = "page" + QString::number( m_page );
+        }
+        Q_ASSERT( !m_pageNames.contains( name ) );
+        m_pageNames.insert( name );
+        m_pageToNames.insert( page, name );
+    }
+    return name;
 }

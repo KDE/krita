@@ -119,7 +119,7 @@ public:
 
         if (!layer->visible()) {
             if (first) {
-                m_projection->clear();
+                m_projection->clear(m_rc);
             }
             return true;
         }

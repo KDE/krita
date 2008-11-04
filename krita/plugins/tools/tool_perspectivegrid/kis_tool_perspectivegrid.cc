@@ -36,6 +36,7 @@
 #include <kis_cursor.h>
 #include <kis_image.h>
 #include <KoPointerEvent.h>
+#include <KoViewConverter.h>
 #include <canvas/kis_perspective_grid_manager.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_selected_transaction.h>

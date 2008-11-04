@@ -822,4 +822,9 @@ void KisView2::slotTotalRefresh()
     m_d->canvas->resetCanvas();
 }
 
+KisLayerBox* KisView2::layerBox()
+{
+    return m_d->layerBox;
+}
+
 #include "kis_view2.moc"

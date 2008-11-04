@@ -79,6 +79,7 @@
 #include "canvas/kis_canvas2.h"
 #include "widgets/kis_meta_data_merge_strategy_chooser_widget.h"
 #include "widgets/kis_wdg_generator.h"
+#include "kis_layer_box.h"
 
 KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
         : m_view(view)
@@ -451,11 +452,12 @@ void KisLayerManager::addLayer(KisNodeSP parent, KisNodeSP above)
     if (img) {
         KisConfig cfg;
         QString profilename;
-        KisLayerSP layer = KisLayerSP(new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE, img->colorSpace()));
+        KisLayerSP layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE, img->colorSpace());
         if (layer) {
             layer->setCompositeOp(img->colorSpace()->compositeOp(COMPOSITE_OVER));
             img->addNode(layer.data(), parent.data(), above.data());
             m_view->canvas()->update();
+            m_view->layerBox()->setCurrentNode( layer );
         } else {
             KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
         }

@@ -21,188 +21,137 @@
     <height>415</height>
    </size>
   </property>
-  <widget class="QLabel" name="deformLabel" >
-   <property name="geometry" >
-    <rect>
-     <x>10</x>
-     <y>50</y>
-     <width>332</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="font" >
-    <font>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="text" >
-    <string>Deform Mode</string>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="interpolationChBox" >
-   <property name="geometry" >
-    <rect>
-     <x>10</x>
-     <y>210</y>
-     <width>171</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Bilinear interpolation</string>
-   </property>
-   <property name="checked" >
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QRadioButton" name="growBtn" >
-   <property name="geometry" >
-    <rect>
-     <x>40</x>
-     <y>80</y>
-     <width>109</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Grow</string>
-   </property>
-  </widget>
-  <widget class="QRadioButton" name="shrinkBtn" >
-   <property name="geometry" >
-    <rect>
-     <x>160</x>
-     <y>80</y>
-     <width>109</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Shrink</string>
-   </property>
-  </widget>
-  <widget class="QRadioButton" name="swirlCCWBtn" >
-   <property name="geometry" >
-    <rect>
-     <x>40</x>
-     <y>110</y>
-     <width>109</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Swirl CCW</string>
-   </property>
-  </widget>
-  <widget class="QRadioButton" name="swirlCWBtn" >
-   <property name="geometry" >
-    <rect>
-     <x>160</x>
-     <y>110</y>
-     <width>109</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Swirl CW</string>
-   </property>
-   <property name="checked" >
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QLabel" name="deformRadiusLbl" >
-   <property name="geometry" >
-    <rect>
-     <x>10</x>
-     <y>150</y>
-     <width>332</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="font" >
-    <font>
-     <weight>50</weight>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="text" >
-    <string>Deform Radius</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="deformAmountLbl" >
-   <property name="geometry" >
-    <rect>
-     <x>10</x>
-     <y>180</y>
-     <width>332</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="font" >
-    <font>
-     <weight>50</weight>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="text" >
-    <string>Deform Amount</string>
-   </property>
-  </widget>
-  <widget class="QSpinBox" name="deformRadiusSPBox" >
-   <property name="geometry" >
-    <rect>
-     <x>160</x>
-     <y>140</y>
-     <width>62</width>
-     <height>29</height>
-    </rect>
-   </property>
-   <property name="maximum" >
-    <number>4096</number>
-   </property>
-   <property name="value" >
-    <number>100</number>
-   </property>
-  </widget>
-  <widget class="QDoubleSpinBox" name="deformAmountSPBox" >
-   <property name="geometry" >
-    <rect>
-     <x>160</x>
-     <y>170</y>
-     <width>62</width>
-     <height>29</height>
-    </rect>
-   </property>
-   <property name="minimum" >
-    <double>0.010000000000000</double>
-   </property>
-   <property name="maximum" >
-    <double>1.000000000000000</double>
-   </property>
-   <property name="singleStep" >
-    <double>0.100000000000000</double>
-   </property>
-   <property name="value" >
-    <double>0.200000000000000</double>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="addPaintChBox" >
-   <property name="geometry" >
-    <rect>
-     <x>10</x>
-     <y>240</y>
-     <width>201</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Paint even no movement</string>
-   </property>
-   <property name="checked" >
-    <bool>true</bool>
-   </property>
-  </widget>
+  <layout class="QGridLayout" name="gridLayout" >
+   <item row="0" column="0" colspan="2" >
+    <widget class="QLabel" name="deformLabel" >
+     <property name="font" >
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text" >
+      <string>Deform Mode</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QRadioButton" name="growBtn" >
+     <property name="text" >
+      <string>Grow</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QRadioButton" name="shrinkBtn" >
+     <property name="text" >
+      <string>Shrink</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QRadioButton" name="swirlCCWBtn" >
+     <property name="text" >
+      <string>Swirl CCW</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" >
+    <widget class="QRadioButton" name="swirlCWBtn" >
+     <property name="text" >
+      <string>Swirl CW</string>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1" >
+    <widget class="QSpinBox" name="deformRadiusSPBox" >
+     <property name="maximum" >
+      <number>4096</number>
+     </property>
+     <property name="value" >
+      <number>100</number>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2" >
+    <widget class="QLabel" name="deformRadiusLbl" >
+     <property name="font" >
+      <font>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text" >
+      <string>Deform Radius</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1" >
+    <widget class="QDoubleSpinBox" name="deformAmountSPBox" >
+     <property name="minimum" >
+      <double>0.010000000000000</double>
+     </property>
+     <property name="maximum" >
+      <double>1.000000000000000</double>
+     </property>
+     <property name="singleStep" >
+      <double>0.100000000000000</double>
+     </property>
+     <property name="value" >
+      <double>0.200000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="2" >
+    <widget class="QLabel" name="deformAmountLbl" >
+     <property name="font" >
+      <font>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text" >
+      <string>Deform Amount</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0" colspan="2" >
+    <widget class="QCheckBox" name="interpolationChBox" >
+     <property name="text" >
+      <string>Bilinear interpolation</string>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0" colspan="2" >
+    <widget class="QCheckBox" name="addPaintChBox" >
+     <property name="text" >
+      <string>Paint when not moving the brush</string>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="1" >
+    <spacer name="verticalSpacer" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>167</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

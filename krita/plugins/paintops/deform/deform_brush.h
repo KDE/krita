@@ -42,6 +42,7 @@ public:
 
     void scale(qreal cursorX,qreal cursorY, qreal factor);
     void swirl(qreal cursorX,qreal cursorY, qreal alpha);
+    void move(qreal cursorX,qreal cursorY, qreal dx, qreal dy);
 
     void setRadius( int deformRadius ){
         m_radius = deformRadius;
@@ -100,6 +101,9 @@ private:
     int m_action;
 
     int m_counter;
+
+    bool m_firstPaint;
+    qreal m_prevX, m_prevY;
 };
 
 #endif

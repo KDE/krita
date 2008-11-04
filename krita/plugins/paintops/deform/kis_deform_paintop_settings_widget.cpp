@@ -59,6 +59,8 @@ void  KisDeformPaintOpSettingsWidget::setConfiguration( const KisPropertiesConfi
         m_options->swirlCWBtn->setChecked( true );
     }else if ( deformAction == 4 ){
         m_options->swirlCCWBtn->setChecked( true );
+    }else if ( deformAction == 5){
+        m_options->moveBtn->setChecked( true );
     }
 }
 
@@ -99,8 +101,10 @@ int  KisDeformPaintOpSettingsWidget::deformAction() const
         return 3;
     }else if ( m_options->swirlCCWBtn->isChecked() ){
         return 4;
-    } else{ 
-        return -1; 
+    } else if ( m_options->moveBtn->isChecked() ){ 
+        return 5; 
+    } else{
+        return -1;
     }
 }
 

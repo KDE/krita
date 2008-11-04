@@ -40,6 +40,7 @@ const qreal radToDeg = 57.29578;
 
 DeformBrush::DeformBrush()
 {
+    m_firstPaint = false;
 }
 
 DeformBrush::~DeformBrush()
@@ -49,6 +50,60 @@ DeformBrush::~DeformBrush()
     }
 
 }
+
+
+void DeformBrush::move(qreal cursorX,qreal cursorY, qreal dx, qreal dy){
+    dbgPlugins << dx;
+    dbgPlugins << dy;
+
+    int curXi = static_cast<int>(cursorX+0.5);
+    int curYi = static_cast<int>(cursorY+0.5);
+    //KoColor kcolor( m_dev->colorSpace() );
+
+    int centerX = m_image->width()  / 2;
+    int centerY = m_image->height() / 2;
+    qreal newX, newY;
+
+    qreal distance;
+    qreal scaleFactor;
+
+    for (int x = curXi - m_radius; x < curXi + m_radius;x++){
+        for (int y = curYi - m_radius; y < curYi + m_radius;y++){
+            newX = x - curXi;
+            newY = y - curYi;
+
+            // normalized distance
+            distance = distanceFromCenter(abs(newX), abs(newY)); 
+
+            // we want circle
+            if (distance > 1.0) continue;
+
+            newX -= dx*m_amount*(1.0-distance);
+            newY -= dy*m_amount*(1.0-distance);
+
+            newX += curXi;
+            newY += curYi;
+
+            if (m_useBilinear){
+                // fill the result to m_tempColor coz of optimalization [creating KoColor used to be slow..]
+                bilinear_interpolation(newX, newY );
+                m_writeAccessor->moveTo(x, y); 
+                memcpy(m_writeAccessor->rawData(), m_tempColor->data() , m_pixelSize );
+            }else
+            if (point_interpolation(&newX,&newY,m_image)){
+                // copy pixel
+                m_readAccessor->moveTo(newX, newY);
+                m_writeAccessor->moveTo(x, y); 
+
+                //memcpy(kcolor.data(), m_readAccessor->rawData(), m_pixelSize);
+                //memcpy(m_writeAccessor->rawData(), kcolor.data(), m_pixelSize );
+                memcpy(m_writeAccessor->rawData(), m_readAccessor->rawData(), m_pixelSize );
+            }
+
+        }
+    }
+}
+
 
 void DeformBrush::scale(qreal cursorX,qreal cursorY, qreal factor){
     int curXi = static_cast<int>(cursorX+0.5);
@@ -154,6 +209,8 @@ void DeformBrush::paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPa
     qreal x1 = info.pos().x();
     qreal y1 = info.pos().y();
 
+
+
     m_dev = layer;
 
     if (m_useBilinear)
@@ -187,7 +244,17 @@ void DeformBrush::paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPa
     if (m_action == 4){
         // CCW
         swirl(x1,y1, (1.0/360*m_counter) * -radToDeg);
+    } else 
+    if (m_action == 5){
+        if (m_firstPaint == false){
+            m_prevX = x1;
+            m_prevY = y1;
+            m_firstPaint = true;
+        }else {
+            move(x1,y1, x1 - m_prevX, y1 - m_prevY);
+        }
     }
+
     m_counter++;
 }
 

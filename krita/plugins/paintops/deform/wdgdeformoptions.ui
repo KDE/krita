@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>340</width>
-    <height>415</height>
+    <height>458</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -35,28 +35,21 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0" >
-    <widget class="QRadioButton" name="growBtn" >
-     <property name="text" >
-      <string>Grow</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1" >
+   <item row="2" column="1" >
     <widget class="QRadioButton" name="shrinkBtn" >
      <property name="text" >
       <string>Shrink</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" >
+   <item row="3" column="0" >
     <widget class="QRadioButton" name="swirlCCWBtn" >
      <property name="text" >
       <string>Swirl CCW</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1" >
+   <item row="3" column="1" >
     <widget class="QRadioButton" name="swirlCWBtn" >
      <property name="text" >
       <string>Swirl CW</string>
@@ -66,7 +59,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1" >
+   <item row="6" column="1" >
     <widget class="QSpinBox" name="deformRadiusSPBox" >
      <property name="maximum" >
       <number>4096</number>
@@ -76,20 +69,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="2" >
-    <widget class="QLabel" name="deformRadiusLbl" >
-     <property name="font" >
-      <font>
-       <weight>50</weight>
-       <bold>false</bold>
-      </font>
-     </property>
-     <property name="text" >
-      <string>Deform Radius</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1" >
+   <item row="9" column="1" >
     <widget class="QDoubleSpinBox" name="deformAmountSPBox" >
      <property name="minimum" >
       <double>0.010000000000000</double>
@@ -105,7 +85,53 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="0" colspan="2" >
+   <item row="12" column="0" colspan="2" >
+    <widget class="QCheckBox" name="interpolationChBox" >
+     <property name="text" >
+      <string>Bilinear interpolation</string>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="13" column="0" colspan="2" >
+    <widget class="QCheckBox" name="addPaintChBox" >
+     <property name="text" >
+      <string>Paint when not moving the brush</string>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="1" >
+    <spacer name="verticalSpacer" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>167</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="6" column="0" >
+    <widget class="QLabel" name="deformRadiusLbl" >
+     <property name="font" >
+      <font>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text" >
+      <string>Deform Radius</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0" >
     <widget class="QLabel" name="deformAmountLbl" >
      <property name="font" >
       <font>
@@ -118,38 +144,19 @@
      </property>
     </widget>
    </item>
-   <item row="9" column="0" colspan="2" >
-    <widget class="QCheckBox" name="interpolationChBox" >
+   <item row="2" column="0" >
+    <widget class="QRadioButton" name="growBtn" >
      <property name="text" >
-      <string>Bilinear interpolation</string>
-     </property>
-     <property name="checked" >
-      <bool>true</bool>
+      <string>Grow</string>
      </property>
     </widget>
    </item>
-   <item row="10" column="0" colspan="2" >
-    <widget class="QCheckBox" name="addPaintChBox" >
+   <item row="5" column="0" >
+    <widget class="QRadioButton" name="moveBtn" >
      <property name="text" >
-      <string>Paint when not moving the brush</string>
-     </property>
-     <property name="checked" >
-      <bool>true</bool>
+      <string>Move</string>
      </property>
     </widget>
-   </item>
-   <item row="11" column="1" >
-    <spacer name="verticalSpacer" >
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0" >
-      <size>
-       <width>20</width>
-       <height>167</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>

@@ -22,6 +22,7 @@
 #include <QMap>
 
 #include "KoPAMasterPage.h"
+#include "KoPAPage.h"
 
 KoPALoadingContext::KoPALoadingContext( KoOdfLoadingContext &context, const QMap<QString, KoDataCenter *> & dataCenterMap )
 : KoShapeLoadingContext( context, dataCenterMap )
@@ -30,12 +31,7 @@ KoPALoadingContext::KoPALoadingContext( KoOdfLoadingContext &context, const QMap
 
 KoPAMasterPage* KoPALoadingContext::masterPageFromName( const QString& name )
 {
-    if( m_masterPages.contains( name ) )
-    {
-        return m_masterPages[name];
-    }
-
-    return NULL;
+    return m_masterPages.value( name, 0 );
 }
 
 void KoPALoadingContext::addMasterPage( const QString& name, KoPAMasterPage* master )
@@ -47,3 +43,14 @@ const QMap<QString, KoPAMasterPage *> & KoPALoadingContext::masterPages()
 {
     return m_masterPages;
 }
+
+KoPAPage* KoPALoadingContext::pageByName( const QString& name )
+{
+    return m_pages.value( name, 0 );
+}
+
+void KoPALoadingContext::addPage( const QString& name, KoPAPage* page )
+{
+    m_pages.insert( name, page );
+}
+

@@ -78,6 +78,7 @@ void KisImportCatcher::slotLoadingFinished()
             }
 
             m_view->image()->addNode(importedImageLayer.data(), parent, currentActiveLayer.data());
+            importedImageLayer->setDirty();
         }
     }
     m_doc->deleteLater();

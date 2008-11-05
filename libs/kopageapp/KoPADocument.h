@@ -225,6 +225,13 @@ protected:
     virtual KoView *createViewInstance( QWidget *parent ) = 0;
 
     /**
+     * Load the epilouge
+     *
+     * The default implementation is empty
+     */
+    virtual bool loadOdfEpilogue( const KoXmlElement & body, KoPALoadingContext & context );
+
+    /**
      * Save the epilouge
      *
      * The default implementation is empty

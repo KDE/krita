@@ -135,6 +135,11 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore )
 
     d->masterPages = loadOdfMasterPages( odfStore.styles().masterPages(), paContext );
     d->pages = loadOdfPages( body, paContext );
+
+    if ( !loadOdfEpilogue( body, paContext ) ) {
+        return false;
+    }
+
     loadOdfDocumentStyles( paContext );
 
     if ( d->pages.size() > 1 ) {
@@ -233,6 +238,13 @@ QList<KoPAPageBase *> KoPADocument::loadOdfPages( const KoXmlElement & body, KoP
         }
     }
     return pages;
+}
+
+bool KoPADocument::loadOdfEpilogue( const KoXmlElement & body, KoPALoadingContext & context )
+{
+    Q_UNUSED( body );
+    Q_UNUSED( context );
+    return true;
 }
 
 bool KoPADocument::saveOdfPages( KoPASavingContext &paContext, QList<KoPAPageBase *> &pages, QList<KoPAPageBase *> &masterPages )

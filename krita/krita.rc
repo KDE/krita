@@ -156,6 +156,9 @@
 	<Action name="other_filters"/>
 </Menu>
 
+<Menu name="Tools"><text>&amp;Tools</text>
+</Menu>
+
 <Menu name="settings"><text>Settings</text>
   <Separator group="settings_show"/>
   <Action name="preferences" group="settings_configure"/>

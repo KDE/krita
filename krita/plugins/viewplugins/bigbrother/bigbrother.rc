@@ -1,7 +1,7 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui library="kritabigbrother" version="2">
 <MenuBar>
-    <Menu name="Tools"><text>&amp;Tools</text>
+    <Menu name="Tools">
         <Menu name="Recording"><text>&amp;Recording</text>
             <Action name="Recording_Open_Play"/>
             <Separator/>

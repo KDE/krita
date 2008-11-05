@@ -51,6 +51,7 @@
 KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
         : KisPaintOp(painter)
 {
+    Q_ASSERT(settings);
     m_image = image;
     m_useMovementPaint = settings->useMovementPaint();
     m_deformBrush.setRadius( settings->radius() );

@@ -87,7 +87,15 @@ void KoPAPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &
         pageProperties = DisplayMasterShapes;
     }
     m_pageProperties = pageProperties;
-    setName( element.attributeNS( KoXmlNS::draw, "name" ) );
+    QString name;
+    if ( element.hasAttributeNS( KoXmlNS::draw, "name" ) ) {
+        name = element.attributeNS( KoXmlNS::draw, "name" );
+        loadingContext.addPage( name, this );
+    }
+    if ( element.hasAttributeNS( KoXmlNS::koffice, "name" ) ) {
+        name = element.attributeNS( KoXmlNS::koffice, "name" );
+    }
+    setName( name );
 }
 
 void KoPAPage::setMasterPage( KoPAMasterPage * masterPage )

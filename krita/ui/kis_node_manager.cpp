@@ -265,7 +265,9 @@ void KisNodeManager::activateNode(KisNodeSP node)
         dbgUI << " activate null node";
         selection->setActiveLayer(0);
         emit sigNodeActivated(0);
-        
+        m_d->activeNode = 0;
+        m_d->maskManager->activateMask(0);
+        m_d->layerManager->activateLayer(0);
     } else {
         dbgUI << " activated node: " << node->name() ;
     

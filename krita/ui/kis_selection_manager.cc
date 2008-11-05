@@ -487,6 +487,7 @@ void KisSelectionManager::paste()
           if (dlg->exec() == QDialog::Accepted)
           layer->convertTo(img->colorSpace());
         */
+        dbgUI << m_view->activeLayer();
         img->addNode(layer , m_view->activeLayer()->parent(), m_view->activeLayer().data());
     } else
         m_view->canvasBase()->toolProxy()->paste();

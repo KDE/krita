@@ -504,13 +504,13 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, Voice* voice, c
             painter.drawLine(ref + QPointF(stemX, chord->stemEndY()),
                              ref + QPointF(stemX, bottomStaff->top() + bottomLine * bottomStaff->lineSpacing() / 2));
             if (chord->beamType(0) == BeamFlag) {
-                m_style->renderNoteFlags( painter, ref.x() + stemX, ref.y() + topStaff->top() + (topLine - stemLen) * topStaff->lineSpacing() / 2, chord->duration(), stemsUp, color );
+                m_style->renderNoteFlags( painter, ref.x() + stemX, ref.y() + chord->stemEndY(), chord->duration(), stemsUp, color );
             }
         } else {
             painter.drawLine(ref + QPointF(stemX, topStaff->top() + topLine * topStaff->lineSpacing() / 2),
                              ref + QPointF(stemX, chord->stemEndY()));
             if (chord->beamType(0) == BeamFlag) {
-                m_style->renderNoteFlags( painter, ref.x() + stemX, ref.y() + bottomStaff->top() + (bottomLine + stemLen) * bottomStaff->lineSpacing() / 2, chord->duration(), stemsUp, color );
+                m_style->renderNoteFlags( painter, ref.x() + stemX, ref.y() + chord->stemEndY(), chord->duration(), stemsUp, color );
             }
         }
 

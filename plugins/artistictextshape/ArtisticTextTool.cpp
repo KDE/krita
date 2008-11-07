@@ -328,7 +328,7 @@ void ArtisticTextTool::setTextCursor( int textCursor )
 
 void ArtisticTextTool::updateTextCursorArea() const
 {
-    if( ! m_currentShape && m_textCursor > -1 )
+    if( ! m_currentShape || m_textCursor < 0 )
         return;
 
     QRectF bbox = m_textCursorShape.boundingRect();

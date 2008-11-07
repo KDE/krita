@@ -18,6 +18,7 @@
  */
 
 #include "ParagraphEditor.h"
+#include "Label.h"
 #include "dialogs/OptionWidget.h"
 
 #include <KoCanvasBase.h>
@@ -135,51 +136,52 @@ void ParagraphEditor::saveLineSpacing()
 
 void ParagraphEditor::paintLabel(QPainter &painter, const KoViewConverter &converter) const
 {
-    RulerIndex ruler;
-    RulerFragment *rulerFragment;
-    QColor foregroundColor;
+    Label label;
+    QLineF unmapped;
+    QColor color;
 
     if (hasActiveRuler()) {
-        ruler = m_activeRuler;
-        rulerFragment = m_activeRulerFragment;
-        foregroundColor = m_rulers[ruler].activeColor();
+        unmapped = m_activeRulerFragment->labelConnector();
+        color = m_rulers[m_activeRuler].activeColor();
+        label.setText(m_rulers[m_activeRuler].name() + ' ' + m_rulers[m_activeRuler].valueString());
     } else if (hasHighlightedRuler()) {
-        ruler = m_highlightedRuler;
-        rulerFragment = m_highlightedRulerFragment;
-        foregroundColor = m_rulers[ruler].highlightColor();
+        unmapped = m_highlightedRulerFragment->labelConnector();
+        color = m_rulers[m_highlightedRuler].highlightColor();
+        label.setText(m_rulers[m_highlightedRuler].name() + ' ' + m_rulers[m_highlightedRuler].valueString());
     } else {
         return;
     }
 
+    // paint connector
     painter.save();
 
-    QLineF unmapped(rulerFragment->labelConnector());
+    painter.setPen(color);
     QLineF connector(converter.documentToView(unmapped.p1()), converter.documentToView(unmapped.p2()));
     connector.setLength(10.0);
-
-    QString text(m_rulers[ruler].name() + ' ' + m_rulers[ruler].valueString());
-
-    painter.setBrush(Qt::white);
-    painter.setPen(foregroundColor);
-
-    QRectF label(connector.p2().x(), connector.p2().y(), 0.0, 0.0);
-    label = painter.boundingRect(label, Qt::AlignCenter | Qt::AlignVCenter, text);
-    label.adjust(-4.0, 0.0, 4.0, 0.0);
-
-    // adjust label so that the connector ends on the edge of the label
-    if (abs(connector.dx()) > abs(connector.dy())) {
-        qreal halfWidth = connector.dy() < 0.0 ? label.width() / 2.0 : -label.width() / 2.0;
-        label.adjust(halfWidth, 0.0, halfWidth, 0.0);
-    } else {
-        qreal halfHeight = connector.dy() >= 0.0 ? label.height() / 2.0 : -label.height() / 2.0;
-        label.adjust(0.0, halfHeight, 0.0, halfHeight);
-    }
-
     painter.drawLine(connector);
-    painter.drawRoundRect(label, 720.0 / label.width(), 720.0 /  label.height());
-    painter.drawText(label, Qt::AlignHCenter | Qt::AlignVCenter, text);
 
     painter.restore();
+
+    // paint label
+    label.setColor(color);
+
+    Qt::Alignment alignment;
+    if (abs(connector.dx()) > abs(connector.dy())) {
+        if (connector.dy() < 0.0) {
+            alignment = Qt::AlignLeft | Qt::AlignVCenter;
+        } else {
+            alignment = Qt::AlignRight | Qt::AlignVCenter;
+        }
+    } else {
+        if (connector.dy() >= 0.0) {
+            alignment = Qt::AlignHCenter | Qt::AlignBottom;
+        } else {
+            alignment = Qt::AlignHCenter | Qt::AlignTop;
+        }
+    }
+    label.setPosition(connector.p2(), alignment);
+
+    label.paint(painter);
 }
 
 void ParagraphEditor::paint(QPainter &painter, const KoViewConverter &converter)

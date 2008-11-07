@@ -216,9 +216,9 @@ void KisBrightnessContrastFilter::process(KisConstProcessingInformation srcInfo,
         gc.end();
     }
 
-    if (configBC->m_adjustment == 0) {
+//     if (configBC->m_adjustment == 0) {
         configBC->m_adjustment = src->colorSpace()->createBrightnessContrastAdjustment(configBC->transfer);
-    }
+//     }
 
     KisRectIteratorPixel iter = dst->createRectIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), dstInfo.selection());
 
@@ -268,7 +268,8 @@ void KisBrightnessContrastFilter::process(KisConstProcessingInformation srcInfo,
         }
         if (progressUpdater) progressUpdater->setProgress(pixelsProcessed / totalCost);
     }
-
+    delete configBC->m_adjustment;
+    configBC->m_adjustment = 0;
 }
 
 KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)

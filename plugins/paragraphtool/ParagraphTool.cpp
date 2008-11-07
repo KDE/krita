@@ -171,8 +171,9 @@ void ParagraphTool::keyPressEvent(QKeyEvent *event)
             break;
         case Qt::Key_Tab:
             if (!m_paragraphEditor.focusNextRuler()) {
-                m_paragraphEditor.activateNextTextBlock();
-                m_paragraphEditor.focusFirstRuler();
+                if (m_paragraphEditor.activateNextTextBlock()) {
+                    m_paragraphEditor.focusFirstRuler();
+                }
             }
             break;
         default:

@@ -50,8 +50,8 @@ public:
     void activateTextBlockAt(const QPointF &point);
 
     // cycle through text blocks
-    void activatePreviousTextBlock();
-    void activateNextTextBlock();
+    bool activatePreviousTextBlock();
+    bool activateNextTextBlock();
 
     void activateTextBlock(QTextBlock newBlock, QTextDocument *document = NULL);
 

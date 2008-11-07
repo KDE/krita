@@ -48,6 +48,8 @@ void  KisDeformPaintOpSettingsWidget::setConfiguration( const KisPropertiesConfi
     m_options->deformAmountSPBox->setValue( config->getDouble( "deform_amount" ) );
     m_options->interpolationChBox->setChecked( config->getBool( "bilinear" ) );
     m_options->addPaintChBox->setChecked( config->getBool( "use_movement_paint" ) );
+    m_options->useCounter->setChecked( config->getBool( "use_counter" ) );
+    m_options->useOldData->setChecked(config->getBool( "use_old_data" ) );
 
     int deformAction = config->getInt( "deform_action" );
     if ( deformAction == 1 )
@@ -61,6 +63,8 @@ void  KisDeformPaintOpSettingsWidget::setConfiguration( const KisPropertiesConfi
         m_options->swirlCCWBtn->setChecked( true );
     }else if ( deformAction == 5){
         m_options->moveBtn->setChecked( true );
+    }else if ( deformAction == 6 ){
+        m_options->lensBtn->setChecked( true );
     }
 }
 
@@ -77,6 +81,8 @@ void KisDeformPaintOpSettingsWidget::writeConfiguration( KisPropertiesConfigurat
     config->setProperty( "deform_action", deformAction() );
     config->setProperty( "bilinear", bilinear() );
     config->setProperty( "use_movement_paint", useMovementPaint() );
+    config->setProperty( "use_counter", useCounter() );
+    config->setProperty( "use_old_data", useOldData() );
 }
 
 int  KisDeformPaintOpSettingsWidget::radius() const
@@ -103,6 +109,8 @@ int  KisDeformPaintOpSettingsWidget::deformAction() const
         return 4;
     } else if ( m_options->moveBtn->isChecked() ){ 
         return 5; 
+    } else if ( m_options->lensBtn->isChecked() ){ 
+        return 6; 
     } else{
         return -1;
     }
@@ -116,3 +124,13 @@ bool  KisDeformPaintOpSettingsWidget::bilinear() const
 bool KisDeformPaintOpSettingsWidget::useMovementPaint() const{
     return m_options->addPaintChBox->isChecked();
 }
+
+bool KisDeformPaintOpSettingsWidget::useCounter() const{
+    return m_options->useCounter->isChecked();
+}
+
+bool KisDeformPaintOpSettingsWidget::useOldData() const{
+    return m_options->useOldData->isChecked();
+}
+
+

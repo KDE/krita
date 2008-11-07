@@ -73,6 +73,16 @@ bool KisDeformPaintOpSettings::useMovementPaint() const
     return m_options->useMovementPaint();
 }
 
+bool KisDeformPaintOpSettings::useCounter() const
+{
+    return m_options->useCounter();
+}
+
+bool KisDeformPaintOpSettings::useOldData() const
+{
+    return m_options->useOldData();
+}
+
 int KisDeformPaintOpSettings::deformAction() const
 {
     return m_options->deformAction();

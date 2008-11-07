@@ -105,7 +105,7 @@
      </property>
     </widget>
    </item>
-   <item row="14" column="1" >
+   <item row="16" column="1" >
     <spacer name="verticalSpacer" >
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
@@ -155,6 +155,27 @@
     <widget class="QRadioButton" name="moveBtn" >
      <property name="text" >
       <string>Move</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1" >
+    <widget class="QRadioButton" name="lensBtn" >
+     <property name="text" >
+      <string>Lens zoom</string>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="0" >
+    <widget class="QCheckBox" name="useCounter" >
+     <property name="text" >
+      <string>Use counter</string>
+     </property>
+    </widget>
+   </item>
+   <item row="15" column="0" colspan="2" >
+    <widget class="QCheckBox" name="useOldData" >
+     <property name="text" >
+      <string>Read pixels from undeformed image</string>
      </property>
     </widget>
    </item>

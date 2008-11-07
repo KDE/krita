@@ -39,14 +39,17 @@ public:
     void paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
 
     void bilinear_interpolation(double x, double y );
+    void bilinear_interpolation_old(double x, double y );
 
     void scale(qreal cursorX,qreal cursorY, qreal factor);
     void swirl(qreal cursorX,qreal cursorY, qreal alpha);
     void move(qreal cursorX,qreal cursorY, qreal dx, qreal dy);
+    void lensDistortion(qreal cursorX,qreal cursorY, qreal k1, qreal k2);
 
     void setRadius( int deformRadius ){
         m_radius = deformRadius;
-        m_maxdist = sqrt(pow(m_radius,2));
+
+        m_maxdist = sqrt( pow(m_radius,2) );
         precomputeDistances(m_radius);
     }
 
@@ -70,12 +73,22 @@ public:
         m_counter = value;
     }
 
+    void setUseCounter(bool useCounter){
+        m_useCounter = useCounter;
+    }
+
+    void setUseOldData(bool useOldData){
+        m_useOldData = useOldData;
+    }
+
 private:
     qreal distanceFromCenter(int x, int y)
     {
         return m_distanceTable[y*(m_radius+1)+x];
     }
 
+    /// move pixel from new computed coords newX, newY to x,y (inverse mapping)
+    void movePixel(qreal newX, qreal newY, int x, int y);
     bool point_interpolation( qreal* x, qreal* y, KisImageSP image );
     void debugColor(const quint8* data);
     void precomputeDistances(int radius);
@@ -103,6 +116,8 @@ private:
     int m_counter;
 
     bool m_firstPaint;
+    bool m_useCounter;
+    bool m_useOldData;
     qreal m_prevX, m_prevY;
 };
 

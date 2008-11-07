@@ -39,6 +39,8 @@ public:
     int deformAction() const;
     bool bilinear() const;
     bool useMovementPaint() const;
+    bool useCounter() const;
+    bool useOldData() const;
 
 private:
     Ui::WdgDeformOptions* m_options;

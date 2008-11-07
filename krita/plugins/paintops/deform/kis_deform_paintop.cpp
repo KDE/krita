@@ -60,6 +60,9 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
     m_deformBrush.setAction( settings->deformAction() );
     m_deformBrush.setImage(image);
     m_deformBrush.setCounter(1);
+    m_deformBrush.setUseCounter( settings->useCounter() );
+    m_deformBrush.setUseOldData( settings->useOldData() );
+
     if ( !settings->node() ){
         m_dev = 0;
     }else{
@@ -82,6 +85,8 @@ void KisDeformPaintOp::paintAt(const KisPaintInformation& info)
 
     dab = cachedDab();
     dab->clear();
+
+    
 
     //write device, read device, position 
     m_deformBrush.paint(dab,m_dev, info);

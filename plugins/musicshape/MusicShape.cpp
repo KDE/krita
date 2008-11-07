@@ -46,7 +46,7 @@
 
 using namespace MusicCore;
 
-static MusicShape* firstShape = 0;
+//static MusicShape* firstShape = 0;
 
 MusicShape::MusicShape()
     : m_firstSystem(0),
@@ -56,7 +56,8 @@ MusicShape::MusicShape()
     m_successor(0),
     m_predecessor(0)
 {
-    kDebug() << "firstShape:" << firstShape << "this:" << this;
+/*    kDebug() << "firstShape:" << firstShape << "this:" << this;
+
     if (firstShape) {
         firstShape->m_successor = this;
         m_predecessor = firstShape;
@@ -65,7 +66,7 @@ MusicShape::MusicShape()
         m_engraver->engraveSheet(m_sheet, m_firstSystem, QSizeF(1e9, 1e9), true, &m_lastSystem);
         firstShape = this;
     } else {
-        firstShape = this;
+        firstShape = this;*/
         m_sheet = new Sheet();
         Bar* bar = m_sheet->addBar();
 
@@ -76,7 +77,7 @@ MusicShape::MusicShape()
         bar->addStaffElement(new TimeSignature(staff, 0, 4, 4));
 
         m_engraver->engraveSheet(m_sheet, 0, QSizeF(1e9, 1e9), true, &m_lastSystem);
-    }
+//    }
 }
 
 MusicShape::~MusicShape()
@@ -88,7 +89,7 @@ MusicShape::~MusicShape()
     delete m_style;
     delete m_engraver;
     delete m_renderer;
-    if (this == firstShape) firstShape = this->m_predecessor;
+//    if (this == firstShape) firstShape = this->m_predecessor;
 }
 
 void MusicShape::setSize( const QSizeF &newSize )

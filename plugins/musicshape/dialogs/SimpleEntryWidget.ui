@@ -309,12 +309,18 @@
           <property name="text" >
            <string/>
           </property>
+          <property name="autoRaise" >
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item row="1" column="3" >
          <widget class="QToolButton" name="selectButton" >
           <property name="text" >
            <string/>
+          </property>
+          <property name="autoRaise" >
+           <bool>true</bool>
           </property>
          </widget>
         </item>

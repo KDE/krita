@@ -29,6 +29,7 @@
 
 #include <KoCanvasController.h>
 #include <KoCanvasResourceProvider.h>
+#include <KoColorBackground.h>
 #include <KoFind.h>
 #include <KoTextDocumentLayout.h>
 #include <KoToolManager.h>
@@ -531,6 +532,7 @@ void KoPAView::insertPage()
     KoPAPageBase * page = 0;
     if ( m_viewMode->masterMode() ) {
         KoPAMasterPage * masterPage = m_doc->newMasterPage();
+        masterPage->setBackground( new KoColorBackground( Qt::white ) );
         // use the layout of the current active page for the new page
         KoPageLayout & layout = masterPage->pageLayout();
         KoPAMasterPage * activeMasterPage = dynamic_cast<KoPAMasterPage *>( m_activePage );

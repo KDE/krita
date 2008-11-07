@@ -70,6 +70,7 @@ void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)
 {
     Q_ASSERT(filterConfig);
     m_d->filterConfig = filterConfig;
+    setDirty();
 }
 
 void KisFilterMask::apply(KisPaintDeviceSP projection, const QRect & rc) const

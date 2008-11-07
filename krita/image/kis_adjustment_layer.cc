@@ -137,6 +137,7 @@ KisFilterConfiguration * KisAdjustmentLayer::filter() const
 void KisAdjustmentLayer::setFilter(KisFilterConfiguration * filterConfig)
 {
     m_d->filterConfig = filterConfig;
+    setDirty();
 }
 
 

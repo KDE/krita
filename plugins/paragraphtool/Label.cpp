@@ -69,10 +69,8 @@ void Label::paint(QPainter &painter) const
 
     qreal halfHeight = bRect.height() / 2.0;
     if  (m_alignment & Qt::AlignTop) {
-        kDebug() << "top";
         bRect.translate(0.0, -halfHeight);
     } else if (m_alignment & Qt::AlignBottom) {
-        kDebug() << "bottom";
         bRect.translate(0.0, halfHeight);
     }
 

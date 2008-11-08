@@ -175,7 +175,7 @@
    <item row="15" column="0" colspan="2" >
     <widget class="QCheckBox" name="useOldData" >
      <property name="text" >
-      <string>Read pixels from undeformed image</string>
+      <string>Use undeformed image</string>
      </property>
     </widget>
    </item>

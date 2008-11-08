@@ -133,4 +133,3 @@ bool KisDeformPaintOpSettingsWidget::useOldData() const{
     return m_options->useOldData->isChecked();
 }
 
-

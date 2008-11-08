@@ -1,0 +1,136 @@
+<ui version="4.0" >
+ <class>DefaultToolArrangeWidget</class>
+ <widget class="QWidget" name="DefaultToolArrangeWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>178</width>
+    <height>56</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout" >
+   <property name="horizontalSpacing" >
+    <number>2</number>
+   </property>
+   <property name="margin" >
+    <number>1</number>
+   </property>
+   <item row="0" column="0" >
+    <widget class="QToolButton" name="leftAlign" >
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="QToolButton" name="hCenterAlign" >
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2" >
+    <widget class="QToolButton" name="rightAlign" >
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item rowspan="2" row="0" column="3" >
+    <widget class="QFrame" name="frame" >
+     <property name="frameShape" >
+      <enum>QFrame::VLine</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Raised</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4" >
+    <widget class="QToolButton" name="bringToFront" >
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="5" >
+    <widget class="QToolButton" name="raiseLevel" >
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item rowspan="2" row="0" column="6" >
+    <widget class="QFrame" name="frame_2" >
+     <property name="frameShape" >
+      <enum>QFrame::VLine</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Raised</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="7" >
+    <widget class="QToolButton" name="group" >
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QToolButton" name="topAlign" >
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QToolButton" name="vCenterAlign" >
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2" >
+    <widget class="QToolButton" name="bottomAlign" >
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="4" >
+    <widget class="QToolButton" name="sendBack" >
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="5" >
+    <widget class="QToolButton" name="lowerLevel" >
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="7" >
+    <widget class="QToolButton" name="ungroup" >
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -17,37 +17,36 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef DEFAULTTOOLWIDGET_H
-#define DEFAULTTOOLWIDGET_H
+#ifndef DEFAULTTOOLTRANSFORMWIDGET_H
+#define DEFAULTTOOLTRANSFORMWIDGET_H
 
-#include <ui_DefaultToolWidget.h>
+#include <ui_DefaultToolTransformWidget.h>
 #include <KoFlake.h>
 
-#include <QWidget>
+#include <QMenu>
 
 class KoInteractionTool;
-class KoPositionSelector;
 class QRadioButton;
 
-class DefaultToolWidget : public QWidget, Ui::DefaultToolWidget {
+class DefaultToolTransformWidget : public QMenu, Ui::DefaultToolTransformWidget {
     Q_OBJECT
 public:
-    explicit DefaultToolWidget( KoInteractionTool* tool, QWidget *parent = 0 );
+    explicit DefaultToolTransformWidget( KoInteractionTool* tool, QWidget *parent = 0 );
 
     /// Sets the unit used by the unit aware child widgets
     void setUnit( const KoUnit &unit );
 
 private slots:
-    void positionSelected( KoFlake::Position position );
-    void updatePosition();
-    void positionHasChanged();
-    void updateSize();
-    void sizeHasChanged();
     void resourceChanged( int key, const QVariant & res );
+    void rotationChanged();
+    void shearXChanged();
+    void shearYChanged();
+    void scaleXChanged();
+    void scaleYChanged();
+    void resetTransformations();
 
 private:
     KoInteractionTool* m_tool;
-    KoPositionSelector *positionSelector;
 };
 
 #endif

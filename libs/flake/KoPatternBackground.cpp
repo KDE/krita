@@ -380,10 +380,10 @@ bool KoPatternBackground::loadStyle(KoOdfLoadingContext & context, const QSizeF 
     QString style = styleStack.property(KoXmlNS::style, "repeat");
     if (style == "stretch")
         d->repeat = Stretched;
-    else if (style == "repeat")
-        d->repeat = Tiled;
-    else
+    else if (style == "no-repeat")
         d->repeat = Original;
+    else
+        d->repeat = Tiled;
 
     if (style != "stretch") {
         // optional attributes which can override original image size

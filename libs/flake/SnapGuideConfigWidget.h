@@ -24,10 +24,12 @@
 
 #include <QtGui/QWidget>
 
+#include "flake_export.h"
+
 class KoSnapGuide;
 class QShowEvent;
 
-class SnapGuideConfigWidget : public QWidget
+class FLAKE_EXPORT SnapGuideConfigWidget : public QWidget
 {
     Q_OBJECT
 

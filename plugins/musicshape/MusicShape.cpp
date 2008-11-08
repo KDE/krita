@@ -75,6 +75,10 @@ MusicShape::MusicShape()
         part->addVoice();
         bar->addStaffElement(new Clef(staff, 0, Clef::Trebble, 2, 0));
         bar->addStaffElement(new TimeSignature(staff, 0, 4, 4));
+        // add some more default bars
+        for (int i = 0; i < 9; i++) {
+            m_sheet->addBar();
+        }
 
         m_engraver->engraveSheet(m_sheet, 0, QSizeF(1e9, 1e9), true, &m_lastSystem);
 //    }

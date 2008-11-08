@@ -35,7 +35,7 @@ KisFilterOpFactory::KisFilterOpFactory()
 {
 }
 
-KisFilterOpFactory::~KisBrushOpFactory()
+KisFilterOpFactory::~KisFilterOpFactory()
 {
 }
 

@@ -23,6 +23,7 @@
 
 class FilterOp : public KParts::Plugin
 {
+    Q_OBJECT
 public:
     FilterOp(QObject *parent, const QStringList &);
     virtual ~FilterOp();

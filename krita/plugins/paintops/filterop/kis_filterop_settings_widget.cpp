@@ -29,12 +29,12 @@
 #include <kis_pressure_size_option.h>
 #include <kis_filter_option.h>
 
-KisFilterOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
-    : KisPaintOpSettingsWidget(parent)
+KisFilterOpSettingsWidget::KisFilterOpSettingsWidget(QWidget* parent)
+    : KisPaintOpOptionsWidget(parent)
 {
     setObjectName("filter option widget");
 
-    m_brushOption = new KisFilterOption();
+    m_brushOption = new KisBrushOption();
     m_sizeOption = new KisPressureSizeOption();
     m_filterOption = new KisFilterOption();
 
@@ -44,7 +44,7 @@ KisFilterOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
 
 }
 
-KisFilterOpSettingsWidget::~KisBrushOpSettingsWidget()
+KisFilterOpSettingsWidget::~KisFilterOpSettingsWidget()
 {
     delete m_brushOption;
     delete m_sizeOption;
@@ -60,7 +60,7 @@ void KisFilterOpSettingsWidget::setConfiguration( const KisPropertiesConfigurati
 
 KisPropertiesConfiguration* KisFilterOpSettingsWidget::configuration() const
 {
-    KisFilterOpSettings *config = new KisBrushOpSettings(const_cast<KisBrushOpSettingsWidget*>( this ));
+    KisFilterOpSettings *config = new KisFilterOpSettings(const_cast<KisFilterOpSettingsWidget*>( this ));
     writeConfiguration(config);
     return config;
 }

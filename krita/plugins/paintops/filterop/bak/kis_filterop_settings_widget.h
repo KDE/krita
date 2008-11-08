@@ -20,34 +20,45 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_FILTEROP_H_
-#define KIS_FILTEROP_H_
+#ifndef KIS_BRUSHOP_SETTINGS_WIDGET_H_
+#define KIS_BRUSHOP_SETTINGS_WIDGET_H_
 
-#include "kis_brush_based_paintop.h"
-#include <klocale.h>
-#include <QDialog>
-#include <KoColorSpace.h>
+#include <kis_paintop_options_widget.h>
 
-class KisFilterOpSettings;
-class KisPaintInformation;
-class KisPainter;
+class KisBrushOption;
+class KisPressureOpacityOption;
+class KisPressureDarkenOption;
+class KisPressureSizeOption;
+class KisPaintActionTypeOption;
 
-class KisFilterOp : public KisBrushBasedPaintOp
-{
+class KisBrushOpSettingsWidget : public KisPaintOpOptionsWidget {
+
+    Q_OBJECT
 
 public:
 
-    KisFilterOp(const KisFilterOpSettings *settings, KisPainter * painter);
-    virtual ~KisFilterOp();
+    KisBrushOpSettingsWidget(QWidget* parent = 0);
 
-    void paintAt(const KisPaintInformation& info);
-    virtual double paintLine(const KisPaintInformation &pi1,
-                             const KisPaintInformation &pi2,
-                             double savedDist = -1);
+    virtual ~KisBrushOpSettingsWidget();
 
-private:
+    void setConfiguration( const KisPropertiesConfiguration * config);
 
-    const KisFilterOpSettings * settings;
+    KisPropertiesConfiguration* configuration() const;
+
+    void writeConfiguration( KisPropertiesConfiguration *config ) const;
+
+
+public:
+
+    KisBrushOption * m_brushOption;
+    KisPressureOpacityOption * m_opacityOption;
+    KisPressureDarkenOption * m_darkenOption;
+    KisPressureSizeOption * m_sizeOption;
+    KisPaintActionTypeOption * m_paintActionTypeOption;
+
+
 };
 
-#endif // KIS_FILTEROP_H_
+
+
+#endif // KIS_BRUSHOP_SETTINGS_WIDGET_H_

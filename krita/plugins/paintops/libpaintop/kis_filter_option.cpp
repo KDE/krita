@@ -21,9 +21,24 @@
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 
+#include "ui_wdgfilteroption.h"
+
+class KisFilterOptionWidget : public QWidget, public Ui::FilterOpOptions {
+public:
+    KisFilterOptionWidget(QWidget* parent = 0)
+        : QWidget(parent)
+    {
+        setupUi(this);
+    }
+};
+
 KisFilterOption::KisFilterOption()
         : KisPaintOpOption(i18n("Filter"))
 {
+    m_checkable = true;
+    m_optionWidget = new KisFilterOptionWidget;
+    m_optionWidget->hide();
+    setConfigurationPage(m_optionWidget);
 }
 
 const KisFilterSP KisFilterOption::filter() const

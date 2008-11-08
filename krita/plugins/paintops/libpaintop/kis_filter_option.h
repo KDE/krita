@@ -25,6 +25,7 @@
 #include <krita_export.h>
 
 class KisFilterConfiguration;
+class KisFilterOptionWidget;
 /**
  * The filter option allows the user to select a particular filter
  * that can be applied by the paintop to the brush footprint or the
@@ -50,6 +51,10 @@ public:
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
 
     void readOptionSetting(const KisPropertiesConfiguration* setting);
+
+private:
+
+    KisFilterOptionWidget* m_optionWidget;
 
 };
 

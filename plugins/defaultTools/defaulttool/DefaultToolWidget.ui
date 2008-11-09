@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>271</width>
-    <height>64</height>
+    <width>174</width>
+    <height>68</height>
    </rect>
   </property>
   <property name="focusPolicy" >
@@ -21,8 +21,14 @@
      <property name="horizontalSpacing" >
       <number>2</number>
      </property>
-     <item row="0" column="1" >
+     <item row="0" column="3" >
       <widget class="KoUnitDoubleSpinBox" name="positionXSpinBox" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="minimum" >
         <double>-10000.000000000000000</double>
        </property>
@@ -31,8 +37,14 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="2" >
+     <item row="0" column="4" >
       <widget class="KoUnitDoubleSpinBox" name="widthSpinBox" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="minimum" >
         <double>-10000.000000000000000</double>
        </property>
@@ -41,8 +53,14 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1" >
+     <item row="1" column="3" >
       <widget class="KoUnitDoubleSpinBox" name="positionYSpinBox" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="minimum" >
         <double>-10000.000000000000000</double>
        </property>
@@ -51,8 +69,14 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2" >
+     <item row="1" column="4" >
       <widget class="KoUnitDoubleSpinBox" name="heightSpinBox" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="minimum" >
         <double>-10000.000000000000000</double>
        </property>
@@ -61,30 +85,27 @@
        </property>
       </widget>
      </item>
-     <item rowspan="2" row="0" column="3" >
+     <item rowspan="2" row="0" column="5" >
       <widget class="KoAspectButton" name="aspectButton" >
        <property name="text" >
         <string/>
        </property>
       </widget>
      </item>
-     <item row="0" column="0" >
-      <widget class="QToolButton" name="transformButton" >
+     <item rowspan="2" row="0" column="0" >
+      <widget class="KoPositionSelector" native="1" name="positionSelector" />
+     </item>
+     <item row="0" column="1" >
+      <widget class="QLabel" name="label" >
        <property name="text" >
-        <string>Transform</string>
-       </property>
-       <property name="popupMode" >
-        <enum>QToolButton::InstantPopup</enum>
+        <string>X:</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="0" >
-      <widget class="QToolButton" name="basepointButton" >
+     <item row="1" column="1" >
+      <widget class="QLabel" name="label_2" >
        <property name="text" >
-        <string>Base Point</string>
-       </property>
-       <property name="popupMode" >
-        <enum>QToolButton::InstantPopup</enum>
+        <string>Y:</string>
        </property>
       </widget>
      </item>
@@ -102,6 +123,12 @@
    <class>KoAspectButton</class>
    <extends>QLabel</extends>
    <header>KoAspectButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KoPositionSelector</class>
+   <extends>QWidget</extends>
+   <header>KoPositionSelector.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>

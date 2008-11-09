@@ -50,7 +50,6 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
     m_tool = tool;
 
     setupUi( this );
-    positionSelector = new KoPositionSelector(0);
 
     setUnit( m_tool->canvas()->unit() );
 
@@ -74,10 +73,6 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
         this, SLOT( resourceChanged( int, const QVariant& ) ) );
 
     aspectButton->setKeepAspectRatio( false );
-
-    transformButton->setMenu(new DefaultToolTransformWidget(tool));
-    basepointButton->setMenu(new QMenu());
-//    basepointButton->menu()->setLayout();
 
     updatePosition();
     updateSize();

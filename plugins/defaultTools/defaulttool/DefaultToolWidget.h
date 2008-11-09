@@ -47,7 +47,6 @@ private slots:
 
 private:
     KoInteractionTool* m_tool;
-    KoPositionSelector *positionSelector;
 };
 
 #endif

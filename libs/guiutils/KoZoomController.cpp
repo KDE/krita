@@ -24,17 +24,17 @@
 #include <KLocale>
 #include <KDebug>
 
-#include <KoZoomAction.h>
 #include <KoZoomHandler.h>
 #include <KoCanvasController.h>
 
 class KoZoomController::Private
 {
 public:
-    Private(KoZoomController *p, bool doSpecialAspectMode)
+    Private(KoZoomController *p, KoZoomAction::SpecialButtons specialButtons)
         : canvasController(0), zoomHandler(0), fitMargin(0), parent(p)
     {
-        action = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), doSpecialAspectMode, 0);
+        action = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), 0);
+        action->setSpecialButtons(specialButtons);
     }
     ~Private()
     {
@@ -73,8 +73,8 @@ public:
     KoZoomController *parent;
 };
 
-KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection, bool doSpecialAspectMode)
-    : d(new Private(this, doSpecialAspectMode))
+KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection, KoZoomAction::SpecialButtons specialButtons)
+    : d(new Private(this, specialButtons))
 {
     d->canvasController = co;
     d->zoomHandler = zh;
@@ -82,6 +82,10 @@ KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KA
             this, SLOT(setZoom(KoZoomMode::Mode, qreal)));
     connect(d->action, SIGNAL(aspectModeChanged(bool)),
             this, SIGNAL(aspectModeChanged(bool)));
+    connect(d->action, SIGNAL(zoomedToSelection()),
+            this, SIGNAL(zoomedToSelection()));
+    connect(d->action, SIGNAL(zoomedToAll()),
+            this, SIGNAL(zoomedToAll()));
 
     actionCollection->addAction("view_zoom", d->action);
     actionCollection->addAction(KStandardAction::ZoomIn,  "zoom_in", d->action, SLOT(zoomIn()));

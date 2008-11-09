@@ -43,16 +43,29 @@ public:
    * Creates a new zoom action.
    * @param zoomModes which zoom modes that should be shown
    * @param text The text that will be displayed.
-   * @param doSpecialAspectMode Show toggle widget for "pixel aspect" mode.
    * @param parent The action's parent object.
    */
-  KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, bool doSpecialAspectMode, QObject *parent);
+  KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, QObject *parent);
   ~KoZoomAction();
 
     /**
      * Reimplemented from @see QActionWidgetFactory.
      */
     virtual QWidget* createWidget(QWidget* parent);
+
+    enum SpecialButton {
+        AspectMode = 1, ///< changing aspect mode
+        ZoomToSelection = 2, ///< zooms to current selection
+        ZoomToAll = 4 ///< zooms to the whole content of the document
+    };
+    Q_DECLARE_FLAGS(SpecialButtons, SpecialButton)
+
+    /**
+     * Enables specified special buttons.
+     * This should be called immediately after calling the constructor.
+     * @param buttons mask of the special button flags to enable
+     */
+    void setSpecialButtons( SpecialButtons buttons ); 
 
 public slots:
 
@@ -115,6 +128,18 @@ signals:
    */
   void aspectModeChanged( bool status );
 
+    /**
+     * Signal is triggered when the user clicks the zoom to selection button.
+     * Nothing else happens except that this signal is emitted.
+     */
+    void zoomedToSelection();
+
+    /**
+     * Signal is triggered when the user clicks the zoom to all button.
+     * Nothing else happens except that this signal is emitted.
+     */
+    void zoomedToAll();
+
 protected:
 
     /// Regenerates the action's items
@@ -126,5 +151,7 @@ private:
     class Private;
     Private * const d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoZoomAction::SpecialButtons)
 
 #endif

@@ -123,7 +123,7 @@ void KoPAView::initGUI()
     KoToolManager::instance()->addController( m_canvasController );
     KoToolManager::instance()->registerTools( actionCollection(), m_canvasController );
 
-    m_zoomController = new KoZoomController( m_canvasController, &m_zoomHandler, actionCollection(), false );
+    m_zoomController = new KoZoomController( m_canvasController, &m_zoomHandler, actionCollection());
     connect( m_zoomController, SIGNAL( zoomChanged( KoZoomMode::Mode, qreal ) ),
              this, SLOT( slotZoomChanged( KoZoomMode::Mode, qreal ) ) );
 

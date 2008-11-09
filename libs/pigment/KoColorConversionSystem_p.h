@@ -226,8 +226,6 @@ struct PathQualityChecker {
     inline bool lessWorseThan(KoColorConversionSystem::Path* path1, KoColorConversionSystem::Path* path2)
     {
          // There is no point in comparing two pathes which doesn't start from the same node or doesn't end at the same node
-        Q_ASSERT(path1->startNode() == path2->startNode());
-        Q_ASSERT(path1->endNode() == path2->endNode());
         if(not ignoreHdr)
         {
             CHECK_ONE_AND_NOT_THE_OTHER(keepDynamicRange)

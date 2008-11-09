@@ -518,6 +518,8 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl2
                             lessWorsePath = newP;
                         }
                         else if ( pQC.lessWorseThan( newP, lessWorsePath)  ) {
+                            Q_ASSERT(newP->startNode()->id() == lessWorsePath->startNode()->id() );
+                            Q_ASSERT(newP->endNode()->id() == lessWorsePath->endNode()->id());
                             kDebug() << pQC.lessWorseThan( newP, lessWorsePath) << " " << newP << "  "<< lessWorsePath;
                             delete lessWorsePath;
                             lessWorsePath = newP;

@@ -110,3 +110,9 @@ kde4_add_unit_test(TestCanvasResourceProvider TESTNAME libs-flake-TestCanvasReso
 target_link_libraries(TestCanvasResourceProvider  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
 
 ########### end ###############
+
+set(TestShapeBackgroundCommand_test_SRCS TestShapeBackgroundCommand.cpp )
+kde4_add_unit_test(TestShapeBackgroundCommand TESTNAME libs-flake-TestShapeBackgroundCommand  ${TestShapeBackgroundCommand_test_SRCS})
+target_link_libraries(TestShapeBackgroundCommand  ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
+
+########### end ###############

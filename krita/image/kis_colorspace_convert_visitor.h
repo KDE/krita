@@ -118,14 +118,11 @@ public:
 
 public:
 
-    bool visit(KisExternalLayer *) {
-        return true;
-    }
-
     bool visit(KisPaintLayer *layer);
     bool visit(KisGroupLayer *layer);
     bool visit(KisAdjustmentLayer* layer);
     bool visit(KisGeneratorLayer * layer);
+    bool visit(KisExternalLayer *);
 private:
     const KoColorSpace *m_dstColorSpace;
     KoColorConversionTransformation::Intent m_renderingIntent;
@@ -193,6 +190,11 @@ bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
     layer->setChannelFlags(m_emptyChannelFlags);
     layer->resetCache();
     layer->setDirty();
+    return true;
+}
+
+bool KisColorSpaceConvertVisitor::visit(KisExternalLayer *layer) {
+    layer->setCompositeOp(m_dstColorSpace->compositeOp(layer->compositeOp()->id()));
     return true;
 }
 

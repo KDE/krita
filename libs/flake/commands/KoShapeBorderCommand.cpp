@@ -28,30 +28,44 @@ class KoShapeBorderCommand::Private
 {
 public:
     Private() {}
-    ~Private() {
+    ~Private()
+    {
         foreach(KoShapeBorderModel* border, oldBorders) {
-            if (border && border->useCount() <= 0)
+            if (border && ! border->removeUser())
                 delete border;
         }
     }
+    
+    void addOldBorder( KoShapeBorderModel * oldBorder )
+    {
+        if (oldBorder)
+            oldBorder->addUser();
+        oldBorders.append(oldBorder);
+    }
+    
+    void addNewBorder( KoShapeBorderModel * newBorder )
+    {
+        if (newBorder)
+            newBorder->addUser();
+        newBorders.append(newBorder);
+    }
+    
     QList<KoShape*> shapes;                ///< the shapes to set border for
     QList<KoShapeBorderModel*> oldBorders; ///< the old borders, one for each shape
     QList<KoShapeBorderModel*> newBorders; ///< the new borders to set
 };
 
-KoShapeBorderCommand::KoShapeBorderCommand(const QList<KoShape*> &shapes, KoShapeBorderModel *border,
-        QUndoCommand *parent)
-        : QUndoCommand(parent)
-        , d(new Private())
+KoShapeBorderCommand::KoShapeBorderCommand(const QList<KoShape*> &shapes, KoShapeBorderModel *border, QUndoCommand *parent)
+    : QUndoCommand(parent)
+    , d(new Private())
 {
     d->shapes = shapes;
-    int shapeCount = shapes.count();
-    for (int i = 0; i < shapeCount; ++i)
-        d->newBorders.append(border);
 
     // save old borders
-    foreach(KoShape *shape, d->shapes)
-    d->oldBorders.append(shape->border());
+    foreach(KoShape *shape, d->shapes) {
+        d->addOldBorder(shape->border());
+        d->addNewBorder(border);
+    }
 
     setText(i18n("Set border"));
 }
@@ -65,12 +79,13 @@ KoShapeBorderCommand::KoShapeBorderCommand(const QList<KoShape*> &shapes,
     Q_ASSERT(shapes.count() == borders.count());
 
     d->shapes = shapes;
-    d->newBorders = borders;
 
     // save old borders
     foreach(KoShape *shape, shapes)
-    d->oldBorders.append(shape->border());
-
+        d->addOldBorder(shape->border());
+    foreach(KoShapeBorderModel * border, borders )
+        d->addNewBorder(border);
+    
     setText(i18n("Set border"));
 }
 
@@ -79,8 +94,8 @@ KoShapeBorderCommand::KoShapeBorderCommand(KoShape* shape, KoShapeBorderModel *b
         , d(new Private())
 {
     d->shapes.append(shape);
-    d->newBorders.append(border);
-    d->oldBorders.append(shape->border());
+    d->addNewBorder(border);
+    d->addOldBorder(shape->border());
 
     setText(i18n("Set border"));
 }

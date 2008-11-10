@@ -29,7 +29,7 @@ KoPALoadingContext::KoPALoadingContext( KoOdfLoadingContext &context, const QMap
 {
 }
 
-KoPAMasterPage* KoPALoadingContext::masterPageFromName( const QString& name )
+KoPAMasterPage* KoPALoadingContext::masterPageByName( const QString& name )
 {
     return m_masterPages.value( name, 0 );
 }

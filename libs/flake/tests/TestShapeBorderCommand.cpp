@@ -34,24 +34,24 @@ void TestShapeBorderCommand::refCounting()
     QVERIFY(shape1->border() == whiteBorder);
     QCOMPARE(whiteBorder->useCount(), 1);
     
-    // old fill is white, new fill is black
+    // old border is white, new border is black
     QUndoCommand *cmd1 = new KoShapeBorderCommand(shape1, blackBorder);
     cmd1->redo();
     QVERIFY(shape1->border() == blackBorder);
     
-    // change fill back to white fill
+    // change border back to white border
     cmd1->undo();
     QVERIFY(shape1->border() == whiteBorder);
     
-    // old fill is white, new fill is red
+    // old border is white, new border is red
     QUndoCommand *cmd2 = new KoShapeBorderCommand(shape1, redBorder);
     cmd2->redo();
     QVERIFY(shape1->border() == redBorder);
 
-    // this command has the white fill as the old fill
+    // this command has the white border as the old border
     delete cmd1;
     
-    // set fill back to white fill
+    // set border back to white border
     cmd2->undo();
     QVERIFY(shape1->border() == whiteBorder);
 

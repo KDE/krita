@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Script Event Action Plugin
 Name[ca]=Connector d'script d'acció d'esdeveniment
+Name[de]=Skriptaktionsereignis-Modul
 Name[el]=Πρόσθετο ενέργειας γεγονότος σεναρίου
 Name[et]=Skripti sündmustoimingute plugin
 Name[gl]=Extensión de Guións de Accións de Presentación
@@ -18,6 +19,7 @@ Type=ServiceType
 X-KDE-ServiceType=KOffice/ScriptEventAction
 Comment=A plugin that contains a script event action
 Comment[ca]=Un connector que conté un script d'acció d'esdeveniment
+Comment[de]=Ein Modul, das ein Skriptaktionsereignis enthält
 Comment[el]=Ένα πρόσθετο που περιέχει μια ενέργεια γεγονότος σεναρίου
 Comment[et]=Skripti sündmustoiminguid sisaldav plugin
 Comment[gl]=Unha extensión que contén un guión de acción eventual

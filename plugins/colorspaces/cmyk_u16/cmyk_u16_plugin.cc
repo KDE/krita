@@ -26,7 +26,7 @@
 #include "kis_cmyk_u16_colorspace.h"
 
 typedef KGenericFactory<CMYKU16Plugin> CMYKU16PluginFactory;
-K_EXPORT_COMPONENT_FACTORY( krita_cmyk_u16_plugin, CMYKU16PluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY( krita_cmyk_u16_plugin, CMYKU16PluginFactory( "kocolorspaces" ) )
 
 
 CMYKU16Plugin::CMYKU16Plugin(QObject *parent, const QStringList &)

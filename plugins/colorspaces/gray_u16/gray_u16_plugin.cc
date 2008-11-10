@@ -27,7 +27,7 @@
 #include "kis_gray_u16_colorspace.h"
 
 typedef KGenericFactory<GRAYU16Plugin> GRAYU16PluginFactory;
-K_EXPORT_COMPONENT_FACTORY( koffice_graya_u16_plugin, GRAYU16PluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY( koffice_graya_u16_plugin, GRAYU16PluginFactory( "kocolorspaces" ) )
 
 
 GRAYU16Plugin::GRAYU16Plugin(QObject *parent, const QStringList &)

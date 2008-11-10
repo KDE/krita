@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>194</width>
-    <height>56</height>
+    <width>208</width>
+    <height>65</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -156,6 +156,19 @@
       <size>
        <width>0</width>
        <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="1" colspan="2" >
+    <spacer name="verticalSpacer" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>0</height>
       </size>
      </property>
     </spacer>

@@ -577,21 +577,24 @@ void KisPrescaledProjection::drawScaledImage(const QRect & rc,  QPainter & gc, b
                 croppedImage = m_d->image->convertToQImage(alignedImageRect.x(), alignedImageRect.y(), alignedImageRect.width(), alignedImageRect.height(), m_d->monitorProfile);
             }
             QSize s(ceil(rcFromAligned.size().width()), ceil(rcFromAligned.size().height()));
-            double scaleXbis = rcFromAligned.width() / s.width();
-            double scaleYbis = rcFromAligned.height() / s.height();
-            gc.save();
-            gc.setRenderHint(QPainter::SmoothPixmapTransform, true);
-            gc.scale(scaleXbis, scaleYbis);
-            QPointF pt(rcFromAligned.topLeft().x() / scaleXbis, rcFromAligned.topLeft().y() / scaleYbis);
-            
-            if (m_d->useQtScaling) {
-                dbgRender << " m_d->useQtScaling";
-                gc.drawImage(pt, croppedImage.scaled(s, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-            } else { // Smooth scaling using blitz
-                dbgRender << " else";
-                gc.drawImage(pt, Blitz::smoothScale(croppedImage, s, Qt::IgnoreAspectRatio));
+            if( s.width() > 0 && s.height() > 0)
+            {
+              double scaleXbis = rcFromAligned.width() / s.width();
+              double scaleYbis = rcFromAligned.height() / s.height();
+              gc.save();
+              gc.setRenderHint(QPainter::SmoothPixmapTransform, true);
+              gc.scale(scaleXbis, scaleYbis);
+              QPointF pt(rcFromAligned.topLeft().x() / scaleXbis, rcFromAligned.topLeft().y() / scaleYbis);
+              
+              if (m_d->useQtScaling) {
+                  dbgRender << " m_d->useQtScaling";
+                  gc.drawImage(pt, croppedImage.scaled(s, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+              } else { // Smooth scaling using blitz
+                  dbgRender << " else";
+                  gc.drawImage(pt, Blitz::smoothScale(croppedImage, s, Qt::IgnoreAspectRatio));
+              }
+              gc.restore();
             }
-            gc.restore();
         }
     }
 }

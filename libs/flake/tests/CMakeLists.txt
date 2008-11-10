@@ -122,3 +122,9 @@ kde4_add_unit_test(TestShapeBorderCommand TESTNAME libs-flake-TestShapeBorderCom
 target_link_libraries(TestShapeBorderCommand ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
 
 ########### end ###############
+
+set(TestShapeShadowCommand_test_SRCS TestShapeShadowCommand.cpp )
+kde4_add_unit_test(TestShapeShadowCommand TESTNAME libs-flake-TestShapeShadowCommand  ${TestShapeShadowCommand_test_SRCS})
+target_link_libraries(TestShapeShadowCommand ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
+
+########### end ###############

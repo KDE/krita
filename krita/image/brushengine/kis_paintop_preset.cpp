@@ -123,22 +123,91 @@ QImage KisPaintOpPreset::img() const
 
 void KisPaintOpPreset::updateImg()
 {
-    if (!m_d->settings) return;
+#if 0 // XXX: port to KisPaintOpPreset
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP mydevice = new KisPaintDevice(cs, "preview device");
+    Q_CHECK_PTR(mydevice);
 
-    Q_ASSERT(!m_d->settings->getString("paintop").isNull());
-    if (m_d->settings->getString("paintop").isNull()) return;
+    KisPainter painter(mydevice);
+    KoColor c(Qt::black, cs);
+    painter.setPaintColor(c);
 
-    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "paintop_preset");
-    KisPainter gc(dev);
-    gc.setPaintOpPreset(this);
+    KisPaintOp * op = KisPaintOpRegistry::instance()->paintOp("sumibrush", this, &painter);
+    painter.setPaintOp(op);
 
-    KisPaintInformation i1(QPointF(0, 25), PRESSURE_MIN);
-    KisPaintInformation i2(QPointF(50, 25), PRESSURE_MAX);
-    KisPaintInformation i3(QPointF(100, 25), PRESSURE_MIN);
+    QLabel *label = m_options->previewLbl;
+    int width = label->width();
+    int height = label->height();
 
-    gc.paintBezierCurve(i1, QPointF(25, 0), QPointF(25, 0), i2);
-    gc.paintBezierCurve(i2, QPointF(75, 0), QPointF(75, 0), i3);
-    gc.end();
+    /*    QPointF p1(0,0);
+          KisPaintInformation pi1(p1, 0.5);
+          QPointF p2(width,height);
+          KisPaintInformation pi2(p2, 1.0);
 
+          painter.paintLine(pi1,pi2);*/
+    painter.end();
+
+    QPointF p1(1.0 / 6.0*width, 2.0 / 3.0*height);
+    QPointF p2(2.0 / 6.0*width, 1.0 / 3.0*height);
+    QPointF p3(4.0 / 6.0*width, 2.0 / 3.0*height);
+    QPointF p4(5.0 / 6.0*width, 1.0 / 3.0*height);
+
+    float pathLength;
+
+    //p2-p1
+    float dx = p2.x() - p1.x();
+    float dy = p2.y() - p1.y();
+    pathLength += sqrt(dx * dx + dy * dy);
+
+    dx = p3.x() - p2.x();
+    dy = p3.y() - p2.y();
+    pathLength += sqrt(dx * dx + dy * dy);
+
+    dx = p4.x() - p3.x();
+    dy = p4.y() - p3.y();
+    pathLength += sqrt(dx * dx + dy * dy);
+
+    m_options->inkAmountSpinBox->setValue((int)pathLength);
+
+    KisPaintInformation pi1(p1, 0.0);
+    KisPaintInformation pi2(p2, 0.95);
+    KisPaintInformation pi3(p3, 0.75);
+    KisPaintInformation pi4(p4, 0.0);
+
+    QPointF c1(p1.x(), p1.y() - 5);
+    QPointF c2(p1.x(), p1.y() + 5);
+    painter.paintBezierCurve(pi1, c1, c2, pi2, 0);
+    c1.setX(p2.x());
+    c1.setY(p2.y() - 5);
+    c2.setX(p2.x());
+    c2.setY(p2.y() + 5);
+    painter.paintBezierCurve(pi2, c1, c2, pi3, 0);
+    c1.setX(p3.x());
+    c1.setY(p3.y() - 5);
+    c2.setX(p3.x());
+    c2.setY(p3.y() + 5);
+    painter.paintBezierCurve(pi3, c1, c2, pi4, 0);
+
+    qint32  xx = 0,
+                 yy = 0,
+                      ww = 0,
+                           hh = 0;
+
+    mydevice->extent(xx, yy, ww, hh);
+
+    /*    dbgPlugins << "Coords extend()";
+          dbgPlugins << xx << " " << yy << " " << ww << " " << hh;
+          dbgPlugins << mydevice->extent();*/
+    QImage img = mydevice->convertToQImage(0, xx, yy, ww, hh);
+
+    /*    const QString filePath("/tmp/sumi-e-preview.png");
+          bool r = img.save(filePath);
+
+          dbgPlugins << "saved to?: "<< r << " " << filePath;*/
+    QPixmap pixmap = QPixmap::fromImage(img);
+
+    Q_CHECK_PTR(label);
+    label->setPixmap(pixmap);
+#endif
 }
 

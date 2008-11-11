@@ -19,7 +19,7 @@
 #ifndef KIS_MASK_SHAPE_H_
 #define KIS_MASK_SHAPE_H_
 
-#include <KoShape.h>
+#include <KoShapeLayer.h>
 
 #include <kis_types.h>
 
@@ -40,7 +40,7 @@ class KoShapeContainer;
  *  by a layer) or channel masks (that contain a single color channel
  *  extracted from the actual layer).
  */
-class KisMaskShape : public KoShape
+class KisMaskShape : public KoShapeLayer
 {
 public:
 

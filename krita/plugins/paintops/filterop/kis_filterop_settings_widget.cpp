@@ -67,7 +67,6 @@ KisPropertiesConfiguration* KisFilterOpSettingsWidget::configuration() const
 
 void KisFilterOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
 {
-    config->clearProperties();
     m_brushOption->writeOptionSetting(config);
     m_sizeOption->writeOptionSetting(config);
     m_filterOption->writeOptionSetting(config);

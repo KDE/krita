@@ -37,6 +37,7 @@
 #include "kis_config.h"
 #include "kis_view2.h"
 #include "canvas/kis_canvas2.h"
+#include <kis_paintop_settings.h>
 
 KisCanvasResourceProvider::KisCanvasResourceProvider(KisView2 * view)
         : m_view(view)
@@ -152,7 +153,6 @@ KisNodeSP KisCanvasResourceProvider::currentNode() const
 KisPaintOpPresetSP KisCanvasResourceProvider::currentPreset() const
 {
     KisPaintOpPresetSP preset = m_resourceProvider->resource(CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-    dbgUI << "current preset: " << preset;
     return preset;
 }
 
@@ -184,7 +184,9 @@ void KisCanvasResourceProvider::slotGradientActivated(KoResource *res)
 
 void KisCanvasResourceProvider::slotPaintOpPresetActivated(const KisPaintOpPresetSP preset)
 {
-    dbgUI << " preset activated: " << preset;
+    Q_ASSERT( preset->valid() );
+    Q_ASSERT( !preset->paintOp().id().isEmpty() );
+    Q_ASSERT( preset->settings() );
     if (!preset) return;
     QVariant v;
     v.setValue(preset);

@@ -1703,6 +1703,7 @@ void KisPainter::setPaintOpPreset(KisPaintOpPresetSP preset, KisImageSP image)
     d->paintOpPreset = preset;
     delete d->paintOp;
     d->paintOp = KisPaintOpRegistry::instance()->paintOp(preset, this, image);
+    Q_ASSERT( d->paintOp );
 }
 
 KisPaintOpPresetSP KisPainter::preset() const

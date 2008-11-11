@@ -262,8 +262,10 @@ void KisLayerManager::updateGUI()
     m_imgMergeLayer->setEnabled(nlayers > 1 && layer && layer->nextSibling());
 
 
-    if (activeDevice())
+    // XXX: Check whether the colorspace was really changed
+    if (activeDevice()) {
         emit currentColorSpaceChanged(activeDevice()->colorSpace());
+    }
 
     m_imgResizeToLayer->setEnabled(activeLayer());
 

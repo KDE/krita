@@ -58,11 +58,13 @@ public:
 private:
 
     const KisSumiPaintOpSettings* m_settings;
-    QColor c;
     QPointF m_previousPoint;
     KisImageSP m_image;
     bool newStrokeFlag;
+
     KisPaintDeviceSP dab;
+    KisPaintDeviceSP m_dev;
+
     QMutex m_mutex;
     Brush m_brush;
 };

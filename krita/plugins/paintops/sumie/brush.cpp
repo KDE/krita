@@ -139,7 +139,7 @@ void Brush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPain
     if (m_mousePressureEnabled && pi1.pressure() == 0.5) { // it is mouse
         pressure = 1.0 - computeMousePressure(distance);
     } else { // leave it as it is
-        pressure = pi1.pressure();
+        pressure = 1.0;
     }
 
     Bristle *bristle = 0;
@@ -147,7 +147,7 @@ void Brush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPain
 
     KisRandomAccessor accessor = dev->createRandomAccessor((int)x1, (int)y1);
     m_pixelSize = dev->colorSpace()->pixelSize();
-    m_accessor = &accessor;
+    m_dabAccessor = &accessor;
     m_dev = dev;
 
 
@@ -301,7 +301,7 @@ void Brush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPain
     rotateBristles(-(angle + 1.57));
     //repositionBristles(angle,slope);
     m_dev = 0;
-    m_accessor = 0;
+    m_dabAccessor = 0;
 }
 
 
@@ -343,51 +343,33 @@ void Brush::repositionBristles(double angle, double slope)
 
 Brush::~Brush()
 {
-    /*    if (!m_accessor){
-          delete m_accessor;
+    /*    if (!m_dabAccessor){
+          delete m_dabAccessor;
           }*/
 }
 
-// TODO: Use KisPaintOpSettings::node() instead of painter()-device();
-// I suppose that this does not work the way we want...
-void Brush::addBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color)
+inline void Brush::addBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color)
 {
-    KoMixColorsOp * mixOp = m_dev->colorSpace()->mixColorsOp();
-    m_accessor->moveTo((int)wx, (int)wy);
-    m_layerAccessor->moveTo((int)wx, (int)wy);
-
-    const quint8 *colors[2];
-    colors[0] = color.data();
-    // now this reads pixels when incremental paint used!
-    colors[1] = m_layerAccessor->rawData();
-
-    qint16 colorWeights[2];
-
-    colorWeights[0] = static_cast<quint8>(color.opacity());
-    colorWeights[1] = static_cast<quint8>(255 - color.opacity());
-    // draw on dab -- temporary device
-    mixOp->mixColors(colors, colorWeights, 2, m_accessor->rawData());
-
-    //memcpy ( m_accessor->rawData(), color.data(), m_pixelSize );
-    // bristle delivered some ink
+    m_dabAccessor->moveTo((int)wx, (int)wy);
+    memcpy ( m_dabAccessor->rawData(), color.data(), m_pixelSize );
     bristle->upIncrement();
 }
 
 void Brush::oldAddBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color)
 {
     KoMixColorsOp * mixOp = m_dev->colorSpace()->mixColorsOp();
-    m_accessor->moveTo((int)wx, (int)wy);
+    m_dabAccessor->moveTo((int)wx, (int)wy);
     const quint8 *colors[2];
     colors[0] = color.data();
-    colors[1] = m_accessor->rawData(); // this is always (0,0,0) in RGB
+    colors[1] = m_dabAccessor->rawData(); // this is always (0,0,0) in RGB
 
     qint16 colorWeights[2];
 
-    colorWeights[0] = static_cast<quint8>(color.opacity());
-    colorWeights[1] = static_cast<quint8>(255 - color.opacity());
-    mixOp->mixColors(colors, colorWeights, 2, m_accessor->rawData());
+    colorWeights[0] = static_cast<quint8>( color.opacity() );
+    colorWeights[1] = static_cast<quint8>( 255 - color.opacity() );
+    mixOp->mixColors(colors, colorWeights, 2, m_dabAccessor->rawData());
 
-    //memcpy ( m_accessor->rawData(), color.data(), m_pixelSize );
+    //memcpy ( m_dabAccessor->rawData(), color.data(), m_pixelSize );
     // bristle delivered some ink
     bristle->upIncrement();
 }
@@ -439,8 +421,8 @@ void Brush::mixCMY(double x, double y, int cyan, int magenta, int yellow,double 
         MAX_CHANNEL_VALUE -1 );
 
     kcolor.fromQColor(result);
-    m_accessor->moveTo(ix,iy);
-    memcpy ( m_accessor->rawData(), kcolor.data(), m_pixelSize );
+    m_dabAccessor->moveTo(ix,iy);
+    memcpy ( m_dabAccessor->rawData(), kcolor.data(), m_pixelSize );
 
 
     // ============
@@ -467,8 +449,8 @@ void Brush::mixCMY(double x, double y, int cyan, int magenta, int yellow,double 
         MAX_CHANNEL_VALUE -1 );
 
     kcolor.fromQColor(result);
-    m_accessor->moveTo(nextX, iy);
-    memcpy ( m_accessor->rawData(), kcolor.data(), m_pixelSize );
+    m_dabAccessor->moveTo(nextX, iy);
+    memcpy ( m_dabAccessor->rawData(), kcolor.data(), m_pixelSize );
 
 
     // ============
@@ -498,8 +480,8 @@ void Brush::mixCMY(double x, double y, int cyan, int magenta, int yellow,double 
         MAX_CHANNEL_VALUE -1 );
 
     kcolor.fromQColor(result);
-    m_accessor->moveTo(ix, nextY);
-    memcpy ( m_accessor->rawData(), kcolor.data(), m_pixelSize );
+    m_dabAccessor->moveTo(ix, nextY);
+    memcpy ( m_dabAccessor->rawData(), kcolor.data(), m_pixelSize );
 
     // ============
     brightness = MAX_CHANNEL_VALUE * xDist * yDist * weight;
@@ -528,15 +510,15 @@ void Brush::mixCMY(double x, double y, int cyan, int magenta, int yellow,double 
         MAX_CHANNEL_VALUE -1 );
 
     kcolor.fromQColor(result);
-    m_accessor->moveTo(nextX, nextY);
-    memcpy ( m_accessor->rawData(), kcolor.data(), m_pixelSize );
+    m_dabAccessor->moveTo(nextX, nextY);
+    memcpy ( m_dabAccessor->rawData(), kcolor.data(), m_pixelSize );
 }
 
 
 void Brush::putBristle(Bristle *bristle, float wx, float wy, const KoColor &color)
 {
-    m_accessor->moveTo((int)wx, (int)wy);
-    memcpy(m_accessor->rawData(), color.data(), m_pixelSize);
+    m_dabAccessor->moveTo((int)wx, (int)wy);
+    memcpy(m_dabAccessor->rawData(), color.data(), m_pixelSize);
     // bristle delivered some ink
     bristle->upIncrement();
 
@@ -557,27 +539,27 @@ void Brush::putBristle(Bristle *bristle, float wx, float wy, const KoColor &colo
 //
 //     if (btl>MIN_OPACITY)
 //     {
-//         m_accessor->moveTo(x,   y);
+//         m_dabAccessor->moveTo(x,   y);
 //         mycolor.setOpacity(btl);
-//         memcpy ( m_accessor->rawData(), mycolor.data(), m_pixelSize );
+//         memcpy ( m_dabAccessor->rawData(), mycolor.data(), m_pixelSize );
 //     }
 //
 //     if (btr>MIN_OPACITY){
-//         m_accessor->moveTo(x+1, y);
+//         m_dabAccessor->moveTo(x+1, y);
 //         mycolor.setOpacity(btr);
-//         memcpy ( m_accessor->rawData(), mycolor.data(), m_pixelSize );
+//         memcpy ( m_dabAccessor->rawData(), mycolor.data(), m_pixelSize );
 //     }
 //
 //     if (bbl>MIN_OPACITY){
-//         m_accessor->moveTo(x, y+1);
+//         m_dabAccessor->moveTo(x, y+1);
 //         mycolor.setOpacity(bbl);
-//         memcpy ( m_accessor->rawData(), mycolor.data(), m_pixelSize );
+//         memcpy ( m_dabAccessor->rawData(), mycolor.data(), m_pixelSize );
 //     }
 //
 //     if (bbr>MIN_OPACITY){
-//         m_accessor->moveTo(x+1, y+1);
+//         m_dabAccessor->moveTo(x+1, y+1);
 //         mycolor.setOpacity(bbr);
-//         memcpy ( m_accessor->rawData(), mycolor.data(), m_pixelSize );
+//         memcpy ( m_dabAccessor->rawData(), mycolor.data(), m_pixelSize );
 //     }
 }
 

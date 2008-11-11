@@ -20,6 +20,8 @@
 #include "ChangecaseFactory.h"
 #include "Changecase.h"
 
+#include <klocale.h>
+
 ChangecaseFactory::ChangecaseFactory(QObject *parent)
     : KoTextEditingFactory(parent, "changecase")
 {

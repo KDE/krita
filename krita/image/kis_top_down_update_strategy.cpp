@@ -79,6 +79,11 @@ public:
 
         QRect rc = dev->extent() & m_rc;
 
+/*        if( !(*dev->colorSpace() == *m_projection->colorSpace() ) )
+        {
+            dev->convertTo( m_projection->colorSpace() );
+        }*/
+        
         KisPainter gc(m_projection);
         gc.setChannelFlags(layer->channelFlags());
         gc.bitBlt(rc.left(), rc.top(), layer->compositeOp() , dev, layer->opacity(), rc.left(), rc.top(), rc.width(), rc.height());

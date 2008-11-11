@@ -70,11 +70,15 @@ void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)
 {
     Q_ASSERT(filterConfig);
     m_d->filterConfig = filterConfig;
+}
+
+void KisFilterMask::setDirty()
+{
     if(selection())
     {
-        setDirty(selection()->selectedExactRect());
+        KisEffectMask::setDirty(selection()->selectedExactRect());
     } else {
-        setDirty();
+        KisEffectMask::setDirty();
     }
 }
 

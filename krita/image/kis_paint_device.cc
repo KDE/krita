@@ -530,7 +530,6 @@ void KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConver
 //         undoAdapter()->addCommand(new KisConvertLayerTypeCmd(KisPaintDeviceSP(this), oldData, oldColorSpace, m_datamanager, m_d->colorSpace));
 //     }
 
-    setDirty();
     emit colorSpaceChanged(dstColorSpace);
     delete oldColorSpace;
     delete weaver;
@@ -554,7 +553,6 @@ void KisPaintDevice::setDataManager(KisDataManagerSP data, const KoColorSpace * 
     m_d->pixelSize = m_d->colorSpace->pixelSize();
     m_d->nChannels = m_d->colorSpace->channelCount();
 
-    setDirty(extent());
 }
 
 void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcProfileName,

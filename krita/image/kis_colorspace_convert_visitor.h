@@ -151,7 +151,6 @@ bool KisColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
         child->accept(*this);
         child = dynamic_cast<KisLayer*>(child->nextSibling().data());
     }
-    layer->setDirty();
     layer->setCompositeOp(m_dstColorSpace->compositeOp(layer->compositeOp()->id()));
     return true;
 }
@@ -160,7 +159,6 @@ bool KisColorSpaceConvertVisitor::visit(KisPaintLayer *layer)
 {
     layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent);
     layer->setChannelFlags(m_emptyChannelFlags);
-    layer->setDirty();
     layer->setCompositeOp(m_dstColorSpace->compositeOp(layer->compositeOp()->id()));
     Q_ASSERT(!layer->temporaryTarget() );
     return true;
@@ -170,7 +168,6 @@ bool KisColorSpaceConvertVisitor::visit(KisGeneratorLayer *layer)
 {
     layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent);
     layer->setChannelFlags(m_emptyChannelFlags);
-    layer->setDirty();
     layer->setCompositeOp(m_dstColorSpace->compositeOp(layer->compositeOp()->id()));
     return true;
 }
@@ -189,7 +186,6 @@ bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
     }
     layer->setChannelFlags(m_emptyChannelFlags);
     layer->resetCache();
-    layer->setDirty();
     return true;
 }
 

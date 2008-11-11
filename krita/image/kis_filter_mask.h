@@ -59,6 +59,7 @@ public:
     void setFilter(KisFilterConfiguration * filterConfig);
 
     void apply(KisPaintDeviceSP projection, const QRect & rc) const;
+    virtual void setDirty();
 
 private:
 

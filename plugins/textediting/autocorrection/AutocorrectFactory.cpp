@@ -20,9 +20,7 @@
 #include "AutocorrectFactory.h"
 #include "Autocorrect.h"
 
-//   #include <KoProperties.h>
-//
-//   #include <klocale.h>
+#include <klocale.h>
 
 AutocorrectFactory::AutocorrectFactory(QObject *parent)
     : KoTextEditingFactory(parent, "autocorrect")

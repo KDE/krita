@@ -67,12 +67,37 @@ Panel::Panel(QWidget *parent)
     m_style3->setCheckable( true );
     connect (m_style3, SIGNAL(triggered()), this, SLOT(style3ButtonClicked()));
 
+    setInitialButtonIcon(widget.bold, "bold");
+    setInitialButtonIcon(widget.italic, "italic");
+    setInitialButtonIcon(widget.underline, "underline");
+    setInitialButtonIcon(widget.center, "middle");
+    setInitialButtonIcon(widget.sizeUp, "sizeup");
+    setInitialButtonIcon(widget.sizeDown, "sizedown");
+    setInitialButtonIcon(widget.style1, "sans");
+    setInitialButtonIcon(widget.style2, "serif");
+    setInitialButtonIcon(widget.style3, "script");
+    if (QApplication::isRightToLeft()) {
+        setInitialButtonIcon(widget.left, "left");
+        setInitialButtonIcon(widget.right, "right");
+    }
+    else {
+        setInitialButtonIcon(widget.right, "left");
+        setInitialButtonIcon(widget.left, "right");
+    }
+
     // TODO enable 'font color'
     widget.color->setVisible(false);
 }
 
 Panel::~Panel()
 {
+}
+
+void Panel::setInitialButtonIcon(QToolButton *button, const QString &name) const
+{
+    button->setIconSize(QSize(42, 42));
+    button->setEnabled(false);
+    button->setIcon(KIcon("koffice_simple_format_"+ name +"_inactive"));
 }
 
 void Panel::setCanvas (KoCanvasBase *canvas)

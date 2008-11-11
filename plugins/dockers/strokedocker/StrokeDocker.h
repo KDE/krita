@@ -6,7 +6,7 @@
    Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
    Copyright (C) 2005 Inge Wallin <inge@lysator.liu.se>
    Copyright (C) 2005 Thomas Zander <zander@kde.org>
-   Copyright (C) 2005-2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2005-2008 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
 
    This library is free software; you can redistribute it and/or
@@ -73,6 +73,8 @@ private slots:
 
     /// reimplemented
     virtual void setCanvas( KoCanvasBase *canvas );
+
+    void resourceChanged(int key, const QVariant & value);
 
 private:
     class Private;

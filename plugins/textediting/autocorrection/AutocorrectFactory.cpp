@@ -28,7 +28,7 @@ AutocorrectFactory::AutocorrectFactory(QObject *parent)
     : KoTextEditingFactory(parent, "autocorrect")
 {
     setShowInMenu(true);
-    setTitle("Autocorrect");
+    setTitle(i18n ("Autocorrect") );
 }
 
 KoTextEditingPlugin *AutocorrectFactory::create() const {

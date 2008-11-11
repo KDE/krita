@@ -84,7 +84,8 @@ void Panel::setCanvas (KoCanvasBase *canvas)
             this, SLOT(resourceChanged(int,const QVariant&)));
 }
 
-void Panel::toolChangeDetected(const QString &toolId) {
+void Panel::toolChangeDetected(const QString &toolId)
+{
     if (toolId != "TextToolFactory_ID")
         return;
     delete m_parent;
@@ -95,7 +96,7 @@ void Panel::toolChangeDetected(const QString &toolId) {
     applyAction(actions.value("format_italic"), widget.italic, "italic", false);
     applyAction(actions.value("format_underline"), widget.underline, "underline", false);
     applyAction(actions.value("format_aligncenter"), widget.center, "middle", true);
-    if(QApplication::isRightToLeft()) {
+    if (QApplication::isRightToLeft()) {
         applyAction(actions.value("format_alignright"), widget.left, "left", true);
         applyAction(actions.value("format_alignleft"), widget.right, "right", true);
     }
@@ -118,7 +119,8 @@ void Panel::toolChangeDetected(const QString &toolId) {
     m_style3->setEnabled(m_handler);
 }
 
-void Panel::resourceChanged (int key, const QVariant &value) {
+void Panel::resourceChanged (int key, const QVariant &value)
+{
     if (key == KoText::CurrentTextDocument) {
         if (value.isNull() && m_parent) {
             delete m_parent;
@@ -128,7 +130,7 @@ void Panel::resourceChanged (int key, const QVariant &value) {
             applyAction(0, widget.italic, "italic", false);
             applyAction(0, widget.underline, "underline", false);
             applyAction(0, widget.center, "middle", true);
-            if(QApplication::isRightToLeft()) {
+            if (QApplication::isRightToLeft()) {
                 applyAction(0, widget.left, "left", true);
                 applyAction(0, widget.right, "right", true);
             }
@@ -146,12 +148,13 @@ void Panel::resourceChanged (int key, const QVariant &value) {
     }
 }
 
-void Panel::applyAction(KAction *action, QToolButton *button, const QString &iconName, bool partOfGroup) {
+void Panel::applyAction(KAction *action, QToolButton *button, const QString &iconName, bool partOfGroup)
+{
     Q_ASSERT(button);
     button->setEnabled(action);
     button->setIconSize(QSize(42, 42));
     KIcon icon("koffice_simple_format_"+ iconName + (action ? "_active" : "_inactive"));
-    if(action == 0) {
+    if (action == 0) {
         button->setIcon(icon);
         button->setEnabled(false);
         return;
@@ -166,17 +169,20 @@ void Panel::applyAction(KAction *action, QToolButton *button, const QString &ico
     new ActionHelper(m_parent, action, newAction, partOfGroup);
 }
 
-void Panel::style1ButtonClicked() {
+void Panel::style1ButtonClicked()
+{
     if (m_handler == 0) return;
     m_handler->setFontFamily("Sans Serif");
 }
 
-void Panel::style2ButtonClicked() {
+void Panel::style2ButtonClicked()
+{
     if (m_handler == 0) return;
     m_handler->setFontFamily("Serif");
 }
 
-void Panel::style3ButtonClicked() {
+void Panel::style3ButtonClicked()
+{
     if (m_handler == 0) return;
     m_handler->setFontFamily("Script");
 }

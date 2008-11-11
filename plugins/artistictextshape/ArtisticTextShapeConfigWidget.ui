@@ -5,15 +5,34 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>337</width>
-    <height>206</height>
+    <width>329</width>
+    <height>99</height>
    </rect>
   </property>
-  <layout class="QGridLayout" >
+  <property name="sizePolicy" >
+   <sizepolicy vsizetype="Preferred" hsizetype="Minimum" >
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <layout class="QGridLayout" name="gridLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
    <item row="0" column="0" >
     <widget class="QLabel" name="label" >
      <property name="text" >
       <string>Family:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" colspan="2" >
+    <widget class="KFontComboBox" name="fontFamily" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
     </widget>
    </item>
@@ -24,101 +43,78 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="2" >
-    <widget class="KIntSpinBox" name="fontSize" />
-   </item>
-   <item row="2" column="0" >
-    <widget class="QLabel" name="label_3" >
-     <property name="text" >
-      <string>Style:</string>
+   <item row="1" column="1" >
+    <widget class="KIntSpinBox" name="fontSize" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
     </widget>
    </item>
-   <item row="2" column="2" >
+   <item row="1" column="2" >
     <widget class="QWidget" native="1" name="widget" >
      <layout class="QHBoxLayout" >
-      <item>
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0" >
-         <size>
-          <width>61</width>
-          <height>29</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
+      <property name="spacing" >
+       <number>0</number>
+      </property>
+      <property name="margin" >
+       <number>0</number>
+      </property>
       <item>
        <widget class="QToolButton" name="anchorStart" >
         <property name="text" >
-         <string>...</string>
+         <string/>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="anchorMiddle" >
         <property name="text" >
-         <string>...</string>
+         <string/>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="anchorEnd" >
         <property name="text" >
-         <string>...</string>
+         <string/>
         </property>
        </widget>
       </item>
       <item>
-       <spacer>
+       <widget class="Line" name="line" >
         <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
+         <enum>Qt::Vertical</enum>
         </property>
-        <property name="sizeHint" stdset="0" >
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
+       </widget>
       </item>
       <item>
        <widget class="QToolButton" name="bold" >
         <property name="text" >
-         <string>...</string>
+         <string/>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="italic" >
         <property name="text" >
-         <string>...</string>
+         <string/>
         </property>
        </widget>
       </item>
      </layout>
     </widget>
    </item>
-   <item row="3" column="0" >
-    <widget class="QLabel" name="label_4" >
-     <property name="text" >
-      <string>Text:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="2" >
-    <widget class="QLineEdit" name="text" />
-   </item>
-   <item row="4" column="0" >
+   <item row="2" column="0" >
     <widget class="QLabel" name="labelStartOffset" >
      <property name="text" >
       <string>Offset:</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="2" >
+   <item row="2" column="1" colspan="2" >
     <widget class="QSlider" name="startOffset" >
      <property name="maximum" >
       <number>100</number>
@@ -128,24 +124,31 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="2" >
-    <spacer>
+   <item row="3" column="1" colspan="2" >
+    <spacer name="verticalSpacer" >
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0" >
       <size>
-       <width>269</width>
-       <height>21</height>
+       <width>20</width>
+       <height>40</height>
       </size>
      </property>
     </spacer>
    </item>
-   <item row="0" column="2" >
-    <widget class="KFontComboBox" name="fontFamily" >
-    </widget>
-   </item>
   </layout>
+  <zorder>label</zorder>
+  <zorder>fontFamily</zorder>
+  <zorder>label_2</zorder>
+  <zorder>fontSize</zorder>
+  <zorder>label_3</zorder>
+  <zorder>label_4</zorder>
+  <zorder>text</zorder>
+  <zorder>labelStartOffset</zorder>
+  <zorder>startOffset</zorder>
+  <zorder>verticalSpacer</zorder>
+  <zorder>widget</zorder>
  </widget>
  <customwidgets>
   <customwidget>

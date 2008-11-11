@@ -53,22 +53,14 @@ ArtisticTextShapeConfigWidget::ArtisticTextShapeConfigWidget()
     connect( widget.fontSize, SIGNAL(valueChanged(int)), this, SIGNAL(propertyChanged()));
     connect( widget.bold, SIGNAL(toggled(bool)), this, SIGNAL(propertyChanged()));
     connect( widget.italic, SIGNAL(toggled(bool)), this, SIGNAL(propertyChanged()));
-    connect( widget.text, SIGNAL(textChanged(const QString&)), this, SIGNAL(propertyChanged()));
     connect( widget.startOffset, SIGNAL(valueChanged(int)), this, SIGNAL(propertyChanged()));
     connect( m_anchorGroup, SIGNAL(buttonClicked(int)), this, SIGNAL(propertyChanged()));
-
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-    if ( canvasController ) {
-        KoShapeManager *manager = canvasController->canvas()->shapeManager();
-        connect( manager, SIGNAL(selectionContentChanged()), this, SLOT(slotTextChanged()));
-    }
 }
 
 void ArtisticTextShapeConfigWidget::blockChildSignals( bool block )
 {
     widget.fontFamily->blockSignals( block );
     widget.fontSize->blockSignals( block );
-    widget.text->blockSignals( block );
     widget.bold->blockSignals( block );
     widget.italic->blockSignals( block );
     widget.startOffset->blockSignals( block );
@@ -85,9 +77,6 @@ void ArtisticTextShapeConfigWidget::open(KoShape *shape)
 
     QFont font = m_shape->font();
 
-    int cursorPos = widget.text->cursorPosition();
-    widget.text->setText( m_shape->text() );
-    widget.text->setCursorPosition( cursorPos );
     widget.fontSize->setValue( font.pointSize() );
     font.setPointSize( 8 );
 
@@ -101,8 +90,7 @@ void ArtisticTextShapeConfigWidget::open(KoShape *shape)
     else
         widget.anchorEnd->setChecked( true );
     widget.startOffset->setValue( static_cast<int>( m_shape->startOffset() * 100.0 ) );
-    widget.startOffset->setVisible( m_shape->isOnPath() );
-    widget.labelStartOffset->setVisible( m_shape->isOnPath() );
+    widget.startOffset->setEnabled( m_shape->isOnPath() );
 
     blockChildSignals( false );
 }
@@ -120,9 +108,7 @@ void ArtisticTextShapeConfigWidget::save()
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     if ( canvasController ) {
         KoCanvasBase *canvas = canvasController->canvas();
-	if ( widget.text->text() != m_shape->text() ) {
-            canvas->addCommand( new ChangeText( this, widget.text->text() ) );
-	} else if ( font != m_shape->font() ) {
+    if ( font != m_shape->font() ) {
             canvas->addCommand( new ChangeFont( this, font ) );
 	} else {
 	    ArtisticTextShape::TextAnchor anchor;
@@ -147,16 +133,3 @@ QUndoCommand * ArtisticTextShapeConfigWidget::createCommand()
 
     return 0;
 }
-
-void ArtisticTextShapeConfigWidget::slotTextChanged()
-{
-    if ( ! m_shape )
-        return;
-
-    int cursorPos = widget.text->cursorPosition();
-    blockChildSignals( true );
-    widget.text->setText( m_shape->text() );
-    blockChildSignals( false );
-    widget.text->setCursorPosition( cursorPos );
-}
-

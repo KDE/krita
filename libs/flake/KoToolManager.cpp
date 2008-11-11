@@ -245,7 +245,7 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
     foreach(KoTool *tool, cd->allTools) {
         QHash<QString, KAction*> actions = tool->actions();
         foreach(QString name, actions.keys())
-        ac->addAction(name, actions[name]);
+            ac->addAction(name, actions[name]);
     }
 }
 
@@ -520,8 +520,8 @@ void KoToolManager::detachCanvas(KoCanvasController *controller)
     QList<KoTool *> tools;
     foreach(CanvasData *cd, d->canvasses.value(controller)) {
         foreach(KoTool *tool, cd->allTools.values())
-        if (! tools.contains(tool))
-            tools.append(tool);
+            if (! tools.contains(tool))
+                tools.append(tool);
         delete cd;
     }
     foreach(KoTool *tool, tools) {
@@ -645,8 +645,8 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
 {
     QList<QString> types;
     foreach(KoShape *shape, shapes)
-    if (! types.contains(shape->shapeId()))
-        types.append(shape->shapeId());
+        if (! types.contains(shape->shapeId()))
+            types.append(shape->shapeId());
 
     QString toolType = KoInteractionTool_ID;
     int prio = INT_MAX;

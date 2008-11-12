@@ -268,13 +268,14 @@ void KoToolProxy::mouseReleaseEvent(QMouseEvent *event, const QPointF &point)
 
         if (! event->isAccepted() && qAbs(d->mouseDownPoint.x() - event->x()) < 5
                 && qAbs(d->mouseDownPoint.y() - event->y()) < 5) {
-            // we potentiall will change the selection
+            // we potentially will change the selection
             Q_ASSERT(d->activeTool->m_canvas);
             KoShapeManager *manager = d->activeTool->m_canvas->shapeManager();
             Q_ASSERT(manager);
+            // only change the selection if that will not lead to losing a complex selection
             if (manager->selection()->count() <= 1) {
                 KoShape *shape = manager->shapeAt(point);
-                if (shape && !manager->selection()->isSelected(shape)) {
+                if (shape && !manager->selection()->isSelected(shape)) { // make the clicked shape the active one
                     manager->selection()->deselectAll();
                     manager->selection()->select(shape);
                     QList<KoShape*> shapes;

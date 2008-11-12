@@ -51,6 +51,8 @@ KisFilterOption::KisFilterOption()
         : KisPaintOpOption(i18n("Filter"))
 {
     m_checkable = false;
+    m_currentFilterConfigWidget = 0;
+
     m_optionsWidget = new KisFilterOptionWidget;
     m_optionsWidget->hide();
     setConfigurationPage(m_optionsWidget);

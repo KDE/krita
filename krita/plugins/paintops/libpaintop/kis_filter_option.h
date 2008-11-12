@@ -24,6 +24,9 @@
 #include <kis_types.h>
 #include <krita_export.h>
 
+class QGridLayout;
+class KoID;
+class KisConfigWidget;
 class KisFilterConfiguration;
 class KisFilterOptionWidget;
 /**
@@ -33,6 +36,7 @@ class KisFilterOptionWidget;
  */
 class PAINTOP_EXPORT KisFilterOption : public KisPaintOpOption
 {
+    Q_OBJECT
 
 public:
 
@@ -48,14 +52,39 @@ public:
      */
     KisFilterConfiguration* filterConfig() const;
 
+    /**
+     * XXX
+     */
+    bool ignoreAlpha();
+
+    /**
+     * XXX
+     */
+    void setNode( KisNodeSP node );
+
+    /**
+     * XXX
+     */
+    void setImage( KisImageSP image );
+
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
 
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
+private slots:
+
+    void setCurrentFilter( const KoID& );
+
+    void updateFilterConfigWidget();
+
 private:
 
-    KisFilterOptionWidget* m_optionWidget;
-
+    QGridLayout* m_layout;
+    KisFilterOptionWidget* m_optionsWidget;
+    const KisFilterSP m_currentFilter;
+    KisConfigWidget* m_currentFilterConfigWidget;
+    KisPaintDeviceSP m_paintDevice;
+    KisImageSP m_image;
 };
 
 #endif

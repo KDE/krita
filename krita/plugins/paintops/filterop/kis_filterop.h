@@ -48,6 +48,7 @@ public:
 private:
 
     const KisFilterOpSettings * settings;
+    KisPaintDeviceSP m_tmpDevice;
 };
 
 #endif // KIS_FILTEROP_H_

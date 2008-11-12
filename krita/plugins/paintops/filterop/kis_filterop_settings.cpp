@@ -25,10 +25,13 @@
 
 #include <kis_brush_option.h>
 #include <kis_paintop_options_widget.h>
-#include <kis_pressure_darken_option.h>
-#include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
-#include <kis_paint_action_type_option.h>
+#include <kis_filter_option.h>
+#include <filter/kis_filter.h>
+#include <filter/kis_filter_configuration.h>
+#include <kis_node.h>
+#include <kis_image.h>
+
 
 KisFilterOpSettings::KisFilterOpSettings( KisFilterOpSettingsWidget* widget )
     : KisPaintOpSettings( widget )
@@ -71,11 +74,40 @@ void KisFilterOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 }
 
 
-KisPaintOpSettingsSP KisFilterOpSettings::clone() const {
+KisPaintOpSettingsSP KisFilterOpSettings::clone() const
+{
 
     KisPaintOpSettings* settings = dynamic_cast<KisPaintOpSettings*>( m_optionsWidget->configuration() );
     return settings;
 
+}
+
+void KisFilterOpSettings::setNode( KisNodeSP node )
+{
+    KisPaintOpSettings::setNode( node );
+    if ( m_optionsWidget ) {
+        m_optionsWidget->m_filterOption->setNode( node );
+    }
+}
+
+void KisFilterOpSettings::setImage( KisImageSP image )
+{
+    m_optionsWidget->m_filterOption->setImage( image );
+}
+
+KisFilterSP KisFilterOpSettings::filter() const
+{
+    return m_optionsWidget->m_filterOption->filter();
+}
+
+KisFilterConfiguration* KisFilterOpSettings::filterConfig() const
+{
+    return m_optionsWidget->m_filterOption->filterConfig();
+}
+
+bool KisFilterOpSettings::ignoreAlpha() const
+{
+    return m_optionsWidget->m_filterOption->ignoreAlpha();
 }
 
 #include "kis_filterop_settings.moc"

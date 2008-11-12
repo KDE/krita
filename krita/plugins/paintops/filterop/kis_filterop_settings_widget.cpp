@@ -22,9 +22,14 @@
 
 #include "kis_filterop_settings_widget.h"
 #include "kis_filterop_settings.h"
+
 #include <widgets/kcurve.h>
 #include <kis_properties_configuration.h>
 #include <kis_brush_option.h>
+#include <filter/kis_filter.h>
+#include <kis_image.h>
+#include <kis_paint_device.h>
+
 #include <kis_paintop_options_widget.h>
 #include <kis_pressure_size_option.h>
 #include <kis_filter_option.h>

@@ -28,6 +28,7 @@
 
 class QDomElement;
 class KisFilterOpSettingsWidget;
+class KisFilterConfiguration;
 
 class KisFilterOpSettings : public QObject, public KisPaintOpSettings
 {
@@ -46,6 +47,14 @@ public:
     void toXML(QDomDocument& doc, QDomElement& rootElt) const;
 
     KisPaintOpSettingsSP clone() const;
+
+    void setNode( KisNodeSP node );
+
+    void setImage( KisImageSP image );
+
+    KisFilterSP filter() const;
+    KisFilterConfiguration* filterConfig() const;
+    bool ignoreAlpha() const;
 
 public:
 

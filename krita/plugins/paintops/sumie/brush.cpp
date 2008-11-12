@@ -350,8 +350,13 @@ Brush::~Brush()
 
 inline void Brush::addBristleInk(Bristle *bristle, float wx, float wy, const KoColor &color)
 {
-    m_dabAccessor->moveTo((int)wx, (int)wy);
-    memcpy ( m_dabAccessor->rawData(), color.data(), m_pixelSize );
+    int ix = (int)wx;
+    int iy = (int)wy;
+    m_dabAccessor->moveTo(ix, iy);
+    if ( m_layer->colorSpace()->alpha( m_dabAccessor->rawData() ) < color.opacity() )
+    {
+        memcpy ( m_dabAccessor->rawData(), color.data(), m_pixelSize );
+    }
     bristle->upIncrement();
 }
 

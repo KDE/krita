@@ -83,11 +83,11 @@ void KoSelection::Private::requestSelectionChangedEvent()
 
 void KoSelection::Private::selectionChangedEvent()
 {
+    eventTriggered = false;
     q->setScale(1, 1);
     //just as well use the oppertunity to update the size and position
     q->updateSizeAndPosition();
     emit q->selectionChanged();
-    eventTriggered = false;
 }
 
 void KoSelection::Private::selectGroupChildren(KoShapeGroup *group)

@@ -97,8 +97,8 @@ public:
     }
 
     void relayoutPrivate() {
-        parent->relayout();
         scheduled = false;
+        parent->relayout();
     }
 
     QList<KoShape *> shapes;

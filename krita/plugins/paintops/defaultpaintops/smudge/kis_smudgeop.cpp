@@ -135,7 +135,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     /* To smudge, one does the following:
          * at first, initialize a temporary paint device with a copy of the original (dab-sized piece, really).
          * all other times:
-             reduce the transparancy of the temporary paint device so as to let it mix gradually
+             reduce the transparency of the temporary paint device so as to let it mix gradually
          * combine the temp device with the piece the brush currently is 'painting', according to a mix (opacity)
              note that in the first step, this does the actual copying of the data
          * this combination is then composited upon the actual image

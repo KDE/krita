@@ -1,5 +1,7 @@
 * make base settings widget with preview signal and use that in all paintop settings
-* move filter setting into libpaintop
+* use default filter config in filter option
+* save/load filter in filter option
+* save/load brush in brush option 
 * move paintop preview code to preset
 * make loading/saving/editing of presets work
 * fix mixer canvas to use right paintop preset
@@ -8,7 +10,6 @@
 * fix dynamic brush where it tries to get a brush shape (it probably shouldn't inherit kis_brush_based_paintop, though)
 * fix scripting plugins (include scripts themselves)
 * fix action recorder serialize/unserialize
-* add checkboxes for curve options
 
 void KisSumiPaintOpSettings::updateImg()
 {

@@ -83,6 +83,10 @@ private:
     KisPaintOpRegistry(const KisPaintOpRegistry&);
     KisPaintOpRegistry operator=(const KisPaintOpRegistry&);
 
+
+    // So the settings can get a paintop to render their sample image
+    friend class KisPaintOpSettings;
+
     /**
      * Return a newly created paintop. You are responsible for deleting
      */

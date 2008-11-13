@@ -157,7 +157,6 @@ void KisFilterOption::writeOptionSetting(KisPropertiesConfiguration* setting) co
 
 void KisFilterOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    // XXX: implement
 }
 
 #include "kis_filter_option.moc"

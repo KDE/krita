@@ -19,22 +19,25 @@
 #define _SMALLCOLORSELECTOR_DOCK_H_
 
 #include <QDockWidget>
+#include <KoCanvasObserver.h>
 
 class KisSmallColorWidget;
-class KisView2;
 class KoColor;
 
-class SmallColorSelectorDock : public QDockWidget
+class SmallColorSelectorDock : public QDockWidget, public KoCanvasObserver
 {
     Q_OBJECT
 public:
-    SmallColorSelectorDock(KisView2 *view);
+    SmallColorSelectorDock();
+
+    /// reimplemented from KoCanvasObserver
+    virtual void setCanvas(KoCanvasBase *canvas);
 public slots:
     void colorChangedProxy(const QColor&);
-    void setColorProxy(const KoColor&);
+    void resourceChanged(int, const QVariant&);
 private:
     KisSmallColorWidget* m_smallColorWidget;
-    KisView2* m_view;
+    KoCanvasBase* m_canvas;
 };
 
 

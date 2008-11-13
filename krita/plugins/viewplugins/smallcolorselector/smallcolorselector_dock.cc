@@ -16,29 +16,43 @@
  */
 
 #include "smallcolorselector_dock.h"
-#include <kis_view2.h>
+
+#include <klocale.h>
+#include <KoCanvasBase.h>
 
 #include "kis_small_color_widget.h"
 #include "kis_canvas_resource_provider.h"
 
 #include <KoColorSpaceRegistry.h>
 
-SmallColorSelectorDock::SmallColorSelectorDock(KisView2 *view) : QDockWidget(i18n("Small Color Selector")), m_view(view)
+SmallColorSelectorDock::SmallColorSelectorDock() : QDockWidget(), m_canvas(0)
 {
     m_smallColorWidget = new KisSmallColorWidget(this);
     setWidget(m_smallColorWidget);
-    connect(m_smallColorWidget, SIGNAL(colorChanged(const QColor&)), this, SLOT(colorChangedProxy(const QColor&)));
-    connect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), this, SLOT(setColorProxy(const KoColor&)));
+    connect(m_smallColorWidget, SIGNAL(colorChanged(const QColor&)),
+            this, SLOT(colorChangedProxy(const QColor&)));
+
+    setWindowTitle(i18n("Small Color Selector"));
+}
+
+void SmallColorSelectorDock::setCanvas( KoCanvasBase * canvas )
+{
+    m_canvas = canvas;
+    connect( m_canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant&)),
+             this, SLOT(resourceChanged(int, const QVariant&)));
+    m_smallColorWidget->setQColor(m_canvas->resourceProvider()->foregroundColor().toQColor());
 }
 
 void SmallColorSelectorDock::colorChangedProxy(const QColor& c)
 {
-    m_view->resourceProvider()->setFGColor(KoColor(c , KoColorSpaceRegistry::instance()->rgb8()));
+    if(m_canvas)
+        m_canvas->resourceProvider()->setForegroundColor(KoColor(c , KoColorSpaceRegistry::instance()->rgb8()));
 }
 
-void SmallColorSelectorDock::setColorProxy(const KoColor& c)
+void SmallColorSelectorDock::resourceChanged(int key, const QVariant& v)
 {
-    m_smallColorWidget->setQColor(c.toQColor());
+    if(key == KoCanvasResource::ForegroundColor)
+        m_smallColorWidget->setQColor(v.value<KoColor>().toQColor());
 }
 
 #include "smallcolorselector_dock.moc"

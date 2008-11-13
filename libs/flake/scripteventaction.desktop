@@ -14,6 +14,7 @@ Name[pt_BR]=Plugin de Ação do Evento do Programa
 Name[sv]=Insticksprogram med skripthändelseåtgärd
 Name[uk]=Додаток сценаріїв реакцій на події
 Name[x-test]=xxScript Event Action Pluginxx
+Name[zh_CN]=脚本事件动作插件
 Name[zh_TW]=文稿事件動作外掛程式
 Type=ServiceType
 X-KDE-ServiceType=KOffice/ScriptEventAction

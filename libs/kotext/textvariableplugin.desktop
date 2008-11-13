@@ -18,6 +18,7 @@ Name[sv]=Textvariabler
 Name[tr]=Metin Değişkeni Eklentisi
 Name[uk]=Втулок текстової змінної
 Name[x-test]=xxText Variable Pluginxx
+Name[zh_CN]=文本变量插件
 Name[zh_TW]=文字變數外掛程式
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Text-Variable

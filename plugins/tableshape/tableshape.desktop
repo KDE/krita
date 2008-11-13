@@ -24,6 +24,7 @@ Name[ta]=அட்டவணை வடிவம்
 Name[tr]=Tablo Şekli
 Name[uk]=Форма таблиці
 Name[x-test]=xxTable Shapexx
+Name[zh_CN]=表格形状
 Name[zh_TW]=表格元件
 X-KDE-ServiceTypes=KOffice/Shape
 Type=Service

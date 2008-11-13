@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Paragraph Tool
+Name[ca]=Eina de paràgraf
 Name[de]=Absatzwerkzeug
 Name[el]=Εργαλείο παραγράφου
 Name[gl]=Ferramenta de Parágrafo
@@ -14,6 +15,7 @@ Name[sv]=Styckesverktyg
 Name[tr]=Paragraf Aracı
 Name[uk]=Інструмент абзаців
 Name[x-test]=xxParagraph Toolxx
+Name[zh_CN]=段落工具
 Name[zh_TW]=段落工具
 X-KDE-ServiceTypes=KOffice/Tool
 Type=Service

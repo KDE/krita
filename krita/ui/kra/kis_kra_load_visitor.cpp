@@ -40,7 +40,7 @@
 #include "kis_datamanager.h"
 #include "generator/kis_generator_layer.h"
 
-KisKraLoadVisitor::KisKraLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayer *, QString> &layerFilenames, const QString & name) :
+KisKraLoadVisitor::KisKraLoadVisitor(KisImageSP img, KoStore *store, QMap<KisNode *, QString> &layerFilenames, const QString & name) :
         KisNodeVisitor(),
         m_layerFilenames(layerFilenames)
 {
@@ -98,7 +98,7 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
 
     }
 
-    // XXX: load masks
+    // XXX: convert 1.x masks to transparency masks
 //     // mask
 //     if (layer->hasMask()) { // We set this in KisDoc::loadPaintLayer
 //         KisPaintDeviceSP mask = layer->getMask();
@@ -244,5 +244,31 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
     }
 
     layer->setDirty(m_img->bounds());
+    return true;
+}
+
+
+bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
+{
+    return true;
+}
+
+bool KisKraLoadVisitor::visit(KisFilterMask *mask)
+{
+    return true;
+}
+
+bool KisKraLoadVisitor::visit(KisTransparencyMask *mask)
+{
+    return true;
+}
+
+bool KisKraLoadVisitor::visit(KisTransformationMask *mask)
+{
+    return true;
+}
+
+bool KisKraLoadVisitor::visit(KisSelectionMask *mask)
+{
     return true;
 }

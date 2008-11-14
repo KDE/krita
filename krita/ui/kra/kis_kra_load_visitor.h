@@ -34,7 +34,7 @@ public:
 
     using KisNodeVisitor::visit;
 
-    KisKraLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayer *, QString> &layerFilenames, const QString & name);
+    KisKraLoadVisitor(KisImageSP img, KoStore *store, QMap<KisNode *, QString> &layerFilenames, const QString & name);
 
 public:
     void setExternalUri(const QString &uri);
@@ -44,13 +44,19 @@ public:
     bool visit(KisGroupLayer *layer);
     bool visit(KisAdjustmentLayer* layer);
     bool visit(KisGeneratorLayer* layer);
+    bool visit(KisCloneLayer *layer);
+    bool visit(KisFilterMask *mask);
+    bool visit(KisTransparencyMask *mask);
+    bool visit(KisTransformationMask *mask);
+    bool visit(KisSelectionMask *mask);
+
 
 private:
     KisImageSP m_img;
     KoStore *m_store;
     bool m_external;
     QString m_uri;
-    QMap<KisLayer *, QString> m_layerFilenames;
+    QMap<KisNode *, QString> m_layerFilenames;
     QString m_name;
 };
 

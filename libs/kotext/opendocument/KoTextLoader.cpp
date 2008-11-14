@@ -32,7 +32,7 @@
 #include <KoPageLayout.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
-#include <KoShape.h>
+#include <KoShapeContainer.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoTextAnchor.h>
@@ -665,69 +665,71 @@ void KoTextLoader::loadSpan(const KoXmlElement& element, QTextCursor& cursor, bo
                 kDebug(32500) << "Node '" << localName << "' unhandled";
             }
 #endif
-            }
         }
-        --d->loadSpanLevel;
+    }
+    --d->loadSpanLevel;
+}
+
+void KoTextLoader::loadTable(const KoXmlElement& tableElem, QTextCursor& cursor)
+{
+    KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(tableElem, d->context);
+    if (!shape) {
+        return;
     }
 
-    void KoTextLoader::loadTable(const KoXmlElement& tableElem, QTextCursor& cursor)
-    {
-        KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(tableElem, d->context);
-        if (!shape) {
-            return;
-        }
-
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+    if (layout) {
         KoTextAnchor *anchor = new KoTextAnchor(shape);
         anchor->loadOdfFromShape();
         d->textSharedData->shapeInserted(shape);
 
-        KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
-        if (layout) {
-            KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
-            if (textObjectManager) {
-                textObjectManager->insertInlineObject(cursor, anchor);
-            }
+
+
+        KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+        if (textObjectManager) {
+            textObjectManager->insertInlineObject(cursor, anchor);
         }
     }
+}
 
-    void KoTextLoader::loadFrame(const KoXmlElement& frameElem, QTextCursor& cursor)
-    {
-        KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(frameElem, d->context);
-        if (!shape) {
-            return;
-        }
-
-        KoTextAnchor *anchor = new KoTextAnchor(shape);
-        anchor->loadOdfFromShape();
-        d->textSharedData->shapeInserted(shape);
-
-        KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
-        if (layout) {
-            KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
-            if (textObjectManager) {
-                textObjectManager->insertInlineObject(cursor, anchor);
-            }
-        }
+void KoTextLoader::loadFrame(const KoXmlElement& frameElem, QTextCursor& cursor)
+{
+    KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(frameElem, d->context);
+    if (!shape) {
+        return;
     }
 
-    void KoTextLoader::startBody(int total)
-    {
-        d->bodyProgressTotal += total;
-    }
+    KoTextAnchor *anchor = new KoTextAnchor(shape);
+    anchor->loadOdfFromShape();
+    d->textSharedData->shapeInserted(shape);
 
-    void KoTextLoader::processBody()
-    {
-        d->bodyProgressValue++;
-        if (d->dt.elapsed() >= d->lastElapsed + 1000) {  // update only once per second
-            d->lastElapsed = d->dt.elapsed();
-            Q_ASSERT(d->bodyProgressTotal > 0);
-            const int percent = d->bodyProgressValue * 100 / d->bodyProgressTotal;
-            emit sigProgress(percent);
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+    if (layout) {
+        KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+        if (textObjectManager) {
+            textObjectManager->insertInlineObject(cursor, anchor);
         }
     }
+}
 
-    void KoTextLoader::endBody()
-    {
+void KoTextLoader::startBody(int total)
+{
+    d->bodyProgressTotal += total;
+}
+
+void KoTextLoader::processBody()
+{
+    d->bodyProgressValue++;
+    if (d->dt.elapsed() >= d->lastElapsed + 1000) {  // update only once per second
+        d->lastElapsed = d->dt.elapsed();
+        Q_ASSERT(d->bodyProgressTotal > 0);
+        const int percent = d->bodyProgressValue * 100 / d->bodyProgressTotal;
+        emit sigProgress(percent);
     }
+}
+
+void KoTextLoader::endBody()
+{
+}
 
 #include "KoTextLoader.moc"

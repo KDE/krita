@@ -44,6 +44,7 @@ public:
     bool visit(KisGroupLayer *layer);
     bool visit(KisAdjustmentLayer* layer);
     bool visit(KisGeneratorLayer* layer);
+
 private:
     KisImageSP m_img;
     KoStore *m_store;

@@ -27,8 +27,13 @@ class KoStore;
 
 #include <kis_types.h>
 
+class KisShapeLayer;
+class KisCloneLayer;
+
 /**
- * Load old-style 1.x .kra files.
+ * Load old-style 1.x .kra files. Updated for 2.0, let's try to stay
+ * compatible. But 2.0 won't be able to save 1.x .kra files unless we
+ * implement an export filter.
  */
 class KisKraLoader : public QObject
 {
@@ -48,20 +53,36 @@ public:
     KisImageSP loadXML(const KoXmlElement& elem);
 
     void loadBinaryData(KoStore* store, KisImageSP image, const QString & uri, bool external);
+
 private:
 
-    void loadLayers(const KoXmlElement& element, KisImageSP img, KisGroupLayerSP parent);
+    void loadLayers(const KoXmlElement& element, KisImageSP img, KisGroupLayer* parent);
 
-    KisLayerSP loadLayer(const KoXmlElement& elem, KisImageSP img);
+    KisLayer* loadLayer(const KoXmlElement& elem, KisImageSP img);
 
-    KisLayerSP loadPaintLayer(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString & compositeOp);
+    void loadMasks(const KoXmlElement& element, KisImageSP img, KisGroupLayer* parent);
 
-    KisGroupLayerSP loadGroupLayer(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp);
+    KisMaskSP loadMask( const KoXmlElement& elem, KisImageSP img );
 
-    KisAdjustmentLayerSP loadAdjustmentLayer(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString & compositeOp);
+    KisLayer* loadPaintLayer(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString & compositeOp);
 
-    KisShapeLayerSP loadShapeLayer(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp);
+    KisGroupLayer* loadGroupLayer(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp);
 
+    KisAdjustmentLayer* loadAdjustmentLayer(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString & compositeOp);
+
+    KisShapeLayer* loadShapeLayer(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp);
+
+    KisGeneratorLayer* loadGeneratorLayer(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp);
+
+    KisCloneLayer* loadCloneLayer(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp);
+
+    KisFilterMask* loadFilterMask(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp);
+
+    KisTransparencyMask* loadTransparencyMask(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp);
+
+    KisTransformationMask* loadTransformationMask(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp);
+
+    KisSelectionMask* loadSelectionMask(const KoXmlElement& elem, KisImageSP img, const QString & name, qint32 x, qint32 y, qint32 opacity, bool visible, bool locked, const QString &compositeOp);
 
 
 private:

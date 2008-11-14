@@ -120,6 +120,9 @@ typedef KisSharedPtr<KisAdjustmentLayer> KisAdjustmentLayerSP;
 class KisGeneratorLayer;
 typedef KisSharedPtr<KisGeneratorLayer> KisGeneratorLayerSP;
 
+class KisCloneLayer;
+typedef KisSharedPtr<KisCloneLayer> KisCloneLayerSP;
+
 class KisGroupLayer;
 typedef KisSharedPtr<KisGroupLayer> KisGroupLayerSP;
 typedef KisWeakSharedPtr<KisGroupLayer> KisGroupLayerWSP;

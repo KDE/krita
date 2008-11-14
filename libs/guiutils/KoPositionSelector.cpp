@@ -112,8 +112,6 @@ public:
         maxCol++; maxRow++; // due to being zero-based.
         preferred = QSize(maxCol * prefSize.width() + (maxCol-1) * GAP, maxRow * prefSize.height() + (maxRow-1) * GAP);
         minimum = QSize(maxCol * prefSize.width(), maxRow * prefSize.height());
-kDebug() << "preferred " <<preferred;
-kDebug() << "minimum " <<minimum;
         return prefSize;
     }
 

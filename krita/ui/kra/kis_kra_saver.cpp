@@ -1,0 +1,129 @@
+/* This file is part of the KDE project
+ * Copyright 2008 (C) Boudewijn Rempt <boud@valdyas.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+#include "kis_kra_saver.h"
+
+#include "kis_kra_tags.h"
+#include "kis_kra_save_visitor.h"
+#include "kis_savexml_visitor.h"
+
+#include <QDomDocument>
+#include <QDomElement>
+#include <QString>
+
+#include <KoDocumentInfo.h>
+#include <KoColorSpace.h>
+#include <KoColorProfile.h>
+#include <KoIccColorProfile.h>
+#include <KoStore.h>
+
+#include <kis_annotation.h>
+#include <kis_image.h>
+#include <kis_group_layer.h>
+#include <kis_layer.h>
+#include <kis_adjustment_layer.h>
+
+#include "kis_doc2.h"
+
+
+using namespace KRA;
+
+class KisKraSaver::Private {
+public:
+    KisDoc2* doc;
+};
+
+KisKraSaver::KisKraSaver( KisDoc2* document )
+    : m_d( new Private )
+{
+    m_d->doc = document;
+}
+
+KisKraSaver::~KisKraSaver()
+{
+}
+
+QDomElement KisKraSaver::saveXML( QDomDocument& doc,  KisImageSP img )
+{
+    QDomElement image = doc.createElement("IMAGE");
+
+    Q_ASSERT(img);
+    image.setAttribute("name", m_d->doc->documentInfo()->aboutInfo("title"));
+    image.setAttribute("mime", "application/x-kra");
+    image.setAttribute("width", img->width());
+    image.setAttribute("height", img->height());
+    image.setAttribute("colorspacename", img->colorSpace()->id());
+    image.setAttribute("description", m_d->doc->documentInfo()->aboutInfo("comment"));
+    // XXX: Save profile as blob inside the image, instead of the product name.
+    if (img->profile() && img->profile()-> valid())
+        image.setAttribute("profile", img->profile()->name());
+    image.setAttribute("x-res", img->xRes());
+    image.setAttribute("y-res", img->yRes());
+
+    quint32 count = 0;
+    KisSaveXmlVisitor visitor(doc, image, count, true);
+
+    img->rootLayer()->accept(visitor);
+
+    return image;
+}
+
+bool KisKraSaver::saveBinaryData( KoStore* store, KisImageSP img, const QString & uri, bool external )
+{
+    QString location;
+
+    // Save the layers data
+    quint32 count = 0;
+    KisKraSaveVisitor visitor(img, store, count, m_d->doc->documentInfo()->aboutInfo("title"));
+
+    if (external)
+        visitor.setExternalUri(uri);
+
+    img->rootLayer()->accept(visitor);
+    // saving annotations
+    // XXX this only saves EXIF and ICC info. This would probably need
+    // a redesign of the dtd of the krita file to do this more generally correct
+    // e.g. have <ANNOTATION> tags or so.
+    KisAnnotationSP annotation = img->annotation("exif");
+    if (annotation) {
+        location = external ? QString::null : uri;
+        location += m_d->doc->documentInfo()->aboutInfo("title") + "/annotations/exif";
+        if (store->open(location)) {
+            store->write(annotation->annotation());
+            store->close();
+        }
+    }
+    if (img->profile()) {
+        const KoColorProfile *profile = img->profile();
+        KisAnnotationSP annotation;
+        if (profile) {
+            const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
+            if (iccprofile && !iccprofile->rawData().isEmpty())
+                annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
+        }
+
+        if (annotation) {
+            location = external ? QString::null : uri;
+            location += m_d->doc->documentInfo()->aboutInfo("title") + "/annotations/icc";
+            if (store->open(location)) {
+                store->write(annotation->annotation());
+                store->close();
+            }
+        }
+    }
+}

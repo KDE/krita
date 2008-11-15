@@ -188,7 +188,6 @@ private slots:
 
 private:
 
-    QDomElement saveImage(QDomDocument& doc, KisImageSP img);
     bool init();
 
     void setIOSteps(qint32 nsteps);

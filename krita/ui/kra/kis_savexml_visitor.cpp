@@ -192,7 +192,7 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     el.setAttribute(VISIBLE, layer->visible());
     el.setAttribute(LOCKED, layer->userLocked());
     el.setAttribute(LAYER_TYPE, layerType);
-    el.setAttribute(FILE_NAME, QString("layer%1").arg(m_count));
+    el.setAttribute(FILE_NAME, LAYER + m_count);
     el.setAttribute(X, layer->x());
     el.setAttribute(Y, layer->y());
 
@@ -204,7 +204,7 @@ void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, con
     el.setAttribute(VISIBLE, mask->visible());
     el.setAttribute(LOCKED, mask->userLocked());
     el.setAttribute(MASK_TYPE, maskType);
-    el.setAttribute(FILE_NAME, QString("mask%1").arg(m_count));
+    el.setAttribute(FILE_NAME, MASK + m_count);
     el.setAttribute(X, mask->x());
     el.setAttribute(Y, mask->y());
 }
@@ -212,7 +212,7 @@ void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, con
 bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
 {
     if (node->childCount() > 0) {
-        QDomElement elem = m_doc.createElement("MASKS");
+        QDomElement elem = m_doc.createElement(MASKS);
         layerElement.appendChild(elem);
         KisSaveXmlVisitor visitor(m_doc, elem, m_count);
         return visitor.visitAllInverse(node);

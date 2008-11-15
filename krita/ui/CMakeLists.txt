@@ -52,7 +52,9 @@ set(kritaui_LIB_SRCS
     kis_import_catcher.cc 
     kra/kis_kra_loader.cpp 
     kra/kis_kra_load_visitor.cpp
+    kra/kis_kra_saver.cpp
     kra/kis_kra_save_visitor.cpp 
+    kra/kis_savexml_visitor.cpp
     kis_label_cursor_pos.cc
     kis_layer_box.cpp 
     flake/kis_layer_container_shape.cc 
@@ -70,7 +72,6 @@ set(kritaui_LIB_SRCS
     kis_print_job.cpp 
     kis_resource_mediator.cc
     kis_resource_server_provider.cpp 
-    kra/kis_savexml_visitor.cc
     kis_selection_manager.cc 
     kis_selection_decoration.cc
     flake/kis_shape_controller.cpp

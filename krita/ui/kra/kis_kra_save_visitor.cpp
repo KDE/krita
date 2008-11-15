@@ -19,21 +19,24 @@
  */
 
 #include "kra/kis_kra_save_visitor.h"
+#include "kra/kis_kra_tags.h"
 
 #include <colorprofiles/KoIccColorProfile.h>
 #include <KoStore.h>
 #include <KoColorSpace.h>
 
+#include "filter/kis_filter_configuration.h"
+#include "generator/kis_generator_layer.h"
 #include "kis_adjustment_layer.h"
 #include "kis_annotation.h"
-#include "filter/kis_filter_configuration.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_selection.h"
 #include "kis_shape_layer.h"
-#include "generator/kis_generator_layer.h"
+
+using namespace KRA;
 
 KisKraSaveVisitor::KisKraSaveVisitor(KisImageSP img, KoStore *store, quint32 &count, const QString & name) :
         KisNodeVisitor(),
@@ -45,7 +48,7 @@ KisKraSaveVisitor::KisKraSaveVisitor(KisImageSP img, KoStore *store, quint32 &co
     m_name = name;
 }
 
-void KisKraSaveVisitor::setExternalUri(QString &uri)
+void KisKraSaveVisitor::setExternalUri(const QString &uri)
 {
     m_external = true;
     m_uri = uri;
@@ -58,7 +61,7 @@ bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
 
         QString location = m_external ? QString::null : m_uri;
         m_store->pushDirectory();
-        m_store->enterDirectory(m_name + QString("/shapelayers/layer%1").arg(m_count));
+        m_store->enterDirectory(m_name + SHAPE_LAYER_PATH + m_count);
         result = shapeLayer->saveOdf(m_store);
         m_store->popDirectory();
     }
@@ -76,13 +79,13 @@ bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
         if (profile) {
             const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
             if (iccprofile && !iccprofile->rawData().isEmpty())
-                annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
+                annotation = new KisAnnotation(ICC, iccprofile->name(), iccprofile->rawData());
         }
 
         if (annotation) {
             // save layer profile
             QString location = m_external ? QString::null : m_uri;
-            location += m_name + QString("/layers/layer%1").arg(m_count) + ".icc";
+            location += m_name + LAYER_PATH + m_count + DOT_ICC;
 
             if (m_store->open(location)) {
                 m_store->write(annotation->annotation());
@@ -128,7 +131,7 @@ bool KisKraSaveVisitor::visit(KisAdjustmentLayer* layer)
     if (layer->filter()) {
         QString location = m_external ? QString::null : m_uri;
         location = m_external ? QString::null : m_uri;
-        location += m_name + QString("/layers/layer%1").arg(m_count) + ".filterconfig";
+        location += m_name + LAYER_PATH + m_count + DOT_FILTERCONFIG;
 
         if (m_store->open(location)) {
             QString s = layer->filter()->toLegacyXML();
@@ -150,13 +153,13 @@ bool KisKraSaveVisitor::visit(KisGeneratorLayer * layer)
         if (profile) {
             const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
             if (iccprofile && !iccprofile->rawData().isEmpty())
-                annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
+                annotation = new  KisAnnotation(ICC, iccprofile->name(), iccprofile->rawData());
         }
 
         if (annotation) {
             // save layer profile
             QString location = m_external ? QString::null : m_uri;
-            location += m_name + QString("/layers/layer%1").arg(m_count) + ".icc";
+            location += m_name + LAYER_PATH + m_count + DOT_ICC;
 
             if (m_store->open(location)) {
                 m_store->write(annotation->annotation());
@@ -168,7 +171,7 @@ bool KisKraSaveVisitor::visit(KisGeneratorLayer * layer)
     if (layer->generator()) {
         QString location = m_external ? QString::null : m_uri;
         location = m_external ? QString::null : m_uri;
-        location += m_name + QString("/layers/layer%1").arg(m_count) + ".generatorconfig";
+        location += m_name + LAYER_PATH + m_count + DOT_GENERATORCONFIG;
 
         if (m_store->open(location)) {
             QString s = layer->generator()->toLegacyXML();
@@ -215,7 +218,7 @@ bool KisKraSaveVisitor::savePaintDevice(KisNode * node)
 {
 
     QString location = m_external ? QString::null : m_uri;
-    location += m_name + QString("/layers/layer%1").arg(m_count);
+    location += m_name + LAYER_PATH + m_count;
 
     // Layer data
     if (m_store->open(location)) {

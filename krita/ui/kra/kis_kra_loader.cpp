@@ -19,6 +19,8 @@
 
 #include "kra/kis_kra_loader.h"
 
+#include "kis_kra_tags.h"
+#include "kis_kra_load_visitor.h"
 
 #include <KoStore.h>
 #include <KoColorSpaceRegistry.h>
@@ -27,7 +29,6 @@
 
 #include "kis_doc2.h"
 #include "kis_config.h"
-#include "kis_kra_load_visitor.h"
 
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
@@ -53,11 +54,8 @@
 #include <kis_transformation_mask.h>
 #include <kis_transparency_mask.h>
 
-/**
- * Mime type for native file format
- */
-#define NATIVE_MIMETYPE "application/x-kra"
 
+using namespace KRA;
 
 class KisKraLoader::Private
 {
@@ -101,9 +99,9 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
     QString colorspacename;
     const KoColorSpace * cs;
 
-    if ((attr = element.attribute("mime")) == NATIVE_MIMETYPE) {
+    if ((attr = element.attribute(MIME)) == NATIVE_MIMETYPE) {
 
-        if ((m_d->imageName = element.attribute("name")).isNull())
+        if ((m_d->imageName = element.attribute(NAME)).isNull())
             return KisImageSP(0);
 
         if ((attr = element.attribute("width")).isNull())

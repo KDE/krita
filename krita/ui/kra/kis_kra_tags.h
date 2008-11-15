@@ -21,10 +21,20 @@
 
 #include <QString>
 
+
+
 /**
  * Tag definitions for our xml file format
  */
 namespace KRA {
+
+    // mimetype
+    const QString NATIVE_MIMETYPE = "application/x-kra";
+
+    // xml tags
+    const QString SEPARATOR = "/";
+    const QString SHAPE_LAYER_PATH = "/shapelayers/layer";
+    const QString LAYER_PATH = "/layers/layer";
 
     const QString ADJUSTMENT_LAYER = "adjustmentlayer";
     const QString CLONE_FROM = "clonefrom";
@@ -32,6 +42,9 @@ namespace KRA {
     const QString CLONE_TYPE = "clonetype";
     const QString COLORSPACE_NAME = "colorspacename";
     const QString COMPOSITE_OP = "compositeop";
+    const QString DOT_FILTERCONFIG = ".filterconfig";
+    const QString DOT_GENERATORCONFIG = ".generatorconfig";
+    const QString DOT_ICC = ".icc";
     const QString FILE_NAME = "filename";
     const QString FILTER_MASK = "filtermask";
     const QString FILTER_NAME = "filtername";
@@ -41,18 +54,22 @@ namespace KRA {
     const QString GENERATOR_NAME = "generatorname";
     const QString GENERATOR_VERSION = "generatorversion";
     const QString GROUP_LAYER = "grouplayer";
+    const QString ICC = "icc";
     const QString LAYER = "layer";
     const QString LAYERS = "LAYERS";
     const QString LAYER_TYPE = "layertype";
     const QString LOCKED = "locked";
     const QString MASK = "mask";
+    const QString MASKS = "masks";
     const QString MASK_TYPE = "masktype";
+    const QString MIME = "mime";
     const QString NAME = "name";
     const QString OPACITY = "opacity";
     const QString PAINT_LAYER = "paintlayer";
     const QString ROTATION = "rotation";
     const QString SELECTION_MASK = "selectionmask";
     const QString SHAPE_LAYER = "shapelayer";
+    const QString SHAPE_LAYERS = "shapelayers";
     const QString TRANSFORMATION_MASK = "transformationmask";
     const QString TRANSPARENCY_MASK = "transparencymask";
     const QString VISIBLE = "visible";
@@ -65,6 +82,15 @@ namespace KRA {
     const QString Y_SHEAR = "y_shear";
     const QString Y_TRANSLATION = "y_translation";
 
+    const QString WIDTH = "width";
+    const QString HEIGHT = "height";
+    const QString DESCRIPTION = "description";
+    const QString PROFILE = "profile";
+    const QString X_RESOLUTION = "x-res";
+    const QString Y_RESOLUTION = "y-res";
+
 }
+
+
 
 #endif

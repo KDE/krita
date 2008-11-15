@@ -48,7 +48,6 @@
 #include <colorprofiles/KoIccColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoFilterManager.h>
 #include <KoID.h>
 #include <KoMainWindow.h>
 #include <KoOdfReadStore.h>
@@ -63,23 +62,17 @@
 #include <KoToolManager.h>
 
 // Krita Image
-#include <kis_adjustment_layer.h>
-#include <kis_annotation.h>
+#include <flake/kis_shape_layer.h>
 #include <kis_debug.h>
-#include <kis_external_layer_iface.h>
 #include <kis_fill_painter.h>
-#include <filter/kis_filter.h>
-#include <filter/kis_filter_registry.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_layer.h>
-
 #include <kis_name_server.h>
 #include <kis_paint_device_action.h>
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
 #include <kis_selection.h>
-#include <flake/kis_shape_layer.h>
 
 // Local
 #include "kis_factory2.h"
@@ -87,14 +80,12 @@
 #include "kis_clipboard.h"
 #include "kis_config.h"
 #include "widgets/kis_custom_image_widget.h"
-#include "kra/kis_kra_save_visitor.h"
-#include "kra/kis_savexml_visitor.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_undo_adapter.h"
 #include "flake/kis_shape_controller.h"
 #include "kis_node_model.h"
 #include "kra/kis_kra_loader.h"
-
+#include "kra/kis_kra_saver.h"
 
 static const char *CURRENT_DTD_VERSION = "2.0";
 
@@ -115,7 +106,6 @@ public:
             : undoAdapter(0)
             , nserver(0)
             , macroNestDepth(0)
-            , conversionDepth(0)
             , ioProgressTotalSteps(0)
             , ioProgressBase(0)
             , kraLoader(0) {
@@ -130,15 +120,15 @@ public:
     KisUndoAdapter *undoAdapter;
     KisNameServer *nserver;
     qint32 macroNestDepth;
-    qint32 conversionDepth;
     int ioProgressTotalSteps;
     int ioProgressBase;
 
     KisImageSP image;
-    KisShapeController * shapeController;
-    KisNodeModel * nodeModel;
+    KisShapeController* shapeController;
+    KisNodeModel* nodeModel;
 
-    KisKraLoader * kraLoader;
+    KisKraLoader* kraLoader;
+    KisKraSaver* kraSaver;
 };
 
 
@@ -204,6 +194,9 @@ bool KisDoc2::init()
     m_d->shapeController = new KisShapeController(this, m_d->nserver);
     m_d->nodeModel = new KisNodeModel(this);
 
+    m_d->kraSaver = 0;
+    m_d->kraLoader = 0;
+
     return true;
 }
 
@@ -213,10 +206,12 @@ QDomDocument KisDoc2::saveXML()
     QDomElement root = doc.documentElement();
 
     root.setAttribute("editor", "Krita");
-    root.setAttribute("depth", (uint)sizeof(quint8));
     root.setAttribute("syntaxVersion", "1");
 
-    root.appendChild(saveImage(doc, m_d->image));
+    Q_ASSERT( m_d->kraSaver == 0 );
+    m_d->kraSaver = new KisKraSaver( this );
+
+    root.appendChild(m_d->kraSaver->saveXML(doc, m_d->image));
 
     return doc;
 }
@@ -249,16 +244,14 @@ bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
     attr = root.attribute("syntaxVersion");
     if (attr.toInt() > 1)
         return false;
-    if ((attr = root.attribute("depth")).isNull())
-        return false;
-    m_d->conversionDepth = attr.toInt();
 
     if (!root.hasChildNodes()) {
         return false;
     }
 
     setUndo(false);
-    m_d->kraLoader = new KisKraLoader(this);
+    Q_ASSERT( m_d->kraLoader == 0 );
+    m_d->kraLoader = new KisKraLoader( this );
 
     // XXX: This still handles multi-image .kra files?
     for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
@@ -289,86 +282,15 @@ bool KisDoc2::loadChildren(KoStore* store)
     return true;
 }
 
-QDomElement KisDoc2::saveImage(QDomDocument& doc, KisImageSP img)
-{
-    QDomElement image = doc.createElement("IMAGE");
-
-    Q_ASSERT(img);
-    image.setAttribute("name", documentInfo()->aboutInfo("title"));
-    image.setAttribute("mime", "application/x-kra");
-    image.setAttribute("width", img->width());
-    image.setAttribute("height", img->height());
-    image.setAttribute("colorspacename", img->colorSpace()->id());
-    image.setAttribute("description", documentInfo()->aboutInfo("comment"));
-    // XXX: Save profile as blob inside the image, instead of the product name.
-    if (img->profile() && img->profile()-> valid())
-        image.setAttribute("profile", img->profile()->name());
-    image.setAttribute("x-res", img->xRes());
-    image.setAttribute("y-res", img->yRes());
-
-    quint32 count = 0;
-    KisSaveXmlVisitor visitor(doc, image, count, true);
-
-    m_d->image->rootLayer()->accept(visitor);
-
-    return image;
-}
-
 
 bool KisDoc2::completeSaving(KoStore *store)
 {
     QString uri = url().url();
-    QString location;
-    bool external = isStoredExtern();
-    qint32 totalSteps = 0;
 
-    KisImageSP img = m_d->image;
+    setIOSteps(m_d->image->nlayers() + 1);
 
-    if (!img) return false;
+    m_d->kraSaver->saveBinaryData( store, m_d->image, url().url(), isStoredExtern() );
 
-    totalSteps = img->nlayers();
-
-    setIOSteps(totalSteps + 1);
-
-    // Save the layers data
-    quint32 count = 0;
-    KisKraSaveVisitor visitor(img, store, count, documentInfo()->aboutInfo("title"));
-
-    if (external)
-        visitor.setExternalUri(uri);
-
-    img->rootLayer()->accept(visitor);
-    // saving annotations
-    // XXX this only saves EXIF and ICC info. This would probably need
-    // a redesign of the dtd of the krita file to do this more generally correct
-    // e.g. have <ANNOTATION> tags or so.
-    KisAnnotationSP annotation = img->annotation("exif");
-    if (annotation) {
-        location = external ? QString::null : uri;
-        location += documentInfo()->aboutInfo("title") + "/annotations/exif";
-        if (store->open(location)) {
-            store->write(annotation->annotation());
-            store->close();
-        }
-    }
-    if (img->profile()) {
-        const KoColorProfile *profile = img->profile();
-        KisAnnotationSP annotation;
-        if (profile) {
-            const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
-            if (iccprofile && !iccprofile->rawData().isEmpty())
-                annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
-        }
-
-        if (annotation) {
-            location = external ? QString::null : uri;
-            location += documentInfo()->aboutInfo("title") + "/annotations/icc";
-            if (store->open(location)) {
-                store->write(annotation->annotation());
-                store->close();
-            }
-        }
-    }
     IODone();
     return true;
 }

@@ -60,20 +60,20 @@ KisKraSaver::~KisKraSaver()
 
 QDomElement KisKraSaver::saveXML( QDomDocument& doc,  KisImageSP img )
 {
-    QDomElement image = doc.createElement("IMAGE");
+    QDomElement image = doc.createElement("IMAGE"); // Legacy!
 
     Q_ASSERT(img);
-    image.setAttribute("name", m_d->doc->documentInfo()->aboutInfo("title"));
-    image.setAttribute("mime", "application/x-kra");
-    image.setAttribute("width", img->width());
-    image.setAttribute("height", img->height());
-    image.setAttribute("colorspacename", img->colorSpace()->id());
-    image.setAttribute("description", m_d->doc->documentInfo()->aboutInfo("comment"));
+    image.setAttribute(NAME, m_d->doc->documentInfo()->aboutInfo("title"));
+    image.setAttribute(MIME, NATIVE_MIMETYPE);
+    image.setAttribute(WIDTH, img->width());
+    image.setAttribute(HEIGHT, img->height());
+    image.setAttribute(COLORSPACE_NAME, img->colorSpace()->id());
+    image.setAttribute(DESCRIPTION, m_d->doc->documentInfo()->aboutInfo("comment"));
     // XXX: Save profile as blob inside the image, instead of the product name.
     if (img->profile() && img->profile()-> valid())
-        image.setAttribute("profile", img->profile()->name());
-    image.setAttribute("x-res", img->xRes());
-    image.setAttribute("y-res", img->yRes());
+        image.setAttribute(PROFILE, img->profile()->name());
+    image.setAttribute(X_RESOLUTION, img->xRes());
+    image.setAttribute(Y_RESOLUTION, img->yRes());
 
     quint32 count = 0;
     KisSaveXmlVisitor visitor(doc, image, count, true);
@@ -102,7 +102,7 @@ bool KisKraSaver::saveBinaryData( KoStore* store, KisImageSP img, const QString 
     KisAnnotationSP annotation = img->annotation("exif");
     if (annotation) {
         location = external ? QString::null : uri;
-        location += m_d->doc->documentInfo()->aboutInfo("title") + "/annotations/exif";
+        location += m_d->doc->documentInfo()->aboutInfo("title") + EXIF_PATH;
         if (store->open(location)) {
             store->write(annotation->annotation());
             store->close();
@@ -114,12 +114,12 @@ bool KisKraSaver::saveBinaryData( KoStore* store, KisImageSP img, const QString 
         if (profile) {
             const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
             if (iccprofile && !iccprofile->rawData().isEmpty())
-                annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
+                annotation = new  KisAnnotation(ICC, iccprofile->name(), iccprofile->rawData());
         }
 
         if (annotation) {
             location = external ? QString::null : uri;
-            location += m_d->doc->documentInfo()->aboutInfo("title") + "/annotations/icc";
+            location += m_d->doc->documentInfo()->aboutInfo("title") + ICC_PATH;
             if (store->open(location)) {
                 store->write(annotation->annotation());
                 store->close();

@@ -34,6 +34,8 @@ namespace KRA {
     // xml tags
     const QString SEPARATOR = "/";
     const QString SHAPE_LAYER_PATH = "/shapelayers/layer";
+    const QString EXIF_PATH = "/annotations/exif";
+    const QString ICC_PATH = "/annotations/icc";
     const QString LAYER_PATH = "/layers/layer";
 
     const QString ADJUSTMENT_LAYER = "adjustmentlayer";
@@ -42,6 +44,7 @@ namespace KRA {
     const QString CLONE_TYPE = "clonetype";
     const QString COLORSPACE_NAME = "colorspacename";
     const QString COMPOSITE_OP = "compositeop";
+    const QString DESCRIPTION = "description";
     const QString DOT_FILTERCONFIG = ".filterconfig";
     const QString DOT_GENERATORCONFIG = ".generatorconfig";
     const QString DOT_ICC = ".icc";
@@ -54,6 +57,7 @@ namespace KRA {
     const QString GENERATOR_NAME = "generatorname";
     const QString GENERATOR_VERSION = "generatorversion";
     const QString GROUP_LAYER = "grouplayer";
+    const QString HEIGHT = "height";
     const QString ICC = "icc";
     const QString LAYER = "layer";
     const QString LAYERS = "LAYERS";
@@ -66,6 +70,7 @@ namespace KRA {
     const QString NAME = "name";
     const QString OPACITY = "opacity";
     const QString PAINT_LAYER = "paintlayer";
+    const QString PROFILE = "profile";
     const QString ROTATION = "rotation";
     const QString SELECTION_MASK = "selectionmask";
     const QString SHAPE_LAYER = "shapelayer";
@@ -73,21 +78,17 @@ namespace KRA {
     const QString TRANSFORMATION_MASK = "transformationmask";
     const QString TRANSPARENCY_MASK = "transparencymask";
     const QString VISIBLE = "visible";
+    const QString WIDTH = "width";
     const QString X = "x";
+    const QString X_RESOLUTION = "x-res";
     const QString X_SCALE = "x_scale";
     const QString X_SHEAR = "x_shear";
     const QString X_TRANSLATION = "x_translation";
     const QString Y = "y";
+    const QString Y_RESOLUTION = "y-res";
     const QString Y_SCALE = "y_scale";
     const QString Y_SHEAR = "y_shear";
     const QString Y_TRANSLATION = "y_translation";
-
-    const QString WIDTH = "width";
-    const QString HEIGHT = "height";
-    const QString DESCRIPTION = "description";
-    const QString PROFILE = "profile";
-    const QString X_RESOLUTION = "x-res";
-    const QString Y_RESOLUTION = "y-res";
 
 }
 

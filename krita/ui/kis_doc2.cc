@@ -253,7 +253,7 @@ bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
     Q_ASSERT( m_d->kraLoader == 0 );
     m_d->kraLoader = new KisKraLoader( this );
 
-    // XXX: This still handles multi-image .kra files?
+    // XXX: Legacy from the multi-image .kra file period.
     for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement()) {
             if (node.nodeName() == "IMAGE") {

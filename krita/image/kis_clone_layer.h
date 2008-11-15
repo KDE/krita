@@ -90,6 +90,14 @@ public:
     void setCopyFrom(KisLayerSP layer, CopyLayerType type);
     KisLayerSP copyFrom() const;
 
+    /**
+     * Used when loading: loading is done in two passes, and the copy
+     * from layer is set when all layers have been created, not during
+     * loading.
+     */
+    void setCopyFromName( const QString& layerName );
+    QString copyFromName();
+
     void setCopyType(CopyLayerType type);
     CopyLayerType copyType() const;
 

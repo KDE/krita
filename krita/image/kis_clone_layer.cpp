@@ -42,6 +42,7 @@ class KisCloneLayer::Private
 public:
     KisPaintDeviceSP projection;
     KisLayerSP copyFrom;
+    QString copyFromName; // Only used during loading
     CopyLayerType type;
     qint32 x;
     qint32 y;
@@ -244,6 +245,23 @@ void KisCloneLayer::setCopyType(CopyLayerType type)
 CopyLayerType KisCloneLayer::copyType() const
 {
     return m_d->type;
+}
+
+
+void KisCloneLayer::setCopyFromName( const QString& layerName )
+{
+    Q_ASSERT( m_d->copyFrom == 0 );
+    m_d->copyFromName = layerName;
+}
+
+QString KisCloneLayer::copyFromName()
+{
+    if ( m_d->copyFrom ) {
+        return m_d->copyFrom->name();
+    }
+    else {
+        return m_d->copyFromName;
+    }
 }
 
 #include "kis_clone_layer.moc"

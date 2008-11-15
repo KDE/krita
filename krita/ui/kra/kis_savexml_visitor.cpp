@@ -167,7 +167,7 @@ bool KisSaveXmlVisitor::visit(KisTransformationMask *mask)
     el.setAttribute(ROTATION, mask->rotation());
     el.setAttribute(X_TRANSLATION, mask->xTranslate());
     el.setAttribute(Y_TRANSLATION, mask->yTranslate());
-    el.setAttribute(FILTER_STATEGY, mask->filterStrategy()->name());
+    el.setAttribute(FILTER_STATEGY, mask->filterStrategy()->id());
     m_elem.appendChild(el);
     m_count++;
     return true;

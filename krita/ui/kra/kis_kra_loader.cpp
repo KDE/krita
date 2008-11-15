@@ -517,10 +517,7 @@ KisNode* KisKraLoader::loadFilterMask(const KoXmlElement& element )
 
 KisNode* KisKraLoader::loadTransparencyMask(const KoXmlElement& element)
 {
-    KisTransparencyMask* mask;
-
-    // We'll load the configuration and the selection later.
-    mask = new KisTransparencyMask();
+    KisTransparencyMask* mask = new KisTransparencyMask();
     Q_CHECK_PTR( mask );
 
     return mask;
@@ -528,17 +525,32 @@ KisNode* KisKraLoader::loadTransparencyMask(const KoXmlElement& element)
 
 KisNode* KisKraLoader::loadTransformationMask(const KoXmlElement& element)
 {
-    return 0;
+    KisTransformationMask* mask = new KisTransformationMask();
+    Q_CHECK_PTR( mask );
+
+
+    mask->setXScale( element.attribute(X_SCALE, "1.0").toDouble() );
+    mask->setYScale( element.attribute(Y_SCALE, "1.0").toDouble() );
+    mask->setXShear( element.attribute(X_SHEAR, "1.0").toDouble() );
+    mask->setYShear( element.attribute(Y_SHEAR, "1.0").toDouble() );
+    mask->setRotation( element.attribute(ROTATION, "0.0").toDouble() );
+    mask->setXTranslation( element.attribute(X_TRANSLATION, "0").toInt() );
+    mask->setYTranslation( element.attribute(Y_TRANSLATION, "0").toInt() );
+
+    KisFilterStrategy* filterStrategy = 0;
+    QString filterStrategyName = element.attribute(FILTER_STATEGY, "Mitchell" );
+    filterStrategy = KisFilterStrategyRegistry::instance()->get( filterStrategyName );
+    mask->setFilterStrategy( filterStrategy );
+
+
+
+    return mask;
 }
 
 KisNode* KisKraLoader::loadSelectionMask(KisImageSP img, const KoXmlElement& element)
 {
-    KisSelectionMask* mask;
-
-    // We'll load the configuration and the selection later.
-    mask = new KisSelectionMask(img);
+    KisSelectionMask* mask = new KisSelectionMask(img);
     Q_CHECK_PTR( mask );
-
 
     return mask;
 }

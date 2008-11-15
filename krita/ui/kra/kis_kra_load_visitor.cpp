@@ -174,7 +174,6 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
     layer->setDirty(m_img->bounds());
     return true;
 
-
 }
 
 bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)

@@ -388,6 +388,8 @@ KisNode* KisKraLoader::loadGroupLayer(const KoXmlElement& element, KisImageSP im
 KisNode* KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImageSP img,
                                            const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
+    // XXX: do something with filterversion?
+
     QString attr;
     KisAdjustmentLayer* layer;
     QString filtername;
@@ -433,7 +435,7 @@ KisNode* KisKraLoader::loadShapeLayer(const KoXmlElement& element, KisImageSP im
 KisNode* KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImageSP img,
                                            const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
-    QString attr;
+    // XXX: do something with generator version?
     KisGeneratorLayer* layer;
     QString generatorname;
 
@@ -464,19 +466,21 @@ KisNode* KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImageS
 KisNode* KisKraLoader::loadCloneLayer(const KoXmlElement& element, KisImageSP img,
                                       const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
-    QString attr;
     KisCloneLayer* layer;
 
     if ( ( element.attribute( "copy_from" ) ).isNull() ) {
-
+        return 0;
     }
     else {
+        layer->setCopyFromName( element.attribute( "copy_from" ) );
     }
 
     if ( ( element.attribute( "copy_type" ) ).isNull() ) {
-
+        return 0;
     }
-
+    else {
+        layer->setCopyType( ( CopyLayerType ) element.attribute( "copy_type" ).toInt() );
+    }
     layer = new KisCloneLayer(0, img, name, opacity);
 
     return 0;

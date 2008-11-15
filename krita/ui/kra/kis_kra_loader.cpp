@@ -468,14 +468,14 @@ KisNode* KisKraLoader::loadCloneLayer(const KoXmlElement& element, KisImageSP im
 {
     KisCloneLayer* layer;
 
-    if ( ( element.attribute( "copy_from" ) ).isNull() ) {
+    if ( ( element.attribute( "clonefrom" ) ).isNull() ) {
         return 0;
     }
     else {
         layer->setCopyFromName( element.attribute( "copy_from" ) );
     }
 
-    if ( ( element.attribute( "copy_type" ) ).isNull() ) {
+    if ( ( element.attribute( "clonetype" ) ).isNull() ) {
         return 0;
     }
     else {

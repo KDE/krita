@@ -18,23 +18,28 @@
  */
 
 #include "kra/kis_savexml_visitor.h"
+#include "kis_kra_tags.h"
 
-#include "kis_adjustment_layer.h"
-#include "filter/kis_filter_configuration.h"
-#include "kis_group_layer.h"
-#include "kis_image.h"
-#include "kis_layer.h"
-#include "kis_paint_layer.h"
-#include "kis_shape_layer.h"
-#include "generator/kis_generator_layer.h"
-#include "kis_filter_mask.h"
-#include "kis_transparency_mask.h"
-#include "kis_transformation_mask.h"
-#include "kis_selection_mask.h"
-#include "kis_clone_layer.h"
-#include <KoCompositeOp.h>
-#include <kis_paint_device.h>
 #include <KoColorSpace.h>
+#include <KoCompositeOp.h>
+
+#include <filter/kis_filter_configuration.h>
+#include <generator/kis_generator_layer.h>
+#include <kis_adjustment_layer.h>
+#include <kis_clone_layer.h>
+#include <kis_filter_mask.h>
+#include <kis_group_layer.h>
+#include <kis_image.h>
+#include <kis_layer.h>
+#include <kis_paint_device.h>
+#include <kis_paint_layer.h>
+#include <kis_selection_mask.h>
+#include <kis_shape_layer.h>
+#include <kis_transformation_mask.h>
+#include <kis_transparency_mask.h>
+
+
+using namespace KRA;
 
 KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, const QDomElement & element, quint32 &count, bool root) :
         KisNodeVisitor(),
@@ -42,15 +47,14 @@ KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, const QDomElement & eleme
         m_count(count),
         m_root(root)
 {
-    dbgKrita << " creating savexml visitor ";
     m_elem = element;
 }
 
 bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
 {
     if (KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
-        QDomElement layerElement = m_doc.createElement("layer");
-        saveLayer(layerElement, "shapelayer", layer);
+        QDomElement layerElement = m_doc.createElement(LAYER);
+        saveLayer(layerElement, SHAPE_LAYER, layer);
         m_elem.appendChild(layerElement);
         m_count++;
         return saveMasks(layer, layerElement);
@@ -60,9 +64,9 @@ bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
 
 bool KisSaveXmlVisitor::visit(KisPaintLayer *layer)
 {
-    QDomElement layerElement = m_doc.createElement("layer");
-    saveLayer(layerElement, "paintlayer", layer);
-    layerElement.setAttribute("colorspacename", layer->paintDevice()->colorSpace()->id());
+    QDomElement layerElement = m_doc.createElement(LAYER);
+    saveLayer(layerElement, PAINT_LAYER, layer);
+    layerElement.setAttribute(COLORSPACE_NAME, layer->paintDevice()->colorSpace()->id());
     m_elem.appendChild(layerElement);
 
     /*    if(layer->paintDevice()->hasExifInfo())
@@ -82,12 +86,12 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
     if (m_root) // if this is the root we fake so not to save it
         layerElement = m_elem;
     else {
-        QDomElement layerElement = m_doc.createElement("layer");
-        saveLayer(layerElement, "grouplayer", layer);
+        QDomElement layerElement = m_doc.createElement(LAYER);
+        saveLayer(layerElement, GROUP_LAYER, layer);
         m_elem.appendChild(layerElement);
     }
 
-    QDomElement elem = m_doc.createElement("LAYERS");
+    QDomElement elem = m_doc.createElement(LAYERS);
     layerElement.appendChild(elem);
     KisSaveXmlVisitor visitor(m_doc, elem, m_count);
 
@@ -96,10 +100,10 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
 
 bool KisSaveXmlVisitor::visit(KisAdjustmentLayer* layer)
 {
-    QDomElement layerElement = m_doc.createElement("layer");
-    saveLayer(layerElement, "adjustmentlayer", layer);
-    layerElement.setAttribute("filtername", layer->filter()->name());
-    layerElement.setAttribute("filterversion", layer->filter()->version());
+    QDomElement layerElement = m_doc.createElement(LAYER);
+    saveLayer(layerElement, ADJUSTMENT_LAYER, layer);
+    layerElement.setAttribute(FILTER_NAME, layer->filter()->name());
+    layerElement.setAttribute(FILTER_VERSION, layer->filter()->version());
     m_elem.appendChild(layerElement);
 
     m_count++;
@@ -108,10 +112,10 @@ bool KisSaveXmlVisitor::visit(KisAdjustmentLayer* layer)
 
 bool KisSaveXmlVisitor::visit(KisGeneratorLayer *layer)
 {
-    QDomElement layerElement = m_doc.createElement("layer");
-    saveLayer(layerElement, "generatorlayer", layer);
-    layerElement.setAttribute("generatorname", layer->generator()->name());
-    layerElement.setAttribute("generatorversion", layer->generator()->version());
+    QDomElement layerElement = m_doc.createElement(LAYER);
+    saveLayer(layerElement, GENERATOR_LAYER, layer);
+    layerElement.setAttribute(GENERATOR_NAME, layer->generator()->name());
+    layerElement.setAttribute(GENERATOR_VERSION, layer->generator()->version());
     m_elem.appendChild(layerElement);
 
     m_count++;
@@ -120,10 +124,10 @@ bool KisSaveXmlVisitor::visit(KisGeneratorLayer *layer)
 
 bool KisSaveXmlVisitor::visit(KisCloneLayer *layer)
 {
-    QDomElement layerElement = m_doc.createElement("layer");
-    saveLayer(layerElement, "clonelayer", layer);
-    layerElement.setAttribute("clonefrom", layer->copyFromName());
-    layerElement.setAttribute("clonetype", layer->copyType());
+    QDomElement layerElement = m_doc.createElement(LAYER);
+    saveLayer(layerElement, CLONE_LAYER, layer);
+    layerElement.setAttribute(CLONE_FROM, layer->copyFromName());
+    layerElement.setAttribute(CLONE_TYPE, layer->copyType());
     m_elem.appendChild(layerElement);
 
     m_count++;
@@ -132,11 +136,10 @@ bool KisSaveXmlVisitor::visit(KisCloneLayer *layer)
 
 bool KisSaveXmlVisitor::visit(KisFilterMask *mask)
 {
-    dbgKrita << "filtermask";
-    QDomElement el = m_doc.createElement("mask");
-    saveMask(el, "filtermask", mask);
-    el.setAttribute("filtername", mask->filter()->name());
-    el.setAttribute("filterversion", mask->filter()->version());
+    QDomElement el = m_doc.createElement(MASK);
+    saveMask(el, FILTER_MASK, mask);
+    el.setAttribute(FILTER_NAME, mask->filter()->name());
+    el.setAttribute(FILTER_VERSION, mask->filter()->version());
 
     m_elem.appendChild(el);
 
@@ -146,9 +149,8 @@ bool KisSaveXmlVisitor::visit(KisFilterMask *mask)
 
 bool KisSaveXmlVisitor::visit(KisTransparencyMask *mask)
 {
-    dbgKrita << "transparency mask";
-    QDomElement el = m_doc.createElement("mask");
-    saveMask(el, "transparencymask", mask);
+    QDomElement el = m_doc.createElement(MASK);
+    saveMask(el, TRANSPARENCY_MASK, mask);
     m_elem.appendChild(el);
     m_count++;
     return true;
@@ -156,18 +158,16 @@ bool KisSaveXmlVisitor::visit(KisTransparencyMask *mask)
 
 bool KisSaveXmlVisitor::visit(KisTransformationMask *mask)
 {
-    dbgKrita << "transformationmask";
-
-    QDomElement el = m_doc.createElement("mask");
-    saveMask(el, "transformationmask", mask);
-    el.setAttribute("x_scale", mask->xScale());
-    el.setAttribute("y_scale", mask->yScale());
-    el.setAttribute("x_shear", mask->xShear());
-    el.setAttribute("y_shear", mask->yShear());
-    el.setAttribute("rotation", mask->rotation());
-    el.setAttribute("x_translation", mask->xTranslate());
-    el.setAttribute("y_translation", mask->yTranslate());
-    el.setAttribute("fiter_strategy", mask->filterStrategy()->name());
+    QDomElement el = m_doc.createElement(MASK);
+    saveMask(el, TRANSFORMATION_MASK, mask);
+    el.setAttribute(X_SCALE, mask->xScale());
+    el.setAttribute(Y_SCALE, mask->yScale());
+    el.setAttribute(X_SHEAR, mask->xShear());
+    el.setAttribute(Y_SHEAR, mask->yShear());
+    el.setAttribute(ROTATION, mask->rotation());
+    el.setAttribute(X_TRANSLATION, mask->xTranslate());
+    el.setAttribute(Y_TRANSLATION, mask->yTranslate());
+    el.setAttribute(FILTER_STATEGY, mask->filterStrategy()->name());
     m_elem.appendChild(el);
     m_count++;
     return true;
@@ -175,10 +175,8 @@ bool KisSaveXmlVisitor::visit(KisTransformationMask *mask)
 
 bool KisSaveXmlVisitor::visit(KisSelectionMask *mask)
 {
-    dbgKrita << "selectionmask";
-
-    QDomElement el = m_doc.createElement("mask");
-    saveMask(el, "selectionmask", mask);
+    QDomElement el = m_doc.createElement(MASK);
+    saveMask(el, SELECTION_MASK, mask);
     m_elem.appendChild(el);
     m_count++;
     return true;
@@ -188,27 +186,27 @@ bool KisSaveXmlVisitor::visit(KisSelectionMask *mask)
 void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, const KisLayer * layer)
 {
 
-    el.setAttribute("name", layer->KisBaseNode::name());
-    el.setAttribute("opacity", layer->opacity());
-    el.setAttribute("compositeop", layer->compositeOp()->id());
-    el.setAttribute("visible", layer->visible());
-    el.setAttribute("locked", layer->userLocked());
-    el.setAttribute("layertype", layerType);
-    el.setAttribute("filename", QString("layer%1").arg(m_count));
-    el.setAttribute("x", layer->x());
-    el.setAttribute("y", layer->y());
+    el.setAttribute(NAME, layer->KisBaseNode::name());
+    el.setAttribute(OPACITY, layer->opacity());
+    el.setAttribute(COMPOSITE_OP, layer->compositeOp()->id());
+    el.setAttribute(VISIBLE, layer->visible());
+    el.setAttribute(LOCKED, layer->userLocked());
+    el.setAttribute(LAYER_TYPE, layerType);
+    el.setAttribute(FILE_NAME, QString("layer%1").arg(m_count));
+    el.setAttribute(X, layer->x());
+    el.setAttribute(Y, layer->y());
 
 }
 
 void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, const KisMask * mask)
 {
-    el.setAttribute("name", mask->KisBaseNode::name());
-    el.setAttribute("visible", mask->visible());
-    el.setAttribute("locked", mask->userLocked());
-    el.setAttribute("masktype", maskType);
-    el.setAttribute("filename", QString("mask%1").arg(m_count));
-    el.setAttribute("x", mask->x());
-    el.setAttribute("y", mask->y());
+    el.setAttribute(NAME, mask->KisBaseNode::name());
+    el.setAttribute(VISIBLE, mask->visible());
+    el.setAttribute(LOCKED, mask->userLocked());
+    el.setAttribute(MASK_TYPE, maskType);
+    el.setAttribute(FILE_NAME, QString("mask%1").arg(m_count));
+    el.setAttribute(X, mask->x());
+    el.setAttribute(Y, mask->y());
 }
 
 bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)

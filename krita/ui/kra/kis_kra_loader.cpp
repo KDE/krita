@@ -104,29 +104,29 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
         if ((m_d->imageName = element.attribute(NAME)).isNull())
             return KisImageSP(0);
 
-        if ((attr = element.attribute("width")).isNull())
+        if ((attr = element.attribute(WIDTH)).isNull())
             return KisImageSP(0);
         width = attr.toInt();
 
-        if ((attr = element.attribute("height")).isNull())
+        if ((attr = element.attribute(HEIGHT)).isNull())
             return KisImageSP(0);
         height = attr.toInt();
 
-        m_d->imageComment = element.attribute("description");
+        m_d->imageComment = element.attribute(DESCRIPTION);
 
         xres = 100.0 / 72.0;
-        if (!(attr = element.attribute("x-res")).isNull()) {
+        if (!(attr = element.attribute(X_RESOLUTION)).isNull()) {
             if (attr.toDouble() > 1.0)
                 xres = attr.toDouble() / 72.0;
         }
 
         yres = 100.0 / 72.0;
-        if (!(attr = element.attribute("y-res")).isNull()) {
+        if (!(attr = element.attribute(Y_RESOLUTION)).isNull()) {
             if (attr.toDouble() > 1.0)
                 yres = attr.toDouble() / 72.0;
         }
 
-        if ((colorspacename = element.attribute("colorspacename")).isNull()) {
+        if ( ( colorspacename = element.attribute( COLORSPACE_NAME ) ).isNull() ) {
             // An old file: take a reasonable default.
             // Krita didn't support anything else in those
             // days anyway.
@@ -137,7 +137,7 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
         if (colorspacename  == "Grayscale + Alpha")
             colorspacename  = "GRAYA";
 
-        if ((profileProductName = element.attribute("profile")).isNull()) {
+        if ((profileProductName = element.attribute(PROFILE)).isNull()) {
             // no mention of profile so get default profile
             cs = KoColorSpaceRegistry::instance()->colorSpace(colorspacename, "");
         } else {
@@ -179,7 +179,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP img, const QString
     // annotations
     // exif
     QString location = external ? QString::null : uri;
-    location += m_d->imageName + "/annotations/exif";
+    location += m_d->imageName + EXIF_PATH;
     if (store->hasFile(location)) {
         QByteArray data;
         store->open(location);
@@ -190,7 +190,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP img, const QString
 
     // icc profile
     location = external ? QString::null : uri;
-    location += m_d->imageName + "/annotations/icc";
+    location += m_d->imageName + ICC_PATH;
     if (store->hasFile(location)) {
         QByteArray data;
         store->open(location);
@@ -213,11 +213,11 @@ KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageSP img, Ki
     KoXmlNode node = element.lastChild();
     KoXmlNode child;
 
-    if (!node.isNull()) {
-        if (node.isElement()) {
-            if (node.nodeName() == "LAYERS" || node.nodeName() == "MASKS" || node.nodeName() == "NODES") {
-                for (child = node.lastChild(); !child.isNull(); child = child.previousSibling()) {
-                    KisNode* node = loadNode(child.toElement(), img);
+    if ( !node.isNull() ) {
+        if ( node.isElement() ) {
+            if ( node.nodeName() == LAYERS || node.nodeName() == MASKS ) {
+                for ( child = node.lastChild(); !child.isNull(); child = child.previousSibling() ) {
+                    KisNode* node = loadNode( child.toElement(), img );
 
                     if ( !node ) {
                         kWarning(41008) << "Could not load node";
@@ -249,19 +249,19 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP img)
 
     KisNode* node = 0;
 
-    if ((name = element.attribute("name")).isNull())
+    if ((name = element.attribute(NAME)).isNull())
         return 0;
 
-    if ((attr = element.attribute("x")).isNull())
+    if ((attr = element.attribute(X)).isNull())
         return 0;
     x = attr.toInt();
 
-    if ((attr = element.attribute("y")).isNull())
+    if ((attr = element.attribute(Y)).isNull())
         return 0;
 
     y = attr.toInt();
 
-    if ((attr = element.attribute("opacity")).isNull())
+    if ((attr = element.attribute(OPACITY)).isNull())
         return 0;
 
     if ((opacity = attr.toInt()) < 0 || opacity > quint8_MAX)
@@ -269,58 +269,58 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP img)
 
 
     const KoColorSpace* colorSpace = 0;
-    if ((element.attribute("colorspacename")).isNull())
+    if ( ( element.attribute( COLORSPACE_NAME ) ).isNull() )
         colorSpace = img->colorSpace();
     else
         // use default profile - it will be replaced later in completeLoading
-        colorSpace = KoColorSpaceRegistry::instance()->colorSpace(element.attribute( "colorspacename" ), "");
+        colorSpace = KoColorSpaceRegistry::instance()->colorSpace(element.attribute( COLORSPACE_NAME ), "");
 
-    QString compositeOpName = element.attribute("compositeop");
+    QString compositeOpName = element.attribute( COMPOSITE_OP );
 
-    if ((attr = element.attribute("visible")).isNull())
+    if ((attr = element.attribute(VISIBLE)).isNull())
         attr = "1";
 
     visible = attr == "0" ? false : true;
 
-    if ((attr = element.attribute("locked")).isNull())
+    if ((attr = element.attribute(LOCKED)).isNull())
         attr = "0";
 
     locked = attr == "0" ? false : true;
 
     // Now find out the layer type and do specific handling
 
-    attr = element.attribute("layertype");
+    attr = element.attribute(LAYER_TYPE);
     if (attr.isNull())
         node = loadPaintLayer(element, img, name, colorSpace, opacity);
 
-    else if (attr == "paintlayer")
+    else if (attr == PAINT_LAYER)
         node = loadPaintLayer(element, img, name, colorSpace, opacity);
 
-    else if (attr == "grouplayer")
+    else if (attr == GROUP_LAYER)
         node = loadGroupLayer(element, img, name, colorSpace, opacity);
 
-    else if (attr == "adjustmentlayer" || attr == "filterlayer" )
+    else if (attr == ADJUSTMENT_LAYER )
         node = loadAdjustmentLayer(element, img, name, colorSpace, opacity);
 
-    else if (attr == "shapelayer")
+    else if (attr == SHAPE_LAYER )
         node = loadShapeLayer(element, img, name, colorSpace, opacity);
 
-    else if ( attr == "generatorlayer" )
+    else if ( attr == GENERATOR_LAYER )
         node = loadGeneratorLayer( element, img, name, colorSpace, opacity);
 
-    else if ( attr == "clonelayer" )
+    else if ( attr == CLONE_LAYER )
         node = loadCloneLayer( element, img, name, colorSpace, opacity);
 
-    else if ( attr == "filtermask" )
+    else if ( attr == FILTER_MASK )
         node = loadFilterMask( element );
 
-    else if ( attr == "transparencymask" )
+    else if ( attr == TRANSPARENCY_MASK )
         node = loadTransparencyMask( element );
 
-    else if ( attr == "transformationmask" )
+    else if ( attr == TRANSFORMATION_MASK )
         node = loadTransformationMask( element );
 
-    else if ( attr == "selectionmask" )
+    else if ( attr == SELECTION_MASK )
         node = loadSelectionMask( img, element );
 
     node->setVisible( visible );
@@ -333,10 +333,10 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP img)
         qobject_cast<KisLayer*>( node )->setCompositeOp( colorSpace->compositeOp( compositeOpName ) );
     }
 
-    if ((element.attribute("filename")).isNull())
+    if ( element.attribute( FILE_NAME ).isNull() )
         m_d->layerFilenames[node] = name;
     else
-        m_d->layerFilenames[node] = QString(element.attribute("filename"));
+        m_d->layerFilenames[node] = QString( element.attribute( FILE_NAME ) );
 
     return node;
 }
@@ -392,7 +392,7 @@ KisNode* KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImage
     KisAdjustmentLayer* layer;
     QString filtername;
 
-    if ((filtername = element.attribute("filtername")).isNull()) {
+    if ((filtername = element.attribute( FILTER_NAME )).isNull()) {
         // XXX: Invalid adjustmentlayer! We should warn about it!
         kWarning(41008) << "No filter in adjustment layer";
         return 0;
@@ -435,9 +435,9 @@ KisNode* KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImageS
 {
     // XXX: do something with generator version?
     KisGeneratorLayer* layer;
-    QString generatorname;
+    QString generatorname = element.attribute( GENERATOR_NAME );
 
-    if ((generatorname = element.attribute("generatorname")).isNull()) {
+    if (generatorname.isNull()) {
         // XXX: Invalid generator layer! We should warn about it!
         kWarning(41008) << "No generator in generator layer";
         return 0;
@@ -466,18 +466,18 @@ KisNode* KisKraLoader::loadCloneLayer(const KoXmlElement& element, KisImageSP im
 {
     KisCloneLayer* layer;
 
-    if ( ( element.attribute( "clonefrom" ) ).isNull() ) {
+    if ( ( element.attribute( CLONE_FROM ) ).isNull() ) {
         return 0;
     }
     else {
-        layer->setCopyFromName( element.attribute( "copy_from" ) );
+        layer->setCopyFromName( element.attribute( CLONE_FROM ) );
     }
 
-    if ( ( element.attribute( "clonetype" ) ).isNull() ) {
+    if ( ( element.attribute( CLONE_TYPE ) ).isNull() ) {
         return 0;
     }
     else {
-        layer->setCopyType( ( CopyLayerType ) element.attribute( "copy_type" ).toInt() );
+        layer->setCopyType( ( CopyLayerType ) element.attribute( CLONE_TYPE ).toInt() );
     }
     layer = new KisCloneLayer(0, img, name, opacity);
 
@@ -491,7 +491,9 @@ KisNode* KisKraLoader::loadFilterMask(const KoXmlElement& element )
     KisFilterMask* mask;
     QString filtername;
 
-    if ((filtername = element.attribute("filtername")).isNull()) {
+    // XXX: should we check the version?
+
+    if ((filtername = element.attribute( FILTER_NAME )).isNull()) {
         // XXX: Invalid filter layer! We should warn about it!
         kWarning(41008) << "No filter in filter layer";
         return 0;

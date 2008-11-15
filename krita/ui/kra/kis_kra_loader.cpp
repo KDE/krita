@@ -319,7 +319,7 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP img)
     else if ( attr == "transparencymask" )
         node = loadTransparencyMask( element );
 
-    else if ( attr == "transformationamsk" )
+    else if ( attr == "transformationmask" )
         node = loadTransformationMask( element );
 
     else if ( attr == "selectionmask" )

@@ -59,6 +59,12 @@ target_link_libraries(KisKraLoaderTest  ${KDE4_KDEUI_LIBS} komain kritaimage kri
 
 ########### next target ###############
 
+set(kis_kra_saver_test_SRCS kis_kra_saver_test.cpp )
+kde4_add_unit_test(KisKraSaverTest TESTNAME krita-ui-KisKraSaverTest ${kis_kra_saver_test_SRCS})
+target_link_libraries(KisKraSaverTest  ${KDE4_KDEUI_LIBS} komain kritaimage kritaui ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(kis_shape_selection_test_SRCS kis_shape_selection_test.cpp )
 
 kde4_add_unit_test(KisShapeSelectionTest TESTNAME krita-image-ShapeSelectionTest ${kis_shape_selection_test_SRCS})

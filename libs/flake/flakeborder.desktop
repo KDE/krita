@@ -20,6 +20,7 @@ Name[sv]=Formkantdefinition
 Name[tr]=Şekil kenarlığı tanımlaması
 Name[uk]=Визначення границі форми
 Name[x-test]=xxShape border definitionxx
+Name[zh_CN]=形状边框定义
 Name[zh_TW]=元件邊框定義
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Border
@@ -42,6 +43,7 @@ Comment[sv]=Definition av en formkant i Flake
 Comment[ta]=ஒரு வடிவ மூளைக்கான வரையறை
 Comment[uk]=Визначення елемента границі форми
 Comment[x-test]=xxDefinition of a flake shape borderxx
+Comment[zh_CN]=Flake 形状边框的定义
 Comment[zh_TW]=Flake 元件邊框定義
 [PropertyDef::X-Flake-Version]
 Type=int

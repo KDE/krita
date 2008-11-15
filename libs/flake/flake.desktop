@@ -48,6 +48,7 @@ Comment[sv]=Ett insticksprogram som innehåller en formmängd och ett verktyg
 Comment[ta]=ஒரு வடிவம் மற்றும் கருவியை எகொண்டது சொருகி எனப்படும்
 Comment[uk]=Втулок, що містить набір з форми та інструмента
 Comment[x-test]=xxA plugin that contains a set of a shape and a toolxx
+Comment[zh_CN]=一个包含一组形状和工具的插件
 Comment[zh_TW]=包含元件與工具集的外掛程式
 [PropertyDef::X-Flake-MinVersion]
 Type=int

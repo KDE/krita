@@ -23,6 +23,7 @@ Name[sv]=Koffice dockningsinsticksprogram
 Name[tr]=KOffice Dockers eklentisi
 Name[uk]=Втулок прив’язок KOffice
 Name[x-test]=xxKOffice Dockers pluginxx
+Name[zh_CN]=KOffice 停靠栏插件
 Name[zh_TW]=KOffice 嵌入外掛程式
 X-KDE-ServiceTypes=KOffice/Dock
 Type=Service

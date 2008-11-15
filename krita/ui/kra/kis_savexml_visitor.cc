@@ -51,8 +51,6 @@ bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
     if (KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
         QDomElement layerElement = m_doc.createElement("layer");
         saveLayer(layerElement, "shapelayer", layer);
-        layerElement.setAttribute("x", shapeLayer->x());
-        layerElement.setAttribute("y", shapeLayer->y());
         m_elem.appendChild(layerElement);
         m_count++;
         return saveMasks(layer, layerElement);
@@ -64,8 +62,6 @@ bool KisSaveXmlVisitor::visit(KisPaintLayer *layer)
 {
     QDomElement layerElement = m_doc.createElement("layer");
     saveLayer(layerElement, "paintlayer", layer);
-    layerElement.setAttribute("x", layer->x());
-    layerElement.setAttribute("y", layer->y());
     layerElement.setAttribute("colorspacename", layer->paintDevice()->colorSpace()->id());
     m_elem.appendChild(layerElement);
 
@@ -88,9 +84,6 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
     else {
         QDomElement layerElement = m_doc.createElement("layer");
         saveLayer(layerElement, "grouplayer", layer);
-
-        layerElement.setAttribute("x", layer->x());
-        layerElement.setAttribute("y", layer->y());
         m_elem.appendChild(layerElement);
     }
 
@@ -107,8 +100,6 @@ bool KisSaveXmlVisitor::visit(KisAdjustmentLayer* layer)
     saveLayer(layerElement, "adjustmentlayer", layer);
     layerElement.setAttribute("filtername", layer->filter()->name());
     layerElement.setAttribute("filterversion", layer->filter()->version());
-    layerElement.setAttribute("x", layer->x());
-    layerElement.setAttribute("y", layer->y());
     m_elem.appendChild(layerElement);
 
     m_count++;
@@ -121,8 +112,6 @@ bool KisSaveXmlVisitor::visit(KisGeneratorLayer *layer)
     saveLayer(layerElement, "generatorlayer", layer);
     layerElement.setAttribute("generatorname", layer->generator()->name());
     layerElement.setAttribute("generatorversion", layer->generator()->version());
-    layerElement.setAttribute("x", layer->x());
-    layerElement.setAttribute("y", layer->y());
     m_elem.appendChild(layerElement);
 
     m_count++;
@@ -133,8 +122,6 @@ bool KisSaveXmlVisitor::visit(KisCloneLayer *layer)
 {
     QDomElement layerElement = m_doc.createElement("layer");
     saveLayer(layerElement, "clonelayer", layer);
-    layerElement.setAttribute("x", layer->x());
-    layerElement.setAttribute("y", layer->y());
     layerElement.setAttribute("clonefrom", layer->copyFrom()->name());
     layerElement.setAttribute("clonetype", layer->copyType());
     m_elem.appendChild(layerElement);
@@ -208,6 +195,8 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     el.setAttribute("locked", layer->userLocked());
     el.setAttribute("layertype", layerType);
     el.setAttribute("filename", QString("layer%1").arg(m_count));
+    el.setAttribute("x", layer->x());
+    el.setAttribute("y", layer->y());
 
 }
 

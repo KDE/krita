@@ -925,8 +925,6 @@ void KisLayerManager::layersUpdated()
     if (!layer) return;
 
     m_view->updateGUI();
-    m_view->resourceProvider()->slotNodeActivated(layer.data());
-
 }
 
 void KisLayerManager::saveLayerAsImage()

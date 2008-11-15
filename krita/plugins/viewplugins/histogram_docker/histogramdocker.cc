@@ -157,7 +157,6 @@ void KritaHistogramDocker::setChannels() {
     QList<KoChannelInfo *> channels;
         // Only display color channels
     for (int i = 0; i < m_producer->channels().count(); i++) {
-        kDebug() << m_producer->channels().at(i)->name();
         if (m_producer->channels().at(i)->channelType() == KoChannelInfo::COLOR) {
             channels.append(m_producer->channels().at(i));
         }

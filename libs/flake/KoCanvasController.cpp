@@ -606,7 +606,7 @@ void KoCanvasController::wheelEvent(QWheelEvent *event)
         QAbstractScrollArea::wheelEvent(event);
 }
 
-bool KoCanvasController::focusNextPrevChild(bool next)
+bool KoCanvasController::focusNextPrevChild(bool)
 {
     // we always return false meaning the canvas takes keyboard focus, but never gives it away.
     return false;

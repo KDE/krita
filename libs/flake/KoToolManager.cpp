@@ -479,9 +479,9 @@ void KoToolManager::movedFocus(QWidget *from, QWidget *to)
     foreach(CanvasData *data, d->canvasses.value(newCanvas)) {
         if (data->inputDevice == d->inputDevice) {
             d->canvasData = data;
-            postSwitchTool();
             d->canvasData->canvas->canvas()->canvasWidget()->setCursor(d->canvasData->activeTool->cursor());
             d->canvasData->canvas->activate();
+            postSwitchTool();
             emit changedCanvas(d->canvasData ? d->canvasData->canvas->canvas() : 0);
             return;
         }

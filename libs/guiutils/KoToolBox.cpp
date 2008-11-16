@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoToolBox.h"
+#include "KoToolBox_p.h"
 
 #include <KoCanvasController.h>
 #include <KoToolManager.h>
@@ -475,4 +475,16 @@ void KoToolBox::paintEvent(QPaintEvent *)
     painter.end();
 }
 
-#include "KoToolBox.moc"
+KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
+    : m_toolBox(toolBox)
+{
+    setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+    setWidget(toolBox);
+}
+
+void KoToolBoxDocker::setCanvas(KoCanvasBase *canvas)
+{
+    m_toolBox->setCanvas(canvas);
+}
+
+#include "KoToolBox_p.moc"

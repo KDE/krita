@@ -109,7 +109,6 @@ install(
     KoTabBar.h
 #    KoTabulator.h
     KoTemplateCreateDia.h
-    KoToolBox.h
     KoToolBoxFactory.h
     KoToolDocker.h
     KoToolDockerFactory.h

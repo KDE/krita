@@ -36,15 +36,24 @@ public:
     DeformBrush();
     ~DeformBrush();
     void paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPaintInformation &info);
+
     void paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
 
-    void bilinear_interpolation(double x, double y );
-    void bilinear_interpolation_old(double x, double y );
+    void bilinear_interpolation(double x, double y , quint8 *dst);
+    void bilinear_interpolation_old(double x, double y , quint8 *dst);
 
     void scale(qreal cursorX,qreal cursorY, qreal factor);
     void swirl(qreal cursorX,qreal cursorY, qreal alpha);
     void move(qreal cursorX,qreal cursorY, qreal dx, qreal dy);
+
+    void fastMove(qreal cursorX,qreal cursorY, qreal dx, qreal dy);
+    void fastSwirl(qreal cursorX,qreal cursorY, qreal alpha);
+    void fastDeformColor(qreal cursorX,qreal cursorY,qreal amount);
+    void fastLensDistortion(qreal cursorX,qreal cursorY, qreal k1, qreal k2);
+
     void lensDistortion(qreal cursorX,qreal cursorY, qreal k1, qreal k2);
+    void deformColor(qreal cursorX,qreal cursorY,qreal amount);
+
 
     void setRadius( int deformRadius ){
         m_radius = deformRadius;
@@ -88,20 +97,27 @@ private:
     }
 
     /// move pixel from new computed coords newX, newY to x,y (inverse mapping)
-    void movePixel(qreal newX, qreal newY, int x, int y);
+    void movePixel(qreal newX, qreal newY, quint8 *dst);
+    void myMovePixel(qreal newX, qreal newY, quint8 *dst);
+
     bool point_interpolation( qreal* x, qreal* y, KisImageSP image );
     void debugColor(const quint8* data);
     void precomputeDistances(int radius);
+    void fastScale(qreal cursorX,qreal cursorY, qreal factor);
 
     // width and height for interpolation
     KisImageSP m_image;
 
     // temporary device
     KisPaintDeviceSP m_dev;
+    KisPaintDeviceSP m_dab;
+
     KisRandomAccessor * m_readAccessor;
     KisRandomAccessor * m_writeAccessor;
     quint32 m_pixelSize;
     
+    KisRandomSubAccessorPixel * m_srcAcc;
+
     //temporary KoColor for optimalization in bilinear interpolation
     KoColor * m_tempColor;
 

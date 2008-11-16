@@ -26,10 +26,13 @@
 #include <QHash>
 #include <QList>
 
-#include "kis_random_accessor.h"
+#include <kis_iterator.h>
+#include <kis_random_accessor.h>
+#include <kis_random_sub_accessor.h>
 
 #include <cmath>
 #include <ctime>
+#include <QTime>
 
 const qreal radToDeg = 57.29578;
 
@@ -50,33 +53,274 @@ DeformBrush::~DeformBrush()
     }
 }
 
-void DeformBrush::movePixel(qreal newX, qreal newY, int x, int y){
+
+/// this method uses my code for bilinear interpolation
+inline void DeformBrush::myMovePixel(qreal newX, qreal newY, quint8 *dst){
     if (m_useBilinear){
         if (m_useOldData)
         {
-            bilinear_interpolation_old(newX, newY );
+            bilinear_interpolation_old(newX, newY, dst);
         }else{
-            bilinear_interpolation(newX, newY );
+            bilinear_interpolation(newX, newY, dst);
         }
-
-        // read from m_tempColor
-        m_writeAccessor->moveTo(x, y); 
-        memcpy(m_writeAccessor->rawData(), m_tempColor->data() , m_pixelSize );
 
     }else if (point_interpolation(&newX,&newY,m_image))
     {
         m_readAccessor->moveTo(newX, newY);
-        m_writeAccessor->moveTo(x, y); 
 
         if (m_useOldData){
-            memcpy(m_writeAccessor->rawData(), m_readAccessor->oldRawData(), m_pixelSize );
+            memcpy(dst, m_readAccessor->oldRawData(), m_pixelSize );
         } else
         {
-            memcpy(m_writeAccessor->rawData(), m_readAccessor->oldRawData(), m_pixelSize );
+            memcpy(dst, m_readAccessor->rawData(), m_pixelSize );
         }
     }
 }
 
+/// this method uses KisSubPixelAccessor 
+inline void DeformBrush::movePixel(qreal newX, qreal newY, quint8 *dst){
+    if (m_useBilinear){
+        m_srcAcc->moveTo(newX,newY);
+
+        if (m_useOldData)
+        {
+            m_srcAcc->sampledOldRawData( dst );
+        }else
+        {
+            m_srcAcc->sampledRawData( dst );
+        }
+    }
+    else
+    {
+        if(point_interpolation(&newX,&newY,m_image))
+        {
+            m_readAccessor->moveTo(newX, newY);
+            if (m_useOldData)
+            {
+                memcpy( dst , m_readAccessor->oldRawData(), m_pixelSize );
+            } else
+            {
+                memcpy( dst , m_readAccessor->rawData(), m_pixelSize );
+            }
+        }
+    }
+}
+
+/***
+* Fast methods uses KisRectIterator, 
+* they are faster just a little bit (according my tests 120 miliseconds faster with big radius, slower with small radius)
+**/
+void DeformBrush::fastScale(qreal cursorX,qreal cursorY, qreal factor){
+    int curXi = static_cast<int>(cursorX+0.5);
+    int curYi = static_cast<int>(cursorY+0.5);
+
+    qreal newX, newY;
+    qreal distance;
+    qreal scaleFactor;
+
+    qint32 x;
+    qint32 y;
+
+    int left = curXi - m_radius;
+    int top = curYi - m_radius;
+    int w = m_radius*2+1;
+    int h = w;
+
+    KisRectIterator m_srcIt = m_dab->createRectIterator(left, top, w ,h );
+    for (;!m_srcIt.isDone(); ++m_srcIt) {
+
+        x = m_srcIt.x();
+        y = m_srcIt.y();
+
+        newX = x - curXi;
+        newY = y - curYi;
+
+        distance = distanceFromCenter( abs(newX), abs(newY) ); 
+        if (distance > 1.0) continue;
+
+        scaleFactor = (1.0 - distance)*factor + distance;
+
+        newX /= scaleFactor;
+        newY /= scaleFactor;
+
+        newX += curXi;
+        newY += curYi;
+
+        myMovePixel(newX, newY, m_srcIt.rawData() );
+    }
+}
+
+
+void DeformBrush::fastLensDistortion(qreal cursorX,qreal cursorY, qreal k1, qreal k2){
+
+    int curXi = static_cast<int>(cursorX+0.5);
+    int curYi = static_cast<int>(cursorY+0.5);
+
+    qreal newX, newY;
+    qreal distance;
+
+    qint32 x;
+    qint32 y;
+
+    int left = curXi - m_radius;
+    int top = curYi - m_radius;
+    int w = m_radius*2+1;
+    int h = w;
+
+    KisRectIterator m_srcIt = m_dab->createRectIterator(left, top, w ,h );
+    for (;!m_srcIt.isDone(); ++m_srcIt) {
+
+        x = m_srcIt.x();
+        y = m_srcIt.y();
+
+            newX = (x - curXi);
+            newY = (y - curYi);
+
+            // normalized distance
+            distance = distanceFromCenter(abs(newX), abs(newY)); 
+            if (distance > 1.0) continue;
+
+            //normalize
+            newX /= m_maxdist;
+            newY /= m_maxdist;
+
+            qreal radius_2 = newX*newX + newY*newY;
+            qreal radius_4 = radius_2 * radius_2;
+
+            if (m_action == 7){
+                    newX = newX * (1.0 + k1*radius_2 + k2*radius_4);
+                    newY = newY * (1.0 + k1*radius_2 + k2*radius_4);
+            }else{
+                    newX = newX / (1.0 + k1*radius_2 + k2*radius_4);
+                    newY = newY / (1.0 + k1*radius_2 + k2*radius_4);
+            }
+
+            newX = m_maxdist * newX;
+            newY = m_maxdist * newY;
+
+            newX += curXi;
+            newY += curYi;
+
+        myMovePixel(newX, newY, m_srcIt.rawData() );
+    }
+}
+
+
+void DeformBrush::fastMove(qreal cursorX,qreal cursorY, qreal dx, qreal dy){
+    int curXi = static_cast<int>(cursorX+0.5);
+    int curYi = static_cast<int>(cursorY+0.5);
+
+    qreal x, y;
+    qreal newX, newY;
+    qreal distance;
+
+    int left = curXi - m_radius;
+    int top = curYi - m_radius;
+    int w = m_radius*2+1;
+    int h = w;
+
+    KisRectIterator m_srcIt = m_dab->createRectIterator(left, top, w ,h );
+    for (;!m_srcIt.isDone(); ++m_srcIt) {
+        x = m_srcIt.x();
+        y = m_srcIt.y();
+
+        newX = x - curXi;
+        newY = y - curYi;
+
+        distance = distanceFromCenter(abs(newX), abs(newY)); 
+        if (distance > 1.0) continue;
+
+        newX -= dx*m_amount*(1.0-distance);
+        newY -= dy*m_amount*(1.0-distance);
+
+        newX += curXi;
+        newY += curYi;
+
+        myMovePixel(newX, newY, m_srcIt.rawData() );
+    }
+}
+
+
+void DeformBrush::fastDeformColor(qreal cursorX,qreal cursorY,qreal amount){
+    int curXi = static_cast<int>(cursorX+0.5);
+    int curYi = static_cast<int>(cursorY+0.5);
+
+    qreal x, y;
+    qreal newX, newY;
+    qreal distance;
+    qreal randomX, randomY;
+
+    int left = curXi - m_radius;
+    int top = curYi - m_radius;
+    int w = m_radius*2+1;
+    int h = w;
+
+    KisRectIterator m_srcIt = m_dab->createRectIterator(left, top, w ,h );
+    for (;!m_srcIt.isDone(); ++m_srcIt) {
+        x = m_srcIt.x();
+        y = m_srcIt.y();
+
+                distance = distanceFromCenter(abs(x - curXi), abs(y - curYi)); 
+                if (distance > 1.0) continue;
+
+                randomX = drand48();
+                randomY = drand48();
+
+                randomX = (randomX*2.0)-1.0;
+                randomY = (randomY*2.0)-1.0;
+
+                newX = x+(amount*randomX);
+                newY = y+(amount*randomY);
+
+        myMovePixel(newX, newY, m_srcIt.rawData() );
+    }
+
+}
+
+
+void DeformBrush::fastSwirl(qreal cursorX,qreal cursorY, qreal alpha){
+    int curXi = static_cast<int>(cursorX+0.5);
+    int curYi = static_cast<int>(cursorY+0.5);
+
+    qreal x, y;
+    qreal newX, newY;
+    qreal rotX, rotY;
+    qreal distance;
+
+    int left = curXi - m_radius;
+    int top = curYi - m_radius;
+    int w = m_radius*2+1;
+    int h = w;
+
+    KisRectIterator m_srcIt = m_dab->createRectIterator(left, top, w ,h );
+    for (;!m_srcIt.isDone(); ++m_srcIt) {
+        x = m_srcIt.x();
+        y = m_srcIt.y();
+
+        newX = x - curXi;
+        newY = y - curYi;
+
+        distance = distanceFromCenter(abs(newX), abs(newY));
+        if (distance > 1.0) continue;
+
+        distance = 1.0 - distance;
+        rotX = cos(-alpha * distance) * newX - sin(-alpha * distance) * newY;
+        rotY = sin(-alpha * distance) * newX + cos(-alpha * distance) * newY;
+
+        newX = rotX;
+        newY = rotY;
+
+        newX += curXi;
+        newY += curYi;
+
+        myMovePixel(newX, newY, m_srcIt.rawData() );
+    }
+}
+
+
+/***
+* Common methods uses KisRandomAccessor, 
+**/
 void DeformBrush::lensDistortion(qreal cursorX,qreal cursorY, qreal k1, qreal k2){
     int curXi = static_cast<int>(cursorX+0.5);
     int curYi = static_cast<int>(cursorY+0.5);
@@ -100,8 +344,13 @@ void DeformBrush::lensDistortion(qreal cursorX,qreal cursorY, qreal k1, qreal k2
             qreal radius_2 = newX*newX + newY*newY;
             qreal radius_4 = radius_2 * radius_2;
 
-            newX = newX * (1.0 + k1*radius_2 + k2*radius_4);
-            newY = newY * (1.0 + k1*radius_2 + k2*radius_4);
+            if (m_action == 7){
+                    newX = newX * (1.0 + k1*radius_2 + k2*radius_4);
+                    newY = newY * (1.0 + k1*radius_2 + k2*radius_4);
+            }else{
+                    newX = newX / (1.0 + k1*radius_2 + k2*radius_4);
+                    newY = newY / (1.0 + k1*radius_2 + k2*radius_4);
+            }
 
             newX = m_maxdist * newX;
             newY = m_maxdist * newY;
@@ -109,10 +358,12 @@ void DeformBrush::lensDistortion(qreal cursorX,qreal cursorY, qreal k1, qreal k2
             newX += curXi;
             newY += curYi;
 
-            movePixel(newX, newY, x,y);
+            m_writeAccessor->moveTo(x, y);
+            movePixel(newX, newY, m_writeAccessor->rawData() );
         }
     }
 }
+
 
 void DeformBrush::move(qreal cursorX,qreal cursorY, qreal dx, qreal dy){
     int curXi = static_cast<int>(cursorX+0.5);
@@ -139,10 +390,12 @@ void DeformBrush::move(qreal cursorX,qreal cursorY, qreal dx, qreal dy){
             newX += curXi;
             newY += curYi;
 
-            movePixel(newX, newY, x,y);
+            m_writeAccessor->moveTo(x, y);
+            movePixel(newX, newY, m_writeAccessor->rawData() );
         }
     }
 }
+
 
 void DeformBrush::scale(qreal cursorX,qreal cursorY, qreal factor){
     int curXi = static_cast<int>(cursorX+0.5);
@@ -171,16 +424,50 @@ void DeformBrush::scale(qreal cursorX,qreal cursorY, qreal factor){
             newX += curXi;
             newY += curYi;
 
-            movePixel(newX, newY, x,y);
+            m_writeAccessor->moveTo(x, y);
+            movePixel(newX, newY, m_writeAccessor->rawData() );
         }
     }
 }
 
+
+void DeformBrush::deformColor ( qreal cursorX,qreal cursorY,qreal amount){
+    int curXi = static_cast<int> ( cursorX+0.5 );
+    int curYi = static_cast<int> ( cursorY+0.5 );
+
+    qreal newX, newY;
+    qreal randomX, randomY;
+    qreal distance;
+
+    srand48 ( time ( 0 ) );
+    for ( int x = curXi - m_radius; x <= curXi + m_radius;x++ )
+    {
+        for ( int y = curYi - m_radius; y <= curYi + m_radius;y++ )
+        {
+
+            distance = distanceFromCenter ( abs ( x - curXi ), abs ( y - curYi ) );
+            if ( distance > 1.0 ) continue;
+
+            randomX = drand48();
+            randomY = drand48();
+
+            randomX = ( randomX*2.0 )-1.0;
+            randomY = ( randomY*2.0 )-1.0;
+
+            newX = x+ ( amount*randomX );
+            newY = y+ ( amount*randomY );
+
+            m_writeAccessor->moveTo(x, y);
+            movePixel(newX, newY, m_writeAccessor->rawData() );
+        }
+    }
+}
+
+
+
 void DeformBrush::swirl(qreal cursorX,qreal cursorY, qreal alpha){
     int curXi = static_cast<int>(cursorX+0.5);
     int curYi = static_cast<int>(cursorY+0.5);
-
-    //KoColor kcolor( m_dev->colorSpace() );
 
     qreal newX, newY;
     qreal rotX, rotY;
@@ -205,11 +492,11 @@ void DeformBrush::swirl(qreal cursorX,qreal cursorY, qreal alpha){
             newX += curXi;
             newY += curYi;
 
-            movePixel(newX, newY, x,y);
+            m_writeAccessor->moveTo(x, y);
+            movePixel(newX, newY, m_writeAccessor->rawData() );
         }
     }
 }
-
 
 void DeformBrush::paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPaintInformation &info)
 {
@@ -217,7 +504,7 @@ void DeformBrush::paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPa
     qreal y1 = info.pos().y();
 
     m_dev = layer;
-
+    m_dab = dev;
     m_pixelSize = dev->colorSpace()->pixelSize();
 
     KisRandomAccessor accessor = dev->createRandomAccessor((int)x1, (int)y1);
@@ -226,12 +513,67 @@ void DeformBrush::paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPa
     KisRandomAccessor accessor2 = layer->createRandomAccessor((int)x1, (int)y1);
     m_readAccessor = &accessor2;
 
-    // used for bilinear interpolation (passing result)
-    if (m_useBilinear){  
-        m_tempColor = new KoColor(m_dev->colorSpace());
-    }
+    KisRandomSubAccessorPixel srcAcc = m_dev->createRandomSubAccessor();
+    m_srcAcc = &srcAcc;
 
-    if (m_action == 1){
+#if 1
+    if (m_action == 1)
+    {
+        // grow
+        if (m_useCounter){
+            fastScale(x1,y1,1.0 + m_counter*m_counter/100.0);
+        }else{
+            fastScale(x1,y1,1.0 + m_amount);
+        }
+    } else 
+    
+    if (m_action == 2)
+    {
+        // shrink
+        if (m_useCounter){
+            fastScale(x1,y1,1.0 - m_counter*m_counter/100.0);
+        }else{
+            fastScale(x1,y1,1.0 - m_amount);
+        }
+    } else 
+
+    if (m_action == 3)
+    {
+        // CW
+        fastSwirl(x1,y1, (1.0/360*m_counter) *  radToDeg);
+    } else 
+    
+    if (m_action == 4)
+    {
+        // CCW
+        fastSwirl(x1,y1, (1.0/360*m_counter) * -radToDeg);
+    } else 
+    
+    if (m_action == 5)
+    {
+        if (m_firstPaint == false){
+            m_prevX = x1;
+            m_prevY = y1;
+            m_firstPaint = true;
+        }else {
+            fastMove(x1,y1, x1 - m_prevX, y1 - m_prevY);
+        }
+    } else
+    
+    if (m_action == 6 || m_action == 7)
+    {
+        fastLensDistortion(x1,y1,m_amount, 0);
+    }
+    else
+    if (m_action == 8)
+    {
+        fastDeformColor(x1,y1,m_amount);
+    }
+#endif 
+
+#if 0
+    if (m_action == 1)
+    {
         // grow
         if (m_useCounter){
             scale(x1,y1,1.0 + m_counter*m_counter/100.0);
@@ -239,7 +581,9 @@ void DeformBrush::paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPa
             scale(x1,y1,1.0 + m_amount);
         }
     } else 
-    if (m_action == 2){
+    
+    if (m_action == 2)
+    {
         // shrink
         if (m_useCounter){
             scale(x1,y1,1.0 - m_counter*m_counter/100.0);
@@ -247,15 +591,21 @@ void DeformBrush::paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPa
             scale(x1,y1,1.0 - m_amount);
         }
     } else 
-    if (m_action == 3){
+
+    if (m_action == 3)
+    {
         // CW
         swirl(x1,y1, (1.0/360*m_counter) *  radToDeg);
     } else 
-    if (m_action == 4){
+    
+    if (m_action == 4)
+    {
         // CCW
         swirl(x1,y1, (1.0/360*m_counter) * -radToDeg);
     } else 
-    if (m_action == 5){
+    
+    if (m_action == 5)
+    {
         if (m_firstPaint == false){
             m_prevX = x1;
             m_prevY = y1;
@@ -264,16 +614,29 @@ void DeformBrush::paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPa
             move(x1,y1, x1 - m_prevX, y1 - m_prevY);
         }
     } else
-    if (m_action == 6){
+    
+    if (m_action == 6 || m_action == 7)
+    {
         lensDistortion(x1,y1,m_amount, 0);
+    } 
+    else
+    if (m_action == 8)
+    {
+        deformColor(x1,y1,m_amount);
     }
+
+#endif
+
     m_counter++;
 }
 
 
 void DeformBrush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2)
 {
-    //dbgKritaPlugins << "Whaaat!";
+    Q_UNUSED(dev);
+    Q_UNUSED(layer);
+    Q_UNUSED(pi1);
+    Q_UNUSED(pi2);
 #if 0    
     qreal dx = pi2.pos().x() - pi1.pos().x();
     qreal dy = pi2.pos().y() - pi1.pos().y();
@@ -330,7 +693,7 @@ void DeformBrush::precomputeDistances(int radius){
 
 
 /// result of bilinear interpolation is in m_tempColor
-void DeformBrush::bilinear_interpolation(double x, double y ) {
+void DeformBrush::bilinear_interpolation(double x, double y, quint8 *dst) {
     KoMixColorsOp * mixOp = m_dev->colorSpace()->mixColorsOp();
 
     int ix = (int)floor(x);
@@ -364,11 +727,13 @@ void DeformBrush::bilinear_interpolation(double x, double y ) {
         colorWeights[1] = static_cast<quint16>( (1.0 - y_frac) *  x_frac * MAX_16BIT); 
         colorWeights[2] = static_cast<quint16>(y_frac * (1.0 - x_frac) * MAX_16BIT);
         colorWeights[3] = static_cast<quint16>(y_frac * x_frac* MAX_16BIT);
-        mixOp->mixColors(colors, colorWeights, 4, m_tempColor->data() );
+
+        mixOp->mixColors(colors, colorWeights, 4, dst );
     }
 }
 
-void DeformBrush::bilinear_interpolation_old(double x, double y ) {
+
+void DeformBrush::bilinear_interpolation_old(double x, double y ,quint8 *dst) {
     KoMixColorsOp * mixOp = m_dev->colorSpace()->mixColorsOp();
 
     int ix = (int)floor(x);
@@ -402,6 +767,6 @@ void DeformBrush::bilinear_interpolation_old(double x, double y ) {
         colorWeights[1] = static_cast<quint16>( (1.0 - y_frac) *  x_frac * MAX_16BIT); 
         colorWeights[2] = static_cast<quint16>(y_frac * (1.0 - x_frac) * MAX_16BIT);
         colorWeights[3] = static_cast<quint16>(y_frac * x_frac* MAX_16BIT);
-        mixOp->mixColors(colors, colorWeights, 4, m_tempColor->data() );
+        mixOp->mixColors(colors, colorWeights, 4, dst );
     }
 }

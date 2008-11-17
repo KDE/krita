@@ -429,6 +429,11 @@ void KoPADocument::updateViews(KoPAPageBase *page)
     }
 }
 
+KoPageApp::PageType KoPADocument::pageType() const
+{
+    return KoPageApp::Page;
+}
+
 void KoPADocument::setActionEnabled( int actions, bool enable )
 {
     foreach( KoView *view, views() )

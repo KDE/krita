@@ -40,6 +40,14 @@ namespace KoPageApp
     enum CanvasResource {
         CurrentPage = KoCanvasResource::KoPageAppStart+1 ///< The current page as a KoShape
     };
+
+    /**
+     * This enum defines if we should talk about pages or slides in the document
+     */
+    enum PageType {
+        Page,
+        Slide
+    };
 }
 
 #endif // KOPAGEAPP_H

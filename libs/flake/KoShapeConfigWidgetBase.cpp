@@ -43,6 +43,11 @@ bool KoShapeConfigWidgetBase::showOnShapeCreate()
     return false;
 }
 
+bool KoShapeConfigWidgetBase::showOnShapeSelect()
+{
+    return true;
+}
+
 QUndoCommand * KoShapeConfigWidgetBase::createCommand()
 {
     return 0;

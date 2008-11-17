@@ -21,6 +21,8 @@
 #include "PictureShapeFactory.h"
 
 #include "PictureShape.h"
+#include "PictureShapeConfigWidget.h"
+
 #include <KoXmlNS.h>
 #include "KoShapeControllerBase.h"
 #include "KoImageCollection.h"
@@ -63,4 +65,11 @@ void PictureShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter *>   
         KoImageCollection *imgCol = new KoImageCollection();
         dataCenterMap["ImageCollection"] = imgCol;
     }
+}
+
+QList<KoShapeConfigWidgetBase*> PictureShapeFactory::createShapeOptionPanels()
+{
+    QList<KoShapeConfigWidgetBase*> panels;
+    panels.append( new PictureShapeConfigWidget() );
+    return panels;
 }

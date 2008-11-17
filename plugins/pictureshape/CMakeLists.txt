@@ -8,6 +8,7 @@ SET (pictureshape_LIB_SRCS
     PictureTool.cpp
     PictureToolFactory.cpp
     Plugin.cpp
+    PictureShapeConfigWidget.cpp
 )
 
 kde4_add_plugin(pictureshape ${pictureshape_LIB_SRCS})

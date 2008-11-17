@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,31 +16,43 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef INTRO_H
-#define INTRO_H
 
-#include <ui_Intro.h>
-
-class DivineProportionShape;
+#ifndef PICTURESHAPECONFIGWIDGET_H
+#define PICTURESHAPECONFIGWIDGET_H
 
 #include <KoShapeConfigWidgetBase.h>
+#include <kurl.h>
+#include <QtGui/QWidget>
 
-class Intro : public KoShapeConfigWidgetBase {
+class KFileWidget;
+class KImageFilePreview;
+class PictureShape;
+class QStackedWidget;
+
+class PictureShapeConfigWidget : public KoShapeConfigWidgetBase
+{
+    Q_OBJECT
 public:
-    Intro();
+    PictureShapeConfigWidget();
+    ~PictureShapeConfigWidget();
 
+    /// reimplemented from KoShapeConfigWidgetBase
     virtual void open(KoShape *shape);
+    /// reimplemented from KoShapeConfigWidgetBase
     virtual void save();
-    virtual KAction *createAction();
+    /// reimplemented from KoShapeConfigWidgetBase
+    virtual bool showOnShapeCreate();
+    /// reimplemented from KoShapeConfigWidgetBase
+    virtual bool showOnShapeSelect();
 
-    /// reimplemented 
-    virtual bool showOnShapeCreate() { return true; }
-    /// reimplemented 
-    virtual bool showOnShapeSelect() { return false; }
+private slots:
+    void onAccepted();
 
 private:
-    Ui::Intro widget;
-    DivineProportionShape *m_shape;
+    KFileWidget* m_fileWidget;
+    KImageFilePreview * m_filePreview;
+    PictureShape * m_shape;
+    QStackedWidget * m_stack;
 };
 
-#endif
+#endif //PICTURESHAPECONFIGWIDGET_H

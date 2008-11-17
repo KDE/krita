@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=Krita/Dock
 Comment=Docker for Krita
+Comment[ca]=Amarrador per al Krita
 Comment[el]=Προσάρτηση για το Krita
 Comment[kk]=Krita-ның докері
 Comment[nds]=Andockmoduul för Krita
@@ -9,6 +10,8 @@ Comment[pt]=Acoplador para o Krita
 Comment[pt_BR]=Acoplador para o Krita
 Comment[sv]=Dockningsfönster för Krita
 Comment[uk]=Засіб швартування для Krita
+Comment[x-test]=xxDocker for Kritaxx
 Comment[zh_CN]=Krita 停靠栏
+Comment[zh_TW]=Krita 的嵌入器
 [PropertyDef::X-Krita-Version]
 Type=int

@@ -278,6 +278,7 @@ void ArtisticTextTool::convertText()
     path->setShapeId( KoPathShapeId );
 
     QUndoCommand * cmd = m_canvas->shapeController()->addShapeDirect( path );
+    cmd->setText( i18n("Convert to Path") );
     m_canvas->shapeController()->removeShape( m_currentShape, cmd );
     m_canvas->addCommand( cmd );
 

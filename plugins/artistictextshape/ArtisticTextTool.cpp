@@ -19,6 +19,8 @@
  */
 
 #include "ArtisticTextTool.h"
+#include "AttachTextToPathCommand.h"
+#include "DetachTextFromPathCommand.h"
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -247,7 +249,7 @@ void ArtisticTextTool::attachPath()
         m_blinkingCursor.stop();
         m_showCursor = false;
         updateTextCursorArea();
-        m_currentShape->putOnPath( m_path );
+        m_canvas->addCommand( new AttachTextToPathCommand( m_currentShape, m_path ) );
         m_blinkingCursor.start( 500 );
     }
 }
@@ -255,7 +257,7 @@ void ArtisticTextTool::attachPath()
 void ArtisticTextTool::detachPath()
 {
     if( m_currentShape && m_currentShape->isOnPath() )
-        m_currentShape->removeFromPath();
+        m_canvas->addCommand( new DetachTextFromPathCommand( m_currentShape ) );
 }
 
 void ArtisticTextTool::convertText()

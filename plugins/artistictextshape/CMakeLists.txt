@@ -9,6 +9,8 @@ SET ( ArtisticTextShape_SRCS
     ArtisticTextTool.cpp
     ArtisticTextToolFactory.cpp
     ArtisticTextShapeConfigWidget.cpp
+    AttachTextToPathCommand.cpp
+    DetachTextFromPathCommand.cpp
 )
 
 kde4_add_ui_files( ArtisticTextShape_SRCS

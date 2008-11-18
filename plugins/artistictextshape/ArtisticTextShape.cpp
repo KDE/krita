@@ -463,7 +463,7 @@ QPainterPath ArtisticTextShape::baseline() const
     return m_baseline;
 }
 
-const KoPathShape * ArtisticTextShape::baselineShape() const
+KoPathShape * ArtisticTextShape::baselineShape() const
 {
     return m_path;
 }

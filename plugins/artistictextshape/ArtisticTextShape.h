@@ -113,7 +113,7 @@ public:
     QPainterPath baseline() const;
 
     /// Returns a pointer to the shape used as baseline
-    const KoPathShape * baselineShape() const;
+    KoPathShape * baselineShape() const;
 
     /// Removes a range of text from the given index
     QString removeRange( unsigned int index, unsigned int nr );

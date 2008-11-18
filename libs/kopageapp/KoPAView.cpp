@@ -177,7 +177,7 @@ void KoPAView::initGUI()
     connect(m_canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
             m_canvas, SLOT(setDocumentOffset(const QPoint&)));
 
-    KoPADocumentStructureDockerFactory structureDockerFactory( KoDocumentSectionView::ThumbnailMode );
+    KoPADocumentStructureDockerFactory structureDockerFactory( KoDocumentSectionView::ThumbnailMode, m_doc->pageType() );
     m_documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( createDockWidget( &structureDockerFactory ) );
     m_documentStructureDocker->setPart( m_doc );
     connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),

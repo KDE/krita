@@ -24,6 +24,7 @@
 #include <KoDockFactory.h>
 #include <KoCanvasObserver.h>
 #include <KoDocumentSectionView.h>
+#include <KoPageApp.h>
 
 class KoShape;
 class KoShapeLayer;
@@ -42,7 +43,7 @@ namespace KParts
 class KoPADocumentStructureDockerFactory : public KoDockFactory
 {
 public:
-    KoPADocumentStructureDockerFactory( KoDocumentSectionView::DisplayMode mode );
+    KoPADocumentStructureDockerFactory( KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType = KoPageApp::Page);
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
@@ -54,6 +55,7 @@ public:
 
 private:
     KoDocumentSectionView::DisplayMode m_mode;
+    KoPageApp::PageType m_pageType;
 };
 
 class KoPADocumentStructureDocker : public QDockWidget, public KoCanvasObserver
@@ -61,7 +63,7 @@ class KoPADocumentStructureDocker : public QDockWidget, public KoCanvasObserver
 Q_OBJECT
 
 public:
-    explicit KoPADocumentStructureDocker( KoDocumentSectionView::DisplayMode mode, QWidget* parent = 0 );
+    explicit KoPADocumentStructureDocker( KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType, QWidget* parent = 0 );
     virtual ~KoPADocumentStructureDocker();
 
     virtual void setCanvas( KoCanvasBase* canvas);

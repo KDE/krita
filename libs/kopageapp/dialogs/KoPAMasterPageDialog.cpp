@@ -37,7 +37,13 @@ KoPAMasterPageDialog::KoPAMasterPageDialog(KoPADocument *document, KoPAMasterPag
     QSize iconSize(128, 128);
     QWidget *mainWidget = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(new QLabel(i18n("Select a master page design:"), mainWidget));
+    if(m_document->pageType() == KoPageApp::Slide ) {
+        layout->addWidget(new QLabel(i18n("Select a master slide design:"), mainWidget));
+        setCaption(i18n("Master Slide"));
+    } else {
+        layout->addWidget(new QLabel(i18n("Select a master page design:"), mainWidget));
+        setCaption(i18n("Master Page"));
+    }
 
     m_listView = new QListView;
     m_listView->setDragDropMode(QListView::NoDragDrop);
@@ -64,7 +70,6 @@ KoPAMasterPageDialog::KoPAMasterPageDialog(KoPADocument *document, KoPAMasterPag
 
     mainWidget->setLayout(layout);
     setMainWidget(mainWidget);
-    setCaption(i18n("Master Page"));
     setModal(true);
     setButtons(Ok|Cancel);
     setDefaultButton(Ok);

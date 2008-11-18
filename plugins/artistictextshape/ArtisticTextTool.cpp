@@ -251,13 +251,17 @@ void ArtisticTextTool::attachPath()
         updateTextCursorArea();
         m_canvas->addCommand( new AttachTextToPathCommand( m_currentShape, m_path ) );
         m_blinkingCursor.start( 500 );
+        updateActions();
     }
 }
 
 void ArtisticTextTool::detachPath()
 {
     if( m_currentShape && m_currentShape->isOnPath() )
+    {
         m_canvas->addCommand( new DetachTextFromPathCommand( m_currentShape ) );
+        updateActions();
+    }
 }
 
 void ArtisticTextTool::convertText()

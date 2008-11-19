@@ -43,6 +43,7 @@ public:
     void setText(QString text);
     void setPosition(QPointF position, Qt::Alignment alignment = 0x0);
 
+    QRectF boundingRect() const;
     void paint(QPainter &painter) const;
 
 private:

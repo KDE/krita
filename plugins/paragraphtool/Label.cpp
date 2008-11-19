@@ -23,6 +23,7 @@
 
 #include <KDebug>
 
+#include <QFontMetrics>
 #include <QPainter>
 
 
@@ -49,6 +50,20 @@ void Label::setPosition(QPointF position, Qt::Alignment alignment)
     m_alignment = alignment;
 }
 
+QRectF Label::boundingRect() const
+{
+    QFontMetrics metrics = QFontMetrics(QFont());
+
+    QRectF bRect = metrics.boundingRect(m_text);
+    QPointF new_position = m_position;
+    new_position.rx() -= bRect.width()/2.0;
+    new_position.ry() -= bRect.height()/2.0;
+    bRect.moveTo(new_position);
+    bRect.adjust(-4.0, 0.0, 4.0, 0.0);
+
+    return bRect;
+}
+
 void Label::paint(QPainter &painter) const
 {
     painter.save();
@@ -56,9 +71,7 @@ void Label::paint(QPainter &painter) const
     painter.setBrush(Qt::white);
     painter.setPen(m_color);
 
-    QRectF bRect(m_position, QSizeF(0.0, 0.0));
-    bRect = painter.boundingRect(bRect, Qt::AlignHCenter | Qt::AlignVCenter, m_text);
-    bRect.adjust(-4.0, 0.0, 4.0, 0.0);
+    QRectF bRect = boundingRect();
 
     qreal halfWidth = bRect.width() / 2.0;
     if (m_alignment & Qt::AlignRight) {

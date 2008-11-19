@@ -323,6 +323,8 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP img)
     else if ( attr == SELECTION_MASK )
         node = loadSelectionMask( img, element );
 
+    Q_ASSERT( node );
+
     node->setVisible( visible );
     node->setUserLocked( locked );
     node->setX( x );
@@ -330,6 +332,8 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP img)
     node->setName( name );
 
     if ( node->inherits( "KisLayer" ) ) {
+        // XXX: restore the channelflags
+
         qobject_cast<KisLayer*>( node )->setCompositeOp( colorSpace->compositeOp( compositeOpName ) );
     }
 
@@ -464,7 +468,7 @@ KisNode* KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImageS
 KisNode* KisKraLoader::loadCloneLayer(const KoXmlElement& element, KisImageSP img,
                                       const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
-    KisCloneLayer* layer;
+    KisCloneLayer* layer = new KisCloneLayer(0, img, name, opacity);
 
     if ( ( element.attribute( CLONE_FROM ) ).isNull() ) {
         return 0;
@@ -479,9 +483,8 @@ KisNode* KisKraLoader::loadCloneLayer(const KoXmlElement& element, KisImageSP im
     else {
         layer->setCopyType( ( CopyLayerType ) element.attribute( CLONE_TYPE ).toInt() );
     }
-    layer = new KisCloneLayer(0, img, name, opacity);
 
-    return 0;
+    return layer;
 }
 
 

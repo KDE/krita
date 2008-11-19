@@ -131,10 +131,10 @@ bool KisKraLoadVisitor::visit(KisGroupLayer *layer)
     if (m_external)
         visitor.setExternalUri(m_uri);
 
-    visitAll(layer);
+    bool result = visitAll(layer);
 
     layer->setDirty(m_img->bounds());
-    return true;
+    return result;
 }
 
 bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)

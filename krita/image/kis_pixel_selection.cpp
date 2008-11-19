@@ -72,6 +72,10 @@ KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs)
 
 }
 
+KisSelectionComponent* KisPixelSelection::clone() {
+    return new KisPixelSelection( *this );
+}
+
 KisPixelSelection::~KisPixelSelection()
 {
     delete m_d;

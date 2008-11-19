@@ -68,6 +68,8 @@ void KisShapeSelectionTest::testAddChild()
 
     QCOMPARE(pixelSelection->selected(25, 25), MAX_SELECTED);
     QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 150, 150));
+
+    selection->updateProjection();
 }
 
 QTEST_KDEMAIN(KisShapeSelectionTest, NoGUI)

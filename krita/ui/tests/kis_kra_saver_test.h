@@ -26,6 +26,7 @@ class KisKraSaverTest : public QObject
     Q_OBJECT
 private slots:
 
+    // XXX: Also test roundtripping of metadata
     void testRoundTrip();
 
 };

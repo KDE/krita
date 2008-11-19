@@ -47,6 +47,7 @@ KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, const QDomElement & eleme
         m_count(count),
         m_root(root)
 {
+    Q_ASSERT( !element.isNull() );
     m_elem = element;
 }
 
@@ -86,12 +87,13 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
     if (m_root) // if this is the root we fake so not to save it
         layerElement = m_elem;
     else {
-        QDomElement layerElement = m_doc.createElement(LAYER);
+        layerElement = m_doc.createElement(LAYER);
         saveLayer(layerElement, GROUP_LAYER, layer);
         m_elem.appendChild(layerElement);
     }
 
     QDomElement elem = m_doc.createElement(LAYERS);
+    Q_ASSERT( !layerElement.isNull() );
     layerElement.appendChild(elem);
     KisSaveXmlVisitor visitor(m_doc, elem, m_count);
 
@@ -136,6 +138,7 @@ bool KisSaveXmlVisitor::visit(KisCloneLayer *layer)
 
 bool KisSaveXmlVisitor::visit(KisFilterMask *mask)
 {
+    Q_ASSERT( mask );
     QDomElement el = m_doc.createElement(MASK);
     saveMask(el, FILTER_MASK, mask);
     el.setAttribute(FILTER_NAME, mask->filter()->name());
@@ -149,6 +152,7 @@ bool KisSaveXmlVisitor::visit(KisFilterMask *mask)
 
 bool KisSaveXmlVisitor::visit(KisTransparencyMask *mask)
 {
+    Q_ASSERT( mask );
     QDomElement el = m_doc.createElement(MASK);
     saveMask(el, TRANSPARENCY_MASK, mask);
     m_elem.appendChild(el);
@@ -158,6 +162,7 @@ bool KisSaveXmlVisitor::visit(KisTransparencyMask *mask)
 
 bool KisSaveXmlVisitor::visit(KisTransformationMask *mask)
 {
+    Q_ASSERT( mask );
     QDomElement el = m_doc.createElement(MASK);
     saveMask(el, TRANSFORMATION_MASK, mask);
     el.setAttribute(X_SCALE, mask->xScale());
@@ -167,6 +172,7 @@ bool KisSaveXmlVisitor::visit(KisTransformationMask *mask)
     el.setAttribute(ROTATION, mask->rotation());
     el.setAttribute(X_TRANSLATION, mask->xTranslate());
     el.setAttribute(Y_TRANSLATION, mask->yTranslate());
+    Q_ASSERT( mask->filterStrategy() );
     el.setAttribute(FILTER_STATEGY, mask->filterStrategy()->id());
     m_elem.appendChild(el);
     m_count++;
@@ -175,6 +181,8 @@ bool KisSaveXmlVisitor::visit(KisTransformationMask *mask)
 
 bool KisSaveXmlVisitor::visit(KisSelectionMask *mask)
 {
+    Q_ASSERT( mask );
+
     QDomElement el = m_doc.createElement(MASK);
     saveMask(el, SELECTION_MASK, mask);
     m_elem.appendChild(el);
@@ -185,6 +193,7 @@ bool KisSaveXmlVisitor::visit(KisSelectionMask *mask)
 
 void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, const KisLayer * layer)
 {
+    // XXX: save the channeflags!
 
     el.setAttribute(NAME, layer->KisBaseNode::name());
     el.setAttribute(OPACITY, layer->opacity());
@@ -213,6 +222,7 @@ bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
 {
     if (node->childCount() > 0) {
         QDomElement elem = m_doc.createElement(MASKS);
+        Q_ASSERT( !layerElement.isNull() );
         layerElement.appendChild(elem);
         KisSaveXmlVisitor visitor(m_doc, elem, m_count);
         return visitor.visitAllInverse(node);

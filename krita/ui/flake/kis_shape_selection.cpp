@@ -41,15 +41,32 @@ KisShapeSelection::KisShapeSelection(KisImageSP image, KisSelectionSP selection)
         : KoShapeContainer(new KisShapeSelectionModel(image, selection, this))
         , m_image(image)
 {
+    Q_ASSERT( m_image );
     setShapeId("KisShapeSelection");
     setSelectable(false);
     m_dirty = false;
     m_canvas = new KisShapeSelectionCanvas();
     m_canvas->shapeManager()->add(this);
+
 }
 
 KisShapeSelection::~KisShapeSelection()
 {
+    delete m_canvas;
+}
+
+KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs)
+    : KoShapeContainer( rhs )
+{
+    m_dirty = rhs.m_dirty;
+    m_image = rhs.m_image;
+    m_canvas = new KisShapeSelectionCanvas();
+    m_canvas->shapeManager()->add( this );
+}
+
+KisSelectionComponent* KisShapeSelection::clone()
+{
+    return new KisShapeSelection( *this );
 }
 
 bool KisShapeSelection::loadOdf(const KoXmlElement&, KoShapeLoadingContext&)
@@ -102,6 +119,8 @@ void KisShapeSelection::paintComponent(QPainter& painter, const KoViewConverter&
 
 void KisShapeSelection::renderToProjection(KisSelection* projection)
 {
+    Q_ASSERT( projection );
+    Q_ASSERT( m_image );
     QMatrix resolutionMatrix;
     resolutionMatrix.scale(m_image->xRes(), m_image->yRes());
 
@@ -111,11 +130,15 @@ void KisShapeSelection::renderToProjection(KisSelection* projection)
 
 void KisShapeSelection::renderToProjection(KisSelection* projection, const QRect& r)
 {
+    Q_ASSERT( projection );
     renderSelection(projection, r);
 }
 
 void KisShapeSelection::renderSelection(KisSelection* projection, const QRect& r)
 {
+    Q_ASSERT( projection );
+    Q_ASSERT( m_image );
+
     QMatrix resolutionMatrix;
     resolutionMatrix.scale(m_image->xRes(), m_image->yRes());
 

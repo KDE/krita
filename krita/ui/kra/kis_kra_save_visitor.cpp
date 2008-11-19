@@ -93,7 +93,7 @@ bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
             }
         }
     }
-    visitAllInverse(layer);
+    bool result = visitAllInverse(layer);
     // XXX: save masks!
 
 //     if (layer->hasMask()) {
@@ -117,7 +117,7 @@ bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
 //    }
 
     m_count++;
-    return true;
+    return result;
 }
 
 bool KisKraSaveVisitor::visit(KisGroupLayer *layer)

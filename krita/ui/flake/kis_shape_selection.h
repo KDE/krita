@@ -41,7 +41,7 @@ public:
 
     virtual ~KisShapeSelection();
 
-    KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs);
+    KisShapeSelection(const KisShapeSelection& rhs);
 
     KisSelectionComponent* clone();
 

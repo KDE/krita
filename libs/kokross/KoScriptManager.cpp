@@ -91,11 +91,53 @@ class KoScriptManagerView : public Kross::ActionCollectionView
 
         virtual ~KoScriptManagerView() {}
 
+        Kross::ActionCollectionModel* model() const
+        {
+                return static_cast<Kross::ActionCollectionModel*>( Kross::ActionCollectionView::model() );
+        }
         virtual void slotAdd()
         {
-            KoScriptManagerAddWizard wizard(this);
+            Kross::ActionCollection *collection = model()->rootCollection();
+            if ( itemSelection().count() == 1 ) {
+                collection = Kross::ActionCollectionModel::collection( itemSelection().indexes().first() );
+            }
+            KoScriptManagerAddWizard wizard(this, collection );
             int result = wizard.exec();
             Q_UNUSED(result);
+        }
+        virtual void slotRemove()
+        {
+            if ( itemSelection().isEmpty() ) {
+                return;
+            }
+            // get the actions/collections, indexes will change when things are removed
+            QList<Kross::Action*> actions;
+            QList<Kross::ActionCollection*> collections;
+            foreach ( const QModelIndex &idx, itemSelection().indexes() ) {
+                Kross::Action *a =  model()->action( idx );
+                if ( a ) {
+                    actions << a;
+                } else {
+                    Kross::ActionCollection *c = model()->collection( idx );
+                    if ( c ) {
+                        collections << c;
+                    }
+                }
+            }
+            foreach ( Kross::Action *action, actions ) {
+                QModelIndex idx = model()->indexForAction( action );
+                if ( idx.isValid() ) {
+                    //kDebug(32010)<<"action:"<<action->name();
+                    delete action;
+                }
+            }
+            foreach ( Kross::ActionCollection *collection, collections ) {
+                QModelIndex idx = model()->indexForCollection( collection );
+                if ( idx.isValid() ) {
+                    //kDebug(32010)<<"collection:"<<collection->name();
+                    delete collection;
+                }
+            }
         }
 };
 

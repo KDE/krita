@@ -32,6 +32,7 @@ namespace Kross {
     //class Action;
     class ActionCollection;
     class ActionCollectionEditor;
+    class ActionCollectionModel;
     //class FormFileWidget;
 }
 
@@ -90,6 +91,7 @@ class KoScriptManagerAddFileWidget : public QWidget
         QString selectedFile() const;
     public Q_SLOTS:
         void slotUpdate();
+        void slotFileHighlighted(const QString &file);
     private:
         class Private;
         Private* const d;
@@ -127,8 +129,11 @@ class KoScriptManagerAddCollectionWidget : public QWidget
     public:
         explicit KoScriptManagerAddCollectionWidget(KoScriptManagerAddWizard* wizard);
         virtual ~KoScriptManagerAddCollectionWidget();
+
+        QString uniqueName() const;
     public Q_SLOTS:
         void slotUpdate();
+        bool accept();
     private:
         KoScriptManagerAddWizard* m_wizard;
         Kross::ActionCollectionEditor* m_editor;

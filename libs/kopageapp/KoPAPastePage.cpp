@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -125,7 +125,13 @@ bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStor
         }
     }
 
-    QUndoCommand * cmd = new QUndoCommand( i18np( "Paste Page", "Paste Pages", qMax( masterPages.size(), pages.size() ) ) );
+    QUndoCommand * cmd = 0;
+    if ( m_doc->pageType() == KoPageApp::Slide ) {
+        cmd = new QUndoCommand( i18np( "Paste Slide", "Paste Slides", qMax( masterPages.size(), pages.size() ) ) );
+    }
+    else {
+        cmd = new QUndoCommand( i18np( "Paste Page", "Paste Pages", qMax( masterPages.size(), pages.size() ) ) );
+    }
 
     foreach( KoPAPageBase * masterPage, masterPages )
     {

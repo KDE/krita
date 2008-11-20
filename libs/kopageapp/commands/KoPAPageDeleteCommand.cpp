@@ -33,7 +33,12 @@ KoPAPageDeleteCommand::KoPAPageDeleteCommand( KoPADocument *document, KoPAPageBa
 {
     Q_ASSERT( document );
     Q_ASSERT( page );
-    setText( i18n( "Delete page" ) );
+    if ( m_page->pageType() == KoPageApp::Slide ) {
+        setText( i18n( "Delete slide" ) );
+    }
+    else {
+        setText( i18n( "Delete page" ) );
+    }
 }
 
 KoPAPageDeleteCommand::~KoPAPageDeleteCommand()

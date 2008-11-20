@@ -284,9 +284,10 @@ bool KoScriptManagerAddCollectionWidget::accept()
 {
     kDebug(32010)<<"KoScriptManagerAddCollectionWidget::accept()";
     Q_ASSERT( m_wizard );
-
+#ifndef DISABLE_ADD_REMOVE
     m_editor->commit(); // take over changes done in the editor into the action collection
     m_editor->collection()->setParentCollection( m_wizard->m_collection );
+#endif
     //TODO select new item
     return true;
 }

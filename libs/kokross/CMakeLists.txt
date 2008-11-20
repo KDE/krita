@@ -1,8 +1,6 @@
 
-if(KDE_VERSION LESS "4.1.80")
-    add_definitions( -DDISABLE_ADD_REMOVE )
-    message(STATUS "KDE_VERSION: ${KDE_VERSION}  ScriptManager: add/remove will not be compiled")
-endif(KDE_VERSION LESS "4.1.80")
+#FIXME check for KDE version
+add_definitions( -DDISABLE_ADD_REMOVE )
 
 include_directories(${KDE4_KDECORE_INCLUDES} ${KDE4_KDEUI_INCLUDES} ${KOMAIN_INCLUDES})
 set(kokross_LIB_SRCS KoScriptingModule.cpp KoScriptingDocker.cpp KoScriptManager.cpp KoScriptManagerAdd.cpp KoScriptingPart.cpp KoScriptingOdf.cpp)

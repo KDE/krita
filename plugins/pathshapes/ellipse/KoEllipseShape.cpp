@@ -68,8 +68,10 @@ void KoEllipseShape::saveOdf( KoShapeSavingContext & context ) const
         default:
             context.xmlWriter().addAttribute( "draw:kind", "full" );
         }
-        context.xmlWriter().addAttribute( "draw:start-angle", m_startAngle );
-        context.xmlWriter().addAttribute( "draw:end-angle", m_endAngle );
+        if ( m_type != Arc || sweepAngle() != 360 ) {
+            context.xmlWriter().addAttribute( "draw:start-angle", m_startAngle );
+            context.xmlWriter().addAttribute( "draw:end-angle", m_endAngle );
+        }
         saveOdfCommonChildElements( context );
         context.xmlWriter().endElement();
     }

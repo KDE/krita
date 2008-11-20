@@ -103,7 +103,7 @@ bool KisPaintOpPreset::load()
     f.close();
     return true;
 
-    setName(m_d->settings->getString("name"));
+    //setName(m_d->settings->getString("name"));
 }
 
 bool KisPaintOpPreset::save()

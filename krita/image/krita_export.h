@@ -1,6 +1,7 @@
 /*
     This file is part of krita
     Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
+    Copyright (c) 2008 Thomas Zander <zander@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -57,5 +58,20 @@
 #define PAINTOP_EXPORT KDE_EXPORT
 
 #endif /* not windows */
+
+/* Now the same for Krita*_TEST_EXPORT, if compiling with unit tests enabled */
+#ifdef COMPILING_TESTS
+#if defined _WIN32 || defined _WIN64
+# if defined(MAKE_KRITAUI_LIB)
+#       define KRITAUI_TEST_EXPORT KDE_EXPORT
+#   else
+#       define KRITAUI_TEST_EXPORT KDE_IMPORT
+#   endif
+# else /* not windows */
+#   define KRITAUI_TEST_EXPORT KDE_EXPORT
+# endif
+#else /* not compiling tests */
+#   define KRITAUI_TEST_EXPORT
+#endif
 
 #endif /* KRITA_EXPORT_H */

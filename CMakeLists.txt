@@ -2,6 +2,11 @@ project(koffice)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
+if(KDE4_BUILD_TESTS)
+    # only with this definition will the FOO_TEST_EXPORT macro do something
+    add_definitions(-DCOMPILING_TESTS)
+endif(KDE4_BUILD_TESTS)
+
 # define the generic version of the KOffice libraries here
 # this makes it easy to advance it when the next KOffice release comes
 set(GENERIC_KOFFICE_LIB_VERSION "5.0.0")

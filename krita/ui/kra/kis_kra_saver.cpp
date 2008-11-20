@@ -56,6 +56,7 @@ KisKraSaver::KisKraSaver( KisDoc2* document )
 
 KisKraSaver::~KisKraSaver()
 {
+    delete m_d;
 }
 
 QDomElement KisKraSaver::saveXML( QDomDocument& doc,  KisImageSP img )

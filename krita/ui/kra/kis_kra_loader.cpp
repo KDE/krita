@@ -104,12 +104,14 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
         if ((m_d->imageName = element.attribute(NAME)).isNull())
             return KisImageSP(0);
 
-        if ((attr = element.attribute(WIDTH)).isNull())
+        if ((attr = element.attribute(WIDTH)).isNull()) {
             return KisImageSP(0);
+        }
         width = attr.toInt();
 
-        if ((attr = element.attribute(HEIGHT)).isNull())
+        if ((attr = element.attribute(HEIGHT)).isNull()) {
             return KisImageSP(0);
+        }
         height = attr.toInt();
 
         m_d->imageComment = element.attribute(DESCRIPTION);
@@ -224,6 +226,10 @@ KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageSP img, Ki
                     } else {
                         img->nextLayerName(); // Make sure the nameserver is current with the number of nodes.
                         img->addNode(node, parent);
+                        if ( node->inherits( "KisLayer" ) ) {
+                            loadNodes( child.toElement(), img, node );
+                        }
+
                     }
                 }
             }
@@ -239,34 +245,15 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP img)
     // ALWAYS define a default value in case the property is not
     // present in the layer definition: this helps a LOT with backward
     // compatibility.
-    QString attr;
-    QString name;
-    qint32 x;
-    qint32 y;
-    qint32 opacity;
-    bool visible;
-    bool locked;
 
-    KisNode* node = 0;
+    QString name = element.attribute(NAME, "No Name");
 
-    if ((name = element.attribute(NAME)).isNull())
-        return 0;
+    qint32 x = element.attribute(X, "0").toInt();
+    qint32 y = element.attribute(Y, "0").toInt();
 
-    if ((attr = element.attribute(X)).isNull())
-        return 0;
-    x = attr.toInt();
-
-    if ((attr = element.attribute(Y)).isNull())
-        return 0;
-
-    y = attr.toInt();
-
-    if ((attr = element.attribute(OPACITY)).isNull())
-        return 0;
-
-    if ((opacity = attr.toInt()) < 0 || opacity > quint8_MAX)
-        opacity = OPACITY_OPAQUE;
-
+    qint32 opacity = element.attribute(OPACITY, QString::number( OPACITY_OPAQUE ) ).toInt();
+    if ( opacity < OPACITY_TRANSPARENT ) opacity = OPACITY_TRANSPARENT;
+    if ( opacity > OPACITY_OPAQUE ) opacity = OPACITY_OPAQUE;
 
     const KoColorSpace* colorSpace = 0;
     if ( ( element.attribute( COLORSPACE_NAME ) ).isNull() )
@@ -277,19 +264,13 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP img)
 
     QString compositeOpName = element.attribute( COMPOSITE_OP );
 
-    if ((attr = element.attribute(VISIBLE)).isNull())
-        attr = "1";
-
-    visible = attr == "0" ? false : true;
-
-    if ((attr = element.attribute(LOCKED)).isNull())
-        attr = "0";
-
-    locked = attr == "0" ? false : true;
+    bool visible = element.attribute(VISIBLE, "1") == "0" ? false : true;
+    bool locked = element.attribute(LOCKED, "0") == "0" ? false : true;
 
     // Now find out the layer type and do specific handling
+    QString attr = element.attribute(LAYER_TYPE);
+    KisNode* node = 0;
 
-    attr = element.attribute(LAYER_TYPE);
     if (attr.isNull())
         node = loadPaintLayer(element, img, name, colorSpace, opacity);
 
@@ -324,7 +305,7 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP img)
         node = loadSelectionMask( img, element );
 
     Q_ASSERT( node );
-
+    qDebug() << "node " << name;
     node->setVisible( visible );
     node->setUserLocked( locked );
     node->setX( x );
@@ -370,7 +351,7 @@ KisNode* KisKraLoader::loadPaintLayer(const KoXmlElement& element, KisImageSP im
       }*/
     // TODO load metadata
 
-    return loadNodes(element, img, layer);
+    return layer;
 
 }
 
@@ -383,7 +364,7 @@ KisNode* KisKraLoader::loadGroupLayer(const KoXmlElement& element, KisImageSP im
     layer = new KisGroupLayer(img, name, opacity);
     Q_CHECK_PTR(layer);
 
-    return loadNodes(element, img, layer);
+    return layer;
 
 }
 
@@ -416,7 +397,7 @@ KisNode* KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImage
 
     layer->setOpacity( opacity );
 
-    return loadNodes(element, img, layer);
+    return layer;
 
 }
 
@@ -429,7 +410,7 @@ KisNode* KisKraLoader::loadShapeLayer(const KoXmlElement& element, KisImageSP im
     KisShapeLayer* layer = new KisShapeLayer(0, img, name, opacity);
     Q_CHECK_PTR(layer);
 
-    return loadNodes(element, img, layer);
+    return layer;
 
 }
 
@@ -461,7 +442,7 @@ KisNode* KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImageS
 
     layer->setOpacity( opacity );
 
-    return loadNodes(element, img, layer);
+    return layer;
 
 }
 

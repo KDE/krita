@@ -194,14 +194,14 @@ bool KisSaveXmlVisitor::visit(KisSelectionMask *mask)
 void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, const KisLayer * layer)
 {
     // XXX: save the channeflags!
-
-    el.setAttribute(NAME, layer->KisBaseNode::name());
+    qDebug() << "saving layer " << layerType << ", " << layer->name();
+    el.setAttribute(NAME, layer->name());
     el.setAttribute(OPACITY, layer->opacity());
     el.setAttribute(COMPOSITE_OP, layer->compositeOp()->id());
     el.setAttribute(VISIBLE, layer->visible());
     el.setAttribute(LOCKED, layer->userLocked());
     el.setAttribute(LAYER_TYPE, layerType);
-    el.setAttribute(FILE_NAME, LAYER + m_count);
+    el.setAttribute(FILE_NAME, LAYER + QString::number( m_count ) );
     el.setAttribute(X, layer->x());
     el.setAttribute(Y, layer->y());
 
@@ -209,11 +209,12 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
 
 void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, const KisMask * mask)
 {
-    el.setAttribute(NAME, mask->KisBaseNode::name());
+    qDebug() << "saving mask " << maskType << ", " << mask->name();
+    el.setAttribute(NAME, mask->name());
     el.setAttribute(VISIBLE, mask->visible());
     el.setAttribute(LOCKED, mask->userLocked());
     el.setAttribute(MASK_TYPE, maskType);
-    el.setAttribute(FILE_NAME, MASK + m_count);
+    el.setAttribute(FILE_NAME, MASK + QString::number( m_count) );
     el.setAttribute(X, mask->x());
     el.setAttribute(Y, mask->y());
 }

@@ -150,21 +150,27 @@ void KisKraSaverTest::testRoundTrip()
     image->addNode( filterMask2, paintLayer2 );
 
     KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask();
+    transparencyMask1->setName( "transparencyMask1" );
     image->addNode( transparencyMask1, group1 );
 
     KisTransparencyMaskSP transparencyMask2 = new KisTransparencyMask();
+    transparencyMask2->setName( "transparencyMask2" );
     image->addNode( transparencyMask2, group2 );
 
     KisTransformationMaskSP transformationMask1 = new KisTransformationMask();
+    transformationMask1->setName( "transformationMask1" );
     image->addNode( transformationMask1, cloneLayer1 );
 
     KisTransformationMaskSP transformationMask2 = new KisTransformationMask();
+    transformationMask2->setName( "transformationMask2" );
     image->addNode( transformationMask2, adjustmentLayer2 );
 
     KisSelectionMaskSP selectionMask1 = new KisSelectionMask(image);
+    selectionMask1->setName( "selectionMask1" );
     image->addNode( paintLayer1, selectionMask1 );
 
     KisSelectionMaskSP selectionMask2 = new KisSelectionMask(image);
+    selectionMask2->setName( "selectionMask2" );
     image->addNode( paintLayer2, selectionMask2 );
 
     doc.saveNativeFormat( "roundtriptest.kra" );

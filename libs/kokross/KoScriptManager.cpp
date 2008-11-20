@@ -95,6 +95,7 @@ class KoScriptManagerView : public Kross::ActionCollectionView
         {
                 return static_cast<Kross::ActionCollectionModel*>( Kross::ActionCollectionView::model() );
         }
+#ifndef DISABLE_ADD_REMOVE
         virtual void slotAdd()
         {
             Kross::ActionCollection *collection = model()->rootCollection();
@@ -139,6 +140,7 @@ class KoScriptManagerView : public Kross::ActionCollectionView
                 }
             }
         }
+#endif
 };
 
 /// \internal d-pointer class.

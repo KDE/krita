@@ -20,6 +20,7 @@ target_link_libraries(
     kostore
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KIO_LIBS}
+    ${KDE4_KFILE_LIBRARY}
     ${QT_QTCORE_LIBRARY}
     )
 install(TARGETS pictureshape DESTINATION ${PLUGIN_INSTALL_DIR})

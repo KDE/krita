@@ -150,18 +150,34 @@ QGradient* KoStopGradient::toQGradient() const
 
 void KoStopGradient::colorAt(KoColor& dst, qreal t) const
 {
-    QList<KoGradientStop>::const_iterator iter = m_stops.begin();
-    while( (iter != m_stops.end() || (iter+1) != m_stops.end()) && ( t > (iter+1)->first + DBL_EPSILON))
-        iter++;
-
-    if(iter == m_stops.end() || (iter+1) == m_stops.end()) {
+    if( ! m_stops.count() )
+        return;
+    if( t <= m_stops.first().first || m_stops.count() == 1 ) {
+        // we have only one stop or t is before the first stop
+        // -> use the color of the first stop
+        dst.fromKoColor(m_stops.first().second);
+    }
+    else if( t >= m_stops.last().first ) {
+        // t is after the last stop
+        // -> use the color of the last stop
         dst.fromKoColor(m_stops.last().second);
     }
     else {
+        // we have at least two color stops
+        // -> find the two stops which frame our t
+        QList<KoGradientStop>::const_iterator stop = m_stops.begin();
+        QList<KoGradientStop>::const_iterator lastStop = m_stops.end();
+        // we already checked the first stop, so we start at the second
+        for( ++stop; stop != lastStop; ++stop ) {
+            // we break at the stop which is just after our t
+            if( stop->first > t )
+                break;
+        }
+
         KoColor buffer(colorSpace());
 
-        KoGradientStop leftStop = *iter;
-        KoGradientStop rightStop = *(iter+1);
+        KoGradientStop leftStop = *(stop-1);
+        KoGradientStop rightStop = *(stop);
 
         const quint8 *colors[2];
         colors[0] = leftStop.second.data();

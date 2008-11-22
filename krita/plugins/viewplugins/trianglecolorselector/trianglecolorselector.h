@@ -32,10 +32,6 @@ public:
     TriangleColorSelectorPlugin(QObject *parent, const QStringList &);
     virtual ~TriangleColorSelectorPlugin();
 
-private:
-
-    KisView2 * m_view;
-
 };
 
 #endif // TriangleColorSelectorPlugin_H

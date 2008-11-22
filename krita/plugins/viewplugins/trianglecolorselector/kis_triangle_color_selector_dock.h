@@ -19,22 +19,25 @@
 #define _KIS_TRIANGLE_COLOR_SELECTOR_DOCK_H_
 
 #include <QDockWidget>
+#include <KoCanvasObserver.h>
 
 class KoColor;
-class KisView2;
 class KoTriangleColorSelector;
 
-class KisTriangleColorSelectorDock : public QDockWidget
+class KisTriangleColorSelectorDock : public QDockWidget, public KoCanvasObserver
 {
     Q_OBJECT
 public:
-    KisTriangleColorSelectorDock(KisView2 *view);
+    KisTriangleColorSelectorDock();
+
+    /// reimplemented from KoCanvasObserver
+    virtual void setCanvas(KoCanvasBase *canvas);
 public slots:
     void colorChangedProxy(const QColor&);
-    void setColorProxy(const KoColor&);
+    void resourceChanged(int, const QVariant&);
 private:
     KoTriangleColorSelector* m_colorSelector;
-    KisView2* m_view;
+    KoCanvasBase* m_canvas;
 };
 
 

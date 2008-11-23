@@ -867,8 +867,8 @@ void KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrategy* st
     strategy->merge(newLayer->metaData(), srcs, scores);
 
     removeNode(layer->prevSibling());
-    addNode(newLayer, layer->parent(), layer.data());
-    removeNode(layer.data());
+    removeNode(layer);
+    addNode(newLayer, layer->parent());
 
     undoAdapter()->endMacro();
 }

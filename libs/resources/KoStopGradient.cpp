@@ -63,6 +63,8 @@ bool KoStopGradient::load()
     if(m_stops.count() >= 2)
         setValid(true);
 
+    updatePreview();
+
     return true;
 }
 
@@ -287,7 +289,6 @@ void KoStopGradient::loadSvgGradient(QFile* file)
 
             if( e.tagName() == "linearGradient" || e.tagName() == "radialGradient" ) {
                 parseSvgGradient(e);
-                updatePreview();
                 return;
             }
             // Inkscape gradients are in another defs
@@ -300,7 +301,6 @@ void KoStopGradient::loadSvgGradient(QFile* file)
 
                     if( defelement.tagName() == "linearGradient" || defelement.tagName() == "radialGradient" ) {
                         parseSvgGradient(defelement);
-                        updatePreview();
                         return;
                     }
                 }

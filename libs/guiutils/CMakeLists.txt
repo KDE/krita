@@ -65,6 +65,8 @@ set(koguiutils_LIB_SRCS
     KoPageLayoutDialog.cpp
     KoPageLayoutWidget.cpp
     KoPagePreviewWidget.cpp
+    KoResourceSelector.cpp
+    KoColorComboBox.cpp
 )
 
 kde4_add_ui_files( koguiutils_LIB_SRCS

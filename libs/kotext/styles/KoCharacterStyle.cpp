@@ -170,8 +170,8 @@ void KoCharacterStyle::applyStyle(QTextBlock &block) const
     QTextCharFormat cf;
     cursor.setPosition(block.position() + block.length() - 1, QTextCursor::KeepAnchor);
     applyStyle(cf);
-    cursor.setCharFormat(cf);
-    cursor.setBlockCharFormat(cf);
+    cursor.mergeCharFormat(cf);
+    cursor.mergeBlockCharFormat(cf);
 }
 
 void KoCharacterStyle::applyStyle(QTextCursor *selection) const

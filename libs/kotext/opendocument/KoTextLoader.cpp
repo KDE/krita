@@ -55,6 +55,7 @@
 #include "styles/KoListLevelProperties.h"
 #include "KoTextSharedLoadingData.h"
 #include "KoTextDocument.h"
+#include "KoTextDebug.h"
 #include "KoList.h"
 
 // KDE + Qt includes
@@ -161,15 +162,16 @@ KoTextLoader::~KoTextLoader()
 
 void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
 {
-    kDebug(32500) << "";
-
     const QTextDocument *document = cursor.block().document();
     d->styleManager = KoTextDocument(document).styleManager();
 
+    kDebug(32500) << "text-style:" << KoTextDebug::textAttributes( cursor.blockCharFormat() );
+#if 0
     if ((document->isEmpty()) && (d->styleManager)) {
         QTextBlock block = cursor.block();
         d->styleManager->defaultParagraphStyle()->applyStyle(block);
     }
+#endif
 
     startBody(KoXml::childNodesCount(bodyElem));
     KoXmlElement tag;
@@ -305,6 +307,7 @@ void KoTextLoader::loadParagraph(const KoXmlElement& element, QTextCursor& curso
         if (!styleName.isEmpty())
             kWarning(32500) << "paragraph style " << styleName << "not found - using default style";
         paragraphStyle = d->styleManager->defaultParagraphStyle();
+        kWarning(32500) << "defaultParagraphStyle not found - using default style";
     }
 
     if (paragraphStyle) {
@@ -314,6 +317,8 @@ void KoTextLoader::loadParagraph(const KoXmlElement& element, QTextCursor& curso
     } else {
         kWarning(32500) << "paragraph style " << styleName << " not found";
     }
+
+    kDebug(32500) << "text-style:" << KoTextDebug::textAttributes( cursor.blockCharFormat() );
 
     QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
 
@@ -352,6 +357,8 @@ void KoTextLoader::loadHeading(const KoXmlElement& element, QTextCursor& cursor)
             list->applyStyle(block, outlineStyle, level);
         }
     }
+
+    kDebug(32500) << "text-style:" << KoTextDebug::textAttributes( cursor.blockCharFormat() );
 
     QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
 
@@ -454,6 +461,7 @@ void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
             c.setBlockFormat(blockFormat);
             d->currentList->add(c.block(), level);
         }
+        kDebug(32500) << "text-style:" << KoTextDebug::textAttributes( cursor.blockCharFormat() );
     }
 
     if (numberedParagraph || --d->currentListLevel == 1) {
@@ -518,6 +526,7 @@ static QString normalizeWhitespace(const QString& in, bool leadingSpace)
 
 void KoTextLoader::loadSpan(const KoXmlElement& element, QTextCursor& cursor, bool *stripLeadingSpace)
 {
+    kDebug(32500) << "text-style:" << KoTextDebug::textAttributes( cursor.blockCharFormat() );
     Q_ASSERT(stripLeadingSpace);
     if (d->loadSpanLevel++ == 0)
         d->loadSpanInitialPos = cursor.position();

@@ -830,9 +830,9 @@ void KisImage::flatten()
 
 void KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrategy* strategy)
 {
-    if (!layer->nextSibling()) return;
+    if (!layer->prevSibling()) return;
     // XXX: this breaks if we allow free mixing of masks and layers
-    KisLayerSP layer2 = dynamic_cast<KisLayer*>(layer->nextSibling().data());
+    KisLayerSP layer2 = dynamic_cast<KisLayer*>(layer->prevSibling().data());
     if (!layer2) return;
 
     KisPaintLayerSP newLayer = new KisPaintLayer(this, layer->name(), OPACITY_OPAQUE, colorSpace());
@@ -840,9 +840,9 @@ void KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrategy* st
 
 
     QRect layerExtent = layer->extent();
-    QRect layerNextSiblingExtent = layer->nextSibling()->extent();
+    QRect layerPrevSiblingExtent = layer->prevSibling()->extent();
 
-    QRect rc = layerExtent | layerNextSiblingExtent;
+    QRect rc = layerExtent | layerPrevSiblingExtent;
 
     undoAdapter()->beginMacro(i18n("Merge with Layer Below"));
 
@@ -856,17 +856,17 @@ void KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrategy* st
 
     // Merge meta data
     QList<const KisMetaData::Store*> srcs;
-    srcs.append(static_cast<KisLayer*>(layer->nextSibling().data())->metaData());
+    srcs.append(static_cast<KisLayer*>(layer->prevSibling().data())->metaData());
     srcs.append(layer->metaData());
     QList<double> scores;
-    int layerNextSiblingArea = layerNextSiblingExtent.width() * layerNextSiblingExtent.height();
+    int layerPrevSiblingArea = layerPrevSiblingExtent.width() * layerPrevSiblingExtent.height();
     int layerArea = layerExtent.width() * layerExtent.height();
-    double norm = qMax(layerNextSiblingArea, layerArea);
-    scores.append(layerNextSiblingArea / norm);
+    double norm = qMax(layerPrevSiblingArea, layerArea);
+    scores.append(layerPrevSiblingArea / norm);
     scores.append(layerArea / norm);
     strategy->merge(newLayer->metaData(), srcs, scores);
 
-    removeNode(layer->nextSibling());
+    removeNode(layer->prevSibling());
     addNode(newLayer, layer->parent(), layer.data());
     removeNode(layer.data());
 

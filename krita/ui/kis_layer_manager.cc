@@ -259,7 +259,7 @@ void KisLayerManager::updateGUI()
 
     // XXX these should be named layer instead of img
     m_imgFlatten->setEnabled(nlayers > 1);
-    m_imgMergeLayer->setEnabled(nlayers > 1 && layer && layer->nextSibling());
+    m_imgMergeLayer->setEnabled(nlayers > 1 && layer && layer->prevSibling());
 
 
     // XXX: Check whether the colorspace was really changed

@@ -32,3 +32,5 @@ QString KisPaintOpFactory::pixmap()
 {
     return "";
 }
+
+#include "kis_paintop_factory.moc"

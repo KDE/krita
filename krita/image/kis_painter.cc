@@ -100,13 +100,13 @@ struct KisPainter::Private {
 };
 
 KisPainter::KisPainter()
-        : d(new Private)
+    : d(new Private)
 {
     init();
 }
 
 KisPainter::KisPainter(KisPaintDeviceSP device)
-        : d(new Private)
+    : d(new Private)
 {
     init();
     Q_ASSERT(device);
@@ -114,7 +114,7 @@ KisPainter::KisPainter(KisPaintDeviceSP device)
 }
 
 KisPainter::KisPainter(KisPaintDeviceSP device, KisSelectionSP selection)
-        : d(new Private)
+    : d(new Private)
 {
     init();
     Q_ASSERT(device);
@@ -1205,7 +1205,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
     KoColor col2(c1);
 
     float grada, gradb, dxa, dxb, dya, dyb, adya, adyb, fraca, fracb,
-    xfa, yfa, xfb, yfb, b1a, b2a, b1b, b2b, dx, dy;
+        xfa, yfa, xfb, yfb, b1a, b2a, b1b, b2b, dx, dy;
     int x, y, ix1, ix2, iy1, iy2;
 
     KoColor pix;
@@ -1578,9 +1578,9 @@ KisPattern * KisPainter::pattern() const
 void KisPainter::setPaintColor(const KoColor& color)
 {
     d->paintColor = color;
-    if( d->device )
+    if ( d->device )
     {
-      d->paintColor.convertTo( d->device->colorSpace() );
+        d->paintColor.convertTo( d->device->colorSpace() );
     }
 }
 
@@ -1592,9 +1592,9 @@ KoColor KisPainter::paintColor() const
 void KisPainter::setBackgroundColor(const KoColor& color)
 {
     d->backgroundColor = color;
-    if( d->device )
+    if ( d->device )
     {
-      d->backgroundColor.convertTo( d->device->colorSpace() );
+        d->backgroundColor.convertTo( d->device->colorSpace() );
     }
 }
 

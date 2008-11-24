@@ -35,6 +35,7 @@
 #include "kis_paint_layer.h"
 #include "kis_selection.h"
 #include "kis_shape_layer.h"
+#include "kis_clone_layer.h"
 
 using namespace KRA;
 
@@ -65,7 +66,7 @@ bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
         result = shapeLayer->saveOdf(m_store);
         m_store->popDirectory();
     }
-    return result;
+    return result || visitAllInverse(layer);;
 }
 
 bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
@@ -93,31 +94,8 @@ bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
             }
         }
     }
-    bool result = visitAllInverse(layer);
-    // XXX: save masks!
-
-//     if (layer->hasMask()) {
-//         KisPaintDeviceSP mask = layer->getMask();
-
-//         if (mask) {
-//             // save layer profile
-//             location = m_external ? QString::null : m_uri;
-//             location += m_img->name() + QString("/layers/layer%1").arg(m_count) + ".mask";
-
-//             if (m_store->open(location)) {
-//                 if (!mask->write(m_store)) {
-//                     mask->disconnect();
-//                     m_store->close();
-//                     return false;
-//                 }
-
-//                 m_store->close();
-//             }
-//         }
-//    }
-
     m_count++;
-    return result;
+    return visitAllInverse(layer);
 }
 
 bool KisKraSaveVisitor::visit(KisGroupLayer *layer)
@@ -140,7 +118,7 @@ bool KisKraSaveVisitor::visit(KisAdjustmentLayer* layer)
         }
     }
     m_count++;
-    return true;
+    return visitAllInverse(layer);
 }
 
 bool KisKraSaveVisitor::visit(KisGeneratorLayer * layer)
@@ -180,13 +158,13 @@ bool KisKraSaveVisitor::visit(KisGeneratorLayer * layer)
         }
     }
     m_count++;
-    return true;
+    return visitAllInverse(layer);
 }
 
 bool KisKraSaveVisitor::visit(KisCloneLayer *layer)
 {
     Q_UNUSED(layer);
-    return true;
+    return visitAllInverse(layer);
 }
 
 bool KisKraSaveVisitor::visit(KisFilterMask *mask)

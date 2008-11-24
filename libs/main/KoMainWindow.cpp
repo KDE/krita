@@ -405,7 +405,7 @@ KoMainWindow::~KoMainWindow()
     d->m_manager->setActivePart(0);
 
     if (d->m_rootViews.findRef(d->m_activeView) == -1) {
-        delete d->m_activeView;
+        d->m_activeView->deleteLater();
         d->m_activeView = 0L;
     }
     d->m_rootViews.setAutoDelete(true);

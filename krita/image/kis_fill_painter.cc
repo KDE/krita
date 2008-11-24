@@ -220,12 +220,17 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled)
         return;
     }
 
-    QRect rc = m_fillSelection->selectedExactRect();
+//  TODO: filling using the correct bound of the selection would be better, *but*
+//  the selection is limited to the exact bound of a layer, while in reality, we don't
+//  want that, since we want a transparent layer to be completely filled
+//     QRect rc = m_fillSelection->selectedExactRect();
 
     // Sets dirty!
-    bltSelection(rc.x(), rc.y(), compositeOp(), filled, m_fillSelection, opacity(),
-                 rc.x(), rc.y(), rc.width(), rc.height());
+//     bltSelection(rc.x(), rc.y(), compositeOp(), filled, m_fillSelection, opacity(),
+//                  rc.x(), rc.y(), rc.width(), rc.height());
 
+    bltSelection(0, 0, compositeOp(), filled, m_fillSelection, opacity(), 0, 0, m_width, m_height);
+    
     if (progressUpdater()) progressUpdater()->setProgress(100);
 
     m_width = m_height = -1;
@@ -242,7 +247,6 @@ typedef enum { None = 0, Added = 1, Checked = 2 } Status;
 
 KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisPaintDeviceSP projection)
 {
-
     if (m_width < 0 || m_height < 0) {
         if (selection() && m_careForSelection) {
             QRect rc = selection()->selectedExactRect();
@@ -250,6 +254,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
             m_height = rc.height() - (startY - rc.y());
         }
     }
+    dbgImage << "Width: " << m_width << " Height: " << m_height;
     // Otherwise the width and height should have been set
     Q_ASSERT(m_width > 0 && m_height > 0);
 

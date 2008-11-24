@@ -395,7 +395,6 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
                               qint32 sx, qint32 sy,
                               qint32 sw, qint32 sh)
 {
-
     if (sw == 0 || sh == 0) return;
     if (srcdev.isNull()) return;
 
@@ -403,9 +402,10 @@ void KisPainter::bltSelection(qint32 dx, qint32 dy,
 
     if (d->device.isNull()) return;
 
-    if (selMask->isProbablyTotallyUnselected(QRect(dx, dy, sw, sh))) {
-        return;
-    }
+// This is an optimization that break the fill painter
+//     if (selMask->isProbablyTotallyUnselected(QRect(dx, dy, sw, sh))) {
+//         return;
+//     }
     QRect srcRect = QRect(sx, sy, sw, sh);
     srcRect &= srcdev->exactBounds();
     if (srcRect.isEmpty()) {
@@ -1578,6 +1578,10 @@ KisPattern * KisPainter::pattern() const
 void KisPainter::setPaintColor(const KoColor& color)
 {
     d->paintColor = color;
+    if( d->device )
+    {
+      d->paintColor.convertTo( d->device->colorSpace() );
+    }
 }
 
 KoColor KisPainter::paintColor() const
@@ -1588,6 +1592,10 @@ KoColor KisPainter::paintColor() const
 void KisPainter::setBackgroundColor(const KoColor& color)
 {
     d->backgroundColor = color;
+    if( d->device )
+    {
+      d->backgroundColor.convertTo( d->device->colorSpace() );
+    }
 }
 
 KoColor KisPainter::backgroundColor() const

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,11 +30,18 @@
 #include "styles/KoParagraphStyle.h"
 #include "KoList.h"
 
+
 const QUrl KoTextDocument::StyleManagerURL = QUrl("kotext://stylemanager");
 const QUrl KoTextDocument::ListsURL = QUrl("kotext://lists");
+#ifdef CHANGETRK
+ const QUrl KoTextDocument::ChangeTrackerURL = QUrl("kotext://changetracker");
+#endif
 
 KoTextDocument::KoTextDocument(QTextDocument *document)
 : m_document(document)
+#ifdef CHANGETRK
+  ,m_changeTrackerAssigned(false)
+#endif
 {
     Q_ASSERT(m_document);
 }
@@ -65,6 +73,27 @@ KoStyleManager *KoTextDocument::styleManager() const
     QVariant resource = m_document->resource(KoTextDocument::StyleManager, StyleManagerURL);
     return resource.value<KoStyleManager *>();
 }
+
+#ifdef CHANGETRK
+void KoTextDocument::setChangeTracker(KoChangeTracker *changeTracker)
+{
+    QVariant v;
+    v.setValue(changeTracker);
+    m_document->addResource(KoTextDocument::ChangeTrackerRessource, ChangeTrackerURL, v);
+    m_changeTrackerAssigned = true;
+}
+
+KoChangeTracker *KoTextDocument::changeTracker() const
+{
+    QVariant resource = m_document->resource(KoTextDocument::ChangeTrackerRessource, ChangeTrackerURL);
+    return resource.value<KoChangeTracker *>();
+}
+
+bool KoTextDocument::changeTrackerAssigned()
+{
+    return m_changeTrackerAssigned;
+}
+#endif
 
 void KoTextDocument::setLists(const QList<KoList *> &lists)
 {

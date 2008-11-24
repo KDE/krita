@@ -25,6 +25,14 @@ set(koodf_LIB_SRCS
     KoStyleStack.cpp
 )
 
+if(CHANGETRK)
+  set(koodf_LIB_SRCS ${koodf_LIB_SRCS}
+    KoGenChange.cpp
+    KoGenChanges.cpp
+  )
+endif(CHANGETRK)
+
+
 kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})
 
 target_link_libraries(koodf kostore)
@@ -53,4 +61,11 @@ install( FILES
     KoOdfWriteStore.h
     KoStyleStack.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+
+if(CHANGETRK)
+  install( FILES ${FILES}
+    KoGenChange.h
+    KoGenChanges.h
+DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+endif(CHANGETRK)
 

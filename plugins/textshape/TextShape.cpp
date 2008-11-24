@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -70,6 +71,10 @@ struct Finalizer {
 #include <QAbstractTextDocumentLayout>
 #include <kdebug.h>
 
+#ifdef CHANGETRK
+  #include <KoChangeTracker.h>
+#endif
+
 
 TextShape::TextShape()
         : KoShapeContainer(new KoTextShapeContainerModel())
@@ -84,7 +89,7 @@ TextShape::TextShape()
     lay->setLayout(new Layout(lay));
     lay->addShape(this);
     m_textShapeData->document()->setDocumentLayout(lay);
-
+    
     lay->setInlineObjectTextManager(new KoInlineTextObjectManager(lay));
     setCollisionDetection(true);
 
@@ -254,7 +259,11 @@ void TextShape::saveOdf(KoShapeSavingContext & context) const
     writer.startElement("draw:frame");
     saveOdfAttributes(context, OdfAllAttributes);
     writer.startElement("draw:text-box");
+#ifdef CHANGETRK
+    m_textShapeData->saveOdf(dynamic_cast<KoTextShapeSavingContext &>(context));
+#else
     m_textShapeData->saveOdf(context);
+#endif
     writer.endElement(); // draw:text-box
     saveOdfCommonChildElements(context);
     writer.endElement(); // draw:frame
@@ -301,6 +310,13 @@ void TextShape::init(const QMap<QString, KoDataCenter *> & dataCenterMap)
 {
     KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(dataCenterMap["StyleManager"]);
     KoTextDocument(m_textShapeData->document()).setStyleManager(styleManager);
+#ifdef CHANGETRK
+    if ( !KoTextDocument(m_textShapeData->document()).changeTrackerAssigned())
+    {
+	KoChangeTracker *changeTracker = new KoChangeTracker();
+      KoTextDocument(m_textShapeData->document()).setChangeTracker(changeTracker);
+    }
+#endif
 }
 
 QTextDocument *TextShape::footnoteDocument()

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -41,8 +42,15 @@ void ChangeTracker::setDocument(QTextDocument * document)
         connect(m_document, SIGNAL(contentsChange(int, int, int)), this, SLOT(contentsChange(int, int, int)));
 }
 
+int ChangeTracker::getChangeId(QString title, int existingChangeId)
+{
+    kDebug(32500) << "ChangeTracker::changeId :" << m_changeId;
+    return m_changeId++;
+}
+
 void ChangeTracker::contentsChange(int from, int charsRemoves, int charsAdded)
 {
+/*
     if (! m_enableSignals) return;
     m_enableSignals = false;
     kDebug(32500) << "ChangeTracker::contentsChange" << from << "," << charsRemoves << "," << charsAdded;
@@ -74,6 +82,7 @@ void ChangeTracker::contentsChange(int from, int charsRemoves, int charsAdded)
 
     m_enableSignals = true;
     m_reverseUndo = false;
+*/
 }
 
 void ChangeTracker::notifyForUndo()

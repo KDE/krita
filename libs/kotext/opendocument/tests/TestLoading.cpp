@@ -58,12 +58,6 @@
 #include <KoTextSharedLoadingData.h>
 #include <KoTextDocument.h>
 
-#ifdef CHANGETRK
- #include <KoTextShapeSavingContext.h>
- #include <KoGenChanges.h>
- #include <KoChangeTracker.h>
-#endif
-
 typedef KoText::Tab KoTextTab;
 // because in a QtScript, I don't seem to be able to use a namespaced type
 
@@ -756,19 +750,11 @@ QString TestLoading::documentToOdt(QTextDocument *document)
     KoXmlWriter xmlWriter(&contentTmpFile, 1);
 
     KoGenStyles mainStyles;
-#ifdef CHANGETRK
-    KoGenChanges changes;
-#endif
     KoEmbeddedDocumentSaver embeddedSaver;
-    
-#ifdef CHANGETRK
-    KoTextShapeSavingContext context(xmlWriter, mainStyles, embeddedSaver, changes);
-#else
     KoShapeSavingContext context(xmlWriter, mainStyles, embeddedSaver);
 
     xmlWriter.startElement("office:body");
     xmlWriter.startElement("office:text");
-#endif
 
     KoTextShapeData *textShapeData = new KoTextShapeData;
     textShapeData->setDocument(document, false /* ownership */);
@@ -779,37 +765,16 @@ QString TestLoading::documentToOdt(QTextDocument *document)
         layout->setInlineObjectTextManager(new KoInlineTextObjectManager(layout)); // required while saving
         KoStyleManager *styleManager = new KoStyleManager;
         KoTextDocument(textShapeData->document()).setStyleManager(styleManager);
-#ifdef CHANGETRK
-	KoChangeTracker* changeTracker = new KoChangeTracker;
-	KoTextDocument(textShapeData->document()).setChangeTracker(changeTracker);
-#endif
     }
     textShapeData->saveOdf(context);
 
-#ifdef CHANGETRK
-//   
-#else
     xmlWriter.endElement(); // office:text
     xmlWriter.endElement(); // office:body
-#endif
 
     contentTmpFile.close();
 
     mainStyles.saveOdfAutomaticStyles(contentWriter, false);
-    
-#ifdef CHANGETRK
-    contentWriter->startElement("office:body");
-    contentWriter->startElement("office:text");
-    
-//    changes.saveOdfChanges(contentWriter, false);
-#endif
-    
     contentWriter->addCompleteElement(&contentTmpFile);
-
-#ifdef CHANGETRK
-    contentWriter->endElement(); //office text
-    contentWriter->endElement(); //office body
-#endif
 
     contentWriter->endElement(); // root element
     contentWriter->endDocument();

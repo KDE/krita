@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
- * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_koffice@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,10 +24,6 @@
 #include <QUrl>
 
 #include "KoList.h"
-
-#ifdef CHANGETRK
- #include "changetracker/KoChangeTracker.h"
-#endif
 
 class KoStyleManager;
 
@@ -59,17 +54,6 @@ public:
     /// Returns the style manager
     KoStyleManager *styleManager() const;
 
-#ifdef CHANGETRK
-    /// Sets the change tracker of the document
-    void setChangeTracker(KoChangeTracker *changeTracker);
-    
-    ///Returns the change tracker of the document
-    KoChangeTracker *changeTracker() const;
-    
-    ///Returns true if a changeTracker is already assigned to the document
-    bool changeTrackerAssigned();
-#endif
-
     /// Sets the lists of the document
     void setLists(const QList<KoList *> &lists);
 
@@ -98,21 +82,12 @@ public:
     enum ResourceType {
         StyleManager = QTextDocument::UserResource,
         Lists
-#ifdef CHANGETRK
-	,ChangeTrackerRessource = QTextDocument::UserResource
-#endif
     };
     static const QUrl StyleManagerURL;
     static const QUrl ListsURL;
-#ifdef CHANGETRK
-    static const QUrl ChangeTrackerURL;
-#endif
 
 private:
     QTextDocument *m_document;
-#ifdef CHANGETRK
-    bool m_changeTrackerAssigned;
-#endif
 };
 
 #endif // KOTEXTDOCUMENT_H

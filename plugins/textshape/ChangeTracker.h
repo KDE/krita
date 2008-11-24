@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,8 +31,6 @@ public:
     ChangeTracker(TextTool *parent);
 
     void setDocument(QTextDocument * document);
-    
-    int getChangeId(QString title, int existingChangeId);
 
     void notifyForUndo();
 
@@ -44,7 +41,6 @@ private:
     QTextDocument *m_document;
     TextTool *m_tool;
     bool m_enableSignals, m_reverseUndo;
-    int m_changeId;
 };
 
 #endif

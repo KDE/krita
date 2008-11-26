@@ -52,10 +52,7 @@ RulerAssistantViewPlugin::RulerAssistantViewPlugin(QObject *parent, const QStrin
 
         setXMLFile(KStandardDirs::locate("data","kritaplugins/rulerassistantview.rc"), true);
 
-        RulerAssistant* ra = new RulerAssistant;
-        KisPaintingAssistant::setCurrentAssistant( ra );
-
-        RulerDecoration* hbd = new RulerDecoration( m_view, ra->ruler() );
+        RulerDecoration* hbd = new RulerDecoration( m_view, 0 );
         m_view->canvasBase()->addDecoration( hbd );
         KAction *action  = new KAction(i18n("&Show ruler assistant"), this);
         actionCollection()->addAction("ShowRulerAssitantDecoration", action );
@@ -67,11 +64,6 @@ RulerAssistantViewPlugin::RulerAssistantViewPlugin(QObject *parent, const QStrin
 RulerAssistantViewPlugin::~RulerAssistantViewPlugin()
 {
     m_view = 0;
-}
-
-void RulerAssistantViewPlugin::slotMyAction()
-{
-  // TODO: implement your action there ! go go go !
 }
 
 #include "rulerassistantview.moc"

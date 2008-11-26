@@ -32,10 +32,6 @@ public:
     RulerAssistantViewPlugin(QObject *parent, const QStringList &);
     virtual ~RulerAssistantViewPlugin();
 
-private slots:
-
-    void slotMyAction();
-
 private:
 
     KisView2 * m_view;

@@ -50,8 +50,18 @@ void KisRulerAssistantTool::activate(bool )
 {
     // Add code here to initialize your tool when it got activated
     KisTool::activate();
+    
+    RulerAssistant* ra = dynamic_cast<RulerAssistant*>( KisPaintingAssistant::currentAssistant() );
+    
+    if( !ra )
+    {
+      ra = new RulerAssistant();
+      KisPaintingAssistant::setCurrentAssistant( ra );
+    }
+    
     m_rulerDecoration = dynamic_cast<RulerDecoration*>(m_canvas->decoration("ruler"));
     Q_ASSERT(m_rulerDecoration);
+    m_rulerDecoration->setRuler( ra->ruler() );
     m_rulerDecoration->setVisible( true);
 }
 

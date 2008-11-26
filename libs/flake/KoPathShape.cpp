@@ -114,6 +114,7 @@ bool KoPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &c
         loader.parseSvg(element.attributeNS(KoXmlNS::svg, "d"), true);
     }
 
+    applyViewboxTransformation(element);
     QPointF pos = normalize();
     setTransformation(QMatrix());
 
@@ -123,8 +124,6 @@ bool KoPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &c
     }
 
     setPosition(pos);
-
-    applyViewboxTransformation(element);
 
     loadOdfAttributes(element, context, OdfTransformation);
 

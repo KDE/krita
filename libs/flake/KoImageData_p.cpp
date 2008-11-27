@@ -35,7 +35,8 @@ KoImageDataPrivate::KoImageDataPrivate(KoImageCollection *c)
 
 KoImageDataPrivate::~KoImageDataPrivate()
 {
-    collection->removeImage(this);
+    if (collection)
+        collection->removeImage(this);
 }
 
 bool KoImageDataPrivate::saveToFile(QIODevice & device)

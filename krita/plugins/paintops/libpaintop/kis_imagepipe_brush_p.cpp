@@ -84,7 +84,12 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
 void KisPipeBrushParasite::setBrushesCount()
 {
     // I assume ncells is correct. If it isn't, complain to the parasite header.
-    brushesCount[0] = ncells / rank[0];
+    if( rank[0] != 0 )
+    {
+      brushesCount[0] = ncells / rank[0];
+    } else {
+      brushesCount[0] = ncells;
+    }
     for (int i = 1; i < dim; i++) {
         if (rank[i] == 0) {
            brushesCount[i] = brushesCount[i-1];

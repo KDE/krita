@@ -409,7 +409,7 @@ KisPaintDeviceSP KisTopDownUpdateStrategy::updateGroupLayerProjection(const QRec
         child = dynamic_cast<KisLayer*>(child->nextSibling().data());
     }
 
-    return projection;
+//     return projection;
 
     m_d->filthyNode = 0;
     return projection;

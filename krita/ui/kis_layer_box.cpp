@@ -375,7 +375,12 @@ void KisLayerBox::slotRmClicked()
     QModelIndexList l = selectedNodes();
 
     for (int i = 0, n = l.count(); i < n; ++i)
-        m_image->removeNode(m_nodeModel->nodeFromIndex(l.at(i)));
+    {
+        KisNodeSP node = m_nodeModel->nodeFromIndex(l.at(i));
+        QRect bounds = node->exactBounds();
+        m_image->removeNode(node);
+        m_image->rootLayer()->setDirty(bounds);
+    }
 }
 
 void KisLayerBox::slotRaiseClicked()

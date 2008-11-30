@@ -136,7 +136,7 @@ void dumpElem(KoXmlElement elem, int level=0) {
     QString prefix="";
     for(int i = 0; i < level; ++i) prefix+="  ";
     qDebug()<<QString("%1  %2").arg(prefix).arg(elem.tagName());
-    foreach(QString s,elem.attributeNames()) qDebug()<<QString("%1    %2 = %3").arg(prefix).arg(s).arg(elem.attribute(s));
+    foreach(const QString &s,elem.attributeNames()) qDebug()<<QString("%1    %2 = %3").arg(prefix).arg(s).arg(elem.attribute(s));
     level++;
     KoXmlElement e;
     forEachElement(e, elem) dumpElem(e,level);

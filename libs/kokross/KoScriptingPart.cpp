@@ -100,7 +100,7 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule* const module, const QStringL
         if( QFileInfo(file).exists() )
             Kross::Manager::self().actionCollection()->readXmlFile(file);
         else
-            foreach(QString f, files)
+            foreach(const QString &f, files)
                 Kross::Manager::self().actionCollection()->readXmlFile(f);
     }
 
@@ -142,7 +142,7 @@ KoScriptingModule* KoScriptingPart::module() const
 bool KoScriptingPart::showExecuteScriptFile()
 {
     QStringList mimetypes;
-    foreach(QString interpretername, Kross::Manager::self().interpreters()) {
+    foreach(const QString &interpretername, Kross::Manager::self().interpreters()) {
         Kross::InterpreterInfo* info = Kross::Manager::self().interpreterInfo(interpretername);
         Q_ASSERT( info );
         mimetypes.append( info->mimeTypes().join(" ").trimmed() );
@@ -174,7 +174,7 @@ void addMenu(QMenu* menu, Kross::ActionCollection* collection)
 {
     foreach(Kross::Action* a, collection->actions())
         menu->addAction(a);
-    foreach(QString collectionname, collection->collections()) {
+    foreach(const QString &collectionname, collection->collections()) {
         Kross::ActionCollection* c = collection->collection(collectionname);
         if( c->isEnabled() )
             addMenu(menu->addMenu( c->text() ), c);

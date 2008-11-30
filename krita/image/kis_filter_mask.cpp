@@ -25,6 +25,7 @@
 #include "kis_processing_information.h"
 #include "kis_node.h"
 #include "kis_node_visitor.h"
+#include "kis_transaction.h"
 
 class KRITAIMAGE_EXPORT KisFilterMask::Private
 {
@@ -70,6 +71,7 @@ void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)
 {
     Q_ASSERT(filterConfig);
     m_d->filterConfig = filterConfig;
+    setDirty();
 }
 
 void KisFilterMask::setDirty()
@@ -92,6 +94,7 @@ void KisFilterMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
 
     selection()->updateProjection(rc);
 
+    KisTransaction transac("", projection, 0 );
     KisConstProcessingInformation src(projection,  rc.topLeft(), selection());
     KisProcessingInformation dst(projection, rc.topLeft(), selection());
 

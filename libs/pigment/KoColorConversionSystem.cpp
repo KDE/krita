@@ -54,11 +54,7 @@ KoColorConversionSystem::KoColorConversionSystem() : d(new Private)
 
 KoColorConversionSystem::~KoColorConversionSystem()
 {
-    QList<Node*> nodes = d->graph.values();
-    foreach(Node* node, nodes)
-    {
-        delete node;
-    }
+    qDeleteAll(d->graph);
     foreach(Vertex* vertex, d->vertexes)
     {
         delete vertex;
@@ -256,7 +252,7 @@ KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(const KoColorCon
 QList<KoColorConversionSystem::Node*> KoColorConversionSystem::nodesFor( const QString& _modelId, const QString& _depthId )
 {
     QList<Node*> nodes;
-    foreach( Node* node, d->graph.values())
+    foreach( Node* node, d->graph)
     {
         if(node->modelId == _modelId and node->depthId == _depthId)
         {
@@ -427,7 +423,7 @@ QString KoColorConversionSystem::bestPathToDot(const QString& srcKey, const QStr
 {
     const Node* srcNode = 0;
     const Node* dstNode = 0;
-    foreach(Node* node, d->graph.values())
+    foreach(Node* node, d->graph)
     {
         if(node->id() == srcKey)
         {

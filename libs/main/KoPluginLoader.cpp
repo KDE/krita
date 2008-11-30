@@ -110,7 +110,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     }
 
     QList<QString> whiteList;
-    foreach(KSharedPtr<KService> service, serviceNames.values()) {
+    foreach(KSharedPtr<KService> service, serviceNames) {
         int errCode = 0;
         QObject * plugin = KService::createInstance<QObject>(service, this, QStringList(), &errCode);
         if (plugin) {

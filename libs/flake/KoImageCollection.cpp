@@ -35,7 +35,7 @@ public:
     QMap<QByteArray, KoImageDataPrivate *> images;
     ~Private()
     {
-        foreach(KoImageDataPrivate * image, images.values())
+        foreach(KoImageDataPrivate * image, images)
             image->collection = 0;
     }
 };

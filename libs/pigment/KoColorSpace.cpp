@@ -76,10 +76,7 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp
 
 KoColorSpace::~KoColorSpace()
 {
-    foreach(KoCompositeOp* op, d->compositeOps.values())
-    {
-        delete op;
-    }
+    qDeleteAll(d->compositeOps);
     foreach(KoChannelInfo * channel, d->channels)
     {
         delete channel;

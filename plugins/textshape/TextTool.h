@@ -31,6 +31,9 @@
 #include <QTextBlock>
 #include <QTimer>
 #include <QClipboard>
+#include <QUndoCommand>
+#include <QTextDocument>
+#include <QPointer>
 
 class KAction;
 class KoAction;
@@ -42,7 +45,6 @@ class UndoTextCommand;
 class InsertCharacter;
 class ChangeTracker;
 
-class QUndoCommand;
 class KFontSizeAction;
 class KFontAction;
 
@@ -54,32 +56,6 @@ class TextTool : public KoTool
     Q_OBJECT
 public:
 
-    enum EditCommands {
-	InsertText=1,
-	InsertParag,
-	InsertNBrkSpace,
-	InsertNBrkHyphen,
-	InsertIndex,
-	InsertSoftHyphen,
-	InsertLineBreak,
-	DeleteText,
-	FormatBold,
-	FormatItalic,
-	FormatUnderline,
-	FormatStrikeOut,
-	FormatAlignLeft,
-	FormatAlignRight,
-	FormatAlignCenter,
-	FormatAlignJustify,
-	FormatSuperScript,
-	FormatSubScript,
-	FormatIndentIncrease,
-	FormatIndentDecrease,
-	FormatFont,
-	FormatParag,
-	FormatDefaultFormat
-	};
-	
     explicit TextTool(KoCanvasBase *canvas);
     ~TextTool();
 
@@ -124,7 +100,6 @@ public:
     virtual void inputMethodEvent(QInputMethodEvent * event);
 
     bool isBidiDocument() const;
-//    KoText::Direction getPageDirection() const;
     
 public slots:
     /// start the textedit-plugin.
@@ -208,6 +183,45 @@ private slots:
     void blinkCaret();
 
 private:
+
+    class UndoTextCommand : public QUndoCommand
+    {
+    public:
+        UndoTextCommand(QTextDocument *document, TextTool *tool, QUndoCommand *parent = 0);
+
+        void undo();
+        void redo();
+
+        QPointer<QTextDocument> m_document;
+        QPointer<TextTool> m_tool;
+    };
+    
+        enum EditCommands {
+	InsertText=1,
+	InsertParag,
+	InsertNBrkSpace,
+	InsertNBrkHyphen,
+	InsertIndex,
+	InsertSoftHyphen,
+	InsertLineBreak,
+	DeleteText,
+	FormatBold,
+	FormatItalic,
+	FormatUnderline,
+	FormatStrikeOut,
+	FormatAlignLeft,
+	FormatAlignRight,
+	FormatAlignCenter,
+	FormatAlignJustify,
+	FormatSuperScript,
+	FormatSubScript,
+	FormatIndentIncrease,
+	FormatIndentDecrease,
+	FormatFont,
+	FormatParag,
+	FormatDefaultFormat
+    };
+
     bool pasteHelper(QClipboard::Mode mode);
     void repaintCaret();
     void repaintSelection();
@@ -248,18 +262,6 @@ private:
     bool m_needSpellChecking;
     bool m_processingKeyPress; // all undo commands generated from key-presses should be combined.
     int m_prevCursorPosition; /// used by editingPluginEvents
-/*
-  The following two int allow handling a QTextDocument undo behaviour:
-  - when typing subsequent letters, the text insert commands are merged within the QTextDocument
-  - lets say you type koffice : this is one "insert text" command within QTextDocument
-  - now between the two f, type rocks: the result is kofrocksfice, but this secont typing is considered a new "insert text" command within QTextDocument
-  - now undo the last typing: the text becomes koffice again
-  - put the cursor back at the end of the text. any new text entered will be considered by QTextDocument as a new "text insert" command, even if it is joined with the previous text.
-  
-  Same applies for deletion.
-*/
-    int m_commandCounter;
-    int m_delCounter;
 
     QTimer m_caretTimer;
     bool m_caretTimerState;

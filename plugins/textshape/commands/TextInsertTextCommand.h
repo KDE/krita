@@ -64,7 +64,6 @@ private:
 	int m_position;
 	QTextCharFormat m_charFormat;
 	int m_id;
-	int m_commandCounter; //this counter is incremented in the tool each time a text command is not able to merge with the previous text command. This is to avoid the merging of this command with subsequent text command, should the non mergeable command be undone. (due to QTextDocument undo/redo behaviour)
 
         QPointer<TextTool> m_tool;
 };

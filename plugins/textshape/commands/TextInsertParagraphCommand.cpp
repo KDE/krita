@@ -31,15 +31,14 @@
 #include <klocalizedstring.h>
 
 TextInsertParagraphCommand::TextInsertParagraphCommand( TextTool *tool, QUndoCommand *parent )
- : QUndoCommand( i18n("New paragraph"), parent ),
+ :	QUndoCommand( i18n("New paragraph"), parent ),
 	m_tool(tool)
 {
-	m_tool->flagUndoRedo( false );
-	m_tool->m_caret.beginEditBlock();
-	
+    m_tool->m_currentCommand = this;
+    m_tool->m_currentCommandHasChildren = true;
+
     QTextBlockFormat format = m_tool->m_caret.blockFormat();
 
-//    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_document->documentLayout());
     KoParagraphStyle *nextStyle = 0;
     if(KoTextDocument(m_tool->m_textShapeData->document()).styleManager()) {
         int id = m_tool->m_caret.blockFormat().intProperty(KoParagraphStyle::StyleId);
@@ -54,18 +53,14 @@ TextInsertParagraphCommand::TextInsertParagraphCommand( TextTool *tool, QUndoCom
     }
     
     QTextList *list = m_tool->m_caret.block().textList();
-kDebug()<<"insert paragraph before insertBlock";
     m_tool->m_caret.insertBlock();
-kDebug()<<"insert paragraph after insertBlock";
 
     QTextBlockFormat bf = m_tool->m_caret.blockFormat();
     bf.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
     bf.clearProperty(KoParagraphStyle::ListStartValue);
     bf.clearProperty(KoParagraphStyle::UnnumberedListItem);
     bf.clearProperty(KoParagraphStyle::IsListHeader);
-kDebug()<<"insert paragraph before first setBlockFormat";
     m_tool->m_caret.setBlockFormat(bf);
-kDebug()<<"insert paragraph after first setBlockFormat";
     if (nextStyle) {
         QTextBlock block = m_tool->m_caret.block();
         nextStyle->applyStyle(block);
@@ -88,13 +83,10 @@ kDebug()<<"insert paragraph after first setBlockFormat";
                 format.setProperty(KoParagraphStyle::TextProgressionDirection, dir);
             } else if (! direction.isNull()) // then we inherit from the previous paragraph.
                 format.setProperty(KoParagraphStyle::TextProgressionDirection, direction);
-kDebug()<<"insert paragraph before second setBlockFormat";
             m_tool->m_caret.setBlockFormat(format);
-kDebug()<<"insert paragraph after second setBlockFormat";
     
-    m_tool->m_caret.endEditBlock();
-	m_tool->flagUndoRedo( true );
-
+      m_tool->m_currentCommand=0;
+      m_tool->m_currentCommandHasChildren = false;
 }
 
 
@@ -106,18 +98,16 @@ TextInsertParagraphCommand::~TextInsertParagraphCommand()
     /// redo the command
 void TextInsertParagraphCommand::redo()
 {
-	m_tool->flagUndoRedo( false );
-	m_document->redo(m_caret);
-	m_tool->flagUndoRedo( true );
-//	m_tool->updateActions();
+    m_tool->flagUndoRedo( false );
+    QUndoCommand::redo();
+    m_tool->flagUndoRedo( true );
 }
 
 
     /// revert the actions done in redo
 void TextInsertParagraphCommand::undo()
 {
-	m_tool->flagUndoRedo( false );
-	m_document->undo(m_caret);
-	m_tool->flagUndoRedo( true );
-//	m_tool->updateActions();
+    m_tool->flagUndoRedo( false );
+    QUndoCommand::undo();
+    m_tool->flagUndoRedo( true );
 }

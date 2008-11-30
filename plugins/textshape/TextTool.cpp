@@ -121,6 +121,43 @@ static bool isRightToLeft(const QString &text)
     return ltr < rtl;
 }
 
+TextTool::UndoTextCommand::UndoTextCommand(QTextDocument *document, TextTool *tool, QUndoCommand *parent)
+                : QUndoCommand(i18n("Text"), parent),
+                m_document(document),
+                m_tool(tool)
+{
+}
+
+void TextTool::UndoTextCommand::undo()
+{
+    if (m_document.isNull())
+      return;
+    if (! m_tool.isNull()) {
+      m_tool->stopMacro();
+      m_tool->m_allowAddUndoCommand = false;
+      if (m_tool->m_changeTracker && !m_tool->m_canvas->resourceProvider()->boolResource(KoCanvasResource::DocumentIsLoading))
+	m_tool->m_changeTracker->notifyForUndo();
+	m_document->undo(&m_tool->m_caret);
+    } else
+	m_document->undo();
+    if (! m_tool.isNull())
+      m_tool->m_allowAddUndoCommand = true;
+}
+	
+void TextTool::UndoTextCommand::redo()
+{
+    if (m_document.isNull())
+      return;
+
+    if (! m_tool.isNull()) {
+      m_tool->m_allowAddUndoCommand = false;
+      m_document->redo(&m_tool->m_caret);
+    } else
+      m_document->redo();
+    if (! m_tool.isNull())
+      m_tool->m_allowAddUndoCommand = true;
+}
+
 TextTool::TextTool(KoCanvasBase *canvas)
         : KoTool(canvas),
         m_textShape(0),
@@ -1277,56 +1314,18 @@ QWidget *TextTool::createOptionWidget()
 
 void TextTool::addUndoCommand()
 {
-//kDebug()<<"in slot add undoCommand";
-m_commandCounter++;
     if (! m_allowAddUndoCommand) return;
-    class UndoTextCommand : public QUndoCommand
-    {
-    public:
-        UndoTextCommand(QTextDocument *document, TextTool *tool, QUndoCommand *parent = 0)
-                : QUndoCommand(i18n("Text"), parent),
-                m_document(document),
-                m_tool(tool) {
-        }
-
-        void undo() {
-            if (m_document.isNull())
-                return;
-            if (! m_tool.isNull()) {
-                m_tool->stopMacro();
-                m_tool->m_allowAddUndoCommand = false;
-                if (m_tool->m_changeTracker && !m_tool->m_canvas->resourceProvider()->boolResource(KoCanvasResource::DocumentIsLoading))
-                    m_tool->m_changeTracker->notifyForUndo();
-                m_document->undo(&m_tool->m_caret);
-            } else
-                m_document->undo();
-            if (! m_tool.isNull())
-                m_tool->m_allowAddUndoCommand = true;
-        }
-
-        void redo() {
-            if (m_document.isNull())
-                return;
-
-            if (! m_tool.isNull()) {
-                m_tool->m_allowAddUndoCommand = false;
-                m_document->redo(&m_tool->m_caret);
-            } else
-                m_document->redo();
-            if (! m_tool.isNull())
-                m_tool->m_allowAddUndoCommand = true;
-        }
-
-        QPointer<QTextDocument> m_document;
-        QPointer<TextTool> m_tool;
-    };
+    
     if (m_currentCommand) {
         new UndoTextCommand(m_textShapeData->document(), this, m_currentCommand);
         if (! m_currentCommandHasChildren)
+	  {
             m_canvas->addCommand(m_currentCommand);
+	  }
         m_currentCommandHasChildren = true;
-    } else
+    } else {
         m_canvas->addCommand(new UndoTextCommand(m_textShapeData->document(), this));
+    }
 }
 
 void TextTool::addCommand(QUndoCommand *command)
@@ -1533,12 +1532,7 @@ bool TextTool::isBidiDocument() const
         return m_canvas->resourceProvider()->boolResource(KoText::BidiDocument);
     return false;
 }
-/*
-KoText::Direction TextTool::getPageDirection() const
-{
-  return m_textShapeData->pageDirection();
-}
-*/
+
 void TextTool::updateParagraphDirection(const QVariant &variant)
 {
     int position = variant.toInt();

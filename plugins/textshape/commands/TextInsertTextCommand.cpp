@@ -24,24 +24,22 @@
 #include "kdebug.h"
 #include <klocalizedstring.h>
 
+
 TextInsertTextCommand::TextInsertTextCommand( TextTool *tool, QString text, QUndoCommand *parent )
 : QUndoCommand( i18n("Insert Text"), parent ),
     m_text(text),
     m_id(TextTool::InsertText),
     m_tool(tool)
 {
-    m_tool->flagUndoRedo( false );
-    m_tool->m_commandCounter = 0;
-    m_tool->m_caret.beginEditBlock();
+    m_tool->m_currentCommand = this;
+    m_tool->m_currentCommandHasChildren = true;
     m_tool->m_caret.insertText( m_text );
-    m_tool->m_caret.endEditBlock();
-    m_tool->flagUndoRedo( true );
+    m_tool->m_currentCommand = 0;
+    m_tool->m_currentCommandHasChildren = false;
 
     //Save tool text counter, position and char format for comparison in MergeWith()
     m_position = m_tool->m_caret.position();
     m_charFormat = m_tool->m_caret.charFormat();
-    m_commandCounter = m_tool->m_commandCounter;
-//    kDebug()<<"textInsert: m_textCounter: "<<m_textCounter;
 }
 
 
@@ -53,9 +51,7 @@ TextInsertTextCommand::~TextInsertTextCommand()
 void TextInsertTextCommand::redo()
 {
     m_tool->flagUndoRedo( false );
-    for (int i=1; i<=m_commandCounter; i++)
-      m_tool->m_textShapeData->document()->redo(&(m_tool->m_caret));
-//    m_tool->updateActions();
+    QUndoCommand::redo();
     m_tool->flagUndoRedo( true );
 }
 
@@ -63,9 +59,7 @@ void TextInsertTextCommand::redo()
 void TextInsertTextCommand::undo()
 {
     m_tool->flagUndoRedo( false );
-    for (int i=1; i<=m_commandCounter; i++)
-      m_tool->m_textShapeData->document()->undo(&(m_tool->m_caret));
-//    m_tool->updateActions();
+    QUndoCommand::undo();
     m_tool->flagUndoRedo( true );
 }
 
@@ -79,16 +73,14 @@ bool TextInsertTextCommand::mergeWith(const QUndoCommand *other)
     if (other->id() != m_id){ 	 // make sure other is also an InsertText command
     return false;
     }
-
+    
     if ((m_position == (static_cast<const TextInsertTextCommand*>(other)->m_position - static_cast<const TextInsertTextCommand*>(other)->m_text.length())) &&
         (static_cast<const TextInsertTextCommand*>(other)->m_charFormat == m_charFormat)) {
         m_text += static_cast<const TextInsertTextCommand*>(other)->m_text;
         m_position += static_cast<const TextInsertTextCommand*>(other)->m_text.length();
-	m_commandCounter += static_cast<const TextInsertTextCommand*>(other)->m_commandCounter;
+	for (int i = 1; i <= other->childCount(); i++)
+	  new TextTool::UndoTextCommand( m_tool->m_textShapeData->document(), m_tool, this);
         return true;
     }
-//    m_tool->m_textCounter++;
-//    m_textCounter++;
-//    kDebug()<<"textInsert: tool textCounter incremented: "<<m_tool->m_textCounter;
     return false;
 }

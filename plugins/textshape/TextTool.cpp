@@ -361,7 +361,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_textEditingPlugins.insert(factory->id(), plugin);
     }
 
-    foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins.values()) {
+    foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins) {
         connect(plugin, SIGNAL(startMacro(const QString &)), this, SLOT(startMacro(const QString &)));
         connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
         QHash<QString, KAction*> actions = plugin->actions();
@@ -1665,13 +1665,13 @@ void TextTool::editingPluginEvents()
 
 void TextTool::finishedWord()
 {
-    foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins.values())
+    foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins)
     plugin->finishedWord(m_textShapeData->document(), m_prevCursorPosition);
 }
 
 void TextTool::finishedParagraph()
 {
-    foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins.values())
+    foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins)
     plugin->finishedParagraph(m_textShapeData->document(), m_prevCursorPosition);
 }
 

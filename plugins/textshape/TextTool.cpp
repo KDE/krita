@@ -32,6 +32,9 @@
 #include "commands/ChangeListLevelCommand.h"
 #include "commands/ListItemNumberingCommand.h"
 
+#include "commands/TextInsertTextCommand.h"
+#include "commands/TextInsertParagraphCommand.h"
+
 #include <KoAction.h>
 #include <KoExecutePolicy.h>
 #include <KoCanvasBase.h>
@@ -437,6 +440,12 @@ TextTool::TextTool(KoCanvasBase *canvas)
 TextTool::~TextTool()
 {
     qDeleteAll(m_textEditingPlugins);
+}
+
+void TextTool::flagUndoRedo( bool flag )
+{
+	m_allowAddUndoCommand = flag;
+	m_allowActions = flag;
 }
 
 void TextTool::blinkCaret()
@@ -876,38 +885,25 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             event->ignore();
             return;
         } else if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
-            startKeyPressMacro();
+//            startKeyPressMacro();
             if (m_caret.hasSelection())
                 m_selectionHandler.deleteInlineObjects();
-            QTextBlockFormat format = m_caret.blockFormat();
-            m_selectionHandler.nextParagraph();
 
-            QVariant direction = format.property(KoParagraphStyle::TextProgressionDirection);
-            format = m_caret.blockFormat();
-            if (m_textShapeData->pageDirection() != KoText::AutoDirection) { // inherit from shape
-                KoText::Direction dir;
-                switch (m_textShapeData->pageDirection()) {
-                case KoText::RightLeftTopBottom:
-                    dir = KoText::PerhapsRightLeftTopBottom;
-                    break;
-                case KoText::LeftRightTopBottom:
-                default:
-                    dir = KoText::PerhapsLeftRightTopBottom;
-                }
-                format.setProperty(KoParagraphStyle::TextProgressionDirection, dir);
-            } else if (! direction.isNull()) // then we inherit from the previous paragraph.
-                format.setProperty(KoParagraphStyle::TextProgressionDirection, direction);
-            m_caret.setBlockFormat(format);
+//            m_selectionHandler.nextParagraph();
+  m_canvas->addCommand(new TextInsertParagraphCommand(this));
+
+
             updateActions();
             editingPluginEvents();
             ensureCursorVisible();
         } else if (event->key() == Qt::Key_Tab || !(event->text().length() == 1 && !event->text().at(0).isPrint())) { // insert the text
-            startKeyPressMacro();
+//            startKeyPressMacro();
             if (m_caret.hasSelection())
                 m_selectionHandler.deleteInlineObjects();
             m_prevCursorPosition = m_caret.position();
             ensureCursorVisible();
-            m_caret.insertText(event->text());
+    m_canvas->addCommand(new TextInsertTextCommand( this, event->text() ));
+//            m_caret.insertText(event->text());
             if (m_textShapeData->pageDirection() == KoText::AutoDirection)
                 m_updateParagDirection.action->execute(m_prevCursorPosition);
             editingPluginEvents();
@@ -1281,6 +1277,8 @@ QWidget *TextTool::createOptionWidget()
 
 void TextTool::addUndoCommand()
 {
+//kDebug()<<"in slot add undoCommand";
+m_commandCounter++;
     if (! m_allowAddUndoCommand) return;
     class UndoTextCommand : public QUndoCommand
     {
@@ -1535,7 +1533,12 @@ bool TextTool::isBidiDocument() const
         return m_canvas->resourceProvider()->boolResource(KoText::BidiDocument);
     return false;
 }
-
+/*
+KoText::Direction TextTool::getPageDirection() const
+{
+  return m_textShapeData->pageDirection();
+}
+*/
 void TextTool::updateParagraphDirection(const QVariant &variant)
 {
     int position = variant.toInt();

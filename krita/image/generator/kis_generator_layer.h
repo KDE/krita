@@ -22,6 +22,7 @@
 #include "kis_types.h"
 #include "kis_layer.h"
 #include <krita_export.h>
+#include "kis_node_filter_interface.h"
 
 class KisFilterConfiguration;
 class KisNodeVisitor;
@@ -36,7 +37,7 @@ class KisNodeVisitor;
  *
  * XXX: what about threadedness?
  */
-class KRITAIMAGE_EXPORT KisGeneratorLayer : public KisLayer, public KisIndirectPaintingSupport
+class KRITAIMAGE_EXPORT KisGeneratorLayer : public KisLayer, public KisIndirectPaintingSupport, public KisNodeFilterInterface
 {
     Q_OBJECT
 
@@ -124,6 +125,10 @@ public:
     KisLayer* layer() {
         return this;
     }
+
+    KisFilterConfiguration * filter() const { return generator(); }
+    void setFilter(KisFilterConfiguration * filterConfig) { setGenerator( filterConfig ); }
+
 
 private:
 

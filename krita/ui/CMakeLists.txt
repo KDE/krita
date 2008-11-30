@@ -3,6 +3,7 @@ include_directories( ${KOTEXT_INCLUDES} ${BLITZ_INCLUDES} ${CMAKE_CURRENT_SOURCE
 
 add_subdirectory( tests )
 
+
 configure_file(config-processor.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-processor.h )
 
 include(kdefx.cmake)

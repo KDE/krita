@@ -46,7 +46,6 @@ namespace KRA {
     const QString COMPOSITE_OP = "compositeop";
     const QString DESCRIPTION = "description";
     const QString DOT_FILTERCONFIG = ".filterconfig";
-    const QString DOT_GENERATORCONFIG = ".generatorconfig";
     const QString DOT_ICC = ".icc";
     const QString FILE_NAME = "filename";
     const QString FILTER_MASK = "filtermask";

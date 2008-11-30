@@ -110,13 +110,13 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
         KisSelectionSP selection = KisSelectionSP(new KisSelection());
         if (!selection->read(m_store)) {
             selection->disconnect();
-            m_store->close();
         }
         else {
             KisTransparencyMask* mask = new KisTransparencyMask();
             mask->setSelection( selection );
             m_img->addNode(mask, layer, layer->firstChild());
         }
+        m_store->close();
     }
 
     layer->setDirty(m_img->bounds());
@@ -145,16 +145,16 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
     QString location = m_external ? QString::null : m_uri;
     location += m_name + "/layers/" + m_layerFilenames[layer] + ".selection";
     if (m_store->hasFile(location)) {
-        m_store->open(location);
-        KisSelectionSP selection = KisSelectionSP(new KisSelection());
-        if (!selection->read(m_store)) {
-            selection->disconnect();
+        if (m_store->open(location)) {
+            KisSelectionSP selection = KisSelectionSP(new KisSelection());
+            if (!selection->read(m_store)) {
+                selection->disconnect();
+                m_store->close();
+            } else {
+                layer->setSelection(selection);
+            }
             m_store->close();
-        } else {
-            layer->setSelection(selection);
         }
-        m_store->close();
-
     }
 
     // filter configuration

@@ -53,7 +53,7 @@ KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, const QDomElement & eleme
 
 bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
 {
-    if (KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
+    if (layer->inherits( "KisShapeLayer" )) {
         QDomElement layerElement = m_doc.createElement(LAYER);
         saveLayer(layerElement, SHAPE_LAYER, layer);
         m_elem.appendChild(layerElement);

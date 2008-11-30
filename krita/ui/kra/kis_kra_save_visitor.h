@@ -60,6 +60,9 @@ public:
 private:
 
     bool savePaintDevice(KisNode * node);
+    bool saveAnnotations(KisLayer* layer);
+    bool saveSelection(KisNode* node);
+    bool saveFilterConfiguration(KisNode* filter);
 
 private:
     KisImageSP m_img;

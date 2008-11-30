@@ -45,9 +45,11 @@ public:
     void undo();
 
 private:
-    KoPathShapePointMap m_pointMap;
+    void applyOffset( const QPointF &offset );
+    
     QPointF m_offset;
     bool m_undoCalled; // this command stores diffs; so calling undo twice will give wrong results. Guard against that.
+    QMap<KoPathShape*, QSet<KoPathPointIndex> > m_points;
 };
 
 #endif // KOPATHPOINTMOVECOMMAND_H

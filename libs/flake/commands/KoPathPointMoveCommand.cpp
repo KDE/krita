@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006,2008 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
@@ -25,11 +25,18 @@
 
 KoPathPointMoveCommand::KoPathPointMoveCommand(const KoPathShapePointMap &pointMap, const QPointF &offset, QUndoCommand *parent)
         : QUndoCommand(parent)
-        , m_pointMap(pointMap)
         , m_offset(offset)
         , m_undoCalled(true)
 {
     setText(i18n("Move points"));
+
+    // only store path point indeces not pointer to path points
+    KoPathShapePointMap::const_iterator it(pointMap.begin());
+    for (; it != pointMap.end(); ++it) {
+        KoPathShape * path = it.key();
+        foreach( KoPathPoint * p, it.value() )
+            m_points[path].insert( path->pathPointIndex( p ) );
+    }
 }
 
 void KoPathPointMoveCommand::redo()
@@ -37,21 +44,9 @@ void KoPathPointMoveCommand::redo()
     QUndoCommand::redo();
     if (! m_undoCalled)
         return;
-    KoPathShapePointMap::iterator it(m_pointMap.begin());
-    for (; it != m_pointMap.end(); ++it) {
-        QPointF offset = it.key()->documentToShape(m_offset) - it.key()->documentToShape(QPointF(0, 0));
-        QMatrix matrix;
-        matrix.translate(offset.x(), offset.y());
-
-        // repaint old bounding rect
-        it.key()->update();
-        foreach(KoPathPoint *p, it.value()) {
-            p->map(matrix, true);
-        }
-        it.key()->normalize();
-        // repaint new bounding rect
-        it.key()->update();
-    }
+    
+    applyOffset( m_offset );
+    
     m_undoCalled = false;
 }
 
@@ -60,10 +55,31 @@ void KoPathPointMoveCommand::undo()
     QUndoCommand::undo();
     if (m_undoCalled)
         return;
-    m_offset *= -1.0;
-    m_undoCalled = true;
-    redo();
-    m_offset *= -1.0;
+    
+    applyOffset( -1.0 * m_offset );
+
     m_undoCalled = true;
 }
 
+void KoPathPointMoveCommand::applyOffset( const QPointF &offset )
+{
+    QMap<KoPathShape*, QSet<KoPathPointIndex> >::iterator it(m_points.begin());
+    for (; it != m_points.end(); ++it) {
+        KoPathShape * path = it.key();
+        // transform offset from document to shape coordinate system
+        QPointF shapeOffset = path->documentToShape(offset) - path->documentToShape(QPointF());
+        QMatrix matrix;
+        matrix.translate(shapeOffset.x(), shapeOffset.y());
+        
+        // repaint old bounding rect
+        path->update();
+        foreach(const KoPathPointIndex index, it.value()) {
+            KoPathPoint * p = path->pointByIndex(index);
+            if ( p )
+                p->map(matrix, true);
+        }
+        path->normalize();
+        // repaint new bounding rect
+        path->update();
+    }
+}

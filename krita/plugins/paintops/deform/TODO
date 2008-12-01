@@ -1,9 +1,3 @@
 TODO:
-	-add KisRandomSubPixelAccessor for bilinear interpolatio
-	-use some Rect Accessor for writing values (random accessor is slow, but needed for reading)
-	-add support for oldRawData too (old version used that, now i use rawData)
-	-add support to GUI to use/not use increment value from m_counter
-	-any wish?
-	-add support for tilt of the stylus to change CCW/CW
-	-use kis_random_sub_accessor.cpp -- interpolations already in Krita
+	- add support for tilt of the stylus to change CCW/CW
 	- reconsider lens distortion coz of filter op and lens distorion plugin (works like magnifier glass when oldRawData used)	

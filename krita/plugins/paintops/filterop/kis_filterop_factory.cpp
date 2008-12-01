@@ -35,7 +35,7 @@ KisFilterOpFactory::KisFilterOpFactory()
 {
 }
 
-KisFilterOpFactory::~KisBrushOpFactory()
+KisFilterOpFactory::~KisFilterOpFactory()
 {
 }
 
@@ -47,9 +47,12 @@ KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettingsSP settings,
     Q_UNUSED(image);
     Q_ASSERT( settings->widget() );
 
-    const KisFilterOpSettings *filteropSettings = dynamic_cast<const KisFilterOpSettings *>(settings.data());
+    // XXX: make all this casting go away!
+
+    KisFilterOpSettings *filteropSettings = const_cast<KisFilterOpSettings*>( dynamic_cast<const KisFilterOpSettings *>(settings.data()) );
     Q_ASSERT(settings != 0 && filteropSettings != 0);
-    m_widget->setConfiguration(const_cast<KisFilterOpSettings*>(filteropSettings));
+    filteropSettings->setImage( image );
+    m_widget->setConfiguration(filteropSettings);
 
     KisPaintOp * op = new KisFilterOp(filteropSettings, painter);
     Q_CHECK_PTR(op);
@@ -61,12 +64,12 @@ KisPaintOpSettingsSP KisFilterOpFactory::settings(QWidget * parent, const KoInpu
     // XXX: store widgets per inputDevice?
     Q_UNUSED( parent );
     Q_UNUSED(inputDevice);
-    Q_UNUSED(image)
-    return new KisFilterOpSettings(m_widget);
+    return settings( image );
 }
 
 KisPaintOpSettingsSP KisFilterOpFactory::settings(KisImageSP image)
 {
-    Q_UNUSED(image);
-    return new KisFilterOpSettings(m_widget);
+    KisFilterOpSettings* settings = new KisFilterOpSettings(m_widget);
+    settings->setImage( image );
+    return settings;
 }

@@ -53,7 +53,7 @@
 #include "kis_paint_device.h"
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"
-
+#include "kis_group_layer.h"
 
 #include "dlg_colorspaceconversion.h"
 
@@ -105,6 +105,7 @@ void ColorSpaceConversion::slotImgColorSpaceConversion()
 
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         image->convertTo(cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId());
+        image->rootLayer()->setDirty();
         QApplication::restoreOverrideCursor();
     }
     delete dlgColorSpaceConversion;
@@ -131,6 +132,7 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
 
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         dev->convertTo(cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId());
+        dev->setDirty();
         QApplication::restoreOverrideCursor();
         m_view->nodeManager()->nodesUpdated();
     }

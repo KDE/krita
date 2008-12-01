@@ -109,10 +109,10 @@ void KisShapeController::setImage(KisImageSP image)
         // First clear the current set of shapes away
         foreach(KoShape* shape, m_d->nodeShapes) {
             removeShape(shape);
-            delete shape; // XXX: What happes with stuff on the
             // clipboard? And how about undo information?
 
         }
+        // FIXME someone clever should know how to fix the shape corresponding to the root layer and delete that
         m_d->nodeShapes.clear();
 
     }

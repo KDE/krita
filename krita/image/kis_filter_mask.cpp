@@ -72,6 +72,16 @@ void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)
     m_d->filterConfig = filterConfig;
 }
 
+void KisFilterMask::setDirty()
+{
+    if(selection())
+    {
+        KisEffectMask::setDirty(selection()->selectedExactRect());
+    } else {
+        KisEffectMask::setDirty();
+    }
+}
+
 void KisFilterMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
 {
     dbgImage << "Applying filter mask on projection  " << projection << " with rect " << rc

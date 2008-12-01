@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
@@ -81,8 +81,10 @@ void KoRectangleShape::saveOdf( KoShapeSavingContext & context ) const
     {
         context.xmlWriter().startElement("draw:rect");
         saveOdfAttributes( context, OdfAllAttributes );
-        context.xmlWriter().addAttributePt( "svg:rx", m_cornerRadiusX * (0.5*size().width()) / 100.0 );
-        context.xmlWriter().addAttributePt( "svg:ry", m_cornerRadiusY * (0.5*size().height()) / 100.0 );
+        if ( m_cornerRadiusX > 0 && m_cornerRadiusY > 0 ) {
+            context.xmlWriter().addAttributePt( "svg:rx", m_cornerRadiusX * (0.5*size().width()) / 100.0 );
+            context.xmlWriter().addAttributePt( "svg:ry", m_cornerRadiusY * (0.5*size().height()) / 100.0 );
+        }
         saveOdfCommonChildElements( context );
         context.xmlWriter().endElement();
     }

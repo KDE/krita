@@ -3,6 +3,7 @@
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
    Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +23,8 @@
 
 #include "DefaultTool.h"
 #include "DefaultToolWidget.h"
+#include "DefaultToolArrangeWidget.h"
+#include "SnapGuideConfigWidget.h"
 #include "SelectionDecorator.h"
 #include "ShapeMoveStrategy.h"
 #include "ShapeRotateStrategy.h"
@@ -185,63 +188,63 @@ bool DefaultTool::wantsAutoScroll()
 
 void DefaultTool::setupActions()
 {
-    KAction* actionBringToFront = new KAction( KIcon( "bring_forward" ),
+    KAction* actionBringToFront = new KAction( KIcon( "object-order-front" ),
                                                i18n( "Bring to &Front" ), this );
-    addAction( "object_move_totop", actionBringToFront );
+    addAction( "object_order_front", actionBringToFront );
     actionBringToFront->setShortcut( QKeySequence( "Ctrl+Shift+]" ) );
     connect(actionBringToFront, SIGNAL(triggered()), this, SLOT(selectionBringToFront()));
 
-    KAction* actionRaise = new KAction( KIcon( "raise" ), i18n( "&Raise" ), this );
-    addAction( "object_move_up", actionRaise );
+    KAction* actionRaise = new KAction( KIcon( "object-order-raise" ), i18n( "&Raise" ), this );
+    addAction( "object_order_raise", actionRaise );
     actionRaise->setShortcut( QKeySequence( "Ctrl+]" ) );
     connect(actionRaise, SIGNAL(triggered()), this, SLOT(selectionMoveUp()));
 
-    KAction* actionLower = new KAction( KIcon( "lower" ), i18n( "&Lower" ), this );
-    addAction( "object_move_down", actionLower );
+    KAction* actionLower = new KAction( KIcon( "object-order-lower" ), i18n( "&Lower" ), this );
+    addAction( "object_order_lower", actionLower );
     actionLower->setShortcut( QKeySequence( "Ctrl+[" ) );
     connect(actionLower, SIGNAL(triggered()), this, SLOT(selectionMoveDown()));
 
-    KAction* actionSendToBack = new KAction( KIcon( "send_backward" ),
+    KAction* actionSendToBack = new KAction( KIcon( "object-order-back" ),
                                              i18n( "Send to &Back" ), this );
-    addAction( "object_move_tobottom", actionSendToBack );
+    addAction( "object_order_back", actionSendToBack );
     actionSendToBack->setShortcut( QKeySequence( "Ctrl+Shift+[" ) );
     connect(actionSendToBack, SIGNAL(triggered()), this, SLOT(selectionSendToBack()));
 
-    KAction* actionAlignLeft = new KAction( KIcon( "aoleft" ),
+    KAction* actionAlignLeft = new KAction( KIcon( "object-align-horizontal-left" ),
                                             i18n( "Align Left" ), this );
     addAction( "object_align_horizontal_left", actionAlignLeft );
     connect(actionAlignLeft, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalLeft()));
 
-    KAction* actionAlignCenter = new KAction( KIcon( "aocenterh" ),
+    KAction* actionAlignCenter = new KAction( KIcon( "object-align-horizontal-center" ),
                                               i18n( "Horizontally Center" ), this );
     addAction( "object_align_horizontal_center", actionAlignCenter );
     connect(actionAlignCenter, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalCenter()));
 
-    KAction* actionAlignRight = new KAction( KIcon( "aoright" ),
+    KAction* actionAlignRight = new KAction( KIcon( "object-align-horizontal-right" ),
                                              i18n( "Align Right" ), this );
     addAction( "object_align_horizontal_right", actionAlignRight );
     connect(actionAlignRight, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalRight()));
 
-    KAction* actionAlignTop = new KAction( KIcon( "aotop" ), i18n( "Align Top" ), this );
+    KAction* actionAlignTop = new KAction( KIcon( "object-align-vertical-top" ), i18n( "Align Top" ), this );
     addAction( "object_align_vertical_top", actionAlignTop );
     connect(actionAlignTop, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalTop()));
 
-    KAction* actionAlignMiddle = new KAction( KIcon( "aocenterv" ),
+    KAction* actionAlignMiddle = new KAction( KIcon( "object-align-vertical-center" ),
                                               i18n( "Vertically Center" ), this );
     addAction( "object_align_vertical_center", actionAlignMiddle );
     connect(actionAlignMiddle, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalCenter()));
 
-    KAction* actionAlignBottom = new KAction( KIcon( "aobottom" ),
+    KAction* actionAlignBottom = new KAction( KIcon( "object-align-vertical-bottom" ),
                                               i18n( "Align Bottom" ), this );
     addAction( "object_align_vertical_bottom", actionAlignBottom );
     connect(actionAlignBottom, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalBottom()));
 
-    KAction* actionGroupBottom = new KAction( KIcon( "group" ),
+    KAction* actionGroupBottom = new KAction( KIcon( "object-group" ),
                                               i18n( "Group" ), this );
     addAction( "object_group", actionGroupBottom );
     connect(actionGroupBottom, SIGNAL(triggered()), this, SLOT(selectionGroup()));
 
-    KAction* actionUngroupBottom = new KAction( KIcon( "ungroup" ),
+    KAction* actionUngroupBottom = new KAction( KIcon( "object-ungroup" ),
                                                 i18n( "Ungroup" ), this );
     addAction( "object_ungroup", actionUngroupBottom );
     connect(actionUngroupBottom, SIGNAL(triggered()), this, SLOT(selectionUngroup()));
@@ -933,6 +936,7 @@ void DefaultTool::activate(bool temporary) {
     repaintDecorations();
     delete m_guideLine;
     m_guideLine = new GuideLine();
+    updateActions();
 }
 
 void DefaultTool::selectionAlignHorizontalLeft() {
@@ -1095,8 +1099,13 @@ void DefaultTool::selectionReorder(KoShapeReorderCommand::MoveShapeType order )
     m_canvas->addCommand( cmd );
 }
 
-QWidget* DefaultTool::createOptionWidget() {
-    return new DefaultToolWidget( this );
+QMap<QString, QWidget *> DefaultTool::createOptionWidgets()
+{
+    QMap<QString, QWidget *> widgets;
+    widgets.insert(i18n("Arrange"), new DefaultToolArrangeWidget( this ));
+    widgets.insert(i18n("Geometry"), new DefaultToolWidget( this ));
+    widgets.insert(i18n("Snapping"), new SnapGuideConfigWidget(m_canvas->snapGuide()));
+    return widgets;
 }
 
 void DefaultTool::resourceChanged( int key, const QVariant & res )
@@ -1226,10 +1235,10 @@ void DefaultTool::updateActions()
     KoSelection * selection( koSelection() ); 
     if (!selection)
     {
-        action( "object_move_totop" )->setEnabled(false);
-        action( "object_move_up" )->setEnabled(false);
-        action( "object_move_down" )->setEnabled(false);
-        action( "object_move_tobottom" )->setEnabled(false);
+        action( "object_order_front" )->setEnabled(false);
+        action( "object_order_raise" )->setEnabled(false);
+        action( "object_order_lower" )->setEnabled(false);
+        action( "object_order_back" )->setEnabled(false);
         action( "object_align_horizontal_left" )->setEnabled(false);
         action( "object_align_horizontal_center" )->setEnabled(false);
         action( "object_align_horizontal_right" )->setEnabled(false);
@@ -1242,10 +1251,10 @@ void DefaultTool::updateActions()
     }
 
     bool enable = selection->count () > 0;
-    action( "object_move_totop" )->setEnabled(enable);
-    action( "object_move_up" )->setEnabled(enable);
-    action( "object_move_down" )->setEnabled(enable);
-    action( "object_move_tobottom" )->setEnabled(enable);
+    action( "object_order_front" )->setEnabled(enable);
+    action( "object_order_raise" )->setEnabled(enable);
+    action( "object_order_lower" )->setEnabled(enable);
+    action( "object_order_back" )->setEnabled(enable);
     enable = selection->count() > 1 || ( enable && m_canvas->resourceProvider()->hasResource( KoCanvasResource::PageSize ) );
     action( "object_align_horizontal_left" )->setEnabled(enable);
     action( "object_align_horizontal_center" )->setEnabled(enable);

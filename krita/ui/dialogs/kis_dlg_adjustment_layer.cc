@@ -84,7 +84,8 @@ void KisDlgAdjustmentLayer::slotNameChanged(const QString & text)
 
 KisFilterConfiguration * KisDlgAdjustmentLayer::filterConfiguration() const
 {
-    return wdgFilterNodeCreation.filterSelector->configuration();
+    KisFilterConfiguration* config = wdgFilterNodeCreation.filterSelector->configuration();
+    return config;
 }
 
 QString KisDlgAdjustmentLayer::layerName() const
@@ -95,8 +96,12 @@ QString KisDlgAdjustmentLayer::layerName() const
 void KisDlgAdjustmentLayer::slotConfigChanged()
 {
     enableButtonOk(1);
-    m_nodeFilterInterface->setFilter(filterConfiguration());
-    m_node->setDirty(m_node->extent());
+    KisFilterConfiguration * config = filterConfiguration();
+    if( config )
+    { 
+        m_nodeFilterInterface->setFilter(config);
+    }
+    m_node->setDirty();
 }
 
 void KisDlgAdjustmentLayer::kickTimer()

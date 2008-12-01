@@ -1,5 +1,9 @@
 /*
- *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2004-2008 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
+ *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,72 +19,48 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_FILTEROP_SETTINGS_H
-#define KIS_FILTEROP_SETTINGS_H
 
-#include "kis_types.h"
-#include "kis_paintop_settings.h"
-class KisConfigWidget;
-class QWidget;
-class KisFilterConfiguration;
+#ifndef KIS_FILTEROP_SETTINGS_H_
+#define KIS_FILTEROP_SETTINGS_H_
+
+#include <kis_paintop_settings.h>
+#include <kis_types.h>
+
 class QDomElement;
-class QDomDocument;
-class QGridLayout;
-class Ui_FilterOpOptions;
-class KoID;
-class KisConfigWidget;
+class KisFilterOpSettingsWidget;
+class KisFilterConfiguration;
 
 class KisFilterOpSettings : public QObject, public KisPaintOpSettings
 {
-
     Q_OBJECT
 
 public:
+    using KisPaintOpSettings::fromXML;
+    using KisPaintOpSettings::toXML;
 
-    KisFilterOpSettings(QWidget* parent, KisImageSP image);
+    KisFilterOpSettings( KisFilterOpSettingsWidget* widget );
 
     virtual ~KisFilterOpSettings();
+    bool paintIncremental();
 
-    virtual KisPaintOpSettingsSP clone() const;
+    void fromXML(const QDomElement& elt);
+    void toXML(QDomDocument& doc, QDomElement& rootElt) const;
 
-    virtual KisConfigWidget *widget() const {
-        return m_optionsWidget;
-    }
+    KisPaintOpSettingsSP clone() const;
 
-    const KisFilterSP filter() const;
+    void setNode( KisNodeSP node );
 
+    void setImage( KisImageSP image );
+
+    KisFilterSP filter() const;
     KisFilterConfiguration* filterConfig() const;
-
     bool ignoreAlpha() const;
 
-    virtual void setNode(KisNodeSP node);
+public:
 
-    using KisPaintOpSettings::fromXML;
-    virtual void fromXML(const QDomElement&);
-
-    using KisPaintOpSettings::toXML;
-    virtual void toXML(QDomDocument&, QDomElement&) const;
-
-protected slots:
-
-    void setCurrentFilter(const KoID &);
-
-private:
-
-    void updateFilterConfigWidget();
-
-private:
-
-    KisConfigWidget* m_optionsWidget;
-    Ui_FilterOpOptions* m_uiOptions;
-    QGridLayout* m_layout;
-    const KisFilterSP m_currentFilter;
-    KisPaintDeviceSP m_paintDevice;
-    KisConfigWidget* m_currentFilterConfigWidget;
-    KisImageSP m_image;
+    KisFilterOpSettingsWidget *m_optionsWidget;
 
 };
 
 
-
-#endif
+#endif // KIS_FILTEROP_SETTINGS_H_

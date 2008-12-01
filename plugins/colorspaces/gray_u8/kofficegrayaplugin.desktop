@@ -22,6 +22,7 @@ Name[pt_BR]=Modelo de Cor de Tons de Cinza com Alfa
 Name[sv]=Gråskalefärgmodell med alfa
 Name[uk]=Модель кольору "відтінки сірого" з альфа
 Name[x-test]=xxGrayscale Color Model with Alphaxx
+Name[zh_CN]=带有 Alpha 的灰度色彩模型
 Name[zh_TW]=有 Alpha 的灰階色彩模型
 Comment=Color model for 8-bit grayscale images
 Comment[bg]=Цветови модел за 8 битови сиви изображения

@@ -53,13 +53,13 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
 {
     Q_ASSERT(settings);
     m_image = image;
-    m_useMovementPaint = settings->useMovementPaint();
+    m_deformBrush.setAction( settings->deformAction() );
     m_deformBrush.setRadius( settings->radius() );
     m_deformBrush.setDeformAmount ( settings->deformAmount() );
     m_deformBrush.setInterpolation( settings->bilinear() );
-    m_deformBrush.setAction( settings->deformAction() );
     m_deformBrush.setImage(image);
     m_deformBrush.setCounter(1);
+    m_useMovementPaint = settings->useMovementPaint();
     m_deformBrush.setUseCounter( settings->useCounter() );
     m_deformBrush.setUseOldData( settings->useOldData() );
 
@@ -85,8 +85,6 @@ void KisDeformPaintOp::paintAt(const KisPaintInformation& info)
 
     dab = cachedDab();
     dab->clear();
-
-    
 
     //write device, read device, position 
     m_deformBrush.paint(dab,m_dev, info);

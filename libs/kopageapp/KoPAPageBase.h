@@ -27,8 +27,9 @@
 
 #include <KoShapeContainer.h>
 #include <KoXmlReader.h>
-#include <KoPASavingContext.h>
 
+#include "KoPageApp.h"
+#include "KoPASavingContext.h"
 #include "kopageapp_export.h"
 
 struct KoPageLayout;
@@ -124,6 +125,13 @@ public:
      * @param shape The shape that was removed
      */
     virtual void shapeRemoved( KoShape * shape );
+
+    /**
+     * Get the page type used in the document
+     *
+     * The default page type KoPageApp::Page is returned
+     */
+    KoPageApp::PageType pageType() const;
 
 protected:
     /**

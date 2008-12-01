@@ -410,7 +410,13 @@ void KoListLevelProperties::loadOdf(KoOdfLoadingContext& context, const KoXmlEle
             setListItemSuffix(suffix);
         const QString startValue = style.attributeNS(KoXmlNS::text, "start-value", QString("1"));
         setStartValue(startValue.toInt());
-    } else { // if not defined, we have do nothing
+    }
+    // TODO implement bitmap for now just use an empty buller char
+    else if (style.localName() == "list-level-style-image") {   // list with image
+        setStyle(KoListStyle::CustomCharItem);
+        setBulletCharacter(QChar());
+    }
+    else { // if not defined, we have do nothing
         kDebug(32500) << "stylename else:" << style.localName() << "level=" << level << "displayLevel=" << displayLevel;
         setStyle(KoListStyle::DecimalItem);
         setListItemSuffix(".");

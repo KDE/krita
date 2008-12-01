@@ -21,6 +21,9 @@
 #ifndef KOZOOMCONTROLLER_H
 #define KOZOOMCONTROLLER_H
 
+#include "KoZoomAction.h"
+#include "koguiutils_export.h"
+#include <KoZoomMode.h>
 #include <QObject>
 #include <QSizeF>
 
@@ -30,8 +33,6 @@ class KoZoomHandler;
 class KActionCollection;
 class QSize;
 
-#include <KoZoomMode.h>
-#include "koguiutils_export.h"
 
 /**
  * This controller class handles zoom levels for any canvas.
@@ -65,9 +66,9 @@ public:
     * @param controller the canvasController
     * @param zoomHandler the zoom handler (viewconverter with setter methods)
     * @param actionCollection the action collection where the KoZoomAction is added to
-    * @param doSpecialAspectMode if the KoZoomAction should show a toggle
+    * @param specialButtons controls which special buttons to show
     */
-    KoZoomController(KoCanvasController *controller, KoZoomHandler *zoomHandler, KActionCollection *actionCollection, bool doSpecialAspectMode);
+    KoZoomController(KoCanvasController *controller, KoZoomHandler *zoomHandler, KActionCollection *actionCollection, KoZoomAction::SpecialButtons specialButtons = 0);
 
     /// destructor
     ~KoZoomController();
@@ -122,6 +123,18 @@ signals:
      * @see KoZoomAction::aspectModeChanged()
      */
     void aspectModeChanged (bool aspectModeActivated);
+
+    /**
+     * Signal is triggered when the user clicks the zoom to selection button.
+     * Nothing else happens except that this signal is emitted.
+     */
+    void zoomedToSelection();
+
+    /**
+     * Signal is triggered when the user clicks the zoom to all button.
+     * Nothing else happens except that this signal is emitted.
+     */
+    void zoomedToAll();
 
 private:
     Q_PRIVATE_SLOT(d, void setAvailableSize())

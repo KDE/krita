@@ -65,6 +65,10 @@ void  KisDeformPaintOpSettingsWidget::setConfiguration( const KisPropertiesConfi
         m_options->moveBtn->setChecked( true );
     }else if ( deformAction == 6 ){
         m_options->lensBtn->setChecked( true );
+    }else if ( deformAction == 7 ){
+        m_options->lensOutBtn->setChecked( true );
+    }else if ( deformAction == 8 ){
+        m_options->colorBtn->setChecked( true );
     }
 }
 
@@ -111,6 +115,10 @@ int  KisDeformPaintOpSettingsWidget::deformAction() const
         return 5; 
     } else if ( m_options->lensBtn->isChecked() ){ 
         return 6; 
+    } else if ( m_options->lensOutBtn->isChecked() ){ 
+        return 7; 
+    } else if ( m_options->colorBtn->isChecked() ){ 
+        return 8; 
     } else{
         return -1;
     }
@@ -132,5 +140,4 @@ bool KisDeformPaintOpSettingsWidget::useCounter() const{
 bool KisDeformPaintOpSettingsWidget::useOldData() const{
     return m_options->useOldData->isChecked();
 }
-
 

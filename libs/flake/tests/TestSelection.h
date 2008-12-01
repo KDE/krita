@@ -9,7 +9,7 @@ class TestSelection : public QObject
 private slots:
     // tests
     void testSelectedShapes();
-
+    void testSize();
 };
 
 #endif

@@ -139,6 +139,15 @@ void KisAdjustmentLayer::setFilter(KisFilterConfiguration * filterConfig)
     m_d->filterConfig = filterConfig;
 }
 
+void KisAdjustmentLayer::setDirty()
+{
+    if(selection())
+    {
+        KisLayer::setDirty(selection()->selectedExactRect());
+    } else {
+        KisLayer::setDirty();
+    }
+}
 
 KisSelectionSP KisAdjustmentLayer::selection() const
 {

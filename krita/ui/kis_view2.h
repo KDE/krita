@@ -22,7 +22,6 @@
 #include <QDockWidget>
 
 #include <KoView.h>
-#include <KoToolBox.h>
 #include <KoToolManager.h>
 #include <krita_export.h>
 #include <kis_types.h>

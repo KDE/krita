@@ -28,6 +28,7 @@
 #include <kstandarddirs.h>
 
 #include <KoDockFactory.h>
+#include <KoDockRegistry.h>
 
 #include "kis_config.h"
 #include "kis_cursor.h"
@@ -43,8 +44,7 @@ K_EXPORT_COMPONENT_FACTORY(kritaspecificcolorselector, SpecificColorSelectorPlug
 class SpecificColorSelectorDockFactory : public KoDockFactory
 {
 public:
-    SpecificColorSelectorDockFactory(KisView2 * view)
-            : m_view(view) {
+    SpecificColorSelectorDockFactory() {
     }
 
     virtual QString id() const {
@@ -56,7 +56,7 @@ public:
     }
 
     virtual QDockWidget* createDockWidget() {
-        SpecificColorSelectorDock * dockWidget = new SpecificColorSelectorDock(m_view);
+        SpecificColorSelectorDock * dockWidget = new SpecificColorSelectorDock();
 
         dockWidget->setObjectName(id());
 
@@ -66,10 +66,6 @@ public:
     KoDockFactory::DockPosition defaultDockPosition() const {
         return DockMinimized;
     }
-
-private:
-    KisView2 * m_view;
-
 };
 
 
@@ -77,18 +73,13 @@ SpecificColorSelectorPlugin::SpecificColorSelectorPlugin(QObject *parent, const 
         : KParts::Plugin(parent)
 {
     dbgPlugins << "SpecificColorSelectorPlugin";
-    if (parent->inherits("KisView2")) {
-        m_view = (KisView2*) parent;
 
-        setComponentData(SpecificColorSelectorPluginFactory::componentData());
-        SpecificColorSelectorDockFactory dockFactory(m_view);
-        m_view->createDockWidget(&dockFactory);
-    }
+    setComponentData(SpecificColorSelectorPluginFactory::componentData());
+    KoDockRegistry::instance()->add( new SpecificColorSelectorDockFactory() );
 }
 
 SpecificColorSelectorPlugin::~SpecificColorSelectorPlugin()
 {
-    m_view = 0;
 }
 
 #include "specificcolorselector.moc"

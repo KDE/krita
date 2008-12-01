@@ -95,6 +95,8 @@ bool compareQImages(QPoint & pt, const QImage & img1, const QImage & img2, int f
                                   && qAbs(qBlue(a) - qBlue(b)) <= fuzzy;
                 if (!same && (qAlpha(a) != 0 || qAlpha(b) != 0)) {
                     qDebug() << " Different! source" << qRed(a) << qGreen(a) << qBlue(a) << "dest" << qRed(b) << qGreen(b) << qBlue(b);
+                    pt.setX(x);
+                    pt.setY(y);
                     return false;
                 }
             }

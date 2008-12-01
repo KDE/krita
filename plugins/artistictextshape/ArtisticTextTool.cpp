@@ -19,6 +19,8 @@
  */
 
 #include "ArtisticTextTool.h"
+#include "AttachTextToPathCommand.h"
+#include "DetachTextFromPathCommand.h"
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -247,15 +249,19 @@ void ArtisticTextTool::attachPath()
         m_blinkingCursor.stop();
         m_showCursor = false;
         updateTextCursorArea();
-        m_currentShape->putOnPath( m_path );
+        m_canvas->addCommand( new AttachTextToPathCommand( m_currentShape, m_path ) );
         m_blinkingCursor.start( 500 );
+        updateActions();
     }
 }
 
 void ArtisticTextTool::detachPath()
 {
     if( m_currentShape && m_currentShape->isOnPath() )
-        m_currentShape->removeFromPath();
+    {
+        m_canvas->addCommand( new DetachTextFromPathCommand( m_currentShape ) );
+        updateActions();
+    }
 }
 
 void ArtisticTextTool::convertText()
@@ -272,6 +278,7 @@ void ArtisticTextTool::convertText()
     path->setShapeId( KoPathShapeId );
 
     QUndoCommand * cmd = m_canvas->shapeController()->addShapeDirect( path );
+    cmd->setText( i18n("Convert to Path") );
     m_canvas->shapeController()->removeShape( m_currentShape, cmd );
     m_canvas->addCommand( cmd );
 
@@ -328,7 +335,7 @@ void ArtisticTextTool::setTextCursor( int textCursor )
 
 void ArtisticTextTool::updateTextCursorArea() const
 {
-    if( ! m_currentShape && m_textCursor > -1 )
+    if( ! m_currentShape || m_textCursor < 0 )
         return;
 
     QRectF bbox = m_textCursorShape.boundingRect();

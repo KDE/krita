@@ -300,7 +300,10 @@ void KoColorConversionSystem::createColorConverters(const KoColorSpace* colorSpa
     typedef QPair<KoID, KoID> KoID2KoID;
     foreach( KoID2KoID possibility, possibilities)
     {
-        Path* path = findBestPath( csNode, nodeFor( possibility.first.id(), possibility.second.id(), "" ) );
+        const KoColorSpaceFactory* csf = KoColorSpaceRegistry::instance()->get( KoColorSpaceRegistry::instance()->colorSpaceId( possibility.first.id(), possibility.second.id() )  );
+        Q_ASSERT( csf );
+        Path* path = findBestPath( csNode, nodeFor( csf->colorModelId().id(), csf->colorDepthId().id(), csf->defaultProfile() ) );
+        Q_ASSERT( path );
         path->isGood = pQC.isGoodPath( path );
 
         if(not bestPath) {
@@ -515,6 +518,8 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl2
                             lessWorsePath = newP;
                         }
                         else if ( pQC.lessWorseThan( newP, lessWorsePath)  ) {
+                            Q_ASSERT(newP->startNode()->id() == lessWorsePath->startNode()->id() );
+                            Q_ASSERT(newP->endNode()->id() == lessWorsePath->endNode()->id());
                             kDebug() << pQC.lessWorseThan( newP, lessWorsePath) << " " << newP << "  "<< lessWorsePath;
                             delete lessWorsePath;
                             lessWorsePath = newP;

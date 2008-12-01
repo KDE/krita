@@ -66,7 +66,6 @@ KisPropertiesConfiguration* KisAirbrushOpSettingsWidget::configuration() const
 
 void KisAirbrushOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
 {
-    config->clearProperties();
     m_brushOption->writeOptionSetting(config);
 }
 

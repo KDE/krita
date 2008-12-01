@@ -77,6 +77,8 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
         painter->setBounds(image->bounds());
     }
 
+    Q_ASSERT( settings );
+
     KisPaintOpFactory* f = value(id);
     if (f) {
         return f->createOp(settings, painter, image);
@@ -87,6 +89,8 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
 KisPaintOp * KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPainter * painter, KisImageSP image) const
 {
     Q_ASSERT(preset);
+    Q_ASSERT( painter );
+    Q_ASSERT( image );
     if (!preset) return 0;
     return paintOp(preset->paintOp().id(), preset->settings(), painter, image);
 }

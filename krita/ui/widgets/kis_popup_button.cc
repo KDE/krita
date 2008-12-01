@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,7 +35,9 @@ struct KisPopupButton::Private {
     QWidget* popupWidget;
 };
 
-KisPopupButton::KisPopupButton(QWidget* parent) : QPushButton(parent), d(new Private)
+KisPopupButton::KisPopupButton(QWidget* parent)
+    : QPushButton(parent)
+    , m_d(new Private)
 {
     setObjectName("KisPopupButton");
     connect(this, SIGNAL(released()), SLOT(showPopupWidget()));
@@ -42,68 +45,70 @@ KisPopupButton::KisPopupButton(QWidget* parent) : QPushButton(parent), d(new Pri
 
 KisPopupButton::~KisPopupButton()
 {
-    delete d;
+    m_d->frameLayout->removeWidget(m_d->popupWidget);
+    m_d->popupWidget->hide();
+    delete m_d;
 }
 
 void KisPopupButton::setAlwaysVisible(bool v)
 {
     if (v) {
-        d->frame->setFrameStyle(Qt::SubWindow);
+        m_d->frame->setFrameStyle(Qt::SubWindow);
         showPopupWidget();
     } else {
-        d->frame->setFrameStyle(Qt::Popup);
+        m_d->frame->setFrameStyle(Qt::Popup);
     }
 }
 
 void KisPopupButton::setPopupWidget(QWidget* widget)
 {
-    delete d->popupWidget;
-    delete d->frame;
+    delete m_d->popupWidget;
+    delete m_d->frame;
     if (widget) {
-        d->frame = new QFrame(this);
-        d->frame->setFrameStyle(QFrame::Box | QFrame::Plain);
-        d->frame->setWindowFlags(Qt::Popup);
-        d->frameLayout = new QHBoxLayout(d->frame);
-        d->frameLayout->setMargin(0);
-        d->frameLayout->setSizeConstraint( QLayout::SetFixedSize );
-        d->frame->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
-        d->popupWidget = widget;
-        d->popupWidget->setParent(d->frame);
-        d->frameLayout->addWidget(d->popupWidget);
+        m_d->frame = new QFrame(this);
+        m_d->frame->setFrameStyle(QFrame::Box | QFrame::Plain);
+        m_d->frame->setWindowFlags(Qt::Popup);
+        m_d->frameLayout = new QHBoxLayout(m_d->frame);
+        m_d->frameLayout->setMargin(0);
+        m_d->frameLayout->setSizeConstraint( QLayout::SetFixedSize );
+        m_d->frame->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
+        m_d->popupWidget = widget;
+        m_d->popupWidget->setParent(m_d->frame);
+        m_d->frameLayout->addWidget(m_d->popupWidget);
     }
-}\
+}
 
 void KisPopupButton::setPopupWidgetWidth(int w)
 {
-    d->frame->resize(w, d->frame->height());
+    m_d->frame->resize(w, m_d->frame->height());
 }
 
 void KisPopupButton::showPopupWidget()
 {
-    if (d->popupWidget) {
-        QSize popSize = d->popupWidget->size();
+    if (m_d->popupWidget) {
+        QSize popSize = m_d->popupWidget->size();
         QRect popupRect(this->mapToGlobal(QPoint(0, this->size().height())), popSize);
 
         // Make sure the popup is not drawn outside the screen area
-        QRect screenRect = QApplication::desktop()->availableGeometry(d->frame);
+        QRect screenRect = QApplication::desktop()->availableGeometry(m_d->frame);
         if (popupRect.right() > screenRect.right())
             popupRect.translate(screenRect.right() - popupRect.right(), 0);
         if (popupRect.left() < screenRect.left())
             popupRect.translate(screenRect.left() - popupRect.left(), 0);
         if (popupRect.bottom() > screenRect.bottom())
-            popupRect.translate(0, -d->frame->height());
+            popupRect.translate(0, -m_d->frame->height());
 
-        d->frame->setGeometry(popupRect);
-        d->frame->raise();
-        d->frame->show();
+        m_d->frame->setGeometry(popupRect);
+        m_d->frame->raise();
+        m_d->frame->show();
 
     }
 }
 
 void KisPopupButton::hidePopupWidget()
 {
-    if (d->popupWidget) {
-        d->frame->setVisible(false);
+    if (m_d->popupWidget) {
+        m_d->frame->setVisible(false);
     }
 }
 

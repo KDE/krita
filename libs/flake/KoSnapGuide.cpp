@@ -234,13 +234,6 @@ QList<QPointF> KoSnapProxy::pointsFromShape(KoShape * shape)
     if (! shape->isVisible(true))
         return snapPoints;
 
-    // add the bounding box corners as default snap points
-    QRectF bbox = shape->boundingRect();
-    snapPoints.append(bbox.topLeft());
-    snapPoints.append(bbox.topRight());
-    snapPoints.append(bbox.bottomRight());
-    snapPoints.append(bbox.bottomLeft());
-
     // return the special snap points of the shape
     snapPoints += shape->snapData().snapPoints();
 
@@ -264,6 +257,15 @@ QList<QPointF> KoSnapProxy::pointsFromShape(KoShape * shape)
 
         if (shape == m_snapGuide->editedShape())
             snapPoints.removeLast();
+    }
+    else
+    {
+        // add the bounding box corners as default snap points
+        QRectF bbox = shape->boundingRect();
+        snapPoints.append(bbox.topLeft());
+        snapPoints.append(bbox.topRight());
+        snapPoints.append(bbox.bottomRight());
+        snapPoints.append(bbox.bottomLeft());
     }
 
     return snapPoints;

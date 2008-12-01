@@ -44,8 +44,6 @@ public:
     virtual bool showOnShapeCreate() { return false; }
     /// reimplemented
     virtual QUndoCommand * createCommand();
-private slots:
-    void slotTextChanged();
 
 private:
     class ChangeFont : public QUndoCommand

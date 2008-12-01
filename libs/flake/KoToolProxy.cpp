@@ -149,6 +149,8 @@ public:
     KoCanvasController *controller;
     KoToolProxy *parent;
 
+    QPoint mouseDownPoint; // used to determine if the mouse-release is after a drag or a simple click
+
     bool mouseLeaveWorkaround; // up until at least 4.3.0 we get a mouse move event when the tablet leaves the canvas.
 };
 
@@ -214,6 +216,7 @@ void KoToolProxy::mousePressEvent(QMouseEvent *event, const QPointF &point)
     d->mouseLeaveWorkaround = false;
     KoInputDevice id;
     KoToolManager::instance()->switchInputDevice(id);
+    d->mouseDownPoint = event->pos();
 
     if (d->tabletPressed) // refuse to send a press unless there was a release first.
         return;
@@ -260,7 +263,30 @@ void KoToolProxy::mouseReleaseEvent(QMouseEvent *event, const QPointF &point)
     d->scrollTimer.stop();
 
     KoPointerEvent ev(event, point);
-    if (d->activeTool) d->activeTool->mouseReleaseEvent(&ev);
+    if (d->activeTool) {
+        d->activeTool->mouseReleaseEvent(&ev);
+
+        if (! event->isAccepted() && event->button() == Qt::LeftButton && event->modifiers() == 0
+                && qAbs(d->mouseDownPoint.x() - event->x()) < 5
+                && qAbs(d->mouseDownPoint.y() - event->y()) < 5) {
+            // we potentially will change the selection
+            Q_ASSERT(d->activeTool->m_canvas);
+            KoShapeManager *manager = d->activeTool->m_canvas->shapeManager();
+            Q_ASSERT(manager);
+            // only change the selection if that will not lead to losing a complex selection
+            if (manager->selection()->count() <= 1) {
+                KoShape *shape = manager->shapeAt(point);
+                if (shape && !manager->selection()->isSelected(shape)) { // make the clicked shape the active one
+                    manager->selection()->deselectAll();
+                    manager->selection()->select(shape);
+                    QList<KoShape*> shapes;
+                    shapes << shape;
+                    QString tool = KoToolManager::instance()->preferredToolForSelection(shapes);
+                    KoToolManager::instance()->switchToolRequested(tool);
+                }
+            }
+        }
+    }
 }
 
 void KoToolProxy::keyPressEvent(QKeyEvent *event)

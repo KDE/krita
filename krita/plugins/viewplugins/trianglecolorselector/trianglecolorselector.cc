@@ -16,24 +16,13 @@
  */
 
 #include "trianglecolorselector.h"
-#include <stdlib.h>
 
-#include <QTimer>
-
-#include <kactioncollection.h>
 #include <kcomponentdata.h>
-#include <kis_debug.h>
 #include <kgenericfactory.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
 
 #include <KoDockFactory.h>
-
-#include "kis_config.h"
-#include "kis_cursor.h"
-#include "kis_global.h"
-#include "kis_types.h"
-#include "kis_view2.h"
+#include <KoDockRegistry.h>
+#include "kis_debug.h"
 
 #include "kis_triangle_color_selector_dock.h"
 
@@ -43,8 +32,7 @@ K_EXPORT_COMPONENT_FACTORY(kritatrianglecolorselector, TriangleColorSelectorPlug
 class KisTriangleColorSelectorDockFactory : public KoDockFactory
 {
 public:
-    KisTriangleColorSelectorDockFactory(KisView2 * view)
-            : m_view(view) {
+    KisTriangleColorSelectorDockFactory() {
     }
 
     virtual QString id() const {
@@ -56,7 +44,7 @@ public:
     }
 
     virtual QDockWidget* createDockWidget() {
-        KisTriangleColorSelectorDock * dockWidget = new KisTriangleColorSelectorDock(m_view);
+        KisTriangleColorSelectorDock * dockWidget = new KisTriangleColorSelectorDock();
 
         dockWidget->setObjectName(id());
 
@@ -66,11 +54,6 @@ public:
     KoDockFactory::DockPosition defaultDockPosition() const {
         return DockMinimized;
     }
-
-
-private:
-    KisView2 * m_view;
-
 };
 
 
@@ -78,18 +61,13 @@ TriangleColorSelectorPlugin::TriangleColorSelectorPlugin(QObject *parent, const 
         : KParts::Plugin(parent)
 {
     dbgPlugins << "TriangleColorSelectorPlugin";
-    if (parent->inherits("KisView2")) {
-        m_view = (KisView2*) parent;
 
-        setComponentData(TriangleColorSelectorPluginFactory::componentData());
-        KisTriangleColorSelectorDockFactory triangleColorSelectorDockFactory(m_view);
-        m_view->createDockWidget(&triangleColorSelectorDockFactory);
-    }
+    setComponentData(TriangleColorSelectorPluginFactory::componentData()); 
+    KoDockRegistry::instance()->add( new KisTriangleColorSelectorDockFactory() );
 }
 
 TriangleColorSelectorPlugin::~TriangleColorSelectorPlugin()
 {
-    m_view = 0;
 }
 
 #include "trianglecolorselector.moc"

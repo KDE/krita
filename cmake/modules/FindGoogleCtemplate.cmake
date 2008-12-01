@@ -14,7 +14,7 @@
 
 SET( GOOGLE_CTEMPLATE_FOUND 0 CACHE BOOL "Do we have Google CTemplate?" )
 
-FIND_PATH(GOOGLE_CTEMPLATE_INCLUDE_DIR google/template.h )
+FIND_PATH(GOOGLE_CTEMPLATE_INCLUDE_DIR HINTS google/template.h ctemplate/template.h )
 
 FIND_LIBRARY(GOOGLE_CTEMPLATE_THREAD_LIB NAMES ctemplate libctemplate libctemplate-debug )
 FIND_LIBRARY(GOOGLE_CTEMPLATE_NOTHREAD_LIB ctemplate_nothreads libctemplate_nothreads ctemplate_nothreads-debug )

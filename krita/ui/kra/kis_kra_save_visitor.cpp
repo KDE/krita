@@ -19,33 +19,37 @@
  */
 
 #include "kra/kis_kra_save_visitor.h"
+#include "kra/kis_kra_tags.h"
 
 #include <colorprofiles/KoIccColorProfile.h>
 #include <KoStore.h>
 #include <KoColorSpace.h>
 
+#include "filter/kis_filter_configuration.h"
+#include "generator/kis_generator_layer.h"
 #include "kis_adjustment_layer.h"
 #include "kis_annotation.h"
-#include "filter/kis_filter_configuration.h"
 #include "kis_group_layer.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_selection.h"
 #include "kis_shape_layer.h"
-#include "generator/kis_generator_layer.h"
+#include "kis_clone_layer.h"
 
-KisKraSaveVisitor::KisKraSaveVisitor(KisImageSP img, KoStore *store, quint32 &count, const QString & name) :
-        KisNodeVisitor(),
-        m_count(count)
+using namespace KRA;
+
+KisKraSaveVisitor::KisKraSaveVisitor(KisImageSP img, KoStore *store, quint32 &count, const QString & name)
+    : KisNodeVisitor()
+    , m_img( img )
+    , m_store( store )
+    , m_external( false )
+    , m_count(count)
+    , m_name( name )
 {
-    m_external = false;
-    m_img = img;
-    m_store = store;
-    m_name = name;
 }
 
-void KisKraSaveVisitor::setExternalUri(QString &uri)
+void KisKraSaveVisitor::setExternalUri(const QString &uri)
 {
     m_external = true;
     m_uri = uri;
@@ -58,11 +62,11 @@ bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
 
         QString location = m_external ? QString::null : m_uri;
         m_store->pushDirectory();
-        m_store->enterDirectory(m_name + QString("/shapelayers/layer%1").arg(m_count));
+        m_store->enterDirectory(m_name + SHAPE_LAYER_PATH + QString::number( m_count ));
         result = shapeLayer->saveOdf(m_store);
         m_store->popDirectory();
     }
-    return result;
+    return result || visitAllInverse(layer);;
 }
 
 bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
@@ -76,13 +80,13 @@ bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
         if (profile) {
             const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
             if (iccprofile && !iccprofile->rawData().isEmpty())
-                annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
+                annotation = new KisAnnotation(ICC, iccprofile->name(), iccprofile->rawData());
         }
 
         if (annotation) {
             // save layer profile
             QString location = m_external ? QString::null : m_uri;
-            location += m_name + QString("/layers/layer%1").arg(m_count) + ".icc";
+            location += m_name + LAYER_PATH + QString::number( m_count ) + DOT_ICC;
 
             if (m_store->open(location)) {
                 m_store->write(annotation->annotation());
@@ -90,31 +94,8 @@ bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
             }
         }
     }
-    visitAllInverse(layer);
-    // XXX: save masks!
-
-//     if (layer->hasMask()) {
-//         KisPaintDeviceSP mask = layer->getMask();
-
-//         if (mask) {
-//             // save layer profile
-//             location = m_external ? QString::null : m_uri;
-//             location += m_img->name() + QString("/layers/layer%1").arg(m_count) + ".mask";
-
-//             if (m_store->open(location)) {
-//                 if (!mask->write(m_store)) {
-//                     mask->disconnect();
-//                     m_store->close();
-//                     return false;
-//                 }
-
-//                 m_store->close();
-//             }
-//         }
-//    }
-
     m_count++;
-    return true;
+    return visitAllInverse(layer);
 }
 
 bool KisKraSaveVisitor::visit(KisGroupLayer *layer)
@@ -128,7 +109,7 @@ bool KisKraSaveVisitor::visit(KisAdjustmentLayer* layer)
     if (layer->filter()) {
         QString location = m_external ? QString::null : m_uri;
         location = m_external ? QString::null : m_uri;
-        location += m_name + QString("/layers/layer%1").arg(m_count) + ".filterconfig";
+        location += m_name + LAYER_PATH + QString::number( m_count ) + DOT_FILTERCONFIG;
 
         if (m_store->open(location)) {
             QString s = layer->filter()->toLegacyXML();
@@ -137,7 +118,7 @@ bool KisKraSaveVisitor::visit(KisAdjustmentLayer* layer)
         }
     }
     m_count++;
-    return true;
+    return visitAllInverse(layer);
 }
 
 bool KisKraSaveVisitor::visit(KisGeneratorLayer * layer)
@@ -150,13 +131,13 @@ bool KisKraSaveVisitor::visit(KisGeneratorLayer * layer)
         if (profile) {
             const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
             if (iccprofile && !iccprofile->rawData().isEmpty())
-                annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
+                annotation = new  KisAnnotation(ICC, iccprofile->name(), iccprofile->rawData());
         }
 
         if (annotation) {
             // save layer profile
             QString location = m_external ? QString::null : m_uri;
-            location += m_name + QString("/layers/layer%1").arg(m_count) + ".icc";
+            location += m_name + LAYER_PATH + QString::number( m_count ) + DOT_ICC;
 
             if (m_store->open(location)) {
                 m_store->write(annotation->annotation());
@@ -168,7 +149,7 @@ bool KisKraSaveVisitor::visit(KisGeneratorLayer * layer)
     if (layer->generator()) {
         QString location = m_external ? QString::null : m_uri;
         location = m_external ? QString::null : m_uri;
-        location += m_name + QString("/layers/layer%1").arg(m_count) + ".generatorconfig";
+        location += m_name + LAYER_PATH + QString::number( m_count ) + DOT_GENERATORCONFIG;
 
         if (m_store->open(location)) {
             QString s = layer->generator()->toLegacyXML();
@@ -177,13 +158,13 @@ bool KisKraSaveVisitor::visit(KisGeneratorLayer * layer)
         }
     }
     m_count++;
-    return true;
+    return visitAllInverse(layer);
 }
 
 bool KisKraSaveVisitor::visit(KisCloneLayer *layer)
 {
     Q_UNUSED(layer);
-    return true;
+    return visitAllInverse(layer);
 }
 
 bool KisKraSaveVisitor::visit(KisFilterMask *mask)
@@ -215,7 +196,7 @@ bool KisKraSaveVisitor::savePaintDevice(KisNode * node)
 {
 
     QString location = m_external ? QString::null : m_uri;
-    location += m_name + QString("/layers/layer%1").arg(m_count);
+    location += m_name + LAYER_PATH + QString::number( m_count );
 
     // Layer data
     if (m_store->open(location)) {

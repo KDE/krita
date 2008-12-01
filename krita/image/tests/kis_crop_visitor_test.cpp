@@ -16,17 +16,78 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <KoColorSpaceRegistry.h>
 #include "kis_crop_visitor_test.h"
 
 #include <qtest_kde.h>
 #include "kis_crop_visitor.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
+#include "kis_fill_painter.h"
+
+#include "testutil.h"
 
 void KisCropVisitorTest::testCreation()
 {
     QRect rc(0, 0, 100, 100);
     KisCropVisitor test(rc, true);
+}
+
+void KisCropVisitorTest::testUndo()
+{
+class KisUndoAdapterDummy : public KisUndoAdapter
+{
+    public:
+        KisUndoAdapterDummy() : KisUndoAdapter(0) {}
+        ~KisUndoAdapterDummy() {}
+
+    public:
+        void addCommand(QUndoCommand *cmd) {    
+            undostack.push(cmd);
+        }
+
+        void beginMacro()
+        {
+            undostack.beginMacro("Test");
+        }
+
+        void endMacro()
+        {
+            undostack.endMacro();
+        }
+
+        void doUndo()
+        {
+            undostack.undo();
+        }
+
+    private:
+        QUndoStack undostack;
+    };
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    KisUndoAdapterDummy* undoAdapterDummy = new KisUndoAdapterDummy();
+    KisImageSP img = new KisImage(undoAdapterDummy, 300, 300, cs, "test");
+    KisPaintLayerSP layer = new KisPaintLayer(img, "testlayer", OPACITY_OPAQUE);
+    KisPaintDeviceSP dev = layer->paintDevice();
+
+    KisFillPainter painter(dev);
+    painter.fillRect( QRect(0, 0, 300, 300), KoColor(Qt::white, cs));
+    QImage image1 = dev->convertToQImage(0, 0, 0, 300, 300);
+
+    undoAdapterDummy->beginMacro();
+
+    QRect rc(0, 0, 100, 100);
+    KisCropVisitor visitor(rc, true);
+    layer->accept(visitor);
+
+    undoAdapterDummy->endMacro();
+    undoAdapterDummy->doUndo();
+
+    QPoint errpoint;
+    if (!TestUtil::compareQImages(errpoint, image1, dev->convertToQImage(0, 0, 0, 300, 300))) {
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    }
 }
 
 

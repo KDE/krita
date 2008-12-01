@@ -206,3 +206,8 @@ void KoPAPageBase::shapeAdded( KoShape * shape )
 void KoPAPageBase::shapeRemoved( KoShape * shape )
 {
 }
+
+KoPageApp::PageType KoPAPageBase::pageType() const
+{
+    return KoPageApp::Page;
+}

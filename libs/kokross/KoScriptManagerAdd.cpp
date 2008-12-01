@@ -25,14 +25,19 @@
 #include <kross/core/action.h>
 #include <kross/core/actioncollection.h>
 #include <kross/ui/view.h>
+#include <kross/ui/model.h>
 
 #include <QtCore/QFileInfo>
 #include <QtGui/QBoxLayout>
 #include <QtGui/QLabel>
 #include <QtGui/QRadioButton>
 
+#include <QLineEdit>
+#include <QComboBox>
+
 #include <klocale.h>
 #include <kurl.h>
+#include <kurlrequester.h>
 #include <kmimetype.h>
 #include <kfilewidget.h>
 #include <kdebug.h>
@@ -105,6 +110,7 @@ class KoScriptManagerAddFileWidget::Private
         KoScriptManagerAddWizard* const wizard;
         KFileWidget* filewidget;
         explicit Private(KoScriptManagerAddWizard* const w): wizard(w) {}
+        QString m_file;
 };
 
 KoScriptManagerAddFileWidget::KoScriptManagerAddFileWidget(KoScriptManagerAddWizard* wizard, const QString& startDirOrVariable)
@@ -125,7 +131,7 @@ KoScriptManagerAddFileWidget::KoScriptManagerAddFileWidget(KoScriptManagerAddWiz
     d->filewidget->setMimeFilter(mimetypes /*, defaultmime*/);
 
     layout->addWidget( d->filewidget );
-    connect(d->filewidget, SIGNAL(fileHighlighted(const QString&)), this, SLOT(slotUpdate()));
+    connect(d->filewidget, SIGNAL(fileHighlighted(const QString&)), this, SLOT(slotFileHighlighted(const QString&)));
     connect(d->filewidget, SIGNAL(fileSelected(const QString&)), this, SLOT(slotUpdate()));
 }
 
@@ -136,12 +142,21 @@ KoScriptManagerAddFileWidget::~KoScriptManagerAddFileWidget()
 
 QString KoScriptManagerAddFileWidget::selectedFile() const
 {
-    return d->filewidget->selectedFile();
+    //kDebug(32010)<<d->filewidget->selectedFile();
+    return d->m_file;
+}
+
+void KoScriptManagerAddFileWidget::slotFileHighlighted(const QString &file)
+{
+    //kDebug(32010)<<file;
+    d->m_file = file;
+    d->wizard->setValid(d->wizard->m_fileItem, ! file.isEmpty());
 }
 
 void KoScriptManagerAddFileWidget::slotUpdate()
 {
-    d->wizard->setValid(d->wizard->m_fileItem, ! d->filewidget->selectedFile().isEmpty());
+    //kDebug(32010)<<selectedFile();
+    d->wizard->setValid(d->wizard->m_fileItem, ! d->m_file.isEmpty());
 }
 
 /********************************************************************
@@ -172,7 +187,16 @@ KoScriptManagerAddScriptWidget::~KoScriptManagerAddScriptWidget()
 
 void KoScriptManagerAddScriptWidget::slotUpdate()
 {
-    d->wizard->setValid(d->wizard->m_scriptItem, d->editor && d->editor->isValid());
+    //NOTE: idValid() only checks ! nameEdit.isEmpty()
+    //d->wizard->setValid(d->wizard->m_scriptItem, d->editor && d->editor->isValid());
+
+    d->wizard->setValid( d->wizard->m_scriptItem, 
+                         ! ( d->editor == 0 ||
+                             d->editor->nameEdit()->text().isEmpty() ||
+                             d->editor->textEdit()->text().isEmpty() ||
+                             d->editor->interpreterEdit()->currentText().isEmpty() ||
+                             d->editor->fileEdit()->url().fileName().isEmpty() )
+                        );
 }
 
 void KoScriptManagerAddScriptWidget::showEvent(QShowEvent* event)
@@ -198,6 +222,11 @@ void KoScriptManagerAddScriptWidget::showEvent(QShowEvent* event)
 
     d->editor = new Kross::ActionCollectionEditor(action, this);
     layout()->addWidget(d->editor);
+    d->editor->interpreterEdit()->setEnabled( false );
+    d->editor->fileEdit()->setEnabled( false );
+    connect( d->editor->textEdit(), SIGNAL( textChanged( const QString& ) ), this, SLOT( slotUpdate() ) );
+    connect( d->editor->interpreterEdit(), SIGNAL( editTextChanged( const QString& ) ), this, SLOT( slotUpdate() ) );
+    connect( d->editor->fileEdit(), SIGNAL( textChanged( const QString& ) ), this, SLOT( slotUpdate() ) );
 
     QWidget::showEvent(event);
     slotUpdate();
@@ -226,8 +255,9 @@ KoScriptManagerAddCollectionWidget::KoScriptManagerAddCollectionWidget(KoScriptM
     setObjectName("ScriptManagerAddCollectionWidget");
     QVBoxLayout* layout = new QVBoxLayout(this);
     setLayout(layout);
-    Kross::ActionCollection* collection = new Kross::ActionCollection("");
+    Kross::ActionCollection* collection = new Kross::ActionCollection(uniqueName());
     m_editor = new Kross::ActionCollectionEditor(collection, this);
+    m_editor->textEdit()->setText( "" );
     layout->addWidget(m_editor);
 }
 
@@ -235,9 +265,31 @@ KoScriptManagerAddCollectionWidget::~KoScriptManagerAddCollectionWidget()
 {
 }
 
+QString KoScriptManagerAddCollectionWidget::uniqueName() const
+{
+    QString s("Collection-%1");
+    int i = 1;
+    while ( m_wizard->m_collection->hasCollection( s.arg( i ) ) ) {
+        ++i;
+    }
+    return s.arg( i );
+}
+
 void KoScriptManagerAddCollectionWidget::slotUpdate()
 {
     m_wizard->setValid(m_wizard->m_collectionItem, m_editor->isValid());
+}
+
+bool KoScriptManagerAddCollectionWidget::accept()
+{
+    kDebug(32010)<<"KoScriptManagerAddCollectionWidget::accept()";
+    Q_ASSERT( m_wizard );
+#ifndef DISABLE_ADD_REMOVE
+    m_editor->commit(); // take over changes done in the editor into the action collection
+    m_editor->collection()->setParentCollection( m_wizard->m_collection );
+#endif
+    //TODO select new item
+    return true;
 }
 
 /********************************************************************

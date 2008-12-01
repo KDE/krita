@@ -19,9 +19,9 @@
 #ifndef KIS_PAINTOP_FACTORY_H_
 #define KIS_PAINTOP_FACTORY_H_
 
-#include "kis_shared.h"
 #include "kis_types.h"
-
+#include "krita_export.h"
+#include <QObject>
 #include <QString>
 
 class KoColorSpace;
@@ -35,10 +35,12 @@ class QWidget;
  * If there is an optionWidget, the derived paintop itself must support settings,
  * and it's up to the factory to do that.
  */
-class KRITAIMAGE_EXPORT KisPaintOpFactory  : public KisShared
+class KRITAIMAGE_EXPORT KisPaintOpFactory : public QObject
 {
+    Q_OBJECT
 
 public:
+
     KisPaintOpFactory();
     virtual ~KisPaintOpFactory() {}
 

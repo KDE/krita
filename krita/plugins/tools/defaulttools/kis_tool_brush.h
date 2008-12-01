@@ -64,7 +64,6 @@ private:
     QGridLayout* m_optionLayout;
     QCheckBox * m_chkSmooth;
     QCheckBox * m_chkAssistant;
-    QComboBox * m_assistant;
     QSlider * m_sliderMagnetism;
     QSlider * m_sliderSmoothness;
 };

@@ -183,7 +183,7 @@ bool KisShapeLayer::saveOdf(KoStore * store) const
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
     foreach(KoShape* shape, shapes) {
-        dbgKrita << "shape: " << shape->name();
+        dbgKrita << "saving shape: " << shape->name();
     }
 
     store->disallowNameExpansion();

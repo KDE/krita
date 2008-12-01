@@ -105,6 +105,7 @@ void KisFilterDialog::updatePreview()
     if (!d->currentFilter) return;
 
     d->mask->setFilter(d->uiFilterDialog.filterSelection->configuration());
+    d->mask->setDirty();
 }
 
 void KisFilterDialog::apply()

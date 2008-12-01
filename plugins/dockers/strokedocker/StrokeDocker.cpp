@@ -32,6 +32,7 @@
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoDockFactory.h>
 #include <KoUnitDoubleSpinBox.h>
 #include <KoShapeManager.h>
@@ -289,10 +290,26 @@ void StrokeDocker::setCanvas( KoCanvasBase *canvas )
 {
     if( canvas )
     {
-        connect( canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
+        connect( canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), 
+                 this, SLOT( selectionChanged() ) );
+        connect( canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant&)),
+                 this, SLOT(resourceChanged(int, const QVariant&)) );
         setUnit( canvas->unit() );
     }
 }
 
-// #include "StrokeDocker.moc"
+void StrokeDocker::resourceChanged(int key, const QVariant & value)
+{
+    switch(key)
+    {
+    case KoCanvasResource::Unit:
+        {
+            KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+            setUnit( canvasController->canvas()->unit() );
+        }
+        break;
+    }
+}
+
+#include "StrokeDocker.moc"
 

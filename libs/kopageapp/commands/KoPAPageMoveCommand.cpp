@@ -33,7 +33,12 @@ KoPAPageMoveCommand::KoPAPageMoveCommand( KoPADocument *document, KoPAPageBase *
 {
     Q_ASSERT( document );
     Q_ASSERT( page );
-    setText( i18n( "Move page" ) );
+    if ( m_page->pageType() == KoPageApp::Slide ) {
+        setText( i18n( "Move page" ) );
+    }
+    else {
+        setText( i18n( "Move slide" ) );
+    }
 }
 
 KoPAPageMoveCommand::~KoPAPageMoveCommand()

@@ -111,7 +111,7 @@ private:
 
     // temporary device
     KisPaintDeviceSP m_dev;
-    KisRandomAccessor * m_accessor;
+    KisRandomAccessor * m_dabAccessor;
     quint32 m_pixelSize;
 
     // painter()->device()

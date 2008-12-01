@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
@@ -114,6 +114,7 @@ bool KoPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &c
         loader.parseSvg(element.attributeNS(KoXmlNS::svg, "d"), true);
     }
 
+    applyViewboxTransformation(element);
     QPointF pos = normalize();
     setTransformation(QMatrix());
 
@@ -123,8 +124,6 @@ bool KoPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &c
     }
 
     setPosition(pos);
-
-    applyViewboxTransformation(element);
 
     loadOdfAttributes(element, context, OdfTransformation);
 
@@ -1067,8 +1066,8 @@ QString KoPathShape::toString(const QMatrix &matrix) const
             }
             // end point of curve ?
             else if (activeCP || (*it)->activeControlPoint1()) {
-                QPointF cp1 = matrix.map(activeCP ? lastPoint->controlPoint2() : (*it)->controlPoint1());
-                QPointF cp2 = matrix.map((*it)->activeControlPoint1() ? (*it)->controlPoint1() : lastPoint->controlPoint2());
+                QPointF cp1 = matrix.map(activeCP ? lastPoint->controlPoint2() : lastPoint->point());
+                QPointF cp2 = matrix.map((*it)->activeControlPoint1() ? (*it)->controlPoint1() : (*it)->point());
                 QPointF p = matrix.map((*it)->point());
                 d += QString("C%1 %2 %3 %4 %5 %6")
                      .arg(cp1.x()).arg(cp1.y())
@@ -1086,8 +1085,8 @@ QString KoPathShape::toString(const QMatrix &matrix) const
                 // add curve when there is a curve on the way to the first point
                 KoPathPoint * firstPoint = (*pathIt)->first();
                 if ((*it)->activeControlPoint2() || firstPoint->activeControlPoint1()) {
-                    QPointF cp1 = matrix.map((*it)->activeControlPoint2() ? (*it)->controlPoint2() : firstPoint->controlPoint1());
-                    QPointF cp2 = matrix.map(firstPoint->activeControlPoint1() ? firstPoint->controlPoint1() : (*it)->controlPoint2());
+                    QPointF cp1 = matrix.map((*it)->activeControlPoint2() ? (*it)->controlPoint2() : (*it)->point());
+                    QPointF cp2 = matrix.map(firstPoint->activeControlPoint1() ? firstPoint->controlPoint1() : (firstPoint)->point());
                     QPointF p = matrix.map(firstPoint->point());
 
                     d += QString("C%1 %2 %3 %4 %5 %6")

@@ -81,7 +81,6 @@ KisPropertiesConfiguration* KisBrushOpSettingsWidget::configuration() const
 
 void KisBrushOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
 {
-    config->clearProperties();
     m_brushOption->writeOptionSetting(config);
     m_sizeOption->writeOptionSetting(config);
     m_opacityOption->writeOptionSetting(config);

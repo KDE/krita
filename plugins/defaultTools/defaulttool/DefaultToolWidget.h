@@ -23,12 +23,13 @@
 #include <ui_DefaultToolWidget.h>
 #include <KoFlake.h>
 
-#include <QTabWidget>
+#include <QWidget>
 
 class KoInteractionTool;
+class KoPositionSelector;
 class QRadioButton;
 
-class DefaultToolWidget : public QTabWidget, Ui::DefaultToolWidget {
+class DefaultToolWidget : public QWidget, Ui::DefaultToolWidget {
     Q_OBJECT
 public:
     explicit DefaultToolWidget( KoInteractionTool* tool, QWidget *parent = 0 );
@@ -43,12 +44,6 @@ private slots:
     void updateSize();
     void sizeHasChanged();
     void resourceChanged( int key, const QVariant & res );
-    void rotationChanged();
-    void shearXChanged();
-    void shearYChanged();
-    void scaleXChanged();
-    void scaleYChanged();
-    void resetTransformations();
 
 private:
     KoInteractionTool* m_tool;

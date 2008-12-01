@@ -44,11 +44,13 @@ public:
             position(-1),
             model(0),
             pageNumber(-1),
-            anchorType(Paragraph) {
+            anchorType(Paragraph)
+    {
         Q_ASSERT(shape);
     }
 
-    void relayout() {
+    void relayout()
+    {
         if (document) {
             KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(document->documentLayout());
             if (lay)
@@ -57,7 +59,8 @@ public:
     }
 
     /// as multiple shapes can hold 1 text flow; the anchored shape can be moved between containers and thus models
-    void setContainer(KoShapeContainer *container) {
+    void setContainer(KoShapeContainer *container)
+    {
         if (container == 0) {
             model = 0;
             shape->setParent(0);

@@ -16,29 +16,41 @@
  */
 
 #include "kis_triangle_color_selector_dock.h"
+
+#include <klocale.h>
+
 #include <KoColorSpaceRegistry.h>
-
-#include <kis_view2.h>
-
-#include "kis_canvas_resource_provider.h"
+#include <KoCanvasBase.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoTriangleColorSelector.h>
+#include <KoColor.h>
 
-KisTriangleColorSelectorDock::KisTriangleColorSelectorDock(KisView2 *view) : QDockWidget(i18n("Triangle Color Selector")), m_view(view)
+KisTriangleColorSelectorDock::KisTriangleColorSelectorDock() : QDockWidget(i18n("Triangle Color Selector")), m_canvas(0)
 {
     m_colorSelector = new KoTriangleColorSelector(this);
     setWidget(m_colorSelector);
     connect(m_colorSelector, SIGNAL(colorChanged(const QColor&)), this, SLOT(colorChangedProxy(const QColor&)));
-    connect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), this, SLOT(setColorProxy(const KoColor&)));
 }
+
+void KisTriangleColorSelectorDock::setCanvas( KoCanvasBase * canvas )
+{
+    m_canvas = canvas;
+    connect( m_canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant&)),
+             this, SLOT(resourceChanged(int, const QVariant&)));
+    m_colorSelector->setQColor(m_canvas->resourceProvider()->foregroundColor().toQColor());
+}
+
 
 void KisTriangleColorSelectorDock::colorChangedProxy(const QColor& c)
 {
-    m_view->resourceProvider()->setFGColor(KoColor(c , KoColorSpaceRegistry::instance()->rgb8()));
+    if(m_canvas)
+        m_canvas->resourceProvider()->setForegroundColor(KoColor(c , KoColorSpaceRegistry::instance()->rgb8()));
 }
 
-void KisTriangleColorSelectorDock::setColorProxy(const KoColor& c)
+void KisTriangleColorSelectorDock::resourceChanged(int key, const QVariant& v)
 {
-    m_colorSelector->setQColor(c.toQColor());
+    if(key == KoCanvasResource::ForegroundColor)
+        m_colorSelector->setQColor(v.value<KoColor>().toQColor());
 }
 
 

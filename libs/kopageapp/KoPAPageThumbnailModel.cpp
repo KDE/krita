@@ -63,7 +63,11 @@ QVariant KoPAPageThumbnailModel::data(const QModelIndex &index, int role) const
     if (role == Qt::DisplayRole) {
         QString name = m_pages.at( index.row() )->name();
         if ( name.isEmpty() ) {
-            name = i18n( "Page %1", index.row() + 1 );
+            if(m_pages.at(index.row() )->pageType() == KoPageApp::Slide ) {
+                name = i18n( "Slide %1", index.row() + 1 );
+            } else {
+                name = i18n( "Page %1", index.row() + 1 );
+            }
         }
         return name;
     }

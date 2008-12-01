@@ -96,9 +96,7 @@ void KisToolBrush::initPaint(KoPointerEvent *e)
     // outline?
     m_canvas->updateCanvas(); // remove the outline
 #endif
-
     m_painter->setPaintOpPreset(currentPaintOpPreset(), currentImage()); // And now the painter owns the op and will destroy it.
-
     if (m_painter->paintOp()->incremental()) {
         m_timer->start(m_rate);
     }
@@ -163,8 +161,6 @@ QWidget * KisToolBrush::createOptionWidget()
     // Drawing assistant configuration
     m_chkAssistant = new QCheckBox(i18n("Assistant:"), optionWidget);
     connect(m_chkAssistant, SIGNAL(toggled(bool)), this, SLOT(setAssistant(bool)));
-    m_assistant = new QComboBox(optionWidget);
-    connect(m_chkAssistant, SIGNAL(toggled(bool)), m_assistant, SLOT(setEnabled(bool)));
     QLabel* labelMagnetism = new QLabel(i18n("Magnetism:"), optionWidget);
     connect(m_chkAssistant, SIGNAL(toggled(bool)), labelMagnetism, SLOT(setEnabled(bool)));
     m_sliderMagnetism = new QSlider(Qt::Horizontal, optionWidget);
@@ -185,7 +181,6 @@ QWidget * KisToolBrush::createOptionWidget()
     m_optionLayout->addWidget(m_chkSmooth, 1, 0);
     m_optionLayout->addWidget(m_sliderSmoothness, 1, 2);
     m_optionLayout->addWidget(m_chkAssistant, 3, 0);
-    m_optionLayout->addWidget(m_assistant, 3, 1, 1, 2);
     m_optionLayout->addWidget(labelMagnetism, 4, 0);
     m_optionLayout->addWidget(m_sliderMagnetism, 4, 1, 1, 2);
 

@@ -35,7 +35,7 @@ public:
     using KisNodeVisitor::visit;
 
 public:
-    void setExternalUri(QString &uri);
+    void setExternalUri(const QString &uri);
 
     bool visit(KisExternalLayer *);
 

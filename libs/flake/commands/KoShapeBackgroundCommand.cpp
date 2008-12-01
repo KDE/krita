@@ -31,14 +31,29 @@ public:
     }
     ~Private() {
         foreach(KoShapeBackground* fill, oldFills) {
-            if (fill && fill->useCount() <= 0)
+            if (fill && ! fill->removeUser())
                 delete fill;
         }
         foreach(KoShapeBackground* fill, newFills) {
-            if (fill && fill->useCount() <= 0)
+            if (fill && ! fill->removeUser())
                 delete fill;
         }
     }
+    
+    void addOldFill( KoShapeBackground * oldFill )
+    {
+        if (oldFill)
+            oldFill->addUser();
+        oldFills.append(oldFill);
+    }
+
+    void addNewFill( KoShapeBackground * newFill )
+    {
+        if (newFill)
+            newFill->addUser();
+        newFills.append(newFill);
+    }
+
     QList<KoShape*> shapes;    ///< the shapes to set background for
     QList<KoShapeBackground*> oldFills;
     QList<KoShapeBackground*> newFills;
@@ -51,8 +66,8 @@ KoShapeBackgroundCommand::KoShapeBackgroundCommand(const QList<KoShape*> &shapes
 {
     d->shapes = shapes;
     foreach(KoShape *shape, d->shapes) {
-        d->oldFills.append(shape->background());
-        d->newFills.append(fill);
+        d->addOldFill(shape->background());
+        d->addNewFill(fill);
     }
 
     setText(i18n("Set background"));
@@ -63,9 +78,9 @@ KoShapeBackgroundCommand::KoShapeBackgroundCommand(KoShape * shape, KoShapeBackg
         , d(new Private())
 {
     d->shapes.append(shape);
-    d->oldFills.append(shape->background());
-    d->newFills.append(fill);
-
+    d->addOldFill(shape->background());
+    d->addNewFill(fill);
+    
     setText(i18n("Set background"));
 }
 
@@ -75,13 +90,14 @@ KoShapeBackgroundCommand::KoShapeBackgroundCommand(const QList<KoShape*> &shapes
 {
     d->shapes = shapes;
     foreach(KoShape *shape, d->shapes) {
-        d->oldFills.append(shape->background());
+        d->addOldFill(shape->background());
     }
-    d->newFills = fills;
-
+    foreach(KoShapeBackground * fill, fills ) {
+        d->addNewFill(fill);
+    }
+        
     setText(i18n("Set background"));
 }
-
 
 void KoShapeBackgroundCommand::redo()
 {
@@ -109,4 +125,3 @@ KoShapeBackgroundCommand::~KoShapeBackgroundCommand()
 {
     delete d;
 }
-

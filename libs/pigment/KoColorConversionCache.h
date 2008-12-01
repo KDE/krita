@@ -32,7 +32,7 @@ class KoColorSpace;
  */
 class KoColorConversionCache {
     public:
-        class CachedTransformation;
+        struct CachedTransformation;
     public:
         KoColorConversionCache();
         ~KoColorConversionCache();

@@ -36,6 +36,8 @@ public:
 
     /// reimplemented
     virtual void populateDataCenterMap(QMap<QString, KoDataCenter *>   & dataCenterMap);
+    /// reimplemented
+    virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };
 
 #endif

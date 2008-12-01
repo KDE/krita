@@ -79,23 +79,23 @@ void copyQImage(qint32 deltaX, qint32 deltaY, QImage* dstImg, const QImage& srcI
 
 struct KisPrescaledProjection::Private {
     Private()
-            : updateAllOfQPainterCanvas(false)
-            , usePixmapNotQImage(false)
-            , useDeferredSmoothing(false)
-            , useNearestNeighbour(false)
-            , useQtScaling(false)
-            , smoothBetween100And200Percent(true)
-            , drawCheckers(false)
-            , scrollCheckers(false)
-            , drawMaskVisualisationOnUnscaledCanvasCache(false)
-            , cacheKisImageAsQImage(true)
-            , showMask(true)
-            , checkSize(32)
-            , documentOffset(0, 0)
-            , canvasSize(0, 0)
-            , imageSize(0, 0)
-            , viewConverter(0)
-            , monitorProfile(0) {
+        : updateAllOfQPainterCanvas(false)
+        , usePixmapNotQImage(false)
+        , useDeferredSmoothing(false)
+        , useNearestNeighbour(false)
+        , useQtScaling(false)
+        , smoothBetween100And200Percent(true)
+        , drawCheckers(false)
+        , scrollCheckers(false)
+        , drawMaskVisualisationOnUnscaledCanvasCache(false)
+        , cacheKisImageAsQImage(true)
+        , showMask(true)
+        , checkSize(32)
+        , documentOffset(0, 0)
+        , canvasSize(0, 0)
+        , imageSize(0, 0)
+        , viewConverter(0)
+        , monitorProfile(0) {
         smoothingTimer.setSingleShot(true);
     }
     bool updateAllOfQPainterCanvas;
@@ -133,8 +133,8 @@ struct KisPrescaledProjection::Private {
 };
 
 KisPrescaledProjection::KisPrescaledProjection()
-        : QObject(0)
-        , m_d(new Private())
+    : QObject(0)
+    , m_d(new Private())
 {
     updateSettings();
     connect(&m_d->smoothingTimer, SIGNAL(timeout()), this, SLOT(slotDoSmoothScale()));
@@ -221,12 +221,12 @@ void KisPrescaledProjection::updateSettings()
     m_d->smoothBetween100And200Percent = true;
 
     dbgRender << "QPainter canvas will render with the following options:\n"
-    << "\t updateAllOfQPainterCanvas: " << m_d->updateAllOfQPainterCanvas << "\n"
-    << "\t useDeferredSmoothing: " << m_d->useDeferredSmoothing << "\n"
-    << "\t useNearestNeighbour: " << m_d->useNearestNeighbour << "\n"
-    << "\t useQtScaling: " << m_d->useQtScaling << "\n"
-    << "\t smoothBetween100And200Percent: " << m_d->smoothBetween100And200Percent << "\n"
-    << "\t cacheKisImageAsQImage: " << m_d->cacheKisImageAsQImage ;
+              << "\t updateAllOfQPainterCanvas: " << m_d->updateAllOfQPainterCanvas << "\n"
+              << "\t useDeferredSmoothing: " << m_d->useDeferredSmoothing << "\n"
+              << "\t useNearestNeighbour: " << m_d->useNearestNeighbour << "\n"
+              << "\t useQtScaling: " << m_d->useQtScaling << "\n"
+              << "\t smoothBetween100And200Percent: " << m_d->smoothBetween100And200Percent << "\n"
+              << "\t cacheKisImageAsQImage: " << m_d->cacheKisImageAsQImage ;
 }
 
 
@@ -256,7 +256,7 @@ void KisPrescaledProjection::documentOffsetMoved(const QPoint &documentOffset)
     qint32 oldCanvasYOffset = oldDocumentOffset.y();
 
     dbgRender << "w: " << width << ", h" << height << ", oldCanvasXOffset " << oldCanvasXOffset << ", oldCanvasYOffset " << oldCanvasYOffset
-    << ", new offset: " << documentOffset;
+              << ", new offset: " << documentOffset;
 
     QImage img = QImage(width, height, QImage::Format_ARGB32);
 //     m_d->prescaledQImage.fill( QColor( 255, 0, 0, 128 ).rgba() );
@@ -482,7 +482,7 @@ void KisPrescaledProjection::drawScaledImage(const QRect & rc,  QPainter & gc, b
     if (m_d->cacheKisImageAsQImage && m_d->unscaledCache.isNull()) {
         updateUnscaledCache(alignedImageRect);
     }
-    
+
     QPointF rcTopLeftUnscaled(rcFromAligned.topLeft().x() / scaleX, rcFromAligned.topLeft().y() / scaleY);
 
 #if 1
@@ -577,21 +577,24 @@ void KisPrescaledProjection::drawScaledImage(const QRect & rc,  QPainter & gc, b
                 croppedImage = m_d->image->convertToQImage(alignedImageRect.x(), alignedImageRect.y(), alignedImageRect.width(), alignedImageRect.height(), m_d->monitorProfile);
             }
             QSize s(ceil(rcFromAligned.size().width()), ceil(rcFromAligned.size().height()));
-            double scaleXbis = rcFromAligned.width() / s.width();
-            double scaleYbis = rcFromAligned.height() / s.height();
-            gc.save();
-            gc.setRenderHint(QPainter::SmoothPixmapTransform, true);
-            gc.scale(scaleXbis, scaleYbis);
-            QPointF pt(rcFromAligned.topLeft().x() / scaleXbis, rcFromAligned.topLeft().y() / scaleYbis);
-            
-            if (m_d->useQtScaling) {
-                dbgRender << " m_d->useQtScaling";
-                gc.drawImage(pt, croppedImage.scaled(s, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-            } else { // Smooth scaling using blitz
-                dbgRender << " else";
-                gc.drawImage(pt, Blitz::smoothScale(croppedImage, s, Qt::IgnoreAspectRatio));
+            if( s.width() > 0 && s.height() > 0)
+            {
+                double scaleXbis = rcFromAligned.width() / s.width();
+                double scaleYbis = rcFromAligned.height() / s.height();
+                gc.save();
+                gc.setRenderHint(QPainter::SmoothPixmapTransform, true);
+                gc.scale(scaleXbis, scaleYbis);
+                QPointF pt(rcFromAligned.topLeft().x() / scaleXbis, rcFromAligned.topLeft().y() / scaleYbis);
+
+                if (m_d->useQtScaling) {
+                    dbgRender << " m_d->useQtScaling";
+                    gc.drawImage(pt, croppedImage.scaled(s, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+                } else { // Smooth scaling using blitz
+                    dbgRender << " else";
+                    gc.drawImage(pt, Blitz::smoothScale(croppedImage, s, Qt::IgnoreAspectRatio));
+                }
+                gc.restore();
             }
-            gc.restore();
         }
     }
 }
@@ -644,20 +647,20 @@ void KisPrescaledProjection::updateUnscaledCache(const QRect & rc)
     p.setCompositionMode(QPainter::CompositionMode_Source);
 
     QImage updateImage = m_d->image->convertToQImage(rc.x(), rc.y(), rc.width(), rc.height(),
-                         m_d->monitorProfile);
+                                                     m_d->monitorProfile);
     dbgRender << updateImage.isNull() << " " << updateImage.width() << " " << updateImage.height();
 //     if (m_d->showMask && m_d->drawMaskVisualisationOnUnscaledCanvasCache) {
-// 
+//
 //         // XXX: Also visualize the global selection
-// 
+//
 //         KisSelectionSP selection = 0;
-// 
+//
 //         if (m_d->currentNode) {
 //             if (m_d->currentNode->inherits("KisMask")) {
-// 
+//
 //                 selection = dynamic_cast<const KisMask*>(m_d->currentNode.data())->selection();
 //             } else if (m_d->currentNode->inherits("KisLayer")) {
-// 
+//
 //                 KisLayerSP layer = dynamic_cast<KisLayer*>(m_d->currentNode.data());
 //                 if (KisSelectionMaskSP selectionMask = layer->selectionMask()) {
 //                     selection = selectionMask->selection();

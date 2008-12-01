@@ -70,6 +70,7 @@ KoShape* MusicShapeFactory::createShape( const KoProperties* params ) const
         loadedFont = true;
     }
     MusicShape* shape = new MusicShape();
+    shape->setSize(QSizeF(400, 300));
     return shape;
 }
 

@@ -16,24 +16,13 @@
  */
 
 #include "smallcolorselector.h"
-#include <stdlib.h>
 
-#include <QTimer>
-
-#include <kactioncollection.h>
 #include <kcomponentdata.h>
-#include <kis_debug.h>
 #include <kgenericfactory.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
 
 #include <KoDockFactory.h>
-
-#include "kis_config.h"
-#include "kis_cursor.h"
-#include "kis_global.h"
-#include "kis_types.h"
-#include "kis_view2.h"
+#include <KoDockRegistry.h>
+#include <KoCanvasResourceProvider.h>
 
 #include "smallcolorselector_dock.h"
 
@@ -43,8 +32,7 @@ K_EXPORT_COMPONENT_FACTORY(kritasmallcolorselector, SmallColorSelectorPluginFact
 class SmallColorSelectorDockFactory : public KoDockFactory
 {
 public:
-    SmallColorSelectorDockFactory(KisView2 * view)
-            : m_view(view) {
+    SmallColorSelectorDockFactory() {
     }
 
     virtual QString id() const {
@@ -56,8 +44,7 @@ public:
     }
 
     virtual QDockWidget* createDockWidget() {
-        SmallColorSelectorDock * dockWidget = new SmallColorSelectorDock(m_view);
-
+        SmallColorSelectorDock * dockWidget = new SmallColorSelectorDock();
         dockWidget->setObjectName(id());
 
         return dockWidget;
@@ -66,29 +53,19 @@ public:
     DockPosition defaultDockPosition() const {
         return DockRight;
     }
-
-private:
-    KisView2 * m_view;
-
 };
 
 
 SmallColorSelectorPlugin::SmallColorSelectorPlugin(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    dbgPlugins << "SmallColorSelectorPlugin";
-    if (parent->inherits("KisView2")) {
-        m_view = (KisView2*) parent;
+    setComponentData(SmallColorSelectorPluginFactory::componentData());
 
-        setComponentData(SmallColorSelectorPluginFactory::componentData());
-        SmallColorSelectorDockFactory dockFactory(m_view);
-        m_view->createDockWidget(&dockFactory);
-    }
+    KoDockRegistry::instance()->add( new SmallColorSelectorDockFactory() );
 }
 
 SmallColorSelectorPlugin::~SmallColorSelectorPlugin()
 {
-    m_view = 0;
 }
 
 #include "smallcolorselector.moc"

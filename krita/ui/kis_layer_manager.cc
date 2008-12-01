@@ -259,11 +259,13 @@ void KisLayerManager::updateGUI()
 
     // XXX these should be named layer instead of img
     m_imgFlatten->setEnabled(nlayers > 1);
-    m_imgMergeLayer->setEnabled(nlayers > 1 && layer && layer->nextSibling());
+    m_imgMergeLayer->setEnabled(nlayers > 1 && layer && layer->prevSibling());
 
 
-    if (activeDevice())
+    // XXX: Check whether the colorspace was really changed
+    if (activeDevice()) {
         emit currentColorSpaceChanged(activeDevice()->colorSpace());
+    }
 
     m_imgResizeToLayer->setEnabled(activeLayer());
 
@@ -923,8 +925,6 @@ void KisLayerManager::layersUpdated()
     if (!layer) return;
 
     m_view->updateGUI();
-    m_view->resourceProvider()->slotNodeActivated(layer.data());
-
 }
 
 void KisLayerManager::saveLayerAsImage()

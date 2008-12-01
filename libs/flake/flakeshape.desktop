@@ -21,6 +21,7 @@ Name[ta]=வடிவ வரையறை
 Name[tr]=Şekil tanımlaması
 Name[uk]=Визначення форми
 Name[x-test]=xxShape definitionxx
+Name[zh_CN]=形状定义
 Name[zh_TW]=元件定義
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Shape
@@ -44,6 +45,7 @@ Comment[sv]=Definition av ett formobjekt i Flake
 Comment[ta]=ஒரு இளைய வடிவ வரையறை
 Comment[uk]=Визначення об’єкта елемента форми
 Comment[x-test]=xxDefinition of a flake shape objectxx
+Comment[zh_CN]=Flake 形状对象的定义
 Comment[zh_TW]=Flake 元件物件定義
 [PropertyDef::X-Flake-MinVersion]
 Type=int

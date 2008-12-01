@@ -35,6 +35,8 @@ public:
 
     /// reimplemented 
     virtual bool showOnShapeCreate() { return true; }
+    /// reimplemented 
+    virtual bool showOnShapeSelect() { return false; }
 
 private:
     Ui::Intro widget;

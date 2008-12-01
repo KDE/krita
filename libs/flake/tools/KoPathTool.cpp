@@ -515,10 +515,16 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
 void KoPathTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     if (m_currentStrategy) {
+        const bool hadNoSelection = !m_pointSelection.hasSelection();
         m_currentStrategy->finishInteraction(event->modifiers());
         QUndoCommand *command = m_currentStrategy->createCommand();
         if (command)
             m_canvas->addCommand(command);
+        if (hadNoSelection && dynamic_cast<KoPathPointRubberSelectStrategy*>(m_currentStrategy)
+                && !m_pointSelection.hasSelection()) {
+            // the click didn't do anything at all. Allow it to be used by others.
+            event->ignore();
+        }
         delete m_currentStrategy;
         m_currentStrategy = 0;
 

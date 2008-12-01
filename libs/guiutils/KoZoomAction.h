@@ -27,76 +27,89 @@
 
 /**
  * Class KoZoomAction implements an action to provide zoom values.
- * In a toolbar, KoZoomAction will show a dropdown list, also with 
+ * In a toolbar, KoZoomAction will show a dropdown list (combobox), also with
  * the possibility for the user to enter arbritrary zoom value
- * (must be an integer). The values shown on the list are alwalys
+ * (must be an integer). The values shown on the list are always
  * sorted.
- * In a statusbar it provides a scale plus an editable value plus some buttons for special zoommodes
+ * In a statusbar it provides a scale (slider) plus an editable value plus
+ * some buttons for special zoommodes
  */
 class KOGUIUTILS_EXPORT KoZoomAction : public KSelectAction
 {
-Q_OBJECT
-
+    Q_OBJECT
 public:
 
   /**
    * Creates a new zoom action.
    * @param zoomModes which zoom modes that should be shown
    * @param text The text that will be displayed.
-   * @param doSpecialAspectMode Show toggle widget for "pixel aspect" mode.
    * @param parent The action's parent object.
    */
-  KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, bool doSpecialAspectMode, QObject *parent);
-  ~KoZoomAction();
+    KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, QObject *parent);
+    ~KoZoomAction();
 
     /**
-     * Reimplemented from @see QActionWidgetFactory.
+     * Reimplemented from QAction.
      */
     virtual QWidget* createWidget(QWidget* parent);
+
+    enum SpecialButton {
+        AspectMode = 1, ///< changing aspect mode
+        ZoomToSelection = 2, ///< zooms to current selection
+        ZoomToAll = 4 ///< zooms to the whole content of the document
+    };
+    Q_DECLARE_FLAGS(SpecialButtons, SpecialButton)
+
+    /**
+     * Enables specified special buttons.
+     * This should be called immediately after calling the constructor.
+     * @param buttons mask of the special button flags to enable
+     */
+    void setSpecialButtons( SpecialButtons buttons ); 
 
 public slots:
 
   /**
-   * Sets the zoom. If it's not yet on the list of zoom values, it will be inserted
+   * Sets the zoom. If zoom not yet on the list of zoom values, it will be inserted
    * into the list at proper place so that the the values remain sorted.
    * emits zoomChanged
    */
-  void setZoom( qreal zoom );
+    void setZoom( qreal zoom );
 
   /**
    * Change the zoom modes that should be shown
    */
-  void setZoomModes( KoZoomMode::Modes zoomModes );
+    void setZoomModes( KoZoomMode::Modes zoomModes );
 
   /**
    * Change the zoom to a closer look than current
    * Zoom mode will be CONSTANT afterwards
    * emits zoomChanged
    */
-  void zoomIn( );
+    void zoomIn( );
 
   /**
    * Change the zoom to a wider look than current
    * Zoom mode will be CONSTANT afterwards
    * emits zoomChanged
    */
-  void zoomOut( );
+    void zoomOut( );
 
   /**
    * Set the actual zoom value used in the app. This is needed when using @ref zoomIn() , @ref zoomOut() and/or when
    * plugged into the viewbar.
    */
-  void setEffectiveZoom(qreal zoom);
+    void setEffectiveZoom(qreal zoom);
 
   /**
    * Change the selected zoom mode.
    */
-  void setSelectedZoomMode( KoZoomMode::Mode mode );
+    void setSelectedZoomMode( KoZoomMode::Mode mode );
 
 protected slots:
 
-  void triggered( const QString& text );
-  void sliderValueChanged(int value);
+    void triggered( const QString& text );
+    void sliderValueChanged(int value);
 
 signals:
 
@@ -106,14 +119,26 @@ signals:
    * @param mode The selected zoom mode
    * @param zoom the zoom, only defined if @p mode is KoZoomMode::ZOOM_CONSTANT
    */
-  void zoomChanged( KoZoomMode::Mode mode, qreal zoom );
+    void zoomChanged( KoZoomMode::Mode mode, qreal zoom );
 
   /**
    * Signal aspectModeChanged is triggered when the user toggles the widget.
    * Nothing else happens except that this signal is emitted.
    * @param status Whether the special aspect mode is on
    */
-  void aspectModeChanged( bool status );
+    void aspectModeChanged( bool status );
+
+    /**
+     * Signal is triggered when the user clicks the zoom to selection button.
+     * Nothing else happens except that this signal is emitted.
+     */
+    void zoomedToSelection();
+
+    /**
+     * Signal is triggered when the user clicks the zoom to all button.
+     * Nothing else happens except that this signal is emitted.
+     */
+    void zoomedToAll();
 
 protected:
 
@@ -126,5 +151,7 @@ private:
     class Private;
     Private * const d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoZoomAction::SpecialButtons)
 
 #endif

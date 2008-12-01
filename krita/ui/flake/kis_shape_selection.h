@@ -38,7 +38,12 @@ class KRITAUI_EXPORT KisShapeSelection : public QObject, public KoShapeContainer
 public:
 
     KisShapeSelection(KisImageSP image, KisSelectionSP selection);
+
     virtual ~KisShapeSelection();
+
+    KisShapeSelection(const KisShapeSelection& rhs);
+
+    KisSelectionComponent* clone();
 
     ///Not implemented
     virtual bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&);
@@ -65,11 +70,10 @@ public:
     KoShapeManager *shapeManager() const;
 
 protected:
+
     virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
 
 private:
-
-    Q_DISABLE_COPY(KisShapeSelection)
 
     void renderSelection(KisSelection* projection, const QRect& r);
 

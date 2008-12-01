@@ -14,6 +14,7 @@ SET ( paragraphtool_SRCS
     ParagraphFragment.cpp
     Ruler.cpp
     RulerFragment.cpp
+    Label.cpp
 
     dialogs/OptionWidget.cpp
 )

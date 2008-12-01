@@ -16,24 +16,33 @@
  */
 
 #include "specificcolorselector_dock.h"
+
 #include <kis_layer.h>
 #include <kis_view2.h>
-
-#include <QLabel>
-
+#include <canvas/kis_canvas2.h>
 #include <kis_canvas_resource_provider.h>
 
 #include "kis_specific_color_selector_widget.h"
 
-SpecificColorSelectorDock::SpecificColorSelectorDock(KisView2 *view) : QDockWidget(i18n("Specific Color Selector")), m_view(view)
+SpecificColorSelectorDock::SpecificColorSelectorDock() : QDockWidget(i18n("Specific Color Selector"))
 {
     m_colorSelector = new KisSpecificColorSelectorWidget(this);
     setWidget(m_colorSelector);
+}
+
+void SpecificColorSelectorDock::setCanvas( KoCanvasBase * canvas )
+{
+    KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
+    Q_ASSERT(canvas);
+    KisView2* view = kisCanvas->view();
+
+    m_colorSelector->disconnect(SIGNAL(colorChanged(const KoColor&)));
     connect(m_colorSelector, SIGNAL(colorChanged(const KoColor&)), view->resourceProvider(), SLOT(slotSetFGColor(const KoColor&)));
     connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), m_colorSelector, SLOT(setColor(const KoColor&)));
     m_colorSelector->setColor(view->resourceProvider()->fgColor());
     connect(view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), this, SLOT(layerChanged(const KisNodeSP)));
 }
+
 
 void SpecificColorSelectorDock::layerChanged(const KisNodeSP l)
 {

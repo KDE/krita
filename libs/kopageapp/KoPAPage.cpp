@@ -79,7 +79,7 @@ const KoPageLayout & KoPAPage::pageLayout() const
 void KoPAPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext )
 {
     QString master = element.attributeNS (KoXmlNS::draw, "master-page-name" );
-    setMasterPage( loadingContext.masterPageFromName( master ) );
+    setMasterPage( loadingContext.masterPageByName( master ) );
     KoStyleStack& styleStack = loadingContext.odfLoadingContext().styleStack();
     int pageProperties = UseMasterBackground | DisplayMasterShapes | DisplayMasterBackground;
     if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) {

@@ -123,7 +123,7 @@ void KoPAView::initGUI()
     KoToolManager::instance()->addController( m_canvasController );
     KoToolManager::instance()->registerTools( actionCollection(), m_canvasController );
 
-    m_zoomController = new KoZoomController( m_canvasController, &m_zoomHandler, actionCollection(), false );
+    m_zoomController = new KoZoomController( m_canvasController, &m_zoomHandler, actionCollection());
     connect( m_zoomController, SIGNAL( zoomChanged( KoZoomMode::Mode, qreal ) ),
              this, SLOT( slotZoomChanged( KoZoomMode::Mode, qreal ) ) );
 
@@ -177,7 +177,7 @@ void KoPAView::initGUI()
     connect(m_canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
             m_canvas, SLOT(setDocumentOffset(const QPoint&)));
 
-    KoPADocumentStructureDockerFactory structureDockerFactory( KoDocumentSectionView::ThumbnailMode );
+    KoPADocumentStructureDockerFactory structureDockerFactory( KoDocumentSectionView::ThumbnailMode, m_doc->pageType() );
     m_documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( createDockWidget( &structureDockerFactory ) );
     m_documentStructureDocker->setPart( m_doc );
     connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),
@@ -249,8 +249,8 @@ void KoPAView::initActions()
     m_actionDeletePage = new KAction( i18n( "Delete Page" ), this );
     m_actionDeletePage->setEnabled( m_doc->pageCount() > 1 );
     actionCollection()->addAction( "page_deletepage", m_actionDeletePage );
-    m_actionDeletePage->setToolTip( i18n( "Delete a new page after the current one" ) );
-    m_actionDeletePage->setWhatsThis( i18n( "Delete a new page after the current one" ) );
+    m_actionDeletePage->setToolTip( i18n( "Delete the current page" ) );
+    m_actionDeletePage->setWhatsThis( i18n( "Delete the current page" ) );
     connect( m_actionDeletePage, SIGNAL( triggered() ), this, SLOT( deletePage() ) );
 
     m_actionMasterPage = new KAction(i18n("Master Page..."), this);

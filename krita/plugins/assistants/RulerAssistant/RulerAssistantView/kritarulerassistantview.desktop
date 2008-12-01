@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=RulerAssistantView
+Name[ca]=VisualitzacióAssistentRegla
+Name[de]=Hilfslineal-Ansicht
 Name[el]=Προβολή βοηθού κανόνα
 Name[gl]=VistadoAsistenteRegra
 Name[it]=Vista dell'assistente dei righelli
@@ -9,6 +11,8 @@ Name[sv]=Linjalguidevy
 Name[x-test]=xxRulerAssistantViewxx
 Name[zh_TW]=尺規小助手檢視
 Comment=RulerAssistantView
+Comment[ca]=VisualitzacióAssistentRegla
+Comment[de]=Hilfslineal-Ansicht
 Comment[el]=Προβολή βοηθού κανόνα
 Comment[gl]=VistaAsistenteRegra
 Comment[it]=Vista dell'assistente dei righelli

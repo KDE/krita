@@ -2,6 +2,11 @@ project(koffice)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
+if(KDE4_BUILD_TESTS)
+    # only with this definition will the FOO_TEST_EXPORT macro do something
+    add_definitions(-DCOMPILING_TESTS)
+endif(KDE4_BUILD_TESTS)
+
 # define the generic version of the KOffice libraries here
 # this makes it easy to advance it when the next KOffice release comes
 set(GENERIC_KOFFICE_LIB_VERSION "5.0.0")
@@ -52,6 +57,18 @@ endif (APPLE)
 
 add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
+
+if(WIN32)
+  # detect oxygen icon dir at configure time based on KDEDIRS - there may be different package installation locations
+  execute_process(COMMAND "${KDE4_KDECONFIG_EXECUTABLE}" --path icon OUTPUT_VARIABLE _dir ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+  file(TO_CMAKE_PATH "${_dir}" __dir)
+  find_path(KDE4_ICON_DIR oxygen PATHS
+      ${__dir}
+  )
+  message(STATUS "using oxygen application icons from ${KDE4_ICON_DIR}")
+else(WIN32)
+    set (KDE4_ICON_DIR  ${CMAKE_INSTALL_PREFIX}/share/icons)
+endif(WIN32)
 
 
 include (MacroAdditionalCleanFiles)
@@ -157,7 +174,7 @@ endif(SHOULD_BUILD_KARBON)
 
 
 if(EIGEN2_FOUND)
-    macro_optional_add_subdirectory(kspread)
+   macro_optional_add_subdirectory(kspread)
     if(BUILD_kspread)
         set(SHOULD_BUILD_KSPREAD true)
     else(BUILD_kspread)

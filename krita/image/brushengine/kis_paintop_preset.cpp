@@ -19,6 +19,7 @@
 #include "kis_paintop_preset.h"
 
 #include <QFile>
+#include <QSize>
 #include <QImage>
 
 #include <KoColorSpaceRegistry.h>
@@ -83,6 +84,7 @@ KoID KisPaintOpPreset::paintOp() const
 void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
 {
     m_d->settings = settings->clone();
+    setValid( true );
 }
 
 KisPaintOpSettingsSP KisPaintOpPreset::settings() const
@@ -101,7 +103,7 @@ bool KisPaintOpPreset::load()
     f.close();
     return true;
 
-    setName(m_d->settings->getString("name"));
+    //setName(m_d->settings->getString("name"));
 }
 
 bool KisPaintOpPreset::save()
@@ -123,22 +125,6 @@ QImage KisPaintOpPreset::img() const
 
 void KisPaintOpPreset::updateImg()
 {
-    if (!m_d->settings) return;
-
-    Q_ASSERT(!m_d->settings->getString("paintop").isNull());
-    if (m_d->settings->getString("paintop").isNull()) return;
-
-    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "paintop_preset");
-    KisPainter gc(dev);
-    gc.setPaintOpPreset(this);
-
-    KisPaintInformation i1(QPointF(0, 25), PRESSURE_MIN);
-    KisPaintInformation i2(QPointF(50, 25), PRESSURE_MAX);
-    KisPaintInformation i3(QPointF(100, 25), PRESSURE_MIN);
-
-    gc.paintBezierCurve(i1, QPointF(25, 0), QPointF(25, 0), i2);
-    gc.paintBezierCurve(i2, QPointF(75, 0), QPointF(75, 0), i3);
-    gc.end();
-
+    m_d->img = m_d->settings->sampleStroke( QSize( 100, 20 ) );
 }
 

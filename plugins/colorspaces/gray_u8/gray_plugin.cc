@@ -33,7 +33,7 @@
 #include "kis_gray_colorspace.h"
 
 typedef KGenericFactory<GrayPlugin> GrayPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kofficegrayau8plugin, GrayPluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY( kofficegrayau8plugin, GrayPluginFactory( "kocolorspaces" ) )
 
 
 GrayPlugin::GrayPlugin(QObject *parent, const QStringList &)

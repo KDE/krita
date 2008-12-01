@@ -73,7 +73,6 @@ KisPropertiesConfiguration* KisDuplicateOpSettingsWidget::configuration() const
 
 void KisDuplicateOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
 {
-    config->clearProperties();
     m_brushOption->writeOptionSetting(config);
     m_sizeOption->writeOptionSetting(config);
     m_duplicateOption->writeOptionSetting( config );

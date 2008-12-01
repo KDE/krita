@@ -180,7 +180,6 @@ QColor KoParagraphStyle::propertyColor(int key) const
 
 void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
 {
-    format = QTextBlockFormat();
     if (d->parentStyle) {
         d->parentStyle->applyStyle(format);
     }
@@ -197,8 +196,9 @@ void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
     QTextBlockFormat format = cursor.blockFormat();
     applyStyle(format);
     cursor.setBlockFormat(format);
-    if (d->charStyle)
+    if (d->charStyle) {
         d->charStyle->applyStyle(block);
+    }
 
     if (applyListStyle) {
         if (d->listStyle) {
@@ -933,7 +933,9 @@ void KoParagraphStyle::loadOdf(const KoXmlElement* element, KoOdfLoadingContext 
     bool m_bOutline = element->hasAttributeNS(KoXmlNS::style, "default-outline-level");
 #endif
     context.styleStack().save();
-    context.addStyles(element, "paragraph");   // Load all parents - only because we don't support inheritance.
+    // Load all parents - only because we don't support inheritance.
+    QString family = element->attributeNS(KoXmlNS::style, "family", "paragraph");
+    context.addStyles(element, family.toLocal8Bit().constData());   // Load all parents - only because we don't support inheritance.
 
     //setParent( d->stylemanager->defaultParagraphStyle() );
 

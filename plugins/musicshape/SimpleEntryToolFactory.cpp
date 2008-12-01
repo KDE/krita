@@ -28,7 +28,7 @@ SimpleEntryToolFactory::SimpleEntryToolFactory( QObject* parent )
     : KoToolFactory( parent, "SimpleEntryToolFactoryId", i18n( "Music Tool" ) )
 {
     setToolTip( i18n( "Music editing tool" ) );
-    setIcon( "musicshape" );
+    setIcon( "music-note-16th" );
     setToolType( dynamicToolType() );
     setPriority( 1 );
     setActivationShapeId( MusicShapeId );

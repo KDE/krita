@@ -122,11 +122,23 @@ void ShapePropertiesDocker::addWidgetForShape( KoShape * shape )
         if( ! panels.count() )
             return;
 
-        d->currentPanel = panels.first();
-        if( d->canvas )
-            d->currentPanel->setUnit( d->canvas->unit() );
-        d->widgetStack->insertWidget( 0, d->currentPanel );
-        connect( d->currentPanel, SIGNAL(propertyChanged()), this, SLOT(shapePropertyChanged()));
+        d->currentPanel = 0;
+        uint panelCount = panels.count();
+        for( uint i = 0; i < panelCount; ++i )
+        {
+            if( panels[i]->showOnShapeSelect() ) {
+                d->currentPanel = panels[i];
+                break;
+            }
+        }
+        if( d->currentPanel )
+        {
+            if( d->canvas )
+                d->currentPanel->setUnit( d->canvas->unit() );
+            d->widgetStack->insertWidget( 0, d->currentPanel );
+            connect( d->currentPanel, SIGNAL(propertyChanged()),
+                     this, SLOT(shapePropertyChanged()));
+        }
     }
 
     if( d->currentPanel )

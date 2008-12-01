@@ -32,7 +32,7 @@
 #include <KoPageLayout.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
-#include <KoShape.h>
+#include <KoShapeContainer.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoTextAnchor.h>
@@ -55,6 +55,7 @@
 #include "styles/KoListLevelProperties.h"
 #include "KoTextSharedLoadingData.h"
 #include "KoTextDocument.h"
+#include "KoTextDebug.h"
 #include "KoList.h"
 
 // KDE + Qt includes
@@ -161,15 +162,16 @@ KoTextLoader::~KoTextLoader()
 
 void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
 {
-    kDebug(32500) << "";
-
     const QTextDocument *document = cursor.block().document();
     d->styleManager = KoTextDocument(document).styleManager();
 
+    kDebug(32500) << "text-style:" << KoTextDebug::textAttributes( cursor.blockCharFormat() );
+#if 0
     if ((document->isEmpty()) && (d->styleManager)) {
         QTextBlock block = cursor.block();
         d->styleManager->defaultParagraphStyle()->applyStyle(block);
     }
+#endif
 
     startBody(KoXml::childNodesCount(bodyElem));
     KoXmlElement tag;
@@ -305,6 +307,7 @@ void KoTextLoader::loadParagraph(const KoXmlElement& element, QTextCursor& curso
         if (!styleName.isEmpty())
             kWarning(32500) << "paragraph style " << styleName << "not found - using default style";
         paragraphStyle = d->styleManager->defaultParagraphStyle();
+        kWarning(32500) << "defaultParagraphStyle not found - using default style";
     }
 
     if (paragraphStyle) {
@@ -314,6 +317,8 @@ void KoTextLoader::loadParagraph(const KoXmlElement& element, QTextCursor& curso
     } else {
         kWarning(32500) << "paragraph style " << styleName << " not found";
     }
+
+    kDebug(32500) << "text-style:" << KoTextDebug::textAttributes( cursor.blockCharFormat() );
 
     QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
 
@@ -352,6 +357,8 @@ void KoTextLoader::loadHeading(const KoXmlElement& element, QTextCursor& cursor)
             list->applyStyle(block, outlineStyle, level);
         }
     }
+
+    kDebug(32500) << "text-style:" << KoTextDebug::textAttributes( cursor.blockCharFormat() );
 
     QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
 
@@ -454,6 +461,7 @@ void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
             c.setBlockFormat(blockFormat);
             d->currentList->add(c.block(), level);
         }
+        kDebug(32500) << "text-style:" << KoTextDebug::textAttributes( cursor.blockCharFormat() );
     }
 
     if (numberedParagraph || --d->currentListLevel == 1) {
@@ -518,6 +526,7 @@ static QString normalizeWhitespace(const QString& in, bool leadingSpace)
 
 void KoTextLoader::loadSpan(const KoXmlElement& element, QTextCursor& cursor, bool *stripLeadingSpace)
 {
+    kDebug(32500) << "text-style:" << KoTextDebug::textAttributes( cursor.blockCharFormat() );
     Q_ASSERT(stripLeadingSpace);
     if (d->loadSpanLevel++ == 0)
         d->loadSpanInitialPos = cursor.position();
@@ -665,69 +674,71 @@ void KoTextLoader::loadSpan(const KoXmlElement& element, QTextCursor& cursor, bo
                 kDebug(32500) << "Node '" << localName << "' unhandled";
             }
 #endif
-            }
         }
-        --d->loadSpanLevel;
+    }
+    --d->loadSpanLevel;
+}
+
+void KoTextLoader::loadTable(const KoXmlElement& tableElem, QTextCursor& cursor)
+{
+    KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(tableElem, d->context);
+    if (!shape) {
+        return;
     }
 
-    void KoTextLoader::loadTable(const KoXmlElement& tableElem, QTextCursor& cursor)
-    {
-        KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(tableElem, d->context);
-        if (!shape) {
-            return;
-        }
-
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+    if (layout) {
         KoTextAnchor *anchor = new KoTextAnchor(shape);
         anchor->loadOdfFromShape();
         d->textSharedData->shapeInserted(shape);
 
-        KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
-        if (layout) {
-            KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
-            if (textObjectManager) {
-                textObjectManager->insertInlineObject(cursor, anchor);
-            }
+
+
+        KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+        if (textObjectManager) {
+            textObjectManager->insertInlineObject(cursor, anchor);
         }
     }
+}
 
-    void KoTextLoader::loadFrame(const KoXmlElement& frameElem, QTextCursor& cursor)
-    {
-        KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(frameElem, d->context);
-        if (!shape) {
-            return;
-        }
-
-        KoTextAnchor *anchor = new KoTextAnchor(shape);
-        anchor->loadOdfFromShape();
-        d->textSharedData->shapeInserted(shape);
-
-        KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
-        if (layout) {
-            KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
-            if (textObjectManager) {
-                textObjectManager->insertInlineObject(cursor, anchor);
-            }
-        }
+void KoTextLoader::loadFrame(const KoXmlElement& frameElem, QTextCursor& cursor)
+{
+    KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(frameElem, d->context);
+    if (!shape) {
+        return;
     }
 
-    void KoTextLoader::startBody(int total)
-    {
-        d->bodyProgressTotal += total;
-    }
+    KoTextAnchor *anchor = new KoTextAnchor(shape);
+    anchor->loadOdfFromShape();
+    d->textSharedData->shapeInserted(shape);
 
-    void KoTextLoader::processBody()
-    {
-        d->bodyProgressValue++;
-        if (d->dt.elapsed() >= d->lastElapsed + 1000) {  // update only once per second
-            d->lastElapsed = d->dt.elapsed();
-            Q_ASSERT(d->bodyProgressTotal > 0);
-            const int percent = d->bodyProgressValue * 100 / d->bodyProgressTotal;
-            emit sigProgress(percent);
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+    if (layout) {
+        KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+        if (textObjectManager) {
+            textObjectManager->insertInlineObject(cursor, anchor);
         }
     }
+}
 
-    void KoTextLoader::endBody()
-    {
+void KoTextLoader::startBody(int total)
+{
+    d->bodyProgressTotal += total;
+}
+
+void KoTextLoader::processBody()
+{
+    d->bodyProgressValue++;
+    if (d->dt.elapsed() >= d->lastElapsed + 1000) {  // update only once per second
+        d->lastElapsed = d->dt.elapsed();
+        Q_ASSERT(d->bodyProgressTotal > 0);
+        const int percent = d->bodyProgressValue * 100 / d->bodyProgressTotal;
+        emit sigProgress(percent);
     }
+}
+
+void KoTextLoader::endBody()
+{
+}
 
 #include "KoTextLoader.moc"

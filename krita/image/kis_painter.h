@@ -472,13 +472,19 @@ public:
     /// Returns the currently set pattern
     KisPattern * pattern() const;
 
-    /// Set the color that will be used to paint with
+    /**
+     * Set the color that will be used to paint with, and convert it
+     * to the color space of the current paint device.
+     */
     void setPaintColor(const KoColor& color);
 
     /// Returns the color that will be used to paint with
     KoColor paintColor() const;
 
-    /// Set the current background color
+    /**
+     * Set the current background color, and convert it
+     * to the color space of the current paint device.
+     */
     void setBackgroundColor(const KoColor& color);
 
     /// Returns the current background color

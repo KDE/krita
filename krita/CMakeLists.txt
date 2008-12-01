@@ -108,6 +108,8 @@ if (SHOULD_BUILD_KRITA)
 
     set(krita_KDEINIT_SRCS main.cc)
 
+    kde4_add_app_icon(krita_KDEINIT_SRCS "${KDE4_ICON_DIR}/oxygen/app/*/krita.png")
+
     kde4_add_kdeinit_executable(krita ${krita_KDEINIT_SRCS})
 
     target_link_libraries(kdeinit_krita kritaui)

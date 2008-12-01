@@ -28,19 +28,20 @@
 #include <KoColorSpace.h>
 
 // kritaimage
-#include "kis_types.h"
-#include "kis_node_visitor.h"
-#include "kis_image.h"
-#include "kis_selection.h"
-#include "kis_layer.h"
-#include "kis_paint_layer.h"
-#include "kis_group_layer.h"
-#include "kis_adjustment_layer.h"
-#include "filter/kis_filter_configuration.h"
-#include "kis_datamanager.h"
-#include "generator/kis_generator_layer.h"
+#include <kis_types.h>
+#include <kis_node_visitor.h>
+#include <kis_image.h>
+#include <kis_selection.h>
+#include <kis_layer.h>
+#include <kis_transparency_mask.h>
+#include <kis_paint_layer.h>
+#include <kis_group_layer.h>
+#include <kis_adjustment_layer.h>
+#include <filter/kis_filter_configuration.h>
+#include <kis_datamanager.h>
+#include <generator/kis_generator_layer.h>
 
-KisKraLoadVisitor::KisKraLoadVisitor(KisImageSP img, KoStore *store, QMap<KisLayer *, QString> &layerFilenames, const QString & name) :
+KisKraLoadVisitor::KisKraLoadVisitor(KisImageSP img, KoStore *store, QMap<KisNode *, QString> &layerFilenames, const QString & name) :
         KisNodeVisitor(),
         m_layerFilenames(layerFilenames)
 {
@@ -98,26 +99,26 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
 
     }
 
-    // XXX: load masks
-//     // mask
-//     if (layer->hasMask()) { // We set this in KisDoc::loadPaintLayer
-//         KisPaintDeviceSP mask = layer->getMask();
-//         location = m_external ? QString::null : m_uri;
-//         location += m_img->name() + "/layers/" + m_layerFilenames[layer] + ".mask";
+    // Check whether there is a file with a .mask extension in the
+    // layer directory, if so, it's an old-style transparency mask
+    // that should be converted.
 
-//         // Layer data
-//         if (m_store->open(location)) {
-//             if (!mask->read(m_store)) {
-//                 mask->disconnect();
-//                 m_store->close();
-//                 //IODone();
-//                 return false;
-//             }
+    location = m_external ? QString::null : m_uri;
+    location += m_name + "/layers/" + m_layerFilenames[layer] + ".mask";
+    if ( m_store->open( location ) ) {
 
-//             m_store->close();
-//         }
-//         layer->setDirty(); // Update the entire layer
-//     }
+        KisSelectionSP selection = KisSelectionSP(new KisSelection());
+        if (!selection->read(m_store)) {
+            selection->disconnect();
+            m_store->close();
+        }
+        else {
+            KisTransparencyMask* mask = new KisTransparencyMask();
+            mask->setSelection( selection );
+            m_img->addNode(mask, layer, layer->firstChild());
+        }
+    }
+
     layer->setDirty(m_img->bounds());
     return true;
 
@@ -130,10 +131,10 @@ bool KisKraLoadVisitor::visit(KisGroupLayer *layer)
     if (m_external)
         visitor.setExternalUri(m_uri);
 
-    visitAll(layer);
+    bool result = visitAll(layer);
 
     layer->setDirty(m_img->bounds());
-    return true;
+    return result;
 }
 
 bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
@@ -173,7 +174,6 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
 
     layer->setDirty(m_img->bounds());
     return true;
-
 
 }
 
@@ -244,5 +244,31 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
     }
 
     layer->setDirty(m_img->bounds());
+    return true;
+}
+
+
+bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
+{
+    return true;
+}
+
+bool KisKraLoadVisitor::visit(KisFilterMask *mask)
+{
+    return true;
+}
+
+bool KisKraLoadVisitor::visit(KisTransparencyMask *mask)
+{
+    return true;
+}
+
+bool KisKraLoadVisitor::visit(KisTransformationMask *mask)
+{
+    return true;
+}
+
+bool KisKraLoadVisitor::visit(KisSelectionMask *mask)
+{
     return true;
 }

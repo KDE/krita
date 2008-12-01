@@ -22,8 +22,11 @@
 #include "kis_types.h"
 #include "krita_export.h"
 
+#include <QImage>
+
 #include "kis_shared.h"
 #include "kis_properties_configuration.h"
+
 
 class KisPaintOpSettingsWidget;
 class KoPointerEvent;
@@ -96,7 +99,15 @@ public:
      *      do not support non-incremental.
      */
     virtual bool paintIncremental() { return true; }
+
+
+    /**
+     * @return a sample stroke that fits in @param size.
+     */
+    QImage sampleStroke(const QSize& size );
+
 private:
+
     struct Private;
     Private* const d;
 

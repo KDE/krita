@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
- *  Copyright (c) 2008 Benoit Jacob jacob@math.jussieu.fr
+ *  Copyright (c) 2008 Benoit Jacob jacob.benoit.1@gmail.com
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

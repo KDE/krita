@@ -74,7 +74,7 @@ protected:
 protected slots:
 
     void setSmooth(bool smooth);
-    void setAssistant(bool assistan);
+    void setAssistant(bool assistant);
 
 private:
 

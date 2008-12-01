@@ -245,7 +245,7 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
     foreach(KoTool *tool, cd->allTools) {
         QHash<QString, KAction*> actions = tool->actions();
         foreach(QString name, actions.keys())
-        ac->addAction(name, actions[name]);
+            ac->addAction(name, actions[name]);
     }
 }
 
@@ -479,9 +479,9 @@ void KoToolManager::movedFocus(QWidget *from, QWidget *to)
     foreach(CanvasData *data, d->canvasses.value(newCanvas)) {
         if (data->inputDevice == d->inputDevice) {
             d->canvasData = data;
-            postSwitchTool();
             d->canvasData->canvas->canvas()->canvasWidget()->setCursor(d->canvasData->activeTool->cursor());
             d->canvasData->canvas->activate();
+            postSwitchTool();
             emit changedCanvas(d->canvasData ? d->canvasData->canvas->canvas() : 0);
             return;
         }
@@ -520,8 +520,8 @@ void KoToolManager::detachCanvas(KoCanvasController *controller)
     QList<KoTool *> tools;
     foreach(CanvasData *cd, d->canvasses.value(controller)) {
         foreach(KoTool *tool, cd->allTools.values())
-        if (! tools.contains(tool))
-            tools.append(tool);
+            if (! tools.contains(tool))
+                tools.append(tool);
         delete cd;
     }
     foreach(KoTool *tool, tools) {
@@ -645,8 +645,8 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
 {
     QList<QString> types;
     foreach(KoShape *shape, shapes)
-    if (! types.contains(shape->shapeId()))
-        types.append(shape->shapeId());
+        if (! types.contains(shape->shapeId()))
+            types.append(shape->shapeId());
 
     QString toolType = KoInteractionTool_ID;
     int prio = INT_MAX;

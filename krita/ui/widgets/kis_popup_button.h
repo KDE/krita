@@ -65,7 +65,7 @@ public slots:
 
 private:
     struct Private;
-    Private* const d;
+    Private* const m_d;
 };
 
 #endif

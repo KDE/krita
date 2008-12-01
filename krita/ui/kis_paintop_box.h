@@ -43,7 +43,7 @@ class KisView2;
 class KisCanvasResourceProvider;
 class KisPresetWidget;
 class KisPaintOpPresetsPopup;
-class KisConfigWidget;
+class KisPaintOpSettingsWidget;
 
 /**
  * This widget presents all paintops that a user can paint with.
@@ -91,7 +91,7 @@ private:
     QComboBox * m_cmbPaintopPresets;
 
     QHBoxLayout * m_layout;
-    KisConfigWidget * m_optionWidget;
+    KisPaintOpSettingsWidget * m_optionWidget;
     KisPresetWidget * m_presetWidget;
     KisPaintOpPresetsPopup * m_presetsPopup;
     KisView2 * m_view;
@@ -99,10 +99,12 @@ private:
     QList<KoID> m_paintops;
     QList<KoID> m_displayedOps;
 
+    KisPaintOpPreset* m_activePreset;
+
     typedef QHash<KoInputDevice, KoID> InputDevicePaintopMap;
     InputDevicePaintopMap m_currentID;
 
-    typedef QHash<KoInputDevice, QList<KisPaintOpPresetSP> > InputDevicePresetsMap;
+    typedef QHash<KoInputDevice, QHash<QString, KisPaintOpPresetSP> > InputDevicePresetsMap;
     InputDevicePresetsMap m_inputDevicePresets;
 };
 

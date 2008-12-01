@@ -24,6 +24,7 @@
 
 #include <kis_types.h>
 #include <kis_external_layer_iface.h>
+#include <krita_export.h>
 
 class QRect;
 class QPainter;
@@ -47,7 +48,7 @@ const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
 
    XXX: what about removing shapes?
 */
-class KisShapeLayer : public KisExternalLayer, public KoShapeLayer
+class KRITAUI_TEST_EXPORT KisShapeLayer : public KisExternalLayer, public KoShapeLayer
 {
     Q_OBJECT
 

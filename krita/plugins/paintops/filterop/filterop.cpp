@@ -45,3 +45,5 @@ FilterOp::FilterOp(QObject *parent, const QStringList &)
 FilterOp::~FilterOp()
 {
 }
+
+#include "filterop.moc"

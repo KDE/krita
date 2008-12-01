@@ -1,0 +1,202 @@
+<ui version="4.0" >
+ <class>DefaultToolTransformWidget</class>
+ <widget class="QMenu" name="DefaultToolTransformWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>222</width>
+    <height>293</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout" >
+   <item row="0" column="0" >
+    <widget class="QDoubleSpinBox" name="rotateSpinBox" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+       <horstretch>2</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="suffix" >
+      <string>°</string>
+     </property>
+     <property name="minimum" >
+      <double>-360.000000000000000</double>
+     </property>
+     <property name="maximum" >
+      <double>360.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="QPushButton" name="rotateButton" >
+     <property name="text" >
+      <string>Rotate</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="KoUnitDoubleSpinBox" name="shearXSpinBox" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+       <horstretch>2</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimum" >
+      <double>-100.000000000000000</double>
+     </property>
+     <property name="maximum" >
+      <double>100.000000000000000</double>
+     </property>
+     <property name="singleStep" >
+      <double>0.100000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QPushButton" name="shearXButton" >
+     <property name="text" >
+      <string>Shear X</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <widget class="KoUnitDoubleSpinBox" name="shearYSpinBox" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+       <horstretch>2</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimum" >
+      <double>-100.000000000000000</double>
+     </property>
+     <property name="maximum" >
+      <double>100.000000000000000</double>
+     </property>
+     <property name="singleStep" >
+      <double>0.100000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" >
+    <widget class="QPushButton" name="shearYButton" >
+     <property name="text" >
+      <string>Shear Y</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" >
+    <widget class="QDoubleSpinBox" name="scaleXSpinBox" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+       <horstretch>2</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="suffix" >
+      <string>%</string>
+     </property>
+     <property name="minimum" >
+      <double>-1000.000000000000000</double>
+     </property>
+     <property name="maximum" >
+      <double>1000.000000000000000</double>
+     </property>
+     <property name="value" >
+      <double>100.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1" >
+    <widget class="QPushButton" name="scaleXButton" >
+     <property name="text" >
+      <string>Scale X</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" >
+    <widget class="QDoubleSpinBox" name="scaleYSpinBox" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+       <horstretch>2</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="suffix" >
+      <string>%</string>
+     </property>
+     <property name="minimum" >
+      <double>-1000.000000000000000</double>
+     </property>
+     <property name="maximum" >
+      <double>1000.000000000000000</double>
+     </property>
+     <property name="value" >
+      <double>100.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1" >
+    <widget class="QPushButton" name="scaleYButton" >
+     <property name="text" >
+      <string>Scale Y</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="2" >
+    <widget class="QCheckBox" name="scaleAspectCheckBox" >
+     <property name="text" >
+      <string>Keep aspect ratio</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="2" >
+    <widget class="QPushButton" name="resetButton" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>Reset Transformations</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="2" >
+    <spacer name="spacer" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>191</width>
+       <height>58</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KoUnitDoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>KoUnitDoubleSpinBox.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -60,6 +60,10 @@ public:
 
     void apply(KisPaintDeviceSP projection, const QRect & rc) const;
 
+    using KisNode::setDirty;
+    virtual void setDirty();
+
+
 private:
 
     class Private;

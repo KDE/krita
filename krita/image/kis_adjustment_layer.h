@@ -88,6 +88,9 @@ public:
     QIcon icon() const;
     KoDocumentSectionModel::PropertyList sectionModelProperties() const;
 
+    using KisLayer::setDirty;
+    virtual void setDirty();
+
 public:
 
     KisFilterConfiguration * filter() const;

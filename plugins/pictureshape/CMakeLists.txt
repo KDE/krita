@@ -8,6 +8,7 @@ SET (pictureshape_LIB_SRCS
     PictureTool.cpp
     PictureToolFactory.cpp
     Plugin.cpp
+    PictureShapeConfigWidget.cpp
 )
 
 kde4_add_plugin(pictureshape ${pictureshape_LIB_SRCS})
@@ -19,6 +20,7 @@ target_link_libraries(
     kostore
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KIO_LIBS}
+    ${KDE4_KFILE_LIBRARY}
     ${QT_QTCORE_LIBRARY}
     )
 install(TARGETS pictureshape DESTINATION ${PLUGIN_INSTALL_DIR})

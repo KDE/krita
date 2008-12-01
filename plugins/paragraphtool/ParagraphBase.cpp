@@ -25,6 +25,7 @@
 #include <KoTextDocumentLayout.h>
 #include <KoTextShapeData.h>
 
+#include <KDebug>
 #include <KLocalizedString>
 
 #include <QAbstractTextDocumentLayout>
@@ -85,14 +86,24 @@ void ParagraphBase::activateTextBlockAt(const QPointF &point)
     activateTextBlock(newBlock, document);
 }
 
-void ParagraphBase::activatePreviousTextBlock()
+bool ParagraphBase::activatePreviousTextBlock()
 {
+    if (!textBlock().previous().isValid()) {
+        return false;
+    }
+
     activateTextBlock(textBlock().previous());
+    return true;
 }
 
-void ParagraphBase::activateNextTextBlock()
+bool ParagraphBase::activateNextTextBlock()
 {
+    if (!textBlock().next().isValid()) {
+        return false;
+    }
+
     activateTextBlock(textBlock().next());
+    return true;
 }
 
 void ParagraphBase::activateTextBlock(QTextBlock newBlock, QTextDocument *document)

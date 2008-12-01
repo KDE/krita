@@ -21,6 +21,7 @@
 #include "kis_paint_device.h"
 #include "kis_transform_worker.h"
 #include "kis_node_visitor.h"
+#include "kis_filter_strategy.h"
 
 #include "QRect"
 
@@ -33,8 +34,10 @@ KisTransformationMask::KisTransformationMask()
         , m_rotation(0)
         , m_xtranslate(0)
         , m_ytranslate(0)
-        , m_filter(0)
-{}
+{
+    Q_ASSERT( KisFilterStrategyRegistry::instance()->keys().count() > 0 );
+    m_filter = KisFilterStrategyRegistry::instance()->get( KisFilterStrategyRegistry::instance()->keys()[0] );
+}
 
 KisTransformationMask::~KisTransformationMask()
 {

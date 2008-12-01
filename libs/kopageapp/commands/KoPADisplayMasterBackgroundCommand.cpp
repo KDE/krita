@@ -31,7 +31,12 @@ KoPADisplayMasterBackgroundCommand::KoPADisplayMasterBackgroundCommand( KoPAPage
         setText( i18n( "Display master background" ) );
     }
     else {
-        setText( i18n( "Display page background" ) );
+        if ( m_page->pageType() == KoPageApp::Slide ) {
+            setText( i18n( "Display slide background" ) );
+        }
+        else {
+            setText( i18n( "Display page background" ) );
+        }
     }
 }
 

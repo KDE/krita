@@ -12,6 +12,8 @@ SET ( defaulttools_SRCS
     defaulttool/DefaultTool.cpp
     defaulttool/DefaultToolFactory.cpp
     defaulttool/DefaultToolWidget.cpp
+    defaulttool/DefaultToolArrangeWidget.cpp
+    defaulttool/DefaultToolTransformWidget.cpp
     defaulttool/ShapeMoveStrategy.cpp
     defaulttool/ShapeResizeStrategy.cpp
     defaulttool/ShapeRotateStrategy.cpp
@@ -25,6 +27,8 @@ SET ( defaulttools_SRCS
 
 kde4_add_ui_files(defaulttools_SRCS
     defaulttool/DefaultToolWidget.ui
+    defaulttool/DefaultToolArrangeWidget.ui
+    defaulttool/DefaultToolTransformWidget.ui
     guidestool/GuidesToolOptionWidget.ui
 )
 

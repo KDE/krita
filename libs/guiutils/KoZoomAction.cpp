@@ -55,18 +55,18 @@ public:
     KoZoomInput* input;
 
     qreal effectiveZoom;
-    bool doSpecialAspectMode;
+
+    KoZoomAction::SpecialButtons specialButtons;
 };
 
-KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, bool doSpecialAspectMode, QObject *parent)
+KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, QObject *parent)
     : KSelectAction(text, parent)
     ,d(new Private)
 {
     d->zoomModes = zoomModes;
     d->slider = 0;
-    d->doSpecialAspectMode = doSpecialAspectMode;
     d->input = 0;
-
+    d->specialButtons = 0;
     setIcon(KIcon("zoom-original"));
     setEditable( true );
     setMaxComboViewCount( 15 );
@@ -234,7 +234,7 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
     // multiple times without problems.  The 'new' here means we can't do that.
     // TODO refactor this method to use connections instead of d-pointer members to communicate so it becomes reentrant.
     d->input = new KoZoomInput(group);
-    regenerateItems( d->effectiveZoom );
+    regenerateItems( d->effectiveZoom, true );
     connect(d->input, SIGNAL(zoomLevelChanged(const QString&)), this, SLOT(triggered(const QString&)));
     layout->addWidget(d->input);
 
@@ -249,8 +249,7 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
     d->slider->setMaximumWidth(80);
     layout->addWidget(d->slider);
 
-    if(d->doSpecialAspectMode)
-    {
+    if (d->specialButtons & AspectMode) {
         QToolButton * aspectButton = new QToolButton(group);
         aspectButton->setIcon(KIcon("zoom-pixels").pixmap(22));
         aspectButton->setCheckable(true);
@@ -258,6 +257,22 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
         aspectButton->setToolTip(i18n("Use same aspect as pixels"));
         connect(aspectButton, SIGNAL(toggled(bool)), this, SIGNAL(aspectModeChanged(bool)));
         layout->addWidget(aspectButton);
+    }
+    if (d->specialButtons & ZoomToSelection) {
+        QToolButton * zoomToSelectionButton = new QToolButton(group);
+        zoomToSelectionButton->setIcon(KIcon("zoom-selection").pixmap(22));
+        zoomToSelectionButton->setAutoRaise(true);
+        zoomToSelectionButton->setToolTip(i18n("Zoom to Selection"));
+        connect(zoomToSelectionButton, SIGNAL(clicked(bool)), this, SIGNAL(zoomedToSelection()));
+        layout->addWidget(zoomToSelectionButton);
+    }
+    if (d->specialButtons & ZoomToAll) {
+        QToolButton * zoomToAllButton = new QToolButton(group);
+        zoomToAllButton->setIcon(KIcon("zoom-all").pixmap(22));
+        zoomToAllButton->setAutoRaise(true);
+        zoomToAllButton->setToolTip(i18n("Zoom to All"));
+        connect(zoomToAllButton, SIGNAL(clicked(bool)), this, SIGNAL(zoomedToAll()));
+        layout->addWidget(zoomToAllButton);
     }
 
     connect(d->slider, SIGNAL(valueChanged(int)), this, SLOT(sliderValueChanged(int)));
@@ -289,6 +304,11 @@ void KoZoomAction::setSelectedZoomMode( KoZoomMode::Mode mode )
 
     if (d->input)
         d->input->setCurrentZoomLevel(modeString);
+}
+
+void KoZoomAction::setSpecialButtons( SpecialButtons buttons )
+{
+    d->specialButtons = buttons;
 }
 
 #include "KoZoomAction.moc"

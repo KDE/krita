@@ -33,7 +33,7 @@
 #include "compositeops/KoCompositeOpBurn.h"
 
 KisGrayAU8ColorSpace ::KisGrayAU8ColorSpace( KoColorProfile *p) :
-            KoLcmsColorSpace<GrayAU8Traits>("GRAYA", i18n("Grayscale 8-bit integer/channel)"), TYPE_GRAYA_8, icSigGrayData, p)
+            KoLcmsColorSpace<GrayAU8Traits>("GRAYA", i18n("Grayscale (8-bit integer/channel)"), TYPE_GRAYA_8, icSigGrayData, p)
 {
     addChannel(new KoChannelInfo(i18n("Gray"), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8));
     addChannel(new KoChannelInfo(i18n("Alpha"), 1, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));

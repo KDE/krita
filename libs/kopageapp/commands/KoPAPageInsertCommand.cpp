@@ -33,7 +33,12 @@ KoPAPageInsertCommand::KoPAPageInsertCommand( KoPADocument *document, KoPAPageBa
 {
     Q_ASSERT( document );
     Q_ASSERT( page );
-    setText( i18n( "Insert page" ) );
+    if ( m_page->pageType() == KoPageApp::Slide ) {
+        setText( i18n( "Insert slide" ) );
+    }
+    else {
+        setText( i18n( "Insert page" ) );
+    }
 }
 
 KoPAPageInsertCommand::~KoPAPageInsertCommand()

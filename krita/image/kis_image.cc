@@ -138,7 +138,7 @@ KisImage::KisImage(const KisImage& rhs)
         m_d->globalSelection = 0;
         m_d->deselectedGlobalSelection = 0;
         setRootLayer(static_cast<KisGroupLayer*>(rhs.m_d->rootLayer->clone().data()));
-        m_d->annotations = rhs.m_d->annotations; // XXX the annotations would probably need to be deep-copied        m_d->nserver = new KisNameServer(rhs.m_d->nserver->currentSeed() + 1);
+        m_d->annotations = rhs.m_d->annotations; // XXX the annotations would probably need to be deep-copied
         m_d->nserver = new KisNameServer( *rhs.m_d->nserver );
         Q_CHECK_PTR(m_d->nserver);
 
@@ -576,7 +576,7 @@ void KisImage::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTr
     m_d->rootLayer->accept(visitor);
 
     unlock();
-    
+
     if (undo()) {
 
         m_d->adapter->addCommand(new KisImageConvertTypeCommand(KisImageSP(this), oldCs, dstColorSpace));
@@ -830,9 +830,9 @@ void KisImage::flatten()
 
 void KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrategy* strategy)
 {
-    if (!layer->nextSibling()) return;
+    if (!layer->prevSibling()) return;
     // XXX: this breaks if we allow free mixing of masks and layers
-    KisLayerSP layer2 = dynamic_cast<KisLayer*>(layer->nextSibling().data());
+    KisLayerSP layer2 = dynamic_cast<KisLayer*>(layer->prevSibling().data());
     if (!layer2) return;
 
     KisPaintLayerSP newLayer = new KisPaintLayer(this, layer->name(), OPACITY_OPAQUE, colorSpace());
@@ -840,9 +840,9 @@ void KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrategy* st
 
 
     QRect layerExtent = layer->extent();
-    QRect layerNextSiblingExtent = layer->nextSibling()->extent();
+    QRect layerPrevSiblingExtent = layer->prevSibling()->extent();
 
-    QRect rc = layerExtent | layerNextSiblingExtent;
+    QRect rc = layerExtent | layerPrevSiblingExtent;
 
     undoAdapter()->beginMacro(i18n("Merge with Layer Below"));
 
@@ -856,19 +856,19 @@ void KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrategy* st
 
     // Merge meta data
     QList<const KisMetaData::Store*> srcs;
-    srcs.append(static_cast<KisLayer*>(layer->nextSibling().data())->metaData());
+    srcs.append(static_cast<KisLayer*>(layer->prevSibling().data())->metaData());
     srcs.append(layer->metaData());
     QList<double> scores;
-    int layerNextSiblingArea = layerNextSiblingExtent.width() * layerNextSiblingExtent.height();
+    int layerPrevSiblingArea = layerPrevSiblingExtent.width() * layerPrevSiblingExtent.height();
     int layerArea = layerExtent.width() * layerExtent.height();
-    double norm = qMax(layerNextSiblingArea, layerArea);
-    scores.append(layerNextSiblingArea / norm);
+    double norm = qMax(layerPrevSiblingArea, layerArea);
+    scores.append(layerPrevSiblingArea / norm);
     scores.append(layerArea / norm);
     strategy->merge(newLayer->metaData(), srcs, scores);
 
-    removeNode(layer->nextSibling());
-    addNode(newLayer, layer->parent(), layer.data());
-    removeNode(layer.data());
+    removeNode(layer->prevSibling());
+    removeNode(layer);
+    addNode(newLayer, layer->parent());
 
     undoAdapter()->endMacro();
 }

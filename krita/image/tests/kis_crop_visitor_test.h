@@ -27,7 +27,7 @@ class KisCropVisitorTest : public QObject
 private slots:
 
     void testCreation();
-
+    void testUndo();
 };
 
 #endif

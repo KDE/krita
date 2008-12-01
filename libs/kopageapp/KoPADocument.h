@@ -213,6 +213,13 @@ public:
      */
     void updateViews(KoPAPageBase *page);
 
+    /**
+     * Get the page type used in the document
+     *
+     * The default page type KoPageApp::Page is returned
+     */
+    virtual KoPageApp::PageType pageType() const;
+
 signals:
     void shapeAdded(KoShape* shape);
     void shapeRemoved(KoShape* shape);

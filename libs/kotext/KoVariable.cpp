@@ -136,4 +136,5 @@ int KoVariable::positionInDocument() const
 
 bool KoVariable::loadOdf(const KoXmlElement&, KoShapeLoadingContext&)
 {
+    return true;
 }

@@ -199,6 +199,8 @@ void KoSelection::deselect(KoShape * object, bool recursive)
     if (count() == 1)
         setTransformation(firstSelectedShape()->absoluteTransformation(0));
 
+    updateSizeAndPosition();
+
     d->requestSelectionChangedEvent();
 }
 

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -642,18 +642,24 @@ QPen KoOdfGraphicStyles::loadOasisStrokeStyle(const KoStyleStack &styleStack, co
         if (stroke == "dash" && styleStack.hasProperty(KoXmlNS::draw, "stroke-dash")) {
             QString dashStyleName = styleStack.property(KoXmlNS::draw, "stroke-dash");
 
+            // set width to 1 in case it is 0 as dividing by 0 gives infinity
+            qreal width = tmpPen.width();
+            if ( width == 0 ) {
+                width = 1;
+            }
+
             KoXmlElement * dashElement = stylesReader.drawStyles()[ dashStyleName ];
             if (dashElement) {
                 QVector<qreal> dashes;
                 if (dashElement->hasAttributeNS(KoXmlNS::draw, "dots1")) {
                     qreal dotLength = KoUnit::parseValue(dashElement->attributeNS(KoXmlNS::draw, "dots1-length", QString()));
-                    dashes.append(dotLength / tmpPen.width());
+                    dashes.append(dotLength / width);
                     qreal dotDistance = KoUnit::parseValue(dashElement->attributeNS(KoXmlNS::draw, "distance", QString()));
-                    dashes.append(dotDistance / tmpPen.width());
+                    dashes.append(dotDistance / width);
                     if (dashElement->hasAttributeNS(KoXmlNS::draw, "dots2")) {
                         dotLength = KoUnit::parseValue(dashElement->attributeNS(KoXmlNS::draw, "dots2-length", QString()));
-                        dashes.append(dotLength / tmpPen.width());
-                        dashes.append(dotDistance / tmpPen.width());
+                        dashes.append(dotLength / width);
+                        dashes.append(dotDistance / width);
                     }
                     tmpPen.setDashPattern(dashes);
                 }

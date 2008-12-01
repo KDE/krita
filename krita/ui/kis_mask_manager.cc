@@ -87,11 +87,11 @@ void KisMaskManager::setup(KActionCollection * actionCollection)
     m_createFilterMask  = new KAction(i18n("Filter Mask..."), this);
     actionCollection->addAction("create_filter_mask", m_createFilterMask);
     connect(m_createFilterMask, SIGNAL(triggered()), this, SLOT(createFilterMask()));
-
+#if 0 // XXX_2.0
     m_createTransformationMask  = new KAction(i18n("Transformation Mask..."), this);
     actionCollection->addAction("create_transformation_mask", m_createTransformationMask);
     connect(m_createTransformationMask, SIGNAL(triggered()), this, SLOT(createTransformationMask()));
-
+#endif
     m_createSelectionMask = new KAction(i18n("Selection Mask..."), this);
     actionCollection->addAction("create_selection_mask", m_createSelectionMask);
     connect(m_createSelectionMask, SIGNAL(triggered()), this, SLOT(createSelectionmask()));
@@ -235,8 +235,8 @@ void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
         KisFilterConfiguration * filter = dlg.filterConfiguration();
         QString name = dlg.layerName();
         mask->setFilter(filter);
+        mask->setDirty();
         activateMask(mask);
-        mask->setDirty(selection->selectedExactRect());
     } else {
         m_view->image()->removeNode(mask);
     }

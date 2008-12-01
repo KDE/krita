@@ -31,7 +31,12 @@ KoPAChangeMasterPageCommand::KoPAChangeMasterPageCommand( KoPADocument *document
 , m_oldMasterPage( page->masterPage() )
 , m_newMasterPage( masterPage )
 {
-    setText( i18n( "Change master page" ) );
+    if ( m_page->pageType() == KoPageApp::Slide ) {
+        setText( i18n( "Change master slide" ) );
+    }
+    else {
+        setText( i18n( "Change master page" ) );
+    }
 }
 
 KoPAChangeMasterPageCommand::~KoPAChangeMasterPageCommand()

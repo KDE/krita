@@ -413,9 +413,17 @@ qreal Chord::stemEndY(bool interpolateBeams) const
     Q_ASSERT( bottomStaff );
 
     if (stemDirection() == StemUp) {
-        return top - topStaff->lineSpacing() * stemLength();
+        qreal pos = top - topStaff->lineSpacing() * stemLength();
+        if (pos > topStaff->center() && beamType(0) == BeamFlag) {
+            pos = topStaff->center();
+        }
+        return pos;
     } else {
-        return bottom + bottomStaff->lineSpacing() * stemLength();
+        qreal pos = bottom + bottomStaff->lineSpacing() * stemLength();
+        if (pos < bottomStaff->center() && beamType(0) == BeamFlag) {
+            pos = bottomStaff->center();
+        }
+        return pos;
     }
 }
 

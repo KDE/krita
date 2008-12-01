@@ -270,8 +270,8 @@ void KisNodeManager::activateNode(KisNodeSP node)
         m_d->layerManager->activateLayer(0);
     } else {
         dbgUI << " activated node: " << node->name() ;
-    
-    
+
+
         KoShape * shape = m_d->view->document()->shapeForNode(node);
         if (!shape) {
             shape = m_d->view->document()->addShape(node);
@@ -282,9 +282,8 @@ void KisNodeManager::activateNode(KisNodeSP node)
             parentShape = m_d->view->document()->addShape(node->parent());
         }
 #endif
-    
+
         selection->select(shape);
-    
         KoShapeLayer * shapeLayer = dynamic_cast<KoShapeLayer*>(shape);
         Q_ASSERT( shapeLayer );
         if (shapeLayer) {
@@ -292,7 +291,7 @@ void KisNodeManager::activateNode(KisNodeSP node)
             shapeLayer->setVisible(node->visible());
             selection->setActiveLayer(shapeLayer);
         }
-    
+
         m_d->activeNode = node;
         if (KisLayerSP layer = dynamic_cast<KisLayer*>(node.data())) {
             m_d->maskManager->activateMask(0);
@@ -303,7 +302,7 @@ void KisNodeManager::activateNode(KisNodeSP node)
             m_d->layerManager->activateLayer(static_cast<KisLayer*>(node->parent().data()));
         }
         emit sigNodeActivated(node);
-    
+
     }
     nodesUpdated();
 }

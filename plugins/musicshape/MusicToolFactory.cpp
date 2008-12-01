@@ -30,7 +30,7 @@ MusicToolFactory::MusicToolFactory( QObject* parent )
     setToolTip( i18n( "Music editing tool, parts" ) );
     setIcon( "musicshape" );
     setToolType( dynamicToolType() );
-    setPriority( 1 );
+    setPriority( 2 );
     setActivationShapeId( MusicShapeId );
 }
 

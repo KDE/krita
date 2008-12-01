@@ -20,7 +20,7 @@
 #include "KoToolBoxFactory.h"
 
 #include <KoToolManager.h>
-#include <KoToolBox.h>
+#include "KoToolBox_p.h"
 
 class KoToolBoxFactory::Private {
 public:
@@ -53,12 +53,9 @@ KoDockFactory::DockPosition KoToolBoxFactory::defaultDockPosition() const
 QDockWidget* KoToolBoxFactory::createDockWidget()
 {
     KoToolBox *box = new KoToolBox(d->canvas);
-    QDockWidget *dockWidget = new QDockWidget();
+    KoToolBoxDocker *docker = new KoToolBoxDocker(box);
+    docker->setWindowTitle(d->appName);
+    docker->setObjectName("ToolBox_"+ d->appName);
 
-    dockWidget->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-    dockWidget->setWindowTitle(d->appName);
-    dockWidget->setObjectName("ToolBox_"+ d->appName);
-    dockWidget->setWidget(box);
-
-    return dockWidget;
+    return docker;
 }

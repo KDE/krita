@@ -33,6 +33,7 @@ class KRITARULERASSISTANTCOMMON_EXPORT RulerDecoration : public KisCanvasDecorat
          */
         void setEdition( bool v );
         Ruler* ruler() { return m_ruler; }
+        void setRuler( Ruler* _ruler ) { m_ruler = _ruler; }
     protected:
         virtual void drawDecoration(QPainter& gc, const QPoint & documentOffset, const QRect& area, const KoViewConverter &converter);
     private:

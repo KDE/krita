@@ -684,6 +684,9 @@ bool TextTool::pasteHelper(QClipboard::Mode mode)
     // check for mime type
     const QMimeData *data = QApplication::clipboard()->mimeData(mode);
 
+	// on windows we do not have data if we try to paste this selection
+	if (!data) return false;
+
     if (data->hasFormat("application/vnd.oasis.opendocument.text")) {
         startMacro("Paste");
         KoTextPaste paste(m_textShapeData, m_caret, m_canvas);

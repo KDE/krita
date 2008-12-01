@@ -104,6 +104,7 @@ KoShapeCollectionDocker::KoShapeCollectionDocker(QWidget* parent)
     QWidget* mainWidget = new QWidget(this);
     QGridLayout* mainLayout = new QGridLayout(mainWidget);
     mainLayout->setMargin(0);
+    //mainLayout->setSizeConstraint(QLayout::SetFixedSize);
     setWidget(mainWidget);
 
     m_quickView = new QListView (mainWidget);
@@ -130,7 +131,7 @@ KoShapeCollectionDocker::KoShapeCollectionDocker(QWidget* parent)
     m_moreShapes->setIcon(KIcon("shape-choose"));
     m_moreShapes->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     mainLayout->addWidget(m_moreShapes, 0, 1);
-    QSpacerItem * verticalSpacer = new QSpacerItem( 20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    QSpacerItem * verticalSpacer = new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding );
     mainLayout->addItem( verticalSpacer, 1, 0, 1, 2 );
 
 

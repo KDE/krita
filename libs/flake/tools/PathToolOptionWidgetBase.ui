@@ -5,11 +5,17 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>289</width>
-    <height>165</height>
+    <width>280</width>
+    <height>64</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout" >
+   <property name="spacing" >
+    <number>0</number>
+   </property>
+   <property name="margin" >
+    <number>0</number>
+   </property>
    <item>
     <widget class="QStackedWidget" name="stackedWidget" >
      <property name="sizePolicy" >
@@ -19,47 +25,35 @@
       </sizepolicy>
      </property>
      <property name="currentIndex" >
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="pathPage" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>281</width>
-        <height>138</height>
-       </rect>
-      </property>
       <layout class="QGridLayout" name="gridLayout" >
-       <item row="0" column="0" colspan="2" >
-        <widget class="QLabel" name="label" >
-         <property name="text" >
-          <string>Styles</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <item row="0" column="0" >
         <widget class="QToolButton" name="corner" >
          <property name="text" >
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1" >
+       <item row="0" column="1" >
         <widget class="QToolButton" name="smooth" >
          <property name="text" >
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="2" >
+       <item row="0" column="2" >
         <widget class="QToolButton" name="symmetric" >
          <property name="text" >
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="3" >
+       <item row="0" column="3" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
@@ -72,107 +66,93 @@
          </property>
         </spacer>
        </item>
-       <item row="1" column="4" >
+       <item row="0" column="5" >
         <widget class="QToolButton" name="lineSegment" >
          <property name="text" >
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="5" >
+       <item row="0" column="6" >
         <widget class="QToolButton" name="curveSegment" >
          <property name="text" >
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="6" >
+       <item row="0" column="7" >
         <widget class="QToolButton" name="linePoint" >
          <property name="text" >
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="7" >
+       <item row="0" column="8" >
         <widget class="QToolButton" name="curvePoint" >
          <property name="text" >
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0" colspan="2" >
-        <widget class="QLabel" name="label_2" >
-         <property name="text" >
-          <string>Actions</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0" >
+       <item row="1" column="0" >
         <widget class="QToolButton" name="addPoint" >
          <property name="text" >
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="1" >
+       <item row="1" column="1" >
         <widget class="QToolButton" name="removePoint" >
          <property name="text" >
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="2" colspan="2" >
-        <spacer name="horizontalSpacer_2" >
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0" >
-          <size>
-           <width>83</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="3" column="4" >
+       <item row="1" column="5" >
         <widget class="QToolButton" name="breakPoint" >
          <property name="text" >
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="5" >
+       <item row="1" column="6" >
         <widget class="QToolButton" name="breakSegment" >
          <property name="text" >
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="6" >
+       <item row="1" column="7" >
         <widget class="QToolButton" name="joinSegment" >
          <property name="text" >
           <string>...</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="7" >
+       <item row="1" column="8" >
         <widget class="QToolButton" name="mergePoints" >
          <property name="text" >
           <string>...</string>
          </property>
         </widget>
        </item>
+       <item row="0" column="4" >
+        <widget class="Line" name="line" >
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4" >
+        <widget class="Line" name="line_2" >
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="parameterPage" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>100</width>
-        <height>30</height>
-       </rect>
-      </property>
       <property name="sizePolicy" >
        <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
         <horstretch>0</horstretch>
@@ -203,35 +183,9 @@
          </property>
         </spacer>
        </item>
-       <item row="2" column="0" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0" >
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
       </layout>
      </widget>
     </widget>
-   </item>
-   <item>
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0" >
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>

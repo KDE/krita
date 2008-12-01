@@ -158,7 +158,11 @@ QVariant KoPADocumentModel::data( const QModelIndex &index, int role ) const
             if( name.isEmpty() )
             {
                 if ( dynamic_cast<KoPAPageBase *>( shape ) ) {
-                    name = i18n("Page") + QString(" %1").arg(m_document->pageIndex(dynamic_cast<KoPAPageBase *>(shape)) + 1);
+                    if(m_document->pageType() == KoPageApp::Slide ) {
+                        name = i18n("Slide %1",  m_document->pageIndex(dynamic_cast<KoPAPageBase *>(shape)) + 1);
+                    } else {
+                        name = i18n("Page  %1", m_document->pageIndex(dynamic_cast<KoPAPageBase *>(shape)) + 1);
+                    }
                 }
                 else if( dynamic_cast<KoShapeLayer*>( shape ) ) {
                     name = i18n("Layer") + QString(" (%1)").arg(shape->zIndex());

@@ -54,17 +54,26 @@ KisBookmarkedConfigurationsEditor::~KisBookmarkedConfigurationsEditor()
 
 void KisBookmarkedConfigurationsEditor::currentConfigChanged(const QModelIndex& idx)
 {
-    d->editorUi.pushButtonDelete->setEnabled(d->model->isIndexDeletable(idx));
+    if( d->model )
+    {
+        d->editorUi.pushButtonDelete->setEnabled(d->model->isIndexDeletable(idx));
+    }
 }
 
 void KisBookmarkedConfigurationsEditor::addCurrentConfiguration()
 {
-    d->model->newConfiguration(ki18n("New configuration %1"), d->currentConfig);
+    if( d->model )
+    {
+        d->model->newConfiguration(ki18n("New configuration %1"), d->currentConfig);
+    }
 }
 
 void KisBookmarkedConfigurationsEditor::deleteConfiguration()
 {
-    d->model->deleteIndex(d->editorUi.listConfigurations->currentIndex());
+    if( d->model )
+    {
+        d->model->deleteIndex(d->editorUi.listConfigurations->currentIndex());
+    }
 }
 
 #include "kis_bookmarked_configurations_editor.moc"

@@ -25,10 +25,10 @@
 #include <QButtonGroup>
 #include <QButtonGroup>
 #include <QPainter>
-#include <QDebug>
+#include <kdebug.h>
 #include <QStyleOption>
 
-#define GAP 5
+#define GAP 0
 
 class KoPositionSelector::Private {
 public:
@@ -103,7 +103,7 @@ public:
                 Q_ASSERT(but);
                 QStyleOptionButton opt;
                 opt.initFrom(but);
-                prefSize = QSize(1,1) + QSize(but->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth, &opt, but),
+                prefSize = QSize(but->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth, &opt, but),
                         but->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorHeight, &opt, but));
             }
             maxRow = qMax(maxRow, item.row);

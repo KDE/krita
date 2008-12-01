@@ -64,8 +64,9 @@ enum ButtonIds
     Button_Delete
 };
 
-KoPADocumentStructureDockerFactory::KoPADocumentStructureDockerFactory( KoDocumentSectionView::DisplayMode mode )
+KoPADocumentStructureDockerFactory::KoPADocumentStructureDockerFactory( KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType)
 : m_mode( mode )
+, m_pageType(pageType)
 {
 }
 
@@ -76,30 +77,38 @@ QString KoPADocumentStructureDockerFactory::id() const
 
 QDockWidget* KoPADocumentStructureDockerFactory::createDockWidget()
 {
-    return new KoPADocumentStructureDocker(m_mode);
+    return new KoPADocumentStructureDocker(m_mode, m_pageType);
 }
 
-KoPADocumentStructureDocker::KoPADocumentStructureDocker( KoDocumentSectionView::DisplayMode mode, QWidget* parent )
+KoPADocumentStructureDocker::KoPADocumentStructureDocker( KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType, QWidget* parent )
 : QDockWidget( parent )
 , KoCanvasObserver()
 , m_doc( 0 )
 , m_model( 0 )
 {
     setWindowTitle( i18n( "Document" ) );
-
+    
     QWidget *mainWidget = new QWidget( this );
     QGridLayout* layout = new QGridLayout( mainWidget );
     layout->addWidget( m_sectionView = new KoDocumentSectionView( mainWidget ), 0, 0, 1, -1 );
 
     QToolButton *button = new QToolButton( mainWidget );
     button->setIcon( SmallIcon( "list-add" ) );
-    button->setToolTip( i18n("Add a new page or layer") );
+    if(pageType == KoPageApp::Slide ) {
+        button->setToolTip( i18n("Add a new slide or layer") );
+    } else {
+        button->setToolTip( i18n("Add a new page or layer") );
+    }
     layout->addWidget( button, 1, 0 );
 
     KMenu *menu = new KMenu( button );
     button->setMenu(menu);
     button->setPopupMode(QToolButton::InstantPopup);
-    menu->addAction( SmallIcon( "document-new" ), i18n( "Page" ), this, SLOT( addPage() ) );
+    if(pageType == KoPageApp::Slide ) {
+        menu->addAction( SmallIcon( "document-new" ), i18n( "Slide" ), this, SLOT( addPage() ) );
+    } else {
+        menu->addAction( SmallIcon( "document-new" ), i18n( "Page" ), this, SLOT( addPage() ) );
+    }
     m_addLayerAction = menu->addAction( SmallIcon( "layer-new" ), i18n( "Layer" ), this, SLOT( addLayer() ) );
 
     m_buttonGroup = new QButtonGroup( mainWidget );

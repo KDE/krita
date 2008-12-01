@@ -46,7 +46,7 @@ public:
      *
      * @param name name of the master page.
      */
-    KoPAMasterPage* masterPageFromName( const QString& name );
+    KoPAMasterPage* masterPageByName( const QString& name );
 
     /**
      * Add a master page to the context.

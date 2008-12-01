@@ -26,7 +26,7 @@
 #include "kis_cmyk_colorspace.h"
 
 typedef KGenericFactory<CMYKU8Plugin> CMYKU8PluginFactory;
-K_EXPORT_COMPONENT_FACTORY( kritacmykplugin, CMYKU8PluginFactory( "krita" ) )
+K_EXPORT_COMPONENT_FACTORY( kritacmykplugin, CMYKU8PluginFactory( "kocolorspaces" ) )
 
 
 CMYKU8Plugin::CMYKU8Plugin(QObject *parent, const QStringList &)

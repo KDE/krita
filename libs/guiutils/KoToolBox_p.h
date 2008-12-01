@@ -49,7 +49,7 @@ class KoShapeLayer;
  * rotating in a smart way to show the buttons optimally.
  * @see KoToolManager
  */
-class KoToolBox : public QWidget, public KoCanvasObserver {
+class KoToolBox : public QWidget {
     Q_OBJECT
 public:
     /// constructor
@@ -90,8 +90,8 @@ public slots:
      */
     void setButtonsVisible(const KoCanvasController *canvas, const QList<QString> &codes);
 
-    /// reimplemented from KoCanvasObserver
-    virtual void setCanvas(KoCanvasBase *canvas);
+    /// set the canvas this docker should listen to for changes.
+    void setCanvas(KoCanvasBase *canvas);
 
 private slots:
     void setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer* newLayer);
@@ -102,6 +102,18 @@ protected:
 private:
     class Private;
     Private * const d;
+};
+
+class KoToolBoxDocker : public QDockWidget, public KoCanvasObserver
+{
+public:
+    KoToolBoxDocker(KoToolBox *toolBox);
+
+    /// reimplemented from KoCanvasObserver
+    virtual void setCanvas(KoCanvasBase *canvas);
+
+private:
+    KoToolBox *m_toolBox;
 };
 
 #endif // _KO_TOOLBOX_H_

@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2004-2008 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
@@ -24,55 +24,31 @@
 #define KIS_FILTEROP_H_
 
 #include "kis_brush_based_paintop.h"
-#include <kis_paintop_settings.h>
-#include <QString>
 #include <klocale.h>
+#include <QDialog>
+#include <KoColorSpace.h>
 
-class QPointF;
-class KisPainter;
-class KisFilterConfiguration;
-class KisConfigWidget;
-class Ui_FilterOpOptions;
-class KoID;
-class QGridLayout;
 class KisFilterOpSettings;
-
-class KisFilterOpFactory  : public KisPaintOpFactory
-{
-
-public:
-    KisFilterOpFactory() {}
-    virtual ~KisFilterOpFactory() {}
-
-    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
-    virtual QString id() const {
-        return "filter";
-    }
-    virtual QString name() const {
-        return i18n("Filter");
-    }
-    virtual QString pixmap() {
-        return "filterop.png";
-    }
-    virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
-    virtual KisPaintOpSettingsSP settings(KisImageSP image);
-};
+class KisPaintInformation;
+class KisPainter;
 
 class KisFilterOp : public KisBrushBasedPaintOp
 {
 
 public:
 
-    KisFilterOp(const KisPaintOpSettingsSP settings, KisPainter * painter);
+    KisFilterOp(const KisFilterOpSettings *settings, KisPainter * painter);
     virtual ~KisFilterOp();
 
     void paintAt(const KisPaintInformation& info);
+    virtual double paintLine(const KisPaintInformation &pi1,
+                             const KisPaintInformation &pi2,
+                             double savedDist = -1);
 
 private:
 
-    const KisFilterOpSettings* m_settings;
+    const KisFilterOpSettings * settings;
     KisPaintDeviceSP m_tmpDevice;
 };
-
 
 #endif // KIS_FILTEROP_H_

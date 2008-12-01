@@ -93,7 +93,7 @@ void KoCtlColorConversionTransformation::transform(const quint8 *src8, quint8 *d
             dbgPigment << "Unsuitable type";
         }
     }
-//     d->program->apply(src, dst);
+    d->program->apply(src, dst);
 }
 
 struct KoCtlColorConversionTransformationFactory::Private {

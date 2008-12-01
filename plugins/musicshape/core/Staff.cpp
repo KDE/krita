@@ -94,7 +94,7 @@ qreal Staff::bottom()
 
 qreal Staff::center()
 {
-    return top() + bottom() / 2;
+    return (top() + bottom()) / 2;
 }
 
 int Staff::lineCount() const

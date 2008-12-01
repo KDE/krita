@@ -64,7 +64,7 @@ void KisNodeActionTest::testExecution()
     KisPaintLayerSP layer = new KisPaintLayer(img, "test", OPACITY_OPAQUE, img->colorSpace());
 
     SimpleNodeAction action(this, layer.data(), &bar);
-    QCOMPARE(layer->userLocked(), true);
+    QCOMPARE(layer->systemLocked(), true);
     // Only for test purposes
     connect(&action, SIGNAL(updateUi(const QVariant&)), this, SLOT(updateGUI()), Qt::DirectConnection);
     action.execute();
@@ -72,7 +72,7 @@ void KisNodeActionTest::testExecution()
         QTest::qSleep(250); // allow the action to do its job.
         QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
     }
-    QCOMPARE(layer->userLocked(), false);
+    QCOMPARE(layer->systemLocked(), false);
 }
 
 

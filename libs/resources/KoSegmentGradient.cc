@@ -206,7 +206,6 @@ QGradient* KoSegmentGradient::toQGradient() const
     QGradient* gradient = new QLinearGradient();;
 
     QColor color;
-    quint8 opacity;
     foreach(KoGradientSegment* segment, m_segments) {
         segment->startColor().toQColor(&color);
         gradient->setColorAt( segment->startOffset() , color );

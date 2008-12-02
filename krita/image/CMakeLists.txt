@@ -85,6 +85,7 @@ set(kritaimage_LIB_SRCS
    kis_filter_strategy.cc
    kis_gradient_painter.cc
    kis_group_layer.cc
+   kis_count_visitor.cpp
    kis_histogram.cc
    kis_image.cc
    kis_iterator.cc
@@ -96,6 +97,7 @@ set(kritaimage_LIB_SRCS
    kis_node.cpp
    kis_node_action.cpp
    kis_node_facade.cpp
+   kis_node_visitor.cpp
    kis_paint_device.cc
    kis_paint_layer.cc
    kis_painter.cc

@@ -55,7 +55,7 @@ set(kritaui_LIB_SRCS
     kra/kis_kra_load_visitor.cpp
     kra/kis_kra_saver.cpp
     kra/kis_kra_save_visitor.cpp 
-    kra/kis_savexml_visitor.cpp
+    kra/kis_kra_savexml_visitor.cpp
     kis_label_cursor_pos.cc
     kis_layer_box.cpp 
     flake/kis_layer_container_shape.cc 

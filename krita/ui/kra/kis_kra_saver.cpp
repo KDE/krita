@@ -20,7 +20,7 @@
 
 #include "kis_kra_tags.h"
 #include "kis_kra_save_visitor.h"
-#include "kis_savexml_visitor.h"
+#include "kis_kra_savexml_visitor.h"
 
 #include <QDomDocument>
 #include <QDomElement>

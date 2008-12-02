@@ -53,6 +53,8 @@ private:
     void saveMask(QDomElement & el, const QString & maskType, const KisMask * mask);
     bool saveMasks(KisNode * node, QDomElement & layerElement);
 
+    friend class KisKraSaveXmlVisitorTest;
+
     QDomDocument m_doc;
     QDomElement m_elem;
     quint32 &m_count;

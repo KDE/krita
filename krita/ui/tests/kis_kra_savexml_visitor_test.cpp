@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2008 Boudewijn Rempt boud@valdyas.org
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,11 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_kra_saver_test.h"
+#include "kis_kra_savexml_visitor_test.h"
 
 #include <qtest_kde.h>
 
 #include <QBitArray>
+#include <QDomDocument>
 
 #include <KoDocument.h>
 #include <KoDocumentInfo.h>
@@ -29,6 +30,7 @@
 #include <KoColorSpace.h>
 #include <KoPathShape.h>
 
+#include "kis_count_visitor.h"
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter.h"
@@ -49,15 +51,34 @@
 #include "kis_shape_selection.h"
 #include "util.h"
 
-void KisKraSaverTest::testRoundTrip()
+#include "kra/kis_kra_savexml_visitor.h"
+
+void KisKraSaveXmlVisitorTest::testCreateDomDocument()
 {
     KisDoc2* doc = createCompleteDocument();
-    doc->saveNativeFormat( "roundtriptest.kra" );
+
+    quint32 count = 0;
+
+    QDomDocument dom;
+    QDomElement image = dom.createElement("IMAGE"); // Legacy!
+    KisSaveXmlVisitor visitor(dom, image, count, true);
+
+    KisImageSP img = doc->image();
+    Q_ASSERT(img);
+
+    QStringList list;
+
+    KisCountVisitor cv(list, KoProperties());
+    img->rootLayer()->accept(cv);
+
+    img->rootLayer()->accept(visitor);
+
+    qDebug() << visitor.m_count << ", " << cv.count();
+    // group layers aren't counted by the save visitor
+    Q_ASSERT( visitor.m_count == ( cv.count() - 3 ) );
+
     delete doc;
-    KisDoc2 doc2;
-    doc2.loadNativeFormat( "roundtriptest.kra" );
-    assertDoc( doc2 );
 }
 
-QTEST_KDEMAIN(KisKraSaverTest, GUI)
-#include "kis_kra_saver_test.moc"
+QTEST_KDEMAIN(KisKraSaveXmlVisitorTest, GUI)
+#include "kis_kra_savexml_visitor_test.moc"

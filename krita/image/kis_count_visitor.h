@@ -110,29 +110,8 @@ public:
 
 private:
 
-    bool inList(KisNode* node) {
-        foreach(QString nodeType, m_nodeTypes) {
-            if (node->inherits(nodeType.toAscii()))
-                return true;
-        }
-        return false;
-    }
-
-    bool check(KisNode * node) {
-        if (m_nodeTypes.isEmpty() || inList(node)) {
-
-            if (m_properties.isEmpty() || node->check(m_properties)) {
-                m_count++;
-            }
-        }
-
-        for (uint i = 0; i < node->childCount(); ++i) {
-            KisNodeSP child = node->at(i);
-            child->accept(*this);
-        }
-
-        return true;
-    }
+    bool inList(KisNode* node);
+    bool check(KisNode * node);
 
     const QStringList m_nodeTypes;
     const KoProperties m_properties;

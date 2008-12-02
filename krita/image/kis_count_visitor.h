@@ -32,6 +32,7 @@
 #include "kis_clone_layer.h"
 #include "kis_filter_mask.h"
 #include "kis_transparency_mask.h"
+#include "kis_selection_mask.h"
 #include "kis_transformation_mask.h"
 #include "generator/kis_generator_layer.h"
 /**
@@ -101,6 +102,10 @@ public:
 
     bool visit(KisGeneratorLayer * layer) {
         return check(layer);
+    }
+
+    bool visit( KisSelectionMask* mask ) {
+        return check( mask );
     }
 
 private:

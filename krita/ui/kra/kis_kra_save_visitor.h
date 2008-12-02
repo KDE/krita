@@ -37,6 +37,8 @@ public:
 public:
     void setExternalUri(const QString &uri);
 
+    bool visit( KisNode* ) { return true; }
+
     bool visit(KisExternalLayer *);
 
     bool visit(KisPaintLayer *layer);

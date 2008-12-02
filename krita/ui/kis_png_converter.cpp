@@ -637,6 +637,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                     ++it;
                 }
             }
+
             //FIXME:should be able to read 1 and 4 bits depth and scale them to 8 bits
             break;
         case PNG_COLOR_TYPE_RGB:
@@ -894,8 +895,11 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
 
         dbgFile << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size();
 
-        if ((*it) -> type().startsWith("krita_attribute:")) { // Attribute
-            // FIXME: it should be possible to save krita_attributes in the "CHUNKs"
+        if ((*it) -> type().startsWith("krita_attribute:")) { //
+                                                              // Attribute
+#ifdef __GNUC__                                                 \
+    #warning "it should be possible to save krita_attributes in the "CHUNKs""
+#endif
             dbgFile << "cannot save this annotation : " << (*it) -> type();
         } else { // Profile
             char* name = new char[(*it)->type().length()+1];

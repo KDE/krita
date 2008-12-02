@@ -20,7 +20,6 @@
 
 #include <kdebug.h>
 
-
 /**
  * In krita code, include kis_debug.h instead of kdebug.h. Then use one of the areas #defined here
  * instead of the raw numbers. Also, try not to check in code outside of tests that uses kDebug

@@ -341,6 +341,13 @@ public:
 
     }
 
+    bool visit(KisNode*) { return true; }
+    bool visit(KisFilterMask*) { return true; }
+    bool visit(KisTransparencyMask*) { return true; }
+    bool visit(KisTransformationMask*) { return true; }
+    bool visit(KisSelectionMask*) { return true; }
+
+
 private:
     // Helper for the indirect painting
     template<class Target>

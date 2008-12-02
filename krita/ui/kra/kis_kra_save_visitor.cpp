@@ -107,7 +107,7 @@ bool KisKraSaveVisitor::visit(KisGeneratorLayer * layer)
 
 bool KisKraSaveVisitor::visit(KisCloneLayer *layer)
 {
-    if (!saveAnnotations( layer )) return false;
+    // Clone layers do not have a profile
     return visitAllInverse(layer);
 }
 
@@ -159,6 +159,9 @@ bool KisKraSaveVisitor::savePaintDevice(KisNode * node)
 
 bool KisKraSaveVisitor::saveAnnotations(KisLayer* layer)
 {
+    if ( !layer ) return false;
+    if ( !layer->paintDevice() ) return false;
+    if ( !layer->paintDevice()->colorSpace() ) return false;
 
     if (layer->paintDevice()->colorSpace()->profile()) {
         const KoColorProfile *profile = layer->paintDevice()->colorSpace()->profile();
@@ -203,7 +206,7 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
 
 bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
 {
-    
+
     if (node->inherits( "KisNodeFilterInterface" )) {
         KisFilterConfiguration* filter = dynamic_cast<KisNodeFilterInterface*>(node)->filter();
         if (filter) {

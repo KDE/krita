@@ -75,6 +75,7 @@ set(kritaimage_LIB_SRCS
    kis_bottom_up_update_strategy.cpp
    kis_boundary.cc
    kis_clone_layer.cpp
+   kis_colorspace_convert_visitor.cpp
    kis_config_widget.cpp
    kis_convolution_kernel.cc
    kis_convolution_painter.cc

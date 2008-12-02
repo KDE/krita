@@ -83,7 +83,7 @@ public:
         {
             dev->convertTo( m_projection->colorSpace() );
         }*/
-        
+
         KisPainter gc(m_projection);
         gc.setChannelFlags(layer->channelFlags());
         gc.bitBlt(rc.left(), rc.top(), layer->compositeOp() , dev, layer->opacity(), rc.left(), rc.top(), rc.width(), rc.height());
@@ -267,6 +267,13 @@ public:
         return true;
 
     }
+
+    bool visit(KisNode*) { return true; }
+    bool visit(KisFilterMask*) { return true; }
+    bool visit(KisTransparencyMask*) { return true; }
+    bool visit(KisTransformationMask*) { return true; }
+    bool visit(KisSelectionMask*) { return true; }
+
 
 private:
     // Helper for the indirect painting

@@ -15,10 +15,12 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
 #include "kis_colorspace_convert_visitor.h"
 
 
-KisColorSpaceConvertVisitor::KisColorSpaceConvertVisitor(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) :
+KisColorSpaceConvertVisitor::KisColorSpaceConvertVisitor(const KoColorSpace *dstColorSpace,
+                                                         KoColorConversionTransformation::Intent renderingIntent) :
         KisNodeVisitor(),
         m_dstColorSpace(dstColorSpace),
         m_renderingIntent(renderingIntent)

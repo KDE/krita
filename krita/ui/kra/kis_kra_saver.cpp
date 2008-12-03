@@ -127,4 +127,5 @@ bool KisKraSaver::saveBinaryData( KoStore* store, KisImageSP img, const QString 
             }
         }
     }
+    return true;
 }

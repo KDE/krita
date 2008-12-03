@@ -32,7 +32,6 @@ class KisKraLoadVisitor : public KisNodeVisitor
 {
 public:
 
-    using KisNodeVisitor::visit;
 
     KisKraLoadVisitor(KisImageSP img, KoStore *store, QMap<KisNode *, QString> &layerFilenames, const QString & name);
 

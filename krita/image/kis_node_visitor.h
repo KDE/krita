@@ -20,6 +20,7 @@
 #define KIS_NODE_VISITOR_H_
 
 #include "kis_node.h"
+#include "krita_export.h"
 
 class KisPaintLayer;
 class KisGroupLayer;
@@ -31,7 +32,7 @@ class KisTransparencyMask;
 class KisTransformationMask;
 class KisSelectionMask;
 
-class KisNodeVisitor
+class KRITAIMAGE_EXPORT KisNodeVisitor
 {
 public:
     KisNodeVisitor() {}

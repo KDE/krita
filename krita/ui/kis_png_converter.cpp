@@ -969,7 +969,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
             Q_ASSERT(xmpIO);
 
             QBuffer buffer;
-            xmpIO->saveTo(metaData, &buffer, KisMetaData::IOBackend::JpegHeader);
+            xmpIO->saveTo(metaData, &buffer, KisMetaData::IOBackend::NoHeader);
 
             dbgFile << "XMP information size is" << buffer.data().size();
             writeRawProfile(png_ptr, info_ptr, "iptc", buffer.data());

@@ -123,6 +123,10 @@ set(kritaui_LIB_SRCS
     widgets/kis_tree_view_popup.cc 
     widgets/kis_wdg_generator.cpp
     widgets/squeezedcombobox.cpp
+    kisexiv2/kis_exif_io.cpp
+    kisexiv2/kis_iptc_io.cpp
+    kisexiv2/kis_xmp_io.cpp
+    kisexiv2/kis_exiv2.cpp
 )
 
 if(HAVE_OPENGL AND HAVE_GLEW)
@@ -188,6 +192,7 @@ endif(HAVE_OPENGL)
 
 set_target_properties(kritaui
     PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "kritaimage${GL_INTERFACE_LIBRARIES}"
 )
 install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

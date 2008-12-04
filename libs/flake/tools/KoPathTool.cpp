@@ -369,7 +369,6 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
     painter.setBrush(Qt::green);   // TODO make color configurable
     painter.setPen(Qt::blue);
 
-    m_pointSelection.update();
     m_pointSelection.paint(painter, converter);
 
     painter.setBrush(Qt::red);   // TODO make color configurable
@@ -503,7 +502,7 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
         m_activeHandle->repaint();
     delete m_activeHandle;
     m_activeHandle = 0;
-    uint selectedPointCount = m_pointSelection.selectedPoints().size();
+    uint selectedPointCount = m_pointSelection.size();
     if (selectedPointCount == 0)
         emit statusTextChanged("");
     else if (selectedPointCount == 1)
@@ -555,12 +554,6 @@ void KoPathTool::keyPressEvent(QKeyEvent *event)
             return;
         }
     } else {
-        QList<KoPathPoint*> selectedPoints = m_pointSelection.selectedPoints().toList();
-        KoPathShape * pathShape = 0;
-        if (m_pointSelection.objectCount() == 1) {
-            pathShape = selectedPoints[0]->parent();
-        }
-
         switch (event->key()) {
 // TODO move these to the actions in the constructor.
         case Qt::Key_I: {
@@ -574,17 +567,16 @@ void KoPathTool::keyPressEvent(QKeyEvent *event)
         }
 #ifndef NDEBUG
         case Qt::Key_D:
-            if (pathShape) {
-                if (pathShape) {
-                    pathShape->debugPath();
-                }
+            if (m_pointSelection.objectCount() == 1) {
+                QList<KoPathPointData> selectedPoints = m_pointSelection.selectedPointsData();
+                selectedPoints[0].pathShape->debugPath();
             }
             break;
 #endif
         case Qt::Key_B:
-            if (selectedPoints.size() == 1)
+            if (m_pointSelection.size() == 1)
                 breakAtPoint();
-            else if (selectedPoints.size() >= 2)
+            else if (m_pointSelection.size() >= 2)
                 breakAtSegment();
             break;
         default:

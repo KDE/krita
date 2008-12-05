@@ -27,8 +27,6 @@
 #include <KoXmlNS.h>
 #include <KoUnit.h>
 
-
-
 KoRectangleShape::KoRectangleShape()
 : m_cornerRadiusX( 0 )
 , m_cornerRadiusY( 0 )
@@ -36,8 +34,6 @@ KoRectangleShape::KoRectangleShape()
     m_handles.push_back( QPointF( 100, 0 ) );
     m_handles.push_back( QPointF( 100, 0 ) );
     QSizeF size( 100, 100 );
-    createPath( size );
-    m_points = *m_subpaths[0];
     updatePath( size );
 }
 
@@ -158,110 +154,128 @@ void KoRectangleShape::updatePath( const QSizeF &size )
     qreal x2 = size.width() - rx;
     qreal y2 = size.height() - ry;
 
-    // the points of the object must not be deleted and recreated as that will 
-    // break command history
-    int cp = 0;
     QPointF curvePoints[12];
 
-    m_points[cp]->setPoint( QPointF( rx, 0 ) );
-    m_points[cp]->removeControlPoint1();
-    m_points[cp]->removeControlPoint2();
+    int requiredCurvePointCount = 4;
+    if ( rx && m_cornerRadiusX < 100 )
+        requiredCurvePointCount += 2;
+    if ( ry && m_cornerRadiusY < 100 )
+        requiredCurvePointCount += 2;
+
+    createPoints( requiredCurvePointCount );
+
+    KoSubpath &points = *m_subpaths[0];
+
+    int cp = 0;
+
+    // first path starts and closes path
+    points[cp]->setProperty( KoPathPoint::StartSubpath );
+    points[cp]->setProperty( KoPathPoint::CloseSubpath );
+    points[cp]->setPoint( QPointF( rx, 0 ) );
+    points[cp]->removeControlPoint1();
+    points[cp]->removeControlPoint2();
 
     if ( m_cornerRadiusX < 100 || m_cornerRadiusY == 0 )
     {
-        m_points[++cp]->setPoint( QPointF( x2, 0 ) );
-        m_points[cp]->removeControlPoint1();
-        m_points[cp]->removeControlPoint2();
+        // end point of the top edge
+        points[++cp]->setPoint( QPointF( x2, 0 ) );
+        points[cp]->removeControlPoint1();
+        points[cp]->removeControlPoint2();
     }
 
     if ( rx )
     {
-        arcToCurve( rx, ry, 90, -90, m_points[cp]->point(), curvePoints );
-        m_points[cp]->setControlPoint2( curvePoints[0] );
-        m_points[++cp]->setControlPoint1( curvePoints[1] );
-        m_points[cp]->setPoint( curvePoints[2] );
-        m_points[cp]->removeControlPoint2();
+        // the top right radius
+        arcToCurve( rx, ry, 90, -90, points[cp]->point(), curvePoints );
+        points[cp]->setControlPoint2( curvePoints[0] );
+        points[++cp]->setControlPoint1( curvePoints[1] );
+        points[cp]->setPoint( curvePoints[2] );
+        points[cp]->removeControlPoint2();
     }
 
     if ( m_cornerRadiusY < 100 || m_cornerRadiusX == 0 )
     {
-        m_points[++cp]->setPoint( QPointF( size.width(), y2 ) );
-        m_points[cp]->removeControlPoint1();
-        m_points[cp]->removeControlPoint2();
+        // the right edge
+        points[++cp]->setPoint( QPointF( size.width(), y2 ) );
+        points[cp]->removeControlPoint1();
+        points[cp]->removeControlPoint2();
     }
 
     if ( rx )
     {
-        arcToCurve( rx, ry, 0, -90, m_points[cp]->point(), curvePoints );
-        m_points[cp]->setControlPoint2( curvePoints[0] );
-        m_points[++cp]->setControlPoint1( curvePoints[1] );
-        m_points[cp]->setPoint( curvePoints[2] );
-        m_points[cp]->removeControlPoint2();
+        // the bottom right radius
+        arcToCurve( rx, ry, 0, -90, points[cp]->point(), curvePoints );
+        points[cp]->setControlPoint2( curvePoints[0] );
+        points[++cp]->setControlPoint1( curvePoints[1] );
+        points[cp]->setPoint( curvePoints[2] );
+        points[cp]->removeControlPoint2();
     }
 
     if ( m_cornerRadiusX < 100 || m_cornerRadiusY == 0 )
     {
-        m_points[++cp]->setPoint( QPointF( rx, size.height() ) );
-        m_points[cp]->removeControlPoint1();
-        m_points[cp]->removeControlPoint2();
+        // the bottom edge
+        points[++cp]->setPoint( QPointF( rx, size.height() ) );
+        points[cp]->removeControlPoint1();
+        points[cp]->removeControlPoint2();
     }
 
     if ( rx )
     {
-        arcToCurve( rx, ry, 270, -90, m_points[cp]->point(), curvePoints );
-        m_points[cp]->setControlPoint2( curvePoints[0] );
-        m_points[++cp]->setControlPoint1( curvePoints[1] );
-        m_points[cp]->setPoint( curvePoints[2] );
-        m_points[cp]->removeControlPoint2();
+        // the bottom left radius
+        arcToCurve( rx, ry, 270, -90, points[cp]->point(), curvePoints );
+        points[cp]->setControlPoint2( curvePoints[0] );
+        points[++cp]->setControlPoint1( curvePoints[1] );
+        points[cp]->setPoint( curvePoints[2] );
+        points[cp]->removeControlPoint2();
     }
 
-    if ( m_cornerRadiusY < 100 || m_cornerRadiusX == 0 )
+    if ( (m_cornerRadiusY < 100 || m_cornerRadiusX == 0) && ry )
     {
-        m_points[++cp]->setPoint( QPointF( 0, ry ) );
-        m_points[cp]->removeControlPoint1();
-        m_points[cp]->removeControlPoint2();
+        // the right edge
+        points[++cp]->setPoint( QPointF( 0, ry ) );
+        points[cp]->removeControlPoint1();
+        points[cp]->removeControlPoint2();
     }
 
     if ( rx )
     {
-        arcToCurve( rx, ry, 180, -90, m_points[cp]->point(), curvePoints );
-        m_points[cp++]->setControlPoint2( curvePoints[0] );
-        m_points[0]->setControlPoint1( curvePoints[1] );
-        m_points[0]->setPoint( curvePoints[2] );
+        // the top left radius
+        arcToCurve( rx, ry, 180, -90, points[cp]->point(), curvePoints );
+        points[cp]->setControlPoint2( curvePoints[0] );
+        points[0]->setControlPoint1( curvePoints[1] );
+        points[0]->setPoint( curvePoints[2] );
     }
 
-    m_subpaths[0]->clear();
-    for ( int i = 0; i < cp; ++i )
+    // unset all stop/close path properties
+    for ( int i = 1; i < cp; ++i )
     {
-        if ( i != cp - 1 )
-        {
-            m_points[i]->unsetProperty( KoPathPoint::StopSubpath );
-        }
-        else
-        {
-            m_points[i]->setProperty( KoPathPoint::StopSubpath );
-            m_points[i]->setProperty( KoPathPoint::CloseSubpath );
-        }
-        m_subpaths[0]->push_back( m_points[i] );
+        points[i]->unsetProperty( KoPathPoint::StopSubpath );
+        points[i]->unsetProperty( KoPathPoint::CloseSubpath );
     }
+
+    // last point stops and closes path
+    points.last()->setProperty( KoPathPoint::StopSubpath );
+    points.last()->setProperty( KoPathPoint::CloseSubpath );
 }
 
-void KoRectangleShape::createPath( const QSizeF &size )
+void KoRectangleShape::createPoints( int requiredPointCount )
 {
-    qreal rx = size.width() / 4;
-    qreal ry = size.height() / 4;
-    qreal x2 = size.width() - rx;
-    qreal y2 = size.height() - ry;
-    moveTo( QPointF( rx, 0 ) );
-    lineTo( QPointF( x2, 0 ) );
-    arcTo( rx, ry, 90, -90 );
-    lineTo( QPointF( size.width(), y2 ) );
-    arcTo( rx, ry, 0, -90 );
-    lineTo( QPointF( rx, size.height() ) );
-    arcTo( rx, ry, 270, -90 );
-    lineTo( QPointF( 0, ry ) );
-    arcTo( rx, ry, 180, -90 );
-    closeMerge();
+    if ( m_subpaths.count() != 1 ) {
+        clear();
+        m_subpaths.append( new KoSubpath() );
+    }
+    int currentPointCount = m_subpaths[0]->count();
+    if (currentPointCount > requiredPointCount) {
+        for( int i = 0; i < currentPointCount-requiredPointCount; ++i ) {
+            delete m_subpaths[0]->front();
+            m_subpaths[0]->pop_front();
+        }
+    }
+    else if (requiredPointCount > currentPointCount) {
+        for( int i = 0; i < requiredPointCount-currentPointCount; ++i ) {
+            m_subpaths[0]->append( new KoPathPoint( this, QPointF() ) );
+        }
+    }
 }
 
 qreal KoRectangleShape::cornerRadiusX() const

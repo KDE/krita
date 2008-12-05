@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -119,7 +119,7 @@ protected:
     void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
     void updatePath( const QSizeF &size );
     /// recreates the path points when the corner count or convexity changes
-    void createPath();
+    void createPoints( int requiredPointCount );
 
 private:
     /// Computes the star center point from the inner points
@@ -136,7 +136,6 @@ private:
     qreal m_roundness[2]; ///< the roundness at the handles
     QPointF m_center;      ///< the star center point
     bool m_convex;         ///< controls if the star is convex
-    KoSubpath m_points;    ///< the path points
 };
 
 #endif /* KOSTARSHAPE_H */

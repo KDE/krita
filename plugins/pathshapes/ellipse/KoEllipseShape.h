@@ -86,7 +86,7 @@ protected:
 
     void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
     void updatePath( const QSizeF &size );
-    void createPath( const QSizeF &size );
+    void createPoints( int requiredPointCount );
 
 private:
     qreal sweepAngle() const;
@@ -106,8 +106,6 @@ private:
     QPointF m_radii;
     // the actual ellipse type
     KoEllipseType m_type;
-
-    KoSubpath m_points;
 };
 
 #endif /* KOELLIPSESHAPE_H */

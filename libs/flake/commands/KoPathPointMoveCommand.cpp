@@ -23,19 +23,15 @@
 #include "KoPathPoint.h"
 #include <klocale.h>
 
-KoPathPointMoveCommand::KoPathPointMoveCommand(const KoPathShapePointMap &pointMap, const QPointF &offset, QUndoCommand *parent)
+KoPathPointMoveCommand::KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QPointF &offset, QUndoCommand *parent)
         : QUndoCommand(parent)
         , m_offset(offset)
         , m_undoCalled(true)
 {
     setText(i18n("Move points"));
 
-    // only store path point indeces not pointer to path points
-    KoPathShapePointMap::const_iterator it(pointMap.begin());
-    for (; it != pointMap.end(); ++it) {
-        KoPathShape * path = it.key();
-        foreach( KoPathPoint * p, it.value() )
-            m_points[path].insert( path->pathPointIndex( p ) );
+    foreach( const KoPathPointData &data, pointData ) {
+        m_points[data.pathShape].insert( data.pointIndex );
     }
 }
 

@@ -56,7 +56,7 @@ void KoPathPointMoveStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::
     if (! selection)
         return;
 
-    KoPathPointMoveCommand cmd(selection->selectedPointMap(), move - m_move);
+    KoPathPointMoveCommand cmd(selection->selectedPointsData(), move - m_move);
     cmd.redo();
     m_move = move;
 }
@@ -77,9 +77,9 @@ QUndoCommand* KoPathPointMoveStrategy::createCommand()
     QUndoCommand *cmd = 0;
     if (!m_move.isNull()) {
         // as the point is already at the new position we need to undo the change
-        KoPathPointMoveCommand revert(selection->selectedPointMap(), -m_move);
+        KoPathPointMoveCommand revert(selection->selectedPointsData(), -m_move);
         revert.redo();
-        cmd = new KoPathPointMoveCommand(selection->selectedPointMap(), m_move);
+        cmd = new KoPathPointMoveCommand(selection->selectedPointsData(), m_move);
     }
     return cmd;
 }

@@ -35,7 +35,6 @@ class KoPathShape;
 class KoPointGroup;
 class KoPathPoint;
 
-typedef QMap<KoPathShape *, QSet<KoPathPoint *> > KoPathShapePointMap;
 typedef QPair<int, int> KoPathPointIndex;
 typedef QMap<KoPathShape *, QSet<KoPathPointIndex> > KoPathShapePointIndexMap;
 

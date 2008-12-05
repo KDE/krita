@@ -152,7 +152,7 @@ private:
     typedef QMap<KoPathShape *, QSet<KoPathPoint *> > PathShapePointMap;
     
     QSet<KoPathPoint *> m_selectedPoints;
-    KoPathShapePointMap m_shapePointMap;
+    PathShapePointMap m_shapePointMap;
     KoPathTool * m_tool;
     QList<KoPathShape*> m_selectedShapes;
 };

@@ -121,6 +121,30 @@ void KoResourceSelector::paintEvent( QPaintEvent *pe )
     itemDelegate()->paint( &painter, viewOption, view()->currentIndex() );
 }
 
+void KoResourceSelector::mousePressEvent( QMouseEvent * event )
+{
+    QStyleOptionComboBox opt;
+    opt.init( this );
+    opt.subControls = QStyle::SC_All;
+    opt.activeSubControls = QStyle::SC_ComboBoxArrow;
+    QStyle::SubControl sc = style()->hitTestComplexControl(QStyle::CC_ComboBox, &opt,
+                                                           mapFromGlobal(event->globalPos()),
+                                                           this);
+    // only clicking on combobox arrow shows popup,
+    // otherwise the resourceApplied signal is send with the current resource
+    if (sc == QStyle::SC_ComboBoxArrow)
+        QComboBox::mousePressEvent( event );
+    else {
+        QModelIndex index = view()->currentIndex();
+        if( ! index.isValid() )
+            return;
+
+        KoResource * resource = static_cast<KoResource*>( index.internalPointer() );
+        if( resource )
+            emit resourceApplied( resource );
+    }
+}
+
 void KoResourceSelector::setColumnCount( int columnCount )
 {
     d->model->setColumnCount( columnCount );

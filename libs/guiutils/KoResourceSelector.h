@@ -52,8 +52,14 @@ signals:
     /// Emitted when a resource was selected
     void resourceSelected( KoResource * resource );
 
+    /// Is emitted when the user has clicked on the current resource
+    void resourceApplied( KoResource * resource );
+
 protected:
-    virtual void paintEvent( QPaintEvent *pe );
+    /// reimplemented
+    virtual void paintEvent( QPaintEvent * );
+    /// reimplemented
+    virtual void mousePressEvent( QMouseEvent * );
 
 private slots:
     void indexChanged( int index );

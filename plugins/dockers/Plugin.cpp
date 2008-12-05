@@ -22,7 +22,7 @@
 #include "shapecollection/KoShapeCollectionDocker.h"
 #include "shadowdocker/ShadowDockerFactory.h"
 #include "shapeselector/ShapeSelectorFactory.h"
-#include "shapeendlines/KoEndLinesFactory.h"
+#include "shapeendlines/KoEndLinesDockerFactory.h"
 
 #include <KoDockRegistry.h>
 
@@ -39,7 +39,7 @@ Plugin::Plugin( QObject *parent, const QStringList& )
     KoDockRegistry::instance()->add( new KoShapeCollectionDockerFactory() );
     KoDockRegistry::instance()->add( new ShadowDockerFactory() );
     KoDockRegistry::instance()->add( new ShapeSelectorFactory() );
-    KoDockRegistry::instance()->add( new KoEndLinesFactory() );
+    KoDockRegistry::instance()->add( new KoEndLinesDockerFactory() );
 }
 
 #include "Plugin.moc"

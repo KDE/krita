@@ -1,0 +1,12 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" 
+  "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg width="4cm" height="4cm" viewBox="0 0 400 400"
+     xmlns="http://www.w3.org/2000/svg">
+  <title>Exemple triangle01- exemple simple d'un 'path'</title>
+  <desc>Un tracé dessinant un triangle</desc>
+  <rect x="1" y="1" width="398" height="398"
+        fill="none" stroke="blue" />
+  <path d="M 100 100 L 300 100 L 200 300 z"
+        fill="black" stroke="black" stroke-width="3" />
+</svg>

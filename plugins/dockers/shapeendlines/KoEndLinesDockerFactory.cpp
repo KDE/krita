@@ -17,27 +17,27 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoEndLinesFactory.h"
-#include "KoShapeEndLines.h"
+#include "KoEndLinesDockerFactory.h"
+#include "KoShapeEndLinesDocker.h"
 
-KoEndLinesFactory::KoEndLinesFactory()
+KoEndLinesDockerFactory::KoEndLinesDockerFactory()
 {
 }
 
-QString KoEndLinesFactory::id() const
+QString KoEndLinesDockerFactory::id() const
 {
     return QString("End Lines");
 }
 
-QDockWidget* KoEndLinesFactory::createDockWidget()
+QDockWidget* KoEndLinesDockerFactory::createDockWidget()
 {
-    KoShapeEndLines* widget = new KoShapeEndLines();
+    KoShapeEndLinesDocker* widget = new KoShapeEndLinesDocker();
     widget->setObjectName(id());
 
     return widget;
 }
 
-KoDockFactory::DockPosition KoEndLinesFactory::defaultDockPosition() const
+KoDockFactory::DockPosition KoEndLinesDockerFactory::defaultDockPosition() const
 {
     return DockMinimized;
 }

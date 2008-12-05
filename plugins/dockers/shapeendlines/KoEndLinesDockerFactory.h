@@ -17,17 +17,17 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOENDLINESFACTORY_H
-#define KOENDLINESFACTORY_H
+#ifndef KOENDLINESDOCKERFACTORY_H
+#define KOENDLINESDOCKERFACTORY_H
 
 #include <KoDockFactory.h>
 #include <QtGui/QDockWidget>
 
 /// the factory which creates the shape properties docker
-class KoEndLinesFactory : public KoDockFactory
+class KoEndLinesDockerFactory : public KoDockFactory
 {
 public:
-    KoEndLinesFactory();
+    KoEndLinesDockerFactory();
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
@@ -35,4 +35,4 @@ public:
 
 };
 
-#endif // KOENDLINESFACTORY_H
+#endif // KOENDLINESDOCKERFACTORY_H

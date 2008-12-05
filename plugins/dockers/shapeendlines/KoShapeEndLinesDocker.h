@@ -17,16 +17,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOSHAPEENDLINES_H_
-#define KOSHAPEENDLINES_H_
+#ifndef KOSHAPEENDLINESDOCKER_H_
+#define KOSHAPEENDLINESDOCKER_H_
 
 #include <QListView>
 #include <QDockWidget>
 
-class KoShapeEndLines : public QDockWidget{
+class KoShapeEndLinesDocker : public QDockWidget{
 public:
-	KoShapeEndLines(QWidget* parent = 0);
-	virtual ~KoShapeEndLines();
+	KoShapeEndLinesDocker(QWidget* parent = 0);
+	virtual ~KoShapeEndLinesDocker();
 
 private:
         QListView *m_quickView;

@@ -36,8 +36,9 @@ set(kofficedockers_SRCS
     shapeselector/ClipboardProxyShape.cpp
     shapeselector/ResizeFolderStrategy.cpp
 
-    shapeendlines/KoShapeEndLines.cpp
-    shapeendlines/KoEndLinesFactory.cpp
+    shapeendlines/KoShapeEndLinesDocker.cpp
+    shapeendlines/KoEndLinesDockerFactory.cpp
+    shapeendlines/KoEndLineShapeModel.cpp
 
     Plugin.cpp
 )

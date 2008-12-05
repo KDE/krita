@@ -18,12 +18,22 @@
  */
 
 
-#include "KoShapeEndLines.h"
+#include "KoShapeEndLinesDocker.h"
+
 #include <QGridLayout>
+#include <QList>
 
 #include <klocale.h>
 
-KoShapeEndLines::KoShapeEndLines(QWidget* parent): QDockWidget(parent){
+
+#include "../shapecollection/KoCollectionItemModel.h"
+#include <KoShapeFactory.h>
+#include <KoShapeRegistry.h>
+#include <kicon.h>
+
+#include "KoEndLineShapeModel.h"
+
+KoShapeEndLinesDocker::KoShapeEndLinesDocker(QWidget* parent): QDockWidget(parent){
 	setWindowTitle(i18n("End lines"));
 
 	    QWidget* mainWidget = new QWidget(this);
@@ -44,8 +54,33 @@ KoShapeEndLines::KoShapeEndLines(QWidget* parent): QDockWidget(parent){
 	    m_quickView->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 	    m_quickView->setTextElideMode(Qt::ElideNone);
 	    m_quickView->setWordWrap(true);
+
+	   QList<KoCollectionItem> quicklist;
+	    KoCollectionItem temp;
+            temp.id = "triangle";
+            temp.name = "triangle";
+           // temp.toolTip = shapeTemplate.toolTip;
+            temp.icon = KIcon("triangle.svg");
+            //temp.properties = shapeTemplate.properties;
+	    quicklist.append(temp);
+
+
+	 /* QList<KoEndLineShape> quicklist;
+
+	    KoEndLineShape kels;
+	    kels.id = "triangle";
+	    kels.name = "triangle";
+	    kels.icon = QIcon(QString("triangle.svg"));
+	    quicklist.append(kels);*/
+
+   KoCollectionItemModel* quickModel = new KoCollectionItemModel(this);
+    quickModel->setShapeTemplateList(quicklist);
+    m_quickView->setModel(quickModel);
+ /* KoEndLineShapeModel * quickModel = new KoEndLineShapeModel(this);
+    quickModel->setShapeTemplateList(quicklist);
+    m_quickView->setModel(quickModel);*/
 }
 
-KoShapeEndLines::~KoShapeEndLines() {
+KoShapeEndLinesDocker::~KoShapeEndLinesDocker() {
 
 }

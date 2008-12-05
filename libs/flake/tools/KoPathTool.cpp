@@ -398,6 +398,7 @@ void KoPathTool::repaintDecorations()
     }
 
     m_pointSelection.repaint();
+    updateOptionsWidget();
 }
 
 void KoPathTool::mousePressEvent(KoPointerEvent *event)

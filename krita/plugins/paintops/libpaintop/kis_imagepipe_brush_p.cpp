@@ -106,7 +106,12 @@ bool KisPipeBrushParasite::saveToDevice(QIODevice* dev) const
     // <count> ncells:<count> dim:<dim> rank0:<rank0> sel0:<sel0> <...>
 
     QTextStream stream(dev);
-    /// FIXME things like step, placement and so are not added (nor loaded, as a matter of fact)
+
+
+#ifdef __GNUC__
+#warning "KisPipeBrushParasite::saveToDevice: FIXME things like step, placement and so are not added (nor loaded, as a matter of fact)"
+#endif
+
     stream << ncells << " ncells:" << ncells << " dim:" << dim;
 
     for (int i = 0; i < dim; i++) {

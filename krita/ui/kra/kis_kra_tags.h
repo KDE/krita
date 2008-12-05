@@ -37,6 +37,8 @@ namespace KRA {
     const QString EXIF_PATH = "/annotations/exif";
     const QString ICC_PATH = "/annotations/icc";
     const QString LAYER_PATH = "/layers/layer";
+    const QString PIXEL_SELECTION_PATH = "/layers/pixelselection";
+    const QString SHAPE_SELECTION_PATH = "/layers/shapeselection";
 
     const QString ADJUSTMENT_LAYER = "adjustmentlayer";
     const QString CLONE_FROM = "clonefrom";

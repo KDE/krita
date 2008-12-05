@@ -637,8 +637,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                     ++it;
                 }
             }
-
-            //FIXME:should be able to read 1 and 4 bits depth and scale them to 8 bits
+#ifdef __GNUC__
+#warning "KisPngCoverter::buildImage(QIODevice* iod): FIXME:should be able to read 1 and 4 bits depth and scale them to 8 bits"
+#endif
             break;
         case PNG_COLOR_TYPE_RGB:
         case PNG_COLOR_TYPE_RGB_ALPHA:
@@ -799,7 +800,9 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
     // Initialize the writing
 //     png_init_io(png_ptr, fp);
     // Setup the progress function
-// FIXME    png_set_write_status_fn(png_ptr, progress);
+#ifdef __GNUC__
+#warning "KisPngCoverter::buildFile: Implement progress updating -- png_set_write_status_fn(png_ptr, progress);"
+#endif
 //     setProgressTotalSteps(100/*height*/);
 
 

@@ -119,7 +119,7 @@ void KisToolRectangle::mouseMoveEvent(KoPointerEvent *event)
         //QRectF bound;
         bound.setTopLeft(m_dragStart);
         bound.setBottomRight(m_dragEnd);
-        /* FIXME Which rectangle to repaint */
+
         m_canvas->updateCanvas(convertToPt(bound.normalized()));
 
         m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,

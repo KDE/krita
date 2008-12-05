@@ -21,7 +21,7 @@
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColorSpace.h"
-// FIXME: use the same #define as in kis_gradient.cc, probably best customizable?
+// XXX: use the same #define as in kis_gradient.cc, probably best customizable?
 #define PREVIEW_WIDTH 64
 #define PREVIEW_HEIGHT 64
 

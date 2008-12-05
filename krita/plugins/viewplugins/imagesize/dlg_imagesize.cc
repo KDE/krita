@@ -30,6 +30,7 @@
 #include <widgets/kis_cmb_idlist.h>
 #include <kis_filter_strategy.h>// XXX: I'm really real bad at arithmetic, let alone math. Here
 // be rounding errors. (Boudewijn)
+
 DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolution)
         : KDialog(parent)
 {
@@ -105,7 +106,10 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 
     slotProtectChanged();
 
-    // FIXME should take it from some application wide setting
+#ifdef __GNUC__
+#warning "DlgImageSize: should take current units from a setting"
+#endif
+
     m_page->cmbWidthUnit->setCurrentIndex(KoUnit::Centimeter);
     m_page->cmbHeightUnit->setCurrentIndex(KoUnit::Centimeter);
 

@@ -1,7 +1,7 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
- *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2007-2008 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,6 +41,9 @@
 #include "kis_transparency_mask.h"
 #include "kis_transformation_mask.h"
 #include "kis_selection_mask.h"
+#include "kis_selection_component.h"
+#include "flake/kis_shape_selection.h"
+#include <kis_pixel_selection.h>
 
 using namespace KRA;
 
@@ -201,6 +204,36 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
     else {
         return false;
     }
+
+    if ( selection->hasPixelSelection() ) {
+        KisPaintDeviceSP dev = selection->pixelSelection();
+        QString location = m_external ? QString::null : m_uri;
+        location += m_name + PIXEL_SELECTION_PATH + QString::number( m_count );
+
+        // Layer data
+        if (m_store->open(location)) {
+            if (!dev->write(m_store)) {
+                dev->disconnect();
+                m_store->close();
+                return false;
+            }
+            m_store->close();
+        }
+    }
+    if ( selection->hasShapeSelection() ) {
+        QString location = m_external ? QString::null : m_uri;
+        m_store->pushDirectory();
+        m_store->enterDirectory(m_name + SHAPE_SELECTION_PATH + QString::number( m_count ));
+        KisShapeSelection* shapeSelection = dynamic_cast<KisShapeSelection*>( selection->shapeSelection() );
+        if ( !shapeSelection ) {
+            return false;
+        }
+
+        if ( !shapeSelection->saveOdf(m_store) ) {
+            return false;
+        }
+        m_store->popDirectory();
+    }
     return true;
 }
 
@@ -208,7 +241,10 @@ bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
 {
 
     if (node->inherits( "KisNodeFilterInterface" )) {
-        KisFilterConfiguration* filter = dynamic_cast<KisNodeFilterInterface*>(node)->filter();
+	KisNodeFilterInterface* filterInterface = dynamic_cast<KisNodeFilterInterface*>(node);
+	qDebug() << "filter interface " << filterInterface;
+	if (!filterInterface) return false;
+        KisFilterConfiguration* filter = filterInterface->filter();
         if (filter) {
             QString location = m_external ? QString::null : m_uri;
             location = m_external ? QString::null : m_uri;
@@ -219,7 +255,7 @@ bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
                 m_store->write(s.toUtf8(), qstrlen(s.toUtf8()));
                 m_store->close();
             }
-    }
+        }
 
     }
     return false;

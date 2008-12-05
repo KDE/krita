@@ -169,7 +169,7 @@ bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
     }
 
     // Save this pipe brush: first the header, and then all individual brushes consecutively
-    // (this needs some care for when we have > 1 dimension), FIXME
+    // XXX: this needs some care for when we have > 1 dimension)
 
     // Gimp Pipe Brush header format: Name\n<number of brushes> <parasite>\n
 

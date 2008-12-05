@@ -305,7 +305,6 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP img)
         node = loadSelectionMask( img, element );
 
     Q_ASSERT( node );
-    qDebug() << "node " << name;
     node->setVisible( visible );
     node->setUserLocked( locked );
     node->setX( x );
@@ -313,7 +312,10 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP img)
     node->setName( name );
 
     if ( node->inherits( "KisLayer" ) ) {
-        // XXX: restore the channelflags
+
+#ifdef __GNUC__
+#warning "KisKraLoader::loadNode: restore the channelflags"
+#endif
 
         qobject_cast<KisLayer*>( node )->setCompositeOp( colorSpace->compositeOp( compositeOpName ) );
     }

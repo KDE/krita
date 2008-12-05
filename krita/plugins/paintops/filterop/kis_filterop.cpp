@@ -85,12 +85,10 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
 
     KisFilterSP filter = settings->filter();
     if (!filter) {
-        qDebug() << "no filter!";
         return;
     }
 
     if (!source()) {
-        qDebug() << "no source!";
         return;
     }
 

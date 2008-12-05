@@ -193,8 +193,9 @@ bool KisSaveXmlVisitor::visit(KisSelectionMask *mask)
 
 void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, const KisLayer * layer)
 {
-    // XXX: save the channeflags!
-    qDebug() << "saving layer " << layerType << ", " << layer->name();
+#ifdef __GNUC__
+#warning "KisSaveXmlVisitor::saveLayer: Save the channelflags!"
+#endif
     el.setAttribute(NAME, layer->name());
     el.setAttribute(OPACITY, layer->opacity());
     el.setAttribute(COMPOSITE_OP, layer->compositeOp()->id());
@@ -209,7 +210,6 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
 
 void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, const KisMask * mask)
 {
-    qDebug() << "saving mask " << maskType << ", " << mask->name();
     el.setAttribute(NAME, mask->name());
     el.setAttribute(VISIBLE, mask->visible());
     el.setAttribute(LOCKED, mask->userLocked());

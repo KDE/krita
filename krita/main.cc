@@ -39,10 +39,13 @@ static void qtMessageHandler(QtMsgType type, const char *msg)
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
+    int state;
+    KAboutData * aboutData=newKritaAboutData();
+
 #ifndef NDEBUG
     qInstallMsgHandler(qtMessageHandler);
 #endif
-    KCmdLineArgs::init(argc, argv, newKritaAboutData());
+    KCmdLineArgs::init(argc, argv, aboutData);
 
     KCmdLineOptions options;
     options.add("+[file(s)]", ki18n("File(s) or URL(s) to open"));
@@ -53,6 +56,10 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     if (!app.start())
         return 1;
 
-    return app.exec();
+    state=app.exec();
+
+    delete (aboutData);
+
+    return state;
 }
 

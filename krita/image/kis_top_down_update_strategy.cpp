@@ -131,21 +131,10 @@ public:
 
         QRect rc = layer->paintDevice()->extent() & m_rc;
 
-        // Indirect painting?
-        KisPaintDeviceSP tempTarget = 0; //layer->temporaryTarget();
-        if (tempTarget) {
-            rc = (layer->projection()->extent() | tempTarget->extent()) & m_rc;
-        }
-
         KisPainter gc(m_projection);
         gc.setChannelFlags(layer->channelFlags());
 
         KisPaintDeviceSP source = layer->projection();
-
-        if (tempTarget) {
-            KisPaintDeviceSP temp = new KisPaintDevice(source->colorSpace());
-            source = paintIndirect(source, temp, layer, rc.left(), rc.top(), rc.left(), rc.top(), rc.width(), rc.height());
-        }
 
         if (first)
             gc.bitBlt(rc.left(), rc.top(), m_projection->colorSpace()->compositeOp(COMPOSITE_COPY), source, layer->opacity(), rc.left(), rc.top(), rc.width(), rc.height());
@@ -276,21 +265,6 @@ public:
 
 
 private:
-    // Helper for the indirect painting
-    template<class Target>
-    KisSharedPtr<Target> paintIndirect(KisPaintDeviceSP source,
-                                       KisSharedPtr<Target> target,
-                                       KisIndirectPaintingSupport* layer,
-                                       qint32 sx, qint32 sy, qint32 dx, qint32 dy,
-                                       qint32 w, qint32 h) {
-/*        KisPainter gc2(target.data());
-        gc2.bitBlt(dx, dy, COMPOSITE_COPY, source,
-                   OPACITY_OPAQUE, sx, sy, w, h);
-        gc2.bitBlt(dx, dy, layer->temporaryCompositeOp(), layer->temporaryTarget(),
-                   layer->temporaryOpacity(), sx, sy, w, h);
-        gc2.end();*/
-        return target;
-    }
     KisPaintDeviceSP m_projection;
     QRect m_rc;
 };

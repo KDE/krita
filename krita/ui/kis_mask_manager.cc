@@ -221,10 +221,16 @@ void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
 
     KisPaintDeviceSP dev = layer->projection();
     KisFilterMask * mask = new KisFilterMask();
-    KisSelectionSP selection = m_view->selection();
-    if (selection) {
-        mask->setSelection(selection);
+    
+    if (layer->selection()) {
+        mask->setSelection(layer->selection());
     }
+    else if(m_view->image()->globalSelection()) {
+        mask->setSelection(m_view->image()->globalSelection());
+    } else {
+        mask->select( parent->exactBounds(), 255 ); // XXX <- not sure why it is needed
+    }
+
     mask->setActive(true);
     mask->setName(i18n("New filter mask"));
     m_view->image()->addNode(mask, parent, above);

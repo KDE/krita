@@ -244,7 +244,8 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
             layer->setTemporaryCompositeOp(m_compositeOp);
             layer->setTemporaryOpacity(m_opacity);
         }
-    } else {
+    }
+    if( !m_target ) {
         m_target = device;
     }
     m_painter = new KisPainter(m_target, currentSelection());
@@ -327,6 +328,7 @@ void KisToolFreehand::endPaint()
     }
     delete m_painter;
     m_painter = 0;
+    m_target = 0 ;
     notifyModified();
 
     if (!m_paintJobs.empty()) {

@@ -66,6 +66,7 @@ KoDocumentSectionModel::PropertyList KisMask::sectionModelProperties() const
 void KisMask::setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties)
 {
     setActive(properties.at(2).state.toBool());
+    KisNode::setSectionModelProperties( properties );
 }
 
 bool KisMask::active() const

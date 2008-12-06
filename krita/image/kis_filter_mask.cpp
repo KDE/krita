@@ -93,6 +93,7 @@ void KisFilterMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
     if (!m_d->filterConfig) return;
 
     selection()->updateProjection(rc);
+    dbgImage << "Selection bounds: " << selection()->selectedExactRect();
 
     KisTransaction transac("", projection, 0 );
     KisConstProcessingInformation src(projection,  rc.topLeft(), selection());

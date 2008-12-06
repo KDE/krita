@@ -117,9 +117,9 @@ void KisPaintLayer::init()
 
 KisPaintDeviceSP KisPaintLayer::projection() const
 {
-    if (!hasEffectMasks())
+    if (!hasEffectMasks() && !hasTemporaryTarget()) {
         return m_d->paintDevice;
-    else {
+    } else {
         return m_d->projection;
     }
 }
@@ -127,7 +127,7 @@ KisPaintDeviceSP KisPaintLayer::projection() const
 void KisPaintLayer::updateProjection(const QRect & rc)
 {
     if (!rc.isValid()) return ;
-    if (!hasEffectMasks()) return;
+    if (!hasEffectMasks() && !hasTemporaryTarget()) return;
     if (!m_d->paintDevice) return;
 
     dbgImage << name() << ": updateProjection " << rc;
@@ -138,6 +138,13 @@ void KisPaintLayer::updateProjection(const QRect & rc)
         KisPainter gc(m_d->projection);
         gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
         gc.bitBlt(rc.topLeft(), m_d->paintDevice, rc);
+    }
+    
+    if( temporaryTarget() )
+    {
+        KisPainter gc(m_d->projection);
+        gc.bitBlt( rc.left(), rc.top(), temporaryCompositeOp(), temporaryTarget(),
+                   temporaryOpacity(), rc.left(), rc.top(), rc.width(), rc.height());
     }
 
     applyEffectMasks(m_d->projection, rc);

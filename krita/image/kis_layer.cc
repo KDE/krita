@@ -323,6 +323,11 @@ quint8 KisIndirectPaintingSupport::temporaryOpacity() const
     return d->compositeOpacity;
 }
 
+bool KisIndirectPaintingSupport::hasTemporaryTarget() const
+{
+    return d->temporaryTarget;
+}
+
 
 KisIndirectPaintingSupport::KisIndirectPaintingSupport() : d(new Private)
 {

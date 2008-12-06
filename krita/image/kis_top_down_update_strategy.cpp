@@ -132,7 +132,7 @@ public:
         QRect rc = layer->paintDevice()->extent() & m_rc;
 
         // Indirect painting?
-        KisPaintDeviceSP tempTarget = layer->temporaryTarget();
+        KisPaintDeviceSP tempTarget = 0; //layer->temporaryTarget();
         if (tempTarget) {
             rc = (layer->projection()->extent() | tempTarget->extent()) & m_rc;
         }
@@ -283,12 +283,12 @@ private:
                                        KisIndirectPaintingSupport* layer,
                                        qint32 sx, qint32 sy, qint32 dx, qint32 dy,
                                        qint32 w, qint32 h) {
-        KisPainter gc2(target.data());
+/*        KisPainter gc2(target.data());
         gc2.bitBlt(dx, dy, COMPOSITE_COPY, source,
                    OPACITY_OPAQUE, sx, sy, w, h);
         gc2.bitBlt(dx, dy, layer->temporaryCompositeOp(), layer->temporaryTarget(),
                    layer->temporaryOpacity(), sx, sy, w, h);
-        gc2.end();
+        gc2.end();*/
         return target;
     }
     KisPaintDeviceSP m_projection;

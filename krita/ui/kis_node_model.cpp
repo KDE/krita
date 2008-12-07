@@ -26,6 +26,7 @@
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include "kis_node.h"
+#include "kis_node_progress_proxy.h"
 #include "kis_image.h"
 #include "kis_selection.h"
 
@@ -224,7 +225,15 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
     case Qt::SizeHintRole: return m_d->image->size();
     case PropertiesRole: return QVariant::fromValue(node->sectionModelProperties());
     case AspectRatioRole: return double(m_d->image->width()) / m_d->image->height();
-    case ProgressRole: return 42; // TODO integrate with the progress report of koffice
+    case ProgressRole:
+    {
+        if( node->nodeProgressProxy() )
+        {
+            return node->nodeProgressProxy()->percentage();
+        } else {
+            return -1;
+        }
+    }
     default:
         if (role >= int(BeginThumbnailRole))
             return node->createThumbnail(role - int(BeginThumbnailRole), role - int(BeginThumbnailRole));
@@ -305,8 +314,14 @@ void KisNodeModel::beginInsertNodes(KisNode * parent, int index)
     beginInsertRows(indexFromNode(parent), parent->childCount() - index, parent->childCount() - index);
 }
 
-void KisNodeModel::endInsertNodes(KisNode *, int)
+void KisNodeModel::endInsertNodes(KisNode * parent, int index)
 {
+    KisNodeSP node = parent->at( index );
+    if( node->nodeProgressProxy() )
+    {
+        connect( node->nodeProgressProxy(), SIGNAL(percentageChanged(int, const KisNodeSP&)), SLOT(progressPercentageChanged(int, const KisNodeSP&)) );
+
+    }
     //dbgUI <<"KisNodeModel::endInsertNodes";
     endInsertRows();
 }
@@ -417,5 +432,12 @@ void KisNodeModel::updateSettings()
     m_d->showRootLayer = cfg.showRootLayer();
     reset();
 }
+
+void KisNodeModel::progressPercentageChanged(int, const KisNodeSP _node)
+{
+    QModelIndex index = indexFromNode(_node);
+    emit( dataChanged(index, index) );
+}
+
 
 #include "kis_node_model.moc"

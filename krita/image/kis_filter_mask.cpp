@@ -25,6 +25,7 @@
 #include "kis_processing_information.h"
 #include "kis_node.h"
 #include "kis_node_visitor.h"
+#include "kis_node_progress_proxy.h"
 #include "kis_transaction.h"
 
 class KRITAIMAGE_EXPORT KisFilterMask::Private
@@ -103,8 +104,12 @@ void KisFilterMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
         kWarning() << "Could not retrieve filter with name " <<  m_d->filterConfig->name();
         return;
     }
-
-    filter->process(src, dst, rc.size(), m_d->filterConfig);
+    KoProgressUpdater updater( nodeProgressProxy() );
+    updater.start( 100, filter->name() );
+    KoUpdater up = updater.startSubtask();
+    
+    filter->process(src, dst, rc.size(), m_d->filterConfig, &up);
+    nodeProgressProxy()->setValue( nodeProgressProxy()->maximum() );
 
 }
 

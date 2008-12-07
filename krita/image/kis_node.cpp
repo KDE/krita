@@ -284,7 +284,7 @@ bool KisNode::remove(KisNodeSP node)
 
 }
 
-KisNodeProgressProxy* KisNode::nodeProgressProxy()
+KisNodeProgressProxy* KisNode::nodeProgressProxy() const
 {
     if( m_d->nodeProgressProxy ) {
         return m_d->nodeProgressProxy;

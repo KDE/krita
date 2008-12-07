@@ -196,7 +196,7 @@ public:
      *         proxy, it will return the proxy of its parent, if the parent has no progress proxy
      *         it will return 0
      */
-    KisNodeProgressProxy* nodeProgressProxy();
+    KisNodeProgressProxy* nodeProgressProxy() const;
 private:
     /**
      * Create a node progress proxy for this node. You need to create a progress proxy only

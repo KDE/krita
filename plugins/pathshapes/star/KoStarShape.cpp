@@ -51,7 +51,12 @@ void KoStarShape::setCornerCount( uint cornerCount )
 {
     if( cornerCount >= 3 )
     {
+        double oldDefaultAngle = defaultAngleRadian();
         m_cornerCount = cornerCount;
+        double newDefaultAngle = defaultAngleRadian();
+        m_angles[base] += newDefaultAngle-oldDefaultAngle;
+        m_angles[tip] += newDefaultAngle-oldDefaultAngle;
+        
         updatePath( QSize() );
     }
 }

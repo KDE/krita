@@ -228,7 +228,9 @@ void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
     else if(m_view->image()->globalSelection()) {
         mask->setSelection(m_view->image()->globalSelection());
     } else {
-        mask->select( parent->exactBounds(), 255 ); // XXX <- not sure why it is needed
+        // XXX not sure why it is needed, but without this the mask is unselected from the begining
+        mask->selection()->getOrCreatePixelSelection()->select(m_view->image()->bounds());
+        mask->selection()->setDeselected(true);
     }
 
     mask->setActive(true);

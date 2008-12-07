@@ -221,6 +221,7 @@ bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis)
     if (m_d->nodes.contains(newNode)) return false;
 
     newNode->prepareForAddition();
+    newNode->createNodeProgressProxy();
 
     int idx = 0;
 

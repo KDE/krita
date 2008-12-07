@@ -197,6 +197,7 @@ public:
      *         it will return 0
      */
     KisNodeProgressProxy* nodeProgressProxy();
+private:
     /**
      * Create a node progress proxy for this node. You need to create a progress proxy only
      * if the node is going to appear in the layerbox, and it needs to be created before

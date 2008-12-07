@@ -24,10 +24,12 @@
 
 #include <kis_types.h>
 
+#include "krita_export.h"
+
 /**
  * This class implements \ref KoProgressProxy and allows node to report progress.
  */
-class KisNodeProgressProxy : public QObject, public KoProgressProxy {
+class KRITAIMAGE_EXPORT KisNodeProgressProxy : public QObject, public KoProgressProxy {
     Q_OBJECT
     friend class KisNode;
         /**
@@ -47,13 +49,17 @@ class KisNodeProgressProxy : public QObject, public KoProgressProxy {
         virtual void setValue( int value );
         virtual void setRange( int minimum, int maximum );
         virtual void setFormat( const QString & format );
+        /**
+         * @return the current percentage (return -1 if no progress)
+         */
+        int percentage() const;
     signals:
         /**
          * Emited when the percentage of the proxy is changed.
          * @param _percentage is the progress value in percent
          * @param _node is the node that own this \ref KisNodeProgressProxy
          */
-        void percentageChanged( int _percentage, const KisNodeSP _node);
+        void percentageChanged( int _percentage, const KisNodeSP& _node);
     private:
         struct Private;
         Private* const d;

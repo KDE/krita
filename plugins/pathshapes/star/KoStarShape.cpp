@@ -267,33 +267,83 @@ QPointF KoStarShape::computeCenter() const
 
 bool KoStarShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
+    QString drawEngine = element.attributeNS( KoXmlNS::draw, "engine", "" );
+    if( ! drawEngine.isEmpty() && drawEngine != "koffice:star" )
+        return false;
+
     loadOdfAttributes( element, context, OdfAllAttributes );
-
-    QString corners = element.attributeNS( KoXmlNS::draw, "corners", "" );
-    if( ! corners.isEmpty() )
-        m_cornerCount = corners.toUInt();
-
-    m_convex = (element.attributeNS( KoXmlNS::draw, "concave", "false" ) == "false" );
-
     QSizeF loadedSize = size();
     QPointF loadedPosition = position();
 
+    // initialize tip radius
     m_radius[tip] = qMax( 0.5 * loadedSize.width(), 0.5 * loadedSize.height() );
 
-    if( m_convex )
+    if( drawEngine.isEmpty() )
     {
-        m_radius[base] = m_radius[tip];
+        QString corners = element.attributeNS( KoXmlNS::draw, "corners", "" );
+        if( ! corners.isEmpty() )
+            m_cornerCount = corners.toUInt();
+
+        m_convex = (element.attributeNS( KoXmlNS::draw, "concave", "false" ) == "false" );
+
+        if( m_convex )
+        {
+            m_radius[base] = m_radius[tip];
+        }
+        else
+        {
+            // sharpness is radius of ellipse on which inner polygon points are located
+            // 0% means all polygon points are on a single ellipse
+            // 100% means inner points are located at polygon center point
+            QString sharpness = element.attributeNS( KoXmlNS::draw, "sharpness", "" );
+            if( ! sharpness.isEmpty() && sharpness.right( 1 ) == "%" )
+            {
+                float percent = sharpness.left( sharpness.length()-1 ).toFloat();
+                m_radius[base] = m_radius[tip] * (100-percent)/100;
+            }
+        }
     }
     else
     {
-        // sharpness is radius of ellipse on which inner polygon points are located
-        // 0% means all polygon points are on a single ellipse
-        // 100% means inner points are located at polygon center point
-        QString sharpness = element.attributeNS( KoXmlNS::draw, "sharpness", "" );
-        if( ! sharpness.isEmpty() && sharpness.right( 1 ) == "%" )
+        QString drawData = element.attributeNS( KoXmlNS::draw, "data" );
+        if( drawData.isEmpty() )
+            return false;
+
+        QStringList properties = drawData.split( ';' );
+        if( properties.count() == 0 )
+            return false;
+
+        foreach( QString property, properties )
         {
-            float percent = sharpness.left( sharpness.length()-1 ).toFloat();
-            m_radius[base] = m_radius[tip] * (100-percent)/100;
+            QStringList pair = property.split( ':' );
+            if( pair.count() != 2 )
+                continue;
+            if( pair[0] == "corners" )
+            {
+                m_cornerCount = pair[1].toInt();
+            }
+            else if( pair[0] == "concave" )
+            {
+                m_convex = (pair[1] == "false");
+            }
+            else if( pair[0] == "baseRoundness" )
+            {
+                m_roundness[base] = pair[1].toDouble();
+            }
+            else if( pair[0] == "tipRoundness" )
+            {
+                m_roundness[tip] = pair[1].toDouble();
+            }
+            else if( pair[0] == "sharpness" )
+            {
+                float percent = pair[1].left( pair[1].length()-1 ).toFloat();
+                m_radius[base] = m_radius[tip] * (100-percent)/100;
+            }
+        }
+
+        if( m_convex )
+        {
+            m_radius[base] = m_radius[tip];
         }
     }
 
@@ -308,24 +358,68 @@ void KoStarShape::saveOdf( KoShapeSavingContext & context ) const
 {
     if( isParametricShape() )
     {
-        context.xmlWriter().startElement("draw:regular-polygon");
-        saveOdfAttributes( context, OdfAllAttributes );
-        context.xmlWriter().addAttribute( "draw:corners", m_cornerCount );
-        context.xmlWriter().addAttribute( "draw:concave", m_convex ? "false" : "true" );
-        // TODO saving the offset angle as rotation applied to the transformation
-        if( ! m_convex )
+        if( m_roundness[tip] != 0.0f || m_roundness[base] != 0.0f )
         {
-            // sharpness is radius of ellipse on which inner polygon points are located
-            // 0% means all polygon points are on a single ellipse
-            // 100% means inner points are located at polygon center point
-            qreal percent = (m_radius[tip]-m_radius[base]) / m_radius[tip] * 100.0;
-            context.xmlWriter().addAttribute( "draw:sharpness", QString("%1%" ).arg( percent ) );
+            // draw:regular-polygon has no means of saving roundness
+            // so we save as a custom shape with a specific draw:engine
+            context.xmlWriter().startElement("draw:custom-shape");
+            saveOdfAttributes( context, OdfAllAttributes );
+
+            // now write the special shape data
+            context.xmlWriter().addAttribute( "draw:engine", "koffice:star" );
+            // create the data attribute
+            QString drawData = QString("corners:%1;").arg( m_cornerCount );
+            drawData += m_convex ? "concave:false;" : "concave:true;";
+            if( ! m_convex )
+            {
+                // sharpness is radius of ellipse on which inner polygon points are located
+                // 0% means all polygon points are on a single ellipse
+                // 100% means inner points are located at polygon center point
+                qreal percent = (m_radius[tip]-m_radius[base]) / m_radius[tip] * 100.0;
+                drawData += QString("sharpness:%1%;").arg( percent );
+            }
+            if( m_roundness[base] != 0.0f )
+            {
+                drawData += QString("baseRoundness:%1;").arg( m_roundness[base] );
+            }
+            if( m_roundness[tip] != 0.0f )
+            {
+                drawData += QString("tipRoundness:%1;").arg( m_roundness[tip] );
+            }
+
+            context.xmlWriter().addAttribute( "draw:data", drawData );
+
+            // write a enhanced geometry element for compatibility with other applications
+            context.xmlWriter().startElement("draw:enhanced-geometry");
+            context.xmlWriter().addAttribute("draw:enhanced-path", toString( transformation() ) );
+            context.xmlWriter().endElement(); // draw:enhanced-geometry
+            
+            saveOdfCommonChildElements( context );
+            context.xmlWriter().endElement(); // draw:custom-shape
         }
-        saveOdfCommonChildElements( context );
-        context.xmlWriter().endElement();
+        else
+        {
+            context.xmlWriter().startElement("draw:regular-polygon");
+            saveOdfAttributes( context, OdfAllAttributes );
+            context.xmlWriter().addAttribute( "draw:corners", m_cornerCount );
+            context.xmlWriter().addAttribute( "draw:concave", m_convex ? "false" : "true" );
+            // TODO saving the offset angle as rotation applied to the transformation
+            if( ! m_convex )
+            {
+                // sharpness is radius of ellipse on which inner polygon points are located
+                // 0% means all polygon points are on a single ellipse
+                // 100% means inner points are located at polygon center point
+                qreal percent = (m_radius[tip]-m_radius[base]) / m_radius[tip] * 100.0;
+                context.xmlWriter().addAttribute( "draw:sharpness", QString("%1%" ).arg( percent ) );
+            }
+            saveOdfCommonChildElements( context );
+            context.xmlWriter().endElement();
+        }
     }
     else
+    {
         KoPathShape::saveOdf( context );
+    }
 }
 
 QString KoStarShape::pathShapeId() const

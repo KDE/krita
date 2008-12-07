@@ -29,11 +29,19 @@
  */
 class KisNodeProgressProxy : public QObject, public KoProgressProxy {
     Q_OBJECT
-    public:
-        KisNodeProgressProxy( KisNode* );
+    friend class KisNode;
+        /**
+         * Create a proxy to report progress when processing, this proxy is associated
+         * with a node, it will report progress in the node progress bar. This proxy
+         * will be deleted when @p _node is deleted.
+         */
+        KisNodeProgressProxy( KisNode* _node);
         ~KisNodeProgressProxy();
         
     public:
+        /**
+         * @return the node associated with this proxy.
+         */
         const KisNodeSP node() const;
         virtual int maximum() const ;
         virtual void setValue( int value );

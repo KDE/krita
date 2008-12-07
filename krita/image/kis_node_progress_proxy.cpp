@@ -18,6 +18,8 @@
 
 #include "kis_node_progress_proxy.h"
 
+#include <QApplication>
+
 #include "kis_node.h"
 
 struct KisNodeProgressProxy::Private {
@@ -57,6 +59,7 @@ int KisNodeProgressProxy::maximum() const
 
 void KisNodeProgressProxy::setValue( int _value )
 {
+    QApplication::processEvents();
     d->value = _value;
     if( d->computePercentage() )
     {

@@ -28,6 +28,7 @@ class KoProperties;
 class KisNodeVisitor;
 class KisNodeGraphListener;
 class KisProjectionUpdateStrategy;
+class KisNodeProgressProxy;
 
 /**
  * A KisNode is a KisBaseNode that knows about its direct peers, parent
@@ -189,7 +190,19 @@ public: // Graph methods
      * KisNodeBase::check(properties) returns true will be returned.
      */
     QList<KisNodeSP> childNodes(const QStringList & nodeTypes, const KoProperties & properties) const;
-
+public:
+    /**
+     * @return the node progress proxy used by this node, if this node has no progress
+     *         proxy, it will return the proxy of its parent, if the parent has no progress proxy
+     *         it will return 0
+     */
+    KisNodeProgressProxy* nodeProgressProxy();
+    /**
+     * Create a node progress proxy for this node. You need to create a progress proxy only
+     * if the node is going to appear in the layerbox, and it needs to be created before
+     * the layer box is made aware of the proxy.
+     */
+    void createNodeProgressProxy( );
 
 protected:
 

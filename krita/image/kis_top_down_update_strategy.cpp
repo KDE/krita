@@ -42,6 +42,7 @@
 #include "kis_processing_information.h"
 #include "kis_node.h"
 #include "kis_projection.h"
+#include "kis_node_progress_proxy.h"
 
 namespace
 {
@@ -210,11 +211,16 @@ public:
         KisConstProcessingInformation srcCfg(m_projection, tmpRc .topLeft(), 0);
         KisProcessingInformation dstCfg(layerProjection, tmpRc .topLeft(), 0);
 
+        Q_ASSERT( layer->nodeProgressProxy() );
+        KoProgressUpdater updater( layer->nodeProgressProxy() );
+        updater.start( 100, f->name() );
+        KoUpdater up = updater.startSubtask();
         // Some filters will require usage of oldRawData, which is not available without
         // a transaction!
         KisTransaction* cmd = new KisTransaction("", layerProjection);
-        f->process(srcCfg, dstCfg, tmpRc.size(), cfg);
+        f->process(srcCfg, dstCfg, tmpRc.size(), cfg, &up);
         delete cmd;
+        layer->nodeProgressProxy()->setValue( layer->nodeProgressProxy()->maximum() );
 
         // Copy the filtered bits onto the projection
         KisPainter gc(m_projection);

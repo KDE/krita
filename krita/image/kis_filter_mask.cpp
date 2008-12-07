@@ -104,6 +104,7 @@ void KisFilterMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
         kWarning() << "Could not retrieve filter with name " <<  m_d->filterConfig->name();
         return;
     }
+    Q_ASSERT( nodeProgressProxy() );
     KoProgressUpdater updater( nodeProgressProxy() );
     updater.start( 100, filter->name() );
     KoUpdater up = updater.startSubtask();

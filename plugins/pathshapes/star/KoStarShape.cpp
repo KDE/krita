@@ -34,12 +34,9 @@ KoStarShape::KoStarShape()
 , m_zoomY( 1.0 )
 , m_convex( false )
 {
-    qreal radianStep = M_PI / static_cast<qreal>(m_cornerCount);
-
     m_radius[base] = 25.0;
     m_radius[tip] = 50.0;
-    m_angles[base] = M_PI_2-2*radianStep;
-    m_angles[tip] = M_PI_2-2*radianStep;
+    m_angles[base] = m_angles[tip] = defaultAngleRadian();
     m_roundness[base] = m_roundness[tip] = 0.0f;
 
     m_center = QPointF(50,50);
@@ -334,6 +331,14 @@ bool KoStarShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &
             {
                 m_roundness[tip] = pair[1].toDouble();
             }
+            else if( pair[0] == "baseAngle" )
+            {
+                m_angles[base] = pair[1].toDouble();
+            }
+            else if( pair[0] == "tipAngle" )
+            {
+                m_angles[tip] = pair[1].toDouble();
+            }
             else if( pair[0] == "sharpness" )
             {
                 float percent = pair[1].left( pair[1].length()-1 ).toFloat();
@@ -358,7 +363,10 @@ void KoStarShape::saveOdf( KoShapeSavingContext & context ) const
 {
     if( isParametricShape() )
     {
-        if( m_roundness[tip] != 0.0f || m_roundness[base] != 0.0f )
+        double defaultAngle = defaultAngleRadian();
+        bool hasRoundness = m_roundness[tip] != 0.0f || m_roundness[base] != 0.0f;
+        bool hasAngleOffset = m_angles[base] != defaultAngle || m_angles[tip] != defaultAngle;
+        if( hasRoundness || hasAngleOffset )
         {
             // draw:regular-polygon has no means of saving roundness
             // so we save as a custom shape with a specific draw:engine
@@ -386,6 +394,8 @@ void KoStarShape::saveOdf( KoShapeSavingContext & context ) const
             {
                 drawData += QString("tipRoundness:%1;").arg( m_roundness[tip] );
             }
+            drawData += QString("baseAngle:%1;").arg( m_angles[base] );
+            drawData += QString("tipAngle:%1;").arg( m_angles[tip] );
 
             context.xmlWriter().addAttribute( "draw:data", drawData );
 
@@ -403,7 +413,6 @@ void KoStarShape::saveOdf( KoShapeSavingContext & context ) const
             saveOdfAttributes( context, OdfAllAttributes );
             context.xmlWriter().addAttribute( "draw:corners", m_cornerCount );
             context.xmlWriter().addAttribute( "draw:concave", m_convex ? "false" : "true" );
-            // TODO saving the offset angle as rotation applied to the transformation
             if( ! m_convex )
             {
                 // sharpness is radius of ellipse on which inner polygon points are located
@@ -425,4 +434,11 @@ void KoStarShape::saveOdf( KoShapeSavingContext & context ) const
 QString KoStarShape::pathShapeId() const
 {
     return KoStarShapeId;
+}
+
+double KoStarShape::defaultAngleRadian() const
+{
+    qreal radianStep = M_PI / static_cast<qreal>(m_cornerCount);
+
+    return M_PI_2-2*radianStep;
 }

@@ -125,6 +125,9 @@ private:
     /// Computes the star center point from the inner points
     QPointF computeCenter() const;
 
+    /// Returns the default offset angle in radian
+    double defaultAngleRadian() const;
+
     /// the handle types
     enum Handles { tip = 0, base = 1 };
 

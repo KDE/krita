@@ -57,7 +57,7 @@ QString KisGenerator::configEntryGroup() const
     return id() + "_generator_bookmarks";
 }
 
-QRect KisGenerator::generatedRect( QRect _imageArea ) const
+QRect KisGenerator::generatedRect( QRect _imageArea, const KisFilterConfiguration*  ) const
 {
     return _imageArea;
 }

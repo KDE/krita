@@ -85,7 +85,7 @@ public:
      *         is supposed to affect all pixels, then the function should return
      *         @p _imageArea
      */
-    virtual QRect generatedRect( QRect _imageArea ) const;
+    virtual QRect generatedRect( QRect _imageArea, const KisFilterConfiguration* = 0 ) const;
     
 protected:
 

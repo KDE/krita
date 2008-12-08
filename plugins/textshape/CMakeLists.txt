@@ -48,9 +48,6 @@ SET ( textshape_SRCS
     commands/ChangeListLevelCommand.cpp
     commands/ListItemNumberingCommand.cpp
     commands/TextCommandBase.cpp
-    
-    commands/TextInsertTextCommand.cpp
-    commands/TextInsertParagraphCommand.cpp
 )
 
 kde4_add_ui_files(textshape_SRCS

@@ -32,9 +32,6 @@
 #include "commands/ChangeListLevelCommand.h"
 #include "commands/ListItemNumberingCommand.h"
 
-#include "commands/TextInsertTextCommand.h"
-#include "commands/TextInsertParagraphCommand.h"
-
 #include <KoAction.h>
 #include <KoExecutePolicy.h>
 #include <KoCanvasBase.h>
@@ -119,43 +116,6 @@ static bool isRightToLeft(const QString &text)
         ++iter;
     }
     return ltr < rtl;
-}
-
-TextTool::UndoTextCommand::UndoTextCommand(QTextDocument *document, TextTool *tool, QUndoCommand *parent)
-                : QUndoCommand(i18n("Text"), parent),
-                m_document(document),
-                m_tool(tool)
-{
-}
-
-void TextTool::UndoTextCommand::undo()
-{
-    if (m_document.isNull())
-      return;
-    if (! m_tool.isNull()) {
-      m_tool->stopMacro();
-      m_tool->m_allowAddUndoCommand = false;
-      if (m_tool->m_changeTracker && !m_tool->m_canvas->resourceProvider()->boolResource(KoCanvasResource::DocumentIsLoading))
-	m_tool->m_changeTracker->notifyForUndo();
-	m_document->undo(&m_tool->m_caret);
-    } else
-	m_document->undo();
-    if (! m_tool.isNull())
-      m_tool->m_allowAddUndoCommand = true;
-}
-	
-void TextTool::UndoTextCommand::redo()
-{
-    if (m_document.isNull())
-      return;
-
-    if (! m_tool.isNull()) {
-      m_tool->m_allowAddUndoCommand = false;
-      m_document->redo(&m_tool->m_caret);
-    } else
-      m_document->redo();
-    if (! m_tool.isNull())
-      m_tool->m_allowAddUndoCommand = true;
 }
 
 TextTool::TextTool(KoCanvasBase *canvas)
@@ -477,12 +437,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
 TextTool::~TextTool()
 {
     qDeleteAll(m_textEditingPlugins);
-}
-
-void TextTool::flagUndoRedo( bool flag )
-{
-	m_allowAddUndoCommand = flag;
-	m_allowActions = flag;
 }
 
 void TextTool::blinkCaret()
@@ -922,25 +876,38 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             event->ignore();
             return;
         } else if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
-//            startKeyPressMacro();
+            startKeyPressMacro();
             if (m_caret.hasSelection())
                 m_selectionHandler.deleteInlineObjects();
+            QTextBlockFormat format = m_caret.blockFormat();
+            m_selectionHandler.nextParagraph();
 
-//            m_selectionHandler.nextParagraph();
-  m_canvas->addCommand(new TextInsertParagraphCommand(this));
-
-
+            QVariant direction = format.property(KoParagraphStyle::TextProgressionDirection);
+            format = m_caret.blockFormat();
+            if (m_textShapeData->pageDirection() != KoText::AutoDirection) { // inherit from shape
+                KoText::Direction dir;
+                switch (m_textShapeData->pageDirection()) {
+                case KoText::RightLeftTopBottom:
+                    dir = KoText::PerhapsRightLeftTopBottom;
+                    break;
+                case KoText::LeftRightTopBottom:
+                default:
+                    dir = KoText::PerhapsLeftRightTopBottom;
+                }
+                format.setProperty(KoParagraphStyle::TextProgressionDirection, dir);
+            } else if (! direction.isNull()) // then we inherit from the previous paragraph.
+                format.setProperty(KoParagraphStyle::TextProgressionDirection, direction);
+            m_caret.setBlockFormat(format);
             updateActions();
             editingPluginEvents();
             ensureCursorVisible();
         } else if (event->key() == Qt::Key_Tab || !(event->text().length() == 1 && !event->text().at(0).isPrint())) { // insert the text
-//            startKeyPressMacro();
+            startKeyPressMacro();
             if (m_caret.hasSelection())
                 m_selectionHandler.deleteInlineObjects();
             m_prevCursorPosition = m_caret.position();
             ensureCursorVisible();
-    m_canvas->addCommand(new TextInsertTextCommand( this, event->text() ));
-//            m_caret.insertText(event->text());
+            m_caret.insertText(event->text());
             if (m_textShapeData->pageDirection() == KoText::AutoDirection)
                 m_updateParagDirection.action->execute(m_prevCursorPosition);
             editingPluginEvents();
@@ -1315,17 +1282,53 @@ QWidget *TextTool::createOptionWidget()
 void TextTool::addUndoCommand()
 {
     if (! m_allowAddUndoCommand) return;
-    
+    class UndoTextCommand : public QUndoCommand
+    {
+    public:
+        UndoTextCommand(QTextDocument *document, TextTool *tool, QUndoCommand *parent = 0)
+                : QUndoCommand(i18n("Text"), parent),
+                m_document(document),
+                m_tool(tool) {
+        }
+
+        void undo() {
+            if (m_document.isNull())
+                return;
+            if (! m_tool.isNull()) {
+                m_tool->stopMacro();
+                m_tool->m_allowAddUndoCommand = false;
+                if (m_tool->m_changeTracker && !m_tool->m_canvas->resourceProvider()->boolResource(KoCanvasResource::DocumentIsLoading))
+                    m_tool->m_changeTracker->notifyForUndo();
+                m_document->undo(&m_tool->m_caret);
+            } else
+                m_document->undo();
+            if (! m_tool.isNull())
+                m_tool->m_allowAddUndoCommand = true;
+        }
+
+        void redo() {
+            if (m_document.isNull())
+                return;
+
+            if (! m_tool.isNull()) {
+                m_tool->m_allowAddUndoCommand = false;
+                m_document->redo(&m_tool->m_caret);
+            } else
+                m_document->redo();
+            if (! m_tool.isNull())
+                m_tool->m_allowAddUndoCommand = true;
+        }
+
+        QPointer<QTextDocument> m_document;
+        QPointer<TextTool> m_tool;
+    };
     if (m_currentCommand) {
         new UndoTextCommand(m_textShapeData->document(), this, m_currentCommand);
         if (! m_currentCommandHasChildren)
-	  {
             m_canvas->addCommand(m_currentCommand);
-	  }
         m_currentCommandHasChildren = true;
-    } else {
+    } else
         m_canvas->addCommand(new UndoTextCommand(m_textShapeData->document(), this));
-    }
 }
 
 void TextTool::addCommand(QUndoCommand *command)

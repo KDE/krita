@@ -31,9 +31,6 @@
 #include <QTextBlock>
 #include <QTimer>
 #include <QClipboard>
-#include <QUndoCommand>
-#include <QTextDocument>
-#include <QPointer>
 
 class KAction;
 class KoAction;
@@ -45,6 +42,7 @@ class UndoTextCommand;
 class InsertCharacter;
 class ChangeTracker;
 
+class QUndoCommand;
 class KFontSizeAction;
 class KFontAction;
 
@@ -55,7 +53,6 @@ class TextTool : public KoTool
 {
     Q_OBJECT
 public:
-
     explicit TextTool(KoCanvasBase *canvas);
     ~TextTool();
 
@@ -100,7 +97,7 @@ public:
     virtual void inputMethodEvent(QInputMethodEvent * event);
 
     bool isBidiDocument() const;
-    
+
 public slots:
     /// start the textedit-plugin.
     void startTextEditingPlugin(const QString &pluginId);
@@ -183,45 +180,6 @@ private slots:
     void blinkCaret();
 
 private:
-
-    class UndoTextCommand : public QUndoCommand
-    {
-    public:
-        UndoTextCommand(QTextDocument *document, TextTool *tool, QUndoCommand *parent = 0);
-
-        void undo();
-        void redo();
-
-        QPointer<QTextDocument> m_document;
-        QPointer<TextTool> m_tool;
-    };
-    
-        enum EditCommands {
-	InsertText=1,
-	InsertParag,
-	InsertNBrkSpace,
-	InsertNBrkHyphen,
-	InsertIndex,
-	InsertSoftHyphen,
-	InsertLineBreak,
-	DeleteText,
-	FormatBold,
-	FormatItalic,
-	FormatUnderline,
-	FormatStrikeOut,
-	FormatAlignLeft,
-	FormatAlignRight,
-	FormatAlignCenter,
-	FormatAlignJustify,
-	FormatSuperScript,
-	FormatSubScript,
-	FormatIndentIncrease,
-	FormatIndentDecrease,
-	FormatFont,
-	FormatParag,
-	FormatDefaultFormat
-    };
-
     bool pasteHelper(QClipboard::Mode mode);
     void repaintCaret();
     void repaintSelection();
@@ -231,7 +189,6 @@ private:
     int pointToPosition(const QPointF & point) const;
     void updateSelectionHandler();
     void updateActions();
-
     void updateStyleManager();
     void setShapeData(KoTextShapeData *data);
     void updateSelectedShape(const QPointF &point);
@@ -241,15 +198,11 @@ private:
     void finishedParagraph();
 
     void startKeyPressMacro();
-    
-    void flagUndoRedo( bool flag );
 
 private:
     friend class UndoTextCommand;
     friend class TextCommandBase;
     friend class ChangeTracker;
-    friend class TextInsertTextCommand;
-    friend class TextInsertParagraphCommand;
     TextShape *m_textShape;
     KoTextShapeData *m_textShapeData;
     QTextCursor m_caret;

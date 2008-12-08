@@ -263,7 +263,7 @@ public:
         if (!f) return false;
 
         // Possibly enlarge the rect that changed (like for convolution filters)
-        tmpRc = f->enlargeRect(tmpRc, cfg);
+        tmpRc = f->changedRect(tmpRc, cfg);
 
         KisSelectionSP selection = layer->selection();
         KisPaintDeviceSP layerProjection = layer->projection();

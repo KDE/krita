@@ -79,6 +79,14 @@ public:
      */
     virtual const KoColorSpace * colorSpace();
 
+    /**
+     * @param _imageArea the rectangle of the image
+     * @return the rectangle that is affected by this generator, if the generator
+     *         is supposed to affect all pixels, then the function should return
+     *         @p _imageArea
+     */
+    virtual QRect generatedRect( QRect _imageArea ) const;
+    
 protected:
 
     /// @return the name of config group in KConfig

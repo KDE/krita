@@ -106,6 +106,28 @@ public:
 
 
     bool workWith(const KoColorSpace* cs) const;
+    /**
+     * Used when threading is used -- the overlap margin is passed to the
+     * filter to use to compute pixels, but the margin is not pasted into the
+     * resulting image. Use this for convolution filters, for instance.
+     * 
+     * This function is deprecated, use \ref neededRect instead
+     */
+    KDE_DEPRECATED virtual int overlapMarginNeeded(const KisFilterConfiguration* = 0) const;
+
+    /**
+     * Some filters need pixels outside the current processing rect to compute the new
+     * value (for instance, convolution filters)
+     */
+    virtual QRect neededRect(const QRect & rect, const KisFilterConfiguration* = 0) const;
+
+    /**
+    * Similar to \ref neededRect: some filters will alter a lot of pixels that are
+    * near to each other at the same time. So when you changed a single rectangle
+    * in a device, the actual rectangle that will feel the influence of this change
+    * might be bigger. Use this function to determine that rect.
+     */
+    virtual QRect changedRect(const QRect & rect, const KisFilterConfiguration* = 0) const;
 
 protected:
 

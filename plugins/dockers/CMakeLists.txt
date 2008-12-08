@@ -44,7 +44,7 @@ set(kofficedockers_SRCS
 )
 
 add_subdirectory( strokedocker/pics )
-
+add_subdirectory( shapeendlines/pics )
 #kde4_add_ui_files( kofficedockers_SRCS
 #)
 

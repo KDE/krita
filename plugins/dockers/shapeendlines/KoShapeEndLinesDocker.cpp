@@ -60,7 +60,7 @@ KoShapeEndLinesDocker::KoShapeEndLinesDocker(QWidget* parent): QDockWidget(paren
             temp.id = "triangle";
             temp.name = "triangle";
            // temp.toolTip = shapeTemplate.toolTip;
-            temp.icon = KIcon("triangle.svg");
+            temp.icon = KIcon("triangle");
             //temp.properties = shapeTemplate.properties;
 	    quicklist.append(temp);
 

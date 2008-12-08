@@ -61,21 +61,21 @@
         <item>
          <widget class="QLabel" name="lblWidthValue" >
           <property name="text" >
-           <string>TextLabel</string>
+           <string/>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QLabel" name="lblHeightValue" >
           <property name="text" >
-           <string>TextLabel</string>
+           <string/>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QLabel" name="lblResolutionValue" >
           <property name="text" >
-           <string>TextLabel</string>
+           <string/>
           </property>
          </widget>
         </item>

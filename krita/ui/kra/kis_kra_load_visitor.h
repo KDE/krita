@@ -52,6 +52,14 @@ public:
 
 
 private:
+
+    bool loadPaintDevice( KisPaintDeviceSP device, const QString& location );
+    bool loadProfile( KisPaintDeviceSP device,  const QString& location );
+    bool loadFilterConfiguration();
+    bool loadSelection();
+    QString getLocation( KisNode* node, const QString& suffix = "" );
+
+private:
     KisImageSP m_img;
     KoStore *m_store;
     bool m_external;

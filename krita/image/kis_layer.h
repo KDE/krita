@@ -115,7 +115,7 @@ public:
      * particular channel is active or not. If the channelflags bit
      * array is empty, all channels are active.
      */
-    QBitArray & channelFlags();
+    QBitArray & channelFlags() const;
 
 
     /**

@@ -41,6 +41,7 @@ namespace KRA {
     const QString SHAPE_SELECTION_PATH = "/layers/shapeselection";
 
     const QString ADJUSTMENT_LAYER = "adjustmentlayer";
+    const QString CHANNEL_FLAGS = "channelflags";
     const QString CLONE_FROM = "clonefrom";
     const QString CLONE_LAYER = "clonelayer";
     const QString CLONE_TYPE = "clonetype";

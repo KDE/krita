@@ -74,8 +74,7 @@ void KisKraSaveXmlVisitorTest::testCreateDomDocument()
     img->rootLayer()->accept(visitor);
 
     qDebug() << visitor.m_count << ", " << cv.count();
-    // group layers aren't counted by the save visitor
-    Q_ASSERT( visitor.m_count == ( cv.count() - 3 ) );
+    Q_ASSERT( visitor.m_count == cv.count() );
 
     delete doc;
 }

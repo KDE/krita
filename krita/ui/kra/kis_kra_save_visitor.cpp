@@ -66,20 +66,19 @@ void KisKraSaveVisitor::setExternalUri(const QString &uri)
 bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
 {
     bool result = false;
-    if (KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
-        qDebug() << "saving shape layer " <<  m_name;
+    if (KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
         QString location = m_external ? QString::null : m_uri;
         m_store->pushDirectory();
         m_store->enterDirectory(m_name + SHAPE_LAYER_PATH + QString::number( m_count ));
         result = shapeLayer->saveOdf(m_store);
         m_store->popDirectory();
     }
+    m_count++;
     return result || visitAllInverse(layer);;
 }
 
 bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
 {
-    //connect(*layer->paintDevice(), SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
     if (!savePaintDevice(layer)) return false;
     if (!saveAnnotations(layer)) return false;
     m_count++;
@@ -88,6 +87,7 @@ bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
 
 bool KisKraSaveVisitor::visit(KisGroupLayer *layer)
 {
+    m_count++;
     return visitAllInverse(layer);
 }
 
@@ -111,6 +111,7 @@ bool KisKraSaveVisitor::visit(KisGeneratorLayer * layer)
 bool KisKraSaveVisitor::visit(KisCloneLayer *layer)
 {
     // Clone layers do not have a profile
+    m_count++;
     return visitAllInverse(layer);
 }
 
@@ -118,24 +119,28 @@ bool KisKraSaveVisitor::visit(KisFilterMask *mask)
 {
     if (!saveSelection( mask )) return false;
     if (!saveFilterConfiguration( mask ) ) return false;
+    m_count++;
     return true;
 }
 
 bool KisKraSaveVisitor::visit(KisTransparencyMask *mask)
 {
     if (!saveSelection( mask )) return false;
+    m_count++;
     return true;
 }
 
 bool KisKraSaveVisitor::visit(KisTransformationMask *mask)
 {
     if (!saveSelection( mask )) return false;
+    m_count++;
     return true;
 }
 
 bool KisKraSaveVisitor::visit(KisSelectionMask *mask)
 {
     if (!saveSelection( mask )) return false;
+    m_count++;
     return true;
 }
 
@@ -145,6 +150,7 @@ bool KisKraSaveVisitor::savePaintDevice(KisNode * node)
 
     QString location = m_external ? QString::null : m_uri;
     location += m_name + LAYER_PATH + QString::number( m_count );
+    //connect(*node->paintDevice(), SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
 
     // Layer data
     if (m_store->open(location)) {
@@ -207,6 +213,8 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
 
     if ( selection->hasPixelSelection() ) {
         KisPaintDeviceSP dev = selection->pixelSelection();
+        //connect(*dev, SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
+
         QString location = m_external ? QString::null : m_uri;
         location += m_name + PIXEL_SELECTION_PATH + QString::number( m_count );
 
@@ -239,7 +247,7 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
 
 bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
 {
-
+    qDebug() << "Saving filter config for node " << node->name() << " count is " << m_count;
     if (node->inherits( "KisNodeFilterInterface" )) {
 	KisNodeFilterInterface* filterInterface = dynamic_cast<KisNodeFilterInterface*>(node);
 	if (!filterInterface) return false;

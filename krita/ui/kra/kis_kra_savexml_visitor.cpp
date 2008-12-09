@@ -20,6 +20,8 @@
 #include "kra/kis_kra_savexml_visitor.h"
 #include "kis_kra_tags.h"
 
+#include <QTextStream>
+
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 
@@ -96,7 +98,7 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
     Q_ASSERT( !layerElement.isNull() );
     layerElement.appendChild(elem);
     KisSaveXmlVisitor visitor(m_doc, elem, m_count);
-
+    m_count++;
     return visitor.visitAllInverse(layer);
 }
 
@@ -193,9 +195,16 @@ bool KisSaveXmlVisitor::visit(KisSelectionMask *mask)
 
 void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, const KisLayer * layer)
 {
-#ifdef __GNUC__
-#warning "KisSaveXmlVisitor::saveLayer: Save the channelflags!"
-#endif
+    QString channelFlagsString;
+    QBitArray channelFlags = layer->channelFlags();
+    for ( int i = 0; i < channelFlags.count(); ++i ) {
+        if ( channelFlags[i] )
+            channelFlagsString += "1";
+        else
+            channelFlagsString += "0";
+    }
+
+    el.setAttribute( CHANNEL_FLAGS, channelFlagsString );
     el.setAttribute(NAME, layer->name());
     el.setAttribute(OPACITY, layer->opacity());
     el.setAttribute(COMPOSITE_OP, layer->compositeOp()->id());

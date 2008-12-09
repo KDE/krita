@@ -153,11 +153,15 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
 
         img = new KisImage(m_d->document->undoAdapter(), width, height, cs, name);
 
+#ifdef __GNUC__
+#warning "KisKraLoader::loadXML: check whether image->lock still works with the top-down update "
+#endif
         img->lock();
 
         img->setResolution(xres, yres);
 
         loadNodes(element, img, const_cast<KisGroupLayer*>( img->rootLayer().data() ));
+
         img->unlock();
 
     }
@@ -223,6 +227,9 @@ KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageSP img, Ki
 
                     if ( !node ) {
                         warnFile << "Could not load node";
+#ifdef __GNUC__
+#warning "KisKraLoader::loadNodes: report node load failures back to the user!"
+#endif
                     } else {
                         img->nextLayerName(); // Make sure the nameserver is current with the number of nodes.
                         img->addNode(node, parent);
@@ -247,8 +254,6 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP img)
     // compatibility.
 
     QString name = element.attribute(NAME, "No Name");
-
-    qDebug() << "Load node >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << name;
 
     qint32 x = element.attribute(X, "0").toInt();
     qint32 y = element.attribute(Y, "0").toInt();
@@ -298,7 +303,10 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP img)
     else
         warnKrita << "Trying to load layer of unsupported type " << attr;
 
-    Q_ASSERT( node );
+    // Loading the node went wrong. Return empty node and leave to
+    // upstream to complain to the user
+    if ( !node ) return 0;
+
     node->setVisible( visible );
     node->setUserLocked( locked );
     node->setX( x );
@@ -307,11 +315,19 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP img)
 
     if ( node->inherits( "KisLayer" ) ) {
 
-#ifdef __GNUC__
-#warning "KisKraLoader::loadNode: restore the channelflags"
-#endif
+        KisLayer* layer = qobject_cast<KisLayer*>( node );
 
-        qobject_cast<KisLayer*>( node )->setCompositeOp( colorSpace->compositeOp( compositeOpName ) );
+        QString channelFlagsString = element.attribute( CHANNEL_FLAGS );
+        if ( !channelFlagsString.isEmpty() ) {
+            QBitArray channelFlags( channelFlagsString.length() );
+            for ( int i = 0; i < channelFlagsString.length(); ++i ) {
+                channelFlags.setBit(i, channelFlagsString[i] == '1' );
+            }
+            layer->setChannelFlags( channelFlags );
+        }
+
+
+        layer->setCompositeOp( colorSpace->compositeOp( compositeOpName ) );
     }
 
     if ( element.attribute( FILE_NAME ).isNull() )

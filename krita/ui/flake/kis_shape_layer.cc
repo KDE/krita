@@ -179,12 +179,11 @@ KoShapeManager *KisShapeLayer::shapeManager() const
 bool KisShapeLayer::saveOdf(KoStore * store) const
 {
 
-    qDebug() << "saving odf";
     QList<KoShape*> shapes = iterator();
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
     foreach(KoShape* shape, shapes) {
-        qDebug() << "saving shape: " << shape->name();
+        qDebug() << ">>>>>>>>>>> saving shape: " << shape->name();
     }
 
     store->disallowNameExpansion();

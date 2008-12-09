@@ -123,7 +123,7 @@ void KisLayer::setChannelFlags(const QBitArray & channelFlags)
     m_d->channelFlags = channelFlags;
 }
 
-QBitArray & KisLayer::channelFlags()
+QBitArray & KisLayer::channelFlags() const
 {
     return m_d->channelFlags;
 }

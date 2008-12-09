@@ -147,7 +147,7 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
         }
 
         if (cs == 0) {
-            kWarning(41008) << "Could not open colorspace";
+            warnFile << "Could not open colorspace";
             return KisImageSP(0);
         }
 
@@ -222,7 +222,7 @@ KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageSP img, Ki
                     KisNode* node = loadNode( child.toElement(), img );
 
                     if ( !node ) {
-                        kWarning(41008) << "Could not load node";
+                        warnFile << "Could not load node";
                     } else {
                         img->nextLayerName(); // Make sure the nameserver is current with the number of nodes.
                         img->addNode(node, parent);
@@ -247,6 +247,8 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP img)
     // compatibility.
 
     QString name = element.attribute(NAME, "No Name");
+
+    qDebug() << "Load node >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << name;
 
     qint32 x = element.attribute(X, "0").toInt();
     qint32 y = element.attribute(Y, "0").toInt();
@@ -273,36 +275,28 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP img)
 
     if (attr.isNull())
         node = loadPaintLayer(element, img, name, colorSpace, opacity);
-
     else if (attr == PAINT_LAYER)
         node = loadPaintLayer(element, img, name, colorSpace, opacity);
-
     else if (attr == GROUP_LAYER)
         node = loadGroupLayer(element, img, name, colorSpace, opacity);
-
     else if (attr == ADJUSTMENT_LAYER )
         node = loadAdjustmentLayer(element, img, name, colorSpace, opacity);
-
     else if (attr == SHAPE_LAYER )
         node = loadShapeLayer(element, img, name, colorSpace, opacity);
-
     else if ( attr == GENERATOR_LAYER )
         node = loadGeneratorLayer( element, img, name, colorSpace, opacity);
-
     else if ( attr == CLONE_LAYER )
         node = loadCloneLayer( element, img, name, colorSpace, opacity);
-
     else if ( attr == FILTER_MASK )
         node = loadFilterMask( element );
-
     else if ( attr == TRANSPARENCY_MASK )
         node = loadTransparencyMask( element );
-
     else if ( attr == TRANSFORMATION_MASK )
         node = loadTransformationMask( element );
-
     else if ( attr == SELECTION_MASK )
         node = loadSelectionMask( img, element );
+    else
+        warnKrita << "Trying to load layer of unsupported type " << attr;
 
     Q_ASSERT( node );
     node->setVisible( visible );
@@ -381,13 +375,13 @@ KisNode* KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImage
 
     if ((filtername = element.attribute( FILTER_NAME )).isNull()) {
         // XXX: Invalid adjustmentlayer! We should warn about it!
-        kWarning(41008) << "No filter in adjustment layer";
+        warnFile << "No filter in adjustment layer";
         return 0;
     }
 
     KisFilterSP f = KisFilterRegistry::instance()->value(filtername);
     if (!f) {
-        kWarning(41008) << "No filter for filtername" << filtername << "";
+        warnFile << "No filter for filtername" << filtername << "";
         return 0; // XXX: We don't have this filter. We should warn about it!
     }
 
@@ -426,13 +420,13 @@ KisNode* KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImageS
 
     if (generatorname.isNull()) {
         // XXX: Invalid generator layer! We should warn about it!
-        kWarning(41008) << "No generator in generator layer";
+        warnFile << "No generator in generator layer";
         return 0;
     }
 
     KisGeneratorSP generator = KisGeneratorRegistry::instance()->value(generatorname);
     if (!generator) {
-        kWarning(41008) << "No generator for generatorname" << generatorname << "";
+        warnFile << "No generator for generatorname" << generatorname << "";
         return 0; // XXX: We don't have this generator. We should warn about it!
     }
 
@@ -481,13 +475,13 @@ KisNode* KisKraLoader::loadFilterMask(const KoXmlElement& element )
 
     if ((filtername = element.attribute( FILTER_NAME )).isNull()) {
         // XXX: Invalid filter layer! We should warn about it!
-        kWarning(41008) << "No filter in filter layer";
+        warnFile << "No filter in filter layer";
         return 0;
     }
 
     KisFilterSP f = KisFilterRegistry::instance()->value(filtername);
     if (!f) {
-        kWarning(41008) << "No filter for filtername" << filtername << "";
+        warnFile << "No filter for filtername" << filtername << "";
         return 0; // XXX: We don't have this filter. We should warn about it!
     }
 

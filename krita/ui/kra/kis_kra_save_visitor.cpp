@@ -67,7 +67,7 @@ bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
 {
     bool result = false;
     if (KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
-
+        qDebug() << "saving shape layer " <<  m_name;
         QString location = m_external ? QString::null : m_uri;
         m_store->pushDirectory();
         m_store->enterDirectory(m_name + SHAPE_LAYER_PATH + QString::number( m_count ));
@@ -242,7 +242,6 @@ bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
 
     if (node->inherits( "KisNodeFilterInterface" )) {
 	KisNodeFilterInterface* filterInterface = dynamic_cast<KisNodeFilterInterface*>(node);
-	qDebug() << "filter interface " << filterInterface;
 	if (!filterInterface) return false;
         KisFilterConfiguration* filter = filterInterface->filter();
         if (filter) {

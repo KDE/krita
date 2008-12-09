@@ -53,10 +53,18 @@ void KisKraSaverTest::testRoundTrip()
 {
     KisDoc2* doc = createCompleteDocument();
     doc->saveNativeFormat( "roundtriptest.kra" );
+    QStringList list;
+    KisCountVisitor cv1(list, KoProperties());
+    doc->image()->rootLayer()->accept(cv1);
+
     delete doc;
+
     KisDoc2 doc2;
     doc2.loadNativeFormat( "roundtriptest.kra" );
-    assertDoc( doc2 );
+
+    KisCountVisitor cv2(list, KoProperties());
+    doc2.image()->rootLayer()->accept(cv2);
+    QCOMPARE( cv1.count(), cv2.count() );
 }
 
 QTEST_KDEMAIN(KisKraSaverTest, GUI)

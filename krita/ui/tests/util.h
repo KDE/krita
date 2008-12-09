@@ -18,7 +18,8 @@
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
-
+#include <qtest_kde.h>
+#include <QTest>
 #include <QBitArray>
 
 #include <KoDocument.h>
@@ -28,6 +29,7 @@
 #include <KoColorSpace.h>
 #include <KoPathShape.h>
 
+#include <kis_count_visitor.h>
 #include "kis_types.h"
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter_configuration.h"
@@ -134,8 +136,16 @@ KisDoc2* createCompleteDocument()
     KoShapeContainer * parentContainer =
             dynamic_cast<KoShapeContainer*>(doc->shapeForNode(group1));
 
-    // XXX: Set a shape on this layer!
+    KoPathShape* path = new KoPathShape();
+    path->setShapeId(KoPathShapeId);
+    path->moveTo(QPointF( 10, 10 ));
+    path->lineTo(QPointF( 10, 10 ) + QPointF(100, 0));
+    path->lineTo(QPointF( 100, 100 ));
+    path->lineTo(QPointF( 10, 10 ) + QPointF(0, 100));
+    path->close();
+    path->normalize();
     KisShapeLayerSP shapeLayer = new KisShapeLayer( parentContainer, image, "shapeLayer1", 75 );
+    shapeLayer->addChild( path );
     image->addNode( shapeLayer, group1 );
     image->addNode( adjustmentLayer2, group1 );
 
@@ -146,7 +156,7 @@ KisDoc2* createCompleteDocument()
     image->addNode( filterMask1, paintLayer1 );
 
     KisFilterMaskSP filterMask2 = new KisFilterMask();
-    filterMask1->setName( "filterMask2" );
+    filterMask2->setName( "filterMask2" );
     filterMask2->setFilter( kfc );
     filterMask2->setSelection( createVectorSelection( paintLayer2->paintDevice(), image ) );
     image->addNode( filterMask2, paintLayer2 );
@@ -179,9 +189,6 @@ KisDoc2* createCompleteDocument()
 }
 
 
-bool assertDoc( KisDoc2& doc )
-{
-    return false;
-}
+
 
 #endif

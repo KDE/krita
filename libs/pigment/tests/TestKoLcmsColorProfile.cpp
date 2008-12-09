@@ -3,8 +3,6 @@
 
 #include <cmath>
 
-#include <kdebug.h>
-
 qreal testRounding(qreal value)
 {
     qreal factor;
@@ -23,7 +21,7 @@ void TestKoLcmsColorProfile::testChromaticitiesFromProfile()
 
     KoLcmsRGBColorProfile::Chromaticities chromaticities = KoLcmsRGBColorProfile::chromaticitiesFromProfile(profile);
 
-    const cmsCIExyY profileRed =   {0.6400f, 0.3300f, 0.212656f};   
+    const cmsCIExyY profileRed =   {0.6400f, 0.3300f, 0.212656f};
     const cmsCIExyY profileGreen = {0.3000f, 0.6000f, 0.715158f};
     const cmsCIExyY profileBlue =  {0.1500f, 0.0600f, 0.072186f};
     const cmsCIExyY profileWhite = {0.3127f, 0.3290f, 1.000000f};
@@ -71,7 +69,7 @@ void TestKoLcmsColorProfile::testProfileCreationFromChromaticities()
 
     cmsHPROFILE lcmsProfile = profile->lcmsProfile();
 
-    KoLcmsRGBColorProfile::Chromaticities profileChromaticities = 
+    KoLcmsRGBColorProfile::Chromaticities profileChromaticities =
         KoLcmsRGBColorProfile::chromaticitiesFromProfile(lcmsProfile);
 
     QCOMPARE(testRounding(profileChromaticities.primaries.Red.x),   testRounding(chromaticities.primaries.Red.x));

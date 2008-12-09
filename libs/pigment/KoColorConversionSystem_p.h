@@ -21,7 +21,7 @@ struct KoColorConversionSystem::Node {
     Node() : isIcc(false), isHdr(false), isInitialized(false), referenceDepth(0), isGray(false), crossingCost(1), colorSpaceFactory(0), isEngine(false),engine(0) {}
     void init( const KoColorSpaceFactory* _colorSpaceFactory)
     {
-        kDebug(DBG_PIGMENT) << "Initialise " << modelId << " " << depthId << " " << profileName;
+        dbgPigment << "Initialise " << modelId << " " << depthId << " " << profileName;
         Q_ASSERT(not isInitialized);
         isInitialized = true;
         

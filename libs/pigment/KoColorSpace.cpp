@@ -20,11 +20,10 @@
 #include <QByteArray>
 #include <QBitArray>
 
-#include <kdebug.h>
 
 #include "KoColorSpace.h"
 #include "KoChannelInfo.h"
-
+#include "DebugPigment.h"
 #include "KoCompositeOp.h"
 #include "KoColorTransformation.h"
 #include "KoColorTransformationFactory.h"
@@ -174,7 +173,7 @@ const KoCompositeOp * KoColorSpace::compositeOp(const QString & id) const
     if ( d->compositeOps.contains( id ) )
         return d->compositeOps.value( id );
     else {
-        kWarning() << "Asking for non-existent composite operation " << id << ", returning " << COMPOSITE_OVER;
+        warnPigment << "Asking for non-existent composite operation " << id << ", returning " << COMPOSITE_OVER;
         return d->compositeOps.value( COMPOSITE_OVER );
     }
 }

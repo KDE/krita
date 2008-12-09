@@ -22,7 +22,7 @@
 
 #include <QDomDocument>
 
-#include "kdebug.h"
+#include "DebugPigment.h"
 #include "KoColor.h"
 #include "KoColorModelStandardIds.h"
 #include "KoColorProfile.h"
@@ -133,7 +133,7 @@ bool KoColor::operator==(const KoColor &other) const
 
 void KoColor::convertTo(const KoColorSpace * cs)
 {
-    //kDebug(DBG_PIGMENT) <<"Our colormodel:" << d->colorSpace->id().name()
+    //dbgPigment <<"Our colormodel:" << d->colorSpace->id().name()
     //      << ", new colormodel: " << cs->id().name() << "\n";
 
     if (*d->colorSpace == *cs)
@@ -183,7 +183,7 @@ void KoColor::fromQColor(const QColor& c) const
 #ifndef NDEBUG
 void KoColor::dump() const
 {
-    //kDebug(DBG_PIGMENT) <<"KoColor (" << this <<")," << d->colorSpace->id().name() <<"";
+    //dbgPigment <<"KoColor (" << this <<")," << d->colorSpace->id().name() <<"";
     QList<KoChannelInfo *> channels = d->colorSpace->channels();
 
     QList<KoChannelInfo *>::const_iterator begin = channels.begin();
@@ -195,15 +195,15 @@ void KoColor::dump() const
         // XXX: setNum always takes a byte.
         if (ch->size() == sizeof(quint8)) {
             // Byte
-            //kDebug(DBG_PIGMENT) <<"Channel (byte):" << ch->name() <<":" << QString().setNum(d->data[ch->pos()]) <<"";
+            //dbgPigment <<"Channel (byte):" << ch->name() <<":" << QString().setNum(d->data[ch->pos()]) <<"";
         }
         else if (ch->size() == sizeof(quint16)) {
             // Short (may also by an nvidia half)
-            //kDebug(DBG_PIGMENT) <<"Channel (short):" << ch->name() <<":" << QString().setNum(*((const quint16 *)(d->data+ch->pos())))  <<"";
+            //dbgPigment <<"Channel (short):" << ch->name() <<":" << QString().setNum(*((const quint16 *)(d->data+ch->pos())))  <<"";
         }
         else if (ch->size() == sizeof(quint32)) {
             // Integer (may also be float... Find out how to distinguish these!)
-            //kDebug(DBG_PIGMENT) <<"Channel (int):" << ch->name() <<":" << QString().setNum(*((const quint32 *)(d->data+ch->pos())))  <<"";
+            //dbgPigment <<"Channel (int):" << ch->name() <<":" << QString().setNum(*((const quint32 *)(d->data+ch->pos())))  <<"";
         }
     }
 }

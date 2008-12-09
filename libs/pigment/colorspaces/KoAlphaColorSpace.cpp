@@ -23,7 +23,6 @@
 #include <QImage>
 #include <QBitArray>
 
-#include <kdebug.h>
 #include <klocale.h>
 
 #include <lcms.h>
@@ -48,7 +47,7 @@ namespace {
     public:
 
         using KoCompositeOp::composite;
-        
+
         void composite(quint8 *dst,
                        qint32 dststride,
                        const quint8 *src,

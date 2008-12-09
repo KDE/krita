@@ -21,7 +21,6 @@
 
 #include <QDomElement>
 
-#include <kdebug.h>
 #include <klocale.h>
 
 #include "compositeops/KoCompositeOps.h"

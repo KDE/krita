@@ -1,8 +1,6 @@
 
 #include "TestKoColorSpaceMaths.h"
 
-#include <kdebug.h>
-
 #include "KoColorSpaceMaths.h"
 
 void TestKoColorSpaceMaths::testColorSpaceMathsTraits()

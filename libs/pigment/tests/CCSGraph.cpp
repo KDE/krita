@@ -24,7 +24,7 @@
 #include <KAboutData>
 #include <KCmdLineArgs>
 #include <KApplication>
-#include <kdebug.h>
+
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColorConversionSystem.h"
@@ -91,7 +91,7 @@ int main(int argc, char** argv)
         kError() << "Unknow graph type : " << graphType.toLatin1();
         exit(EXIT_FAILURE);
     }
-    
+
     if (outputType == "dot") {
         QFile file(outputFileName);
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))

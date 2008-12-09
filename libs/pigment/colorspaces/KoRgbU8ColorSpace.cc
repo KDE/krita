@@ -21,7 +21,6 @@
 #include <QDomElement>
 #include <QImage>
 
-#include <kdebug.h>
 #include <klocale.h>
 
 #include <KoIntegerMaths.h>

@@ -24,9 +24,11 @@
 
 #define DBG_PIGMENT 30008
 
-#define dbgPigment kDebug(DBG_PIGMENT)
+#define dbgPigment kDebug( 30008 )
 #define dbgPigmentCCS dbgPigment
 #define dbgPigmentCSRegistry dbgPigment
 #define dbgPigmentCS dbgPigment
 
+#define warnPigment kWarning( 30008 )
+#define errorPigment kError( 30008 )
 #endif

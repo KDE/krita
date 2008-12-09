@@ -22,6 +22,7 @@
 #include <QColor>
 #include <QBitArray>
 
+#include "DebugPigment.h"
 #include "pigment_export.h"
 
 #include "KoLcmsColorSpace.h"
@@ -122,35 +123,35 @@ public:
     virtual KoColorTransformation* createBrightnessContrastAdjustment(const quint16* transferValues) const
     {
         Q_UNUSED(transferValues);
-        kWarning() << i18n("Undefined operation in the alpha colorspace");
+        warnPigment << i18n("Undefined operation in the alpha colorspace");
         return 0;
     }
     virtual KoColorTransformation* createDesaturateAdjustment() const
     {
-        kWarning() << i18n("Undefined operation in the alpha colorspace");
+        warnPigment << i18n("Undefined operation in the alpha colorspace");
         return 0;
     }
     virtual KoColorTransformation* createPerChannelAdjustment(const quint16* const*) const
     {
-        kWarning() << i18n("Undefined operation in the alpha colorspace");
+        warnPigment << i18n("Undefined operation in the alpha colorspace");
         return 0;
     }
     virtual KoColorTransformation *createDarkenAdjustment(qint32 , bool , qreal ) const
     {
-        kWarning() << i18n("Undefined operation in the alpha colorspace");
+        warnPigment << i18n("Undefined operation in the alpha colorspace");
         return 0;
     }
     virtual void invertColor(quint8*, qint32) const
     {
-        kWarning() << i18n("Undefined operation in the alpha colorspace");
+        warnPigment << i18n("Undefined operation in the alpha colorspace");
     }
     virtual void colorToXML( const quint8* , QDomDocument& , QDomElement& ) const
     {
-        kWarning() << i18n("Undefined operation in the alpha colorspace");
+        warnPigment << i18n("Undefined operation in the alpha colorspace");
     }
     virtual void colorFromXML( quint8* , const QDomElement& ) const
     {
-        kWarning() << i18n("Undefined operation in the alpha colorspace");
+        warnPigment << i18n("Undefined operation in the alpha colorspace");
     }
 
 public:

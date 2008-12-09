@@ -197,8 +197,6 @@ private:
     void finishedWord();
     void finishedParagraph();
 
-    void startKeyPressMacro();
-
 private:
     friend class UndoTextCommand;
     friend class TextCommandBase;
@@ -213,7 +211,6 @@ private:
     bool m_trackChanges;
     bool m_allowResourceProviderUpdates;
     bool m_needSpellChecking;
-    bool m_processingKeyPress; // all undo commands generated from key-presses should be combined.
     int m_prevCursorPosition; /// used by editingPluginEvents
 
     QTimer m_caretTimer;

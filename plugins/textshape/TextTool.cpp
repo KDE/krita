@@ -128,7 +128,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_trackChanges(false),
         m_allowResourceProviderUpdates(true),
         m_needSpellChecking(true),
-        m_processingKeyPress(false),
         m_prevCursorPosition(-1),
         m_caretTimer(this),
         m_caretTimerState(true),
@@ -876,33 +875,15 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             event->ignore();
             return;
         } else if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
-            startKeyPressMacro();
+            startMacro(i18n("Insert Linebreak"));
             if (m_caret.hasSelection())
                 m_selectionHandler.deleteInlineObjects();
-            QTextBlockFormat format = m_caret.blockFormat();
             m_selectionHandler.nextParagraph();
-
-            QVariant direction = format.property(KoParagraphStyle::TextProgressionDirection);
-            format = m_caret.blockFormat();
-            if (m_textShapeData->pageDirection() != KoText::AutoDirection) { // inherit from shape
-                KoText::Direction dir;
-                switch (m_textShapeData->pageDirection()) {
-                case KoText::RightLeftTopBottom:
-                    dir = KoText::PerhapsRightLeftTopBottom;
-                    break;
-                case KoText::LeftRightTopBottom:
-                default:
-                    dir = KoText::PerhapsLeftRightTopBottom;
-                }
-                format.setProperty(KoParagraphStyle::TextProgressionDirection, dir);
-            } else if (! direction.isNull()) // then we inherit from the previous paragraph.
-                format.setProperty(KoParagraphStyle::TextProgressionDirection, direction);
-            m_caret.setBlockFormat(format);
             updateActions();
             editingPluginEvents();
             ensureCursorVisible();
         } else if (event->key() == Qt::Key_Tab || !(event->text().length() == 1 && !event->text().at(0).isPrint())) { // insert the text
-            startKeyPressMacro();
+            startMacro(i18n("Key Press"));
             if (m_caret.hasSelection())
                 m_selectionHandler.deleteInlineObjects();
             m_prevCursorPosition = m_caret.position();
@@ -912,6 +893,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
                 m_updateParagDirection.action->execute(m_prevCursorPosition);
             editingPluginEvents();
             emit blockChanged(m_caret.block());
+            stopMacro();
         }
     }
     if (moveOperation != QTextCursor::NoMove || destinationPosition != -1) {
@@ -1148,7 +1130,6 @@ void TextTool::deactivate()
     repaintCaret();
     m_textShape = 0;
     if (m_textShapeData) {
-//        m_textShapeData->document()->setUndoRedoEnabled(false); // erase undo history.
         TextSelection selection;
         selection.document = m_textShapeData->document();
         selection.position = m_caret.position();
@@ -1490,7 +1471,6 @@ void TextTool::startMacro(const QString &title)
     };
     m_currentCommand = new MacroCommand(title);
     m_currentCommandHasChildren = false;
-    m_processingKeyPress = false;
 }
 
 void TextTool::stopMacro()
@@ -1499,7 +1479,6 @@ void TextTool::stopMacro()
     if (! m_currentCommandHasChildren)
         delete m_currentCommand;
     m_currentCommand = 0;
-    m_processingKeyPress = false;
 }
 
 void TextTool::showStyleManager()
@@ -1683,28 +1662,6 @@ void TextTool::setTextColor(const KoColor &color)
 void TextTool::setBackgroundColor(const KoColor &color)
 {
     m_selectionHandler.setTextBackgroundColor(color.toQColor());
-}
-
-void TextTool::startKeyPressMacro()
-{
-    /* we have a little state machine here;
-        As soon as the user presses a key (i.e. we enter the keyPressEvent) this method should be
-        called and we make sure that all commands from that point on are combined into one so things like
-        spell checking will not create extra undo states :)  [state a]
-        As soon as the user does a different action, like executing a menu option, we create new undo states
-        again, separating them into different user-undoable actions.  [state b]
-
-        Then there is the 'macro' function that plugins etc can start;  which is [state c].
-    */
-
-    if (m_currentCommand) {
-        if (m_processingKeyPress) // already have a key-press macro
-            return;
-        stopMacro();
-    }
-
-    startMacro(i18n("Key press"));
-    m_processingKeyPress = true;
 }
 
 #include "TextTool.moc"

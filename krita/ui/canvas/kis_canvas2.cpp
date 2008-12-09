@@ -253,7 +253,7 @@ void KisCanvas2::createOpenGLCanvas()
         m_d->currentCanvasIsOpenGL = true;
         m_d->currentCanvasUsesOpenGLShaders = m_d->openGLImageTextures->usingHDRExposureProgram();
     } else {
-        kWarning() << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
+        warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
         createQPainterCanvas();
     }
 #endif
@@ -266,7 +266,7 @@ void KisCanvas2::createCanvas()
 #ifdef HAVE_OPENGL
         createOpenGLCanvas();
 #else
-        kWarning() << "OpenGL requested while its not available, starting qpainter canvas";
+        warnKrita << "OpenGL requested while its not available, starting qpainter canvas";
         createQPainterCanvas();
 #endif
     } else {

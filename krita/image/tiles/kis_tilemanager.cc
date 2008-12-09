@@ -346,18 +346,18 @@ void KisTileManager::toSwap(TileInfo* info)
             if (ftruncate(tfile->tempFile->handle(), newsize)) {
                 // XXX make these maybe i18n()able and in an error box, but then through
                 // some kind of proxy such that we don't pollute this with GUI code
-                kWarning(41004) << "Resizing the temporary swapfile failed!";
+                warnTiles << "Resizing the temporary swapfile failed!";
                 // Be somewhat pollite and try to figure out why it failed
                 switch (errno) {
-                case EIO: kWarning(41004) <<"Error was E IO,"
+                case EIO: warnTiles <<"Error was E IO,"
                     << "possible reason is a disk error!" << endl; break;
-                case EINVAL: kWarning(41004) <<"Error was E INVAL,"
+                case EINVAL: warnTiles <<"Error was E INVAL,"
                     << "possible reason is that you are using more memory than "
                     << "the filesystem or disk can handle" << endl; break;
-                default: kWarning(41004) <<"Errno was:" << errno;
+                default: warnTiles <<"Errno was:" << errno;
                 }
-                kWarning(41004) << "The swapfile is:" << tfile->tempFile->fileName();
-                kWarning(41004) << "Will try to avoid using the swap any further";
+                warnTiles << "The swapfile is:" << tfile->tempFile->fileName();
+                warnTiles << "Will try to avoid using the swap any further";
 
                 dbgTiles << "Failed ftruncate info:"
                 << "tried adding " << info->size << " bytes "
@@ -379,7 +379,7 @@ void KisTileManager::toSwap(TileInfo* info)
         //memcpy(data, tile->m_data, info->size);
         QFile* file = info->file;
         if (!file) {
-            kWarning() << "Opening the file as QFile failed";
+            warnKrita << "Opening the file as QFile failed";
             m_swapForbidden = true;
             return;
         }
@@ -388,7 +388,7 @@ void KisTileManager::toSwap(TileInfo* info)
         quint8* data = 0;
         if (!kritaMmap(data, 0, info->size, PROT_READ | PROT_WRITE, MAP_SHARED,
                        fd, info->filePos)) {
-            kWarning() << "Initial mmap failed";
+            warnKrita << "Initial mmap failed";
             m_swapForbidden = true;
             return;
         }
@@ -536,18 +536,18 @@ bool KisTileManager::kritaMmap(quint8*& result, void *start, size_t length,
 
     // Same here for warning and GUI
     if (result == (quint8*) - 1) {
-        kWarning(41004) << "mmap failed: errno is" << errno << "; we're probably going to crash very soon now...";
+        warnTiles << "mmap failed: errno is" << errno << "; we're probably going to crash very soon now...";
 
         // Try to ignore what happened and carry on, but unlikely that we'll get
         // much further, since the file resizing went OK and this is memory-related...
         if (errno == ENOMEM) {
-            kWarning(41004) << "mmap failed with E NOMEM! This means that"
+            warnTiles << "mmap failed with E NOMEM! This means that"
             << "either there are no more memory mappings available for Krita, "
             << "or that there is no more memory available!" << endl;
         }
 
-        kWarning(41004) << "Trying to continue anyway (no guarantees)";
-        kWarning(41004) << "Will try to avoid using the swap any further";
+        warnTiles << "Trying to continue anyway (no guarantees)";
+        warnTiles << "Will try to avoid using the swap any further";
         dbgTiles << "Failed mmap info:"
         << "tried mapping " << length << " bytes" << endl;
         if (!m_files.empty()) {
@@ -581,7 +581,7 @@ void KisTileManager::fromSwap(TileInfo* info)
 
     if (!kritaMmap(info->tile->m_data, 0, info->size, PROT_READ | PROT_WRITE, MAP_SHARED,
                    info->file->handle(), info->filePos)) {
-        kWarning() << "fromSwap failed!";
+        warnKrita << "fromSwap failed!";
         return;
     }
 

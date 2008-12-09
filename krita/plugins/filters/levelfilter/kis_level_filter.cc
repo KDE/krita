@@ -83,7 +83,7 @@ void KisLevelFilter::process(KisConstProcessingInformation srcInfo,
     QPoint dstTopLeft = dstInfo.topLeft();
     QPoint srcTopLeft = srcInfo.topLeft();
     if (!config) {
-        kWarning() << "No configuration object for level filter\n";
+        warnKrita << "No configuration object for level filter\n";
         return;
     }
 

@@ -20,6 +20,8 @@
 
 #include <kdebug.h>
 
+//#define KRITA_RELEASE_MODE
+
 /**
  * In krita code, include kis_debug.h instead of kdebug.h. Then use one of the areas #defined here
  * instead of the raw numbers. Also, try not to check in code outside of tests that uses kDebug
@@ -77,7 +79,9 @@
 #define fatalMath if (false) kFatal(41009)
 #define fatalRender if (false) kFatal(41010)
 #define fatalScript if (false) kFatal(41011)
+
 #else
+
 #define dbgKrita kDebug(41000) // For temporary debug lines, where you'd have used kDebug() before.
 #define dbgImage kDebug(41001)
 #define dbgRegistry kDebug(41002)

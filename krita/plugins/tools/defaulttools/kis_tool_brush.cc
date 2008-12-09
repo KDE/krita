@@ -86,7 +86,7 @@ void KisToolBrush::initPaint(KoPointerEvent *e)
     KisToolFreehand::initPaint(e);
 
     if (!m_painter) {
-        kWarning() << "Didn't create a painter! Something is wrong!";
+        warnKrita << "Didn't create a painter! Something is wrong!";
         return;
     }
 

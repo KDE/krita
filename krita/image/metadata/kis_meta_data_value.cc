@@ -242,32 +242,32 @@ QMap<QString, KisMetaData::Value>* Value::asStructure()
     return 0;
 }
 
-QDebug operator<<(QDebug dbg, const Value &v)
+QDebug operator<<(QDebug debug, const Value &v)
 {
     switch (v.type()) {
     case Value::Invalid:
-        dbg.nospace() << "invalid value";
+        debug.nospace() << "invalid value";
         break;
     case Value::Variant:
-        dbg.nospace() << "Variant: " << v.asVariant();
+        debug.nospace() << "Variant: " << v.asVariant();
         break;
     case Value::OrderedArray:
     case Value::UnorderedArray:
     case Value::AlternativeArray:
     case Value::LangArray:
-        dbg.nospace() << "Array: " << v.asArray();
+        debug.nospace() << "Array: " << v.asArray();
         break;
     case Value::Structure:
-        dbg.nospace() << "Structure: " << v.asStructure();
+        debug.nospace() << "Structure: " << v.asStructure();
         break;
     case Value::SignedRational:
-        dbg.nospace() << "Signed rational: " << v.asSignedRational().numerator << " / " << v.asSignedRational().denominator;
+        debug.nospace() << "Signed rational: " << v.asSignedRational().numerator << " / " << v.asSignedRational().denominator;
         break;
     case Value::UnsignedRational:
-        dbg.nospace() << "Unsigend rational: " << v.asUnsignedRational().numerator << " / " << v.asUnsignedRational().denominator;
+        debug.nospace() << "Unsigend rational: " << v.asUnsignedRational().numerator << " / " << v.asUnsignedRational().denominator;
         break;
     }
-    return dbg.space();
+    return debug.space();
 }
 
 bool Value::operator==(const Value& rhs) const

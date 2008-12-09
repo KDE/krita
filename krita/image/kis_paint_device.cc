@@ -142,7 +142,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
             m_datamanager = new KisDataManager(*rhs.m_datamanager);
             Q_CHECK_PTR(m_datamanager);
         } else {
-            kWarning() << "rhs " << rhs.objectName() << " has no datamanager\n";
+            warnKrita << "rhs " << rhs.objectName() << " has no datamanager\n";
         }
         m_d->x = rhs.m_d->x;
         m_d->y = rhs.m_d->y;
@@ -608,7 +608,7 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint3
     try {
         data = new quint8 [w * h * m_d->pixelSize];
     } catch (std::bad_alloc) {
-        kWarning() << "KisPaintDevice::convertToQImage std::bad_alloc for " << w << " * " << h << " * " << m_d->pixelSize;
+        warnKrita << "KisPaintDevice::convertToQImage std::bad_alloc for " << w << " * " << h << " * " << m_d->pixelSize;
         //delete[] data; // data is not allocated, so don't free it
         return QImage();
     }

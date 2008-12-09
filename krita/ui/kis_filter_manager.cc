@@ -86,7 +86,7 @@ void KisFilterManager::insertFilter(const QString & name)
     KisFilterSP f = KisFilterRegistry::instance()->value(name);
     Q_ASSERT(f);
     if (d->filters2Action.keys().contains(f.data())) {
-        kWarning() << "Filter" << name << " has already been inserted";
+        warnKrita << "Filter" << name << " has already been inserted";
         return;
     }
     KoID category = f->menuCategory();

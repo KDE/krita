@@ -59,7 +59,7 @@ void KisToolRectangle::paint(QPainter& gc, const KoViewConverter &converter)
     qreal sx, sy;
     converter.zoom(&sx, &sy);
     if (!currentImage()) {
-        kWarning() << "No currentImage!";
+        warnKrita << "No currentImage!";
         return;
     }
     gc.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());

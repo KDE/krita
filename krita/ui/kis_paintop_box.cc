@@ -295,7 +295,7 @@ KisPaintOpPresetSP KisPaintopBox::activePreset(const KoID & paintop, const KoInp
         return preset;
     }
     else {
-        kWarning() << "Could not get paintop preset for paintop " << paintop.name() << ", return default";
+        warnKrita << "Could not get paintop preset for paintop " << paintop.name() << ", return default";
         return KisPaintOpRegistry::instance()->defaultPreset(paintop, 0, inputDevice, m_view->image());
     }
 }

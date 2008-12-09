@@ -172,7 +172,7 @@ public:
     }
     inline T& operator*() {
         if (!d)
-            kWarning() << kBacktrace();
+            warnKrita << kBacktrace();
         Q_ASSERT(d); return *d;
     }
 
@@ -181,7 +181,7 @@ public:
     }
     inline T* operator->() {
         if (!d) {
-            kWarning() << kBacktrace();
+            warnKrita << kBacktrace();
         }
 
         Q_ASSERT(d); return d;
@@ -310,7 +310,7 @@ public:
     }
     inline T* operator->() {
         if (!d || !dataPtr || !dataPtr->valid) {
-            kWarning() << kBacktrace();
+            warnKrita << kBacktrace();
         }
         Q_ASSERT(d && dataPtr && dataPtr->valid);
         return d;

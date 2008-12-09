@@ -160,17 +160,17 @@ if (n > 1)
 
 #include "kis_debug.h"
 
-QDebug operator<<(QDebug dbg, const KisConvolutionKernel &c)
+QDebug operator<<(QDebug debug, const KisConvolutionKernel &c)
 {
     int pos = 0;
-    dbg.nospace() << "[" << c.width() << "," << c.height() << "]{";
+    debug.nospace() << "[" << c.width() << "," << c.height() << "]{";
     for (unsigned int i = 0; i < c.width(); ++i) {
-        dbg.nospace() << " {";
+        debug.nospace() << " {";
         for (unsigned int j = 0; j < c.height(); ++j, ++pos) {
-            dbg.nospace() << c.data()[pos] << " ";
+            debug.nospace() << c.data()[pos] << " ";
         }
-        dbg.nospace() << " }";
+        debug.nospace() << " }";
     }
-    dbg.nospace() << c.factor() << " " << c.offset() <<  " }";
-    return dbg.space();
+    debug.nospace() << c.factor() << " " << c.offset() <<  " }";
+    return debug.space();
 }

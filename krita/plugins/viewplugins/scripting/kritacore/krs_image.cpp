@@ -67,7 +67,7 @@ bool Image::convertToColorSpace(const QString& colorspacename)
 {
     const KoColorSpace * dstCS = KoColorSpaceRegistry::instance()->colorSpace(colorspacename, 0);
     if (!dstCS) {
-        kWarning(41011) << QString("ColorSpace %1 is not available, please check your installation.").arg(colorspacename);
+        warnScript << QString("ColorSpace %1 is not available, please check your installation.").arg(colorspacename);
         return false;
     }
     m_image->convertTo(dstCS);

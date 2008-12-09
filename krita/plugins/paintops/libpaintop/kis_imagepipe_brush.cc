@@ -164,7 +164,7 @@ bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
     int len = qstrlen(name);
 
     if (m_d->parasite.dim != 1) {
-        kWarning(41001) << "Save to file for pipe brushes with dim != not yet supported!";
+        warnImage << "Save to file for pipe brushes with dim != not yet supported!";
         return false;
     }
 
@@ -296,7 +296,7 @@ void KisImagePipeBrush::selectNextBrush(const KisPaintInformation& info) const
             index = static_cast<int>(angle / (2.0 * M_PI) * m_d->parasite.rank[i]);
             break;
         default:
-            kWarning(41001) << "This parasite KisParasite::SelectionMode has not been implemented. Reselecting"
+            warnImage << "This parasite KisParasite::SelectionMode has not been implemented. Reselecting"
             << " to Incremental";
             m_d->parasite.selection[i] = KisParasite::Incremental;
             index = 0;

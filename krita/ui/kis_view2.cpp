@@ -786,7 +786,7 @@ void KisView2::loadPlugins()
             insertChildClient(plugin);
         } else {
             if (errCode == KLibLoader::ErrNoLibrary) {
-                kWarning() << " Error loading plugin was : ErrNoLibrary" << KLibLoader::self()->lastErrorMessage();
+                warnKrita << " Error loading plugin was : ErrNoLibrary" << KLibLoader::self()->lastErrorMessage();
             }
         }
     }

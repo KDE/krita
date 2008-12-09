@@ -275,7 +275,7 @@ void KisShapeController::addShape(KoShape* shape)
 
         }
     } else {
-        kWarning() << "Eeek -- we tried to add a krita layer shape without going through KisImage";
+        warnKrita << "Eeek -- we tried to add a krita layer shape without going through KisImage";
     }
 
     m_d->doc->setModified(true);

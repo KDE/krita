@@ -1294,7 +1294,7 @@ void TextTool::addUndoCommand()
         void undo() {
             if (m_document.isNull())
                 return;
-            if (! m_tool.isNull()) {
+            if ( !(m_tool.isNull()) && (m_tool->m_textShapeData) && (m_tool->m_textShapeData->document() == m_document) ) {
                 m_tool->stopMacro();
                 m_tool->m_allowAddUndoCommand = false;
                 if (m_tool->m_changeTracker && !m_tool->m_canvas->resourceProvider()->boolResource(KoCanvasResource::DocumentIsLoading))
@@ -1310,7 +1310,7 @@ void TextTool::addUndoCommand()
             if (m_document.isNull())
                 return;
 
-            if (! m_tool.isNull()) {
+            if ( !(m_tool.isNull()) && (m_tool->m_textShapeData) && (m_tool->m_textShapeData->document() == m_document) ) {
                 m_tool->m_allowAddUndoCommand = false;
                 m_document->redo(&m_tool->m_caret);
             } else

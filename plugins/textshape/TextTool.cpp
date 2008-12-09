@@ -613,8 +613,8 @@ void TextTool::setShapeData(KoTextShapeData *data)
         if (m_textShape->demoText()) {
             m_textShapeData->document()->setUndoRedoEnabled(false); // removes undo history
             m_textShape->setDemoText(false); // remove demo text
+            m_textShapeData->document()->setUndoRedoEnabled(true); // allow undo history
         }
-        m_textShapeData->document()->setUndoRedoEnabled(true); // allow undo history
     }
     if (m_trackChanges) {
         if (m_changeTracker == 0)
@@ -1148,7 +1148,7 @@ void TextTool::deactivate()
     repaintCaret();
     m_textShape = 0;
     if (m_textShapeData) {
-        m_textShapeData->document()->setUndoRedoEnabled(false); // erase undo history.
+//        m_textShapeData->document()->setUndoRedoEnabled(false); // erase undo history.
         TextSelection selection;
         selection.document = m_textShapeData->document();
         selection.position = m_caret.position();

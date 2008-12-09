@@ -37,7 +37,7 @@ class FontDia : public KDialog
 {
     Q_OBJECT
 public:
-    explicit FontDia(const QTextCursor &cursor, QWidget* parent = 0);
+    explicit FontDia(QTextCursor *cursor, QWidget* parent = 0);
 
     const KoCharacterStyle *style() const {
         return &m_style;
@@ -57,7 +57,7 @@ private:
     FontLayoutTab *m_layoutTab;
     LanguageTab *m_languageTab;
 
-    QTextCursor m_cursor;
+    QTextCursor* m_cursor;
     QTextCharFormat m_initialFormat;
     KoCharacterStyle m_style;
 };

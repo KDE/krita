@@ -1619,7 +1619,7 @@ void TextTool::insertSpecialCharacter()
 
 void TextTool::selectFont()
 {
-    FontDia *fontDlg = new FontDia(m_caret);
+    FontDia *fontDlg = new FontDia(&m_caret);
     fontDlg->exec();
     delete fontDlg;
 }

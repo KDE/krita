@@ -269,18 +269,31 @@ QPointF KoStarShape::computeCenter() const
 
 bool KoStarShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
-    QString drawEngine = element.attributeNS( KoXmlNS::draw, "engine", "" );
-    if( ! drawEngine.isEmpty() && drawEngine != "koffice:star" )
+    bool loadAsCustomShape = false;
+    
+    if( element.localName() == "custom-shape" )
+    {
+        QString drawEngine = element.attributeNS( KoXmlNS::draw, "engine", "" );
+        if( drawEngine != "koffice:star" )
+            return false;
+        loadAsCustomShape = true;
+    }
+    else if( element.localName() != "regular-polygon" )
+    {
         return false;
+    }
 
     loadOdfAttributes( element, context, OdfAllAttributes );
     QSizeF loadedSize = size();
     QPointF loadedPosition = position();
 
     // initialize tip radius
+    // TODO: this is unfortunately not precise, we have to calculate the enclosing
+    // ellipse from the resulting size (loaded size) of the shape and use the ellipse
+    // radius for the tip radius
     m_radius[tip] = qMax( 0.5 * loadedSize.width(), 0.5 * loadedSize.height() );
 
-    if( drawEngine.isEmpty() )
+    if( ! loadAsCustomShape )
     {
         QString corners = element.attributeNS( KoXmlNS::draw, "corners", "" );
         if( ! corners.isEmpty() )

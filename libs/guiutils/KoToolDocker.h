@@ -55,6 +55,8 @@ public slots:
     bool hasOptionWidget();
 
 private:
+    Q_PRIVATE_SLOT(d, void optionWidgetDestroyed(QObject*))
+
     class Private;
     Private * const d;
 };

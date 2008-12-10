@@ -45,14 +45,19 @@
 
 using namespace KRA;
 
-KisKraLoadVisitor::KisKraLoadVisitor(KisImageSP img, KoStore *store, QMap<KisNode *, QString> &layerFilenames, const QString & name) :
-        KisNodeVisitor(),
-        m_layerFilenames(layerFilenames)
+KisKraLoadVisitor::KisKraLoadVisitor( KisImageSP img,
+                                      KoStore *store,
+                                      QMap<KisNode *, QString> &layerFilenames,
+                                      const QString & name,
+                                      int syntaxVersion) :
+    KisNodeVisitor(),
+    m_layerFilenames(layerFilenames)
 {
     m_external = false;
     m_img = img;
     m_store = store;
     m_name = name;
+    m_syntaxVersion = syntaxVersion;
 }
 
 void KisKraLoadVisitor::setExternalUri(const QString &uri)
@@ -70,32 +75,35 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
 {
 
     if ( !loadPaintDevice( layer->paintDevice(), getLocation( layer ) ) ) {
-         return false;
+        return false;
     }
     if ( !loadProfile( layer->paintDevice(), getLocation( layer, DOT_ICC ) ) ) {
         return false;
     }
 
-    // Check whether there is a file with a .mask extension in the
-    // layer directory, if so, it's an old-style transparency mask
-    // that should be converted.
-    QString location = getLocation( layer, ".mask" );
 
-    if ( m_store->open( location ) ) {
+    if ( m_syntaxVersion == 1 ) {
+        // Check whether there is a file with a .mask extension in the
 
-        KisSelectionSP selection = KisSelectionSP(new KisSelection());
-        KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
-        if (!pixelSelection->read(m_store)) {
-            pixelSelection->disconnect();
+        // layer directory, if so, it's an old-style transparency mask
+        // that should be converted.
+        QString location = getLocation( layer, ".mask" );
+
+        if ( m_store->open( location ) ) {
+
+            KisSelectionSP selection = KisSelectionSP(new KisSelection());
+            KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+            if (!pixelSelection->read(m_store)) {
+                pixelSelection->disconnect();
+            }
+            else {
+                KisTransparencyMask* mask = new KisTransparencyMask();
+                mask->setSelection( selection );
+                m_img->addNode(mask, layer, layer->firstChild());
+            }
+            m_store->close();
         }
-        else {
-            KisTransparencyMask* mask = new KisTransparencyMask();
-            mask->setSelection( selection );
-            m_img->addNode(mask, layer, layer->firstChild());
-        }
-        m_store->close();
     }
-
     layer->setDirty(m_img->bounds());
     return true;
 
@@ -111,38 +119,26 @@ bool KisKraLoadVisitor::visit(KisGroupLayer *layer)
 
 bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
 {
-    //connect(*layer->paintDevice(), SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
+    // Adjustmentlayers are tricky: there's the 1.x style and the 2.x
+    // style, which has selections with selection components
 
-    // The selection -- if present. If not, we simply cannot open the dratted thing.
-    QString location = m_external ? QString::null : m_uri;
-    location += m_name + "/layers/" + m_layerFilenames[layer] + ".selection";
-    if (m_store->hasFile(location)) {
-        if (m_store->open(location)) {
-            KisSelectionSP selection = KisSelectionSP(new KisSelection());
-            if (!selection->read(m_store)) {
-                selection->disconnect();
-                m_store->close();
-            } else {
-                layer->setSelection(selection);
-            }
-            m_store->close();
-        }
+    if ( m_syntaxVersion == 1 ) {
+
+        //connect(*layer->paintDevice(), SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
+        QString location = getLocation( layer, ".selection" );
+        KisSelectionSP selection = new KisSelection();
+        KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+        loadPaintDevice( pixelSelection, getLocation( layer, ".selection" ) );
+        layer->setSelection(selection);
+    }
+    else if ( m_syntaxVersion == 2 ) {
+        layer->setSelection( loadSelection( getLocation( layer ) ) );
+    }
+    else {
+        // We use the default, empty selection
     }
 
-    // filter configuration
-    location = m_external ? QString::null : m_uri;
-    location += m_name + "/layers/" + m_layerFilenames[layer] + ".filterconfig";
-
-    if (m_store->hasFile(location) && layer->filter()) {
-        QByteArray data;
-        m_store->open(location);
-        data = m_store->read(m_store->size());
-        m_store->close();
-        if (!data.isEmpty()) {
-            KisFilterConfiguration * kfc = layer->filter();
-            kfc->fromLegacyXML(QString(data));
-        }
-    }
+    loadFilterConfiguration( layer->filter(), getLocation( layer, DOT_FILTERCONFIG ) );
 
     layer->setDirty(m_img->bounds());
     return true;
@@ -296,10 +292,36 @@ bool KisKraLoadVisitor::loadProfile( KisPaintDeviceSP device, const QString& loc
 }
 
 
-bool KisKraLoadVisitor::loadFilterConfiguration()
+bool KisKraLoadVisitor::loadFilterConfiguration( KisFilterConfiguration* kfc, const QString& location )
 {
+    if ( m_store->hasFile(location) ) {
+        QByteArray data;
+        m_store->open(location);
+        data = m_store->read(m_store->size());
+        m_store->close();
+        if (!data.isEmpty()) {
+            kfc->fromLegacyXML(QString(data));
+        }
+    }
 }
 
-bool KisKraLoadVisitor::loadSelection()
+KisSelectionSP KisKraLoadVisitor::loadSelection( const QString& location )
 {
+    KisSelectionSP selection = new KisSelection();
+
+    // Pixel selection
+    QString pixelSelectionLocation = location + DOT_PIXEL_SELECTION;
+    if ( m_store->hasFile( pixelSelectionLocation ) ) {
+        KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+        loadPaintDevice( pixelSelection, pixelSelectionLocation );
+    }
+
+    // Shape selection
+    QString shapeSelectionLocation = location + DOT_SHAPE_SELECTION;
+#ifdef __GNUC__
+#warning "KisKraLoadVisitor::loadSelection: implement loading of shape selection components."
+#endif
+
+    return selection;
+
 }

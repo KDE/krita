@@ -66,6 +66,8 @@ private:
     bool saveSelection(KisNode* node);
     bool saveFilterConfiguration(KisNode* filter);
 
+    QString getLocation( const QString& suffix );
+
 private:
     KisImageSP m_img;
     KoStore *m_store;

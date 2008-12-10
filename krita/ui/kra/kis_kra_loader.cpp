@@ -65,13 +65,15 @@ public:
     QString imageName; // used to be stored in the image, is now in the documentInfo block
     QString imageComment; // used to be stored in the image, is now in the documentInfo block
     QMap<KisNode*, QString> layerFilenames; // temp storage during loading
+    int syntaxVersion; // version of the fileformat we are loading
 
 };
 
-KisKraLoader::KisKraLoader(KisDoc2 * document)
+KisKraLoader::KisKraLoader(KisDoc2 * document, int syntaxVersion)
     : m_d(new Private())
 {
     m_d->document = document;
+    m_d->syntaxVersion = syntaxVersion;
 }
 
 
@@ -172,7 +174,7 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
 void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP img, const QString & uri, bool external)
 {
     // Load the layers data
-    KisKraLoadVisitor visitor(img, store, m_d->layerFilenames, m_d->imageName);
+    KisKraLoadVisitor visitor(img, store, m_d->layerFilenames, m_d->imageName, m_d->syntaxVersion);
 
     if (external)
         visitor.setExternalUri(uri);
@@ -269,13 +271,11 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP img)
         // use default profile - it will be replaced later in completeLoading
         colorSpace = KoColorSpaceRegistry::instance()->colorSpace(element.attribute( COLORSPACE_NAME ), "");
 
-    QString compositeOpName = element.attribute( COMPOSITE_OP );
-
     bool visible = element.attribute(VISIBLE, "1") == "0" ? false : true;
     bool locked = element.attribute(LOCKED, "0") == "0" ? false : true;
 
     // Now find out the layer type and do specific handling
-    QString attr = element.attribute(LAYER_TYPE);
+    QString attr = element.attribute(NODE_TYPE);
     KisNode* node = 0;
 
     if (attr.isNull())
@@ -314,7 +314,6 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP img)
     node->setName( name );
 
     if ( node->inherits( "KisLayer" ) ) {
-
         KisLayer* layer = qobject_cast<KisLayer*>( node );
 
         QString channelFlagsString = element.attribute( CHANNEL_FLAGS );
@@ -326,7 +325,7 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP img)
             layer->setChannelFlags( channelFlags );
         }
 
-
+        QString compositeOpName = element.attribute( COMPOSITE_OP, "normal" );
         layer->setCompositeOp( colorSpace->compositeOp( compositeOpName ) );
     }
 

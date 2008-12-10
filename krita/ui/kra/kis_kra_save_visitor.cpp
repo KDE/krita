@@ -67,9 +67,8 @@ bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
 {
     bool result = false;
     if (KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
-        QString location = m_external ? QString::null : m_uri;
         m_store->pushDirectory();
-        m_store->enterDirectory(m_name + SHAPE_LAYER_PATH + QString::number( m_count ));
+        m_store->enterDirectory( getLocation( DOT_SHAPE_LAYER )) ;
         result = shapeLayer->saveOdf(m_store);
         m_store->popDirectory();
     }
@@ -148,12 +147,10 @@ bool KisKraSaveVisitor::visit(KisSelectionMask *mask)
 bool KisKraSaveVisitor::savePaintDevice(KisNode * node)
 {
 
-    QString location = m_external ? QString::null : m_uri;
-    location += m_name + LAYER_PATH + QString::number( m_count );
     //connect(*node->paintDevice(), SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
 
     // Layer data
-    if (m_store->open(location)) {
+    if (m_store->open(getLocation( QString() ))) {
         if (!node->paintDevice()->write(m_store)) {
             node->paintDevice()->disconnect();
             m_store->close();
@@ -183,10 +180,7 @@ bool KisKraSaveVisitor::saveAnnotations(KisLayer* layer)
 
         if (annotation) {
             // save layer profile
-            QString location = m_external ? QString::null : m_uri;
-            location += m_name + LAYER_PATH + QString::number( m_count ) + DOT_ICC;
-
-            if (m_store->open(location)) {
+            if (m_store->open(getLocation( DOT_ICC ))) {
                 m_store->write(annotation->annotation());
                 m_store->close();
             }
@@ -214,12 +208,8 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
     if ( selection->hasPixelSelection() ) {
         KisPaintDeviceSP dev = selection->pixelSelection();
         //connect(*dev, SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
-
-        QString location = m_external ? QString::null : m_uri;
-        location += m_name + PIXEL_SELECTION_PATH + QString::number( m_count );
-
         // Layer data
-        if (m_store->open(location)) {
+        if (m_store->open(getLocation( DOT_PIXEL_SELECTION ))) {
             if (!dev->write(m_store)) {
                 dev->disconnect();
                 m_store->close();
@@ -229,9 +219,9 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
         }
     }
     if ( selection->hasShapeSelection() ) {
-        QString location = m_external ? QString::null : m_uri;
         m_store->pushDirectory();
-        m_store->enterDirectory(m_name + SHAPE_SELECTION_PATH + QString::number( m_count ));
+
+        m_store->enterDirectory( getLocation( DOT_SHAPE_SELECTION ) );
         KisShapeSelection* shapeSelection = dynamic_cast<KisShapeSelection*>( selection->shapeSelection() );
         if ( !shapeSelection ) {
             return false;
@@ -247,17 +237,12 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
 
 bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
 {
-    qDebug() << "Saving filter config for node " << node->name() << " count is " << m_count;
     if (node->inherits( "KisNodeFilterInterface" )) {
 	KisNodeFilterInterface* filterInterface = dynamic_cast<KisNodeFilterInterface*>(node);
 	if (!filterInterface) return false;
         KisFilterConfiguration* filter = filterInterface->filter();
         if (filter) {
-            QString location = m_external ? QString::null : m_uri;
-            location = m_external ? QString::null : m_uri;
-            location += m_name + LAYER_PATH + QString::number( m_count ) + DOT_FILTERCONFIG;
-
-            if (m_store->open(location)) {
+            if (m_store->open(getLocation( DOT_FILTERCONFIG ))) {
                 QString s = filter->toLegacyXML();
                 m_store->write(s.toUtf8(), qstrlen(s.toUtf8()));
                 m_store->close();
@@ -266,4 +251,11 @@ bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
 
     }
     return false;
+}
+
+QString KisKraSaveVisitor::getLocation( const QString& suffix )
+{
+    QString location = m_external ? QString::null : m_uri;
+    location += m_name + LAYER_PATH + QString::number( m_count ) + suffix;
+    return location;
 }

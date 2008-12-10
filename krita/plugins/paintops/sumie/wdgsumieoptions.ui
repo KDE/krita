@@ -223,6 +223,9 @@
               <property name="minimum" >
                <double>-99.000000000000000</double>
               </property>
+              <property name="maximum" >
+               <double>999.990000000000009</double>
+              </property>
               <property name="value" >
                <double>2.000000000000000</double>
               </property>

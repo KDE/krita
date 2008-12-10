@@ -55,7 +55,7 @@ KoTool::KoTool(KoCanvasBase *canvas)
 
 KoTool::~KoTool()
 {
-    qDeleteALl(d->optionWidgets);
+    qDeleteAll(d->optionWidgets);
     delete d;
 }
 

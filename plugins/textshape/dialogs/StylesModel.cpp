@@ -313,9 +313,9 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
     connect(sm, SIGNAL(styleRemoved(KoParagraphStyle*)), this, SLOT(removeParagraphStyle(KoParagraphStyle*)));
 
     foreach(KoParagraphStyle *style, m_styleManager->paragraphStyles())
-    addParagraphStyle(style);
+        addParagraphStyle(style);
     foreach(KoCharacterStyle *style, m_styleManager->characterStyles())
-    addCharacterStyle(style);
+        addCharacterStyle(style);
 }
 
 // called when the stylemanager adds a style

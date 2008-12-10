@@ -90,7 +90,6 @@ void KisFilterMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
     dbgImage << "Applying filter mask on projection  " << projection << " with rect " << rc
     << " and filter config " << m_d->filterConfig;
 
-    Q_ASSERT(m_d->filterConfig);
     if (!m_d->filterConfig) return;
 
     selection()->updateProjection(rc);

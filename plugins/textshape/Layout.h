@@ -121,6 +121,8 @@ private:
     int numColumns() {
         return m_dropCapsNChars;
     }
+
+    QString m_currentMasterPage;
 };
 
 #endif

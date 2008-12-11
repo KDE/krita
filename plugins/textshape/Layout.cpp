@@ -335,9 +335,11 @@ bool Layout::nextParag()
     bool pagebreak = (m_format.pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore ||
                       m_format.boolProperty(KoParagraphStyle::BreakBefore));
 
-    const QString masterPageName = m_format.property(KoParagraphStyle::MasterPageName).toString();
-    if (! masterPageName.isNull())
+    const QVariant masterPageName = m_format.property(KoParagraphStyle::MasterPageName);
+    if (! masterPageName.isNull() && m_currentMasterPage != masterPageName.toString()) {
+        m_currentMasterPage = masterPageName.toString();
         pagebreak = true; // new master-page means new page
+    }
 
     if (!m_newShape && pagebreak) {
         m_data->setEndPosition(m_block.position() - 1);
@@ -540,6 +542,7 @@ void Layout::resetPrivate()
     m_blockData = 0;
     m_newParag = true;
     m_block = m_parent->document()->begin();
+    m_currentMasterPage.clear();
 
     shapeNumber = 0;
     int lastPos = -1;

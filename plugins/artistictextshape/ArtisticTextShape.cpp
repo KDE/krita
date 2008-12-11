@@ -144,7 +144,7 @@ bool ArtisticTextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingCon
     if( properties.count() == 0 )
         return false;
 
-    foreach( QString property, properties )
+    foreach( const QString &property, properties )
     {
         QStringList pair = property.split( ':' );
         if( pair.count() != 2 )

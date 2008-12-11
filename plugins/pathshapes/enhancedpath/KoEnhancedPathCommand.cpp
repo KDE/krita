@@ -63,7 +63,7 @@ bool KoEnhancedPathCommand::execute()
         break;
         // line from current point (x y) +
         case 'L':
-            foreach( QPointF point, points )
+            foreach( const QPointF &point, points )
                 m_parent->lineTo( m_parent->viewboxToShape( point ) );
         break;
         // cubic bezier curve from current point (x1 y1 x2 y2 x y) +

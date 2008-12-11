@@ -29,7 +29,7 @@ class KoPathShape;
 class DetachTextFromPathCommand : public QUndoCommand
 {
 public:
-    DetachTextFromPathCommand( ArtisticTextShape * textShape, QUndoCommand * parent = 0 );
+    explicit DetachTextFromPathCommand( ArtisticTextShape * textShape, QUndoCommand * parent = 0 );
     /// reimplemented from QUndoCommand
     virtual void redo();
     /// reimplemented from QUndoCommand

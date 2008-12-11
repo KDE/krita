@@ -201,7 +201,9 @@ bool KoEnhancedPathCommand::execute()
         break;
         // quadratic bezier curve (x1 y1 x y)+
         case 'Q':
-            // TODO implement me
+            for( uint i = 0; i < pointsCount; i+=2 )
+                m_parent->curveTo( m_parent->viewboxToShape( points[i] ),
+                                   m_parent->viewboxToShape( points[i+1] ) );
         break;
         default:
         break;

@@ -26,6 +26,10 @@
 
 #include "DebugPigment.h"
 
+cmsHPROFILE KoLcmsDefaultTransformations::s_RGBProfile = 0;
+QMap< QString, QMap< KoLcmsColorProfileContainer*, KoLcmsDefaultTransformations* > > KoLcmsDefaultTransformations::s_transformations;
+
+
 // -- KoLcmsColorSpaceFactory --
 QList<KoColorConversionTransformationFactory*> KoLcmsColorSpaceFactory::colorConversionLinks() const
 {

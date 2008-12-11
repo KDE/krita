@@ -138,4 +138,9 @@ void KisMask::setY(qint32 y)
     m_d->selection->setY(y);
 }
 
+QRect KisMask::adjustedDirtyRect( const QRect& _rect ) const
+{
+  return _rect;
+}
+
 #include "kis_mask.moc"

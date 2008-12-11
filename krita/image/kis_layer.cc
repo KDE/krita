@@ -190,6 +190,26 @@ void KisLayer::setImage(KisImageSP image)
     }
 }
 
+void KisLayer::setDirty(const QRect & rect)
+{
+    QRect dr = rect;
+    QList<KisMaskSP> masks = effectMasks();
+    foreach( KisMaskSP mask, masks)
+    {
+        dr |= mask->adjustedDirtyRect( rect );
+    }
+    KisNode::setDirty( dr );
+}
+
+void KisLayer::setDirty(const QRegion & region)
+{ 
+    if (region.isEmpty()) return;
+
+    foreach(const QRect & rc, region.rects()) {
+        setDirty(rc);
+    }
+}
+
 KisSelectionMaskSP KisLayer::selectionMask() const
 {
     QList<KisNodeSP> masks = childNodes(QStringList("KisSelectionMask"), KoProperties());

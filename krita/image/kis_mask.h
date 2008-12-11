@@ -145,6 +145,7 @@ public:
      */
     void setY(qint32 y);
 
+    virtual QRect adjustedDirtyRect( const QRect& _rect ) const;
 private:
 
     struct Private;

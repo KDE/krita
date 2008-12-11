@@ -183,6 +183,10 @@ public:
 
 public:
 
+    using KisNode::setDirty;
+    virtual void setDirty(const QRect & rect);
+
+    virtual void setDirty(const QRegion & region);
     /**
      * Returns true if there are any effect masks present
      */

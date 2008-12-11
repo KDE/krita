@@ -63,6 +63,7 @@ public:
     using KisNode::setDirty;
     virtual void setDirty();
 
+    virtual QRect adjustedDirtyRect( const QRect& _rect ) const;
 
 private:
 

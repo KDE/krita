@@ -118,4 +118,10 @@ bool KisFilterMask::accept(KisNodeVisitor &v)
     return v.visit(this);
 }
 
+QRect KisFilterMask::adjustedDirtyRect( const QRect& _rect ) const
+{
+    KisFilterSP filter = KisFilterRegistry::instance()->value(m_d->filterConfig->name());
+    return filter->changedRect( _rect, m_d->filterConfig );
+}
+
 #include "kis_filter_mask.moc"

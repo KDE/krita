@@ -223,10 +223,9 @@ KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageSP img, Ki
 
     if ( !node.isNull() ) {
         if ( node.isElement() ) {
-            if ( node.nodeName() == LAYERS || node.nodeName() == MASKS ) {
+            if ( node.nodeName().toUpper() == LAYERS.toUpper() || node.nodeName().toUpper() == MASKS.toUpper() ) {
                 for ( child = node.lastChild(); !child.isNull(); child = child.previousSibling() ) {
                     KisNode* node = loadNode( child.toElement(), img );
-
                     if ( !node ) {
                         warnFile << "Could not load node";
 #ifdef __GNUC__
@@ -275,33 +274,46 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP img)
     bool locked = element.attribute(LOCKED, "0") == "0" ? false : true;
 
     // Now find out the layer type and do specific handling
-    QString attr = element.attribute(NODE_TYPE);
+    QString nodeType;
+
+    if ( m_d->syntaxVersion == 1 ) {
+        nodeType = element.attribute("layertype");
+        if ( nodeType.isEmpty() ) {
+            nodeType = PAINT_LAYER;
+        }
+    }
+    else {
+        nodeType = element.attribute(NODE_TYPE);
+    }
+
+    Q_ASSERT( !nodeType.isEmpty() );
+    if ( nodeType.isEmpty() ) return 0;
+
+
     KisNode* node = 0;
 
-    if (attr.isNull())
+    if ( nodeType == PAINT_LAYER )
         node = loadPaintLayer(element, img, name, colorSpace, opacity);
-    else if (attr == PAINT_LAYER)
-        node = loadPaintLayer(element, img, name, colorSpace, opacity);
-    else if (attr == GROUP_LAYER)
+    else if ( nodeType == GROUP_LAYER )
         node = loadGroupLayer(element, img, name, colorSpace, opacity);
-    else if (attr == ADJUSTMENT_LAYER )
+    else if ( nodeType == ADJUSTMENT_LAYER )
         node = loadAdjustmentLayer(element, img, name, colorSpace, opacity);
-    else if (attr == SHAPE_LAYER )
+    else if ( nodeType == SHAPE_LAYER )
         node = loadShapeLayer(element, img, name, colorSpace, opacity);
-    else if ( attr == GENERATOR_LAYER )
+    else if ( nodeType == GENERATOR_LAYER )
         node = loadGeneratorLayer( element, img, name, colorSpace, opacity);
-    else if ( attr == CLONE_LAYER )
+    else if ( nodeType == CLONE_LAYER )
         node = loadCloneLayer( element, img, name, colorSpace, opacity);
-    else if ( attr == FILTER_MASK )
+    else if ( nodeType == FILTER_MASK )
         node = loadFilterMask( element );
-    else if ( attr == TRANSPARENCY_MASK )
+    else if ( nodeType == TRANSPARENCY_MASK )
         node = loadTransparencyMask( element );
-    else if ( attr == TRANSFORMATION_MASK )
+    else if ( nodeType == TRANSFORMATION_MASK )
         node = loadTransformationMask( element );
-    else if ( attr == SELECTION_MASK )
+    else if ( nodeType == SELECTION_MASK )
         node = loadSelectionMask( img, element );
     else
-        warnKrita << "Trying to load layer of unsupported type " << attr;
+        warnKrita << "Trying to load layer of unsupported type " << nodeType;
 
     // Loading the node went wrong. Return empty node and leave to
     // upstream to complain to the user
@@ -549,4 +561,3 @@ KisNode* KisKraLoader::loadSelectionMask(KisImageSP img, const KoXmlElement& ele
 
     return mask;
 }
-

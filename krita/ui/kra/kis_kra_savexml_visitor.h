@@ -47,6 +47,11 @@ public:
     bool visit(KisTransformationMask *mask);
     bool visit(KisSelectionMask *mask);
 
+    QMap<const KisNode*, QString> nodeFileNames()
+    {
+        return m_nodeFileNames;
+    }
+
 private:
 
     void saveLayer(QDomElement & el, const QString & layerType, const KisLayer * layer);
@@ -55,6 +60,7 @@ private:
 
     friend class KisKraSaveXmlVisitorTest;
 
+    QMap<const KisNode*,  QString> m_nodeFileNames;
     QDomDocument m_doc;
     QDomElement m_elem;
     quint32 &m_count;

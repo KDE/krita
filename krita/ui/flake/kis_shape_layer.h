@@ -100,9 +100,8 @@ public:
 
     KoShapeManager *shapeManager() const;
 
-    using KoShapeLayer::saveOdf;
-
-    bool saveOdf(KoStore * store) const;
+    bool saveLayer(KoStore * store) const;
+    bool loadLayer( KoStore* store, const QString& location );
 
 private:
 

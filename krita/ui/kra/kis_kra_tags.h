@@ -33,10 +33,10 @@ namespace KRA {
 
     // xml tags
     const QString SEPARATOR = "/";
-    const QString SHAPE_LAYER_PATH = "/shapelayers/layer";
+    const QString SHAPE_LAYER_PATH = "/shapelayers/";
     const QString EXIF_PATH = "/annotations/exif";
     const QString ICC_PATH = "/annotations/icc";
-    const QString LAYER_PATH = "/layers/layer";
+    const QString LAYER_PATH = "/layers/";
 
     const QString ADJUSTMENT_LAYER = "adjustmentlayer";
     const QString CHANNEL_FLAGS = "channelflags";
@@ -46,11 +46,13 @@ namespace KRA {
     const QString COLORSPACE_NAME = "colorspacename";
     const QString COMPOSITE_OP = "compositeop";
     const QString DESCRIPTION = "description";
+
     const QString DOT_FILTERCONFIG = ".filterconfig";
     const QString DOT_ICC = ".icc";
     const QString DOT_PIXEL_SELECTION = ".pixelselection";
     const QString DOT_SHAPE_SELECTION = ".shapeselection";
     const QString DOT_SHAPE_LAYER = ".shapelayer";
+
     const QString FILE_NAME = "filename";
     const QString FILTER_MASK = "filtermask";
     const QString FILTER_NAME = "filtername";
@@ -63,7 +65,7 @@ namespace KRA {
     const QString HEIGHT = "height";
     const QString ICC = "icc";
     const QString LAYER = "layer";
-    const QString LAYERS = "LAYERS";
+    const QString LAYERS = "layers";
     const QString NODE_TYPE = "nodetype";
     const QString LOCKED = "locked";
     const QString MASK = "mask";

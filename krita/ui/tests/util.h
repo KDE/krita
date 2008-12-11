@@ -83,9 +83,10 @@ KisSelectionSP createVectorSelection( KisPaintDeviceSP paintDevice, KisImageSP i
 
 KisDoc2* createCompleteDocument()
 {
-    KisImageSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test");
+    KisImageSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip");
     KisDoc2* doc = new KisDoc2;
     doc->setCurrentImage( image );
+    doc->documentInfo()->setAboutInfo("title", image->name());
 
     KisGroupLayerSP group1 = new KisGroupLayer( image, "group1", 50 );
 
@@ -163,22 +164,27 @@ KisDoc2* createCompleteDocument()
 
     KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask();
     transparencyMask1->setName( "transparencyMask1" );
+    transparencyMask1->setSelection( createPixelSelection( paintLayer1->paintDevice() ) );
     image->addNode( transparencyMask1, group1 );
 
     KisTransparencyMaskSP transparencyMask2 = new KisTransparencyMask();
     transparencyMask2->setName( "transparencyMask2" );
+    transparencyMask2->setSelection( createPixelSelection( paintLayer1->paintDevice() ) );
     image->addNode( transparencyMask2, group2 );
 
     KisTransformationMaskSP transformationMask1 = new KisTransformationMask();
     transformationMask1->setName( "transformationMask1" );
+    transformationMask1->setSelection( createPixelSelection( paintLayer1->paintDevice() ) );
     image->addNode( transformationMask1, cloneLayer1 );
 
     KisTransformationMaskSP transformationMask2 = new KisTransformationMask();
     transformationMask2->setName( "transformationMask2" );
+    transformationMask2->setSelection( createPixelSelection( paintLayer1->paintDevice() ) );
     image->addNode( transformationMask2, adjustmentLayer2 );
 
     KisSelectionMaskSP selectionMask1 = new KisSelectionMask(image);
     selectionMask1->setName( "selectionMask1" );
+    selectionMask1->setSelection( createPixelSelection( paintLayer1->paintDevice() ) );
     image->addNode( selectionMask1, paintLayer1 );
 
     KisSelectionMaskSP selectionMask2 = new KisSelectionMask(image);

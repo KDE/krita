@@ -46,6 +46,7 @@ using namespace KRA;
 class KisKraSaver::Private {
 public:
     KisDoc2* doc;
+    QMap<const KisNode*, QString> nodeFileNames;
 };
 
 KisKraSaver::KisKraSaver( KisDoc2* document )
@@ -80,7 +81,7 @@ QDomElement KisKraSaver::saveXML( QDomDocument& doc,  KisImageSP img )
     KisSaveXmlVisitor visitor(doc, image, count, true);
 
     img->rootLayer()->accept(visitor);
-
+    m_d->nodeFileNames = visitor.nodeFileNames();
     return image;
 }
 
@@ -90,7 +91,8 @@ bool KisKraSaver::saveBinaryData( KoStore* store, KisImageSP img, const QString 
 
     // Save the layers data
     quint32 count = 0;
-    KisKraSaveVisitor visitor(img, store, count, m_d->doc->documentInfo()->aboutInfo("title"));
+
+    KisKraSaveVisitor visitor(img, store, count, m_d->doc->documentInfo()->aboutInfo("title"), m_d->nodeFileNames);
 
     if (external)
         visitor.setExternalUri(uri);

@@ -291,6 +291,8 @@ bool KisDoc2::completeSaving(KoStore *store)
 
     m_d->kraSaver->saveBinaryData( store, m_d->image, url().url(), isStoredExtern() );
 
+    delete m_d->kraSaver;
+
     IODone();
     return true;
 }

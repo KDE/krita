@@ -25,6 +25,7 @@
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 
+#include <kis_debug.h>
 #include <filter/kis_filter_configuration.h>
 #include <generator/kis_generator_layer.h>
 #include <kis_adjustment_layer.h>
@@ -99,7 +100,15 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
     layerElement.appendChild(elem);
     KisSaveXmlVisitor visitor(m_doc, elem, m_count);
     m_count++;
-    return visitor.visitAllInverse(layer);
+    bool success = visitor.visitAllInverse(layer);
+
+    QMapIterator<const KisNode*, QString> i(visitor.nodeFileNames());
+    while (i.hasNext()) {
+        i.next();
+        m_nodeFileNames[i.key()] = i.value();
+    }
+
+    return success;
 }
 
 bool KisSaveXmlVisitor::visit(KisAdjustmentLayer* layer)
@@ -215,6 +224,12 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     el.setAttribute(X, layer->x());
     el.setAttribute(Y, layer->y());
 
+    m_nodeFileNames[layer] = LAYER + QString::number( m_count );
+
+    dbgFile << "Saved layer "
+            << layer->name()
+            << " of type " << layerType
+            << " with filename " << LAYER + QString::number( m_count );
 }
 
 void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, const KisMask * mask)
@@ -226,6 +241,13 @@ void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, con
     el.setAttribute(FILE_NAME, MASK + QString::number( m_count) );
     el.setAttribute(X, mask->x());
     el.setAttribute(Y, mask->y());
+
+    m_nodeFileNames[mask] = MASK + QString::number( m_count );
+
+    dbgFile << "Saved mask "
+            << mask->name()
+            << " of type " << maskType
+            << " with filename " << MASK + QString::number( m_count );
 }
 
 bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
@@ -235,7 +257,15 @@ bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
         Q_ASSERT( !layerElement.isNull() );
         layerElement.appendChild(elem);
         KisSaveXmlVisitor visitor(m_doc, elem, m_count);
-        return visitor.visitAllInverse(node);
+        bool success =  visitor.visitAllInverse(node);
+
+        QMapIterator<const KisNode*, QString> i(visitor.nodeFileNames());
+        while (i.hasNext()) {
+            i.next();
+            m_nodeFileNames[i.key()] = i.value();
+        }
+
+        return success;
     }
     return true;
 }

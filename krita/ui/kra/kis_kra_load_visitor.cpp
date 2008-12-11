@@ -19,7 +19,7 @@
 
 #include "kra/kis_kra_load_visitor.h"
 #include "kis_kra_tags.h"
-
+#include "flake/kis_shape_layer.h"
 
 #include <QRect>
 
@@ -42,6 +42,11 @@
 #include <kis_datamanager.h>
 #include <generator/kis_generator_layer.h>
 #include <kis_pixel_selection.h>
+#include <kis_clone_layer.h>
+#include <kis_filter_mask.h>
+#include <kis_transparency_mask.h>
+#include <kis_transformation_mask.h>
+#include <kis_selection_mask.h>
 
 using namespace KRA;
 
@@ -66,9 +71,13 @@ void KisKraLoadVisitor::setExternalUri(const QString &uri)
     m_uri = uri;
 }
 
-bool KisKraLoadVisitor::visit(KisExternalLayer *)
+bool KisKraLoadVisitor::visit(KisExternalLayer * layer)
 {
-    return true;
+    bool result = false;
+    if ( KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>( layer ) ) {
+        result =  shapeLayer->loadLayer( m_store, getLocation( layer, DOT_SHAPE_LAYER ) );
+    }
+    return result;
 }
 
 bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
@@ -147,69 +156,17 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
 
 bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
 {
-    QString location = m_external ? QString::null : m_uri;
-    location += m_name + "/layers/" + m_layerFilenames[layer];
-
-    // Layer data
-    if (m_store->open(location)) {
-        if (!layer->paintDevice()->read(m_store)) {
-            layer->paintDevice()->disconnect();
-            m_store->close();
-            //IODone();
-            return false;
-        }
-
-        m_store->close();
-    } else {
-        kError() << "No image data: that's an error!";
+    if ( !loadPaintDevice( layer->paintDevice(), getLocation( layer ) ) ) {
         return false;
     }
 
-    // icc profile
-    location = m_external ? QString::null : m_uri;
-    location += m_name + "/layers/" + m_layerFilenames[layer] + ".icc";
-
-    if (m_store->hasFile(location)) {
-        QByteArray data;
-        m_store->open(location);
-        data = m_store->read(m_store->size());
-        m_store->close();
-        // Create a colorspace with the embedded profile
-        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace(layer->paintDevice()->colorSpace()->id(), new KoIccColorProfile(data));
-        // replace the old colorspace
-        layer->paintDevice()->setDataManager(layer->paintDevice()->dataManager(), cs);
-
+    if ( !loadProfile( layer->paintDevice(), getLocation( layer, DOT_ICC ) ) ) {
+        return false;
     }
 
-    location = m_external ? QString::null : m_uri;
-    location += m_name + "/layers/" + m_layerFilenames[layer] + ".selection";
-    if (m_store->hasFile(location)) {
-        m_store->open(location);
-        KisSelectionSP selection = KisSelectionSP(new KisSelection());
-        if (!selection->read(m_store)) {
-            selection->disconnect();
-            m_store->close();
-        } else {
-            layer->setSelection(selection);
-        }
-        m_store->close();
+    layer->setSelection( loadSelection( getLocation( layer ) ) );
 
-    }
-
-    // filter configuration
-    location = m_external ? QString::null : m_uri;
-    location += m_name + "/layers/" + m_layerFilenames[layer] + ".generatorconfig";
-
-    if (m_store->hasFile(location) && layer->generator()) {
-        QByteArray data;
-        m_store->open(location);
-        data = m_store->read(m_store->size());
-        m_store->close();
-        if (!data.isEmpty()) {
-            KisFilterConfiguration * kfc = layer->generator();
-            kfc->fromLegacyXML(QString(data));
-        }
-    }
+    loadFilterConfiguration( layer->generator(), getLocation( layer, DOT_FILTERCONFIG ) );
 
     layer->setDirty(m_img->bounds());
     return true;
@@ -218,26 +175,42 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
 
 bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
 {
-    return true;
+    // Clone layers have no data except for their masks
+    bool result = visitAll(layer);
+
+    layer->setDirty(m_img->bounds());
+    return result;
 }
 
 bool KisKraLoadVisitor::visit(KisFilterMask *mask)
 {
+    mask->setSelection( loadSelection( getLocation( mask ) ) );
+    loadFilterConfiguration( mask->filter(), getLocation( mask, DOT_FILTERCONFIG ) );
+
+    mask->setDirty(m_img->bounds());
     return true;
 }
 
 bool KisKraLoadVisitor::visit(KisTransparencyMask *mask)
 {
+    mask->setSelection( loadSelection( getLocation( mask ) ) );
+    mask->setDirty(m_img->bounds());
+
     return true;
 }
 
 bool KisKraLoadVisitor::visit(KisTransformationMask *mask)
 {
+
+    mask->setSelection( loadSelection( getLocation( mask ) ) );
+    mask->setDirty(m_img->bounds());
     return true;
 }
 
 bool KisKraLoadVisitor::visit(KisSelectionMask *mask)
 {
+    mask->setSelection( loadSelection( getLocation( mask ) ) );
+    mask->setDirty(m_img->bounds());
     return true;
 }
 
@@ -246,14 +219,12 @@ QString KisKraLoadVisitor::getLocation( KisNode* node, const QString& suffix )
     QString location = m_external ? QString::null : m_uri;
     location += m_name + "/" + LAYERS + "/" + m_layerFilenames[node] + suffix;
 
-
     return location;
 }
 
 bool KisKraLoadVisitor::loadPaintDevice( KisPaintDeviceSP device, const QString& location )
 {
     //connect(*device, SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
-
     // Layer data
     if (m_store->open(location)) {
         if (!device->read(m_store)) {
@@ -265,9 +236,10 @@ bool KisKraLoadVisitor::loadPaintDevice( KisPaintDeviceSP device, const QString&
 
         m_store->close();
     } else {
-        kError() << "No image data: that's an error!";
+        kError() << "No image data: that's an error! " << device << ", " << location;
         return false;
     }
+    return true;
 }
 
 

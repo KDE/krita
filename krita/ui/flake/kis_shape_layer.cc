@@ -28,6 +28,7 @@
 #include <QIcon>
 #include <QString>
 #include <QList>
+#include <QDebug>
 
 #include <ktemporaryfile.h>
 #include <kicon.h>
@@ -49,6 +50,8 @@
 #include <KoStoreDevice.h>
 #include <KoViewConverter.h>
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
+#include <KoOdfReadStore.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -176,7 +179,7 @@ KoShapeManager *KisShapeLayer::shapeManager() const
     return m_d->canvas->shapeManager();
 }
 
-bool KisShapeLayer::saveOdf(KoStore * store) const
+bool KisShapeLayer::saveLayer(KoStore * store) const
 {
 
     QList<KoShape*> shapes = iterator();
@@ -269,6 +272,15 @@ bool KisShapeLayer::saveOdf(KoStore * store) const
 
     return true;
 }
+
+bool KisShapeLayer::loadLayer( KoStore* store, const QString& location )
+{
+#ifdef __GNUC__
+#warning "KisShapeLayer::loadLayer: implement loading of odf subdocument"
+#endif
+
+}
+
 
 KisPaintDeviceSP KisShapeLayer::paintDevice() const
 {

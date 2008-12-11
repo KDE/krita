@@ -196,6 +196,7 @@ void KisMaskManager::createTransparencyMask(KisNodeSP parent, KisNodeSP above)
     mask->setName(i18n("Transparency Mask"));     // XXX:Auto-increment a number here, like with layers
     mask->setActive(true);
     m_view->image()->addNode(mask, parent, above);
+    mask->setDirty();
     activateMask(mask);
 }
 

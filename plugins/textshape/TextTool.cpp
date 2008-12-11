@@ -1127,7 +1127,8 @@ void TextTool::deactivate()
 {
     m_caretTimer.stop();
     m_caretTimerState = false;
-    repaintCaret();
+    if (m_textShapeData) // then we got disabled without ever having done anything.
+        repaintCaret();
     m_textShape = 0;
     if (m_textShapeData) {
         TextSelection selection;

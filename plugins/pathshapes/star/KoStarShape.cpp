@@ -171,7 +171,7 @@ void KoStarShape::updatePath( const QSizeF &size )
     Q_UNUSED(size);
     qreal radianStep = M_PI / static_cast<qreal>(m_cornerCount);
 
-    createPoints( 2*m_cornerCount );
+    createPoints( m_convex ? m_cornerCount : 2*m_cornerCount );
 
     KoSubpath &points = *m_subpaths[0];
 

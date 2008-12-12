@@ -669,7 +669,9 @@ void TextTool::copy() const
 void TextTool::deleteSelection()
 {
     if (!m_selectionHandler.deleteInlineObjects(false) || m_caret.hasSelection()) {
+        startMacro(i18n("Delete"));
         m_caret.deleteChar();
+        stopMacro();
     }
     editingPluginEvents();
 }
@@ -807,8 +809,11 @@ void TextTool::keyPressEvent(QKeyEvent *event)
                 m_caret.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
             // if the cursor position (no selection) has inline object, the character + inline object
             // is deleted by the InlineTextObjectManager
-            if (!m_selectionHandler.deleteInlineObjects(true) || m_caret.hasSelection())
+            if (!m_selectionHandler.deleteInlineObjects(true) || m_caret.hasSelection()) {
+                startMacro(i18n("Delete"));
                 m_caret.deletePreviousChar();
+                stopMacro();
+                }
             editingPluginEvents();
         }
         ensureCursorVisible();
@@ -824,8 +829,11 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             m_caret.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
         // the event only gets through when the Del is not used in the app
         // if the app forwards Del then deleteSelection is used
-        if (!m_selectionHandler.deleteInlineObjects(false) || m_caret.hasSelection())
+        if (!m_selectionHandler.deleteInlineObjects(false) || m_caret.hasSelection()) {
+            startMacro(i18n("Delete"));
             m_caret.deleteChar();
+            stopMacro();
+            }
         editingPluginEvents();
     } else if ((event->key() == Qt::Key_Left) && (event->modifiers() | Qt::ShiftModifier) == Qt::ShiftModifier)
         moveOperation = QTextCursor::Left;

@@ -74,8 +74,13 @@ void KisKraLoadVisitor::setExternalUri(const QString &uri)
 bool KisKraLoadVisitor::visit(KisExternalLayer * layer)
 {
     bool result = false;
+
     if ( KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>( layer ) ) {
-        result =  shapeLayer->loadLayer( m_store, getLocation( layer, DOT_SHAPE_LAYER ) );
+        m_store->pushDirectory();
+        m_store->enterDirectory( getLocation( layer, DOT_SHAPE_LAYER )) ;
+        result =  shapeLayer->loadLayer( m_store );
+        m_store->popDirectory();
+
     }
     return result;
 }

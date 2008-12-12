@@ -100,8 +100,8 @@ public:
 
     KoShapeManager *shapeManager() const;
 
-    bool saveLayer(KoStore * store) const;
-    bool loadLayer( KoStore* store, const QString& location );
+    bool saveLayer( KoStore * store ) const;
+    bool loadLayer( KoStore* store );
 
 private:
 

@@ -34,9 +34,13 @@
 #include <kicon.h>
 
 #include <KoCompositeOp.h>
+#include <KoDataCenter.h>
 #include <KoDocument.h>
 #include <KoEmbeddedDocumentSaver.h>
+#include <KoGenStyle.h>
+#include <KoImageCollection.h>
 #include <KoOdfLoadingContext.h>
+#include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfWriteStore.h>
 #include <KoPageLayout.h>
@@ -49,9 +53,9 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoViewConverter.h>
-#include <KoXmlWriter.h>
+#include <KoXmlNS.h>
 #include <KoXmlReader.h>
-#include <KoOdfReadStore.h>
+#include <KoXmlWriter.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -273,11 +277,122 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     return true;
 }
 
-bool KisShapeLayer::loadLayer( KoStore* store, const QString& location )
+bool KisShapeLayer::loadLayer( KoStore* store )
 {
-#ifdef __GNUC__
-#warning "KisShapeLayer::loadLayer: implement loading of odf subdocument"
+    KoOdfReadStore odfStore( store );
+    QString errorMessage;
+
+    odfStore.loadAndParse( errorMessage );
+
+    if ( !errorMessage.isEmpty() ) {
+        qDebug() << errorMessage;
+        return false;
+    }
+
+    KoXmlElement contents = odfStore.contentDoc().documentElement();
+    KoXmlElement body( KoXml::namedItemNS( contents, KoXmlNS::office, "body" ) );
+
+    if( body.isNull() )
+    {
+        qDebug() <<"No office:body found!";
+        //setErrorMessage( i18n( "Invalid OASIS document. No office:body tag found." ) );
+        return false;
+    }
+
+    body = KoXml::namedItemNS( body, KoXmlNS::office, "drawing");
+    if(body.isNull())
+    {
+        qDebug() <<"No office:drawing found!";
+        //setErrorMessage( i18n( "Invalid OASIS document. No office:drawing tag found." ) );
+        return false;
+    }
+
+    KoXmlElement page( KoXml::namedItemNS( body, KoXmlNS::draw, "page" ) );
+    if(page.isNull())
+    {
+        qDebug() <<"No office:drawing found!";
+        //setErrorMessage( i18n( "Invalid OASIS document. No draw:page tag found." ) );
+        return false;
+    }
+#if 0
+
+    KoXmlElement * master = 0;
+    if( odfStore.styles().masterPages().contains( "Standard" ) )
+        master = odfStore.styles().masterPages().value( "Standard" );
+    else if( odfStore.styles().masterPages().contains( "Default" ) )
+        master = odfStore.styles().masterPages().value( "Default" );
+    else if( ! odfStore.styles().masterPages().empty() )
+        master = odfStore.styles().masterPages().begin().value();
+
+    if( master )
+    {
+        const KoXmlElement *style = odfStore.styles().findStyle(
+            master->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) );
+        m_pageLayout.loadOasis( *style );
+        setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
+    }
+    else
+    {
+        kWarning() << "No master page found!";
+        return false;
+    }
+
+    KoOdfLoadingContext context( odfStore.styles(), odfStore.store() );
+    KoShapeLoadingContext shapeContext( context, dataCenterMap() );
+
+    KoXmlElement layerElement;
+    forEachElement( layerElement, context.odfLoadingContext().stylesReader().layerSet() )
+    {
+        KoShapeLayer * l = new KoShapeLayer();
+        if( l->loadOdf( layerElement, context ) )
+            insertLayer( l );
+    }
+
+    KoShapeLayer * defaultLayer = 0;
+
+    // check if we have to insert a default layer
+    if( d->layers.count() == 0 )
+        defaultLayer = new KoShapeLayer();
+
+    KoXmlElement child;
+    forEachElement( child, element )
+    {
+        kDebug(38000) <<"loading shape" << child.localName();
+
+        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, context );
+        if( shape )
+            d->objects.append( shape );
+    }
+
+    // add all toplevel shapes to the default layer
+    foreach( KoShape * shape, d->objects )
+    {
+        if( ! shape->parent() )
+        {
+            if( ! defaultLayer )
+                defaultLayer = new KoShapeLayer();
+
+            defaultLayer->addChild( shape );
+        }
+    }
+
+    if( defaultLayer )
+        insertLayer( defaultLayer );
+
+
+    if( d->document.pageSize().isEmpty() )
+    {
+        QSizeF pageSize = d->document.contentRect().united( QRectF(0,0,1,1) ).size();
+        setPageSize( pageSize );
+    }
+
+    loadOasisSettings( odfStore.settingsDoc() );
+
+    return true;
+
+
 #endif
+
 
 }
 

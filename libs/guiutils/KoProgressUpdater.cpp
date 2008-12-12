@@ -150,7 +150,7 @@ KoUpdater KoProgressUpdater::startSubtask(int weight) {
 
 void KoProgressUpdater::scheduleUpdate() {
     d->action->execute();
-    QApplication::processEvents(); // This is needed otherwise the action doesn't emit its signal (sick) TODO: it would probably better to do without the signal emiting things of KoAction and to connect directly threadweaver stuff to the updates functions
+    QApplication::processEvents(QEventLoop::ExcludeUserInputEvents); // This is needed otherwise the action doesn't emit its signal (sick) TODO: it would probably better to do without the signal emiting things of KoAction and to connect directly threadweaver stuff to the updates functions
 }
 
 

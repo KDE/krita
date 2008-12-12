@@ -130,7 +130,7 @@ public:
             return true;
         }
 
-        QRect rc = layer->paintDevice()->extent() & m_rc;
+        QRect rc = layer->extent() & m_rc;
 
         KisPainter gc(m_projection);
         gc.setChannelFlags(layer->channelFlags());

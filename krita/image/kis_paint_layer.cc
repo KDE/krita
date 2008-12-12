@@ -234,7 +234,14 @@ void KisPaintLayer::setY(qint32 y)
 QRect KisPaintLayer::extent() const
 {
     if (m_d->paintDevice)
-        return m_d->paintDevice->extent();
+    {
+        QRect r = m_d->paintDevice->extent();
+        if( temporaryTarget() )
+        {
+          r |= temporaryTarget()->extent();
+        }
+        return r;
+    }
     else
         return QRect();
 }
@@ -242,7 +249,14 @@ QRect KisPaintLayer::extent() const
 QRect KisPaintLayer::exactBounds() const
 {
     if (m_d->paintDevice)
-        return m_d->paintDevice->exactBounds();
+    {
+        QRect r = m_d->paintDevice->exactBounds();
+        if( temporaryTarget() )
+        {
+          r |= temporaryTarget()->exactBounds();
+        }
+        return r;
+    }
     else
         return QRect();
 }

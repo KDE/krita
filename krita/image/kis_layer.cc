@@ -333,6 +333,11 @@ KisPaintDeviceSP KisIndirectPaintingSupport::temporaryTarget()
     return d->temporaryTarget;
 }
 
+const KisPaintDeviceSP KisIndirectPaintingSupport::temporaryTarget() const
+{
+    return d->temporaryTarget;
+}
+
 const KoCompositeOp* KisIndirectPaintingSupport::temporaryCompositeOp() const
 {
     return d->compositeOp;

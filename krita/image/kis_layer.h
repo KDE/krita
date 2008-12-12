@@ -251,6 +251,7 @@ public:
     void setTemporaryCompositeOp(const KoCompositeOp* c);
     void setTemporaryOpacity(quint8 o);
     KisPaintDeviceSP temporaryTarget();
+    const KisPaintDeviceSP temporaryTarget() const;
     const KoCompositeOp* temporaryCompositeOp() const;
     quint8 temporaryOpacity() const;
     bool hasTemporaryTarget() const;

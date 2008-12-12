@@ -304,13 +304,20 @@ void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int positi
     }
 }
 
-void KoTextDocumentLayout::scheduleLayout()
+void KoTextDocumentLayout::scheduleLayoutWithoutInterrupt()
 {
     if (d->scheduled)
         return;
-    interruptLayout();
     d->scheduled = true;
     QTimer::singleShot(0, this, SLOT(relayoutPrivate()));
+}
+
+void KoTextDocumentLayout::scheduleLayout()
+{
+    if (! d->scheduled) {
+        scheduleLayoutWithoutInterrupt();
+        interruptLayout();
+    }
 }
 
 void KoTextDocumentLayout::relayout()

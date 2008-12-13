@@ -147,7 +147,10 @@ void KisPaintLayer::updateProjection(const QRect & rc)
                    temporaryOpacity(), rc.left(), rc.top(), rc.width(), rc.height());
     }
 
-    applyEffectMasks(m_d->projection, rc);
+    if( visible() )
+    {
+        applyEffectMasks(m_d->projection, rc);
+    }
 }
 
 

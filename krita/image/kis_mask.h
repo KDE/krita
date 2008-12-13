@@ -81,22 +81,6 @@ public:
 
     virtual ~KisMask();
 
-    virtual KoDocumentSectionModel::PropertyList sectionModelProperties() const;
-
-    virtual void setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties);
-
-    /**
-     * @return true if the mask is active, i.e. should be applied on
-     * its parent layer.
-     */
-    bool active() const;
-
-    /**
-     * set the active status of this mask. Inactive layers can be
-     * edited but are not applied to their parent layer.
-     */
-    void setActive(bool active);
-
     /**
      * Return the selection associated with this mask. A selection can
      * contain both a paint device and shapes.

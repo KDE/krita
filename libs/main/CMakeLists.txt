@@ -3,12 +3,12 @@
 add_subdirectory( tests )
 add_subdirectory( threadAction/tests )
 
-include_directories( ${KOODF_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/)
+include_directories( ${KOODF_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/ ${KDEPIMLIBS_INCLUDE_DIR})
 
 ########### next target ###############
 
 if( QCA2_FOUND )
-add_definitions( -DQCA2 )
+   add_definitions( -DQCA2 )
 endif( QCA2_FOUND )
 
 set(komain_LIB_SRCS
@@ -94,9 +94,10 @@ target_link_libraries(komain koodf
     ${KDE4_KDE3SUPPORT_LIBS}
 )
 
+target_link_libraries(komain LINK_INTERFACE_LIBRARIES koodf ${QT_QTGUI_LIBRARY})
+
 set_target_properties(komain PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
-    ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "koodf;${QT_QTGUI_LIBRARY}"
 )
 install(TARGETS komain ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

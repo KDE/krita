@@ -32,8 +32,7 @@ class KisWeakSharedPtr;
 /**
  * KisSharedPtr is a shared pointer similar to KSharedPtr and
  * boost::shared_ptr. The difference with KSharedPtr is that our
- * constructor is not explicit. The difference with boost is still to
- * be determined.
+ * constructor is not explicit.
  *
  * A shared pointer is a wrapper around a real pointer. The shared
  * pointer keeps a reference count, and when the refernece count drops
@@ -44,21 +43,26 @@ class KisWeakSharedPtr;
  * http://bugs.kde.org/show_bug.cgi?id=52261 as well as
  * http://www.boost.org/libs/smart_ptr/shared_ptr.htm.
  *
- * Advantage of KisSharedPtr over boost pointer ?
- * The difference with boost share pointer is that in boost::shared_ptr,
- * the counter is kept inside the smart pointer, meaning that you should
- * never never remove the pointer from its smart pointer object, because if
- * you do that, and somewhere in the code, the pointer is put back in a smart
- * pointer, then you have two counters, and when one reach zero, then the object
- * gets deleted while some other code thinks the pointer is still valid.
+ * Advantage of KisSharedPtr over boost pointer or QSharedPointer?
  *
- * Inconvenient of KisSharedPtr over boost pointer ?
+ * The difference with boost share pointer is that in
+ * boost::shared_ptr, the counter is kept inside the smart pointer,
+ * meaning that you should never never remove the pointer from its
+ * smart pointer object, because if you do that, and somewhere in the
+ * code, the pointer is put back in a smart pointer, then you have two
+ * counters, and when one reach zero, then the object gets deleted
+ * while some other code thinks the pointer is still valid.
+ *
+ * Disadvantage of KisSharedPtr compared to boost pointer?
+ *
  * KisSharedPtr requires the class to inherits KisShared.
  *
  * Difference with QSharedDataPointer
- * QSharedDataPointer and KisSharedPtr are very similar, but QSharedDataPointer
- * has an explicit constructor which makes it more painfull to use in some
- * construct. And QSharedDataPointer doesn't offer a weak pointer.
+ *
+ * QSharedDataPointer and KisSharedPtr are very similar, but
+ * QSharedDataPointer has an explicit constructor which makes it more
+ * painful to use in some constructions. And QSharedDataPointer
+ * doesn't offer a weak pointer.
  */
 template<class T>
 class KisSharedPtr
@@ -92,7 +96,7 @@ public:
     }
 
     /**
-     * Unreferences the object that this pointer points to. If it was
+     * Dereferences the object that this pointer points to. If it was
      * the last reference, the object will be deleted.
      */
     inline ~KisSharedPtr() {

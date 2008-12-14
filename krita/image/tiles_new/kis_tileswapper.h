@@ -18,7 +18,7 @@
 #ifndef KIS_TILESWAPPER_H_
 #define KIS_TILESWAPPER_H_
 
-#include <KTemporaryFile>
+#include <QTemporaryFile>
 #include <QWaitCondition>
 #include <QLinkedList>
 #include <QObject>
@@ -33,17 +33,26 @@
 #include "kis_sharedtiledata.h"
 
 /**
- * An idle swapper. This class is responsible for the management of the files that the tiles of individual KisTileStoreMemories are swapped to.
+ * An idle swapper. This class is responsible for the management of
+ * the files that the tiles of individual KisTileStoreMemories are
+ * swapped to.
  *
- * How the tiledata is mapped to the files is an implementational detail of this class, with some part of these details being shared with the TileStoreMemory.
- * In the current case, we map each Tile of a certain tileSize to a file. When such a file is full, we add a new one for the tileSize.
- * This is a break with Krita 1.5+ which shared swapfiles for all tilesizes -> there was the possibility of swapfile fragmentation.
+ * How the tiledata is mapped to the files is an implementational
+ * detail of this class, with some part of these details being shared
+ * with the TileStoreMemory. In the current case, we map each Tile of
+ * a certain tileSize to a file. When such a file is full, we add a
+ * new one for the tileSize. This is a break with Krita 1.5+ which
+ * shared swapfiles for all tilesizes -> there was the possibility of
+ * swapfile fragmentation.
  *
- * The 'one swapfile per paintdev' sounds a bit risky, since having a swapfile per paintdev -> lots of swapfiles -> problems with Qt possibly (Qt uses
- * select(2) for all kinds of stuff, which by default will break if >= 1024 file descriptors are in use.
+ * The 'one swapfile per paintdev' sounds a bit risky, since having a
+ * swapfile per paintdev -> lots of swapfiles -> problems with Qt
+ * possibly (Qt uses select(2) for all kinds of stuff, which by
+ * default will break if >= 1024 file descriptors are in use.
  *
- * TODO: add something to a generic paintdevice that it should be considered 'volatile', i.e. will be used so shortly that swapping or compressing it is useless
- * (think paintbrush dabs).
+ * TODO: add something to a generic paintdevice that it should be
+ * considered 'volatile', i.e. will be used so shortly that swapping
+ * or compressing it is useless (think paintbrush dabs).
  */
 class KRITAIMAGE_EXPORT KisTileSwapper : public QThread
 {

@@ -46,7 +46,9 @@
 KisTileSwapper* KisTileSwapper::m_singleton = 0;
 static K3StaticDeleter<KisTileSwapper> staticDeleter;
 
-// If not defined, it does not sleep, and keeps swapping or so (### Only when swap pressure would be too high) ### Implement this code path
+// If not defined, it does not sleep, and keeps swapping or so (###
+// Only when swap pressure would be too high) ### Implement this code
+// path
 #define SWAPMECHANICS_CHECK_AGE
 
 /*
@@ -60,8 +62,9 @@ static QMutex tempMutex;
 */
 
 /*
-    If a tile is in the swaplist, also add one to the 'locked in memory', so that we don't delete it (this hopefully
-    avoids a deadlock)
+    If a tile is in the swaplist, also add one to the 'locked in
+    memory', so that we don't delete it (this hopefully avoids a
+    deadlock)
 */
 
 KisTileSwapper::KisTileSwapper()
@@ -121,18 +124,25 @@ void KisTileSwapper::run()
     forever {
         if (m_stopThread) // No locking, since it only changes from false to true
             return;
-        // AGGRESSIVE SWAPPER! Loops until everything is swapped, and wakes as soon as something is swappable! (Hopefully, there's the chance of a signal happening
-        // between queue unlock and waitlock ###)
-        // ### Less aggressive swapper would be problematic atm: If we signal during the swapping, it is lost!
+        // AGGRESSIVE SWAPPER! Loops until everything is swapped, and
+        // wakes as soon as something is swappable! (Hopefully,
+        // there's the chance of a signal happening between queue
+        // unlock and waitlock ###) ### Less aggressive swapper would
+        // be problematic atm: If we signal during the swapping, it is
+        // lost!
 
         // There are new items in the workqueue, hopefully
         m_swapQueueLock.lock();
         KisSharedTileData* tileData = 0;
         if (!m_swapList.empty()) {
             tileData = m_swapList.front();
-            m_swapQueueLock.unlock(); // First unlock list, then lock tiledata: no deadlock (is legal, since we are locked in mem)
+            m_swapQueueLock.unlock(); // First unlock list, then lock
+                                      // tiledata: no deadlock (is
+                                      // legal, since we are locked in
+                                      // mem)
 
-            tileData->lock.lock(); // No mutex locker here: we'd otherwise SLEEP in it!
+            tileData->lock.lock(); // No mutex locker here: we'd
+                                   // otherwise SLEEP in it!
 
             KisTileStoreMemory::SharedDataMemoryInfo* memInfo
             = dynamic_cast<KisTileStoreMemory::SharedDataMemoryInfo*>(tileData->storeData);
@@ -149,16 +159,22 @@ void KisTileSwapper::run()
             }
 
             /*
-              The front element is the oldest element. If the oldest element is too young, we have to go to sleep at least as long as its age, and then check again
-              to see if, in the case it's still there, to swap it
+              The front element is the oldest element. If the oldest
+              element is too young, we have to go to sleep at least as
+              long as its age, and then check again to see if, in the
+              case it's still there, to swap it
             */
 
             unsigned long toSleepMSec = shouldSleepAmountmsecs(tileData);
 
             if (toSleepMSec > 0) { // ### FUZZIFY?
                 tileData->lock.unlock();
-                QThread::msleep(toSleepMSec); // LOCKING? (### WHAT IF WE'RE BEING DESTROYED? -> TOO SLOW)
-                // tileData is still (possibly) in the swap queue at this point, since we never removed it from it
+                QThread::msleep(toSleepMSec); // LOCKING? (### WHAT IF
+                                              // WE'RE BEING
+                                              // DESTROYED? -> TOO
+                                              // SLOW)
+                // tileData is still (possibly) in the swap queue at
+                // this point, since we never removed it from it
             } else {
                 swapTileData(tileData); // ### This takes too long inside the queuelock! But it'd be badly locked otherwise? (STILL BADLY LOCKED) (removes the tileData from swappableList)
                 tileData->lock.unlock();
@@ -204,7 +220,8 @@ void KisTileSwapper::enqueueForSwapping(KisSharedTileData* tileData)
 
     m_swapQueueLock.unlock();
 
-    // ### HELP! If we wake here, we still have the tileData lock (recursively, even), does this then deadlock?
+    // ### HELP! If we wake here, we still have the tileData lock
+    // ### (recursively, even), does this then deadlock?
     m_waitLock.lock();
     m_waitCondition.wakeAll();
     m_waitLock.unlock();
@@ -248,7 +265,9 @@ void KisTileSwapper::addTileDataToSwapFile(KisSharedTileData* tileData)   // LOC
         pageSize = sysconf(_SC_PAGESIZE);
 #endif
 
-        // For each tilesize, there's a vector of files. Either this has a file at it's back with room for one more tile, or it has not.
+        // For each tilesize, there's a vector of files. Either this
+        // has a file at it's back with room for one more tile, or it
+        // has not.
         TempFile* tempFile = 0;
 
         TempFileVector* tempFiles = 0;
@@ -313,8 +332,8 @@ void KisTileSwapper::addTileDataToSwapFile(KisSharedTileData* tileData)   // LOC
 
 unsigned long KisTileSwapper::shouldSleepAmountmsecs(KisSharedTileData* tileData)
 {
-    // ASSUMPTION: Queue is still locked so it can't get pulled away under our feet! ### tileData also locked
-    // Not old enough?
+    // ASSUMPTION: Queue is still locked so it can't get pulled away
+    // under our feet! ### tileData also locked Not old enough?
     KisSharedTileData::TimeDiffType age = tileData->lastUse.msecsTo(QTime::currentTime());
 
     if (age > idleThreshold()) {
@@ -432,8 +451,12 @@ void KisTileSwapper::fromSwappableList(KisSharedTileData* tileData)   // ### Spe
     Q_ASSERT(memInfo->isInSwappableList);
     Q_ASSERT(memInfo->isSwappable);
     // This code is called for 2 purposes/
-    // * from the shared tiledata code, after we locked it into memory (and so found out it originally was locked 0 times)
-    // * from the actual swapping code: we are about to swap out and at that point the locked count should be 0 indeed
+    //
+    // * from the shared tiledata code, after we locked it into memory
+    //  (and so found out it originally was locked 0 times)
+    //
+    // * from the actual swapping code: we are about to swap out and
+    //  at that point the locked count should be 0 indeed
     assert(tileData->timesLockedInMemory == 0 || tileData->timesLockedInMemory == 1);
     Q_ASSERT(tileData->timesLockedInMemory == 0 || tileData->timesLockedInMemory == 1);
     Q_ASSERT(!tileData->deleteable);

@@ -25,8 +25,9 @@
 #include "kis_tilestorefromfile.h"
 
 /**
- * A class that provides an easy interface having a paint device's tiles come directly from some tile. Note that
- * this class fills the tile WIHTOUT ANY REGARD TO THE COLORSPACE!
+ * A class that provides an easy interface having a paint device's
+ * tiles come directly from some tile. Note that this class fills the
+ * tile WIHTOUT ANY REGARD TO THE COLORSPACE!
  */
 class KRITAIMAGE_EXPORT KisTileSourceFile : public virtual KisTileStoreFromFile, public virtual KisDataManagerProxy
 {

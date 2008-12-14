@@ -25,6 +25,7 @@
 #include <KoCanvasBase.h>
 
 #include <KLocale>
+#include <KMessageBox>
 #include <KPageDialog>
 #include <QVBoxLayout>
 #include <QListWidget>
@@ -38,6 +39,14 @@ InsertTextReferenceAction::InsertTextReferenceAction(KoCanvasBase *canvas, const
 
 KoVariable *InsertTextReferenceAction::createVariable()
 {
+    const QList<KoTextLocator*> textLocators = m_manager->textLocators();
+/* TODO re-enable this check when the string-freeze is lifted.
+    if (textLocators.isEmpty()) {
+        KMessageBox::information(m_canvas->canvasWidget(), i18n("Please create an index to reference first."));
+        return 0;
+    }
+*/
+
     QWidget *widget = new QWidget();
     QVBoxLayout *lay = new QVBoxLayout(widget);
     widget->setLayout(lay);
@@ -45,24 +54,22 @@ KoVariable *InsertTextReferenceAction::createVariable()
 
     QLabel *label = new QLabel(i18n("Select the index you want to reference"), widget);
     lay->addWidget(label);
-    QList<KoTextLocator*> textLocators = m_manager->textLocators();
     QStringList selectionList;
     foreach(KoTextLocator* locator, textLocators)
-    selectionList << locator->word() + '(' + QString::number(locator->pageNumber()) + ')';
+        selectionList << locator->word() + '(' + QString::number(locator->pageNumber()) + ')';
     QListWidget *list = new QListWidget(widget);
     lay->addWidget(list);
     list->addItems(selectionList);
 
-    KPageDialog *dialog = new KPageDialog(m_canvas->canvasWidget());
-    dialog->setCaption(i18n("%1 Options", text()));
-    dialog->addPage(widget, "");
+    KPageDialog dialog(m_canvas->canvasWidget());
+    dialog.setCaption(i18n("%1 Options", text()));
+    dialog.addPage(widget, QString());
 
     KoVariable *variable = 0;
-    if (dialog->exec() == KPageDialog::Accepted) {
+    if (dialog.exec() == KPageDialog::Accepted && list->currentRow() >= 0) {
         KoTextLocator *locator = textLocators[list->currentRow()];
         Q_ASSERT(locator);
         variable = new KoTextReference(locator->id());
     }
-    delete dialog;
     return variable;
 }

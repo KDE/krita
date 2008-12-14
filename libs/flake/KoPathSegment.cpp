@@ -741,8 +741,20 @@ QPair<KoPathSegment, KoPathSegment> KoPathSegment::splitAt(qreal t) const
         deCasteljau(t, &newCP2, &splitCP1, &splitP, &splitCP2, &newCP1);
 
         if (degree() == 2) {
-            results.first = KoPathSegment(d->first->point(), splitCP1, splitP);
-            results.second = KoPathSegment(splitP, splitCP2, d->second->point());
+            if( second()->activeControlPoint1() ) {
+                KoPathPoint * s1p1 = new KoPathPoint( 0, d->first->point() );
+                KoPathPoint * s1p2 = new KoPathPoint( 0, splitP );
+                s1p2->setControlPoint1( splitCP1 );
+                KoPathPoint * s2p1 = new KoPathPoint( 0, splitP );
+                KoPathPoint * s2p2 = new KoPathPoint( 0, d->second->point() );
+                s2p2->setControlPoint1( splitCP2 );
+                results.first = KoPathSegment( s1p1, s1p2 );
+                results.second = KoPathSegment( s2p1, s2p2 );
+            }
+            else {
+                results.first = KoPathSegment(d->first->point(), splitCP1, splitP);
+                results.second = KoPathSegment(splitP, splitCP2, d->second->point());
+            }
         } else {
             results.first = KoPathSegment(d->first->point(), newCP2, splitCP1, splitP);
             results.second = KoPathSegment(splitP, splitCP2, newCP1, d->second->point());

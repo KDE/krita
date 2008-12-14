@@ -119,7 +119,7 @@ void TestPathSegment::segmentPointAt()
 void TestPathSegment::segmentSplitAt()
 {
     KoPathSegment s1(QPointF(0, 0), QPointF(100, 0));
-    QPair<KoPathSegment, KoPathSegment> parts1 = s1.splitAt(0.5);
+    QPair<KoPathSegment, KoPathSegment> parts1 = s1.splitAt( 0.5 );
     QCOMPARE(parts1.first.first()->point(), QPointF(0, 0));
     QCOMPARE(parts1.first.second()->point(), QPointF(50, 0));
     QCOMPARE(parts1.first.degree(), 1);
@@ -127,8 +127,13 @@ void TestPathSegment::segmentSplitAt()
     QCOMPARE(parts1.second.second()->point(), QPointF(100, 0));
     QCOMPARE(parts1.second.degree(), 1);
 
+    QPainterPath p1;
+    p1.moveTo( QPoint(0, 0) );
+    p1.lineTo( QPointF(100, 0) );
+    QCOMPARE( parts1.first.second()->point(), p1.pointAtPercent( 0.5 ) );
+    
     KoPathSegment s2(QPointF(0, 0), QPointF(100, 100), QPointF(200, 0));
-    QPair<KoPathSegment, KoPathSegment> parts2 = s2.splitAt(0.5);
+    QPair<KoPathSegment, KoPathSegment> parts2 = s2.splitAt( 0.5 );
     QCOMPARE(parts2.first.first()->point(), QPointF(0, 0));
     QCOMPARE(parts2.first.second()->point(), QPointF(100, 50));
     QCOMPARE(parts2.first.degree(), 2);
@@ -136,14 +141,24 @@ void TestPathSegment::segmentSplitAt()
     QCOMPARE(parts2.second.second()->point(), QPointF(200, 0));
     QCOMPARE(parts2.second.degree(), 2);
 
+    QPainterPath p2;
+    p2.moveTo( QPoint(0, 0) );
+    p2.quadTo( QPointF(100, 100), QPointF(200, 0) );
+    QCOMPARE( parts2.first.second()->point(), p2.pointAtPercent( 0.5 ) );
+    
     KoPathSegment s3(QPointF(0, 0), QPointF(100, 100), QPointF(200, 100), QPointF(300, 0));
-    QPair<KoPathSegment, KoPathSegment> parts3 = s3.splitAt(0.5);
+    QPair<KoPathSegment, KoPathSegment> parts3 = s3.splitAt( 0.5 );
     QCOMPARE(parts3.first.first()->point(), QPointF(0, 0));
     QCOMPARE(parts3.first.second()->point(), QPointF(150, 75));
     QCOMPARE(parts3.first.degree(), 3);
     QCOMPARE(parts3.second.first()->point(), QPointF(150, 75));
     QCOMPARE(parts3.second.second()->point(), QPointF(300, 0));
     QCOMPARE(parts3.second.degree(), 3);
+
+    QPainterPath p3;
+    p3.moveTo( QPoint(0, 0) );
+    p3.cubicTo( QPointF(100, 100), QPointF(200, 100), QPointF(300, 0) );
+    QCOMPARE( parts3.first.second()->point(), p3.pointAtPercent( 0.5 ) );
 }
 
 void TestPathSegment::segmentIntersections()

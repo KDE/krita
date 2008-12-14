@@ -43,34 +43,21 @@ KoPathPointInsertCommand::KoPathPointInsertCommand(const QList<KoPathPointData> 
             continue;
 
         m_pointDataList.append(*it);
-        if (segment.first()->activeControlPoint2() || segment.second()->activeControlPoint1()) {
-            QPointF q[4] = {
-                segment.first()->point(),
-                segment.first()->activeControlPoint2() ? segment.first()->controlPoint2() : segment.first()->point(),
-                segment.second()->activeControlPoint1() ? segment.second()->controlPoint1() : segment.second()->point(),
-                segment.second()->point()
-            };
-
-            QPointF p[3];
-            // the De Casteljau algorithm.
-            for (unsigned short j = 1; j <= 3; ++j) {
-                for (unsigned short i = 0; i <= 3 - j; ++i) {
-                    q[i] = (1.0 - insertPosition) * q[i] + insertPosition * q[i + 1];
-                }
-                // modify the new segment.
-                p[j - 1] = q[0];
-            }
-            KoPathPoint * splitPoint = new KoPathPoint(pathShape, p[2]);
-            splitPoint->setControlPoint1(p[1]);
-            splitPoint->setControlPoint2(q[1]);
-
-            m_points.append(splitPoint);
-            m_controlPoints.append(QPair<QPointF, QPointF>(p[0], q[2]));
-        } else {
-            QPointF splitPointPos = segment.first()->point() + insertPosition * (segment.second()->point() - segment.first()->point());
-            m_points.append(new KoPathPoint(pathShape, splitPointPos));
-            m_controlPoints.append(QPair<QPointF, QPointF>(segment.first()->controlPoint2(), segment.second()->controlPoint1()));
-        }
+        
+        QPair<KoPathSegment, KoPathSegment> splitSegments = segment.splitAt( insertPosition );
+        
+        KoPathPoint * split1 = splitSegments.first.second();
+        KoPathPoint * split2 = splitSegments.second.first();
+        KoPathPoint * splitPoint = new KoPathPoint( pathShape, split1->point() );
+        if( split1->activeControlPoint1() )
+            splitPoint->setControlPoint1(split1->controlPoint1());
+        if( split2->activeControlPoint2() )
+            splitPoint->setControlPoint2(split2->controlPoint2());
+        
+        m_points.append(splitPoint);
+        QPointF cp1 = splitSegments.first.first()->controlPoint2();
+        QPointF cp2 = splitSegments.second.second()->controlPoint1();
+        m_controlPoints.append(QPair<QPointF, QPointF>(cp1, cp2));
     }
 }
 

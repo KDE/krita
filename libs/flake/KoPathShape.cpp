@@ -307,10 +307,14 @@ const QPainterPath KoPathShape::outline() const
                 if (currProperties & KoPathPoint::StartSubpath) {
                     path.moveTo(currPoint->point());
                 }
-            } else if (activeCP || currPoint->activeControlPoint1()) {
+            } else if (activeCP && currPoint->activeControlPoint1()) {
                 path.cubicTo(
-                    activeCP ? lastPoint->controlPoint2() : lastPoint->point(),
-                    currPoint->activeControlPoint1() ? currPoint->controlPoint1() : currPoint->point(),
+                    lastPoint->controlPoint2(),
+                    currPoint->controlPoint1(),
+                    currPoint->point());
+            } else if( activeCP || currPoint->activeControlPoint1()) {
+                path.quadTo(
+                    activeCP ? lastPoint->controlPoint2() : currPoint->controlPoint1(),
                     currPoint->point());
             } else {
                 path.lineTo(currPoint->point());
@@ -318,11 +322,16 @@ const QPainterPath KoPathShape::outline() const
             if (currProperties & KoPathPoint::CloseSubpath && currProperties & KoPathPoint::StopSubpath) {
                 // add curve when there is a curve on the way to the first point
                 KoPathPoint * firstPoint = subpath->first();
-                if (currPoint->activeControlPoint2() || firstPoint->activeControlPoint1()) {
+                if (currPoint->activeControlPoint2() && firstPoint->activeControlPoint1()) {
                     path.cubicTo(
-                        currPoint->activeControlPoint2() ? currPoint->controlPoint2() : currPoint->point(),
-                        firstPoint->activeControlPoint1() ? firstPoint->controlPoint1() : firstPoint->point(),
+                        currPoint->controlPoint2(),
+                        firstPoint->controlPoint1(),
                         firstPoint->point());
+                }
+                else if(currPoint->activeControlPoint2() || firstPoint->activeControlPoint1()) {
+                    path.quadTo(
+                        currPoint->activeControlPoint2() ? currPoint->controlPoint2() : firstPoint->controlPoint1(),
+                        firstPoint->point());                
                 }
                 path.closeSubpath();
             }

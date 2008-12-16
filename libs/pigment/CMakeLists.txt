@@ -84,7 +84,7 @@ target_link_libraries(
     )
 
 target_link_libraries(
-    pigmentcms LINK_INTERFACE_LIBRARIES komain ${LCMS_LIBRARIES}
+    pigmentcms LINK_INTERFACE_LIBRARIES komain ${LCMS_LIBRARIES} ${LINK_OPENEXR_LIB} ${LINK_OPENCTL_LIB}
 )
 
 set_target_properties(pigmentcms PROPERTIES

@@ -50,16 +50,13 @@ Viewport::Viewport(KoCanvasController* parent)
         , m_drawShadow(false)
         , m_canvas(0)
         , m_documentOffset(QPoint(0, 0))
+        , m_margin(0)
 {
     setBackgroundRole(QPalette::Dark);
     setAutoFillBackground(true);
     setAcceptDrops(true);
     setMouseTracking(true);
     m_parent = parent;
-
-    KConfigGroup cfg = KGlobal::config()->group("");
-    m_margin = cfg.readEntry("canvasmargin",  0);
-
 }
 
 void Viewport::setCanvas(QWidget *canvas)
@@ -315,7 +312,6 @@ void Viewport::resetLayout()
         if (marginLeft > 0) moveX = marginLeft;
         if (marginLeft > 0) resizeW = viewW - marginLeft;
         if (marginRight > 0) resizeW = viewW - marginRight;
-
     } else {
         // Take care of the margin around the canvas
         int marginTop = m_margin - m_documentOffset.y();
@@ -330,10 +326,10 @@ void Viewport::resetLayout()
         if (marginLeft > 0) resizeW = viewW - marginLeft;
         if (marginRight > 0) resizeW = viewW - marginRight;
         if (marginBottom > 0) resizeH = viewH - marginBottom;
-
     }
     if (m_parent->canvasMode() == KoCanvasController::AlignTop) {
-        moveY = 0;
+        // have up to m_margin pixels at top.
+        moveY = qMin(m_margin, moveY);
     }
     if (m_canvas) {
         if (m_parent->canvasMode() == KoCanvasController::Infinite)

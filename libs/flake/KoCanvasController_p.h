@@ -55,6 +55,7 @@ public:
     void handleDragMoveEvent(QDragMoveEvent *event);
     void handleDragLeaveEvent(QDragLeaveEvent *event);
     void handlePaintEvent(QPainter & gc, QPaintEvent *event);
+    void setMargin(int margin) { m_margin = margin; resetLayout(); }
 
 private:
 

@@ -56,7 +56,7 @@ public:
             , ignoreScrollSignals(false) {}
     KoCanvasBase * canvas;
     CanvasMode canvasMode;
-    int margin; // The viewport margin around the document
+    int margin; // The viewport margin around the document // TODO can we remove this one? The viewport has a copy...
     QSize documentSize;
     QPoint documentOffset;
     Viewport * viewportWidget;
@@ -82,15 +82,10 @@ KoCanvasController::KoCanvasController(QWidget *parent)
       Note: KoPage apps should probably startup with a sane document size; for Krita that's impossible
      */
     setMinimumSize(QSize(50, 50));
+    setMouseTracking(true);
 
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetX()));
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetY()));
-
-    setMouseTracking(true);
-
-    KConfigGroup cfg = KGlobal::config()->group("");
-    m_d->margin = cfg.readEntry("canvasmargin",  0);
-
     connect(this, SIGNAL(moveDocumentOffset(const QPoint&)), m_d->viewportWidget, SLOT(documentOffsetMoved(const QPoint&)));
 }
 
@@ -612,6 +607,17 @@ bool KoCanvasController::focusNextPrevChild(bool)
     return false;
 }
 
+void KoCanvasController::setMargin(int margin)
+{
+    m_d->margin = margin;
+    Q_ASSERT(m_d->viewportWidget);
+    m_d->viewportWidget->setMargin(margin);
+}
+
+int KoCanvasController::margin() const
+{
+    return m_d->margin;
+}
 
 void KoCanvasController::activate()
 {

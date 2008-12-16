@@ -224,10 +224,12 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
         m_store->enterDirectory( getLocation( node, DOT_SHAPE_SELECTION ) );
         KisShapeSelection* shapeSelection = dynamic_cast<KisShapeSelection*>( selection->shapeSelection() );
         if ( !shapeSelection ) {
+            m_store->popDirectory();
             return false;
         }
 
         if ( !shapeSelection->saveOdf(m_store) ) {
+            m_store->popDirectory();
             return false;
         }
         m_store->popDirectory();

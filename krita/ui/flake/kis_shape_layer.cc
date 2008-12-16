@@ -28,6 +28,7 @@
 #include <QIcon>
 #include <QString>
 #include <QList>
+#include <QMap>
 #include <QDebug>
 
 #include <ktemporaryfile.h>
@@ -185,13 +186,6 @@ KoShapeManager *KisShapeLayer::shapeManager() const
 
 bool KisShapeLayer::saveLayer(KoStore * store) const
 {
-
-    QList<KoShape*> shapes = iterator();
-    qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-
-//     foreach(KoShape* shape, shapes) {
-//     }
-
     store->disallowNameExpansion();
     KoOdfWriteStore odfStore(store);
     KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
@@ -211,10 +205,15 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
 
     KoPageLayout page;
     page.format = KoPageFormat::defaultFormat();
-    page.orientation = KoPageFormat::Portrait;
-    // XXX: this is in pixels -- should be in points?
-    page.width = image()->width();
-    page.height = image()->height();
+    QRectF rc = boundingRect();
+    page.width = rc.width();
+    page.height = rc.height();
+    if ( page.width > page.height ) {
+        page.orientation = KoPageFormat::Landscape;
+    }
+    else {
+         page.orientation = KoPageFormat::Portrait;
+    }
 
     KoGenStyles mainStyles;
     KoGenStyle pageLayout = page.saveOasis();
@@ -290,6 +289,12 @@ bool KisShapeLayer::loadLayer( KoStore* store )
     }
 
     KoXmlElement contents = odfStore.contentDoc().documentElement();
+
+    qDebug() <<"Start loading OASIS document..." << contents.text();
+    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().localName();
+    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
+    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().isElement();
+
     KoXmlElement body( KoXml::namedItemNS( contents, KoXmlNS::office, "body" ) );
 
     if( body.isNull() )
@@ -314,7 +319,6 @@ bool KisShapeLayer::loadLayer( KoStore* store )
         //setErrorMessage( i18n( "Invalid OASIS document. No draw:page tag found." ) );
         return false;
     }
-#if 0
 
     KoXmlElement * master = 0;
     if( odfStore.styles().masterPages().contains( "Standard" ) )
@@ -328,8 +332,9 @@ bool KisShapeLayer::loadLayer( KoStore* store )
     {
         const KoXmlElement *style = odfStore.styles().findStyle(
             master->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) );
-        m_pageLayout.loadOasis( *style );
-        setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
+        KoPageLayout pageLayout;
+        pageLayout.loadOasis( *style );
+        setSize( QSizeF( pageLayout.width, pageLayout.height ) );
     }
     else
     {
@@ -337,62 +342,31 @@ bool KisShapeLayer::loadLayer( KoStore* store )
         return false;
     }
 
+    QMap<QString, KoDataCenter*> dataCenterMap;
     KoOdfLoadingContext context( odfStore.styles(), odfStore.store() );
-    KoShapeLoadingContext shapeContext( context, dataCenterMap() );
+    KoShapeLoadingContext shapeContext( context, dataCenterMap );
+
 
     KoXmlElement layerElement;
-    forEachElement( layerElement, context.odfLoadingContext().stylesReader().layerSet() )
+    forEachElement( layerElement, context.stylesReader().layerSet() )
     {
         KoShapeLayer * l = new KoShapeLayer();
-        if( l->loadOdf( layerElement, context ) )
-            insertLayer( l );
-    }
-
-    KoShapeLayer * defaultLayer = 0;
-
-    // check if we have to insert a default layer
-    if( d->layers.count() == 0 )
-        defaultLayer = new KoShapeLayer();
-
-    KoXmlElement child;
-    forEachElement( child, element )
-    {
-        kDebug(38000) <<"loading shape" << child.localName();
-
-        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, context );
-        if( shape )
-            d->objects.append( shape );
-    }
-
-    // add all toplevel shapes to the default layer
-    foreach( KoShape * shape, d->objects )
-    {
-        if( ! shape->parent() )
-        {
-            if( ! defaultLayer )
-                defaultLayer = new KoShapeLayer();
-
-            defaultLayer->addChild( shape );
+        if( !loadOdf( layerElement, shapeContext ) ) {
+            kWarning() << "Could not load shape layer!";
+            return false;
         }
     }
 
-    if( defaultLayer )
-        insertLayer( defaultLayer );
-
-
-    if( d->document.pageSize().isEmpty() )
+    KoXmlElement child;
+    forEachElement( child, page )
     {
-        QSizeF pageSize = d->document.contentRect().united( QRectF(0,0,1,1) ).size();
-        setPageSize( pageSize );
+        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, shapeContext );
+        if( shape ) {
+            addChild( shape );
+        }
     }
 
-    loadOasisSettings( odfStore.settingsDoc() );
-
     return true;
-
-
-#endif
-
 
 }
 

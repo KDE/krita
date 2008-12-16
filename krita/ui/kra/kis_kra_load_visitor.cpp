@@ -222,8 +222,7 @@ bool KisKraLoadVisitor::visit(KisSelectionMask *mask)
 QString KisKraLoadVisitor::getLocation( KisNode* node, const QString& suffix )
 {
     QString location = m_external ? QString::null : m_uri;
-    location += m_name + "/" + LAYERS + "/" + m_layerFilenames[node] + suffix;
-
+    location += m_name + LAYER_PATH + m_layerFilenames[node] + suffix;
     return location;
 }
 

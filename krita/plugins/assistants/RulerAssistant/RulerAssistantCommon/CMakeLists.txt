@@ -7,6 +7,6 @@ set(kritarulerassistantcommon_PART_SRCS
 
 kde4_add_library(KritaRulerAssistantCommon SHARED ${kritarulerassistantcommon_PART_SRCS})
 
-target_link_libraries(KritaRulerAssistantCommon kritaui)
+target_link_libraries(KritaRulerAssistantCommon kritaui ${KDE4_KDEUI_LIBS})
 
 install(TARGETS KritaRulerAssistantCommon ${INSTALL_TARGETS_DEFAULT_ARGS})

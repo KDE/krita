@@ -373,7 +373,7 @@ private slots:
 private:
 
     class Private;
-    Private * const m_d;
+    Private * const d;
 };
 
 #endif

@@ -59,6 +59,7 @@ private:
     QMatrix m_shearMatrix;
     bool m_isMirrored;
     QList<QMatrix> m_oldTransforms;
+    QMatrix m_initialSelectionMatrix;
 };
 
 #endif

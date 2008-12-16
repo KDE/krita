@@ -20,6 +20,7 @@
 
 #include "ShapeRotateStrategy.h"
 #include "SelectionDecorator.h"
+#include "SelectionTransformCommand.h"
 
 #include <KoInteractionTool.h>
 #include <KoCanvasBase.h>
@@ -37,6 +38,8 @@ ShapeRotateStrategy::ShapeRotateStrategy( KoTool *tool, KoCanvasBase *canvas, co
 , m_initialBoundingRect()
 , m_start(clicked)
 {
+    m_initialSelectionMatrix = canvas->shapeManager()->selection()->transformation();
+
     QList<KoShape*> selectedShapes = canvas->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     foreach(KoShape *shape, selectedShapes) {
         if( ! shape->isEditable() )
@@ -141,5 +144,7 @@ QUndoCommand* ShapeRotateStrategy::createCommand() {
 
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, newTransforms );
     cmd->setText( i18n("Rotate") );
+    KoSelection * sel = m_canvas->shapeManager()->selection();
+    new SelectionTransformCommand(sel, m_initialSelectionMatrix, sel->transformation(), cmd);
     return cmd;
 }

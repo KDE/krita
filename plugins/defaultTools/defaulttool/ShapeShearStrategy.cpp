@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006 casper Boemann <cbr@boemann.dk>
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,6 +21,7 @@
 
 #include "ShapeShearStrategy.h"
 #include "SelectionDecorator.h"
+#include "SelectionTransformCommand.h"
 
 #include <KoInteractionTool.h>
 #include <KoCanvasBase.h>
@@ -49,6 +50,8 @@ ShapeShearStrategy::ShapeShearStrategy( KoTool *tool, KoCanvasBase *canvas, cons
         m_selectedShapes << shape;
         m_oldTransforms << shape->transformation();
     }
+
+    m_initialSelectionMatrix = sel->transformation();
 
     // Eventhoug we aren't currently activated by the corner handles we might as well code like it
     switch(direction) {
@@ -175,5 +178,7 @@ QUndoCommand* ShapeShearStrategy::createCommand() {
         newTransforms << shape->transformation();
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, newTransforms );
     cmd->setText( i18n("Shear") );
+    KoSelection * sel = m_canvas->shapeManager()->selection();
+    new SelectionTransformCommand(sel, m_initialSelectionMatrix, sel->transformation(), cmd);
     return cmd;
 }

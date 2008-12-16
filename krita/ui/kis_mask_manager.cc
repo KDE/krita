@@ -242,7 +242,6 @@ void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
         KisFilterConfiguration * filter = dlg.filterConfiguration();
         QString name = dlg.layerName();
         mask->setFilter(filter);
-        mask->setDirty();
         activateMask(mask);
     } else {
         m_view->image()->removeNode(mask);

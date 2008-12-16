@@ -47,42 +47,42 @@ class KOGUIUTILS_EXPORT KoRuler : public QWidget
 {
 Q_OBJECT
 public:
-        /**
-         * Creates a ruler with the orientation @p orientation
-         * @param parent parent widget
-         * @param orientation the orientation of the ruler
-         * @param viewConverter the view converter used to convert from point to pixel
-         */
-        KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConverter* viewConverter);
-        ~KoRuler();
+    /**
+     * Creates a ruler with the orientation @p orientation
+     * @param parent parent widget
+     * @param orientation the orientation of the ruler
+     * @param viewConverter the view converter used to convert from point to pixel
+     */
+    KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConverter* viewConverter);
+    ~KoRuler();
 
-        /// For paragraphs each tab definition is represented by this struct.
-        struct Tab {
-            qreal position;    ///< distance in point from the start of the text-shape
-            QTextOption::TabType type;       ///< Determine which type is used.
-        };
+    /// For paragraphs each tab definition is represented by this struct.
+    struct Tab {
+        qreal position;    ///< distance in point from the start of the text-shape
+        QTextOption::TabType type;       ///< Determine which type is used.
+    };
 
-        /// The ruler's unit
-        KoUnit unit() const;
+    /// The ruler's unit
+    KoUnit unit() const;
 
-        /// The length of the ruler in points (pt)
-        qreal rulerLength() const;
+    /// The length of the ruler in points (pt)
+    qreal rulerLength() const;
 
-        /// The orientation of the ruler
-        Qt::Orientation orientation() const;
+    /// The orientation of the ruler
+    Qt::Orientation orientation() const;
 
-        /// The start indent of the first line
-        qreal firstLineIndent() const;
+    /// The start indent of the first line
+    qreal firstLineIndent() const;
 
-        /// The start indent of the rest of the lines
-        qreal paragraphIndent() const;
+    /// The start indent of the rest of the lines
+    qreal paragraphIndent() const;
 
-        /// The end indent of all lines
-        qreal endIndent() const;
+    /// The end indent of all lines
+    qreal endIndent() const;
 
-        /// The tab chooser widget, which you must put into a layout along with the ruler.
-        /// Returns 0 for vertical rulers,
-        QWidget *tabChooser();
+    /// The tab chooser widget, which you must put into a layout along with the ruler.
+    /// Returns 0 for vertical rulers,
+    QWidget *tabChooser();
 
     /**
      * set a list of actions that will be shown in a popup should the user right click on this ruler.
@@ -96,92 +96,92 @@ public:
      */
     QList<QAction*> popupActionList() const;
 
-    public slots:
-        /// Set the unit of the ruler
-        void setUnit(KoUnit unit);
+public slots:
+    /// Set the unit of the ruler
+    void setUnit(KoUnit unit);
 
-        /** Set the offset. Use this function to sync the ruler with
-          * the canvas' position on screen
-          * @param offset The offset in pixels
-          */
-        void setOffset(int offset);
+    /** Set the offset. Use this function to sync the ruler with
+      * the canvas' position on screen
+      * @param offset The offset in pixels
+      */
+    void setOffset(int offset);
 
-        /// Sets the length of the ruler to @p length in points (pt)
-        void setRulerLength(qreal length);
+    /// Sets the length of the ruler to @p length in points (pt)
+    void setRulerLength(qreal length);
 
-        /** Set the active range, ie the part of the ruler that is most likely used.
-          * set to 0, 0 when there is no longer any active range
-          * @param start the start of the range in pt
-          * @param end the end of the range in pt
-          */
-        void setActiveRange(qreal start, qreal end);
+    /** Set the active range, ie the part of the ruler that is most likely used.
+      * set to 0, 0 when there is no longer any active range
+      * @param start the start of the range in pt
+      * @param end the end of the range in pt
+      */
+    void setActiveRange(qreal start, qreal end);
 
-        /** Set the state of the ruler so that it shows everything in right to left mode.
-          * @param isRightToLeft state of right to left mode. Default is false.
-          */
-        void setRightToLeft(bool isRightToLeft);
+    /** Set the state of the ruler so that it shows everything in right to left mode.
+      * @param isRightToLeft state of right to left mode. Default is false.
+      */
+    void setRightToLeft(bool isRightToLeft);
 
-        /** Set if the ruler should show indents as used in textditors.
-          * Set the indents with setFirstLineIndent(), setParagraphIndent(), setEndIndent() .
-          * @param show show indents if true. Default is false.
-          */
-        void setShowIndents(bool show);
+    /** Set if the ruler should show indents as used in textditors.
+      * Set the indents with setFirstLineIndent(), setParagraphIndent(), setEndIndent() .
+      * @param show show indents if true. Default is false.
+      */
+    void setShowIndents(bool show);
 
-        /** Set the position of the first line start indent relative to the active range.
-          * If Right To left is set the indent is relative to the right side of the active range .
-          * @param indent the value relative to the active range.
-          */
-        void setFirstLineIndent(qreal indent);
+    /** Set the position of the first line start indent relative to the active range.
+      * If Right To left is set the indent is relative to the right side of the active range .
+      * @param indent the value relative to the active range.
+      */
+    void setFirstLineIndent(qreal indent);
 
-        /** Set the position of the rest of the lines start indent relative to the active range.
-          * If Right To left is set the indent is relative to the right side of the active range .
-          * @param indent the value relative to the active range.
-          */
-        void setParagraphIndent(qreal indent);
+    /** Set the position of the rest of the lines start indent relative to the active range.
+      * If Right To left is set the indent is relative to the right side of the active range .
+      * @param indent the value relative to the active range.
+      */
+    void setParagraphIndent(qreal indent);
 
-        /** Set the position of the end indent relative to the active range.
-          * If Right To left is set the indent is relative to the left side of the active range .
-          * @param indent the value relative to the active range.
-          */
-        void setEndIndent(qreal indent);
+    /** Set the position of the end indent relative to the active range.
+      * If Right To left is set the indent is relative to the left side of the active range .
+      * @param indent the value relative to the active range.
+      */
+    void setEndIndent(qreal indent);
 
-        /** Set whether the ruler should show the current mouse position.
-          * Update the position with updateMouseCoordinate().
-          * @param show show mouse position if true. Default is false.
-          */
-        void setShowMousePosition(bool show);
+    /** Set whether the ruler should show the current mouse position.
+      * Update the position with updateMouseCoordinate().
+      * @param show show mouse position if true. Default is false.
+      */
+    void setShowMousePosition(bool show);
 
-        /** Update the current position of the mouse pointer, repainting if changed.
-          * The ruler offset will be applied before painting.
-          * @param coordinate Either the x or y coordinate of the mouse depending
-          *                   of the orientation of the ruler.
-          */
-        void updateMouseCoordinate(int coordinate);
+    /** Update the current position of the mouse pointer, repainting if changed.
+      * The ruler offset will be applied before painting.
+      * @param coordinate Either the x or y coordinate of the mouse depending
+      *                   of the orientation of the ruler.
+      */
+    void updateMouseCoordinate(int coordinate);
 
-        /**
-         * Set whether the ruler should show the selection borders
-         * @param show show selection borders if true, default is false.
-         */
-        void setShowSelectionBorders(bool show);
+    /**
+     * Set whether the ruler should show the selection borders
+     * @param show show selection borders if true, default is false.
+     */
+    void setShowSelectionBorders(bool show);
 
-        /**
-         * Update the selection borders
-         * @param first the first selection border in points
-         * @param second the other selection border in points
-         */
-        void updateSelectionBorders(qreal first, qreal second);
+    /**
+     * Update the selection borders
+     * @param first the first selection border in points
+     * @param second the other selection border in points
+     */
+    void updateSelectionBorders(qreal first, qreal second);
 
-        /**
-         * Set whether the ruler should show tabs
-         * @param show show selection borders if true, default is false.
-         */
-        void setShowTabs(bool show);
+    /**
+     * Set whether the ruler should show tabs
+     * @param show show selection borders if true, default is false.
+     */
+    void setShowTabs(bool show);
 
-        /**
-         * Update the tabs
-         * @param tabs a list of tabs that is shown on the ruler the first selection border in points
-         */
-        void updateTabs(const QList<Tab> &tabs);
+    /**
+     * Update the tabs
+     * @param tabs a list of tabs that is shown on the ruler the first selection border in points
+     */
+    void updateTabs(const QList<Tab> &tabs);
 
     /***
      * Return the list of tabs set on this ruler.
@@ -210,11 +210,11 @@ public:
     bool removeHotSpot(int id);
 
 signals:
-        /**
-         * emitted when any of the indents is moved by the user.
-         * @param final false until the user releases the mouse. So you can implement live update.
-         */
-        void indentsChanged(bool final);
+    /**
+     * emitted when any of the indents is moved by the user.
+     * @param final false until the user releases the mouse. So you can implement live update.
+     */
+    void indentsChanged(bool final);
 
     /**
      * Emitted when any of the tabs are moved, deleted or inserted by the user.
@@ -245,7 +245,6 @@ protected:
     virtual QSize minimumSizeHint() const;
     /// reimplemented
     virtual QSize sizeHint() const;
-
 
 private:
     KoRulerPrivate * const d;

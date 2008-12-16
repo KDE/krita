@@ -100,11 +100,13 @@ void RulerTabChooser::paintEvent(QPaintEvent *)
     }
 }
 
-static int compareTabs(KoRuler::Tab &tab1, KoRuler::Tab &tab2) {
+static int compareTabs(KoRuler::Tab &tab1, KoRuler::Tab &tab2)
+{
     return tab1.position < tab2.position;
 }
 
-QRectF HorizontalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainter &painter) {
+QRectF HorizontalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainter &painter)
+{
     lengthInPixel = d->viewConverter->documentToViewX(d->rulerLength);
     QRectF rectangle;
     rectangle.setX(qMax(0, d->offset));
@@ -141,7 +143,8 @@ QRectF HorizontalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPain
     return rectangle;
 }
 
-void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &painter) {
+void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &painter)
+{
     if (! d->showTabs)
         return;
     QPolygonF polygon;
@@ -191,7 +194,8 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
     //painter.setRenderHint( QPainter::Antialiasing, false );
 }
 
-void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainter &painter, const QRectF &rectangle) {
+void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainter &painter, const QRectF &rectangle)
+{
     qreal numberStep = d->numberStepForUnit(); // number step in unit
     QRectF activeRangeRectangle;
     int numberStepPixel = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(numberStep)));
@@ -311,7 +315,8 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
     }
 }
 
-void HorizontalPaintingStrategy::drawIndents(const KoRulerPrivate *d, QPainter &painter) {
+void HorizontalPaintingStrategy::drawIndents(const KoRulerPrivate *d, QPainter &painter)
+{
     QPolygonF polygon;
 
     painter.setBrush(d->ruler->palette().brush(QPalette::Base));
@@ -358,7 +363,8 @@ void HorizontalPaintingStrategy::drawIndents(const KoRulerPrivate *d, QPainter &
     painter.drawPolygon(polygon);
 }
 
-QSize HorizontalPaintingStrategy::sizeHint() {
+QSize HorizontalPaintingStrategy::sizeHint()
+{
     QSize size;
     QFont font = KGlobalSettings::toolBarFont();
     QFontMetrics fm(font);
@@ -370,7 +376,8 @@ QSize HorizontalPaintingStrategy::sizeHint() {
     return size;
 }
 
-QRectF VerticalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainter &painter) {
+QRectF VerticalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainter &painter)
+{
     lengthInPixel = d->viewConverter->documentToViewY(d->rulerLength);
     QRectF rectangle;
     rectangle.setX(0);
@@ -408,7 +415,8 @@ QRectF VerticalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainte
     return rectangle;
 }
 
-void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainter &painter, const QRectF &rectangle) {
+void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainter &painter, const QRectF &rectangle)
+{
     qreal numberStep = d->numberStepForUnit(); // number step in unit
     int numberStepPixel = qRound(d->viewConverter->documentToViewY( d->unit.fromUserValue(numberStep)));
     QFontMetrics fontMetrics(KGlobalSettings::toolBarFont());
@@ -513,7 +521,8 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
     }
 }
 
-QSize VerticalPaintingStrategy::sizeHint() {
+QSize VerticalPaintingStrategy::sizeHint()
+{
     QSize size;
     QFont font = KGlobalSettings::toolBarFont();
     QFontMetrics fm(font);
@@ -526,7 +535,8 @@ QSize VerticalPaintingStrategy::sizeHint() {
 }
 
 
-void HorizontalDistancesPaintingStrategy::drawDistanceLine(const KoRulerPrivate *d, QPainter &painter, const qreal start, const qreal end) {
+void HorizontalDistancesPaintingStrategy::drawDistanceLine(const KoRulerPrivate *d, QPainter &painter, const qreal start, const qreal end)
+{
 
     // Don't draw too short lines
     if (qMax(start, end) - qMin(start, end) < 1)
@@ -573,7 +583,8 @@ void HorizontalDistancesPaintingStrategy::drawDistanceLine(const KoRulerPrivate 
     painter.restore();
 }
 
-void HorizontalDistancesPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainter &painter, const QRectF&) {
+void HorizontalDistancesPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainter &painter, const QRectF&)
+{
     QList<qreal> points;
     points << 0.0;
     points << d->activeRangeStart + d->paragraphIndent + d->firstLineIndent;
@@ -897,18 +908,21 @@ void KoRuler::updateTabs(const QList<KoRuler::Tab> &tabs)
     d->tabs = tabs;
 }
 
-QList<KoRuler::Tab> KoRuler::tabs() const {
+QList<KoRuler::Tab> KoRuler::tabs() const
+{
     QList<Tab> answer = d->tabs;
     qSort(answer.begin(), answer.end(), compareTabs);
 
     return answer;
 }
 
-void KoRuler::setPopupActionList(const QList<QAction*> &popupActionList) {
+void KoRuler::setPopupActionList(const QList<QAction*> &popupActionList)
+{
     d->popupActions = popupActionList;
 }
 
-QList<QAction*> KoRuler::popupActionList() const {
+QList<QAction*> KoRuler::popupActionList() const
+{
     return d->popupActions;
 }
 
@@ -1148,14 +1162,16 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
     update();
 }
 
-void KoRuler::clearHotSpots() {
+void KoRuler::clearHotSpots()
+{
     if (d->hotspots.isEmpty())
         return;
     d->hotspots.clear();
     update();
 }
 
-void KoRuler::setHotSpot(qreal position, int id) {
+void KoRuler::setHotSpot(qreal position, int id)
+{
     foreach(KoRulerPrivate::HotSpotData hs, d->hotspots) {
         if (hs.id == id) {
             hs.position = position;
@@ -1170,7 +1186,8 @@ void KoRuler::setHotSpot(qreal position, int id) {
     d->hotspots.append(hs);
 }
 
-bool KoRuler::removeHotSpot(int id) {
+bool KoRuler::removeHotSpot(int id)
+{
     QList<KoRulerPrivate::HotSpotData>::Iterator iter = d->hotspots.begin();
     while(iter != d->hotspots.end()) {
         if (iter->id == id) {

@@ -112,7 +112,7 @@ if (SHOULD_BUILD_KRITA)
 
     kde4_add_kdeinit_executable(krita ${krita_KDEINIT_SRCS})
 
-    target_link_libraries(kdeinit_krita kritaui)
+    target_link_libraries(kdeinit_krita kritaui ${KDE4_KDEUI_LIBS} komain)
 
     install(TARGETS kdeinit_krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 

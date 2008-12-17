@@ -204,6 +204,10 @@ void KoPathTool::insertPoints()
         if (!segments.isEmpty()) {
             KoPathPointInsertCommand *cmd = new KoPathPointInsertCommand(segments, 0.5);
             m_canvas->addCommand(cmd);
+            
+            foreach( KoPathPoint * p, cmd->insertedPoints() ) {
+                m_pointSelection.add( p, false );
+            }
             updateActions();
         }
     }

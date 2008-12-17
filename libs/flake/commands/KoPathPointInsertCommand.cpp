@@ -132,3 +132,7 @@ void KoPathPointInsertCommand::undo()
     m_deletePoints = true;
 }
 
+QList<KoPathPoint*> KoPathPointInsertCommand::insertedPoints() const
+{
+    return m_points;
+}

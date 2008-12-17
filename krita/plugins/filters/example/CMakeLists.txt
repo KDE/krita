@@ -6,7 +6,7 @@ kde4_add_plugin(kritaexample ${kritaexample_PART_SRCS})
 
 
 
-target_link_libraries(kritaexample kritaui)
+target_link_libraries(kritaexample koguiutils kritaimage kritaui ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS})
 
 install(TARGETS kritaexample  DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -14,7 +14,7 @@ kde4_add_plugin(kritalenscorrectionfilter ${kritalenscorrectionfilter_PART_SRCS}
 
 
 
-target_link_libraries(kritalenscorrectionfilter kritaui)
+target_link_libraries(kritalenscorrectionfilter koguiutils kritaimage kritaui ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS})
 
 install(TARGETS kritalenscorrectionfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 

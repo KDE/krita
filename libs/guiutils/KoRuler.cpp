@@ -152,7 +152,7 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
     painter.setBrush(d->ruler->palette().color(QPalette::Text));
     painter.setRenderHint( QPainter::Antialiasing );
 
-    foreach (KoRuler::Tab t, d->tabs) {
+    foreach (const KoRuler::Tab & t, d->tabs) {
         qreal x;
         if (d->rightToLeft)
             x = d->viewConverter->documentToViewX(d->activeRangeEnd - t.position)
@@ -308,7 +308,7 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
         const qreal bottom = rectangle.bottom() -1;
         if (d->selected == KoRulerPrivate::None && d->showMousePosition && mouseCoord > 0 && mouseCoord < rectangle.width() )
             painter.drawLine(QPointF(mouseCoord, top), QPointF(mouseCoord, bottom));
-        foreach (KoRulerPrivate::HotSpotData hp, d->hotspots) {
+        foreach (const KoRulerPrivate::HotSpotData & hp, d->hotspots) {
             const qreal x = d->viewConverter->documentToViewX(hp.position) + d->offset;
             painter.drawLine(QPointF(x, top), QPointF(x, bottom));
         }
@@ -514,7 +514,7 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
         const qreal right = rectangle.right() -1;
         if (d->selected == KoRulerPrivate::None && d->showMousePosition && mouseCoord > 0 && mouseCoord < rectangle.height() )
             painter.drawLine(QPointF(left, mouseCoord), QPointF(right, mouseCoord));
-        foreach (KoRulerPrivate::HotSpotData hp, d->hotspots) {
+        foreach (const KoRulerPrivate::HotSpotData & hp, d->hotspots) {
             const qreal y = d->viewConverter->documentToViewY(hp.position) + d->offset;
             painter.drawLine(QPointF(left, y), QPointF(right, y));
         }
@@ -942,7 +942,7 @@ void KoRuler::mousePressEvent ( QMouseEvent* ev )
     if (d->showTabs) {
         int i = 0;
         int x;
-        foreach (Tab t, d->tabs) {
+        foreach (const Tab & t, d->tabs) {
             if (d->rightToLeft)
                 x = int(d->viewConverter->documentToViewX(d->activeRangeEnd - t.position)
                         + d->offset);
@@ -1172,7 +1172,9 @@ void KoRuler::clearHotSpots()
 
 void KoRuler::setHotSpot(qreal position, int id)
 {
-    foreach(KoRulerPrivate::HotSpotData hs, d->hotspots) {
+    uint hotspotCount = d->hotspots.count();
+    for( uint i = 0; i < hotspotCount; ++i ) {
+        KoRulerPrivate::HotSpotData & hs = d->hotspots[i];
         if (hs.id == id) {
             hs.position = position;
             update();

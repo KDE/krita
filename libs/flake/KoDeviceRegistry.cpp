@@ -35,7 +35,7 @@ void KoDeviceRegistry::init()
     KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Device"),
                                      QString::fromLatin1("[X-Flake-MinVersion] <= 0"));
 
-    foreach(QString id, keys()) {
+    foreach(const QString & id, keys()) {
         KoDevice * d = value(id);
         if (d)
             d->start();
@@ -44,7 +44,7 @@ void KoDeviceRegistry::init()
 
 KoDeviceRegistry::~KoDeviceRegistry()
 {
-    foreach(QString id, keys()) {
+    foreach(const QString & id, keys()) {
         KoDevice * d = value(id);
         if (d)
             d->stop();

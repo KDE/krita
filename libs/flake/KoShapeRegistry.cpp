@@ -107,7 +107,7 @@ void KoShapeRegistry::insertFactory(KoShapeFactory * factory)
     if (factory->odfNameSpace().isEmpty() || factory->odfElementNames().isEmpty()) {
         kDebug(30006) << "Shape factory" << factory->id() << " does not have OdfNamespace defined, ignoring";
     } else {
-        foreach(QString elementName, factory->odfElementNames()) {
+        foreach(const QString & elementName, factory->odfElementNames()) {
 
             QPair<QString, QString> p(factory->odfNameSpace(), elementName);
 

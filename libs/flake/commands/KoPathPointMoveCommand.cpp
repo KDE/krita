@@ -69,7 +69,7 @@ void KoPathPointMoveCommand::applyOffset( const QPointF &offset )
         
         // repaint old bounding rect
         path->update();
-        foreach(const KoPathPointIndex index, it.value()) {
+        foreach(const KoPathPointIndex & index, it.value()) {
             KoPathPoint * p = path->pointByIndex(index);
             if ( p )
                 p->map(matrix, true);

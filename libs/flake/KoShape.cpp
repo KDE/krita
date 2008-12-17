@@ -437,8 +437,8 @@ void KoShape::copySettings(const KoShape *shape)
 {
     d->size = shape->size();
     d->connectors.clear();
-    foreach(QPointF point, shape->connectionPoints())
-    addConnectionPoint(point);
+    foreach(const QPointF & point, shape->connectionPoints())
+        addConnectionPoint(point);
     d->zIndex = shape->zIndex();
     d->visible = shape->isVisible();
 
@@ -542,8 +542,8 @@ QList<QPointF> KoShape::connectionPoints() const
     QList<QPointF> points;
     QSizeF s = size();
     // convert glue points to shape coordinates
-    foreach(QPointF cp, d->connectors)
-    points.append(QPointF(s.width() * cp.x(), s.height() * cp.y()));
+    foreach(const QPointF & cp, d->connectors)
+        points.append(QPointF(s.width() * cp.x(), s.height() * cp.y()));
 
     return points;
 }
@@ -874,7 +874,7 @@ bool KoShape::loadOdfAttributes(const KoXmlElement & element, KoShapeLoadingCont
 
     if (attributes & OdfAdditionalAttributes) {
         QSet<KoShapeLoadingContext::AdditionalAttributeData> additionalAttributeData = KoShapeLoadingContext::additionalAttributeData();
-        foreach(KoShapeLoadingContext::AdditionalAttributeData attributeData, additionalAttributeData) {
+        foreach(const KoShapeLoadingContext::AdditionalAttributeData & attributeData, additionalAttributeData) {
             if (element.hasAttributeNS(attributeData.ns, attributeData.tag)) {
                 QString value = element.attributeNS(attributeData.ns, attributeData.tag);
                 //kDebug(30006) << "load additional attribute" << attributeData.tag << value;

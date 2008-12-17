@@ -77,7 +77,7 @@ bool OrthogonalSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * pr
     QList<KoShape*> shapes = proxy->shapes();
     foreach(KoShape * shape, shapes) {
         QList<QPointF> points = proxy->pointsFromShape(shape);
-        foreach(QPointF point, points) {
+        foreach(const QPointF & point, points) {
             qreal dx = fabs(point.x() - mousePosition.x());
             if (dx < minHorzDist && dx < maxSnapDistance) {
                 minHorzDist = dx;
@@ -145,7 +145,7 @@ bool NodeSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * proxy, q
 
     QPointF snappedPoint = mousePosition;
 
-    foreach(QPointF point, points) {
+    foreach(const QPointF & point, points) {
         qreal distance = fastDistance(mousePosition, point);
         if (distance < maxDistance && distance < minDistance) {
             snappedPoint = point;

@@ -181,7 +181,7 @@ void KoToolManager::setup()
 
     KoShapeRegistry::instance();
     KoToolRegistry *registry = KoToolRegistry::instance();
-    foreach(QString id, registry->keys()) {
+    foreach(const QString & id, registry->keys()) {
         ToolHelper *t = new ToolHelper(registry->value(id));
         d->tools.append(t);
     }
@@ -244,7 +244,7 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
     CanvasData *cd = d->canvasses.value(controller).first();
     foreach(KoTool *tool, cd->allTools) {
         QHash<QString, KAction*> actions = tool->actions();
-        foreach(QString name, actions.keys())
+        foreach(const QString & name, actions.keys())
             ac->addAction(name, actions[name]);
     }
 }

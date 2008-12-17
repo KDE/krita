@@ -155,6 +155,7 @@ set(kritaimage_LIB_SRCS
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
 target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} ${KDE4_KDE3SUPPORT_LIBS} koguiutils ${KDE4_THREADWEAVER_LIBRARIES} ${EXIV2_LIBRARIES} )
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES koguiutils ${KDE4_KPARTS_LIBS} ${QT_QT3SUPPORT_LIBRARY} ${EXIV2_LIBRARIES})
 
 if(OPENEXR_FOUND)
   target_link_libraries(kritaimage  ${OPENEXR_LIBRARIES})

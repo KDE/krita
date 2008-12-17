@@ -14,7 +14,7 @@ kde4_add_plugin(kritarandompickfilter ${kritarandompickfilter_PART_SRCS})
 
 
 
-target_link_libraries(kritarandompickfilter kritaui)
+target_link_libraries(kritarandompickfilter koguiutils kritaimage kritaui ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS})
 
 install(TARGETS kritarandompickfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 

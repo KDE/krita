@@ -90,7 +90,7 @@ public:
         if (parent)
             parent->removeChild(me);
         foreach(KoShapeManager *manager, shapeManagers)
-        manager->remove(me);
+            manager->remove(me);
         delete userData;
         delete appData;
         if (border && ! border->removeUser())
@@ -107,7 +107,7 @@ public:
             parent->model()->childChanged(me, type);
         me->shapeChanged(type);
         foreach(KoShape * shape, dependees)
-        shape->notifyShapeChanged(me, type);
+            shape->notifyShapeChanged(me, type);
     }
 
     QSizeF size; // size in pt
@@ -388,7 +388,7 @@ void KoShape::update() const
     if (!d->shapeManagers.empty()) {
         QRectF rect(boundingRect());
         foreach(KoShapeManager * manager, d->shapeManagers)
-        manager->update(rect, this, true);
+            manager->update(rect, this, true);
     }
 }
 
@@ -744,7 +744,7 @@ void KoShape::setName(const QString & name)
 void KoShape::deleteLater()
 {
     foreach(KoShapeManager *manager, d->shapeManagers)
-    manager->remove(this);
+        manager->remove(this);
     d->shapeManagers.clear();
     new ShapeDeleter(this);
 }

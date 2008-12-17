@@ -12,7 +12,7 @@ kde4_add_unit_test(KisIlluminantProfileTest
                    ${kis_illuminant_profile_test_SRCS})
 
 target_link_libraries(KisIlluminantProfileTest
-    kritaimage ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+    kritaimage ${KDE4_KDEUI_LIBS} ${QT_QTXML_LIBRARY} ${QT_QTTEST_LIBRARY})
 
 ########### KisKSColorSpace Test ###############
 
@@ -25,7 +25,7 @@ kde4_add_unit_test(KisKSColorSpaceTest
                    ${kis_ks_colorspace_test_SRCS})
 
 target_link_libraries(KisKSColorSpaceTest
-    kritaimage ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+    kritaimage pigmentcms ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
 
 ########### Mixing Test ###############
 
@@ -38,4 +38,4 @@ kde4_add_unit_test(MixingTest
                    ${mixing_test_SRCS})
 
 target_link_libraries(MixingTest
-    kritaimage ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+    kritaimage pigmentcms ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})

@@ -8,7 +8,7 @@ kde4_add_plugin(kritaconvolutionfilters ${kritaconvolutionfilters_PART_SRCS})
 
 
 
-target_link_libraries(kritaconvolutionfilters kritaui)
+target_link_libraries(kritaconvolutionfilters koguiutils kritaimage kritaui ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS})
 
 install(TARGETS kritaconvolutionfilters  DESTINATION ${PLUGIN_INSTALL_DIR})
 

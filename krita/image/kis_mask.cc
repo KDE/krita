@@ -117,7 +117,12 @@ void KisMask::setY(qint32 y)
 
 QRect KisMask::adjustedDirtyRect( const QRect& _rect ) const
 {
-  return _rect;
+    return _rect;
+}
+
+QRect KisMask::neededRect( const QRect& _rect ) const
+{
+    return _rect;
 }
 
 #include "kis_mask.moc"

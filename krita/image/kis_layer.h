@@ -224,7 +224,7 @@ protected:
      * Apply the effect masks to the given projection, producing
      * finally the dst paint device.
      */
-    void applyEffectMasks(KisPaintDeviceSP projection, const QRect & rc);
+    void applyEffectMasks(const KisPaintDeviceSP original, KisPaintDeviceSP projection, const QRect & rc);
 
 private:
     class Private;

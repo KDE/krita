@@ -64,6 +64,7 @@ public:
     virtual void setDirty();
 
     virtual QRect adjustedDirtyRect( const QRect& _rect ) const;
+    virtual QRect neededRect( const QRect& _rect ) const;
 
 private:
 

@@ -129,7 +129,14 @@ public:
      */
     void setY(qint32 y);
 
+    /**
+     * Adjust the dirty to rect to check which values need to be recomputed
+     */
     virtual QRect adjustedDirtyRect( const QRect& _rect ) const;
+    /**
+     * @return the rect that is needed to compute the corresponding values
+     */
+    virtual QRect neededRect( const QRect& _rect ) const;
 private:
 
     struct Private;

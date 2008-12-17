@@ -123,4 +123,10 @@ QRect KisFilterMask::adjustedDirtyRect( const QRect& _rect ) const
     return filter->changedRect( _rect, m_d->filterConfig );
 }
 
+QRect KisFilterMask::neededRect( const QRect& _rect ) const
+{
+    KisFilterSP filter = KisFilterRegistry::instance()->value(m_d->filterConfig->name());
+    return filter->neededRect( _rect, m_d->filterConfig );
+}
+
 #include "kis_filter_mask.moc"

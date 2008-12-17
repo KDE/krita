@@ -32,6 +32,7 @@
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoCompositeOp.h>
+#include <KoProperties.h>
 
 #include "kis_image.h"
 #include "kis_selection.h"
@@ -140,16 +141,36 @@ void KisPaintLayer::updateProjection(const QRect & rc)
         gc.bitBlt(rc.topLeft(), m_d->paintDevice, rc);
     }
     
+    // TODO copy less
+    KisPaintDeviceSP source = m_d->paintDevice;
+    
     if( temporaryTarget() )
     {
-        KisPainter gc(m_d->projection);
-        gc.bitBlt( rc.left(), rc.top(), temporaryCompositeOp(), temporaryTarget(),
-                   temporaryOpacity(), rc.left(), rc.top(), rc.width(), rc.height());
+        source = new KisPaintDevice( m_d->paintDevice->colorSpace() );
+        QRect currentNeededRc = rc;
+        KoProperties props;
+        props.setProperty("visible", true);
+        QList<KisNodeSP> masks = childNodes(QStringList("KisEffectMask"), props);
+        for( int i = masks.size() - 1; i >= 0 ; --i )
+        {
+            const KisEffectMask * effectMask = dynamic_cast<const KisEffectMask*>(masks.at(i).data());
+            if (effectMask) {
+                currentNeededRc |= effectMask->neededRect( currentNeededRc );
+            }
+        }
+        
+        KisPainter gc(source);
+        gc.bitBlt( currentNeededRc.left(), currentNeededRc.top(), COMPOSITE_COPY,
+                   m_d->paintDevice, temporaryOpacity(), currentNeededRc.left(),
+                    currentNeededRc.top(), currentNeededRc.width(), currentNeededRc.height());
+        gc.bitBlt( currentNeededRc.left(), currentNeededRc.top(), temporaryCompositeOp(),
+                   temporaryTarget(), temporaryOpacity(), currentNeededRc.left(),
+                    currentNeededRc.top(), currentNeededRc.width(), currentNeededRc.height());
     }
 
     if( visible() )
     {
-        applyEffectMasks(m_d->projection, rc);
+        applyEffectMasks(source, m_d->projection, rc);
     }
 }
 

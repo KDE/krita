@@ -40,5 +40,5 @@ set(TestStylesModel_test_SRCS
     ../dialogs/StylesModel.cpp
 )
 kde4_add_unit_test(TestStylesModel TESTNAME shapes-text-TestStylesModel ${TestStylesModel_test_SRCS})
-target_link_libraries(TestStylesModel kotext ${KDE4_KDEUI_LIBRARY} ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestStylesModel kotext ${QT_QTTEST_LIBRARY})
 

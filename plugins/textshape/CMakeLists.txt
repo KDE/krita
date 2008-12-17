@@ -72,17 +72,13 @@ kde4_add_ui_files(textshape_SRCS
 
 kde4_add_plugin(textshape ${textshape_SRCS})
 
-target_link_libraries(
-    textshape
-    flake
+target_link_libraries(textshape
     koguiutils
     kotext
-    komain
-    kostore
-    pigmentcms
+    ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}
-    )
+)
 install(TARGETS textshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

@@ -16,7 +16,7 @@ kde4_add_plugin(kritaextensioncolorsfilters ${kritaextensioncolorsfilters_PART_S
 
 
 
-target_link_libraries(kritaextensioncolorsfilters kritaui)
+target_link_libraries(kritaextensioncolorsfilters ${KDE4_KPARTS_LIBS} ${QT_QTXML_LIBRARY} koguiutils kritaui kritaimage)
 
 install(TARGETS kritaextensioncolorsfilters  DESTINATION ${PLUGIN_INSTALL_DIR})
 

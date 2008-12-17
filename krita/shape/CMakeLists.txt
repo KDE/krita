@@ -13,7 +13,7 @@ SET (kritashape_LIB_SRCS
 
 kde4_add_plugin(kritashape ${kritashape_LIB_SRCS})
 
-target_link_libraries(kritashape kritaimage flake kritaui ${KDE4_KIO_LIBS} ${KDE4_KDEUI_LIBS} ${QT_QT3SUPPORT_LIBRARY})
+target_link_libraries(kritashape kritaui)
 install(TARGETS kritashape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

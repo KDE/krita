@@ -17,8 +17,7 @@ kde4_add_plugin(kritacolorsfilters ${kritacolorsfilters_PART_SRCS})
 
 
 
-target_link_libraries(kritacolorsfilters ${KDE4_KPARTS_LIBS} ${QT_QTXML_LIBRARY} ${QT_QT3SUPPORT_LIBRARY}
-                                          koguiutils kritaui kritaimage pigmentcms)
+target_link_libraries(kritacolorsfilters kritaui)
 
 install(TARGETS kritacolorsfilters  DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -14,7 +14,7 @@ kde4_add_plugin(kritanoisefilter ${kritanoisefilter_PART_SRCS})
 
 
 
-target_link_libraries(kritanoisefilter koguiutils kritaimage kritaui ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS})
+target_link_libraries(kritanoisefilter kritaui)
 
 install(TARGETS kritanoisefilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 

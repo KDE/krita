@@ -4,7 +4,7 @@ kde4_add_plugin(kritaroundcornersfilter ${kritaroundcornersfilter_PART_SRCS})
 
 
 
-target_link_libraries(kritaroundcornersfilter koguiutils kritaimage kritaui ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS})
+target_link_libraries(kritaroundcornersfilter kritaui)
 
 install(TARGETS kritaroundcornersfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 

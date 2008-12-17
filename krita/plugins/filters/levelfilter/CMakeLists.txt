@@ -14,7 +14,7 @@ kde4_add_plugin(kritalevelfilter ${kritalevelfilter_PART_SRCS})
 
 
 
-target_link_libraries(kritalevelfilter koguiutils kritaimage kritaui ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS})
+target_link_libraries(kritalevelfilter kritaui)
 
 install(TARGETS kritalevelfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 

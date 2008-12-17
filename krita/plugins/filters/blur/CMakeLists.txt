@@ -14,7 +14,7 @@ kde4_add_plugin(kritablurfilter ${kritablurfilter_PART_SRCS})
 
 
 
-target_link_libraries(kritablurfilter ${KDE4_KPARTS_LIBS} koguiutils kritaimage kritaui)
+target_link_libraries(kritablurfilter kritaui)
 
 install(TARGETS kritablurfilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 

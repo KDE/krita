@@ -6,7 +6,7 @@ kde4_add_plugin(kritapixelizefilter ${kritapixelizefilter_PART_SRCS})
 
 
 
-target_link_libraries(kritapixelizefilter koguiutils kritaimage kritaui ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS})
+target_link_libraries(kritapixelizefilter kritaui)
 
 install(TARGETS kritapixelizefilter  DESTINATION ${PLUGIN_INSTALL_DIR})
 

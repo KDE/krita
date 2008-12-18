@@ -99,19 +99,20 @@ KisConvolutionKernelSP KisConvolutionKernel::kernelFromMaskGenerator(KisMaskGene
     qint32 height = (int)(kmg->height() + 0.5);
 
     KisConvolutionKernelSP k = new KisConvolutionKernel(width, height, 0, 0);
-    double cosa = 1.0;//cos(angle);
-    double sina = 0.0;//sin(angle);
-    double xc = 0.5 * width;
-    double yc = 0.5 * height;
+    double cosa = cos(angle);
+    double sina = sin(angle);
+    double xc = 0.5 * width - 0.5;
+    double yc = 0.5 * height - 0.5;
     qint32 factor = 0;
     qint32* itData = k->data();
+//     dbgImage << ppVar(xc) << ppVar(yc);
     for (int y_it = 0; y_it < height; ++y_it) {
         for (int x_it = 0; x_it < width; ++x_it) {
             double x_ = (x_it - xc);
             double y_ = (y_it - yc);
             double x = cosa * x_ - sina * y_;
             double y = sina * x_ + cosa * y_;
-//             dbgKrita << x << " " << y << " " << x_ << " " << y_ << " " << kmg->interpolatedValueAt( x,y);
+//             dbgImage << ppVar(x) << ppVar(y) << ppVar(x_) << ppVar(y_) << ppVar( kmg->interpolatedValueAt( x,y) );
             *itData = 255 - kmg->interpolatedValueAt(x, y);
             factor += *itData;
             ++itData;

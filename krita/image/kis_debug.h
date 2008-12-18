@@ -138,6 +138,6 @@
 /**
  * Use this macro to display in the output stream the name of a variable followed by its value.
  */
-#define ppVar( var ) #var << " = " << var
+#define ppVar( var ) #var << "=" << var
 
 #endif

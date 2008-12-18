@@ -188,3 +188,10 @@ void KisFilterWave::process(KisConstProcessingInformation srcInfo,
     delete horizontalcurve;
     delete verticalcurve;
 }
+
+int KisFilterWave::overlapMarginNeeded(const KisFilterConfiguration* _config) const
+{
+    int horizontalamplitude = (config && config->getProperty("horizontalamplitude", value)) ? value.toInt() : 4;
+    int verticalamplitude = (config && config->getProperty("verticalamplitude", value)) ? value.toInt() : 4;
+    return qMax(horizontalamplitude, verticalamplitude) ;
+}

@@ -102,7 +102,7 @@ void KisBlurFilter::process(KisConstProcessingInformation srcInfo,
         break;
     }
 
-    KisConvolutionKernelSP kernel = KisConvolutionKernel::kernelFromMaskGenerator(kas, rotate);
+    KisConvolutionKernelSP kernel = KisConvolutionKernel::kernelFromMaskGenerator(kas, rotate * M_PI / 180.0);
     delete kas;
     KisConvolutionPainter painter(dst, dstInfo.selection());
     painter.setProgress(progressUpdater);

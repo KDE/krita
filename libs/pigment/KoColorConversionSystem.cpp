@@ -516,7 +516,7 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl2
                         else if ( pQC.lessWorseThan( newP, lessWorsePath)  ) {
                             Q_ASSERT(newP->startNode()->id() == lessWorsePath->startNode()->id() );
                             Q_ASSERT(newP->endNode()->id() == lessWorsePath->endNode()->id());
-                            kDebug() << pQC.lessWorseThan( newP, lessWorsePath) << " " << newP << "  "<< lessWorsePath;
+                            warnPigment << pQC.lessWorseThan( newP, lessWorsePath) << " " << newP << "  "<< lessWorsePath;
                             delete lessWorsePath;
                             lessWorsePath = newP;
                         } else {
@@ -547,10 +547,10 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl2
     }
     if(lessWorsePath)
     {
-        kWarning(DBG_PIGMENT) << "No good path from " << srcNode->id() << " to " << dstNode->id() << " found : length = " << lessWorsePath->length() << " cost = " << lessWorsePath->cost << " referenceDepth = " << lessWorsePath->referenceDepth << " respectColorCorrectness = " << lessWorsePath->respectColorCorrectness << " isGood = " << lessWorsePath->isGood ;
+        warnPigment << "No good path from " << srcNode->id() << " to " << dstNode->id() << " found : length = " << lessWorsePath->length() << " cost = " << lessWorsePath->cost << " referenceDepth = " << lessWorsePath->referenceDepth << " respectColorCorrectness = " << lessWorsePath->respectColorCorrectness << " isGood = " << lessWorsePath->isGood ;
         return lessWorsePath;
     } 
-    kError(DBG_PIGMENT) << "No path from " << srcNode->id() << " to " << dstNode->id() << " found not ";
+    errorPigment << "No path from " << srcNode->id() << " to " << dstNode->id() << " found not ";
     return 0;
 }
 

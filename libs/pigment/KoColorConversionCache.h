@@ -26,7 +26,7 @@ class KoColorSpace;
 #include "KoColorConversionTransformation.h"
 
 /**
- * This class holds a cache of KoColorConversionTransformation.
+ * This class holds a cache of KoColorConversionTransformations.
  * 
  * This class is not part of public API, and can be changed without notice.
  */
@@ -36,13 +36,15 @@ class KoColorConversionCache {
     public:
         KoColorConversionCache();
         ~KoColorConversionCache();
+
         /**
-         * This function return a cached color transformation if available
+         * This function returns a cached color transformation if available
          * or create one.
          * @param src source color space
          * @param dst destination color space
          */
         KoCachedColorConversionTransformation cachedConverter(const KoColorSpace* src, const KoColorSpace* dst, KoColorConversionTransformation::Intent _renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+
         /**
          * This function is called by the destructor of the color space to
          * warn the cache that any pointers to this color space is going to

@@ -31,9 +31,9 @@
 #include <klocale.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
+#include <k3staticdeleter.h>
 
 #include <lcms.h>
-
 
 #include "KoPluginLoader.h"
 
@@ -70,11 +70,14 @@ struct KoColorSpaceRegistry::Private {
 };
 
 KoColorSpaceRegistry *KoColorSpaceRegistry::Private::singleton = 0;
+// deleting the registry still gives errors
+//static K3StaticDeleter<KoColorSpaceRegistry> staticDeleter;
 
 KoColorSpaceRegistry* KoColorSpaceRegistry::instance()
 {
     if(KoColorSpaceRegistry::Private::singleton == 0)
     {
+        //staticDeleter.setObject(KoColorSpaceRegistry::Private::singleton, new KoColorSpaceRegistry());
         KoColorSpaceRegistry::Private::singleton = new KoColorSpaceRegistry();
         KoColorSpaceRegistry::Private::singleton->init();
     }
@@ -201,7 +204,6 @@ KoColorSpaceRegistry::KoColorSpaceRegistry() : d(new Private())
 KoColorSpaceRegistry::~KoColorSpaceRegistry()
 {
     delete d->colorConversionSystem;
-    delete d->colorConversionCache;
     foreach( KoColorProfile* profile, d->profileMap) {
         delete profile;
     }
@@ -210,6 +212,9 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
         delete cs;
     }
     d->csMap.clear();
+    // deleting colorspaces calls a function in the cache
+    delete d->colorConversionCache;
+    d->colorConversionCache = 0;
     delete d->alphaCs;
     delete d->rgbU8sRGB;
     delete d->lab16sLAB;

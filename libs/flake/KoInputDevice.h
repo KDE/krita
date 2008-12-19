@@ -25,6 +25,7 @@
 
 #include <QHash>
 #include <QTabletEvent>
+#include <QDebug>
 
 /**
  * This class represents an input device.
@@ -91,6 +92,43 @@ private:
     class Private;
     Private * const d;
 };
+
+Q_DECLARE_METATYPE( KoInputDevice )
+
+
+inline QDebug operator<<(QDebug dbg, const KoInputDevice device)
+{
+    if ( device.isMouse() )
+        dbg.nospace() << "mouse";
+    else {
+        switch( device.pointer() ) {
+        case QTabletEvent::UnknownPointer:
+            dbg.nospace() << "unknown pointer";
+        case QTabletEvent::Pen:
+            dbg.nospace() << "pen";
+        case QTabletEvent::Cursor:
+            dbg.nospace() << "cursor";
+        case QTabletEvent::Eraser:
+            dbg.nospace() << "eraser";
+        }
+        switch( device.device() ) {
+        case QTabletEvent::NoDevice:
+            dbg.space() << "no device";
+        case QTabletEvent::Puck:
+            dbg.space() << "puck";
+        case QTabletEvent::Stylus:
+            dbg.space() << "stylus";
+        case QTabletEvent::Airbrush:
+            dbg.space() << "airbrush";
+        case QTabletEvent::FourDMouse:
+            dbg.space() << "four2mouse";
+        case QTabletEvent::RotationStylus:
+            dbg.space() << "rotationstylus";
+        }
+        dbg.space() << "(id: " << device.uniqueTabletId() << ")";
+    }
+    return dbg.space();
+}
 
 inline uint qHash(const KoInputDevice & key)
 {

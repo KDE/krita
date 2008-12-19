@@ -58,7 +58,7 @@
 
 KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name)
         : QWidget(parent),
-        m_resourceProvider(view->resourceProvider()), m_view(view)
+        m_resourceProvider(view->resourceProvider()), m_view(view), m_optionWidget(0), m_activePreset(0)
 {
     Q_ASSERT(view != 0);
 
@@ -67,7 +67,6 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     KAcceleratorManager::setNoAccel(this);
 
     setWindowTitle(i18n("Painter's Toolchest"));
-    m_optionWidget = 0;
 
     m_cmbPaintops = new KComboBox(this);
     m_cmbPaintops->setObjectName("KisPaintopBox::m_cmbPaintops");

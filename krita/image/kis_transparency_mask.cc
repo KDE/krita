@@ -57,7 +57,7 @@ void KisTransparencyMask::apply(KisPaintDeviceSP projection, const QRect & rc) c
     KisHLineIteratorPixel projectionIt = projection->createHLineIterator(rc.x(), rc.y(), rc.width());
     KisHLineConstIteratorPixel maskIt = selection()->createHLineConstIterator(rc.x(), rc.y(), rc.width());
 
-    for (int row = rc.y(); row < rc.height(); ++row) {
+    for (int row = rc.y(); row < rc.bottom() + 1; ++row) {
         while (!projectionIt.isDone()) {
 
             int pixels = qMin(projectionIt.nConseqHPixels(), maskIt.nConseqHPixels());

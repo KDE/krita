@@ -53,6 +53,8 @@ KisSmallColorWidget::KisSmallColorWidget(QWidget* parent) : QWidget(parent), d(n
     d->saturation = 0;
     d->updateAllowed = true;
     d->handle = NoHandle;
+    d->rectangleHeight = 1;
+    d->rectangleWidth = 1;
 }
 
 KisSmallColorWidget::~KisSmallColorWidget()

@@ -72,12 +72,10 @@ public:
         , dim(0)
         , needsMovement(false)
     {
-        for (int i = 0; i < MaxDim; i++) {
-            rank[i] = index[i] = brushesCount[i] = 0;
-            selection[i] = KisParasite::Constant;
-        }
+        init();
     }
 
+    void init();
     /// Initializes the brushesCount helper
     void setBrushesCount();
 

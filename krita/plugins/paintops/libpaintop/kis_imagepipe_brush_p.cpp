@@ -20,6 +20,7 @@
 
 KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
 {
+    init();
     needsMovement = false;
     QRegExp basicSplitter(" ");
     QRegExp parasiteSplitter(":");
@@ -79,6 +80,14 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
     }
 
     setBrushesCount();
+}
+
+void KisPipeBrushParasite::init()
+{
+    for (int i = 0; i < MaxDim; i++) {
+        rank[i] = index[i] = brushesCount[i] = 0;
+        selection[i] = KisParasite::Constant;
+    }
 }
 
 void KisPipeBrushParasite::setBrushesCount()

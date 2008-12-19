@@ -71,7 +71,6 @@ public:
 
 
     virtual quint32 colorSpaceType() const { return 0; }
-    virtual icColorSpaceSignature colorSpaceSignature() const { return icSigGrayData; }
 
     virtual bool hasHighDynamicRange() const { return false; }
     virtual const KoColorProfile* profile() const { return 0; }

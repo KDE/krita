@@ -174,7 +174,7 @@ QString KoDocumentInfo::aboutInfo(const QString& info) const
 
 bool KoDocumentInfo::saveOasisAuthorInfo(KoXmlWriter &xmlWriter)
 {
-    foreach(QString tag, m_authorTags) {
+    foreach(const QString & tag, m_authorTags) {
         if (!authorInfo(tag).isEmpty() && tag == "creator") {
             xmlWriter.startElement("dc:creator");
             xmlWriter.addTextNode(authorInfo("creator"));
@@ -235,7 +235,7 @@ QDomElement KoDocumentInfo::saveAuthorInfo(QDomDocument& doc)
     QDomElement e = doc.createElement("author");
     QDomElement t;
 
-    foreach(QString tag, m_authorTags) {
+    foreach(const QString & tag, m_authorTags) {
         if (tag == "creator")
             t = doc.createElement("full-name");
         else
@@ -252,10 +252,10 @@ bool KoDocumentInfo::saveOasisAboutInfo(KoXmlWriter &xmlWriter)
 {
     saveParameters();
 
-    foreach(QString tag, m_aboutTags) {
+    foreach(const QString & tag, m_aboutTags) {
         if (!aboutInfo(tag).isEmpty() || tag == "title") {
             if (tag == "keyword") {
-                foreach(QString tmp, aboutInfo("keyword").split(';')) {
+                foreach(const QString & tmp, aboutInfo("keyword").split(';')) {
                     xmlWriter.startElement("meta:keyword");
                     xmlWriter.addTextNode(tmp);
                     xmlWriter.endElement();
@@ -333,7 +333,7 @@ QDomElement KoDocumentInfo::saveAboutInfo(QDomDocument& doc)
     QDomElement e = doc.createElement("about");
     QDomElement t;
 
-    foreach(QString tag, m_aboutTags) {
+    foreach(const QString & tag, m_aboutTags) {
         if (tag == "comments") {
             t = doc.createElement("abstract");
             e.appendChild(t);

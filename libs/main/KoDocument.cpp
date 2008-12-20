@@ -2598,7 +2598,7 @@ KoOpenPane* KoDocument::createOpenPane(QWidget* parent, const KComponentData &co
 {
     KoOpenPane* openPane = new KoOpenPane(parent, componentData, templateType);
     QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(openPane);
-    foreach(CustomDocumentWidgetItem item, widgetList) {
+    foreach(const CustomDocumentWidgetItem & item, widgetList) {
         openPane->addCustomDocumentWidget(item.widget, item.title, item.icon);
         connect(item.widget, SIGNAL(documentSelected()), this, SLOT(startCustomDocument()));
     }

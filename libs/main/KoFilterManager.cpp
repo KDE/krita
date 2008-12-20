@@ -382,7 +382,7 @@ void buildGraph(Q3AsciiDict<Vertex>& vertices, KoFilterManager::Direction direct
         // Now we have to exclude the "stop" mimetypes (in the right direction!)
         if (direction == KoFilterManager::Import) {
             // Import: "stop" mime type should not appear in export
-            foreach(QString testIt, (*it)->export_) {
+            foreach(const QString & testIt, (*it)->export_) {
                 if (!stopList.contains(testIt))
                     expList.append(testIt);
             }
@@ -390,7 +390,7 @@ void buildGraph(Q3AsciiDict<Vertex>& vertices, KoFilterManager::Direction direct
             impList = (*it)->import;
         } else {
             // Export: "stop" mime type should not appear in import
-            foreach(QString testIt, (*it)->import) {
+            foreach(const QString & testIt, (*it)->import) {
                 if (!stopList.contains(testIt))
                     impList.append(testIt);
             }
@@ -497,10 +497,10 @@ QStringList KoFilterManager::mimeFilter(const QByteArray& mimetype, Direction di
     QStringList lst = nativeMimeTypes;
 
     // Now look for filters which output each of those natives mimetypes
-    foreach(QString natit, nativeMimeTypes) {
+    foreach(const QString & natit, nativeMimeTypes) {
         const QStringList outMimes = connected(vertices, natit.toLatin1());
         //kDebug(s_area) <<"output formats connected to mime" << natit <<" :" << outMimes;
-        foreach(QString mit, outMimes) {
+        foreach(const QString & mit, outMimes) {
             if (!lst.contains(mit))     // append only if not there already. Qt4: QSet<QString>?
                 lst.append(mit);
         }

@@ -175,10 +175,10 @@ ExtensionSnapStrategy::ExtensionSnapStrategy()
 bool ExtensionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance)
 {
     qreal maxDistance = maxSnapDistance * maxSnapDistance;
-    qreal minDistance = HUGE_VAL;
+    qreal minDistances[2] = { HUGE_VAL, HUGE_VAL };
 
-    QPointF snappedPoint = mousePosition;
-    QPointF startPoint;
+    QPointF snappedPoints[2] = { mousePosition, mousePosition };
+    QPointF startPoints[2];
 
     QList<KoShape*> shapes = proxy->shapes(true);
     foreach(KoShape * shape, shapes) {
@@ -200,10 +200,21 @@ bool ExtensionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * pro
             QPointF firstSnapPosition = mousePosition;
             if (snapToExtension(firstSnapPosition, first, matrix)) {
                 qreal distance = fastDistance(firstSnapPosition, mousePosition);
-                if (distance < maxDistance && distance < minDistance) {
-                    minDistance = distance;
-                    snappedPoint = firstSnapPosition;
-                    startPoint = matrix.map(first->point());
+                if (distance < maxDistance) {
+                    if (distance < minDistances[0]) {
+                        minDistances[1] = minDistances[0];
+                        snappedPoints[1] = snappedPoints[0];
+                        startPoints[1] = startPoints[0];
+
+                        minDistances[0] = distance;
+                        snappedPoints[0] = firstSnapPosition;
+                        startPoints[0] = matrix.map(first->point());
+                    }
+                    else if (distance < minDistances[1]) {
+                        minDistances[1] = distance;
+                        snappedPoints[1] = firstSnapPosition;
+                        startPoints[1] = matrix.map(first->point());
+                    }
                 }
             }
 
@@ -212,23 +223,61 @@ bool ExtensionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * pro
             QPointF lastSnapPosition = mousePosition;
             if (snapToExtension(lastSnapPosition, last, matrix)) {
                 qreal distance = fastDistance(lastSnapPosition, mousePosition);
-                if (distance < maxDistance && distance < minDistance) {
-                    minDistance = distance;
-                    snappedPoint = lastSnapPosition;
-                    startPoint = matrix.map(last->point());
+                if (distance < maxDistance) {
+                    if (distance < minDistances[0]) {
+                        minDistances[1] = minDistances[0];
+                        snappedPoints[1] = snappedPoints[0];
+                        startPoints[1] = startPoints[0];
+                        
+                        minDistances[0] = distance;
+                        snappedPoints[0] = lastSnapPosition;
+                        startPoints[0] = matrix.map(last->point());
+                    }
+                    else if (distance < minDistances[1]) {
+                        minDistances[1] = distance;
+                        snappedPoints[1] = lastSnapPosition;
+                        startPoints[1] = matrix.map(last->point());
+                    }
                 }
             }
         }
     }
 
-    if (minDistance < HUGE_VAL)
-        m_line = QLineF(startPoint, snappedPoint);
-    else
-        m_line = QLineF();
+    m_lines.clear();
+    // if we have to extension near our mouse position, they might have an intersection
+    // near our mouse position which we want to use as the snapped position
+    if (minDistances[0] < HUGE_VAL && minDistances[1] < HUGE_VAL ) {
+        // check if intersection of extension lines is near mouse position
+        KoPathSegment s1( startPoints[0], snappedPoints[0] + snappedPoints[0]-startPoints[0] );
+        KoPathSegment s2( startPoints[1], snappedPoints[1] + snappedPoints[1]-startPoints[1] );
+        QList<QPointF> isects = s1.intersections( s2 );
+        if (isects.count() == 1 && fastDistance(isects[0], mousePosition) < maxDistance) {
+            // add both extension lines
+            m_lines.append( QLineF(startPoints[0], isects[0]) );
+            m_lines.append( QLineF(startPoints[1], isects[0]) );
+            setSnappedPosition(isects[0]);
+        }
+        else {
+            // only add nearest extension line of both
+            uint index = minDistances[0] < minDistances[1] ? 0 : 1;
+            m_lines.append( QLineF(startPoints[index], snappedPoints[index]) );
+            setSnappedPosition(snappedPoints[index]);
+        }
+    }
+    else  if (minDistances[0] < HUGE_VAL) {
+        m_lines.append( QLineF(startPoints[0], snappedPoints[0]) );
+        setSnappedPosition(snappedPoints[0]);
+    }
+    else if (minDistances[1] < HUGE_VAL) {
+        m_lines.append( QLineF(startPoints[1], snappedPoints[1]) );
+        setSnappedPosition(snappedPoints[1]);
+    }
+    else {
+        // none of the extension lines is near our mouse position
+        return false;
+    }
 
-    setSnappedPosition(snappedPoint);
-
-    return (minDistance < HUGE_VAL);
+    return true;
 }
 
 QPainterPath ExtensionSnapStrategy::decoration(const KoViewConverter &converter) const
@@ -236,9 +285,9 @@ QPainterPath ExtensionSnapStrategy::decoration(const KoViewConverter &converter)
     Q_UNUSED(converter);
 
     QPainterPath decoration;
-    if (! m_line.isNull()) {
-        decoration.moveTo(m_line.p1());
-        decoration.lineTo(m_line.p2());
+    foreach( const QLineF & line, m_lines ) {
+        decoration.moveTo(line.p1());
+        decoration.lineTo(line.p2());
     }
     return decoration;
 }

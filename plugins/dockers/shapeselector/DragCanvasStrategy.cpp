@@ -28,6 +28,7 @@ DragCanvasStrategy::DragCanvasStrategy(Canvas *canvas, KoPointerEvent &event)
 
 void DragCanvasStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
 {
+    Q_UNUSED(modifiers);
     QPointF distance = mouseLocation - m_lastPosition;
     m_canvas->moveDocumentOffset(distance);
     m_lastPosition = mouseLocation - distance;

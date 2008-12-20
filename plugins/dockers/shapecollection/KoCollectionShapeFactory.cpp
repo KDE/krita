@@ -110,6 +110,7 @@ KoShape* KoCollectionShapeFactory::createDefaultShape( KoShapeControllerBase * s
 KoShape* KoCollectionShapeFactory::createShape( const KoProperties* params, KoShapeControllerBase * shapeController )
 {
     Q_UNUSED(params)
+    Q_UNUSED(shapeController);
     return createDefaultShape();
 }
 

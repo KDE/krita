@@ -45,5 +45,6 @@ QString GroupShape::groupId() const {
 
 void GroupShape::save(QDomElement &root)
 {
+    Q_UNUSED(root);
 }
 

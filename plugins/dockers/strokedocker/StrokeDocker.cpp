@@ -298,8 +298,10 @@ void StrokeDocker::setCanvas( KoCanvasBase *canvas )
     }
 }
 
-void StrokeDocker::resourceChanged(int key, const QVariant & value)
+void StrokeDocker::resourceChanged(int key, const QVariant & value )
 {
+    Q_UNUSED(value);
+
     switch(key)
     {
     case KoCanvasResource::Unit:

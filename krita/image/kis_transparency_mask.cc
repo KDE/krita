@@ -61,7 +61,7 @@ void KisTransparencyMask::apply(KisPaintDeviceSP projection, const QRect & rc) c
         while (!projectionIt.isDone()) {
 
             int pixels = qMin(projectionIt.nConseqHPixels(), maskIt.nConseqHPixels());
-            cs->applyAlphaU8Mask(projectionIt.rawData(), maskIt.rawData(), pixels);
+            cs->applyInverseAlphaU8Mask(projectionIt.rawData(), maskIt.rawData(), pixels);
 
             projectionIt += pixels;
             maskIt += pixels;

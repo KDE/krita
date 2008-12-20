@@ -131,7 +131,7 @@ public:
      *
      * The default page type KoPageApp::Page is returned
      */
-    KoPageApp::PageType pageType() const;
+    virtual KoPageApp::PageType pageType() const;
 
 protected:
     /**

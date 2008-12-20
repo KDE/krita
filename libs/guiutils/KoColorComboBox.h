@@ -45,6 +45,9 @@ public slots:
     /// Sets a new color to be displayed
     void setColor( const QColor &color );
 
+    /// Returns the current color
+    QColor color() const;
+
 protected:
     /// reimplemented
     virtual void paintEvent( QPaintEvent * );

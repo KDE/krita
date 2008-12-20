@@ -61,7 +61,6 @@
 #include "KoPAOdfPageSaveHelper.h"
 #include "KoPAPastePage.h"
 #include "commands/KoPAPageInsertCommand.h"
-#include "commands/KoPAPageDeleteCommand.h"
 #include "commands/KoPAChangeMasterPageCommand.h"
 #include "dialogs/KoPAMasterPageDialog.h"
 
@@ -566,8 +565,7 @@ void KoPAView::copyPage()
 void KoPAView::deletePage()
 {
     if ( !isMasterUsed( m_activePage ) ) {
-        KoPAPageDeleteCommand * command = new KoPAPageDeleteCommand( m_doc, m_activePage );
-        m_canvas->addCommand( command );
+        m_doc->removePage( m_activePage );
     }
 }
 

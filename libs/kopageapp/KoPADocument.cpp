@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -47,6 +47,7 @@
 #include "KoPASavingContext.h"
 #include "KoPALoadingContext.h"
 #include "KoPAViewMode.h"
+#include "commands/KoPAPageDeleteCommand.h"
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -400,6 +401,19 @@ void KoPADocument::postRemoveShape( KoPAPageBase * page, KoShape * shape )
 {
     Q_UNUSED( page );
     Q_UNUSED( shape );
+}
+
+void KoPADocument::removePage( KoPAPageBase * page )
+{
+    KoPAPageDeleteCommand * command = new KoPAPageDeleteCommand( this, page );
+    pageRemoved( page, command );
+    addCommand( command );
+}
+
+void KoPADocument::pageRemoved( KoPAPageBase * page, QUndoCommand * parent )
+{
+    Q_UNUSED( page );
+    Q_UNUSED( parent );
 }
 
 QMap<QString, KoDataCenter *> KoPADocument::dataCenterMap() const

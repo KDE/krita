@@ -59,7 +59,6 @@ signals:
 private:
     struct Private;
     KisFilterDialog::Private* const d;
-    Q_PRIVATE_SLOT(d, void dirtyPreviewMask())
 };
 
 #endif

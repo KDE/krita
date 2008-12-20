@@ -20,9 +20,6 @@
 
 #include "kis_dlg_filter.h"
 
-#include <KoAction.h>
-#include <threadAction/KoExecutePolicy.h>
-
 // From krita/image
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
@@ -44,14 +41,8 @@ struct KisFilterDialog::Private {
     KisFilterSP currentFilter;
     Ui_FilterDialog uiFilterDialog;
     KisFilterMaskSP mask;
-    KoAction* maskAction;
     KisNodeSP node;
     KisImageSP image;
-    void dirtyPreviewMask()
-    {
-        dbgUI << "dirtyPreviewMask()";
-        mask->setDirty();
-    }
 };
 
 KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageSP image) :
@@ -65,9 +56,6 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageSP ima
     d->node = node;
     d->image = image;
     d->mask = new KisFilterMask();
-    d->maskAction = new KoAction( this );
-    d->maskAction->setExecutePolicy(KoExecutePolicy::onlyLastPolicy);
-    connect(d->maskAction, SIGNAL(triggered(const QVariant &)), SLOT(dirtyPreviewMask()), Qt::DirectConnection);
 
     KisPixelSelectionSP psel = d->mask->selection()->getOrCreatePixelSelection();
     psel->select(rc);
@@ -117,7 +105,7 @@ void KisFilterDialog::updatePreview()
     if (!d->currentFilter) return;
 
     d->mask->setFilter(d->uiFilterDialog.filterSelection->configuration());
-    d->maskAction->execute();
+    d->mask->setDirty();
 }
 
 void KisFilterDialog::apply()

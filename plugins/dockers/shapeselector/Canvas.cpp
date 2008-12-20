@@ -46,7 +46,7 @@
 
 DummyShapeController::DummyShapeController()
 {
-    foreach( QString id, KoShapeRegistry::instance()->keys() ) {
+    foreach( const QString & id, KoShapeRegistry::instance()->keys() ) {
         KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value( id );
         shapeFactory->populateDataCenterMap( m_dataCenterMap );
     }
@@ -247,11 +247,11 @@ void  Canvas::dropEvent(QDropEvent *event) {
             if (folder) break;
         }
         QByteArray urls = event->mimeData()->data("text/uri-list");
-        foreach(QString file, QString(urls).split("\n")) {
+        foreach(QString file, QString(urls).split('\n')) {
             file = file.trimmed();
             if (file.isEmpty())
                 break;
-            m_parent->addItems(KUrl(file.trimmed()), folder);
+            m_parent->addItems(KUrl(file), folder);
         }
         event->setDropAction(Qt::CopyAction);
         event->accept();

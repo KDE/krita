@@ -125,7 +125,7 @@ void KoColorSpaceRegistry::init()
     // Set PigmentCMS's ctl module directory
     QStringList ctlModulesDirs = KGlobal::mainComponent().dirs()->findDirs( "data", "pigmentcms/ctlmodules/");
     dbgPigmentCSRegistry << ctlModulesDirs;
-    foreach(QString dir, ctlModulesDirs)
+    foreach(const QString & dir, ctlModulesDirs)
     {
         dbgPigmentCSRegistry << "Append : " << dir << " to the list of CTL modules";
         OpenCTL::ModulesManager::instance()->addDirectory( dir.toAscii().data());

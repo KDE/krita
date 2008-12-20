@@ -105,7 +105,7 @@ void Autocorrect::finishedWord(QTextDocument *document, int cursorPosition) {
     emit stopMacro();
 }
 
-void Autocorrect::finishedParagraph(QTextDocument *document, int cursorPosition) {
+void Autocorrect::finishedParagraph(QTextDocument */*document*/, int /*cursorPosition*/ ) {
     if(! m_trimParagraphs) return;
     // TODO
 }
@@ -377,7 +377,7 @@ void Autocorrect::capitalizeWeekDays() {
     if(! m_capitalizeWeekDays) return;
 
     QString trimmed = m_word.trimmed();
-    foreach (QString name, m_cacheNameOfDays) {
+    foreach (const QString & name, m_cacheNameOfDays) {
         if (trimmed == name) {
             int pos = m_word.indexOf(name);
             m_word.replace(pos, 1, name.at(0).toUpper());

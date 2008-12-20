@@ -33,7 +33,7 @@ class StylesModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    StylesModel(KoStyleManager *styleManager, QObject *parent = 0);
+    explicit StylesModel(KoStyleManager *styleManager, QObject *parent = 0);
     ~StylesModel();
 
     virtual QModelIndex index(int row, int column, const QModelIndex &parent) const;

@@ -70,8 +70,8 @@ void SimpleStyleWidget::fillListsCombobox()
     // we would maybe want to pass a language to this, to include localized list counting strategies.
 
     widget.listType->clear();
-    foreach(Lists::ListStyleItem item, Lists::genericListStyleItems())
-    widget.listType->addItem(item.name, static_cast<int>(item.style));
+    foreach(const Lists::ListStyleItem & item, Lists::genericListStyleItems())
+        widget.listType->addItem(item.name, static_cast<int>(item.style));
 }
 
 void SimpleStyleWidget::setCurrentBlock(const QTextBlock &block)
@@ -120,7 +120,7 @@ void SimpleStyleWidget::setCurrentBlock(const QTextBlock &block)
         }
     }
 
-    foreach(Lists::ListStyleItem item, Lists::otherListStyleItems()) {
+    foreach(const Lists::ListStyleItem & item, Lists::otherListStyleItems()) {
         if (item.style == style) {
             widget.listType->addItem(item.name, static_cast<int>(item.style));
             widget.listType->setCurrentIndex(widget.listType->count() - 1);

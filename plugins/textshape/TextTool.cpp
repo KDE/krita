@@ -86,7 +86,7 @@
 
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut)
 {
-    foreach(QKeySequence ks, KStandardShortcut::shortcut(shortcut).toList()) {
+    foreach(const QKeySequence & ks, KStandardShortcut::shortcut(shortcut).toList()) {
         if (input == ks)
             return true;
     }
@@ -342,7 +342,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     action->setToolTip(i18n("Change text attributes to their default values"));
     connect(action, SIGNAL(triggered()), this, SLOT(setDefaultFormat()));
 
-    foreach(QString key, KoTextEditingRegistry::instance()->keys()) {
+    foreach(const QString & key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
         Q_ASSERT(factory);
         if (m_textEditingPlugins.contains(factory->id())) {
@@ -414,7 +414,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     QList<QAction*> list;
     list.append(this->action("text_default"));
     list.append(this->action("format_font"));
-    foreach(QString key, KoTextEditingRegistry::instance()->keys()) {
+    foreach(const QString & key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
         if (factory->showInMenu()) {
             KAction *a = new KAction(factory->title(), this);

@@ -32,11 +32,11 @@ ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
 {
     widget.setupUi(this);
 
-    foreach(Lists::ListStyleItem item, Lists::genericListStyleItems())
+    foreach(const Lists::ListStyleItem & item, Lists::genericListStyleItems())
         addStyle(item);
     addStyle(Lists::ListStyleItem(i18n("Custom Bullet"), KoListStyle::CustomCharItem));
     m_blankCharIndex = addStyle(Lists::ListStyleItem(i18n("No Bullet"), KoListStyle::CustomCharItem));
-    foreach(Lists::ListStyleItem item, Lists::otherListStyleItems())
+    foreach(const Lists::ListStyleItem & item, Lists::otherListStyleItems())
         addStyle(item);
 
     widget.alignment->addItem(i18nc("Automatic horizontal alignment", "Auto"));

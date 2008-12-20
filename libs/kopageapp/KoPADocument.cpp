@@ -72,7 +72,7 @@ KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleV
     d->inlineTextObjectManager = new KoInlineTextObjectManager(this);
 
     // Ask every shapefactory to populate the dataCenterMap
-    foreach(QString id, KoShapeRegistry::instance()->keys())
+    foreach(const QString & id, KoShapeRegistry::instance()->keys())
     {
         KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
         shapeFactory->populateDataCenterMap(d->dataCenterMap);

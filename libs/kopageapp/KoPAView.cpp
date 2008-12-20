@@ -610,7 +610,7 @@ void KoPAView::clipboardDataChanged()
         mimeTypes << KoOdf::mimeType( KoOdf::Graphics );
         mimeTypes << KoOdf::mimeType( KoOdf::Presentation );
 
-        foreach(QString mimeType, mimeTypes)
+        foreach(const QString & mimeType, mimeTypes)
         {
             if ( data->hasFormat( mimeType ) ) {
                 paste = true;

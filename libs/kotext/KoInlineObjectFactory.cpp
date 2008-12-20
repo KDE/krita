@@ -29,8 +29,8 @@ public:
     }
 
     ~InlineObjectFactoryPrivate() {
-        foreach(KoInlineObjectTemplate t, templates)
-        delete t.properties;
+        foreach(const KoInlineObjectTemplate & t, templates)
+            delete t.properties;
         templates.clear();
     }
 

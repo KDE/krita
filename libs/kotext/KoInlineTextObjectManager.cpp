@@ -182,7 +182,7 @@ QList<QAction*> KoInlineTextObjectManager::createInsertVariableActions(KoCanvasB
 {
     QList<QAction *> answer = KoVariableRegistry::instance()->createInsertVariableActions(host);
     int i = 0;
-    foreach(QString name, m_variableManager.variables()) {
+    foreach(const QString & name, m_variableManager.variables()) {
         answer.insert(i++, new InsertNamedVariableAction(host, this, name));
     }
 

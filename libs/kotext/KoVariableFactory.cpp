@@ -31,7 +31,7 @@ public:
             : id(id) {}
 
     ~Private() {
-        foreach(KoVariableTemplate t, templates) {
+        foreach(const KoVariableTemplate & t, templates) {
             delete t.properties;
         }
     }

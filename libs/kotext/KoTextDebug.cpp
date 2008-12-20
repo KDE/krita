@@ -343,7 +343,7 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
         case KoParagraphStyle::TabPositions:
             key = "tab-stops";
             value = "";
-            foreach(QVariant qvtab, qvariant_cast<QList<QVariant> >(properties[id])) {
+            foreach(const QVariant & qvtab, qvariant_cast<QList<QVariant> >(properties[id])) {
                 KoText::Tab tab = qvtab.value<KoText::Tab>();
                 value.append("{");
                 value.append(" pos:").append(QString::number(tab.position));

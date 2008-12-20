@@ -200,6 +200,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->viewConverter = new KoZoomHandler();
     m_d->canvasController = new KoCanvasController(this);
     m_d->canvasController->setDrawShadow(false);
+    m_d->canvasController->setMargin(10);
 
     m_d->canvas = new KisCanvas2(m_d->viewConverter, this, doc->shapeController());
     m_d->canvasController->setCanvas(m_d->canvas);

@@ -38,7 +38,7 @@ class KoOdfCollectionLoader : public QObject
 {
     Q_OBJECT
     public:
-        KoOdfCollectionLoader(const QString& path, QObject* parent = 0);
+        explicit KoOdfCollectionLoader(const QString& path, QObject* parent = 0);
         ~KoOdfCollectionLoader();
 
         void load();

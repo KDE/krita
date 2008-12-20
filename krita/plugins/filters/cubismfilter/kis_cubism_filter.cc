@@ -54,6 +54,7 @@
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
 #include <KoCompositeOp.h>
+#include <kis_random_accessor.h>
 
 #include "widgets/kis_multi_integer_filter_widget.h"
 
@@ -69,7 +70,8 @@ KisCubismFilter::KisCubismFilter() : KisFilter(id(), KisFilter::CategoryArtistic
 {
     setSupportsPainting(false);
     setSupportsPreview(true);
-    setColorSpaceIndependence(TO_RGBA8);
+//     setSupportsThreading(false);
+    setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
 bool KisCubismFilter::workWith(const KoColorSpace* /*cs*/) const
@@ -99,29 +101,7 @@ void KisCubismFilter::process(KisConstProcessingInformation srcInfo,
     quint32 tileSize = configuration->getInt("tileSize", 1);
     quint32 tileSaturation = configuration->getInt("tileSaturation");
 
-    const KoColorSpace * cs = src->colorSpace();
-    QString id = cs->id();
-
-    if (id == "RGBA" || id == "GRAY" || id == "CMYK") {
-        cubism(src, srcTopLeft, dst, dstTopLeft, size, tileSize, tileSaturation);
-    } else {
-//         if (src->image()) src->image()->lock();
-
-        KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "temporary");
-        KisPainter gc(dev);
-        gc.bitBlt(0, 0, COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
-        gc.end();
-
-//         dbgKrita << src->colorSpace()->id().id();
-        cubism(dev, QPoint(0, 0), dev, QPoint(0, 0), size, tileSize, tileSaturation);
-
-        gc.begin(dst, dstInfo.selection());
-        gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, dev, 0, 0, size.width(), size.height());
-        gc.end();
-//         if (src->image()) src->image()->unlock();
-
-//         dbgKrita << src->colorSpace()->id().id();
-    }
+    cubism(src, srcTopLeft, dst, dstTopLeft, size, tileSize, tileSaturation);
 }
 
 void KisCubismFilter::randomizeIndices(qint32 count, qint32* indices) const
@@ -220,8 +200,7 @@ void KisCubismFilter::fillPolyColor(KisPaintDeviceSP src,
     Q_UNUSED(dest);
 
     qint32         val;
-    qint32         alpha;
-    quint8         buf[4];
+    double         alpha;
     qint32         x, y;
     double          xx, yy;
     double          vec[2];
@@ -303,6 +282,11 @@ void KisCubismFilter::fillPolyColor(KisPaintDeviceSP src,
         }
     }
 
+    KisRandomAccessor dstAccessor = dst->createRandomAccessor(0, 0);
+
+    KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
+    quint8* buf = new quint8[pixelSize];
+
     vals = new qint32[sizeX];
 //         x1 = minX; x2 = maxX; y1 = minY; y2 = maxY;
     for (qint32 i = 0; i < sizeY; i++, minScanlinesIter++, maxScanlinesIter++) {
@@ -331,34 +315,27 @@ void KisCubismFilter::fillPolyColor(KisPaintDeviceSP src,
 
                         if (val > 0) {
                             xx = static_cast<double>(j) / static_cast<double>(SUPERSAMPLE) + minX;
-                            alpha = static_cast<qint32>(val * calcAlphaBlend(vec, oneOverDist, xx - sx, yy - sy));
+                            alpha = calcAlphaBlend(vec, oneOverDist, xx - sx, yy - sy);
 
-//                                                         KisRectIteratorPixel srcIt = src->createRectIterator(x,y,1,1, false);
-//                                                         const quint8* srcPixel = srcIt.oldRawData();
-//                                                         memcpy( buf, srcPixel, sizeof(quint8) * pixelSize );
-                            dst->readBytes(buf, x, y, 1, 1);
-#ifndef USE_READABLE_BUT_SLOW_CODE
-                            quint8 *bufIter = buf;
-                            const quint8 *colIter = col;
-                            quint8 *bufEnd = buf + pixelSize;
+                            qint16 weights[2];
+                            weights[0] = static_cast<quint8>(alpha * 255);
+                            weights[1] = 255 - weights[0];
 
-                            for (; bufIter < bufEnd; bufIter++, colIter++)
-                                *bufIter = (static_cast<quint8>(*colIter * alpha)
-                                            + (static_cast<quint8>(*bufIter)
-                                               * (256 - alpha))) >> 8;
-#else  //original, pre-ECL code
-                            for (b = 0; b < pixelSize; b++) {
-                                buf[b] = ((col[b] * alpha) + (buf[b] * (255 - alpha))) / 255;
-                            }
-#endif
+                            dstAccessor.moveTo(x, y);
+                            memcpy( buf, dstAccessor.rawData(), sizeof(quint8) * pixelSize );
 
-                            dst->writeBytes(buf, x, y, 1, 1);
+                            const quint8* colors[2];
+                            colors[0] = col;
+                            colors[1] = buf;
+
+                            mixOp->mixColors(colors, weights, 2, dstAccessor.rawData());
                         }
                     }
                 }
             }
         }
     }
+    delete[] buf;
     delete[] vals;
     delete[] minScanlines;
     delete[] maxScanlines;
@@ -406,6 +383,7 @@ void KisCubismFilter::cubism(KisPaintDeviceSP src,
     qint32 pixelSize = src->pixelSize();
     const quint8 *srcPixel /*= new quint8[ pixelSize ]*/;
     quint8 *dstPixel = 0;
+    KisRandomAccessor srcAccessor = src->createRandomAccessor(0, 0);
     while (count < numTiles) {
         i = randomIndices[count] / (cols + 1);
         j = randomIndices[count] % (cols + 1);
@@ -426,8 +404,8 @@ void KisCubismFilter::cubism(KisPaintDeviceSP src,
         iy = (qint32) CLAMP(y, dstTopLeft.y(), dstTopLeft.y() + size.height() - 1);
 
         //read the pixel at ix, iy
-        KisRectIteratorPixel srcIt = src->createRectIterator(ix, iy, 1, 1, false); // TODO use a random accessor here
-        srcPixel = srcIt.oldRawData();
+        srcAccessor.moveTo(ix, iy);
+        srcPixel = srcAccessor.rawData();
         if (srcPixel[pixelSize - 1]) {
             fillPolyColor(src, srcTopLeft, dst, dstTopLeft, size, poly, srcPixel, dstPixel);
         }

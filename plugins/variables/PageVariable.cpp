@@ -86,7 +86,7 @@ void PageVariable::variableMoved(const KoShape *shape, const QTextDocument *docu
                 if (page) {
                     pagenumber = page->pageNumber(m_pageselect, m_pageadjust);
                 }
-                setValue(pagenumber >= 0 ? QString::number(pagenumber + 1) : QString());
+                setValue(pagenumber >= 0 ? QString::number(pagenumber) : QString());
             }
         }
         break;

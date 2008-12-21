@@ -63,14 +63,6 @@ public:
      * exist.
      */
     virtual int pageNumber(PageSelection select = CurrentPage, int adjustment = 0) const = 0;
-
-    //TODO we may also need;
-
-    //Cause visible page count can differ from the real number of pages. E.g. if a
-    //document has page1 with pagestyle1 and page2 with pagestyle2 then we have 3
-    //pages cause after page1 a blank page got added (may depend on pageSide()).
-    //int pageCount()
-
 };
 
 #endif

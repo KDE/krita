@@ -27,19 +27,23 @@
 #include "brush_shape.h"
 #include "kis_paint_device.h"
 
-class Brush
+class ChalkBrush
 {
 
 public:
-    Brush(const BrushShape &initialShape, KoColor inkColor);
-    Brush();
-    ~Brush();
-    Brush(KoColor inkColor, BrushShape shape);
-    void paint(KisPaintDeviceSP dev, float x, float y, const KoColor &color);
+    ChalkBrush(const BrushShape &initialShape, KoColor inkColor);
+    ChalkBrush();
+    ~ChalkBrush();
+    ChalkBrush(KoColor inkColor, BrushShape shape);
+    void paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color);
 
-
+    void setRadius(int radius){
+        m_radius = radius;
+        init();
+    }
 
 private:
+    void init();
     QVector<Bristle> m_bristles;
     BrushShape m_initialShape;
     KoColor m_inkColor;

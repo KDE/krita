@@ -17,8 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_CHALKPAINTOP_H_
-#define KIS_CHALKPAINTOP_H_
+#ifndef KIS_CHALK_PAINTOP_H_
+#define KIS_CHALK_PAINTOP_H_
 
 #include <QColor>
 #include <QMutex>
@@ -27,43 +27,29 @@
 #include <kis_paintop.h>
 #include <kis_types.h>
 
-#include "brush.h"
+#include "chalk_brush.h"
+
+#include "kis_chalk_paintop_settings.h"
 
 class QPointF;
 class KisPainter;
-class KisChalkOpSettings;
-
-class KisChalkPaintOpFactory : public KisPaintOpFactory
-{
-
-public:
-    KisChalkPaintOpFactory() {}
-    virtual ~KisChalkPaintOpFactory() {}
-
-    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
-    virtual QString id() const {
-        return "chalkbrush";
-    }
-    virtual QString name() const {
-        return i18n("Chalk-e brush");
-    }
-    virtual QString pixmap() {
-        return "krita-chalk.png";
-    }
-    virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
-    virtual KisPaintOpSettingsSP settings(KisImageSP image);
-};
-
 
 class KisChalkPaintOp : public KisPaintOp
 {
 
 public:
 
-    KisChalkPaintOp(KisPainter * painter, KisImageSP image);
+    KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
     virtual ~KisChalkPaintOp();
 
     void paintAt(const KisPaintInformation& info);
+    // uncomment to not have cycled chalk paintop 
+    //double paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist);
+
+    virtual bool incremental() const {
+        return false;
+    }
+
 
     double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
         Q_UNUSED(xSpacing);
@@ -75,16 +61,12 @@ public:
     }
 
 
-
 private:
-    QColor c;
-    QPointF m_previousPoint;
+    const KisChalkPaintOpSettings* m_settings;
     KisImageSP m_image;
-    bool newStrokeFlag;
-    //Stroke stroke;
     KisPaintDeviceSP dab;
     QMutex m_mutex;
-    Brush m_mybrush;
+    ChalkBrush m_chalkBrush;
 };
 
-#endif // KIS_CHALKPAINTOP_H_
+#endif // KIS_CHALK_PAINTOP_H_

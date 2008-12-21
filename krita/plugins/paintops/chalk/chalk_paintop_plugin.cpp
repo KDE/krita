@@ -1,6 +1,4 @@
 /*
- * chalkpaintop_plugin.cc -- Part of Krita
- *
  * Copyright (c) 2008 Lukáš Tvrdý (lukast.dev@gmail.com)
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -18,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "chalkpaintop_plugin.h"
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
@@ -28,7 +25,10 @@
 
 #include <kis_paintop_registry.h>
 
-#include "kis_chalkpaintop.h"
+#include "chalk_paintop_plugin.h"
+#include "kis_chalk_paintop.h"
+#include "kis_chalk_paintop_factory.h"
+
 #include "kis_global.h"
 
 typedef KGenericFactory<ChalkPaintOpPlugin> ChalkPaintOpPluginFactory;
@@ -41,7 +41,7 @@ ChalkPaintOpPlugin::ChalkPaintOpPlugin(QObject *parent, const QStringList &)
     //
     setComponentData(ChalkPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisChalkPaintOpFactory());
+    r->add(new KisChalkPaintOpFactory);
 
 }
 
@@ -49,4 +49,4 @@ ChalkPaintOpPlugin::~ChalkPaintOpPlugin()
 {
 }
 
-#include "chalkpaintop_plugin.moc"
+#include "chalk_paintop_plugin.moc"

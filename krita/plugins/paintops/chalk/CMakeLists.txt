@@ -1,12 +1,15 @@
 set(kritachalkpaintop_PART_SRCS
-	chalkpaintop_plugin.cpp
-	kis_chalkpaintop.cpp
+	chalk_paintop_plugin.cpp
+	kis_chalk_paintop.cpp
+    kis_chalk_paintop_factory.cpp
+    kis_chalk_paintop_settings.cpp
+    kis_chalk_paintop_settings_widget.cpp
 	bristle.cpp
 	brush_shape.cpp
-	brush.cpp	
+	chalk_brush.cpp	
     )
 
-#kde4_add_ui_files(kritadefaultpaintops_PART_SRCS wdgbrushcurves.ui wdgduplicateop.ui )
+kde4_add_ui_files(kritachalkpaintop_PART_SRCS wdgchalkoptions.ui )
 
 kde4_add_plugin(kritachalkpaintop ${kritachalkpaintop_PART_SRCS})
 

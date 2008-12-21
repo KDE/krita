@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "brush.h"
+#include "chalk_brush.h"
 #include "brush_shape.h"
 
 #include <KoColor.h>
@@ -34,46 +34,46 @@
 #define drand48 rand
 #endif
 
-Brush::Brush(const BrushShape &initialShape, KoColor inkColor)
+ChalkBrush::ChalkBrush(const BrushShape &initialShape, KoColor inkColor)
 {
     m_initialShape = initialShape;
     m_inkColor = inkColor;
     m_counter = 0;
 }
 
-Brush::Brush()
+ChalkBrush::ChalkBrush()
 {
     m_radius = 5;
     m_counter = 0;
-
-    BrushShape bs;
-    bs.fromGaussian(m_radius, 1.0f, 0.9f);
-    m_bristles = bs.getBristles();
-
-    srand48(1045);
+    init();
 }
 
 
-void Brush::paint(KisPaintDeviceSP dev, float x, float y, const KoColor &color)
+void ChalkBrush::init(){
+    BrushShape bs;
+    // some empiric values 
+    bs.fromGaussian(m_radius, 1.0f, 0.9f);
+    m_bristles = bs.getBristles();
+    srand48( time(0) );
+}
+
+void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color)
 {
 
     m_inkColor = color;
     m_counter++;
-    float decr = (m_counter * m_counter * m_counter) / 1000000.0f;
+    qreal decr = (m_counter * m_counter * m_counter) / 1000000.0f;
 
     Bristle *bristle;
 
     qint32 pixelSize = dev->colorSpace()->pixelSize();
     KisRandomAccessor accessor = dev->createRandomAccessor((int)x, (int)y);
 
-
-    double dirt, result;
+    qreal dirt, result;
 
     //count decrementing of saturation and alpha
-    result = log((double)m_counter);
+    result = log( ( qreal )m_counter);
     result = -(result * 10) / 100.0;
-
-
 
     QHash<QString, QVariant> params;
     params["h"] = 0.0;
@@ -101,11 +101,10 @@ void Brush::paint(KisPaintDeviceSP dev, float x, float y, const KoColor &color)
 
         accessor.moveTo(dx, dy);
         memcpy(accessor.rawData(), m_inkColor.data(), pixelSize);
-
         bristle->setInkAmount(1.0f - decr);
     }
 }
 
-Brush::~Brush()
+ChalkBrush::~ChalkBrush()
 {
 }

@@ -184,6 +184,7 @@ void KisCanvasResourceProvider::slotGradientActivated(KoResource *res)
 
 void KisCanvasResourceProvider::slotPaintOpPresetActivated(const KisPaintOpPresetSP preset)
 {
+    dbgUI << "KisCanvasResourceProvider::slotPaintOpPresetActivated " << preset;
     Q_ASSERT( preset->valid() );
     Q_ASSERT( !preset->paintOp().id().isEmpty() );
     Q_ASSERT( preset->settings() );

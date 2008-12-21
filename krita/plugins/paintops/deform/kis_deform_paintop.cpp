@@ -63,11 +63,11 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
     m_deformBrush.setUseCounter( settings->useCounter() );
     m_deformBrush.setUseOldData( settings->useOldData() );
 
-    if ( !settings->node() ){
+/*    if ( !settings->node() ){
         m_dev = 0;
     }else{
         m_dev = settings->node()->paintDevice();
-    }
+    }*/
 }
 
 KisDeformPaintOp::~KisDeformPaintOp()
@@ -79,8 +79,7 @@ void KisDeformPaintOp::paintAt(const KisPaintInformation& info)
     QMutexLocker locker(&m_mutex);
 
     if (!painter()) return;
-    KisPaintDeviceSP device = painter()->device();
-    if (!device) return;
+    m_dev = painter()->device();
     if (!m_dev) return;
 
     dab = cachedDab();

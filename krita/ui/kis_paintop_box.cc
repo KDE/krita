@@ -57,8 +57,11 @@
 
 
 KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name)
-        : QWidget(parent),
-        m_resourceProvider(view->resourceProvider()), m_view(view), m_optionWidget(0), m_activePreset(0)
+        : QWidget(parent)
+        , m_resourceProvider(view->resourceProvider())
+        , m_view(view)
+        , m_optionWidget(0)
+        , m_activePreset(0)
 {
     Q_ASSERT(view != 0);
 
@@ -124,14 +127,17 @@ KisPaintopBox::~KisPaintopBox()
 
 void KisPaintopBox::addItem(const KoID & paintop, const QString & /*category*/)
 {
+    dbgUI << "KisPaintopBox::addItem " << paintop;
     m_paintops.append(paintop);
 }
 
 void KisPaintopBox::slotItemSelected(int index)
 {
+    dbgUI << "KisPaintopBox::slotItemSelected " << index;
+
     if (index < m_displayedOps.count()) {
         KoID paintop = m_displayedOps.at(index);
-
+        dbgUI << "\t\t selected " << paintop;
         setCurrentPaintop(paintop);
 
         m_cmbPaintopPresets->clear();
@@ -141,6 +147,7 @@ void KisPaintopBox::slotItemSelected(int index)
 
         foreach(KisPaintOpPreset* preset,
                 KisResourceServerProvider::instance()->paintOpPresetServer()->resources()) {
+            dbgUI << "\t\t " << preset << ", " << preset->paintOp();
             if (preset->paintOp() == paintop) {
                 m_cmbPaintopPresets->addItem(preset->name(), QVariant(preset));
             }
@@ -150,6 +157,7 @@ void KisPaintopBox::slotItemSelected(int index)
 
 void KisPaintopBox::colorSpaceChanged(const KoColorSpace *cs)
 {
+    dbgUI << "KisPaintopBox::colorSpaceChanged " << cs;
     m_displayedOps.clear();
     m_cmbPaintops->clear();
 
@@ -181,6 +189,8 @@ void KisPaintopBox::colorSpaceChanged(const KoColorSpace *cs)
 
 QPixmap KisPaintopBox::paintopPixmap(const KoID & paintop)
 {
+    dbgUI << "KisPaintopBox::paintopPixmap " << paintop;
+
     QString pixmapName = KisPaintOpRegistry::instance()->pixmap(paintop);
 
     if (pixmapName.isEmpty()) {
@@ -194,8 +204,8 @@ QPixmap KisPaintopBox::paintopPixmap(const KoID & paintop)
 
 void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice & inputDevice)
 {
-    dbgKrita << "Change input device : " << inputDevice.device() << " " << inputDevice.pointer() << " " << inputDevice.uniqueTabletId() ;
-    dbgKrita << KoToolManager::instance()->currentInputDevice().device() << " " << KoToolManager::instance()->currentInputDevice().pointer() << " " << KoToolManager::instance()->currentInputDevice().uniqueTabletId() ;
+    dbgUI << "KisPaintopBox::slotInputDeviceChanged: " << inputDevice.device() << " " << inputDevice.pointer() << " " << inputDevice.uniqueTabletId() ;
+    dbgUI << "\t\t" << KoToolManager::instance()->currentInputDevice().device() << " " << KoToolManager::instance()->currentInputDevice().pointer() << " " << KoToolManager::instance()->currentInputDevice().uniqueTabletId() ;
     KoID paintop;
     InputDevicePaintopMap::iterator it = m_currentID.find(inputDevice);
 
@@ -220,6 +230,8 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice & inputDevice)
 
 void KisPaintopBox::slotCurrentNodeChanged(KisNodeSP node)
 {
+    dbgUI << "KisPaintopBox::slotCurrentNodeChanged " << node;
+
     for (InputDevicePresetsMap::iterator it = m_inputDevicePresets.begin();
             it != m_inputDevicePresets.end();
             ++it) {
@@ -234,13 +246,17 @@ void KisPaintopBox::slotCurrentNodeChanged(KisNodeSP node)
 
 const KoID& KisPaintopBox::currentPaintop()
 {
-    return m_currentID[KoToolManager::instance()->currentInputDevice()];
+    KoID id = m_currentID[KoToolManager::instance()->currentInputDevice()];
+    dbgUI << "KisPaintopBox::currentPaintop " << id << " for device " << KoToolManager::instance()->currentInputDevice();
+    return m_currentID[KoToolManager::instance()->currentInputDevice()];;
 }
 
 void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 {
+    dbgUI << "KisPaintopBox::setCurrentPaintop " << paintop;
 
     if ( m_activePreset && m_optionWidget ) {
+        dbgUI << "\t\t writing configuration to option widget";
         m_optionWidget->writeConfiguration( const_cast<KisPaintOpSettings*>( m_activePreset->settings().data() ) );
     }
 
@@ -248,11 +264,12 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 
     KisPaintOpPresetSP preset =
         activePreset(currentPaintop(), KoToolManager::instance()->currentInputDevice());
-    dbgUI << "active preset for paintop " << paintop.id() << " is " << preset;
+    dbgUI << "\t\tactive preset for paintop " << paintop.id() << " is " << preset;
 
     if (preset != 0 && preset->settings() && preset->settings()->widget()) {
         m_optionWidget = preset->settings()->widget();
         if ( !preset->settings()->getProperties().isEmpty() ) {
+            dbgUI << "\t\tSetting configuration on option widget ";
             m_optionWidget->setConfiguration( preset->settings() );
         }
         m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
@@ -260,6 +277,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
         m_presetsPopup->setPaintOpSettingsWidget(0);
     }
 
+    preset->settings()->setNode( m_resourceProvider->currentNode() );
     m_resourceProvider->slotPaintOpPresetActivated(preset);
 
     m_activePreset = preset.data();
@@ -267,6 +285,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 
 KoID KisPaintopBox::defaultPaintop(const KoInputDevice & inputDevice)
 {
+    dbgUI << "KisPaintopBox::defaultPaintop " << inputDevice;
     if (inputDevice == KoInputDevice::eraser()) {
         return KoID("eraser", "");
     } else {
@@ -276,6 +295,7 @@ KoID KisPaintopBox::defaultPaintop(const KoInputDevice & inputDevice)
 
 KisPaintOpPresetSP KisPaintopBox::activePreset(const KoID & paintop, const KoInputDevice & inputDevice)
 {
+    dbgUI << "KisPaintopBox::activePreset " << paintop << ", inputdevice " << inputDevice;
     QHash<QString, KisPaintOpPresetSP> settingsArray;
 
     if ( !m_inputDevicePresets.contains( inputDevice ) ) {

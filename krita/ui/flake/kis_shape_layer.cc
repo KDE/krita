@@ -290,10 +290,10 @@ bool KisShapeLayer::loadLayer( KoStore* store )
 
     KoXmlElement contents = odfStore.contentDoc().documentElement();
 
-    qDebug() <<"Start loading OASIS document..." << contents.text();
-    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().localName();
-    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
-    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().isElement();
+//    qDebug() <<"Start loading OASIS document..." << contents.text();
+//    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().localName();
+//    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
+//    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().isElement();
 
     KoXmlElement body( KoXml::namedItemNS( contents, KoXmlNS::office, "body" ) );
 

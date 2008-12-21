@@ -43,7 +43,7 @@ public:
     virtual ~KisChalkPaintOp();
 
     void paintAt(const KisPaintInformation& info);
-    // uncomment to not have cycled chalk paintop 
+    // uncomment to not have cycled chalk paintop
     //double paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist);
 
     virtual bool incremental() const {
@@ -57,7 +57,7 @@ public:
         Q_UNUSED(pressure1);
         Q_UNUSED(pressure2);
         // XXX: this is wrong!
-        return 0.5;
+        return 1;
     }
 
 

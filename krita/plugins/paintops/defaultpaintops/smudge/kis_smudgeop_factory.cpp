@@ -52,7 +52,6 @@ KisPaintOp * KisSmudgeOpFactory::createOp(const KisPaintOpSettingsSP settings,
 
     const KisSmudgeOpSettings *smudgeopSettings = dynamic_cast<const KisSmudgeOpSettings *>(settings.data());
     Q_ASSERT(settings != 0 && smudgeopSettings != 0);
-    m_widget->setConfiguration(const_cast<KisSmudgeOpSettings*>(smudgeopSettings));
 
     KisPaintOp * op = new KisSmudgeOp(smudgeopSettings, painter);
     Q_CHECK_PTR(op);

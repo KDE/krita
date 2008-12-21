@@ -51,7 +51,7 @@ KisSumiPaintOp::KisSumiPaintOp(const
     , newStrokeFlag( true )
 
 {
-    Q_ASSERT(settings);    
+    Q_ASSERT(settings);
     BrushShape brushShape;
 
     if (settings->brushDimension() == 1) {
@@ -92,7 +92,7 @@ KisSumiPaintOp::KisSumiPaintOp(const
     }else{
         m_dev = settings->node()->paintDevice();
     }
- 
+
 }
 
 KisSumiPaintOp::~KisSumiPaintOp()
@@ -133,11 +133,11 @@ double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
 
 
    /* painter()->bltSelection(
-        rc.x(), rc.y(), 
-        device->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN), 
-        dab, 
-        painter()->opacity(), 
-        rc.x(), rc.y(), 
+        rc.x(), rc.y(),
+        device->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN),
+        dab,
+        painter()->opacity(),
+        rc.x(), rc.y(),
         rc.width(), rc.height());
     */
 

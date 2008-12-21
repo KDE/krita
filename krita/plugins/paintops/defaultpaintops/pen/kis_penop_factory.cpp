@@ -52,7 +52,6 @@ KisPaintOp * KisPenOpFactory::createOp(const KisPaintOpSettingsSP settings,
 
     const KisPenOpSettings *penopSettings = dynamic_cast<const KisPenOpSettings *>(settings.data());
     Q_ASSERT(settings != 0 && penopSettings != 0);
-    m_widget->setConfiguration(const_cast<KisPenOpSettings*>(penopSettings));
 
     KisPaintOp * op = new KisPenOp(penopSettings, painter);
     Q_CHECK_PTR(op);

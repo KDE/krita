@@ -52,8 +52,6 @@ KisPaintOp * KisBrushOpFactory::createOp(const KisPaintOpSettingsSP settings,
 
     const KisBrushOpSettings *brushopSettings = dynamic_cast<const KisBrushOpSettings *>(settings.data());
     Q_ASSERT(settings != 0 && brushopSettings != 0);
-    m_widget->setConfiguration(const_cast<KisBrushOpSettings*>(brushopSettings));
-
     KisPaintOp * op = new KisBrushOp(brushopSettings, painter);
     Q_CHECK_PTR(op);
     return op;

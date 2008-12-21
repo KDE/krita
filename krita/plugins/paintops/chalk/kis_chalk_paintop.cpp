@@ -42,9 +42,9 @@
 
 
 KisChalkPaintOp::KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
-        : KisPaintOp( painter )
-        , m_settings( settings )
-        , m_image ( image )
+    : KisPaintOp( painter )
+    , m_settings( settings )
+    , m_image ( image )
 {
     m_chalkBrush.setRadius( settings->radius() );
 }
@@ -55,27 +55,29 @@ KisChalkPaintOp::~KisChalkPaintOp()
 
 // if you uncomment this, it did not cycle
 /*double KisChalkPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist){
-    paintAt(pi1);
-    paintAt(pi2);
-    return 0.5;
-};*/
+  paintAt(pi1);
+  paintAt(pi2);
+  return 0.5;
+  };*/
 
 void KisChalkPaintOp::paintAt(const KisPaintInformation& info)
 {
     QMutexLocker locker(&m_mutex);
     if (!painter()) return;
 
-        dab = cachedDab();
-        dab->clear();
+    dab = cachedDab();
+    dab->clear();
 
-        qreal x1, y1;
+    qreal x1, y1;
 
-        x1 = info.pos().x();
-        y1 = info.pos().y();
+    x1 = info.pos().x();
+    y1 = info.pos().y();
 
-        m_chalkBrush.paint(dab, x1, y1, painter()->paintColor());
+//    qDebug() <<  x1 << ", " << y1;
 
-        QRect rc = dab->extent();
+    m_chalkBrush.paint(dab, x1, y1, painter()->paintColor());
+
+    QRect rc = dab->extent();
 
     painter()->bltSelection(
         rc.x(), rc.y(),

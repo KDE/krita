@@ -52,7 +52,6 @@ KisPaintOp * KisAirbrushOpFactory::createOp(const KisPaintOpSettingsSP settings,
 
     const KisAirbrushOpSettings *airbrushopSettings = dynamic_cast<const KisAirbrushOpSettings *>(settings.data());
     Q_ASSERT(settings != 0 && airbrushopSettings != 0);
-    m_widget->setConfiguration(const_cast<KisAirbrushOpSettings*>(airbrushopSettings));
 
     KisPaintOp * op = new KisAirbrushOp(airbrushopSettings, painter);
     Q_CHECK_PTR(op);

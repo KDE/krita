@@ -96,7 +96,7 @@ void KisToolBrush::initPaint(KoPointerEvent *e)
     // outline?
     m_canvas->updateCanvas(); // remove the outline
 #endif
-    m_painter->setPaintOpPreset(currentPaintOpPreset(), currentImage()); // And now the painter owns the op and will destroy it.
+    m_painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
     if (m_painter->paintOp()->incremental()) {
         m_timer->start(m_rate);
     }

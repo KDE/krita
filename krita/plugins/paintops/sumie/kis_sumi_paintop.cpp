@@ -112,9 +112,9 @@ double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
 
     if (!painter()) return 0;
 
-    KisPaintDeviceSP device = painter()->device();
+/*    KisPaintDeviceSP device = painter()->device();
     if (!device) return 0;
-    m_dev = device;
+    m_dev = device;*/
 
     dab = cachedDab();
     dab->clear();

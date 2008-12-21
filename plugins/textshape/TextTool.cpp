@@ -482,7 +482,6 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
 
     qreal zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
-    painter.scale(zoomX, zoomY);
 
     QAbstractTextDocumentLayout::PaintContext pc;
     QAbstractTextDocumentLayout::Selection selection;
@@ -497,7 +496,9 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
             continue;
 
         painter.save();
-        painter.setMatrix(painter.matrix() * ts->absoluteTransformation(&converter));
+        QMatrix shapeMatrix = ts->absoluteTransformation(&converter);
+        shapeMatrix.scale(zoomX, zoomY);
+        painter.setMatrix(shapeMatrix * painter.matrix());
         painter.translate(0, -data->documentOffset());
         if (qMin(data->endPosition(), selectEnd) != qMax(data->position(), selectStart)) {
             QRectF clip = textRect(qMax(data->position(), selectStart), qMin(data->endPosition(), selectEnd));

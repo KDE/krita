@@ -44,31 +44,17 @@ KisCurvePaintOpSettingsWidget::~ KisCurvePaintOpSettingsWidget()
 
 void  KisCurvePaintOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
 {
-    m_options->curveRadiusSPBox->setValue( config->getInt( "radius" ) );
-    m_options->curveAmountSPBox->setValue( config->getDouble( "curve_amount" ) );
-    m_options->interpolationChBox->setChecked( config->getBool( "bilinear" ) );
-    m_options->addPaintChBox->setChecked( config->getBool( "use_movement_paint" ) );
-    m_options->useCounter->setChecked( config->getBool( "use_counter" ) );
-    m_options->useOldData->setChecked(config->getBool( "use_old_data" ) );
+    m_options->minDistSPBox->setValue( config->getInt( "min_distance" ) );
+    m_options->pulseSPBox->setValue( config->getInt( "interval" ) );
 
     int curveAction = config->getInt( "curve_action" );
     if ( curveAction == 1 )
     {
-        m_options->growBtn->setChecked( true );
+        m_options->mode1Btn->setChecked( true );
     } else if ( curveAction == 2 ){
-        m_options->shrinkBtn->setChecked( true );
+        m_options->mode2Btn->setChecked( true );
     }else if ( curveAction == 3 ){
-        m_options->swirlCWBtn->setChecked( true );
-    }else if ( curveAction == 4 ){
-        m_options->swirlCCWBtn->setChecked( true );
-    }else if ( curveAction == 5){
-        m_options->moveBtn->setChecked( true );
-    }else if ( curveAction == 6 ){
-        m_options->lensBtn->setChecked( true );
-    }else if ( curveAction == 7 ){
-        m_options->lensOutBtn->setChecked( true );
-    }else if ( curveAction == 8 ){
-        m_options->colorBtn->setChecked( true );
+        m_options->mode3Btn->setChecked( true );
     }
 }
 
@@ -80,64 +66,31 @@ KisPropertiesConfiguration*  KisCurvePaintOpSettingsWidget::configuration() cons
 
 void KisCurvePaintOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration* config ) const
 {
-    config->setProperty( "radius", radius() );
-    config->setProperty( "curve_amount", curveAmount() );
+    config->setProperty( "min_distance", minimalDistance() );
     config->setProperty( "curve_action", curveAction() );
-    config->setProperty( "bilinear", bilinear() );
-    config->setProperty( "use_movement_paint", useMovementPaint() );
-    config->setProperty( "use_counter", useCounter() );
-    config->setProperty( "use_old_data", useOldData() );
+    config->setProperty( "interval", interval() );
 }
 
-int  KisCurvePaintOpSettingsWidget::radius() const
+int  KisCurvePaintOpSettingsWidget::minimalDistance() const
 {
-    return m_options->curveRadiusSPBox->value();
+    return m_options->minDistSPBox->value();
 }
 
-double  KisCurvePaintOpSettingsWidget::curveAmount() const
+int  KisCurvePaintOpSettingsWidget::interval() const
 {
-    return m_options->curveAmountSPBox->value();
+    return m_options->pulseSPBox->value();
 }
+
 
 int  KisCurvePaintOpSettingsWidget::curveAction() const
 {
-    //TODO: make it nicer using enums or something
-    if ( m_options->growBtn->isChecked() )
+    if ( m_options->mode1Btn->isChecked() )
     {
         return 1;
-    } else if ( m_options->shrinkBtn->isChecked() ){
+    } else if ( m_options->mode2Btn->isChecked() ){
         return 2;
-    }else if ( m_options->swirlCWBtn->isChecked() ){
+    }else if ( m_options->mode3Btn->isChecked() ){
         return 3;
-    }else if ( m_options->swirlCCWBtn->isChecked() ){
-        return 4;
-    } else if ( m_options->moveBtn->isChecked() ){ 
-        return 5; 
-    } else if ( m_options->lensBtn->isChecked() ){ 
-        return 6; 
-    } else if ( m_options->lensOutBtn->isChecked() ){ 
-        return 7; 
-    } else if ( m_options->colorBtn->isChecked() ){ 
-        return 8; 
-    } else{
-        return -1;
-    }
-}
-
-bool  KisCurvePaintOpSettingsWidget::bilinear() const
-{
-    return m_options->interpolationChBox->isChecked();
-}
-
-bool KisCurvePaintOpSettingsWidget::useMovementPaint() const{
-    return m_options->addPaintChBox->isChecked();
-}
-
-bool KisCurvePaintOpSettingsWidget::useCounter() const{
-    return m_options->useCounter->isChecked();
-}
-
-bool KisCurvePaintOpSettingsWidget::useOldData() const{
-    return m_options->useOldData->isChecked();
+    }else return -1;
 }
 

@@ -46,13 +46,9 @@ public:
 
     bool paintIncremental();
 
-    int radius() const;
-    double curveAmount() const;
+    int minimalDistance() const;
     int curveAction() const;
-    bool bilinear() const;
-    bool useMovementPaint() const;
-    bool useCounter() const;
-    bool useOldData() const;
+    int interval() const;
 
 private:
     KisCurvePaintOpSettingsWidget* m_options;

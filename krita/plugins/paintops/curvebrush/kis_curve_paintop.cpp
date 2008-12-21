@@ -56,7 +56,9 @@ KisCurvePaintOp::KisCurvePaintOp(const KisCurvePaintOpSettings *settings, KisPai
     m_curveBrush.setPainter(painter);
 
     m_curveBrush.setInkColor( painter->paintColor() );
-
+    m_curveBrush.setMode( settings->curveAction() );
+    m_curveBrush.setMinimalDistance( settings->minimalDistance() );
+    m_curveBrush.setInterval( settings->interval() );
 }
 
 KisCurvePaintOp::~KisCurvePaintOp()

@@ -35,7 +35,6 @@ KisCurvePaintOpSettings::KisCurvePaintOpSettings(KisCurvePaintOpSettingsWidget* 
         : KisPaintOpSettings(settingsWidget)
 {
     m_options = settingsWidget;
-    // Initialize with the default settings from the widget
     m_options->writeConfiguration( this );
 }
 
@@ -52,57 +51,32 @@ bool KisCurvePaintOpSettings::paintIncremental()
     return false;
 }
 
-int KisCurvePaintOpSettings::radius() const
+int KisCurvePaintOpSettings::minimalDistance() const
 {
-    return m_options->radius();
+    return m_options->minimalDistance();
 }
 
-
-double KisCurvePaintOpSettings::curveAmount() const
-{
-    return m_options->curveAmount();
-}
-
-bool KisCurvePaintOpSettings::bilinear() const
-{
-    return m_options->bilinear();
-}
-
-bool KisCurvePaintOpSettings::useMovementPaint() const
-{
-    return m_options->useMovementPaint();
-}
-
-bool KisCurvePaintOpSettings::useCounter() const
-{
-    return m_options->useCounter();
-}
-
-bool KisCurvePaintOpSettings::useOldData() const
-{
-    return m_options->useOldData();
-}
 
 int KisCurvePaintOpSettings::curveAction() const
 {
     return m_options->curveAction();
 }
 
+int KisCurvePaintOpSettings::interval() const
+{
+    return m_options->interval();
+}
+
+
 void KisCurvePaintOpSettings::fromXML(const QDomElement& elt)
 {
-    // First, call the parent class fromXML to make sure all the
-    // properties are saved to the map
     KisPaintOpSettings::fromXML( elt );
-    // Then load the properties for all widgets
     m_options->setConfiguration( this );
 }
 
 void KisCurvePaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 {
-    // First, make sure all the option widgets have saved their state
-    // to the property configuration
     KisPropertiesConfiguration * settings = m_options->configuration();
-    // Then call the parent class fromXML
     settings->KisPropertiesConfiguration::toXML( doc, rootElt );
     delete settings;
 }

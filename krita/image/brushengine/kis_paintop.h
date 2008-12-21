@@ -73,12 +73,15 @@ public:
      * Draw a line between pos1 and pos2 using the currently set brush and color.
      * If savedDist is less than zero, the brush is painted at pos1 before being
      * painted along the line using the spacing setting.
-     * @return the drag distance, that is the remains of the distance between p1 and p2 not covered
-     * because the currenlty set brush has a spacing greater than that distance.
+     *
+     * @return the drag distance, that is the remains of the distance
+     * between p1 and p2 not covered because the currenlty set brush
+     * has a spacing greater than that distance.
      */
     virtual double paintLine(const KisPaintInformation &pi1,
                              const KisPaintInformation &pi2,
                              double savedDist = -1);
+
     /**
      * Draw a Bezier curve between pos1 and pos2 using control points 1 and 2.
      * If savedDist is less than zero, the brush is painted at pos1 before being

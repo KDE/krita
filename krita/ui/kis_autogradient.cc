@@ -75,10 +75,10 @@ void KisAutogradient::slotSelectedSegment(KoGradientSegment* segment)
     comboBoxColorInterpolationType->setCurrentIndex(segment->colorInterpolation());
     comboBoxInterpolationType->setCurrentIndex(segment->interpolation());
 
-    int leftOpacity = qRound(startColor.alpha() / OPACITY_OPAQUE * 100);
+    int leftOpacity = (startColor.alpha() * 100) / OPACITY_OPAQUE;
     intNumInputLeftOpacity->setValue(leftOpacity);
 
-    int rightOpacity = qRound(endColor.alpha() / OPACITY_OPAQUE * 100);
+    int rightOpacity = (endColor.alpha() * 100) / OPACITY_OPAQUE;
     intNumInputRightOpacity->setValue(rightOpacity);
 
     paramChanged();

@@ -41,26 +41,27 @@ class KisFilterConfiguration;
 class KisNodeVisitor;
 
  /** XXX_NODE: implement prepareForRemoval with:
-	// Adjustment layers should mark the layers underneath 
-	// them, whose rendering they have cached, dirty on 
-	// removal. Otherwise, the group won't be re-rendered.
-	KisAdjustmentLayer * al = 
-		dynamic_cast<KisAdjustmentLayer*>(layer.data());
-        if (al) 
-	{
-		QRect r = al->extent();
-		// Lock the image, because we are going to dirty 
-		// a lot of layers 
-		lock(); 
-		KisLayerSP l = layer->nextSibling();
-		while (l) 
-		{
-			KisAdjustmentLayer * al2 = 
-				dynamic_cast<KisAdjustmentLayer*>(l.data());
-			if (al2 != 0) break;
-			l = l->nextSibling();
-		}
-		unlock();
+// Adjustment layers should mark the layers underneath 
+// them, whose rendering they have cached, dirty on 
+// removal. Otherwise, the group won't be re-rendered.
+
+   KisAdjustmentLayer * al = 
+      dynamic_cast<KisAdjustmentLayer*>(layer.data());
+   if (al) 
+   {
+      QRect r = al->extent();
+      // Lock the image, because we are going to dirty 
+      // a lot of layers 
+      lock(); 
+      KisLayerSP l = layer->nextSibling();
+      while (l)
+      {
+         KisAdjustmentLayer * al2 = 
+            dynamic_cast<KisAdjustmentLayer*>(l.data());
+         if (al2 != 0) break;
+         l = l->nextSibling();
+   }
+   unlock();
 	}
 
  * XXX_NODE: also implement masks modifying the adj. layer's selection.

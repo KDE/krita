@@ -338,9 +338,14 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
             }
         }
     }
-
+#if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 17
     Exiv2::DataBuf rawData = exifData.copy();
     ioDevice->write((const char*) rawData.pData_, rawData.size_);
+#else
+    Exiv2::Blob rawData;
+    Exiv2::ExifParser::encode( rawData, Exiv2::littleEndian, exifData );
+    ioDevice->write((const char*) rawData.begin(), rawData.size() );
+#endif
     ioDevice->close();
     return true;
 }
@@ -355,7 +360,11 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
     ioDevice->open(QIODevice::ReadOnly);
     QByteArray arr = ioDevice->readAll();
     Exiv2::ExifData exifData;
+#if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 17
     exifData.load((const Exiv2::byte*)arr.data(), arr.size());
+#else
+    Exiv2::ExifParser::decode( exifData, (const Exiv2::byte*)arr.data(), arr.size());
+#endif
     dbgFile << "There are" << exifData.count() << " entries in the exif section";
     const KisMetaData::Schema* tiffSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::TIFFSchemaUri);
     const KisMetaData::Schema* exifSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::EXIFSchemaUri);

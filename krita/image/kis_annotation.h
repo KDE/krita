@@ -18,6 +18,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+/**
+ * @file this file is part of the Krita application in koffice
+ * @author Boudewijn Rempt
+ * @author comments by hscott
+ * @since 1.4 or 2005
+ */
+
 #ifndef _KIS_ANNOTATION_H_
 #define _KIS_ANNOTATION_H_
 
@@ -28,7 +35,7 @@
 #include <QString>
 
 /**
- * An data extension mechanism for Krita.
+ * @class KisAnnotation A data extension mechanism for Krita.
  *
  * An annotation can be of something like a QByteArray or a QString op
  * a more specific datatype that can be attached to an image (or maybe
@@ -47,10 +54,11 @@ class KisAnnotation : public KisShared
 public:
 
     /**
-     * Creates a new annotation object. The annotation object cannot
-     * be changed later
+     * creates a new annotation object. The annotation object cannot
+     * be changed later.
      *
-     * @param type a non-localized string identifying the type of the annotation
+     * @param type a non-localized string identifying the type of the
+     * annotation
      * @param description a localized string describing the annotation
      * @param data a binary blob containing the annotation data
      */
@@ -60,21 +68,27 @@ public:
             m_annotation(data) {}
 
     /**
-     * @return a non-localized string identifiying the type of the annotation
+     * gets a non-localized strin identifying the type of the 
+     * annotation.
+     * @return a non-localized string identifiying the type of the 
+     * annotation
      */
     QString & type() {
         return m_type;
     }
 
     /**
-     * @return a localized string describing the type of the annotations
-     *         for user interface purposes.
+     * gets a localized string describing the type of annotations for
+     * used interface purposes.
+     * @return a localized string describing the type of the 
+     * annotations for user interface purposes.
      */
     QString & description() {
         return m_description;
     }
 
     /**
+     * gets a binary blob representation of this annotation
      * @return a binary blob representation of this annotation
      */
     QByteArray & annotation() {

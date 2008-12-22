@@ -275,25 +275,32 @@ void KisLayer::applyEffectMasks(const KisPaintDeviceSP original, const KisPaintD
     }
     dbgImage << "Apply effects on " << rc << " with a total needed rect of " << currentNeededRc;
     
-    KisPaintDeviceSP tmp = new KisPaintDevice( projection->colorSpace());
-    KisPainter gc(tmp);
-    gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
-    gc.bitBlt(currentNeededRc.topLeft(), original, currentNeededRc);
+    if (masks.size() > 0) {
+        KisPaintDeviceSP tmp = new KisPaintDevice( projection->colorSpace());
+        KisPainter gc(tmp);
+        gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
+        gc.bitBlt(currentNeededRc.topLeft(), original, currentNeededRc);
     
-    // Then loop through the effect masks and apply them
-    for (int i = 0; i < masks.size(); ++i) {
+        // Then loop through the effect masks and apply them
+        for (int i = 0; i < masks.size(); ++i) {
 
-        const KisEffectMask * effectMask = dynamic_cast<const KisEffectMask*>(masks.at(i).data());
+            const KisEffectMask * effectMask = dynamic_cast<const KisEffectMask*>(masks.at(i).data());
 
-        if (effectMask) {
-            dbgImage << " layer " << name() << " has effect mask " << effectMask->name() << " on " << neededRects[i];
-            effectMask->apply(tmp, neededRects[i]);
+            if (effectMask) {
+                dbgImage << " layer " << name() << " has effect mask " << effectMask->name() << " on " << neededRects[i];
+                effectMask->apply(tmp, neededRects[i]);
+            }
         }
-    }
     
-    KisPainter gc2(projection);
-    gc2.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
-    gc2.bitBlt(rc.topLeft(), tmp, rc);
+        KisPainter gc2(projection);
+        gc2.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
+        gc2.bitBlt(rc.topLeft(), tmp, rc);
+    }
+    else {
+        KisPainter gc2(projection);
+        gc2.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
+        gc2.bitBlt(rc.topLeft(), original, rc);
+    }
 }
 
 

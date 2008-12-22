@@ -344,7 +344,7 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
 #else
     Exiv2::Blob rawData;
     Exiv2::ExifParser::encode( rawData, Exiv2::littleEndian, exifData );
-    ioDevice->write((const char*) rawData.begin(), rawData.size() );
+    ioDevice->write((const char*) &*rawData.begin(), rawData.size() );
 #endif
     ioDevice->close();
     return true;

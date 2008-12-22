@@ -5,14 +5,12 @@
 
 class KisView;
 
-class %
+class %{APPNAME}Plugin : public KParts::Plugin
 {
-    APPNAME
-}Plugin : public KParts::Plugin {
     Q_OBJECT
 public:
-    % {APPNAME}Plugin(QObject *parent, const QStringList &);
-    virtual ~ % {APPNAME}Plugin();
+    %{APPNAME}Plugin(QObject *parent, const QStringList &);
+    virtual ~%{APPNAME}Plugin();
 
 private:
 

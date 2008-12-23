@@ -35,6 +35,7 @@
 #include <QTime>
 
 const qreal radToDeg = 57.29578;
+const qreal degToRad = M_PI/180.0;
 
 #ifdef _WIN32
 #define srand48 srand
@@ -279,6 +280,7 @@ void DeformBrush::fastDeformColor(qreal cursorX,qreal cursorY,qreal amount){
 
 
 void DeformBrush::fastSwirl(qreal cursorX,qreal cursorY, qreal alpha){
+    dbgPlugins << "fswirl alpha:" << alpha;
     int curXi = static_cast<int>(cursorX+0.5);
     int curYi = static_cast<int>(cursorY+0.5);
 
@@ -540,13 +542,24 @@ void DeformBrush::paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPa
     if (m_action == 3)
     {
         // CW
-        fastSwirl(x1,y1, (1.0/360*m_counter) *  radToDeg);
+        if (m_useCounter){
+            fastSwirl(x1,y1, (m_counter) *  degToRad);
+            //fastSwirl(x1,y1, (1.0/360*m_counter) *  radToDeg); // crazy fast swirl
+        }else{
+            fastSwirl(x1,y1, ( 360 * m_amount) *  degToRad);
+        }
+
     } else 
     
     if (m_action == 4)
     {
         // CCW
-        fastSwirl(x1,y1, (1.0/360*m_counter) * -radToDeg);
+        if (m_useCounter){
+            fastSwirl(x1,y1, (m_counter) *  degToRad);
+            //fastSwirl(x1,y1, (1.0/360*m_counter) * -radToDeg); // crazy fast swirl ccw
+        }else{
+            fastSwirl(x1,y1, ( 360 * m_amount) *  -degToRad);
+        }
     } else 
     
     if (m_action == 5)

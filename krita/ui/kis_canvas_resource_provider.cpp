@@ -224,10 +224,12 @@ void KisCanvasResourceProvider::slotSetBGColor(const KoColor& c)
 
 void KisCanvasResourceProvider::slotNodeActivated(const KisNodeSP node)
 {
-    if (node)
+    if (node) {
         dbgUI << " node activated: " << node->name();
-    else
+    }
+    else {
         dbgUI << " null node activated";
+    }
 
     QVariant v;
     v.setValue(node);

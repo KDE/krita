@@ -30,36 +30,48 @@
 #include <KoColor.h>
 
 #include "kis_chalk_paintop_settings.h"
+#include <kis_paintop_options_widget.h>
+#include <kis_paint_action_type_option.h>
 
 KisChalkPaintOpSettingsWidget:: KisChalkPaintOpSettingsWidget(QWidget* parent)
-    : KisPaintOpSettingsWidget(parent)
+    : KisPaintOpOptionsWidget(parent)
 {
     m_options = new Ui::WdgChalkOptions();
     m_options->setupUi(this);
+    m_paintActionTypeOption = new KisPaintActionTypeOption();
 
+//    addPaintOpOption(m_options);
+    addPaintOpOption(m_paintActionTypeOption);
 }
 
 KisChalkPaintOpSettingsWidget::~ KisChalkPaintOpSettingsWidget()
 {
+    delete m_options;
+    delete m_paintActionTypeOption;
 }
 
 void  KisChalkPaintOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
 {
     m_options->radiusSpinBox->setValue( config->getInt( "radius" ) );
+    m_paintActionTypeOption->readOptionSetting(config);
 }
 
 KisPropertiesConfiguration*  KisChalkPaintOpSettingsWidget::configuration() const
 {
-    KisChalkPaintOpSettings* settings = new KisChalkPaintOpSettings( const_cast<KisChalkPaintOpSettingsWidget*>( this ) );
-    return settings;
+    KisChalkPaintOpSettings* config = new KisChalkPaintOpSettings( const_cast<KisChalkPaintOpSettingsWidget*>( this ) );
+
+    m_paintActionTypeOption->writeOptionSetting(config);
+    return config;
 }
 
 void KisChalkPaintOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration* config ) const
 {
     config->setProperty( "radius", radius() );
+    m_paintActionTypeOption->writeOptionSetting(config);
 }
 
 int  KisChalkPaintOpSettingsWidget::radius() const
 {
     return m_options->radiusSpinBox->value();
 }
+

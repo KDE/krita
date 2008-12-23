@@ -19,12 +19,14 @@
 #ifndef KIS_CHALKPAINTOP_SETTINGS_WIDGET_H_
 #define KIS_CHALKPAINTOP_SETTINGS_WIDGET_H_
 
-#include <kis_paintop_settings_widget.h>
+#include <kis_paintop_options_widget.h>
 
 #include "ui_wdgchalkoptions.h"
 #include "widgets/kis_popup_button.h"
 
-class KisChalkPaintOpSettingsWidget : public KisPaintOpSettingsWidget
+class KisPaintActionTypeOption;
+
+class KisChalkPaintOpSettingsWidget : public KisPaintOpOptionsWidget
 {
 public:
     KisChalkPaintOpSettingsWidget(QWidget* parent = 0);
@@ -32,15 +34,15 @@ public:
     virtual ~KisChalkPaintOpSettingsWidget();
 
     void setConfiguration( const KisPropertiesConfiguration * config);
-
     KisPropertiesConfiguration* configuration() const;
-
     void writeConfiguration( KisPropertiesConfiguration *config ) const;
 
     int radius() const;
 
+    KisPaintActionTypeOption* m_paintActionTypeOption;
 private:
     Ui::WdgChalkOptions* m_options;
+
 };
 
 #endif

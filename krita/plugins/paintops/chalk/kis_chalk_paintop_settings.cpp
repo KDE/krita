@@ -29,6 +29,7 @@
 #include <kis_paint_information.h>
 
 #include "kis_chalk_paintop_settings_widget.h"
+#include <kis_paint_action_type_option.h>
 
 KisChalkPaintOpSettings::KisChalkPaintOpSettings(KisChalkPaintOpSettingsWidget* settingsWidget)
         : KisPaintOpSettings(settingsWidget)
@@ -47,8 +48,10 @@ KisPaintOpSettingsSP KisChalkPaintOpSettings::clone() const
 
 bool KisChalkPaintOpSettings::paintIncremental()
 {
-    return false;
+    return m_options->m_paintActionTypeOption->paintActionType() == BUILDUP;
 }
+
+
 
 void KisChalkPaintOpSettings::fromXML(const QDomElement& elt)
 {

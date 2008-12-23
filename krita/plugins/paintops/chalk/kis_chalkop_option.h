@@ -15,33 +15,30 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KIS_CHALKOP_OPTION_H
+#define KIS_CHALKOP_OPTION_H
 
-#ifndef KIS_CHALKPAINTOP_SETTINGS_WIDGET_H_
-#define KIS_CHALKPAINTOP_SETTINGS_WIDGET_H_
+#include <kis_paintop_option.h>
+#include <krita_export.h>
 
-#include <kis_paintop_options_widget.h>
+class KisChalkOpOptionsWidget;
 
-#include "ui_wdgchalkoptions.h"
-#include "widgets/kis_popup_button.h"
-
-class KisPaintActionTypeOption;
-class KisChalkOpOption;
-
-class KisChalkPaintOpSettingsWidget : public KisPaintOpOptionsWidget
+class KisChalkOpOption : public KisPaintOpOption
 {
-    Q_OBJECT
-
 public:
-    KisChalkPaintOpSettingsWidget(QWidget* parent = 0);
-    virtual ~KisChalkPaintOpSettingsWidget();
+    KisChalkOpOption();
+    ~KisChalkOpOption();
 
-    void setConfiguration( const KisPropertiesConfiguration * config);
-    KisPropertiesConfiguration* configuration() const;
-    void writeConfiguration( KisPropertiesConfiguration *config ) const;
+    int radius() const;
+    void setRadius( int radius );
 
-public:
-    KisPaintActionTypeOption* m_paintActionTypeOption;
-    KisChalkOpOption* m_chalkOption;
+    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration* setting);
+
+
+private:
+
+   KisChalkOpOptionsWidget * m_options;
 
 };
 

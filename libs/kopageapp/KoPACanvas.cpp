@@ -184,6 +184,11 @@ void KoPACanvas::wheelEvent ( QWheelEvent * event )
     m_view->viewMode()->wheelEvent( event, viewConverter()->viewToDocument( event->pos() + m_documentOffset ) );
 }
 
+void KoPACanvas::closeEvent( QCloseEvent * event )
+{
+    m_view->viewMode()->closeEvent( event );
+}
+
 void KoPACanvas::updateInputMethodInfo()
 {
     updateMicroFocus();

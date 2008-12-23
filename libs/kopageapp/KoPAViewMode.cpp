@@ -33,6 +33,11 @@ KoPAViewMode::~KoPAViewMode()
 {
 }
 
+void KoPAViewMode::closeEvent( QCloseEvent * event )
+{
+    event->ignore();
+}
+
 void KoPAViewMode::setMasterMode( bool master )
 {
     Q_UNUSED(master);

@@ -24,6 +24,7 @@
 #include <QSize>
 #include <QToolButton>
 #include <QHBoxLayout>
+#include <QGridLayout>
 #include <QCheckBox>
 #include <QFrame>
 #include <QLabel>
@@ -51,7 +52,7 @@ public:
     KoColorSetWidget *thePublic;
     KoColorSet *colorSet;
     QTimer m_timer;
-    QVBoxLayout *mainLayout;
+    QGridLayout *mainLayout;
     bool firstShowOfContainer;
     QCheckBox *filterCheckBox;
     QWidget *colorSetContainer;
@@ -152,7 +153,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
 
     d->firstShowOfContainer = true;
 
-    d->mainLayout = new QVBoxLayout();
+    d->mainLayout = new QGridLayout();
     d->mainLayout->setMargin(4);
     d->mainLayout->setSpacing(2);
 
@@ -160,7 +161,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
 
     d->numRecents = 0;
     d->recentsLayout = new QHBoxLayout();
-    d->mainLayout->addLayout(d->recentsLayout);
+    d->mainLayout->addLayout(d->recentsLayout, 0, 0);
     d->recentsLayout->setMargin(0);
     d->recentsLayout->setSpacing(1);
     d->recentsLayout->addWidget(new QLabel(i18n("Recent:")));
@@ -172,11 +173,11 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
 
     d->filterCheckBox = new QCheckBox(i18n("Hide colors with bad contrast"));
     d->filterCheckBox->setChecked(true);
-    d->mainLayout->addWidget(d->filterCheckBox);
+    d->mainLayout->addWidget(d->filterCheckBox, 0, 1);
     connect(d->filterCheckBox, SIGNAL(stateChanged(int)), SLOT(filter(int)));
 
     d->scrollArea = new QScrollArea();
-    d->mainLayout->addWidget(d->scrollArea);
+    d->mainLayout->addWidget(d->scrollArea, 1, 0, 1, 2, Qt::AlignLeft);
     d->filter(QCheckBox::On);
 
     d->addRemoveButton = new QToolButton(this);
@@ -184,7 +185,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->addRemoveButton->setAutoRaise(true);
     d->addRemoveButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     connect(d->addRemoveButton, SIGNAL(clicked()), SLOT(addRemoveColors()));
-    d->mainLayout->addWidget(d->addRemoveButton);
+    d->mainLayout->addWidget(d->addRemoveButton, 2, 0, 1, 2, Qt::AlignLeft);
 
     setLayout(d->mainLayout);
 

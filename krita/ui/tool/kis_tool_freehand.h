@@ -36,7 +36,7 @@ class KisRecordedPolyLinePaintAction;
 class KisRecordedBezierCurvePaintAction;
 class FreehandPaintJobExecutor;
 
-class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint, Eigen::WithAlignedOperatorNew
+class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint, public Eigen::WithAlignedOperatorNew
 {
 
     Q_OBJECT

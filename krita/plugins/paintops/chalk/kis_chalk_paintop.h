@@ -43,8 +43,6 @@ public:
     virtual ~KisChalkPaintOp();
 
     void paintAt(const KisPaintInformation& info);
-    // uncomment to not have cycled chalk paintop
-    //double paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist);
 
     virtual bool incremental() const {
         return false;
@@ -52,11 +50,10 @@ public:
 
 
     double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
-        Q_UNUSED(xSpacing);
-        Q_UNUSED(ySpacing);
         Q_UNUSED(pressure1);
         Q_UNUSED(pressure2);
-        // XXX: this is wrong!
+        xSpacing = 1;
+        ySpacing = 1;
         return 1;
     }
 
@@ -65,7 +62,6 @@ private:
     const KisChalkPaintOpSettings* m_settings;
     KisImageSP m_image;
     KisPaintDeviceSP dab;
-    QMutex m_mutex;
     ChalkBrush m_chalkBrush;
 };
 

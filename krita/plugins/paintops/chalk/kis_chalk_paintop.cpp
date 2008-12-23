@@ -20,6 +20,7 @@
 #include "kis_chalk_paintop_settings.h"
 
 #include <cmath>
+#include <math.h>
 
 #include <QRect>
 #include <QColor>
@@ -53,16 +54,8 @@ KisChalkPaintOp::~KisChalkPaintOp()
 {
 }
 
-// if you uncomment this, it did not cycle
-/*double KisChalkPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist){
-  paintAt(pi1);
-  paintAt(pi2);
-  return 0.5;
-  };*/
-
 void KisChalkPaintOp::paintAt(const KisPaintInformation& info)
 {
-    QMutexLocker locker(&m_mutex);
     if (!painter()) return;
 
     dab = cachedDab();
@@ -73,7 +66,8 @@ void KisChalkPaintOp::paintAt(const KisPaintInformation& info)
     x1 = info.pos().x();
     y1 = info.pos().y();
 
-//    qDebug() <<  x1 << ", " << y1;
+    Q_ASSERT(!isnan(x1));
+    Q_ASSERT(!isnan(y1));
 
     m_chalkBrush.paint(dab, x1, y1, painter()->paintColor());
 

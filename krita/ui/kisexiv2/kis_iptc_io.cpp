@@ -155,7 +155,7 @@ bool KisIptcIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
 #if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 17
     iptcData.load((const Exiv2::byte*)arr.data(), arr.size());
 #else
-    Exiv2::IptcData::decode( iptcData, (const Exiv2::byte*)arr.data(), arr.size());
+    Exiv2::IptcParser::decode( iptcData, (const Exiv2::byte*)arr.data(), arr.size());
 #endif
     dbgFile << "There are" << iptcData.count() << " entries in the IPTC section";
     for (Exiv2::IptcMetadata::const_iterator it = iptcData.begin();

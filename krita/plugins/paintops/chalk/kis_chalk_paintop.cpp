@@ -66,9 +66,6 @@ void KisChalkPaintOp::paintAt(const KisPaintInformation& info)
     x1 = info.pos().x();
     y1 = info.pos().y();
 
-    Q_ASSERT(!isnan(x1));
-    Q_ASSERT(!isnan(y1));
-
     m_chalkBrush.paint(dab, x1, y1, painter()->paintColor());
 
     QRect rc = dab->extent();

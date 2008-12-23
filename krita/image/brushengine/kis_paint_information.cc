@@ -141,3 +141,18 @@ double KisPaintInformation::tangentialPressure() const
 {
     return d->tangentialPressure;
 }
+
+QDebug operator<<(QDebug dbg, const KisPaintInformation &info)
+{
+#ifndef NDEBUG
+    dbg.nospace() << "Position: " << info.pos();
+    dbg.nospace() << ", Pressure: " << info.pressure();
+    dbg.nospace() << ", X Tilt: " << info.xTilt();
+    dbg.nospace() << ", Y Tilt: " << info.yTilt();
+    dbg.nospace() << ", Movement: " << toQPointF(info.movement());
+    dbg.nospace() << ", Rotation: " << info.rotation();
+    dbg.nospace() << ", Tangential Pressure: " << info.tangentialPressure();
+    dbg.nospace() << ", Angle: " << info.angle();
+#endif
+    return dbg.space();
+}

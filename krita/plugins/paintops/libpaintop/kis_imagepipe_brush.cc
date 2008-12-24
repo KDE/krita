@@ -164,12 +164,12 @@ bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
     int len = qstrlen(name);
 
     if (m_d->parasite.dim != 1) {
-        kWarning(41001) << "Save to file for pipe brushes with dim != not yet supported!";
+        warnImage << "Save to file for pipe brushes with dim != not yet supported!";
         return false;
     }
 
     // Save this pipe brush: first the header, and then all individual brushes consecutively
-    // (this needs some care for when we have > 1 dimension), FIXME
+    // XXX: this needs some care for when we have > 1 dimension)
 
     // Gimp Pipe Brush header format: Name\n<number of brushes> <parasite>\n
 
@@ -296,7 +296,7 @@ void KisImagePipeBrush::selectNextBrush(const KisPaintInformation& info) const
             index = static_cast<int>(angle / (2.0 * M_PI) * m_d->parasite.rank[i]);
             break;
         default:
-            kWarning(41001) << "This parasite KisParasite::SelectionMode has not been implemented. Reselecting"
+            warnImage << "This parasite KisParasite::SelectionMode has not been implemented. Reselecting"
             << " to Incremental";
             m_d->parasite.selection[i] = KisParasite::Incremental;
             index = 0;

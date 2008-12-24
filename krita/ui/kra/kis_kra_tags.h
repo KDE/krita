@@ -33,21 +33,26 @@ namespace KRA {
 
     // xml tags
     const QString SEPARATOR = "/";
-    const QString SHAPE_LAYER_PATH = "/shapelayers/layer";
+    const QString SHAPE_LAYER_PATH = "/shapelayers/";
     const QString EXIF_PATH = "/annotations/exif";
     const QString ICC_PATH = "/annotations/icc";
-    const QString LAYER_PATH = "/layers/layer";
+    const QString LAYER_PATH = "/layers/";
 
     const QString ADJUSTMENT_LAYER = "adjustmentlayer";
+    const QString CHANNEL_FLAGS = "channelflags";
     const QString CLONE_FROM = "clonefrom";
     const QString CLONE_LAYER = "clonelayer";
     const QString CLONE_TYPE = "clonetype";
     const QString COLORSPACE_NAME = "colorspacename";
     const QString COMPOSITE_OP = "compositeop";
     const QString DESCRIPTION = "description";
+
     const QString DOT_FILTERCONFIG = ".filterconfig";
-    const QString DOT_GENERATORCONFIG = ".generatorconfig";
     const QString DOT_ICC = ".icc";
+    const QString DOT_PIXEL_SELECTION = ".pixelselection";
+    const QString DOT_SHAPE_SELECTION = ".shapeselection";
+    const QString DOT_SHAPE_LAYER = ".shapelayer";
+
     const QString FILE_NAME = "filename";
     const QString FILTER_MASK = "filtermask";
     const QString FILTER_NAME = "filtername";
@@ -60,12 +65,11 @@ namespace KRA {
     const QString HEIGHT = "height";
     const QString ICC = "icc";
     const QString LAYER = "layer";
-    const QString LAYERS = "LAYERS";
-    const QString LAYER_TYPE = "layertype";
+    const QString LAYERS = "layers";
+    const QString NODE_TYPE = "nodetype";
     const QString LOCKED = "locked";
     const QString MASK = "mask";
     const QString MASKS = "masks";
-    const QString MASK_TYPE = "masktype";
     const QString MIME = "mime";
     const QString NAME = "name";
     const QString OPACITY = "opacity";
@@ -74,7 +78,6 @@ namespace KRA {
     const QString ROTATION = "rotation";
     const QString SELECTION_MASK = "selectionmask";
     const QString SHAPE_LAYER = "shapelayer";
-    const QString SHAPE_LAYERS = "shapelayers";
     const QString TRANSFORMATION_MASK = "transformationmask";
     const QString TRANSPARENCY_MASK = "transparencymask";
     const QString VISIBLE = "visible";

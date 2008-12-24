@@ -55,6 +55,7 @@ private:
     QRectF m_initialBoundingRect;
     QPointF m_start;
     QMatrix m_rotationMatrix;
+    QMatrix m_initialSelectionMatrix;
     QList<QMatrix> m_oldTransforms;
     QPointF m_rotationCenter;
 };

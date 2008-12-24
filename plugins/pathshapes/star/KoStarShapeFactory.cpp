@@ -35,8 +35,10 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
 {
     setToolTip( i18n( "A star" ) );
     setIcon("star");
-    setOdfElementNames( KoXmlNS::draw, QStringList( "regular-polygon" ) );
-    setLoadingPriority( 1 );
+    QStringList elementNames;
+    elementNames << "regular-polygon" << "custom-shape";
+    setOdfElementNames(KoXmlNS::draw, elementNames);
+    setLoadingPriority( 5 );
 
     KoShapeTemplate t;
     t.id = KoPathShapeId;
@@ -132,7 +134,12 @@ KoShape * KoStarShapeFactory::createShape( const KoProperties * params ) const
 
 bool KoStarShapeFactory::supports(const KoXmlElement & e) const
 {
-    return ( e.localName() == "regular-polygon" && e.namespaceURI() == KoXmlNS::draw );
+    if ( e.localName() == "regular-polygon" && e.namespaceURI() == KoXmlNS::draw )
+        return true;
+    if ( e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw )
+        return true;
+
+    return false;
 }
 
 QList<KoShapeConfigWidgetBase*> KoStarShapeFactory::createShapeOptionPanels()

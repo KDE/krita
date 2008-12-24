@@ -107,11 +107,11 @@ void KisGeneratorLayer::updateProjection(const QRect& rc)
         m_d->projection = new KisPaintDevice(*m_d->paintDevice);
     } else {
         KisPainter gc(m_d->projection);
-        gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
+        gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY)); // TODO don't copy
         gc.bitBlt(rc.topLeft(), m_d->paintDevice, rc);
     }
 
-    applyEffectMasks(m_d->projection, rc);
+    applyEffectMasks( m_d->paintDevice, m_d->projection, rc);
 
 }
 

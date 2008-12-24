@@ -16,18 +16,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_extent_visitor_test.h"
+#ifndef KIS_KRA_SAVEXML_VISITOR_TEST_H
+#define KIS_KRA_SAVEXML_VISITOR_TEST_H
 
-#include <qtest_kde.h>
-#include "kis_extent_visitor.h"
-#include "kis_image.h"
+#include <QtTest/QtTest>
 
-void KisExtentVisitorTest::testCreation()
+class KisKraSaveXmlVisitorTest : public QObject
 {
-    QRect rc(0, 0, 100, 100);
-    KisExtentVisitor test(rc, true);
-}
+    Q_OBJECT
+private slots:
 
+    // XXX: Also test roundtripping of metadata
+    void testCreateDomDocument();
 
-QTEST_KDEMAIN(KisExtentVisitorTest, GUI)
-#include "kis_extent_visitor_test.moc"
+};
+
+#endif

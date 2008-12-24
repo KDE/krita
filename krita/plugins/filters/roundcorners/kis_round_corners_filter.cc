@@ -75,7 +75,7 @@ void KisRoundCornersFilter::process(KisConstProcessingInformation srcInfo,
             !dst ||
             !size.isValid() ||
             !config) {
-        kWarning() << "Invalid parameters for round corner filter";
+        warnKrita << "Invalid parameters for round corner filter";
         dbgPlugins << src << " " << dst << " " << size << " " << config;
         return;
     }

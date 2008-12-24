@@ -125,7 +125,7 @@ void KisRotateVisitor::shear(double angleX, double angleY, KoUpdater *progress)
     p2.bitBlt(r.x(), r.y(), COMPOSITE_OVER, sheared, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
     p2.end();
 
-    m_progressUpdater->setProgress(100);
+    m_progressUpdater->setProgress( m_progressUpdater->maximum() );
 }
 
 KisPaintDeviceSP KisRotateVisitor::rotateRight90(KisPaintDeviceSP src)

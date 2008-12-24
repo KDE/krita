@@ -136,9 +136,10 @@ void Brush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPain
     qreal distance = sqrt(dx * dx + dy * dy);
 
     qreal pressure = pi2.pressure();
-    if (m_mousePressureEnabled && pi1.pressure() == 0.5) { // it is mouse
+    if (m_mousePressureEnabled && pi2.pressure() == 0.5) { // it is mouse and want pressure from mouse movement
         pressure = 1.0 - computeMousePressure(distance);
-    } else { // leave it as it is
+    }else if (pi2.pressure() == 0.5) // if it is mouse
+    {
         pressure = 1.0;
     }
 
@@ -274,7 +275,7 @@ void Brush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPain
                 }else{
                     opacity =
                         255.0 *
-                        pressure *
+                        /* pressure * */
                         bristle->length() *
                         bristle->inkAmount() *
                         (1.0 - inkDeplation);

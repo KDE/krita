@@ -71,10 +71,10 @@ QString Schema::generateQualifiedName(const QString & name) const
     return prefix() + ':' + name;
 }
 
-QDebug operator<<(QDebug dbg, const KisMetaData::Schema &c)
+QDebug operator<<(QDebug debug, const KisMetaData::Schema &c)
 {
-    dbg.nospace() << "Uri = " << c.uri() << " Prefix = " << c.prefix();
-    return dbg.space();
+    debug.nospace() << "Uri = " << c.uri() << " Prefix = " << c.prefix();
+    return debug.space();
 }
 
 // ---- Schema Registry ---- //

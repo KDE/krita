@@ -50,5 +50,5 @@ private:
 
 class QDebug;
 
-QDebug operator<<(QDebug dbg, const KisConvolutionKernel &c);
+QDebug operator<<(QDebug debug, const KisConvolutionKernel &c);
 #endif

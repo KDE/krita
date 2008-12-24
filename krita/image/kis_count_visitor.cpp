@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,18 +16,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_EXTENT_VISITOR_TEST_H
-#define KIS_EXTENT_VISITOR_TEST_H
+#include "kis_count_visitor.h"
+#include "kis_image.h"
 
-#include <QtTest/QtTest>
+bool KisCountVisitor::inList(KisNode* node) {
+    foreach(QString nodeType, m_nodeTypes) {
+        if (node->inherits(nodeType.toAscii()))
+            return true;
+    }
+    return false;
+}
 
-class KisExtentVisitorTest : public QObject
-{
-    Q_OBJECT
-private slots:
+bool KisCountVisitor::check(KisNode * node) {
+    if (m_nodeTypes.isEmpty() || inList(node)) {
 
-    void testCreation();
+        if (m_properties.isEmpty() || node->check(m_properties)) {
+            m_count++;
+        }
+    }
+    visitAll(node);
 
-};
-
-#endif
+    return true;
+}

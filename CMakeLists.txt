@@ -12,6 +12,8 @@ endif(KDE4_BUILD_TESTS)
 set(GENERIC_KOFFICE_LIB_VERSION "5.0.0")
 set(GENERIC_KOFFICE_LIB_SOVERSION "5")
 
+cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
+
 # search packages used by KDE
 set(KDE_MIN_VERSION "4.1.0")
 find_package(KDE4 4.1.0 REQUIRED)
@@ -28,9 +30,22 @@ message( STATUS "Create Resources will be required in the final release")
 macro_optional_find_package(Eigen2)
 macro_optional_find_package(Blitz)
 macro_optional_find_package(QCA2)
-macro_optional_find_package(Exif)
 macro_optional_find_package(Freetype)
 macro_optional_find_package(Fontconfig)
+macro_optional_find_package(Exiv2)
+
+if(EXIV2_FOUND)
+    # query pkg-config asking for a Exiv2 >= 0.16
+    EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=0.16 exiv2 RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
+    if(_return_VALUE STREQUAL "0")
+      message(STATUS "Found Exiv2 release >= 0.16")
+    else(_return_VALUE STREQUAL "0")
+      set(EXIV2_FOUND FALSE)
+      message(STATUS "Found Exiv2 release < 0.16")
+    endif(_return_VALUE STREQUAL "0")
+endif(EXIV2_FOUND)
+
+macro_log_feature(EXIV2_FOUND "Exiv2" "Krita will not be built" "http://www.exiv2.org" FALSE "0.16")
 
 macro_log_feature(EIGEN2_FOUND "Eigen2" "Eigen2 is needed by KSpread and Krita. They won't be built." "Module in kdesupport" FALSE "2.0")
 
@@ -109,7 +124,7 @@ TEST_BIG_ENDIAN(CMAKE_WORDS_BIGENDIAN)
 configure_file(config-endian.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-endian.h )
 
 # for config.h and <toplevel/foo.h> includes (if any?)
-include_directories(${QDBUS_INCLUDE_DIRS}  ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
 
 # kostore is at the bottom of stack, so it has the dependency on the kde4 includes.
 set(KOSTORE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/store ${CMAKE_BINARY_DIR}/libs/store ${KDE4_INCLUDES})
@@ -137,9 +152,9 @@ set(KOPROPERTY_INCLUDES ${CMAKE_SOURCE_DIR}/libs ${CMAKE_BINARY_DIR}/libs)
 
 set(SHOULD_BUILD_KRITA TRUE)
 
-if(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND)
+if(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
    set(SHOULD_BUILD_KRITA FALSE)
-endif(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND)
+endif(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
 
 macro_log_feature(BLITZ_FOUND "qimageblitz" "Krita requires qimageblitz. Krita will not be built" "qimageblitz is available from kdesupport" FALSE "")
 

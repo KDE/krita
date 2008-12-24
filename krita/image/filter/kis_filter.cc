@@ -80,3 +80,31 @@ bool KisFilter::workWith(const KoColorSpace* cs) const
 {
     Q_UNUSED(cs); return true;
 }
+
+int KisFilter::overlapMarginNeeded(const KisFilterConfiguration*) const
+{
+    return 0;
+}
+
+QRect KisFilter::neededRect(const QRect & rect, const KisFilterConfiguration* c) const
+{
+    QRect rc = rect;
+    int margin = overlapMarginNeeded(c);
+    rc.setLeft(rect.left() - margin);
+    rc.setTop(rect.top() - margin);
+    rc.setRight(rect.right() + margin);
+    rc.setBottom(rect.bottom() + margin);
+    return rc;
+}
+
+QRect KisFilter::changedRect(const QRect & rect, const KisFilterConfiguration* c) const
+{
+    QRect rc = rect;
+    int margin = overlapMarginNeeded(c);
+    rc.setLeft(rect.left() - margin);
+    rc.setTop(rect.top() - margin);
+    rc.setRight(rect.right() + margin);
+    rc.setBottom(rect.bottom() + margin);
+    return rc;
+}
+

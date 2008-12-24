@@ -56,28 +56,6 @@ KisMask::~KisMask()
     delete m_d;
 }
 
-KoDocumentSectionModel::PropertyList KisMask::sectionModelProperties() const
-{
-    KoDocumentSectionModel::PropertyList l = KisBaseNode::sectionModelProperties();
-    l << KoDocumentSectionModel::Property(i18n("Active"), KIcon("active"), KIcon("inactive"), active());
-    return l;
-}
-
-void KisMask::setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties)
-{
-    setActive(properties.at(2).state.toBool());
-}
-
-bool KisMask::active() const
-{
-    return nodeProperties().boolProperty("active", true);
-}
-
-void KisMask::setActive(bool active)
-{
-    nodeProperties().setProperty("active", active);
-}
-
 KisSelectionSP KisMask::selection() const
 {
     return m_d->selection;
@@ -135,6 +113,16 @@ void KisMask::setY(qint32 y)
 {
     Q_ASSERT(m_d->selection);
     m_d->selection->setY(y);
+}
+
+QRect KisMask::adjustedDirtyRect( const QRect& _rect ) const
+{
+    return _rect;
+}
+
+QRect KisMask::neededRect( const QRect& _rect ) const
+{
+    return _rect;
 }
 
 #include "kis_mask.moc"

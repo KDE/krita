@@ -108,15 +108,19 @@ void KisCloneLayer::updateProjection(const QRect& r)
         KisPainter gc(m_d->projection);
         gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
 
+        // TODO don't copy
+        KisPaintDeviceSP src = 0;
         switch (m_d->type) {
         case COPY_PROJECTION:
             gc.bitBlt(rc.topLeft(), m_d->copyFrom->projection(), rc);
+            src = m_d->copyFrom->projection();
             break;
         case COPY_ORIGINAL:
         default:
             gc.bitBlt(rc.topLeft(), m_d->copyFrom->original(), rc);
+            src = m_d->copyFrom->original();
         }
-        applyEffectMasks(m_d->projection, r);
+        applyEffectMasks(m_d->copyFrom->original(), m_d->projection, r);
     }
 }
 

@@ -3,6 +3,7 @@ include_directories( ${KOTEXT_INCLUDES} ${BLITZ_INCLUDES} ${CMAKE_CURRENT_SOURCE
 
 add_subdirectory( tests )
 
+
 configure_file(config-processor.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-processor.h )
 
 include(kdefx.cmake)
@@ -54,7 +55,7 @@ set(kritaui_LIB_SRCS
     kra/kis_kra_load_visitor.cpp
     kra/kis_kra_saver.cpp
     kra/kis_kra_save_visitor.cpp 
-    kra/kis_savexml_visitor.cpp
+    kra/kis_kra_savexml_visitor.cpp
     kis_label_cursor_pos.cc
     kis_layer_box.cpp 
     flake/kis_layer_container_shape.cc 
@@ -122,6 +123,10 @@ set(kritaui_LIB_SRCS
     widgets/kis_tree_view_popup.cc 
     widgets/kis_wdg_generator.cpp
     widgets/squeezedcombobox.cpp
+    kisexiv2/kis_exif_io.cpp
+    kisexiv2/kis_iptc_io.cpp
+    kisexiv2/kis_xmp_io.cpp
+    kisexiv2/kis_exiv2.cpp
 )
 
 if(HAVE_OPENGL AND HAVE_GLEW)
@@ -175,7 +180,8 @@ kde4_add_ui_files(kritaui_LIB_SRCS
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 
-target_link_libraries(kritaui ${KDE4_KDE3SUPPORT_LIBS} ${BLITZ_LIBRARIES} ${KDE4_KPARTS_LIBS} kritaimage kotext ${PNG_LIBRARIES} ${KDE4_THREADWEAVER_LIBRARY})
+target_link_libraries(kritaui ${KDE4_KDE3SUPPORT_LIBS} ${BLITZ_LIBRARIES} ${KDE4_KPARTS_LIBS} kritaimage kotext ${PNG_LIBRARIES})
+target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage ${GL_INTERFACE_LIBRARIES})
 
 if(HAVE_OPENGL)
     target_link_libraries(kritaui ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENEXR_LIBRARIES})
@@ -187,7 +193,6 @@ endif(HAVE_OPENGL)
 
 set_target_properties(kritaui
     PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
-    ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "kritaimage${GL_INTERFACE_LIBRARIES}"
 )
 install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

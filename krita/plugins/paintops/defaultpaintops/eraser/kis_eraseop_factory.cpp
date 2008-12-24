@@ -52,7 +52,6 @@ KisPaintOp * KisEraseOpFactory::createOp(const KisPaintOpSettingsSP settings,
 
     const KisEraseOpSettings *eraseopSettings = dynamic_cast<const KisEraseOpSettings *>(settings.data());
     Q_ASSERT(settings != 0 && eraseopSettings != 0);
-    m_widget->setConfiguration(const_cast<KisEraseOpSettings*>(eraseopSettings));
 
     KisPaintOp * op = new KisEraseOp(eraseopSettings, painter);
     Q_CHECK_PTR(op);

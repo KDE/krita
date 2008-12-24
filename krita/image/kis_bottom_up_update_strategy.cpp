@@ -263,7 +263,7 @@ public:
         if (!f) return false;
 
         // Possibly enlarge the rect that changed (like for convolution filters)
-        tmpRc = f->enlargeRect(tmpRc, cfg);
+        tmpRc = f->changedRect(tmpRc, cfg);
 
         KisSelectionSP selection = layer->selection();
         KisPaintDeviceSP layerProjection = layer->projection();
@@ -340,6 +340,13 @@ public:
         return true;
 
     }
+
+    bool visit(KisNode*) { return true; }
+    bool visit(KisFilterMask*) { return true; }
+    bool visit(KisTransparencyMask*) { return true; }
+    bool visit(KisTransformationMask*) { return true; }
+    bool visit(KisSelectionMask*) { return true; }
+
 
 private:
     // Helper for the indirect painting

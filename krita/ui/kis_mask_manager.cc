@@ -194,8 +194,8 @@ void KisMaskManager::createTransparencyMask(KisNodeSP parent, KisNodeSP above)
         mask->setSelection(selection);
     }
     mask->setName(i18n("Transparency Mask"));     // XXX:Auto-increment a number here, like with layers
-    mask->setActive(true);
     m_view->image()->addNode(mask, parent, above);
+    mask->setDirty();
     activateMask(mask);
 }
 
@@ -221,11 +221,18 @@ void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
 
     KisPaintDeviceSP dev = layer->projection();
     KisFilterMask * mask = new KisFilterMask();
-    KisSelectionSP selection = m_view->selection();
-    if (selection) {
-        mask->setSelection(selection);
+    
+    if (layer->selection()) {
+        mask->setSelection(layer->selection());
     }
-    mask->setActive(true);
+    else if(m_view->image()->globalSelection()) {
+        mask->setSelection(m_view->image()->globalSelection());
+    } else {
+        // XXX not sure why it is needed, but without this the mask is unselected from the begining
+        mask->selection()->getOrCreatePixelSelection()->select(m_view->image()->bounds());
+        mask->selection()->setDeselected(true);
+    }
+
     mask->setName(i18n("New filter mask"));
     m_view->image()->addNode(mask, parent, above);
 
@@ -235,7 +242,6 @@ void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
         KisFilterConfiguration * filter = dlg.filterConfiguration();
         QString name = dlg.layerName();
         mask->setFilter(filter);
-        mask->setDirty();
         activateMask(mask);
     } else {
         m_view->image()->removeNode(mask);
@@ -273,7 +279,6 @@ void KisMaskManager::createTransformationMask(KisNodeSP parent, KisNodeSP above)
         mask->setXTranslation(dlg.transformationEffect()->moveX());
         mask->setYTranslation(dlg.transformationEffect()->moveY());
         mask->setFilterStrategy(dlg.transformationEffect()->filterStrategy());
-        mask->setActive(true);
         m_view->image()->addNode(mask, parent, above);
         activateMask(mask);
         mask->setDirty(selection->selectedExactRect());
@@ -306,9 +311,7 @@ void KisMaskManager::createSelectionMask(KisNodeSP parent, KisNodeSP above)
         mask->setSelection(selection);
     }
     mask->setName(i18n("Selection"));     // XXX:Auto-increment a number here, like with layers
-    mask->setActive(true);
     m_view->image()->addNode(mask, parent, above);
-    activateMask(mask);
 }
 
 

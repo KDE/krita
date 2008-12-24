@@ -136,6 +136,6 @@ private:
 }
 
 
-KRITAIMAGE_EXPORT QDebug operator<<(QDebug dbg, const KisMetaData::Value &v);
+KRITAIMAGE_EXPORT QDebug operator<<(QDebug debug, const KisMetaData::Value &v);
 
 #endif

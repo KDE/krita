@@ -875,7 +875,7 @@ void KoEnhancedPathFormula::debugTokens( const TokenList &tokens )
 void KoEnhancedPathFormula::debugOpcodes()
 {
 #ifndef NDEBUG
-    foreach( Opcode c, m_codes )
+    foreach( const Opcode &c, m_codes )
     {
         QString ctext;
         switch( c.type )

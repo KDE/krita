@@ -123,7 +123,7 @@ void KisLayer::setChannelFlags(const QBitArray & channelFlags)
     m_d->channelFlags = channelFlags;
 }
 
-QBitArray & KisLayer::channelFlags()
+QBitArray & KisLayer::channelFlags() const
 {
     return m_d->channelFlags;
 }
@@ -190,6 +190,26 @@ void KisLayer::setImage(KisImageSP image)
     }
 }
 
+void KisLayer::setDirty(const QRect & rect)
+{
+    QRect dr = rect;
+    QList<KisMaskSP> masks = effectMasks();
+    foreach( KisMaskSP mask, masks)
+    {
+        dr |= mask->adjustedDirtyRect( dr );
+    }
+    KisNode::setDirty( dr );
+}
+
+void KisLayer::setDirty(const QRegion & region)
+{ 
+    if (region.isEmpty()) return;
+
+    foreach(const QRect & rc, region.rects()) {
+        setDirty(rc);
+    }
+}
+
 KisSelectionMaskSP KisLayer::selectionMask() const
 {
     QList<KisNodeSP> masks = childNodes(QStringList("KisSelectionMask"), KoProperties());
@@ -204,7 +224,7 @@ KisSelectionMaskSP KisLayer::selectionMask() const
 KisSelectionSP KisLayer::selection() const
 {
     KisSelectionMaskSP selMask = selectionMask();
-    if (selMask && selMask->active())
+    if (selMask && selMask->visible())
         return selMask->selection();
     else if (m_d->image)
         return m_d->image->globalSelection();
@@ -222,7 +242,7 @@ bool KisLayer::hasEffectMasks() const
     return false;
 }
 
-void KisLayer::applyEffectMasks(const KisPaintDeviceSP projection, const QRect & rc)
+void KisLayer::applyEffectMasks(const KisPaintDeviceSP original, const KisPaintDeviceSP projection, const QRect & rc)
 {
     if (m_d->previewMask) {
         m_d->previewMask->apply(projection, rc);
@@ -233,17 +253,54 @@ void KisLayer::applyEffectMasks(const KisPaintDeviceSP projection, const QRect &
 
     QList<KisNodeSP> masks = childNodes(QStringList("KisEffectMask"), props);
 
-    // Then loop through the effect masks and apply them
-    for (int i = 0; i < masks.size(); ++i) {
-
+    // Compute the needed area
+    
+    QRect currentNeededRc = rc;
+    
+    QList< QRect > neededRects;
+    
+    neededRects.push_front( rc );
+    for( int i = masks.size() - 1; i >= 0 ; --i )
+    {
         const KisEffectMask * effectMask = dynamic_cast<const KisEffectMask*>(masks.at(i).data());
-
         if (effectMask) {
-            dbgImage << " layer " << name() << " has effect mask " << effectMask->name();
-            effectMask->apply(projection, rc);
+            dbgImage << i << " " << effectMask->neededRect( currentNeededRc );
+            currentNeededRc |= effectMask->neededRect( currentNeededRc );
+            dbgImage << i << currentNeededRc;
+            if( i > 0 )
+            {
+                neededRects.push_front( currentNeededRc );
+            }
         }
     }
+    dbgImage << "Apply effects on " << rc << " with a total needed rect of " << currentNeededRc;
+    
+    if (masks.size() > 0) {
+        KisPaintDeviceSP tmp = new KisPaintDevice( projection->colorSpace());
+        KisPainter gc(tmp);
+        gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
+        gc.bitBlt(currentNeededRc.topLeft(), original, currentNeededRc);
+    
+        // Then loop through the effect masks and apply them
+        for (int i = 0; i < masks.size(); ++i) {
 
+            const KisEffectMask * effectMask = dynamic_cast<const KisEffectMask*>(masks.at(i).data());
+
+            if (effectMask) {
+                dbgImage << " layer " << name() << " has effect mask " << effectMask->name() << " on " << neededRects[i];
+                effectMask->apply(tmp, neededRects[i]);
+            }
+        }
+    
+        KisPainter gc2(projection);
+        gc2.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
+        gc2.bitBlt(rc.topLeft(), tmp, rc);
+    }
+    else {
+        KisPainter gc2(projection);
+        gc2.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
+        gc2.bitBlt(rc.topLeft(), original, rc);
+    }
 }
 
 
@@ -313,6 +370,11 @@ KisPaintDeviceSP KisIndirectPaintingSupport::temporaryTarget()
     return d->temporaryTarget;
 }
 
+const KisPaintDeviceSP KisIndirectPaintingSupport::temporaryTarget() const
+{
+    return d->temporaryTarget;
+}
+
 const KoCompositeOp* KisIndirectPaintingSupport::temporaryCompositeOp() const
 {
     return d->compositeOp;
@@ -321,6 +383,11 @@ const KoCompositeOp* KisIndirectPaintingSupport::temporaryCompositeOp() const
 quint8 KisIndirectPaintingSupport::temporaryOpacity() const
 {
     return d->compositeOpacity;
+}
+
+bool KisIndirectPaintingSupport::hasTemporaryTarget() const
+{
+    return d->temporaryTarget;
 }
 
 

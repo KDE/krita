@@ -52,7 +52,6 @@ KisPaintOp * KisFilterOpFactory::createOp(const KisPaintOpSettingsSP settings,
     KisFilterOpSettings *filteropSettings = const_cast<KisFilterOpSettings*>( dynamic_cast<const KisFilterOpSettings *>(settings.data()) );
     Q_ASSERT(settings != 0 && filteropSettings != 0);
     filteropSettings->setImage( image );
-    m_widget->setConfiguration(filteropSettings);
 
     KisPaintOp * op = new KisFilterOp(filteropSettings, painter);
     Q_CHECK_PTR(op);

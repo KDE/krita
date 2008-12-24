@@ -79,8 +79,7 @@ void KisDeformPaintOp::paintAt(const KisPaintInformation& info)
     QMutexLocker locker(&m_mutex);
 
     if (!painter()) return;
-    KisPaintDeviceSP device = painter()->device();
-    if (!device) return;
+    /* m_dev = painter()->device(); */
     if (!m_dev) return;
 
     dab = cachedDab();

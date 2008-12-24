@@ -17,8 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_CHALKPAINTOP_H_
-#define KIS_CHALKPAINTOP_H_
+#ifndef KIS_CURVEPAINTOP_H_
+#define KIS_CURVEPAINTOP_H_
 
 #include <QColor>
 #include <QMutex>
@@ -27,64 +27,43 @@
 #include <kis_paintop.h>
 #include <kis_types.h>
 
-#include "brush.h"
+#include "curve_brush.h"
+
+#include "kis_curve_paintop_settings.h"
 
 class QPointF;
 class KisPainter;
-class KisChalkOpSettings;
 
-class KisChalkPaintOpFactory : public KisPaintOpFactory
+class KisCurvePaintOp : public KisPaintOp
 {
 
 public:
-    KisChalkPaintOpFactory() {}
-    virtual ~KisChalkPaintOpFactory() {}
+    KisCurvePaintOp(const KisCurvePaintOpSettings *settings, KisPainter * painter, KisImageSP image);
+    virtual ~KisCurvePaintOp();
 
-    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
-    virtual QString id() const {
-        return "chalkbrush";
+    virtual bool incremental() const {
+        return false;
     }
-    virtual QString name() const {
-        return i18n("Chalk-e brush");
-    }
-    virtual QString pixmap() {
-        return "krita-chalk.png";
-    }
-    virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
-    virtual KisPaintOpSettingsSP settings(KisImageSP image);
-};
-
-
-class KisChalkPaintOp : public KisPaintOp
-{
-
-public:
-
-    KisChalkPaintOp(KisPainter * painter, KisImageSP image);
-    virtual ~KisChalkPaintOp();
 
     void paintAt(const KisPaintInformation& info);
+    double paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist);
 
     double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
         Q_UNUSED(xSpacing);
         Q_UNUSED(ySpacing);
         Q_UNUSED(pressure1);
         Q_UNUSED(pressure2);
-        // XXX: this is wrong!
+        // XXX: this is wrong, but that doesn't matter, since paintLine doesn't use spacing.
         return 0.5;
     }
 
 
-
 private:
-    QColor c;
-    QPointF m_previousPoint;
     KisImageSP m_image;
-    bool newStrokeFlag;
-    //Stroke stroke;
     KisPaintDeviceSP dab;
+    KisPaintDeviceSP m_dev;
     QMutex m_mutex;
-    Brush m_mybrush;
+    CurveBrush m_curveBrush;
 };
 
-#endif // KIS_CHALKPAINTOP_H_
+#endif // KIS_CURVEPAINTOP_H_

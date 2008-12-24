@@ -28,14 +28,20 @@
 #include <QIcon>
 #include <QString>
 #include <QList>
+#include <QMap>
+#include <QDebug>
 
 #include <ktemporaryfile.h>
 #include <kicon.h>
 
 #include <KoCompositeOp.h>
+#include <KoDataCenter.h>
 #include <KoDocument.h>
 #include <KoEmbeddedDocumentSaver.h>
+#include <KoGenStyle.h>
+#include <KoImageCollection.h>
 #include <KoOdfLoadingContext.h>
+#include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfWriteStore.h>
 #include <KoPageLayout.h>
@@ -48,6 +54,8 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoViewConverter.h>
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
 #include <kis_types.h>
@@ -176,16 +184,8 @@ KoShapeManager *KisShapeLayer::shapeManager() const
     return m_d->canvas->shapeManager();
 }
 
-bool KisShapeLayer::saveOdf(KoStore * store) const
+bool KisShapeLayer::saveLayer(KoStore * store) const
 {
-
-    QList<KoShape*> shapes = iterator();
-    qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-
-    foreach(KoShape* shape, shapes) {
-        dbgKrita << "saving shape: " << shape->name();
-    }
-
     store->disallowNameExpansion();
     KoOdfWriteStore odfStore(store);
     KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
@@ -205,10 +205,15 @@ bool KisShapeLayer::saveOdf(KoStore * store) const
 
     KoPageLayout page;
     page.format = KoPageFormat::defaultFormat();
-    page.orientation = KoPageFormat::Portrait;
-    // XXX: this is in pixels -- should be in points?
-    page.width = image()->width();
-    page.height = image()->height();
+    QRectF rc = boundingRect();
+    page.width = rc.width();
+    page.height = rc.height();
+    if ( page.width > page.height ) {
+        page.orientation = KoPageFormat::Landscape;
+    }
+    else {
+         page.orientation = KoPageFormat::Portrait;
+    }
 
     KoGenStyles mainStyles;
     KoGenStyle pageLayout = page.saveOasis();
@@ -270,6 +275,101 @@ bool KisShapeLayer::saveOdf(KoStore * store) const
 
     return true;
 }
+
+bool KisShapeLayer::loadLayer( KoStore* store )
+{
+    KoOdfReadStore odfStore( store );
+    QString errorMessage;
+
+    odfStore.loadAndParse( errorMessage );
+
+    if ( !errorMessage.isEmpty() ) {
+        qDebug() << errorMessage;
+        return false;
+    }
+
+    KoXmlElement contents = odfStore.contentDoc().documentElement();
+
+//    qDebug() <<"Start loading OASIS document..." << contents.text();
+//    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().localName();
+//    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
+//    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().isElement();
+
+    KoXmlElement body( KoXml::namedItemNS( contents, KoXmlNS::office, "body" ) );
+
+    if( body.isNull() )
+    {
+        qDebug() <<"No office:body found!";
+        //setErrorMessage( i18n( "Invalid OASIS document. No office:body tag found." ) );
+        return false;
+    }
+
+    body = KoXml::namedItemNS( body, KoXmlNS::office, "drawing");
+    if(body.isNull())
+    {
+        qDebug() <<"No office:drawing found!";
+        //setErrorMessage( i18n( "Invalid OASIS document. No office:drawing tag found." ) );
+        return false;
+    }
+
+    KoXmlElement page( KoXml::namedItemNS( body, KoXmlNS::draw, "page" ) );
+    if(page.isNull())
+    {
+        qDebug() <<"No office:drawing found!";
+        //setErrorMessage( i18n( "Invalid OASIS document. No draw:page tag found." ) );
+        return false;
+    }
+
+    KoXmlElement * master = 0;
+    if( odfStore.styles().masterPages().contains( "Standard" ) )
+        master = odfStore.styles().masterPages().value( "Standard" );
+    else if( odfStore.styles().masterPages().contains( "Default" ) )
+        master = odfStore.styles().masterPages().value( "Default" );
+    else if( ! odfStore.styles().masterPages().empty() )
+        master = odfStore.styles().masterPages().begin().value();
+
+    if( master )
+    {
+        const KoXmlElement *style = odfStore.styles().findStyle(
+            master->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) );
+        KoPageLayout pageLayout;
+        pageLayout.loadOasis( *style );
+        setSize( QSizeF( pageLayout.width, pageLayout.height ) );
+    }
+    else
+    {
+        kWarning() << "No master page found!";
+        return false;
+    }
+
+    QMap<QString, KoDataCenter*> dataCenterMap;
+    KoOdfLoadingContext context( odfStore.styles(), odfStore.store() );
+    KoShapeLoadingContext shapeContext( context, dataCenterMap );
+
+
+    KoXmlElement layerElement;
+    forEachElement( layerElement, context.stylesReader().layerSet() )
+    {
+        KoShapeLayer * l = new KoShapeLayer();
+        if( !loadOdf( layerElement, shapeContext ) ) {
+            kWarning() << "Could not load shape layer!";
+            return false;
+        }
+    }
+
+    KoXmlElement child;
+    forEachElement( child, page )
+    {
+        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, shapeContext );
+        if( shape ) {
+            addChild( shape );
+        }
+    }
+
+    return true;
+
+}
+
 
 KisPaintDeviceSP KisShapeLayer::paintDevice() const
 {

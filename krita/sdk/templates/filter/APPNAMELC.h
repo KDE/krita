@@ -4,38 +4,24 @@
 #include <kparts/plugin.h>
 #include "filter/kis_filter.h"
 
-class %
+class %{APPNAME}Plugin : public KParts::Plugin
 {
-    APPNAME
-}Plugin : public KParts::Plugin {
 public:
-    % {APPNAME}Plugin(QObject *parent, const QStringList &);
-    virtual ~ % {APPNAME}Plugin();
+    %{APPNAME}Plugin(QObject *parent, const QStringList &);
+    virtual ~%{APPNAME}Plugin();
 };
 
-class %
+class %{APPNAME}Filter : public KisFilter
 {
-    APPNAME
-}Filter : public KisFilter {
 public:
-    % {APPNAME}Filter();
+    %{APPNAME}Filter();
 public:
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
-    virtual ColorSpaceIndependence colorSpaceIndependence() const {
-        return FULLY_INDEPENDENT;
-    }
-    static inline KoID id() {
-        return KoID("%{APPNAMELC}", i18n("%{APPNAME}"));
-    }
-    virtual bool supportsPainting() const {
-        return true;
-    }
-    virtual bool supportsPreview() const {
-        return true;
-    }
-    virtual bool supportsIncrementalPainting() const {
-        return false;
-    }
+    virtual ColorSpaceIndependence colorSpaceIndependence() const { return FULLY_INDEPENDENT; }
+    static inline KoID id() { return KoID("%{APPNAMELC}", i18n("%{APPNAME}")); }
+    virtual bool supportsPainting() const { return true; }
+    virtual bool supportsPreview() const { return true; }
+    virtual bool supportsIncrementalPainting() const { return false; }
 };
 
 #endif

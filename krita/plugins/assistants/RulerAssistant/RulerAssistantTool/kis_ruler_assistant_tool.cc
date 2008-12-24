@@ -27,6 +27,7 @@
 
 #include <canvas/kis_canvas2.h>
 #include <kis_cursor.h>
+#include <kis_image.h>
 #include <kis_view2.h>
 
 #include "RulerAssistant.h"
@@ -46,6 +47,11 @@ KisRulerAssistantTool::~KisRulerAssistantTool()
 {
 }
 
+QPointF adjustPointF( const QPointF& _pt, const QRectF& _rc)
+{
+    return QPointF( qBound( _rc.left(), _pt.x(), _rc.right() ), qBound( _rc.top(), _pt.y(), _rc.bottom() ) );
+}
+
 void KisRulerAssistantTool::activate(bool )
 {
     // Add code here to initialize your tool when it got activated
@@ -58,6 +64,13 @@ void KisRulerAssistantTool::activate(bool )
       ra = new RulerAssistant();
       KisPaintingAssistant::setCurrentAssistant( ra );
     }
+    QRectF imageArea = QRectF( pixelToView( QPoint(0,0) ),
+                               m_canvas->image()->pixelToDocument( QPoint( m_canvas->image()->width(), m_canvas->image()->height()) ) );
+    
+    dbgPlugins << imageArea << ra->ruler()->point1() << ra->ruler()->point2();
+    
+    ra->ruler()->setPoint1( adjustPointF( ra->ruler()->point1(), imageArea ) );
+    ra->ruler()->setPoint2( adjustPointF( ra->ruler()->point2(), imageArea ) );
     
     m_rulerDecoration = dynamic_cast<RulerDecoration*>(m_canvas->decoration("ruler"));
     Q_ASSERT(m_rulerDecoration);

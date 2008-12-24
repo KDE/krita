@@ -39,8 +39,8 @@ KoEllipseShape::KoEllipseShape()
     m_handles.push_back( QPointF( 100, 50 ) );
     m_handles.push_back( QPointF( 0, 50 ) );
     QSizeF size( 100, 100 );
-    createPath( size );
-    m_points = *m_subpaths[0];
+    m_radii = QPointF( size.width() / 2.0, size.height() / 2.0 );
+    m_center = QPointF( m_radii.x(), m_radii.y() );
     updatePath( size );
 }
 
@@ -226,36 +226,48 @@ void KoEllipseShape::updatePath( const QSizeF &size )
 
     int pointCnt = arcToCurve( m_radii.x(), m_radii.y(), m_startAngle, sweepAngle() , startpoint, curvePoints );
 
-    int cp = 0;
-    m_points[cp]->setPoint( startpoint );
-    m_points[cp]->removeControlPoint1();
-    for ( int i = 0; i < pointCnt; i += 3 )
-    {
-        m_points[cp]->setControlPoint2( curvePoints[i] );
-        m_points[++cp]->setControlPoint1( curvePoints[i+1] ); 
-        m_points[cp]->setPoint( curvePoints[i+2] );
-        m_points[cp]->removeControlPoint2();
+    int curvePointCount = 1 + pointCnt / 3;
+    int requiredPointCount = curvePointCount;
+    if (m_type == Pie) {
+        requiredPointCount++;
     }
+    else if ( m_type == Arc && m_startAngle == m_endAngle ) {
+        curvePointCount--;
+        requiredPointCount--;
+    }
+    
+    createPoints( requiredPointCount );
+
+    KoSubpath & points = *m_subpaths[0];
+
+    int curveIndex = 0;
+    points[0]->setPoint( startpoint );
+    points[0]->removeControlPoint1();
+    points[0]->setProperty( KoPathPoint::StartSubpath );
+    for ( int i = 1; i < curvePointCount; ++i )
+    {
+        points[i-1]->setControlPoint2( curvePoints[curveIndex++] );
+        points[i]->setControlPoint1( curvePoints[curveIndex++] ); 
+        points[i]->setPoint( curvePoints[curveIndex++] );
+        points[i]->removeControlPoint2();
+    }
+
     if ( m_type == Pie )
     {
-        m_points[++cp]->setPoint( m_center );
-        m_points[cp]->removeControlPoint1();
-        m_points[cp]->removeControlPoint2();
+        points[requiredPointCount-1]->setPoint( m_center );
+        points[requiredPointCount-1]->removeControlPoint1();
+        points[requiredPointCount-1]->removeControlPoint2();
     }
     else if ( m_type == Arc && m_startAngle == m_endAngle )
     {
-        m_points[0]->setControlPoint1( m_points[cp]->controlPoint1() );
-        m_points[0]->setPoint( m_points[cp]->point() );
-        --cp;
+        points[curvePointCount-1]->setControlPoint2( curvePoints[curveIndex] );
+        points[0]->setControlPoint1( curvePoints[++curveIndex] );
     }
 
-    m_subpaths[0]->clear();
-
-    for ( int i = 0; i <= cp; ++i )
+    for ( int i = 0; i < requiredPointCount; ++i )
     {
-        m_points[i]->unsetProperty( KoPathPoint::StopSubpath );
-        m_points[i]->unsetProperty( KoPathPoint::CloseSubpath );
-        m_subpaths[0]->push_back( m_points[i] );
+        points[i]->unsetProperty( KoPathPoint::StopSubpath );
+        points[i]->unsetProperty( KoPathPoint::CloseSubpath );
     }
     m_subpaths[0]->last()->setProperty( KoPathPoint::StopSubpath );
     if( m_type == Arc && m_startAngle != m_endAngle )
@@ -272,15 +284,24 @@ void KoEllipseShape::updatePath( const QSizeF &size )
     normalize();
 }
 
-void KoEllipseShape::createPath( const QSizeF &size )
+void KoEllipseShape::createPoints( int requiredPointCount )
 {
-    clear();
-    m_radii = QPointF( size.width() / 2.0, size.height() / 2.0 );
-    m_center = QPointF( m_radii.x(), m_radii.y() );
-    moveTo( QPointF( size.width(), m_radii.y() ) );
-    arcTo( m_radii.x(), m_radii.y(), 0, 360.0 );
-    lineTo( QPointF( m_radii.x(), m_radii.y() ) );
-    close();
+    if ( m_subpaths.count() != 1 ) {
+        clear();
+        m_subpaths.append( new KoSubpath() );
+    }
+    int currentPointCount = m_subpaths[0]->count();
+    if (currentPointCount > requiredPointCount) {
+        for( int i = 0; i < currentPointCount-requiredPointCount; ++i ) {
+            delete m_subpaths[0]->front();
+            m_subpaths[0]->pop_front();
+        }
+    }
+    else if (requiredPointCount > currentPointCount) {
+        for( int i = 0; i < requiredPointCount-currentPointCount; ++i ) {
+            m_subpaths[0]->append( new KoPathPoint( this, QPointF() ) );
+        }
+    }
 }
 
 

@@ -228,9 +228,16 @@ void KisConvolutionPainter::applyMatrixRepeat(const KisConvolutionKernelSP kerne
     khalfWidth = (kw - 1) / 2;
     khalfHeight = (kh - 1) / 2;
 
-    xLastMinuskhw = x + (w - khalfWidth);
-    yLastMinuskhh = y + (h - khalfHeight);
+    QRect exactBound = src->exactBounds();
+    
+    int data_right = qMax( exactBound.right() + 1, x + w );
+    int data_bottom = qMax( exactBound.bottom() + 1, y + h );
+    
+    xLastMinuskhw = data_right - khalfWidth;
+    yLastMinuskhh = data_bottom - khalfHeight;
 
+    dbgImage << ppVar( xLastMinuskhw ) << ppVar( yLastMinuskhh ) << ppVar( w ) << ppVar( h ) << ppVar( x) << ppVar( y ) << ppVar( exactBound );
+    
     const KoColorSpace * cs = device()->colorSpace();
     KoConvolutionOp * convolutionOp = cs->convolutionOp();
 

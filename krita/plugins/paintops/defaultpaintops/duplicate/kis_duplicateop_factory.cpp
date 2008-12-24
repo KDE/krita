@@ -52,7 +52,6 @@ KisPaintOp * KisDuplicateOpFactory::createOp(const KisPaintOpSettingsSP settings
 
     const KisDuplicateOpSettings *duplicateopSettings = dynamic_cast<const KisDuplicateOpSettings *>(settings.data());
     Q_ASSERT(settings != 0 && duplicateopSettings != 0);
-    m_widget->setConfiguration(const_cast<KisDuplicateOpSettings*>(duplicateopSettings));
 
     KisPaintOp * op = new KisDuplicateOp(duplicateopSettings, painter);
     Q_CHECK_PTR(op);

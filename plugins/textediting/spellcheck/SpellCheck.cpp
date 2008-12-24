@@ -162,8 +162,8 @@ void SpellCheck::highlightMisspelled(const QString &word, int startPosition, boo
     while( iter != ranges.end() ) {
         QTextLayout::FormatRange r = *(iter);
         const int rEnd = r.start + r.length;
-        if (rEnd >= range.start && rEnd <= rangeEnd || rangeEnd >= r.start && rangeEnd <= rEnd // intersect
-                && r.format == m_defaultMisspelledFormat) {
+        if ((rEnd >= range.start && rEnd <= rangeEnd) || (rangeEnd >= r.start && rangeEnd <= rEnd // intersect
+                && r.format == m_defaultMisspelledFormat)) {
             ranges.erase(iter);
             break;
         }

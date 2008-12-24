@@ -80,18 +80,6 @@ KisConfigWidget * KisBaseProcessor::createConfigurationWidget(QWidget *, const K
     return 0;
 }
 
-QRect KisBaseProcessor::enlargeRect(const QRect & rect, const KisFilterConfiguration* c) const
-{
-    QRect rc = rect;
-    int margin = overlapMarginNeeded(c);
-    rc.setLeft(rect.left() - margin);
-    rc.setTop(rect.top() - margin);
-    rc.setRight(rect.right() + margin);
-    rc.setBottom(rect.bottom() + margin);
-    return rc;
-}
-
-
 KisBookmarkedConfigurationManager* KisBaseProcessor::bookmarkManager()
 {
     return d->bookmarkManager;
@@ -106,11 +94,6 @@ void KisBaseProcessor::setBookmarkManager(KisBookmarkedConfigurationManager* bm)
 {
     delete d->bookmarkManager;
     d->bookmarkManager = bm;
-}
-
-int KisBaseProcessor::overlapMarginNeeded(const KisFilterConfiguration*) const
-{
-    return 0;
 }
 
 QString KisBaseProcessor::id() const

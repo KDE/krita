@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,17 +34,13 @@ KoStarShape::KoStarShape()
 , m_zoomY( 1.0 )
 , m_convex( false )
 {
-    qreal radianStep = M_PI / static_cast<qreal>(m_cornerCount);
-
     m_radius[base] = 25.0;
     m_radius[tip] = 50.0;
-    m_angles[base] = M_PI_2-2*radianStep;
-    m_angles[tip] = M_PI_2-2*radianStep;
+    m_angles[base] = m_angles[tip] = defaultAngleRadian();
     m_roundness[base] = m_roundness[tip] = 0.0f;
 
-    createPath();
-
-    m_center = computeCenter();
+    m_center = QPointF(50,50);
+    updatePath( QSize(100,100) );
 }
 
 KoStarShape::~KoStarShape()
@@ -55,8 +51,13 @@ void KoStarShape::setCornerCount( uint cornerCount )
 {
     if( cornerCount >= 3 )
     {
+        double oldDefaultAngle = defaultAngleRadian();
         m_cornerCount = cornerCount;
-        createPath();
+        double newDefaultAngle = defaultAngleRadian();
+        m_angles[base] += newDefaultAngle-oldDefaultAngle;
+        m_angles[tip] += newDefaultAngle-oldDefaultAngle;
+        
+        updatePath( QSize() );
     }
 }
 
@@ -102,7 +103,7 @@ void KoStarShape::setTipRoundness( qreal tipRoundness )
 void KoStarShape::setConvex( bool convex )
 {
     m_convex = convex;
-    createPath();
+    updatePath( QSize() );
 }
 
 bool KoStarShape::convex() const
@@ -170,6 +171,10 @@ void KoStarShape::updatePath( const QSizeF &size )
     Q_UNUSED(size);
     qreal radianStep = M_PI / static_cast<qreal>(m_cornerCount);
 
+    createPoints( m_convex ? m_cornerCount : 2*m_cornerCount );
+
+    KoSubpath &points = *m_subpaths[0];
+
     uint index = 0;
     for( uint i = 0; i < 2*m_cornerCount; ++i )
     {
@@ -179,56 +184,59 @@ void KoStarShape::updatePath( const QSizeF &size )
         qreal radian = static_cast<qreal>( (i+1)*radianStep ) + m_angles[cornerType];
         QPointF cornerPoint = QPointF( m_zoomX * m_radius[cornerType] * cos( radian ), m_zoomY * m_radius[cornerType] * sin( radian ) );
 
-        m_points[index]->setPoint( m_center + cornerPoint );
+        points[index]->setPoint( m_center + cornerPoint );
+        points[index]->unsetProperty( KoPathPoint::StopSubpath );
+        points[index]->unsetProperty( KoPathPoint::CloseSubpath );
         if( m_roundness[cornerType] > 1e-10 || m_roundness[cornerType] < -1e-10 )
         {
             // normalized cross product to compute tangential vector for handle point
             QPointF tangentVector( cornerPoint.y()/m_radius[cornerType], -cornerPoint.x()/m_radius[cornerType] );
-            m_points[index]->setControlPoint2( m_points[index]->point() - m_roundness[cornerType] * tangentVector );
-            m_points[index]->setControlPoint1( m_points[index]->point() + m_roundness[cornerType] * tangentVector );
+            points[index]->setControlPoint2( points[index]->point() - m_roundness[cornerType] * tangentVector );
+            points[index]->setControlPoint1( points[index]->point() + m_roundness[cornerType] * tangentVector );
         }
         else
         {
-            m_points[index]->removeControlPoint1();
-            m_points[index]->removeControlPoint2();
+            points[index]->removeControlPoint1();
+            points[index]->removeControlPoint2();
         }
         index++;
     }
 
+    // first path starts and closes path
+    points[0]->setProperty( KoPathPoint::StartSubpath );
+    points[0]->setProperty( KoPathPoint::CloseSubpath );
+    // last point stops and closes path
+    points.last()->setProperty( KoPathPoint::StopSubpath );
+    points.last()->setProperty( KoPathPoint::CloseSubpath );
+
     normalize();
-    m_handles[tip] = m_points.at(tip)->point();
+
+    m_handles.clear();
+    m_handles.push_back( points.at(tip)->point() );
     if( ! m_convex )
-        m_handles[base] = m_points.at(base)->point();
+        m_handles.push_back( points.at(base)->point() );
+
     m_center = computeCenter();
 }
 
-void KoStarShape::createPath()
+void KoStarShape::createPoints( int requiredPointCount )
 {
-    clear();
-    qreal radianStep = M_PI / static_cast<qreal>(m_cornerCount);
-
-    QPointF center = QPointF( m_radius[tip], m_radius[tip] );
-
-    QPointF cornerPoint( m_radius[tip] * cos( m_angles[tip] + radianStep ), m_radius[tip] * sin( m_angles[tip] + radianStep ) );
-    moveTo( center + cornerPoint );
-    for( uint i = 1; i < 2*m_cornerCount; ++i )
-    {
-        uint cornerType = i % 2;
-        if( cornerType == base && m_convex )
-            continue;
-        qreal radian = static_cast<qreal>( (i+1)*radianStep )  + m_angles[cornerType];
-        cornerPoint = QPointF( m_radius[cornerType] * cos( radian ), m_radius[cornerType] * sin( radian ) );
-        lineTo( center + cornerPoint );
+    if ( m_subpaths.count() != 1 ) {
+        clear();
+        m_subpaths.append( new KoSubpath() );
     }
-    close();
-    normalize();
-
-    m_points = *m_subpaths[0];
-    m_handles.clear();
-    m_handles.push_back( m_points.at(tip)->point() );
-    if( ! m_convex )
-        m_handles.push_back( m_points.at(base)->point() );
-    m_center = computeCenter();
+    int currentPointCount = m_subpaths[0]->count();
+    if (currentPointCount > requiredPointCount) {
+        for( int i = 0; i < currentPointCount-requiredPointCount; ++i ) {
+            delete m_subpaths[0]->front();
+            m_subpaths[0]->pop_front();
+        }
+    }
+    else if (requiredPointCount > currentPointCount) {
+        for( int i = 0; i < requiredPointCount-currentPointCount; ++i ) {
+            m_subpaths[0]->append( new KoPathPoint( this, QPointF() ) );
+        }
+    }
 }
 
 void KoStarShape::setSize( const QSizeF &newSize )
@@ -246,50 +254,123 @@ void KoStarShape::setSize( const QSizeF &newSize )
 
 QPointF KoStarShape::computeCenter() const
 {
+    KoSubpath &points = *m_subpaths[0];
+
     QPointF center( 0, 0 );
     for( uint i = 0; i < m_cornerCount; ++i )
     {
         if( m_convex )
-            center += m_points[i]->point();
+            center += points[i]->point();
         else
-            center += m_points[2*i]->point();
+            center += points[2*i]->point();
     }
     return center / static_cast<qreal>( m_cornerCount );
 }
 
 bool KoStarShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
+    bool loadAsCustomShape = false;
+    
+    if( element.localName() == "custom-shape" )
+    {
+        QString drawEngine = element.attributeNS( KoXmlNS::draw, "engine", "" );
+        if( drawEngine != "koffice:star" )
+            return false;
+        loadAsCustomShape = true;
+    }
+    else if( element.localName() != "regular-polygon" )
+    {
+        return false;
+    }
+
     loadOdfAttributes( element, context, OdfAllAttributes );
-
-    QString corners = element.attributeNS( KoXmlNS::draw, "corners", "" );
-    if( ! corners.isEmpty() )
-        m_cornerCount = corners.toUInt();
-
-    m_convex = (element.attributeNS( KoXmlNS::draw, "concave", "false" ) == "false" );
-
     QSizeF loadedSize = size();
     QPointF loadedPosition = position();
 
+    // initialize tip radius
+    // TODO: this is unfortunately not precise, we have to calculate the enclosing
+    // ellipse from the resulting size (loaded size) of the shape and use the ellipse
+    // radius for the tip radius
     m_radius[tip] = qMax( 0.5 * loadedSize.width(), 0.5 * loadedSize.height() );
 
-    if( m_convex )
+    if( ! loadAsCustomShape )
     {
-        m_radius[base] = m_radius[tip];
+        QString corners = element.attributeNS( KoXmlNS::draw, "corners", "" );
+        if( ! corners.isEmpty() )
+            m_cornerCount = corners.toUInt();
+
+        m_convex = (element.attributeNS( KoXmlNS::draw, "concave", "false" ) == "false" );
+
+        if( m_convex )
+        {
+            m_radius[base] = m_radius[tip];
+        }
+        else
+        {
+            // sharpness is radius of ellipse on which inner polygon points are located
+            // 0% means all polygon points are on a single ellipse
+            // 100% means inner points are located at polygon center point
+            QString sharpness = element.attributeNS( KoXmlNS::draw, "sharpness", "" );
+            if( ! sharpness.isEmpty() && sharpness.right( 1 ) == "%" )
+            {
+                float percent = sharpness.left( sharpness.length()-1 ).toFloat();
+                m_radius[base] = m_radius[tip] * (100-percent)/100;
+            }
+        }
     }
     else
     {
-        // sharpness is radius of ellipse on which inner polygon points are located
-        // 0% means all polygon points are on a single ellipse
-        // 100% means inner points are located at polygon center point
-        QString sharpness = element.attributeNS( KoXmlNS::draw, "sharpness", "" );
-        if( ! sharpness.isEmpty() && sharpness.right( 1 ) == "%" )
+        QString drawData = element.attributeNS( KoXmlNS::draw, "data" );
+        if( drawData.isEmpty() )
+            return false;
+
+        QStringList properties = drawData.split( ';' );
+        if( properties.count() == 0 )
+            return false;
+
+        foreach( const QString &property, properties )
         {
-            float percent = sharpness.left( sharpness.length()-1 ).toFloat();
-            m_radius[base] = m_radius[tip] * (100-percent)/100;
+            QStringList pair = property.split( ':' );
+            if( pair.count() != 2 )
+                continue;
+            if( pair[0] == "corners" )
+            {
+                m_cornerCount = pair[1].toInt();
+            }
+            else if( pair[0] == "concave" )
+            {
+                m_convex = (pair[1] == "false");
+            }
+            else if( pair[0] == "baseRoundness" )
+            {
+                m_roundness[base] = pair[1].toDouble();
+            }
+            else if( pair[0] == "tipRoundness" )
+            {
+                m_roundness[tip] = pair[1].toDouble();
+            }
+            else if( pair[0] == "baseAngle" )
+            {
+                m_angles[base] = pair[1].toDouble();
+            }
+            else if( pair[0] == "tipAngle" )
+            {
+                m_angles[tip] = pair[1].toDouble();
+            }
+            else if( pair[0] == "sharpness" )
+            {
+                float percent = pair[1].left( pair[1].length()-1 ).toFloat();
+                m_radius[base] = m_radius[tip] * (100-percent)/100;
+            }
+        }
+
+        if( m_convex )
+        {
+            m_radius[base] = m_radius[tip];
         }
     }
 
-    createPath();
+    updatePath( loadedSize );
     setSize( loadedSize );
     setPosition( loadedPosition );
 
@@ -300,27 +381,82 @@ void KoStarShape::saveOdf( KoShapeSavingContext & context ) const
 {
     if( isParametricShape() )
     {
-        context.xmlWriter().startElement("draw:regular-polygon");
-        saveOdfAttributes( context, OdfAllAttributes );
-        context.xmlWriter().addAttribute( "draw:corners", m_cornerCount );
-        context.xmlWriter().addAttribute( "draw:concave", m_convex ? "false" : "true" );
-        // TODO saving the offset angle as rotation applied to the transformation
-        if( ! m_convex )
+        double defaultAngle = defaultAngleRadian();
+        bool hasRoundness = m_roundness[tip] != 0.0f || m_roundness[base] != 0.0f;
+        bool hasAngleOffset = m_angles[base] != defaultAngle || m_angles[tip] != defaultAngle;
+        if( hasRoundness || hasAngleOffset )
         {
-            // sharpness is radius of ellipse on which inner polygon points are located
-            // 0% means all polygon points are on a single ellipse
-            // 100% means inner points are located at polygon center point
-            qreal percent = (m_radius[tip]-m_radius[base]) / m_radius[tip] * 100.0;
-            context.xmlWriter().addAttribute( "draw:sharpness", QString("%1%" ).arg( percent ) );
+            // draw:regular-polygon has no means of saving roundness
+            // so we save as a custom shape with a specific draw:engine
+            context.xmlWriter().startElement("draw:custom-shape");
+            saveOdfAttributes( context, OdfAllAttributes );
+
+            // now write the special shape data
+            context.xmlWriter().addAttribute( "draw:engine", "koffice:star" );
+            // create the data attribute
+            QString drawData = QString("corners:%1;").arg( m_cornerCount );
+            drawData += m_convex ? "concave:false;" : "concave:true;";
+            if( ! m_convex )
+            {
+                // sharpness is radius of ellipse on which inner polygon points are located
+                // 0% means all polygon points are on a single ellipse
+                // 100% means inner points are located at polygon center point
+                qreal percent = (m_radius[tip]-m_radius[base]) / m_radius[tip] * 100.0;
+                drawData += QString("sharpness:%1%;").arg( percent );
+            }
+            if( m_roundness[base] != 0.0f )
+            {
+                drawData += QString("baseRoundness:%1;").arg( m_roundness[base] );
+            }
+            if( m_roundness[tip] != 0.0f )
+            {
+                drawData += QString("tipRoundness:%1;").arg( m_roundness[tip] );
+            }
+            drawData += QString("baseAngle:%1;").arg( m_angles[base] );
+            drawData += QString("tipAngle:%1;").arg( m_angles[tip] );
+
+            context.xmlWriter().addAttribute( "draw:data", drawData );
+
+            // write a enhanced geometry element for compatibility with other applications
+            context.xmlWriter().startElement("draw:enhanced-geometry");
+            context.xmlWriter().addAttribute("draw:enhanced-path", toString( transformation() ) );
+            context.xmlWriter().endElement(); // draw:enhanced-geometry
+            
+            saveOdfCommonChildElements( context );
+            context.xmlWriter().endElement(); // draw:custom-shape
         }
-        saveOdfCommonChildElements( context );
-        context.xmlWriter().endElement();
+        else
+        {
+            context.xmlWriter().startElement("draw:regular-polygon");
+            saveOdfAttributes( context, OdfAllAttributes );
+            context.xmlWriter().addAttribute( "draw:corners", m_cornerCount );
+            context.xmlWriter().addAttribute( "draw:concave", m_convex ? "false" : "true" );
+            if( ! m_convex )
+            {
+                // sharpness is radius of ellipse on which inner polygon points are located
+                // 0% means all polygon points are on a single ellipse
+                // 100% means inner points are located at polygon center point
+                qreal percent = (m_radius[tip]-m_radius[base]) / m_radius[tip] * 100.0;
+                context.xmlWriter().addAttribute( "draw:sharpness", QString("%1%" ).arg( percent ) );
+            }
+            saveOdfCommonChildElements( context );
+            context.xmlWriter().endElement();
+        }
     }
     else
+    {
         KoPathShape::saveOdf( context );
+    }
 }
 
 QString KoStarShape::pathShapeId() const
 {
     return KoStarShapeId;
+}
+
+double KoStarShape::defaultAngleRadian() const
+{
+    qreal radianStep = M_PI / static_cast<qreal>(m_cornerCount);
+
+    return M_PI_2-2*radianStep;
 }

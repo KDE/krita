@@ -27,7 +27,11 @@ class KisNodeVisitorTest : public QObject
 private slots:
 
     void testCreation();
+    void testFullImage();
+
 
 };
+
+
 
 #endif

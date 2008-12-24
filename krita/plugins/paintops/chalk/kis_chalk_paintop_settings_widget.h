@@ -16,35 +16,32 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _BRUSH_H_
-#define _BRUSH_H_
+#ifndef KIS_CHALKPAINTOP_SETTINGS_WIDGET_H_
+#define KIS_CHALKPAINTOP_SETTINGS_WIDGET_H_
 
-#include <QVector>
+#include <kis_paintop_options_widget.h>
 
-#include <KoColor.h>
+#include "ui_wdgchalkoptions.h"
+#include "widgets/kis_popup_button.h"
 
-#include "bristle.h"
-#include "brush_shape.h"
-#include "kis_paint_device.h"
+class KisPaintActionTypeOption;
+class KisChalkOpOption;
 
-class Brush
+class KisChalkPaintOpSettingsWidget : public KisPaintOpOptionsWidget
 {
+    Q_OBJECT
 
 public:
-    Brush(const BrushShape &initialShape, KoColor inkColor);
-    Brush();
-    ~Brush();
-    Brush(KoColor inkColor, BrushShape shape);
-    void paint(KisPaintDeviceSP dev, float x, float y, const KoColor &color);
+    KisChalkPaintOpSettingsWidget(QWidget* parent = 0);
+    virtual ~KisChalkPaintOpSettingsWidget();
 
+    void setConfiguration( const KisPropertiesConfiguration * config);
+    KisPropertiesConfiguration* configuration() const;
+    void writeConfiguration( KisPropertiesConfiguration *config ) const;
 
-
-private:
-    QVector<Bristle> m_bristles;
-    BrushShape m_initialShape;
-    KoColor m_inkColor;
-    int m_counter;
-    int m_radius;
+public:
+    KisPaintActionTypeOption* m_paintActionTypeOption;
+    KisChalkOpOption* m_chalkOption;
 
 };
 

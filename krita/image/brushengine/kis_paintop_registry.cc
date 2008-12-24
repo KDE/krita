@@ -69,7 +69,7 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
 KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image) const
 {
     if (painter == 0) {
-        kWarning() << " KisPaintOpRegistry::paintOp painter is null";
+        warnKrita << " KisPaintOpRegistry::paintOp painter is null";
         return 0;
     }
 

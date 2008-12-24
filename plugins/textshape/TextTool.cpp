@@ -86,7 +86,7 @@
 
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut)
 {
-    foreach(QKeySequence ks, KStandardShortcut::shortcut(shortcut).toList()) {
+    foreach(const QKeySequence & ks, KStandardShortcut::shortcut(shortcut).toList()) {
         if (input == ks)
             return true;
     }
@@ -128,7 +128,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_trackChanges(false),
         m_allowResourceProviderUpdates(true),
         m_needSpellChecking(true),
-        m_processingKeyPress(false),
         m_prevCursorPosition(-1),
         m_caretTimer(this),
         m_caretTimerState(true),
@@ -343,7 +342,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     action->setToolTip(i18n("Change text attributes to their default values"));
     connect(action, SIGNAL(triggered()), this, SLOT(setDefaultFormat()));
 
-    foreach(QString key, KoTextEditingRegistry::instance()->keys()) {
+    foreach(const QString & key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
         Q_ASSERT(factory);
         if (m_textEditingPlugins.contains(factory->id())) {
@@ -361,7 +360,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_textEditingPlugins.insert(factory->id(), plugin);
     }
 
-    foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins.values()) {
+    foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins) {
         connect(plugin, SIGNAL(startMacro(const QString &)), this, SLOT(startMacro(const QString &)));
         connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
         QHash<QString, KAction*> actions = plugin->actions();
@@ -415,7 +414,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     QList<QAction*> list;
     list.append(this->action("text_default"));
     list.append(this->action("format_font"));
-    foreach(QString key, KoTextEditingRegistry::instance()->keys()) {
+    foreach(const QString & key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
         if (factory->showInMenu()) {
             KAction *a = new KAction(factory->title(), this);
@@ -483,7 +482,6 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
 
     qreal zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
-    painter.scale(zoomX, zoomY);
 
     QAbstractTextDocumentLayout::PaintContext pc;
     QAbstractTextDocumentLayout::Selection selection;
@@ -498,7 +496,9 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
             continue;
 
         painter.save();
-        painter.setMatrix(painter.matrix() * ts->absoluteTransformation(&converter));
+        QMatrix shapeMatrix = ts->absoluteTransformation(&converter);
+        shapeMatrix.scale(zoomX, zoomY);
+        painter.setMatrix(shapeMatrix * painter.matrix());
         painter.translate(0, -data->documentOffset());
         if (qMin(data->endPosition(), selectEnd) != qMax(data->position(), selectStart)) {
             QRectF clip = textRect(qMax(data->position(), selectStart), qMin(data->endPosition(), selectEnd));
@@ -613,8 +613,8 @@ void TextTool::setShapeData(KoTextShapeData *data)
         if (m_textShape->demoText()) {
             m_textShapeData->document()->setUndoRedoEnabled(false); // removes undo history
             m_textShape->setDemoText(false); // remove demo text
+            m_textShapeData->document()->setUndoRedoEnabled(true); // allow undo history
         }
-        m_textShapeData->document()->setUndoRedoEnabled(true); // allow undo history
     }
     if (m_trackChanges) {
         if (m_changeTracker == 0)
@@ -670,7 +670,9 @@ void TextTool::copy() const
 void TextTool::deleteSelection()
 {
     if (!m_selectionHandler.deleteInlineObjects(false) || m_caret.hasSelection()) {
+        startMacro(i18n("Delete"));
         m_caret.deleteChar();
+        stopMacro();
     }
     editingPluginEvents();
 }
@@ -808,8 +810,11 @@ void TextTool::keyPressEvent(QKeyEvent *event)
                 m_caret.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
             // if the cursor position (no selection) has inline object, the character + inline object
             // is deleted by the InlineTextObjectManager
-            if (!m_selectionHandler.deleteInlineObjects(true) || m_caret.hasSelection())
+            if (!m_selectionHandler.deleteInlineObjects(true) || m_caret.hasSelection()) {
+                startMacro(i18n("Delete"));
                 m_caret.deletePreviousChar();
+                stopMacro();
+                }
             editingPluginEvents();
         }
         ensureCursorVisible();
@@ -825,8 +830,11 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             m_caret.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
         // the event only gets through when the Del is not used in the app
         // if the app forwards Del then deleteSelection is used
-        if (!m_selectionHandler.deleteInlineObjects(false) || m_caret.hasSelection())
+        if (!m_selectionHandler.deleteInlineObjects(false) || m_caret.hasSelection()) {
+            startMacro(i18n("Delete"));
             m_caret.deleteChar();
+            stopMacro();
+            }
         editingPluginEvents();
     } else if ((event->key() == Qt::Key_Left) && (event->modifiers() | Qt::ShiftModifier) == Qt::ShiftModifier)
         moveOperation = QTextCursor::Left;
@@ -876,33 +884,15 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             event->ignore();
             return;
         } else if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
-            startKeyPressMacro();
+            startMacro(i18n("Insert Linebreak"));
             if (m_caret.hasSelection())
                 m_selectionHandler.deleteInlineObjects();
-            QTextBlockFormat format = m_caret.blockFormat();
             m_selectionHandler.nextParagraph();
-
-            QVariant direction = format.property(KoParagraphStyle::TextProgressionDirection);
-            format = m_caret.blockFormat();
-            if (m_textShapeData->pageDirection() != KoText::AutoDirection) { // inherit from shape
-                KoText::Direction dir;
-                switch (m_textShapeData->pageDirection()) {
-                case KoText::RightLeftTopBottom:
-                    dir = KoText::PerhapsRightLeftTopBottom;
-                    break;
-                case KoText::LeftRightTopBottom:
-                default:
-                    dir = KoText::PerhapsLeftRightTopBottom;
-                }
-                format.setProperty(KoParagraphStyle::TextProgressionDirection, dir);
-            } else if (! direction.isNull()) // then we inherit from the previous paragraph.
-                format.setProperty(KoParagraphStyle::TextProgressionDirection, direction);
-            m_caret.setBlockFormat(format);
             updateActions();
             editingPluginEvents();
             ensureCursorVisible();
         } else if (event->key() == Qt::Key_Tab || !(event->text().length() == 1 && !event->text().at(0).isPrint())) { // insert the text
-            startKeyPressMacro();
+            startMacro(i18n("Key Press"));
             if (m_caret.hasSelection())
                 m_selectionHandler.deleteInlineObjects();
             m_prevCursorPosition = m_caret.position();
@@ -912,6 +902,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
                 m_updateParagDirection.action->execute(m_prevCursorPosition);
             editingPluginEvents();
             emit blockChanged(m_caret.block());
+            stopMacro();
         }
     }
     if (moveOperation != QTextCursor::NoMove || destinationPosition != -1) {
@@ -1145,10 +1136,10 @@ void TextTool::deactivate()
 {
     m_caretTimer.stop();
     m_caretTimerState = false;
-    repaintCaret();
+    if (m_textShapeData) // then we got disabled without ever having done anything.
+        repaintCaret();
     m_textShape = 0;
     if (m_textShapeData) {
-        m_textShapeData->document()->setUndoRedoEnabled(false); // erase undo history.
         TextSelection selection;
         selection.document = m_textShapeData->document();
         selection.position = m_caret.position();
@@ -1294,7 +1285,7 @@ void TextTool::addUndoCommand()
         void undo() {
             if (m_document.isNull())
                 return;
-            if (! m_tool.isNull()) {
+            if ( !(m_tool.isNull()) && (m_tool->m_textShapeData) && (m_tool->m_textShapeData->document() == m_document) ) {
                 m_tool->stopMacro();
                 m_tool->m_allowAddUndoCommand = false;
                 if (m_tool->m_changeTracker && !m_tool->m_canvas->resourceProvider()->boolResource(KoCanvasResource::DocumentIsLoading))
@@ -1310,7 +1301,7 @@ void TextTool::addUndoCommand()
             if (m_document.isNull())
                 return;
 
-            if (! m_tool.isNull()) {
+            if ( !(m_tool.isNull()) && (m_tool->m_textShapeData) && (m_tool->m_textShapeData->document() == m_document) ) {
                 m_tool->m_allowAddUndoCommand = false;
                 m_document->redo(&m_tool->m_caret);
             } else
@@ -1490,7 +1481,6 @@ void TextTool::startMacro(const QString &title)
     };
     m_currentCommand = new MacroCommand(title);
     m_currentCommandHasChildren = false;
-    m_processingKeyPress = false;
 }
 
 void TextTool::stopMacro()
@@ -1499,7 +1489,6 @@ void TextTool::stopMacro()
     if (! m_currentCommandHasChildren)
         delete m_currentCommand;
     m_currentCommand = 0;
-    m_processingKeyPress = false;
 }
 
 void TextTool::showStyleManager()
@@ -1619,7 +1608,7 @@ void TextTool::insertSpecialCharacter()
 
 void TextTool::selectFont()
 {
-    FontDia *fontDlg = new FontDia(m_caret);
+    FontDia *fontDlg = new FontDia(&m_caret);
     fontDlg->exec();
     delete fontDlg;
 }
@@ -1665,13 +1654,13 @@ void TextTool::editingPluginEvents()
 
 void TextTool::finishedWord()
 {
-    foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins.values())
+    foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins)
     plugin->finishedWord(m_textShapeData->document(), m_prevCursorPosition);
 }
 
 void TextTool::finishedParagraph()
 {
-    foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins.values())
+    foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins)
     plugin->finishedParagraph(m_textShapeData->document(), m_prevCursorPosition);
 }
 
@@ -1683,28 +1672,6 @@ void TextTool::setTextColor(const KoColor &color)
 void TextTool::setBackgroundColor(const KoColor &color)
 {
     m_selectionHandler.setTextBackgroundColor(color.toQColor());
-}
-
-void TextTool::startKeyPressMacro()
-{
-    /* we have a little state machine here;
-        As soon as the user presses a key (i.e. we enter the keyPressEvent) this method should be
-        called and we make sure that all commands from that point on are combined into one so things like
-        spell checking will not create extra undo states :)  [state a]
-        As soon as the user does a different action, like executing a menu option, we create new undo states
-        again, separating them into different user-undoable actions.  [state b]
-
-        Then there is the 'macro' function that plugins etc can start;  which is [state c].
-    */
-
-    if (m_currentCommand) {
-        if (m_processingKeyPress) // already have a key-press macro
-            return;
-        stopMacro();
-    }
-
-    startMacro(i18n("Key press"));
-    m_processingKeyPress = true;
 }
 
 #include "TextTool.moc"

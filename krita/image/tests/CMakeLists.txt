@@ -243,12 +243,6 @@ target_link_libraries(KisDatamanagerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTT
 
 ########### next target ###############
 
-set(kis_extent_visitor_test_SRCS kis_extent_visitor_test.cpp )
-kde4_add_unit_test(KisExtentVisitorTest TESTNAME krita-image-KisExtentVisitorTest ${kis_extent_visitor_test_SRCS})
-target_link_libraries(KisExtentVisitorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_fill_painter_test_SRCS kis_fill_painter_test.cpp )
 kde4_add_unit_test(KisFillPainterTest TESTNAME krita-image-KisFillPainterTest ${kis_fill_painter_test_SRCS})
 target_link_libraries(KisFillPainterTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

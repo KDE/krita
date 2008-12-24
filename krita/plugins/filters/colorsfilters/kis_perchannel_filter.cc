@@ -220,7 +220,7 @@ void KisPerChannelFilter::process(KisConstProcessingInformation srcInfo,
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
     if (!config) {
-        kWarning() << "No configuration object for per-channel filter";
+        warnKrita << "No configuration object for per-channel filter";
         return;
     }
 

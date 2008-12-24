@@ -20,6 +20,7 @@
 
 KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
 {
+    init();
     needsMovement = false;
     QRegExp basicSplitter(" ");
     QRegExp parasiteSplitter(":");
@@ -27,7 +28,7 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
     for (int i = 0; i < parasites.count(); i++) {
         QStringList splitted = parasites.at(i).split(parasiteSplitter, QString::SkipEmptyParts);
         if (splitted.count() != 2) {
-            kWarning(41001) << "Wrong count for this parasite key/value:" << parasites.at(i);
+            warnImage << "Wrong count for this parasite key/value:" << parasites.at(i);
             continue;
         }
         QString index = splitted.at(0);
@@ -56,19 +57,19 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
                 else
                     selection[selIndex] = KisParasite::Constant;
             } else {
-                kWarning(41001) << "Sel: wrong index: " << selIndex << "(dim = " << dim << ")";
+                warnImage << "Sel: wrong index: " << selIndex << "(dim = " << dim << ")";
             }
         } else if (index.startsWith("rank")) {
             int rankIndex = qMax(1, index.mid(strlen("rank")).toInt());
             if (rankIndex < 0 || rankIndex > dim) {
-                kWarning(41001) << "Rankindex out of range: " << rankIndex;
+                warnImage << "Rankindex out of range: " << rankIndex;
                 continue;
             }
             rank[rankIndex] = (splitted.at(1)).toInt();
         } else if (index == "ncells") {
             ncells = (splitted.at(1)).toInt();
             if (ncells < 1) {
-                kWarning(41001) << "ncells out of range: " << ncells;
+                warnImage << "ncells out of range: " << ncells;
                 ncells = 1;
             }
         }
@@ -81,10 +82,23 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
     setBrushesCount();
 }
 
+void KisPipeBrushParasite::init()
+{
+    for (int i = 0; i < MaxDim; i++) {
+        rank[i] = index[i] = brushesCount[i] = 0;
+        selection[i] = KisParasite::Constant;
+    }
+}
+
 void KisPipeBrushParasite::setBrushesCount()
 {
     // I assume ncells is correct. If it isn't, complain to the parasite header.
-    brushesCount[0] = ncells / rank[0];
+    if( rank[0] != 0 )
+    {
+      brushesCount[0] = ncells / rank[0];
+    } else {
+      brushesCount[0] = ncells;
+    }
     for (int i = 1; i < dim; i++) {
         if (rank[i] == 0) {
            brushesCount[i] = brushesCount[i-1];
@@ -101,7 +115,12 @@ bool KisPipeBrushParasite::saveToDevice(QIODevice* dev) const
     // <count> ncells:<count> dim:<dim> rank0:<rank0> sel0:<sel0> <...>
 
     QTextStream stream(dev);
-    /// FIXME things like step, placement and so are not added (nor loaded, as a matter of fact)
+
+
+#ifdef __GNUC__
+#warning "KisPipeBrushParasite::saveToDevice: FIXME things like step, placement and so are not added (nor loaded, as a matter of fact)"
+#endif
+
     stream << ncells << " ncells:" << ncells << " dim:" << dim;
 
     for (int i = 0; i < dim; i++) {

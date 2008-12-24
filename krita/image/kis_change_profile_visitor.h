@@ -85,6 +85,13 @@ public:
         return true;
     }
 
+    bool visit(KisNode*) { return true; }
+    bool visit( KisCloneLayer* ) { return true; }
+    bool visit(KisFilterMask*) { return true; }
+    bool visit(KisTransparencyMask*) { return true; }
+    bool visit(KisTransformationMask*) { return true; }
+    bool visit(KisSelectionMask*) { return true; }
+
 private:
 
     bool updatePaintDevice(KisLayer * layer) {

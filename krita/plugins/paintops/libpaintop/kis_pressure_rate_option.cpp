@@ -71,7 +71,6 @@ void KisPressureRateOption::readOptionSetting(const KisPropertiesConfiguration* 
 }
 
 
-#define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
 quint8 KisPressureRateOption::apply( quint8 opacity, qint32 sw,  qint32 sh, KisPaintDeviceSP srcdev, double pressure) const
 {
@@ -79,11 +78,14 @@ quint8 KisPressureRateOption::apply( quint8 opacity, qint32 sw,  qint32 sh, KisP
 
     if (isChecked()) {
         if (customCurve()) {
-            opacity = CLAMP((quint8)(double(opacity) * scaleToCurve(pressure)),
-                            OPACITY_TRANSPARENT, OPACITY_OPAQUE);
+            opacity = qBound((qint32)OPACITY_TRANSPARENT, 
+                             (qint32)(double(opacity) * scaleToCurve(pressure)),
+                             (qint32)OPACITY_OPAQUE);
+
         } else {
-            opacity = CLAMP((quint8)(double(opacity) * pressure),
-                            OPACITY_TRANSPARENT, OPACITY_OPAQUE);
+            opacity = qBound((qint32)OPACITY_TRANSPARENT,
+                             (qint32)(double(opacity) * pressure),
+                             (qint32)OPACITY_OPAQUE);
         }
     }
 

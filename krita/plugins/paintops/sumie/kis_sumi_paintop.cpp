@@ -51,8 +51,7 @@ KisSumiPaintOp::KisSumiPaintOp(const
     , newStrokeFlag( true )
 
 {
-    m_dev = settings->node()->paintDevice();
-
+    Q_ASSERT(settings);
     BrushShape brushShape;
 
     if (settings->brushDimension() == 1) {
@@ -87,6 +86,13 @@ KisSumiPaintOp::KisSumiPaintOp(const
         m_brush.setInkDepletionWeight( settings->inkDepletionWeight()/100.0 );
         m_brush.setPressureWeight( settings->pressureWeight()/100.0 );
     }
+
+    if ( !settings->node() ){
+        m_dev = 0;
+    }else{
+        m_dev = settings->node()->paintDevice();
+    }
+
 }
 
 KisSumiPaintOp::~KisSumiPaintOp()
@@ -104,10 +110,11 @@ double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
     QMutexLocker locker(&m_mutex);
     Q_UNUSED(savedDist);
 
-    if (!painter()) return -1;
+    if (!painter()) return 0;
 
-    KisPaintDeviceSP device = painter()->device();
-    if (!device) return -1;
+/*    KisPaintDeviceSP device = painter()->device();
+    if (!device) return 0;
+    m_dev = device;*/
 
     dab = cachedDab();
     dab->clear();
@@ -126,11 +133,11 @@ double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
 
 
    /* painter()->bltSelection(
-        rc.x(), rc.y(), 
-        device->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN), 
-        dab, 
-        painter()->opacity(), 
-        rc.x(), rc.y(), 
+        rc.x(), rc.y(),
+        device->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN),
+        dab,
+        painter()->opacity(),
+        rc.x(), rc.y(),
         rc.width(), rc.height());
     */
 

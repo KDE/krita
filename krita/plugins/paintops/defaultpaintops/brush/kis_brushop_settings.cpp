@@ -60,7 +60,6 @@ void KisBrushOpSettings::fromXML(const QDomElement& elt)
 
 void KisBrushOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 {
-
     // First, make sure all the option widgets have saved their state
     // to the property configuration
     KisPropertiesConfiguration * settings = m_optionsWidget->configuration();
@@ -72,7 +71,8 @@ void KisBrushOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 }
 
 
-KisPaintOpSettingsSP KisBrushOpSettings::clone() const {
+KisPaintOpSettingsSP KisBrushOpSettings::clone() const
+{
 
     KisPaintOpSettings* settings = dynamic_cast<KisPaintOpSettings*>( m_optionsWidget->configuration() );
     return settings;

@@ -71,12 +71,26 @@ KisSelectionComponent* KisShapeSelection::clone()
 
 bool KisShapeSelection::loadOdf(const KoXmlElement&, KoShapeLoadingContext&)
 {
-    return false;
+#ifdef __GNUC__
+#warning "KisShapeSelection::loadOdf: Implement loading of shape selections"
+#endif
 }
 
 void KisShapeSelection::saveOdf(KoShapeSavingContext&) const
 {
+#ifdef __GNUC__
+#warning "KisShapeSelection::saveOdf: Implement saving of shape selections"
+#endif
+
 }
+
+bool KisShapeSelection::saveOdf( KoStore * store ) const
+{
+#ifdef __GNUC__
+#warning "KisShapeSelection::saveOdf: Implement saving of shape selections"
+#endif
+}
+
 
 void KisShapeSelection::addChild(KoShape *object)
 {

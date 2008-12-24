@@ -637,7 +637,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                     ++it;
                 }
             }
-            //FIXME:should be able to read 1 and 4 bits depth and scale them to 8 bits
+#ifdef __GNUC__
+#warning "KisPngCoverter::buildImage(QIODevice* iod): FIXME:should be able to read 1 and 4 bits depth and scale them to 8 bits"
+#endif
             break;
         case PNG_COLOR_TYPE_RGB:
         case PNG_COLOR_TYPE_RGB_ALPHA:
@@ -798,7 +800,9 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
     // Initialize the writing
 //     png_init_io(png_ptr, fp);
     // Setup the progress function
-// FIXME    png_set_write_status_fn(png_ptr, progress);
+#ifdef __GNUC__
+#warning "KisPngCoverter::buildFile: Implement progress updating -- png_set_write_status_fn(png_ptr, progress);"
+#endif
 //     setProgressTotalSteps(100/*height*/);
 
 
@@ -894,8 +898,11 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
 
         dbgFile << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size();
 
-        if ((*it) -> type().startsWith("krita_attribute:")) { // Attribute
-            // FIXME: it should be possible to save krita_attributes in the "CHUNKs"
+        if ((*it) -> type().startsWith("krita_attribute:")) { //
+                                                              // Attribute
+#ifdef __GNUC__                                                 \
+    #warning "it should be possible to save krita_attributes in the "CHUNKs""
+#endif
             dbgFile << "cannot save this annotation : " << (*it) -> type();
         } else { // Profile
             char* name = new char[(*it)->type().length()+1];
@@ -965,7 +972,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
             Q_ASSERT(xmpIO);
 
             QBuffer buffer;
-            xmpIO->saveTo(metaData, &buffer, KisMetaData::IOBackend::JpegHeader);
+            xmpIO->saveTo(metaData, &buffer, KisMetaData::IOBackend::NoHeader);
 
             dbgFile << "XMP information size is" << buffer.data().size();
             writeRawProfile(png_ptr, info_ptr, "iptc", buffer.data());

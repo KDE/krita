@@ -132,7 +132,7 @@ void KisFilterDialog::createMask()
         mask = l->previewMask();
         l->removePreviewMask();
         d->image->addNode(mask, l);
-        l->setDirty();
+        mask->setDirty();
         close();
     }
 }

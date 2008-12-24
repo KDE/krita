@@ -21,9 +21,45 @@
 #include <qtest_kde.h>
 #include "kis_node_visitor.h"
 
+class TestNodeVisitor : public KisNodeVisitor
+{
+public:
+
+    TestNodeVisitor() {}
+
+    ~TestNodeVisitor() {}
+
+    bool visit(KisNode *node) { return true; }
+
+    bool visit(KisPaintLayer *layer) { return true; }
+
+    bool visit(KisGroupLayer *layer) { return true; }
+
+    bool visit(KisAdjustmentLayer *layer) { return true; }
+
+    bool visit(KisExternalLayer *layer) { return true; }
+
+    bool visit(KisGeneratorLayer *layer) { return true; }
+
+    bool visit(KisCloneLayer *layer) { return true; }
+
+    bool visit(KisFilterMask *mask) { return true; }
+
+    bool visit(KisTransparencyMask *mask) { return true; }
+
+    bool visit(KisTransformationMask *mask) { return true; }
+
+    bool visit(KisSelectionMask *mask) { return true; }
+
+};
+
 void KisNodeVisitorTest::testCreation()
 {
-    KisNodeVisitor test;
+    TestNodeVisitor v;
+}
+
+void KisNodeVisitorTest::testFullImage()
+{
 }
 
 

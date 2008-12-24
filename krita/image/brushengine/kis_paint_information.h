@@ -19,6 +19,8 @@
 #ifndef _KIS_PAINT_INFORMATION_
 #define _KIS_PAINT_INFORMATION_
 
+#include <QDebug>
+
 #include "kis_global.h"
 #include "kis_vec.h"
 #include "krita_export.h"
@@ -34,7 +36,7 @@ class KRITAIMAGE_EXPORT KisPaintInformation
 {
 
 public:
-
+    
     KisPaintInformation(const QPointF & pos = QPointF(), double pressure = PRESSURE_DEFAULT,
                         double xTilt = 0.0, double yTilt = 0.0,
                         KisVector2D movement = KisVector2D(),
@@ -84,4 +86,8 @@ private:
     struct Private;
     Private* const d;
 };
+
+KRITAIMAGE_EXPORT QDebug operator<<(QDebug debug, const KisPaintInformation& info);
+
+
 #endif

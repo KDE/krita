@@ -56,7 +56,7 @@ KisGeneratorRegistry::KisGeneratorRegistry()
         if (!plugin) {
             dbgPlugins << "found plugin" << service->property("Name").toString() << "," << errCode << "";
             if (errCode == KLibLoader::ErrNoLibrary) {
-                kWarning(41006) << " Error loading plugin was : ErrNoLibrary" << KLibLoader::self()->lastErrorMessage();
+                warnPlugins << " Error loading plugin was : ErrNoLibrary" << KLibLoader::self()->lastErrorMessage();
             }
         }
 

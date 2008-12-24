@@ -32,6 +32,7 @@
 #include "kis_clone_layer.h"
 #include "kis_filter_mask.h"
 #include "kis_transparency_mask.h"
+#include "kis_selection_mask.h"
 #include "kis_transformation_mask.h"
 #include "generator/kis_generator_layer.h"
 /**
@@ -103,31 +104,14 @@ public:
         return check(layer);
     }
 
+    bool visit( KisSelectionMask* mask ) {
+        return check( mask );
+    }
+
 private:
 
-    bool inList(KisNode* node) {
-        foreach(QString nodeType, m_nodeTypes) {
-            if (node->inherits(nodeType.toAscii()))
-                return true;
-        }
-        return false;
-    }
-
-    bool check(KisNode * node) {
-        if (m_nodeTypes.isEmpty() || inList(node)) {
-
-            if (m_properties.isEmpty() || node->check(m_properties)) {
-                m_count++;
-            }
-        }
-
-        for (uint i = 0; i < node->childCount(); ++i) {
-            KisNodeSP child = node->at(i);
-            child->accept(*this);
-        }
-
-        return true;
-    }
+    bool inList(KisNode* node);
+    bool check(KisNode * node);
 
     const QStringList m_nodeTypes;
     const KoProperties m_properties;

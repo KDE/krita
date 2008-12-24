@@ -277,12 +277,12 @@ QRectF ItemStore::loadShapeTypes()
         s_itemStorePrivate()->addFolder(mainFolder);
     }
 
-    foreach(QString id, KoShapeRegistry::instance()->keys()) {
+    foreach(const QString & id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactory *factory = KoShapeRegistry::instance()->value(id);
         if (factory->hidden())
             continue;
         bool oneAdded=false;
-        foreach(KoShapeTemplate shapeTemplate, factory->templates()) {
+        foreach(const KoShapeTemplate & shapeTemplate, factory->templates()) {
             oneAdded=true;
             TemplateShape *ts = new TemplateShape(shapeTemplate);
             KoShapeTemplate t1 = ts->shapeTemplate();

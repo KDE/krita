@@ -400,7 +400,7 @@ void KisCurveMagnetic::gaussianBlur(const QRect& rect, KisPaintDeviceSP src, Kis
     }
 
     KisConvolutionPainter painter(dst);
-    // FIXME createKernel could create dynamic gaussian kernels having sigma as argument
+    // XXX createKernel could create dynamic gaussian kernels having sigma as argument
     KisKernelSP kernel = createKernel(1, 1, 1, 1, 24, 1, 1, 1, 1, 32, 0);
     painter.applyMatrix(kernel, grectx, grecty, grectw, grecth, BORDER_AVOID);
 }

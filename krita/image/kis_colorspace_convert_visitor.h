@@ -21,8 +21,10 @@
 #include <QBitArray>
 
 #include <KoColorConversionTransformation.h>
+#include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 
+#include <krita_export.h>
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_node_visitor.h"
@@ -108,13 +110,11 @@ private:
 #endif
 
 
-class KisColorSpaceConvertVisitor : public KisNodeVisitor
+class KRITAIMAGE_EXPORT KisColorSpaceConvertVisitor : public KisNodeVisitor
 {
 public:
     KisColorSpaceConvertVisitor(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent);
     virtual ~KisColorSpaceConvertVisitor();
-
-    using KisNodeVisitor::visit;
 
 public:
 
@@ -123,76 +123,21 @@ public:
     bool visit(KisAdjustmentLayer* layer);
     bool visit(KisGeneratorLayer * layer);
     bool visit(KisExternalLayer *);
+
+    bool visit(KisNode*) { return true; }
+    bool visit(KisCloneLayer*) { return true; }
+    bool visit(KisFilterMask*) { return true; }
+    bool visit(KisTransparencyMask*) { return true; }
+    bool visit(KisTransformationMask*) { return true; }
+    bool visit(KisSelectionMask*) { return true; }
+
+
 private:
     const KoColorSpace *m_dstColorSpace;
     KoColorConversionTransformation::Intent m_renderingIntent;
     QBitArray m_emptyChannelFlags;
 };
 
-KisColorSpaceConvertVisitor::KisColorSpaceConvertVisitor(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) :
-        KisNodeVisitor(),
-        m_dstColorSpace(dstColorSpace),
-        m_renderingIntent(renderingIntent)
-{
-}
-
-KisColorSpaceConvertVisitor::~KisColorSpaceConvertVisitor()
-{
-}
-
-bool KisColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
-{
-    // Clear the projection, we will have to re-render everything.
-    // The image is already set to the new colorspace, so this'll work.
-    layer->resetProjection();
-    layer->setChannelFlags(m_emptyChannelFlags);
-    KisLayerSP child = dynamic_cast<KisLayer*>(layer->firstChild().data());
-    while (child) {
-        child->accept(*this);
-        child = dynamic_cast<KisLayer*>(child->nextSibling().data());
-    }
-    layer->setCompositeOp(m_dstColorSpace->compositeOp(layer->compositeOp()->id()));
-    return true;
-}
-
-bool KisColorSpaceConvertVisitor::visit(KisPaintLayer *layer)
-{
-    layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent);
-    layer->setChannelFlags(m_emptyChannelFlags);
-    layer->setCompositeOp(m_dstColorSpace->compositeOp(layer->compositeOp()->id()));
-    Q_ASSERT(!layer->temporaryTarget() );
-    return true;
-}
-
-bool KisColorSpaceConvertVisitor::visit(KisGeneratorLayer *layer)
-{
-    layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent);
-    layer->setChannelFlags(m_emptyChannelFlags);
-    layer->setCompositeOp(m_dstColorSpace->compositeOp(layer->compositeOp()->id()));
-    return true;
-}
-
-
-
-bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
-{
-    if (layer->filter()->name() == "perchannel") {
-        // Per-channel filters need to be reset because of different number
-        // of channels. This makes undo very tricky, but so be it.
-        // XXX: Make this more generic for after 1.6, when we'll have many
-        // channel-specific filters.
-        KisFilterSP f = KisFilterRegistry::instance()->value("perchannel");
-        layer->setFilter(f->defaultConfiguration(0));
-    }
-    layer->setChannelFlags(m_emptyChannelFlags);
-    layer->resetCache();
-    return true;
-}
-
-bool KisColorSpaceConvertVisitor::visit(KisExternalLayer *layer) {
-    layer->setCompositeOp(m_dstColorSpace->compositeOp(layer->compositeOp()->id()));
-    return true;
-}
 
 #endif // KIS_COLORSPACE_CONVERT_VISITOR_H_
 

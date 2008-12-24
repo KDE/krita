@@ -187,7 +187,7 @@ const qint32 MAX_CHANNEL_LMSA = 4;
 
 #define EPSILON 1e-6
 
-// FIXME: lcms doesn't support 32-bit float
+// XXX: lcms doesn't support 32-bit float
 #define F32_LCMS_TYPE TYPE_BGRA_16
 
 // disable the lcms handling by setting profile=0

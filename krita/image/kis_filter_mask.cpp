@@ -25,6 +25,8 @@
 #include "kis_processing_information.h"
 #include "kis_node.h"
 #include "kis_node_visitor.h"
+#include "kis_node_progress_proxy.h"
+#include "kis_transaction.h"
 
 class KRITAIMAGE_EXPORT KisFilterMask::Private
 {
@@ -87,27 +89,44 @@ void KisFilterMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
     dbgImage << "Applying filter mask on projection  " << projection << " with rect " << rc
     << " and filter config " << m_d->filterConfig;
 
-    Q_ASSERT(m_d->filterConfig);
     if (!m_d->filterConfig) return;
 
     selection()->updateProjection(rc);
 
+    KisTransaction transac("", projection, 0 );
     KisConstProcessingInformation src(projection,  rc.topLeft(), selection());
     KisProcessingInformation dst(projection, rc.topLeft(), selection());
 
     KisFilterSP filter = KisFilterRegistry::instance()->value(m_d->filterConfig->name());
     if (!filter) {
-        kWarning() << "Could not retrieve filter with name " <<  m_d->filterConfig->name();
+        warnKrita << "Could not retrieve filter with name " <<  m_d->filterConfig->name();
         return;
     }
-
-    filter->process(src, dst, rc.size(), m_d->filterConfig);
+    Q_ASSERT( nodeProgressProxy() );
+    KoProgressUpdater updater( nodeProgressProxy() );
+    updater.start( 100, filter->name() );
+    KoUpdater up = updater.startSubtask();
+    
+    filter->process(src, dst, rc.size(), m_d->filterConfig, &up);
+    nodeProgressProxy()->setValue( nodeProgressProxy()->maximum() );
 
 }
 
 bool KisFilterMask::accept(KisNodeVisitor &v)
 {
     return v.visit(this);
+}
+
+QRect KisFilterMask::adjustedDirtyRect( const QRect& _rect ) const
+{
+    KisFilterSP filter = KisFilterRegistry::instance()->value(m_d->filterConfig->name());
+    return filter->changedRect( _rect, m_d->filterConfig );
+}
+
+QRect KisFilterMask::neededRect( const QRect& _rect ) const
+{
+    KisFilterSP filter = KisFilterRegistry::instance()->value(m_d->filterConfig->name());
+    return filter->neededRect( _rect, m_d->filterConfig );
 }
 
 #include "kis_filter_mask.moc"

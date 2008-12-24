@@ -20,6 +20,7 @@
 #define KIS_NODE_VISITOR_H_
 
 #include "kis_node.h"
+#include "krita_export.h"
 
 class KisPaintLayer;
 class KisGroupLayer;
@@ -31,46 +32,34 @@ class KisTransparencyMask;
 class KisTransformationMask;
 class KisSelectionMask;
 
-class KisNodeVisitor
+class KRITAIMAGE_EXPORT KisNodeVisitor
 {
 public:
     KisNodeVisitor() {}
     virtual ~KisNodeVisitor() {}
 
 public:
-    virtual bool visit(KisNode *node) {
-        Q_UNUSED(node); return false;
-    }
-    virtual bool visit(KisPaintLayer *layer) {
-        Q_UNUSED(layer); return false;
-    }
-    virtual bool visit(KisGroupLayer *layer) {
-        Q_UNUSED(layer); return false;
-    }
-    virtual bool visit(KisAdjustmentLayer *layer) {
-        Q_UNUSED(layer); return false;
-    }
-    virtual bool visit(KisExternalLayer *layer) {
-        Q_UNUSED(layer); return false;
-    }
-    virtual bool visit(KisGeneratorLayer *layer) {
-        Q_UNUSED(layer); return false;
-    }
-    virtual bool visit(KisCloneLayer *layer) {
-        Q_UNUSED(layer); return false;
-    }
-    virtual bool visit(KisFilterMask *mask) {
-        Q_UNUSED(mask); return false;
-    }
-    virtual bool visit(KisTransparencyMask *mask) {
-        Q_UNUSED(mask); return false;
-    }
-    virtual bool visit(KisTransformationMask *mask) {
-        Q_UNUSED(mask); return false;
-    }
-    virtual bool visit(KisSelectionMask *mask) {
-        Q_UNUSED(mask); return false;
-    }
+    virtual bool visit(KisNode *node) = 0;
+
+    virtual bool visit(KisPaintLayer *layer) = 0;
+
+    virtual bool visit(KisGroupLayer *layer) = 0;
+
+    virtual bool visit(KisAdjustmentLayer *layer) = 0;
+
+    virtual bool visit(KisExternalLayer *layer) = 0;
+
+    virtual bool visit(KisGeneratorLayer *layer) = 0;
+
+    virtual bool visit(KisCloneLayer *layer) = 0;
+
+    virtual bool visit(KisFilterMask *mask) = 0;
+
+    virtual bool visit(KisTransparencyMask *mask) = 0;
+
+    virtual bool visit(KisTransformationMask *mask) = 0;
+
+    virtual bool visit(KisSelectionMask *mask) = 0;
 
 protected:
 
@@ -83,17 +72,7 @@ protected:
      * @return true if none of the childnodes returns false on
      * accepting the visitor.
      */
-    bool visitAll(KisNode * node, bool breakOnFail = false) {
-        for (uint i = 0; i < node->childCount(); ++i) {
-            if (!node->at(i)->accept(*this)) {
-                if (breakOnFail)
-                    return false;
-            }
-        }
-        return true;
-    }
-
-
+    bool visitAll(KisNode * node, bool breakOnFail = false);
 
     /**
      * Visit all child nodes of the given node starting with the last one until one node returns
@@ -104,17 +83,7 @@ protected:
      * @return true if none of the childnodes returns false on
      * accepting the visitor.
      */
-    bool visitAllInverse(KisNode * node, bool breakOnFail = false) {
-        KisNodeSP child = node->lastChild();
-        while (child) {
-            if (!child->accept(*this)) {
-                if (breakOnFail)
-                    return false;
-            }
-            child = child->prevSibling();
-        }
-        return true;
-    }
+    bool visitAllInverse(KisNode * node, bool breakOnFail = false);
 };
 
 

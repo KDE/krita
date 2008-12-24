@@ -118,7 +118,7 @@ void KisToolEllipse::mouseMoveEvent(KoPointerEvent *event)
         //draw(m_dragStart, m_dragEnd);
         bound.setTopLeft(m_dragStart);
         bound.setBottomRight(m_dragEnd);
-        /* FIXME Which rectangle to repaint */
+
         m_canvas->updateCanvas(convertToPt(bound.normalized()));
 
         m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,

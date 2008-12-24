@@ -32,6 +32,7 @@
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoCompositeOp.h>
+#include <KoProperties.h>
 
 #include "kis_image.h"
 #include "kis_selection.h"
@@ -54,8 +55,8 @@ public:
 };
 
 KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
-        : KisLayer(img, name, opacity)
-        , m_d(new Private())
+    : KisLayer(img, name, opacity)
+    , m_d(new Private())
 {
     Q_ASSERT(img);
     Q_ASSERT(dev);
@@ -66,8 +67,8 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
 
 
 KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity)
-        : KisLayer(img, name, opacity)
-        , m_d(new Private())
+    : KisLayer(img, name, opacity)
+    , m_d(new Private())
 {
     Q_ASSERT(img);
     m_d->paintDevice = new KisPaintDevice(this, img->colorSpace(), name);
@@ -75,8 +76,8 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
 }
 
 KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, const KoColorSpace * colorSpace)
-        : KisLayer(img, name, opacity)
-        , m_d(new Private())
+    : KisLayer(img, name, opacity)
+    , m_d(new Private())
 {
 //     Q_ASSERT(img);
     if (colorSpace == 0)
@@ -87,9 +88,9 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
 }
 
 KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
-        : KisLayer(rhs)
-        , KisIndirectPaintingSupport(rhs)
-        , m_d(new Private)
+    : KisLayer(rhs)
+    , KisIndirectPaintingSupport(rhs)
+    , m_d(new Private)
 {
     m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
     init();
@@ -117,9 +118,9 @@ void KisPaintLayer::init()
 
 KisPaintDeviceSP KisPaintLayer::projection() const
 {
-    if (!hasEffectMasks())
+    if (!hasEffectMasks() && !hasTemporaryTarget()) {
         return m_d->paintDevice;
-    else {
+    } else {
         return m_d->projection;
     }
 }
@@ -127,8 +128,9 @@ KisPaintDeviceSP KisPaintLayer::projection() const
 void KisPaintLayer::updateProjection(const QRect & rc)
 {
     if (!rc.isValid()) return ;
-    if (!hasEffectMasks()) return;
+    if (!hasEffectMasks() && !hasTemporaryTarget()) return;
     if (!m_d->paintDevice) return;
+    if (!visible()) return;
 
     dbgImage << name() << ": updateProjection " << rc;
 
@@ -140,7 +142,43 @@ void KisPaintLayer::updateProjection(const QRect & rc)
         gc.bitBlt(rc.topLeft(), m_d->paintDevice, rc);
     }
 
-    applyEffectMasks(m_d->projection, rc);
+    KisPaintDeviceSP source = m_d->paintDevice;
+
+    KoProperties props;
+    props.setProperty("visible", true);
+    QList<KisNodeSP> masks = childNodes(QStringList("KisEffectMask"), props);
+
+    if( temporaryTarget() ) {
+        if ( masks.size() == 0 ) {
+            KisPainter gc(m_d->projection);
+            gc.setCompositeOp(temporaryCompositeOp());
+            gc.setOpacity(temporaryOpacity());
+            gc.bitBlt( rc.topLeft(), temporaryTarget(), rc);
+        }
+        else {
+            source = new KisPaintDevice( m_d->paintDevice->colorSpace() );
+            QRect currentNeededRc = rc;
+            for( int i = masks.size() - 1; i >= 0 ; --i )
+            {
+                const KisEffectMask * effectMask = dynamic_cast<const KisEffectMask*>(masks.at(i).data());
+                if (effectMask) {
+                    currentNeededRc |= effectMask->neededRect( currentNeededRc );
+                }
+            }
+
+            KisPainter gc(source);
+            gc.bitBlt( currentNeededRc.left(), currentNeededRc.top(), COMPOSITE_COPY,
+                       m_d->paintDevice, temporaryOpacity(), currentNeededRc.left(),
+                       currentNeededRc.top(), currentNeededRc.width(), currentNeededRc.height());
+            gc.bitBlt( currentNeededRc.left(), currentNeededRc.top(), temporaryCompositeOp(),
+                       temporaryTarget(), temporaryOpacity(), currentNeededRc.left(),
+                       currentNeededRc.top(), currentNeededRc.width(), currentNeededRc.height());
+        }
+        
+    }
+    if (masks.size() > 0) {
+        applyEffectMasks(source, m_d->projection, rc);
+    }
 }
 
 
@@ -227,7 +265,14 @@ void KisPaintLayer::setY(qint32 y)
 QRect KisPaintLayer::extent() const
 {
     if (m_d->paintDevice)
-        return m_d->paintDevice->extent();
+    {
+        QRect r = m_d->paintDevice->extent();
+        if( temporaryTarget() )
+        {
+            r |= temporaryTarget()->extent();
+        }
+        return r;
+    }
     else
         return QRect();
 }
@@ -235,7 +280,14 @@ QRect KisPaintLayer::extent() const
 QRect KisPaintLayer::exactBounds() const
 {
     if (m_d->paintDevice)
-        return m_d->paintDevice->exactBounds();
+    {
+        QRect r = m_d->paintDevice->exactBounds();
+        if( temporaryTarget() )
+        {
+            r |= temporaryTarget()->exactBounds();
+        }
+        return r;
+    }
     else
         return QRect();
 }

@@ -91,7 +91,7 @@ KoShape * KoEnhancedPathShapeFactory::createShape(const KoProperties * params) c
     shape->addModifiers( params->stringProperty( "modifiers" ) );
 
     ListType handles = params->property( "handles" ).toList();
-    foreach( QVariant v, handles )
+    foreach( const QVariant &v, handles )
         shape->addHandle( v.toMap() );
 
     ComplexType formulae = params->property( "formulae" ).toMap();
@@ -101,7 +101,7 @@ KoShape * KoEnhancedPathShapeFactory::createShape(const KoProperties * params) c
         shape->addFormula( formula.key(), formula.value().toString() );
 
     QStringList commands = params->property( "commands" ).toStringList();
-    foreach( QString cmd, commands )
+    foreach( const QString &cmd, commands )
         shape->addCommand( cmd );
 
     QVariant color;

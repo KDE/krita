@@ -26,6 +26,7 @@
 
 #include <krita_export.h>
 
+class KoStore;
 class KisShapeSelectionCanvas;
 
 /**
@@ -51,6 +52,7 @@ public:
     ///Not implemented
     virtual void saveOdf(KoShapeSavingContext&) const;
 
+    virtual bool saveOdf( KoStore * store ) const;
     /**
      * Renders the shapes to a selection. This method should only be called
      * by KisSelection to update it's projection.

@@ -84,7 +84,12 @@ void KisCustomPalette::slotAddNew()
 {
     // Let the user select a new color
     // FIXME also let him add the current paint color to the palette
-    // or even better, let the color picker have an option 'Add to palette'!
+    // or even better, let the color picker have an option 'Add to
+    // palette'!
+#ifdef __GNUC__
+#warning "KisCustomPalette::slotAddNew: re-implement adding of new colors to palettes"
+#endif
+
     /*
         KoColorSetEntry entry;
 

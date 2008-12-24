@@ -40,7 +40,7 @@ class KisKraLoader
 
 public:
 
-    KisKraLoader(KisDoc2 * document);
+    KisKraLoader(KisDoc2 * document, int syntaxVersion);
 
     ~KisKraLoader();
 

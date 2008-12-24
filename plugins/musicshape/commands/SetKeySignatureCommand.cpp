@@ -142,10 +142,10 @@ SetKeySignatureCommand::SetKeySignatureCommand(MusicShape* shape, int startBar, 
 
 void SetKeySignatureCommand::redo()
 {
-    foreach (BarKeySignaturePair p, m_oldKeySignatures) {
+    foreach (const BarKeySignaturePair & p, m_oldKeySignatures) {
         p.first->removeStaffElement(p.second, false);
     }
-    foreach (BarKeySignaturePair p, m_newKeySignatures) {
+    foreach (const BarKeySignaturePair & p, m_newKeySignatures) {
         p.first->addStaffElement(p.second);
     }
     if (m_staff) {
@@ -159,10 +159,10 @@ void SetKeySignatureCommand::redo()
 
 void SetKeySignatureCommand::undo()
 {
-    foreach (BarKeySignaturePair p, m_newKeySignatures) {
+    foreach (const BarKeySignaturePair & p, m_newKeySignatures) {
         p.first->removeStaffElement(p.second, false);
     }
-    foreach (BarKeySignaturePair p, m_oldKeySignatures) {
+    foreach (const BarKeySignaturePair & p, m_oldKeySignatures) {
         p.first->addStaffElement(p.second);
     }
     if (m_staff) {

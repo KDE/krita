@@ -45,6 +45,7 @@ endif(USE_OLD_TILESYSTEM)
 include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
                      ${CMAKE_SOURCE_DIR}/krita/image/metadata
                      ${KOMAIN_INCLUDES}
+                     ${EXIV2_INCLUDE_DIR}
 )
 
 set(kritaimage_LIB_SRCS
@@ -75,6 +76,7 @@ set(kritaimage_LIB_SRCS
    kis_bottom_up_update_strategy.cpp
    kis_boundary.cc
    kis_clone_layer.cpp
+   kis_colorspace_convert_visitor.cpp
    kis_config_widget.cpp
    kis_convolution_kernel.cc
    kis_convolution_painter.cc
@@ -84,6 +86,7 @@ set(kritaimage_LIB_SRCS
    kis_filter_strategy.cc
    kis_gradient_painter.cc
    kis_group_layer.cc
+   kis_count_visitor.cpp
    kis_histogram.cc
    kis_image.cc
    kis_iterator.cc
@@ -95,6 +98,8 @@ set(kritaimage_LIB_SRCS
    kis_node.cpp
    kis_node_action.cpp
    kis_node_facade.cpp
+   kis_node_progress_proxy.cpp
+   kis_node_visitor.cpp
    kis_paint_device.cc
    kis_paint_layer.cc
    kis_painter.cc
@@ -149,7 +154,8 @@ set(kritaimage_LIB_SRCS
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} ${KDE4_KDE3SUPPORT_LIBS} koguiutils ${KDE4_THREADWEAVER_LIBRARIES} )
+target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} ${KDE4_KDE3SUPPORT_LIBS} koguiutils ${KDE4_THREADWEAVER_LIBRARIES} ${EXIV2_LIBRARIES} )
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES koguiutils ${KDE4_KPARTS_LIBS} ${QT_QT3SUPPORT_LIBRARY} ${EXIV2_LIBRARIES})
 
 if(OPENEXR_FOUND)
   target_link_libraries(kritaimage  ${OPENEXR_LIBRARIES})
@@ -158,7 +164,6 @@ endif(OPENEXR_FOUND)
 
 set_target_properties(kritaimage PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
-    ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "koguiutils;${KDE4_KPARTS_LIBS};${QT_QT3SUPPORT_LIBRARY}"
 )
 install(TARGETS kritaimage  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

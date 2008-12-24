@@ -115,7 +115,7 @@ public:
      * particular channel is active or not. If the channelflags bit
      * array is empty, all channels are active.
      */
-    QBitArray & channelFlags();
+    QBitArray & channelFlags() const;
 
 
     /**
@@ -183,6 +183,10 @@ public:
 
 public:
 
+    using KisNode::setDirty;
+    virtual void setDirty(const QRect & rect);
+
+    virtual void setDirty(const QRegion & region);
     /**
      * Returns true if there are any effect masks present
      */
@@ -220,7 +224,7 @@ protected:
      * Apply the effect masks to the given projection, producing
      * finally the dst paint device.
      */
-    void applyEffectMasks(KisPaintDeviceSP projection, const QRect & rc);
+    void applyEffectMasks(const KisPaintDeviceSP original, KisPaintDeviceSP projection, const QRect & rc);
 
 private:
     class Private;
@@ -247,8 +251,10 @@ public:
     void setTemporaryCompositeOp(const KoCompositeOp* c);
     void setTemporaryOpacity(quint8 o);
     KisPaintDeviceSP temporaryTarget();
+    const KisPaintDeviceSP temporaryTarget() const;
     const KoCompositeOp* temporaryCompositeOp() const;
     quint8 temporaryOpacity() const;
+    bool hasTemporaryTarget() const;
 
     // Or I could make KisLayer a virtual base of KisIndirectPaintingSupport and so, but
     // I'm sure virtual diamond inheritance isn't as appreciated as this

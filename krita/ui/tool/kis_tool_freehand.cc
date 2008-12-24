@@ -59,6 +59,7 @@
 #include "kis_cursor.h"
 #include "kis_painting_assistant.h"
 
+#define ENABLE_RECORDING
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
         : KisToolPaint(canvas, cursor)
@@ -111,7 +112,9 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
                                      e->rotation(), e->tangentialPressure());
         paintAt(m_previousPaintInformation);
         if (!m_smooth) {
+#ifdef ENABLE_RECORDING
             m_polyLinePaintAction->addPoint(m_previousPaintInformation);
+#endif
         }
     }
 }
@@ -172,12 +175,16 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
                              control1,
                              control2,
                              info);
+#ifdef ENABLE_RECORDING
             m_bezierCurvePaintAction->addPoint(m_previousPaintInformation, control1, control2, info);
+#endif
             m_previousTangent = newTangent;
             m_previousDrag = dragVec;
         } else {
             paintLine(m_previousPaintInformation, info);
+#ifdef ENABLE_RECORDING
             m_polyLinePaintAction->addPoint(info);
+#endif
         }
 
         m_previousPaintInformation = info;
@@ -244,7 +251,8 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
             layer->setTemporaryCompositeOp(m_compositeOp);
             layer->setTemporaryOpacity(m_opacity);
         }
-    } else {
+    }
+    if( !m_target ) {
         m_target = device;
     }
     m_painter = new KisPainter(m_target, currentSelection());
@@ -270,14 +278,30 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
           << ", incremental " << m_paintIncremental
           << ", paint on selection: " << m_paintOnSelection
           << ", active device has selection: " << device->hasSelection()
-    //       << ", target has selection: " << m_target->hasSelection()
-    << endl;
+          << endl;
     */
+#ifdef ENABLE_RECORDING // Temporary, to figure out what is going without being
+      // distracted by the recording
     if (m_smooth) {
-        m_bezierCurvePaintAction = new KisRecordedBezierCurvePaintAction(i18n("Freehand tool"),  currentNode(), currentPaintOpPreset(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), m_paintIncremental, m_compositeOp);
+        m_bezierCurvePaintAction = new KisRecordedBezierCurvePaintAction(i18n("Freehand tool"),
+                                                                         currentNode(),
+                                                                         currentPaintOpPreset(),
+                                                                         m_painter->paintColor(),
+                                                                         m_painter->backgroundColor(),
+                                                                         m_painter->opacity(),
+                                                                         m_paintIncremental,
+                                                                         m_compositeOp);
     } else {
-        m_polyLinePaintAction = new KisRecordedPolyLinePaintAction(i18n("Freehand tool"), currentNode(), currentPaintOpPreset(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), m_paintIncremental, m_compositeOp);
+        m_polyLinePaintAction = new KisRecordedPolyLinePaintAction(i18n("Freehand tool"),
+                                                                   currentNode(),
+                                                                   currentPaintOpPreset(),
+                                                                   m_painter->paintColor(),
+                                                                   m_painter->backgroundColor(),
+                                                                   m_painter->opacity(),
+                                                                   m_paintIncremental,
+                                                                   m_compositeOp);
     }
+#endif
 }
 
 void KisToolFreehand::endPaint()
@@ -327,6 +351,7 @@ void KisToolFreehand::endPaint()
     }
     delete m_painter;
     m_painter = 0;
+    m_target = 0 ;
     notifyModified();
 
     if (!m_paintJobs.empty()) {
@@ -335,7 +360,7 @@ void KisToolFreehand::endPaint()
         }
         m_paintJobs.clear();
     }
-
+#ifdef ENABLE_RECORDING
     if (m_smooth) {
         if (image())
             image()->actionRecorder()->addAction(*m_bezierCurvePaintAction);
@@ -347,6 +372,7 @@ void KisToolFreehand::endPaint()
         delete m_polyLinePaintAction;
         m_polyLinePaintAction = 0;
     }
+#endif
 }
 
 void KisToolFreehand::paintAt(const KisPaintInformation &pi)

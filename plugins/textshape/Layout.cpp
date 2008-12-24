@@ -335,9 +335,11 @@ bool Layout::nextParag()
     bool pagebreak = (m_format.pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore ||
                       m_format.boolProperty(KoParagraphStyle::BreakBefore));
 
-    const QString masterPageName = m_format.property(KoParagraphStyle::MasterPageName).toString();
-    if (! masterPageName.isNull())
+    const QVariant masterPageName = m_format.property(KoParagraphStyle::MasterPageName);
+    if (! masterPageName.isNull() && m_currentMasterPage != masterPageName.toString()) {
+        m_currentMasterPage = masterPageName.toString();
         pagebreak = true; // new master-page means new page
+    }
 
     if (!m_newShape && pagebreak) {
         m_data->setEndPosition(m_block.position() - 1);
@@ -361,7 +363,7 @@ bool Layout::nextParag()
     QList<KoText::Tab> koTabs;
     QVariant variant = m_format.property(KoParagraphStyle::TabPositions);
     if (! variant.isNull()) {
-        foreach(QVariant tv, qvariant_cast<QList<QVariant> >(variant)) {
+        foreach(const QVariant & tv, qvariant_cast<QList<QVariant> >(variant)) {
             KoText::Tab koTab = tv.value<KoText::Tab>();
             QTextOption::Tab tab;
             tab.position = koTab.position * qt_defaultDpiX() / 72.; // convertion here is required because Qt thinks in device units and we don't
@@ -540,6 +542,7 @@ void Layout::resetPrivate()
     m_blockData = 0;
     m_newParag = true;
     m_block = m_parent->document()->begin();
+    m_currentMasterPage.clear();
 
     shapeNumber = 0;
     int lastPos = -1;
@@ -726,7 +729,7 @@ void Layout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &c
             painter->restore();
 
             QVector<QTextLayout::FormatRange> selections;
-            foreach(QAbstractTextDocumentLayout::Selection selection, context.textContext.selections) {
+            foreach(const QAbstractTextDocumentLayout::Selection & selection, context.textContext.selections) {
                 QTextCursor cursor = selection.cursor;
                 int begin = cursor.position();
                 int end = cursor.anchor();

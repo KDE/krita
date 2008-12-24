@@ -20,7 +20,7 @@
 
 #include "kis_kra_tags.h"
 #include "kis_kra_save_visitor.h"
-#include "kis_savexml_visitor.h"
+#include "kis_kra_savexml_visitor.h"
 
 #include <QDomDocument>
 #include <QDomElement>
@@ -46,6 +46,7 @@ using namespace KRA;
 class KisKraSaver::Private {
 public:
     KisDoc2* doc;
+    QMap<const KisNode*, QString> nodeFileNames;
 };
 
 KisKraSaver::KisKraSaver( KisDoc2* document )
@@ -76,11 +77,11 @@ QDomElement KisKraSaver::saveXML( QDomDocument& doc,  KisImageSP img )
     image.setAttribute(X_RESOLUTION, img->xRes());
     image.setAttribute(Y_RESOLUTION, img->yRes());
 
-    quint32 count = 0;
+    quint32 count = 1; // We don't save the root layer, but it does count
     KisSaveXmlVisitor visitor(doc, image, count, true);
 
     img->rootLayer()->accept(visitor);
-
+    m_d->nodeFileNames = visitor.nodeFileNames();
     return image;
 }
 
@@ -90,7 +91,8 @@ bool KisKraSaver::saveBinaryData( KoStore* store, KisImageSP img, const QString 
 
     // Save the layers data
     quint32 count = 0;
-    KisKraSaveVisitor visitor(img, store, count, m_d->doc->documentInfo()->aboutInfo("title"));
+
+    KisKraSaveVisitor visitor(img, store, count, m_d->doc->documentInfo()->aboutInfo("title"), m_d->nodeFileNames);
 
     if (external)
         visitor.setExternalUri(uri);
@@ -127,4 +129,5 @@ bool KisKraSaver::saveBinaryData( KoStore* store, KisImageSP img, const QString 
             }
         }
     }
+    return true;
 }

@@ -52,7 +52,6 @@ KisPaintOp * KisComplexOpFactory::createOp(const KisPaintOpSettingsSP settings,
 
     const KisComplexOpSettings *complexopSettings = dynamic_cast<const KisComplexOpSettings *>(settings.data());
     Q_ASSERT(settings != 0 && complexopSettings != 0);
-    m_widget->setConfiguration(const_cast<KisComplexOpSettings*>(complexopSettings));
 
     KisPaintOp * op = new KisComplexOp(complexopSettings, painter);
     Q_CHECK_PTR(op);

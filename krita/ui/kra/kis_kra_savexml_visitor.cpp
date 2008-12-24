@@ -17,12 +17,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kra/kis_savexml_visitor.h"
+#include "kra/kis_kra_savexml_visitor.h"
 #include "kis_kra_tags.h"
+
+#include <QTextStream>
 
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 
+#include <kis_debug.h>
 #include <filter/kis_filter_configuration.h>
 #include <generator/kis_generator_layer.h>
 #include <kis_adjustment_layer.h>
@@ -53,7 +56,7 @@ KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, const QDomElement & eleme
 
 bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
 {
-    if (KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
+    if (layer->inherits( "KisShapeLayer" )) {
         QDomElement layerElement = m_doc.createElement(LAYER);
         saveLayer(layerElement, SHAPE_LAYER, layer);
         m_elem.appendChild(layerElement);
@@ -96,8 +99,16 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
     Q_ASSERT( !layerElement.isNull() );
     layerElement.appendChild(elem);
     KisSaveXmlVisitor visitor(m_doc, elem, m_count);
+    m_count++;
+    bool success = visitor.visitAllInverse(layer);
 
-    return visitor.visitAllInverse(layer);
+    QMapIterator<const KisNode*, QString> i(visitor.nodeFileNames());
+    while (i.hasNext()) {
+        i.next();
+        m_nodeFileNames[i.key()] = i.value();
+    }
+
+    return success;
 }
 
 bool KisSaveXmlVisitor::visit(KisAdjustmentLayer* layer)
@@ -193,30 +204,50 @@ bool KisSaveXmlVisitor::visit(KisSelectionMask *mask)
 
 void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, const KisLayer * layer)
 {
-    // XXX: save the channeflags!
-    qDebug() << "saving layer " << layerType << ", " << layer->name();
+    QString channelFlagsString;
+    QBitArray channelFlags = layer->channelFlags();
+    for ( int i = 0; i < channelFlags.count(); ++i ) {
+        if ( channelFlags[i] )
+            channelFlagsString += "1";
+        else
+            channelFlagsString += "0";
+    }
+
+    el.setAttribute( CHANNEL_FLAGS, channelFlagsString );
     el.setAttribute(NAME, layer->name());
     el.setAttribute(OPACITY, layer->opacity());
     el.setAttribute(COMPOSITE_OP, layer->compositeOp()->id());
     el.setAttribute(VISIBLE, layer->visible());
     el.setAttribute(LOCKED, layer->userLocked());
-    el.setAttribute(LAYER_TYPE, layerType);
+    el.setAttribute(NODE_TYPE, layerType);
     el.setAttribute(FILE_NAME, LAYER + QString::number( m_count ) );
     el.setAttribute(X, layer->x());
     el.setAttribute(Y, layer->y());
 
+    m_nodeFileNames[layer] = LAYER + QString::number( m_count );
+
+    dbgFile << "Saved layer "
+            << layer->name()
+            << " of type " << layerType
+            << " with filename " << LAYER + QString::number( m_count );
 }
 
 void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, const KisMask * mask)
 {
-    qDebug() << "saving mask " << maskType << ", " << mask->name();
     el.setAttribute(NAME, mask->name());
     el.setAttribute(VISIBLE, mask->visible());
     el.setAttribute(LOCKED, mask->userLocked());
-    el.setAttribute(MASK_TYPE, maskType);
+    el.setAttribute(NODE_TYPE, maskType);
     el.setAttribute(FILE_NAME, MASK + QString::number( m_count) );
     el.setAttribute(X, mask->x());
     el.setAttribute(Y, mask->y());
+
+    m_nodeFileNames[mask] = MASK + QString::number( m_count );
+
+    dbgFile << "Saved mask "
+            << mask->name()
+            << " of type " << maskType
+            << " with filename " << MASK + QString::number( m_count );
 }
 
 bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
@@ -226,7 +257,15 @@ bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
         Q_ASSERT( !layerElement.isNull() );
         layerElement.appendChild(elem);
         KisSaveXmlVisitor visitor(m_doc, elem, m_count);
-        return visitor.visitAllInverse(node);
+        bool success =  visitor.visitAllInverse(node);
+
+        QMapIterator<const KisNode*, QString> i(visitor.nodeFileNames());
+        while (i.hasNext()) {
+            i.next();
+            m_nodeFileNames[i.key()] = i.value();
+        }
+
+        return success;
     }
     return true;
 }

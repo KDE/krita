@@ -24,9 +24,9 @@
 
 #include "kis_node_visitor.h"
 #include "kis_types.h"
+#include "krita_export.h"
 
-
-class KisSaveXmlVisitor : public KisNodeVisitor
+class KRITAUI_EXPORT KisSaveXmlVisitor : public KisNodeVisitor
 {
 public:
     KisSaveXmlVisitor(QDomDocument doc, const QDomElement & element, quint32 &count, bool root = false);
@@ -35,6 +35,7 @@ public:
 
 public:
 
+    bool visit( KisNode* ) { return true; }
     bool visit(KisExternalLayer *);
     bool visit(KisPaintLayer *layer);
     bool visit(KisGroupLayer *layer);
@@ -46,12 +47,20 @@ public:
     bool visit(KisTransformationMask *mask);
     bool visit(KisSelectionMask *mask);
 
+    QMap<const KisNode*, QString> nodeFileNames()
+    {
+        return m_nodeFileNames;
+    }
+
 private:
 
     void saveLayer(QDomElement & el, const QString & layerType, const KisLayer * layer);
     void saveMask(QDomElement & el, const QString & maskType, const KisMask * mask);
     bool saveMasks(KisNode * node, QDomElement & layerElement);
 
+    friend class KisKraSaveXmlVisitorTest;
+
+    QMap<const KisNode*,  QString> m_nodeFileNames;
     QDomDocument m_doc;
     QDomElement m_elem;
     quint32 &m_count;

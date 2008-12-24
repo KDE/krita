@@ -47,6 +47,8 @@ public:
 
 public:
 
+    bool visit( KisNode* ) { return true; }
+
     bool visit(KisExternalLayer * layer);
 
     bool visit(KisPaintLayer *layer);

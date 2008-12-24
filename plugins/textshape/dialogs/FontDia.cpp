@@ -30,10 +30,10 @@
 #include <kvbox.h>
 #include <kfontdialog.h>
 
-FontDia::FontDia(const QTextCursor &cursor, QWidget* parent)
+FontDia::FontDia(QTextCursor* cursor, QWidget* parent)
         : KDialog(parent),
         m_cursor(cursor),
-        m_initialFormat(cursor.charFormat()),
+        m_initialFormat(cursor->charFormat()),
         m_style(m_initialFormat)
 {
     setCaption(i18n("Select Font"));
@@ -106,7 +106,7 @@ void FontDia::slotApply()
     m_decorationTab->save();
     m_layoutTab->save();
     m_style.setLanguage(m_languageTab->language());
-    m_style.applyStyle(&m_cursor);
+    m_style.applyStyle(m_cursor);
 }
 
 void FontDia::slotOk()

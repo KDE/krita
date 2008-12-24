@@ -112,7 +112,9 @@ void KisShapeController::setImage(KisImageSP image)
             // clipboard? And how about undo information?
 
         }
-        // FIXME someone clever should know how to fix the shape corresponding to the root layer and delete that
+#ifdef __GNUC__
+#warning "KisShapeController::setImage: FIXME someone clever should know how to fix the shape corresponding to the root layer and delete that"
+#endif
         m_d->nodeShapes.clear();
 
     }
@@ -273,7 +275,7 @@ void KisShapeController::addShape(KoShape* shape)
 
         }
     } else {
-        kWarning() << "Eeek -- we tried to add a krita layer shape without going through KisImage";
+        warnKrita << "Eeek -- we tried to add a krita layer shape without going through KisImage";
     }
 
     m_d->doc->setModified(true);

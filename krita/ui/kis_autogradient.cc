@@ -28,6 +28,7 @@
 #include <KoSegmentGradient.h>
 
 #include "kis_autogradient_resource.h"
+#include "kis_debug.h"
 
 #include "widgets/kis_gradient_slider_widget.h"
 
@@ -74,10 +75,10 @@ void KisAutogradient::slotSelectedSegment(KoGradientSegment* segment)
     comboBoxColorInterpolationType->setCurrentIndex(segment->colorInterpolation());
     comboBoxInterpolationType->setCurrentIndex(segment->interpolation());
 
-    int leftOpacity = qRound(startColor.alpha() / OPACITY_OPAQUE * 100);
+    int leftOpacity = (startColor.alpha() * 100) / OPACITY_OPAQUE;
     intNumInputLeftOpacity->setValue(leftOpacity);
 
-    int rightOpacity = qRound(endColor.alpha() / OPACITY_OPAQUE * 100);
+    int rightOpacity = (endColor.alpha() * 100) / OPACITY_OPAQUE;
     intNumInputRightOpacity->setValue(rightOpacity);
 
     paramChanged();
@@ -137,10 +138,11 @@ void KisAutogradient::slotChangedRightColor(const QColor& color)
 
 void KisAutogradient::slotChangedLeftOpacity(int value)
 {
+    dbgUI << value;
     KoGradientSegment* segment = gradientSlider->selectedSegment();
     if (segment) {
         KoColor c(segment->startColor().toQColor(), segment->startColor().colorSpace());
-        c.setOpacity(value / 100 * OPACITY_OPAQUE);
+        c.setOpacity( (value * OPACITY_OPAQUE) / 100);
         segment->setStartColor(c);
     }
     gradientSlider->repaint();
@@ -150,10 +152,11 @@ void KisAutogradient::slotChangedLeftOpacity(int value)
 
 void KisAutogradient::slotChangedRightOpacity(int value)
 {
+    dbgUI << value;
     KoGradientSegment* segment = gradientSlider->selectedSegment();
     if (segment) {
         KoColor c(segment->endColor().toQColor(), segment->endColor().colorSpace());
-        c.setOpacity(value / 100 *OPACITY_OPAQUE);
+        c.setOpacity( (value *OPACITY_OPAQUE) / 100 );
         segment->setEndColor(c);
     }
     gradientSlider->repaint();

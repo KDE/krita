@@ -121,7 +121,7 @@ void KisEmbossFilter::process(KisConstProcessingInformation srcInfo,
         for (int x = 0; !(progressUpdater && progressUpdater->interrupted()) && (x < Width); ++x, ++it, ++dstIt) {
             if (dstIt.isSelected()) {
 
-// FIXME: COLORSPACE_INDEPENDENCE or at least work IN RGB16A
+// XXX: COLORSPACE_INDEPENDENCE or at least work IN RGB16A
 
 
                 src->colorSpace()->toQColor(it.oldRawData(), &color1);

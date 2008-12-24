@@ -34,15 +34,17 @@
 #include "kis_projection_update_strategy.h"
 #include "kis_bottom_up_update_strategy.h" // XXX Make into real plugins with registry and factories
 #include "kis_top_down_update_strategy.h"
+#include "kis_node_progress_proxy.h"
 
 class KisNode::Private
 {
 public:
-    Private() : graphListener(0), updateStrategy(0) {}
+    Private() : graphListener(0), updateStrategy(0), nodeProgressProxy(0) {}
     KisNodeSP parent;
     KisNodeGraphListener * graphListener;
     QList<KisNodeSP> nodes;
     KisProjectionUpdateStrategy * updateStrategy;
+    KisNodeProgressProxy* nodeProgressProxy;
 };
 
 KisNode::KisNode()
@@ -80,6 +82,7 @@ void KisNode::init()
 
 KisNode::~KisNode()
 {
+    delete m_d->nodeProgressProxy;
     delete m_d->updateStrategy;
     m_d->nodes.clear();
     delete m_d;
@@ -218,6 +221,7 @@ bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis)
     if (m_d->nodes.contains(newNode)) return false;
 
     newNode->prepareForAddition();
+    newNode->createNodeProgressProxy();
 
     int idx = 0;
 
@@ -278,6 +282,23 @@ bool KisNode::remove(KisNodeSP node)
 
     return remove(index(node));
 
+}
+
+KisNodeProgressProxy* KisNode::nodeProgressProxy() const
+{
+    if( m_d->nodeProgressProxy ) {
+        return m_d->nodeProgressProxy;
+    } else if( parent() ) {
+        return parent()->nodeProgressProxy();
+    }
+    return 0;
+}
+
+void KisNode::createNodeProgressProxy( )
+{
+    if( !m_d->nodeProgressProxy ) {
+        m_d->nodeProgressProxy = new KisNodeProgressProxy( this );
+    }
 }
 
 

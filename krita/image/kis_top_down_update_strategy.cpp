@@ -42,6 +42,7 @@
 #include "kis_processing_information.h"
 #include "kis_node.h"
 #include "kis_projection.h"
+#include "kis_node_progress_proxy.h"
 
 namespace
 {
@@ -83,7 +84,7 @@ public:
         {
             dev->convertTo( m_projection->colorSpace() );
         }*/
-        
+
         KisPainter gc(m_projection);
         gc.setChannelFlags(layer->channelFlags());
         gc.bitBlt(rc.left(), rc.top(), layer->compositeOp() , dev, layer->opacity(), rc.left(), rc.top(), rc.width(), rc.height());
@@ -129,23 +130,12 @@ public:
             return true;
         }
 
-        QRect rc = layer->paintDevice()->extent() & m_rc;
-
-        // Indirect painting?
-        KisPaintDeviceSP tempTarget = layer->temporaryTarget();
-        if (tempTarget) {
-            rc = (layer->projection()->extent() | tempTarget->extent()) & m_rc;
-        }
+        QRect rc = layer->extent() & m_rc;
 
         KisPainter gc(m_projection);
         gc.setChannelFlags(layer->channelFlags());
 
         KisPaintDeviceSP source = layer->projection();
-
-        if (tempTarget) {
-            KisPaintDeviceSP temp = new KisPaintDevice(source->colorSpace());
-            source = paintIndirect(source, temp, layer, rc.left(), rc.top(), rc.left(), rc.top(), rc.width(), rc.height());
-        }
 
         if (first)
             gc.bitBlt(rc.left(), rc.top(), m_projection->colorSpace()->compositeOp(COMPOSITE_COPY), source, layer->opacity(), rc.left(), rc.top(), rc.width(), rc.height());
@@ -206,7 +196,7 @@ public:
         if (!f) return false;
 
         // Possibly enlarge the rect that changed (like for convolution filters)
-        tmpRc = f->enlargeRect(tmpRc, cfg);
+        tmpRc = f->changedRect(tmpRc, cfg);
 
         KisSelectionSP selection = layer->selection();
         KisPaintDeviceSP layerProjection = layer->projection();
@@ -221,11 +211,16 @@ public:
         KisConstProcessingInformation srcCfg(m_projection, tmpRc .topLeft(), 0);
         KisProcessingInformation dstCfg(layerProjection, tmpRc .topLeft(), 0);
 
+        Q_ASSERT( layer->nodeProgressProxy() );
+        KoProgressUpdater updater( layer->nodeProgressProxy() );
+        updater.start( 100, f->name() );
+        KoUpdater up = updater.startSubtask();
         // Some filters will require usage of oldRawData, which is not available without
         // a transaction!
         KisTransaction* cmd = new KisTransaction("", layerProjection);
-        f->process(srcCfg, dstCfg, tmpRc.size(), cfg);
+        f->process(srcCfg, dstCfg, tmpRc.size(), cfg, &up);
         delete cmd;
+        layer->nodeProgressProxy()->setValue( layer->nodeProgressProxy()->maximum() );
 
         // Copy the filtered bits onto the projection
         KisPainter gc(m_projection);
@@ -268,22 +263,14 @@ public:
 
     }
 
+    bool visit(KisNode*) { return true; }
+    bool visit(KisFilterMask*) { return true; }
+    bool visit(KisTransparencyMask*) { return true; }
+    bool visit(KisTransformationMask*) { return true; }
+    bool visit(KisSelectionMask*) { return true; }
+
+
 private:
-    // Helper for the indirect painting
-    template<class Target>
-    KisSharedPtr<Target> paintIndirect(KisPaintDeviceSP source,
-                                       KisSharedPtr<Target> target,
-                                       KisIndirectPaintingSupport* layer,
-                                       qint32 sx, qint32 sy, qint32 dx, qint32 dy,
-                                       qint32 w, qint32 h) {
-        KisPainter gc2(target.data());
-        gc2.bitBlt(dx, dy, COMPOSITE_COPY, source,
-                   OPACITY_OPAQUE, sx, sy, w, h);
-        gc2.bitBlt(dx, dy, layer->temporaryCompositeOp(), layer->temporaryTarget(),
-                   layer->temporaryOpacity(), sx, sy, w, h);
-        gc2.end();
-        return target;
-    }
     KisPaintDeviceSP m_projection;
     QRect m_rc;
 };
@@ -409,7 +396,7 @@ KisPaintDeviceSP KisTopDownUpdateStrategy::updateGroupLayerProjection(const QRec
         child = dynamic_cast<KisLayer*>(child->nextSibling().data());
     }
 
-    return projection;
+//     return projection;
 
     m_d->filthyNode = 0;
     return projection;

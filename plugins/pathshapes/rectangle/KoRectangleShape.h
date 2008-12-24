@@ -75,14 +75,12 @@ protected:
 
     void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
     void updatePath( const QSizeF &size );
-    void createPath( const QSizeF &size );
+    void createPoints( int requiredPointCount );
     void updateHandles();
 
 private:
     qreal m_cornerRadiusX; ///< in percent of half of the rectangle width (a number between 0 and 100)
     qreal m_cornerRadiusY; ///< in percent of half of the rectangle height (a number between 0 and 100)
-
-    KoSubpath m_points;
 };
 
 #endif /* KORECTANGLESHAPE_H */

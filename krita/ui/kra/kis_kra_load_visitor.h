@@ -26,19 +26,24 @@
 #include "kis_types.h"
 #include "kis_node_visitor.h"
 
+class KisFilterConfiguration;
 class KoStore;
 
 class KisKraLoadVisitor : public KisNodeVisitor
 {
 public:
 
-    using KisNodeVisitor::visit;
 
-    KisKraLoadVisitor(KisImageSP img, KoStore *store, QMap<KisNode *, QString> &layerFilenames, const QString & name);
+    KisKraLoadVisitor( KisImageSP img,
+                       KoStore *store,
+                       QMap<KisNode *, QString> &layerFilenames,
+                       const QString & name,
+                       int syntaxVersion );
 
 public:
     void setExternalUri(const QString &uri);
 
+    bool visit( KisNode* ) { return true; }
     bool visit(KisExternalLayer *);
     bool visit(KisPaintLayer *layer);
     bool visit(KisGroupLayer *layer);
@@ -52,12 +57,21 @@ public:
 
 
 private:
+
+    bool loadPaintDevice( KisPaintDeviceSP device, const QString& location );
+    bool loadProfile( KisPaintDeviceSP device,  const QString& location );
+    bool loadFilterConfiguration( KisFilterConfiguration* kfc, const QString& location );
+    KisSelectionSP loadSelection( const QString& location );
+    QString getLocation( KisNode* node, const QString& suffix = "" );
+
+private:
     KisImageSP m_img;
     KoStore *m_store;
     bool m_external;
     QString m_uri;
     QMap<KisNode *, QString> m_layerFilenames;
     QString m_name;
+    int m_syntaxVersion;
 };
 
 #endif // KIS_KRA_LOAD_VISITOR_H_

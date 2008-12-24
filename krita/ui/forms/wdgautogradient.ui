@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>KisWdgAutogradient</class>
  <widget class="QWidget" name="KisWdgAutogradient" >
   <property name="geometry" >
@@ -25,18 +22,16 @@
       <string>Custom Gradient</string>
      </property>
      <layout class="QVBoxLayout" >
-      <property name="margin" >
-       <number>11</number>
-      </property>
       <property name="spacing" >
        <number>6</number>
       </property>
+      <property name="margin" >
+       <number>11</number>
+      </property>
       <item>
-       <widget class="KisGradientSliderWidget" name="gradientSlider" >
+       <widget class="KisGradientSliderWidget" native="1" name="gradientSlider" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>0</vsizetype>
+         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -54,19 +49,19 @@
       </item>
       <item>
        <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
         <property name="spacing" >
          <number>6</number>
         </property>
+        <property name="margin" >
+         <number>0</number>
+        </property>
         <item>
          <layout class="QVBoxLayout" >
-          <property name="margin" >
-           <number>0</number>
-          </property>
           <property name="spacing" >
            <number>6</number>
+          </property>
+          <property name="margin" >
+           <number>0</number>
           </property>
           <item>
            <widget class="QLabel" name="textLabel1" >
@@ -88,11 +83,11 @@
           </item>
           <item>
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <property name="spacing" >
              <number>6</number>
+            </property>
+            <property name="margin" >
+             <number>0</number>
             </property>
             <item>
              <widget class="QLabel" name="labelLeftColor" >
@@ -115,9 +110,7 @@
             <item>
              <widget class="KColorButton" name="leftColorButton" >
               <property name="sizePolicy" >
-               <sizepolicy>
-                <hsizetype>0</hsizetype>
-                <vsizetype>0</vsizetype>
+               <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -148,11 +141,11 @@
           </item>
           <item>
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <property name="spacing" >
              <number>6</number>
+            </property>
+            <property name="margin" >
+             <number>0</number>
             </property>
             <item>
              <widget class="QLabel" name="labelRightColor" >
@@ -175,9 +168,7 @@
             <item>
              <widget class="KColorButton" name="rightColorButton" >
               <property name="sizePolicy" >
-               <sizepolicy>
-                <hsizetype>0</hsizetype>
-                <vsizetype>0</vsizetype>
+               <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -202,6 +193,20 @@
               <property name="focusPolicy" >
                <enum>Qt::ClickFocus</enum>
               </property>
+              <property name="color" >
+               <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+              </property>
+              <property name="defaultColor" >
+               <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+              </property>
              </widget>
             </item>
            </layout>
@@ -210,11 +215,11 @@
         </item>
         <item>
          <layout class="QVBoxLayout" >
-          <property name="margin" >
-           <number>0</number>
-          </property>
           <property name="spacing" >
            <number>6</number>
+          </property>
+          <property name="margin" >
+           <number>0</number>
           </property>
           <item>
            <widget class="QLabel" name="textLabel2" >
@@ -237,9 +242,7 @@
           <item>
            <widget class="KIntSpinBox" name="intNumInputLeftOpacity" >
             <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>13</hsizetype>
-              <vsizetype>13</vsizetype>
+             <sizepolicy vsizetype="Ignored" hsizetype="Ignored" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -257,15 +260,19 @@
             </property>
             <property name="focusPolicy" >
              <enum>Qt::ClickFocus</enum>
+            </property>
+            <property name="maximum" >
+             <number>100</number>
+            </property>
+            <property name="value" >
+             <number>100</number>
             </property>
            </widget>
           </item>
           <item>
            <widget class="KIntSpinBox" name="intNumInputRightOpacity" >
             <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>13</hsizetype>
-              <vsizetype>13</vsizetype>
+             <sizepolicy vsizetype="Ignored" hsizetype="Ignored" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -283,6 +290,12 @@
             </property>
             <property name="focusPolicy" >
              <enum>Qt::ClickFocus</enum>
+            </property>
+            <property name="maximum" >
+             <number>100</number>
+            </property>
+            <property name="value" >
+             <number>100</number>
             </property>
            </widget>
           </item>
@@ -292,11 +305,11 @@
       </item>
       <item>
        <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
         <property name="spacing" >
          <number>6</number>
+        </property>
+        <property name="margin" >
+         <number>0</number>
         </property>
         <item>
          <widget class="QComboBox" name="comboBoxInterpolationType" >
@@ -382,28 +395,23 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
    <class>KColorButton</class>
-   <extends>QWidget</extends>
+   <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
    <container>1</container>
-   <pixmap></pixmap>
-  </customwidget>
-  <customwidget>
-   <class>KisGradientSliderWidget</class>
-   <extends></extends>
-   <header>widgets/kis_gradient_slider_widget.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
   <customwidget>
    <class>KIntSpinBox</class>
    <extends>QSpinBox</extends>
    <header>knuminput.h</header>
    <container>1</container>
-   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
+   <class>KisGradientSliderWidget</class>
+   <extends></extends>
+   <header>widgets/kis_gradient_slider_widget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

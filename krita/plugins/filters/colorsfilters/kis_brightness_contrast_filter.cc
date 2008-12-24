@@ -203,7 +203,7 @@ void KisBrightnessContrastFilter::process(KisConstProcessingInformation srcInfo,
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
     if (!config) {
-        kWarning() << "No configuration object for brightness/contrast filter\n";
+        warnKrita << "No configuration object for brightness/contrast filter\n";
         return;
     }
 

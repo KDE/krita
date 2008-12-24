@@ -206,7 +206,7 @@ QDomDocument KisDoc2::saveXML()
     QDomElement root = doc.documentElement();
 
     root.setAttribute("editor", "Krita");
-    root.setAttribute("syntaxVersion", "1");
+    root.setAttribute("syntaxVersion", "2");
 
     Q_ASSERT( m_d->kraSaver == 0 );
     m_d->kraSaver = new KisKraSaver( this );
@@ -241,8 +241,8 @@ bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
     if (doc.doctype().name() != "DOC")
         return false;
     root = doc.documentElement();
-    attr = root.attribute("syntaxVersion");
-    if (attr.toInt() > 1)
+    int syntaxVersion = root.attribute("syntaxVersion", "3").toInt();
+    if (syntaxVersion > 2)
         return false;
 
     if (!root.hasChildNodes()) {
@@ -251,7 +251,7 @@ bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
 
     setUndo(false);
     Q_ASSERT( m_d->kraLoader == 0 );
-    m_d->kraLoader = new KisKraLoader( this );
+    m_d->kraLoader = new KisKraLoader( this, syntaxVersion );
 
     // XXX: Legacy from the multi-image .kra file period.
     for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
@@ -290,6 +290,9 @@ bool KisDoc2::completeSaving(KoStore *store)
     setIOSteps(m_d->image->nlayers() + 1);
 
     m_d->kraSaver->saveBinaryData( store, m_d->image, url().url(), isStoredExtern() );
+
+    delete m_d->kraSaver;
+    m_d->kraSaver = 0;
 
     IODone();
     return true;

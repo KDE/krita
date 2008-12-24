@@ -99,10 +99,10 @@ void ChangePartDetailsCommand::redo()
             m_part->removeStaff(s, false);
         }
         Staff* s = m_part->staff(m_newStaffCount - 1);
-        foreach (VoiceElementStaffPair p, m_elements) {
+        foreach (const VoiceElementStaffPair & p, m_elements) {
             p.first->setStaff(s);
         }
-        foreach (NoteStaffPair p, m_notes) {
+        foreach (const NoteStaffPair & p, m_notes) {
             p.first->setStaff(s);
         }
     }
@@ -121,10 +121,10 @@ void ChangePartDetailsCommand::undo()
         foreach (Staff* s, m_staves) {
             m_part->addStaff(s);
         }
-        foreach (VoiceElementStaffPair p, m_elements) {
+        foreach (const VoiceElementStaffPair & p, m_elements) {
             p.first->setStaff(p.second);
         }
-        foreach (NoteStaffPair p, m_notes) {
+        foreach (const NoteStaffPair & p, m_notes) {
             p.first->setStaff(p.second);
         }        
     } else if (m_oldStaffCount < m_newStaffCount) {

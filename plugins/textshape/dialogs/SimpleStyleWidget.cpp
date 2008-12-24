@@ -50,14 +50,25 @@ SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
         widget.alignRight->setDefaultAction(tool->action("format_alignright"));
     }
 
-    //widget.textColor->setDefaultAction(tool->action("format_textcolor"));
-    //widget.backgroundColor->setDefaultAction(tool->action("format_backgroundcolor"));
+    widget.textColor->setDefaultAction(tool->action("format_textcolor"));
+    widget.backgroundColor->setDefaultAction(tool->action("format_backgroundcolor"));
     widget.alignCenter->setDefaultAction(tool->action("format_aligncenter"));
     widget.alignBlock->setDefaultAction(tool->action("format_alignblock"));
     widget.superscript->setDefaultAction(tool->action("format_super"));
     widget.subscript->setDefaultAction(tool->action("format_sub"));
     widget.decreaseIndent->setDefaultAction(tool->action("format_decreaseindent"));
     widget.increaseIndent->setDefaultAction(tool->action("format_increaseindent"));
+
+    QComboBox *family = qobject_cast<QComboBox*> (tool->action("format_fontfamily")->requestWidget(this));
+    if (family) { // kdelibs 4.1 didn't return anything here.
+        widget.fontsFrame->addWidget(family);
+        // TODO connect to move focus away on accept
+    }
+    QComboBox *size = qobject_cast<QComboBox*> (tool->action("format_fontsize")->requestWidget(this));
+    if (size) { // kdelibs 4.1 didn't return anything here.
+        widget.fontsFrame->addWidget(size);
+        // TODO connect to move focus away on accept
+    }
 
     fillListsCombobox();
 

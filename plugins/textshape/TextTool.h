@@ -173,6 +173,9 @@ private slots:
     void updateParagraphDirection(const QVariant &variant);
     /// method that will be called in the UI thread directly after the one above
     void updateParagraphDirectionUi();
+    
+    /// returns the focus to canvas when styles are selected in the optionDocker
+    void returnFocusToCanvas();
 
     void selectFont();
     void shapeAddedToCanvas();

@@ -210,12 +210,14 @@ void StylesWidget::applyStyle()
     KoParagraphStyle *paragraphStyle = m_stylesModel->paragraphStyleForIndex(index);
     if (paragraphStyle) {
         emit paragraphStyleSelected(paragraphStyle);
+        emit doneWithFocus();
         return;
     }
 
     KoCharacterStyle *characterStyle = m_stylesModel->characterStyleForIndex(index);
     if (characterStyle) {
         emit characterStyleSelected(characterStyle);
+        emit doneWithFocus();
         return;
     }
 }

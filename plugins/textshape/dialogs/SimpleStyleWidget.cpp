@@ -61,7 +61,7 @@ SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
 
     fillListsCombobox();
 
-    connect(widget.listType, SIGNAL(currentIndexChanged(int)), this, SLOT(listStyleChanged(int)));
+    connect(widget.listType, SIGNAL(activated(int)), this, SLOT(listStyleChanged(int)));
     connect(widget.reversedText, SIGNAL(clicked()), this, SLOT(directionChangeRequested()));
 }
 
@@ -145,6 +145,7 @@ void SimpleStyleWidget::listStyleChanged(int row)
 
     m_tool->addCommand(new ChangeListCommand(m_currentBlock,
                        static_cast<KoListStyle::Style>(widget.listType->itemData(row).toInt()), 0 /* level */));
+    emit doneWithFocus();
 }
 
 void SimpleStyleWidget::directionChangeRequested()
@@ -172,6 +173,7 @@ void SimpleStyleWidget::directionChangeRequested()
         break;
     };
     cursor.setBlockFormat(format);
+    emit doneWithFocus();
 }
 
 void SimpleStyleWidget::updateDirection(DirectionButtonState state)

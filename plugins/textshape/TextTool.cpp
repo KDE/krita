@@ -1252,6 +1252,8 @@ QWidget *TextTool::createOptionWidget()
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), ssw, SLOT(setStyleManager(KoStyleManager *)));
     connect(this, SIGNAL(blockChanged(const QTextBlock&)), ssw, SLOT(setCurrentBlock(const QTextBlock&)));
     connect(this, SIGNAL(charFormatChanged(const QTextCharFormat &)), ssw, SLOT(setCurrentFormat(const QTextCharFormat &)));
+    
+    connect(ssw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), styles, SLOT(setStyleManager(KoStyleManager *)));
     connect(this, SIGNAL(charFormatChanged(const QTextCharFormat &)),
@@ -1263,11 +1265,17 @@ QWidget *TextTool::createOptionWidget()
             &m_selectionHandler, SLOT(setStyle(KoParagraphStyle*)));
     connect(styles, SIGNAL(characterStyleSelected(KoCharacterStyle *)),
             &m_selectionHandler, SLOT(setStyle(KoCharacterStyle*)));
+    connect(styles, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
     updateStyleManager();
     if (m_textShape)
         updateActions();
     return widget;
+}
+
+void TextTool::returnFocusToCanvas()
+{
+    m_canvas->canvasWidget()->setFocus();
 }
 
 void TextTool::addUndoCommand()

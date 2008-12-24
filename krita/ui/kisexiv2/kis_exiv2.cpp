@@ -201,8 +201,58 @@ Exiv2::Value* kmdValueToExivValue(const KisMetaData::Value& value, Exiv2::TypeId
     return 0;
 }
 
+Exiv2::Value* kmdValueToExivValue( const KisMetaData::Value& value )
+{
+    Exiv2::Value* arrV = 0;
+    switch (value.type()) {
+        case KisMetaData::Value::Invalid:
+            return &*Exiv2::Value::create(Exiv2::invalidTypeId);
+        case KisMetaData::Value::Variant: {
+            QVariant var = value.asVariant();
+            switch( var.type()) {
+                case QVariant::Int:
+                    return new Exiv2::ValueType<int32_t>(variant.toInt(0));
+                case QVariant::Double:
+                    return new Exiv2::ValueType<double>(variant.toDouble(0));
+                case QVairant::Date: {
+                    QDate date = variant.toDate();
+                    return new Exiv2::DateValue(date.year(), date.month(), date.day());
+                }
+                case QVariant::DateTime:
+                    return new Exiv2::StringValue(qPrintable(variant.toDateTime().toString("yyyy:MM:dd hh:mm:ss")));
+                case QVariant:String:
+                    return new Exiv2::StringValue(qPrintable(variant.toString()));
+                default:
+                    qFatal() << "Unhandled type: " << var.type();
+                    return 0;
+            }
+        }
+        case KisMetaData::Value::SignedRational:
+            return new Exiv2::ValueType<Exiv2::Rational>(Exiv2::Rational(value.asSignedRational().numerator, value.asSignedRational().denominator));
+        case KisMetaData::Value::UnsignedRational:
+            return new Exiv2::ValueType<Exiv2::URational>(Exiv2::URational(value.asUnsignedRational().numerator, value.asUnsignedRational().denominator));
+        case KisMetaData::Value::AlternativeArray: 
+            arrV = Exiv2::Value::create(Exiv2::langAlt);
+        case KisMetaData::Value::OrderedArray:
+        case KisMetaData::Value::UnorderedArray:
+        {
+            if( !arrV )
+            {
+                arrV = Exiv2::Value::create(Exiv2::xmpSeq);
+            }
+            foreach( const KisMetaData::Value& v, value.asArray() )
+            {
+                Exiv2::Value* ev = kmdValueToExivValue( v );
+                arrV->read( ev->toString() );
+                delete ev;
+            }
+            return arrV;
+        }
+    }
+    qFatal() << "Unhandled value type";
+    return 0;
+}
 
-// TODO: There must be a better way to do that !
 struct KisExiv2 {
     KisExiv2() {
         KisMetaData::IOBackendRegistry::instance()->add(new KisIptcIO);
@@ -212,13 +262,3 @@ struct KisExiv2 {
 };
 
 static KisExiv2* exiv2 = new KisExiv2();
-
-// void initKisExiv2()
-// {
-//     if(not isInit)
-//     {
-//         KisMetaData::IOBackendRegistry::instance()->add(new KisIptcIO);
-//         KisMetaData::IOBackendRegistry::instance()->add(new KisExifIO);
-//         isInit = true;
-//     }
-// }

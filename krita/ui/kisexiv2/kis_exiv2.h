@@ -33,5 +33,10 @@ KisMetaData::Value exivValueToKMDValue( const Exiv2::Value::AutoPtr value );
 Exiv2::Value* variantToExivValue( const QVariant& variant, Exiv2::TypeId type );
 /// Convert a KisMetaData to an Exiv value
 Exiv2::Value* kmdValueToExivValue( const KisMetaData::Value& value, Exiv2::TypeId type );
+/**
+ * Convert a KisMetaData to an Exiv value, without knowing the targeted Exiv2::TypeId
+ * This function should be used for saving to XMP.
+ */
+Exiv2::Value* kmdValueToExivValue( const KisMetaData::Value& value );
 
 #endif

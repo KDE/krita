@@ -1,10 +1,14 @@
 [Desktop Entry]
 Name=Curve brush
+Name[el]=Πινέλο καμπύλης
 Name[et]=Kõverapintsel
+Name[gl]=Pincel Curvo
+Name[kk]=Қисық қылқаламы
 Name[nds]=Bagenpinsel
 Name[nl]=Kromme-penseel
 Name[pt]=Pincel curvo
 Name[pt_BR]=Pincel curvo
+Name[sv]=Kurvpensel
 Name[uk]=Викривлений пензель
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service

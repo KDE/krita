@@ -448,7 +448,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc)
         // Hide all dockwidgets and remember their old state
         d->m_dockWidgetVisibilityMap.clear();
 
-        foreach(QDockWidget* dockWidget, d->m_dockWidgetMap.values()) {
+        foreach(QDockWidget* dockWidget, d->m_dockWidgetMap) {
             d->m_dockWidgetVisibilityMap.insert(dockWidget, dockWidget->isVisible());
             dockWidget->setVisible(false);
         }
@@ -502,7 +502,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc)
     }
 
     if (doc && !d->m_dockWidgetVisibilityMap.isEmpty()) {
-        foreach(QDockWidget* dockWidget, d->m_dockWidgetMap.values()) {
+        foreach(QDockWidget* dockWidget, d->m_dockWidgetMap) {
             dockWidget->setVisible(d->m_dockWidgetVisibilityMap.value(dockWidget));
         }
     }
@@ -1073,7 +1073,7 @@ void KoMainWindow::closeEvent(QCloseEvent *e)
         saveWindowSettings();
         setRootDocument(0L);
         if (!d->m_dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency
-            foreach(QDockWidget* dockWidget, d->m_dockWidgetMap.values())
+            foreach(QDockWidget* dockWidget, d->m_dockWidgetMap)
             dockWidget->setVisible(d->m_dockWidgetVisibilityMap.value(dockWidget));
         }
         KParts::MainWindow::closeEvent(e);

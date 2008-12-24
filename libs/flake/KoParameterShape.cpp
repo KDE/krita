@@ -143,4 +143,5 @@ bool KoParameterShape::isParametricShape() const
 void KoParameterShape::setModified(bool modified)
 {
     d->modified = modified;
+    update();
 }

@@ -82,10 +82,10 @@ kde4_add_ui_files( koguiutils_LIB_SRCS
 kde4_add_library(koguiutils SHARED ${koguiutils_LIB_SRCS})
 
 target_link_libraries(koguiutils ${KDE4_KDE3SUPPORT_LIBS} flake koresources)
+target_link_libraries(koguiutils LINK_INTERFACE_LIBRARIES flake koresources)
 
 set_target_properties(koguiutils PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
-    ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "flake;koresources"
 )
 install(TARGETS koguiutils  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
@@ -106,6 +106,7 @@ install(
     KoItemToolTip.h
     KoPartSelectAction.h
     KoPartSelectDia.h
+    KoProgressUpdater.h
     KoRuler.h
     KoShapePainter.h
     KoTabBar.h

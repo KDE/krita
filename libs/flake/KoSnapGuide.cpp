@@ -202,7 +202,7 @@ QList<QPointF> KoSnapProxy::pointsInRect(const QRectF &rect)
     QList<QPointF> points;
     QList<KoShape*> shapes = shapesInRect(rect);
     foreach(KoShape * shape, shapes) {
-        foreach(QPointF point, pointsFromShape(shape)) {
+        foreach(const QPointF & point, pointsFromShape(shape)) {
             if (rect.contains(point))
                 points.append(point);
         }
@@ -284,7 +284,7 @@ QList<KoPathSegment> KoSnapProxy::segmentsInRect(const QRectF &rect)
         if (path) {
             shapeSegments = path->segmentsAt(rectOnShape);
         } else {
-            foreach(KoPathSegment s, shape->snapData().snapSegments()) {
+            foreach(const KoPathSegment & s, shape->snapData().snapSegments()) {
                 QRectF controlRect = s.controlPointRect();
                 if (! rect.intersects(controlRect) && ! controlRect.contains(rect))
                     continue;
@@ -297,7 +297,7 @@ QList<KoPathSegment> KoSnapProxy::segmentsInRect(const QRectF &rect)
 
         QMatrix m = shape->absoluteTransformation(0);
         // transform segments to document coordinates
-        foreach(KoPathSegment s, shapeSegments) {
+        foreach(const KoPathSegment & s, shapeSegments) {
             if (ignoredPoints.contains(s.first()) || ignoredPoints.contains(s.second()))
                 continue;
             segments.append(s.mapped(m));

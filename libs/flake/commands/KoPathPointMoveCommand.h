@@ -26,6 +26,7 @@
 #include <QPointF>
 
 #include "KoPathShape.h"
+#include "KoPathPointData.h"
 
 /// The undo / redo command for path point moving.
 class KoPathPointMoveCommand : public QUndoCommand
@@ -33,11 +34,11 @@ class KoPathPointMoveCommand : public QUndoCommand
 public:
     /**
      * Command to move path point.
-     * @param pointMap map of the path point to move
+     * @param pointData the path points to move
      * @param offset the offset by which the point is moved in document coordinates
      * @param parent the parent command used for macro commands
      */
-    KoPathPointMoveCommand(const KoPathShapePointMap &pointMap, const QPointF &offset, QUndoCommand *parent = 0);
+    KoPathPointMoveCommand(const QList<KoPathPointData> &pointData, const QPointF &offset, QUndoCommand *parent = 0);
 
     /// redo the command
     void redo();
@@ -45,9 +46,11 @@ public:
     void undo();
 
 private:
-    KoPathShapePointMap m_pointMap;
+    void applyOffset( const QPointF &offset );
+    
     QPointF m_offset;
     bool m_undoCalled; // this command stores diffs; so calling undo twice will give wrong results. Guard against that.
+    QMap<KoPathShape*, QSet<KoPathPointIndex> > m_points;
 };
 
 #endif // KOPATHPOINTMOVECOMMAND_H

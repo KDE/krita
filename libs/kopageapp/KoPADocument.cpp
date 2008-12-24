@@ -635,4 +635,9 @@ void KoPADocument::insertIntoDataCenterMap(QString key, KoDataCenter *dc)
     d->dataCenterMap[key] = dc;
 }
 
+
+void KoPADocument::removePage( KoPAPageBase * page )
+{
+}
+
 #include "KoPADocument.moc"

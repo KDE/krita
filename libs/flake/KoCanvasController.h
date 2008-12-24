@@ -49,10 +49,6 @@ class KoCanvasBase;
  * area, and when the view on the document is near its edges, smaller.
  * In your canvas widget code, you can find the right place in your
  * document in pixel coordinates by adding the documentOffset
- *
- * XXX: Maybe have different sized margins for top, left, right and
- * bottom? Now it's one config setting.
- *
  */
 class FLAKE_EXPORT KoCanvasController : public QAbstractScrollArea
 {
@@ -236,6 +232,17 @@ public:
      */
     void pan(const QPoint &distance);
 
+    /**
+     * Returns the current margin that is used to pad the canvas with.
+     * This value is read from the KConfig property "canvasmargin"
+     */
+    int margin() const;
+
+    /**
+     * Set the new margin to pad the canvas with.
+     */
+    void setMargin(int margin);
+
 signals:
     /**
      * Emitted when a previously added canvas is about to be removed.
@@ -366,7 +373,7 @@ private slots:
 private:
 
     class Private;
-    Private * const m_d;
+    Private * const d;
 };
 
 #endif

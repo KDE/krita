@@ -104,13 +104,6 @@ public slots:
     */
     void setDocumentSize( const QSizeF &documentSize );
 
-    /**
-     * Sets a fitting margin that is used when zooming to page size/width.
-     * Note that the fit margin is given in pixels.
-     * @param margin the new fit margin to use, the default is zero
-     */
-    void setFitMargin( int margin );
-
 signals:
     /**
      * This signal is emitted whenever either the zoommode or the zoom level is changed by the user.

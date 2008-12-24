@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -161,6 +161,15 @@ public:
      */
     int takePage( KoPAPageBase *page );
 
+    /**
+     * Remove the page from the document
+     *
+     * This generates the command and adds the command that deletes the page
+     *
+     * @param page The page that gets removed
+     */
+   virtual void removePage( KoPAPageBase * page );
+
     void addShape( KoShape *shape );
     void removeShape( KoShape* shape );
 
@@ -260,6 +269,16 @@ protected:
      * The default impementation does nothing
      */
     virtual void postRemoveShape( KoPAPageBase * page, KoShape * shape );
+
+    /**
+     * This function is called with the command that will remove the page
+     * given.
+     * The default implementation is empty.
+     *
+     * @param page The page that will be removed
+     * @param parent The command that will be used to delete the page
+     */
+    //virtual void pageRemoved( KoPAPageBase * page, QUndoCommand * parent );
 
     /**
      * @brief Enables/Disables the given actions in all views

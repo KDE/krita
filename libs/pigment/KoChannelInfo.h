@@ -21,14 +21,13 @@
 
 #include <QtGui/QColor>
 #include <QtCore/QString>
-#include "ksharedptr.h"
 
 /**
  * This class gives some basic information about a channel,
  * that is, one of the components that makes up a particular
  * pixel.
  */
-class KoChannelInfo : public KShared {
+class KoChannelInfo {
 public:
     /// enum to define the type of the channel
     enum enumChannelType {

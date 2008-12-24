@@ -131,7 +131,7 @@ void KoLayoutVisitor::relayout() {
     };
 
     Layouter layouter;
-    foreach(Item item, d->items)
+    foreach(const Item & item, d->items)
         layouter.add(item);
     layouter.finish();
 }

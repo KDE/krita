@@ -329,7 +329,7 @@ void TestPathShape::removePoint()
     QPainterPath ppath(QPointF(20, 10));
     ppath.lineTo(15, 25);
     ppath.moveTo(40, 30);
-    ppath.cubicTo(40, 30, 30, 45, 30, 40);
+    ppath.quadTo(30, 45, 30, 40);
     ppath.closeSubpath();
 
     QVERIFY(ppath == path.outline());
@@ -493,7 +493,7 @@ void TestPathShape::openSubpath()
     ppath.lineTo(60, 60);
     ppath.moveTo(140, 100);
     ppath.lineTo(100, 100);
-    ppath.cubicTo(120, 120, 140, 140, 140, 140);
+    ppath.quadTo(120, 120, 140, 140);
 
     QVERIFY(ppath == path.outline());
 }

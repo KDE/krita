@@ -21,7 +21,6 @@
 
 #include <QDomElement>
 
-#include <kdebug.h>
 #include <klocale.h>
 
 #include "../compositeops/KoCompositeOpOver.h"
@@ -47,7 +46,7 @@ KoLabColorSpace::KoLabColorSpace( KoColorProfile *p) :
 
 bool KoLabColorSpace::willDegrade(ColorSpaceIndependence independence) const
 {
-    if (independence == TO_RGBA8) 
+    if (independence == TO_RGBA8)
         return true;
     else
         return false;

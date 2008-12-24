@@ -1,3 +1,4 @@
+
 /* This file is part of the KDE project
  * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
@@ -45,6 +46,9 @@ public slots:
     /// Sets a new color to be displayed
     void setColor( const QColor &color );
 
+    /// Returns the current color
+    QColor color() const;
+
 protected:
     /// reimplemented
     virtual void paintEvent( QPaintEvent * );
@@ -63,3 +67,4 @@ private:
 };
 
 #endif // KOCOLORCOMBOBOX_H
+

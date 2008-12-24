@@ -51,6 +51,9 @@ public:
     /// revert the actions done in redo
     void undo();
 
+    /// Returns list of inserted points
+    QList<KoPathPoint*> insertedPoints() const;
+    
 private:
     QList<KoPathPointData> m_pointDataList;
     QList<KoPathPoint*> m_points;

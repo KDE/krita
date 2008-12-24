@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2007
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,43 +17,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoProgressBar.h"
+#ifndef KOSHAPERENAMECOMMAND_H
+#define KOSHAPERENAMECOMMAND_H
 
-#include <QApplication>
+#include "flake_export.h"
+#include <QUndoCommand>
 
-KoProgressBar::KoProgressBar( QWidget * parent )
- : QProgressBar( parent )
+class QString;
+class KoShape;
+
+class FLAKE_EXPORT KoShapeRenameCommand : public QUndoCommand
 {
-}
+public:
+    KoShapeRenameCommand(KoShape *shape, const QString &newName, QUndoCommand *parent = 0);
+    virtual ~KoShapeRenameCommand();
 
-KoProgressBar::~KoProgressBar()
-{
-}
+    /// redo the command
+    void redo();
+    /// revert the actions done in redo
+    void undo();
 
-int KoProgressBar::maximum() const
-{
-    return QProgressBar::maximum();
-}
+private:
+    class Private;
+    Private * const d;
+};
 
-void KoProgressBar::setValue( int value )
-{
-    QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
-    if( value >= minimum() && value < maximum() )
-    {
-        QProgressBar::setValue( value );
-        setVisible( true );
-    } else {
-        setVisible( false );
-    }
-}
-
-void KoProgressBar::setRange( int minimum, int maximum )
-{
-    QProgressBar::setRange( minimum, maximum );
-}
-
-void KoProgressBar::setFormat( const QString & format )
-{
-    QProgressBar::setFormat( format );
-}
-
+#endif /* KOSHAPERENAMECOMMAND_H */

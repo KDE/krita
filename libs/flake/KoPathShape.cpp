@@ -68,6 +68,7 @@ void KoPathShape::saveOdf(KoShapeSavingContext & context) const
     saveOdfAttributes(context, OdfAllAttributes | OdfViewbox);
 
     context.xmlWriter().addAttribute("svg:d", toString(QMatrix()));
+    context.xmlWriter().addAttribute("koffice:nodeTypes", nodeTypes());
 
     saveOdfCommonChildElements(context);
     context.xmlWriter().endElement();
@@ -112,6 +113,7 @@ bool KoPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &c
     } else { // path loading
         KoPathShapeLoader loader(this);
         loader.parseSvg(element.attributeNS(KoXmlNS::svg, "d"), true);
+        loadNodeTypes(element);
     }
 
     applyViewboxTransformation(element);
@@ -305,10 +307,14 @@ const QPainterPath KoPathShape::outline() const
                 if (currProperties & KoPathPoint::StartSubpath) {
                     path.moveTo(currPoint->point());
                 }
-            } else if (activeCP || currPoint->activeControlPoint1()) {
+            } else if (activeCP && currPoint->activeControlPoint1()) {
                 path.cubicTo(
-                    activeCP ? lastPoint->controlPoint2() : lastPoint->point(),
-                    currPoint->activeControlPoint1() ? currPoint->controlPoint1() : currPoint->point(),
+                    lastPoint->controlPoint2(),
+                    currPoint->controlPoint1(),
+                    currPoint->point());
+            } else if( activeCP || currPoint->activeControlPoint1()) {
+                path.quadTo(
+                    activeCP ? lastPoint->controlPoint2() : currPoint->controlPoint1(),
                     currPoint->point());
             } else {
                 path.lineTo(currPoint->point());
@@ -316,11 +322,16 @@ const QPainterPath KoPathShape::outline() const
             if (currProperties & KoPathPoint::CloseSubpath && currProperties & KoPathPoint::StopSubpath) {
                 // add curve when there is a curve on the way to the first point
                 KoPathPoint * firstPoint = subpath->first();
-                if (currPoint->activeControlPoint2() || firstPoint->activeControlPoint1()) {
+                if (currPoint->activeControlPoint2() && firstPoint->activeControlPoint1()) {
                     path.cubicTo(
-                        currPoint->activeControlPoint2() ? currPoint->controlPoint2() : currPoint->point(),
-                        firstPoint->activeControlPoint1() ? firstPoint->controlPoint1() : firstPoint->point(),
+                        currPoint->controlPoint2(),
+                        firstPoint->controlPoint1(),
                         firstPoint->point());
+                }
+                else if(currPoint->activeControlPoint2() || firstPoint->activeControlPoint1()) {
+                    path.quadTo(
+                        currPoint->activeControlPoint2() ? currPoint->controlPoint2() : firstPoint->controlPoint1(),
+                        firstPoint->point());                
                 }
                 path.closeSubpath();
             }
@@ -1103,6 +1114,82 @@ QString KoPathShape::toString(const QMatrix &matrix) const
     }
 
     return d;
+}
+
+char nodeType( const KoPathPoint * point )
+{
+    if (point->properties() & KoPathPoint::IsSmooth) {
+        return 's';
+    }
+    else if (point->properties() & KoPathPoint::IsSymmetric) {
+        return 'z';
+    }
+    else {
+        return 'c';
+    }
+}
+
+QString KoPathShape::nodeTypes() const
+{
+    QString types;
+    KoSubpathList::const_iterator pathIt(m_subpaths.begin());
+    for (; pathIt != m_subpaths.end(); ++pathIt) {
+        KoSubpath::const_iterator it((*pathIt)->begin());
+        for (; it != (*pathIt)->end(); ++it) {
+            if (it == (*pathIt)->begin()) {
+                types.append( 'c' );
+            }
+            else {
+                types.append( nodeType( *it ) );
+            }
+
+            if ((*it)->properties() & KoPathPoint::StopSubpath
+                && (*it)->properties() & KoPathPoint::CloseSubpath) {
+                KoPathPoint * firstPoint = (*pathIt)->first();
+                types.append( nodeType( firstPoint ) );
+            }
+        }
+    }
+    return types;
+}
+
+void updateNodeType( KoPathPoint * point, const QChar & nodeType )
+{
+    if (nodeType == 's') {
+        point->setProperty(KoPathPoint::IsSmooth);
+    }
+    else if (nodeType == 'z') {
+        point->setProperty(KoPathPoint::IsSymmetric);
+    }
+}
+
+void KoPathShape::loadNodeTypes(const KoXmlElement & element)
+{
+    if (element.hasAttributeNS(KoXmlNS::koffice, "nodeTypes")) {
+        QString nodeTypes = element.attributeNS(KoXmlNS::koffice, "nodeTypes");
+        QString::const_iterator nIt(nodeTypes.begin());
+        KoSubpathList::const_iterator pathIt(m_subpaths.begin());
+        for (; pathIt != m_subpaths.end(); ++pathIt) {
+            KoSubpath::iterator it((*pathIt)->begin());
+            for (; it != (*pathIt)->end(); ++it, nIt++) {
+                // be sure not to crash if there are not enough nodes in nodeTypes
+                if (nIt == nodeTypes.end()) {
+                    kWarning(30006) << "not enough nodes in koffice:nodeTypes";
+                    return;
+                }
+                // the first node is always of type 'c'
+                if (it != (*pathIt)->begin()) {
+                    updateNodeType(*it, *nIt);
+                }
+
+                if ((*it)->properties() & KoPathPoint::StopSubpath
+                    && (*it)->properties() & KoPathPoint::CloseSubpath) {
+                    ++nIt;
+                    updateNodeType((*pathIt)->first(), *nIt);
+                }
+            }
+        }
+    }
 }
 
 Qt::FillRule KoPathShape::fillRule() const

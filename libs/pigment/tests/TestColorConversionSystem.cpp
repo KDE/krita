@@ -21,8 +21,6 @@
 
 #include <qtest_kde.h>
 
-#include <kdebug.h>
-
 #include <DebugPigment.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>

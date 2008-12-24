@@ -43,7 +43,7 @@ void KoPathToolSelection::paint(QPainter &painter, const KoViewConverter &conver
 {
     int handleRadius = m_tool->canvas()->resourceProvider()->handleRadius();
 
-    KoPathShapePointMap::iterator it(m_shapePointMap.begin());
+    PathShapePointMap::iterator it(m_shapePointMap.begin());
     for (; it != m_shapePointMap.end(); ++it) {
         painter.save();
 
@@ -59,6 +59,9 @@ void KoPathToolSelection::paint(QPainter &painter, const KoViewConverter &conver
 
 void KoPathToolSelection::add(KoPathPoint * point, bool clear)
 {
+    if( ! point )
+        return;
+    
     bool allreadyIn = false;
     if (clear) {
         if (size() == 1 && m_selectedPoints.contains(point)) {
@@ -73,7 +76,7 @@ void KoPathToolSelection::add(KoPathPoint * point, bool clear)
     if (!allreadyIn) {
         m_selectedPoints.insert(point);
         KoPathShape * pathShape = point->parent();
-        KoPathShapePointMap::iterator it(m_shapePointMap.find(pathShape));
+        PathShapePointMap::iterator it(m_shapePointMap.find(pathShape));
         if (it == m_shapePointMap.end()) {
             it = m_shapePointMap.insert(pathShape, QSet<KoPathPoint *>());
         }
@@ -185,11 +188,6 @@ QList<KoPathPointData> KoPathToolSelection::selectedSegmentsData() const
     return pointData;
 }
 
-const KoPathShapePointMap & KoPathToolSelection::selectedPointMap() const
-{
-    return m_shapePointMap;
-}
-
 QList<KoPathShape*> KoPathToolSelection::selectedShapes() const
 {
     return m_selectedShapes;
@@ -202,6 +200,7 @@ void KoPathToolSelection::setSelectedShapes(const QList<KoPathShape*> shapes)
 
 void KoPathToolSelection::repaint()
 {
+    update();
     foreach(KoPathPoint *p, m_selectedPoints) {
         m_tool->repaint(p->boundingRect(false));
     }
@@ -209,15 +208,26 @@ void KoPathToolSelection::repaint()
 
 void KoPathToolSelection::update()
 {
-    KoPathShapePointMap::iterator it(m_shapePointMap.begin());
+    bool selectionHasChanged = false;
+    
+    PathShapePointMap::iterator it(m_shapePointMap.begin());
     while (it != m_shapePointMap.end()) {
-        if (! m_selectedShapes.contains(it.key())) {
+        KoParameterShape *parameterShape = dynamic_cast<KoParameterShape*>(it.key());
+        bool isParametricShape = parameterShape && parameterShape->isParametricShape();
+        if (! m_selectedShapes.contains(it.key()) || isParametricShape) {
+            QSet<KoPathPoint *>::iterator pointIt(it.value().begin());
+            for (; pointIt != it.value().end(); ++pointIt) {
+                m_selectedPoints.remove( *pointIt );
+            }    
             it = m_shapePointMap.erase(it);
+            selectionHasChanged = true;
         } else {
             QSet<KoPathPoint *>::iterator pointIt(it.value().begin());
             while (pointIt != it.value().end()) {
                 if ((*pointIt)->parent()->pathPointIndex(*pointIt) == KoPathPointIndex(-1, -1)) {
+                    m_selectedPoints.remove(*pointIt);
                     pointIt = it.value().erase(pointIt);
+                    selectionHasChanged = true;
                 } else {
                     ++pointIt;
                 }
@@ -225,6 +235,9 @@ void KoPathToolSelection::update()
             ++it;
         }
     }
+    
+    if (selectionHasChanged)
+        emit selectionChanged();
 }
 
 bool KoPathToolSelection::hasSelection()

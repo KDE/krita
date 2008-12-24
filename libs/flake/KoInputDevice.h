@@ -25,6 +25,7 @@
 
 #include <QHash>
 #include <QTabletEvent>
+#include <QDebug>
 
 /**
  * This class represents an input device.
@@ -91,6 +92,10 @@ private:
     class Private;
     Private * const d;
 };
+
+Q_DECLARE_METATYPE( KoInputDevice )
+
+FLAKE_EXPORT QDebug operator<<(QDebug debug, const KoInputDevice &device);
 
 inline uint qHash(const KoInputDevice & key)
 {

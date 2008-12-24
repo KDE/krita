@@ -38,14 +38,14 @@ QMenu* KoSelectShapeAction::createShapeMenu()
 {
     // get all available shapes from the registry and fill the menu
     QMenu* menu = new QMenu();
-    foreach( QString shapeId, KoShapeRegistry::instance()->keys() ) {
+    foreach( const QString & shapeId, KoShapeRegistry::instance()->keys() ) {
         KoShapeFactory* factory = KoShapeRegistry::instance()->value( shapeId );
 
         // if there are templates create a submenu
         if( !factory->templates().isEmpty() ) {
             QMenu* tmp = menu->addMenu( KIcon( factory->icon() ), factory->name() );
             tmp->setToolTip( factory->toolTip() );
-            foreach( KoShapeTemplate shapeTemplate, factory->templates() ) {
+            foreach( const KoShapeTemplate & shapeTemplate, factory->templates() ) {
                 QAction* action = tmp->addAction( shapeTemplate.name );
                 action->setIcon( KIcon( shapeTemplate.icon ) );
                 action->setToolTip( shapeTemplate.toolTip );

@@ -117,6 +117,7 @@ set(flake_SRCS
     commands/KoPathReverseCommand.cpp
     commands/KoEventActionAddCommand.cpp
     commands/KoEventActionRemoveCommand.cpp
+    commands/KoShapeRenameCommand.cpp
     tools/KoCreatePathTool.cpp
     tools/KoCreatePathToolFactory.cpp
     tools/KoCreateShapeStrategy.cpp
@@ -155,6 +156,7 @@ kde4_add_ui_files(flake_SRCS
 kde4_add_library(flake SHARED ${flake_SRCS})
 
 target_link_libraries(flake ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} pigmentcms)
+target_link_libraries(flake LINK_INTERFACE_LIBRARIES pigmentcms)
 
 if(HAVE_OPENGL)
     target_link_libraries(flake ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY})
@@ -162,7 +164,6 @@ endif(HAVE_OPENGL)
 
 set_target_properties(flake PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
-    ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "pigmentcms"
 )
 
 ########### install files ###############

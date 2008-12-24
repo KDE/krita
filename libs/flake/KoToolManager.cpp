@@ -133,7 +133,7 @@ public:
             uniqueToolIds.insert(tl, tool->uniqueId());
             toolsHash.insert(tool->id(), tl);
             tl->setObjectName(tool->id());
-            foreach(KAction *action, tl->actions().values())
+            foreach(KAction *action, tl->actions())
                 action->setEnabled(false);
             KoZoomTool *zoomTool = dynamic_cast<KoZoomTool*>(tl);
             if (zoomTool)
@@ -181,7 +181,7 @@ void KoToolManager::setup()
 
     KoShapeRegistry::instance();
     KoToolRegistry *registry = KoToolRegistry::instance();
-    foreach(QString id, registry->keys()) {
+    foreach(const QString & id, registry->keys()) {
         ToolHelper *t = new ToolHelper(registry->value(id));
         d->tools.append(t);
     }
@@ -244,8 +244,10 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
     CanvasData *cd = d->canvasses.value(controller).first();
     foreach(KoTool *tool, cd->allTools) {
         QHash<QString, KAction*> actions = tool->actions();
-        foreach(QString name, actions.keys())
+
+        foreach(const QString & name, actions.keys())
             ac->addAction(name, actions[name]);
+
     }
 }
 
@@ -321,7 +323,7 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary)
     }
 
     if (newActiveTool) {
-        foreach(KAction *action, d->canvasData->activeTool->actions().values())
+        foreach(KAction *action, d->canvasData->activeTool->actions())
             action->setEnabled(false);
         // repaint the decorations before we deactivate the tool as it might deleted
         // data needed for the repaint
@@ -353,7 +355,7 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary)
 
     // we expect the tool to emit a cursor on activation.  This is for quick-fail :)
     d->canvasData->canvas->canvas()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
-    foreach(KAction *action, d->canvasData->activeTool->actions().values()) {
+    foreach(KAction *action, d->canvasData->activeTool->actions()) {
         action->setEnabled(true);
         d->canvasData->canvas->addAction(action);
     }
@@ -519,9 +521,11 @@ void KoToolManager::detachCanvas(KoCanvasController *controller)
 
     QList<KoTool *> tools;
     foreach(CanvasData *cd, d->canvasses.value(controller)) {
-        foreach(KoTool *tool, cd->allTools.values())
+
+        foreach(KoTool *tool, cd->allTools)
             if (! tools.contains(tool))
                 tools.append(tool);
+
         delete cd;
     }
     foreach(KoTool *tool, tools) {

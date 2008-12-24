@@ -35,6 +35,7 @@
 #include <KoShapeGroup.h>
 #include <KoShapeGroupCommand.h>
 #include <KoShapeUngroupCommand.h>
+#include <KoShapeRenameCommand.h>
 #include <KoZoomHandler.h>
 
 #include <klocale.h>
@@ -253,8 +254,11 @@ bool KoPADocumentModel::setData(const QModelIndex &index, const QVariant &value,
     {
         case Qt::DisplayRole:
         case Qt::EditRole:
-            shape->setName( value.toString() );
-            break;
+        {
+            QUndoCommand * cmd = new KoShapeRenameCommand( shape, value.toString() );
+            // TODO 2.1 use different text for the command if e.g. it is a page/slide or layer
+            m_document->addCommand( cmd );
+        }   break;
         case PropertiesRole:
             setProperties( shape, value.value<PropertyList>());
             break;

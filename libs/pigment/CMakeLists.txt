@@ -83,9 +83,12 @@ target_link_libraries(
     ${LINK_OPENCTL_LIB}
     )
 
+target_link_libraries(
+    pigmentcms LINK_INTERFACE_LIBRARIES komain ${LCMS_LIBRARIES} ${LINK_OPENEXR_LIB} ${LINK_OPENCTL_LIB}
+)
+
 set_target_properties(pigmentcms PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
-    ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "komain;${LCMS_LIBRARIES}"
 )
 
 install(TARGETS pigmentcms  ${INSTALL_TARGETS_DEFAULT_ARGS})

@@ -50,12 +50,17 @@ public:
     virtual void enterEvent(QEvent *event);
     virtual void leaveEvent(QEvent *event);
     virtual void paintEvent(QPaintEvent *event);
+
+    QSize m_styleSize;
+    int m_iconSize;
 };
 
 KoDockWidgetTitleBarButton::KoDockWidgetTitleBarButton(KoDockWidgetTitleBar *titleBar)
         : QAbstractButton(titleBar)
 {
     setFocusPolicy(Qt::NoFocus);
+    m_iconSize = 0;
+    m_styleSize = QSize(0,0);
 }
 
 QSize KoDockWidgetTitleBarButton::sizeHint() const
@@ -65,9 +70,14 @@ QSize KoDockWidgetTitleBarButton::sizeHint() const
     const int margin = style()->pixelMetric(QStyle::PM_DockWidgetTitleBarButtonMargin, 0, this);
     if (icon().isNull())
         return QSize(margin, margin);
+    
     int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize, 0, this);
-    const QPixmap pm = icon().pixmap(iconSize);
-    return QSize(pm.width() + margin, pm.height() + margin);
+    if (iconSize != m_iconSize) {
+        const_cast<KoDockWidgetTitleBarButton*>(this)->m_iconSize = iconSize;
+        const QPixmap pm = icon().pixmap(iconSize);
+        const_cast<KoDockWidgetTitleBarButton*>(this)->m_styleSize = QSize(pm.width() + margin, pm.height() + margin);
+    }
+    return m_styleSize;
 }
 
 // redraw the button when the mouse enters or leaves it

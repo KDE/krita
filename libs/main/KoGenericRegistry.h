@@ -80,7 +80,7 @@ public:
     }
 
     /**
-     * This function remove an item from the registry
+     * This function removes an item from the registry
      */
     void remove(const QString &id) {
         m_hash.remove(id);

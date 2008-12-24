@@ -49,7 +49,8 @@ KoPagePreviewWidget::~KoPagePreviewWidget()
     delete d;
 }
 
-void KoPagePreviewWidget::paintEvent(QPaintEvent *event) {
+void KoPagePreviewWidget::paintEvent(QPaintEvent *event)
+{
     Q_UNUSED(event);
     // resolution[XY] is in pixel per pt
     qreal resolutionX = POINT_TO_INCH( static_cast<qreal>(KoGlobal::dpiX()) );
@@ -88,18 +89,20 @@ void KoPagePreviewWidget::paintEvent(QPaintEvent *event) {
     // paint scale
 }
 
-void KoPagePreviewWidget::drawPage(QPainter &painter, qreal zoom, const QRect &dimensions, bool left) {
+void KoPagePreviewWidget::drawPage(QPainter &painter, qreal zoom, const QRect &dimensions, bool left)
+{
     painter.fillRect(dimensions, QBrush(palette().base()));
     painter.setPen(QPen(palette().color(QPalette::Dark)));
     painter.drawRect(dimensions);
 
     // draw text areas
     QRect textArea = dimensions;
-    if(d->pageLayout.top == 0 && d->pageLayout.bottom == 0 &&
-            ( d->pageLayout.left == 0 && d->pageLayout.right == 0) ||
-            ( d->pageLayout.pageEdge == 0 && d->pageLayout.bindingSide == 0))
+    if ((d->pageLayout.top == 0 && d->pageLayout.bottom == 0 &&
+            d->pageLayout.left == 0 && d->pageLayout.right == 0) ||
+            ( d->pageLayout.pageEdge == 0 && d->pageLayout.bindingSide == 0)) {
         // no margin
         return;
+    }
     else {
         textArea.setTop(textArea.top() + qRound(zoom * d->pageLayout.top));
         textArea.setBottom(textArea.bottom() - qRound(zoom * d->pageLayout.bottom));
@@ -128,12 +131,14 @@ void KoPagePreviewWidget::drawPage(QPainter &painter, qreal zoom, const QRect &d
 
 }
 
-void KoPagePreviewWidget::setPageLayout(const KoPageLayout &layout) {
+void KoPagePreviewWidget::setPageLayout(const KoPageLayout &layout)
+{
     d->pageLayout = layout;
     update();
 }
 
-void KoPagePreviewWidget::setColumns(const KoColumns &columns) {
+void KoPagePreviewWidget::setColumns(const KoColumns &columns)
+{
     d->columns = columns;
     update();
 }

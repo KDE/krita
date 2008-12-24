@@ -140,5 +140,5 @@ void KoPathShapeLoader::svgArcTo(qreal x, qreal y, qreal r1, qreal r2, qreal ang
 
 void KoPathShapeLoader::svgClosePath()
 {
-    d->path->close();
+    d->path->closeMerge();
 }

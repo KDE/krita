@@ -28,8 +28,8 @@
 #include <cmath>
 #include <lcms.h>
 
-#include <kdebug.h>
-#include <KoChromaticities.h>
+#include "DebugPigment.h"
+#include "KoChromaticities.h"
 
 class KoLcmsColorProfileContainer::Private {
 public:
@@ -75,7 +75,7 @@ QByteArray KoLcmsColorProfileContainer::lcmsProfileToByteArray(const cmsHPROFILE
     }
     else
     {
-        kError() << "Couldn't resize the profile buffer, system is probably running out of memory.";
+        errorPigment << "Couldn't resize the profile buffer, system is probably running out of memory.";
         rawData.resize(0);
     }
     return rawData;
@@ -111,7 +111,7 @@ QByteArray KoLcmsColorProfileContainer::createFromChromacities(const KoRGBChroma
         transferFunctions[i] = gammaTable;
     }
 
-    cmsHPROFILE profile = cmsCreateRGBProfile(&whitePoint, &primaries, 
+    cmsHPROFILE profile = cmsCreateRGBProfile(&whitePoint, &primaries,
                                               transferFunctions);
     QString name = _profileName;
 
@@ -134,7 +134,7 @@ QByteArray KoLcmsColorProfileContainer::createFromChromacities(const KoRGBChroma
 
     cmsAddTag(profile, icSigDeviceModelDescTag, name.toLatin1().data());
 
-    // Clear the default manufacturer's tag that is set to "(lcms internal)" 
+    // Clear the default manufacturer's tag that is set to "(lcms internal)"
     QByteArray ba("");
     cmsAddTag(profile, icSigDeviceMfgDescTag, ba.data());
 
@@ -259,7 +259,7 @@ static KoCIExyY RGB2xyY(cmsHPROFILE RGBProfile, qreal red, qreal green, qreal bl
     const DWORD outputFormat = TYPE_XYZ_DBL;
     const DWORD transformFlags = cmsFLAGS_NOTPRECALC;
 
-    cmsHTRANSFORM transform = cmsCreateTransform(RGBProfile, inputFormat, XYZProfile, outputFormat, 
+    cmsHTRANSFORM transform = cmsCreateTransform(RGBProfile, inputFormat, XYZProfile, outputFormat,
                                                  INTENT_ABSOLUTE_COLORIMETRIC, transformFlags);
 
     struct XYZPixel {

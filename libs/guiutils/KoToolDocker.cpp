@@ -28,6 +28,13 @@ public:
     Private() : currentWidget(0) {}
     QWidget *currentWidget;
     QWidget *minimalWidget; //used to force the docker to a minimal size
+
+    void optionWidgetDestroyed(QObject* child)
+    {
+        if (child == currentWidget)
+            currentWidget = 0;
+    }
+
 };
 
 
@@ -55,6 +62,7 @@ bool KoToolDocker::hasOptionWidget()
 void KoToolDocker::removeOptionWidget()
 {
     if(d->currentWidget) {
+        disconnect(d->currentWidget, SIGNAL(destroyed(QObject*)), this, SLOT(optionWidgetDestroyed(QObject*)));
         d->currentWidget->hide();
         d->currentWidget->setParent(0);
     }
@@ -71,6 +79,7 @@ void KoToolDocker::newOptionWidget(QWidget *optionWidget) {
         d->currentWidget->setParent(0);
     }
     d->currentWidget = optionWidget;
+    connect(d->currentWidget, SIGNAL(destroyed(QObject*)), this, SLOT(optionWidgetDestroyed(QObject*)));
     setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX); // will be overwritten again next
     setWidget(optionWidget);
     d->minimalWidget->setParent(0);

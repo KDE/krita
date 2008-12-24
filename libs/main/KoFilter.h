@@ -22,7 +22,6 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QMap>
-#include <Qt3Support/Q3PtrStack>
 #include "komain_export.h"
 class QIODevice;
 class KoFilterChain;
@@ -300,12 +299,6 @@ private:
      * These methods are declared friends of the KoFilterChain
      */
     void filterChainLeaveDirectory() const;
-
-    /**
-     * A stack which keeps track of the current part references.
-     * We push one PartState structure for every embedding level.
-     */
-    Q3PtrStack<PartState> m_partStack;
 
     class Private;
     Private * const d;

@@ -18,9 +18,7 @@
 */
 
 #include "KoColorProfile.h"
-
-#include <kdebug.h>
-
+#include "DebugPigment.h"
 struct KoColorProfile::Private
 {
     QString name;
@@ -30,7 +28,7 @@ struct KoColorProfile::Private
 
 KoColorProfile::KoColorProfile(const QString &fileName) : d(new Private)
 {
-//     kDebug(DBG_PIGMENT) <<" Profile filename =" << fileName;
+//     dbgPigment <<" Profile filename =" << fileName;
     d->fileName = fileName;
 }
 

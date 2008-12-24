@@ -55,10 +55,7 @@ KoTool::KoTool(KoCanvasBase *canvas)
 
 KoTool::~KoTool()
 {
-    /*TODO change this to map behaviour
-        if (d->optionWidget && !d->optionWidget->parentWidget())
-            delete d->optionWidget;
-    */
+    qDeleteAll(d->optionWidgets);
     delete d;
 }
 

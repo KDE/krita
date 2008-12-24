@@ -26,7 +26,6 @@
 #include <QByteArray>
 #include <QIODevice>
 #include <QWidget>
-#include <QtCrypto>
 #include <QBuffer>
 #include <kpassworddialog.h>
 #include <knewpassworddialog.h>

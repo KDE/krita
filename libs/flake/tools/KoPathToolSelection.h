@@ -86,7 +86,7 @@ public:
     int objectCount() const;
 
     /**
-    * @brief Get the number of path objects in the selection
+    * @brief Get the number of path points in the selection
     *
     * @return number of points in the selection
     */
@@ -120,14 +120,6 @@ public:
     */
     QList<KoPathPointData> selectedSegmentsData() const;
 
-    /**
-    * @brief Get the selected point map
-    *
-    * @return KoSelectedPointMap containing all objects and selected points
-    * typedef QMap<KoPathShape *, QSet<KoPathPoint *> > KoSelectedPointMap;
-    */
-    const KoPathShapePointMap & selectedPointMap() const;
-
     /// Returns list of selected shapes
     QList<KoPathShape*> selectedShapes() const;
 
@@ -157,8 +149,10 @@ signals:
     void selectionChanged();
 
 private:
+    typedef QMap<KoPathShape *, QSet<KoPathPoint *> > PathShapePointMap;
+    
     QSet<KoPathPoint *> m_selectedPoints;
-    KoPathShapePointMap m_shapePointMap;
+    PathShapePointMap m_shapePointMap;
     KoPathTool * m_tool;
     QList<KoPathShape*> m_selectedShapes;
 };

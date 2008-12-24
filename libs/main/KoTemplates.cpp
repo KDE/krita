@@ -218,14 +218,14 @@ void KoTemplateTree::readGroups()
 {
 
     QStringList dirs = m_componentData.dirs()->resourceDirs(m_templateType);
-    foreach(QString dirName, dirs) {
+    foreach(const QString & dirName, dirs) {
         //kDebug( 30003 ) <<"dir:" << *it;
         QDir dir(dirName);
         // avoid the annoying warning
         if (!dir.exists())
             continue;
         QStringList templateDirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-        foreach(QString templateDirName, templateDirs) {
+        foreach(const QString & templateDirName, templateDirs) {
             QDir templateDir(dirName + templateDirName);
             QString name = templateDirName;
             QString defaultTab;
@@ -355,7 +355,7 @@ void KoTemplateTree::writeTemplate(KoTemplate *t, KoTemplateGroup *group,
     if (t->isHidden() && QFile::exists(fileName))
         return;
     QString fill;
-    while (KIO::NetAccess::exists(fileName, true, 0)) {
+    while (KIO::NetAccess::exists(fileName, KIO::NetAccess::SourceSide, 0)) {
         fill += '_';
         fileName = path + fill + name + ".desktop";
     }

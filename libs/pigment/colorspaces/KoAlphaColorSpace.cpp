@@ -23,7 +23,6 @@
 #include <QImage>
 #include <QBitArray>
 
-#include <kdebug.h>
 #include <klocale.h>
 
 #include <lcms.h>
@@ -48,7 +47,7 @@ namespace {
     public:
 
         using KoCompositeOp::composite;
-        
+
         void composite(quint8 *dst,
                        qint32 dststride,
                        const quint8 *src,
@@ -368,13 +367,13 @@ void KoAlphaColorSpace::fromQColor(const QColor& c, quint8 *dst, const KoColorPr
 
 void KoAlphaColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorProfile * /*profile*/) const
 {
-    c->setRgba(255, 255, 255, src[PIXEL_MASK]);
+    c->setRgba(qRgba(255, 255, 255, src[PIXEL_MASK]));
 }
 
 quint8 KoAlphaColorSpace::difference(const quint8 *src1, const quint8 *src2) const
 {
     // Arithmetic operands smaller than int are converted to int automatically
-    return QABS(src2[PIXEL_MASK] - src1[PIXEL_MASK]);
+    return qAbs(src2[PIXEL_MASK] - src1[PIXEL_MASK]);
 }
 
 void KoAlphaColorSpace::mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const

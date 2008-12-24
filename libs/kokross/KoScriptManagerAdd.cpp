@@ -123,7 +123,7 @@ KoScriptManagerAddFileWidget::KoScriptManagerAddFileWidget(KoScriptManagerAddWiz
     d->filewidget = new KFileWidget(KUrl(startDirOrVariable), this);
 
     QStringList mimetypes;
-    foreach(QString interpretername, Kross::Manager::self().interpreters()) {
+    foreach(const QString &interpretername, Kross::Manager::self().interpreters()) {
         Kross::InterpreterInfo* info = Kross::Manager::self().interpreterInfo(interpretername);
         Q_ASSERT( info );
         mimetypes.append( info->mimeTypes().join(" ").trimmed() );

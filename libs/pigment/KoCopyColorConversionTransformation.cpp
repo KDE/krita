@@ -19,8 +19,6 @@
 
 #include "KoCopyColorConversionTransformation.h"
 
-#include <kdebug.h>
-
 #include <KoColorSpace.h>
 
 // --- KoCopyColorConversionTransformation ---

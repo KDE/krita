@@ -77,6 +77,7 @@ KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KA
     : d(new Private(this, specialButtons))
 {
     d->canvasController = co;
+    d->fitMargin = co->margin();
     d->zoomHandler = zh;
     connect(d->action, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
             this, SLOT(setZoom(KoZoomMode::Mode, qreal)));
@@ -177,11 +178,6 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
 
     // Finally ask the canvasController to recenter
     d->canvasController->recenterPreferred();
-}
-
-void KoZoomController::setFitMargin( int margin )
-{
-    d->fitMargin = margin;
 }
 
 #include "KoZoomController.moc"

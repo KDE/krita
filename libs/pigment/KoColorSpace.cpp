@@ -20,11 +20,10 @@
 #include <QByteArray>
 #include <QBitArray>
 
-#include <kdebug.h>
 
 #include "KoColorSpace.h"
 #include "KoChannelInfo.h"
-
+#include "DebugPigment.h"
 #include "KoCompositeOp.h"
 #include "KoColorTransformation.h"
 #include "KoColorTransformationFactory.h"
@@ -76,15 +75,15 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp
 
 KoColorSpace::~KoColorSpace()
 {
-    foreach(KoCompositeOp* op, d->compositeOps.values())
-    {
-        delete op;
-    }
+    qDeleteAll(d->compositeOps);
     foreach(KoChannelInfo * channel, d->channels)
     {
         delete channel;
     }
-    KoColorSpaceRegistry::instance()->colorConversionCache()->colorSpaceIsDestroyed(this);
+    KoColorConversionCache* cache = KoColorSpaceRegistry::instance()->colorConversionCache();
+    if (cache) {
+        cache->colorSpaceIsDestroyed(this);
+    }
     delete d->mixColorsOp;
     delete d->convolutionOp;
     delete d;
@@ -177,7 +176,7 @@ const KoCompositeOp * KoColorSpace::compositeOp(const QString & id) const
     if ( d->compositeOps.contains( id ) )
         return d->compositeOps.value( id );
     else {
-        kWarning() << "Asking for non-existent composite operation " << id << ", returning " << COMPOSITE_OVER;
+        warnPigment << "Asking for non-existent composite operation " << id << ", returning " << COMPOSITE_OVER;
         return d->compositeOps.value( COMPOSITE_OVER );
     }
 }

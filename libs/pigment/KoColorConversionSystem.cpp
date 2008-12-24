@@ -54,11 +54,7 @@ KoColorConversionSystem::KoColorConversionSystem() : d(new Private)
 
 KoColorConversionSystem::~KoColorConversionSystem()
 {
-    QList<Node*> nodes = d->graph.values();
-    foreach(Node* node, nodes)
-    {
-        delete node;
-    }
+    qDeleteAll(d->graph);
     foreach(Vertex* vertex, d->vertexes)
     {
         delete vertex;
@@ -256,7 +252,7 @@ KoColorConversionSystem::Node* KoColorConversionSystem::nodeFor(const KoColorCon
 QList<KoColorConversionSystem::Node*> KoColorConversionSystem::nodesFor( const QString& _modelId, const QString& _depthId )
 {
     QList<Node*> nodes;
-    foreach( Node* node, d->graph.values())
+    foreach( Node* node, d->graph)
     {
         if(node->modelId == _modelId and node->depthId == _depthId)
         {
@@ -298,7 +294,7 @@ void KoColorConversionSystem::createColorConverters(const KoColorSpace* colorSpa
     // Look for a color conversion
     Path* bestPath = 0;
     typedef QPair<KoID, KoID> KoID2KoID;
-    foreach( KoID2KoID possibility, possibilities)
+    foreach( const KoID2KoID & possibility, possibilities)
     {
         const KoColorSpaceFactory* csf = KoColorSpaceRegistry::instance()->get( KoColorSpaceRegistry::instance()->colorSpaceId( possibility.first.id(), possibility.second.id() )  );
         Q_ASSERT( csf );
@@ -427,7 +423,7 @@ QString KoColorConversionSystem::bestPathToDot(const QString& srcKey, const QStr
 {
     const Node* srcNode = 0;
     const Node* dstNode = 0;
-    foreach(Node* node, d->graph.values())
+    foreach(Node* node, d->graph)
     {
         if(node->id() == srcKey)
         {
@@ -518,9 +514,11 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl2
                             lessWorsePath = newP;
                         }
                         else if ( pQC.lessWorseThan( newP, lessWorsePath)  ) {
+
                             Q_ASSERT(newP->startNode()->id() == lessWorsePath->startNode()->id() );
                             Q_ASSERT(newP->endNode()->id() == lessWorsePath->endNode()->id());
-                            kDebug() << pQC.lessWorseThan( newP, lessWorsePath) << " " << newP << "  "<< lessWorsePath;
+                            warnPigment << pQC.lessWorseThan( newP, lessWorsePath) << " " << newP << "  "<< lessWorsePath;
+
                             delete lessWorsePath;
                             lessWorsePath = newP;
                         } else {
@@ -551,10 +549,10 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl2
     }
     if(lessWorsePath)
     {
-        kWarning(DBG_PIGMENT) << "No good path from " << srcNode->id() << " to " << dstNode->id() << " found : length = " << lessWorsePath->length() << " cost = " << lessWorsePath->cost << " referenceDepth = " << lessWorsePath->referenceDepth << " respectColorCorrectness = " << lessWorsePath->respectColorCorrectness << " isGood = " << lessWorsePath->isGood ;
+        warnPigment << "No good path from " << srcNode->id() << " to " << dstNode->id() << " found : length = " << lessWorsePath->length() << " cost = " << lessWorsePath->cost << " referenceDepth = " << lessWorsePath->referenceDepth << " respectColorCorrectness = " << lessWorsePath->respectColorCorrectness << " isGood = " << lessWorsePath->isGood ;
         return lessWorsePath;
     } 
-    kError(DBG_PIGMENT) << "No path from " << srcNode->id() << " to " << dstNode->id() << " found not ";
+    errorPigment << "No path from " << srcNode->id() << " to " << dstNode->id() << " found not ";
     return 0;
 }
 

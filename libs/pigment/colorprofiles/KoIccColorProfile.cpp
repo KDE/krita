@@ -29,10 +29,8 @@
 #endif
 
 #include <QFile>
-
-#include <kdebug.h>
-
-#include <KoChromaticities.h>
+#include "DebugPigment.h"
+#include "KoChromaticities.h"
 
 #include "KoLcmsColorProfileContainer.h"
 
@@ -227,7 +225,7 @@ bool KoIccColorProfile::load()
     if (init())
         return true;
 
-    kWarning() << "Failed to load profile from " << fileName();
+    warnPigment << "Failed to load profile from " << fileName();
     return false;
 }
 

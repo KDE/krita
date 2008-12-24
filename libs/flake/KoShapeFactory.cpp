@@ -36,8 +36,8 @@ public:
     }
 
     ~Private() {
-        foreach(KoShapeTemplate t, templates)
-        delete t.properties;
+        foreach(const KoShapeTemplate & t, templates)
+            delete t.properties;
         templates.clear();
     }
 
@@ -51,7 +51,6 @@ public:
     quint32 loadingPriority;
     QString odfNameSpace;
     QStringList odfElementNames;
-
 };
 
 

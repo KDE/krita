@@ -90,7 +90,7 @@ public:
         if (parent)
             parent->removeChild(me);
         foreach(KoShapeManager *manager, shapeManagers)
-        manager->remove(me);
+            manager->remove(me);
         delete userData;
         delete appData;
         if (border && ! border->removeUser())
@@ -107,7 +107,7 @@ public:
             parent->model()->childChanged(me, type);
         me->shapeChanged(type);
         foreach(KoShape * shape, dependees)
-        shape->notifyShapeChanged(me, type);
+            shape->notifyShapeChanged(me, type);
     }
 
     QSizeF size; // size in pt
@@ -388,7 +388,7 @@ void KoShape::update() const
     if (!d->shapeManagers.empty()) {
         QRectF rect(boundingRect());
         foreach(KoShapeManager * manager, d->shapeManagers)
-        manager->update(rect, this, true);
+            manager->update(rect, this, true);
     }
 }
 
@@ -437,8 +437,8 @@ void KoShape::copySettings(const KoShape *shape)
 {
     d->size = shape->size();
     d->connectors.clear();
-    foreach(QPointF point, shape->connectionPoints())
-    addConnectionPoint(point);
+    foreach(const QPointF & point, shape->connectionPoints())
+        addConnectionPoint(point);
     d->zIndex = shape->zIndex();
     d->visible = shape->isVisible();
 
@@ -542,8 +542,8 @@ QList<QPointF> KoShape::connectionPoints() const
     QList<QPointF> points;
     QSizeF s = size();
     // convert glue points to shape coordinates
-    foreach(QPointF cp, d->connectors)
-    points.append(QPointF(s.width() * cp.x(), s.height() * cp.y()));
+    foreach(const QPointF & cp, d->connectors)
+        points.append(QPointF(s.width() * cp.x(), s.height() * cp.y()));
 
     return points;
 }
@@ -744,7 +744,7 @@ void KoShape::setName(const QString & name)
 void KoShape::deleteLater()
 {
     foreach(KoShapeManager *manager, d->shapeManagers)
-    manager->remove(this);
+        manager->remove(this);
     d->shapeManagers.clear();
     new ShapeDeleter(this);
 }
@@ -874,7 +874,7 @@ bool KoShape::loadOdfAttributes(const KoXmlElement & element, KoShapeLoadingCont
 
     if (attributes & OdfAdditionalAttributes) {
         QSet<KoShapeLoadingContext::AdditionalAttributeData> additionalAttributeData = KoShapeLoadingContext::additionalAttributeData();
-        foreach(KoShapeLoadingContext::AdditionalAttributeData attributeData, additionalAttributeData) {
+        foreach(const KoShapeLoadingContext::AdditionalAttributeData & attributeData, additionalAttributeData) {
             if (element.hasAttributeNS(attributeData.ns, attributeData.tag)) {
                 QString value = element.attributeNS(attributeData.ns, attributeData.tag);
                 //kDebug(30006) << "load additional attribute" << attributeData.tag << value;

@@ -63,7 +63,7 @@ public:
             const channels_type *s = reinterpret_cast<const channels_type *>(srcRowStart);
             channels_type *d = reinterpret_cast<channels_type *>(dstRowStart);
 
-            const Q_UINT8 *mask = maskRowStart;
+            const quint8 *mask = maskRowStart;
 
             for (qint32 i = cols; i > 0; i--, s+=srcInc, d+=_CSTraits::channels_nb)
             {

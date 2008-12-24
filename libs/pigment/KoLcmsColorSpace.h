@@ -58,6 +58,14 @@ class KoLcmsInfo {
     private:
         Private* const d;
 };
+
+struct PIGMENTCMS_EXPORT KoLcmsDefaultTransformations {
+    cmsHTRANSFORM toRGB;
+    cmsHTRANSFORM fromRGB;
+    static cmsHPROFILE s_RGBProfile;
+    static QMap< QString, QMap< KoLcmsColorProfileContainer*, KoLcmsDefaultTransformations* > > s_transformations;
+};
+
 /**
  * This is the base class for all colorspaces that are based on the lcms library, for instance
  * RGB 8bits and 16bits, CMYK 8bits and 16bits, LAB...
@@ -110,8 +118,7 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
 
         struct Private {
             mutable quint8 * qcolordata; // A small buffer for conversion from and to qcolor.
-            cmsHTRANSFORM defaultToRGB;    // Default transform to 8 bit sRGB
-            cmsHTRANSFORM defaultFromRGB;  // Default transform from 8 bit sRGB
+            KoLcmsDefaultTransformations* defaultTransformations;
 
             mutable cmsHPROFILE   lastRGBProfile;  // Last used profile to transform to/from RGB
             mutable cmsHTRANSFORM lastToRGB;       // Last used transform to transform to RGB
@@ -135,15 +142,14 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             d->lastRGBProfile = 0;
             d->lastToRGB = 0;
             d->lastFromRGB = 0;
-            d->defaultFromRGB = 0;
-            d->defaultToRGB = 0;
+            d->defaultTransformations = 0;
         }
 
         virtual ~KoLcmsColorSpace()
         {
-            cmsCloseProfile(d->lastFromRGB);
+/*            cmsCloseProfile(d->lastFromRGB);
             cmsDeleteTransform( d->defaultFromRGB );
-            cmsDeleteTransform( d->defaultToRGB );
+            cmsDeleteTransform( d->defaultToRGB );*/
             delete d->colorProfile;
             delete[] d->qcolordata;
             delete d;
@@ -157,16 +163,32 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
 
             Q_ASSERT(d->profile );
 
-    // For conversions from default rgb
-            d->lastFromRGB = cmsCreate_sRGBProfile();
-
-            d->defaultFromRGB = cmsCreateTransform(d->lastFromRGB, TYPE_BGR_8,
+            if( KoLcmsDefaultTransformations::s_RGBProfile == 0 )
+            {
+              KoLcmsDefaultTransformations::s_RGBProfile = cmsCreate_sRGBProfile();
+            }
+            d->defaultTransformations = KoLcmsDefaultTransformations::s_transformations[ this->id() ][ d->profile ];
+            if( not d->defaultTransformations )
+            {
+              d->defaultTransformations = new KoLcmsDefaultTransformations;
+              d->defaultTransformations->fromRGB = cmsCreateTransform(KoLcmsDefaultTransformations::s_RGBProfile, TYPE_BGR_8,
                     d->profile->lcmsProfile(), this->colorSpaceType(),
                     INTENT_PERCEPTUAL, 0);
-
-            d->defaultToRGB =  cmsCreateTransform(d->profile->lcmsProfile(), this->colorSpaceType(),
-                    d->lastFromRGB, TYPE_BGR_8,
+              d->defaultTransformations->toRGB = cmsCreateTransform(d->profile->lcmsProfile(), this->colorSpaceType(),
+                    KoLcmsDefaultTransformations::s_RGBProfile, TYPE_BGR_8,
                     INTENT_PERCEPTUAL, 0);
+              KoLcmsDefaultTransformations::s_transformations[ this->id() ][ d->profile ] = d->defaultTransformations;
+            }
+    // For conversions from default rgb
+//             d->lastFromRGB = cmsCreate_sRGBProfile();
+// 
+//             d->defaultFromRGB = cmsCreateTransform(d->lastFromRGB, TYPE_BGR_8,
+//                     d->profile->lcmsProfile(), this->colorSpaceType(),
+//                     INTENT_PERCEPTUAL, 0);
+// 
+//             d->defaultToRGB =  cmsCreateTransform(d->profile->lcmsProfile(), this->colorSpaceType(),
+//                     d->lastFromRGB, TYPE_BGR_8,
+//                     INTENT_PERCEPTUAL, 0);
 
         }
     public:
@@ -190,9 +212,9 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             KoLcmsColorProfileContainer* profile = asLcmsProfile(koprofile);
             if (profile == 0) {
 	    // Default sRGB
-                if (!d->defaultFromRGB) return;
+                Q_ASSERT(d->defaultTransformations and d->defaultTransformations->fromRGB);
 
-                cmsDoTransform(d->defaultFromRGB, d->qcolordata, dst, 1);
+                cmsDoTransform(d->defaultTransformations->fromRGB, d->qcolordata, dst, 1);
             }
             else {
                 if (d->lastFromRGB == 0 || (d->lastFromRGB != 0 && d->lastRGBProfile != profile->lcmsProfile())) {
@@ -213,8 +235,8 @@ class KoLcmsColorSpace : public KoColorSpaceAbstract<_CSTraits>, public KoLcmsIn
             KoLcmsColorProfileContainer* profile = asLcmsProfile(koprofile);
             if (profile == 0) {
 	// Default sRGB transform
-                if (!d->defaultToRGB) return;
-                cmsDoTransform(d->defaultToRGB, const_cast <quint8 *>(src), d->qcolordata, 1);
+                Q_ASSERT(d->defaultTransformations and d->defaultTransformations->toRGB);
+                cmsDoTransform(d->defaultTransformations->toRGB, const_cast <quint8 *>(src), d->qcolordata, 1);
             }
             else {
                 if (d->lastToRGB == 0 || (d->lastToRGB != 0 && d->lastRGBProfile != profile->lcmsProfile())) {

@@ -30,7 +30,7 @@ class KoColor;
 class KoColorSet;
 
 /**
- * @short A colormanaged widget for chooosing a color from a colorset
+ * @short A colormanaged widget for choosing a color from a colorset
  *
  * KoColorSetWidget is a widget for choosing a color (colormanaged via pigment). Normally it shows an
  * icon and above a small rect of the current color. When the user moves the pointer on top of the widget

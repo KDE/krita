@@ -1,3 +1,4 @@
+
 /* This file is part of the KDE project
  * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
@@ -92,6 +93,11 @@ void KoColorComboBox::setColor( const QColor &color )
     update();
 }
 
+QColor KoColorComboBox::color() const
+{
+    return d->currentColor();
+}
+
 void KoColorComboBox::paintEvent( QPaintEvent * event )
 {
     QComboBox::paintEvent( event );
@@ -134,13 +140,13 @@ void KoColorComboBox::showPopup()
     }
 
     // default popup position is below the combobox
-    QPoint popupPos = mapToGlobal( QPoint( x() + width() - d->popup->width(), y()+height() ) );
+    QPoint popupPos = mapToGlobal( QPoint( width() - d->popup->width(), height() ) );
 
     // Make sure the popup is not drawn outside the screen area
     QRect screenRect = QApplication::desktop()->availableGeometry( d->popup );
     // if lower right corner is not on screen anymore, popup above combobox
     if( ! screenRect.contains( popupPos + QPoint( d->popup->width(), d->popup->height() ) ) )
-        popupPos = mapToGlobal( QPoint( x() + width() - d->popup->width(), y()-d->popup->height() ) );
+        popupPos = mapToGlobal( QPoint( width() - d->popup->width(), -d->popup->height() ) );
 
     d->popup->popup( popupPos );
 }
@@ -174,3 +180,4 @@ void KoColorComboBox::opacityHasChanged( int opacity )
 }
 
 #include "KoColorComboBox.moc"
+

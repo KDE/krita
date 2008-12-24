@@ -27,10 +27,10 @@ struct KoColorTransformationFactoryRegistry::Private
 };
 
 KoColorTransformationFactoryRegistry* KoColorTransformationFactoryRegistry::Private::s_registry = 0;
-        
+
 KoColorTransformationFactoryRegistry::KoColorTransformationFactoryRegistry() : d(new Private)
 {
-    
+
 }
 
 KoColorTransformationFactoryRegistry::~KoColorTransformationFactoryRegistry()
@@ -39,7 +39,6 @@ KoColorTransformationFactoryRegistry::~KoColorTransformationFactoryRegistry()
 }
 
 
-#include <kdebug.h>
 void KoColorTransformationFactoryRegistry::addColorTransformationFactory(KoColorTransformationFactory* factory)
 {
     instance()->add(factory);

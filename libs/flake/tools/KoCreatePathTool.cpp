@@ -138,6 +138,9 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         // to avoid a unnecessary big area being repainted
         m_activePoint->setControlPoint1(point);
         m_activePoint->setControlPoint2(point);
+        // remove them immediately so we do not end up having control points on a line start point
+        m_activePoint->removeControlPoint1();
+        m_activePoint->removeControlPoint2();
         m_firstPoint = m_activePoint;
         m_canvas->updateCanvas(handleRect(point));
         m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());

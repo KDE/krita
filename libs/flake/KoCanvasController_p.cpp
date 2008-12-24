@@ -336,10 +336,14 @@ void Viewport::resetLayout()
             m_canvas->setGeometry(0, 0, viewW, viewH);
         else
             m_canvas->setGeometry(moveX, moveY, resizeW, resizeH);
+        m_canvas->update();
     }
 
-//     kDebug(30006) <<"View port geom:" << geometry();
-//     kDebug(30006) <<"Canvas widget geom:" << m_canvas->geometry();
+#if 0
+     kDebug(30006) <<"View port geom:" << geometry();
+     if (m_canvas)
+        kDebug(30006) <<"Canvas widget geom:" << m_canvas->geometry();
+#endif
 }
 
 #include "KoCanvasController_p.moc"

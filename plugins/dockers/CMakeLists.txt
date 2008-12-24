@@ -38,7 +38,6 @@ set(kofficedockers_SRCS
 
     shapeendlines/KoShapeEndLinesDocker.cpp
     shapeendlines/KoEndLinesDockerFactory.cpp
-    shapeendlines/KoEndLineShapeModel.cpp
 
     Plugin.cpp
 )

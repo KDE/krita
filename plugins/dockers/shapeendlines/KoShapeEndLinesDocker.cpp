@@ -1,86 +1,129 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- */
+   Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
+   Copyright (C) 2002 Tomislav Lukman <tomislav.lukman@ck.t-com.hr>
+   Copyright (C) 2002-2003 Rob Buis <buis@kde.org>
+   Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
+   Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2005-2006 Inge Wallin <inge@lysator.liu.se>
+   Copyright (C) 2005-2008 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2006 Peter Simonsson <psn@linux.se>
+   Copyright (C) 2006 Laurent Montel <montel@kde.org>
+   Copyright (C) 2007 Thorsten Zachmann <t.zachmann@zagge.de>
 
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+*/
 
 #include "KoShapeEndLinesDocker.h"
 
-#include <QGridLayout>
-#include <QList>
-
-#include <klocale.h>
-
-
+#include <KoToolManager.h>
+#include <KoCanvasBase.h>
+#include <KoCanvasController.h>
+#include <KoCanvasResourceProvider.h>
+#include <KoDockFactory.h>
+#include <KoUnitDoubleSpinBox.h>
+#include <KoShapeManager.h>
+#include <KoShapeBorderCommand.h>
+#include <KoShapeBorderModel.h>
+#include <KoSelection.h>
 #include "../shapecollection/KoCollectionItemModel.h"
 #include <KoShapeFactory.h>
 #include <KoShapeRegistry.h>
 #include <kicon.h>
+#include <kiconloader.h>
+#include <klocale.h>
 
-#include "KoEndLineShapeModel.h"
-
-KoShapeEndLinesDocker::KoShapeEndLinesDocker(QWidget* parent): QDockWidget(parent){
-	setWindowTitle(i18n("End lines"));
-
-	    QWidget* mainWidget = new QWidget(this);
-	    QGridLayout* mainLayout = new QGridLayout(mainWidget);
-	    mainLayout->setMargin(0);
-	    setWidget(mainWidget);
-
-	    m_quickView = new QListView (mainWidget);
-	    mainLayout->addWidget(m_quickView, 0, 0);
-	    m_quickView->setViewMode(QListView::IconMode);
-	    m_quickView->setDragDropMode(QListView::DragOnly);
-	    m_quickView->setSelectionMode(QListView::SingleSelection);
-	    m_quickView->setResizeMode(QListView::Adjust);
-	    m_quickView->setFlow(QListView::LeftToRight);
-	    m_quickView->setGridSize(QSize(40, 44));
-	    m_quickView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	    m_quickView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	    m_quickView->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-	    m_quickView->setTextElideMode(Qt::ElideNone);
-	    m_quickView->setWordWrap(true);
-
-	   QList<KoCollectionItem> quicklist;
-	    KoCollectionItem temp;
-            temp.id = "triangle";
-            temp.name = "triangle";
-           // temp.toolTip = shapeTemplate.toolTip;
-            temp.icon = KIcon("triangle");
-            //temp.properties = shapeTemplate.properties;
-	    quicklist.append(temp);
+#include <QLabel>
+#include <QRadioButton>
+#include <QWidget>
+#include <QGridLayout>
+#include <QButtonGroup>
+#include <QGridLayout>
+#include <QList>
+#include <QComboBox>
 
 
-	 /* QList<KoEndLineShape> quicklist;
+class KoShapeEndLinesDocker::Private
+{
+public:
+    Private() {}
+    QComboBox * leftEndLineComboBox;
+    QComboBox * rightEndLineComboBox;
+};
 
-	    KoEndLineShape kels;
-	    kels.id = "triangle";
-	    kels.name = "triangle";
-	    kels.icon = QIcon(QString("triangle.svg"));
-	    quicklist.append(kels);*/
+KoShapeEndLinesDocker::KoShapeEndLinesDocker()
+    : d( new Private() )
+{
+    setWindowTitle( i18n( "End Lines" ) );
 
-   KoCollectionItemModel* quickModel = new KoCollectionItemModel(this);
-    quickModel->setShapeTemplateList(quicklist);
-    m_quickView->setModel(quickModel);
- /* KoEndLineShapeModel * quickModel = new KoEndLineShapeModel(this);
-    quickModel->setShapeTemplateList(quicklist);
-    m_quickView->setModel(quickModel);*/
+    QWidget *mainWidget = new QWidget( this );
+    QGridLayout *mainLayout = new QGridLayout( mainWidget );
+    
+    QLabel * leftEndLineLabel = new QLabel( i18n( "Left:" ), mainWidget );
+    mainLayout->addWidget( leftEndLineLabel, 0, 0 );
+    d->leftEndLineComboBox = new QComboBox( mainWidget );
+    d->leftEndLineComboBox->insertItem(KIcon("triangle").pixmap(QSize(22,22),QIcon::Normal,QIcon::On));
+    mainLayout->addWidget( d->leftEndLineComboBox,0,1,1,3);
+
+    connect( d->leftEndLineComboBox, SIGNAL(activated( int ) ), this, SLOT( leftEndLineChanged(int) ) );
+
+    QLabel * rightEndLineLabel = new QLabel( i18n( "Right:" ), mainWidget );
+    mainLayout->addWidget( rightEndLineLabel, 1, 0 );
+    d->rightEndLineComboBox = new QComboBox( mainWidget );
+    d->rightEndLineComboBox->insertItem(KIcon("triangle").pixmap(QSize(22,22),QIcon::Normal,QIcon::On));
+    mainLayout->addWidget( d->rightEndLineComboBox,1,1,1,3);
+
+    connect( d->rightEndLineComboBox, SIGNAL(activated( int ) ), this, SLOT( rightEndLineChanged(int) ) );
+
+ 
+    mainLayout->setRowStretch( 5, 1 );
+    mainLayout->setColumnStretch( 1, 1 );
+    mainLayout->setColumnStretch( 2, 1 );
+    mainLayout->setColumnStretch( 3, 1 );
+ 
+    setWidget( mainWidget );
+
 }
 
-KoShapeEndLinesDocker::~KoShapeEndLinesDocker() {
-
+KoShapeEndLinesDocker::~KoShapeEndLinesDocker()
+{
+    delete d;
 }
+
+void KoShapeEndLinesDocker::applyChanges()
+{
+}
+
+
+void KoShapeEndLinesDocker::leftEndLineChanged(int index)
+{
+ 
+}
+
+void KoShapeEndLinesDocker::rightEndLineChanged(int index)
+{
+ 
+}
+
+void KoShapeEndLinesDocker::selectionChanged()
+{
+}
+
+void KoShapeEndLinesDocker::setCanvas( KoCanvasBase *canvas )
+{
+}
+#include "KoShapeEndLinesDocker.moc"
+

@@ -117,6 +117,7 @@ set(flake_SRCS
     commands/KoPathReverseCommand.cpp
     commands/KoEventActionAddCommand.cpp
     commands/KoEventActionRemoveCommand.cpp
+    commands/KoShapeRenameCommand.cpp
     tools/KoCreatePathTool.cpp
     tools/KoCreatePathToolFactory.cpp
     tools/KoCreateShapeStrategy.cpp

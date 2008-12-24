@@ -73,7 +73,7 @@ void KoOdfLoadingContext::addStyles(const KoXmlElement* style, const char* famil
         if (parentStyle)
             addStyles(parentStyle, family, usingStylesAutoStyles);
         else
-            kWarning(32500) << "Parent style not found: " << parentStyleName;
+            kWarning(32500) << "Parent style not found: " << family << parentStyleName << usingStylesAutoStyles;
     } else if (family) {
         const KoXmlElement* def = m_stylesReader.defaultStyle(family);
         if (def) {   // on top of all, the default style for this family

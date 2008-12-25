@@ -212,8 +212,10 @@ Exiv2::Value* kmdValueToExivValue( const KisMetaData::Value& value )
             switch( var.type()) {
                 case QVariant::Int:
                     return new Exiv2::ValueType<int32_t>(var.toInt(0));
+#if 0
                 case QVariant::Double:
                     return new Exiv2::ValueType<double>(var.toDouble(0));
+#endif
                 case QVariant::Date: {
                     QDate date = var.toDate();
                     return new Exiv2::DateValue(date.year(), date.month(), date.day());

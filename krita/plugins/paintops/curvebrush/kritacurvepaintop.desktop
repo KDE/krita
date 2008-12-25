@@ -10,6 +10,7 @@ Name[pt]=Pincel curvo
 Name[pt_BR]=Pincel curvo
 Name[sv]=Kurvpensel
 Name[uk]=Викривлений пензель
+Name[zh_TW]=曲線筆刷
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritacurvepaintop

@@ -62,12 +62,12 @@ SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
     QComboBox *family = qobject_cast<QComboBox*> (tool->action("format_fontfamily")->requestWidget(this));
     if (family) { // kdelibs 4.1 didn't return anything here.
         widget.fontsFrame->addWidget(family);
-        // TODO connect to move focus away on accept
+        connect(family, SIGNAL(activated(int)), this, SIGNAL(doneWithFocus()));
     }
     QComboBox *size = qobject_cast<QComboBox*> (tool->action("format_fontsize")->requestWidget(this));
     if (size) { // kdelibs 4.1 didn't return anything here.
         widget.fontsFrame->addWidget(size);
-        // TODO connect to move focus away on accept
+        connect(size, SIGNAL(activated(int)), this, SIGNAL(doneWithFocus()));
     }
 
     fillListsCombobox();

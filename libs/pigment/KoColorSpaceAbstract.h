@@ -95,8 +95,6 @@ class CompositeCopy : public KoCompositeOp {
         }
 };
 
-#include "DebugPigment.h"
-
 template<class _CSTrait>
 class KoConvolutionOpImpl : public KoConvolutionOp {
     typedef typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype compositetype;

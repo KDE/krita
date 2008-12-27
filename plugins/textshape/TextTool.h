@@ -98,6 +98,16 @@ public:
 
     bool isBidiDocument() const;
 
+
+    /// The following two methods allow an undo/redo command to tell the tool, it will modify the QTextDocument and wants to be parent of the undo/redo commands resulting from these changes.
+
+    void startEditing(QUndoCommand* command);
+    
+    void stopEditing();
+    
+    const QTextCursor cursor();
+
+
 public slots:
     /// start the textedit-plugin.
     void startTextEditingPlugin(const QString &pluginId);
@@ -238,7 +248,8 @@ private:
     QHash<QString, KoTextEditingPlugin*> m_textEditingPlugins;
     KoTextEditingPlugin *m_spellcheckPlugin;
 
-    QUndoCommand *m_currentCommand;
+    QUndoCommand *m_currentCommand; //this command will be the direct parent of undoCommands generated as the result of QTextDocument changes
+
     bool m_currentCommandHasChildren;
 
     // update Parag direction will be multi-threaded.

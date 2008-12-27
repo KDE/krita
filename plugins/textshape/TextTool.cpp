@@ -598,6 +598,11 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
     }
 }
 
+const QTextCursor TextTool::cursor()
+{
+    return m_caret;
+}
+
 void TextTool::setShapeData(KoTextShapeData *data)
 {
     bool docChanged = data == 0 || m_textShapeData == 0 || m_textShapeData->document() != data->document();
@@ -802,7 +807,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
                 addCommand(lin);
             } else {
                 // backspace on numbered, empty parag, removes numbering.
-                ChangeListCommand *clc = new ChangeListCommand(m_caret.block(), KoListStyle::None, 0 /* level */);
+                ChangeListCommand *clc = new ChangeListCommand(m_caret, KoListStyle::None, 0 /* level */);
                 addCommand(clc);
             }
         } else {
@@ -1338,6 +1343,18 @@ void TextTool::addCommand(QUndoCommand *command)
         cmd->setTool(this);
     m_currentCommandHasChildren = true; //to avoid adding it again on the first child UndoTextCommand (infinite loop)
     m_canvas->addCommand(command); // will execute it.
+    m_currentCommand = 0;
+    m_currentCommandHasChildren = false;
+}
+
+void TextTool::startEditing(QUndoCommand* command)
+{
+    m_currentCommand = command;
+    m_currentCommandHasChildren = true;
+}
+
+void TextTool::stopEditing()
+{
     m_currentCommand = 0;
     m_currentCommandHasChildren = false;
 }

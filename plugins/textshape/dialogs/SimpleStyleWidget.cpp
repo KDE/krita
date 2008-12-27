@@ -154,8 +154,7 @@ void SimpleStyleWidget::listStyleChanged(int row)
 {
     if (m_blockSignals) return;
 
-    m_tool->addCommand(new ChangeListCommand(m_currentBlock,
-                       static_cast<KoListStyle::Style>(widget.listType->itemData(row).toInt()), 0 /* level */));
+    m_tool->addCommand(new ChangeListCommand(m_tool->cursor(), static_cast<KoListStyle::Style>(widget.listType->itemData(row).toInt()), 0 /* level*/));
     emit doneWithFocus();
 }
 

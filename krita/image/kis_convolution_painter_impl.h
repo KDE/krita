@@ -18,26 +18,45 @@
 
 #include "kis_convolution_painter.h"
 
+#include "kis_repeat_iterators_pixel.h"
+
 struct StandardIteratorFactory {
     typedef KisHLineIteratorPixel HLineIterator;
     typedef KisHLineConstIteratorPixel HLineConstIterator;
     typedef KisVLineConstIteratorPixel VLineConstIterator;
-    inline static KisHLineIteratorPixel createHLineIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w)
+    inline static KisHLineIteratorPixel createHLineIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, const QRect& )
     {
         return src->createHLineIterator(x, y, w);
     }
-    inline static KisHLineConstIteratorPixel createHLineConstIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w)
+    inline static KisHLineConstIteratorPixel createHLineConstIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, const QRect& )
     {
         return src->createHLineConstIterator(x, y, w);
     }
-    inline static KisVLineConstIteratorPixel createVLineConstIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 h)
+    inline static KisVLineConstIteratorPixel createVLineConstIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 h, const QRect& )
     {
         return src->createVLineConstIterator(x, y, h);
     }
 };
 
+struct RepeatIteratorFactory {
+    typedef KisHLineIteratorPixel HLineIterator;
+    typedef KisRepeatHLineConstIteratorPixel HLineConstIterator;
+    typedef KisRepeatVLineConstIteratorPixel VLineConstIterator;
+    inline static KisHLineIteratorPixel createHLineIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, const QRect& )
+    {
+        return src->createHLineIterator(x, y, w);
+    }
+    inline static KisRepeatHLineConstIteratorPixel createHLineConstIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, const QRect& _dataRect)
+    {
+        return src->createRepeatHLineConstIterator(x, y, w, _dataRect);
+    }
+    inline static KisRepeatVLineConstIteratorPixel createVLineConstIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 h, const QRect& _dataRect)
+    {
+        return src->createRepeatVLineConstIterator(x, y, h, _dataRect);
+    }
+};
 template< class _IteratorFactory_>
-void KisConvolutionPainter::applyMatrixImpl(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, qint32 h)
+void KisConvolutionPainter::applyMatrixImpl(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, qint32 h, const QRect& _dataRect)
 {
     dbgImage << *kernel;
     // Make the area we cover as small as possible
@@ -81,7 +100,7 @@ void KisConvolutionPainter::applyMatrixImpl(const KisConvolutionKernelSP kernel,
     // row == the y position of the pixel we want to change in the paint device
     int row = y;
 
-    typename _IteratorFactory_::HLineIterator hit = _IteratorFactory_::createHLineIterator(device(), x, y, w );
+    typename _IteratorFactory_::HLineIterator hit = _IteratorFactory_::createHLineIterator(device(), x, y, w, _dataRect );
 
     for (; row < y + h; ++row) {
 
@@ -103,7 +122,7 @@ void KisConvolutionPainter::applyMatrixImpl(const KisConvolutionKernelSP kernel,
                     // kw = the width of the kernel
 
                     // Fill the cache with pointers to the pixels under the kernel
-                    typename _IteratorFactory_::HLineConstIterator kitSrc = _IteratorFactory_::createHLineConstIterator(src, col - khalfWidth, (row - khalfHeight) + krow, kw );
+                    typename _IteratorFactory_::HLineConstIterator kitSrc = _IteratorFactory_::createHLineConstIterator(src, col - khalfWidth, (row - khalfHeight) + krow, kw, _dataRect );
                     while (!kitSrc.isDone()) {
                         memcpy(pixelPtrCache[i], kitSrc.oldRawData(), cdepth);
                         ++kitSrc;
@@ -121,7 +140,7 @@ void KisConvolutionPainter::applyMatrixImpl(const KisConvolutionKernelSP kernel,
                     }
                 }
                 qint32 i = kw - 1;
-                typename _IteratorFactory_::VLineConstIterator kitSrc = _IteratorFactory_::createVLineConstIterator(src, col + khalfWidth, row - khalfHeight, kh );
+                typename _IteratorFactory_::VLineConstIterator kitSrc = _IteratorFactory_::createVLineConstIterator(src, col + khalfWidth, row - khalfHeight, kh, _dataRect );
                 while (!kitSrc.isDone()) {
                     memcpy(pixelPtrCache[i], kitSrc.oldRawData(), cdepth);
                     ++kitSrc;

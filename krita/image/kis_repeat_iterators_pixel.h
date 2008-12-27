@@ -72,7 +72,7 @@ class KisRepeatHLineIteratorPixelBase : public KisRepeatLineIteratorPixelBase<T>
         inline ~KisRepeatHLineIteratorPixelBase();
         inline KisRepeatHLineIteratorPixelBase<T> & operator ++();
         inline bool isDone() const {
-            return this->m_realX >= this->m_startX + this->m_width;
+            return this->m_realX >= m_startX + m_width;
         }
         /**
          * Reach next row.
@@ -84,6 +84,34 @@ class KisRepeatHLineIteratorPixelBase : public KisRepeatLineIteratorPixelBase<T>
         qint32 m_startX;
         qint32 m_startIteratorX;
         qint32 m_width;
+};
+
+/**
+ * This iterator is an iterator that will "artificially" extend the paint device with the
+ * value of the border when trying to access values outside the range of data.
+ */
+template<class T>
+class KisRepeatVLineIteratorPixelBase : public KisRepeatLineIteratorPixelBase<T> {
+    public:
+        /**
+         * @param rc indicates the rectangle that trully contains data
+         */
+        inline KisRepeatVLineIteratorPixelBase( KisDataManager *dm, KisDataManager *sel_dm, qint32 x, qint32 y, qint32 h, qint32 offsetx, qint32 offsety, const QRect& _rc );
+        inline ~KisRepeatVLineIteratorPixelBase();
+        inline KisRepeatVLineIteratorPixelBase<T> & operator ++();
+        inline bool isDone() const {
+            return this->m_realY >= m_startY + m_height;
+        }
+        /**
+         * Reach next row.
+         */
+        inline void nextCol();
+    private:
+        void createIterator();
+    private:
+        qint32 m_startY;
+        qint32 m_startIteratorY;
+        qint32 m_height;
 };
 
 //------------------------ Implementations ------------------------//
@@ -147,7 +175,6 @@ inline void KisRepeatHLineIteratorPixelBase<T>::nextRow()
         createIterator();
     }
     ++this->m_realY;
-    return *this;
 }
 
 template<class T>
@@ -165,5 +192,66 @@ void KisRepeatHLineIteratorPixelBase<T>::createIterator()
     this->m_iterator = new T( this->m_dm, this->m_sel_dm, this->m_startIteratorX, startY, this->m_dataRect.width(), this->m_offsetX, this->m_offsetY );
     this->m_realX = this->m_startX;
 }
+
+//---------------- KisRepeatVLineIteratorPixelBase ----------------//
+
+template<class T>
+KisRepeatVLineIteratorPixelBase<T>::KisRepeatVLineIteratorPixelBase( KisDataManager *dm, KisDataManager *sel_dm, qint32 x, qint32 y, qint32 h, qint32 offsetx, qint32 offsety, const QRect& _rc ) : KisRepeatLineIteratorPixelBase<T>( dm, sel_dm, x, y, offsetx, offsety , _rc ),
+        m_startY(y), m_startIteratorY(y),
+        m_height(h)
+{
+    // Compute the startx value of the iterator
+    if( m_startIteratorY < _rc.top() )
+    {
+        m_startIteratorY = _rc.top();
+    }
+    createIterator();
+}
+
+template<class T>
+KisRepeatVLineIteratorPixelBase<T>::~KisRepeatVLineIteratorPixelBase()
+{
+}
+
+template<class T>
+inline KisRepeatVLineIteratorPixelBase<T> & KisRepeatVLineIteratorPixelBase<T>::operator++()
+{
+    Q_ASSERT(this->m_iterator);
+    if( this->m_realY >= this->m_dataRect.y() && this->m_realY < this->m_dataRect.y() + this->m_dataRect.height() )
+    {
+        ++(*this->m_iterator);
+    }
+    ++this->m_realY;
+    return *this;
+}
+
+template<class T>
+inline void KisRepeatVLineIteratorPixelBase<T>::nextCol()
+{
+    if( this->m_realX >= this->m_dataRect.x() && this->m_realX < this->m_dataRect.x() + this->m_dataRect.width() )
+    {
+        this->m_iterator->nextCol();
+    } else {
+        createIterator();
+    }
+    ++this->m_realX;
+}
+
+template<class T>
+void KisRepeatVLineIteratorPixelBase<T>::createIterator()
+{
+    // Cleanup
+    delete this->m_iterator;
+    qint32 startX = this->m_realX;
+    if( startX < this->m_dataRect.x() ) {
+        startX = this->m_dataRect.x();
+    }
+    if( startX > (this->m_dataRect.x() + this->m_dataRect.width() - 1 ) ) {
+        startX = (this->m_dataRect.x() + this->m_dataRect.width() - 1 );
+    }
+    this->m_iterator = new T( this->m_dm, this->m_sel_dm, startX, this->m_startIteratorY, this->m_dataRect.height(), this->m_offsetX, this->m_offsetY );
+    this->m_realY = this->m_startY;
+}
+
 
 #endif

@@ -485,6 +485,14 @@ public:
     KisHLineConstIteratorPixel createHLineConstIterator(qint32 x, qint32 y, qint32 w, const KisSelection * selection = 0) const;
 
     /**
+     * Create an iterator that will "artificially" extend the paint device with the
+     * value of the border when trying to access values outside the range of data.
+     * 
+     * @param rc indicates the rectangle that trully contains data
+     */
+    KisRepeatHLineConstIteratorPixel createRepeatHLineConstIterator(qint32 x, qint32 y, qint32 w, const QRect& _dataWidth, const KisSelection * selection = 0) const;
+    
+    /**
     * @param selection an up-to-date selection that has the same origin as the paint device
      * @return an iterator which points to the first pixel of a horizontal line
      */

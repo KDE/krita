@@ -58,6 +58,7 @@
 #include "kis_selection_component.h"
 #include "kis_pixel_selection.h"
 #include "kis_paint_device_jobs.h"
+#include "kis_repeat_iterators_pixel.h"
 
 class KisPaintDevice::Private
 {
@@ -728,6 +729,17 @@ KisHLineConstIteratorPixel  KisPaintDevice::createHLineConstIterator(qint32 x, q
         selectionDm = const_cast< KisDataManager*>(selection->dataManager().data());
 
     return KisHLineConstIteratorPixel(dm, selectionDm, x, y, w, m_d->x, m_d->y);
+}
+
+KisRepeatHLineConstIteratorPixel KisPaintDevice::createRepeatHLineConstIterator(qint32 x, qint32 y, qint32 w, const QRect& _dataWidth, const KisSelection * selection ) const
+{
+    KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
+    KisDataManager* selectionDm = 0;
+
+    if (selection)
+        selectionDm = const_cast< KisDataManager*>(selection->dataManager().data());
+
+    return KisRepeatHLineConstIteratorPixel(dm, selectionDm, x, y, w, m_d->x, m_d->y, _dataWidth);
 }
 
 KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(qint32 x, qint32 y, qint32 h, const KisSelection * selection)

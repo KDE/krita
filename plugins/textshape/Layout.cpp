@@ -167,7 +167,9 @@ bool Layout::addLine(QTextLine &line)
 
     const qreal footnoteHeight = findFootnote(line);
 
-    if (m_data->documentOffset() + shape->size().height() - footnoteHeight < m_y + line.height() + m_shapeBorder.bottom) {
+    if (!m_newShape
+            && m_data->documentOffset() + shape->size().height() - footnoteHeight
+            < m_y + line.height() + m_shapeBorder.bottom) {
         // line does not fit.
         m_data->setEndPosition(m_block.position() + line.textStart() - 1);
 

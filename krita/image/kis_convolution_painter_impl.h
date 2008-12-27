@@ -134,10 +134,13 @@ void KisConvolutionPainter::applyMatrixImpl(const KisConvolutionKernelSP kernel,
             } else {
                 for (qint32 krow = 0; krow <  kh; ++krow) { // shift the cache to the left
                     quint8** d = pixelPtrCache + krow * kw;
-                    //memmove( d, d + 1, (kw-1)*sizeof(quint8*));
+                    /*memmove( d, d + 1, (kw-1)*sizeof(quint8*));
                     for (int i = 0; i < (kw - 1); i++) {
                         memcpy(d[i], d[i+1], cdepth);
-                    }
+                    }*/
+                    quint8* first = *d;
+                    memmove(d, d + 1, (kw - 1)*sizeof(quint8*));
+                    *(d + kw - 1) = first;
                 }
                 qint32 i = kw - 1;
                 typename _IteratorFactory_::VLineConstIterator kitSrc = _IteratorFactory_::createVLineConstIterator(src, col + khalfWidth, row - khalfHeight, kh, _dataRect );

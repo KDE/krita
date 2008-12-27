@@ -1336,8 +1336,10 @@ void TextTool::addCommand(QUndoCommand *command)
     TextCommandBase *cmd = dynamic_cast<TextCommandBase*>(command);
     if (cmd)
         cmd->setTool(this);
+    m_currentCommandHasChildren = true; //to avoid adding it again on the first child UndoTextCommand (infinite loop)
     m_canvas->addCommand(command); // will execute it.
     m_currentCommand = 0;
+    m_currentCommandHasChildren = false;
 }
 
 void TextTool::nonbreakingSpace()

@@ -24,6 +24,8 @@
 
 #include <QMetaType>
 
+class KoListPrivate;
+
 /**
  * This class represents an ODF list. An ODF list may have upto 10 levels
  * Each of the levels is represented as a QTextList (QTextList does not support
@@ -80,10 +82,12 @@ public:
     bool continueNumbering(int level) const;
 
     static int level(const QTextBlock &block);
+    
+    /// Returns a pointer to the KoList private member
+    KoListPrivate* listPrivate();
 
 private:
-    class Private;
-    Private *d;
+    KoListPrivate *d;
 
     Q_PRIVATE_SLOT(d, void styleChanged(int))
 };

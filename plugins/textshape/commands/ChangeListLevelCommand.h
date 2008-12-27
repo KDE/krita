@@ -24,6 +24,8 @@
 
 #include <QTextBlock>
 
+class KoList;
+
 /**
  * This command is used the change level of a list-item.
  */
@@ -60,10 +62,13 @@ public:
 
 private:
     int effectiveLevel(int level);
+    
+    KoList* m_list;
 
     QTextBlock m_block;
     CommandType m_type;
     int m_level, m_oldLevel;
+    bool m_first;
 };
 
 #endif

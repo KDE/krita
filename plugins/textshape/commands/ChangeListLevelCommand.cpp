@@ -23,7 +23,9 @@
 #include <KoTextBlockData.h>
 #include <KoTextDocument.h>
 #include <KoList.h>
+#include "KoList_p.h"
 #include <KoListLevelProperties.h>
+#include <KLocale>
 #include <kdebug.h>
 
 #include <QTextCursor>
@@ -33,8 +35,10 @@ ChangeListLevelCommand::ChangeListLevelCommand(const QTextBlock &block, ChangeLi
     : TextCommandBase(parent),
       m_block(block),
       m_type(type),
-      m_level(level)
+      m_level(level),
+      m_first(true)
 {
+    setText(i18n("Change List Level"));
 }
 
 ChangeListLevelCommand::~ChangeListLevelCommand()
@@ -57,46 +61,41 @@ int ChangeListLevelCommand::effectiveLevel(int level)
 
 void ChangeListLevelCommand::redo()
 {
-    TextCommandBase::redo();
-    UndoRedoFinalizer finalizer(this, m_tool);
-
-    QTextList *textList = m_block.textList();
-    if (!textList)
-        return;
-    KoList *list = KoTextDocument(m_block.document()).list(textList);
-    Q_ASSERT(list);
-    m_oldLevel = list->level(m_block);
-    int newLevel = effectiveLevel(m_oldLevel);
-
-    if (!list->style()->hasLevelProperties(newLevel)) {
-        KoListLevelProperties llp = list->style()->levelProperties(newLevel);
-        llp.setIndent((newLevel-1) * 20); // make this configurable
-        list->style()->setLevelProperties(llp);
+    if (!m_first) {
+        TextCommandBase::redo();
+        UndoRedoFinalizer finalizer(this, m_tool);
+        m_list->listPrivate()->textLists[m_block.textList()->format().property(KoListStyle::Level).toInt() - 1] = m_block.textList();
+        KoListPrivate::invalidate(m_block);
     }
-    list->add(m_block, newLevel);
+    else {
+        QTextList *textList = m_block.textList();
+        if (!textList)
+            return;
+        m_list = KoTextDocument(m_block.document()).list(textList);
+        Q_ASSERT(m_list);
+        m_oldLevel = m_list->level(m_block);
+        int newLevel = effectiveLevel(m_oldLevel);
+
+        if (!m_list->style()->hasLevelProperties(newLevel)) {
+            KoListLevelProperties llp = m_list->style()->levelProperties(newLevel);
+            llp.setIndent((newLevel-1) * 20); // make this configurable
+            m_list->style()->setLevelProperties(llp);
+        }
+        m_list->add(m_block, newLevel);
+    }
+    m_first = false;
 }
 
 void ChangeListLevelCommand::undo()
 {
     TextCommandBase::undo();
     UndoRedoFinalizer finalizer(this, m_tool);
-
-    QTextList *textList = m_block.textList();
-    if (!textList)
-        return;
-    KoList *list = KoTextDocument(m_block.document()).list(textList);
-    Q_ASSERT(list);
-    list->add(m_block, m_oldLevel);
+    if (m_block.textList())
+        m_list->listPrivate()->textLists[m_block.textList()->format().property(KoListStyle::Level).toInt() - 1] = m_block.textList();
+    KoListPrivate::invalidate(m_block);
 }
 
 bool ChangeListLevelCommand::mergeWith(const QUndoCommand *other)
 {
-    const ChangeListLevelCommand *cmd = dynamic_cast<const ChangeListLevelCommand *>(other);
-    if (!cmd)
-        return false;
-    if (m_block != cmd->m_block || m_type != cmd->m_type)
-        return false;
-    m_level = cmd->m_level;
-    return true;
+    return false;
 }
-

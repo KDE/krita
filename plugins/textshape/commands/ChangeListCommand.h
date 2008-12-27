@@ -79,6 +79,13 @@ public:
     virtual bool mergeWith(const QUndoCommand *other);
 
 private:
+    enum commandAction {
+        createNew,
+        modifyExisting,
+        reparentList,
+        mergeList,
+        removeList
+    };
     void storeOldProperties();
     int detectLevel(int givenLevel);
     void initList(KoListStyle *style, int level);
@@ -88,7 +95,9 @@ private:
     KoList *m_list, *m_oldList;
     KoListLevelProperties m_newProperties;
     int m_flags;
+    bool m_first;
     KoListLevelProperties m_formerProperties;
+    commandAction m_currentAction;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ChangeListCommand::ChangeFlags)

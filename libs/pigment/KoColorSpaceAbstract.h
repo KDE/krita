@@ -95,6 +95,8 @@ class CompositeCopy : public KoCompositeOp {
         }
 };
 
+#include "DebugPigment.h"
+
 template<class _CSTrait>
 class KoConvolutionOpImpl : public KoConvolutionOp {
     typedef typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype compositetype;
@@ -158,22 +160,36 @@ public:
                     qint64 a = ( totalWeight - totalWeightTransparent );
                     for(uint i = 0; i < _CSTrait::channels_nb; i++)
                     {
-                        compositetype v = totals[i] / a + offset;
                         if( allChannels || channelFlags.testBit( i ) )
                         {
-                            dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
-                                                        KoColorSpaceMathsTraits<channels_type>::max );
+                            if( i == (uint)_CSTrait::alpha_pos )
+                            {
+                                compositetype v = totals[i] / totalWeight + offset;
+                                dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
+                                                         KoColorSpaceMathsTraits<channels_type>::max );
+                            } else {
+                                compositetype v = totals[i] / a + offset;
+                                dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
+                                                         KoColorSpaceMathsTraits<channels_type>::max );
+                            }
                         }
                     }
-                } else {
+               } else {
                     qreal a = totalWeight / ( factor * ( totalWeight - totalWeightTransparent ) ); // use qreal as it easily saturate
                     for(uint i = 0; i < _CSTrait::channels_nb; i++)
                     {
-                        compositetype v = (compositetype)( totals[i] * a + offset );
                         if( allChannels || channelFlags.testBit( i ) )
                         {
-                            dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
-                                                     KoColorSpaceMathsTraits<channels_type>::max );
+                            if( i == (uint)_CSTrait::alpha_pos )
+                            {
+                                compositetype v = totals[i] / factor + offset;
+                                dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
+                                                         KoColorSpaceMathsTraits<channels_type>::max );
+                            } else {
+                                compositetype v = (compositetype)( totals[i] * a + offset );
+                                dstColor[ i ] = CLAMP(v, KoColorSpaceMathsTraits<channels_type>::min,
+                                                         KoColorSpaceMathsTraits<channels_type>::max );
+                            }
                         }
                     }
                 }

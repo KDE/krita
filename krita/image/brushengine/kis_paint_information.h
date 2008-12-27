@@ -39,7 +39,7 @@ public:
     
     KisPaintInformation(const QPointF & pos = QPointF(), double pressure = PRESSURE_DEFAULT,
                         double xTilt = 0.0, double yTilt = 0.0,
-                        KisVector2D movement = KisVector2D(),
+                        KisVector2D movement = nullKisVector2D(),
                         double rotation = 0.0,
                         double tangentialPressure = 0.0
                        );

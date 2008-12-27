@@ -157,7 +157,7 @@ template<class T>
 inline KisRepeatHLineIteratorPixelBase<T> & KisRepeatHLineIteratorPixelBase<T>::operator++()
 {
     Q_ASSERT(this->m_iterator);
-    if( this->m_realX >= this->m_dataRect.x() && this->m_realX < this->m_dataRect.x() + this->m_dataRect.width() )
+    if( this->m_realX >= this->m_dataRect.x() && this->m_realX < this->m_dataRect.x() + this->m_dataRect.width() - 1 )
     {
         ++(*this->m_iterator);
     }
@@ -217,7 +217,7 @@ template<class T>
 inline KisRepeatVLineIteratorPixelBase<T> & KisRepeatVLineIteratorPixelBase<T>::operator++()
 {
     Q_ASSERT(this->m_iterator);
-    if( this->m_realY >= this->m_dataRect.y() && this->m_realY < this->m_dataRect.y() + this->m_dataRect.height() )
+    if( this->m_realY >= this->m_dataRect.y() && this->m_realY < this->m_dataRect.y() + this->m_dataRect.height() - 1 )
     {
         ++(*this->m_iterator);
     }

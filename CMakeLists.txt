@@ -215,7 +215,6 @@ if( BZIP2_EXECUTABLE )
 endif( BZIP2_EXECUTABLE )
 
 macro_optional_add_subdirectory(kformula)
-macro_optional_add_subdirectory(kool)
 macro_optional_add_subdirectory(kivio)
 macro_optional_add_subdirectory(kounavail)
 macro_optional_add_subdirectory(kplato)

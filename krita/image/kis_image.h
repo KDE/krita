@@ -425,7 +425,7 @@ public:
      * Merge the specified layer with the layer
      * below this layer, remove the specified layer.
      */
-    void mergeLayer(KisLayerSP l, const KisMetaData::MergeStrategy* strategy);
+    KisLayerSP mergeLayer(KisLayerSP l, const KisMetaData::MergeStrategy* strategy);
 
     QRect bounds() const;
 

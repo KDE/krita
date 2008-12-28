@@ -918,7 +918,11 @@ void KisLayerManager::mergeLayer()
     const KisMetaData::MergeStrategy* strategy = KisMetaDataMergeStrategyChooserWidget::showDialog(m_view);
     if (!strategy) return;
 
-    img->mergeLayer(layer, strategy);
+    KisLayerSP  newLayer = img->mergeLayer(layer, strategy);
+    if(newLayer) {
+        newLayer->setDirty();
+    }
+    
     m_view->updateGUI();
 
 }

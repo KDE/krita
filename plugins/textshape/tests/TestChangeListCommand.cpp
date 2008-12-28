@@ -1,10 +1,14 @@
 #include "TestChangeListCommand.h"
+#include "tests/MockShapes.h"
 #include "../commands/ChangeListCommand.h"
 
 #include <KoListStyle.h>
 #include <KoListLevelProperties.h>
 #include <KoStyleManager.h>
 #include <KoTextDocument.h>
+
+#include <TextTool.h>
+#include <KoCanvasBase.h>
 
 #include <QTextDocument>
 #include <QTextCursor>
@@ -14,11 +18,14 @@ void TestChangeListCommand::addList()
 {
     QTextDocument doc;
     KoTextDocument(&doc).setStyleManager(new KoStyleManager);
+    TextTool *tool = new TextTool(new MockCanvas);
     QTextCursor cursor(&doc);
     cursor.insertText("Root\nparag1\nparag2\nparag3\nparag4\n");
 
     QTextBlock block = doc.begin().next();
-    ChangeListCommand clc(block, KoListStyle::DecimalItem);
+    cursor.setPosition(block.position());
+    ChangeListCommand clc(cursor, KoListStyle::DecimalItem);
+    clc.setTool(tool);
     clc.redo();
 
     block = doc.begin();
@@ -32,7 +39,8 @@ void TestChangeListCommand::addList()
     QTextListFormat format = tl->format();
     QCOMPARE(format.intProperty(QTextListFormat::ListStyle), (int) KoListStyle::DecimalItem);
 
-    ChangeListCommand clc2(block, KoListStyle::DiscItem);
+    cursor.setPosition(block.position());
+    ChangeListCommand clc2(cursor, KoListStyle::DiscItem);
     clc2.redo();
 
     block = doc.begin();
@@ -48,6 +56,7 @@ void TestChangeListCommand::removeList()
 {
     QTextDocument doc;
     KoTextDocument(&doc).setStyleManager(new KoStyleManager);
+    TextTool *tool = new TextTool(new MockCanvas);
     QTextCursor cursor(&doc);
     cursor.insertText("Root\nparag1\nparag2\nparag3\nparag4\n");
     KoListStyle style;
@@ -60,7 +69,8 @@ void TestChangeListCommand::removeList()
     block = doc.begin().next();
     QVERIFY(block.textList()); // init, we should not have to test KoListStyle here ;)
 
-    ChangeListCommand clc(block, KoListStyle::None);
+    cursor.setPosition(block.position());
+    ChangeListCommand clc(cursor, KoListStyle::None);
     clc.redo();
 
     block = doc.begin();
@@ -74,7 +84,8 @@ void TestChangeListCommand::removeList()
     block = block.next();
     QVERIFY(block.textList());
 
-    ChangeListCommand clc2(block, KoListStyle::None);
+    cursor.setPosition(block.position());
+    ChangeListCommand clc2(cursor, KoListStyle::None);
     clc2.redo();
     block = doc.begin();
     QVERIFY(block.textList() == 0);
@@ -92,6 +103,7 @@ void TestChangeListCommand::joinList()
 {
     QTextDocument doc;
     KoTextDocument(&doc).setStyleManager(new KoStyleManager);
+    TextTool *tool = new TextTool(new MockCanvas);
     QTextCursor cursor(&doc);
     cursor.insertText("Root\nparag1\nparag2\nparag3\nparag4\n");
     KoListStyle style;
@@ -113,7 +125,8 @@ void TestChangeListCommand::joinList()
     block = block.next(); // parag2
     QVERIFY(block.textList() == 0);
 
-    ChangeListCommand clc(block, KoListStyle::DiscItem);
+    cursor.setPosition(block.position());
+    ChangeListCommand clc(cursor, KoListStyle::DiscItem);
     clc.redo();
     QCOMPARE(block.textList(), tl);
 }
@@ -123,6 +136,7 @@ void TestChangeListCommand::joinList2()
     // test usecase of joining with the one before and the one after based on similar styles.
     QTextDocument doc;
     KoTextDocument(&doc).setStyleManager(new KoStyleManager);
+    TextTool *tool = new TextTool(new MockCanvas);
     QTextCursor cursor(&doc);
     cursor.insertText("Root\nparag1\nparag2\nparag3\nparag4");
     KoListStyle style;
@@ -144,7 +158,8 @@ void TestChangeListCommand::joinList2()
 
     // now apply the default 'DiscItem' on 'parag1' expecting it to join with the list already set on 'parag2'
     block = doc.begin().next();
-    ChangeListCommand clc(block, KoListStyle::DiscItem);
+    cursor.setPosition(block.position());
+    ChangeListCommand clc(cursor, KoListStyle::DiscItem);
     clc.redo();
     QTextList *tl = block.textList();
     QVERIFY(tl);
@@ -159,7 +174,8 @@ void TestChangeListCommand::joinList2()
     QVERIFY(numberedList);
     block = block.previous(); // parag3
     QVERIFY(block.textList() == 0);
-    ChangeListCommand clc2(block, KoListStyle::DecimalItem);
+    cursor.setPosition(block.position());
+    ChangeListCommand clc2(cursor, KoListStyle::DecimalItem);
     clc2.redo();
     QVERIFY(block.textList());
     QVERIFY(block.textList() != tl);
@@ -177,6 +193,7 @@ void TestChangeListCommand::splitList()
 
     QTextDocument doc;
     KoTextDocument(&doc).setStyleManager(new KoStyleManager);
+    TextTool *tool = new TextTool(new MockCanvas);
     QTextCursor cursor(&doc);
     cursor.insertText("Root\nparagA\nparagB\nparagC");
     QTextBlock block = doc.begin().next();
@@ -201,7 +218,8 @@ void TestChangeListCommand::splitList()
     QCOMPARE(paragC.textList(), paragB.textList());
 
     QTextList *tl = paragB.textList();
-    ChangeListCommand clc(paragB, KoListStyle::AlphaLowerItem);
+    cursor.setPosition(paragB.position());
+    ChangeListCommand clc(cursor, KoListStyle::AlphaLowerItem);
     clc.redo();
 
     QVERIFY(doc.begin().textList() == 0);

@@ -1,5 +1,5 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-include_directories( ${CMAKE_SOURCE_DIR}/plugins/textshape ${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES} )
+include_directories( ${CMAKE_SOURCE_DIR}/plugins/textshape ${CMAKE_BINARY_DIR}/plugins/textshape ${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES} )
 
 ########### next target ###############
 
@@ -10,6 +10,7 @@ set(TestDocumentLayout_test_SRCS
     ../TextShape.cpp
     ../ListItemsHelper.cpp
 )
+
 kde4_add_unit_test(TestDocumentLayout TESTNAME shapes-text-TestDocumentLayout ${TestDocumentLayout_test_SRCS})
 target_link_libraries(TestDocumentLayout kotext ${QT_QTTEST_LIBRARY})
 
@@ -18,10 +19,42 @@ target_link_libraries(TestDocumentLayout kotext ${QT_QTTEST_LIBRARY})
 set(TestChangeListCommand_test_SRCS
     TestChangeListCommand.cpp
     ../commands/ChangeListCommand.cpp
+    ../commands/ChangeListLevelCommand.cpp
+    ../commands/ListItemNumberingCommand.cpp
     ../commands/TextCommandBase.cpp
+    ../TextTool.cpp
+    ../ChangeTracker.cpp
+    ../dialogs/FontDia.cpp
+    ../dialogs/InsertCharacter.cpp
+    ../dialogs/StyleManagerDialog.cpp
+    ../dialogs/ParagraphSettingsDialog.cpp
+    ../dialogs/SimpleStyleWidget.cpp
+    ../dialogs/StylesWidget.cpp
+    ../dialogs/FontTab.cpp
+    ../dialogs/CharacterHighlighting.cpp
+    ../dialogs/FontDecorations.cpp
+    ../dialogs/FontLayoutTab.cpp
+    ../dialogs/LanguageTab.cpp
+    ../dialogs/StyleManager.cpp
+    ../dialogs/ParagraphIndentSpacing.cpp
+    ../dialogs/ParagraphLayout.cpp
+    ../dialogs/ParagraphDecorations.cpp
+    ../dialogs/ParagraphBulletsNumbers.cpp
+    ../dialogs/ListsSpinBox.cpp
+    ../dialogs/StylesModel.cpp
+    ../dialogs/ParagraphGeneral.cpp
+    ../dialogs/CharacterGeneral.cpp
+    ../dialogs/NewStyleWidget.cpp
+    ../dialogs/CharacterDecorations.cpp
+    ../dialogs/CharacterStyleOptions.cpp
+    ../ListItemsHelper.cpp
+    ../TextShape.cpp
+    ../Layout.cpp    
 )
+
+
 kde4_add_unit_test(TestChangeListCommand TESTNAME shapes-text-TestChangeListCommand ${TestChangeListCommand_test_SRCS})
-target_link_libraries(TestChangeListCommand kotext ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestChangeListCommand koguiutils kotext ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS})
 
 ########### next target ###############
 

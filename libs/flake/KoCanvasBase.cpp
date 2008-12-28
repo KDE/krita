@@ -41,15 +41,12 @@ public:
     KoShapeController *shapeController;
     KoCanvasResourceProvider * resourceProvider;
     KoCanvasController *controller;
-    bool isAntialiased : 1;
     KoSnapGuide * snapGuide;
 };
 
 KoCanvasBase::KoCanvasBase(KoShapeControllerBase * shapeControllerBase)
         : d(new Private())
 {
-    KConfigGroup cfg(KGlobal::config()->group("canvas"));
-    d->isAntialiased = cfg.readEntry("antialiasing", true);
     d->resourceProvider = new KoCanvasResourceProvider(0);
     d->shapeController = new KoShapeController(this, shapeControllerBase);
     d->snapGuide = new KoSnapGuide(this);
@@ -89,11 +86,6 @@ KoCanvasController * KoCanvasBase::canvasController() const
 
 void KoCanvasBase::clipToDocument(const KoShape *, QPointF &) const
 {
-}
-
-bool KoCanvasBase::isAntialiased() const
-{
-    return d->isAntialiased;
 }
 
 KoSnapGuide * KoCanvasBase::snapGuide() const

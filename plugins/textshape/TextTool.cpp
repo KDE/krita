@@ -819,7 +819,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
                 startMacro(i18n("Delete"));
                 m_caret.deletePreviousChar();
                 stopMacro();
-                }
+            }
             editingPluginEvents();
         }
         ensureCursorVisible();
@@ -839,7 +839,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             startMacro(i18n("Delete"));
             m_caret.deleteChar();
             stopMacro();
-            }
+        }
         editingPluginEvents();
     } else if ((event->key() == Qt::Key_Left) && (event->modifiers() | Qt::ShiftModifier) == Qt::ShiftModifier)
         moveOperation = QTextCursor::Left;

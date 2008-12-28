@@ -35,8 +35,6 @@ template<typename _type, int _nbchannels>
 class KisGenericColorSpace : public KoColorSpace
 {
 
-    using KoColorSpace::bitBlt;
-
     class KisGenericColorSpaceConvolutionOpImpl : public KoConvolutionOp
     {
     public:
@@ -259,18 +257,6 @@ public:
     virtual KoID mathToolboxId() const {
         return KoID("", "");
     }
-
-    virtual void bitBlt(quint8 */*dst*/,
-                        qint32 /*dststride*/,
-                        KoColorSpace * /*srcSpace*/,
-                        const quint8 */*src*/,
-                        qint32 /*srcRowStride*/,
-                        const quint8 */*srcAlphaMask*/,
-                        qint32 /*maskRowStride*/,
-                        quint8 /*opacity*/,
-                        qint32 /*rows*/,
-                        qint32 /*cols*/,
-                        const KoCompositeOp& /*op*/) const { }
 
     virtual void colorToXML(const quint8* , QDomDocument& , QDomElement&) const {}
     virtual void colorFromXML(quint8* , const QDomElement&) const {}

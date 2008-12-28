@@ -847,11 +847,11 @@ KisLayerSP KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrate
 
     KisPainter gc(newLayer->paintDevice());
     gc.setCompositeOp(newLayer->colorSpace()->compositeOp(COMPOSITE_COPY));
-    gc.bitBlt(rc.topLeft(), layer->projection(), rc);
-
-    gc.setCompositeOp(layer2->compositeOp());
-    gc.setOpacity(layer2->opacity());
     gc.bitBlt(rc.topLeft(), layer2->projection(), rc);
+
+    gc.setCompositeOp(layer->compositeOp());
+    gc.setOpacity(layer->opacity());
+    gc.bitBlt(rc.topLeft(), layer->projection(), rc);
 
     // Merge meta data
     QList<const KisMetaData::Store*> srcs;

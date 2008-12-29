@@ -78,7 +78,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::filter(int state)
     colorSetContainer = new QWidget();
     colorSetLayout = new QGridLayout();
     colorSetLayout->setMargin(0);
-    colorSetLayout->setSpacing(1);
+    colorSetLayout->setSpacing(0);
     for(int i = 0; i<16; i++) {
         colorSetLayout->setColumnMinimumWidth(i, 12);
     }
@@ -162,7 +162,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->recentsLayout = new QHBoxLayout();
     d->mainLayout->addLayout(d->recentsLayout);
     d->recentsLayout->setMargin(0);
-    d->recentsLayout->setSpacing(1);
+    d->recentsLayout->setSpacing(KDialog::spacingHint());
     d->recentsLayout->addWidget(new QLabel(i18n("Recent:")));
     d->recentsLayout->addStretch(1);
 
@@ -189,6 +189,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     setLayout(d->mainLayout);
 
     // Use 40_Colors.gpl for testing
+    // TODO don't depend on Krita data in libs
     QString defaultPalette("krita/palettes/40_Colors.gpl");
     QString dir = KGlobal::dirs()->findResourceDir("data", defaultPalette);
     KoColorSet *colorSet = new KoColorSet(dir.append(defaultPalette));

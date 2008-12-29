@@ -29,7 +29,6 @@ class QMimeData;
 class KoXmlElement;
 class KoOdfReadStore;
 
-//TODO export
 class KOODF_EXPORT KoOdfPaste
 {
 public:

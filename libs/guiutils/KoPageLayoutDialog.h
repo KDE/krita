@@ -42,14 +42,14 @@ public:
     void setPageSpread(bool pageSpread);
     const KoPageLayout& pageLayout() const;
 
-private Q_SLOTS:
+private slots:
     void setPageLayout(const KoPageLayout &layout);
     void visit();
 
 protected:
     bool applyToDocument() const;
 
-protected Q_SLOTS:
+protected slots:
     void accept();
     void reject();
     void showEvent(QShowEvent *e);

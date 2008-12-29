@@ -98,7 +98,7 @@ class KOGUIUTILS_EXPORT KoDualColorButton : public QWidget
      */
     virtual QSize sizeHint() const;
 
-  public Q_SLOTS:
+  public slots:
     /**
      * Sets the foreground color.
      */
@@ -116,7 +116,7 @@ class KOGUIUTILS_EXPORT KoDualColorButton : public QWidget
      */
     void setPopDialog( bool popDialog );
 
-  Q_SIGNALS:
+  signals:
     /**
      * Emitted when the foreground color is changed.
      */

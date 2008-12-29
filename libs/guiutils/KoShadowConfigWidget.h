@@ -54,7 +54,7 @@ public:
 public slots:
     void setUnit( const KoUnit &unit );
 
-Q_SIGNALS:
+signals:
     /// Is emitted whenever the shadow color has changed
     void shadowColorChanged( const QColor &color );
 

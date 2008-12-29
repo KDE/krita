@@ -19,7 +19,7 @@
 
 #include "KoPageLayoutWidget.h"
 
-#include "ui_KoPageLayoutWidget.h"
+#include <ui_KoPageLayoutWidget.h>
 
 class KoPageLayoutWidget::Private
 {
@@ -51,10 +51,11 @@ KoPageLayoutWidget::KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layo
     group2->addButton(d->widget.singleSided);
     group2->addButton(d->widget.facingPages);
     // the two sets of labels we use might have different lengths; make sure this does not create a 'jumping' ui
-    d->widget.singleSided->setChecked(true);
+    d->allowSignals = true;
+    d->widget.facingPages->setChecked(true);
     facingPagesChanged();
     int width = qMax(d->widget.leftLabel->width(), d->widget.rightLabel->width());
-    d->widget.facingPages->setChecked(true);
+    d->widget.singleSided->setChecked(true);
     facingPagesChanged();
     width = qMax(width, qMax(d->widget.leftLabel->width(), d->widget.rightLabel->width()));
     d->widget.leftLabel->setMinimumSize(QSize(width, 5));
@@ -77,7 +78,6 @@ KoPageLayoutWidget::KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layo
     connect(d->widget.height, SIGNAL(valueChangedPt(qreal)), this, SLOT(optionsChanged()));
 
     setUnit(KoUnit(KoUnit::Millimeter));
-    d->allowSignals = true;
     setPageLayout(layout);
     showTextDirection(false);
 }
@@ -87,9 +87,10 @@ KoPageLayoutWidget::~KoPageLayoutWidget()
     delete d;
 }
 
-void KoPageLayoutWidget::sizeChanged(int row) {
-    if(row < 0) return;
-    if(! d->allowSignals) return;
+void KoPageLayoutWidget::sizeChanged(int row)
+{
+    if (row < 0) return;
+    if (! d->allowSignals) return;
     d->allowSignals = false;
     d->pageLayout.format = static_cast<KoPageFormat::Format> (row);
     bool custom =  d->pageLayout.format == KoPageFormat::CustomSize;
@@ -100,22 +101,24 @@ void KoPageLayoutWidget::sizeChanged(int row) {
     if ( !custom ) {
         d->pageLayout.width = MM_TO_POINT( KoPageFormat::width( d->pageLayout.format, d->pageLayout.orientation ) );
         d->pageLayout.height = MM_TO_POINT( KoPageFormat::height( d->pageLayout.format, d->pageLayout.orientation ) );
-        if(pageSpread)
+        if (pageSpread)
             d->pageLayout.width *= 2;
     }
 
-    d->widget.width->changeValue( d->pageLayout.width / (pageSpread?2:1) );
+    d->widget.width->changeValue( d->pageLayout.width );
     d->widget.height->changeValue( d->pageLayout.height );
 
     emit layoutChanged(d->pageLayout);
     d->allowSignals = true;
 }
 
-void KoPageLayoutWidget::unitChanged(int row) {
+void KoPageLayoutWidget::unitChanged(int row)
+{
     setUnit(KoUnit(static_cast<KoUnit::Unit> (row)));
 }
 
-void KoPageLayoutWidget::setUnit(const KoUnit &unit) {
+void KoPageLayoutWidget::setUnit(const KoUnit &unit)
+{
     d->unit = unit;
 
     d->widget.width->setUnit(d->unit);
@@ -129,14 +132,15 @@ void KoPageLayoutWidget::setUnit(const KoUnit &unit) {
     // TODO set combobox
 }
 
-void KoPageLayoutWidget::setPageLayout(const KoPageLayout &layout) {
-    if(! d->allowSignals) return;
+void KoPageLayoutWidget::setPageLayout(const KoPageLayout &layout)
+{
+    if (! d->allowSignals) return;
     d->allowSignals = false;
     d->pageLayout = layout;
 
     Q_ASSERT(d->orientationGroup->button( layout.orientation ));
     d->orientationGroup->button( layout.orientation )->setChecked( true );
-    if(layout.bindingSide >= 0 && layout.pageEdge >= 0) {
+    if (layout.bindingSide >= 0 && layout.pageEdge >= 0) {
         d->widget.facingPages->setChecked(true);
         d->widget.bindingEdgeMargin->changeValue(layout.bindingSide);
         d->widget.pageEdgeMargin->changeValue(layout.pageEdge);
@@ -158,10 +162,11 @@ void KoPageLayoutWidget::setPageLayout(const KoPageLayout &layout) {
     d->widget.sizes->setCurrentIndex(layout.format); // calls sizeChanged()
 }
 
-void KoPageLayoutWidget::facingPagesChanged() {
-    if(! d->allowSignals) return;
+void KoPageLayoutWidget::facingPagesChanged()
+{
+    if (! d->allowSignals) return;
     d->allowSignals = false;
-    if(d->widget.singleSided->isChecked()) {
+    if (d->widget.singleSided->isChecked()) {
         d->widget.leftLabel->setText(i18n("Left Edge:"));
         d->widget.rightLabel->setText(i18n("Right Edge:"));
     }
@@ -174,8 +179,9 @@ void KoPageLayoutWidget::facingPagesChanged() {
     sizeChanged(d->widget.sizes->currentIndex());
 }
 
-void KoPageLayoutWidget::marginsChanged() {
-    if(! d->allowSignals) return;
+void KoPageLayoutWidget::marginsChanged()
+{
+    if (! d->allowSignals) return;
     d->allowSignals = false;
     d->pageLayout.left = -1;
     d->pageLayout.right = -1;
@@ -185,14 +191,14 @@ void KoPageLayoutWidget::marginsChanged() {
     d->pageLayout.bottom = d->marginsEnabled?d->widget.bottomMargin->value():0;
     qreal left = d->marginsEnabled?d->widget.bindingEdgeMargin->value():0;
     qreal right = d->marginsEnabled?d->widget.pageEdgeMargin->value():0;
-    if(left + right > d->pageLayout.width - 10) {
+    if (left + right > d->pageLayout.width - 10) {
         // make sure the actual text area is never smaller than 10 points.
         qreal diff = d->pageLayout.width - 10 - left - right;
         left = qMin(d->pageLayout.width - 10, qMax(qreal(0.0), left - diff / qreal(2.0)));
         right = qMax(qreal(0.0), right - d->pageLayout.width - 10 - left);
     }
 
-    if(d->widget.singleSided->isChecked()) {
+    if (d->widget.singleSided->isChecked()) {
         d->pageLayout.left = left;
         d->pageLayout.right = right;
     }
@@ -206,15 +212,17 @@ void KoPageLayoutWidget::marginsChanged() {
     d->allowSignals = true;
 }
 
-void KoPageLayoutWidget::setTextAreaAvailable(bool available) {
+void KoPageLayoutWidget::setTextAreaAvailable(bool available)
+{
     d->marginsEnabled = available;
     d->widget.margins->setEnabled(available);
     marginsChanged();
 }
 
-void KoPageLayoutWidget::optionsChanged() {
-    if(! d->allowSignals) return;
-    if(d->widget.sizes->currentIndex() == KoPageFormat::CustomSize) {
+void KoPageLayoutWidget::optionsChanged()
+{
+    if (! d->allowSignals) return;
+    if (d->widget.sizes->currentIndex() == KoPageFormat::CustomSize) {
         d->pageLayout.width = d->widget.width->value();
         d->pageLayout.height = d->widget.height->value();
     } else
@@ -223,8 +231,9 @@ void KoPageLayoutWidget::optionsChanged() {
     marginsChanged();
 }
 
-void KoPageLayoutWidget::orientationChanged() {
-    if(! d->allowSignals) return;
+void KoPageLayoutWidget::orientationChanged()
+{
+    if (! d->allowSignals) return;
     d->allowSignals = false;
     d->pageLayout.orientation = d->widget.landscape->isChecked() ? KoPageFormat::Landscape : KoPageFormat::Portrait;
 
@@ -248,7 +257,8 @@ void KoPageLayoutWidget::showPageSpread(bool on)
     d->widget.facingPages->setVisible(on);
 }
 
-void KoPageLayoutWidget::setPageSpread(bool pageSpread) {
+void KoPageLayoutWidget::setPageSpread(bool pageSpread)
+{
     if (pageSpread) {
         d->widget.facingPages->setChecked(true);
 //         d->widget.width->changeValue( d->pageLayout.width / 2.0);
@@ -269,34 +279,37 @@ void KoPageLayoutWidget::setApplyToDocument(bool apply)
     }
 }
 
-void KoPageLayoutWidget::showTextDirection(bool on) {
+void KoPageLayoutWidget::showTextDirection(bool on)
+{
     d->widget.directionLabel->setVisible(on);
     d->widget.textDirection->setVisible(on);
 }
 
-void KoPageLayoutWidget::setTextDirection(KoText::Direction direction ) {
+void KoPageLayoutWidget::setTextDirection(KoText::Direction direction )
+{
     int index = 0;
     switch(direction) {
-        case KoText::LeftRightTopBottom:
-        case KoText::PerhapsLeftRightTopBottom:
-            index = 1;
-            break;
-        case KoText::RightLeftTopBottom:
-        case KoText::PerhapsRightLeftTopBottom:
-            index = 2;
-            break;
-        case KoText::TopBottomRightLeft: // unused for now.
-        case KoText::AutoDirection:
-            index = 0;
+    case KoText::LeftRightTopBottom:
+    case KoText::PerhapsLeftRightTopBottom:
+        index = 1;
+        break;
+    case KoText::RightLeftTopBottom:
+    case KoText::PerhapsRightLeftTopBottom:
+        index = 2;
+        break;
+    case KoText::TopBottomRightLeft: // unused for now.
+    case KoText::AutoDirection:
+        index = 0;
     }
     d->widget.textDirection->setCurrentIndex(index);
 }
 
-KoText::Direction KoPageLayoutWidget::textDirection() const {
+KoText::Direction KoPageLayoutWidget::textDirection() const
+{
     switch(d->widget.textDirection->currentIndex()) {
-        case 1: return KoText::LeftRightTopBottom;
-        case 2: return KoText::RightLeftTopBottom;
-        default:
-        case 0: return KoText::AutoDirection;
+    case 1: return KoText::LeftRightTopBottom;
+    case 2: return KoText::RightLeftTopBottom;
+    default:
+    case 0: return KoText::AutoDirection;
     }
 }

@@ -38,6 +38,7 @@ set(koguiutils_LIB_SRCS
     KoToolDockerFactory.cpp
     KoLayoutVisitor.cpp
     KoCopyController.cpp
+    KoCutController.cpp
     KoPasteController.cpp
    KoColorDocker.cpp
    KoResourceChooser.cpp

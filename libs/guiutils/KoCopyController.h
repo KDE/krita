@@ -25,6 +25,7 @@
 
 class QAction;
 class KoCanvasBase;
+class KoCopyControllerPrivate;
 
 /**
  * This class takes care of the copy actions integration into flake.
@@ -43,7 +44,7 @@ public:
      *     action is used as a parent for the QObject for memory management purposes.
      */
     KoCopyController(KoCanvasBase *canvas, QAction *copyAction);
-    ~KoCopyController();
+    virtual ~KoCopyController();
 
 signals:
     /// emitted when the user pressed copy and the current tool had no selection.
@@ -60,10 +61,12 @@ public slots:
 
 private:
     Q_PRIVATE_SLOT(d, void copy())
+    Q_PRIVATE_SLOT(d, void cut())
     Q_PRIVATE_SLOT(d, void selectionChanged(bool))
 
-    class Private;
-    Private * const d;
+protected:
+    friend class KoCopyControllerPrivate;
+    KoCopyControllerPrivate * const d;
 };
 
 #endif

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,27 +27,19 @@
 #include <KDebug>
 #include <QAction>
 
-class KoCopyController::Private {
+// KoCopyControllerPrivate
+class KoCopyControllerPrivate
+{
 public:
-    Private(KoCopyController *p, KoCanvasBase *c, QAction *a) : parent(p), canvas(c), action(a)
-    {
-        appHasSelection = false;
-    }
+    KoCopyControllerPrivate(KoCopyController *p, KoCanvasBase *c, QAction *a);
 
     // request to start the actual copy
-    void copy()
-    {
-        if (canvas->toolProxy()->selection() && canvas->toolProxy()->selection()->hasSelection())
-            // means the copy can be done by a flake tool
-            canvas->toolProxy()->copy();
-        else // if not; then the application gets a request to do the copy
-            emit parent->copyRequested();
-    }
+    void copy();
 
-    void selectionChanged(bool hasSelection)
-{
-        action->setEnabled(appHasSelection || hasSelection);
-    }
+    // request to start the actual cut
+    void cut();
+
+    void selectionChanged(bool hasSelection);
 
     KoCopyController *parent;
     KoCanvasBase *canvas;
@@ -55,9 +47,38 @@ public:
     bool appHasSelection;
 };
 
+KoCopyControllerPrivate::KoCopyControllerPrivate(KoCopyController *p, KoCanvasBase *c, QAction *a)
+    : parent(p),
+    canvas(c),
+    action(a)
+{
+    appHasSelection = false;
+}
+
+void KoCopyControllerPrivate::copy()
+{
+    if (canvas->toolProxy()->selection() && canvas->toolProxy()->selection()->hasSelection())
+        // means the copy can be done by a flake tool
+        canvas->toolProxy()->copy();
+    else // if not; then the application gets a request to do the copy
+        emit parent->copyRequested();
+}
+
+void KoCopyControllerPrivate::cut()
+{
+    canvas->toolProxy()->cut();
+}
+
+void KoCopyControllerPrivate::selectionChanged(bool hasSelection)
+{
+    action->setEnabled(appHasSelection || hasSelection);
+}
+
+
+// KoCopyController
 KoCopyController::KoCopyController(KoCanvasBase *canvas, QAction *copyAction)
     : QObject(copyAction),
-    d(new Private(this, canvas, copyAction))
+    d(new KoCopyControllerPrivate(this, canvas, copyAction))
 {
     connect(canvas->toolProxy(), SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
     connect(copyAction, SIGNAL(triggered()), this, SLOT(copy()));

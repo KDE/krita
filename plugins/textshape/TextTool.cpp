@@ -1223,6 +1223,8 @@ QRectF TextTool::textRect(int startPosition, int endPosition) const
     if (startPosition > endPosition)
         qSwap(startPosition, endPosition);
     QTextBlock block = m_textShapeData->document()->findBlock(startPosition);
+    if (!block.isValid())
+        return QRectF();
     QTextLine line1 = block.layout()->lineForTextPosition(startPosition - block.position());
     if (! line1.isValid())
         return QRectF();
@@ -1231,6 +1233,8 @@ QRectF TextTool::textRect(int startPosition, int endPosition) const
         return QRectF(startX, line1.y(), 1, line1.height());
 
     QTextBlock block2 = m_textShapeData->document()->findBlock(endPosition);
+    if (!block2.isValid())
+        return QRectF();
     QTextLine line2 = block2.layout()->lineForTextPosition(endPosition - block2.position());
     if (! line2.isValid())
         return QRectF();

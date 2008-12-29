@@ -267,6 +267,7 @@ protected:
     void setHeight(qint32 h);
     void setImage(const QImage& img);
     void setBrushType(enumBrushType type);
+    KisBrush(const KisBrush& rhs);
 
 private:
 

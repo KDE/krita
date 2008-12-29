@@ -102,6 +102,9 @@ public:
 
     virtual QString defaultFileExtension() const;
 
+protected:
+    KisImagePipeBrush(const KisImagePipeBrush& rhs);
+
 private:
 
     bool init();

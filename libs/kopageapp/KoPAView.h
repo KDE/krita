@@ -150,8 +150,6 @@ protected slots:
     void viewGuides(bool show);
     void slotZoomChanged( KoZoomMode::Mode mode, qreal zoom );
 
-    void editCut();
-    void editCopy();
     void editPaste();
     void editDeleteSelection();
     void editSelectAll();

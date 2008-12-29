@@ -50,6 +50,8 @@
 #include <KoRulerController.h>
 #include <KoDrag.h>
 #include <KoShapeDeleteCommand.h>
+#include <KoCutController.h>
+#include <KoCopyController.h>
 
 #include "KoPADocumentStructureDocker.h"
 #include "KoShapeTraversal.h"
@@ -195,8 +197,10 @@ void KoPAView::initGUI()
 
 void KoPAView::initActions()
 {
-    actionCollection()->addAction( KStandardAction::Cut, "edit_cut", this, SLOT( editCut() ) );
-    actionCollection()->addAction( KStandardAction::Copy, "edit_copy", this, SLOT( editCopy() ) );
+    KAction *action = actionCollection()->addAction( KStandardAction::Cut, "edit_cut", 0, 0);
+    new KoCutController(kopaCanvas(), action);
+    action = actionCollection()->addAction( KStandardAction::Copy, "edit_copy", 0, 0 );
+    new KoCopyController(kopaCanvas(), action);
     m_editPaste = actionCollection()->addAction( KStandardAction::Paste, "edit_paste", this, SLOT( editPaste() ) );
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
     connect(m_canvas->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(clipboardDataChanged()));
@@ -290,16 +294,6 @@ void KoPAView::viewGuides(bool show)
 {
     m_doc->guidesData().setShowGuideLines(show);
     m_canvas->update();
-}
-
-void KoPAView::editCut()
-{
-    m_canvas->toolProxy()->cut();
-}
-
-void KoPAView::editCopy()
-{
-    m_canvas->toolProxy()->copy();
 }
 
 void KoPAView::editPaste()

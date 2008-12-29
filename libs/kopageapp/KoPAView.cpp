@@ -167,9 +167,14 @@ void KoPAView::initGUI()
     KoToolBoxFactory toolBoxFactory(m_canvasController, "Tools" );
     createDockWidget( &toolBoxFactory );
 
-    KoDockerManager *dockerManager = new KoDockerManager(this);
-    connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ),
-             dockerManager, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );
+    KoDockerManager *dockerMng = dockerManager();
+    if (!dockerMng) {
+        dockerMng = new KoDockerManager(this);
+        setDockerManager(dockerMng);
+    }
+
+    connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, KoView *) ),
+             dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, KoView *) ) );
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
     connect(m_canvas, SIGNAL(documentSize(const QSize&)), m_canvasController, SLOT(setDocumentSize(const QSize&)));

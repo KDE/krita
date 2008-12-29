@@ -132,6 +132,7 @@ public:
         m_lastExportSpecialOutputFlag = 0;
         m_readOnly = false;
         m_dockWidgetMenu = 0;
+        m_dockerManager = 0;
     }
     ~KoMainWindowPrivate() {
         qDeleteAll(m_toolbarList);
@@ -214,6 +215,7 @@ public:
     QMap<QString, QDockWidget*> m_dockWidgetMap;
     KActionMenu* m_dockWidgetMenu;
     QMap<QDockWidget*, bool> m_dockWidgetVisibilityMap;
+    KoDockerManager *m_dockerManager;
 };
 
 KoMainWindow::KoMainWindow(const KComponentData &componentData)
@@ -1916,6 +1918,16 @@ void KoMainWindow::forceDockTabFonts()
 QList<QDockWidget*> KoMainWindow::dockWidgets()
 {
     return d->m_dockWidgetMap.values();
+}
+
+KoDockerManager * KoMainWindow::dockerManager() const
+{
+    return d->m_dockerManager;
+}
+
+void KoMainWindow::setDockerManager(KoDockerManager *dm)
+{
+    d->m_dockerManager = dm;
 }
 
 KRecentFilesAction *KoMainWindow::recentAction() const

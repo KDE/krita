@@ -36,6 +36,8 @@ class QDockWidget;
 class QAction;
 class QLabel;
 
+// KOffice class but not in main module
+class KoDockerManager;
 
 namespace KParts
 {
@@ -163,6 +165,23 @@ public:
 
     /// Return the list of dock widgets belonging to this main window.
     QList<QDockWidget*> dockWidgets();
+
+    /**
+     * @return the KoDockerManager which is assigned
+     * WARNING: this could be 0, if no docker have been assigned yet. In that case create one
+      * and assign it.
+     * Note This should only be called by KoView
+     * @ref setDockerManager to assign it.
+     */
+    KoDockerManager * dockerManager() const;
+
+    /**
+     * use this to assign a KoDockerManager.
+     * Note this should only be called by KoView
+     * @ref dockerManager to retrieve it.
+     */
+    void setDockerManager(KoDockerManager *);
+
 
 signals:
     /**

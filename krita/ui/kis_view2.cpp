@@ -432,9 +432,14 @@ void KisView2::slotLoadingFinished()
 
     m_d->nodeManager->nodesUpdated();
 
-    KoDockerManager *dockerManager = new KoDockerManager(this);
-    connect(m_d->canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &)),
-            dockerManager, SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &)));
+    KoDockerManager *dockerMng = dockerManager();
+    if (!dockerMng) {
+        dockerMng = new KoDockerManager(this);
+        setDockerManager(dockerMng);
+    }
+
+    connect( m_d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, KoView *) ),
+             dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, KoView *) ) );
 
 
     connectCurrentImage();

@@ -45,11 +45,6 @@ public slots:
     void newOptionWidget(QWidget *widget);
 
     /**
-     * Removes the current widget (if any) from the docker and makes the docker as small as possible
-     */
-    void removeOptionWidget();
-
-    /**
      * Returns whether the docker has an optionwidget attached
      */
     bool hasOptionWidget();

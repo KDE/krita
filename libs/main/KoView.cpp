@@ -671,6 +671,20 @@ void KoView::endOperation()
 //   canvas()->update();
 }
 
+KoDockerManager * KoView::dockerManager() const
+{
+    KoMainWindow *mw = shell();
+    return mw ? mw->dockerManager() : 0;
+}
+
+void KoView::setDockerManager(KoDockerManager *dm)
+{
+    KoMainWindow *mw = shell();
+
+    if(mw)
+        mw->setDockerManager(dm);
+}
+
 KoMainWindow * KoView::shell() const
 {
     return dynamic_cast<KoMainWindow *>(window());

@@ -182,8 +182,10 @@ QWidget * KoTool::createOptionWidget()
 QMap<QString, QWidget *>  KoTool::createOptionWidgets()
 {
     QMap<QString, QWidget *> ow;
-    if (QWidget *widget = createOptionWidget())
+    if (QWidget *widget = createOptionWidget()) {
+        widget->setObjectName(toolId());
         ow.insert(i18n("Tool Options"), widget);
+    }
     return ow;
 }
 

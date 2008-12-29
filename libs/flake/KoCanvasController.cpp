@@ -31,6 +31,7 @@
 #include "KoCanvasBase.h"
 #include "KoCanvasObserver.h"
 #include <KoMainWindow.h>
+#include <KoView.h>
 #include "tools/KoGuidesTool.h"
 #include "KoToolManager.h"
 
@@ -410,7 +411,16 @@ void KoCanvasController::zoomTo(const QRect &viewRect)
 
 void KoCanvasController::setToolOptionWidgets(const QMap<QString, QWidget *>&widgetMap)
 {
-    emit toolOptionWidgetsChanged(widgetMap);
+    KoView *view=0;
+    QWidget *w = this;
+    while (w->parentWidget()) {
+        view = qobject_cast<KoView*>(w);
+        if(view) {
+            emit toolOptionWidgetsChanged(widgetMap, view);
+            break;
+        }
+        w = w->parentWidget();
+    }
 }
 
 void KoCanvasController::setDocumentSize(const QSize & sz, bool recalculateCenter)

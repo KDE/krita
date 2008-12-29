@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006, 2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2007 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2007-2008 Casper Boemann <cbr@boemann.dk>
  * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -29,6 +29,7 @@
 
 class KoShape;
 class KoCanvasBase;
+class KoView;
 
 /**
  * This widget is a wrapper around your canvas providing scrollbars.
@@ -288,7 +289,7 @@ signals:
     /**
      * Emit the new tool option widgets to be used with this canvas.
      */
-    void toolOptionWidgetsChanged(const QMap<QString, QWidget *> &);
+    void toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, KoView *);
 
     /**
      * Emitted whenever the document is scrolled.

@@ -42,7 +42,7 @@ KoPageLayoutWidget::KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layo
 
     d->pageLayout = layout;
     d->marginsEnabled = true;
-    d->allowSignals = false;
+    d->allowSignals = true;
     d->orientationGroup = new QButtonGroup(this);
     d->orientationGroup->addButton(d->widget.portrait, KoPageFormat::Portrait);
     d->orientationGroup->addButton(d->widget.landscape, KoPageFormat::Landscape);
@@ -51,7 +51,6 @@ KoPageLayoutWidget::KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layo
     group2->addButton(d->widget.singleSided);
     group2->addButton(d->widget.facingPages);
     // the two sets of labels we use might have different lengths; make sure this does not create a 'jumping' ui
-    d->allowSignals = true;
     d->widget.facingPages->setChecked(true);
     facingPagesChanged();
     int width = qMax(d->widget.leftLabel->width(), d->widget.rightLabel->width());
@@ -79,6 +78,8 @@ KoPageLayoutWidget::KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layo
 
     setUnit(KoUnit(KoUnit::Millimeter));
     setPageLayout(layout);
+    if (layout.format == 0) // make sure we always call this during startup, even if the A3 (index=0) was chosen
+        sizeChanged(layout.format);
     showTextDirection(false);
 }
 
@@ -94,14 +95,13 @@ void KoPageLayoutWidget::sizeChanged(int row)
     d->allowSignals = false;
     d->pageLayout.format = static_cast<KoPageFormat::Format> (row);
     bool custom =  d->pageLayout.format == KoPageFormat::CustomSize;
-    bool pageSpread = d->widget.facingPages->isChecked();
     d->widget.width->setEnabled( custom );
     d->widget.height->setEnabled( custom );
 
     if ( !custom ) {
         d->pageLayout.width = MM_TO_POINT( KoPageFormat::width( d->pageLayout.format, d->pageLayout.orientation ) );
         d->pageLayout.height = MM_TO_POINT( KoPageFormat::height( d->pageLayout.format, d->pageLayout.orientation ) );
-        if (pageSpread)
+        if (d->widget.facingPages->isChecked()) // is pagespread
             d->pageLayout.width *= 2;
     }
 
@@ -259,10 +259,8 @@ void KoPageLayoutWidget::showPageSpread(bool on)
 
 void KoPageLayoutWidget::setPageSpread(bool pageSpread)
 {
-    if (pageSpread) {
+    if (pageSpread)
         d->widget.facingPages->setChecked(true);
-//         d->widget.width->changeValue( d->pageLayout.width / 2.0);
-    }
     else
         d->widget.singleSided->setChecked(true);
 }

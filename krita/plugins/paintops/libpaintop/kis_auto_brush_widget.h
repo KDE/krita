@@ -53,6 +53,11 @@ private slots:
     void linkSizeToggled(bool);
     void linkFadeToggled(bool);
 
+
+signals:
+
+    void sigBrushChanged();
+        
 protected:
     virtual void resizeEvent(QResizeEvent *);
 

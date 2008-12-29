@@ -43,6 +43,8 @@ void KisCurveOption::transferCurve()
             m_curve[i] = value;
     }
     m_customCurve = true;
+
+    emit sigSettingChanged();
 }
 
 
@@ -71,5 +73,5 @@ void KisCurveOption::readOptionSetting(const KisPropertiesConfiguration* setting
                 m_curve[i] = setting->getDouble(QString(m_name + "Curve%0").arg(i), i / 255.0);
         }
     }
-
+    emit sigSettingChanged();
 }

@@ -58,6 +58,10 @@ private slots:
     void slotAddPredefined();
     void slotUpdateCurrentBrush(int i = 0); // To connect with activated(int)
 
+signals:
+
+    void sigBrushChanged();
+    
 private:
     void createBrush();
     KisImageSP m_image;

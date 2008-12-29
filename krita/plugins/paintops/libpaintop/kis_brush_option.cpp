@@ -26,6 +26,7 @@ KisBrushOption::KisBrushOption()
 {
     m_checkable = false;
     m_brushSelectionWidget = new KisBrushSelectionWidget();
+    connect(m_brushSelectionWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigSettingChanged()));
     m_brushSelectionWidget->hide();
     setConfigurationPage(m_brushSelectionWidget);
 }
@@ -59,11 +60,16 @@ void KisBrushOption::setTextBrush( bool on )
 
 void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    // XXX: define a serialization format for potato stamps
+#ifdef __GNUC__
+#warning "KisBrushOption::writeOptionSetting: define a serialization format for potato stamps"
+#endif
+
+
 }
 
 void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    // XXX: define a serialization format for potato stamps & a way to
-    // set the active potato stamp correctly
+#ifdef __GNUC__
+#warning "KisBrushOption::readOptionSetting: define a serialization format for potato stamps & a way to  set the active potato stamp correctly"
+#endif
 }

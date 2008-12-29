@@ -78,6 +78,8 @@ void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption * option)
 
     m_d->paintOpOptions << option;
 
+    connect(option, SIGNAL(sigSettingChanged()), SIGNAL(sigConfigChanged()));
+    
     if ( option->isCheckable() ) {
         QWidget* w = new QWidget;
         QVBoxLayout* l = new QVBoxLayout;

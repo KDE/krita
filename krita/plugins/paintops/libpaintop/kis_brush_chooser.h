@@ -48,13 +48,17 @@ public:
     }
 
 private slots:
+    
     void slotSetItemSpacing(double);
     void slotSetItemUseColorAsMask(bool);
     void slotImportBrush();
     void slotActivatedBrush(KoResource *);
     void update(QTableWidgetItem *item);
 
+signals:
 
+    void sigBrushChanged();
+        
 private:
     QLabel *m_lbName;
     QLabel *m_lbSpacing;

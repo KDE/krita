@@ -70,6 +70,8 @@ void KisTextBrush::rebuildTextBrush()
     textBrush->setFont(m_font);
     textBrush->setText(lineEdit->text());
     textBrush->updateBrush();
+
+    emit sigBrushChanged();
 }
 
 #include "kis_text_brush.moc"

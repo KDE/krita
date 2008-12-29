@@ -55,16 +55,20 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     l->addWidget(m_brushesTab);
 
     m_autoBrushWidget = new KisAutoBrushWidget(0, "autobrush", i18n("Autobrush"));
+    connect(m_autoBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
     m_brushesTab->addTab(m_autoBrushWidget, i18n("Autobrush"));
 
     m_brushChooser = new KisBrushChooser(0);
+    connect(m_brushChooser, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
     m_brushesTab->addTab(m_brushChooser, i18n("Predefined Brushes"));
 
     // XXX: pass image!
     m_customBrushWidget = new KisCustomBrush(0, i18n("Custom Brush"), 0);
+    connect(m_customBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
     m_brushesTab->addTab(m_customBrushWidget, i18n("Custom Brush"));
 
     m_textBrushWidget = new KisTextBrush(0, "textbrush", i18n("Text Brush"));
+    connect(m_textBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
     m_brushesTab->addTab(m_textBrushWidget, i18n("Text Brush"));
 
     setLayout(l);

@@ -48,6 +48,9 @@ public:
     void setCustomBrush( bool on );
     void setTextBrush( bool on );
 
+signals:
+
+    void sigBrushChanged();
 
 private:
 

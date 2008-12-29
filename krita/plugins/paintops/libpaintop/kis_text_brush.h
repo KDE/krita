@@ -83,6 +83,10 @@ private slots:
     void rebuildTextBrush();
     void getFont();
 
+signals:
+
+    void sigBrushChanged();
+    
 private:
     KisBrushSP m_textBrush;
     QFont m_font;

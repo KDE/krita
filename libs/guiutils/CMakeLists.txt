@@ -73,8 +73,6 @@ kde4_add_ui_files( koguiutils_LIB_SRCS
     KoCsvImportDialog.ui
     KoGeneralPropertyUi.ui
     KoPageLayoutWidget.ui
-    #KoPageLayoutColumns.ui
-    #KoPageLayoutHeaderBase.ui
     KoEditColorSet.ui
     KoShadowConfigWidget.ui
 )

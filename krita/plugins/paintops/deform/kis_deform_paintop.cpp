@@ -24,7 +24,7 @@
 #include <QRect>
 #include <QList>
 #include <QColor>
-#include <QMutexLocker>
+//#include <QMutexLocker>
 
 #include <qdebug.h>
 
@@ -76,7 +76,7 @@ KisDeformPaintOp::~KisDeformPaintOp()
 
 void KisDeformPaintOp::paintAt(const KisPaintInformation& info)
 {
-    QMutexLocker locker(&m_mutex);
+//    QMutexLocker locker(&m_mutex);
 
     if (!painter()) return;
     /* m_dev = painter()->device(); */

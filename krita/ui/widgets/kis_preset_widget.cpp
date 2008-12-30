@@ -54,13 +54,12 @@ void KisPresetWidget::updatePreview()
 void KisPresetWidget::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
-    qint32 cw = width();
-    qint32 ch = height();
+    qint32 cw = width() - 1;
+    qint32 ch = height() - 1;
     p.fillRect(0, 0, cw, ch, Qt::white);  // XXX: use a palette for this instead of white?
 
     if (m_preset) {
-        p.drawImage(1, 1, m_preset->img());
-        p.drawText(1, ch - 1 , m_preset->name());
+        p.drawImage(1, 1, m_preset->img().scaled(QSize(cw, ch), Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
     p.setPen(Qt::gray);
     p.drawRect(0, 0, cw + 1, ch + 1);

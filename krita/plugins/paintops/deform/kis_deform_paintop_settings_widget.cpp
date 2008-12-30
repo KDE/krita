@@ -80,6 +80,7 @@ KisPropertiesConfiguration*  KisDeformPaintOpSettingsWidget::configuration() con
 
 void KisDeformPaintOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration* config ) const
 {
+    config->setProperty( "paintop", "deformbrush"); // XXX: make this a const id string
     config->setProperty( "radius", radius() );
     config->setProperty( "deform_amount", deformAmount() );
     config->setProperty( "deform_action", deformAction() );

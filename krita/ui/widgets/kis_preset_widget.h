@@ -46,8 +46,8 @@ public:
 
 public slots:
 
-    void slotSetPaintOp(const KoID & paintOp);
-    void slotSetItem(KisPaintOpPreset * preset);
+    void setPreset(KisPaintOpPresetSP preset);
+    void updatePreview();
 
 protected:
 
@@ -55,9 +55,7 @@ protected:
 
 private:
 
-    KoID m_paintOp;
-    KisPaintOpPreset * m_preset;
-    KisPaintDeviceSP m_canvas;
+    KisPaintOpPresetSP m_preset;
 
 };
 

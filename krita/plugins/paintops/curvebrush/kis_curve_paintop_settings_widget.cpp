@@ -66,6 +66,7 @@ KisPropertiesConfiguration*  KisCurvePaintOpSettingsWidget::configuration() cons
 
 void KisCurvePaintOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration* config ) const
 {
+    config->setProperty("paintop", "curvebrush"); // XXX: make this a const id string
     config->setProperty( "min_distance", minimalDistance() );
     config->setProperty( "curve_action", curveAction() );
     config->setProperty( "interval", interval() );

@@ -72,6 +72,7 @@ KisPropertiesConfiguration* KisFilterOpSettingsWidget::configuration() const
 
 void KisFilterOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
 {
+    config->setProperty("paintop", "filter"); // XXX: make this a const id string
     m_brushOption->writeOptionSetting(config);
     m_sizeOption->writeOptionSetting(config);
     m_filterOption->writeOptionSetting(config);

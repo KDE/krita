@@ -21,7 +21,7 @@
 #define KIS_SUMIPAINTOP_H_
 
 #include <QColor>
-#include <QMutex>
+//#include <QMutex>
 
 #include <klocale.h>
 #include <kis_paintop.h>
@@ -65,7 +65,7 @@ private:
     KisPaintDeviceSP dab;
     KisPaintDeviceSP m_dev;
 
-    QMutex m_mutex;
+//    QMutex m_mutex;
     Brush m_brush;
 };
 

@@ -59,8 +59,9 @@
 KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name)
         : QWidget(parent)
         , m_resourceProvider(view->resourceProvider())
-        , m_view(view)
         , m_optionWidget(0)
+        , m_presetWidget(0)
+        , m_view(view)
         , m_activePreset(0)
 {
     Q_ASSERT(view != 0);
@@ -81,15 +82,13 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_cmbPaintopPresets->setMinimumWidth(150);
     m_cmbPaintopPresets->setToolTip(i18n("Brush presets"));
 
-    m_layout = new QHBoxLayout(this);
-    m_layout->setMargin(1);
-    m_layout->setSpacing(1);
-    m_layout->addWidget(m_cmbPaintops);
-    m_layout->addWidget(m_cmbPaintopPresets);
-
-    KisPresetWidget * m_presetWidget = new KisPresetWidget(this, "presetwidget");
+    m_presetWidget = new KisPresetWidget(this, "presetwidget");
     m_presetWidget->setToolTip(i18n("Edit brush preset"));
     m_presetWidget->setFixedSize(120, 26);
+
+    m_layout = new QHBoxLayout(this);
+    m_layout->addWidget(m_cmbPaintops);
+    m_layout->addWidget(m_cmbPaintopPresets);
     m_layout->addWidget(m_presetWidget);
 
     m_presetsPopup = new KisPaintOpPresetsPopup();
@@ -258,6 +257,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
     if ( m_activePreset && m_optionWidget ) {
         dbgUI << "\t\t writing configuration to option widget";
         m_optionWidget->writeConfiguration( const_cast<KisPaintOpSettings*>( m_activePreset->settings().data() ) );
+        m_optionWidget->disconnect(m_presetWidget);
     }
 
     m_currentID[KoToolManager::instance()->currentInputDevice()] = paintop;
@@ -265,6 +265,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
     KisPaintOpPresetSP preset =
         activePreset(currentPaintop(), KoToolManager::instance()->currentInputDevice());
     dbgUI << "\t\tactive preset for paintop " << paintop.id() << " is " << preset;
+    dbgUI << "XXXX" << preset->paintOp() << ", " << preset->settings()->toXML();
 
     if (preset != 0 && preset->settings() && preset->settings()->widget()) {
         m_optionWidget = preset->settings()->widget();
@@ -273,6 +274,9 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
             m_optionWidget->setConfiguration( preset->settings() );
         }
         m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
+        Q_ASSERT(m_optionWidget);
+        Q_ASSERT(m_presetWidget);
+        connect(m_optionWidget, SIGNAL(sigPleaseUpdatePreview()), m_presetWidget, SLOT(updatePreview()));
     } else {
         m_presetsPopup->setPaintOpSettingsWidget(0);
     }
@@ -280,7 +284,8 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
     preset->settings()->setNode( m_resourceProvider->currentNode() );
     m_resourceProvider->slotPaintOpPresetActivated(preset);
 
-    m_activePreset = preset.data();
+    m_activePreset = preset; //.data(); // XXX: Why grab the pointer from the shared object?
+    m_presetWidget->setPreset(m_activePreset);
 }
 
 KoID KisPaintopBox::defaultPaintop(const KoInputDevice & inputDevice)

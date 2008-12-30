@@ -81,6 +81,7 @@ KisPropertiesConfiguration* KisSmudgeOpSettingsWidget::configuration() const
 
 void KisSmudgeOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
 {
+    config->setProperty("paintop", "smudge"); // XXX: make this a const id string
     m_brushOption->writeOptionSetting(config);
     m_sizeOption->writeOptionSetting(config);
     m_opacityOption->writeOptionSetting(config);

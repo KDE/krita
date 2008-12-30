@@ -22,8 +22,8 @@
 
 #include "kis_duplicateop_settings_widget.h"
 #include "kis_duplicateop_settings.h"
-#include "kis_duplicateop_option.h"             \
-                                                \
+#include "kis_duplicateop_option.h"
+                                                
 #include <widgets/kcurve.h>
 
 #include <kis_image.h>
@@ -73,6 +73,7 @@ KisPropertiesConfiguration* KisDuplicateOpSettingsWidget::configuration() const
 
 void KisDuplicateOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
 {
+    config->setProperty("paintop", "duplicate"); // XXX: make this a const id string
     m_brushOption->writeOptionSetting(config);
     m_sizeOption->writeOptionSetting(config);
     m_duplicateOption->writeOptionSetting( config );

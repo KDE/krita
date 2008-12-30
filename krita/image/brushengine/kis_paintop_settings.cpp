@@ -86,10 +86,11 @@ QImage KisPaintOpSettings::sampleStroke(const QSize& size )
     KisPaintOpPresetSP preset = new KisPaintOpPreset();
     preset->setSettings( this );
 
-    painter.setPaintOpPreset( preset );
-
     int width = size.width();
     int height = size.height();
+
+    KisImageSP img = new KisImage(0, width, height, cs, "temporary for stroke sample");
+    painter.setPaintOpPreset( preset, img);
 
     QPointF p1(1.0 / 6.0*width, 2.0 / 3.0*height);
     QPointF p2(2.0 / 6.0*width, 1.0 / 3.0*height);

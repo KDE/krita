@@ -67,6 +67,7 @@ KisPropertiesConfiguration*  KisChalkPaintOpSettingsWidget::configuration() cons
 
 void KisChalkPaintOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration* config ) const
 {
+    config->setProperty("paintop", "chalkbrush"); // XXX: make this a const id string
     m_chalkOption->writeOptionSetting(config);
     m_paintActionTypeOption->writeOptionSetting(config);
 }

@@ -21,7 +21,7 @@
 #define KIS_CURVEPAINTOP_H_
 
 #include <QColor>
-#include <QMutex>
+//#include <QMutex>
 
 #include <klocale.h>
 #include <kis_paintop.h>
@@ -62,7 +62,7 @@ private:
     KisImageSP m_image;
     KisPaintDeviceSP dab;
     KisPaintDeviceSP m_dev;
-    QMutex m_mutex;
+//    QMutex m_mutex;
     CurveBrush m_curveBrush;
 };
 

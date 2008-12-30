@@ -27,27 +27,28 @@
 #include <KoColorSpaceRegistry.h>
 
 #include <kis_paintop_preset.h>
-#include <kis_paint_device.h>
-#include <kis_painter.h>
 
 KisPresetWidget::KisPresetWidget(QWidget *parent, const char *name)
         : KisPopupButton(parent)
 {
     setObjectName(name);
     m_preset = 0;
-    m_canvas = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "preset preview canvas");
 }
 
-void KisPresetWidget::slotSetPaintOp(const KoID & paintOp)
+void KisPresetWidget::setPreset(KisPaintOpPresetSP preset)
 {
-    m_paintOp = paintOp;
-}
-
-
-void KisPresetWidget::slotSetItem(KisPaintOpPreset * preset)
-{
-    m_preset = preset;
+    Q_ASSERT(preset);
+    m_preset = preset.data();
+    m_preset->updateImg();
     update();
+}
+
+void KisPresetWidget::updatePreview()
+{
+    if (m_preset) {
+        m_preset->updateImg();
+        update();
+    }
 }
 
 void KisPresetWidget::paintEvent(QPaintEvent *)
@@ -57,9 +58,6 @@ void KisPresetWidget::paintEvent(QPaintEvent *)
     qint32 ch = height();
     p.fillRect(0, 0, cw, ch, Qt::white);  // XXX: use a palette for this instead of white?
 
-    /*
-        draw a sinus with min pressure at start, max pressure in the middle, min pressure at end
-    */
     if (m_preset) {
         p.drawImage(1, 1, m_preset->img());
         p.drawText(1, ch - 1 , m_preset->name());

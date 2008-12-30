@@ -21,7 +21,7 @@
 #define KIS_CHALK_PAINTOP_H_
 
 #include <QColor>
-#include <QMutex>
+//#include <QMutex>
 
 #include <klocale.h>
 #include <kis_paintop.h>

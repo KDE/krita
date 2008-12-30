@@ -24,7 +24,7 @@
 
 #include <QRect>
 #include <QColor>
-#include <QMutexLocker>
+//#include <QMutexLocker>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>

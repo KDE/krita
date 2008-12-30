@@ -122,7 +122,7 @@ private:
 
     struct Private;
     Private * const m_d;
-
+    Q_PRIVATE_SLOT(m_d, void slotLayersChanged(KisGroupLayerSP));
 };
 
 #endif

@@ -70,7 +70,12 @@ KisSmudgeOp::KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter *painte
     Q_ASSERT(painter);
     Q_ASSERT(settings->m_optionsWidget->m_brushOption);
     m_brush = settings->m_optionsWidget->m_brushOption->brush();
-    m_source = settings->node()->paintDevice();
+    if (settings->node()) {
+        m_source = settings->node()->paintDevice();
+    }
+    else {
+        m_source = painter->paintDevice();
+    }
     m_srcdev = new KisPaintDevice(m_source->colorSpace(), "duplicate source dev");
     m_target = new KisPaintDevice(m_source->colorSpace(), "duplicate target dev");
 

@@ -1,7 +1,6 @@
 * use default filter config in filter option
 * save/load filter in filter option
 * save/load brush in brush option
-* move paintop preview code to preset
 * make loading/saving/editing of presets work
 * fix mixer canvas to use right paintop preset
 * set a default paintop preset in the canvas resource provider

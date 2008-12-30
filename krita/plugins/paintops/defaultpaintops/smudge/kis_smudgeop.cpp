@@ -74,7 +74,7 @@ KisSmudgeOp::KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter *painte
         m_source = settings->node()->paintDevice();
     }
     else {
-        m_source = painter->paintDevice();
+        m_source = painter->device();
     }
     m_srcdev = new KisPaintDevice(m_source->colorSpace(), "duplicate source dev");
     m_target = new KisPaintDevice(m_source->colorSpace(), "duplicate target dev");

@@ -209,7 +209,8 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
         KisPaintDeviceSP dev = selection->pixelSelection();
         //connect(*dev, SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
         // Layer data
-        if (m_store->open(getLocation( node, DOT_PIXEL_SELECTION ))) {
+        QString location = getLocation( node, DOT_PIXEL_SELECTION );
+        if (m_store->open(location)) {
             if (!dev->write(m_store)) {
                 dev->disconnect();
                 m_store->close();
@@ -239,18 +240,21 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
 
 bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
 {
-    if (node->inherits( "KisNodeFilterInterface" )) {
-	KisNodeFilterInterface* filterInterface = dynamic_cast<KisNodeFilterInterface*>(node);
-	if (!filterInterface) return false;
-        KisFilterConfiguration* filter = filterInterface->filter();
-        if (filter) {
-            if (m_store->open(getLocation( node, DOT_FILTERCONFIG ))) {
-                QString s = filter->toLegacyXML();
-                m_store->write(s.toUtf8(), qstrlen(s.toUtf8()));
-                m_store->close();
-            }
+    KisFilterConfiguration* filter;
+    if (node->inherits("KisFilterMask")) {
+        filter = static_cast<KisFilterMask*>(node)->filter();
+    }
+    else if (node->inherits( "KisAdjustmentLayer" )) {
+        filter = static_cast<KisAdjustmentLayer*>(node)->filter();
+    }
+    if (filter) {
+        QString location = getLocation( node, DOT_FILTERCONFIG );
+        if (m_store->open(location)) {
+            QString s = filter->toLegacyXML();
+            m_store->write(s.toUtf8(), qstrlen(s.toUtf8()));
+            m_store->close();
+            return true;
         }
-
     }
     return false;
 }

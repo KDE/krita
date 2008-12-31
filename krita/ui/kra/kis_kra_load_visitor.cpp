@@ -261,9 +261,10 @@ bool KisKraLoadVisitor::loadProfile( KisPaintDeviceSP device, const QString& loc
                                                          new KoIccColorProfile(data));
         // replace the old colorspace
         device->setDataManager(device->dataManager(), cs);
+        return true;
 
     }
-
+    return false;
 
 }
 
@@ -277,8 +278,10 @@ bool KisKraLoadVisitor::loadFilterConfiguration( KisFilterConfiguration* kfc, co
         m_store->close();
         if (!data.isEmpty()) {
             kfc->fromLegacyXML(QString(data));
+            return true;
         }
     }
+    return false;
 }
 
 KisSelectionSP KisKraLoadVisitor::loadSelection( const QString& location )

@@ -137,6 +137,9 @@ void KisPaintLayer::updateProjection(const QRect & rc)
     if (!m_d->projection) {
         m_d->projection = new KisPaintDevice(*m_d->paintDevice);
     } else {
+        m_d->projection->setX(m_d->paintDevice->x());
+        m_d->projection->setY(m_d->paintDevice->y());
+
         KisPainter gc(m_d->projection);
         gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
         gc.bitBlt(rc.topLeft(), m_d->paintDevice, rc);

@@ -397,6 +397,7 @@ void KoToolManager::postSwitchTool()
         toolWidget = d->canvasData->dummyToolWidget;
         if (toolWidget == 0) {
             toolWidget = new QWidget();
+            toolWidget->setObjectName( "DummyToolWidget" );
             QVBoxLayout *layout = new QVBoxLayout(toolWidget);
             layout->setMargin(3);
             d->canvasData->dummyToolLabel = new QLabel(toolWidget);

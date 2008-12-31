@@ -45,6 +45,7 @@ void DivineProportionShape::paint(QPainter &painter, const KoViewConverter &conv
 }
 
 void DivineProportionShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas) {
+    Q_UNUSED(canvas);
     if(!m_printable) {
         applyConversion(painter, converter);
         painter.setRenderHint(QPainter::Antialiasing);
@@ -62,7 +63,7 @@ void DivineProportionShape::draw(QPainter &painter) {
     painter.setPen(QPen(QColor(173, 123, 134)));
     const qreal x1 = rect.width() / m_divineProportion;
     const qreal x2 = rect.width() - x1;
-    if(top && !left || !top && left) {
+    if((top && !left) || (!top && left)) {
         painter.drawLine(rect.bottomLeft(), rect.topRight());
         painter.drawLine(QPointF(x1, 0), rect.bottomRight());
         painter.drawLine(QPointF(0,0), QPointF(x2, rect.bottom()));

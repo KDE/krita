@@ -61,7 +61,11 @@ DivineProportionTool::DivineProportionTool(KoCanvasBase *canvas)
 DivineProportionTool::~DivineProportionTool() {
 }
 
-void DivineProportionTool::paint( QPainter &painter, const KoViewConverter &converter) {
+void DivineProportionTool::paint( QPainter &painter, const KoViewConverter &converter)
+{
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
+    // nothing to do here
 }
 
 void DivineProportionTool::mousePressEvent( KoPointerEvent *event ) {

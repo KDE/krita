@@ -375,14 +375,31 @@ QSizeF KoPathShape::size() const
 
 void KoPathShape::setSize(const QSizeF &newSize)
 {
-    QSizeF oldSize = size();
-    qreal zoomX = oldSize.width() == 0.0 ? 1.0 : newSize.width() / oldSize.width();
-    qreal zoomY = oldSize.height() == 0.0 ? 1.0 : newSize.height() / oldSize.height();
-    QMatrix matrix(zoomX, 0, 0, zoomY, 0, 0);
+    QMatrix matrix(resizeMatrix(newSize));
 
-    //qDebug() << "setSize" << zoomX << "," << zoomY << "," << newSize;
     KoShape::setSize(newSize);
     map(matrix);
+}
+
+QMatrix KoPathShape::resizeMatrix( const QSizeF & newSize ) const
+{
+    QSizeF oldSize = size();
+    if (oldSize.width() == 0.0) {
+        oldSize.setWidth(0.000001);
+    }
+    if (oldSize.height() == 0.0) {
+        oldSize.setHeight(0.000001);
+    }
+
+    QSizeF sizeNew(newSize);
+    if (sizeNew.width() == 0.0) {
+        sizeNew.setWidth(0.000001);
+    }
+    if (sizeNew.height() == 0.0) {
+        sizeNew.setHeight(0.000001);
+    }
+
+    return QMatrix(sizeNew.width() / oldSize.width(), 0, 0, sizeNew.height() / oldSize.height(), 0, 0);
 }
 
 KoPathPoint * KoPathShape::moveTo(const QPointF &p)

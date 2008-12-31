@@ -93,7 +93,17 @@ public:
     virtual QRectF boundingRect() const;
     /// reimplemented
     virtual QSizeF size() const;
-    /// reimplemented
+    /**
+     * Resize the shape
+     *
+     * This makes sure that the pathshape will not be resized to 0 if the new size
+     * is null as that makes it impossible to undo the change.
+     *
+     * All functions that overwrite this function should also use the resizeMatrix
+     * function to get and use the same data in resizing.
+     *
+     * @see resizeMatrix()
+     */
     virtual void setSize(const QSizeF &size);
     /// reimplemented
     virtual bool hitTest(const QPointF &position) const;
@@ -504,6 +514,14 @@ protected:
      * @brief Load node types
      */
     void loadNodeTypes(const KoXmlElement & element);
+
+    /**
+     * Get the resize matrix
+     *
+     * This makes sure that also if the newSize isNull that there will be a
+     * very small size of 0.000001 pixels
+     */
+    QMatrix resizeMatrix( const QSizeF & newSize ) const;
 
     KoSubpathList m_subpaths;
 

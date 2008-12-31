@@ -60,7 +60,7 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
                 warnImage << "Sel: wrong index: " << selIndex << "(dim = " << dim << ")";
             }
         } else if (index.startsWith("rank")) {
-            int rankIndex = qMax(1, index.mid(strlen("rank")).toInt());
+            int rankIndex = index.mid(strlen("rank")).toInt();
             if (rankIndex < 0 || rankIndex > dim) {
                 warnImage << "Rankindex out of range: " << rankIndex;
                 continue;

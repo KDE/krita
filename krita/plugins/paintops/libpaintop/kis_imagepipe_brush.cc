@@ -159,6 +159,9 @@ bool KisImagePipeBrush::init()
     }
 
     m_d->data.resize(0);
+
+    sanitize();
+
     return true;
 }
 
@@ -311,8 +314,8 @@ void KisImagePipeBrush::selectNextBrush(const KisPaintInformation& info) const
             break;
         default:
             warnImage << "This parasite KisParasite::SelectionMode has not been implemented. Reselecting"
-            << " to Incremental";
-            m_d->parasite.selection[i] = KisParasite::Incremental;
+            << " to Constant";
+            m_d->parasite.selection[i] = KisParasite::Constant; // Not incremental, since that assumes rank > 0
             index = 0;
         }
         m_d->parasite.index[i] = index;
@@ -346,6 +349,19 @@ KisImagePipeBrush* KisImagePipeBrush::clone() const
 QString KisImagePipeBrush::defaultFileExtension() const
 {
     return QString(".gih");
+}
+
+void KisImagePipeBrush::sanitize() {
+    for (int i = 0; i < m_d->parasite.dim; i++) {
+        // In the 2 listed cases, we'd divide by 0!
+        if (   m_d->parasite.selection[i] == KisParasite::Incremental
+              || m_d->parasite.selection[i] == KisParasite::Angular) {
+            if (m_d->parasite.rank[i] == 0) {
+                warnImage << "Brush" << name() << " has a wrong rank for its selection mode!";
+                m_d->parasite.selection[i] = KisParasite::Constant;
+             }
+        }
+    }
 }
 
 #include "kis_imagepipe_brush.moc"

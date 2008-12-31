@@ -82,3 +82,12 @@ kde4_add_unit_test(TestConvolutionOpImpl TESTNAME libs-pigment-TestConvolutionOp
 
 target_link_libraries(TestConvolutionOpImpl  ${KDE4_KDECORE_LIBS} pigmentcms ${QT_QTTEST_LIBRARY})
 
+
+########### next target ###############
+
+set(TestKoRgbU8ColorSpaceTester_test_SRCS KoRgbU8ColorSpaceTester.cpp )
+
+kde4_add_unit_test(TestKoRgbU8ColorSpaceTester TESTNAME libs-pigment-TestKoRgbU8ColorSpaceTester ${TestKoRgbU8ColorSpaceTester_test_SRCS})
+
+target_link_libraries(TestKoRgbU8ColorSpaceTester  ${KDE4_KDECORE_LIBS} pigmentcms ${QT_QTTEST_LIBRARY})
+

@@ -107,6 +107,9 @@ public:
     /// Update the canvas for the given rectangle in view coordinates.
     void updateCanvasViewRect(const QRectF &viewRect);
 
+    virtual QWidget* createOptionWidget();
+    virtual QWidget* optionWidget();
+    
 protected:
 
     KisImageSP image() const;

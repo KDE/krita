@@ -41,9 +41,6 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
 
-    QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
-
 public slots:
     virtual void activate(bool temp = false);
     void deactivate();
@@ -67,7 +64,11 @@ public:
         {
             setToolTip( i18n( "Ruler assistant editor tool" ) );
             setToolType( TOOL_TYPE_VIEW );
-            setIcon( "tool_rulerassistanttool" );
+#ifdef __GNUC__
+#warning "KisRulerAssistantToolFactory: create a tool icon"
+#endif
+            
+            setIcon("math_matrix");//"tool_rulerassistanttool" );
             setPriority( 0 );
         };
 

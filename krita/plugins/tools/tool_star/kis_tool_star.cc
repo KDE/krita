@@ -184,7 +184,8 @@ QWidget* KisToolStar::createOptionWidget()
 
     m_optWidget = new WdgToolStar(widget);
     Q_CHECK_PTR(m_optWidget);
-
+    m_optWidget->setObjectName(toolId() + " option widget");
+    
     m_optWidget->ratioSpinBox->setValue(m_innerOuterRatio);
 
     QGridLayout *optionLayout = new QGridLayout(widget);

@@ -49,10 +49,10 @@ class KisToolPerspectiveTransform : public KisToolNonPaint, KisCommandHistoryLis
 public:
     KisToolPerspectiveTransform();
     virtual ~KisToolPerspectiveTransform();
-
+#if 0
     virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
-
+#endif
     virtual void setup(KActionCollection *collection);
     virtual void paint(QPainter& gc);
     virtual void paint(QPainter& gc, const QRect& rc);

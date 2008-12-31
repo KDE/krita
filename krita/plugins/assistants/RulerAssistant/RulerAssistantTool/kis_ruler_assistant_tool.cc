@@ -146,15 +146,5 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
     _gc.drawEllipse( QRectF( _converter.documentToView( m_rulerDecoration->ruler()->point2() ) - QPointF(5,5), QSizeF(10,10)));
 }
 
-QWidget* KisRulerAssistantTool::createOptionWidget()
-{
-    m_widget = 0;
-    return m_widget;
-}
-
-QWidget* KisRulerAssistantTool::optionWidget()
-{
-    return m_widget;
-}
 
 #include "kis_ruler_assistant_tool.moc"

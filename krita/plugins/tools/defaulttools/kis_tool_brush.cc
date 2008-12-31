@@ -144,7 +144,7 @@ QWidget * KisToolBrush::createOptionWidget()
 {
 
     QWidget * optionWidget = KisToolFreehand::createOptionWidget();
-
+    optionWidget->setObjectName(toolId() + "option widget");
     m_chkSmooth = new QCheckBox(i18nc("smooth out the curves while drawing", "Smoothness"), optionWidget);
     m_chkSmooth->setObjectName("chkSmooth");
     m_chkSmooth->setChecked(true);

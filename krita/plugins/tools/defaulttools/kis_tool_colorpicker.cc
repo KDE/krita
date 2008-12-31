@@ -220,7 +220,7 @@ void KisToolColorPicker::displayPickedColor()
 QWidget* KisToolColorPicker::createOptionWidget()
 {
     m_optionsWidget = new ColorPickerOptionsWidget(0);
-
+    m_optionsWidget->setObjectName(toolId() + " option widget");
     m_optionsWidget->cbUpdateCurrentColor->setChecked(m_updateColor);
 
     m_optionsWidget->cmbSources->setCurrentIndex(0);

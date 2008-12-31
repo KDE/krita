@@ -51,7 +51,6 @@ KisToolSelectBrush::KisToolSelectBrush(KoCanvasBase *canvas)
                           i18n("Selection Brush"))
 {
     setObjectName("tool_select_brush");
-    m_optWidget = 0;
     m_paintOnSelection = true;
 }
 
@@ -62,11 +61,6 @@ KisToolSelectBrush::~KisToolSelectBrush()
 void KisToolSelectBrush::activate(bool tmp)
 {
     KisToolFreehand::activate(tmp);
-
-    if (!m_optWidget)
-        return;
-
-    m_optWidget->slotActivated();
 }
 
 void KisToolSelectBrush::initPaint(KoPointerEvent* /*e*/)
@@ -119,32 +113,6 @@ void KisToolSelectBrush::endPaint()
         m_painter = 0;
         //notifyModified();
     }
-}
-
-QWidget* KisToolSelectBrush::createOptionWidget()
-{
-    // Commented out due to the fact that this doesn't actually work if you change the action
-#if 0
-    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
-    Q_ASSERT(canvas);
-    m_optWidget = new KisSelectionOptions(canvas);
-    Q_CHECK_PTR(m_optWidget);
-    m_optWidget->setWindowTitle(i18n("Selection Brush"));
-
-    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
-    Q_ASSERT(l);
-    if (l) {
-        l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
-    }
-
-    return m_optWidget;
-#endif
-    return 0;
-}
-
-QWidget* KisToolSelectBrush::optionWidget()
-{
-    return m_optWidget;
 }
 
 #include "kis_tool_select_brush.moc"

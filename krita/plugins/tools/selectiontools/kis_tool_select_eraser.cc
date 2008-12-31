@@ -46,7 +46,6 @@ KisToolSelectEraser::KisToolSelectEraser(KoCanvasBase *canvas)
                   i18n("Selection Eraser"))
 {
     setObjectName("tool_select_eraser");
-    m_optWidget = 0;
     m_paintOnSelection = true;
 }
 
@@ -101,32 +100,6 @@ void KisToolSelectEraser::initPaint(KoPointerEvent */*e*/)
 void KisToolSelectEraser::endPaint()
 {
     KisToolFreehand::endPaint();
-}
-
-QWidget* KisToolSelectEraser::createOptionWidget()
-{
-    // Commented out due to the fact that this doesn't actually work if you change the action
-#if 0
-    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
-    Q_ASSERT(canvas);
-    m_optWidget = new KisSelectionOptions(canvas);
-    Q_CHECK_PTR(m_optWidget);
-    m_optWidget->setWindowTitle(i18n("Selection Eraser"));
-
-    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(m_optWidget->layout());
-    Q_ASSERT(l);
-    if (l) {
-        l->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding));
-    }
-
-    return m_optWidget;
-#endif
-    return 0;
-}
-
-QWidget* KisToolSelectEraser::optionWidget()
-{
-    return m_optWidget;
 }
 
 #include "kis_tool_select_eraser.moc"

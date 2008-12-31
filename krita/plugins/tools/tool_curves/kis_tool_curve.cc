@@ -554,7 +554,7 @@ QWidget* KisToolCurve::createSelectionOptionWidget(QWidget* parent)
     m_optWidget = new KisSelectionOptions(parent, m_subject);
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setCaption(m_UIName);
-
+    m_optWidget->setObjectName(toolId() + "option widget");
     connect(m_optWidget, SIGNAL(actionChanged(int)), this, SLOT(slotSetAction(int)));
 
     QVBoxLayout * l = static_cast<QVBoxLayout*>(m_optWidget->layout());

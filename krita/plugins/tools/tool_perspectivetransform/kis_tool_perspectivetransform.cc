@@ -587,10 +587,10 @@ void KisToolPerspectiveTransform::notifyCommandExecuted(K3Command * command)
         m_subject->canvasController() ->updateCanvas();
     }
 }
-
+#if 0
 QWidget* KisToolPerspectiveTransform::createOptionWidget()
 {
-#if 0
+
     m_optWidget = new WdgToolPerspectiveTransform(parent);
     Q_CHECK_PTR(m_optWidget);
 
@@ -618,7 +618,7 @@ QWidget* KisToolPerspectiveTransform::createOptionWidget()
     m_optWidget->textLabel2->hide();
     m_optWidget->textLabel3->hide();
     m_optWidget->textLabel4->hide();
-#endif
+
     return 0;
 }
 
@@ -626,6 +626,7 @@ QWidget* KisToolPerspectiveTransform::optionWidget()
 {
     return 0;
 }
+#endif
 
 void KisToolPerspectiveTransform::setup(KActionCollection *collection)
 {

@@ -29,16 +29,19 @@ DivineProportionShapeFactory::DivineProportionShapeFactory(QObject *parent)
     setIcon( "divine-shape" );
 }
 
-KoShape *DivineProportionShapeFactory::createDefaultShape() const {
+KoShape *DivineProportionShapeFactory::createDefaultShape() const
+{
     DivineProportionShape *text = new DivineProportionShape();
     return text;
 }
 
-KoShape *DivineProportionShapeFactory::createShape(const KoProperties * /*params*/) const {
+KoShape *DivineProportionShapeFactory::createShape(const KoProperties * /*params*/) const
+{
     return createDefaultShape();
 }
 
-QList<KoShapeConfigWidgetBase*> DivineProportionShapeFactory::createShapeOptionPanels() {
+QList<KoShapeConfigWidgetBase*> DivineProportionShapeFactory::createShapeOptionPanels()
+{
     QList<KoShapeConfigWidgetBase*> answer;
     answer.append(new Intro());
     return answer;

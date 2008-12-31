@@ -58,7 +58,8 @@ DivineProportionTool::DivineProportionTool(KoCanvasBase *canvas)
 
 }
 
-DivineProportionTool::~DivineProportionTool() {
+DivineProportionTool::~DivineProportionTool()
+{
 }
 
 void DivineProportionTool::paint( QPainter &painter, const KoViewConverter &converter)
@@ -68,26 +69,30 @@ void DivineProportionTool::paint( QPainter &painter, const KoViewConverter &conv
     // nothing to do here
 }
 
-void DivineProportionTool::mousePressEvent( KoPointerEvent *event ) {
+void DivineProportionTool::mousePressEvent( KoPointerEvent *event )
+{
     event->ignore();
 }
 
-void DivineProportionTool::mouseMoveEvent( KoPointerEvent *event ) {
+void DivineProportionTool::mouseMoveEvent( KoPointerEvent *event )
+{
     event->ignore();
 }
 
-void DivineProportionTool::mouseReleaseEvent( KoPointerEvent *event ) {
+void DivineProportionTool::mouseReleaseEvent( KoPointerEvent *event )
+{
     event->ignore();
 }
 
-void DivineProportionTool::activate (bool) {
+void DivineProportionTool::activate (bool)
+{
     KoSelection *selection = m_canvas->shapeManager()->selection();
-    foreach(KoShape *shape, selection->selectedShapes()) {
+    foreach (KoShape *shape, selection->selectedShapes()) {
         m_currentShape = dynamic_cast<DivineProportionShape*> (shape);
-        if(m_currentShape)
+        if (m_currentShape)
             break;
     }
-    if(m_currentShape == 0) { // none found
+    if (m_currentShape == 0) { // none found
         emit done();
         return;
     }
@@ -96,45 +101,53 @@ void DivineProportionTool::activate (bool) {
     updateActions();
 }
 
-void DivineProportionTool::deactivate() {
+void DivineProportionTool::deactivate()
+{
     m_currentShape = 0;
 }
 
-void DivineProportionTool::updateActions() {
+void DivineProportionTool::updateActions()
+{
     switch(m_currentShape->orientation()) {
-        case DivineProportionShape::BottomRight: m_bottomRightOrientation->setChecked(true); break;
-        case DivineProportionShape::BottomLeft: m_bottomLeftOrientation->setChecked(true); break;
-        case DivineProportionShape::TopRight: m_topRightOrientation->setChecked(true); break;
-        case DivineProportionShape::TopLeft: m_topLeftOrientation->setChecked(true); break;
+    case DivineProportionShape::BottomRight: m_bottomRightOrientation->setChecked(true); break;
+    case DivineProportionShape::BottomLeft: m_bottomLeftOrientation->setChecked(true); break;
+    case DivineProportionShape::TopRight: m_topRightOrientation->setChecked(true); break;
+    case DivineProportionShape::TopLeft: m_topLeftOrientation->setChecked(true); break;
     }
 }
 
-void DivineProportionTool::topLeftOrientationToggled(bool on) {
-    if(on && m_currentShape)
+void DivineProportionTool::topLeftOrientationToggled(bool on)
+{
+    if (on && m_currentShape)
         m_currentShape->setOrientation(DivineProportionShape::TopLeft);
 }
 
-void DivineProportionTool::topRightOrientationToggled(bool on) {
-    if(on && m_currentShape)
+void DivineProportionTool::topRightOrientationToggled(bool on)
+{
+    if (on && m_currentShape)
         m_currentShape->setOrientation(DivineProportionShape::TopRight);
 }
 
-void DivineProportionTool::bottomLeftOrientationToggled(bool on) {
-    if(on && m_currentShape)
+void DivineProportionTool::bottomLeftOrientationToggled(bool on)
+{
+    if (on && m_currentShape)
         m_currentShape->setOrientation(DivineProportionShape::BottomLeft);
 }
 
-void DivineProportionTool::bottomRightOrientationToggled(bool on) {
-    if(on && m_currentShape)
+void DivineProportionTool::bottomRightOrientationToggled(bool on)
+{
+    if (on && m_currentShape)
         m_currentShape->setOrientation(DivineProportionShape::BottomRight);
 }
 
-void DivineProportionTool::setPrintable(bool on) {
-    if(m_currentShape)
+void DivineProportionTool::setPrintable(bool on)
+{
+    if (m_currentShape)
         m_currentShape->setPrintable(on);
 }
 
-QWidget *DivineProportionTool::createOptionWidget() {
+QWidget *DivineProportionTool::createOptionWidget()
+{
     QWidget *widget = new QWidget();
     QGridLayout *layout = new QGridLayout(widget);
     QToolButton *tlButton = new QToolButton(widget);

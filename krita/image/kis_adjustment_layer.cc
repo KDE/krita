@@ -158,11 +158,6 @@ void KisAdjustmentLayer::setSelection(KisSelectionSP selection)
 {
     if (selection) {
         m_d->selection = new KisSelection(*selection.data());
-//         KisFillPainter gc(KisPaintDeviceSP(m_d->selection.data()));
-//         gc.bitBlt(0, 0, COMPOSITE_COPY, selection,
-//                   0, 0, image()->bounds().width(), image()->bounds().height());
-//         gc.end();
-//         selection->getOrCreatePixelSelection()->dataManager()->setDefaultPixel(selection->dataManager()->defaultPixel());
     } else {
         m_d->selection = new KisSelection();
         m_d->selection->getOrCreatePixelSelection()->select(image()->bounds());

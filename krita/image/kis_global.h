@@ -22,8 +22,6 @@
 #include <lcms.h>
 #include <limits.h>
 
-#include <QString>
-
 #include <kglobal.h>
 #include <kofficeversion.h>
 #define KRITA_VERSION KOFFICE_VERSION

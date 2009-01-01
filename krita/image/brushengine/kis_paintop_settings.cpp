@@ -100,7 +100,7 @@ painter.setPaintOpPreset( preset, img);
     QPointF p3(4.0 / 6.0*width, 2.0 / 3.0*height);
     QPointF p4(5.0 / 6.0*width, 1.0 / 3.0*height);
 
-    float pathLength;
+    float pathLength = 0.0;
 
     //p2-p1
     float dx = p2.x() - p1.x();

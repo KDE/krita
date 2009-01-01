@@ -25,7 +25,9 @@ class QDomElement;
 class QDomDocument;
 
 /**
- * This is the base class of auto brush shape. You should subclass it if you want to create new shape.
+ * This is the base class of auto brush shape.
+ * You should subclass it if you want to create a new
+ * shape.
  */
 class KRITAIMAGE_EXPORT KisMaskGenerator
 {
@@ -61,7 +63,7 @@ protected:
 };
 
 /**
- * This class allow to create circular shape.
+ * This class allows to create circular shape.
  */
 class KRITAIMAGE_EXPORT KisCircleMaskGenerator : public KisMaskGenerator
 {
@@ -81,7 +83,7 @@ private:
 };
 
 /**
- * This class allow to create rectangular shape.
+ * This class allows to create rectangular shape.
  */
 class KRITAIMAGE_EXPORT KisRectangleMaskGenerator : public KisMaskGenerator
 {

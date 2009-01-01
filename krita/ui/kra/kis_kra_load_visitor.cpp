@@ -98,7 +98,6 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
 
     if ( m_syntaxVersion == 1 ) {
         // Check whether there is a file with a .mask extension in the
-
         // layer directory, if so, it's an old-style transparency mask
         // that should be converted.
         QString location = getLocation( layer, ".mask" );

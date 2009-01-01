@@ -768,8 +768,9 @@ void KisLayerManager::mirrorLayerX()
         Q_CHECK_PTR(t);
     }
 
-    dev->mirrorX();
-
+    QRect dirty = KisTransformWorker::mirrorX(dev, m_view->selection() );
+    m_activeLayer->setDirty(dirty);
+    
     if (t) m_view->undoAdapter()->addCommand(t);
 
     m_doc->setModified(true);
@@ -789,7 +790,8 @@ void KisLayerManager::mirrorLayerY()
         Q_CHECK_PTR(t);
     }
 
-    dev->mirrorY();
+    QRect dirty = KisTransformWorker::mirrorY(dev, m_view->selection() );
+    m_activeLayer->setDirty(dirty);
 
     if (t) m_view->undoAdapter()->addCommand(t);
 

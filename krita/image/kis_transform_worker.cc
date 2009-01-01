@@ -27,6 +27,7 @@
 #include "kis_paint_device.h"
 #include "kis_debug.h"
 #include "kis_selection.h"
+#include "kis_datamanager.h"
 
 #include "kis_iterators_pixel.h"
 #include "kis_filter_strategy.h"
@@ -559,3 +560,98 @@ bool KisTransformWorker::run()
 //    return m_progressUpdater->interrupted();
     return false;
 }
+
+QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, const KisSelection* selection)
+{
+    KisPaintDeviceSP dst = dev;
+    bool hasCurrentMemento = dev->dataManager()->hasCurrentMemento();
+    int pixelSize = dev->pixelSize();
+    
+    if (!hasCurrentMemento) {
+            dst = new KisPaintDevice(dev->colorSpace());
+    }
+    
+    QRect r;
+    if (selection) {
+        r = selection->selectedExactRect();
+    } else {
+        r = dev->exactBounds();
+    }
+    {
+        KisHLineConstIteratorPixel srcIt = dev->createHLineConstIterator(r.x(), r.top(), r.width(), selection);
+        KisHLineIteratorPixel dstIt = dst->createHLineIterator(r.x(), r.top(), r.width());
+
+        for (qint32 y = r.top(); y <= r.bottom(); ++y) {
+
+            dstIt += r.width() - 1;
+
+            while (!srcIt.isDone()) {
+                if (srcIt.isSelected()) {
+                    if (hasCurrentMemento)
+                        memcpy(dstIt.rawData(), srcIt.oldRawData(), pixelSize);
+                    else
+                        memcpy(dstIt.rawData(), srcIt.rawData(), pixelSize);
+                }
+                ++srcIt;
+                --dstIt;
+
+            }
+            srcIt.nextRow();
+            dstIt.nextRow();
+        }
+    }
+    if (!hasCurrentMemento) {
+        dev->setDataManager( dst->dataManager(), dst->colorSpace() );
+    }
+
+    return r;
+}
+
+QRect KisTransformWorker::mirrorY(KisPaintDeviceSP dev, const KisSelection* selection)
+{
+    KisPaintDeviceSP dst = dev;
+    qDebug() << dev;
+    bool hasCurrentMemento = dev->dataManager()->hasCurrentMemento();
+    qDebug() << "hasCurrentMemento " << hasCurrentMemento;
+    
+    int pixelSize = dev->pixelSize();
+    
+    if (!hasCurrentMemento) {
+        dst = new KisPaintDevice(dev->colorSpace());
+    }
+
+    qDebug() << "dst == dev " << (dst == dev);
+    
+    /* Read a line from bottom to top and and from top to bottom and write their values to each other */
+    QRect r;
+    if (selection) {
+        r = selection->selectedExactRect();
+    } else {
+        r = dev->exactBounds();
+    }
+    {
+        qint32 y1, y2;
+        for (y1 = r.top(), y2 = r.bottom(); y1 <= r.bottom(); ++y1, --y2) {
+
+            KisHLineIteratorPixel itTop = dst->createHLineIterator(r.x(), y1, r.width(), selection);
+            KisHLineConstIteratorPixel itBottom = dev->createHLineConstIterator(r.x(), y2, r.width());
+
+            while (!itTop.isDone() && !itBottom.isDone()) {
+                if (itBottom.isSelected()) {
+                    if (hasCurrentMemento)
+                        memcpy(itTop.rawData(), itBottom.oldRawData(), pixelSize);
+                    else
+                        memcpy(itTop.rawData(), itBottom.rawData(), pixelSize);
+                }
+                ++itBottom;
+                ++itTop;
+            }
+        }
+    }
+    if (!hasCurrentMemento) {
+        dev->setDataManager( dst->dataManager(), dst->colorSpace() );
+    }
+
+    return r;
+}
+

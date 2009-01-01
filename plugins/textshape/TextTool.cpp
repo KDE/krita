@@ -542,9 +542,12 @@ void TextTool::updateSelectedShape(const QPointF &point)
         foreach(KoShape *shape, m_canvas->shapeManager()->shapesAt(area, true)) {
             TextShape *textShape = dynamic_cast<TextShape*>(shape);
             if (textShape) {
-                m_textShape = textShape;
                 KoTextShapeData *d = static_cast<KoTextShapeData*>(textShape->userData());
-                if (d->document() == m_textShapeData->document())
+                const bool sameDocument = d->document() == m_textShapeData->document();
+                if (sameDocument && d->position() < 0)
+                    continue; // don't change to a shape that has no text
+                m_textShape = textShape;
+                if (sameDocument)
                     break; // stop looking.
             }
         }

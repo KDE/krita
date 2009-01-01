@@ -301,6 +301,8 @@ void KoToolManager::switchTool(const QString &id, bool temporary)
 
 void KoToolManager::switchTool(KoTool *tool, bool temporary)
 {
+    if (d->canvasData->activeTool == tool)
+        return;
     Q_ASSERT(tool);
     if (d->canvasData == 0)
         return;

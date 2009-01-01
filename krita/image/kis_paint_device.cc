@@ -570,8 +570,9 @@ void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcPr
     } else {
         quint8 * dstData = new quint8[img.width() * img.height() * pixelSize()];
         KoColorSpaceRegistry::instance()
-        ->colorSpace("RGBA", srcProfileName)->
-        convertPixelsTo(img.bits(), dstData, colorSpace(), img.width() * img.height());
+            ->colorSpace("RGBA", srcProfileName)
+            ->convertPixelsTo(img.bits(), dstData, colorSpace(), img.width() * img.height());
+            
         writeBytes(dstData, offsetX, offsetY, img.width(), img.height());
         delete[] dstData;
     }

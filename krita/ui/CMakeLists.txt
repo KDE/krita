@@ -27,6 +27,7 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_new_layer.cc 
     dialogs/kis_dlg_preferences.cc
     dialogs/kis_dlg_transformation_effect.cpp
+    kis_autogradient_resource.cc
     kis_autogradient.cc
     kis_birdeye_box.cc 
     kis_bookmarked_configurations_editor.cc

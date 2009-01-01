@@ -66,15 +66,15 @@ public:
     double getGamma(void);
 
 private:
-    unsigned int m_leftmost;
-    unsigned int m_rightmost;
+    int m_leftmost;
+    int m_rightmost;
     eCursor m_grab_cursor;
     unsigned int m_grab_index;
     bool m_dragging;
 
-    unsigned int m_blackcursor;
-    unsigned int m_whitecursor;
-    unsigned int m_gammacursor;
+    int m_blackcursor;
+    int m_whitecursor;
+    int m_gammacursor;
 
     bool m_gammaEnabled;
     double m_gamma;

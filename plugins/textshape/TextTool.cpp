@@ -440,13 +440,22 @@ TextTool::~TextTool()
 
 void TextTool::blinkCaret()
 {
-    m_caretTimerState = !m_caretTimerState;
+    if (! m_canvas->canvasWidget()->hasFocus()) {
+        m_caretTimer.stop();
+        m_caretTimerState = false; // not visible.
+    }
+    else {
+        m_caretTimerState = !m_caretTimerState;
+    }
     if (m_textShapeData)
         repaintCaret();
 }
 
 void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
+
+    if (m_canvas->canvasWidget()->hasFocus() && !m_caretTimer.isActive()) // make sure we blink
+        m_caretTimer.start();
     QTextBlock block = m_caret.block();
     if (! block.layout()) // not layouted yet.  The Shape paint method will trigger a layout
         return;

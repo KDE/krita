@@ -75,6 +75,8 @@
 
 #include "kofficeversion.h"
 
+class KoDockerManager : public QObject { }; // little hack to be able to use this class as a qobject
+
 class KoPartManager : public KParts::PartManager
 {
 public:
@@ -1928,6 +1930,10 @@ KoDockerManager * KoMainWindow::dockerManager() const
 void KoMainWindow::setDockerManager(KoDockerManager *dm)
 {
     d->m_dockerManager = dm;
+    if (dm) {
+        QObject *manager = static_cast<QObject*> (dm);
+        manager->setParent(this); // make sure that the dockerManager is deleted by us.
+    }
 }
 
 KRecentFilesAction *KoMainWindow::recentAction() const

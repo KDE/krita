@@ -83,9 +83,11 @@ void KoDockerManager::removeUnusedOptionWidgets()
     while (j.hasNext()) {
         j.next();
         d->toolDockerVisibillityMap[j.key()] = j.value()->isVisible();
-        if(!d->activeToolDockerMap.contains(j.key())) {
+        if (!d->activeToolDockerMap.contains(j.key())) {
+            // kDebug() << "removing" << j.key() << ((void*) j.value());
             j.value()->toggleViewAction()->setVisible(false);
             d->view->removeDockWidget(j.value());
+            d->toolDockerMap.remove(j.key());
         }
     }
 }

@@ -22,9 +22,33 @@
 
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
-#include "xmlwritertest.h"
-#include <kdebug.h>
+#include <KDebug>
 #include <QList>
+#include <QBuffer>
+#include <QRegExp>
+
+
+#define TEST_BEGIN(publicId,systemId) \
+    { \
+        QByteArray cstr; \
+        QBuffer buffer( &cstr ); \
+        buffer.open( QIODevice::WriteOnly ); \
+        { \
+            KoXmlWriter writer( &buffer ); \
+            writer.startDocument( "r", publicId, systemId ); \
+            writer.startElement( "r" )
+
+#define TEST_END_QTTEST(expected) \
+    writer.endElement(); \
+    writer.endDocument(); \
+    } \
+    buffer.putChar( '\0' ); /*null-terminate*/ \
+    QString expectedFull = QString::fromLatin1( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" ); \
+                           expectedFull += QString::fromLatin1( expected ); \
+                                           QString s1 = QString::fromLatin1( cstr ); \
+                                                        QCOMPARE( expectedFull, s1 ); \
+                                                        }
+
 
 void TestKoGenStyles::testLookup()
 {

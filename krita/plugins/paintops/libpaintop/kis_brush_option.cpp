@@ -31,7 +31,7 @@ KisBrushOption::KisBrushOption()
     setConfigurationPage(m_brushSelectionWidget);
 }
 
-KisBrushSP KisBrushOption::brush() const
+KisBrush* KisBrushOption::brush() const
 {
     return m_brushSelectionWidget->brush();
 }

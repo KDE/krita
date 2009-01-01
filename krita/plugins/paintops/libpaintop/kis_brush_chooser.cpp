@@ -145,7 +145,7 @@ void KisBrushChooser::slotImportBrush()
 
 void KisBrushChooser::slotActivatedBrush(KoResource * resource)
 {
-    KisBrush * brush = dynamic_cast<KisBrush*>(resource);
+    KisBrush* brush = dynamic_cast<KisBrush*>(resource);
     if (brush) {
         m_brush = brush;
     }

@@ -141,7 +141,7 @@ struct KisBrush::Private {
     quint32 magic_number; /*  GIMP brush magic number  */
 
     enumBrushType brushType;
-
+    
     KisBoundary* boundary;
 };
 

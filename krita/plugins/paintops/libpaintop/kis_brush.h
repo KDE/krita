@@ -81,7 +81,7 @@ public:
 };
 
 
-class PAINTOP_EXPORT KisBrush : public KoResource, public KisShared
+class PAINTOP_EXPORT KisBrush : public KoResource
 {
 
     class ScaledBrush;
@@ -293,9 +293,6 @@ private:
     struct Private;
     Private* const d;
 };
-
-class KisBrush;
-typedef KisSharedPtr<KisBrush> KisBrushSP;
 
 #endif // KIS_BRUSH_
 

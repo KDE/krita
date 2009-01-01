@@ -41,7 +41,7 @@ class PAINTOP_EXPORT KisAutoBrushWidget : public KisWdgAutobrush
 public:
     KisAutoBrushWidget(QWidget *parent, const char* name, const QString& caption);
     void activate();
-    KisBrushSP brush();
+    KisBrush* brush();
 
 private slots:
 
@@ -63,7 +63,7 @@ protected:
 
 private:
     QImage m_brush;
-    KisBrushSP m_autoBrush;
+    KisBrush* m_autoBrush;
     bool m_linkSize;
     bool m_linkFade;
 };

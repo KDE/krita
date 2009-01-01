@@ -39,7 +39,7 @@ class PAINTOP_EXPORT KisBrushChooser : public QWidget
 public:
     KisBrushChooser(QWidget *parent = 0, const char *name = 0);
     virtual ~KisBrushChooser();
-    KisBrushSP brush() {
+    KisBrush* brush() {
         return m_brush;
     };
 
@@ -60,12 +60,12 @@ signals:
     void sigBrushChanged();
         
 private:
-    QLabel *m_lbName;
-    QLabel *m_lbSpacing;
-    KisDoubleWidget *m_slSpacing;
-    QCheckBox *m_chkColorMask;
-    KisResourceMediator * m_brushMediator;
-    KisBrushSP m_brush;
+    QLabel* m_lbName;
+    QLabel* m_lbSpacing;
+    KisDoubleWidget* m_slSpacing;
+    QCheckBox* m_chkColorMask;
+    KisResourceMediator* m_brushMediator;
+    KisBrush* m_brush;
     KisItemChooser* m_itemChooser;
 
 };

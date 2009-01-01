@@ -75,7 +75,7 @@ class KisTextBrush : public KisWdgTextBrush
 public:
 
     KisTextBrush(QWidget *parent, const char* name, const QString& caption);
-    KisBrushSP brush() {
+    KisBrush* brush() {
         return m_textBrush;
     }
 
@@ -88,7 +88,7 @@ signals:
     void sigBrushChanged();
     
 private:
-    KisBrushSP m_textBrush;
+    KisBrush* m_textBrush;
     QFont m_font;
 };
 

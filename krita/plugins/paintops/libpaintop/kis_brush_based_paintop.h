@@ -32,12 +32,12 @@ class PAINTOP_EXPORT KisBrushBasedPaintOp : public KisPaintOp
 
 public:
 
-    KisBrushBasedPaintOp(KisPainter * painter, KisBrushSP brush = 0);
+    KisBrushBasedPaintOp(KisPainter * painter, KisBrush* brush = 0);
     double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const;
 
 protected: // XXX: make private!
 
-    KisBrushSP m_brush;
+    KisBrush* m_brush;
 
 };
 

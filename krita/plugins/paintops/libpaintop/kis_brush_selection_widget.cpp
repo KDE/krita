@@ -82,9 +82,9 @@ KisBrushSelectionWidget::~KisBrushSelectionWidget()
 {
 }
 
-KisBrushSP KisBrushSelectionWidget::brush()
+KisBrush* KisBrushSelectionWidget::brush()
 {
-    KisBrushSP theBrush;
+    KisBrush* theBrush;
     switch (m_brushesTab->currentIndex()) {
     case 0:
         theBrush = m_autoBrushWidget->brush();

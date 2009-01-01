@@ -5,15 +5,13 @@ set(xmlwritertest_SRCS TestXmlWriter.cpp )
 
 kde4_add_unit_test(TestXmlWriter TESTNAME libs-store-testxmlwriter ${xmlwritertest_SRCS})
 
-target_link_libraries(TestXmlWriter kostore ${QT_QTTEST_LIBRARY} ${QT_QT3SUPPORT_LIBRARY} ${QT_QTGUI_LIBRARY}  ${KDE4_KDEUI_LIBS})
+target_link_libraries(TestXmlWriter kostore ${QT_QTTEST_LIBRARY} ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDEUI_LIBS})
 
 ########### next target ###############
 
-set(koxmlreader_SRCS koxmlreadertest.cpp )
-
-kde4_add_unit_test(koxmlreadertest TESTNAME libs-store-koxmlreadertest ${koxmlreader_SRCS})
-
-target_link_libraries(koxmlreadertest kostore ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY}  ${KDE4_KDEUI_LIBS})
+set(xmlreadertest_SRCS TestXmlReader.cpp )
+kde4_add_unit_test(TestXmlReader TESTNAME libs-store-testxmlreader ${xmlreadertest_SRCS})
+target_link_libraries(TestXmlReader kostore ${QT_QTTEST_LIBRARY} ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDEUI_LIBS})
 
 ########### next target ###############
 

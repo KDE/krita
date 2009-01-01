@@ -22,7 +22,7 @@
 
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
-#include "../../store/tests/xmlwritertest.h"
+#include "xmlwritertest.h"
 #include <kdebug.h>
 #include <QList>
 

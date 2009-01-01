@@ -262,12 +262,9 @@ bool KisKraLoadVisitor::loadProfile( KisPaintDeviceSP device, const QString& loc
         // replace the old colorspace
         device->setDataManager(device->dataManager(), cs);
         return true;
-
     }
     return false;
-
 }
-
 
 bool KisKraLoadVisitor::loadFilterConfiguration( KisFilterConfiguration* kfc, const QString& location )
 {

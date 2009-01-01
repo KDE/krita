@@ -22,7 +22,7 @@
 
 #include "KoStoreBase.h"
 #include <QHash>
-#include <QtCrypto/QtCrypto>
+#include <QtCrypto>
 
 class QString;
 class QByteArray;

@@ -118,6 +118,19 @@ void KisPainterTest::testPaintDeviceBltSelection(const KoColorSpace * cs)
     img.save("blt_Selection_" + cs->name() + ".png");
 
     QCOMPARE(dst->exactBounds(), QRect(10, 10, 10, 10));
+
+    KisPaintDeviceSP dst2 = new KisPaintDevice(cs, "dst2");
+    KisPainter painter2(dst2);
+    painter2.setSelection(selection);
+
+    painter2.bltSelection(0, 0,
+                         dst2->colorSpace()->compositeOp(COMPOSITE_SUBTRACT),
+                         src,
+                         OPACITY_OPAQUE,
+                         0, 0, 30, 30);
+    painter2.end();
+
+    QCOMPARE(dst2->exactBounds(), QRect(10, 10, 10, 10));
 }
 
 void KisPainterTest::testPaintDeviceBltSelection()

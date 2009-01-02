@@ -296,6 +296,11 @@ void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
 
 void KoTextLoader::loadParagraph(const KoXmlElement& element, QTextCursor& cursor)
 {
+    // if we are not in a list and the cursor has still a list style remove it as otherwise 
+    // all that comes after a list is a list
+    if (!d->currentList && cursor.currentList()) {
+        cursor.currentList()->remove(cursor.block());
+    }
     // TODO use the default style name a default value?
     QString styleName = element.attributeNS(KoXmlNS::text, "style-name", QString());
 
@@ -320,7 +325,7 @@ void KoTextLoader::loadParagraph(const KoXmlElement& element, QTextCursor& curso
         kWarning(32500) << "paragraph style " << styleName << " not found";
     }
 
-    kDebug(32500) << "text-style:" << KoTextDebug::textAttributes( cursor.blockCharFormat() );
+    kDebug(32500) << "text-style:" << KoTextDebug::textAttributes( cursor.blockCharFormat() ) << d->currentList << d->currentListStyle;
 
     bool stripLeadingSpace = true;
     loadSpan(element, cursor, &stripLeadingSpace);

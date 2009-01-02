@@ -434,6 +434,11 @@ void KoMainWindow::setRootDocument(KoDocument *doc)
         d->m_docToOpen = 0;
     }
 
+    if (d->m_dockerManager) { // All the views will be deleted, so lets remove this one too
+        delete d->m_dockerManager;
+        d->m_dockerManager = 0;
+    }
+
     //kDebug(30003) <<"KoMainWindow::setRootDocument this =" << this <<" doc =" << doc;
     Q3PtrList<KoView> oldRootViews = d->m_rootViews;
     d->m_rootViews.clear();

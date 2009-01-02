@@ -3,7 +3,7 @@
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
- * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007-2009 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
@@ -310,6 +310,8 @@ void KoTextLoader::loadParagraph(const KoXmlElement& element, QTextCursor& curso
         kWarning(32500) << "defaultParagraphStyle not found - using default style";
     }
 
+    QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
+
     if (paragraphStyle) {
         QTextBlock block = cursor.block();
         // Apply list style when loading a list but we don't have a list style
@@ -319,8 +321,6 @@ void KoTextLoader::loadParagraph(const KoXmlElement& element, QTextCursor& curso
     }
 
     kDebug(32500) << "text-style:" << KoTextDebug::textAttributes( cursor.blockCharFormat() );
-
-    QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
 
     bool stripLeadingSpace = true;
     loadSpan(element, cursor, &stripLeadingSpace);

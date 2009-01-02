@@ -820,17 +820,15 @@ void TestDocumentLayout::testDropCaps()
     layout->layout();
 
     // test that the first text line is the dropcaps and the positions are right.
-    //blockLayout = block.layout();
     QVERIFY(blockLayout->lineCount() > 2);
     line = blockLayout->lineAt(0);
-    QEXPECT_FAIL("", "Drop caps not implemented yet", Abort);
     QCOMPARE(line.textLength(), 1);
     QCOMPARE(line.position(), QPointF(0, 0));
-    qreal w = line.width();
+    qreal w = line.naturalTextWidth();
 
     line = blockLayout->lineAt(1);
     QVERIFY(line.textLength() > 2);
-    QCOMPARE(line.position(), QPointF(w + 9.0 , 0));
+    QCOMPARE(line.position(), QPointF(w + 10.0 , 0));
 }
 
 void TestDocumentLayout::testNonBreakableLines()

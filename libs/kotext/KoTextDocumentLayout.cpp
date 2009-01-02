@@ -255,13 +255,13 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
         QTextBlock block = document()->findBlock(from);
         if (! block.isValid())
             break;
-        if (block.textList()) {
-            KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.textList()->item(0).userData());
+        if (from == block.position() && block.textList()) {
+            KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
             if (data)
                 data->setCounterWidth(-1); // invalidate whole list.
         }
 
-        from += block.length();
+        from = block.position() + block.length();
     }
 
     foreach(KoShape *shape, shapes()) {

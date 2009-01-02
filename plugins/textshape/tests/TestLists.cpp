@@ -526,3 +526,51 @@ void TestDocumentLayout::testLetterSynchronization()
         block = block.next();
     }
 }
+
+void TestDocumentLayout::testInvalidateLists()
+{
+    initForNewTest("Base\nListItem1\nListItem2");
+
+    //KoParagraphStyle style;
+    KoListStyle listStyle;
+    KoListLevelProperties llp;
+    llp.setStyle(KoListStyle::DecimalItem);
+    listStyle.setLevelProperties(llp);
+    //style.setListStyle(&listStyle);
+
+    QTextBlock block = doc->begin().next();
+    QVERIFY(block.isValid());
+    listStyle.applyStyle(block);
+    block = block.next();
+    QVERIFY(block.isValid());
+    listStyle.applyStyle(block);
+
+    layout->layout();
+
+    // check the list items were done (semi) properly
+    block = doc->begin().next();
+    QVERIFY(block.textList());
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
+    QVERIFY(data);
+    QVERIFY(data->hasCounterData());
+
+    QTextCursor cursor(doc);
+    cursor.setPosition(10); // list item1
+    cursor.insertText("x");
+    QCOMPARE(data->hasCounterData(), true); // nothing changed
+
+    cursor.setPosition(22); // list item2
+    cursor.insertText("x");
+    QCOMPARE(data->hasCounterData(), true); // nothing changed
+    cursor.deleteChar();
+    QCOMPARE(data->hasCounterData(), true); // nothing changed
+
+    cursor.setPosition(25); // end of doc
+    cursor.insertBlock();
+    block = cursor.block();
+    QVERIFY(block.textList());
+    QVERIFY(block.userData() == 0);
+
+    QCOMPARE(data->hasCounterData(), false); // inserting a new block on this list made the list be invalidated
+}
+

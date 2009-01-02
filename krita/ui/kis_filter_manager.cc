@@ -43,7 +43,7 @@ struct KisFilterManager::Private {
     Private() : reapplyAction(0), actionCollection(0) {
 
     }
-    QAction* reapplyAction;
+    KAction* reapplyAction;
     QHash<QString, KActionMenu*> filterActionMenus;
     QHash<QString, KisFilterHandler*> filterHandlers;
     QHash<KisFilter*, KAction*> filters2Action;

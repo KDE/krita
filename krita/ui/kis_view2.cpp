@@ -148,7 +148,7 @@ public:
     KisCanvasResourceProvider * resourceProvider;
     KisFilterManager * filterManager;
     KisStatusBar * statusBar;
-    QAction * totalRefresh;
+    KAction * totalRefresh;
     KisSelectionManager *selectionManager;
     KisControlFrame * controlFrame;
     KisBirdEyeBox * birdEyeBox;

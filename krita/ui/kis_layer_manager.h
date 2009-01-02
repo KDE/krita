@@ -135,24 +135,24 @@ private:
 
     QList<QAction*> m_pluginActions;
 
-    QAction *m_imgFlatten;
-    QAction *m_imgMergeLayer;
-    QAction *m_actionAdjustmentLayer;
-    QAction *m_actionGeneratorLayer;
-    QAction *m_layerAdd;
-    QAction *m_layerAddCloneLayer;
-    QAction *m_layerAddShapeLayer;
-    QAction *m_layerBottom;
-    QAction *m_layerDup;
+    KAction *m_imgFlatten;
+    KAction *m_imgMergeLayer;
+    KAction *m_actionAdjustmentLayer;
+    KAction *m_actionGeneratorLayer;
+    KAction *m_layerAdd;
+    KAction *m_layerAddCloneLayer;
+    KAction *m_layerAddShapeLayer;
+    KAction *m_layerBottom;
+    KAction *m_layerDup;
     KToggleAction *m_layerHide;
-    QAction *m_layerLower;
-    QAction *m_layerProperties;
-    QAction *m_layerRaise;
-    QAction *m_layerRm;
-    QAction *m_layerSaveAs;
-    QAction *m_layerTop;
+    KAction *m_layerLower;
+    KAction *m_layerProperties;
+    KAction *m_layerRaise;
+    KAction *m_layerRm;
+    KAction *m_layerSaveAs;
+    KAction *m_layerTop;
     bool m_actLayerVis;
-    QAction *m_imgResizeToLayer;
+    KAction *m_imgResizeToLayer;
 
     KisLayerSP m_activeLayer;
 };

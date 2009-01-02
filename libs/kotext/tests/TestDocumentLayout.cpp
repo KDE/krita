@@ -9,11 +9,9 @@ void TestDocumentLayout::initTestCase()
     shape1 = 0;
     doc = 0;
     layout = 0;
-
-    loremIpsum = QString("Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.");
 }
 
-void TestDocumentLayout::initForNewTest(const QString &initText)
+void TestDocumentLayout::initForNewTest()
 {
     // this leaks memory like mad, but who cares ;)
     shape1 = new MockTextShape();
@@ -26,7 +24,7 @@ void TestDocumentLayout::initForNewTest(const QString &initText)
     Q_ASSERT(layout);
 }
 
-void TestDocumentLayout:: testHitTest()
+void TestDocumentLayout::testHitTest()
 {
     // init a basic document with 3 parags.
     initForNewTest();

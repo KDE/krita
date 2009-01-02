@@ -299,7 +299,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->m_exportPdf->setEnabled(false);
     d->m_paCloseFile->setEnabled(false);
 
-    d->m_splitter = new QSplitter(Qt::Vertical, this);
+    d->m_splitter = new QSplitter(Qt::Horizontal, this);
     d->m_splitter->setObjectName("mw-splitter");
     setCentralWidget(d->m_splitter);
     // Keyboard accessibility enhancements.

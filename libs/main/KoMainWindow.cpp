@@ -68,10 +68,7 @@
 #include <QtGui/QPrinter>
 #include <QtGui/QPrintDialog>
 #include <QDesktopWidget>
-
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
 #include <QtGui/QPrintPreviewDialog>
-#endif
 
 #include "kofficeversion.h"
 
@@ -252,9 +249,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->m_paSave = actionCollection()->addAction(KStandardAction::Save,  "file_save", this, SLOT(slotFileSave()));
     d->m_paSaveAs = actionCollection()->addAction(KStandardAction::SaveAs,  "file_save_as", this, SLOT(slotFileSaveAs()));
     d->m_paPrint = actionCollection()->addAction(KStandardAction::Print,  "file_print", this, SLOT(slotFilePrint()));
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     d->m_paPrintPreview = actionCollection()->addAction(KStandardAction::PrintPreview,  "file_print_preview", this, SLOT(slotFilePrintPreview()));
-#endif
 
     d->m_exportPdf  = new KAction(i18n("Export as PDF..."), this);
     d->m_exportPdf->setIcon(KIcon("application-pdf"));
@@ -299,9 +294,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->m_exportFile->setEnabled(false);
     d->m_paSave->setEnabled(false);
     d->m_paPrint->setEnabled(false);
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     d->m_paPrintPreview->setEnabled(false);
-#endif
     d->m_sendfile->setEnabled(false);
     d->m_exportPdf->setEnabled(false);
     d->m_paCloseFile->setEnabled(false);
@@ -484,9 +477,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc)
     d->m_importFile->setEnabled(enable);
     d->m_exportFile->setEnabled(enable);
     d->m_paPrint->setEnabled(enable);
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     d->m_paPrintPreview->setEnabled(enable);
-#endif
     d->m_sendfile->setEnabled(enable);
     d->m_exportPdf->setEnabled(enable);
     d->m_paCloseFile->setEnabled(enable);
@@ -541,9 +532,7 @@ void KoMainWindow::setRootDocumentDirect(KoDocument *doc, const Q3PtrList<KoView
     d->m_paSaveAs->setEnabled(enable);
     d->m_exportFile->setEnabled(enable);
     d->m_paPrint->setEnabled(enable);
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     d->m_paPrintPreview->setEnabled(enable);
-#endif
     d->m_sendfile->setEnabled(enable);
     d->m_exportPdf->setEnabled(enable);
     d->m_paCloseFile->setEnabled(enable);
@@ -1369,7 +1358,6 @@ void KoMainWindow::slotFilePrint()
 
 void KoMainWindow::slotFilePrintPreview()
 {
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     if (!rootView())
         return;
     KoPrintJob *printJob = rootView()->createPrintJob();
@@ -1380,7 +1368,6 @@ void KoMainWindow::slotFilePrintPreview()
     connect(preview, SIGNAL(paintRequested(QPrinter*)), printJob, SLOT(startPrinting()));
     preview->exec();
     delete preview;
-#endif
 }
 
 void KoMainWindow::slotPrintAndSave()

@@ -108,9 +108,7 @@ static bool compareFragments(const QTextFragment &actualFragment, const QTextFra
                  && actualFormat.font().styleHint() == expectedFormat.font().styleHint() // test this explicity since font == ignores it
                  && actualFormat.foreground() == expectedFormat.foreground()
                  && actualFormat.background() == expectedFormat.background()
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
                  && actualFormat.fontCapitalization() == expectedFormat.fontCapitalization()
-#endif
                  && actualFormat.underlineColor() == expectedFormat.underlineColor()
                  && actualFormat.textOutline() == expectedFormat.textOutline()
                  && actualFormat.property(KoCharacterStyle::UnderlineStyle).toInt()
@@ -523,13 +521,7 @@ QScriptValue KoTextTabToQScriptValue(QScriptEngine *engine, const KoTextTab &tab
 void QScriptValueToKoTextTab(const QScriptValue &obj, KoTextTab &tab)
 {
     tab.position = obj.property("position").toNumber();
-    tab.type = (
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
-                   QTextOption::
-#else
-                   KoText::
-#endif
-                   TabType) obj.property("type").toInt32();
+    tab.type = (QTextOption::TabType) obj.property("type").toInt32();
     tab.delimiter = obj.property("delimiter").toString()[0];
     tab.leaderType = (KoCharacterStyle::LineType) obj.property("leaderType").toInt32();
     tab.leaderStyle = (KoCharacterStyle::LineStyle) obj.property("leaderStyle").toInt32();

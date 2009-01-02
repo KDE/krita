@@ -29,6 +29,7 @@
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
 
+#include <kis_debug.h>
 
 KisChannelFlagsWidget::KisChannelFlagsWidget(const KoColorSpace * colorSpace, QWidget * parent)
         : QScrollArea(parent)
@@ -59,6 +60,7 @@ KisChannelFlagsWidget::~KisChannelFlagsWidget()
 
 void KisChannelFlagsWidget::setChannelFlags(const QBitArray & cf)
 {
+    dbgUI << "KisChannelFlagsWidget::setChannelFlags " << cf.isEmpty();
     if (cf.isEmpty()) return;
 
     QBitArray channelFlags = m_colorSpace->setChannelFlagsToColorSpaceOrder(cf);
@@ -73,12 +75,20 @@ QBitArray KisChannelFlagsWidget::channelFlags() const
     QBitArray ba(m_channelChecks.size());
 
     for (int i = 0; i < m_channelChecks.size(); ++i) {
+        
         bool flag = m_channelChecks.at(i)->isChecked();
         if (!flag) allTrue = false;
+        
         ba.setBit(i, flag);
+        dbgUI << " channel " << i << " is " << flag << ", allTrue = " << allTrue << ", so ba.testBit("<<i<<")" << " is " << ba.testBit(i);
     }
     if (allTrue)
         return QBitArray();
-    else
-        return m_colorSpace->setChannelFlagsToPixelOrder(ba);
+    else {
+        QBitArray result = m_colorSpace->setChannelFlagsToPixelOrder(ba);
+        for (int i = 0; i < result.size(); ++i) {
+            dbgUI << "On conversion to the pixel order, flag " << i << " is " << result.testBit(i);
+        }
+        return result;
+    }
 }

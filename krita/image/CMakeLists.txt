@@ -56,10 +56,25 @@ set(kritaimage_LIB_SRCS
    brushengine/kis_paintop_preset.cpp
    brushengine/kis_paintop_registry.cc
    brushengine/kis_paintop_settings.cpp
-   commands/kis_image_commands.cc
-   commands/kis_layer_commands.cc
-   commands/kis_node_commands.cc
-   commands/kis_selection_commands.cc
+   commands/kis_deselect_global_selection_command.cpp
+   commands/kis_deselect_local_selection_command.cpp
+   commands/kis_image_change_layers_command.cpp
+   commands/kis_image_command.cpp
+   commands/kis_image_convert_type_command.cpp
+   commands/kis_image_layer_add_command.cpp
+   commands/kis_image_layer_move_command.cpp
+   commands/kis_image_layer_remove_command.cpp
+   commands/kis_image_lock_command.cpp
+   commands/kis_image_props_command.cpp
+   commands/kis_image_resize_command.cpp
+   commands/kis_layer_command.cpp
+   commands/kis_layer_compositeop_command.cpp
+   commands/kis_layer_opacity_command.cpp
+   commands/kis_layer_props_command.cpp
+   commands/kis_node_move_command.cpp
+   commands/kis_reselect_global_selection_command.cpp
+   commands/kis_reselect_local_selection_command.cpp
+   commands/kis_set_global_selection_command.cpp
    filter/kis_filter.cc
    filter/kis_filter_configuration.cc
    filter/kis_filter_job.cpp

@@ -67,12 +67,17 @@ public:
     void preparePage(const QVariant &page) {
         const int pageNumber = page.toInt();
         KoUpdater updater = updaters.at(index-1);
-        if (!painter)
-            painter = new QPainter(printer);
-        painter->save(); // state before page preparation
+        if (painter)
+            painter->save(); // state before page preparation
         if(! stop)
             parent->preparePage(pageNumber);
         updater.setProgress(45);
+        if (!painter) {
+            // force the painter to be created *after* the preparePage since the page
+            // size may have been updated there and that doesn't work with the first page
+            painter = new QPainter(printer);
+            painter->save(); // state before page preparation (2)
+        }
         if (index > 1)
             printer->newPage();
         updater.setProgress(55);
@@ -216,8 +221,10 @@ void KoPrintingDialog::setPageRange(const QList<int> &pages) {
 }
 
 QPainter & KoPrintingDialog::painter() const {
-    if (d->painter == 0)
+    if (d->painter == 0) {
         d->painter = new QPainter(d->printer);
+        d->painter->save(); // state before page preparation (3)
+    }
     return *d->painter;
 }
 

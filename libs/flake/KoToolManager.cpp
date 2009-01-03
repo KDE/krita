@@ -301,10 +301,10 @@ void KoToolManager::switchTool(const QString &id, bool temporary)
 
 void KoToolManager::switchTool(KoTool *tool, bool temporary)
 {
-    if (d->canvasData->activeTool == tool)
-        return;
     Q_ASSERT(tool);
     if (d->canvasData == 0)
+        return;
+    if (d->canvasData->activeTool == tool && tool->toolId() != KoInteractionTool_ID)
         return;
 
     bool newActiveTool = d->canvasData->activeTool != 0;

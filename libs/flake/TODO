@@ -1,9 +1,5 @@
 For anyone that wants to hack on flake here is a list of things that need to be done;
 
 Some suggestions discussed on IRC:
-- mouse wheel for zoom in and out, middle mouse button for panning in the default tool
-- better grouping of flake tools
-- use the status bar to show some context info
-- have the toolbox layout tools in single column
 - add position input for selected path point in the path tool widget
 - visualized handle size is always the same, but hit range is bigger

@@ -29,8 +29,10 @@ The applications currently included in KOffice are:
   A pixel graphics tool
 - KFormula
   A mathematical formula editor
+- KPlato
+  Project planning
 
-More information can be found at http://wiki.koffice.org
+More information can be found at http://koffice.org
 
 Developers:
 ===========

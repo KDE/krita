@@ -35,7 +35,7 @@ public:
     /// The type of note specifies how the application will use the text from the note.
     enum Type {
         Footnote,   ///< Notes of this type will have their text placed at the bottom of a shape.
-        Endnote     ///< Notes of this type are used as endnotes in appliations that support that.
+        Endnote     ///< Notes of this type are used as endnotes in applications that support that.
         // Comment-note?
     };
 

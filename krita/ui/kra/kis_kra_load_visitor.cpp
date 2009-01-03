@@ -179,8 +179,10 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
 
     loadFilterConfiguration( layer->generator(), getLocation( layer, DOT_FILTERCONFIG ) );
 
+    bool result = visitAll(layer);
+
     layer->setDirty(m_img->bounds());
-    return true;
+    return result;
 }
 
 

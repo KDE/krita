@@ -117,8 +117,10 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
             m_store->close();
         }
     }
+    bool result = visitAll(layer);
+
     layer->setDirty(m_img->bounds());
-    return true;
+    return result;
 
 }
 

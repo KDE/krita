@@ -1179,11 +1179,9 @@ void KoMainWindow::chooseNewDocument(InitDocFlags initDocFlags)
     if (!newdoc)
         return;
 
-    //FIXME: This needs to be handled differently
-    connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
 
-    if ((!doc  && (initDocFlags == InitDocFileNew)) || (doc && !doc->isEmpty())) {
+    if ((!doc && initDocFlags == InitDocFileNew) || (doc && !doc->isEmpty())) {
         KoMainWindow *s = new KoMainWindow(newdoc->componentData());
         s->show();
         newdoc->addShell(s);

@@ -84,7 +84,7 @@ public:
 
 signals:
     void typeChanged(int types);
-    void pathChanged(KoPathShape* path);
+    void pathChanged(KoPathShape* path); // TODO this is unused, can we remove this one?
 protected:
     /// reimplemented
     virtual QMap<QString, QWidget *>  createOptionWidgets();

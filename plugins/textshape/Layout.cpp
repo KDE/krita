@@ -283,7 +283,7 @@ bool Layout::nextParag()
 
         // repaint till end of shape.
         const qreal offsetInShape = m_y - m_data->documentOffset();
-        shape->update(QRectF(0.0, offsetInShape, shape->size().width(), shape->size().width() - offsetInShape));
+        shape->update(QRectF(0.0, offsetInShape, shape->size().width(), shape->size().height() - offsetInShape));
         // cleanup and repaint rest of shapes.
         m_textShape->markLayoutDone();
         cleanupShapes();

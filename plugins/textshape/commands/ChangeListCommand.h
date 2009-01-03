@@ -29,6 +29,7 @@
 
 #include <QTextBlock>
 #include <QList>
+#include <QHash>
 
 /**
  * This command is useful to alter the list-association of a single textBlock.

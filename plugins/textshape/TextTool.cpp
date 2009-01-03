@@ -433,6 +433,30 @@ TextTool::TextTool(KoCanvasBase *canvas)
     connect(&m_caretTimer, SIGNAL(timeout()), this, SLOT(blinkCaret()));
 }
 
+#ifndef NDEBUG
+#include "tests/MockShapes.h"
+TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
+    : KoTool(canvas),
+    m_textShape(0),
+    m_textShapeData(0),
+    m_changeTracker(0),
+    m_allowActions(true),
+    m_allowAddUndoCommand(true),
+    m_trackChanges(false),
+    m_allowResourceProviderUpdates(true),
+    m_needSpellChecking(true),
+    m_prevCursorPosition(-1),
+    m_caretTimer(this),
+    m_caretTimerState(true),
+    m_spellcheckPlugin(0),
+    m_currentCommand(0),
+    m_currentCommandHasChildren(false),
+    m_specialCharacterDocker(0)
+{
+    // we could init some vars here, but we probably don't have to
+}
+#endif
+
 TextTool::~TextTool()
 {
     qDeleteAll(m_textEditingPlugins);

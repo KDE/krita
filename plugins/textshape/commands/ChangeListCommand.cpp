@@ -19,7 +19,7 @@
  */
 
 #include "ChangeListCommand.h"
-#include "KoList_p.h"
+#include "KoList_p.h" // FIXME this header is not suppost to be included outside of kotext
 
 #include <KoTextBlockData.h>
 #include <KoTextDocument.h>
@@ -29,6 +29,8 @@
 
 #include <KLocale>
 #include <KDebug>
+
+// FIXME the text tool is not passed in here anywhere so we'll get crashes when we use it in redo()
 
 ChangeListCommand::ChangeListCommand( const QTextCursor &cursor, KoListStyle::Style style, int level,
                                      int flags, QUndoCommand *parent)

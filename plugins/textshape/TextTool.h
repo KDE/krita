@@ -46,6 +46,8 @@ class QUndoCommand;
 class KFontSizeAction;
 class KFontAction;
 
+class MockCanvas;
+
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
  */
@@ -191,6 +193,11 @@ private slots:
     void shapeAddedToCanvas();
 
     void blinkCaret();
+
+#ifndef NDEBUG
+protected:
+    explicit TextTool(MockCanvas *canvas);
+#endif
 
 private:
     bool pasteHelper(QClipboard::Mode mode);

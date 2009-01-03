@@ -1204,19 +1204,23 @@ void TextTool::repaintSelection()
 
 void TextTool::repaintSelection(int startPosition, int endPosition)
 {
+    if (startPosition > endPosition)
+        qSwap(startPosition, endPosition);
     QList<TextShape *> shapes;
-    if (m_textShapeData->position() > startPosition || m_textShapeData->endPosition() < endPosition) {
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-        Q_ASSERT(lay);
-        foreach(KoShape* shape, lay->shapes()) {
-            TextShape *textShape = dynamic_cast<TextShape*>(shape);
-            Q_ASSERT(textShape);
-            if (textShape->textShapeData()->position() >= startPosition &&
-                    textShape->textShapeData()->endPosition() <= endPosition)
-                shapes.append(textShape);
-        }
-    } else // the simple case; the full selection is inside the current shape.
-        shapes.append(m_textShape);
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    Q_ASSERT(lay);
+    foreach(KoShape* shape, lay->shapes()) {
+        TextShape *textShape = dynamic_cast<TextShape*>(shape);
+        Q_ASSERT(textShape);
+
+        const int from = textShape->textShapeData()->position();
+        const int end = textShape->textShapeData()->endPosition();
+        if ((from <= startPosition && end >= startPosition && end <= endPosition)
+            || (from >= startPosition && end <= endPosition) // shape totally included
+            || (from <= endPosition && end >= endPosition)
+            )
+            shapes.append(textShape);
+    }
 
     // loop over all shapes that contain the text and update per shape.
     QRectF repaintRect = textRect(startPosition, endPosition);

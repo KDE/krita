@@ -1321,7 +1321,7 @@ qreal Layout::findFootnote(const QTextLine &line)
         return 0;
     QString text = m_block.text();
     int pos = text.indexOf(QChar(0xFFFC), line.textStart());
-    while (pos >= 0 && pos < line.textLength()) {
+    while (pos >= 0 && pos <= line.textStart() + line.textLength()) {
         QTextCursor c1(m_block);
         c1.setPosition(m_block.position() + pos);
         c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);

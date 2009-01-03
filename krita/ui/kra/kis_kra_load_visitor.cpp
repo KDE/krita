@@ -82,6 +82,10 @@ bool KisKraLoadVisitor::visit(KisExternalLayer * layer)
         m_store->popDirectory();
 
     }
+
+    result = visitAll(layer) && result;
+    layer->setDirty(m_img->bounds());
+
     return result;
 }
 
@@ -155,9 +159,10 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
 
     loadFilterConfiguration( layer->filter(), getLocation( layer, DOT_FILTERCONFIG ) );
 
-    layer->setDirty(m_img->bounds());
-    return true;
+    bool result = visitAll(layer);
 
+    layer->setDirty(m_img->bounds());
+    return result;
 }
 
 bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)

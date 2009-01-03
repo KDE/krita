@@ -165,12 +165,26 @@ bool Layout::addLine(QTextLine &line)
         }
     }
 
-    const qreal footnoteHeight = findFootnote(line);
+    int oldFootnoteDocLength = -1;
+    const qreal footnoteHeight = findFootnote(line, &oldFootnoteDocLength);
 
     if (!m_newShape
             && m_data->documentOffset() + shape->size().height() - footnoteHeight
             < m_y + line.height() + m_shapeBorder.bottom) {
         // line does not fit.
+
+        if (oldFootnoteDocLength >= 0) {
+            QTextCursor cursor(m_textShape->footnoteDocument());
+            cursor.setPosition(oldFootnoteDocLength);
+#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
+            cursor.setPosition(m_textShape->footnoteDocument()->characterCount()-1, QTextCursor::KeepAnchor);
+#else
+            QTextBlock last = m_textShape->footnoteDocument()->end().previous();
+            cursor.setPosition(last.position() + last.length() - 1, QTextCursor::KeepAnchor);
+#endif
+            cursor.removeSelectedText();
+        }
+
         m_data->setEndPosition(m_block.position() + line.textStart() - 1);
 
         bool ignoreParagraph = false;
@@ -1315,21 +1329,31 @@ qreal Layout::inlineCharHeight(const QTextFragment &fragment)
     return 0.0;
 }
 
-qreal Layout::findFootnote(const QTextLine &line)
+qreal Layout::findFootnote(const QTextLine &line, int *oldLength)
 {
     if (m_parent->inlineObjectTextManager() == 0)
         return 0;
+    Q_ASSERT(oldLength);
     QString text = m_block.text();
     int pos = text.indexOf(QChar(0xFFFC), line.textStart());
+    bool firstFootnote = true;
     while (pos >= 0 && pos <= line.textStart() + line.textLength()) {
         QTextCursor c1(m_block);
         c1.setPosition(m_block.position() + pos);
         c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
         KoInlineNote *note = dynamic_cast<KoInlineNote*>(m_parent->inlineObjectTextManager()->inlineTextObject(c1));
         if (note && note->type() == KoInlineNote::Footnote) {
+            QTextCursor cursor(m_textShape->footnoteDocument());
+#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
+            cursor.setPosition(m_textShape->footnoteDocument()->characterCount()-1);
+#else
             QTextBlock last = m_textShape->footnoteDocument()->end().previous();
-            QTextCursor cursor(last);
             cursor.setPosition(last.position() + last.length() - 1);
+#endif
+            if (firstFootnote) {
+                (*oldLength) = cursor.position();
+                firstFootnote = false;
+            }
             if (cursor.position() > 1)
                 cursor.insertText("\n");
 

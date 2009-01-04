@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 2000-2006 David Faure <faure@kde.org>
-   Copyright (C) 2007 Thomas zander <zander@kde.org>
+   Copyright (C) 2007, 2009 Thomas zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1294,52 +1294,6 @@ void KoMainWindow::slotFileQuit()
     close();
 }
 
-#if 0
-void KoMainWindow::slotFilePrintPreview()
-{
-    if (!rootView()) {
-        kWarning() << "KoMainWindow::slotFilePrint : No root view!";
-        return;
-    }
-    QPrinter printer(QPrinter::HighResolution);
-    KTemporaryFile tmpFile;
-    tmpFile.setAutoRemove(false);
-    // The temp file is deleted by KoPrintPreview
-    tmpFile.open();
-
-    // This line has to be before setupPrinter to let the apps decide what to
-    // print and what not (if they want to :)
-#if 0 //XXX_PORT
-    printer.setFromTo(printer.minPage(), printer.maxPage());
-    printer.setPreviewOnly(true);
-#endif
-
-    QPrintDialog *printDialog = KdePrint::createPrintDialog(&printer, rootView()->printDialogPages(), this);
-
-    rootView()->setupPrinter(printer, *printDialog);
-
-    QString oldFileName = printer.outputFileName();
-    printer.setOutputFileName(tmpFile.fileName());
-    int oldNumCopies = printer.numCopies();
-    printer.setNumCopies(1);
-    // Disable kdeprint's own preview, we'd get two. This shows that KPrinter needs
-    // a "don't use the previous settings" mode. The current way is really too much of a hack.
-#if 0
-    QString oldKDEPreview = printer.option("kde-preview");
-    printer.setOption("kde-preview", "0");
-#endif
-    rootView()->print(printer, *printDialog);
-    //KoPrintPreview::preview(this, "KoPrintPreviewDialog", tmpFile.fileName());
-
-    // Restore previous values
-    printer.setOutputFileName(oldFileName);
-    printer.setNumCopies(oldNumCopies);
-#if 0
-    printer.setOption("kde-preview", oldKDEPreview);
-#endif
-}
-#endif
-
 void KoMainWindow::slotFilePrint()
 {
     if (!rootView())
@@ -1366,6 +1320,13 @@ void KoMainWindow::slotFilePrintPreview()
     KoPrintJob *printJob = rootView()->createPrintJob();
     if (printJob == 0)
         return;
+
+  /* Sets the startPrinting() slot to be blocking.
+     The Qt print-preview dialog requires the printing to be completely blocking
+     and only return when the full document has been printed.
+     By default the KoPrintingDialog is non-blocking and
+     multithreading, setting blocking to true will allow it to be used in the preview dialog */
+    printJob->setProperty("blocking", true);
     QPrintPreviewDialog *preview = new QPrintPreviewDialog(&printJob->printer(), this);
     printJob->setParent(preview); // will take care of deleting the job
     connect(preview, SIGNAL(paintRequested(QPrinter*)), printJob, SLOT(startPrinting()));

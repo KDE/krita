@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -117,6 +117,8 @@ public:
             shapeManager->paint(*painter, zoomer, true);
         painter->restore(); // state before page preparation
 
+        if(parent->property("blocking").toBool())
+            return;
         if(!stop && index < pages.count()) {
             pageNumber->setText(i18n("Printing page %1", QString::number(pages[index])));
             action->execute(pages[index++]);
@@ -249,17 +251,30 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy) {
         return;
     }
 
-    d->dialog->show();
+    const bool blocking = property("blocking").toBool();
+    if (!blocking)
+        d->dialog->show();
     if(d->index == 0 && d->pages.count() > 0 && d->printer) {
         d->stop = false;
         delete d->painter;
         d->painter = 0;
         d->zoomer.setZoomAndResolution(100, d->printer->resolution(), d->printer->resolution());
         d->progress->start();
-        for(int i=0; i < d->pages.count(); i++)
-            d->updaters.append(d->progress->startSubtask()); // one per page
-        d->pageNumber->setText(i18n("Printing page %1", QString::number(d->pages[d->index])));
-        d->action->execute(d->pages[d->index++]);
+        if (blocking) {
+            d->resetValues();
+            foreach (int page, d->pages) {
+                d->index++;
+                d->updaters.append(d->progress->startSubtask()); // one per page
+                d->preparePage(page);
+                d->printPage(page);
+            }
+        }
+        else {
+            for(int i=0; i < d->pages.count(); i++)
+                d->updaters.append(d->progress->startSubtask()); // one per page
+            d->pageNumber->setText(i18n("Printing page %1", QString::number(d->pages[d->index])));
+            d->action->execute(d->pages[d->index++]);
+        }
     }
 }
 

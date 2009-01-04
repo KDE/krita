@@ -39,7 +39,7 @@ class KoPrintingDialogPrivate {
 public:
     KoPrintingDialogPrivate(KoPrintingDialog *dia)
         : parent(dia),
-        stop(false),
+        stop(true),
         shapeManager(0),
         painter(0),
         printer(new QPrinter()),
@@ -106,6 +106,7 @@ public:
             painter->end();
         delete painter;
         painter = 0;
+        stop = false;
     }
 
     void printPage(const QVariant &page) {

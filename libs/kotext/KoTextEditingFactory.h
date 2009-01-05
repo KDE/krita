@@ -50,8 +50,8 @@ public:
     virtual KoTextEditingPlugin *create() const = 0;
 
     /**
-     * return the id for the variable this factory creates.
-     * @return the id for the variable this factory creates.
+     * return the id for the plugin this factory creates.
+     * @return the id for the plugin this factory creates.
      */
     QString id() const;
 

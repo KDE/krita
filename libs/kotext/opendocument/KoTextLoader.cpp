@@ -335,6 +335,8 @@ void KoTextLoader::loadParagraph(const KoXmlElement& element, QTextCursor& curso
 void KoTextLoader::loadHeading(const KoXmlElement& element, QTextCursor& cursor)
 {
     int level = qMax(1, element.attributeNS(KoXmlNS::text, "outline-level", "1").toInt());
+    // TODO: fallback to default-outline-level from the style, if specified?
+
     QString styleName = element.attributeNS(KoXmlNS::text, "style-name", QString());
 
     QTextBlock block = cursor.block();
@@ -380,6 +382,7 @@ void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
     KoListStyle *listStyle = d->textSharedData->listStyle(styleName, d->stylesDotXml);
 
     int level;
+    // TODO: get level from the style, if it has a style:list-level attribute (new in ODF-1.2)
 
     if (numberedParagraph) {
         d->currentList = d->list(cursor.block().document(), listStyle);

@@ -418,9 +418,11 @@ TextTool::TextTool(KoCanvasBase *canvas)
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
         if (factory->showInMenu()) {
             KAction *a = new KAction(factory->title(), this);
+            //KAction *a = new KAction(i18n("Apply %1").arg(factory->title()), this); // TODO enable this when stringfreeze lifts
             connect(a, SIGNAL(triggered()), signalMapper, SLOT(map()));
             signalMapper->setMapping(a, factory->id());
             list.append(a);
+            addAction(QString("apply_%1").arg(factory->id()), a);
         }
     }
     setPopupActionList(list);

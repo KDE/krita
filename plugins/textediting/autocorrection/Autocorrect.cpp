@@ -45,8 +45,6 @@ Autocorrect::Autocorrect()
     m_enabled->setChecked(true);
     addAction("enable_autocorrection", m_enabled);
 
-    //TODO an action for apply_autoformat
-
     m_singleSpaces = true;
     m_uppercaseFirstCharOfSentence = false;
     m_fixTwoUppercaseChars = false;

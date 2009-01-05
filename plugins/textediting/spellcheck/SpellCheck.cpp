@@ -257,7 +257,8 @@ void SpellCheck::configureSpellCheck()
     }
 }
 
-void SpellCheck::resourceChanged( int key, const QVariant & res ) {
+void SpellCheck::resourceChanged( int key, const QVariant & res )
+{
     if (key == KoCanvasResource::DocumentIsLoading)
         m_documentIsLoading = res.toBool();
 }

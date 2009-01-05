@@ -33,7 +33,8 @@
 
 #include <KoGlobal.h>
 
-Autocorrect::Autocorrect() {
+Autocorrect::Autocorrect()
+{
     /* setup actions for this plugin */
     KAction *configureAction = new KAction(i18n("Configure &Autocorrection..."), this);
     connect(configureAction, SIGNAL(triggered()), this, SLOT(configureAutocorrect()));
@@ -76,7 +77,8 @@ Autocorrect::~Autocorrect()
     writeConfig();
 }
 
-void Autocorrect::finishedWord(QTextDocument *document, int cursorPosition) {
+void Autocorrect::finishedWord(QTextDocument *document, int cursorPosition)
+{
     if (!m_enableAutocorrect) return;
 
     m_cursor = QTextCursor(document);
@@ -87,26 +89,27 @@ void Autocorrect::finishedWord(QTextDocument *document, int cursorPosition) {
     emit startMacro(i18n("Autocorrection"));
 
     bool done = autoFormatURLs();
-    if(!done) done = singleSpaces();
-    if(!done) done = autoBoldUnderline();
-    if(!done) done = autoFractions();
-    if(!done) advancedAutocorrect();
-    if(!done) uppercaseFirstCharOfSentence();
-    if(!done) fixTwoUppercaseChars();
-    if(!done) autoNumbering();
-    if(!done) superscriptAppendix();
-    if(!done) capitalizeWeekDays();
-    if(!done) autoFormatBulletList();
-    if(!done) replaceTypographicQuotes();
+    if (!done) done = singleSpaces();
+    if (!done) done = autoBoldUnderline();
+    if (!done) done = autoFractions();
+    if (!done) advancedAutocorrect();
+    if (!done) uppercaseFirstCharOfSentence();
+    if (!done) fixTwoUppercaseChars();
+    if (!done) autoNumbering();
+    if (!done) superscriptAppendix();
+    if (!done) capitalizeWeekDays();
+    if (!done) autoFormatBulletList();
+    if (!done) replaceTypographicQuotes();
 
-    if(m_cursor.selectedText() != m_word)
+    if (m_cursor.selectedText() != m_word)
         m_cursor.insertText(m_word);
 
     emit stopMacro();
 }
 
-void Autocorrect::finishedParagraph(QTextDocument */*document*/, int /*cursorPosition*/ ) {
-    if(! m_trimParagraphs) return;
+void Autocorrect::finishedParagraph(QTextDocument * /*document*/, int /*cursorPosition*/ )
+{
+    if (! m_trimParagraphs) return;
     // TODO
 }
 
@@ -144,8 +147,9 @@ void Autocorrect::configureAutocorrect()
 
 // ******************** individual features;
 
-void Autocorrect::uppercaseFirstCharOfSentence() {
-    if(! m_uppercaseFirstCharOfSentence) return;
+void Autocorrect::uppercaseFirstCharOfSentence()
+{
+    if (! m_uppercaseFirstCharOfSentence) return;
 
     int startPos = m_cursor.selectionStart();
     QTextBlock block = m_cursor.block();
@@ -196,8 +200,9 @@ void Autocorrect::uppercaseFirstCharOfSentence() {
     m_cursor.setPosition(startPos + m_word.length(), QTextCursor::KeepAnchor);
 }
 
-void Autocorrect::fixTwoUppercaseChars() {
-    if(! m_fixTwoUppercaseChars) return;
+void Autocorrect::fixTwoUppercaseChars()
+{
+    if (! m_fixTwoUppercaseChars) return;
     if (m_word.length() <= 2) return;
 
     if (m_twoUpperLetterExceptions.contains(m_word.trimmed()))
@@ -214,8 +219,9 @@ void Autocorrect::fixTwoUppercaseChars() {
     }
 }
 
-bool Autocorrect::autoFormatURLs() {
-    if(! m_autoFormatURLs) return false;
+bool Autocorrect::autoFormatURLs()
+{
+    if (! m_autoFormatURLs) return false;
 
     QString link = autoDetectURL(m_word);
     if (link.isNull()) return false;
@@ -224,7 +230,7 @@ bool Autocorrect::autoFormatURLs() {
     int startPos = m_cursor.selectionStart();
     m_cursor.setPosition(startPos);
     m_cursor.setPosition(startPos + trimmed.length(), QTextCursor::KeepAnchor);
-    
+
     QTextCharFormat format;
     format.setAnchor(true);
     format.setAnchorHref(link);
@@ -235,13 +241,14 @@ bool Autocorrect::autoFormatURLs() {
     return true;
 }
 
-bool Autocorrect::singleSpaces() {
-    if(! m_singleSpaces) return false;
-    if(!m_cursor.atBlockStart() && m_word.length() == 1 && m_word.at(0) == ' ') {
+bool Autocorrect::singleSpaces()
+{
+    if (! m_singleSpaces) return false;
+    if (!m_cursor.atBlockStart() && m_word.length() == 1 && m_word.at(0) == ' ') {
         // then when the prev char is also a space, don't insert one.
         QTextBlock block = m_cursor.block();
         QString text = block.text();
-        if(text.at(m_cursor.position() -1 - block.position()) == ' ') {
+        if (text.at(m_cursor.position() -1 - block.position()) == ' ') {
             m_word.clear();
             return true;
         }
@@ -249,8 +256,9 @@ bool Autocorrect::singleSpaces() {
     return false;
 }
 
-bool Autocorrect::autoBoldUnderline() {
-    if(! m_autoBoldUnderline) return false;
+bool Autocorrect::autoBoldUnderline()
+{
+    if (! m_autoBoldUnderline) return false;
 
     QString trimmed = m_word.trimmed();
 
@@ -297,8 +305,9 @@ bool Autocorrect::autoBoldUnderline() {
     return true;
 }
 
-bool Autocorrect::autoFractions() {
-    if(! m_autoFractions) return false;
+bool Autocorrect::autoFractions()
+{
+    if (! m_autoFractions) return false;
 
     QString trimmed = m_word.trimmed();
 
@@ -314,13 +323,15 @@ bool Autocorrect::autoFractions() {
     return true;
 }
 
-void Autocorrect::autoNumbering() {
-    if(! m_autoNumbering) return;
+void Autocorrect::autoNumbering()
+{
+    if (! m_autoNumbering) return;
     // TODO
 }
 
-void Autocorrect::superscriptAppendix() {
-    if(! m_superscriptAppendix) return;
+void Autocorrect::superscriptAppendix()
+{
+    if (! m_superscriptAppendix) return;
 
     QString trimmed = m_word.trimmed();
     int startPos = -1;
@@ -369,12 +380,13 @@ void Autocorrect::superscriptAppendix() {
 
         QTextCharFormat format;
         format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-        cursor.mergeCharFormat(format); 
+        cursor.mergeCharFormat(format);
     }
 }
 
-void Autocorrect::capitalizeWeekDays() {
-    if(! m_capitalizeWeekDays) return;
+void Autocorrect::capitalizeWeekDays()
+{
+    if (! m_capitalizeWeekDays) return;
 
     QString trimmed = m_word.trimmed();
     foreach (const QString & name, m_cacheNameOfDays) {
@@ -386,8 +398,9 @@ void Autocorrect::capitalizeWeekDays() {
     }
 }
 
-void Autocorrect::autoFormatBulletList() {
-    if(! m_autoFormatBulletList) return;
+void Autocorrect::autoFormatBulletList()
+{
+    if (! m_autoFormatBulletList) return;
     // TODO
 }
 
@@ -396,7 +409,7 @@ void Autocorrect::replaceTypographicQuotes()
     /* this method is ported from lib/kotext/KoAutoFormat.cpp KoAutoFormat::doTypographicQuotes
      * from KOffice 1.x branch */
 
-    if (!(m_replaceDoubleQuotes && m_word.contains('"')) && 
+    if (!(m_replaceDoubleQuotes && m_word.contains('"')) &&
             !(m_replaceSingleQuotes && m_word.contains('\''))) return;
 
     // Need to determine if we want a starting or ending quote.
@@ -422,7 +435,7 @@ void Autocorrect::replaceTypographicQuotes()
                 QChar::Category c1 = (*(iter - 1)).category();
 
                 // case 1 and 2
-                if (c1 == QChar::Separator_Space || c1 == QChar::Separator_Line || c1 == QChar::Separator_Paragraph || 
+                if (c1 == QChar::Separator_Space || c1 == QChar::Separator_Line || c1 == QChar::Separator_Paragraph ||
                         c1 == QChar::Punctuation_Open || c1 == QChar::Other_Control)
                     ending = false;
 
@@ -651,13 +664,13 @@ void Autocorrect::readAutocorrectXmlEntry()
 
     if (doc.doctype().name() != "autocorrection")
         return;
-    
+
     QDomElement de = doc.documentElement();
 
     QDomElement upper = de.namedItem("UpperCaseExceptions").toElement();
     if (!upper.isNull()) {
         QDomNodeList nl = upper.childNodes();
-        for (int i = 0; i < nl.count(); i++) 
+        for (int i = 0; i < nl.count(); i++)
             m_upperCaseExceptions += nl.item(i).toElement().attribute("exception");
     }
 
@@ -677,7 +690,7 @@ void Autocorrect::readAutocorrectXmlEntry()
 
     /* Load advanced autocorrect entry, including the format */
     QDomElement item = de.namedItem("items").toElement();
-    if(!item.isNull())
+    if (!item.isNull())
     {
         QDomNodeList nl = item.childNodes();
         for (int i = 0; i < nl.count(); i++) {

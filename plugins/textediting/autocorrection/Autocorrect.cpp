@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -37,10 +37,15 @@ Autocorrect::Autocorrect()
 {
     /* setup actions for this plugin */
     KAction *configureAction = new KAction(i18n("Configure &Autocorrection..."), this);
-    connect(configureAction, SIGNAL(triggered()), this, SLOT(configureAutocorrect()));
+    connect(configureAction, SIGNAL(triggered(bool)), this, SLOT(configureAutocorrect()));
     addAction("configure_autocorrection", configureAction);
 
-    m_enableAutocorrect = false;
+    m_enabled = new KAction(i18n("Autocorrection"), this);
+    m_enabled->setCheckable(true);
+    m_enabled->setChecked(true);
+    addAction("enable_autocorrection", m_enabled);
+
+    //TODO an action for apply_autoformat
 
     m_singleSpaces = true;
     m_uppercaseFirstCharOfSentence = false;
@@ -79,7 +84,7 @@ Autocorrect::~Autocorrect()
 
 void Autocorrect::finishedWord(QTextDocument *document, int cursorPosition)
 {
-    if (!m_enableAutocorrect) return;
+    if (!m_enabled->isChecked()) return;
 
     m_cursor = QTextCursor(document);
     selectWord(m_cursor, cursorPosition);
@@ -585,6 +590,7 @@ void Autocorrect::readConfig()
 {
     KConfigGroup interface = KoGlobal::kofficeConfig()->group("Autocorrect");
 
+    m_enabled->setChecked(interface.readEntry("enabled", m_enabled->isChecked()));
     m_uppercaseFirstCharOfSentence = interface.readEntry("UppercaseFirstCharOfSentence", m_uppercaseFirstCharOfSentence);
     m_fixTwoUppercaseChars = interface.readEntry("FixTwoUppercaseChars", m_fixTwoUppercaseChars);
     m_autoFormatURLs = interface.readEntry("AutoFormatURLs", m_autoFormatURLs);
@@ -609,6 +615,7 @@ void Autocorrect::readConfig()
 void Autocorrect::writeConfig()
 {
     KConfigGroup interface = KoGlobal::kofficeConfig()->group("Autocorrect");
+    interface.writeEntry("enabled", m_enabled->isChecked());
     interface.writeEntry("UppercaseFirstCharOfSentence", m_uppercaseFirstCharOfSentence);
     interface.writeEntry("FixTwoUppercaseChars", m_fixTwoUppercaseChars);
     interface.writeEntry("AutoFormatURLs", m_autoFormatURLs);

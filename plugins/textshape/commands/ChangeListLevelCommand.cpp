@@ -23,7 +23,6 @@
 #include <KoTextBlockData.h>
 #include <KoTextDocument.h>
 #include <KoList.h>
-#include "KoList_p.h"
 #include "TextTool.h"
 #include <KoListLevelProperties.h>
 #include <KLocale>
@@ -85,8 +84,9 @@ void ChangeListLevelCommand::redo()
         TextCommandBase::redo();
         UndoRedoFinalizer finalizer(this, m_tool);
         for (int i = 0; i < m_blocks.size(); ++i) {
-            m_lists.value(i)->listPrivate()->textLists[m_blocks.at(i).textList()->format().property(KoListStyle::Level).toInt() - 1] = m_blocks.at(i).textList();
-            KoListPrivate::invalidate(m_blocks.at(i));
+            m_lists.value(i)->updateStoredList(m_blocks.at(i));
+            if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).userData()))
+                userData->setCounterWidth(-1.0);
         }
     }
     else {
@@ -110,8 +110,10 @@ void ChangeListLevelCommand::undo()
     UndoRedoFinalizer finalizer(this, m_tool);
     for (int i = 0; i < m_blocks.size(); ++i) {
         if (m_blocks.at(i).textList())
-            m_lists.value(i)->listPrivate()->textLists[m_blocks.at(i).textList()->format().property(KoListStyle::Level).toInt() - 1] = m_blocks.at(i).textList();
-        KoListPrivate::invalidate(m_blocks.at(i));
+            m_lists.value(i)->updateStoredList(m_blocks.at(i));
+        if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).userData()))
+            userData->setCounterWidth(-1.0);
+
     }
 }
 

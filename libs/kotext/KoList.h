@@ -82,10 +82,10 @@ public:
     bool continueNumbering(int level) const;
 
     static int level(const QTextBlock &block);
-    
-    /// Returns a pointer to the KoList private member
-    KoListPrivate* listPrivate();
 
+    /// Update the stored QTextList pointer for the given block
+    void updateStoredList(const QTextBlock &block);
+    
 private:
     KoListPrivate *d;
 

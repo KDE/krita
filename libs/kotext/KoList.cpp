@@ -165,9 +165,11 @@ KoListStyle *KoList::style() const
     return d->style;
 }
 
-KoListPrivate *KoList::listPrivate()
+void KoList::updateStoredList(const QTextBlock &block)
 {
-    return d;
+    int level = block.textList()->format().property(KoListStyle::Level).toInt();
+    if (block.textList())
+        d->textLists[level-1] = block.textList();
 }
 
 bool KoList::contains(QTextList *list) const

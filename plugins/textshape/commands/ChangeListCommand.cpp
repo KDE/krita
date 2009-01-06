@@ -19,7 +19,6 @@
  */
 
 #include "ChangeListCommand.h"
-#include "KoList_p.h" // FIXME this header is not suppost to be included outside of kotext
 
 #include <KoTextBlockData.h>
 #include <KoTextDocument.h>
@@ -29,8 +28,6 @@
 
 #include <KLocale>
 #include <KDebug>
-
-// FIXME the text tool is not passed in here anywhere so we'll get crashes when we use it in redo()
 
 ChangeListCommand::ChangeListCommand( const QTextCursor &cursor, KoListStyle::Style style, int level,
                                      int flags, QUndoCommand *parent)
@@ -170,7 +167,7 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
             continue;
         }
         // Then check if we want to modify an existing list.
-        //The behaviour chosen for modifying a list is the following. If the selection contains more than one block, a new list is always created. If the selection only contains one block, the behaviour depends on the flag.
+        // The behaviour chosen for modifying a list is the following. If the selection contains more than one block, a new list is always created. If the selection only contains one block, the behaviour depends on the flag.
         if ((m_flags & ModifyExistingList) && (m_blocks.size() == 1)) {
             m_list.insert(i, document.list(m_blocks.at(i)));
             if (m_list.value(i)) {
@@ -198,18 +195,31 @@ void ChangeListCommand::redo()
     if (!m_first) {
         for (int i = 0; i < m_blocks.size(); ++i) { // We invalidate the lists before calling redo on the QTextDocument
             if (m_actions.value(i) == ChangeListCommand::removeList)
-                KoListPrivate::invalidateList(m_blocks.value(i));
+                for (int j = 0; j < m_blocks.at(i).textList()->count(); j++) {
+                    if (m_blocks.at(i).textList()->item(j) != m_blocks.at(i)) {
+                        if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).textList()->item(j).userData()))
+                            userData->setCounterWidth(-1.0);
+                        break;
+                    }
+                }
         }
         TextCommandBase::redo();
         UndoRedoFinalizer finalizer(this, m_tool);
         for (int i = 0; i < m_blocks.size(); ++i) {
             if ((m_actions.value(i) == ChangeListCommand::modifyExisting) || (m_actions.value(i) == ChangeListCommand::createNew) || (m_actions.value(i) == ChangeListCommand::mergeList)) {
-                m_list.value(i)->listPrivate()->textLists[m_blocks.at(i).textList()->format().property(KoListStyle::Level).toInt() - 1] = m_blocks.at(i).textList();
+                m_list.value(i)->updateStoredList(m_blocks.at(i));
                 KoListStyle *listStyle = m_list.value(i)->style();
                 listStyle->refreshLevelProperties(m_newProperties.value(i));
-                KoListPrivate::invalidateList(m_blocks.at(i));
+                for (int j = 0; j < m_blocks.at(i).textList()->count(); j++) {
+                    if (m_blocks.at(i).textList()->item(j) != m_blocks.at(i)) {
+                        if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).textList()->item(j).userData()))
+                            userData->setCounterWidth(-1.0);
+                        break;
+                    }
+                }
             }
-            KoListPrivate::invalidate(m_blocks.at(i));
+            if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).userData()))
+                userData->setCounterWidth(-1.0);
         }
     }
     else {
@@ -249,33 +259,52 @@ void ChangeListCommand::undo()
     for (int i = 0; i < m_blocks.size(); ++i) {
         // command to undo:
         if (m_actions.value(i) == ChangeListCommand::removeList) {
-            m_oldList.value(i)->listPrivate()->textLists[m_blocks.at(i).textList()->format().property(KoListStyle::Level).toInt() - 1] = m_blocks.at(i).textList();
+            m_oldList.value(i)->updateStoredList(m_blocks.at(i));
             if ((m_flags & ModifyExistingList) && (m_formerProperties.value(i).style() != KoListStyle::None)) {
                 KoListStyle *listStyle = m_oldList.value(i)->style();
                 listStyle->refreshLevelProperties(m_formerProperties.value(i));
             }
-            KoListPrivate::invalidateList(m_blocks.at(i));
+            for (int j = 0; j < m_blocks.at(i).textList()->count(); j++) {
+                if (m_blocks.at(i).textList()->item(j) != m_blocks.at(i)) {
+                    if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).textList()->item(j).userData()))
+                        userData->setCounterWidth(-1.0);
+                    break;
+                }
+            }
         }
         else if (m_actions.value(i) == ChangeListCommand::modifyExisting) {
-            m_list.value(i)->listPrivate()->textLists[m_blocks.at(i).textList()->format().property(KoListStyle::Level).toInt() - 1] = m_blocks.at(i).textList();
+            m_list.value(i)->updateStoredList(m_blocks.at(i));
             if ((m_flags & ModifyExistingList) && (m_formerProperties.value(i).style() != KoListStyle::None)) {
                 KoListStyle *listStyle = m_oldList.value(i)->style();
                 listStyle->refreshLevelProperties(m_formerProperties.value(i));
             }
-            KoListPrivate::invalidateList(m_blocks.at(i));
+            for (int j = 0; j < m_blocks.at(i).textList()->count(); j++) {
+                if (m_blocks.at(i).textList()->item(j) != m_blocks.at(i)) {
+                    if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).textList()->item(j).userData()))
+                        userData->setCounterWidth(-1.0);
+                    break;
+                }
+            }
         }
         else {
             //(ChangeListCommand::createNew)
             //(ChangeListCommand::mergeList)
             
             //if the new/merged list replaced an existing list, the pointer to QTextList in oldList needs updating.
-            if ((m_oldList.value(i)) && (m_blocks.at(i).textList())) {
-                m_oldList.value(i)->listPrivate()->textLists[m_blocks.at(i).textList()->format().property(KoListStyle::Level).toInt() - 1] = m_blocks.at(i).textList();
-                KoListPrivate::invalidateList(m_blocks.at(i));
+            if ((m_oldList.value(i))) {
+                m_oldList.value(i)->updateStoredList(m_blocks.at(i));
+                for (int j = 0; j < m_blocks.at(i).textList()->count(); j++) {
+                    if (m_blocks.at(i).textList()->item(j) != m_blocks.at(i)) {
+                        if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).textList()->item(j).userData()))
+                            userData->setCounterWidth(-1.0);
+                        break;
+                    }
+                }
             }
         }
-            
-        KoListPrivate::invalidate(m_blocks.at(i));
+        
+        if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).userData()))
+            userData->setCounterWidth(-1.0);
     }
 }
 

@@ -862,10 +862,10 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         }
         ensureCursorVisible();
     } else if ((event->key() == Qt::Key_Tab || event->key() == Qt::Key_BackTab)
-               && !m_caret.hasSelection() && m_caret.block().textList() && (m_caret.position() == m_caret.block().position())) {
+               && ((!m_caret.hasSelection() && (m_caret.position() == m_caret.block().position())) || (m_caret.block().document()->findBlock(m_caret.anchor()) != m_caret.block().document()->findBlock(m_caret.position()))) && m_caret.block().textList()) {
         ChangeListLevelCommand::CommandType type = 
             event->key() == Qt::Key_Tab ? ChangeListLevelCommand::IncreaseLevel : ChangeListLevelCommand::DecreaseLevel;
-        ChangeListLevelCommand *cll = new ChangeListLevelCommand(m_caret.block(), type, 1);
+        ChangeListLevelCommand *cll = new ChangeListLevelCommand(m_caret, type, 1);
         addCommand(cll);
         editingPluginEvents();
     } else if (event->key() == Qt::Key_Delete) {

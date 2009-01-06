@@ -182,7 +182,10 @@ void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
             const QString localName = tag.localName();
             handledTag = true;
             if (!firstTime) {
-                cursor.insertBlock();
+                // use empty formats to not inherit from the prev parag
+                QTextBlockFormat bf;
+                QTextCharFormat cf;
+                cursor.insertBlock(bf, cf);
             }
             if (tag.namespaceURI() == KoXmlNS::text) {
                 if (localName == "p") {    // text paragraph
@@ -296,11 +299,6 @@ void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
 
 void KoTextLoader::loadParagraph(const KoXmlElement& element, QTextCursor& cursor)
 {
-    // if we are not in a list and the cursor has still a list style remove it as otherwise 
-    // all that comes after a list is a list
-    if (!d->currentList && cursor.currentList()) {
-        cursor.currentList()->remove(cursor.block());
-    }
     // TODO use the default style name a default value?
     QString styleName = element.attributeNS(KoXmlNS::text, "style-name", QString());
 
@@ -426,7 +424,10 @@ void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
             continue;
 
         if (!firstTime) {
-            cursor.insertBlock();
+            // use empty formats to not inherit from the prev parag
+            QTextBlockFormat bf;
+            QTextCharFormat cf;
+            cursor.insertBlock(bf, cf);
         } else {
             firstTime = false;
         }

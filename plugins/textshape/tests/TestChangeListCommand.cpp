@@ -28,7 +28,6 @@ void TestChangeListCommand::addList()
 {
     QTextDocument doc;
     KoTextDocument(&doc).setStyleManager(new KoStyleManager);
-    QEXPECT_FAIL("", "We should refactor to not use TextTool", Abort);
     MockTextTool *tool = new MockTextTool(new MockCanvas);
     QTextCursor cursor(&doc);
     cursor.insertText("Root\nparag1\nparag2\nparag3\nparag4\n");
@@ -52,6 +51,7 @@ void TestChangeListCommand::addList()
 
     cursor.setPosition(block.position());
     ChangeListCommand clc2(cursor, KoListStyle::DiscItem);
+    clc2.setTool(tool);
     clc2.redo();
 
     block = doc.begin();
@@ -67,7 +67,6 @@ void TestChangeListCommand::removeList()
 {
     QTextDocument doc;
     KoTextDocument(&doc).setStyleManager(new KoStyleManager);
-    QEXPECT_FAIL("", "We should refactor to not use TextTool", Abort);
     MockTextTool *tool = new MockTextTool(new MockCanvas);
     QTextCursor cursor(&doc);
     cursor.insertText("Root\nparag1\nparag2\nparag3\nparag4\n");
@@ -83,6 +82,7 @@ void TestChangeListCommand::removeList()
 
     cursor.setPosition(block.position());
     ChangeListCommand clc(cursor, KoListStyle::None);
+    clc.setTool(tool);
     clc.redo();
 
     block = doc.begin();
@@ -98,6 +98,7 @@ void TestChangeListCommand::removeList()
 
     cursor.setPosition(block.position());
     ChangeListCommand clc2(cursor, KoListStyle::None);
+    clc2.setTool(tool);
     clc2.redo();
     block = doc.begin();
     QVERIFY(block.textList() == 0);
@@ -115,7 +116,6 @@ void TestChangeListCommand::joinList()
 {
     QTextDocument doc;
     KoTextDocument(&doc).setStyleManager(new KoStyleManager);
-    QEXPECT_FAIL("", "We should refactor to not use TextTool", Abort);
     MockTextTool *tool = new MockTextTool(new MockCanvas);
     QTextCursor cursor(&doc);
     cursor.insertText("Root\nparag1\nparag2\nparag3\nparag4\n");
@@ -140,6 +140,7 @@ void TestChangeListCommand::joinList()
 
     cursor.setPosition(block.position());
     ChangeListCommand clc(cursor, KoListStyle::DiscItem);
+    clc.setTool(tool);
     clc.redo();
     QCOMPARE(block.textList(), tl);
 }
@@ -149,7 +150,6 @@ void TestChangeListCommand::joinList2()
     // test usecase of joining with the one before and the one after based on similar styles.
     QTextDocument doc;
     KoTextDocument(&doc).setStyleManager(new KoStyleManager);
-    QEXPECT_FAIL("", "We should refactor to not use TextTool", Abort);
     MockTextTool *tool = new MockTextTool(new MockCanvas);
     QTextCursor cursor(&doc);
     cursor.insertText("Root\nparag1\nparag2\nparag3\nparag4");
@@ -174,6 +174,7 @@ void TestChangeListCommand::joinList2()
     block = doc.begin().next();
     cursor.setPosition(block.position());
     ChangeListCommand clc(cursor, KoListStyle::DiscItem);
+    clc.setTool(tool);
     clc.redo();
     QTextList *tl = block.textList();
     QVERIFY(tl);
@@ -190,6 +191,7 @@ void TestChangeListCommand::joinList2()
     QVERIFY(block.textList() == 0);
     cursor.setPosition(block.position());
     ChangeListCommand clc2(cursor, KoListStyle::DecimalItem);
+    clc2.setTool(tool);
     clc2.redo();
     QVERIFY(block.textList());
     QVERIFY(block.textList() != tl);
@@ -207,7 +209,6 @@ void TestChangeListCommand::splitList()
 
     QTextDocument doc;
     KoTextDocument(&doc).setStyleManager(new KoStyleManager);
-    QEXPECT_FAIL("", "We should refactor to not use TextTool", Abort);
     MockTextTool *tool = new MockTextTool(new MockCanvas);
     QTextCursor cursor(&doc);
     cursor.insertText("Root\nparagA\nparagB\nparagC");
@@ -235,6 +236,7 @@ void TestChangeListCommand::splitList()
     QTextList *tl = paragB.textList();
     cursor.setPosition(paragB.position());
     ChangeListCommand clc(cursor, KoListStyle::AlphaLowerItem);
+    clc.setTool(tool);
     clc.redo();
 
     QVERIFY(doc.begin().textList() == 0);

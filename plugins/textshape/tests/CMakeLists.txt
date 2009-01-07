@@ -54,7 +54,7 @@ set(TestChangeListCommand_test_SRCS
 
 
 kde4_add_unit_test(TestChangeListCommand TESTNAME shapes-text-TestChangeListCommand ${TestChangeListCommand_test_SRCS})
-target_link_libraries(TestChangeListCommand koguiutils kotext ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS})
+target_link_libraries(TestChangeListCommand koguiutils kotext ${QT_QTTEST_LIBRARY}  ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDEUI_LIBS})
 
 ########### next target ###############
 

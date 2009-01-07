@@ -25,7 +25,7 @@
 
 using namespace KUnitTest;
 
-KUNITTEST_MODULE( kunittest_kis_strategy_colorspace_grayscale_tester, "Greyscale ColorSpace Tester" );
+KUNITTEST_MODULE( kunittest_kis_strategy_colorspace_grayscale_tester, "Grayscale ColorSpace Tester" );
 KUNITTEST_MODULE_REGISTER_TESTER( KisGrayColorSpaceTester );
 
 void KisGrayColorSpaceTester::allTests()

@@ -297,18 +297,6 @@ void KisView2::dropEvent(QDropEvent *event)
 }
 
 
-void KisView2::slotChildActivated(bool a)
-{
-
-    KoView::slotChildActivated(a);
-}
-
-
-void KisView2::canvasAddChild(KoViewChild *child)
-{
-    KoView::canvasAddChild(child);
-    connect(this, SIGNAL(viewTransformationsChanged()), child, SLOT(reposition()));
-}
 KisImageSP KisView2::image()
 {
     return m_d->doc->image();

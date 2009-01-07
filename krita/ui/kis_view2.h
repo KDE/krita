@@ -78,8 +78,6 @@ public:
     virtual void updateReadWrite(bool readwrite) {
         Q_UNUSED(readwrite);
     }
-    void slotChildActivated(bool a);
-    void canvasAddChild(KoViewChild * child);
 
 public:  // Krita specific interfaces
 

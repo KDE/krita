@@ -162,6 +162,9 @@ KoTextLoader::~KoTextLoader()
 
 void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
 {
+    const QTextBlockFormat defaultBlockFormat = cursor.blockFormat();
+    const QTextCharFormat defaultCharFormat = cursor.charFormat();
+
     const QTextDocument *document = cursor.block().document();
     d->styleManager = KoTextDocument(document).styleManager();
 
@@ -182,10 +185,7 @@ void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
             const QString localName = tag.localName();
             handledTag = true;
             if (!firstTime) {
-                // use empty formats to not inherit from the prev parag
-                QTextBlockFormat bf;
-                QTextCharFormat cf;
-                cursor.insertBlock(bf, cf);
+                cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
             }
             if (tag.namespaceURI() == KoXmlNS::text) {
                 if (localName == "p") {    // text paragraph

@@ -30,6 +30,7 @@
 #include <QGridLayout>
 #include <QToolButton>
 #include <QCheckBox>
+#include <QPainter>
 
 DivineProportionTool::DivineProportionTool(KoCanvasBase *canvas)
     : KoTool(canvas),

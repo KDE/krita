@@ -59,6 +59,7 @@ void KisFilterMaskTest::testProjectionNotSelected()
     // Check basic apply(). Shouldn't do anything, since nothing is selected yet.
     KisPaintDeviceSP projection = new KisPaintDevice(cs);
     projection->convertFromQImage(qimg, 0, 0, 0);
+    mask->createNodeProgressProxy();
     mask->apply(projection, QRect(0, 0, qimg.width(), qimg.height()));
     mask->select(qimg.rect(), MIN_SELECTED);
 
@@ -83,6 +84,7 @@ void KisFilterMaskTest::testProjectionSelected()
 
     KisFilterMaskSP mask = new KisFilterMask();
     mask->setFilter(kfc);
+    mask->createNodeProgressProxy();
 
     KisPaintDeviceSP projection = new KisPaintDevice(cs);
     projection->convertFromQImage(qimg, 0, 0, 0);
@@ -111,6 +113,7 @@ void KisFilterMaskTest::testInImage()
     Q_ASSERT(kfc);
 
     KisFilterMaskSP mask = new KisFilterMask();
+    mask->createNodeProgressProxy();
     mask->setFilter(kfc);
     mask->select(qimg.rect(), MAX_SELECTED);
 

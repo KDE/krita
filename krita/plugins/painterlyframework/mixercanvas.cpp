@@ -95,8 +95,8 @@ void MixerCanvas::setResources(KisCanvasResourceProvider *rp)
 
     internal->setResource(KoCanvasResource::ForegroundColor, rp->fgColor());
     internal->setResource(KoCanvasResource::BackgroundColor, rp->bgColor());
-    internal->setResource(KisCanvasResourceProvider::CurrentPattern, rp->currentPattern());
-    internal->setResource(KisCanvasResourceProvider::CurrentGradient, rp->currentGradient());
+    internal->setResource(KisCanvasResourceProvider::CurrentPattern, QVariant::fromValue<void*>(rp->currentPattern()));
+    internal->setResource(KisCanvasResourceProvider::CurrentGradient, QVariant::fromValue<void*>(rp->currentGradient()));
 
     internal->setResource(KisCanvasResourceProvider::CurrentKritaNode, rp->currentNode().data());
     internal->setResource(KisCanvasResourceProvider::HdrExposure, rp->HDRExposure());

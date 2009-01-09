@@ -142,7 +142,7 @@ void KisPaintopBox::slotItemSelected(int index)
         m_cmbPaintopPresets->clear();
         KisPaintOpPresetSP preset =
             activePreset(currentPaintop(), KoToolManager::instance()->currentInputDevice());
-        m_cmbPaintopPresets->addItem(preset->name(), QVariant(preset));
+        m_cmbPaintopPresets->addItem(preset->name(), QVariant::fromValue<KisPaintOpPresetSP>(preset));
 
         foreach(KisPaintOpPreset* preset,
                 KisResourceServerProvider::instance()->paintOpPresetServer()->resources()) {

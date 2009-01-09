@@ -46,9 +46,6 @@ QVariant KoCollectionItemModel::data(const QModelIndex& index, int role) const
         case Qt::UserRole:
             return m_shapeTemplateList[index.row()].id;
 
-        case Qt::UserRole + 1:
-            return m_shapeTemplateList[index.row()].properties;
-
         case Qt::DisplayRole:
             return m_shapeTemplateList[index.row()].name;
 

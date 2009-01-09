@@ -96,4 +96,5 @@ Categories=Qt;KDE;Office;Graphics;
 X-KDE-NativeMimeType=application/x-krita
 X-KDE-StartupNotify=true
 X-DBUS-StartupType=Multi
+X-DBUS-ServiceName=org.koffice.krita
 X-Krita-Version=2

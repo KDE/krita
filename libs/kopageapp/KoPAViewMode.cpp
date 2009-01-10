@@ -74,7 +74,7 @@ KoViewConverter * KoPAViewMode::viewConverter( KoPACanvas * canvas )
 
 void KoPAViewMode::updateActivePage( KoPAPageBase *page )
 {
-    m_view->updateActivePage( page );
+    m_view->doUpdateActivePage( page );
 }
 
 void KoPAViewMode::addShape( KoShape *shape )

@@ -87,7 +87,7 @@ KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
     initActions();
 
     if ( m_doc->pageCount() > 0 )
-        updateActivePage( m_doc->pageByIndex( 0, false ) );
+        doUpdateActivePage( m_doc->pageByIndex( 0, false ) );
 }
 
 KoPAView::~KoPAView()
@@ -187,7 +187,7 @@ void KoPAView::initGUI()
     m_documentStructureDocker->setPart( m_doc );
     connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),
              m_documentStructureDocker, SLOT( setPart( KParts::Part * ) ) );
-    // connect(m_documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), this, SLOT(updateActivePage(KoPAPageBase*)));
+    connect(m_documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), this, SLOT(updateActivePage(KoPAPageBase*)));
 
     KoToolManager::instance()->requestToolActivation( m_canvasController );
 
@@ -415,6 +415,12 @@ KoShapeManager* KoPAView::masterShapeManager() const
 
 void KoPAView::updateActivePage( KoPAPageBase * page )
 {
+    m_viewMode->updateActivePage( page );
+}
+
+void KoPAView::doUpdateActivePage( KoPAPageBase * page )
+{
+    bool pageChanged = page == m_activePage;
     setActivePage( page );
 
     m_canvas->updateSize();
@@ -433,7 +439,9 @@ void KoPAView::updateActivePage( KoPAPageBase * page )
 
     updatePageNavigationActions();
 
-    emit activePageChanged();
+    if ( pageChanged ) {
+        emit activePageChanged();
+    }
 }
 
 void KoPAView::setActivePage( KoPAPageBase* page )
@@ -441,35 +449,37 @@ void KoPAView::setActivePage( KoPAPageBase* page )
     if ( !page )
         return;
 
-    shapeManager()->removeAdditional( m_activePage );
-    m_activePage = page;
-    shapeManager()->addAdditional( m_activePage );
-    QList<KoShape*> shapes = page->iterator();
-    shapeManager()->setShapes( shapes, false );
-    //Make the top most layer active
-    if ( !shapes.isEmpty() ) {
-        KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes.last() );
-        shapeManager()->selection()->setActiveLayer( layer );
-    }
-
-    // if the page is not a master page itself set shapes of the master page
-    KoPAPage * paPage = dynamic_cast<KoPAPage *>( page );
-    if ( paPage ) {
-        KoPAMasterPage * masterPage = paPage->masterPage();
-        QList<KoShape*> masterShapes = masterPage->iterator();
-        masterShapeManager()->setShapes( masterShapes, false );
+    if ( page != m_activePage ) {
+        shapeManager()->removeAdditional( m_activePage );
+        m_activePage = page;
+        shapeManager()->addAdditional( m_activePage );
+        QList<KoShape*> shapes = page->iterator();
+        shapeManager()->setShapes( shapes, false );
         //Make the top most layer active
-        if ( !masterShapes.isEmpty() ) {
-            KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( masterShapes.last() );
-            masterShapeManager()->selection()->setActiveLayer( layer );
+        if ( !shapes.isEmpty() ) {
+            KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes.last() );
+            shapeManager()->selection()->setActiveLayer( layer );
         }
-    }
-    else {
-        // if the page is a master page no shapes are in the masterShapeManager
-        masterShapeManager()->setShapes( QList<KoShape*>() );
-    }
 
-    m_documentStructureDocker->setActivePage(m_activePage);
+        // if the page is not a master page itself set shapes of the master page
+        KoPAPage * paPage = dynamic_cast<KoPAPage *>( page );
+        if ( paPage ) {
+            KoPAMasterPage * masterPage = paPage->masterPage();
+            QList<KoShape*> masterShapes = masterPage->iterator();
+            masterShapeManager()->setShapes( masterShapes, false );
+            //Make the top most layer active
+            if ( !masterShapes.isEmpty() ) {
+                KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( masterShapes.last() );
+                masterShapeManager()->selection()->setActiveLayer( layer );
+            }
+        }
+        else {
+            // if the page is a master page no shapes are in the masterShapeManager
+            masterShapeManager()->setShapes( QList<KoShape*>() );
+        }
+
+        m_documentStructureDocker->setActivePage(m_activePage);
+    }
 }
 
 void KoPAView::navigatePage( KoPageApp::PageNavigation pageNavigation )
@@ -477,7 +487,7 @@ void KoPAView::navigatePage( KoPageApp::PageNavigation pageNavigation )
     KoPAPageBase * newPage = m_doc->pageByNavigation( m_activePage, pageNavigation );
 
     if ( newPage != m_activePage ) {
-        updateActivePage( newPage );
+        doUpdateActivePage( newPage );
     }
 }
 
@@ -547,7 +557,7 @@ void KoPAView::insertPage()
     KoPAPageInsertCommand * command = new KoPAPageInsertCommand( m_doc, page, m_activePage );
     m_canvas->addCommand( command );
 
-    updateActivePage(page);
+    doUpdateActivePage(page);
 }
 
 void KoPAView::copyPage()

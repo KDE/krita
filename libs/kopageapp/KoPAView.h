@@ -113,6 +113,11 @@ public:
      */
     void setActionEnabled( int actions, bool enable );
 
+    /**
+     * Set the active page and updates the UI
+     */
+    void doUpdateActivePage( KoPAPageBase * page );
+
 public slots:
     /// Set the active page and updates the UI
     void updateActivePage( KoPAPageBase * page );

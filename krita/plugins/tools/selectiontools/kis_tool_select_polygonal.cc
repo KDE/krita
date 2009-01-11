@@ -244,6 +244,8 @@ QWidget* KisToolSelectPolygonal::createOptionWidget()
     KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(m_canvas);
     Q_ASSERT(canvas);
     m_optWidget = new KisSelectionOptions(canvas);
+    m_optWidget->setObjectName(toolId() + " option widget");
+        
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setWindowTitle(i18n("Polygonal Selection"));
 

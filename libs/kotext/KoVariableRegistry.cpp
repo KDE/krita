@@ -74,7 +74,7 @@ void KoVariableRegistry::init()
         if (nameSpace.isEmpty() || factory->odfElementNames().isEmpty()) {
             kDebug(32500) << "Variable factory" << factory->id() << " does not have odfNameSpace defined, ignoring";
         } else {
-            foreach(QString elementName, factory->odfElementNames()) {
+            foreach(const QString & elementName, factory->odfElementNames()) {
                 d->factories.insert(QPair<QString, QString>(nameSpace, elementName), factory);
 
                 kDebug(32500) << "Inserting variable factory" << factory->id() << " for"
@@ -117,7 +117,7 @@ QList<QAction*> KoVariableRegistry::createInsertVariableActions(KoCanvasBase *ho
 {
     QList<QAction*> answer;
     foreach(KoVariableFactory * factory, values()) {
-        foreach(KoVariableTemplate templ, factory->templates()) {
+        foreach(const KoVariableTemplate & templ, factory->templates()) {
             answer.append(new InsertVariableAction(host, factory, templ));
         }
     }

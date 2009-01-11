@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -47,6 +47,7 @@
 #include "KoPASavingContext.h"
 #include "KoPALoadingContext.h"
 #include "KoPAViewMode.h"
+#include "commands/KoPAPageDeleteCommand.h"
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -71,7 +72,7 @@ KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleV
     d->inlineTextObjectManager = new KoInlineTextObjectManager(this);
 
     // Ask every shapefactory to populate the dataCenterMap
-    foreach(QString id, KoShapeRegistry::instance()->keys())
+    foreach(const QString & id, KoShapeRegistry::instance()->keys())
     {
         KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
         shapeFactory->populateDataCenterMap(d->dataCenterMap);
@@ -402,6 +403,19 @@ void KoPADocument::postRemoveShape( KoPAPageBase * page, KoShape * shape )
     Q_UNUSED( shape );
 }
 
+void KoPADocument::removePage( KoPAPageBase * page )
+{
+    KoPAPageDeleteCommand * command = new KoPAPageDeleteCommand( this, page );
+    pageRemoved( page, command );
+    addCommand( command );
+}
+
+void KoPADocument::pageRemoved( KoPAPageBase * page, QUndoCommand * parent )
+{
+    Q_UNUSED( page );
+    Q_UNUSED( parent );
+}
+
 QMap<QString, KoDataCenter *> KoPADocument::dataCenterMap() const
 {
     return d->dataCenterMap;
@@ -636,8 +650,6 @@ void KoPADocument::insertIntoDataCenterMap(QString key, KoDataCenter *dc)
 }
 
 
-void KoPADocument::removePage( KoPAPageBase * page )
-{
-}
+
 
 #include "KoPADocument.moc"

@@ -113,6 +113,11 @@ public:
      */
     void setActionEnabled( int actions, bool enable );
 
+    /**
+     * Set the active page and updates the UI
+     */
+    void doUpdateActivePage( KoPAPageBase * page );
+
 public slots:
     /// Set the active page and updates the UI
     void updateActivePage( KoPAPageBase * page );
@@ -150,8 +155,6 @@ protected slots:
     void viewGuides(bool show);
     void slotZoomChanged( KoZoomMode::Mode mode, qreal zoom );
 
-    void editCut();
-    void editCopy();
     void editPaste();
     void editDeleteSelection();
     void editSelectAll();

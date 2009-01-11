@@ -401,7 +401,7 @@ void KoPADocumentStructureDocker::extractSelectedLayersAndShapes( QList<KoPAPage
     // 1. only make it possible to select one type of object page, layer, shape
     // 2. don't add shapes when we already have the page/layer/group in the selection
     // separate selected layers and selected shapes
-    foreach( QModelIndex index, selectedItems )
+    foreach( const QModelIndex & index, selectedItems )
     {
         KoShape *shape = static_cast<KoShape*>( index.internalPointer() );
         KoPAPageBase * page = dynamic_cast<KoPAPageBase*>( shape );

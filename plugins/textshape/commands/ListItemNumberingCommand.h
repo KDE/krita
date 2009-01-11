@@ -58,6 +58,7 @@ private:
     QTextBlock m_block;
     bool m_numbered;
     bool m_wasNumbered;
+    bool m_first;
 };
 
 #endif

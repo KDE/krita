@@ -28,11 +28,14 @@
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_node.h"
+
+#include "kis_paint_layer.h"
 #include "kis_image.h"
 #include "kis_painter.h"
 #include "kis_paint_device.h"
 #include "kis_paintop_registry.h"
 #include "kis_paint_information.h"
+
 #include "kis_paintop_settings_widget.h"
 
 struct KisPaintOpSettings::Private {
@@ -75,28 +78,32 @@ KisNodeSP KisPaintOpSettings::node() const
     return d->node;
 }
 
+
 QImage KisPaintOpSettings::sampleStroke(const QSize& size )
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisPaintDeviceSP mydevice = new KisPaintDevice(cs, "preview device");
+    int width = size.width();
+    int height = size.height();
 
-    KisPainter painter(mydevice);
+    KisImageSP img = new KisImage(0, width, height, cs, "temporary for stroke sample");
+    KisLayerSP layer = new KisPaintLayer(img, "temporary for stroke sample", OPACITY_OPAQUE, cs);
+    
+    
+    KisPainter painter(layer->paintDevice());
     painter.setPaintColor(KoColor() );
 
     KisPaintOpPresetSP preset = new KisPaintOpPreset();
-    preset->setSettings( this );
-
-    painter.setPaintOpPreset( preset );
-
-    int width = size.width();
-    int height = size.height();
+    preset->setSettings( this ); // This clones
+    preset->settings()->setNode( layer );
+    
+painter.setPaintOpPreset( preset, img);
 
     QPointF p1(1.0 / 6.0*width, 2.0 / 3.0*height);
     QPointF p2(2.0 / 6.0*width, 1.0 / 3.0*height);
     QPointF p3(4.0 / 6.0*width, 2.0 / 3.0*height);
     QPointF p4(5.0 / 6.0*width, 1.0 / 3.0*height);
 
-    float pathLength;
+    float pathLength = 0.0;
 
     //p2-p1
     float dx = p2.x() - p1.x();
@@ -132,5 +139,6 @@ QImage KisPaintOpSettings::sampleStroke(const QSize& size )
     c2.setY(p3.y() + 5);
     painter.paintBezierCurve(pi3, c1, c2, pi4, 0);
 
-    return mydevice->convertToQImage(0);
+    return layer->paintDevice()->convertToQImage(0);
 }
+

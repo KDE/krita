@@ -198,7 +198,7 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
 {
     m_optWidget = new QWidget();
     Q_CHECK_PTR(m_optWidget);
-
+    m_optWidget->setObjectName(toolId() + " option widget");
     m_optWidget->setWindowTitle(i18n("Similar Selection"));
 
     QVBoxLayout * l = new QVBoxLayout(m_optWidget);

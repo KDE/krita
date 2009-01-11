@@ -116,15 +116,18 @@ KisSelection::KisSelection(const KisSelection& rhs)
     m_d->interestedInDirtyness = false;
     if (rhs.m_d->hasPixelSelection) {
         m_d->pixelSelection = new KisPixelSelection(*rhs.m_d->pixelSelection.data());
+        m_d->pixelSelection->dataManager()->setDefaultPixel(rhs.m_d->pixelSelection->dataManager()->defaultPixel());
     }
     m_d->hasPixelSelection = rhs.m_d->hasPixelSelection;
     m_d->hasShapeSelection = rhs.m_d->hasShapeSelection;
     m_d->isDeselected = rhs.m_d->isDeselected;
 
     if (rhs.m_d->hasShapeSelection) {
+
         Q_ASSERT( rhs.m_d->shapeSelection );
         m_d->shapeSelection = rhs.m_d->shapeSelection->clone();
-        Q_ASSERT( m_d->shapeSelection );
+        Q_ASSERT( m_d->shapeSelection != rhs.m_d->shapeSelection );
+
     } else {
         m_d->shapeSelection = 0;
     }

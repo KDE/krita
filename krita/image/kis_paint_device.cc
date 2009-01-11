@@ -18,6 +18,7 @@
  */
 
 #include "kis_paint_device.h"
+
 #include <QRect>
 #include <QMatrix>
 #include <QImage>
@@ -31,18 +32,15 @@
 #include <klocale.h>
 #include <kconfiggroup.h>
 
-#include "KoColorProfile.h"
-#include "KoColor.h"
-#include "KoColorSpace.h"
-#include "KoColorSpaceRegistry.h"
-#include "KoIntegerMaths.h"
+#include <KoColorProfile.h>
+#include <KoColor.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoIntegerMaths.h>
 #include <KoStore.h>
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_painter.h"
-#include "kis_fill_painter.h"
-#include "filter/kis_filter.h"
 #include "kis_iterator.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iterator_pixel_trait.h"
@@ -58,6 +56,7 @@
 #include "kis_selection_component.h"
 #include "kis_pixel_selection.h"
 #include "kis_paint_device_jobs.h"
+#include "kis_repeat_iterators_pixel.h"
 
 class KisPaintDevice::Private
 {
@@ -197,6 +196,15 @@ void KisPaintDevice::move(const QPoint& pt)
     move(pt.x(), pt.y());
 }
 
+void KisPaintDevice::extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
+{
+    QRect rc = extent();
+    x = rc.x();
+    y = rc.y();
+    w = rc.width();
+    h = rc.height();
+}
+
 QRect KisPaintDevice::extent() const
 {
     qint32 x, y, w, h;
@@ -206,6 +214,15 @@ QRect KisPaintDevice::extent() const
 
     return QRect(x, y, w, h);
 }
+
+void KisPaintDevice::exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const {
+    QRect rc = exactBounds();
+    x = rc.x();
+    y = rc.y();
+    w = rc.width();
+    h = rc.height();
+}
+
 
 QRect KisPaintDevice::exactBounds() const
 {
@@ -329,85 +346,6 @@ void KisPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *
 void KisPaintDevice::clear(const QRect & rc)
 {
     m_datamanager->clear(rc.x(), rc.y(), rc.width(), rc.height(), m_datamanager->defaultPixel());
-}
-
-void KisPaintDevice::mirrorX(KisSelection * selection)
-{
-    KisPaintDeviceSP dst = this;
-    if (!m_datamanager->hasCurrentMemento())
-        dst = new KisPaintDevice(colorSpace());
-
-    QRect r;
-    if (selection) {
-        r = selection->selectedExactRect();
-    } else {
-        r = exactBounds();
-    }
-    {
-        KisHLineConstIteratorPixel srcIt = createHLineConstIterator(r.x(), r.top(), r.width(), selection);
-        KisHLineIteratorPixel dstIt = dst->createHLineIterator(r.x(), r.top(), r.width());
-
-        for (qint32 y = r.top(); y <= r.bottom(); ++y) {
-
-            dstIt += r.width() - 1;
-
-            while (!srcIt.isDone()) {
-                if (srcIt.isSelected()) {
-                    if (m_datamanager->hasCurrentMemento())
-                        memcpy(dstIt.rawData(), srcIt.oldRawData(), m_d->pixelSize);
-                    else
-                        memcpy(dstIt.rawData(), srcIt.rawData(), m_d->pixelSize);
-                }
-                ++srcIt;
-                --dstIt;
-
-            }
-            srcIt.nextRow();
-            dstIt.nextRow();
-        }
-    }
-    if (!m_datamanager->hasCurrentMemento())
-        m_datamanager = dst->dataManager();
-
-    setDirty(r);
-}
-
-void KisPaintDevice::mirrorY(KisSelection * selection)
-{
-    KisPaintDeviceSP dst = this;
-    if (!m_datamanager->hasCurrentMemento())
-        dst = new KisPaintDevice(colorSpace());
-
-    /* Read a line from bottom to top and and from top to bottom and write their values to each other */
-    QRect r;
-    if (selection) {
-        r = selection->selectedExactRect();
-    } else {
-        r = exactBounds();
-    }
-
-    qint32 y1, y2;
-    for (y1 = r.top(), y2 = r.bottom(); y1 <= r.bottom(); ++y1, --y2) {
-
-        KisHLineIteratorPixel itTop = dst->createHLineIterator(r.x(), y1, r.width(), selection);
-        KisHLineConstIteratorPixel itBottom = createHLineConstIterator(r.x(), y2, r.width());
-
-        while (!itTop.isDone() && !itBottom.isDone()) {
-            if (itBottom.isSelected()) {
-                if (m_datamanager->hasCurrentMemento())
-                    memcpy(itTop.rawData(), itBottom.oldRawData(), m_d->pixelSize);
-                else
-                    memcpy(itTop.rawData(), itBottom.rawData(), m_d->pixelSize);
-            }
-            ++itBottom;
-            ++itTop;
-        }
-    }
-
-    if (!m_datamanager->hasCurrentMemento())
-        m_datamanager = dst->dataManager();
-
-    setDirty(r);
 }
 
 bool KisPaintDevice::write(KoStore *store)
@@ -569,8 +507,9 @@ void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcPr
     } else {
         quint8 * dstData = new quint8[img.width() * img.height() * pixelSize()];
         KoColorSpaceRegistry::instance()
-        ->colorSpace("RGBA", srcProfileName)->
-        convertPixelsTo(img.bits(), dstData, colorSpace(), img.width() * img.height());
+            ->colorSpace("RGBA", srcProfileName)
+            ->convertPixelsTo(img.bits(), dstData, colorSpace(), img.width() * img.height());
+            
         writeBytes(dstData, offsetX, offsetY, img.width(), img.height());
         delete[] dstData;
     }
@@ -728,6 +667,28 @@ KisHLineConstIteratorPixel  KisPaintDevice::createHLineConstIterator(qint32 x, q
         selectionDm = const_cast< KisDataManager*>(selection->dataManager().data());
 
     return KisHLineConstIteratorPixel(dm, selectionDm, x, y, w, m_d->x, m_d->y);
+}
+
+KisRepeatHLineConstIteratorPixel KisPaintDevice::createRepeatHLineConstIterator(qint32 x, qint32 y, qint32 w, const QRect& _dataWidth, const KisSelection * selection ) const
+{
+    KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
+    KisDataManager* selectionDm = 0;
+
+    if (selection)
+        selectionDm = const_cast< KisDataManager*>(selection->dataManager().data());
+
+    return KisRepeatHLineConstIteratorPixel(dm, selectionDm, x, y, w, m_d->x, m_d->y, _dataWidth);
+}
+
+KisRepeatVLineConstIteratorPixel KisPaintDevice::createRepeatVLineConstIterator(qint32 x, qint32 y, qint32 h, const QRect& _dataWidth, const KisSelection * selection ) const
+{
+    KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
+    KisDataManager* selectionDm = 0;
+
+    if (selection)
+        selectionDm = const_cast< KisDataManager*>(selection->dataManager().data());
+
+    return KisRepeatVLineConstIteratorPixel(dm, selectionDm, x, y, h, m_d->x, m_d->y, _dataWidth);
 }
 
 KisVLineIteratorPixel  KisPaintDevice::createVLineIterator(qint32 x, qint32 y, qint32 h, const KisSelection * selection)

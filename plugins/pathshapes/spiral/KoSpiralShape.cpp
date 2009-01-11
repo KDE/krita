@@ -59,8 +59,7 @@ bool KoSpiralShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext
 
 void KoSpiralShape::setSize( const QSizeF &newSize )
 {
-    QSizeF oldSize = size();
-    QMatrix matrix( newSize.width() / oldSize.width(), 0, 0, newSize.height() / oldSize.height(), 0, 0 );
+    QMatrix matrix( resizeMatrix( newSize ) );
     m_center = matrix.map( m_center );
     m_radii = matrix.map( m_radii );
     KoParameterShape::setSize( newSize );

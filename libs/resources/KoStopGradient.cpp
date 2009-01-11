@@ -95,7 +95,7 @@ bool KoStopGradient::save()
     QColor color;
 
     // color stops
-    foreach( KoGradientStop stop, m_stops )
+    foreach( const KoGradientStop & stop, m_stops )
     {
         stop.second.toQColor( &color );
         stream << indent << indent;
@@ -244,7 +244,7 @@ KoStopGradient * KoStopGradient::fromQGradient( QGradient * gradient )
             return 0;
     }
 
-    foreach( QGradientStop stop, gradient->stops() )
+    foreach( const QGradientStop & stop, gradient->stops() )
     {
         KoColor color;
         color.fromQColor( stop.second );
@@ -565,7 +565,7 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element)
                 // try style attr
                 QString style = colorstop.attribute( "style" ).simplified();
                 QStringList substyles = style.split( ';', QString::SkipEmptyParts );
-                foreach(QString s, substyles)
+                foreach(const QString & s, substyles)
                 {
                     QStringList substyle = s.split( ':' );
                     QString command	= substyle[0].trimmed();

@@ -38,7 +38,7 @@ public slots:
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
-    void newOptionWidgets(const QMap<QString, QWidget *> & optionWidgetMap);
+    void newOptionWidgets(const QMap<QString, QWidget *> & optionWidgetMap, KoView *callingView);
 
     void removeUnusedOptionWidgets();
 

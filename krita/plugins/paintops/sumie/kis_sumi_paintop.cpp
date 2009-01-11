@@ -24,7 +24,7 @@
 #include <QRect>
 #include <QList>
 #include <QColor>
-#include <QMutexLocker>
+//#include <QMutexLocker>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -107,7 +107,7 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 
 double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist)
 {
-    QMutexLocker locker(&m_mutex);
+//    QMutexLocker locker(&m_mutex);
     Q_UNUSED(savedDist);
 
     if (!painter()) return 0;

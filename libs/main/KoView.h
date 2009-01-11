@@ -40,6 +40,9 @@ class KoViewChild;
 class KoDocumentChild;
 class KoDockFactory;
 
+// KOffice class but not in main module
+class KoDockerManager;
+
 // KDE classes
 class KStatusBar;
 class KXmlGuiWindow;
@@ -303,6 +306,25 @@ public:
      * The default implementation returns 0, which silently cancels printing.
      */
     virtual KoPrintJob * createPrintJob();
+
+    /**
+     * @return the KoDockerManager which is assigned to the @ref KoMainWindow of this view
+     * WARNING: this could be 0, if the main window isn't a koffice main window.
+     * (e.g. it can be any KParts application).
+     * or if no docker have been assigned yet. In that case create one and then use
+     * Note KoDockerManager is not actually defined in the main module but rather in guiutils
+     * @ref setDockerManager to assign it.
+     */
+    KoDockerManager * dockerManager() const;
+
+    /**
+     * use this to assign a KoDockerManager to the KoMainWindow of this view.
+     * This function may not do anything if the main window isn't a koffice main window.
+     * (e.g. it can be any KParts application)
+     * Note KoDockerManager is not actually defined in the main module but rather in guiutils
+     * @ref dockerManager to retrieve it.
+     */
+    void setDockerManager(KoDockerManager *);
 
     /**
      * @return the KoMainWindow in which this view is currently.

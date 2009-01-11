@@ -88,7 +88,17 @@ private:
     void decorateTabs(QPainter *painter, const QVariantList& tabList, const QTextLine &line, const QTextFragment& currentFragment, int startOfBlock);
 
     qreal inlineCharHeight(const QTextFragment &fragment);
-    qreal findFootnote(const QTextLine &line);
+
+    /**
+     * Find a footnote and if there exists one reserve space for it at the bottom of the shape.
+     * @param line the line that we are currently doing layout for. Any finding of footnotes
+     *      will be limited to content in this line.
+     * @param oldLength this pointer will be filled with the text position in the footnote document
+     *      before any footnotes have been inserted.  This is useful to undo the insertion of the
+     *      footnote.
+     * @return the height in document points of space used for all footnotes in this frame.
+     */
+    qreal findFootnote(const QTextLine &line, int *oldLength);
 
     void resetPrivate();
 

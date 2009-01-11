@@ -66,10 +66,12 @@ void KisTextBrush::rebuildTextBrush()
 {
     lblFont->setText(QString(m_font.family() + ", %1").arg(m_font.pointSize()));
     lblFont->setFont(m_font);
-    KisTextBrushResource* textBrush = dynamic_cast<KisTextBrushResource*>(m_textBrush.data());
+    KisTextBrushResource* textBrush = dynamic_cast<KisTextBrushResource*>(m_textBrush);
     textBrush->setFont(m_font);
     textBrush->setText(lineEdit->text());
     textBrush->updateBrush();
+
+    emit sigBrushChanged();
 }
 
 #include "kis_text_brush.moc"

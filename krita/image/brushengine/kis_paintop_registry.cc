@@ -88,19 +88,25 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
 
 KisPaintOp * KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPainter * painter, KisImageSP image) const
 {
-    Q_ASSERT(preset);
+    Q_ASSERT( preset );
+    Q_ASSERT( painter );
+    Q_ASSERT( image );
+
     Q_ASSERT( painter );
     Q_ASSERT( image );
     if (!preset) return 0;
+
     return paintOp(preset->paintOp().id(), preset->settings(), painter, image);
 }
 
 KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id, QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image) const
 {
     KisPaintOpFactory* f = value(id.id());
-    if (f)
-        return f->settings(parent, inputDevice, image);
-
+    if (f) {
+        KisPaintOpSettingsSP settings = f->settings(parent, inputDevice, image);
+        settings->setProperty("paintop", id.id());
+        return settings;
+    }
     return 0;
 }
 
@@ -108,11 +114,13 @@ KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id, QWidget * p
 {
     KisPaintOpPresetSP preset = new KisPaintOpPreset();
     preset->setName(i18n("default"));
-    preset->setSettings(settings(id, parent, inputDevice, image));
+    KisPaintOpSettingsSP s = settings(id, parent, inputDevice, image);
+    preset->setSettings(s);
     if (preset->settings() && preset->settings()->widget()) {
         preset->settings()->widget()->hide();
     }
     preset->setPaintOp(id);
+    Q_ASSERT(!preset->paintOp().id().isEmpty());
     preset->setValid(true);
     return preset;
 }

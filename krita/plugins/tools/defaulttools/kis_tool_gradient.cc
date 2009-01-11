@@ -331,7 +331,8 @@ QWidget* KisToolGradient::createOptionWidget()
 {
     QWidget *widget = KisToolPaint::createOptionWidget();
     Q_CHECK_PTR(widget);
-
+    widget->setObjectName(toolId() + " option widget");
+    
     m_lbShape = new QLabel(i18n("Shape:"), widget);
     m_lbRepeat = new QLabel(i18n("Repeat:"), widget);
 

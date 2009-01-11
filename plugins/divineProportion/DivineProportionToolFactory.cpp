@@ -33,10 +33,12 @@ DivineProportionToolFactory::DivineProportionToolFactory(QObject *parent)
     setActivationShapeId (DivineProportionShape_SHAPEID);
 }
 
-DivineProportionToolFactory::~DivineProportionToolFactory() {
+DivineProportionToolFactory::~DivineProportionToolFactory()
+{
 }
 
-KoTool * DivineProportionToolFactory::createTool(KoCanvasBase *canvas) {
+KoTool * DivineProportionToolFactory::createTool(KoCanvasBase *canvas)
+{
     return new DivineProportionTool(canvas);
 }
 

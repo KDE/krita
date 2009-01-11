@@ -115,25 +115,25 @@ private:
 
     KisClipboard * m_clipboard;
 
-    QAction *m_copy;
-    QAction *m_cut;
-    QAction *m_paste;
-    QAction *m_pasteNew;
-    QAction *m_cutToNewLayer;
-    QAction *m_selectAll;
-    QAction *m_deselect;
-    QAction *m_clear;
-    QAction *m_delete;
-    QAction *m_reselect;
-    QAction *m_invert;
-    QAction *m_toNewLayer;
-    QAction *m_feather;
-    QAction *m_smooth;
-    QAction *m_load;
-    QAction *m_save;
-    QAction *m_fillForegroundColor;
-    QAction *m_fillBackgroundColor;
-    QAction *m_fillPattern;
+    KAction *m_copy;
+    KAction *m_cut;
+    KAction *m_paste;
+    KAction *m_pasteNew;
+    KAction *m_cutToNewLayer;
+    KAction *m_selectAll;
+    KAction *m_deselect;
+    KAction *m_clear;
+    KAction *m_delete;
+    KAction *m_reselect;
+    KAction *m_invert;
+    KAction *m_toNewLayer;
+    KAction *m_feather;
+    KAction *m_smooth;
+    KAction *m_load;
+    KAction *m_save;
+    KAction *m_fillForegroundColor;
+    KAction *m_fillBackgroundColor;
+    KAction *m_fillPattern;
     KToggleAction *m_toggleDisplaySelection;
 
     QList<QAction*> m_pluginActions;

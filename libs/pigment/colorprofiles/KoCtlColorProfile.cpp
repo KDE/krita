@@ -61,14 +61,14 @@ struct KoCtlColorProfile::Private {
     QString colorDepthID;
     quint32 colorDepthIDNumber;
     qreal exposure;
-    qreal middleGreyScaleFactor;
+    qreal middleGrayScaleFactor;
 };
 
 KoCtlColorProfile::KoCtlColorProfile(QString filename) : KoColorProfile(filename), d(new Private)
 {
     d->module = 0;
-    d->middleGreyScaleFactor = 0.0883883;
-    d->exposure = pow(2, 2.47393) * d->middleGreyScaleFactor;
+    d->middleGrayScaleFactor = 0.0883883;
+    d->exposure = pow(2, 2.47393) * d->middleGrayScaleFactor;
 }
 
 KoCtlColorProfile::KoCtlColorProfile(const KoCtlColorProfile& rhs) : KoColorProfile(rhs), d(new Private(*rhs.d))
@@ -381,7 +381,7 @@ void KoCtlColorProfile::setProperty( const QString& _name, const QVariant& _vari
 {
     if( _name == "exposure" )
     {
-        d->exposure = pow(2, _variant.toDouble() + 2.47393) * d->middleGreyScaleFactor;
+        d->exposure = pow(2, _variant.toDouble() + 2.47393) * d->middleGrayScaleFactor;
     } else {
         dbgPigment << "Not CTL property " << _name;
         return KoColorProfile::setProperty(_name, _variant);

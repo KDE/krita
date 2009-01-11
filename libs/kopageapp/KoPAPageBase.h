@@ -126,12 +126,13 @@ public:
      */
     virtual void shapeRemoved( KoShape * shape );
 
+
     /**
      * Get the page type used in the document
      *
      * The default page type KoPageApp::Page is returned
      */
-    KoPageApp::PageType pageType() const;
+    virtual KoPageApp::PageType pageType() const;
 
 protected:
     /**

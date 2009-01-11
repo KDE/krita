@@ -49,7 +49,7 @@ KoPageLayoutDialog::KoPageLayoutDialog(QWidget *parent, const KoPageLayout& layo
     d->visited = false;
 
     setWindowTitle(i18n("Page Layout"));
-    setFaceType(KPageDialog::Auto);
+    setFaceType(KPageDialog::Tabbed);
 
     QWidget *widget = new QWidget(this);
     addPage(widget, i18n("Page"));

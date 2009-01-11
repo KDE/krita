@@ -38,6 +38,7 @@
 #include "kis_view2.h"
 #include "kis_doc2.h"
 #include "kis_mask_manager.h"
+#include "kis_group_layer.h"
 #include "kis_layer_manager.h"
 #include "kis_selection_manager.h"
 
@@ -53,7 +54,14 @@ struct KisNodeManager::Private {
     KisLayerManager * layerManager;
     KisMaskManager * maskManager;
     KisNodeSP activeNode;
+    KisNodeManager* self;
+    void slotLayersChanged(KisGroupLayerSP);
 };
+
+void KisNodeManager::Private::slotLayersChanged(KisGroupLayerSP layer)
+{
+    self->activateNode( layer->at( 0 ) );
+}
 
 KisNodeManager::KisNodeManager(KisView2 * view, KisDoc2 * doc)
         : m_d(new Private())
@@ -62,6 +70,8 @@ KisNodeManager::KisNodeManager(KisView2 * view, KisDoc2 * doc)
     m_d->doc = doc;
     m_d->layerManager = new KisLayerManager(view, doc);
     m_d->maskManager = new KisMaskManager(view);
+    m_d->self = this;
+    connect( m_d->view->image(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), SLOT(slotLayersChanged(KisGroupLayerSP)) );
 }
 
 KisNodeManager::~KisNodeManager()

@@ -1,3 +1,4 @@
+
 /*
  *  Copyright (c) 2008 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
@@ -66,6 +67,7 @@ KisPropertiesConfiguration*  KisCurvePaintOpSettingsWidget::configuration() cons
 
 void KisCurvePaintOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration* config ) const
 {
+    config->setProperty("paintop", "curvebrush"); // XXX: make this a const id string
     config->setProperty( "min_distance", minimalDistance() );
     config->setProperty( "curve_action", curveAction() );
     config->setProperty( "interval", interval() );
@@ -93,4 +95,5 @@ int  KisCurvePaintOpSettingsWidget::curveAction() const
         return 3;
     }else return -1;
 }
+
 

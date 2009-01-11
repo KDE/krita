@@ -18,6 +18,8 @@
 
 #include "kis_tool.h"
 #include <QCursor>
+#include <QLabel>
+#include <QWidget>
 
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
@@ -54,7 +56,8 @@ struct KisTool::Private {
     Private() : currentPattern(0),
             currentGradient(0),
             currentPaintOpPreset(0),
-            currentGenerator(0) { }
+            currentGenerator(0),
+            optionWidget(0) { }
     QCursor cursor; // the cursor that should be shown on tool activation.
 
     // From the canvas resources
@@ -67,6 +70,7 @@ struct KisTool::Private {
     KisNodeSP currentNode;
     float currentExposure;
     KisFilterConfiguration * currentGenerator;
+    QWidget* optionWidget;
 };
 
 KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
@@ -74,6 +78,7 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
         , d(new Private)
 {
     d->cursor = cursor;
+
 }
 
 KisTool::~KisTool()
@@ -328,6 +333,19 @@ void KisTool::setupPainter(KisPainter * painter)
     painter->setGradient(currentGradient());
     painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
 
+}
+
+
+QWidget* KisTool::createOptionWidget()
+{
+    d->optionWidget = new QLabel("No options"); // XXX translate later!
+    d->optionWidget->setObjectName(toolId() + " Option Widget");
+    return d->optionWidget;
+}
+
+QWidget* KisTool::optionWidget()
+{
+    return d->optionWidget;
 }
 
 #include "kis_tool.moc"

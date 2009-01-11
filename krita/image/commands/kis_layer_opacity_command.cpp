@@ -24,16 +24,6 @@
 
 #include "kis_layer.h"
 
-KisLayerCommand::KisLayerCommand(const QString& name, KisLayerSP layer) :
-        QUndoCommand(name), m_layer(layer)
-{
-}
-
-KisLayerCommand::~KisLayerCommand()
-{
-}
-
-
 KisLayerOpacityCommand::KisLayerOpacityCommand(KisLayerSP layer, quint8 oldOpacity, quint8 newOpacity) :
         KisLayerCommand(i18n("Layer Opacity"), layer)
 {
@@ -50,25 +40,5 @@ void KisLayerOpacityCommand::redo()
 void KisLayerOpacityCommand::undo()
 {
     m_layer->setOpacity(m_oldOpacity);
-    m_layer->setDirty();
-}
-
-KisLayerCompositeOpCommand::KisLayerCompositeOpCommand(KisLayerSP layer, const KoCompositeOp* oldCompositeOp,
-        const KoCompositeOp* newCompositeOp) :
-        KisLayerCommand(i18n("Layer Composite Mode"), layer)
-{
-    m_oldCompositeOp = oldCompositeOp;
-    m_newCompositeOp = newCompositeOp;
-}
-
-void KisLayerCompositeOpCommand::redo()
-{
-    m_layer->setCompositeOp(m_newCompositeOp);
-    m_layer->setDirty();
-}
-
-void KisLayerCompositeOpCommand::undo()
-{
-    m_layer->setCompositeOp(m_oldCompositeOp);
     m_layer->setDirty();
 }

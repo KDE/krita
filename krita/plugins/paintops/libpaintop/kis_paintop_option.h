@@ -74,6 +74,13 @@ public slots:
      */
     //virtual void actuate(KRITA_PAINTOP_OPTION_ACTUATOR actuator);
 
+signals:
+
+    /**
+     * emit this whenever a setting has changed. It will update the preview
+     */
+    void sigSettingChanged();
+
 protected:
 
     bool m_checkable;

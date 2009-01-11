@@ -23,7 +23,7 @@
 #define _KOFFICE_VERSION_H_
 
 
-#define KOFFICE_VERSION_STRING "2.0 beta-4"
+#define KOFFICE_VERSION_STRING "2.0 beta-5"
 
 #define KOFFICE_VERSION_MAJOR 1
 #define KOFFICE_VERSION_MINOR 9
@@ -32,7 +32,7 @@
 
 //#define KOFFICE_ALPHA 10
 
-#define KOFFICE_BETA 4
+#define KOFFICE_BETA 5
 
 //#define KOFFICE_RC
 

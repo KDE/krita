@@ -69,7 +69,7 @@ private slots:
     void testRestartNumbering();
     void testRightToLeftList();
     void testLetterSynchronization();
-
+    void testInvalidateLists();
 
 // relativeBulletSize
 

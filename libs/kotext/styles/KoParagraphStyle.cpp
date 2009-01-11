@@ -1358,7 +1358,7 @@ void KoParagraphStyle::setTabPositions(const QList<KoText::Tab> &tabs)
     QList<KoText::Tab> newTabs = tabs;
     qSort(newTabs.begin(), newTabs.end(), compareTabs);
     QList<QVariant> list;
-    foreach(KoText::Tab tab, tabs) {
+    foreach(const KoText::Tab & tab, tabs) {
         QVariant v;
         v.setValue(tab);
         list.append(v);
@@ -1372,7 +1372,7 @@ QList<KoText::Tab> KoParagraphStyle::tabPositions() const
     if (variant.isNull())
         return QList<KoText::Tab>();
     QList<KoText::Tab> answer;
-    foreach(QVariant tab, qvariant_cast<QList<QVariant> >(variant)) {
+    foreach(const QVariant & tab, qvariant_cast<QList<QVariant> >(variant)) {
         answer.append(tab.value<KoText::Tab>());
     }
     return answer;
@@ -1622,7 +1622,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle & style)
         buf.open(QIODevice::WriteOnly);
         KoXmlWriter elementWriter(&buf);
         elementWriter.startElement("style:tab-stops");
-        foreach(KoText::Tab tab, tabPositions()) {
+        foreach(const KoText::Tab & tab, tabPositions()) {
             elementWriter.startElement("style:tab-stop");
             elementWriter.addAttributePt("style:position", tab.position);
             if (!tabTypeMap[tab.type].isEmpty())

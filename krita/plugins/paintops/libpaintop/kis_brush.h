@@ -81,7 +81,7 @@ public:
 };
 
 
-class PAINTOP_EXPORT KisBrush : public KoResource, public KisShared
+class PAINTOP_EXPORT KisBrush : public KoResource
 {
 
     class ScaledBrush;
@@ -267,6 +267,7 @@ protected:
     void setHeight(qint32 h);
     void setImage(const QImage& img);
     void setBrushType(enumBrushType type);
+    KisBrush(const KisBrush& rhs);
 
 private:
 
@@ -292,9 +293,6 @@ private:
     struct Private;
     Private* const d;
 };
-
-class KisBrush;
-typedef KisSharedPtr<KisBrush> KisBrushSP;
 
 #endif // KIS_BRUSH_
 

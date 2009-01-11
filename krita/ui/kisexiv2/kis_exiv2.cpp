@@ -1,3 +1,4 @@
+
 /*
  *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
  *
@@ -211,19 +212,21 @@ Exiv2::Value* kmdValueToExivValue( const KisMetaData::Value& value )
             QVariant var = value.asVariant();
             switch( var.type()) {
                 case QVariant::Int:
-                    return new Exiv2::ValueType<int32_t>(variant.toInt(0));
+                    return new Exiv2::ValueType<int32_t>(var.toInt(0));
+#if 0
                 case QVariant::Double:
-                    return new Exiv2::ValueType<double>(variant.toDouble(0));
-                case QVairant::Date: {
-                    QDate date = variant.toDate();
+                    return new Exiv2::ValueType<double>(var.toDouble(0));
+#endif
+                case QVariant::Date: {
+                    QDate date = var.toDate();
                     return new Exiv2::DateValue(date.year(), date.month(), date.day());
                 }
                 case QVariant::DateTime:
-                    return new Exiv2::StringValue(qPrintable(variant.toDateTime().toString("yyyy:MM:dd hh:mm:ss")));
-                case QVariant:String:
-                    return new Exiv2::StringValue(qPrintable(variant.toString()));
+                    return new Exiv2::StringValue(qPrintable(var.toDateTime().toString("yyyy:MM:dd hh:mm:ss")));
+                case QVariant::String:
+                    return new Exiv2::StringValue(qPrintable(var.toString()));
                 default:
-                    qFatal() << "Unhandled type: " << var.type();
+                    qFatal("Unhandled type.");
                     return 0;
             }
         }
@@ -232,13 +235,13 @@ Exiv2::Value* kmdValueToExivValue( const KisMetaData::Value& value )
         case KisMetaData::Value::UnsignedRational:
             return new Exiv2::ValueType<Exiv2::URational>(Exiv2::URational(value.asUnsignedRational().numerator, value.asUnsignedRational().denominator));
         case KisMetaData::Value::AlternativeArray: 
-            arrV = Exiv2::Value::create(Exiv2::langAlt);
+            arrV = new Exiv2::LangAltValue;
         case KisMetaData::Value::OrderedArray:
         case KisMetaData::Value::UnorderedArray:
         {
             if( !arrV )
             {
-                arrV = Exiv2::Value::create(Exiv2::xmpSeq);
+                arrV = new Exiv2::XmpArrayValue;
             }
             foreach( const KisMetaData::Value& v, value.asArray() )
             {
@@ -249,7 +252,7 @@ Exiv2::Value* kmdValueToExivValue( const KisMetaData::Value& value )
             return arrV;
         }
     }
-    qFatal() << "Unhandled value type";
+    qFatal( "Unhandled value type" );
     return 0;
 }
 
@@ -262,3 +265,4 @@ struct KisExiv2 {
 };
 
 static KisExiv2* exiv2 = new KisExiv2();
+

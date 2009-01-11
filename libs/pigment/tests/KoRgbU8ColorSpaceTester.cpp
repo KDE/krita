@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2008 Bart Coppens <kde@bartcoppens.be>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,28 +17,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kunittest/runner.h>
-#include <kunittest/module.h>
+#include <qtest_kde.h>
+#include <kdebug.h>
+#include <string.h>
 
-#include "kis_factory.h"
-#include "kis_strategy_colorspace_rgb_tester.h"
-#include "kis_rgb_colorspace.h"
+#include "KoColorModelStandardIds.h"
 
-using namespace KUnitTest;
+#include "KoColor.h"
+#include "KoColorSpace.h"
+#include "KoColorSpaceRegistry.h"
+#include "KoCompositeOp.h"
 
-KUNITTEST_MODULE( kunittest_kis_strategy_colorspace_rgb_tester, "RGB ColorSpace Tester" );
-KUNITTEST_MODULE_REGISTER_TESTER( KisRgbColorSpaceTester );
 
-void KisRgbColorSpaceTester::allTests()
-{
-    // We need this so that the color profile loading can operate without crashing.
-    KisFactory *factory = new KisFactory();
+#include "KoRgbU8ColorSpaceTester.h"
 
-    testBasics();
-    testMixColors();
-
-    delete factory;
-}
 
 #define NUM_CHANNELS 4
 
@@ -46,8 +39,9 @@ void KisRgbColorSpaceTester::allTests()
 #define BLUE_CHANNEL 2
 #define ALPHA_CHANNEL 3
 
-void KisRgbColorSpaceTester::testBasics()
+void KoRgbColorSpaceTester::testBasics()
 {
+#if 0
     KoColorProfile *defProfile = new KoColorProfile(cmsCreate_sRGBProfile());  
     KisRgbColorSpace *cs = new KisRgbColorSpace(defProfile);
 
@@ -98,10 +92,12 @@ void KisRgbColorSpaceTester::testBasics()
     CHECK((uint)green, 192u);
     CHECK((uint)blue, 64u);
     CHECK((uint)alpha, 99u);
+#endif
 }
 
-void KisRgbColorSpaceTester::testMixColors()
+void KoRgbColorSpaceTester::testMixColors()
 {
+#if 0
     KoColorProfile *defProfile = new KoColorProfile(cmsCreate_sRGBProfile());
     KisRgbColorSpace *cs = new KisRgbColorSpace(defProfile);
 
@@ -193,5 +189,67 @@ void KisRgbColorSpaceTester::testMixColors()
     CHECK((int)outputPixel[PIXEL_GREEN], 255);
     CHECK((int)outputPixel[PIXEL_BLUE], 255);
     CHECK((int)outputPixel[PIXEL_ALPHA], 165);
+#endif
 }
+
+void KoRgbColorSpaceTester::testCompositeOps()
+{
+    // Just COMPOSITE_COPY for now
+
+    QList<KoID> depthIDs = KoColorSpaceRegistry::instance()->colorDepthList(RGBAColorModelID.id(),
+            KoColorSpaceRegistry::AllColorSpaces);
+
+    foreach( KoID depthId, depthIDs)
+    {
+        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(
+                KoColorSpaceRegistry::instance()->colorSpaceId( RGBAColorModelID.id(), depthId.id() ) , "");
+        const KoCompositeOp* copyOp = cs->compositeOp(COMPOSITE_COPY);
+        KoColor src(cs), dst(cs);
+
+        QColor red(255, 0, 0);
+        QColor blue(0, 0, 255);
+        QColor transparentRed(255, 0, 0, 0);
+
+        // Copying a color over another color should replace the original color
+        src.fromQColor(red);
+        dst.fromQColor(blue);
+
+        QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) != 0);
+
+        copyOp->composite(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(),
+                          0, 0, 1, 1, OPACITY_OPAQUE);
+
+        src.fromQColor(red);
+        QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) == 0);
+
+        // Copying something transparent over something non-transparent should, of course, make the dst transparent
+        src.fromQColor(transparentRed);
+        dst.fromQColor(blue);
+
+        QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) != 0);
+
+        copyOp->composite(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(),
+                          0, 0, 1, 1, OPACITY_OPAQUE);
+
+        src.fromQColor(transparentRed);
+        QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) == 0);
+
+        // Copying something solid over something transparent
+        src.fromQColor(blue);
+        dst.fromQColor(transparentRed);
+
+        QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) != 0);
+
+        copyOp->composite(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(),
+                          0, 0, 1, 1, OPACITY_OPAQUE);
+
+        src.fromQColor(blue);
+        QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) == 0);
+
+    }
+
+}
+
+QTEST_KDEMAIN(KoRgbColorSpaceTester, NoGUI)
+#include "KoRgbU8ColorSpaceTester.moc"
 

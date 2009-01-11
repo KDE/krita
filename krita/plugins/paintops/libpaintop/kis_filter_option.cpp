@@ -50,6 +50,7 @@ public:
 KisFilterOption::KisFilterOption()
         : KisPaintOpOption(i18n("Filter"))
 {
+
     m_checkable = false;
     m_currentFilterConfigWidget = 0;
 
@@ -75,6 +76,8 @@ KisFilterOption::KisFilterOption()
         setCurrentFilter(l2.first());
     }
 
+
+
 }
 
 const KisFilterSP KisFilterOption::filter() const
@@ -87,6 +90,7 @@ KisFilterConfiguration* KisFilterOption::filterConfig() const
     if (!m_currentFilterConfigWidget) return 0;
     return static_cast<KisFilterConfiguration*>(m_currentFilterConfigWidget->configuration());
 }
+
 
 
 bool KisFilterOption::ignoreAlpha()
@@ -144,7 +148,9 @@ void KisFilterOption::updateFilterConfigWidget()
             m_layout->addWidget(m_currentFilterConfigWidget);
             m_optionsWidget->grpFilterOptions->updateGeometry();
             m_currentFilterConfigWidget->show();
+            connect(m_currentFilterConfigWidget, SIGNAL(sigPleaseUpdatePreview()), this, SIGNAL(sigSettingChanged()));
         }
+            
     }
     m_layout->update();
 }
@@ -153,10 +159,20 @@ void KisFilterOption::updateFilterConfigWidget()
 
 void KisFilterOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
+
+#ifdef __GNUC__
+#warning "KisFilterOption::writeOptionSetting: write the filter option setting"
+#endif
+
 }
 
 void KisFilterOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
+
+#ifdef __GNUC__
+#warning "KisFilterOption::readOptionSetting: restore the filter option setting"
+#endif
+
 }
 
 #include "kis_filter_option.moc"

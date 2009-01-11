@@ -39,6 +39,9 @@ KisDuplicateOpOption::KisDuplicateOpOption()
 {
     m_checkable = false;
     m_optionWidget = new KisDuplicateOpOptionsWidget();
+    connect(m_optionWidget->cbHealing, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_optionWidget->cbPerspective, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+        
     setConfigurationPage(m_optionWidget);
 }
 
@@ -77,5 +80,6 @@ void KisDuplicateOpOption::readOptionSetting(const KisPropertiesConfiguration* s
 {
     m_optionWidget->cbHealing->setChecked( setting->getBool( "Duplicateop/Healing", false ) );
     m_optionWidget->cbPerspective->setChecked( setting->getBool( "Duplicateop/CorrectPerspective", false ) );
+    emit sigSettingChanged();
 }
 

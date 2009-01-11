@@ -183,12 +183,6 @@ target_link_libraries(KisAnnotationTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTE
 
 ########### next target ###############
 
-set(kis_autogradient_resource_test_SRCS kis_autogradient_resource_test.cpp )
-kde4_add_unit_test(KisAutogradientResourceTest TESTNAME krita-image-KisAutogradientResourceTest ${kis_autogradient_resource_test_SRCS})
-target_link_libraries(KisAutogradientResourceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_basic_math_toolbox_test_SRCS kis_basic_math_toolbox_test.cpp )
 kde4_add_unit_test(KisBasicMathToolboxTest TESTNAME krita-image-KisBasicMathToolboxTest ${kis_basic_math_toolbox_test_SRCS})
 target_link_libraries(KisBasicMathToolboxTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

@@ -394,15 +394,4 @@ void KisToolPerspectiveGrid::drawGrid(QPainter& gc)
     }
 }
 
-// QWidget* KisToolPerspectiveGrid::createOptionWidget()
-// {
-//     return 0;
-// }
-//
-// QWidget* KisToolPerspectiveGrid::optionWidget()
-// {
-//         return 0;
-// }
-
-
 #include "kis_tool_perspectivegrid.moc"

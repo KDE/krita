@@ -41,13 +41,16 @@ public:
 
     ~KisBrushSelectionWidget();
 
-    KisBrushSP brush();
+    KisBrush* brush();
 
     void setAutoBrush( bool on );
     void setPredefinedBrushes( bool on );
     void setCustomBrush( bool on );
     void setTextBrush( bool on );
 
+signals:
+
+    void sigBrushChanged();
 
 private:
 

@@ -39,7 +39,7 @@ class KisNodeProgressProxy;
  */
 class KRITAIMAGE_EXPORT KisNode : public KisBaseNode
 {
-
+    friend class KisFilterMaskTest;
     Q_OBJECT
 
 public:

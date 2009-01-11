@@ -102,12 +102,15 @@ public:
 
     virtual QString defaultFileExtension() const;
 
+protected:
+    KisImagePipeBrush(const KisImagePipeBrush& rhs);
+
 private:
 
     bool init();
     void setParasiteString(const QString& parasite);
     void selectNextBrush(const KisPaintInformation& info) const;
-
+    void sanitize(); // Force some default values in case the ones read in don't make sense
 private:
     class Private;
     Private * const m_d;

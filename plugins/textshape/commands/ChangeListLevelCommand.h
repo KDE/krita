@@ -23,6 +23,10 @@
 #include "TextCommandBase.h"
 
 #include <QTextBlock>
+#include <QList>
+#include <QHash>
+
+class KoList;
 
 /**
  * This command is used the change level of a list-item.
@@ -39,10 +43,10 @@ public:
     /**
      * Change the list property of 'block'.
      * @param block the paragraph to change the list property of
-     * @param level indicates the new level for the list item
+     * @param coef indicates by how many levels the list item should be displaced
      * @param parent the parent undo command for macro functionality
      */
-    ChangeListLevelCommand(const QTextBlock &block, CommandType type, int level, QUndoCommand *parent = 0);
+    ChangeListLevelCommand(const QTextCursor &cursor, CommandType type, int coef, QUndoCommand *parent = 0);
 
     ~ChangeListLevelCommand();
 
@@ -60,10 +64,15 @@ public:
 
 private:
     int effectiveLevel(int level);
-
-    QTextBlock m_block;
+    
     CommandType m_type;
-    int m_level, m_oldLevel;
+    int coefficient;
+    
+    QList<QTextBlock> m_blocks;
+    QHash<int, KoList*> m_lists;
+    QHash<int, int> m_levels;
+    
+    bool m_first;
 };
 
 #endif

@@ -2573,6 +2573,7 @@ void KoDocument::openTemplate(const KUrl& url)
     setModified(false);
 
     if (ok) {
+        setMimeTypeAfterLoading(KMimeType::findByUrl(url, 0, true)->name());
         deleteOpenPane();
         resetURL();
         setEmpty();

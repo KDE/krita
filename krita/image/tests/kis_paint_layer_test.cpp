@@ -33,6 +33,7 @@
 #include "testutil.h"
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
+#include "kis_pixel_selection.h"
 
 void KisPaintLayerTest::testProjection()
 {
@@ -50,6 +51,7 @@ void KisPaintLayerTest::testProjection()
     QVERIFY(layer->paintDevice().data() == layer->projection().data());
 
     KisTransparencyMaskSP transparencyMask = new KisTransparencyMask();
+    transparencyMask->selection()->getOrCreatePixelSelection()->invert();
     image->addNode(transparencyMask.data(), layer.data());
 
     // Now there are masks. Verify that

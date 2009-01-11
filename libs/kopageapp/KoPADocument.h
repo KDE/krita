@@ -161,6 +161,7 @@ public:
      */
     int takePage( KoPAPageBase *page );
 
+
     /**
      * Remove the page from the document
      *
@@ -168,7 +169,8 @@ public:
      *
      * @param page The page that gets removed
      */
-   virtual void removePage( KoPAPageBase * page );
+    virtual void removePage( KoPAPageBase * page );
+
 
     void addShape( KoShape *shape );
     void removeShape( KoShape* shape );
@@ -271,6 +273,7 @@ protected:
     virtual void postRemoveShape( KoPAPageBase * page, KoShape * shape );
 
     /**
+
      * This function is called with the command that will remove the page
      * given.
      * The default implementation is empty.
@@ -278,9 +281,10 @@ protected:
      * @param page The page that will be removed
      * @param parent The command that will be used to delete the page
      */
-    //virtual void pageRemoved( KoPAPageBase * page, QUndoCommand * parent );
+    virtual void pageRemoved( KoPAPageBase * page, QUndoCommand * parent );
 
     /**
+
      * @brief Enables/Disables the given actions in all views
      *
      * The actions are of Type KoPAAction

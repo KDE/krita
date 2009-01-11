@@ -44,7 +44,7 @@ public:
     virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
 
     virtual QString id() const {
-        return "paintbrush";
+        return "complex";
     }
 
     virtual QString name() const {

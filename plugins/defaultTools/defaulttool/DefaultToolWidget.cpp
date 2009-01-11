@@ -138,6 +138,10 @@ void DefaultToolWidget::updateSize()
     if( selectionCount )
         selSize = selection->boundingRect().size();
 
+
+    widthSpinBox->setEnabled( selectionCount );
+    heightSpinBox->setEnabled( selectionCount );
+
     widthSpinBox->blockSignals(true);
     heightSpinBox->blockSignals(true);
     widthSpinBox->changeValue( selSize.width() );

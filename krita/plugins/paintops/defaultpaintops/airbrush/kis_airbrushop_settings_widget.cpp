@@ -66,6 +66,9 @@ KisPropertiesConfiguration* KisAirbrushOpSettingsWidget::configuration() const
 
 void KisAirbrushOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
 {
+
+    config->setProperty("paintop", "airbrush"); // XXX: make this a const id string
+
     m_brushOption->writeOptionSetting(config);
 }
 

@@ -33,8 +33,6 @@ class KisPaintDeviceTest : public QObject
     void testThumbnail();
     void testPixel();
     void testDirty();
-    void testMirrorTransaction();
-    void testMirror();
     void testRoundtripReadWrite();
     void testPlanarReadWrite();
     void testColorSpaceConversion();

@@ -719,7 +719,8 @@ QWidget* KisToolTransform::createOptionWidget()
 {
     m_optWidget = new WdgToolTransform(0);
     Q_CHECK_PTR(m_optWidget);
-
+    m_optWidget->setObjectName(toolId() + " option widget");
+    
     m_optWidget->cmbFilter->clear();
     m_optWidget->cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
 

@@ -23,11 +23,11 @@
 
 class KoToolDockerFactory::Private {
 public:
-    Private( int id ) : dockWidgetId(id) {}
-    int dockWidgetId;
+    Private( QString id ) : dockWidgetId(id) {}
+    QString dockWidgetId;
 };
 
-KoToolDockerFactory::KoToolDockerFactory( int dockWidgetId )
+KoToolDockerFactory::KoToolDockerFactory( QString dockWidgetId )
 : d( new Private(dockWidgetId))
 {
 }
@@ -39,10 +39,7 @@ KoToolDockerFactory::~KoToolDockerFactory()
 
 QString KoToolDockerFactory::id() const
 {
-    if (d->dockWidgetId==0)
-        return QString("KoToolOptionsDocker");
-    else
-        return QString("KoToolOptionsDocker %1").arg(d->dockWidgetId+1);
+    return d->dockWidgetId;
 }
 
 QDockWidget* KoToolDockerFactory::createDockWidget()

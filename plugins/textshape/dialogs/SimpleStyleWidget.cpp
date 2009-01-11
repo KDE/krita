@@ -50,8 +50,8 @@ SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
         widget.alignRight->setDefaultAction(tool->action("format_alignright"));
     }
 
-    //widget.textColor->setDefaultAction(tool->action("format_textcolor"));
-    //widget.backgroundColor->setDefaultAction(tool->action("format_backgroundcolor"));
+    widget.textColor->setDefaultAction(tool->action("format_textcolor"));
+    widget.backgroundColor->setDefaultAction(tool->action("format_backgroundcolor"));
     widget.alignCenter->setDefaultAction(tool->action("format_aligncenter"));
     widget.alignBlock->setDefaultAction(tool->action("format_alignblock"));
     widget.superscript->setDefaultAction(tool->action("format_super"));
@@ -59,9 +59,20 @@ SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
     widget.decreaseIndent->setDefaultAction(tool->action("format_decreaseindent"));
     widget.increaseIndent->setDefaultAction(tool->action("format_increaseindent"));
 
+    QComboBox *family = qobject_cast<QComboBox*> (tool->action("format_fontfamily")->requestWidget(this));
+    if (family) { // kdelibs 4.1 didn't return anything here.
+        widget.fontsFrame->addWidget(family);
+        connect(family, SIGNAL(activated(int)), this, SIGNAL(doneWithFocus()));
+    }
+    QComboBox *size = qobject_cast<QComboBox*> (tool->action("format_fontsize")->requestWidget(this));
+    if (size) { // kdelibs 4.1 didn't return anything here.
+        widget.fontsFrame->addWidget(size);
+        connect(size, SIGNAL(activated(int)), this, SIGNAL(doneWithFocus()));
+    }
+
     fillListsCombobox();
 
-    connect(widget.listType, SIGNAL(currentIndexChanged(int)), this, SLOT(listStyleChanged(int)));
+    connect(widget.listType, SIGNAL(activated(int)), this, SLOT(listStyleChanged(int)));
     connect(widget.reversedText, SIGNAL(clicked()), this, SLOT(directionChangeRequested()));
 }
 
@@ -143,8 +154,8 @@ void SimpleStyleWidget::listStyleChanged(int row)
 {
     if (m_blockSignals) return;
 
-    m_tool->addCommand(new ChangeListCommand(m_currentBlock,
-                       static_cast<KoListStyle::Style>(widget.listType->itemData(row).toInt()), 0 /* level */));
+    m_tool->addCommand(new ChangeListCommand(m_tool->cursor(), static_cast<KoListStyle::Style>(widget.listType->itemData(row).toInt()), 0 /* level*/));
+    emit doneWithFocus();
 }
 
 void SimpleStyleWidget::directionChangeRequested()
@@ -172,6 +183,7 @@ void SimpleStyleWidget::directionChangeRequested()
         break;
     };
     cursor.setBlockFormat(format);
+    emit doneWithFocus();
 }
 
 void SimpleStyleWidget::updateDirection(DirectionButtonState state)

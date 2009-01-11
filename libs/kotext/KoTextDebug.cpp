@@ -302,6 +302,56 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
     foreach(int id, properties.keys()) {
         QString key, value;
         switch (id) {
+        // the following are 'todo'
+        case KoParagraphStyle::PercentLineHeight:
+        case KoParagraphStyle::FixedLineHeight:
+        case KoParagraphStyle::MinimumLineHeight:
+        case KoParagraphStyle::LineSpacing:
+        case KoParagraphStyle::LineSpacingFromFont:
+        case KoParagraphStyle::AlignLastLine:
+        case KoParagraphStyle::WidowThreshold:
+        case KoParagraphStyle::OrphanThreshold:
+        case KoParagraphStyle::DropCapsTextStyle:
+        case KoParagraphStyle::FollowDocBaseline:
+        case KoParagraphStyle::HasLeftBorder:
+        case KoParagraphStyle::HasTopBorder:
+        case KoParagraphStyle::HasRightBorder:
+        case KoParagraphStyle::HasBottomBorder:
+        case KoParagraphStyle::BorderLineWidth:
+        case KoParagraphStyle::SecondBorderLineWidth:
+        case KoParagraphStyle::DistanceToSecondBorder:
+        case KoParagraphStyle::LeftPadding:
+        case KoParagraphStyle::TopPadding:
+        case KoParagraphStyle::RightPadding:
+        case KoParagraphStyle::BottomPadding:
+        case KoParagraphStyle::LeftBorderColor:
+        case KoParagraphStyle::TopInnerBorderWidth:
+        case KoParagraphStyle::TopBorderSpacing:
+        case KoParagraphStyle::TopBorderStyle:
+        case KoParagraphStyle::TopBorderColor:
+        case KoParagraphStyle::RightInnerBorderWidth:
+        case KoParagraphStyle::RightBorderSpacing:
+        case KoParagraphStyle::RightBorderStyle:
+        case KoParagraphStyle::RightBorderColor:
+        case KoParagraphStyle::BottomInnerBorderWidth:
+        case KoParagraphStyle::BottomBorderSpacing:
+        case KoParagraphStyle::BottomBorderStyle:
+        case KoParagraphStyle::BottomBorderColor:
+        case KoParagraphStyle::ListStyleId:
+        case KoParagraphStyle::ListStartValue:
+        case KoParagraphStyle::RestartListNumbering:
+        case KoParagraphStyle::TextProgressionDirection:
+        case KoParagraphStyle::MasterPageName:
+        case KoParagraphStyle::OutlineLevel:
+            break;
+        case KoParagraphStyle::BreakBefore:
+            key = "breakBefore";
+            value = properties[id].toBool() ? "true" : "false" ;
+            break;
+        case KoParagraphStyle::BreakAfter:
+            key = "breakAfter";
+            value = properties[id].toBool() ? "true" : "false" ;
+            break;
         case KoParagraphStyle::AutoTextIndent:
             key = "autotextindent";
             value = properties[id].toBool() ? "true" : "false" ;
@@ -343,7 +393,7 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
         case KoParagraphStyle::TabPositions:
             key = "tab-stops";
             value = "";
-            foreach(QVariant qvtab, qvariant_cast<QList<QVariant> >(properties[id])) {
+            foreach(const QVariant & qvtab, qvariant_cast<QList<QVariant> >(properties[id])) {
                 KoText::Tab tab = qvtab.value<KoText::Tab>();
                 value.append("{");
                 value.append(" pos:").append(QString::number(tab.position));

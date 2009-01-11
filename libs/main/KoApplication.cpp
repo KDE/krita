@@ -59,10 +59,6 @@ KoApplication::KoApplication()
     // Initialize all KOffice directories etc.
     KoGlobal::initialize();
 
-    // Prepare a DCOP interface
-//     d->m_appIface = new KoApplicationIface;
-//     dcopClient()->setDefaultObject( d->m_appIface->objId() );
-
     new KoApplicationAdaptor(this);
     QDBusConnection::sessionBus().registerObject("/application", this);
 
@@ -72,7 +68,6 @@ KoApplication::KoApplication()
 // This gets called before entering KApplication::KApplication
 bool KoApplication::initHack()
 {
-
     KCmdLineOptions options;
     options.add("print", ki18n("Only print and exit"));
     options.add("template", ki18n("Open a new document with a template"));

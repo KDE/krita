@@ -194,7 +194,7 @@ QWidget* KisToolFill::createOptionWidget()
 {
     //QWidget *widget = KisToolPaint::createOptionWidget(parent);
     QWidget *widget = KisToolPaint::createOptionWidget();
-
+    widget->setObjectName(toolId() + " option widget");
     m_lbThreshold = new QLabel(i18n("Threshold: "), widget);
     m_slThreshold = new KIntNumInput(widget);
     m_slThreshold->setObjectName("int_widget");

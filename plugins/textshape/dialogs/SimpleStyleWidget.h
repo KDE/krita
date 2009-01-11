@@ -38,6 +38,9 @@ public slots:
     void setStyleManager(KoStyleManager *sm);
     void setCurrentFormat(const QTextCharFormat& format);
 
+signals:
+    void doneWithFocus();
+
 private slots:
     void listStyleChanged(int row);
     void directionChangeRequested();

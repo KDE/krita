@@ -206,6 +206,11 @@ signals:
     void styleChanged(int level);
 
 private:
+    friend class ChangeListCommand;
+    friend class ChangeListLevelCommand;
+
+    void refreshLevelProperties(const KoListLevelProperties &properties);
+
     class Private;
     Private * const d;
 };

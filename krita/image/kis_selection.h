@@ -89,7 +89,7 @@ public:
     KisSelection();
 
     /**
-     * Copy the selection. The components are not copied. (XXX: should they?)
+     * Copy the selection. The selection components are copied, too.
      */
     KisSelection(const KisSelection& rhs);
 

@@ -585,8 +585,10 @@ void KisToolCrop::setOptionWidgetRatio(double ratio)
 QWidget* KisToolCrop::createOptionWidget()
 {
     m_optWidget = new WdgToolCrop(0);
+    
     Q_CHECK_PTR(m_optWidget);
-
+    m_optWidget->setObjectName(toolId() + " option widget");
+    
     connect(m_optWidget->bnCrop, SIGNAL(clicked()), this, SLOT(crop()));
 
     connect(m_optWidget->intX, SIGNAL(valueChanged(int)), this, SLOT(setCropX(int)));

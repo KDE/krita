@@ -241,10 +241,9 @@ void KoStarShape::createPoints( int requiredPointCount )
 
 void KoStarShape::setSize( const QSizeF &newSize )
 {
-    QSizeF oldSize = size();
-    // apply the new aspect ratio
-    m_zoomX *= newSize.width() / oldSize.width();
-    m_zoomY *= newSize.height() / oldSize.height();
+    QMatrix matrix(resizeMatrix(newSize));
+    m_zoomX *= matrix.m11();
+    m_zoomY *= matrix.m22();
 
     // this transforms the handles
     KoParameterShape::setSize( newSize );

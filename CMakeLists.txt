@@ -210,12 +210,14 @@ FIND_PROGRAM(BZIP2_EXECUTABLE NAMES bzip2 )
 
 macro_log_feature(BZIP2_EXECUTABLE "bzip2" "bzip2 program is necessary to compile kexi. kexi will not be built" "http://www.bzip.org" FALSE "")
 
-if( BZIP2_EXECUTABLE )
-  macro_optional_add_subdirectory(kexi)
-endif( BZIP2_EXECUTABLE )
+OPTION(BUILD_kexi "Build kexi" FALSE)
+if(BUILD_kexi)
+    if( BZIP2_EXECUTABLE )
+        macro_optional_add_subdirectory(kexi)
+    endif( BZIP2_EXECUTABLE )
+endif(BUILD_kexi)
 
 macro_optional_add_subdirectory(kformula)
-macro_optional_add_subdirectory(kool)
 macro_optional_add_subdirectory(kivio)
 macro_optional_add_subdirectory(kounavail)
 macro_optional_add_subdirectory(kplato)

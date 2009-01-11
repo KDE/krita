@@ -84,6 +84,7 @@ KisPropertiesConfiguration*  KisSumiPaintOpSettingsWidget::configuration() const
 
 void KisSumiPaintOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration* config ) const
 {
+    config->setProperty("paintop", "sumibrush"); // XXX: make this a const id string
     QList<float> c = curve();
     config->setProperty( "curve_count", c.count() );
     for ( int i = 0; i < c.count(); ++i ) {

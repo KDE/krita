@@ -42,4 +42,13 @@ inline QPointF toQPointF(const ExpressionType& expr)
     return QPointF(expr.x(), expr.y());
 }
 
+inline KisVector2D nullKisVector2D()
+{
+    KisVector2D v;
+    v(0) = 0.0;
+    v(1) = 0.0;
+    return v;
+}
+
+
 #endif

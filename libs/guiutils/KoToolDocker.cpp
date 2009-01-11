@@ -27,7 +27,6 @@ class KoToolDocker::Private {
 public:
     Private() : currentWidget(0) {}
     QWidget *currentWidget;
-    QWidget *minimalWidget; //used to force the docker to a minimal size
 
     void optionWidgetDestroyed(QObject* child)
     {
@@ -35,8 +34,9 @@ public:
             currentWidget = 0;
     }
 
-};
+    
 
+};
 
 KoToolDocker::KoToolDocker(QWidget *parent)
     : QDockWidget("Tool Options initial name - never seen", parent),
@@ -44,10 +44,6 @@ KoToolDocker::KoToolDocker(QWidget *parent)
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::TopDockWidgetArea);
     d->currentWidget = 0;
-    d->minimalWidget = new QWidget();
-    d->minimalWidget->setMaximumSize(0,0);
-    setWidget(d->minimalWidget);
-    d->minimalWidget->show();
 }
 
 KoToolDocker::~KoToolDocker() {
@@ -59,17 +55,6 @@ bool KoToolDocker::hasOptionWidget()
     return  d->currentWidget != 0;
 }
 
-void KoToolDocker::removeOptionWidget()
-{
-    if(d->currentWidget) {
-        disconnect(d->currentWidget, SIGNAL(destroyed(QObject*)), this, SLOT(optionWidgetDestroyed(QObject*)));
-        d->currentWidget->hide();
-        d->currentWidget->setParent(0);
-    }
-    setWidget(d->minimalWidget);
-    d->minimalWidget->show();
-    d->currentWidget = 0;
-}
 
 void KoToolDocker::newOptionWidget(QWidget *optionWidget) {
     if(d->currentWidget == optionWidget)
@@ -82,7 +67,6 @@ void KoToolDocker::newOptionWidget(QWidget *optionWidget) {
     connect(d->currentWidget, SIGNAL(destroyed(QObject*)), this, SLOT(optionWidgetDestroyed(QObject*)));
     setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX); // will be overwritten again next
     setWidget(optionWidget);
-    d->minimalWidget->setParent(0);
     adjustSize();
     optionWidget->show();
     update(); // force qt to update the layout even when we are floating

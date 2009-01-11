@@ -417,8 +417,17 @@ void KisLayerManager::layerProperties()
                                   cs,
                                   layer->channelFlags());
         if (dlg.exec() == QDialog::Accepted) {
+        
             QBitArray newChannelFlags = dlg.getChannelFlags();
+            for (int i = 0; i < newChannelFlags.size(); ++i) {
+                dbgUI << "we got flags: " << i << " is " << newChannelFlags.testBit(i);
+            }
             QBitArray oldChannelFlags = layer->channelFlags();
+            for (int i = 0; i < oldChannelFlags.size(); ++i) {
+                dbgUI << "the old ones were: " << i << " is " << oldChannelFlags.testBit(i);
+            }
+
+            dbgUI << " and are they the same: " << (oldChannelFlags == newChannelFlags);
 
             if (layer->name() != dlg.getName() ||
                     layer->opacity() != dlg.getOpacity() ||
@@ -426,13 +435,11 @@ void KisLayerManager::layerProperties()
                     oldChannelFlags != newChannelFlags
                ) {
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
-                m_view->undoAdapter()->addCommand(new KisImageLayerPropsCommand(layer->image(),
-                                                  layer,
-                                                  dlg.getOpacity(),
-                                                  dlg.getCompositeOp(),
-                                                  dlg.getName(),
-                                                  newChannelFlags));
-                layer->setDirty();
+                m_view->undoAdapter()->addCommand(new KisLayerPropsCommand(layer,
+                                                  layer->opacity(), dlg.getOpacity(),
+                                                  layer->compositeOp(), dlg.getCompositeOp(),
+                                                  layer->name(), dlg.getName(),
+                                                  oldChannelFlags, newChannelFlags));
                 QApplication::restoreOverrideCursor();
                 m_doc->setModified(true);
             }
@@ -768,8 +775,9 @@ void KisLayerManager::mirrorLayerX()
         Q_CHECK_PTR(t);
     }
 
-    dev->mirrorX();
-
+    QRect dirty = KisTransformWorker::mirrorX(dev, m_view->selection() );
+    m_activeLayer->setDirty(dirty);
+    
     if (t) m_view->undoAdapter()->addCommand(t);
 
     m_doc->setModified(true);
@@ -789,7 +797,8 @@ void KisLayerManager::mirrorLayerY()
         Q_CHECK_PTR(t);
     }
 
-    dev->mirrorY();
+    QRect dirty = KisTransformWorker::mirrorY(dev, m_view->selection() );
+    m_activeLayer->setDirty(dirty);
 
     if (t) m_view->undoAdapter()->addCommand(t);
 
@@ -918,7 +927,11 @@ void KisLayerManager::mergeLayer()
     const KisMetaData::MergeStrategy* strategy = KisMetaDataMergeStrategyChooserWidget::showDialog(m_view);
     if (!strategy) return;
 
-    img->mergeLayer(layer, strategy);
+    KisLayerSP  newLayer = img->mergeLayer(layer, strategy);
+    if(newLayer) {
+        newLayer->setDirty();
+    }
+    
     m_view->updateGUI();
 
 }

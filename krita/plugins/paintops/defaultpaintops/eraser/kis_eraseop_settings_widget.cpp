@@ -70,6 +70,9 @@ KisPropertiesConfiguration* KisEraseOpSettingsWidget::configuration() const
 
 void KisEraseOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
 {
+
+    config->setProperty("paintop", "eraser"); // XXX: make this a const id string
+
     m_brushOption->writeOptionSetting(config);
     m_sizeOption->writeOptionSetting(config);
     m_opacityOption->writeOptionSetting(config);

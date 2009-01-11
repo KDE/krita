@@ -56,6 +56,8 @@
 
 #include "kis_selection.h"
 
+#include "kis_convolution_painter_impl.h"
+
 
 KisConvolutionPainter::KisConvolutionPainter()
         : KisPainter()
@@ -73,334 +75,38 @@ KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, KisSelecti
 }
 
 
-void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, qint32 h,
-                                        KisConvolutionBorderOp borderOp)
+void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, qint32 h, KisConvolutionBorderOp borderOp)
 {
-    dbgImage << *kernel;
-    // Make the area we cover as small as possible
-    if (selection()) {
-
-        QRect r = selection()->selectedRect().intersect(QRect(x, y, w, h));
-        x = r.x();
-        y = r.y();
-        w = r.width();
-        h = r.height();
-    }
-
-    if (w == 0 && h == 0) return;
-    // Determine the kernel's extent from the center pixel
-    qint32 kw, kh, khalfWidth, khalfHeight, xLastMinuskhw, yLastMinuskhh;
-    kw = kernel->width();
-    kh = kernel->height();
-    khalfWidth = (kw - 1) / 2;
-    khalfHeight = (kh - 1) / 2;
-
-    xLastMinuskhw = x + (w - khalfWidth);
-    yLastMinuskhh = y + (h - khalfHeight);
-
-    // Don't try to convolve on an area smaller than the kernel, or with a kernel that is not square or has no center pixel.
-    if (w < kw || h < kh || (kw&1) == 0 || (kh&1) == 0 || kernel->factor() == 0) return;
-
-    int lastProgressPercent = 0;
-    if (progressUpdater()) progressUpdater()->setProgress(0);
-    const KoColorSpace * cs = device()->colorSpace();
-    KoConvolutionOp * convolutionOp = cs->convolutionOp();
-
+    
     // Determine whether we convolve border pixels, or not.
     switch (borderOp) {
-    case BORDER_DEFAULT_FILL :
-        break;
     case BORDER_REPEAT:
-        applyMatrixRepeat(kernel, src, x, y, w, h);
+    {
+        QRect dataRect = src->exactBounds();
+        applyMatrixImpl<RepeatIteratorFactory>(kernel, src, x, y, w, h, dataRect);
+    }
         return;
+    case BORDER_DEFAULT_FILL :
+    {
+        applyMatrixImpl<StandardIteratorFactory>(kernel, src, x, y, w, h, QRect());
+        return;
+    }
     case BORDER_WRAP:
+    {
+        qFatal("Not implemented");
+    }
     case BORDER_AVOID:
     default :
-        x += khalfWidth;
-        y += khalfHeight;
+    {
+        // TODO should probably be computed from the exactBounds...
+        qint32 kw = kernel->width();
+        qint32 kh = kernel->height();
+        x += (kw - 1 ) / 2;
+        y += (kh - 1 ) / 2;
         w -= kw - 1;
         h -= kh - 1;
+        applyMatrixImpl<StandardIteratorFactory>(kernel, src, x, y, w, h, QRect());
     }
-
-    // Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them in the colorspace.
-
-    int cacheSize = kw * kh;
-    int cdepth = cs -> pixelSize();
-    quint8** pixelPtrCache = new quint8*[cacheSize];
-    for (int i = 0; i < cacheSize; i++)
-        pixelPtrCache[i] = new quint8[cdepth];
-//     pixelPtrCache.fill(0);
-
-    // row == the y position of the pixel we want to change in the paint device
-    int row = y;
-
-    KisHLineIteratorPixel hit = device()->createHLineIterator(x, y, w);
-
-    for (; row < y + h; ++row) {
-
-        // col = the x position of the pixel we want to change
-        int col = x;
-
-
-        bool needFull = true;
-        while (!hit.isDone()) {
-
-            // Iterate over all contributing pixels that are covered by the kernel
-            // krow = the y position in the kernel matrix
-            if (needFull) {
-                qint32 i = 0;
-                for (qint32 krow = 0; krow <  kh; ++krow) {
-
-                    // col - khalfWidth = the left starting point of the kernel as centered on our pixel
-                    // krow - khalfHeight = the offset for the top of the kernel as centered on our pixel
-                    // kw = the width of the kernel
-
-                    // Fill the cache with pointers to the pixels under the kernel
-                    KisHLineConstIteratorPixel kitSrc = src->createHLineConstIterator(col - khalfWidth, (row - khalfHeight) + krow, kw);
-                    while (!kitSrc.isDone()) {
-                        memcpy(pixelPtrCache[i], kitSrc.oldRawData(), cdepth);
-                        ++kitSrc;
-                        ++i;
-                    }
-                }
-                needFull = false;
-                Q_ASSERT(i == kw*kh);
-            } else {
-                for (qint32 krow = 0; krow <  kh; ++krow) { // shift the cache to the left
-                    quint8** d = pixelPtrCache + krow * kw;
-                    //memmove( d, d + 1, (kw-1)*sizeof(quint8*));
-                    for (int i = 0; i < (kw - 1); i++) {
-                        memcpy(d[i], d[i+1], cdepth);
-                    }
-                }
-                qint32 i = kw - 1;
-                KisVLineConstIteratorPixel kitSrc = src->createVLineConstIterator(col + khalfWidth, row - khalfHeight, kh);
-                while (!kitSrc.isDone()) {
-                    memcpy(pixelPtrCache[i], kitSrc.oldRawData(), cdepth);
-                    ++kitSrc;
-                    i += kw;
-                }
-            }
-            if (hit.isSelected()) {
-                convolutionOp->convolveColors(pixelPtrCache, kernel->data(), hit.rawData(), kernel->factor(), kernel->offset(), kw * kh, channelFlags());
-//                 pixelPtrCache.fill(0);
-            }
-            ++col;
-            ++hit;
-        }
-
-        hit.nextRow();
-
-        int progressPercent = 100 - ((((y + h) - row) * 100) / h);
-
-        if (progressUpdater() && progressPercent > lastProgressPercent) {
-            progressUpdater()->setProgress(progressPercent);
-            lastProgressPercent = progressPercent;
-
-            if (progressUpdater()->interrupted()) {
-                dbgImage << "Convolution is interupted";
-                for (int i = 0; i < cacheSize; i++)
-                    delete[] pixelPtrCache[i];
-                delete[] pixelPtrCache;
-
-                return;
-            }
-        }
-
     }
-
-    addDirtyRect(QRect(x, y, w, h));
-
-    if (progressUpdater()) progressUpdater()->setProgress(100);
-
-    for (int i = 0; i < cacheSize; i++)
-        delete[] pixelPtrCache[i];
-    delete[] pixelPtrCache;
 }
 
-void KisConvolutionPainter::applyMatrixRepeat(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, qint32 h)
-{
-    int lastProgressPercent = 0;
-    // Determine the kernel's extent from the center pixel
-    qint32 kw, kh, khalfWidth, khalfHeight, xLastMinuskhw, yLastMinuskhh;
-    kw = kernel->width();
-    kh = kernel->height();
-    khalfWidth = (kw - 1) / 2;
-    khalfHeight = (kh - 1) / 2;
-
-    QRect exactBound = src->exactBounds();
-    
-    int data_right = qMax( exactBound.right() + 1, x + w );
-    int data_bottom = qMax( exactBound.bottom() + 1, y + h );
-    
-    xLastMinuskhw = data_right - khalfWidth;
-    yLastMinuskhh = data_bottom - khalfHeight;
-
-    dbgImage << ppVar( xLastMinuskhw ) << ppVar( yLastMinuskhh ) << ppVar( w ) << ppVar( h ) << ppVar( x) << ppVar( y ) << ppVar( exactBound );
-    
-    const KoColorSpace * cs = device()->colorSpace();
-    KoConvolutionOp * convolutionOp = cs->convolutionOp();
-
-    // Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them in the colorspace.
-
-    int cacheSize = kw * kh;
-    int cdepth = cs -> pixelSize();
-    quint8** pixelPtrCache = new quint8*[cacheSize];
-    for (int i = 0; i < cacheSize; i++)
-        pixelPtrCache[i] = new quint8[cdepth];
-
-    // row == the y position of the pixel we want to change in the paint device
-    int row = y;
-    KisHLineIteratorPixel hit = device()->createHLineIterator(x, y, w);
-    for (; row < y + h; ++row) {
-
-        // col = the x position of the pixel we want to change
-        int col = x;
-
-
-        bool needFull = true;
-
-        qint32 itStart = row - khalfHeight;
-        qint32 itH = kh;
-        if (itStart < 0) {
-            itH += itStart;
-            itStart = 0;
-        } else if (itStart + kh > yLastMinuskhh) {
-            itH -= itStart + kh - yLastMinuskhh;
-        }
-        KisVLineConstIteratorPixel kitSrc = src->createVLineConstIterator(col + khalfWidth , itStart, itH);
-        while (!hit.isDone()) {
-
-            // Iterate over all contributing pixels that are covered by the kernel
-            // krow = the y position in the kernel matrix
-            if (needFull) { // The cache has not been fill, so we need to fill it
-                qint32 i = 0;
-                qint32 krow = 0;
-                if (row < khalfHeight) {
-                    // We are just outside the layer, all the row in the cache will be identical
-                    // so we need to create them only once, and then to copy them
-                    if (x < khalfWidth) { // the left pixels are outside of the layer, in the corner
-                        qint32 kcol = 0;
-                        KisHLineConstIteratorPixel kitSrc = src->createHLineConstIterator(0, 0, kw);
-                        for (; kcol < (khalfWidth - x) + 1; ++kcol) { // First copy the address of the topleft pixel
-                            memcpy(pixelPtrCache[kcol], kitSrc.oldRawData(), cdepth);
-                        }
-                        for (; kcol < kw; ++kcol) { // Then copy the address of the rest of the line
-                            ++kitSrc;
-                            memcpy(pixelPtrCache[kcol], kitSrc.oldRawData(), cdepth);
-                        }
-                    } else {
-                        uint kcol = 0;
-                        KisHLineConstIteratorPixel kitSrc = src->createHLineConstIterator(col - khalfWidth, 0, kw);
-                        while (!kitSrc.isDone()) {
-                            memcpy(pixelPtrCache[kcol], kitSrc.oldRawData(), cdepth);
-                            ++kitSrc;
-                            ++kcol;
-                        }
-                    }
-                    krow = 1; // we have already done the first krow
-                    for (;krow < (khalfHeight - row); ++krow) {
-                        //    Copy the first line in the current line
-                        for (int i = 0; i < kw; i++)
-                            memcpy(pixelPtrCache[krow * kw + i], pixelPtrCache[i], cdepth);
-                    }
-                    i = krow * kw;
-                }
-                qint32 itH = kh;
-                if (row + khalfHeight > yLastMinuskhh) {
-                    itH += yLastMinuskhh - row - khalfHeight;
-                }
-                for (; krow <  itH; ++krow) {
-
-                    // col - khalfWidth = the left starting point of the kernel as centered on our pixel
-                    // krow - khalfHeight = the offset for the top of the kernel as centered on our pixel
-                    // kw = the width of the kernel
-
-                    // Fill the cache with pointers to the pixels under the kernel
-                    qint32 itHStart = col - khalfWidth;
-                    qint32 itW = kw;
-                    if (itHStart < 0) {
-                        itW += itHStart;
-                        itHStart = 0;
-                    }
-                    KisHLineConstIteratorPixel kitSrc = src->createHLineConstIterator(itHStart, (row - khalfHeight) + krow, itW);
-                    if (col < khalfWidth) {
-                        for (; i <  krow * kw + (kw - itW); i += 1) {
-                            memcpy(pixelPtrCache[i], kitSrc.oldRawData(), cdepth);
-                        }
-                    }
-                    while (!kitSrc.isDone()) {
-                        memcpy(pixelPtrCache[i], kitSrc.oldRawData(), cdepth);
-                        ++kitSrc;
-                        ++i;
-                    }
-                }
-                qint32 lastvalid = i - kw;
-                for (; krow < kh; ++krow) {
-                    // Copy the last valid line in the current line
-                    for (int i = 0; i < kw; i++)
-                        memcpy(pixelPtrCache[krow * kw + i], pixelPtrCache[lastvalid + i],
-                               cdepth);
-                }
-                needFull = false;
-            } else {
-                for (qint32 krow = 0; krow <  kh; ++krow) { // shift the cache to the left
-                    quint8** d = pixelPtrCache + krow * kw;
-                    //memmove( d, d + 1, (kw-1)*sizeof(quint8*));
-                    quint8* first = *d;
-                    memmove(d, d + 1, (kw - 1)*sizeof(quint8*));
-                    *(d + kw - 1) = first;
-                }
-                if (col < xLastMinuskhw) {
-                    qint32 i = kw - 1;
-                    kitSrc.nextCol();
-                    if (row < khalfHeight) {
-                        for (; i < (khalfHeight - row) * kw; i += kw) {
-                            memcpy(pixelPtrCache[i], kitSrc.oldRawData(), cdepth);
-                        }
-                    }
-                    while (!kitSrc.isDone()) {
-                        memcpy(pixelPtrCache[i], kitSrc.oldRawData(), cdepth);
-                        ++kitSrc;
-                        i += kw;
-                    }
-                    qint32 lastvalid = i - kw;
-                    for (;i < kw*kh; i += kw) {
-                        memcpy(pixelPtrCache[i], pixelPtrCache[lastvalid], cdepth);
-                    }
-                }
-            }
-            if (hit.isSelected()) {
-                convolutionOp->convolveColors(pixelPtrCache, kernel->data(), hit.rawData(), kernel->factor(), kernel->offset(), kw * kh, channelFlags());
-            }
-            ++col;
-            ++hit;
-        }
-        hit.nextRow();
-
-        int progressPercent = 100 - ((((y + h) - row) * 100) / h);
-
-        if (progressUpdater() && progressPercent > lastProgressPercent) {
-            progressUpdater()->setProgress(progressPercent);
-            lastProgressPercent = progressPercent;
-
-            if (progressUpdater()->interrupted()) {
-                dbgImage << "Convolution is interupted";
-                for (int i = 0; i < cacheSize; i++)
-                    delete[] pixelPtrCache[i];
-                delete[] pixelPtrCache;
-
-                return;
-            }
-        }
-
-    }
-
-    addDirtyRect(QRect(x, y, w, h));
-
-    if (progressUpdater()) progressUpdater()->setProgress(100);
-
-    for (int i = 0; i < cacheSize; i++)
-        delete[] pixelPtrCache[i];
-    delete[] pixelPtrCache;
-}

@@ -141,7 +141,7 @@ struct KisBrush::Private {
     quint32 magic_number; /*  GIMP brush magic number  */
 
     enumBrushType brushType;
-
+    
     KisBoundary* boundary;
 };
 
@@ -202,6 +202,16 @@ KisBrush::KisBrush(const QImage& image, const QString& name)
     setBrushType(IMAGE);
 }
 
+KisBrush::KisBrush(const KisBrush& rhs)
+    : KoResource(""),
+      d(new Private)
+{
+    setName(rhs.name());
+    *d = *rhs.d;
+    d->data = QByteArray();
+    d->boundary = 0;
+    d->scaledBrushes.clear();
+}
 
 KisBrush::~KisBrush()
 {
@@ -1393,19 +1403,7 @@ void KisBrush::makeMaskImage()
 
 KisBrush* KisBrush::clone() const
 {
-    KisBrush* c = new KisBrush(filename());
-    c->d->spacing = d->spacing;
-    c->d->useColorAsMask = d->useColorAsMask;
-    c->d->hasColor = d->useColorAsMask;
-    c->d->img = d->img;
-    c->d->width = d->width;
-    c->d->height = d->height;
-    c->d->ownData = false;
-    c->d->hotSpot = d->hotSpot;
-    c->d->brushType = d->brushType;
-    c->setValid(true);
-
-    return c;
+    return new KisBrush(*this);
 }
 
 void KisBrush::toXML(QDomDocument& d, QDomElement& e) const
@@ -1449,5 +1447,6 @@ QString KisBrush::defaultFileExtension() const
 {
     return QString(".gbr");
 }
+
 
 #include "kis_brush.moc"

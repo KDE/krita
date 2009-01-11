@@ -46,7 +46,7 @@ class KisCustomBrush : public KisWdgCustomBrush
 public:
     KisCustomBrush(QWidget *parent, const QString& caption, KisImageSP image);
     virtual ~KisCustomBrush();
-    KisBrushSP brush() {
+    KisBrush* brush() {
         return m_brush;
     };
 
@@ -58,10 +58,14 @@ private slots:
     void slotAddPredefined();
     void slotUpdateCurrentBrush(int i = 0); // To connect with activated(int)
 
+signals:
+
+    void sigBrushChanged();
+    
 private:
     void createBrush();
     KisImageSP m_image;
-    KisBrushSP m_brush;
+    KisBrush* m_brush;
     KoResourceServerAdapter<KisBrush>* m_rServerAdapter;
 };
 

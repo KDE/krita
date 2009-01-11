@@ -451,6 +451,7 @@ void KoTextSelectionHandler::nextParagraph()
     QTextList *list = d->caret->block().textList();
     d->caret->insertBlock();
     QTextBlockFormat bf = d->caret->blockFormat();
+    QVariant direction = bf.property(KoParagraphStyle::TextProgressionDirection);
     bf.setPageBreakPolicy(QTextFormat::PageBreak_Auto);
     bf.clearProperty(KoParagraphStyle::ListStartValue);
     bf.clearProperty(KoParagraphStyle::UnnumberedListItem);
@@ -462,6 +463,22 @@ void KoTextSelectionHandler::nextParagraph()
         if (list)
             list->add(block);
     }
+    
+    bf = d->caret->blockFormat();
+    if (d->textShapeData->pageDirection() != KoText::AutoDirection) { // inherit from shape
+        KoText::Direction dir;
+        switch (d->textShapeData->pageDirection()) {
+        case KoText::RightLeftTopBottom:
+            dir = KoText::PerhapsRightLeftTopBottom;
+            break;
+        case KoText::LeftRightTopBottom:
+        default:
+            dir = KoText::PerhapsLeftRightTopBottom;
+        }
+        bf.setProperty(KoParagraphStyle::TextProgressionDirection, dir);
+    } else if (! direction.isNull()) // then we inherit from the previous paragraph.
+        bf.setProperty(KoParagraphStyle::TextProgressionDirection, direction);
+    d->caret->setBlockFormat(bf);
     emit stopMacro();
 }
 

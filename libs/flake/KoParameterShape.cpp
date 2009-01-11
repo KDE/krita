@@ -112,8 +112,7 @@ void KoParameterShape::paintHandle(QPainter & painter, const KoViewConverter & c
 
 void KoParameterShape::setSize(const QSizeF &newSize)
 {
-    QSizeF oldSize = size();
-    QMatrix matrix(newSize.width() / oldSize.width(), 0, 0, newSize.height() / oldSize.height(), 0, 0);
+    QMatrix matrix(resizeMatrix(newSize));
 
     for (int i = 0; i < m_handles.size(); ++i) {
         m_handles[i] = matrix.map(m_handles[i]);

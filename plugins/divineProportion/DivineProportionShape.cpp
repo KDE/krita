@@ -34,25 +34,30 @@ DivineProportionShape::DivineProportionShape()
     setShapeId(DivineProportionShape_SHAPEID);
 }
 
-DivineProportionShape::~DivineProportionShape() {
+DivineProportionShape::~DivineProportionShape()
+{
 }
 
-void DivineProportionShape::paint(QPainter &painter, const KoViewConverter &converter) {
-    if(m_printable) {
+void DivineProportionShape::paint(QPainter &painter, const KoViewConverter &converter)
+{
+    if (m_printable) {
         applyConversion(painter, converter);
         draw(painter);
     }
 }
 
-void DivineProportionShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas) {
-    if(!m_printable) {
+void DivineProportionShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)
+{
+    Q_UNUSED(canvas);
+    if (!m_printable) {
         applyConversion(painter, converter);
         painter.setRenderHint(QPainter::Antialiasing);
         draw(painter);
     }
 }
 
-void DivineProportionShape::draw(QPainter &painter) {
+void DivineProportionShape::draw(QPainter &painter)
+{
     painter.setPen(QPen(QColor(172, 196, 206)));
     QRectF rect(QPointF(0,0), size());
     bool top = (m_orientation == TopRight || m_orientation == TopLeft);
@@ -62,7 +67,7 @@ void DivineProportionShape::draw(QPainter &painter) {
     painter.setPen(QPen(QColor(173, 123, 134)));
     const qreal x1 = rect.width() / m_divineProportion;
     const qreal x2 = rect.width() - x1;
-    if(top && !left || !top && left) {
+    if ((top && !left) || (!top && left)) {
         painter.drawLine(rect.bottomLeft(), rect.topRight());
         painter.drawLine(QPointF(x1, 0), rect.bottomRight());
         painter.drawLine(QPointF(0,0), QPointF(x2, rect.bottom()));
@@ -74,16 +79,19 @@ void DivineProportionShape::draw(QPainter &painter) {
     }
 }
 
-void DivineProportionShape::saveOdf(KoShapeSavingContext & context) const {
+void DivineProportionShape::saveOdf(KoShapeSavingContext & context) const
+{
     // TODO
 }
 
-bool DivineProportionShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
+bool DivineProportionShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+{
     return false; // TODO
 }
 
-void DivineProportionShape::divideHorizontal(QPainter &painter, const QRectF &rect, bool top, bool left) {
-    if(rect.height() < 2)
+void DivineProportionShape::divideHorizontal(QPainter &painter, const QRectF &rect, bool top, bool left)
+{
+    if (rect.height() < 2)
         return;
     const qreal y = rect.height() / m_divineProportion;
     const qreal offset = top ? rect.bottom() - y : rect.top() + y;
@@ -94,8 +102,9 @@ void DivineProportionShape::divideHorizontal(QPainter &painter, const QRectF &re
                 QSizeF(rect.width(), rect.height() - y)), !top, left);
 }
 
-void DivineProportionShape::divideVertical(QPainter &painter, const QRectF &rect, bool top, bool left) {
-    if(rect.width() < 2)
+void DivineProportionShape::divideVertical(QPainter &painter, const QRectF &rect, bool top, bool left)
+{
+    if (rect.width() < 2)
         return;
     const qreal x = rect.width() / m_divineProportion;
     const qreal offset = left ? rect.right() - x : rect.left() + x;
@@ -105,15 +114,17 @@ void DivineProportionShape::divideVertical(QPainter &painter, const QRectF &rect
                 QSizeF(rect.width() - x, rect.height())), top, !left);
 }
 
-void DivineProportionShape::setOrientation(Orientation orientation) {
-    if(m_orientation == orientation)
+void DivineProportionShape::setOrientation(Orientation orientation)
+{
+    if (m_orientation == orientation)
         return;
     m_orientation = orientation;
     update();
 }
 
-void DivineProportionShape::setPrintable(bool on) {
-    if(m_printable == on)
+void DivineProportionShape::setPrintable(bool on)
+{
+    if (m_printable == on)
         return;
     m_printable = on;
     update();

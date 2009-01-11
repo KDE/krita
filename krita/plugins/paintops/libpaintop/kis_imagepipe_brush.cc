@@ -58,7 +58,7 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
     m_d->parasite.dim = devices.count();
     // XXX Change for multidim! :
     m_d->parasite.ncells = devices.at(0).count();
-    m_d->parasite.rank[0] = m_d->parasite.ncells;
+    m_d->parasite.rank[0] = m_d->parasite.ncells; // ### This can masquerade some bugs, be careful here in the future
     m_d->parasite.selection[0] = modes.at(0);
     // XXX needsmovement!
 
@@ -72,6 +72,19 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
 
     m_d->brushType = PIPE_IMAGE;
 }
+
+KisImagePipeBrush::KisImagePipeBrush(const KisImagePipeBrush& rhs)
+    : KisBrush(rhs),
+      m_d(new Private)
+{
+    *m_d = *(rhs.m_d);
+    m_d->brushes.clear();
+    m_d->parasite = rhs.m_d->parasite;
+    for (int i = 0; i < rhs.m_d->brushes.count(); i++) {
+        m_d->brushes.append(rhs.m_d->brushes.at(i)->clone());
+    }
+}
+
 
 KisImagePipeBrush::~KisImagePipeBrush()
 {
@@ -117,7 +130,8 @@ bool KisImagePipeBrush::init()
 
     QString paramline = QString::fromUtf8(line2, line2.size());
     m_d->numOfBrushes = paramline.left(paramline.indexOf(' ')).toUInt();
-    m_d->parasite = paramline.mid(paramline.indexOf(' ') + 1);
+    m_d->parasiteString = paramline.mid(paramline.indexOf(' ') + 1);
+    m_d->parasite = KisPipeBrushParasite(m_d->parasiteString);
     i++; // Skip past the second newline
 
     qint32 numOfBrushes = 0;
@@ -145,6 +159,9 @@ bool KisImagePipeBrush::init()
     }
 
     m_d->data.resize(0);
+
+    sanitize();
+
     return true;
 }
 
@@ -296,9 +313,11 @@ void KisImagePipeBrush::selectNextBrush(const KisPaintInformation& info) const
             index = static_cast<int>(angle / (2.0 * M_PI) * m_d->parasite.rank[i]);
             break;
         default:
+
             warnImage << "This parasite KisParasite::SelectionMode has not been implemented. Reselecting"
-            << " to Incremental";
-            m_d->parasite.selection[i] = KisParasite::Incremental;
+            << " to Constant";
+            m_d->parasite.selection[i] = KisParasite::Constant; // Not incremental, since that assumes rank > 0
+
             index = 0;
         }
         m_d->parasite.index[i] = index;
@@ -326,31 +345,25 @@ void KisImagePipeBrush::makeMaskImage()
 
 KisImagePipeBrush* KisImagePipeBrush::clone() const
 {
-    // The obvious way of cloning each brush in this one doesn't work for some reason...
-
-    // XXX Multidimensionals not supported yet, change together with the constructor...
-    QVector< QVector<KisPaintDevice*> > devices;
-    QVector<KisParasite::SelectionMode > modes;
-
-    devices.push_back(QVector<KisPaintDevice*>());
-    modes.push_back(m_d->parasite.selection[0]);
-
-    for (int i = 0; i < m_d->brushes.count(); i++) {
-        KisPaintDevice* pd = new KisPaintDevice(
-            KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0), "clone pd");
-        pd->convertFromQImage(m_d->brushes.at(i)->img(), "");
-        devices[0].append(pd);
-    }
-
-    KisImagePipeBrush* c = new KisImagePipeBrush(name(), width(), height(), devices, modes);
-    // XXX clean up devices
-
-    return c;
+    return new KisImagePipeBrush(*this);
 }
 
 QString KisImagePipeBrush::defaultFileExtension() const
 {
     return QString(".gih");
+}
+
+void KisImagePipeBrush::sanitize() {
+    for (int i = 0; i < m_d->parasite.dim; i++) {
+        // In the 2 listed cases, we'd divide by 0!
+        if (   m_d->parasite.selection[i] == KisParasite::Incremental
+              || m_d->parasite.selection[i] == KisParasite::Angular) {
+            if (m_d->parasite.rank[i] == 0) {
+                warnImage << "Brush" << name() << " has a wrong rank for its selection mode!";
+                m_d->parasite.selection[i] = KisParasite::Constant;
+             }
+        }
+    }
 }
 
 #include "kis_imagepipe_brush.moc"

@@ -32,7 +32,7 @@
 class KOGUIUTILS_EXPORT KoToolDockerFactory : public KoDockFactory
 {
 public:
-    KoToolDockerFactory( int dockWidgetId = 0 );
+    KoToolDockerFactory( QString dockWidgetId = 0 );
     ~KoToolDockerFactory();
 
     /// reimplemented from parent

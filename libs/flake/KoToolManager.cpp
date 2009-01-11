@@ -306,6 +306,8 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary)
     Q_ASSERT(tool);
     if (d->canvasData == 0)
         return;
+    if (d->canvasData->activeTool == tool && tool->toolId() != KoInteractionTool_ID)
+        return;
 
     bool newActiveTool = d->canvasData->activeTool != 0;
 
@@ -399,6 +401,7 @@ void KoToolManager::postSwitchTool()
         toolWidget = d->canvasData->dummyToolWidget;
         if (toolWidget == 0) {
             toolWidget = new QWidget();
+            toolWidget->setObjectName( "DummyToolWidget" );
             QVBoxLayout *layout = new QVBoxLayout(toolWidget);
             layout->setMargin(3);
             d->canvasData->dummyToolLabel = new QLabel(toolWidget);

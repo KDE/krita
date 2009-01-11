@@ -1,3 +1,4 @@
+
 /*
  *  Copyright (c) 2008 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
@@ -24,7 +25,7 @@
 #include <QRect>
 #include <QList>
 #include <QColor>
-#include <QMutexLocker>
+//#include <QMutexLocker>
 
 #include <qdebug.h>
 
@@ -73,7 +74,7 @@ void KisCurvePaintOp::paintAt(const KisPaintInformation& info)
 
 double KisCurvePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist)
 {
-    QMutexLocker locker(&m_mutex);
+//    QMutexLocker locker(&m_mutex);
 
     if (!painter()) return 0;
     m_dev = painter()->device();
@@ -82,7 +83,7 @@ double KisCurvePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaint
     dab = cachedDab();
     dab->clear();
 
-    //write device, read device, position 
+    //write device, read device, position
     m_curveBrush.paintLine(dab,m_dev, pi1, pi2);
 
     QRect rc = dab->extent();
@@ -101,3 +102,4 @@ double KisCurvePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaint
     return  dragVec.norm();
 
 }
+

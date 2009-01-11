@@ -44,7 +44,7 @@ class QColor;
  * used in the image's gradient field. This class only handles 
  * the gradient colour picker, _not_ the image's gradient field.
  */
-class KRITAIMAGE_EXPORT KisAutogradientResource
+class KRITAUI_EXPORT KisAutogradientResource
             : public KoSegmentGradient
 {
 

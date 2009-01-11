@@ -579,38 +579,22 @@ KoCharacterStyle::LineMode KoCharacterStyle::underlineMode() const
 
 void KoCharacterStyle::setFontLetterSpacing(qreal spacing)
 {
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     d->setProperty(QTextCharFormat::FontLetterSpacing, spacing);
-#else
-    Q_UNUSED(spacing);
-#endif
 }
 
 qreal KoCharacterStyle::fontLetterSpacing() const
 {
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     return d->propertyDouble(QTextCharFormat::FontLetterSpacing);
-#else
-    return 0.0;
-#endif
 }
 
 void KoCharacterStyle::setFontWordSpacing(qreal spacing)
 {
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     d->setProperty(QTextCharFormat::FontWordSpacing, spacing);
-#else
-    Q_UNUSED(spacing);
-#endif
 }
 
 qreal KoCharacterStyle::fontWordSpacing() const
 {
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     return d->propertyDouble(QTextCharFormat::FontWordSpacing);
-#else
-    return 0.0;
-#endif
 }
 
 

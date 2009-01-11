@@ -92,7 +92,7 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
         return;
     }
 
-    KisBrushSP brush = m_brush;;
+    KisBrush* brush = m_brush;;
     if (!brush) return;
 
     KisPaintInformation adjustedInfo = settings->m_optionsWidget->m_sizeOption->apply(info);

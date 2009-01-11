@@ -36,7 +36,9 @@
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
 
-#include "kis_global.h"
+#include <kis_debug.h>
+#include <kis_global.h>
+
 #include "widgets/squeezedcombobox.h"
 
 #include "widgets/kis_cmb_composite.h"
@@ -130,7 +132,11 @@ KoCompositeOp * KisDlgLayerProperties::getCompositeOp() const
 
 QBitArray KisDlgLayerProperties::getChannelFlags() const
 {
-    return m_channelFlags->channelFlags();
+    QBitArray flags = m_channelFlags->channelFlags();
+    for (int i = 0; i < flags.size(); ++i) {
+       dbgUI << "Received flag from channelFlags widget, flag " << i << " is " << flags.testBit(i);
+    }
+    return flags;
 }
 
 #include "kis_dlg_layer_properties.moc"

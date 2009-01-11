@@ -79,6 +79,7 @@ void KisCustomBrush::slotUpdateCurrentBrush(int)
         if (m_brush)
             preview->setPixmap(QPixmap::fromImage(m_brush->img()));
     }
+    emit sigBrushChanged();
 }
 
 void KisCustomBrush::slotExport()

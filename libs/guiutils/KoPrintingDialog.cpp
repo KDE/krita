@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,7 +39,7 @@ class KoPrintingDialogPrivate {
 public:
     KoPrintingDialogPrivate(KoPrintingDialog *dia)
         : parent(dia),
-        stop(false),
+        stop(true),
         shapeManager(0),
         painter(0),
         printer(new QPrinter()),
@@ -67,12 +67,17 @@ public:
     void preparePage(const QVariant &page) {
         const int pageNumber = page.toInt();
         KoUpdater updater = updaters.at(index-1);
-        if (!painter)
-            painter = new QPainter(printer);
-        painter->save(); // state before page preparation
+        if (painter)
+            painter->save(); // state before page preparation
         if(! stop)
             parent->preparePage(pageNumber);
         updater.setProgress(45);
+        if (!painter) {
+            // force the painter to be created *after* the preparePage since the page
+            // size may have been updated there and that doesn't work with the first page
+            painter = new QPainter(printer);
+            painter->save(); // state before page preparation (2)
+        }
         if (index > 1)
             printer->newPage();
         updater.setProgress(55);
@@ -101,6 +106,7 @@ public:
             painter->end();
         delete painter;
         painter = 0;
+        stop = false;
     }
 
     void printPage(const QVariant &page) {
@@ -112,6 +118,8 @@ public:
             shapeManager->paint(*painter, zoomer, true);
         painter->restore(); // state before page preparation
 
+        if(parent->property("blocking").toBool())
+            return;
         if(!stop && index < pages.count()) {
             pageNumber->setText(i18n("Printing page %1", QString::number(pages[index])));
             action->execute(pages[index++]);
@@ -216,8 +224,10 @@ void KoPrintingDialog::setPageRange(const QList<int> &pages) {
 }
 
 QPainter & KoPrintingDialog::painter() const {
-    if (d->painter == 0)
+    if (d->painter == 0) {
         d->painter = new QPainter(d->printer);
+        d->painter->save(); // state before page preparation (3)
+    }
     return *d->painter;
 }
 
@@ -242,17 +252,30 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy) {
         return;
     }
 
-    d->dialog->show();
+    const bool blocking = property("blocking").toBool();
+    if (!blocking)
+        d->dialog->show();
     if(d->index == 0 && d->pages.count() > 0 && d->printer) {
         d->stop = false;
         delete d->painter;
         d->painter = 0;
         d->zoomer.setZoomAndResolution(100, d->printer->resolution(), d->printer->resolution());
         d->progress->start();
-        for(int i=0; i < d->pages.count(); i++)
-            d->updaters.append(d->progress->startSubtask()); // one per page
-        d->pageNumber->setText(i18n("Printing page %1", QString::number(d->pages[d->index])));
-        d->action->execute(d->pages[d->index++]);
+        if (blocking) {
+            d->resetValues();
+            foreach (int page, d->pages) {
+                d->index++;
+                d->updaters.append(d->progress->startSubtask()); // one per page
+                d->preparePage(page);
+                d->printPage(page);
+            }
+        }
+        else {
+            for(int i=0; i < d->pages.count(); i++)
+                d->updaters.append(d->progress->startSubtask()); // one per page
+            d->pageNumber->setText(i18n("Printing page %1", QString::number(d->pages[d->index])));
+            d->action->execute(d->pages[d->index++]);
+        }
     }
 }
 

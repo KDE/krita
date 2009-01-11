@@ -41,9 +41,6 @@ public:
     KisToolSelectEraser(KoCanvasBase *canvas);
     virtual ~KisToolSelectEraser();
 
-    virtual QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
-
 public slots:
     virtual void activate(bool tmp);
 

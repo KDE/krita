@@ -302,8 +302,8 @@ Value& Value::operator+=(const Value & v)
     case Value::Variant:
         Q_ASSERT(v.type() == Value::Variant);
         {
-            QVariant v1 = d->value.variant;
-            QVariant v2 = v.d->value.variant;
+            QVariant v1 = *d->value.variant;
+            QVariant v2 = *v.d->value.variant;
             Q_ASSERT(v2.canConvert(v1.type()));
             switch (v1.type()) {
             default:

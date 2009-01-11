@@ -1,3 +1,4 @@
+
 /*  This file is part of the KDE project
 
     Copyright (c) 2000 Matthias Elter <elter@kde.org>
@@ -141,14 +142,17 @@ QImage KoPattern::img() const
     return m_img;
 }
 
-bool KoPattern::init(QByteArray& data)
+bool KoPattern::init(QByteArray& bytes)
 {
+    int dataSize = bytes.size();
+    const char* data = bytes.constData();
+
     // load Gimp patterns
     GimpPatternHeader bh;
     qint32 k;
-    QByteArray name;
+    char* name;
 
-    if ((int)sizeof(GimpPatternHeader) > data.size()) {
+    if ((int)sizeof(GimpPatternHeader) > dataSize) {
         return false;
     }
 
@@ -160,18 +164,18 @@ bool KoPattern::init(QByteArray& data)
     bh.bytes = ntohl(bh.bytes);
     bh.magic_number = ntohl(bh.magic_number);
 
-    if ((int)bh.header_size > data.size() || bh.header_size == 0) {
+    if ((int)bh.header_size > dataSize || bh.header_size == 0) {
+        return false;
+    }
+    int size = bh.header_size - sizeof(GimpPatternHeader);
+    name = new char[size];
+    memcpy(name, data + sizeof(GimpPatternHeader), size);
+
+    if (name[size - 1]) {
         return false;
     }
 
-    name.resize(bh.header_size - sizeof(GimpPatternHeader));
-    memcpy(name.data(), data.constData() + sizeof(GimpPatternHeader), name.size());
-
-    if (name[name.size() - 1]) {
-        return false;
-    }
-
-    setName(name);
+    setName(QString::fromAscii(name, size));
 
     if (bh.width == 0 || bh.height == 0) {
         return false;
@@ -199,7 +203,7 @@ bool KoPattern::init(QByteArray& data)
 
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++, k++) {
-                if (k > data.size()) {
+                if (k > dataSize) {
                     kWarning(30009) <<"failed in gray";
                     return false;
                 }
@@ -214,7 +218,7 @@ bool KoPattern::init(QByteArray& data)
         qint32 alpha;
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++, k++) {
-                if (k + 2 > data.size()) {
+                if (k + 2 > dataSize) {
                     kWarning(30009) <<"failed in grayA";
                     return false;
                 }
@@ -228,7 +232,7 @@ bool KoPattern::init(QByteArray& data)
         // RGB without alpha
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++) {
-                if (k + 3 > data.size()) {
+                if (k + 3 > dataSize) {
                     kWarning(30009) <<"failed in RGB";
                     return false;
                 }
@@ -243,7 +247,7 @@ bool KoPattern::init(QByteArray& data)
         // Has alpha
         for (quint32 y = 0; y < bh.height; y++) {
             for (quint32 x = 0; x < bh.width; x++) {
-                if (k + 4 > data.size()) {
+                if (k + 4 > dataSize) {
                     kWarning(30009) <<"failed in RGBA";
                     return false;
                 }

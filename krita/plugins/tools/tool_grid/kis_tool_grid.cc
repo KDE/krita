@@ -108,16 +108,4 @@ void KisToolGrid::paint(QPainter& gc, const KoViewConverter &converter)
     Q_UNUSED(converter);
 }
 
-// Uncomment if you have a configuration widget
-// QWidget* KisToolGrid::createOptionWidget()
-// {
-//     return 0;
-// }
-//
-// QWidget* KisToolGrid::optionWidget()
-// {
-//         return 0;
-// }
-
-
 #include "kis_tool_grid.moc"

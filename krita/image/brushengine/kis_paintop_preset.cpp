@@ -83,12 +83,15 @@ KoID KisPaintOpPreset::paintOp() const
 
 void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
 {
+    Q_ASSERT(!settings->getString("paintop", "").isEmpty());
     m_d->settings = settings->clone();
     setValid( true );
 }
 
 KisPaintOpSettingsSP KisPaintOpPreset::settings() const
 {
+    Q_ASSERT(!m_d->settings->getString("paintop", "").isEmpty());
+    
     return m_d->settings;
 }
 

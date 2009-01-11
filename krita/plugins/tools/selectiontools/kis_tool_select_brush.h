@@ -42,9 +42,6 @@ public:
     KisToolSelectBrush(KoCanvasBase *canvas);
     virtual ~KisToolSelectBrush();
 
-    virtual QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
-
 public slots:
     virtual void activate(bool);
 
@@ -54,7 +51,6 @@ protected:
     virtual void endPaint();
 
 private:
-    KisSelectionOptions * m_optWidget;
     KisSelectedTransaction *m_transaction;
 };
 

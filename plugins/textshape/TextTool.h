@@ -46,6 +46,8 @@ class QUndoCommand;
 class KFontSizeAction;
 class KFontAction;
 
+class MockCanvas;
+
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
  */
@@ -97,6 +99,16 @@ public:
     virtual void inputMethodEvent(QInputMethodEvent * event);
 
     bool isBidiDocument() const;
+
+
+    /// The following two methods allow an undo/redo command to tell the tool, it will modify the QTextDocument and wants to be parent of the undo/redo commands resulting from these changes.
+
+    void startEditing(QUndoCommand* command);
+    
+    void stopEditing();
+    
+    const QTextCursor cursor();
+
 
 public slots:
     /// start the textedit-plugin.
@@ -173,11 +185,19 @@ private slots:
     void updateParagraphDirection(const QVariant &variant);
     /// method that will be called in the UI thread directly after the one above
     void updateParagraphDirectionUi();
+    
+    /// returns the focus to canvas when styles are selected in the optionDocker
+    void returnFocusToCanvas();
 
     void selectFont();
     void shapeAddedToCanvas();
 
     void blinkCaret();
+
+#ifndef NDEBUG
+protected:
+    explicit TextTool(MockCanvas *canvas);
+#endif
 
 private:
     bool pasteHelper(QClipboard::Mode mode);
@@ -235,7 +255,8 @@ private:
     QHash<QString, KoTextEditingPlugin*> m_textEditingPlugins;
     KoTextEditingPlugin *m_spellcheckPlugin;
 
-    QUndoCommand *m_currentCommand;
+    QUndoCommand *m_currentCommand; //this command will be the direct parent of undoCommands generated as the result of QTextDocument changes
+
     bool m_currentCommandHasChildren;
 
     // update Parag direction will be multi-threaded.

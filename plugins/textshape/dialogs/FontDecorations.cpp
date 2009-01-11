@@ -41,13 +41,13 @@ void FontDecorations::open(KoCharacterStyle *style)
     m_textColorChanged = false;
     m_backgroundColorChanged = false;
     m_textColorReset = ! m_style->hasProperty(QTextFormat::ForegroundBrush);
-    if (m_textColorReset) {
+    if (m_textColorReset || (m_style->foreground().style() == Qt::NoBrush)) {
         clearTextColor();
     } else {
         widget.textColor->setColor(m_style->foreground().color());
     }
     m_backgroundColorReset = ! m_style->hasProperty(QTextFormat::BackgroundBrush);
-    if (m_backgroundColorReset) {
+    if (m_backgroundColorReset || (m_style->background().style() == Qt::NoBrush)) {
         clearBackgroundColor();
     } else {
         widget.backgroundColor->setColor(m_style->background().color());
@@ -58,11 +58,11 @@ void FontDecorations::save() const
 {
     Q_ASSERT(m_style);
     if (m_backgroundColorReset)
-        m_style->clearBackground();
+        m_style->setBackground(QBrush(Qt::NoBrush));
     else if (m_backgroundColorChanged)
         m_style->setBackground(QBrush(widget.backgroundColor->color()));
     if (m_textColorReset)
-        m_style->clearForeground();
+        m_style->setForeground(QBrush(Qt::NoBrush));
     else if (m_textColorChanged)
         m_style->setForeground(QBrush(widget.textColor->color()));
 }

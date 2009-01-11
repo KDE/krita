@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright ( C ) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -50,12 +50,16 @@ KoPAPageDeleteCommand::~KoPAPageDeleteCommand()
 
 void KoPAPageDeleteCommand::redo()
 {
+    QUndoCommand::redo();
+
     m_index = m_document->takePage( m_page );
     m_deletePage = true;
 }
 
 void KoPAPageDeleteCommand::undo()
 {
+    QUndoCommand::undo();
+
     m_document->insertPage( m_page, m_index );
     m_deletePage = false;
 }

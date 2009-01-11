@@ -238,7 +238,7 @@ void KoXmlWriter::addAttribute(const char* attrName, const char* value)
 void KoXmlWriter::addAttribute(const char* attrName, double value)
 {
     QByteArray str;
-    str.setNum(value, 'f', DBL_DIG);
+    str.setNum(value, 'f', 11);
     addAttribute(attrName, str.data());
 }
 
@@ -252,7 +252,7 @@ void KoXmlWriter::addAttribute(const char* attrName, float value)
 void KoXmlWriter::addAttributePt(const char* attrName, double value)
 {
     QByteArray str;
-    str.setNum(value, 'f', DBL_DIG);
+    str.setNum(value, 'f', 11);
     str += "pt";
     addAttribute(attrName, str.data());
 }

@@ -23,6 +23,7 @@
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_types.h"
+#include "kis_transform_worker.h"
 #include "kis_paint_device.h"
 #include "kis_transaction.h"
 
@@ -48,7 +49,7 @@ void KisTransactionTest::testUndo()
     QVERIFY(c2 == Qt::black);
 
     KisTransaction t("mirror", dev, 0);
-    dev->mirrorX();
+    KisTransformWorker::mirrorX(dev);
 
     t.undo();
 
@@ -82,7 +83,7 @@ void KisTransactionTest::testRedo()
     QVERIFY(c2 == Qt::black);
 
     KisTransaction t("mirror", dev, 0);
-    dev->mirrorX();
+    KisTransformWorker::mirrorY(dev);
 
     t.undo();
     t.redo();

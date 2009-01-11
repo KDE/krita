@@ -119,7 +119,7 @@
        <item>
         <widget class="QLabel" name="label_correction" >
          <property name="text" >
-          <string>TextLabel1:</string>
+          <string comment="KDE::DoNotExtract" >TextLabel1:</string>
          </property>
         </widget>
        </item>

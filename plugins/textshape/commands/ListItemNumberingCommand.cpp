@@ -19,6 +19,8 @@
 
 #include "ListItemNumberingCommand.h"
 
+#include <KLocale>
+
 #include <KoParagraphStyle.h>
 #include <KoTextBlockData.h>
 #include <QTextCursor>
@@ -26,9 +28,11 @@
 ListItemNumberingCommand::ListItemNumberingCommand(const QTextBlock &block, bool numbered, QUndoCommand *parent)
     : TextCommandBase(parent),
       m_block(block),
-      m_numbered(numbered)
+      m_numbered(numbered),
+      m_first(true)
 {
     m_wasNumbered = !block.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem);
+    setText(i18n("Change List Numbering"));
 }
 
 ListItemNumberingCommand::~ListItemNumberingCommand()
@@ -53,28 +57,30 @@ void ListItemNumberingCommand::setNumbered(bool numbered)
 
 void ListItemNumberingCommand::redo()
 {
-    TextCommandBase::redo();
-    UndoRedoFinalizer finalizer(this, m_tool);
-
-    setNumbered(m_numbered);
+    if (!m_first) {
+        TextCommandBase::redo();
+        UndoRedoFinalizer finalizer(this, m_tool);
+        KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_block.userData());
+        if (userData)
+            userData->setCounterWidth(-1.0);
+    }
+    else {
+        setNumbered(m_numbered);
+    }
+    m_first = false;
 }
 
 void ListItemNumberingCommand::undo()
 {
     TextCommandBase::undo();
     UndoRedoFinalizer finalizer(this, m_tool);
-
-    setNumbered(!m_numbered);
+    
+    KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_block.userData());
+    if (userData)
+        userData->setCounterWidth(-1.0);
 }
 
 bool ListItemNumberingCommand::mergeWith(const QUndoCommand *other)
 {
-    const ListItemNumberingCommand *cmd = dynamic_cast<const ListItemNumberingCommand *>(other);
-    if (!cmd)
-        return false;
-    if (m_block != cmd->m_block)
-        return false;
-    m_numbered = cmd->m_numbered;
-    return true;
+    return false;
 }
-

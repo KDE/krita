@@ -21,6 +21,7 @@
 
 #include <QVector>
 #include <QList>
+#include <QTransform>
 
 #include <KoColor.h>
 

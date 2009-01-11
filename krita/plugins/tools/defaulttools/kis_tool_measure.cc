@@ -197,6 +197,7 @@ QWidget* KisToolMeasure::createOptionWidget()
     if (!currentImage())
         return 0;
     m_optWidget = new KisToolMeasureOptionsWidget(0, currentImage()->xRes());
+    m_optWidget->setObjectName(toolId() + " option widget");
     connect(this, SIGNAL(sigDistanceChanged(double)), m_optWidget, SLOT(slotSetDistance(double)));
     connect(this, SIGNAL(sigAngleChanged(double)), m_optWidget, SLOT(slotSetAngle(double)));
 

@@ -3,7 +3,7 @@
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
- * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007-2009 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
@@ -162,6 +162,10 @@ KoTextLoader::~KoTextLoader()
 
 void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
 {
+
+    const QTextBlockFormat defaultBlockFormat = cursor.blockFormat();
+    const QTextCharFormat defaultCharFormat = cursor.charFormat();
+
     const QTextDocument *document = cursor.block().document();
     d->styleManager = KoTextDocument(document).styleManager();
 
@@ -182,7 +186,7 @@ void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
             const QString localName = tag.localName();
             handledTag = true;
             if (!firstTime) {
-                cursor.insertBlock();
+                cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
             }
             if (tag.namespaceURI() == KoXmlNS::text) {
                 if (localName == "p") {    // text paragraph
@@ -310,6 +314,8 @@ void KoTextLoader::loadParagraph(const KoXmlElement& element, QTextCursor& curso
         kWarning(32500) << "defaultParagraphStyle not found - using default style";
     }
 
+    QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
+
     if (paragraphStyle) {
         QTextBlock block = cursor.block();
         // Apply list style when loading a list but we don't have a list style
@@ -318,9 +324,9 @@ void KoTextLoader::loadParagraph(const KoXmlElement& element, QTextCursor& curso
         kWarning(32500) << "paragraph style " << styleName << " not found";
     }
 
-    kDebug(32500) << "text-style:" << KoTextDebug::textAttributes( cursor.blockCharFormat() );
 
-    QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
+    kDebug(32500) << "text-style:" << KoTextDebug::textAttributes( cursor.blockCharFormat() ) << d->currentList << d->currentListStyle;
+
 
     bool stripLeadingSpace = true;
     loadSpan(element, cursor, &stripLeadingSpace);
@@ -330,6 +336,8 @@ void KoTextLoader::loadParagraph(const KoXmlElement& element, QTextCursor& curso
 void KoTextLoader::loadHeading(const KoXmlElement& element, QTextCursor& cursor)
 {
     int level = qMax(1, element.attributeNS(KoXmlNS::text, "outline-level", "1").toInt());
+    // TODO: fallback to default-outline-level from the style, if specified?
+
     QString styleName = element.attributeNS(KoXmlNS::text, "style-name", QString());
 
     QTextBlock block = cursor.block();
@@ -375,6 +383,7 @@ void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
     KoListStyle *listStyle = d->textSharedData->listStyle(styleName, d->stylesDotXml);
 
     int level;
+    // TODO: get level from the style, if it has a style:list-level attribute (new in ODF-1.2)
 
     if (numberedParagraph) {
         d->currentList = d->list(cursor.block().document(), listStyle);
@@ -418,7 +427,10 @@ void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
             continue;
 
         if (!firstTime) {
-            cursor.insertBlock();
+            // use empty formats to not inherit from the prev parag
+            QTextBlockFormat bf;
+            QTextCharFormat cf;
+            cursor.insertBlock(bf, cf);
         } else {
             firstTime = false;
         }

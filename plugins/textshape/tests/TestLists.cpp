@@ -63,7 +63,6 @@ void TestDocumentLayout::testNumberedList()
     QTextBlock block = doc->begin();
     style.applyStyle(block);
     block = block.next();
-    QVERIFY(block.isValid());
 
     KoListStyle listStyle;
     KoListLevelProperties llp;
@@ -122,8 +121,8 @@ void TestDocumentLayout::testNumberedList()
 
     // now to make sure the text is actually properly set.
     block = doc->begin().next();
-    i = 1;
-    while (block.isValid() && i < 14) {
+    i = 0;
+    while (block.isValid() && i < 13) {
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
         QVERIFY(data);
         QCOMPARE(data->counterText(), QString::number(i++));
@@ -135,12 +134,13 @@ void TestDocumentLayout::testNumberedList()
     listStyle.setLevelProperties(llp);
 
     QTextCursor cursor(doc);
-    cursor.setPosition(40); // listItem4
-    block = cursor.block();
-    QVERIFY(block.textList() != 0);
-    QCOMPARE(block.textList()->format().intProperty(KoListStyle::StartValue), 4);
-
+    cursor.setPosition(10); // listItem1
     QTextBlockFormat format = cursor.blockFormat();
+    format.setProperty(KoParagraphStyle::ListStartValue, 4);
+    cursor.setBlockFormat(format);
+
+    cursor.setPosition(40); // listItem4
+    format = cursor.blockFormat();
     format.setProperty(KoParagraphStyle::ListStartValue, 12);
     cursor.setBlockFormat(format);
 
@@ -154,7 +154,7 @@ void TestDocumentLayout::testNumberedList()
         if (i == 7) i = 12;
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
         QVERIFY(data);
-        QCOMPARE(data->counterText(), QString::number(i++) + ".");
+        QCOMPARE(data->counterText(), QString::number(i++));
         block = block.next();
     }
 }
@@ -526,3 +526,51 @@ void TestDocumentLayout::testLetterSynchronization()
         block = block.next();
     }
 }
+
+void TestDocumentLayout::testInvalidateLists()
+{
+    initForNewTest("Base\nListItem1\nListItem2");
+
+    //KoParagraphStyle style;
+    KoListStyle listStyle;
+    KoListLevelProperties llp;
+    llp.setStyle(KoListStyle::DecimalItem);
+    listStyle.setLevelProperties(llp);
+    //style.setListStyle(&listStyle);
+
+    QTextBlock block = doc->begin().next();
+    QVERIFY(block.isValid());
+    listStyle.applyStyle(block);
+    block = block.next();
+    QVERIFY(block.isValid());
+    listStyle.applyStyle(block);
+
+    layout->layout();
+
+    // check the list items were done (semi) properly
+    block = doc->begin().next();
+    QVERIFY(block.textList());
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
+    QVERIFY(data);
+    QVERIFY(data->hasCounterData());
+
+    QTextCursor cursor(doc);
+    cursor.setPosition(10); // list item1
+    cursor.insertText("x");
+    QCOMPARE(data->hasCounterData(), true); // nothing changed
+
+    cursor.setPosition(22); // list item2
+    cursor.insertText("x");
+    QCOMPARE(data->hasCounterData(), true); // nothing changed
+    cursor.deleteChar();
+    QCOMPARE(data->hasCounterData(), true); // nothing changed
+
+    cursor.setPosition(25); // end of doc
+    cursor.insertBlock();
+    block = cursor.block();
+    QVERIFY(block.textList());
+    QVERIFY(block.userData() == 0);
+
+    QCOMPARE(data->hasCounterData(), false); // inserting a new block on this list made the list be invalidated
+}
+

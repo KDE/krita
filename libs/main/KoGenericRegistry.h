@@ -67,6 +67,7 @@ public:
      * @param item the item to add (NOTE: T must have an QString id() const   function)
      */
     void add(T item) {
+        Q_ASSERT( item );
         m_hash.insert(item->id(), item);
     }
 
@@ -76,6 +77,7 @@ public:
      * @param item the item to add
      */
     void add(const QString &id, T item) {
+        Q_ASSERT( item );
         m_hash.insert(id, item);
     }
 

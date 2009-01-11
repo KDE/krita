@@ -67,7 +67,8 @@ private:
     /**
      * This function is called by applyMatrix when borderOp == BORDER_REPEAT
      */
-    void applyMatrixRepeat(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, qint32 h);
+    template< class _IteratorFactory_>
+    void applyMatrixImpl(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, qint32 h, const QRect& _dataRect);
 
 
 };

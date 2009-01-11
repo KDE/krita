@@ -22,12 +22,14 @@
 #define CHANGELISTCOMMAND
 
 #include "TextCommandBase.h"
-
+#include "TextTool.h"
 #include <KoListStyle.h>
 #include <KoList.h>
 #include <KoListLevelProperties.h>
 
 #include <QTextBlock>
+#include <QList>
+#include <QHash>
 
 /**
  * This command is useful to alter the list-association of a single textBlock.
@@ -50,7 +52,7 @@ public:
      * @param style indicates which style to use.
      * @param parent the parent undo command for macro functionality
      */
-    ChangeListCommand(const QTextBlock &block, KoListStyle::Style style, int level = 0, 
+    ChangeListCommand( const QTextCursor &cursor, KoListStyle::Style style, int level = 0, 
                       int flags = ModifyExistingList | MergeWithAdjacentList, 
                       QUndoCommand *parent = 0);
 
@@ -61,7 +63,7 @@ public:
      * @param exact if true then the actual style 'style' should be set, if false we possibly  merge with another similar style that is near the block
      * @param parent the parent undo command for macro functionality
      */
-    ChangeListCommand(const QTextBlock &block, KoListStyle *style, int level = 0,
+    ChangeListCommand( const QTextCursor &cursor, KoListStyle *style, int level = 0,
                       int flags = ModifyExistingList | MergeWithAdjacentList | MergeExactly, 
                       QUndoCommand *parent = 0);
     ~ChangeListCommand();
@@ -79,16 +81,28 @@ public:
     virtual bool mergeWith(const QUndoCommand *other);
 
 private:
-    void storeOldProperties();
-    int detectLevel(int givenLevel);
-    void initList(KoListStyle *style, int level);
+    enum commandAction {
+        createNew,
+        modifyExisting,
+        reparentList,
+        mergeList,
+        removeList
+    };
+    void extractTextBlocks(const QTextCursor &cursor, int level);
+    int detectLevel(const QTextBlock &block, int givenLevel);
+    void initList(KoListStyle *style/*, int level*/);
     bool formatsEqual(const KoListLevelProperties &llp, const QTextListFormat &format);
 
-    QTextBlock m_block;
-    KoList *m_list, *m_oldList;
-    KoListLevelProperties m_newProperties;
     int m_flags;
-    KoListLevelProperties m_formerProperties;
+    bool m_first;
+
+    QList<QTextBlock> m_blocks;
+    QHash<int, KoListLevelProperties> m_formerProperties;
+    QHash<int, KoListLevelProperties> m_newProperties;
+    QHash<int, int> m_levels;
+    QHash<int, KoList*> m_list;
+    QHash<int, KoList*> m_oldList;
+    QHash<int, commandAction> m_actions;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ChangeListCommand::ChangeFlags)

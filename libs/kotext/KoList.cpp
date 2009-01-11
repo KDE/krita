@@ -30,40 +30,11 @@
 #include <QPointer>
 #include <QBitArray>
 
-class KoList::Private
-{
-public:
-    Private(KoList *q, const QTextDocument *document)
-    : q(q), type(KoList::TextList), style(0), textLists(10), document(document)
-    {
-    }
+#include "KoList_p.h"
 
-    ~Private()
-    {
-    }
 
-    static void invalidate(const QTextBlock &block)
-    {
-        if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(block.userData()))
-            userData->setCounterWidth(-1.0);
-    }
-
-    void styleChanged(int level)
-    {
-        Q_UNUSED(level);
-        q->setStyle(style);
-    }
-
-    KoList *q;
-    KoList::Type type;
-    KoListStyle *style;
-    QVector<QPointer<QTextList> > textLists;
-    const QTextDocument *document;
-    QMap<int, QVariant> properties;
-}
-;
 KoList::KoList(const QTextDocument *document, KoListStyle *style, KoList::Type type)
-    : QObject(const_cast<QTextDocument *>(document)), d(new Private(this, document))
+    : QObject(const_cast<QTextDocument *>(document)), d(new KoListPrivate(this, document))
 {
     Q_ASSERT(document);
     d->type = type;
@@ -120,7 +91,6 @@ void KoList::add(const QTextBlock &block, int level)
             }
         }
     }
-
     remove(block);
 
     QTextList *textList = d->textLists.value(level-1);
@@ -157,15 +127,10 @@ void KoList::remove(const QTextBlock &block)
     if (QTextList *textList = block.textList()) {
         // invalidate the list before we remove the item
         // (since the list might disappear if the block is the only item)
-        for (int i = 0; i < textList->count(); i++) {
-            if (textList->item(i) != block) {
-                Private::invalidate(textList->item(i));
-                break;
-            }
-        }
+        KoListPrivate::invalidateList(block);
         textList->remove(block);
     }
-    Private::invalidate(block);
+    KoListPrivate::invalidate(block);
 }
 
 void KoList::setStyle(KoListStyle *style)
@@ -198,6 +163,13 @@ void KoList::setStyle(KoListStyle *style)
 KoListStyle *KoList::style() const
 {
     return d->style;
+}
+
+void KoList::updateStoredList(const QTextBlock &block)
+{
+    int level = block.textList()->format().property(KoListStyle::Level).toInt();
+    if (block.textList())
+        d->textLists[level-1] = block.textList();
 }
 
 bool KoList::contains(QTextList *list) const
@@ -252,4 +224,3 @@ int KoList::level(const QTextBlock &block)
 }
 
 #include "KoList.moc"
-

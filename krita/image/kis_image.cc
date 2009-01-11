@@ -827,12 +827,16 @@ void KisImage::flatten()
 }
 
 
-void KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrategy* strategy)
+KisLayerSP KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrategy* strategy)
 {
-    if (!layer->prevSibling()) return;
+
+    if (!layer->prevSibling()) return 0;
+
     // XXX: this breaks if we allow free mixing of masks and layers
+
     KisLayerSP layer2 = dynamic_cast<KisLayer*>(layer->prevSibling().data());
-    if (!layer2) return;
+    if (!layer2) return 0;
+
 
     KisPaintLayerSP newLayer = new KisPaintLayer(this, layer->name(), OPACITY_OPAQUE, colorSpace());
     Q_CHECK_PTR(newLayer);
@@ -847,11 +851,11 @@ void KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrategy* st
 
     KisPainter gc(newLayer->paintDevice());
     gc.setCompositeOp(newLayer->colorSpace()->compositeOp(COMPOSITE_COPY));
-    gc.bitBlt(rc.topLeft(), layer->projection(), rc);
-
-    gc.setCompositeOp(layer2->compositeOp());
-    gc.setOpacity(layer2->opacity());
     gc.bitBlt(rc.topLeft(), layer2->projection(), rc);
+
+    gc.setCompositeOp(layer->compositeOp());
+    gc.setOpacity(layer->opacity());
+    gc.bitBlt(rc.topLeft(), layer->projection(), rc);
 
     // Merge meta data
     QList<const KisMetaData::Store*> srcs;
@@ -870,6 +874,8 @@ void KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrategy* st
     addNode(newLayer, layer->parent());
 
     undoAdapter()->endMacro();
+    
+    return newLayer;
 }
 
 

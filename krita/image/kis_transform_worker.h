@@ -23,9 +23,12 @@
 #include "kis_types.h"
 #include "krita_export.h"
 
+#include <QRect>
+
 class KisPaintDevice;
 class KoUpdater;
 class KisFilterStrategy;
+class KisSelection;
 
 class KRITAIMAGE_EXPORT KisTransformWorker
 {
@@ -38,6 +41,17 @@ public:
                        KoUpdater *progress,
                        KisFilterStrategy *filter, bool fixBorderAlpha = false);
     ~KisTransformWorker();
+
+    /**
+     * Mirror the specified device along the X axis
+     */
+    static QRect mirrorX(KisPaintDeviceSP dev, const KisSelection* selection = 0);
+    
+    /**
+     * Mirror the specified device along the Y axis
+     */
+    static QRect mirrorY(KisPaintDeviceSP dev, const KisSelection* selection = 0);
+
 
 public:
 

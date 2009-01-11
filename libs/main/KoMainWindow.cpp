@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 2000-2006 David Faure <faure@kde.org>
-   Copyright (C) 2007 Thomas zander <zander@kde.org>
+   Copyright (C) 2007, 2009 Thomas zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -68,12 +68,11 @@
 #include <QtGui/QPrinter>
 #include <QtGui/QPrintDialog>
 #include <QDesktopWidget>
-
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
 #include <QtGui/QPrintPreviewDialog>
-#endif
 
 #include "kofficeversion.h"
+
+class KoDockerManager : public QObject { }; // little hack to be able to use this class as a qobject
 
 class KoPartManager : public KParts::PartManager
 {
@@ -132,6 +131,7 @@ public:
         m_lastExportSpecialOutputFlag = 0;
         m_readOnly = false;
         m_dockWidgetMenu = 0;
+        m_dockerManager = 0;
     }
     ~KoMainWindowPrivate() {
         qDeleteAll(m_toolbarList);
@@ -214,6 +214,7 @@ public:
     QMap<QString, QDockWidget*> m_dockWidgetMap;
     KActionMenu* m_dockWidgetMenu;
     QMap<QDockWidget*, bool> m_dockWidgetVisibilityMap;
+    KoDockerManager *m_dockerManager;
 };
 
 KoMainWindow::KoMainWindow(const KComponentData &componentData)
@@ -248,9 +249,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->m_paSave = actionCollection()->addAction(KStandardAction::Save,  "file_save", this, SLOT(slotFileSave()));
     d->m_paSaveAs = actionCollection()->addAction(KStandardAction::SaveAs,  "file_save_as", this, SLOT(slotFileSaveAs()));
     d->m_paPrint = actionCollection()->addAction(KStandardAction::Print,  "file_print", this, SLOT(slotFilePrint()));
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     d->m_paPrintPreview = actionCollection()->addAction(KStandardAction::PrintPreview,  "file_print_preview", this, SLOT(slotFilePrintPreview()));
-#endif
 
     d->m_exportPdf  = new KAction(i18n("Export as PDF..."), this);
     d->m_exportPdf->setIcon(KIcon("application-pdf"));
@@ -295,14 +294,12 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->m_exportFile->setEnabled(false);
     d->m_paSave->setEnabled(false);
     d->m_paPrint->setEnabled(false);
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     d->m_paPrintPreview->setEnabled(false);
-#endif
     d->m_sendfile->setEnabled(false);
     d->m_exportPdf->setEnabled(false);
     d->m_paCloseFile->setEnabled(false);
 
-    d->m_splitter = new QSplitter(Qt::Vertical, this);
+    d->m_splitter = new QSplitter(Qt::Horizontal, this);
     d->m_splitter->setObjectName("mw-splitter");
     setCentralWidget(d->m_splitter);
     // Keyboard accessibility enhancements.
@@ -437,6 +434,11 @@ void KoMainWindow::setRootDocument(KoDocument *doc)
         d->m_docToOpen = 0;
     }
 
+    if (d->m_dockerManager) { // All the views will be deleted, so lets remove this one too
+        delete d->m_dockerManager;
+        d->m_dockerManager = 0;
+    }
+
     //kDebug(30003) <<"KoMainWindow::setRootDocument this =" << this <<" doc =" << doc;
     Q3PtrList<KoView> oldRootViews = d->m_rootViews;
     d->m_rootViews.clear();
@@ -480,9 +482,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc)
     d->m_importFile->setEnabled(enable);
     d->m_exportFile->setEnabled(enable);
     d->m_paPrint->setEnabled(enable);
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     d->m_paPrintPreview->setEnabled(enable);
-#endif
     d->m_sendfile->setEnabled(enable);
     d->m_exportPdf->setEnabled(enable);
     d->m_paCloseFile->setEnabled(enable);
@@ -537,9 +537,7 @@ void KoMainWindow::setRootDocumentDirect(KoDocument *doc, const Q3PtrList<KoView
     d->m_paSaveAs->setEnabled(enable);
     d->m_exportFile->setEnabled(enable);
     d->m_paPrint->setEnabled(enable);
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     d->m_paPrintPreview->setEnabled(enable);
-#endif
     d->m_sendfile->setEnabled(enable);
     d->m_exportPdf->setEnabled(enable);
     d->m_paCloseFile->setEnabled(enable);
@@ -1181,11 +1179,9 @@ void KoMainWindow::chooseNewDocument(InitDocFlags initDocFlags)
     if (!newdoc)
         return;
 
-    //FIXME: This needs to be handled differently
-    connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
 
-    if ((!doc  && (initDocFlags == InitDocFileNew)) || (doc && !doc->isEmpty())) {
+    if ((!doc && initDocFlags == InitDocFileNew) || (doc && !doc->isEmpty())) {
         KoMainWindow *s = new KoMainWindow(newdoc->componentData());
         s->show();
         newdoc->addShell(s);
@@ -1298,52 +1294,6 @@ void KoMainWindow::slotFileQuit()
     close();
 }
 
-#if 0
-void KoMainWindow::slotFilePrintPreview()
-{
-    if (!rootView()) {
-        kWarning() << "KoMainWindow::slotFilePrint : No root view!";
-        return;
-    }
-    QPrinter printer(QPrinter::HighResolution);
-    KTemporaryFile tmpFile;
-    tmpFile.setAutoRemove(false);
-    // The temp file is deleted by KoPrintPreview
-    tmpFile.open();
-
-    // This line has to be before setupPrinter to let the apps decide what to
-    // print and what not (if they want to :)
-#if 0 //XXX_PORT
-    printer.setFromTo(printer.minPage(), printer.maxPage());
-    printer.setPreviewOnly(true);
-#endif
-
-    QPrintDialog *printDialog = KdePrint::createPrintDialog(&printer, rootView()->printDialogPages(), this);
-
-    rootView()->setupPrinter(printer, *printDialog);
-
-    QString oldFileName = printer.outputFileName();
-    printer.setOutputFileName(tmpFile.fileName());
-    int oldNumCopies = printer.numCopies();
-    printer.setNumCopies(1);
-    // Disable kdeprint's own preview, we'd get two. This shows that KPrinter needs
-    // a "don't use the previous settings" mode. The current way is really too much of a hack.
-#if 0
-    QString oldKDEPreview = printer.option("kde-preview");
-    printer.setOption("kde-preview", "0");
-#endif
-    rootView()->print(printer, *printDialog);
-    //KoPrintPreview::preview(this, "KoPrintPreviewDialog", tmpFile.fileName());
-
-    // Restore previous values
-    printer.setOutputFileName(oldFileName);
-    printer.setNumCopies(oldNumCopies);
-#if 0
-    printer.setOption("kde-preview", oldKDEPreview);
-#endif
-}
-#endif
-
 void KoMainWindow::slotFilePrint()
 {
     if (!rootView())
@@ -1365,18 +1315,23 @@ void KoMainWindow::slotFilePrint()
 
 void KoMainWindow::slotFilePrintPreview()
 {
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     if (!rootView())
         return;
     KoPrintJob *printJob = rootView()->createPrintJob();
     if (printJob == 0)
         return;
+
+  /* Sets the startPrinting() slot to be blocking.
+     The Qt print-preview dialog requires the printing to be completely blocking
+     and only return when the full document has been printed.
+     By default the KoPrintingDialog is non-blocking and
+     multithreading, setting blocking to true will allow it to be used in the preview dialog */
+    printJob->setProperty("blocking", true);
     QPrintPreviewDialog *preview = new QPrintPreviewDialog(&printJob->printer(), this);
     printJob->setParent(preview); // will take care of deleting the job
     connect(preview, SIGNAL(paintRequested(QPrinter*)), printJob, SLOT(startPrinting()));
     preview->exec();
     delete preview;
-#endif
 }
 
 void KoMainWindow::slotPrintAndSave()
@@ -1916,6 +1871,20 @@ void KoMainWindow::forceDockTabFonts()
 QList<QDockWidget*> KoMainWindow::dockWidgets()
 {
     return d->m_dockWidgetMap.values();
+}
+
+KoDockerManager * KoMainWindow::dockerManager() const
+{
+    return d->m_dockerManager;
+}
+
+void KoMainWindow::setDockerManager(KoDockerManager *dm)
+{
+    d->m_dockerManager = dm;
+    if (dm) {
+        QObject *manager = static_cast<QObject*> (dm);
+        manager->setParent(this); // make sure that the dockerManager is deleted by us.
+    }
 }
 
 KRecentFilesAction *KoMainWindow::recentAction() const

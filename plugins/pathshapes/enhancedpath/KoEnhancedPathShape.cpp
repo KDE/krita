@@ -79,12 +79,12 @@ void KoEnhancedPathShape::updatePath( const QSizeF & )
 
 void KoEnhancedPathShape::setSize( const QSizeF &newSize )
 {
-    QSizeF oldSize = size();
+    QMatrix matrix( resizeMatrix( newSize ) );
 
     KoParameterShape::setSize( newSize );
 
-    qreal scaleX = newSize.width() / oldSize.width();
-    qreal scaleY = newSize.height() / oldSize.height();
+    qreal scaleX = matrix.m11();
+    qreal scaleY = matrix.m22();
     m_viewBoxOffset.rx() *= scaleX;
     m_viewBoxOffset.ry() *= scaleY;
     m_viewMatrix.scale( scaleX, scaleY );

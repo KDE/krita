@@ -37,7 +37,7 @@ public:
 protected:
     void paintEvent(QPaintEvent *event);
 
-public Q_SLOTS:
+public slots:
     void setPageLayout(const KoPageLayout &layout);
     void setColumns(const KoColumns &columns);
 

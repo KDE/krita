@@ -8,12 +8,15 @@ Name[fi]=Tekstimuuttujien liitännäinen
 Name[fy]=Fariabele tekst plugin
 Name[gl]=Extensión de Variable de Texto
 Name[hi]=पाठ वेरिएबल प्लगइन
+
 Name[it]=Estensione per le variabili di testo
+Name[ja]=テキスト変数プラグイン
+
 Name[kk]=Мәтін айнымалының плагині
 Name[nds]=Textvariabeln-Moduul
 Name[nl]=Tekstvariabeleplugin
 Name[pt]='Plugin' de Variáveis de Texto
-Name[pt_BR]=Plugin de Variáveis de Texto
+Name[pt_BR]=Plug-in de Variáveis de Texto
 Name[sv]=Textvariabler
 Name[tr]=Metin Değişkeni Eklentisi
 Name[uk]=Втулок текстової змінної
@@ -30,12 +33,15 @@ Comment[et]=Teksti muutujaid sisaldav plugin
 Comment[fi]=Liitännäinen, joka sisältää tekstimuuttujia
 Comment[gl]=Unha extensión que contén variables de texto
 Comment[hi]=एक प्लगइन जिसमें पाठ वेरिएबल्स हैं
+
 Comment[it]=Un'estensione contenente variabili di testo
+Comment[ja]=テキスト変数を含むプラグイン
+
 Comment[kk]=Мәтін айнымалылары орналасатын плагині
 Comment[nds]=En Moduul, dat Textvariabeln bargt
 Comment[nl]=Een plugin, dat variabele bevat
 Comment[pt]=Um 'plugin' que contém variáveis de texto
-Comment[pt_BR]=Um plugin que contém variáveis de texto
+Comment[pt_BR]=Um plug-in que contém variáveis de texto
 Comment[sv]=Ett insticksprogram som innehåller textvariabler
 Comment[ta]=சொருகளானது உரை மாறிலிகளை கொண்டுள்ளது
 Comment[uk]=Втулок, що містить текстові змінні

@@ -160,7 +160,7 @@ void KGradientSlider::mousePressEvent(QMouseEvent * e)
         m_blackcursor = x;
         m_grab_cursor = closest_cursor;
         m_leftmost = 0;
-        m_rightmost = m_whitecursor;
+        m_rightmost = m_whitecursor - 1;
         if (m_gammaEnabled) {
             double delta = (double)(m_whitecursor - m_blackcursor) / 2.0;
             double mid   = (double)m_blackcursor + delta;
@@ -171,7 +171,7 @@ void KGradientSlider::mousePressEvent(QMouseEvent * e)
     case WhiteCursor:
         m_whitecursor = x;
         m_grab_cursor = closest_cursor;
-        m_leftmost = m_blackcursor;
+        m_leftmost = m_blackcursor + 1;
         m_rightmost = 255;
         if (m_gammaEnabled) {
             double delta = (double)(m_whitecursor - m_blackcursor) / 2.0;
@@ -218,7 +218,7 @@ void KGradientSlider::mouseReleaseEvent(QMouseEvent * e)
 
 void KGradientSlider::mouseMoveEvent(QMouseEvent * e)
 {
-    unsigned int x = abs(e->pos().x());
+    int x = e->pos().x();
 
     if (m_dragging == true) { // Else, drag the selected point
         if (x <= m_leftmost)
@@ -226,12 +226,6 @@ void KGradientSlider::mouseMoveEvent(QMouseEvent * e)
 
         if (x >= m_rightmost)
             x = m_rightmost;
-
-        /*if(x > 255)
-            x = 255;
-
-        if(x < 0)
-            x = 0;*/
 
         switch (m_grab_cursor) {
         case BlackCursor:

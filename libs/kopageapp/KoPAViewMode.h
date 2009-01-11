@@ -35,6 +35,7 @@ class QTabletEvent;
 class QMouseEvent;
 class QKeyEvent;
 class QWheelEvent;
+class QCloseEvent;
 class QPointF;
 
 class KOPAGEAPP_EXPORT KoPAViewMode : public QObject
@@ -54,6 +55,10 @@ public:
     virtual void keyPressEvent( QKeyEvent *event ) = 0;
     virtual void keyReleaseEvent( QKeyEvent *event ) = 0;
     virtual void wheelEvent( QWheelEvent * event, const QPointF &point ) = 0;
+    /**
+     * The default implementation ignores this event
+     */
+    virtual void closeEvent( QCloseEvent * event );
 
     /**
      * @brief Switch the active view mode to work on master/normal pages

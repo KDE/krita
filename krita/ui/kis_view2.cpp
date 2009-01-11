@@ -54,14 +54,11 @@
 
 #include <KoMainWindow.h>
 #include <KoCanvasController.h>
-#include <KoShapeManager.h>
-#include <KoShape.h>
 #include <KoSelection.h>
 #include <KoToolBoxFactory.h>
 #include <KoZoomHandler.h>
 #include <KoViewConverter.h>
 #include <KoView.h>
-#include <KoToolDockerFactory.h>
 #include <KoColorDocker.h>
 #include "KoColorSpaceRegistry.h"
 #include <KoDockerManager.h>
@@ -151,7 +148,7 @@ public:
     KisCanvasResourceProvider * resourceProvider;
     KisFilterManager * filterManager;
     KisStatusBar * statusBar;
-    QAction * totalRefresh;
+    KAction * totalRefresh;
     KisSelectionManager *selectionManager;
     KisControlFrame * controlFrame;
     KisBirdEyeBox * birdEyeBox;
@@ -179,7 +176,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     // XXX: This state is taken from a kritarc where the docker constellation was configured by hand to look
     //      like the krita 1.6 configuration. Setting this state if none is present seems to work, but there's
     //      still hte versioning problem to be accounted for.
-    QString state = "AAAA/wAAAAD9AAAAAgAAAAAAAAAzAAACPfwCAAAAAfsAAAAOAFQAbwBvAGwAQgBvAHgBAAAAPwAAAj0AAABGAP///wAAAAEAAADiAAACPfwCAAAADvwAAAA/AAAA9gAAANwBAAAe+gAAAAECAAAAA/sAAAAaAEsAaQBzAEIAaQByAGQAZQB5AGUAQgBvAHgBAAAAAP////8AAAAwAP////sAAAAqAEsAbwBUAG8AbwBsAE8AcAB0AGkAbwBuAHMARABvAGMAawBlAHIAIAA4AQAAAAD/////AAAAvQD////7AAAAJgBLAG8AVABvAG8AbABPAHAAdABpAG8AbgBzAEQAbwBjAGsAZQByAQAAAAD/////AAAAAAAAAAD8AAABJgAAAMcAAAAAAP////r/////AgAAAAP7AAAAGgBLAG8AQwBvAGwAbwByAEQAbwBjAGsAZQByAAAAAAD/////AAAAoAD////7AAAAIABLAGkAcwBQAGEAbABlAHQAdABlAEQAbwBjAGsAZQByAAAAAAD/////AAAAmwD////7AAAAIgBTAHQAcgBvAGsAZQAgAFAAcgBvAHAAZQByAHQAaQBlAHMAAAAAAP////8AAACmAP////wAAAE7AAAAZgAAAGYAAABm+gAAAAEBAAAAAvsAAAAuAEsAbwBTAGgAYQBwAGUAQwBvAGwAbABlAGMAdABpAG8AbgBEAG8AYwBrAGUAcgEAAAAA/////wAAAOIAAADi+wAAACQAUwBtAGEAbABsAEMAbwBsAG8AcgBTAGUAbABlAGMAdABvAHIBAAACPgAAAOIAAABWAP////sAAAAWAEsAaQBzAEwAYQB5AGUAcgBCAG8AeAEAAAGnAAAA1QAAAJAA////+wAAACIAUwBoAGEAZABvAHcAIABQAHIAbwBwAGUAcgB0AGkAZQBzAAAAAAD/////AAAAjgD////7AAAAIABTAGgAYQBwAGUAIABQAHIAbwBwAGUAcgB0AGkAZQBzAAAAAAD/////AAAAFAD////7AAAAJABTAGkAbQBwAGwAZQAgAFQAZQB4AHQAIABFAGQAaQB0AG8AcgAAAAAA/////wAAAM4A////+wAAABIAUwBjAHIAaQBwAHQAaQBuAGcAAAAAAP////8AAAB0AP////sAAAAwAEsAaQBzAFQAcgBpAGEAbgBnAGwAZQBDAG8AbABvAHIAUwBlAGwAZQBjAHQAbwByAAAAAp0AAAB4AAAAeAD////7AAAAKgBTAHAAZQBjAGkAZgBpAGMAQwBvAGwAbwByAFMAZQBsAGUAYwB0AG8AcgAAAAKzAAAA1QAAAI0A////+wAAABoAUwBoAGEAcABlAFMAZQBsAGUAYwB0AG8AcgAAAAAA/////wAAAD4A////+wAAACoASwBvAFQAbwBvAGwATwBwAHQAaQBvAG4AcwBEAG8AYwBrAGUAcgAgADMAAAACYAAAABwAAAAUAP////sAAAAuAEsAaQBzAFAAYQBpAG4AdABlAHIAbAB5AE0AaQB4AGUAcgBEAG8AYwBrAGUAcgAAAAAA/////wAAAHAA////+wAAACwASwBvAFQAbwBvAGwATwBwAHQAaQBvAG4AcwBEAG8AYwBrAGUAcgAgADEAMwAAAAAA/////wAAABQA////AAAB/wAAAj0AAAAEAAAABAAAAAgAAAAI/AAAAAEAAAACAAAAAgAAABYAbQBhAGkAbgBUAG8AbwBsAEIAYQByAQAAAAAAAACNAAAAAAAAAAAAAAAeAEIAcgB1AHMAaABlAHMAQQBuAGQAUwB0AHUAZgBmAQAAAI0AAAKTAAAAAAAAAAA=";
+    QString state = "AAAA/wAAAAD9AAAAAgAAAAAAAAAzAAACK/wCAAAAAfsAAAAOAFQAbwBvAGwAQgBvAHgBAAAAQwAAAisAAABGAP///wAAAAEAAAEHAAACK/wCAAAAEfwAAABDAAAAwwAAALkBAAAb+gAAAAACAAAABPsAAAAuAEsAcgBpAHQAYQBTAGgAYQBwAGUALwBLAGkAcwBUAG8AbwBsAEIAcgB1AHMAaAEAAAAA/////wAAAJ0A////+wAAABoASwBpAHMAQgBpAHIAZABlAHkAZQBCAG8AeAEAAAAA/////wAAADAA////+wAAACoASwBvAFQAbwBvAGwATwBwAHQAaQBvAG4AcwBEAG8AYwBrAGUAcgAgADgBAAAAAP////8AAAAAAAAAAPsAAAAmAEsAbwBUAG8AbwBsAE8AcAB0AGkAbwBuAHMARABvAGMAawBlAHIBAAAAAP////8AAAAAAAAAAPwAAAEmAAAAxwAAAAAA////+v////8CAAAAA/sAAAAaAEsAbwBDAG8AbABvAHIARABvAGMAawBlAHIAAAAAAP////8AAACgAP////sAAAAgAEsAaQBzAFAAYQBsAGUAdAB0AGUARABvAGMAawBlAHIAAAAAAP////8AAACbAP////sAAAAiAFMAdAByAG8AawBlACAAUAByAG8AcABlAHIAdABpAGUAcwAAAAAA/////wAAAKIA/////AAAAQkAAAB5AAAAZQAAAIX6AAAAAQEAAAAC+wAAAC4ASwBvAFMAaABhAHAAZQBDAG8AbABsAGUAYwB0AGkAbwBuAEQAbwBjAGsAZQByAQAAAAD/////AAABBwD////7AAAAJABTAG0AYQBsAGwAQwBvAGwAbwByAFMAZQBsAGUAYwB0AG8AcgEAAAI+AAAA4gAAAFYA////+wAAABYASwBpAHMATABhAHkAZQByAEIAbwB4AQAAAYUAAADpAAAAsQD////7AAAAIgBTAGgAYQBkAG8AdwAgAFAAcgBvAHAAZQByAHQAaQBlAHMAAAAAAP////8AAACJAP////sAAAAgAFMAaABhAHAAZQAgAFAAcgBvAHAAZQByAHQAaQBlAHMAAAAAAP////8AAAAUAP////sAAAAkAFMAaQBtAHAAbABlACAAVABlAHgAdAAgAEUAZABpAHQAbwByAAAAAAD/////AAABNgD////7AAAAEgBTAGMAcgBpAHAAdABpAG4AZwAAAAAA/////wAAAHQA////+wAAADAASwBpAHMAVAByAGkAYQBuAGcAbABlAEMAbwBsAG8AcgBTAGUAbABlAGMAdABvAHIAAAACnQAAAHgAAAB4AP////sAAAAqAFMAcABlAGMAaQBmAGkAYwBDAG8AbABvAHIAUwBlAGwAZQBjAHQAbwByAAAAArMAAADVAAAAigD////7AAAAGgBTAGgAYQBwAGUAUwBlAGwAZQBjAHQAbwByAAAAAAD/////AAAAPgD////7AAAAKgBLAG8AVABvAG8AbABPAHAAdABpAG8AbgBzAEQAbwBjAGsAZQByACAAMwAAAAJgAAAAHAAAAAAAAAAA+wAAAC4ASwBpAHMAUABhAGkAbgB0AGUAcgBsAHkATQBpAHgAZQByAEQAbwBjAGsAZQByAAAAAAD/////AAAAbgD////7AAAALABLAG8AVABvAG8AbABPAHAAdABpAG8AbgBzAEQAbwBjAGsAZQByACAAMQAzAAAAAAD/////AAAAAAAAAAD7AAAAFgBTAHQAeQBsAGUARABvAGMAawBlAHIAAAAAAP////8AAABPAP////v/////AAAAAlUAAAAZAAAAFAD////7AAAAIABLAGkAcwBIAGkAcwB0AG8AZwByAGEAbQBEAG8AYwBrAAAAAAD/////AAAAeAAAAHgAAAHgAAACKwAAAAQAAAAEAAAACAAAAAj8AAAAAQAAAAIAAAACAAAAFgBtAGEAaQBuAFQAbwBvAGwAQgBhAHIBAAAAAAAAAI0AAAAAAAAAAAAAAB4AQgByAHUAcwBoAGUAcwBBAG4AZABTAHQAdQBmAGYBAAAAjQAAApMAAAAAAAAAAA==";
 
     KConfigGroup group(KGlobal::config(), "krita");
     if (!group.hasKey("State")) {
@@ -300,18 +297,6 @@ void KisView2::dropEvent(QDropEvent *event)
 }
 
 
-void KisView2::slotChildActivated(bool a)
-{
-
-    KoView::slotChildActivated(a);
-}
-
-
-void KisView2::canvasAddChild(KoViewChild *child)
-{
-    KoView::canvasAddChild(child);
-    connect(this, SIGNAL(viewTransformationsChanged()), child, SLOT(reposition()));
-}
 KisImageSP KisView2::image()
 {
     return m_d->doc->image();
@@ -432,11 +417,6 @@ void KisView2::slotLoadingFinished()
 
     m_d->nodeManager->nodesUpdated();
 
-    KoDockerManager *dockerManager = new KoDockerManager(this);
-    connect(m_d->canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &)),
-            dockerManager, SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &)));
-
-
     connectCurrentImage();
 
     if (img->locked()) {
@@ -474,8 +454,16 @@ void KisView2::createGUI()
     KoToolBoxFactory toolBoxFactory(m_d->canvasController, "Tools");
     createDockWidget(&toolBoxFactory);
 
-    KoToolDockerFactory toolDockerFactory;
-    createDockWidget(&toolDockerFactory);
+    KoDockerManager *dockerMng = dockerManager();
+    if (!dockerMng) {
+        dockerMng = new KoDockerManager(this);
+        setDockerManager(dockerMng);
+    }
+
+    connect( m_d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, KoView *) ),
+             dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, KoView *) ) );
+
+
 
     KisBirdEyeBoxFactory birdeyeFactory(this);
     m_d->birdEyeBox = qobject_cast<KisBirdEyeBox*>(createDockWidget(&birdeyeFactory));

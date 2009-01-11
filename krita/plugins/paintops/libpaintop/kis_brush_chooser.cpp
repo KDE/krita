@@ -95,6 +95,8 @@ void KisBrushChooser::slotSetItemSpacing(double spacingValue)
         KisBrush *brush = static_cast<KisBrush *>(item->resource());
         brush->setSpacing(spacingValue);
     }
+
+    emit sigBrushChanged();
 }
 
 void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
@@ -106,6 +108,8 @@ void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
         brush->setUseColorAsMask(useColorAsMask);
         m_itemChooser->selectItem(m_itemChooser->currentItem());
     }
+
+   emit sigBrushChanged();
 }
 
 void KisBrushChooser::update(QTableWidgetItem *item)
@@ -124,7 +128,11 @@ void KisBrushChooser::update(QTableWidgetItem *item)
         m_slSpacing->setValue(brush->spacing());
         m_chkColorMask->setChecked(brush->useColorAsMask());
         m_chkColorMask->setEnabled(brush->hasColor());
+
+        emit sigBrushChanged();
     }
+    
+
 }
 
 void KisBrushChooser::slotImportBrush()
@@ -137,9 +145,9 @@ void KisBrushChooser::slotImportBrush()
 
 void KisBrushChooser::slotActivatedBrush(KoResource * resource)
 {
-    KisBrush * brush = dynamic_cast<KisBrush*>(resource);
+    KisBrush* brush = dynamic_cast<KisBrush*>(resource);
     if (brush) {
-        m_brush = brush->clone();
+        m_brush = brush;
     }
 }
 

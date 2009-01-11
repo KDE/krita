@@ -38,6 +38,7 @@ set(koguiutils_LIB_SRCS
     KoToolDockerFactory.cpp
     KoLayoutVisitor.cpp
     KoCopyController.cpp
+    KoCutController.cpp
     KoPasteController.cpp
    KoColorDocker.cpp
    KoResourceChooser.cpp
@@ -73,8 +74,6 @@ kde4_add_ui_files( koguiutils_LIB_SRCS
     KoCsvImportDialog.ui
     KoGeneralPropertyUi.ui
     KoPageLayoutWidget.ui
-    #KoPageLayoutColumns.ui
-    #KoPageLayoutHeaderBase.ui
     KoEditColorSet.ui
     KoShadowConfigWidget.ui
 )

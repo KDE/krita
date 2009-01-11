@@ -34,7 +34,6 @@ class KoImageCollection::Private
 public:
     QMap<QByteArray, KoImageDataPrivate *> images;
 
-
     ~Private()
     {
         foreach(KoImageDataPrivate * image, images)

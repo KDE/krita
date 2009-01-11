@@ -26,13 +26,12 @@ private slots:
     void testHitTest();
 
 private:
-    void initForNewTest(const QString &initText = QString());
+    void initForNewTest();
 
 private:
     MockTextShape *shape1;
     QTextDocument *doc;
     KoTextDocumentLayout *layout;
-    QString loremIpsum;
 };
 
 class MockTextShape : public KoShape

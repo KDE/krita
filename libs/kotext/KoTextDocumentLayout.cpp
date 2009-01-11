@@ -249,6 +249,21 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
     if (shapes().count() == 0) // nothing to do.
         return;
 
+    int from = position;
+    const int to = from + charsAdded;
+    while (from < to) { // find blocks that have been added
+        QTextBlock block = document()->findBlock(from);
+        if (! block.isValid())
+            break;
+        if (from == block.position() && block.textList()) {
+            KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+            if (data)
+                data->setCounterWidth(-1); // invalidate whole list.
+        }
+
+        from = block.position() + block.length();
+    }
+
     foreach(KoShape *shape, shapes()) {
         KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(shape->userData());
         Q_ASSERT(data);
@@ -304,13 +319,20 @@ void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int positi
     }
 }
 
-void KoTextDocumentLayout::scheduleLayout()
+void KoTextDocumentLayout::scheduleLayoutWithoutInterrupt()
 {
     if (d->scheduled)
         return;
-    interruptLayout();
     d->scheduled = true;
     QTimer::singleShot(0, this, SLOT(relayoutPrivate()));
+}
+
+void KoTextDocumentLayout::scheduleLayout()
+{
+    if (! d->scheduled) {
+        scheduleLayoutWithoutInterrupt();
+        interruptLayout();
+    }
 }
 
 void KoTextDocumentLayout::relayout()

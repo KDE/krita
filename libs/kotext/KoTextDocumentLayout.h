@@ -211,6 +211,10 @@ protected:
     /// reimplemented
     virtual void resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
 
+    /// make sure we start a layout run (returns immediately)
+    /// This method keeps the state data and does not interrupt a runnign layout.
+    void scheduleLayoutWithoutInterrupt();
+
 private:
     Q_PRIVATE_SLOT(d, void relayoutPrivate())
 

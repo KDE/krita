@@ -131,7 +131,8 @@ QWidget * KisToolPaint::createOptionWidget()
 {
 
     QWidget * optionWidget = new QWidget();
-
+    optionWidget->setObjectName(toolId());
+    
     m_lbOpacity = new QLabel(i18n("Opacity: "), optionWidget);
     m_slOpacity = new KoSliderCombo(optionWidget);
     m_slOpacity->setMinimum(0);

@@ -190,11 +190,7 @@ KoView::KoView(KoDocument *document, QWidget *parent)
 
     actionCollection()->addAssociatedWidget(this);
     foreach(QAction* action, actionCollection()->actions())
-#if QT_VERSION < KDE_MAKE_VERSION(4,4,0)
-    action->setShortcutContext(Qt::WidgetShortcut); // remove after Qt4.4 becomes mandatory
-#else
     action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-#endif
 }
 
 KoView::~KoView()
@@ -669,6 +665,20 @@ void KoView::endOperation()
     d->m_inOperation = false;
 
 //   canvas()->update();
+}
+
+KoDockerManager * KoView::dockerManager() const
+{
+    KoMainWindow *mw = shell();
+    return mw ? mw->dockerManager() : 0;
+}
+
+void KoView::setDockerManager(KoDockerManager *dm)
+{
+    KoMainWindow *mw = shell();
+
+    if(mw)
+        mw->setDockerManager(dm);
 }
 
 KoMainWindow * KoView::shell() const

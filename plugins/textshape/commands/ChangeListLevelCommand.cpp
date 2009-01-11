@@ -23,18 +23,41 @@
 #include <KoTextBlockData.h>
 #include <KoTextDocument.h>
 #include <KoList.h>
+#include "TextTool.h"
 #include <KoListLevelProperties.h>
+#include <KLocale>
 #include <kdebug.h>
 
 #include <QTextCursor>
+#include <QHash>
+#include <QList>
 
-ChangeListLevelCommand::ChangeListLevelCommand(const QTextBlock &block, ChangeListLevelCommand::CommandType type, 
-                                               int level, QUndoCommand *parent)
+ChangeListLevelCommand::ChangeListLevelCommand(const QTextCursor &cursor, ChangeListLevelCommand::CommandType type, 
+                                               int coef, QUndoCommand *parent)
     : TextCommandBase(parent),
-      m_block(block),
       m_type(type),
-      m_level(level)
+      coefficient(coef),
+      m_first(true)
 {
+    setText(i18n("Change List Level"));
+    
+    int selectionStart = qMin(cursor.anchor(), cursor.position());
+    int selectionEnd = qMax(cursor.anchor(), cursor.position());
+    
+    QTextBlock block = cursor.block().document()->findBlock(selectionStart);
+    
+    bool oneOf = (selectionStart == selectionEnd); //ensures the block containing the cursor is selected in that case
+    
+    while (block.isValid() && ((block.position() < selectionEnd) || oneOf)) {
+        m_blocks.append(block);
+        if (block.textList()) {
+            m_lists.insert(m_blocks.size() - 1, KoTextDocument(block.document()).list(block.textList()));
+            Q_ASSERT(m_lists.value(m_blocks.size() - 1));
+            m_levels.insert(m_blocks.size() - 1, effectiveLevel(m_lists.value(m_blocks.size() - 1)->level(block)));
+        }
+        oneOf = false;
+        block = block.next();
+    }
 }
 
 ChangeListLevelCommand::~ChangeListLevelCommand()
@@ -45,9 +68,9 @@ int ChangeListLevelCommand::effectiveLevel(int level)
 {
     int result;
     if (m_type == IncreaseLevel) {
-        result = level + m_level;
+        result = level + coefficient;
     } else if (m_type == DecreaseLevel) {
-        result = level - m_level;
+        result = level - coefficient;
     } else if (m_type == SetLevel) {
         result = level;
     }
@@ -57,46 +80,44 @@ int ChangeListLevelCommand::effectiveLevel(int level)
 
 void ChangeListLevelCommand::redo()
 {
-    TextCommandBase::redo();
-    UndoRedoFinalizer finalizer(this, m_tool);
-
-    QTextList *textList = m_block.textList();
-    if (!textList)
-        return;
-    KoList *list = KoTextDocument(m_block.document()).list(textList);
-    Q_ASSERT(list);
-    m_oldLevel = list->level(m_block);
-    int newLevel = effectiveLevel(m_oldLevel);
-
-    if (!list->style()->hasLevelProperties(newLevel)) {
-        KoListLevelProperties llp = list->style()->levelProperties(newLevel);
-        llp.setIndent((newLevel-1) * 20); // make this configurable
-        list->style()->setLevelProperties(llp);
+    if (!m_first) {
+        TextCommandBase::redo();
+        UndoRedoFinalizer finalizer(this, m_tool);
+        for (int i = 0; i < m_blocks.size(); ++i) {
+            m_lists.value(i)->updateStoredList(m_blocks.at(i));
+            if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).userData()))
+                userData->setCounterWidth(-1.0);
+        }
     }
-    list->add(m_block, newLevel);
+    else {
+        m_tool->startEditing(this);
+        for (int i = 0; i < m_blocks.size(); ++i) {
+            if (!m_lists.value(i)->style()->hasLevelProperties(m_levels.value(i))) {
+                KoListLevelProperties llp = m_lists.value(i)->style()->levelProperties(m_levels.value(i));
+                llp.setIndent((m_levels.value(i)-1) * 20); //TODO make this configurable
+                m_lists.value(i)->style()->setLevelProperties(llp);
+            }
+            m_lists.value(i)->add(m_blocks.at(i), m_levels.value(i));
+        }
+        m_tool->stopEditing();
+    }
+    m_first = false;
 }
 
 void ChangeListLevelCommand::undo()
 {
     TextCommandBase::undo();
     UndoRedoFinalizer finalizer(this, m_tool);
+    for (int i = 0; i < m_blocks.size(); ++i) {
+        if (m_blocks.at(i).textList())
+            m_lists.value(i)->updateStoredList(m_blocks.at(i));
+        if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).userData()))
+            userData->setCounterWidth(-1.0);
 
-    QTextList *textList = m_block.textList();
-    if (!textList)
-        return;
-    KoList *list = KoTextDocument(m_block.document()).list(textList);
-    Q_ASSERT(list);
-    list->add(m_block, m_oldLevel);
+    }
 }
 
 bool ChangeListLevelCommand::mergeWith(const QUndoCommand *other)
 {
-    const ChangeListLevelCommand *cmd = dynamic_cast<const ChangeListLevelCommand *>(other);
-    if (!cmd)
-        return false;
-    if (m_block != cmd->m_block || m_type != cmd->m_type)
-        return false;
-    m_level = cmd->m_level;
-    return true;
+    return false;
 }
-

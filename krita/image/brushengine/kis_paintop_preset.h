@@ -96,10 +96,6 @@ public:
 
     // XXX: serialize to/from xml for recording!
 
-private:
-
-    /// Called whenever the settings change so the image representing this resource
-    /// in the resource choosers is updated.
     void updateImg();
 
 private:

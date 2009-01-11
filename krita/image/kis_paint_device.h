@@ -19,13 +19,7 @@
 #ifndef KIS_PAINT_DEVICE_IMPL_H_
 #define KIS_PAINT_DEVICE_IMPL_H_
 
-#include <QColor>
-#include <QHash>
 #include <QObject>
-#include <QPixmap>
-#include <QList>
-#include <QString>
-#include <QPaintDevice>
 
 #include "kis_debug.h"
 
@@ -41,6 +35,8 @@
 class QRect;
 class QImage;
 class QPoint;
+class QString;
+class QColor;
 
 class KoStore;
 class KoColorSpace;
@@ -52,6 +48,7 @@ class KisRandomSubAccessorPixel;
 class KisDataManager;
 class KisSelectionComponent;
 class KisPainterlyOverlay;
+
 typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 
 /**
@@ -92,6 +89,7 @@ public:
     virtual ~KisPaintDevice();
 
 public:
+
     /**
      * Write the pixels of this paint device into the specified file store.
      */
@@ -140,30 +138,18 @@ public:
      * For instance, the tiled datamanager keeps the extent to the nearest
      * multiple of 64.
      */
-    void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const {
-        QRect rc = extent();
-        x = rc.x();
-        y = rc.y();
-        w = rc.width();
-        h = rc.height();
-    }
+    void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
 
+    /// Convience method for the above
     virtual QRect extent() const;
-
 
     /**
      * Get the exact bounds of this paint device. This may be very slow,
      * especially on larger paint devices because it does a linear scanline search.
      */
-    void exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const {
-        QRect rc = exactBounds();
-        x = rc.x();
-        y = rc.y();
-        w = rc.width();
-        h = rc.height();
-    }
-
-
+    void exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
+        
+    /// Convience method for the above
     virtual QRect exactBounds() const;
 
     /**
@@ -276,7 +262,6 @@ public:
      */
     void writePlanarBytes(QVector<quint8*> planes, qint32 x, qint32 y, qint32 w, qint32 h);
 
-
     /**
      *   Converts the paint device to a different colorspace
      */
@@ -332,17 +317,16 @@ public:
      */
     virtual QImage createThumbnail(qint32 maxw, qint32 maxh);
 
-
     /**
      * Fill c and opacity with the values found at x and y.
      *
      * The color values will be transformed from the profile of
      * this paint device to the display profile.
-     *
+     
+     * @deprecated use iterators instead
      * @return true if the operation was successful.
      */
-    bool pixel(qint32 x, qint32 y, QColor *c);
-
+    bool KDE_DEPRECATED pixel(qint32 x, qint32 y, QColor *c);
 
     /**
      * Fill kc with the values found at x and y. This method differs
@@ -351,9 +335,10 @@ public:
      * The color values will be transformed from the profile of
      * this paint device to the display profile.
      *
+     * @deprecated use iterators instead
      * @return true if the operation was successful.
      */
-    bool pixel(qint32 x, qint32 y, KoColor * kc);
+    bool KDE_DEPRECATED pixel(qint32 x, qint32 y, KoColor * kc);
 
     /**
      * Set the specified pixel to the specified color. Note that this
@@ -367,12 +352,14 @@ public:
      * Note that this will use 8-bit values and may cause a significant
      * degradation when used on 16-bit or hdr quality images.
      *
+     * @deprecated use iterators instead
      * @return true if the operation was successful
      *
      */
-    bool setPixel(qint32 x, qint32 y, const QColor& c);
+    bool KDE_DEPRECATED setPixel(qint32 x, qint32 y, const QColor& c);
 
-    bool setPixel(qint32 x, qint32 y, const KoColor& kc);
+    /// Convience method for the above
+    bool KDE_DEPRECATED setPixel(qint32 x, qint32 y, const KoColor& kc);
 
     /**
      * @return the colorspace of the pixels in this paint device
@@ -404,7 +391,6 @@ public:
      */
     virtual quint32 channelCount() const;
 
-
     /**
      * Return the painterly overlay -- a special paint device that
      * uses the KisPainterlyOverlayColorSpace that defines things
@@ -427,33 +413,29 @@ public:
     void removePainterlyOverlay();
 
 public:
-
+    
     /**
-     *  Add the specified rect to the parent layer's set of dirty rects
-     *  (if there is a parent layer)
+     * Add the specified rect to the parent layer's set of dirty rects
+     * (if there is a parent layer)
+     * @deprecated: call setDirty on the node
      */
-    virtual void setDirty(const QRect & rc);
+    virtual void KDE_DEPRECATED setDirty(const QRect & rc);
 
     /**
      *  Add the specified region to the parent layer's dirty region
      *  (if there is a parent layer)
+     * @deprecated: call setDirty on the node
      */
-    virtual void setDirty(const QRegion & region);
+    virtual void KDE_DEPRECATED setDirty(const QRegion & region);
 
     /**
      *  Set the parent layer completely dirty, if this paint device has
      *  as parent layer.
+     * @deprecated: call setDirty on the node
      */
-    virtual void setDirty();
-
-    /**
-     * Mirror the device along the X axis
-     */
-    void mirrorX(KisSelection * selection = 0);
-    /**
-     * Mirror the device along the Y axis
-     */
-    void mirrorY(KisSelection * selection = 0);
+    virtual void KDE_DEPRECATED setDirty();
+    
+public:
 
     /**
      * Create an iterator over a rectangle section of a paint device, the path followed by
@@ -484,6 +466,21 @@ public:
      */
     KisHLineConstIteratorPixel createHLineConstIterator(qint32 x, qint32 y, qint32 w, const KisSelection * selection = 0) const;
 
+    /**
+     * Create an iterator that will "artificially" extend the paint device with the
+     * value of the border when trying to access values outside the range of data.
+     * 
+     * @param rc indicates the rectangle that truly contains data
+     */
+    KisRepeatHLineConstIteratorPixel createRepeatHLineConstIterator(qint32 x, qint32 y, qint32 w, const QRect& _dataWidth, const KisSelection * selection = 0) const;
+    /**
+     * Create an iterator that will "artificially" extend the paint device with the
+     * value of the border when trying to access values outside the range of data.
+     * 
+     * @param rc indicates the rectangle that trully contains data
+     */
+    KisRepeatVLineConstIteratorPixel createRepeatVLineConstIterator(qint32 x, qint32 y, qint32 h, const QRect& _dataWidth, const KisSelection * selection = 0) const;
+    
     /**
     * @param selection an up-to-date selection that has the same origin as the paint device
      * @return an iterator which points to the first pixel of a horizontal line
@@ -548,6 +545,7 @@ signals:
      * manage the undo system.
      */
     void painterlyOverlayCreated();
+    
 private:
 
     KisPaintDevice& operator=(const KisPaintDevice&);

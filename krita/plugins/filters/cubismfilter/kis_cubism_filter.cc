@@ -101,7 +101,21 @@ void KisCubismFilter::process(KisConstProcessingInformation srcInfo,
     quint32 tileSize = configuration->getInt("tileSize", 1);
     quint32 tileSaturation = configuration->getInt("tileSaturation");
 
-    cubism(src, srcTopLeft, dst, dstTopLeft, size, tileSize, tileSaturation);
+
+    if (srcInfo.selection()) {
+
+        KisPaintDeviceSP dev = new KisPaintDevice(src->colorSpace(), "tmp");
+
+        cubism(src, srcTopLeft, dev, dstTopLeft, size, tileSize, tileSaturation);
+
+        KisPainter gc(dst);
+        gc.bltSelection(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_OVER, dev, srcInfo.selection(), OPACITY_OPAQUE,                        
+                        dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
+        gc.end();
+    } else {
+        cubism(src, srcTopLeft, dst, dstTopLeft, size, tileSize, tileSaturation);
+    }
+
 }
 
 void KisCubismFilter::randomizeIndices(qint32 count, qint32* indices) const
@@ -208,7 +222,6 @@ void KisCubismFilter::fillPolyColor(KisPaintDeviceSP src,
     qint32         x1 = rect.left(), y1 = rect.top(), x2 = rect.right(), y2 = rect.bottom();
 //         qint32         selWidth, selHeight;
     qint32         *vals, *valsIter, *valsEnd;
-    qint32         b;
     qint32         xs, ys, xe, ye;
 
 

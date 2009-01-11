@@ -40,6 +40,7 @@ KoPABackgroundToolWidget::KoPABackgroundToolWidget( KoPABackgroundTool *tool, QW
 : QWidget( parent )
 , m_tool( tool )
 {
+    setObjectName( "KoPABackgroundToolWidget" );
     widget.setupUi( this );
     connect( widget.backgroundImage, SIGNAL( clicked( bool ) ), this, SLOT( setBackgroundImage() ) );
     connect( widget.useMasterBackground, SIGNAL( stateChanged( int ) ), this, SLOT( useMasterBackground( int ) ) );

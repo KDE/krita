@@ -108,7 +108,10 @@ void KisAutoBrushWidget::paramChanged()
 
     QPixmap p = QPixmap::fromImage(pi);
     brushPreview->setIcon(QIcon(p));
+
+    emit sigBrushChanged();
 }
+
 void KisAutoBrushWidget::spinBoxWidthChanged(int a)
 {
     spinBoxHorizontal->setMaximum(a / 2);
@@ -164,7 +167,7 @@ void KisAutoBrushWidget::linkFadeToggled(bool b)
     }
 }
 
-KisBrushSP KisAutoBrushWidget::brush()
+KisBrush* KisAutoBrushWidget::brush()
 {
     return m_autoBrush;
 }

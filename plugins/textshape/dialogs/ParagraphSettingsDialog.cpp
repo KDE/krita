@@ -71,7 +71,7 @@ void ParagraphSettingsDialog::accept()
         m_style->applyStyle(format);
         m_cursor.mergeBlockFormat(format);
         if (m_style->listStyle()) {
-            ChangeListCommand *cmd = new ChangeListCommand(m_cursor.block(), m_style->listStyle(), 0, 
+            ChangeListCommand *cmd = new ChangeListCommand(m_tool->cursor(), m_style->listStyle(), 0, 
                                                            ChangeListCommand::MergeWithAdjacentList);
             m_tool->addCommand(cmd);
         } else {

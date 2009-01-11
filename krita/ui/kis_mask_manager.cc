@@ -27,29 +27,30 @@
 
 #include <KoID.h>
 
-#include "kis_transaction.h"
-#include "filter/kis_filter_configuration.h"
-#include "commands/kis_node_commands.h"
+#include <kis_transaction.h>
+#include <filter/kis_filter_configuration.h>
+#include <commands/kis_node_commands.h>
 #include "dialogs/kis_dlg_transformation_effect.h"
 #include <kis_undo_adapter.h>
 #include <kis_paint_layer.h>
 #include "kis_doc2.h"
 #include "kis_view2.h"
-#include "kis_layer.h"
-#include "kis_group_layer.h"
-#include "kis_transformation_mask.h"
-#include "kis_filter_mask.h"
-#include "kis_transparency_mask.h"
-#include "kis_mask.h"
-#include "kis_effect_mask.h"
+#include <kis_layer.h>
+#include <kis_group_layer.h>
+#include <kis_transformation_mask.h>
+#include <kis_filter_mask.h>
+#include <kis_transparency_mask.h>
+#include <kis_mask.h>
+#include <kis_effect_mask.h>
 #include "dialogs/kis_dlg_adjustment_layer.h"
 #include "widgets/kis_mask_widgets.h"
-#include "kis_selection.h"
-#include "kis_pixel_selection.h"
+#include <kis_selection.h>
+#include <kis_pixel_selection.h>
 #include "dialogs/kis_dlg_adj_layer_props.h"
-#include "kis_selection_mask.h"
-#include "kis_paint_device.h"
-#include "kis_image.h"
+#include <kis_selection_mask.h>
+#include <kis_paint_device.h>
+#include <kis_image.h>
+#include <kis_transform_worker.h>
 #include <KoCompositeOp.h>
 #include <KoColorSpace.h>
 #include <KoColor.h>
@@ -393,8 +394,9 @@ void KisMaskManager::mirrorMaskX()
         Q_CHECK_PTR(t);
     }
 
-    dev->mirrorX();
-
+    QRect dirty = KisTransformWorker::mirrorX(dev, m_view->selection() );
+    m_activeMask->setDirty(dirty);
+    
     if (t) m_view->undoAdapter()->addCommand(t);
 
     m_view->document()->setModified(true);
@@ -414,11 +416,13 @@ void KisMaskManager::mirrorMaskY()
 
     KisTransaction * t = 0;
     if (m_view->undoAdapter() && m_view->undoAdapter()->undo()) {
-        t = new KisTransaction(i18n("Mirror Layer X"), dev);
+        t = new KisTransaction(i18n("Mirror Layer Y"), dev);
         Q_CHECK_PTR(t);
     }
 
-    dev->mirrorY();
+    QRect dirty = KisTransformWorker::mirrorY(dev, m_view->selection() );
+    m_activeMask->setDirty(dirty);
+    
 
     if (t) m_view->undoAdapter()->addCommand(t);
 

@@ -1,3 +1,4 @@
+
 /*
  *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
@@ -21,7 +22,7 @@
 #define KIS_CHALK_PAINTOP_H_
 
 #include <QColor>
-#include <QMutex>
+//#include <QMutex>
 
 #include <klocale.h>
 #include <kis_paintop.h>

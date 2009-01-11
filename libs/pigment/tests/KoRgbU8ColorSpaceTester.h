@@ -20,14 +20,15 @@
 #ifndef KIS_STRATEGY_COLORSPACE_RGB_TESTER_H
 #define KIS_STRATEGY_COLORSPACE_RGB_TESTER_H
 
-#include <kunittest/tester.h>
+#include <QtTest/QtTest>
 
-class KisRgbColorSpaceTester : public KUnitTest::Tester
+class KoRgbColorSpaceTester : public QObject
 {
-public:
-        void allTests();
+    Q_OBJECT
+private slots:
     void testBasics();
     void testMixColors();
+    void testCompositeOps();
 };
 
 #endif

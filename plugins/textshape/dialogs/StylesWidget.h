@@ -43,6 +43,9 @@ public slots:
     void setCurrentFormat(const QTextBlockFormat &format);
     void setCurrentFormat(const QTextCharFormat &format);
 
+signals:
+    void doneWithFocus();
+
 private slots:
     void newStyleClicked();
     void deleteStyleClicked();

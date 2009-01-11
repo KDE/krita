@@ -804,7 +804,7 @@ void KisImage::flatten()
     KisPainter gc(dst->paintDevice());
     gc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, mergedImage(), OPACITY_OPAQUE, rc.left(), rc.top(), rc.width(), rc.height());
 
-    setRootLayer(new KisGroupLayer(this, "", OPACITY_OPAQUE));
+    setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE));
 
     if (undo()) {
         m_d->adapter->beginMacro(i18n("Flatten Image"));
@@ -832,6 +832,7 @@ KisLayerSP KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrate
     if (!layer->prevSibling()) return 0;
     // XXX: this breaks if we allow free mixing of masks and layers
     KisLayerSP layer2 = dynamic_cast<KisLayer*>(layer->prevSibling().data());
+    dbgImage << "Merge " << layer << " with " << layer2;
     if (!layer2) return 0;
 
     KisPaintLayerSP newLayer = new KisPaintLayer(this, layer->name(), OPACITY_OPAQUE, colorSpace());
@@ -865,9 +866,11 @@ KisLayerSP KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrate
     scores.append(layerArea / norm);
     strategy->merge(newLayer->metaData(), srcs, scores);
 
+    KisNodeSP parent = layer->parent(); // parent is set to null when the layer is removed from the node
+    dbgImage << ppVar( parent );
     removeNode(layer->prevSibling());
     removeNode(layer);
-    addNode(newLayer, layer->parent());
+    addNode(newLayer, parent);
 
     undoAdapter()->endMacro();
     
@@ -1010,6 +1013,7 @@ KisPaintDeviceSP KisImage::mergedImage()
 void KisImage::notifyLayersChanged()
 {
     emit sigLayersChanged(rootLayer());
+    emit sigPostLayersChanged(rootLayer());
 }
 
 void KisImage::notifyPropertyChanged(KisLayerSP layer)

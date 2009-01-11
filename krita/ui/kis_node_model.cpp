@@ -52,11 +52,12 @@ KisNodeModel::~KisNodeModel()
 
 void KisNodeModel::setImage(KisImageSP image)
 {
-    //dbgUI <<"KisNodeModel::setImage " << image << ": number of layers " << image->nlayers();
+    dbgUI <<"KisNodeModel::setImage " << image << ": number of layers " << image->nlayers();
     if (m_d->image) {
         m_d->image->disconnect(this);
     }
     m_d->image = image;
+    connect( m_d->image, SIGNAL(sigPostLayersChanged(KisGroupLayerSP)), SLOT(layersChanged()));
 
     connect(m_d->image, SIGNAL(sigAboutToAddANode(KisNode*, int)),
             SLOT(beginInsertNodes(KisNode*, int)));
@@ -437,6 +438,11 @@ void KisNodeModel::progressPercentageChanged(int, const KisNodeSP _node)
 {
     QModelIndex index = indexFromNode(_node);
     emit( dataChanged(index, index) );
+}
+
+void KisNodeModel::layersChanged()
+{
+    reset();
 }
 
 

@@ -71,7 +71,7 @@ KisNodeManager::KisNodeManager(KisView2 * view, KisDoc2 * doc)
     m_d->layerManager = new KisLayerManager(view, doc);
     m_d->maskManager = new KisMaskManager(view);
     m_d->self = this;
-    connect( m_d->view->image(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), SLOT(slotLayersChanged(KisGroupLayerSP)) );
+    connect( m_d->view->image(), SIGNAL(sigPostLayersChanged(KisGroupLayerSP)), SLOT(slotLayersChanged(KisGroupLayerSP)) );
 }
 
 KisNodeManager::~KisNodeManager()

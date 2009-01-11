@@ -480,6 +480,11 @@ signals:
      * as the layers only change internally then.
      */
     void sigLayersChanged(KisGroupLayerSP rootLayer);
+    /**
+     * Emitted when the list of layers has changed completely, and emited after \ref sigLayersChanged has been
+     * emitted.
+     */
+    void sigPostLayersChanged(KisGroupLayerSP rootLayer);
 
     void sigLayerMoved(KisLayerSP layer);
     void sigLayerRemoved(KisLayerSP layer);

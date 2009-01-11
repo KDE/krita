@@ -77,6 +77,7 @@ private slots:
     void endRemoveNodes(KisNode * parent, int index);
     void updateSettings();
     void progressPercentageChanged(int, const KisNodeSP);
+    void layersChanged();
 private:
 
     class Private;

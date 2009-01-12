@@ -1,9 +1,0 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritaspacenav" version="1">
-<MenuBar>
-    <Menu name="Settings"><text>&amp;Settings</text>
-		<Separator/>
-		<Action name="spacenav"/>
-    </Menu>
-</MenuBar>
-</kpartgui>

@@ -420,7 +420,7 @@ void KoPAView::updateActivePage( KoPAPageBase * page )
 
 void KoPAView::doUpdateActivePage( KoPAPageBase * page )
 {
-    bool pageChanged = page == m_activePage;
+    bool pageChanged = page != m_activePage;
     setActivePage( page );
 
     m_canvas->updateSize();

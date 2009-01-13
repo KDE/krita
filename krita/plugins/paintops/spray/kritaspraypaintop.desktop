@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Spray
+X-KDE-ServiceTypes=Krita/Paintop
+Type=Service
+X-KDE-Library=kritaspraypaintop
+X-Krita-Version=3

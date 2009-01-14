@@ -661,7 +661,7 @@ void KisLayerManager::layerRemove()
             QRect extent = layer->extent();
             KisNodeSP parent = layer->parent();
 
-            img->removeLayer(layer);
+            img->removeNode(layer);
 
             if (parent)
                 parent->setDirty(extent);
@@ -706,7 +706,7 @@ void KisLayerManager::layerRaise()
 
     layer = activeLayer();
 
-    img->raiseLayer(layer);
+    img->raiseNode(layer);
     layer->parent()->setDirty();
 }
 
@@ -720,7 +720,7 @@ void KisLayerManager::layerLower()
 
     layer = activeLayer();
 
-    img->lowerLayer(layer);
+    img->lowerNode(layer);
     layer->parent()->setDirty();
 }
 

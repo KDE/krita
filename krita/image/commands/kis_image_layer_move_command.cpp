@@ -35,14 +35,14 @@
 #include "kis_undo_adapter.h"
 
 
-KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageSP image, KisNodeSP layer, KisNodeSP wasParent, KisNodeSP wasAbove)
+KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageSP image, KisNodeSP layer, KisNodeSP newParent, KisNodeSP newAbove)
         : KisImageCommand(i18n("Move Layer"), image)
 {
     m_layer = layer;
-    m_prevParent = wasParent;
-    m_prevAbove = wasAbove;
-    m_newParent = layer->parent();
-    m_newAbove = layer->nextSibling();
+    m_newParent = newParent;
+    m_newAbove = newAbove;
+    m_prevParent = layer->parent();
+    m_prevAbove = layer->prevSibling();
 }
 
 void KisImageLayerMoveCommand::redo()

@@ -363,47 +363,6 @@ public:
     /// of this image.
     KisPaintDeviceSP projection();
 
-    /// Move layer to specified position
-    bool KDE_DEPRECATED moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis);
-
-    /**
-     * Add an already existing layer to the image. The layer is put on top
-     * of the layers in the specified layergroup
-     * @param layer the layer to be added
-     * @param parent the parent layer
-     */
-    bool KDE_DEPRECATED addLayer(KisLayerSP layer, KisGroupLayerSP parent = 0);
-
-    /**
-     * Add already existing layer to image.
-     *
-     * @param layer the layer to be added
-     * @param parent the parent layer
-     * @param aboveThis in the list with child layers of the specified
-     *                  parent, add this layer above the specified sibling.
-     *                  if 0, the layer is put in the lowermost position in
-     *                  its group.
-     * returns false if adding the layer didn't work, true if the layer got added
-     */
-    bool KDE_DEPRECATED addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis);
-
-    /**
-     * Adds the layer to this group at the specified index.
-     * childCount() is a valid index and appends to the end. Fails and
-     * returns false if the layer is already in this group or any
-     * other (remove it first.)
-     */
-    bool KDE_DEPRECATED addLayer(KisLayerSP layer,  KisGroupLayerSP parent, int index);
-
-    /// Remove layer
-    bool KDE_DEPRECATED removeLayer(KisLayerSP layer);
-
-    /// Move layer up one slot
-    bool KDE_DEPRECATED raiseLayer(KisLayerSP layer);
-
-    /// Move layer down one slot
-    bool KDE_DEPRECATED lowerLayer(KisLayerSP layer);
-
     /**
      * Return the number of layers (not other nodes) that are in this
      * image.

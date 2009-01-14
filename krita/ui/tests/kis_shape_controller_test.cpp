@@ -51,7 +51,7 @@ void KisShapeControllerTest::testSetImage()
     QCOMPARE((int)image->rootLayer()->childCount(), 0);
 
     KisLayerSP layer = new KisPaintLayer(image, "test1", OPACITY_OPAQUE);
-    image->addLayer(layer);
+    image->addNode(layer);
     QCOMPARE((int)image->rootLayer()->childCount(), 1);
 
     shapeController.setImage(image);
@@ -73,26 +73,26 @@ void KisShapeControllerTest::testAddShape()
     QCOMPARE((int)image->rootLayer()->childCount(), 0);
 
     KisLayerSP layer = new KisPaintLayer(image, "test1", OPACITY_OPAQUE);
-    image->addLayer(layer);
+    image->addNode(layer);
     QCOMPARE((int)image->rootLayer()->childCount(), 1);
 
     shapeController.setImage(image);
     QCOMPARE(shapeController.layerMapSize(), 2);
 
     KisGroupLayerSP layer2 = new KisGroupLayer(image, "test2", OPACITY_OPAQUE);
-    image->addLayer(layer2.data());
+    image->addNode(layer2.data());
 
     QVERIFY(shapeController.shapeForNode(layer2.data()) != 0);
     QCOMPARE((int)image->rootLayer()->childCount(), 2);
     QCOMPARE(shapeController.layerMapSize(), 3);
 
     KisLayerSP layer3 = new KisCloneLayer(layer, image, "clonetest", OPACITY_OPAQUE);
-    image->addLayer(layer3, layer2);
+    image->addNode(layer3, layer2);
     QCOMPARE((int)image->rootLayer()->childCount(), 2);
     QCOMPARE(shapeController.layerMapSize(), 4);
 
     KisLayerSP layer4 = new KisGroupLayer(image, "grouptest", OPACITY_OPAQUE);
-    image->addLayer(layer4, layer2);
+    image->addNode(layer4, layer2);
     QCOMPARE(shapeController.layerMapSize(), 5);
 
     KisMaskSP mask1 = new KisTransparencyMask();
@@ -111,36 +111,36 @@ void KisShapeControllerTest::testRemoveShape()
     QCOMPARE((int)image->rootLayer()->childCount(), 0);
 
     KisLayerSP layer = new KisPaintLayer(image, "test1", OPACITY_OPAQUE);
-    image->addLayer(layer);
+    image->addNode(layer);
     QCOMPARE((int)image->rootLayer()->childCount(), 1);
 
     shapeController.setImage(image);
     QCOMPARE(shapeController.layerMapSize(), 2);
 
     KisGroupLayerSP layer2 = new KisGroupLayer(image, "test2", OPACITY_OPAQUE);
-    image->addLayer(layer2.data());
+    image->addNode(layer2.data());
 
     QVERIFY(shapeController.shapeForNode(layer2.data()) != 0);
     QCOMPARE((int)image->rootLayer()->childCount(), 2);
     QCOMPARE(shapeController.layerMapSize(), 3);
 
     KisLayerSP layer3 = new KisCloneLayer(layer, image, "clonetest", OPACITY_OPAQUE);
-    image->addLayer(layer3, layer2);
+    image->addNode(layer3, layer2);
     QCOMPARE((int)image->rootLayer()->childCount(), 2);
     QCOMPARE(shapeController.layerMapSize(), 4);
 
     KisLayerSP layer4 = new KisGroupLayer(image, "grouptest", OPACITY_OPAQUE);
-    image->addLayer(layer4, layer2);
+    image->addNode(layer4, layer2);
     QCOMPARE(shapeController.layerMapSize(), 5);
 
     KisMaskSP mask1 = new KisTransparencyMask();
     image->addNode(mask1.data(), layer3.data());
     QCOMPARE(shapeController.layerMapSize(), 6);
 
-    image->removeLayer(layer2);
+    image->removeNode(layer2);
     QCOMPARE(shapeController.layerMapSize(), 2);
 
-    image->removeLayer(layer);
+    image->removeNode(layer);
     QCOMPARE(shapeController.layerMapSize(), 1);
 
     shapeController.setImage(0);

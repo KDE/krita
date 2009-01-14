@@ -50,7 +50,7 @@ void KisLayerTest::testCreation()
     QCOMPARE(layer->userLocked(), false);
     QCOMPARE(layer->temporary(), false);
 
-    image->addLayer(layer, image->rootLayer());
+    image->addNode(layer, image->rootLayer());
 
     QBitArray channels(4);
     channels.fill(true);
@@ -94,9 +94,9 @@ void KisLayerTest::testOrdering()
       +---------+
      */
 
-    QVERIFY(image->addLayer(layer1, image->rootLayer()));
-    QVERIFY(image->addLayer(layer2, image->rootLayer()));
-    QVERIFY(image->addLayer(layer3, image->rootLayer(), layer1));
+    QVERIFY(image->addNode(layer1, image->rootLayer()));
+    QVERIFY(image->addNode(layer2, image->rootLayer()));
+    QVERIFY(image->addNode(layer3, image->rootLayer(), layer1));
 
     QCOMPARE((int) image->nlayers(), 4);
 
@@ -132,7 +132,7 @@ void KisLayerTest::testOrdering()
       |root     |
       +---------+
      */
-    QVERIFY(image->moveLayer(layer2, image->rootLayer(), layer1));
+    QVERIFY(image->moveNode(layer2, image->rootLayer(), layer1));
 
     QVERIFY(image->rootLayer()->at(0) == layer1.data());
     QVERIFY(image->rootLayer()->at(1) == layer2.data());
@@ -206,7 +206,7 @@ void KisLayerTest::testMoveLayer()
     QVERIFY(image->root()->at(1) == node2.data());
     QVERIFY(image->root()->at(2) == node3.data());
 
-    QVERIFY(image->moveLayer(node3, image->rootLayer(), node1));
+    QVERIFY(image->moveNode(node3, image->rootLayer(), node1));
 
     QVERIFY(image->root()->at(0) == node1.data());
     QVERIFY(image->root()->at(1) == node3.data());

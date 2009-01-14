@@ -63,7 +63,6 @@ KisCustomBrush::KisCustomBrush(QWidget *parent, const QString& caption, KisImage
 
 KisCustomBrush::~KisCustomBrush()
 {
-    delete m_brush;
     delete m_rServerAdapter;
 }
 

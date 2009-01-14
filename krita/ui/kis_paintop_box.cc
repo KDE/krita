@@ -75,6 +75,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_cmbPaintops = new KComboBox(this);
     m_cmbPaintops->setObjectName("KisPaintopBox::m_cmbPaintops");
     m_cmbPaintops->setMinimumWidth(150);
+    m_cmbPaintops->setMaxVisibleItems( 20 );
     m_cmbPaintops->setToolTip(i18n("Artist's materials"));
 
     m_cmbPaintopPresets = new KComboBox(this);

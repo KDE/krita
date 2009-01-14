@@ -103,5 +103,6 @@ void KisDeformPaintOp::paintAt(const KisPaintInformation& info)
 double KisDeformPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist)
 {
     paintAt(pi1);
+    paintAt(pi2);
     return 0;
 }

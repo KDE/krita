@@ -1557,7 +1557,6 @@ KisPaintDeviceSP KisPainter::device()
 
 void KisPainter::setChannelFlags(QBitArray channelFlags)
 {
-    qDebug() << "KisPainter::setChannelFlags " << channelFlags.size();
     d->channelFlags = channelFlags;
 }
 

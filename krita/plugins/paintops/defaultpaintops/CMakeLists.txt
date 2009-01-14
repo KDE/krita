@@ -33,11 +33,6 @@ set(kritadefaultpaintops_PART_SRCS
 	smudge/kis_smudgeop_factory.cpp
 	smudge/kis_smudgeop_settings.cpp
 	smudge/kis_smudgeop_settings_widget.cpp
-#	kis_airbrushop.cc
-#	kis_duplicateop.cc
-#	kis_eraseop.cc
-#	kis_penop.cc
-#    kis_smudgeop.cc   
     )
 
 kde4_add_ui_files(kritadefaultpaintops_PART_SRCS duplicate/wdgduplicateop.ui )

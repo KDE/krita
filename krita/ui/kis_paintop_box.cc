@@ -149,7 +149,7 @@ void KisPaintopBox::slotItemSelected(int index)
                 KisResourceServerProvider::instance()->paintOpPresetServer()->resources()) {
             dbgUI << "\t\t " << preset << ", " << preset->paintOp();
             if (preset->paintOp() == paintop) {
-                m_cmbPaintopPresets->addItem(preset->name(), QVariant(preset));
+                m_cmbPaintopPresets->addItem(preset->name(), QVariant::fromValue<KisPaintOpPresetSP>(preset));
             }
         }
     }

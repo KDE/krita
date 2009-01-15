@@ -48,7 +48,7 @@ KisGeneratorRegistry::KisGeneratorRegistry()
 
     KService::List::ConstIterator iter;
     dbgPlugins << "generators found: " << offers.count();
-    for (iter = offers.begin(); iter != offers.end(); ++iter) {
+    for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
         KService::Ptr service = *iter;
         int errCode = 0;
         KParts::Plugin* plugin =

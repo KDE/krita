@@ -278,7 +278,7 @@ void KisView2::dropEvent(QDropEvent *event)
             QAction *action = popup.exec(QCursor::pos());
 
             if (action != 0 && action != cancel) {
-                for (KUrl::List::ConstIterator it = urls.begin(); it != urls.end(); ++it) {
+                for (KUrl::List::ConstIterator it = urls.constBegin(); it != urls.constEnd(); ++it) {
                     KUrl url = *it;
 
                     if (action == insertAsNewLayer || action == insertAsNewLayers) {
@@ -765,7 +765,7 @@ void KisView2::loadPlugins()
                             QString::fromLatin1("(Type == 'Service') and "
                                                 "([X-Krita-Version] == 3)"));
     KService::List::ConstIterator iter;
-    for (iter = offers.begin(); iter != offers.end(); ++iter) {
+    for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
 
         KService::Ptr service = *iter;
         int errCode = 0;

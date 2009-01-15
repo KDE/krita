@@ -46,7 +46,7 @@ KisFilterRegistry::KisFilterRegistry()
                              QString::fromLatin1("(Type == 'Service') and "
                                                  "([X-Krita-Version] == 3)"));
 
-    KService::List::ConstIterator iter;
+    KService::List::Iterator iter;
 
     for (iter = offers.begin(); iter != offers.end(); ++iter) {
         KService::Ptr service = *iter;

@@ -340,7 +340,7 @@ void KoTemplateCreateDia::slotOk() {
     // if there's a .directory file, we copy this one, too
     bool ready=false;
     QStringList tmp=group->dirs();
-    for(QStringList::ConstIterator it=tmp.begin(); it!=tmp.end() && !ready; ++it) {
+    for(QStringList::ConstIterator it=tmp.constBegin(); it!=tmp.constEnd() && !ready; ++it) {
         if((*it).contains(dir)==0) {
             orig.setPath( (*it)+".directory" );
             // Check if we can read the file

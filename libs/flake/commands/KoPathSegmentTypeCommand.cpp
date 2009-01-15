@@ -67,8 +67,8 @@ KoPathSegmentTypeCommand::~KoPathSegmentTypeCommand()
 void KoPathSegmentTypeCommand::redo()
 {
     QUndoCommand::redo();
-    QList<KoPathPointData>::const_iterator it(m_pointDataList.begin());
-    for (; it != m_pointDataList.end(); ++it) {
+    QList<KoPathPointData>::const_iterator it(m_pointDataList.constBegin());
+    for (; it != m_pointDataList.constEnd(); ++it) {
         KoPathShape * pathShape = it->pathShape;
         pathShape->update();
 

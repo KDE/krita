@@ -178,8 +178,8 @@ void KoPathTool::pointTypeChanged(QAction *type)
         QList<KoPathPointData> selectedPoints = m_pointSelection.selectedPointsData();
         QList<KoPathPointData> pointToChange;
 
-        QList<KoPathPointData>::const_iterator it(selectedPoints.begin());
-        for (; it != selectedPoints.end(); ++it) {
+        QList<KoPathPointData>::const_iterator it(selectedPoints.constBegin());
+        for (; it != selectedPoints.constEnd(); ++it) {
             KoPathPoint *point = it->pathShape->pointByIndex(it->pointIndex);
             if (point) {
                 if (point->activeControlPoint1() && point->activeControlPoint2()) {
@@ -234,8 +234,8 @@ void KoPathTool::pointToLine()
         QList<KoPathPointData> selectedPoints = m_pointSelection.selectedPointsData();
         QList<KoPathPointData> pointToChange;
 
-        QList<KoPathPointData>::const_iterator it(selectedPoints.begin());
-        for (; it != selectedPoints.end(); ++it) {
+        QList<KoPathPointData>::const_iterator it(selectedPoints.constBegin());
+        for (; it != selectedPoints.constEnd(); ++it) {
             KoPathPoint *point = it->pathShape->pointByIndex(it->pointIndex);
             if (point && (point->activeControlPoint1() || point->activeControlPoint2()))
                 pointToChange.append(*it);
@@ -254,8 +254,8 @@ void KoPathTool::pointToCurve()
         QList<KoPathPointData> selectedPoints = m_pointSelection.selectedPointsData();
         QList<KoPathPointData> pointToChange;
 
-        QList<KoPathPointData>::const_iterator it(selectedPoints.begin());
-        for (; it != selectedPoints.end(); ++it) {
+        QList<KoPathPointData>::const_iterator it(selectedPoints.constBegin());
+        for (; it != selectedPoints.constEnd(); ++it) {
             KoPathPoint *point = it->pathShape->pointByIndex(it->pointIndex);
             if (point && (! point->activeControlPoint1() || ! point->activeControlPoint2()))
                 pointToChange.append(*it);

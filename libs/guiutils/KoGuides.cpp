@@ -335,8 +335,8 @@ void KoGuides::getGuideLines( QList<qreal> &horizontalPos, QList<qreal> &vertica
     horizontalPos.clear();
     verticalPos.clear();
 
-    QList<KoGuideLine *>::const_iterator it = m_guideLines[GL].begin();
-    for ( ; it != m_guideLines[GL].end(); ++it )
+    QList<KoGuideLine *>::const_iterator it = m_guideLines[GL].constBegin();
+    for ( ; it != m_guideLines[GL].constEnd(); ++it )
     {
         if ( ( *it )->orientation == Qt::Horizontal )
         {
@@ -347,8 +347,8 @@ void KoGuides::getGuideLines( QList<qreal> &horizontalPos, QList<qreal> &vertica
             verticalPos.append( ( *it )->position );
         }
     }
-    it = m_guideLines[GL_SELECTED].begin();
-    for ( ; it != m_guideLines[GL_SELECTED].end(); ++it )
+    it = m_guideLines[GL_SELECTED].constBegin();
+    for ( ; it != m_guideLines[GL_SELECTED].constEnd(); ++it )
     {
         if ( ( *it )->orientation == Qt::Horizontal )
         {
@@ -371,8 +371,8 @@ void KoGuides::snapToGuideLines( QRectF &rect, int snap, SnapStatus &snapStatus,
 
     for ( int i = 0; i < GL_END; ++i )
     {
-        QList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
-        for ( ; it != m_guideLines[i].end(); ++it )
+        QList<KoGuideLine *>::const_iterator it = m_guideLines[i].constBegin();
+        for ( ; it != m_guideLines[i].constEnd(); ++it )
         {
             if ( ( *it )->orientation == Qt::Horizontal )
             {
@@ -435,8 +435,8 @@ void KoGuides::snapToGuideLines( QPointF &pos, int snap, SnapStatus &snapStatus,
 
     for ( int i = 0; i < GL_END; ++i )
     {
-        QList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
-        for ( ; it != m_guideLines[i].end(); ++it )
+        QList<KoGuideLine *>::const_iterator it = m_guideLines[i].constBegin();
+        for ( ; it != m_guideLines[i].constEnd(); ++it )
         {
             if ( ( *it )->orientation == Qt::Horizontal )
             {
@@ -478,8 +478,8 @@ void KoGuides::repaintSnapping( const QRectF &snappedRect )
     bool needRepaint = false;
     for ( int i = 0; i < GL_END; ++i )
     {
-        QList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
-        for ( ; it != m_guideLines[i].end(); ++it )
+        QList<KoGuideLine *>::const_iterator it = m_guideLines[i].constBegin();
+        for ( ; it != m_guideLines[i].constEnd(); ++it )
         {
             if ( ( *it )->orientation == Qt::Horizontal )
             {
@@ -532,8 +532,8 @@ void KoGuides::repaintSnapping( const QPointF &snappedPoint, SnapStatus snapStat
     bool needRepaint = false;
     for ( int i = 0; i < GL_END; ++i )
     {
-        QList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
-        for ( ; it != m_guideLines[i].end(); ++it )
+        QList<KoGuideLine *>::const_iterator it = m_guideLines[i].constBegin();
+        for ( ; it != m_guideLines[i].constEnd(); ++it )
         {
             if ( ( *it )->orientation == Qt::Horizontal && ( snapStatus & Qt::Horizontal ) )
             {
@@ -588,8 +588,8 @@ void KoGuides::repaintAfterSnapping()
 
     for ( int i = 0; i < GL_END; ++i )
     {
-        QList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
-        for ( ; it != m_guideLines[i].end(); ++it )
+        QList<KoGuideLine *>::const_iterator it = m_guideLines[i].constBegin();
+        for ( ; it != m_guideLines[i].constEnd(); ++it )
         {
             if ( ( *it )->snapping )
             {
@@ -612,8 +612,8 @@ void KoGuides::diffNextGuide( QRectF &rect, QPointF &diff )
 {
     for ( int i = 0; i < GL_END; ++i )
     {
-        QList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
-        for ( ; it != m_guideLines[i].end(); ++it )
+        QList<KoGuideLine *>::const_iterator it = m_guideLines[i].constBegin();
+        for ( ; it != m_guideLines[i].constEnd(); ++it )
         {
             if ( ( *it )->orientation == Qt::Horizontal )
             {

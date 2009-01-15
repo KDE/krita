@@ -257,7 +257,7 @@ void KoTemplateTree::readTemplates()
     Q3PtrListIterator<KoTemplateGroup> groupIt(m_groups);
     for (; groupIt.current() != 0L; ++groupIt) {
         QStringList dirs = groupIt.current()->dirs();
-        for (QStringList::ConstIterator it = dirs.begin(); it != dirs.end(); ++it) {
+        for (QStringList::ConstIterator it = dirs.constBegin(); it != dirs.constEnd(); ++it) {
             QDir d(*it);
             if (!d.exists())
                 continue;

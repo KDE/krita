@@ -76,8 +76,8 @@ KoFilterChooser::KoFilterChooser(QWidget *parent, const QStringList &mimeTypes, 
     page->setLayout(layout);
 
     Q_ASSERT(!m_mimeTypes.isEmpty());
-    for (QStringList::ConstIterator it = m_mimeTypes.begin();
-            it != m_mimeTypes.end();
+    for (QStringList::ConstIterator it = m_mimeTypes.constBegin();
+            it != m_mimeTypes.constEnd();
             it++) {
         KMimeType::Ptr mime = KMimeType::mimeType(*it);
         const QString name = mime ? mime->comment() : *it;
@@ -256,8 +256,8 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString& url, Q
         QStringList nativeMimeTypes;
         nativeMimeTypes.append(m_document->nativeFormatMimeType());
         nativeMimeTypes += m_document->extraNativeMimeTypes();
-        QStringList::ConstIterator it = nativeMimeTypes.begin();
-        const QStringList::ConstIterator end = nativeMimeTypes.end();
+        QStringList::ConstIterator it = nativeMimeTypes.constBegin();
+        const QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; !chain && it != end; ++it) {
             m_graph.setSourceMimeType((*it).toLatin1());
             if (m_graph.isValid())
@@ -356,14 +356,14 @@ void buildGraph(Q3AsciiDict<Vertex>& vertices, KoFilterManager::Direction direct
     // partly copied from build graph, but I don't see any other
     // way without crude hacks, as we have to obey the direction here
     Q3ValueList<KoDocumentEntry> parts(KoDocumentEntry::query(false, QString()));
-    Q3ValueList<KoDocumentEntry>::ConstIterator partIt(parts.begin());
-    Q3ValueList<KoDocumentEntry>::ConstIterator partEnd(parts.end());
+    Q3ValueList<KoDocumentEntry>::ConstIterator partIt(parts.constBegin());
+    Q3ValueList<KoDocumentEntry>::ConstIterator partEnd(parts.constEnd());
 
     while (partIt != partEnd) {
         QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes").toStringList();
         nativeMimeTypes += (*partIt).service()->property("X-KDE-NativeMimeType").toString();
-        QStringList::ConstIterator it = nativeMimeTypes.begin();
-        const QStringList::ConstIterator end = nativeMimeTypes.end();
+        QStringList::ConstIterator it = nativeMimeTypes.constBegin();
+        const QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; it != end; ++it)
             if (!(*it).isEmpty())
                 vertices.insert((*it).toLatin1(), new Vertex((*it).toLatin1()));
@@ -371,8 +371,8 @@ void buildGraph(Q3AsciiDict<Vertex>& vertices, KoFilterManager::Direction direct
     }
 
     Q3ValueList<KoFilterEntry::Ptr> filters = KoFilterEntry::query(); // no constraint here - we want *all* :)
-    Q3ValueList<KoFilterEntry::Ptr>::ConstIterator it = filters.begin();
-    const Q3ValueList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
+    Q3ValueList<KoFilterEntry::Ptr>::ConstIterator it = filters.constBegin();
+    const Q3ValueList<KoFilterEntry::Ptr>::ConstIterator end = filters.constEnd();
 
     for (; it != end; ++it) {
 
@@ -405,8 +405,8 @@ void buildGraph(Q3AsciiDict<Vertex>& vertices, KoFilterManager::Direction direct
         }
 
         // First add the "starting points" to the dict
-        QStringList::ConstIterator importIt = impList.begin();
-        const QStringList::ConstIterator importEnd = impList.end();
+        QStringList::ConstIterator importIt = impList.constBegin();
+        const QStringList::ConstIterator importEnd = impList.constEnd();
         for (; importIt != importEnd; ++importIt) {
             const QByteArray key = (*importIt).toLatin1();    // latin1 is okay here (werner)
             // already there?
@@ -416,8 +416,8 @@ void buildGraph(Q3AsciiDict<Vertex>& vertices, KoFilterManager::Direction direct
 
         // Are we allowed to use this filter at all?
         if (KoFilterManager::filterAvailable(*it)) {
-            QStringList::ConstIterator exportIt = expList.begin();
-            const QStringList::ConstIterator exportEnd = expList.end();
+            QStringList::ConstIterator exportIt = expList.constBegin();
+            const QStringList::ConstIterator exportEnd = expList.constEnd();
 
             for (; exportIt != exportEnd; ++exportIt) {
                 // First make sure the export vertex is in place
@@ -431,7 +431,7 @@ void buildGraph(Q3AsciiDict<Vertex>& vertices, KoFilterManager::Direction direct
                 // direction (import/export)
                 // This is the chunk of code which actually differs from the
                 // graph stuff (apart from the different vertex class)
-                importIt = impList.begin(); // ### TODO: why only the first one?
+                importIt = impList.constBegin(); // ### TODO: why only the first one?
                 if (direction == KoFilterManager::Import) {
                     for (; importIt != importEnd; ++importIt)
                         exp->addEdge(vertices[(*importIt).toLatin1()]);
@@ -515,8 +515,8 @@ QStringList KoFilterManager::mimeFilter()
     buildGraph(vertices, KoFilterManager::Import);
 
     Q3ValueList<KoDocumentEntry> parts(KoDocumentEntry::query(false, QString()));
-    Q3ValueList<KoDocumentEntry>::ConstIterator partIt(parts.begin());
-    Q3ValueList<KoDocumentEntry>::ConstIterator partEnd(parts.end());
+    Q3ValueList<KoDocumentEntry>::ConstIterator partIt(parts.constBegin());
+    Q3ValueList<KoDocumentEntry>::ConstIterator partEnd(parts.constEnd());
 
     if (partIt == partEnd)
         return QStringList();
@@ -531,8 +531,8 @@ QStringList KoFilterManager::mimeFilter()
     while (partIt != partEnd) {
         QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes").toStringList();
         nativeMimeTypes += (*partIt).service()->property("X-KDE-NativeMimeType").toString();
-        QStringList::ConstIterator it = nativeMimeTypes.begin();
-        const QStringList::ConstIterator end = nativeMimeTypes.end();
+        QStringList::ConstIterator it = nativeMimeTypes.constBegin();
+        const QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; it != end; ++it)
             if (!(*it).isEmpty())
                 v->addEdge(vertices[(*it).toLatin1()]);

@@ -186,8 +186,8 @@ void KoColor::dump() const
     //dbgPigment <<"KoColor (" << this <<")," << d->colorSpace->id().name() <<"";
     QList<KoChannelInfo *> channels = d->colorSpace->channels();
 
-    QList<KoChannelInfo *>::const_iterator begin = channels.begin();
-    QList<KoChannelInfo *>::const_iterator end = channels.end();
+    QList<KoChannelInfo *>::const_iterator begin = channels.constBegin();
+    QList<KoChannelInfo *>::const_iterator end = channels.constEnd();
 
     for (QList<KoChannelInfo *>::const_iterator it = begin; it != end; ++it)
     {

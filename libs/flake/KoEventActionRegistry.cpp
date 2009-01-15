@@ -122,7 +122,7 @@ QList<KoEventAction*> KoEventActionRegistry::createEventActionsFromOdf(const KoX
                     QString action(element.attributeNS(KoXmlNS::presentation, "action", QString()));
                     QHash<QString, KoEventActionFactory *>::const_iterator it(d->presentationEventActions.find(action));
 
-                    if (it != d->presentationEventActions.end()) {
+                    if (it != d->presentationEventActions.constEnd()) {
                         KoEventAction * eventAction = it.value()->createEventAction();
                         if (eventAction) {
                             if (eventAction->loadOdf(element, context)) {

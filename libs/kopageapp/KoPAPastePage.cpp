@@ -95,8 +95,8 @@ bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStor
             Q_ASSERT( masterPage );
             if ( masterPage ) {
                 QString masterPageName( savingContext.masterPageName( masterPage ) );
-                QMap<QString, KoPAMasterPage*>::const_iterator existingMasterPage( masterPageNames.find( masterPageName ) );
-                if ( existingMasterPage != masterPageNames.end() ) {
+                QMap<QString, KoPAMasterPage*>::const_iterator existingMasterPage( masterPageNames.constFind( masterPageName ) );
+                if ( existingMasterPage != masterPageNames.constEnd() ) {
                     updateMasterPage.insert( masterPage, existingMasterPage.value() );
                 }
             }
@@ -109,16 +109,16 @@ bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStor
             Q_ASSERT( p );
             if ( p ) {
                 KoPAMasterPage * masterPage( p->masterPage() );
-                QMap<KoPAMasterPage*, KoPAMasterPage*>::const_iterator pageIt( updateMasterPage.find( masterPage ) );
-                if ( pageIt != updateMasterPage.end() ) {
+                QMap<KoPAMasterPage*, KoPAMasterPage*>::const_iterator pageIt( updateMasterPage.constFind( masterPage ) );
+                if ( pageIt != updateMasterPage.constEnd() ) {
                     p->setMasterPage( pageIt.value() );
                 }
             }
         }
 
         // delete dumplicate master pages;
-        QMap<KoPAMasterPage*, KoPAMasterPage*>::const_iterator pageIt( updateMasterPage.begin() );
-        for ( ; pageIt != updateMasterPage.end(); ++pageIt )
+        QMap<KoPAMasterPage*, KoPAMasterPage*>::const_iterator pageIt( updateMasterPage.constBegin() );
+        for ( ; pageIt != updateMasterPage.constEnd(); ++pageIt )
         {
             masterPages.removeAll( pageIt.key() );
             delete pageIt.key();

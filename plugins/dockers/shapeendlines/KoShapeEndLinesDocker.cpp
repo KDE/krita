@@ -84,6 +84,7 @@ KoShapeEndLinesDocker::KoShapeEndLinesDocker()
     mainLayout->addWidget( rightEndLineLabel, 1, 0 );
     d->rightEndLineComboBox = new QComboBox( mainWidget );
     d->rightEndLineComboBox->insertItem(KIcon("triangle").pixmap(QSize(22,22),QIcon::Normal,QIcon::On));
+    d->rightEndLineComboBox->insertItem(KIcon("triangle2").pixmap(QSize(22,22),QIcon::Normal,QIcon::On));
     mainLayout->addWidget( d->rightEndLineComboBox,1,1,1,3);
 
     connect( d->rightEndLineComboBox, SIGNAL(activated( int ) ), this, SLOT( rightEndLineChanged(int) ) );
@@ -110,12 +111,12 @@ void KoShapeEndLinesDocker::applyChanges()
 
 void KoShapeEndLinesDocker::leftEndLineChanged(int index)
 {
- 
+    d->leftEndLineComboBox->setCurrentItem(index);
 }
 
 void KoShapeEndLinesDocker::rightEndLineChanged(int index)
 {
- 
+  d->rightEndLineComboBox->setCurrentItem(index);
 }
 
 void KoShapeEndLinesDocker::selectionChanged()

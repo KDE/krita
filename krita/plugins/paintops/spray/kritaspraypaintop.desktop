@@ -2,6 +2,8 @@
 Name=Spray
 Name[it]=Spruzzo
 Name[nds]=Spröhen
+Name[pt]='Spray'
+Name[pt_BR]='Spray'
 Name[sv]=Sprej
 Name[uk]=Аерограф
 X-KDE-ServiceTypes=Krita/Paintop

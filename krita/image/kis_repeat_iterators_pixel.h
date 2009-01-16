@@ -35,7 +35,7 @@ class KisRepeatLineIteratorPixelBase {
     friend class KisRepeatHLineIteratorPixelBase<T>;
     friend class KisRepeatVLineIteratorPixelBase<T>;
         /**
-         * @param rc indicates the rectangle that trully contains data
+         * @param rc indicates the rectangle that truly contains data
          */
         inline KisRepeatLineIteratorPixelBase( KisDataManager *dm, KisDataManager *sel_dm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety, const QRect& _rc );
         inline ~KisRepeatLineIteratorPixelBase();

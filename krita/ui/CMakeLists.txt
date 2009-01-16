@@ -67,6 +67,7 @@ set(kritaui_LIB_SRCS
     flake/kis_mask_shape.cc 
     kis_node_manager.cpp 
     kis_node_model.cpp
+    kis_node_commands_adapter.cpp
     kis_painting_assistant.cc 
     kis_paintop_box.cc 
     kis_palette_docker.cc

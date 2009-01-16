@@ -26,6 +26,7 @@ class KisView2;
 class KActionCollection;
 class KAction;
 class KToggleAction;
+class KisNodeCommandsAdapter;
 
 #include "kis_mask.h"
 
@@ -197,6 +198,7 @@ private:
     KAction *m_mirrorMaskY;
 
     KAction *m_maskProperties;
+    KisNodeCommandsAdapter* m_commandsAdapter;
 
 };
 

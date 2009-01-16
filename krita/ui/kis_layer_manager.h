@@ -37,6 +37,7 @@ class KisDoc2;
 class KisFilterStrategy;
 class KisView2;
 class KisFilterConfiguration;
+class KisNodeCommandsAdapter;
 
 
 /**
@@ -155,6 +156,7 @@ private:
     KAction *m_imgResizeToLayer;
 
     KisLayerSP m_activeLayer;
+    KisNodeCommandsAdapter* m_commandsAdapter;
 };
 
 #endif

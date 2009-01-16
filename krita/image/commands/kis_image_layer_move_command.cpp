@@ -43,11 +43,28 @@ KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageSP image, KisNodeSP l
     m_newAbove = newAbove;
     m_prevParent = layer->parent();
     m_prevAbove = layer->prevSibling();
+    m_index = -1;
+}
+
+KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageSP image, KisNodeSP node, KisNodeSP newParent, quint32 index)
+        : KisImageCommand(i18n("Move Layer"), image)
+{
+    m_layer = node;
+    m_newParent = newParent;
+    m_newAbove = 0;
+    m_prevParent = node->parent();
+    m_prevAbove = node->prevSibling();
+    m_index = index;
 }
 
 void KisImageLayerMoveCommand::redo()
 {
-    m_image->moveNode(m_layer, m_newParent, m_newAbove);
+    if( m_newAbove || m_index == -1 )
+    {
+        m_image->moveNode(m_layer, m_newParent, m_newAbove);
+    } else {
+        m_image->moveNode(m_layer, m_newParent, m_index);
+    }
 }
 
 void KisImageLayerMoveCommand::undo()

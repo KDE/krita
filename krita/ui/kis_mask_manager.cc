@@ -54,6 +54,7 @@
 #include <KoCompositeOp.h>
 #include <KoColorSpace.h>
 #include <KoColor.h>
+#include "kis_node_commands_adapter.h"
 
 KisMaskManager::KisMaskManager(KisView2 * view)
         : m_view(view)
@@ -74,6 +75,7 @@ KisMaskManager::KisMaskManager(KisView2 * view)
         , m_mirrorMaskX(0)
         , m_mirrorMaskY(0)
         , m_maskProperties(0)
+        , m_commandsAdapter( new KisNodeCommandsAdapter( m_view ) )
 {
 }
 
@@ -195,7 +197,7 @@ void KisMaskManager::createTransparencyMask(KisNodeSP parent, KisNodeSP above)
         mask->setSelection(selection);
     }
     mask->setName(i18n("Transparency Mask"));     // XXX:Auto-increment a number here, like with layers
-    m_view->image()->addNode(mask, parent, above);
+    m_commandsAdapter->addNode(mask, parent, above);
     mask->setDirty();
     activateMask(mask);
 }
@@ -235,7 +237,7 @@ void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
     }
 
     mask->setName(i18n("New filter mask"));
-    m_view->image()->addNode(mask, parent, above);
+    m_commandsAdapter->addNode(mask, parent, above);
 
     KisDlgAdjustmentLayer dlg(mask, mask, dev, m_view->image(), mask->name(), i18n("New Filter Mask"), m_view, "dlgfiltermask");
 
@@ -280,7 +282,7 @@ void KisMaskManager::createTransformationMask(KisNodeSP parent, KisNodeSP above)
         mask->setXTranslation(dlg.transformationEffect()->moveX());
         mask->setYTranslation(dlg.transformationEffect()->moveY());
         mask->setFilterStrategy(dlg.transformationEffect()->filterStrategy());
-        m_view->image()->addNode(mask, parent, above);
+        m_commandsAdapter->addNode(mask, parent, above);
         activateMask(mask);
         mask->setDirty(selection->selectedExactRect());
     }
@@ -312,7 +314,7 @@ void KisMaskManager::createSelectionMask(KisNodeSP parent, KisNodeSP above)
         mask->setSelection(selection);
     }
     mask->setName(i18n("Selection"));     // XXX:Auto-increment a number here, like with layers
-    m_view->image()->addNode(mask, parent, above);
+    m_commandsAdapter->addNode(mask, parent, above);
 }
 
 
@@ -323,8 +325,9 @@ void KisMaskManager::maskToSelection()
     if (!m_activeMask) return;
     KisImageSP image = m_view->image();
     if (!image) return;
-    image->setGlobalSelection(m_activeMask->selection());
-    image->removeNode(m_activeMask.data());
+    // TODO require a macro
+    image->setGlobalSelection(m_activeMask->selection()); // TODO that definitively require a command !
+    m_commandsAdapter->removeNode(m_activeMask.data());
     m_activeMask = 0;
 }
 
@@ -357,9 +360,10 @@ void KisMaskManager::maskToLayer()
         dstiter.nextRow();
     }
 
-    image->removeNode(m_activeMask.data());
+    // TODO make a macro (require a string)
+    m_commandsAdapter->removeNode(m_activeMask.data());
     m_activeMask = 0;
-    image->addNode(layer.data(), activeLayer->parent(), activeLayer.data());
+    m_commandsAdapter->addNode(layer.data(), activeLayer->parent(), activeLayer.data());
 }
 
 void KisMaskManager::duplicateMask()
@@ -368,7 +372,7 @@ void KisMaskManager::duplicateMask()
     if (!!m_view->image()) return;
     if (m_activeMask->inherits("KisSelectionMask")) return; // Cannot duplicate selection masks
     KisNodeSP dup = m_activeMask->clone();
-    m_view->image()->addNode(dup, m_activeMask->parent(), m_activeMask.data());
+    m_commandsAdapter->addNode(dup, m_activeMask->parent(), m_activeMask.data());
 
 }
 
@@ -376,7 +380,7 @@ void KisMaskManager::removeMask()
 {
     if (!m_activeMask) return;
     if (!m_view->image()) return;
-    m_view->image()->removeNode(m_activeMask.data());
+    m_commandsAdapter->removeNode(m_activeMask.data());
 }
 
 void KisMaskManager::mirrorMaskX()

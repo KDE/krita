@@ -377,9 +377,7 @@ void KisLayerBox::slotRmClicked()
     for (int i = 0, n = l.count(); i < n; ++i)
     {
         KisNodeSP node = m_nodeModel->nodeFromIndex(l.at(i));
-        QRect bounds = node->exactBounds();
-        m_image->removeNode(node);
-        m_image->rootLayer()->setDirty(bounds);
+        m_nodeManager->removeNode( node );
     }
 }
 

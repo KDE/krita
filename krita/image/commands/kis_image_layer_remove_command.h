@@ -28,12 +28,14 @@
 #include "kis_types.h"
 #include "kis_image_command.h"
 
+#include <krita_export.h>
+
 class KoCompositeOp;
 class KoColorSpace;
 class KoColorProfile;
 
 /// The command for removing a layer
-class KisImageLayerRemoveCommand : public KisImageCommand
+class KRITAIMAGE_EXPORT KisImageLayerRemoveCommand : public KisImageCommand
 {
 
 

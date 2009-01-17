@@ -24,8 +24,11 @@
 
 #include <QMap>
 
+#include <KoOdfStylesReader.h>
+
 #include "kopageapp_export.h"
 
+class KComponentData;
 class KoPAMasterPage;
 class KoPAPage;
 
@@ -39,7 +42,7 @@ public:
      * @param context Context for loading oasis docs.
      * @param context The shape controller.
      */
-     KoPALoadingContext( KoOdfLoadingContext &context, const QMap<QString, KoDataCenter *> & dataCenterMap );
+     KoPALoadingContext( KoOdfLoadingContext &context, const QMap<QString, KoDataCenter *> & dataCenterMap, const KComponentData & componentData );
 
     /**
      * Get the master page with the name @p name.
@@ -76,9 +79,13 @@ public:
      */
     void addPage( const QString& name, KoPAPage* page );
 
+    KoOdfStylesReader & defaultStylesReader();
+
 private:
     QMap<QString, KoPAMasterPage*> m_masterPages;
     QMap<QString, KoPAPage*> m_pages;
+    KoXmlDocument m_doc; // the doc needs to be kept around so it is possible to access the styles
+    KoOdfStylesReader m_defaultStylesReader;
 };
 
 #endif /*KOPALOADINGCONTEXT_H*/

@@ -211,6 +211,45 @@ Exiv2::Value* deviceSettingDescriptionKMDToExif(const KisMetaData::Value& value)
     return new Exiv2::DataValue((const Exiv2::byte*)array.data(), array.size());
 }
 
+KisMetaData::Value cfaPatternExifToKMD(const Exiv2::Value::AutoPtr value)
+{
+    QMap<QString, KisMetaData::Value> cfaPatternStructure;
+    const Exiv2::DataValue* dvalue = dynamic_cast<const Exiv2::DataValue*>(&*value);
+    Q_ASSERT(dvalue);
+    QByteArray array(dvalue->count(), 0);
+    dvalue->copy((Exiv2::byte*)array.data());
+    int columns = (reinterpret_cast<quint16*>(array.data()))[0];
+    int rows = (reinterpret_cast<quint16*>(array.data()))[1];
+    cfaPatternStructure["Columns"] = KisMetaData::Value(columns);
+    cfaPatternStructure["Rows"] = KisMetaData::Value(rows);
+    QList<KisMetaData::Value> values;
+    int index = 4;
+    for (int i = 0; i < columns * rows; i++) {
+        values.append( KisMetaData::Value( *(array.data() + index) ) );
+        index++;
+    }
+    cfaPatternStructure["Values"] = KisMetaData::Value(values, KisMetaData::Value::OrderedArray);
+        return KisMetaData::Value(cfaPatternStructure);
+}
+
+Exiv2::Value* cfaPatternKMDToExif(const KisMetaData::Value& value)
+{
+    QMap<QString, KisMetaData::Value> cfaStructure = value.asStructure();
+    quint16 columns = cfaStructure["Columns"].asVariant().toInt(0);
+    quint16 rows = cfaStructure["Rows"].asVariant().toInt(0);
+
+    QList<KisMetaData::Value> values = cfaStructure["Values"].asArray();
+    Q_ASSERT(columns*rows == values.size());
+    QByteArray array(4 + columns*rows, 0);
+    (reinterpret_cast<quint16*>(array.data()))[0] = columns;
+    (reinterpret_cast<quint16*>(array.data()))[1] = rows;
+    for (int i = 0; i < columns * rows; i++) {
+        int val = values[i].asVariant().toInt();
+        *(array.data() + 4 + i) = val;
+    }
+    return new Exiv2::DataValue((const Exiv2::byte*)array.data(), array.size());
+}
+
 // Read and write Flash //
 
 KisMetaData::Value flashExifToKMD(const Exiv2::Value::AutoPtr value)
@@ -324,6 +363,8 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
                 v = kmdOECFStructureToExifOECF(entry.value());
             } else if (exivKey == "Exif.Photo.DeviceSettingDescription") {
                 v = deviceSettingDescriptionKMDToExif(entry.value());
+            } else if (exivKey == "Exif.Photo.CFAPattern") {
+                v = cfaPatternKMDToExif(entry.value());
             } else if (exivKey == "Exif.Photo.Flash") {
                 v = flashKMDToExif(entry.value());
             } else {
@@ -415,6 +456,8 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 v = KisMetaData::Value(exivValueToDateTime(it->getValue()));
             } else if (it->key() == "Exif.Photo.DeviceSettingDescription") {
                 v = deviceSettingDescriptionExifToKMD(it->getValue());
+            } else if (it->key() == "Exif.Photo.CFAPattern") {
+                v = cfaPatternExifToKMD(it->getValue());
             } else if (it->key() == "Exif.Photo.Flash") {
                 v = flashExifToKMD(it->getValue());
             } else {

@@ -44,11 +44,13 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
+//already defined in KoRulerController.cpp
+#ifndef KDE_USE_FINAL
 static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2)
 {
     return tab1.position < tab2.position;
 }
-
+#endif
 class KoParagraphStyle::Private
 {
 public:

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,6 +38,10 @@ public:
     void moveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis );
     void moveNode(KisNodeSP node, KisNodeSP parent, quint32 indexaboveThis );
     void removeNode(KisNodeSP node);
+    void lower(KisNodeSP node);
+    void raise(KisNodeSP node);
+    void toBottom(KisNodeSP node);
+    void toTop(KisNodeSP node);
 private:
     KisView2* m_view;
 };

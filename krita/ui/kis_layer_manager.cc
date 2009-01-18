@@ -709,7 +709,7 @@ void KisLayerManager::layerRaise()
 
     layer = activeLayer();
 
-    img->raiseNode(layer);
+    m_commandsAdapter->raise(layer);
     layer->parent()->setDirty();
 }
 
@@ -723,7 +723,7 @@ void KisLayerManager::layerLower()
 
     layer = activeLayer();
 
-    img->lowerNode(layer);
+    m_commandsAdapter->lower( layer );
     layer->parent()->setDirty();
 }
 
@@ -736,7 +736,7 @@ void KisLayerManager::layerFront()
         return;
 
     layer = activeLayer();
-    img->toTop(layer.data());
+    m_commandsAdapter->toTop(layer);
     layer->parent()->setDirty();
 }
 
@@ -748,7 +748,7 @@ void KisLayerManager::layerBack()
     KisLayerSP layer;
 
     layer = activeLayer();
-    img->toBottom(layer.data());
+    m_commandsAdapter->toBottom(layer);
     layer->parent()->setDirty();
 }
 

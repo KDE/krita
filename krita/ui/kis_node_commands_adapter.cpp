@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,6 +23,10 @@
 #include "commands/kis_image_layer_add_command.h"
 #include "commands/kis_image_layer_move_command.h"
 #include "commands/kis_image_layer_remove_command.h"
+#include "commands/kis_image_node_lower_command.h"
+#include "commands/kis_image_node_raise_command.h"
+#include "commands/kis_image_node_to_bottom_command.h"
+#include "commands/kis_image_node_to_top_command.h"
 #include "kis_view2.h"
 
 KisNodeCommandsAdapter::KisNodeCommandsAdapter( KisView2 * view ) : m_view( view )
@@ -63,4 +67,28 @@ void KisNodeCommandsAdapter::removeNode(KisNodeSP node)
 {
     Q_ASSERT(m_view->image()->undoAdapter());
     m_view->image()->undoAdapter()->addCommand( new KisImageLayerRemoveCommand( m_view->image(), node ) );
+}
+
+void KisNodeCommandsAdapter::lower(KisNodeSP node)
+{
+    Q_ASSERT(m_view->image()->undoAdapter());
+    m_view->image()->undoAdapter()->addCommand( new KisImageNodeLowerCommand( m_view->image(), node ) );
+}
+
+void KisNodeCommandsAdapter::raise(KisNodeSP node)
+{
+    Q_ASSERT(m_view->image()->undoAdapter());
+    m_view->image()->undoAdapter()->addCommand( new KisImageNodeRaiseCommand( m_view->image(), node ) );
+}
+
+void KisNodeCommandsAdapter::toBottom(KisNodeSP node)
+{
+    Q_ASSERT(m_view->image()->undoAdapter());
+    m_view->image()->undoAdapter()->addCommand( new KisImageNodeToBottomCommand( m_view->image(), node ) );
+}
+
+void KisNodeCommandsAdapter::toTop(KisNodeSP node)
+{
+    Q_ASSERT(m_view->image()->undoAdapter());
+    m_view->image()->undoAdapter()->addCommand( new KisImageNodeToTopCommand( m_view->image(), node ) );
 }

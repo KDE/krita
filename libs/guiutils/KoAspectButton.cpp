@@ -26,7 +26,7 @@
 
 namespace {
     /* XPM -- copyright The Gimp */
-    const char *chain_broken_24[] = {
+    const char *_chain_broken_24[] = {
         /* columns rows colors chars-per-pixel */
         "9 24 10 1",
         "  c black",
@@ -67,7 +67,7 @@ namespace {
     };
 
     /* XPM  -- copyright The Gimp */
-    const char *chain_24[] = {
+    const char *_chain_24[] = {
         /* columns rows colors chars-per-pixel */
         "9 24 10 1",
         "  c black",
@@ -111,8 +111,8 @@ namespace {
 class KoAspectButton::Private {
 public:
     Private()
-        : chain(QIcon(chain_24).pixmap(24,24)),
-        brokenChain(QIcon(chain_broken_24).pixmap(24,24)),
+        : chain(QIcon(_chain_24).pixmap(24,24)),
+        brokenChain(QIcon(_chain_broken_24).pixmap(24,24)),
         keepAspect(true)
     {
     }

@@ -64,6 +64,10 @@ set(kritaimage_LIB_SRCS
    commands/kis_image_layer_add_command.cpp
    commands/kis_image_layer_move_command.cpp
    commands/kis_image_layer_remove_command.cpp
+   commands/kis_image_node_lower_command.cpp
+   commands/kis_image_node_raise_command.cpp
+   commands/kis_image_node_to_bottom_command.cpp
+   commands/kis_image_node_to_top_command.cpp
    commands/kis_image_lock_command.cpp
    commands/kis_image_props_command.cpp
    commands/kis_image_resize_command.cpp
@@ -72,6 +76,7 @@ set(kritaimage_LIB_SRCS
    commands/kis_layer_opacity_command.cpp
    commands/kis_layer_props_command.cpp
    commands/kis_node_move_command.cpp
+   commands/kis_node_property_list_command.cpp
    commands/kis_reselect_global_selection_command.cpp
    commands/kis_reselect_local_selection_command.cpp
    commands/kis_set_global_selection_command.cpp

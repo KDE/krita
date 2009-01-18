@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,40 +16,27 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_image_commands.h"
+#include "kis_image_node_lower_command.h"
 #include <QString>
-#include <QBitArray>
 
 #include <klocale.h>
 
-#include "KoColorSpaceRegistry.h"
-#include "KoColor.h"
-#include "KoColorProfile.h"
-#include "KoColorSpace.h"
-
-
 #include "kis_image.h"
-#include "kis_layer.h"
-#include "kis_group_layer.h"
 #include "kis_undo_adapter.h"
 
-KisImageLayerRemoveCommand::KisImageLayerRemoveCommand(KisImageSP image, KisNodeSP layer)
-        : KisImageCommand(i18n("Remove Layer"), image)
+KisImageNodeLowerCommand::KisImageNodeLowerCommand(KisImageSP image, KisNodeSP node )
+        : KisImageCommand(i18n("Lower"), image), m_node(node)
 {
-    m_layer = layer;
-    m_prevParent = layer->parent();
-    m_prevAbove = layer->prevSibling();
 }
 
-
-void KisImageLayerRemoveCommand::redo()
+void KisImageNodeLowerCommand::redo()
 {
-    m_image->removeNode(m_layer);
-    m_layer->setDirty();
+    m_image->lowerNode(m_node);
+    m_node->setDirty();
 }
 
-void KisImageLayerRemoveCommand::undo()
+void KisImageNodeLowerCommand::undo()
 {
-    m_image->addNode(m_layer, m_prevParent, m_prevAbove);
-    m_layer->setDirty();
+    m_image->raiseNode(m_node);
+    m_node->setDirty();
 }

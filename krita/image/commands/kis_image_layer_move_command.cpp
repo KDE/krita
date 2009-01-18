@@ -59,15 +59,17 @@ KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageSP image, KisNodeSP n
 
 void KisImageLayerMoveCommand::redo()
 {
-    if( m_newAbove || m_index == -1 )
+    if( m_newAbove || m_index == quint32(-1) )
     {
         m_image->moveNode(m_layer, m_newParent, m_newAbove);
     } else {
         m_image->moveNode(m_layer, m_newParent, m_index);
     }
+    m_layer->setDirty();
 }
 
 void KisImageLayerMoveCommand::undo()
 {
     m_image->moveNode(m_layer, m_prevParent, m_prevAbove);
+    m_layer->setDirty();
 }

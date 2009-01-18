@@ -29,6 +29,8 @@
 #include "kis_node_progress_proxy.h"
 #include "kis_image.h"
 #include "kis_selection.h"
+#include "kis_undo_adapter.h"
+#include "commands/kis_node_property_list_command.h"
 
 class KisNodeModel::Private
 {
@@ -290,7 +292,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         wasVisible = node->visible();
         visible = proplist.at(0).state.toBool();
 
-        node->setSectionModelProperties(proplist);
+        m_d->image->undoAdapter()->addCommand( new KisNodePropertyListCommand( node, proplist ) );
         emit dataChanged(index, index);
         if (wasVisible != visible) {
             node->setDirty();

@@ -114,7 +114,8 @@ void KoLineBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewCo
     else
         pen.setColor(d->color);
 
-    painter.strokePath(shape->outline(), pen);
+    if(!pen.isCosmetic())
+        painter.strokePath(shape->outline(), pen);
 }
 
 void KoLineBorder::setCapStyle(Qt::PenCapStyle style)

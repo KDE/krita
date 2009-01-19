@@ -63,7 +63,7 @@ bool KisOpenRasterStackSaveVisitor::visit(KisPaintLayer *layer)
     QDomElement elt = d->layerStack.createElement("layer");
     saveLayerInfo(elt, layer);
     elt.setAttribute("src", filename);
-    d->currentElement->appendChild(elt);
+    d->currentElement->insertBefore(elt, QDomNode());
 
     return true;
 }
@@ -96,7 +96,7 @@ bool KisOpenRasterStackSaveVisitor::visit(KisGroupLayer *layer)
         imageElt.setAttribute("w", width);
         imageElt.setAttribute("h", height);
         imageElt.appendChild(elt);
-        d->layerStack.appendChild(imageElt);
+        d->layerStack.insertBefore(imageElt, QDomNode());
         d->currentElement = 0;
         d->saveContext->saveStack(d->layerStack);
     }
@@ -110,6 +110,6 @@ bool KisOpenRasterStackSaveVisitor::visit(KisAdjustmentLayer *layer)
     saveLayerInfo(elt, layer);
     elt.setAttribute("type", "applications:krita:" + layer->filter()->name());
     saveLayerInfo(elt, layer);
-    d->currentElement->appendChild(elt);
+    d->currentElement->insertBefore(elt, QDomNode());
     return true;
 }

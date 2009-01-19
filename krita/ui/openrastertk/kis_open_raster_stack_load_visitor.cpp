@@ -133,7 +133,7 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                     opacity = subelem.attribute("opacity").toDouble();
                 }
                 KisGroupLayerSP layer = new KisGroupLayer(d->image, "", opacity * 255);
-                d->image->addNode(layer.data(), gL.data(), gL->childCount());
+                d->image->addNode(layer.data(), gL.data(),0);
                 loadGroupLayer(subelem, layer);
             } else if (node.nodeName() == "layer") {
                 QString filename = subelem.attribute("src");
@@ -145,7 +145,7 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                     KisPaintDeviceSP device = d->loadContext->loadDeviceData(filename);
                     if (device) {
                         KisPaintLayerSP layer = new KisPaintLayer(gL->image() , "", opacity * 255, device);
-                        d->image->addNode(layer.data(), gL.data(), gL->childCount());
+                        d->image->addNode(layer.data(), gL.data(),0);
                         loadPaintLayer(subelem, layer);
                         dbgFile << "Loading was successful";
                     }
@@ -160,7 +160,7 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                 }
                 KisFilterConfiguration * kfc = f->defaultConfiguration(0);
                 KisAdjustmentLayerSP layer = new KisAdjustmentLayer(gL->image() , "", kfc, KisSelectionSP(0));
-                d->image->addNode(layer.data(), gL.data(), gL->childCount());
+                d->image->addNode(layer.data(), gL.data(),0);
                 loadAdjustmentLayer(subelem, layer);
 
             } else {

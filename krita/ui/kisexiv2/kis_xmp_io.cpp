@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008-2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -46,7 +46,17 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
             it != store->end(); ++it)
     {
         const KisMetaData::Entry& entry = *it;
-//         xmpData_.add( Exiv2::XmpKey( entry.schema()->uri().ascii(), entry.name().ascii() ), kmdValueToExivValue( entry.value() ) );
+        
+        // Check wether the prefix and namespace are know to exiv2
+        std::string prefix = Exiv2::XmpProperties::prefix(entry.schema()->uri().ascii());
+        if( prefix == "")
+        {
+            dbgFile << "Unknown namespace " << ppVar(entry.schema()->uri()) << ppVar(entry.schema()->prefix());
+            prefix = entry.schema()->prefix().ascii();
+            Exiv2::XmpProperties::registerNs(entry.schema()->uri().ascii(), prefix );
+        }
+        dbgFile << "Saving " << entry;
+        xmpData_.add(Exiv2::XmpKey(prefix, entry.name().ascii()), kmdValueToExivValue(entry.value()));
     }
     // Serialize data
     std::string xmpPacket_;

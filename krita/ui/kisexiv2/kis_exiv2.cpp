@@ -225,7 +225,7 @@ Exiv2::Value* kmdValueToExivValue( const KisMetaData::Value& value )
                 case QVariant::String:
                     return new Exiv2::StringValue(qPrintable(var.toString()));
                 default:
-                    qFatal("Unhandled type.");
+                    qFatal("Unhandled type. " + var.type() );
                     return 0;
             }
         }

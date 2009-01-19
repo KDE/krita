@@ -36,12 +36,13 @@ class KisRecordedPolyLinePaintAction;
 class KisRecordedBezierCurvePaintAction;
 class FreehandPaintJobExecutor;
 
-class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint, public Eigen::WithAlignedOperatorNew
+class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
 {
 
     Q_OBJECT
 
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
     KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText);
     virtual ~KisToolFreehand();

@@ -19,7 +19,9 @@
 #include "kis_paint_information.h"
 #include <QDomElement>
 
-struct KisPaintInformation::Private : Eigen::WithAlignedOperatorNew {
+struct KisPaintInformation::Private {
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
     QPointF pos;
     double pressure;
     double xTilt;

@@ -51,8 +51,6 @@ KisOpenRasterStackSaveVisitor::~KisOpenRasterStackSaveVisitor()
 void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* layer)
 {
     elt.setAttribute("name", layer->name());
-    elt.setAttribute("x", layer->x());
-    elt.setAttribute("y", layer->y());
     elt.setAttribute("opacity", layer->opacity() / 255.0);
 }
 

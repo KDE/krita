@@ -20,12 +20,13 @@
 
 #include <QRect>
 
-#include "kicon.h"
+#include <kicon.h>
+
 #include "kis_types.h"
 #include "kis_paint_device.h"
 #include "kis_mask.h"
 
-#include <krita_export.h>
+#include "krita_export.h"
 
 enum selectionType {
     READ_SELECTION,

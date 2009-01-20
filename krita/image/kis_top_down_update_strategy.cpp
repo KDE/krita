@@ -19,6 +19,8 @@
 
 #include "kis_top_down_update_strategy.h"
 
+#include <QDebug>
+
 #include <KoCompositeOp.h>
 
 #include "kis_types.h"
@@ -51,229 +53,235 @@ namespace
  * not need to update the projection of the nodes, because this strategy updates
  * all projections before starting to merge.
  */
-class KisMergeVisitor : public KisNodeVisitor
-{
+    class KisMergeVisitor : public KisNodeVisitor
+    {
 
-public:
+    public:
 
-    using KisNodeVisitor::visit;
+        using KisNodeVisitor::visit;
 
-    KisMergeVisitor(KisPaintDeviceSP projection, const QRect& rc) :
+        KisMergeVisitor(KisPaintDeviceSP projection, const QRect& rc) :
             KisNodeVisitor() {
-        Q_ASSERT(projection);
-        m_projection = projection;
-        m_rc = rc;
-    }
-
-public:
-
-    bool visit(KisExternalLayer * layer) {
-        if (m_projection.isNull()) {
-            return false;
+            Q_ASSERT(projection);
+            m_projection = projection;
+            m_rc = rc;
         }
-        if (!layer->visible())
-            return true;
 
-        KisPaintDeviceSP dev = layer->projection();
-        if (!dev)
-            return true;
+    public:
 
-        QRect rc = dev->extent() & m_rc;
+        bool visit(KisExternalLayer * layer) {
+            if (m_projection.isNull()) {
+                return false;
+            }
+            if (!layer->visible())
+                return true;
+
+            KisPaintDeviceSP dev = layer->projection();
+            if (!dev)
+                return true;
+
+            QRect rc = dev->extent() & m_rc;
 
 /*        if( !(*dev->colorSpace() == *m_projection->colorSpace() ) )
-        {
-            dev->convertTo( m_projection->colorSpace() );
-        }*/
+          {
+          dev->convertTo( m_projection->colorSpace() );
+          }*/
 
-        KisPainter gc(m_projection);
-        gc.setChannelFlags(layer->channelFlags());
-        gc.bitBlt(rc.left(), rc.top(), layer->compositeOp() , dev, layer->opacity(), rc.left(), rc.top(), rc.width(), rc.height());
+            KisPainter gc(m_projection);
 
-        return true;
-    }
+            gc.setChannelFlags(layer->channelFlags());
 
-    bool visit(KisGeneratorLayer * layer) {
-        if (m_projection.isNull()) {
-            return false;
-        }
-        if (!layer->visible())
+            gc.bitBlt(rc.left(), rc.top(), layer->compositeOp() , dev, layer->opacity(), rc.left(), rc.top(), rc.width(), rc.height());
+
             return true;
-
-        layer->updateProjection(m_rc);
-        KisPaintDeviceSP dev = layer->projection();
-        if (!dev)
-            return true;
-
-        QRect rc = dev->extent() & m_rc;
-
-        KisPainter gc(m_projection);
-        gc.setChannelFlags(layer->channelFlags());
-        gc.bitBlt(rc.left(), rc.top(), layer->compositeOp() , dev, layer->opacity(), rc.left(), rc.top(), rc.width(), rc.height());
-
-        return true;
-    }
-
-    bool visit(KisPaintLayer *layer) {
-
-        if (m_projection.isNull()) {
-            return false;
         }
 
-        bool first = false;
-        if (layer->prevSibling() == 0 && layer->parent() == layer->image()->root())
-            first = true;
-
-        if (!layer->visible()) {
-            if (first) {
-                m_projection->clear(m_rc);
+        bool visit(KisGeneratorLayer * layer) {
+            if (m_projection.isNull()) {
+                return false;
             }
+            if (!layer->visible())
+                return true;
+
+            layer->updateProjection(m_rc);
+            KisPaintDeviceSP dev = layer->projection();
+            if (!dev)
+                return true;
+
+            QRect rc = dev->extent() & m_rc;
+
+            KisPainter gc(m_projection);
+            gc.setChannelFlags(layer->channelFlags());
+            gc.bitBlt(rc.left(), rc.top(), layer->compositeOp() , dev, layer->opacity(), rc.left(), rc.top(), rc.width(), rc.height());
+
             return true;
         }
 
-        QRect rc = layer->extent() & m_rc;
+        bool visit(KisPaintLayer *layer) {
 
-        KisPainter gc(m_projection);
-        gc.setChannelFlags(layer->channelFlags());
+            if (m_projection.isNull()) {
+                return false;
+            }
 
-        KisPaintDeviceSP source = layer->projection();
+            bool first = false;
+            if (layer->prevSibling() == 0 && layer->parent() == layer->image()->root())
+                first = true;
 
-        if (first)
-            gc.bitBlt(rc.left(), rc.top(), m_projection->colorSpace()->compositeOp(COMPOSITE_COPY), source, layer->opacity(), rc.left(), rc.top(), rc.width(), rc.height());
-        else
-            gc.bitBlt(rc.left(), rc.top(), layer->compositeOp(), source, layer->opacity(), rc.left(), rc.top(), rc.width(), rc.height());
+            if (!layer->visible()) {
+                if (first) {
+                    m_projection->clear(m_rc);
+                }
+                return true;
+            }
 
-        return true;
-    }
+            QRect rc = layer->extent() & m_rc;
 
-    bool visit(KisGroupLayer *layer) {
+            KisPainter gc(m_projection);
+            QBitArray flags = layer->channelFlags();
+            for (int i = 0; i < flags.size(); ++i) {
+                qDebug() << "KisTopDownUpdateStrategy::visit, flag " << i << " is " << flags.testBit(i);
+            }
+            gc.setChannelFlags(flags);
 
-        if (m_projection.isNull()) {
-            return false;
-        }
+            KisPaintDeviceSP source = layer->projection();
 
-        if (!layer->visible())
-            return true;
+            if (first)
+                gc.bitBlt(rc.left(), rc.top(), m_projection->colorSpace()->compositeOp(COMPOSITE_COPY), source, layer->opacity(), rc.left(), rc.top(), rc.width(), rc.height());
+            else
+                gc.bitBlt(rc.left(), rc.top(), layer->compositeOp(), source, layer->opacity(), rc.left(), rc.top(), rc.width(), rc.height());
 
-        KisPaintDeviceSP dev = layer->projection();
-
-        QRect rc = dev->extent() & m_rc;
-
-
-        KisPainter gc(m_projection);
-        gc.setChannelFlags(layer->channelFlags());
-        gc.bitBlt(rc.left(), rc.top(), layer->compositeOp(), dev, layer->opacity(), rc.left(), rc.top(), rc.width(), rc.height());
-
-        return true;
-    }
-
-    bool visit(KisAdjustmentLayer* layer) {
-
-        Q_ASSERT(layer);
-
-        if (m_projection.isNull()) {
             return true;
         }
 
-        if (!layer->visible())
+        bool visit(KisGroupLayer *layer) {
+
+            if (m_projection.isNull()) {
+                return false;
+            }
+
+            if (!layer->visible())
+                return true;
+
+            KisPaintDeviceSP dev = layer->projection();
+
+            QRect rc = dev->extent() & m_rc;
+
+
+            KisPainter gc(m_projection);
+            gc.setChannelFlags(layer->channelFlags());
+            gc.bitBlt(rc.left(), rc.top(), layer->compositeOp(), dev, layer->opacity(), rc.left(), rc.top(), rc.width(), rc.height());
+
             return true;
-
-        QRect tmpRc = m_rc;
-
-        KisPaintDeviceSP tempTarget = layer->temporaryTarget();
-
-        if (tempTarget) {
-            tmpRc = (layer->extent() | tempTarget->extent()) & tmpRc;
         }
 
-        if (tmpRc.width() == 0 || tmpRc.height() == 0) // Don't even try
+        bool visit(KisAdjustmentLayer* layer) {
+
+            Q_ASSERT(layer);
+
+            if (m_projection.isNull()) {
+                return true;
+            }
+
+            if (!layer->visible())
+                return true;
+
+            QRect tmpRc = m_rc;
+
+            KisPaintDeviceSP tempTarget = layer->temporaryTarget();
+
+            if (tempTarget) {
+                tmpRc = (layer->extent() | tempTarget->extent()) & tmpRc;
+            }
+
+            if (tmpRc.width() == 0 || tmpRc.height() == 0) // Don't even try
+                return true;
+
+
+            KisFilterConfiguration * cfg = layer->filter();
+            if (!cfg) return true;
+
+            KisFilterSP f = KisFilterRegistry::instance()->value(cfg->name());
+            if (!f) return false;
+
+            // Possibly enlarge the rect that changed (like for convolution filters)
+            tmpRc = f->changedRect(tmpRc, cfg);
+
+            KisSelectionSP selection = layer->selection();
+            KisPaintDeviceSP layerProjection = layer->projection();
+
+            // It's necessary to copy the unselected pixels to the projection cache inside
+            // the adjustment layer to make the merge optimization in the grouplayer work.
+            KisPainter gc1(layerProjection);
+            gc1.setCompositeOp(layerProjection->colorSpace()->compositeOp(COMPOSITE_COPY));
+            gc1.bitBlt(m_rc.topLeft(), m_projection, m_rc);
+            gc1.end();
+
+            KisConstProcessingInformation srcCfg(m_projection, tmpRc .topLeft(), 0);
+            KisProcessingInformation dstCfg(layerProjection, tmpRc .topLeft(), 0);
+
+            Q_ASSERT( layer->nodeProgressProxy() );
+            KoProgressUpdater updater( layer->nodeProgressProxy() );
+            updater.start( 100, f->name() );
+            KoUpdater up = updater.startSubtask();
+            // Some filters will require usage of oldRawData, which is not available without
+            // a transaction!
+            KisTransaction* cmd = new KisTransaction("", layerProjection);
+            f->process(srcCfg, dstCfg, tmpRc.size(), cfg, &up);
+            delete cmd;
+            layer->nodeProgressProxy()->setValue( layer->nodeProgressProxy()->maximum() );
+
+            // Copy the filtered bits onto the projection
+            KisPainter gc(m_projection);
+            if (selection)
+                gc.bltSelection(tmpRc.left(), tmpRc.top(),
+                                layer->compositeOp(), layerProjection, selection, layer->opacity(),
+                                tmpRc.left(), tmpRc.top(), tmpRc.width(), tmpRc.height());
+            else
+                gc.bitBlt(tmpRc.left(), tmpRc.top(),
+                          layer->compositeOp(), layerProjection, layer->opacity(),
+                          tmpRc.left(), tmpRc.top(), tmpRc.width(), tmpRc.height());
+            gc.end();
+
             return true;
-
-
-        KisFilterConfiguration * cfg = layer->filter();
-        if (!cfg) return true;
-
-        KisFilterSP f = KisFilterRegistry::instance()->value(cfg->name());
-        if (!f) return false;
-
-        // Possibly enlarge the rect that changed (like for convolution filters)
-        tmpRc = f->changedRect(tmpRc, cfg);
-
-        KisSelectionSP selection = layer->selection();
-        KisPaintDeviceSP layerProjection = layer->projection();
-
-        // It's necessary to copy the unselected pixels to the projection cache inside
-        // the adjustment layer to make the merge optimization in the grouplayer work.
-        KisPainter gc1(layerProjection);
-        gc1.setCompositeOp(layerProjection->colorSpace()->compositeOp(COMPOSITE_COPY));
-        gc1.bitBlt(m_rc.topLeft(), m_projection, m_rc);
-        gc1.end();
-
-        KisConstProcessingInformation srcCfg(m_projection, tmpRc .topLeft(), 0);
-        KisProcessingInformation dstCfg(layerProjection, tmpRc .topLeft(), 0);
-
-        Q_ASSERT( layer->nodeProgressProxy() );
-        KoProgressUpdater updater( layer->nodeProgressProxy() );
-        updater.start( 100, f->name() );
-        KoUpdater up = updater.startSubtask();
-        // Some filters will require usage of oldRawData, which is not available without
-        // a transaction!
-        KisTransaction* cmd = new KisTransaction("", layerProjection);
-        f->process(srcCfg, dstCfg, tmpRc.size(), cfg, &up);
-        delete cmd;
-        layer->nodeProgressProxy()->setValue( layer->nodeProgressProxy()->maximum() );
-
-        // Copy the filtered bits onto the projection
-        KisPainter gc(m_projection);
-        if (selection)
-            gc.bltSelection(tmpRc.left(), tmpRc.top(),
-                            layer->compositeOp(), layerProjection, selection, layer->opacity(),
-                            tmpRc.left(), tmpRc.top(), tmpRc.width(), tmpRc.height());
-        else
-            gc.bitBlt(tmpRc.left(), tmpRc.top(),
-                      layer->compositeOp(), layerProjection, layer->opacity(),
-                      tmpRc.left(), tmpRc.top(), tmpRc.width(), tmpRc.height());
-        gc.end();
-
-        return true;
-    }
-
-
-    bool visit(KisCloneLayer * layer) {
-
-        if (m_projection.isNull()) {
-            return false;
         }
 
-        if (!layer->visible())
+
+        bool visit(KisCloneLayer * layer) {
+
+            if (m_projection.isNull()) {
+                return false;
+            }
+
+            if (!layer->visible())
+                return true;
+            KisPaintDeviceSP dev = layer->projection();
+
+            if (!dev) return false;
+
+            QRect rc = dev->extent() & m_rc;
+
+            KisPainter gc(m_projection);
+            gc.setCompositeOp(layer->compositeOp());
+            gc.setOpacity(layer->opacity());
+            gc.setChannelFlags(layer->channelFlags());
+
+            gc.bitBlt(rc.topLeft(), dev, rc);
+
             return true;
-        KisPaintDeviceSP dev = layer->projection();
 
-        if (!dev) return false;
+        }
 
-        QRect rc = dev->extent() & m_rc;
-
-        KisPainter gc(m_projection);
-        gc.setCompositeOp(layer->compositeOp());
-        gc.setOpacity(layer->opacity());
-        gc.setChannelFlags(layer->channelFlags());
-
-        gc.bitBlt(rc.topLeft(), dev, rc);
-
-        return true;
-
-    }
-
-    bool visit(KisNode*) { return true; }
-    bool visit(KisFilterMask*) { return true; }
-    bool visit(KisTransparencyMask*) { return true; }
-    bool visit(KisTransformationMask*) { return true; }
-    bool visit(KisSelectionMask*) { return true; }
+        bool visit(KisNode*) { return true; }
+        bool visit(KisFilterMask*) { return true; }
+        bool visit(KisTransparencyMask*) { return true; }
+        bool visit(KisTransformationMask*) { return true; }
+        bool visit(KisSelectionMask*) { return true; }
 
 
-private:
-    KisPaintDeviceSP m_projection;
-    QRect m_rc;
-};
+    private:
+        KisPaintDeviceSP m_projection;
+        QRect m_rc;
+    };
 }
 
 
@@ -287,7 +295,7 @@ public:
 };
 
 KisTopDownUpdateStrategy::KisTopDownUpdateStrategy(KisNodeWSP node)
-        : m_d(new Private)
+    : m_d(new Private)
 {
     m_d->node = node;
 }
@@ -302,13 +310,13 @@ KisTopDownUpdateStrategy::~KisTopDownUpdateStrategy()
 void KisTopDownUpdateStrategy::setDirty(const QRect & rc)
 {
     /*
-         if the filthyNode is the node
-             set the parent dirty
-         if the filtyNode is not the node
-             schedule a projection update for the current node
-                 if the projection update is done, set the parent dirty
-                     until the root is done
-     */
+      if the filthyNode is the node
+      set the parent dirty
+      if the filtyNode is not the node
+      schedule a projection update for the current node
+      if the projection update is done, set the parent dirty
+      until the root is done
+    */
     if (m_d->node && m_d->node->parent())
         static_cast<KisTopDownUpdateStrategy*>(m_d->node->parent()->updateStrategy())->setFilthyNode(m_d->node);
 
@@ -331,14 +339,14 @@ void KisTopDownUpdateStrategy::setImage(KisImageSP image)
 void KisTopDownUpdateStrategy::lock()
 {
     /*
-       lock is called on the root layer's updateStrategy.
-       this strategy locks recursively all children. Lock
-       has two meanings: the update process is stopped until
-       unlock is called and the nodes are set locked. In contrast
-       with the bottom-up strategy that does per-node book-keeping,
-       we have to lock the nodes themselves to avoid redirtying while
-       updating the projection.
-     */
+      lock is called on the root layer's updateStrategy.
+      this strategy locks recursively all children. Lock
+      has two meanings: the update process is stopped until
+      unlock is called and the nodes are set locked. In contrast
+      with the bottom-up strategy that does per-node book-keeping,
+      we have to lock the nodes themselves to avoid redirtying while
+      updating the projection.
+    */
     m_d->node.data()->setSystemLocked(true);
     KisNodeSP child = m_d->node->firstChild();
     while (child) {
@@ -354,7 +362,7 @@ void KisTopDownUpdateStrategy::unlock()
       this strategy unlocks recursively all children. Unlock
       has two meanings: the update process is restarted
       and all nodes are unlocked.
-     */
+    */
     KisNodeSP child = m_d->node->firstChild();
     while (child) {
         static_cast<KisTopDownUpdateStrategy*>(child->updateStrategy())->unlock();
@@ -366,14 +374,14 @@ void KisTopDownUpdateStrategy::unlock()
 KisPaintDeviceSP KisTopDownUpdateStrategy::updateGroupLayerProjection(const QRect & rc, KisPaintDeviceSP projection)
 {
     /*
-        Grouplayer are special since they can contain nodes that contain a projection
-        of part of the stack.
+      Grouplayer are special since they can contain nodes that contain a projection
+      of part of the stack.
 
-        if filthynode is above an adjustment layer
-            start recomposition from the adjustment layer
-        else
-            start recomposition from the bottom
-     */
+      if filthynode is above an adjustment layer
+      start recomposition from the adjustment layer
+      else
+      start recomposition from the bottom
+    */
     KisNodeSP startWith = m_d->node->firstChild();
     if (m_d->filthyNode) {
         KisNodeSP node = m_d->node->firstChild();

@@ -320,7 +320,9 @@ void KisPaintDeviceTest::testThumbnail()
         QImage thumb = dev->createThumbnail(50, 50);
         QVERIFY(thumb.width() <= 50);
         QVERIFY(thumb.height() <= 50);
+	image.save("kis_paint_device_test_test_thumbnail.png");
     }
+
 }
 
 void KisPaintDeviceTest::testPixel()

@@ -22,13 +22,10 @@
 #include <QRect>
 #include <QMatrix>
 #include <QImage>
-#include <QApplication>
 #include <QList>
-#include <QUndoCommand>
 #include <QHash>
 
 #include <QThread>
-#include <threadweaver/ThreadWeaver.h>
 #include <klocale.h>
 #include <kconfiggroup.h>
 
@@ -52,7 +49,6 @@
 
 #include "kis_datamanager.h"
 
-#include "kis_undo_adapter.h"
 #include "kis_selection_component.h"
 #include "kis_pixel_selection.h"
 #include "kis_paint_device_jobs.h"
@@ -383,46 +379,6 @@ void KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConver
     h = rc.height();
 
 
-    // For now, default multithreading to false: our backend cannot handle this type
-    // of multithreading yet.
-
-    KConfigGroup cfg = KGlobal::config()->group("");
-    bool threadColorSpaceConversion = cfg.readEntry("thread_colorspace_conversion", false);
-    ThreadWeaver::Weaver * weaver = 0;
-
-    if (threadColorSpaceConversion) {
-        weaver = new Weaver();
-        weaver->setMaximumNumberOfThreads(cfg.readEntry("threadsafe",  QThread::idealThreadCount()));
-    }
-
-    // Experiment with these versions to see which is faster,  but it
-    // seems that lcms dwarfs everything.
-#if 0
-
-    // Because this is anew paint device, its tiles should always be
-    // aligned with ours.
-    {
-        KisRectConstIteratorPixel srcIter = createRectConstIterator(x, y, w, h);
-        KisRectIteratorPixel dstIter = dst.createRectIterator(x, y, w, h);
-        while (!srcIter.isDone() && !dstIter.isDone()) {
-
-            qint32 numContiguousSrcPixels = srcIter.nConseqPixels();
-            qint32 numContiguousDstPixels = dstIter.nConseqPixels();
-
-            // Because the tiles should be aligned
-            Q_ASSERT(numContiguousDstPixels == numContiguousSrcPixels);
-
-            if (threadColorSpaceConversion) {
-                ConversionJob * job = new ConversionJob(srcIter.rawData(), dstIter.rawData(), colorSpace(), dstColorSpace, numContiguousSrcPixels, renderingIntent, 0);
-                weaver->enqueue(job);
-            } else
-                m_d->colorSpace->convertPixelsTo(srcIter.rawData(), dstIter.rawData(), dstColorSpace, numContiguousSrcPixels, renderingIntent);
-
-            srcIter += numContiguousSrcPixels;
-            dstIter += numContiguousDstPixels;
-        }
-    }
-#else
     for (qint32 row = y; row < y + h; ++row) {
 
         qint32 column = x;
@@ -442,20 +398,11 @@ void KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConver
             const quint8 *srcData = srcIt.rawData();
             quint8 *dstData = dstIt.rawData();
 
-            if (threadColorSpaceConversion) {
-                ConversionJob * job = new ConversionJob(srcData, dstData, colorSpace(), dstColorSpace, columns, renderingIntent, 0);
-                weaver->enqueue(job);
-            } else
-                m_d->colorSpace->convertPixelsTo(srcData, dstData, dstColorSpace, columns, renderingIntent);
+            m_d->colorSpace->convertPixelsTo(srcData, dstData, dstColorSpace, columns, renderingIntent);
 
             column += columns;
             columnsRemaining -= columns;
         }
-    }
-#endif
-
-    if (threadColorSpaceConversion) {
-        weaver->finish();
     }
 
     KisDataManagerSP oldData = m_datamanager;
@@ -463,14 +410,8 @@ void KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConver
 
     setDataManager(dst.m_datamanager, dstColorSpace);
 
-// XXX: make undoable
-//     if (undoAdapter() && undoAdapter()->undo()) {
-//         undoAdapter()->addCommand(new KisConvertLayerTypeCmd(KisPaintDeviceSP(this), oldData, oldColorSpace, m_datamanager, m_d->colorSpace));
-//     }
-
     emit colorSpaceChanged(dstColorSpace);
     delete oldColorSpace;
-    delete weaver;
 }
 
 void KisPaintDevice::setProfile(const KoColorProfile * profile)
@@ -588,12 +529,15 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h) const
         w = qint32(double(srcw) / srch * h);
 
     KisRandomConstAccessorPixel iter = createRandomConstAccessor(0, 0);
+    KisRandomAccessorPixel dstIter = thumbnail->createRandomAccessor( 0, 0 );
+
     for (qint32 y = 0; y < h; ++y) {
         qint32 iY = (y * srch) / h;
         for (qint32 x = 0; x < w; ++x) {
             qint32 iX = (x * srcw) / w;
             iter.moveTo(iX, iY);
-            thumbnail->setPixel(x, y, KoColor(iter.rawData(), m_d->colorSpace));
+            dstIter.moveTo(x,  y );
+            memcpy( dstIter.rawData(), iter.rawData(), m_d->pixelSize );
         }
     }
 

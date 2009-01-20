@@ -18,6 +18,8 @@
  */
 
 #include "kis_painterly_overlay.h"
+#include "kis_painterly_overlay_colorspace.h"
+
 
 class KisPainterlyOverlay::Private
 {

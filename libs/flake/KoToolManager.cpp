@@ -340,6 +340,15 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary)
     }
 
     d->canvasData->activeTool = tool;
+
+    // make sure the old tool will not be called after it has been deactivated
+    if (d->canvasData->canvas->canvas()) {
+        KoCanvasBase *canvas = d->canvasData->canvas->canvas();
+        KoToolProxy *tp = d->proxies.value(canvas);
+        if (tp)
+            tp->setActiveTool(d->canvasData->activeTool);
+    }
+
     connect(d->canvasData->activeTool, SIGNAL(cursorChanged(QCursor)),
             this, SLOT(updateCursor(QCursor)));
     connect(d->canvasData->activeTool, SIGNAL(activateTool(const QString &)),
@@ -380,9 +389,6 @@ void KoToolManager::postSwitchTool()
 #endif
     if (d->canvasData->canvas->canvas()) {
         KoCanvasBase *canvas = d->canvasData->canvas->canvas();
-        KoToolProxy *tp = d->proxies.value(canvas);
-        if (tp)
-            tp->setActiveTool(d->canvasData->activeTool);
         canvas->updateInputMethodInfo();
     }
 

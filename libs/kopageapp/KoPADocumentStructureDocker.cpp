@@ -171,6 +171,8 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( KoDocumentSectionView:
     connect( m_sectionView->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ),
              this, SLOT (itemSelected( const QItemSelection&, const QItemSelection& ) ) );
 
+    connect( m_model, SIGNAL( modelReset()), this, SIGNAL( dockerReset() ) );
+
     KConfigGroup configGroup = KGlobal::config()->group( "KoPageApp/DocumentStructureDocker" );
     QString viewModeString = configGroup.readEntry("ViewMode", "");
 
@@ -429,9 +431,11 @@ void KoPADocumentStructureDocker::setCanvas( KoCanvasBase* canvas )
 
 void KoPADocumentStructureDocker::setActivePage(KoPAPageBase *page)
 {
-    int row = m_doc->pageIndex(page);
-    QModelIndex index = m_model->index(row, 0);
-    m_sectionView->setCurrentIndex(index);
+    if ( m_doc ) {
+        int row = m_doc->pageIndex(page);
+        QModelIndex index = m_model->index(row, 0);
+        m_sectionView->setCurrentIndex(index);
+    }
 }
 
 void KoPADocumentStructureDocker::setMasterMode(bool master)
@@ -457,13 +461,26 @@ void KoPADocumentStructureDocker::thumbnailView()
 void KoPADocumentStructureDocker::setViewMode(KoDocumentSectionView::DisplayMode mode)
 {
     bool expandable = (mode != KoDocumentSectionView::ThumbnailMode);
+    
+    // if we switch to non-expandable mode (ThumbnailMode) and if current index
+    // is not a page, we need to select the corresponding page first, otherwise
+    // none of the page will be selected when we do collapse all
+    if ( !expandable ) {
+        QModelIndex currentIndex = m_sectionView->currentIndex();
+        QModelIndex parentIndex = currentIndex.parent();
+        while ( parentIndex.isValid() ) {
+            currentIndex = parentIndex;
+            parentIndex = currentIndex.parent();
+        }
+
+        m_sectionView->setCurrentIndex( currentIndex );
+        m_sectionView->collapseAll();
+    }
+
     m_sectionView->setDisplayMode(mode);
     m_sectionView->setItemsExpandable(expandable);
     m_sectionView->setRootIsDecorated(expandable);
     m_sectionView->setSelectionMode(expandable ? QAbstractItemView::ExtendedSelection : QAbstractItemView::SingleSelection);
-
-    if(mode == KoDocumentSectionView::ThumbnailMode)
-        m_sectionView->collapseAll();
 
     m_viewModeActions[mode]->setChecked (true);
 }

@@ -184,10 +184,10 @@ void KoPAView::initGUI()
 
     KoPADocumentStructureDockerFactory structureDockerFactory( KoDocumentSectionView::ThumbnailMode, m_doc->pageType() );
     m_documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( createDockWidget( &structureDockerFactory ) );
-    m_documentStructureDocker->setPart( m_doc );
     connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),
              m_documentStructureDocker, SLOT( setPart( KParts::Part * ) ) );
     connect(m_documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), this, SLOT(updateActivePage(KoPAPageBase*)));
+    connect(m_documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
 
     KoToolManager::instance()->requestToolActivation( m_canvasController );
 
@@ -416,6 +416,11 @@ KoShapeManager* KoPAView::masterShapeManager() const
 void KoPAView::updateActivePage( KoPAPageBase * page )
 {
     m_viewMode->updateActivePage( page );
+}
+
+void KoPAView::reinitDocumentDocker()
+{
+    m_documentStructureDocker->setActivePage( m_activePage );
 }
 
 void KoPAView::doUpdateActivePage( KoPAPageBase * page )

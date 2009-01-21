@@ -206,6 +206,12 @@ protected slots:
      */
     void findDocumentSetPrevious( QTextDocument * document );
 
+    /**
+     * Re-initialize the document structure docker after active document in this
+     * view has been changed
+     */
+    void reinitDocumentDocker();
+
 protected:
     KoPADocument *m_doc;
     KoPACanvas *m_canvas;

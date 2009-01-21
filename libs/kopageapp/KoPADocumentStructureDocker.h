@@ -73,8 +73,13 @@ public:
 signals:
     void pageChanged(KoPAPageBase *page);
 
+    /// This signal will be emitted after the model for this docker has been reset
+    void dockerReset();
+
 public slots:
     void updateView();
+    /// Set the KPart::Part or the document for this docker, this will reset the document model for this docker
+    /// and eventually dockerReset() signal will be emitted
     void setPart( KParts::Part * part );
 
 private slots:

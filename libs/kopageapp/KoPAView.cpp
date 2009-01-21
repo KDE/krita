@@ -165,7 +165,7 @@ void KoPAView::initGUI()
     connect(m_horizontalRuler, SIGNAL(guideLineCreated(Qt::Orientation, int)),
             m_canvasController, SLOT(addGuideLine(Qt::Orientation, int)));
 
-    KoToolBoxFactory toolBoxFactory(m_canvasController, "Tools" );
+    KoToolBoxFactory toolBoxFactory(m_canvasController, i18n("Tools") );
     createDockWidget( &toolBoxFactory );
 
     KoDockerManager *dockerMng = dockerManager();

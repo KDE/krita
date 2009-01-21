@@ -59,7 +59,7 @@ void KoPartSelectAction::init(KActionCollection *ac, const char *name)
         KService::Ptr serv = (*it).service();
         if (!serv->genericName().isEmpty()) {
             KAction *action = new KAction(KIcon(serv->icon()), serv->genericName().replace('&',"&&"), ac);
-            ac->addAction(serv->name().toLatin1(), action);
+            ac->addAction(serv->entryPath(), action);
             connect(action, SIGNAL(triggered()), this, SLOT(slotActionActivated()));
             addAction( action );
         }
@@ -70,8 +70,8 @@ void KoPartSelectAction::init(KActionCollection *ac, const char *name)
 // Called when selecting a part
 void KoPartSelectAction::slotActionActivated()
 {
-    QString servName = sender()->objectName();
-    KService::Ptr serv = KService::serviceByName( servName );
+    const QString entryPath = sender()->objectName();
+    KService::Ptr serv = KService::serviceByDesktopPath(entryPath);
     m_documentEntry = KoDocumentEntry( serv );
     trigger();
 }

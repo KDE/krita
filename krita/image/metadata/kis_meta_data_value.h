@@ -29,6 +29,7 @@ class QVariant;
 
 namespace KisMetaData
 {
+  class Schema;
 struct UnsignedRational {
     explicit UnsignedRational(quint32 n = 0, quint32 d = 1) : numerator(n), denominator(d) {}
     quint32 numerator;
@@ -74,7 +75,7 @@ public:
      * or LangArray
      */
     Value(const QList<Value>& array, ValueType type = OrderedArray);
-    Value(const QMap<QString, Value>& structure);
+    Value(const KisMetaData::Schema* schema, const QMap<QString, Value>& structure);
     Value(const KisMetaData::SignedRational& signedRational);
     Value(const KisMetaData::UnsignedRational& unsignedRational);
     Value(const Value& v);

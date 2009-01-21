@@ -126,7 +126,7 @@ KisMetaData::Value exifOECFToKMDOECFStructure(const Exiv2::Value::AutoPtr value)
         }
     }
     oecfStructure["Values"] = KisMetaData::Value(values, KisMetaData::Value::OrderedArray);
-    return KisMetaData::Value(oecfStructure);
+    return KisMetaData::Value( KisMetaData::SchemaRegistry::instance()->schemaFromUri( KisMetaData::Schema::EXIFSchemaUri), oecfStructure);
 }
 
 Exiv2::Value* kmdOECFStructureToExifOECF(const KisMetaData::Value& value)
@@ -188,7 +188,7 @@ KisMetaData::Value deviceSettingDescriptionExifToKMD(const Exiv2::Value::AutoPtr
         settings.append(KisMetaData::Value(setting));
     }
     deviceSettingStructure["Settings"] = KisMetaData::Value(settings, KisMetaData::Value::OrderedArray);
-    return KisMetaData::Value(deviceSettingStructure);
+    return KisMetaData::Value(KisMetaData::SchemaRegistry::instance()->schemaFromUri( KisMetaData::Schema::EXIFSchemaUri), deviceSettingStructure);
 }
 
 Exiv2::Value* deviceSettingDescriptionKMDToExif(const KisMetaData::Value& value)
@@ -229,7 +229,7 @@ KisMetaData::Value cfaPatternExifToKMD(const Exiv2::Value::AutoPtr value)
         index++;
     }
     cfaPatternStructure["Values"] = KisMetaData::Value(values, KisMetaData::Value::OrderedArray);
-        return KisMetaData::Value(cfaPatternStructure);
+        return KisMetaData::Value(KisMetaData::SchemaRegistry::instance()->schemaFromUri( KisMetaData::Schema::EXIFSchemaUri), cfaPatternStructure);
 }
 
 Exiv2::Value* cfaPatternKMDToExif(const KisMetaData::Value& value)
@@ -266,7 +266,7 @@ KisMetaData::Value flashExifToKMD(const Exiv2::Value::AutoPtr value)
     flashStructure["Function"] = QVariant(function);
     bool redEye = ((v >> 6) & 0x01);  // bit 7 if function
     flashStructure["RedEyeMode"] = QVariant(redEye);
-    return KisMetaData::Value(flashStructure);
+    return KisMetaData::Value(KisMetaData::SchemaRegistry::instance()->schemaFromUri( KisMetaData::Schema::EXIFSchemaUri), flashStructure);
 }
 
 Exiv2::Value* flashKMDToExif(const KisMetaData::Value& value)

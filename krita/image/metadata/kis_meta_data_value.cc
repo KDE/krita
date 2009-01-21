@@ -37,6 +37,7 @@ struct Value::Private {
         KisMetaData::SignedRational* signedRational;
         KisMetaData::UnsignedRational* unsignedRational;
     } value;
+    const KisMetaData::Schema* schema;
     ValueType type;
     Value* propertyQualifier;
 };
@@ -60,8 +61,9 @@ Value::Value(const QList<Value>& array, ValueType type) : d(new Private)
     d->type = type; // TODO: I am hesitating about LangArray to keep them as array or convert them to maps
 }
 
-Value::Value(const QMap<QString, Value>& structure) : d(new Private)
+Value::Value(const KisMetaData::Schema* schema, const QMap<QString, Value>& structure) : d(new Private)
 {
+    d->schema = schema;
     d->type = Structure;
     d->value.structure = new QMap<QString, Value>(structure);
 }

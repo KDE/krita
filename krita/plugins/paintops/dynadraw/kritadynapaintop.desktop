@@ -1,0 +1,16 @@
+[Desktop Entry]
+Name=Dyna
+Name[el]=Σπρέι
+Name[et]=Pihusti
+Name[it]=Spruzzo
+Name[nds]=Spröhen
+Name[nl]=Spuitbus
+Name[pt]='Dyna'
+Name[pt_BR]='Dyna'
+Name[sv]=Sprej
+Name[uk]=Аерограф
+Name[zh_TW]=噴霧
+X-KDE-ServiceTypes=Krita/Paintop
+Type=Service
+X-KDE-Library=kritadynapaintop
+X-Krita-Version=3

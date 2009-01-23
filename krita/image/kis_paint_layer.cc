@@ -62,7 +62,6 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
     Q_ASSERT(dev);
     m_d->paintDevice = dev;
 
-    init();
 }
 
 
@@ -72,7 +71,6 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
 {
     Q_ASSERT(img);
     m_d->paintDevice = new KisPaintDevice(this, img->colorSpace(), name);
-    init();
 }
 
 KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, const KoColorSpace * colorSpace)
@@ -84,7 +82,6 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
         colorSpace = img->colorSpace();
     Q_ASSERT(colorSpace);
     m_d->paintDevice = new KisPaintDevice(this, colorSpace, name);
-    init();
 }
 
 KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
@@ -93,7 +90,6 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
     , m_d(new Private)
 {
     m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
-    init();
 }
 
 KisPaintLayer::~KisPaintLayer()
@@ -108,13 +104,6 @@ bool KisPaintLayer::allowAsChild(KisNodeSP node) const
     else
         return false;
 }
-
-void KisPaintLayer::init()
-{
-    connect(m_d->paintDevice.data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SLOT(slotColorSpaceChanged()));
-    connect(m_d->paintDevice.data(), SIGNAL(profileChanged(const KoColorProfile*)), this, SLOT(slotColorSpaceChanged()));
-}
-
 
 KisPaintDeviceSP KisPaintLayer::projection() const
 {
@@ -177,7 +166,7 @@ void KisPaintLayer::updateProjection(const QRect & rc)
                        temporaryTarget(), temporaryOpacity(), currentNeededRc.left(),
                        currentNeededRc.top(), currentNeededRc.width(), currentNeededRc.height());
         }
-        
+
     }
     if (masks.size() > 0) {
         applyEffectMasks(source, m_d->projection, rc);
@@ -295,9 +284,5 @@ QRect KisPaintLayer::exactBounds() const
         return QRect();
 }
 
-void KisPaintLayer::slotColorSpaceChanged()
-{
-//    notifyPropertyChanged();
-}
 
 #include "kis_paint_layer.moc"

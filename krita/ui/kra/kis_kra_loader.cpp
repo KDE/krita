@@ -121,13 +121,13 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
         xres = 100.0 / 72.0;
         if (!(attr = element.attribute(X_RESOLUTION)).isNull()) {
             if (attr.toDouble() > 1.0)
-                xres = attr.toDouble() / 72.0;
+                xres = attr.toDouble();
         }
 
         yres = 100.0 / 72.0;
         if (!(attr = element.attribute(Y_RESOLUTION)).isNull()) {
             if (attr.toDouble() > 1.0)
-                yres = attr.toDouble() / 72.0;
+                yres = attr.toDouble();
         }
 
         if ( ( colorspacename = element.attribute( COLORSPACE_NAME ) ).isNull() ) {

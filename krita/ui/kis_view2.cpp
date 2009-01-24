@@ -405,8 +405,6 @@ KisUndoAdapter * KisView2::undoAdapter()
 
 void KisView2::slotLoadingFinished()
 {
-//     disconnect(m_d->doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished())); // TODO why the deconnection ?
-
     KisImageSP img = image();
     slotSetImageSize(img->width(), img->height());
 
@@ -425,7 +423,6 @@ void KisView2::slotLoadingFinished()
         img->blockSignals(false);
         img->unlock();
     }
-
 
     if (KisNodeSP node = img->rootLayer()->firstChild()) {
         m_d->layerBox->setCurrentNode(node);

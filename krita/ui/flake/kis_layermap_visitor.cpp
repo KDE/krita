@@ -26,7 +26,7 @@
 #include "kis_node_visitor.h"
 #include "kis_external_layer_iface.h"
 
-#include <kis_layer_shape.h>
+#include <kis_node_shape.h>
 #include <kis_paint_layer.h>
 #include <kis_shape_layer.h>
 #include <kis_clone_layer.h>
@@ -38,10 +38,7 @@
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
 #include <generator/kis_generator_layer.h>
-
 #include "kis_layer_container_shape.h"
-
-#include "kis_mask_shape.h"
 
 
 KisLayerMapVisitor::KisLayerMapVisitor(QMap<KisNodeSP, KoShape*> & nodeMap)
@@ -57,12 +54,12 @@ QMap<KisNodeSP, KoShape*> & KisLayerMapVisitor::layerMap()
 
 bool KisLayerMapVisitor::visit(KisExternalLayer * layer)
 {
-    KisShapeLayer * layerShape = dynamic_cast<KisShapeLayer*>(layer);
-    if (!layerShape) {
+    KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(layer);
+    if (!shapeLayer) {
         return false;
     }
 
-    m_nodeMap[layer] = layerShape;
+    m_nodeMap[layer] = shapeLayer;
     visitAll(layer);
     return true;
 }
@@ -130,7 +127,7 @@ bool KisLayerMapVisitor::visitLeafNodeLayer(KisLayer * layer)
 
     if (m_nodeMap.contains(layer->parent())) {
         KoShapeContainer * parent = static_cast<KoShapeContainer*>(m_nodeMap[layer->parent()]);
-        KisLayerShape * layerShape = new KisLayerShape(parent, layer);
+        KisNodeShape * layerShape = new KisNodeShape(parent, layer);
         m_nodeMap[layer] = layerShape;
         visitAll(layer);
         return true;
@@ -147,7 +144,7 @@ bool KisLayerMapVisitor::visitMask(KisMask * mask)
 
     if (m_nodeMap.contains(mask->parent())) {
         KoShapeContainer * parent = static_cast<KoShapeContainer*>(m_nodeMap[mask->parent()]);
-        KisMaskShape * maskShape = new KisMaskShape(parent, mask);
+        KisNodeShape * maskShape = new KisNodeShape(parent, mask);
         m_nodeMap[mask] = maskShape;
         return true;
     }

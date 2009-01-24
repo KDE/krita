@@ -29,7 +29,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "KoToolFactory.h"
-#include "flake/kis_layer_shape.h"
+#include "flake/kis_node_shape.h"
 
 class QPointF;
 class QWidget;
@@ -111,7 +111,7 @@ public:
         setToolType(TOOL_TYPE_TRANSFORM);
         setToolTip(i18n("Measure the distance between two points"));
         setIcon("krita_tool_measure");
-        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        //setActivationShapeId( KIS_NODE_SHAPE_ID );
         setPriority(16);
         setActivationShapeId("krita/always");
     }

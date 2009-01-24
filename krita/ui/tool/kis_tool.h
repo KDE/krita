@@ -35,12 +35,12 @@ class KisFilterConfiguration;
 class KisPainter;
 
 /// Definitions of the toolgroups of Krita
-static const QString TOOL_TYPE_SHAPE = "0 Krita/Shape"; // Geometric shapes like ellipses and lines
-static const QString TOOL_TYPE_FREEHAND = "1 Krita/Freehand"; // Freehand drawing tools
-static const QString TOOL_TYPE_TRANSFORM = "2 Krita/Transform"; // Tools that transform the layer;
-static const QString TOOL_TYPE_FILL = "3 Krita/Fill"; // Tools that fill parts of the canvas
-static const QString TOOL_TYPE_VIEW = "4 Krita/View"; // Tools that affect the canvas: pan, zoom, etc.
-static const QString TOOL_TYPE_SELECTED = "5 Krita/Select"; // Tools that select pixels
+static const QString TOOL_TYPE_SHAPE = "0 Krita/Shape/main";         // Geometric shapes like ellipses and lines
+static const QString TOOL_TYPE_FREEHAND = "1 Krita/Freehand/main";   // Freehand drawing tools
+static const QString TOOL_TYPE_TRANSFORM = "2 Krita/Transform/main"; // Tools that transform the layer;
+static const QString TOOL_TYPE_FILL = "3 Krita/Fill";                // Tools that fill parts of the canvas
+static const QString TOOL_TYPE_VIEW = "4 Krita/View";                // Tools that affect the canvas: pan, zoom, etc.
+static const QString TOOL_TYPE_SELECTED = "5 Krita/Select";          // Tools that select pixels
 
 
 class  KRITAUI_EXPORT KisTool
@@ -109,7 +109,7 @@ public:
 
     virtual QWidget* createOptionWidget();
     virtual QWidget* optionWidget();
-    
+
 protected:
 
     KisImageSP image() const;

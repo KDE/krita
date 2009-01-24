@@ -32,7 +32,7 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_gradient_painter.h>
-#include <flake/kis_layer_shape.h>
+#include <flake/kis_node_shape.h>
 
 #include <config-opengl.h>
 #include <config-glew.h>
@@ -119,7 +119,7 @@ public:
         setIcon("krita_tool_gradient");
         setShortcut(KShortcut(Qt::Key_G));
         setPriority(15);
-        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        //setActivationShapeId( KIS_NODE_SHAPE_ID );
         setInputDeviceAgnostic(false);
     }
 

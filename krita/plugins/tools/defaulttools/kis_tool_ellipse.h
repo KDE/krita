@@ -26,7 +26,7 @@
 #include "kis_tool_shape.h"
 #include "kis_types.h"
 #include "KoToolFactory.h"
-#include "flake/kis_layer_shape.h"
+#include "flake/kis_node_shape.h"
 
 
 class QPainter;
@@ -70,7 +70,7 @@ public:
             : KoToolFactory(parent, "KritaShape/KisToolEllipse", i18n("Ellipse")) {
         setToolTip(i18n("Draw an ellipse"));
         setToolType(TOOL_TYPE_SHAPE);
-        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        //setActivationShapeId( KIS_NODE_SHAPE_ID );
         setIcon("krita_tool_ellipse");
         setPriority(3);
         setInputDeviceAgnostic(false);

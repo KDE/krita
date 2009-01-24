@@ -55,8 +55,7 @@
 #include <widgets/kis_cmb_idlist.h>
 #include <kis_transform_worker.h>
 
-#include "flake/kis_layer_shape.h"
-#include "flake/kis_mask_shape.h"
+#include "flake/kis_node_shape.h"
 #include "flake/kis_layer_container_shape.h"
 #include "flake/kis_shape_layer.h"
 #include "kis_canvas_resource_provider.h"

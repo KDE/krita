@@ -36,10 +36,6 @@ public:
 
     using KisNodeVisitor::visit;
 
-    /**
-     * @param layerMap: the map that maps layers to layer shapes and
-     * masks to mask shapes.
-     */
     KisLayerMapVisitor(QMap<KisNodeSP, KoShape*> & nodeMap);
     virtual ~KisLayerMapVisitor() {}
 

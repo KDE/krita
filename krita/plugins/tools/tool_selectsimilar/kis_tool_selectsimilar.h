@@ -22,7 +22,7 @@
 #include <kis_tool.h>
 #include <KoToolFactory.h>
 #include <kis_selection.h>
-#include "flake/kis_layer_shape.h"
+#include "flake/kis_node_shape.h"
 
 class QWidget;
 class KoCanvasBase;
@@ -87,7 +87,7 @@ public:
             : KoToolFactory(parent, "KisToolSelectSimilar", i18n("Select similar colors")) {
         setToolTip(i18n("Select similar colors"));
         setToolType(TOOL_TYPE_SELECTED);
-        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        //setActivationShapeId( KIS_NODE_SHAPE_ID );
         setIcon("tool_similar_selection");
         setShortcut(KShortcut(Qt::CTRL + Qt::Key_E));
         setPriority(57);

@@ -46,8 +46,7 @@
 #include "kis_group_layer.h"
 #include "kis_layer_container_shape.h"
 #include "kis_layermap_visitor.h"
-#include "kis_layer_shape.h"
-#include "kis_mask_shape.h"
+#include "kis_node_shape.h"
 #include "kis_name_server.h"
 #include "kis_mask.h"
 #include "kis_shape_layer.h"
@@ -155,10 +154,9 @@ void KisShapeController::removeShape(KoShape* shape)
         }
     }
 
-    if (shape->shapeId() == KIS_LAYER_SHAPE_ID
+    if (shape->shapeId() == KIS_NODE_SHAPE_ID
             || shape->shapeId() == KIS_SHAPE_LAYER_ID
             || shape->shapeId() == KIS_LAYER_CONTAINER_ID
-            || shape->shapeId() == KIS_MASK_SHAPE_ID
             || shape->shapeId() == KoPathShapeId) { // selection shapes
         if (KoToolManager::instance()->activeCanvasController()
                 && KoToolManager::instance()->activeCanvasController()->canvas()) {
@@ -207,10 +205,9 @@ void KisShapeController::addShape(KoShape* shape)
     // Only non-krita shapes get added through this method; krita
     // layer shapes are added to kisimage and then end up in
     // slotLayerAdded
-    if (shape->shapeId() != KIS_LAYER_SHAPE_ID  &&
+    if (shape->shapeId() != KIS_NODE_SHAPE_ID  &&
             shape->shapeId() != KIS_SHAPE_LAYER_ID  &&
-            shape->shapeId() != KIS_LAYER_CONTAINER_ID &&
-            shape->shapeId() != KIS_MASK_SHAPE_ID) {
+            shape->shapeId() != KIS_LAYER_CONTAINER_ID ) {
 
         // There's a selection active. that means that all shapes get added to the active selection,
         // instead of to a shape layer or a newly created shape layer.
@@ -329,12 +326,11 @@ void KisShapeController::slotNodeAdded(KisNode* parentNode, int index)
     } else if (node->inherits("KisPaintLayer")  ||
                node->inherits("KisAdjustmentLayer") ||
                node->inherits("KisCloneLayer") ||
-               node->inherits("KisGeneratorLayer")) {
-        shape = new KisLayerShape(parent, static_cast<KisLayer*>(node.data()));
+               node->inherits("KisGeneratorLayer") ||
+               node->inherits( "KisMask" ) ) {
+        shape = new KisNodeShape(parent, static_cast<KisLayer*>(node.data()));
     } else if (node->inherits("KisShapeLayer")) {
         shape = static_cast<KisShapeLayer*>(node.data());
-    } else if (node->inherits("KisMask")) {
-        shape = new KisMaskShape(parent, static_cast<KisMask*>(node.data()));
     }
 
     Q_ASSERT(shape);

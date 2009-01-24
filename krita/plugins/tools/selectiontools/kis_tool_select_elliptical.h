@@ -28,7 +28,7 @@
 #include "kis_tool.h"
 #include "kis_selection.h"
 #include "KoToolFactory.h"
-#include "flake/kis_layer_shape.h"
+#include "flake/kis_node_shape.h"
 
 class KisSelectionOptions;
 
@@ -79,7 +79,7 @@ public:
             : KoToolFactory(parent, "KisToolSelectElliptical", i18n("Elliptical Selection")) {
         setToolTip(i18n("Select an elliptical area"));
         setToolType(TOOL_TYPE_SELECTED);
-        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        //setActivationShapeId( KIS_NODE_SHAPE_ID );
         setIcon("tool_elliptical_selection");
         setShortcut(KShortcut(Qt::Key_J));
         setPriority(53);

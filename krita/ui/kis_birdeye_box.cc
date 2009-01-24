@@ -237,10 +237,6 @@ KisBirdEyeBox::KisBirdEyeBox(KisView2 * view)
     connect(m_exposureDoubleWidget, SIGNAL(sliderReleased()), SLOT(exposureSliderReleased()));
 
     m_draggingExposureSlider = false;
-#if 0 // XXX: Redo when zooming is implemented again (BSAR)
-    Q_ASSERT(m_subject->document() != 0);
-    connect(m_subject->document(), SIGNAL(sigCommandExecuted()), SLOT(slotDocCommandExecuted()));
-#endif
     if (m_image) {
         connect(m_image.data(), SIGNAL(sigImageUpdated(QRect)), SLOT(slotImageUpdated(QRect)));
     }

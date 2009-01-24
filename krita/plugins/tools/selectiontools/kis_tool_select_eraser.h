@@ -23,7 +23,7 @@
 
 #include "KoToolFactory.h"
 
-#include "flake/kis_layer_shape.h"
+#include "flake/kis_node_shape.h"
 #include "kis_tool_freehand.h"
 
 class KisSelectionOptions;
@@ -62,7 +62,7 @@ public:
         setIcon("tool_eraser_selection");
         setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_E));
         setPriority(51);
-        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        //setActivationShapeId( KIS_NODE_SHAPE_ID );
     }
 
     virtual ~KisToolSelectEraserFactory() {}

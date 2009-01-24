@@ -29,7 +29,7 @@
 
 #include "kis_tool.h"
 #include "kis_selection.h"
-#include "flake/kis_layer_shape.h"
+#include "flake/kis_node_shape.h"
 
 class KisSelectionOptions;
 
@@ -77,7 +77,7 @@ public:
         setToolType(TOOL_TYPE_SELECTED);
         setIcon("tool_outline_selection");
         setPriority(55);
-        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        //setActivationShapeId( KIS_NODE_SHAPE_ID );
     }
 
     virtual ~KisToolSelectOutlineFactory() {}

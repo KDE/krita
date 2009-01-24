@@ -162,6 +162,7 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
 
         img->setResolution(xres, yres);
 
+
         loadNodes(element, img, const_cast<KisGroupLayer*>( img->rootLayer().data() ));
 
         img->unlock();
@@ -218,11 +219,15 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP img, const QString
 
 KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageSP img, KisNode* parent)
 {
+
     KoXmlNode node = element.lastChild();
     KoXmlNode child;
-
     if ( !node.isNull() ) {
+        qDebug() << ">>>>>>>>>>> " << node.isElement() << ", " << node.nodeName() << ", " << node.toText().data();
+
         if ( node.isElement() ) {
+
+            qDebug() << ">>>>>>>>>>>>> " << node.nodeName();
             if ( node.nodeName().toUpper() == LAYERS.toUpper() || node.nodeName().toUpper() == MASKS.toUpper() ) {
                 for ( child = node.lastChild(); !child.isNull(); child = child.previousSibling() ) {
                     KisNode* node = loadNode( child.toElement(), img );
@@ -233,7 +238,7 @@ KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageSP img, Ki
 #endif
                     } else {
                         img->nextLayerName(); // Make sure the nameserver is current with the number of nodes.
-                        img->addNode(node, parent);
+                        qDebug() << "image->addNode " << node << ", " << parent << ":" << img->addNode(node, parent);
                         if ( node->inherits( "KisLayer" ) ) {
                             loadNodes( child.toElement(), img, node );
                         }

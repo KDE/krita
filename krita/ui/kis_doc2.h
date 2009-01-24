@@ -156,34 +156,23 @@ public:
      */
     KisNodeModel * nodeModel() const;
 
-public slots:
-    void slotImageUpdated();
-    void slotImageUpdated(const QRect& rect);
-    void slotDocumentRestored();
-
 signals:
-    void sigDocUpdated();
-    void sigDocUpdated(QRect rect);
+
     void sigLoadingFinished();
 
-    /*
-     * Emitted every time a command is added to the undo history, or executed
-     * due to an undo or redo action.
-     */
-    void sigCommandExecuted();
-
 public:
+
     // Overide KoDocument
     virtual KoView* createViewInstance(QWidget *parent);
 
 protected slots:
+
     // Overide KoDocument
     virtual void openExistingFile(const KUrl& url);
     virtual void openTemplate(const KUrl& url);
 
 private slots:
 
-    void slotUpdate(KisImageSP img, quint32 x, quint32 y, quint32 w, quint32 h);
     void slotIOProgress(qint8 percentage);
 
 private:

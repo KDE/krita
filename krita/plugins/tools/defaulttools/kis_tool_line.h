@@ -28,7 +28,7 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "KoToolFactory.h"
-#include "flake/kis_layer_shape.h"
+#include "flake/kis_node_shape.h"
 
 class KisPainter;
 
@@ -82,7 +82,7 @@ public:
         setToolTip(i18n("Draw a straight line with the current brush"));
         // Temporarily
         setToolType(TOOL_TYPE_SHAPE);
-        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        //setActivationShapeId( KIS_NODE_SHAPE_ID );
         setPriority(1);
         setIcon("krita_tool_line");
         setInputDeviceAgnostic(false);

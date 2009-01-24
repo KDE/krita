@@ -22,7 +22,7 @@
 #define KIS_TOOL_POLYGON_H_
 
 #include "kis_tool_shape.h"
-#include "flake/kis_layer_shape.h"
+#include "flake/kis_node_shape.h"
 
 class KoCanvasBase;
 
@@ -74,7 +74,7 @@ public:
             : KoToolFactory(parent, "KisToolPolygon", i18n("Polygon")) {
         setToolTip(i18n("Draw a polygon. Shift-mouseclick ends the polygon."));
         setToolType(TOOL_TYPE_SHAPE);
-        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        //setActivationShapeId( KIS_NODE_SHAPE_ID );
         setIcon("tool_polygon");
         setPriority(4);
         setInputDeviceAgnostic(false);

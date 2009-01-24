@@ -444,6 +444,7 @@ void KisNodeModel::progressPercentageChanged(int, const KisNodeSP _node)
 
 void KisNodeModel::layersChanged()
 {
+    qDebug() << "KisNodeModel::layersChanged";
     reset();
 }
 

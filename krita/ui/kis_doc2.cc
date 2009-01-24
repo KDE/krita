@@ -25,10 +25,10 @@
 
 
 #include <QApplication>
-#include <qdom.h>
+#include <QDomDocument>
+#include <QDomElement>
 #include <QImage>
 #include <QPainter>
-#include <q3tl.h>
 #include <QStringList>
 #include <QWidget>
 #include <QList>
@@ -253,7 +253,7 @@ bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
     Q_ASSERT( m_d->kraLoader == 0 );
     m_d->kraLoader = new KisKraLoader( this, syntaxVersion );
 
-    // XXX: Legacy from the multi-image .kra file period.
+    // Legacy from the multi-image .kra file period.
     for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement()) {
             if (node.nodeName() == "IMAGE") {
@@ -266,7 +266,12 @@ bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
             }
         }
     }
-    setCurrentImage(img);
+
+    if (m_d->image) {
+        // Disconnect existing sig/slot connections
+        m_d->image->disconnect(this);
+    }
+    m_d->image = img;
 
     return true;
 }
@@ -298,6 +303,7 @@ bool KisDoc2::completeSaving(KoStore *store)
     return true;
 }
 
+
 bool KisDoc2::completeLoading(KoStore *store)
 {
     if (!m_d->image) return false;
@@ -314,7 +320,15 @@ bool KisDoc2::completeLoading(KoStore *store)
     delete m_d->kraLoader;
     m_d->kraLoader = 0;
 
-    connect(m_d->image.data(), SIGNAL(sigImageModified()), this, SLOT(slotImageUpdated()));
+    m_d->image->setUndoAdapter(m_d->undoAdapter);
+    m_d->shapeController->setImage(m_d->image);
+    m_d->nodeModel->setImage(m_d->image);
+    setUndo(true);
+
+    connect(m_d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified()));
+
+
+
     emit sigLoadingFinished();
 
     return true;
@@ -362,7 +376,7 @@ KisImageSP KisDoc2::newImage(const QString& name, qint32 width, qint32 height, c
     img->lock();
 
     Q_CHECK_PTR(img);
-    connect(img.data(), SIGNAL(sigImageModified()), this, SLOT(slotImageUpdated()));
+    connect(img.data(), SIGNAL(sigImageModified()), this, SLOT(setModified()));
 
     KisPaintLayerSP layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE, colorspace);
     Q_CHECK_PTR(layer);
@@ -402,7 +416,7 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const K
     Q_CHECK_PTR(img);
     img->lock();
 
-    connect(img.data(), SIGNAL(sigImageModified()), this, SLOT(slotImageUpdated()));
+    connect(img.data(), SIGNAL(sigImageModified()), this, SLOT(setModified()));
     img->setResolution(imgResolution, imgResolution);
     img->setProfile(cs->profile());
     documentInfo()->setAboutInfo("title", name);
@@ -457,32 +471,9 @@ void KisDoc2::paintContent(QPainter& painter, const QRect& rc)
     m_d->image->renderToPainter(rect.left(), rect.left(), rect.top(), rect.height(), rect.width(), rect.height(), painter, profile);
 }
 
-void KisDoc2::slotImageUpdated()
-{
-    emit sigDocUpdated();
-    setModified(true);
-}
-
-void KisDoc2::slotImageUpdated(const QRect& rect)
-{
-    emit sigDocUpdated(rect);
-}
-
 void KisDoc2::setUndo(bool undo)
 {
     m_d->undoAdapter->setUndo(undo);
-}
-
-void KisDoc2::slotDocumentRestored()
-{
-    setModified(false);
-}
-
-void KisDoc2::slotUpdate(KisImageSP, quint32 x, quint32 y, quint32 w, quint32 h)
-{
-    QRect rc(x, y, w, h);
-
-    emit sigDocUpdated(rc);
 }
 
 bool KisDoc2::undo() const

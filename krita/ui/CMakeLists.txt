@@ -1,4 +1,3 @@
-
 include_directories( ${KOTEXT_INCLUDES} ${BLITZ_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/flake ${CMAKE_CURRENT_SOURCE_DIR}/openrastertk ${CMAKE_SOURCE_DIR}/krita/image/metadata )
 
 add_subdirectory( tests )
@@ -27,8 +26,17 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_new_layer.cc 
     dialogs/kis_dlg_preferences.cc
     dialogs/kis_dlg_transformation_effect.cpp
-    kis_autogradient_resource.cc
+    flake/kis_layer_container_shape.cc 
+    flake/kis_node_shape.cpp
+    flake/kis_shape_controller.cpp
+    flake/kis_shape_layer.cc 
+    flake/kis_shape_layer_canvas.cpp 
+    flake/kis_shape_selection.cpp
+    flake/kis_shape_selection_canvas.cpp
+    flake/kis_shape_selection_model.cpp 
+    flake/kis_layermap_visitor.cpp
     kis_autogradient.cc
+    kis_autogradient_resource.cc
     kis_birdeye_box.cc 
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc
@@ -52,22 +60,13 @@ set(kritaui_LIB_SRCS
     kis_image_manager.cc
     kis_image_view_converter.cpp
     kis_import_catcher.cc 
-    kra/kis_kra_loader.cpp 
-    kra/kis_kra_load_visitor.cpp
-    kra/kis_kra_saver.cpp
-    kra/kis_kra_save_visitor.cpp 
-    kra/kis_kra_savexml_visitor.cpp
     kis_label_cursor_pos.cc
     kis_layer_box.cpp 
-    flake/kis_layer_container_shape.cc 
     kis_layer_manager.cc
-    kis_layermap_visitor.cc 
-    flake/kis_layer_shape.cc 
     kis_mask_manager.cc
-    flake/kis_mask_shape.cc 
+    kis_node_commands_adapter.cpp
     kis_node_manager.cpp 
     kis_node_model.cpp
-    kis_node_commands_adapter.cpp
     kis_painting_assistant.cc 
     kis_paintop_box.cc 
     kis_palette_docker.cc
@@ -75,31 +74,33 @@ set(kritaui_LIB_SRCS
     kis_print_job.cpp 
     kis_resource_mediator.cc
     kis_resource_server_provider.cpp 
-    kis_selection_manager.cc 
     kis_selection_decoration.cc
-    flake/kis_shape_controller.cpp
-    flake/kis_shape_layer_canvas.cpp 
-    flake/kis_shape_layer.cc 
-    flake/kis_shape_selection.cpp
-    flake/kis_shape_selection_model.cpp 
+    kis_selection_manager.cc 
     kis_statusbar.cc 
+    kis_view2.cpp 
+    kis_zoom_manager.cc
+    kisexiv2/kis_exif_io.cpp
+    kisexiv2/kis_exiv2.cpp
+    kisexiv2/kis_iptc_io.cpp
+    kisexiv2/kis_xmp_io.cpp
+    kra/kis_kra_load_visitor.cpp
+    kra/kis_kra_loader.cpp 
+    kra/kis_kra_save_visitor.cpp 
+    kra/kis_kra_saver.cpp
+    kra/kis_kra_savexml_visitor.cpp
+    opengl/kis_opengl.cpp 
+    opengl/kis_opengl_canvas2.cpp
+    opengl/kis_opengl_image_textures.cpp
+    openrastertk/kis_open_raster_stack_load_visitor.cpp
+    openrastertk/kis_open_raster_stack_save_visitor.cpp
+    tool/kis_selection_options.cc 
     tool/kis_selection_tool_helper.cpp 
     tool/kis_tool.cc 
     tool/kis_tool_freehand.cc 
     tool/kis_tool_freehand_p.cpp
     tool/kis_tool_paint.cc 
     tool/kis_tool_shape.cc
-    tool/kis_selection_options.cc 
-    kis_view2.cpp 
-    kis_zoom_manager.cc
-    flake/kis_shape_selection_canvas.cpp
-    opengl/kis_opengl_canvas2.cpp
-    opengl/kis_opengl.cpp 
-    opengl/kis_opengl_image_textures.cpp
-    openrastertk/kis_open_raster_stack_load_visitor.cpp
-    openrastertk/kis_open_raster_stack_save_visitor.cpp
     widgets/imageviewer.cc 
-    widgets/kis_preset_chooser.cpp
     widgets/kcurve.cc
     widgets/kis_channelflags_widget.cpp 
     widgets/kis_cmb_composite.cc
@@ -120,15 +121,12 @@ set(kritaui_LIB_SRCS
     widgets/kis_paintop_presets_popup.cpp 
     widgets/kis_pattern_chooser.cc
     widgets/kis_popup_button.cc 
+    widgets/kis_preset_chooser.cpp
     widgets/kis_preset_widget.cpp 
     widgets/kis_previewwidget.cc
     widgets/kis_tree_view_popup.cc 
     widgets/kis_wdg_generator.cpp
     widgets/squeezedcombobox.cpp
-    kisexiv2/kis_exif_io.cpp
-    kisexiv2/kis_iptc_io.cpp
-    kisexiv2/kis_xmp_io.cpp
-    kisexiv2/kis_exiv2.cpp
 )
 
 if(HAVE_OPENGL AND HAVE_GLEW)

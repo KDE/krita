@@ -23,7 +23,7 @@
 
 #include "KoToolFactory.h"
 
-#include <flake/kis_layer_shape.h>
+#include <flake/kis_node_shape.h>
 
 class QTimer;
 class QCheckBox;
@@ -81,7 +81,7 @@ public:
         setIcon("krita_tool_freehand");
         setShortcut(KShortcut(Qt::Key_B));
         setPriority(0);
-        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        //setActivationShapeId( KIS_NODE_SHAPE_ID );
         setInputDeviceAgnostic(false);
     }
 

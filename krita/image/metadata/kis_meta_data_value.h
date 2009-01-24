@@ -82,8 +82,7 @@ public:
     Value& operator=(const Value& v);
     ~Value();
 public:
-    void setPropertyQualifier(const Value&);
-    bool hasPropertyQualifier() const;
+    void addPropertyQualifier(const QString& _name, const Value&);
 public:
     /// @return the type of this Value
     ValueType type() const;
@@ -128,6 +127,13 @@ public:
      */
     QMap<QString, KisMetaData::Value> asStructure() const;
     QMap<QString, KisMetaData::Value>* asStructure();
+    const KisMetaData::Schema* structureSchema() const;
+    
+    /**
+     * It's a convenient function that build a map from a LangArray using the property
+     * qualifier "xml:lang" for the key of the map.
+     */
+    QMap<QString, KisMetaData::Value> asLangArray() const;
 public:
     bool operator==(const Value&) const;
     Value& operator+=(const Value&);

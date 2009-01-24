@@ -37,6 +37,6 @@ Exiv2::Value* kmdValueToExivValue( const KisMetaData::Value& value, Exiv2::TypeI
  * Convert a KisMetaData to an Exiv value, without knowing the targeted Exiv2::TypeId
  * This function should be used for saving to XMP.
  */
-Exiv2::Value* kmdValueToExivValue( const KisMetaData::Value& value );
+Exiv2::Value* kmdValueToExivXmpValue( const KisMetaData::Value& value );
 
 #endif

@@ -340,7 +340,7 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
                 exivKey = "Exif.Photo.MakerNote";
             }
         }
-        dbgFile << "Saving " << entry << " to " << exivKey;
+        dbgFile << "Saving " << entry.name() << " to " << exivKey;
         if (exivKey.isEmpty()) {
             dbgFile << entry.qualifiedName() << " is unsavable to EXIF";
         } else {
@@ -367,12 +367,21 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
                 v = cfaPatternKMDToExif(entry.value());
             } else if (exivKey == "Exif.Photo.Flash") {
                 v = flashKMDToExif(entry.value());
+            } else if (exivKey == "Exif.Photo.UserComment") {
+                Q_ASSERT( entry.value().type() == KisMetaData::Value::LangArray );
+                QMap<QString, KisMetaData::Value> langArr = entry.value().asLangArray();
+                if( langArr.contains( "x-default") )
+                {
+                    v = kmdValueToExivValue( langArr.value( "x-default" ), Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
+                } else if( langArr.size() > 0 ) {
+                    v = kmdValueToExivValue( langArr.begin().value(), Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
+                }
             } else {
                 dbgFile << exifKey.tag();
                 v = kmdValueToExivValue(entry.value(), Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
             }
             if (v && v->typeId() != Exiv2::invalidTypeId) {
-                dbgFile << "Saving key" << exivKey << " of KMD value" << entry.value();
+                dbgFile << "Saving key" << exivKey; // << " of KMD value" << entry.value();
                 exifData.add(exifKey, v);
             } else {
                 dbgFile << "No exif value was created for" << entry.qualifiedName() << " as" << exivKey << " of KMD value" << entry.value();
@@ -460,6 +469,25 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 v = cfaPatternExifToKMD(it->getValue());
             } else if (it->key() == "Exif.Photo.Flash") {
                 v = flashExifToKMD(it->getValue());
+            } else if (it->key() == "Exif.Photo.UserComment") {
+                KisMetaData::Value vUC = exivValueToKMDValue(it->getValue());
+                Q_ASSERT( vUC.type() == KisMetaData::Value::Variant );
+                QVariant commentVar = vUC.asVariant();
+                QString comment;
+                if( commentVar.type() == QVariant::String )
+                {
+                    comment = commentVar.toString();
+                } else if( commentVar.type() == QVariant::ByteArray )
+                {
+                    comment = QString::fromLatin1( commentVar.toByteArray().data(), commentVar.toByteArray().size() );
+                } else {
+                    qFatal( "Unhandled UserComment value type." );
+                }
+                KisMetaData::Value vcomment( comment );
+                vcomment.addPropertyQualifier( "xml:lang", KisMetaData::Value("x-default") );
+                QList<KisMetaData::Value> alt;
+                alt.append(vcomment);
+                v = KisMetaData::Value( alt, KisMetaData::Value::LangArray );
             } else {
                 v = exivValueToKMDValue(it->getValue());
             }

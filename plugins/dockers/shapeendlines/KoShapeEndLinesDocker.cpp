@@ -45,6 +45,9 @@
 #include <kicon.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <KoOdfReadStore.h>
+#include <kstandarddirs.h>
+
 
 #include <QLabel>
 #include <QRadioButton>
@@ -69,22 +72,44 @@ KoShapeEndLinesDocker::KoShapeEndLinesDocker()
 {
     setWindowTitle( i18n( "End Lines" ) );
 
+    QString fileName( KStandardDirs::locate( "data", "kpresenter/endLineStyle/endLine.xml" ) );
+    QStringList endLinesList;
+    if ( ! fileName.isEmpty() ) {
+      QFile file( fileName );
+      QString errorMessage;
+      if ( KoOdfReadStore::loadAndParse( &file, m_doc, errorMessage, fileName ) ) {
+        KoXmlElement drawMarker, lineEndElement(m_doc.namedItem("lineends").toElement());
+        forEachElement(drawMarker, lineEndElement){
+          endLinesList.append(i18n(drawMarker.attribute("name").replace("_", " ")));
+        }
+	    }else {
+        kDebug() << "reading of endLine.xml failed:" << errorMessage;
+      }
+    }
+    else {
+      kDebug() << "defaultstyles.xml not found";
+    }
+
+
     QWidget *mainWidget = new QWidget( this );
     QGridLayout *mainLayout = new QGridLayout( mainWidget );
     
-    QLabel * leftEndLineLabel = new QLabel( i18n( "Left:" ), mainWidget );
+    QLabel * leftEndLineLabel = new QLabel( i18n( "Begin:" ), mainWidget );
     mainLayout->addWidget( leftEndLineLabel, 0, 0 );
     d->leftEndLineComboBox = new QComboBox( mainWidget );
-    d->leftEndLineComboBox->insertItem(KIcon("triangle").pixmap(QSize(22,22),QIcon::Normal,QIcon::On));
+    d->leftEndLineComboBox->addItems(endLinesList);
     mainLayout->addWidget( d->leftEndLineComboBox,0,1,1,3);
 
     connect( d->leftEndLineComboBox, SIGNAL(activated( int ) ), this, SLOT( leftEndLineChanged(int) ) );
 
-    QLabel * rightEndLineLabel = new QLabel( i18n( "Right:" ), mainWidget );
+    QLabel * rightEndLineLabel = new QLabel( i18n( "End:" ), mainWidget );
     mainLayout->addWidget( rightEndLineLabel, 1, 0 );
     d->rightEndLineComboBox = new QComboBox( mainWidget );
-    d->rightEndLineComboBox->insertItem(KIcon("triangle").pixmap(QSize(22,22),QIcon::Normal,QIcon::On));
-    d->rightEndLineComboBox->insertItem(KIcon("triangle2").pixmap(QSize(22,22),QIcon::Normal,QIcon::On));
+
+    d->rightEndLineComboBox->addItems(endLinesList);
+
+
+
     mainLayout->addWidget( d->rightEndLineComboBox,1,1,1,3);
 
     connect( d->rightEndLineComboBox, SIGNAL(activated( int ) ), this, SLOT( rightEndLineChanged(int) ) );

@@ -29,10 +29,12 @@
 #define KOSHAPEENDLINESDOCKER_H
 
 #include <KoUnit.h>
+#include <KoXmlReader.h>
 #include <KoCanvasObserver.h>
 #include <QtGui/QDockWidget>
 #include <QListView>
 #include <QDockWidget>
+#include <kdebug.h>
 
 class KoShapeBorderModel;
 class KoCanvasController;
@@ -57,9 +59,9 @@ private slots:
     /// reimplemented
     virtual void setCanvas( KoCanvasBase *canvas );
 
-    
 private:
-        QListView *m_quickView;
+    //KoXmlReader *kxr;
+    KoXmlDocument m_doc;
 
 private:
     class Private;

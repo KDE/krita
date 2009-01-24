@@ -80,7 +80,7 @@ KoShapeEndLinesDocker::KoShapeEndLinesDocker()
       if ( KoOdfReadStore::loadAndParse( &file, m_doc, errorMessage, fileName ) ) {
         KoXmlElement drawMarker, lineEndElement(m_doc.namedItem("lineends").toElement());
         forEachElement(drawMarker, lineEndElement){
-          endLinesList.append(i18n(drawMarker.attribute("name").replace("_", " ")));
+          endLinesList.append(drawMarker.attribute("name").replace("_", " "));
         }
 	    }else {
         kDebug() << "reading of endLine.xml failed:" << errorMessage;

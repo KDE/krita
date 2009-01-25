@@ -2,7 +2,7 @@
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
- * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008-2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -48,7 +48,6 @@ public:
     KoImageData::ErrorCode errorCode;
     QSizeF imageSize;
     QPixmap pixmap;
-    QImage image; // this member holds the data in case the image is embedded.
     QByteArray key; // key to identify the picture
     QByteArray rawData; // the raw data of the picture either from the file or store
     QString suffix; // the suffix of the picture e.g. png

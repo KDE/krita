@@ -1040,24 +1040,16 @@ void DefaultTool::selectionAlign(KoShapeAlignCommand::Align align)
     if( selectedShapes.count() < 1)
         return;
 
-    QRectF bb;
-
-    foreach( KoShape * shape, selectedShapes )
-    {
-        if( dynamic_cast<KoShapeGroup*>( shape ) )
-            continue;
-        if( bb.isNull() )
-            bb = shape->absoluteTransformation(0).map( shape->outline() ).boundingRect();
-        else
-            bb = bb.unite( shape->absoluteTransformation(0).map( shape->outline() ).boundingRect() );
-    }
-
     // TODO add an option to the widget so that one can align to the page
     // with multiple selected shapes too
+
+    QRectF bb;
 
     // single selected shape is automatically aligned to document rect
     if( selectedShapes.count() == 1 && m_canvas->resourceProvider()->hasResource( KoCanvasResource::PageSize ) )
         bb = QRectF( QPointF(0,0), m_canvas->resourceProvider()->sizeResource( KoCanvasResource::PageSize ) );
+    else
+        bb = selection->boundingRect();
 
     KoShapeAlignCommand *cmd = new KoShapeAlignCommand( selectedShapes, align, bb );
 

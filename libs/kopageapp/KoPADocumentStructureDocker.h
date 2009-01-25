@@ -21,6 +21,7 @@
 
 #include <QDockWidget>
 #include <QHash>
+#include <QContextMenuEvent>
 #include <KoDockFactory.h>
 #include <KoCanvasObserver.h>
 #include <KoDocumentSectionView.h>
@@ -69,6 +70,9 @@ public:
     virtual void setCanvas( KoCanvasBase* canvas);
     void setActivePage(KoPAPageBase *page);
     void setMasterMode(bool master);
+    
+protected:
+    void contextMenuEvent(QContextMenuEvent* event);
 
 signals:
     void pageChanged(KoPAPageBase *page);

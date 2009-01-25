@@ -27,6 +27,7 @@
 
 //KDE includes
 #include <klocale.h>
+#include <kdebug.h>
 
 //KOffice includes
 #include <KoPACanvas.h>

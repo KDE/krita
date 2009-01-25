@@ -540,6 +540,12 @@ void KoPADocumentStructureDocker::addPage()
     }
 }
 
+void KoPADocumentStructureDocker::contextMenuEvent(QContextMenuEvent* event)
+{
+    QMenu menu( this );
+    menu.addAction( QString( "test" ) );
+    menu.exec(event->globalPos());
+}
 #include "KoPADocumentStructureDocker.moc"
 
 // kate: replace-tabs on; space-indent on; indent-width 4; mixedindent off; indent-mode cstyle;

@@ -52,8 +52,8 @@ QUndoCommand * KoPathPointRemoveCommand::createCommand(
 
     last = sortedPointData.first();
 
-    QList<KoPathPointData>::const_iterator it(sortedPointData.begin());
-    for (; it != sortedPointData.end(); ++it) {
+    QList<KoPathPointData>::const_iterator it(sortedPointData.constBegin());
+    for (; it != sortedPointData.constEnd(); ++it) {
         // check if we have come to the next subpath of the same or another path
         if (last.pathShape != it->pathShape || last.pointIndex.first != it->pointIndex.first) {
             // check if all points of the last subpath should be deleted

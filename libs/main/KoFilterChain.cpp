@@ -588,8 +588,8 @@ KoStoreDevice* KoFilterChain::storageCreateFirstStream(const QString& streamName
     // have to perform a little hack in case we're used by any ole-style
     // filter which utilizes internal embedding. Ugly, but well...
     if (!m_internalEmbeddingDirectories.isEmpty()) {
-        QStringList::ConstIterator it = m_internalEmbeddingDirectories.begin();
-        QStringList::ConstIterator end = m_internalEmbeddingDirectories.end();
+        QStringList::ConstIterator it = m_internalEmbeddingDirectories.constBegin();
+        QStringList::ConstIterator end = m_internalEmbeddingDirectories.constEnd();
         while (it != end && (*storage)->enterDirectory(*it))
             ++it;
     }
@@ -811,14 +811,14 @@ void Graph::buildGraph()
 {
     // Make sure that all available parts are added to the graph
     const QList<KoDocumentEntry> parts(KoDocumentEntry::query(KoDocumentEntry::AllEntries));
-    QList<KoDocumentEntry>::ConstIterator partIt(parts.begin());
-    QList<KoDocumentEntry>::ConstIterator partEnd(parts.end());
+    QList<KoDocumentEntry>::ConstIterator partIt(parts.constBegin());
+    QList<KoDocumentEntry>::ConstIterator partEnd(parts.constEnd());
 
     while (partIt != partEnd) {
         QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes").toStringList();
         nativeMimeTypes += (*partIt).service()->property("X-KDE-NativeMimeType").toString();
-        QStringList::ConstIterator it = nativeMimeTypes.begin();
-        QStringList::ConstIterator end = nativeMimeTypes.end();
+        QStringList::ConstIterator it = nativeMimeTypes.constBegin();
+        QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; it != end; ++it)
             if (!(*it).isEmpty())
                 m_vertices.insert((*it).toLatin1(), new Vertex((*it).toLatin1()));
@@ -827,13 +827,13 @@ void Graph::buildGraph()
 
     // no constraint here - we want *all* :)
     const QList<KoFilterEntry::Ptr> filters(KoFilterEntry::query());
-    QList<KoFilterEntry::Ptr>::ConstIterator it = filters.begin();
-    QList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
+    QList<KoFilterEntry::Ptr>::ConstIterator it = filters.constBegin();
+    QList<KoFilterEntry::Ptr>::ConstIterator end = filters.constEnd();
 
     for (; it != end; ++it) {
         // First add the "starting points" to the dict
-        QStringList::ConstIterator importIt = (*it)->import.begin();
-        QStringList::ConstIterator importEnd = (*it)->import.end();
+        QStringList::ConstIterator importIt = (*it)->import.constBegin();
+        QStringList::ConstIterator importEnd = (*it)->import.constEnd();
         for (; importIt != importEnd; ++importIt) {
             const QByteArray key = (*importIt).toLatin1();    // latin1 is okay here (werner)
             // already there?
@@ -843,8 +843,8 @@ void Graph::buildGraph()
 
         // Are we allowed to use this filter at all?
         if (KoFilterManager::filterAvailable(*it)) {
-            QStringList::ConstIterator exportIt = (*it)->export_.begin();
-            QStringList::ConstIterator exportEnd = (*it)->export_.end();
+            QStringList::ConstIterator exportIt = (*it)->export_.constBegin();
+            QStringList::ConstIterator exportEnd = (*it)->export_.constEnd();
 
             for (; exportIt != exportEnd; ++exportIt) {
                 // First make sure the export vertex is in place
@@ -855,7 +855,7 @@ void Graph::buildGraph()
                     m_vertices.insert(key, exp);
                 }
                 // Then create the appropriate edges
-                importIt = (*it)->import.begin();
+                importIt = (*it)->import.constBegin();
                 for (; importIt != importEnd; ++importIt)
                     m_vertices[(*importIt).toLatin1()]->addEdge(new Edge(exp, *it));
             }
@@ -899,8 +899,8 @@ QByteArray Graph::findKOfficePart() const
 {
     // Here we simply try to find the closest KOffice mimetype
     const QList<KoDocumentEntry> parts(KoDocumentEntry::query(KoDocumentEntry::AllEntries));
-    QList<KoDocumentEntry>::ConstIterator partIt(parts.begin());
-    QList<KoDocumentEntry>::ConstIterator partEnd(parts.end());
+    QList<KoDocumentEntry>::ConstIterator partIt(parts.constBegin());
+    QList<KoDocumentEntry>::ConstIterator partEnd(parts.constEnd());
 
     const Vertex *v = 0;
 
@@ -908,8 +908,8 @@ QByteArray Graph::findKOfficePart() const
     while (!v && partIt != partEnd) {
         QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes").toStringList();
         nativeMimeTypes += (*partIt).service()->property("X-KDE-NativeMimeType").toString();
-        QStringList::ConstIterator it = nativeMimeTypes.begin();
-        QStringList::ConstIterator end = nativeMimeTypes.end();
+        QStringList::ConstIterator it = nativeMimeTypes.constBegin();
+        QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; !v && it != end; ++it)
             if (!(*it).isEmpty())
                 v = m_vertices[(*it).toLatin1()];
@@ -922,8 +922,8 @@ QByteArray Graph::findKOfficePart() const
     while (partIt != partEnd) {
         QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes").toStringList();
         nativeMimeTypes += (*partIt).service()->property("X-KDE-NativeMimeType").toString();
-        QStringList::ConstIterator it = nativeMimeTypes.begin();
-        QStringList::ConstIterator end = nativeMimeTypes.end();
+        QStringList::ConstIterator it = nativeMimeTypes.constBegin();
+        QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; !v && it != end; ++it) {
             QString key = *it;
             if (!key.isEmpty()) {

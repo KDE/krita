@@ -132,7 +132,7 @@ KoSharedLoadingData * KoShapeLoadingContext::sharedData(const QString & id) cons
 {
     KoSharedLoadingData * data = 0;
     QMap<QString, KoSharedLoadingData*>::const_iterator it(d->sharedData.find(id));
-    if (it != d->sharedData.end()) {
+    if (it != d->sharedData.constEnd()) {
         data = it.value();
     }
     return data;

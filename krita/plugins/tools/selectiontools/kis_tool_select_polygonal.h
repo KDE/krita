@@ -25,7 +25,7 @@
 
 #include "KoToolFactory.h"
 
-#include "flake/kis_layer_shape.h"
+#include "flake/kis_node_shape.h"
 #include "kis_selection.h"
 #include "kis_tool.h"
 
@@ -84,7 +84,7 @@ public:
         setToolType(TOOL_TYPE_SELECTED);
         setIcon("tool_polygonal_selection");
         setPriority(54);
-        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        //setActivationShapeId( KIS_NODE_SHAPE_ID );
     }
 
     virtual ~KisToolSelectPolygonalFactory() {}

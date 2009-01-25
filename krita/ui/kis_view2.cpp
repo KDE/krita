@@ -278,7 +278,7 @@ void KisView2::dropEvent(QDropEvent *event)
             QAction *action = popup.exec(QCursor::pos());
 
             if (action != 0 && action != cancel) {
-                for (KUrl::List::ConstIterator it = urls.begin(); it != urls.end(); ++it) {
+                for (KUrl::List::ConstIterator it = urls.constBegin(); it != urls.constEnd(); ++it) {
                     KUrl url = *it;
 
                     if (action == insertAsNewLayer || action == insertAsNewLayers) {
@@ -405,8 +405,6 @@ KisUndoAdapter * KisView2::undoAdapter()
 
 void KisView2::slotLoadingFinished()
 {
-//     disconnect(m_d->doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished())); // TODO why the deconnection ?
-
     KisImageSP img = image();
     slotSetImageSize(img->width(), img->height());
 
@@ -425,7 +423,6 @@ void KisView2::slotLoadingFinished()
         img->blockSignals(false);
         img->unlock();
     }
-
 
     if (KisNodeSP node = img->rootLayer()->firstChild()) {
         m_d->layerBox->setCurrentNode(node);
@@ -451,7 +448,7 @@ void KisView2::createGUI()
         shell()->removeDockWidget(dockWidget);
     }
 
-    KoToolBoxFactory toolBoxFactory(m_d->canvasController, "Tools");
+    KoToolBoxFactory toolBoxFactory(m_d->canvasController, i18n("Tools"));
     createDockWidget(&toolBoxFactory);
 
     KoDockerManager *dockerMng = dockerManager();
@@ -483,7 +480,7 @@ void KisView2::createGUI()
         shell()->addDockWidget(Qt::RightDockWidgetArea, dockWidget);
 
     }
-
+#if 0
     QDockWidget * birdEyeBox = qobject_cast<QDockWidget*>(shell()->findChild<QDockWidget*>("KisBirdeyeBox"));
     QDockWidget * toolBox = qobject_cast<QDockWidget*>(shell()->findChild<QDockWidget*>("KoToolOptionsDocker"));
     QDockWidget * colorDocker = qobject_cast<QDockWidget*>(shell()->findChild<QDockWidget*>("KoColorDocker"));
@@ -512,6 +509,7 @@ void KisView2::createGUI()
             tabBar->setFont(dockWidgetFont);
         }
     }
+#endif
 
     m_d->statusBar = KoView::statusBar() ? new KisStatusBar(KoView::statusBar(), this) : 0;
     connect(m_d->canvasController, SIGNAL(documentMousePositionChanged(const QPointF &)),
@@ -619,20 +617,6 @@ void KisView2::connectCurrentImage()
         connect(img.data(), SIGNAL(sigSizeChanged(qint32, qint32)), this, SLOT(slotSetImageSize(qint32, qint32)));
         connect(img->undoAdapter(), SIGNAL(selectionChanged()), selectionManager(), SLOT(selectionChanged()));
 
-#if 0 // XXX_NODE
-        connect(img.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
-
-        connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)),
-                m_d->resourceProvider, SLOT(slotLayerActivated(const KisLayerSP)));
-
-        // Temporary forwarding of signals until these deprecated
-        // signals are gone from KisImage
-        connect(img.data(), SIGNAL(sigColorSpaceChanged(const KoColorSpace *)),
-                m_d->layerManager, SIGNAL(currentColorSpaceChanged(const KoColorSpace *)));
-
-        connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), m_d->layerManager, SLOT(layersUpdated()));
-        connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), m_d->canvas, SLOT(updateCanvas()));
-#endif
     }
 
     m_d->canvas->connectCurrentImage();
@@ -667,41 +651,6 @@ void KisView2::disconnectCurrentImage()
         m_d->canvas->disconnectCurrentImage();
     }
 }
-
-#if 0
-void KisView2::setupPrinter(QPrinter &printer, QPrintDialog &printDialog)
-{
-    Q_UNUSED(printer);
-    Q_UNUSED(printDialog);
-    // XXX: implement printing
-    //p.setMinMax(1, 1);
-}
-
-void KisView2::print(QPrinter& printer, QPrintDialog &printDialog)
-{
-    Q_UNUSED(printDialog);
-    QPainter gc(&printer);
-
-    KisImageSP img = image();
-    if (!img) return;
-
-    gc.setClipping(false);
-
-    KisConfig cfg;
-    QString printerProfileName = cfg.printerProfile();
-    const KoColorProfile *printerProfile = KoColorSpaceRegistry::instance()->profileByName(printerProfileName);
-
-    double exposure = m_d->canvas->resourceProvider()->resource(KisCanvasResourceProvider::HdrExposure).toDouble();
-
-    double scaleX = printer.resolution() / (72.0 * img->xRes());
-    double scaleY = printer.resolution() / (72.0 * img->yRes());
-
-    QRect r = img->bounds();
-
-    gc.scale(scaleX, scaleY);
-    img->renderToPainter(0, 0, r.x(), r.y(), r.width(), r.height(), gc, printerProfile, exposure);
-}
-#endif
 
 void KisView2::slotUpdateFullScreen(bool toggle)
 {
@@ -765,7 +714,7 @@ void KisView2::loadPlugins()
                             QString::fromLatin1("(Type == 'Service') and "
                                                 "([X-Krita-Version] == 3)"));
     KService::List::ConstIterator iter;
-    for (iter = offers.begin(); iter != offers.end(); ++iter) {
+    for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
 
         KService::Ptr service = *iter;
         int errCode = 0;

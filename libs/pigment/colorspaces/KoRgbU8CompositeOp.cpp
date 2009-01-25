@@ -394,7 +394,7 @@ void KoRgbU8CompositeOp::compositeDivide(quint8 *dstRowStart, qint32 dstRowStrid
                              quint8 srcColor = src[channel];
                              quint8 dstColor = dst[channel];
 
-                             srcColor = qMin((dstColor * (UINT8_MAX + 1u) + (srcColor / 2u)) / (1u + srcColor), UINT8_MAX);
+                             srcColor = qMin((dstColor * (UINT8_MAX + 1u) + (srcColor / 2u)) / (1u + srcColor), (uint)UINT8_MAX);
 
                              quint8 newColor = UINT8_BLEND(srcColor, dstColor, srcBlend);
 

@@ -136,8 +136,8 @@ void KoProperties::setProperty(const QString & name, const QVariant & value)
 
 bool KoProperties::property(const QString & name, QVariant & value) const
 {
-    QMap<QString, QVariant>::const_iterator it = d->properties.find(name);
-    if (it == d->properties.end()) {
+    QMap<QString, QVariant>::const_iterator it = d->properties.constFind(name);
+    if (it == d->properties.constEnd()) {
         return false;
     } else {
         value = *it;

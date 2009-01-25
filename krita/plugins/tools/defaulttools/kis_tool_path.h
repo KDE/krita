@@ -22,7 +22,7 @@
 #include <KoCreatePathTool.h>
 #include <KoToolFactory.h>
 
-#include "flake/kis_layer_shape.h"
+#include "flake/kis_node_shape.h"
 #include "kis_tool.h"
 
 class KisSelectionOptions;
@@ -49,7 +49,7 @@ public:
             : KoToolFactory(parent, "KisToolPath", i18n("Paint a path")) {
         setToolTip(i18n("Draw a path."));
         setToolType(TOOL_TYPE_SHAPE);
-        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        //setActivationShapeId( KIS_NODE_SHAPE_ID );
         setIcon("krita_draw_path");
         setPriority(7);
     }

@@ -46,9 +46,6 @@ public:
 
     /**
      * Create an empty node without a parent.
-     *
-     * @param the image that owns this node. The image will be
-     * informed before and after changes in this node's node list.
      */
     KisNode();
 
@@ -57,8 +54,7 @@ public:
      * node.
      */
     KisNode(const KisNode & rhs);
-private:
-    void init();
+
 public:
     /**
      * Delete this node
@@ -68,8 +64,6 @@ public:
     virtual KisNodeSP clone() const = 0;
 
     virtual bool accept(KisNodeVisitor &v);
-
-protected:
 
     /**
      * Re-implement this method to add constraints for the node
@@ -190,14 +184,18 @@ public: // Graph methods
      * KisNodeBase::check(properties) returns true will be returned.
      */
     QList<KisNodeSP> childNodes(const QStringList & nodeTypes, const KoProperties & properties) const;
+
 public:
+
     /**
      * @return the node progress proxy used by this node, if this node has no progress
      *         proxy, it will return the proxy of its parent, if the parent has no progress proxy
      *         it will return 0
      */
     KisNodeProgressProxy* nodeProgressProxy() const;
+
 private:
+
     /**
      * Create a node progress proxy for this node. You need to create a progress proxy only
      * if the node is going to appear in the layerbox, and it needs to be created before
@@ -227,6 +225,8 @@ protected:
 
 
 private:
+
+    void init();
 
     friend class KisNodeFacade;
     friend class KisNodeTest;

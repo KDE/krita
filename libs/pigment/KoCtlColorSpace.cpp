@@ -19,6 +19,7 @@
 
 #include "KoCtlColorSpace.h"
 
+#include "KoColorSpaceAbstract.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorSpaceMaths.h"
 #include "colorprofiles/KoCtlColorProfile.h"
@@ -34,6 +35,7 @@ KoCtlColorSpace::KoCtlColorSpace(const QString &id, const QString &name, KoMixCo
     Q_ASSERT(profile);
     d->profile = static_cast<KoCtlColorProfile*>(profile->clone());
     d->qcolordata = new quint16[4];
+    this->addCompositeOp( new CompositeCopy( this ) );
 }
 
 KoCtlColorSpace::~KoCtlColorSpace()

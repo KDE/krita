@@ -54,8 +54,9 @@ class MergeStrategy;
 }
 
 /**
- * This is the image class, it contains a tree of KisLayer stack and meta information about the image. And it also provides some functions
- * to manipulate the whole image.
+ * This is the image class, it contains a tree of KisLayer stack and
+ * meta information about the image. And it also provides some
+ * functions to manipulate the whole image.
  */
 class KRITAIMAGE_EXPORT KisImage : public QObject, public KisNodeFacade, public KisNodeGraphListener, public KisShared
 {
@@ -101,11 +102,11 @@ public:
                            const KoColorProfile * profile);
 
     /**
-     * Render the projection scaled onto a QImage. Use this when
-     * zoom < 100% to avoid color-adjusting pixels that will be
-     * filtered away anyway. It uses nearest-neighbour sampling, so
-     * the result is inaccurate and ugly. Set the option "fast_zoom"
-     * to true to make Krita use this.
+     * Render the projection scaled onto a QImage. Use this when zoom
+     * < 100% to avoid color-adjusting pixels that will be filtered
+     * away anyway. It uses nearest-neighbour sampling, so the result
+     * is inaccurate and ugly. Set the option "fast_zoom" to true to
+     * make Krita use this.
      *
      * XXX: Implement the mask option to draw the mask onto the
      * scaled image.
@@ -123,14 +124,15 @@ public:
                            KisSelectionSP mask = 0);
 
     /**
-     * Lock the image to make sure no recompositing-causing signals get emitted
-     * while you're messing with the layers. Don't forget to unlock again.
+     * Lock the image to make sure no recompositing-causing signals
+     * get emitted while you're messing with the layers. Don't forget
+     * to unlock again.
      */
     void lock();
 
     /**
-     * Unlock the image to make sure the rest of Krita learns about changes in the image
-     * again.
+     * Unlock the image to make sure the rest of Krita learns about
+     * changes in the image again.
      */
     void unlock();
 
@@ -262,14 +264,14 @@ public:
     bool undo() const;
 
     /**
-     * Tell the image it's modified; this emits the sigImageModified signal. This happens
-     *  when the image needs to be saved
+     * Tell the image it's modified; this emits the sigImageModified
+     * signal. This happens when the image needs to be saved
      */
     void setModified();
 
     /**
-     * The default colorspace of this image: new layers will have this colorspace
-     * and the projection will have this colorspace.
+     * The default colorspace of this image: new layers will have this
+     * colorspace and the projection will have this colorspace.
      */
     const KoColorSpace * colorSpace() const;
 
@@ -349,8 +351,9 @@ public:
     }
 
     /**
-     *  returns a paintdevice that contains the merged layers of this image, within
-     * the bounds of this image (with the colorspace and profile of this image)
+     * returns a paintdevice that contains the merged layers of this
+     * image, within the bounds of this image (with the colorspace and
+     * profile of this image)
      */
     KisPaintDeviceSP mergedImage();
 
@@ -359,50 +362,11 @@ public:
      */
     KisGroupLayerSP rootLayer() const;
 
-    /// Return the projection; that is, the complete, composited representation
-    /// of this image.
+    /**
+     * Return the projection; that is, the complete, composited
+     * representation of this image.
+     */
     KisPaintDeviceSP projection();
-
-    /// Move layer to specified position
-    bool KDE_DEPRECATED moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis);
-
-    /**
-     * Add an already existing layer to the image. The layer is put on top
-     * of the layers in the specified layergroup
-     * @param layer the layer to be added
-     * @param parent the parent layer
-     */
-    bool KDE_DEPRECATED addLayer(KisLayerSP layer, KisGroupLayerSP parent = 0);
-
-    /**
-     * Add already existing layer to image.
-     *
-     * @param layer the layer to be added
-     * @param parent the parent layer
-     * @param aboveThis in the list with child layers of the specified
-     *                  parent, add this layer above the specified sibling.
-     *                  if 0, the layer is put in the lowermost position in
-     *                  its group.
-     * returns false if adding the layer didn't work, true if the layer got added
-     */
-    bool KDE_DEPRECATED addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis);
-
-    /**
-     * Adds the layer to this group at the specified index.
-     * childCount() is a valid index and appends to the end. Fails and
-     * returns false if the layer is already in this group or any
-     * other (remove it first.)
-     */
-    bool KDE_DEPRECATED addLayer(KisLayerSP layer,  KisGroupLayerSP parent, int index);
-
-    /// Remove layer
-    bool KDE_DEPRECATED removeLayer(KisLayerSP layer);
-
-    /// Move layer up one slot
-    bool KDE_DEPRECATED raiseLayer(KisLayerSP layer);
-
-    /// Move layer down one slot
-    bool KDE_DEPRECATED lowerLayer(KisLayerSP layer);
 
     /**
      * Return the number of layers (not other nodes) that are in this
@@ -435,12 +399,12 @@ public:
     void notifyPropertyChanged(KisLayerSP layer);
 
     /**
-       Called whenever a layer has changed. The layer is added to a
-       list of dirty layers and as soon as the document stores the
-       command that is now in progress, the image will be notified.
-       Then the image will notify the dirty layers, the dirty layers
-       will notify their parents & emit a signal that will be caught
-       by the layer box, which will request a new thumbnail.
+     * Called whenever a layer has changed. The layer is added to a
+     * list of dirty layers and as soon as the document stores the
+     * command that is now in progress, the image will be notified.
+     * Then the image will notify the dirty layers, the dirty layers
+     * will notify their parents & emit a signal that will be caught
+     * by the layer box, which will request a new thumbnail.
     */
     void notifyLayerUpdated(KisLayerSP layer);
 
@@ -480,6 +444,11 @@ signals:
      * as the layers only change internally then.
      */
     void sigLayersChanged(KisGroupLayerSP rootLayer);
+    /**
+     * Emitted when the list of layers has changed completely, and emited after \ref sigLayersChanged has been
+     * emitted.
+     */
+    void sigPostLayersChanged(KisGroupLayerSP rootLayer);
 
     void sigLayerMoved(KisLayerSP layer);
     void sigLayerRemoved(KisLayerSP layer);

@@ -27,7 +27,7 @@
 #include <QKeyEvent>
 
 #include "kis_tool_paint.h"
-#include "flake/kis_layer_shape.h"
+#include "flake/kis_node_shape.h"
 
 
 
@@ -78,7 +78,7 @@ public:
             : KoToolFactory(parent, "KisToolPolyline", i18n("Polyline")) {
         setToolTip(i18n("Draw a polyline. Shift-mouseclick ends the polyline."));
         setToolType(TOOL_TYPE_SHAPE);
-        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        //setActivationShapeId( KIS_NODE_SHAPE_ID );
         setIcon("polyline");
         setPriority(5);
         setInputDeviceAgnostic(false);

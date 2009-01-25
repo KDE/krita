@@ -25,7 +25,7 @@
 #include "KoToolFactory.h"
 #include "ui_wdgcolorpicker.h"
 #include "kis_tool.h"
-#include <flake/kis_layer_shape.h>
+#include <flake/kis_node_shape.h>
 class KoResource;
 class KoColorSet;
 
@@ -88,7 +88,7 @@ public:
             : KoToolFactory(parent, "KritaSelected/KisToolColorPicker", i18n("Color Picker")) {
         setToolTip(i18n("Select a color from the image or current layer"));
         setToolType(TOOL_TYPE_FILL);
-//         setActivationShapeId( KIS_LAYER_SHAPE_ID );
+//         setActivationShapeId( KIS_NODE_SHAPE_ID );
         setPriority(15);
         setIcon("krita_tool_color_picker");
         setShortcut(KShortcut(Qt::Key_P));

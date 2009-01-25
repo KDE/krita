@@ -26,7 +26,7 @@
 
 #include <KoToolFactory.h>
 #include "kis_tool.h"
-#include "flake/kis_layer_shape.h"
+#include "flake/kis_node_shape.h"
 
 #include "ui_wdg_tool_crop.h"
 
@@ -139,7 +139,7 @@ public:
             : KoToolFactory(parent, "KisToolCrop", i18n("Crop")) {
         setToolTip(i18n("Crop the image to an area"));
         setToolType(TOOL_TYPE_TRANSFORM);
-        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        //setActivationShapeId( KIS_NODE_SHAPE_ID );
         setPriority(10);
         setIcon("tool_crop");
     }

@@ -23,7 +23,6 @@
 #include <klocale.h>
 
 #include "kis_paint_device.h"
-#include "kis_painterly_overlay_colorspace.h"
 
 #include <krita_export.h>
 

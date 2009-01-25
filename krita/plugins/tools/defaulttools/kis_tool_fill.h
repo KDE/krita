@@ -27,7 +27,7 @@
 
 
 #include "kis_tool_paint.h"
-#include <flake/kis_layer_shape.h>
+#include <flake/kis_node_shape.h>
 
 class KisPainter;
 class KisFillPainter;

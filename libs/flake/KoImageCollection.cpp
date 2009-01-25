@@ -126,12 +126,18 @@ KoImageData * KoImageCollection::getImage(const KUrl & url)
 
 KoImageData * KoImageCollection::getImage(const QString & href, KoStore * store)
 {
-    KoImageData * data = new KoImageData(this, href, store);
-    if ( data->errorCode() == KoImageData::Success ) {
-        lookup( data );
+    KoImageData * data = 0;
+    if (KUrl::isRelativeUrl(href)) {
+        data = new KoImageData(this, href, store);
+        if ( data->errorCode() == KoImageData::Success ) {
+            lookup( data );
+        }
+        else {
+            data = 0;
+        }
     }
     else {
-        data = 0;
+        data = getImage(KUrl(href));
     }
     return data;
 }

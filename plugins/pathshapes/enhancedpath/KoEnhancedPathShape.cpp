@@ -139,8 +139,8 @@ qreal KoEnhancedPathShape::evaluateReference( const QString &reference )
         case '?':
         {
             QString fname = reference.mid( 1 );
-            FormulaStore::const_iterator formulaIt = m_formulae.find( fname );
-            if( formulaIt != m_formulae.end() )
+            FormulaStore::const_iterator formulaIt = m_formulae.constFind( fname );
+            if( formulaIt != m_formulae.constEnd() )
             {
                 KoEnhancedPathFormula * formula = formulaIt.value();
                 if( formula )
@@ -178,8 +178,8 @@ KoEnhancedPathParameter * KoEnhancedPathShape::parameter( const QString & text )
 {
     Q_ASSERT( ! text.isEmpty() );
 
-    ParameterStore::const_iterator parameterIt = m_parameters.find( text );
-    if( parameterIt != m_parameters.end() )
+    ParameterStore::const_iterator parameterIt = m_parameters.constFind( text );
+    if( parameterIt != m_parameters.constEnd() )
         return parameterIt.value();
     else
     {

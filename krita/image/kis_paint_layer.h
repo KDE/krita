@@ -114,11 +114,8 @@ public slots:
         return this;
     }
 
-private slots:
-    void slotColorSpaceChanged();
 
 private:
-    void init();
 
     class Private;
     Private * const m_d;

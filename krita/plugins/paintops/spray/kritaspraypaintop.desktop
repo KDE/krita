@@ -1,0 +1,16 @@
+[Desktop Entry]
+Name=Spray
+Name[el]=Σπρέι
+Name[et]=Pihusti
+Name[it]=Spruzzo
+Name[nds]=Spröhen
+Name[nl]=Spuitbus
+Name[pt]='Spray'
+Name[pt_BR]='Spray'
+Name[sv]=Sprej
+Name[uk]=Аерограф
+Name[zh_TW]=噴霧
+X-KDE-ServiceTypes=Krita/Paintop
+Type=Service
+X-KDE-Library=kritaspraypaintop
+X-Krita-Version=3

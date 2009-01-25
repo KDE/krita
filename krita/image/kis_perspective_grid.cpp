@@ -272,12 +272,12 @@ KisSubPerspectiveGrid* KisPerspectiveGrid::gridAt(QPointF p)
 
 QList<KisSubPerspectiveGrid*>::const_iterator KisPerspectiveGrid::begin() const
 {
-    return d->subGrids.begin();
+    return d->subGrids.constBegin();
 }
 
 QList<KisSubPerspectiveGrid*>::const_iterator KisPerspectiveGrid::end() const
 {
-    return d->subGrids.end();
+    return d->subGrids.constEnd();
 }
 
 bool KisPerspectiveGrid::hasSubGrids() const

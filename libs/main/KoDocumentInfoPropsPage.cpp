@@ -137,8 +137,8 @@ void KoDocumentInfoPropsPage::applyChanges()
     bool docInfoSaved = false;
 
     QStringList entries = root->entries();
-    QStringList::ConstIterator it = entries.begin();
-    QStringList::ConstIterator end = entries.end();
+    QStringList::ConstIterator it = entries.constBegin();
+    QStringList::ConstIterator end = entries.constEnd();
     for (; it != end; ++it) {
         const KArchiveEntry *entry = root->entry(*it);
 
@@ -193,8 +193,8 @@ void KoDocumentInfoPropsPage::copy(const QString &path, const KArchiveEntry *ent
         }
 
         QStringList entries = dir->entries();
-        QStringList::ConstIterator it = entries.begin();
-        QStringList::ConstIterator end = entries.end();
+        QStringList::ConstIterator it = entries.constBegin();
+        QStringList::ConstIterator end = entries.constEnd();
         for (; it != end; ++it)
             copy(p, dir->entry(*it));
     }

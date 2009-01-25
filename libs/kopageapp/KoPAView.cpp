@@ -165,7 +165,7 @@ void KoPAView::initGUI()
     connect(m_horizontalRuler, SIGNAL(guideLineCreated(Qt::Orientation, int)),
             m_canvasController, SLOT(addGuideLine(Qt::Orientation, int)));
 
-    KoToolBoxFactory toolBoxFactory(m_canvasController, "Tools" );
+    KoToolBoxFactory toolBoxFactory(m_canvasController, i18n("Tools") );
     createDockWidget( &toolBoxFactory );
 
     KoDockerManager *dockerMng = dockerManager();
@@ -184,10 +184,10 @@ void KoPAView::initGUI()
 
     KoPADocumentStructureDockerFactory structureDockerFactory( KoDocumentSectionView::ThumbnailMode, m_doc->pageType() );
     m_documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( createDockWidget( &structureDockerFactory ) );
-    m_documentStructureDocker->setPart( m_doc );
     connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),
              m_documentStructureDocker, SLOT( setPart( KParts::Part * ) ) );
     connect(m_documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), this, SLOT(updateActivePage(KoPAPageBase*)));
+    connect(m_documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
 
     KoToolManager::instance()->requestToolActivation( m_canvasController );
 
@@ -418,9 +418,14 @@ void KoPAView::updateActivePage( KoPAPageBase * page )
     m_viewMode->updateActivePage( page );
 }
 
+void KoPAView::reinitDocumentDocker()
+{
+    m_documentStructureDocker->setActivePage( m_activePage );
+}
+
 void KoPAView::doUpdateActivePage( KoPAPageBase * page )
 {
-    bool pageChanged = page == m_activePage;
+    bool pageChanged = page != m_activePage;
     setActivePage( page );
 
     m_canvas->updateSize();

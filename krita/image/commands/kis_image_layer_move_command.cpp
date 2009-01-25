@@ -35,22 +35,41 @@
 #include "kis_undo_adapter.h"
 
 
-KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageSP image, KisNodeSP layer, KisNodeSP wasParent, KisNodeSP wasAbove)
+KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageSP image, KisNodeSP layer, KisNodeSP newParent, KisNodeSP newAbove)
         : KisImageCommand(i18n("Move Layer"), image)
 {
     m_layer = layer;
-    m_prevParent = wasParent;
-    m_prevAbove = wasAbove;
-    m_newParent = layer->parent();
-    m_newAbove = layer->nextSibling();
+    m_newParent = newParent;
+    m_newAbove = newAbove;
+    m_prevParent = layer->parent();
+    m_prevAbove = layer->prevSibling();
+    m_index = -1;
+}
+
+KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageSP image, KisNodeSP node, KisNodeSP newParent, quint32 index)
+        : KisImageCommand(i18n("Move Layer"), image)
+{
+    m_layer = node;
+    m_newParent = newParent;
+    m_newAbove = 0;
+    m_prevParent = node->parent();
+    m_prevAbove = node->prevSibling();
+    m_index = index;
 }
 
 void KisImageLayerMoveCommand::redo()
 {
-    m_image->moveNode(m_layer, m_newParent, m_newAbove);
+    if( m_newAbove || m_index == quint32(-1) )
+    {
+        m_image->moveNode(m_layer, m_newParent, m_newAbove);
+    } else {
+        m_image->moveNode(m_layer, m_newParent, m_index);
+    }
+    m_layer->setDirty();
 }
 
 void KisImageLayerMoveCommand::undo()
 {
     m_image->moveNode(m_layer, m_prevParent, m_prevAbove);
+    m_layer->setDirty();
 }

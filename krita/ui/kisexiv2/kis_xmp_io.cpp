@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008-2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -37,6 +37,18 @@ KisXMPIO::~KisXMPIO()
 {
 }
 
+inline std::string exiv2Prefix( const KisMetaData::Schema* _schema )
+{
+    std::string prefix = Exiv2::XmpProperties::prefix(_schema->uri().ascii());
+    if( prefix == "")
+    {
+        dbgFile << "Unknown namespace " << ppVar(_schema->uri()) << ppVar(_schema->prefix());
+        prefix = _schema->prefix().ascii();
+        Exiv2::XmpProperties::registerNs(_schema->uri().ascii(), prefix );
+    }
+    return prefix;
+}
+
 bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType) const
 {
     dbgFile << "Save XMP Data";
@@ -46,7 +58,31 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
             it != store->end(); ++it)
     {
         const KisMetaData::Entry& entry = *it;
-//         xmpData_.add( Exiv2::XmpKey( entry.schema()->uri().ascii(), entry.name().ascii() ), kmdValueToExivValue( entry.value() ) );
+        
+        // Check wether the prefix and namespace are know to exiv2
+        std::string prefix = exiv2Prefix( entry.schema() );
+        dbgFile << "Saving " << entry.name();
+        
+        const KisMetaData::Value& value = entry.value();
+        
+        if( value.type() == KisMetaData::Value::Structure )
+        {
+            QMap<QString, KisMetaData::Value> structure = value.asStructure();
+            std::string structPrefix = exiv2Prefix( value.structureSchema() );
+            for( QMap<QString, KisMetaData::Value>::iterator it = structure.begin();
+                 it != structure.end(); ++it )
+            {
+                Q_ASSERT( it.value().type() != KisMetaData::Value::Structure ); // Can't nest structure
+                QString key = "%1/%2:%3";
+                key.arg( entry.name() );
+                key.arg( structPrefix.c_str() );
+                key.arg( it.key() );
+                xmpData_.add(Exiv2::XmpKey(prefix, key.ascii()), kmdValueToExivXmpValue( it.value() ));
+            }
+        } else {
+            xmpData_.add(Exiv2::XmpKey(prefix, entry.name().ascii()), kmdValueToExivXmpValue(value));
+        }
+        // TODO property qualifier
     }
     // Serialize data
     std::string xmpPacket_;

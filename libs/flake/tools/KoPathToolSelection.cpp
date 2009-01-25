@@ -165,8 +165,8 @@ QList<KoPathPointData> KoPathToolSelection::selectedSegmentsData() const
     KoPathPointData last(0, KoPathPointIndex(-1, -1));
     KoPathPointData lastSubpathStart(0, KoPathPointIndex(-1, -1));
 
-    QList<KoPathPointData>::const_iterator it(pd.begin());
-    for (; it != pd.end(); ++it) {
+    QList<KoPathPointData>::const_iterator it(pd.constBegin());
+    for (; it != pd.constEnd(); ++it) {
         if (it->pointIndex.second == 0)
             lastSubpathStart = *it;
 

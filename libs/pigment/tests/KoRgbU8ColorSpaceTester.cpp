@@ -201,6 +201,7 @@ void KoRgbColorSpaceTester::testCompositeOps()
 
     foreach( KoID depthId, depthIDs)
     {
+	kDebug() << depthId.id();
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(
                 KoColorSpaceRegistry::instance()->colorSpaceId( RGBAColorModelID.id(), depthId.id() ) , "");
         const KoCompositeOp* copyOp = cs->compositeOp(COMPOSITE_COPY);

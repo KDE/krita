@@ -33,20 +33,35 @@
 #include "kis_group_layer.h"
 #include "kis_undo_adapter.h"
 
-KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageSP image, KisNodeSP layer)
-        : KisImageCommand(i18n("Add Layer"), image)
+KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageSP image, KisNodeSP layer, KisNodeSP parent, KisNodeSP aboveThis)
+        : KisImageCommand(i18n("Add Layer"), image), m_index( -1 )
 {
     m_layer = layer;
-    m_parent = layer->parent();
-    m_aboveThis = layer->nextSibling();
+    m_parent = parent;
+    m_aboveThis = aboveThis;
+}
+
+KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageSP image, KisNodeSP layer, KisNodeSP parent, quint32 index )
+        : KisImageCommand(i18n("Add Layer"), image), m_index( index )
+{
+    m_layer = layer;
+    m_parent = parent;
+    m_aboveThis = 0;
 }
 
 void KisImageLayerAddCommand::redo()
 {
-    m_image->addNode(m_layer, m_parent, m_aboveThis);
+    if( m_aboveThis || m_index == quint32(-1) )
+    {
+        m_image->addNode(m_layer, m_parent, m_aboveThis);
+    } else {
+        m_image->addNode(m_layer, m_parent, m_index);
+    }
+    m_layer->setDirty();
 }
 
 void KisImageLayerAddCommand::undo()
 {
     m_image->removeNode(m_layer);
+    m_layer->setDirty();
 }

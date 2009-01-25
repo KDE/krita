@@ -48,7 +48,7 @@ public:
     }
 
     virtual QString name() const {
-        return i18n("Pixel Brush");
+        return i18n("Mixing Brush");
     }
 
     virtual QString pixmap() {

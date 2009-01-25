@@ -38,8 +38,14 @@ Plugin::Plugin( QObject *parent, const QStringList& )
     KoDockRegistry::instance()->add( new ShapePropertiesDockerFactory() );
     KoDockRegistry::instance()->add( new KoShapeCollectionDockerFactory() );
     KoDockRegistry::instance()->add( new ShadowDockerFactory() );
-    KoDockRegistry::instance()->add( new ShapeSelectorFactory() );
     KoDockRegistry::instance()->add( new KoEndLinesDockerFactory() );
+#ifdef BUILD_EVERYTHING
+    KoDockRegistry::instance()->add( new ShapeSelectorFactory() );
+
+    
+
+#endif
+
 }
 
 #include "Plugin.moc"

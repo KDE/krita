@@ -29,7 +29,7 @@
 #include "kis_tool_shape.h"
 #include "kis_types.h"
 #include "KoToolFactory.h"
-#include "flake/kis_layer_shape.h"
+#include "flake/kis_node_shape.h"
 
 
 class QPainter;
@@ -82,7 +82,7 @@ public:
         setToolTip(i18n("Draw a rectangle"));
 
         setToolType(TOOL_TYPE_SHAPE);
-        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        //setActivationShapeId( KIS_NODE_SHAPE_ID );
         setIcon("krita_tool_rectangle");
         //setShortcut( Qt::Key_F6 );
         setPriority(2);

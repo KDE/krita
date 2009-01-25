@@ -23,7 +23,7 @@
 
 #include "kis_tool_shape.h"
 #include "ui_wdg_tool_star.h"
-#include "flake/kis_layer_shape.h"
+#include "flake/kis_node_shape.h"
 
 
 class WdgToolStar : public QWidget, public Ui::WdgToolStar
@@ -83,7 +83,7 @@ public:
         setToolType(TOOL_TYPE_SHAPE);
         setPriority(6);
         setIcon("tool_star");
-        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        //setActivationShapeId( KIS_NODE_SHAPE_ID );
         setInputDeviceAgnostic(false);
     }
 

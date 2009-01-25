@@ -28,12 +28,14 @@
 #include "kis_types.h"
 #include "kis_image_command.h"
 
+#include <krita_export.h>
+
 class KoCompositeOp;
 class KoColorSpace;
 class KoColorProfile;
 
 /// The command for adding a layer
-class KisImageLayerAddCommand : public KisImageCommand
+class KRITAIMAGE_EXPORT KisImageLayerAddCommand : public KisImageCommand
 {
 
 public:
@@ -42,7 +44,8 @@ public:
      * @param image The image the command will be working on.
      * @param layer the layer to add
      */
-    KisImageLayerAddCommand(KisImageSP image, KisNodeSP layer);
+    KisImageLayerAddCommand(KisImageSP image, KisNodeSP layer, KisNodeSP parent, KisNodeSP aboveThis);
+    KisImageLayerAddCommand(KisImageSP image, KisNodeSP layer, KisNodeSP parent, quint32 index );
 
     virtual void redo();
     virtual void undo();
@@ -51,5 +54,6 @@ private:
     KisNodeSP m_layer;
     KisNodeSP m_parent;
     KisNodeSP m_aboveThis;
+    quint32 m_index;
 };
 #endif

@@ -963,7 +963,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
             writeRawProfile(png_ptr, info_ptr, "iptc", buffer.data());
         }
         // Save XMP
-//         if(options.xmp)
+        if(options.xmp)
 #if 1
         // TODO enable when XMP support is finiehsed
         {

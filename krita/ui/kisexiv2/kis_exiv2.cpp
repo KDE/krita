@@ -202,52 +202,71 @@ Exiv2::Value* kmdValueToExivValue(const KisMetaData::Value& value, Exiv2::TypeId
     return 0;
 }
 
-Exiv2::Value* kmdValueToExivValue( const KisMetaData::Value& value )
+Exiv2::Value* kmdValueToExivXmpValue( const KisMetaData::Value& value )
 {
-    Exiv2::Value* arrV = 0;
+    Q_ASSERT( value.type() != KisMetaData::Value::Structure );
     switch (value.type()) {
         case KisMetaData::Value::Invalid:
             return &*Exiv2::Value::create(Exiv2::invalidTypeId);
         case KisMetaData::Value::Variant: {
             QVariant var = value.asVariant();
-            switch( var.type()) {
-                case QVariant::Int:
-                    return new Exiv2::ValueType<int32_t>(var.toInt(0));
-#if 0
-                case QVariant::Double:
-                    return new Exiv2::ValueType<double>(var.toDouble(0));
-#endif
-                case QVariant::Date: {
-                    QDate date = var.toDate();
-                    return new Exiv2::DateValue(date.year(), date.month(), date.day());
+            if( var.type() == QVariant::Bool )
+            {
+                if( var.toBool() )
+                {
+                    return new Exiv2::XmpTextValue("True");
+                } else {
+                    return new Exiv2::XmpTextValue("False");
                 }
-                case QVariant::DateTime:
-                    return new Exiv2::StringValue(qPrintable(var.toDateTime().toString("yyyy:MM:dd hh:mm:ss")));
-                case QVariant::String:
-                    return new Exiv2::StringValue(qPrintable(var.toString()));
-                default:
-                    qFatal("Unhandled type.");
-                    return 0;
+            } else {
+                Q_ASSERT( var.canConvert( QVariant::String) );
+                return new Exiv2::XmpTextValue( var.toString().ascii() );
             }
         }
         case KisMetaData::Value::SignedRational:
-            return new Exiv2::ValueType<Exiv2::Rational>(Exiv2::Rational(value.asSignedRational().numerator, value.asSignedRational().denominator));
+        {
+            QString rat = "%1 / %2";
+            rat.arg( value.asSignedRational().numerator );
+            rat.arg( value.asSignedRational().denominator );
+            return new Exiv2::XmpTextValue( rat.ascii() );
+        }
         case KisMetaData::Value::UnsignedRational:
-            return new Exiv2::ValueType<Exiv2::URational>(Exiv2::URational(value.asUnsignedRational().numerator, value.asUnsignedRational().denominator));
-        case KisMetaData::Value::AlternativeArray: 
-            arrV = new Exiv2::LangAltValue;
+        {
+            QString rat = "%1 / %2";
+            rat.arg( value.asUnsignedRational().numerator );
+            rat.arg( value.asUnsignedRational().denominator );
+            return new Exiv2::XmpTextValue( rat.ascii() );
+        }
+        case KisMetaData::Value::AlternativeArray:
         case KisMetaData::Value::OrderedArray:
         case KisMetaData::Value::UnorderedArray:
         {
-            if( !arrV )
-            {
-                arrV = new Exiv2::XmpArrayValue;
-            }
+            Exiv2::Value* arrV = new Exiv2::XmpArrayValue;
             foreach( const KisMetaData::Value& v, value.asArray() )
             {
-                Exiv2::Value* ev = kmdValueToExivValue( v );
+                Exiv2::Value* ev = kmdValueToExivXmpValue( v );
                 arrV->read( ev->toString() );
                 delete ev;
+            }
+            return arrV;
+        }
+        case KisMetaData::Value::LangArray:
+        {
+            Exiv2::Value* arrV = new Exiv2::LangAltValue;
+            QMap<QString, KisMetaData::Value> langArray = value.asLangArray();
+            for( QMap<QString, KisMetaData::Value>::iterator it = langArray.begin();
+                 it != langArray.end(); ++it )
+            {
+                QString exivVal;
+                if( it.key() != "x-default" )
+                {
+                    exivVal = "lang=" + it.key() + " ";
+                }
+                Q_ASSERT( it.value().type() == KisMetaData::Value::Variant );
+                QVariant var = it.value().asVariant();
+                Q_ASSERT( var.type() == QVariant::String );
+                exivVal += var.toString();
+                arrV->read( exivVal.ascii() );
             }
             return arrV;
         }

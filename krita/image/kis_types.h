@@ -19,7 +19,6 @@
 #define KISTYPES_H_
 
 #include <QVector>
-#include <QMap>
 #include <QPoint>
 
 template<class T>
@@ -193,6 +192,7 @@ typedef KisSharedPtr<KisPaintOpPreset> KisPaintOpPresetSP;
 class KisPaintOpSettings;
 typedef KisSharedPtr<KisPaintOpSettings> KisPaintOpSettingsSP;
 
+#include <kis_shared_ptr.h>
+
 #endif // KISTYPES_H_
 
-#include <kis_shared_ptr.h>

@@ -90,7 +90,7 @@ QImage KisPaintOpSettings::sampleStroke(const QSize& size )
     
     
     KisPainter painter(layer->paintDevice());
-    painter.setPaintColor(KoColor() );
+    painter.setPaintColor(KoColor(Qt::black, cs) );
 
     KisPaintOpPresetSP preset = new KisPaintOpPreset();
     preset->setSettings( this ); // This clones

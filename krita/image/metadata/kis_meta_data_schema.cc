@@ -35,6 +35,7 @@ const QString Schema::IPTCSchemaUri = "http://iptc.org/std/Iptc4xmpCore/1.0/xmln
 const QString Schema::PhotoshopSchemaUri = "http://ns.adobe.com/photoshop/1.0/";
 
 
+
 struct Schema::Private {
     QString uri;
     QString prefix;
@@ -106,7 +107,7 @@ SchemaRegistry::SchemaRegistry() : d(new Private)
     create(Schema::MakerNoteSchemaUri, "mkn");
     create(Schema::IPTCSchemaUri, "Iptc4xmpCore");
     create(Schema::PhotoshopSchemaUri, "photoshop");
-//     create("http://www.hdrsoft.com/tone_mapping_settings", "pmtm"); // TODO this one shouldn't be defined here but added as needed
+    
 }
 
 

@@ -80,6 +80,7 @@
 #include "widgets/kis_meta_data_merge_strategy_chooser_widget.h"
 #include "widgets/kis_wdg_generator.h"
 #include "kis_layer_box.h"
+#include "kis_node_commands_adapter.h"
 
 KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
         : m_view(view)
@@ -103,11 +104,13 @@ KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
         , m_actLayerVis(false)
         , m_imgResizeToLayer(0)
         , m_activeLayer(0)
+        , m_commandsAdapter( new KisNodeCommandsAdapter( m_view ) )
 {
 }
 
 KisLayerManager::~KisLayerManager()
 {
+    delete m_commandsAdapter;
 }
 
 KisLayerSP KisLayerManager::activeLayer()
@@ -466,7 +469,7 @@ void KisLayerManager::addLayer(KisNodeSP parent, KisNodeSP above)
         KisLayerSP layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE, img->colorSpace());
         if (layer) {
             layer->setCompositeOp(img->colorSpace()->compositeOp(COMPOSITE_OVER));
-            img->addNode(layer.data(), parent.data(), above.data());
+            m_commandsAdapter->addNode(layer.data(), parent.data(), above.data());
             m_view->canvas()->update();
             m_view->layerBox()->setCurrentNode( layer );
         } else {
@@ -482,7 +485,7 @@ void KisLayerManager::addGroupLayer(KisNodeSP parent, KisNodeSP above)
         KisLayerSP layer = KisLayerSP(new KisGroupLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE));
         if (layer) {
             layer->setCompositeOp(img->colorSpace()->compositeOp(COMPOSITE_OVER));
-            img->addNode(layer.data(), parent.data(), above.data());
+            m_commandsAdapter->addNode(layer.data(), parent.data(), above.data());
             m_view->canvas()->update();
         } else {
             KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
@@ -522,7 +525,7 @@ void KisLayerManager::addCloneLayer(KisNodeSP parent, KisNodeSP above)
         if (layer) {
 
             layer->setCompositeOp(img->colorSpace()->compositeOp(COMPOSITE_OVER));
-            img->addNode(layer.data(), parent.data(), above.data());
+            m_commandsAdapter->addNode(layer.data(), parent.data(), above.data());
 
             m_view->canvas()->update();
 
@@ -556,7 +559,7 @@ void KisLayerManager::addShapeLayer(KisNodeSP parent, KisNodeSP above)
         KisLayerSP layer = new KisShapeLayer(parentContainer, img.data(), img->nextLayerName(), OPACITY_OPAQUE);
         if (layer) {
             layer->setCompositeOp(img->colorSpace()->compositeOp(COMPOSITE_OVER));
-            img->addNode(layer.data(), parent, above.data());
+            m_commandsAdapter->addNode(layer.data(), parent, above.data());
             m_view->canvas()->update();
         } else {
             KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
@@ -606,7 +609,7 @@ KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNo
     if (!img) return 0;
 
     KisAdjustmentLayerSP l = new KisAdjustmentLayer(img, name, filter, selection);
-    img->addNode(l.data(), parent, above);
+    m_commandsAdapter->addNode(l.data(), parent, above);
     l->setDirty(img->bounds());
     return l;
 }
@@ -642,7 +645,7 @@ void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above, const
     if (!img) return;
 
     KisGeneratorLayerSP l = new KisGeneratorLayer(img, name, generator, selection);
-    img->addNode(l.data(), parent, above.data());
+    m_commandsAdapter->addNode(l.data(), parent, above.data());
     if (l->selection())
         l->setDirty(l->selection()->selectedExactRect());
     else
@@ -661,7 +664,7 @@ void KisLayerManager::layerRemove()
             QRect extent = layer->extent();
             KisNodeSP parent = layer->parent();
 
-            img->removeLayer(layer);
+            m_commandsAdapter->removeNode(layer);
 
             if (parent)
                 parent->setDirty(extent);
@@ -686,7 +689,7 @@ void KisLayerManager::layerDuplicate()
 
     KisLayerSP dup = dynamic_cast<KisLayer*>(active->clone().data());
     dup->setName(i18n("Duplicate of '%1'", active->name()));
-    img->addNode(dup.data(), active->parent(), active.data());
+    m_commandsAdapter->addNode(dup.data(), active->parent(), active.data());
     if (dup) {
         activateLayer(dup);
         dup->setDirty();
@@ -706,7 +709,7 @@ void KisLayerManager::layerRaise()
 
     layer = activeLayer();
 
-    img->raiseLayer(layer);
+    m_commandsAdapter->raise(layer);
     layer->parent()->setDirty();
 }
 
@@ -720,7 +723,7 @@ void KisLayerManager::layerLower()
 
     layer = activeLayer();
 
-    img->lowerLayer(layer);
+    m_commandsAdapter->lower( layer );
     layer->parent()->setDirty();
 }
 
@@ -733,7 +736,7 @@ void KisLayerManager::layerFront()
         return;
 
     layer = activeLayer();
-    img->toTop(layer.data());
+    m_commandsAdapter->toTop(layer);
     layer->parent()->setDirty();
 }
 
@@ -745,7 +748,7 @@ void KisLayerManager::layerBack()
     KisLayerSP layer;
 
     layer = activeLayer();
-    img->toBottom(layer.data());
+    m_commandsAdapter->toBottom(layer);
     layer->parent()->setDirty();
 }
 

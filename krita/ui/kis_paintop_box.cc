@@ -77,12 +77,19 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_cmbPaintops = new KComboBox(this);
     m_cmbPaintops->setObjectName("KisPaintopBox::m_cmbPaintops");
     m_cmbPaintops->setMinimumWidth(150);
+    m_cmbPaintops->setMaxVisibleItems( 20 );
     m_cmbPaintops->setToolTip(i18n("Artist's materials"));
 
     m_cmbPaintopPresets = new KComboBox(this);
     m_cmbPaintopPresets->setObjectName("KisPaintopBox::m_cmbPaintopPresets");
     m_cmbPaintopPresets->setMinimumWidth(150);
     m_cmbPaintopPresets->setToolTip(i18n("Brush presets"));
+
+#ifdef Q_WS_MAC
+    m_cmbPaintops->setAttribute(Qt::WA_MacSmallSize, true);
+    m_cmbPaintopPresets->setAttribute(Qt::WA_MacSmallSize, true);
+#endif
+
 
     m_presetWidget = new KisPresetWidget(this, "presetwidget");
     m_presetWidget->setToolTip(i18n("Edit brush preset"));
@@ -150,7 +157,7 @@ void KisPaintopBox::slotItemSelected(int index)
                 KisResourceServerProvider::instance()->paintOpPresetServer()->resources()) {
             dbgUI << "\t\t " << preset << ", " << preset->paintOp();
             if (preset->paintOp() == paintop) {
-                m_cmbPaintopPresets->addItem(preset->name(), QVariant(preset));
+                m_cmbPaintopPresets->addItem(preset->name(), QVariant::fromValue<KisPaintOpPresetSP>(preset));
             }
         }
     }

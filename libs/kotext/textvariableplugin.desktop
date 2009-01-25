@@ -13,6 +13,7 @@ Name[it]=Estensione per le variabili di testo
 Name[ja]=テキスト変数プラグイン
 
 Name[kk]=Мәтін айнымалының плагині
+Name[lv]=Teksta mainīgā spraudnis
 Name[nds]=Textvariabeln-Moduul
 Name[nl]=Tekstvariabeleplugin
 Name[pt]='Plugin' de Variáveis de Texto
@@ -38,6 +39,7 @@ Comment[it]=Un'estensione contenente variabili di testo
 Comment[ja]=テキスト変数を含むプラグイン
 
 Comment[kk]=Мәтін айнымалылары орналасатын плагині
+Comment[lv]=Spraudnis, kas satur teksta mainīgos
 Comment[nds]=En Moduul, dat Textvariabeln bargt
 Comment[nl]=Een plugin, dat variabele bevat
 Comment[pt]=Um 'plugin' que contém variáveis de texto

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006-2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2006-2007,2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -51,9 +51,7 @@ KisOpenRasterStackSaveVisitor::~KisOpenRasterStackSaveVisitor()
 void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* layer)
 {
     elt.setAttribute("name", layer->name());
-    elt.setAttribute("x", layer->x());
-    elt.setAttribute("y", layer->y());
-    elt.setAttribute("opacity", layer->opacity());
+    elt.setAttribute("opacity", layer->opacity() / 255.0);
 }
 
 bool KisOpenRasterStackSaveVisitor::visit(KisPaintLayer *layer)
@@ -63,7 +61,7 @@ bool KisOpenRasterStackSaveVisitor::visit(KisPaintLayer *layer)
     QDomElement elt = d->layerStack.createElement("layer");
     saveLayerInfo(elt, layer);
     elt.setAttribute("src", filename);
-    d->currentElement->appendChild(elt);
+    d->currentElement->insertBefore(elt, QDomNode());
 
     return true;
 }
@@ -90,7 +88,13 @@ bool KisOpenRasterStackSaveVisitor::visit(KisGroupLayer *layer)
         previousElt->appendChild(elt);
         d->currentElement = previousElt;
     } else {
-        d->layerStack.appendChild(elt);
+        QDomElement imageElt = d->layerStack.createElement("image");
+        int width = layer->image()->width();
+        int height = layer->image()->height();
+        imageElt.setAttribute("w", width);
+        imageElt.setAttribute("h", height);
+        imageElt.appendChild(elt);
+        d->layerStack.insertBefore(imageElt, QDomNode());
         d->currentElement = 0;
         d->saveContext->saveStack(d->layerStack);
     }
@@ -104,6 +108,6 @@ bool KisOpenRasterStackSaveVisitor::visit(KisAdjustmentLayer *layer)
     saveLayerInfo(elt, layer);
     elt.setAttribute("type", "applications:krita:" + layer->filter()->name());
     saveLayerInfo(elt, layer);
-    d->currentElement->appendChild(elt);
+    d->currentElement->insertBefore(elt, QDomNode());
     return true;
 }

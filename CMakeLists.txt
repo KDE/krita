@@ -203,6 +203,12 @@ if(SHOULD_BUILD_KPRESENTER)
     macro_optional_add_subdirectory(kpresenter)
 endif(SHOULD_BUILD_KPRESENTER)
 
+OPTION(BUILD_EVERYTHING "This option control wether plugins/apps that are not part of the 2.0 release should be build." FALSE)
+if(BUILD_EVERYTHING)
+    ADD_DEFINITIONS(-DBUILD_EVERYTHING)
+endif(BUILD_EVERYTHING)
+
+
 macro_optional_add_subdirectory(kdgantt)
 macro_optional_add_subdirectory(kchart)
 

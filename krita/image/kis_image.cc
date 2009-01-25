@@ -684,92 +684,6 @@ KisPaintDeviceSP KisImage::projection()
     return projection;
 }
 
-bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP group)
-{
-    // XXX: Temporarily for compatibility
-    if (group)
-        return addNode(layer.data(), group.data());
-    else {
-        KisNode * root = rootLayer().data();
-        return addNode(layer, root);
-    }
-}
-
-bool KisImage::addLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis)
-{
-    if (parent && aboveThis)
-        return addNode(layer.data(), parent.data(), aboveThis.data());
-    else if (parent)
-        return addNode(layer.data(), parent.data());
-    else
-        return addNode(layer.data(), rootLayer().data());
-}
-
-bool KisImage::addLayer(KisLayerSP layer,  KisGroupLayerSP parent, int index)
-{
-    if (parent)
-        return addNode(layer.data(), parent.data(), index);
-    else
-        return addNode(layer.data(), rootLayer().data(), index);
-}
-
-
-bool KisImage::removeLayer(KisLayerSP layer)
-{
-    if (KisGroupLayerSP parent = dynamic_cast<KisGroupLayer*>(layer->parent().data())) {
-
-        KisNodeSP wasAbove = layer->nextSibling();
-        KisNodeSP wasBelow = layer->prevSibling();
-
-        const bool success = removeNode(layer.data());
-
-        if (success) {
-            layer->setImage(0);
-            if (!layer->temporary() && undo()) {
-                m_d->adapter->addCommand(new KisImageLayerRemoveCommand(KisImageSP(this),
-                                         layer,
-                                         parent,
-                                         wasAbove));
-            }
-        }
-        return success;
-    }
-
-    return false;
-}
-
-bool KisImage::raiseLayer(KisLayerSP layer)
-{
-    return raiseNode(layer.data());
-}
-
-bool KisImage::lowerLayer(KisLayerSP layer)
-{
-    return lowerNode(layer.data());
-}
-
-bool KisImage::moveLayer(KisLayerSP layer, KisGroupLayerSP parent, KisLayerSP aboveThis)
-{
-    // XXX: Temporary until everything is moved to handling just nodes
-    lock();
-    KisGroupLayerSP wasParent = dynamic_cast<KisGroupLayer*>(layer->parent().data());
-    KisLayerSP wasAbove = dynamic_cast<KisLayer*>(layer->nextSibling().data());
-    if (wasParent.data() == parent.data() && wasAbove.data() == aboveThis.data())
-        return false;
-    bool success = moveNode(layer.data(), parent.data(), aboveThis.data());
-    if (success) {
-        if (undo())
-            m_d->adapter->addCommand(new KisImageLayerMoveCommand(KisImageSP(this),
-                                     layer,
-                                     wasParent,
-                                     wasAbove));
-    }
-
-    unlock();
-
-    return success;
-}
-
 qint32 KisImage::nlayers() const
 {
     QStringList list;
@@ -804,7 +718,7 @@ void KisImage::flatten()
     KisPainter gc(dst->paintDevice());
     gc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, mergedImage(), OPACITY_OPAQUE, rc.left(), rc.top(), rc.width(), rc.height());
 
-    setRootLayer(new KisGroupLayer(this, "", OPACITY_OPAQUE));
+    setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE));
 
     if (undo()) {
         m_d->adapter->beginMacro(i18n("Flatten Image"));
@@ -835,6 +749,7 @@ KisLayerSP KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrate
     // XXX: this breaks if we allow free mixing of masks and layers
 
     KisLayerSP layer2 = dynamic_cast<KisLayer*>(layer->prevSibling().data());
+    dbgImage << "Merge " << layer << " with " << layer2;
     if (!layer2) return 0;
 
 
@@ -869,9 +784,11 @@ KisLayerSP KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrate
     scores.append(layerArea / norm);
     strategy->merge(newLayer->metaData(), srcs, scores);
 
+    KisNodeSP parent = layer->parent(); // parent is set to null when the layer is removed from the node
+    dbgImage << ppVar( parent );
     removeNode(layer->prevSibling());
     removeNode(layer);
-    addNode(newLayer, layer->parent());
+    addNode(newLayer, parent);
 
     undoAdapter()->endMacro();
     
@@ -1014,6 +931,7 @@ KisPaintDeviceSP KisImage::mergedImage()
 void KisImage::notifyLayersChanged()
 {
     emit sigLayersChanged(rootLayer());
+    emit sigPostLayersChanged(rootLayer());
 }
 
 void KisImage::notifyPropertyChanged(KisLayerSP layer)

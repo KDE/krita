@@ -124,4 +124,3 @@ QList<QAction*> KoVariableRegistry::createInsertVariableActions(KoCanvasBase *ho
     return answer;
 }
 
-#include "KoVariableRegistry.moc"

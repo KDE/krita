@@ -1,0 +1,121 @@
+<ui version="4.0" >
+ <class>WdgDynaOptions</class>
+ <widget class="QWidget" name="WdgDynaOptions" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>345</width>
+    <height>348</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+    <horstretch>210</horstretch>
+    <verstretch>60</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>210</width>
+    <height>60</height>
+   </size>
+  </property>
+  <widget class="QWidget" name="layoutWidget" >
+   <property name="geometry" >
+    <rect>
+     <x>50</x>
+     <y>10</y>
+     <width>129</width>
+     <height>197</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout_2" >
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout" >
+      <item>
+       <widget class="QLabel" name="radiusLabel" >
+        <property name="text" >
+         <string>radius</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="radiusSpinBox" >
+        <property name="value" >
+         <number>12</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout" >
+      <item>
+       <widget class="QLabel" name="coverageLabel" >
+        <property name="text" >
+         <string>coverage</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDoubleSpinBox" name="coverageSpin" >
+        <property name="decimals" >
+         <number>3</number>
+        </property>
+        <property name="maximum" >
+         <double>1.000000000000000</double>
+        </property>
+        <property name="singleStep" >
+         <double>0.050000000000000</double>
+        </property>
+        <property name="value" >
+         <double>0.300000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="jitterMoveBox" >
+        <property name="text" >
+         <string>Jitter movement</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="jitterSizeBox" >
+        <property name="text" >
+         <string>Jitter size</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="useParticlesBox" >
+        <property name="text" >
+         <string>Paint Particles</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDoubleSpinBox" name="amountSpin" >
+        <property name="decimals" >
+         <number>2</number>
+        </property>
+        <property name="maximum" >
+         <double>5.000000000000000</double>
+        </property>
+        <property name="singleStep" >
+         <double>0.100000000000000</double>
+        </property>
+        <property name="value" >
+         <double>1.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -41,6 +41,7 @@
 #include "kis_group_layer.h"
 #include "kis_layer_manager.h"
 #include "kis_selection_manager.h"
+#include "kis_node_commands_adapter.h"
 
 struct KisNodeManager::Private {
 
@@ -55,6 +56,7 @@ struct KisNodeManager::Private {
     KisMaskManager * maskManager;
     KisNodeSP activeNode;
     KisNodeManager* self;
+    KisNodeCommandsAdapter* commandsAdapter;
     void slotLayersChanged(KisGroupLayerSP);
 };
 
@@ -71,11 +73,13 @@ KisNodeManager::KisNodeManager(KisView2 * view, KisDoc2 * doc)
     m_d->layerManager = new KisLayerManager(view, doc);
     m_d->maskManager = new KisMaskManager(view);
     m_d->self = this;
-    connect( m_d->view->image(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), SLOT(slotLayersChanged(KisGroupLayerSP)) );
+    m_d->commandsAdapter = new KisNodeCommandsAdapter( view );
+    connect( m_d->view->image(), SIGNAL(sigPostLayersChanged(KisGroupLayerSP)), SLOT(slotLayersChanged(KisGroupLayerSP)) );
 }
 
 KisNodeManager::~KisNodeManager()
 {
+    delete m_d->commandsAdapter;
     delete m_d;
 }
 void KisNodeManager::setup(KActionCollection * actionCollection)
@@ -184,14 +188,14 @@ void KisNodeManager::addNode(KisNodeSP node, KisNodeSP activeNode)
     KisNodeSP above;
 
     getNewNodeLocation(node->metaObject()->className(), parent, above, activeNode);
-    m_d->doc->image()->addNode(node, parent, above);
+    m_d->commandsAdapter->addNode(node, parent, above);
     node->setDirty(node->extent());
 }
 
 void KisNodeManager::insertNode(KisNodeSP node, KisNodeSP parent, int index)
 {
     if (allowAsChild(parent->metaObject()->className(), node->metaObject()->className())) {
-        m_d->doc->image()->addNode(node, parent, index);
+        m_d->commandsAdapter->addNode(node, parent, index);
     }
 }
 
@@ -209,7 +213,7 @@ void KisNodeManager::moveNode(KisNodeSP node, KisNodeSP activeNode)
     dbgUI << " move node " << node->name() << " for parent " << parent->name();
     if (above)
         dbgUI << " above " << above->name();
-    m_d->doc->image()->moveNode(node, parent, above);
+    m_d->commandsAdapter->moveNode(node, parent, above);
     node->setDirty(node->extent());
 }
 
@@ -217,7 +221,7 @@ void KisNodeManager::moveNodeAt(KisNodeSP node, KisNodeSP parent, int index)
 {
     dbgUI << "Move node " << node << " to " << parent << " at " << index;
     if (allowAsChild(parent->metaObject()->className(), node->metaObject()->className())) {
-        m_d->doc->image()->moveNode(node, parent, index);
+        m_d->commandsAdapter->moveNode(node, parent, index);
     }
 }
 
@@ -404,6 +408,12 @@ void KisNodeManager::nodeToBottom()
     }
 }
 
+void KisNodeManager::removeNode(KisNodeSP node)
+{
+//     QRect bounds = node->exactBounds();
+    m_d->commandsAdapter->removeNode( node );
+//     m_image->rootLayer()->setDirty(bounds);
+}
 
 #include "kis_node_manager.moc"
 

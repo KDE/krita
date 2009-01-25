@@ -610,9 +610,7 @@ QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, const KisSelection* sele
 QRect KisTransformWorker::mirrorY(KisPaintDeviceSP dev, const KisSelection* selection)
 {
     KisPaintDeviceSP dst = dev;
-    qDebug() << dev;
     bool hasCurrentMemento = dev->dataManager()->hasCurrentMemento();
-    qDebug() << "hasCurrentMemento " << hasCurrentMemento;
     
     int pixelSize = dev->pixelSize();
     
@@ -620,8 +618,6 @@ QRect KisTransformWorker::mirrorY(KisPaintDeviceSP dev, const KisSelection* sele
         dst = new KisPaintDevice(dev->colorSpace());
     }
 
-    qDebug() << "dst == dev " << (dst == dev);
-    
     /* Read a line from bottom to top and and from top to bottom and write their values to each other */
     QRect r;
     if (selection) {

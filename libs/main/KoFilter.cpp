@@ -127,16 +127,16 @@ void KoEmbeddingFilter::endInternalEmbedding()
 
 int KoEmbeddingFilter::internalPartReference(const QString& key) const
 {
-    QMap<QString, PartReference>::const_iterator it = d->partStack.top()->m_partReferences.find(key);
-    if (it == d->partStack.top()->m_partReferences.end())
+    QMap<QString, PartReference>::const_iterator it = d->partStack.top()->m_partReferences.constFind(key);
+    if (it == d->partStack.top()->m_partReferences.constEnd())
         return -1;
     return it.value().m_index;
 }
 
 QByteArray KoEmbeddingFilter::internalPartMimeType(const QString& key) const
 {
-    QMap<QString, PartReference>::const_iterator it = d->partStack.top()->m_partReferences.find(key);
-    if (it == d->partStack.top()->m_partReferences.end())
+    QMap<QString, PartReference>::const_iterator it = d->partStack.top()->m_partReferences.constFind(key);
+    if (it == d->partStack.top()->m_partReferences.constEnd())
         return QByteArray();
     return it.value().m_mimeType;
 }

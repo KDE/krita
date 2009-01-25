@@ -86,8 +86,8 @@ void KoParameterShape::paintHandles(QPainter & painter, const KoViewConverter & 
     QPolygonF poly(handleRect(QPointF(0, 0), handleRadius));
     poly = matrix.map(poly);
 
-    QList<QPointF>::const_iterator it(m_handles.begin());
-    for (; it != m_handles.end(); ++it) {
+    QList<QPointF>::const_iterator it(m_handles.constBegin());
+    for (; it != m_handles.constEnd(); ++it) {
         QPointF moveVector = worldMatrix.map(*it);
         poly.translate(moveVector.x(), moveVector.y());
         painter.drawPolygon(poly);

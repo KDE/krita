@@ -30,7 +30,7 @@
 
 #include <kis_undo_adapter.h>
 #include <kis_types.h>
-#include <flake/kis_layer_shape.h>
+#include <flake/kis_node_shape.h>
 #include <kis_tool.h>
 
 #include "ui_wdg_tool_transform.h"
@@ -142,7 +142,7 @@ public:
         setIcon("transform-rotate");
         setPriority(11);
 
-        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        //setActivationShapeId( KIS_NODE_SHAPE_ID );
     }
 
     virtual ~KisToolTransformFactory() {}

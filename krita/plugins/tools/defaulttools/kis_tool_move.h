@@ -23,7 +23,7 @@
 
 #include "KoToolFactory.h"
 #include "kis_tool.h"
-#include <flake/kis_layer_shape.h>
+#include <flake/kis_node_shape.h>
 
 class KoCanvasBase;
 
@@ -67,7 +67,7 @@ public:
         setToolTip(i18n("Move a layer"));
         setToolType(TOOL_TYPE_TRANSFORM);
         //setToolType( dynamicToolType() );
-        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        //setActivationShapeId( KIS_NODE_SHAPE_ID );
         setPriority(11);
         setIcon("krita_tool_move");
         //setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_V ) );

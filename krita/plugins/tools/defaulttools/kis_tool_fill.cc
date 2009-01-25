@@ -172,6 +172,7 @@ void KisToolFill::mouseReleaseEvent(KoPointerEvent *e)
 {
 
     if (!m_canvas) return;
+    if (!currentNode()) return;
     if (!currentImage() || !currentNode()->paintDevice()) return;
     if (e->button() == Qt::LeftButton) {
         int x, y;

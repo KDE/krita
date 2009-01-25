@@ -94,9 +94,10 @@ void KisBrushChooser::slotSetItemSpacing(double spacingValue)
     if (item) {
         KisBrush *brush = static_cast<KisBrush *>(item->resource());
         brush->setSpacing(spacingValue);
-    }
+        slotActivatedBrush(brush);
 
-    emit sigBrushChanged();
+        emit sigBrushChanged();
+    }
 }
 
 void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
@@ -106,10 +107,10 @@ void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
     if (item) {
         KisBrush *brush = static_cast<KisBrush *>(item->resource());
         brush->setUseColorAsMask(useColorAsMask);
-        m_itemChooser->selectItem(m_itemChooser->currentItem());
-    }
+        slotActivatedBrush(brush);
 
-   emit sigBrushChanged();
+        emit sigBrushChanged();
+    }
 }
 
 void KisBrushChooser::update(QTableWidgetItem *item)

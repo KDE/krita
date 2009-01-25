@@ -74,8 +74,8 @@ void KoPartSelectDia::selectionChanged( Q3ListViewItem *item )
 KoDocumentEntry KoPartSelectDia::entry()
 {
     if ( listview->currentItem() ) {
-	QList<KoDocumentEntry>::const_iterator it = m_lstEntries.begin();
-	for ( ; it != m_lstEntries.end(); ++it ) {
+	QList<KoDocumentEntry>::const_iterator it = m_lstEntries.constBegin();
+	for ( ; it != m_lstEntries.constEnd(); ++it ) {
 	    if ( ( *it ).service()->name() == listview->currentItem()->text( 0 ) )
 		return *it;
 	}

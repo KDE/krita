@@ -22,7 +22,7 @@
 #define KIS_RANDOM_ACCESSOR_H
 
 #include <krita_export.h>
-#include <kis_global.h>
+#include "kis_global.h"
 
 class KisDataManager;
 

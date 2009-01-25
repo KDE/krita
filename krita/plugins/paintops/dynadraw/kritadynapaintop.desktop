@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Dyna
+Name[uk]=Дайна
+X-KDE-ServiceTypes=Krita/Paintop
+Type=Service
+X-KDE-Library=kritadynapaintop
+X-Krita-Version=3

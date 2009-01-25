@@ -29,6 +29,8 @@
 #include "kis_node_progress_proxy.h"
 #include "kis_image.h"
 #include "kis_selection.h"
+#include "kis_undo_adapter.h"
+#include "commands/kis_node_property_list_command.h"
 
 class KisNodeModel::Private
 {
@@ -52,11 +54,12 @@ KisNodeModel::~KisNodeModel()
 
 void KisNodeModel::setImage(KisImageSP image)
 {
-    //dbgUI <<"KisNodeModel::setImage " << image << ": number of layers " << image->nlayers();
+    dbgUI <<"KisNodeModel::setImage " << image << ": number of layers " << image->nlayers();
     if (m_d->image) {
         m_d->image->disconnect(this);
     }
     m_d->image = image;
+    connect( m_d->image, SIGNAL(sigPostLayersChanged(KisGroupLayerSP)), SLOT(layersChanged()));
 
     connect(m_d->image, SIGNAL(sigAboutToAddANode(KisNode*, int)),
             SLOT(beginInsertNodes(KisNode*, int)));
@@ -289,7 +292,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         wasVisible = node->visible();
         visible = proplist.at(0).state.toBool();
 
-        node->setSectionModelProperties(proplist);
+        m_d->image->undoAdapter()->addCommand( new KisNodePropertyListCommand( node, proplist ) );
         emit dataChanged(index, index);
         if (wasVisible != visible) {
             node->setDirty();
@@ -437,6 +440,12 @@ void KisNodeModel::progressPercentageChanged(int, const KisNodeSP _node)
 {
     QModelIndex index = indexFromNode(_node);
     emit( dataChanged(index, index) );
+}
+
+void KisNodeModel::layersChanged()
+{
+    qDebug() << "KisNodeModel::layersChanged";
+    reset();
 }
 
 

@@ -23,7 +23,7 @@
 
 #include "KoToolFactory.h"
 
-#include "flake/kis_layer_shape.h"
+#include "flake/kis_node_shape.h"
 #include "kis_tool_freehand.h"
 
 class KisSelectedTransaction;
@@ -65,7 +65,7 @@ public:
         setIcon("tool_brush_selection");
         setShortcut(KShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_B));
         setPriority(50);
-        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        //setActivationShapeId( KIS_NODE_SHAPE_ID );
     }
 
     virtual ~KisToolSelectBrushFactory() {}

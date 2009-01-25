@@ -293,8 +293,8 @@ void KoPictureCollection::readFromStore(KoStore * store, const StoreMap & storeM
 KoPicture KoPictureCollection::findOrLoad(const QString& fileName, const QDateTime& dateTime)
 {
     // As now all KoPictureKey objects have a valid QDateTime, we must do it without a date/time check.
-    ConstIterator it = find(KoPictureKey(fileName, dateTime));
-    if (it == end()) {
+    ConstIterator it = constFind(KoPictureKey(fileName, dateTime));
+    if (it == constEnd()) {
         return loadPicture(fileName);
     }
     return *it;

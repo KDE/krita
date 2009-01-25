@@ -167,12 +167,12 @@ const Value& Store::getValue(const QString & uri, const QString & entryName) con
 
 QHash<QString, Entry>::const_iterator Store::begin() const
 {
-    return d->entries.begin();
+    return d->entries.constBegin();
 }
 
 QHash<QString, Entry>::const_iterator Store::end() const
 {
-    return d->entries.end();
+    return d->entries.constEnd();
 }
 
 void Store::debugDump() const

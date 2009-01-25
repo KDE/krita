@@ -39,10 +39,9 @@ class QString;
 class QColor;
 
 class KoStore;
+class KoColor;
 class KoColorSpace;
-class KoColor;
 class KoColorProfile;
-class KoColor;
 
 class KisRandomSubAccessorPixel;
 class KisDataManager;

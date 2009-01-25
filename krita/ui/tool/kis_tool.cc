@@ -31,9 +31,8 @@
 #include <KoSelection.h>
 #include <KoAbstractGradient.h>
 
-#include "kis_layer_shape.h"
+#include "kis_node_shape.h"
 #include "kis_layer_container_shape.h"
-#include "kis_mask_shape.h"
 #include "kis_shape_layer.h"
 
 #include <kis_view2.h>

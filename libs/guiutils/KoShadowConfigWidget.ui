@@ -48,7 +48,7 @@
        </widget>
       </item>
       <item row="2" column="1" >
-       <widget class="KColorButton" name="shadowColor" />
+       <widget class="KoColorComboBox" name="shadowColor" />
       </item>
      </layout>
     </widget>
@@ -70,11 +70,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
-  </customwidget>
-  <customwidget>
    <class>KoSliderCombo</class>
    <extends>QComboBox</extends>
    <header location="global" >KoSliderCombo.h</header>
@@ -83,6 +78,11 @@
    <class>KoUnitDoubleSpinBox</class>
    <extends>QDoubleSpinBox</extends>
    <header location="global" >KoUnitDoubleSpinBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KoColorComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global" >KoColorComboBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

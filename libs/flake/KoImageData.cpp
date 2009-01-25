@@ -2,7 +2,7 @@
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
- * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008-2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -41,14 +41,15 @@
 KoImageData::KoImageData(KoImageCollection *collection, const QImage & image)
 : d(new KoImageDataPrivate(collection))
 {
-    d->image = image;
     QByteArray ba;
     QBuffer buffer(&ba);
     buffer.open(QIODevice::WriteOnly);
     image.save(&buffer, "PNG"); // use .png for images we get as QImage
+    buffer.close();
     QCryptographicHash ch(QCryptographicHash::Md5);
     ch.addData(ba);
     d->key = ch.result();
+    d->rawData = ba;
     d->suffix = "png";
 }
 
@@ -109,36 +110,27 @@ KoImageData::ImageQuality KoImageData::imageQuality() const
 QPixmap KoImageData::pixmap()
 {
     if (d->pixmap.isNull()) {
-        image(); // force loading if only present if only present as raw data
-
-        if (! d->image.isNull()) {
-            if (d->quality == NoPreviewImage) {
-                d->pixmap = QPixmap(1, 1);
-                QPainter p(&d->pixmap);
-                p.setPen(QPen(Qt::gray));
-                p.drawPoint(0, 0);
-                p.end();
-            }
-            else {
-                int multiplier = 150; // max 150 ppi
-                if (d->quality == LowQuality)
-                    multiplier = 50;
-                else if (d->quality == MediumQuality)
-                    multiplier = 100;
-                int width = qMin(d->image.width(), qRound(imageSize().width() * multiplier / 72.));
-                int height = qMin(d->image.height(), qRound(imageSize().height() * multiplier / 72.));
-                // kDebug(30006)() <<"  image:" << width <<"x" << height;
-
-                QImage scaled = d->image.scaled(width, height);
-                if (!d->rawData.isEmpty()) { // free memory
-                    d->image = QImage();
-                }
-
-                d->pixmap = QPixmap::fromImage(scaled);
-            }
+        if (d->quality == NoPreviewImage) {
+            d->pixmap = QPixmap(1, 1);
+            QPainter p(&d->pixmap);
+            p.setPen(QPen(Qt::gray));
+            p.drawPoint(0, 0);
+            p.end();
+        }
+        else {
+            d->pixmap.loadFromData(d->rawData);
         }
     }
     return d->pixmap;
+}
+
+const QImage KoImageData::image() const
+{
+    QImage image;
+    if ( ! image.loadFromData( d->rawData ) ) {
+        kWarning(30006) << "load image from data failed";
+    }
+    return image;
 }
 
 bool KoImageData::saveToFile(QIODevice & device)
@@ -149,7 +141,7 @@ bool KoImageData::saveToFile(QIODevice & device)
 bool KoImageData::loadFromFile(QIODevice & device)
 {
     d->rawData = device.readAll();
-    bool loaded = d->image.loadFromData( d->rawData );
+    bool loaded = d->pixmap.loadFromData( d->rawData );
     if ( loaded ) {
         QCryptographicHash ch(QCryptographicHash::Md5);
         ch.addData(d->rawData);
@@ -165,27 +157,22 @@ const QSizeF KoImageData::imageSize()
 {
     if (!d->imageSize.isValid()) {
         // The imagesize have not yet been calculated
-        image(); // make sure the image is loaded
+        // TODO is there a better way to get the resolution then using a QImage
+        QImage theImage = image();
 
-        if (d->image.dotsPerMeterX())
-            d->imageSize.setWidth(DM_TO_POINT(d->image.width() / (qreal) d->image.dotsPerMeterX() * 10.0));
+        if (theImage.dotsPerMeterX())
+            d->imageSize.setWidth(DM_TO_POINT(theImage.width() / (qreal) theImage.dotsPerMeterX() * 10.0));
         else
-            d->imageSize.setWidth(d->image.width() / 72.0);
+            d->imageSize.setWidth(theImage.width() / 72.0);
 
-        if (d->image.dotsPerMeterY())
-            d->imageSize.setHeight(DM_TO_POINT(d->image.height() / (qreal) d->image.dotsPerMeterY() * 10.0));
+        if (theImage.dotsPerMeterY())
+            d->imageSize.setHeight(DM_TO_POINT(theImage.height() / (qreal) theImage.dotsPerMeterY() * 10.0));
         else
-            d->imageSize.setHeight(d->image.height() / 72.0);
+            d->imageSize.setHeight(theImage.height() / 72.0);
+
+        //kDebug() << "resolution:" << d->image.dotsPerMeterX() << "*" << d->image.dotsPerMeterY() << ",size:" << size;
     }
     return d->imageSize;
-}
-
-const QImage KoImageData::image() const
-{
-    if ( d->image.isNull() ) {
-        d->image.loadFromData( d->rawData );
-    }
-    return d->image;
 }
 
 bool KoImageData::operator==(const KoImageData &other) const

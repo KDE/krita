@@ -2,7 +2,7 @@
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
- * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008-2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,7 +28,7 @@
 
 KoImageDataPrivate::KoImageDataPrivate(KoImageCollection *c)
 :collection(c)
-,quality(KoImageData::MediumQuality)
+,quality(KoImageData::HighQuality)
 ,errorCode(KoImageData::Success)
 {
 }
@@ -41,10 +41,5 @@ KoImageDataPrivate::~KoImageDataPrivate()
 
 bool KoImageDataPrivate::saveToFile(QIODevice & device)
 {
-    if (!rawData.isEmpty()) {
-        return device.write(rawData) == rawData.size();
-    }
-    else {
-        return image.save(&device, "PNG"); // if we only have a image save it as png
-    }
+    return device.write(rawData) == rawData.size();
 }

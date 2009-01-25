@@ -18,6 +18,15 @@ set(kofficedockers_SRCS
     shadowdocker/ShadowDocker.cpp
     shadowdocker/ShadowDockerFactory.cpp
 
+    shapeendlines/KoShapeEndLinesDocker.cpp
+    shapeendlines/KoEndLinesDockerFactory.cpp
+
+    Plugin.cpp
+)
+
+if( BUILD_EVERYTHING )
+
+set(kofficedockers_SRCS ${kofficedockers_SRCS}
     shapeselector/Canvas.cpp
     shapeselector/DragCanvasStrategy.cpp
     shapeselector/FolderBorder.cpp
@@ -36,11 +45,13 @@ set(kofficedockers_SRCS
     shapeselector/ClipboardProxyShape.cpp
     shapeselector/ResizeFolderStrategy.cpp
 
-    shapeendlines/KoShapeEndLinesDocker.cpp
-    shapeendlines/KoEndLinesDockerFactory.cpp
 
-    Plugin.cpp
+    
+
+    
+
 )
+endif( BUILD_EVERYTHING )
 
 add_subdirectory( strokedocker/pics )
 add_subdirectory( shapeendlines/pics )

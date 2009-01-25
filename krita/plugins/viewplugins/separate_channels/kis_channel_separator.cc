@@ -91,8 +91,8 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
     vKisPaintDeviceSP layers;
 
-    QList<KoChannelInfo *>::const_iterator begin = channels.begin();
-    QList<KoChannelInfo *>::const_iterator end = channels.end();
+    QList<KoChannelInfo *>::const_iterator begin = channels.constBegin();
+    QList<KoChannelInfo *>::const_iterator end = channels.constEnd();
 
 
     QRect rect = src->exactBounds();

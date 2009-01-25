@@ -570,6 +570,8 @@ void DeformBrush::paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPa
             m_firstPaint = true;
         }else {
             fastMove(x1,y1, x1 - m_prevX, y1 - m_prevY);
+            m_prevX = x1;
+            m_prevY = y1;
         }
     } else
     

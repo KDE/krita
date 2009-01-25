@@ -69,12 +69,12 @@ void kisnodemodel_test::testRowcount()
     QVERIFY(model.rowCount() == 2);
 
     KisGroupLayerSP parent = new KisGroupLayer(img, "group 1", 200);
-    img->addLayer(parent, img->rootLayer());
+    img->addNode(parent, img->rootLayer());
 
     QVERIFY(model.rowCount() == 3);
 
     KisPaintLayerSP child = new KisPaintLayer(img, "child", 200);
-    img->addLayer(child, parent);
+    img->addNode(child, parent);
 
     QVERIFY(model.rowCount() == 3);
 
@@ -147,10 +147,10 @@ void kisnodemodel_test::testModelIndex()
             first  1
      */
     KisGroupLayerSP parent = new KisGroupLayer(img, "group 1", 200);
-    img->addLayer(parent, img->rootLayer());
+    img->addNode(parent, img->rootLayer());
 
     KisPaintLayerSP child = new KisPaintLayer(img, "child", 200);
-    img->addLayer(child, parent);
+    img->addNode(child, parent);
 
     QModelIndex parentIdx = model.index(0, 0);
 
@@ -191,10 +191,10 @@ void kisnodemodel_test::testGroupLayers()
     KisLayerSP second = new KisPaintLayer(img, "second", 200, img->colorSpace());
 
     KisGroupLayerSP parent = new KisGroupLayer(img, "group 1", 200);
-    img->addLayer(parent, img->rootLayer());
+    img->addNode(parent, img->rootLayer());
 
     KisPaintLayerSP child = new KisPaintLayer(img, "child", 200);
-    img->addLayer(child, parent);
+    img->addNode(child, parent);
 
     QModelIndex parentIdx = model.index(0, 0);
     QVERIFY(model.hasChildren(parentIdx));

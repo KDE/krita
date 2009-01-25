@@ -97,7 +97,7 @@ bool KoPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &c
         points.remove('\n');
         bool firstPoint = true;
         const QStringList coordinateList = points.split(' ');
-        for (QStringList::ConstIterator it = coordinateList.begin(); it != coordinateList.end(); ++it) {
+        for (QStringList::ConstIterator it = coordinateList.constBegin(); it != coordinateList.constEnd(); ++it) {
             QPointF point;
             point.setX((*it).toDouble());
             ++it;
@@ -228,15 +228,15 @@ void KoPathShape::paint(QPainter &painter, const KoViewConverter &converter)
 #ifndef NDEBUG
 void KoPathShape::paintDebug(QPainter &painter)
 {
-    KoSubpathList::const_iterator pathIt(m_subpaths.begin());
+    KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
     int i = 0;
 
     QPen pen(Qt::black);
     painter.save();
     painter.setPen(pen);
-    for (; pathIt != m_subpaths.end(); ++pathIt) {
-        KoSubpath::const_iterator it((*pathIt)->begin());
-        for (; it != (*pathIt)->end(); ++it) {
+    for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
+        KoSubpath::const_iterator it((*pathIt)->constBegin());
+        for (; it != (*pathIt)->constEnd(); ++it) {
             ++i;
             KoPathPoint *point = (*it);
             QRectF r(point->point(), QSizeF(5, 5));
@@ -265,10 +265,10 @@ void KoPathShape::paintDebug(QPainter &painter)
 
 void KoPathShape::debugPath()
 {
-    KoSubpathList::iterator pathIt(m_subpaths.begin());
-    for (; pathIt != m_subpaths.end(); ++pathIt) {
-        KoSubpath::const_iterator it((*pathIt)->begin());
-        for (; it != (*pathIt)->end(); ++it) {
+    KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
+    for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
+        KoSubpath::const_iterator it((*pathIt)->constBegin());
+        for (; it != (*pathIt)->constEnd(); ++it) {
             kDebug(30006) << "p:" << (*pathIt) << "," << *it << "," << (*it)->point() << "," << (*it)->properties() << "," << (*it)->group();
         }
     }
@@ -279,13 +279,13 @@ void KoPathShape::paintPoints(QPainter &painter, const KoViewConverter &converte
 {
     applyConversion(painter, converter);
 
-    KoSubpathList::const_iterator pathIt(m_subpaths.begin());
+    KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
 
     QRectF handle = converter.viewToDocument(handleRect(QPoint(0, 0), handleRadius));
 
-    for (; pathIt != m_subpaths.end(); ++pathIt) {
-        KoSubpath::const_iterator it((*pathIt)->begin());
-        for (; it != (*pathIt)->end(); ++it)
+    for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
+        KoSubpath::const_iterator it((*pathIt)->constBegin());
+        for (; it != (*pathIt)->constEnd(); ++it)
             (*it)->paint(painter, handleRadius, KoPathPoint::Node);
     }
 }
@@ -564,10 +564,10 @@ QPointF KoPathShape::normalize()
 
 void KoPathShape::map(const QMatrix &matrix)
 {
-    KoSubpathList::iterator pathIt(m_subpaths.begin());
-    for (; pathIt != m_subpaths.end(); ++pathIt) {
-        KoSubpath::iterator it((*pathIt)->begin());
-        for (; it != (*pathIt)->end(); ++it) {
+    KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
+    for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
+        KoSubpath::const_iterator it((*pathIt)->constBegin());
+        for (; it != (*pathIt)->constEnd(); ++it) {
             (*it)->map(matrix);
         }
     }
@@ -609,10 +609,10 @@ QList<KoPathPoint*> KoPathShape::pointsAt(const QRectF &r)
 {
     QList<KoPathPoint*> result;
 
-    KoSubpathList::iterator pathIt(m_subpaths.begin());
-    for (; pathIt != m_subpaths.end(); ++pathIt) {
-        KoSubpath::iterator it((*pathIt)->begin());
-        for (; it != (*pathIt)->end(); ++it) {
+    KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
+    for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
+        KoSubpath::const_iterator it((*pathIt)->constBegin());
+        for (; it != (*pathIt)->constEnd(); ++it) {
             if (r.contains((*it)->point()))
                 result.append(*it);
             else if ((*it)->activeControlPoint1() && r.contains((*it)->controlPoint1()))
@@ -697,8 +697,8 @@ KoPathSegment KoPathShape::segmentByIndex(const KoPathPointIndex &pointIndex) co
 int KoPathShape::pointCount() const
 {
     int i = 0;
-    KoSubpathList::const_iterator pathIt(m_subpaths.begin());
-    for (; pathIt != m_subpaths.end(); ++pathIt) {
+    KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
+    for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
         i += (*pathIt)->size();
     }
 
@@ -1079,14 +1079,14 @@ QString KoPathShape::toString(const QMatrix &matrix) const
 {
     QString d;
 
-    KoSubpathList::const_iterator pathIt(m_subpaths.begin());
-    for (; pathIt != m_subpaths.end(); ++pathIt) {
-        KoSubpath::const_iterator it((*pathIt)->begin());
+    KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
+    for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
+        KoSubpath::const_iterator it((*pathIt)->constBegin());
         KoPathPoint * lastPoint(*it);
         bool activeCP = false;
-        for (; it != (*pathIt)->end(); ++it) {
+        for (; it != (*pathIt)->constEnd(); ++it) {
             // first point of subpath ?
-            if (it == (*pathIt)->begin()) {
+            if (it == (*pathIt)->constBegin()) {
                 if ((*it)->properties() & KoPathPoint::StartSubpath) {
                     QPointF p = matrix.map((*it)->point());
                     d += QString("M%1 %2").arg(p.x()).arg(p.y());
@@ -1149,11 +1149,11 @@ char nodeType( const KoPathPoint * point )
 QString KoPathShape::nodeTypes() const
 {
     QString types;
-    KoSubpathList::const_iterator pathIt(m_subpaths.begin());
-    for (; pathIt != m_subpaths.end(); ++pathIt) {
-        KoSubpath::const_iterator it((*pathIt)->begin());
-        for (; it != (*pathIt)->end(); ++it) {
-            if (it == (*pathIt)->begin()) {
+    KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
+    for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
+        KoSubpath::const_iterator it((*pathIt)->constBegin());
+        for (; it != (*pathIt)->constEnd(); ++it) {
+            if (it == (*pathIt)->constBegin()) {
                 types.append( 'c' );
             }
             else {
@@ -1184,18 +1184,18 @@ void KoPathShape::loadNodeTypes(const KoXmlElement & element)
 {
     if (element.hasAttributeNS(KoXmlNS::koffice, "nodeTypes")) {
         QString nodeTypes = element.attributeNS(KoXmlNS::koffice, "nodeTypes");
-        QString::const_iterator nIt(nodeTypes.begin());
-        KoSubpathList::const_iterator pathIt(m_subpaths.begin());
-        for (; pathIt != m_subpaths.end(); ++pathIt) {
-            KoSubpath::iterator it((*pathIt)->begin());
-            for (; it != (*pathIt)->end(); ++it, nIt++) {
+        QString::const_iterator nIt(nodeTypes.constBegin());
+        KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
+        for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
+            KoSubpath::const_iterator it((*pathIt)->constBegin());
+            for (; it != (*pathIt)->constEnd(); ++it, nIt++) {
                 // be sure not to crash if there are not enough nodes in nodeTypes
-                if (nIt == nodeTypes.end()) {
+                if (nIt == nodeTypes.constEnd()) {
                     kWarning(30006) << "not enough nodes in koffice:nodeTypes";
                     return;
                 }
                 // the first node is always of type 'c'
-                if (it != (*pathIt)->begin()) {
+                if (it != (*pathIt)->constBegin()) {
                     updateNodeType(*it, *nIt);
                 }
 

@@ -25,7 +25,7 @@
 #include "kis_tool.h"
 #include "kis_selection.h"
 #include "KoToolFactory.h"
-#include "flake/kis_layer_shape.h"
+#include "flake/kis_node_shape.h"
 
 class KisSelectionOptions;
 class KoCanvasBase;
@@ -75,7 +75,7 @@ public:
             : KoToolFactory(parent, "KisToolSelectRectangular", i18n("Rectangular Selection")) {
         setToolTip(i18n("Select a rectangular area"));
         setToolType(TOOL_TYPE_SELECTED);
-        //setActivationShapeId( KIS_LAYER_SHAPE_ID );
+        //setActivationShapeId( KIS_NODE_SHAPE_ID );
         setIcon("tool_rect_selection");
         setShortcut(KShortcut(Qt::Key_R));
         setPriority(52);

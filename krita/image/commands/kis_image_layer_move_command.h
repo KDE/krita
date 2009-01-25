@@ -33,7 +33,7 @@ class KoColorSpace;
 class KoColorProfile;
 
 /// The command for layer moves inside the layer stack
-class KisImageLayerMoveCommand: public KisImageCommand
+class KRITAIMAGE_EXPORT KisImageLayerMoveCommand : public KisImageCommand
 {
 
 
@@ -43,10 +43,11 @@ public:
      *
      * @param image the image
      * @param layer the moved layer
-     * @param wasParent the previous parent of the layer
-     * @param wasAbove the layer that was above the layer before the move
+     * @param newParent the next parent of the layer
+     * @param newAbove the layer that will be below the layer after the move
      */
-    KisImageLayerMoveCommand(KisImageSP image, KisNodeSP layer, KisNodeSP wasParent, KisNodeSP wasAbove);
+    KisImageLayerMoveCommand(KisImageSP image, KisNodeSP node, KisNodeSP newParent, KisNodeSP newAbove);
+    KisImageLayerMoveCommand(KisImageSP image, KisNodeSP node, KisNodeSP newParent, quint32 index);
 
     virtual void redo();
     virtual void undo();
@@ -57,6 +58,7 @@ private:
     KisNodeSP m_prevAbove;
     KisNodeSP m_newParent;
     KisNodeSP m_newAbove;
+    quint32 m_index;
 };
 
 #endif 

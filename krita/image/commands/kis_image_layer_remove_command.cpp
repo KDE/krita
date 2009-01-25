@@ -34,21 +34,23 @@
 #include "kis_group_layer.h"
 #include "kis_undo_adapter.h"
 
-KisImageLayerRemoveCommand::KisImageLayerRemoveCommand(KisImageSP image, KisNodeSP layer, KisNodeSP wasParent, KisNodeSP wasAbove)
+KisImageLayerRemoveCommand::KisImageLayerRemoveCommand(KisImageSP image, KisNodeSP layer)
         : KisImageCommand(i18n("Remove Layer"), image)
 {
     m_layer = layer;
-    m_prevParent = wasParent;
-    m_prevAbove = wasAbove;
+    m_prevParent = layer->parent();
+    m_prevAbove = layer->prevSibling();
 }
 
 
 void KisImageLayerRemoveCommand::redo()
 {
     m_image->removeNode(m_layer);
+    m_layer->setDirty();
 }
 
 void KisImageLayerRemoveCommand::undo()
 {
     m_image->addNode(m_layer, m_prevParent, m_prevAbove);
+    m_layer->setDirty();
 }

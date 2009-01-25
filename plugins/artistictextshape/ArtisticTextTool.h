@@ -164,6 +164,9 @@ private:
     void createTextCursorShape();
     void updateTextCursorArea() const;
 
+    /// returns the transformation matrix for the text cursor
+    QTransform cursorTransform() const;
+
     ArtisticTextShape * m_currentShape;
     KoPathShape * m_path;
     KoPathShape * m_tmpPath;

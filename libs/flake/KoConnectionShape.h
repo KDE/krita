@@ -56,6 +56,9 @@ public:
         return KOCONNECTIONSHAPEID;
     }
 
+    // reimplemented
+    virtual bool hitTest(const QPointF &position) const;
+
     /// Sets the first shape the connector is connected to
     void setConnection1(KoShape * shape1, int connectionPointIndex);
 

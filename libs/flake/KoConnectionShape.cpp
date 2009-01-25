@@ -131,6 +131,11 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
     return true;
 }
 
+bool KoConnectionShape::hitTest(const QPointF &position) const
+{
+    return KoShape::hitTest(position);
+}
+
 void KoConnectionShape::moveHandleAction(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers);

@@ -172,7 +172,7 @@ void DefaultToolWidget::sizeHasChanged()
         resizeMatrix.scale( newSize.width() / rect.width(), newSize.height() / rect.height() );
         resizeMatrix.translate( -rect.x(), -rect.y() );
 
-        QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+        QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::StrippedSelection );
         QList<QSizeF> oldSizes, newSizes;
         QList<QMatrix> oldState;
         QList<QMatrix> newState;
@@ -196,7 +196,10 @@ void DefaultToolWidget::sizeHasChanged()
 
             // calculate the new size of the shape, using the effective scale values
             oldSizes << oldSize;
-            newSizes << QSizeF( scaleX * oldSize.width(), scaleY * oldSize.height() );
+            QSizeF newSize = QSizeF( scaleX * oldSize.width(), scaleY * oldSize.height() );
+            newSizes << newSize;
+            shape->setSize( newSize );
+
             // apply the rest of the transformation without the resizing part
             shape->applyAbsoluteTransformation( scaleMatrix.inverted() * resizeMatrix );
             newState << shape->transformation();

@@ -80,6 +80,8 @@ void KisToolSelectContiguous::mousePressEvent(KoPointerEvent * e)
     if (m_canvas && currentImage()) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
 
+        if (!currentNode())
+            return;
         KisPaintDeviceSP dev = currentNode()->paintDevice();
 
         if (!dev || !currentNode()->visible())

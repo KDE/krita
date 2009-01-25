@@ -96,6 +96,9 @@ void KisToolCrop::mousePressEvent(KoPointerEvent *e)
 {
     if (m_canvas) {
 
+        if (!currentNode())
+            return;
+
         if (currentImage() && currentNode()->paintDevice() && e->button() == Qt::LeftButton) {
 
             QPoint pos = convertToIntPixelCoord(e);

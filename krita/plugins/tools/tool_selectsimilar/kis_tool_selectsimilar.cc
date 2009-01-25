@@ -126,6 +126,9 @@ void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *e)
         if (!currentImage())
             return;
 
+        if (!currentNode())
+            return;
+
         KisPaintDeviceSP dev = currentNode()->paintDevice();
 
         if (!dev || !currentNode()->visible())

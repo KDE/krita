@@ -42,7 +42,9 @@ KoLineBorder::KoLineBorder()
         : d(new Private())
 {
     d->color = QColor(Qt::black);
-    d->pen.setWidthF(0.0);
+    // we are not rendering stroke with zero width anymore
+    // so lets use a default width of 1.0
+    d->pen.setWidthF(1.0);
 }
 
 KoLineBorder::KoLineBorder(const KoLineBorder & other)

@@ -44,6 +44,8 @@ KoShapeSavingContext::KoShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles& 
         , m_embeddedSaver(embeddedSaver)
         , m_savingMode(savingMode)
 {
+    // by default allow saving of draw:id
+    addOption(KoShapeSavingContext::DrawId);
 }
 
 KoShapeSavingContext::~KoShapeSavingContext()

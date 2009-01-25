@@ -28,7 +28,7 @@
 
 KoImageDataPrivate::KoImageDataPrivate(KoImageCollection *c)
 :collection(c)
-,quality(KoImageData::MediumQuality)
+,quality(KoImageData::HighQuality)
 ,errorCode(KoImageData::Success)
 {
 }

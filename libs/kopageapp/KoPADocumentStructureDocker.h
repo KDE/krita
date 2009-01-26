@@ -99,6 +99,7 @@ private slots:
 private:
     void extractSelectedLayersAndShapes( QList<KoPAPageBase*> &pages, QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes );
     void setViewMode(KoDocumentSectionView::DisplayMode mode);
+    QModelIndex getRootIndex( const QModelIndex &index ) const;
 
     KoDocumentSectionView::DisplayMode viewModeFromString( const QString& mode );
     QString viewModeToString( KoDocumentSectionView::DisplayMode mode );

@@ -434,7 +434,9 @@ void KoPADocumentStructureDocker::setActivePage(KoPAPageBase *page)
     if ( m_doc ) {
         int row = m_doc->pageIndex(page);
         QModelIndex index = m_model->index(row, 0);
-        m_sectionView->setCurrentIndex(index);
+        if ( index != getRootIndex( m_sectionView->currentIndex() ) ) {
+            m_sectionView->setCurrentIndex(index);
+        }
     }
 }
 
@@ -466,14 +468,8 @@ void KoPADocumentStructureDocker::setViewMode(KoDocumentSectionView::DisplayMode
     // is not a page, we need to select the corresponding page first, otherwise
     // none of the page will be selected when we do collapse all
     if ( !expandable ) {
-        QModelIndex currentIndex = m_sectionView->currentIndex();
-        QModelIndex parentIndex = currentIndex.parent();
-        while ( parentIndex.isValid() ) {
-            currentIndex = parentIndex;
-            parentIndex = currentIndex.parent();
-        }
-
-        m_sectionView->setCurrentIndex( currentIndex );
+        QModelIndex rootIndex = getRootIndex( m_sectionView->currentIndex() );
+        m_sectionView->setCurrentIndex( rootIndex );
         m_sectionView->collapseAll();
     }
 
@@ -483,6 +479,18 @@ void KoPADocumentStructureDocker::setViewMode(KoDocumentSectionView::DisplayMode
     m_sectionView->setSelectionMode(expandable ? QAbstractItemView::ExtendedSelection : QAbstractItemView::SingleSelection);
 
     m_viewModeActions[mode]->setChecked (true);
+}
+
+QModelIndex KoPADocumentStructureDocker::getRootIndex( const QModelIndex &index ) const
+{
+    QModelIndex currentIndex;
+    QModelIndex parentIndex = index.parent();
+    while ( parentIndex.isValid() ) {
+        currentIndex = parentIndex;
+        parentIndex = currentIndex.parent();
+    }
+    
+    return currentIndex;
 }
 
 KoDocumentSectionView::DisplayMode KoPADocumentStructureDocker::viewModeFromString( const QString& mode )

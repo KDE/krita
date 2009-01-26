@@ -540,16 +540,13 @@ void KisSelectionManager::selectAll()
     KisImageSP img = m_view->image();
     if (!img) return;
 
-    KisLayerSP layer = m_view->activeLayer();
-    if (!layer) return;
-
     QUndoCommand* selectionCmd = new QUndoCommand(i18n("Select All"));
 
     if (!m_view->selection())
         new KisSetGlobalSelectionCommand(img, selectionCmd);
     KisSelectionSP selection = m_view->selection();
 
-    new KisSelectedTransaction(QString(), layer, selectionCmd);
+    new KisSelectionTransaction(QString(), img, selection, selectionCmd);
 
     selection->getOrCreatePixelSelection()->select(img->bounds());
 

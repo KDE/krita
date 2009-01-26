@@ -74,6 +74,9 @@ void KisToolPath::addPathShape()
     image->setModified();
 
     m_canvas->addCommand(painter.endTransaction());
+    
+    delete m_shape;
+    m_shape = 0;
 }
 
 #include "kis_tool_path.moc"

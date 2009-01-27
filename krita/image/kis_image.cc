@@ -624,6 +624,7 @@ void KisImage::setResolution(double xres, double yres)
 {
     m_d->xres = xres;
     m_d->yres = yres;
+    emit(sigResolutionChanged(xres, yres));
 }
 
 QPointF KisImage::documentToPixel(const QPointF &documentCoord) const

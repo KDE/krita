@@ -118,22 +118,22 @@ void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
         }
     }
     if ( hit ) {
-         QPointF pos = event->point;
-         pos -= m_currentShape->absolutePosition( KoFlake::TopLeftCorner );
-         const int len = m_currentShape->text().length();
-         int hit = len;
-         qreal mindist = DBL_MAX;
-         for ( int i = 0; i < len;++i ) {
-             QPointF center;
-             m_currentShape->getCharPositionAt( i, center );
-             center = pos - center;
-             if ( (fabs(center.x()) + fabs(center.y())) < mindist ) {
-                 hit = i;
-                 mindist = fabs(center.x()) + fabs(center.y());
-             }
-         }
-         setTextCursorInternal( hit );
-	 m_currentText = m_currentShape->text();
+        QPointF pos = event->point;
+        pos -= m_currentShape->absolutePosition( KoFlake::TopLeftCorner );
+        const int len = m_currentShape->text().length();
+        int hit = len;
+        qreal mindist = DBL_MAX;
+        for ( int i = 0; i < len;++i ) {
+            QPointF center;
+            m_currentShape->getCharPositionAt( i, center );
+            center = pos - center;
+            if ( (fabs(center.x()) + fabs(center.y())) < mindist ) {
+                hit = i;
+                mindist = fabs(center.x()) + fabs(center.y());
+            }
+        }
+        setTextCursorInternal( hit );
+        m_currentText = m_currentShape->text();
     }
     event->ignore();
 }
@@ -230,6 +230,9 @@ void ArtisticTextTool::blinkCursor()
 void ArtisticTextTool::deactivate()
 {
     if ( m_currentShape ) {
+        if( m_currentShape->text().isEmpty() ) {
+            m_canvas->addCommand( m_canvas->shapeController()->removeShape( m_currentShape ) );
+        }
         enableTextCursor( false );
         m_currentShape = 0;
     }

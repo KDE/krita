@@ -205,7 +205,10 @@ bool ArtisticTextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingCon
 
 QSizeF ArtisticTextShape::size() const
 {
-    return outline().boundingRect().size();
+    if( m_text.isEmpty() )
+        return nullBoundBox().size();
+    else
+        return outline().boundingRect().size();
 }
 
 void ArtisticTextShape::setSize( const QSizeF &newSize )
@@ -225,6 +228,12 @@ void ArtisticTextShape::setSize( const QSizeF &newSize )
 const QPainterPath ArtisticTextShape::outline() const
 {
     return m_outline;
+}
+
+QRectF ArtisticTextShape::nullBoundBox() const
+{
+    QFontMetrics metrics( m_font );
+    return QRectF( QPointF(), QSizeF(metrics.averageCharWidth(), metrics.height()) );
 }
 
 void ArtisticTextShape::createOutline()
@@ -493,7 +502,7 @@ void ArtisticTextShape::addRange( unsigned int index, const QString &str )
 void ArtisticTextShape::getCharAngleAt( unsigned int charNum, qreal &angle ) const
 {
     if( isOnPath() ) {
-	qreal t = m_charOffsets[ qMin( int( charNum ), m_charOffsets.size() ) ];
+        qreal t = m_charOffsets[ qMin( int( charNum ), m_charOffsets.size() ) ];
         angle = m_baseline.angleAtPercent( t );
     } else {
         angle = 0.0;
@@ -513,9 +522,9 @@ void ArtisticTextShape::getCharPositionAt( unsigned int charNum, QPointF &pos ) 
             pos = QPointF( w, size().height() );
         } else {
             int w = metrics.width( m_text.left( charNum + 1 ) );
-	    int w2 = metrics.charWidth( m_text, charNum );
-	    pos = QPointF( w - w2, size().height() );
-	}
+            int w2 = metrics.charWidth( m_text, charNum );
+            pos = QPointF( w - w2, size().height() );
+        }
     }
 }
 
@@ -531,6 +540,8 @@ void ArtisticTextShape::updateSizeAndPosition( bool global )
     createOutline();
 
     QRectF bbox = m_outline.boundingRect();
+    if( bbox.isEmpty() )
+        bbox = nullBoundBox();
 
     // calculate the offset we have to apply to keep our position
     QPointF offset = m_outlineOrigin - bbox.topLeft();

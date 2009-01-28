@@ -108,7 +108,7 @@ public:
     /// Clear the map of properties
     void clearProperties();
 
-private:
+public:
 
     void dump();
 

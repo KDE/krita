@@ -58,13 +58,12 @@
 #include <QList>
 #include <QComboBox>
 
-
 class KoShapeEndLinesDocker::Private
 {
 public:
     Private() {}
-    QComboBox * leftEndLineComboBox;
-    QComboBox * rightEndLineComboBox;
+    QComboBox * beginEndLineComboBox;
+    QComboBox * endEndLineComboBox;
 };
 
 KoShapeEndLinesDocker::KoShapeEndLinesDocker()
@@ -73,46 +72,41 @@ KoShapeEndLinesDocker::KoShapeEndLinesDocker()
     setWindowTitle( i18n( "End Lines" ) );
 
     QString fileName( KStandardDirs::locate( "data", "kpresenter/endLineStyle/endLine.xml" ) );
-    QStringList endLinesList;
+    QStringList nameEndLinesList;
     if ( ! fileName.isEmpty() ) {
       QFile file( fileName );
       QString errorMessage;
       if ( KoOdfReadStore::loadAndParse( &file, m_doc, errorMessage, fileName ) ) {
         KoXmlElement drawMarker, lineEndElement(m_doc.namedItem("lineends").toElement());
         forEachElement(drawMarker, lineEndElement){
-          endLinesList.append(drawMarker.attribute("name").replace("_", " "));
-        }
+          nameEndLinesList.append(drawMarker.attribute("name").replace("_", " "));
+	  }
 	    }else {
         kDebug() << "reading of endLine.xml failed:" << errorMessage;
       }
     }
     else {
-      kDebug() << "defaultstyles.xml not found";
+      kDebug() << "endLine.xml not found";
     }
-
 
     QWidget *mainWidget = new QWidget( this );
     QGridLayout *mainLayout = new QGridLayout( mainWidget );
     
-    QLabel * leftEndLineLabel = new QLabel( i18n( "Begin:" ), mainWidget );
-    mainLayout->addWidget( leftEndLineLabel, 0, 0 );
-    d->leftEndLineComboBox = new QComboBox( mainWidget );
-    d->leftEndLineComboBox->addItems(endLinesList);
-    mainLayout->addWidget( d->leftEndLineComboBox,0,1,1,3);
+    QLabel * beginEndLineLabel = new QLabel( i18n( "Begin:" ), mainWidget );
+    mainLayout->addWidget( beginEndLineLabel, 0, 0 );
+    d->beginEndLineComboBox = new QComboBox( mainWidget );
+    d->beginEndLineComboBox->addItems(nameEndLinesList);
+    mainLayout->addWidget( d->beginEndLineComboBox,0,1,1,3);
 
-    connect( d->leftEndLineComboBox, SIGNAL(activated( int ) ), this, SLOT( leftEndLineChanged(int) ) );
+    connect( d->beginEndLineComboBox, SIGNAL(activated( int ) ), this, SLOT( beginEndLineChanged(int) ) );
 
-    QLabel * rightEndLineLabel = new QLabel( i18n( "End:" ), mainWidget );
-    mainLayout->addWidget( rightEndLineLabel, 1, 0 );
-    d->rightEndLineComboBox = new QComboBox( mainWidget );
+    QLabel * endEndLineLabel = new QLabel( i18n( "End:" ), mainWidget );
+    mainLayout->addWidget( endEndLineLabel, 1, 0 );
+    d->endEndLineComboBox = new QComboBox( mainWidget );
+    d->endEndLineComboBox->addItems(nameEndLinesList);
+    mainLayout->addWidget( d->endEndLineComboBox,1,1,1,3);
 
-    d->rightEndLineComboBox->addItems(endLinesList);
-
-
-
-    mainLayout->addWidget( d->rightEndLineComboBox,1,1,1,3);
-
-    connect( d->rightEndLineComboBox, SIGNAL(activated( int ) ), this, SLOT( rightEndLineChanged(int) ) );
+    connect( d->endEndLineComboBox, SIGNAL(activated( int ) ), this, SLOT( endEndLineChanged(int) ) );
 
  
     mainLayout->setRowStretch( 5, 1 );
@@ -134,14 +128,14 @@ void KoShapeEndLinesDocker::applyChanges()
 }
 
 
-void KoShapeEndLinesDocker::leftEndLineChanged(int index)
+void KoShapeEndLinesDocker::beginEndLineChanged(int index)
 {
-    d->leftEndLineComboBox->setCurrentItem(index);
+    d->beginEndLineComboBox->setCurrentItem(index);
 }
 
-void KoShapeEndLinesDocker::rightEndLineChanged(int index)
+void KoShapeEndLinesDocker::endEndLineChanged(int index)
 {
-  d->rightEndLineComboBox->setCurrentItem(index);
+  d->endEndLineComboBox->setCurrentItem(index);
 }
 
 void KoShapeEndLinesDocker::selectionChanged()

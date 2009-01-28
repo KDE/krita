@@ -51,8 +51,8 @@ public:
 private slots:
     void applyChanges();
     /// End Line has changed
-    void leftEndLineChanged(int index);
-    void rightEndLineChanged(int index);
+    void beginEndLineChanged(int index);
+    void endEndLineChanged(int index);
     /// selection has changed
     void selectionChanged();
 
@@ -60,7 +60,6 @@ private slots:
     virtual void setCanvas( KoCanvasBase *canvas );
 
 private:
-    //KoXmlReader *kxr;
     KoXmlDocument m_doc;
 
 private:

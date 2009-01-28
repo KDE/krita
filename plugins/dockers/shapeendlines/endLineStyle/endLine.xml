@@ -1,3 +1,6 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" 
+  "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
 <lineends>
    <draw:marker draw:name="Arrow" svg:viewBox="0 0 20 30" svg:d="m10 0-10
 30h20z"/>

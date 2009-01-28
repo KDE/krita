@@ -55,7 +55,7 @@ public:
     qreal angx, angy;
     qreal mass, drag;
     qreal lastx, lasty;
-    int fixedangle;
+    bool fixedangle;
 
 };
 

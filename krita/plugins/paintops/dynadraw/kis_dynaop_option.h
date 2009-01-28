@@ -29,14 +29,16 @@ public:
     KisDynaOpOption();
     ~KisDynaOpOption();
 
-    int radius() const;
 
-    qreal coverage() const;
-    qreal amount() const;
-    bool jitterMovement() const;
-    bool jitterSize() const;
-    bool useParticles() const;
+    qreal initWidth() const;
+    qreal mass() const;
+    qreal drag() const;
+    bool useFixedAngle() const;
+    qreal xAngle() const;
+    qreal yAngle() const;
+    qreal widthRange() const;
 
+    //TODO add saving 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 

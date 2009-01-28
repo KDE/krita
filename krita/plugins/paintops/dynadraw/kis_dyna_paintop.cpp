@@ -47,9 +47,14 @@ KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainte
     , m_settings( settings )
     , m_image ( image )
 {
-    m_dynaBrush.setRadius( settings->radius() );
-    m_dynaBrush.setAmount( settings->amount() );
     m_dynaBrush.setImage( image );
+
+    m_dynaBrush.setInitialWidth( settings->initWidth() );
+    m_dynaBrush.setMass( settings->mass() );
+    m_dynaBrush.setDrag( settings->drag() );
+    m_dynaBrush.useFixedAngle( settings->useFixedAngle() );
+    m_dynaBrush.setAngle( settings->xAngle(), settings->yAngle() );
+    m_dynaBrush.setWidthRange( settings->widthRange() );
 }
 
 KisDynaPaintOp::~KisDynaPaintOp()
@@ -57,7 +62,7 @@ KisDynaPaintOp::~KisDynaPaintOp()
 }
 
 double KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist){
-
+    if (!painter()) return 0;
     dab = cachedDab();
     dab->clear();
 
@@ -88,27 +93,5 @@ double KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
 
 void KisDynaPaintOp::paintAt(const KisPaintInformation& info)
 {
-/*    if (!painter()) return;
-
-    dab = cachedDab();
-    dab->clear();
-
-    qreal x1, y1;
-
-    x1 = info.pos().x();
-    y1 = info.pos().y();
-
-    m_dynaBrush.initMouse( info.pos() );
-    m_dynaBrush.paint(dab, x1, y1, painter()->paintColor());
-
-    QRect rc = dab->extent();
-
-    painter()->bltSelection(
-        rc.x(), rc.y(),
-        painter()->compositeOp(),
-        dab,
-        painter()->opacity(),
-        rc.x(), rc.y(),
-        rc.width(), rc.height());
-*/
+    paintLine(info, info, 0);
 }

@@ -51,8 +51,6 @@ bool KisDynaPaintOpSettings::paintIncremental()
     return m_options->m_paintActionTypeOption->paintActionType() == BUILDUP;
 }
 
-
-
 void KisDynaPaintOpSettings::fromXML(const QDomElement& elt)
 {
     KisPaintOpSettings::fromXML( elt );
@@ -66,34 +64,37 @@ void KisDynaPaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) cons
     delete settings;
 }
 
-int KisDynaPaintOpSettings::radius() const
+qreal KisDynaPaintOpSettings::initWidth() const
 {
-    return m_options->m_dynaOption->radius();
+    return m_options->m_dynaOption->initWidth();
+}
+    
+qreal KisDynaPaintOpSettings::mass() const
+{
+    return m_options->m_dynaOption->mass();
 }
 
-qreal KisDynaPaintOpSettings::coverage() const
+qreal KisDynaPaintOpSettings::drag() const
 {
-    return m_options->m_dynaOption->coverage();
+    return m_options->m_dynaOption->drag();
 }
 
-qreal KisDynaPaintOpSettings::amount() const
+bool KisDynaPaintOpSettings::useFixedAngle() const
 {
-    return m_options->m_dynaOption->amount();
+    return m_options->m_dynaOption->useFixedAngle();
 }
 
-
-bool KisDynaPaintOpSettings::jitterMovement() const
+qreal KisDynaPaintOpSettings::xAngle() const
 {
-    return m_options->m_dynaOption->jitterMovement();
+    return m_options->m_dynaOption->xAngle();
 }
 
-bool KisDynaPaintOpSettings::jitterSize() const
+qreal KisDynaPaintOpSettings::yAngle() const
 {
-    return m_options->m_dynaOption->jitterSize();
+    return m_options->m_dynaOption->yAngle();
 }
 
-bool KisDynaPaintOpSettings::useParticles() const
+qreal KisDynaPaintOpSettings::widthRange() const
 {
-    return m_options->m_dynaOption->useParticles();
+    return m_options->m_dynaOption->widthRange();
 }
-

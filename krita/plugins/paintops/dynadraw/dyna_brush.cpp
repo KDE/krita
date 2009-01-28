@@ -26,6 +26,8 @@
 
 #include <cmath>
 
+#include <QVector>
+
 #ifdef _WIN32
 #define srand48 srand
 #define drand48 rand
@@ -35,16 +37,17 @@
 DynaBrush::DynaBrush()
 {
     first = false;
-    m_radius = 0;
     m_counter = 0;
 
     /* dynadraw init */
     m_curmass = 0.5;
     m_curdrag = 0.15;
-    m_mouse.fixedangle = 1;
-    m_initwidth = 1.5;
-    m_width = m_initwidth;
-    
+    m_mouse.fixedangle = true;
+    m_width = 1.5;
+    m_xangle = 0.60;
+    m_yangle = 0.20;
+    m_widthRange = 0.05;
+
 }
 
 void DynaBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color)
@@ -54,8 +57,8 @@ void DynaBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &col
     m_inkColor = color;*/
 
     qreal mx, my;   
-    mx = m_fmouse.x();
-    my = m_fmouse.y();
+    mx = m_mousePos.x();
+    my = m_mousePos.y();
 
     if (!first){
         m_mouse.init(mx,my);
@@ -73,7 +76,6 @@ void DynaBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &col
         drawSegment(drawer);
     }
 
-    dbgPlugins << "paint finished..";
     m_counter++;
 }
 
@@ -117,8 +119,8 @@ int DynaBrush::applyFilter(qreal mx, qreal my)
     m_mouse.angx /= m_mouse.vel;
     m_mouse.angy /= m_mouse.vel;
     if(m_mouse.fixedangle) {
-        m_mouse.angx = 0.6;
-        m_mouse.angy = 0.2;
+        m_mouse.angx = m_xangle;
+        m_mouse.angy = m_yangle;
     }
 
     m_mouse.velx = m_mouse.velx * (1.0 - drag);
@@ -139,8 +141,8 @@ void DynaBrush::drawSegment(KisPainter &painter)
     qreal wid;
     qreal px, py, nx, ny;
 
-//    wid = 0.04 - m_mouse.vel;
-    wid = 0.05 - m_mouse.vel;
+//  wid = 0.04 - m_mouse.vel;
+    wid = m_widthRange - m_mouse.vel;
 
     wid = wid * m_width;
 
@@ -184,24 +186,29 @@ void DynaBrush::drawSegment(KisPainter &painter)
     QPointF p3(px3,py3 );
     QPointF p4(px4,py4 );
 
-    painter.drawLine( p1, p2 );
-    painter.drawLine( p2, p3 );
-    painter.drawLine( p3, p4 );
-    painter.drawLine( p4, p1 );
+
+    QVector<QPointF> pole;
+    pole.append(p1);
+    pole.append(p2);
+    pole.append(p3);
+    pole.append(p4);
+
+    painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+    painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+    painter.paintPolygon( pole );
+    pole.clear();
+//    painter.drawLine( p1, p2 );
+//    painter.drawLine( p2, p3 );
+//    painter.drawLine( p3, p4 );
+//    painter.drawLine( p4, p1 );
 
     QPointF start( px * m_image->width(), py * m_image->height() );
     QPointF end( nx * m_image->width(), ny * m_image->height() );
-
-    dbgPlugins << "st" << start;
-    dbgPlugins << "end" << end;
 
     painter.drawLine( start, end );
 
     m_odelx = delx;
     m_odely = dely;
 }
-
-
-
 
 

@@ -46,55 +46,47 @@ KisDynaOpOption::~KisDynaOpOption()
     // delete m_options; 
 }
 
-int KisDynaOpOption::radius() const
+qreal KisDynaOpOption::initWidth() const
 {
-    return m_options->radiusSpinBox->value();
+    return m_options->initWidthSPBox->value();
 }
 
-bool KisDynaOpOption::jitterSize() const
+qreal KisDynaOpOption::mass() const
 {
-    return m_options->jitterSizeBox->isChecked();
+    return m_options->massSPBox->value();
 }
 
-bool KisDynaOpOption::jitterMovement() const
+qreal KisDynaOpOption::drag() const
 {
-    return m_options->jitterMoveBox->isChecked();
+    return m_options->dragSPBox->value();
 }
 
-bool KisDynaOpOption::useParticles() const
+bool KisDynaOpOption::useFixedAngle() const
 {
-    return m_options->useParticlesBox->isChecked();
+    return m_options->fixedAngleChBox->isChecked();
 }
 
-qreal KisDynaOpOption::coverage() const
+qreal KisDynaOpOption::xAngle() const
 {
-    return m_options->coverageSpin->value();
+    return m_options->xAngleSPBox->value();
 }
 
-qreal KisDynaOpOption::amount() const
+qreal KisDynaOpOption::yAngle() const
 {
-    return m_options->amountSpin->value();
+    return m_options->yAngleSPBox->value();
 }
 
+qreal KisDynaOpOption::widthRange() const
+{
+    return m_options->widthRangeSPBox->value();
+}
 
 void KisDynaOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty( "Dyna/radius", radius() );
-    setting->setProperty( "Dyna/coverage", coverage() );
-    setting->setProperty( "Dyna/amount", amount() );
-    setting->setProperty( "Dyna/jitterSize", jitterSize() );
-    setting->setProperty( "Dyna/jitterMovement", jitterMovement() );
-    setting->setProperty( "Dyna/particles", useParticles() );
 }
 
 void KisDynaOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_options->radiusSpinBox->setValue( setting->getInt("Dyna/radius") );
-    m_options->coverageSpin->setValue( setting->getDouble("Dyna/coverage") );
-    m_options->amountSpin->setValue( setting->getDouble("Dyna/amount") );
-    m_options->jitterSizeBox->setChecked( setting->getBool("Dyna/jitterSize") );
-    m_options->jitterMoveBox->setChecked( setting->getBool("Dyna/jitterMovement") );
-    m_options->useParticlesBox->setChecked( setting->getBool("Dyna/particles") );
 }
 
 

@@ -55,6 +55,7 @@ endif( BUILD_EVERYTHING )
 
 add_subdirectory( strokedocker/pics )
 add_subdirectory( shapeendlines/pics )
+add_subdirectory( shapeendlines/endLineStyle )
 #kde4_add_ui_files( kofficedockers_SRCS
 #)
 

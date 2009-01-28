@@ -77,6 +77,7 @@
 #include "kis_selection_mask.h"
 #include "flake/kis_shape_layer.h"
 #include "kis_selection_decoration.h"
+#include "canvas/kis_canvas_decoration.h"
 
 #include "kis_clipboard.h"
 #include "kis_view2.h"
@@ -766,8 +767,9 @@ void KisSelectionManager::feather()
 
 void KisSelectionManager::toggleDisplaySelection()
 {
-    // XXX_SELECTION: Re-activate later! (BSAR)
-    //m_view->selectionDisplayToggled(displaySelection());
+    KisCanvasDecoration* decoration = m_view->canvasBase()->decoration("selection");
+    if(decoration)
+        decoration->toggleVisibility();
 }
 
 bool KisSelectionManager::displaySelection()

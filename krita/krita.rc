@@ -27,10 +27,6 @@
  <Menu name="View"><text>&amp;View</text>
   <Action name="fullscreen"/>
   <Separator/>
-  <Action name="view_newview"/>
-  <ActionList name="view_closeallviews"/>
-  <Separator/>
-  <ActionList name="view_split"/>
   <Action name="zoom"/>
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>

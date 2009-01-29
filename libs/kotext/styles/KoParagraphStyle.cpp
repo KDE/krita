@@ -102,7 +102,6 @@ KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block, QObject *
         listStyle->setLevelProperties(llp);
         answer->setListStyle(listStyle);
     }
-
     return answer;
 }
 

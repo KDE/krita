@@ -31,17 +31,17 @@ class FontLayoutTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit FontLayoutTab(bool withSubSuperScript, QWidget* parent = 0);
+    explicit FontLayoutTab(bool withSubSuperScript, bool uniqueFormat, QWidget* parent = 0);
     ~FontLayoutTab() {}
 
-    void open(KoCharacterStyle *style);
-    void save();
+    void setDisplay(KoCharacterStyle *style);
+    void save(KoCharacterStyle *style);
 
 private:
     Ui::FontLayoutTab widget;
     QButtonGroup *m_buttonGroup;
-
-    KoCharacterStyle *m_style;
+    
+    bool m_uniqueFormat;
 };
 
 #endif

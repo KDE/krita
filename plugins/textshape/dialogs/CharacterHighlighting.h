@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C)  2001,2002,2003 Montel Laurent <lmontel@mandrakesoft.com>
    Copyright (C)  2006 Thomas Zander <zander@kde.org>
+   Copyright (C)  2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,27 +24,44 @@
 
 #include "ui_CharacterHighlighting.h"
 
-class KoCharacterStyle;
+#include "KoCharacterStyle.h"
+
+class QColor;
 
 class CharacterHighlighting : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit CharacterHighlighting(QWidget* parent = 0);
+    explicit CharacterHighlighting(bool uniqueFormat, QWidget* parent = 0);
     ~CharacterHighlighting() {}
 
-    void open(KoCharacterStyle *style);
-    void save();
+    void setDisplay(KoCharacterStyle *style);
+    void save(KoCharacterStyle *style);
+
+signals:
+    void underlineChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor);
+    void strikethroughChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor);
+    void capitalizationChanged(QFont::Capitalization);
 
 private slots:
-    void underlineChanged(int item);
+    void underlineTypeChanged(int item);
+    void underlineStyleChanged(int item);
+    void underlineColorChanged(QColor color);
+    void strikethroughTypeChanged(int item);
+    void strikethroughStyleChanged(int item);
+    void strikethroughColorChanged(QColor color);
+    void capitalisationChanged();
 
 private:
+    KoCharacterStyle::LineType indexToLineType(int index);
+    KoCharacterStyle::LineStyle indexToLineStyle(int index);
+    int lineTypeToIndex(KoCharacterStyle::LineType type);
+    int lineStyleToIndex(KoCharacterStyle::LineStyle type);
+
     Ui::CharacterHighlighting widget;
 
-    KoCharacterStyle *m_style;
+    bool m_uniqueFormat;
 };
 
 #endif
-

@@ -24,26 +24,27 @@
 #include <QFont>
 #include <QWidget>
 
-class KFontChooser;
+#include <kfontchooser.h>
+
+class KoCharacterStyle;
 
 class FontTab : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit FontTab(QWidget* parent = 0);
+    explicit FontTab(bool uniqueFormat, QWidget* parent = 0);
     ~FontTab() {}
 
-    QFont font();
-
-public slots:
-    void setFont(const QFont &font);
+    void setDisplay(const KoCharacterStyle *displayStyle);
+    void save(KoCharacterStyle *style) const;
 
 signals:
     void fontChanged(const QFont &font);
 
 private:
     KFontChooser *m_fontChooser;
+    bool m_uniqueFormat;
 };
 
 #endif

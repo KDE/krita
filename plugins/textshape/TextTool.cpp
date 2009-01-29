@@ -1682,6 +1682,8 @@ void TextTool::insertSpecialCharacter()
 void TextTool::selectFont()
 {
     FontDia *fontDlg = new FontDia(&m_caret);
+    connect(fontDlg, SIGNAL(startMacro(const QString &)), this, SLOT(startMacro(const QString &)));
+    connect(fontDlg, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
     fontDlg->exec();
     delete fontDlg;
 }

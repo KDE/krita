@@ -35,14 +35,13 @@ SET ( textshape_SRCS
     dialogs/NewStyleWidget.cpp
     dialogs/CharacterGeneral.cpp
     dialogs/CharacterHighlighting.cpp
-    dialogs/CharacterDecorations.cpp
-    dialogs/CharacterStyleOptions.cpp
     dialogs/InsertCharacter.cpp
     dialogs/FontDia.cpp
     dialogs/FontLayoutTab.cpp
     dialogs/FontDecorations.cpp
     dialogs/FontTab.cpp
     dialogs/LanguageTab.cpp
+    dialogs/FormattingPreview.cpp
 
     commands/ChangeListCommand.cpp
     commands/ChangeListLevelCommand.cpp
@@ -61,9 +60,7 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/ParagraphGeneral.ui
     dialogs/NewStyleWidget.ui
     dialogs/CharacterGeneral.ui
-    dialogs/CharacterDecorations.ui
     dialogs/CharacterHighlighting.ui
-    dialogs/CharacterStyleOptions.ui
 
     dialogs/FontDecorations.ui
     dialogs/FontLayoutTab.ui

@@ -30,21 +30,23 @@ class FontDecorations : public QWidget
     Q_OBJECT
 
 public:
-    explicit FontDecorations(QWidget* parent = 0);
+    explicit FontDecorations(bool uniqueFormat, QWidget* parent = 0);
     ~FontDecorations() {}
 
-    void open(KoCharacterStyle *style);
-    void save() const;
+    void setDisplay(KoCharacterStyle *style);
+    void save(KoCharacterStyle *style) const;
+    
+signals:
+    void textColorChanged(QColor);
+    void backgroundColorChanged(QColor);
 
 private slots:
+    void textToggled(bool state);
+    void backgroundToggled(bool state);
     void clearTextColor();
     void clearBackgroundColor();
-    void textColorChanged() {
-        m_textColorReset = false; m_textColorChanged = true;
-    }
-    void backgroundColorChanged() {
-        m_backgroundColorReset = false; m_backgroundColorChanged = true;
-    }
+    void textColorChanged();
+    void backgroundColorChanged();
 
 private:
     Ui::FontDecorations widget;
@@ -52,7 +54,7 @@ private:
     bool m_textColorChanged, m_textColorReset;
     bool m_backgroundColorChanged, m_backgroundColorReset;
 
-    KoCharacterStyle *m_style;
+    bool m_uniqueFormat;
 };
 
 #endif

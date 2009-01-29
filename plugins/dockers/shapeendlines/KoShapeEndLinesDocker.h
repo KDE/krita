@@ -55,6 +55,7 @@ private slots:
     void endEndLineChanged(int index);
     /// selection has changed
     void selectionChanged();
+    QByteArray generateSVG(QString path, QString viewBox);
 
     /// reimplemented
     virtual void setCanvas( KoCanvasBase *canvas );

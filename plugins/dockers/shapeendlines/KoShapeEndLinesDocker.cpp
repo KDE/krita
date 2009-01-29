@@ -57,6 +57,8 @@
 #include <QGridLayout>
 #include <QList>
 #include <QComboBox>
+#include <QSvgRenderer>
+
 
 class KoShapeEndLinesDocker::Private
 {
@@ -66,21 +68,67 @@ public:
     QComboBox * endEndLineComboBox;
 };
 
+QByteArray KoShapeEndLinesDocker::generateSVG(QString path, QString viewBox){
+  QString str("<?xml version=\"1.0\" standalone=\"no\"?>");
+  str.append("\n");
+  str.append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">");
+  str.append("\n");
+  str.append("<svg width=\"30px\" height=\"30px\" viewBox=\"");
+  str.append(viewBox);
+  str.append("\" preserveAspectRatio=\"none\" xmlns=\"http://www.w3.org/2000/svg\">");
+  str.append("\n");
+  str.append("  <path fill=\"black\"  d=\"");
+  str.append(path);
+  str.append("\" />");
+  str.append("\n");
+  str.append("</svg>");
+  QByteArray res;
+  return res.append(str.toUtf8());
+}
+
 KoShapeEndLinesDocker::KoShapeEndLinesDocker()
     : d( new Private() )
 {
     setWindowTitle( i18n( "End Lines" ) );
 
+    QWidget *mainWidget = new QWidget( this );
+    QGridLayout *mainLayout = new QGridLayout( mainWidget );
+
+    // Define the two QComboBox
+    int iconW=30, iconH=30;
+    d->beginEndLineComboBox = new QComboBox( mainWidget );
+    d->beginEndLineComboBox->setIconSize(QSize(iconW, iconH));
+    d->endEndLineComboBox = new QComboBox( mainWidget );
+    d->endEndLineComboBox->setIconSize(QSize(iconW, iconH));
+
     QString fileName( KStandardDirs::locate( "data", "kpresenter/endLineStyle/endLine.xml" ) );
-    QStringList nameEndLinesList;
     if ( ! fileName.isEmpty() ) {
       QFile file( fileName );
       QString errorMessage;
       if ( KoOdfReadStore::loadAndParse( &file, m_doc, errorMessage, fileName ) ) {
         KoXmlElement drawMarker, lineEndElement(m_doc.namedItem("lineends").toElement());
+
         forEachElement(drawMarker, lineEndElement){
-          nameEndLinesList.append(drawMarker.attribute("name").replace("_", " "));
-	  }
+          // Init QPainter and QPixmap
+          QIcon drawIcon;
+          QPixmap endLinePixmap(iconW, iconH);
+          QPainter *endLinePainter = new QPainter(&endLinePixmap);
+          // Convert path to SVG
+          QSvgRenderer *endLineRenderer;
+          endLineRenderer = new QSvgRenderer(generateSVG(drawMarker.attribute("d"), drawMarker.attribute("viewBox")));
+          endLineRenderer->render(endLinePainter);
+
+          // init QIcon
+          drawIcon = QIcon(endLinePixmap);
+
+          // add icon and label in the two QComboBox
+          d->beginEndLineComboBox->addItem(drawIcon, drawMarker.attribute("name").replace("_", " "));
+          d->endEndLineComboBox->addItem(drawIcon, drawMarker.attribute("name").replace("_", " "));
+
+          // erease the two pointer
+          delete endLineRenderer;
+          delete endLinePainter;
+        }
 	    }else {
         kDebug() << "reading of endLine.xml failed:" << errorMessage;
       }
@@ -89,31 +137,25 @@ KoShapeEndLinesDocker::KoShapeEndLinesDocker()
       kDebug() << "endLine.xml not found";
     }
 
-    QWidget *mainWidget = new QWidget( this );
-    QGridLayout *mainLayout = new QGridLayout( mainWidget );
     
+    // Add Begin to the docker
     QLabel * beginEndLineLabel = new QLabel( i18n( "Begin:" ), mainWidget );
     mainLayout->addWidget( beginEndLineLabel, 0, 0 );
-    d->beginEndLineComboBox = new QComboBox( mainWidget );
-    d->beginEndLineComboBox->addItems(nameEndLinesList);
     mainLayout->addWidget( d->beginEndLineComboBox,0,1,1,3);
-
     connect( d->beginEndLineComboBox, SIGNAL(activated( int ) ), this, SLOT( beginEndLineChanged(int) ) );
 
+    // Add End to the docker
     QLabel * endEndLineLabel = new QLabel( i18n( "End:" ), mainWidget );
     mainLayout->addWidget( endEndLineLabel, 1, 0 );
-    d->endEndLineComboBox = new QComboBox( mainWidget );
-    d->endEndLineComboBox->addItems(nameEndLinesList);
     mainLayout->addWidget( d->endEndLineComboBox,1,1,1,3);
-
     connect( d->endEndLineComboBox, SIGNAL(activated( int ) ), this, SLOT( endEndLineChanged(int) ) );
 
- 
+
     mainLayout->setRowStretch( 5, 1 );
     mainLayout->setColumnStretch( 1, 1 );
     mainLayout->setColumnStretch( 2, 1 );
     mainLayout->setColumnStretch( 3, 1 );
- 
+
     setWidget( mainWidget );
 
 }
@@ -130,7 +172,7 @@ void KoShapeEndLinesDocker::applyChanges()
 
 void KoShapeEndLinesDocker::beginEndLineChanged(int index)
 {
-    d->beginEndLineComboBox->setCurrentItem(index);
+  d->beginEndLineComboBox->setCurrentItem(index);
 }
 
 void KoShapeEndLinesDocker::endEndLineChanged(int index)

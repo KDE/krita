@@ -23,7 +23,6 @@
 #include "ui_StyleManager.h"
 
 #include <QWidget>
-#include <QList>
 
 class KoStyleManager;
 class QListWidgetItem;
@@ -45,22 +44,24 @@ public slots:
     void save();
 
 private slots:
-    void setStyle(QListWidgetItem *item, QListWidgetItem *previous);
     void buttonNewPressed();
     void buttonDeletePressed();
-    void setStyleName(const QString &name);
     void addParagraphStyle(KoParagraphStyle*);
     void addCharacterStyle(KoCharacterStyle*);
     void removeParagraphStyle(KoParagraphStyle*);
     void removeCharacterStyle(KoCharacterStyle*);
+    void setParagraphStyle(KoParagraphStyle *style, bool canDelete);
+    void setCharacterStyle(KoCharacterStyle *style, bool canDelete);
 
 private:
     Ui::StyleManager widget;
     KoStyleManager *m_styleManager;
-    QList<KoParagraphStyle*> m_paragraphStyles;
 
     QMap<int, KoParagraphStyle*> m_alteredParagraphStyles;
     QMap<int, KoCharacterStyle*> m_alteredCharacterStyles;
+
+    KoParagraphStyle *m_selectedParagStyle;
+    KoCharacterStyle *m_selectedCharStyle;
 
     bool m_blockSignals;
 };

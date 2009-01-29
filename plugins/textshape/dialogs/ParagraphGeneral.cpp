@@ -32,6 +32,20 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
 {
     widget.setupUi(this);
 
+//Disable for now
+    //next style
+    widget.label_2->setVisible(false);
+    widget.nextStyle->setVisible(false);
+    //inherit style
+    widget.label_3->setVisible(false);
+    widget.inheritStyle->setVisible(false);
+    //use named charStyle
+    widget.useCharacterStyle->setVisible(false);
+    widget.label_4->setVisible(false);
+    widget.characterStyle->setVisible(false);
+    //include in TOC
+    widget.inToc->setVisible(false);
+
     m_paragraphIndentSpacing = new ParagraphIndentSpacing(this);
     m_paragraphLayout = new ParagraphLayout(this);
     m_paragraphBulletsNumbers = new ParagraphBulletsNumbers(this);

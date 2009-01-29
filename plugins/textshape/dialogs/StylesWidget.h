@@ -38,17 +38,21 @@ class StylesWidget : public QWidget
 public:
     explicit StylesWidget(QWidget *parent = 0);
 
+    void setEmbedded(bool embed);
+
 public slots:
     void setStyleManager(KoStyleManager *sm);
     void setCurrentFormat(const QTextBlockFormat &format);
     void setCurrentFormat(const QTextCharFormat &format);
+    void deleteStyleClicked();
 
 signals:
     void doneWithFocus();
+    void paragraphStyleSelected(KoParagraphStyle *paragraphStyle, bool canDelete);
+    void characterStyleSelected(KoCharacterStyle *characterStyle, bool canDelete);
 
 private slots:
     void newStyleClicked();
-    void deleteStyleClicked();
     void editStyle();
     void applyStyle();
     /// updates button state
@@ -66,6 +70,7 @@ private:
     QTextCharFormat m_currentCharFormat;
     StylesModel *m_stylesModel;
     bool m_blockSignals;
+    bool m_isEmbedded;
 };
 
 #endif

@@ -57,6 +57,16 @@ StylesWidget::StylesWidget(QWidget *parent)
     connect(widget.stylesView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(setCurrent(const QModelIndex&)));
 }
 
+void StylesWidget::setEmbedded(bool embed)
+{
+    m_isEmbedded = embed;
+
+    widget.newStyle->setVisible(!embed);
+    widget.deleteStyle->setVisible(!embed);
+    widget.modifyStyle->setVisible(!embed);
+    widget.applyStyle->setVisible(!embed);
+}
+
 void StylesWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
@@ -177,17 +187,22 @@ void StylesWidget::editStyle()
     Q_ASSERT(index.isValid());
     KoParagraphStyle *paragraphStyle = m_stylesModel->paragraphStyleForIndex(index);
     KoCharacterStyle *characterStyle = 0;
+    KoParagraphStyle *paragStyleClone = 0;
+    KoCharacterStyle *characStyleClone = 0;
+
     if (paragraphStyle == 0)
         characterStyle = m_stylesModel->characterStyleForIndex(index);
 
     QWidget *widget = 0;
     if (paragraphStyle) {
+        paragStyleClone = paragraphStyle->clone();
         ParagraphGeneral *p = new ParagraphGeneral;
         p->setParagraphStyles(m_styleManager->paragraphStyles());
         p->setStyle(paragraphStyle);
         // TODO get KoUnit from somewhere and set that on p
         widget = p;
     } else if (characterStyle) {
+        characStyleClone = characterStyle->clone();
         CharacterGeneral *c = new CharacterGeneral;
         c->setStyle(characterStyle);
         widget = c;
@@ -199,8 +214,20 @@ void StylesWidget::editStyle()
         dialog->setMainWidget(widget);
         connect(dialog, SIGNAL(okClicked()), widget, SLOT(save()));
         dialog->exec();
+        if (paragraphStyle) {
+            if (paragraphStyle != paragStyleClone)
+                applyStyle();
+        }
+        else if (characterStyle) {
+            if (characterStyle != characStyleClone)
+                applyStyle();
+        }
         delete dialog;
     }
+    delete paragStyleClone;
+    delete characStyleClone;
+    paragStyleClone = 0;
+    characStyleClone = 0;
 }
 
 void StylesWidget::applyStyle()
@@ -234,6 +261,20 @@ void StylesWidget::setCurrent(const QModelIndex &index)
             canDelete = m_stylesModel->paragraphStyleForIndex(index);
     }
     widget.deleteStyle->setEnabled(canDelete);
+
+    if (index.isValid() && m_isEmbedded) {
+	KoParagraphStyle *paragraphStyle = m_stylesModel->paragraphStyleForIndex(index);
+	if (paragraphStyle) {
+	    emit paragraphStyleSelected(paragraphStyle, canDelete);
+	    return;
+	}
+
+	KoCharacterStyle *characterStyle = m_stylesModel->characterStyleForIndex(index);
+	if (characterStyle) {
+	    emit characterStyleSelected(characterStyle, canDelete);
+	    return;
+	}
+    }
 }
 
 #include <StylesWidget.moc>

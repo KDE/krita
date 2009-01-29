@@ -1502,13 +1502,13 @@ void TextTool::insertIndexMarker()
 
 void TextTool::formatParagraph()
 {
-    ParagraphSettingsDialog *dia = new ParagraphSettingsDialog(m_canvas->canvasWidget(), this);
-    dia->open(m_caret);
+    ParagraphSettingsDialog *dia = new ParagraphSettingsDialog(this, &m_caret);
     dia->setUnit(m_canvas->unit());
     connect(dia, SIGNAL(startMacro(const QString&)), this, SLOT(startMacro(const QString&)));
     connect(dia, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
 
-    dia->show();
+    dia->exec();
+    delete dia;
 }
 
 void TextTool::toggleTrackChanges(bool on)

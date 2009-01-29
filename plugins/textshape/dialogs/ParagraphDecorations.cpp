@@ -23,44 +23,47 @@
 #include <KDebug>
 
 ParagraphDecorations::ParagraphDecorations(QWidget* parent)
-        : QWidget(parent),
-        m_style(0)
+        : QWidget(parent)
 {
     widget.setupUi(this);
 
-    connect(widget.backgroundColor, SIGNAL(changed(const QColor&)), this, SLOT(backgroundColorChanged()));
+    connect(widget.backgroundColor, SIGNAL(changed(const QColor&)), this, SLOT(slotBackgroundColorChanged()));
     connect(widget.resetBackgroundColor, SIGNAL(clicked()), this, SLOT(clearBackgroundColor()));
 }
 
-void ParagraphDecorations::open(KoParagraphStyle *style)
+void ParagraphDecorations::slotBackgroundColorChanged()
 {
-    m_style = style;
+    m_backgroundColorReset = false; m_backgroundColorChanged = true;
+    emit backgroundColorChanged(widget.backgroundColor->color());
+}
+
+void ParagraphDecorations::setDisplay(KoParagraphStyle *style)
+{
     m_backgroundColorChanged = false;
-    m_backgroundColorReset = m_style->background().style() == Qt::NoBrush;
+    m_backgroundColorReset = style->background().style() == Qt::NoBrush;
     if (m_backgroundColorReset) {
         clearBackgroundColor();
     } else {
-        widget.backgroundColor->setColor(m_style->background().color());
+        widget.backgroundColor->setColor(style->background().color());
     }
 }
 
-void ParagraphDecorations::save() const
+void ParagraphDecorations::save(KoParagraphStyle *style) const
 {
-    Q_ASSERT(m_style);
-    if (m_backgroundColorReset) {
+    Q_ASSERT(style);
+    if (m_backgroundColorReset)
         // clearing the property doesn't work since ParagraphSettingsDialog does a mergeBlockFormat
-        // so we'll set it to an invalid brush instead
-        QBrush brush;
-        m_style->setBackground(brush);
-    } else if (m_backgroundColorChanged) {
-        m_style->setBackground(QBrush(widget.backgroundColor->color()));
-    }
+        // so we'll set it to a Qt::NoBrush brush instead
+        style->setBackground(QBrush(Qt::NoBrush));
+    else if (m_backgroundColorChanged)
+        style->setBackground(QBrush(widget.backgroundColor->color()));
 }
 
 void ParagraphDecorations::clearBackgroundColor()
 {
     widget.backgroundColor->setColor(widget.backgroundColor->defaultColor());
     m_backgroundColorReset = true;
+    emit backgroundColorChanged(QColor(Qt::transparent));
 }
 
 #include "ParagraphDecorations.moc"

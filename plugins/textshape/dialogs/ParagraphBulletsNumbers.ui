@@ -182,13 +182,6 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0" colspan="2" >
-    <widget class="QGroupBox" name="previewPane" >
-     <property name="title" >
-      <string>Preview</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <customwidgets>

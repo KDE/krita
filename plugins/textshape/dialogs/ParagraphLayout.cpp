@@ -25,11 +25,31 @@ ParagraphLayout::ParagraphLayout(QWidget *parent)
         : QWidget(parent)
 {
     widget.setupUi(this);
+
+    connect(widget.right, SIGNAL(toggled(bool)), this, SLOT(slotAlignChanged()));
+    connect(widget.center, SIGNAL(toggled(bool)), this, SLOT(slotAlignChanged()));
+    connect(widget.justify, SIGNAL(toggled(bool)), this, SLOT(slotAlignChanged()));
+    connect(widget.left, SIGNAL(toggled(bool)), this, SLOT(slotAlignChanged()));
 }
 
-void ParagraphLayout::open(KoParagraphStyle *style)
+void ParagraphLayout::slotAlignChanged()
 {
-    m_style = style;
+    Qt::Alignment align;
+    if (widget.right->isChecked())
+        align = Qt::AlignRight;
+    else if (widget.center->isChecked())
+        align = Qt::AlignHCenter;
+    else if (widget.justify->isChecked())
+        align = Qt::AlignJustify;
+    else
+        align = Qt::AlignLeft;
+
+    emit horizontalAlignmentChanged(align);
+}
+
+
+void ParagraphLayout::setDisplay(KoParagraphStyle *style)
+{
     switch (style->alignment()) {
     case Qt::AlignRight: widget.right->setChecked(true); break;
     case Qt::AlignHCenter: widget.center->setChecked(true); break;
@@ -44,7 +64,7 @@ void ParagraphLayout::open(KoParagraphStyle *style)
     widget.breakAfter->setChecked(style->breakAfter());
 }
 
-void ParagraphLayout::save()
+void ParagraphLayout::save(KoParagraphStyle *style)
 {
     Qt::Alignment align;
     if (widget.right->isChecked())
@@ -55,10 +75,10 @@ void ParagraphLayout::save()
         align = Qt::AlignJustify;
     else
         align = Qt::AlignLeft;
-    m_style->setAlignment(align);
-    m_style->setNonBreakableLines(widget.keepTogether->isChecked());
-    m_style->setBreakBefore(widget.breakBefore->isChecked());
-    m_style->setBreakAfter(widget.breakAfter->isChecked());
+    style->setAlignment(align);
+    style->setNonBreakableLines(widget.keepTogether->isChecked());
+    style->setBreakBefore(widget.breakBefore->isChecked());
+    style->setBreakAfter(widget.breakAfter->isChecked());
 }
 
 #include "ParagraphLayout.moc"

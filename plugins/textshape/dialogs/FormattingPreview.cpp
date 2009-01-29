@@ -19,15 +19,24 @@
 
 #include "FormattingPreview.h"
 
+#include <KoPostscriptPaintDevice.h>
+#include <KoZoomHandler.h>
+
+#include <QBrush>
 #include <QColor>
 #include <QFont>
 #include <QFontMetrics>
 #include <QFrame>
 #include <QPainter>
 #include <QPen>
+#include <QPointF>
 #include <QRect>
 #include <QRectF>
 #include <QString>
+#include <QStringList>
+#include <QTextLayout>
+#include <QTextLine>
+#include <QTextOption>
 
 #include <math.h>
 
@@ -36,17 +45,27 @@
 
  FormattingPreview::FormattingPreview(QWidget* parent)
         : QFrame(parent),
-        m_font(QFont("Times", 12)),
-        m_fontCapitalisation(QFont::MixedCase),
+        m_previewType(FontPreview),
         m_sampleText(i18n("Font")),
+        //Character properties
+        m_backgroundColor(QColor(Qt::transparent)),
+        m_font(QFont("Sans Serif", 12)),
+        m_fontCapitalisation(QFont::MixedCase),
         m_strikethroughType(KoCharacterStyle::NoLineType),
         m_strikethroughStyle(KoCharacterStyle::NoLineStyle),
         m_strikethroughColor(QColor(Qt::black)),
+        m_textColor(QColor(Qt::black)),
         m_underlineType(KoCharacterStyle::NoLineType),
         m_underlineStyle(KoCharacterStyle::NoLineStyle),
         m_underlineColor(QColor(Qt::black)),
-        m_textColor(QColor(Qt::black)),
-        m_backgroundColor(QColor(Qt::transparent))
+        //Paragraph properties
+        m_align(Qt::AlignHCenter | Qt::AlignVCenter),
+        m_paragBackgroundColor(QColor(Qt::white)),
+        m_firstLineMargin(0),
+        m_horizAlign(Qt::AlignHCenter),
+        m_leftMargin(0),
+        m_rightMargin(0),
+        m_vertAlign(Qt::AlignVCenter)
 {
     setFrameStyle(QFrame::Box | QFrame::Plain);
     setMinimumSize( 500, 150 );
@@ -55,6 +74,41 @@
 FormattingPreview::~FormattingPreview()
 {
 }
+
+void FormattingPreview::setPreviewType(FormattingPreview::PreviewType type)
+{
+    m_previewType = type;
+}
+
+
+void FormattingPreview::setText(const QString &sampleText)
+{
+    m_sampleText = sampleText;
+    update();
+}
+
+//Character properties
+void FormattingPreview::setCharacterStyle(const KoCharacterStyle* style)
+{
+    if (style->hasProperty(QTextFormat::ForegroundBrush) && style->foreground().color().isValid())
+        m_textColor = style->foreground().color();
+    else
+        m_textColor = QColor(Qt::black);
+    if (style->hasProperty(QTextFormat::BackgroundBrush) && style->background().color().isValid())
+        m_backgroundColor = style->background().color();
+    else
+        m_backgroundColor = QColor(Qt::transparent);
+    m_font = style->font();
+    m_fontCapitalisation = style->fontCapitalization();
+    m_strikethroughType = style->strikeOutType();
+    m_strikethroughStyle = style->strikeOutStyle();
+    m_strikethroughColor = style->strikeOutColor();
+    m_underlineType = style->underlineType();
+    m_underlineStyle = style->underlineStyle();
+    m_underlineColor = style->underlineColor();
+    update();
+}
+
 
 void FormattingPreview::setBackgroundColor(QColor color)
 {
@@ -74,17 +128,11 @@ void FormattingPreview::setFontCapitalisation(QFont::Capitalization capitalisati
     update();
 }
 
-void FormattingPreview::setStrikethrough(KoCharacterStyle::LineType strikethroughType, KoCharacterStyle::LineStyle strikethroughStyle, const QColor &color)
+void FormattingPreview::setStrikethrough(KoCharacterStyle::LineType strikethroughType, KoCharacterStyle::LineStyle strikethroughStyle, const QColor &strikethroughColor)
 {
     m_strikethroughType = strikethroughType;
     m_strikethroughStyle = strikethroughStyle;
-    m_strikethroughColor = color;
-    update();
-}
-
-void FormattingPreview::setText(const QString &sampleText)
-{
-    m_sampleText = sampleText;
+    m_strikethroughColor = strikethroughColor;
     update();
 }
 
@@ -102,42 +150,149 @@ void FormattingPreview::setUnderline(KoCharacterStyle::LineType underlineType, K
     update();
 }
 
+//Paragraph properties
+void FormattingPreview::setParagraphBackgroundColor(QColor color)
+{
+    m_paragBackgroundColor = color;
+    update();
+}
+
+void FormattingPreview::setParagraphStyle(const KoParagraphStyle* style)
+{
+    m_align = style->alignment();
+}
+
+void FormattingPreview::setFirstLineMargin(double margin)
+{
+    m_firstLineMargin = margin;
+    update();
+}
+
+void FormattingPreview::setHorizontalAlign(Qt::Alignment align)
+{
+    m_horizAlign = align;
+    m_align = m_horizAlign | m_vertAlign;
+    update();
+}
+
+void FormattingPreview::setLeftMargin(double margin)
+{
+    m_leftMargin = margin;
+    update();
+}
+
+void FormattingPreview::setLineSpacing(double fixedLineHeight, double lineSpacing, double minimumLineHeight, int percentLineSpacing, bool useFontProperties)
+{
+    m_fixedLineHeight = fixedLineHeight;
+    m_lineSpacing = lineSpacing;
+    m_minimumLineHeight = minimumLineHeight;
+    m_percentLineHeight = percentLineSpacing;
+    m_useFontProperties = useFontProperties;
+    update();
+}
+
+void FormattingPreview::setRightMargin(double margin)
+{
+    m_rightMargin = margin;
+    update();
+}
+
 //Painting related methods
 
 void FormattingPreview::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event)
+
+    KoPostscriptPaintDevice *paintDevice = new KoPostscriptPaintDevice;
+    KoZoomHandler *zoomHandler = new KoZoomHandler;
+    zoomHandler->setResolutionToStandard();
+    zoomHandler->setZoom(1.0);
+    qreal zoomX, zoomY;
+    zoomHandler->zoom(&zoomX, &zoomY);
     QPainter painter(this);
-    painter.fillRect(contentsRect(), QBrush(Qt::white));
+    painter.scale(zoomX, zoomY);
+
+    painter.fillRect(contentsRect(), QBrush(QColor(Qt::white)));
+    painter.fillRect(contentsRect(), QBrush(m_paragBackgroundColor.isValid()?m_paragBackgroundColor:QColor(Qt::white)));
 
 //set up the Font properties
-    QFont displayFont = m_font;
+    QFont displayFont = QFont(m_font, paintDevice);
     displayFont.setCapitalization(m_fontCapitalisation);
-    painter.setFont(displayFont);
 
-//draw the preview text
-    QRect boundingRect = painter.boundingRect(contentsRect(), Qt::AlignCenter, m_sampleText);
+//first quickly check if we can draw at least one word
+    QStringList words = m_sampleText.split(" ");
+    painter.setFont(displayFont);
+    QRectF boundingRect = painter.boundingRect(contentsRect(), Qt::AlignCenter, words.at(0));
     if ((boundingRect.width() > contentsRect().width()) || (boundingRect.height() > contentsRect().height())) {
         displayFont.setPointSize(12);
-        painter.setFont(displayFont);
-        boundingRect = painter.boundingRect(contentsRect(), Qt::AlignCenter, m_sampleText);
     }
-    QRectF displayRect = QRectF((contentsRect().width()-boundingRect.width())/2, (contentsRect().height()-boundingRect.height())/2, boundingRect.width(), boundingRect.height());
 
-    QFontMetrics fm = QFontMetrics(displayFont);
-
+    painter.setFont(displayFont);
     painter.setPen(m_textColor);
-    painter.fillRect(displayRect, QBrush(m_backgroundColor));
-    painter.drawText(displayRect,  Qt::AlignLeft | Qt::AlignVCenter, m_sampleText);
 
-    //draw underline
-    if ((m_underlineType != KoCharacterStyle::NoLineType) && (m_underlineStyle != KoCharacterStyle::NoLineStyle)) {
+//now start the actual layout
 
-        qreal xstart = displayRect.x();
-        qreal xend = displayRect.x() + displayRect.width();
-        qreal y = displayRect.y() + fm.ascent() + fm.underlinePos() + 1;
+    QTextLayout layout(m_sampleText, displayFont);
+    layout.setTextOption(QTextOption(m_align));
 
-        qreal width;
-        switch (m_font.weight()) {
+    QFontMetrics fm = QFontMetrics(displayFont, paintDevice);
+    qreal xmargin = 5; //leave a tiny space on borders
+    qreal ymargin = 5;
+    qreal height = 0;
+    qreal lineHeight = zoomHandler->documentToViewY(m_fixedLineHeight);
+    qreal lineSpacing = 0;
+    qreal lineWidth = (contentsRect().width() - 2*xmargin)/zoomX;
+    bool firstLine = true;
+
+    bool useFixedLineHeight = zoomHandler->documentToViewY(m_fixedLineHeight) != 0.0;
+    if (! useFixedLineHeight) {
+        lineHeight = fm.height();
+        lineSpacing = zoomHandler->documentToViewY(m_lineSpacing);
+        if (lineSpacing == 0.0) { // unset
+            if (m_percentLineHeight != 0)
+                lineSpacing = lineHeight * ((m_percentLineHeight-100) / 100.0);
+            else if (lineSpacing == 0.0)
+                lineSpacing = lineHeight * 0.2;
+        }
+    }
+
+    if (m_minimumLineHeight > 0.0 && (m_minimumLineHeight>lineHeight+lineSpacing)) {
+        lineHeight = zoomHandler->documentToViewY(m_minimumLineHeight);
+        lineSpacing = 0;
+    }
+
+    layout.beginLayout();
+    while (1) {
+        QTextLine line = layout.createLine();
+        if (!line.isValid())
+            break;
+        line.setLineWidth(lineWidth - ((firstLine)?zoomHandler->documentToViewX(m_firstLineMargin):zoomHandler->documentToViewX(m_leftMargin - m_rightMargin)));
+        line.setPosition(QPointF((firstLine)?m_firstLineMargin:zoomHandler->documentToViewX(m_leftMargin), height*zoomY));
+        height += lineHeight + lineSpacing;
+
+        firstLine = false;
+
+        if ((height + lineHeight) > ((contentsRect().height() - 2* ymargin))/zoomY)
+            break;
+    }
+    layout.endLayout();
+
+    boundingRect = layout.boundingRect();
+    QPointF origin = QPointF(xmargin, qMax(ymargin,(contentsRect().height()-boundingRect.height())/2)/zoomY);
+    QTextCharFormat charFormat;
+    charFormat.setBackground(QBrush(m_backgroundColor));
+    QVector<QTextLayout::FormatRange> selections;
+    QTextLayout::FormatRange fr;
+    fr.start = 0;
+    fr.length = m_sampleText.length();
+    fr.format = charFormat;
+    selections.append(fr);
+
+    layout.draw(&painter, origin, selections);
+
+//draw decorations
+    qreal width;
+    switch (m_font.weight()) {
         case QFont::Light:
             width = fm.lineWidth() /2;
             break;
@@ -151,34 +306,23 @@ void FormattingPreview::paintEvent(QPaintEvent *event)
             break;
         default:
             width = fm.lineWidth();
-        }
-        drawLine(painter, xstart, xend, y, width, fm.underlinePos(), m_underlineType, m_underlineStyle, m_underlineColor);
     }
-    //draw strikethrough
-    if ((m_strikethroughType != KoCharacterStyle::NoLineType) && (m_strikethroughStyle != KoCharacterStyle::NoLineStyle)) {
 
-        qreal xstart = displayRect.x();
-        qreal xend = displayRect.x() + displayRect.width();
-        qreal y = displayRect.y() + fm.ascent() - fm.strikeOutPos();
+    for (int i = 0; i <= layout.lineCount() - 1; i++) {
+        QTextLine line = layout.lineAt(i);
 
-        qreal width;
-        switch (m_font.weight()) {
-        case QFont::Light:
-            width = fm.lineWidth() /2;
-            break;
-        case QFont::Normal: //Falltrhough
-        case QFont::DemiBold:
-            width = fm.lineWidth();
-            break;
-        case QFont::Bold: //Fallthrough
-        case QFont::Black:
-            width = fm.lineWidth() * 2;
-            break;
-        default:
-            width = fm.lineWidth();
-        }
-        drawLine(painter, xstart, xend, y, width, fm.strikeOutPos(), m_strikethroughType, m_strikethroughStyle, m_strikethroughColor);
+        qreal xstart = line.naturalTextRect().x() + origin.x();
+        qreal xend = line.naturalTextRect().x() + origin.x() + line.naturalTextWidth();
+        qreal y = line.naturalTextRect().y() + origin.y() + line.ascent();
+
+        if ((m_underlineType != KoCharacterStyle::NoLineType) && (m_underlineStyle != KoCharacterStyle::NoLineStyle))
+            drawLine(painter, xstart, xend, y + fm.underlinePos() + 1, width, fm.underlinePos(), m_underlineType, m_underlineStyle, (m_underlineColor.isValid())?m_underlineColor:m_textColor);
+        if ((m_strikethroughType != KoCharacterStyle::NoLineType) && (m_strikethroughStyle != KoCharacterStyle::NoLineStyle))
+            drawLine(painter, xstart, xend, y - fm.strikeOutPos(), width, fm.underlinePos(), m_strikethroughType, m_strikethroughStyle, (m_strikethroughColor.isValid())?m_strikethroughColor:m_textColor);
     }
+
+    delete paintDevice;
+    delete zoomHandler;
 }
 
 void FormattingPreview::drawLine(QPainter &painter, qreal xstart, qreal xend, qreal y, qreal width, int distToBaseLine, KoCharacterStyle::LineType lineType, KoCharacterStyle::LineStyle lineStyle, QColor lineColor)

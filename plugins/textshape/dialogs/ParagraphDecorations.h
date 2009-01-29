@@ -33,21 +33,20 @@ public:
     explicit ParagraphDecorations(QWidget* parent = 0);
     ~ParagraphDecorations() {}
 
-    void open(KoParagraphStyle *style);
-    void save() const;
+    void setDisplay(KoParagraphStyle *style);
+    void save(KoParagraphStyle *style) const;
+
+signals:
+    void backgroundColorChanged(QColor);
 
 private slots:
     void clearBackgroundColor();
-    void backgroundColorChanged() {
-        m_backgroundColorReset = false; m_backgroundColorChanged = true;
-    }
+    void slotBackgroundColorChanged();
 
 private:
     Ui::ParagraphDecorations widget;
 
     bool m_backgroundColorChanged, m_backgroundColorReset;
-
-    KoParagraphStyle *m_style;
 };
 
 #endif

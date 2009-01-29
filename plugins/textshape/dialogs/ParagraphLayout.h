@@ -32,14 +32,18 @@ class ParagraphLayout : public QWidget
 public:
     ParagraphLayout(QWidget *parent);
 
-    void open(KoParagraphStyle *style);
+    void setDisplay(KoParagraphStyle *style);
 
-    void save();
+    void save(KoParagraphStyle *style);
+
+signals:
+    void horizontalAlignmentChanged(Qt::Alignment);
+
+private slots:
+    void slotAlignChanged();
 
 private:
     Ui::ParagraphLayout widget;
-
-    KoParagraphStyle *m_style;
 };
 
 #endif

@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>430</width>
-    <height>402</height>
+    <width>449</width>
+    <height>412</height>
    </rect>
   </property>
   <property name="whatsThis" >
@@ -37,7 +37,7 @@
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>40</width>
           <height>71</height>
@@ -81,13 +81,6 @@
      </layout>
     </widget>
    </item>
-   <item rowspan="4" row="0" column="1" >
-    <widget class="QGroupBox" name="previewPane" >
-     <property name="title" >
-      <string>Preview</string>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="0" >
     <widget class="QGroupBox" name="groupBox_2" >
      <property name="whatsThis" >
@@ -114,16 +107,7 @@
         </property>
         <widget class="QWidget" name="unitsPage" >
          <layout class="QHBoxLayout" >
-          <property name="leftMargin" >
-           <number>0</number>
-          </property>
-          <property name="topMargin" >
-           <number>0</number>
-          </property>
-          <property name="rightMargin" >
-           <number>0</number>
-          </property>
-          <property name="bottomMargin" >
+          <property name="margin" >
            <number>0</number>
           </property>
           <item>
@@ -133,16 +117,7 @@
         </widget>
         <widget class="QWidget" name="percentPage" >
          <layout class="QHBoxLayout" >
-          <property name="leftMargin" >
-           <number>0</number>
-          </property>
-          <property name="topMargin" >
-           <number>0</number>
-          </property>
-          <property name="rightMargin" >
-           <number>0</number>
-          </property>
-          <property name="bottomMargin" >
+          <property name="margin" >
            <number>0</number>
           </property>
           <item>
@@ -207,7 +182,7 @@
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>91</width>
           <height>20</height>
@@ -242,7 +217,7 @@
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>40</width>
           <height>51</height>
@@ -271,7 +246,7 @@
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>313</width>
        <height>16</height>

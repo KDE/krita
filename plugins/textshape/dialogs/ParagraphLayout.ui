@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>273</height>
+    <height>279</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -47,13 +47,6 @@
      </layout>
     </widget>
    </item>
-   <item rowspan="3" row="0" column="1" >
-    <widget class="QGroupBox" name="previewPane" >
-     <property name="title" >
-      <string>Preview</string>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="0" >
     <widget class="QGroupBox" name="groupBox_2" >
      <property name="title" >
@@ -89,7 +82,7 @@
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>20</width>
        <height>40</height>

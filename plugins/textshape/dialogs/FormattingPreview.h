@@ -21,6 +21,7 @@
 #define FORMATTINGPREVIEW_H
 
 #include <KoCharacterStyle.h>
+#include <KoParagraphStyle.h>
 
 #include <QFont>
 #include <QFrame>
@@ -33,10 +34,20 @@ class FormattingPreview : public QFrame
     Q_OBJECT
 
 public:
+    enum PreviewType {
+        FontPreview,
+        ParagPreview
+    };
+
     explicit FormattingPreview(QWidget* parent = 0);
     ~FormattingPreview();
 
+    void setPreviewType(PreviewType type);
+
 public slots:
+    ///Character properties
+    void setCharacterStyle(const KoCharacterStyle *style);
+
     void setBackgroundColor(QColor color);
     void setFont(const QFont &font);
     void setFontCapitalisation(QFont::Capitalization capitalisation);
@@ -45,28 +56,55 @@ public slots:
     void setTextColor(QColor color);
     void setUnderline(KoCharacterStyle::LineType underlineType, KoCharacterStyle::LineStyle underlineStyle, const QColor &underlineColor);
 
+    ///Paragraph properties
+    void setParagraphStyle(const KoParagraphStyle *style);
+
+    void setParagraphBackgroundColor(QColor color);
+    void setFirstLineMargin(qreal margin);
+    void setHorizontalAlign(Qt::Alignment);
+    void setLeftMargin(qreal margin);
+    void setLineSpacing(qreal fixedLineHeight, qreal lineSpacing, qreal minimumLineHeight, int percentLineSpacing, bool useFontProperties);
+    void setRightMargin(qreal margin);
+
 protected:
     void paintEvent(QPaintEvent *event);
     void drawLine(QPainter &painter, qreal xstart, qreal xend, qreal y, qreal width, int underlineDist, KoCharacterStyle::LineType lineType, KoCharacterStyle::LineStyle lineStyle, QColor lineColor);
-    
+
 private:
+    PreviewType m_previewType;
+
+    QString m_sampleText;
+
+    ///Character properties
     QColor m_backgroundColor;
 
     QFont m_font;
-    
+
     QFont::Capitalization m_fontCapitalisation;
-    
-    QString m_sampleText;
-    
+
     KoCharacterStyle::LineType m_strikethroughType;
     KoCharacterStyle::LineStyle m_strikethroughStyle;
     QColor m_strikethroughColor;
-    
+
     QColor m_textColor;
 
     KoCharacterStyle::LineType m_underlineType;
     KoCharacterStyle::LineStyle m_underlineStyle;
     QColor m_underlineColor;
+
+    ///Paragraph properties
+    Qt::Alignment m_align;
+    QColor m_paragBackgroundColor;
+    qreal m_firstLineMargin;
+    qreal m_fixedLineHeight;
+    Qt::Alignment m_horizAlign;
+    qreal m_leftMargin;
+    qreal m_lineSpacing;
+    qreal m_minimumLineHeight;
+    int m_percentLineHeight;
+    qreal m_rightMargin;
+    bool m_useFontProperties;
+    Qt::Alignment m_vertAlign;
 };
 
 #endif //FORMATTINGPREVIEW_H

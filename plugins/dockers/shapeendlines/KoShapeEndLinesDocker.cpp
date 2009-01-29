@@ -107,24 +107,22 @@ KoShapeEndLinesDocker::KoShapeEndLinesDocker()
         if ( KoOdfReadStore::loadAndParse( &file, m_doc, errorMessage, fileName ) ) {
             KoXmlElement drawMarker, lineEndElement(m_doc.namedItem("lineends").toElement());
 
+            QSvgRenderer endLineRenderer;
             forEachElement(drawMarker, lineEndElement){
                 // Init QPainter and QPixmap
                 QPixmap endLinePixmap(d->endEndLineComboBox->iconSize());
                 endLinePixmap.fill(QColor(Qt::transparent));
                 QPainter endLinePainter(&endLinePixmap);
                 // Convert path to SVG
-                //kDebug() << generateSVG(drawMarker.attribute("d"), drawMarker.attribute("viewBox"), drawMarker.attribute("name").replace("_", " "));
-                QSvgRenderer endLineRenderer(generateSVG(drawMarker.attribute("d"), drawMarker.attribute("viewBox")));
+                endLineRenderer.load(generateSVG(drawMarker.attribute("d"), drawMarker.attribute("viewBox")));
                 endLineRenderer.render(&endLinePainter);
 
                 // init QIcon
-                QIcon drawIcon = QIcon(endLinePixmap);
+                QIcon drawIcon(endLinePixmap);
 
                 // add icon and label in the two QComboBox
                 d->beginEndLineComboBox->addItem(drawIcon, drawMarker.attribute("name").replace("_", " "));
                 d->endEndLineComboBox->addItem(drawIcon, drawMarker.attribute("name").replace("_", " "));
-
-                // erease the two pointer
             }
         }else {
             kDebug() << "reading of endLine.xml failed:" << errorMessage;

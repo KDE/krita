@@ -68,8 +68,11 @@ public:
     QComboBox * endEndLineComboBox;
 };
 
-QByteArray KoShapeEndLinesDocker::generateSVG(QString path, QString viewBox){
+QByteArray KoShapeEndLinesDocker::generateSVG(QString path, QString viewBox, QString comment){
   QString str("<?xml version=\"1.0\" standalone=\"no\"?>");
+  str.append("<!--");
+  str.append(comment);
+  str.append("-->");
   str.append("\n");
   str.append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">");
   str.append("\n");
@@ -112,9 +115,11 @@ KoShapeEndLinesDocker::KoShapeEndLinesDocker()
           // Init QPainter and QPixmap
           QIcon drawIcon;
           QPixmap endLinePixmap(iconW, iconH);
+          endLinePixmap.fill(QColor(Qt::transparent));
           QPainter *endLinePainter = new QPainter(&endLinePixmap);
           // Convert path to SVG
           QSvgRenderer *endLineRenderer;
+          //kDebug() << generateSVG(drawMarker.attribute("d"), drawMarker.attribute("viewBox"), drawMarker.attribute("name").replace("_", " "));
           endLineRenderer = new QSvgRenderer(generateSVG(drawMarker.attribute("d"), drawMarker.attribute("viewBox")));
           endLineRenderer->render(endLinePainter);
 

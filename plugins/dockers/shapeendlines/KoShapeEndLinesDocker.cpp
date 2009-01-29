@@ -68,25 +68,21 @@ public:
     QComboBox * endEndLineComboBox;
 };
 
-QByteArray KoShapeEndLinesDocker::generateSVG(QString path, QString viewBox, QString comment){
-  QString str("<?xml version=\"1.0\" standalone=\"no\"?>");
-  str.append("<!--");
-  str.append(comment);
-  str.append("-->");
-  str.append("\n");
-  str.append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">");
-  str.append("\n");
-  str.append("<svg width=\"30px\" height=\"30px\" viewBox=\"");
-  str.append(viewBox);
-  str.append("\" preserveAspectRatio=\"none\" xmlns=\"http://www.w3.org/2000/svg\">");
-  str.append("\n");
-  str.append("  <path fill=\"black\"  d=\"");
-  str.append(path);
-  str.append("\" />");
-  str.append("\n");
-  str.append("</svg>");
-  QByteArray res;
-  return res.append(str.toUtf8());
+QByteArray KoShapeEndLinesDocker::generateSVG(QString path, QString viewBox, QString comment)
+{
+    QByteArray str("<?xml version=\"1.0\" standalone=\"no\"?>\
+    <!--");
+    str.append(comment.toUtf8());
+    str.append("-->\
+    <!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\
+    <svg width=\"30px\" height=\"30px\" viewBox=\"");
+    str.append(viewBox.toUtf8());
+    str.append("\" preserveAspectRatio=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\
+    <path fill=\"black\"  d=\"");
+    str.append(path.toUtf8());
+    str.append("\" />\
+    </svg>");
+    return str;
 }
 
 KoShapeEndLinesDocker::KoShapeEndLinesDocker()
@@ -106,40 +102,36 @@ KoShapeEndLinesDocker::KoShapeEndLinesDocker()
 
     QString fileName( KStandardDirs::locate( "data", "kpresenter/endLineStyle/endLine.xml" ) );
     if ( ! fileName.isEmpty() ) {
-      QFile file( fileName );
-      QString errorMessage;
-      if ( KoOdfReadStore::loadAndParse( &file, m_doc, errorMessage, fileName ) ) {
-        KoXmlElement drawMarker, lineEndElement(m_doc.namedItem("lineends").toElement());
+        QFile file( fileName );
+        QString errorMessage;
+        if ( KoOdfReadStore::loadAndParse( &file, m_doc, errorMessage, fileName ) ) {
+            KoXmlElement drawMarker, lineEndElement(m_doc.namedItem("lineends").toElement());
 
-        forEachElement(drawMarker, lineEndElement){
-          // Init QPainter and QPixmap
-          QIcon drawIcon;
-          QPixmap endLinePixmap(iconW, iconH);
-          endLinePixmap.fill(QColor(Qt::transparent));
-          QPainter *endLinePainter = new QPainter(&endLinePixmap);
-          // Convert path to SVG
-          QSvgRenderer *endLineRenderer;
-          //kDebug() << generateSVG(drawMarker.attribute("d"), drawMarker.attribute("viewBox"), drawMarker.attribute("name").replace("_", " "));
-          endLineRenderer = new QSvgRenderer(generateSVG(drawMarker.attribute("d"), drawMarker.attribute("viewBox")));
-          endLineRenderer->render(endLinePainter);
+            forEachElement(drawMarker, lineEndElement){
+                // Init QPainter and QPixmap
+                QPixmap endLinePixmap(d->endEndLineComboBox->iconSize());
+                endLinePixmap.fill(QColor(Qt::transparent));
+                QPainter endLinePainter(&endLinePixmap);
+                // Convert path to SVG
+                //kDebug() << generateSVG(drawMarker.attribute("d"), drawMarker.attribute("viewBox"), drawMarker.attribute("name").replace("_", " "));
+                QSvgRenderer endLineRenderer(generateSVG(drawMarker.attribute("d"), drawMarker.attribute("viewBox")));
+                endLineRenderer.render(&endLinePainter);
 
-          // init QIcon
-          drawIcon = QIcon(endLinePixmap);
+                // init QIcon
+                QIcon drawIcon = QIcon(endLinePixmap);
 
-          // add icon and label in the two QComboBox
-          d->beginEndLineComboBox->addItem(drawIcon, drawMarker.attribute("name").replace("_", " "));
-          d->endEndLineComboBox->addItem(drawIcon, drawMarker.attribute("name").replace("_", " "));
+                // add icon and label in the two QComboBox
+                d->beginEndLineComboBox->addItem(drawIcon, drawMarker.attribute("name").replace("_", " "));
+                d->endEndLineComboBox->addItem(drawIcon, drawMarker.attribute("name").replace("_", " "));
 
-          // erease the two pointer
-          delete endLineRenderer;
-          delete endLinePainter;
+                // erease the two pointer
+            }
+        }else {
+            kDebug() << "reading of endLine.xml failed:" << errorMessage;
         }
-	    }else {
-        kDebug() << "reading of endLine.xml failed:" << errorMessage;
-      }
     }
     else {
-      kDebug() << "endLine.xml not found";
+        kDebug() << "endLine.xml not found";
     }
 
     
@@ -177,12 +169,12 @@ void KoShapeEndLinesDocker::applyChanges()
 
 void KoShapeEndLinesDocker::beginEndLineChanged(int index)
 {
-  d->beginEndLineComboBox->setCurrentItem(index);
+    d->beginEndLineComboBox->setCurrentItem(index);
 }
 
 void KoShapeEndLinesDocker::endEndLineChanged(int index)
 {
-  d->endEndLineComboBox->setCurrentItem(index);
+    d->endEndLineComboBox->setCurrentItem(index);
 }
 
 void KoShapeEndLinesDocker::selectionChanged()

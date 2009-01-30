@@ -25,7 +25,6 @@
 #include "CharacterHighlighting.h"
 #include "FontDecorations.h"
 #include "FontLayoutTab.h"
-#include "LanguageTab.h"
 
 #include "CharacterGeneral.h"
 

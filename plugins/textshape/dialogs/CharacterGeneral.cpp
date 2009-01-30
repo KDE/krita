@@ -58,7 +58,8 @@ CharacterGeneral::CharacterGeneral(QWidget *parent, bool uniqueFormat)
     widget.tabs->addTab(m_characterDecorations, i18n("Decorations"));
     widget.tabs->addTab(m_characterHighlighting, i18n("Highlighting"));
     widget.tabs->addTab(m_layoutTab, i18n("Layout"));
-    widget.tabs->addTab(m_languageTab, i18n("Language"));
+    //widget.tabs->addTab(m_languageTab, i18n("Language"));
+    m_languageTab->setVisible(false);
 
     connect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
     connect(widget.name, SIGNAL(textChanged(const QString &)), this, SLOT(setName(const QString&)));

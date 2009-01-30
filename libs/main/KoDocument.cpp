@@ -1637,16 +1637,21 @@ bool KoDocument::oldLoadAndParse(KoStore* store, const QString& filename, KoXmlD
     return true;
 }
 
-bool KoDocument::loadNativeFormat(const QString & file)
+bool KoDocument::loadNativeFormat(const QString & file_)
 {
+    QString file = file_;
     QFileInfo fileInfo(file);
     if (!fileInfo.exists()) { // check duplicated from openUrl, but this is useful for templates
         d->lastErrorMessage = i18n("The file %1 does not exist.", file);
         return false;
     }
     if (!fileInfo.isFile()) {
-        d->lastErrorMessage = i18n("%1 is not a file." , file);
-        return false;
+        file = file += "/content.xml";
+        QFileInfo fileInfo2(file);
+        if (!fileInfo2.exists() || !fileInfo2.isFile()) {
+            d->lastErrorMessage = i18n("%1 is not a file." , file_);
+            return false;
+        }
     }
 
     QApplication::setOverrideCursor(Qt::WaitCursor);

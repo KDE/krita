@@ -646,9 +646,12 @@ void TextTool::setShapeData(KoTextShapeData *data)
     bool docChanged = data == 0 || m_textShapeData == 0 || m_textShapeData->document() != data->document();
     if (m_textShapeData && docChanged)
         disconnect(m_textShapeData->document(), SIGNAL(undoCommandAdded()), this, SLOT(addUndoCommand()));
+    if (m_textShapeData)
+        disconnect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
     m_textShapeData = data;
     if (m_textShapeData == 0)
         return;
+    connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
     if (docChanged) {
         connect(m_textShapeData->document(), SIGNAL(undoCommandAdded()), this, SLOT(addUndoCommand()));
         m_caret = QTextCursor(m_textShapeData->document());
@@ -1044,7 +1047,11 @@ void TextTool::ensureCursorVisible()
             Q_ASSERT(textShape);
             KoTextShapeData *d = static_cast<KoTextShapeData*>(textShape->userData());
             if (m_caret.position() >= d->position() && m_caret.position() <= d->endPosition()) {
+                if (m_textShapeData)
+                    disconnect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
                 m_textShapeData = d;
+                if (m_textShapeData)
+                    connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
                 m_textShape = textShape;
                 break;
             }
@@ -1525,7 +1532,8 @@ void TextTool::toggleTrackChanges(bool on)
 
 void TextTool::selectAll()
 {
-    if (m_textShapeData == 0) return;
+    if (m_textShapeData == 0)
+        return;
     const int selectionLength = qAbs(m_caret.position() - m_caret.anchor());
     QTextBlock lastBlock = m_textShapeData->document()->end().previous();
     m_caret.setPosition(lastBlock.position() + lastBlock.length() - 1);
@@ -1700,6 +1708,25 @@ void TextTool::shapeAddedToCanvas()
             selection->select(m_textShape);
             selection->deselect(shape);
         }
+    }
+}
+
+void TextTool::shapeDataRemoved()
+{
+    m_textShapeData = 0;
+    m_textShape = 0;
+    if (! m_caret.isNull()) {
+        const QTextDocument *doc = m_caret.block().document();
+        Q_ASSERT(doc);
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(doc->documentLayout());
+        if (lay == 0 || lay->shapes().isEmpty()) {
+            emit done();
+            return;
+        }
+
+        m_textShape = static_cast<TextShape*>(lay->shapes().first());
+        m_textShapeData = static_cast<KoTextShapeData*>(m_textShape->userData());
+        connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
     }
 }
 

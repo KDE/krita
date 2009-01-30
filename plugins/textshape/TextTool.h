@@ -194,6 +194,9 @@ private slots:
 
     void blinkCaret();
 
+    // called when the m_textShapeData has been deleted.
+    void shapeDataRemoved();
+
 #ifndef NDEBUG
 protected:
     explicit TextTool(MockCanvas *canvas);

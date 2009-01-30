@@ -41,6 +41,8 @@ FontLayoutTab::FontLayoutTab(bool withSubSuperScript, bool uniqueFormat, QWidget
     widget.custom->setVisible(false);
     widget.offset->setVisible(false);
     widget.offsetLabel->setVisible(false);
+
+    widget.hyphenate->setVisible(false); // TODO enable when we add this feature to the layout engine
 }
 
 void FontLayoutTab::setDisplay(KoCharacterStyle *style)

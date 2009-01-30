@@ -457,12 +457,14 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
     ioDevice->open(QIODevice::ReadOnly);
     QByteArray arr = ioDevice->readAll();
     Exiv2::ExifData exifData;
+    Exiv2::ByteOrder byteOrder;
 #if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 17
     exifData.load((const Exiv2::byte*)arr.data(), arr.size());
+    byteOrder = exifData.byteOrder();
 #else
-    Exiv2::ExifParser::decode( exifData, (const Exiv2::byte*)arr.data(), arr.size());
+    byteOrder = Exiv2::ExifParser::decode( exifData, (const Exiv2::byte*)arr.data(), arr.size());
 #endif
-    dbgFile << "Byte order = " << exifData.byteOrder() << ppVar(Exiv2::bigEndian) << ppVar(Exiv2::littleEndian);
+    dbgFile << "Byte order = " << byteOrder << ppVar(Exiv2::bigEndian) << ppVar(Exiv2::littleEndian);
     dbgFile << "There are" << exifData.count() << " entries in the exif section";
     const KisMetaData::Schema* tiffSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::TIFFSchemaUri);
     const KisMetaData::Schema* exifSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::EXIFSchemaUri);
@@ -508,13 +510,13 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
             } else if (it->key() == "Exif.Photo.ComponentsConfiguration") {
                 v = exifArrayToKMDIntOrderedArray(it->getValue());
             } else if (it->key() == "Exif.Photo.OECF") {
-                v = exifOECFToKMDOECFStructure(it->getValue(), exifData.byteOrder());
+                v = exifOECFToKMDOECFStructure(it->getValue(), byteOrder);
             } else if (it->key() == "Exif.Photo.DateTimeDigitized" || it->key() == "Exif.Photo.DateTimeOriginal") {
                 v = KisMetaData::Value(exivValueToDateTime(it->getValue()));
             } else if (it->key() == "Exif.Photo.DeviceSettingDescription") {
                 v = deviceSettingDescriptionExifToKMD(it->getValue());
             } else if (it->key() == "Exif.Photo.CFAPattern") {
-                v = cfaPatternExifToKMD(it->getValue(), exifData.byteOrder());
+                v = cfaPatternExifToKMD(it->getValue(), byteOrder);
             } else if (it->key() == "Exif.Photo.Flash") {
                 v = flashExifToKMD(it->getValue());
             } else if (it->key() == "Exif.Photo.UserComment") {

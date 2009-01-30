@@ -66,6 +66,8 @@ struct Finalizer {
 #include <QTextLayout>
 #include <QFont>
 #include <QPen>
+#include <QThread>
+#include <QApplication>
 #include <QPainter>
 #include <QAbstractTextDocumentLayout>
 #include <kdebug.h>
@@ -327,7 +329,11 @@ void TextShape::waitUntilReady() const
     synchronized(m_mutex) {
         if (m_textShapeData->isDirty()) {
             m_textShapeData->fireResizeEvent(); // triggers a relayout
-            m_waiter.wait(&m_mutex);
+            if (QThread::currentThread() != QApplication::instance()->thread()) {
+                // only wait if this is called in the non-main thread.
+                // this avoids locks due to the layout code expecting the GUI thread to be free while layouting.
+                m_waiter.wait(&m_mutex);
+            }
         }
     }
 }

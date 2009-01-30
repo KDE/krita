@@ -658,11 +658,11 @@ void TextTool::setShapeData(KoTextShapeData *data)
             m_textShape->setDemoText(false); // remove demo text
             m_textShapeData->document()->setUndoRedoEnabled(true); // allow undo history
         }
-    }
-    if (m_trackChanges) {
-        if (m_changeTracker == 0)
-            m_changeTracker = new ChangeTracker(this);
-        m_changeTracker->setDocument(m_textShapeData->document());
+        if (m_trackChanges) {
+            if (m_changeTracker == 0)
+                m_changeTracker = new ChangeTracker(this);
+            m_changeTracker->setDocument(m_textShapeData->document());
+        }
     }
     if (m_spellcheckPlugin)
         m_spellcheckPlugin->checkSection(m_textShapeData->document(), 0, 0);

@@ -29,6 +29,9 @@ namespace KisMetaData
 class Value;
 class Store;
 class Schema;
+/**
+ * Represent a metadata entry, a name and a value (\ref KisMetaData::Value).
+ */
 class KRITAIMAGE_EXPORT Entry
 {
     struct Private;
@@ -72,6 +75,10 @@ public:
      * @return true if this entry is valid
      */
     bool isValid() const;
+    /**
+     * @return true if the name in argument is valid entry name.
+     */
+    static bool isValidName( const QString& _name );
     /**
      * Affect the content of entry to this entry if entry is valid
      */

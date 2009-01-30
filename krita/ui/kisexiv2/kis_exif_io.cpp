@@ -106,6 +106,7 @@ inline T fixEndianess( T v, Exiv2::ByteOrder order )
             return qFromBigEndian<T>( v );
     }
     qFatal("Unknown byte order");
+    return v;
 }
 
 Exiv2::ByteOrder invertByteOrder( Exiv2::ByteOrder order )
@@ -119,6 +120,7 @@ Exiv2::ByteOrder invertByteOrder( Exiv2::ByteOrder order )
         case Exiv2::bigEndian:
             return Exiv2::littleEndian;
     }
+    return Exiv2::invalidByteOrder;
 }
 
 
@@ -452,6 +454,7 @@ bool KisExifIO::canSaveAllEntries(KisMetaData::Store* /*store*/) const
     return false; // It's a known fact that exif can't save all information, but TODO: write the check
 }
 
+
 bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
 {
     ioDevice->open(QIODevice::ReadOnly);
@@ -497,7 +500,13 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
             store->addEntry(KisMetaData::Entry(dcSchema, "rights", exivValueToKMDValue(it->getValue())));
         } else if (it->groupName() == "Image") {
             // Tiff tags
-            store->addEntry(KisMetaData::Entry(tiffSchema, it->tagName().c_str(), exivValueToKMDValue(it->getValue()))) ;
+            QString fixedTN = it->tagName().c_str();
+            if( KisMetaData::Entry::isValidName(fixedTN) )
+            {
+                store->addEntry(KisMetaData::Entry(tiffSchema, fixedTN, exivValueToKMDValue(it->getValue()))) ;
+            } else {
+                dbgFile << "Invalid tag name: " << fixedTN;
+            }
         } else if (it->groupName() == "Photo" || (it->groupName() == "GPS")) {
             // Exif tags (and GPS tags)
             KisMetaData::Value v;

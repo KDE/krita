@@ -73,14 +73,15 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
                  it != structure.end(); ++it )
             {
                 Q_ASSERT( it.value().type() != KisMetaData::Value::Structure ); // Can't nest structure
-                QString key = "%1/%2:%3";
-                key.arg( entry.name() );
-                key.arg( structPrefix.c_str() );
-                key.arg( it.key() );
-                xmpData_.add(Exiv2::XmpKey(prefix, key.ascii()), kmdValueToExivXmpValue( it.value() ));
+                QString key = QString("%1/%2:%3").arg( entry.name() ).arg( structPrefix.c_str() ).arg( it.key() );
+                Exiv2::XmpKey ekey(prefix, key.ascii());
+                dbgFile << ppVar(key) << ppVar(ekey.key().c_str());
+                xmpData_.add( ekey, kmdValueToExivXmpValue( it.value() ));
             }
         } else {
-            xmpData_.add(Exiv2::XmpKey(prefix, entry.name().ascii()), kmdValueToExivXmpValue(value));
+            Exiv2::XmpKey key(prefix, entry.name().ascii());
+            dbgFile << ppVar(key.key().c_str());
+            xmpData_.add( key, kmdValueToExivXmpValue(value));
         }
         // TODO property qualifier
     }

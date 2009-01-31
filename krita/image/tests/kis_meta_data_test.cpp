@@ -23,6 +23,7 @@
 #include "kis_meta_data_filter_registry.h"
 #include "kis_meta_data_value.h"
 #include "kis_meta_data_schema.h"
+#include "kis_meta_data_schema_registry.h"
 #include "kis_meta_data_store.h"
 
 using namespace KisMetaData;

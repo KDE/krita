@@ -158,6 +158,7 @@ set(kritaimage_LIB_SRCS
    metadata/kis_meta_data_merge_strategy_p.cc
    metadata/kis_meta_data_merge_strategy_registry.cc
    metadata/kis_meta_data_schema.cc
+   metadata/kis_meta_data_schema_registry.cc
    metadata/kis_meta_data_store.cc
    metadata/kis_meta_data_value.cc
    recorder/kis_action_recorder.cc

@@ -36,6 +36,11 @@ class FLAKE_EXPORT KoShapeLayer : public KoShapeContainer
 public:
     /// The default constructor
     KoShapeLayer();
+    /**
+     * Constructor with custom model
+     * @param model the custom modem
+     */
+    KoShapeLayer(KoShapeContainerModel *model);
     /// empty implementation, as the layer itself is not visible
     virtual void paintComponent(QPainter &, const KoViewConverter &) {}
     virtual bool hitTest(const QPointF &position) const;

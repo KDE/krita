@@ -32,7 +32,6 @@
 #include "kis_node_graph_listener.h"
 #include "kis_node_visitor.h"
 #include "kis_projection_update_strategy.h"
-#include "kis_bottom_up_update_strategy.h" // XXX Make into real plugins with registry and factories
 #include "kis_top_down_update_strategy.h"
 #include "kis_node_progress_proxy.h"
 
@@ -40,7 +39,7 @@ class KisNode::Private
 {
 public:
     Private() : graphListener(0), updateStrategy(0), nodeProgressProxy(0) {}
-    KisNodeSP parent;
+    KisNodeWSP parent;
     KisNodeGraphListener * graphListener;
     QList<KisNodeSP> nodes;
     KisProjectionUpdateStrategy * updateStrategy;
@@ -71,13 +70,7 @@ KisNode::KisNode(const KisNode & rhs)
 
 void KisNode::init()
 {
-    KConfigGroup cfg = KGlobal::config()->group("");
-    QString updateStrategy = cfg.readEntry("update_strategy", "TopDown");
-    if (updateStrategy == "BottomUp") {
-        m_d->updateStrategy = new KisBottomUpUpdateStrategy(this);
-    } else if (updateStrategy == "TopDown") {
-        m_d->updateStrategy = new KisTopDownUpdateStrategy(this);
-    }
+    m_d->updateStrategy = new KisTopDownUpdateStrategy(this);
 }
 
 KisNode::~KisNode()

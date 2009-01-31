@@ -204,7 +204,6 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
     else {
         return false;
     }
-
     if ( selection->hasPixelSelection() ) {
         KisPaintDeviceSP dev = selection->pixelSelection();
         //connect(*dev, SIGNAL(ioProgress(qint8)), m_img, SLOT(slotIOProgress(qint8)));
@@ -221,7 +220,6 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
     }
     if ( selection->hasShapeSelection() ) {
         m_store->pushDirectory();
-
         m_store->enterDirectory( getLocation( node, DOT_SHAPE_SELECTION ) );
         KisShapeSelection* shapeSelection = dynamic_cast<KisShapeSelection*>( selection->shapeSelection() );
         if ( !shapeSelection ) {
@@ -229,7 +227,7 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
             return false;
         }
 
-        if ( !shapeSelection->saveOdf(m_store) ) {
+        if ( !shapeSelection->saveSelection(m_store) ) {
             m_store->popDirectory();
             return false;
         }

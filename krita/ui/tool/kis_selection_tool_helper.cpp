@@ -101,8 +101,6 @@ void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
     KisShapeSelection* shapeSelection;
     if (!selection->hasShapeSelection()) {
         shapeSelection = new KisShapeSelection(m_image, selection);
-        QUndoCommand * cmd = m_canvas->shapeController()->addShape(shapeSelection);
-        cmd->redo();
         selection->setShapeSelection(shapeSelection);
     } else {
         shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());

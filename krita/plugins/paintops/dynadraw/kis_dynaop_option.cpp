@@ -81,6 +81,33 @@ qreal KisDynaOpOption::widthRange() const
     return m_options->widthRangeSPBox->value();
 }
 
+
+int KisDynaOpOption::action() const
+{
+    if ( m_options->circleRBox->isChecked() )
+        return 0;
+    if ( m_options->polygonRBox->isChecked() )
+        return 1;
+    if ( m_options->wireRBox->isChecked() )
+        return 2;
+}
+
+int KisDynaOpOption::circleRadius() const
+{
+    return m_options->circleRadiusSPBox->value();
+}
+
+bool KisDynaOpOption::enableLine() const
+{
+    return m_options->LineCBox->isChecked();
+}
+
+bool KisDynaOpOption::twoCircles() const
+{
+    return m_options->twoCBox->isChecked();
+}
+
+
 void KisDynaOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
 }

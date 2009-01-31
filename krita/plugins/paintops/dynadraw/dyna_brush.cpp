@@ -141,7 +141,6 @@ void DynaBrush::drawSegment(KisPainter &painter)
     qreal wid;
     qreal px, py, nx, ny;
 
-//  wid = 0.04 - m_mouse.vel;
     wid = m_widthRange - m_mouse.vel;
 
     wid = wid * m_width;
@@ -158,57 +157,140 @@ void DynaBrush::drawSegment(KisPainter &painter)
     nx = m_mouse.curx;
     ny = m_mouse.cury;
 
-    // TODO : kritadraw polygon here..
-    qreal px1 = px + m_odelx;
-    qreal py1 = py + m_odely;
+    QPointF prev( px , py );       // previous position
+    QPointF now( nx , ny );         // new position
 
-    qreal px2 = px - m_odelx;
-    qreal py2 = py - m_odely;
+    QPointF prevr( px + m_odelx , py + m_odely );  
+    QPointF prevl( px - m_odelx , py - m_odely );  
 
-    qreal px3 = nx - delx;
-    qreal py3 = ny - dely;
+    QPointF nowl( nx - delx , ny - dely);
+    QPointF nowr( nx + delx , ny + dely);
 
-    qreal px4 = nx + delx;
-    qreal py4 = ny + dely;
+    // transform coords from float points into image points
+    prev.rx() *= m_image->width();
+    prevr.rx()*= m_image->width();
+    prevl.rx()*= m_image->width();
+    now.rx()  *= m_image->width();
+    nowl.rx() *= m_image->width();
+    nowr.rx() *= m_image->width();
 
-    px1 *= m_image->width();
-    px2 *= m_image->width();
-    px3 *= m_image->width();
-    px4 *= m_image->width();
+    prev.ry() *= m_image->height();
+    prevr.ry()*= m_image->height();
+    prevl.ry()*= m_image->height();
+    now.ry()  *= m_image->height();
+    nowl.ry() *= m_image->height();
+    nowr.ry() *= m_image->height();
 
-    py1 *= m_image->height();
-    py2 *= m_image->height();
-    py3 *= m_image->height();
-    py4 *= m_image->height();
+    if (m_enableLine)
+    painter.drawLine( prev, now );
 
-    QPointF p1(px1,py1 );
-    QPointF p2(px2,py2 );
-    QPointF p3(px3,py3 );
-    QPointF p4(px4,py4 );
+    // paint circle
+    if (m_action == 0){
+/*        drawLines(painter,
+        prev,
+        now,
+        m_circleRadius);*/
 
 
-    QVector<QPointF> pole;
-    pole.append(p1);
-    pole.append(p2);
-    pole.append(p3);
-    pole.append(p4);
+        drawCircle(painter, prev.x(), prev.y() , m_circleRadius * nx , 2 * m_circleRadius  * nx );
 
-    painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-    painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-    painter.paintPolygon( pole );
-    pole.clear();
-//    painter.drawLine( p1, p2 );
-//    painter.drawLine( p2, p3 );
-//    painter.drawLine( p3, p4 );
-//    painter.drawLine( p4, p1 );
+        if (m_twoCircles)
+        {
+            drawCircle(painter, now.x(), now.y() , m_circleRadius * ny , 2 * m_circleRadius * ny );
+        }
 
-    QPointF start( px * m_image->width(), py * m_image->height() );
-    QPointF end( nx * m_image->width(), ny * m_image->height() );
-
-    painter.drawLine( start, end );
+    }else
+    if (m_action == 1)
+    {
+        drawQuad(painter, prevr, prevl, nowl, nowr);
+    }else 
+    if (m_action == 2)
+    {
+        drawWire(painter, prevr, prevl, nowl, nowr);
+    }
 
     m_odelx = delx;
     m_odely = dely;
 }
 
 
+void DynaBrush::drawQuad(KisPainter &painter,
+        QPointF &topRight, 
+        QPointF &topLeft,
+        QPointF &bottomLeft,
+        QPointF &bottomRight)
+{
+    QVector<QPointF> points;
+    points.append(topRight);
+    points.append(topLeft);
+    points.append(bottomLeft);
+    points.append(bottomRight);
+
+    painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+    painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+    painter.paintPolygon( points );
+}
+
+void DynaBrush::drawCircle(KisPainter &painter,qreal x, qreal y, int radius, int steps){
+    QVector<QPointF> points;
+    // circle x, circle y
+    qreal cx, cy;
+
+    qreal length = 2.0 * M_PI;
+    qreal step = 1.0 / steps;
+    for (int i = 0; i < steps; i++){
+        cx = cos(i * step * length);
+        cy = sin(i * step * length);
+
+        cx *= radius;
+        cy *= radius;
+
+        cx += x;
+        cy += y;
+
+        points.append( QPointF(cx, cy) );
+    }
+
+    painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+    painter.paintPolygon( points );
+}
+
+void DynaBrush::drawWire(KisPainter &painter,
+        QPointF &topRight, 
+        QPointF &topLeft,
+        QPointF &bottomLeft,
+        QPointF &bottomRight)
+{
+    painter.drawLine( topRight, topLeft );
+    painter.drawLine( topLeft, bottomLeft );
+    painter.drawLine( bottomLeft, bottomRight );
+    painter.drawLine( bottomRight, topRight );
+}
+
+void DynaBrush::drawLines(KisPainter &painter,
+        QPointF &prev,
+        QPointF &now,
+        int count
+)
+{
+    QPointF p1,p2;
+/*    dbgPlugins << "Velocity: ";
+    dbgPlugins << m_mouse.velx;
+    dbgPlugins << m_mouse.vely;
+    dbgPlugins << m_mouse.vel;
+    dbgPlugins << m_mouse.acc;
+    dbgPlugins << "\n";*/
+    
+    int spacing = 10 * m_mouse.acc;
+
+    for (int i = -count/2; i < count/2; i++)
+    {
+        p1.setX ( prev.x() );
+        p1.setY ( prev.y() );
+
+        p2.setX ( spacing * i + now.x() );
+        p2.setY ( spacing * i + now.y() );
+
+        painter.drawLine(p1, p2);
+    }
+}

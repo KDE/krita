@@ -76,6 +76,22 @@ public:
         m_widthRange = widthRange;
     }
 
+    void setAction(int action){
+        m_action = action;
+    }
+    
+    void setCircleRadius(int circleRadius){
+        m_circleRadius = circleRadius;
+    }
+
+    void enableLine(bool enableLine){
+        m_enableLine = enableLine;
+    }
+
+    void enableTwoCircles(bool twoCircles){
+        m_twoCircles = twoCircles;
+    }
+
     void initMouse(const QPointF &point){
         m_mousePos.setX( point.x() / m_image->width() );
         //m_fmouse.setY( (m_image->height() - point.y()) / (qreal)m_image->height() );
@@ -85,8 +101,27 @@ public:
     void drawSegment(KisPainter &painter);
 
 
-
 private:
+    void drawCircle(KisPainter &painter,qreal x, qreal y, int radius, int steps);
+
+    void drawQuad(KisPainter &painter,
+            QPointF &topRight,QPointF &topLeft,
+            QPointF &bottomLeft,QPointF &bottomRight);
+
+    void drawWire(KisPainter &painter,
+        QPointF &topRight, 
+        QPointF &topLeft,
+        QPointF &bottomLeft,
+        QPointF &bottomRight);
+
+
+void drawLines(KisPainter &painter,
+        QPointF &prev,
+        QPointF &now,
+        int count);
+
+
+
     KoColor m_inkColor;
     KisImageSP m_image;
 
@@ -107,6 +142,12 @@ private:
     qreal m_xangle;
     qreal m_yangle;
     qreal m_widthRange;
+
+    // drawing various primitives
+    int m_action;
+    bool m_enableLine, m_twoCircles;
+    qreal m_circleRadius;
+    
 
 };
 

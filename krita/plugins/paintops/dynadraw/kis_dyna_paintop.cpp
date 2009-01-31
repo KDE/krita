@@ -55,6 +55,14 @@ KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainte
     m_dynaBrush.useFixedAngle( settings->useFixedAngle() );
     m_dynaBrush.setAngle( settings->xAngle(), settings->yAngle() );
     m_dynaBrush.setWidthRange( settings->widthRange() );
+
+    // primitives
+    m_dynaBrush.setAction( settings->action() );
+    m_dynaBrush.setCircleRadius( settings->circleRadius() );
+    m_dynaBrush.enableLine( settings->enableLine() );
+    m_dynaBrush.enableTwoCircles( settings->twoCircles() );
+
+
 }
 
 KisDynaPaintOp::~KisDynaPaintOp()

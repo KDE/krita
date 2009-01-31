@@ -38,6 +38,11 @@ public:
     qreal yAngle() const;
     qreal widthRange() const;
 
+    int action() const;
+    int circleRadius() const;
+    bool enableLine() const;
+    bool twoCircles() const;
+
     //TODO add saving 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);

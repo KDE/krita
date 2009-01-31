@@ -98,3 +98,23 @@ qreal KisDynaPaintOpSettings::widthRange() const
 {
     return m_options->m_dynaOption->widthRange();
 }
+
+int KisDynaPaintOpSettings::action() const
+{
+    return m_options->m_dynaOption->action();
+}
+    
+int KisDynaPaintOpSettings::circleRadius() const
+{
+    return m_options->m_dynaOption->circleRadius();
+}
+
+bool KisDynaPaintOpSettings::enableLine() const
+{
+    return m_options->m_dynaOption->enableLine();
+}
+
+bool KisDynaPaintOpSettings::twoCircles() const
+{
+    return m_options->m_dynaOption->twoCircles();
+}

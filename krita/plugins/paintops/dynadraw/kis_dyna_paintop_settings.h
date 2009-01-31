@@ -59,6 +59,11 @@ public:
     qreal yAngle() const;
     qreal widthRange() const;
 
+    int action() const;
+    int circleRadius() const;
+    bool enableLine() const;
+    bool twoCircles() const;
+
  
 private:
 

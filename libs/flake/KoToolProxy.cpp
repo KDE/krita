@@ -113,6 +113,7 @@ public:
     void checkAutoScroll(const KoPointerEvent &event)
     {
         if (controller == 0) return;
+        if (!activeTool) return;
         if (!activeTool->wantsAutoScroll()) return;
         if (!event.isAccepted()) return;
         if (event.buttons() != Qt::LeftButton) return;

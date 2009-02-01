@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2007,2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -20,8 +20,12 @@
 
 #include <QString>
 
+#include <kcomponentdata.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
+
 #include "kis_debug.h"
-#include "kis_meta_data_schema.h"
+#include "kis_meta_data_schema_p.h"
 
 using namespace KisMetaData;
 
@@ -45,8 +49,28 @@ SchemaRegistry* SchemaRegistry::instance()
 
 SchemaRegistry::SchemaRegistry() : d(new Private)
 {
+    
+    KGlobal::mainComponent().dirs()->addResourceType("metadata_schema", "data", "krita/metadata/schemas/");
+
+    QStringList schemasFilenames;
+    schemasFilenames += KGlobal::mainComponent().dirs()->findAllResources("metadata_schema", "*.schema");
+    
+    foreach( QString fileName, schemasFilenames )
+    {
+        Schema* schema = new Schema();
+        schema->d->load( fileName );
+        if( schemaFromUri( schema->uri()) ) {
+            errImage << "Schema allready exist uri: " << schema->uri();
+        } else if( schemaFromPrefix( schema->prefix() ) ) {
+            errImage << "Schema allready exist prefix: " << schema->prefix();
+        } else {
+            d->uri2Schema[schema->uri()] = schema;
+            d->prefix2Schema[schema->prefix()] = schema;
+        }
+    }
+    
+    // DEPRECATED WRITE A SCHEMA FOR EACH OF THEM
     create(Schema::TIFFSchemaUri, "tiff");
-    create(Schema::EXIFSchemaUri, "exif");
     create(Schema::DublinCoreSchemaUri, "dc");
     create(Schema::XMPSchemaUri, "xmp");
     create(Schema::XMPRightsSchemaUri, "xmpRights");
@@ -54,7 +78,6 @@ SchemaRegistry::SchemaRegistry() : d(new Private)
     create(Schema::MakerNoteSchemaUri, "mkn");
     create(Schema::IPTCSchemaUri, "Iptc4xmpCore");
     create(Schema::PhotoshopSchemaUri, "photoshop");
-    
 }
 
 

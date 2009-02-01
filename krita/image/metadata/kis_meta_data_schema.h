@@ -27,12 +27,10 @@ namespace KisMetaData
 {
 
 class SchemaRegistry;
+class TypeInfo;
 
 class KRITAIMAGE_EXPORT Schema
 {
-
-    struct Private;
-
     friend class SchemaRegistry;
 
 public:
@@ -49,13 +47,23 @@ public:
     static const QString IPTCSchemaUri;
     static const QString PhotoshopSchemaUri;
 private:
+    Schema();
     Schema(const QString & _uri, const QString & _ns);
-
+public:
+    /**
+     * @return the \ref TypeInfo associated with a given a property ( @p _propertyName ).
+     */
+    const TypeInfo* propertyType( const QString& _propertyName ) const;
+    /**
+     * @return the \ref TypeInfo describing a given structure of that scheam
+     */
+    const TypeInfo* structure( const QString& _structureName ) const;
 public:
     QString uri() const;
     QString prefix() const;
     QString generateQualifiedName(const QString &) const;
 private:
+    struct Private;
     Private* const d;
 };
 

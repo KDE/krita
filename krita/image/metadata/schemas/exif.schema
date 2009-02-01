@@ -8,17 +8,17 @@
     </structure>
     <structure name="Flash" prefix="exif" uri="http://ns.adobe.com/exif/1.0/">
       <boolean name="Fired" />
-      <choice name="Return" closed="1">
+      <closedchoice name="Return" >
         <integer name="no strobe return detection">0</integer>
         <integer name="strobe return light not detected">2</integer>
         <integer name="strobe return light detected">3</integer>
-      </choice>
-      <choice name="Mode" closed="1">
+      </closedchoice>
+      <closedchoice name="Mode" >
         <integer name="unknown">0</integer>
         <integer name="compulsory flash firing">1</integer>
         <integer name="compulsory flash suppression">2</integer>
         <integer name="auto moce">3</integer>
-      </choice>
+      </closedchoice>
       <boolean name="Function" />
       <boolean name="RedEyeMode" />
     </structure>
@@ -34,35 +34,37 @@
     </structure>
   </structures>
   <properties>
-    <choice name="ExifVersion" closed="1">
-      <value>0220</value>
-    </choice>
-    <choice name="FlashpixVersion" closed="1">
-      <value>0100</value>
-    </choice>
-    <choice name="ColorSpace" closed="1">
+    <closedchoice name="ExifVersion">
+      <text>0220</text>
+    </closedchoice>
+    <closedchoice name="FlashpixVersion">
+      <text>0100</text>
+    </closedchoice>
+    <closedchoice name="ColorSpace">
       <integer name="sRGB">1</integer>
       <integer name="uncalibrated">65635</integer>
-    </choice>
-    <choiceseq name="ComponentsConfiguration" closed="1">
-      <integer name="unexistant">0</integer>
-      <integer name="Y">1</integer>
-      <integer name="Cb">2</integer>
-      <integer name="Cr">3</integer>
-      <integer name="R">4</integer>
-      <integer name="G">5</integer>
-      <integer name="B">6</integer>
-    </choiceseq>
+    </closedchoice>
+    <seq name="ComponentsConfiguration">
+      <closedchoice>
+        <integer name="unexistant">0</integer>
+        <integer name="Y">1</integer>
+        <integer name="Cb">2</integer>
+        <integer name="Cr">3</integer>
+        <integer name="R">4</integer>
+        <integer name="G">5</integer>
+        <integer name="B">6</integer>
+      </closedchoice>
+    </seq>
     <rational name="CompressedBitsPerPixel" />
     <integer name="PixelXDimension" />
     <integer name="PixelYDimension" />
-    <langalt name="UserComment" />
+    <lang name="UserComment" />
     <text name="RelatedSoundFile" />
     <date name="DateTimeOriginal" />
     <date name="DateTimeDigitized" />
     <rational name="ExposureTime" />
     <rational name="FNumber" />
-    <choice name="ExposureProgram" closed="1" >
+    <closedchoice name="ExposureProgram" >
       <integer name="not defined">0</integer>
       <integer name="Manual">1</integer>
       <integer name="Normal program">2</integer>
@@ -72,7 +74,7 @@
       <integer name="Action program">6</integer>
       <integer name="Portrait mode">7</integer>
       <integer name="Landscape mode">8</integer>
-    </choice>
+    </closedchoice>
     <text name="SpectralSensitivity" />
     <seq name="ISOSpeedRatings" type="integer" />
     <OECFSFR name="OECF" />
@@ -82,7 +84,7 @@
     <rational name="ExposureBiasValue" />
     <rational name="MaxApertureValue" />
     <rational name="SubjectDistance" />
-    <choice name="MeteringMode" closed="1">
+    <closedchoice name="MeteringMode" >
       <integer name="unknown">0</integer>
       <integer name="Average">1</integer>
       <integer name="CenterWeightedAverage">2</integer>
@@ -91,8 +93,8 @@
       <integer name="Pattern">5</integer>
       <integer name="Partial">6</integer>
       <integer name="other">255</integer>
-    </choice>
-    <choice name="LightSource" closed="1">
+    </closedchoice>
+    <closedchoice name="LightSource">
       <integer name="unknown">0</integer>
       <integer name="Daylight">1</integer>
       <integer name="Fluorescent">2</integer>
@@ -114,7 +116,7 @@
       <integer name="D50">23</integer>
       <integer name="ISO studio tungsten">24</integer>
       <integer name="other">255</integer>
-    </choice>
+    </closedchoice>
     <Flash name="Flash" />
     <rational name="FocalLength" />
     <seq name="SubjectArea" type="integer" />
@@ -122,13 +124,13 @@
     <OECFSFR name="SpatialFrequencyResponse" />
     <rational name="FocalPlaneXResolution" />
     <rational name="FocalPlaneYResolution" />
-    <choice name="FocalPlaneResolutionUnit" closed="1" >
+    <closedchoice name="FocalPlaneResolutionUnit">
       <integer name="inches">2</integer>
       <integer name="centimeters">3</integer>
-    </choice>
+    </closedchoice>
     <integer name="SubjectLocation" />
     <rational name="ExposureIndex" />
-    <choice name="SensingMethod" closed="1" >
+    <closedchoice name="SensingMethod">
       <integer name="Not defined">1</integer>
       <integer name="One-chip color area sensor">2</integer>
       <integer name="Two-chip color area sensor">3</integer>
@@ -136,119 +138,119 @@
       <integer name="Color sequential area sensor">5</integer>
       <integer name="Trilinear sensor">7</integer>
       <integer name="Color sequential linear sensor">8</integer>
-    </choice>
-    <choice name="FileSource" closed="1">
+    </closedchoice>
+    <closedchoice name="FileSource">
       <integer name="DSC">3</integer>
-    </choice>
-    <choice name="SceneType" closed="1">
+    </closedchoice>
+    <closedchoice name="SceneType" >
       <integer name="Directly photographed image">1</integer>
-    </choice>
+    </closedchoice>
     <CFAPattern name="CFAPattern" />
-    <choice name="CustomRendered" closed="1">
+    <closedchoice name="CustomRendered">
       <integer name="Normal process">0</integer>
       <integer name="Custom process">1</integer>
-    </choice>
-    <choice name="ExposureMode" closed="1">
+    </closedchoice>
+    <closedchoice name="ExposureMode">
       <integer name="Auto exposure">0</integer>
       <integer name="Manual exposure">1</integer>
       <integer name="Auto bracket"></integer>
-    </choice>
-    <choice name="WhiteBalance" closed="1">
+    </closedchoice>
+    <closedchoice name="WhiteBalance">
       <integer name="Auto white balance">0</integer>
       <integer name="Manual white balance">1</integer>
-    </choice>
+    </closedchoice>
     <rational name="DigitalZoomRatio" />
     <integer name="FocalLengthIn35mmFilm" />
-    <choice name="SceneCaptureType" closed="1">
+    <closedchoice name="SceneCaptureType">
       <integer name="Standard">0</integer>
       <integer name="Landscape">1</integer>
       <integer name="Portrait">2</integer>
       <integer name="Night scene">3</integer>
-    </choice>
-    <choice name="GainControl" closed="1">
+    </closedchoice>
+    <closedchoice name="GainControl">
       <integer name="None">0</integer>
       <integer name="Low gain up">1</integer>
       <integer name="High gain up">2</integer>
       <integer name="Low gain down">3</integer>
       <integer name="High gain down">4</integer>
-    </choice>
-    <choice name="Contrast" closed="1">
+    </closedchoice>
+    <closedchoice name="Contrast">
       <integer name="Normal">0</integer>
       <integer name="Soft">1</integer>
       <integer name="Hard">2</integer>
-    </choice>
-    <choice name="Saturation" closed="1">
+    </closedchoice>
+    <closedchoice name="Saturation">
       <integer name="Normal">0</integer>
       <integer name="Low saturation">1</integer>
       <integer name="High saturation">2</integer>
-    </choice>
-    <choice name="Sharpness" closed="1">
+    </closedchoice>
+    <closedchoice name="Sharpness">
       <integer name="Normal">0</integer>
       <integer name="Soft">1</integer>
       <integer name="Hard">2</integer>
-    </choice>
+    </closedchoice>
     <DeviceSettings name="DeviceSettingDescription" />
-    <choice name="SubjectDistanceRange" closed="1">
+    <closedchoice name="SubjectDistanceRange" >
       <integer name="Unknown">0</integer>
       <integer name="Macro">1</integer>
       <integer name="Close view">2</integer>
       <integer name="Distant view">3</integer>
-    </choice>
+    </closedchoice>
     <text name="ImageUniqueID" />
     <text name="GPSVersionID" />
-    <GPSCoordinate name="GPSLatitude" />
-    <GPSCoordinate name="GPSLongitude" />
-    <choice name="GPSAltitudeRef" closed="1" >
+    <gpscoordinate name="GPSLatitude" />
+    <gpscoordinate name="GPSLongitude" />
+    <closedchoice name="GPSAltitudeRef" >
       <integer name="Above sea level">0</integer>
       <integer name="Below sea level">1</integer>
-    </choice>
+    </closedchoice>
     <rational name="GPSAltitude" />
     <date name="GPSTimeStamp" />
     <text name="GPSSatellites" />
-    <choice name="GPSStatus" closed="1">
+    <closedchoice name="GPSStatus" >
       <text name="measurement in progress">A</text>
       <text name="measurement is interoperability">V</text>
-    </choice>
-    <choice name="GPSMeasureMode" >
+    </closedchoice>
+    <openedchoice name="GPSMeasureMode" >
       <text name="two-dimensional measurement">2</text>
       <text name="three-dimensional measurement">3</text>
-    </choice>
+    </openedchoice>
     <rational name="GPSDOP" />
-    <choice name="GPSSpeedRef" closed="1">
+    <closedchoice name="GPSSpeedRef" >
       <text name="kilometers per hour">K</text>
       <text name="miles per hour">M</text>
       <text name="knots">N</text>
-    </choice>
+    </closedchoice>
     <rational name="GPSSpeed" />
-    <choice name="GPSTrackRef" closed="1">
+    <closedchoice name="GPSTrackRef">
       <text name="true direction">T</text>
       <text name="magnetic direction">M</text>
-    </choice>
+    </closedchoice>
     <rational name="GPSTrack" />
-    <choice name="GPSImgDirectionRef" closed="1">
+    <closedchoice name="GPSImgDirectionRef" >
       <text name="true direction">T</text>
       <text name="magnetic direction">M</text>
-    </choice>
+    </closedchoice>
     <rational name="GPSImgDirection" />
     <text name="GPSMapDatum" />
-    <GPSCoordinate name="GPSDestLatitude" />
-    <GPSCoordinate name="GPSDestLongitude" />
-    <choice name="GPSDestBearingRef" closed="1">
+    <gpscoordinate name="GPSDestLatitude" />
+    <gpscoordinate name="GPSDestLongitude" />
+    <closedchoice name="GPSDestBearingRef" >
       <text name="true direction">T</text>
       <text name="magnetic direction">M</text>
-    </choice>
+    </closedchoice>
     <rational name="GPSDestBearing" />
-    <choice name="GPSDestDistanceRef" closed="1">
+    <closedchoice name="GPSDestDistanceRef" >
       <text name="kilometers">K</text>
       <text name="miles">M</text>
       <text name="knots">N</text>
-    </choice>
+    </closedchoice>
     <rational name="GPSDestDistance" />
     <text name="GPSProcessingMethod" />
     <text name="GPSAreaInformation" />
-    <choice name="GPSDifferential" />
+    <closedchoice name="GPSDifferential" >
       <integer name="Without corrction">0</integer>
       <integer name="Correction applied">1</integer>
-    </choice>
+    </closedchoice>
   </properties>
 </schema>

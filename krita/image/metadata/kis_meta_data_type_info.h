@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -19,13 +19,14 @@
 #ifndef _KIS_META_DATA_TYPE_INFO_H_
 #define _KIS_META_DATA_TYPE_INFO_H_
 
-#include <QHash>
+#include <QList>
 #include <QString>
+#include <krita_export.h>
 
 namespace KisMetaData {
     class Schema;
     class Value;
-    class TypeInfo {
+    class KRITAIMAGE_EXPORT TypeInfo {
         public:
             enum PropertyType {
                 IntegerType,
@@ -42,18 +43,19 @@ namespace KisMetaData {
                 OpenedChoice,
                 ClosedChoice
             };
-        private:
-            friend class Schema;
-            static const TypeInfo* Integer;
-            static const TypeInfo* Date;
-            static const TypeInfo* Text;
-            static const TypeInfo* SignedRational;
-            static const TypeInfo* UnsignedRational;
-            static const TypeInfo* GPSCoordinate;
-            static const TypeInfo* orderedArray( const TypeInfo* );
-            static const TypeInfo* unorderedArray( const TypeInfo* );
-            static const TypeInfo* alternativeArray( const TypeInfo* );
-            static const TypeInfo* LangArray;
+            class Choice {
+                public:
+                    Choice( const Value&, const QString& hint);
+                    Choice( const Choice& );
+                    Choice& operator=(const Choice&);
+                    ~Choice();
+                public:
+                    const Value& value() const;
+                    const QString& hint() const;
+                private:
+                    struct Private;
+                    Private* const d;
+            };
         private:
             TypeInfo( PropertyType _propertiesType );
             /**
@@ -64,14 +66,21 @@ namespace KisMetaData {
              * Create a \ref TypeInfo for a choice (either open or closed).
              * @param _propertiesType either OpenedChoice or ClosedChoice
              */
-            TypeInfo( PropertyType _propertiesType, const TypeInfo* _embedded, const QHash< QString, Value>& );
+            TypeInfo( PropertyType _propertiesType, const TypeInfo* _embedded, const QList< Choice >& );
+            /**
+             * Create a \ref TypeInfo for a structure.
+             */
+            TypeInfo( Schema* _structureSchema, const QString& name );
             ~TypeInfo();
         public:
             PropertyType propertyType() const;
             const TypeInfo* embeddedPropertyType() const;
-            const QHash< QString, Value>& choices() const;
-        private:
+            const QList< Choice >& choices() const;
+            Schema* structureSchema() const;
+            const QString& structureName() const;
+        public:
             struct Private;
+        private:
             Private* const d;
     };
 }

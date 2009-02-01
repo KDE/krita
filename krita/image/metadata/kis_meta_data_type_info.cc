@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -18,33 +18,24 @@
 
 #include "kis_meta_data_type_info.h"
 
+#include "kis_meta_data_type_info_p.h"
 #include "kis_meta_data_value.h"
 
 using namespace KisMetaData;
-
-struct TypeInfo::Private {
-    Private() : embeddedTypeInfo(0) {}
-    PropertyType propertyType;
-    const TypeInfo* embeddedTypeInfo;
-    QHash< QString, Value> choices;
-    static QHash< const TypeInfo*, const TypeInfo*> orderedArrays;
-    static QHash< const TypeInfo*, const TypeInfo*> unorderedArrays;
-    static QHash< const TypeInfo*, const TypeInfo*> alternativeArrays;
-};
 
 QHash< const TypeInfo*, const TypeInfo*> TypeInfo::Private::orderedArrays;
 QHash< const TypeInfo*, const TypeInfo*> TypeInfo::Private::unorderedArrays;
 QHash< const TypeInfo*, const TypeInfo*> TypeInfo::Private::alternativeArrays;
 
 
-const TypeInfo* TypeInfo::Integer = new TypeInfo( TypeInfo::IntegerType );
-const TypeInfo* TypeInfo::Date = new TypeInfo( TypeInfo::DateType );
-const TypeInfo* TypeInfo::Text = new TypeInfo( TypeInfo::TextType );
-const TypeInfo* TypeInfo::SignedRational = new TypeInfo( TypeInfo::SignedRationalType );
-const TypeInfo* TypeInfo::UnsignedRational = new TypeInfo( TypeInfo::UnsignedRationalType );
-const TypeInfo* TypeInfo::GPSCoordinate = new TypeInfo( TypeInfo::GPSCoordinateType );
+const TypeInfo* TypeInfo::Private::Integer = new TypeInfo( TypeInfo::IntegerType );
+const TypeInfo* TypeInfo::Private::Date = new TypeInfo( TypeInfo::DateType );
+const TypeInfo* TypeInfo::Private::Text = new TypeInfo( TypeInfo::TextType );
+const TypeInfo* TypeInfo::Private::SignedRational = new TypeInfo( TypeInfo::SignedRationalType );
+const TypeInfo* TypeInfo::Private::UnsignedRational = new TypeInfo( TypeInfo::UnsignedRationalType );
+const TypeInfo* TypeInfo::Private::GPSCoordinate = new TypeInfo( TypeInfo::GPSCoordinateType );
 
-const TypeInfo* TypeInfo::orderedArray( const TypeInfo* _typeInfo)
+const TypeInfo* TypeInfo::Private::orderedArray( const TypeInfo* _typeInfo)
 {
     if( Private::orderedArrays.contains( _typeInfo ) )
     {
@@ -55,7 +46,7 @@ const TypeInfo* TypeInfo::orderedArray( const TypeInfo* _typeInfo)
     return info;
 }
 
-const TypeInfo* TypeInfo::unorderedArray( const TypeInfo* _typeInfo)
+const TypeInfo* TypeInfo::Private::unorderedArray( const TypeInfo* _typeInfo)
 {
     if( Private::unorderedArrays.contains( _typeInfo ) )
     {
@@ -66,7 +57,7 @@ const TypeInfo* TypeInfo::unorderedArray( const TypeInfo* _typeInfo)
     return info;
 }
 
-const TypeInfo* TypeInfo::alternativeArray( const TypeInfo* _typeInfo)
+const TypeInfo* TypeInfo::Private::alternativeArray( const TypeInfo* _typeInfo)
 {
     if( Private::alternativeArrays.contains( _typeInfo ) )
     {
@@ -77,15 +68,60 @@ const TypeInfo* TypeInfo::alternativeArray( const TypeInfo* _typeInfo)
     return info;
 }
 
-const TypeInfo* TypeInfo::LangArray = new TypeInfo( TypeInfo::LangArrayType );
+const TypeInfo* TypeInfo::Private::createChoice( PropertyType _propertiesType, const TypeInfo* _embedded, const QList< Choice >& _choices)
+{
+    return new TypeInfo( _propertiesType, _embedded, _choices );
+}
+
+const TypeInfo* TypeInfo::Private::createStructure( Schema* _structureSchema, const QString& name )
+{
+    return new TypeInfo( _structureSchema, name );
+}
+
+const TypeInfo* TypeInfo::Private::LangArray = new TypeInfo( TypeInfo::LangArrayType );
 
 TypeInfo::TypeInfo( TypeInfo::PropertyType _propertyType ) : d(new Private )
 {
     d->propertyType = _propertyType;
     if( d->propertyType == TypeInfo::LangArrayType )
     {
-        d->embeddedTypeInfo = TypeInfo::Text;
+        d->embeddedTypeInfo = TypeInfo::Private::Text;
     }
+}
+
+struct TypeInfo::Choice::Private {
+    Value value;
+    QString hint;
+};
+
+TypeInfo::Choice::Choice( const Value& value, const QString& hint) : d(new Private)
+{
+    d->value = value;
+    d->hint = hint;
+}
+
+TypeInfo::Choice::Choice( const Choice& _rhs) : d(new Private(*_rhs.d))
+{
+}
+
+TypeInfo::Choice::Choice& TypeInfo::Choice::operator=(const Choice& _rhs)
+{
+    *d = *_rhs.d;
+    return *this;
+}
+
+TypeInfo::Choice::~Choice()
+{
+    delete d;
+}
+const Value& TypeInfo::Choice::value() const
+{
+    return d->value;
+}
+
+const QString& TypeInfo::Choice::hint() const
+{
+    return d->hint;
 }
 
 TypeInfo::TypeInfo( PropertyType _propertyType, const TypeInfo* _embedded ) : d(new Private)
@@ -95,11 +131,18 @@ TypeInfo::TypeInfo( PropertyType _propertyType, const TypeInfo* _embedded ) : d(
     d->embeddedTypeInfo = _embedded;
 }
 
-TypeInfo::TypeInfo( PropertyType _propertyType, const TypeInfo* _embedded, const QHash< QString, Value>& _choices) : d(new Private)
+TypeInfo::TypeInfo( PropertyType _propertyType, const TypeInfo* _embedded, const QList< Choice >& _choices) : d(new Private)
 {
     Q_ASSERT(_propertyType == ClosedChoice || _propertyType == OpenedChoice );
     d->propertyType = _propertyType;
+    d->embeddedTypeInfo =_embedded;
     d->choices = _choices;
+}
+
+TypeInfo::TypeInfo( Schema* _structureSchema, const QString& name ) : d(new Private)
+{
+    d->structureSchema = _structureSchema;
+    d->structureName = name;
 }
 
 TypeInfo::~TypeInfo()
@@ -117,7 +160,17 @@ const TypeInfo* TypeInfo::embeddedPropertyType() const
     return d->embeddedTypeInfo;
 }
 
-const QHash< QString, Value>& TypeInfo::choices() const
+const QList< TypeInfo::Choice >& TypeInfo::choices() const
 {
     return d->choices;
+}
+
+Schema* TypeInfo::structureSchema() const
+{
+    return d->structureSchema;
+}
+
+const QString& TypeInfo::structureName() const
+{
+    return d->structureName;
 }

@@ -35,10 +35,12 @@ private slots:
     void testValueCreation();
     void testValueEquality();
     void testValueCopy();
-    void testSchema();
+    void testSchemaBasic();
     void testEntry();
     void testStore();
     void testFilters();
+    void testTypeInfo();
+    void testSchemaParse();
 private:
     KisMetaData::Value createUnsignedRationalValue();
     KisMetaData::Value createSignedRationalValue();

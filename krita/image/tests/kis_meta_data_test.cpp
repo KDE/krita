@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008-2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@
 #include "kis_meta_data_schema.h"
 #include "kis_meta_data_schema_registry.h"
 #include "kis_meta_data_store.h"
+#include "kis_meta_data_type_info.h"
+#include "kis_meta_data_type_info_p.h"
 
 using namespace KisMetaData;
 
@@ -178,7 +180,7 @@ void KisMetaDataTest::testValueCopy()
     }
 
 
-void KisMetaDataTest::testSchema()
+void KisMetaDataTest::testSchemaBasic()
 {
     TEST_SCHEMA(TIFFSchemaUri);
     TEST_SCHEMA(EXIFSchemaUri);
@@ -253,6 +255,124 @@ void KisMetaDataTest::testFilters()
         QVERIFY(!s.containsEntry(psSchema, "City"));
         QVERIFY(!s.containsEntry(psSchema, "Country"));
     }
+}
+
+void KisMetaDataTest::testTypeInfo()
+{
+    QVERIFY( TypeInfo::Private::Integer->propertyType() == TypeInfo::IntegerType );
+    QVERIFY( TypeInfo::Private::Integer->embeddedPropertyType() == 0 );
+    QVERIFY( TypeInfo::Private::Integer->choices().size() == 0 );
+    
+    QVERIFY( TypeInfo::Private::Text->propertyType() == TypeInfo::TextType );
+    QVERIFY( TypeInfo::Private::Text->embeddedPropertyType() == 0 );
+    QVERIFY( TypeInfo::Private::Text->choices().size() == 0 );
+    
+    QVERIFY( TypeInfo::Private::Date->propertyType() == TypeInfo::DateType );
+    QVERIFY( TypeInfo::Private::Date->embeddedPropertyType() == 0 );
+    QVERIFY( TypeInfo::Private::Date->choices().size() == 0 );
+    
+    QVERIFY( TypeInfo::Private::SignedRational->propertyType() == TypeInfo::SignedRationalType );
+    QVERIFY( TypeInfo::Private::SignedRational->embeddedPropertyType() == 0 );
+    QVERIFY( TypeInfo::Private::SignedRational->choices().size() == 0 );
+    
+    QVERIFY( TypeInfo::Private::UnsignedRational->propertyType() == TypeInfo::UnsignedRationalType );
+    QVERIFY( TypeInfo::Private::UnsignedRational->embeddedPropertyType() == 0 );
+    QVERIFY( TypeInfo::Private::UnsignedRational->choices().size() == 0 );
+    
+    QVERIFY( TypeInfo::Private::GPSCoordinate->propertyType() == TypeInfo::GPSCoordinateType );
+    QVERIFY( TypeInfo::Private::GPSCoordinate->embeddedPropertyType() == 0 );
+    QVERIFY( TypeInfo::Private::GPSCoordinate->choices().size() == 0 );
+    
+    QVERIFY( TypeInfo::Private::LangArray->propertyType() == TypeInfo::LangArrayType );
+    QVERIFY( TypeInfo::Private::LangArray->embeddedPropertyType() == TypeInfo::Private::Text );
+    QVERIFY( TypeInfo::Private::LangArray->choices().size() == 0 );
+    
+    // Test OrderedArray
+    const TypeInfo* arrOA1 = TypeInfo::Private::orderedArray( TypeInfo::Private::Integer );
+    QVERIFY( arrOA1->propertyType() == TypeInfo::OrderedArrayType );
+    QVERIFY( arrOA1->embeddedPropertyType() == TypeInfo::Private::Integer );
+    QVERIFY( arrOA1->choices().size() == 0 );
+    QVERIFY( arrOA1 == TypeInfo::Private::orderedArray( TypeInfo::Private::Integer ) );
+    const TypeInfo* arrOA2 = TypeInfo::Private::orderedArray( TypeInfo::Private::Text );
+    QVERIFY( arrOA1 != arrOA2 );
+    QVERIFY( arrOA2->embeddedPropertyType() == TypeInfo::Private::Text );
+    
+    // Test UnarderedArray
+    const TypeInfo* arrUOA1 = TypeInfo::Private::unorderedArray( TypeInfo::Private::Integer );
+    QVERIFY( arrUOA1->propertyType() == TypeInfo::UnorderedArrayType );
+    QVERIFY( arrUOA1->embeddedPropertyType() == TypeInfo::Private::Integer );
+    QVERIFY( arrUOA1->choices().size() == 0 );
+    QVERIFY( arrUOA1 == TypeInfo::Private::unorderedArray( TypeInfo::Private::Integer ) );
+    const TypeInfo* arrUOA2 = TypeInfo::Private::unorderedArray( TypeInfo::Private::Text );
+    QVERIFY( arrUOA1 != arrUOA2 );
+    QVERIFY( arrUOA2->embeddedPropertyType() == TypeInfo::Private::Text );
+    QVERIFY( arrUOA1 != arrOA1 );
+    QVERIFY( arrUOA2 != arrOA2 );
+    
+    // Test AlternativeArray
+    const TypeInfo* arrAA1 = TypeInfo::Private::alternativeArray( TypeInfo::Private::Integer );
+    QVERIFY( arrAA1->propertyType() == TypeInfo::AlternativeArrayType );
+    QVERIFY( arrAA1->embeddedPropertyType() == TypeInfo::Private::Integer );
+    QVERIFY( arrAA1->choices().size() == 0 );
+    QVERIFY( arrAA1 == TypeInfo::Private::alternativeArray( TypeInfo::Private::Integer ) );
+    const TypeInfo* arrAA2 = TypeInfo::Private::alternativeArray( TypeInfo::Private::Text );
+    QVERIFY( arrAA1 != arrAA2 );
+    QVERIFY( arrAA2->embeddedPropertyType() == TypeInfo::Private::Text );
+    QVERIFY( arrAA1 != arrOA1 );
+    QVERIFY( arrAA1 != arrUOA1 );
+    QVERIFY( arrAA2 != arrOA2 );
+    QVERIFY( arrAA2 != arrUOA2 );
+    
+    // Test Choice
+    QList< TypeInfo::Choice > choices;
+    choices.push_back( TypeInfo::Choice(Value(12), "Hello" ) );
+    choices.push_back( TypeInfo::Choice(Value(42), "World" ) );
+    const TypeInfo* oChoice = TypeInfo::Private::createChoice( TypeInfo::OpenedChoice, TypeInfo::Private::Integer, choices );
+    QVERIFY( oChoice->propertyType() == TypeInfo::OpenedChoice );
+    QVERIFY( oChoice->embeddedPropertyType() == TypeInfo::Private::Integer );
+    QVERIFY( oChoice->choices().size() == 2 );
+    QVERIFY( oChoice->choices()[0].value() == Value(12) );
+    QVERIFY( oChoice->choices()[0].hint() == "Hello" );
+    QVERIFY( oChoice->choices()[1].value() == Value(42) );
+    QVERIFY( oChoice->choices()[1].hint() == "World" );
+    const TypeInfo* cChoice = TypeInfo::Private::createChoice( TypeInfo::ClosedChoice, TypeInfo::Private::Integer, choices );
+    QVERIFY( cChoice->propertyType() == TypeInfo::ClosedChoice );
+}
+
+void KisMetaDataTest::testSchemaParse()
+{
+    const Schema* exifSchema = SchemaRegistry::instance()->schemaFromUri(Schema::EXIFSchemaUri);
+    QVERIFY(exifSchema);
+    
+    const TypeInfo* colorSpaceType = exifSchema->propertyType("ColorSpace");
+    QVERIFY(colorSpaceType);
+    QVERIFY(colorSpaceType->propertyType() == TypeInfo::ClosedChoice);
+    QVERIFY(colorSpaceType->choices().size() == 2 );
+    QVERIFY(colorSpaceType->choices()[0].value() == Value(1) );
+    QVERIFY(colorSpaceType->choices()[0].hint() == "sRGB" );
+    QVERIFY(colorSpaceType->choices()[1].value() == Value(65635) );
+    QVERIFY(colorSpaceType->choices()[1].hint() == "uncalibrated" );
+    
+    QVERIFY(exifSchema->propertyType("CompressedBitsPerPixel"));
+    QVERIFY(exifSchema->propertyType("CompressedBitsPerPixel")->propertyType() == TypeInfo::SignedRationalType);
+    
+    QVERIFY(exifSchema->propertyType("PixelXDimension"));
+    QVERIFY(exifSchema->propertyType("PixelXDimension")->propertyType() == TypeInfo::IntegerType);
+    
+    QVERIFY(exifSchema->propertyType("UserComment"));
+    QVERIFY(exifSchema->propertyType("UserComment")->propertyType() == TypeInfo::LangArrayType);
+    
+    QVERIFY(exifSchema->propertyType("RelatedSoundFile"));
+    QVERIFY(exifSchema->propertyType("RelatedSoundFile")->propertyType() == TypeInfo::TextType);
+    
+    QVERIFY(exifSchema->propertyType("DateTimeOriginal"));
+    QVERIFY(exifSchema->propertyType("DateTimeOriginal")->propertyType() == TypeInfo::DateType);
+    
+    const TypeInfo* oecfType = exifSchema->propertyType("OECF");
+    QVERIFY(oecfType);
+    QVERIFY(oecfType == exifSchema->structure("OECFSFR"));
+    // TODO
+    
 }
 
 QTEST_KDEMAIN(KisMetaDataTest, GUI)

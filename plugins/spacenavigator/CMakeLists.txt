@@ -13,7 +13,7 @@ SET ( spacenavigator_SRCS
 )
 
 kde4_add_plugin(spacenavigator ${spacenavigator_SRCS})
-target_link_libraries(spacenavigator spnav flake koguiutils kotext)
+target_link_libraries(spacenavigator spnav ${X11_LIBRARIES} flake koguiutils kotext)
 install(TARGETS spacenavigator DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

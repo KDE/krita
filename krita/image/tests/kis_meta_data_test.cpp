@@ -371,8 +371,15 @@ void KisMetaDataTest::testSchemaParse()
     const TypeInfo* oecfType = exifSchema->propertyType("OECF");
     QVERIFY(oecfType);
     QVERIFY(oecfType == exifSchema->structure("OECFSFR"));
-    // TODO
-    
+    QVERIFY(oecfType->structureName() == "OECFSFR");
+    QVERIFY(oecfType->structureSchema());
+    QVERIFY(oecfType->structureSchema()->propertyType("Columns")->propertyType() == TypeInfo::IntegerType );
+    QVERIFY(oecfType->structureSchema()->propertyType("Rows")->propertyType() == TypeInfo::IntegerType );
+    QVERIFY(oecfType->structureSchema()->propertyType("Names")->propertyType() == TypeInfo::OrderedArrayType );
+    QVERIFY(oecfType->structureSchema()->propertyType("Names")->embeddedPropertyType()->propertyType() == TypeInfo::TextType );
+    QVERIFY(oecfType->structureSchema()->propertyType("Values")->propertyType() == TypeInfo::OrderedArrayType );
+    QVERIFY(oecfType->structureSchema()->propertyType("Values")->embeddedPropertyType()->propertyType() == TypeInfo::SignedRationalType );
+
 }
 
 QTEST_KDEMAIN(KisMetaDataTest, GUI)

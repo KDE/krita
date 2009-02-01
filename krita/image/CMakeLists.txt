@@ -188,6 +188,8 @@ set_target_properties(kritaimage PROPERTIES
 )
 install(TARGETS kritaimage  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
+########### install schemas #############
+install( FILES metadata/schemas/exif.schema DESTINATION ${DATA_INSTALL_DIR}/krita/metadata/schemas)
 
 ########### install files ###############
 # Don't install the header files for now

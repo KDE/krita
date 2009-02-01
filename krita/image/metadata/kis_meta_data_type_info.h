@@ -29,6 +29,7 @@ namespace KisMetaData {
     class KRITAIMAGE_EXPORT TypeInfo {
         public:
             enum PropertyType {
+                BooleanType,
                 IntegerType,
                 DateType,
                 TextType,

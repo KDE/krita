@@ -32,6 +32,7 @@ struct KRITAIMAGE_TEST_EXPORT KisMetaData::TypeInfo::Private {
         static QHash< const TypeInfo*, const TypeInfo*> unorderedArrays;
         static QHash< const TypeInfo*, const TypeInfo*> alternativeArrays;
     public:
+        static const TypeInfo* Boolean;
         static const TypeInfo* Integer;
         static const TypeInfo* Date;
         static const TypeInfo* Text;

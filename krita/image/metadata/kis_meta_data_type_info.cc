@@ -27,7 +27,7 @@ QHash< const TypeInfo*, const TypeInfo*> TypeInfo::Private::orderedArrays;
 QHash< const TypeInfo*, const TypeInfo*> TypeInfo::Private::unorderedArrays;
 QHash< const TypeInfo*, const TypeInfo*> TypeInfo::Private::alternativeArrays;
 
-
+const TypeInfo* TypeInfo::Private::Boolean = new TypeInfo( TypeInfo::BooleanType );
 const TypeInfo* TypeInfo::Private::Integer = new TypeInfo( TypeInfo::IntegerType );
 const TypeInfo* TypeInfo::Private::Date = new TypeInfo( TypeInfo::DateType );
 const TypeInfo* TypeInfo::Private::Text = new TypeInfo( TypeInfo::TextType );

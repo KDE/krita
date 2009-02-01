@@ -259,6 +259,10 @@ void KisMetaDataTest::testFilters()
 
 void KisMetaDataTest::testTypeInfo()
 {
+    QVERIFY( TypeInfo::Private::Boolean->propertyType() == TypeInfo::BooleanType );
+    QVERIFY( TypeInfo::Private::Boolean->embeddedPropertyType() == 0 );
+    QVERIFY( TypeInfo::Private::Boolean->choices().size() == 0 );
+    
     QVERIFY( TypeInfo::Private::Integer->propertyType() == TypeInfo::IntegerType );
     QVERIFY( TypeInfo::Private::Integer->embeddedPropertyType() == 0 );
     QVERIFY( TypeInfo::Private::Integer->choices().size() == 0 );

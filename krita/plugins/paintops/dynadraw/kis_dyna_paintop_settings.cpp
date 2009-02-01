@@ -109,6 +109,17 @@ int KisDynaPaintOpSettings::circleRadius() const
     return m_options->m_dynaOption->circleRadius();
 }
 
+int KisDynaPaintOpSettings::lineCount() const
+{
+    return m_options->m_dynaOption->lineCount();
+}
+
+qreal KisDynaPaintOpSettings::lineSpacing() const
+{
+    return m_options->m_dynaOption->lineSpacing();
+}
+
+
 bool KisDynaPaintOpSettings::enableLine() const
 {
     return m_options->m_dynaOption->enableLine();

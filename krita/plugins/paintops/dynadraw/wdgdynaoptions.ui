@@ -25,7 +25,7 @@
    <property name="geometry" >
     <rect>
      <x>10</x>
-     <y>10</y>
+     <y>0</y>
      <width>321</width>
      <height>341</height>
     </rect>
@@ -193,13 +193,13 @@
     <attribute name="title" >
      <string>Shape</string>
     </attribute>
-    <widget class="QWidget" name="" >
+    <widget class="QWidget" name="layoutWidget" >
      <property name="geometry" >
       <rect>
        <x>0</x>
        <y>10</y>
-       <width>221</width>
-       <height>127</height>
+       <width>301</width>
+       <height>141</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout" >
@@ -224,8 +224,42 @@
         </item>
         <item>
          <widget class="QSpinBox" name="circleRadiusSPBox" >
+          <property name="toolTip" >
+           <string>Circle radius</string>
+          </property>
           <property name="value" >
            <number>20</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2" >
+        <item>
+         <widget class="QRadioButton" name="linesRBox" >
+          <property name="text" >
+           <string>Lines</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDoubleSpinBox" name="lineSpacingSPBox" >
+          <property name="toolTip" >
+           <string>Line spacing</string>
+          </property>
+          <property name="value" >
+           <double>20.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="lineCountSPBox" >
+          <property name="toolTip" >
+           <string>Line count</string>
+          </property>
+          <property name="value" >
+           <number>10</number>
           </property>
          </widget>
         </item>

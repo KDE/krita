@@ -64,6 +64,8 @@ public:
     bool enableLine() const;
     bool twoCircles() const;
 
+    int lineCount() const;
+    qreal lineSpacing() const;
  
 private:
 

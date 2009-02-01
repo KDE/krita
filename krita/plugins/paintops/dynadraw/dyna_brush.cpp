@@ -64,6 +64,11 @@ void DynaBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &col
         m_mouse.init(mx,my);
         m_odelx = 0.0;
         m_odely = 0.0;
+
+        for (int i = 0; i < m_circleRadius; i++){
+            m_prevPosition.append(QPointF(x,y));
+        }
+
         first = true;
         return;
     }
@@ -184,21 +189,12 @@ void DynaBrush::drawSegment(KisPainter &painter)
     if (m_enableLine)
     painter.drawLine( prev, now );
 
-    // paint circle
     if (m_action == 0){
-/*        drawLines(painter,
-        prev,
-        now,
-        m_circleRadius);*/
-
-
         drawCircle(painter, prev.x(), prev.y() , m_circleRadius * nx , 2 * m_circleRadius  * nx );
-
         if (m_twoCircles)
         {
             drawCircle(painter, now.x(), now.y() , m_circleRadius * ny , 2 * m_circleRadius * ny );
         }
-
     }else
     if (m_action == 1)
     {
@@ -207,6 +203,10 @@ void DynaBrush::drawSegment(KisPainter &painter)
     if (m_action == 2)
     {
         drawWire(painter, prevr, prevl, nowl, nowr);
+    }else
+    if (m_action == 3)
+    {
+        drawLines(painter,prev,now,m_lineCount);
     }
 
     m_odelx = delx;
@@ -274,23 +274,18 @@ void DynaBrush::drawLines(KisPainter &painter,
 )
 {
     QPointF p1,p2;
-/*    dbgPlugins << "Velocity: ";
-    dbgPlugins << m_mouse.velx;
-    dbgPlugins << m_mouse.vely;
-    dbgPlugins << m_mouse.vel;
-    dbgPlugins << m_mouse.acc;
-    dbgPlugins << "\n";*/
-    
-    int spacing = 10 * m_mouse.acc;
+    qreal offsetX, offsetY;
 
-    for (int i = -count/2; i < count/2; i++)
+    int half = count / 2;
+    for (int i = 0; i < count; i++)
     {
-        p1.setX ( prev.x() );
-        p1.setY ( prev.y() );
+        offsetX = m_mouse.angx * (i-half) * m_lineSpacing * m_mouse.acc;
+        offsetY = m_mouse.angy * (i-half) * m_lineSpacing * m_mouse.acc;
 
-        p2.setX ( spacing * i + now.x() );
-        p2.setY ( spacing * i + now.y() );
+        p2.setX( now.x() + offsetX);
+        p2.setY( now.y() + offsetY);
 
-        painter.drawLine(p1, p2);
+        painter.drawLine( m_prevPosition[i], p2);
+        m_prevPosition[i] = p2;
     }
 }

@@ -61,7 +61,8 @@ KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainte
     m_dynaBrush.setCircleRadius( settings->circleRadius() );
     m_dynaBrush.enableLine( settings->enableLine() );
     m_dynaBrush.enableTwoCircles( settings->twoCircles() );
-
+    m_dynaBrush.setLineCount ( settings->lineCount() );
+    m_dynaBrush.setLineSpacing ( settings->lineSpacing() );
 
 }
 

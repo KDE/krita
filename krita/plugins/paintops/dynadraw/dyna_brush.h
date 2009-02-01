@@ -84,6 +84,14 @@ public:
         m_circleRadius = circleRadius;
     }
 
+    void setLineCount(int lineCount){
+        m_lineCount = lineCount;
+    }
+    
+    void setLineSpacing(qreal spacing){
+        m_lineSpacing = spacing;
+    }
+
     void enableLine(bool enableLine){
         m_enableLine = enableLine;
     }
@@ -120,13 +128,13 @@ void drawLines(KisPainter &painter,
         QPointF &now,
         int count);
 
-
-
     KoColor m_inkColor;
     KisImageSP m_image;
 
     int m_counter;
     int m_pixelSize;
+
+    QVector<QPointF> m_prevPosition;
 
     qreal m_odelx, m_odely;
 
@@ -147,7 +155,9 @@ void drawLines(KisPainter &painter,
     int m_action;
     bool m_enableLine, m_twoCircles;
     qreal m_circleRadius;
-    
+
+    int m_lineCount;
+    qreal m_lineSpacing;
 
 };
 

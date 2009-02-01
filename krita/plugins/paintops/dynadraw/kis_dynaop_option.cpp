@@ -90,6 +90,9 @@ int KisDynaOpOption::action() const
         return 1;
     if ( m_options->wireRBox->isChecked() )
         return 2;
+    if ( m_options->linesRBox->isChecked() )
+        return 3;
+
 }
 
 int KisDynaOpOption::circleRadius() const
@@ -106,6 +109,17 @@ bool KisDynaOpOption::twoCircles() const
 {
     return m_options->twoCBox->isChecked();
 }
+
+int KisDynaOpOption::lineCount() const
+{
+    return m_options->lineCountSPBox->value();
+}
+
+qreal KisDynaOpOption::lineSpacing() const
+{
+    return m_options->lineSpacingSPBox->value();
+}
+
 
 
 void KisDynaOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const

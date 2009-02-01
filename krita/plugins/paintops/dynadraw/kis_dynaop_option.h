@@ -43,6 +43,10 @@ public:
     bool enableLine() const;
     bool twoCircles() const;
 
+    int lineCount() const;
+    qreal lineSpacing() const;
+
+
     //TODO add saving 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);

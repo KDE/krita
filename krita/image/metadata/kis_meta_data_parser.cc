@@ -27,14 +27,38 @@ Parser::~Parser()
 }
 
 #include "kis_meta_data_parser_p.h"
+
+#include <QDateTime>
 #include <QVariant>
 
-Value IntegerParser::parse( const QString& _name) const
+Value IntegerParser::parse( const QString& _v) const
 {
-  return Value( _name.toInt() );
+    return Value( _v.toInt() );
 }
 
-Value TextParser::parse( const QString& _name) const
+Value TextParser::parse( const QString& _v) const
 {
-  return Value( _name );
+    return Value( _v );
+}
+
+Value DateParser::parse( const QString& _v) const
+{
+    if( _v.length() <= 4 )
+    {
+        return Value( QDateTime::fromString(_v, "yyyy") );
+    } else if( _v.length() <= 7 )
+    {
+        return Value( QDateTime::fromString(_v, "yyyy-MM") );
+    } else if( _v.length() <= 10 )
+    {
+        return Value( QDateTime::fromString(_v, "yyyy-MM-dd") );
+    } else if( _v.length() <= 16 )
+    {
+        return Value( QDateTime::fromString(_v, "yyyy-MM-ddThh:mm") );
+    } else if( _v.length() <= 19 )
+    {
+        return Value( QDateTime::fromString(_v, "yyyy-MM-ddThh:mm:ss") );
+    } else {
+        return Value( QDateTime::fromString(_v, Qt::ISODate ) );
+    }
 }

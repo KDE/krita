@@ -96,6 +96,8 @@ TypeInfo::TypeInfo( TypeInfo::PropertyType _propertyType ) : d(new Private )
         case TextType:
             d->parser = new TextParser;
             break;
+        case DateType:
+            d->parser = new DateParser;
     }
 }
 

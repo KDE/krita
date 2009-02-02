@@ -398,6 +398,53 @@ void KisMetaDataTest::testParser()
     QVERIFY( textV.type() == Value::Variant );
     QVERIFY( textV.asVariant() == "Bouh" );
     QVERIFY( textV.asVariant().type() == QVariant::String );
+    
+    Value dateV1 = TypeInfo::Private::Date->parser()->parse("2005-10-31");
+    QVERIFY( dateV1.type() == Value::Variant );
+    QDateTime d1 = dateV1.asVariant().toDateTime();
+    QVERIFY( d1.date().year() == 2005 );
+    QVERIFY( d1.date().month() == 10 );
+    QVERIFY( d1.date().day() == 31 );
+    
+    Value dateV2 = TypeInfo::Private::Date->parser()->parse("2005");
+    QVERIFY( dateV2.type() == Value::Variant );
+    QDateTime d2 = dateV2.asVariant().toDateTime();
+    QVERIFY( d2.date().year() == 2005 );
+
+    Value dateV3 = TypeInfo::Private::Date->parser()->parse("2005-12");
+    QVERIFY( dateV3.type() == Value::Variant );
+    QDateTime d3 = dateV3.asVariant().toDateTime();
+    QVERIFY( d3.date().year() == 2005 );
+    QVERIFY( d3.date().month() == 12 );
+
+    Value dateV4 = TypeInfo::Private::Date->parser()->parse("2005-10-31T12:20");
+    QVERIFY( dateV4.type() == Value::Variant );
+    QDateTime d4 = dateV4.asVariant().toDateTime();
+    QVERIFY( d4.date().year() == 2005 );
+    QVERIFY( d4.date().month() == 10 );
+    QVERIFY( d4.date().day() == 31 );
+    QVERIFY( d4.time().hour() == 12 );
+    QVERIFY( d4.time().minute() == 20 );
+
+    Value dateV5 = TypeInfo::Private::Date->parser()->parse("2005-10-31T12:20:32");
+    QVERIFY( dateV5.type() == Value::Variant );
+    QDateTime d5 = dateV5.asVariant().toDateTime();
+    QVERIFY( d5.date().year() == 2005 );
+    QVERIFY( d5.date().month() == 10 );
+    QVERIFY( d5.date().day() == 31 );
+    QVERIFY( d5.time().hour() == 12 );
+    QVERIFY( d5.time().minute() == 20 );
+    QVERIFY( d5.time().second() == 32 );
+
+    Value dateV6 = TypeInfo::Private::Date->parser()->parse("2005-10-31T12:20:32-06:00");
+    QVERIFY( dateV6.type() == Value::Variant );
+    QDateTime d6 = dateV6.asVariant().toDateTime();
+    QVERIFY( d6.date().year() == 2005 );
+    QVERIFY( d6.date().month() == 10 );
+    QVERIFY( d6.date().day() == 31 );
+    QVERIFY( d6.time().hour() == 6 );
+    QVERIFY( d6.time().minute() == 20 );
+    QVERIFY( d6.time().second() == 32 );
 }
 
 QTEST_KDEMAIN(KisMetaDataTest, GUI)

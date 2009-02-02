@@ -28,6 +28,10 @@ namespace KisMetaData {
     public:
       virtual Value parse( const QString& ) const;
   };
+  class DateParser : public Parser {
+    public:
+      virtual Value parse( const QString& ) const;
+  };
 
 };
 

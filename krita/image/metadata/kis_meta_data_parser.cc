@@ -30,6 +30,7 @@ Parser::~Parser()
 
 #include <QDateTime>
 #include <QVariant>
+#include <KDateTime>
 
 Value IntegerParser::parse( const QString& _v) const
 {
@@ -59,6 +60,6 @@ Value DateParser::parse( const QString& _v) const
     {
         return Value( QDateTime::fromString(_v, "yyyy-MM-ddThh:mm:ss") );
     } else {
-        return Value( QDateTime::fromString(_v, Qt::ISODate ) );
+        return Value( KDateTime::fromString(_v ).toUtc().dateTime() );
     }
 }

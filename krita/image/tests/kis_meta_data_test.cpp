@@ -442,7 +442,7 @@ void KisMetaDataTest::testParser()
     QVERIFY( d6.date().year() == 2005 );
     QVERIFY( d6.date().month() == 10 );
     QVERIFY( d6.date().day() == 31 );
-    QVERIFY( d6.time().hour() == 6 );
+    QVERIFY( d6.time().hour() == 18 );
     QVERIFY( d6.time().minute() == 20 );
     QVERIFY( d6.time().second() == 32 );
 }

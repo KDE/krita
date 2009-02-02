@@ -41,6 +41,7 @@ private slots:
     void testFilters();
     void testTypeInfo();
     void testSchemaParse();
+    void testParser();
 private:
     KisMetaData::Value createUnsignedRationalValue();
     KisMetaData::Value createSignedRationalValue();

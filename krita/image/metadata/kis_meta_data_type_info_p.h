@@ -21,12 +21,13 @@
 #include <QHash>
 
 struct KRITAIMAGE_TEST_EXPORT KisMetaData::TypeInfo::Private {
-    Private() : embeddedTypeInfo(0), structureSchema(0) {}
+    Private() : embeddedTypeInfo(0), structureSchema(0), parser(0) {}
     PropertyType propertyType;
     const TypeInfo* embeddedTypeInfo;
     QList< Choice> choices;
     Schema* structureSchema;
     QString structureName;
+    Parser* parser;
     private:
         static QHash< const TypeInfo*, const TypeInfo*> orderedArrays;
         static QHash< const TypeInfo*, const TypeInfo*> unorderedArrays;

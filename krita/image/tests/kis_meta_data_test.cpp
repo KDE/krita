@@ -27,6 +27,7 @@
 #include "kis_meta_data_store.h"
 #include "kis_meta_data_type_info.h"
 #include "kis_meta_data_type_info_p.h"
+#include "kis_meta_data_parser.h"
 
 using namespace KisMetaData;
 
@@ -384,6 +385,19 @@ void KisMetaDataTest::testSchemaParse()
     QVERIFY(oecfType->structureSchema()->propertyType("Values")->propertyType() == TypeInfo::OrderedArrayType );
     QVERIFY(oecfType->structureSchema()->propertyType("Values")->embeddedPropertyType()->propertyType() == TypeInfo::SignedRationalType );
 
+}
+
+void KisMetaDataTest::testParser()
+{
+    Value intV = TypeInfo::Private::Integer->parser()->parse("1242");
+    QVERIFY( intV.type() == Value::Variant );
+    QVERIFY( intV.asVariant() == 1242 );
+    QVERIFY( intV.asVariant().type() == QVariant::Int );
+    
+    Value textV = TypeInfo::Private::Text->parser()->parse("Bouh");
+    QVERIFY( textV.type() == Value::Variant );
+    QVERIFY( textV.asVariant() == "Bouh" );
+    QVERIFY( textV.asVariant().type() == QVariant::String );
 }
 
 QTEST_KDEMAIN(KisMetaDataTest, GUI)

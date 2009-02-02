@@ -24,6 +24,7 @@
 #include <krita_export.h>
 
 namespace KisMetaData {
+    class Parser;
     class Schema;
     class Value;
     class KRITAIMAGE_EXPORT TypeInfo {
@@ -79,6 +80,7 @@ namespace KisMetaData {
             const QList< Choice >& choices() const;
             Schema* structureSchema() const;
             const QString& structureName() const;
+            const Parser* parser() const;
         public:
             struct Private;
         private:

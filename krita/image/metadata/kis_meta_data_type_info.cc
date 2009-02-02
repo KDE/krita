@@ -18,6 +18,7 @@
 
 #include "kis_meta_data_type_info.h"
 
+#include "kis_meta_data_parser_p.h"
 #include "kis_meta_data_type_info_p.h"
 #include "kis_meta_data_value.h"
 
@@ -87,6 +88,15 @@ TypeInfo::TypeInfo( TypeInfo::PropertyType _propertyType ) : d(new Private )
     {
         d->embeddedTypeInfo = TypeInfo::Private::Text;
     }
+    switch( d->propertyType )
+    {
+        case IntegerType:
+            d->parser = new IntegerParser;
+            break;
+        case TextType:
+            d->parser = new TextParser;
+            break;
+    }
 }
 
 struct TypeInfo::Choice::Private {
@@ -147,6 +157,7 @@ TypeInfo::TypeInfo( Schema* _structureSchema, const QString& name ) : d(new Priv
 
 TypeInfo::~TypeInfo()
 {
+    delete d->parser;
     delete d;
 }
 
@@ -173,4 +184,9 @@ Schema* TypeInfo::structureSchema() const
 const QString& TypeInfo::structureName() const
 {
     return d->structureName;
+}
+
+const Parser* TypeInfo::parser() const
+{
+    return d->parser;
 }

@@ -20,8 +20,8 @@
 KisDynamicOpSettingsWidget::KisDynamicOpSettingsWidget(QWidget* parent)
         : KisPaintOpSettingsWidget( parent )
 {
+    m_uiOptions = new Ui::DynamicBrushOptions();
     m_uiOptions->setupUi(this);
-
 }
 
 KisDynamicOpSettingsWidget::~KisDynamicOpSettingsWidget()

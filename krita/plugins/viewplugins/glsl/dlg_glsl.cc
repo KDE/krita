@@ -20,11 +20,7 @@
 
 #include "dlg_glsl.h"
 
-
 #include <GL/glew.h>
-
-#include <QtOpenGL>
-
 
 #include <QScrollArea>
 #include <QLabel>

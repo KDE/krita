@@ -22,8 +22,8 @@
 #define _KIS_GLSL_WIDGET
 
 #include <GL/glew.h>
-#include <QtOpenGL>
 #include <QGLWidget>
+#include <QGLFramebufferObject>
 
 #include <kis_paint_device.h>
 

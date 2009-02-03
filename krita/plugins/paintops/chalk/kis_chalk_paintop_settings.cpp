@@ -15,6 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_chalk_paintop_settings.h"
+
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 
@@ -27,7 +29,6 @@
 #include <kis_paint_information.h>
 #include <kis_paint_action_type_option.h>
 
-#include "kis_chalk_paintop_settings.h"
 #include "kis_chalk_paintop_settings_widget.h"
 #include "kis_chalkop_option.h"
 
@@ -70,3 +71,4 @@ int KisChalkPaintOpSettings::radius() const
 {
     return m_options->m_chalkOption->radius();
 }
+

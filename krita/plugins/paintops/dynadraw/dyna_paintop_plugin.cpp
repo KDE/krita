@@ -15,6 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "dyna_paintop_plugin.h"
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -25,7 +26,6 @@
 
 #include <kis_paintop_registry.h>
 
-#include "dyna_paintop_plugin.h"
 #include "kis_dyna_paintop.h"
 #include "kis_dyna_paintop_factory.h"
 

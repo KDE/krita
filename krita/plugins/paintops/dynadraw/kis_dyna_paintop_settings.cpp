@@ -15,6 +15,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_dyna_paintop_settings.h"
+
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 
@@ -27,7 +30,7 @@
 #include <kis_paint_information.h>
 #include <kis_paint_action_type_option.h>
 
-#include "kis_dyna_paintop_settings.h"
+
 #include "kis_dyna_paintop_settings_widget.h"
 #include "kis_dynaop_option.h"
 
@@ -68,7 +71,7 @@ qreal KisDynaPaintOpSettings::initWidth() const
 {
     return m_options->m_dynaOption->initWidth();
 }
-    
+
 qreal KisDynaPaintOpSettings::mass() const
 {
     return m_options->m_dynaOption->mass();
@@ -103,7 +106,7 @@ int KisDynaPaintOpSettings::action() const
 {
     return m_options->m_dynaOption->action();
 }
-    
+
 int KisDynaPaintOpSettings::circleRadius() const
 {
     return m_options->m_dynaOption->circleRadius();
@@ -129,3 +132,4 @@ bool KisDynaPaintOpSettings::twoCircles() const
 {
     return m_options->m_dynaOption->twoCircles();
 }
+

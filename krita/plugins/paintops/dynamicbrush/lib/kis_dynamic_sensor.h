@@ -15,8 +15,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_TRANSFORM_PARAMETER_H_
-#define _KIS_TRANSFORM_PARAMETER_H_
+#ifndef _KIS_DYNAMIC_SENSOR_H_
+#define _KIS_DYNAMIC_SENSOR_H_
 
 #include "dynamicbrush_export.h"
 

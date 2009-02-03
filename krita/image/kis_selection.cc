@@ -342,9 +342,7 @@ void KisSelection::updateProjection(const QRect& r)
 
         m_d->pixelSelection->renderToProjection(this, r);
     }
-    Q_ASSERT( m_d->shapeSelection );
-
-
+    m_d->shapeSelection->renderToProjection(this, r);
 }
 
 void KisSelection::setDeselected(bool deselected)

@@ -60,8 +60,7 @@ void KisShapeSelectionModel::add(KoShape *child)
         m_parentSelection->updateProjection();
     }
     else {
-//         m_parentSelection->updateProjection(updateRect);
-        m_parentSelection->updateProjection();
+        m_parentSelection->updateProjection(updateRect);
     }
 
     m_image->undoAdapter()->emitSelectionChanged();
@@ -122,8 +121,7 @@ void KisShapeSelectionModel::childChanged(KoShape * child, KoShape::ChangeType t
 
     m_shapeMap[child] = child->boundingRect();
 
-    // TODO: find out why updating a rect doesn't work
-    //m_parentSelection->updateProjection(changedRect.toAlignedRect());
+    m_parentSelection->updateProjection(changedRect.toAlignedRect());
     m_parentSelection->updateProjection();
     m_image->undoAdapter()->emitSelectionChanged();
 }

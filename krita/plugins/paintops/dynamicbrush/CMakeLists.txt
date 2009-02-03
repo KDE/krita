@@ -5,6 +5,9 @@ add_subdirectory(programs)
 set(kritadynamicbrush_PART_SRCS
     dynamicbrush.cc
     kis_dynamicop.cc
+    kis_dynamicop_factory.cpp
+    kis_dynamicop_settings.cpp
+    kis_dynamicop_settings_widget.cpp
     kis_dynamic_programs_editor.cc
     )
 

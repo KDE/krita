@@ -15,40 +15,29 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_DYNAMICOP_H_
-#define KIS_DYNAMICOP_H_
+#include "kis_dynamicop_settings_widget.h"
 
-#include "kis_paintop.h"
-
-class KisPainter;
-class KisPaintInformation;
-class KisDynamicBrush;
-class KisDynamicOpSettings;
-
-class KisDynamicOp : public KisPaintOp
+KisDynamicOpSettingsWidget::KisDynamicOpSettingsWidget(QWidget* parent)
+        : KisPaintOpSettingsWidget( parent )
 {
+    m_uiOptions->setupUi(this);
 
-public:
+}
 
-    KisDynamicOp(const KisDynamicOpSettings *settings, KisPainter * painter);
+KisDynamicOpSettingsWidget::~KisDynamicOpSettingsWidget()
+{
+}
 
-    virtual ~KisDynamicOp();
+void KisDynamicOpSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
+{
+}
 
-    void paintAt(const KisPaintInformation& info);
+KisPropertiesConfiguration* KisDynamicOpSettingsWidget::configuration() const
+{
+        return 0;
+}
 
-    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
-        Q_UNUSED(xSpacing);
-        Q_UNUSED(ySpacing);
-        Q_UNUSED(pressure1);
-        Q_UNUSED(pressure2);
-        // XXX: this is wrong!
-        return 0.5;
-    }
+void KisDynamicOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *config ) const
+{
+}
 
-
-private:
-    KisDynamicBrush* m_brush;
-    const KisDynamicOpSettings *m_settings;
-};
-
-#endif // KIS_DYNAMICOP_H_

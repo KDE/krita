@@ -81,12 +81,12 @@ void KisFiltersListDynamicProgram::fromXML(const QDomElement& elt)
 {
     KisDynamicProgram::fromXML(elt);
     QDomNode n = elt.firstChild();
-    while (not n.isNull()) {
+    while (!n.isNull()) {
         QDomElement e = n.toElement();
-        if (not e.isNull()) {
+        if (!e.isNull()) {
             if (e.tagName() == "Filters") {
                 QDomNode nFilter = e.firstChild();
-                while (not nFilter.isNull()) {
+                while (!nFilter.isNull()) {
                     QDomElement eFilter = nFilter.toElement();
                     if (eFilter.tagName() == "Filter") {
                         KisDynamicTransformation* transfo = KisDynamicTransformationsFactory::createFromXML(eFilter);

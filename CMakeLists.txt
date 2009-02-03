@@ -32,18 +32,8 @@ macro_optional_find_package(Blitz)
 macro_optional_find_package(QCA2)
 macro_optional_find_package(Freetype)
 macro_optional_find_package(Fontconfig)
+set(EXIV2_MIN_VERSION "0.16")
 macro_optional_find_package(Exiv2)
-
-if(EXIV2_FOUND AND NOT WIN32)
-    # query pkg-config asking for a Exiv2 >= 0.16
-    EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=0.16 exiv2 RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
-    if(_return_VALUE STREQUAL "0")
-      message(STATUS "Found Exiv2 release >= 0.16")
-    else(_return_VALUE STREQUAL "0")
-      set(EXIV2_FOUND FALSE)
-      message(STATUS "Found Exiv2 release < 0.16")
-    endif(_return_VALUE STREQUAL "0")
-endif(EXIV2_FOUND AND NOT WIN32)
 
 macro_log_feature(EXIV2_FOUND "Exiv2" "Krita will not be built" "http://www.exiv2.org" FALSE "0.16")
 

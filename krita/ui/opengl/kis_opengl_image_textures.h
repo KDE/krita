@@ -29,7 +29,7 @@
 
 #include <map>
 
-#include <QGlWidget>
+#include <QGLWidget>
 #include <QImage>
 #include <QObject>
 #include <QVector>

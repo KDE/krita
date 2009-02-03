@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KRITA_SHAPE_SHAPE_FACTORY
-#define KRITA_SHAPE_SHAPE_FACTORY
+#ifndef KRITA_SHAPE_FACTORY
+#define KRITA_SHAPE_FACTORY
 
 #include <QStringList>
 

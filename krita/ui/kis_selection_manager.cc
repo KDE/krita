@@ -592,8 +592,10 @@ void KisSelectionManager::clear()
 
     if (sel)
         dev->clearSelection(sel);
-    else
+    else {
         dev->clear();
+        dev->setDirty();
+    }
 
     dev->setDirty(img->bounds());
     img->undoAdapter()->addCommand(t);

@@ -19,7 +19,7 @@
 #define KIS_DYNAMICOP_SETTINGS_WIDGET_H_
 
 #include <kis_paintop_settings_widget.h>
-#include "Ui_DynamicBrushOptions.h"
+#include "ui_DynamicBrushOptions.h"
 
 class KisPropertiesConfiguration;
 

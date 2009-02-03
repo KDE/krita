@@ -259,7 +259,7 @@ Exiv2::Value* kmdValueToExivXmpValue( const KisMetaData::Value& value )
                 QString exivVal;
                 if( it.key() != "x-default" )
                 {
-                    exivVal = "lang=" + it.key() + " ";
+                    exivVal = "lang=" + it.key() + ' ';
                 }
                 Q_ASSERT( it.value().type() == KisMetaData::Value::Variant );
                 QVariant var = it.value().asVariant();

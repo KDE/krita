@@ -898,7 +898,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
 
         dbgFile << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size();
 
-        if ((*it) -> type().startsWith("krita_attribute:")) { //
+        if ((*it) -> type().startsWith(QString("krita_attribute:"))) { //
                                                               // Attribute
 #ifdef __GNUC__                                                 \
     #warning "it should be possible to save krita_attributes in the "CHUNKs""

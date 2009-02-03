@@ -41,7 +41,7 @@ KisXMPIO::~KisXMPIO()
 inline std::string exiv2Prefix( const KisMetaData::Schema* _schema )
 {
     std::string prefix = Exiv2::XmpProperties::prefix(_schema->uri().ascii());
-    if( prefix == "")
+    if( prefix.empty())
     {
         dbgFile << "Unknown namespace " << ppVar(_schema->uri()) << ppVar(_schema->prefix());
         prefix = _schema->prefix().ascii();
@@ -60,7 +60,7 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
     {
         const KisMetaData::Entry& entry = *it;
         
-        // Check wether the prefix and namespace are know to exiv2
+        // Check whether the prefix and namespace are know to exiv2
         std::string prefix = exiv2Prefix( entry.schema() );
         dbgFile << "Saving " << entry.name();
         

@@ -33,5 +33,5 @@ namespace KisMetaData {
       virtual Value parse( const QString& ) const;
   };
 
-};
+}
 

@@ -55,7 +55,7 @@ class KRITAIMAGE_EXPORT KisNodeProgressProxy : public QObject, public KoProgress
         int percentage() const;
     signals:
         /**
-         * Emited when the percentage of the proxy is changed.
+         * Emitted when the percentage of the proxy is changed.
          * @param _percentage is the progress value in percent
          * @param _node is the node that own this \ref KisNodeProgressProxy
          */

@@ -445,7 +445,7 @@ signals:
      */
     void sigLayersChanged(KisGroupLayerSP rootLayer);
     /**
-     * Emitted when the list of layers has changed completely, and emited after \ref sigLayersChanged has been
+     * Emitted when the list of layers has changed completely, and emitted after \ref sigLayersChanged has been
      * emitted.
      */
     void sigPostLayersChanged(KisGroupLayerSP rootLayer);

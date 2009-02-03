@@ -18,10 +18,10 @@
 #ifndef KIS_TILEDDATAMANAGER_H_
 #define KIS_TILEDDATAMANAGER_H_
 
-#include <qglobal.h>
-#include <q3valuevector.h>
-#include <qvector.h>
-#include <qmutex.h>
+#include <QGlobal>
+#include <Q3ValueVector>
+#include <QVector>
+#include <QMutex>
 
 #include <kis_shared.h>
 #include <kis_shared_ptr.h>

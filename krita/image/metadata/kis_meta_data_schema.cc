@@ -249,7 +249,7 @@ bool Schema::Private::parseEltType(QDomElement& elt, EntryInfo& entryInfo, QStri
     } else if( tagName == "gpscoordinate" ) {
         entryInfo.propertyType = TypeInfo::Private::GPSCoordinate;
         return true;
-    } else if( tagName == "openedchoice" or tagName == "closedchoice" ) {
+    } else if( tagName == "openedchoice" || tagName == "closedchoice" ) {
         entryInfo.propertyType = parseChoice( elt );
         return true;
     } else if( !ignoreStructure && structures.contains(tagName))
@@ -296,7 +296,7 @@ const TypeInfo* Schema::Private::parseEmbType( QDomElement& elt, bool ignoreStru
                 return TypeInfo::Private::Date;
             } else if( type == "text" ) {
                 return TypeInfo::Private::Text;
-            } else if( type == "openedchoice" or type == "closedchoice" ) {
+            } else if( type == "openedchoice" || type == "closedchoice" ) {
                 return parseChoice( e );
             }
         }

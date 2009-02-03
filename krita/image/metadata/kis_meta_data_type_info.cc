@@ -116,7 +116,7 @@ TypeInfo::Choice::Choice( const Choice& _rhs) : d(new Private(*_rhs.d))
 {
 }
 
-TypeInfo::Choice::Choice& TypeInfo::Choice::operator=(const Choice& _rhs)
+TypeInfo::Choice& TypeInfo::Choice::operator=(const Choice& _rhs)
 {
     *d = *_rhs.d;
     return *this;

@@ -339,9 +339,9 @@ void FormattingPreview::drawLine(QPainter &painter, qreal xstart, qreal xend, qr
         painter.setRenderHint(QPainter::Antialiasing, true);
         const qreal halfWaveWidth = 2 * distToBaseLine;
         const qreal halfWaveLength = 4 * distToBaseLine;
-        const int startAngle = 45; //in °
-        const int middleAngle = 225; //in °
-        const int spanAngle = 90; //in °
+        const qreal startAngle = 45.; //in °
+        const qreal middleAngle = 225.; //in °
+        const qreal spanAngle = 90.; //in °
         qreal xbound = xstart - (1 - cos(startAngle))*halfWaveLength / 2;
         qreal ybound1 = y - (1 - sin(startAngle))*halfWaveWidth / 2;
         qreal ybound2 = y - (1 + sin(startAngle))*halfWaveWidth / 2;

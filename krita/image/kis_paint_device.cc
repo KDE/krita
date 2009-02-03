@@ -331,6 +331,7 @@ const quint8 *KisPaintDevice::defaultPixel() const
 void KisPaintDevice::clear()
 {
     m_datamanager->clear();
+    setDirty();
 }
 
 void KisPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *fillPixel)
@@ -342,6 +343,7 @@ void KisPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *
 void KisPaintDevice::clear(const QRect & rc)
 {
     m_datamanager->clear(rc.x(), rc.y(), rc.width(), rc.height(), m_datamanager->defaultPixel());
+    setDirty(rc);
 }
 
 bool KisPaintDevice::write(KoStore *store)

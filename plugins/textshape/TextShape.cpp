@@ -269,26 +269,26 @@ bool TextShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &con
     // load the style of the frame
     const KoXmlElement * style = 0;
     if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {
-        style = context.odfLoadingContext().stylesReader().findStyle( element.attributeNS( KoXmlNS::draw, "style-name" ),
-                                                                      "graphic",
-                                                                      context.odfLoadingContext().useStylesAutoStyles() );
+        style = context.odfLoadingContext().stylesReader().findStyle(
+                    element.attributeNS(KoXmlNS::draw, "style-name"), "graphic",
+                    context.odfLoadingContext().useStylesAutoStyles());
         Q_ASSERT( style );
     }
     else if (element.hasAttributeNS(KoXmlNS::presentation, "style-name")) {
-        style = context.odfLoadingContext().stylesReader().findStyle( element.attributeNS( KoXmlNS::presentation, "style-name" ),
-                                                                      "presentation",
-                                                                      context.odfLoadingContext().useStylesAutoStyles() );
+        style = context.odfLoadingContext().stylesReader().findStyle(
+                    element.attributeNS(KoXmlNS::presentation, "style-name"), "presentation",
+                    context.odfLoadingContext().useStylesAutoStyles());
         Q_ASSERT( style );
     }
 
-    if ( style ) {
+    if (style) {
         KoParagraphStyle paragraphStyle;
-        paragraphStyle.loadOdf( style, context.odfLoadingContext() );
+        paragraphStyle.loadOdf(style, context.odfLoadingContext());
 
         QTextDocument * document = m_textShapeData->document();
-        QTextCursor cursor( document );
+        QTextCursor cursor(document);
         QTextBlock block = cursor.block();
-        paragraphStyle.applyStyle( block, false );
+        paragraphStyle.applyStyle(block, false);
     }
 
     return loadOdfFrame(element, context);

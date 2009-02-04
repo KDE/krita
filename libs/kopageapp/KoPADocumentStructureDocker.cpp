@@ -543,12 +543,14 @@ void KoPADocumentStructureDocker::addPage()
 void KoPADocumentStructureDocker::contextMenuEvent(QContextMenuEvent* event)
 {
     QMenu menu( this );
-    menu.addAction( QString( i18n( "Create a slide" ) ) );
-    menu.addAction( QString( i18n( "Delete a slide" ) ) );
+    
+    menu.addAction( SmallIcon( "document-new" ), QString( i18n("Add a new page or layer") ), this, SLOT( addPage() ) );
+    menu.addAction( QString( i18n("Delete selected objects") ) );
     menu.addAction( QString( i18n( "Cut" ) ) );
     menu.addAction( QString( i18n( "Copy" ) ) );
     menu.addAction( QString( i18n( "Paste" ) ) );
     menu.addAction( QString( i18n( "Mask a slide" ) ) );
+    
     menu.exec(event->globalPos());
 }
 #include "KoPADocumentStructureDocker.moc"

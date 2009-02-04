@@ -35,6 +35,7 @@
 #include <QListView>
 #include <QDockWidget>
 #include <kdebug.h>
+#include <QStringList>
 
 class KoShapeBorderModel;
 class KoCanvasController;
@@ -55,13 +56,21 @@ private slots:
     void endEndLineChanged(int index);
     /// selection has changed
     void selectionChanged();
-    QByteArray generateSVG(QString path, QString viewBox, QString comment = QString());
+    QByteArray generateSVG(QString path, QString viewBox, QSize size, QString comment = QString());
 
     /// reimplemented
     virtual void setCanvas( KoCanvasBase *canvas );
 
 private:
     KoXmlDocument m_doc;
+    QString beginEndLineCurrentName;
+    QString endEndLineCurrentName;
+    int iconW;
+    int iconH;
+    QSize iconSize;
+    QStringList nameEndLineList;
+    QMap<QString, QString> pathEndLineMap;
+    QMap<QString, QString> viewEndLineMap;
 
 private:
     class Private;

@@ -2,14 +2,14 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" 
   "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
 <lineends>
-   <draw:marker draw:name="Arrow" svg:viewBox="0 0 20 30" svg:d="m10 0-10
+   <draw:marker draw:name="Arrow" draw:display-name="Arrow" svg:viewBox="0 0 20 30" svg:d="m10 0-10
 30h20z"/>
-   <draw:marker draw:name="Circle" svg:viewBox="0 0 1131 1131" svg:d="m462
+   <draw:marker draw:name="Circle" draw:display-name="Circle" svg:viewBox="0 0 1131 1131" svg:d="m462
 1118-102-29-102-51-93-72-72-93-51-102-29-102-13-105 13-102 29-106 51-102
 72-89 93-72 102-50 102-34 106-9 101 9 106 34 98 50 93 72 72 89 51 102 29 106
 13 102-13 105-29 102-51 102-72 93-93 72-98 51-106 29-101 13z"/>
-   <draw:marker draw:name="Dimension_20_Lines" draw:display-name="Dimension
-Lines" svg:viewBox="0 0 836 110" svg:d="m0 0h278 278 280v36 36
+   <draw:marker draw:name="Dimension_20_Lines" draw:display-name="Dimension Lines" 
+svg:viewBox="0 0 836 110" svg:d="m0 0h278 278 280v36 36
 38h-278-278-280v-36-36z"/>
    <draw:marker draw:name="Double_20_Arrow" draw:display-name="Double Arrow"
 svg:viewBox="0 0 1131 1918" svg:d="m737 1131h394l-564-1131-567 1131h398l-398
@@ -18,7 +18,7 @@ svg:viewBox="0 0 1131 1918" svg:d="m737 1131h394l-564-1131-567 1131h398l-398
 svg:viewBox="0 0 1122 2243" svg:d="m0 2108v17 17l12 42 30 34 38 21 43 4 29-8
 30-21 25-26 13-34 343-1532 339 1520 13 42 29 34 39 21 42 4 42-12 34-30
 21-42v-39-12l-4 4-440-1998-9-42-25-39-38-25-43-8-42 8-38 25-26 39-8 42z"/>
-   <draw:marker draw:name="Square" svg:viewBox="0 0 10 10" svg:d="m0
+   <draw:marker draw:name="Square" draw:display-name="Square" svg:viewBox="0 0 10 10" svg:d="m0
 0h10v10h-10z"/>
    <draw:marker draw:name="Square_20_45" draw:display-name="Square 45"
 svg:viewBox="0 0 1131 1131" svg:d="m0 564 564 567 567-567-567-564z"/>

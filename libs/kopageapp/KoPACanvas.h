@@ -60,6 +60,7 @@ public:
     KoToolProxy * toolProxy() const { return m_toolProxy; }
     const KoViewConverter *viewConverter() const;
     QWidget* canvasWidget() { return this; }
+    const QWidget* canvasWidget() const { return this; }
     KoUnit unit() const;
     const QPoint & documentOffset() const;
 

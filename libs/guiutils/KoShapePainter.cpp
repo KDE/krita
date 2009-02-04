@@ -88,6 +88,10 @@ public:
         return 0;
     };
 
+    virtual const QWidget* canvasWidget() const {
+        return 0;
+    }
+
     virtual KoUnit unit() const
     {
         return KoUnit( KoUnit::Point );

@@ -78,6 +78,11 @@ QWidget* KisShapeSelectionCanvas::canvasWidget()
     return 0;
 }
 
+const QWidget* KisShapeSelectionCanvas::canvasWidget() const
+{
+    return 0;
+}
+
 KoUnit KisShapeSelectionCanvas::unit() const
 {
     Q_ASSERT(false); // This should never be called as this canvas should have no tools.

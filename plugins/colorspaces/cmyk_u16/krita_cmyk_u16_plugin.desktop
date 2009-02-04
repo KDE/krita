@@ -76,6 +76,7 @@ Comment[ru]=Цветовое пространство CMYK (целое 16-бит
 Comment[sk]=Model farieb pre CMYK obrázky so 16 bitmi na kanál
 Comment[sl]=Barvni model za slike CMYK z 16 biti/kanal
 Comment[sv]=Färgmodell för 16-bitars heltal per kanal CMYK-bilder
+Comment[tr]=CMYK görüntüleri için kanal başına 16-bit integer ile Renk modeli
 Comment[uk]=Модель кольору з 16-бітовим цілим числом для кожного каналу зображень CMYK
 Comment[x-test]=xxColor model for 16-bit integer per channel CMYK imagesxx
 Comment[zh_CN]=16 位整数每通道 CYMK 图像的色彩模型

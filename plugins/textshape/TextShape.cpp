@@ -226,7 +226,8 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
         }
 
         if (! moreText) { // draw bottom of text.  Makes it easier to see where the text ends
-            QPen pen(Qt::blue); // TODO make configurable?
+            QPalette palette = canvas->canvasWidget()->palette();
+            QPen pen(palette.color(QPalette::Button));
             painter.setPen(pen);
 
             QPointF endPoint = converter.documentToView(QPointF(size().width(),
@@ -236,7 +237,8 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
                 painter.drawLine(QPointF(0, endPoint.y()), endPoint);
         } else if (shapes.count() <= 1 || shapes.last() == this) { // there is invisible text left.
             QPoint bottomRight = converter.documentToView(QPointF(size().width(), size().height())).toPoint();
-            QPen pen(Qt::red); // TODO make configurable?
+            QPalette palette = canvas->canvasWidget()->palette();
+            QPen pen(palette.color(QPalette::Link));
             painter.setPen(pen);
             QPoint topLeft = bottomRight - QPoint(15, 15);
             painter.drawRect(QRect(topLeft, QSize(13, 13)));

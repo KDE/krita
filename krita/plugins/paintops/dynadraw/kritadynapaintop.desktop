@@ -3,6 +3,7 @@ Name=Dyna
 Name[gl]=Dinámico
 Name[it]=Pennello dinamico
 Name[uk]=Дайна
+Name[x-test]=xxDynaxx
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritadynapaintop

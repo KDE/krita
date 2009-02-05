@@ -10,6 +10,7 @@ Name[pt]='Spray'
 Name[pt_BR]='Spray'
 Name[sv]=Sprej
 Name[uk]=Аерограф
+Name[x-test]=xxSprayxx
 Name[zh_TW]=噴霧
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service

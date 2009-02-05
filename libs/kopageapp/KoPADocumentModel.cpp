@@ -196,11 +196,11 @@ QVariant KoPADocumentModel::data( const QModelIndex &index, int role ) const
             if( ! selection )
                 return false;
 
-            KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
+            /* KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
             if( layer )
                 return (layer == selection->activeLayer() );
-            else
-                return selection->isSelected( shape );
+            else */
+            return selection->isSelected( shape );
         }
         case PropertiesRole: return QVariant::fromValue( properties( shape ) );
         case AspectRatioRole:
@@ -263,15 +263,16 @@ bool KoPADocumentModel::setData(const QModelIndex &index, const QVariant &value,
             setProperties( shape, value.value<PropertyList>());
             break;
         case ActiveRole:
-            if (value.toBool())
+            /* if (value.toBool())
             {
                 KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
                 KoSelection * selection = canvasController->canvas()->shapeManager()->selection();
 
                 KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
-                if( layer && selection )
+                if( layer && selection ) {
                     selection->setActiveLayer( layer );
-            }
+                }
+            } */
             break;
         default:
             return false;

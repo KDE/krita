@@ -30,8 +30,8 @@ class KoShape;
 class KoShapeLayer;
 class KoPADocument;
 class KoPADocumentModel;
-class QModelIndex;
 class KoPAPageBase;
+class QModelIndex;
 class QAction;
 class QButtonGroup;
 
@@ -108,6 +108,7 @@ private:
     KoDocumentSectionView *m_sectionView;
     KoPADocumentModel *m_model;
     QHash<KoDocumentSectionView::DisplayMode, QAction*> m_viewModeActions;
+    QList<KoShape *> m_selectedShapes;
     QButtonGroup *m_buttonGroup;
     QAction* m_addLayerAction;
 };

@@ -100,6 +100,8 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
 {
     saveOdfDefaultStyles(mainStyles);
 
+    // don't save character styles that are already saved as part of a paragraph style
+    QSet<KoCharacterStyle*> characterParagraphStyles;
     foreach(KoParagraphStyle *paragraphStyle, d->paragStyles) {
         if (paragraphStyle == d->defaultParagraphStyle)
             continue;
@@ -112,10 +114,11 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
         KoGenStyle style(KoGenStyle::StyleUser, "paragraph");
         paragraphStyle->saveOdf(style);
         mainStyles.lookup(style, name, KoGenStyles::DontForceNumbering);
+        characterParagraphStyles.insert(paragraphStyle->characterStyle());
     }
 
     foreach(KoCharacterStyle *characterStyle, d->charStyles) {
-        if (characterStyle == d->defaultParagraphStyle->characterStyle())
+        if (characterStyle == d->defaultParagraphStyle->characterStyle() || characterParagraphStyles.contains(characterStyle))
             continue;
 
         QString name(QString(QUrl::toPercentEncoding(characterStyle->name(), "", " ")).replace('%', '_'));

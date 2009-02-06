@@ -146,8 +146,6 @@ QList<QPair<QString, KoParagraphStyle *> > KoTextSharedLoadingData::loadParagrap
         parastyle->loadOdf(styleElem, context);
         QString listStyleName = styleElem->attributeNS(KoXmlNS::style, "list-style-name", QString());
         KoListStyle *list = listStyle(listStyleName, styleTypes & StylesDotXml);
-        if (!list && styleManager)
-            list = styleManager->defaultListStyle();
         if (list) {
             KoListStyle *newListStyle = new KoListStyle(parastyle);
             newListStyle->copyProperties(list);

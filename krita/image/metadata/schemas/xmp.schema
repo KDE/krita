@@ -1,0 +1,25 @@
+<schema prefix="xmp" uri="http://ns.adobe.com/xap/1.0/">
+  <structures>
+    <structure name="Thumbnail" prefix="xapGImg" uri="http://ns.adobe.com/xap/1.0/g/img/">
+      <integer name="height" />
+      <integer name="width" />
+      <closedchoice name="format">
+        <text name="jpeg">JPEG</text>
+      </closedchoice>
+      <text name="image" />
+    </structure>
+  </structures>
+  <properties>
+    <bag type="text" name="Advisory" />
+    <text name="BaseUrl" />
+    <date type="CreateDate" />
+    <text name="CreatorTool" />
+    <bag name="Identifier" type="text" />
+    <text name="Label" />
+    <date name="MetadataDate" />
+    <date name="ModifyDate" />
+    <text name="Nickname" />
+    <integer name="Rating" />
+    <alt name="Thumbnails" type="Thumbnail" />
+  </properties>
+</schema>

@@ -70,10 +70,6 @@ SchemaRegistry::SchemaRegistry() : d(new Private)
     }
     
     // DEPRECATED WRITE A SCHEMA FOR EACH OF THEM
-    create(Schema::TIFFSchemaUri, "tiff");
-    create(Schema::DublinCoreSchemaUri, "dc");
-    create(Schema::XMPSchemaUri, "xmp");
-    create(Schema::XMPRightsSchemaUri, "xmpRights");
     create(Schema::XMPMediaManagementUri, "xmpMM");
     create(Schema::MakerNoteSchemaUri, "mkn");
     create(Schema::IPTCSchemaUri, "Iptc4xmpCore");

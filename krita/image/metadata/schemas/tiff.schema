@@ -1,0 +1,53 @@
+<schema prefix="tiff" uri="http://ns.adobe.com/tiff/1.0/">
+  <structures>
+  </structures>
+  <properties>
+    <integer name="ImageWidth" />
+    <integer name="ImageLength" />
+    <seq name="BitsPerSamble" type="integer" />
+    <closedchoice name="Compression" >
+      <integer name="uncompressed">1</integer>
+      <integer name="JPEG">6</integer>
+    </closedchoice>
+    <closedchoice name="PhotometricInterpretation" >
+      <integer name="RGB">2</integer>
+      <integer name="YCbCr">6</integer>
+    </closedchoice>
+    <closedchoice name="Orientation" >
+      <integer name="0th row at top, 0th column at left">1</integer>
+      <integer name="0th row at top, 0th column at right">2</integer>
+      <integer name="0th row at bottom, 0th column at right">3</integer>
+      <integer name="0th row at bottom, 0th column at left">4</integer>
+      <integer name="0th row at left, 0th column at top">5</integer>
+      <integer name="0th row at right, 0th column at top">6</integer>
+      <integer name="0th row at right, 0th column at bottom">7</integer>
+      <integer name="0th row at left, 0th column at bottom">8</integer>
+    </closedchoice>
+    <integer name="SamplesPerPixel" />
+    <closedchoice name="PlanarConfiguration" >
+      <integer name="chunky">1</integer>
+      <integer name="planar">2</integer>
+    </closedchoice>
+    <closedchoice name="YCbCrSubSampling">
+      <seq type="integer" name="YCbCr4:2:2">2 1</seq>
+      <seq type="integer" name="YCbCr4:2:0">2 2</seq>
+    </closedchoice>
+    <closedchoice name="YCbCrPositioning">
+      <integer name="centered">1</integer>
+      <integer name="co-sited">2</integer>
+    </closedchoice>
+    <rational name="XResolution" />
+    <rational name="YResolution" />
+    <closedchoice name="ResolutionUnit" >
+      <integer name="inches">2</integer>
+      <integer name="centimeters">3</integer>
+    </closedchoice>
+    <seq name="TransferFunction" type="integer" />
+    <seq name="WhitePoint" type="rational" />
+    <seq name="PrimaryChromacities" type="rational" />
+    <seq name="YCbCrCoefficients" type="rational" />
+    <seq name="ReferenceBlackWhite" type="rational" />
+    <text name="Make" />
+    <text name="Model" />
+  </properties>
+</schema>

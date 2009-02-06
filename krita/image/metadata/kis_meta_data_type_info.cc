@@ -152,6 +152,7 @@ TypeInfo::TypeInfo( PropertyType _propertyType, const TypeInfo* _embedded, const
     Q_ASSERT(_propertyType == ClosedChoice || _propertyType == OpenedChoice );
     d->propertyType = _propertyType;
     d->embeddedTypeInfo =_embedded;
+    d->parser = _embedded->parser();
     d->choices = _choices;
 }
 

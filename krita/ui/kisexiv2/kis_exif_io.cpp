@@ -167,7 +167,7 @@ KisMetaData::Value exifOECFToKMDOECFStructure(const Exiv2::Value::AutoPtr value,
     }
     oecfStructure["Values"] = KisMetaData::Value(values, KisMetaData::Value::OrderedArray);
     dbgFile << "OECF: " << ppVar(columns) << ppVar(rows) << ppVar(dvalue->count());
-    return KisMetaData::Value( KisMetaData::SchemaRegistry::instance()->schemaFromUri( KisMetaData::Schema::EXIFSchemaUri), oecfStructure);
+    return KisMetaData::Value( oecfStructure);
 }
 
 Exiv2::Value* kmdOECFStructureToExifOECF(const KisMetaData::Value& value)
@@ -229,7 +229,7 @@ KisMetaData::Value deviceSettingDescriptionExifToKMD(const Exiv2::Value::AutoPtr
         settings.append(KisMetaData::Value(setting));
     }
     deviceSettingStructure["Settings"] = KisMetaData::Value(settings, KisMetaData::Value::OrderedArray);
-    return KisMetaData::Value(KisMetaData::SchemaRegistry::instance()->schemaFromUri( KisMetaData::Schema::EXIFSchemaUri), deviceSettingStructure);
+    return KisMetaData::Value( deviceSettingStructure);
 }
 
 Exiv2::Value* deviceSettingDescriptionKMDToExif(const KisMetaData::Value& value)
@@ -278,7 +278,7 @@ KisMetaData::Value cfaPatternExifToKMD(const Exiv2::Value::AutoPtr value, Exiv2:
     }
     cfaPatternStructure["Values"] = KisMetaData::Value(values, KisMetaData::Value::OrderedArray);
     dbgFile << "CFAPattern " << ppVar(columns) << " " << ppVar(rows) << ppVar(values.size() << ppVar(dvalue->count()));
-    return KisMetaData::Value(KisMetaData::SchemaRegistry::instance()->schemaFromUri( KisMetaData::Schema::EXIFSchemaUri), cfaPatternStructure);
+    return KisMetaData::Value( cfaPatternStructure);
 }
 
 Exiv2::Value* cfaPatternKMDToExif(const KisMetaData::Value& value)
@@ -316,7 +316,7 @@ KisMetaData::Value flashExifToKMD(const Exiv2::Value::AutoPtr value)
     flashStructure["Function"] = QVariant(function);
     bool redEye = ((v >> 6) & 0x01);  // bit 7 if function
     flashStructure["RedEyeMode"] = QVariant(redEye);
-    return KisMetaData::Value(KisMetaData::SchemaRegistry::instance()->schemaFromUri( KisMetaData::Schema::EXIFSchemaUri), flashStructure);
+    return KisMetaData::Value( flashStructure);
 }
 
 Exiv2::Value* flashKMDToExif(const KisMetaData::Value& value)

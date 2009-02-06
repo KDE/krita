@@ -75,7 +75,7 @@ public:
      * or LangArray
      */
     Value(const QList<Value>& array, ValueType type = OrderedArray);
-    Value(const KisMetaData::Schema* schema, const QMap<QString, Value>& structure);
+    Value(const QMap<QString, Value>& structure);
     Value(const KisMetaData::SignedRational& signedRational);
     Value(const KisMetaData::UnsignedRational& unsignedRational);
     Value(const Value& v);
@@ -127,8 +127,6 @@ public:
      */
     QMap<QString, KisMetaData::Value> asStructure() const;
     QMap<QString, KisMetaData::Value>* asStructure();
-    const KisMetaData::Schema* structureSchema() const;
-    
     /**
      * It's a convenient function that build a map from a LangArray using the property
      * qualifier "xml:lang" for the key of the map.

@@ -198,6 +198,9 @@ bool Schema::Private::parseEltType(QDomElement& elt, EntryInfo& entryInfo, QStri
     if( tagName == "integer" ) {
         entryInfo.propertyType = TypeInfo::Private::Integer;
         return true;
+    } else if( tagName == "boolean" ) {
+        entryInfo.propertyType = TypeInfo::Private::Boolean;
+        return true;
     } else if( tagName == "date" ) {
         entryInfo.propertyType = TypeInfo::Private::Date;
         return true;
@@ -270,6 +273,8 @@ const TypeInfo* Schema::Private::parseAttType( QDomElement& elt, bool ignoreStru
     QString type = elt.attribute("type");
     if( type == "integer" ) {
         return TypeInfo::Private::Integer;
+    } else if( type == "boolean" ) {
+        return TypeInfo::Private::Boolean;
     } else if( type == "date" ) {
         return TypeInfo::Private::Date;
     } else if( type == "text" ) {
@@ -292,6 +297,8 @@ const TypeInfo* Schema::Private::parseEmbType( QDomElement& elt, bool ignoreStru
             QString type = e.tagName();
             if( type == "integer" ) {
                 return TypeInfo::Private::Integer;
+            } else if( type == "boolean" ) {
+                return TypeInfo::Private::Boolean;
             } else if( type == "date" ) {
                 return TypeInfo::Private::Date;
             } else if( type == "text" ) {

@@ -98,6 +98,10 @@ TypeInfo::TypeInfo( TypeInfo::PropertyType _propertyType ) : d(new Private )
             break;
         case DateType:
             d->parser = new DateParser;
+            break;
+        case SignedRationalType:
+            d->parser = new RationalParser;
+            break;
     }
 }
 

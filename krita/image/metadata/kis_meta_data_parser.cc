@@ -29,6 +29,8 @@ Parser::~Parser()
 #include "kis_meta_data_parser_p.h"
 
 #include <QDateTime>
+#include <QRegExp>
+#include <QStringList>
 #include <QVariant>
 #include <KDateTime>
 
@@ -62,4 +64,13 @@ Value DateParser::parse( const QString& _v) const
     } else {
         return Value( KDateTime::fromString(_v ).toUtc().dateTime() );
     }
+}
+
+Value RationalParser::parse(const QString& _v) const
+{
+    QRegExp regexp("(\\-?\\d+)/(\\d+)");
+    regexp.indexIn(_v);
+    if( regexp.capturedTexts().size() > 2 )
+        return Value( SignedRational( regexp.capturedTexts()[1].toInt(), regexp.capturedTexts()[2].toInt() ) );
+    return Value();
 }

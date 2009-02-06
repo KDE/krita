@@ -1,6 +1,6 @@
 project( spacenavigator )
 
-include_directories( ${FLAKE_INCLUDES} ${QT_INCLUDES} ${KOMAIN_INCLUDES} ${KOGUIUTILS_INCLUDES})
+include_directories( ${FLAKE_INCLUDES} ${QT_INCLUDES} ${KOMAIN_INCLUDES} ${KOGUIUTILS_INCLUDES} ${SPNAV_INCLUDE_DIR})
 
 
 ########### Flake Plugin library ###############
@@ -13,7 +13,7 @@ SET ( spacenavigator_SRCS
 )
 
 kde4_add_plugin(spacenavigator ${spacenavigator_SRCS})
-target_link_libraries(spacenavigator spnav ${X11_LIBRARIES} flake koguiutils kotext)
+target_link_libraries(spacenavigator ${SPNAV_LIBRARY} ${X11_LIBRARIES} flake koguiutils kotext)
 install(TARGETS spacenavigator DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

@@ -27,7 +27,7 @@ struct KRITAIMAGE_TEST_EXPORT KisMetaData::TypeInfo::Private {
     QList< Choice> choices;
     Schema* structureSchema;
     QString structureName;
-    Parser* parser;
+    const Parser* parser;
     private:
         static QHash< const TypeInfo*, const TypeInfo*> orderedArrays;
         static QHash< const TypeInfo*, const TypeInfo*> unorderedArrays;

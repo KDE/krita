@@ -92,7 +92,7 @@ void KoStyleManager::saveOdfDefaultStyles(KoGenStyles &mainStyles)
 {
     KoGenStyle style(KoGenStyle::StyleUser, "paragraph");
     style.setDefaultStyle(true);
-    d->defaultParagraphStyle->saveOdf(style);
+    d->defaultParagraphStyle->saveOdf(style, mainStyles);
     mainStyles.lookup(style);
 }
 
@@ -112,7 +112,7 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
         }
 
         KoGenStyle style(KoGenStyle::StyleUser, "paragraph");
-        paragraphStyle->saveOdf(style);
+        paragraphStyle->saveOdf(style, mainStyles);
         mainStyles.lookup(style, name, KoGenStyles::DontForceNumbering);
         characterParagraphStyles.insert(paragraphStyle->characterStyle());
     }

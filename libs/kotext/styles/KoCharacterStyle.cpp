@@ -995,6 +995,9 @@ bool KoCharacterStyle::isEmpty() const
 
 void KoCharacterStyle::saveOdf(KoGenStyle &style)
 {
+    if (!d->name.isEmpty()) {
+        style.addAttribute("style:display-name", d->name);
+    }
     QList<int> keys = d->stylesPrivate.keys();
     foreach(int key, keys) {
         if (key == QTextFormat::FontWeight) {

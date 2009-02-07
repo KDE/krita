@@ -15,6 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "chalk_paintop_plugin.h"
+
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -25,7 +27,7 @@
 
 #include <kis_paintop_registry.h>
 
-#include "chalk_paintop_plugin.h"
+
 #include "kis_chalk_paintop.h"
 #include "kis_chalk_paintop_factory.h"
 

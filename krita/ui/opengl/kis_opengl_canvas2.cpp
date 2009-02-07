@@ -21,7 +21,7 @@
 
 #ifdef HAVE_OPENGL
 
-#include <QtOpenGL>
+#include <QMenu>
 #include <QWidget>
 #include <QGLWidget>
 #include <QGLContext>

@@ -74,8 +74,8 @@ QDomElement KisKraSaver::saveXML( QDomDocument& doc,  KisImageSP img )
     // XXX: Save profile as blob inside the image, instead of the product name.
     if (img->profile() && img->profile()-> valid())
         image.setAttribute(PROFILE, img->profile()->name());
-    image.setAttribute(X_RESOLUTION, img->xRes());
-    image.setAttribute(Y_RESOLUTION, img->yRes());
+    image.setAttribute(X_RESOLUTION, img->xRes()*72.0);
+    image.setAttribute(Y_RESOLUTION, img->yRes()*72.0);
 
     quint32 count = 1; // We don't save the root layer, but it does count
     KisSaveXmlVisitor visitor(doc, image, count, true);

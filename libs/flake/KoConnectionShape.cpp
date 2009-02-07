@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Boudewijn Rempt <boud@kde.org>
  * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2009  Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -83,7 +83,43 @@ void KoConnectionShape::paint(QPainter&, const KoViewConverter&)
 
 void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
 {
-    Q_UNUSED(context);
+    context.xmlWriter().startElement("draw:connector");
+    saveOdfAttributes( context, OdfMandatories | OdfCommonChildElements );
+    
+    switch( d->connectionType )
+    {
+        case Lines:
+            context.xmlWriter().addAttribute( "draw:type", "lines" );
+            break;
+        case Straight:
+            context.xmlWriter().addAttribute( "draw:type", "line" );
+            break;
+        case Curve:
+            context.xmlWriter().addAttribute( "draw:type", "curve" );
+            break;
+        default:
+            context.xmlWriter().addAttribute( "draw:type", "standard" );
+            break;
+    }
+    
+    if (d->shape1) {
+        context.xmlWriter().addAttribute( "draw:start-shape", context.drawId(d->shape1) );
+        context.xmlWriter().addAttribute( "draw:start-glue-point", d->connectionPointIndex1 );
+    }
+    else {
+        context.xmlWriter().addAttributePt( "svg:x1", m_handles[0].x() );
+        context.xmlWriter().addAttributePt( "svg:y1", m_handles[0].y() );
+    }
+    if (d->shape2) {
+        context.xmlWriter().addAttribute( "draw:end-shape", context.drawId(d->shape2) );
+        context.xmlWriter().addAttribute( "draw:end-glue-point", d->connectionPointIndex2 );
+    }
+    else {
+        context.xmlWriter().addAttributePt( "svg:x2", m_handles[1].x() );
+        context.xmlWriter().addAttributePt( "svg:y2", m_handles[1].y() );
+    }
+    
+    context.xmlWriter().endElement();
 }
 
 bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
@@ -129,6 +165,11 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
     updateConnections();
 
     return true;
+}
+
+bool KoConnectionShape::hitTest(const QPointF &position) const
+{
+    return KoShape::hitTest(position);
 }
 
 void KoConnectionShape::moveHandleAction(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers)

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2008 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (C) 2008-2009 Fredy Yanardi <fyanardi@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -165,6 +165,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( KoDocumentSectionView:
     m_model = new KoPADocumentModel( this );
     m_sectionView->setModel( m_model );
     m_sectionView->setSelectionBehavior( QAbstractItemView::SelectRows );
+    m_sectionView->setSelectionMode( QAbstractItemView::ExtendedSelection );
     m_sectionView->setDragDropMode( QAbstractItemView::InternalMove );
 
     connect( m_sectionView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(itemClicked(const QModelIndex&)));
@@ -219,44 +220,80 @@ void KoPADocumentStructureDocker::itemClicked( const QModelIndex &index )
 {
     Q_ASSERT(index.internalPointer());
 
-    if( ! index.isValid() )
+    if ( ! index.isValid() )
         return;
 
     KoShape *shape = static_cast<KoShape*>( index.internalPointer() );
-    if( ! shape )
+    if ( ! shape )
         return;
-    if (dynamic_cast<KoPAPageBase*>(shape)) {
-        emit pageChanged(dynamic_cast<KoPAPageBase*>(shape));
-        return;
-    }
-    emit pageChanged(m_doc->pageByShape(shape));
-    if( dynamic_cast<KoShapeLayer*>( shape ) )
-        return;
-
-    QList<KoPAPageBase*> selectedPages;
-    QList<KoShapeLayer*> selectedLayers;
-    QList<KoShape*> selectedShapes;
-
-    // separate selected layers and selected shapes
-    extractSelectedLayersAndShapes( selectedPages, selectedLayers, selectedShapes );
-
-    // XXX: Do stuff withthe selected pages!
-
+    // check whether the newly selected shape is a page or shape/layer
+    bool isPage = ( dynamic_cast<KoPAPageBase *>( shape ) != 0 );
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    foreach( KoShape* shape, selection->selectedShapes() )
-        shape->update();
 
-    selection->deselectAll();
+    if ( isPage ) {
+        // no shape is currently selected
+        if ( !m_selectedShapes.isEmpty() ) {
+            m_sectionView->clearSelection();
+            selection->deselectAll();
+            m_sectionView->setCurrentIndex( index );
+            m_selectedShapes.clear();
+            emit pageChanged( dynamic_cast<KoPAPageBase *>( shape ) );
+        }
+        else {
+            // There are more than one page selected
+            if ( m_sectionView->selectionModel()->selectedIndexes().size() == 1 ) {
+                emit pageChanged( dynamic_cast<KoPAPageBase *>( shape ) );
+            }
+        }
+    }
+    else {
+        KoPAPageBase *newPageByShape = m_doc->pageByShape( shape );
+        // there is already shape(s) selected
+        if ( !m_selectedShapes.isEmpty() ) {
+            // if the newly selected shape is not in the same page as previously
+            // selected shape(s), then clear previous selection
+            KoPAPageBase *currentPage = m_doc->pageByShape( m_selectedShapes.first() );
+            if ( currentPage != newPageByShape ) {
+                m_sectionView->clearSelection();
+                selection->deselectAll();
+                m_sectionView->setCurrentIndex( index );
+                m_selectedShapes.clear();
+                emit pageChanged( newPageByShape );
+                selection->select( shape );
+                shape->update();
+            }
+            else {
+                QList<KoPAPageBase*> selectedPages;
+                QList<KoShapeLayer*> selectedLayers;
+                QList<KoShape*> selectedShapes;
 
-    foreach( KoShape* shape, selectedShapes )
-    {
-        if( shape )
-        {
+                // separate selected layers and selected shapes
+                extractSelectedLayersAndShapes( selectedPages, selectedLayers, selectedShapes );
+
+                // XXX: Do stuff withthe selected pages!
+
+                foreach ( KoShape* shape, selection->selectedShapes() ) {
+                    shape->update();
+                }
+                selection->deselectAll();
+                foreach ( KoShape* shape, selectedShapes ) {
+                    if ( shape ) {
+                        selection->select( shape );
+                        shape->update();
+                    }
+                }
+            }
+        }
+        // no shape is selected, meaning only page(s) is selected
+        else {
+            m_sectionView->clearSelection();
+            m_sectionView->setCurrentIndex( index );
             selection->select( shape );
             shape->update();
+            emit pageChanged( newPageByShape );
         }
+        m_selectedShapes.append( shape );
     }
 }
 
@@ -434,7 +471,10 @@ void KoPADocumentStructureDocker::setActivePage(KoPAPageBase *page)
     if ( m_doc ) {
         int row = m_doc->pageIndex(page);
         QModelIndex index = m_model->index(row, 0);
-        m_sectionView->setCurrentIndex(index);
+        if ( index != m_sectionView->currentIndex()
+                && index != getRootIndex( m_sectionView->currentIndex() ) ) {
+            m_sectionView->setCurrentIndex(index);
+        }
     }
 }
 
@@ -467,22 +507,34 @@ void KoPADocumentStructureDocker::setViewMode(KoDocumentSectionView::DisplayMode
     // none of the page will be selected when we do collapse all
     if ( !expandable ) {
         QModelIndex currentIndex = m_sectionView->currentIndex();
-        QModelIndex parentIndex = currentIndex.parent();
-        while ( parentIndex.isValid() ) {
-            currentIndex = parentIndex;
-            parentIndex = currentIndex.parent();
+        QModelIndex rootIndex = getRootIndex( currentIndex );
+        if ( currentIndex != rootIndex ) {
+            m_sectionView->setCurrentIndex( rootIndex );
         }
-
-        m_sectionView->setCurrentIndex( currentIndex );
         m_sectionView->collapseAll();
     }
 
     m_sectionView->setDisplayMode(mode);
     m_sectionView->setItemsExpandable(expandable);
     m_sectionView->setRootIsDecorated(expandable);
-    m_sectionView->setSelectionMode(expandable ? QAbstractItemView::ExtendedSelection : QAbstractItemView::SingleSelection);
+    // m_sectionView->setSelectionMode(expandable ? QAbstractItemView::ExtendedSelection : QAbstractItemView::SingleSelection);
 
     m_viewModeActions[mode]->setChecked (true);
+}
+
+QModelIndex KoPADocumentStructureDocker::getRootIndex( const QModelIndex &index ) const
+{
+    QModelIndex currentIndex;
+    QModelIndex parentIndex = index.parent();
+    if ( !parentIndex.isValid() ) {
+        return index;
+    }
+    while ( parentIndex.isValid() ) {
+        currentIndex = parentIndex;
+        parentIndex = currentIndex.parent();
+    }
+
+    return currentIndex;
 }
 
 KoDocumentSectionView::DisplayMode KoPADocumentStructureDocker::viewModeFromString( const QString& mode )

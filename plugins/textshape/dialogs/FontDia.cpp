@@ -2,6 +2,7 @@
    Copyright (C)  2001, 2002 Montel Laurent <lmontel@mandrakesoft.com>
    Copyright (C)  2006-2007 Thomas Zander <zander@kde.org>
    Copyright (C)  2008 Girish Ramakrishnan <girish@forwardbias.in>
+   Copyright (C)  2008 Pierre Stirnweiss <pstirnweiss@googlemail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,61 +25,66 @@
 #include "CharacterHighlighting.h"
 #include "FontDecorations.h"
 #include "FontLayoutTab.h"
-#include "LanguageTab.h"
+
+#include "CharacterGeneral.h"
+
+#include "FormattingPreview.h"
 
 #include <klocale.h>
 #include <kvbox.h>
 #include <kfontdialog.h>
 
+#include <QTextBlock>
+#include <QTextFragment>
+#include <QTextDocument>
+#include <QTextCursor>
+
 FontDia::FontDia(QTextCursor* cursor, QWidget* parent)
         : KDialog(parent),
-        m_cursor(cursor),
-        m_initialFormat(cursor->charFormat()),
-        m_style(m_initialFormat)
+        m_cursor(cursor)
 {
+    //First find out if we have more than one charFormat in our selection. If so, m_initialFormat/m_style will get initialised with the charFormat at the cursor's position. The tabs will get informed of this.
+
+    if (m_cursor->hasSelection()) {
+        int begin = qMin(m_cursor->anchor(), m_cursor->position());
+        int end = qMax(m_cursor->anchor(), m_cursor->position());
+        QTextBlock block = m_cursor->block().document()->findBlock(begin);
+        m_uniqueFormat = true;
+        QTextCursor caret(*m_cursor);
+        caret.setPosition(begin+1);
+        m_initialFormat = caret.charFormat();
+        while (block.isValid() && block.position() < end) {
+            QTextBlock::iterator iter = block.begin();
+            while (! iter.atEnd()) {
+                QTextFragment fragment = iter.fragment();
+                if (fragment.position() >= end)
+                    break;
+                if (fragment.position() + fragment.length() <= begin) {
+                    iter++;
+                    continue;
+                }
+                if (!(m_uniqueFormat = (fragment.charFormat() == m_initialFormat)))
+                    break;
+                iter++;
+            }
+            if (!m_uniqueFormat)
+                break;
+            block = block.next();
+        }
+    }
+    else {
+        m_initialFormat = cursor->charFormat();
+        m_uniqueFormat = true;
+    }
+
     setCaption(i18n("Select Font"));
     setModal(true);
     setButtons(Ok | Cancel | Reset | Apply);
     setDefaultButton(Ok);
 
-    KVBox *mainWidget = new KVBox(this);
-    KHBox *mainHBox = new KHBox(mainWidget);
-
-    QTabWidget *fontTabWidget = new QTabWidget(mainHBox);
-
-    // Font tab
-    m_fontTab = new FontTab(this);
-    fontTabWidget->addTab(m_fontTab, i18n("Font"));
-
-    /*  connect( fontTab, SIGNAL( familyChanged() ), this, SLOT( slotFontFamilyChanged() ) );
-        connect( fontTab, SIGNAL( boldChanged() ), this, SLOT( slotFontBoldChanged() ) );
-        connect( fontTab, SIGNAL( italicChanged() ), this, SLOT( slotFontItalicChanged() ) );
-        connect( fontTab, SIGNAL( sizeChanged() ), this, SLOT( slotFontSizeChanged() ) );
-    */
-
-    //Highlighting tab
-    m_highlightingTab = new CharacterHighlighting(this);
-    fontTabWidget->addTab(m_highlightingTab, i18n("Highlighting"));
-
-    //Decoration tab
-    m_decorationTab = new FontDecorations(this);
-    fontTabWidget->addTab(m_decorationTab, i18n("Decoration"));
-
-    //Layout tab
-    m_layoutTab = new FontLayoutTab(true, this);
-    fontTabWidget->addTab(m_layoutTab, i18n("Layout"));
-
-    //Language tab
-    m_languageTab = new LanguageTab(this);
-    fontTabWidget->addTab(m_languageTab, i18n("Language"));
-
-    //Related properties List View
-    //relatedPropertiesListView = new K3ListView( mainHBox );
-
-    //Preview
-    //fontDiaPreview = new KoFontDiaPreview( mainWidget );
-
-    setMainWidget(mainWidget);
+    m_characterGeneral = new CharacterGeneral(this, m_uniqueFormat);
+    m_characterGeneral->hideStyleName(true);
+    setMainWidget(m_characterGeneral);
 
     connect(this, SIGNAL(applyClicked()), this, SLOT(slotApply()));
     connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
@@ -88,25 +94,17 @@ FontDia::FontDia(QTextCursor* cursor, QWidget* parent)
 
 void FontDia::initTabs()
 {
-    m_fontTab->setFont(m_style.font());
-    m_highlightingTab->open(&m_style);
-    m_decorationTab->open(&m_style);
-    m_layoutTab->open(&m_style);
-    m_languageTab->setLanguage(m_style.language());
+    KoCharacterStyle style(m_initialFormat);
+    m_characterGeneral->setStyle(&style);
 }
 
 void FontDia::slotApply()
 {
-    QFont font = m_fontTab->font();
-    m_style.setFontFamily(font.family());
-    m_style.setFontPointSize(font.pointSize());
-    m_style.setFontWeight(font.weight());
-    m_style.setFontItalic(font.italic());
-    m_highlightingTab->save();
-    m_decorationTab->save();
-    m_layoutTab->save();
-    m_style.setLanguage(m_languageTab->language());
-    m_style.applyStyle(m_cursor);
+    emit startMacro(i18n("Font"));
+    KoCharacterStyle chosenStyle;
+    m_characterGeneral->save(&chosenStyle);
+    chosenStyle.applyStyle(m_cursor);
+    emit stopMacro();
 }
 
 void FontDia::slotOk()
@@ -117,10 +115,8 @@ void FontDia::slotOk()
 
 void FontDia::slotReset()
 {
-    m_style.copyProperties(m_initialFormat);
     initTabs();
     slotApply(); // ### Should reset() apply?
 }
 
 #include "FontDia.moc"
-

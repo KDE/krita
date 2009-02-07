@@ -118,16 +118,16 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
 
         m_d->imageComment = element.attribute(DESCRIPTION);
 
-        xres = 100.0;
+        xres = 100.0 / 72.0;
         if (!(attr = element.attribute(X_RESOLUTION)).isNull()) {
             if (attr.toDouble() > 1.0)
-                xres = attr.toDouble();
+                xres = attr.toDouble() / 72.0;
         }
 
         yres = 100.0;
         if (!(attr = element.attribute(Y_RESOLUTION)).isNull()) {
             if (attr.toDouble() > 1.0)
-                yres = attr.toDouble();
+                yres = attr.toDouble() / 72.0;
         }
 
         if ( ( colorspacename = element.attribute( COLORSPACE_NAME ) ).isNull() ) {

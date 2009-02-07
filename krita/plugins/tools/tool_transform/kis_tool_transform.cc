@@ -227,6 +227,9 @@ void KisToolTransform::mousePressEvent(KoPointerEvent *e)
 {
     KisImageSP img = image();
 
+    if (!currentNode())
+        return;
+
     if (img && currentNode()->paintDevice() && e->button() == Qt::LeftButton) {
         QPointF mousePos = QPointF(e->point.x() * img->xRes(), e->point.y() * img->yRes());
         switch (m_function) {

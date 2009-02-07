@@ -15,8 +15,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_TOOL_HUMANBODYTOOL_H_
-#define _KIS_TOOL_HUMANBODYTOOL_H_
+#ifndef _KIS_TOOL_RULER_ASSISTANT_TOOL_H_
+#define _KIS_TOOL_RULER_ASSISTANT_TOOL_H_
 
 #include <kis_tool.h>
 #include <KoToolFactory.h>
@@ -46,7 +46,7 @@ public slots:
     void deactivate();
 
 protected:
-    
+
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
 protected:
@@ -67,7 +67,7 @@ public:
 #ifdef __GNUC__
 #warning "KisRulerAssistantToolFactory: create a tool icon"
 #endif
-            
+
             setIcon("math_matrix");//"tool_rulerassistanttool" );
             setPriority( 0 );
         };

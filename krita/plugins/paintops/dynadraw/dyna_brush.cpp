@@ -26,6 +26,8 @@
 
 #include <cmath>
 
+#include <QVector>
+
 #ifdef _WIN32
 #define srand48 srand
 #define drand48 rand
@@ -35,16 +37,17 @@
 DynaBrush::DynaBrush()
 {
     first = false;
-    m_radius = 0;
     m_counter = 0;
 
     /* dynadraw init */
     m_curmass = 0.5;
     m_curdrag = 0.15;
-    m_mouse.fixedangle = 1;
-    m_initwidth = 1.5;
-    m_width = m_initwidth;
-    
+    m_mouse.fixedangle = true;
+    m_width = 1.5;
+    m_xangle = 0.60;
+    m_yangle = 0.20;
+    m_widthRange = 0.05;
+
 }
 
 void DynaBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color)
@@ -54,13 +57,18 @@ void DynaBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &col
     m_inkColor = color;*/
 
     qreal mx, my;   
-    mx = m_fmouse.x();
-    my = m_fmouse.y();
+    mx = m_mousePos.x();
+    my = m_mousePos.y();
 
     if (!first){
         m_mouse.init(mx,my);
         m_odelx = 0.0;
         m_odely = 0.0;
+
+        for (int i = 0; i < m_circleRadius; i++){
+            m_prevPosition.append(QPointF(x,y));
+        }
+
         first = true;
         return;
     }
@@ -73,7 +81,6 @@ void DynaBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &col
         drawSegment(drawer);
     }
 
-    dbgPlugins << "paint finished..";
     m_counter++;
 }
 
@@ -117,8 +124,8 @@ int DynaBrush::applyFilter(qreal mx, qreal my)
     m_mouse.angx /= m_mouse.vel;
     m_mouse.angy /= m_mouse.vel;
     if(m_mouse.fixedangle) {
-        m_mouse.angx = 0.6;
-        m_mouse.angy = 0.2;
+        m_mouse.angx = m_xangle;
+        m_mouse.angy = m_yangle;
     }
 
     m_mouse.velx = m_mouse.velx * (1.0 - drag);
@@ -139,8 +146,7 @@ void DynaBrush::drawSegment(KisPainter &painter)
     qreal wid;
     qreal px, py, nx, ny;
 
-//    wid = 0.04 - m_mouse.vel;
-    wid = 0.05 - m_mouse.vel;
+    wid = m_widthRange - m_mouse.vel;
 
     wid = wid * m_width;
 
@@ -156,52 +162,130 @@ void DynaBrush::drawSegment(KisPainter &painter)
     nx = m_mouse.curx;
     ny = m_mouse.cury;
 
-    // TODO : kritadraw polygon here..
-    qreal px1 = px + m_odelx;
-    qreal py1 = py + m_odely;
+    QPointF prev( px , py );       // previous position
+    QPointF now( nx , ny );         // new position
 
-    qreal px2 = px - m_odelx;
-    qreal py2 = py - m_odely;
+    QPointF prevr( px + m_odelx , py + m_odely );  
+    QPointF prevl( px - m_odelx , py - m_odely );  
 
-    qreal px3 = nx - delx;
-    qreal py3 = ny - dely;
+    QPointF nowl( nx - delx , ny - dely);
+    QPointF nowr( nx + delx , ny + dely);
 
-    qreal px4 = nx + delx;
-    qreal py4 = ny + dely;
+    // transform coords from float points into image points
+    prev.rx() *= m_image->width();
+    prevr.rx()*= m_image->width();
+    prevl.rx()*= m_image->width();
+    now.rx()  *= m_image->width();
+    nowl.rx() *= m_image->width();
+    nowr.rx() *= m_image->width();
 
-    px1 *= m_image->width();
-    px2 *= m_image->width();
-    px3 *= m_image->width();
-    px4 *= m_image->width();
+    prev.ry() *= m_image->height();
+    prevr.ry()*= m_image->height();
+    prevl.ry()*= m_image->height();
+    now.ry()  *= m_image->height();
+    nowl.ry() *= m_image->height();
+    nowr.ry() *= m_image->height();
 
-    py1 *= m_image->height();
-    py2 *= m_image->height();
-    py3 *= m_image->height();
-    py4 *= m_image->height();
+    if (m_enableLine)
+    painter.drawLine( prev, now );
 
-    QPointF p1(px1,py1 );
-    QPointF p2(px2,py2 );
-    QPointF p3(px3,py3 );
-    QPointF p4(px4,py4 );
-
-    painter.drawLine( p1, p2 );
-    painter.drawLine( p2, p3 );
-    painter.drawLine( p3, p4 );
-    painter.drawLine( p4, p1 );
-
-    QPointF start( px * m_image->width(), py * m_image->height() );
-    QPointF end( nx * m_image->width(), ny * m_image->height() );
-
-    dbgPlugins << "st" << start;
-    dbgPlugins << "end" << end;
-
-    painter.drawLine( start, end );
+    if (m_action == 0){
+        drawCircle(painter, prev.x(), prev.y() , m_circleRadius * nx , 2 * m_circleRadius  * nx );
+        if (m_twoCircles)
+        {
+            drawCircle(painter, now.x(), now.y() , m_circleRadius * ny , 2 * m_circleRadius * ny );
+        }
+    }else
+    if (m_action == 1)
+    {
+        drawQuad(painter, prevr, prevl, nowl, nowr);
+    }else 
+    if (m_action == 2)
+    {
+        drawWire(painter, prevr, prevl, nowl, nowr);
+    }else
+    if (m_action == 3)
+    {
+        drawLines(painter,prev,now,m_lineCount);
+    }
 
     m_odelx = delx;
     m_odely = dely;
 }
 
 
+void DynaBrush::drawQuad(KisPainter &painter,
+        QPointF &topRight, 
+        QPointF &topLeft,
+        QPointF &bottomLeft,
+        QPointF &bottomRight)
+{
+    QVector<QPointF> points;
+    points.append(topRight);
+    points.append(topLeft);
+    points.append(bottomLeft);
+    points.append(bottomRight);
 
+    painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+    painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+    painter.paintPolygon( points );
+}
 
+void DynaBrush::drawCircle(KisPainter &painter,qreal x, qreal y, int radius, int steps){
+    QVector<QPointF> points;
+    // circle x, circle y
+    qreal cx, cy;
 
+    qreal length = 2.0 * M_PI;
+    qreal step = 1.0 / steps;
+    for (int i = 0; i < steps; i++){
+        cx = cos(i * step * length);
+        cy = sin(i * step * length);
+
+        cx *= radius;
+        cy *= radius;
+
+        cx += x;
+        cy += y;
+
+        points.append( QPointF(cx, cy) );
+    }
+
+    painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+    painter.paintPolygon( points );
+}
+
+void DynaBrush::drawWire(KisPainter &painter,
+        QPointF &topRight, 
+        QPointF &topLeft,
+        QPointF &bottomLeft,
+        QPointF &bottomRight)
+{
+    painter.drawLine( topRight, topLeft );
+    painter.drawLine( topLeft, bottomLeft );
+    painter.drawLine( bottomLeft, bottomRight );
+    painter.drawLine( bottomRight, topRight );
+}
+
+void DynaBrush::drawLines(KisPainter &painter,
+        QPointF &prev,
+        QPointF &now,
+        int count
+)
+{
+    QPointF p1,p2;
+    qreal offsetX, offsetY;
+
+    int half = count / 2;
+    for (int i = 0; i < count; i++)
+    {
+        offsetX = m_mouse.angx * (i-half) * m_lineSpacing * m_mouse.acc;
+        offsetY = m_mouse.angy * (i-half) * m_lineSpacing * m_mouse.acc;
+
+        p2.setX( now.x() + offsetX);
+        p2.setY( now.y() + offsetY);
+
+        painter.drawLine( m_prevPosition[i], p2);
+        m_prevPosition[i] = p2;
+    }
+}

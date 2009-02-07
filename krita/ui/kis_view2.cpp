@@ -393,7 +393,7 @@ KisSelectionSP KisView2::selection()
     if (layer)
         return layer->selection(); // falls through to the global
     // selection, or 0 in the end
-    return 0;
+    return image()->globalSelection();
 }
 
 
@@ -406,12 +406,12 @@ KisUndoAdapter * KisView2::undoAdapter()
 void KisView2::slotLoadingFinished()
 {
     KisImageSP img = image();
-    slotSetImageSize(img->width(), img->height());
+    slotImageSizeChanged();
 
     if (m_d->statusBar) {
         m_d->statusBar->imageSizeChanged(img->width(), img->height());
     }
-    m_d->resourceProvider->slotSetImageSize(img->width(), img->height());
+    m_d->resourceProvider->slotImageSizeChanged();
 
     m_d->nodeManager->nodesUpdated();
 
@@ -613,8 +613,9 @@ void KisView2::connectCurrentImage()
             connect(img.data(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->statusBar, SLOT(imageSizeChanged(qint32, qint32)));
 
         }
-        connect(img.data(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->resourceProvider, SLOT(slotSetImageSize(qint32, qint32)));
-        connect(img.data(), SIGNAL(sigSizeChanged(qint32, qint32)), this, SLOT(slotSetImageSize(qint32, qint32)));
+        connect(img.data(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->resourceProvider, SLOT(slotImageSizeChanged()));
+        connect(img.data(), SIGNAL(sigSizeChanged(qint32, qint32)), this, SLOT(slotImageSizeChanged()));
+        connect(img.data(), SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotImageSizeChanged()));
         connect(img->undoAdapter(), SIGNAL(selectionChanged()), selectionManager(), SLOT(selectionChanged()));
 
     }
@@ -697,12 +698,12 @@ void KisView2::slotEditPalette()
     base->show();
 }
 
-void KisView2::slotSetImageSize(qint32 w, qint32 h)
+void KisView2::slotImageSizeChanged()
 {
     m_d->zoomManager->zoomController()->setPageSize(QSizeF(image()->width() / image()->xRes(), image()->height() / image()->yRes()));
     m_d->zoomManager->zoomController()->setDocumentSize(QSizeF(image()->width() / image()->xRes(), image()->height() / image()->yRes()));
-    m_d->canvasController->setDocumentSize(QSize(int(ceil(m_d->viewConverter->documentToViewX(w / image()->xRes()))),
-                                           int(ceil(m_d->viewConverter->documentToViewY(h / image()->yRes())))));
+    m_d->canvasController->setDocumentSize(QSize(int(ceil(m_d->viewConverter->documentToViewX(image()->width() / image()->xRes()))),
+                                           int(ceil(m_d->viewConverter->documentToViewY(image()->height() / image()->yRes())))));
     m_d->zoomManager->updateGUI();
 }
 

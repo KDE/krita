@@ -16,6 +16,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_chalk_paintop_settings_widget.h"
+
 #include <KoColorSpaceRegistry.h>
 
 #include <kis_image.h>
@@ -28,7 +31,6 @@
 
 #include <KoColor.h>
 
-#include "kis_chalk_paintop_settings_widget.h"
 #include "kis_chalkop_option.h"
 #include "kis_chalk_paintop_settings.h"
 

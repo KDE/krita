@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>345</width>
-    <height>348</height>
+    <width>337</width>
+    <height>359</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -17,103 +17,281 @@
   </property>
   <property name="minimumSize" >
    <size>
-    <width>210</width>
-    <height>60</height>
+    <width>337</width>
+    <height>359</height>
    </size>
   </property>
-  <widget class="QWidget" name="layoutWidget" >
+  <widget class="QTabWidget" name="tabWidget" >
    <property name="geometry" >
     <rect>
-     <x>50</x>
-     <y>10</y>
-     <width>129</width>
-     <height>197</height>
+     <x>10</x>
+     <y>0</y>
+     <width>321</width>
+     <height>341</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_2" >
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout" >
-      <item>
-       <widget class="QLabel" name="radiusLabel" >
+   <property name="minimumSize" >
+    <size>
+     <width>321</width>
+     <height>341</height>
+    </size>
+   </property>
+   <property name="maximumSize" >
+    <size>
+     <width>321</width>
+     <height>341</height>
+    </size>
+   </property>
+   <property name="currentIndex" >
+    <number>1</number>
+   </property>
+   <widget class="QWidget" name="tab" >
+    <attribute name="title" >
+     <string>Dynamics settings</string>
+    </attribute>
+    <widget class="QWidget" name="layoutWidget" >
+     <property name="geometry" >
+      <rect>
+       <x>40</x>
+       <y>30</y>
+       <width>156</width>
+       <height>223</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="gridLayout" >
+      <item row="0" column="0" colspan="2" >
+       <widget class="QLabel" name="initWidthLbl" >
         <property name="text" >
-         <string>radius</string>
+         <string>Initial width</string>
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QSpinBox" name="radiusSpinBox" >
-        <property name="value" >
-         <number>12</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout" >
-      <item>
-       <widget class="QLabel" name="coverageLabel" >
-        <property name="text" >
-         <string>coverage</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QDoubleSpinBox" name="coverageSpin" >
-        <property name="decimals" >
-         <number>3</number>
-        </property>
-        <property name="maximum" >
-         <double>1.000000000000000</double>
+      <item row="0" column="2" >
+       <widget class="QDoubleSpinBox" name="initWidthSPBox" >
+        <property name="minimum" >
+         <double>-99.000000000000000</double>
         </property>
         <property name="singleStep" >
          <double>0.050000000000000</double>
         </property>
         <property name="value" >
-         <double>0.300000000000000</double>
+         <double>1.500000000000000</double>
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QCheckBox" name="jitterMoveBox" >
-        <property name="text" >
-         <string>Jitter movement</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="jitterSizeBox" >
-        <property name="text" >
-         <string>Jitter size</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="useParticlesBox" >
-        <property name="text" >
-         <string>Paint Particles</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QDoubleSpinBox" name="amountSpin" >
-        <property name="decimals" >
-         <number>2</number>
-        </property>
-        <property name="maximum" >
-         <double>5.000000000000000</double>
+      <item rowspan="2" row="1" column="2" >
+       <widget class="QDoubleSpinBox" name="massSPBox" >
+        <property name="minimum" >
+         <double>-99.000000000000000</double>
         </property>
         <property name="singleStep" >
-         <double>0.100000000000000</double>
+         <double>0.050000000000000</double>
         </property>
         <property name="value" >
-         <double>1.000000000000000</double>
+         <double>0.500000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item rowspan="2" row="2" column="0" colspan="2" >
+       <widget class="QLabel" name="label_3" >
+        <property name="text" >
+         <string>Drag</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2" >
+       <widget class="QDoubleSpinBox" name="dragSPBox" >
+        <property name="minimum" >
+         <double>-99.000000000000000</double>
+        </property>
+        <property name="singleStep" >
+         <double>0.050000000000000</double>
+        </property>
+        <property name="value" >
+         <double>0.150000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item rowspan="2" row="4" column="0" colspan="3" >
+       <widget class="QCheckBox" name="fixedAngleChBox" >
+        <property name="text" >
+         <string>Fixed angle</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0" colspan="2" >
+       <widget class="QLabel" name="label_4" >
+        <property name="text" >
+         <string>X angle</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0" >
+       <widget class="QLabel" name="label_5" >
+        <property name="text" >
+         <string>Y angle</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0" colspan="2" >
+       <widget class="QLabel" name="label_6" >
+        <property name="text" >
+         <string>Width range</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="2" >
+       <widget class="QDoubleSpinBox" name="widthRangeSPBox" >
+        <property name="minimum" >
+         <double>-99.000000000000000</double>
+        </property>
+        <property name="singleStep" >
+         <double>0.050000000000000</double>
+        </property>
+        <property name="value" >
+         <double>0.050000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="2" >
+       <widget class="QDoubleSpinBox" name="yAngleSPBox" >
+        <property name="minimum" >
+         <double>-99.000000000000000</double>
+        </property>
+        <property name="singleStep" >
+         <double>0.050000000000000</double>
+        </property>
+        <property name="value" >
+         <double>0.200000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="2" >
+       <widget class="QDoubleSpinBox" name="xAngleSPBox" >
+        <property name="minimum" >
+         <double>-99.000000000000000</double>
+        </property>
+        <property name="singleStep" >
+         <double>0.050000000000000</double>
+        </property>
+        <property name="value" >
+         <double>0.600000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" colspan="2" >
+       <widget class="QLabel" name="label_2" >
+        <property name="text" >
+         <string>Mass</string>
         </property>
        </widget>
       </item>
      </layout>
-    </item>
-   </layout>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_2" >
+    <attribute name="title" >
+     <string>Shape</string>
+    </attribute>
+    <widget class="QWidget" name="layoutWidget" >
+     <property name="geometry" >
+      <rect>
+       <x>0</x>
+       <y>10</y>
+       <width>301</width>
+       <height>141</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout" >
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout" >
+        <item>
+         <widget class="QRadioButton" name="circleRBox" >
+          <property name="text" >
+           <string>Circle</string>
+          </property>
+          <property name="checked" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="twoCBox" >
+          <property name="text" >
+           <string>Two</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="circleRadiusSPBox" >
+          <property name="toolTip" >
+           <string>Circle radius</string>
+          </property>
+          <property name="value" >
+           <number>20</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2" >
+        <item>
+         <widget class="QRadioButton" name="linesRBox" >
+          <property name="text" >
+           <string>Lines</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDoubleSpinBox" name="lineSpacingSPBox" >
+          <property name="toolTip" >
+           <string>Line spacing</string>
+          </property>
+          <property name="value" >
+           <double>20.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="lineCountSPBox" >
+          <property name="toolTip" >
+           <string>Line count</string>
+          </property>
+          <property name="value" >
+           <number>10</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="polygonRBox" >
+        <property name="text" >
+         <string>Polygon</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="wireRBox" >
+        <property name="text" >
+         <string>Wire</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="LineCBox" >
+        <property name="text" >
+         <string>Paint connection</string>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
   </widget>
  </widget>
  <resources/>

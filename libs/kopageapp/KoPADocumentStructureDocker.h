@@ -31,8 +31,8 @@ class KoShape;
 class KoShapeLayer;
 class KoPADocument;
 class KoPADocumentModel;
-class QModelIndex;
 class KoPAPageBase;
+class QModelIndex;
 class QAction;
 class QButtonGroup;
 
@@ -103,6 +103,7 @@ private slots:
 private:
     void extractSelectedLayersAndShapes( QList<KoPAPageBase*> &pages, QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes );
     void setViewMode(KoDocumentSectionView::DisplayMode mode);
+    QModelIndex getRootIndex( const QModelIndex &index ) const;
 
     KoDocumentSectionView::DisplayMode viewModeFromString( const QString& mode );
     QString viewModeToString( KoDocumentSectionView::DisplayMode mode );
@@ -111,6 +112,7 @@ private:
     KoDocumentSectionView *m_sectionView;
     KoPADocumentModel *m_model;
     QHash<KoDocumentSectionView::DisplayMode, QAction*> m_viewModeActions;
+    QList<KoShape *> m_selectedShapes;
     QButtonGroup *m_buttonGroup;
     QAction* m_addLayerAction;
 };

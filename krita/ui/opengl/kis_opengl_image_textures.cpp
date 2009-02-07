@@ -24,6 +24,8 @@
 #include <ksharedptr.h>
 
 #include <QGLWidget>
+#include <QImage>
+#include <QApplication>
 
 #include <config-openexr.h>
 

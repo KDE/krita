@@ -183,6 +183,7 @@ void KisPropertiesConfiguration::dump()
 {
     QMap<QString, QVariant>::Iterator it;
     for (it = d->properties.begin(); it != d->properties.end(); ++it) {
+      dbgKrita << it.key() << " = " << it.value();
     }
 
 }

@@ -29,7 +29,7 @@
 using namespace KisMetaData;
 
 struct Value::Private {
-    Private() : schema(0), type(Invalid) {}
+    Private() : type(Invalid) {}
     union {
         QVariant* variant;
         QList<Value>* array;
@@ -37,7 +37,6 @@ struct Value::Private {
         KisMetaData::SignedRational* signedRational;
         KisMetaData::UnsignedRational* unsignedRational;
     } value;
-    const KisMetaData::Schema* schema;
     ValueType type;
     QMap<QString, Value> propertyQualifiers;
 };
@@ -61,10 +60,8 @@ Value::Value(const QList<Value>& array, ValueType type) : d(new Private)
     d->type = type; // TODO: I am hesitating about LangArray to keep them as array or convert them to maps
 }
 
-Value::Value(const KisMetaData::Schema* schema, const QMap<QString, Value>& structure) : d(new Private)
+Value::Value(const QMap<QString, Value>& structure) : d(new Private)
 {
-    Q_ASSERT( schema );
-    d->schema = schema;
     d->type = Structure;
     d->value.structure = new QMap<QString, Value>(structure);
 }
@@ -91,7 +88,6 @@ Value& Value::operator=(const Value & v)
 {
     Q_ASSERT(d->type == Invalid || d->type == v.d->type);
     d->type = v.d->type;
-    d->schema = v.d->schema;
     d->propertyQualifiers = v.d->propertyQualifiers;
     switch (d->type) {
     case Invalid:
@@ -107,7 +103,6 @@ Value& Value::operator=(const Value & v)
         break;
     case Structure:
         d->value.structure = new QMap<QString, Value>(*v.d->value.structure);
-        Q_ASSERT( d->schema );
         break;
     case SignedRational:
         d->value.signedRational = new KisMetaData::SignedRational(*v.d->value.signedRational);
@@ -237,12 +232,6 @@ QMap<QString, KisMetaData::Value> Value::asStructure() const
         return *d->value.structure;
     }
     return QMap<QString, KisMetaData::Value>();
-}
-
-const KisMetaData::Schema* Value::structureSchema() const
-{
-    Q_ASSERT( d->type == Structure );
-    return d->schema;
 }
 
 QMap<QString, KisMetaData::Value>* Value::asStructure()
@@ -438,7 +427,7 @@ QMap<QString, KisMetaData::Value> Value::asLangArray() const
 {
     Q_ASSERT( d->type == LangArray );
     QMap<QString, KisMetaData::Value> langArray;
-    foreach( KisMetaData::Value val, *d->value.array )
+    foreach( const KisMetaData::Value val, *d->value.array )
     {
         Q_ASSERT( val.d->propertyQualifiers.contains("xml:lang")); // TODO propably worth to have an assert for this in the constructor as well
         KisMetaData::Value valKeyVal = val.d->propertyQualifiers.value("xml:lang");

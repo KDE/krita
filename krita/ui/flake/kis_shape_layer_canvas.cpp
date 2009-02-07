@@ -144,6 +144,11 @@ QWidget* KisShapeLayerCanvas::canvasWidget()
     return 0;
 }
 
+const QWidget* KisShapeLayerCanvas::canvasWidget() const
+{
+    return 0;
+}
+
 KoUnit KisShapeLayerCanvas::unit() const
 {
     Q_ASSERT(false); // This should never be called as this canvas should have no tools.

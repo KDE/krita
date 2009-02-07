@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,44 +19,60 @@
  */
 
 #include "CharacterGeneral.h"
-#include "CharacterStyleOptions.h"
-#include "CharacterDecorations.h"
+#include "FontLayoutTab.h"
+#include "FontTab.h"
 #include "CharacterHighlighting.h"
+#include "LanguageTab.h"
+#include "FontDecorations.h"
+#include "FormattingPreview.h"
 
 #include <KoStyleManager.h>
 #include <KoCharacterStyle.h>
-#include <kfontdialog.h>
 
-CharacterGeneral::CharacterGeneral(QWidget *parent)
+#include "kdebug.h"
+
+CharacterGeneral::CharacterGeneral(QWidget *parent, bool uniqueFormat)
         : QWidget(parent),
         m_blockSignals(false),
         m_style(0)
 {
     widget.setupUi(this);
 
-    m_styleOptions = new CharacterStyleOptions(true, this);
-    m_characterDecorations = new CharacterDecorations(this);
-    m_characterHighlighting = new CharacterHighlighting(this);
+    m_layoutTab = new FontLayoutTab(true, uniqueFormat, this);
 
-    QWidget *fonts = new QWidget(this);
-    QLayout *layout = new QVBoxLayout(fonts);
-    fonts->setLayout(layout);
+    m_characterDecorations = new FontDecorations(uniqueFormat, this);
+    connect(m_characterDecorations, SIGNAL(backgroundColorChanged(QColor)), this, SLOT(slotBackgroundColorChanged(QColor)));
+    connect(m_characterDecorations, SIGNAL(textColorChanged(QColor)), this, SLOT(slotTextColorChanged(QColor)));
 
-    QStringList list;
-    KFontChooser::getFontList(list, KFontChooser::SmoothScalableFonts);
-    m_fontChooser = new KFontChooser(this, false, list, false);
-    m_fontChooser->setSampleBoxVisible(false);
-    layout->addWidget(m_fontChooser);
+    m_characterHighlighting = new CharacterHighlighting(uniqueFormat, this);
+    connect(m_characterHighlighting, SIGNAL(underlineChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor)), this, SLOT(slotUnderlineChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor)));
+    connect(m_characterHighlighting, SIGNAL(strikethroughChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor)), this, SLOT(slotStrikethroughChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor)));
+    connect(m_characterHighlighting, SIGNAL(capitalizationChanged(QFont::Capitalization)), this, SLOT(slotCapitalizationChanged(QFont::Capitalization)));
 
-    widget.tabs->addTab(fonts, i18n("Font"));
+    m_fontTab = new FontTab(uniqueFormat, this);
+    connect(m_fontTab, SIGNAL(fontChanged(const QFont &)), this, SLOT(slotFontSelected(const QFont &)));
+
+    m_languageTab = new LanguageTab(uniqueFormat, this);
+
+    widget.tabs->addTab(m_fontTab, i18n("Font"));
     widget.tabs->addTab(m_characterDecorations, i18n("Decorations"));
     widget.tabs->addTab(m_characterHighlighting, i18n("Highlighting"));
-    widget.tabs->addTab(m_styleOptions, i18n("Layout"));
-    // TODO language
+    widget.tabs->addTab(m_layoutTab, i18n("Layout"));
+    //widget.tabs->addTab(m_languageTab, i18n("Language"));
+    m_languageTab->setVisible(false);
 
     connect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
     connect(widget.name, SIGNAL(textChanged(const QString &)), this, SLOT(setName(const QString&)));
-    //connect( m_fontChooser, SIGNAL( fontSelected( const QFont & ) ), this, SIGNAL( fontChanged( const QFont & ) ) );
+}
+
+void CharacterGeneral::hideStyleName(bool hide)
+{
+    if (hide) {
+        disconnect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
+        disconnect(widget.name, SIGNAL(textChanged(const QString &)), this, SLOT(setName(const QString&)));
+        widget.tabs->removeTab(0);
+        m_nameHidden = true;
+    }
 }
 
 void CharacterGeneral::setStyle(KoCharacterStyle *style)
@@ -65,26 +82,34 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style)
         return;
     m_blockSignals = true;
 
-    widget.name->setText(style->name());
-    m_fontChooser->setFont(style->font());
-    m_styleOptions->open(style);
-    m_characterDecorations->open(style);
-    m_characterHighlighting->open(style);
+    if (!m_nameHidden)
+        widget.name->setText(style->name());
+    m_fontTab->setDisplay(style);
+    m_layoutTab->setDisplay(style);
+    m_characterDecorations->setDisplay(style);
+    m_characterHighlighting->setDisplay(style);
+    m_languageTab->setDisplay(style);
 
     m_blockSignals = false;
 }
 
-void CharacterGeneral::save()
+void CharacterGeneral::save(KoCharacterStyle *style)
 {
-    if (m_style == 0) return;
-    m_characterDecorations->save();
-    m_characterHighlighting->save();
-    m_styleOptions->save();
-    QFont font = m_fontChooser->font();
-    m_style->setFontFamily(font.family());
-    m_style->setFontPointSize(font.pointSizeF());
-    m_style->setFontWeight(font.weight());
-    m_style->setFontItalic(font.italic());
+    KoCharacterStyle *savingStyle;
+    if (style == 0) {
+        if (m_style == 0)
+            return;
+        else
+            savingStyle = m_style;
+    }
+    else
+        savingStyle = style;
+
+    m_fontTab->save(savingStyle);
+    m_characterDecorations->save(savingStyle);
+    m_characterHighlighting->save(savingStyle);
+    m_layoutTab->save(savingStyle);
+    m_languageTab->save(savingStyle);
 }
 
 void CharacterGeneral::switchToGeneralTab()
@@ -95,6 +120,36 @@ void CharacterGeneral::switchToGeneralTab()
 void CharacterGeneral::setName(const QString &name)
 {
     m_style->setName(name);
+}
+
+void CharacterGeneral::slotCapitalizationChanged(QFont::Capitalization capitalisation)
+{
+    widget.preview->setFontCapitalisation(capitalisation);
+}
+
+void CharacterGeneral::slotFontSelected(const QFont &font)
+{
+    widget.preview->setFont(font);
+}
+
+void CharacterGeneral::slotBackgroundColorChanged(QColor color)
+{
+    widget.preview->setBackgroundColor(color);
+}
+
+void CharacterGeneral::slotTextColorChanged(QColor color)
+{
+    widget.preview->setTextColor(color);
+}
+
+void CharacterGeneral::slotUnderlineChanged(KoCharacterStyle::LineType lineType, KoCharacterStyle::LineStyle lineStyle, QColor lineColor)
+{
+    widget.preview->setUnderline(lineType, lineStyle, lineColor);
+}
+
+void CharacterGeneral::slotStrikethroughChanged(KoCharacterStyle::LineType lineType, KoCharacterStyle::LineStyle lineStyle, QColor lineColor)
+{
+    widget.preview->setStrikethrough(lineType, lineStyle, lineColor);
 }
 
 #include <CharacterGeneral.moc>

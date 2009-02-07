@@ -157,3 +157,4 @@ void SprayBrush::paintParticle(KisRandomAccessor &writeAccessor,const KoColor &c
     writeAccessor.moveTo ( ipx + 1, ipy + 1 );
     memcpy ( writeAccessor.rawData(), pcolor.data(), m_pixelSize );
 }
+

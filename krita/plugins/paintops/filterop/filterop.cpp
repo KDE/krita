@@ -47,3 +47,4 @@ FilterOp::~FilterOp()
 }
 
 #include "filterop.moc"
+

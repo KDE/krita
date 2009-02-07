@@ -21,28 +21,22 @@
 
 #include <KoUnit.h>
 
-#include <KPageDialog>
+#include <KDialog>
 #include <QTextCursor>
 
 class TextTool;
-class ParagraphBulletsNumbers;
-class ParagraphIndentSpacing;
-class ParagraphDecorations;
-class ParagraphLayout;
-
+class ParagraphGeneral;
 class KoParagraphStyle;
 
 /// A dialog to show the settings for a paragraph
-class ParagraphSettingsDialog : public KPageDialog
+class ParagraphSettingsDialog : public KDialog
 {
     Q_OBJECT
 public:
-    explicit ParagraphSettingsDialog(QWidget *parent, TextTool *tool);
+    explicit ParagraphSettingsDialog(TextTool *tool, QTextCursor *cursor, QWidget* parent = 0);
     ~ParagraphSettingsDialog();
 
     void setUnit(const KoUnit &unit);
-    void open(const QTextCursor &cursor);
-    void open(KoParagraphStyle *style);
 
 signals:
     /// emitted when a series of commands is started that together need to become 1 undo action.
@@ -50,25 +44,17 @@ signals:
     /// emitted when a series of commands has ended that together should be 1 undo action.
     void stopMacro();
 
-
-private slots:
-    void visit();
+protected slots:
+    void slotApply();
+    void slotOk();
 
 private:
-    void accept();
-    void reject();
-    void showEvent(QShowEvent *);
+    void initTabs();
 
-    ParagraphIndentSpacing *m_paragraphIndentSpacing;
-    ParagraphLayout *m_paragraphLayout;
-    ParagraphBulletsNumbers *m_paragraphBulletsNumbers;
-    ParagraphDecorations *m_paragraphDecorations;
-
+    ParagraphGeneral *m_paragraphGeneral;
     TextTool *m_tool;
-    QTextCursor m_cursor;
-    KoParagraphStyle *m_style;
-    bool m_ownStyle;
-    bool m_visited;
+    QTextCursor *m_cursor;
+    bool m_uniqueFormat;
 };
 
 #endif

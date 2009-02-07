@@ -420,6 +420,9 @@ void KisToolCurve::commitCurve()
 
 void KisToolCurve::paintCurve()
 {
+    if (!currentNode())
+        return;
+
     KisPaintDeviceSP device = currentNode()->paintDevice();
     if (!device) return;
 

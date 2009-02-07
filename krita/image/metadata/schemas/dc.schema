@@ -1,0 +1,23 @@
+<schema prefix="dc" uri="http://purl.org/dc/elements/1.1/">
+  <structures>
+  </structures>
+  <properties>
+    <bag name="contributor" type="text" />
+    <text name="coverage" />
+    <seq name="creator" type="text" />
+    <seq name="date" type="date" />
+    <lang name="description" />
+    <text name="format" />
+    <text name="identifier" />
+    <bag name="language" type="text" />
+    <bag name="publisher" type="text" />
+    <bag name="relation" type="text" />
+    <lang name="rights" />
+    <text name="source" />
+    <lang name="title" />
+    <bag name="type">
+      <openedchoice type="text" />
+    </bag>
+    
+  </properties>
+</schema>

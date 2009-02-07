@@ -28,6 +28,7 @@ class KisPainter;
 class QWidget;
 class KoInputDevice;
 class KisCurveSettingsWidget;
+class KisCurvePaintOpSettingsWidget;
 
 
 class KisCurvePaintOpFactory : public KisPaintOpFactory

@@ -18,8 +18,8 @@
 #ifndef KIS_TILEDDATAMANAGER_H_
 #define KIS_TILEDDATAMANAGER_H_
 
-#include <qglobal.h>
-#include <q3valuevector.h>
+#include <QtGlobal>
+#include <Q3ValueVector>
 #include <QVector>
 
 #include <kis_shared.h>

@@ -27,8 +27,7 @@
 #include <KDebug>
 
 ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
-        : QWidget(parent),
-        m_paragStyle(0)
+        : QWidget(parent)//,
 {
     widget.setupUi(this);
 
@@ -56,9 +55,8 @@ int ParagraphBulletsNumbers::addStyle(const Lists::ListStyleItem &lsi)
     return widget.listTypes->count() - 1;
 }
 
-void ParagraphBulletsNumbers::open(KoParagraphStyle *style, int level)
+void ParagraphBulletsNumbers::setDisplay(KoParagraphStyle *style, int level)
 {
-    m_paragStyle = style;
     KoListStyle *listStyle = style->listStyle();
     widget.listPropertiesPane->setEnabled(listStyle != 0);
     widget.customCharacter->setText("-");
@@ -102,21 +100,20 @@ void ParagraphBulletsNumbers::open(KoParagraphStyle *style, int level)
     // minimum label width
 }
 
-void ParagraphBulletsNumbers::save()
+void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
 {
-    kDebug() << "ParagraphBulletsNumbers::save";
-    Q_ASSERT(m_paragStyle);
+    Q_ASSERT(savingStyle);
     const int currentRow = widget.listTypes->currentRow();
     KoListStyle::Style style = m_mapping[currentRow];
     if (style == KoListStyle::None) {
-        m_paragStyle->setListStyle(0);
+        savingStyle->setListStyle(0);
         return;
     }
-    if (m_paragStyle->listStyle() == 0) {
-        KoListStyle *listStyle = new KoListStyle(m_paragStyle);
-        m_paragStyle->setListStyle(listStyle);
+    if (savingStyle->listStyle() == 0) {
+        KoListStyle *listStyle = new KoListStyle(savingStyle);
+        savingStyle->setListStyle(listStyle);
     }
-    KoListStyle *listStyle = m_paragStyle->listStyle();
+    KoListStyle *listStyle = savingStyle->listStyle();
     KoListLevelProperties llp = listStyle->levelProperties(widget.depth->value());
     llp.setStyle(style);
     llp.setLevel(widget.depth->value());
@@ -145,7 +142,6 @@ void ParagraphBulletsNumbers::save()
 
 void ParagraphBulletsNumbers::styleChanged(int index)
 {
-//kDebug() <<"ParagraphBulletsNumbers::styleChanged";
     KoListStyle::Style style = m_mapping[index];
     bool showLetterSynchronization = false;
     switch (style) {

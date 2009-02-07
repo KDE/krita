@@ -2,6 +2,7 @@
    Copyright (C)  2001,2002,2003 Montel Laurent <lmontel@mandrakesoft.com>
    Copyright (C)  2006-2007 Thomas Zander <zander@kde.org>
    Copyright (C)  2008 Girish Ramakrishnan <girish@forwardbias.in>
+   Copyright (C)  2008 Pierre Stirnweiss <pstirnweiss@googlemail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,11 +28,9 @@
 
 #include <QTextCursor>
 
-class FontTab;
-class CharacterHighlighting;
-class FontDecorations;
-class FontLayoutTab;
-class LanguageTab;
+class QFont;
+
+class CharacterGeneral;
 
 class FontDia : public KDialog
 {
@@ -39,9 +38,11 @@ class FontDia : public KDialog
 public:
     explicit FontDia(QTextCursor *cursor, QWidget* parent = 0);
 
-    const KoCharacterStyle *style() const {
-        return &m_style;
-    }
+signals:
+    /// emitted when a series of commands is started that together need to become 1 undo action.
+    void startMacro(const QString &name);
+    /// emitted when a series of commands has ended that together should be 1 undo action.
+    void stopMacro();
 
 protected slots:
     void slotReset();
@@ -51,15 +52,12 @@ protected slots:
 private:
     void initTabs();
 
-    FontTab *m_fontTab;
-    CharacterHighlighting *m_highlightingTab;
-    FontDecorations *m_decorationTab;
-    FontLayoutTab *m_layoutTab;
-    LanguageTab *m_languageTab;
+    CharacterGeneral *m_characterGeneral;
 
     QTextCursor* m_cursor;
     QTextCharFormat m_initialFormat;
-    KoCharacterStyle m_style;
+
+    bool m_uniqueFormat;
 };
 
 #endif

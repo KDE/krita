@@ -68,9 +68,11 @@ QString KoTextWriter::saveParagraphStyle(const QTextBlock &block)
     // we'll convert the blockFormat to a KoParagraphStyle to check for local changes.
     KoParagraphStyle paragStyle(blockFormat, charFormat);
     if (paragStyle == (*originalParagraphStyle)) { // This is the real, unmodified character style.
+        // TODO zachmann: this could use the name of the saved style without saving it again
+        // therefore we would need to store that information in the saving context
         if (originalParagraphStyle != defaultParagraphStyle) {
             KoGenStyle style(KoGenStyle::StyleUser, "paragraph");
-            originalParagraphStyle->saveOdf(style);
+            originalParagraphStyle->saveOdf(style, m_context.mainStyles());
             generatedName = m_context.mainStyles().lookup(style, internalName, KoGenStyles::DontForceNumbering);
         }
     } else { // There are manual changes... We'll have to store them then
@@ -79,7 +81,7 @@ QString KoTextWriter::saveParagraphStyle(const QTextBlock &block)
             style.setAutoStyleInStylesDotXml(true);
         if (originalParagraphStyle)
             paragStyle.removeDuplicates(*originalParagraphStyle);
-        paragStyle.saveOdf(style);
+        paragStyle.saveOdf(style, m_context.mainStyles());
         generatedName = m_context.mainStyles().lookup(style, "P");
     }
     return generatedName;

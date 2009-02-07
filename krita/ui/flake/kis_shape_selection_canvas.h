@@ -49,6 +49,7 @@ public:
     KoToolProxy * toolProxy() const;
     const KoViewConverter *viewConverter() const;
     QWidget* canvasWidget();
+    const QWidget* canvasWidget() const;
     KoUnit unit() const;
     virtual void updateInputMethodInfo() {}
 

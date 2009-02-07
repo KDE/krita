@@ -5,23 +5,11 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>439</width>
-    <height>322</height>
+    <width>508</width>
+    <height>253</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" >
-   <property name="leftMargin" >
-    <number>0</number>
-   </property>
-   <property name="topMargin" >
-    <number>0</number>
-   </property>
-   <property name="rightMargin" >
-    <number>0</number>
-   </property>
-   <property name="bottomMargin" >
-    <number>0</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout" >
    <item>
     <widget class="QTabWidget" name="tabs" >
      <property name="sizePolicy" >
@@ -61,19 +49,49 @@
        <item row="1" column="1" >
         <widget class="QLineEdit" name="name" />
        </item>
-       <item row="2" column="0" colspan="2" >
-        <widget class="QGroupBox" name="previewPane" >
-         <property name="title" >
-          <string>Preview</string>
+       <item row="2" column="1" >
+        <spacer name="verticalSpacer" >
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
          </property>
-        </widget>
+         <property name="sizeHint" stdset="0" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
     </widget>
    </item>
+   <item>
+    <widget class="FormattingPreview" name="preview" >
+     <property name="minimumSize" >
+      <size>
+       <width>500</width>
+       <height>100</height>
+      </size>
+     </property>
+     <property name="frameShape" >
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Raised</enum>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>FormattingPreview</class>
+   <extends>QFrame</extends>
+   <header>dialogs/FormattingPreview.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

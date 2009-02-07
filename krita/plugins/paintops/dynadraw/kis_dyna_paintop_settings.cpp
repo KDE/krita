@@ -15,6 +15,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_dyna_paintop_settings.h"
+
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 
@@ -27,7 +30,7 @@
 #include <kis_paint_information.h>
 #include <kis_paint_action_type_option.h>
 
-#include "kis_dyna_paintop_settings.h"
+
 #include "kis_dyna_paintop_settings_widget.h"
 #include "kis_dynaop_option.h"
 
@@ -51,8 +54,6 @@ bool KisDynaPaintOpSettings::paintIncremental()
     return m_options->m_paintActionTypeOption->paintActionType() == BUILDUP;
 }
 
-
-
 void KisDynaPaintOpSettings::fromXML(const QDomElement& elt)
 {
     KisPaintOpSettings::fromXML( elt );
@@ -66,34 +67,69 @@ void KisDynaPaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) cons
     delete settings;
 }
 
-int KisDynaPaintOpSettings::radius() const
+qreal KisDynaPaintOpSettings::initWidth() const
 {
-    return m_options->m_dynaOption->radius();
+    return m_options->m_dynaOption->initWidth();
 }
 
-qreal KisDynaPaintOpSettings::coverage() const
+qreal KisDynaPaintOpSettings::mass() const
 {
-    return m_options->m_dynaOption->coverage();
+    return m_options->m_dynaOption->mass();
 }
 
-qreal KisDynaPaintOpSettings::amount() const
+qreal KisDynaPaintOpSettings::drag() const
 {
-    return m_options->m_dynaOption->amount();
+    return m_options->m_dynaOption->drag();
+}
+
+bool KisDynaPaintOpSettings::useFixedAngle() const
+{
+    return m_options->m_dynaOption->useFixedAngle();
+}
+
+qreal KisDynaPaintOpSettings::xAngle() const
+{
+    return m_options->m_dynaOption->xAngle();
+}
+
+qreal KisDynaPaintOpSettings::yAngle() const
+{
+    return m_options->m_dynaOption->yAngle();
+}
+
+qreal KisDynaPaintOpSettings::widthRange() const
+{
+    return m_options->m_dynaOption->widthRange();
+}
+
+int KisDynaPaintOpSettings::action() const
+{
+    return m_options->m_dynaOption->action();
+}
+
+int KisDynaPaintOpSettings::circleRadius() const
+{
+    return m_options->m_dynaOption->circleRadius();
+}
+
+int KisDynaPaintOpSettings::lineCount() const
+{
+    return m_options->m_dynaOption->lineCount();
+}
+
+qreal KisDynaPaintOpSettings::lineSpacing() const
+{
+    return m_options->m_dynaOption->lineSpacing();
 }
 
 
-bool KisDynaPaintOpSettings::jitterMovement() const
+bool KisDynaPaintOpSettings::enableLine() const
 {
-    return m_options->m_dynaOption->jitterMovement();
+    return m_options->m_dynaOption->enableLine();
 }
 
-bool KisDynaPaintOpSettings::jitterSize() const
+bool KisDynaPaintOpSettings::twoCircles() const
 {
-    return m_options->m_dynaOption->jitterSize();
-}
-
-bool KisDynaPaintOpSettings::useParticles() const
-{
-    return m_options->m_dynaOption->useParticles();
+    return m_options->m_dynaOption->twoCircles();
 }
 

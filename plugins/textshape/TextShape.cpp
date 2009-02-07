@@ -66,6 +66,8 @@ struct Finalizer {
 #include <QTextLayout>
 #include <QFont>
 #include <QPen>
+#include <QThread>
+#include <QApplication>
 #include <QPainter>
 #include <QAbstractTextDocumentLayout>
 #include <kdebug.h>
@@ -224,7 +226,8 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
         }
 
         if (! moreText) { // draw bottom of text.  Makes it easier to see where the text ends
-            QPen pen(Qt::blue); // TODO make configurable?
+            QPalette palette = canvas->canvasWidget()->palette();
+            QPen pen(palette.color(QPalette::Button));
             painter.setPen(pen);
 
             QPointF endPoint = converter.documentToView(QPointF(size().width(),
@@ -234,7 +237,8 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
                 painter.drawLine(QPointF(0, endPoint.y()), endPoint);
         } else if (shapes.count() <= 1 || shapes.last() == this) { // there is invisible text left.
             QPoint bottomRight = converter.documentToView(QPointF(size().width(), size().height())).toPoint();
-            QPen pen(Qt::red); // TODO make configurable?
+            QPalette palette = canvas->canvasWidget()->palette();
+            QPen pen(palette.color(QPalette::Link));
             painter.setPen(pen);
             QPoint topLeft = bottomRight - QPoint(15, 15);
             painter.drawRect(QRect(topLeft, QSize(13, 13)));
@@ -267,26 +271,26 @@ bool TextShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &con
     // load the style of the frame
     const KoXmlElement * style = 0;
     if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {
-        style = context.odfLoadingContext().stylesReader().findStyle( element.attributeNS( KoXmlNS::draw, "style-name" ),
-                                                                      "graphic",
-                                                                      context.odfLoadingContext().useStylesAutoStyles() );
+        style = context.odfLoadingContext().stylesReader().findStyle(
+                    element.attributeNS(KoXmlNS::draw, "style-name"), "graphic",
+                    context.odfLoadingContext().useStylesAutoStyles());
         Q_ASSERT( style );
     }
     else if (element.hasAttributeNS(KoXmlNS::presentation, "style-name")) {
-        style = context.odfLoadingContext().stylesReader().findStyle( element.attributeNS( KoXmlNS::presentation, "style-name" ),
-                                                                      "presentation",
-                                                                      context.odfLoadingContext().useStylesAutoStyles() );
+        style = context.odfLoadingContext().stylesReader().findStyle(
+                    element.attributeNS(KoXmlNS::presentation, "style-name"), "presentation",
+                    context.odfLoadingContext().useStylesAutoStyles());
         Q_ASSERT( style );
     }
 
-    if ( style ) {
+    if (style) {
         KoParagraphStyle paragraphStyle;
-        paragraphStyle.loadOdf( style, context.odfLoadingContext() );
+        paragraphStyle.loadOdf(style, context.odfLoadingContext());
 
         QTextDocument * document = m_textShapeData->document();
-        QTextCursor cursor( document );
+        QTextCursor cursor(document);
         QTextBlock block = cursor.block();
-        paragraphStyle.applyStyle( block, false );
+        paragraphStyle.applyStyle(block, false);
     }
 
     return loadOdfFrame(element, context);
@@ -327,7 +331,11 @@ void TextShape::waitUntilReady() const
     synchronized(m_mutex) {
         if (m_textShapeData->isDirty()) {
             m_textShapeData->fireResizeEvent(); // triggers a relayout
-            m_waiter.wait(&m_mutex);
+            if (QThread::currentThread() != QApplication::instance()->thread()) {
+                // only wait if this is called in the non-main thread.
+                // this avoids locks due to the layout code expecting the GUI thread to be free while layouting.
+                m_waiter.wait(&m_mutex);
+            }
         }
     }
 }

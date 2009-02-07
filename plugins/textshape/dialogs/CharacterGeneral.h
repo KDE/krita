@@ -25,21 +25,23 @@
 #include <QWidget>
 
 class KoCharacterStyle;
-class CharacterStyleOptions;
-class CharacterDecorations;
+class FontDecorations;
 class CharacterHighlighting;
-class KFontChooser;
+class FontTab;
+class FontLayoutTab;
+class LanguageTab;
 
 class CharacterGeneral : public QWidget
 {
     Q_OBJECT
 public:
-    explicit CharacterGeneral(QWidget *parent = 0);
+    explicit CharacterGeneral(QWidget *parent = 0, bool uniqueFormat = true);
 
     void setStyle(KoCharacterStyle *style);
+    void hideStyleName(bool hide);
 
 public slots:
-    void save();
+    void save(KoCharacterStyle *style = 0);
 
     void switchToGeneralTab();
 
@@ -48,15 +50,23 @@ signals:
 
 private slots:
     void setName(const QString &name);
+    void slotFontSelected(const QFont &);
+    void slotBackgroundColorChanged(QColor);
+    void slotTextColorChanged(QColor);
+    void slotUnderlineChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor);
+    void slotStrikethroughChanged(KoCharacterStyle::LineType, KoCharacterStyle::LineStyle, QColor);
+    void slotCapitalizationChanged(QFont::Capitalization capitalisation);
 
 private:
     Ui::CharacterGeneral widget;
     bool m_blockSignals;
+    bool m_nameHidden;
 
-    CharacterStyleOptions *m_styleOptions;
-    CharacterDecorations *m_characterDecorations;
+    FontLayoutTab *m_layoutTab;
+    FontDecorations *m_characterDecorations;
     CharacterHighlighting *m_characterHighlighting;
-    KFontChooser *m_fontChooser;
+    FontTab *m_fontTab;
+    LanguageTab *m_languageTab;
 
     KoCharacterStyle *m_style;
 };

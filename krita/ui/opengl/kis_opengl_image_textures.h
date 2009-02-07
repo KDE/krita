@@ -29,7 +29,8 @@
 
 #include <map>
 
-#include <QtOpenGL>
+#include <QGLWidget>
+#include <QImage>
 #include <QObject>
 #include <QVector>
 

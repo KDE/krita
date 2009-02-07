@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008-2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -93,6 +93,24 @@ void KoPABackgroundToolWidget::setBackgroundImage()
                 QUndoCommand * cmd = new QUndoCommand( i18n( "Change backgound image" ) );
                 KoPatternBackground * bg = new KoPatternBackground( collection );
                 bg->setPattern( image );
+                QSizeF imageSize = bg->patternOriginalSize();
+                QSizeF pageSize = m_tool->view()->activePage()->size();
+                KoPatternBackground::PatternRepeat repeat = KoPatternBackground::Original;
+                if ( imageSize.width() > pageSize.width() || imageSize.height() > pageSize.height() ) {
+                    qreal imageRatio = imageSize.width() / imageSize.height();
+                    qreal pageRatio = pageSize.width() / pageSize.height();
+                    if ( qAbs( imageRatio - pageRatio) < 0.1 ) {
+                        repeat = KoPatternBackground::Stretched;
+                    }
+                    else {
+                        qreal zoom = pageSize.width() / imageSize.width();
+                        zoom = qMin( zoom, pageSize.height() / imageSize.height() );
+
+                        bg->setPatternDisplaySize( imageSize * zoom );
+                    }
+                }
+                bg->setRepeat( repeat );
+
                 new KoShapeBackgroundCommand( page, bg, cmd );
                 m_tool->canvas()->addCommand( cmd );
             }

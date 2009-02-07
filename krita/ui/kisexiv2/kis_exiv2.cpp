@@ -70,39 +70,6 @@ KisMetaData::Value exivValueToKMDValue(const Exiv2::Value::AutoPtr value)
     case Exiv2::date:
     case Exiv2::time:
         return KisMetaData::Value(QDateTime::fromString(value->toString().c_str(), Qt::ISODate));
-    case Exiv2::xmpText:
-        return KisMetaData::Value(value->toString().c_str());
-    case Exiv2::langAlt: {
-
-        return KisMetaData::Value();
-    }
-    case Exiv2::xmpBag:
-    case Exiv2::xmpSeq:
-    case Exiv2::xmpAlt: {
-        const Exiv2::XmpArrayValue* xav = dynamic_cast<const Exiv2::XmpArrayValue*>(value.get());
-        Q_ASSERT(xav);
-        QList<KisMetaData::Value> array;
-        for (std::vector< std::string >::const_iterator it = xav->value_.begin();
-                it != xav->value_.end(); ++it) {
-            array.push_back(KisMetaData::Value(it->c_str()));
-        }
-        KisMetaData::Value::ValueType vt = KisMetaData::Value::Invalid;
-        switch (xav->xmpArrayType()) {
-        case Exiv2::XmpValue::xaNone:
-            Q_ASSERT(false);
-            break;
-        case Exiv2::XmpValue::xaAlt:
-            vt = KisMetaData::Value::AlternativeArray;
-            break;
-        case Exiv2::XmpValue::xaBag:
-            vt = KisMetaData::Value::UnorderedArray;
-            break;
-        case Exiv2::XmpValue::xaSeq:
-            vt = KisMetaData::Value::OrderedArray;
-            break;
-        }
-        return KisMetaData::Value(array, vt);
-    }
     }
     dbgFile << "Unknown type id :" << value->typeId() << " value =" << value->toString().c_str();
     Q_ASSERT(false); // This point must never be reached !
@@ -226,15 +193,15 @@ Exiv2::Value* kmdValueToExivXmpValue( const KisMetaData::Value& value )
         case KisMetaData::Value::SignedRational:
         {
             QString rat = "%1 / %2";
-            rat.arg( value.asSignedRational().numerator );
-            rat.arg( value.asSignedRational().denominator );
+            rat = rat.arg( value.asSignedRational().numerator );
+            rat = rat.arg( value.asSignedRational().denominator );
             return new Exiv2::XmpTextValue( rat.ascii() );
         }
         case KisMetaData::Value::UnsignedRational:
         {
             QString rat = "%1 / %2";
-            rat.arg( value.asUnsignedRational().numerator );
-            rat.arg( value.asUnsignedRational().denominator );
+            rat = rat.arg( value.asUnsignedRational().numerator );
+            rat = rat.arg( value.asUnsignedRational().denominator );
             return new Exiv2::XmpTextValue( rat.ascii() );
         }
         case KisMetaData::Value::AlternativeArray:
@@ -260,7 +227,7 @@ Exiv2::Value* kmdValueToExivXmpValue( const KisMetaData::Value& value )
                 QString exivVal;
                 if( it.key() != "x-default" )
                 {
-                    exivVal = "lang=" + it.key() + " ";
+                    exivVal = "lang=" + it.key() + ' ';
                 }
                 Q_ASSERT( it.value().type() == KisMetaData::Value::Variant );
                 QVariant var = it.value().asVariant();

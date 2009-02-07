@@ -29,7 +29,7 @@
 #include <kis_paintop_registry.h>
 #include <kis_view2.h>
 
-#include "kis_dynamicop.h"
+#include "kis_dynamicop_factory.h"
 #include "kis_dynamic_shape_program.h"
 #include "kis_dynamic_coloring_program.h"
 #include "kis_dynamic_programs_editor.h"

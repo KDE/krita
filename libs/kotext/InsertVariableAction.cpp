@@ -33,6 +33,7 @@ InsertVariableAction::InsertVariableAction(KoCanvasBase *base, KoVariableFactory
         , m_factory(factory)
         , m_templateId(templ.id)
         , m_properties(templ.properties)
+        , m_templateName(templ.name)
 {
 }
 
@@ -45,7 +46,7 @@ KoVariable *InsertVariableAction::createVariable()
             widget->layout()->setMargin(0);
         }
         KPageDialog *dialog = new KPageDialog(m_canvas->canvasWidget());
-        dialog->setCaption(i18n("%1 Options", text()));
+        dialog->setCaption(i18n("%1 Options", m_templateName));
         dialog->addPage(widget, "");
         if (dialog->exec() != KPageDialog::Accepted) {
             delete variable;

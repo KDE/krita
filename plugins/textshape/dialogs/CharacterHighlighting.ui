@@ -34,31 +34,21 @@
     </widget>
    </item>
    <item row="1" column="2" >
-    <widget class="KColorButton" native="1" name="underlineColor" >
+    <widget class="KColorButton" name="underlineColor" >
      <property name="enabled" >
       <bool>false</bool>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" colspan="3" >
-    <widget class="QCheckBox" name="strikethrough" >
-     <property name="text" >
-      <string>Strikethrough</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" colspan="3" >
+   <item row="5" column="0" colspan="3" >
     <spacer>
-     <property name="spacerName" stdset="0" >
-      <string/>
-     </property>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeType" >
       <enum>QSizePolicy::Expanding</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>10</width>
        <height>10</height>
@@ -66,7 +56,7 @@
      </property>
     </spacer>
    </item>
-   <item row="3" column="0" colspan="3" >
+   <item row="4" column="0" colspan="3" >
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
       <string>Capitalization</string>
@@ -114,13 +104,10 @@
       </item>
       <item rowspan="3" row="0" column="2" >
        <spacer name="horizontalSpacer" >
-        <property name="spacerName" stdset="0" >
-         <string>horizontalSpacer</string>
-        </property>
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>40</width>
           <height>20</height>
@@ -145,6 +132,30 @@
      </layout>
     </widget>
    </item>
+   <item row="2" column="0" >
+    <widget class="QLabel" name="textLabel2" >
+     <property name="text" >
+      <string>Strikethrough:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" >
+    <widget class="QComboBox" name="strikethroughStyle" />
+   </item>
+   <item row="3" column="1" >
+    <widget class="QComboBox" name="strikethroughLineStyle" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2" >
+    <widget class="KColorButton" name="strikethroughColor" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
@@ -152,7 +163,7 @@
  <customwidgets>
   <customwidget>
    <class>KColorButton</class>
-   <extends>QWidget</extends>
+   <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
    <container>1</container>
   </customwidget>

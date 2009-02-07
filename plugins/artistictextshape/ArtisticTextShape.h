@@ -138,6 +138,7 @@ private:
     void cacheGlyphOutlines();
     bool pathHasChanged() const;
     void createOutline();
+    QRectF nullBoundBox() const;
 
     QString m_text; ///< the text content
     QFont m_font; ///< the font to use for drawing

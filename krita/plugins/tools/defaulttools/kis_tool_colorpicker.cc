@@ -85,6 +85,9 @@ void KisToolColorPicker::mousePressEvent(KoPointerEvent *event)
         if (!currentImage())
             return;
 
+        if (!currentNode())
+            return;
+
         bool sampleMerged = m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED;
         if (!sampleMerged) {
             if (!currentNode()) {

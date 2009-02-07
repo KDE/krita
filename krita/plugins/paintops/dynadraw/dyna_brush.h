@@ -38,14 +38,6 @@ public:
     DynaBrush(KoColor inkColor);
     void paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color);
 
-    void setRadius(int radius){
-        m_radius = radius;
-    }
-
-    void setAmount(qreal amount){
-        m_amount = amount;
-    }
-
     // dyna function
     qreal flerp(qreal f0, qreal f1, qreal p)
     {
@@ -54,39 +46,118 @@ public:
 
     int applyFilter(qreal mx, qreal my);
 
+    //setters
     void setImage( KisImageSP image ){
         m_image = image;
     }
 
+    void setInitialWidth(qreal width){
+        m_width = width;
+    }
+    
+    void setMass(qreal mass){
+        m_curmass = mass;
+    }
+
+    void setDrag(qreal drag){
+        m_curdrag = drag;
+    }
+
+    void useFixedAngle(bool useFixedAngle){
+        m_mouse.fixedangle = useFixedAngle;
+    }
+
+    void setAngle(qreal xangle, qreal yangle){
+        m_xangle = xangle; 
+        m_yangle = yangle;
+    }
+
+    void setWidthRange(qreal widthRange){
+        m_widthRange = widthRange;
+    }
+
+    void setAction(int action){
+        m_action = action;
+    }
+    
+    void setCircleRadius(int circleRadius){
+        m_circleRadius = circleRadius;
+    }
+
+    void setLineCount(int lineCount){
+        m_lineCount = lineCount;
+    }
+    
+    void setLineSpacing(qreal spacing){
+        m_lineSpacing = spacing;
+    }
+
+    void enableLine(bool enableLine){
+        m_enableLine = enableLine;
+    }
+
+    void enableTwoCircles(bool twoCircles){
+        m_twoCircles = twoCircles;
+    }
 
     void initMouse(const QPointF &point){
-        m_fmouse.setX( point.x() / m_image->width() );
+        m_mousePos.setX( point.x() / m_image->width() );
         //m_fmouse.setY( (m_image->height() - point.y()) / (qreal)m_image->height() );
-        m_fmouse.setY( point.y() / m_image->height() );
+        m_mousePos.setY( point.y() / m_image->height() );
     }
 
     void drawSegment(KisPainter &painter);
 
+
 private:
+    void drawCircle(KisPainter &painter,qreal x, qreal y, int radius, int steps);
+
+    void drawQuad(KisPainter &painter,
+            QPointF &topRight,QPointF &topLeft,
+            QPointF &bottomLeft,QPointF &bottomRight);
+
+    void drawWire(KisPainter &painter,
+        QPointF &topRight, 
+        QPointF &topLeft,
+        QPointF &bottomLeft,
+        QPointF &bottomRight);
+
+
+void drawLines(KisPainter &painter,
+        QPointF &prev,
+        QPointF &now,
+        int count);
+
     KoColor m_inkColor;
     KisImageSP m_image;
 
     int m_counter;
-    int m_radius;
-    qreal m_amount;
     int m_pixelSize;
 
-    qreal m_initwidth;
-    qreal m_width;
-    qreal m_odelx, m_odely;
-    qreal m_curmass, m_curdrag;
+    QVector<QPointF> m_prevPosition;
 
-    DynaFilter m_mouse;
+    qreal m_odelx, m_odely;
 
     // mouse info
-    QPointF m_fmouse;
+    QPointF m_mousePos;
     bool first;
 
+    // settings variables
+    qreal m_width;
+    qreal m_curmass; 
+    qreal m_curdrag;
+    DynaFilter m_mouse;
+    qreal m_xangle;
+    qreal m_yangle;
+    qreal m_widthRange;
+
+    // drawing various primitives
+    int m_action;
+    bool m_enableLine, m_twoCircles;
+    qreal m_circleRadius;
+
+    int m_lineCount;
+    qreal m_lineSpacing;
 
 };
 

@@ -22,22 +22,27 @@
 
 #include <ui_LanguageTab.h>
 
+class KoCharacterStyle;
+
 class LanguageTab : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit LanguageTab(/*KSpell2::Loader::Ptr loader = KSpell2::Loader::Ptr()*/ QWidget* parent = 0, Qt::WFlags fl = 0);
+    explicit LanguageTab(/*KSpell2::Loader::Ptr loader = KSpell2::Loader::Ptr()*/bool uniqueFormat, QWidget* parent = 0, Qt::WFlags fl = 0);
     ~LanguageTab();
 
     QString language() const;
-    void setLanguage(const QString &item);
+    void setDisplay(KoCharacterStyle *style);
+    void save(KoCharacterStyle *style) const;
 
 signals:
     void languageChanged();
 
 private:
     Ui::LanguageTab widget;
+    
+    bool m_uniqueFormat;
 };
 
 #endif

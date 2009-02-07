@@ -30,6 +30,7 @@ class KoUnit;
 class ParagraphBulletsNumbers;
 class ParagraphIndentSpacing;
 class ParagraphLayout;
+class ParagraphDecorations;
 
 class ParagraphGeneral : public QWidget
 {
@@ -37,25 +38,37 @@ class ParagraphGeneral : public QWidget
 public:
     ParagraphGeneral(QWidget *parent = 0);
 
-    void setStyle(KoParagraphStyle *style);
+    void setStyle(KoParagraphStyle *style, int level = 0);
     void setParagraphStyles(const QList<KoParagraphStyle*> styles);
     void setUnit(const KoUnit &unit);
 
     void switchToGeneralTab();
+    void hideStyleName(bool hide);
 
 public slots:
-    void save();
+    void save(KoParagraphStyle *style = 0);
 
 signals:
     void nameChanged(const QString &name);
 
+private slots:
+    void setName(const QString &name);
+    void backgroundColorChanged(QColor);
+    void firstLineMarginChanged(qreal margin);
+    void leftMarginChanged(qreal margin);
+    void lineSpacingChanged(double fixedLineHeight, double lineSpacing, double minimumLineHeight, int percentLineSpacing, bool useFontProperties);
+    void rightMarginChanged(qreal margin);
+    void horizontalAlignmentChanged(Qt::Alignment);
+
 private:
     Ui::ParagraphGeneral widget;
     bool m_blockSignals;
+    bool m_nameHidden;
 
     ParagraphIndentSpacing *m_paragraphIndentSpacing;
     ParagraphLayout *m_paragraphLayout;
     ParagraphBulletsNumbers *m_paragraphBulletsNumbers;
+    ParagraphDecorations *m_paragraphDecorations;
 
     KoParagraphStyle *m_style;
     QList<KoParagraphStyle*> m_paragraphStyles;

@@ -77,6 +77,7 @@
 #include "kis_selection_mask.h"
 #include "flake/kis_shape_layer.h"
 #include "kis_selection_decoration.h"
+#include "canvas/kis_canvas_decoration.h"
 
 #include "kis_clipboard.h"
 #include "kis_view2.h"
@@ -540,16 +541,13 @@ void KisSelectionManager::selectAll()
     KisImageSP img = m_view->image();
     if (!img) return;
 
-    KisLayerSP layer = m_view->activeLayer();
-    if (!layer) return;
-
     QUndoCommand* selectionCmd = new QUndoCommand(i18n("Select All"));
 
     if (!m_view->selection())
         new KisSetGlobalSelectionCommand(img, selectionCmd);
     KisSelectionSP selection = m_view->selection();
 
-    new KisSelectedTransaction(QString(), layer, selectionCmd);
+    new KisSelectionTransaction(QString(), img, selection, selectionCmd);
 
     selection->getOrCreatePixelSelection()->select(img->bounds());
 
@@ -594,8 +592,10 @@ void KisSelectionManager::clear()
 
     if (sel)
         dev->clearSelection(sel);
-    else
+    else {
         dev->clear();
+        dev->setDirty();
+    }
 
     dev->setDirty(img->bounds());
     img->undoAdapter()->addCommand(t);
@@ -769,8 +769,9 @@ void KisSelectionManager::feather()
 
 void KisSelectionManager::toggleDisplaySelection()
 {
-    // XXX_SELECTION: Re-activate later! (BSAR)
-    //m_view->selectionDisplayToggled(displaySelection());
+    KisCanvasDecoration* decoration = m_view->canvasBase()->decoration("selection");
+    if(decoration)
+        decoration->toggleVisibility();
 }
 
 bool KisSelectionManager::displaySelection()

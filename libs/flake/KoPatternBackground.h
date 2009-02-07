@@ -63,16 +63,16 @@ public:
     /// Sets the pattern reference point
     void setReferencePoint(ReferencePoint referencePoint);
 
-    /// Returns reference point offset in percent of the size to fill
+    /// Returns reference point offset in percent of the pattern display size
     QPointF referencePointOffset() const;
 
-    /// Sets the reference point offset in percent of the size to fill
+    /// Sets the reference point offset in percent of the pattern display size
     void setReferencePointOffset(const QPointF &offset);
 
-    /// Returns tile repeat offset in percent of the size to fill
+    /// Returns tile repeat offset in percent of the pattern display size
     QPointF tileRepeatOffset() const;
 
-    /// Sets the tile repeat offset in percent of the size to fill
+    /// Sets the tile repeat offset in percent of the pattern display size
     void setTileRepeatOffset(const QPointF &offset);
 
     /// Returns the pattern display size

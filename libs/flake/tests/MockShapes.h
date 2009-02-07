@@ -80,6 +80,9 @@ public:
     QWidget* canvasWidget() {
         return 0;
     }
+    const QWidget* canvasWidget() const {
+        return 0;
+    }
     KoUnit unit() const {
         return KoUnit(KoUnit::Millimeter);
     }

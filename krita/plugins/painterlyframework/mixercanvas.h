@@ -98,6 +98,9 @@ public:
     QWidget* canvasWidget() {
         return this;
     }
+    const QWidget* canvasWidget() const {
+        return this;
+    }
 
     void updateCanvas(const QRegion& region);
 

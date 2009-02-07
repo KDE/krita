@@ -49,6 +49,7 @@ Comment[nl]=Kleurmodel voor XYZ-afbeeldingen met 16-bit integer per kanaal
 Comment[pt]=Modelo de cor para imagens CMYK com 16 bits por canal
 Comment[pt_BR]=Modelo de cor para imagens XYZ com 16 bits inteiros por canal
 Comment[sv]=Färgmodell för 16-bitars heltal per kanal XYZ-bilder
+Comment[tr]=Yüksek Dinamik Genişliğine sahip RGB resimler için kanal başına 16 bit ve 32 bit olan Renk Modeli
 Comment[uk]=Модель кольорів з 16-бітовим цілим числом на канал для зображень XYZ
 Comment[x-test]=xxColor model for 16-bit integer per channel XYZ imagesxx
 Comment[zh_TW]=每色頻為 16-bit 的 XYZ 圖片色彩模型

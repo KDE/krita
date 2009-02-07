@@ -50,7 +50,7 @@ void  KisSumiPaintOpSettingsWidget::setConfiguration( const KisPropertiesConfigu
     QList<float> c;
     int count = config->getInt( "curve_count" );
     for ( int i = 0; i < count; ++i ) {
-        c << config->getFloat( "ink_curve_" + i );
+        c << config->getFloat( QString("ink_curve_%1").arg( i) );
     }
 
     m_options->radiusSpinBox->setValue( config->getInt( "radius" ) );
@@ -79,6 +79,7 @@ void  KisSumiPaintOpSettingsWidget::setConfiguration( const KisPropertiesConfigu
 KisPropertiesConfiguration*  KisSumiPaintOpSettingsWidget::configuration() const
 {
     KisSumiPaintOpSettings* settings = new KisSumiPaintOpSettings( const_cast<KisSumiPaintOpSettingsWidget*>( this ) );
+//     settings->dump();
     return settings;
 }
 
@@ -88,8 +89,8 @@ void KisSumiPaintOpSettingsWidget::writeConfiguration( KisPropertiesConfiguratio
     QList<float> c = curve();
     config->setProperty( "curve_count", c.count() );
     for ( int i = 0; i < c.count(); ++i ) {
-        config->setProperty( "ink_curve_" + i, c[i] );
-    }
+        config->setProperty( QString("ink_curve_%1").arg( i), c[i] );
+    } 
     config->setProperty( "radius", radius() );
     config->setProperty( "sigma", sigma() );
     config->setProperty( "brush_dimension", brushDimension() );

@@ -37,7 +37,7 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
             if (dim < 1 || dim > MaxDim) {
                 dim = 1;
             }
-        } else if (index.startsWith("sel")) {
+        } else if (index.startsWith(QString("sel"))) {
             int selIndex = index.mid(strlen("sel")).toInt();
             if (selIndex >= 0 && selIndex < dim) {
                 QString selectionMode = splitted.at(1);
@@ -59,7 +59,7 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
             } else {
                 warnImage << "Sel: wrong index: " << selIndex << "(dim = " << dim << ")";
             }
-        } else if (index.startsWith("rank")) {
+        } else if (index.startsWith(QString("rank"))) {
             int rankIndex = index.mid(strlen("rank")).toInt();
             if (rankIndex < 0 || rankIndex > dim) {
                 warnImage << "Rankindex out of range: " << rankIndex;

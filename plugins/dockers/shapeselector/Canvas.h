@@ -86,6 +86,8 @@ public:
     void moveDocumentOffset(const QPointF &offset);
     void resetDocumentOffset();
 
+    const QWidget* canvasWidget() const { return 0; }
+
 signals:
     void resized(const QSize &newSize);
 

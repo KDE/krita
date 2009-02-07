@@ -18,7 +18,7 @@
 #ifndef KIS_SHAPE_SELECTION_H
 #define KIS_SHAPE_SELECTION_H
 
-#include <KoShapeContainer.h>
+#include <KoShapeLayer.h>
 #include <KoShapeFactory.h>
 
 #include <kis_selection_component.h>
@@ -32,7 +32,7 @@ class KisShapeSelectionCanvas;
 /**
  *
  */
-class KRITAUI_EXPORT KisShapeSelection : public QObject, public KoShapeContainer, public KisSelectionComponent
+class KRITAUI_EXPORT KisShapeSelection : public QObject, public KoShapeLayer, public KisSelectionComponent
 {
     Q_OBJECT
 
@@ -46,13 +46,9 @@ public:
 
     KisSelectionComponent* clone();
 
-    ///Not implemented
-    virtual bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&);
+    bool saveSelection( KoStore * store) const;
 
-    ///Not implemented
-    virtual void saveOdf(KoShapeSavingContext&) const;
-
-    virtual bool saveOdf( KoStore * store ) const;
+    bool loadSelection( KoStore * store );
     /**
      * Renders the shapes to a selection. This method should only be called
      * by KisSelection to update it's projection.

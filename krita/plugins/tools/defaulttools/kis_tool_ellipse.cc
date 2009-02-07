@@ -144,6 +144,9 @@ void KisToolEllipse::mouseReleaseEvent(KoPointerEvent *event)
         if (!currentImage())
             return;
 
+        if (!currentNode())
+            return;
+
         if (!currentNode()->paintDevice())
             return;
 

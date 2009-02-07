@@ -22,11 +22,28 @@
 #include <QPainter>
 #include <QTimer>
 
+#include <ktemporaryfile.h>
+
 #include <KoLineBorder.h>
 #include <KoPathShape.h>
 #include <KoCompositeOp.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoShapeManager.h>
+#include <KoDocument.h>
+#include <KoEmbeddedDocumentSaver.h>
+#include <KoGenStyle.h>
+#include <KoOdfLoadingContext.h>
+#include <KoOdfReadStore.h>
+#include <KoOdfStylesReader.h>
+#include <KoOdfWriteStore.h>
+#include <KoXmlNS.h>
+#include <KoShapeRegistry.h>
+#include <KoShapeLoadingContext.h>
+#include <KoXmlWriter.h>
+#include <KoStore.h>
+#include <KoShapeSavingContext.h>
+#include <KoStoreDevice.h>
+
 
 #include "kis_painter.h"
 #include "kis_paint_device.h"
@@ -38,7 +55,7 @@
 #include <kis_debug.h>
 
 KisShapeSelection::KisShapeSelection(KisImageSP image, KisSelectionSP selection)
-        : KoShapeContainer(new KisShapeSelectionModel(image, selection, this))
+        : KoShapeLayer(new KisShapeSelectionModel(image, selection, this))
         , m_image(image)
 {
     Q_ASSERT( m_image );
@@ -56,7 +73,7 @@ KisShapeSelection::~KisShapeSelection()
 }
 
 KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs)
-    : KoShapeContainer( rhs )
+    : KoShapeLayer( rhs )
 {
     m_dirty = rhs.m_dirty;
     m_image = rhs.m_image;
@@ -69,45 +86,203 @@ KisSelectionComponent* KisShapeSelection::clone()
     return new KisShapeSelection( *this );
 }
 
-bool KisShapeSelection::loadOdf(const KoXmlElement&, KoShapeLoadingContext&)
+bool KisShapeSelection::saveSelection(KoStore * store) const
 {
+    store->disallowNameExpansion();
+    KoOdfWriteStore odfStore(store);
+    KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
+    KoEmbeddedDocumentSaver embeddedSaver;
+    KoDocument::SavingContext documentContext(odfStore, embeddedSaver);
 
-#ifdef __GNUC__
-#warning "KisShapeSelection::loadOdf: Implement loading of shape selections"
-#endif
-    return false;
+    if (!store->open("content.xml"))
+        return false;
 
+    KoStoreDevice storeDev(store);
+    KoXmlWriter * docWriter = KoOdfWriteStore::createOasisXmlWriter(&storeDev, "office:document-content");
+
+    // for office:master-styles
+    KTemporaryFile masterStyles;
+    masterStyles.open();
+    KoXmlWriter masterStylesTmpWriter(&masterStyles, 1);
+
+    KoPageLayout page;
+    page.format = KoPageFormat::defaultFormat();
+    QRectF rc = boundingRect();
+    page.width = rc.width();
+    page.height = rc.height();
+    if ( page.width > page.height ) {
+        page.orientation = KoPageFormat::Landscape;
+    }
+    else {
+         page.orientation = KoPageFormat::Portrait;
+    }
+
+    KoGenStyles mainStyles;
+    KoGenStyle pageLayout = page.saveOasis();
+    QString layoutName = mainStyles.lookup(pageLayout, "PL");
+    KoGenStyle masterPage(KoGenStyle::StyleMaster);
+    masterPage.addAttribute("style:page-layout-name", layoutName);
+    mainStyles.lookup(masterPage, "Default", KoGenStyles::DontForceNumbering);
+
+    KTemporaryFile contentTmpFile;
+    contentTmpFile.open();
+    KoXmlWriter contentTmpWriter(&contentTmpFile, 1);
+
+    contentTmpWriter.startElement("office:body");
+    contentTmpWriter.startElement("office:drawing");
+
+    KoShapeSavingContext shapeContext(contentTmpWriter, mainStyles, documentContext.embeddedSaver);
+
+    shapeContext.xmlWriter().startElement("draw:page");
+    shapeContext.xmlWriter().addAttribute("draw:name", "");
+    shapeContext.xmlWriter().addAttribute("draw:id", "page1");
+    shapeContext.xmlWriter().addAttribute("draw:master-page-name", "Default");
+
+    saveOdf(shapeContext);
+
+    shapeContext.xmlWriter().endElement(); // draw:page
+
+    contentTmpWriter.endElement(); // office:drawing
+    contentTmpWriter.endElement(); // office:body
+
+    mainStyles.saveOdfAutomaticStyles(docWriter, false);
+
+    // And now we can copy over the contents from the tempfile to the real one
+    contentTmpFile.seek(0);
+    docWriter->addCompleteElement(&contentTmpFile);
+
+    docWriter->endElement(); // Root element
+    docWriter->endDocument();
+    delete docWriter;
+
+    if (!store->close())
+        return false;
+
+    manifestWriter->addManifestEntry("content.xml", "text/xml");
+
+    if (! mainStyles.saveOdfStylesDotXml(store, manifestWriter)) {
+        return false;
+    }
+
+    manifestWriter->addManifestEntry("settings.xml", "text/xml");
+
+    if (! shapeContext.saveDataCenter( documentContext.odfStore.store(), documentContext.odfStore.manifestWriter() ))
+        return false;
+
+    // Write out manifest file
+    if (!odfStore.closeManifestWriter()) {
+        dbgImage << "closing manifestWriter failed";
+        return false;
+    }
+
+    return true;
 }
 
-void KisShapeSelection::saveOdf(KoShapeSavingContext&) const
+bool KisShapeSelection::loadSelection( KoStore* store )
 {
+    KoOdfReadStore odfStore( store );
+    QString errorMessage;
 
-#ifdef __GNUC__
-#warning "KisShapeSelection::saveOdf: Implement saving of shape selections"
-#endif
+    odfStore.loadAndParse( errorMessage );
 
-}
+    if ( !errorMessage.isEmpty() ) {
+        qDebug() << errorMessage;
+        return false;
+    }
+
+    KoXmlElement contents = odfStore.contentDoc().documentElement();
+
+//    qDebug() <<"Start loading OASIS document..." << contents.text();
+//    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().localName();
+//    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
+//    qDebug() <<"Start loading OASIS contents..." << contents.lastChild().isElement();
+
+    KoXmlElement body( KoXml::namedItemNS( contents, KoXmlNS::office, "body" ) );
+
+    if( body.isNull() )
+    {
+        qDebug() <<"No office:body found!";
+        //setErrorMessage( i18n( "Invalid OASIS document. No office:body tag found." ) );
+        return false;
+    }
+
+    body = KoXml::namedItemNS( body, KoXmlNS::office, "drawing");
+    if(body.isNull())
+    {
+        qDebug() <<"No office:drawing found!";
+        //setErrorMessage( i18n( "Invalid OASIS document. No office:drawing tag found." ) );
+        return false;
+    }
+
+    KoXmlElement page( KoXml::namedItemNS( body, KoXmlNS::draw, "page" ) );
+    if(page.isNull())
+    {
+        qDebug() <<"No office:drawing found!";
+        //setErrorMessage( i18n( "Invalid OASIS document. No draw:page tag found." ) );
+        return false;
+    }
+
+    KoXmlElement * master = 0;
+    if( odfStore.styles().masterPages().contains( "Standard" ) )
+        master = odfStore.styles().masterPages().value( "Standard" );
+    else if( odfStore.styles().masterPages().contains( "Default" ) )
+        master = odfStore.styles().masterPages().value( "Default" );
+    else if( ! odfStore.styles().masterPages().empty() )
+        master = odfStore.styles().masterPages().begin().value();
+
+    if( master )
+    {
+        const KoXmlElement *style = odfStore.styles().findStyle(
+            master->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) );
+        KoPageLayout pageLayout;
+        pageLayout.loadOasis( *style );
+        setSize( QSizeF( pageLayout.width, pageLayout.height ) );
+    }
+    else
+    {
+        kWarning() << "No master page found!";
+        return false;
+    }
+
+    QMap<QString, KoDataCenter*> dataCenterMap;
+    KoOdfLoadingContext context( odfStore.styles(), odfStore.store() );
+    KoShapeLoadingContext shapeContext( context, dataCenterMap );
 
 
-bool KisShapeSelection::saveOdf( KoStore* ) const
-{
-#ifdef __GNUC__
-#warning "KisShapeSelection::saveOdf: Implement saving of shape selections"
-#endif
-    return false;
+    KoXmlElement layerElement;
+    forEachElement( layerElement, context.stylesReader().layerSet() )
+    {
+        KoShapeLayer * l = new KoShapeLayer();
+        if( !loadOdf( layerElement, shapeContext ) ) {
+            kWarning() << "Could not load shape layer!";
+            return false;
+        }
+    }
+
+    KoXmlElement child;
+    forEachElement( child, page )
+    {
+        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, shapeContext );
+        if( shape ) {
+            addChild( shape );
+        }
+    }
+
+    return true;
+
 }
 
 
 void KisShapeSelection::addChild(KoShape *object)
 {
-    KoShapeContainer::addChild(object);
+    KoShapeLayer::addChild(object);
     m_canvas->shapeManager()->add(object);
 }
 
 void KisShapeSelection::removeChild(KoShape *object)
 {
     m_canvas->shapeManager()->remove(object);
-    KoShapeContainer::removeChild(object);
+    KoShapeLayer::removeChild(object);
 }
 
 QPainterPath KisShapeSelection::selectionOutline()

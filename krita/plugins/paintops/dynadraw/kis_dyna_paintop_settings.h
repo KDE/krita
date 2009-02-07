@@ -50,13 +50,22 @@ public:
 
     KisPaintOpSettingsSP clone() const;
 
-    int radius() const;
 
-    qreal coverage() const;
-    qreal amount() const;
-    bool jitterMovement() const;
-    bool jitterSize() const;
-    bool useParticles() const;
+    qreal initWidth() const;
+    qreal mass() const;
+    qreal drag() const;
+    bool useFixedAngle() const;
+    qreal xAngle() const;
+    qreal yAngle() const;
+    qreal widthRange() const;
+
+    int action() const;
+    int circleRadius() const;
+    bool enableLine() const;
+    bool twoCircles() const;
+
+    int lineCount() const;
+    qreal lineSpacing() const;
  
 private:
 

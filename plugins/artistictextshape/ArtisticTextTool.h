@@ -84,28 +84,32 @@ public:
     }
     virtual void undo()
     {
+        QUndoCommand::undo();
+
         if ( m_shape ) {
-	    if ( m_tool->m_currentShape != m_shape ) {
-	        m_tool->enableTextCursor( false );
-		m_tool->m_currentShape = m_shape;
-	        m_tool->enableTextCursor( true );
-	    }
+            if ( m_tool->m_currentShape != m_shape ) {
+                m_tool->enableTextCursor( false );
+                m_tool->m_currentShape = m_shape;
+                m_tool->enableTextCursor( true );
+            }
             m_tool->setTextCursorInternal( m_from );
-	    m_tool->m_currentText.remove( m_from, m_text.length() );
+            m_tool->m_currentText.remove( m_from, m_text.length() );
             m_shape->removeRange( m_from, m_text.length() );
-	}
+        }
     }
     virtual void redo()
     {
+        QUndoCommand::redo();
+
         if ( m_shape ) {
-	    if ( m_tool->m_currentShape != m_shape ) {
-	        m_tool->enableTextCursor( false );
-		m_tool->m_currentShape = m_shape;
-	        m_tool->enableTextCursor( true );
-	    }
+            if ( m_tool->m_currentShape != m_shape ) {
+                m_tool->enableTextCursor( false );
+                m_tool->m_currentShape = m_shape;
+                m_tool->enableTextCursor( true );
+            }
             m_shape->addRange( m_from, m_text );
             m_tool->setTextCursorInternal( m_from + m_text.length() );
-	}
+        }
     }
 private:
     ArtisticTextTool *m_tool;
@@ -125,26 +129,30 @@ public:
     }
     virtual void undo()
     {
+        QUndoCommand::undo();
+
         if ( m_shape ) {
-	    if ( m_tool->m_currentShape != m_shape ) {
-	        m_tool->enableTextCursor( false );
-		m_tool->m_currentShape = m_shape;
-	        m_tool->enableTextCursor( true );
-	    }
-	    m_tool->m_currentShape = m_shape;
-	    m_tool->m_currentText.insert( m_from, m_text );
+            if ( m_tool->m_currentShape != m_shape ) {
+                m_tool->enableTextCursor( false );
+                m_tool->m_currentShape = m_shape;
+                m_tool->enableTextCursor( true );
+            }
+            m_tool->m_currentShape = m_shape;
+            m_tool->m_currentText.insert( m_from, m_text );
             m_shape->addRange( m_from, m_text );
             m_tool->setTextCursorInternal( m_from + m_nr );
-	}
+        }
     }
     virtual void redo()
     {
+        QUndoCommand::redo();
+
         if ( m_shape ) {
-	    if ( m_tool->m_currentShape != m_shape ) {
-	        m_tool->enableTextCursor( false );
-		m_tool->m_currentShape = m_shape;
-	        m_tool->enableTextCursor( true );
-	    }
+            if ( m_tool->m_currentShape != m_shape ) {
+                m_tool->enableTextCursor( false );
+                m_tool->m_currentShape = m_shape;
+                m_tool->enableTextCursor( true );
+            }
             m_tool->setTextCursorInternal( m_from );
             m_text = m_shape->removeRange( m_from, m_nr );
         }
@@ -163,6 +171,9 @@ private:
     void setTextCursorInternal( int textCursor );
     void createTextCursorShape();
     void updateTextCursorArea() const;
+
+    /// returns the transformation matrix for the text cursor
+    QTransform cursorTransform() const;
 
     ArtisticTextShape * m_currentShape;
     KoPathShape * m_path;

@@ -16,7 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
+#ifndef KIS_EXIF_INFO_VISITOR_H
+#define KIS_EXIF_INFO_VISITOR_H
 
 #include <kis_node_visitor.h>
 #include <kis_meta_data_store.h>
@@ -70,3 +71,5 @@ private:
     KisMetaData::Store* m_exifInfo;
     uint m_countPaintLayer;
 };
+
+#endif

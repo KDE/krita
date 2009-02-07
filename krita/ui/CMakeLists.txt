@@ -181,7 +181,6 @@ kde4_add_ui_files(kritaui_LIB_SRCS
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 
 target_link_libraries(kritaui ${KDE4_KDE3SUPPORT_LIBS} ${BLITZ_LIBRARIES} ${KDE4_KPARTS_LIBS} kritaimage kotext ${PNG_LIBRARIES})
-target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage ${GL_INTERFACE_LIBRARIES})
 
 if(HAVE_OPENGL)
     target_link_libraries(kritaui ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENEXR_LIBRARIES})
@@ -190,6 +189,8 @@ if(HAVE_OPENGL)
         target_link_libraries(kritaui ${GLEW_LIBRARIES})
     endif(HAVE_GLEW)
 endif(HAVE_OPENGL)
+
+target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage ${GL_INTERFACE_LIBRARIES})
 
 set_target_properties(kritaui
     PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}

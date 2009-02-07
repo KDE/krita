@@ -213,6 +213,11 @@ QWidget* KisCanvas2::canvasWidget()
     return m_d->canvasWidget->widget();
 }
 
+const QWidget* KisCanvas2::canvasWidget() const
+{
+    return m_d->canvasWidget->widget();
+}
+
 
 KoUnit KisCanvas2::unit() const
 {

@@ -26,7 +26,8 @@
 #include "KoTextDocumentLayout.h"
 #include "KoStyleManager.h"
 #include "KoListLevelProperties.h"
-#include "KoGenStyle.h"
+#include <KoGenStyle.h>
+#include <KoGenStyles.h>
 #include "Styles_p.h"
 #include "KoTextDocument.h"
 
@@ -102,7 +103,6 @@ KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block, QObject *
         listStyle->setLevelProperties(llp);
         answer->setListStyle(listStyle);
     }
-
     return answer;
 }
 
@@ -1439,13 +1439,18 @@ void KoParagraphStyle::removeDuplicates(const KoParagraphStyle &other)
         d->charStyle->removeDuplicates(*other.d->charStyle);
 }
 
-void KoParagraphStyle::saveOdf(KoGenStyle & style)
+void KoParagraphStyle::saveOdf(KoGenStyle & style, KoGenStyles &mainStyles)
 {
     if (d->charStyle) {
         d->charStyle->saveOdf(style);
     }
     if (d->listStyle) {
-        d->listStyle->saveOdf(style);
+        KoGenStyle liststyle(KoGenStyle::StyleList);
+        d->listStyle->saveOdf(liststyle);
+        QString name(QString(QUrl::toPercentEncoding(d->listStyle->name(), "", " ")).replace('%', '_'));
+        if (name.isEmpty())
+            name = "L";
+        style.addAttribute("style:list-style-name", mainStyles.lookup(liststyle, name, KoGenStyles::DontForceNumbering));
     }
     // only custom style have a displayname. automatic styles don't have a name set.
     if (!d->name.isEmpty() && !style.isDefaultStyle()) {

@@ -35,6 +35,7 @@
 #include <kis_meta_data_entry.h>
 #include <kis_meta_data_value.h>
 #include <kis_meta_data_schema.h>
+#include <kis_meta_data_schema_registry.h>
 
 struct KisExifIO::Private {
 };
@@ -106,6 +107,7 @@ inline T fixEndianess( T v, Exiv2::ByteOrder order )
             return qFromBigEndian<T>( v );
     }
     qFatal("Unknown byte order");
+    return v;
 }
 
 Exiv2::ByteOrder invertByteOrder( Exiv2::ByteOrder order )
@@ -119,6 +121,7 @@ Exiv2::ByteOrder invertByteOrder( Exiv2::ByteOrder order )
         case Exiv2::bigEndian:
             return Exiv2::littleEndian;
     }
+    return Exiv2::invalidByteOrder;
 }
 
 
@@ -164,7 +167,7 @@ KisMetaData::Value exifOECFToKMDOECFStructure(const Exiv2::Value::AutoPtr value,
     }
     oecfStructure["Values"] = KisMetaData::Value(values, KisMetaData::Value::OrderedArray);
     dbgFile << "OECF: " << ppVar(columns) << ppVar(rows) << ppVar(dvalue->count());
-    return KisMetaData::Value( KisMetaData::SchemaRegistry::instance()->schemaFromUri( KisMetaData::Schema::EXIFSchemaUri), oecfStructure);
+    return KisMetaData::Value( oecfStructure);
 }
 
 Exiv2::Value* kmdOECFStructureToExifOECF(const KisMetaData::Value& value)
@@ -226,7 +229,7 @@ KisMetaData::Value deviceSettingDescriptionExifToKMD(const Exiv2::Value::AutoPtr
         settings.append(KisMetaData::Value(setting));
     }
     deviceSettingStructure["Settings"] = KisMetaData::Value(settings, KisMetaData::Value::OrderedArray);
-    return KisMetaData::Value(KisMetaData::SchemaRegistry::instance()->schemaFromUri( KisMetaData::Schema::EXIFSchemaUri), deviceSettingStructure);
+    return KisMetaData::Value( deviceSettingStructure);
 }
 
 Exiv2::Value* deviceSettingDescriptionKMDToExif(const KisMetaData::Value& value)
@@ -275,7 +278,7 @@ KisMetaData::Value cfaPatternExifToKMD(const Exiv2::Value::AutoPtr value, Exiv2:
     }
     cfaPatternStructure["Values"] = KisMetaData::Value(values, KisMetaData::Value::OrderedArray);
     dbgFile << "CFAPattern " << ppVar(columns) << " " << ppVar(rows) << ppVar(values.size() << ppVar(dvalue->count()));
-    return KisMetaData::Value(KisMetaData::SchemaRegistry::instance()->schemaFromUri( KisMetaData::Schema::EXIFSchemaUri), cfaPatternStructure);
+    return KisMetaData::Value( cfaPatternStructure);
 }
 
 Exiv2::Value* cfaPatternKMDToExif(const KisMetaData::Value& value)
@@ -313,7 +316,7 @@ KisMetaData::Value flashExifToKMD(const Exiv2::Value::AutoPtr value)
     flashStructure["Function"] = QVariant(function);
     bool redEye = ((v >> 6) & 0x01);  // bit 7 if function
     flashStructure["RedEyeMode"] = QVariant(redEye);
-    return KisMetaData::Value(KisMetaData::SchemaRegistry::instance()->schemaFromUri( KisMetaData::Schema::EXIFSchemaUri), flashStructure);
+    return KisMetaData::Value( flashStructure);
 }
 
 Exiv2::Value* flashKMDToExif(const KisMetaData::Value& value)
@@ -452,17 +455,20 @@ bool KisExifIO::canSaveAllEntries(KisMetaData::Store* /*store*/) const
     return false; // It's a known fact that exif can't save all information, but TODO: write the check
 }
 
+
 bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
 {
     ioDevice->open(QIODevice::ReadOnly);
     QByteArray arr = ioDevice->readAll();
     Exiv2::ExifData exifData;
+    Exiv2::ByteOrder byteOrder;
 #if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 17
     exifData.load((const Exiv2::byte*)arr.data(), arr.size());
+    byteOrder = exifData.byteOrder();
 #else
-    Exiv2::ExifParser::decode( exifData, (const Exiv2::byte*)arr.data(), arr.size());
+    byteOrder = Exiv2::ExifParser::decode( exifData, (const Exiv2::byte*)arr.data(), arr.size());
 #endif
-    dbgFile << "Byte order = " << exifData.byteOrder() << ppVar(Exiv2::bigEndian) << ppVar(Exiv2::littleEndian);
+    dbgFile << "Byte order = " << byteOrder << ppVar(Exiv2::bigEndian) << ppVar(Exiv2::littleEndian);
     dbgFile << "There are" << exifData.count() << " entries in the exif section";
     const KisMetaData::Schema* tiffSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::TIFFSchemaUri);
     const KisMetaData::Schema* exifSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::EXIFSchemaUri);
@@ -495,7 +501,13 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
             store->addEntry(KisMetaData::Entry(dcSchema, "rights", exivValueToKMDValue(it->getValue())));
         } else if (it->groupName() == "Image") {
             // Tiff tags
-            store->addEntry(KisMetaData::Entry(tiffSchema, it->tagName().c_str(), exivValueToKMDValue(it->getValue()))) ;
+            QString fixedTN = it->tagName().c_str();
+            if( KisMetaData::Entry::isValidName(fixedTN) )
+            {
+                store->addEntry(KisMetaData::Entry(tiffSchema, fixedTN, exivValueToKMDValue(it->getValue()))) ;
+            } else {
+                dbgFile << "Invalid tag name: " << fixedTN;
+            }
         } else if (it->groupName() == "Photo" || (it->groupName() == "GPS")) {
             // Exif tags (and GPS tags)
             KisMetaData::Value v;
@@ -508,13 +520,13 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
             } else if (it->key() == "Exif.Photo.ComponentsConfiguration") {
                 v = exifArrayToKMDIntOrderedArray(it->getValue());
             } else if (it->key() == "Exif.Photo.OECF") {
-                v = exifOECFToKMDOECFStructure(it->getValue(), exifData.byteOrder());
+                v = exifOECFToKMDOECFStructure(it->getValue(), byteOrder);
             } else if (it->key() == "Exif.Photo.DateTimeDigitized" || it->key() == "Exif.Photo.DateTimeOriginal") {
                 v = KisMetaData::Value(exivValueToDateTime(it->getValue()));
             } else if (it->key() == "Exif.Photo.DeviceSettingDescription") {
                 v = deviceSettingDescriptionExifToKMD(it->getValue());
             } else if (it->key() == "Exif.Photo.CFAPattern") {
-                v = cfaPatternExifToKMD(it->getValue(), exifData.byteOrder());
+                v = cfaPatternExifToKMD(it->getValue(), byteOrder);
             } else if (it->key() == "Exif.Photo.Flash") {
                 v = flashExifToKMD(it->getValue());
             } else if (it->key() == "Exif.Photo.UserComment") {

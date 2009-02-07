@@ -33,6 +33,12 @@ KoShapeLayer::KoShapeLayer()
     setSelectable(false);
 }
 
+KoShapeLayer::KoShapeLayer(KoShapeContainerModel *model)
+        : KoShapeContainer(model)
+{
+    setSelectable(false);
+}
+
 bool KoShapeLayer::hitTest(const QPointF &position) const
 {
     Q_UNUSED(position);

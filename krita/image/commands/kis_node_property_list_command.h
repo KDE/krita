@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_IMAGE_NODE_RAISE_COMMAND_H_
-#define KIS_IMAGE_NODE_RAISE_COMMAND_H_
+#ifndef KIS_IMAGE_NODE_PROPERTY_LIST_COMMAND_H_
+#define KIS_IMAGE_NODE_PROPERTY_LIST_COMMAND_H_
 
 #include <krita_export.h>
 
@@ -25,7 +25,6 @@
 #include "kis_image_command.h"
 #include "KoDocumentSectionModel.h"
 
-#include <krita_export.h>
 
 /// The command for changing the property list of a layer
 class KRITAIMAGE_EXPORT KisNodePropertyListCommand : public QUndoCommand

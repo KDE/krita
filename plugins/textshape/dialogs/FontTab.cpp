@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C)  2001, 2002 Montel Laurent <lmontel@mandrakesoft.com>
    Copyright (C)  2006 Thomas Zander <zander@kde.org>
+   Copyright (C)  2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,17 +22,23 @@
 #include "FontTab.h"
 
 #include <kfontdialog.h>
+
+#include <KoCharacterStyle.h>
+
+#include <QFontDatabase>
+#include <QStringList>
 #include <QVBoxLayout>
 
-FontTab::FontTab(QWidget* parent)
-        : QWidget(parent)
+FontTab::FontTab(bool uniqueFormat, QWidget* parent)
+        : QWidget(parent),
+        m_uniqueFormat(uniqueFormat)
 {
     QLayout *layout = new QVBoxLayout(this);
     setLayout(layout);
 
     QStringList list;
     KFontChooser::getFontList(list, KFontChooser::SmoothScalableFonts);
-    m_fontChooser = new KFontChooser(this, false, list, false);
+    m_fontChooser = new KFontChooser(this, (m_uniqueFormat) ? KFontChooser::DisplayFrame : KFontChooser::ShowDifferences, list, false);
     m_fontChooser->setSampleBoxVisible(false);
 
     layout->addWidget(m_fontChooser);
@@ -39,25 +46,31 @@ FontTab::FontTab(QWidget* parent)
     connect(m_fontChooser, SIGNAL(fontSelected(const QFont &)), this, SIGNAL(fontChanged(const QFont &)));
 }
 
-QFont FontTab::font()
+void FontTab::setDisplay(const KoCharacterStyle* displayStyle)
 {
-    return m_fontChooser->font();
-}
+//First deal with fonts which don't have the italic property but oblique instead.
+    QFont font = displayStyle->font();
+    QFontDatabase dbase;
+    QStringList availableStyles = dbase.styles(font.family());
+    if (font.italic() && !(availableStyles.contains(QString("Italic"))) && availableStyles.contains(QString("Oblique")))
+	font.setStyle(QFont::StyleOblique);
 
-void FontTab::setFont(const QFont &font)
-{
     m_fontChooser->setFont(font);
 }
 
-/*
-void FontTab::slotFontChanged( const QFont &font )
+void FontTab::save(KoCharacterStyle* style) const
 {
-    if ( comparisonFont.family() != font.family() ) emit familyChanged();
-    if ( comparisonFont.bold() != font.bold() ) emit boldChanged();
-    if ( comparisonFont.italic() != font.italic() ) emit italicChanged();
-    if ( comparisonFont.pointSize() != font.pointSize() ) emit sizeChanged();
-    comparisonFont = font;
+    KFontChooser::FontDiffFlags fontDiff = m_fontChooser->fontDiffFlags();
+    if (m_uniqueFormat || (fontDiff & KFontChooser::FontDiffFamily)){
+        style->setFontFamily(m_fontChooser->font().family());
+    }
+    if (m_uniqueFormat || (fontDiff & KFontChooser::FontDiffSize)){
+        style->setFontPointSize(m_fontChooser->font().pointSize());
+    }
+    if (m_uniqueFormat || (fontDiff & KFontChooser::FontDiffStyle)) {
+        style->setFontWeight(m_fontChooser->font().weight());
+        style->setFontItalic(m_fontChooser->font().italic()); //TODO should set style instead of italic
+    }
 }
-*/
 
 #include "FontTab.moc"

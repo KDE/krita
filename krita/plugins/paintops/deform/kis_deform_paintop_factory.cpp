@@ -15,6 +15,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#include "kis_deform_paintop_factory.h"
+
 #include <kis_painter.h>
 #include <kis_paintop_settings.h>
 #include <kis_image.h>
@@ -22,12 +25,12 @@
 #include "kis_deform_paintop_settings_widget.h"
 #include "kis_deform_paintop_settings.h"
 #include "kis_deform_paintop.h"
-#include "kis_deform_paintop_factory.h"
+
 
 KisDeformPaintOpFactory::KisDeformPaintOpFactory()
     :  m_widget( new KisDeformPaintOpSettingsWidget )
 {
-    // 
+    //
 }
 
 KisPaintOp * KisDeformPaintOpFactory::createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image = 0)

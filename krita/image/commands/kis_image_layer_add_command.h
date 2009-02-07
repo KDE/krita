@@ -28,7 +28,6 @@
 #include "kis_types.h"
 #include "kis_image_command.h"
 
-#include <krita_export.h>
 
 class KoCompositeOp;
 class KoColorSpace;

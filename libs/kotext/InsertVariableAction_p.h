@@ -39,6 +39,7 @@ private:
     KoVariableFactory *const m_factory;
     const QString m_templateId;
     const KoProperties *const m_properties;
+    QString m_templateName;
 };
 
 #endif

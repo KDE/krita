@@ -411,6 +411,20 @@ KOSTORE_EXPORT bool setDocument(KoXmlDocument& doc, QIODevice* device,
                                 int* errorLine = 0, int* errorColumn = 0);
 }
 
+/**
+ * \def forEachElement( elem, parent )
+ * \brief Loop through all child elements of \parent.
+ * This convenience macro is used to implement the forEachElement loop.
+ * The \elem parameter is a name of a QDomElement variable and the \parent
+ * is the name of the parent element. For example:
+ *
+ * QDomElement e;
+ * forEachElement( e, parent )
+ * {
+ *     kDebug() << e.localName() << " element found.";
+ *     ...
+ * }
+ */
 #define forEachElement( elem, parent ) \
     for ( KoXmlNode _node = parent.firstChild(); !_node.isNull(); _node = _node.nextSibling() ) \
         if ( ( elem = _node.toElement() ).isNull() ) {} else

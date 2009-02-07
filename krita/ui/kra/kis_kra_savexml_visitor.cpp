@@ -208,9 +208,9 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     QBitArray channelFlags = layer->channelFlags();
     for ( int i = 0; i < channelFlags.count(); ++i ) {
         if ( channelFlags[i] )
-            channelFlagsString += "1";
+            channelFlagsString += '1';
         else
-            channelFlagsString += "0";
+            channelFlagsString += '0';
     }
 
     el.setAttribute( CHANNEL_FLAGS, channelFlagsString );

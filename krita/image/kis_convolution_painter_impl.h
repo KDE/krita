@@ -15,6 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KIS_CONVOLUTION_PAINTER_IMPL_H
+#define KIS_CONVOLUTION_PAINTER_IMPL_H
 
 #include "kis_convolution_painter.h"
 
@@ -186,3 +188,5 @@ void KisConvolutionPainter::applyMatrixImpl(const KisConvolutionKernelSP kernel,
         delete[] pixelPtrCache[i];
     delete[] pixelPtrCache;
 }
+
+#endif

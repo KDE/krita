@@ -445,7 +445,7 @@ signals:
      */
     void sigLayersChanged(KisGroupLayerSP rootLayer);
     /**
-     * Emitted when the list of layers has changed completely, and emited after \ref sigLayersChanged has been
+     * Emitted when the list of layers has changed completely, and emitted after \ref sigLayersChanged has been
      * emitted.
      */
     void sigPostLayersChanged(KisGroupLayerSP rootLayer);
@@ -470,6 +470,7 @@ signals:
     void sigSizeChanged(qint32 w, qint32 h);
     void sigProfileChanged(KoColorProfile *  profile);
     void sigColorSpaceChanged(const KoColorSpace*  cs);
+    void sigResolutionChanged(double xRes, double yRes);
 
     /**
      * Inform the model that we're going to add a layer.

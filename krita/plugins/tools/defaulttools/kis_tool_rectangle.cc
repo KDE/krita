@@ -139,6 +139,9 @@ void KisToolRectangle::mouseReleaseEvent(KoPointerEvent *event)
     if (!currentImage())
         return;
 
+    if (!currentNode())
+        return;
+
     KisPaintDeviceSP device = currentNode()->paintDevice();
     if (!device) return;
 

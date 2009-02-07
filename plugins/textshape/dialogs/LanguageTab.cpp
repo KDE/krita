@@ -20,6 +20,8 @@
 #include "LanguageTab.h"
 #include "KoGlobal.h"
 
+#include <KoCharacterStyle.h>
+
 #include <kcombobox.h>
 #include <kiconloader.h>
 
@@ -28,8 +30,9 @@
 
 #include "LanguageTab.moc"
 
-LanguageTab::LanguageTab(/*KSpell2::Loader::Ptr loader,*/ QWidget* parent, Qt::WFlags fl)
-        : QWidget(parent)
+LanguageTab::LanguageTab(/*KSpell2::Loader::Ptr loader,*/bool uniqueFormat, QWidget* parent, Qt::WFlags fl)
+        : QWidget(parent),
+        m_uniqueFormat(uniqueFormat)
 {
     widget.setupUi(this);
 
@@ -41,6 +44,8 @@ LanguageTab::LanguageTab(/*KSpell2::Loader::Ptr loader,*/ QWidget* parent, Qt::W
     const QStringList langNames = KoGlobal::listOfLanguages();
     const QStringList langTags = KoGlobal::listOfLanguageTags();
     QSet<QString> spellCheckLanguages;
+    
+    widget.languageList->addItem(QString("None"));
 #if 0 //Port it
     if (loader)
         spellCheckLanguages = QSet<QString>::fromList(loader->languages());
@@ -65,22 +70,24 @@ LanguageTab::~LanguageTab()
 {
 }
 
-QString LanguageTab::language() const
+void LanguageTab::save(KoCharacterStyle* style) const
 {
-    if (!widget.languageList->currentItem())
-        return QString();
-
-    return KoGlobal::tagOfLanguage(widget.languageList->currentItem()->text());
+    if (!widget.languageList->currentItem() || widget.languageList->currentItem()->text() == "None") //TODO i18n
+        style->setLanguage(QString());
+    else
+        style->setLanguage(KoGlobal::tagOfLanguage(widget.languageList->currentItem()->text()));
 }
 
-void LanguageTab::setLanguage(const QString &item)
+void LanguageTab::setDisplay(KoCharacterStyle *style)
 {
-    const QString& name = KoGlobal::languageFromTag(item);
+    if (m_uniqueFormat) {
+        const QString& name = KoGlobal::languageFromTag(style->language());
 
-    QList<QListWidgetItem*> items = widget.languageList->findItems(name,
+        QList<QListWidgetItem*> items = widget.languageList->findItems(name,
                                     Qt::MatchFixedString);
-    if (!items.isEmpty()) {
-        widget.languageList->setCurrentItem(items.first());
-        widget.languageList->scrollToItem(items.first());
+        if (!items.isEmpty()) {
+            widget.languageList->setCurrentItem(items.first());
+            widget.languageList->scrollToItem(items.first());
+        }
     }
 }

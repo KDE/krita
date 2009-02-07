@@ -33,13 +33,24 @@ class ParagraphIndentSpacing : public QWidget
     Q_OBJECT
 public:
     ParagraphIndentSpacing(QWidget *parent);
-    void open(KoParagraphStyle *style);
+    void setDisplay(KoParagraphStyle *style);
     void setUnit(const KoUnit &unit);
 
-    void save();
+    void save(KoParagraphStyle *style);
+
+signals:
+    void firstLineMarginChanged(qreal margin);
+    void leftMarginChanged(qreal margin);
+    void lineSpacingChanged(double fixedLineHeight, double lineSpacing, double minimumLineHeight, int percentLineSpacing, bool useFontProperties);
+    void rightMarginChanged(qreal margin);
 
 private slots:
+    void slotFirstLineMarginChanged(double margin);
+    void slotLeftMarginChanged(double margin);
+    void slotRightMarginChanged(double margin);
     void lineSpacingChanged(int);
+    void spacingValueChanged(double value);
+    void spacingPercentChanged(int percent);
     void useFontMetrices(bool);
     void autoTextIndentChanged(int state);
 

@@ -65,15 +65,9 @@ ArtisticTextTool::~ArtisticTextTool()
 {
 }
 
-void ArtisticTextTool::paint( QPainter &painter, const KoViewConverter &converter)
+QTransform ArtisticTextTool::cursorTransform() const
 {
-    if ( ! m_currentShape || !m_showCursor )
-        return;
-
-    painter.save();
-    m_currentShape->applyConversion( painter, converter );
-    painter.setBrush( Qt::black );
-    QTransform transform( m_currentShape->transformation() );
+    QTransform transform( m_currentShape->absoluteTransformation(0) );
     QPointF pos;
     m_currentShape->getCharPositionAt( m_textCursor, pos );
     transform.translate( pos.x() - 1, pos.y() );
@@ -85,7 +79,19 @@ void ArtisticTextTool::paint( QPainter &painter, const KoViewConverter &converte
         QFontMetrics metrics(f);
         transform.translate( 0, metrics.descent() );
     }
-    painter.setWorldTransform( transform, true );
+
+    return transform;
+}
+
+void ArtisticTextTool::paint( QPainter &painter, const KoViewConverter &converter)
+{
+    if ( ! m_currentShape || !m_showCursor )
+        return;
+
+    painter.save();
+    m_currentShape->applyConversion( painter, converter );
+    painter.setBrush( Qt::black );
+    painter.setWorldTransform( cursorTransform(), true );
     painter.setClipping( false );
     painter.drawPath( m_textCursorShape );
     painter.restore();
@@ -112,22 +118,22 @@ void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
         }
     }
     if ( hit ) {
-         QPointF pos = event->point;
-         pos -= m_currentShape->absolutePosition( KoFlake::TopLeftCorner );
-         const int len = m_currentShape->text().length();
-         int hit = len;
-         qreal mindist = DBL_MAX;
-         for ( int i = 0; i < len;++i ) {
-             QPointF center;
-             m_currentShape->getCharPositionAt( i, center );
-             center = pos - center;
-             if ( (fabs(center.x()) + fabs(center.y())) < mindist ) {
-                 hit = i;
-                 mindist = fabs(center.x()) + fabs(center.y());
-             }
-         }
-         setTextCursorInternal( hit );
-	 m_currentText = m_currentShape->text();
+        QPointF pos = event->point;
+        pos -= m_currentShape->absolutePosition( KoFlake::TopLeftCorner );
+        const int len = m_currentShape->text().length();
+        int hit = len;
+        qreal mindist = DBL_MAX;
+        for ( int i = 0; i < len;++i ) {
+            QPointF center;
+            m_currentShape->getCharPositionAt( i, center );
+            center = pos - center;
+            if ( (fabs(center.x()) + fabs(center.y())) < mindist ) {
+                hit = i;
+                mindist = fabs(center.x()) + fabs(center.y());
+            }
+        }
+        setTextCursorInternal( hit );
+        m_currentText = m_currentShape->text();
     }
     event->ignore();
 }
@@ -224,6 +230,9 @@ void ArtisticTextTool::blinkCursor()
 void ArtisticTextTool::deactivate()
 {
     if ( m_currentShape ) {
+        if( m_currentShape->text().isEmpty() ) {
+            m_canvas->addCommand( m_canvas->shapeController()->removeShape( m_currentShape ) );
+        }
         enableTextCursor( false );
         m_currentShape = 0;
     }
@@ -338,20 +347,7 @@ void ArtisticTextTool::updateTextCursorArea() const
     if( ! m_currentShape || m_textCursor < 0 )
         return;
 
-    QRectF bbox = m_textCursorShape.boundingRect();
-    QTransform transform( m_currentShape->transformation() );
-    QPointF pos;
-    m_currentShape->getCharPositionAt( m_textCursor, pos );
-    transform.translate( pos.x() - 1, pos.y() );
-    qreal angle;
-    m_currentShape->getCharAngleAt( m_textCursor, angle );
-    transform.rotate( 360. - angle );
-    if ( m_currentShape->isOnPath() ) {
-        QFont f = m_currentShape->font();
-        QFontMetrics metrics(f);
-        transform.translate( 0, metrics.descent() );
-    }
-    bbox = transform.mapRect( bbox );
+    QRectF bbox = cursorTransform().mapRect( m_textCursorShape.boundingRect() );
     m_canvas->updateCanvas( bbox );
 }
 

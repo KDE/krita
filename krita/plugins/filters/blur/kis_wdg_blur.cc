@@ -55,7 +55,7 @@ KisPropertiesConfiguration* KisWdgBlur::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("blur", 1);
     config->setProperty("halfWidth", widget()->intHalfWidth->value());
-    config->setProperty("halfHeight", widget()->intHalfWidth->value());
+    config->setProperty("halfHeight", widget()->intHalfHeight->value());
     config->setProperty("rotate", widget()->intAngle->value());
     config->setProperty("strength", widget()->intStrength->value());
     config->setProperty("shape", widget()->cbShape->currentIndex());

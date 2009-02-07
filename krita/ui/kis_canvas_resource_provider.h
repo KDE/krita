@@ -103,7 +103,7 @@ public slots:
      * Set the image size in pixels. The resource provider will store
      * the image size in postscript points.
      */
-    void slotSetImageSize(qint32 w, qint32 h);
+    void slotImageSizeChanged();
     void slotSetDisplayProfile(const KoColorProfile * profile);
 
 private slots:

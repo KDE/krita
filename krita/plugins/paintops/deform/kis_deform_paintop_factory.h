@@ -28,6 +28,7 @@ class KisPainter;
 class QWidget;
 class KoInputDevice;
 class KisDeformSettingsWidget;
+class KisDeformPaintOpSettingsWidget;
 
 
 class KisDeformPaintOpFactory : public KisPaintOpFactory

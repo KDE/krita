@@ -41,8 +41,6 @@
 
 #include <kis_debug.h>
 
-#include "kis_debug.h"
-
 QGLWidget *KisOpenGL::SharedContextWidget = 0;
 
 void KisOpenGL::createContext()

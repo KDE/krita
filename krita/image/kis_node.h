@@ -55,7 +55,6 @@ public:
      */
     KisNode(const KisNode & rhs);
 
-public:
     /**
      * Delete this node
      */
@@ -73,8 +72,6 @@ public:
      * this node
      */
     virtual bool allowAsChild(KisNodeSP) const = 0;
-
-public:
 
     /**
      * @return the update strategy

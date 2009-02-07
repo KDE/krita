@@ -45,8 +45,8 @@ set(TestChangeListCommand_test_SRCS
     ../dialogs/ParagraphGeneral.cpp
     ../dialogs/CharacterGeneral.cpp
     ../dialogs/NewStyleWidget.cpp
-    ../dialogs/CharacterDecorations.cpp
-    ../dialogs/CharacterStyleOptions.cpp
+    ../dialogs/FormattingPreview.cpp
+    ../dialogs/StyleManagerWelcome.cpp
     ../ListItemsHelper.cpp
     ../TextShape.cpp
     ../Layout.cpp    

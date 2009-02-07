@@ -98,7 +98,9 @@ public: // KoCanvasBase implementation
 
     virtual const KoViewConverter *viewConverter() const;
 
-    QWidget* canvasWidget();
+    virtual QWidget* canvasWidget();
+
+    virtual const QWidget* canvasWidget() const;
 
     virtual KoUnit unit() const;
 

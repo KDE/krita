@@ -157,8 +157,11 @@ set(kritaimage_LIB_SRCS
    metadata/kis_meta_data_merge_strategy.cc
    metadata/kis_meta_data_merge_strategy_p.cc
    metadata/kis_meta_data_merge_strategy_registry.cc
+   metadata/kis_meta_data_parser.cc
    metadata/kis_meta_data_schema.cc
+   metadata/kis_meta_data_schema_registry.cc
    metadata/kis_meta_data_store.cc
+   metadata/kis_meta_data_type_info.cc
    metadata/kis_meta_data_value.cc
    recorder/kis_action_recorder.cc
    recorder/kis_macro.cc
@@ -186,6 +189,14 @@ set_target_properties(kritaimage PROPERTIES
 )
 install(TARGETS kritaimage  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
+########### install schemas #############
+install( FILES
+    metadata/schemas/dc.schema
+    metadata/schemas/exif.schema
+    metadata/schemas/tiff.schema
+    metadata/schemas/xmp.schema
+    
+    DESTINATION ${DATA_INSTALL_DIR}/krita/metadata/schemas)
 
 ########### install files ###############
 # Don't install the header files for now

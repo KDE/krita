@@ -120,7 +120,9 @@ void KisShapeSelectionModel::childChanged(KoShape * child, KoShape::ChangeType t
     changedRect = matrix.mapRect(changedRect);
 
     m_shapeMap[child] = child->boundingRect();
+
     m_parentSelection->updateProjection(changedRect.toAlignedRect());
+    m_parentSelection->updateProjection();
     m_image->undoAdapter()->emitSelectionChanged();
 }
 

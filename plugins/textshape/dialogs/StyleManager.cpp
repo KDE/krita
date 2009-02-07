@@ -22,6 +22,8 @@
 
 #include "StyleManager.h"
 
+#include "StylesWidget.h"
+
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>
@@ -33,13 +35,11 @@ StyleManager::StyleManager(QWidget *parent)
     widget.setupUi(this);
     layout()->setMargin(0);
 
-    connect(widget.styles, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
-            this, SLOT(setStyle(QListWidgetItem*, QListWidgetItem*)));
+    connect(widget.styles, SIGNAL(paragraphStyleSelected(KoParagraphStyle *, bool)), this, SLOT(setParagraphStyle(KoParagraphStyle*,bool)));
+    connect(widget.styles, SIGNAL(characterStyleSelected(KoCharacterStyle *, bool)), this, SLOT(setCharacterStyle(KoCharacterStyle*,bool)));
+
     connect(widget.bNew, SIGNAL(pressed()), this, SLOT(buttonNewPressed()));
     connect(widget.bDelete, SIGNAL(pressed()), this, SLOT(buttonDeletePressed()));
-
-    connect(widget.paragraphStylePage, SIGNAL(nameChanged(const QString&)), this, SLOT(setStyleName(const QString&)));
-    connect(widget.characterStylePage, SIGNAL(nameChanged(const QString&)), this, SLOT(setStyleName(const QString&)));
 
     connect(widget.createPage, SIGNAL(newParagraphStyle(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
     connect(widget.createPage, SIGNAL(newCharacterStyle(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
@@ -63,90 +63,53 @@ void StyleManager::setStyleManager(KoStyleManager *sm)
 {
     Q_ASSERT(sm);
     m_styleManager = sm;
-    widget.styles->clear();
-    bool defaultOne = true;
-    foreach(KoParagraphStyle *style, m_styleManager->paragraphStyles()) {
-        if (defaultOne) {
-            defaultOne = false;
-            continue;
-        }
-        QListWidgetItem *item = new QListWidgetItem(style->name(), widget.styles, PARAGRAPH_STYLE);
-        item->setData(PARAGRAPH_STYLE, style->styleId());
-        widget.styles->addItem(item);
-        m_paragraphStyles.append(style);
-    }
-    QListWidgetItem *separator = new QListWidgetItem(widget.styles);
-    separator->setBackgroundColor(QColor(Qt::black)); // TODO use theme
-    separator->setSizeHint(QSize(20, 2));
-    defaultOne = true;
-    foreach(KoCharacterStyle *style, m_styleManager->characterStyles()) {
-        if (defaultOne) {
-            defaultOne = false;
-            continue;
-        }
-        if (separator)
-            widget.styles->addItem(separator);
-        separator = 0;
-
-        QListWidgetItem *item = new QListWidgetItem(style->name(), widget.styles, CHARACTER_STYLE);
-        item->setData(CHARACTER_STYLE, style->styleId());
-        widget.styles->addItem(item);
-    }
-    delete separator;
-
-    widget.paragraphStylePage->setParagraphStyles(m_paragraphStyles);
-    widget.styles->setCurrentRow(0);
-
+    widget.styles->setStyleManager(sm);
+    widget.styles->setEmbedded(true);
+    widget.stackedWidget->setCurrentWidget(widget.welcomePage);
+    widget.paragraphStylePage->setParagraphStyles(sm->paragraphStyles());
     connect(sm, SIGNAL(styleAdded(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
     connect(sm, SIGNAL(styleAdded(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
     connect(sm, SIGNAL(styleRemoved(KoParagraphStyle*)), this, SLOT(removeParagraphStyle(KoParagraphStyle*)));
     connect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
 }
 
-void StyleManager::setStyle(QListWidgetItem *item, QListWidgetItem *previous)
+void StyleManager::setParagraphStyle(KoParagraphStyle *style, bool canDelete)
 {
-    int styleId = item->data(PARAGRAPH_STYLE).toInt();
-    if (styleId > 0) {
-        widget.characterStylePage->save();
-        widget.characterStylePage->setStyle(0);
-        widget.paragraphStylePage->save();
-        KoParagraphStyle *style;
-        if (m_alteredParagraphStyles.contains(styleId))
-            style = m_alteredParagraphStyles.value(styleId);
-        else {
-            style = new KoParagraphStyle;
-            style->copyProperties(m_styleManager->paragraphStyle(styleId));
-            m_alteredParagraphStyles.insert(styleId, style);
-        }
-        widget.paragraphStylePage->setStyle(style);
-        widget.stackedWidget->setCurrentWidget(widget.paragraphStylePage);
-    } else {
-        widget.paragraphStylePage->save();
-        widget.paragraphStylePage->setStyle(0);
-        widget.characterStylePage->save();
-        styleId = item->data(CHARACTER_STYLE).toInt();
-        if (styleId > 0) {
-            KoCharacterStyle *style;
-            if (m_alteredCharacterStyles.contains(styleId))
-                style = m_alteredCharacterStyles.value(styleId);
-            else {
-                style = new KoCharacterStyle;
-                style->copyProperties(m_styleManager->characterStyle(styleId));
-                m_alteredCharacterStyles.insert(styleId, style);
-            }
-            widget.characterStylePage->setStyle(style);
-            widget.stackedWidget->setCurrentWidget(widget.characterStylePage);
-        } else {
-            // separator clicked.
-            const int row = widget.styles->row(item);
-            if (widget.styles->row(previous) == row + 1) // moving up.
-                widget.styles->setCurrentRow(row - 1);
-            else if (widget.styles->row(previous) == row - 1) // moving down.
-                widget.styles->setCurrentRow(row + 1);
-            else
-                widget.styles->setCurrentItem(previous);
-        }
-    }
+    m_selectedCharStyle = 0;
+    m_selectedParagStyle = style;
+    widget.characterStylePage->save();
+    widget.characterStylePage->setStyle(0);
+    widget.paragraphStylePage->save();
+    KoParagraphStyle * localStyle = style->clone();
+
+    if (!m_alteredParagraphStyles.contains(style->styleId()))
+        m_alteredParagraphStyles.insert(style->styleId(), localStyle);
+    else
+        localStyle = m_alteredParagraphStyles.value(style->styleId());
+
+    widget.paragraphStylePage->setStyle(localStyle);
+    widget.stackedWidget->setCurrentWidget(widget.paragraphStylePage);
+    widget.bDelete->setEnabled(canDelete);
+}
+
+void StyleManager::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
+{
+    m_selectedParagStyle = 0;
+    m_selectedCharStyle = style;
+    widget.paragraphStylePage->save();
+    widget.paragraphStylePage->setStyle(0);
+    widget.characterStylePage->save();
+
+    KoCharacterStyle *localStyle = style->clone();
+
+    if (!m_alteredCharacterStyles.contains(style->styleId()))
+        m_alteredCharacterStyles.insert(style->styleId(), localStyle);
+    else
+        localStyle = m_alteredCharacterStyles.value(style->styleId());
+
+    widget.characterStylePage->setStyle(localStyle);
+    widget.stackedWidget->setCurrentWidget(widget.characterStylePage);
+    widget.bDelete->setEnabled(canDelete);
 }
 
 void StyleManager::setUnit(const KoUnit &unit)
@@ -158,57 +121,51 @@ void StyleManager::save()
 {
     m_blockSignals = true;
     widget.paragraphStylePage->save();
+    widget.characterStylePage->save();
 
     foreach(int styleId, m_alteredCharacterStyles.keys()) {
         KoCharacterStyle *orig = m_styleManager->characterStyle(styleId);
         KoCharacterStyle *altered = m_alteredCharacterStyles[styleId];
-        if (orig == 0) { // new one
-            QListWidgetItem *item;
-            for (int i = 0; i < widget.styles->count(); i++) {
-                item = widget.styles->item(i);
-                if (item->data(CHARACTER_STYLE).toInt() == altered->styleId())
-                    break;
-            }
-            Q_ASSERT(item->data(CHARACTER_STYLE).toInt() == altered->styleId()); // assert that the style is in the list
-            m_styleManager->add(altered);
-            item->setData(CHARACTER_STYLE, altered->styleId());
-        } else if (altered == 0) // deleted one.
-            m_styleManager->remove(orig);
-        else {
-            orig->copyProperties(altered);
-            m_styleManager->alteredStyle(orig);
-            delete altered;
-        }
+        orig->copyProperties(altered);
+        m_styleManager->alteredStyle(orig);
+        delete altered;
     }
     m_alteredCharacterStyles.clear();
 
     foreach(int styleId, m_alteredParagraphStyles.keys()) {
         KoParagraphStyle *orig = m_styleManager->paragraphStyle(styleId);
         KoParagraphStyle *altered = m_alteredParagraphStyles[styleId];
-        if (orig == 0) { // new one
-            QListWidgetItem *item = 0;
-            for (int i = 0; i < widget.styles->count(); i++) {
-                item = widget.styles->item(i);
-                if (item->data(PARAGRAPH_STYLE).toInt() == altered->styleId())
-                    break;
-            }
-            Q_ASSERT( item );
-            Q_ASSERT(item->data(PARAGRAPH_STYLE).toInt() == altered->styleId()); // assert that the style is in the list
-            m_styleManager->add(altered);
-            item->setData(PARAGRAPH_STYLE, altered->styleId());
-        } else if (altered == 0) // deleted one.
-            m_styleManager->remove(orig);
-        else {
-            orig->copyProperties(altered);
-            m_styleManager->alteredStyle(orig);
-            delete altered;
-        }
+        orig->copyProperties(altered);
+        m_styleManager->alteredStyle(orig);
+        delete altered;
     }
     m_alteredParagraphStyles.clear();
+//Reset the active style
+    if (m_selectedCharStyle) {
+        KoCharacterStyle *localStyle = m_selectedCharStyle->clone();
 
-    widget.characterStylePage->setStyle(0);
-    widget.paragraphStylePage->setStyle(0);
-    setStyle(widget.styles->currentItem(), 0);
+        if (!m_alteredCharacterStyles.contains(m_selectedCharStyle->styleId()))
+            m_alteredCharacterStyles.insert(m_selectedCharStyle->styleId(), localStyle);
+        else
+            localStyle = m_alteredCharacterStyles.value(m_selectedCharStyle->styleId());
+
+        widget.characterStylePage->setStyle(localStyle);
+    }
+    else
+        widget.characterStylePage->setStyle(0);
+
+    if (m_selectedParagStyle) {
+        KoParagraphStyle * localStyle = m_selectedParagStyle->clone();
+
+        if (!m_alteredParagraphStyles.contains(m_selectedParagStyle->styleId()))
+            m_alteredParagraphStyles.insert(m_selectedParagStyle->styleId(), localStyle);
+        else
+            localStyle = m_alteredParagraphStyles.value(m_selectedParagStyle->styleId());
+
+        widget.paragraphStylePage->setStyle(localStyle);
+    }
+    else
+        widget.paragraphStylePage->setStyle(0);
     m_blockSignals = false;
 }
 
@@ -220,57 +177,47 @@ void StyleManager::buttonNewPressed()
 
 void StyleManager::addParagraphStyle(KoParagraphStyle *style)
 {
+    widget.paragraphStylePage->save();
+    widget.characterStylePage->save();
+    widget.characterStylePage->setStyle(0);
+    widget.paragraphStylePage->setStyle(0);
+
     if (m_blockSignals) return;
+
     KoCharacterStyle *cs = style->characterStyle();
     if (cs->name().isEmpty())
         cs->setName(style->name());
     addCharacterStyle(cs);
-    QListWidgetItem *item = new QListWidgetItem(style->name(), 0, PARAGRAPH_STYLE);
-    int i = 1000;
-    while (m_alteredParagraphStyles.contains(i))
-        i++;
-    style->setStyleId(i);
-    m_alteredParagraphStyles.insert(i, style);
-    item->setData(PARAGRAPH_STYLE, i);
-    widget.styles->insertItem(m_paragraphStyles.count(), item);
-    m_paragraphStyles.append(style);
-    widget.styles->setCurrentItem(item);
-    widget.paragraphStylePage->switchToGeneralTab();
+
+    m_styleManager->add(style);
+    widget.paragraphStylePage->setParagraphStyles(m_styleManager->paragraphStyles());
+    widget.stackedWidget->setCurrentWidget(widget.welcomePage);
 }
 
 void StyleManager::addCharacterStyle(KoCharacterStyle *style)
 {
     if (m_blockSignals) return;
-    QListWidgetItem *item = new QListWidgetItem(style->name(), 0, CHARACTER_STYLE);
-    int i = 1000;
-    while (m_alteredCharacterStyles.contains(i))
-        i++;
-    style->setStyleId(i);
-    m_alteredCharacterStyles.insert(i, style);
-    item->setData(CHARACTER_STYLE, i);
-    widget.styles->insertItem(widget.styles->count(), item);
-    widget.styles->setCurrentItem(item);
-    widget.characterStylePage->switchToGeneralTab();
+
+    m_styleManager->add(style);
+    widget.stackedWidget->setCurrentWidget(widget.welcomePage);
 }
 
 void StyleManager::buttonDeletePressed()
 {
-    // TODO
-}
-
-void StyleManager::setStyleName(const QString &name)
-{
-    widget.styles->currentItem()->setText(name);
+    widget.styles->deleteStyleClicked();
 }
 
 void StyleManager::removeParagraphStyle(KoParagraphStyle* style)
 {
-    // TODO  signal incoming from style manager to remove this style
+    if (m_alteredParagraphStyles.contains(style->styleId()))
+        m_alteredParagraphStyles.remove(style->styleId());
+    widget.paragraphStylePage->setParagraphStyles(m_styleManager->paragraphStyles());
 }
 
 void StyleManager::removeCharacterStyle(KoCharacterStyle* style)
 {
-    // TODO  signal incoming from style manager to remove this style
+    if (m_alteredCharacterStyles.contains(style->styleId()))
+        m_alteredCharacterStyles.remove(style->styleId());
 }
 
 /* TODO

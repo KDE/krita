@@ -18,48 +18,12 @@
 #ifndef KIS_DYNAMICOP_H_
 #define KIS_DYNAMICOP_H_
 
-#include <kis_paintop_settings.h>
 #include "kis_paintop.h"
-#include <QString>
-#include <klocale.h>
 
-class QWidget;
-class QPointF;
 class KisPainter;
-
+class KisPaintInformation;
 class KisDynamicBrush;
-class Ui_DynamicBrushOptions;
-
-class KisBookmarkedConfigurationManager;
-class KisBookmarkedConfigurationsModel;
 class KisDynamicOpSettings;
-
-class KisDynamicOpFactory : public KisPaintOpFactory
-{
-public:
-    KisDynamicOpFactory(KisBookmarkedConfigurationManager* shapeBookmarksManager, KisBookmarkedConfigurationManager* coloringBookmarksManager) :
-            m_shapeBookmarksManager(shapeBookmarksManager), m_coloringBookmarksManager(coloringBookmarksManager) {}
-    virtual ~KisDynamicOpFactory() {}
-
-    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageSP image);
-    virtual QString id() const {
-        return "dynamicbrush";
-    }
-    virtual QString name() const {
-        return i18n("Dynamic Brush");
-    }
-    virtual QString pixmap() {
-        return "dynamicbrush.png";
-    }
-
-    virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);
-    virtual KisPaintOpSettingsSP settings(KisImageSP image);
-
-private:
-    KisBookmarkedConfigurationManager* m_shapeBookmarksManager;
-    KisBookmarkedConfigurationManager* m_coloringBookmarksManager;
-};
-
 
 class KisDynamicOp : public KisPaintOp
 {
@@ -67,9 +31,11 @@ class KisDynamicOp : public KisPaintOp
 public:
 
     KisDynamicOp(const KisDynamicOpSettings *settings, KisPainter * painter);
+
     virtual ~KisDynamicOp();
 
     void paintAt(const KisPaintInformation& info);
+
     double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
         Q_UNUSED(xSpacing);
         Q_UNUSED(ySpacing);

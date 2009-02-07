@@ -27,6 +27,7 @@
 #include <kis_meta_data_entry.h>
 #include <kis_meta_data_value.h>
 #include <kis_meta_data_schema.h>
+#include <kis_meta_data_schema_registry.h>
 
 const char photoshopMarker[] = "Photoshop 3.0\0";
 const char photoshopBimId_[] = "8BIM";

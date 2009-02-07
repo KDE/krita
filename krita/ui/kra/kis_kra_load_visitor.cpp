@@ -34,7 +34,6 @@
 #include <kis_image.h>
 #include <kis_selection.h>
 #include <kis_layer.h>
-#include <kis_transparency_mask.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
 #include <kis_adjustment_layer.h>
@@ -47,6 +46,8 @@
 #include <kis_transparency_mask.h>
 #include <kis_transformation_mask.h>
 #include <kis_selection_mask.h>
+#include "kis_shape_selection.h"
+
 
 using namespace KRA;
 
@@ -341,9 +342,15 @@ KisSelectionSP KisKraLoadVisitor::loadSelection( const QString& location )
 
     // Shape selection
     QString shapeSelectionLocation = location + DOT_SHAPE_SELECTION;
-#ifdef __GNUC__
-#warning "KisKraLoadVisitor::loadSelection: implement loading of shape selection components."
-#endif
+    if ( m_store->hasFile( shapeSelectionLocation + "/content.xml" ) ) {
+        m_store->pushDirectory();
+        m_store->enterDirectory( shapeSelectionLocation ) ;
+
+        KisShapeSelection* shapeSelection = new KisShapeSelection(m_img, selection);
+        selection->setShapeSelection(shapeSelection);
+        shapeSelection->loadSelection( m_store );
+        m_store->popDirectory();
+    }
 
     return selection;
 

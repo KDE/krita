@@ -478,11 +478,13 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
             }
             QUndoCommand *command;
             KoPAPageBase *after = ( row != 0 ) ? m_document->pageByIndex( row - 1, false ) : 0;
+            // TODO: After string freeze is lifted, the command name can be changed to
+            //  "Move slides" and "Move pages" to reflect the actual behavior
             if ( m_document->pageType() == KoPageApp::Slide ) {
-                command = new QUndoCommand( i18n( "Move Slides") );
+                command = new QUndoCommand( i18n( "Move slide") );
             }
             else {
-                command = new QUndoCommand( i18n( "Move Pages" ) );
+                command = new QUndoCommand( i18n( "Move page" ) );
             }
             foreach ( KoPAPageBase *page, pages ) {
                 KoPAPageMoveCommand *moveCommand = new KoPAPageMoveCommand( m_document, page, after, command );

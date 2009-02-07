@@ -72,7 +72,7 @@ void KoShapeGroupCommand::redo()
             // -> we need compensate the group position change
             QPointF positionOffset = oldGroupPosition - bound.topLeft();
             foreach(KoShape * child, m_container->iterator())
-            child->setAbsolutePosition(child->absolutePosition() + positionOffset);
+                child->setAbsolutePosition(child->absolutePosition() + positionOffset);
         }
     }
 
@@ -116,7 +116,7 @@ void KoShapeGroupCommand::undo()
             // -> we need compensate the group position change
             QPointF positionOffset = oldGroupPosition - bound.topLeft();
             foreach(KoShape * child, m_container->iterator())
-            child->setAbsolutePosition(child->absolutePosition() + positionOffset);
+                child->setAbsolutePosition(child->absolutePosition() + positionOffset);
 
             m_container->setAbsolutePosition(bound.topLeft(), KoFlake::TopLeftCorner);
             m_container->setSize(bound.size());

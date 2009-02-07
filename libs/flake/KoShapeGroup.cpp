@@ -97,7 +97,7 @@ bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     setPosition(bound.topLeft());
 
     foreach(KoShape * shape, iterator())
-    shape->setAbsolutePosition(shape->absolutePosition() - bound.topLeft());
+        shape->setAbsolutePosition(shape->absolutePosition() - bound.topLeft());
 
     return true;
 }

@@ -479,10 +479,10 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
             QUndoCommand *command;
             KoPAPageBase *after = ( row != 0 ) ? m_document->pageByIndex( row - 1, false ) : 0;
             if ( m_document->pageType() == KoPageApp::Slide ) {
-                command = new QUndoCommand( "Move Slides" );
+                command = new QUndoCommand( i18n( "Move Slides") );
             }
             else {
-                command = new QUndoCommand( "Move Pages" );
+                command = new QUndoCommand( i18n( "Move Pages" ) );
             }
             foreach ( KoPAPageBase *page, pages ) {
                 KoPAPageMoveCommand *moveCommand = new KoPAPageMoveCommand( m_document, page, after, command );

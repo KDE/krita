@@ -198,6 +198,9 @@ void KoListStyle::loadOdf(KoOdfLoadingContext& context, const KoXmlElement& styl
 
 void KoListStyle::saveOdf(KoGenStyle &style)
 {
+    if (!d->name.isEmpty()) {
+        style.addAttribute("style:display-name", d->name);
+    }
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level

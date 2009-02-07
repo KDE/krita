@@ -266,6 +266,8 @@ void KisShapeController::addShape(KoShape* shape)
                 }
 
             }
+            connect(shapeLayer, SIGNAL(selectionChanged(QList<KoShape*>)),
+                    KoToolManager::instance(), SLOT(selectionChanged(QList<KoShape*>)));
 
             // XXX: What happens if the shape is added embedded in another
             // shape?

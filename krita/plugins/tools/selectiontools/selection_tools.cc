@@ -52,8 +52,8 @@ SelectionTools::SelectionTools(QObject *parent, const QStringList &)
     r->add(new KisToolSelectOutlineFactory(r, QStringList()));
     r->add(new KisToolSelectPolygonalFactory(r, QStringList()));
     r->add(new KisToolSelectRectangularFactory(r, QStringList()));
-    r->add(new KisToolSelectBrushFactory(r, QStringList()));
-    r->add(new KisToolSelectEraserFactory(r, QStringList()));
+    //r->add(new KisToolSelectBrushFactory(r, QStringList()));
+    //r->add(new KisToolSelectEraserFactory(r, QStringList()));
     r->add(new KisToolSelectEllipticalFactory(r, QStringList()));
     r->add(new KisToolSelectContiguousFactory(r, QStringList()));
     r->add(new KisToolSelectPathFactory(r, QStringList()));

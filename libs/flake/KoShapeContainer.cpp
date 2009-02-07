@@ -71,7 +71,7 @@ public:
     QList<KoShape*> iterator() const {
         QList<KoShape*> answer;
         foreach(Relation *relation, m_relations)
-        answer.append(relation->child());
+            answer.append(relation->child());
         return answer;
     }
 
@@ -117,7 +117,7 @@ public:
     ~Private() {
         if (children) {
             foreach(KoShape *shape, children->iterator())
-            shape->setParent(0);
+                shape->setParent(0);
             delete children;
         }
     }
@@ -241,7 +241,7 @@ void KoShapeContainer::shapeChanged(ChangeType type)
         return;
     d->children->containerChanged(this);
     foreach(KoShape *shape, d->children->iterator())
-    shape->notifyChanged();
+        shape->notifyChanged();
 }
 
 bool KoShapeContainer::childClipped(const KoShape *child) const
@@ -256,7 +256,7 @@ void KoShapeContainer::update() const
     KoShape::update();
     if (d->children)
         foreach(KoShape *shape, d->children->iterator())
-        shape->update();
+            shape->update();
 }
 
 QList<KoShape*> KoShapeContainer::iterator() const

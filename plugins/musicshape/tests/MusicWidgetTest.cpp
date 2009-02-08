@@ -56,7 +56,7 @@ int main(int argc, char** argv)
         bar->voice(voice)->addElement(chord);
     }
     w.setSheet(sheet);
-
+    w.setScale(1.5);
     w.show();
     return app.exec();
 }

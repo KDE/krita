@@ -60,6 +60,7 @@ void MusicWidget::paintEvent(QPaintEvent* event)
 {
     if (!m_sheet) return;
     QPainter painter(this);
+    painter.scale(m_scale, m_scale);
     m_renderer.renderSheet(painter, m_sheet, 0, m_lastSystem);
 }
 

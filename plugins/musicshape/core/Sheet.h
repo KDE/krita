@@ -44,7 +44,7 @@ public:
     /**
      * Constructor, this will create a sheet containing no parts.
      */
-    Sheet();
+    explicit Sheet(QObject* parent = 0);
 
     /**
      * Destructor.

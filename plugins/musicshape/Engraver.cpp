@@ -36,8 +36,7 @@
 
 #include <QtCore/QList>
 #include <QtCore/QVarLengthArray>
-
-#include <kdebug.h>
+#include <QtCore/QMultiMap>
 
 #ifndef log2
 # define log2(x) (log(x) / M_LN2)
@@ -57,7 +56,7 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool doE
         firstBar = sheet->staffSystem(firstSystem)->firstBar();
     }
 
-    kDebug() << "Engraving from firstSystem:" << firstSystem << "firstBar:" << firstBar;
+    //kDebug() << "Engraving from firstSystem:" << firstSystem << "firstBar:" << firstBar;
 
     if (doEngraveBars || true) {
         // engrave all bars in the sheet

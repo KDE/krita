@@ -36,7 +36,7 @@ public:
     QList<StaffSystem*> staffSystems;
 };
 
-Sheet::Sheet() : d(new Private)
+Sheet::Sheet(QObject* parent) : QObject(parent), d(new Private)
 {
 }
 

@@ -39,8 +39,7 @@ namespace KisMetaData {
                 AlternativeArrayType,
                 LangArrayType,
                 StructureType,
-                SignedRationalType,
-                UnsignedRationalType,
+                RationalType,
                 GPSCoordinateType,
                 OpenedChoice,
                 ClosedChoice
@@ -81,6 +80,14 @@ namespace KisMetaData {
             Schema* structureSchema() const;
             const QString& structureName() const;
             const Parser* parser() const;
+            /**
+             * @return true if @p value has a type that is correct for this \ref TypeInfo
+             */
+            bool hasCorrectType( const Value& value ) const;
+            /**
+             * @return true if @p value has a value acceptable for this \ref TypeInfo
+             */
+            bool hasCorrectValue( const Value& value ) const;
         public:
             struct Private;
         private:

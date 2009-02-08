@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,38 +16,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_META_DATA_TEST_H
-#define KIS_META_DATA_TEST_H
+#ifndef _KIS_EXIV2_TEST_H_
+#define _KIS_EXIV2_TEST_H_
 
-#include <QtTest/QtTest>
+#include <QObject>
 
-namespace KisMetaData
-{
-class Value;
-}
-
-class KisMetaDataTest : public QObject
+class KisExiv2Test : public QObject
 {
     Q_OBJECT
 private slots:
-
-    void testRationals();
-    void testValueCreation();
-    void testValueEquality();
-    void testValueCopy();
-    void testSchemaBasic();
-    void testEntry();
-    void testStore();
-    void testFilters();
-    void testTypeInfo();
-    void testSchemaParse();
-    void testParser();
-    void testValidator();
-private:
-    KisMetaData::Value createRationalValue();
-    KisMetaData::Value createIntegerValue(int v = 42);
-    KisMetaData::Value createStringValue();
-    KisMetaData::Value createListValue();
+    void testExifLoader();
 };
 
 #endif

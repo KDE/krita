@@ -30,20 +30,11 @@ class QVariant;
 namespace KisMetaData
 {
   class Schema;
-struct UnsignedRational {
-    explicit UnsignedRational(quint32 n = 0, quint32 d = 1) : numerator(n), denominator(d) {}
-    quint32 numerator;
-    quint32 denominator;
-    bool operator==(const UnsignedRational& ur) const {
-        return numerator == ur.numerator && denominator == ur.denominator;
-    }
-};
-
-struct SignedRational {
-    explicit SignedRational(qint32 n = 0, qint32 d = 1) : numerator(n), denominator(d) {}
+struct Rational {
+    explicit Rational(qint32 n = 0, qint32 d = 1) : numerator(n), denominator(d) {}
     qint32 numerator;
     qint32 denominator;
-    bool operator==(const SignedRational& ur) const {
+    bool operator==(const Rational& ur) const {
         return numerator == ur.numerator && denominator == ur.denominator;
     }
 };
@@ -64,8 +55,7 @@ public:
         AlternativeArray,
         LangArray,
         Structure,
-        SignedRational,
-        UnsignedRational
+        Rational
     };
 public:
     Value();
@@ -76,13 +66,13 @@ public:
      */
     Value(const QList<Value>& array, ValueType type = OrderedArray);
     Value(const QMap<QString, Value>& structure);
-    Value(const KisMetaData::SignedRational& signedRational);
-    Value(const KisMetaData::UnsignedRational& unsignedRational);
+    Value(const KisMetaData::Rational& rational);
     Value(const Value& v);
     Value& operator=(const Value& v);
     ~Value();
 public:
     void addPropertyQualifier(const QString& _name, const Value&);
+    const QMap<QString, Value>& propertyQualifiers() const;
 public:
     /// @return the type of this Value
     ValueType type() const;
@@ -104,15 +94,10 @@ public:
      */
     bool setVariant(const QVariant& variant);
     /**
-     * @return the UnsignedRational hold by this Value, or a null rational if this Value is not
-     * an UnsignedRational
+     * @return the Rational hold by this Value, or a null rational if this Value is not
+     * an Rational
      */
-    KisMetaData::UnsignedRational asUnsignedRational() const;
-    /**
-     * @return the SignedRational hold by this Value, or a null rational if this Value is not
-     * a SignedRational
-     */
-    KisMetaData::SignedRational asSignedRational() const;
+    KisMetaData::Rational asRational() const;
     /**
      * @return the array hold by this Value, or an empty array if this Value is not either
      * an OrderedArray, UnorderedArray or AlternativeArray

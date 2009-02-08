@@ -164,6 +164,10 @@ public:
      */
     QList<QString> keys() const;
 
+    /**
+     * @return the list of entries
+     */
+    QList<Entry> entries() const;
 private:
     Private* const d;
 };

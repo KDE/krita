@@ -247,7 +247,7 @@ bool Schema::Private::parseEltType(QDomElement& elt, EntryInfo& entryInfo, QStri
         entryInfo.propertyType = TypeInfo::Private::LangArray;
         return true;
     } else if( tagName == "rational" ) {
-        entryInfo.propertyType = TypeInfo::Private::SignedRational;
+        entryInfo.propertyType = TypeInfo::Private::Rational;
         return true;
     } else if( tagName == "gpscoordinate" ) {
         entryInfo.propertyType = TypeInfo::Private::GPSCoordinate;
@@ -280,7 +280,7 @@ const TypeInfo* Schema::Private::parseAttType( QDomElement& elt, bool ignoreStru
     } else if( type == "text" ) {
         return TypeInfo::Private::Text;
     } else if( type == "rational" ) {
-        return TypeInfo::Private::SignedRational;
+        return TypeInfo::Private::Rational;
     }
     errImage << "Unsupported type: " << type << " in an attribute";
     return 0;

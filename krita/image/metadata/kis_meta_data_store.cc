@@ -207,3 +207,8 @@ QList<QString> Store::keys() const
 {
     return d->entries.keys();
 }
+
+QList<Entry> Store::entries() const
+{
+    return d->entries.values();
+}

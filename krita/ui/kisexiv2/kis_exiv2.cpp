@@ -63,9 +63,9 @@ KisMetaData::Value exivValueToKMDValue(const Exiv2::Value::AutoPtr value)
     case Exiv2::comment: // look at kexiv2 for the problem about decoding correctly that tag
         return KisMetaData::Value(value->toString().c_str());
     case Exiv2::unsignedRational:
-        return KisMetaData::Value(KisMetaData::UnsignedRational(value->toRational().first , value->toRational().second));
+        return KisMetaData::Value(KisMetaData::Rational(value->toRational().first , value->toRational().second));
     case Exiv2::signedRational:
-        return KisMetaData::Value(KisMetaData::SignedRational(value->toRational().first , value->toRational().second));
+        return KisMetaData::Value(KisMetaData::Rational(value->toRational().first , value->toRational().second));
     case Exiv2::date:
     case Exiv2::time:
         return KisMetaData::Value(QDateTime::fromString(value->toString().c_str(), Qt::ISODate));
@@ -135,13 +135,14 @@ Exiv2::Value* kmdValueToExivValue(const KisMetaData::Value& value, Exiv2::TypeId
     case KisMetaData::Value::Variant: {
         return variantToExivValue(value.asVariant(), type);
     }
-    case KisMetaData::Value::SignedRational:
-        Q_ASSERT(type == Exiv2::signedRational);
-        return new Exiv2::ValueType<Exiv2::Rational>(Exiv2::Rational(value.asSignedRational().numerator, value.asSignedRational().denominator));
-    case KisMetaData::Value::UnsignedRational: {
-        Q_ASSERT(type == Exiv2::unsignedRational);
-        return new Exiv2::ValueType<Exiv2::URational>(Exiv2::URational(value.asUnsignedRational().numerator, value.asUnsignedRational().denominator));
-    }
+    case KisMetaData::Value::Rational:
+        Q_ASSERT(type == Exiv2::signedRational || type == Exiv2::unsignedRational);
+        if( type == type == Exiv2::signedRational )
+        {
+            return new Exiv2::ValueType<Exiv2::Rational>(Exiv2::Rational(value.asRational().numerator, value.asRational().denominator));
+        } else {
+            return new Exiv2::ValueType<Exiv2::URational>(Exiv2::URational(value.asRational().numerator, value.asRational().denominator));
+        }
     case KisMetaData::Value::OrderedArray:
     case KisMetaData::Value::UnorderedArray:
     case KisMetaData::Value::AlternativeArray: {
@@ -189,18 +190,11 @@ Exiv2::Value* kmdValueToExivXmpValue( const KisMetaData::Value& value )
                 return new Exiv2::XmpTextValue( var.toString().ascii() );
             }
         }
-        case KisMetaData::Value::SignedRational:
+        case KisMetaData::Value::Rational:
         {
             QString rat = "%1 / %2";
-            rat = rat.arg( value.asSignedRational().numerator );
-            rat = rat.arg( value.asSignedRational().denominator );
-            return new Exiv2::XmpTextValue( rat.ascii() );
-        }
-        case KisMetaData::Value::UnsignedRational:
-        {
-            QString rat = "%1 / %2";
-            rat = rat.arg( value.asUnsignedRational().numerator );
-            rat = rat.arg( value.asUnsignedRational().denominator );
+            rat = rat.arg( value.asRational().numerator );
+            rat = rat.arg( value.asRational().denominator );
             return new Exiv2::XmpTextValue( rat.ascii() );
         }
         case KisMetaData::Value::AlternativeArray:

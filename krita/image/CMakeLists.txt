@@ -162,6 +162,7 @@ set(kritaimage_LIB_SRCS
    metadata/kis_meta_data_schema_registry.cc
    metadata/kis_meta_data_store.cc
    metadata/kis_meta_data_type_info.cc
+   metadata/kis_meta_data_validator.cc
    metadata/kis_meta_data_value.cc
    recorder/kis_action_recorder.cc
    recorder/kis_macro.cc
@@ -195,6 +196,7 @@ install( FILES
     metadata/schemas/exif.schema
     metadata/schemas/tiff.schema
     metadata/schemas/xmp.schema
+    metadata/schemas/xmprights.schema
     
     DESTINATION ${DATA_INSTALL_DIR}/krita/metadata/schemas)
 

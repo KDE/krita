@@ -59,6 +59,8 @@ public:
 
 private:
     void childCountChanged();
+    virtual void shapeChanged(ChangeType type);
+    
 };
 
 #endif

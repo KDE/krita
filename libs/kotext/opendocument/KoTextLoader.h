@@ -3,7 +3,7 @@
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
- * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007-2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -117,16 +117,9 @@ private:
     void loadNote(const KoXmlElement& element, QTextCursor& cursor);
 
     /**
-    * Load the frame element \p element into the \p cursor .
-    *
-    * This method does normaly something like at the example above with an
-    * own implementation of \a KoTextFrameLoader to handle frames.
-    * \code
-    * KoTextFrameLoader frameloader(this);
-    * frameloader.loadFrame(context, parent, cursor);
-    * \endcode
+    * Load the shape element \p element into the \p cursor .
     */
-    void loadFrame(const KoXmlElement& element, QTextCursor& cursor);
+    void loadShape(const KoXmlElement& element, QTextCursor& cursor);
 
     /**
     * This is called in loadBody before reading the body starts.

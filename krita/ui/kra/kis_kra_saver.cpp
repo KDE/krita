@@ -47,12 +47,17 @@ class KisKraSaver::Private {
 public:
     KisDoc2* doc;
     QMap<const KisNode*, QString> nodeFileNames;
+    QString imageName;
 };
 
 KisKraSaver::KisKraSaver( KisDoc2* document )
     : m_d( new Private )
 {
     m_d->doc = document;
+
+    m_d->imageName = m_d->doc->documentInfo()->aboutInfo("title");
+    if(m_d->imageName.isEmpty())
+        m_d->imageName = "Unnamed";
 }
 
 KisKraSaver::~KisKraSaver()
@@ -65,7 +70,7 @@ QDomElement KisKraSaver::saveXML( QDomDocument& doc,  KisImageSP img )
     QDomElement image = doc.createElement("IMAGE"); // Legacy!
 
     Q_ASSERT(img);
-    image.setAttribute(NAME, m_d->doc->documentInfo()->aboutInfo("title"));
+    image.setAttribute(NAME, m_d->imageName);
     image.setAttribute(MIME, NATIVE_MIMETYPE);
     image.setAttribute(WIDTH, img->width());
     image.setAttribute(HEIGHT, img->height());
@@ -92,7 +97,7 @@ bool KisKraSaver::saveBinaryData( KoStore* store, KisImageSP img, const QString 
     // Save the layers data
     quint32 count = 0;
 
-    KisKraSaveVisitor visitor(img, store, count, m_d->doc->documentInfo()->aboutInfo("title"), m_d->nodeFileNames);
+    KisKraSaveVisitor visitor(img, store, count, m_d->imageName, m_d->nodeFileNames);
 
     if (external)
         visitor.setExternalUri(uri);
@@ -105,7 +110,7 @@ bool KisKraSaver::saveBinaryData( KoStore* store, KisImageSP img, const QString 
     KisAnnotationSP annotation = img->annotation("exif");
     if (annotation) {
         location = external ? QString::null : uri;
-        location += m_d->doc->documentInfo()->aboutInfo("title") + EXIF_PATH;
+        location += m_d->imageName + EXIF_PATH;
         if (store->open(location)) {
             store->write(annotation->annotation());
             store->close();
@@ -122,7 +127,7 @@ bool KisKraSaver::saveBinaryData( KoStore* store, KisImageSP img, const QString 
 
         if (annotation) {
             location = external ? QString::null : uri;
-            location += m_d->doc->documentInfo()->aboutInfo("title") + ICC_PATH;
+            location += m_d->imageName + ICC_PATH;
             if (store->open(location)) {
                 store->write(annotation->annotation());
                 store->close();

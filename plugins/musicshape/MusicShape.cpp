@@ -49,7 +49,8 @@ using namespace MusicCore;
 //static MusicShape* firstShape = 0;
 
 MusicShape::MusicShape()
-    : m_firstSystem(0),
+    : KoFrameShape("http://www.koffice.org/music", "shape"),
+    m_firstSystem(0),
     m_style(new MusicStyle),
     m_engraver(new Engraver()),
     m_renderer(new MusicRenderer(m_style)),
@@ -116,19 +117,25 @@ void MusicShape::paint( QPainter& painter, const KoViewConverter& converter )
 void MusicShape::saveOdf( KoShapeSavingContext & context ) const
 {
     KoXmlWriter& writer = context.xmlWriter();
+    writer.startElement("draw:frame");
+    saveOdfAttributes(context, OdfAllAttributes);
+
     writer.startElement("music:shape");
     writer.addAttribute("xmlns:music", "http://www.koffice.org/music");
-    saveOdfAttributes( context, OdfAllAttributes );
+    MusicXmlWriter().writeSheet(writer, m_sheet, false);
+    writer.endElement(); // music:shape
 
-    MusicXmlWriter().writeSheet( writer, m_sheet, false );
-
-    saveOdfCommonChildElements( context );
-    writer.endElement();
+    saveOdfCommonChildElements(context);
+    writer.endElement(); // draw:frame
 }
 
 bool MusicShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
-    loadOdfAttributes( element, context, OdfAllAttributes );
+    loadOdfAttributes(element, context, OdfAllAttributes);
+    return loadOdfFrame(element, context);
+}
 
+bool MusicShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context )
+{
     KoXmlElement score = KoXml::namedItemNS(element, "http://www.koffice.org/music", "score-partwise");
     if (score.isNull()) {
         kWarning() << "no music:score-partwise element as first child";

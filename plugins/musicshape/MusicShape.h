@@ -20,6 +20,7 @@
 #define MUSIC_SHAPE
 
 #include <KoShape.h>
+#include <KoFrameShape.h>
 #include <kurl.h>
 #define MusicShapeId "MusicShape"
 
@@ -31,7 +32,7 @@ class MusicRenderer;
 class MusicStyle;
 class Engraver;
 
-class MusicShape : public KoShape
+class MusicShape : public KoShape, public KoFrameShape
 {
 public:
     MusicShape();
@@ -57,11 +58,13 @@ public:
     MusicRenderer* renderer();
     MusicStyle* style();
     void engrave(bool engraveBars=true);
-    
+
     MusicShape* successor() { return m_successor; }
     MusicShape* predecessor() { return m_predecessor; }
+protected:
+    // reimplemented
+    virtual bool loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context );
 private:
-
     MusicCore::Sheet* m_sheet;
     int m_firstSystem;
     int m_lastSystem;

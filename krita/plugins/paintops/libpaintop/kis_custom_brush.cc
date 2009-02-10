@@ -49,6 +49,7 @@ KisCustomBrush::KisCustomBrush(QWidget *parent, const QString& caption, KisImage
 {
     setWindowTitle(caption);
     preview->setScaledContents(true);
+    preview->setFixedSize(preview->size());
 
     KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
     m_rServerAdapter = new KoResourceServerAdapter<KisBrush>(rServer);

@@ -134,12 +134,13 @@ KisMetaData::Value exifOECFToKMDOECFStructure(const Exiv2::Value::AutoPtr value,
     dvalue->copy((Exiv2::byte*)array.data());
     int columns = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[0], order);
     int rows = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[1], order);
-    if( (columns * rows + 4) != dvalue->count())
+
+    if( (columns * rows + 4) > dvalue->count())
     { // Sometime byteOrder get messed up (especially if metadata got saved with kexiv2 library, or any library that doesn't save back with the same byte order as the camera)
         order = invertByteOrder( order );
         columns = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[0], order);
         rows = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[1], order);
-        Q_ASSERT((columns * rows + 4) == dvalue->count());
+        Q_ASSERT((columns * rows + 4) > dvalue->count());
     }
     oecfStructure["Columns"] = KisMetaData::Value(columns);
     oecfStructure["Rows"] = KisMetaData::Value(rows);

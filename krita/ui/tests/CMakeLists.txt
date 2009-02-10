@@ -87,5 +87,5 @@ target_link_libraries(KisAutogradientResourceTest  ${KDE4_KDEUI_LIBS} kritaimage
 ########### next target ###############
 
 set(kis_exiv2_test_SRCS kis_exiv2_test.cpp )
-kde4_add_unit_test(KisExiv2Test TESTNAME krita-ui-KisAutogradientResourceTest ${kis_exiv2_test_SRCS})
+kde4_add_unit_test(KisExiv2Test TESTNAME krita-ui-KisExiv2Test ${kis_exiv2_test_SRCS})
 target_link_libraries(KisExiv2Test  ${KDE4_KDEUI_LIBS} kritaimage kritaui ${QT_QTTEST_LIBRARY})

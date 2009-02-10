@@ -24,6 +24,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
+#include <KoZoomHandler.h>
 
 #include "core/Sheet.h"
 #include "core/Part.h"
@@ -106,6 +107,11 @@ void MusicShape::setSize( const QSizeF &newSize )
 
 void MusicShape::paint( QPainter& painter, const KoViewConverter& converter )
 {
+    constPaint( painter, converter );
+}
+
+void MusicShape::constPaint( QPainter& painter, const KoViewConverter& converter ) const
+{
     applyConversion( painter, converter );
 
     painter.setClipping(true);
@@ -124,6 +130,22 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
     writer.addAttribute("xmlns:music", "http://www.koffice.org/music");
     MusicXmlWriter().writeSheet(writer, m_sheet, false);
     writer.endElement(); // music:shape
+
+    // Save a preview image
+    qreal previewDPI = 150;
+    QSizeF imgSize = size(); // in points
+    imgSize *= previewDPI / 72;
+    QImage img(imgSize.toSize(), QImage::Format_ARGB32);
+    QPainter painter(&img);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::TextAntialiasing);
+    KoZoomHandler converter;
+    converter.setZoomAndResolution(100, previewDPI, previewDPI);
+    constPaint(painter, converter);
+    //img.save("/tmp/test.png");
+    // TODO: actually save the image
+
+    // TODO: Save a preview svg
 
     saveOdfCommonChildElements(context);
     writer.endElement(); // draw:frame

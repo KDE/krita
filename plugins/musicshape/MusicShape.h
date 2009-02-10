@@ -39,6 +39,7 @@ public:
     virtual ~MusicShape();
     /// reimplemented
     virtual void paint( QPainter& painter, const KoViewConverter& converter );
+    void constPaint( QPainter& painter, const KoViewConverter& converter ) const;
 
     /// reimplemented
     virtual void setSize( const QSizeF &newSize );

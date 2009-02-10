@@ -79,5 +79,9 @@ void KisDuplicateOpSettingsWidget::writeConfiguration( KisPropertiesConfiguratio
     m_duplicateOption->writeOptionSetting( config );
 }
 
+void KisDuplicateOpSettingsWidget::setImage(KisImageSP image)
+{
+    m_brushOption->setImage(image);
+}
 
 #include "kis_duplicateop_settings_widget.moc"

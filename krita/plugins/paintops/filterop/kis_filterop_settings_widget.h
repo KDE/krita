@@ -24,6 +24,7 @@
 #define KIS_FILTEROP_SETTINGS_WIDGET_H_
 
 #include <kis_paintop_options_widget.h>
+#include <kis_image.h>
 
 class KisBrushOption;
 class KisFilterOption;
@@ -44,6 +45,8 @@ public:
     KisPropertiesConfiguration* configuration() const;
 
     void writeConfiguration( KisPropertiesConfiguration *config ) const;
+
+    void setImage(KisImageSP image);
 
 public:
 

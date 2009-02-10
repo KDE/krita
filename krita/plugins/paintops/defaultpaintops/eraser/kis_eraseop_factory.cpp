@@ -63,12 +63,12 @@ KisPaintOpSettingsSP KisEraseOpFactory::settings(QWidget * parent, const KoInput
     // XXX: store widgets per inputDevice?
     Q_UNUSED( parent );
     Q_UNUSED(inputDevice);
-    Q_UNUSED(image)
+    m_widget->setImage(image);
     return new KisEraseOpSettings(m_widget);
 }
 
 KisPaintOpSettingsSP KisEraseOpFactory::settings(KisImageSP image)
 {
-    Q_UNUSED(image);
+    m_widget->setImage(image);
     return new KisEraseOpSettings(m_widget);
 }

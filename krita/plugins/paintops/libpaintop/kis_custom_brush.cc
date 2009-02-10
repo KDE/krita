@@ -161,5 +161,10 @@ void KisCustomBrush::createBrush()
         m_brush->makeMaskImage();
 }
 
+void KisCustomBrush::setImage(KisImageSP image)
+{
+    m_image = image;
+}
+
 
 #include "kis_custom_brush.moc"

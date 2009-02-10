@@ -78,5 +78,9 @@ void KisFilterOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *
     m_filterOption->writeOptionSetting(config);
 }
 
+void KisFilterOpSettingsWidget::setImage(KisImageSP image)
+{
+    m_brushOption->setImage(image);
+}
 
 #include "kis_filterop_settings_widget.moc"

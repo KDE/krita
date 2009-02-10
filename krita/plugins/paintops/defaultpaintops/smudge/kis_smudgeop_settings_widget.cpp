@@ -89,5 +89,10 @@ void KisSmudgeOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *
     m_rateOption->writeOptionSetting(config);
 }
 
+void KisSmudgeOpSettingsWidget::setImage(KisImageSP image)
+{
+    m_brushOption->setImage(image);
+}
+
 
 #include "kis_smudgeop_settings_widget.moc"

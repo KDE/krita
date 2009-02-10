@@ -89,5 +89,10 @@ void KisPenOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *con
     m_paintActionTypeOption->writeOptionSetting(config);
 }
 
+void KisPenOpSettingsWidget::setImage(KisImageSP image)
+{
+    m_brushOption->setImage(image);
+}
+
 
 #include "kis_penop_settings_widget.moc"

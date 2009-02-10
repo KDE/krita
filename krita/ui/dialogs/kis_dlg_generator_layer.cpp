@@ -30,7 +30,6 @@
 #include <kis_config_widget.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_paint_device.h>
-#include <widgets/kis_previewwidget.h>
 #include <kis_transaction.h>
 
 KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & name, QWidget * parent)

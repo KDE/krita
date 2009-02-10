@@ -61,6 +61,16 @@ public:
 
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
 
+    KisBookmarkedConfigurationManager* shapeBookmarksManager()
+    {
+        return m_shapeBookmarksManager;
+    }
+
+    KisBookmarkedConfigurationManager* coloringBookmarksManager()
+    {
+        return m_coloringBookmarksManager;
+    }
+
 private:
     KisDynamicOpSettingsWidget* const m_widget;
     KisBookmarkedConfigurationManager* m_shapeBookmarksManager;

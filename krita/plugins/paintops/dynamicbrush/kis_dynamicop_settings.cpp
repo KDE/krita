@@ -1,4 +1,3 @@
-
 /*
  *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *
@@ -19,13 +18,19 @@
 #include "kis_dynamicop_settings.h"
 
 #include <QWidget>
+#include <QDomElement>
 
 #include <kis_bookmarked_configuration_manager.h>
 #include <kis_bookmarked_configurations_model.h>
+#include <kis_painter.h>
 
+#include "kis_dynamic_coloring.h"
+#include "kis_dynamic_brush.h"
 #include "kis_dynamicop_settings_widget.h"
 #include "ui_DynamicBrushOptions.h"
-
+#include "kis_dynamic_shape_program.h"
+#include "kis_dynamic_coloring_program.h"
+#include "kis_bristle_shape.h"
 
 KisDynamicOpSettings::KisDynamicOpSettings(KisDynamicOpSettingsWidget* widget, KisBookmarkedConfigurationManager* shapeBookmarksManager, KisBookmarkedConfigurationManager* coloringBookmarksManager)
     : KisPaintOpSettings( widget )
@@ -51,39 +56,39 @@ bool KisDynamicOpSettings::paintIncremental()
     return true;
 }
 
-
-
-// TEMP
 KisDynamicBrush* KisDynamicOpSettings::createBrush(KisPainter *painter) const
 {
-#if 0
     KisDynamicBrush* current = new KisDynamicBrush(i18n("example"));
     // Init shape program
     QModelIndex shapeModelIndex = m_shapeBookmarksModel->index(
-                                      m_uiOptions->comboBoxShapePrograms->currentIndex(), 0);
-    KisDynamicShapeProgram* shapeProgram = static_cast<KisDynamicShapeProgram*>(m_shapeBookmarksModel->configuration(shapeModelIndex));
+                                      m_optionsWidget->m_uiOptions->comboBoxShapePrograms->currentIndex(), 0);
+    KisDynamicShapeProgram* shapeProgram =
+                    static_cast<KisDynamicShapeProgram*>(m_shapeBookmarksModel->configuration(shapeModelIndex));
     Q_ASSERT(shapeProgram);
     current->setShapeProgram(shapeProgram);
     // Init coloring program
     QModelIndex coloringModelIndex = m_coloringBookmarksModel->index(
-                                         m_uiOptions->comboBoxColoringPrograms->currentIndex(), 0);
+                                         m_optionsWidget->m_uiOptions->comboBoxColoringPrograms->currentIndex(), 0);
     KisDynamicColoringProgram* coloringProgram = static_cast<KisDynamicColoringProgram*>(m_coloringBookmarksModel->configuration(coloringModelIndex));
     Q_ASSERT(coloringProgram);
     current->setColoringProgram(coloringProgram);
+
+
     // Init shape
-    switch (m_uiOptions->comboBoxShapes->currentIndex()) {
-    case 1:
-        current->setShape(new KisBristleShape());
-        break;
-    default:
+    switch (m_optionsWidget->m_uiOptions->comboBoxShapes->currentIndex()) {
     case 0: {
 #if 0 // XXX: Fix!
         current->setShape(new KisDabShape(painter->brush()));
 #endif
     }
+    case 1:
+        // fall-through
+    default:
+        current->setShape(new KisBristleShape());
+        break;
     }
     // Init coloring
-    switch (m_uiOptions->comboBoxColoring->currentIndex()) {
+    switch (m_optionsWidget->m_uiOptions->comboBoxColoring->currentIndex()) {
     case 3:
         current->setColoring(new KisTotalRandomColoring());
         break;
@@ -100,45 +105,26 @@ KisDynamicBrush* KisDynamicOpSettings::createBrush(KisPainter *painter) const
     }
 
     return current;
-#endif
 }
 
 void KisDynamicOpSettings::fromXML(const QDomElement& elt)
 {
-    // First, call the parent class fromXML to make sure all the
-    // properties are saved to the map
-    KisPaintOpSettings::fromXML( elt );
 
-    // Then load the properties for all widgets
-    m_optionsWidget->setConfiguration( this );
-
-#if 0
-    m_uiOptions->comboBoxShapes->setCurrentIndex(elt.attribute("shapeType", "0").toInt());
-    m_uiOptions->comboBoxColoring->setCurrentIndex(elt.attribute("coloringType", "0").toInt());
-    // XXX: load the shape program / coloring program
-#endif
+    m_optionsWidget->m_uiOptions->comboBoxShapes->setCurrentIndex(elt.attribute("shapeType", "0").toInt());
+    m_optionsWidget->m_uiOptions->comboBoxColoring->setCurrentIndex(elt.attribute("coloringType", "0").toInt());
 }
 
 void KisDynamicOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 {
-    // First, make sure all the option widgets have saved their state
-    // to the property configuration
-    KisPropertiesConfiguration * settings = m_optionsWidget->configuration();
 
-    // Then call the parent class fromXML
-    settings->KisPropertiesConfiguration::toXML( doc, rootElt );
-
-    delete settings;
-
-#if 0
-    rootElt.setAttribute("shapeType", m_uiOptions->comboBoxShapes->currentIndex());
-    rootElt.setAttribute("coloringType", m_uiOptions->comboBoxColoring->currentIndex());
+    rootElt.setAttribute("shapeType", m_optionsWidget->m_uiOptions->comboBoxShapes->currentIndex());
+    rootElt.setAttribute("coloringType", m_optionsWidget->m_uiOptions->comboBoxColoring->currentIndex());
     // Save shape program
     QDomElement shapeElt = doc.createElement("Shape");
     rootElt.appendChild(shapeElt);
 
     QModelIndex shapeModelIndex = m_shapeBookmarksModel->index(
-                                      m_uiOptions->comboBoxShapePrograms->currentIndex(), 0);
+                                      m_optionsWidget->m_uiOptions->comboBoxShapePrograms->currentIndex(), 0);
     KisDynamicShapeProgram* shapeProgram = static_cast<KisDynamicShapeProgram*>(m_shapeBookmarksModel->configuration(shapeModelIndex));
     Q_ASSERT(shapeProgram);
 
@@ -151,21 +137,20 @@ void KisDynamicOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
     rootElt.appendChild(coloringElt);
 
     QModelIndex coloringModelIndex = m_coloringBookmarksModel->index(
-                                         m_uiOptions->comboBoxColoringPrograms->currentIndex(), 0);
+                                         m_optionsWidget->m_uiOptions->comboBoxColoringPrograms->currentIndex(), 0);
     KisDynamicColoringProgram* coloringProgram = static_cast<KisDynamicColoringProgram*>(m_coloringBookmarksModel->configuration(coloringModelIndex));
     Q_ASSERT(coloringProgram);
 
     coloringProgram->toXML(doc, coloringElt);
 
     delete coloringProgram;
-#endif
+
 }
 
 KisPaintOpSettingsSP KisDynamicOpSettings::clone() const
 {
-    KisPaintOpSettingsSP settings = dynamic_cast<KisPaintOpSettings*>( m_optionsWidget->configuration() );
-    return settings;
-#if 0
-    return new KisDynamicOpSettings(0, m_shapeBookmarksModel->bookmarkedConfigurationManager(), m_coloringBookmarksModel->bookmarkedConfigurationManager());
-#endif
+    return new KisDynamicOpSettings(m_optionsWidget,
+                                    m_shapeBookmarksModel->bookmarkedConfigurationManager(),
+                                    m_coloringBookmarksModel->bookmarkedConfigurationManager());
+
 }

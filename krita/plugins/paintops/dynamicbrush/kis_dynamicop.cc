@@ -33,23 +33,30 @@
 #include "kis_dynamic_brush.h"
 
 KisDynamicOp::KisDynamicOp(const KisDynamicOpSettings *settings, KisPainter *painter)
-        : KisPaintOp(painter), m_settings(settings)
+        : KisPaintOp(painter)
+        , m_brush(0)
+        , m_settings(settings)
 {
     Q_ASSERT(settings);
     m_brush = m_settings->createBrush(painter);
-    m_brush->startPainting(painter);
+    if (m_brush)
+        m_brush->startPainting(painter);
 }
 
 KisDynamicOp::~KisDynamicOp()
 {
-    m_brush->endPainting();
-    delete m_brush;
+    if (m_brush) {
+        m_brush->endPainting();
+        delete m_brush;
+    }
 }
 
 void KisDynamicOp::paintAt(const KisPaintInformation& info)
 {
 
+    if (!painter()) return;
     if (!painter()->device()) return;
+    if (!m_brush) return;
 
     KisPaintDeviceSP device = painter()->device();
 

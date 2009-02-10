@@ -111,4 +111,3 @@ private:
 
 
 #endif //KIS_PAINTOP_BOX_H_
-

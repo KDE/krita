@@ -142,8 +142,14 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
     KoZoomHandler converter;
     converter.setZoomAndResolution(100, previewDPI, previewDPI);
     constPaint(painter, converter);
-    //img.save("/tmp/test.png");
-    // TODO: actually save the image
+    writer.startElement("draw:image");
+    // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
+    QString name = context.imageHref(img);
+    writer.addAttribute("xlink:type", "simple" );
+    writer.addAttribute("xlink:show", "embed" );
+    writer.addAttribute("xlink:actuate", "onLoad");
+    writer.addAttribute("xlink:href", name);
+    writer.endElement(); // draw:image
 
     // TODO: Save a preview svg
 

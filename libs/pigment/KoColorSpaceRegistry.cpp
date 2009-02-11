@@ -31,7 +31,7 @@
 #include <klocale.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
-#include <k3staticdeleter.h>
+//#include <k3staticdeleter.h>
 
 #include <lcms.h>
 
@@ -70,13 +70,13 @@ struct KoColorSpaceRegistry::Private {
 };
 
 KoColorSpaceRegistry *KoColorSpaceRegistry::Private::singleton = 0;
-static K3StaticDeleter<KoColorSpaceRegistry> staticDeleter;
+//static K3StaticDeleter<KoColorSpaceRegistry> staticDeleter;
 
 KoColorSpaceRegistry* KoColorSpaceRegistry::instance()
 {
     if (KoColorSpaceRegistry::Private::singleton == 0)
     {
-        staticDeleter.setObject(KoColorSpaceRegistry::Private::singleton, new KoColorSpaceRegistry());
+        //staticDeleter.setObject(KoColorSpaceRegistry::Private::singleton, new KoColorSpaceRegistry());
         KoColorSpaceRegistry::Private::singleton = new KoColorSpaceRegistry();
         KoColorSpaceRegistry::Private::singleton->init();
     }

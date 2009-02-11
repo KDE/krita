@@ -222,12 +222,11 @@ KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageSP img, Ki
 
     KoXmlNode node = element.lastChild();
     KoXmlNode child;
+
     if ( !node.isNull() ) {
-        qDebug() << ">>>>>>>>>>> " << node.isElement() << ", " << node.nodeName() << ", " << node.toText().data();
 
-        if ( node.isElement() ) {
+        if ( !node.toElement().isNull() ) {
 
-            qDebug() << ">>>>>>>>>>>>> " << node.nodeName();
             if ( node.nodeName().toUpper() == LAYERS.toUpper() || node.nodeName().toUpper() == MASKS.toUpper() ) {
                 for ( child = node.lastChild(); !child.isNull(); child = child.previousSibling() ) {
                     KisNode* node = loadNode( child.toElement(), img );

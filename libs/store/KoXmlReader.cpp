@@ -86,6 +86,10 @@
 #include <QStringList>
 #include <QVector>
 
+
+#include <kdeversion.h>
+
+
 /*
  Use more compact representation of in-memory nodes.
 
@@ -722,7 +726,7 @@ public:
           addCData, addProcessing are all related. These are all necessary
           for stateful manipulation of the document. See also the calls
           to these function from KoXmlHandler.
-        
+
           The state itself is defined by the member variables
           currentDepth and the groups (see above).
      */
@@ -1472,8 +1476,11 @@ bool KoXmlNodeData::setContent(QXmlInputSource* source, bool namespaceProcessing
     QXmlSimpleReader reader;
     reader.setFeature(QLatin1String("http://xml.org/sax/features/namespaces"), namespaceProcessing);
     reader.setFeature(QLatin1String("http://xml.org/sax/features/namespace-prefixes"), !namespaceProcessing);
+#if QT_VERSION < 0x040500
     reader.setFeature(QLatin1String("http://trolltech.com/xml/features/report-whitespace-only-CharData"), false);
-
+#else
+    reader.setFeature(QLatin1String("http://qtsoftware.com/xml/features/report-whitespace-only-CharData"), false);
+#endif
     return setContent(source, &reader, errorMsg, errorLine, errorColumn);
 }
 
@@ -2598,7 +2605,11 @@ bool KoXmlDocument::setContent(QIODevice* device, bool namespaceProcessing,
     QXmlSimpleReader reader;
     reader.setFeature("http://xml.org/sax/features/namespaces", namespaceProcessing);
     reader.setFeature("http://xml.org/sax/features/namespace-prefixes", !namespaceProcessing);
-    reader.setFeature("http://trolltech.com/xml/features/report-whitespace-only-CharData", false);
+#if QT_VERSION < 0x040500
+    reader.setFeature(QLatin1String("http://trolltech.com/xml/features/report-whitespace-only-CharData"), false);
+#else
+    reader.setFeature(QLatin1String("http://qtsoftware.com/xml/features/report-whitespace-only-CharData"), false);
+#endif
 
     // FIXME this hack is apparently private
     //reader.setUndefEntityInAttrHack(true);
@@ -2841,7 +2852,11 @@ bool KoXml::setDocument(KoXmlDocument& doc, QIODevice* device,
     QXmlSimpleReader reader;
     reader.setFeature(QLatin1String("http://xml.org/sax/features/namespaces"), namespaceProcessing);
     reader.setFeature(QLatin1String("http://xml.org/sax/features/namespace-prefixes"), !namespaceProcessing);
+#if QT_VERSION < 0x040500
     reader.setFeature(QLatin1String("http://trolltech.com/xml/features/report-whitespace-only-CharData"), false);
+#else
+    reader.setFeature(QLatin1String("http://qtsoftware.com/xml/features/report-whitespace-only-CharData"), false);
+#endif
 
     KoXmlInputSource* source = new KoXmlInputSource(device);
     bool result = doc.setContent(source, &reader, errorMsg, errorLine, errorColumn);

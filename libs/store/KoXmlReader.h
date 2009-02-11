@@ -46,7 +46,7 @@ class QString;
 class QXmlReader;
 class QXmlInputSource;
 
-#include "KoXmlReaderForward.h"
+class KoXmlNode;
 class KoXmlText;
 class KoXmlCDATASection;
 class KoXmlDocumentType;

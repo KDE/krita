@@ -93,6 +93,7 @@ KisLayerBox::KisLayerBox()
     connect(m_wdgLayerBox->listLayers, SIGNAL(contextMenuRequested(const QPoint&, const QModelIndex&)),
             this, SLOT(slotContextMenuRequested(const QPoint&, const QModelIndex&)));
     connect(m_wdgLayerBox->listLayers, SIGNAL(clicked(const QModelIndex&)), SLOT(slotNodeActivated(const QModelIndex&)));
+
     m_viewModeMenu = new KMenu(this);
     QActionGroup *group = new QActionGroup(this);
     QList<QAction*> actions;

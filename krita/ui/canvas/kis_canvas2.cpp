@@ -169,11 +169,19 @@ KoShapeManager* KisCanvas2::shapeManager() const
     KisLayerSP activeLayer = m_d->view->layerManager()->activeLayer();
     if (activeLayer) {
         KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(activeLayer.data());
-        if (shapeLayer)
+        if (shapeLayer) {
+            dbgUI << "Current shape manager belongs to a shape layer " << shapeLayer->shapeManager();
             return shapeLayer->shapeManager();
-        if (activeLayer->selection() && activeLayer->selection()->hasShapeSelection())
-            return static_cast<KisShapeSelection*>(activeLayer->selection()->shapeSelection())->shapeManager();
+        }
+        if (activeLayer->selection() && activeLayer->selection()->hasShapeSelection()) {
+            KoShapeManager* m = static_cast<KisShapeSelection*>(activeLayer->selection()->shapeSelection())->shapeManager();
+            dbgUI << "Current shape manager belongs to a shape selection " << m;
+            return m;
+
+        }
     }
+    dbgUI << "current shape manager belongs to the man canvas " << m_d->shapeManager;
+
     return m_d->shapeManager;
 }
 

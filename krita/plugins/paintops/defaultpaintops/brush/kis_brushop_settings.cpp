@@ -40,7 +40,8 @@ KisBrushOpSettings::KisBrushOpSettings( KisBrushOpSettingsWidget* widget )
 
 }
 
-KisBrushOpSettings::~KisBrushOpSettings() {
+KisBrushOpSettings::~KisBrushOpSettings()
+{
 }
 
 bool KisBrushOpSettings::paintIncremental()

@@ -112,7 +112,7 @@ public:
         setToolType(TOOL_TYPE_TRANSFORM);
         setIcon("tool_perspectivetransform");
         setPriority(12);
-        setActivationShapeId("flake/edit");
+        //setActivationShapeId("flake/edit");
     };
 
     virtual ~KisToolPerspectiveTransformFactory(QObject *parent, const QStringList&) {}

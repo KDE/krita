@@ -113,6 +113,7 @@ public:
         setIcon("krita_tool_measure");
         //setActivationShapeId( KIS_NODE_SHAPE_ID );
         setPriority(16);
+        setActivationShapeId("krita/always");
     }
 
     virtual ~KisToolMeasureFactory() {}

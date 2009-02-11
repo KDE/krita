@@ -180,6 +180,14 @@ public:
     QString imageHref(KoImageData * image);
 
     /**
+     * Get the image href under which the image will be save in the store
+     *
+     * This should only be used for temporary images that are onle there during
+     * saving, e.g. a pixmap representation of a draw:frame
+     */
+    QString imageHref(QImage & image);
+
+    /**
      * Get the images that needs to be saved to the store
      */
     QMap<QByteArray, QString> imagesToSave();
@@ -235,6 +243,7 @@ private:
     QMap<QString, KoSharedSavingData*> m_sharedData;
     QMap<QByteArray, QString> m_imageNames;
     int m_imageId;
+    QMap<QString, QImage> m_images;
 
     KoGenStyles& m_mainStyles;
     KoEmbeddedDocumentSaver& m_embeddedSaver;

@@ -155,6 +155,16 @@ QString KoShapeSavingContext::imageHref(KoImageData * image)
     return it.value();
 }
 
+QString KoShapeSavingContext::imageHref(QImage & image)
+{
+    // TODO this can be optimized to recocnice images which have the same content
+    // Also this can use quite a lot of memeory as the qimage are all kept until
+    // the they are saved to the store in memory
+    QString href = QString("Pictures/image%1.png").arg(++m_imageId);
+    m_images.insert(href, image);
+    return href;
+}
+
 QMap<QByteArray, QString> KoShapeSavingContext::imagesToSave()
 {
     return m_imageNames;
@@ -171,6 +181,25 @@ bool KoShapeSavingContext::saveDataCenter(KoStore *store, KoXmlWriter* manifestW
     foreach(KoDataCenter *dataCenter, m_dataCenter) {
         ok = ok && dataCenter->completeSaving(store, manifestWriter, this);
         kDebug() << "ok" << ok;
+    }
+    for ( QMap<QString, QImage>::iterator it(m_images.begin()); it != m_images.end(); ++it ) {
+        if (store->open(it.key())) {
+            KoStoreDevice device(store);
+            ok = ok && it.value().save(&device, "PNG");
+            store->close();
+            // TODO error handling
+            if (ok) {
+                const QString mimetype(KMimeType::findByPath(it.key(), 0 , true)->name());
+                manifestWriter->addManifestEntry(it.key(), mimetype);
+            }
+            else {
+                kWarning(30006) << "saving image failed";
+            }
+        }
+        else {
+            ok = false;
+            kWarning(30006) << "saving image failed: open store failed";
+        }
     }
     return ok;
 }

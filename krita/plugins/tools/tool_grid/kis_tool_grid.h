@@ -19,7 +19,6 @@
 #define _KIS_TOOL_GRID_H_
 
 #include <kis_tool.h>
-#include <flake/kis_node_shape.h>
 #include <KoToolFactory.h>
 
 class KisCanvas2;
@@ -70,7 +69,7 @@ public:
         setToolType(TOOL_TYPE_VIEW);
         setIcon("krita_tool_grid");
         setPriority(17);
-        //setActivationShapeId(KIS_NODE_SHAPE_ID);
+        setActivationShapeId("krita/always");
     };
 
 

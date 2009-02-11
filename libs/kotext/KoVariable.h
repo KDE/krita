@@ -30,7 +30,7 @@
 
 class QTextInlineObject;
 class QTextDocument;
-class KoXmlElement;
+#include "KoXmlReaderForward.h"
 class KoShape;
 class KoShapeLoadingContext;
 class KoProperties;

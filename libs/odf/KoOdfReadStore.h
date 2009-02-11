@@ -19,12 +19,13 @@
 #ifndef KOODFREADSTORE_H
 #define KOODFREADSTORE_H
 
+#include "KoXmlReaderForward.h"
+
 class QString;
 class QIODevice;
 class QXmlSimpleReader;
 class KoStore;
 class KoOdfStylesReader;
-class KoXmlDocument;
 
 /**
  * Helper class around KoStore for reading out ODF files.

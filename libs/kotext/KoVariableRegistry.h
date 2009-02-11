@@ -27,7 +27,7 @@
 #include <QObject>
 #include <QList>
 
-class KoXmlElement;
+#include "KoXmlReaderForward.h"
 class KoShapeLoadingContext;
 class KoVariable;
 class KoCanvasBase;

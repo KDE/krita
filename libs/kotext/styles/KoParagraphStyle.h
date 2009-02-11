@@ -36,7 +36,7 @@ class QTextBlock;
 class KoStyleStack;
 class KoGenStyle;
 class KoGenStyles;
-class KoXmlElement;
+#include "KoXmlReaderForward.h"
 class KoOdfLoadingContext;
 
 /**

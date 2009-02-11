@@ -612,9 +612,9 @@ void KoToolManager::selectionChanged(QList<KoShape*> shapes)
     // there needs to be at least one shape for a tool without an activationShapeId
     // to work
     // if not change the current tool to the default tool
-    if (!(d->canvasData->activationShapeId.isNull() && shapes.size() > 0) 
-    && d->canvasData->activationShapeId != "flake/always" 
-    && d->canvasData->activationShapeId != "flake/edit" 
+    if (!(d->canvasData->activationShapeId.isNull() && shapes.size() > 0)
+    && d->canvasData->activationShapeId != "flake/always"
+    && d->canvasData->activationShapeId != "flake/edit"
     && ! types.contains(d->canvasData->activationShapeId)) {
         switchTool(KoInteractionTool_ID, false);
     }
@@ -624,11 +624,19 @@ void KoToolManager::selectionChanged(QList<KoShape*> shapes)
 
 void KoToolManager::currentLayerChanged(const KoShapeLayer* layer)
 {
+    kDebug( 30006 ) << "layer changed to " << layer;
+
     emit currentLayerChanged(d->canvasData->canvas, layer);
     bool enabled = layer == 0 || (layer->isEditable() && layer->isVisible());
+
+    kDebug(30006 ) << "and the layer is " << ( enabled ? "true" : "false" );
+
     KoToolProxy *proxy = d->proxies.value(d->canvasData->canvas->canvas());
-    if (proxy)
+    kDebug( 30006 ) << " and the proxy is " << proxy;
+    if (proxy) {
+        kDebug( 30006 ) << " set " << d->canvasData->activeTool << ( enabled ? "enabled" : "disabled" );
         proxy->setActiveTool(enabled ? d->canvasData->activeTool : 0);
+    }
 }
 
 KoCanvasController *KoToolManager::activeCanvasController() const

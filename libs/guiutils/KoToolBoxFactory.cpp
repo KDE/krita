@@ -18,7 +18,7 @@
  */
 
 #include "KoToolBoxFactory.h"
-
+#include "klocale.h"
 #include <KoToolManager.h>
 #include "KoToolBox_p.h"
 
@@ -29,10 +29,15 @@ public:
 };
 
 
-KoToolBoxFactory::KoToolBoxFactory(KoCanvasController *canvas, const QString& appName)
+KoToolBoxFactory::KoToolBoxFactory(KoCanvasController *canvas, const QString& title)
     : d( new Private())
 {
-    d->appName = appName;
+    if (title.isEmpty()) {
+        d->appName = i18n("Tools");
+    }
+    else {
+        d->appName = title;
+    }
     d->canvas = canvas;
 }
 

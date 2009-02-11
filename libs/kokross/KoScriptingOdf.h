@@ -119,12 +119,13 @@ class KoScriptingOdfReader : public QObject
         * root-element have a level of 1, there children of 2, etc.
         */
         int level() const;
-
+#ifndef KOXML_USE_QDOM
         /**
         * Return a list of attribute-names the element has. This could be
         * for example "text:style-name".
         */
         QStringList attributeNames();
+#endif
 
         /**
         * Return the value of the attribute with the name \p name .

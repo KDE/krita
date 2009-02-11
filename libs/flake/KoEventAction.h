@@ -21,10 +21,9 @@
 #define KOEVENTACTION_H
 
 #include "flake_export.h"
-
+#include "KoXmlReaderForward.h"
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
-class KoXmlElement;
 class KoTool;
 
 /**

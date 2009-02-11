@@ -22,7 +22,7 @@
 
 #include "flake_export.h"
 
-class KoXmlElement;
+#include "KoXmlReaderForward.h"
 class KoShapeLoadingContext;
 
 /**

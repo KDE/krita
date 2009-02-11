@@ -88,10 +88,11 @@ public:
             : KoToolFactory(parent, "KritaSelected/KisToolColorPicker", i18n("Color Picker")) {
         setToolTip(i18n("Select a color from the image or current layer"));
         setToolType(TOOL_TYPE_FILL);
-        //setActivationShapeId( KIS_NODE_SHAPE_ID );
+//         setActivationShapeId( KIS_NODE_SHAPE_ID );
         setPriority(15);
         setIcon("krita_tool_color_picker");
         setShortcut(KShortcut(Qt::Key_P));
+        setActivationShapeId("krita/always");
     }
 
     virtual ~KisToolColorPickerFactory() {}

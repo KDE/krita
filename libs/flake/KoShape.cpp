@@ -1085,13 +1085,13 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
     // The position is implicitly stored in the transformation matrix
     // if the transformation is saved as well
     if ((attributes & OdfPosition) && !(attributes & OdfTransformation)) {
-        const QPointF p(position());
+        const QPointF p(position() * context.shapeOffset(this));
         context.xmlWriter().addAttributePt("svg:x", p.x());
         context.xmlWriter().addAttributePt("svg:y", p.y());
     }
 
     if (attributes & OdfTransformation) {
-        QMatrix matrix = absoluteTransformation(0);
+        QMatrix matrix = absoluteTransformation(0) * context.shapeOffset(this);
         if (! matrix.isIdentity()) {
             QString m = QString("matrix(%1 %2 %3 %4 %5pt %6pt)")
                         .arg(matrix.m11()).arg(matrix.m12())

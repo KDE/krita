@@ -233,6 +233,32 @@ public:
      */
     KoSharedSavingData * sharedData(const QString & id) const;
 
+    /**
+     * Add an offset that will be applied to the shape position when saved
+     *
+     * This is needed e.g. for shapes anchored to a text shape as the position is
+     * saved as offset to the anchor.
+     *
+     * @param shape The shape for which the offset should be added.
+     * @param m The offset which should be applied on saving the position.
+     */
+    void addShapeOffset(const KoShape * shape, const QMatrix & m);
+
+    /**
+     * Remove an offset from the saved offset list
+     *
+     * @param shape The shape for which the offset should be removed.
+     */
+    void removeShapeOffset(const KoShape * shape);
+
+    /**
+     * Get the offest that will be applied to the shape position when saved.
+     *
+     * @param shape The shape for which the offset should be get.
+     * @return the saved offset or QMatrix() when offset is not set.
+     */
+    QMatrix shapeOffset(const KoShape * shape) const;
+
 private:
     KoXmlWriter *m_xmlWriter;
     KoShapeSavingOptions m_savingOptions;
@@ -244,6 +270,7 @@ private:
     QMap<QByteArray, QString> m_imageNames;
     int m_imageId;
     QMap<QString, QImage> m_images;
+    QHash<const KoShape *, QMatrix> m_shapeOffsets;
 
     KoGenStyles& m_mainStyles;
     KoEmbeddedDocumentSaver& m_embeddedSaver;

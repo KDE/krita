@@ -225,3 +225,18 @@ KoSharedSavingData * KoShapeSavingContext::sharedData(const QString & id) const
     }
     return data;
 }
+
+void KoShapeSavingContext::addShapeOffset(const KoShape * shape, const QMatrix & m)
+{
+    m_shapeOffsets.insert(shape, m);
+}
+
+void KoShapeSavingContext::removeShapeOffset(const KoShape * shape)
+{
+    m_shapeOffsets.remove(shape);
+}
+
+QMatrix KoShapeSavingContext::shapeOffset(const KoShape * shape) const
+{
+    return m_shapeOffsets.value(shape, QMatrix());
+}

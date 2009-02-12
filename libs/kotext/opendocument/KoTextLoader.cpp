@@ -713,15 +713,22 @@ void KoTextLoader::loadShape(const KoXmlElement& element, QTextCursor& cursor)
         return;
     }
 
-    KoTextAnchor *anchor = new KoTextAnchor(shape);
-    anchor->loadOdfFromShape();
     d->textSharedData->shapeInserted(shape);
+    if (shape->hasAdditionalAttribute( "text:anchor-type")) {
+        QString anchorType = shape->additionalAttribute("text:anchor-type");
+        // page anchored shapes are handled differently
+        if (anchorType != "page") {
+            KoTextAnchor *anchor = new KoTextAnchor(shape);
+            anchor->loadOdfFromShape();
+            d->textSharedData->shapeInserted(shape);
 
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
-    if (layout) {
-        KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
-        if (textObjectManager) {
-            textObjectManager->insertInlineObject(cursor, anchor);
+            KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+            if (layout) {
+                KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+                if (textObjectManager) {
+                    textObjectManager->insertInlineObject(cursor, anchor);
+                }
+            }
         }
     }
 }

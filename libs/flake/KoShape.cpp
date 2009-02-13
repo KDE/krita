@@ -754,14 +754,8 @@ bool KoShape::isEditable() const
     if (!d->visible || d->locked)
         return false;
 
-    KoShapeContainer * p = parent();
-    if (p && p->isChildLocked(this))
+    if (d->parent && d->parent->isChildLocked(this))
         return false;
-    while (p) {
-        if (! p->isEditable())
-            return false;
-        p = p->parent();
-    }
 
     return true;
 }

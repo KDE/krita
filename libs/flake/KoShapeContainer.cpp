@@ -37,6 +37,18 @@ public:
         Relation *r = new Relation(child);
         m_relations.append(r);
     }
+    void proposeMove(KoShape *shape, QPointF &move) {
+        KoShapeContainer *parent = shape->parent();
+        bool allowedToMove = true;
+        while (allowedToMove && parent) {
+            allowedToMove = parent->isEditable();
+            parent = parent->parent();
+        }
+        if (! allowedToMove) {
+            move.setX(0);
+            move.setY(0);
+        }
+    }
 
     void setClipping(const KoShape *child, bool clipping) {
         Relation *relation = findRelation(child);

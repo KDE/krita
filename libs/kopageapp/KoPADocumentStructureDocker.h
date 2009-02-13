@@ -72,6 +72,7 @@ public:
     void setMasterMode(bool master);
     
 protected:
+    /// This is the context menu for the slide show in the KoPADocumentStructure docker
     void contextMenuEvent(QContextMenuEvent* event);
 
 signals:

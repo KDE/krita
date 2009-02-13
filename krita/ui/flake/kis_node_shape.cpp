@@ -167,8 +167,6 @@ void KisNodeShape::editabilityChanged( )
 KisImageSP KisNodeShape::getImage() const
 {
 
-    qDebug() << "m_d->node->inherits layer " << m_d->node->inherits("KisLayer");
-    qDebug() << "m_d->node->inherits mask " << m_d->node->inherits("KisMask");
     if ( m_d->node->inherits( "KisLayer" ) ) {
         return dynamic_cast<KisLayer*>( m_d->node.data() )->image();
     }

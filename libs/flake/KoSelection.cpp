@@ -29,7 +29,6 @@
 #include <QPainter>
 #include <QTimer>
 
-
 class KoSelection::Private
 {
 public:
@@ -45,31 +44,43 @@ public:
 
     void selectionChangedEvent();
 
-    QRectF sizeRect() const;
+    QRectF sizeRect();
 
     KoSelection *q;
+    QRectF globalBound;
 };
 
-QRectF KoSelection::Private::sizeRect() const
+QRectF KoSelection::Private::sizeRect()
 {
     bool first = true;
     QRectF bb;
 
-    QMatrix itmat = q->absoluteTransformation(0).inverted();
-
+    QMatrix invSelectionTransform = q->absoluteTransformation(0).inverted();
+    
+    QRectF bound;
+    
     if (!selectedShapes.isEmpty()) {
         QList<KoShape*>::const_iterator it = selectedShapes.begin();
         for (; it != selectedShapes.end(); ++it) {
             if (dynamic_cast<KoShapeGroup*>(*it))
                 continue;
+            
+            const QMatrix shapeTransform = (*it)->absoluteTransformation(0);
+            const QRectF shapeRect(QRectF(QPointF(), (*it)->size()));
+            
             if (first) {
-                bb = ((*it)->absoluteTransformation(0) * itmat).mapRect(QRectF(QPointF(), (*it)->size()));
+                bb = (shapeTransform * invSelectionTransform).mapRect(shapeRect);
+                bound = shapeTransform.mapRect( shapeRect );
                 first = false;
-            } else
-                bb = bb.unite(((*it)->absoluteTransformation(0) * itmat).mapRect(QRectF(QPointF(), (*it)->size())));
+            } else {
+                bb = bb.united((shapeTransform * invSelectionTransform).mapRect(shapeRect));
+                bound = bound.united( shapeTransform.mapRect( shapeRect ) );
+            }
         }
     }
 
+    globalBound = bound;
+    
     return bb;
 }
 
@@ -85,8 +96,6 @@ void KoSelection::Private::selectionChangedEvent()
 {
     eventTriggered = false;
     q->setScale(1, 1);
-    //just as well use the oppertunity to update the size and position
-    q->updateSizeAndPosition();
     emit q->selectionChanged();
 }
 
@@ -145,6 +154,10 @@ void KoSelection::select(KoShape * object, bool recursive)
     Q_ASSERT(object);
     if (! object->isSelectable() || ! object->isVisible(true))
         return;
+    
+    // save old number of selected shapes
+    uint oldSelectionCount = d->selectedShapes.count();
+    
     if (!d->selectedShapes.contains(object))
         d->selectedShapes << object;
 
@@ -167,13 +180,27 @@ void KoSelection::select(KoShape * object, bool recursive)
         }
     }
 
-    if (d->selectedShapes.count() == 1)
+    if (d->selectedShapes.count() == 1) {
         setTransformation(object->absoluteTransformation(0));
-    else
+        updateSizeAndPosition();
+    }
+    else {
         setTransformation(QMatrix());
-
-    updateSizeAndPosition();
-
+        // we are resetting the transformation here anyway,
+        // so we can just add the newly selected shapes to the bounding box
+        // in document coordinates and then use that size and position
+        uint newSelectionCount = d->selectedShapes.count();
+        for( uint i = oldSelectionCount; i < newSelectionCount; ++i ) {
+            KoShape * shape = d->selectedShapes[i];
+            const QMatrix shapeTransform = shape->absoluteTransformation(0);
+            const QRectF shapeRect(QRectF(QPointF(), shape->size()));
+            
+            d->globalBound = d->globalBound.united( shapeTransform.mapRect( shapeRect ) );
+        }
+        setSize(d->globalBound.size());
+        setPosition(d->globalBound.topLeft());
+    }
+    
     d->requestSelectionChangedEvent();
 }
 
@@ -245,7 +272,7 @@ void KoSelection::updateSizeAndPosition()
 
 QRectF KoSelection::boundingRect() const
 {
-    return absoluteTransformation(0).mapRect(d->sizeRect());
+    return absoluteTransformation(0).mapRect(QRectF(QPointF(), size()));
 }
 
 const QList<KoShape*> KoSelection::selectedShapes(KoFlake::SelectionType strip) const

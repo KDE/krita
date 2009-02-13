@@ -157,9 +157,11 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
     } */
 
     if (qAbs(newPosition.y()) < 10.0) // TopOfFrame
-    {//kDebug(32500) <<"  TopOfFrame";
+    {
+        kDebug(32500) <<"  TopOfFrame";
         relation->anchor->setAlignment(KoTextAnchor::TopOfFrame);
-    } else if (qAbs(parentShapeRect.height() - newPosition.y()) < 10.0) {//kDebug(32500) <<"  BottomOfFrame";
+    } else if (qAbs(parentShapeRect.height() - newPosition.y()) < 10.0) {
+        kDebug(32500) <<"  BottomOfFrame";
         relation->anchor->setAlignment(KoTextAnchor::BottomOfFrame); // TODO
     } else { // need layout info..
         QTextBlock block = relation->anchor->document()->findBlock(relation->anchor->positionInDocument());
@@ -169,17 +171,20 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
             Q_ASSERT(data);
             QTextLine tl = layout->lineAt(0);
             qreal y = tl.y() - data->documentOffset() - newPosition.y();
-            if (y >= 0 && y < 10) {//kDebug(32500) <<"  TopOfParagraph" << y <<"";
+            if (y >= 0 && y < 10) {
+                kDebug(32500) <<"  TopOfParagraph" << y <<"";
                 relation->anchor->setAlignment(KoTextAnchor::TopOfParagraph);
             } else {
                 tl = layout->lineAt(layout->lineCount() - 1);
                 y = newPosition.y() - tl.y() - data->documentOffset() - tl.ascent();
-                if (y >= 0 && y < 10) {//kDebug(32500) <<"  BottomOfParagraph" << y;
+                if (y >= 0 && y < 10) {
+                    kDebug(32500) <<"  BottomOfParagraph" << y;
                     relation->anchor->setAlignment(KoTextAnchor::BottomOfParagraph); // TODO
                 } else {
                     tl = layout->lineForTextPosition(relation->anchor->positionInDocument() - block.position());
                     y = tl.y() - data->documentOffset() - newPosition.y();
-                    if (y >= 0 && y < 10) {//kDebug(32500) <<"  AboveCurrentLine";
+                    if (y >= 0 && y < 10) {
+                        kDebug(32500) <<"  AboveCurrentLine";
                         relation->anchor->setAlignment(KoTextAnchor::AboveCurrentLine);
                     }
                     //else  do VerticalOffset here as well?

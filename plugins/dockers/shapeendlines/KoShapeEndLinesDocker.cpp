@@ -48,7 +48,7 @@
 #include <KoToolManager.h>
 #include <KoShape.h> 
 #include <KoSelection.h>
-
+#include <KoPathShape.h>
 
 
 #include <QLabel>
@@ -89,15 +89,13 @@ QByteArray KoShapeEndLinesDocker::generateSVG(QString path, QString viewBox, QSi
     str.append(path.toUtf8());
     str.append("\" />\
     </svg>");
-    kDebug() << size.width();
-    kDebug() << size.height();
-    kDebug() << str;
     return str;
 }
 
 KoShapeEndLinesDocker::KoShapeEndLinesDocker()
     : d( new Private() )
 {
+    int proportion = 3;
     setWindowTitle( i18n( "End Lines" ) );
 
     QWidget *mainWidget = new QWidget( this );
@@ -128,9 +126,10 @@ KoShapeEndLinesDocker::KoShapeEndLinesDocker()
                 QPixmap endLinePixmap(d->endEndLineComboBox->iconSize());
                 endLinePixmap.fill(QColor(Qt::transparent));
                 QPainter endLinePainter(&endLinePixmap);
+
                 // Convert path to SVG
-                endLineRenderer.load(generateSVG(drawMarker.attribute("d"), drawMarker.attribute("viewBox"), iconSize));
-                endLineRenderer.render(&endLinePainter);
+                endLineRenderer.load(generateSVG(drawMarker.attribute("d"), drawMarker.attribute("viewBox"), QSize(iconW-6, iconH-6)));
+                endLineRenderer.render(&endLinePainter, QRectF(proportion, proportion, iconW-(proportion*2), iconH-(proportion*2)));
 
                 // init QIcon
                 QIcon drawIcon(endLinePixmap);
@@ -180,31 +179,28 @@ KoShapeEndLinesDocker::~KoShapeEndLinesDocker()
 
 void KoShapeEndLinesDocker::applyChanges()
 {
-   /*
-   KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-   KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-   if( ! selection || ! selection->count() )
-        return;
-   
-    QSvgRenderer endLineRenderer;
-                // Init QPainter and QPixmap
-                QPixmap endLinePixmap(d->beginEndLineComboBox->iconSize());
-                endLinePixmap.fill(QColor(Qt::transparent));
-                QPainter endLinePainter(&endLinePixmap);
-                // Convert path to SVG
-                endLineRenderer.load(generateSVG(drawMarker.attribute("d"), drawMarker.attribute("viewBox")));
-                endLineRenderer.render(&endLinePainter);
-
-                // init QIcon
-                QIcon drawIcon(endLinePixmap);
-
-   
-   KoShape* shape = selection->firstSelectedShape();
-   //qreal angle = shape->rotation();
-   kDebug() << selection->count();
-   //shape->isVisible(false);
-   */
-
+//   KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+//   KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+//   if( ! selection || ! selection->count() )
+//        return;
+//   
+//    QSvgRenderer endLineRenderer;
+//                // Init QPainter and QPixmap
+//                QPixmap endLinePixmap(d->beginEndLineComboBox->iconSize());
+//                endLinePixmap.fill(QColor(Qt::transparent));
+//                QPainter endLinePainter(&endLinePixmap);
+//                // Convert path to SVG
+//                endLineRenderer.load(generateSVG(drawMarker.attribute("d"), drawMarker.attribute("viewBox")));
+//                endLineRenderer.render(&endLinePainter);
+//
+//                // init QIcon
+//                QIcon drawIcon(endLinePixmap);
+//
+//   
+//   KoShape* shape = selection->firstSelectedShape();
+//   //qreal angle = shape->rotation();
+//   kDebug() << selection->count();
+//   //shape->isVisible(false);
 }
 
 

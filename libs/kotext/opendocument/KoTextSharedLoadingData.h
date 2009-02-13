@@ -89,15 +89,12 @@ public:
     KoListStyle *listStyle(const QString &name, bool stylesDotXml);
 
 protected:
-
     /**
      * This method got called by kotext once a \a KoShape got inserted and an
      * application can implement this to do additional things with shapes once
      * they got inserted.
      */
-    virtual void shapeInserted(KoShape* shape) {
-        Q_UNUSED(shape);
-    }
+    virtual void shapeInserted(KoShape* shape);
 
 private:
     enum StyleType {

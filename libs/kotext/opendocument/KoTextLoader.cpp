@@ -713,7 +713,6 @@ void KoTextLoader::loadShape(const KoXmlElement& element, QTextCursor& cursor)
         return;
     }
 
-    d->textSharedData->shapeInserted(shape);
     if (shape->hasAdditionalAttribute( "text:anchor-type")) {
         QString anchorType = shape->additionalAttribute("text:anchor-type");
         // page anchored shapes are handled differently
@@ -729,6 +728,9 @@ void KoTextLoader::loadShape(const KoXmlElement& element, QTextCursor& cursor)
                     textObjectManager->insertInlineObject(cursor, anchor);
                 }
             }
+        }
+        else {
+            d->textSharedData->shapeInserted(shape);
         }
     }
 }

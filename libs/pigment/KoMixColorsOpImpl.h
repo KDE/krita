@@ -85,6 +85,9 @@ class KoMixColorsOpImpl : public KoMixColorsOp {
                         if(v > KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::max) {
                             v = KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::max;
                         }
+                        if(v < KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::min) {
+                            v = KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::min;
+                        }
                         dstColor[ i ] = v;
                     }
                 }

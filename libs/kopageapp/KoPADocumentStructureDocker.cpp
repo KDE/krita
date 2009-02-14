@@ -27,9 +27,6 @@
 #include "KoPAMasterPage.h"
 #include "KoPAPage.h"
 #include "commands/KoPAPageInsertCommand.h"
-#if 0 // XXX: Add undo for reordering pages, look at Karbon
-#include <KarbonLayerReorderCommand.h>
-#endif
 
 #include <KoShapeManager.h>
 #include <KoShapeBorderModel.h>
@@ -220,11 +217,11 @@ void KoPADocumentStructureDocker::itemClicked( const QModelIndex &index )
 {
     Q_ASSERT(index.internalPointer());
 
-    if ( ! index.isValid() )
+    if ( !index.isValid() )
         return;
 
     KoShape *shape = static_cast<KoShape*>( index.internalPointer() );
-    if ( ! shape )
+    if ( !shape )
         return;
     // check whether the newly selected shape is a page or shape/layer
     bool isPage = ( dynamic_cast<KoPAPageBase *>( shape ) != 0 );
@@ -254,14 +251,20 @@ void KoPADocumentStructureDocker::itemClicked( const QModelIndex &index )
             // if the newly selected shape is not in the same page as previously
             // selected shape(s), then clear previous selection
             KoPAPageBase *currentPage = m_doc->pageByShape( m_selectedShapes.first() );
+            KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>( shape );
             if ( currentPage != newPageByShape ) {
                 m_sectionView->clearSelection();
                 selection->deselectAll();
                 m_sectionView->setCurrentIndex( index );
                 m_selectedShapes.clear();
                 emit pageChanged( newPageByShape );
-                selection->select( shape );
-                shape->update();
+                if ( layer ) {
+                    selection->setActiveLayer( layer );
+                }
+                else {
+                    selection->select( shape );
+                    shape->update();
+                }
             }
             else {
                 QList<KoPAPageBase*> selectedPages;
@@ -282,6 +285,11 @@ void KoPADocumentStructureDocker::itemClicked( const QModelIndex &index )
                         selection->select( shape );
                         shape->update();
                     }
+                }
+                // if we just selected a layer, check whether this layer is already active, if not
+                // then make it active
+                if ( layer && selection->activeLayer() != layer && selectedLayers.count() <= 1 ) {
+                    selection->setActiveLayer( layer );
                 }
             }
         }

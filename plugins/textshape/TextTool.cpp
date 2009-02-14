@@ -40,8 +40,8 @@
 #include <KoPointerEvent.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoColor.h>
-#include <KoColorSetAction.h>
 #include <KoColorBackground.h>
+#include <KoColorPopupAction.h>
 
 #include <KoCharacterStyle.h>
 #include <KoTextDocumentLayout.h>
@@ -324,13 +324,13 @@ TextTool::TextTool(KoCanvasBase *canvas)
     addAction("format_fontsize", m_actionFormatFontSize);
     connect(m_actionFormatFontSize, SIGNAL(fontSizeChanged(int)), &m_selectionHandler, SLOT(setFontSize(int)));
 
-    m_actionFormatTextColor = new KoColorSetAction(this);
+    m_actionFormatTextColor = new KoColorPopupAction(this);
     m_actionFormatTextColor->setIcon(KIcon("format-text-color"));
     m_actionFormatTextColor->setToolTip(i18n("Text Color..."));
     addAction("format_textcolor", m_actionFormatTextColor);
     connect(m_actionFormatTextColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setTextColor(const KoColor &)));
 
-    m_actionFormatBackgroundColor = new KoColorSetAction(this);
+    m_actionFormatBackgroundColor = new KoColorPopupAction(this);
     m_actionFormatBackgroundColor->setIcon(KIcon("format-fill-color"));
     m_actionFormatBackgroundColor->setToolTip(i18n("Background Color..."));
     m_actionFormatBackgroundColor->setText(i18n("Background"));

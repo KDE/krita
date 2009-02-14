@@ -43,8 +43,11 @@
 #include <KoSelection.h>
 #include <KoCompositeOp.h>
 #include <KoShapeManager.h>
+#include <KoProgressUpdater.h>
 
 #include <kis_global.h>
+#include <canvas/kis_canvas2.h>
+#include <kis_view2.h>
 #include <kis_painter.h>
 #include <kis_cursor.h>
 #include <kis_image.h>
@@ -53,6 +56,7 @@
 #include <kis_selection.h>
 #include <kis_filter_strategy.h>
 #include <widgets/kis_cmb_idlist.h>
+#include <kis_statusbar.h>
 #include <kis_transform_worker.h>
 
 #include "flake/kis_node_shape.h"
@@ -624,8 +628,14 @@ void KisToolTransform::transform()
     if (!image() || !currentNode()->paintDevice())
         return;
 
+    KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
+    if(!canvas)
+        return;
+
     QPointF t = m_translate - rot(m_originalCenter.x() * m_scaleX, m_originalCenter.y() * m_scaleY);
-    //KoUpdater *progress = m_subject->progressDisplay();
+    KoProgressUpdater updater(canvas->view()->statusBar()->progress());
+    updater.start( 100, i18n("Transform") );
+    KoUpdater progress = updater.startSubtask();
 
     // This mementoes the current state of the active device.
     TransformCmd * transaction = new TransformCmd(this, currentNode(), m_scaleX,
@@ -655,7 +665,7 @@ void KisToolTransform::transform()
     // Perform the transform. Since we copied the original state back, this doesn't degrade
     // after many tweaks. Since we started the transaction before the copy back, the memento
     // has the previous state.
-    KisTransformWorker worker(currentNode()->paintDevice(), m_scaleX, m_scaleY, 0, 0, m_a, int(t.x()), int(t.y()), 0/*progress*/, m_filter);
+    KisTransformWorker worker(currentNode()->paintDevice(), m_scaleX, m_scaleY, 0, 0, m_a, int(t.x()), int(t.y()), &progress, m_filter);
     worker.run();
 
 // XXX_PROGRESS, XXX_LAYERS

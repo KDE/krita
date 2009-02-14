@@ -223,21 +223,24 @@ KisNode* KisKraLoader::loadNodes(const KoXmlElement& element, KisImageSP img, Ki
     KoXmlNode node = element.lastChild();
     KoXmlNode child;
 
+    QDomDocument doc;
+
     if ( !node.isNull() ) {
 
-        if ( !node.toElement().isNull() ) {
+        if ( node.isElement() ) {
 
             if ( node.nodeName().toUpper() == LAYERS.toUpper() || node.nodeName().toUpper() == MASKS.toUpper() ) {
                 for ( child = node.lastChild(); !child.isNull(); child = child.previousSibling() ) {
                     KisNode* node = loadNode( child.toElement(), img );
                     if ( !node ) {
-                        warnFile << "Could not load node";
+                        qDebug() << ">>>>>>>>>>>>>>>>>>> Could not load node";
 #ifdef __GNUC__
 #warning "KisKraLoader::loadNodes: report node load failures back to the user!"
 #endif
                     } else {
                         img->nextLayerName(); // Make sure the nameserver is current with the number of nodes.
-                        if ( node->inherits( "KisLayer" ) ) {
+                        img->addNode(node, parent);
+                        if ( node->inherits( "KisLayer" ) && child.childNodesCount() > 0 ) {
                             loadNodes( child.toElement(), img, node );
                         }
 

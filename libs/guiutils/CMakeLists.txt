@@ -47,7 +47,7 @@ set(koguiutils_LIB_SRCS
    KoUniColorChooser.cpp
    KoUniColorDialog.cpp
    KoColorSetWidget.cpp
-   KoColorSetAction.cpp
+   KoColorPopupAction.cpp
    KoEditColorSetDialog.cpp
    KoColorPatch.cpp
    KoDualColorButton.cpp
@@ -67,7 +67,6 @@ set(koguiutils_LIB_SRCS
     KoPageLayoutWidget.cpp
     KoPagePreviewWidget.cpp
     KoResourceSelector.cpp
-    KoColorComboBox.cpp
 )
 
 kde4_add_ui_files( koguiutils_LIB_SRCS

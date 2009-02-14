@@ -28,26 +28,33 @@
 class KoColor;
 
 /**
- * KoColorSetAction makes use of KoColorSetWidget to show a widget for for choosing a color (colormanaged via pigment).
- * @see KoColorSetAction
+ * KoColorPopupAction makes use of KoColorSetWidget to show a widget for for choosing a color (colormanaged via pigment).
+ * @see KoColorPopupAction
  */
 
-class KOGUIUTILS_EXPORT KoColorSetAction : public KAction
+class KOGUIUTILS_EXPORT KoColorPopupAction : public KAction
 {
     Q_OBJECT
 
 public:
     /**
-      * Constructs a KoColorSetAction with the specified parent.
+      * Constructs a KoColorPopupAction with the specified parent.
       *
       * @param parent The parent for this action.
       */
-    KoColorSetAction(QObject *parent = 0);
+    KoColorPopupAction(QObject *parent = 0);
 
     /**
      * Destructor
      */
-    virtual ~KoColorSetAction();
+    virtual ~KoColorPopupAction();
+
+public slots:
+    /// Sets a new color to be displayed
+    void setCurrentColor( const QColor &color );
+
+    /// Returns the current color
+    QColor currentColor() const;
 
 signals:
     /**
@@ -58,12 +65,15 @@ signals:
     void colorChanged(const KoColor &color);
 
 private slots:
-    void handleColorChange(const KoColor &color, bool final);
-    void showCustomColorDialog();
+    void emitColorChanged();
+    void colorWasSelected(const KoColor &color, bool final);
+    void colorWasEdited( const QColor &color );
+    void opacityWasChanged( int opacity );
 
 private:
-    class KoColorSetActionPrivate;
-    KoColorSetActionPrivate * const d;
+    void updateIcon();
+    class KoColorPopupActionPrivate;
+    KoColorPopupActionPrivate * const d;
 };
 
 #endif

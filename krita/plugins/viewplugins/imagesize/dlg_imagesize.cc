@@ -62,8 +62,8 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 
     m_page->doubleResolution->setValue(72.0 * resolution);
 
-    m_page->cmbInteractor->addItem("Size in Pixels");
-    m_page->cmbInteractor->addItem("Print Size");
+    m_page->cmbInteractor->addItem(i18n("Size in Pixels"));
+    m_page->cmbInteractor->addItem(i18n("Print Size"));
 
     slotAspectChanged(true);
 

@@ -55,7 +55,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->intPixelHeight->setValue(height);
 
     m_page->cmbFilterType->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
-    m_page->cmbFilterType->setCurrent("Mitchell");
+    m_page->cmbFilterType->setCurrent("Bicubic");
 
     m_page->cmbWidthUnit->addItems(KoUnit::listOfUnitName());
     m_page->cmbHeightUnit->addItems(KoUnit::listOfUnitName());

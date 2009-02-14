@@ -726,7 +726,7 @@ QWidget* KisToolTransform::createOptionWidget()
     m_optWidget->cmbFilter->clear();
     m_optWidget->cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
 
-    m_optWidget->cmbFilter->setCurrent("Mitchell");
+    m_optWidget->cmbFilter->setCurrent("Bicubicl");
     connect(m_optWidget->cmbFilter, SIGNAL(activated(const KoID &)),
             this, SLOT(slotSetFilter(const KoID &)));
 

@@ -95,12 +95,16 @@ void KoRgbColorSpaceTester::testBasics()
 #endif
 }
 
+#define PIXEL_RED 0
+#define PIXEL_GREEN 1
+#define PIXEL_BLUE 2
+#define PIXEL_ALPHA 3
+
 void KoRgbColorSpaceTester::testMixColors()
 {
-#if 0
-    KoColorProfile *defProfile = new KoColorProfile(cmsCreate_sRGBProfile());
-    KisRgbColorSpace *cs = new KisRgbColorSpace(defProfile);
-
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(
+                KoColorSpaceRegistry::instance()->colorSpaceId( RGBAColorModelID.id(), Integer8BitsColorDepthID.id() ) , "");
+    KoMixColorsOp * mixOp = cs->mixColorsOp();
 
     // Test mixColors.
     quint8 pixel1[4];
@@ -118,7 +122,7 @@ void KoRgbColorSpaceTester::testMixColors()
     pixel2[PIXEL_ALPHA] = 0;
 
     const quint8 *pixelPtrs[2];
-    quint8 weights[2];
+    qint16 weights[2];
 
     pixelPtrs[0] = pixel1;
     pixelPtrs[1] = pixel2;
@@ -126,32 +130,32 @@ void KoRgbColorSpaceTester::testMixColors()
     weights[0] = 255;
     weights[1] = 0;
 
-    cs->mixColors(pixelPtrs, weights, 2, outputPixel);
+    mixOp->mixColors(pixelPtrs, weights, 2, outputPixel);
 
-    CHECK((int)outputPixel[PIXEL_RED], 255);
-    CHECK((int)outputPixel[PIXEL_GREEN], 255);
-    CHECK((int)outputPixel[PIXEL_BLUE], 255);
-    CHECK((int)outputPixel[PIXEL_ALPHA], 255);
+    QVERIFY((int)outputPixel[PIXEL_RED] == 255);
+    QVERIFY((int)outputPixel[PIXEL_GREEN] == 255);
+    QVERIFY((int)outputPixel[PIXEL_BLUE] == 255);
+    QVERIFY((int)outputPixel[PIXEL_ALPHA] == 255);
 
     weights[0] = 0;
     weights[1] = 255;
 
-    cs->mixColors(pixelPtrs, weights, 2, outputPixel);
+    mixOp->mixColors(pixelPtrs, weights, 2, outputPixel);
 
-    CHECK((int)outputPixel[PIXEL_RED], 0);
-    CHECK((int)outputPixel[PIXEL_GREEN], 0);
-    CHECK((int)outputPixel[PIXEL_BLUE], 0);
-    CHECK((int)outputPixel[PIXEL_ALPHA], 0);
+    QVERIFY((int)outputPixel[PIXEL_RED] == 0);
+    QVERIFY((int)outputPixel[PIXEL_GREEN] == 0);
+    QVERIFY((int)outputPixel[PIXEL_BLUE] == 0);
+    QVERIFY((int)outputPixel[PIXEL_ALPHA] == 0);
 
     weights[0] = 128;
     weights[1] = 127;
 
-    cs->mixColors(pixelPtrs, weights, 2, outputPixel);
+    mixOp->mixColors(pixelPtrs, weights, 2, outputPixel);
      
-    CHECK((int)outputPixel[PIXEL_RED], 255);
-    CHECK((int)outputPixel[PIXEL_GREEN], 255);
-    CHECK((int)outputPixel[PIXEL_BLUE], 255);
-    CHECK((int)outputPixel[PIXEL_ALPHA], 128);
+    QVERIFY((int)outputPixel[PIXEL_RED] == 255);
+    QVERIFY((int)outputPixel[PIXEL_GREEN] == 255);
+    QVERIFY((int)outputPixel[PIXEL_BLUE] == 255);
+    QVERIFY((int)outputPixel[PIXEL_ALPHA] == 128);
 
     pixel1[PIXEL_RED] = 200;
     pixel1[PIXEL_GREEN] = 100;
@@ -163,12 +167,12 @@ void KoRgbColorSpaceTester::testMixColors()
     pixel2[PIXEL_BLUE] = 20;
     pixel2[PIXEL_ALPHA] = 255;
 
-    cs->mixColors(pixelPtrs, weights, 2, outputPixel);
+    mixOp->mixColors(pixelPtrs, weights, 2, outputPixel);
 
-    CHECK((int)outputPixel[PIXEL_RED], 150);
-    CHECK((int)outputPixel[PIXEL_GREEN], 150);
-    CHECK((int)outputPixel[PIXEL_BLUE], 35);
-    CHECK((int)outputPixel[PIXEL_ALPHA], 255);
+    QVERIFY((int)outputPixel[PIXEL_RED] == 150);
+    QVERIFY((int)outputPixel[PIXEL_GREEN] == 150);
+    QVERIFY((int)outputPixel[PIXEL_BLUE] == 35);
+    QVERIFY((int)outputPixel[PIXEL_ALPHA] == 255);
 
     pixel1[PIXEL_RED] = 0;
     pixel1[PIXEL_GREEN] = 0;
@@ -183,13 +187,12 @@ void KoRgbColorSpaceTester::testMixColors()
     weights[0] = 89;
     weights[1] = 166;
 
-    cs->mixColors(pixelPtrs, weights, 2, outputPixel);
+    mixOp->mixColors(pixelPtrs, weights, 2, outputPixel);
 
-    CHECK((int)outputPixel[PIXEL_RED], 255);
-    CHECK((int)outputPixel[PIXEL_GREEN], 255);
-    CHECK((int)outputPixel[PIXEL_BLUE], 255);
-    CHECK((int)outputPixel[PIXEL_ALPHA], 165);
-#endif
+    QVERIFY((int)outputPixel[PIXEL_RED] == 255);
+    QVERIFY((int)outputPixel[PIXEL_GREEN] == 255);
+    QVERIFY((int)outputPixel[PIXEL_BLUE] == 255);
+    QVERIFY((int)outputPixel[PIXEL_ALPHA] == 165);
 }
 
 void KoRgbColorSpaceTester::testCompositeOps()

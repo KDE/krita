@@ -46,6 +46,8 @@ public:
     void setCustomBrush( bool on );
     void setTextBrush( bool on );
 
+    void setImage(KisImageSP image);
+
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
 
     void readOptionSetting(const KisPropertiesConfiguration* setting);

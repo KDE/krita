@@ -24,6 +24,7 @@
 #define KIS_PENOP_SETTINGS_WIDGET_H_
 
 #include <kis_paintop_options_widget.h>
+#include <kis_image.h>
 
 class KisBrushOption;
 class KisPressureOpacityOption;
@@ -47,6 +48,7 @@ public:
 
     void writeConfiguration( KisPropertiesConfiguration *config ) const;
 
+    void setImage(KisImageSP image);
 
 public:
 

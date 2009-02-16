@@ -78,21 +78,23 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::filter(int state)
         delete colorSetContainer;
     colorSetContainer = new QWidget();
     colorSetLayout = new QGridLayout();
-    colorSetLayout->setMargin(0);
-    colorSetLayout->setSpacing(0);
+    colorSetLayout->setMargin(3);
+    colorSetLayout->setSpacing(1);
+    colorSetContainer->setBackgroundRole(QPalette::Dark);
     for(int i = 0; i<16; i++) {
         colorSetLayout->setColumnMinimumWidth(i, 12);
     }
     colorSetContainer->setLayout(colorSetLayout);
 
     if (colorSet) {
-        for( int i = 0; i < colorSet->nColors(); i++) {
+        for( int i = 0, p= 0; i < colorSet->nColors(); i++) {
             if(!hide || (i % 3 != 0 && i % 16 != 5)) {
                 KoColorPatch *patch = new KoColorPatch(colorSetContainer);
+                patch->setFrameStyle(QFrame::NoFrame);
                 patch->setColor(colorSet->getColor(i).color);
-                patch->setFrameShape(QFrame::Box);
                 connect(patch, SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
-                colorSetLayout->addWidget(patch, i/16, i%16);
+                colorSetLayout->addWidget(patch, p/16, p%16);
+                ++p;
             }
         }
     }
@@ -177,12 +179,12 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     connect(d->filterCheckBox, SIGNAL(stateChanged(int)), SLOT(filter(int)));
 
     d->scrollArea = new QScrollArea();
-    d->mainLayout->addWidget(d->scrollArea, 1, 0, 1, 2, Qt::AlignLeft);
+    d->scrollArea->setBackgroundRole(QPalette::Dark);
+    d->mainLayout->addWidget(d->scrollArea);
     d->filter(QCheckBox::On);
 
     d->addRemoveButton = new QToolButton(this);
     d->addRemoveButton->setText(i18n("Add / Remove Colors..."));
-    d->addRemoveButton->setAutoRaise(true);
     d->addRemoveButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     connect(d->addRemoveButton, SIGNAL(clicked()), SLOT(addRemoveColors()));
     d->mainLayout->addWidget(d->addRemoveButton, 2, 0, 1, 2, Qt::AlignLeft);

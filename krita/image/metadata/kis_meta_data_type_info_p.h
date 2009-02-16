@@ -37,8 +37,7 @@ struct KRITAIMAGE_TEST_EXPORT KisMetaData::TypeInfo::Private {
         static const TypeInfo* Integer;
         static const TypeInfo* Date;
         static const TypeInfo* Text;
-        static const TypeInfo* SignedRational;
-        static const TypeInfo* UnsignedRational;
+        static const TypeInfo* Rational;
         static const TypeInfo* GPSCoordinate;
         static const TypeInfo* orderedArray( const TypeInfo* );
         static const TypeInfo* unorderedArray( const TypeInfo* );

@@ -72,10 +72,11 @@ void KisMacro::play()
         undoAdapter->beginMacro(i18n("Play macro"));
     }
 
-    for (QList<KisRecordedAction*>::iterator it = d->actions.begin();
-            it != d->actions.end(); ++it) {
-        dbgImage << "Play action : " << (*it)->name();
-        (*it)->play(undoAdapter);
+    for (QList<KisRecordedAction*>::iterator it = d->actions.begin(); it != d->actions.end(); ++it) {
+        if ( *it ) {
+            dbgImage << "Play action : " << (*it)->name();
+            (*it)->play(undoAdapter);
+        }
         QApplication::processEvents();
     }
 

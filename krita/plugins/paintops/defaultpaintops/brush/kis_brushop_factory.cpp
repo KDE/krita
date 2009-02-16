@@ -62,12 +62,12 @@ KisPaintOpSettingsSP KisBrushOpFactory::settings(QWidget * parent, const KoInput
     // XXX: store widgets per inputDevice?
     Q_UNUSED( parent );
     Q_UNUSED(inputDevice);
-    Q_UNUSED(image)
+    m_widget->setImage(image);
     return new KisBrushOpSettings(m_widget);
 }
 
 KisPaintOpSettingsSP KisBrushOpFactory::settings(KisImageSP image)
 {
-    Q_UNUSED(image);
+    m_widget->setImage(image);
     return new KisBrushOpSettings(m_widget);
 }

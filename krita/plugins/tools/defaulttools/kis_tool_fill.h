@@ -91,6 +91,7 @@ public:
             : KoToolFactory(parent, "KritaFill/KisToolFill", i18n("Contiguous Fill")) {
         setToolTip(i18n("Fill a contiguous area of color with a color, or fill a selection."));
         setToolType(TOOL_TYPE_FILL);
+	//setActivationShapeId( KIS_NODE_SHAPE_ID );
         setIcon("krita_tool_color_fill");
         //setShortcut( QKeySequence( Qt::Key_F ) );
         setPriority(14);

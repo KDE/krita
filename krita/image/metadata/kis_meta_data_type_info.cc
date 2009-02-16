@@ -18,9 +18,12 @@
 
 #include "kis_meta_data_type_info.h"
 
+#include <QVariant>
+
 #include "kis_meta_data_parser_p.h"
 #include "kis_meta_data_type_info_p.h"
 #include "kis_meta_data_value.h"
+#include "kis_meta_data_schema.h"
 
 using namespace KisMetaData;
 
@@ -32,8 +35,7 @@ const TypeInfo* TypeInfo::Private::Boolean = new TypeInfo( TypeInfo::BooleanType
 const TypeInfo* TypeInfo::Private::Integer = new TypeInfo( TypeInfo::IntegerType );
 const TypeInfo* TypeInfo::Private::Date = new TypeInfo( TypeInfo::DateType );
 const TypeInfo* TypeInfo::Private::Text = new TypeInfo( TypeInfo::TextType );
-const TypeInfo* TypeInfo::Private::SignedRational = new TypeInfo( TypeInfo::SignedRationalType );
-const TypeInfo* TypeInfo::Private::UnsignedRational = new TypeInfo( TypeInfo::UnsignedRationalType );
+const TypeInfo* TypeInfo::Private::Rational = new TypeInfo( TypeInfo::RationalType );
 const TypeInfo* TypeInfo::Private::GPSCoordinate = new TypeInfo( TypeInfo::GPSCoordinateType );
 
 const TypeInfo* TypeInfo::Private::orderedArray( const TypeInfo* _typeInfo)
@@ -99,7 +101,7 @@ TypeInfo::TypeInfo( TypeInfo::PropertyType _propertyType ) : d(new Private )
         case DateType:
             d->parser = new DateParser;
             break;
-        case SignedRationalType:
+        case RationalType:
             d->parser = new RationalParser;
             break;
     }
@@ -196,4 +198,109 @@ const QString& TypeInfo::structureName() const
 const Parser* TypeInfo::parser() const
 {
     return d->parser;
+}
+
+bool checkArray( const Value& value, const TypeInfo* typeInfo )
+{
+    QList< Value > values = value.asArray();
+    foreach( const Value& val, values )
+    {
+        if( !typeInfo->hasCorrectType(val))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool TypeInfo::hasCorrectType( const Value& value ) const
+{
+    switch( d->propertyType )
+    {
+        case BooleanType:
+            return value.type() == Value::Variant && value.asVariant().type() == QVariant::Bool;
+        case IntegerType:
+            return value.type() == Value::Variant && value.asVariant().type() == QVariant::Int;
+        case DateType:
+            return value.type() == Value::Variant && value.asVariant().type() == QVariant::DateTime;
+        case GPSCoordinateType:
+        case TextType:
+            return value.type() == Value::Variant && value.asVariant().type() == QVariant::String;
+        case OrderedArrayType:
+            if( value.type() == Value::OrderedArray )
+            {
+                return checkArray( value, d->embeddedTypeInfo );
+            } else {
+                return false;
+            }
+        case UnorderedArrayType:
+            if( value.type() == Value::UnorderedArray )
+            {
+                return checkArray( value, d->embeddedTypeInfo );
+            } else {
+                return false;
+            }
+        case AlternativeArrayType:
+            if( value.type() == Value::AlternativeArray )
+            {
+                return checkArray( value, d->embeddedTypeInfo );
+            } else {
+                return false;
+            }
+        case LangArrayType:
+            if( value.type() == Value::LangArray )
+            {
+                QList< Value > values = value.asArray();
+                foreach( const Value& vallang, values )
+                {
+                    if( !Private::Text->hasCorrectType(vallang) ||
+                        !Private::Text->hasCorrectType(vallang.propertyQualifiers()["xml:lang"]) )
+                    {
+                        return false;
+                    }
+                }
+            } else {
+                return false;
+            }
+        case StructureType:
+            if( value.type() == Value::Structure )
+            {
+                QMap<QString, KisMetaData::Value> structure = value.asStructure();
+                for( QMap<QString, KisMetaData::Value>::iterator it = structure.begin();
+                     it != structure.end(); ++it)
+                {
+                    const TypeInfo* typeInfo = d->structureSchema->propertyType(it.key());
+                    if( !typeInfo || typeInfo->hasCorrectType(it.value()))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            } else {
+                return false;
+            }
+        case RationalType:
+            return value.type() == Value::Rational;
+        case OpenedChoice:
+        case ClosedChoice:
+            return d->embeddedTypeInfo->hasCorrectType(value);
+    }
+    return false;
+}
+
+bool TypeInfo::hasCorrectValue( const Value& value ) const
+{
+    if( d->propertyType == ClosedChoice )
+    {
+        foreach( Choice choice, d->choices )
+        {
+            if( choice.value() == value )
+            {
+                return true;
+            }
+        }
+        return false;
+    } else {
+        return true;
+    }
 }

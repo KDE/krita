@@ -46,6 +46,8 @@
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QMimeData>
 
+#include "commands/KoPAPageMoveCommand.h"
+
 KoPADocumentModel::KoPADocumentModel( QObject* parent, KoPADocument *document )
 : KoDocumentSectionModel( parent )
 , m_master(false)
@@ -436,20 +438,27 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
 
     QList<KoShape*> toplevelShapes;
     QList<KoShapeLayer*> layers;
+    QList<KoPAPageBase *> pages;
     // remove shapes having its parent in the list
     // and separate the layers
     foreach( KoShape * shape, shapes )
     {
-        KoShapeContainer * parent = shape->parent();
+        // check whether the selection contains page
+        // by the UI rules, the selection should contains page only
+        KoPAPageBase *page = dynamic_cast<KoPAPageBase *>( shape );
+        if ( page ) {
+            pages.append( page );
+            continue;
+        }
+
+        KoShapeContainer *parentShape = shape->parent();
         bool hasParentInList = false;
-        while( parent )
-        {
-            if( shapes.contains( parent ) )
-            {
+        while ( parentShape ) {
+            if ( shapes.contains( parentShape ) ) {
                 hasParentInList = true;
                 break;
             }
-            parent = parent->parent();
+            parentShape = parentShape->parent();
         }
         if( hasParentInList )
             continue;
@@ -461,15 +470,39 @@ bool KoPADocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction act
             toplevelShapes.append( shape );
     }
 
-    if( ! parent.isValid() )
-    {
-        kDebug(30010) <<"KoPADocumentModel::dropMimeData parent = root";
-        return false;
+    // dropping to root, only page(s) is allowed
+    if ( !parent.isValid() ) {
+        if ( !pages.isEmpty() ) {
+            if ( row < 0 ) {
+                return false;
+            }
+            QUndoCommand *command;
+            KoPAPageBase *after = ( row != 0 ) ? m_document->pageByIndex( row - 1, false ) : 0;
+            // TODO: After string freeze is lifted, the command name can be changed to
+            //  "Move slides" and "Move pages" to reflect the actual behavior
+            if ( m_document->pageType() == KoPageApp::Slide ) {
+                command = new QUndoCommand( i18n( "Move slide") );
+            }
+            else {
+                command = new QUndoCommand( i18n( "Move page" ) );
+            }
+            foreach ( KoPAPageBase *page, pages ) {
+                KoPAPageMoveCommand *moveCommand = new KoPAPageMoveCommand( m_document, page, after, command );
+                after = page;
+            }
+            m_document->addCommand( command );
+            kDebug(30010) << "KoPADocumentModel::dropMimeData parent = root, dropping page(s) as root, moving page(s)";
+            return true;
+        }
+        else {
+            kDebug(30010) << "KoPADocumentModel::dropMimeData parent = root, dropping non-page as root, returning false";
+            return false;
+        }
     }
+
     KoShape *shape = static_cast<KoShape*>( parent.internalPointer() );
     KoShapeContainer * container = dynamic_cast<KoShapeContainer*>( shape );
-    if( container )
-    {
+    if( container ) {
         KoShapeGroup * group = dynamic_cast<KoShapeGroup*>( container );
         if( group )
         {

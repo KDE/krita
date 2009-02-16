@@ -21,14 +21,17 @@
 #include "MockShapes.h"
 #include <KoShapeGroup.h>
 #include <KoShapeGroupCommand.h>
+#include <KoLineBorder.h>
+#include <KoShapeShadow.h>
 #include <QtGui/QUndoCommand>
 
 TestShapeGroupCommand::TestShapeGroupCommand()
-        : toplevelGroup(0), sublevelGroup(0)
-        , cmd1(0), cmd2(0)
+        : toplevelGroup(0), sublevelGroup(0), strokeGroup(0)
+        , cmd1(0), cmd2(0), strokeCmd(0)
         , toplevelShape1(0), toplevelShape2(0)
         , sublevelShape1(0), sublevelShape2(0)
         , extraShape1(0), extraShape2(0)
+        , strokeShape1(0), strokeShape2(0)
 {
 }
 
@@ -64,20 +67,50 @@ void TestShapeGroupCommand::init()
 
     toplevelGroup = new KoShapeGroup();
     sublevelGroup = new KoShapeGroup();
+    
+    strokeShape1 = new MockShape();
+    strokeShape1->setSize( QSizeF(50,50) );
+    strokeShape1->setPosition( QPointF(0,0) );
+    
+    strokeShape2 = new MockShape();
+    strokeShape2->setSize( QSizeF(50,50) );
+    strokeShape2->setPosition( QPointF(25,25) );
+    
+    strokeGroup = new KoShapeGroup();
+    strokeGroup->setBorder( new KoLineBorder( 2.0f ) );
+    strokeGroup->setShadow( new KoShapeShadow() );
 }
 
 void TestShapeGroupCommand::cleanup()
 {
     delete toplevelGroup;
+    toplevelGroup = 0;
     delete sublevelGroup;
+    sublevelGroup = 0;
+    delete strokeGroup;
+    strokeGroup = 0;
     delete toplevelShape1;
+    toplevelShape1 = 0;
     delete toplevelShape2;
+    toplevelShape2 = 0;
     delete sublevelShape1;
+    sublevelShape1 = 0;
     delete sublevelShape2;
+    sublevelShape2 = 0;
     delete extraShape1;
+    extraShape1 = 0;
     delete extraShape2;
+    extraShape2 = 0;
+    delete strokeShape1;
+    strokeShape1 = 0;
+    delete strokeShape2;
+    strokeShape2 = 0;
     delete cmd1;
+    cmd1 = 0;
     delete cmd2;
+    cmd2 = 0;
+    delete strokeCmd;
+    strokeCmd = 0;
 }
 
 void TestShapeGroupCommand::testToplevelGroup()
@@ -201,6 +234,29 @@ void TestShapeGroupCommand::testAddToSublevelGroup()
     QCOMPARE(sublevelGroup->absolutePosition(KoFlake::TopLeftCorner), QPointF(150, 150));
     QCOMPARE(sublevelGroup->position(), QPointF(100, 100));
     QCOMPARE(sublevelGroup->size(), QSizeF(150, 50));
+}
+
+void TestShapeGroupCommand::testGroupStrokeShapes()
+{
+    QRectF bound = strokeShape1->boundingRect().unite( strokeShape2->boundingRect() );
+    if (strokeGroup->border()) {
+        KoInsets insets;
+        strokeGroup->border()->borderInsets(strokeGroup, insets);
+        bound.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
+    }
+    if (strokeGroup->shadow()) {
+        KoInsets insets;
+        strokeGroup->shadow()->insets(strokeGroup, insets);
+        bound.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
+    }
+    
+    QList<KoShape*> strokeShapes;
+    strokeShapes << strokeShape2 << strokeShape1;
+    strokeCmd = new KoShapeGroupCommand(strokeGroup, strokeShapes);
+    strokeCmd->redo();
+    QCOMPARE(strokeShape1->size(), QSizeF(50, 50));
+    QCOMPARE(strokeShape2->size(), QSizeF(50, 50));
+    QCOMPARE(bound, strokeGroup->boundingRect());
 }
 
 QTEST_MAIN(TestShapeGroupCommand)

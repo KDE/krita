@@ -42,9 +42,9 @@ private slots:
     void testTypeInfo();
     void testSchemaParse();
     void testParser();
+    void testValidator();
 private:
-    KisMetaData::Value createUnsignedRationalValue();
-    KisMetaData::Value createSignedRationalValue();
+    KisMetaData::Value createRationalValue();
     KisMetaData::Value createIntegerValue(int v = 42);
     KisMetaData::Value createStringValue();
     KisMetaData::Value createListValue();

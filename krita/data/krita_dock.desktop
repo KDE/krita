@@ -5,6 +5,7 @@ X-KDE-ServiceType=Krita/Dock
 Comment=Docker for Krita
 Comment[ca]=Amarrador per al Krita
 Comment[el]=Προσάρτηση για το Krita
+Comment[es]=Anclaje para Krita
 Comment[et]=Krita dokk
 Comment[gl]=Docker para Krita
 Comment[it]=Gancio per Krita

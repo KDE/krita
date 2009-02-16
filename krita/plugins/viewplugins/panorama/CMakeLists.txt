@@ -1,6 +1,7 @@
 
 set(kritapanorama_PART_SRCS
     panorama.cc
+    imageviewer.cc
     kis_images_blender.cpp
 # image alignement framework
     imagealignment/harris_detector.cpp

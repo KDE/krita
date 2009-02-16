@@ -218,12 +218,7 @@ void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
                     }
                 }
             } else if (tag.namespaceURI() == KoXmlNS::draw) {
-                if (localName == "frame") {
-                    loadFrame(tag, cursor);
-                } else {
-                    kWarning(32500) << "unhandled draw:" << localName;
-                    handledTag = false;
-                }
+                loadShape(tag, cursor);
             } else if (tag.namespaceURI() == KoXmlNS::table) {
                 if (localName == "table") {
                     loadTable(tag, cursor);
@@ -648,8 +643,8 @@ void KoTextLoader::loadSpan(const KoXmlElement& element, QTextCursor& cursor, bo
             If a heading has a numbering applied, the text of the formatted number can be included in a
             <text:number> element. This text can be used by applications that do not support numbering of
             headings, but it will be ignored by applications that support numbering.                   */
-        } else if (isDrawNS && localName == "frame") { // draw:frame
-            loadFrame(ts, cursor);
+        } else if (isDrawNS) {
+            loadShape(ts, cursor);
         } else {
             KoVariable * var = KoVariableRegistry::instance()->createFromOdf(ts, d->context);
 
@@ -713,22 +708,32 @@ void KoTextLoader::loadTable(const KoXmlElement& tableElem, QTextCursor& cursor)
     }
 }
 
-void KoTextLoader::loadFrame(const KoXmlElement& frameElem, QTextCursor& cursor)
+void KoTextLoader::loadShape(const KoXmlElement& element, QTextCursor& cursor)
 {
-    KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(frameElem, d->context);
+    KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(element, d->context);
     if (!shape) {
+        kDebug(32500) << "shape '" << element.localName() << "' unhandled";
         return;
     }
 
-    KoTextAnchor *anchor = new KoTextAnchor(shape);
-    anchor->loadOdfFromShape();
-    d->textSharedData->shapeInserted(shape);
+    if (shape->hasAdditionalAttribute( "text:anchor-type")) {
+        QString anchorType = shape->additionalAttribute("text:anchor-type");
+        // page anchored shapes are handled differently
+        if (anchorType != "page") {
+            KoTextAnchor *anchor = new KoTextAnchor(shape);
+            anchor->loadOdfFromShape();
+            d->textSharedData->shapeInserted(shape);
 
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
-    if (layout) {
-        KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
-        if (textObjectManager) {
-            textObjectManager->insertInlineObject(cursor, anchor);
+            KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+            if (layout) {
+                KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+                if (textObjectManager) {
+                    textObjectManager->insertInlineObject(cursor, anchor);
+                }
+            }
+        }
+        else {
+            d->textSharedData->shapeInserted(shape);
         }
     }
 }

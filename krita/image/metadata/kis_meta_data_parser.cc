@@ -71,6 +71,6 @@ Value RationalParser::parse(const QString& _v) const
     QRegExp regexp("(\\-?\\d+)/(\\d+)");
     regexp.indexIn(_v);
     if( regexp.capturedTexts().size() > 2 )
-        return Value( SignedRational( regexp.capturedTexts()[1].toInt(), regexp.capturedTexts()[2].toInt() ) );
+        return Value( Rational( regexp.capturedTexts()[1].toInt(), regexp.capturedTexts()[2].toInt() ) );
     return Value();
 }

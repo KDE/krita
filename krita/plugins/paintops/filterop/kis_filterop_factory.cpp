@@ -68,6 +68,7 @@ KisPaintOpSettingsSP KisFilterOpFactory::settings(QWidget * parent, const KoInpu
 
 KisPaintOpSettingsSP KisFilterOpFactory::settings(KisImageSP image)
 {
+    m_widget->setImage(image);
     KisFilterOpSettings* settings = new KisFilterOpSettings(m_widget);
     settings->setImage( image );
     return settings;

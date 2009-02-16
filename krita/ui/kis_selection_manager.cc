@@ -108,9 +108,9 @@ KisSelectionManager::KisSelectionManager(KisView2 * view, KisDoc2 * doc)
 {
     m_clipboard = KisClipboard::instance();
 
-//     KoSelection * selection = m_view->canvasBase()->globalShapeManager()->selection();
-//     Q_ASSERT(selection);
-//     connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
+    KoSelection * selection = m_view->canvasBase()->globalShapeManager()->selection();
+    Q_ASSERT(selection);
+    connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 
     KisSelectionDecoration* decoration = new KisSelectionDecoration( m_view );
     connect(this, SIGNAL(currentSelectionChanged()), decoration, SLOT(selectionChanged()));
@@ -319,11 +319,7 @@ void KisSelectionManager::updateGUI()
     bool shapeCopyEnable = false;
     if (shapeLayer) {
 
-        // TODO listen selectionChanded signals form the shapelayer
         shapeCopyEnable = true;
-//         if (shapeLayer) {
-//             shapeLayerEnable = shapeLayer->shapeManager()->selection()->count() > 0;
-//         }
 
         const QMimeData* data = QApplication::clipboard()->mimeData();
         if (data) {

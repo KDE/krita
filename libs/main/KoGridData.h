@@ -23,11 +23,10 @@
 
 #include "komain_export.h"
 #include <QtGui/QColor>
-
+#include "KoXmlReaderForward.h"
 class QPainter;
 class QRectF;
 class KoViewConverter;
-class KoXmlDocument;
 class KoXmlWriter;
 
 /**

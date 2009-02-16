@@ -277,3 +277,7 @@ KoListStyle * KoTextSharedLoadingData::listStyle(const QString &name, bool style
     return stylesDotXml ? d->listStylesDotXmlStyles.value(name) : d->listContentDotXmlStyles.value(name);
 }
 
+void KoTextSharedLoadingData::shapeInserted(KoShape* shape)
+{
+    Q_UNUSED(shape);
+}

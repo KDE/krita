@@ -208,7 +208,6 @@ void KoTextAnchor::setOffset(const QPointF &offset)
 
 void KoTextAnchor::saveOdf(KoShapeSavingContext & context)
 {
-    // TODO do we really need to pass the context in here?
     shape()->removeAdditionalAttribute("text:anchor-page-number");
     switch (d->anchorType) {
     case Page:
@@ -229,7 +228,11 @@ void KoTextAnchor::saveOdf(KoShapeSavingContext & context)
         shape()->setAdditionalAttribute("text:anchor-type", "as-char");
         break;
     }
+
+    QPointF offset = d->distance - shape()->absolutePosition(KoFlake::TopLeftCorner);
+    context.addShapeOffset(shape(), QMatrix(1, 0, 0, 1, offset.x(), offset.y()));
     shape()->saveOdf(context);
+    context.removeShapeOffset(shape());
 }
 
 bool KoTextAnchor::loadOdfFromShape()

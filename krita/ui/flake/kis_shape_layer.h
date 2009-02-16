@@ -103,6 +103,12 @@ public:
     bool saveLayer( KoStore * store ) const;
     bool loadLayer( KoStore* store );
 
+public slots:
+    void selectionChanged();
+
+signals:
+    void selectionChanged(QList<KoShape*> shape);
+
 private:
 
     class Private;

@@ -26,6 +26,8 @@
 #include "KoXmlWriter.h"
 #include "KoXmlReader.h"
 #include "KoShapeRegistry.h"
+#include "KoShapeBorderModel.h"
+#include "KoShapeShadow.h"
 
 #include <QPainter>
 
@@ -49,6 +51,7 @@ bool KoShapeGroup::hitTest(const QPointF &position) const
 
 void KoShapeGroup::childCountChanged()
 {
+    // TODO: why is this needed here ? the group/ungroup command should take care of this
     QRectF br = boundingRect();
     setAbsolutePosition(br.topLeft(), KoFlake::TopLeftCorner);
     setSize(br.size());
@@ -97,7 +100,36 @@ bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     setPosition(bound.topLeft());
 
     foreach(KoShape * shape, iterator())
-    shape->setAbsolutePosition(shape->absolutePosition() - bound.topLeft());
+        shape->setAbsolutePosition(shape->absolutePosition() - bound.topLeft());
 
     return true;
+}
+
+void KoShapeGroup::shapeChanged(ChangeType type)
+{
+    switch( type )
+    {
+        case KoShape::BorderChanged:
+        {
+            KoShapeBorderModel * stroke = border();
+            if( stroke ) {
+                if( stroke->removeUser() )
+                    delete stroke;
+                setBorder(0);
+            }
+            break;
+        }
+        case KoShape::ShadowChanged:
+        {
+            KoShapeShadow * shade = shadow();
+            if( shade ) {
+                if( shade->removeUser() )
+                    delete shade;
+                setShadow(0);
+            }
+            break;
+        }
+        default:
+            break;
+    }
 }

@@ -100,7 +100,6 @@ set(kritaui_LIB_SRCS
     tool/kis_tool_freehand_p.cpp
     tool/kis_tool_paint.cc 
     tool/kis_tool_shape.cc
-    widgets/imageviewer.cc 
     widgets/kcurve.cc
     widgets/kis_channelflags_widget.cpp 
     widgets/kis_cmb_composite.cc
@@ -123,7 +122,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_popup_button.cc 
     widgets/kis_preset_chooser.cpp
     widgets/kis_preset_widget.cpp 
-    widgets/kis_previewwidget.cc
     widgets/kis_tree_view_popup.cc 
     widgets/kis_wdg_generator.cpp
     widgets/squeezedcombobox.cpp

@@ -20,6 +20,7 @@
 #include "kis_brush_selection_widget.h"
 #include <klocale.h>
 #include "kis_brush.h"
+#include "kis_image.h"
 
 KisBrushOption::KisBrushOption()
         : KisPaintOpOption(i18n("Brush Tip"))
@@ -55,6 +56,11 @@ void KisBrushOption::setCustomBrush( bool on )
 void KisBrushOption::setTextBrush( bool on )
 {
     m_brushSelectionWidget->setTextBrush( on );
+}
+
+void KisBrushOption::setImage(KisImageSP image)
+{
+    m_brushSelectionWidget->setImage(image);
 }
 
 

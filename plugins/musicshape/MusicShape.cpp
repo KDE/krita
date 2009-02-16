@@ -24,6 +24,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
+#include <KoZoomHandler.h>
 
 #include "core/Sheet.h"
 #include "core/Part.h"
@@ -49,7 +50,8 @@ using namespace MusicCore;
 //static MusicShape* firstShape = 0;
 
 MusicShape::MusicShape()
-    : m_firstSystem(0),
+    : KoFrameShape("http://www.koffice.org/music", "shape"),
+    m_firstSystem(0),
     m_style(new MusicStyle),
     m_engraver(new Engraver()),
     m_renderer(new MusicRenderer(m_style)),
@@ -105,6 +107,11 @@ void MusicShape::setSize( const QSizeF &newSize )
 
 void MusicShape::paint( QPainter& painter, const KoViewConverter& converter )
 {
+    constPaint( painter, converter );
+}
+
+void MusicShape::constPaint( QPainter& painter, const KoViewConverter& converter ) const
+{
     applyConversion( painter, converter );
 
     painter.setClipping(true);
@@ -116,19 +123,47 @@ void MusicShape::paint( QPainter& painter, const KoViewConverter& converter )
 void MusicShape::saveOdf( KoShapeSavingContext & context ) const
 {
     KoXmlWriter& writer = context.xmlWriter();
+    writer.startElement("draw:frame");
+    saveOdfAttributes(context, OdfAllAttributes);
+
     writer.startElement("music:shape");
     writer.addAttribute("xmlns:music", "http://www.koffice.org/music");
-    saveOdfAttributes( context, OdfAllAttributes );
+    MusicXmlWriter().writeSheet(writer, m_sheet, false);
+    writer.endElement(); // music:shape
 
-    MusicXmlWriter().writeSheet( writer, m_sheet, false );
+    // Save a preview image
+    qreal previewDPI = 150;
+    QSizeF imgSize = size(); // in points
+    imgSize *= previewDPI / 72;
+    QImage img(imgSize.toSize(), QImage::Format_ARGB32);
+    QPainter painter(&img);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::TextAntialiasing);
+    KoZoomHandler converter;
+    converter.setZoomAndResolution(100, previewDPI, previewDPI);
+    constPaint(painter, converter);
+    writer.startElement("draw:image");
+    // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
+    QString name = context.imageHref(img);
+    writer.addAttribute("xlink:type", "simple" );
+    writer.addAttribute("xlink:show", "embed" );
+    writer.addAttribute("xlink:actuate", "onLoad");
+    writer.addAttribute("xlink:href", name);
+    writer.endElement(); // draw:image
 
-    saveOdfCommonChildElements( context );
-    writer.endElement();
+    // TODO: Save a preview svg
+
+    saveOdfCommonChildElements(context);
+    writer.endElement(); // draw:frame
 }
 
 bool MusicShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
-    loadOdfAttributes( element, context, OdfAllAttributes );
+    loadOdfAttributes(element, context, OdfAllAttributes);
+    return loadOdfFrame(element, context);
+}
 
+bool MusicShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context )
+{
     KoXmlElement score = KoXml::namedItemNS(element, "http://www.koffice.org/music", "score-partwise");
     if (score.isNull()) {
         kWarning() << "no music:score-partwise element as first child";

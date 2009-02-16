@@ -49,6 +49,7 @@ KisCustomBrush::KisCustomBrush(QWidget *parent, const QString& caption, KisImage
 {
     setWindowTitle(caption);
     preview->setScaledContents(true);
+    preview->setFixedSize(preview->size());
 
     KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
     m_rServerAdapter = new KoResourceServerAdapter<KisBrush>(rServer);
@@ -159,6 +160,11 @@ void KisCustomBrush::createBrush()
     m_brush = new KisImagePipeBrush(m_image->objectName(), w, h, devices, modes);
     if (colorAsMask->isChecked())
         m_brush->makeMaskImage();
+}
+
+void KisCustomBrush::setImage(KisImageSP image)
+{
+    m_image = image;
 }
 
 

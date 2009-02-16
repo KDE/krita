@@ -28,17 +28,13 @@
 #include "kis_meta_data_type_info.h"
 #include "kis_meta_data_type_info_p.h"
 #include "kis_meta_data_parser.h"
+#include "kis_meta_data_validator.h"
 
 using namespace KisMetaData;
 
-KisMetaData::Value KisMetaDataTest::createUnsignedRationalValue()
+KisMetaData::Value KisMetaDataTest::createRationalValue()
 {
-    return KisMetaData::Value(UnsignedRational(42, 12));
-}
-
-KisMetaData::Value KisMetaDataTest::createSignedRationalValue()
-{
-    return KisMetaData::Value(SignedRational(12, -42));
+    return KisMetaData::Value(Rational(12, -42));
 }
 
 KisMetaData::Value KisMetaDataTest::createIntegerValue(int v)
@@ -54,25 +50,25 @@ KisMetaData::Value KisMetaDataTest::createStringValue()
 KisMetaData::Value KisMetaDataTest::createListValue()
 {
     QList<Value> list;
-    list << createUnsignedRationalValue() << createSignedRationalValue() << createIntegerValue() << createStringValue();
+    list << createRationalValue() << createIntegerValue() << createStringValue();
     return list;
 }
 
 void KisMetaDataTest::testRationals()
 {
     {
-        KisMetaData::SignedRational sr(-10, -14);
+        KisMetaData::Rational sr(-10, -14);
         QCOMPARE(sr.numerator, -10);
         QCOMPARE(sr.denominator, -14);
-        KisMetaData::SignedRational sr2(14, 10);
+        KisMetaData::Rational sr2(14, 10);
         QVERIFY(sr == sr);
         QVERIFY(!(sr == sr2));
     }
     {
-        KisMetaData::UnsignedRational sr(10, 14);
-        QCOMPARE(sr.numerator, (unsigned int)10);
-        QCOMPARE(sr.denominator, (unsigned int)14);
-        KisMetaData::UnsignedRational sr2(14, 10);
+        KisMetaData::Rational sr(10, 14);
+        QCOMPARE(sr.numerator, 10);
+        QCOMPARE(sr.denominator, 14);
+        KisMetaData::Rational sr2(14, 10);
         QVERIFY(sr == sr);
         QVERIFY(!(sr == sr2));
     }
@@ -98,26 +94,26 @@ void KisMetaDataTest::testValueCreation()
         QCOMPARE(createStringValue().type(), Value::Variant);
     }
     {
-        KisMetaData::SignedRational sr(42, -12);
+        KisMetaData::Rational sr(42, -12);
         Value v(sr);
-        QCOMPARE(v.type(), Value::SignedRational);
-        QCOMPARE(v.asSignedRational(), sr);
-        QCOMPARE(createSignedRationalValue().type(), Value::SignedRational);
+        QCOMPARE(v.type(), Value::Rational);
+        QCOMPARE(v.asRational(), sr);
+        QCOMPARE(createRationalValue().type(), Value::Rational);
         QCOMPARE(v.asInteger(), -42 / 12);
         QCOMPARE(v.asDouble(), -42.0 / 12.0);
     }
     {
-        KisMetaData::UnsignedRational sr(42, 12);
+        KisMetaData::Rational sr(42, 12);
         Value v(sr);
-        QCOMPARE(v.type(), Value::UnsignedRational);
-        QCOMPARE(v.asUnsignedRational(), sr);
-        QCOMPARE(createUnsignedRationalValue().type(), Value::UnsignedRational);
+        QCOMPARE(v.type(), Value::Rational);
+        QCOMPARE(v.asRational(), sr);
+        QCOMPARE(createRationalValue().type(), Value::Rational);
         QCOMPARE(v.asInteger(), 42 / 12);
         QCOMPARE(v.asDouble(), 42.0 / 12.0);
     }
     {
         QList<Value> list;
-        list << createUnsignedRationalValue() << createSignedRationalValue() << createIntegerValue() << createStringValue();
+        list << createRationalValue() << createIntegerValue() << createStringValue();
         Value v(list);
         QCOMPARE(v.type(), Value::OrderedArray);
         QVERIFY(v.isArray());
@@ -143,8 +139,7 @@ void KisMetaDataTest::testValueCreation()
 
 void KisMetaDataTest::testValueEquality()
 {
-    QVERIFY(createUnsignedRationalValue() == createUnsignedRationalValue());
-    QVERIFY(createSignedRationalValue() == createSignedRationalValue());
+    QVERIFY(createRationalValue() == createRationalValue());
     QVERIFY(createIntegerValue() == createIntegerValue());
     QVERIFY(createStringValue() == createStringValue());
     QVERIFY(createListValue() == createListValue());
@@ -162,8 +157,7 @@ void KisMetaDataTest::testValueEquality()
 
 void KisMetaDataTest::testValueCopy()
 {
-    TEST_VALUE_COPY(createUnsignedRationalValue);
-    TEST_VALUE_COPY(createSignedRationalValue);
+    TEST_VALUE_COPY(createRationalValue);
     TEST_VALUE_COPY(createIntegerValue);
     TEST_VALUE_COPY(createStringValue);
     TEST_VALUE_COPY(createListValue);
@@ -263,26 +257,42 @@ void KisMetaDataTest::testTypeInfo()
     QVERIFY( TypeInfo::Private::Boolean->propertyType() == TypeInfo::BooleanType );
     QVERIFY( TypeInfo::Private::Boolean->embeddedPropertyType() == 0 );
     QVERIFY( TypeInfo::Private::Boolean->choices().size() == 0 );
+    QVERIFY( TypeInfo::Private::Boolean->hasCorrectType( Value(true) ));
+    QVERIFY( !TypeInfo::Private::Boolean->hasCorrectType( createIntegerValue() ) );
+    QVERIFY( !TypeInfo::Private::Boolean->hasCorrectType( createStringValue() ) );
+    QVERIFY( !TypeInfo::Private::Boolean->hasCorrectType( createListValue() ) );
     
     QVERIFY( TypeInfo::Private::Integer->propertyType() == TypeInfo::IntegerType );
     QVERIFY( TypeInfo::Private::Integer->embeddedPropertyType() == 0 );
     QVERIFY( TypeInfo::Private::Integer->choices().size() == 0 );
+    QVERIFY( !TypeInfo::Private::Integer->hasCorrectType( Value(true) ));
+    QVERIFY( TypeInfo::Private::Integer->hasCorrectType( createIntegerValue() ) );
+    QVERIFY( !TypeInfo::Private::Integer->hasCorrectType( createStringValue() ) );
+    QVERIFY( !TypeInfo::Private::Integer->hasCorrectType( createListValue() ) );
     
     QVERIFY( TypeInfo::Private::Text->propertyType() == TypeInfo::TextType );
     QVERIFY( TypeInfo::Private::Text->embeddedPropertyType() == 0 );
     QVERIFY( TypeInfo::Private::Text->choices().size() == 0 );
+    QVERIFY( !TypeInfo::Private::Text->hasCorrectType( Value(true) ));
+    QVERIFY( !TypeInfo::Private::Text->hasCorrectType( createIntegerValue() ) );
+    QVERIFY( TypeInfo::Private::Text->hasCorrectType( createStringValue() ) );
+    QVERIFY( !TypeInfo::Private::Text->hasCorrectType( createListValue() ) );
     
     QVERIFY( TypeInfo::Private::Date->propertyType() == TypeInfo::DateType );
     QVERIFY( TypeInfo::Private::Date->embeddedPropertyType() == 0 );
     QVERIFY( TypeInfo::Private::Date->choices().size() == 0 );
+    QVERIFY( TypeInfo::Private::Date->hasCorrectType( Value(QDateTime()) ));
+    QVERIFY( !TypeInfo::Private::Date->hasCorrectType( createIntegerValue() ) );
+    QVERIFY( !TypeInfo::Private::Date->hasCorrectType( createStringValue() ) );
+    QVERIFY( !TypeInfo::Private::Date->hasCorrectType( createListValue() ) );
     
-    QVERIFY( TypeInfo::Private::SignedRational->propertyType() == TypeInfo::SignedRationalType );
-    QVERIFY( TypeInfo::Private::SignedRational->embeddedPropertyType() == 0 );
-    QVERIFY( TypeInfo::Private::SignedRational->choices().size() == 0 );
-    
-    QVERIFY( TypeInfo::Private::UnsignedRational->propertyType() == TypeInfo::UnsignedRationalType );
-    QVERIFY( TypeInfo::Private::UnsignedRational->embeddedPropertyType() == 0 );
-    QVERIFY( TypeInfo::Private::UnsignedRational->choices().size() == 0 );
+    QVERIFY( TypeInfo::Private::Rational->propertyType() == TypeInfo::RationalType );
+    QVERIFY( TypeInfo::Private::Rational->embeddedPropertyType() == 0 );
+    QVERIFY( TypeInfo::Private::Rational->choices().size() == 0 );
+    QVERIFY( TypeInfo::Private::Rational->hasCorrectType( createRationalValue() ));
+    QVERIFY( !TypeInfo::Private::Rational->hasCorrectType( createIntegerValue() ) );
+    QVERIFY( !TypeInfo::Private::Rational->hasCorrectType( createStringValue() ) );
+    QVERIFY( !TypeInfo::Private::Rational->hasCorrectType( createListValue() ) );
     
     QVERIFY( TypeInfo::Private::GPSCoordinate->propertyType() == TypeInfo::GPSCoordinateType );
     QVERIFY( TypeInfo::Private::GPSCoordinate->embeddedPropertyType() == 0 );
@@ -291,6 +301,15 @@ void KisMetaDataTest::testTypeInfo()
     QVERIFY( TypeInfo::Private::LangArray->propertyType() == TypeInfo::LangArrayType );
     QVERIFY( TypeInfo::Private::LangArray->embeddedPropertyType() == TypeInfo::Private::Text );
     QVERIFY( TypeInfo::Private::LangArray->choices().size() == 0 );
+    
+    // Create List of integer Value
+    QList< Value > goodIntegerList;
+    goodIntegerList.push_back( createIntegerValue() );
+    goodIntegerList.push_back( createIntegerValue(12) );
+    QList< Value > badIntegerList;
+    badIntegerList.push_back( createIntegerValue() );
+    badIntegerList.push_back( createStringValue() );
+    badIntegerList.push_back( createIntegerValue(12) );
     
     // Test OrderedArray
     const TypeInfo* arrOA1 = TypeInfo::Private::orderedArray( TypeInfo::Private::Integer );
@@ -301,6 +320,12 @@ void KisMetaDataTest::testTypeInfo()
     const TypeInfo* arrOA2 = TypeInfo::Private::orderedArray( TypeInfo::Private::Text );
     QVERIFY( arrOA1 != arrOA2 );
     QVERIFY( arrOA2->embeddedPropertyType() == TypeInfo::Private::Text );
+    QVERIFY( !arrOA1->hasCorrectType( Value(true) ));
+    QVERIFY( !arrOA1->hasCorrectType( createIntegerValue() ) );
+    QVERIFY( !arrOA1->hasCorrectType( createStringValue() ) );
+    QVERIFY( !arrOA1->hasCorrectType( createListValue() ) );
+    QVERIFY( arrOA1->hasCorrectType( Value(goodIntegerList, Value::OrderedArray ) ) );
+    QVERIFY( !arrOA1->hasCorrectType( Value(badIntegerList, Value::OrderedArray ) ) );
     
     // Test UnarderedArray
     const TypeInfo* arrUOA1 = TypeInfo::Private::unorderedArray( TypeInfo::Private::Integer );
@@ -313,6 +338,12 @@ void KisMetaDataTest::testTypeInfo()
     QVERIFY( arrUOA2->embeddedPropertyType() == TypeInfo::Private::Text );
     QVERIFY( arrUOA1 != arrOA1 );
     QVERIFY( arrUOA2 != arrOA2 );
+    QVERIFY( !arrUOA1->hasCorrectType( Value(true) ));
+    QVERIFY( !arrUOA1->hasCorrectType( createIntegerValue() ) );
+    QVERIFY( !arrUOA1->hasCorrectType( createStringValue() ) );
+    QVERIFY( !arrUOA1->hasCorrectType( createListValue() ) );
+    QVERIFY( arrUOA1->hasCorrectType( Value(goodIntegerList, Value::UnorderedArray ) ) );
+    QVERIFY( !arrUOA1->hasCorrectType( Value(badIntegerList, Value::UnorderedArray ) ) );
     
     // Test AlternativeArray
     const TypeInfo* arrAA1 = TypeInfo::Private::alternativeArray( TypeInfo::Private::Integer );
@@ -327,6 +358,12 @@ void KisMetaDataTest::testTypeInfo()
     QVERIFY( arrAA1 != arrUOA1 );
     QVERIFY( arrAA2 != arrOA2 );
     QVERIFY( arrAA2 != arrUOA2 );
+    QVERIFY( !arrAA1->hasCorrectType( Value(true) ));
+    QVERIFY( !arrAA1->hasCorrectType( createIntegerValue() ) );
+    QVERIFY( !arrAA1->hasCorrectType( createStringValue() ) );
+    QVERIFY( !arrAA1->hasCorrectType( createListValue() ) );
+    QVERIFY( arrAA1->hasCorrectType( Value(goodIntegerList, Value::AlternativeArray ) ) );
+    QVERIFY( !arrAA1->hasCorrectType( Value(badIntegerList, Value::AlternativeArray ) ) );
     
     // Test Choice
     QList< TypeInfo::Choice > choices;
@@ -340,8 +377,28 @@ void KisMetaDataTest::testTypeInfo()
     QVERIFY( oChoice->choices()[0].hint() == "Hello" );
     QVERIFY( oChoice->choices()[1].value() == Value(42) );
     QVERIFY( oChoice->choices()[1].hint() == "World" );
+    QVERIFY( !oChoice->hasCorrectType( Value(true) ));
+    QVERIFY( oChoice->hasCorrectType( createIntegerValue(12) ) );
+    QVERIFY( oChoice->hasCorrectType( createIntegerValue(-12) ) );
+    QVERIFY( oChoice->hasCorrectType( createIntegerValue(42) ) );
+    QVERIFY( !oChoice->hasCorrectType( createStringValue() ) );
+    QVERIFY( !oChoice->hasCorrectType( createListValue() ) );
+    QVERIFY( !oChoice->hasCorrectType( Value(goodIntegerList, Value::AlternativeArray ) ) );
+    QVERIFY( !oChoice->hasCorrectType( Value(badIntegerList, Value::AlternativeArray ) ) );
+    
     const TypeInfo* cChoice = TypeInfo::Private::createChoice( TypeInfo::ClosedChoice, TypeInfo::Private::Integer, choices );
     QVERIFY( cChoice->propertyType() == TypeInfo::ClosedChoice );
+    QVERIFY( !cChoice->hasCorrectType( Value(true) ));
+    QVERIFY( cChoice->hasCorrectType( createIntegerValue(12) ) );
+    QVERIFY( cChoice->hasCorrectType( createIntegerValue(-12) ) );
+    QVERIFY( cChoice->hasCorrectType( createIntegerValue(42) ) );
+    QVERIFY( !cChoice->hasCorrectType( createStringValue() ) );
+    QVERIFY( !cChoice->hasCorrectType( createListValue() ) );
+    QVERIFY( !cChoice->hasCorrectType( Value(goodIntegerList, Value::AlternativeArray ) ) );
+    QVERIFY( !cChoice->hasCorrectType( Value(badIntegerList, Value::AlternativeArray ) ) );
+    QVERIFY( cChoice->hasCorrectValue( createIntegerValue(12) ) );
+    QVERIFY( !cChoice->hasCorrectValue( createIntegerValue(-12) ) );
+    QVERIFY( cChoice->hasCorrectValue( createIntegerValue(42) ) );
 }
 
 void KisMetaDataTest::testSchemaParse()
@@ -359,7 +416,7 @@ void KisMetaDataTest::testSchemaParse()
     QVERIFY(colorSpaceType->choices()[1].hint() == "uncalibrated" );
     
     QVERIFY(exifSchema->propertyType("CompressedBitsPerPixel"));
-    QVERIFY(exifSchema->propertyType("CompressedBitsPerPixel")->propertyType() == TypeInfo::SignedRationalType);
+    QVERIFY(exifSchema->propertyType("CompressedBitsPerPixel")->propertyType() == TypeInfo::RationalType);
     
     QVERIFY(exifSchema->propertyType("PixelXDimension"));
     QVERIFY(exifSchema->propertyType("PixelXDimension")->propertyType() == TypeInfo::IntegerType);
@@ -383,7 +440,7 @@ void KisMetaDataTest::testSchemaParse()
     QVERIFY(oecfType->structureSchema()->propertyType("Names")->propertyType() == TypeInfo::OrderedArrayType );
     QVERIFY(oecfType->structureSchema()->propertyType("Names")->embeddedPropertyType()->propertyType() == TypeInfo::TextType );
     QVERIFY(oecfType->structureSchema()->propertyType("Values")->propertyType() == TypeInfo::OrderedArrayType );
-    QVERIFY(oecfType->structureSchema()->propertyType("Values")->embeddedPropertyType()->propertyType() == TypeInfo::SignedRationalType );
+    QVERIFY(oecfType->structureSchema()->propertyType("Values")->embeddedPropertyType()->propertyType() == TypeInfo::RationalType );
 
 }
 
@@ -445,6 +502,63 @@ void KisMetaDataTest::testParser()
     QVERIFY( d6.time().hour() == 18 );
     QVERIFY( d6.time().minute() == 20 );
     QVERIFY( d6.time().second() == 32 );
+}
+
+void KisMetaDataTest::testValidator()
+{
+    Store store;
+    const Schema* exif = SchemaRegistry::instance()->schemaFromUri( Schema::EXIFSchemaUri );
+    QVERIFY( exif );
+    store.addEntry( Entry( exif, "PixelXDimension", createIntegerValue() ) );
+    store.addEntry( Entry( exif, "PixelYDimension", createIntegerValue() ) );
+    store.addEntry( Entry( exif, "RelatedSoundFile", createStringValue() ) );
+    store.addEntry( Entry( exif, "ColorSpace", createIntegerValue(1) ) );
+    store.addEntry( Entry( exif, "ExposureTime", createRationalValue() ) );
+    Validator validator(&store);
+    QCOMPARE( validator.countInvalidEntries(), 0 );
+    QCOMPARE( validator.countValidEntries(), 5 );
+    QCOMPARE( validator.invalidEntries().size(), 0 );
+    
+    // Unknown entry
+    store.addEntry( Entry( exif, "azerty", createIntegerValue() ) );
+    validator.revalidate();
+    QCOMPARE( validator.countInvalidEntries(), 1 );
+    QCOMPARE( validator.countValidEntries(), 5 );
+    QCOMPARE( validator.invalidEntries()[ exif->generateQualifiedName("azerty") ].type(), Validator::Reason::UNKNOWN_ENTRY );
+    store.removeEntry(exif, "azerty");
+    
+    // Invalid type for rational
+    store.addEntry( Entry( exif, "FNumber", createIntegerValue() ) );
+    validator.revalidate();
+    QCOMPARE( validator.countInvalidEntries(), 1 );
+    QCOMPARE( validator.countValidEntries(), 5 );
+    QCOMPARE( validator.invalidEntries()[ exif->generateQualifiedName("FNumber") ].type(), Validator::Reason::INVALID_TYPE );
+    store.removeEntry(exif, "FNumber");
+    
+    // Invalid type for integer
+    store.addEntry( Entry( exif, "SubjectLocation", createStringValue() ) );
+    validator.revalidate();
+    QCOMPARE( validator.countInvalidEntries(), 1 );
+    QCOMPARE( validator.countValidEntries(), 5 );
+    QCOMPARE( validator.invalidEntries()[ exif->generateQualifiedName("SubjectLocation") ].type(), Validator::Reason::INVALID_TYPE );
+    store.removeEntry( exif, "SubjectLocation" );
+    
+    // Invalid type for choice
+    store.addEntry( Entry( exif, "SensingMethod", createStringValue() ) );
+    validator.revalidate();
+    QCOMPARE( validator.countInvalidEntries(), 1 );
+    QCOMPARE( validator.countValidEntries(), 5 );
+    QCOMPARE( validator.invalidEntries()[ exif->generateQualifiedName("SensingMethod") ].type(), Validator::Reason::INVALID_TYPE );
+    store.removeEntry( exif, "SensingMethod" );
+    
+    // Invalid value for choice
+    store.addEntry( Entry( exif, "SensingMethod", createIntegerValue(1242) ) );
+    validator.revalidate();
+    QCOMPARE( validator.countInvalidEntries(), 1 );
+    QCOMPARE( validator.countValidEntries(), 5 );
+    QCOMPARE( validator.invalidEntries()[ exif->generateQualifiedName("SensingMethod") ].type(), Validator::Reason::INVALID_VALUE );
+    store.removeEntry( exif, "SensingMethod" );
+    
 }
 
 QTEST_KDEMAIN(KisMetaDataTest, GUI)

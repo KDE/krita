@@ -20,6 +20,7 @@
 #include "KoShadowConfigWidget.h"
 #include "ui_KoShadowConfigWidget.h"
 #include <KoUnit.h>
+#include <KoColorPopupAction.h>
 #include <QtGui/QCheckBox>
 #include <math.h>
 
@@ -30,23 +31,26 @@ public:
     {
     }
     Ui_KoShadowConfigWidget widget;
+    KoColorPopupAction *actionShadowColor;
 };
 
 KoShadowConfigWidget::KoShadowConfigWidget( QWidget * parent )
     : QWidget( parent ), d( new Private() )
 {
     d->widget.setupUi(this);
-    d->widget.shadowColor->setColor( Qt::gray );
     d->widget.shadowOffset->setValue( 10.0 );
     d->widget.shadowAngle->setValue( 45.0 );
     d->widget.shadowAngle->setMinimum( 0.0 );
     d->widget.shadowAngle->setMaximum( 360.0 );
     d->widget.shadowOptions->setEnabled( false );
 
+    d->actionShadowColor = new KoColorPopupAction(this);
+    d->widget.shadowColor->setDefaultAction(d->actionShadowColor);
+
     connect( d->widget.shadowVisible, SIGNAL(toggled(bool)), this, SLOT(visibilityChanged()) );
     connect( d->widget.shadowVisible, SIGNAL(toggled(bool)), this, SIGNAL(shadowVisibilityChanged(bool)) );
-    connect( d->widget.shadowColor, SIGNAL(colorChanged(const QColor&)), 
-        this, SIGNAL(shadowColorChanged(const QColor&)));
+    connect( d->actionShadowColor, SIGNAL(colorChanged(const KoColor&)), 
+        this, SIGNAL(shadowColorChanged(const KoColor&)));
     connect( d->widget.shadowAngle, SIGNAL(valueChanged(qreal,bool)), this, SLOT(offsetChanged()));
     connect( d->widget.shadowOffset, SIGNAL(valueChangedPt(qreal)), this, SLOT(offsetChanged()));
 }
@@ -59,13 +63,13 @@ KoShadowConfigWidget::~KoShadowConfigWidget()
 void KoShadowConfigWidget::setShadowColor( const QColor &color )
 {
     d->widget.shadowColor->blockSignals(true);
-    d->widget.shadowColor->setColor( color );
+    d->actionShadowColor->setCurrentColor( color );
     d->widget.shadowColor->blockSignals(false);
 }
 
 QColor KoShadowConfigWidget::shadowColor() const
 {
-    return d->widget.shadowColor->color();
+    return d->actionShadowColor->currentColor();
 }
 
 void KoShadowConfigWidget::setShadowOffset( const QPointF &offset )

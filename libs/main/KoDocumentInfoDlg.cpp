@@ -229,7 +229,7 @@ void KoDocumentInfoDlg::saveAuthorData()
 {
     d->m_info->setAuthorInfo("creator", d->m_authorUi->leFullName->text());
     d->m_info->setAuthorInfo("initial", d->m_authorUi->leInitials->text());
-    d->m_info->setAuthorInfo("title", d->m_authorUi->leTitle->text());
+    d->m_info->setAuthorInfo("author-title", d->m_authorUi->leTitle->text());
     d->m_info->setAuthorInfo("company", d->m_authorUi->leCompany->text());
     d->m_info->setAuthorInfo("email", d->m_authorUi->leEmail->text());
     d->m_info->setAuthorInfo("telephone-work", d->m_authorUi->lePhoneWork->text());

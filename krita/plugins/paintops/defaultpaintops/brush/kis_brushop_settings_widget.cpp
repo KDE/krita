@@ -91,5 +91,9 @@ void KisBrushOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *c
     m_paintActionTypeOption->writeOptionSetting(config);
 }
 
+void KisBrushOpSettingsWidget::setImage(KisImageSP image)
+{
+    m_brushOption->setImage(image);
+}
 
 #include "kis_brushop_settings_widget.moc"

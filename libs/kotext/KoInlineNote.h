@@ -22,7 +22,7 @@
 #include "KoInlineObject.h"
 #include "kotext_export.h"
 
-class KoXmlElement;
+#include "KoXmlReaderForward.h"
 class KoShapeLoadingContext;
 
 /**

@@ -168,7 +168,7 @@ void KisCustomImageWidget::buttonClicked()
 {
     const KoColorSpace * cs = colorSpaceSelector->currentColorSpace();
 
-    QColor qc(Qt::white);
+    QColor qc = cmbColor->color();
 
     qint32 width, height;
     double resolution;

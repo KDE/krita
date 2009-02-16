@@ -57,6 +57,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
+#include <KoSelection.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -92,6 +93,8 @@ KisShapeLayer::KisShapeLayer(KoShapeContainer * parent,
     m_d->projection = new KisPaintDevice(img->colorSpace());
     m_d->canvas = new KisShapeLayerCanvas(this, m_d->converter);
     m_d->canvas->setProjection(m_d->projection);
+
+    connect(m_d->canvas->shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 }
 
 KisShapeLayer::~KisShapeLayer()
@@ -375,4 +378,10 @@ KisPaintDeviceSP KisShapeLayer::paintDevice() const
 {
     return 0;
 }
+
+void KisShapeLayer::selectionChanged()
+{
+    emit selectionChanged( m_d->canvas->shapeManager()->selection()->selectedShapes());
+}
+
 #include "kis_shape_layer.moc"

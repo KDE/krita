@@ -24,12 +24,11 @@
 #include "komain_export.h"
 #include <QtCore/QList>
 #include <QtCore/Qt>
-
+#include "KoXmlReaderForward.h"
 class QPainter;
 class KoViewConverter;
 class QRectF;
 class QColor;
-class KoXmlDocument;
 class KoXmlWriter;
 
 class KOMAIN_EXPORT KoGuidesData

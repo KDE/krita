@@ -72,7 +72,6 @@ ImageSize::ImageSize(QObject *parent, const QStringList &)
 
         KAction *action  = new KAction(i18n("Scale To New Size..."), this);
         actionCollection()->addAction("imagesize", action);
-        action->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_S));
         connect(action, SIGNAL(triggered()), this, SLOT(slotImageSize()));
 
         action  = new KAction(i18n("Scale &Layer..."), this);

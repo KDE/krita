@@ -21,7 +21,6 @@
 #include "Voice.h"
 #include "Sheet.h"
 #include <QtCore/QList>
-#include <kdebug.h>
 
 namespace MusicCore {
 

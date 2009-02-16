@@ -50,6 +50,8 @@ public:
         return m_brush;
     };
 
+    void setImage(KisImageSP image);
+
 protected:
     virtual void showEvent(QShowEvent *);
 

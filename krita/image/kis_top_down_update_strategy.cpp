@@ -138,9 +138,9 @@ namespace
 
             KisPainter gc(m_projection);
             QBitArray flags = layer->channelFlags();
-            for (int i = 0; i < flags.size(); ++i) {
-                qDebug() << "KisTopDownUpdateStrategy::visit, flag " << i << " is " << flags.testBit(i);
-            }
+//            for (int i = 0; i < flags.size(); ++i) {
+//                qDebug() << "KisTopDownUpdateStrategy::visit, flag " << i << " is " << flags.testBit(i);
+//            }
             gc.setChannelFlags(flags);
 
             KisPaintDeviceSP source = layer->projection();

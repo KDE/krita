@@ -34,7 +34,7 @@ KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, QList<KoSh
 {
     Q_ASSERT(m_clipped.count() == m_shapes.count());
     foreach(KoShape* shape, m_shapes)
-    m_oldParents.append(shape->parent());
+        m_oldParents.append(shape->parent());
 
     setText(i18n("Group shapes"));
 }
@@ -72,7 +72,7 @@ void KoShapeGroupCommand::redo()
             // -> we need compensate the group position change
             QPointF positionOffset = oldGroupPosition - bound.topLeft();
             foreach(KoShape * child, m_container->iterator())
-            child->setAbsolutePosition(child->absolutePosition() + positionOffset);
+                child->setAbsolutePosition(child->absolutePosition() + positionOffset);
         }
     }
 
@@ -116,12 +116,11 @@ void KoShapeGroupCommand::undo()
             // -> we need compensate the group position change
             QPointF positionOffset = oldGroupPosition - bound.topLeft();
             foreach(KoShape * child, m_container->iterator())
-            child->setAbsolutePosition(child->absolutePosition() + positionOffset);
+                child->setAbsolutePosition(child->absolutePosition() + positionOffset);
 
             m_container->setAbsolutePosition(bound.topLeft(), KoFlake::TopLeftCorner);
             m_container->setSize(bound.size());
         }
-
     }
 }
 

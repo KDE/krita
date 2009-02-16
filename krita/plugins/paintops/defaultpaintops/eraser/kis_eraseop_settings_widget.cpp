@@ -78,5 +78,9 @@ void KisEraseOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration *c
     m_opacityOption->writeOptionSetting(config);
 }
 
+void KisEraseOpSettingsWidget::setImage(KisImageSP image)
+{
+    m_brushOption->setImage(image);
+}
 
 #include "kis_eraseop_settings_widget.moc"

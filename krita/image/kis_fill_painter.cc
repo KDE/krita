@@ -317,7 +317,10 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
 
         int x = segment->x;
         int y = segment->y;
-
+        Q_ASSERT( x >= 0 );
+        Q_ASSERT( x < m_width );
+        Q_ASSERT( y >= 0 );
+        Q_ASSERT( y < m_height );
         /* We need an iterator that is valid in the range (0,y) - (width,y). Therefore,
         it is needed to start the iterator at the first position, and then skip to (x,y). */
         pixelIt = sourceDevice->createHLineIterator(0, y, m_width);
@@ -341,10 +344,18 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
 
         if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
             map[m_width * (y - 1) + x] = Added;
+            Q_ASSERT( x >= 0 );
+            Q_ASSERT( x < m_width );
+            Q_ASSERT( y - 1 >= 0 );
+            Q_ASSERT( y - 1 < m_height );
             stack.push(new FillSegment(x, y - 1));
         }
         if (y < (m_height - 1) && (map[m_width * (y + 1) + x] == None)) {
             map[m_width * (y + 1) + x] = Added;
+            Q_ASSERT( x >= 0 );
+            Q_ASSERT( x < m_width );
+            Q_ASSERT( y + 1 >= 0 );
+            Q_ASSERT( y + 1 < m_height );
             stack.push(new FillSegment(x, y + 1));
         }
 
@@ -356,39 +367,59 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         --selIt;
         --x;
 
-        // go to the left
-        while (!stop && x >= 0 && (map[m_width * y + x] != Checked)) { // FIXME optimizeable?
-            map[m_width * y + x] = Checked;
-            diff = devColorSpace->difference(source, pixelIt.rawData());
-            if (diff >= m_threshold
-                    || (hasSelection && srcSel->selected(pixelIt.x(), pixelIt.y()) == MIN_SELECTED)) {
-                stop = true;
-                continue;
-            }
+        if( x > 0 )
+        {
+            // go to the left
+            while (!stop && x >= 0 && (map[m_width * y + x] != Checked)) { // FIXME optimizeable?
+                map[m_width * y + x] = Checked;
+                diff = devColorSpace->difference(source, pixelIt.rawData());
+                if (diff >= m_threshold
+                        || (hasSelection && srcSel->selected(pixelIt.x(), pixelIt.y()) == MIN_SELECTED)) {
+                    stop = true;
+                    continue;
+                }
 
-            if (m_fuzzy) {
-                colorSpace->fromQColor(Qt::white, selIt.rawData());
-                colorSpace->setAlpha(selIt.rawData(), MAX_SELECTED - diff, 1);
-            } else
-                colorSpace->fromQColor(Qt::white, selIt.rawData());
+                if (m_fuzzy) {
+                    colorSpace->fromQColor(Qt::white, selIt.rawData());
+                    colorSpace->setAlpha(selIt.rawData(), MAX_SELECTED - diff, 1);
+                } else
+                    colorSpace->fromQColor(Qt::white, selIt.rawData());
 
-            if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
-                map[m_width * (y - 1) + x] = Added;
-                stack.push(new FillSegment(x, y - 1));
+                if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
+                    map[m_width * (y - 1) + x] = Added;
+                    Q_ASSERT( x >= 0 );
+                    Q_ASSERT( x < m_width );
+                    Q_ASSERT( y - 1 >= 0 );
+                    Q_ASSERT( y - 1 < m_height );
+                    stack.push(new FillSegment(x, y - 1));
+                }
+                if (y < (m_height - 1) && (map[m_width * (y + 1) + x] == None)) {
+                    map[m_width * (y + 1) + x] = Added;
+                    Q_ASSERT( x >= 0 );
+                    Q_ASSERT( x < m_width );
+                    Q_ASSERT( y + 1 >= 0 );
+                    Q_ASSERT( y + 1 < m_height );
+                    stack.push(new FillSegment(x, y + 1));
+                }
+                ++pixelsDone;
+                --pixelIt;
+                --selIt;
+                --x;
             }
-            if (y < (m_height - 1) && (map[m_width * (y + 1) + x] == None)) {
-                map[m_width * (y + 1) + x] = Added;
-                stack.push(new FillSegment(x, y + 1));
-            }
-            ++pixelsDone;
-            --pixelIt;
-            --selIt;
-            --x;
         }
 
         x = segment->x + 1;
         delete segment;
+        segment = 0;
 
+        if (x >= m_width) {
+            continue;
+        }
+        Q_ASSERT( x >= 0 );
+        Q_ASSERT( x < m_width );
+        Q_ASSERT( y >= 0 );
+        Q_ASSERT( y < m_height );
+        
         if (map[m_width * y + x] == Checked)
             continue;
 
@@ -415,10 +446,18 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
 
             if (y > 0 && (map[m_width * (y - 1) + x] == None)) {
                 map[m_width * (y - 1) + x] = Added;
+                Q_ASSERT( x >= 0 );
+                Q_ASSERT( x < m_width );
+                Q_ASSERT( y >= 0 );
+                Q_ASSERT( y - 1 < m_height );
                 stack.push(new FillSegment(x, y - 1));
             }
             if (y < (m_height - 1) && (map[m_width * (y + 1) + x] == None)) {
                 map[m_width * (y + 1) + x] = Added;
+                Q_ASSERT( x >= 0 );
+                Q_ASSERT( x < m_width );
+                Q_ASSERT( y + 1 >= 0 );
+                Q_ASSERT( y + 1 < m_height );
                 stack.push(new FillSegment(x, y + 1));
             }
             ++pixelsDone;

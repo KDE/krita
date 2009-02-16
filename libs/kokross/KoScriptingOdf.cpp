@@ -74,7 +74,10 @@ QString KoScriptingOdfReader::name() const { return d->currentElement.tagName();
 QString KoScriptingOdfReader::namespaceURI() const { return d->currentElement.namespaceURI(); }
 int KoScriptingOdfReader::level() const { return d->level; }
 
+#ifndef KOXML_USE_QDOM
 QStringList KoScriptingOdfReader::attributeNames() { return d->currentElement.attributeNames(); }
+#endif
+
 QString KoScriptingOdfReader::attribute(const QString& name, const QString& defaultValue) const { return d->currentElement.attribute(name, defaultValue); }
 QString KoScriptingOdfReader::attributeNS(const QString& namespaceURI, const QString& localName, const QString& defaultValue) const { return d->currentElement.attributeNS(namespaceURI, localName, defaultValue); }
 bool KoScriptingOdfReader::hasAttribute(const QString& name) const { return d->currentElement.hasAttribute(name); }
@@ -85,7 +88,11 @@ bool KoScriptingOdfReader::isElement() const { return d->currentElement.isElemen
 QString KoScriptingOdfReader::text() const { return d->currentElement.text(); }
 
 bool KoScriptingOdfReader::hasChildren() const {
+#ifdef KOXML_USE_QDOM
+    const int count = d->currentElement.childNodes().count();
+#else
     const int count = d->currentElement.childNodesCount();
+#endif
     if( count < 1 )
         return false;
     if( count == 1 && d->currentElement.firstChild().isText() )
@@ -136,7 +143,9 @@ void dumpElem(KoXmlElement elem, int level=0) {
     QString prefix="";
     for(int i = 0; i < level; ++i) prefix+="  ";
     qDebug()<<QString("%1  %2").arg(prefix).arg(elem.tagName());
+#ifndef KOXML_USE_QDOM
     foreach(const QString &s,elem.attributeNames()) qDebug()<<QString("%1    %2 = %3").arg(prefix).arg(s).arg(elem.attribute(s));
+#endif
     level++;
     KoXmlElement e;
     forEachElement(e, elem) dumpElem(e,level);

@@ -1,4 +1,4 @@
-include_directories(programs/filterslist lib/ lib/transformations lib/ui )
+include_directories(programs/filterslist lib/ lib/transformations lib/ui lib/shapes/)
 add_subdirectory(lib)
 add_subdirectory(programs)
 

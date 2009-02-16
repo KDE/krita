@@ -21,7 +21,7 @@
 
 class QString;
 
-class KoXmlElement;
+#include "KoXmlReaderForward.h"
 class KoStore;
 
 class KisDoc2;

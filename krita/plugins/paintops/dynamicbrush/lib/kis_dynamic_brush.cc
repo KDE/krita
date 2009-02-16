@@ -28,7 +28,11 @@
 #include "kis_dynamic_shape_program.h"
 
 KisDynamicBrush::KisDynamicBrush(const QString& name)
-        : m_name(name), m_shape(0), m_coloring(0), m_shapeProgram(0), m_coloringProgram(0)
+        : m_name(name)
+        , m_shape(0)
+        , m_coloring(0)
+        , m_shapeProgram(0)
+        , m_coloringProgram(0)
 {
 }
 
@@ -44,6 +48,7 @@ KisDynamicBrush::~KisDynamicBrush()
 void KisDynamicBrush::startPainting(KisPainter* _painter)
 {
     Q_ASSERT(m_shape);
+    Q_ASSERT(_painter);
     m_shape->startPainting(_painter);
 }
 
@@ -55,23 +60,27 @@ void KisDynamicBrush::endPainting()
 
 void KisDynamicBrush::setShapeProgram(KisDynamicShapeProgram* p)
 {
+    Q_ASSERT(p);
     delete m_shapeProgram;
     m_shapeProgram = p;
 }
 void KisDynamicBrush::setColoringProgram(KisDynamicColoringProgram* p)
 {
+    Q_ASSERT(p);
     delete m_coloringProgram;
     m_coloringProgram = p;
 }
 
 void KisDynamicBrush::setShape(KisDynamicShape* shape)
 {
+    Q_ASSERT(shape);
     delete m_shape;
     m_shape = shape;
 }
 
 void KisDynamicBrush::setColoring(KisDynamicColoring* coloring)
 {
+    Q_ASSERT(coloring);
     delete m_coloring;
     m_coloring = coloring;
 }

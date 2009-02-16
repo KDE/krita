@@ -46,7 +46,7 @@ class QString;
 class QXmlReader;
 class QXmlInputSource;
 
-class KoXmlElement;
+class KoXmlNode;
 class KoXmlText;
 class KoXmlCDATASection;
 class KoXmlDocumentType;
@@ -63,6 +63,8 @@ class KoXmlNodeData;
 *
 * KoXmlNode implements an explicit sharing, a node shares its data with
 * other copies (if exist).
+*
+* XXX: DO NOT ADD CONVENIENCE API HERE BECAUSE THIS CLASS MUST REMAIN COMPATIBLE WITH QDOMNODE!
 *
 * @author Ariya Hidayat <ariya@kde.org>
 */
@@ -115,7 +117,7 @@ public:
     KoXmlNode nextSibling() const;
     KoXmlNode previousSibling() const;
 
-    // equivalen to node.childNodes().count() if node is a QDomNode instance
+    // equivalent to node.childNodes().count() if node is a QDomNode instance
     int childNodesCount() const;
 
     // workaround to get and iterate over all attributes

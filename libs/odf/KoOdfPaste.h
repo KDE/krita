@@ -23,10 +23,10 @@
 #include <KoOdf.h>
 
 #include "koodf_export.h"
+#include "KoXmlReaderForward.h"
 
 class QString;
 class QMimeData;
-class KoXmlElement;
 class KoOdfReadStore;
 
 class KOODF_EXPORT KoOdfPaste

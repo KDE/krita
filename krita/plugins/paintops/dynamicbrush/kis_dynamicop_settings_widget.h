@@ -38,7 +38,6 @@ public:
 
     void writeConfiguration( KisPropertiesConfiguration *config ) const;
 
-
 public:
 
     Ui_DynamicBrushOptions* m_uiOptions;

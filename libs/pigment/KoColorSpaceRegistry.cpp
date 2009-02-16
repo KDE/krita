@@ -31,7 +31,7 @@
 #include <klocale.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
-#include <k3staticdeleter.h>
+//#include <k3staticdeleter.h>
 
 #include <lcms.h>
 
@@ -70,12 +70,11 @@ struct KoColorSpaceRegistry::Private {
 };
 
 KoColorSpaceRegistry *KoColorSpaceRegistry::Private::singleton = 0;
-// deleting the registry still gives errors
 //static K3StaticDeleter<KoColorSpaceRegistry> staticDeleter;
 
 KoColorSpaceRegistry* KoColorSpaceRegistry::instance()
 {
-    if(KoColorSpaceRegistry::Private::singleton == 0)
+    if (KoColorSpaceRegistry::Private::singleton == 0)
     {
         //staticDeleter.setObject(KoColorSpaceRegistry::Private::singleton, new KoColorSpaceRegistry());
         KoColorSpaceRegistry::Private::singleton = new KoColorSpaceRegistry();
@@ -378,7 +377,7 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         {
             cs = colorSpace( csID, profile->name());
         }
-        
+
         if( not d->profileMap.contains( profile->name() ) )
         {
           addProfile( profile );

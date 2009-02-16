@@ -26,7 +26,6 @@ class QTimer;
 class KisFilter;
 class QListWidgetItem;
 class QLabel;
-class KisPreviewWidget;
 class KisFilterConfiguration;
 class QGroupBox;
 class KisConfigWidget;

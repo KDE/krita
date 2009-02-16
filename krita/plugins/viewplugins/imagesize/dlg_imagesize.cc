@@ -55,15 +55,15 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->intPixelHeight->setValue(height);
 
     m_page->cmbFilterType->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
-    m_page->cmbFilterType->setCurrent("Mitchell");
+    m_page->cmbFilterType->setCurrent("Bicubic");
 
     m_page->cmbWidthUnit->addItems(KoUnit::listOfUnitName());
     m_page->cmbHeightUnit->addItems(KoUnit::listOfUnitName());
 
     m_page->doubleResolution->setValue(72.0 * resolution);
 
-    m_page->cmbInteractor->addItem("Size in Pixels");
-    m_page->cmbInteractor->addItem("Print Size");
+    m_page->cmbInteractor->addItem(i18n("Size in Pixels"));
+    m_page->cmbInteractor->addItem(i18n("Print Size"));
 
     slotAspectChanged(true);
 

@@ -37,7 +37,7 @@ class KoAction;
 class KoStyleManager;
 class KoTextEditingPlugin;
 class KoColor;
-class KoColorSetAction;
+class KoColorPopupAction;
 class UndoTextCommand;
 class InsertCharacter;
 class ChangeTracker;
@@ -252,8 +252,8 @@ private:
     KAction *m_actionFormatDecreaseIndent;
     KFontSizeAction *m_actionFormatFontSize;
     KFontAction *m_actionFormatFontFamily;
-    KoColorSetAction *m_actionFormatTextColor;
-    KoColorSetAction *m_actionFormatBackgroundColor;
+    KoColorPopupAction *m_actionFormatTextColor;
+    KoColorPopupAction *m_actionFormatBackgroundColor;
 
     QHash<QString, KoTextEditingPlugin*> m_textEditingPlugins;
     KoTextEditingPlugin *m_spellcheckPlugin;

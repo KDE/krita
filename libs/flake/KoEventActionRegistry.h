@@ -23,10 +23,9 @@
 #include <QList>
 
 #include "flake_export.h"
-
+#include "KoXmlReaderForward.h"
 class KoEventAction;
 class KoEventActionFactory;
-class KoXmlElement;
 class KoShapeLoadingContext;
 
 class FLAKE_EXPORT KoEventActionRegistry

@@ -72,5 +72,9 @@ void KisAirbrushOpSettingsWidget::writeConfiguration( KisPropertiesConfiguration
     m_brushOption->writeOptionSetting(config);
 }
 
+void KisAirbrushOpSettingsWidget::setImage(KisImageSP image)
+{
+    m_brushOption->setImage(image);
+}
 
 #include "kis_airbrushop_settings_widget.moc"

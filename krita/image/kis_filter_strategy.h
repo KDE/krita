@@ -72,6 +72,16 @@ public:
     virtual double valueAt(double t) const;
 };
 
+class KRITAIMAGE_EXPORT KisBicubicFilterStrategy : public KisFilterStrategy
+{
+public:
+    KisBicubicFilterStrategy() : KisFilterStrategy(KoID("Bicubic", i18n("Bicubic"))) {
+        supportVal = 2.0; intSupportVal = 512;
+    }
+    virtual ~KisBicubicFilterStrategy() {}
+
+    virtual qint32 intValueAt(qint32 t) const;
+};
 class KRITAIMAGE_EXPORT KisBoxFilterStrategy : public KisFilterStrategy
 {
 public:
@@ -90,7 +100,7 @@ public:
 class KRITAIMAGE_EXPORT KisTriangleFilterStrategy : public KisFilterStrategy
 {
 public:
-    KisTriangleFilterStrategy() : KisFilterStrategy(KoID("Triangle", i18n("Triangle aka (bi)linear"))) {
+    KisTriangleFilterStrategy() : KisFilterStrategy(KoID("Triangle", i18n("Bilinear"))) {
         supportVal = 1.0; intSupportVal = 256;
     }
     virtual ~KisTriangleFilterStrategy() {}

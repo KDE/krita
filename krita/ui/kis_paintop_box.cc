@@ -85,6 +85,9 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_cmbPaintopPresets->setMinimumWidth(150);
     m_cmbPaintopPresets->setToolTip(i18n("Brush presets"));
 
+    // XXX: for 2.0
+    m_cmbPaintopPresets->hide();
+
 #ifdef Q_WS_MAC
     m_cmbPaintops->setAttribute(Qt::WA_MacSmallSize, true);
     m_cmbPaintopPresets->setAttribute(Qt::WA_MacSmallSize, true);

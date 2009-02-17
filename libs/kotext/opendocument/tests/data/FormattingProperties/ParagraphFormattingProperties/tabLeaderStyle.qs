@@ -28,4 +28,4 @@ setFormatProperty(textBlockFormat, KoParagraphStyle.TabPositions, [tabstop]);
 cursor.setBlockFormat(textBlockFormat);
 cursor.insertText("this is (tab)\tan example of (tab)\tparagraph with tab stop at 3in, whose leader line style is wave.");
 
-return document;
+document;

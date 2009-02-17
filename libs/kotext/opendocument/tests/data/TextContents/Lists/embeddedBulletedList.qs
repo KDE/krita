@@ -20,4 +20,4 @@ cursor.insertText("This is an example of embedded bulleted list", defaultListIte
 cursor.insertBlock();
 cursor.insertText("This is an example of embedded bulleted list", defaultListItemFormat);
 
-return document;
+document;

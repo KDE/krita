@@ -21,4 +21,4 @@ setFormatProperty(textBlockFormat, KoParagraphStyle.TabPositions, [tabstop]);
 cursor.setBlockFormat(textBlockFormat);
 cursor.insertText("this is (tab)\ttab type is right.");
 
-return document;
+document;

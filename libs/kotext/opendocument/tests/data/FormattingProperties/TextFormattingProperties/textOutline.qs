@@ -12,4 +12,4 @@ cursor.insertText("this is an example of text displaying as an outline.", textOu
 cursor.insertBlock();
 cursor.insertText("this is an example of text displaying the text itself.", noTextOutlineFormat);
 
-return document;
+document;

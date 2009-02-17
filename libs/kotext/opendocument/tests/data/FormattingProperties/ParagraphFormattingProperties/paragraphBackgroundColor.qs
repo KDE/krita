@@ -17,4 +17,4 @@ cursor.insertText("This is an example of paragraph with red background color.");
 cursor.insertBlock(greenBackgroundFormat);
 cursor.insertText("This is an example of paragraph with green background color.");
 
-return document;
+document;

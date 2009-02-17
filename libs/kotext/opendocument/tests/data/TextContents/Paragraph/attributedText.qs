@@ -17,4 +17,4 @@ cursor.insertText(" and ", defaultTextFormat);
 cursor.insertText("these words are emphasized", boldFormat);
 cursor.insertText(".", defaultTextFormat);
 
-return document;
+document;

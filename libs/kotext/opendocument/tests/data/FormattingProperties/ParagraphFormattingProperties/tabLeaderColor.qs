@@ -21,4 +21,4 @@ setFormatProperty(textBlockFormat, KoParagraphStyle.TabPositions, [tabstop]);
 cursor.setBlockFormat(textBlockFormat);
 cursor.insertText("this is (tab)\tan example of paragraph with tab stop, whose leader line color is green.", textCharFormat);
 
-return document;
+document;

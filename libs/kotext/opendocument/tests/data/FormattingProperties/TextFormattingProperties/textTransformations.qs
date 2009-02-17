@@ -15,4 +15,4 @@ cursor.insertText("this is an example of text transformation to upper case.", up
 cursor.insertBlock();
 cursor.insertText("this is an example of text transformation to capitalize.", capitalizeFormat);
 
-return document;
+document;

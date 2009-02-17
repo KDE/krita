@@ -55,4 +55,4 @@ cursor.insertText("This is an example of text with dot dot dash underline.", dot
 cursor.insertBlock();
 cursor.insertText("This is an example of text with wave underline.", waveLineFormat);
 
-return document;
+document;

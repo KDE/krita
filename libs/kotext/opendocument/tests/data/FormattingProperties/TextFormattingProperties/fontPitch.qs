@@ -16,4 +16,4 @@ cursor.insertText("This is an example that set font pitch to fixed. This is an e
 cursor.insertBlock();
 cursor.insertText("This is an example that set font pitch to variable. This is an example that set font pitch to variable. This is an example that set font pitch to variable.", variablePitchFormat);
 
-return document;
+document;

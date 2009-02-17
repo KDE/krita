@@ -20,4 +20,4 @@ cursor.insertText("This is an example of text with italic font style.", italicFo
 cursor.insertBlock();
 cursor.insertText("This is an example of text with oblique font style.", obliqueFormat);
 
-return document;
+document;

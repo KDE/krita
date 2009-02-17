@@ -32,4 +32,4 @@ cursor.insertText("\t42 + 0.01 = \t42.01");
 cursor.insertBlock(textBlockFormat);
 cursor.insertText("\t4233.343 + 0.00 = \t4233.343");
 
-return document;
+document;

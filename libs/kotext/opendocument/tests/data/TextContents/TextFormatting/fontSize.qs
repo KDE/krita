@@ -8,4 +8,4 @@ twentyEightPointFormat.setFont(twentyEightPointFont);
 cursor.insertText("The following is a character whose font size is ", defaultTextFormat);
 cursor.insertText("28.", twentyEightPointFormat);
 
-return document;
+document;

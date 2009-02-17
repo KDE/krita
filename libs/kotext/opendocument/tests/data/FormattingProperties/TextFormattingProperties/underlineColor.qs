@@ -17,4 +17,4 @@ cursor.insertText("This is an example of text with underline which has the same 
 cursor.insertBlock();
 cursor.insertText("This is an example of text with underline which has the defined color.", definedColorUnderlineFormat);
 
-return document;
+document;

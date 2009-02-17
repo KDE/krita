@@ -14,4 +14,4 @@ cursor.insertText("This is an example that create a font family for the text.", 
 cursor.insertBlock();
 cursor.insertText("This is an example that create a font family for the text.", arialBlackFormat);
 
-return document;
+document;

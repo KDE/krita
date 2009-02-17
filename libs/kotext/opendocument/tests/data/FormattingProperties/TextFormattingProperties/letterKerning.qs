@@ -14,4 +14,4 @@ cursor.insertText("This is an example of text without letter kerning: Tr Ke Yr r
 cursor.insertBlock(defaultBlockFormat);
 cursor.insertText("This is an example of text with letter kerning: Tr Ke Yr r, To AY y, AT", kerningFormat);
 
-return document;
+document;

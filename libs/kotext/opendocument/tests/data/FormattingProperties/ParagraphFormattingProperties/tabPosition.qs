@@ -21,4 +21,4 @@ setFormatProperty(textBlockFormat, KoParagraphStyle.TabPositions, [t100pt]);
 cursor.setBlockFormat(textBlockFormat);
 cursor.insertText("some text\t(tab)\t(tab) position of tab stop is 100pt.");
 
-return document;
+document;

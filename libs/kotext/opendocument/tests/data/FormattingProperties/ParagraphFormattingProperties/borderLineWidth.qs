@@ -117,4 +117,4 @@ setFormatProperty(textBlockFormatLeftOnly, KoParagraphStyle.LeftBorderWidth, 0.0
 cursor.setBlockFormat(textBlockFormatLeftOnly);
 cursor.insertText("This is an example of paragraph with double border. The width of inner line in left side is 0.01 inch, the distance between two line in left side is 0.3 inch, and the width of the outer line in left side is 0.03 inch."); // P5
 
-return document;
+document;

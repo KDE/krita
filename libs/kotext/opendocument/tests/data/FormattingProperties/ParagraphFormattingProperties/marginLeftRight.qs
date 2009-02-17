@@ -24,4 +24,4 @@ setFormatProperty(textBlockFormat, QTextFormat.BlockRightMargin, 72 * 1);
 cursor.setBlockFormat(textBlockFormat);
 cursor.insertText("This is an example of paragraph with left margin of 2 inch and right margin of 1 inch. This is an example of paragraph with left margin of 2 inch and right margin of 1 inch.");
 
-return document;
+document;

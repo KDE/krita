@@ -20,4 +20,4 @@ setFormatProperty(textBlockFormat, KoParagraphStyle.DropCapsLength, -1);
 cursor.setBlockFormat(textBlockFormat);
 cursor.insertText("This is an example of paragraph with drop caps. This is also an example of drop caps with length of word. This is an example of paragraph with drop caps. This is also an example of drop caps with length of word. This is an example of paragraph with drop caps. This is also an example of drop caps with length of word.");
 
-return document;
+document;

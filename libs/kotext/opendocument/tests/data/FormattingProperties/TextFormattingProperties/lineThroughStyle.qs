@@ -55,4 +55,4 @@ cursor.insertText("this is an example of text with line trough whose style is do
 cursor.insertBlock();
 cursor.insertText("this is an example of text with line trough whose style is wave.", waveLineFormat);
 
-return document;
+document;

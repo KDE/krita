@@ -18,4 +18,4 @@ cursor.insertText("This test case checks font size, this is an example of text w
 cursor.insertText("relative font size of -3pt", sizeM3Format);
 cursor.insertText("", defaultTextFormat);
 
-return document;
+document;

@@ -7,4 +7,4 @@ cursor.insertText("This is an example of specify the country of the text, by usi
 cursor.insertBlock();
 cursor.insertText("\u4F60\u597D", chineseFormat);
 
-return document;
+document;

@@ -23,4 +23,4 @@ setFormatProperty(textBlockFormat, KoParagraphStyle.TabPositions, [tabstop]);
 cursor.setBlockFormat(textBlockFormat);
 cursor.insertText("(tab)\twith a double leader line.");
 
-return document;
+document;

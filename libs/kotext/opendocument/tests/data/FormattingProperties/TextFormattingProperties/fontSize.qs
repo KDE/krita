@@ -16,4 +16,4 @@ cursor.insertBlock();
 cursor.insertText("This test case checks font size, this is an example of text with ", defaultTextFormat);
 cursor.insertText("font size of 50%", size50pcFormat);
 
-return document;
+document;

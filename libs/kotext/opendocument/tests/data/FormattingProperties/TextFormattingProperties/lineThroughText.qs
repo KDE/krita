@@ -28,4 +28,4 @@ cursor.insertText("this is an example of text with line through --x--", tf);
 cursor.insertBlock();
 cursor.insertText("the line through text is --x--.", tf_plain);
 
-return document;
+document;

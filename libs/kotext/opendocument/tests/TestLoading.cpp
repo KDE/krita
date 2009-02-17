@@ -591,84 +591,84 @@ void TestLoading::cleanup()
 
 void TestLoading::addData()
 {
-    QTest::newRow("bulletedList") << "TextContents/Lists/bulletedList"; //application default style
-    QTest::newRow("continueNumbering") << "TextContents/Lists/continueNumbering"; //application default style
-    QTest::newRow("embeddedBulletedList") << "TextContents/Lists/embeddedBulletedList"; //application default style
-    QTest::newRow("listHeader") << "TextContents/Lists/listHeader"; //application default style
-    QTest::newRow("multilevelList") << "TextContents/Lists/multilevelList"; //unnumberedFormat is a blockFormat, so initialise it with defaultBlockFormat and not defaultListItemFormat (which is a charFormat))
-    QTest::newRow("multipleParagraphs") << "TextContents/Lists/multipleParagraphs"; //application default style
-    QTest::newRow("numberedList") << "TextContents/Lists/numberedList"; //application default style
-    QTest::newRow("numberedParagraph") << "TextContents/Lists/numberedParagraph"; //insert sublist pointers in generatedLists
-    QTest::newRow("startValue") << "TextContents/Lists/startValue"; //application default style
+    QTest::newRow("bulletedList") << "TextContents/Lists/bulletedList";
+    QTest::newRow("continueNumbering") << "TextContents/Lists/continueNumbering";
+    QTest::newRow("embeddedBulletedList") << "TextContents/Lists/embeddedBulletedList";
+    QTest::newRow("listHeader") << "TextContents/Lists/listHeader";
+    QTest::newRow("multilevelList") << "TextContents/Lists/multilevelList";
+    QTest::newRow("multipleParagraphs") << "TextContents/Lists/multipleParagraphs";
+    QTest::newRow("numberedList") << "TextContents/Lists/numberedList";
+    QTest::newRow("numberedParagraph") << "TextContents/Lists/numberedParagraph";
+    QTest::newRow("startValue") << "TextContents/Lists/startValue";
 
-    QTest::newRow("boldAndItalic") << "TextContents/TextFormatting/boldAndItalic"; //work adding foreground property to common.qs
+    QTest::newRow("boldAndItalic") << "TextContents/TextFormatting/boldAndItalic";
 
-    QTest::newRow("attributedText") << "TextContents/Paragraph/attributedText"; //work adding foreground property to common.qs
-    QTest::newRow("basicContents") << "TextContents/Paragraph/basicContents"; //use "\u00AD" "\u2011" and "\u00A0" in basicContent.qs for special chars softHyphen, NonBrwakingHyphen and NonBreakingSpace
-    QTest::newRow("whitespace") << "TextContents/Paragraph/whitespace"; //work adding foreground property to common.qs
+    QTest::newRow("attributedText") << "TextContents/Paragraph/attributedText";
+    QTest::newRow("basicContents") << "TextContents/Paragraph/basicContents";
+    QTest::newRow("whitespace") << "TextContents/Paragraph/whitespace";
 
-    QTest::newRow("fontSize1") << "TextContents/TextFormatting/fontSize"; //work adding foreground property to common.qs
+    QTest::newRow("fontSize1") << "TextContents/TextFormatting/fontSize";
 
-    QTest::newRow("fontColors") << "TextContents/TextFormatting/fontColors"; //saving works by fixing TextWriter::save (shouldn't set parent property to "default", and fixing TestLoading::documentToOdf to also create styles.xml)
+    QTest::newRow("fontColors") << "TextContents/TextFormatting/fontColors";
 
-    QTest::newRow("color") << "FormattingProperties/TextFormattingProperties/color"; //work adding foreground property to common.qs
+    QTest::newRow("color") << "FormattingProperties/TextFormattingProperties/color";
 
-    QTest::newRow("country") << "FormattingProperties/TextFormattingProperties/country"; //work with application default style
-    QTest::newRow("fontCharset") << "FormattingProperties/TextFormattingProperties/fontCharacterSet"; //work adding foreground property to common.qs
-    QTest::newRow("fontFamily") << "FormattingProperties/TextFormattingProperties/fontFamily"; //work with application default
+    QTest::newRow("country") << "FormattingProperties/TextFormattingProperties/country";
+    QTest::newRow("fontCharset") << "FormattingProperties/TextFormattingProperties/fontCharacterSet";
+    QTest::newRow("fontFamily") << "FormattingProperties/TextFormattingProperties/fontFamily";
 #if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
     QTest::newRow("fontFamilyGeneric") << "FormattingProperties/TextFormattingProperties/fontFamilyGeneric";
 #endif
-    QTest::newRow("fontName") << "FormattingProperties/TextFormattingProperties/fontName"; //when parent style is not found, load the app/odf default instead
-    QTest::newRow("fontPitch") << "FormattingProperties/TextFormattingProperties/fontPitch"; //work adding foreground property to common.qs
-    QTest::newRow("fontSize2") << "FormattingProperties/TextFormattingProperties/fontSize"; //saving fixed by removing the paragraphChar format properties before testing textSpan characterFormat for equality with the one stored in styleManager.
-    QTest::newRow("fontStyle") << "FormattingProperties/TextFormattingProperties/fontStyle"; //application default style
-    QTest::newRow("fontWeight") << "FormattingProperties/TextFormattingProperties/fontWeight"; //application default style
-    QTest::newRow("fontVariant") << "FormattingProperties/TextFormattingProperties/fontVariant"; //application default style
-    QTest::newRow("language") << "FormattingProperties/TextFormattingProperties/language"; //fix script file to use unicode code point values
+    QTest::newRow("fontName") << "FormattingProperties/TextFormattingProperties/fontName";
+    QTest::newRow("fontPitch") << "FormattingProperties/TextFormattingProperties/fontPitch";
+    QTest::newRow("fontSize2") << "FormattingProperties/TextFormattingProperties/fontSize";
+    QTest::newRow("fontStyle") << "FormattingProperties/TextFormattingProperties/fontStyle";
+    QTest::newRow("fontWeight") << "FormattingProperties/TextFormattingProperties/fontWeight";
+    QTest::newRow("fontVariant") << "FormattingProperties/TextFormattingProperties/fontVariant";
+    QTest::newRow("language") << "FormattingProperties/TextFormattingProperties/language";
 #if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
     QTest::newRow("letterKerning") << "FormattingProperties/TextFormattingProperties/letterKerning";
 #endif
-    QTest::newRow("lineThroughColor") << "FormattingProperties/TextFormattingProperties/lineThroughColor"; //application default style
-    QTest::newRow("lineThroughMode") << "FormattingProperties/TextFormattingProperties/lineThroughMode"; //application default style
-    QTest::newRow("lineThroughStyle") << "FormattingProperties/TextFormattingProperties/lineThroughStyle"; //application default style
-    QTest::newRow("lineThroughType") << "FormattingProperties/TextFormattingProperties/lineThroughType"; //application default style
-    QTest::newRow("lineThroughWidth") << "FormattingProperties/TextFormattingProperties/lineThroughWidth"; //application default style
-    QTest::newRow("lineThroughText") << "FormattingProperties/TextFormattingProperties/lineThroughText"; //application default style
-    QTest::newRow("relativeFontSize") << "FormattingProperties/TextFormattingProperties/relativeFontSize"; //application default style
-    QTest::newRow("textBackgroundColor") << "FormattingProperties/TextFormattingProperties/textBackgroundColor"; //application default style
-    QTest::newRow("textOutline") << "FormattingProperties/TextFormattingProperties/textOutline"; //fix outline QPen creation parameters
-    QTest::newRow("textTranformations") << "FormattingProperties/TextFormattingProperties/textTransformations"; //application default style
-    QTest::newRow("underlineColor") << "FormattingProperties/TextFormattingProperties/underlineColor"; //application default style
-    QTest::newRow("underlineMode") << "FormattingProperties/TextFormattingProperties/underlineMode"; //application default style
-    QTest::newRow("underlineType") << "FormattingProperties/TextFormattingProperties/underlineType"; //application default style
-    QTest::newRow("underlineStyle") << "FormattingProperties/TextFormattingProperties/underlineStyle"; //application default style
-    QTest::newRow("underlineWidth") << "FormattingProperties/TextFormattingProperties/underlineWidth"; //application default style
+    QTest::newRow("lineThroughColor") << "FormattingProperties/TextFormattingProperties/lineThroughColor";
+    QTest::newRow("lineThroughMode") << "FormattingProperties/TextFormattingProperties/lineThroughMode";
+    QTest::newRow("lineThroughStyle") << "FormattingProperties/TextFormattingProperties/lineThroughStyle";
+    QTest::newRow("lineThroughType") << "FormattingProperties/TextFormattingProperties/lineThroughType";
+    QTest::newRow("lineThroughWidth") << "FormattingProperties/TextFormattingProperties/lineThroughWidth";
+    QTest::newRow("lineThroughText") << "FormattingProperties/TextFormattingProperties/lineThroughText";
+    QTest::newRow("relativeFontSize") << "FormattingProperties/TextFormattingProperties/relativeFontSize";
+    QTest::newRow("textBackgroundColor") << "FormattingProperties/TextFormattingProperties/textBackgroundColor";
+    QTest::newRow("textOutline") << "FormattingProperties/TextFormattingProperties/textOutline";
+    QTest::newRow("textTranformations") << "FormattingProperties/TextFormattingProperties/textTransformations";
+    QTest::newRow("underlineColor") << "FormattingProperties/TextFormattingProperties/underlineColor";
+    QTest::newRow("underlineMode") << "FormattingProperties/TextFormattingProperties/underlineMode";
+    QTest::newRow("underlineType") << "FormattingProperties/TextFormattingProperties/underlineType";
+    QTest::newRow("underlineStyle") << "FormattingProperties/TextFormattingProperties/underlineStyle";
+    QTest::newRow("underlineWidth") << "FormattingProperties/TextFormattingProperties/underlineWidth";
 
-    QTest::newRow("autoTextIndent") << "FormattingProperties/ParagraphFormattingProperties/automaticTextIndent"; //application default style
-    QTest::newRow("border") << "FormattingProperties/ParagraphFormattingProperties/border"; //application default style
-    QTest::newRow("borderLineWidth") << "FormattingProperties/ParagraphFormattingProperties/borderLineWidth"; //application default style
-    QTest::newRow("dropCapsDistance") << "FormattingProperties/ParagraphFormattingProperties/dropCapsDistance"; //application default style
-    QTest::newRow("dropCapsLength") << "FormattingProperties/ParagraphFormattingProperties/dropCapsLength"; //application default style
-    QTest::newRow("dropCapsLines") << "FormattingProperties/ParagraphFormattingProperties/dropCapsLines"; //application default style
-    QTest::newRow("margin") << "FormattingProperties/ParagraphFormattingProperties/margin"; //application default style
-    QTest::newRow("marginLeftRight") << "FormattingProperties/ParagraphFormattingProperties/marginLeftRight"; //application default style
-    QTest::newRow("marginTopBottom") << "FormattingProperties/ParagraphFormattingProperties/marginTopBottom"; //application default style
-    QTest::newRow("paragraphBackground") << "FormattingProperties/ParagraphFormattingProperties/paragraphBackgroundColor"; //application default style
-    QTest::newRow("textAlign") << "FormattingProperties/ParagraphFormattingProperties/textAlign"; //application default style
-    QTest::newRow("textIndent") << "FormattingProperties/ParagraphFormattingProperties/textIndent"; //application default style
-    QTest::newRow("tabDelimiterChar") << "FormattingProperties/ParagraphFormattingProperties/tabDelimiterChar"; //application default style
-    QTest::newRow("tabLeaderColor") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderColor"; //work adding foreground property to common.qs
-    QTest::newRow("tabLeaderStyle") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderStyle"; //application default style
-    QTest::newRow("tabLeaderText") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderText"; //application default style
-    QTest::newRow("tabLeaderType") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderType"; //application default style
-    QTest::newRow("tabLeaderWidth") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderWidth"; //application default style
-    QTest::newRow("tabPosition") << "FormattingProperties/ParagraphFormattingProperties/tabPosition"; //application default style
-    QTest::newRow("tabStopDistance") << "FormattingProperties/ParagraphFormattingProperties/tabStopDistance"; //application default style
-    QTest::newRow("tabType") << "FormattingProperties/ParagraphFormattingProperties/tabType"; //application default style
+    QTest::newRow("autoTextIndent") << "FormattingProperties/ParagraphFormattingProperties/automaticTextIndent";
+    QTest::newRow("border") << "FormattingProperties/ParagraphFormattingProperties/border";
+    QTest::newRow("borderLineWidth") << "FormattingProperties/ParagraphFormattingProperties/borderLineWidth";
+    QTest::newRow("dropCapsDistance") << "FormattingProperties/ParagraphFormattingProperties/dropCapsDistance";
+    QTest::newRow("dropCapsLength") << "FormattingProperties/ParagraphFormattingProperties/dropCapsLength";
+    QTest::newRow("dropCapsLines") << "FormattingProperties/ParagraphFormattingProperties/dropCapsLines";
+    QTest::newRow("margin") << "FormattingProperties/ParagraphFormattingProperties/margin";
+    QTest::newRow("marginLeftRight") << "FormattingProperties/ParagraphFormattingProperties/marginLeftRight";
+    QTest::newRow("marginTopBottom") << "FormattingProperties/ParagraphFormattingProperties/marginTopBottom";
+    QTest::newRow("paragraphBackground") << "FormattingProperties/ParagraphFormattingProperties/paragraphBackgroundColor";
+    QTest::newRow("textAlign") << "FormattingProperties/ParagraphFormattingProperties/textAlign";
+    QTest::newRow("textIndent") << "FormattingProperties/ParagraphFormattingProperties/textIndent";
+    QTest::newRow("tabDelimiterChar") << "FormattingProperties/ParagraphFormattingProperties/tabDelimiterChar";
+    QTest::newRow("tabLeaderColor") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderColor";
+    QTest::newRow("tabLeaderStyle") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderStyle";
+    QTest::newRow("tabLeaderText") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderText";
+    QTest::newRow("tabLeaderType") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderType";
+    QTest::newRow("tabLeaderWidth") << "FormattingProperties/ParagraphFormattingProperties/tabLeaderWidth";
+    QTest::newRow("tabPosition") << "FormattingProperties/ParagraphFormattingProperties/tabPosition";
+    QTest::newRow("tabStopDistance") << "FormattingProperties/ParagraphFormattingProperties/tabStopDistance";
+    QTest::newRow("tabType") << "FormattingProperties/ParagraphFormattingProperties/tabType";
 
-    QTest::newRow("bookmark") << "ParagraphElements/bookmark"; //work adding foreground property to common.qs
-    QTest::newRow("note") << "ParagraphElements/note"; //work adding foreground property to common.qs
+    QTest::newRow("bookmark") << "ParagraphElements/bookmark";
+    QTest::newRow("note") << "ParagraphElements/note";
 }
 
 QTextDocument *TestLoading::documentFromScript(const QString &script)

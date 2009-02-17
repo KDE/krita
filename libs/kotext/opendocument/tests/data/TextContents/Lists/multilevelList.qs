@@ -29,4 +29,4 @@ cursor.insertBlock();
 cursor.insertText("Level 1 item", defaultListItemFormat);
 list1.add(cursor.block());
 
-return document;
+document;

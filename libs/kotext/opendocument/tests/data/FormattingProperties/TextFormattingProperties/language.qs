@@ -7,4 +7,4 @@ cursor.insertText("This is an example of text with different language. the follo
 cursor.insertBlock();
 cursor.insertText("\u4F60\u597D", chineseFormat);
 
-return document;
+document;

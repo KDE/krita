@@ -10,4 +10,4 @@ cursor.insertText("this is an example of paragraph displaying text as small capi
 cursor.insertBlock();
 cursor.insertText("this is an example of paragraph displaying text as small capitalized letters off.", normalFormat);
 
-return document;
+document;

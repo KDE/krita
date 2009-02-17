@@ -14,4 +14,4 @@ cursor.insertText("This is an example of assign a font to the text.", timesNewRo
 cursor.insertBlock();
 cursor.insertText("This is an example of assign a font to the text.", arialBlackFormat);
 
-return document;
+document;

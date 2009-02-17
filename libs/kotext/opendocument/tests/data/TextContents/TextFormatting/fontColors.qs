@@ -19,4 +19,4 @@ blackFormat.setForeground(new QBrush(new QColor("#000000")));
 cursor.insertBlock();
 cursor.insertText("this is black", blackFormat);
 
-return document;
+document;

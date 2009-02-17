@@ -10,4 +10,4 @@ cursor.insertText("This is an example of text with transparent background color.
 cursor.insertBlock();
 cursor.insertText("This is an example of text with red background color.", redBackgroundFormat);
 
-return document;
+document;

@@ -152,6 +152,7 @@ KoCharacterStyle.LengthLineWeight = i++;
 
 var defaultTextFormat = new QTextCharFormat;
 defaultTextFormat.setFont(defaultFont);
+defaultTextFormat.setForeground(new QBrush(new QColor(Qt.black)));
 cursor.setCharFormat(defaultTextFormat);
 
 QTextCharFormat.clone = function(fmt) {

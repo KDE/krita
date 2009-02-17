@@ -969,7 +969,6 @@ void KoCharacterStyle::loadOdf(KoOdfLoadingContext& context)
     generateKey();
     addRef();
 #endif
-
 }
 
 bool KoCharacterStyle::operator==(const KoCharacterStyle &other) const

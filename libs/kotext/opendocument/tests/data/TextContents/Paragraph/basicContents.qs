@@ -52,12 +52,12 @@ cursor.insertBlock(defaultBlockFormat);
 cursor.insertText("To check the following features, you should try moving the last words to the edge of a laid out line by typing or deleting text from the line \n");
 
 cursor.insertBlock(defaultBlockFormat);
-cursor.insertText("Soft Hyphen: The last word has a minus sign after \"recrea\" but the last but one word has a soft-hyphen at the same location: recrea­tion recrea-tion");
+cursor.insertText("Soft Hyphen: The last word has a minus sign after \"recrea\" but the last but one word has a soft-hyphen at the same location: recrea\u00ADtion recrea-tion");
 
 cursor.insertBlock(defaultBlockFormat);
-cursor.insertText("Non-breaking Hyphen: The last word has a minus sign after \"re\" but the last but one word has a non-breaking hyphen at the same location: re‑creation re-creation");
+cursor.insertText("Non-breaking Hyphen: The last word has a minus sign after \"re\" but the last but one word has a non-breaking hyphen at the same location: re\u2011creation re-creation");
 
 cursor.insertBlock(defaultBlockFormat);
-cursor.insertText("No break space: The last word set has a simple space but the last but one word set has a no-break space: \"austin powers\" \"austin powers\"");
+cursor.insertText("No break space: The last word set has a simple space but the last but one word set has a no-break space: \"austin\u00A0powers\" \"austin powers\"");
 
 return document;

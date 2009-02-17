@@ -103,7 +103,8 @@ void KoGenStyle::writeStyle(KoXmlWriter* writer, const KoGenStyles& styles, cons
                 m_familyName = parentStyle->attribute("style:family").toLatin1();
                 //kDebug(30003) <<"Got familyname" << m_familyName <<" from parent";
             }
-            writer->addAttribute("style:parent-style-name", m_parentName);
+            if (parentStyle && !parentStyle->isDefaultStyle())
+                writer->addAttribute("style:parent-style-name", m_parentName);
         }
     } else { // default-style
         Q_ASSERT(qstrcmp(elementName, "style:default-style") == 0);

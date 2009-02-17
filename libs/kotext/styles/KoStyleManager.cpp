@@ -67,13 +67,10 @@ KoStyleManager::KoStyleManager(QObject *parent)
     d->defaultParagraphStyle->setName(i18n("Default"));
     KoCharacterStyle *charStyle = d->defaultParagraphStyle->characterStyle();
     charStyle->setName(i18n("Default"));
-    charStyle->setForeground( Qt::black );
-    // ###: Load the default from an external resource and load it into the style stack
-    // This is a temporary hack until we make KoXmlElement non-readonly
-    charStyle->setFontFamily("Sans Serif");
-    charStyle->setFontPointSize(12.0);
+
     add(d->defaultParagraphStyle);
 
+    //TODO: also use the defaultstyles.xml mechanism. see KoOdfLoadingContext and KoTextSharedLoadingData
     d->defaultListStyle = new KoListStyle(this);
     KoListLevelProperties llp;
     llp.setLevel(1);

@@ -101,9 +101,10 @@ QString KoTextWriter::saveCharacterStyle(const QTextCharFormat &charFormat, cons
 
     KoCharacterStyle charStyle(charFormat);
     // we'll convert it to a KoCharacterStyle to check for local changes.
+    // we remove that properties given by the paragraphstyle char format, these are not present in the saved style (should it really be the case?)
+    charStyle.removeDuplicates(blockCharFormat);
     if (charStyle == (*originalCharStyle)) { // This is the real, unmodified character style.
         if (originalCharStyle != defaultCharStyle) {
-            charStyle.removeDuplicates(blockCharFormat);
             if (!charStyle.isEmpty()) {
                 KoGenStyle style(KoGenStyle::StyleUser, "text");
                 originalCharStyle->saveOdf(style);
@@ -115,7 +116,6 @@ QString KoTextWriter::saveCharacterStyle(const QTextCharFormat &charFormat, cons
         if (m_context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
             style.setAutoStyleInStylesDotXml(true);
         charStyle.removeDuplicates(*originalCharStyle);
-        charStyle.removeDuplicates(blockCharFormat);
         if (!charStyle.isEmpty()) {
             charStyle.saveOdf(style);
             generatedName = m_context.mainStyles().lookup(style, "T");
@@ -127,7 +127,7 @@ QString KoTextWriter::saveCharacterStyle(const QTextCharFormat &charFormat, cons
 
 QHash<QTextList *, QString> KoTextWriter::saveListStyles(QTextBlock block, int to)
 {
-    QSet<KoList *> generatedLists;
+    QHash<KoList *, QString> generatedLists;
     QHash<QTextList *, QString> listStyles;
     KoTextDocument document(block.document());
 
@@ -136,15 +136,18 @@ QHash<QTextList *, QString> KoTextWriter::saveListStyles(QTextBlock block, int t
         if (!textList)
             continue;
         if (KoList *list = document.list(block)) {
-            if (generatedLists.contains(list))
+            if (generatedLists.contains(list)) {
+                if (!listStyles.contains(textList))
+                    listStyles.insert(textList, generatedLists.value(list));
                 continue;
+            }
             KoListStyle *listStyle = list->style();
             bool automatic = listStyle->styleId() == 0;
             KoGenStyle style(automatic ? KoGenStyle::StyleListAuto : KoGenStyle::StyleList);
             listStyle->saveOdf(style);
             QString generatedName = m_context.mainStyles().lookup(style, listStyle->name(), KoGenStyles::AllowDuplicates);
             listStyles[textList] = generatedName;
-            generatedLists.insert(list);
+            generatedLists.insert(list, generatedName);
         } else {
             if (listStyles.contains(textList))
                 continue;
@@ -167,9 +170,8 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
     if (outlineLevel > 0) {
         m_writer->startElement("text:h", false);
         m_writer->addAttribute("text:outline-level", outlineLevel);
-    } else {
+    } else 
         m_writer->startElement("text:p", false);
-    }
 
     QString styleName = saveParagraphStyle(block);
     if (!styleName.isEmpty())
@@ -178,7 +180,6 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
     // Write the fragments and their formats
     QTextCursor cursor(block);
     QTextCharFormat blockCharFormat = cursor.blockCharFormat();
-
     QTextBlock::iterator it;
     for (it = block.begin(); !(it.atEnd()); ++it) {
         QTextFragment currentFragment = it.fragment();
@@ -193,7 +194,6 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
                 inlineObject->saveOdf(m_context);
             } else {
                 QString styleName = saveCharacterStyle(charFormat, blockCharFormat);
-
                 if (charFormat.isAnchor()) {
                     m_writer->startElement("text:a", false);
                     m_writer->addAttribute("xlink:type", "simple");

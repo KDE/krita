@@ -71,7 +71,7 @@ void ArtisticTextShape::paintDecorations(QPainter &/*painter*/, const KoViewConv
 void ArtisticTextShape::saveOdf(KoShapeSavingContext &context) const
 {
     context.xmlWriter().startElement("draw:custom-shape");
-    saveOdfAttributes( context, OdfAllAttributes );
+    saveOdfAttributes( context, OdfAllAttributes & ~OdfGeometry );
 
     // now write the special shape data
     context.xmlWriter().addAttribute( "draw:engine", "svg:text" );
@@ -198,7 +198,12 @@ bool ArtisticTextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingCon
     updateSizeAndPosition();
     update();
 
-    loadOdfAttributes( element, context, OdfAllAttributes );
+    QMatrix invMatrix = isOnPath() ? transformation().inverted() : QMatrix();
+
+    loadOdfAttributes( element, context, OdfAllAttributes & ~OdfGeometry );
+
+    // compensate transformation resulting from being put on path
+    applyTransformation( invMatrix );
 
     return true;
 }

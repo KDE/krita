@@ -52,6 +52,7 @@ namespace KRA {
     const QString DOT_PIXEL_SELECTION = ".pixelselection";
     const QString DOT_SHAPE_SELECTION = ".shapeselection";
     const QString DOT_SHAPE_LAYER = ".shapelayer";
+    const QString DOT_METADATA = ".metadata";
 
     const QString FILE_NAME = "filename";
     const QString FILTER_MASK = "filtermask";

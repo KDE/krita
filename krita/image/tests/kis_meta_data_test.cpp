@@ -502,6 +502,16 @@ void KisMetaDataTest::testParser()
     QVERIFY( d6.time().hour() == 18 );
     QVERIFY( d6.time().minute() == 20 );
     QVERIFY( d6.time().second() == 32 );
+    
+    Value rational1 = TypeInfo::Private::Rational->parser()->parse("-10/20");
+    QVERIFY( rational1.type() == Value::Rational );
+    QVERIFY( rational1.asRational().numerator == -10 );
+    QVERIFY( rational1.asRational().denominator == 20 );
+
+    Value rational2 = TypeInfo::Private::Rational->parser()->parse("10/20");
+    QVERIFY( rational2.type() == Value::Rational );
+    QVERIFY( rational2.asRational().numerator == 10 );
+    QVERIFY( rational2.asRational().denominator == 20 );
 }
 
 void KisMetaDataTest::testValidator()

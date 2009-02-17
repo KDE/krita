@@ -19,7 +19,6 @@
 #ifndef KOOASISLOADINGCONTEXT_H
 #define KOOASISLOADINGCONTEXT_H
 
-class KoOdfStylesReader;
 class KoStore;
 
 #include <QtCore/QMap>
@@ -27,6 +26,8 @@ class KoStore;
 #include <QtCore/QStringList>
 #include <KoStyleStack.h>
 #include <KoXmlReader.h>
+#include <KoOdfStylesReader.h>
+#include <kcomponentdata.h>
 
 /**
  * Used during loading of Oasis format (and discarded at the end of the loading).
@@ -45,7 +46,7 @@ public:
      * @param styles reference to the KoOdfStylesReader parsed by KoDocument
      * @param store pointer to store, if available, for e.g. loading images.
      */
-    explicit KoOdfLoadingContext(KoOdfStylesReader& stylesReader, KoStore* store);
+    explicit KoOdfLoadingContext(KoOdfStylesReader& stylesReader, KoStore* store, const KComponentData & componentData = KComponentData() );
     virtual ~KoOdfLoadingContext();
 
     KoStore* store() {
@@ -55,6 +56,13 @@ public:
     KoOdfStylesReader& stylesReader() {
         return m_stylesReader;
     }
+    /**
+    * Get the application default styles styleReader
+    */
+    KoOdfStylesReader & defaultStylesReader() {
+        return m_defaultStylesReader;
+    }
+
     KoStyleStack& styleStack() {
         return m_styleStack;
     }
@@ -123,6 +131,9 @@ private:
 
     class Private;
     Private * const d;
+
+    KoOdfStylesReader m_defaultStylesReader;
+    KoXmlDocument m_doc; // the doc needs to be kept around so it is possible to access the styles
 };
 
 #endif /* KOOASISLOADINGCONTEXT_H */

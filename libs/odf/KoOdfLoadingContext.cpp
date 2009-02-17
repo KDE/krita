@@ -21,13 +21,16 @@
 #include <KoOdfStylesReader.h>
 #include <KoStore.h>
 #include <KoXmlNS.h>
+
+#include <kstandarddirs.h>
+
 #include <kdebug.h>
 
 class KoOdfLoadingContext::Private
 {
 };
 
-KoOdfLoadingContext::KoOdfLoadingContext(KoOdfStylesReader& stylesReader, KoStore* store)
+KoOdfLoadingContext::KoOdfLoadingContext(KoOdfStylesReader& stylesReader, KoStore* store, const KComponentData & componentData)
         : m_store(store)
         , m_stylesReader(stylesReader)
         , m_metaXmlParsed(false)
@@ -38,6 +41,23 @@ KoOdfLoadingContext::KoOdfLoadingContext(KoOdfStylesReader& stylesReader, KoStor
     KoOdfReadStore oasisStore(store);
     QString dummy;
     (void)oasisStore.loadAndParse("tar:/META-INF/manifest.xml", m_manifestDoc, dummy);
+
+    if (componentData.isValid()) {
+        QString fileName( KStandardDirs::locate( "styles", "defaultstyles.xml", componentData ) );
+        if ( ! fileName.isEmpty() ) {
+            QFile file( fileName );
+            QString errorMessage;
+            if ( KoOdfReadStore::loadAndParse( &file, m_doc, errorMessage, fileName ) ) {
+                m_defaultStylesReader.createStyleMap( m_doc, true );
+            }
+            else {
+                kWarning(30010) << "reading of defaultstyles.xml failed:" << errorMessage;
+            }
+        }
+        else {
+            kWarning(30010) << "defaultstyles.xml not found";
+        }
+    }
 }
 
 
@@ -72,12 +92,28 @@ void KoOdfLoadingContext::addStyles(const KoXmlElement* style, const char* famil
 
         if (parentStyle)
             addStyles(parentStyle, family, usingStylesAutoStyles);
-        else
+        else {
             kWarning(32500) << "Parent style not found: " << family << parentStyleName << usingStylesAutoStyles;
+            //we are handling a non compliant odf file. let's at the very least load the application default, and the eventual odf default
+            if (family) {
+                const KoXmlElement* appDef = m_defaultStylesReader.defaultStyle(family);
+                if (appDef) {// on top of all, the application default style for this family
+                    m_styleStack.push(*appDef);
+                }
+                const KoXmlElement* def = m_stylesReader.defaultStyle(family);
+                if (def) {   // then, the default style for this family
+                    m_styleStack.push(*def);
+                }
+            }
+        }
     } else if (family) {
+        //first push the applicationDefaultStyle
+        const KoXmlElement* appDef = m_defaultStylesReader.defaultStyle(family);
+        if (appDef) {// on top of all, the application default style for this family
+            m_styleStack.push(*appDef);
+        }
         const KoXmlElement* def = m_stylesReader.defaultStyle(family);
-        if (def) {   // on top of all, the default style for this family
-            //kDebug(32500) <<"pushing default style" << style->attributeNS( KoXmlNS::style,"name", QString() );
+        if (def) {   // then, the default style for this family
             m_styleStack.push(*def);
         }
     }

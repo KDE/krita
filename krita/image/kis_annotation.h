@@ -37,7 +37,7 @@
 /**
  * @class KisAnnotation A data extension mechanism for Krita.
  *
- * An annotation can be of something like a QByteArray or a QString op
+ * An annotation can be of something like a QByteArray or a QString or
  * a more specific datatype that can be attached to an image (or maybe
  * later, if needed, to a layer) and contains data that must be
  * associated with an image for purposes of import/export.
@@ -68,9 +68,9 @@ public:
             m_annotation(data) {}
 
     /**
-     * gets a non-localized strin identifying the type of the 
+     * gets a non-localized strin identifying the type of the
      * annotation.
-     * @return a non-localized string identifiying the type of the 
+     * @return a non-localized string identifiying the type of the
      * annotation
      */
     QString & type() {
@@ -80,7 +80,7 @@ public:
     /**
      * gets a localized string describing the type of annotations for
      * used interface purposes.
-     * @return a localized string describing the type of the 
+     * @return a localized string describing the type of the
      * annotations for user interface purposes.
      */
     QString & description() {

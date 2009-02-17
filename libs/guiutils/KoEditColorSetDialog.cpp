@@ -44,7 +44,9 @@ KoEditColorSet::KoEditColorSet(const QList<KoColorSet *> &palettes, const QStrin
     m_colorSets(palettes),
     m_gridLayout(0),
     m_activeColorSet(0),
-    m_activePatch(0)
+    m_activePatch(0),
+    m_initialColorSetCount(palettes.count()),
+    m_activeColorSetRequested(false)
 {
     widget.setupUi(this);
     foreach (KoColorSet *colorSet, m_colorSets) {
@@ -94,9 +96,15 @@ KoEditColorSet::KoEditColorSet(const QList<KoColorSet *> &palettes, const QStrin
 
 KoEditColorSet::~KoEditColorSet()
 {
-    foreach (KoColorSet *colorSet, m_colorSets) {
-        if (colorSet != m_activeColorSet)
-            delete colorSet;
+    // only delete new color sets
+    uint colorSetCount = m_colorSets.count();
+    for( uint i = m_initialColorSetCount; i < colorSetCount; ++i ) {
+        KoColorSet * cs = m_colorSets[i];
+        // if the active color set was requested by activeColorSet()
+        // the caller takes ownership and then we do not delete it here
+        if( cs == m_activeColorSet && m_activeColorSetRequested )
+            continue;
+        delete cs;
     }
 }
 
@@ -191,6 +199,7 @@ void KoEditColorSet::save()
 
 KoColorSet *KoEditColorSet::activeColorSet()
 {
+    m_activeColorSetRequested = true;
     return m_activeColorSet;
 }
 

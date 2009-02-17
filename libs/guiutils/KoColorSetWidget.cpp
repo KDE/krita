@@ -108,8 +108,30 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
 
     Q_ASSERT(colorSet);
     KoEditColorSetDialog *dlg = new KoEditColorSetDialog(palettes, colorSet->name(), thePublic);
-    if (dlg->exec()) { // always reload the color set
-        thePublic->setColorSet(dlg->activeColorSet());
+    if (dlg->exec() == KDialog::Accepted ) { // always reload the color set
+        KoColorSet * cs = dlg->activeColorSet();
+        // check if the selected colorset is predefined
+        if( ! palettes.contains( cs ) ) {
+            int i = 1;
+            QFileInfo fileInfo;
+            QString savePath = srv->saveLocation();
+
+            do {
+                fileInfo.setFile( savePath + QString("%1.gpl").arg( i++, 4, 10, QChar('0') ) );
+            }
+            while( fileInfo.exists() );
+
+            cs->setFilename( fileInfo.filePath() );
+            cs->setValid( true );
+            
+            // add new colorset to predefined colorsets
+            if( ! srv->addResource( cs ) ) {
+                delete cs;
+                cs = 0;
+            }
+        }
+        if( cs )
+            thePublic->setColorSet(cs);
         // colorSetContainer->setFixedSize(colorSetLayout->sizeHint());
         // thePublic->setFixedSize(mainLayout->sizeHint());
     }

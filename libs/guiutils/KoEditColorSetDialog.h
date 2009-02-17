@@ -37,6 +37,10 @@ class KoEditColorSet : public QWidget
 public:
     KoEditColorSet(const QList<KoColorSet *> &palettes, const QString &activePalette, QWidget *parent = 0);
     virtual ~KoEditColorSet();
+    
+    /**
+     * Return the active color set. The caller takes ownership of that color set.
+     */
     KoColorSet *activeColorSet();
 
 private slots:
@@ -54,6 +58,8 @@ private:
     QScrollArea *m_scrollArea;
     KoColorSet *m_activeColorSet;
     KoColorPatch *m_activePatch;
+    uint m_initialColorSetCount;
+    bool m_activeColorSetRequested;
 };
 
 /**
@@ -80,6 +86,8 @@ public:
     KoEditColorSetDialog(const QList<KoColorSet *> &palettes, const QString &activePalette, QWidget *parent = 0);
 
     /**
+     * Returns the last active color set.
+     * The caller takes ownership of that color set.
      * @return the last active KoColorSet in the dialog before the user press OK
      */
     KoColorSet *activeColorSet();

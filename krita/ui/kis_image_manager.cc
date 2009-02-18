@@ -164,7 +164,7 @@ void KisImageManager::slotImageProperties()
     KisDlgImageProperties dlg(img, m_view);
 
     if (dlg.exec() == QDialog::Accepted) {
-        QUndoCommand* cmd = new KisImagePropsCommand(img, dlg.colorSpace(), dlg.profile());
+        QUndoCommand* cmd = new KisImagePropsCommand(img, dlg.colorSpace());
         m_view->document()->addCommand(cmd);
     }
 }

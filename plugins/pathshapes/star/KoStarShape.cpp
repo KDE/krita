@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006-2009 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -282,21 +282,19 @@ bool KoStarShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &
         return false;
     }
 
-    loadOdfAttributes( element, context, OdfAllAttributes );
-    QSizeF loadedSize = size();
     QPointF loadedPosition = position();
 
-    // initialize tip radius
-    // TODO: this is unfortunately not precise, we have to calculate the enclosing
-    // ellipse from the resulting size (loaded size) of the shape and use the ellipse
-    // radius for the tip radius
-    m_radius[tip] = qMax( 0.5 * loadedSize.width(), 0.5 * loadedSize.height() );
+    m_radius[tip] = 50;
+    m_center = QPointF(50,50);
 
     if( ! loadAsCustomShape )
     {
         QString corners = element.attributeNS( KoXmlNS::draw, "corners", "" );
-        if( ! corners.isEmpty() )
+        if( ! corners.isEmpty() ) {
             m_cornerCount = corners.toUInt();
+            // initialize default angles of tip and base
+            m_angles[base] = m_angles[tip] = defaultAngleRadian();
+        }
 
         m_convex = (element.attributeNS( KoXmlNS::draw, "concave", "false" ) == "false" );
 
@@ -369,9 +367,12 @@ bool KoStarShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &
         }
     }
 
-    updatePath( loadedSize );
-    setSize( loadedSize );
-    setPosition( loadedPosition );
+    updatePath( QSizeF() );
+
+    // reset transformation
+    setTransformation( QMatrix() );
+
+    loadOdfAttributes( element, context, OdfAllAttributes );
 
     return true;
 }

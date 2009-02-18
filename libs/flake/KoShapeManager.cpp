@@ -31,6 +31,7 @@
 #include "KoToolProxy.h"
 #include "KoShapeManagerPaintingStrategy.h"
 #include "KoShapeShadow.h"
+#include "KoShapeLayer.h"
 
 #include <QPainter>
 #include <kdebug.h>
@@ -113,7 +114,7 @@ void KoShapeManager::add(KoShape *shape, bool repaint)
         return;
     shape->addShapeManager(this);
     d->shapes.append(shape);
-    if (! dynamic_cast<KoShapeGroup*>(shape)) {
+    if (! dynamic_cast<KoShapeGroup*>(shape) && ! dynamic_cast<KoShapeLayer*>(shape)) {
         QRectF br(shape->boundingRect());
         d->tree.insert(br, shape);
     }

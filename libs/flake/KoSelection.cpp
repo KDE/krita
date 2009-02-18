@@ -185,6 +185,10 @@ void KoSelection::select(KoShape * object, bool recursive)
         updateSizeAndPosition();
     }
     else {
+        // reset global bound if there were no shapes selected before
+        if( ! oldSelectionCount )
+            d->globalBound = QRectF();
+        
         setTransformation(QMatrix());
         // we are resetting the transformation here anyway,
         // so we can just add the newly selected shapes to the bounding box

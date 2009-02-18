@@ -176,7 +176,7 @@ void Schema::Private::parseProperties(QDomElement& elt)
             {
                 if( types.contains(name) )
                 {
-                    errImage << name << " allready defined.";
+                    errImage << name << " already defined.";
                 } else {
                     types[ name ] = info;
                 }

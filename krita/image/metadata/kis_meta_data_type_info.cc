@@ -292,7 +292,7 @@ bool TypeInfo::hasCorrectValue( const Value& value ) const
 {
     if( d->propertyType == ClosedChoice )
     {
-        foreach( Choice choice, d->choices )
+        foreach( const Choice& choice, d->choices )
         {
             if( choice.value() == value )
             {

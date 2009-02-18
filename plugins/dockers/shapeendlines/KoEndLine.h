@@ -23,12 +23,12 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-*/
+*/ 
 
-#ifndef KOSHAPEENDLINESDOCKER_H
-#define KOSHAPEENDLINESDOCKER_H
 
-#include "KoEndLine.h"
+#ifndef KOENDLINE_H
+#define KOENDLINE_H
+
 #include <KoUnit.h>
 #include <KoXmlReader.h>
 #include <KoCanvasObserver.h>
@@ -40,42 +40,23 @@
 
 class KoShapeBorderModel;
 class KoCanvasController;
+class KoPathShape;
 
-/// A docker for setting properties of end lines
-class KoShapeEndLinesDocker : public QDockWidget, public KoCanvasObserver
-{
-    Q_OBJECT
+class KoEndLine{
 
 public:
-    /// Creates the end lines docker
-    KoShapeEndLinesDocker();
-    virtual ~KoShapeEndLinesDocker();
-private slots:
-    void applyChanges();
-    /// End Line has changed
-    void beginEndLineChanged(int index);
-    void endEndLineChanged(int index);
-    /// selection has changed
-    void selectionChanged();
-    /// reimplemented
-    virtual void setCanvas( KoCanvasBase *canvas );
+KoEndLine(QString name, QString path, QString view);
+virtual ~KoEndLine();
+QIcon drawIcon(QSize size, int proportion);
+QString name();
+QByteArray generateSVG(QSize size, QString comment = QString());
 
 private:
-    KoXmlDocument m_doc;
-    QString m_beginEndLineCurrentName;
-    QString m_endEndLineCurrentName;
-    int m_iconW;
-    int m_iconH;
-    QSize m_iconSize;
-    QStringList m_nameEndLineList;
-    QMap<QString, QString> m_pathEndLineMap;
-    QMap<QString, QString> m_viewEndLineMap;
-    QList<KoEndLine> m_endLineList;
+QString m_name;
+QString m_path;
+QString m_view;
 
-private:
-    class Private;
-    Private * const d;
 };
 
-#endif // KOSHAPEENDLINESDOCKER_H
+#endif // KOENDLINE_H
 

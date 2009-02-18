@@ -71,76 +71,44 @@ public:
     QComboBox * endEndLineComboBox;
 };
 
-QByteArray KoShapeEndLinesDocker::generateSVG(QString path, QString viewBox, QSize size, QString comment)
-{
-    QByteArray str("<?xml version=\"1.0\" standalone=\"no\"?>\
-    <!--");
-    str.append(comment.toUtf8());
-    str.append("-->\
-    <!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\
-    <svg width=\"");
-    str.append(QString::number(size.width()).toUtf8());
-    str.append("px\" height=\"");
-    str.append(QString::number(size.height()).toUtf8());
-    str.append("px\" viewBox=\"");
-    str.append(viewBox.toUtf8());
-    str.append("\" preserveAspectRatio=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\
-    <path fill=\"black\"  d=\"");
-    str.append(path.toUtf8());
-    str.append("\" />\
-    </svg>");
-    return str;
-}
-
 KoShapeEndLinesDocker::KoShapeEndLinesDocker()
     : d( new Private() )
 {
-    int proportion = 3;
     setWindowTitle( i18n( "End Lines" ) );
 
     QWidget *mainWidget = new QWidget( this );
     QGridLayout *mainLayout = new QGridLayout( mainWidget );
 
     // Define the two QComboBox
-    iconW = 20;
-    iconH = 20;
-    iconSize.setHeight(iconH);
-    iconSize.setWidth(iconW);
+    m_iconW = 20;
+    m_iconH = 20;
+    m_iconSize.setHeight(m_iconH);
+    m_iconSize.setWidth(m_iconW);
     d->beginEndLineComboBox = new QComboBox( mainWidget );
-    d->beginEndLineComboBox->setIconSize(iconSize);
-    d->beginEndLineComboBox->addItem(QIcon(),"None");
+    d->beginEndLineComboBox->setIconSize(m_iconSize);
+    d->beginEndLineComboBox->addItem(QIcon(),"      None");
     d->endEndLineComboBox = new QComboBox( mainWidget );
-    d->endEndLineComboBox->setIconSize(iconSize);
-    d->endEndLineComboBox->addItem(QIcon(),"None");
+    d->endEndLineComboBox->setIconSize(m_iconSize);
+    d->endEndLineComboBox->addItem(QIcon(),"      None");
 
-    QString fileName( KStandardDirs::locate( "data", "kpresenter/endLineStyle/endLine.xml" ) );
+    int proportion = 3;
+    QString fileName( KStandardDirs::locate( "data","kpresenter/endLineStyle/endLine.xml" ) );
     if ( ! fileName.isEmpty() ) {
         QFile file( fileName );
         QString errorMessage;
         if ( KoOdfReadStore::loadAndParse( &file, m_doc, errorMessage, fileName ) ) {
             KoXmlElement drawMarker, lineEndElement(m_doc.namedItem("lineends").toElement());
 
-            QSvgRenderer endLineRenderer;
             forEachElement(drawMarker, lineEndElement){
-                // Init QPainter and QPixmap
-                QPixmap endLinePixmap(d->endEndLineComboBox->iconSize());
-                endLinePixmap.fill(QColor(Qt::transparent));
-                QPainter endLinePainter(&endLinePixmap);
 
-                // Convert path to SVG
-                endLineRenderer.load(generateSVG(drawMarker.attribute("d"), drawMarker.attribute("viewBox"), QSize(iconW-6, iconH-6)));
-                endLineRenderer.render(&endLinePainter, QRectF(proportion, proportion, iconW-(proportion*2), iconH-(proportion*2)));
+                KoEndLine temp(drawMarker.attribute("display-name"),drawMarker.attribute("d"),drawMarker.attribute("viewBox"));
+		m_endLineList.append(temp);
 
-                // init QIcon
-                QIcon drawIcon(endLinePixmap);
+		QIcon drawIcon(temp.drawIcon(m_iconSize, proportion));
 
                 // add icon and label in the two QComboBox
-                d->beginEndLineComboBox->addItem(drawIcon, drawMarker.attribute("display-name"));
-                d->endEndLineComboBox->addItem(drawIcon, drawMarker.attribute("display-name"));
-
-                nameEndLineList.append(drawMarker.attribute("display-name"));
-                pathEndLineMap.insert(drawMarker.attribute("display-name"), drawMarker.attribute("d"));
-                viewEndLineMap.insert(drawMarker.attribute("display-name"), drawMarker.attribute("viewBox"));
+                d->beginEndLineComboBox->addItem(drawIcon, temp.name());
+                d->endEndLineComboBox->addItem(drawIcon, temp.name());
             }
         }else {
             kDebug() << "reading of endLine.xml failed:" << errorMessage;
@@ -149,7 +117,7 @@ KoShapeEndLinesDocker::KoShapeEndLinesDocker()
     else {
         kDebug() << "endLine.xml not found";
     }
-    
+
     // Add Begin to the docker
     QLabel * beginEndLineLabel = new QLabel( i18n( "Begin :" ), mainWidget );
     mainLayout->addWidget( beginEndLineLabel, 0, 0 );
@@ -207,14 +175,14 @@ void KoShapeEndLinesDocker::applyChanges()
 void KoShapeEndLinesDocker::beginEndLineChanged(int index)
 {
     d->beginEndLineComboBox->setCurrentItem(index);
-    beginEndLineCurrentName = d->beginEndLineComboBox->itemText(index);
+    m_beginEndLineCurrentName = d->beginEndLineComboBox->itemText(index);
     applyChanges();
 }
 
 void KoShapeEndLinesDocker::endEndLineChanged(int index)
 {
     d->endEndLineComboBox->setCurrentItem(index);
-    endEndLineCurrentName = d->endEndLineComboBox->itemText(index);
+    m_endEndLineCurrentName = d->endEndLineComboBox->itemText(index);
     applyChanges();
 }
 

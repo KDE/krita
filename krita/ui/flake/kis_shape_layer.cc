@@ -263,6 +263,8 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     if (!store->close())
         return false;
 
+    embeddedSaver.saveEmbeddedDocuments(documentContext);
+
     manifestWriter->addManifestEntry("content.xml", "text/xml");
 
     if (! mainStyles.saveOdfStylesDotXml(store, manifestWriter)) {

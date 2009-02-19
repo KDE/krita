@@ -30,6 +30,9 @@
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QFrame>
+#include <QBrush>
+#include <QLinearGradient>
+#include <QImage>
 
 #include <kis_debug.h>
 
@@ -279,8 +282,10 @@ void KisHistogramView::updateHistogram()
     }
 
     qint32 bins = m_histogram->producer()->numberOfBins();
+
     m_pix = QPixmap(bins, height);
     m_pix.fill();
+
     QPainter p(&m_pix);
     p.setBrush(Qt::black);
 
@@ -309,19 +314,29 @@ void KisHistogramView::updateHistogram()
             highest = (double)m_histogram->calculations().getHighest();
     }
 
+    QPen pen( Qt::white );
+
     for (int chan = 0; chan < m_channels.count(); chan++) {
         QColor color;
         m_histogram->setChannel(m_channelToOffset.at(chan));
 
         if (m_color) {
             color = m_channels.at(chan)->color();
-            p.setPen(color);
+            QLinearGradient gradient;
+//             gradient.setStart( 0, 0 );
+//             gradient.setFinalStop( 0, height );
+            gradient.setColorAt( 0, Qt::white );
+            gradient.setColorAt( 1, color );
+            QBrush brush( gradient );
+            pen = QPen( brush, 0 );
         } else {
             color = Qt::black;
         }
+
         blackOnBlack = (color == Qt::black);
 
         if (m_histogram->getHistogramType() == LINEAR) {
+
             double factor = (double)height / highest;
             for (i = 0; i < bins; ++i) {
                 // So that we get a good view even with a selection box with
@@ -329,18 +344,19 @@ void KisHistogramView::updateHistogram()
                 if (i >= selFrom && i < selTo && blackOnBlack) {
                     p.setPen(Qt::white);
                 } else {
-                    p.setPen(color);
+                    p.setPen(pen);
                 }
                 p.drawLine(i, height, i, height - int(m_histogram->getValue(i) * factor));
             }
         } else {
+
             double factor = (double)height / (double)log(highest);
             for (i = 0; i < bins; ++i) {
                 // Same as above
                 if (i >= selFrom && i < selTo && blackOnBlack) {
                     p.setPen(Qt::white);
                 } else {
-                    p.setPen(color);
+                    p.setPen(pen);
                 }
                 if (m_histogram->getValue(i) > 0) { // Don't try to calculate log(0)
                     p.drawLine(i, height, i,

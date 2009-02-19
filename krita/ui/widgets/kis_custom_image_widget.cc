@@ -177,7 +177,6 @@ void KisCustomImageWidget::buttonClicked()
     // XXX: Added explicit casts to get rid of warning
     width = static_cast<qint32>(0.5  + KoUnit::ptToUnit(m_width, KoUnit(KoUnit::Pixel, resolution)));
     height = static_cast<qint32>(0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution)));
-
     m_doc->newImage(txtName->text(), width, height, cs, KoColor(qc, cs), txtDescription->toPlainText(), resolution);
 
     KisImageSP img = m_doc->image();
@@ -196,6 +195,7 @@ void KisCustomImageWidget::buttonClicked()
                 gc.end();
             }
         }
+        layer->setDirty(QRect(0, 0, width, height));
     }
 
     emit documentSelected();

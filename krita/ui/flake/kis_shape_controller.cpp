@@ -251,6 +251,7 @@ void KisShapeController::addShape(KoShape* shape)
 
                 dbgUI << "container:" << container;
                 shapeLayer = new KisShapeLayer(container,
+                                               this,
                                                m_d->image,
                                                i18n("Flake shapes %1", m_d->nameServer->number()),
                                                OPACITY_OPAQUE);

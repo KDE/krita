@@ -436,7 +436,7 @@ KisNode* KisKraLoader::loadShapeLayer(const KoXmlElement& element, KisImageSP im
 {
     QString attr;
 
-    KisShapeLayer* layer = new KisShapeLayer(0, img, name, opacity);
+    KisShapeLayer* layer = new KisShapeLayer(0, m_d->document->shapeController(), img, name, opacity);
     Q_CHECK_PTR(layer);
 
     return layer;
@@ -445,7 +445,7 @@ KisNode* KisKraLoader::loadShapeLayer(const KoXmlElement& element, KisImageSP im
 
 
 KisNode* KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImageSP img,
-                                           const QString& name, const KoColorSpace* cs, quint32 opacity)
+                                          const QString& name, const KoColorSpace* cs, quint32 opacity)
 {
     // XXX: do something with generator version?
     KisGeneratorLayer* layer;

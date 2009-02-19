@@ -420,7 +420,7 @@ void KisLayerManager::layerProperties()
                                   cs,
                                   layer->channelFlags());
         if (dlg.exec() == QDialog::Accepted) {
-        
+
             QBitArray newChannelFlags = dlg.getChannelFlags();
             for (int i = 0; i < newChannelFlags.size(); ++i) {
                 dbgUI << "we got flags: " << i << " is " << newChannelFlags.testBit(i);
@@ -556,7 +556,7 @@ void KisLayerManager::addShapeLayer(KisNodeSP parent, KisNodeSP above)
             dynamic_cast<KoShapeContainer*>(m_doc->shapeForNode(parentLayer));
         if (!parentContainer) return;
 
-        KisLayerSP layer = new KisShapeLayer(parentContainer, img.data(), img->nextLayerName(), OPACITY_OPAQUE);
+        KisLayerSP layer = new KisShapeLayer(parentContainer, m_doc->shapeController(), img.data(), img->nextLayerName(), OPACITY_OPAQUE);
         if (layer) {
             layer->setCompositeOp(img->colorSpace()->compositeOp(COMPOSITE_OVER));
             m_commandsAdapter->addNode(layer.data(), parent, above.data());
@@ -780,7 +780,7 @@ void KisLayerManager::mirrorLayerX()
 
     QRect dirty = KisTransformWorker::mirrorX(dev, m_view->selection() );
     m_activeLayer->setDirty(dirty);
-    
+
     if (t) m_view->undoAdapter()->addCommand(t);
 
     m_doc->setModified(true);
@@ -934,7 +934,7 @@ void KisLayerManager::mergeLayer()
     if(newLayer) {
         newLayer->setDirty();
     }
-    
+
     m_view->updateGUI();
 
 }

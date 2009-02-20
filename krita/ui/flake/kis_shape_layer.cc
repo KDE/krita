@@ -353,6 +353,7 @@ bool KisShapeLayer::loadLayer( KoStore* store )
     }
 
     KoOdfLoadingContext context( odfStore.styles(), odfStore.store() );
+    context.setManifestFile(QString("tar:/") + odfStore.store()->currentPath() + "META-INF/manifest.xml");
     KoShapeLoadingContext shapeContext( context, m_d->controller->dataCenterMap() );
 
 

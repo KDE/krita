@@ -60,10 +60,15 @@ KoOdfLoadingContext::KoOdfLoadingContext(KoOdfStylesReader& stylesReader, KoStor
     }
 }
 
-
 KoOdfLoadingContext::~KoOdfLoadingContext()
 {
     delete d;
+}
+
+void KoOdfLoadingContext::setManifestFile(const QString& fileName) {
+    KoOdfReadStore oasisStore(m_store);
+    QString dummy;
+    (void)oasisStore.loadAndParse(fileName, m_manifestDoc, dummy);
 }
 
 void KoOdfLoadingContext::fillStyleStack(const KoXmlElement& object, const char* nsURI, const char* attrName, const char* family)

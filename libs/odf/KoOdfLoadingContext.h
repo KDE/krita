@@ -22,6 +22,7 @@
 class KoStore;
 
 #include <QtCore/QMap>
+#include <QtCore/QString>
 #include "koodf_export.h"
 #include <QtCore/QStringList>
 #include <KoStyleStack.h>
@@ -48,6 +49,12 @@ public:
      */
     explicit KoOdfLoadingContext(KoOdfStylesReader& stylesReader, KoStore* store, const KComponentData & componentData = KComponentData() );
     virtual ~KoOdfLoadingContext();
+
+    /**
+    * Set different manifest
+    * @param fileName file name of the manifest file
+    */
+    void setManifestFile(const QString& fileName);
 
     KoStore* store() {
         return m_store;

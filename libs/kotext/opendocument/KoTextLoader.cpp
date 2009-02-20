@@ -178,16 +178,14 @@ void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
 
     startBody(KoXml::childNodesCount(bodyElem));
     KoXmlElement tag;
-    bool handledTag = false;
-    bool firstTime = true;
+    bool usedParagraph = false; // set to true if we found a tag that used the paragraph, indicating that the next round needs to start a new one.
     forEachElement(tag, bodyElem) {
         if (! tag.isNull()) {
             const QString localName = tag.localName();
-            handledTag = true;
-            if (!firstTime) {
-                cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
-            }
             if (tag.namespaceURI() == KoXmlNS::text) {
+                if (usedParagraph)
+                    cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
+                usedParagraph = true;
                 if (localName == "p") {    // text paragraph
                     loadParagraph(tag, cursor);
                 } else if (localName == "h") {  // heading
@@ -212,7 +210,7 @@ void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
                             }
                         }
                     } else {
-                        handledTag = false;
+                        usedParagraph = false;
                         kWarning(32500) << "unhandled text:" << localName;
                     }
                 }
@@ -285,8 +283,6 @@ void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
 #endif
             }
         }
-        if ((firstTime) && (handledTag))
-            firstTime = false;
         processBody();
     }
     endBody();

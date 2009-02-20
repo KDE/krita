@@ -77,7 +77,6 @@ KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int n)
     nTransfers = n;
     dirty = true;
     oldCs = 0;
-    adjustment = 0;
 }
 
 KisPerChannelFilterConfiguration::~KisPerChannelFilterConfiguration()
@@ -85,7 +84,6 @@ KisPerChannelFilterConfiguration::~KisPerChannelFilterConfiguration()
     for (int i = 0;i < nTransfers;i++)
         delete [] transfers[i];
     delete[] transfers;
-    delete adjustment;
 }
 
 bool KisPerChannelFilterConfiguration::isCompatible(const KisPaintDeviceSP dev) const
@@ -233,16 +231,7 @@ void KisPerChannelFilter::process(KisConstProcessingInformation srcInfo,
         return;
     }
 
-    if (configBC->dirty || (src->colorSpace() != configBC->oldCs)) {
-        delete configBC->adjustment;
-        configBC->adjustment =
-            src->colorSpace()->createPerChannelAdjustment(configBC->transfers);
-//         dbgKrita << configBC->adjustment;
-        configBC->oldCs = src->colorSpace();
-        configBC->dirty = false;
-    }
-
-    KoColorTransformation *adj = configBC->adjustment;
+    KoColorTransformation *adj = src->colorSpace()->createPerChannelAdjustment(configBC->transfers);
 
 
     if (src != dst) {

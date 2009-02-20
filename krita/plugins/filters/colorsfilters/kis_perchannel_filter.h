@@ -63,7 +63,6 @@ public:
     // Caching of adjustment
     bool dirty;
     const KoColorSpace* oldCs;
-    KoColorTransformation* adjustment;
 };
 
 

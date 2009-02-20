@@ -23,9 +23,14 @@
 
 #include <qtest_kde.h>
 
+#include "kis_debug.h"
+#include "kis_meta_data_entry.h"
 #include "kis_meta_data_io_backend.h"
+#include "kis_meta_data_schema.h"
+#include "kis_meta_data_schema_registry.h"
 #include "kis_meta_data_store.h"
 #include "kis_meta_data_validator.h"
+#include "kis_meta_data_value.h"
 
 #include "filestest.h"
 
@@ -49,8 +54,28 @@ void KisExiv2Test::testExifLoader()
     bool loadSuccess = exifIO->loadFrom(store, &exifBuffer);
     QVERIFY(loadSuccess);
     Validator validator(store);
+    
+    for(QMap<QString, Validator::Reason>::const_iterator it = validator.invalidEntries().begin();
+        it != validator.invalidEntries().end(); ++it )
+    {
+        dbgKrita << it.key() << " = " << it.value().type() << " entry = " << store->getEntry(it.key());
+    }
+    
     QCOMPARE(validator.countInvalidEntries(), 0 );
-    QCOMPARE(validator.countValidEntries(), 10 );
+    QCOMPARE(validator.countValidEntries(), 51 );
+    
+    const KisMetaData::Schema* tiffSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::TIFFSchemaUri);
+    const KisMetaData::Schema* exifSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::EXIFSchemaUri);
+    const KisMetaData::Schema* dcSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::DublinCoreSchemaUri);
+    const KisMetaData::Schema* xmpSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::XMPSchemaUri);
+    const KisMetaData::Schema* mknSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::MakerNoteSchemaUri);
+    
+    QCOMPARE(store->getEntry( tiffSchema, "Make" ).value(), Value("Hewlett-Packard" ) );
+    QCOMPARE(store->getEntry( tiffSchema, "Model" ).value(), Value("HP PhotoSmart R707 (V01.00) " ) );
+    QCOMPARE(store->getEntry( tiffSchema, "Orientation" ).value(), Value(1) );
+
+    
+    QCOMPARE(store->getEntry( mknSchema, "RawData" ).value(), Value("SFBNZXQ=" ) );
 }
 
 QTEST_KDEMAIN(KisExiv2Test, GUI)

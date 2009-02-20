@@ -94,7 +94,7 @@ void KoDockerManager::removeUnusedOptionWidgets()
 
 void KoDockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWidgetMap, KoView *callingView)
 {
-        //removeUnusedOptionWidgets(); // will probably be needed to fix multi view problems
+    //removeUnusedOptionWidgets(); // will probably be needed to fix multi view problems
 
     // First remove the previous active dockers from sight and docker menu
     QMapIterator<QString, KoToolDocker *> j(d->activeToolDockerMap);

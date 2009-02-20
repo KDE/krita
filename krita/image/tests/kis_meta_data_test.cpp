@@ -399,6 +399,10 @@ void KisMetaDataTest::testTypeInfo()
     QVERIFY( cChoice->hasCorrectValue( createIntegerValue(12) ) );
     QVERIFY( !cChoice->hasCorrectValue( createIntegerValue(-12) ) );
     QVERIFY( cChoice->hasCorrectValue( createIntegerValue(42) ) );
+    
+    // Test structure
+    
+    
 }
 
 void KisMetaDataTest::testSchemaParse()
@@ -430,8 +434,13 @@ void KisMetaDataTest::testSchemaParse()
     QVERIFY(exifSchema->propertyType("DateTimeOriginal"));
     QVERIFY(exifSchema->propertyType("DateTimeOriginal")->propertyType() == TypeInfo::DateType);
     
+    QVERIFY(exifSchema->propertyType("ISOSpeedRatings"));
+    QVERIFY(exifSchema->propertyType("ISOSpeedRatings")->propertyType() == TypeInfo::OrderedArrayType);
+    QVERIFY(exifSchema->propertyType("ISOSpeedRatings")->embeddedPropertyType() == TypeInfo::Private::Integer );
+
     const TypeInfo* oecfType = exifSchema->propertyType("OECF");
     QVERIFY(oecfType);
+    QVERIFY(oecfType->propertyType() == TypeInfo::StructureType );
     QVERIFY(oecfType == exifSchema->structure("OECFSFR"));
     QVERIFY(oecfType->structureName() == "OECFSFR");
     QVERIFY(oecfType->structureSchema());

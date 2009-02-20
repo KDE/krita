@@ -21,7 +21,7 @@
 #include "TestLoading.h"
 
 #include <QtGui>
-#include <QDebug>
+#include <KDebug>
 #include <QtScript>
 #include <QtTest>
 
@@ -554,8 +554,16 @@ void TestLoading::initTestCase()
 
     engine = new QScriptEngine();
 
-    engine->importExtension("qt.core");
-    engine->importExtension("qt.gui");
+    QScriptValue rc = engine->importExtension("qt.core");
+    if (rc.isError()) {
+        kWarning() << "Failed to find Qt bindings, aborting";
+        abort();
+    }
+    rc = engine->importExtension("qt.gui");
+    if (rc.isError()) {
+        kWarning() << "Failed to load QtGui bindings, aborting";
+        abort();
+    }
 
     QScriptValue globalObject = engine->globalObject();
     globalObject.setProperty("qApp", engine->newQObject(qApp));

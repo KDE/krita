@@ -38,6 +38,7 @@
       <text>0220</text>
     </closedchoice>
     <closedchoice name="FlashpixVersion">
+      <text>0010</text>
       <text>0100</text>
     </closedchoice>
     <closedchoice name="ColorSpace">
@@ -153,7 +154,7 @@
     <closedchoice name="ExposureMode">
       <integer name="Auto exposure">0</integer>
       <integer name="Manual exposure">1</integer>
-      <integer name="Auto bracket"></integer>
+      <integer name="Auto bracket">2</integer>
     </closedchoice>
     <closedchoice name="WhiteBalance">
       <integer name="Auto white balance">0</integer>

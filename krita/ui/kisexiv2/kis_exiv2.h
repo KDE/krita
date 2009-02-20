@@ -21,14 +21,11 @@
 
 class QVariant;
 
-namespace KisMetaData {
-    class Value;
-}
-
+#include <kis_meta_data_value.h>
 #include <exiv2/value.hpp>
 
 /// Convert an exiv value to a KisMetaData value
-KisMetaData::Value exivValueToKMDValue( const Exiv2::Value::AutoPtr value );
+KisMetaData::Value exivValueToKMDValue( const Exiv2::Value::AutoPtr value, bool forceSeq, KisMetaData::Value::ValueType arrayType = KisMetaData::Value::UnorderedArray );
 /// Convert a QtVariant to an Exiv value
 Exiv2::Value* variantToExivValue( const QVariant& variant, Exiv2::TypeId type );
 /// Convert a KisMetaData to an Exiv value

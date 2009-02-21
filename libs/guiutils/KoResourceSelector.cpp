@@ -231,7 +231,7 @@ QVariant KoResourceModel::data( const QModelIndex &index, int role ) const
 QModelIndex KoResourceModel::index ( int row, int column, const QModelIndex & ) const
 {
     int index = row * m_columnCount + column;
-    if( index >= m_resourceAdapter->resources().count() )
+    if( index >= m_resourceAdapter->resources().count() || index < 0)
         return QModelIndex();
 
     KoResource * resource = m_resourceAdapter->resources()[index];

@@ -164,7 +164,7 @@ add_subdirectory(libs)
 add_subdirectory(interfaces)
 add_subdirectory(cmake)
 
-add_subdirectory(karbon)
+macro_optional_add_subdirectory(karbon)
 
 if(EIGEN2_FOUND)
    macro_optional_add_subdirectory(kspread)

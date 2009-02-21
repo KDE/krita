@@ -556,9 +556,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                 info->setAuthorInfo("creator", text_ptr[i].text);
             } else if (key.contains("Raw profile type exif")) {
                 decode_meta_data(text_ptr + i, layer->metaData(), "exif", 6);
-            } else if (key.contains("Raw profile type iptc ")) {
+            } else if (key.contains("Raw profile type iptc")) {
                 decode_meta_data(text_ptr + i, layer->metaData(), "iptc", 14);
-            } else if (key.contains("Raw profile type xmp  ")) {
+            } else if (key.contains("Raw profile type xmp")) {
                 decode_meta_data(text_ptr + i, layer->metaData(), "xmp", 0);
             }
         }

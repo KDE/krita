@@ -1,4 +1,7 @@
-add_subdirectory( bigbrother )
+if(BUILD_EVERYTHING)
+    add_subdirectory( bigbrother )
+endif(BUILD_EVERYTHING)
+
 add_subdirectory( bracketing2hdr )
 add_subdirectory( colorrange )
 add_subdirectory( colorspaceconversion )

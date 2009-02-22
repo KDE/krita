@@ -158,6 +158,14 @@ void KisShapeController::setImage(KisImageSP image)
         m_d->image->rootLayer()->accept(v);
         m_d->nodeShapes = v.layerMap();
 
+        foreach(KoShape* shape, m_d->nodeShapes) {
+            KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(shape);
+            if (shapeLayer) {
+                    connect(shapeLayer, SIGNAL(selectionChanged(QList<KoShape*>)),
+                    KoToolManager::instance(), SLOT(selectionChanged(QList<KoShape*>)));
+            }
+        }
+
         foreach(KoView *view, m_d->doc->views()) {
             KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();
             foreach(KoShape* shape, m_d->nodeShapes) {

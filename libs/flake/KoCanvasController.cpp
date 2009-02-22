@@ -241,7 +241,7 @@ void KoCanvasController::updateCanvasOffsetX()
     emit canvasOffsetXChanged(canvasOffsetX());
     if (d->ignoreScrollSignals)
         return;
-    if (d->viewportWidget && d->viewportWidget->canvas())
+    if (d->viewportWidget && d->viewportWidget->canvas() && horizontalScrollBar()->hasFocus())
         d->viewportWidget->canvas()->setFocus(); // workaround ugly bug in Qt that the focus is transferred to the sliders
     d->preferredCenterFractionX = (horizontalScrollBar()->value() + horizontalScrollBar()->pageStep() / 2.0) / d->documentSize.width();
 }
@@ -251,7 +251,7 @@ void KoCanvasController::updateCanvasOffsetY()
     emit canvasOffsetYChanged(canvasOffsetY());
     if (d->ignoreScrollSignals)
         return;
-    if (d->viewportWidget && d->viewportWidget->canvas())
+    if (d->viewportWidget && d->viewportWidget->canvas() && verticalScrollBar()->hasFocus())
         d->viewportWidget->canvas()->setFocus(); // workaround ugly bug in Qt that the focus is transferred to the sliders
     d->preferredCenterFractionY = (verticalScrollBar()->value() + verticalScrollBar()->pageStep() / 2.0) / d->documentSize.height();
 }

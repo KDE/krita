@@ -659,6 +659,7 @@ void TestLoading::addData()
     QTest::newRow("dropCapsDistance") << "FormattingProperties/ParagraphFormattingProperties/dropCapsDistance";
     QTest::newRow("dropCapsLength") << "FormattingProperties/ParagraphFormattingProperties/dropCapsLength";
     QTest::newRow("dropCapsLines") << "FormattingProperties/ParagraphFormattingProperties/dropCapsLines";
+    QTest::newRow("lineSpacing") << "FormattingProperties/ParagraphFormattingProperties/lineSpacing";
     QTest::newRow("margin") << "FormattingProperties/ParagraphFormattingProperties/margin";
     QTest::newRow("marginLeftRight") << "FormattingProperties/ParagraphFormattingProperties/marginLeftRight";
     QTest::newRow("marginTopBottom") << "FormattingProperties/ParagraphFormattingProperties/marginTopBottom";

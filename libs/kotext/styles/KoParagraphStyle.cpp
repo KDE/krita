@@ -74,7 +74,7 @@ public:
 };
 
 KoParagraphStyle::KoParagraphStyle(QObject *parent)
-        : QObject(parent), d(new Private())
+        : QObject(parent), d(new Private()), normalLineHeight(false)
 {
     d->charStyle = new KoCharacterStyle(this);
 }
@@ -273,6 +273,7 @@ static QString odfBorderStyleString(const KoParagraphStyle::BorderStyle borderst
 void KoParagraphStyle::setLineHeightPercent(int lineHeight)
 {
     setProperty(PercentLineHeight, lineHeight);
+    normalLineHeight = false;
 }
 
 int KoParagraphStyle::lineHeightPercent() const
@@ -283,6 +284,7 @@ int KoParagraphStyle::lineHeightPercent() const
 void KoParagraphStyle::setLineHeightAbsolute(qreal height)
 {
     setProperty(FixedLineHeight, height);
+    normalLineHeight = false;
 }
 
 qreal KoParagraphStyle::lineHeightAbsolute() const
@@ -293,6 +295,7 @@ qreal KoParagraphStyle::lineHeightAbsolute() const
 void KoParagraphStyle::setMinimumLineHeight(qreal height)
 {
     setProperty(MinimumLineHeight, height);
+    normalLineHeight = false;
 }
 
 qreal KoParagraphStyle::minimumLineHeight() const
@@ -303,6 +306,7 @@ qreal KoParagraphStyle::minimumLineHeight() const
 void KoParagraphStyle::setLineSpacing(qreal spacing)
 {
     setProperty(LineSpacing, spacing);
+    normalLineHeight = false;
 }
 
 qreal KoParagraphStyle::lineSpacing() const
@@ -313,6 +317,7 @@ qreal KoParagraphStyle::lineSpacing() const
 void KoParagraphStyle::setLineSpacingFromFont(bool on)
 {
     setProperty(LineSpacingFromFont, on);
+    normalLineHeight = false;
 }
 
 bool KoParagraphStyle::lineSpacingFromFont() const
@@ -1037,12 +1042,17 @@ void KoParagraphStyle::loadOdfProperties(KoStyleStack& styleStack)
             else // fixed value
                 setLineHeightAbsolute(KoUnit::parseValue(value));
         }
-    } // Line-height-at-least is mutually exclusive with line-height
-    else if (styleStack.hasProperty(KoXmlNS::style, "line-height-at-least")) {    // 3.11.2
-        setMinimumLineHeight(KoUnit::parseValue(styleStack.property(KoXmlNS::style, "line-height-at-least")));
-    } // Line-spacing is mutually exclusive with line-height and line-height-at-least
+        else
+            normalLineHeight = true;
+    } // Line-spacing is mutually exclusive with line-height
     else if (styleStack.hasProperty(KoXmlNS::style, "line-spacing")) {    // 3.11.3
         setLineSpacing(KoUnit::parseValue(styleStack.property(KoXmlNS::style, "line-spacing")));
+    }
+    if (styleStack.hasProperty(KoXmlNS::style, "line-height-at-least") && !normalLineHeight && lineHeightAbsolute() == 0) {    // 3.11.2
+        setMinimumLineHeight(KoUnit::parseValue(styleStack.property(KoXmlNS::style, "line-height-at-least")));
+    }  // Line-height-at-least is mutually exclusive with absolute line-height
+    if (styleStack.hasProperty(KoXmlNS::style, "font-independent-line-spacing") && !normalLineHeight && lineHeightAbsolute() == 0) {
+        setLineSpacingFromFont(styleStack.property(KoXmlNS::style, "font-independent-line-spacing") == "true");
     }
 
     // Tabulators
@@ -1441,6 +1451,7 @@ void KoParagraphStyle::removeDuplicates(const KoParagraphStyle &other)
 
 void KoParagraphStyle::saveOdf(KoGenStyle & style, KoGenStyles &mainStyles)
 {
+    bool writtenLineSpacing = false;
     if (d->charStyle) {
         d->charStyle->saveOdf(style);
     }
@@ -1456,6 +1467,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle & style, KoGenStyles &mainStyles)
     if (!d->name.isEmpty() && !style.isDefaultStyle()) {
         style.addAttribute("style:display-name", d->name);
     }
+
     QList<int> keys = d->stylesPrivate.keys();
     foreach(int key, keys) {
         if (key == QTextFormat::BlockAlignment) {
@@ -1495,7 +1507,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle & style, KoGenStyles &mainStyles)
                 style.addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::ParagraphType);
             else
                 style.addProperty("fo:background-color", "transparent", KoGenStyle::ParagraphType);
-            // Padding
+    // Padding
         } else if (key == KoParagraphStyle::LeftPadding) {
             style.addPropertyPt("fo:padding-left", leftPadding(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::RightPadding) {
@@ -1513,15 +1525,30 @@ void KoParagraphStyle::saveOdf(KoGenStyle & style, KoGenStyles &mainStyles)
             style.addPropertyPt("fo:margin-top", topMargin(), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BlockBottomMargin) {
             style.addPropertyPt("fo:margin-bottom", bottomMargin(), KoGenStyle::ParagraphType);
-            // Line spacing
-        } else if (key == KoParagraphStyle::MinimumLineHeight) {
-            style.addPropertyPt("style:line-height-at-least", minimumLineHeight(), KoGenStyle::ParagraphType);
-        } else if (key == KoParagraphStyle::LineSpacing) {
-            style.addPropertyPt("style:line-spacing", lineSpacing(), KoGenStyle::ParagraphType);
-        } else if (key == KoParagraphStyle::PercentLineHeight) {
-            style.addProperty("fo:line-height", QString("%1%").arg(lineHeightPercent()), KoGenStyle::ParagraphType);
-        } else if (key == KoParagraphStyle::FixedLineHeight) {
-            style.addPropertyPt("fo:line-height", lineHeightAbsolute(), KoGenStyle::ParagraphType);
+    // Line spacing
+        } else if ( key == KoParagraphStyle::MinimumLineHeight ||
+                    key == KoParagraphStyle::LineSpacing ||
+                    key == KoParagraphStyle::PercentLineHeight ||
+                    key == KoParagraphStyle::FixedLineHeight ||
+                    key == KoParagraphStyle::LineSpacingFromFont) {
+
+            if (key == KoParagraphStyle::MinimumLineHeight && minimumLineHeight() > 0) {
+                style.addPropertyPt("style:line-height-at-least", minimumLineHeight(), KoGenStyle::ParagraphType);
+                writtenLineSpacing = true;
+            } else if (key == KoParagraphStyle::LineSpacing && lineSpacing() > 0) {
+                style.addPropertyPt("style:line-spacing", lineSpacing(), KoGenStyle::ParagraphType);
+                writtenLineSpacing = true;
+            } else if (key == KoParagraphStyle::PercentLineHeight && lineHeightPercent() > 0) {
+                style.addProperty("fo:line-height", QString("%1%").arg(lineHeightPercent()), KoGenStyle::ParagraphType);
+                writtenLineSpacing = true;
+            } else if (key == KoParagraphStyle::FixedLineHeight && lineHeightAbsolute() > 0) {
+                style.addPropertyPt("fo:line-height", lineHeightAbsolute(), KoGenStyle::ParagraphType);
+                writtenLineSpacing = true;
+            } else if (key == KoParagraphStyle::LineSpacingFromFont && lineHeightAbsolute() == 0) {
+                style.addProperty("style:font-independent-line-spacing", lineSpacingFromFont(), KoGenStyle::ParagraphType);
+                writtenLineSpacing = true;
+            }
+    //
         } else if (key == QTextFormat::TextIndent) {
             style.addPropertyPt("fo:text-indent", textIndent(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::AutoTextIndent) {
@@ -1530,6 +1557,8 @@ void KoParagraphStyle::saveOdf(KoGenStyle & style, KoGenStyles &mainStyles)
             style.addPropertyPt("style:tab-stop-distance", tabStopDistance(), KoGenStyle::ParagraphType);
         }
     }
+    if (!writtenLineSpacing && normalLineHeight)
+        style.addProperty("fo:line-height", QString("normal"), KoGenStyle::ParagraphType);
     // save border stuff
     QString leftBorder = QString("%1pt %2 %3").arg(QString::number(leftBorderWidth()),
                          odfBorderStyleString(leftBorderStyle()),

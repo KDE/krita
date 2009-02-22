@@ -255,6 +255,10 @@ QAction *KoView::action(const QDomElement &element) const
     if (!act)
         act = d->m_doc->KXMLGUIClient::action(name.toUtf8());
 
+    // last resort, try to get action from the main window if there is one
+    if (!act && shell())
+        act = shell()->actionCollection()->action(name);
+
     return act;
 }
 
@@ -633,9 +637,6 @@ void KoView::setupGlobalActions()
     actionNewView  = new KAction(KIcon("window-new"), i18n("&New View"), this);
     actionCollection()->addAction("view_newview", actionNewView);
     connect(actionNewView, SIGNAL(triggered(bool)), this, SLOT(newView()));
-
-    if (shell())
-        actionCollection()->addAction("view_fullscreen", shell()->actionCollection()->action("view_fullscreen"));
 }
 
 void KoView::newView()

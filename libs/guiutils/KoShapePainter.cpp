@@ -134,43 +134,49 @@ void KoShapePainter::paintShapes( QPainter & painter, KoViewConverter & converte
     d->canvas->shapeManager()->paint( painter, converter, true );
 }
 
-bool KoShapePainter::paintShapes( QImage & image )
+void KoShapePainter::paintShapes( QPainter & painter, const QRect & painterRect, const QRectF & documentRect )
 {
-    if( image.isNull() )
-        return false;
-
-    QRectF bound = contentRect();
-    QSizeF size = image.size();
-
     KoZoomHandler zoomHandler;
-    // calculate the image size in document coordinates
-    QRectF imageBox = zoomHandler.viewToDocument( QRectF( 0, 0, size.width(), size.height() ) );
+    // calculate the painter destination rectangle size in document coordinates
+    QRectF paintBox = zoomHandler.viewToDocument(QRectF(QPointF(), painterRect.size()));
 
     // compute the zoom factor based on the bounding rects in document coordinates
     // so that the content fits into the image
-    qreal zoomW = imageBox.width() / bound.width();
-    qreal zoomH = imageBox.height() / bound.height();
+    qreal zoomW = paintBox.width() / documentRect.width();
+    qreal zoomH = paintBox.height() / documentRect.height();
     qreal zoom = qMin( zoomW, zoomH );
 
     // now set the zoom into the zoom handler used for painting the shape
     zoomHandler.setZoom( zoom );
 
-    QPainter painter( &image );
+    painter.save();
 
     // initialize painter
     painter.setPen( QPen(Qt::NoPen) );
     painter.setBrush( Qt::NoBrush );
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setClipRect( QRectF(QPoint(),size) );
+    painter.setClipRect( painterRect );
 
-    QRectF zoomedBound = zoomHandler.documentToView( bound );
-    QPointF offset = QPointF( 0.5 * size.width(), 0.5 * size.height() ) - zoomedBound.center();
+    QRectF zoomedBound = zoomHandler.documentToView( documentRect );
+    QPointF offset = QPointF( 0.5 * painterRect.width(), 0.5 * painterRect.height() ) - zoomedBound.center();
 
     // center content in image
     painter.translate( offset.x(), offset.y() );
 
     // finally paint the shapes
     paintShapes( painter, zoomHandler );
+
+    painter.restore();
+}
+
+bool KoShapePainter::paintShapes( QImage & image )
+{
+    if( image.isNull() )
+        return false;
+
+    QPainter painter( &image );
+
+    paintShapes( painter, image.rect(), contentRect() );
 
     return true;
 }
@@ -184,15 +190,9 @@ QRectF KoShapePainter::contentRect()
             continue;
         if( dynamic_cast<KoShapeGroup*>( shape ) )
             continue;
-        QPainterPath outline = shape->absoluteTransformation(0).map( shape->outline() );
-        QRectF shapeRect = outline.boundingRect();
-        // correct shape box with border sizes
-        if( shape->border() )
-        {
-            KoInsets inset;
-            shape->border()->borderInsets( shape, inset );
-            shapeRect.adjust( -inset.left, -inset.top, inset.right, inset.bottom );
-        }
+
+        QRectF shapeRect = shape->boundingRect();
+
         if( bound.isEmpty() )
             bound = shapeRect;
         else

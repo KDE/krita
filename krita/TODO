@@ -24,9 +24,6 @@ Regressions from 1.x
 
     * Progress reporting ( per layer )
     * Split view crashes
-    * opening a backup file causes a crash ( krita(8568)/koffice (filter manager)
-      KoFilterManager::importDocument: Can't open  "application/zip" , trying filter chooser
-      ASSERT: "mime" in file /home/boud/kde/src/koffice/libs/main/KoFilterManager.cpp, line 82)
 
 * Tools
 

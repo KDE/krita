@@ -21,29 +21,35 @@
 #include "kra/kis_kra_save_visitor.h"
 #include "kra/kis_kra_tags.h"
 
+#include <QBuffer>
+#include <QByteArray>
+
 #include <colorprofiles/KoIccColorProfile.h>
 #include <KoStore.h>
 #include <KoColorSpace.h>
 
-#include "filter/kis_filter_configuration.h"
-#include "generator/kis_generator_layer.h"
-#include "kis_adjustment_layer.h"
-#include "kis_annotation.h"
-#include "kis_group_layer.h"
-#include "kis_image.h"
-#include "kis_layer.h"
-#include "kis_paint_layer.h"
-#include "kis_selection.h"
-#include "kis_shape_layer.h"
-#include "kis_clone_layer.h"
-#include "kis_mask.h"
-#include "kis_filter_mask.h"
-#include "kis_transparency_mask.h"
-#include "kis_transformation_mask.h"
-#include "kis_selection_mask.h"
-#include "kis_selection_component.h"
-#include "flake/kis_shape_selection.h"
+#include <filter/kis_filter_configuration.h>
+#include <generator/kis_generator_layer.h>
+#include <kis_adjustment_layer.h>
+#include <kis_annotation.h>
+#include <kis_group_layer.h>
+#include <kis_image.h>
+#include <kis_layer.h>
+#include <kis_paint_layer.h>
+#include <kis_selection.h>
+#include <kis_shape_layer.h>
+#include <kis_clone_layer.h>
+#include <kis_mask.h>
+#include <kis_filter_mask.h>
+#include <kis_transparency_mask.h>
+#include <kis_transformation_mask.h>
+#include <kis_selection_mask.h>
+#include <kis_selection_component.h>
 #include <kis_pixel_selection.h>
+#include <metadata/kis_meta_data_store.h>
+#include <metadata/kis_meta_data_io_backend.h>
+
+#include "flake/kis_shape_selection.h"
 
 using namespace KRA;
 
@@ -68,6 +74,7 @@ bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
 {
     bool result = false;
     if (KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
+        if (!saveMetaData(layer)) return false;
         m_store->pushDirectory();
         m_store->enterDirectory( getLocation( layer, DOT_SHAPE_LAYER )) ;
         result = shapeLayer->saveLayer(m_store);
@@ -81,6 +88,7 @@ bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
 {
     if (!savePaintDevice(layer)) return false;
     if (!saveAnnotations(layer)) return false;
+    if (!saveMetaData(layer)) return false;
     m_count++;
     return visitAllInverse(layer);
 }
@@ -88,6 +96,7 @@ bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
 bool KisKraSaveVisitor::visit(KisGroupLayer *layer)
 {
     m_count++;
+    if (!saveMetaData(layer)) return false;
     return visitAllInverse(layer);
 }
 
@@ -95,6 +104,7 @@ bool KisKraSaveVisitor::visit(KisAdjustmentLayer* layer)
 {
     if (!saveSelection( layer )) return false;
     if (!saveFilterConfiguration( layer ) ) return false;
+    if (!saveMetaData(layer)) return false;
     m_count++;
     return visitAllInverse(layer);
 }
@@ -104,6 +114,7 @@ bool KisKraSaveVisitor::visit(KisGeneratorLayer * layer)
     if (!saveSelection(layer)) return false;
     if (!saveAnnotations( layer )) return false; // generator layers can have a profile because they have their own pixel data
     if (!saveFilterConfiguration( layer ) ) return false;
+    if (!saveMetaData(layer)) return false;
     m_count++;
     return visitAllInverse(layer);
 }
@@ -112,6 +123,7 @@ bool KisKraSaveVisitor::visit(KisCloneLayer *layer)
 {
     // Clone layers do not have a profile
     m_count++;
+    if (!saveMetaData(layer)) return false;
     return visitAllInverse(layer);
 }
 
@@ -256,6 +268,36 @@ bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
         }
     }
     return false;
+}
+
+bool KisKraSaveVisitor::saveMetaData( KisNode* node )
+{
+    if ( !node->inherits( "KisLayer" ) ) return true;
+
+    KisMetaData::Store* metadata = ( static_cast<KisLayer*>( node ) )->metaData();
+    if (metadata->isEmpty() ) return true;
+
+    // Serialize all the types of metadata there are
+    KisMetaData::IOBackend* backend = KisMetaData::IOBackendRegistry::instance()->get("xmp");
+    if ( !backend->supportSaving() ) {
+        dbgFile << "Backend " << backend->id() << " does not support saving.";
+        return false;
+    }
+
+    QString location = getLocation( node, QString( "." ) + backend->id() +  DOT_METADATA );
+    dbgFile << "going to save " << backend->id() << ", " << backend->name() << " to " << location;
+
+    QBuffer buffer;
+    backend->saveTo(metadata, &buffer);
+
+    QByteArray data = buffer.data();
+    dbgFile << "\t information size is" << data.size();
+
+    if ( data.size() > 0 && m_store->open( location ) ) {
+        m_store->write( data,  data.size() );
+        m_store->close();
+    }
+    return true;
 }
 
 QString KisKraSaveVisitor::getLocation( KisNode* node, const QString& suffix )

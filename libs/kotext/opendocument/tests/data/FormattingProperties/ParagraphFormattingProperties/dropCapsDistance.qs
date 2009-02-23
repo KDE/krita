@@ -20,4 +20,4 @@ setFormatProperty(textBlockFormat, KoParagraphStyle.DropCapsDistance, 72 * 3);
 cursor.setBlockFormat(textBlockFormat);
 cursor.insertText("This is an example of paragraph with drop caps. the distance between the last dropped character and the first of the remaining characters of each line is 3in. This is an example of paragraph with drop caps. the distance between the last dropped character and the first of the remaining characters of each line is 3in.");
 
-return document;
+document;

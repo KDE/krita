@@ -281,6 +281,11 @@ void KoEnhancedPathShape::addModifiers( const QString &modifiers )
 
 void KoEnhancedPathShape::addCommand( const QString &command )
 {
+    addCommand( command, true );
+}
+
+void KoEnhancedPathShape::addCommand( const QString &command, bool triggerUpdate )
+{
     if( command.isEmpty() )
         return;
 
@@ -304,7 +309,8 @@ void KoEnhancedPathShape::addCommand( const QString &command )
     }
     m_commands.append( cmd );
 
-    updatePath( size() );
+    if( triggerUpdate )
+        updatePath( size() );
 }
 
 const QRectF & KoEnhancedPathShape::viewBox() const
@@ -483,7 +489,7 @@ void KoEnhancedPathShape::parsePathData( const QString & data )
                 if( lastChar == ' ' || QChar(lastChar).isNumber() )
                 {
                     if( ! cmdString.isEmpty() )
-                        addCommand( cmdString );
+                        addCommand( cmdString, false );
                     cmdString = *ptr;
                 }
                 else
@@ -498,5 +504,7 @@ void KoEnhancedPathShape::parsePathData( const QString & data )
         lastChar = *ptr;
     }
     if( ! cmdString.isEmpty() )
-        addCommand( cmdString );
+        addCommand( cmdString, false );
+
+    updatePath( size() );
 }

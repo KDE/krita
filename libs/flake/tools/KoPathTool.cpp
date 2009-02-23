@@ -128,6 +128,7 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
     addAction("pathpoint-join", m_actionJoinSegment);
     connect(m_actionJoinSegment, SIGNAL(triggered()), this, SLOT(joinPoints()));
 
+    // TODO: implement me
     m_actionMergePoints = new KAction(KIcon("pathpoint-merge"), i18n("Merge points"), this);
     m_actionMergePoints->setEnabled(false); // not implemented yet.
     addAction("pathpoint-merge", m_actionMergePoints);
@@ -675,7 +676,7 @@ void KoPathTool::updateActions()
     m_actionCurveSegment->setEnabled(hasSegmentsSelected);
     m_actionBreakSegment->setEnabled(hasPointsSelected && m_pointSelection.objectCount() == 1 && m_pointSelection.size() == 2);
     m_actionJoinSegment->setEnabled(hasPointsSelected && m_pointSelection.objectCount() == 1 && m_pointSelection.size() == 2);
-    //m_actionMergePoints->setEnabled(false);
+    m_actionMergePoints->setEnabled(false);
 }
 
 void KoPathTool::deactivate()

@@ -30,8 +30,6 @@ message( STATUS "Create Resources will be required in the final release")
 macro_optional_find_package(Eigen2)
 macro_optional_find_package(Blitz)
 macro_optional_find_package(QCA2)
-macro_optional_find_package(Freetype)
-macro_optional_find_package(Fontconfig)
 set(EXIV2_MIN_VERSION "0.16")
 macro_optional_find_package(Exiv2)
 
@@ -166,17 +164,7 @@ add_subdirectory(libs)
 add_subdirectory(interfaces)
 add_subdirectory(cmake)
 
-macro_log_feature(FREETYPE_FOUND "FreeType" "Karbon requires FreeType. Karbon will not be built" "http://www.freetype.org" FALSE "")
-macro_log_feature(FONTCONFIG_FOUND "Fontconfig" "Karbon requires Fontconfig. Karbon will not be built" "http://fontconfig.org" FALSE "")
-
-if(FREETYPE_FOUND AND FONTCONFIG_FOUND )
-   set(SHOULD_BUILD_KARBON true)
-endif(FREETYPE_FOUND AND FONTCONFIG_FOUND)
-
-if(SHOULD_BUILD_KARBON)
-	macro_optional_add_subdirectory(karbon)
-endif(SHOULD_BUILD_KARBON)
-
+macro_optional_add_subdirectory(karbon)
 
 if(EIGEN2_FOUND)
    macro_optional_add_subdirectory(kspread)

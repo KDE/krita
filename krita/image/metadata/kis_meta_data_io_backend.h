@@ -36,6 +36,7 @@ class Store;
 class KRITAIMAGE_EXPORT IOBackend
 {
 public:
+
     /**
      * Tell whether the backend input/output from/to binary data
      * or text (XML or RDF) data.
@@ -44,22 +45,30 @@ public:
         Binary,
         Text
     };
+
     enum HeaderType {
         NoHeader, ///< Don't append any header
         JpegHeader ///< Append Jpeg-style header
     };
+
 public:
+
     virtual ~IOBackend() {}
+
     virtual QString id() const = 0;
+
     virtual QString name() const = 0;
+
     /**
      * @return the type of the backend
      */
     virtual BackendType type() const = 0;
+
     /**
      * @return tell if this backend support saving
      */
     virtual bool supportSaving() const = 0;
+
     /**
      * @param store the list of metadata to save
      * @param ioDevice the device to where the metadata will be saved
@@ -68,16 +77,19 @@ public:
      * @return true if the save was successful
      */
     virtual bool saveTo(Store* store, QIODevice* ioDevice, HeaderType headerType = NoHeader) const = 0;
+
     /**
      * @param store the list of metadata
      * @return true if this backend is capable of saving all the metadata
      * of the store
      */
     virtual bool canSaveAllEntries(Store* store) const = 0;
+
     /**
      * @return true if this backend support loading
      */
     virtual bool supportLoading() const = 0;
+
     /**
      * @param store the list of metadata to load
      * @param ioDevice the device from where the metadata will be loaded

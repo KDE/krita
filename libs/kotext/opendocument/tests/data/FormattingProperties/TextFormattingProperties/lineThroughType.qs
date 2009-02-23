@@ -20,5 +20,5 @@ cursor.insertText("this is an example of text with single line trough", singleLi
 cursor.insertBlock();
 cursor.insertText("this is an example of text with double line trough", doubleLineThroughFormat);
 
-return document;
+document;
 

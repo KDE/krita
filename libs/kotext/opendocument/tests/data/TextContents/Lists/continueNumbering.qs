@@ -40,4 +40,4 @@ cursor.insertText("continue numbering");
 cursor.insertBlock();
 cursor.insertText("continue numbering");
 
-return document;
+document;

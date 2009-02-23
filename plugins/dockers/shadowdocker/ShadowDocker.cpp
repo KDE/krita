@@ -48,7 +48,7 @@ ShadowDocker::ShadowDocker()
     setWidget( d->widget );
     d->widget->setEnabled( false );
 
-    connect( d->widget, SIGNAL(shadowColorChanged(const QColor&)), this, SLOT(shadowChanged()));
+    connect( d->widget, SIGNAL(shadowColorChanged(const KoColor&)), this, SLOT(shadowChanged()));
     connect( d->widget, SIGNAL(shadowOffsetChanged(const QPointF&)), this, SLOT(shadowChanged()));
     connect( d->widget, SIGNAL(shadowVisibilityChanged(bool)), this, SLOT(shadowChanged()));
 }

@@ -5,6 +5,6 @@ setFormatProperty(chineseFormat, KoCharacterStyle.Language, "zh");
 
 cursor.insertText("This is an example of text with different language. the following is Chinese word which means \"how are you\".");
 cursor.insertBlock();
-cursor.insertText("你好", chineseFormat);
+cursor.insertText("\u4F60\u597D", chineseFormat);
 
-return document;
+document;

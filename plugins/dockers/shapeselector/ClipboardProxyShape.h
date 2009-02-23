@@ -25,7 +25,7 @@
 
 class QPainter;
 class KoViewConverter;
-class KoXmlElement;
+#include "KoXmlReaderForward.h"
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 

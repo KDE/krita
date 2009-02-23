@@ -37,6 +37,7 @@ void TestDocumentLayout::initForNewTest(const QString &initText)
     Q_ASSERT(layout);
     doc = layout->document();
     Q_ASSERT(doc);
+    doc->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false)); //do it manually since we do not load the appDefaultStyle
     m_textLayout = new Layout(layout);
     layout->setLayout(m_textLayout);
     styleManager = new KoStyleManager();

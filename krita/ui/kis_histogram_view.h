@@ -33,54 +33,79 @@
 class KoChannelInfo;
 
 /**
- * This class displays a histogram. It has a list of channels it can select. The easy
- * way is to display channelStrings() to the user, and then use a setActiveChannel
- * with the integer the same as the one the selected string in that stringlist has.
- * If the selected one is a producer, the histogram will automatically display all its
+ * This class displays a histogram. It has a list of channels it can
+ * select. The easy way is to display channelStrings() to the user,
+ * and then use a setActiveChannel with the integer the same as the
+ * one the selected string in that stringlist has. If the selected one
+ * is a producer, the histogram will automatically display all its
  * channels, and color them if that is possible.
  *
- * You can also set the channels manually, just don't forget that the displayed channels
- * all need to belong to the same producer! If you set them manually, don't forget to set
- * the (non)usage of color as well.
+ * You can also set the channels manually, just don't forget that the
+ * displayed channels all need to belong to the same producer! If you
+ * set them manually, don't forget to set the (non)usage of color as
+ * well.
  *
- * You can either set this to use a specific layer, or use a specific histogram. With the latter,
- * some functionality will disappear, like listProducers(). Setting a histogram will discard
- * info on the layer, and setting a layer will discard info on the histogram.
+ * You can either set this to use a specific layer, or use a specific
+ * histogram. With the latter, some functionality will disappear, like
+ * listProducers(). Setting a histogram will discard info on the
+ * layer, and setting a layer will discard info on the histogram.
+ *
+ * XXX: make beautiful, for instance by using alpha and a bit of a
+ * gradient!
  **/
 class KRITAUI_EXPORT KisHistogramView : public QLabel
 {
     Q_OBJECT
+
 public:
+
     KisHistogramView(QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
+
     virtual ~KisHistogramView();
 
     void setPaintDevice(KisPaintDeviceSP dev);
+
     void setHistogram(KisHistogramSP histogram);
+
     void setView(double from, double size);
+
     KoHistogramProducerSP currentProducer();
+
     QStringList channelStrings();
+
     /** Lists all producers currently available */
     QList<KoID> listProducers();
+
     /** Sets the currently displayed channels to channels of the producer with producerID as ID*/
     void setCurrentChannels(const KoID& producerID, QList<KoChannelInfo *> channels);
+
     /** Be careful, producer will be modified */
     void setCurrentChannels(KoHistogramProducerSP producer, QList<KoChannelInfo *> channels);
+
     bool hasColor();
+
     void setColor(bool set);
 
 public slots:
+
     void setActiveChannel(int channel);
+
     void setHistogramType(enumHistogramType type);
+
     void updateHistogram();
 
 signals:
+
     void rightClicked(const QPoint& pos);
 
 protected:
+
     virtual void mousePressEvent(QMouseEvent * e);
 
 private:
+
     void setChannels();
+
     void addProducerChannels(KoHistogramProducerSP producer);
 
     typedef struct {

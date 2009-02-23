@@ -23,4 +23,4 @@ cursor.insertBlock();
 cursor.insertText("This is an example of text ", defaultTextFormat);
 cursor.insertText("with double underline.", doubleUnderlineFormat);
 
-return document;
+document;

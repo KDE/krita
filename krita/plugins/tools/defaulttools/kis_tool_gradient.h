@@ -72,7 +72,7 @@ public slots:
     void slotSetAntiAliasThreshold(double);
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
-    void slotSetPreviewOpacity(int value);
+    void slotSetPreviewOpacity(int value,bool final);
     void slotConfigChanged();
 #endif
 

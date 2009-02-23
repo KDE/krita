@@ -35,4 +35,4 @@ cursor.insertBlock(level1Format);
 list1.add(cursor.block());
 cursor.insertText("Heading");
 
-return document;
+document;

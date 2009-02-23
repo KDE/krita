@@ -189,6 +189,12 @@ class KoColorSpaceMaths {
         {
             return (traits_compositetype)a >> ( traits::bits - KoColorSpaceMathsTraits<_Tdst>::bits );
         }
+        inline static typename  KoColorSpaceMathsTraits<_Tdst>::compositetype clamp( typename  KoColorSpaceMathsTraits<_Tdst>::compositetype val )
+        {
+            return qBound( (typename  KoColorSpaceMathsTraits<_Tdst>::compositetype) KoColorSpaceMathsTraits<_Tdst>::min,
+                           val,
+                           (typename  KoColorSpaceMathsTraits<_Tdst>::compositetype)KoColorSpaceMathsTraits<_Tdst>::max );
+        }
 };
 
 //------------------------------ double specialization ------------------------------//
@@ -218,7 +224,13 @@ inline double KoColorSpaceMaths<quint16, double>::scaleToA(quint16 a)
     return a * ( 1.0 / 0xFFFF );
 }
 
-//------------------------------ half specialization ------------------------------//
+template<>
+inline double KoColorSpaceMaths<double>::clamp(double a)
+{
+    return a;
+}
+
+//------------------------------ float specialization ------------------------------//
 
 template<>
 inline float KoColorSpaceMaths<double, float>::scaleToA(double a)
@@ -262,6 +274,12 @@ template<>
 inline float KoColorSpaceMaths<float>::blend(float a, float b, float alpha)
 {
     return ( a - b) * alpha + b;
+}
+
+template<>
+inline double KoColorSpaceMaths<float>::clamp(double a)
+{
+    return a;
 }
 
 //------------------------------ half specialization ------------------------------//
@@ -328,6 +346,13 @@ inline half KoColorSpaceMaths<half>::blend(half a, half b, half alpha)
 {
     return ( a - b) * alpha + b;
 }
+
+template<>
+inline double KoColorSpaceMaths<half>::clamp(double a)
+{
+    return a;
+}
+
 
 #endif
 

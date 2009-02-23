@@ -26,4 +26,4 @@ setFormatProperty(textBlockFormat, QTextFormat.BlockBottomMargin, 72 * 0.1);
 cursor.setBlockFormat(textBlockFormat);
 cursor.insertText("This is an example of paragraph with margin (top, bottom, left and right margins for paragraphs simultaneously) of 0.1 inch. This is an example of paragraph with margin (top, bottom, left and right margins for paragraphs simultaneously) of 0.1 inch.");
 
-return document;
+document;

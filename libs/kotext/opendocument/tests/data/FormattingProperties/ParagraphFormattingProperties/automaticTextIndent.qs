@@ -42,4 +42,4 @@ textBlockFormat.setTextIndent(72 * 1);
 cursor.insertBlock(textBlockFormat);
 cursor.insertText("This is an example of paragraph with font size 12pt, text indent of 1inch and automatic text indent unspecified. This should visually have 1 inch indentation, same as P4_12_1in. [P5_12_1in]");
 
-return document;
+document;

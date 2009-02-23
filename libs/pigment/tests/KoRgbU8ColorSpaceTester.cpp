@@ -170,7 +170,7 @@ void KoRgbColorSpaceTester::testMixColors()
     mixOp->mixColors(pixelPtrs, weights, 2, outputPixel);
 
     QVERIFY((int)outputPixel[PIXEL_RED] == 150);
-    QVERIFY((int)outputPixel[PIXEL_GREEN] == 150);
+    QCOMPARE((int)outputPixel[PIXEL_GREEN], 149);
     QVERIFY((int)outputPixel[PIXEL_BLUE] == 35);
     QVERIFY((int)outputPixel[PIXEL_ALPHA] == 255);
 

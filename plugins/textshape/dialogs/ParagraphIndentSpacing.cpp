@@ -187,6 +187,8 @@ void ParagraphIndentSpacing::save(KoParagraphStyle *style)
     style->setBottomMargin(widget.after->value());
     style->setAutoTextIndent(widget.autoTextIndent->isChecked());
     style->setLineHeightAbsolute(0); // since it trumps percentage based line heights, unset it.
+    style->setMinimumLineHeight(0);
+    style->setLineSpacing(0);
     switch (widget.lineSpacing->currentIndex()) {
     case 0: style->setLineHeightPercent(120); break;
     case 1: style->setLineHeightPercent(180); break;

@@ -38,4 +38,4 @@ setFormatProperty(textBlockFormatBb, KoParagraphStyle.BottomBorderWidth, 0.0346 
 cursor.setBlockFormat(textBlockFormatBb);
 cursor.insertText("This is an example of paragraph with border. The line arrangement is bottom only. This is an example of paragraph with border. The line arrangement is bottom only. This is an example of paragraph with border. The line arrangement is bottom only.");
 
-return document;
+document;

@@ -58,7 +58,6 @@ public:
 public:
     quint16 transfer[256];
     QList<QPointF>  curve;
-    KoColorTransformation * m_adjustment;
 };
 
 /**

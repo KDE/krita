@@ -25,4 +25,4 @@ cursor.insertText("Foo ");
 cursor.insertBlock();
 cursor.insertText(" Foo");
 
-return document;
+document;

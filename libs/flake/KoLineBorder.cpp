@@ -30,6 +30,8 @@
 #include <KoGenStyles.h>
 #include <KoOdfGraphicStyles.h>
 
+#include <math.h>
+
 class KoLineBorder::Private
 {
 public:
@@ -93,7 +95,13 @@ void KoLineBorder::borderInsets(const KoShape *shape, KoInsets &insets)
     qreal lineWidth = d->pen.widthF();
     if (lineWidth < 0)
         lineWidth = 1;
-    lineWidth /= 2; // since we draw a line half inside, and half outside the object.
+    lineWidth *= 0.5; // since we draw a line half inside, and half outside the object.
+    
+    // if we have square cap, we need a little more space
+    // -> sqrt( (0.5*penWidth)^2 + (0.5*penWidth)^2 )
+    if( capStyle() == Qt::SquareCap )
+        lineWidth *= M_SQRT2;
+    
     insets.top = lineWidth;
     insets.bottom = lineWidth;
     insets.left = lineWidth;

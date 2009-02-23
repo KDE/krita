@@ -787,10 +787,14 @@ KisLayerSP KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrate
 
     KisNodeSP parent = layer->parent(); // parent is set to null when the layer is removed from the node
     dbgImage << ppVar( parent );
-    removeNode(layer->prevSibling());
-    removeNode(layer);
-    addNode(newLayer, parent);
+//     addNode(newLayer, parent, layer);
+//     removeNode(layer->prevSibling());
+//     removeNode(layer);
 
+    undoAdapter()->addCommand(new KisImageLayerAddCommand(this, newLayer, parent, layer ));
+    undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, layer->prevSibling() ));
+    undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, layer ));
+    
     undoAdapter()->endMacro();
     
     return newLayer;

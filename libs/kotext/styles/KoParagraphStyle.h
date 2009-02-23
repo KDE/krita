@@ -579,6 +579,8 @@ private:
 
     class Private;
     Private * const d;
+
+    bool normalLineHeight;
 };
 
 #endif

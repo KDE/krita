@@ -88,20 +88,28 @@ void TestShapeAt::test()
 
 void TestShapeAt::testShadow()
 {
+    QRectF bbox(20, 30, 50, 70);
+    
     MockShape shape;
-    shape.setPosition(QPointF(20, 30));
-    shape.setSize(QSizeF(50, 70));
-    QCOMPARE(shape.boundingRect(), QRectF(20, 30, 50, 70));
+    shape.setPosition(bbox.topLeft());
+    shape.setSize(bbox.size());
+    QCOMPARE(shape.boundingRect(), bbox);
 
     KoLineBorder *border = new KoLineBorder();
     border->setLineWidth(20); // which means the shape grows 10 in all directions.
     shape.setBorder(border);
-    QCOMPARE(shape.boundingRect(), QRectF(10, 20, 70, 90));
+    KoInsets borderInsets;
+    border->borderInsets(&shape, borderInsets);
+    bbox.adjust(-borderInsets.left, -borderInsets.top, borderInsets.right, borderInsets.bottom);
+    QCOMPARE(shape.boundingRect(), bbox);
 
     KoShapeShadow *shadow = new KoShapeShadow();
     shadow->setOffset(QPointF(5, 9));
     shape.setShadow(shadow);
-    QCOMPARE(shape.boundingRect(), QRectF(10, 20, 75, 99));
+    KoInsets shadowInsets;
+    shadow->insets(&shape, shadowInsets);
+    bbox.adjust(-shadowInsets.left, -shadowInsets.top, shadowInsets.right, shadowInsets.bottom);
+    QCOMPARE(shape.boundingRect(), bbox);
 }
 
 QTEST_MAIN(TestShapeAt)

@@ -113,7 +113,7 @@ int Validator::countValidEntries() const
 {
     return d->countValidEntries;
 }
-QMap<QString, Validator::Reason> Validator::invalidEntries() const
+const QMap<QString, Validator::Reason>& Validator::invalidEntries() const
 {
     return d->invalidEntries;
 }

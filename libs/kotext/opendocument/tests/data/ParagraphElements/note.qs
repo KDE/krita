@@ -13,4 +13,4 @@ cursor.insertText("This paragraph contains a footnote", defaultTextFormat);
 cursor.insertText(InlineObjectMaker, noteFormat);
 cursor.insertText(", too", defaultTextFormat);
 
-return document;
+document;

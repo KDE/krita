@@ -30,7 +30,7 @@
 // ---- Generic convertion functions ---- //
 
 // Convert an exiv value to a KisMetaData value
-KisMetaData::Value exivValueToKMDValue(const Exiv2::Value::AutoPtr value)
+KisMetaData::Value exivValueToKMDValue(const Exiv2::Value::AutoPtr value, bool forceSeq, KisMetaData::Value::ValueType arrayType)
 {
     switch (value->typeId()) {
     case Exiv2::signedByte:
@@ -43,20 +43,20 @@ KisMetaData::Value exivValueToKMDValue(const Exiv2::Value::AutoPtr value)
         dbgFile << "Undefined value :" << value->typeId() << " value =" << value->toString().c_str();
         QByteArray array(value->count() , 0);
         value->copy((Exiv2::byte*)array.data(), Exiv2::invalidByteOrder);
-        return KisMetaData::Value(array);
+        return KisMetaData::Value(QString(array.toBase64()));
     }
     case Exiv2::unsignedByte:
     case Exiv2::unsignedShort:
     case Exiv2::unsignedLong:
     case Exiv2::signedShort:
     case Exiv2::signedLong: {
-        if (value->count() == 1) {
+        if (value->count() == 1 && !forceSeq) {
             return KisMetaData::Value((int)value->toLong());
         } else {
             QList<KisMetaData::Value> array;
             for (int i = 0; i < value->count(); i++)
                 array.push_back(KisMetaData::Value((int)value->toLong(i)));
-            return KisMetaData::Value(array, KisMetaData::Value::UnorderedArray);
+            return KisMetaData::Value(array, arrayType);
         }
     }
     case Exiv2::asciiString:
@@ -82,7 +82,10 @@ Exiv2::Value* variantToExivValue(const QVariant& variant, Exiv2::TypeId type)
 {
     switch (type) {
     case Exiv2::undefined:
-        return new Exiv2::DataValue((Exiv2::byte*)variant.toByteArray().data(), variant.toByteArray().size());
+    {
+        QByteArray arr = QByteArray::fromBase64( variant.toString().toAscii() );
+        return new Exiv2::DataValue((Exiv2::byte*)arr.data(), arr.size());
+    }
     case Exiv2::unsignedByte:
         return new Exiv2::ValueType<uint16_t>(variant.toUInt(0));
     case Exiv2::unsignedShort:

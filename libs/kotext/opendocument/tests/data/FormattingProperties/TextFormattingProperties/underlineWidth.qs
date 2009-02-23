@@ -55,4 +55,4 @@ setFormatProperty(tf, KoCharacterStyle.UnderlineWeight, KoCharacterStyle.LengthL
 setFormatProperty(tf, KoCharacterStyle.UnderlineWidth, 0.05 * 72);
 cursor.insertText("This is an example of text with underline, the underline width is 0.05in.", tf);
 
-return document;
+document;

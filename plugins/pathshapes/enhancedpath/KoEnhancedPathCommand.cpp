@@ -176,10 +176,10 @@ bool KoEnhancedPathCommand::execute()
             foreach( QPointF point, points )
             {
                 point = m_parent->viewboxToShape( point );
-                qreal rx = lastPoint->point().x() - point.x();
-                qreal ry = lastPoint->point().y() - point.y();
-                qreal startAngle = ry > 0.0 ? 270.0 : 90.0;
-                qreal sweepAngle = rx*rx > 0.0 ? 90.0 : -90.0;
+                qreal rx = point.x() - lastPoint->point().x();
+                qreal ry = point.y() - lastPoint->point().y();
+                qreal startAngle = ry > 0.0 ? 90.0 : 270.0;
+                qreal sweepAngle = rx*ry < 0.0 ? 90.0 : -90.0;
                 lastPoint = m_parent->arcTo( fabs(rx), fabs(ry), startAngle, sweepAngle );
             }
         }
@@ -191,10 +191,10 @@ bool KoEnhancedPathCommand::execute()
             foreach( QPointF point, points )
             {
                 point = m_parent->viewboxToShape( point );
-                qreal rx = lastPoint->point().x() - point.x();
-                qreal ry = lastPoint->point().y() - point.y();
-                qreal startAngle = rx > 0.0 ? 0.0 : 180.0;
-                qreal sweepAngle = ry*ry > 0.0 ? 90.0 : -90.0;
+                qreal rx = point.x() - lastPoint->point().x();
+                qreal ry = point.y() - lastPoint->point().y();
+                qreal startAngle = rx < 0.0 ? 0.0 : 180.0;
+                qreal sweepAngle = rx*ry > 0.0 ? 90.0 : -90.0;
                 lastPoint = m_parent->arcTo( fabs(rx), fabs(ry), startAngle, sweepAngle );
             }
         }

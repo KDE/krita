@@ -495,25 +495,28 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
         }
         if (it->key() == "Exif.Photo.MakerNote") {
             const KisMetaData::Schema* makerNoteSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::MakerNoteSchemaUri);
-            store->addEntry(KisMetaData::Entry(makerNoteSchema, "RawData", exivValueToKMDValue(it->getValue())));
+            store->addEntry(KisMetaData::Entry(makerNoteSchema, "RawData", exivValueToKMDValue(it->getValue(), false)));
         } else if (it->key() == "Exif.Image.DateTime") { // load as xmp:ModifyDate
             store->addEntry(KisMetaData::Entry(xmpSchema, "ModifyDate", KisMetaData::Value(exivValueToDateTime(it->getValue()))));
         } else if (it->key() == "Exif.Image.ImageDescription") { // load as "dc:description"
-            store->addEntry(KisMetaData::Entry(dcSchema, "description", exivValueToKMDValue(it->getValue())));
+            store->addEntry(KisMetaData::Entry(dcSchema, "description", exivValueToKMDValue(it->getValue(), false)));
         } else if (it->key() == "Exif.Image.Software") { // load as "xmp:CreatorTool"
-            store->addEntry(KisMetaData::Entry(xmpSchema, "CreatorTool", exivValueToKMDValue(it->getValue())));
+            store->addEntry(KisMetaData::Entry(xmpSchema, "CreatorTool", exivValueToKMDValue(it->getValue(), false)));
         } else if (it->key() == "Exif.Image.Artist") { // load as dc:creator
             QList<KisMetaData::Value> creators;
-            creators.push_back(exivValueToKMDValue(it->getValue()));
+            creators.push_back(exivValueToKMDValue(it->getValue(), false));
             store->addEntry(KisMetaData::Entry(dcSchema, "creator", KisMetaData::Value(creators, KisMetaData::Value::OrderedArray)));
         } else if (it->key() == "Exif.Image.Copyright") { // load as dc:rights
-            store->addEntry(KisMetaData::Entry(dcSchema, "rights", exivValueToKMDValue(it->getValue())));
+            store->addEntry(KisMetaData::Entry(dcSchema, "rights", exivValueToKMDValue(it->getValue(), false)));
         } else if (it->groupName() == "Image") {
             // Tiff tags
             QString fixedTN = it->tagName().c_str();
-            if( KisMetaData::Entry::isValidName(fixedTN) )
+            if( it->key() == "Exif.Image.ExifTag" )
             {
-                store->addEntry(KisMetaData::Entry(tiffSchema, fixedTN, exivValueToKMDValue(it->getValue()))) ;
+                dbgFile << "Ignoring " << it->key().c_str();
+            } else if( KisMetaData::Entry::isValidName(fixedTN) )
+            {
+                store->addEntry(KisMetaData::Entry(tiffSchema, fixedTN, exivValueToKMDValue(it->getValue(), false))) ;
             } else {
                 dbgFile << "Invalid tag name: " << fixedTN;
             }
@@ -539,7 +542,7 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
             } else if (it->key() == "Exif.Photo.Flash") {
                 v = flashExifToKMD(it->getValue());
             } else if (it->key() == "Exif.Photo.UserComment") {
-                KisMetaData::Value vUC = exivValueToKMDValue(it->getValue());
+                KisMetaData::Value vUC = exivValueToKMDValue(it->getValue(), false);
                 Q_ASSERT( vUC.type() == KisMetaData::Value::Variant );
                 QVariant commentVar = vUC.asVariant();
                 QString comment;
@@ -558,9 +561,20 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 alt.append(vcomment);
                 v = KisMetaData::Value( alt, KisMetaData::Value::LangArray );
             } else {
-                v = exivValueToKMDValue(it->getValue());
+                bool forceSeq = false;
+                KisMetaData::Value::ValueType arrayType = KisMetaData::Value::UnorderedArray;
+                if (it->key() == "Exif.Photo.ISOSpeedRatings") {
+                    forceSeq = true;
+                    arrayType = KisMetaData::Value::OrderedArray;
+                }
+                v = exivValueToKMDValue(it->getValue(), forceSeq, arrayType);
             }
-            store->addEntry(KisMetaData::Entry(exifSchema, it->tagName().c_str(), v));
+            if( it->key() == "Exif.Photo.InteroperabilityTag" )
+            {
+                dbgFile << "Ignoring " << it->key().c_str();
+            } else {
+                store->addEntry(KisMetaData::Entry(exifSchema, it->tagName().c_str(), v));
+            }
         } else if (it->groupName() == "Thumbnail") {
             dbgFile << "Ignoring thumbnail tag :" << it->key().c_str();
         } else {

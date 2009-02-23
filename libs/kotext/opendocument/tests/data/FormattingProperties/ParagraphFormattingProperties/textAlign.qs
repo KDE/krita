@@ -32,4 +32,4 @@ cursor.insertText("This is an example of paragraph with text align of center.");
 cursor.insertBlock(alignJustifyFormat);
 cursor.insertText("This is an example of paragraph with text align of justify.");
 
-return document;
+document;

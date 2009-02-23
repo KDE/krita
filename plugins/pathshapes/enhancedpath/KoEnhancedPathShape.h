@@ -104,6 +104,9 @@ private:
     /// parses the enhanced path data
     void parsePathData( const QString & data );
 
+    /// Adds a new command
+    void addCommand( const QString &command, bool triggerUpdate );
+
     typedef QMap<QString, KoEnhancedPathFormula*> FormulaStore;
     typedef QList<qreal> ModifierStore;
     typedef QMap<QString, KoEnhancedPathParameter*> ParameterStore;

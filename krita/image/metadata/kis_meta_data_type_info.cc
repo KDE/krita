@@ -160,6 +160,7 @@ TypeInfo::TypeInfo( PropertyType _propertyType, const TypeInfo* _embedded, const
 
 TypeInfo::TypeInfo( Schema* _structureSchema, const QString& name ) : d(new Private)
 {
+    d->propertyType = TypeInfo::StructureType;
     d->structureSchema = _structureSchema;
     d->structureName = name;
 }
@@ -270,7 +271,7 @@ bool TypeInfo::hasCorrectType( const Value& value ) const
                      it != structure.end(); ++it)
                 {
                     const TypeInfo* typeInfo = d->structureSchema->propertyType(it.key());
-                    if( !typeInfo || typeInfo->hasCorrectType(it.value()))
+                    if( !typeInfo || !typeInfo->hasCorrectType(it.value()))
                     {
                         return false;
                     }
@@ -292,7 +293,7 @@ bool TypeInfo::hasCorrectValue( const Value& value ) const
 {
     if( d->propertyType == ClosedChoice )
     {
-        foreach( Choice choice, d->choices )
+        foreach( const Choice& choice, d->choices )
         {
             if( choice.value() == value )
             {

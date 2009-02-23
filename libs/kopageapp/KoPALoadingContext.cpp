@@ -28,23 +28,9 @@
 #include "KoPAMasterPage.h"
 #include "KoPAPage.h"
 
-KoPALoadingContext::KoPALoadingContext( KoOdfLoadingContext &context, const QMap<QString, KoDataCenter *> & dataCenterMap, const KComponentData & componentData )
+KoPALoadingContext::KoPALoadingContext( KoOdfLoadingContext &context, const QMap<QString, KoDataCenter *> & dataCenterMap )
 : KoShapeLoadingContext( context, dataCenterMap )
 {
-    QString fileName( KStandardDirs::locate( "styles", "defaultstyles.xml", componentData ) );
-    if ( ! fileName.isEmpty() ) {
-        QFile file( fileName );
-        QString errorMessage;
-        if ( KoOdfReadStore::loadAndParse( &file, m_doc, errorMessage, fileName ) ) {
-            m_defaultStylesReader.createStyleMap( m_doc, true );
-        }
-        else {
-            kWarning(30010) << "reading of defaultstyles.xml failed:" << errorMessage;
-        }
-    }
-    else {
-        kWarning(30010) << "defaultstyles.xml not found";
-    }
 }
 
 KoPAMasterPage* KoPALoadingContext::masterPageByName( const QString& name )
@@ -71,9 +57,3 @@ void KoPALoadingContext::addPage( const QString& name, KoPAPage* page )
 {
     m_pages.insert( name, page );
 }
-
-KoOdfStylesReader & KoPALoadingContext::defaultStylesReader()
-{
-    return m_defaultStylesReader;
-}
-

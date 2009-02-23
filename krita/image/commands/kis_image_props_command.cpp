@@ -34,20 +34,18 @@
 #include "kis_group_layer.h"
 #include "kis_undo_adapter.h"
 
-KisImagePropsCommand::KisImagePropsCommand(KisImageSP image, const KoColorSpace* newColorSpace, const KoColorProfile* newProfile)
+KisImagePropsCommand::KisImagePropsCommand(KisImageSP image, const KoColorSpace* newColorSpace)
         : KisImageCommand(i18n("Property Changes"), image)
         , m_newColorSpace(newColorSpace)
-        , m_newProfile(newProfile)
 {
     m_oldColorSpace = m_image->colorSpace();
-    m_oldProfile = m_image->profile();
 }
 
 void KisImagePropsCommand::redo()
 {
     setUndo(false);
     m_image->setColorSpace(m_newColorSpace);
-    m_image->setProfile(m_newProfile);
+    m_image->rootLayer()->setDirty();
     setUndo(true);
 }
 
@@ -55,6 +53,6 @@ void KisImagePropsCommand::undo()
 {
     setUndo(false);
     m_image->setColorSpace(m_oldColorSpace);
-    m_image->setProfile(m_oldProfile);
+    m_image->rootLayer()->setDirty();
     setUndo(true);
 }

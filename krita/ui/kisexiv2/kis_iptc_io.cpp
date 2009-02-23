@@ -167,7 +167,7 @@ bool KisIptcIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
             store->addEntry(KisMetaData::Entry(
                                 KisMetaData::SchemaRegistry::instance()->schemaFromUri(iptcToKMd.namespaceUri),
                                 iptcToKMd.name,
-                                exivValueToKMDValue(it->getValue())));
+                                exivValueToKMDValue(it->getValue(), false)));
         }
     }
     return false;

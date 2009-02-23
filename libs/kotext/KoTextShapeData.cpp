@@ -92,7 +92,6 @@ void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnershi
     if (! d->document->useDesignMetrics())
         d->document->setUseDesignMetrics(true);
     d->ownsDocument = transferOwnership;
-    d->document->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false));
 }
 
 QTextDocument *KoTextShapeData::document()

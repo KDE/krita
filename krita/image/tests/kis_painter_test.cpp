@@ -124,7 +124,7 @@ void KisPainterTest::testPaintDeviceBltSelection(const KoColorSpace * cs)
     painter2.setSelection(selection);
 
     painter2.bltSelection(0, 0,
-                         dst2->colorSpace()->compositeOp(COMPOSITE_SUBTRACT),
+                         dst2->colorSpace()->compositeOp(COMPOSITE_SUBSTRACT),
                          src,
                          OPACITY_OPAQUE,
                          0, 0, 30, 30);

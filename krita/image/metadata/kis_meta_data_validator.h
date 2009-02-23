@@ -60,7 +60,7 @@ namespace KisMetaData {
             ~Validator();
             int countInvalidEntries() const;
             int countValidEntries() const;
-            QMap<QString, Reason> invalidEntries() const;
+            const QMap<QString, Reason>& invalidEntries() const;
             /**
              * Call this function to revalidate the store.
              */

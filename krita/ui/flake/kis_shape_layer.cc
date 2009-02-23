@@ -52,6 +52,7 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
 #include <KoStore.h>
+#include <KoShapeControllerBase.h>
 #include <KoStoreDevice.h>
 #include <KoViewConverter.h>
 #include <KoXmlNS.h>
@@ -75,9 +76,11 @@ public:
     qint32 y;
     KisPaintDeviceSP projection;
     KisShapeLayerCanvas * canvas;
+    KoShapeControllerBase* controller;
 };
 
 KisShapeLayer::KisShapeLayer(KoShapeContainer * parent,
+                             KoShapeControllerBase* controller,
                              KisImageSP img,
                              const QString &name,
                              quint8 opacity)
@@ -93,6 +96,7 @@ KisShapeLayer::KisShapeLayer(KoShapeContainer * parent,
     m_d->projection = new KisPaintDevice(img->colorSpace());
     m_d->canvas = new KisShapeLayerCanvas(this, m_d->converter);
     m_d->canvas->setProjection(m_d->projection);
+    m_d->controller = controller;
 
     connect(m_d->canvas->shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 }
@@ -259,6 +263,8 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     if (!store->close())
         return false;
 
+    embeddedSaver.saveEmbeddedDocuments(documentContext);
+
     manifestWriter->addManifestEntry("content.xml", "text/xml");
 
     if (! mainStyles.saveOdfStylesDotXml(store, manifestWriter)) {
@@ -267,7 +273,8 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
 
     manifestWriter->addManifestEntry("settings.xml", "text/xml");
 
-    if (! shapeContext.saveDataCenter( documentContext.odfStore.store(), documentContext.odfStore.manifestWriter() ))
+    if (! shapeContext.saveDataCenter( documentContext.odfStore.store(),
+                                       documentContext.odfStore.manifestWriter() ))
         return false;
 
     // Write out manifest file
@@ -345,9 +352,9 @@ bool KisShapeLayer::loadLayer( KoStore* store )
         return false;
     }
 
-    QMap<QString, KoDataCenter*> dataCenterMap;
     KoOdfLoadingContext context( odfStore.styles(), odfStore.store() );
-    KoShapeLoadingContext shapeContext( context, dataCenterMap );
+    context.setManifestFile(QString("tar:/") + odfStore.store()->currentPath() + "META-INF/manifest.xml");
+    KoShapeLoadingContext shapeContext( context, m_d->controller->dataCenterMap() );
 
 
     KoXmlElement layerElement;

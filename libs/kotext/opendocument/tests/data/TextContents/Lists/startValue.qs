@@ -40,4 +40,4 @@ cursor.insertText("test start-value for list");
 cursor.insertBlock();
 cursor.insertText("test start-value for list");
 
-return document;
+document;

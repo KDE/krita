@@ -14,4 +14,4 @@ cursor.insertText("this is an example of text with black line through.", blackSt
 cursor.insertBlock();
 cursor.insertText("this is an example of text with red line through.", redStrikeThroughFormat);
 
-return document;
+document;

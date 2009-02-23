@@ -16,4 +16,4 @@ cursor.insertText("This is an example of text with continuous line through.", co
 cursor.insertBlock();
 cursor.insertText("This is an example of text with word only line through.", wordStrikeOutFormat);
 
-return document;
+document;

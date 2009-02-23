@@ -71,7 +71,6 @@ KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfigurati
     for (quint32 i = 0; i < 256; ++i) {
         transfer[i] = i * 257;
     }
-    m_adjustment = 0;
     QPointF p;
     p.rx() = 0.0; p.ry() = 0.0;
     curve.append(p);
@@ -81,7 +80,6 @@ KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfigurati
 
 KisBrightnessContrastFilterConfiguration::~KisBrightnessContrastFilterConfiguration()
 {
-    delete m_adjustment;
 }
 
 void KisBrightnessContrastFilterConfiguration::fromXML(const QString& s)
@@ -119,9 +117,6 @@ void KisBrightnessContrastFilterConfiguration::fromXML(const QString& s)
         }
         n = n.nextSibling();
     }
-    // If the adjustment was cached, it now has changed - invalidate it
-    delete m_adjustment;
-    m_adjustment = 0;
 }
 
 QString KisBrightnessContrastFilterConfiguration::toString()
@@ -207,8 +202,8 @@ void KisBrightnessContrastFilter::process(KisConstProcessingInformation srcInfo,
         return;
     }
 
-    KisBrightnessContrastFilterConfiguration* configBC = (KisBrightnessContrastFilterConfiguration*) config;
-    Q_ASSERT(config);
+    const KisBrightnessContrastFilterConfiguration* configBC = dynamic_cast<const KisBrightnessContrastFilterConfiguration*>( config );
+    Q_ASSERT(configBC);
 
     if (src != dst) {
         KisPainter gc(dst, dstInfo.selection());
@@ -216,9 +211,7 @@ void KisBrightnessContrastFilter::process(KisConstProcessingInformation srcInfo,
         gc.end();
     }
 
-//     if (configBC->m_adjustment == 0) {
-        configBC->m_adjustment = src->colorSpace()->createBrightnessContrastAdjustment(configBC->transfer);
-//     }
+    KoColorTransformation * adjustment = src->colorSpace()->createBrightnessContrastAdjustment(configBC->transfer);
 
     KisRectIteratorPixel iter = dst->createRectIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), dstInfo.selection());
 
@@ -250,7 +243,7 @@ void KisBrightnessContrastFilter::process(KisConstProcessingInformation srcInfo,
                 ++npix;
             }
             // adjust
-            configBC->m_adjustment->transform(firstPixel, firstPixel, npix);
+            adjustment->transform(firstPixel, firstPixel, npix);
             pixelsProcessed += npix;
             ++iter;
             break;
@@ -258,7 +251,7 @@ void KisBrightnessContrastFilter::process(KisConstProcessingInformation srcInfo,
 
         default:
             // adjust, but since it's partially selected we also only partially adjust
-            configBC->m_adjustment->transform(iter.oldRawData(), iter.rawData(), 1);
+            adjustment->transform(iter.oldRawData(), iter.rawData(), 1);
             const quint8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
             qint16 weights[2] = {MAX_SELECTED - selectedness, selectedness};
             mixOp->mixColors(pixels, weights, 2, iter.rawData());
@@ -268,8 +261,7 @@ void KisBrightnessContrastFilter::process(KisConstProcessingInformation srcInfo,
         }
         if (progressUpdater) progressUpdater->setProgress(pixelsProcessed / totalCost);
     }
-    delete configBC->m_adjustment;
-    configBC->m_adjustment = 0;
+    delete adjustment;
 }
 
 KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)

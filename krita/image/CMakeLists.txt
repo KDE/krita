@@ -195,6 +195,7 @@ install( FILES
     metadata/schemas/dc.schema
     metadata/schemas/exif.schema
     metadata/schemas/tiff.schema
+    metadata/schemas/mkn.schema
     metadata/schemas/xmp.schema
     metadata/schemas/xmprights.schema
     

@@ -35,7 +35,7 @@ ParagraphSettingsDialog::ParagraphSettingsDialog(TextTool *tool, QTextCursor *cu
         m_tool(tool),
         m_cursor(cursor)
 {
-    setCaption(i18n("Select Font"));
+    setCaption(i18n("Paragraph Format"));
     setModal(true);
     setButtons(Ok | Cancel | Apply);
     setDefaultButton(Ok);

@@ -47,7 +47,7 @@ KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
         COMPOSITE_PLUS <<
         COMPOSITE_MINUS <<
         COMPOSITE_ADD <<
-        COMPOSITE_SUBTRACT <<
+        COMPOSITE_SUBSTRACT <<
         COMPOSITE_DIFF <<
         COMPOSITE_MULT <<
         COMPOSITE_DIVIDE <<

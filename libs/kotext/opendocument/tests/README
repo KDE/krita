@@ -3,7 +3,7 @@ http://develop.opendocumentfellowship.com/testsuite/.
 
 How to run:
 The ODF test suite requires QScript bindings of Qt. 
-1. svn co svn://labs.trolltech.com/svn/qtscript/generator
+1. git clone git://labs.trolltech.com/qtscriptgenerator
 2. Please read the README in the generator package. Once you have done that
    * Create the generator by compiling inside generator/
    * Run the generator. This will create bindings for qt-copy. This will

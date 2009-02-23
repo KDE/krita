@@ -31,6 +31,8 @@
 #include "KoRgbU8CompositeOp.h"
 
 #include "compositeops/KoCompositeOps.h"
+#include "compositeops/KoCompositeOpAdd.h"
+#include "compositeops/KoCompositeOpSubstract.h"
 
 #define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
 #define upscale(value)  (value) // ((quint8) (257UL*(value)))
@@ -82,8 +84,8 @@ KoRgbU8ColorSpace::KoRgbU8ColorSpace( KoColorProfile *p) :
     addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_SATURATION,  i18n( "Saturation" )));
     addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_VALUE,  i18n( "Value" )));
     addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_COLOR,  i18n( "Color" )));
-    addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_ADD,  i18n( "Add" )));
-    addCompositeOp( new KoRgbU8CompositeOp(this, COMPOSITE_SUBTRACT,  i18n( "Substract" )));
+    addCompositeOp( new KoCompositeOpAdd<RgbU8Traits>( this ) ); // TODO move it to the saddStandardCompositeOps (after 2.0)
+    addCompositeOp( new KoCompositeOpSubstract<RgbU8Traits>( this ) ); // TODO move it to the saddStandardCompositeOps (after 2.0)
 }
 
 

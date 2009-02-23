@@ -17,4 +17,4 @@ cursor.insertText(", and this word is ", defaultTextFormat);
 cursor.insertText("italic", italicFormat);
 cursor.insertText(".", defaultTextFormat);
 
-return document;
+document;

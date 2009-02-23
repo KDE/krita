@@ -55,4 +55,4 @@ setFormatProperty(tf, KoCharacterStyle.StrikeOutWeight, KoCharacterStyle.LengthL
 setFormatProperty(tf, KoCharacterStyle.StrikeOutWidth, 0.05 * 72);
 cursor.insertText("This is an example of text with linethrough, the linethrough width is 0.05in.", tf);
 
-return document;
+document;

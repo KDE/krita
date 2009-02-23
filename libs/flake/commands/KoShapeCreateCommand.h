@@ -43,10 +43,8 @@ public:
     void redo();
     /// revert the actions done in redo
     void undo();
-private:
-    enum AddRemove { Add, Remove };
-    void recurse(KoShape *shape, const AddRemove ar);
 
+private:
     class Private;
     Private * const d;
 };

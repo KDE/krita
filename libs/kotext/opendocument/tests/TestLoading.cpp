@@ -21,7 +21,7 @@
 #include "TestLoading.h"
 
 #include <QtGui>
-#include <QDebug>
+#include <KDebug>
 #include <QtScript>
 #include <QtTest>
 
@@ -57,6 +57,8 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoTextSharedLoadingData.h>
 #include <KoTextDocument.h>
+#include <kstandarddirs.h>
+
 
 typedef KoText::Tab KoTextTab;
 // because in a QtScript, I don't seem to be able to use a namespaced type
@@ -488,6 +490,7 @@ static QScriptValue copyFormatProperties(QScriptContext *context, QScriptEngine 
 TestLoading::TestLoading()
 {
     componentData = new KComponentData("TestLoading");
+    componentData->dirs()->addResourceType("styles", "data", "kword/styles/");
 }
 
 TestLoading::~TestLoading()
@@ -551,8 +554,16 @@ void TestLoading::initTestCase()
 
     engine = new QScriptEngine();
 
-    engine->importExtension("qt.core");
-    engine->importExtension("qt.gui");
+    QScriptValue rc = engine->importExtension("qt.core");
+    if (rc.isError()) {
+        kWarning() << "Failed to find Qt bindings, aborting";
+        abort();
+    }
+    rc = engine->importExtension("qt.gui");
+    if (rc.isError()) {
+        kWarning() << "Failed to load QtGui bindings, aborting";
+        abort();
+    }
 
     QScriptValue globalObject = engine->globalObject();
     globalObject.setProperty("qApp", engine->newQObject(qApp));
@@ -609,6 +620,7 @@ void TestLoading::addData()
     QTest::newRow("fontColors") << "TextContents/TextFormatting/fontColors";
 
     QTest::newRow("color") << "FormattingProperties/TextFormattingProperties/color";
+
     QTest::newRow("country") << "FormattingProperties/TextFormattingProperties/country";
     QTest::newRow("fontCharset") << "FormattingProperties/TextFormattingProperties/fontCharacterSet";
     QTest::newRow("fontFamily") << "FormattingProperties/TextFormattingProperties/fontFamily";
@@ -647,6 +659,7 @@ void TestLoading::addData()
     QTest::newRow("dropCapsDistance") << "FormattingProperties/ParagraphFormattingProperties/dropCapsDistance";
     QTest::newRow("dropCapsLength") << "FormattingProperties/ParagraphFormattingProperties/dropCapsLength";
     QTest::newRow("dropCapsLines") << "FormattingProperties/ParagraphFormattingProperties/dropCapsLines";
+    QTest::newRow("lineSpacing") << "FormattingProperties/ParagraphFormattingProperties/lineSpacing";
     QTest::newRow("margin") << "FormattingProperties/ParagraphFormattingProperties/margin";
     QTest::newRow("marginLeftRight") << "FormattingProperties/ParagraphFormattingProperties/marginLeftRight";
     QTest::newRow("marginTopBottom") << "FormattingProperties/ParagraphFormattingProperties/marginTopBottom";
@@ -692,7 +705,7 @@ QTextDocument *TestLoading::documentFromOdt(const QString &odt)
 
     KoStyleManager *styleManager = new KoStyleManager;
 
-    KoOdfLoadingContext odfLoadingContext(odfReadStore.styles(), odfReadStore.store());
+    KoOdfLoadingContext odfLoadingContext(odfReadStore.styles(), odfReadStore.store(), *componentData);
     QMap<QString, KoDataCenter *> dataCenterMap;
     KoShapeLoadingContext shapeLoadingContext(odfLoadingContext, dataCenterMap);
     KoTextSharedLoadingData *textSharedLoadingData = new KoTextSharedLoadingData;
@@ -742,6 +755,8 @@ QString TestLoading::documentToOdt(QTextDocument *document)
     KoXmlWriter xmlWriter(&contentTmpFile, 1);
 
     KoGenStyles mainStyles;
+    KoStyleManager *styleMan = KoTextDocument(document).styleManager();
+    styleMan->saveOdf(mainStyles);
     KoEmbeddedDocumentSaver embeddedSaver;
     KoShapeSavingContext context(xmlWriter, mainStyles, embeddedSaver);
 
@@ -772,10 +787,14 @@ QString TestLoading::documentToOdt(QTextDocument *document)
     contentWriter->endDocument();
     delete contentWriter;
 
+
     if (!store->close())
         qWarning() << "Failed to close the store";
 
+    mainStyles.saveOdfStylesDotXml(store, manifestWriter);
+
     odfWriteStore.closeManifestWriter();
+
 
     delete store;
     delete textShapeData;

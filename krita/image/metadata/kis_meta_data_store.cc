@@ -83,7 +83,12 @@ bool Store::addEntry(const Entry& entry)
 
 bool Store::empty() const
 {
-    return d->entries.empty();
+    return d->entries.isEmpty();
+}
+
+bool Store::isEmpty() const
+{
+    return d->entries.isEmpty();
 }
 
 bool Store::containsEntry(const QString & entryKey) const

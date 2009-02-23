@@ -16,4 +16,4 @@ cursor.insertText("This is an example of text with continuous underline.", conti
 cursor.insertBlock();
 cursor.insertText("This is an example of text with word only underline.", wordUnderlineFormat);
 
-return document;
+document;

@@ -28,4 +28,4 @@ textBlockFormat.setTextIndent(72 * 2);
 cursor.insertBlock(textBlockFormat);
 cursor.insertText("This is an example of paragraph with text indent of 2 inch. This is an example of paragraph with text indent of 2 inch.");
 
-return document;
+document;

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Boudewijn Rempt <boud@kde.org>
- * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007,2009 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2007,2009  Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -84,7 +84,7 @@ void KoConnectionShape::paint(QPainter&, const KoViewConverter&)
 void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
 {
     context.xmlWriter().startElement("draw:connector");
-    saveOdfAttributes( context, OdfMandatories | OdfCommonChildElements );
+    saveOdfAttributes( context, OdfMandatories | OdfAdditionalAttributes );
     
     switch( d->connectionType )
     {
@@ -118,13 +118,15 @@ void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
         context.xmlWriter().addAttributePt( "svg:x2", m_handles[1].x() );
         context.xmlWriter().addAttributePt( "svg:y2", m_handles[1].y() );
     }
+
+    saveOdfCommonChildElements(context);
     
     context.xmlWriter().endElement();
 }
 
 bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
-    loadOdfAttributes(element, context, OdfMandatories | OdfCommonChildElements);
+    loadOdfAttributes(element, context, OdfMandatories | OdfCommonChildElements | OdfAdditionalAttributes);
 
     QString type = element.attributeNS(KoXmlNS::draw, "type", "standard");
     if (type == "lines")

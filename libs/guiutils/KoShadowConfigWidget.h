@@ -24,6 +24,7 @@
 #include <QtGui/QWidget>
 
 class KoUnit;
+class KoColor;
 
 /// A widget for configuring the shadow of a shape
 class KOGUIUTILS_EXPORT KoShadowConfigWidget : public QWidget
@@ -56,7 +57,7 @@ public slots:
 
 signals:
     /// Is emitted whenever the shadow color has changed
-    void shadowColorChanged( const QColor &color );
+    void shadowColorChanged( const KoColor &color );
 
     /// Is emitted whenever the shadow offset has changed
     void shadowOffsetChanged( const QPointF &offset );

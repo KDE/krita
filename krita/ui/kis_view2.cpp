@@ -480,36 +480,6 @@ void KisView2::createGUI()
         shell()->addDockWidget(Qt::RightDockWidgetArea, dockWidget);
 
     }
-#if 0
-    QDockWidget * birdEyeBox = qobject_cast<QDockWidget*>(shell()->findChild<QDockWidget*>("KisBirdeyeBox"));
-    QDockWidget * toolBox = qobject_cast<QDockWidget*>(shell()->findChild<QDockWidget*>("KoToolOptionsDocker"));
-    QDockWidget * colorDocker = qobject_cast<QDockWidget*>(shell()->findChild<QDockWidget*>("KoColorDocker"));
-    QDockWidget * paletteDocker = qobject_cast<QDockWidget*>(shell()->findChild<QDockWidget*>("KisPaletteDocker"));
-    QDockWidget * strokeDocker = qobject_cast<QDockWidget*>(shell()->findChild<QDockWidget*>("Stroke Properties"));
-
-    if (birdEyeBox != 0 && toolBox != 0) {
-        shell()->tabifyDockWidget(birdEyeBox, toolBox);
-    }
-
-    if (colorDocker != 0 && paletteDocker != 0 && strokeDocker != 0) {
-        shell()->tabifyDockWidget(colorDocker, paletteDocker);
-        shell()->tabifyDockWidget(paletteDocker, strokeDocker);
-    }
-    colorDocker->show();
-
-    KConfigGroup group(KGlobal::config(), "GUI");
-    QFont dockWidgetFont  = KGlobalSettings::generalFont();
-    qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
-    pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
-    dockWidgetFont.setPointSizeF(pointSize);
-
-    foreach(QObject * object, shell()->children()) {
-        if (object->inherits("QTabBar")) {
-            QTabBar * tabBar = qobject_cast<QTabBar*>(object);
-            tabBar->setFont(dockWidgetFont);
-        }
-    }
-#endif
 
     m_d->statusBar = KoView::statusBar() ? new KisStatusBar(KoView::statusBar(), this) : 0;
     connect(m_d->canvasController, SIGNAL(documentMousePositionChanged(const QPointF &)),
@@ -700,10 +670,14 @@ void KisView2::slotEditPalette()
 
 void KisView2::slotImageSizeChanged()
 {
-    m_d->zoomManager->zoomController()->setPageSize(QSizeF(image()->width() / image()->xRes(), image()->height() / image()->yRes()));
-    m_d->zoomManager->zoomController()->setDocumentSize(QSizeF(image()->width() / image()->xRes(), image()->height() / image()->yRes()));
-    m_d->canvasController->setDocumentSize(QSize(int(ceil(m_d->viewConverter->documentToViewX(image()->width() / image()->xRes()))),
-                                           int(ceil(m_d->viewConverter->documentToViewY(image()->height() / image()->yRes())))));
+    QSizeF size(image()->width() / image()->xRes(), image()->height() / image()->yRes());
+    m_d->zoomManager->zoomController()->setPageSize(size);
+    m_d->zoomManager->zoomController()->setDocumentSize(size);
+
+    QSize documentSize(int(ceil(m_d->viewConverter->documentToViewX(image()->width()  / image()->xRes()))),
+                       int(ceil(m_d->viewConverter->documentToViewY(image()->height() / image()->yRes()))));
+    m_d->canvasController->setDocumentSize(documentSize);
+
     m_d->zoomManager->updateGUI();
 }
 

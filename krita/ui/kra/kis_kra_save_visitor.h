@@ -64,8 +64,8 @@ private:
     bool savePaintDevice(KisNode * node);
     bool saveAnnotations(KisLayer* layer);
     bool saveSelection(KisNode* node);
-    bool saveFilterConfiguration(KisNode* filter);
-
+    bool saveFilterConfiguration(KisNode* node);
+    bool saveMetaData( KisNode* node );
     QString getLocation( KisNode* node, const QString& suffix = "" );
 
 private:

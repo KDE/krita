@@ -399,6 +399,10 @@ void KisMetaDataTest::testTypeInfo()
     QVERIFY( cChoice->hasCorrectValue( createIntegerValue(12) ) );
     QVERIFY( !cChoice->hasCorrectValue( createIntegerValue(-12) ) );
     QVERIFY( cChoice->hasCorrectValue( createIntegerValue(42) ) );
+    
+    // Test structure
+    
+    
 }
 
 void KisMetaDataTest::testSchemaParse()
@@ -430,8 +434,13 @@ void KisMetaDataTest::testSchemaParse()
     QVERIFY(exifSchema->propertyType("DateTimeOriginal"));
     QVERIFY(exifSchema->propertyType("DateTimeOriginal")->propertyType() == TypeInfo::DateType);
     
+    QVERIFY(exifSchema->propertyType("ISOSpeedRatings"));
+    QVERIFY(exifSchema->propertyType("ISOSpeedRatings")->propertyType() == TypeInfo::OrderedArrayType);
+    QVERIFY(exifSchema->propertyType("ISOSpeedRatings")->embeddedPropertyType() == TypeInfo::Private::Integer );
+
     const TypeInfo* oecfType = exifSchema->propertyType("OECF");
     QVERIFY(oecfType);
+    QVERIFY(oecfType->propertyType() == TypeInfo::StructureType );
     QVERIFY(oecfType == exifSchema->structure("OECFSFR"));
     QVERIFY(oecfType->structureName() == "OECFSFR");
     QVERIFY(oecfType->structureSchema());
@@ -502,6 +511,16 @@ void KisMetaDataTest::testParser()
     QVERIFY( d6.time().hour() == 18 );
     QVERIFY( d6.time().minute() == 20 );
     QVERIFY( d6.time().second() == 32 );
+    
+    Value rational1 = TypeInfo::Private::Rational->parser()->parse("-10/20");
+    QVERIFY( rational1.type() == Value::Rational );
+    QVERIFY( rational1.asRational().numerator == -10 );
+    QVERIFY( rational1.asRational().denominator == 20 );
+
+    Value rational2 = TypeInfo::Private::Rational->parser()->parse("10/20");
+    QVERIFY( rational2.type() == Value::Rational );
+    QVERIFY( rational2.asRational().numerator == 10 );
+    QVERIFY( rational2.asRational().denominator == 20 );
 }
 
 void KisMetaDataTest::testValidator()

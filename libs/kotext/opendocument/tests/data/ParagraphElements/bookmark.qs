@@ -27,4 +27,4 @@ cursor.insertText("like this ", defaultTextFormat);
 cursor.insertText(InlineObjectMaker, bookmarkEndFormat);
 cursor.insertText("one.", defaultTextFormat);
 
-return document;
+document;

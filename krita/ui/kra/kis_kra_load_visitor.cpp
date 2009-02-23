@@ -22,6 +22,8 @@
 #include "flake/kis_shape_layer.h"
 
 #include <QRect>
+#include <QBuffer>
+#include <QByteArray>
 
 #include <KoColorSpaceRegistry.h>
 #include <colorprofiles/KoIccColorProfile.h>
@@ -29,6 +31,8 @@
 #include <KoColorSpace.h>
 
 // kritaimage
+#include <metadata/kis_meta_data_io_backend.h>
+#include <metadata/kis_meta_data_store.h>
 #include <kis_types.h>
 #include <kis_node_visitor.h>
 #include <kis_image.h>
@@ -78,6 +82,11 @@ bool KisKraLoadVisitor::visit(KisExternalLayer * layer)
     bool result = false;
 
     if ( KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>( layer ) ) {
+
+        if ( !loadMetaData( layer  ) ) {
+            return false;
+        }
+
         m_store->pushDirectory();
         m_store->enterDirectory( getLocation( layer, DOT_SHAPE_LAYER )) ;
         result =  shapeLayer->loadLayer( m_store );
@@ -104,7 +113,9 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
     if ( !loadProfile( layer->paintDevice(), getLocation( layer, DOT_ICC ) ) ) {
         return false;
     }
-
+    if ( !loadMetaData( layer  ) ) {
+        return false;
+    }
 
     if ( m_syntaxVersion == 1 ) {
         // Check whether there is a file with a .mask extension in the
@@ -143,6 +154,9 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
 
 bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
 {
+    if ( !loadMetaData( layer  ) ) {
+        return false;
+    }
 
     bool result = visitAll(layer);
 
@@ -181,6 +195,9 @@ bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
         // We use the default, empty selection
     }
 
+    if ( !loadMetaData( layer  ) ) {
+        return false;
+    }
 
     loadFilterConfiguration( layer->filter(), getLocation( layer, DOT_FILTERCONFIG ) );
 
@@ -202,6 +219,10 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
         return false;
     }
 
+    if ( !loadMetaData( layer  ) ) {
+        return false;
+    }
+
     layer->setSelection( loadSelection( getLocation( layer ) ) );
 
     loadFilterConfiguration( layer->generator(), getLocation( layer, DOT_FILTERCONFIG ) );
@@ -216,6 +237,9 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
 
 bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
 {
+    if ( !loadMetaData( layer ) ) {
+        return false;
+    }
     // Clone layers have no data except for their masks
     bool result = visitAll(layer);
 
@@ -259,13 +283,6 @@ bool KisKraLoadVisitor::visit(KisSelectionMask *mask)
     mask->setSelection( loadSelection( getLocation( mask ) ) );
     mask->setDirty(m_img->bounds());
     return true;
-}
-
-QString KisKraLoadVisitor::getLocation( KisNode* node, const QString& suffix )
-{
-    QString location = m_external ? QString::null : m_uri;
-    location += m_name + LAYER_PATH + m_layerFilenames[node] + suffix;
-    return location;
 }
 
 bool KisKraLoadVisitor::loadPaintDevice( KisPaintDeviceSP device, const QString& location )
@@ -328,6 +345,38 @@ bool KisKraLoadVisitor::loadFilterConfiguration( KisFilterConfiguration* kfc, co
     return false;
 }
 
+bool KisKraLoadVisitor::loadMetaData( KisNode* node )
+{
+    KisLayer* layer = qobject_cast<KisLayer*>( node );
+    if ( !layer ) return true;
+
+    bool result = true;
+
+    KisMetaData::IOBackend* backend = KisMetaData::IOBackendRegistry::instance()->get("xmp");
+
+    if ( !backend->supportLoading() ) {
+        dbgFile << "Backend " << backend->id() << " does not support loading.";
+	return false;
+    }
+
+    QString location = getLocation( node, QString( "." ) + backend->id() +  DOT_METADATA );
+    dbgFile << "going to load " << backend->id() << ", " << backend->name() << " from " << location;
+
+    if ( m_store->hasFile( location ) ) {
+        QByteArray data;
+        m_store->open( location );
+        data = m_store->read( m_store->size() );
+        m_store->close();
+        QBuffer buffer( &data );
+        if ( !backend->loadFrom( layer->metaData(), &buffer ) ) {
+            dbgFile << "\terror while loading metadata";
+            result = false;
+        }
+
+    }
+
+    return result;
+}
 
 KisSelectionSP KisKraLoadVisitor::loadSelection( const QString& location )
 {
@@ -354,4 +403,11 @@ KisSelectionSP KisKraLoadVisitor::loadSelection( const QString& location )
 
     return selection;
 
+}
+
+QString KisKraLoadVisitor::getLocation( KisNode* node, const QString& suffix )
+{
+    QString location = m_external ? QString::null : m_uri;
+    location += m_name + LAYER_PATH + m_layerFilenames[node] + suffix;
+    return location;
 }

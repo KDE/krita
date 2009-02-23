@@ -86,7 +86,7 @@ void KoRgbU8CompositeOp::composite(quint8 *dst, qint32 dstRowStride,
     else if (id() == COMPOSITE_ADD) {
         compositeAdd(m_pixelSize, dst, dstRowStride, src, srcRowStride, rows, cols, opacity, channelFlags);
     }
-    else if (id() == COMPOSITE_SUBTRACT) {
+    else if (id() == COMPOSITE_SUBSTRACT) {
         compositeSubtract(m_pixelSize, dst, dstRowStride, src, srcRowStride, rows, cols, opacity, channelFlags);
     }
     else if (id() == COMPOSITE_DIFF) {

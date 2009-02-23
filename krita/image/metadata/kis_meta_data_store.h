@@ -52,10 +52,15 @@ public:
      * @return true if there is no metadata in this store.
      */
     bool empty() const;
+    bool isEmpty() const;
+
 
     /**
      * Insert a new entry.
-     * @param entry the new entry to insert in the metadata store, it must be a key which doesn't already exist
+     *
+     * @param entry the new entry to insert in the metadata store, it
+     * must be a key which doesn't already exist
+     *
      * @return false if the entry couldn't be included whether because the key already
      *  exists
      */

@@ -96,48 +96,25 @@ QImage KisPaintOpSettings::sampleStroke(const QSize& size )
     preset->setSettings( this ); // This clones
     preset->settings()->setNode( layer );
     
-painter.setPaintOpPreset( preset, img);
+    painter.setPaintOpPreset( preset, img);
 
-    QPointF p1(1.0 / 6.0*width, 2.0 / 3.0*height);
-    QPointF p2(2.0 / 6.0*width, 1.0 / 3.0*height);
-    QPointF p3(4.0 / 6.0*width, 2.0 / 3.0*height);
-    QPointF p4(5.0 / 6.0*width, 1.0 / 3.0*height);
-
-    float pathLength = 0.0;
-
-    //p2-p1
-    float dx = p2.x() - p1.x();
-    float dy = p2.y() - p1.y();
-    pathLength += sqrt(dx * dx + dy * dy);
-
-    dx = p3.x() - p2.x();
-    dy = p3.y() - p2.y();
-    pathLength += sqrt(dx * dx + dy * dy);
-
-    dx = p4.x() - p3.x();
-    dy = p4.y() - p3.y();
-    pathLength += sqrt(dx * dx + dy * dy);
+    QPointF p1(0                , 7.0/12.0 * height);
+    QPointF p2(1.0/2.0 * width  , 7.0/12.0 * height);
+    QPointF p3( width - 4.0, height - 4.0);
 
     KisPaintInformation pi1(p1, 0.0);
     KisPaintInformation pi2(p2, 0.95);
-    KisPaintInformation pi3(p3, 0.75);
-    KisPaintInformation pi4(p4, 0.0);
+    KisPaintInformation pi3(p3, 0.0);
 
-    QPointF c1(p1.x(), p1.y() - 5);
-    QPointF c2(p1.x(), p1.y() + 5);
+    QPointF c1( 1.0/4.0* width , height - 2.0);
+    QPointF c2(c1);
     painter.paintBezierCurve(pi1, c1, c2, pi2, 0);
 
-    c1.setX(p2.x());
-    c1.setY(p2.y() - 5);
-    c2.setX(p2.x());
-    c2.setY(p2.y() + 5);
+    c1.setX( 3.0/4.0 * width);
+    c1.setY( 0);
+    c2.setX( c1.x() );
+    c2.setY( c1.y() );
     painter.paintBezierCurve(pi2, c1, c2, pi3, 0);
-
-    c1.setX(p3.x());
-    c1.setY(p3.y() - 5);
-    c2.setX(p3.x());
-    c2.setY(p3.y() + 5);
-    painter.paintBezierCurve(pi3, c1, c2, pi4, 0);
 
     return layer->paintDevice()->convertToQImage(0);
 }

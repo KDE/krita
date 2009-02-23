@@ -55,14 +55,14 @@ SchemaRegistry::SchemaRegistry() : d(new Private)
     QStringList schemasFilenames;
     schemasFilenames += KGlobal::mainComponent().dirs()->findAllResources("metadata_schema", "*.schema");
     
-    foreach( QString fileName, schemasFilenames )
+    foreach( const QString& fileName, schemasFilenames )
     {
         Schema* schema = new Schema();
         schema->d->load( fileName );
         if( schemaFromUri( schema->uri()) ) {
-            errImage << "Schema allready exist uri: " << schema->uri();
+            errImage << "Schema already exist uri: " << schema->uri();
         } else if( schemaFromPrefix( schema->prefix() ) ) {
-            errImage << "Schema allready exist prefix: " << schema->prefix();
+            errImage << "Schema already exist prefix: " << schema->prefix();
         } else {
             d->uri2Schema[schema->uri()] = schema;
             d->prefix2Schema[schema->prefix()] = schema;

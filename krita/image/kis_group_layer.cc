@@ -225,6 +225,7 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     {
         m_d->projection->clear();
     } else {
+        m_d->projection->clear(rc); // needed when layers in the group aren't fully opaque
         m_d->projection = updateStrategy()->updateGroupLayerProjection(rc, m_d->projection);
     }
 }

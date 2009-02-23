@@ -951,8 +951,6 @@ protected slots:
      */
     virtual void openTemplate(const KUrl& url);
 
-    void deleteOpenPaneDelayed();
-
 protected:
     /**
      * Struct used in the list created by createCustomDocumentWidgets()
@@ -1124,7 +1122,7 @@ private slots:
      * Removes the open widget showed at application start up.
      */
     void deleteOpenPane();
-
+    void openPaneDeleted( QObject * object );
 private:
     virtual void insertChild(QObject *) {
         Q_ASSERT(0);

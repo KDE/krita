@@ -2569,7 +2569,7 @@ void KoDocument::openExistingFile(const KUrl& url)
     setModified(false);
 
     if (ok)
-        QTimer::singleShot(0, this, SLOT(deleteOpenPane()));
+        deleteOpenPane();
 }
 
 void KoDocument::openTemplate(const KUrl& url)
@@ -2632,7 +2632,8 @@ void KoDocument::deleteOpenPane()
 {
     if (d->m_startUpWidget) {
         d->m_startUpWidget->hide();
-        QTimer::singleShot(1000, this, SLOT(deleteOpenPaneDelayed()));
+        d->m_startUpWidget->deleteLater();
+        connect(d->m_startUpWidget, SIGNAL(destroyed(QObject*)), this, SLOT(openPaneDeleted(QObject*)));
 
         shells().getFirst()->factory()->container("mainToolBar", shells().getFirst())->show();
         shells().getFirst()->setRootDocument(this);
@@ -2641,10 +2642,11 @@ void KoDocument::deleteOpenPane()
     }
 }
 
-void KoDocument::deleteOpenPaneDelayed()
+void KoDocument::openPaneDeleted( QObject * object )
 {
-    delete d->m_startUpWidget;
-    d->m_startUpWidget = 0;
+    if( object == d->m_startUpWidget ) {
+        d->m_startUpWidget = 0;
+    }
 }
 
 QList<KoDocument::CustomDocumentWidgetItem> KoDocument::createCustomDocumentWidgets(QWidget * /*parent*/)

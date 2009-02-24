@@ -93,6 +93,7 @@ bool KisNodeFacade::moveNode(KisNodeSP node, KisNodeSP parent, quint32 newIndex)
     if (node->graphListener())
         node->graphListener()->aboutToMoveNode(node.data(), oldIndex, newIndex);
     KisNodeSP aboveThis = parent->at(newIndex - 1);
+    if( aboveThis == node ) return false;
     if (node->parent()) {
         if (!node->parent()->remove(node)) return false;
     }
@@ -106,6 +107,7 @@ bool KisNodeFacade::moveNode(KisNodeSP node, KisNodeSP parent, quint32 newIndex)
 
 bool KisNodeFacade::addNode(KisNodeSP node, KisNodeSP parent)
 {
+    dbgImage << "Add node " << node << " to " << parent;
     if (!node) return false;
     if (!parent && !m_d->root) return false;
 

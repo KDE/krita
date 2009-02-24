@@ -89,8 +89,10 @@ public:
     ~Private() {
         if (parent)
             parent->removeChild(me);
-        foreach(KoShapeManager *manager, shapeManagers)
+        foreach(KoShapeManager *manager, shapeManagers) {
             manager->remove(me);
+            manager->removeAdditional(me);
+        }
         delete userData;
         delete appData;
         if (border && ! border->removeUser())

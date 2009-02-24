@@ -52,12 +52,12 @@ class KoCompositeOpMultiply : public KoCompositeOpAlphaBase<_CSTraits, KoComposi
             {
                 if( (int)i != _CSTraits::alpha_pos  && ( channelFlags.isEmpty() || channelFlags.testBit( i ) ) )
                 {
-                    channels_type srcColor = src[i];
-                    channels_type dstColor = dst[i];
+                    channels_type srcChannel = src[i];
+                    channels_type dstChannel = dst[i];
 
-                    srcColor = KoColorSpaceMaths<channels_type>::multiply(srcColor, dstColor);
+                    srcChannel = KoColorSpaceMaths<channels_type>::multiply(srcChannel, dstChannel);
 
-                    dst[i] = KoColorSpaceMaths<channels_type>::blend(srcColor, dstColor, srcBlend);
+                    dst[i] = KoColorSpaceMaths<channels_type>::blend(srcChannel, dstChannel, srcBlend);
                 }
             }
         }

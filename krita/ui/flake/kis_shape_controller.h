@@ -68,6 +68,8 @@ private slots:
     void slotNodeRemoved(KisNode*node, int index);
     void slotLayersChanged(KisGroupLayerSP rootLayer);
 
+    void slotNotifySelectionChanged(QList<KoShape*> shapes);
+
 private:
 
     int layerMapSize();

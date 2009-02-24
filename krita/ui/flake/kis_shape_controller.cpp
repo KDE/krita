@@ -298,6 +298,9 @@ void KisShapeController::addShape(KoShape* shape)
                 }
 
             }
+            // TODO: refactor after 2.0
+            connect(shapeLayer, SIGNAL(selectionChanged(QList<KoShape*>)),
+                    this, SLOT(slotNotifySelectionChanged(QList<KoShape*>)));
             connect(shapeLayer, SIGNAL(selectionChanged(QList<KoShape*>)),
                     KoToolManager::instance(), SLOT(selectionChanged(QList<KoShape*>)));
 
@@ -415,5 +418,14 @@ int KisShapeController::layerMapSize()
     return m_d->nodeShapes.size();
 }
 
+void KisShapeController::slotNotifySelectionChanged(QList<KoShape*> shapes){
+    foreach(KoView *view, m_d->doc->views()) {
+        KisCanvas2 *canvas = ((KisView2*)view)->canvasBase();   
+        canvas->globalShapeManager()->selection()->deselectAll();
+        foreach(KoShape* shape, shapes) {
+            canvas->globalShapeManager()->selection()->select(shape);
+        }
+    }
+}
 
 #include "kis_shape_controller.moc"

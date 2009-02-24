@@ -454,35 +454,37 @@ void KoPAView::setActivePage( KoPAPageBase* page )
     if ( !page )
         return;
 
-    if ( page != m_activePage ) {
-        shapeManager()->removeAdditional( m_activePage );
-        m_activePage = page;
-        shapeManager()->addAdditional( m_activePage );
-        QList<KoShape*> shapes = page->iterator();
-        shapeManager()->setShapes( shapes, false );
+    bool pageChanged = page != m_activePage;
+
+    shapeManager()->removeAdditional( m_activePage );
+    m_activePage = page;
+    shapeManager()->addAdditional( m_activePage );
+    QList<KoShape*> shapes = page->iterator();
+    shapeManager()->setShapes( shapes, false );
+    //Make the top most layer active
+    if ( !shapes.isEmpty() ) {
+        KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes.last() );
+        shapeManager()->selection()->setActiveLayer( layer );
+    }
+
+    // if the page is not a master page itself set shapes of the master page
+    KoPAPage * paPage = dynamic_cast<KoPAPage *>( page );
+    if ( paPage ) {
+        KoPAMasterPage * masterPage = paPage->masterPage();
+        QList<KoShape*> masterShapes = masterPage->iterator();
+        masterShapeManager()->setShapes( masterShapes, false );
         //Make the top most layer active
-        if ( !shapes.isEmpty() ) {
-            KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes.last() );
-            shapeManager()->selection()->setActiveLayer( layer );
+        if ( !masterShapes.isEmpty() ) {
+            KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( masterShapes.last() );
+            masterShapeManager()->selection()->setActiveLayer( layer );
         }
+    }
+    else {
+        // if the page is a master page no shapes are in the masterShapeManager
+        masterShapeManager()->setShapes( QList<KoShape*>() );
+    }
 
-        // if the page is not a master page itself set shapes of the master page
-        KoPAPage * paPage = dynamic_cast<KoPAPage *>( page );
-        if ( paPage ) {
-            KoPAMasterPage * masterPage = paPage->masterPage();
-            QList<KoShape*> masterShapes = masterPage->iterator();
-            masterShapeManager()->setShapes( masterShapes, false );
-            //Make the top most layer active
-            if ( !masterShapes.isEmpty() ) {
-                KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( masterShapes.last() );
-                masterShapeManager()->selection()->setActiveLayer( layer );
-            }
-        }
-        else {
-            // if the page is a master page no shapes are in the masterShapeManager
-            masterShapeManager()->setShapes( QList<KoShape*>() );
-        }
-
+    if ( pageChanged ) {
         m_documentStructureDocker->setActivePage(m_activePage);
     }
 }

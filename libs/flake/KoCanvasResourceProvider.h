@@ -28,8 +28,10 @@
 
 #include <KoID.h>
 #include "flake_export.h"
+
 class KoColor;
 class KoShape;
+class KoLineBorder;
 
 /**
  * The KoCanvasResource contains a set of per-canvas
@@ -45,6 +47,7 @@ namespace KoCanvasResource
 enum CanvasResource {
     ForegroundColor,    ///< The active forground color selected for this canvas.
     BackgroundColor,    ///< The active background color selected for this canvas.
+    ActiveBorder,       ///< The actove border selected for this canvas
     CompositeOperation,
     CompositeOpacity,
     HandleRadius,       ///< The handle radius used for drawing handles of any kind
@@ -145,6 +148,12 @@ public:
     /// Returns the actual handle radius
     int handleRadius();
 
+    /// Sets the border resource
+    void setActiveBorder( const KoLineBorder &border );
+    
+    /// Returns the border resource
+    KoLineBorder activeBorder();
+    
     /**
      * Sets that the new unit of this canvas has changed
      * The actual unit can be obtained directly from the canvas

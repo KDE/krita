@@ -129,8 +129,9 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
     } else {
         m_shape = new KoPathShape();
         m_shape->setShapeId(KoPathShapeId);
-        // TODO take properties from the resource provider
-        m_shape->setBorder(new KoLineBorder(1, m_canvas->resourceProvider()->foregroundColor().toQColor()));
+        KoLineBorder * border = new KoLineBorder(m_canvas->resourceProvider()->activeBorder());
+        border->setColor(m_canvas->resourceProvider()->foregroundColor().toQColor());
+        m_shape->setBorder(border);
         m_canvas->updateCanvas(m_canvas->snapGuide()->boundingRect());
         const QPointF &point = m_canvas->snapGuide()->snap(event->point, event->modifiers());
         m_activePoint = m_shape->moveTo(point);

@@ -205,6 +205,11 @@ void KoShapeCollectionDocker::loadDefaultShapes()
     QList<KoCollectionItem> quicklist;
     int quickCount=0;
 
+    QStringList quickShapes;
+    quickShapes << "TextShapeID" << "PictureShape" << "KoConnectionShape" << "ChartShape" << "ArtisticText";
+    KConfigGroup cfg = KGlobal::config()->group("KoShapeCollection");
+    quickShapes = cfg.readEntry("QuickShapes", quickShapes);
+
     foreach(const QString & id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactory *factory = KoShapeRegistry::instance()->value(id);
         // don't show hidden factories
@@ -230,7 +235,7 @@ void KoShapeCollectionDocker::loadDefaultShapes()
             else
                 defaultList.append(temp);
 
-            if(temp.id=="TextShapeID" || temp.id=="PictureShape" || temp.id=="KoConnectionShape" || temp.id=="ChartShape" || temp.id=="FormulaShapeID") {
+            if(quickShapes.contains(temp.id)) {
                 quicklist.append(temp);
                 quickCount++;
             }
@@ -252,7 +257,7 @@ void KoShapeCollectionDocker::loadDefaultShapes()
             else
                 defaultList.append(temp);
 
-            if(temp.id=="TextShapeID" || temp.id=="PictureShape" || temp.id=="KoConnectionShape" || temp.id=="ChartShape" || temp.id=="FormulaShapeID") {
+            if(quickShapes.contains(temp.id)) {
                 quicklist.append(temp);
                 quickCount++;
             }

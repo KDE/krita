@@ -237,7 +237,7 @@ void KoShapeCollectionDocker::loadDefaultShapes()
 
             QString id= temp.id;
             if (!shapeTemplate.templateId.isEmpty()) {
-                id += "_"+shapeTemplate.templateId;
+                id += '_'+shapeTemplate.templateId;
             }
 
             if (quickShapes.contains(id)) {

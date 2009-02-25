@@ -49,11 +49,6 @@ class KoDataCenter;
  */
 struct FLAKE_EXPORT KoShapeTemplate {
     KoShapeTemplate() {
-        id = "";
-        templateId = "";
-        name = "";
-        toolTip = "";
-        icon = "";
         properties = 0;
     }
     QString id;         ///< The id of the shape

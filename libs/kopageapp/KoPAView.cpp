@@ -182,14 +182,16 @@ void KoPAView::initGUI()
     connect(m_canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
             m_canvas, SLOT(setDocumentOffset(const QPoint&)));
 
-    KoPADocumentStructureDockerFactory structureDockerFactory( KoDocumentSectionView::ThumbnailMode, m_doc->pageType() );
-    m_documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( createDockWidget( &structureDockerFactory ) );
-    connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),
-             m_documentStructureDocker, SLOT( setPart( KParts::Part * ) ) );
-    connect(m_documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), this, SLOT(updateActivePage(KoPAPageBase*)));
-    connect(m_documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
+    if (shell()) {
+        KoPADocumentStructureDockerFactory structureDockerFactory( KoDocumentSectionView::ThumbnailMode, m_doc->pageType() );
+        m_documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( createDockWidget( &structureDockerFactory ) );
+        connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),
+                m_documentStructureDocker, SLOT( setPart( KParts::Part * ) ) );
+        connect(m_documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), this, SLOT(updateActivePage(KoPAPageBase*)));
+        connect(m_documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
 
-    KoToolManager::instance()->requestToolActivation( m_canvasController );
+        KoToolManager::instance()->requestToolActivation( m_canvasController );
+    }
 
     show();
 }
@@ -379,7 +381,9 @@ void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
 void KoPAView::setMasterMode( bool master )
 {
     m_viewMode->setMasterMode( master );
-    m_documentStructureDocker->setMasterMode(master);
+    if (shell()) {
+        m_documentStructureDocker->setMasterMode(master);
+    }
     m_actionMasterPage->setEnabled(!master);
 
     QList<KoPAPageBase*> pages = m_doc->pages( master );
@@ -420,7 +424,9 @@ void KoPAView::updateActivePage( KoPAPageBase * page )
 
 void KoPAView::reinitDocumentDocker()
 {
-    m_documentStructureDocker->setActivePage( m_activePage );
+    if (shell()) {
+        m_documentStructureDocker->setActivePage( m_activePage );
+    }
 }
 
 void KoPAView::doUpdateActivePage( KoPAPageBase * page )
@@ -484,7 +490,7 @@ void KoPAView::setActivePage( KoPAPageBase* page )
         masterShapeManager()->setShapes( QList<KoShape*>() );
     }
 
-    if ( pageChanged ) {
+    if ( shell() && pageChanged ) {
         m_documentStructureDocker->setActivePage(m_activePage);
     }
 }

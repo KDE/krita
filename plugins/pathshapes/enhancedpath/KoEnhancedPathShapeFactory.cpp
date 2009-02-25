@@ -154,6 +154,7 @@ void KoEnhancedPathShapeFactory::addCross()
 
     KoShapeTemplate t;
     t.id = KoPathShapeId;
+    t.templateId = "cross";
     t.name = i18n("Cross");
     t.family = "funny";
     t.toolTip = i18n("A cross");
@@ -187,6 +188,7 @@ void KoEnhancedPathShapeFactory::addArrow()
 
     KoShapeTemplate t;
     t.id = KoPathShapeId;
+    t.templateId = "arrow";
     t.name = i18n("Arrow");
     t.family = "arrow";
     t.toolTip = i18n("An arrow");
@@ -264,6 +266,7 @@ void KoEnhancedPathShapeFactory::addCallout()
 
     KoShapeTemplate t;
     t.id = KoPathShapeId;
+    t.templateId = "callout";
     t.name = i18n("Callout");
     t.family = "funny";
     t.toolTip = i18n("A callout");
@@ -308,6 +311,7 @@ void KoEnhancedPathShapeFactory::addSmiley()
 
     KoShapeTemplate t;
     t.id = KoPathShapeId;
+    t.templateId = "smiley";
     t.name = i18n("Smiley");
     t.family = "funny";
     t.toolTip = i18n("Smiley");
@@ -386,6 +390,7 @@ void KoEnhancedPathShapeFactory::addCircularArrow()
 
     KoShapeTemplate t;
     t.id = KoPathShapeId;
+    t.templateId = "circulararrow";
     t.name = i18n("Circular Arrow");
     t.family = "arrow";
     t.toolTip = i18n("A circular-arrow");
@@ -430,6 +435,7 @@ void KoEnhancedPathShapeFactory::addGearhead()
 
     KoShapeTemplate t;
     t.id = KoPathShapeId;
+    t.templateId = "gearhead";
     t.name = i18n("Gearhead");
     t.family = "funny";
     t.toolTip = i18n("A gearhead");

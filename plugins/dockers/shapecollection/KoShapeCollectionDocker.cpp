@@ -240,7 +240,7 @@ void KoShapeCollectionDocker::loadDefaultShapes()
                 id += "_"+shapeTemplate.templateId;
             }
 
-            if (quickShapes.contains(temp.id)) {
+            if (quickShapes.contains(id)) {
                 quicklist.append(temp);
                 quickCount++;
             }

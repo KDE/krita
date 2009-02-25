@@ -21,8 +21,6 @@ set(koguiutils_LIB_SRCS
    KoGuides.cpp 
    KoImageResource.cpp
    KoItemToolTip.cpp
-   KoPartSelectDia.cpp
-   KoPartSelectAction.cpp
    KoRuler.cpp
    KoSliderCombo.cpp
    KoTabBar.cpp

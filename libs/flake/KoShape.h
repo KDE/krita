@@ -403,24 +403,24 @@ public:
     /**
      * Makes it possible for the user to select this shape.
      * This parameter defaults to true.
-     * @param selectable when true; set the shape to be selectable.
+     * @param selectable when true; set the shape to be selectable by the user.
      */
     void setSelectable(bool selectable);
     /**
-     * Returns wheather this shape can be selected by the user.
+     * Returns if this shape can be selected by the user.
      * @return true only when the object is selectable.
      */
     bool isSelectable() const;
 
     /**
      * Changes the Shape to be locked in place.
-     * Being locked means the shape can no longer change shape or position.
+     * Being locked means the user can not change shape or position of the shape.
      * @param locked when true; set the shape to be locked.
      */
     void setLocked(bool locked);
     /**
      * Returns current locked state of this shape.
-     * Being locked means the shape can no longer change shape or position.
+     * Being locked means the user can not change shape or position of the shape.
      * @return current locked state of this shape.
      */
     bool isLocked() const;
@@ -678,9 +678,10 @@ public:
     void notifyChanged();
 
     /**
-     * A shape can be in a state that its doing loading or text layout or similar in which case
+     * A shape can be in a state that it is doing processing data like loading or text layout.
+     * In which case
      * it can be shown on screen just fine (probably partially) but it should really not be printed
-     * until its fully done.
+     * until it is fully done processing.
      * Flake will call this method from a non-main thread and only start printing it when the
      * method returned.
      * Warning!  This method can be blocking for a long time, never call it on the gui-thread!
@@ -690,10 +691,13 @@ public:
     /**
      * Schedule the shape for thread-safe deletion.
      * After calling this method will self-delete in the main threads event loop.
-     * If deleting a shape can possibly be done in a separate thread, you should delete it
-     * using this method.  If you delete a shape from another thread then its possible the main
+     * If your code deletes a shape and your code can possibly be running in a separate thread,
+     * you should use this method to delete the shape.
+     * The reason for this is that If you delete a shape from another thread then it is
+     * possible the main
      * thread will use it after its been removed, while painting for example.
-     * Note that in contrary to the equivalent method on QObject, you can not call this more than ones!
+     *
+     * Note that in contrary to the equivalent method on QObject, you can not call this more than once.
      */
     void deleteLater();
 

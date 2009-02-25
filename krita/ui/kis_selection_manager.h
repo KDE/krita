@@ -35,6 +35,7 @@ class KoViewConverter;
 class KisView2;
 class KisDoc;
 class KisClipboard;
+class KisNodeCommandsAdapter;
 
 /**
  * The selection manager is responsible selections
@@ -115,6 +116,8 @@ private:
 
     KisClipboard * m_clipboard;
 
+    KisNodeCommandsAdapter* m_adapter;
+    
     KAction *m_copy;
     KAction *m_cut;
     KAction *m_paste;

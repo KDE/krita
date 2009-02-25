@@ -274,16 +274,16 @@ void KoShapeCollectionDocker::loadDefaultShapes()
     addCollection("default", i18n("Default"), model);
 
     model = new KoCollectionItemModel(this);
-    model->setShapeTemplateList(funnyList);
-    addCollection("funny", i18n("Funny"), model);
+    model->setShapeTemplateList(geometricList);
+    addCollection("geometric", i18n("Geometrics"), model);
 
     model = new KoCollectionItemModel(this);
     model->setShapeTemplateList(arrowList);
     addCollection("arrow", i18n("Arrows"), model);
 
     model = new KoCollectionItemModel(this);
-    model->setShapeTemplateList(geometricList);
-    addCollection("geometric", i18n("Geometrics"), model);
+    model->setShapeTemplateList(funnyList);
+    addCollection("funny", i18n("Funny"), model);
 
     KoCollectionItemModel* quickModel = new KoCollectionItemModel(this);
     quickModel->setShapeTemplateList(quicklist);

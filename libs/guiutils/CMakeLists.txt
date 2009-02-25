@@ -100,8 +100,6 @@ install(
     KoGuides.h
     KoImageResource.h
     KoItemToolTip.h
-    KoPartSelectAction.h
-    KoPartSelectDia.h
     KoProgressUpdater.h
     KoRuler.h
     KoShapePainter.h

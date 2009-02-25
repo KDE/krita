@@ -235,7 +235,12 @@ void KoShapeCollectionDocker::loadDefaultShapes()
             else
                 defaultList.append(temp);
 
-            if(quickShapes.contains(temp.id)) {
+            QString id= temp.id;
+            if (!shapeTemplate.templateId.isEmpty()) {
+                id += "_"+shapeTemplate.templateId;
+            }
+
+            if (quickShapes.contains(temp.id)) {
                 quicklist.append(temp);
                 quickCount++;
             }

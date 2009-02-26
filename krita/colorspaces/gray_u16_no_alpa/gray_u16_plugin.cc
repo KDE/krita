@@ -4,7 +4,7 @@
 * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
 * Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
 *
-*  This program is free software; you can grayistribute it and/or modify
+*  This program is free software; you can distribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
 *  the Free Software Foundation; either version 2 of the License, or
 *  (at your option) any later version.

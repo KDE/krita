@@ -19,6 +19,8 @@
  */
 
 #include "kis_perchannel_filter.h"
+
+#include <Qt>
 #include <QLayout>
 #include <QPixmap>
 #include <QPainter>
@@ -26,7 +28,9 @@
 #include <QComboBox>
 #include <qdom.h>
 #include <QHBoxLayout>
+#include <QMessageBox>
 
+#include "KoChannelInfo.h"
 #include "KoBasicHistogramProducers.h"
 #include "KoColorSpace.h"
 #include "KoColorTransformation.h"
@@ -46,6 +50,212 @@
 #include "kis_histogram.h"
 #include "kis_painter.h"
 
+
+KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)
+        : KisConfigWidget(parent, f)
+{
+    Q_ASSERT(dev);
+    m_page = new WdgPerChannel(this);
+
+    QHBoxLayout * layout = new QHBoxLayout(this);
+    Q_CHECK_PTR(layout);
+    layout->addWidget(m_page);
+
+    m_dev = dev;
+    m_activeCh = 0;
+
+    /* init curves with zeroes */
+    m_curves.clear();
+    for (unsigned int ch = 0; ch < m_dev->colorSpace()->colorChannelCount(); ch++) {
+        m_curves.append(KisCurve());
+        m_curves[ch].append(QPointF(0, 0));
+        m_curves[ch].append(QPointF(1, 1));
+    }
+
+    /* fill in the channel chooser */
+    QList<KoChannelInfo *> channels = dev->colorSpace()->channels();
+    for (unsigned int ch = 0; ch < dev->colorSpace()->colorChannelCount(); ch++)
+        m_page->cmbChannel->addItem(channels.at(ch)->name());
+
+    connect(m_page->cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
+
+    // create the horizontal and vertical gradient labels
+    m_page->hgradient->setPixmap(createGradient(Qt::Horizontal));
+    m_page->vgradient->setPixmap(createGradient(Qt::Vertical));
+
+    // init histogram calculator
+    QList<KoID> keys =
+        KoHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_dev->colorSpace());
+    KoHistogramProducerFactory *hpf;
+    hpf = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(0).id());
+    m_histogram = new KisHistogram(m_dev, hpf->generate(), LINEAR);
+
+    connect(m_page->kCurve, SIGNAL(modified()), this, SIGNAL(sigConfigChanged()));
+    connect(m_page->cbPreview, SIGNAL(stateChanged(int)), this, SLOT(setPreview(int)));
+
+    m_page->kCurve->setupInOutControls(m_page->intIn, m_page->intOut, 0, 100);
+
+    setActiveChannel(0);
+}
+
+void KisPerChannelConfigWidget::setPreview(int state)
+{
+    if(state) {
+	connect(m_page->kCurve, SIGNAL(modified()), this, SIGNAL(sigConfigChanged()));
+	emit sigConfigChanged();
+    }
+    else
+	disconnect(m_page->kCurve, SIGNAL(modified()), this, SIGNAL(sigConfigChanged()));
+}
+
+
+inline QPixmap KisPerChannelConfigWidget::createGradient(Qt::Orientation orient /*, int invert (not used yet) */)
+{
+    int width;
+    int height;
+    int *i, inc, col;
+    int x=0,y=0;
+    
+    if(orient == Qt::Horizontal) {
+	i=&x; inc=1; col=0;
+	width=256; height=1;
+    }
+    else {
+	i=&y; inc=-1; col=255;
+	width=1; height=256;
+    }
+    
+    QPixmap gradientpix(width, height);
+    QPainter p(&gradientpix);
+    p.setPen(QPen::QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
+    for (; *i < 256; (*i)++, col+=inc) {
+	p.setPen(QColor(col, col, col));
+	p.drawPoint(x,y);
+    }
+    return gradientpix;
+}
+
+inline QPixmap KisPerChannelConfigWidget::getHistogram()
+{
+    int i;
+    int height = 256;
+    QPixmap pix(256, height);
+    pix.fill();
+    QPainter p(&pix);
+    p.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
+    
+    m_histogram->setChannel(m_activeCh);
+  
+    double highest = (double)m_histogram->calculations().getHighest();
+    qint32 bins = m_histogram->producer()->numberOfBins();
+    
+    if (m_histogram->getHistogramType() == LINEAR) {
+	double factor = (double)height / highest;
+	for (i = 0; i < bins; ++i) {
+	    p.drawLine(i, height, i, height - int(m_histogram->getValue(i) * factor));
+	}
+    } else {
+	double factor = (double)height / (double)log(highest);
+	for (i = 0; i < bins; ++i) {
+	    p.drawLine(i, height, i, height - int(log((double)m_histogram->getValue(i)) * factor));
+	}
+    }
+    return pix;
+}
+
+#define BITS_PER_BYTE 8
+#define pwr2(p) (1<<p)
+
+void KisPerChannelConfigWidget::setActiveChannel(int ch)
+{
+    m_curves[m_activeCh] = m_page->kCurve->getCurve();
+    m_activeCh = ch;
+    m_page->kCurve->setCurve(m_curves[m_activeCh]);
+    m_page->kCurve->setPixmap(getHistogram());
+    
+    // Getting range accepted by chahhel
+    KoChannelInfo *channel = m_dev->colorSpace()->channels()[m_activeCh];
+    int order = BITS_PER_BYTE*channel->size();
+    int maxValue = pwr2(order);
+    int min;
+    int max;
+
+    m_page->kCurve->dropInOutControls();
+
+    switch(channel->channelValueType())
+      {
+      case KoChannelInfo::UINT8: 
+      case KoChannelInfo::UINT16: 
+      case KoChannelInfo::UINT32:
+	m_shift = 0;
+	m_scale = double(maxValue);
+	min=0;
+	max=maxValue-1;
+	break;
+      case KoChannelInfo::INT8:
+      case KoChannelInfo::INT16:
+	m_shift = 0.5;
+	m_scale = double(maxValue);
+	min=-maxValue/2;
+	max=maxValue/2 - 1;
+	break;
+      case KoChannelInfo::FLOAT16:
+      case KoChannelInfo::FLOAT32:
+      case KoChannelInfo::FLOAT64:
+      default:
+	m_shift = 0;
+	m_scale = 100.0;
+	//Hack Alert: shoud be changed to float
+	min=0;
+	max=100;
+	break;
+      }
+
+    m_page->kCurve->setupInOutControls(m_page->intIn, m_page->intOut, min, max);
+}
+
+
+KisPropertiesConfiguration * KisPerChannelConfigWidget::configuration() const
+{
+    int nCh = m_dev->colorSpace()->colorChannelCount();
+    KisPerChannelFilterConfiguration * cfg = new KisPerChannelFilterConfiguration(nCh);
+
+    // updating current state
+    m_curves[m_activeCh] = m_page->kCurve->getCurve();
+
+    for (int ch = 0; ch < nCh; ch++) {
+        cfg->curves[ch] = m_curves[ch];
+
+        for (int i = 0; i < 256; i++) {
+            qint32 val;
+            val = int(0xFFFF * m_page->kCurve->getCurveValue(m_curves[ch],  i / 255.0));
+            if (val > 0xFFFF)
+                val = 0xFFFF;
+            if (val < 0)
+                val = 0;
+
+            cfg->transfers[ch][i] = val;
+        }
+    }
+
+    cfg->dirty = true;
+
+    return cfg;
+}
+
+void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
+{
+    const KisPerChannelFilterConfiguration * cfg = dynamic_cast<const KisPerChannelFilterConfiguration *>(config);
+    if (!cfg)
+        return;
+
+    for (unsigned int ch = 0; ch < cfg->nTransfers; ch++) {
+        m_curves[ch] = cfg->curves[ch];
+    }
+    m_page->kCurve->setCurve(m_curves[m_activeCh]);
+    setActiveChannel(0);
+}
+
 class KisPerChannelFilterConfigurationFactory : public KisFilterConfigurationFactory
 {
 public:
@@ -64,7 +274,7 @@ public:
 KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int n)
         : KisFilterConfiguration("perchannel", 1)
 {
-    transfers = new quint16*[n];
+    transfers = new quint16* [n];
     for (int i = 0; i < n; i++) {
         curves.append(KisCurve());
 
@@ -291,136 +501,7 @@ void KisPerChannelFilter::process(KisConstProcessingInformation srcInfo,
 
 }
 
-void KisPerChannelConfigWidget::setActiveChannel(int ch)
-{
-    int i;
-    int height = 256;
-    QPixmap pix(256, height);
-    pix.fill();
-    QPainter p(&pix);
-    p.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
 
-    m_histogram->setChannel(ch);
-
-    double highest = (double)m_histogram->calculations().getHighest();
-    qint32 bins = m_histogram->producer()->numberOfBins();
-
-    if (m_histogram->getHistogramType() == LINEAR) {
-        double factor = (double)height / highest;
-        for (i = 0; i < bins; ++i) {
-            p.drawLine(i, height, i, height - int(m_histogram->getValue(i) * factor));
-        }
-    } else {
-        double factor = (double)height / (double)log(highest);
-        for (i = 0; i < bins; ++i) {
-            p.drawLine(i, height, i, height - int(log((double)m_histogram->getValue(i)) * factor));
-        }
-    }
-
-    m_curves[m_activeCh] = m_page->kCurve->getCurve();
-    m_activeCh = ch;
-    m_page->kCurve->setCurve(m_curves[m_activeCh]);
-
-    m_page->kCurve->setPixmap(pix);
-}
-
-KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)
-        : KisConfigWidget(parent, f)
-{
-    Q_ASSERT(dev);
-    int i;
-    int height;
-    m_page = new WdgPerChannel(this);
-    QHBoxLayout * l = new QHBoxLayout(this);
-    Q_CHECK_PTR(l);
-
-    m_dev = dev;
-    m_curves.clear();
-    m_activeCh = 0;
-    for (unsigned int ch = 0; ch < m_dev->colorSpace()->colorChannelCount(); ch++) {
-        m_curves.append(KisCurve());
-        m_curves[ch].append(QPointF(0, 0));
-        m_curves[ch].append(QPointF(1, 1));
-    }
-
-    l->addWidget(m_page);
-    height = 256;
-    connect(m_page->kCurve, SIGNAL(modified()), SIGNAL(sigConfigChanged()));
-
-    // Fill in the channel chooser
-    QList<KoChannelInfo *> channels = dev->colorSpace()->channels();
-    for (unsigned int val = 0; val < dev->colorSpace()->colorChannelCount(); val++)
-        m_page->cmbChannel->addItem(channels.at(val)->name());
-    connect(m_page->cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
-
-    // Create the horizontal gradient label
-    QPixmap hgradientpix(256, 1);
-    QPainter hgp(&hgradientpix);
-    hgp.setPen(QPen::QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
-    for (i = 0; i < 256; ++i) {
-        hgp.setPen(QColor(i, i, i));
-        hgp.drawPoint(i, 0);
-    }
-    m_page->hgradient->setPixmap(hgradientpix);
-
-    // Create the vertical gradient label
-    QPixmap vgradientpix(1, 256);
-    QPainter vgp(&vgradientpix);
-    vgp.setPen(QPen::QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
-    for (i = 0; i < 256; ++i) {
-        vgp.setPen(QColor(i, i, i));
-        vgp.drawPoint(0, 255 - i);
-    }
-    m_page->vgradient->setPixmap(vgradientpix);
-
-    QList<KoID> keys =
-        KoHistogramProducerFactoryRegistry::instance()->listKeysCompatibleWith(m_dev->colorSpace());
-    KoHistogramProducerFactory *hpf;
-    hpf = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(0).id());
-    m_histogram = new KisHistogram(m_dev, hpf->generate(), LINEAR);
-
-    setActiveChannel(0);
-}
-
-KisPropertiesConfiguration * KisPerChannelConfigWidget::configuration() const
-{
-    int nCh = m_dev->colorSpace()->colorChannelCount();
-    KisPerChannelFilterConfiguration * cfg = new KisPerChannelFilterConfiguration(nCh);
-
-    m_curves[m_activeCh] = m_page->kCurve->getCurve();
-
-    for (int ch = 0; ch < nCh; ch++) {
-        cfg->curves[ch] = m_curves[ch];
-
-        for (int i = 0; i < 256; i++) {
-            qint32 val;
-            val = int(0xFFFF * m_page->kCurve->getCurveValue(m_curves[ch],  i / 255.0));
-            if (val > 0xFFFF)
-                val = 0xFFFF;
-            if (val < 0)
-                val = 0;
-
-            cfg->transfers[ch][i] = val;
-        }
-    }
-
-    cfg->dirty = true;
-
-    return cfg;
-}
-
-void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
-{
-    const KisPerChannelFilterConfiguration * cfg = dynamic_cast<const KisPerChannelFilterConfiguration *>(config);
-    if (!cfg)
-        return;
-
-    for (unsigned int ch = 0; ch < cfg->nTransfers; ch++) {
-        m_curves[ch] = cfg->curves[ch];
-    }
-    m_page->kCurve->setCurve(m_curves[m_activeCh]);
-    setActiveChannel(0);
-}
 
 #include "kis_perchannel_filter.moc"
 

@@ -30,6 +30,8 @@
 
 #include "ui_wdg_perchannel.h"
 
+enum Qt::Orientation;
+
 class WdgPerChannel : public QWidget, public Ui::WdgPerChannel
 {
     Q_OBJECT
@@ -104,13 +106,26 @@ public:
 
 private slots:
     virtual void setActiveChannel(int ch);
+    void setPreview(int state);
 
 private:
+
+    // private routines
+    inline QPixmap getHistogram();
+    inline QPixmap createGradient(Qt::Orientation orient /*, int invert (not used now) */);
+
+    // members
     WdgPerChannel * m_page;
     KisPaintDeviceSP m_dev;
     KisHistogram *m_histogram;
     mutable QList<KisCurve> m_curves;
     int m_activeCh;
+
+    // scales for displaying color numbers
+    double m_scale;
+    double m_shift;
+    
+
 };
 
 #endif

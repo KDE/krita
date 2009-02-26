@@ -77,9 +77,6 @@ KoParagraphStyle::KoParagraphStyle(QObject *parent)
         : QObject(parent), d(new Private()), normalLineHeight(false)
 {
     d->charStyle = new KoCharacterStyle(this);
-
-    //set default paragraphStyle properties. Those that should be there at the very least.
-    //actually there is no properties in paragraphStyle that are deemed absolutly necessary so far.
 }
 
 KoParagraphStyle::KoParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &blockCharFormat, QObject *parent)
@@ -88,9 +85,6 @@ KoParagraphStyle::KoParagraphStyle(const QTextBlockFormat &blockFormat, const QT
 {
     d->stylesPrivate = blockFormat.properties();
     d->charStyle = new KoCharacterStyle(blockCharFormat, this);
-
-    //set default paragraphStyle properties, here be carefull to check that the blockFormat above don't define them. In other words, just set the missing ones.
-    //actually there is no properties in paragraphStyle that are deemed absolutly necessary so far.
 }
 
 KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block, QObject *parent)

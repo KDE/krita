@@ -103,7 +103,6 @@ QString KoTextWriter::saveCharacterStyle(const QTextCharFormat &charFormat, cons
     // we'll convert it to a KoCharacterStyle to check for local changes.
     // we remove that properties given by the paragraphstyle char format, these are not present in the saved style (should it really be the case?)
     charStyle.removeDuplicates(blockCharFormat);
-    originalCharStyle->removeDuplicates(blockCharFormat);
     if (charStyle == (*originalCharStyle)) { // This is the real, unmodified character style.
         if (originalCharStyle != defaultCharStyle) {
             if (!charStyle.isEmpty()) {

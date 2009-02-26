@@ -81,24 +81,12 @@ public:
 KoCharacterStyle::KoCharacterStyle(QObject *parent)
         : QObject(parent), d(new Private())
 {
-    //set the default characterStyle properties. These which are deemed absolutly necessary.
-    setFontFamily("Sans Serif");
-    setFontPointSize(12);
-    setForeground(QBrush(Qt::black));
 }
 
 KoCharacterStyle::KoCharacterStyle(const QTextCharFormat &format, QObject *parent)
         : QObject(parent), d(new Private())
 {
     copyProperties(format);
-
-    //set the default characterStyle properties. These which are deemed absolutly necessary. Actually set the ones which are missing in the given QTextCharFormat.
-    if (fontFamily().isEmpty())
-        setFontFamily("Sans Serif");
-    if (!fontPointSize())
-        setFontPointSize(12);
-    if (!hasProperty(QTextCharFormat::ForegroundBrush))
-        setForeground(QBrush(Qt::black));
 }
 
 void KoCharacterStyle::copyProperties(const KoCharacterStyle *style)

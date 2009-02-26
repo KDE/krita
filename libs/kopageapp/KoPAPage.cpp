@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2009 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -146,7 +146,7 @@ void KoPAPage::setDisplayMasterBackground( bool display )
     }
 }
 
-QPixmap KoPAPage::thumbnail( const QSize& size )
+QPixmap KoPAPage::generateThumbnail( const QSize& size )
 {
     // don't paint null pixmap
     if ( size.isEmpty() ) // either width or height is <= 0
@@ -167,7 +167,7 @@ QPixmap KoPAPage::thumbnail( const QSize& size )
 
     paintBackground( painter, zoomHandler );
 
-    KoShapePainter shapePainter;
+    KoShapePainter shapePainter( getPaintingStrategy() );
     if ( displayMasterShapes() ) {
         shapePainter.setShapes( masterPage()->iterator() );
         shapePainter.paintShapes( painter, zoomHandler );

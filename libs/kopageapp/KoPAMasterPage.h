@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2009 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -54,12 +54,12 @@ public:
     /// reimplemented
     virtual void setDisplayMasterBackground( bool display );
 
-    /// reimplemented
-    virtual QPixmap thumbnail( const QSize& size = QSize( 512, 512 ) );
-
 protected:
     /// Reimplemented from KoPageBase
     virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );
+
+    /// reimplemented
+    virtual QPixmap generateThumbnail( const QSize& size = QSize( 512, 512 ) );
 
     KoPageLayout m_pageLayout;
 };

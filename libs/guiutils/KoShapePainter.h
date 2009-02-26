@@ -28,6 +28,7 @@
 
 class KoShape;
 class KoViewConverter;
+class KoShapeManagerPaintingStrategy;
 class QPainter;
 class QImage;
 
@@ -37,7 +38,7 @@ class QImage;
 class KOGUIUTILS_EXPORT KoShapePainter
 {
 public:
-    KoShapePainter();
+    KoShapePainter(KoShapeManagerPaintingStrategy * strategy = 0);
     ~KoShapePainter();
     
     /**

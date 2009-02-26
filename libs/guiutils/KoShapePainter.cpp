@@ -22,6 +22,7 @@
 
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
+#include <KoShapeManagerPaintingStrategy.h>
 #include <KoZoomHandler.h>
 #include <KoUnit.h>
 #include <KoShape.h>
@@ -114,9 +115,13 @@ public:
     SimpleCanvas * canvas;
 };
 
-KoShapePainter::KoShapePainter()
+KoShapePainter::KoShapePainter(KoShapeManagerPaintingStrategy * strategy)
     : d( new Private() )
 {
+    if (strategy) {
+        strategy->setShapeManager(d->canvas->shapeManager());
+        d->canvas->shapeManager()->setPaintingStrategy(strategy);
+    }
 }
 
 KoShapePainter::~KoShapePainter()

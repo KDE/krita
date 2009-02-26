@@ -1,7 +1,7 @@
 /*
  *  Copyright (c) 2003 Boudewijn Rempt (boud@valdyas.org)
  *
- *  This program is free software; you can grayistribute it and/or modify
+ *  This program is free software; you can distribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.

@@ -58,6 +58,8 @@ void KisChalkPaintOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) return;
 
+    dbgPlugins << info;
+
     dab = cachedDab();
     dab->clear();
 

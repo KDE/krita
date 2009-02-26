@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _BRUSH_H_
-#define _BRUSH_H_
+#ifndef _SPRAY_BRUSH_H_
+#define _SPRAY_BRUSH_H_
 
 #include <QVector>
 
@@ -75,6 +75,7 @@ private:
     bool m_jitterMovement;
     bool m_useParticles;
     qreal m_coverage;
+    // amount of jitter for movement
     qreal m_amount;
 };
 

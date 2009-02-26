@@ -37,6 +37,7 @@ SprayBrush::SprayBrush(const KoColor &inkColor)
 {
     m_inkColor = inkColor;
     m_counter = 0;
+    srand(time(0));
 }
 
 SprayBrush::SprayBrush()
@@ -49,7 +50,6 @@ SprayBrush::SprayBrush()
 
 void SprayBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color)
 {
-    srand(time(0));
     // jitter radius
     int tmpRadius = m_radius;
     if (m_jitterSize){
@@ -85,19 +85,19 @@ void SprayBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
     int opacity = 255;
     m_inkColor.setOpacity(opacity);
 
+	qreal angle;
+    qreal lengthX;
+    qreal lengthY;
     for (int i = 0;i<points;i++){
-        nx = (drand48() * m_radius * 2) - m_radius;
-        ny = (drand48() * m_radius * 2) - m_radius;
+		angle = drand48();
+        // different X and Y length??
+		lengthY = lengthX = drand48();
+        // I hope we live the are where sin and cos is not slow for spray
+        nx = (sin(angle * M_PI * 2) * m_radius * lengthX);
+        ny = (cos(angle * M_PI * 2) * m_radius * lengthY);
 
-        qreal distance = sqrt(nx*nx + ny*ny);
-        qreal weight = distance / m_radius; 
-
-        if ( (distance+0.5) > m_radius){
-            continue;
-        }
-
-        
-        if (m_useParticles){
+        if (m_useParticles)
+        {
             paintParticle(accessor,m_inkColor,nx + x, ny + y);
         }
         else
@@ -105,20 +105,13 @@ void SprayBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
             ix = (int)(nx + x + 0.5);
             iy = (int)(ny + y + 0.5);
             accessor.moveTo(ix, iy);
-/* 
-            int srcAlpha = dev->colorSpace()->alpha ( accessor.rawData() );
-            int dstAlpha = (255 * (1.0-weight));
-            dstAlpha = (dstAlpha + srcAlpha) % 255;
-            m_inkColor.setOpacity(dstAlpha);
-*/
             memcpy(accessor.rawData(), m_inkColor.data(), pixelSize);
         }
 
 
     }
-
+    // recover from jittering
     m_radius = tmpRadius;
-
 }
 
 SprayBrush::~SprayBrush()
@@ -140,6 +133,10 @@ void SprayBrush::paintParticle(KisRandomAccessor &writeAccessor,const KoColor &c
     int btr = ( fx )  * ( 1-fy ) * MAX_OPACITY;
     int bbl = ( 1-fx ) * ( fy )  * MAX_OPACITY;
     int bbr = ( fx )  * ( fy )  * MAX_OPACITY;
+
+    // this version overwrite pixels, e.g. when it sprays two particle next
+    // to each other, the pixel with lower opacity can override other pixel.
+    // Maybe some kind of compositing using here would be cool
 
     pcolor.setOpacity ( btl );
     writeAccessor.moveTo ( ipx  , ipy );

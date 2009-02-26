@@ -20,7 +20,6 @@
 #include "kis_spray_paintop_settings.h"
 
 #include <cmath>
-#include <math.h>
 
 #include <QRect>
 #include <QColor>
@@ -40,7 +39,6 @@
 #include <kis_selection.h>
 #include <kis_random_accessor.h>
 
-
 KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
     : KisPaintOp( painter )
     , m_settings( settings )
@@ -52,11 +50,29 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     m_sprayBrush.setJitterMovement( settings->jitterMovement() );
     m_sprayBrush.setUseParticles( settings->useParticles() );
     m_sprayBrush.setAmount( settings->amount() );
+
+    if (settings->radius() > 1)
+    {
+        m_ySpacing = m_xSpacing = settings->radius() * 0.5; // half of radius
+    } else
+    {
+        m_ySpacing = m_xSpacing = 1;
+    }
 }
 
 KisSprayPaintOp::~KisSprayPaintOp()
 {
 }
+
+double KisSprayPaintOp::spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
+        Q_UNUSED(pressure1);
+        Q_UNUSED(pressure2);
+        xSpacing = m_xSpacing;
+        ySpacing = m_ySpacing;
+        if (xSpacing >= ySpacing) return xSpacing;
+        else return ySpacing;
+}
+
 
 void KisSprayPaintOp::paintAt(const KisPaintInformation& info)
 {

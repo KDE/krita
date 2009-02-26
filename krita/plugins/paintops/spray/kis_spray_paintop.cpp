@@ -44,20 +44,23 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     , m_settings( settings )
     , m_image ( image )
 {
-    m_sprayBrush.setRadius( settings->radius() );
+    m_sprayBrush.setDiameter( settings->diameter() );
     m_sprayBrush.setCoverity( settings->coverage() );
     m_sprayBrush.setJitterSize( settings->jitterSize() );
     m_sprayBrush.setJitterMovement( settings->jitterMovement() );
     m_sprayBrush.setUseParticles( settings->useParticles() );
     m_sprayBrush.setAmount( settings->amount() );
-
-    if (settings->radius() > 1)
+    
+    
+    if ( (settings->diameter() * 0.5) > 1)
     {
-        m_ySpacing = m_xSpacing = settings->radius() * 0.5; // half of radius
+        m_ySpacing = m_xSpacing = settings->diameter() * 0.5 * settings->spacing();
     } else
     {
-        m_ySpacing = m_xSpacing = 1;
+        m_ySpacing = m_xSpacing = 1.0;
     }
+    m_spacing = m_xSpacing;
+
 }
 
 KisSprayPaintOp::~KisSprayPaintOp()
@@ -69,8 +72,8 @@ double KisSprayPaintOp::spacing(double & xSpacing, double & ySpacing, double pre
         Q_UNUSED(pressure2);
         xSpacing = m_xSpacing;
         ySpacing = m_ySpacing;
-        if (xSpacing >= ySpacing) return xSpacing;
-        else return ySpacing;
+
+        return m_spacing;
 }
 
 

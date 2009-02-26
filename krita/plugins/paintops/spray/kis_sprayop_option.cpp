@@ -46,9 +46,9 @@ KisSprayOpOption::~KisSprayOpOption()
     // delete m_options; 
 }
 
-int KisSprayOpOption::radius() const
+int KisSprayOpOption::diameter() const
 {
-    return m_options->radiusSpinBox->value();
+    return m_options->diameterSpinBox->value();
 }
 
 bool KisSprayOpOption::jitterSize() const
@@ -76,12 +76,18 @@ qreal KisSprayOpOption::amount() const
     return m_options->amountSpin->value();
 }
 
+qreal KisSprayOpOption::spacing() const
+{
+    return m_options->spacingKDNumInp->value();
+}
+
 
 void KisSprayOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty( "Spray/radius", radius() );
+    setting->setProperty( "Spray/diameter", diameter() );
     setting->setProperty( "Spray/coverage", coverage() );
     setting->setProperty( "Spray/amount", amount() );
+    setting->setProperty( "Spray/spacing", spacing() );
     setting->setProperty( "Spray/jitterSize", jitterSize() );
     setting->setProperty( "Spray/jitterMovement", jitterMovement() );
     setting->setProperty( "Spray/particles", useParticles() );
@@ -89,9 +95,10 @@ void KisSprayOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
 
 void KisSprayOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_options->radiusSpinBox->setValue( setting->getInt("Spray/radius") );
+    m_options->diameterSpinBox->setValue( setting->getInt("Spray/diameter") );
     m_options->coverageSpin->setValue( setting->getDouble("Spray/coverage") );
     m_options->amountSpin->setValue( setting->getDouble("Spray/amount") );
+    m_options->spacingKDNumInp->setValue( setting->getDouble("Spray/spacing") );
     m_options->jitterSizeBox->setChecked( setting->getBool("Spray/jitterSize") );
     m_options->jitterMoveBox->setChecked( setting->getBool("Spray/jitterMovement") );
     m_options->useParticlesBox->setChecked( setting->getBool("Spray/particles") );

@@ -57,7 +57,7 @@ private:
     KisImageSP m_image;
     KisPaintDeviceSP dab;
     SprayBrush m_sprayBrush;
-    double m_xSpacing, m_ySpacing;
+    double m_xSpacing, m_ySpacing, m_spacing;
 };
 
 #endif // KIS_SPRAY_PAINTOP_H_

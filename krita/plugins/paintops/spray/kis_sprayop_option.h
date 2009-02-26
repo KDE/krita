@@ -29,10 +29,12 @@ public:
     KisSprayOpOption();
     ~KisSprayOpOption();
 
-    int radius() const;
+    int diameter() const;
 
     qreal coverage() const;
     qreal amount() const;
+    qreal spacing() const;
+
     bool jitterMovement() const;
     bool jitterSize() const;
     bool useParticles() const;

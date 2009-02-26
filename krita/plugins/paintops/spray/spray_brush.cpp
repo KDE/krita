@@ -37,7 +37,7 @@ SprayBrush::SprayBrush(const KoColor &inkColor)
 {
     m_inkColor = inkColor;
     m_counter = 0;
-    srand(time(0));
+    srand48(time(0));
 }
 
 SprayBrush::SprayBrush()

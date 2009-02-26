@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>345</width>
-    <height>348</height>
+    <width>233</width>
+    <height>264</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -24,24 +24,24 @@
   <widget class="QWidget" name="layoutWidget" >
    <property name="geometry" >
     <rect>
-     <x>52</x>
-     <y>12</y>
+     <x>10</x>
+     <y>10</y>
      <width>207</width>
-     <height>157</height>
+     <height>229</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2" >
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout" >
       <item>
-       <widget class="QLabel" name="radiusLabel" >
+       <widget class="QLabel" name="diameterLabel" >
         <property name="text" >
-         <string>radius</string>
+         <string>diameter</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="radiusSpinBox" >
+       <widget class="QSpinBox" name="diameterSpinBox" >
         <property name="maximum" >
          <number>999</number>
         </property>
@@ -51,7 +51,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QSlider" name="radiusSlider" >
+       <widget class="QSlider" name="diameterSlider" >
         <property name="maximum" >
          <number>999</number>
         </property>
@@ -128,17 +128,61 @@
         </property>
        </widget>
       </item>
+      <item>
+       <spacer name="verticalSpacer" >
+        <property name="orientation" >
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType" >
+         <enum>QSizePolicy::Preferred</enum>
+        </property>
+        <property name="sizeHint" stdset="0" >
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2" >
+        <item>
+         <widget class="QLabel" name="spacingLabel" >
+          <property name="text" >
+           <string>spacing</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KDoubleNumInput" name="spacingKDNumInp" >
+          <property name="value" >
+           <double>0.250000000000000</double>
+          </property>
+          <property name="maximum" >
+           <double>5.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
      </layout>
     </item>
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KDoubleNumInput</class>
+   <extends>QWidget</extends>
+   <header>knuminput.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
-   <sender>radiusSpinBox</sender>
+   <sender>diameterSpinBox</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>radiusSpinBox</receiver>
+   <receiver>diameterSpinBox</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel" >
@@ -152,9 +196,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>radiusSpinBox</sender>
+   <sender>diameterSpinBox</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>radiusSlider</receiver>
+   <receiver>diameterSlider</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel" >
@@ -168,9 +212,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>radiusSlider</sender>
+   <sender>diameterSlider</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>radiusSpinBox</receiver>
+   <receiver>diameterSpinBox</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel" >

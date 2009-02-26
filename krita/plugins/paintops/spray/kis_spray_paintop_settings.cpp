@@ -67,9 +67,9 @@ void KisSprayPaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) con
     delete settings;
 }
 
-int KisSprayPaintOpSettings::radius() const
+int KisSprayPaintOpSettings::diameter() const
 {
-    return m_options->m_sprayOption->radius();
+    return m_options->m_sprayOption->diameter();
 }
 
 qreal KisSprayPaintOpSettings::coverage() const
@@ -80,6 +80,11 @@ qreal KisSprayPaintOpSettings::coverage() const
 qreal KisSprayPaintOpSettings::amount() const
 {
     return m_options->m_sprayOption->amount();
+}
+
+qreal KisSprayPaintOpSettings::spacing() const
+{
+    return m_options->m_sprayOption->spacing();
 }
 
 

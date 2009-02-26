@@ -274,6 +274,9 @@ void KoPAView::initActions()
         actionMenu->addAction(action);
     actionCollection()->addAction("insert_variable", actionMenu);
 
+    KActionMenu * am = new KActionMenu(i18n("Import slideshow"), this);
+    actionCollection()->addAction("import_slideshow", am);
+
     m_find = new KoFind( this, m_canvas->resourceProvider(), actionCollection() );
 }
 

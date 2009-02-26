@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007,2009 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,14 +28,14 @@ class KoShapeManagerPaintingStrategy::Private
 {
 public:
     Private(KoShapeManager * manager)
-            : shapeManager(manager) {
-    }
+    : shapeManager(manager)
+    {}
 
     KoShapeManager * shapeManager;
 };
 
 KoShapeManagerPaintingStrategy::KoShapeManagerPaintingStrategy(KoShapeManager * shapeManager)
-        : d(new KoShapeManagerPaintingStrategy::Private(shapeManager))
+: d(new KoShapeManagerPaintingStrategy::Private(shapeManager))
 {
 }
 
@@ -49,7 +49,9 @@ void KoShapeManagerPaintingStrategy::paint(KoShape * shape, QPainter &painter, c
     painter.save();
     painter.setMatrix(shape->absoluteTransformation(&converter) * painter.matrix());
 
-    d->shapeManager->paintShape(shape, painter, converter, forPrint);
+    if (d->shapeManager) {
+        d->shapeManager->paintShape(shape, painter, converter, forPrint);
+    }
 
     painter.restore();  // for the matrix
 }
@@ -58,6 +60,11 @@ void KoShapeManagerPaintingStrategy::adapt(KoShape * shape, QRectF & rect)
 {
     Q_UNUSED(shape);
     Q_UNUSED(rect);
+}
+
+void KoShapeManagerPaintingStrategy::setShapeManager(KoShapeManager * shapeManager)
+{
+    d->shapeManager = shapeManager;
 }
 
 KoShapeManager * KoShapeManagerPaintingStrategy::shapeManager()

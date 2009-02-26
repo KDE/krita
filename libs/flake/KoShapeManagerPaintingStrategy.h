@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007,2009 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -58,6 +58,16 @@ public:
      * @param rect rect which will be updated to give the rect the shape occupies.
      */
     virtual void adapt(KoShape * shape, QRectF & rect);
+
+    /**
+     * Set the shape manager
+     * 
+     * This is needed in case you cannot set the shape manager when creating the paiting strategy.
+     * It needs to be set before you paint otherwise nothing will be painted.
+     *
+     * @param shapeManager The shape manager to use in the painting startegy
+     */
+    void setShapeManager(KoShapeManager * shapeManager);
 
 protected:
     KoShapeManager * shapeManager();

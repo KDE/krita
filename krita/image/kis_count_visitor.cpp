@@ -20,7 +20,7 @@
 #include "kis_image.h"
 
 bool KisCountVisitor::inList(KisNode* node) {
-    foreach(const QString nodeType, m_nodeTypes) {
+    foreach(const QString& nodeType, m_nodeTypes) {
         if (node->inherits(nodeType.toAscii()))
             return true;
     }

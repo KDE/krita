@@ -65,7 +65,6 @@
 #include "dialogs/kis_dlg_adjustment_layer.h"
 #include "dialogs/kis_dlg_layer_properties.h"
 #include "dialogs/kis_dlg_generator_layer.h"
-#include "dialogs/kis_dlg_new_layer.h"
 #include "kis_doc2.h"
 #include "kis_filter_manager.h"
 #include "commands/kis_image_commands.h"

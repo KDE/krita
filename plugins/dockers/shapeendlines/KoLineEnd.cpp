@@ -27,7 +27,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoEndLine.h" 
+#include "KoLineEnd.h" 
 
 #include <QPixmap>
 #include <QIcon>
@@ -35,18 +35,18 @@
 #include <QPainter>
 
 
-KoEndLine::KoEndLine(QString name, QString path, QString view)
+KoLineEnd::KoLineEnd(QString name, QString path, QString view)
 {
   m_name = name;
   m_path = path;
   m_view = view;
 }
 
-KoEndLine::~KoEndLine()
+KoLineEnd::~KoLineEnd()
 {
 }
 
-QByteArray KoEndLine::generateSVG(QSize size, QString comment)
+QByteArray KoLineEnd::generateSVG(QSize size, QString comment)
 {
     QByteArray str("<?xml version=\"1.0\" standalone=\"no\"?>\
     <!--");
@@ -67,7 +67,7 @@ QByteArray KoEndLine::generateSVG(QSize size, QString comment)
     return str;
 }
 
-QIcon KoEndLine::drawIcon(QSize size, int proportion)
+QIcon KoLineEnd::drawIcon(QSize size, int proportion)
 {
     QSvgRenderer endLineRenderer;
     QPixmap endLinePixmap(size);
@@ -82,9 +82,9 @@ QIcon KoEndLine::drawIcon(QSize size, int proportion)
     return QIcon (endLinePixmap);
 }
 
-QString KoEndLine::name()
+QString KoLineEnd::name()
 {
   return m_name;
 }
 
-#include "KoEndLine.moc"
+#include "KoLineEnd.moc"

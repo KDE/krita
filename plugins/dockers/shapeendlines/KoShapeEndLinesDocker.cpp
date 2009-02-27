@@ -101,7 +101,7 @@ KoShapeEndLinesDocker::KoShapeEndLinesDocker()
 
             forEachElement(drawMarker, lineEndElement){
 
-                KoEndLine temp(drawMarker.attribute("display-name"),drawMarker.attribute("d"),drawMarker.attribute("viewBox"));
+                KoLineEnd temp(drawMarker.attribute("display-name"),drawMarker.attribute("d"),drawMarker.attribute("viewBox"));
 		m_endLineList.append(temp);
 
 		QIcon drawIcon(temp.drawIcon(m_iconSize, proportion));

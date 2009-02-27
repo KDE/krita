@@ -20,7 +20,7 @@ set(kofficedockers_SRCS
 
     shapeendlines/KoShapeEndLinesDocker.cpp
     shapeendlines/KoEndLinesDockerFactory.cpp
-    shapeendlines/KoEndLine.cpp
+    shapeendlines/KoLineEnd.cpp
 
     Plugin.cpp
 )

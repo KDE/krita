@@ -28,7 +28,7 @@
 #ifndef KOSHAPEENDLINESDOCKER_H
 #define KOSHAPEENDLINESDOCKER_H
 
-#include "KoEndLine.h"
+#include "KoLineEnd.h"
 #include <KoUnit.h>
 #include <KoXmlReader.h>
 #include <KoCanvasObserver.h>
@@ -70,7 +70,7 @@ private:
     QStringList m_nameEndLineList;
     QMap<QString, QString> m_pathEndLineMap;
     QMap<QString, QString> m_viewEndLineMap;
-    QList<KoEndLine> m_endLineList;
+    QList<KoLineEnd> m_endLineList;
 
 private:
     class Private;

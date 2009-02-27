@@ -26,8 +26,8 @@
 */ 
 
 
-#ifndef KOENDLINE_H
-#define KOENDLINE_H
+#ifndef KOLINEEND_H
+#define KOLINEEND_H
 
 #include <KoUnit.h>
 #include <KoXmlReader.h>
@@ -42,11 +42,11 @@ class KoShapeBorderModel;
 class KoCanvasController;
 class KoPathShape;
 
-class KoEndLine{
+class KoLineEnd{
 
 public:
-KoEndLine(QString name, QString path, QString view);
-virtual ~KoEndLine();
+KoLineEnd(QString name, QString path, QString view);
+virtual ~KoLineEnd();
 QIcon drawIcon(QSize size, int proportion);
 QString name();
 QByteArray generateSVG(QSize size, QString comment = QString());
@@ -58,5 +58,5 @@ QString m_view;
 
 };
 
-#endif // KOENDLINE_H
+#endif // KOLINEEND_H
 

@@ -412,7 +412,6 @@ void KisLayerBox::slotNodeActivated(const QModelIndex & node)
 void KisLayerBox::setUpdatesAndSignalsEnabled(bool enable)
 {
     setUpdatesEnabled(enable);
-    //doubleOpacity->setUpdatesEnabled(enable);
     m_wdgLayerBox->cmbComposite->setUpdatesEnabled(enable);
 
     m_wdgLayerBox->doubleOpacity->blockSignals(!enable);

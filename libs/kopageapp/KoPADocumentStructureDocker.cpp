@@ -603,11 +603,6 @@ void KoPADocumentStructureDocker::addPage()
 void KoPADocumentStructureDocker::contextMenuEvent(QContextMenuEvent* event)
 {
     QMenu menu( this );
-    // Connected to addPage 
-    menu.addAction( i18n( "Launch the presentation" ) );
-    menu.addAction( i18n( "Custom slide show" ) );
-    
-    menu.addSeparator();
     
     // Not connected yet
     menu.addAction( SmallIcon( "document-new" ), i18n("Add a new slide"), this, SLOT( addPage() ) );

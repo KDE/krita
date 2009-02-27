@@ -26,7 +26,7 @@ class QWidget;
  * The KisPresetChooser allows the user to select a preset from
  * the set of presets associated with the active paintop.
  *
- * XXX: extend the KoResourseChooser class to also make it
+ * XXX: extend the KoResourceChooser class to also make it
  * possible to show its items in various list forms.
  *
  */

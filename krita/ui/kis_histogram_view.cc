@@ -323,8 +323,6 @@ void KisHistogramView::updateHistogram()
         if (m_color) {
             color = m_channels.at(chan)->color();
             QLinearGradient gradient;
-//             gradient.setStart( 0, 0 );
-//             gradient.setFinalStop( 0, height );
             gradient.setColorAt( 0, Qt::white );
             gradient.setColorAt( 1, color );
             QBrush brush( gradient );

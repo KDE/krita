@@ -65,7 +65,6 @@ void KisImageManager::setup(KActionCollection * actionCollection)
 
 void KisImageManager::updateGUI()
 {
-    //bool enabled = m_view->image();
 }
 
 

@@ -960,7 +960,7 @@ QVector<quint8*> KisTiledDataManager::readPlanarBytes(QVector<qint32> channelsiz
 
     quint32 numPixels = w * h;
     int i = 0;
-    foreach(const qint32 channelsize, channelsizes) {
+    foreach(int channelsize, channelsizes) {
         planes.append(new quint8[ numPixels * channelsize ]);
         ++i;
     }

@@ -23,7 +23,6 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_generator_layer.cpp
     dialogs/kis_dlg_image_properties.cc
     dialogs/kis_dlg_layer_properties.cc
-    dialogs/kis_dlg_new_layer.cc 
     dialogs/kis_dlg_preferences.cc
     dialogs/kis_dlg_transformation_effect.cpp
     flake/kis_layer_container_shape.cc 
@@ -60,7 +59,6 @@ set(kritaui_LIB_SRCS
     kis_image_manager.cc
     kis_image_view_converter.cpp
     kis_import_catcher.cc 
-    kis_label_cursor_pos.cc
     kis_layer_box.cpp 
     kis_layer_manager.cc
     kis_mask_manager.cc

@@ -106,16 +106,6 @@ public:
     qint32 swappiness() const;
     void setSwappiness(qint32 swappiness);
 
-    qint32 getPressureCorrection();
-    void setPressureCorrection(qint32 correction);
-    qint32 getDefaultPressureCorrection();
-
-    bool tabletDeviceEnabled(const QString& tabletDeviceName) const;
-    void setTabletDeviceEnabled(const QString& tabletDeviceName, bool enabled);
-
-    qint32 tabletDeviceAxis(const QString& tabletDeviceName, const QString& axisName, qint32 defaultAxis) const;
-    void setTabletDeviceAxis(const QString& tabletDeviceName, const QString& axisName, qint32 axis) const;
-
     quint32 getGridMainStyle();
     void setGridMainStyle(quint32 v);
     quint32 getGridSubdivisionStyle();

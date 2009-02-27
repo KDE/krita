@@ -58,11 +58,6 @@ void KisCanvasResourceProvider::setCanvasResourceProvider(KoCanvasResourceProvid
 
     v.setValue(KoColor(Qt::white, m_view->image()->colorSpace()));
     m_resourceProvider->setResource(KoCanvasResource::BackgroundColor, v);
-#if 0 // XXX: set a default paintop preset
-    m_resourceProvider->setResource(CurrentPaintop, KoID("paintbrush", "Paintbrush"));
-    v = qVariantFromValue((void *) 0);
-    m_resourceProvider->setResource(CurrentPaintopSettings, v);
-#endif
 
     resetDisplayProfile();
 
@@ -184,7 +179,6 @@ void KisCanvasResourceProvider::slotGradientActivated(KoResource *res)
 
 void KisCanvasResourceProvider::slotPaintOpPresetActivated(const KisPaintOpPresetSP preset)
 {
-    dbgUI << "KisCanvasResourceProvider::slotPaintOpPresetActivated " << preset;
     Q_ASSERT( preset->valid() );
     Q_ASSERT( !preset->paintOp().id().isEmpty() );
     Q_ASSERT( preset->settings() );
@@ -224,13 +218,6 @@ void KisCanvasResourceProvider::slotSetBGColor(const KoColor& c)
 
 void KisCanvasResourceProvider::slotNodeActivated(const KisNodeSP node)
 {
-    if (node) {
-        dbgUI << " node activated: " << node->name();
-    }
-    else {
-        dbgUI << " null node activated";
-    }
-
     QVariant v;
     v.setValue(node);
     m_resourceProvider->setResource(CurrentKritaNode, v);

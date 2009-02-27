@@ -387,7 +387,7 @@ void GridSettingsTab::linkSpacingToggled(bool b)
 
 //---------------------------------------------------------------------------------------------------
 
-PreferencesDialog::PreferencesDialog(QWidget* parent, const char* name)
+KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
         : KPageDialog(parent)
 {
     Q_UNUSED(name);
@@ -435,11 +435,11 @@ PreferencesDialog::PreferencesDialog(QWidget* parent, const char* name)
 
 }
 
-PreferencesDialog::~PreferencesDialog()
+KisDlgPreferences::~KisDlgPreferences()
 {
 }
 
-void PreferencesDialog::slotDefault()
+void KisDlgPreferences::slotDefault()
 {
     m_general->setDefault();
     m_colorSettings->setDefault();
@@ -450,11 +450,11 @@ void PreferencesDialog::slotDefault()
     m_gridSettings->setDefault();
 }
 
-bool PreferencesDialog::editPreferences()
+bool KisDlgPreferences::editPreferences()
 {
-    PreferencesDialog* dialog;
+    KisDlgPreferences* dialog;
 
-    dialog = new PreferencesDialog();
+    dialog = new KisDlgPreferences();
     bool baccept = (dialog->exec() == Accepted);
     if (baccept) {
         KisConfig cfg;

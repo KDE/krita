@@ -634,7 +634,7 @@ void KisView2::slotUpdateFullScreen(bool toggle)
 
 void KisView2::slotPreferences()
 {
-    if (PreferencesDialog::editPreferences()) {
+    if (KisDlgPreferences::editPreferences()) {
         KisConfigNotifier::instance()->notifyConfigChanged();
         m_d->resourceProvider->resetDisplayProfile();
 

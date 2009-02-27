@@ -258,7 +258,7 @@ void KisSelectionManager::updateGUI()
 
         enable = l && !l->userLocked() && l->visible();
 #if 0 // XXX_SELECTION (how are we going to handle deselect and
-        // reselectt now?
+        // reselect now?
         if (l->inherits("KisAdjustmentLayer")
                 if (dev && !adjLayer)
                     m_reselect->setEnabled(dev->selectionDeselected());

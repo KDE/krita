@@ -92,7 +92,6 @@ set(kritaimage_LIB_SRCS
    kis_base_processor.cpp
    kis_basic_math_toolbox.cpp
    kis_bookmarked_configuration_manager.cc
-   kis_bottom_up_update_strategy.cpp
    kis_boundary.cc
    kis_clone_layer.cpp
    kis_colorspace_convert_visitor.cpp

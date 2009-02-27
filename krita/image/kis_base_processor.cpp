@@ -28,7 +28,14 @@
 
 struct KisBaseProcessor::Private {
     Private()
-            : bookmarkManager(0), supportsPainting(false), supportsPreview(true), supportsAdjustmentLayers(false), supportsIncrementalPainting(true), supportsThreading(true), colorSpaceIndependence(FULLY_INDEPENDENT) {
+        : bookmarkManager(0)
+        , supportsPainting(false)
+        , supportsPreview(true)
+        , supportsAdjustmentLayers(false)
+        , supportsIncrementalPainting(true)
+        , supportsThreading(true)
+        , colorSpaceIndependence(FULLY_INDEPENDENT)
+    {
     }
 
     KisBookmarkedConfigurationManager* bookmarkManager;

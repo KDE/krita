@@ -194,7 +194,7 @@ void KisLayer::setDirty(const QRect & rect)
 {
     QRect dr = rect;
     QList<KisMaskSP> masks = effectMasks();
-    foreach( const KisMaskSP mask, masks)
+    foreach( const KisMaskSP& mask, masks)
     {
         dr |= mask->adjustedDirtyRect( dr );
     }
@@ -308,7 +308,7 @@ QList<KisMaskSP> KisLayer::effectMasks() const
 {
     QList<KisNodeSP> nodes = childNodes(QStringList("KisEffectMask"), KoProperties());
     QList<KisMaskSP> masks;
-    foreach(const KisNodeSP node,  nodes) {
+    foreach(const KisNodeSP& node,  nodes) {
         KisMaskSP mask = dynamic_cast<KisMask*>(const_cast<KisNode*>(node.data()));
         if (mask)
             masks.append(mask);

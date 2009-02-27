@@ -34,7 +34,7 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kparts/componentfactory.h>
-
+#include <kconfiggroup.h>
 
 #include <KoPluginLoader.h>
 #include <KoShapeRegistry.h>
@@ -110,11 +110,11 @@ const KComponentData &KisFactory2::componentData()
 
         s_instance->dirs()->addResourceType("krita_template", "data", "krita/templates");
 
-        // XXX: Are these obsolete?
-        s_instance->dirs()->addResourceType("kis", "data", "krita/");
+	// for cursors
         s_instance->dirs()->addResourceType("kis_pics", "data", "krita/pics/");
+
+	// for images in the paintop box
         s_instance->dirs()->addResourceType("kis_images", "data", "krita/images/");
-        s_instance->dirs()->addResourceType("toolbars", "data", "koffice/toolbar/");
 
         s_instance->dirs()->addResourceType("kis_profiles", "data", "krita/profiles/");
 
@@ -122,6 +122,27 @@ const KComponentData &KisFactory2::componentData()
 
         // Tell the iconloader about share/apps/koffice/icons
         KIconLoader::global()->addAppDir("koffice");
+
+        {
+            KConfigGroup group( KGlobal::config(), "KoShapeCollection" );
+            if ( !group.hasKey( "QuickShapes" ) ) {
+                group.writeEntry( "QuickShapes", "ArtisticText,TextShapeID,DivineProportionShapeID,KoEllipseShape,KoRectangleShape" );
+            }
+
+        }
+
+        {
+            // XXX: This state is taken from a kritarc where the docker constellation was configured by hand to look
+            //      like the krita 1.6 configuration. Setting this state if none is present seems to work, but there's
+            //      still hte versioning problem to be accounted for.
+            QString state = "AAAA/wAAAAD9AAAAAgAAAAAAAAAzAAACK/wCAAAAAfsAAAAOAFQAbwBvAGwAQgBvAHgBAAAAQwAAAisAAABGAP///wAAAAEAAAEHAAACK/wCAAAAEfwAAABDAAAAwwAAALkBAAAb+gAAAAACAAAABPsAAAAuAEsAcgBpAHQAYQBTAGgAYQBwAGUALwBLAGkAcwBUAG8AbwBsAEIAcgB1AHMAaAEAAAAA/////wAAAJ0A////+wAAABoASwBpAHMAQgBpAHIAZABlAHkAZQBCAG8AeAEAAAAA/////wAAADAA////+wAAACoASwBvAFQAbwBvAGwATwBwAHQAaQBvAG4AcwBEAG8AYwBrAGUAcgAgADgBAAAAAP////8AAAAAAAAAAPsAAAAmAEsAbwBUAG8AbwBsAE8AcAB0AGkAbwBuAHMARABvAGMAawBlAHIBAAAAAP////8AAAAAAAAAAPwAAAEmAAAAxwAAAAAA////+v////8CAAAAA/sAAAAaAEsAbwBDAG8AbABvAHIARABvAGMAawBlAHIAAAAAAP////8AAACgAP////sAAAAgAEsAaQBzAFAAYQBsAGUAdAB0AGUARABvAGMAawBlAHIAAAAAAP////8AAACbAP////sAAAAiAFMAdAByAG8AawBlACAAUAByAG8AcABlAHIAdABpAGUAcwAAAAAA/////wAAAKIA/////AAAAQkAAAB5AAAAZQAAAIX6AAAAAQEAAAAC+wAAAC4ASwBvAFMAaABhAHAAZQBDAG8AbABsAGUAYwB0AGkAbwBuAEQAbwBjAGsAZQByAQAAAAD/////AAABBwD////7AAAAJABTAG0AYQBsAGwAQwBvAGwAbwByAFMAZQBsAGUAYwB0AG8AcgEAAAI+AAAA4gAAAFYA////+wAAABYASwBpAHMATABhAHkAZQByAEIAbwB4AQAAAYUAAADpAAAAsQD////7AAAAIgBTAGgAYQBkAG8AdwAgAFAAcgBvAHAAZQByAHQAaQBlAHMAAAAAAP////8AAACJAP////sAAAAgAFMAaABhAHAAZQAgAFAAcgBvAHAAZQByAHQAaQBlAHMAAAAAAP////8AAAAUAP////sAAAAkAFMAaQBtAHAAbABlACAAVABlAHgAdAAgAEUAZABpAHQAbwByAAAAAAD/////AAABNgD////7AAAAEgBTAGMAcgBpAHAAdABpAG4AZwAAAAAA/////wAAAHQA////+wAAADAASwBpAHMAVAByAGkAYQBuAGcAbABlAEMAbwBsAG8AcgBTAGUAbABlAGMAdABvAHIAAAACnQAAAHgAAAB4AP////sAAAAqAFMAcABlAGMAaQBmAGkAYwBDAG8AbABvAHIAUwBlAGwAZQBjAHQAbwByAAAAArMAAADVAAAAigD////7AAAAGgBTAGgAYQBwAGUAUwBlAGwAZQBjAHQAbwByAAAAAAD/////AAAAPgD////7AAAAKgBLAG8AVABvAG8AbABPAHAAdABpAG8AbgBzAEQAbwBjAGsAZQByACAAMwAAAAJgAAAAHAAAAAAAAAAA+wAAAC4ASwBpAHMAUABhAGkAbgB0AGUAcgBsAHkATQBpAHgAZQByAEQAbwBjAGsAZQByAAAAAAD/////AAAAbgD////7AAAALABLAG8AVABvAG8AbABPAHAAdABpAG8AbgBzAEQAbwBjAGsAZQByACAAMQAzAAAAAAD/////AAAAAAAAAAD7AAAAFgBTAHQAeQBsAGUARABvAGMAawBlAHIAAAAAAP////8AAABPAP////v/////AAAAAlUAAAAZAAAAFAD////7AAAAIABLAGkAcwBIAGkAcwB0AG8AZwByAGEAbQBEAG8AYwBrAAAAAAD/////AAAAeAAAAHgAAAHgAAACKwAAAAQAAAAEAAAACAAAAAj8AAAAAQAAAAIAAAACAAAAFgBtAGEAaQBuAFQAbwBvAGwAQgBhAHIBAAAAAAAAAI0AAAAAAAAAAAAAAB4AQgByAHUAcwBoAGUAcwBBAG4AZABTAHQAdQBmAGYBAAAAjQAAApMAAAAAAAAAAA==";
+
+            KConfigGroup group(KGlobal::config(), "krita");
+            if (!group.hasKey("State")) {
+                group.writeEntry("State", state);
+            }
+        }
+
     }
 
     return *s_instance;

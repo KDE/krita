@@ -196,12 +196,16 @@ install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-#install( FILES
+install( FILES
+    canvas/kis_canvas2.h
+    canvas/kis_canvas_decoration.h
+    tool/kis_tool.h
+    kis_cursor.h
+    kis_view2.h
 #    kis_cmb_composite.h
 #    kis_cmb_idlist.h
 #    kis_color_cup.h
 #    kis_config.h
-#    kis_cursor.h
 #    kis_double_click_event.h
 #    kis_double_widget.h
 #    kis_filter_manager.h
@@ -220,7 +224,6 @@ install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 #    kis_paintop_box.h
 #    kis_palette_widget.h
 #    kis_previewwidget.h
-#    kis_tool.h
 #    kis_tool_non_paint.h
 #    kis_tool_paint.h
 #    kis_tool_freehand.h
@@ -231,4 +234,4 @@ install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 #    kobirdeyepanel.h
 #    KoInputDevice.h
 #    canvas/kis_perspective_grid_manager.h
-#    DESTINATION ${INCLUDE_INSTALL_DIR})
+   DESTINATION ${INCLUDE_INSTALL_DIR})

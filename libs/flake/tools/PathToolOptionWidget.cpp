@@ -37,7 +37,9 @@ PathToolOptionWidget::PathToolOptionWidget(KoPathTool *tool, QWidget *parent)
     widget.breakPoint->setDefaultAction(tool->action("path-break-point"));
     widget.breakSegment->setDefaultAction(tool->action("path-break-segment"));
     widget.joinSegment->setDefaultAction(tool->action("pathpoint-join"));
-    widget.mergePoints->setDefaultAction(tool->action("pathpoint-merge"));
+    // TODO: reenable again when action is implemented
+    //widget.mergePoints->setDefaultAction(tool->action("pathpoint-merge"));
+    widget.mergePoints->setVisible(false);
 
     connect(widget.convertToPath, SIGNAL(released()), tool->action("convert-to-path"), SLOT(trigger()));
 }

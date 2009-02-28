@@ -35,10 +35,10 @@ public:
     ~Private() {
         if (isSeparated && controller) {
             foreach(KoPathShape* p, paths)
-            delete p;
+                delete p;
         } else {
             foreach(KoPathShape* p, separatedPaths)
-            delete p;
+                delete p;
         }
     }
 
@@ -76,12 +76,12 @@ void KoPathSeparateCommand::redo()
 
     if (d->controller) {
         foreach(KoPathShape* p, d->paths)
-        d->controller->removeShape(p);
+            d->controller->removeShape(p);
         foreach(KoPathShape *p, d->separatedPaths)
-        d->controller->addShape(p);
+            d->controller->addShape(p);
     }
     foreach(KoPathShape* p, d->paths)
-    p->update();
+        p->update();
 }
 
 void KoPathSeparateCommand::undo()
@@ -89,13 +89,13 @@ void KoPathSeparateCommand::undo()
     QUndoCommand::undo();
     if (d->controller) {
         foreach(KoPathShape *p, d->separatedPaths)
-        d->controller->removeShape(p);
+            d->controller->removeShape(p);
         foreach(KoPathShape* p, d->paths)
-        d->controller->addShape(p);
+            d->controller->addShape(p);
     }
 
     d->isSeparated = false;
 
     foreach(KoPathShape* p, d->paths)
-    p->update();
+        p->update();
 }

@@ -189,19 +189,18 @@ bool KoShapePainter::paintShapes( QImage & image )
 QRectF KoShapePainter::contentRect()
 {
     QRectF bound;
-    foreach( KoShape * shape, d->canvas->shapeManager()->shapes() )
-    {
-        if( ! shape->isVisible( true ) )
+    foreach(KoShape * shape, d->canvas->shapeManager()->shapes()) {
+        if (! shape->isVisible( true ))
             continue;
-        if( dynamic_cast<KoShapeGroup*>( shape ) )
+        if (dynamic_cast<KoShapeGroup*>(shape))
             continue;
 
         QRectF shapeRect = shape->boundingRect();
 
-        if( bound.isEmpty() )
+        if (bound.isEmpty())
             bound = shapeRect;
         else
-            bound = bound.united( shapeRect );
+            bound = bound.united(shapeRect);
     }
     return bound;
 }

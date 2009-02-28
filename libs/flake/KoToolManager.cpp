@@ -188,7 +188,7 @@ void KoToolManager::setup()
 
     // connect to all tools so we can hear their button-clicks
     foreach(ToolHelper *tool, d->tools)
-    connect(tool, SIGNAL(toolActivated(ToolHelper*)), this, SLOT(toolActivated(ToolHelper*)));
+        connect(tool, SIGNAL(toolActivated(ToolHelper*)), this, SLOT(toolActivated(ToolHelper*)));
 
     // load pluggable input devices
     KoDeviceRegistry::instance();

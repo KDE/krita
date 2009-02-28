@@ -250,8 +250,8 @@ int KoSelection::count() const
 {
     int count = 0;
     foreach(KoShape *shape, d->selectedShapes)
-    if (dynamic_cast<KoShapeGroup*>(shape) == 0)
-        ++count;
+        if (dynamic_cast<KoShapeGroup*>(shape) == 0)
+            ++count;
     return count;
 }
 
@@ -311,8 +311,8 @@ bool KoSelection::isSelected(const KoShape *object) const
         return true;
 
     foreach(KoShape *shape, d->selectedShapes)
-    if (shape == object)
-        return true;
+        if (shape == object)
+            return true;
 
     return false;
 }

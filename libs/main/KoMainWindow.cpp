@@ -578,7 +578,7 @@ void KoMainWindow::saveRecentFiles()
     // Tell all windows to reload their list, after saving
     // Doesn't work multi-process, but it's a start
     foreach(KMainWindow* window, KMainWindow::memberList())
-    static_cast<KoMainWindow *>(window)->reloadRecentFileList();
+        static_cast<KoMainWindow *>(window)->reloadRecentFileList();
 }
 
 void KoMainWindow::reloadRecentFileList()
@@ -1072,7 +1072,7 @@ void KoMainWindow::closeEvent(QCloseEvent *e)
         setRootDocument(0L);
         if (!d->m_dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency
             foreach(QDockWidget* dockWidget, d->m_dockWidgetMap)
-            dockWidget->setVisible(d->m_dockWidgetVisibilityMap.value(dockWidget));
+                dockWidget->setVisible(d->m_dockWidgetVisibilityMap.value(dockWidget));
         }
         KParts::MainWindow::closeEvent(e);
     } else
@@ -1429,11 +1429,12 @@ void KoMainWindow::showToolbar(const char * tbName, bool shown)
         tb->hide();
 
     // Update the action appropriately
-    foreach(QAction* action, d->m_toolbarList)
-    if (action->objectName() != tbName) {
-        //kDebug(30003) <<"KoMainWindow::showToolbar setChecked" << shown;
-        static_cast<KToggleAction *>(action)->setChecked(shown);
-        break;
+    foreach(QAction* action, d->m_toolbarList) {
+        if (action->objectName() != tbName) {
+            //kDebug(30003) <<"KoMainWindow::showToolbar setChecked" << shown;
+            static_cast<KToggleAction *>(action)->setChecked(shown);
+            break;
+        }
     }
 }
 

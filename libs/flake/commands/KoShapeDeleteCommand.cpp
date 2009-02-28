@@ -37,7 +37,7 @@ public:
             return;
 
         foreach(KoShape *shape, shapes)
-        delete shape;
+            delete shape;
     }
 
     KoShapeControllerBase *controller; ///< the shape controller to use for removing/readding

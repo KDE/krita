@@ -51,7 +51,7 @@ public:
             Q_ASSERT(factory);
             int z = 0;
             foreach(KoShape *sh, canvas->shapeManager()->shapes())
-            z = qMax(z, sh->zIndex());
+                z = qMax(z, sh->zIndex());
             shape->setZIndex(z + 1);
 
             // show config dialog.
@@ -98,7 +98,7 @@ public:
                     return 0;
                 }
                 foreach(KoShapeConfigWidgetBase *widget, widgets)
-                widget->save();
+                    widget->save();
             }
             delete dialog;
         }

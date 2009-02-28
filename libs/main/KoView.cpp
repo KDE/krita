@@ -190,7 +190,7 @@ KoView::KoView(KoDocument *document, QWidget *parent)
 
     actionCollection()->addAssociatedWidget(this);
     foreach(QAction* action, actionCollection()->actions())
-    action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+        action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 }
 
 KoView::~KoView()

@@ -208,7 +208,7 @@ void KoPathShape::clear()
 {
     foreach(KoSubpath *subpath, m_subpaths) {
         foreach(KoPathPoint *point, *subpath)
-        delete point;
+            delete point;
         delete subpath;
     }
     m_subpaths.clear();
@@ -844,7 +844,7 @@ bool KoPathShape::join(int subpathIndex)
 
     // append the second subpath to the first
     foreach(KoPathPoint * p, *nextSubpath)
-    subpath->append(p);
+        subpath->append(p);
 
     // remove the nextSubpath from path
     m_subpaths.removeAt(subpathIndex + 1);

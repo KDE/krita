@@ -301,7 +301,7 @@ KoDocument::~KoDocument()
     // Tell our views that the document is already destroyed and
     // that they shouldn't try to access it.
     foreach(KoView* view, d->m_views)
-    view->setDocumentDeleted();
+        view->setDocumentDeleted();
 
     delete d->m_startUpWidget;
     d->m_startUpWidget = 0;
@@ -627,7 +627,7 @@ void KoDocument::setReadWrite(bool readwrite)
     KParts::ReadWritePart::setReadWrite(readwrite);
 
     foreach(KoView* view, d->m_views)
-    view->updateReadWrite(readwrite);
+        view->updateReadWrite(readwrite);
 
     Q3PtrListIterator<KoDocumentChild> dIt(d->m_children);
     for (; dIt.current(); ++dIt)
@@ -719,18 +719,19 @@ const Q3PtrList<KoDocumentChild>& KoDocument::children() const
 
 KParts::Part *KoDocument::hitTest(QWidget *widget, const QPoint &globalPos)
 {
-    foreach(KoView* view, d->m_views)
-    if (static_cast<QWidget *>(view) == widget) {
-        QPoint canvasPos(view->canvas()->mapFromGlobal(globalPos));
-        canvasPos.rx() += view->canvasXOffset();
-        canvasPos.ry() += view->canvasYOffset();
+    foreach(KoView* view, d->m_views) {
+        if (static_cast<QWidget *>(view) == widget) {
+            QPoint canvasPos(view->canvas()->mapFromGlobal(globalPos));
+            canvasPos.rx() += view->canvasXOffset();
+            canvasPos.ry() += view->canvasYOffset();
 
-        KParts::Part *part = view->hitTest(canvasPos);
-        if (part)
-            return part;
+            KParts::Part *part = view->hitTest(canvasPos);
+            if (part)
+                return part;
+        }
     }
 
-    return 0L;
+    return 0;
 }
 
 KoDocument* KoDocument::hitTest(const QPoint &pos, KoView* view, const QMatrix &matrix)

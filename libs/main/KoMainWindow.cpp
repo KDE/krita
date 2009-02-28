@@ -82,10 +82,6 @@ public:
         setSelectionPolicy(KParts::PartManager::TriState);
         setAllowNestedParts(true);
         setIgnoreScrollBars(true);
-        // Allow right-click on embedded objects (without activating them)
-        // But beware: this means right-click on parent, from embedded object,
-        // doesn't make the parent active first...
-        setActivationButtonMask(Qt::LeftButton | Qt::MidButton);
     }
     virtual bool eventFilter(QObject *obj, QEvent *ev) {
         if (!obj->isWidgetType() || ::qobject_cast<KoFrame *>(obj))

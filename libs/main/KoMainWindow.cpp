@@ -1437,10 +1437,12 @@ void KoMainWindow::showToolbar(const char * tbName, bool shown)
 void KoMainWindow::slotSplitView()
 {
     d->m_splitted = true;
-    d->m_rootViews.append(d->m_rootDoc->createView(d->m_splitter));
-    d->m_rootViews.current()->show();
-    d->m_rootViews.current()->setPartManager(d->m_manager);
-    d->m_manager->setActivePart(d->m_rootDoc, d->m_rootViews.current());
+    KoView *current = d->m_rootViews.current();
+    KoView *newView = d->m_rootDoc->createView(d->m_splitter);
+    d->m_rootViews.append(newView);
+    current->show();
+    current->setPartManager(d->m_manager);
+    d->m_manager->setActivePart(d->m_rootDoc, current);
     d->m_removeView->setEnabled(true);
     d->m_orientation->setEnabled(true);
 }

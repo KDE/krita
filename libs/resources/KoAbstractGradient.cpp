@@ -1,6 +1,7 @@
 /*
     Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
     Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
+    Copyright (c) 2009 Jan Hambrecht <jaham@gmx.net>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -82,26 +83,50 @@ QImage KoAbstractGradient::generatePreview(int width, int height) const
 {
     QImage img(width, height, QImage::Format_RGB32);
 
+    const int checkerSize = 4;
+    const int checkerSize_2 = 2*checkerSize;
+    const int darkBackground = 128;
+    const int lightBackground = 128 + 63;
+
+    QRgb * lineA = reinterpret_cast<QRgb*>( img.scanLine(0) );
+    QRgb * lineB = reinterpret_cast<QRgb*>( img.scanLine(checkerSize) );
+
     KoColor c;
     QColor color;
-    for (int x = 0; x < img.width(); x++) {
+    // first create the two reference lines
+    for (int x = 0; x < img.width(); ++x) {
 
         qreal t = static_cast<qreal>(x) / (img.width() - 1);
         colorAt(c, t);
         c.toQColor( &color );
-        qreal alpha = static_cast<qreal>(color.alpha()) / OPACITY_OPAQUE;
+        const qreal alpha = color.alphaF();
 
-        for (int y = 0; y < img.height(); y++) {
-            int backgroundRed = 128 + 63 * ((x / 4 + y / 4) % 2);
-            int backgroundGreen = backgroundRed;
-            int backgroundBlue = backgroundRed;
+        int darkR = static_cast<int>((1 - alpha) * darkBackground + alpha * color.red() + 0.5);
+        int darkG = static_cast<int>((1 - alpha) * darkBackground + alpha * color.green() + 0.5);
+        int darkB = static_cast<int>((1 - alpha) * darkBackground + alpha * color.blue() + 0.5);
 
-            int red = static_cast<int>((1 - alpha) * backgroundRed + alpha * color.red() + 0.5);
-            int green = static_cast<int>((1 - alpha) * backgroundGreen + alpha * color.green() + 0.5);
-            int blue = static_cast<int>((1 - alpha) * backgroundBlue + alpha * color.blue() + 0.5);
+        int lightR = static_cast<int>((1 - alpha) * lightBackground + alpha * color.red() + 0.5);
+        int lightG = static_cast<int>((1 - alpha) * lightBackground + alpha * color.green() + 0.5);
+        int lightB = static_cast<int>((1 - alpha) * lightBackground + alpha * color.blue() + 0.5);
 
-            img.setPixel(x, y, qRgb(red, green, blue));
-        }
+        bool defColor = (x % checkerSize_2) < checkerSize;
+
+        if( lineA )
+            lineA[x] = defColor ? qRgb(darkR, darkG, darkB) : qRgb(lightR, lightG, lightB);
+        if( lineB )
+            lineB[x] = defColor ? qRgb(lightR, lightG, lightB) : qRgb(darkR, darkG, darkB);
+    }
+
+    int bytesPerLine = img.bytesPerLine();
+
+    // now copy lines accordingly
+    for (int y = 0; y < img.height(); ++y ) {
+        bool firstLine = (y % checkerSize_2) < checkerSize;
+        QRgb * line = reinterpret_cast<QRgb*>( img.scanLine(y) );
+        if (line == lineA || line == lineB)
+            continue;
+
+        memcpy(line, firstLine ? lineA : lineB, bytesPerLine);
     }
 
     return img;
@@ -116,6 +141,5 @@ void KoAbstractGradient::updatePreview()
 {
     d->img = generatePreview( PREVIEW_WIDTH, PREVIEW_HEIGHT );
 }
-
 
 #include "KoAbstractGradient.moc"

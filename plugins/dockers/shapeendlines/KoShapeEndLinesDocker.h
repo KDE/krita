@@ -40,6 +40,7 @@
 class KoShapeBorderModel;
 class KoCanvasController;
 class KoLineEnd;
+class QComboBox;
 
 /// A docker for setting properties of end lines
 class KoShapeEndLinesDocker : public QDockWidget, public KoCanvasObserver
@@ -73,8 +74,8 @@ private:
     QList<KoLineEnd> m_endLineList;
 
 private:
-    class Private;
-    Private * const d;
+    QComboBox * m_beginEndLineComboBox;
+    QComboBox * m_endEndLineComboBox;
 };
 
 #endif // KOSHAPEENDLINESDOCKER_H

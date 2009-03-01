@@ -64,16 +64,7 @@
 #include <QPixmap>
 
 
-class KoShapeEndLinesDocker::Private
-{
-public:
-    Private() {}
-    QComboBox * beginEndLineComboBox;
-    QComboBox * endEndLineComboBox;
-};
-
 KoShapeEndLinesDocker::KoShapeEndLinesDocker()
-    : d( new Private() )
 {
     setWindowTitle( i18n( "End Lines" ) );
 
@@ -85,12 +76,12 @@ KoShapeEndLinesDocker::KoShapeEndLinesDocker()
     m_iconH = 20;
     m_iconSize.setHeight(m_iconH);
     m_iconSize.setWidth(m_iconW);
-    d->beginEndLineComboBox = new QComboBox( mainWidget );
-    d->beginEndLineComboBox->setIconSize(m_iconSize);
-    d->beginEndLineComboBox->addItem(QIcon(),"      None");
-    d->endEndLineComboBox = new QComboBox( mainWidget );
-    d->endEndLineComboBox->setIconSize(m_iconSize);
-    d->endEndLineComboBox->addItem(QIcon(),"      None");
+    m_beginEndLineComboBox = new QComboBox( mainWidget );
+    m_beginEndLineComboBox->setIconSize(m_iconSize);
+    m_beginEndLineComboBox->addItem(QIcon(),"      None");
+    m_endEndLineComboBox = new QComboBox( mainWidget );
+    m_endEndLineComboBox->setIconSize(m_iconSize);
+    m_endEndLineComboBox->addItem(QIcon(),"      None");
 
     int proportion = 3;
     QString fileName( KStandardDirs::locate( "data","kpresenter/endLineStyle/endLine.xml" ) );
@@ -108,8 +99,8 @@ KoShapeEndLinesDocker::KoShapeEndLinesDocker()
 		QIcon drawIcon(temp.drawIcon(m_iconSize, proportion));
 
                 // add icon and label in the two QComboBox
-                d->beginEndLineComboBox->addItem(drawIcon, temp.name());
-                d->endEndLineComboBox->addItem(drawIcon, temp.name());
+                m_beginEndLineComboBox->addItem(drawIcon, temp.name());//, QVariant(temp.generateSVG()));
+                m_endEndLineComboBox->addItem(drawIcon, temp.name());
             }
         }else {
             kDebug() << "reading of endLine.xml failed:" << errorMessage;
@@ -122,14 +113,14 @@ KoShapeEndLinesDocker::KoShapeEndLinesDocker()
     // Add Begin to the docker
     QLabel * beginEndLineLabel = new QLabel( i18n( "Begin :" ), mainWidget );
     mainLayout->addWidget( beginEndLineLabel, 0, 0 );
-    mainLayout->addWidget( d->beginEndLineComboBox,0,1,1,3);
-    connect( d->beginEndLineComboBox, SIGNAL(activated( int ) ), this, SLOT( beginEndLineChanged(int) ) );
+    mainLayout->addWidget( m_beginEndLineComboBox,0,1,1,3);
+    connect( m_beginEndLineComboBox, SIGNAL(activated( int ) ), this, SLOT( beginEndLineChanged( int ) ) );
 
     // Add End to the docker
     QLabel * endEndLineLabel = new QLabel( i18n( "End :" ), mainWidget );
     mainLayout->addWidget( endEndLineLabel, 1, 0 );
-    mainLayout->addWidget( d->endEndLineComboBox,1,1,1,3);
-    connect( d->endEndLineComboBox, SIGNAL(activated( int ) ), this, SLOT( endEndLineChanged(int) ) );
+    mainLayout->addWidget( m_endEndLineComboBox,1,1,1,3);
+    connect( m_endEndLineComboBox, SIGNAL(activated( int ) ), this, SLOT( endEndLineChanged( int ) ) );
 
 
     mainLayout->setRowStretch( 5, 1 );
@@ -143,11 +134,12 @@ KoShapeEndLinesDocker::KoShapeEndLinesDocker()
 
 KoShapeEndLinesDocker::~KoShapeEndLinesDocker()
 {
-    delete d;
 }
 
 void KoShapeEndLinesDocker::applyChanges()
 {
+    kDebug() << "begin = "<< m_beginEndLineComboBox->currentText();
+    kDebug() << "end = "<< m_endEndLineComboBox->currentText();
 //   KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
 //   KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 //   if( ! selection || ! selection->count() )
@@ -155,7 +147,7 @@ void KoShapeEndLinesDocker::applyChanges()
 //   
 //    QSvgRenderer endLineRenderer;
 //                // Init QPainter and QPixmap
-//                QPixmap endLinePixmap(d->beginEndLineComboBox->iconSize());
+//                QPixmap endLinePixmap(m_beginEndLineComboBox->iconSize());
 //                endLinePixmap.fill(QColor(Qt::transparent));
 //                QPainter endLinePainter(&endLinePixmap);
 //                // Convert path to SVG
@@ -175,15 +167,15 @@ void KoShapeEndLinesDocker::applyChanges()
 
 void KoShapeEndLinesDocker::beginEndLineChanged(int index)
 {
-    d->beginEndLineComboBox->setCurrentItem(index);
-    m_beginEndLineCurrentName = d->beginEndLineComboBox->itemText(index);
+    m_beginEndLineComboBox->setCurrentItem(index);
+    m_beginEndLineCurrentName = m_beginEndLineComboBox->itemText(index);
     applyChanges();
 }
 
 void KoShapeEndLinesDocker::endEndLineChanged(int index)
 {
-    d->endEndLineComboBox->setCurrentItem(index);
-    m_endEndLineCurrentName = d->endEndLineComboBox->itemText(index);
+    m_endEndLineComboBox->setCurrentItem(index);
+    m_endEndLineCurrentName = m_endEndLineComboBox->itemText(index);
     applyChanges();
 }
 

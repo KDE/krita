@@ -17,7 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "kgradientslider.h"
+
 
 // C++ includes.
 
@@ -26,28 +26,25 @@
 
 // Qt includes.
 
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qpoint.h>
-#include <qpen.h>
+#include <QPixmap>
+#include <QPainter>
+#include <QPoint>
+#include <QPen>
 #include <QMouseEvent>
+#include <QBrush>
+#include <QLinearGradient>
 
 // Local includes.
-
+#include "kgradientslider.h"
 
 
 KGradientSlider::KGradientSlider(QWidget *parent)
-        : QWidget(parent)
+        : QWidget(parent), m_black(0), m_white(255), m_gamma(1.0), m_gammaEnabled(false)
 {
-    m_dragging = false;
+    m_feedback = false;
+    m_grabCursor = None;
 
     setMouseTracking(true);
-    setMaximumSize(255, 28);
-
-    m_blackcursor = 0;
-    m_whitecursor = 255;
-    m_gamma = 1.0;
-    m_gammaEnabled = false;
     setFocusPolicy(Qt::StrongFocus);
 }
 
@@ -57,35 +54,31 @@ KGradientSlider::~KGradientSlider()
 
 void KGradientSlider::paintEvent(QPaintEvent *)
 {
-    int    x, y;
-    int    wWidth = width();
-    int    wHeight = height();
+    int x, y;
+    int wWidth = width();
+    int wHeight = height();
 
-    int gradientHeight = (wHeight / 3);
+    const int gradientHeight = (int)round((double)wHeight / 7.0 * 2);
 
     // A QPixmap is used for enable the double buffering.
-    /*if (!m_dragging) {*/
     QPainter p1(this);
 
     // Draw first gradient
-    y = 0;
-    p1.setPen(QPen::QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
-    for (x = 0; x < 255; ++x) {
-        int gray = (255 * x) / wWidth;
-        p1.setPen(QColor(gray, gray, gray));
-        p1.drawLine(x, y, x, y + gradientHeight - 1);
-    }
+    QLinearGradient grayGradient(0, 0, wWidth - 1, gradientHeight);
+    grayGradient.setColorAt(0, Qt::black);
+    grayGradient.setColorAt(1, Qt::white);
+    p1.fillRect(0, 0, wWidth, gradientHeight, QBrush(grayGradient));
 
     // Draw second gradient
-    y = (wHeight / 3);
-    if (m_blackcursor > 0) {
-        p1.fillRect(0, y, (int)m_blackcursor, gradientHeight, QBrush(Qt::black));
+    y = gradientHeight;
+    if (m_blackCursor > 0) {
+        p1.fillRect(0, y, (int)m_blackCursor, gradientHeight, QBrush(Qt::black));
     }
-    if (m_whitecursor < 255) {
-        p1.fillRect((int)m_whitecursor, y, 255, gradientHeight, QBrush(Qt::white));
+    if (m_whiteCursor < wWidth) {
+        p1.fillRect((int)m_whiteCursor, y, wWidth, gradientHeight, QBrush(Qt::white));
     }
-    for (x = (int)m_blackcursor; x < (int)m_whitecursor; ++x) {
-        double inten = (double)(x - m_blackcursor) / (double)(m_whitecursor - m_blackcursor);
+    for (x = (int)m_blackCursor; x < (int)m_whiteCursor; ++x) {
+        double inten = (double)(x - m_blackCursor) / (double)(m_whiteCursor - m_blackCursor);
         inten = pow(inten, (1.0 / m_gamma));
         int gray = (int)(255 * inten);
         p1.setPen(QColor(gray, gray, gray));
@@ -93,30 +86,39 @@ void KGradientSlider::paintEvent(QPaintEvent *)
     }
 
     // Draw cursors
-    y = (2 * wHeight / 3);
+    y += gradientHeight;
     QPoint a[3];
     p1.setPen(Qt::black);
+    p1.setRenderHint(QPainter::Antialiasing, true);
 
-    a[0] = QPoint(m_blackcursor, y);
-    a[1] = QPoint(m_blackcursor + 3, wHeight - 1);
-    a[2] = QPoint(m_blackcursor - 3, wHeight - 1);
+    const int cursorHalfBase = (int)(gradientHeight / 1.5);
+
+    a[0] = QPoint(m_blackCursor, y);
+    a[1] = QPoint(m_blackCursor + cursorHalfBase, wHeight - 1);
+    a[2] = QPoint(m_blackCursor - cursorHalfBase, wHeight - 1);
     p1.setBrush(Qt::black);
     p1.drawPolygon(a, 3);
 
     if (m_gammaEnabled) {
-        a[0] = QPoint(m_gammacursor, y);
-        a[1] = QPoint(m_gammacursor + 3, wHeight - 1);
-        a[2] = QPoint(m_gammacursor - 3, wHeight - 1);
+        a[0] = QPoint(m_gammaCursor, y);
+        a[1] = QPoint(m_gammaCursor + cursorHalfBase, wHeight - 1);
+        a[2] = QPoint(m_gammaCursor - cursorHalfBase, wHeight - 1);
         p1.setBrush(Qt::gray);
         p1.drawPolygon(a, 3);
     }
 
-    a[0] = QPoint(m_whitecursor, y);
-    a[1] = QPoint(m_whitecursor + 3, wHeight - 1);
-    a[2] = QPoint(m_whitecursor - 3, wHeight - 1);
+    a[0] = QPoint(m_whiteCursor, y);
+    a[1] = QPoint(m_whiteCursor + cursorHalfBase, wHeight - 1);
+    a[2] = QPoint(m_whiteCursor - cursorHalfBase, wHeight - 1);
     p1.setBrush(Qt::white);
     p1.drawPolygon(a, 3);
+}
 
+void KGradientSlider::resizeEvent(QResizeEvent *)
+{
+    m_scalingFactor = (double)width() / 255;
+    calculateCursorPositions();
+    update();
 }
 
 void KGradientSlider::mousePressEvent(QMouseEvent * e)
@@ -129,68 +131,73 @@ void KGradientSlider::mousePressEvent(QMouseEvent * e)
 
     unsigned int x = e->pos().x();
 
-    distance = 1000; // just a big number
+    distance = width() + 1; // just a big number
 
-    if (abs((int)(x - m_blackcursor)) < distance) {
-        distance = abs((int)(x - m_blackcursor));
+    if (abs((int)(x - m_blackCursor)) < distance) {
+        distance = abs((int)(x - m_blackCursor));
         closest_cursor = BlackCursor;
     }
 
-    if (abs((int)(x - m_whitecursor)) < distance) {
-        distance = abs((int)(x - m_whitecursor));
+    if (abs((int)(x - m_whiteCursor)) < distance) {
+        distance = abs((int)(x - m_whiteCursor));
         closest_cursor = WhiteCursor;
     }
 
-    if (m_gammaEnabled && (abs((int)(x - m_gammacursor)) < distance)) {
-        distance = abs((int)(x - m_gammacursor));
-        closest_cursor = GammaCursor;
+    if (m_gammaEnabled) {
+        int gammaDistance = (int)x - m_gammaCursor;
+
+        if (abs(gammaDistance) < distance) {
+            distance = abs((int)x - m_gammaCursor);
+            closest_cursor = GammaCursor;
+        } else if (abs(gammaDistance) == distance) {
+            if ( (closest_cursor == BlackCursor) && (gammaDistance > 0) ) {
+                distance = abs(gammaDistance);
+                closest_cursor = GammaCursor;
+            } else if ( (closest_cursor == WhiteCursor) && (gammaDistance < 0) ) {
+                distance = abs(gammaDistance);
+                closest_cursor = GammaCursor;
+            }
+        }
     }
 
     if (distance > 20) {
+        m_grabCursor = None;
         return;
     }
-
-
-    m_dragging = true;
 
     // Determine cursor values and the leftmost and rightmost points.
 
     switch (closest_cursor) {
     case BlackCursor:
-        m_blackcursor = x;
-        m_grab_cursor = closest_cursor;
+        m_blackCursor = x;
+        m_grabCursor = closest_cursor;
         m_leftmost = 0;
-        m_rightmost = m_whitecursor - 1;
-        if (m_gammaEnabled) {
-            double delta = (double)(m_whitecursor - m_blackcursor) / 2.0;
-            double mid   = (double)m_blackcursor + delta;
-            double tmp   = log10(1.0 / m_gamma);
-            m_gammacursor = (unsigned int)qRound(mid + delta * tmp);
-        }
+        m_rightmost = m_whiteCursor - 1;
+        if (m_gammaEnabled)
+            m_gammaCursor = calculateGammaCursor();
         break;
     case WhiteCursor:
-        m_whitecursor = x;
-        m_grab_cursor = closest_cursor;
-        m_leftmost = m_blackcursor + 1;
-        m_rightmost = 255;
-        if (m_gammaEnabled) {
-            double delta = (double)(m_whitecursor - m_blackcursor) / 2.0;
-            double mid   = (double)m_blackcursor + delta;
-            double tmp   = log10(1.0 / m_gamma);
-            m_gammacursor = (unsigned int)qRound(mid + delta * tmp);
-        }
+        m_whiteCursor = x;
+        m_grabCursor = closest_cursor;
+        m_leftmost = m_blackCursor + 1;
+        m_rightmost = width();
+        if (m_gammaEnabled)
+            m_gammaCursor = calculateGammaCursor();
         break;
     case GammaCursor:
-        m_gammacursor = x;
-        m_grab_cursor = closest_cursor;
-        m_leftmost = m_blackcursor;
-        m_rightmost = m_whitecursor;
-
-        double delta = (double)(m_whitecursor - m_blackcursor) / 2.0;
-        double mid = (double)m_blackcursor + delta;
-        double tmp = (x - mid) / delta;
-        m_gamma = 1.0 / pow(10, tmp);
+        m_gammaCursor = x;
+        m_grabCursor = closest_cursor;
+        m_leftmost = m_blackCursor;
+        m_rightmost = m_whiteCursor;
+        {
+          double delta = (double)(m_whiteCursor - m_blackCursor) / 2.0;
+          double mid = (double)m_blackCursor + delta;
+          double tmp = (x - mid) / delta;
+          m_gamma = 1.0 / pow(10, tmp);
+        }
         break;
+    default:
+      break;
     }
     update();
 }
@@ -200,64 +207,68 @@ void KGradientSlider::mouseReleaseEvent(QMouseEvent * e)
     if (e->button() != Qt::LeftButton)
         return;
 
-    m_dragging = false;
     update();
 
-    switch (m_grab_cursor) {
+    switch (m_grabCursor) {
     case BlackCursor:
-        emit modifiedBlack(m_blackcursor);
+        m_black = (int)round(m_blackCursor / m_scalingFactor);
+        m_feedback = true;
+        emit sigModifiedBlack(m_black);
         break;
     case WhiteCursor:
-        emit modifiedWhite(m_whitecursor);
+        m_white = (int)round(m_whiteCursor / m_scalingFactor);
+        m_feedback = true;
+        emit sigModifiedWhite(m_white);
         break;
     case GammaCursor:
-        emit modifiedGamma(m_gamma);
+        emit sigModifiedGamma(m_gamma);
+        break;
+    default:
         break;
     }
+
+    m_grabCursor = None;
+    m_feedback = false;
 }
 
 void KGradientSlider::mouseMoveEvent(QMouseEvent * e)
 {
     int x = e->pos().x();
 
-    if (m_dragging == true) { // Else, drag the selected point
+    if (m_grabCursor != None) { // Else, drag the selected point
         if (x <= m_leftmost)
             x = m_leftmost;
 
         if (x >= m_rightmost)
             x = m_rightmost;
 
-        switch (m_grab_cursor) {
+        switch (m_grabCursor) {
         case BlackCursor:
-            if (m_blackcursor != x) {
-                m_blackcursor = x;
+            if (m_blackCursor != x) {
+                m_blackCursor = x;
                 if (m_gammaEnabled) {
-                    double delta = (double)(m_whitecursor - m_blackcursor) / 2.0;
-                    double mid   = (double)m_blackcursor + delta;
-                    double tmp   = log10(1.0 / m_gamma);
-                    m_gammacursor = (unsigned int)qRound(mid + delta * tmp);
+                    m_gammaCursor = calculateGammaCursor();
                 }
             }
             break;
         case WhiteCursor:
-            if (m_whitecursor != x) {
-                m_whitecursor = x;
+            if (m_whiteCursor != x) {
+                m_whiteCursor = x;
                 if (m_gammaEnabled) {
-                    double delta = (double)(m_whitecursor - m_blackcursor) / 2.0;
-                    double mid   = (double)m_blackcursor + delta;
-                    double tmp   = log10(1.0 / m_gamma);
-                    m_gammacursor = (unsigned int)qRound(mid + delta * tmp);
+                    m_gammaCursor = calculateGammaCursor();
                 }
             }
             break;
         case GammaCursor:
-            if (m_gammacursor != x) {
-                m_gammacursor = x;
-                double delta = (double)(m_whitecursor - m_blackcursor) / 2.0;
-                double mid = (double)m_blackcursor + delta;
+            if (m_gammaCursor != x) {
+                m_gammaCursor = x;
+                double delta = (double)(m_whiteCursor - m_blackCursor) / 2.0;
+                double mid = (double)m_blackCursor + delta;
                 double tmp = (x - mid) / delta;
                 m_gamma = 1.0 / pow(10, tmp);
             }
+            break;
+        default:
             break;
         }
     }
@@ -265,8 +276,19 @@ void KGradientSlider::mouseMoveEvent(QMouseEvent * e)
     update();
 }
 
-void KGradientSlider::leaveEvent(QEvent *)
+void KGradientSlider::calculateCursorPositions()
 {
+    m_blackCursor = (int)round(m_black * m_scalingFactor);
+    m_whiteCursor = (int)round(m_white * m_scalingFactor);
+    m_gammaCursor = calculateGammaCursor();
+}
+
+unsigned int KGradientSlider::calculateGammaCursor()
+{
+    double delta = (double)(m_whiteCursor - m_blackCursor) / 2.0;
+    double mid   = (double)m_blackCursor + delta;
+    double tmp   = log10(1.0 / m_gamma);
+    return (unsigned int)qRound(mid + delta * tmp);
 }
 
 
@@ -281,42 +303,31 @@ double KGradientSlider::getGamma(void)
     return m_gamma;
 }
 
-void KGradientSlider::modifyBlack(int v)
+void KGradientSlider::slotModifyBlack(int v)
 {
-    if (v >= 0 && v <= (int)m_whitecursor) {
-        m_blackcursor = (unsigned int)v;
-        if (m_gammaEnabled) {
-            double delta = (double)(m_whitecursor - m_blackcursor) / 2.0;
-            double mid   = (double)m_blackcursor + delta;
-            double tmp   = log10(1.0 / m_gamma);
-            m_gammacursor = (unsigned int)qRound(mid + delta * tmp);
-        }
+    if (v >= 0 && v <= (int)m_white && !m_feedback) {
+        m_black = v;
+        m_blackCursor = (int)round(m_black * m_scalingFactor);
+        m_gammaCursor = calculateGammaCursor();
         update();
     }
 }
-void KGradientSlider::modifyWhite(int v)
+void KGradientSlider::slotModifyWhite(int v)
 {
-    if (v >= (int)m_blackcursor && v <= 255) {
-        m_whitecursor = (unsigned int)v;
-        if (m_gammaEnabled) {
-            double delta = (double)(m_whitecursor - m_blackcursor) / 2.0;
-            double mid   = (double)m_blackcursor + delta;
-            double tmp   = log10(1.0 / m_gamma);
-            m_gammacursor = (unsigned int)qRound(mid + delta * tmp);
-        }
+    if (v >= (int)m_black && v <= width() && !m_feedback) {
+        m_white = v;
+        m_whiteCursor = (int)round(m_white * m_scalingFactor);
+        m_gammaCursor = calculateGammaCursor();
         update();
     }
 }
-void KGradientSlider::modifyGamma(double v)
+void KGradientSlider::slotModifyGamma(double v)
 {
     if (m_gamma != v) {
-        emit modifiedGamma(v);
+        emit sigModifiedGamma(v);
     }
     m_gamma = v;
-    double delta = (double)(m_whitecursor - m_blackcursor) / 2.0;
-    double mid   = (double)m_blackcursor + delta;
-    double tmp   = log10(1.0 / m_gamma);
-    m_gammacursor = (unsigned int)qRound(mid + delta * tmp);
+    m_gammaCursor = calculateGammaCursor();
     update();
 }
 

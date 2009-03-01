@@ -35,7 +35,8 @@ class KGradientSlider : public QWidget
     typedef enum {
         BlackCursor,
         GammaCursor,
-        WhiteCursor
+        WhiteCursor,
+        None
     } eCursor;
 
 public:
@@ -44,22 +45,25 @@ public:
     virtual ~KGradientSlider();
 
 public slots:
-    void modifyBlack(int);
-    void modifyWhite(int);
-    void modifyGamma(double);
+    void slotModifyBlack(int);
+    void slotModifyWhite(int);
+    void slotModifyGamma(double);
 
 signals:
-
-    void modifiedBlack(int);
-    void modifiedWhite(int);
-    void modifiedGamma(double);
+    void sigModifiedBlack(int);
+    void sigModifiedWhite(int);
+    void sigModifiedGamma(double);
 
 protected:
     void paintEvent(QPaintEvent *);
+    void resizeEvent(QResizeEvent *);
     void mousePressEvent(QMouseEvent * e);
     void mouseReleaseEvent(QMouseEvent * e);
     void mouseMoveEvent(QMouseEvent * e);
-    void leaveEvent(QEvent *);
+
+private:
+    void calculateCursorPositions();
+    unsigned int calculateGammaCursor();
 
 public:
     void enableGamma(bool b);
@@ -68,16 +72,21 @@ public:
 private:
     int m_leftmost;
     int m_rightmost;
-    eCursor m_grab_cursor;
-    unsigned int m_grab_index;
-    bool m_dragging;
+    eCursor m_grabCursor;
+    unsigned int m_grabIndex;
+    double m_scalingFactor;
 
-    int m_blackcursor;
-    int m_whitecursor;
-    int m_gammacursor;
+    int m_blackCursor;
+    int m_whiteCursor;
+    int m_gammaCursor;
 
-    bool m_gammaEnabled;
+    int m_black;
+    int m_white;
+
     double m_gamma;
+    bool m_gammaEnabled;
+
+    bool m_feedback;
 };
 
 

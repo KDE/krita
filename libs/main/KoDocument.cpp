@@ -166,7 +166,7 @@ public:
     bool m_storeInternal; // Store this doc internally even if url is external
     bool m_bLoading; // True while loading (openUrl is async)
 
-    KoOpenPane* m_startUpWidget;
+    QPointer<KoOpenPane> m_startUpWidget;
     QString m_templateType;
     QList<KoVersionInfo> m_versionInfo;
 
@@ -2634,19 +2634,11 @@ void KoDocument::deleteOpenPane()
     if (d->m_startUpWidget) {
         d->m_startUpWidget->hide();
         d->m_startUpWidget->deleteLater();
-        connect(d->m_startUpWidget, SIGNAL(destroyed(QObject*)), this, SLOT(openPaneDeleted(QObject*)));
 
         shells().getFirst()->factory()->container("mainToolBar", shells().getFirst())->show();
         shells().getFirst()->setRootDocument(this);
     } else {
         emit closeEmbedInitDialog();
-    }
-}
-
-void KoDocument::openPaneDeleted( QObject * object )
-{
-    if( object == d->m_startUpWidget ) {
-        d->m_startUpWidget = 0;
     }
 }
 

@@ -25,6 +25,7 @@
 class KisBookmarkedConfigurationsModel;
 class KisSerializableConfiguration;
 class QModelIndex;
+class QItemSelection;
 
 /**
  * This dialog is used to edit the content of a bookmark manager
@@ -42,7 +43,7 @@ public:
     KisBookmarkedConfigurationsEditor(QWidget* parent, KisBookmarkedConfigurationsModel* manager, const KisSerializableConfiguration* currentConfig);
     ~KisBookmarkedConfigurationsEditor();
 private slots:
-    void currentConfigChanged(const QModelIndex& idx);
+    void currentConfigChanged(const QItemSelection& selected, const QItemSelection&);
     void addCurrentConfiguration();
     void deleteConfiguration();
 private:

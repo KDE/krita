@@ -36,8 +36,10 @@ KisBookmarkedConfigurationsEditor::KisBookmarkedConfigurationsEditor(QWidget* pa
     d->editorUi.listConfigurations->setModel(d->model);
     connect(d->editorUi.pushButtonClose, SIGNAL(pressed()), SLOT(accept()));
 
-    connect(d->editorUi.listConfigurations, SIGNAL(clicked(const QModelIndex&)), SLOT(currentConfigChanged(const QModelIndex&)));
-    currentConfigChanged(d->editorUi.listConfigurations->currentIndex());
+    connect(d->editorUi.listConfigurations->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), 
+	    this, SLOT(currentConfigChanged(const QItemSelection&, const QItemSelection&)));
+    currentConfigChanged(d->editorUi.listConfigurations->selectionModel()->selection(), 
+			 d->editorUi.listConfigurations->selectionModel()->selection());
 
     connect(d->editorUi.pushButtonDelete, SIGNAL(pressed()), SLOT(deleteConfiguration()));
     connect(d->editorUi.pushButtonBookmarkCurrent, SIGNAL(pressed()), SLOT(addCurrentConfiguration()));
@@ -52,26 +54,25 @@ KisBookmarkedConfigurationsEditor::~KisBookmarkedConfigurationsEditor()
     delete d;
 }
 
-void KisBookmarkedConfigurationsEditor::currentConfigChanged(const QModelIndex& idx)
+void KisBookmarkedConfigurationsEditor::currentConfigChanged(const QItemSelection& selected, const QItemSelection&)
 {
-    if( d->model )
-    {
-        d->editorUi.pushButtonDelete->setEnabled(d->model->isIndexDeletable(idx));
+    if( d->model ) {
+        d->editorUi.pushButtonDelete->setEnabled(!(selected.indexes().isEmpty()) ?
+						 d->model->isIndexDeletable(selected.indexes().first()) :
+						 false);
     }
 }
 
 void KisBookmarkedConfigurationsEditor::addCurrentConfiguration()
 {
-    if( d->model )
-    {
+    if( d->model ) {
         d->model->newConfiguration(ki18n("New configuration %1"), d->currentConfig);
     }
 }
 
 void KisBookmarkedConfigurationsEditor::deleteConfiguration()
 {
-    if( d->model )
-    {
+    if( d->model ) {
         d->model->deleteIndex(d->editorUi.listConfigurations->currentIndex());
     }
 }

@@ -37,24 +37,24 @@
 #include <QDockWidget>
 #include <kdebug.h>
 #include <QStringList>
+#include "flake_export.h"
 
 class KoShapeBorderModel;
 class KoCanvasController;
 class KoPathShape;
 
-class KoLineEnd{
-
+class FLAKE_EXPORT KoLineEnd{
 public:
-KoLineEnd(QString name, QString path, QString view);
-virtual ~KoLineEnd();
-QIcon drawIcon(QSize size, int proportion);
-QString name();
-QByteArray generateSVG(QSize size, QString comment = QString());
+    KoLineEnd(QString name, QString path, QString view);
+    virtual ~KoLineEnd();
+    QIcon drawIcon(QSize size, int proportion);
+    QString name();
+    QByteArray generateSVG(QSize size, QString comment = QString());
 
 private:
-QString m_name;
-QString m_path;
-QString m_view;
+    QString m_name;
+    QString m_path;
+    QString m_view;
 
 };
 

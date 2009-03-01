@@ -49,6 +49,7 @@
 #include <KoShape.h> 
 #include <KoSelection.h>
 #include <KoPathShape.h>
+#include <KoLineEnd.h>
 
 
 #include <QLabel>

@@ -28,7 +28,6 @@
 #ifndef KOSHAPEENDLINESDOCKER_H
 #define KOSHAPEENDLINESDOCKER_H
 
-#include "KoLineEnd.h"
 #include <KoUnit.h>
 #include <KoXmlReader.h>
 #include <KoCanvasObserver.h>
@@ -40,6 +39,7 @@
 
 class KoShapeBorderModel;
 class KoCanvasController;
+class KoLineEnd;
 
 /// A docker for setting properties of end lines
 class KoShapeEndLinesDocker : public QDockWidget, public KoCanvasObserver

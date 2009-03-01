@@ -25,9 +25,10 @@
 #include "flake_export.h"
 
 #include <QMap>
-
+#include <QObject>
 #include "KoShape.h"
 #include "KoPathSegment.h"
+#include "KoLineEnd.h"
 
 #define KoPathShapeId "KoPathShape"
 
@@ -530,6 +531,8 @@ protected:
 private:
     class Private;
     Private * const d;
+    KoLineEnd * m_begin;
+    KoLineEnd * m_end;
 };
 
 #endif /* KOPATHSHAPE_H */

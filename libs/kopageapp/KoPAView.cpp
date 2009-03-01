@@ -216,10 +216,10 @@ void KoPAView::initActions()
     connect(m_deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
     connect(m_canvas->toolProxy(), SIGNAL(selectionChanged(bool)), m_deleteSelectionAction, SLOT(setEnabled(bool)));
 
-    m_actionViewShowGrid  = new KToggleAction(i18n("Show &Grid"), this);
-    m_actionViewShowGrid->setChecked(m_doc->gridData().showGrid());
-    actionCollection()->addAction("view_grid", m_actionViewShowGrid );
-    connect( m_actionViewShowGrid, SIGNAL( triggered( bool ) ), this, SLOT (viewGrid( bool )));
+    KToggleAction *showGrid= m_doc->gridData().gridToggleAction(m_canvas);
+    // XXX remove the translated string when the string freeze is lifted, the KoGridData should have those
+    showGrid->setText(i18n("Show &Grid"));
+    actionCollection()->addAction("view_grid", showGrid );
 
     m_actionViewSnapToGrid = new KToggleAction(i18n("Snap to Grid"), this);
     m_actionViewSnapToGrid->setChecked(m_doc->gridData().snapToGrid());
@@ -283,12 +283,6 @@ void KoPAView::viewSnapToGrid(bool snap)
 {
     m_doc->gridData().setSnapToGrid(snap);
     m_actionViewSnapToGrid->setChecked(snap);
-}
-
-void KoPAView::viewGrid(bool show)
-{
-    m_doc->gridData().setShowGrid(show);
-    //m_actionViewShowGrid->setChecked(show);
 }
 
 void KoPAView::viewGuides(bool show)

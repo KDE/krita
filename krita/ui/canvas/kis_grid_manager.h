@@ -60,7 +60,6 @@ protected:
 private:
 
     KisView2* m_view;
-    KToggleAction* m_toggleGrid;
     KToggleAction* m_toggleSnapToGrid;
     KAction* m_gridConfig;
     KAction* m_gridFastConfig1x1;

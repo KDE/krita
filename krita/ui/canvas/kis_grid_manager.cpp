@@ -62,16 +62,16 @@ void KisGridManager::setup(KActionCollection * collection)
     KisConfig config;
     m_view->document()->gridData().setGrid(config.getGridHSpacing(), config.getGridVSpacing());
 
-    m_toggleGrid  = new KToggleAction(i18n("Show Grid"), this);
-    collection->addAction("view_toggle_grid", m_toggleGrid);
-    connect(m_toggleGrid, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
-
-    m_toggleGrid->setCheckedState(KGuiItem(i18n("Hide Grid")));
-    m_toggleGrid->setChecked(m_view->document()->gridData().showGrid());
+    KToggleAction *toggleGrid = m_view->document()->gridData().gridToggleAction();
+    // XXX remove the translated strings when the string freeze is lifted, the KoGridData should have those
+    toggleGrid->setText(i18n("Show Grid"));
+    toggleGrid->setCheckedState(KGuiItem(i18n("Hide Grid")));
+    collection->addAction("view_grid", toggleGrid);
+    connect(toggleGrid, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
 
     m_toggleSnapToGrid  = new KToggleAction(i18n("Snap To Grid"), this);
     collection->addAction("view_snap_to_grid", m_toggleSnapToGrid);
-    connect(m_toggleGrid, SIGNAL(triggered()), this, SLOT(toggleSnapToGrid()));
+    connect(toggleGrid, SIGNAL(triggered()), this, SLOT(toggleSnapToGrid()));
 
     // Fast grid config
     m_gridFastConfig1x1  = new KAction(i18n("1x1"), this);

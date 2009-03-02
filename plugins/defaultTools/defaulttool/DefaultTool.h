@@ -137,7 +137,10 @@ private:
     void selectionReorder(KoShapeReorderCommand::MoveShapeType order );
     bool moveSelection( int direction, Qt::KeyboardModifiers modifiers );
 
+    /// Returns selection rectangle adjusted by handle proximity threshold
     QRectF handlesSize();
+    /// Return rectangle of handle at given point
+    QRectF handleRectAt( const QPointF &point );
 
     // convenience method;
     KoSelection * koSelection();

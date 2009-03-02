@@ -47,6 +47,14 @@ KoLineEnd::KoLineEnd()
 {
 }
 
+KoLineEnd::KoLineEnd(const KoLineEnd &lineEnd)
+{
+    m_name = lineEnd.m_name;
+    m_path = lineEnd.m_path;
+    m_view = lineEnd.m_view;
+    m_svg = lineEnd.m_svg;
+}
+
 KoLineEnd::~KoLineEnd()
 {
 }

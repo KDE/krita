@@ -47,6 +47,7 @@ class FLAKE_EXPORT KoLineEnd{
 public:
     KoLineEnd(QString name, QString path, QString view);
     KoLineEnd();
+    KoLineEnd(const KoLineEnd &);
     virtual ~KoLineEnd();
     QIcon drawIcon(QSize size, int proportion);
     QString name();

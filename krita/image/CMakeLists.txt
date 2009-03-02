@@ -92,7 +92,6 @@ set(kritaimage_LIB_SRCS
    kis_base_processor.cpp
    kis_basic_math_toolbox.cpp
    kis_bookmarked_configuration_manager.cc
-   kis_bottom_up_update_strategy.cpp
    kis_boundary.cc
    kis_clone_layer.cpp
    kis_colorspace_convert_visitor.cpp
@@ -203,6 +202,20 @@ install( FILES
 
 ########### install files ###############
 # Don't install the header files for now
+
+install( FILES 
+    kis_debug.h
+    kis_image.h
+    kis_painter.h
+    kis_paint_device.h
+    kis_iterators_pixel.h
+    kis_shared_data.h
+    kis_shared_ptr.h
+    kis_shared_ptr_vector.h
+    kis_types.h
+    krita_export.h
+    DESTINATION ${INCLUDE_INSTALL_DIR})
+
 #install( FILES   kis_debug.h kis_global.h kis_annotation.h
 #kis_shared_ptr_vector.h kis_undo_adapter.h kis_progress_subject.h
 #kis_progress_display_interface.h kis_adjustment_layer.h

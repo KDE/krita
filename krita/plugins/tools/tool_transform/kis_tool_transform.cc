@@ -58,6 +58,10 @@
 #include <widgets/kis_cmb_idlist.h>
 #include <kis_statusbar.h>
 #include <kis_transform_worker.h>
+#include <kis_pixel_selection.h>
+#include <kis_shape_selection.h>
+#include <kis_selection_manager.h>
+#include <KoShapeTransformCommand.h>
 
 #include "flake/kis_node_shape.h"
 #include "flake/kis_layer_container_shape.h"
@@ -209,7 +213,9 @@ void KisToolTransform::initHandles()
     KisSelectionSP selection = currentSelection();
     if (selection) {
         QRect r = selection->selectedExactRect();
-        m_origSelection = new KisSelection(*selection.data());
+        m_origSelection = new KisSelection();
+        KisPixelSelectionSP origPixelSelection = new KisPixelSelection(*selection->getOrCreatePixelSelection().data());
+        m_origSelection->setPixelSelection(origPixelSelection);
         r.getRect(&x, &y, &w, &h);
     } else {
         dev->exactBounds(x, y, w, h);
@@ -641,7 +647,8 @@ void KisToolTransform::transform()
     TransformCmd * transaction = new TransformCmd(this, currentNode(), m_scaleX,
             m_scaleY, m_translate, m_a, m_origSelection, m_originalTopLeft, m_originalBottomRight);
 
-    // Copy the original state back.
+
+    //Copy the original state back.
     QRect rc = m_origDevice->extent();
     rc = rc.normalized();
     currentNode()->paintDevice()->clear();
@@ -653,11 +660,12 @@ void KisToolTransform::transform()
     if (m_origSelection) {
         QRect rc = m_origSelection->selectedRect();
         rc = rc.normalized();
-        // XXX_SELECTION This used to create a new selection!
-        if (currentSelection()) currentSelection()->clear();
-        KisPainter sgc(KisPaintDeviceSP(currentSelection().data()));
-        sgc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, KisPaintDeviceSP(m_origSelection.data()), rc.x(), rc.y(), rc.width(), rc.height());
-        sgc.end();
+        if (currentSelection()) {
+            currentSelection()->getOrCreatePixelSelection()->clear();
+            KisPainter sgc(KisPaintDeviceSP(currentSelection()->getOrCreatePixelSelection()));
+            sgc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, m_origSelection, rc.x(), rc.y(), rc.width(), rc.height());
+            sgc.end();
+        }
     } else
         if (currentSelection())
             currentSelection()->clear();
@@ -665,8 +673,54 @@ void KisToolTransform::transform()
     // Perform the transform. Since we copied the original state back, this doesn't degrade
     // after many tweaks. Since we started the transaction before the copy back, the memento
     // has the previous state.
-    KisTransformWorker worker(currentNode()->paintDevice(), m_scaleX, m_scaleY, 0, 0, m_a, int(t.x()), int(t.y()), &progress, m_filter);
-    worker.run();
+    if (m_origSelection) {
+        KisPaintDeviceSP tmpDevice = new KisPaintDevice(m_origDevice->colorSpace());
+        QRect selectRect = currentSelection()->selectedRect();
+        KisPainter gc(tmpDevice, currentSelection());
+        gc.bltSelection(selectRect.x(), selectRect.y(), COMPOSITE_OVER, m_origDevice, OPACITY_OPAQUE,
+                        selectRect.x(), selectRect.y(), selectRect.width(), selectRect.height());
+        gc.end();
+
+        KisTransformWorker worker(tmpDevice, m_scaleX, m_scaleY, 0, 0, m_a, int(t.x()), int(t.y()), &progress, m_filter);
+        worker.run();
+
+        currentNode()->paintDevice()->clearSelection(currentSelection());
+
+        KisTransformWorker selectionWorker(currentSelection()->getOrCreatePixelSelection(), m_scaleX, m_scaleY, 0, 0, m_a, int(t.x()), int(t.y()), &progress, m_filter);
+        selectionWorker.run();
+
+
+        if(currentSelection()->hasShapeSelection()) {
+            QMatrix resolutionMatrix;
+            resolutionMatrix.scale(1/image()->xRes(), 1/image()->yRes());
+            QPointF center = resolutionMatrix.map(m_originalCenter);
+
+            QMatrix matrix;
+            matrix.translate(center.x(), center.y());
+            matrix.rotate(m_a/M_PI*180);
+            matrix.translate(-center.x(), -center.y());
+
+            KisShapeSelection* shapeSelection = static_cast<KisShapeSelection*>(currentSelection()->shapeSelection());
+            QList<KoShape *> shapes = shapeSelection->shapeManager()->shapes();
+            QList<QMatrix> m_oldMatrixList;
+            QList<QMatrix> m_newMatrixList;
+            foreach(KoShape *shape, shapes) {
+                m_oldMatrixList << shape->transformation();
+                m_newMatrixList << shape->transformation()*matrix;
+            }
+            KoShapeTransformCommand* cmd = new KoShapeTransformCommand( shapes, m_oldMatrixList, m_newMatrixList, transaction );
+            cmd->redo();
+        }
+
+        QRect tmpRc = tmpDevice->extent();
+        KisPainter painter(currentNode()->paintDevice());
+        painter.bitBlt(tmpRc.x(), tmpRc.y(), COMPOSITE_OVER, tmpDevice,
+                       tmpRc.x(), tmpRc.y(), tmpRc.width(), tmpRc.height());
+        painter.end();
+    } else {
+        KisTransformWorker worker(currentNode()->paintDevice(), m_scaleX, m_scaleY, 0, 0, m_a, int(t.x()), int(t.y()), &progress, m_filter);
+        worker.run();
+    }
 
 // XXX_PROGRESS, XXX_LAYERS
 //     // If canceled, go back to the memento
@@ -678,6 +732,10 @@ void KisToolTransform::transform()
 //     }
 
     currentNode()->paintDevice()->setDirty(rc); // XXX: This is not enough - should union with new extent
+
+    canvas->view()->selectionManager()->selectionChanged();
+    if(currentSelection()->hasShapeSelection())
+        canvas->view()->selectionManager()->shapeSelectionChanged();
 
     // Else add the command -- this will have the memento from the previous state,
     // and the transformed state from the original device we cached in our activated()

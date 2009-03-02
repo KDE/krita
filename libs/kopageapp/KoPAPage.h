@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2009 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -61,9 +61,6 @@ public:
     /// reimplemented
     virtual void setDisplayMasterBackground( bool display );
 
-    /// reimplemented
-    virtual QPixmap thumbnail( const QSize& size = QSize( 512, 512 ) );
-
 protected:
     /**
      * DisplayMasterBackground and DisplayMasterShapes are only saved loaded in a presentation
@@ -81,6 +78,9 @@ protected:
 
     /// Reimplemented from KoPageBase
     virtual void saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const;
+
+    /// reimplemented
+    virtual QPixmap generateThumbnail( const QSize& size = QSize( 512, 512 ) );
 
     KoPAMasterPage * m_masterPage;
 

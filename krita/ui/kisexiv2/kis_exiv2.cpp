@@ -178,7 +178,7 @@ Exiv2::Value* kmdValueToExivXmpValue( const KisMetaData::Value& value )
     Q_ASSERT( value.type() != KisMetaData::Value::Structure );
     switch (value.type()) {
         case KisMetaData::Value::Invalid:
-            return &*Exiv2::Value::create(Exiv2::invalidTypeId);
+            return new Exiv2::DataValue(Exiv2::invalidTypeId);
         case KisMetaData::Value::Variant: {
             QVariant var = value.asVariant();
             if( var.type() == QVariant::Bool )

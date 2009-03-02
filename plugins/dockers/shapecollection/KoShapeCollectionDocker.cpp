@@ -205,6 +205,11 @@ void KoShapeCollectionDocker::loadDefaultShapes()
     QList<KoCollectionItem> quicklist;
     int quickCount=0;
 
+    QStringList quickShapes;
+    quickShapes << "TextShapeID" << "PictureShape" << "KoConnectionShape" << "ChartShape" << "ArtisticText";
+    KConfigGroup cfg = KGlobal::config()->group("KoShapeCollection");
+    quickShapes = cfg.readEntry("QuickShapes", quickShapes);
+
     foreach(const QString & id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactory *factory = KoShapeRegistry::instance()->value(id);
         // don't show hidden factories
@@ -230,7 +235,12 @@ void KoShapeCollectionDocker::loadDefaultShapes()
             else
                 defaultList.append(temp);
 
-            if(temp.id=="TextShapeID" || temp.id=="PictureShape" || temp.id=="KoConnectionShape" || temp.id=="ChartShape" || temp.id=="FormulaShapeID") {
+            QString id= temp.id;
+            if (!shapeTemplate.templateId.isEmpty()) {
+                id += '_'+shapeTemplate.templateId;
+            }
+
+            if (quickShapes.contains(id)) {
                 quicklist.append(temp);
                 quickCount++;
             }
@@ -252,7 +262,7 @@ void KoShapeCollectionDocker::loadDefaultShapes()
             else
                 defaultList.append(temp);
 
-            if(temp.id=="TextShapeID" || temp.id=="PictureShape" || temp.id=="KoConnectionShape" || temp.id=="ChartShape" || temp.id=="FormulaShapeID") {
+            if(quickShapes.contains(temp.id)) {
                 quicklist.append(temp);
                 quickCount++;
             }
@@ -264,16 +274,16 @@ void KoShapeCollectionDocker::loadDefaultShapes()
     addCollection("default", i18n("Default"), model);
 
     model = new KoCollectionItemModel(this);
-    model->setShapeTemplateList(funnyList);
-    addCollection("funny", i18n("Funny"), model);
+    model->setShapeTemplateList(geometricList);
+    addCollection("geometric", i18n("Geometrics"), model);
 
     model = new KoCollectionItemModel(this);
     model->setShapeTemplateList(arrowList);
     addCollection("arrow", i18n("Arrows"), model);
 
     model = new KoCollectionItemModel(this);
-    model->setShapeTemplateList(geometricList);
-    addCollection("geometric", i18n("Geometrics"), model);
+    model->setShapeTemplateList(funnyList);
+    addCollection("funny", i18n("Funny"), model);
 
     KoCollectionItemModel* quickModel = new KoCollectionItemModel(this);
     quickModel->setShapeTemplateList(quicklist);

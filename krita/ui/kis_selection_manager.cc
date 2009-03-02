@@ -78,6 +78,7 @@
 #include "flake/kis_shape_layer.h"
 #include "kis_selection_decoration.h"
 #include "canvas/kis_canvas_decoration.h"
+#include "kis_node_commands_adapter.h"
 
 #include "kis_clipboard.h"
 #include "kis_view2.h"
@@ -86,6 +87,7 @@
 KisSelectionManager::KisSelectionManager(KisView2 * view, KisDoc2 * doc)
         : m_view(view),
         m_doc(doc),
+        m_adapter(new KisNodeCommandsAdapter(view)),
         m_copy(0),
         m_cut(0),
         m_paste(0),
@@ -256,7 +258,7 @@ void KisSelectionManager::updateGUI()
 
         enable = l && !l->userLocked() && l->visible();
 #if 0 // XXX_SELECTION (how are we going to handle deselect and
-        // reselectt now?
+        // reselect now?
         if (l->inherits("KisAdjustmentLayer")
                 if (dev && !adjLayer)
                     m_reselect->setEnabled(dev->selectionDeselected());
@@ -486,9 +488,9 @@ void KisSelectionManager::paste()
         */
         if( m_view->activeLayer() )
         {
-            img->addNode(layer , m_view->activeLayer()->parent(), m_view->activeLayer().data());
+            m_adapter->addNode(layer , m_view->activeLayer()->parent(), m_view->activeLayer().data());
         } else {
-            img->addNode(layer , img->rootLayer() );
+            m_adapter->addNode(layer , img->rootLayer(), 0 );
         }
         layer->setDirty();
     } else

@@ -166,11 +166,14 @@ public:
     bool m_storeInternal; // Store this doc internally even if url is external
     bool m_bLoading; // True while loading (openUrl is async)
 
-    KoOpenPane* m_startUpWidget;
+    QPointer<KoOpenPane> m_startUpWidget;
     QString m_templateType;
     QList<KoVersionInfo> m_versionInfo;
 
     KUndoStack* m_undoStack;
+
+    KoGridData gridData;
+    KoGuidesData guidesData;
 };
 
 // Used in singleViewMode
@@ -301,7 +304,7 @@ KoDocument::~KoDocument()
     // Tell our views that the document is already destroyed and
     // that they shouldn't try to access it.
     foreach(KoView* view, d->m_views)
-    view->setDocumentDeleted();
+        view->setDocumentDeleted();
 
     delete d->m_startUpWidget;
     d->m_startUpWidget = 0;
@@ -627,7 +630,7 @@ void KoDocument::setReadWrite(bool readwrite)
     KParts::ReadWritePart::setReadWrite(readwrite);
 
     foreach(KoView* view, d->m_views)
-    view->updateReadWrite(readwrite);
+        view->updateReadWrite(readwrite);
 
     Q3PtrListIterator<KoDocumentChild> dIt(d->m_children);
     for (; dIt.current(); ++dIt)
@@ -719,18 +722,19 @@ const Q3PtrList<KoDocumentChild>& KoDocument::children() const
 
 KParts::Part *KoDocument::hitTest(QWidget *widget, const QPoint &globalPos)
 {
-    foreach(KoView* view, d->m_views)
-    if (static_cast<QWidget *>(view) == widget) {
-        QPoint canvasPos(view->canvas()->mapFromGlobal(globalPos));
-        canvasPos.rx() += view->canvasXOffset();
-        canvasPos.ry() += view->canvasYOffset();
+    foreach(KoView* view, d->m_views) {
+        if (static_cast<QWidget *>(view) == widget) {
+            QPoint canvasPos(view->canvas()->mapFromGlobal(globalPos));
+            canvasPos.rx() += view->canvasXOffset();
+            canvasPos.ry() += view->canvasYOffset();
 
-        KParts::Part *part = view->hitTest(canvasPos);
-        if (part)
-            return part;
+            KParts::Part *part = view->hitTest(canvasPos);
+            if (part)
+                return part;
+        }
     }
 
-    return 0L;
+    return 0;
 }
 
 KoDocument* KoDocument::hitTest(const QPoint &pos, KoView* view, const QMatrix &matrix)
@@ -2569,7 +2573,7 @@ void KoDocument::openExistingFile(const KUrl& url)
     setModified(false);
 
     if (ok)
-        QTimer::singleShot(0, this, SLOT(deleteOpenPane()));
+        deleteOpenPane();
 }
 
 void KoDocument::openTemplate(const KUrl& url)
@@ -2632,19 +2636,13 @@ void KoDocument::deleteOpenPane()
 {
     if (d->m_startUpWidget) {
         d->m_startUpWidget->hide();
-        QTimer::singleShot(1000, this, SLOT(deleteOpenPaneDelayed()));
+        d->m_startUpWidget->deleteLater();
 
         shells().getFirst()->factory()->container("mainToolBar", shells().getFirst())->show();
         shells().getFirst()->setRootDocument(this);
     } else {
         emit closeEmbedInitDialog();
     }
-}
-
-void KoDocument::deleteOpenPaneDelayed()
-{
-    delete d->m_startUpWidget;
-    d->m_startUpWidget = 0;
 }
 
 QList<KoDocument::CustomDocumentWidgetItem> KoDocument::createCustomDocumentWidgets(QWidget * /*parent*/)
@@ -2700,6 +2698,16 @@ void KoDocument::setDocumentClean(bool clean)
 void KoDocument::clearUndoHistory()
 {
     d->m_undoStack->clear();
+}
+
+KoGridData &KoDocument::gridData()
+{
+    return d->gridData;
+}
+
+KoGuidesData &KoDocument::guidesData()
+{
+    return d->guidesData;
 }
 
 #include "KoDocument_p.moc"

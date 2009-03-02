@@ -77,7 +77,7 @@ QStringList KoApplicationAdaptor::getViews()
         Q3PtrListIterator<KoDocument> it(*documents);
         for (; it.current(); ++it) {
             foreach(KoView* view, it.current()->views())
-            lst.append('/' + view->objectName());
+                lst.append('/' + view->objectName());
         }
     }
     return lst;

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2009 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -201,13 +201,25 @@ QSizeF KoPAPageBase::size() const
 
 void KoPAPageBase::shapeAdded( KoShape * shape )
 {
+    Q_UNUSED( shape );
 }
 
 void KoPAPageBase::shapeRemoved( KoShape * shape )
 {
+    Q_UNUSED( shape );
 }
 
 KoPageApp::PageType KoPAPageBase::pageType() const
 {
     return KoPageApp::Page;
+}
+
+QPixmap KoPAPageBase::thumbnail( const QSize& size )
+{
+    return generateThumbnail( size );
+}
+
+KoShapeManagerPaintingStrategy * KoPAPageBase::getPaintingStrategy() const
+{
+    return 0;
 }

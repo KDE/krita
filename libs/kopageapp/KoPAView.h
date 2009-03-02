@@ -151,7 +151,6 @@ protected:
 
 protected slots:
     void viewSnapToGrid(bool snap);
-    void viewGrid(bool show);
     void viewGuides(bool show);
     void slotZoomChanged( KoZoomMode::Mode mode, qreal zoom );
 
@@ -230,7 +229,6 @@ private:
     KAction *m_deleteSelectionAction;
 
     KToggleAction *m_actionViewSnapToGrid;
-    KToggleAction *m_actionViewShowGrid;
     KToggleAction *m_actionViewShowGuides;
     KToggleAction *m_actionViewShowMasterPages;
 

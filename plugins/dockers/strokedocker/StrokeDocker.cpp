@@ -179,6 +179,9 @@ void StrokeDocker::applyChanges()
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+
+    canvasController->canvas()->resourceProvider()->setActiveBorder( d->border );
+
     if( ! selection || ! selection->count() )
         return;
 

@@ -19,15 +19,15 @@
  */
 #include "kis_level_filter.h"
 
-#include <math.h>
+#include <cmath>
 
 #include <klocale.h>
 
-#include <qlayout.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qlabel.h>
-#include <qspinbox.h>
+#include <QLayout>
+#include <QPixmap>
+#include <QPainter>
+#include <QLabel>
+#include <QSpinBox>
 
 #include <KoBasicHistogramProducers.h>
 #include <KoColorSpace.h>
@@ -183,39 +183,45 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
     m_page.ingradient->enableGamma(true);
     m_page.blackspin->setValue(0);
     m_page.whitespin->setValue(255);
-    m_page.gammaspin->setNum(1.0);
-    m_page.ingradient->modifyGamma(1.0);
+    m_page.gammaspin->setValue(1.0);
+    m_page.ingradient->slotModifyGamma(1.0);
     m_page.outblackspin->setValue(0);
     m_page.outwhitespin->setValue(255);
 
     connect(m_page.blackspin, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
     connect(m_page.whitespin, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
-    connect(m_page.ingradient, SIGNAL(modifiedGamma(double)), SIGNAL(sigConfigChanged()));
+    connect(m_page.ingradient, SIGNAL(sigModifiedGamma(double)), SIGNAL(sigConfigChanged()));
 
-    connect(m_page.blackspin, SIGNAL(valueChanged(int)), m_page.ingradient, SLOT(modifyBlack(int)));
-    connect(m_page.whitespin, SIGNAL(valueChanged(int)), m_page.ingradient, SLOT(modifyWhite(int)));
-    //connect( m_page.whitespin, SIGNAL(valueChanged(int)), m_page.ingradient, SLOT(modifyGamma()));
+    connect(m_page.blackspin, SIGNAL(valueChanged(int)), m_page.ingradient, SLOT(slotModifyBlack(int)));
+    connect(m_page.whitespin, SIGNAL(valueChanged(int)), m_page.ingradient, SLOT(slotModifyWhite(int)));
+    connect(m_page.gammaspin, SIGNAL(valueChanged(double)), m_page.ingradient, SLOT(slotModifyGamma(double)));
 
-    connect(m_page.ingradient, SIGNAL(modifiedBlack(int)), m_page.blackspin, SLOT(setValue(int)));
-    connect(m_page.ingradient, SIGNAL(modifiedWhite(int)), m_page.whitespin, SLOT(setValue(int)));
-    connect(m_page.ingradient, SIGNAL(modifiedGamma(double)), m_page.gammaspin, SLOT(setNum(double)));
+    connect(m_page.blackspin, SIGNAL(valueChanged(int)), this, SLOT(slotModifyInWhiteLimit(int)));
+    connect(m_page.whitespin, SIGNAL(valueChanged(int)), this, SLOT(slotModifyInBlackLimit(int)));
+
+    connect(m_page.ingradient, SIGNAL(sigModifiedBlack(int)), m_page.blackspin, SLOT(setValue(int)));
+    connect(m_page.ingradient, SIGNAL(sigModifiedWhite(int)), m_page.whitespin, SLOT(setValue(int)));
+    connect(m_page.ingradient, SIGNAL(sigModifiedGamma(double)), m_page.gammaspin, SLOT(setValue(double)));
 
 
     connect(m_page.outblackspin, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
     connect(m_page.outwhitespin, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
 
-    connect(m_page.outblackspin, SIGNAL(valueChanged(int)), m_page.outgradient, SLOT(modifyBlack(int)));
-    connect(m_page.outwhitespin, SIGNAL(valueChanged(int)), m_page.outgradient, SLOT(modifyWhite(int)));
+    connect(m_page.outblackspin, SIGNAL(valueChanged(int)), m_page.outgradient, SLOT(slotModifyBlack(int)));
+    connect(m_page.outwhitespin, SIGNAL(valueChanged(int)), m_page.outgradient, SLOT(slotModifyWhite(int)));
 
-    connect(m_page.outgradient, SIGNAL(modifiedBlack(int)), m_page.outblackspin, SLOT(setValue(int)));
-    connect(m_page.outgradient, SIGNAL(modifiedWhite(int)), m_page.outwhitespin, SLOT(setValue(int)));
+    connect(m_page.outblackspin, SIGNAL(valueChanged(int)), this, SLOT(slotModifyOutWhiteLimit(int)));
+    connect(m_page.outwhitespin, SIGNAL(valueChanged(int)), this, SLOT(slotModifyOutBlackLimit(int)));
 
-    connect((QObject*)(m_page.chkLogarithmic), SIGNAL(toggled(bool)), this, SLOT(drawHistogram(bool)));
+    connect(m_page.outgradient, SIGNAL(sigModifiedBlack(int)), m_page.outblackspin, SLOT(setValue(int)));
+    connect(m_page.outgradient, SIGNAL(sigModifiedWhite(int)), m_page.outwhitespin, SLOT(setValue(int)));
+
+    connect((QObject*)(m_page.chkLogarithmic), SIGNAL(toggled(bool)), this, SLOT(slotDrawHistogram(bool)));
 
     KoHistogramProducerSP producer = KoHistogramProducerSP(new KoGenericLabHistogramProducer());
     histogram = new KisHistogram(dev, producer, LINEAR);
     m_histlog = false;
-    drawHistogram();
+    slotDrawHistogram();
 
 }
 
@@ -224,9 +230,11 @@ KisLevelConfigWidget::~KisLevelConfigWidget()
     delete histogram;
 }
 
-void KisLevelConfigWidget::drawHistogram(bool logarithmic)
+void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
 {
-    int height = 256;
+    int wHeight = height();
+    int wHeightMinusOne = wHeight - 1;
+    int wWidth = width();
 
     if (m_histlog != logarithmic) {
         // Update the histogram
@@ -237,27 +245,54 @@ void KisLevelConfigWidget::drawHistogram(bool logarithmic)
         m_histlog = logarithmic;
     }
 
-    QPixmap pix(256, height);
+    QPixmap pix(wWidth, wHeight);
     pix.fill();
     QPainter p(&pix);
+
     p.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
 
     double highest = (double)histogram->calculations().getHighest();
     Q_INT32 bins = histogram->producer()->numberOfBins();
 
+    // use nearest neighbour interpolation
     if (histogram->getHistogramType() == LINEAR) {
-        double factor = (double)height / highest;
-        for (int i = 0; i < bins; ++i) {
-            p.drawLine(i, height, i, height - int(histogram->getValue(i) * factor));
+        double factor = (double)(wHeight - wHeight / 5.0) / highest;
+        for (int i = 0; i < wWidth; i++)
+        {
+            int binNo = (int)round((double)i / wWidth * (bins - 1));
+            if ((int)histogram->getValue(binNo) != 0)
+                p.drawLine(i, wHeightMinusOne, i, wHeightMinusOne - (int)histogram->getValue(binNo) * factor);
         }
     } else {
-        double factor = (double)height / (double)log(highest);
-        for (int i = 0; i < bins; ++i) {
-            p.drawLine(i, height, i, height - int(log((double)histogram->getValue(i)) * factor));
+        double factor = (double)(wHeight - wHeight / 5.0) / (double)log(highest);
+        for (int i = 0; i < wWidth; i++) {
+            int binNo = (int)round((double)i / wWidth * (bins - 1)) ;
+            if ((int)histogram->getValue(binNo) != 0)
+              p.drawLine(i, wHeightMinusOne, i, wHeightMinusOne - log(histogram->getValue(binNo)) * factor);
         }
     }
 
     m_page.histview->setPixmap(pix);
+}
+
+void KisLevelConfigWidget::slotModifyInBlackLimit(int limit)
+{
+    m_page.blackspin->setMaximum(limit - 1);
+}
+
+void KisLevelConfigWidget::slotModifyInWhiteLimit(int limit)
+{
+    m_page.whitespin->setMinimum(limit + 1);
+}
+
+void KisLevelConfigWidget::slotModifyOutBlackLimit(int limit)
+{
+    m_page.outblackspin->setMaximum(limit - 1);
+}
+
+void KisLevelConfigWidget::slotModifyOutWhiteLimit(int limit)
+{
+    m_page.outwhitespin->setMinimum(limit + 1);
 }
 
 KisPropertiesConfiguration * KisLevelConfigWidget::configuration() const
@@ -278,18 +313,22 @@ void KisLevelConfigWidget::setConfiguration(const KisPropertiesConfiguration * c
     QVariant value;
     if (config->getProperty("blackvalue", value)) {
         m_page.blackspin->setValue(value.toUInt());
+        m_page.ingradient->slotModifyBlack(value.toUInt());
     }
     if (config->getProperty("whitevalue", value)) {
         m_page.whitespin->setValue(value.toUInt());
+        m_page.ingradient->slotModifyWhite(value.toUInt());
     }
     if (config->getProperty("gammavalue", value)) {
-        m_page.ingradient->modifyGamma(value.toDouble());
+        m_page.gammaspin->setValue(value.toUInt());
+        m_page.ingradient->slotModifyGamma(value.toDouble());
     }
     if (config->getProperty("outblackvalue", value)) {
         m_page.outblackspin->setValue(value.toUInt());
+        m_page.outgradient->slotModifyBlack(value.toUInt());
     }
     if (config->getProperty("outwhitevalue", value)) {
         m_page.outwhitespin->setValue(value.toUInt());
+        m_page.outgradient->slotModifyWhite(value.toUInt());
     }
 }
-

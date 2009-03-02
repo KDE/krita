@@ -130,8 +130,7 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
 
     // TODO: implement me
     m_actionMergePoints = new KAction(KIcon("pathpoint-merge"), i18n("Merge points"), this);
-    m_actionMergePoints->setEnabled(false); // not implemented yet.
-    addAction("pathpoint-merge", m_actionMergePoints);
+    //addAction("pathpoint-merge", m_actionMergePoints);
 
     m_actionConvertToPath = new KAction(KIcon("convert-to-path"), i18n("To Path"), this);
     m_actionConvertToPath->setShortcut(Qt::Key_P);

@@ -20,7 +20,6 @@
 #include "kis_spray_paintop_settings.h"
 
 #include <cmath>
-#include <math.h>
 
 #include <QRect>
 #include <QColor>
@@ -40,23 +39,43 @@
 #include <kis_selection.h>
 #include <kis_random_accessor.h>
 
-
 KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
     : KisPaintOp( painter )
     , m_settings( settings )
     , m_image ( image )
 {
-    m_sprayBrush.setRadius( settings->radius() );
+    m_sprayBrush.setDiameter( settings->diameter() );
     m_sprayBrush.setCoverity( settings->coverage() );
     m_sprayBrush.setJitterSize( settings->jitterSize() );
     m_sprayBrush.setJitterMovement( settings->jitterMovement() );
     m_sprayBrush.setUseParticles( settings->useParticles() );
     m_sprayBrush.setAmount( settings->amount() );
+    
+    
+    if ( (settings->diameter() * 0.5) > 1)
+    {
+        m_ySpacing = m_xSpacing = settings->diameter() * 0.5 * settings->spacing();
+    } else
+    {
+        m_ySpacing = m_xSpacing = 1.0;
+    }
+    m_spacing = m_xSpacing;
+
 }
 
 KisSprayPaintOp::~KisSprayPaintOp()
 {
 }
+
+double KisSprayPaintOp::spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
+        Q_UNUSED(pressure1);
+        Q_UNUSED(pressure2);
+        xSpacing = m_xSpacing;
+        ySpacing = m_ySpacing;
+
+        return m_spacing;
+}
+
 
 void KisSprayPaintOp::paintAt(const KisPaintInformation& info)
 {

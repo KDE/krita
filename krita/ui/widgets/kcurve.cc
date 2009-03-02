@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,6 +39,8 @@
 #include <QPaintEvent>
 #include <QList>
 
+#include <QSpinBox>
+
 // KDE includes.
 
 #include <kis_debug.h>
@@ -46,14 +49,33 @@
 
 // Local includes.
 
+#define bounds(x,a,b) (x<a ? a : (x>b ? b :x))
+#define MOUSE_AWAY_THRES 15
+#define POINT_AREA       1E-4
+#define CURVE_AREA       1E-4
+
+
+static
+bool pointLessThan(const QPointF &a, const QPointF &b);
+
+
+#include "kcurve_p.h"
+
+
 KCurve::KCurve(QWidget *parent, Qt::WFlags f)
-        : QWidget(parent, f)
+    : QWidget(parent, f), d(new KCurve::Private(this))
 {
     setObjectName("KCurve");
-    m_grab_point_index = -1;
-    m_readOnlyMode   = false;
-    m_guideVisible   = false;
-    m_dragging = false;
+    d->m_grab_point_index = -1;
+    d->m_readOnlyMode   = false;
+    d->m_guideVisible   = false;
+    d->m_pixmapDirty=true;
+    d->m_pixmapCache=NULL;
+    d->setState(ST_NORMAL);
+
+
+    d->m_intIn=NULL;
+    d->m_intOut=NULL;
 
     setMouseTracking(true);
     setAutoFillBackground(false);
@@ -61,160 +83,245 @@ KCurve::KCurve(QWidget *parent, Qt::WFlags f)
     setMinimumSize(150, 50);
     QPointF p;
     p.rx() = 0.0; p.ry() = 0.0;
-    m_points.append(p);
+    d->m_points.append(p);
     p.rx() = 1.0; p.ry() = 1.0;
-    m_points.append(p);
+    d->m_points.append(p);
+
+    d->setCurveModified();
+
     setFocusPolicy(Qt::StrongFocus);
 }
 
 KCurve::~KCurve()
 {
+    if(d->m_pixmapCache)
+	delete d->m_pixmapCache;
+    delete d;
 }
+
+void KCurve::setupInOutControls(QSpinBox *in, QSpinBox *out, int min, int max)
+{
+    d->m_intIn=in;
+    d->m_intOut=out;
+  
+    if(!d->m_intIn || !d->m_intOut)
+	return;
+
+    d->m_inOutMin=min;
+    d->m_inOutMax=max;
+
+    d->m_intIn->setRange(d->m_inOutMin, d->m_inOutMax);
+    d->m_intOut->setRange(d->m_inOutMin, d->m_inOutMax);
+  
+
+    connect(d->m_intIn, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)));
+    connect(d->m_intOut, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)));
+    d->syncIOControls();
+  
+}
+void KCurve::dropInOutControls()
+{
+    if(!d->m_intIn || !d->m_intOut)
+	return;
+
+    disconnect(d->m_intIn, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)));
+    disconnect(d->m_intOut, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)));
+
+    d->m_intIn=d->m_intOut=NULL;
+  
+}
+
+void KCurve::inOutChanged(int)
+{
+    QPointF pt;
+
+    Q_ASSERT(d->m_grab_point_index>=0);
+
+    pt.rx()=d->io2sp(d->m_intIn->value());
+    pt.ry()=d->io2sp(d->m_intOut->value());
+  
+    if(d->jumpOverExistingPoints(pt, d->m_grab_point_index)) {
+	d->m_points[d->m_grab_point_index]=pt;
+	qSort(d->m_points.begin(), d->m_points.end(), pointLessThan);
+	d->m_grab_point_index = d->m_points.indexOf(pt);
+    }
+    else
+	pt=d->m_points[d->m_grab_point_index];
+   
+
+    d->m_intIn->blockSignals(true);
+    d->m_intOut->blockSignals(true);
+
+    d->m_intIn->setValue(d->sp2io(pt.rx()));
+    d->m_intOut->setValue(d->sp2io(pt.ry()));
+
+    d->m_intIn->blockSignals(false);
+    d->m_intOut->blockSignals(false);
+
+    d->setCurveModified();
+}
+
 
 void KCurve::reset(void)
 {
-    m_grab_point_index = -1;
-    m_guideVisible = false;
-    repaint();
+    d->m_grab_point_index = -1;
+    d->m_guideVisible = false;
+    
+    d->setCurveModified();
 }
 
 void KCurve::setCurveGuide(const QColor & color)
 {
-    m_guideVisible = true;
-    m_colorGuide   = color;
-    repaint();
+    d->m_guideVisible = true;
+    d->m_colorGuide   = color;
+
 }
 
 void KCurve::setPixmap(const QPixmap & pix)
 {
-    m_pix = pix;
-    repaint();
+    d->m_pix = pix;
+    d->m_pixmapDirty=true;
+    d->setCurveRepaint();
 }
 
 void KCurve::keyPressEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Delete || e->key() == Qt::Key_Backspace) {
-        if (m_grab_point_index > 0 && m_grab_point_index < m_points.count() - 1) {
+        if (d->m_grab_point_index > 0 && d->m_grab_point_index < d->m_points.count() - 1) {
             //rx() find closest point to get focus afterwards
-            double grab_point_x = m_points[m_grab_point_index].rx();
+            double grab_point_x = d->m_points[d->m_grab_point_index].rx();
 
-            int left_of_grab_point_index = m_grab_point_index - 1;
-            int right_of_grab_point_index = m_grab_point_index + 1;
+            int left_of_grab_point_index = d->m_grab_point_index - 1;
+            int right_of_grab_point_index = d->m_grab_point_index + 1;
             int new_grab_point_index;
 
-            if (fabs(m_points[left_of_grab_point_index].rx() - grab_point_x) <
-                    fabs(m_points[right_of_grab_point_index].rx() - grab_point_x)) {
+            if (fabs(d->m_points[left_of_grab_point_index].rx() - grab_point_x) <
+		fabs(d->m_points[right_of_grab_point_index].rx() - grab_point_x)) {
                 new_grab_point_index = left_of_grab_point_index;
             } else {
-                new_grab_point_index = m_grab_point_index;
+                new_grab_point_index = d->m_grab_point_index;
             }
-            m_points.removeAt(m_grab_point_index);
-            m_grab_point_index = new_grab_point_index;
+            d->m_points.removeAt(d->m_grab_point_index);
+            d->m_grab_point_index = new_grab_point_index;
+	    setCursor(Qt::ArrowCursor);
+	    d->setState(ST_NORMAL);
         }
-        repaint();
-    } else if (e->key() == Qt::Key_Escape && m_dragging) {
-        m_points[m_grab_point_index].rx() = m_grabOriginalX;
-        m_points[m_grab_point_index].ry() = m_grabOriginalY;
+	d->setCurveModified();
+    } else if (e->key() == Qt::Key_Escape && d->state()!=ST_NORMAL) {
+        d->m_points[d->m_grab_point_index].rx() = d->m_grabOriginalX;
+        d->m_points[d->m_grab_point_index].ry() = d->m_grabOriginalY;
         setCursor(Qt::ArrowCursor);
-        m_dragging = false;
-        repaint();
-        emit modified();
+	d->setState(ST_NORMAL);
+
+	d->setCurveModified();
+    } else if ((e->key() == Qt::Key_A || e->key()==Qt::Key_Insert) && d->state()==ST_NORMAL) {
+	/* FIXME: Lets user choose the hotkeys */
+        addPointInTheMiddle();
     } else
         QWidget::keyPressEvent(e);
 }
 
+void KCurve::addPointInTheMiddle()
+{
+    QPointF pt;
+    pt.rx()=0.5;
+    pt.ry()=getCurveValue(pt.rx());
+  
+    if(!d->jumpOverExistingPoints(pt, -1))
+	return;
+
+    d->m_points.append(pt);
+    qSort(d->m_points.begin(), d->m_points.end(), pointLessThan);
+    d->m_grab_point_index = d->m_points.indexOf(pt);
+  
+    if(d->m_intIn)
+	d->m_intIn->setFocus(Qt::TabFocusReason);
+    d->setCurveModified();
+}
+
+void KCurve::resizeEvent(QResizeEvent *e)
+{
+    d->m_pixmapDirty=true;
+    QWidget::resizeEvent(e);
+}
+
 void KCurve::paintEvent(QPaintEvent *)
 {
-    int    x, y;
-    int    wWidth = width();
-    int    wHeight = height();
+    int    wWidth = width()-1;
+    int    wHeight = height()-1;
 
-    x  = 0;
-    y  = 0;
-
-    // Drawing selection or all histogram values.
     QPainter p(this);
-    p.setRenderHint(QPainter::Antialiasing);
+
+    // Antialiasing is not a good idea here, because 
+    // the grid will drift one pixel to any side due to rounding of int
+    // FIXME: let's user tell the last word (in config)
+    //p.setRenderHint(QPainter::Antialiasing);
+
 
     //  draw background
-    if (!m_pix.isNull()) {
-        p.scale(1.0*wWidth / m_pix.width(), 1.0*wHeight / m_pix.height());
-        p.drawPixmap(0, 0, m_pix);
-        p.resetMatrix();
+    if (!d->m_pix.isNull()) {
+	if(d->m_pixmapDirty || !d->m_pixmapCache) {
+	    if(d->m_pixmapCache)
+		delete d->m_pixmapCache;
+	    d->m_pixmapCache = new QPixmap(width(), height());
+	    QPainter cachePainter(d->m_pixmapCache);
+
+	    cachePainter.scale(1.0*width() / d->m_pix.width(), 1.0*height() / d->m_pix.height());
+	    cachePainter.drawPixmap(0, 0, d->m_pix);
+	    d->m_pixmapDirty=false;
+	}
+	p.drawPixmap(0,0,*d->m_pixmapCache);
     } else
         p.fillRect(rect(), palette().background());
 
-    // Draw grid separators.
-    p.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
-    p.drawLine(wWidth / 3, 0, wWidth / 3, wHeight);
-    p.drawLine(2*wWidth / 3, 0, 2*wWidth / 3, wHeight);
-    p.drawLine(0, wHeight / 3, wWidth, wHeight / 3);
-    p.drawLine(0, 2*wHeight / 3, wWidth, 2*wHeight / 3);
+    
+    d->drawGrid(p, wWidth, wHeight);
+
 
     // Draw curve.
-    double curvePrevVal = getCurveValue(0.0);
+    double prevY = wHeight-getCurveValue(0.)*wHeight;
+    double prevX = 0.;
+    double curY;
+    double normalizedX;
+    int x;
+
     p.setPen(QPen::QPen(palette().text(), 1, Qt::SolidLine));
     for (x = 0 ; x < wWidth ; x++) {
-        double curveX;
-        double curveVal;
+        normalizedX = double(x) / wWidth;
+        curY = wHeight-getCurveValue(normalizedX)*wHeight;
 
-        curveX = (x + 0.5) / wWidth;
-
-        curveVal = getCurveValue(curveX);
-
-        p.drawLine(QLineF(x + 0.5 - 1, wHeight - curvePrevVal * wHeight + 0.5,
-                          x + 0.5, wHeight - curveVal * wHeight + 0.5));
-        curvePrevVal = curveVal;
+	/**
+	 * Keep in mind that QLineF rounds doubles 
+	 * to ints matematically, not just rounds down
+	 * like in C
+	 */
+ 	p.drawLine(QLineF(prevX, prevY,
+                          x, curY ));
+	prevX = x;
+        prevY = curY;
     }
-    p.drawLine(QLineF(x + 0.5 - 1, wHeight - curvePrevVal * wHeight + 0.5,
-                      x + 0.5, wHeight - getCurveValue(1.0) * wHeight + 0.5));
+    p.drawLine(QLineF(prevX, prevY ,
+                      x, wHeight - getCurveValue(1.0) * wHeight));
 
     // Drawing curve handles.
-    if (!m_readOnlyMode) {
-        for (int i = 0; i < m_points.count(); ++i) {
-            double curveX = m_points.at(i).x();
-            double curveY = m_points.at(i).y();
+    double curveX;
+    double curveY;
+    if (!d->m_readOnlyMode) {
+        for (int i = 0; i < d->m_points.count(); ++i) {
+            curveX = d->m_points.at(i).x();
+            curveY = d->m_points.at(i).y();
 
-            if (i == m_grab_point_index) {
+            if (i == d->m_grab_point_index) {
                 p.setPen(QPen::QPen(Qt::red, 3, Qt::SolidLine));
-                p.drawEllipse(QRectF(curveX * wWidth + 0.5 - 2,
-                                     wHeight - 2 - curveY * wHeight + 0.5, 4, 4));
+                p.drawEllipse(QRectF(curveX * wWidth - 2,
+                                     wHeight - 2 - curveY * wHeight, 4, 4));
             } else {
                 p.setPen(QPen::QPen(Qt::red, 1, Qt::SolidLine));
-                p.drawEllipse(QRectF(curveX * wWidth + 0.5 - 3,
-                                     wHeight - 3 - curveY * wHeight + 0.5, 6, 6));
+                p.drawEllipse(QRectF(curveX * wWidth - 3,
+                                     wHeight - 3 - curveY * wHeight, 6, 6));
             }
         }
     }
-}
-
-int KCurve::nearestPointInRange(QPointF pt) const
-{
-    double nearestDistanceSquared = 1000;
-    int nearestIndex = -1;
-    int i = 0;
-
-    foreach(const QPointF & point, m_points) {
-        double distanceSquared = (pt.x() - point.x()) *
-                                 (pt.x() - point.x()) +
-                                 (pt.y() - point.y()) *
-                                 (pt.y() - point.y());
-
-        if (distanceSquared < nearestDistanceSquared) {
-            nearestIndex = i;
-            nearestDistanceSquared = distanceSquared;
-        }
-        ++i;
-    }
-
-    if (nearestIndex >= 0) {
-        if (fabs(pt.x() - m_points[nearestIndex].x()) * width() < 5 &&
-                fabs(pt.y() - m_points[nearestIndex].y()) * width() < 5) {
-            return nearestIndex;
-        }
-    }
-
-    return -1;
 }
 
 static bool pointLessThan(const QPointF &a, const QPointF &b)
@@ -224,200 +331,161 @@ static bool pointLessThan(const QPointF &a, const QPointF &b)
 
 void KCurve::mousePressEvent(QMouseEvent * e)
 {
-    if (m_readOnlyMode) return;
+    if (d->m_readOnlyMode) return;
 
     if (e->button() != Qt::LeftButton)
         return;
 
-    double x = e->pos().x() / (float)width();
-    double y = 1.0 - e->pos().y() / (float)height();
+    double x = e->pos().x() / (double)(width()-1);
+    double y = 1.0 - e->pos().y() / (double)(height()-1);
 
-    int closest_point_index = nearestPointInRange(QPointF(x, y));
 
+        
+    int closest_point_index = d->nearestPointInRange(QPointF(x, y), width(), height());
     if (closest_point_index < 0) {
-        QPointF newPoint(x, y);
-        m_points.append(newPoint);
-        qSort(m_points.begin(), m_points.end(), pointLessThan);
-        m_grab_point_index = m_points.indexOf(newPoint);
+	QPointF newPoint(x, y);
+	if(!d->jumpOverExistingPoints(newPoint, -1))
+	  return;
+	d->m_points.append(newPoint);
+	qSort(d->m_points.begin(), d->m_points.end(), pointLessThan);
+	d->m_grab_point_index = d->m_points.indexOf(newPoint);
     } else {
-        m_grab_point_index = closest_point_index;
+	d->m_grab_point_index = closest_point_index;
     }
+    
+    d->m_grabOriginalX = d->m_points[d->m_grab_point_index].x();
+    d->m_grabOriginalY = d->m_points[d->m_grab_point_index].y();
+    d->m_grabOffsetX = d->m_points[d->m_grab_point_index].x() - x;
+    d->m_grabOffsetY = d->m_points[d->m_grab_point_index].y() - y;
+    d->m_points[d->m_grab_point_index].rx() = x + d->m_grabOffsetX;
+    d->m_points[d->m_grab_point_index].ry() = y + d->m_grabOffsetY;
+    
+    d->m_draggedAwayPointIndex = -1;
+    d->setState(ST_DRAG);   
 
-    m_grabOriginalX = m_points[m_grab_point_index].x();
-    m_grabOriginalY = m_points[m_grab_point_index].y();
-    m_grabOffsetX = m_points[m_grab_point_index].x() - x;
-    m_grabOffsetY = m_points[m_grab_point_index].y() - y;
-    m_points[m_grab_point_index].rx() = x + m_grabOffsetX;
-    m_points[m_grab_point_index].ry() = y + m_grabOffsetY;
-    m_dragging = true;
-    m_draggedawaypointindex = -1;
-
-    setCursor(Qt::CrossCursor);
-    repaint();
+	
+    d->setCurveModified();
 }
 
-void KCurve::mouseReleaseEvent(QMouseEvent * e)
+
+void KCurve::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (m_readOnlyMode) return;
+    if (d->m_readOnlyMode) return;
 
     if (e->button() != Qt::LeftButton)
         return;
 
     setCursor(Qt::ArrowCursor);
-    m_dragging = false;
-    repaint();
-    emit modified();
+    d->setState(ST_NORMAL);
+    
+    d->setCurveModified();
 }
+
 
 void KCurve::mouseMoveEvent(QMouseEvent * e)
 {
-    if (m_readOnlyMode) return;
+    if (d->m_readOnlyMode) return;
 
-    double x = e->pos().x() / (float)width();
-    double y = 1.0 - e->pos().y() / (float)height();
+    double x = e->pos().x() / (double)(width()-1);
+    double y = 1.0 - e->pos().y() / (double)(height()-1);
 
-    if (m_dragging == false) { // If no point is selected set the the cursor shape if on top
-        int nearestPointIndex = nearestPointInRange(QPointF(x, y));
-
+    if (d->state() == ST_NORMAL) 
+    { // If no point is selected set the the cursor shape if on top
+        int nearestPointIndex = d->nearestPointInRange(QPointF(x, y), width(), height());
+	
         if (nearestPointIndex < 0)
-            setCursor(Qt::ArrowCursor);
+	    setCursor(Qt::ArrowCursor);
         else
-            setCursor(Qt::CrossCursor);
+	    setCursor(Qt::CrossCursor);
     } else { // Else, drag the selected point
-        bool removepoint = e->pos().x() - width() > 15 || e->pos().x() < -15 || e->pos().y() - height() > 15 || e->pos().y() < -15;
+	bool crossedHoriz = e->pos().x() - width() > MOUSE_AWAY_THRES ||
+	                    e->pos().x() < -MOUSE_AWAY_THRES;
+	bool crossedVert =  e->pos().y() - height() > MOUSE_AWAY_THRES ||
+	                    e->pos().y() < -MOUSE_AWAY_THRES;
+      
+	bool removePoint =  (crossedHoriz || crossedVert);
 
-        if (removepoint == false && m_draggedawaypointindex != -1) {
+        if (!removePoint && d->m_draggedAwayPointIndex>=0) {
             // point is no longer dragged away so reinsert it
-            QPointF newPoint(m_draggedawaypoint);
-            m_points.insert(m_draggedawaypointindex, newPoint);
-            m_grab_point_index = m_draggedawaypointindex;
-            m_draggedawaypointindex = -1;
+            QPointF newPoint(d->m_draggedAwayPoint);
+            d->m_points.insert(d->m_draggedAwayPointIndex, newPoint);
+            d->m_grab_point_index = d->m_draggedAwayPointIndex;
+            d->m_draggedAwayPointIndex = -1;
         }
 
-        if (removepoint == true && m_draggedawaypointindex != -1)
-            return;
+        if (removePoint && 
+	    (d->m_draggedAwayPointIndex>=0))
+	    return;
+
 
         setCursor(Qt::CrossCursor);
 
-        x += m_grabOffsetX;
-        y += m_grabOffsetY;
+        x += d->m_grabOffsetX;
+        y += d->m_grabOffsetY;
 
         double leftX;
         double rightX;
-        if (m_grab_point_index == 0) {
+        if (d->m_grab_point_index == 0) {
             leftX = 0.0;
-            if (m_points.count() > 1)
-                rightX = m_points[m_grab_point_index + 1].rx() - 1E-4;
+            if (d->m_points.count() > 1)
+                rightX = d->m_points[d->m_grab_point_index + 1].rx() - POINT_AREA;
             else
                 rightX = 1.0;
-        } else if (m_grab_point_index == m_points.count() - 1) {
-            leftX = m_points[m_grab_point_index - 1].rx() + 1E-4;
+        } else if (d->m_grab_point_index == d->m_points.count() - 1) {
+            leftX = d->m_points[d->m_grab_point_index - 1].rx() + POINT_AREA;
             rightX = 1.0;
         } else {
-            Q_ASSERT(m_grab_point_index > 0 && m_grab_point_index < m_points.count() - 1);
+            Q_ASSERT(d->m_grab_point_index > 0 && d->m_grab_point_index < d->m_points.count() - 1);
 
             // the 1E-4 addition so we can grab the dot later.
-            leftX = m_points[m_grab_point_index - 1].rx() + 1E-4;
-            rightX = m_points[m_grab_point_index + 1].rx() - 1E-4;
+            leftX = d->m_points[d->m_grab_point_index - 1].rx() + POINT_AREA;
+            rightX = d->m_points[d->m_grab_point_index + 1].rx() - POINT_AREA;
         }
 
-        if (x <= leftX) {
-            x = leftX;
-        } else if (x >= rightX) {
-            x = rightX;
+	x=bounds(x, leftX, rightX);
+	y=bounds(y, 0., 1.);
+
+        d->m_points[d->m_grab_point_index].rx() = x;
+	d->m_points[d->m_grab_point_index].ry() = y;
+
+
+        if (removePoint && d->m_points.count()>2) {
+            d->m_draggedAwayPoint.rx() = d->m_points[d->m_grab_point_index].rx();
+            d->m_draggedAwayPoint.ry() = d->m_points[d->m_grab_point_index].ry();
+            d->m_draggedAwayPointIndex = d->m_grab_point_index;
+            d->m_points.removeAt(d->m_grab_point_index);
+	    d->m_grab_point_index=bounds(d->m_grab_point_index, 0, d->m_points.count()-1);
         }
 
-        if (y > 1.0)
-            y = 1.0;
-
-        if (y < 0.0)
-            y = 0.0;
-
-        m_points[m_grab_point_index].rx() = x;
-        m_points[m_grab_point_index].ry() = y;
-
-        if (removepoint) {
-            m_draggedawaypoint.rx() = m_points[m_grab_point_index].rx();
-            m_draggedawaypoint.ry() = m_points[m_grab_point_index].ry();
-            m_draggedawaypointindex = m_grab_point_index;
-            m_points.removeAt(m_grab_point_index);
-        }
-
-        emit modified();
+	d->setCurveModified();
     }
-
-    repaint();
 }
 
 double KCurve::getCurveValue(double x)
 {
-    return getCurveValue(m_points, x);
+    if(d->m_splineDirty) {
+	d->m_spline.createSpline(QVector<QPointF>::fromList(d->m_points));
+	d->m_splineDirty=false;
+    }
+    return Private::checkBounds(d->m_spline, x);
 }
 
-double KCurve::getCurveValue(const QList<QPointF >& curve, double x)
+double KCurve::getCurveValue(const QList<QPointF>& curve, double x)
 {
-    double t;
-    QPointF p;
-    QPointF p0, p1, p2, p3;
-    double c0, c1, c2, c3;
-    double val;
-
-    if (curve.count() == 0)
-        return 0.5;
-
-    // First find curve segment
-    p = curve.first();
-    if (x < p.x())
-        return p.y();
-
-    p = curve.last();
-    if (x >= p.x())
-        return p.y();
-
-    // Find the four control points (two on each side of x)
-    int i = 0;
-    while (x >= curve.at(i).x()) {
-        ++i;
-    }
-    --i;
-
-    if (i - 1 < 0) {
-        p1 = p0 = curve.first();
-    } else {
-        p0 = curve.at(i - 1);
-        p1 = curve.at(i);
-    }
-
-    if (i + 2 > curve.count() - 1) {
-        p2 = p3 = curve.last();
-    } else {
-        p2 = curve.at(i + 1);
-        p3 = curve.at(i + 2);
-    }
-
-    // Calculate the value
-    t = (x - p1.x()) / (p2.x() - p1.x());
-    c2 = (p2.y() - p0.y()) * (p2.x() - p1.x()) / (p2.x() - p0.x());
-    c3 = p1.y();
-    c0 = -2 * p2.y() + 2 * c3 + c2 + (p3.y() - p1.y()) * (p2.x() - p1.x()) / (p3.x() - p1.x());
-    c1 = p2.y() - c3 - c2 - c0;
-    val = ((c0 * t + c1) * t + c2) * t + c3;
-
-    if (val < 0.0)
-        val = 0.0;
-    if (val > 1.0)
-        val = 1.0;
-    return val;
+    KisCubicSpline<QPointF, double> spline(QVector<QPointF>::fromList(curve));
+    return Private::checkBounds(spline, x);
 }
 
-QList<QPointF > KCurve::getCurve()
+QList<QPointF> KCurve::getCurve()
 {
-    return m_points;
+    return d->m_points;
 }
 
 void KCurve::setCurve(QList<QPointF >inlist)
 {
-    m_points = inlist;
+    d->m_points = inlist;
+    d->m_grab_point_index=bounds(d->m_grab_point_index, 0,d->m_points.count()-1);
+    d->setCurveModified();
 }
 
 void KCurve::leaveEvent(QEvent *)

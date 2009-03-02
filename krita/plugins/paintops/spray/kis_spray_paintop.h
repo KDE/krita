@@ -42,6 +42,7 @@ public:
     KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
     virtual ~KisSprayPaintOp();
 
+    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const;
     void paintAt(const KisPaintInformation& info);
 
     virtual bool incremental() const {
@@ -49,13 +50,6 @@ public:
     }
 
 
-    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const {
-        Q_UNUSED(pressure1);
-        Q_UNUSED(pressure2);
-        xSpacing = 1;
-        ySpacing = 1;
-        return 1;
-    }
 
 
 private:
@@ -63,6 +57,7 @@ private:
     KisImageSP m_image;
     KisPaintDeviceSP dab;
     SprayBrush m_sprayBrush;
+    double m_xSpacing, m_ySpacing, m_spacing;
 };
 
 #endif // KIS_SPRAY_PAINTOP_H_

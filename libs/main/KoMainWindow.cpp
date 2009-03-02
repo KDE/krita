@@ -82,10 +82,6 @@ public:
         setSelectionPolicy(KParts::PartManager::TriState);
         setAllowNestedParts(true);
         setIgnoreScrollBars(true);
-        // Allow right-click on embedded objects (without activating them)
-        // But beware: this means right-click on parent, from embedded object,
-        // doesn't make the parent active first...
-        setActivationButtonMask(Qt::LeftButton | Qt::MidButton);
     }
     virtual bool eventFilter(QObject *obj, QEvent *ev) {
         if (!obj->isWidgetType() || ::qobject_cast<KoFrame *>(obj))
@@ -578,7 +574,7 @@ void KoMainWindow::saveRecentFiles()
     // Tell all windows to reload their list, after saving
     // Doesn't work multi-process, but it's a start
     foreach(KMainWindow* window, KMainWindow::memberList())
-    static_cast<KoMainWindow *>(window)->reloadRecentFileList();
+        static_cast<KoMainWindow *>(window)->reloadRecentFileList();
 }
 
 void KoMainWindow::reloadRecentFileList()
@@ -1072,7 +1068,7 @@ void KoMainWindow::closeEvent(QCloseEvent *e)
         setRootDocument(0L);
         if (!d->m_dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency
             foreach(QDockWidget* dockWidget, d->m_dockWidgetMap)
-            dockWidget->setVisible(d->m_dockWidgetVisibilityMap.value(dockWidget));
+                dockWidget->setVisible(d->m_dockWidgetVisibilityMap.value(dockWidget));
         }
         KParts::MainWindow::closeEvent(e);
     } else
@@ -1429,21 +1425,24 @@ void KoMainWindow::showToolbar(const char * tbName, bool shown)
         tb->hide();
 
     // Update the action appropriately
-    foreach(QAction* action, d->m_toolbarList)
-    if (action->objectName() != tbName) {
-        //kDebug(30003) <<"KoMainWindow::showToolbar setChecked" << shown;
-        static_cast<KToggleAction *>(action)->setChecked(shown);
-        break;
+    foreach(QAction* action, d->m_toolbarList) {
+        if (action->objectName() != tbName) {
+            //kDebug(30003) <<"KoMainWindow::showToolbar setChecked" << shown;
+            static_cast<KToggleAction *>(action)->setChecked(shown);
+            break;
+        }
     }
 }
 
 void KoMainWindow::slotSplitView()
 {
     d->m_splitted = true;
-    d->m_rootViews.append(d->m_rootDoc->createView(d->m_splitter));
-    d->m_rootViews.current()->show();
-    d->m_rootViews.current()->setPartManager(d->m_manager);
-    d->m_manager->setActivePart(d->m_rootDoc, d->m_rootViews.current());
+    KoView *current = d->m_rootViews.current();
+    KoView *newView = d->m_rootDoc->createView(d->m_splitter);
+    d->m_rootViews.append(newView);
+    current->show();
+    current->setPartManager(d->m_manager);
+    d->m_manager->setActivePart(d->m_rootDoc, current);
     d->m_removeView->setEnabled(true);
     d->m_orientation->setEnabled(true);
 }

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2009 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -117,8 +117,7 @@ void KoPAMasterPage::setDisplayMasterBackground( bool display )
     Q_UNUSED( display );
 }
 
-
-QPixmap KoPAMasterPage::thumbnail( const QSize& size )
+QPixmap KoPAMasterPage::generateThumbnail( const QSize& size )
 {
     // don't paint null pixmap
     if ( size.isEmpty() ) // either width or height is <= 0

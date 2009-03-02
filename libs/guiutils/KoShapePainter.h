@@ -28,6 +28,7 @@
 
 class KoShape;
 class KoViewConverter;
+class KoShapeManagerPaintingStrategy;
 class QPainter;
 class QImage;
 
@@ -37,7 +38,7 @@ class QImage;
 class KOGUIUTILS_EXPORT KoShapePainter
 {
 public:
-    KoShapePainter();
+    KoShapePainter(KoShapeManagerPaintingStrategy * strategy = 0);
     ~KoShapePainter();
     
     /**
@@ -70,7 +71,7 @@ public:
      */
     bool paintShapes( QImage & image );
 
-    /// Rreturns the bounding rect of the shapes to paint
+    /// Returns the bounding rect of the shapes to paint
     QRectF contentRect();
 
 private:

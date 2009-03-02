@@ -1476,11 +1476,7 @@ bool KoXmlNodeData::setContent(QXmlInputSource* source, bool namespaceProcessing
     QXmlSimpleReader reader;
     reader.setFeature(QLatin1String("http://xml.org/sax/features/namespaces"), namespaceProcessing);
     reader.setFeature(QLatin1String("http://xml.org/sax/features/namespace-prefixes"), !namespaceProcessing);
-#if QT_VERSION < 0x040500
     reader.setFeature(QLatin1String("http://trolltech.com/xml/features/report-whitespace-only-CharData"), false);
-#else
-    reader.setFeature(QLatin1String("http://qtsoftware.com/xml/features/report-whitespace-only-CharData"), false);
-#endif
     return setContent(source, &reader, errorMsg, errorLine, errorColumn);
 }
 
@@ -2852,11 +2848,7 @@ bool KoXml::setDocument(KoXmlDocument& doc, QIODevice* device,
     QXmlSimpleReader reader;
     reader.setFeature(QLatin1String("http://xml.org/sax/features/namespaces"), namespaceProcessing);
     reader.setFeature(QLatin1String("http://xml.org/sax/features/namespace-prefixes"), !namespaceProcessing);
-#if QT_VERSION < 0x040500
     reader.setFeature(QLatin1String("http://trolltech.com/xml/features/report-whitespace-only-CharData"), false);
-#else
-    reader.setFeature(QLatin1String("http://qtsoftware.com/xml/features/report-whitespace-only-CharData"), false);
-#endif
 
     KoXmlInputSource* source = new KoXmlInputSource(device);
     bool result = doc.setContent(source, &reader, errorMsg, errorLine, errorColumn);

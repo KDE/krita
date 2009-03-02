@@ -35,9 +35,6 @@ class KisSharedPtr;
  * and the disadvantage that inheritiance relations are no longer
  * recognizable
  */
-class KisProjection;
-typedef KisSharedPtr<KisProjection> KisProjectionSP;
-
 class KisImage;
 typedef KisSharedPtr<KisImage> KisImageSP;
 typedef KisWeakSharedPtr<KisImage> KisImageWSP;

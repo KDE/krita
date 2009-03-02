@@ -173,26 +173,19 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     connect(m_d->totalRefresh, SIGNAL(triggered()), this, SLOT(slotTotalRefresh()));
 
 
-    // XXX: This state is taken from a kritarc where the docker constellation was configured by hand to look
-    //      like the krita 1.6 configuration. Setting this state if none is present seems to work, but there's
-    //      still hte versioning problem to be accounted for.
-    QString state = "AAAA/wAAAAD9AAAAAgAAAAAAAAAzAAACK/wCAAAAAfsAAAAOAFQAbwBvAGwAQgBvAHgBAAAAQwAAAisAAABGAP///wAAAAEAAAEHAAACK/wCAAAAEfwAAABDAAAAwwAAALkBAAAb+gAAAAACAAAABPsAAAAuAEsAcgBpAHQAYQBTAGgAYQBwAGUALwBLAGkAcwBUAG8AbwBsAEIAcgB1AHMAaAEAAAAA/////wAAAJ0A////+wAAABoASwBpAHMAQgBpAHIAZABlAHkAZQBCAG8AeAEAAAAA/////wAAADAA////+wAAACoASwBvAFQAbwBvAGwATwBwAHQAaQBvAG4AcwBEAG8AYwBrAGUAcgAgADgBAAAAAP////8AAAAAAAAAAPsAAAAmAEsAbwBUAG8AbwBsAE8AcAB0AGkAbwBuAHMARABvAGMAawBlAHIBAAAAAP////8AAAAAAAAAAPwAAAEmAAAAxwAAAAAA////+v////8CAAAAA/sAAAAaAEsAbwBDAG8AbABvAHIARABvAGMAawBlAHIAAAAAAP////8AAACgAP////sAAAAgAEsAaQBzAFAAYQBsAGUAdAB0AGUARABvAGMAawBlAHIAAAAAAP////8AAACbAP////sAAAAiAFMAdAByAG8AawBlACAAUAByAG8AcABlAHIAdABpAGUAcwAAAAAA/////wAAAKIA/////AAAAQkAAAB5AAAAZQAAAIX6AAAAAQEAAAAC+wAAAC4ASwBvAFMAaABhAHAAZQBDAG8AbABsAGUAYwB0AGkAbwBuAEQAbwBjAGsAZQByAQAAAAD/////AAABBwD////7AAAAJABTAG0AYQBsAGwAQwBvAGwAbwByAFMAZQBsAGUAYwB0AG8AcgEAAAI+AAAA4gAAAFYA////+wAAABYASwBpAHMATABhAHkAZQByAEIAbwB4AQAAAYUAAADpAAAAsQD////7AAAAIgBTAGgAYQBkAG8AdwAgAFAAcgBvAHAAZQByAHQAaQBlAHMAAAAAAP////8AAACJAP////sAAAAgAFMAaABhAHAAZQAgAFAAcgBvAHAAZQByAHQAaQBlAHMAAAAAAP////8AAAAUAP////sAAAAkAFMAaQBtAHAAbABlACAAVABlAHgAdAAgAEUAZABpAHQAbwByAAAAAAD/////AAABNgD////7AAAAEgBTAGMAcgBpAHAAdABpAG4AZwAAAAAA/////wAAAHQA////+wAAADAASwBpAHMAVAByAGkAYQBuAGcAbABlAEMAbwBsAG8AcgBTAGUAbABlAGMAdABvAHIAAAACnQAAAHgAAAB4AP////sAAAAqAFMAcABlAGMAaQBmAGkAYwBDAG8AbABvAHIAUwBlAGwAZQBjAHQAbwByAAAAArMAAADVAAAAigD////7AAAAGgBTAGgAYQBwAGUAUwBlAGwAZQBjAHQAbwByAAAAAAD/////AAAAPgD////7AAAAKgBLAG8AVABvAG8AbABPAHAAdABpAG8AbgBzAEQAbwBjAGsAZQByACAAMwAAAAJgAAAAHAAAAAAAAAAA+wAAAC4ASwBpAHMAUABhAGkAbgB0AGUAcgBsAHkATQBpAHgAZQByAEQAbwBjAGsAZQByAAAAAAD/////AAAAbgD////7AAAALABLAG8AVABvAG8AbABPAHAAdABpAG8AbgBzAEQAbwBjAGsAZQByACAAMQAzAAAAAAD/////AAAAAAAAAAD7AAAAFgBTAHQAeQBsAGUARABvAGMAawBlAHIAAAAAAP////8AAABPAP////v/////AAAAAlUAAAAZAAAAFAD////7AAAAIABLAGkAcwBIAGkAcwB0AG8AZwByAGEAbQBEAG8AYwBrAAAAAAD/////AAAAeAAAAHgAAAHgAAACKwAAAAQAAAAEAAAACAAAAAj8AAAAAQAAAAIAAAACAAAAFgBtAGEAaQBuAFQAbwBvAGwAQgBhAHIBAAAAAAAAAI0AAAAAAAAAAAAAAB4AQgByAHUAcwBoAGUAcwBBAG4AZABTAHQAdQBmAGYBAAAAjQAAApMAAAAAAAAAAA==";
-
-    KConfigGroup group(KGlobal::config(), "krita");
-    if (!group.hasKey("State")) {
-        group.writeEntry("State", state);
-    }
-
     setComponentData(KisFactory2::componentData(), false);
 
-    if (!doc->isReadWrite())
+    if (!doc->isReadWrite()) {
         setXMLFile("krita_readonly.rc");
-    else
+    }
+    else {
         setXMLFile("krita.rc");
+    }
 
     if (mainWindow()) {
          actionCollection()->addAction(KStandardAction::KeyBindings, "keybindings", mainWindow()->guiFactory(), SLOT(configureShortcuts()));
     }
+
     m_d->doc = doc;
     m_d->viewConverter = new KoZoomHandler();
     m_d->canvasController = new KoCanvasController(this);
@@ -641,7 +634,7 @@ void KisView2::slotUpdateFullScreen(bool toggle)
 
 void KisView2::slotPreferences()
 {
-    if (PreferencesDialog::editPreferences()) {
+    if (KisDlgPreferences::editPreferences()) {
         KisConfigNotifier::instance()->notifyConfigChanged();
         m_d->resourceProvider->resetDisplayProfile();
 

@@ -32,7 +32,7 @@ KoShapeReorderCommand::KoShapeReorderCommand(const QList<KoShape*> &shapes, QLis
 {
     Q_ASSERT(m_shapes.count() == m_newIndexes.count());
     foreach(KoShape *shape, shapes)
-    m_previousIndexes.append(shape->zIndex());
+        m_previousIndexes.append(shape->zIndex());
 
     setText(i18n("Reorder shapes"));
 }

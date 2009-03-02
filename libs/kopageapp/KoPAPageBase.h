@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2009 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -37,6 +37,7 @@ class KoOdfLoadingContext;
 class KoGenStyle;
 class KoShape;
 class KoPALoadingContext;
+class KoShapeManagerPaintingStrategy;
 
 /**
  * Base class used for KoPAMasterPage and KoPAPage
@@ -105,7 +106,7 @@ public:
 
     virtual void setDisplayMasterBackground( bool display ) = 0;
 
-    virtual QPixmap thumbnail( const QSize& size = QSize( 512, 512 ) ) = 0;
+    QPixmap thumbnail( const QSize& size = QSize( 512, 512 ) );
 
     /// reimplemented
     virtual QSizeF size() const;
@@ -207,6 +208,20 @@ protected:
      * @param paContext the pageapp loading context
      */
     virtual void loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext & loadingContext );
+
+    /**
+     * Create thumbnail for the page
+     */
+    virtual QPixmap generateThumbnail( const QSize& size = QSize( 512, 512 ) ) = 0;
+
+    /**
+     * Get the painting strategy used for generating thumbnails
+     *
+     * The returned strategy needs to be alloced by new
+     *
+     * @return 0 which mean use the default strategy
+     */
+    virtual KoShapeManagerPaintingStrategy * getPaintingStrategy() const;
 };
 
 #endif /* KOPAPAGEBASE_H */

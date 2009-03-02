@@ -62,16 +62,16 @@ void KisGridManager::setup(KActionCollection * collection)
     KisConfig config;
     m_view->document()->gridData().setGrid(config.getGridHSpacing(), config.getGridVSpacing());
 
-    m_toggleGrid  = new KToggleAction(i18n("Show Grid"), this);
-    collection->addAction("view_toggle_grid", m_toggleGrid);
-    connect(m_toggleGrid, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
-
-    m_toggleGrid->setCheckedState(KGuiItem(i18n("Hide Grid")));
-    m_toggleGrid->setChecked(m_view->document()->gridData().showGrid());
+    KToggleAction *toggleGrid = m_view->document()->gridData().gridToggleAction();
+    // XXX remove the translated strings when the string freeze is lifted, the KoGridData should have those
+    toggleGrid->setText(i18n("Show Grid"));
+    toggleGrid->setCheckedState(KGuiItem(i18n("Hide Grid")));
+    collection->addAction("view_grid", toggleGrid);
+    connect(toggleGrid, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
 
     m_toggleSnapToGrid  = new KToggleAction(i18n("Snap To Grid"), this);
     collection->addAction("view_snap_to_grid", m_toggleSnapToGrid);
-    connect(m_toggleGrid, SIGNAL(triggered()), this, SLOT(toggleSnapToGrid()));
+    connect(toggleGrid, SIGNAL(triggered()), this, SLOT(toggleSnapToGrid()));
 
     // Fast grid config
     m_gridFastConfig1x1  = new KAction(i18n("1x1"), this);
@@ -115,7 +115,7 @@ void KisGridManager::fastConfig1x1()
     KisConfig cfg;
     cfg.setGridHSpacing(1);
     cfg.setGridVSpacing(1);
-    //m_view->updateCanvas();
+    m_view->canvas()->update();
 }
 
 void KisGridManager::fastConfig2x2()
@@ -123,7 +123,7 @@ void KisGridManager::fastConfig2x2()
     KisConfig cfg;
     cfg.setGridHSpacing(2);
     cfg.setGridVSpacing(2);
-    //m_view->updateCanvas();
+    m_view->canvas()->update();
 }
 
 void KisGridManager::fastConfig5x5()
@@ -131,7 +131,7 @@ void KisGridManager::fastConfig5x5()
     KisConfig cfg;
     cfg.setGridHSpacing(5);
     cfg.setGridVSpacing(5);
-    //m_view->updateCanvas();
+    m_view->canvas()->update();
 }
 
 void KisGridManager::fastConfig10x10()
@@ -139,7 +139,7 @@ void KisGridManager::fastConfig10x10()
     KisConfig cfg;
     cfg.setGridHSpacing(10);
     cfg.setGridVSpacing(10);
-    //m_view->updateCanvas();
+    m_view->canvas()->update();
 }
 
 void KisGridManager::fastConfig20x20()
@@ -147,7 +147,7 @@ void KisGridManager::fastConfig20x20()
     KisConfig cfg;
     cfg.setGridHSpacing(20);
     cfg.setGridVSpacing(20);
-    //m_view->updateCanvas();
+    m_view->canvas()->update();
 }
 
 void KisGridManager::fastConfig40x40()
@@ -155,7 +155,7 @@ void KisGridManager::fastConfig40x40()
     KisConfig cfg;
     cfg.setGridHSpacing(40);
     cfg.setGridVSpacing(40);
-    //m_view->updateCanvas();
+    m_view->canvas()->update();
 }
 
 #define pixelToView(point) \

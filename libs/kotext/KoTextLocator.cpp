@@ -71,7 +71,7 @@ public:
         }
         if (pageTmp != pageNumber || chapterTmp != chapterPosition) {
             foreach(KoTextReference* reference, listeners)
-            reference->variableMoved(0, 0, 0);
+                reference->variableMoved(0, 0, 0);
         }
     }
 

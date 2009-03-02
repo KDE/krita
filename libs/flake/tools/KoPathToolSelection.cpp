@@ -51,7 +51,7 @@ void KoPathToolSelection::paint(QPainter &painter, const KoViewConverter &conver
         KoShape::applyConversion(painter, converter);
 
         foreach(KoPathPoint *p, it.value())
-        p->paint(painter, handleRadius, KoPathPoint::All);
+            p->paint(painter, handleRadius, KoPathPoint::All);
 
         painter.restore();
     }
@@ -119,7 +119,7 @@ void KoPathToolSelection::selectPoints(const QRectF &rect, bool clearSelection)
         if (parameterShape && parameterShape->isParametricShape())
             continue;
         foreach(KoPathPoint* point, shape->pointsAt(shape->documentToShape(rect)))
-        add(point, false);
+            add(point, false);
     }
     blockSignals(false);
     emit selectionChanged();

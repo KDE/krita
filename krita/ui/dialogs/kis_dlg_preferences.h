@@ -185,7 +185,7 @@ private:
 /**
  *  Preferences dialog of KImageShop^WKrayon^WKrita
  */
-class PreferencesDialog : public KPageDialog
+class KisDlgPreferences : public KPageDialog
 {
     Q_OBJECT
 
@@ -196,8 +196,8 @@ public:
 
 protected:
 
-    PreferencesDialog(QWidget *parent = 0, const char *name = 0);
-    ~PreferencesDialog();
+    KisDlgPreferences(QWidget *parent = 0, const char *name = 0);
+    ~KisDlgPreferences();
 
 protected:
 

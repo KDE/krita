@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Laurent Montel <montel@kde.org>
-   Copyright (C) 2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,14 +19,17 @@
 */
 
 #include "KoGridData.h"
-
-#include "KoUnit.h"
 #include "KoViewConverter.h"
+
+#include <KoUnit.h>
 #include <KoOasisSettings.h>
 #include <KoXmlWriter.h>
 
+#include <KToggleAction>
+#include <KLocale>
 #include <QPainter>
 #include <QRectF>
+#include <KDebug>
 
 #define DEFAULT_GRID_SIZE_MM 5.0
 
@@ -34,17 +37,25 @@ class KoGridData::Private
 {
 public:
     Private()
-            : snapToGrid(false),
-            showGrid(false),
-            gridX(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
-            gridY(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
-            gridColor(Qt::lightGray) {
+        : snapToGrid(false),
+        showGrid(false),
+        gridX(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
+        gridY(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
+        gridColor(Qt::lightGray),
+        toggleGridAction(0)
+    {
+    }
+
+    ~Private()
+    {
+        delete toggleGridAction;
     }
 
     bool snapToGrid;
     bool showGrid;
     qreal gridX, gridY;
     QColor gridColor;
+    KToggleAction *toggleGridAction;
 };
 
 KoGridData::KoGridData()
@@ -95,6 +106,8 @@ void KoGridData::setGridColor(const QColor & color)
 
 bool KoGridData::showGrid() const
 {
+    if (d->toggleGridAction)
+        return d->toggleGridAction->isChecked();
     return d->showGrid;
 }
 
@@ -168,7 +181,7 @@ void KoGridData::saveOdfSettings(KoXmlWriter &settingsWriter)
     settingsWriter.startElement("config:config-item");
     settingsWriter.addAttribute("config:name", "IsSnapToGrid");
     settingsWriter.addAttribute("config:type", "boolean");
-    settingsWriter.addTextNode(d->snapToGrid ? "true" : "false");
+    settingsWriter.addTextNode(snapToGrid() ? "true" : "false");
     settingsWriter.endElement();
 
     if (d->gridX >= 0.0) {
@@ -186,4 +199,20 @@ void KoGridData::saveOdfSettings(KoXmlWriter &settingsWriter)
         settingsWriter.addTextNode(QString::number(static_cast<int>(POINT_TO_MM(d->gridY * 100.0))));
         settingsWriter.endElement();
     }
+}
+
+KToggleAction *KoGridData::gridToggleAction(QWidget* canvas)
+{
+    if (! d->toggleGridAction) {
+        d->toggleGridAction = new KToggleAction(KIcon("grid"), QString(), 0);
+#if 0 // re-enable when the string-freeze is lifted.
+        d->toggleGridAction = new KToggleAction(KIcon("grid"), i18n("Show Grid"), 0);
+        d->toggleGridAction->setCheckedState(KGuiItem(i18n("Hide Grid")));
+        d->toggleGridAction->setToolTip(i18n("Shows or hides grid"));
+        d->toggleGridAction->setChecked(d->showGrid);
+#endif
+    }
+    if (canvas)
+        QObject::connect(d->toggleGridAction, SIGNAL(toggled(bool)), canvas, SLOT(update()));
+    return d->toggleGridAction;
 }

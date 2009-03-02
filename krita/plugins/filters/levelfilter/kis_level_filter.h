@@ -31,26 +31,6 @@ class QWidget;
 class KisColorAdjustment;
 class KisHistogram;
 
-#if 0
-
-class KisLevelFilterConfiguration : public KisFilterConfiguration
-{
-
-public:
-
-    KisLevelFilterConfiguration();
-    virtual ~KisLevelFilterConfiguration();
-    virtual void fromXML(const QString&);
-    virtual QString toString();
-
-public:
-    Q_UINT8 blackvalue, whitevalue;
-    double gammavalue;
-    Q_UINT16 outblackvalue, outwhitevalue;
-    KisColorAdjustment * m_adjustment;
-};
-
-#endif
 
 /**
  * This class affect Intensity Y of the image
@@ -96,7 +76,12 @@ public:
     Ui::WdgLevel m_page;
 
 protected slots:
-    void drawHistogram(bool logarithmic = false);
+    void slotDrawHistogram(bool logarithmic = false);
+
+    void slotModifyInBlackLimit(int);
+    void slotModifyInWhiteLimit(int);
+    void slotModifyOutBlackLimit(int);
+    void slotModifyOutWhiteLimit(int);
 
 protected:
     KisHistogram *histogram;

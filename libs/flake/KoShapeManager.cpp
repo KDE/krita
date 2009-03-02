@@ -329,7 +329,7 @@ void KoShapeManager::notifyShapeChanged(KoShape * shape)
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
     if (container) {
         foreach(KoShape *child, container->iterator())
-        d->aggregate4update.insert(child);
+            d->aggregate4update.insert(child);
     }
 }
 
@@ -361,7 +361,7 @@ void KoShapeManager::updateTree()
 
         void fireSignals() {
             foreach(KoShape *shape, shapesWithCollisionDetection)
-            shape->shapeChanged(KoShape::CollisionDetected);
+                shape->shapeChanged(KoShape::CollisionDetected);
         }
 
     private:
@@ -384,7 +384,7 @@ void KoShapeManager::updateTree()
 
     // do it again to see which shapes we intersect with _after_ moving.
     foreach(KoShape *shape, d->aggregate4update)
-    detector.detect(d->tree, shape, d->shapeIndexesBeforeUpdate[shape]);
+        detector.detect(d->tree, shape, d->shapeIndexesBeforeUpdate[shape]);
     d->aggregate4update.clear();
     d->shapeIndexesBeforeUpdate.clear();
 

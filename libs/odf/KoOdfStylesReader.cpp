@@ -59,11 +59,11 @@ KoOdfStylesReader::KoOdfStylesReader()
 KoOdfStylesReader::~KoOdfStylesReader()
 {
     foreach(const QString& family, d->customStyles.keys())
-    qDeleteAll(d->customStyles[family]);
+        qDeleteAll(d->customStyles[family]);
     foreach(const QString& family, d->contentAutoStyles.keys())
-    qDeleteAll(d->contentAutoStyles[family]);
+        qDeleteAll(d->contentAutoStyles[family]);
     foreach(const QString& family, d->stylesAutoStyles.keys())
-    qDeleteAll(d->stylesAutoStyles[family]);
+        qDeleteAll(d->stylesAutoStyles[family]);
     qDeleteAll(d->defaultStyles);
     qDeleteAll(d->styles);
     qDeleteAll(d->masterPages);

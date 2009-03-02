@@ -280,7 +280,6 @@ void DeformBrush::fastDeformColor(qreal cursorX,qreal cursorY,qreal amount){
 
 
 void DeformBrush::fastSwirl(qreal cursorX,qreal cursorY, qreal alpha){
-    dbgPlugins << "fswirl alpha:" << alpha;
     int curXi = static_cast<int>(cursorX+0.5);
     int curYi = static_cast<int>(cursorY+0.5);
 

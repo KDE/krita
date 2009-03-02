@@ -23,6 +23,7 @@
 #include <QVariant>
 #include <KoColor.h>
 #include "KoShape.h"
+#include "KoLineBorder.h"
 
 class KoCanvasResourceProvider::Private
 {
@@ -140,6 +141,22 @@ void KoCanvasResourceProvider::setHandleRadius(int handleRadius)
 int KoCanvasResourceProvider::handleRadius()
 {
     return resource(KoCanvasResource::HandleRadius).toInt();
+}
+
+void KoCanvasResourceProvider::setActiveBorder( const KoLineBorder &border )
+{
+    QVariant v;
+    v.setValue(border);
+    setResource(KoCanvasResource::ActiveBorder, v);
+}
+
+KoLineBorder KoCanvasResourceProvider::activeBorder()
+{
+    if (! d->resources.contains(KoCanvasResource::ActiveBorder)) {
+        KoLineBorder empty;
+        return empty;
+    }
+    return resource(KoCanvasResource::ActiveBorder).value<KoLineBorder>();
 }
 
 void KoCanvasResourceProvider::setUnitChanged()

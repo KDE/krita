@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Laurent Montel <montel@kde.org>
-   Copyright (C) 2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,16 +22,19 @@
 #define KOGRIDDATA_H
 
 #include "komain_export.h"
+#include <KoXmlReaderForward.h>
 #include <QtGui/QColor>
-#include "KoXmlReaderForward.h"
+
 class QPainter;
 class QRectF;
 class KoViewConverter;
 class KoXmlWriter;
+class KToggleAction;
 
 /**
  * This class stores application-data for display-grids.
  * Things like grid colors, distances and snap to grid are saved here.
+ * \sa KoDocument::gridData()
  */
 class KOMAIN_EXPORT KoGridData
 {
@@ -107,6 +110,12 @@ public:
       * @param area the area in need of updating
      */
     void paintGrid(QPainter &painter, const KoViewConverter &converter, const QRectF &area) const;
+
+    /**
+     * Returns a toggle action that can be added to the menu of your views.
+     * @param by passing the canvas the toggle action will automatically update the canvas when its toggled.
+     */
+    KToggleAction *gridToggleAction(QWidget* canvas = 0);
 
 private:
     class Private;

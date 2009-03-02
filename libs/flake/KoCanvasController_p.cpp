@@ -175,7 +175,7 @@ void Viewport::handleDropEvent(QDropEvent *event)
 
         // repaint selection before selecting newly create shape
         foreach(KoShape * shape, selection->selectedShapes())
-        shape->update();
+            shape->update();
 
         selection->deselectAll();
         selection->select(m_draggedShape);

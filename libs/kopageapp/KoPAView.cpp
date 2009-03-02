@@ -182,14 +182,16 @@ void KoPAView::initGUI()
     connect(m_canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
             m_canvas, SLOT(setDocumentOffset(const QPoint&)));
 
-    KoPADocumentStructureDockerFactory structureDockerFactory( KoDocumentSectionView::ThumbnailMode, m_doc->pageType() );
-    m_documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( createDockWidget( &structureDockerFactory ) );
-    connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),
-             m_documentStructureDocker, SLOT( setPart( KParts::Part * ) ) );
-    connect(m_documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), this, SLOT(updateActivePage(KoPAPageBase*)));
-    connect(m_documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
+    if (shell()) {
+        KoPADocumentStructureDockerFactory structureDockerFactory( KoDocumentSectionView::ThumbnailMode, m_doc->pageType() );
+        m_documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( createDockWidget( &structureDockerFactory ) );
+        connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),
+                m_documentStructureDocker, SLOT( setPart( KParts::Part * ) ) );
+        connect(m_documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), this, SLOT(updateActivePage(KoPAPageBase*)));
+        connect(m_documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
 
-    KoToolManager::instance()->requestToolActivation( m_canvasController );
+        KoToolManager::instance()->requestToolActivation( m_canvasController );
+    }
 
     show();
 }
@@ -214,10 +216,10 @@ void KoPAView::initActions()
     connect(m_deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
     connect(m_canvas->toolProxy(), SIGNAL(selectionChanged(bool)), m_deleteSelectionAction, SLOT(setEnabled(bool)));
 
-    m_actionViewShowGrid  = new KToggleAction(i18n("Show &Grid"), this);
-    m_actionViewShowGrid->setChecked(m_doc->gridData().showGrid());
-    actionCollection()->addAction("view_grid", m_actionViewShowGrid );
-    connect( m_actionViewShowGrid, SIGNAL( triggered( bool ) ), this, SLOT (viewGrid( bool )));
+    KToggleAction *showGrid= m_doc->gridData().gridToggleAction(m_canvas);
+    // XXX remove the translated string when the string freeze is lifted, the KoGridData should have those
+    showGrid->setText(i18n("Show &Grid"));
+    actionCollection()->addAction("view_grid", showGrid );
 
     m_actionViewSnapToGrid = new KToggleAction(i18n("Snap to Grid"), this);
     m_actionViewSnapToGrid->setChecked(m_doc->gridData().snapToGrid());
@@ -284,12 +286,6 @@ void KoPAView::viewSnapToGrid(bool snap)
 {
     m_doc->gridData().setSnapToGrid(snap);
     m_actionViewSnapToGrid->setChecked(snap);
-}
-
-void KoPAView::viewGrid(bool show)
-{
-    m_doc->gridData().setShowGrid(show);
-    //m_actionViewShowGrid->setChecked(show);
 }
 
 void KoPAView::viewGuides(bool show)
@@ -382,7 +378,9 @@ void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
 void KoPAView::setMasterMode( bool master )
 {
     m_viewMode->setMasterMode( master );
-    m_documentStructureDocker->setMasterMode(master);
+    if (shell()) {
+        m_documentStructureDocker->setMasterMode(master);
+    }
     m_actionMasterPage->setEnabled(!master);
 
     QList<KoPAPageBase*> pages = m_doc->pages( master );
@@ -423,7 +421,9 @@ void KoPAView::updateActivePage( KoPAPageBase * page )
 
 void KoPAView::reinitDocumentDocker()
 {
-    m_documentStructureDocker->setActivePage( m_activePage );
+    if (shell()) {
+        m_documentStructureDocker->setActivePage( m_activePage );
+    }
 }
 
 void KoPAView::doUpdateActivePage( KoPAPageBase * page )
@@ -457,35 +457,37 @@ void KoPAView::setActivePage( KoPAPageBase* page )
     if ( !page )
         return;
 
-    if ( page != m_activePage ) {
-        shapeManager()->removeAdditional( m_activePage );
-        m_activePage = page;
-        shapeManager()->addAdditional( m_activePage );
-        QList<KoShape*> shapes = page->iterator();
-        shapeManager()->setShapes( shapes, false );
+    bool pageChanged = page != m_activePage;
+
+    shapeManager()->removeAdditional( m_activePage );
+    m_activePage = page;
+    shapeManager()->addAdditional( m_activePage );
+    QList<KoShape*> shapes = page->iterator();
+    shapeManager()->setShapes( shapes, false );
+    //Make the top most layer active
+    if ( !shapes.isEmpty() ) {
+        KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes.last() );
+        shapeManager()->selection()->setActiveLayer( layer );
+    }
+
+    // if the page is not a master page itself set shapes of the master page
+    KoPAPage * paPage = dynamic_cast<KoPAPage *>( page );
+    if ( paPage ) {
+        KoPAMasterPage * masterPage = paPage->masterPage();
+        QList<KoShape*> masterShapes = masterPage->iterator();
+        masterShapeManager()->setShapes( masterShapes, false );
         //Make the top most layer active
-        if ( !shapes.isEmpty() ) {
-            KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes.last() );
-            shapeManager()->selection()->setActiveLayer( layer );
+        if ( !masterShapes.isEmpty() ) {
+            KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( masterShapes.last() );
+            masterShapeManager()->selection()->setActiveLayer( layer );
         }
+    }
+    else {
+        // if the page is a master page no shapes are in the masterShapeManager
+        masterShapeManager()->setShapes( QList<KoShape*>() );
+    }
 
-        // if the page is not a master page itself set shapes of the master page
-        KoPAPage * paPage = dynamic_cast<KoPAPage *>( page );
-        if ( paPage ) {
-            KoPAMasterPage * masterPage = paPage->masterPage();
-            QList<KoShape*> masterShapes = masterPage->iterator();
-            masterShapeManager()->setShapes( masterShapes, false );
-            //Make the top most layer active
-            if ( !masterShapes.isEmpty() ) {
-                KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( masterShapes.last() );
-                masterShapeManager()->selection()->setActiveLayer( layer );
-            }
-        }
-        else {
-            // if the page is a master page no shapes are in the masterShapeManager
-            masterShapeManager()->setShapes( QList<KoShape*>() );
-        }
-
+    if ( shell() && pageChanged ) {
         m_documentStructureDocker->setActivePage(m_activePage);
     }
 }

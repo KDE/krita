@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _BRUSH_H_
-#define _BRUSH_H_
+#ifndef _SPRAY_BRUSH_H_
+#define _SPRAY_BRUSH_H_
 
 #include <QVector>
 
@@ -38,8 +38,9 @@ public:
     /// Paints Wu Particle
     void paintParticle(KisRandomAccessor &writeAccessor,const KoColor &color,qreal rx, qreal ry);
 
-    void setRadius(int radius){
-        m_radius = radius;
+    void setDiameter(int diameter){
+        m_diameter = diameter;
+        m_radius = diameter * 0.5;
     }
 
     void setCoverity(qreal coverage){
@@ -66,8 +67,9 @@ public:
 private:
     KoColor m_inkColor;
     int m_counter;
-    int m_radius;
+    qreal m_radius;
     int m_pixelSize;
+    int m_diameter;
 
 
     // jitter
@@ -75,6 +77,7 @@ private:
     bool m_jitterMovement;
     bool m_useParticles;
     qreal m_coverage;
+    // amount of jitter for movement
     qreal m_amount;
 };
 

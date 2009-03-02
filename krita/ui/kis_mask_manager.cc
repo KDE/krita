@@ -216,6 +216,12 @@ void KisMaskManager::createFilterMask()
     }
 }
 
+void KisMaskManager::addEffectMask( KisNodeSP parent, KisEffectMaskSP mask )
+{
+    m_commandsAdapter->addNode( mask, parent, 02110 );
+    activateMask( mask );
+}
+
 void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
 {
     KisLayerSP layer = dynamic_cast<KisLayer*>(parent.data());
@@ -224,7 +230,7 @@ void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
 
     KisPaintDeviceSP dev = layer->projection();
     KisFilterMask * mask = new KisFilterMask();
-    
+
     if (layer->selection()) {
         mask->setSelection(layer->selection());
     }
@@ -400,7 +406,7 @@ void KisMaskManager::mirrorMaskX()
 
     QRect dirty = KisTransformWorker::mirrorX(dev, m_view->selection() );
     m_activeMask->setDirty(dirty);
-    
+
     if (t) m_view->undoAdapter()->addCommand(t);
 
     m_view->document()->setModified(true);
@@ -426,7 +432,7 @@ void KisMaskManager::mirrorMaskY()
 
     QRect dirty = KisTransformWorker::mirrorY(dev, m_view->selection() );
     m_activeMask->setDirty(dirty);
-    
+
 
     if (t) m_view->undoAdapter()->addCommand(t);
 

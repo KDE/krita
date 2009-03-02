@@ -78,16 +78,25 @@ public:
 };
 
 /**
-   The KisThreadedApplicator takes a paint device, a job factory and a
-   paint device and creates threadweaver jobs for as many subrects as
-   are needed to cover the whole paint device.
-*/
+ * The KisThreadedApplicator takes a paint device, a job factory and a
+ * paint device and creates threadweaver jobs for as many subrects as
+ *  are needed to cover the whole paint device.
+ *
+ * XXX: make it use kissystemlocker & threadweaver jobcollections
+ */
 class KRITAIMAGE_EXPORT KisThreadedApplicator : public QObject
 {
 
     Q_OBJECT
 
 public:
+
+
+    enum ApplicatorMode {
+        TILED,
+        UNTILED
+    };
+
 
     /**
      * @param dev The paintdevice that is the subject of the jobs
@@ -102,7 +111,9 @@ public:
      *                 Use this for convolutions, for instance.
      *
      */
-    KisThreadedApplicator(KisPaintDeviceSP dev, const QRect & rc, KisJobFactory * jobFactory, KoProgressUpdater * updater, int margin = 0);
+    KisThreadedApplicator(KisPaintDeviceSP dev, const QRect & rc,
+                          KisJobFactory * jobFactory, KoProgressUpdater * updater,
+                          int margin = 0, ApplicatorMode mode = TILED);
     ~KisThreadedApplicator();
 
     /**
@@ -113,7 +124,7 @@ public:
 
 signals:
 
-    void areaDone(const QRect & rc);
+    void areaDone(KisPaintDeviceSP dev, const QRect & rc);
 
 private slots:
 

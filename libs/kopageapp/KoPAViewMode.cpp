@@ -21,6 +21,7 @@
 
 #include "KoPACanvas.h"
 #include "KoPAView.h"
+#include <KoCanvasController.h>
 
 KoPAViewMode::KoPAViewMode( KoPAView * view, KoPACanvas * canvas )
 : m_canvas( canvas )
@@ -51,6 +52,8 @@ bool KoPAViewMode::masterMode()
 void KoPAViewMode::activate( KoPAViewMode * previousViewMode )
 {
     Q_UNUSED( previousViewMode );
+    m_canvas->updateSize();
+    m_canvas->canvasController()->scrollContentsBy( 0, 0 );
 }
 
 void KoPAViewMode::deactivate()

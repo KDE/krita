@@ -23,7 +23,6 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_generator_layer.cpp
     dialogs/kis_dlg_image_properties.cc
     dialogs/kis_dlg_layer_properties.cc
-    dialogs/kis_dlg_new_layer.cc 
     dialogs/kis_dlg_preferences.cc
     dialogs/kis_dlg_transformation_effect.cpp
     flake/kis_layer_container_shape.cc 
@@ -60,7 +59,6 @@ set(kritaui_LIB_SRCS
     kis_image_manager.cc
     kis_image_view_converter.cpp
     kis_import_catcher.cc 
-    kis_label_cursor_pos.cc
     kis_layer_box.cpp 
     kis_layer_manager.cc
     kis_mask_manager.cc
@@ -198,12 +196,16 @@ install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-#install( FILES
+install( FILES
+    canvas/kis_canvas2.h
+    canvas/kis_canvas_decoration.h
+    tool/kis_tool.h
+    kis_cursor.h
+    kis_view2.h
 #    kis_cmb_composite.h
 #    kis_cmb_idlist.h
 #    kis_color_cup.h
 #    kis_config.h
-#    kis_cursor.h
 #    kis_double_click_event.h
 #    kis_double_widget.h
 #    kis_filter_manager.h
@@ -222,7 +224,6 @@ install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 #    kis_paintop_box.h
 #    kis_palette_widget.h
 #    kis_previewwidget.h
-#    kis_tool.h
 #    kis_tool_non_paint.h
 #    kis_tool_paint.h
 #    kis_tool_freehand.h
@@ -233,4 +234,4 @@ install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 #    kobirdeyepanel.h
 #    KoInputDevice.h
 #    canvas/kis_perspective_grid_manager.h
-#    DESTINATION ${INCLUDE_INSTALL_DIR})
+   DESTINATION ${INCLUDE_INSTALL_DIR})

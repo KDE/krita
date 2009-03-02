@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
- *
+ *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
+ * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -32,6 +33,8 @@
 
 #include <krita_export.h>
 
+class QSpinBox;
+
 /**
  * KCurve is a widget that shows a single curve that can be edited
  * by the user. The user can grab the curve and move it; this creates
@@ -49,7 +52,7 @@ class KRITAUI_EXPORT KCurve : public QWidget
     Q_OBJECT
 
 public:
-
+  
     /**
      * Create a new curve widget with a default curve, that is a straight
      * line from bottom-left to top-right.
@@ -87,6 +90,10 @@ signals:
      */
     void modified(void);
 
+    protected slots:
+    void inOutChanged(int);
+
+
 protected:
 
     void keyPressEvent(QKeyEvent *);
@@ -95,6 +102,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent * e);
     void mouseMoveEvent(QMouseEvent * e);
     void leaveEvent(QEvent *);
+    void resizeEvent(QResizeEvent *e);
 
 public:
 
@@ -123,23 +131,25 @@ public:
      */
     void setCurve(QList<QPointF> inlist);
 
+    /**
+     * Connect/disconnect external spinboxes to the curve
+     * @min/@max - is the range for their values
+     */   
+    void setupInOutControls(QSpinBox *in, QSpinBox *out, int min, int max);
+    void dropInOutControls();
+
+    /**
+     * Handy function that creates new point in the middle 
+     * of the curve and sets focus on the m_intIn field,
+     * so the user can move this point anywhere in a moment
+     */
+    void addPointInTheMiddle();
+
 private:
-    int nearestPointInRange(QPointF pt) const;
 
-    int m_grab_point_index;
-    bool m_dragging;
-    double m_grabOffsetX;
-    double m_grabOffsetY;
-    double m_grabOriginalX;
-    double m_grabOriginalY;
-    QPointF m_draggedawaypoint;
-    int m_draggedawaypointindex;
+    struct Private;
+    Private * const d;
 
-    bool m_readOnlyMode;
-    bool m_guideVisible;
-    QColor m_colorGuide;
-    QList<QPointF> m_points;
-    QPixmap m_pix;
 };
 
 

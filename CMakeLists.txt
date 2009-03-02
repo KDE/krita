@@ -164,6 +164,8 @@ add_subdirectory(libs)
 add_subdirectory(interfaces)
 add_subdirectory(cmake)
 
+set(SHOULD_BUILD_KARBON TRUE)
+
 macro_optional_add_subdirectory(karbon)
 
 if(EIGEN2_FOUND)

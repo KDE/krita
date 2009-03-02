@@ -42,6 +42,7 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
 
     KoShapeTemplate t;
     t.id = KoPathShapeId;
+    t.templateId = "star";
     t.name = i18n("Star");
     t.family = "geometric";
     t.toolTip = i18n("A star");
@@ -55,6 +56,7 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
     addTemplate(t);
 
     t.id = KoPathShapeId;
+    t.templateId = "flower";
     t.name = i18n("Flower");
     t.family = "funny";
     t.toolTip = i18n("A flower");
@@ -71,6 +73,7 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
     addTemplate(t);
 
     t.id = KoPathShapeId;
+    t.templateId = "pentagon";
     t.name = i18n("Pentagon");
     t.family = "geometric";
     t.toolTip = i18n("A pentagon");
@@ -86,6 +89,7 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
     addTemplate(t);
 
     t.id = KoPathShapeId;
+    t.templateId = "hexagon";
     t.name = i18n("Hexagon");
     t.family = "geometric";
     t.toolTip = i18n("A hexagon");

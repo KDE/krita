@@ -39,7 +39,6 @@ const qint32 IMG_DEFAULT_HEIGHT = 512;
 const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_OUTLINE;
 const qint32 DEFAULT_MAX_TILES_MEM = 5000;
 const qint32 DEFAULT_SWAPPINESS = 100;
-const qint32 DEFAULT_PRESSURE_CORRECTION = 50;
 const qint32 DEFAULT_UNDO_LIMIT = 50;
 const qint32 DEFAULT_BORDER_SIZE = 128;
 }
@@ -287,41 +286,6 @@ qint32 KisConfig::swappiness() const
 void KisConfig::setSwappiness(qint32 swappiness)
 {
     m_cfg.writeEntry("swappiness", swappiness);
-}
-
-qint32 KisConfig::getPressureCorrection()
-{
-    return m_cfg.readEntry("pressurecorrection", DEFAULT_PRESSURE_CORRECTION);
-}
-
-void KisConfig::setPressureCorrection(qint32 correction)
-{
-    m_cfg.writeEntry("pressurecorrection",  correction);
-}
-
-qint32 KisConfig::getDefaultPressureCorrection()
-{
-    return DEFAULT_PRESSURE_CORRECTION;
-}
-
-bool KisConfig::tabletDeviceEnabled(const QString& tabletDeviceName) const
-{
-    return m_cfg.readEntry("TabletDevice" + tabletDeviceName + "Enabled", false);
-}
-
-void KisConfig::setTabletDeviceEnabled(const QString& tabletDeviceName, bool enabled)
-{
-    m_cfg.writeEntry("TabletDevice" + tabletDeviceName + "Enabled", enabled);
-}
-
-qint32 KisConfig::tabletDeviceAxis(const QString& tabletDeviceName, const QString& axisName, qint32 defaultAxis) const
-{
-    return m_cfg.readEntry("TabletDevice" + tabletDeviceName + axisName, defaultAxis);
-}
-
-void KisConfig::setTabletDeviceAxis(const QString& tabletDeviceName, const QString& axisName, qint32 axis) const
-{
-    m_cfg.writeEntry("TabletDevice" + tabletDeviceName + axisName, axis);
 }
 
 quint32 KisConfig::getGridMainStyle()

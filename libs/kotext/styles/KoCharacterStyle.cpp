@@ -155,6 +155,11 @@ void KoCharacterStyle::clearForeground()
 
 void KoCharacterStyle::applyStyle(QTextCharFormat &format) const
 {
+    // Since Qt takes its default size from the user config we will set a default size if nobody else does.
+    if (!format.hasProperty(QTextFormat::FontPointSize))
+        format.setFontPointSize(12);
+    // TODO same for color and font-family
+
     QList<int> keys = d->stylesPrivate.keys();
     for (int i = 0; i < keys.count(); i++) {
         QVariant variant = d->stylesPrivate.value(keys[i]);

@@ -842,13 +842,11 @@ public:
     */
     bool addVersion(const QString& comment);
 
-    KoGridData &gridData() {
-        return m_gridData;
-    }
+    /// return the grid data for this document.
+    KoGridData &gridData();
 
-    KoGuidesData &guidesData() {
-        return m_guidesData;
-    }
+    /// returns the guides data for this document.
+    KoGuidesData &guidesData();
 
     void clearUndoHistory();
 
@@ -1139,8 +1137,6 @@ private:
     Private * const d;
     KService::Ptr m_nativeService;
     bool m_bEmpty;
-    KoGridData m_gridData;
-    KoGuidesData m_guidesData;
     static Q3PtrList<KoDocument> *s_documentList;
     static const int s_defaultAutoSave;
 };

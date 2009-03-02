@@ -171,6 +171,9 @@ public:
     QList<KoVersionInfo> m_versionInfo;
 
     KUndoStack* m_undoStack;
+
+    KoGridData gridData;
+    KoGuidesData guidesData;
 };
 
 // Used in singleViewMode
@@ -2695,6 +2698,16 @@ void KoDocument::setDocumentClean(bool clean)
 void KoDocument::clearUndoHistory()
 {
     d->m_undoStack->clear();
+}
+
+KoGridData &KoDocument::gridData()
+{
+    return d->gridData;
+}
+
+KoGuidesData &KoDocument::guidesData()
+{
+    return d->guidesData;
 }
 
 #include "KoDocument_p.moc"

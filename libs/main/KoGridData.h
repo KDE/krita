@@ -34,6 +34,7 @@ class KToggleAction;
 /**
  * This class stores application-data for display-grids.
  * Things like grid colors, distances and snap to grid are saved here.
+ * \sa KoDocument::gridData()
  */
 class KOMAIN_EXPORT KoGridData
 {

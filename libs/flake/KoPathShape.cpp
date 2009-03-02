@@ -259,6 +259,7 @@ void KoPathShape::paintDebug(QPainter &painter)
             painter.drawEllipse(r);
         }
     }
+
     painter.restore();
     kDebug(30006) << "nop =" << i;
 }
@@ -1275,4 +1276,14 @@ bool KoPathShape::hitTest(const QPointF &position) const
     point = absoluteTransformation(0).inverted().map(position - shadow()->offset());
 
     return outlinePath.contains(point);
+}
+
+void KoPathShape::setBeginLineEnd( const KoLineEnd &path )
+{
+    m_begin = path;
+}
+
+void KoPathShape::setEndLineEnd( const KoLineEnd &path )
+{
+    m_end = path;
 }

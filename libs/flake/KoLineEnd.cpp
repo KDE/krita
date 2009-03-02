@@ -31,6 +31,7 @@
 
 #include <QPixmap>
 #include <QIcon>
+#include <QImage>
 #include <QSvgRenderer>
 #include <QPainter>
 
@@ -40,6 +41,10 @@ KoLineEnd::KoLineEnd(QString name, QString path, QString view)
   m_name = name;
   m_path = path;
   m_view = view;
+}
+
+KoLineEnd::KoLineEnd()
+{
 }
 
 KoLineEnd::~KoLineEnd()
@@ -64,7 +69,27 @@ QByteArray KoLineEnd::generateSVG(QSize size, QString comment)
     str.append(m_path.toUtf8());
     str.append("\" />\
     </svg>");
+    m_svg = str;
     return str;
+}
+
+QByteArray KoLineEnd::getSVG(){
+    return m_svg;
+}
+
+QImage KoLineEnd::drawImage(QSize size)
+{
+    QSvgRenderer endLineRenderer;
+    QPixmap endLinePixmap(size);
+    endLinePixmap.fill(QColor(Qt::transparent));
+    QPainter endLinePainter(&endLinePixmap);
+
+    // Convert path to SVG
+    endLineRenderer.load(generateSVG(QSize(size.width(), size.height())));
+    endLineRenderer.render(&endLinePainter);
+
+    // return QImage
+    return QImage (endLinePixmap);
 }
 
 QIcon KoLineEnd::drawIcon(QSize size, int proportion)
@@ -85,6 +110,16 @@ QIcon KoLineEnd::drawIcon(QSize size, int proportion)
 QString KoLineEnd::name()
 {
   return m_name;
+}
+
+QString KoLineEnd::path()
+{
+  return m_path;
+}
+
+QString KoLineEnd::viewBox()
+{
+  return m_view;
 }
 
 #include "KoLineEnd.moc"

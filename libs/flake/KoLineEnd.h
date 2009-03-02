@@ -46,16 +46,21 @@ class KoPathShape;
 class FLAKE_EXPORT KoLineEnd{
 public:
     KoLineEnd(QString name, QString path, QString view);
+    KoLineEnd();
     virtual ~KoLineEnd();
     QIcon drawIcon(QSize size, int proportion);
     QString name();
+    QString path();
+    QString viewBox();
     QByteArray generateSVG(QSize size, QString comment = QString());
+    QByteArray getSVG();
+    QImage drawImage(QSize size);
 
 private:
     QString m_name;
     QString m_path;
     QString m_view;
-
+    QByteArray m_svg;
 };
 
 #endif // KOLINEEND_H

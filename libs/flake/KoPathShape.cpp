@@ -49,8 +49,8 @@ public:
     }
 
     Qt::FillRule fillRule;
-    KoLineEnd *m_begin;
-    KoLineEnd *m_end;
+    KoLineEnd *beginLineEnd;
+    KoLineEnd *endLineEnd;
 };
 
 KoPathShape::KoPathShape()
@@ -1280,12 +1280,12 @@ bool KoPathShape::hitTest(const QPointF &position) const
     return outlinePath.contains(point);
 }
 
-void KoPathShape::setBeginLineEnd( KoLineEnd path )
+void KoPathShape::setBeginLineEnd( const KoLineEnd &path )
 {
-    d->m_begin = &path;
+    d->beginLineEnd = new KoLineEnd(path);
 }
 
-void KoPathShape::setEndLineEnd( KoLineEnd path )
+void KoPathShape::setEndLineEnd( const KoLineEnd &path )
 {
-    d->m_end = &path;
+    d->endLineEnd = new KoLineEnd(path);
 }

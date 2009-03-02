@@ -430,13 +430,13 @@ public:
      * @brief Add a line end at the begining of the path
      * @param path the path in svg's d format attribute
      */
-    void setBeginLineEnd(KoLineEnd path);
+    void setBeginLineEnd(const KoLineEnd &path);
 
     /**
      * @brief Add a line end at the ending of the path
      * @param path the path in svg's d format attribute
      */
-    void setEndLineEnd(KoLineEnd path);
+    void setEndLineEnd(const KoLineEnd &path);
 
     /// Returns a odf/svg string represenatation of the path data with the given matrix applied.
     QString toString(const QMatrix &matrix) const;

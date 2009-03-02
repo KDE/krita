@@ -68,12 +68,9 @@ private:
     int m_iconW;
     int m_iconH;
     QSize m_iconSize;
-    QStringList m_nameEndLineList;
     QMap<QString, QString> m_pathEndLineMap;
     QMap<QString, QString> m_viewEndLineMap;
     QList<KoLineEnd> m_endLineList;
-
-private:
     QComboBox * m_beginEndLineComboBox;
     QComboBox * m_endEndLineComboBox;
 };

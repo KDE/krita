@@ -78,10 +78,11 @@ KoShapeEndLinesDocker::KoShapeEndLinesDocker()
     m_iconSize.setWidth(m_iconW);
     m_beginEndLineComboBox = new QComboBox( mainWidget );
     m_beginEndLineComboBox->setIconSize(m_iconSize);
-    m_beginEndLineComboBox->addItem(QIcon(),"      None");
+
+    m_beginEndLineComboBox->addItem(QIcon(),"      None", QVariant( QStringList() ) );
     m_endEndLineComboBox = new QComboBox( mainWidget );
     m_endEndLineComboBox->setIconSize(m_iconSize);
-    m_endEndLineComboBox->addItem(QIcon(),"      None");
+    m_endEndLineComboBox->addItem(QIcon(),"      None", QVariant ( QStringList() ) );
 
     int proportion = 3;
     QString fileName( KStandardDirs::locate( "data","kpresenter/endLineStyle/endLine.xml" ) );
@@ -94,13 +95,12 @@ KoShapeEndLinesDocker::KoShapeEndLinesDocker()
             forEachElement(drawMarker, lineEndElement){
 
                 KoLineEnd temp(drawMarker.attribute("display-name"),drawMarker.attribute("d"),drawMarker.attribute("viewBox"));
-		m_endLineList.append(temp);
 
-		QIcon drawIcon(temp.drawIcon(m_iconSize, proportion));
-
+                QIcon drawIcon(temp.drawIcon(m_iconSize, proportion));
+                
                 // add icon and label in the two QComboBox
-                m_beginEndLineComboBox->addItem(drawIcon, temp.name());//, QVariant(temp.generateSVG()));
-                m_endEndLineComboBox->addItem(drawIcon, temp.name());
+                m_beginEndLineComboBox->addItem( drawIcon, temp.name(), QVariant( QStringList() << drawMarker.attribute("d") << drawMarker.attribute("viewBox") ) );
+                m_endEndLineComboBox->addItem( drawIcon, temp.name(), QVariant(  QStringList() << drawMarker.attribute("d") << drawMarker.attribute("viewBox") ) );
             }
         }else {
             kDebug() << "reading of endLine.xml failed:" << errorMessage;
@@ -138,12 +138,30 @@ KoShapeEndLinesDocker::~KoShapeEndLinesDocker()
 
 void KoShapeEndLinesDocker::applyChanges()
 {
-    kDebug() << "begin = "<< m_beginEndLineComboBox->currentText();
-    kDebug() << "end = "<< m_endEndLineComboBox->currentText();
-//   KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-//   KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-//   if( ! selection || ! selection->count() )
-//        return;
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    if( ! selection || ! selection->count() )
+        return;
+   
+    KoLineEnd *begin;
+    kDebug() << "init begin";
+    QStringList beginList = m_beginEndLineComboBox->itemData( m_beginEndLineComboBox->currentIndex() ).toStringList();
+    if(beginList.size() == 2){
+        begin = new KoLineEnd(m_beginEndLineComboBox->currentText(), beginList[0], beginList[1]);
+    }else{
+        begin = new KoLineEnd(m_beginEndLineComboBox->currentText(), QString(), QString());
+    }
+
+    KoLineEnd *end;
+    kDebug() << "init end";
+    QStringList endList = m_endEndLineComboBox->itemData( m_endEndLineComboBox->currentIndex() ).toStringList();
+    if(endList.size() == 2){
+        end = new KoLineEnd(m_endEndLineComboBox->currentText(), endList[0], endList[1]);
+    }else{
+        end = new KoLineEnd(m_endEndLineComboBox->currentText(), QString(), QString());
+    }
+    kDebug() << "begin = "<< m_beginEndLineComboBox->itemData( m_beginEndLineComboBox->currentIndex() );
+    kDebug() << "end = "<< m_endEndLineComboBox->itemData( m_endEndLineComboBox->currentIndex() );
 //   
 //    QSvgRenderer endLineRenderer;
 //                // Init QPainter and QPixmap
@@ -158,10 +176,18 @@ void KoShapeEndLinesDocker::applyChanges()
 //                QIcon drawIcon(endLinePixmap);
 //
 //   
-//   KoShape* shape = selection->firstSelectedShape();
+    KoShape* shape = selection->firstSelectedShape();
+    if(shape->shapeId() == "KoPathShape"){
+        kDebug() << shape->shapeId();
+        KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
+        pathShape->setBeginLineEnd(*begin);
+        pathShape->setEndLineEnd(*end);
+    }
 //   //qreal angle = shape->rotation();
 //   kDebug() << selection->count();
 //   //shape->isVisible(false);
+    delete begin;
+    delete end;
 }
 
 

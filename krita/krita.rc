@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="15">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="16">
 
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>

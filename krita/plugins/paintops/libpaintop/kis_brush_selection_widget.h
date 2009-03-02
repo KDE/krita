@@ -32,7 +32,7 @@ class KisView2;
 /**
  * Compound widget that collects all the various brush selection widgets.
  */
-class KisBrushSelectionWidget : public QWidget
+class PAINTOP_EXPORT KisBrushSelectionWidget : public QWidget
 {
     Q_OBJECT
 

@@ -177,9 +177,8 @@ void KoShapeEndLinesDocker::applyChanges()
 //
 //   
     KoShape* shape = selection->firstSelectedShape();
-    if(shape->shapeId() == "KoPathShape"){
-        kDebug() << shape->shapeId();
-        KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
+    KoPathShape *pathShape;
+    if(pathShape = dynamic_cast<KoPathShape*>(shape)){
         pathShape->setBeginLineEnd(*begin);
         pathShape->setEndLineEnd(*end);
     }

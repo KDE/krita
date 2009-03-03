@@ -201,19 +201,35 @@ install( FILES
     DESTINATION ${DATA_INSTALL_DIR}/krita/metadata/schemas)
 
 ########### install files ###############
-# Don't install the header files for now
 
 install( FILES 
+    kis_base_node.h
+    kis_base_processor.h
     kis_debug.h
+    kis_global.h
     kis_image.h
+    kis_iterator.h
+    kis_iterators_pixel.h
+    kis_iterator_pixel_trait.h
+    kis_node.h
+    kis_node_facade.h
+    kis_node_graph_listener.h
     kis_painter.h
     kis_paint_device.h
+    kis_properties_configuration.h
+    kis_processing_information.h
     kis_iterators_pixel.h
+    kis_serializable_configuration.h
+    kis_shared.h
+    kis_shared_data.h
     kis_shared_data.h
     kis_shared_ptr.h
     kis_shared_ptr_vector.h
     kis_types.h
     krita_export.h
+    filter/kis_filter_configuration.h
+    generator/kis_generator.h
+    generator/kis_generator_registry.h
     DESTINATION ${INCLUDE_INSTALL_DIR})
 
 #install( FILES   kis_debug.h kis_global.h kis_annotation.h

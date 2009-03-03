@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2007,2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,11 +25,14 @@ class KisRandomGeneratorTest : public QObject
 {
     Q_OBJECT
 private slots:
-
+    void twoSeeds();
+    void twoCalls();
     void testConstantness();
     void testEvolution();
 private:
-    void testConstantness(int seed);
+    void twoCalls(Q_UINT64 seed);
+    void testConstantness(Q_UINT64 seed);
+    void twoSeeds(Q_UINT64 seed1, Q_UINT64 seed2);
 
 };
 

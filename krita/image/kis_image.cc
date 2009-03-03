@@ -78,8 +78,6 @@ public:
     bool sizeChangedWhileLocked;
     KisPerspectiveGrid* perspectiveGrid;
 
-    KUrl uri;
-
     qint32 width;
     qint32 height;
 
@@ -126,7 +124,6 @@ KisImage::KisImage(const KisImage& rhs)
         else
             m_d->perspectiveGrid = 0;
 
-        m_d->uri = rhs.m_d->uri;
         m_d->width = rhs.m_d->width;
         m_d->height = rhs.m_d->height;
         m_d->xres = rhs.m_d->xres;

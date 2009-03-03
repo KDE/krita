@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007,2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -96,6 +96,7 @@ public:
     virtual void borderInsets(const KoShape *shape, KoInsets &insets);
     virtual bool hasTransparency();
     virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
+    virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor & color );
 
 private:
     class Private;

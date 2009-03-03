@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
- * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007,2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -80,6 +80,19 @@ public:
      * @param converter to convert between internal and view coordinates.
      */
     virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter) = 0;
+
+    /**
+     * Paint the border in the given color
+     *
+     * This method should paint the border around the shape in the given color.
+     *
+     * @param shape the shape to paint around
+     * @param painter the painter to paint to, the painter will have the topleft of the
+     *       shape as its start coordinate.
+     * @param converter to convert between internal and view coordinates.
+     * @param color to use to paint the border.
+     */
+    virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor & color ) = 0;
 
     /// refcounting
     void addUser();

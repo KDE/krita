@@ -19,10 +19,12 @@
 
 #include "KoShapeShadow.h"
 #include "KoShapeSavingContext.h"
+#include "KoShapeBorderModel.h"
 #include "KoShape.h"
 #include "KoInsets.h"
 #include "KoPathShape.h"
 #include <KoGenStyle.h>
+#include <KoViewConverter.h>
 #include <QtGui/QPainter>
 #include <QtCore/QAtomicInt>
 
@@ -65,20 +67,24 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
     if (! d->visible)
         return;
 
+    painter.save();
     KoShape::applyConversion(painter, converter);
 
     painter.setPen(d->color);
     if (shape->background())
         painter.setBrush(QBrush(d->color));
-    QMatrix tm;
-    tm.translate(d->offset.x(), d->offset.y());
-    QMatrix tr = shape->absoluteTransformation(&converter);
-    painter.setMatrix(tr * tm * tr.inverted() * painter.matrix());
+    painter.translate(d->offset);
     QPainterPath path(shape->outline());
     KoPathShape * pathShape = dynamic_cast<KoPathShape*>(shape);
     if (pathShape)
         path.setFillRule(pathShape->fillRule());
     painter.drawPath(path);
+    painter.restore();
+
+    if (shape->border()) {
+        painter.translate(converter.documentToView(d->offset));
+        shape->border()->paintBorder(shape, painter, converter, d->color);
+    }
 }
 
 void KoShapeShadow::setOffset(const QPointF & offset)

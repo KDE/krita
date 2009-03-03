@@ -32,6 +32,7 @@ void KisRandomGeneratorTest::twoSeeds(Q_UINT64 seed1, Q_UINT64 seed2)
     for (int y = 0; y < 100; y++) {
         for (int x = 0; x < 100; x++) {
             QVERIFY(rand1.randomAt(x, y) != rand2.randomAt(x, y));
+            QVERIFY( fabs( rand1.randomAt(x, y) - rand2.randomAt(x, y)) > 1e-2 );
         }
     }
 }

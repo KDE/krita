@@ -24,9 +24,10 @@
 #include <stdint.h>
 #include <math.h>
 
-// made with:
-// seq 0 255 | sort --random-sort | xargs -n1 printf "0x%02x, " \
-//           | sed 's/\(0x.., \)\{12\}/&\n/g' | sed 's/^/        /' ; echo
+/* made with:
+ seq 0 255 | sort --random-sort | xargs -n1 printf "0x%02x, " \
+           | sed 's/\(0x.., \)\{12\}/&\n/g' | sed 's/^/        /' ; echo
+  */
 const unsigned char salt[16][256] = {
     {
         0x10, 0x37, 0xff, 0x6b, 0x7f, 0x88, 0x94, 0xdb, 0xd5, 0xd9, 0x9f, 0x82,
@@ -415,6 +416,21 @@ const unsigned char salt[16][256] = {
     }
 };
 
+inline uint64_t swapbitsinbytes( uint64_t v )
+{
+ const uint64_t h_mask_1 = 0xaaaaaaaaaaaaaaaaLL;
+ const uint64_t l_mask_1 = 0x5555555555555555LL;
+ 
+ const uint64_t h_mask_2 = 0xccccccccccccccccLL;
+ const uint64_t l_mask_2 = 0x3333333333333333LL;
+ 
+ const uint64_t h_mask_4 = 0xf0f0f0f0f0f0f0f0LL;
+ const uint64_t l_mask_4 = 0x0f0f0f0f0f0f0f0fLL;
+ 
+ v = ( ( v & h_mask_1 ) >> 1 ) | ( ( v & l_mask_1 ) << 1 );
+ v = ( ( v & h_mask_2 ) >> 2 ) | ( ( v & l_mask_2 ) << 2 );
+ return ( ( v & h_mask_4 ) >> 4 ) | ( ( v & l_mask_4 ) << 4 );
+}
 
 inline uint64_t makePart( uint64_t v, int idx, int small, int big )
 {
@@ -441,12 +457,15 @@ uint64_t myRandom1(uint64_t n, uint64_t seed)
 }
 
 struct KisRandomGenerator::Private {
-    Q_UINT64 seed;
+    Q_UINT64 rawSeed;
+    Q_UINT64 maskedSeed;
 };
 
 KisRandomGenerator::KisRandomGenerator(Q_UINT64 seed) : d(new Private)
 {
-    d->seed = seed ^ mask;
+    d->rawSeed = seed;
+    seed ^= swapbitsinbytes( seed );
+    d->maskedSeed = seed ^ mask;
 }
 
 KisRandomGenerator::~KisRandomGenerator()
@@ -456,8 +475,8 @@ KisRandomGenerator::~KisRandomGenerator()
 
 Q_UINT64 KisRandomGenerator::randomAt(Q_INT64 x, Q_INT64 y)
 {
-  Q_UINT64 n = x + y * coef;
-  return myRandom1( n, d->seed );
+  Q_UINT64 n = x + y * coef + d->rawSeed;
+  return myRandom1( n, d->maskedSeed );
 }
 
 double KisRandomGenerator::doubleRandomAt(Q_INT64 x, Q_INT64 y)

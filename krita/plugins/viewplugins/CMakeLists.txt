@@ -12,7 +12,9 @@ add_subdirectory( imagesize )
 add_subdirectory( metadataeditor )
 add_subdirectory( modify_selection )
 add_subdirectory( rotateimage )
-add_subdirectory( scripting ) # TODO: port it to the change of KisFilter
+if(BUILD_EVERYTHING)
+    add_subdirectory( scripting ) # TODO: port it to the change of KisFilter
+endif(BUILD_EVERYTHING)
 add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 add_subdirectory( smallcolorselector )
@@ -30,7 +32,9 @@ macro_log_feature(HAVE_OPENGL "OpenGL" "The Krita shader filter plugin will not 
 macro_log_feature(HAVE_GLEW "GLEW" "The Krita shader filter plugin will not be built" "http://glew.sourceforge.net" FALSE "")
 
 if(GMM_FOUND AND NOT MSVC)
-    add_subdirectory( panorama )
+    if(BUILD_EVERYTHING)
+        add_subdirectory( panorama )
+    endif(BUILD_EVERYTHING)
 endif(GMM_FOUND AND NOT MSVC)
 
 if(HAVE_OPENGL AND HAVE_GLEW)

@@ -70,7 +70,7 @@ void FolderBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewCo
     }
 }
 
-void FolderBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor & color);
+void FolderBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor & color)
 {
     // FIXME
     paintBorder(shape, painter, converter);

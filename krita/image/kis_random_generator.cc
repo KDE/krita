@@ -432,6 +432,11 @@ inline uint64_t swapbitsinbytes( uint64_t v )
  return ( ( v & h_mask_4 ) >> 4 ) | ( ( v & l_mask_4 ) << 4 );
 }
 
+quint64 permuteWhole(quint64 n, quint64 a, quint64 b)
+{
+    return ((n * a) + b);
+}
+
 inline uint64_t makePart( uint64_t v, int idx, int small, int big )
 {
   uint64_t a = salt[small][big];
@@ -450,18 +455,18 @@ uint64_t myRandom1(uint64_t n, uint64_t seed)
   for(int i = 0; i < 8; ++ i)
   {
     int a = (seed >> (8 * i )) ;
-    v = makePart( v, i, (n % 16) ^ (a & 0x0F), (n % 255) ^ (a & 0xFF) );
-    n -= n / 255;
+    int b = (n >> (8 * i )) ;
+    v = makePart( v, i, (b % 16) ^ (a & 0x0F), (b & 0xFF) ^ (a & 0xFF) );
   }
   return v;
 }
 
 struct KisRandomGenerator::Private {
-    Q_UINT64 rawSeed;
-    Q_UINT64 maskedSeed;
+    quint64 rawSeed;
+    quint64 maskedSeed;
 };
 
-KisRandomGenerator::KisRandomGenerator(Q_UINT64 seed) : d(new Private)
+KisRandomGenerator::KisRandomGenerator(quint64 seed) : d(new Private)
 {
     d->rawSeed = seed;
     seed ^= swapbitsinbytes( seed );
@@ -473,13 +478,25 @@ KisRandomGenerator::~KisRandomGenerator()
     delete d;
 }
 
-Q_UINT64 KisRandomGenerator::randomAt(Q_INT64 x, Q_INT64 y)
+quint64 KisRandomGenerator::randomAt(qint64 x, qint64 y)
 {
-  Q_UINT64 n = x + y * coef + d->rawSeed;
-  return myRandom1( n, d->maskedSeed );
+    const quint64 kxn = 427140578808118991LL;
+    const quint64 kyn = 166552399647317237LL;
+    const quint64 kxs = 48058817213113801LL;
+    const quint64 kys = 9206429469018994469LL;
+    quint64 n = (quint64(x + 5) * kxn) + (quint64(y + 7) * kyn) + d->rawSeed;
+    n = permuteWhole(n, 8759824322359LL, 13);
+    n = (n >> 32) ^ (n << 32);
+    n = permuteWhole(n, 200560490131LL, 2707);
+    // nice way to find big primes:
+    // factor `dd if=/dev/urandom count=1 ibs=8 | od -t u8 | awk '{print $2}'`
+    quint64 s = (quint64(x + 13) * kxs) + (quint64(y ^ d->rawSeed) * kys);
+    n ^= x ^ (y * 1040097393733LL);
+
+    return myRandom1( n, s );
 }
 
-double KisRandomGenerator::doubleRandomAt(Q_INT64 x, Q_INT64 y)
+double KisRandomGenerator::doubleRandomAt(qint64 x, qint64 y)
 {
     return randomAt(x, y) / (double)UINT64_MAX;
 }

@@ -70,7 +70,6 @@ private:
     QSize m_iconSize;
     QMap<QString, QString> m_pathEndLineMap;
     QMap<QString, QString> m_viewEndLineMap;
-    QList<KoLineEnd> m_endLineList;
     QComboBox * m_beginEndLineComboBox;
     QComboBox * m_endEndLineComboBox;
 };

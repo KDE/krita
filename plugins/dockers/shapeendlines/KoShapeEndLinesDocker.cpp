@@ -78,11 +78,13 @@ KoShapeEndLinesDocker::KoShapeEndLinesDocker()
     m_iconSize.setWidth(m_iconW);
     m_beginEndLineComboBox = new QComboBox( mainWidget );
     m_beginEndLineComboBox->setIconSize(m_iconSize);
-
-    m_beginEndLineComboBox->addItem(QIcon(),"      None", QVariant( QStringList() ) );
+    
+    QPixmap qp(m_iconSize);
+    qp.fill(Qt::transparent);
+    m_beginEndLineComboBox->addItem(QIcon(qp),"None", QVariant( QStringList() ) );
     m_endEndLineComboBox = new QComboBox( mainWidget );
     m_endEndLineComboBox->setIconSize(m_iconSize);
-    m_endEndLineComboBox->addItem(QIcon(),"      None", QVariant ( QStringList() ) );
+    m_endEndLineComboBox->addItem(QIcon(qp),"None", QVariant ( QStringList() ) );
 
     int proportion = 3;
     QString fileName( KStandardDirs::locate( "data","kpresenter/endLineStyle/endLine.xml" ) );
@@ -144,7 +146,6 @@ void KoShapeEndLinesDocker::applyChanges()
         return;
    
     KoLineEnd *begin;
-    kDebug() << "init begin";
     QStringList beginList = m_beginEndLineComboBox->itemData( m_beginEndLineComboBox->currentIndex() ).toStringList();
     if(beginList.size() == 2){
         begin = new KoLineEnd(m_beginEndLineComboBox->currentText(), beginList[0], beginList[1]);
@@ -153,38 +154,19 @@ void KoShapeEndLinesDocker::applyChanges()
     }
 
     KoLineEnd *end;
-    kDebug() << "init end";
     QStringList endList = m_endEndLineComboBox->itemData( m_endEndLineComboBox->currentIndex() ).toStringList();
     if(endList.size() == 2){
         end = new KoLineEnd(m_endEndLineComboBox->currentText(), endList[0], endList[1]);
     }else{
         end = new KoLineEnd(m_endEndLineComboBox->currentText(), QString(), QString());
     }
-    kDebug() << "begin = "<< m_beginEndLineComboBox->itemData( m_beginEndLineComboBox->currentIndex() );
-    kDebug() << "end = "<< m_endEndLineComboBox->itemData( m_endEndLineComboBox->currentIndex() );
-//   
-//    QSvgRenderer endLineRenderer;
-//                // Init QPainter and QPixmap
-//                QPixmap endLinePixmap(m_beginEndLineComboBox->iconSize());
-//                endLinePixmap.fill(QColor(Qt::transparent));
-//                QPainter endLinePainter(&endLinePixmap);
-//                // Convert path to SVG
-//                endLineRenderer.load(generateSVG(drawMarker.attribute("d"), drawMarker.attribute("viewBox")));
-//                endLineRenderer.render(&endLinePainter);
-//
-//                // init QIcon
-//                QIcon drawIcon(endLinePixmap);
-//
-//   
+ 
     KoShape* shape = selection->firstSelectedShape();
     KoPathShape *pathShape;
     if(pathShape = dynamic_cast<KoPathShape*>(shape)){
         pathShape->setBeginLineEnd(*begin);
         pathShape->setEndLineEnd(*end);
     }
-//   //qreal angle = shape->rotation();
-//   kDebug() << selection->count();
-//   //shape->isVisible(false);
     delete begin;
     delete end;
 }

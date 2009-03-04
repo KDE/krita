@@ -3,7 +3,12 @@
 add_subdirectory( tests )
 add_subdirectory( threadAction/tests )
 
-include_directories( ${KOODF_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/ ${KDEPIMLIBS_INCLUDE_DIR})
+if (KdepimLibs_FOUND)
+   #include_directories(${KDEPIMLIBS_INCLUDE_DIR})
+   add_definitions(KDEPIMLIBS_FOUND)
+endif (KdepimLibs_FOUND)
+
+include_directories( ${KOODF_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/ )
 
 ########### next target ###############
 

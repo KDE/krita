@@ -28,8 +28,12 @@
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kglobal.h>
+
+#ifdef KDEPIMLIBS_FOUND
 #include <kabc/addressee.h>
 #include <kabc/stdaddressbook.h>
+#endif
+
 #include <KoGlobal.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
@@ -204,8 +208,13 @@ void KoDocumentInfoDlg::initAuthorTab()
     d->m_authorUi->leStreet->setText(d->m_info->authorInfo("street"));
     d->m_authorUi->lePosition->setText(d->m_info->authorInfo("position"));
 
+#ifdef KDEPIMLIBS_FOUND
     connect(d->m_authorUi->pbLoadKABC, SIGNAL(clicked()),
             this, SLOT(slotLoadFromKABC()));
+#else
+    d->m_authorUi->pbLoadKABC->hide();
+#endif
+
     connect(d->m_authorUi->pbDelete, SIGNAL(clicked()),
             this, SLOT(slotDeleteAuthorInfo()));
 }
@@ -327,6 +336,7 @@ void KoDocumentInfoDlg::slotDeleteAuthorInfo()
 
 void KoDocumentInfoDlg::slotLoadFromKABC()
 {
+#ifdef KDEPIMLIBS_FOUND
     KABC::StdAddressBook *ab = static_cast<KABC::StdAddressBook*>
                                (KABC::StdAddressBook::self());
     if (!ab)
@@ -359,6 +369,7 @@ void KoDocumentInfoDlg::slotLoadFromKABC()
     d->m_authorUi->lePostal->setText(a.postalCode());
     d->m_authorUi->leCity->setText(a.locality());
     d->m_authorUi->leStreet->setText(a.street());
+#endif
 }
 
 void KoDocumentInfoDlg::slotSaveEncryption()

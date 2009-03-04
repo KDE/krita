@@ -22,7 +22,7 @@ include(MacroLibrary)
 macro_optional_find_package(Boost)
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
-find_package(KdepimLibs REQUIRED)
+macro_optional_find_package(KdepimLibs)
 find_package(LCMS REQUIRED)
 find_package(PNG REQUIRED)
 find_package(CreateResources)
@@ -41,7 +41,7 @@ macro_log_feature(QCA2_FOUND "libqca2" "QCA2 is needed to compile support for en
 
 macro_log_feature(Boost_FOUND "libboost-dev" "Boost is needed by KPresenter. KPresenter will not be built" "http://www.boost.org" FALSE "")
 
-
+macro_log_feature(Kdepimlibs_FOUND "KDEPimLibs" "KDE Pim Libs is needed by KPlato and for KDE addressbok integration. KPlato will not be built" "Module in KDE" FALSE "")
 
 set(REQUIRED_LCMS_VERSION 115)
 
@@ -206,7 +206,11 @@ endif(BUILD_kexi)
 macro_optional_add_subdirectory(kformula)
 macro_optional_add_subdirectory(kivio)
 macro_optional_add_subdirectory(kounavail)
-macro_optional_add_subdirectory(kplato)
+
+if(Kdepimlibs_FOUND)
+	macro_optional_add_subdirectory(kplato)
+endif(Kdepimlibs_FOUND)
+
 macro_optional_add_subdirectory(krita)
 macro_optional_add_subdirectory(kword)
 add_subdirectory(pics)

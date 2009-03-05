@@ -102,8 +102,8 @@ void SprayBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
         }
         else
         {
-            ix = (int)(nx + x + 0.5);
-            iy = (int)(ny + y + 0.5);
+            ix = qRound(nx + x);
+            iy = qRound(ny + y);
             accessor.moveTo(ix, iy);
             memcpy(accessor.rawData(), m_inkColor.data(), pixelSize);
         }
@@ -129,10 +129,10 @@ void SprayBrush::paintParticle(KisRandomAccessor &writeAccessor,const KoColor &c
     qreal fx = rx - ipx;
     qreal fy = ry - ipy;
 
-    int btl = ( 1-fx ) * ( 1-fy ) * MAX_OPACITY;
-    int btr = ( fx )  * ( 1-fy ) * MAX_OPACITY;
-    int bbl = ( 1-fx ) * ( fy )  * MAX_OPACITY;
-    int bbr = ( fx )  * ( fy )  * MAX_OPACITY;
+    int btl = qRound( ( 1-fx ) * ( 1-fy ) * MAX_OPACITY );
+    int btr = qRound( ( fx )  * ( 1-fy ) * MAX_OPACITY );
+    int bbl = qRound( ( 1-fx ) * ( fy )  * MAX_OPACITY );
+    int bbr = qRound( ( fx )  * ( fy )  * MAX_OPACITY );
 
     // this version overwrite pixels, e.g. when it sprays two particle next
     // to each other, the pixel with lower opacity can override other pixel.

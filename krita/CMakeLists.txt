@@ -80,6 +80,8 @@ if (SHOULD_BUILD_KRITA)
 
     include_directories(${EIGEN2_INCLUDE_DIR})
 
+    add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+
     add_subdirectory( image )
     add_subdirectory( ui )
 IF(BUILD_EVERYTHING)

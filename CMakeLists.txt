@@ -58,7 +58,6 @@ if (APPLE)
 endif (APPLE)
 
 
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 
 if(WIN32)

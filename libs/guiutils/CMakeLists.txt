@@ -4,6 +4,7 @@ add_subdirectory( tests )
 
 include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${PIGMENT_INCLUDES}  ${KOGUIUTILS_INCLUDES} ${KORESOURCES_INCLUDES} ${KOTEXT_INCLUDES} )
 
+add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 ########### next target ###############
 

@@ -41,7 +41,7 @@ macro_log_feature(QCA2_FOUND "libqca2" "QCA2 is needed to compile support for en
 
 macro_log_feature(Boost_FOUND "libboost-dev" "Boost is needed by KPresenter. KPresenter will not be built" "http://www.boost.org" FALSE "")
 
-macro_log_feature(Kdepimlibs_FOUND "KDEPimLibs" "KDE Pim Libs is needed by KPlato and for KDE addressbok integration. KPlato will not be built" "Module in KDE" FALSE "")
+macro_log_feature(KdepimLibs_FOUND "KDEPimLibs" "KDE Pim Libs is needed by KPlato and for KDE addressbok integration. KPlato will not be built" "Module in KDE" FALSE "")
 
 set(REQUIRED_LCMS_VERSION 115)
 
@@ -207,9 +207,9 @@ macro_optional_add_subdirectory(kformula)
 macro_optional_add_subdirectory(kivio)
 macro_optional_add_subdirectory(kounavail)
 
-if(Kdepimlibs_FOUND)
+if(KdepimLibs_FOUND)
 	macro_optional_add_subdirectory(kplato)
-endif(Kdepimlibs_FOUND)
+endif(KdepimLibs_FOUND)
 
 macro_optional_add_subdirectory(krita)
 macro_optional_add_subdirectory(kword)

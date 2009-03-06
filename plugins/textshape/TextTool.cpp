@@ -864,7 +864,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             editingPluginEvents();
         }
         ensureCursorVisible();
-    } else if ((event->key() == Qt::Key_Tab || event->key() == Qt::Key_BackTab)
+    } else if ((event->key() == Qt::Key_Tab || event->key() == Qt::Key_Backtab)
                && ((!m_caret.hasSelection() && (m_caret.position() == m_caret.block().position())) || (m_caret.block().document()->findBlock(m_caret.anchor()) != m_caret.block().document()->findBlock(m_caret.position()))) && m_caret.block().textList()) {
         ChangeListLevelCommand::CommandType type = 
             event->key() == Qt::Key_Tab ? ChangeListLevelCommand::IncreaseLevel : ChangeListLevelCommand::DecreaseLevel;

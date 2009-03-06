@@ -23,7 +23,10 @@
 #include <QtCore/QMutex>
 #include <QtCore/QList>
 
-class ThreadWeaver::Job;
+namespace ThreadWeaver
+{
+class Job;
+}
 
 /**
  * Sequential job-queueing policy.

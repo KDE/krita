@@ -49,8 +49,8 @@ public:
     }
 
     Qt::FillRule fillRule;
-    KoLineEnd *beginLineEnd;
-    KoLineEnd *endLineEnd;
+    KoLineEnd beginLineEnd;
+    KoLineEnd endLineEnd;
 };
 
 KoPathShape::KoPathShape()
@@ -1282,10 +1282,10 @@ bool KoPathShape::hitTest(const QPointF &position) const
 
 void KoPathShape::setBeginLineEnd( const KoLineEnd &path )
 {
-    d->beginLineEnd = new KoLineEnd(path);
+    d->beginLineEnd = path;
 }
 
 void KoPathShape::setEndLineEnd( const KoLineEnd &path )
 {
-    d->endLineEnd = new KoLineEnd(path);
+    d->endLineEnd = path;
 }

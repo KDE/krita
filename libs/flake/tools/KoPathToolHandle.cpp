@@ -81,7 +81,7 @@ KoInteractionStrategy * PointHandle::handleMousePress(KoPointerEvent *event)
 {
     if ((event->button() & Qt::LeftButton) == 0)
         return 0;
-    if ((event->modifiers() & Qt::ShiftButton) == 0) { // no shift pressed.
+    if ((event->modifiers() & Qt::ShiftModifier) == 0) { // no shift pressed.
         KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
 
         // control select adds/removes points to/from the selection

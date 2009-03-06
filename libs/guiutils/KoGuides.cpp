@@ -377,18 +377,18 @@ void KoGuides::snapToGuideLines( QRectF &rect, int snap, SnapStatus &snapStatus,
             if ( ( *it )->orientation == Qt::Horizontal )
             {
                 qreal tmp = (*it)->position - rect.top();
-                if ( snapStatus & Qt::Horizontal || QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
+                if ( snapStatus & Qt::Horizontal || qAbs( tmp ) < m_zoomHandler->unzoomItY( snap ) )
                 {
-                    if(QABS( tmp ) < QABS(diff.y()))
+                    if(qAbs( tmp ) < qAbs(diff.y()))
                     {
                         diff.setY( tmp );
                         snapStatus |= Qt::Horizontal;
                     }
                 }
                 tmp = (*it)->position - rect.bottom();
-                if ( snapStatus & Qt::Horizontal || QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
+                if ( snapStatus & Qt::Horizontal || qAbs( tmp ) < m_zoomHandler->unzoomItY( snap ) )
                 {
-                    if(QABS( tmp ) < QABS(diff.y()))
+                    if(qAbs( tmp ) < qAbs(diff.y()))
                     {
                         diff.setY( tmp );
                         snapStatus |= Qt::Horizontal;
@@ -398,18 +398,18 @@ void KoGuides::snapToGuideLines( QRectF &rect, int snap, SnapStatus &snapStatus,
             else
             {
                 qreal tmp = (*it)->position - rect.left();
-                if ( snapStatus & Qt::Vertical || QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
+                if ( snapStatus & Qt::Vertical || qAbs( tmp ) < m_zoomHandler->unzoomItX( snap ) )
                 {
-                    if(QABS( tmp ) < QABS(diff.x()))
+                    if(qAbs( tmp ) < qAbs(diff.x()))
                     {
                         diff.setX( tmp );
                         snapStatus |= Qt::Vertical;
                     }
                 }
                 tmp = (*it)->position - rect.right();
-                if ( snapStatus & Qt::Vertical || QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
+                if ( snapStatus & Qt::Vertical || qAbs( tmp ) < m_zoomHandler->unzoomItX( snap ) )
                 {
-                    if(QABS( tmp ) < QABS(diff.x()))
+                    if(qAbs( tmp ) < qAbs(diff.x()))
                     {
                         diff.setX( tmp );
                         snapStatus |= Qt::Vertical;
@@ -441,9 +441,9 @@ void KoGuides::snapToGuideLines( QPointF &pos, int snap, SnapStatus &snapStatus,
             if ( ( *it )->orientation == Qt::Horizontal )
             {
                 qreal tmp = (*it)->position - pos.y();
-                if ( snapStatus & Qt::Horizontal || QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
+                if ( snapStatus & Qt::Horizontal || qAbs( tmp ) < m_zoomHandler->unzoomItY( snap ) )
                 {
-                    if(QABS( tmp ) < QABS(diff.y()))
+                    if(qAbs( tmp ) < qAbs(diff.y()))
                     {
                         diff.setY( tmp );
                         snapStatus |= Qt::Horizontal;
@@ -453,9 +453,9 @@ void KoGuides::snapToGuideLines( QPointF &pos, int snap, SnapStatus &snapStatus,
             else
             {
                 qreal tmp = (*it)->position - pos.x();
-                if ( snapStatus & Qt::Vertical || QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
+                if ( snapStatus & Qt::Vertical || qAbs( tmp ) < m_zoomHandler->unzoomItX( snap ) )
                 {
-                    if(QABS( tmp ) < QABS(diff.x()))
+                    if(qAbs( tmp ) < qAbs(diff.x()))
                     {
                         diff.setX( tmp );
                         snapStatus |= Qt::Vertical;
@@ -821,11 +821,11 @@ KoGuides::KoGuideLine * KoGuides::find( QPointF &p, qreal diff )
     QList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
     for ( ; it != m_guideLines[GL_SELECTED].end(); ++it )
     {
-        if ( ( *it )->orientation == Qt::Vertical && QABS( ( *it )->position - p.x() ) < diff )
+        if ( ( *it )->orientation == Qt::Vertical && qAbs( ( *it )->position - p.x() ) < diff )
         {
             return *it;
         }
-        if ( ( *it )->orientation == Qt::Horizontal && QABS( ( *it )->position - p.y() ) < diff )
+        if ( ( *it )->orientation == Qt::Horizontal && qAbs( ( *it )->position - p.y() ) < diff )
         {
             return *it;
         }
@@ -834,11 +834,11 @@ KoGuides::KoGuideLine * KoGuides::find( QPointF &p, qreal diff )
     it = m_guideLines[GL].begin();
     for ( ; it != m_guideLines[GL].end(); ++it )
     {
-        if ( ( *it )->orientation == Qt::Vertical && QABS( ( *it )->position - p.x() ) < diff )
+        if ( ( *it )->orientation == Qt::Vertical && qAbs( ( *it )->position - p.x() ) < diff )
         {
             return *it;
         }
-        if ( ( *it )->orientation == Qt::Horizontal && QABS( ( *it )->position - p.y() ) < diff )
+        if ( ( *it )->orientation == Qt::Horizontal && qAbs( ( *it )->position - p.y() ) < diff )
         {
             return *it;
         }

@@ -124,8 +124,8 @@ KisRectangleMaskGenerator::KisRectangleMaskGenerator(double w, double h, double 
 }
 quint8 KisRectangleMaskGenerator::valueAt(double x, double y)
 {
-    double xr = QABS(x /*- m_xcenter*/);
-    double yr = QABS(y /*- m_ycenter*/);
+    double xr = qAbs(x /*- m_xcenter*/);
+    double yr = qAbs(y /*- m_ycenter*/);
     if (xr > m_fh || yr > m_fv) {
         if (yr <= ((xr - m_fh) * m_c + m_fv)) {
             return (uchar)(255 * (xr - m_fh) / (m_w - m_fh));

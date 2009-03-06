@@ -172,7 +172,7 @@ void KisSobelFilter::process(KisConstProcessingInformation srcInfo,
             gradient = (qint32)((doVertical && doHorizontal) ?
                                 (ROUND(RMS(horGradient, verGradient)) / 5.66)   // always >0
                                 : (keepSign ? (127 + (ROUND((horGradient + verGradient) / 8.0)))
-                                   : (ROUND(QABS(horGradient + verGradient) / 4.0))));
+                                   : (ROUND(qAbs(horGradient + verGradient) / 4.0))));
 
             *d++ = gradient;
             if (gradient > 10) counter ++;

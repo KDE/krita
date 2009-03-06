@@ -6,7 +6,7 @@ endif(MSVC)
 
 macro_optional_find_package(Spnav)
 
-macro_log_feature(SPNAV_FOUND "Spnav" "Spnav is the library which is required by the space navigator device plugin" "http://spacenav.sourceforge.net/" FALSE "")
+macro_log_feature(SPNAV_FOUND "Spnav" "3Dconnexion device driver and SDK" "http://spacenav.sourceforge.net/" FALSE "" "Required by SpaceNavigator 3D mouse plugin")
 
 add_subdirectory( scan )
 add_subdirectory( colorspaces )

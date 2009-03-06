@@ -27,9 +27,9 @@ MESSAGE("Krita: port the histogram docker")
 
 macro_optional_find_package(GMM)
 
-macro_log_feature(GMM_FOUND "GMM" "The Krita Panorama plugin will not be built." "http://home.gna.org/getfem/download.html" FALSE "")
-macro_log_feature(HAVE_OPENGL "OpenGL" "The Krita shader filter plugin will not be built" "" FALSE "")
-macro_log_feature(HAVE_GLEW "GLEW" "The Krita shader filter plugin will not be built" "http://glew.sourceforge.net" FALSE "")
+macro_log_feature(GMM_FOUND "Gmm++" "Generic C++ template library for sparse, dense and skyline matrices" "http://home.gna.org/getfem/download.html" FALSE "" "Required by the Krita panorama plugin")
+macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by the Krita shader filter plugin")
+macro_log_feature(HAVE_GLEW "GLEW" "The OpenGL Extension Wrangler Library" "http://glew.sourceforge.net" FALSE "" "Required by the Krita shader filter plugin")
 
 if(GMM_FOUND AND NOT MSVC)
     if(BUILD_EVERYTHING)

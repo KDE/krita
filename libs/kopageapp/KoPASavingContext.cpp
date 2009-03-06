@@ -92,7 +92,7 @@ QString KoPASavingContext::pageName( const KoPAPage * page )
     else {
         name = page->name();
         QRegExp rx( "^page[0-9]+$" );
-        if ( name.isEmpty() || m_pageNames.contains( name ) || rx.search( name ) != -1 ) {
+        if ( name.isEmpty() || m_pageNames.contains( name ) || rx.indexIn( name ) != -1 ) {
             name = "page" + QString::number( m_page );
         }
         Q_ASSERT( !m_pageNames.contains( name ) );

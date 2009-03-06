@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -198,6 +198,7 @@ private slots:
     void shapeDataRemoved();
 
 #ifndef NDEBUG
+    void debugTextDocument();
 protected:
     explicit TextTool(MockCanvas *canvas);
 #endif

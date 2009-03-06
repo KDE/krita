@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
@@ -407,6 +407,13 @@ TextTool::TextTool(KoCanvasBase *canvas)
             this, SLOT(updateParagraphDirection(const QVariant&)), Qt::DirectConnection);
     connect(m_updateParagDirection.action, SIGNAL(updateUi(const QVariant &)),
             this, SLOT(updateParagraphDirectionUi()));
+
+#ifndef NDEBUG
+    action = new KAction("Paragraph Debug", this); // do NOT add i18n!
+    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_P);
+    addAction("detailed_debug_paragraphs", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(debugTextDocument()));
+#endif
 
     // setup the context list.
     QSignalMapper *signalMapper = new QSignalMapper(this);
@@ -1775,5 +1782,81 @@ void TextTool::setBackgroundColor(const KoColor &color)
 {
     m_selectionHandler.setTextBackgroundColor(color.toQColor());
 }
+
+#ifndef NDEBUG
+void TextTool::debugTextDocument()
+{
+    if (m_textShapeData == 0)
+        return;
+    const int CHARSPERLINE = 80; // TODO Make configurable using ENV var?
+    KoStyleManager *styleManager = KoTextDocument(m_textShapeData->document()).styleManager();
+
+    QTextBlock block = m_textShapeData->document()->begin();
+    for (;block.isValid(); block = block.next()) {
+        QVariant var = block.blockFormat().property(KoParagraphStyle::StyleId);
+        if (!var.isNull()) {
+            KoParagraphStyle *ps = styleManager->paragraphStyle(var.toInt());
+            kDebug(32500) << "--- Paragraph Style:" << (ps ? ps->name() : QString()) << var.toInt();
+        }
+        var = block.charFormat().property(KoCharacterStyle::StyleId);
+        if (!var.isNull()) {
+            KoCharacterStyle *cs = styleManager->characterStyle(var.toInt());
+            kDebug(32500) << "--- Character Style:" << (cs ? cs->name() : QString()) << var.toInt();
+        }
+        int lastPrintedChar = -1;
+        QTextBlock::iterator it;
+        QString fragmentText;
+        for (it = block.begin(); !it.atEnd(); ++it) {
+            QTextFragment fragment = it.fragment();
+            if (!fragment.isValid())
+                continue;
+            QTextCharFormat fmt = fragment.charFormat();
+            const int fragmentStart = fragment.position() - block.position();
+            for (int i = fragmentStart; i < fragmentStart + fragment.length(); i += CHARSPERLINE) {
+//kDebug() << "fragment" << fragmentStart << fragment.length() << "lp" << lastPrintedChar << "start" << fragmentStart;
+                if (lastPrintedChar == fragmentStart-1)
+                    fragmentText += '|';
+                if (lastPrintedChar < fragmentStart || i > fragmentStart) {
+                    QString debug = block.text().mid(lastPrintedChar, CHARSPERLINE);
+                    lastPrintedChar += CHARSPERLINE;
+                    if (lastPrintedChar > block.length())
+                        debug += "\\n";
+                    kDebug(32500) << debug;
+                }
+                var = fmt.property(KoCharacterStyle::StyleId);
+                QString charStyleLong, charStyleShort;
+                if (! var.isNull()) { // named style
+                    charStyleShort = QString::number(var.toInt());
+                    KoCharacterStyle *cs = styleManager->characterStyle(var.toInt());
+                    if (cs)
+                        charStyleLong = cs->name();
+                }
+                if (fragment.length() > charStyleLong.length())
+                    fragmentText += charStyleLong;
+                else if (fragment.length() > charStyleShort.length())
+                    fragmentText += charStyleShort;
+                else if (fragment.length() >= 2)
+                    fragmentText += QChar(8230); // elipses
+                int rest =  fragmentStart - (lastPrintedChar-CHARSPERLINE) + fragment.length() - fragmentText.length();
+//kDebug() << "rest" << rest << "text:" << fragmentText.length() << "fragment" << fragment.length() << (lastPrintedChar - CHARSPERLINE);
+                rest = qMin(rest, CHARSPERLINE - fragmentText.length());
+                //int rest =  fragmentText.length() - qMin(fragment.length() - fragmentText.length(), CHARSPERLINE);
+                if (rest >= 2)
+                    fragmentText = QString("%1%2").arg(fragmentText).arg(' ', rest);
+                if (rest >= 0)
+                    fragmentText += '|';
+//kDebug() << "fragmentText.length()" << fragmentText.length();
+                if (fragmentText.length() >= CHARSPERLINE) {
+                    kDebug(32500) << fragmentText;
+                    fragmentText.clear();
+                }
+                // if there is an objectId set, print its type (list, anchor etc)
+            }
+        }
+        if (!fragmentText.isEmpty())
+            kDebug(32500) << fragmentText;
+    }
+}
+#endif
 
 #include "TextTool.moc"

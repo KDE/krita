@@ -151,7 +151,7 @@ void ParagraphTool::keyPressEvent(QKeyEvent *event)
             m_paragraphEditor.highlightRulerAt(m_mousePosition);
             break;
         case Qt::Key_Delete:
-        case Qt::Key_BackSpace:
+        case Qt::Key_Backspace:
             m_paragraphEditor.applyParentStyleToActiveRuler();
             break;
         default:

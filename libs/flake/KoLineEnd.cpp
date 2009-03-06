@@ -31,10 +31,10 @@
 
 #include <QPixmap>
 #include <QIcon>
-#include <QImage>
 #include <QSvgRenderer>
 #include <QPainter>
 
+//qRegisterMetaType<KoLineEnd>("KoLineEnd");
 
 KoLineEnd::KoLineEnd(QString name, QString path, QString view)
 {
@@ -83,21 +83,6 @@ QByteArray KoLineEnd::generateSVG(QSize size, QString comment)
 
 QByteArray KoLineEnd::getSVG(){
     return m_svg;
-}
-
-QImage KoLineEnd::drawImage(QSize size)
-{
-    QSvgRenderer endLineRenderer;
-    QPixmap endLinePixmap(size);
-    endLinePixmap.fill(QColor(Qt::transparent));
-    QPainter endLinePainter(&endLinePixmap);
-
-    // Convert path to SVG
-    endLineRenderer.load(generateSVG(QSize(size.width(), size.height())));
-    endLineRenderer.render(&endLinePainter);
-
-    // return QImage
-    return QImage (endLinePixmap);
 }
 
 QIcon KoLineEnd::drawIcon(QSize size, int proportion)

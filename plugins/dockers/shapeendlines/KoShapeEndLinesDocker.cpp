@@ -62,6 +62,7 @@
 #include <QComboBox>
 #include <QSvgRenderer>
 #include <QPixmap>
+#include <QMetaType>
 
 
 KoShapeEndLinesDocker::KoShapeEndLinesDocker()
@@ -79,12 +80,16 @@ KoShapeEndLinesDocker::KoShapeEndLinesDocker()
     m_beginEndLineComboBox = new QComboBox( mainWidget );
     m_beginEndLineComboBox->setIconSize(m_iconSize);
     
+    qRegisterMetaType<KoLineEnd>("KoLineEnd");
+
     QPixmap qp(m_iconSize);
     qp.fill(Qt::transparent);
-    m_beginEndLineComboBox->addItem(QIcon(qp),"None", QVariant( QStringList() ) );
+    QVariant beginNone;
+    QVariant endNone;
+    m_beginEndLineComboBox->addItem(QIcon(qp),"None", beginNone.fromValue( KoLineEnd() ) );
     m_endEndLineComboBox = new QComboBox( mainWidget );
     m_endEndLineComboBox->setIconSize(m_iconSize);
-    m_endEndLineComboBox->addItem(QIcon(qp),"None", QVariant ( QStringList() ) );
+    m_endEndLineComboBox->addItem(QIcon(qp),"None", beginNone.fromValue( KoLineEnd() ) );
 
     int proportion = 3;
     QString fileName( KStandardDirs::locate( "data","kpresenter/endLineStyle/endLine.xml" ) );
@@ -100,9 +105,11 @@ KoShapeEndLinesDocker::KoShapeEndLinesDocker()
 
                 QIcon drawIcon(temp.drawIcon(m_iconSize, proportion));
                 
+                QVariant beginValue;
+                QVariant endValue;
                 // add icon and label in the two QComboBox
-                m_beginEndLineComboBox->addItem( drawIcon, temp.name(), QVariant( QStringList() << drawMarker.attribute("d") << drawMarker.attribute("viewBox") ) );
-                m_endEndLineComboBox->addItem( drawIcon, temp.name(), QVariant(  QStringList() << drawMarker.attribute("d") << drawMarker.attribute("viewBox") ) );
+                m_beginEndLineComboBox->addItem( drawIcon, temp.name(), beginValue.fromValue( temp ) );
+                m_endEndLineComboBox->addItem( drawIcon, temp.name(), endValue.fromValue( temp ) );
             }
         }else {
             kDebug() << "reading of endLine.xml failed:" << errorMessage;
@@ -145,30 +152,15 @@ void KoShapeEndLinesDocker::applyChanges()
     if( ! selection || ! selection->count() )
         return;
    
-    KoLineEnd *begin;
-    QStringList beginList = m_beginEndLineComboBox->itemData( m_beginEndLineComboBox->currentIndex() ).toStringList();
-    if(beginList.size() == 2){
-        begin = new KoLineEnd(m_beginEndLineComboBox->currentText(), beginList[0], beginList[1]);
-    }else{
-        begin = new KoLineEnd(m_beginEndLineComboBox->currentText(), QString(), QString());
-    }
+    KoLineEnd begin ( m_endEndLineComboBox->itemData( m_endEndLineComboBox->currentIndex() ).value<KoLineEnd>() );
+    KoLineEnd end( m_endEndLineComboBox->itemData( m_endEndLineComboBox->currentIndex() ).value<KoLineEnd>() ) ;
 
-    KoLineEnd *end;
-    QStringList endList = m_endEndLineComboBox->itemData( m_endEndLineComboBox->currentIndex() ).toStringList();
-    if(endList.size() == 2){
-        end = new KoLineEnd(m_endEndLineComboBox->currentText(), endList[0], endList[1]);
-    }else{
-        end = new KoLineEnd(m_endEndLineComboBox->currentText(), QString(), QString());
-    }
- 
     KoShape* shape = selection->firstSelectedShape();
     KoPathShape *pathShape;
     if(pathShape = dynamic_cast<KoPathShape*>(shape)){
-        pathShape->setBeginLineEnd(*begin);
-        pathShape->setEndLineEnd(*end);
+        pathShape->setBeginLineEnd(begin);
+        pathShape->setEndLineEnd(end);
     }
-    delete begin;
-    delete end;
 }
 
 

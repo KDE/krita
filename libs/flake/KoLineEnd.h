@@ -38,6 +38,7 @@
 #include <kdebug.h>
 #include <QStringList>
 #include "flake_export.h"
+#include <QMetaType>
 
 class KoShapeBorderModel;
 class KoCanvasController;
@@ -55,7 +56,6 @@ public:
     QString viewBox();
     QByteArray generateSVG(QSize size, QString comment = QString());
     QByteArray getSVG();
-    QImage drawImage(QSize size);
 
 private:
     QString m_name;
@@ -64,5 +64,6 @@ private:
     QByteArray m_svg;
 };
 
+Q_DECLARE_METATYPE(KoLineEnd);
 #endif // KOLINEEND_H
 

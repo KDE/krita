@@ -123,7 +123,7 @@ void KoPABackgroundToolWidget::useMasterBackground( int state )
 {
     KoPAPage * page = dynamic_cast<KoPAPage *>( m_tool->canvas()->resourceProvider()->koShapeResource( KoPageApp::CurrentPage ) );
     if ( page ) {
-        KoPADisplayMasterBackgroundCommand * cmd = new KoPADisplayMasterBackgroundCommand( page, state == QCheckBox::On );
+        KoPADisplayMasterBackgroundCommand * cmd = new KoPADisplayMasterBackgroundCommand( page, state == Qt::Checked );
         m_tool->canvas()->addCommand( cmd );
     }
 }
@@ -132,7 +132,7 @@ void KoPABackgroundToolWidget::displayMasterShapes( int state )
 {
     KoPAPage * page = dynamic_cast<KoPAPage *>( m_tool->canvas()->resourceProvider()->koShapeResource( KoPageApp::CurrentPage ) );
     if ( page ) {
-        KoPADisplayMasterShapesCommand * cmd = new KoPADisplayMasterShapesCommand( page, state == QCheckBox::On );
+        KoPADisplayMasterShapesCommand * cmd = new KoPADisplayMasterShapesCommand( page, state == Qt::Checked );
         m_tool->canvas()->addCommand( cmd );
     }
 }

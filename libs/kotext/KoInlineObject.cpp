@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,41 +18,46 @@
  */
 
 #include "KoInlineObject.h"
+#include "KoInlineObject_p.h"
 #include "KoTextDocumentLayout.h"
 #include "KoShapeSavingContext.h"
 
-class InlineObjectPrivate
-{
-public:
-    InlineObjectPrivate()
-            : manager(0),
-            id(-1),
-            propertyChangeListener(0) {
-    }
+#include <QDebug>
 
-    KoInlineTextObjectManager *manager;
-    int id;
-    bool propertyChangeListener;
-};
+QDebug KoInlineObjectPrivate::printDebug(QDebug dbg) const
+{
+    dbg.nospace() << "KoInlineObject ManagerId: " << id;
+    return dbg.space();
+}
 
 KoInlineObject::KoInlineObject(bool propertyChangeListener)
-        : d(new InlineObjectPrivate)
+        : d_ptr(new KoInlineObjectPrivate)
 {
+    Q_D(KoInlineObject);
+    d->propertyChangeListener = propertyChangeListener;
+}
+
+KoInlineObject::KoInlineObject(KoInlineObjectPrivate &priv, bool propertyChangeListener)
+    : d_ptr(&priv)
+{
+    Q_D(KoInlineObject);
     d->propertyChangeListener = propertyChangeListener;
 }
 
 KoInlineObject::~KoInlineObject()
 {
-    delete d;
+    delete d_ptr;
 }
 
 void KoInlineObject::setManager(KoInlineTextObjectManager *manager)
 {
+    Q_D(KoInlineObject);
     d->manager = manager;
 }
 
 KoInlineTextObjectManager *KoInlineObject::manager()
 {
+    Q_D(KoInlineObject);
     return d->manager;
 }
 
@@ -69,15 +74,19 @@ void KoInlineObject::propertyChanged(Property key, const QVariant &value)
 
 int KoInlineObject::id() const
 {
+    Q_D(const KoInlineObject);
     return d->id;
 }
+
 void KoInlineObject::setId(int id)
 {
+    Q_D(KoInlineObject);
     d->id = id;
 }
 
 bool KoInlineObject::propertyChangeListener() const
 {
+    Q_D(const KoInlineObject);
     return d->propertyChangeListener;
 }
 
@@ -89,3 +98,9 @@ KoShape * KoInlineObject::shapeForPosition(const QTextDocument *document, int po
         return 0;
     return lay->shapeForPosition(position);
 }
+
+QDebug operator<<(QDebug dbg, const KoInlineObject *o)
+{
+    return o->d_func()->printDebug(dbg);
+}
+

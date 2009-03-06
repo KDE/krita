@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,7 +32,7 @@ class QRectF;
 
 class KoShape;
 class KoInlineTextObjectManager;
-class InlineObjectPrivate;
+class KoInlineObjectPrivate;
 class KoShapeSavingContext;
 
 /**
@@ -196,6 +196,8 @@ public:
     bool propertyChangeListener() const;
 
 protected:
+    explicit KoInlineObject(KoInlineObjectPrivate &, bool propertyChangeListener = false);
+
     /**
      * We allow a text document to be shown in more than one shape; which brings up the need to figure out
      * which shape is used for a certain text.
@@ -205,7 +207,13 @@ protected:
      */
     static KoShape *shapeForPosition(const QTextDocument *document, int position);
 
+    KoInlineObjectPrivate *d_ptr;
+
 private:
-    InlineObjectPrivate * const d;
+    Q_DECLARE_PRIVATE(KoInlineObject)
+    friend Q_CORE_EXPORT QDebug operator<<(QDebug, const KoInlineObject *);
 };
+
+KOTEXT_EXPORT QDebug operator<<(QDebug dbg, const KoInlineObject *o);
+
 #endif

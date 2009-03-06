@@ -120,7 +120,7 @@ bool ChangeListCommand::formatsEqual(const KoListLevelProperties &llp, const QTe
         llp.applyStyle(listFormat);
         return listFormat == format;
     } else {
-        return llp.style() == format.style();
+        return (int) llp.style() == (int) format.style();
     }
 }
 
@@ -308,7 +308,7 @@ void ChangeListCommand::undo()
     }
 }
 
-bool ChangeListCommand::mergeWith(const QUndoCommand *other)
+bool ChangeListCommand::mergeWith(const QUndoCommand *)
 {
     return false;
 }

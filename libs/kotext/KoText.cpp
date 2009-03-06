@@ -66,7 +66,7 @@ bool KoText::Tab::operator==(const Tab &other) const
 
 Qt::Alignment KoText::alignmentFromString(const QString &align)
 {
-    Qt::Alignment alignment = Qt::AlignAuto;
+    Qt::Alignment alignment = Qt::AlignLeft;
     if (align == "left")
         alignment = Qt::AlignLeft | Qt::AlignAbsolute;
     else if (align == "right")

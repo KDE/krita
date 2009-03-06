@@ -1789,7 +1789,10 @@ void TextTool::debugTextDocument()
     if (m_textShapeData == 0)
         return;
     const int CHARSPERLINE = 80; // TODO Make configurable using ENV var?
-    KoStyleManager *styleManager = KoTextDocument(m_textShapeData->document()).styleManager();
+    const int CHARPOSITION = 278301935;
+    KoTextDocument document(m_textShapeData->document());
+    KoStyleManager *styleManager = document.styleManager();
+    KoInlineTextObjectManager *inlineManager = document.inlineTextObjectManager();
 
     QTextBlock block = m_textShapeData->document()->begin();
     for (;block.isValid(); block = block.next()) {
@@ -1806,6 +1809,7 @@ void TextTool::debugTextDocument()
         int lastPrintedChar = -1;
         QTextBlock::iterator it;
         QString fragmentText;
+        QList<QTextCharFormat> inlineCharacters;
         for (it = block.begin(); !it.atEnd(); ++it) {
             QTextFragment fragment = it.fragment();
             if (!fragment.isValid())
@@ -1813,7 +1817,6 @@ void TextTool::debugTextDocument()
             QTextCharFormat fmt = fragment.charFormat();
             const int fragmentStart = fragment.position() - block.position();
             for (int i = fragmentStart; i < fragmentStart + fragment.length(); i += CHARSPERLINE) {
-//kDebug() << "fragment" << fragmentStart << fragment.length() << "lp" << lastPrintedChar << "start" << fragmentStart;
                 if (lastPrintedChar == fragmentStart-1)
                     fragmentText += '|';
                 if (lastPrintedChar < fragmentStart || i > fragmentStart) {
@@ -1831,30 +1834,40 @@ void TextTool::debugTextDocument()
                     if (cs)
                         charStyleLong = cs->name();
                 }
+                if (inlineManager && fmt.hasProperty(KoCharacterStyle::InlineInstanceId)) {
+                    QTextCharFormat inlineFmt = fmt;
+                    inlineFmt.setProperty(CHARPOSITION, fragmentStart);
+                    inlineCharacters << inlineFmt;
+                }
+
                 if (fragment.length() > charStyleLong.length())
                     fragmentText += charStyleLong;
                 else if (fragment.length() > charStyleShort.length())
                     fragmentText += charStyleShort;
                 else if (fragment.length() >= 2)
                     fragmentText += QChar(8230); // elipses
+
+
+
                 int rest =  fragmentStart - (lastPrintedChar-CHARSPERLINE) + fragment.length() - fragmentText.length();
-//kDebug() << "rest" << rest << "text:" << fragmentText.length() << "fragment" << fragment.length() << (lastPrintedChar - CHARSPERLINE);
                 rest = qMin(rest, CHARSPERLINE - fragmentText.length());
-                //int rest =  fragmentText.length() - qMin(fragment.length() - fragmentText.length(), CHARSPERLINE);
                 if (rest >= 2)
                     fragmentText = QString("%1%2").arg(fragmentText).arg(' ', rest);
                 if (rest >= 0)
                     fragmentText += '|';
-//kDebug() << "fragmentText.length()" << fragmentText.length();
                 if (fragmentText.length() >= CHARSPERLINE) {
                     kDebug(32500) << fragmentText;
                     fragmentText.clear();
                 }
-                // if there is an objectId set, print its type (list, anchor etc)
             }
         }
         if (!fragmentText.isEmpty())
             kDebug(32500) << fragmentText;
+
+        foreach (QTextCharFormat cf, inlineCharacters) {
+            KoInlineObject *object= inlineManager->inlineTextObject(cf);
+            kDebug(32500) << "At pos:" << cf.intProperty(CHARPOSITION) << object;
+        }
     }
 }
 #endif

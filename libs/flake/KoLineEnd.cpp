@@ -33,6 +33,7 @@
 #include <QIcon>
 #include <QSvgRenderer>
 #include <QPainter>
+#include <QRectF>
 
 //qRegisterMetaType<KoLineEnd>("KoLineEnd");
 
@@ -115,4 +116,11 @@ QString KoLineEnd::viewBox()
   return m_view;
 }
 
+void KoLineEnd::paint(QPainter &painter, QRectF rect)
+{
+    QSvgRenderer endLineRenderer;
+    endLineRenderer.load(generateSVG(QSize(20, 20)));
+    endLineRenderer.render(&painter, rect);
+
+}
 #include "KoLineEnd.moc"

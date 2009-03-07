@@ -43,6 +43,8 @@
 class KoShapeBorderModel;
 class KoCanvasController;
 class KoPathShape;
+class QPainter;
+class QRectF;
 
 class FLAKE_EXPORT KoLineEnd{
 public:
@@ -56,6 +58,7 @@ public:
     QString viewBox();
     QByteArray generateSVG(QSize size, QString comment = QString());
     QByteArray getSVG();
+    void paint(QPainter &painter, QRectF rect);
 
 private:
     QString m_name;

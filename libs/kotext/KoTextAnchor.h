@@ -75,15 +75,6 @@ public:
         HorizontalOffset    ///< Move the anchor to be an exact horizontal distance from the the anchor.
     };
 
-    /// the anchor type we are using
-    enum AnchorType {
-        Page,               ///< Relative to the page
-        Frame,              ///< Relative to the frame containing the anchor
-        Paragraph,          ///< Relative to the paragraph
-        Char,               ///< Relative to the character before the anchor
-        AsChar              ///< The shape attached using this anchor must be considered as a character
-    };
-
     /**
      * Constructor for an in-place anchor.
      * @param shape the anchored shape that this anchor links to.
@@ -119,9 +110,6 @@ public:
 
     /// returns the cursor position in the document where this anchor is positioned.
     int positionInDocument() const;
-
-    /// returns the page number in case this is a page anchor
-    int pageNumber() const;
 
     /// returns the document that this anchor is associated with.
     const QTextDocument *document() const;

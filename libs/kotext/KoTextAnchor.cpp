@@ -31,7 +31,8 @@
 #include <QPainter>
 #include <KDebug>
 
-#define I_WANT_BAD_LOOKING_THINGS_FOR_DEBUG 0
+#define DEBUG_PAINTING
+
 class KoTextAnchor::Private
 {
 public:
@@ -42,9 +43,7 @@ public:
             verticalAlignment(VerticalOffset),
             document(0),
             position(-1),
-            model(0),
-            pageNumber(-1),
-            anchorType(Paragraph)
+            model(0)
     {
         Q_ASSERT(shape);
     }
@@ -86,8 +85,6 @@ public:
     int position;
     KoTextShapeContainerModel *model;
     QPointF distance;
-    int pageNumber;
-    AnchorType anchorType;
 };
 
 KoTextAnchor::KoTextAnchor(KoShape *shape)
@@ -162,25 +159,16 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
     object.setDescent(0);
 }
 
-void KoTextAnchor::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
+void KoTextAnchor::paint(QPainter &painter, QPaintDevice *, const QTextDocument *, const QRectF &, QTextInlineObject , int , const QTextCharFormat &)
 {
-    Q_UNUSED(document);
     Q_UNUSED(painter);
-    Q_UNUSED(pd);
-    Q_UNUSED(rect);
-    Q_UNUSED(object);
-    Q_UNUSED(posInDocument);
-    Q_UNUSED(format);
-#if I_WANT_BAD_LOOKING_THINGS_FOR_DEBUG
-    kDebug() << "*****************************************************************************************************************************";
-    kDebug() << "painting KoTextAnchor : " << rect ;
-    kDebug() << "*****************************************************************************************************************************";
+    // we never paint ourselves; the shape can do that.
+#ifdef DEBUG_PAINTING
     painter.setOpacity(0.5);
     painter.drawLine(0, 0, 15, 15);
     painter.drawLine(15, 0, 0, 15);
     painter.setOpacity(1);
 #endif
-    // we never paint ourselves; the shape can do that.
 }
 
 int KoTextAnchor::positionInDocument() const
@@ -208,6 +196,11 @@ void KoTextAnchor::setOffset(const QPointF &offset)
 
 void KoTextAnchor::saveOdf(KoShapeSavingContext & context)
 {
+    if (d->horizontalAlignment  == HorizontalOffset && d->verticalAlignment == VerticalOffset) { // inline
+        shape()->setAdditionalAttribute("text:anchor-type", "as-char");
+    }
+
+/*
     shape()->removeAdditionalAttribute("text:anchor-page-number");
     switch (d->anchorType) {
     case Page:
@@ -233,10 +226,12 @@ void KoTextAnchor::saveOdf(KoShapeSavingContext & context)
     context.addShapeOffset(shape(), QMatrix(1, 0, 0, 1, offset.x(), offset.y()));
     shape()->saveOdf(context);
     context.removeShapeOffset(shape());
+*/
 }
 
 bool KoTextAnchor::loadOdfFromShape()
 {
+/*
     setOffset(shape()->position());
     shape()->setPosition(QPointF(0, 0));
     if (shape()->hasAdditionalAttribute("text:anchor-type")) {
@@ -256,10 +251,7 @@ bool KoTextAnchor::loadOdfFromShape()
             d->anchorType = AsChar;
         return true;
     }
+*/
     return false;
 }
 
-int KoTextAnchor::pageNumber() const
-{
-    return d->pageNumber;
-}

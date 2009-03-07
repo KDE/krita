@@ -1764,13 +1764,13 @@ void TextTool::editingPluginEvents()
 void TextTool::finishedWord()
 {
     foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins)
-    plugin->finishedWord(m_textShapeData->document(), m_prevCursorPosition);
+        plugin->finishedWord(m_textShapeData->document(), m_prevCursorPosition);
 }
 
 void TextTool::finishedParagraph()
 {
     foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins)
-    plugin->finishedParagraph(m_textShapeData->document(), m_prevCursorPosition);
+        plugin->finishedParagraph(m_textShapeData->document(), m_prevCursorPosition);
 }
 
 void TextTool::setTextColor(const KoColor &color)

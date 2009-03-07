@@ -27,6 +27,7 @@
 
 class KoShape;
 class KoTextAnchorPrivate;
+class KoXmlElement;
 
 /**
  * This class is the object that is positioned in the text to be an anchor for a shape.
@@ -131,7 +132,7 @@ public:
     void setOffset(const QPointF &offset);
 
     /// Load the additional attributes.
-    bool loadOdfFromShape();
+    bool loadOdfFromShape(const KoXmlElement& element);
     /// Save the additional attributes.
     void saveOdf(KoShapeSavingContext & context);
 

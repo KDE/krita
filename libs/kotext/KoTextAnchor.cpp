@@ -24,6 +24,8 @@
 
 #include <KoShapeContainer.h>
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
+#include <KoXmlNS.h>
 #include <KoShapeSavingContext.h>
 #include <KoUnit.h>
 
@@ -294,7 +296,7 @@ void KoTextAnchor::saveOdf(KoShapeSavingContext & context)
     }
 }
 
-bool KoTextAnchor::loadOdfFromShape()
+bool KoTextAnchor::loadOdfFromShape(const KoXmlElement& element)
 {
     Q_D(KoTextAnchor);
     d->distance = shape()->position();
@@ -315,8 +317,8 @@ bool KoTextAnchor::loadOdfFromShape()
             d->verticalAlignment = TopOfFrame;
         }
 
-        if (shape()->hasAdditionalAttribute("koffice:anchor-type")) {
-            anchorType = shape()->additionalAttribute("koffice:anchor-type"); // our enriched properties
+        if (element.hasAttributeNS(KoXmlNS::koffice, "anchor-type")) {
+            anchorType = element.attributeNS(KoXmlNS::koffice, "anchor-type"); // our enriched properties
             QStringList types = anchorType.split('|');
             if (types.count() > 1) {
                 QString vertical = types[0];

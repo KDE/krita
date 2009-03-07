@@ -152,7 +152,7 @@ void KoShapeEndLinesDocker::applyChanges()
     if( ! selection || ! selection->count() )
         return;
    
-    KoLineEnd begin ( m_endEndLineComboBox->itemData( m_endEndLineComboBox->currentIndex() ).value<KoLineEnd>() );
+    KoLineEnd begin ( m_beginEndLineComboBox->itemData( m_beginEndLineComboBox->currentIndex() ).value<KoLineEnd>() );
     KoLineEnd end( m_endEndLineComboBox->itemData( m_endEndLineComboBox->currentIndex() ).value<KoLineEnd>() ) ;
 
     KoShape* shape = selection->firstSelectedShape();

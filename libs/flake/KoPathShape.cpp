@@ -41,7 +41,7 @@
 
 #include <KDebug>
 #include <QtGui/QPainter>
-
+#include <QSizeF>
 class KoPathShape::Private
 {
 public:
@@ -221,6 +221,12 @@ void KoPathShape::paint(QPainter &painter, const KoViewConverter &converter)
     applyConversion(painter, converter);
     QPainterPath path(outline());
     path.setFillRule(d->fillRule);
+    QSizeF lineEndSize(size().width()*0.05, size().height()*0.05);
+    QPointF beginPoint(m_subpaths.last()->first()->point().x() - lineEndSize.width()/2, m_subpaths.last()->first()->point().y() - lineEndSize.height()/2);
+    QPointF endPoint(m_subpaths.last()->last()->point().x() - lineEndSize.width()/2, m_subpaths.last()->last()->point().y() - lineEndSize.height()/2);
+
+    d->beginLineEnd.paint(painter, QRectF(beginPoint, lineEndSize));
+    d->endLineEnd.paint(painter, QRectF(endPoint, lineEndSize));
 
     if (background())
         background()->paint(painter, path);

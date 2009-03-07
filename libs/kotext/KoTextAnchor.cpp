@@ -269,24 +269,26 @@ void KoTextAnchor::saveOdf(KoShapeSavingContext & context)
     }
 
     if (odfAnchorType == AsChar) {
-        // TODO  the draw:transform should not be saved in this case!
-        if (qAbs(d->distance.y()) > 1E-4)
-            shape()->setAdditionalAttribute("svg:y", QString("%1pt").arg(d->distance.y()));
+       if (qAbs(d->distance.y()) > 1E-4)
+           shape()->setAdditionalAttribute("svg:y", QString("%1pt").arg(d->distance.y()));
+
+        // the draw:transform should not have any offset since we put that in the svg:y already.
+        context.addShapeOffset(shape(), shape()->absoluteTransformation(0).inverted());
+
         shape()->setAdditionalAttribute("text:anchor-type", "as-char");
         shape()->saveOdf(context);
         shape()->removeAdditionalAttribute("svg:y");
-    }
-    else { // these don't map perfectly
+    } else {
+        // these don't map perfectly to ODF because we have more functionality
         shape()->setAdditionalAttribute("koffice:anchor-type", d->anchorPosition());
-        QPointF offset = d->distance - shape()->absolutePosition(KoFlake::TopLeftCorner);
-        //context.addShapeOffset(shape(), QMatrix(1, 0, 0, 1, offset.x(), offset.y()));
-        context.addShapeOffset(shape(), QMatrix(1, 0, 0, 1, -10, 20));
-        if (odfAnchorType == Frame) {
-            shape()->setAdditionalAttribute("text:anchor-type", "frame");
-        }
-        else if (odfAnchorType == Paragraph) {
-            shape()->setAdditionalAttribute("text:anchor-type", "paragraph");
-        }
+
+        QString type;
+        if (odfAnchorType == Frame)
+            type = "frame";
+        else
+            type = "paragraph";
+        shape()->setAdditionalAttribute("text:anchor-type", type);
+        context.addShapeOffset(shape(), shape()->parent()->absoluteTransformation(0).inverted());
         shape()->saveOdf(context);
         context.removeShapeOffset(shape());
     }
@@ -295,27 +297,60 @@ void KoTextAnchor::saveOdf(KoShapeSavingContext & context)
 bool KoTextAnchor::loadOdfFromShape()
 {
     Q_D(KoTextAnchor);
-/*
-    setOffset(shape()->position());
-    shape()->setPosition(QPointF(0, 0));
-    if (shape()->hasAdditionalAttribute("text:anchor-type")) {
-        d->pageNumber = -1;
-        QString anchorType = shape()->additionalAttribute("text:anchor-type");
-        if (anchorType == "paragraph")
-            d->anchorType = Paragraph;
-        else if (anchorType == "page") {
-            d->anchorType = Page;
-            if (shape()->hasAdditionalAttribute("text:anchor-page-number"))
-                d->pageNumber = shape()->additionalAttribute("text:anchor-page-number").toInt();
-        } else if (anchorType == "frame")
-            d->anchorType = Frame;
-        else if (anchorType == "char")
-            d->anchorType = Char;
-        else if (anchorType == "as-char")
-            d->anchorType = AsChar;
-        return true;
+    d->distance = shape()->position();
+    if (! shape()->hasAdditionalAttribute("text:anchor-type"))
+        return false;
+    QString anchorType = shape()->additionalAttribute("text:anchor-type");
+    if (anchorType == "char" || anchorType == "as-char") {
+        // no clue what the difference is between 'char' and 'as-char'...
+        d->horizontalAlignment = HorizontalOffset;
+        d->verticalAlignment = VerticalOffset;
     }
-*/
-    return false;
+    else {
+        if (anchorType == "paragraph") {
+            d->horizontalAlignment = Left;
+            d->verticalAlignment = TopOfParagraph;
+        } else if (anchorType == "frame") {
+            d->horizontalAlignment = Left;
+            d->verticalAlignment = TopOfFrame;
+        }
+
+        if (shape()->hasAdditionalAttribute("koffice:anchor-type")) {
+            anchorType = shape()->additionalAttribute("koffice:anchor-type"); // our enriched properties
+            QStringList types = anchorType.split('|');
+            if (types.count() > 1) {
+                QString vertical = types[0];
+                QString horizontal = types[1];
+                if (vertical == "TopOfFrame")
+                    d->verticalAlignment = TopOfFrame;
+                else if (vertical == "TopOfParagraph")
+                    d->verticalAlignment = TopOfParagraph;
+                else if (vertical == "AboveCurrentLine")
+                    d->verticalAlignment = AboveCurrentLine;
+                else if (vertical == "BelowCurrentLine")
+                    d->verticalAlignment = BelowCurrentLine;
+                else if (vertical == "BottomOfParagraph")
+                    d->verticalAlignment = BottomOfParagraph;
+                else if (vertical == "BottomOfFrame")
+                    d->verticalAlignment = BottomOfFrame;
+                else if (vertical == "VerticalOffset")
+                    d->verticalAlignment = VerticalOffset;
+
+                if (horizontal == "Left")
+                    d->horizontalAlignment = Left;
+                else if (horizontal == "Right")
+                    d->horizontalAlignment = Right;
+                else if (horizontal == "Center")
+                    d->horizontalAlignment = Center;
+                else if (horizontal == "ClosestToBinding")
+                    d->horizontalAlignment = ClosestToBinding;
+                else if (horizontal == "FurtherFromBinding")
+                    d->horizontalAlignment = FurtherFromBinding;
+                else if (horizontal == "HorizontalOffset")
+                    d->horizontalAlignment = HorizontalOffset;
+            }
+        }
+    }
+    return true;
 }
 

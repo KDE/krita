@@ -290,7 +290,8 @@ void KoTextAnchor::saveOdf(KoShapeSavingContext & context)
         else
             type = "paragraph";
         shape()->setAdditionalAttribute("text:anchor-type", type);
-        context.addShapeOffset(shape(), shape()->parent()->absoluteTransformation(0).inverted());
+        if (shape()->parent()) // an anchor may not yet have been layout-ed
+            context.addShapeOffset(shape(), shape()->parent()->absoluteTransformation(0).inverted());
         shape()->saveOdf(context);
         context.removeShapeOffset(shape());
     }
@@ -351,6 +352,7 @@ bool KoTextAnchor::loadOdfFromShape(const KoXmlElement& element)
                 else if (horizontal == "HorizontalOffset")
                     d->horizontalAlignment = HorizontalOffset;
             }
+            d->distance = QPointF();
         }
     }
     return true;

@@ -1,5 +1,7 @@
 include_directories( ${KOTEXT_INCLUDES} ${BLITZ_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/flake ${CMAKE_CURRENT_SOURCE_DIR}/openrastertk ${CMAKE_SOURCE_DIR}/krita/image/metadata )
 
+add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+
 add_subdirectory( tests )
 
 

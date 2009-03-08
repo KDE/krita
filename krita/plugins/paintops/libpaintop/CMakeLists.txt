@@ -1,5 +1,7 @@
 add_subdirectory( tests )
 
+add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+
 set(kritalibpaintop_LIB_SRCS
     kis_auto_brush.cpp
     kis_brush_based_paintop.cpp

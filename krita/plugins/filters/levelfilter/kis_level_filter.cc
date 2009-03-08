@@ -118,7 +118,7 @@ void KisLevelFilter::process(KisConstProcessingInformation srcInfo,
     if (progressUpdater) {
         progressUpdater->setRange(0, size.width() * size.height());
     }
-    Q_INT32 pixelsProcessed = 0;
+    qint32 pixelsProcessed = 0;
 
     for (int row = 0; row < size.height() && !(progressUpdater && progressUpdater->interrupted()); ++row) {
         while (! srcIt.isDone()  && !(progressUpdater && progressUpdater->interrupted())) {
@@ -252,7 +252,7 @@ void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
     p.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
 
     double highest = (double)histogram->calculations().getHighest();
-    Q_INT32 bins = histogram->producer()->numberOfBins();
+    qint32 bins = histogram->producer()->numberOfBins();
 
     // use nearest neighbour interpolation
     if (histogram->getHistogramType() == LINEAR) {

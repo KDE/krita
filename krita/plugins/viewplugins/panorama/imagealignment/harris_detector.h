@@ -47,7 +47,7 @@ lHarrisPoints computeHarrisPoints(KisPaintDeviceSP device, QRect area);
 
 struct Match {
     const HarrisPoint* ref, * match;
-    Q_INT32 l1Ref, l2Ref, l1Match, l2Match;
+    qint32 l1Ref, l2Ref, l1Match, l2Match;
     double strength;
 };
 typedef std::vector<Match> vMatches;

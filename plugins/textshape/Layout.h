@@ -71,6 +71,11 @@ public:
     /// reimplemented from superclass
     virtual void clearTillEnd();
 
+    /// reimplemented from superclass
+    int numColumns() {
+        return m_dropCapsNChars;
+    }
+
     /// set default tab size for this document
     virtual void setTabSpacing(qreal spacing) {
         m_defaultTabSizing = spacing;
@@ -99,7 +104,6 @@ private:
      * @return the height in document points of space used for all footnotes in this frame.
      */
     qreal findFootnote(const QTextLine &line, int *oldLength);
-
     void resetPrivate();
 
 private:
@@ -128,9 +132,6 @@ private:
     // we decorate the tab for the text of a fragment
     int m_dropCapsNChars, m_dropCapsAffectsNMoreLines;
     qreal m_dropCapsAffectedLineWidthAdjust, m_y_justBelowDropCaps;
-    int numColumns() {
-        return m_dropCapsNChars;
-    }
 
     QString m_currentMasterPage;
 };

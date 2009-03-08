@@ -1872,6 +1872,15 @@ void TextTool::debugTextDocument()
             KoInlineObject *object= inlineManager->inlineTextObject(cf);
             kDebug(32500) << "At pos:" << cf.intProperty(CHARPOSITION) << object;
         }
+        QTextList *list = block.textList();
+        if (list) {
+            if (list->format().hasProperty(KoListStyle::StyleId)) {
+                KoListStyle *ls = styleManager->listStyle(list->format().intProperty(KoListStyle::StyleId));
+                kDebug(32500) << "   List style applied:" << ls->styleId() << ls->name();
+            }
+            else
+                kDebug(32500) << "   Is a list..." << list;
+        }
     }
 }
 

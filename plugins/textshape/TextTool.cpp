@@ -413,6 +413,10 @@ TextTool::TextTool(KoCanvasBase *canvas)
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_P);
     addAction("detailed_debug_paragraphs", action);
     connect(action, SIGNAL(triggered()), this, SLOT(debugTextDocument()));
+    action = new KAction("Styles Debug", this); // do NOT add i18n!
+    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_S);
+    addAction("detailed_debug_styles", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(debugTextStyles()));
 #endif
 
     // setup the context list.
@@ -1868,6 +1872,63 @@ void TextTool::debugTextDocument()
             KoInlineObject *object= inlineManager->inlineTextObject(cf);
             kDebug(32500) << "At pos:" << cf.intProperty(CHARPOSITION) << object;
         }
+    }
+}
+
+void TextTool::debugTextStyles()
+{
+    KoTextDocument document(m_textShapeData->document());
+    KoStyleManager *styleManager = document.styleManager();
+
+    QSet<int> seenStyles;
+
+    foreach (KoParagraphStyle *style, styleManager->paragraphStyles()) {
+        kDebug(32500) << style->styleId() << style->name() << (styleManager->defaultParagraphStyle() == style ? "[Default]" : "");
+        KoCharacterStyle *cs = style->characterStyle();
+        seenStyles << style->styleId();
+        if (cs) {
+            kDebug(32500) << "  +- CharStyle: " << cs->styleId() << cs->name();
+            kDebug(32500) << "  |  " << cs->font();
+            seenStyles << cs->styleId();
+        } else {
+            kDebug(32500) << "  +- ERROR; no char style found!" << endl;
+        }
+        KoListStyle *ls = style->listStyle();
+        if (ls) { // optional ;)
+            kDebug(32500) << "  +- ListStyle: " << ls->styleId() << ls->name()
+                << (ls == styleManager->defaultListStyle() ? "[Default]":"");
+            foreach (int level, ls->listLevels()) {
+                KoListLevelProperties llp = ls->levelProperties(level);
+                kDebug(32500) << "  |  level" << llp.level() << " style (enum):" << llp.style();
+                if (llp.bulletCharacter().unicode() != 0)
+                    kDebug(32500) << "  |  bullet" << llp.bulletCharacter();
+            }
+            seenStyles << ls->styleId();
+        }
+    }
+
+    bool first = true;
+    foreach (KoCharacterStyle *style, styleManager->characterStyles()) {
+        if (seenStyles.contains(style->styleId()))
+            continue;
+        if (first) {
+            kDebug(32500) << "--- Character styles ---";
+            first = false;
+        }
+        kDebug(32500) << style->styleId() << style->name();
+        kDebug(32500) << style->font();
+    }
+
+    first = true;
+    foreach (KoListStyle *style, styleManager->listStyles()) {
+        if (seenStyles.contains(style->styleId()))
+            continue;
+        if (first) {
+            kDebug(32500) << "--- List styles ---";
+            first = false;
+        }
+        kDebug(32500) << style->styleId() << style->name()
+                << (style == styleManager->defaultListStyle() ? "[Default]":"");
     }
 }
 #endif

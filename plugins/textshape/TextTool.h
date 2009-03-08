@@ -199,6 +199,7 @@ private slots:
 
 #ifndef NDEBUG
     void debugTextDocument();
+    void debugTextStyles();
 protected:
     explicit TextTool(MockCanvas *canvas);
 #endif

@@ -44,12 +44,12 @@ public:
      * @return the constant random value corresponding to a given pixel, the value is between 0
      *         and RAND_MAX
      */
-    Q_UINT64 randomAt(Q_INT64 x, Q_INT64 y);
+    Q_UINT64 randomAt(qint64 x, qint64 y);
     /**
      * @return the constant random value correspoding to a given pixel, the value is between 0
      *         and 1.0
      */
-    double doubleRandomAt(Q_INT64 x, Q_INT64 y);
+    double doubleRandomAt(qint64 x, qint64 y);
 private:
     struct Private;
     Private* const d;

@@ -30,9 +30,9 @@ private slots:
     void testConstantness();
     void testEvolution();
 private:
-    void twoCalls(Q_UINT64 seed);
-    void testConstantness(Q_UINT64 seed);
-    void twoSeeds(Q_UINT64 seed1, Q_UINT64 seed2);
+    void twoCalls(quint64 seed);
+    void testConstantness(quint64 seed);
+    void twoSeeds(quint64 seed1, quint64 seed2);
 
 };
 

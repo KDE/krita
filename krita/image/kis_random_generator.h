@@ -38,13 +38,13 @@ public:
     /**
      * Creates a new instance of a random generator with the given seed.
      */
-    KisRandomGenerator(Q_UINT64 seed);
+    KisRandomGenerator(quint64 seed);
     ~KisRandomGenerator();
     /**
      * @return the constant random value corresponding to a given pixel, the value is between 0
      *         and RAND_MAX
      */
-    Q_UINT64 randomAt(qint64 x, qint64 y);
+    quint64 randomAt(qint64 x, qint64 y);
     /**
      * @return the constant random value correspoding to a given pixel, the value is between 0
      *         and 1.0

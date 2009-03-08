@@ -25,7 +25,7 @@
 
 #include "kis_debug.h"
 
-void KisRandomGeneratorTest::twoSeeds(Q_UINT64 seed1, Q_UINT64 seed2)
+void KisRandomGeneratorTest::twoSeeds(quint64 seed1, quint64 seed2)
 {
     KisRandomGenerator rand1(seed1);
     KisRandomGenerator rand2(seed2);
@@ -48,7 +48,7 @@ void KisRandomGeneratorTest::twoSeeds()
 }
 
 
-void KisRandomGeneratorTest::twoCalls(Q_UINT64 seed)
+void KisRandomGeneratorTest::twoCalls(quint64 seed)
 {
     KisRandomGenerator rand1(seed);
     for (int y = 0; y < 100; y++) {
@@ -70,7 +70,7 @@ void KisRandomGeneratorTest::twoCalls()
     twoCalls(6013413451550LL);
 }
 
-void KisRandomGeneratorTest::testConstantness(Q_UINT64 seed)
+void KisRandomGeneratorTest::testConstantness(quint64 seed)
 {
     KisRandomGenerator rand1(seed);
     KisRandomGenerator rand2(seed);
@@ -102,7 +102,7 @@ void KisRandomGeneratorTest::testEvolution()
     KisRandomGenerator randg(10000);
     for (int y = 2; y < 1000; y++) {
         for (int x = 2; x < 1000; x++) {
-            Q_UINT64 number = randg.randomAt(x, y);
+            quint64 number = randg.randomAt(x, y);
             double dnumber = randg.doubleRandomAt(x, y);
 
             for (int i = -2; i < 3; i++) {

@@ -1867,7 +1867,8 @@ void TextTool::debugTextDocument()
         }
         if (!fragmentText.isEmpty())
             kDebug(32500) << fragmentText;
-
+        else if (block.length() == 1) // no actual tet
+            kDebug(32500) << "\\n";
         foreach (QTextCharFormat cf, inlineCharacters) {
             KoInlineObject *object= inlineManager->inlineTextObject(cf);
             kDebug(32500) << "At pos:" << cf.intProperty(CHARPOSITION) << object;
@@ -1879,7 +1880,7 @@ void TextTool::debugTextDocument()
                 kDebug(32500) << "   List style applied:" << ls->styleId() << ls->name();
             }
             else
-                kDebug(32500) << "   Is a list..." << list;
+                kDebug(32500) << " +- is a list..." << list;
         }
     }
 }

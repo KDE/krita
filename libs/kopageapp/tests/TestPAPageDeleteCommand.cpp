@@ -143,5 +143,52 @@ void TestPAPageDeleteCommand::redoUndoMaster()
     }
 }
 
+void TestPAPageDeleteCommand::redoUndoMultiple()
+{
+    MockDocument doc;
+
+    // Create master page.
+    KoPAMasterPage * master = new KoPAMasterPage();
+    doc.insertPage(master, 0);
+    KoPAMasterPage * m = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
+    QVERIFY(m != 0);
+
+    // Create three regular pages.
+    KoPAPage * page1 = new KoPAPage(master);
+    KoPAPage * page2 = new KoPAPage(master);
+    KoPAPage * page3 = new KoPAPage(master);
+    doc.insertPage(page1, 1);
+    doc.insertPage(page2, 2);
+    doc.insertPage(page3, 3);
+    KoPAPage * p1 = dynamic_cast<KoPAPage *>(doc.pageByIndex(0, false));
+    KoPAPage * p2 = dynamic_cast<KoPAPage *>(doc.pageByIndex(1, false));
+    KoPAPage * p3 = dynamic_cast<KoPAPage *>(doc.pageByIndex(2, false));
+    QVERIFY(p1 != 0);
+    QVERIFY(p2 != 0);
+    QVERIFY(p3 != 0);
+
+    // Delete the two last ones.
+    QList<KoPAPageBase*> pagesToDelete;
+    pagesToDelete.append(p2);
+    pagesToDelete.append(p3);
+    KoPAPageDeleteCommand cmd(&doc, pagesToDelete);
+
+    // Verify that the pages are still there.
+    QVERIFY(doc.pageByIndex(0, false) == p1);
+    QVERIFY(doc.pageByIndex(1, false) == p2);
+    QVERIFY(doc.pageByIndex(2, false) == p3);
+
+    cmd.redo();
+
+    // Verify that they are gone.
+    QVERIFY(!doc.pages(false).contains(p2));
+    QVERIFY(!doc.pages(false).contains(p3));
+
+    // Undo and verify that they are back at the right place.
+    cmd.undo();
+    QVERIFY(doc.pageByIndex(1, false) == p2);
+    QVERIFY(doc.pageByIndex(2, false) == p3);
+}
+
 QTEST_KDEMAIN( TestPAPageDeleteCommand, GUI )
 #include "TestPAPageDeleteCommand.moc"

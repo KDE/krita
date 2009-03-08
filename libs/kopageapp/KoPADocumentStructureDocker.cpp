@@ -27,6 +27,7 @@
 #include "KoPAMasterPage.h"
 #include "KoPAPage.h"
 #include "commands/KoPAPageInsertCommand.h"
+#include "commands/KoPAPageDeleteCommand.h"
 
 #include <KoShapeManager.h>
 #include <KoShapeBorderModel.h>
@@ -195,6 +196,13 @@ void KoPADocumentStructureDocker::setPart( KParts::Part * part )
 {
     m_doc = dynamic_cast<KoPADocument *>( part );
     m_model->setDocument( m_doc ); // this either contains the doc or is 0
+
+    m_buttonGroup->button(Button_Delete)->setEnabled(false);
+    if (m_doc) {
+        if (m_sectionView->selectionModel()->selectedIndexes().count() < m_doc->pages().count()) {
+            m_buttonGroup->button(Button_Delete)->setEnabled(true);
+        }
+    }
 }
 
 void KoPADocumentStructureDocker::slotButtonClicked( int buttonId )
@@ -327,7 +335,7 @@ void KoPADocumentStructureDocker::addLayer()
 
 void KoPADocumentStructureDocker::deleteItem()
 {
-    QList<KoPAPageBase*> selectedPages; // XXX: Fix this!
+    QList<KoPAPageBase*> selectedPages;
     QList<KoShapeLayer*> selectedLayers;
     QList<KoShape*> selectedShapes;
 
@@ -357,6 +365,9 @@ void KoPADocumentStructureDocker::deleteItem()
     else if( selectedShapes.count() )
     {
         cmd = new KoShapeDeleteCommand( m_doc, selectedShapes );
+    }
+    else if (!selectedPages.isEmpty() && selectedPages.count() < m_doc->pages().count()) {
+        cmd = new KoPAPageDeleteCommand(m_doc, selectedPages);
     }
 
     if( cmd )
@@ -582,13 +593,18 @@ void KoPADocumentStructureDocker::itemSelected( const QItemSelection& selected, 
     if( selected.indexes().isEmpty() ) {
         m_buttonGroup->button( Button_Raise )->setEnabled( false );
         m_buttonGroup->button( Button_Lower )->setEnabled( false );
-        m_buttonGroup->button( Button_Delete )->setEnabled( false );
         m_addLayerAction->setEnabled( false );
     } else {
-        m_buttonGroup->button( Button_Delete )->setEnabled( true );
         m_buttonGroup->button( Button_Raise )->setEnabled( true );
         m_buttonGroup->button( Button_Lower )->setEnabled( true );
         m_addLayerAction->setEnabled( true );
+    }
+
+    if (!m_sectionView->selectionModel()->selectedIndexes().empty() &&
+            m_sectionView->selectionModel()->selectedIndexes().count() < m_doc->pages().count()) {
+        m_buttonGroup->button(Button_Delete)->setEnabled(true);
+    } else {
+        m_buttonGroup->button(Button_Delete)->setEnabled(false);
     }
 }
 

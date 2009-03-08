@@ -122,7 +122,7 @@ void KisLevelFilter::process(KisConstProcessingInformation srcInfo,
 
     for (int row = 0; row < size.height() && !(progressUpdater && progressUpdater->interrupted()); ++row) {
         while (! srcIt.isDone()  && !(progressUpdater && progressUpdater->interrupted())) {
-            Q_UINT32 npix = 0, maxpix = qMin(srcIt.nConseqHPixels(), dstIt.nConseqHPixels());
+            quint32 npix = 0, maxpix = qMin(srcIt.nConseqHPixels(), dstIt.nConseqHPixels());
             quint8 selectedness = dstIt.selectedness();
             // The idea here is to handle stretches of completely selected and completely unselected pixels.
             // Partially selected pixels are handled one pixel at a time.

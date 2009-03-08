@@ -205,7 +205,11 @@ install( FILES
 install( FILES 
     kis_base_node.h
     kis_base_processor.h
+    kis_convolution_kernel.h
+    kis_convolution_painter.h
     kis_debug.h
+    kis_filter_strategy.h
+    kis_generic_colorspace.h
     kis_global.h
     kis_image.h
     kis_iterator.h
@@ -225,6 +229,8 @@ install( FILES
     kis_shared_data.h
     kis_shared_ptr.h
     kis_shared_ptr_vector.h
+    kis_transaction.h
+    kis_transform_worker.h
     kis_types.h
     krita_export.h
     filter/kis_filter_configuration.h

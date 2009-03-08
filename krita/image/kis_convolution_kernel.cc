@@ -56,6 +56,14 @@ quint32 KisConvolutionKernel::height() const
     return d->height;
 }
 
+void KisConvolutionKernel::setSize(quint32 width, quint32 height)
+{
+    Q_ASSERT(d->width * d->height == width * height);
+    d->width = width;
+    d->height = height;
+}
+
+
 qint32 KisConvolutionKernel::offset() const
 {
     return d->offset;
@@ -64,6 +72,11 @@ qint32 KisConvolutionKernel::offset() const
 qint32 KisConvolutionKernel::factor() const
 {
     return d->factor;
+}
+
+void KisConvolutionKernel::setFactor( qint32 factor)
+{
+    d->factor = factor;
 }
 
 qint32* KisConvolutionKernel::data()

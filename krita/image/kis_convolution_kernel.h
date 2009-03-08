@@ -35,8 +35,13 @@ public:
 
     quint32 width() const;
     quint32 height() const;
+    /**
+     * Change the size of a kernel, it won't reallocate, and therefore it must keep the same kernel size ( oldwidth * oldheight = newwidth*newheight)
+     */
+    void setSize(quint32 width, quint32 height);
     qint32 offset() const;
     qint32 factor() const;
+    void setFactor( qint32 );
     qint32 * data();
     const qint32 * data() const;
 

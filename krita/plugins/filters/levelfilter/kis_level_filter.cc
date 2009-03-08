@@ -97,7 +97,7 @@ void KisLevelFilter::process(KisConstProcessingInformation srcInfo,
     int outblackvalue = config->getInt("outblackvalue");
     int outwhitevalue = config->getInt("outwhitevalue", 255);
 
-    Q_UINT16 transfer[256];
+    quint16 transfer[256];
     for (int i = 0; i < 256; i++) {
         if (i <= blackvalue)
             transfer[i] = outblackvalue;

@@ -123,7 +123,7 @@ void KisLevelFilter::process(KisConstProcessingInformation srcInfo,
     for (int row = 0; row < size.height() && !(progressUpdater && progressUpdater->interrupted()); ++row) {
         while (! srcIt.isDone()  && !(progressUpdater && progressUpdater->interrupted())) {
             Q_UINT32 npix = 0, maxpix = qMin(srcIt.nConseqHPixels(), dstIt.nConseqHPixels());
-            Q_UINT8 selectedness = dstIt.selectedness();
+            quint8 selectedness = dstIt.selectedness();
             // The idea here is to handle stretches of completely selected and completely unselected pixels.
             // Partially selected pixels are handled one pixel at a time.
             switch (selectedness) {
@@ -138,8 +138,8 @@ void KisLevelFilter::process(KisConstProcessingInformation srcInfo,
                 break;
 
             case MAX_SELECTED: {
-                const Q_UINT8 *firstPixelSrc = srcIt.oldRawData();
-                Q_UINT8 *firstPixelDst = dstIt.rawData();
+                const quint8 *firstPixelSrc = srcIt.oldRawData();
+                quint8 *firstPixelDst = dstIt.rawData();
                 while (dstIt.selectedness() == MAX_SELECTED && maxpix) {
                     --maxpix;
                     if (maxpix != 0) {

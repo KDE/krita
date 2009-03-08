@@ -249,7 +249,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
         KisHLineConstIteratorPixel hitDevice = device->createHLineConstIterator(rect.left(), rect.top() + 2, rect.width() - 4);
         KisHLineIteratorPixel hitinfoDevice = infoDevice-> createHLineIterator(rect.left() + 2, 2, rect.width());
 
-        Q_UINT8 pixelvalue[5];
+        quint8 pixelvalue[5];
 
         dbgPlugins << " Compute the derivatives";
         dbgPlugins << "  horizontal derivatives";
@@ -270,7 +270,7 @@ lInterestPoints HarrisPointDetector::computeInterestPoints(KisPaintDeviceSP devi
                 infoValues[INFO_HADD] = beta0 * (pixelvalue[CENTER]) + beta1 * (pixelvalue[LEFT] + pixelvalue[RIGHT]) + beta2 * (pixelvalue[LEFTLEFT] + pixelvalue[RIGHTRIGHT]);
                 infoValues[INFO_INTENSITY] = pixelvalue[CENTER];
 //                     dbgPlugins << hitDevice.x() <<"" << hitDevice.y() <<"" << infoValues[INFO_HDIFF] <<"" << infoValues[INFO_HADD] <<"" << (int)pixelvalue[CENTER] <<"" << infoValues[INFO_INTENSITY];
-                memmove(pixelvalue, pixelvalue + 1, 4*sizeof(Q_UINT8));
+                memmove(pixelvalue, pixelvalue + 1, 4*sizeof(quint8));
                 ++hitDevice;
                 ++hitinfoDevice;
             }

@@ -2,6 +2,7 @@
 Name=SpecificColorSelector
 Name[ca]=SelectorDeColorEspecific
 Name[de]=Spezifischer Farbwähler
+Name[es]=Selector de colores específico
 Name[et]=Konkreetse värvi valija
 Name[gl]=SelectorDeCoresEspecífico
 Name[hi]=विशिष्टरंगचयनक
@@ -20,6 +21,7 @@ Name[zh_TW]=指定顏色選擇器
 Comment=SpecificColorSelector
 Comment[ca]=SelectorDeColorEspecific
 Comment[de]=Spezifischer Farbwähler
+Comment[es]=Selector de colores específico
 Comment[et]=Konkreetse värvi valija
 Comment[gl]=SelectorDeCoresEspecífico
 Comment[hi]=विशिष्टरंगचयनक

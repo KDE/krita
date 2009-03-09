@@ -398,7 +398,7 @@ QString KisPerChannelFilterConfiguration::toString()
     return doc.toString();
 }
 
-KisPerChannelFilter::KisPerChannelFilter() : KisFilter(id(), CategoryAdjust, i18n("&Color Adjustment curves..."))
+KisPerChannelFilter::KisPerChannelFilter() : KisFilter(id(), categoryAdjust(), i18n("&Color Adjustment curves..."))
 {
     setSupportsPainting(true);
     setSupportsPreview(true);

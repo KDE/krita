@@ -27,16 +27,55 @@
 #include "kis_selection.h"
 #include "kis_types.h"
 
-const KoID KisFilter::CategoryAdjust = KoID("adjust_filters", i18n("Adjust"));
-const KoID KisFilter::CategoryArtistic = KoID("artistic_filters", i18n("Artistic"));
-const KoID KisFilter::CategoryBlur = KoID("blur_filters", i18n("Blur"));
-const KoID KisFilter::CategoryColors = KoID("color_filters", i18n("Colors"));
-const KoID KisFilter::CategoryEdgeDetection = KoID("edge_filters", i18n("Edge Detection"));
-const KoID KisFilter::CategoryEmboss = KoID("emboss_filters", i18n("Emboss"));
-const KoID KisFilter::CategoryEnhance = KoID("enhance_filters", i18n("Enhance"));
-const KoID KisFilter::CategoryMap = KoID("map_filters", i18n("Map"));
-const KoID KisFilter::CategoryNonPhotorealistic = KoID("nonphotorealistic_filters", i18n("Non-photorealistic"));
-const KoID KisFilter::CategoryOther = KoID("other_filters", i18n("Other"));
+KoID KisFilter::categoryAdjust()
+{
+    return KoID("adjust_filters", i18n("Adjust"));
+}
+
+KoID KisFilter::categoryArtistic()
+{
+    return KoID("artistic_filters", i18n("Artistic"));
+}
+
+KoID KisFilter::categoryBlur()
+{
+    return KoID("blur_filters", i18n("Blur"));
+}
+
+KoID KisFilter::categoryColors()
+{
+    return KoID("color_filters", i18n("Colors"));
+}
+
+KoID KisFilter::categoryEdgeDetection()
+{
+    return KoID("edge_filters", i18n("Edge Detection"));
+}
+
+KoID KisFilter::categoryEmboss()
+{
+    return KoID("emboss_filters", i18n("Emboss"));
+}
+
+KoID KisFilter::categoryEnhance()
+{
+    return KoID("enhance_filters", i18n("Enhance"));
+}
+
+KoID KisFilter::categoryMap()
+{
+    return KoID("map_filters", i18n("Map"));
+}
+
+KoID KisFilter::categoryNonPhotorealistic()
+{
+    return KoID("nonphotorealistic_filters", i18n("Non-photorealistic"));
+}
+
+KoID KisFilter::categoryOther()
+{
+    return KoID("other_filters", i18n("Other"));
+}
 
 
 KisFilter::KisFilter(const KoID& id, const KoID & category, const QString & entry)

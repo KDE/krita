@@ -54,7 +54,7 @@
 
 #include "widgets/kis_multi_integer_filter_widget.h"
 
-KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), CategoryEmboss, i18n("&Emboss with Variable Depth..."))
+KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), categoryEmboss(), i18n("&Emboss with Variable Depth..."))
 {
     setSupportsPainting(false);
     setSupportsPreview(true);

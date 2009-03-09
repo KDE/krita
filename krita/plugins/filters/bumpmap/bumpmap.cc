@@ -90,7 +90,7 @@ KritaBumpmap::~KritaBumpmap()
 }
 
 KisFilterBumpmap::KisFilterBumpmap()
-        : KisFilter(KoID("bumpmap", i18n("Bumpmap")), KisFilter::CategoryMap, i18n("&Bumpmap..."))
+        : KisFilter(KoID("bumpmap", i18n("Bumpmap")), KisFilter::categoryMap(), i18n("&Bumpmap..."))
 {
     setColorSpaceIndependence(TO_LAB16);
     setSupportsPainting(true);
@@ -219,7 +219,7 @@ void KisFilterBumpmap::process(KisConstProcessingInformation srcInfo,
 
     // Crate a grayscale layer from the bumpmap layer.
     QRect bmRect;
-    const KisPaintDevice * bumpmap;
+    const KisPaintDevice * bumpmap = 0;
 
     KisNodeSP node = config->getProperty("source_layer").value<KisNodeSP>();
     if (node) {

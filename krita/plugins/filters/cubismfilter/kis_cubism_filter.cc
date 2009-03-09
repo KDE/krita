@@ -66,7 +66,7 @@
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 #define SQR(x) ((x) * (x))
 
-KisCubismFilter::KisCubismFilter() : KisFilter(id(), KisFilter::CategoryArtistic, i18n("&Cubism..."))
+KisCubismFilter::KisCubismFilter() : KisFilter(id(), KisFilter::categoryArtistic(), i18n("&Cubism..."))
 {
     setSupportsPainting(false);
     setSupportsPreview(true);

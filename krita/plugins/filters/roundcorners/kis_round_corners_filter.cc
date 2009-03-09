@@ -48,7 +48,7 @@
 #include <kis_processing_information.h>
 #include <kis_types.h>
 
-KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), KisFilter::CategoryMap, i18n("&Round Corners..."))
+KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), KisFilter::categoryMap(), i18n("&Round Corners..."))
 {
     setSupportsPainting(false);
     setSupportsPreview(true);

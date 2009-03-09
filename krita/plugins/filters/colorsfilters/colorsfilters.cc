@@ -87,7 +87,7 @@ ColorsFilters::~ColorsFilters()
 //==================================================================
 
 
-KisAutoContrast::KisAutoContrast() : KisFilter(id(), CategoryAdjust, i18n("&Auto Contrast"))
+KisAutoContrast::KisAutoContrast() : KisFilter(id(), categoryAdjust(), i18n("&Auto Contrast"))
 {
     setSupportsPreview(true);
     setSupportsPainting(false);
@@ -241,7 +241,7 @@ void KisAutoContrast::process(KisConstProcessingInformation srcInfo,
 //==================================================================
 
 KisDesaturateFilter::KisDesaturateFilter()
-        : KisFilter(id(), CategoryAdjust, i18n("&Desaturate"))
+        : KisFilter(id(), categoryAdjust(), i18n("&Desaturate"))
 {
 
 }

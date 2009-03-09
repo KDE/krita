@@ -63,7 +63,7 @@ KritaExample::~KritaExample()
 {
 }
 
-KisFilterInvert::KisFilterInvert() : KisFilter(id(), CategoryAdjust, i18n("&Invert"))
+KisFilterInvert::KisFilterInvert() : KisFilter(id(), categoryAdjust(), i18n("&Invert"))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);

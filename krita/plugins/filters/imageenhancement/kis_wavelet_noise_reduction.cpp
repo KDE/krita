@@ -34,7 +34,7 @@
 #include <kis_processing_information.h>
 
 KisWaveletNoiseReduction::KisWaveletNoiseReduction()
-        : KisFilter(id(), CategoryEnhance, i18n("&Wavelet Noise Reducer"))
+        : KisFilter(id(), categoryEnhance(), i18n("&Wavelet Noise Reducer"))
 {
     setSupportsPainting(false);
     setSupportsPreview(true);

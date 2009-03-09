@@ -54,7 +54,7 @@
 
 #include "widgets/kis_multi_integer_filter_widget.h"
 
-KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::CategoryMap, i18n("&Small Tiles..."))
+KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::categoryMap(), i18n("&Small Tiles..."))
 {
     setSupportsPainting(true);
     setSupportsPreview(true);

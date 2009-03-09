@@ -46,7 +46,7 @@
 #include "kis_types.h"
 
 KisLevelFilter::KisLevelFilter()
-        : KisFilter(id(), CategoryAdjust, i18n("&Levels"))
+        : KisFilter(id(), categoryAdjust(), i18n("&Levels"))
 {
     setSupportsPainting(true);
     setSupportsPreview(true);

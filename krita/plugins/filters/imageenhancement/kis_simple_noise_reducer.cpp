@@ -34,7 +34,7 @@
 #include <kis_selection.h>
 
 KisSimpleNoiseReducer::KisSimpleNoiseReducer()
-        : KisFilter(id(), CategoryEnhance, i18n("&Gaussian Noise Reduction"))
+        : KisFilter(id(), categoryEnhance(), i18n("&Gaussian Noise Reduction"))
 {
     setSupportsPainting(false);
     setSupportsPreview(true);

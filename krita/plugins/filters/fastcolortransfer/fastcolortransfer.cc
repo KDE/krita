@@ -57,7 +57,7 @@ FastColorTransferPlugin::~FastColorTransferPlugin()
 {
 }
 
-KisFilterFastColorTransfer::KisFilterFastColorTransfer() : KisFilter(id(), CategoryColors, i18n("&Color Transfer..."))
+KisFilterFastColorTransfer::KisFilterFastColorTransfer() : KisFilter(id(), categoryColors(), i18n("&Color Transfer..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);

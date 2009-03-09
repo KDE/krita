@@ -30,8 +30,6 @@
 
 #include "ui_wdg_perchannel.h"
 
-enum Qt::Orientation;
-
 class WdgPerChannel : public QWidget, public Ui::WdgPerChannel
 {
     Q_OBJECT

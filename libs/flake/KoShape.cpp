@@ -770,13 +770,20 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
     if (b) {
         b->fillStyle(style, context);
     }
+    else {
+        style.addProperty( "draw:stroke", "none" );
+    }
     KoShapeShadow * s = shadow();
     if (s)
         s->fillStyle(style, context);
 
     KoShapeBackground * bg = background();
-    if (bg)
+    if (bg) {
         bg->fillStyle(style, context);
+    }
+    else {
+        style.addProperty( "draw:fill", "none" );
+    }
 
     if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml)) {
         style.setAutoStyleInStylesDotXml(true);

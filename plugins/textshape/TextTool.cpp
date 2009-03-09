@@ -1787,9 +1787,9 @@ void TextTool::setBackgroundColor(const KoColor &color)
     m_selectionHandler.setTextBackgroundColor(color.toQColor());
 }
 
-#ifndef NDEBUG
 void TextTool::debugTextDocument()
 {
+#ifndef NDEBUG
     if (m_textShapeData == 0)
         return;
     const int CHARSPERLINE = 80; // TODO Make configurable using ENV var?
@@ -1883,10 +1883,12 @@ void TextTool::debugTextDocument()
                 kDebug(32500) << " +- is a list..." << list;
         }
     }
+#endif
 }
 
 void TextTool::debugTextStyles()
 {
+#ifndef NDEBUG
     KoTextDocument document(m_textShapeData->document());
     KoStyleManager *styleManager = document.styleManager();
 
@@ -1940,7 +1942,7 @@ void TextTool::debugTextStyles()
         kDebug(32500) << style->styleId() << style->name()
                 << (style == styleManager->defaultListStyle() ? "[Default]":"");
     }
-}
 #endif
+}
 
 #include "TextTool.moc"

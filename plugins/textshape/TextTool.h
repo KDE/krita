@@ -197,9 +197,12 @@ private slots:
     // called when the m_textShapeData has been deleted.
     void shapeDataRemoved();
 
-#ifndef NDEBUG
+    /// print debug about the details of the text document
     void debugTextDocument();
+    /// print debug about the details of the styles on the current text document
     void debugTextStyles();
+
+#ifndef NDEBUG
 protected:
     explicit TextTool(MockCanvas *canvas);
 #endif

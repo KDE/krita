@@ -53,6 +53,7 @@ void KoParameterShape::moveHandle(int handleId, const QPointF & point, Qt::Keybo
 
     updatePath(size());
     update();
+    notifyChangedShape(ParameterChanged);
 }
 
 

@@ -1181,6 +1181,12 @@ void KoShape::notifyShapeChanged(KoShape * shape, ChangeType type)
     Q_UNUSED(type);
 }
 
+void KoShape::notifyChangedShape(ChangeType type)
+{
+    d->shapeChanged(type);
+}
+
+
 KoSnapData KoShape::snapData() const
 {
     return KoSnapData();

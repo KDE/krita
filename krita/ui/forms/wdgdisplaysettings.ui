@@ -66,7 +66,7 @@
       <item row="2" column="0" >
        <widget class="QLabel" name="lblColor" >
         <property name="text" >
-         <string>Checkers' Color:</string>
+         <string>Checkers Color:</string>
         </property>
        </widget>
       </item>
@@ -99,7 +99,7 @@
       <item row="1" column="0" >
        <widget class="QLabel" name="lblCheckSize" >
         <property name="text" >
-         <string>&amp;Checkers' size</string>
+         <string>&amp;Checkers size</string>
         </property>
         <property name="buddy" >
          <cstring>intCheckSize</cstring>

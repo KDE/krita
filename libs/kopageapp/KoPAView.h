@@ -211,6 +211,11 @@ protected slots:
      */
     void reinitDocumentDocker();
 
+    /** 
+     * Import slideshow 
+     */
+    void importSlideshow();
+
 protected:
     KoPADocument *m_doc;
     KoPACanvas *m_canvas;

@@ -2,6 +2,7 @@
 Name=TriangleColorSelector
 Name[ca]=SelectorTriangularDeColor
 Name[de]=Dreieckiger Farbwähler
+Name[en_GB]=TriangleColourSelector
 Name[es]=Selector de colores triangular
 Name[et]=Kolmnurk-värvivalija
 Name[gl]=SelectorDeCoresTriangular
@@ -19,6 +20,7 @@ Name[zh_TW]=三角型顏色選擇器
 Comment=TriangleColorSelector
 Comment[ca]=SelectorTriangularDeColor
 Comment[de]=Dreieckiger Farbwähler
+Comment[en_GB]=TriangleColourSelector
 Comment[es]=Selector de colores triangular
 Comment[et]=Kolmnurk-värvivalija
 Comment[gl]=SelectorDeCoresTriangular

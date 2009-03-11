@@ -262,6 +262,12 @@ protected:
     bool saveOdfSettings( KoStore * store );
 
     /**
+     * Save specific settings
+     *
+     */
+    virtual bool saveOdfSettings( KoXmlWriter * settingsWriter );    
+
+    /**
      * Load settings
      */
     void loadOdfSettings( const KoXmlDocument & settingsDoc );

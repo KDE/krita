@@ -309,6 +309,8 @@ bool KoPADocument::saveOdfSettings( KoStore * store )
 
     KoUnit::saveOasis( settingsWriter, unit() );
 
+    bool settings_saved = saveOdfSettings(settingsWriter);
+
     settingsWriter->endElement(); // config:config-item-set
 
     settingsWriter->startElement("config:config-item-set");
@@ -331,6 +333,11 @@ bool KoPADocument::saveOdfSettings( KoStore * store )
 
     delete settingsWriter;
 
+    return true;
+}
+
+bool KoPADocument::saveOdfSettings( KoXmlWriter * settingsWriter )
+{
     return true;
 }
 

@@ -51,7 +51,6 @@ public:
     QMap<QString, KoShapeLayer*> layers;
     QMap<QString, KoShape*> drawIds;
     QMap<QString, KoSharedLoadingData*> sharedData;
-    QMap<KoShape*, int> zIndices;
     int zIndex;
     QMap<QString, KoDataCenter *> dataCenterMap;
 };

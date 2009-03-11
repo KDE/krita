@@ -106,16 +106,6 @@ void KoShapeLoadingContext::setZIndex(int index)
     d->zIndex = index;
 }
 
-void KoShapeLoadingContext::addShapeZIndex(KoShape * shape, int index)
-{
-    d->zIndices.insert(shape, index);
-}
-
-const QMap<KoShape*, int> & KoShapeLoadingContext::shapeZIndices()
-{
-    return d->zIndices;
-}
-
 void KoShapeLoadingContext::addSharedData(const QString & id, KoSharedLoadingData * data)
 {
     QMap<QString, KoSharedLoadingData*>::iterator it(d->sharedData.find(id));

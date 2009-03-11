@@ -1,5 +1,5 @@
-/*
- * Copyright (C) 2008 Thomas Zander <zander@kde.org>
+/* This file is part of the KDE project
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,20 +16,23 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef FOLDERBORDER_H
-#define FOLDERBORDER_H
 
-#include <KoShapeBorderModel.h>
+#include <QDebug>
 
-class FolderBorder : public KoShapeBorderModel
+class KoInlineObjectPrivate
 {
 public:
-    FolderBorder();
-    virtual void fillStyle(KoGenStyle &, KoShapeSavingContext &) {}
-    virtual void borderInsets(const KoShape *shape, KoInsets &insets);
-    virtual bool hasTransparency();
-    virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
-    virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor & color);
-};
+    KoInlineObjectPrivate()
+        : manager(0),
+        id(-1),
+        propertyChangeListener(0)
+    {
+    }
+    virtual ~KoInlineObjectPrivate() { }
 
-#endif
+    KoInlineTextObjectManager *manager;
+    int id;
+    bool propertyChangeListener;
+
+    virtual QDebug printDebug(QDebug dbg) const;
+};

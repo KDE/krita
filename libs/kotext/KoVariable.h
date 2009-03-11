@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -36,7 +36,7 @@ class KoShapeLoadingContext;
 class KoProperties;
 class QWidget;
 class KoVariableManager;
-class VariablePrivate;
+class KoVariablePrivate;
 
 /**
  * Base class for in-text variables.
@@ -118,7 +118,7 @@ private:
                const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
 private:
-    VariablePrivate * const d;
+    Q_DECLARE_PRIVATE(KoVariable)
 };
-#endif
 
+#endif

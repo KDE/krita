@@ -20,15 +20,67 @@
 
 #include "kis_random_generator.h"
 #include <stdlib.h>
+#define __STDC_LIMIT_MACROS
+#include <stdint.h>
 #include <math.h>
 
+#include "rand_salt.h"
+
+inline uint64_t swapbitsinbytes( uint64_t v )
+{
+ const uint64_t h_mask_1 = 0xaaaaaaaaaaaaaaaaLL;
+ const uint64_t l_mask_1 = 0x5555555555555555LL;
+ 
+ const uint64_t h_mask_2 = 0xccccccccccccccccLL;
+ const uint64_t l_mask_2 = 0x3333333333333333LL;
+ 
+ const uint64_t h_mask_4 = 0xf0f0f0f0f0f0f0f0LL;
+ const uint64_t l_mask_4 = 0x0f0f0f0f0f0f0f0fLL;
+ 
+ v = ( ( v & h_mask_1 ) >> 1 ) | ( ( v & l_mask_1 ) << 1 );
+ v = ( ( v & h_mask_2 ) >> 2 ) | ( ( v & l_mask_2 ) << 2 );
+ return ( ( v & h_mask_4 ) >> 4 ) | ( ( v & l_mask_4 ) << 4 );
+}
+
+quint64 permuteWhole(quint64 n, quint64 a, quint64 b)
+{
+    return ((n * a) + b);
+}
+
+inline uint64_t makePart( uint64_t v, int idx, int small, int big )
+{
+  uint64_t a = salt[small][big];
+  uint64_t b = 8 * idx;
+  uint64_t c = a << b;
+  return v | c  ;
+}
+
+// This mask and coef generated doing some "random" computation and concatenation of numbers from random.org
+#define mask 0x2D88F3F11F491819LL
+#define coef 0x37DB094
+
+uint64_t myRandom1(uint64_t n1, uint64_t n2)
+{
+  uint64_t v = 0;
+  for(int i = 0; i < 8; ++ i)
+  {
+    int a = (n1 >> (8 * i )) ;
+    int b = (n2 >> (8 * i )) ;
+    v = makePart( v, i, a & 0xFF, b & 0xFF );
+  }
+  return v;
+}
+
 struct KisRandomGenerator::Private {
-    int seed;
+    quint64 rawSeed;
+    quint64 maskedSeed;
 };
 
-KisRandomGenerator::KisRandomGenerator(int seed) : d(new Private)
+KisRandomGenerator::KisRandomGenerator(quint64 seed) : d(new Private)
 {
-    d->seed = seed;
+    d->rawSeed = seed;
+    seed ^= swapbitsinbytes( seed );
+    d->maskedSeed = seed ^ mask;
 }
 
 KisRandomGenerator::~KisRandomGenerator()
@@ -36,18 +88,25 @@ KisRandomGenerator::~KisRandomGenerator()
     delete d;
 }
 
-int KisRandomGenerator::randomAt(int x, int y)
+quint64 KisRandomGenerator::randomAt(qint64 x, qint64 y)
 {
-    return (int)(doubleRandomAt(x, y) * RAND_MAX);
+    const quint64 kxn = 427140578808118991LL;
+    const quint64 kyn = 166552399647317237LL;
+    const quint64 kxs = 48058817213113801LL;
+    const quint64 kys = 9206429469018994469LL;
+    quint64 n1 = (quint64(x + 5) * kxn) * d->rawSeed;
+    quint64 n2 = (quint64(y + 7) * kyn) + d->rawSeed;
+    n1 = permuteWhole(n1, 8759824322359LL, 13);
+    n1 = (n1 >> 32) ^ (n1 << 32);
+    n2 = permuteWhole(n2, 200560490131LL, 2707);
+    n2 = (n2 >> 32) ^ (n2 << 32);
+    n1 ^= x ^ (y * 1040097393733LL) ^ kxs;
+    n2 ^= y ^ (x * 1040097393733LL) ^ kys;
+    return myRandom1( n1, n2 );
 }
 
-double KisRandomGenerator::doubleRandomAt(int x, int y)
+double KisRandomGenerator::doubleRandomAt(qint64 x, qint64 y)
 {
-    // To plot it in Octave :
-    // t = 1:1:100000;
-    //plot (t, sort(0.5*(cos( cos(cos(t.*t.*t.*t))) + 1)));
-    // This function has a near-gaussian distribtution
-    int n = x + (y + 1) * d->seed;
-    return 0.5*(cos(pow(n, 4)) + 1);
+    return randomAt(x, y) / (double)UINT64_MAX;
 }
 

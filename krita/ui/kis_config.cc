@@ -34,13 +34,11 @@
 namespace
 {
 const double IMG_DEFAULT_RESOLUTION = 100.0; // dpi
-const qint32 IMG_DEFAULT_WIDTH = 512;
-const qint32 IMG_DEFAULT_HEIGHT = 512;
+const qint32 IMG_DEFAULT_WIDTH = 2048;
+const qint32 IMG_DEFAULT_HEIGHT = 2048;
 const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_OUTLINE;
 const qint32 DEFAULT_MAX_TILES_MEM = 5000;
 const qint32 DEFAULT_SWAPPINESS = 100;
-const qint32 DEFAULT_UNDO_LIMIT = 50;
-const qint32 DEFAULT_BORDER_SIZE = 128;
 }
 
 KisConfig::KisConfig()
@@ -53,26 +51,6 @@ KisConfig::~KisConfig()
     m_cfg.sync();
 }
 
-
-int KisConfig::borderSize() const
-{
-    return m_cfg.readEntry("borderSize", DEFAULT_BORDER_SIZE);
-}
-
-void KisConfig::setBorderSize(int borderSize)
-{
-    m_cfg.writeEntry("borderSize", borderSize);
-}
-
-bool KisConfig::fixDockerWidth() const
-{
-    return m_cfg.readEntry("fixDockerWidth", true);
-}
-
-void KisConfig::setFixedDockerWidth(bool fix)
-{
-    m_cfg.writeEntry("fixDockerWidth", fix);
-}
 
 bool KisConfig::useProjections() const
 {
@@ -92,17 +70,6 @@ bool KisConfig::undoEnabled() const
 void KisConfig::setUndoEnabled(bool undo)
 {
     m_cfg.writeEntry("undoEnabled", undo);
-}
-
-
-qint32 KisConfig::defUndoLimit() const
-{
-    return m_cfg.readEntry("undolimit", DEFAULT_UNDO_LIMIT);
-}
-
-void KisConfig::defUndoLimit(qint32 limit)
-{
-    m_cfg.writeEntry("undolimit", limit);
 }
 
 qint32 KisConfig::defImgWidth() const
@@ -517,9 +484,9 @@ bool KisConfig::useQtSmoothScaling()
     return m_cfg.readEntry("qt_smooth_scaling", false);
 }
 
-void KisConfig::setUseQtSmoothScaling(bool useQtSmootScaling)
+void KisConfig::setUseQtSmoothScaling(bool useQtSmoothScaling)
 {
-    m_cfg.writeEntry("qt_smooth_scaling", useQtSmootScaling);
+    m_cfg.writeEntry("qt_smooth_scaling", useQtSmoothScaling);
 }
 
 bool KisConfig::threadColorSpaceConversion()

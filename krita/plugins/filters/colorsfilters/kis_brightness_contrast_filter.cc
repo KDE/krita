@@ -154,7 +154,7 @@ QString KisBrightnessContrastFilterConfiguration::toString()
 }
 
 KisBrightnessContrastFilter::KisBrightnessContrastFilter()
-        : KisFilter(id(), CategoryAdjust, i18n("&Brightness/Contrast curve..."))
+        : KisFilter(id(), categoryAdjust(), i18n("&Brightness/Contrast curve..."))
 {
     setSupportsPainting(true);
     setSupportsPreview(true);

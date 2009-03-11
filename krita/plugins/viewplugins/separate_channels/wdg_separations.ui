@@ -148,8 +148,7 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <customwidgets>
+  <customwidgets>
   <customwidget>
    <class>Q3ButtonGroup</class>
    <extends>Q3GroupBox</extends>

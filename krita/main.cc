@@ -21,30 +21,15 @@
 #include <kcmdlineargs.h>
 #include <KoApplication.h>
 #include <krita_export.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <kis_debug.h>
 #include <QString>
 
 #include "ui/kis_aboutdata.h"
-
-#ifndef NDEBUG
-static void qtMessageHandler(QtMsgType type, const char *msg)
-{
-    fprintf(stderr, "%s\n", msg);
-    if (type == QtFatalMsg)
-        abort();
-}
-#endif
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
     int state;
     KAboutData * aboutData=newKritaAboutData();
 
-#ifndef NDEBUG
-    qInstallMsgHandler(qtMessageHandler);
-#endif
     KCmdLineArgs::init(argc, argv, aboutData);
 
     KCmdLineOptions options;

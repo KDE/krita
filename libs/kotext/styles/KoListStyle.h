@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
@@ -170,6 +170,9 @@ public:
     void removeLevelProperties(int level);
 
     QTextListFormat listFormat(int level);
+
+    /// return the configured list levels that hasLevelProperties would return true to.
+    QList<int> listLevels() const;
 
     /// return the name of the style.
     QString name() const;

@@ -187,9 +187,9 @@ QWidget* KisToolSelectContiguous::optionWidget()
 
 void KisToolSelectContiguous::slotSetSampleMerged(int state)
 {
-    if (state == QCheckBox::NoChange)
+    if (state == Qt::PartiallyChecked)
         return;
-    m_sampleMerged = (state == QCheckBox::On);
+    m_sampleMerged = (state == Qt::Checked);
 }
 
 #include "kis_tool_select_contiguous.moc"

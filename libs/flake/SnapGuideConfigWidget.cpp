@@ -53,15 +53,15 @@ SnapGuideConfigWidget::~SnapGuideConfigWidget()
 
 void SnapGuideConfigWidget::snappingEnabled(int state)
 {
-    widget.orthogonalSnapGuide->setEnabled(state == QCheckBox::On);
-    widget.nodeSnapGuide->setEnabled(state == QCheckBox::On);
-    widget.extensionSnapGuide->setEnabled(state == QCheckBox::On);
-    widget.intersectionSnapGuide->setEnabled(state == QCheckBox::On);
-    widget.boundingBoxSnapGuide->setEnabled(state == QCheckBox::On);
-    widget.lineGuideSnapGuide->setEnabled(state == QCheckBox::On);
-    widget.snapDistance->setEnabled(state == QCheckBox::On);
+    widget.orthogonalSnapGuide->setEnabled(state == Qt::Checked);
+    widget.nodeSnapGuide->setEnabled(state == Qt::Checked);
+    widget.extensionSnapGuide->setEnabled(state == Qt::Checked);
+    widget.intersectionSnapGuide->setEnabled(state == Qt::Checked);
+    widget.boundingBoxSnapGuide->setEnabled(state == Qt::Checked);
+    widget.lineGuideSnapGuide->setEnabled(state == Qt::Checked);
+    widget.snapDistance->setEnabled(state == Qt::Checked);
 
-    m_snapGuide->enableSnapping(state == QCheckBox::On);
+    m_snapGuide->enableSnapping(state == Qt::Checked);
 }
 
 void SnapGuideConfigWidget::strategyChanged()

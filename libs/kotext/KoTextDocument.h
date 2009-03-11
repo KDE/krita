@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +27,7 @@
 #include "KoList.h"
 
 class KoStyleManager;
+class KoInlineTextObjectManager;
 
 /**
  * KoTextDocument provides an easy mechanism to set and access to the
@@ -71,6 +73,9 @@ public:
 
     /// Returns the KoList that holds \a list
     KoList *list(QTextList *textList) const;
+
+    /// Returns the KoInlineTextObjectManager
+    KoInlineTextObjectManager *inlineTextObjectManager() const;
 
     /**
      * Clears the text in the document. Unlike QTextDocument::clear(), this

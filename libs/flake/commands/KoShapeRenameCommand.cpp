@@ -47,6 +47,7 @@ KoShapeRenameCommand::KoShapeRenameCommand(KoShape *shape, const QString &newNam
 
 KoShapeRenameCommand::~KoShapeRenameCommand()
 {
+   delete d;
 }
 
 void KoShapeRenameCommand::redo()

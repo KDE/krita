@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,8 +25,10 @@
 
 #include <kdebug.h>
 
-#include "styles/KoStyleManager.h"
 #include "KoTextDocument.h"
+#include "styles/KoStyleManager.h"
+#include "KoInlineTextObjectManager.h"
+#include "KoTextDocumentLayout.h"
 #include "styles/KoParagraphStyle.h"
 #include "KoList.h"
 
@@ -122,4 +125,12 @@ void KoTextDocument::clearText()
     QTextCursor cursor(m_document);
     cursor.select(QTextCursor::Document);
     cursor.removeSelectedText();
+}
+
+KoInlineTextObjectManager *KoTextDocument::inlineTextObjectManager() const
+{
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_document->documentLayout());
+    if (lay)
+        return lay->inlineObjectTextManager();
+    return 0;
 }

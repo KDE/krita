@@ -78,8 +78,6 @@ public:
     bool sizeChangedWhileLocked;
     KisPerspectiveGrid* perspectiveGrid;
 
-    KUrl uri;
-
     qint32 width;
     qint32 height;
 
@@ -126,7 +124,6 @@ KisImage::KisImage(const KisImage& rhs)
         else
             m_d->perspectiveGrid = 0;
 
-        m_d->uri = rhs.m_d->uri;
         m_d->width = rhs.m_d->width;
         m_d->height = rhs.m_d->height;
         m_d->xres = rhs.m_d->xres;
@@ -472,8 +469,8 @@ void KisImage::rotate(double radians, KoUpdater *progress)
     qint32 h = height();
     qint32 tx = qint32((w * cos(radians) - h * sin(radians) - w) / 2 + 0.5);
     qint32 ty = qint32((h * cos(radians) + w * sin(radians) - h) / 2 + 0.5);
-    w = (qint32)(width() * QABS(cos(radians)) + height() * QABS(sin(radians)) + 0.5);
-    h = (qint32)(height() * QABS(cos(radians)) + width() * QABS(sin(radians)) + 0.5);
+    w = (qint32)(width() * qAbs(cos(radians)) + height() * qAbs(sin(radians)) + 0.5);
+    h = (qint32)(height() * qAbs(cos(radians)) + width() * qAbs(sin(radians)) + 0.5);
 
     tx -= (w - width()) / 2;
     ty -= (h - height()) / 2;
@@ -512,18 +509,18 @@ void KisImage::shear(double angleX, double angleY, KoUpdater *progress)
 
 
     if (angleX != 0 || angleY != 0) {
-        double deltaY = height() * QABS(tan(angleX * pi / 180) * tan(angleY * pi / 180));
-        w = (qint32)(width() + QABS(height() * tan(angleX * pi / 180)));
+        double deltaY = height() * qAbs(tan(angleX * pi / 180) * tan(angleY * pi / 180));
+        w = (qint32)(width() + qAbs(height() * tan(angleX * pi / 180)));
         //ugly fix for the problem of having two extra pixels if only a shear along one
         //axis is done. This has to be fixed in the cropping code in KisRotateVisitor!
         if (angleX == 0 || angleY == 0)
-            h = (qint32)(height() + QABS(w * tan(angleY * pi / 180)));
+            h = (qint32)(height() + qAbs(w * tan(angleY * pi / 180)));
         else if (angleX > 0 && angleY > 0)
-            h = (qint32)(height() + QABS(w * tan(angleY * pi / 180)) - 2 * deltaY + 2);
+            h = (qint32)(height() + qAbs(w * tan(angleY * pi / 180)) - 2 * deltaY + 2);
         else if (angleX < 0 && angleY < 0)
-            h = (qint32)(height() + QABS(w * tan(angleY * pi / 180)) - 2 * deltaY + 2);
+            h = (qint32)(height() + qAbs(w * tan(angleY * pi / 180)) - 2 * deltaY + 2);
         else
-            h = (qint32)(height() + QABS(w * tan(angleY * pi / 180)));
+            h = (qint32)(height() + qAbs(w * tan(angleY * pi / 180)));
     }
 
     if (w != width() || h != height()) {

@@ -17,5 +17,6 @@ install( FILES
     krita_dock.desktop
     DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
-
-
+install( FILES
+    kritarc
+    DESTINATION ${CONFIG_INSTALL_DIR} )

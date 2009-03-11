@@ -42,16 +42,16 @@ class KRITAIMAGE_EXPORT KisFilter : public KisBaseProcessor
 {
 
 public:
-    static const KoID CategoryAdjust;
-    static const KoID CategoryArtistic;
-    static const KoID CategoryBlur;
-    static const KoID CategoryColors;
-    static const KoID CategoryEdgeDetection;
-    static const KoID CategoryEmboss;
-    static const KoID CategoryEnhance;
-    static const KoID CategoryMap;
-    static const KoID CategoryNonPhotorealistic;
-    static const KoID CategoryOther;
+    static KoID categoryAdjust();
+    static KoID categoryArtistic();
+    static KoID categoryBlur();
+    static KoID categoryColors();
+    static KoID categoryEdgeDetection();
+    static KoID categoryEmboss();
+    static KoID categoryEnhance();
+    static KoID categoryMap();
+    static KoID categoryNonPhotorealistic();
+    static KoID categoryOther();
 
 public:
 

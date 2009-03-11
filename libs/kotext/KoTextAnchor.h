@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +26,8 @@
 #include <QPointF>
 
 class KoShape;
+class KoTextAnchorPrivate;
+class KoXmlElement;
 
 /**
  * This class is the object that is positioned in the text to be an anchor for a shape.
@@ -75,21 +77,12 @@ public:
         HorizontalOffset    ///< Move the anchor to be an exact horizontal distance from the the anchor.
     };
 
-    /// the anchor type we are using
-    enum AnchorType {
-        Page,               ///< Relative to the page
-        Frame,              ///< Relative to the frame containing the anchor
-        Paragraph,          ///< Relative to the paragraph
-        Char,               ///< Relative to the character before the anchor
-        AsChar              ///< The shape attached using this anchor must be considered as a character
-    };
-
     /**
      * Constructor for an in-place anchor.
      * @param shape the anchored shape that this anchor links to.
      */
     KoTextAnchor(KoShape *shape);
-    ~KoTextAnchor();
+    virtual ~KoTextAnchor();
 
     /**
      * Return the shape that is linked to from the text anchor.
@@ -120,9 +113,6 @@ public:
     /// returns the cursor position in the document where this anchor is positioned.
     int positionInDocument() const;
 
-    /// returns the page number in case this is a page anchor
-    int pageNumber() const;
-
     /// returns the document that this anchor is associated with.
     const QTextDocument *document() const;
 
@@ -142,13 +132,12 @@ public:
     void setOffset(const QPointF &offset);
 
     /// Load the additional attributes.
-    bool loadOdfFromShape();
+    bool loadOdfFromShape(const KoXmlElement& element);
     /// Save the additional attributes.
     void saveOdf(KoShapeSavingContext & context);
 
 private:
-    class Private;
-    Private * const d;
+    Q_DECLARE_PRIVATE(KoTextAnchor)
 };
 
 #endif

@@ -65,7 +65,7 @@ void minimize(const quint8* s, quint8* d, uint nbpixels)
     }
 }
 
-KisFilterMax::KisFilterMax() : KisFilter(id(), CategoryColors, i18n("M&aximize Channel"))
+KisFilterMax::KisFilterMax() : KisFilter(id(), categoryColors(), i18n("M&aximize Channel"))
 {
     setSupportsPainting(true);
     setSupportsPreview(true);
@@ -119,7 +119,7 @@ void KisFilterMax::process(KisConstProcessingInformation srcInfo,
     }
 }
 
-KisFilterMin::KisFilterMin() : KisFilter(id(), CategoryColors, i18n("M&inimize Channel"))
+KisFilterMin::KisFilterMin() : KisFilter(id(), categoryColors(), i18n("M&inimize Channel"))
 {
     setSupportsPainting(true);
     setSupportsPreview(true);

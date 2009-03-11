@@ -117,7 +117,8 @@ public:
         Deleted, ///< the shape was deleted
         BorderChanged, ///< the shapes border has changed
         BackgroundChanged, ///< the shapes background has changed
-        ShadowChanged ///< the shapes shadow has changed
+        ShadowChanged, ///< the shapes shadow has changed
+        ParameterChanged ///< the shapes parameter has changed (KoParameterShape only)
     };
 
     /**
@@ -859,6 +860,12 @@ protected:
 
     /// return the current matrix that contains the rotation/scale/position of this shape
     const QMatrix& matrix() const;
+
+    /**
+     * Notify the shape that a change was done. To be used by inheriting shapes.
+     * @param type the change type
+     */
+    void notifyChangedShape(ChangeType type);
 
 private:
     friend class KoShapeManager;

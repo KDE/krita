@@ -59,7 +59,9 @@
 
 //#define DEBUG_REPAINT
 
+#if QT_VERSION < 0x040500
 #define WORKAROUNT_TABLET_TRACKING_BUG
+#endif
 
 class KisQPainterCanvas::Private
 {

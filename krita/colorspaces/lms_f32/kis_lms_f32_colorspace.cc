@@ -265,9 +265,9 @@ quint8 KisLmsF32ColorSpace::difference(const quint8 *src1U8, const quint8 *src2U
     const Pixel *src1 = reinterpret_cast<const Pixel *>(src1U8);
     const Pixel *src2 = reinterpret_cast<const Pixel *>(src2U8);
 
-    return FLOAT_TO_UINT8(qMax(QABS(src2->longWave - src1->longWave),
-                               qMax(QABS(src2->middleWave - src1->middleWave),
-                                    QABS(src2->shortWave - src1->shortWave))));
+    return FLOAT_TO_UINT8(qMax(qAbs(src2->longWave - src1->longWave),
+                               qMax(qAbs(src2->middleWave - src1->middleWave),
+                                    qAbs(src2->shortWave - src1->shortWave))));
 }
 
 void KisLmsF32ColorSpace::mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const

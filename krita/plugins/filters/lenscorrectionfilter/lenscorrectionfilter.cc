@@ -72,7 +72,7 @@ KritaLensCorrectionFilter::~KritaLensCorrectionFilter()
 {
 }
 
-KisFilterLensCorrection::KisFilterLensCorrection() : KisFilter(id(), CategoryOther, i18n("&Lens Correction..."))
+KisFilterLensCorrection::KisFilterLensCorrection() : KisFilter(id(), categoryOther(), i18n("&Lens Correction..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);

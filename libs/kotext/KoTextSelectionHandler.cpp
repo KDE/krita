@@ -541,6 +541,10 @@ void KoTextSelectionHandler::addBookmark(const QString &name)
 
 bool KoTextSelectionHandler::deleteInlineObjects(bool backward)
 {
+    return false;
+    // TODO don't just blindly delete, make this a command so we can undo it later.
+    // Also note that the below code needs unit testing since I found some issues already
+/*
     QTextCursor cursor(*d->caret);
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(d->textShapeData->document()->documentLayout());
     Q_ASSERT(layout);
@@ -579,6 +583,7 @@ bool KoTextSelectionHandler::deleteInlineObjects(bool backward)
         }
     }
     return found;
+*/
 }
 
 void KoTextSelectionHandler::setShape(KoShape *shape)

@@ -44,6 +44,7 @@ Validator::Reason::Reason(const Validator::Reason& _rhs ) : d(new Private(*_rhs.
 Validator::Reason& Validator::Reason::operator=(const Validator::Reason& _rhs)
 {
     *d = *_rhs.d;
+    return *this;
 }
 
 Validator::Reason::~Reason()

@@ -23,6 +23,8 @@
 
 #include <krita_export.h>
 
+#include <qglobal.h>
+
 /**
  * This is a class that return a pseudo-random number that will be constant for a given
  * pixel coordinate.
@@ -36,18 +38,18 @@ public:
     /**
      * Creates a new instance of a random generator with the given seed.
      */
-    KisRandomGenerator(int seed);
+    KisRandomGenerator(quint64 seed);
     ~KisRandomGenerator();
     /**
      * @return the constant random value corresponding to a given pixel, the value is between 0
      *         and RAND_MAX
      */
-    int randomAt(int x, int y);
+    quint64 randomAt(qint64 x, qint64 y);
     /**
      * @return the constant random value correspoding to a given pixel, the value is between 0
      *         and 1.0
      */
-    double doubleRandomAt(int x, int y);
+    double doubleRandomAt(qint64 x, qint64 y);
 private:
     struct Private;
     Private* const d;

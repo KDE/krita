@@ -515,8 +515,14 @@ void KoPAView::canvasControllerResized()
 
 void KoPAView::updateMousePosition(const QPoint& position)
 {
-    m_horizontalRuler->updateMouseCoordinate(position.x());
-    m_verticalRuler->updateMouseCoordinate(position.y());
+    QPoint canvasOffset( m_canvasController->canvasOffsetX(), m_canvasController->canvasOffsetY() );
+    // the offset is positive it the canvas is shown fully visible
+    canvasOffset.setX(canvasOffset.x() < 0 ? canvasOffset.x(): 0);
+    canvasOffset.setY(canvasOffset.y() < 0 ? canvasOffset.y(): 0);
+    QPoint viewPos = position - canvasOffset;
+
+    m_horizontalRuler->updateMouseCoordinate(viewPos.x());
+    m_verticalRuler->updateMouseCoordinate(viewPos.y());
 
     // Update the selection borders in the rulers while moving with the mouse
     if(m_canvas->shapeManager()->selection() && (m_canvas->shapeManager()->selection()->count() > 0)) {

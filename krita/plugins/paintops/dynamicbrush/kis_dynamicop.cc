@@ -86,5 +86,3 @@ void KisDynamicOp::paintAt(const KisPaintInformation& info)
     painter()->setOpacity(origOpacity);
     painter()->setPaintColor(origColor);
 }
-
-#include "kis_dynamicop.moc"

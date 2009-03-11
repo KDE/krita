@@ -26,6 +26,7 @@ KisDynamicOpSettingsWidget::KisDynamicOpSettingsWidget(QWidget* parent)
 {
     m_uiOptions = new Ui::DynamicBrushOptions();
     m_uiOptions->setupUi(this);
+    m_uiOptions->comboBoxShapes->removeItem(1);
 }
 
 KisDynamicOpSettingsWidget::~KisDynamicOpSettingsWidget()

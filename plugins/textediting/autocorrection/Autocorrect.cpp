@@ -662,7 +662,7 @@ void Autocorrect::readAutocorrectXmlEntry()
         return;
 
     QFile xmlFile(fname);
-    if (!xmlFile.open(IO_ReadOnly))
+    if (!xmlFile.open(QIODevice::ReadOnly))
         return;
 
     QDomDocument doc;

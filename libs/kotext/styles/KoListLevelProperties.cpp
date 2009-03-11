@@ -534,12 +534,12 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer) const
 
     writer->endElement(); // list-level-properties
 
-    kDebug(32500) << "Key KoListStyle::ListItemPrefix :" << d->stylesPrivate.value(KoListStyle::ListItemPrefix);
-    kDebug(32500) << "Key KoListStyle::ListItemSuffix :" << d->stylesPrivate.value(KoListStyle::ListItemSuffix);
-    kDebug(32500) << "Key KoListStyle::CharacterStyleId :" << d->stylesPrivate.value(KoListStyle::CharacterStyleId);
-    kDebug(32500) << "Key KoListStyle::BulletSize :" << d->stylesPrivate.value(KoListStyle::BulletSize);
-    kDebug(32500) << "Key KoListStyle::Alignment :" << d->stylesPrivate.value(KoListStyle::Alignment);
-    kDebug(32500) << "Key KoListStyle::LetterSynchronization :" << d->stylesPrivate.value(KoListStyle::LetterSynchronization);
+//   kDebug(32500) << "Key KoListStyle::ListItemPrefix :" << d->stylesPrivate.value(KoListStyle::ListItemPrefix);
+//   kDebug(32500) << "Key KoListStyle::ListItemSuffix :" << d->stylesPrivate.value(KoListStyle::ListItemSuffix);
+//   kDebug(32500) << "Key KoListStyle::CharacterStyleId :" << d->stylesPrivate.value(KoListStyle::CharacterStyleId);
+//   kDebug(32500) << "Key KoListStyle::BulletSize :" << d->stylesPrivate.value(KoListStyle::BulletSize);
+//   kDebug(32500) << "Key KoListStyle::Alignment :" << d->stylesPrivate.value(KoListStyle::Alignment);
+//   kDebug(32500) << "Key KoListStyle::LetterSynchronization :" << d->stylesPrivate.value(KoListStyle::LetterSynchronization);
 
     writer->endElement();
 }

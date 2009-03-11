@@ -21,6 +21,7 @@
 #define KOPAPAGEDELETECOMMAND_H
 
 #include <QUndoCommand>
+#include <QMap>
 
 #include "kopageapp_export.h"
 
@@ -33,7 +34,22 @@ class KoPAPageBase;
 class KOPAGEAPP_TEST_EXPORT KoPAPageDeleteCommand : public QUndoCommand
 {
 public:
+    /**
+     * Command to delete a single page.
+     * @param document the document to delete the page from
+     * @param page the page to delete
+     * @param parent the parent command used for macro commands
+     */
     KoPAPageDeleteCommand( KoPADocument *document, KoPAPageBase *page, QUndoCommand *parent = 0 );
+
+    /**
+     * Command to delete multiple pages.
+     * @param document the document to delete the pages from
+     * @param pages a list of pages to delete
+     * @param parent the parent command used for macro commands
+     */
+    KoPAPageDeleteCommand(KoPADocument *document, const QList<KoPAPageBase*> &pages, QUndoCommand *parent = 0);
+
     virtual ~KoPAPageDeleteCommand();
 
     /// redo the command
@@ -42,10 +58,9 @@ public:
     void undo();
 
 private:
-    KoPADocument * m_document;
-    KoPAPageBase * m_page;
-    int m_index;
-    bool m_deletePage;
+    KoPADocument * m_document; //< the document to delete the pages from
+    QMap<int, KoPAPageBase*> m_pages; //< a map of pages to delete, with document index as key
+    bool m_deletePages; //< shows if pages should be deleted when deleting the command
 };
 
 #endif // KOPAPAGEDELETECOMMAND_H

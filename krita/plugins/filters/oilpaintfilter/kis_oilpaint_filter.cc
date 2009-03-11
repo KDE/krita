@@ -55,7 +55,7 @@
 #include "widgets/kis_multi_integer_filter_widget.h"
 
 
-KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), KisFilter::CategoryArtistic, i18n("&Oilpaint..."))
+KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), KisFilter::categoryArtistic(), i18n("&Oilpaint..."))
 {
     setSupportsPainting(true);
     setSupportsPreview(true);

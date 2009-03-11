@@ -20,6 +20,7 @@
 #include "TestPathSegment.h"
 #include <KoPathSegment.h>
 #include <KoPathPoint.h>
+#include <QPainterPath>
 
 void TestPathSegment::segmentAssign()
 {

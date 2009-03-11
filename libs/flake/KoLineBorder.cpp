@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007,2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -126,6 +126,18 @@ void KoLineBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewCo
 
     if(!pen.isCosmetic())
         painter.strokePath(shape->outline(), pen);
+}
+
+void KoLineBorder::paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor & color )
+{
+    KoShape::applyConversion(painter, converter);
+
+    QPen pen = d->pen;
+    pen.setColor(color);
+
+    if(!pen.isCosmetic()) {
+        painter.strokePath(shape->outline(), pen);
+    }
 }
 
 void KoLineBorder::setCapStyle(Qt::PenCapStyle style)

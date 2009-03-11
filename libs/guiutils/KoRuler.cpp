@@ -419,6 +419,9 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
 {
     qreal numberStep = d->numberStepForUnit(); // number step in unit
     int numberStepPixel = qRound(d->viewConverter->documentToViewY( d->unit.fromUserValue(numberStep)));
+    if (numberStepPixel <= 0)
+        return;
+
     QFontMetrics fontMetrics(KGlobalSettings::toolBarFont());
     // Calc the longest text length
     int textLength = 0;

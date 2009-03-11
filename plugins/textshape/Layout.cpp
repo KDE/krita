@@ -1136,7 +1136,7 @@ void Layout::drawListItem(QPainter *painter, const QTextBlock &block)
             Qt::Alignment align = static_cast<Qt::Alignment>(listFormat.intProperty(KoListStyle::Alignment));
             if (align == 0)
                 align = Qt::AlignLeft;
-            else if (align != Qt::AlignAuto)
+            else if (align != Qt::AlignLeft)
                 align |= Qt::AlignAbsolute;
             QTextOption option(align);
             option.setTextDirection(block.layout()->textOption().textDirection());

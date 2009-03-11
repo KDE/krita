@@ -33,20 +33,11 @@ public:
     KisConfig();
     ~KisConfig();
 
-    int borderSize() const;
-    void setBorderSize(int borderSize);
-
-    bool fixDockerWidth() const;
-    void setFixedDockerWidth(bool fix);
-
     bool useProjections() const;
     void setUseProjections(bool useProj);
 
     bool undoEnabled() const;
     void setUndoEnabled(bool undo);
-
-    qint32 defUndoLimit() const;
-    void defUndoLimit(qint32 limit);
 
     qint32 defImgWidth() const;
     void defImgWidth(qint32 width);
@@ -166,7 +157,7 @@ public:
 
     // Don't use our own method, but use Qt
     bool useQtSmoothScaling();
-    void setUseQtSmoothScaling(bool useQtSmootScaling);
+    void setUseQtSmoothScaling(bool useQtSmoothScaling);
 
     bool threadColorSpaceConversion();
     void setThreadColorSpaceConversion(bool threadColorSpaceConversion);

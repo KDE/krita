@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -196,6 +196,11 @@ private slots:
 
     // called when the m_textShapeData has been deleted.
     void shapeDataRemoved();
+
+    /// print debug about the details of the text document
+    void debugTextDocument();
+    /// print debug about the details of the styles on the current text document
+    void debugTextStyles();
 
 #ifndef NDEBUG
 protected:

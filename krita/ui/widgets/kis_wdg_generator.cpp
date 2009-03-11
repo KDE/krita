@@ -136,6 +136,8 @@ KisFilterConfiguration * KisWdgGenerator::configuration()
         if (config) {
             return config;
         }
+    } else {
+      return d->currentGenerator->defaultConfiguration(0);
     }
     return 0;
 }

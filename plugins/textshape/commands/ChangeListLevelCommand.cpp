@@ -117,7 +117,7 @@ void ChangeListLevelCommand::undo()
     }
 }
 
-bool ChangeListLevelCommand::mergeWith(const QUndoCommand *other)
+bool ChangeListLevelCommand::mergeWith(const QUndoCommand *)
 {
     return false;
 }

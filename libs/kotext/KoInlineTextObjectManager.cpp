@@ -239,4 +239,9 @@ void KoInlineTextObjectManager::documentInformationUpdated(const QString &info, 
         setProperty(KoInlineObject::SenderCompany, data);
 }
 
+QList<KoInlineObject*> KoInlineTextObjectManager::inlineTextObjects() const
+{
+    return m_objects.values();
+}
+
 #include "KoInlineTextObjectManager.moc"

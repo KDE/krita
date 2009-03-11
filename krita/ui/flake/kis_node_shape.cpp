@@ -174,6 +174,7 @@ KisImageSP KisNodeShape::getImage() const
         return dynamic_cast<KisLayer*>( m_d->node->parent().data() )->image();
     }
 
+    return 0;
 }
 
 #include "kis_node_shape.moc"

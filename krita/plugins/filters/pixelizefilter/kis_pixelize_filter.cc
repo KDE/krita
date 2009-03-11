@@ -56,7 +56,7 @@
 #include "widgets/kis_multi_integer_filter_widget.h"
 
 
-KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), KisFilter::CategoryArtistic, i18n("&Pixelize..."))
+KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), KisFilter::categoryArtistic(), i18n("&Pixelize..."))
 {
     setSupportsPainting(true);
     setSupportsPreview(true);

@@ -22,7 +22,7 @@ include(MacroLibrary)
 macro_optional_find_package(Boost)
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
-find_package(KdepimLibs REQUIRED)
+macro_optional_find_package(KdepimLibs)
 find_package(LCMS REQUIRED)
 find_package(PNG REQUIRED)
 find_package(CreateResources)
@@ -33,15 +33,15 @@ macro_optional_find_package(QCA2)
 set(EXIV2_MIN_VERSION "0.16")
 macro_optional_find_package(Exiv2)
 
-macro_log_feature(EXIV2_FOUND "Exiv2" "Krita will not be built" "http://www.exiv2.org" FALSE "0.16")
+macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http://www.exiv2.org" FALSE "0.16" "Required by Krita")
 
-macro_log_feature(EIGEN2_FOUND "Eigen2" "Eigen2 is needed by KSpread and Krita. They won't be built." "Module in kdesupport" FALSE "2.0")
+macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by KSpread and Krita (available as a module in kdesupport)")
 
-macro_log_feature(QCA2_FOUND "libqca2" "QCA2 is needed to compile support for encrypted OpenDocument files" "Module in kdesupport" FALSE "2.0" "" )
+macro_log_feature(QCA2_FOUND "QCA" "Qt Cryptographic Architecture" "http://delta.affinix.com/qca" FALSE "2.0" "Required for encrypted OpenDocument files support (available as a module in kdesupport)")
 
-macro_log_feature(Boost_FOUND "libboost-dev" "Boost is needed by KPresenter. KPresenter will not be built" "http://www.boost.org" FALSE "")
+macro_log_feature(Boost_FOUND "Boost" "Boost C++ Libraries" "http://www.boost.org" FALSE "" "Required by KPresenter")
 
-
+macro_log_feature(KdepimLibs_FOUND "KDE PIMLibs" "KDE Personal Information Management Libraries" "http://www.kde.org/" FALSE "" "Required by KPlato and the KDE address book integration (available as a module in KDE)")
 
 set(REQUIRED_LCMS_VERSION 115)
 
@@ -51,14 +51,13 @@ else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
     set(HAVE_REQUIRED_LCMS_VERSION FALSE)
 endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
 
-macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "lcms" "LittleCMS is required to build KOffice" "http://www.littlecms.com" TRUE "1.15")
+macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" TRUE "1.15" "Required by KOffice")
 
 if (APPLE)
    find_package(Carbon REQUIRED)
 endif (APPLE)
 
 
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 
 if(WIN32)
@@ -103,7 +102,7 @@ configure_file(config-opengl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-opengl.h
 # Look for OpenCTL
 macro_optional_find_package(OpenCTL)
 
-macro_log_feature(OPENCTL_FOUND "OpenCTL" "OpenCTL is needed for some color spaces (High Dynamic Range Color Spaces, YCbCr and LMS)" "http://www.openctl.org" FALSE "0.9.2")
+macro_log_feature(OPENCTL_FOUND "OpenCTL" "Free Color Transformation Language implementation" "http://www.openctl.org" FALSE "0.9.2" "Required for High Dynamic Range Color Spaces, YCbCr and LMS support")
 configure_file(config-openctl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-openctl.h )
 
 
@@ -144,7 +143,7 @@ if(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
    set(SHOULD_BUILD_KRITA FALSE)
 endif(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
 
-macro_log_feature(BLITZ_FOUND "qimageblitz" "Krita requires qimageblitz. Krita will not be built" "qimageblitz is available from kdesupport" FALSE "")
+macro_log_feature(BLITZ_FOUND "Blitz" "Image effect library" "http://www.kde.org" FALSE "" "Required by Krita (available in kdesupport)")
 
 #Check if build kpresenter here to be able to test if we can build filters/kpresenter
 if(Boost_FOUND)
@@ -194,7 +193,7 @@ macro_optional_add_subdirectory(kchart)
 
 FIND_PROGRAM(BZIP2_EXECUTABLE NAMES bzip2 )
 
-macro_log_feature(BZIP2_EXECUTABLE "bzip2" "bzip2 program is necessary to compile kexi. kexi will not be built" "http://www.bzip.org" FALSE "")
+macro_log_feature(BZIP2_EXECUTABLE "bzip2" "High-quality data compressor" "http://www.bzip.org" FALSE "" "Required by Kexi")
 
 OPTION(BUILD_kexi "Build kexi" FALSE)
 if(BUILD_kexi)
@@ -206,7 +205,11 @@ endif(BUILD_kexi)
 macro_optional_add_subdirectory(kformula)
 macro_optional_add_subdirectory(kivio)
 macro_optional_add_subdirectory(kounavail)
-macro_optional_add_subdirectory(kplato)
+
+if(KdepimLibs_FOUND)
+	macro_optional_add_subdirectory(kplato)
+endif(KdepimLibs_FOUND)
+
 macro_optional_add_subdirectory(krita)
 macro_optional_add_subdirectory(kword)
 add_subdirectory(pics)

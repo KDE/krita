@@ -312,8 +312,7 @@ This option is most important when Automatically add words to completion list is
     </layout>
   </widget>
   <layoutdefault spacing="6" margin="11" />
-  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
-  <connections>
+    <connections>
     <connection>
       <sender>slider1</sender>
       <signal>valueChanged(int)</signal>

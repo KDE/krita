@@ -88,7 +88,7 @@ void KisOpenGLShader::loadSourceCodeFromFile(const QString & sourceCodeFilename)
 
     QFile sourceCodeFile(fullFilename);
 
-    if (!sourceCodeFile.open(IO_ReadOnly)) {
+    if (!sourceCodeFile.open(QIODevice::ReadOnly)) {
         dbgUI << "Unable to open shader source code file:" << fullFilename;
         return;
     }

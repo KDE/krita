@@ -390,7 +390,7 @@ private:
      * @return true if they are the same
      * @return false otherwise
      */ 
-    bool virtuallyEqual( qreal a, qreal b ) { return QABS( a - b ) < 1E-4; }
+    bool virtuallyEqual( qreal a, qreal b ) { return qAbs( a - b ) < 1E-4; }
 
     /// view
     KoView * m_view;

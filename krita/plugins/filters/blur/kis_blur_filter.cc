@@ -36,7 +36,7 @@
 #include <kis_processing_information.h>
 #include "kis_mask_generator.h"
 
-KisBlurFilter::KisBlurFilter() : KisFilter(id(), CategoryBlur, i18n("&Blur..."))
+KisBlurFilter::KisBlurFilter() : KisFilter(id(), categoryBlur(), i18n("&Blur..."))
 {
     setSupportsPainting(true);
     setSupportsPreview(true);

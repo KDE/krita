@@ -2601,11 +2601,7 @@ bool KoXmlDocument::setContent(QIODevice* device, bool namespaceProcessing,
     QXmlSimpleReader reader;
     reader.setFeature("http://xml.org/sax/features/namespaces", namespaceProcessing);
     reader.setFeature("http://xml.org/sax/features/namespace-prefixes", !namespaceProcessing);
-#if QT_VERSION < 0x040500
     reader.setFeature(QLatin1String("http://trolltech.com/xml/features/report-whitespace-only-CharData"), false);
-#else
-    reader.setFeature(QLatin1String("http://qtsoftware.com/xml/features/report-whitespace-only-CharData"), false);
-#endif
 
     // FIXME this hack is apparently private
     //reader.setUndefEntityInAttrHack(true);

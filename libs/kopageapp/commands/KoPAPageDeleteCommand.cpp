@@ -27,13 +27,16 @@
 KoPAPageDeleteCommand::KoPAPageDeleteCommand( KoPADocument *document, KoPAPageBase *page, QUndoCommand *parent )
 : QUndoCommand( parent )
 , m_document( document )
-, m_page( page )
-, m_index( -1 )
-, m_deletePage( false )
+, m_deletePages(false)
 {
-    Q_ASSERT( document );
-    Q_ASSERT( page );
-    if ( m_page->pageType() == KoPageApp::Slide ) {
+    Q_ASSERT(m_document);
+    Q_ASSERT(m_document->pages().count() > 1);
+    Q_ASSERT(page);
+    int index = m_document->pageIndex(page);
+    Q_ASSERT(index != -1);
+    m_pages.insert(index, page);
+
+    if ( page->pageType() == KoPageApp::Slide ) {
         setText( i18n( "Delete slide" ) );
     }
     else {
@@ -41,25 +44,62 @@ KoPAPageDeleteCommand::KoPAPageDeleteCommand( KoPADocument *document, KoPAPageBa
     }
 }
 
+KoPAPageDeleteCommand::KoPAPageDeleteCommand(KoPADocument *document, const QList<KoPAPageBase*> &pages, QUndoCommand *parent)
+: QUndoCommand(parent)
+, m_document(document)
+, m_deletePages(false)
+{
+    Q_ASSERT(m_document);
+    Q_ASSERT(m_document->pages().count() > pages.count());
+    int index = -1;
+
+    foreach (KoPAPageBase *page, pages) {
+        Q_ASSERT(page);
+        index = m_document->pageIndex(page);
+        Q_ASSERT(index != -1);
+        m_pages.insert(index, page);
+    }
+
+    if (pages.first()->pageType() == KoPageApp::Slide) {
+        //setText( i18n( "Delete slides" ) ); // TODO: <-- Pluralize after string freeze
+        setText(i18n( "Delete slide"));
+    }
+    else {
+        //setText( i18n( "Delete pages" ) ); // TODO: <-- Pluralize after string freeze
+        setText(i18n("Delete page"));
+    }
+}
+
 KoPAPageDeleteCommand::~KoPAPageDeleteCommand()
 {
-    if ( m_deletePage ) {
-        delete m_page;
-    }
+    if (!m_deletePages)
+        return;
+
+    qDeleteAll(m_pages);
 }
 
 void KoPAPageDeleteCommand::redo()
 {
     QUndoCommand::redo();
+    int index = -1;
 
-    m_index = m_document->takePage( m_page );
-    m_deletePage = true;
+    foreach (KoPAPageBase *page, m_pages) {
+        index = m_document->takePage(page);
+        Q_ASSERT(index != -1);
+    }
+
+    m_deletePages = true;
 }
 
 void KoPAPageDeleteCommand::undo()
 {
     QUndoCommand::undo();
+    QMapIterator<int, KoPAPageBase*> i(m_pages);
 
-    m_document->insertPage( m_page, m_index );
-    m_deletePage = false;
+    while (i.hasNext()) {
+        i.next();
+        m_document->insertPage(i.value(), i.key());
+    }
+
+    m_deletePages = false;
 }

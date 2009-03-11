@@ -770,13 +770,20 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
     if (b) {
         b->fillStyle(style, context);
     }
+    else {
+        style.addProperty( "draw:stroke", "none" );
+    }
     KoShapeShadow * s = shadow();
     if (s)
         s->fillStyle(style, context);
 
     KoShapeBackground * bg = background();
-    if (bg)
+    if (bg) {
         bg->fillStyle(style, context);
+    }
+    else {
+        style.addProperty( "draw:fill", "none" );
+    }
 
     if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml)) {
         style.setAutoStyleInStylesDotXml(true);
@@ -1180,6 +1187,12 @@ void KoShape::notifyShapeChanged(KoShape * shape, ChangeType type)
     Q_UNUSED(shape);
     Q_UNUSED(type);
 }
+
+void KoShape::notifyChangedShape(ChangeType type)
+{
+    d->shapeChanged(type);
+}
+
 
 KoSnapData KoShape::snapData() const
 {

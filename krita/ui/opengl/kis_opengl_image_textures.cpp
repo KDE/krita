@@ -240,7 +240,7 @@ void KisOpenGLImageTextures::updateImageTextureTiles(const QRect& rect)
                 glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
                 QImage tileUpdateImage;
-                Q_UINT8 *pixels;
+                quint8 *pixels;
                 bool deletePixelsAfterUse = false;
 
                 if (m_imageTextureInternalFormat == GL_RGBA8) {
@@ -260,7 +260,7 @@ void KisOpenGLImageTextures::updateImageTextureTiles(const QRect& rect)
 #endif
                     pixels = tileUpdateImage.bits();
                 } else {
-                    pixels = new Q_UINT8[tileUpdateRect.width() * tileUpdateRect.height() * m_image->colorSpace()->pixelSize()];
+                    pixels = new quint8[tileUpdateRect.width() * tileUpdateRect.height() * m_image->colorSpace()->pixelSize()];
                     Q_CHECK_PTR(pixels);
                     deletePixelsAfterUse = true;
 
@@ -286,7 +286,7 @@ void KisOpenGLImageTextures::updateImageTextureTiles(const QRect& rect)
                                 --halfCount;
                             }
                             delete [] pixels;
-                            pixels = reinterpret_cast<Q_UINT8 *>(pixels_as_floats);
+                            pixels = reinterpret_cast<quint8 *>(pixels_as_floats);
                         } else {
                             Q_ASSERT(m_imageTextureType == GL_HALF_FLOAT_ARB);
                         }

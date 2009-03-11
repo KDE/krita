@@ -46,7 +46,7 @@
 #include "kis_types.h"
 
 KisLevelFilter::KisLevelFilter()
-        : KisFilter(id(), CategoryAdjust, i18n("&Levels"))
+        : KisFilter(id(), categoryAdjust(), i18n("&Levels"))
 {
     setSupportsPainting(true);
     setSupportsPreview(true);
@@ -97,7 +97,7 @@ void KisLevelFilter::process(KisConstProcessingInformation srcInfo,
     int outblackvalue = config->getInt("outblackvalue");
     int outwhitevalue = config->getInt("outwhitevalue", 255);
 
-    Q_UINT16 transfer[256];
+    quint16 transfer[256];
     for (int i = 0; i < 256; i++) {
         if (i <= blackvalue)
             transfer[i] = outblackvalue;
@@ -118,12 +118,12 @@ void KisLevelFilter::process(KisConstProcessingInformation srcInfo,
     if (progressUpdater) {
         progressUpdater->setRange(0, size.width() * size.height());
     }
-    Q_INT32 pixelsProcessed = 0;
+    qint32 pixelsProcessed = 0;
 
     for (int row = 0; row < size.height() && !(progressUpdater && progressUpdater->interrupted()); ++row) {
         while (! srcIt.isDone()  && !(progressUpdater && progressUpdater->interrupted())) {
-            Q_UINT32 npix = 0, maxpix = qMin(srcIt.nConseqHPixels(), dstIt.nConseqHPixels());
-            Q_UINT8 selectedness = dstIt.selectedness();
+            quint32 npix = 0, maxpix = qMin(srcIt.nConseqHPixels(), dstIt.nConseqHPixels());
+            quint8 selectedness = dstIt.selectedness();
             // The idea here is to handle stretches of completely selected and completely unselected pixels.
             // Partially selected pixels are handled one pixel at a time.
             switch (selectedness) {
@@ -138,8 +138,8 @@ void KisLevelFilter::process(KisConstProcessingInformation srcInfo,
                 break;
 
             case MAX_SELECTED: {
-                const Q_UINT8 *firstPixelSrc = srcIt.oldRawData();
-                Q_UINT8 *firstPixelDst = dstIt.rawData();
+                const quint8 *firstPixelSrc = srcIt.oldRawData();
+                quint8 *firstPixelDst = dstIt.rawData();
                 while (dstIt.selectedness() == MAX_SELECTED && maxpix) {
                     --maxpix;
                     if (maxpix != 0) {
@@ -252,7 +252,7 @@ void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
     p.setPen(QPen::QPen(Qt::gray, 1, Qt::SolidLine));
 
     double highest = (double)histogram->calculations().getHighest();
-    Q_INT32 bins = histogram->producer()->numberOfBins();
+    qint32 bins = histogram->producer()->numberOfBins();
 
     // use nearest neighbour interpolation
     if (histogram->getHistogramType() == LINEAR) {

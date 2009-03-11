@@ -70,7 +70,7 @@ KritaRandomPickFilter::~KritaRandomPickFilter()
 {
 }
 
-KisFilterRandomPick::KisFilterRandomPick() : KisFilter(id(), CategoryOther, i18n("&Random Pick..."))
+KisFilterRandomPick::KisFilterRandomPick() : KisFilter(id(), categoryOther(), i18n("&Random Pick..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);

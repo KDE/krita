@@ -121,6 +121,8 @@ void KoDockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWi
         if(!td) {
             KoToolDockerFactory toolDockerFactory(i.value()->objectName());
             td = qobject_cast<KoToolDocker*>(callingView->createDockWidget(&toolDockerFactory));
+            if (!td)
+                return;
             d->toolDockerMap[i.value()->objectName()] = td;
             d->toolDockerVisibillityMap[i.value()->objectName()] =  true;
         }

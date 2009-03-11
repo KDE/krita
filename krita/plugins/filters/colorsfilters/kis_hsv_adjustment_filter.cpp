@@ -28,7 +28,7 @@
 #include <kis_processing_information.h>
 
 KisHSVAdjustmentFilter::KisHSVAdjustmentFilter()
-        : KisFilter(id(), CategoryAdjust, i18n("&HSV Adjustment..."))
+        : KisFilter(id(), categoryAdjust(), i18n("&HSV Adjustment..."))
 {
     setSupportsPainting(true);
     setSupportsPreview(true);

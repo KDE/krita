@@ -166,14 +166,14 @@ void KoShapeEndLinesDocker::applyChanges()
 
 void KoShapeEndLinesDocker::beginEndLineChanged(int index)
 {
-    m_beginEndLineComboBox->setCurrentItem(index);
+    m_beginEndLineComboBox->setCurrentIndex(index);
     m_beginEndLineCurrentName = m_beginEndLineComboBox->itemText(index);
     applyChanges();
 }
 
 void KoShapeEndLinesDocker::endEndLineChanged(int index)
 {
-    m_endEndLineComboBox->setCurrentItem(index);
+    m_endEndLineComboBox->setCurrentIndex(index);
     m_endEndLineCurrentName = m_endEndLineComboBox->itemText(index);
     applyChanges();
 }

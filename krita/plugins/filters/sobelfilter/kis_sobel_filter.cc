@@ -74,7 +74,7 @@
 //     return KisFilterConfiguration::toString();
 // }
 
-KisSobelFilter::KisSobelFilter() : KisFilter(id(), CategoryEdgeDetection, i18n("&Sobel..."))
+KisSobelFilter::KisSobelFilter() : KisFilter(id(), categoryEdgeDetection(), i18n("&Sobel..."))
 {
     setSupportsPainting(false);
     setSupportsPreview(true);
@@ -172,7 +172,7 @@ void KisSobelFilter::process(KisConstProcessingInformation srcInfo,
             gradient = (qint32)((doVertical && doHorizontal) ?
                                 (ROUND(RMS(horGradient, verGradient)) / 5.66)   // always >0
                                 : (keepSign ? (127 + (ROUND((horGradient + verGradient) / 8.0)))
-                                   : (ROUND(QABS(horGradient + verGradient) / 4.0))));
+                                   : (ROUND(qAbs(horGradient + verGradient) / 4.0))));
 
             *d++ = gradient;
             if (gradient > 10) counter ++;

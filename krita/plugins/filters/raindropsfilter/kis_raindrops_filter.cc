@@ -55,7 +55,7 @@
 #include "widgets/kis_multi_integer_filter_widget.h"
 
 
-KisRainDropsFilter::KisRainDropsFilter() : KisFilter(id(), KisFilter::CategoryArtistic, i18n("&Raindrops..."))
+KisRainDropsFilter::KisRainDropsFilter() : KisFilter(id(), KisFilter::categoryArtistic(), i18n("&Raindrops..."))
 {
     setSupportsPainting(false);
     setSupportsPreview(true);

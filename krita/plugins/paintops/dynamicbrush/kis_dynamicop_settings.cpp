@@ -30,6 +30,7 @@
 #include "ui_DynamicBrushOptions.h"
 #include "kis_dynamic_shape_program.h"
 #include "kis_dynamic_coloring_program.h"
+#include "kis_dab_shape.h"
 #include "kis_bristle_shape.h"
 
 KisDynamicOpSettings::KisDynamicOpSettings(KisDynamicOpSettingsWidget* widget, KisBookmarkedConfigurationManager* shapeBookmarksManager, KisBookmarkedConfigurationManager* coloringBookmarksManager)
@@ -76,14 +77,13 @@ KisDynamicBrush* KisDynamicOpSettings::createBrush(KisPainter *painter) const
 
     // Init shape
     switch (m_optionsWidget->m_uiOptions->comboBoxShapes->currentIndex()) {
+    default:
     case 0: {
-#if 0 // XXX: Fix!
-        current->setShape(new KisDabShape(painter->brush()));
-#endif
+        current->setShape(new KisDabShape(m_optionsWidget->m_uiOptions->brushOptions->brush()));
+        break;
     }
     case 1:
         // fall-through
-    default:
         current->setShape(new KisBristleShape());
         break;
     }

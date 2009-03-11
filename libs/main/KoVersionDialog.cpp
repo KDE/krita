@@ -251,7 +251,7 @@ KoVersionModifyDialog::KoVersionModifyDialog(QWidget* parent, KoVersionInfo *inf
 
 QString KoVersionModifyDialog::comment() const
 {
-    return m_textEdit->text();
+    return m_textEdit->toPlainText();
 }
 
 

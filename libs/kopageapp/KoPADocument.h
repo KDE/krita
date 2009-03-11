@@ -257,6 +257,16 @@ protected:
     virtual bool saveOdfEpilogue( KoPASavingContext & paContext );
 
     /**
+     * Save settings
+     */
+    bool saveOdfSettings( KoStore * store );
+
+    /**
+     * Load settings
+     */
+    void loadOdfSettings( const KoXmlDocument & settingsDoc );
+
+    /**
      * This function is called by at the end of addShape. This is used 
      * e.g. for doing work on the application which is in the KoShapeAppData.
      *

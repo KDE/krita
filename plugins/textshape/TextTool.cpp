@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
@@ -407,6 +407,17 @@ TextTool::TextTool(KoCanvasBase *canvas)
             this, SLOT(updateParagraphDirection(const QVariant&)), Qt::DirectConnection);
     connect(m_updateParagDirection.action, SIGNAL(updateUi(const QVariant &)),
             this, SLOT(updateParagraphDirectionUi()));
+
+#ifndef NDEBUG
+    action = new KAction("Paragraph Debug", this); // do NOT add i18n!
+    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_P);
+    addAction("detailed_debug_paragraphs", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(debugTextDocument()));
+    action = new KAction("Styles Debug", this); // do NOT add i18n!
+    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_S);
+    addAction("detailed_debug_styles", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(debugTextStyles()));
+#endif
 
     // setup the context list.
     QSignalMapper *signalMapper = new QSignalMapper(this);
@@ -866,7 +877,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             editingPluginEvents();
         }
         ensureCursorVisible();
-    } else if ((event->key() == Qt::Key_Tab || event->key() == Qt::Key_BackTab)
+    } else if ((event->key() == Qt::Key_Tab || event->key() == Qt::Key_Backtab)
                && ((!m_caret.hasSelection() && (m_caret.position() == m_caret.block().position())) || (m_caret.block().document()->findBlock(m_caret.anchor()) != m_caret.block().document()->findBlock(m_caret.position()))) && m_caret.block().textList()) {
         ChangeListLevelCommand::CommandType type = 
             event->key() == Qt::Key_Tab ? ChangeListLevelCommand::IncreaseLevel : ChangeListLevelCommand::DecreaseLevel;
@@ -1761,13 +1772,13 @@ void TextTool::editingPluginEvents()
 void TextTool::finishedWord()
 {
     foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins)
-    plugin->finishedWord(m_textShapeData->document(), m_prevCursorPosition);
+        plugin->finishedWord(m_textShapeData->document(), m_prevCursorPosition);
 }
 
 void TextTool::finishedParagraph()
 {
     foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins)
-    plugin->finishedParagraph(m_textShapeData->document(), m_prevCursorPosition);
+        plugin->finishedParagraph(m_textShapeData->document(), m_prevCursorPosition);
 }
 
 void TextTool::setTextColor(const KoColor &color)
@@ -1778,6 +1789,164 @@ void TextTool::setTextColor(const KoColor &color)
 void TextTool::setBackgroundColor(const KoColor &color)
 {
     m_selectionHandler.setTextBackgroundColor(color.toQColor());
+}
+
+void TextTool::debugTextDocument()
+{
+#ifndef NDEBUG
+    if (m_textShapeData == 0)
+        return;
+    const int CHARSPERLINE = 80; // TODO Make configurable using ENV var?
+    const int CHARPOSITION = 278301935;
+    KoTextDocument document(m_textShapeData->document());
+    KoStyleManager *styleManager = document.styleManager();
+    KoInlineTextObjectManager *inlineManager = document.inlineTextObjectManager();
+
+    QTextBlock block = m_textShapeData->document()->begin();
+    for (;block.isValid(); block = block.next()) {
+        QVariant var = block.blockFormat().property(KoParagraphStyle::StyleId);
+        if (!var.isNull()) {
+            KoParagraphStyle *ps = styleManager->paragraphStyle(var.toInt());
+            kDebug(32500) << "--- Paragraph Style:" << (ps ? ps->name() : QString()) << var.toInt();
+        }
+        var = block.charFormat().property(KoCharacterStyle::StyleId);
+        if (!var.isNull()) {
+            KoCharacterStyle *cs = styleManager->characterStyle(var.toInt());
+            kDebug(32500) << "--- Character Style:" << (cs ? cs->name() : QString()) << var.toInt();
+        }
+        int lastPrintedChar = -1;
+        QTextBlock::iterator it;
+        QString fragmentText;
+        QList<QTextCharFormat> inlineCharacters;
+        for (it = block.begin(); !it.atEnd(); ++it) {
+            QTextFragment fragment = it.fragment();
+            if (!fragment.isValid())
+                continue;
+            QTextCharFormat fmt = fragment.charFormat();
+            const int fragmentStart = fragment.position() - block.position();
+            for (int i = fragmentStart; i < fragmentStart + fragment.length(); i += CHARSPERLINE) {
+                if (lastPrintedChar == fragmentStart-1)
+                    fragmentText += '|';
+                if (lastPrintedChar < fragmentStart || i > fragmentStart) {
+                    QString debug = block.text().mid(lastPrintedChar, CHARSPERLINE);
+                    lastPrintedChar += CHARSPERLINE;
+                    if (lastPrintedChar > block.length())
+                        debug += "\\n";
+                    kDebug(32500) << debug;
+                }
+                var = fmt.property(KoCharacterStyle::StyleId);
+                QString charStyleLong, charStyleShort;
+                if (! var.isNull()) { // named style
+                    charStyleShort = QString::number(var.toInt());
+                    KoCharacterStyle *cs = styleManager->characterStyle(var.toInt());
+                    if (cs)
+                        charStyleLong = cs->name();
+                }
+                if (inlineManager && fmt.hasProperty(KoCharacterStyle::InlineInstanceId)) {
+                    QTextCharFormat inlineFmt = fmt;
+                    inlineFmt.setProperty(CHARPOSITION, fragmentStart);
+                    inlineCharacters << inlineFmt;
+                }
+
+                if (fragment.length() > charStyleLong.length())
+                    fragmentText += charStyleLong;
+                else if (fragment.length() > charStyleShort.length())
+                    fragmentText += charStyleShort;
+                else if (fragment.length() >= 2)
+                    fragmentText += QChar(8230); // elipses
+
+
+
+                int rest =  fragmentStart - (lastPrintedChar-CHARSPERLINE) + fragment.length() - fragmentText.length();
+                rest = qMin(rest, CHARSPERLINE - fragmentText.length());
+                if (rest >= 2)
+                    fragmentText = QString("%1%2").arg(fragmentText).arg(' ', rest);
+                if (rest >= 0)
+                    fragmentText += '|';
+                if (fragmentText.length() >= CHARSPERLINE) {
+                    kDebug(32500) << fragmentText;
+                    fragmentText.clear();
+                }
+            }
+        }
+        if (!fragmentText.isEmpty())
+            kDebug(32500) << fragmentText;
+        else if (block.length() == 1) // no actual tet
+            kDebug(32500) << "\\n";
+        foreach (QTextCharFormat cf, inlineCharacters) {
+            KoInlineObject *object= inlineManager->inlineTextObject(cf);
+            kDebug(32500) << "At pos:" << cf.intProperty(CHARPOSITION) << object;
+        }
+        QTextList *list = block.textList();
+        if (list) {
+            if (list->format().hasProperty(KoListStyle::StyleId)) {
+                KoListStyle *ls = styleManager->listStyle(list->format().intProperty(KoListStyle::StyleId));
+                kDebug(32500) << "   List style applied:" << ls->styleId() << ls->name();
+            }
+            else
+                kDebug(32500) << " +- is a list..." << list;
+        }
+    }
+#endif
+}
+
+void TextTool::debugTextStyles()
+{
+#ifndef NDEBUG
+    KoTextDocument document(m_textShapeData->document());
+    KoStyleManager *styleManager = document.styleManager();
+
+    QSet<int> seenStyles;
+
+    foreach (KoParagraphStyle *style, styleManager->paragraphStyles()) {
+        kDebug(32500) << style->styleId() << style->name() << (styleManager->defaultParagraphStyle() == style ? "[Default]" : "");
+        KoCharacterStyle *cs = style->characterStyle();
+        seenStyles << style->styleId();
+        if (cs) {
+            kDebug(32500) << "  +- CharStyle: " << cs->styleId() << cs->name();
+            kDebug(32500) << "  |  " << cs->font();
+            seenStyles << cs->styleId();
+        } else {
+            kDebug(32500) << "  +- ERROR; no char style found!" << endl;
+        }
+        KoListStyle *ls = style->listStyle();
+        if (ls) { // optional ;)
+            kDebug(32500) << "  +- ListStyle: " << ls->styleId() << ls->name()
+                << (ls == styleManager->defaultListStyle() ? "[Default]":"");
+            foreach (int level, ls->listLevels()) {
+                KoListLevelProperties llp = ls->levelProperties(level);
+                kDebug(32500) << "  |  level" << llp.level() << " style (enum):" << llp.style();
+                if (llp.bulletCharacter().unicode() != 0)
+                    kDebug(32500) << "  |  bullet" << llp.bulletCharacter();
+            }
+            seenStyles << ls->styleId();
+        }
+    }
+
+    bool first = true;
+    foreach (KoCharacterStyle *style, styleManager->characterStyles()) {
+        if (seenStyles.contains(style->styleId()))
+            continue;
+        if (first) {
+            kDebug(32500) << "--- Character styles ---";
+            first = false;
+        }
+        kDebug(32500) << style->styleId() << style->name();
+        kDebug(32500) << style->font();
+    }
+
+    first = true;
+    foreach (KoListStyle *style, styleManager->listStyles()) {
+        if (seenStyles.contains(style->styleId()))
+            continue;
+        if (first) {
+            kDebug(32500) << "--- List styles ---";
+            first = false;
+        }
+        kDebug(32500) << style->styleId() << style->name()
+                << (style == styleManager->defaultListStyle() ? "[Default]":"");
+    }
+#endif
 }
 
 #include "TextTool.moc"

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,11 +18,14 @@
  */
 
 #include "KoTextAnchor.h"
+#include "KoInlineObject_p.h"
 #include "KoTextDocumentLayout.h"
 #include "KoTextShapeContainerModel.h"
 
 #include <KoShapeContainer.h>
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
+#include <KoXmlNS.h>
 #include <KoShapeSavingContext.h>
 #include <KoUnit.h>
 
@@ -31,20 +34,19 @@
 #include <QPainter>
 #include <KDebug>
 
-#define I_WANT_BAD_LOOKING_THINGS_FOR_DEBUG 0
-class KoTextAnchor::Private
+// #define DEBUG_PAINTING
+
+class KoTextAnchorPrivate : public KoInlineObjectPrivate
 {
 public:
-    Private(KoTextAnchor *p, KoShape *s)
+    KoTextAnchorPrivate(KoTextAnchor *p, KoShape *s)
             : parent(p),
             shape(s),
-            horizontalAlignment(HorizontalOffset),
-            verticalAlignment(VerticalOffset),
+            horizontalAlignment(KoTextAnchor::HorizontalOffset),
+            verticalAlignment(KoTextAnchor::VerticalOffset),
             document(0),
             position(-1),
-            model(0),
-            pageNumber(-1),
-            anchorType(Paragraph)
+            model(0)
     {
         Q_ASSERT(shape);
     }
@@ -78,38 +80,70 @@ public:
         }
     }
 
+    QDebug printDebug(QDebug dbg) const
+    {
+        dbg.nospace() << "KoTextAnchor";
+        dbg.space() << anchorPosition();
+        dbg.space() << "offset:" << distance;
+        dbg.space() << "shape:" << shape->name();
+        return dbg.space();
+    }
+
+    QString anchorPosition() const
+    {
+        QString answer;
+        switch (verticalAlignment) {
+        case KoTextAnchor::TopOfFrame: answer = "TopOfFrame"; break;
+        case KoTextAnchor::TopOfParagraph: answer = "TopOfParagraph"; break;
+        case KoTextAnchor::AboveCurrentLine: answer = "AboveCurrentLine"; break;
+        case KoTextAnchor::BelowCurrentLine: answer = "BelowCurrentLine"; break;
+        case KoTextAnchor::BottomOfParagraph: answer = "BottomOfParagraph"; break;
+        case KoTextAnchor::BottomOfFrame: answer = "BottomOfFrame"; break;
+        case KoTextAnchor::VerticalOffset: answer = "VerticalOffset"; break;
+        }
+        answer += '|';
+        switch(horizontalAlignment) {
+        case KoTextAnchor::Left: answer+= "Left"; break;
+        case KoTextAnchor::Right: answer+= "Right"; break;
+        case KoTextAnchor::Center: answer+= "Center"; break;
+        case KoTextAnchor::ClosestToBinding: answer+= "ClosestToBinding"; break;
+        case KoTextAnchor::FurtherFromBinding: answer+= "FurtherFromBinding"; break;
+        case KoTextAnchor::HorizontalOffset: answer+= "HorizontalOffset"; break;
+        }
+        return answer;
+    }
+
     KoTextAnchor * const parent;
     KoShape * const shape;
-    AnchorHorizontal horizontalAlignment;
-    AnchorVertical verticalAlignment;
+    KoTextAnchor::AnchorHorizontal horizontalAlignment;
+    KoTextAnchor::AnchorVertical verticalAlignment;
     const QTextDocument *document;
     int position;
     KoTextShapeContainerModel *model;
     QPointF distance;
-    int pageNumber;
-    AnchorType anchorType;
 };
 
 KoTextAnchor::KoTextAnchor(KoShape *shape)
-        : KoInlineObject(false),
-        d(new Private(this, shape))
+    : KoInlineObject(*(new KoTextAnchorPrivate(this, shape)), false)
 {
 }
 
 KoTextAnchor::~KoTextAnchor()
 {
+    Q_D(KoTextAnchor);
     if (d->model)
         d->model->removeAnchor(this);
-    delete d;
 }
 
 KoShape *KoTextAnchor::shape() const
 {
+    Q_D(const KoTextAnchor);
     return d->shape;
 }
 
 void KoTextAnchor::setAlignment(KoTextAnchor::AnchorHorizontal horizontal)
 {
+    Q_D(KoTextAnchor);
     if (d->horizontalAlignment == horizontal)
         return;
     d->horizontalAlignment = horizontal;
@@ -118,6 +152,7 @@ void KoTextAnchor::setAlignment(KoTextAnchor::AnchorHorizontal horizontal)
 
 void KoTextAnchor::setAlignment(KoTextAnchor::AnchorVertical vertical)
 {
+    Q_D(KoTextAnchor);
     if (d->verticalAlignment == vertical)
         return;
     d->verticalAlignment = vertical;
@@ -126,11 +161,13 @@ void KoTextAnchor::setAlignment(KoTextAnchor::AnchorVertical vertical)
 
 KoTextAnchor::AnchorVertical KoTextAnchor::verticalAlignment() const
 {
+    Q_D(const KoTextAnchor);
     return d->verticalAlignment;
 }
 
 KoTextAnchor::AnchorHorizontal KoTextAnchor::horizontalAlignment() const
 {
+    Q_D(const KoTextAnchor);
     return d->horizontalAlignment;
 }
 
@@ -138,6 +175,7 @@ void KoTextAnchor::updatePosition(const QTextDocument *document, QTextInlineObje
 {
     Q_UNUSED(object);
     Q_UNUSED(format);
+    Q_D(KoTextAnchor);
     d->document = document;
     d->position = posInDocument;
     d->setContainer(dynamic_cast<KoShapeContainer*>(shapeForPosition(document, posInDocument)));
@@ -150,56 +188,55 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
     Q_UNUSED(posInDocument);
     Q_UNUSED(format);
     Q_UNUSED(pd);
+    Q_D(KoTextAnchor);
 
     if (horizontalAlignment() == HorizontalOffset && verticalAlignment() == VerticalOffset) {
         object.setWidth(d->shape->size().width());
-        object.setAscent(d->shape->size().height());
+        object.setAscent(qMax((qreal) 0, -d->distance.y()));
+        object.setDescent(qMax((qreal) 0, d->shape->size().height() + d->distance.y()));
     } else {
         QFontMetricsF fm(format.font());
         object.setWidth(0);
         object.setAscent(fm.ascent());
+        object.setDescent(0);
     }
-    object.setDescent(0);
 }
 
-void KoTextAnchor::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
+void KoTextAnchor::paint(QPainter &painter, QPaintDevice *, const QTextDocument *, const QRectF &rect, QTextInlineObject , int , const QTextCharFormat &)
 {
-    Q_UNUSED(document);
     Q_UNUSED(painter);
-    Q_UNUSED(pd);
     Q_UNUSED(rect);
-    Q_UNUSED(object);
-    Q_UNUSED(posInDocument);
-    Q_UNUSED(format);
-#if I_WANT_BAD_LOOKING_THINGS_FOR_DEBUG
-    kDebug() << "*****************************************************************************************************************************";
-    kDebug() << "painting KoTextAnchor : " << rect ;
-    kDebug() << "*****************************************************************************************************************************";
-    painter.setOpacity(0.5);
-    painter.drawLine(0, 0, 15, 15);
-    painter.drawLine(15, 0, 0, 15);
-    painter.setOpacity(1);
-#endif
     // we never paint ourselves; the shape can do that.
+#ifdef DEBUG_PAINTING
+    painter.setOpacity(0.5);
+    QRectF charSpace = rect;
+    if (charSpace.width() < 10)
+        charSpace.adjust(-5, 0, 5, 0);
+    painter.fillRect(charSpace, QColor(Qt::green));
+#endif
 }
 
 int KoTextAnchor::positionInDocument() const
 {
+    Q_D(const KoTextAnchor);
     return d->position;
 }
 
 const QTextDocument *KoTextAnchor::document() const
 {
+    Q_D(const KoTextAnchor);
     return d->document;
 }
 
 const QPointF &KoTextAnchor::offset() const
 {
+    Q_D(const KoTextAnchor);
     return d->distance;
 }
 
 void KoTextAnchor::setOffset(const QPointF &offset)
 {
+    Q_D(KoTextAnchor);
     if (d->distance == offset)
         return;
     d->distance = offset;
@@ -208,58 +245,116 @@ void KoTextAnchor::setOffset(const QPointF &offset)
 
 void KoTextAnchor::saveOdf(KoShapeSavingContext & context)
 {
-    shape()->removeAdditionalAttribute("text:anchor-page-number");
-    switch (d->anchorType) {
-    case Page:
-        shape()->setAdditionalAttribute("text:anchor-type", "page");
-        Q_ASSERT(d->pageNumber >= 1);
-        shape()->setAdditionalAttribute("text:anchor-page-number", QString::number(d->pageNumber));
+    Q_D(KoTextAnchor);
+    // the anchor type determines where in the stream the shape is to be saved.
+    enum OdfAnchorType {
+        AsChar,
+        Frame,
+        Paragraph
+    };
+    // ODF is not nearly as powerful as we need it (yet) so lets do some mapping.
+    OdfAnchorType odfAnchorType;
+    switch (d->verticalAlignment) {
+    case KoTextAnchor::TopOfFrame:
+    case KoTextAnchor::BottomOfFrame:
+        odfAnchorType = Frame;
         break;
-    case Frame:
-        shape()->setAdditionalAttribute("text:anchor-type", "frame");
+    case KoTextAnchor::TopOfParagraph:
+    case KoTextAnchor::AboveCurrentLine:
+    case KoTextAnchor::BelowCurrentLine:
+    case KoTextAnchor::BottomOfParagraph:
+        odfAnchorType = Paragraph;
         break;
-    case Paragraph:
-        shape()->setAdditionalAttribute("text:anchor-type", "paragraph");
+    case KoTextAnchor::VerticalOffset:
+        odfAnchorType = AsChar;
         break;
-    case Char:
-        shape()->setAdditionalAttribute("text:anchor-type", "char");
-        break;
-    case AsChar:
+    }
+
+    if (odfAnchorType == AsChar) {
+       if (qAbs(d->distance.y()) > 1E-4)
+           shape()->setAdditionalAttribute("svg:y", QString("%1pt").arg(d->distance.y()));
+
+        // the draw:transform should not have any offset since we put that in the svg:y already.
+        context.addShapeOffset(shape(), shape()->absoluteTransformation(0).inverted());
+
         shape()->setAdditionalAttribute("text:anchor-type", "as-char");
-        break;
+        shape()->saveOdf(context);
+        shape()->removeAdditionalAttribute("svg:y");
+    } else {
+        // these don't map perfectly to ODF because we have more functionality
+        shape()->setAdditionalAttribute("koffice:anchor-type", d->anchorPosition());
+
+        QString type;
+        if (odfAnchorType == Frame)
+            type = "frame";
+        else
+            type = "paragraph";
+        shape()->setAdditionalAttribute("text:anchor-type", type);
+        if (shape()->parent()) // an anchor may not yet have been layout-ed
+            context.addShapeOffset(shape(), shape()->parent()->absoluteTransformation(0).inverted());
+        shape()->saveOdf(context);
+        context.removeShapeOffset(shape());
     }
-
-    QPointF offset = d->distance - shape()->absolutePosition(KoFlake::TopLeftCorner);
-    context.addShapeOffset(shape(), QMatrix(1, 0, 0, 1, offset.x(), offset.y()));
-    shape()->saveOdf(context);
-    context.removeShapeOffset(shape());
 }
 
-bool KoTextAnchor::loadOdfFromShape()
+bool KoTextAnchor::loadOdfFromShape(const KoXmlElement& element)
 {
-    setOffset(shape()->position());
-    shape()->setPosition(QPointF(0, 0));
-    if (shape()->hasAdditionalAttribute("text:anchor-type")) {
-        d->pageNumber = -1;
-        QString anchorType = shape()->additionalAttribute("text:anchor-type");
-        if (anchorType == "paragraph")
-            d->anchorType = Paragraph;
-        else if (anchorType == "page") {
-            d->anchorType = Page;
-            if (shape()->hasAdditionalAttribute("text:anchor-page-number"))
-                d->pageNumber = shape()->additionalAttribute("text:anchor-page-number").toInt();
-        } else if (anchorType == "frame")
-            d->anchorType = Frame;
-        else if (anchorType == "char")
-            d->anchorType = Char;
-        else if (anchorType == "as-char")
-            d->anchorType = AsChar;
-        return true;
+    Q_D(KoTextAnchor);
+    d->distance = shape()->position();
+    if (! shape()->hasAdditionalAttribute("text:anchor-type"))
+        return false;
+    QString anchorType = shape()->additionalAttribute("text:anchor-type");
+    if (anchorType == "char" || anchorType == "as-char") {
+        // no clue what the difference is between 'char' and 'as-char'...
+        d->horizontalAlignment = HorizontalOffset;
+        d->verticalAlignment = VerticalOffset;
     }
-    return false;
+    else {
+        if (anchorType == "paragraph") {
+            d->horizontalAlignment = Left;
+            d->verticalAlignment = TopOfParagraph;
+        } else if (anchorType == "frame") {
+            d->horizontalAlignment = Left;
+            d->verticalAlignment = TopOfFrame;
+        }
+
+        if (element.hasAttributeNS(KoXmlNS::koffice, "anchor-type")) {
+            anchorType = element.attributeNS(KoXmlNS::koffice, "anchor-type"); // our enriched properties
+            QStringList types = anchorType.split('|');
+            if (types.count() > 1) {
+                QString vertical = types[0];
+                QString horizontal = types[1];
+                if (vertical == "TopOfFrame")
+                    d->verticalAlignment = TopOfFrame;
+                else if (vertical == "TopOfParagraph")
+                    d->verticalAlignment = TopOfParagraph;
+                else if (vertical == "AboveCurrentLine")
+                    d->verticalAlignment = AboveCurrentLine;
+                else if (vertical == "BelowCurrentLine")
+                    d->verticalAlignment = BelowCurrentLine;
+                else if (vertical == "BottomOfParagraph")
+                    d->verticalAlignment = BottomOfParagraph;
+                else if (vertical == "BottomOfFrame")
+                    d->verticalAlignment = BottomOfFrame;
+                else if (vertical == "VerticalOffset")
+                    d->verticalAlignment = VerticalOffset;
+
+                if (horizontal == "Left")
+                    d->horizontalAlignment = Left;
+                else if (horizontal == "Right")
+                    d->horizontalAlignment = Right;
+                else if (horizontal == "Center")
+                    d->horizontalAlignment = Center;
+                else if (horizontal == "ClosestToBinding")
+                    d->horizontalAlignment = ClosestToBinding;
+                else if (horizontal == "FurtherFromBinding")
+                    d->horizontalAlignment = FurtherFromBinding;
+                else if (horizontal == "HorizontalOffset")
+                    d->horizontalAlignment = HorizontalOffset;
+            }
+            d->distance = QPointF();
+        }
+    }
+    return true;
 }
 
-int KoTextAnchor::pageNumber() const
-{
-    return d->pageNumber;
-}

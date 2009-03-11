@@ -96,7 +96,7 @@ class KoIncompleteColorSpace : public KoColorSpaceAbstract<_CSTraits> {
             typename _CSTraits::channels_type count = 0;
             for(uint i = 0; i < this->colorChannelCount(); i++)
             {
-                typename _CSTraits::channels_type d = QABS(src2[i] - src1[i]);
+                typename _CSTraits::channels_type d = qAbs(src2[i] - src1[i]);
                 if( d > count)
                 {
                     count = d;

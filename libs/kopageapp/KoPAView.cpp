@@ -65,7 +65,9 @@
 #include "commands/KoPAChangeMasterPageCommand.h"
 #include "dialogs/KoPAMasterPageDialog.h"
 
+#include <KoStore.h>
 #include "KoShapeOdfSaveHelper.h"
+#include "KoFileDialog.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -76,6 +78,14 @@
 #include <kstatusbar.h>
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
+
+#include <KoXmlNS.h>
+#include <KoOdfReadStore.h>
+#include <KoOdfLoadingContext.h>
+#include "KoPALoadingContext.h"
+#include <QBuffer>
+#include <KoXmlWriter.h>
+#include <KoEmbeddedDocumentSaver.h>
 
 KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
 : KoView( document, parent )
@@ -285,7 +295,142 @@ void KoPAView::initActions()
 
 void KoPAView::importSlideshow()
 {
-  kDebug() << "Import slideshow";
+  KoPAPastePage kpapp(m_doc,m_activePage);
+
+  KoStore* store = KoStore::createStore( QString("/home/alexia/Bureau/revue_sprint8.odp"), KoStore::Read );
+  if(!store)
+    kDebug("file not found");
+  KoOdfReadStore odfStore(store);
+
+  QString errorMessage;
+    if (! odfStore.loadAndParse(errorMessage)) {
+        kError() << "loading and parsing failed:" << errorMessage << endl;
+    }
+
+    KoXmlElement content = odfStore.contentDoc().documentElement();
+    KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
+
+    if (realBody.isNull()) {
+        kError() << "No body tag found!" << endl;
+    }
+
+    KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, KoOdf::bodyContentElement(KoOdf::Presentation, false));
+
+    if (body.isNull()) {
+        kError() << "No" << KoOdf::bodyContentElement(KoOdf::Presentation, true) << "tag found!" << endl;
+    }
+
+
+
+
+
+KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store(), m_doc->componentData() );
+    KoPALoadingContext paContext( loadingContext, m_doc->dataCenterMap() );
+
+    QList<KoPAPageBase *> masterPages( m_doc->loadOdfMasterPages( odfStore.styles().masterPages(), paContext ) );
+    QList<KoPAPageBase *> pages( m_doc->loadOdfPages( body, paContext ) );
+
+    KoPAPageBase * insertAfterPage = 0;
+    KoPAPageBase * insertAfterMasterPage = 0;
+    if ( dynamic_cast<KoPAMasterPage *>( m_activePage ) || ( m_activePage == 0 && pages.empty() ) ) {
+        insertAfterMasterPage = m_activePage;
+        insertAfterPage = m_doc->pages( false ).last();
+    }
+    else {
+        insertAfterPage = m_activePage;
+        insertAfterMasterPage = m_doc->pages( true ).last();
+    }
+
+    if ( ! pages.empty() ) {
+        KoGenStyles mainStyles;
+        QBuffer buffer;
+        buffer.open( QIODevice::WriteOnly );
+        KoXmlWriter xmlWriter( &buffer );
+        KoEmbeddedDocumentSaver embeddedSaver;
+        KoPASavingContext savingContext( xmlWriter, mainStyles, embeddedSaver, 1, KoShapeSavingContext::Store );
+        savingContext.addOption( KoShapeSavingContext::UniqueMasterPages );
+        QList<KoPAPageBase*> emptyList;
+        QList<KoPAPageBase*> existingMasterPages = m_doc->pages( true );
+        savingContext.setClearDrawIds( true );
+        m_doc->saveOdfPages( savingContext, emptyList, existingMasterPages );
+
+        QMap<QString, KoPAMasterPage*> masterPageNames;
+
+        foreach ( KoPAPageBase * page, existingMasterPages )
+        {
+            KoPAMasterPage * masterPage = dynamic_cast<KoPAMasterPage*>( page );
+            Q_ASSERT( masterPage );
+            if ( masterPage ) {
+                QString masterPageName( savingContext.masterPageName( masterPage ) );
+                if ( !masterPageNames.contains( masterPageName ) ) {
+                    masterPageNames.insert( masterPageName, masterPage );
+                }
+            }
+
+        }
+
+        m_doc->saveOdfPages( savingContext, emptyList, masterPages );
+
+        QMap<KoPAMasterPage*, KoPAMasterPage*> updateMasterPage;
+        foreach ( KoPAPageBase * page, masterPages )
+        {
+            KoPAMasterPage * masterPage = dynamic_cast<KoPAMasterPage*>( page );
+            Q_ASSERT( masterPage );
+            if ( masterPage ) {
+                QString masterPageName( savingContext.masterPageName( masterPage ) );
+                QMap<QString, KoPAMasterPage*>::const_iterator existingMasterPage( masterPageNames.constFind( masterPageName ) );
+                if ( existingMasterPage != masterPageNames.constEnd() ) {
+                    updateMasterPage.insert( masterPage, existingMasterPage.value() );
+                }
+            }
+        }
+
+        // update pages which have a duplicate master page
+        foreach ( KoPAPageBase * page, pages )
+        {
+            KoPAPage * p = dynamic_cast<KoPAPage*>( page );
+            Q_ASSERT( p );
+            if ( p ) {
+                KoPAMasterPage * masterPage( p->masterPage() );
+                QMap<KoPAMasterPage*, KoPAMasterPage*>::const_iterator pageIt( updateMasterPage.constFind( masterPage ) );
+                if ( pageIt != updateMasterPage.constEnd() ) {
+                    p->setMasterPage( pageIt.value() );
+                }
+            }
+        }
+
+        // delete dumplicate master pages;
+        QMap<KoPAMasterPage*, KoPAMasterPage*>::const_iterator pageIt( updateMasterPage.constBegin() );
+        for ( ; pageIt != updateMasterPage.constEnd(); ++pageIt )
+        {
+            masterPages.removeAll( pageIt.key() );
+            delete pageIt.key();
+        }
+    }
+
+    QUndoCommand * cmd = 0;
+    if ( m_doc->pageType() == KoPageApp::Slide ) {
+        cmd = new QUndoCommand( i18np( "Paste Slide", "Paste Slides", qMax( masterPages.size(), pages.size() ) ) );
+    }
+    else {
+        cmd = new QUndoCommand( i18np( "Paste Page", "Paste Pages", qMax( masterPages.size(), pages.size() ) ) );
+    }
+
+    foreach( KoPAPageBase * masterPage, masterPages )
+    {
+        new KoPAPageInsertCommand( m_doc, masterPage, insertAfterMasterPage, cmd );
+        insertAfterMasterPage = masterPage;
+    }
+
+    foreach( KoPAPageBase * page, pages )
+    {
+        new KoPAPageInsertCommand( m_doc, page, insertAfterPage, cmd );
+        insertAfterPage = page;
+    }
+
+    m_doc->addCommand( cmd );
+
+  
 }
 
 void KoPAView::viewSnapToGrid(bool snap)

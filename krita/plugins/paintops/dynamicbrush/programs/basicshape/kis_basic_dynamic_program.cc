@@ -74,7 +74,7 @@ KisBasicDynamicProgram::~KisBasicDynamicProgram()
 
 inline double jitter(int amount, double v)
 {
-    v *= 1.0 + double(rand() - RAND_MAX / 2) * amount / (RAND_MAX * 50) ;
+    v *= 1.0 + double(rand() - RAND_MAX / 2) * amount / (RAND_MAX * 50.0) ;
     if (v >= 1.0) v = 1.0;
     return v;
 }

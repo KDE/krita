@@ -50,19 +50,31 @@ public:
     ~KisPerChannelFilterConfiguration();
 
     using KisFilterConfiguration::fromXML;
+    using KisFilterConfiguration::toXML;
+    using KisFilterConfiguration::toLegacyXML;
+    using KisFilterConfiguration::fromLegacyXML;
 
-    virtual void fromXML(const QString&);
-    virtual QString toString();
+    virtual void fromLegacyXML(const QDomElement& root);
+    virtual void toLegacyXML(QDomDocument& doc, QDomElement& root) const;
 
+    virtual void fromXML(const QDomElement& e);
+    virtual void toXML(QDomDocument& doc, QDomElement& root) const;
+
+    void setCurves(QList<KisCurve> &curves);
+    static inline void initDefaultCurves(QList<KisCurve> &curves, int nCh);
+    void updateTransfers();
+    void updateTransfersCached(KCurve &cacheKCurve);
     bool isCompatible(const KisPaintDeviceSP) const;
 
 public:
-    QList<KisCurve> curves;
-    quint16 **transfers;
-    quint16 nTransfers;
-    // Caching of adjustment
-    bool dirty;
+    QList<KisCurve> m_curves;
+    quint16 **m_transfers;
+    quint16 m_nTransfers;
     const KoColorSpace* oldCs;
+
+protected:
+    void createTransfers(int nTransfers);
+    void deleteTransfers();
 };
 
 
@@ -76,6 +88,7 @@ public:
     KisPerChannelFilter();
 public:
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
+    virtual KisFilterConfiguration * factoryConfiguration(const KisPaintDeviceSP) const;
 
     using KisFilter::process;
     void process(KisConstProcessingInformation src,

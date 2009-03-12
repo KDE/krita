@@ -100,6 +100,8 @@ public:
      */
     void setChannelFlags(QBitArray channelFlags);
 
+protected:
+    void setVersion(qint32 version);
 private:
     struct Private;
     Private* const d;

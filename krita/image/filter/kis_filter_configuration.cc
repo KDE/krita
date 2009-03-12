@@ -136,6 +136,11 @@ qint32 KisFilterConfiguration::version() const
     return d->version;
 }
 
+void KisFilterConfiguration::setVersion(qint32 version)
+{
+    d->version = version;
+}
+
 bool KisFilterConfiguration::isCompatible(const KisPaintDeviceSP) const
 {
     return true;

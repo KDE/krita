@@ -19,6 +19,7 @@ set(flake_SRCS
     KoSelection.cpp
     KoShape.cpp
     KoShapeContainer.cpp
+    KoShapeContainerModel.cpp
     KoShapeGroup.cpp
     KoShapeManagerPaintingStrategy.cpp
     KoShapeManager.cpp

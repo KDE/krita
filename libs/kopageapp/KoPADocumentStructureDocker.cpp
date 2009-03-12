@@ -41,6 +41,7 @@
 #include <KoShapeDeleteCommand.h>
 #include <KoShapeReorderCommand.h>
 #include <KoShapeLayer.h>
+#include <kactioncollection.h>
 
 #include <KMenu>
 #include <klocale.h>
@@ -622,12 +623,34 @@ void KoPADocumentStructureDocker::contextMenuEvent(QContextMenuEvent* event)
     
     // Not connected yet
     menu.addAction( SmallIcon( "document-new" ), i18n("Add a new slide"), this, SLOT( addPage() ) );
-    menu.addAction( i18n("Delete selected objects") );
-    menu.addAction( i18n( "Cut" ) );
-    menu.addAction( i18n( "Copy" ) );
-    menu.addAction( i18n( "Paste" ) );
+    menu.addAction( i18n("Delete selected objects"), this, SLOT( deleteItem() ));
+    
+    menu.addAction( i18n( "Cut" ) ,this,  SLOT( editCut() ) );
+    menu.addAction( i18n( "Copy" ), this,  SLOT( editCopy() ));
+    menu.addAction( i18n( "Paste" ), this, SLOT( editPaste() ) );
     
     menu.exec(event->globalPos());
+}
+
+void KoPADocumentStructureDocker::editCut()
+{
+    editCopy();
+    deleteItem();
+}
+
+void KoPADocumentStructureDocker::editCopy()
+{
+    QList<KoPAPageBase*> m_dataSelectedPages;
+    QList<KoShapeLayer*> m_dataSelectedLayers;
+    QList<KoShape*> m_dataSelectedShapes;
+
+    // separate selected layers and selected shapes
+    extractSelectedLayersAndShapes( m_dataSelectedPages, m_dataSelectedLayers, m_dataSelectedShapes );
+}
+
+void KoPADocumentStructureDocker::editPaste()
+{
+    
 }
 #include "KoPADocumentStructureDocker.moc"
 

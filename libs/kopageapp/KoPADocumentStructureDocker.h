@@ -100,6 +100,9 @@ private slots:
     void thumbnailView();
 
     void itemSelected( const QItemSelection& selected, const QItemSelection& deselected );
+    void editCut();
+    void editCopy();
+    void editPaste();  
 
 private:
     void extractSelectedLayersAndShapes( QList<KoPAPageBase*> &pages, QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes );
@@ -116,6 +119,10 @@ private:
     QList<KoShape *> m_selectedShapes;
     QButtonGroup *m_buttonGroup;
     QAction* m_addLayerAction;
+    
+    QList<KoPAPageBase*> m_dataSelectedPages;
+    QList<KoShapeLayer*> m_dataSelectedLayers;
+    QList<KoShape*> m_dataSelectedShapes;
 };
 
 #endif // KOPADOCUMENTSTRUCTUREDOCKER_H

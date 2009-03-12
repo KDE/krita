@@ -27,10 +27,13 @@
 #include <QApplication>
 #include <QClipboard>
 
+#include <KFileDialog>
+
 #include <KoCanvasController.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoColorBackground.h>
 #include <KoFind.h>
+#include <KoFilterManager.h>
 #include <KoTextDocumentLayout.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
@@ -297,7 +300,23 @@ void KoPAView::importSlideshow()
 {
   KoPAPastePage kpapp(m_doc,m_activePage);
 
-  KoStore* store = KoStore::createStore( QString("/home/alexia/Bureau/revue_sprint8.odp"), KoStore::Read );
+KFileDialog *dialog = new KFileDialog(KUrl("kfiledialog:///OpenDialog"),QString(), this);
+  dialog->setObjectName("file dialog");
+  dialog->setMode(KFile::File);
+  dialog->setCaption(i18n("Import Slideshow"));
+  const QStringList mimeFilter = KoFilterManager::mimeFilter(KoDocument::readNativeFormatMimeType(),
+                                   KoFilterManager::Import,
+                                   KoDocument::readExtraNativeMimeTypes());
+  dialog->setMimeFilter(mimeFilter);
+if (dialog->exec() != QDialog::Accepted) {
+        delete dialog;
+    }
+    KUrl url(dialog->selectedUrl());
+    delete dialog;
+
+    QString path = url.path();
+
+  KoStore* store = KoStore::createStore( path, KoStore::Read );
   if(!store)
     kDebug("file not found");
   KoOdfReadStore odfStore(store);
@@ -318,7 +337,7 @@ void KoPAView::importSlideshow()
 
     if (body.isNull()) {
         kError() << "No" << KoOdf::bodyContentElement(KoOdf::Presentation, true) << "tag found!" << endl;
-    }
+}
 
 
 
@@ -429,8 +448,6 @@ KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store(), m_doc->
     }
 
     m_doc->addCommand( cmd );
-
-  
 }
 
 void KoPAView::viewSnapToGrid(bool snap)

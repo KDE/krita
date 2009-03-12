@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -87,6 +87,9 @@ public:
      *      deleted
      */
     bool removeInlineObject(QTextCursor &cursor);
+
+    /// remove an inline object from this manager.
+    void removeInlineObject(KoInlineObject *object);
 
     /**
      * Set a property that may have changed which will be forwarded to all registered textObjects.

@@ -21,6 +21,7 @@
 #include "KoInlineObject_p.h"
 #include "KoTextDocumentLayout.h"
 #include "KoShapeSavingContext.h"
+#include "KoInlineTextObjectManager.h"
 
 #include <QDebug>
 
@@ -46,7 +47,11 @@ KoInlineObject::KoInlineObject(KoInlineObjectPrivate &priv, bool propertyChangeL
 
 KoInlineObject::~KoInlineObject()
 {
+    if (d_ptr->manager) {
+        d_ptr->manager->removeInlineObject(this);
+    }
     delete d_ptr;
+    d_ptr = 0;
 }
 
 void KoInlineObject::setManager(KoInlineTextObjectManager *manager)

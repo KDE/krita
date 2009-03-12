@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -118,6 +118,13 @@ bool KoInlineTextObjectManager::removeInlineObject(QTextCursor &cursor)
         return true;
     }
     return false;
+}
+
+void KoInlineTextObjectManager::removeInlineObject(KoInlineObject *object)
+{
+    Q_ASSERT(object);
+    m_objects.remove(object->id());
+    // TODO dirty the document somehow
 }
 
 void KoInlineTextObjectManager::setProperty(KoInlineObject::Property key, const QVariant &value)

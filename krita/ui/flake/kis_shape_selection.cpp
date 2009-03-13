@@ -340,7 +340,7 @@ void KisShapeSelection::renderSelection(KisSelection* projection, const QRect& r
     QTime t;
     t.start();
 
-    KisPaintDeviceSP tmpMask = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), "tmp");
+    KisPaintDeviceSP tmpMask = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
 
     const qint32 MASK_IMAGE_WIDTH = 256;
     const qint32 MASK_IMAGE_HEIGHT = 256;

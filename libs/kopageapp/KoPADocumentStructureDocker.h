@@ -119,10 +119,6 @@ private:
     QList<KoShape *> m_selectedShapes;
     QButtonGroup *m_buttonGroup;
     QAction* m_addLayerAction;
-    
-    QList<KoPAPageBase*> m_dataSelectedPages;
-    QList<KoShapeLayer*> m_dataSelectedLayers;
-    QList<KoShape*> m_dataSelectedShapes;
 };
 
 #endif // KOPADOCUMENTSTRUCTUREDOCKER_H

@@ -42,6 +42,11 @@
 #include <KoShapeReorderCommand.h>
 #include <KoShapeLayer.h>
 #include <kactioncollection.h>
+#include <KoShapeOdfSaveHelper.h>
+#include <KoDrag.h>
+#include "KoPAOdfPageSaveHelper.h"
+#include "KoPAPastePage.h"
+#include "KoShapePaste.h"
 
 #include <KMenu>
 #include <klocale.h>
@@ -50,11 +55,14 @@
 #include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <KConfigGroup>
+#include <kdebug.h>
 
 #include <QtGui/QGridLayout>
 #include <QtGui/QToolButton>
 #include <QtGui/QButtonGroup>
 #include <QItemSelection>
+#include <QApplication>
+#include <QClipboard>
 
 enum ButtonIds
 {
@@ -640,17 +648,66 @@ void KoPADocumentStructureDocker::editCut()
 
 void KoPADocumentStructureDocker::editCopy()
 {
-    QList<KoPAPageBase*> m_dataSelectedPages;
-    QList<KoShapeLayer*> m_dataSelectedLayers;
-    QList<KoShape*> m_dataSelectedShapes;
+    QList<KoPAPageBase*> pages;
+    QList<KoShapeLayer*> layers;
+    QList<KoShape*> shapes;
 
     // separate selected layers and selected shapes
-    extractSelectedLayersAndShapes( m_dataSelectedPages, m_dataSelectedLayers, m_dataSelectedShapes );
+    extractSelectedLayersAndShapes( pages, layers, shapes );
+    
+    foreach ( KoShape* shape, layers ) {
+        // Add layers to shapes
+        shapes.append(shape);
+    }
+    
+    if( !shapes.empty() ) {
+        // Copy Shapes or Layers
+        KoShapeOdfSaveHelper saveHelper(shapes);
+        KoDrag drag;
+        drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
+        drag.addToClipboard();
+        
+        return;
+    }
+    
+    if( !pages.empty() ) {        
+        // Copy Pages
+        KoPAOdfPageSaveHelper saveHelper( m_doc, pages );
+        KoDrag drag;
+        drag.setOdf( KoOdf::mimeType( m_doc->documentType() ), saveHelper );
+        drag.addToClipboard();
+    }
 }
 
 void KoPADocumentStructureDocker::editPaste()
 {
-    
+    const QMimeData * data = QApplication::clipboard()->mimeData();
+
+    if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))) {
+        // Paste Shapes or Layers
+        KoCanvasBase* canvas = KoToolManager::instance()->activeCanvasController()->canvas();
+        KoShapeManager * shapeManager = canvas->shapeManager();
+        int zIndex = 0;
+        foreach (KoShape *shape, shapeManager->shapes())
+        {
+            zIndex = qMax(zIndex, shape->zIndex());
+        }
+        KoShapePaste paste(canvas, zIndex + 1, shapeManager->selection()->activeLayer());
+        paste.paste(KoOdf::Text, data);
+        
+    } else {
+        // Paste Pages
+        KoOdf::DocumentType documentTypes[] = { KoOdf::Graphics, KoOdf::Presentation };
+        for ( unsigned int i = 0; i < sizeof( documentTypes ) / sizeof( KoOdf::DocumentType ); ++i )
+        {
+            if ( data->hasFormat( KoOdf::mimeType( documentTypes[i] ) ) ) {
+                KoPACanvas * canvas = dynamic_cast<KoPACanvas *>( KoToolManager::instance()->activeCanvasController()->canvas() );
+                KoPAPastePage paste( m_doc, canvas->koPAView()->activePage() );
+                paste.paste( documentTypes[i], data );
+                break;
+            }
+        }
+    }
 }
 #include "KoPADocumentStructureDocker.moc"
 

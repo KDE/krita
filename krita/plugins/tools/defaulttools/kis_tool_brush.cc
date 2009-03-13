@@ -147,7 +147,7 @@ QWidget * KisToolBrush::createOptionWidget()
     optionWidget->setObjectName(toolId() + "option widget");
     m_chkSmooth = new QCheckBox(i18nc("smooth out the curves while drawing", "Smoothness"), optionWidget);
     m_chkSmooth->setObjectName("chkSmooth");
-    m_chkSmooth->setChecked(true);
+    m_chkSmooth->setChecked(m_smooth);
     connect(m_chkSmooth, SIGNAL(toggled(bool)), this, SLOT(setSmooth(bool)));
 
     m_sliderSmoothness = new QSlider(Qt::Horizontal, optionWidget);

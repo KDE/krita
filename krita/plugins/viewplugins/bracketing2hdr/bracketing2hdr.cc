@@ -351,7 +351,7 @@ void Bracketing2HDRPlugin::computeCameraResponse(QList<BracketingFrame> frames)
     // Now optimize the camera response
     // Create a temporary paint device and fill it with the current value
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBAF32", 0);
-    KisPaintDeviceSP device = new KisPaintDevice(cs, i18n("HDR Layer"));
+    KisPaintDeviceSP device = new KisPaintDevice(cs);
     // Initialize some variables used for computation
     QVector<qint64> counts[3];
     QVector<double> sums[3];

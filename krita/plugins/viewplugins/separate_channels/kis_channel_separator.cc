@@ -114,12 +114,12 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
         KisPaintDeviceSP dev;
         if (toColor) {
             // We don't downscale if we separate to color channels
-            dev = new KisPaintDevice(srcCs, "color separations");
+            dev = new KisPaintDevice(srcCs);
         } else {
             if (channelSize == 1 || downscale) {
-                dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace("GRAYA", 0), "8 bit grayscale sep");
+                dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace("GRAYA", 0));
             } else {
-                dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace("GRAYA16", 0), "16 bit grayscale sep");
+                dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace("GRAYA16", 0));
                 destSize = 2;
             }
         }

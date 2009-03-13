@@ -70,7 +70,7 @@ KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painte
     Q_ASSERT(settings->m_optionsWidget->m_brushOption);
     m_brush = settings->m_optionsWidget->m_brushOption->brush();
     Q_ASSERT( m_brush );
-    m_tmpDevice = new KisPaintDevice(source()->colorSpace(), "tmp");
+    m_tmpDevice = new KisPaintDevice(source()->colorSpace());
 }
 
 KisFilterOp::~KisFilterOp()

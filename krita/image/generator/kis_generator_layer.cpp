@@ -149,7 +149,7 @@ KoDocumentSectionModel::PropertyList KisGeneratorLayer::sectionModelProperties()
 
 void KisGeneratorLayer::resetCache()
 {
-    m_d->paintDevice = new KisPaintDevice(image()->colorSpace(), name().toLatin1());
+    m_d->paintDevice = new KisPaintDevice(image()->colorSpace());
 }
 
 KisFilterConfiguration * KisGeneratorLayer::generator() const
@@ -265,9 +265,9 @@ void KisGeneratorLayer::update()
     if (!f) return;
 
     if (f->colorSpace())
-        m_d->paintDevice = new KisPaintDevice(f->colorSpace(), name().toLatin1());
+        m_d->paintDevice = new KisPaintDevice(f->colorSpace());
     else
-        m_d->paintDevice = new KisPaintDevice(image()->colorSpace(), name().toLatin1());
+        m_d->paintDevice = new KisPaintDevice(image()->colorSpace());
 
     QRect tmpRc = exactBounds();
 

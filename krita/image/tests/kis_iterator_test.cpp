@@ -58,7 +58,7 @@ void KisIteratorTest::writeBytes(const KoColorSpace * colorSpace)
 {
 
 
-    KisPaintDevice dev(colorSpace, "test");
+    KisPaintDevice dev(colorSpace);
 
     QVERIFY(dev.extent() == QRect(qint32_MAX, qint32_MAX, 0, 0));
 
@@ -98,7 +98,7 @@ void KisIteratorTest::writeBytes(const KoColorSpace * colorSpace)
 void KisIteratorTest::fill(const KoColorSpace * colorSpace)
 {
 
-    KisPaintDevice dev(colorSpace, "test");
+    KisPaintDevice dev(colorSpace);
 
     QVERIFY(dev.extent() == QRect(qint32_MAX, qint32_MAX, 0, 0));
 
@@ -130,7 +130,7 @@ void KisIteratorTest::fill(const KoColorSpace * colorSpace)
 void KisIteratorTest::rectIter(const KoColorSpace * colorSpace)
 {
 
-    KisPaintDevice dev(colorSpace, "test");
+    KisPaintDevice dev(colorSpace);
 
     quint8 * bytes = colorSpace->allocPixelBuffer(1);
     memset(bytes, 128, colorSpace->pixelSize());
@@ -173,7 +173,7 @@ void KisIteratorTest::rectIter(const KoColorSpace * colorSpace)
 
 void KisIteratorTest::hLineIter(const KoColorSpace * colorSpace)
 {
-    KisPaintDevice dev(colorSpace, "test");
+    KisPaintDevice dev(colorSpace);
 
     quint8 * bytes = colorSpace->allocPixelBuffer(1);
     memset(bytes, 128, colorSpace->pixelSize());
@@ -231,7 +231,7 @@ void KisIteratorTest::hLineIter(const KoColorSpace * colorSpace)
 void KisIteratorTest::vLineIter(const KoColorSpace * colorSpace)
 {
 
-    KisPaintDevice dev(colorSpace, "test");
+    KisPaintDevice dev(colorSpace);
     quint8 * bytes = colorSpace->allocPixelBuffer(1);
     memset(bytes, 128, colorSpace->pixelSize());
 
@@ -272,7 +272,7 @@ void KisIteratorTest::vLineIter(const KoColorSpace * colorSpace)
 void KisIteratorTest::randomAccessor(const KoColorSpace * colorSpace)
 {
 
-    KisPaintDevice dev(colorSpace, "test");
+    KisPaintDevice dev(colorSpace);
     quint8 * bytes = colorSpace->allocPixelBuffer(1);
     memset(bytes, 128, colorSpace->pixelSize());
 

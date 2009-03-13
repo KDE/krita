@@ -725,7 +725,7 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
     // Fill the polygon bounding rectangle with the required contents then we'll
     // create a mask for the actual polygon coverage.
 
-    KisPaintDeviceSP polygon = new KisPaintDevice(d->device->colorSpace(), "polygon");
+    KisPaintDeviceSP polygon = new KisPaintDevice(d->device->colorSpace());
     Q_CHECK_PTR(polygon);
 
     KisFillPainter fillPainter(polygon);

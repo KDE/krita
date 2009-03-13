@@ -76,7 +76,7 @@ KisPaintDeviceSP KisPaintOp::cachedDab()
 KisPaintDeviceSP KisPaintOp::cachedDab(const KoColorSpace *cs)
 {
     if (!d->dab || !(*d->dab->colorSpace() == *cs)) {
-        d->dab = KisPaintDeviceSP(new KisPaintDevice(cs, "dab"));
+        d->dab = KisPaintDeviceSP(new KisPaintDevice(cs));
     }
     return d->dab;
 }

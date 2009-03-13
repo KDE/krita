@@ -166,7 +166,7 @@ void KisTilesFromFileTester::paintDeviceTest()
 void KisTilesFromFileTester::writeTest()
 {
     const KoColorSpace* colorSpace = KoColorSpaceRegistry::instance()->colorSpace("GRAYA", 0);
-    KisPaintDeviceSP dev = new KisPaintDevice(colorSpace, "test");
+    KisPaintDeviceSP dev = new KisPaintDevice(colorSpace);
 
     KisSharedPtr<FakeTileSourceTest> tileSource = new FakeTileSourceTest;
     KisDataManagerSP dm = new KisDataManager(tileSource->pixelSize(), defPixel);

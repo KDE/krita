@@ -177,7 +177,7 @@ void KisTransformWorker::rotate180(KisPaintDeviceSP src, KisPaintDeviceSP dst)
             ++dstIt;
         }
         srcIt.nextRow();
-        
+
         //progress info
         m_progressStep += r.width();
         if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
@@ -408,7 +408,7 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
             ++dstIt;
             i++;
         }
-        
+
         //progress info
         m_progressStep += dstLen;
         if(m_lastProgressReport != (m_progressStep * 100) / m_progressTotalSteps) {
@@ -432,7 +432,7 @@ bool KisTransformWorker::run()
     m_progressStep = 0;
     QRect r = m_dev->exactBounds();
 
-    KisPaintDeviceSP tmpdev1 = KisPaintDeviceSP(new KisPaintDevice(m_dev->colorSpace(), "transform_tmpdev1"));
+    KisPaintDeviceSP tmpdev1 = KisPaintDeviceSP(new KisPaintDevice(m_dev->colorSpace()));
     KisPaintDeviceSP srcdev = m_dev;
 
     double xscale = m_xscale;
@@ -524,22 +524,22 @@ bool KisTransformWorker::run()
         return false;
         return m_progressUpdater->interrupted();
     }
-    
+
         if ( m_progressUpdater->interrupted()) {
             m_progressUpdater->setProgress(100);
             return false;
         }
-    
+
     transformPass <KisHLineIteratorPixel>(srcdev.data(), srcdev.data(), xscale, yscale*xshear, 0, m_filter, m_fixBorderAlpha);
-    
+
     if ( m_progressUpdater->interrupted()) {
         m_progressUpdater->setProgress(100);
         return false;
     }
-    
+
     // Now do the second pass
     transformPass <KisVLineIteratorPixel>(srcdev.data(), srcdev.data(), yscale, yshear, ytranslate, m_filter, m_fixBorderAlpha);
-    
+
     if ( m_progressUpdater->interrupted()) {
         m_progressUpdater->setProgress(100);
         return false;
@@ -567,11 +567,11 @@ QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, const KisSelection* sele
     KisPaintDeviceSP dst = dev;
     bool hasCurrentMemento = dev->dataManager()->hasCurrentMemento();
     int pixelSize = dev->pixelSize();
-    
+
     if (!hasCurrentMemento) {
             dst = new KisPaintDevice(dev->colorSpace());
     }
-    
+
     QRect r;
     if (selection) {
         r = selection->selectedExactRect();
@@ -612,9 +612,9 @@ QRect KisTransformWorker::mirrorY(KisPaintDeviceSP dev, const KisSelection* sele
 {
     KisPaintDeviceSP dst = dev;
     bool hasCurrentMemento = dev->dataManager()->hasCurrentMemento();
-    
+
     int pixelSize = dev->pixelSize();
-    
+
     if (!hasCurrentMemento) {
         dst = new KisPaintDevice(dev->colorSpace());
     }

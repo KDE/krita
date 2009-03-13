@@ -38,7 +38,7 @@ void KisTransformWorkerTest::testCreation()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP img = new KisImage(0, 10, 10, cs, "bla");
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
-    KisPaintDeviceSP dev = new KisPaintDevice(cs, "bla");
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
     KisTransformWorker tw(dev, 1.0, 1.0, 1.0, 1.0, 1.5, 0, 0, &updater, filter, true);
 }
 
@@ -63,7 +63,7 @@ void KisTransformWorkerTest::testMirror()
     QVERIFY(c1 == Qt::white);
     QVERIFY(c2 == Qt::black);
     dev->convertToQImage(0, 0, 0, 1024, 512).save("before.png");
-    
+
     KisTransformWorker::mirrorX(dev);
     dev->convertToQImage(0, 0, 0, 1024, 512).save("mirror_x.png");
 
@@ -148,7 +148,7 @@ void KisTransformWorkerTest::testMirrorTransaction()
 
     QVERIFY(c1 == Qt::white);
     QVERIFY(c2 == Qt::black);
-    
+
     KisTransaction t2("mirror", dev, 0);
     KisTransformWorker::mirrorY(dev);
     dev->convertToQImage(0, 0, 0, 1024, 512).save("transaction_mirror_y.png");

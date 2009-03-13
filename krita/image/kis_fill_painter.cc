@@ -179,7 +179,7 @@ void KisFillPainter::fillColor(int startX, int startY, KisPaintDeviceSP projecti
     genericFillStart(startX, startY, projection);
 
     // Now create a layer and fill it
-    KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(device()->colorSpace(), "filled_fillcolor"));
+    KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(device()->colorSpace()));
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled);
     painter.fillRect(0, 0, m_width, m_height, paintColor());
@@ -193,7 +193,7 @@ void KisFillPainter::fillPattern(int startX, int startY, KisPaintDeviceSP projec
     genericFillStart(startX, startY, projection);
 
     // Now create a layer and fill it
-    KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(device()->colorSpace(), "filled_fillpattern"));
+    KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(device()->colorSpace()));
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled);
     painter.fillRect(0, 0, m_width, m_height, pattern());
@@ -230,7 +230,7 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled)
 //                  rc.x(), rc.y(), rc.width(), rc.height());
 
     bltSelection(0, 0, compositeOp(), filled, m_fillSelection, opacity(), 0, 0, m_width, m_height);
-    
+
     if (progressUpdater()) progressUpdater()->setProgress(100);
 
     m_width = m_height = -1;
@@ -419,7 +419,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         Q_ASSERT( x < m_width );
         Q_ASSERT( y >= 0 );
         Q_ASSERT( y < m_height );
-        
+
         if (map[m_width * y + x] == Checked)
             continue;
 

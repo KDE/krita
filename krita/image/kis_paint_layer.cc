@@ -70,7 +70,7 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
     , m_d(new Private())
 {
     Q_ASSERT(img);
-    m_d->paintDevice = new KisPaintDevice(this, img->colorSpace(), name);
+    m_d->paintDevice = new KisPaintDevice(this, img->colorSpace());
 }
 
 KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity, const KoColorSpace * colorSpace)
@@ -81,7 +81,7 @@ KisPaintLayer::KisPaintLayer(KisImageSP img, const QString& name, quint8 opacity
     if (colorSpace == 0)
         colorSpace = img->colorSpace();
     Q_ASSERT(colorSpace);
-    m_d->paintDevice = new KisPaintDevice(this, colorSpace, name);
+    m_d->paintDevice = new KisPaintDevice(this, colorSpace);
 }
 
 KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)

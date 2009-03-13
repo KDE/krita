@@ -37,7 +37,7 @@ static quint8 defPixel = 145;
 
 void KisTilesRegressionTester::weirdCrash1Test()
 {
-    KisPaintDeviceSP p = new KisPaintDevice(0, KoColorSpaceRegistry::instance()->rgb8(), "regression test: weird crash");
+    KisPaintDeviceSP p = new KisPaintDevice(0, KoColorSpaceRegistry::instance()->rgb8());
 }
 
 QTEST_KDEMAIN(KisTilesRegressionTester, NoGUI)

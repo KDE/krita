@@ -44,7 +44,7 @@ struct KisPixelSelection::Private {
 };
 
 KisPixelSelection::KisPixelSelection()
-        : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), QString("selection"))
+        : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8())
         , m_d(new Private)
 {
     m_d->parentPaintDevice = 0;
@@ -53,7 +53,7 @@ KisPixelSelection::KisPixelSelection()
 }
 
 KisPixelSelection::KisPixelSelection(KisPaintDeviceSP dev)
-        : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), QString("selection for ") + dev->objectName())
+        : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8())
         , m_d(new Private)
 {
     Q_ASSERT(dev);

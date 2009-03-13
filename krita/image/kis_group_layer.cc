@@ -61,7 +61,7 @@ KisGroupLayer::KisGroupLayer(KisImageWSP img, const QString &name, quint8 opacit
         KisLayer(img, name, opacity),
         m_d(new Private())
 {
-    m_d->projection = new KisPaintDevice(this, img->colorSpace(), name.toLatin1());
+    m_d->projection = new KisPaintDevice(this, img->colorSpace());
     updateSettings();
 }
 
@@ -118,7 +118,7 @@ void KisGroupLayer::resetProjection(KisPaintDeviceSP to)
     if (to)
         m_d->projection = new KisPaintDevice(*to); /// XXX ### look into Copy on Write here (CoW)
     else
-        m_d->projection = new KisPaintDevice(this, image()->colorSpace(), name().toLatin1());
+        m_d->projection = new KisPaintDevice(this, image()->colorSpace());
 }
 
 bool KisGroupLayer::paintLayerInducesProjectionOptimization(KisPaintLayerSP l) const

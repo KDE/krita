@@ -78,9 +78,8 @@ bool KisToolFill::flood(int startX, int startY)
 #warning Port the fixes for filling the selection from 1.6!
 #endif
 
-
         QRect rc = selection->selectedRect();
-        KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(device->colorSpace(),  "filled_only_selection"));
+        KisPaintDeviceSP filled = new KisPaintDevice(device->colorSpace());
         delete m_fillPainter;
         m_fillPainter = new KisFillPainter(filled);
         Q_CHECK_PTR(m_fillPainter);

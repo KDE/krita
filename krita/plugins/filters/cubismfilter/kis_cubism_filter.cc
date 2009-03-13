@@ -103,7 +103,7 @@ void KisCubismFilter::process(KisConstProcessingInformation srcInfo,
 
     if (srcInfo.selection()) {
 
-        KisPaintDeviceSP dev = new KisPaintDevice(src->colorSpace(), "tmp");
+        KisPaintDeviceSP dev = new KisPaintDevice(src->colorSpace());
 
         cubism(src, srcTopLeft, dev, dstTopLeft, size, tileSize, tileSaturation);
 

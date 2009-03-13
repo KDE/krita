@@ -86,7 +86,7 @@ void KisSmallTilesFilter::process(KisConstProcessingInformation srcInfo,
 
     KisPaintDeviceSP tile = KisPaintDeviceSP(0);
     if (srcInfo.selection()) {
-        KisPaintDeviceSP tmp = new KisPaintDevice(src->colorSpace(), "selected bit");
+        KisPaintDeviceSP tmp = new KisPaintDevice(src->colorSpace());
         KisPainter gc(tmp);
         gc.bltSelection(0, 0, COMPOSITE_COPY, src, OPACITY_OPAQUE, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         tile = tmp->createThumbnailDevice(srcRect.width() / numberOfTiles, srcRect.height() / numberOfTiles);

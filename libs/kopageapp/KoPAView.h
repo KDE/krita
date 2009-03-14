@@ -117,6 +117,11 @@ public:
      * Set the active page and updates the UI
      */
     void doUpdateActivePage( KoPAPageBase * page );
+    
+    /**
+     * Paste the page if everything is ok
+     */
+    void pagePaste();
 
 public slots:
     /// Set the active page and updates the UI

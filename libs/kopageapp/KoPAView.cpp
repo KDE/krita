@@ -27,13 +27,10 @@
 #include <QApplication>
 #include <QClipboard>
 
-#include <KFileDialog>
-
 #include <KoCanvasController.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoColorBackground.h>
 #include <KoFind.h>
-#include <KoFilterManager.h>
 #include <KoTextDocumentLayout.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
@@ -324,6 +321,7 @@ void KoPAView::importDocument()
     KoOdfReadStore odfStore(store);
 
     QString errorMessage;
+
     if (! odfStore.loadAndParse(errorMessage)) {
         kError() << "loading and parsing failed:" << errorMessage << endl;
     }
@@ -446,6 +444,8 @@ void KoPAView::importDocument()
     }
 
     m_doc->addCommand( cmd );
+
+  
 }
 
 void KoPAView::viewSnapToGrid(bool snap)
@@ -463,18 +463,23 @@ void KoPAView::viewGuides(bool show)
 void KoPAView::editPaste()
 {
     if ( !m_canvas->toolProxy()->paste() ) {
-        const QMimeData * data = QApplication::clipboard()->mimeData();
+	pagePaste();
+    }
+}
 
-        KoOdf::DocumentType documentTypes[] = { KoOdf::Graphics, KoOdf::Presentation };
+void KoPAView::pagePaste()
+{
+    const QMimeData * data = QApplication::clipboard()->mimeData();
 
-        for ( unsigned int i = 0; i < sizeof( documentTypes ) / sizeof( KoOdf::DocumentType ); ++i )
-        {
-            if ( data->hasFormat( KoOdf::mimeType( documentTypes[i] ) ) ) {
-                KoPAPastePage paste( m_doc, m_activePage );
-                paste.paste( documentTypes[i], data );
-                break;
-            }
-        }
+    KoOdf::DocumentType documentTypes[] = { KoOdf::Graphics, KoOdf::Presentation };
+
+    for ( unsigned int i = 0; i < sizeof( documentTypes ) / sizeof( KoOdf::DocumentType ); ++i )
+    {
+	if ( data->hasFormat( KoOdf::mimeType( documentTypes[i] ) ) ) {
+	    KoPAPastePage paste( m_doc, m_activePage );
+	    paste.paste( documentTypes[i], data );
+	    break;
+	}
     }
 }
 

@@ -697,16 +697,8 @@ void KoPADocumentStructureDocker::editPaste()
         
     } else {
         // Paste Pages
-        KoOdf::DocumentType documentTypes[] = { KoOdf::Graphics, KoOdf::Presentation };
-        for ( unsigned int i = 0; i < sizeof( documentTypes ) / sizeof( KoOdf::DocumentType ); ++i )
-        {
-            if ( data->hasFormat( KoOdf::mimeType( documentTypes[i] ) ) ) {
-                KoPACanvas * canvas = dynamic_cast<KoPACanvas *>( KoToolManager::instance()->activeCanvasController()->canvas() );
-                KoPAPastePage paste( m_doc, canvas->koPAView()->activePage() );
-                paste.paste( documentTypes[i], data );
-                break;
-            }
-        }
+        KoPACanvas * canvas = dynamic_cast<KoPACanvas *>( KoToolManager::instance()->activeCanvasController()->canvas() );
+        canvas->koPAView()->pagePaste();
     }
 }
 #include "KoPADocumentStructureDocker.moc"

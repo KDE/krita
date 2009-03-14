@@ -81,7 +81,7 @@ void PictureShapeConfigWidget::save()
     if (!url.isEmpty())
         m_shape->loadFromUrl(url);
 
-    kDebug() << "image url =" << url;
+    kDebug(31000) << "image url =" << url;
 }
 
 bool PictureShapeConfigWidget::showOnShapeCreate()

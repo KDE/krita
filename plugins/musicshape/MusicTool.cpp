@@ -47,7 +47,7 @@ MusicTool::~MusicTool()
 void MusicTool::activate (bool temporary)
 {
     Q_UNUSED( temporary );
-    kDebug() ;
+    //kDebug() ;
 
     KoSelection* selection = m_canvas->shapeManager()->selection();
     foreach ( KoShape* shape, selection->selectedShapes() )
@@ -67,7 +67,7 @@ void MusicTool::activate (bool temporary)
 
 void MusicTool::deactivate()
 {
-  kDebug()<<"MusicTool::deactivate";
+  //kDebug()<<"MusicTool::deactivate";
   m_musicshape = 0;
 }
 

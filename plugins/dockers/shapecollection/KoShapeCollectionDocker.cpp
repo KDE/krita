@@ -397,7 +397,7 @@ void KoShapeCollectionDocker::scanCollectionDir(const QString& path, QMenu* menu
     QString name = dg.readEntry("Name");
     QString icon = dg.readEntry("Icon");
     QString type = dg.readEntry("X-KDE-DirType");
-    kDebug() << name << type;
+    //kDebug() << name << type;
 
     if(type == "subdir") {
         QMenu* submenu = menu->addMenu(QIcon(dir.absoluteFilePath(icon)), name);

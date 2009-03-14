@@ -87,7 +87,7 @@ void KoOdfCollectionLoader::load()
 
 void KoOdfCollectionLoader::loadShape()
 {
-    kDebug() << m_shape.tagName();
+    //kDebug() << m_shape.tagName();
     KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(m_shape, *m_shapeLoadingContext);
 
     if (shape) {
@@ -138,7 +138,7 @@ void KoOdfCollectionLoader::nextFile()
             m_filterManager = new KoFilterManager(QByteArray(KoOdf::mimeType(KoOdf::Graphics)));
         KoFilter::ConversionStatus status;
         importedFile = m_filterManager->importDocument(filepath, status);
-        kDebug() << "File:" << filepath << "Import:" << importedFile;
+        //kDebug() << "File:" << filepath << "Import:" << importedFile;
 
         if(status != KoFilter::OK)
         {

@@ -83,8 +83,7 @@ QWidget * PictureTool::createOptionWidget()
 
 void PictureTool::slotChangeUrl()
 {
-
-  kDebug()<<" PictureTool::slotChangeUrl";
+  //kDebug()<<" PictureTool::slotChangeUrl";
   KUrl url = KFileDialog::getOpenUrl();
   if(!url.isEmpty() && m_pictureshape)
     m_pictureshape->loadFromUrl(url);

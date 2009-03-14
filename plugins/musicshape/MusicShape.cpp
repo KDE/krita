@@ -88,7 +88,7 @@ MusicShape::MusicShape()
 
 MusicShape::~MusicShape()
 {
-    kDebug() << "destroying" << this;
+    //kDebug() << "destroying" << this;
     if (!m_predecessor && !m_successor) {
         delete m_sheet;
     }

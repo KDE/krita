@@ -490,7 +490,6 @@ void TextTool::blinkCaret()
 
 void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
-
     if (m_canvas->canvasWidget()->hasFocus() && !m_caretTimer.isActive()) // make sure we blink
         m_caretTimer.start();
     QTextBlock block = m_caret.block();
@@ -512,7 +511,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                 continue;
             KoTextShapeData *data = ts->textShapeData();
             // check if shape contains some of the selection, if not, skip
-            if (!( (data->endPosition() >= selectStart && data->position()) <= selectEnd
+            if (!( (data->endPosition() >= selectStart && data->position() <= selectEnd)
                     || (data->position() <= selectStart && data->endPosition() >= selectEnd)) )
                 continue;
             if (painter.hasClipping()) {
@@ -546,7 +545,8 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
         shapeMatrix.scale(zoomX, zoomY);
         painter.setMatrix(shapeMatrix * painter.matrix());
         painter.translate(0, -data->documentOffset());
-        if (qMin(data->endPosition(), selectEnd) != qMax(data->position(), selectStart)) {
+        if ((data->endPosition() >= selectStart && data->position() <= selectEnd)
+                || (data->position() <= selectStart && data->endPosition() >= selectEnd)) {
             QRectF clip = textRect(qMax(data->position(), selectStart), qMin(data->endPosition(), selectEnd));
             painter.setClipRect(clip, Qt::IntersectClip);
             data->document()->documentLayout()->draw(&painter, pc);

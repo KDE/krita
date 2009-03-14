@@ -289,61 +289,59 @@ void KoPAView::initActions()
         actionMenu->addAction(action);
     actionCollection()->addAction("insert_variable", actionMenu);
 
-    KAction * am = new KAction(i18n("Import slideshow"), this);
-    actionCollection()->addAction("import_slideshow", am);
-    connect(am, SIGNAL(triggered()), this, SLOT(importSlideshow()));
+    KAction * am = new KAction(i18n("Import document"), this);
+    actionCollection()->addAction("import_document", am);
+    connect(am, SIGNAL(triggered()), this, SLOT(importDocument()));
 
     m_find = new KoFind( this, m_canvas->resourceProvider(), actionCollection() );
 }
 
-void KoPAView::importSlideshow()
+void KoPAView::importDocument()
 {
-  KoPAPastePage kpapp(m_doc,m_activePage);
+    KoPAPastePage kpapp( m_doc,m_activePage );
 
-KFileDialog *dialog = new KFileDialog(KUrl("kfiledialog:///OpenDialog"),QString(), this);
-  dialog->setObjectName("file dialog");
-  dialog->setMode(KFile::File);
-  dialog->setCaption(i18n("Import Slideshow"));
-  const QStringList mimeFilter = KoFilterManager::mimeFilter(KoDocument::readNativeFormatMimeType(),
-                                   KoFilterManager::Import,
-                                   KoDocument::readExtraNativeMimeTypes());
-  dialog->setMimeFilter(mimeFilter);
-if (dialog->exec() != QDialog::Accepted) {
-        delete dialog;
+    KFileDialog *dialog = new KFileDialog( KUrl("kfiledialog:///OpenDialog"),QString(), this );
+    dialog->setObjectName( "file dialog" );
+    dialog->setMode( KFile::File );
+    if ( m_doc->pageType() == KoPageApp::Slide ) {
+        dialog->setCaption(i18n("Import Slideshow"));
     }
-    KUrl url(dialog->selectedUrl());
+    else {
+        dialog->setCaption(i18n("Import Document"));
+    }
+    const QStringList mimeFilter = KoFilterManager::mimeFilter( KoDocument::readNativeFormatMimeType(), KoFilterManager::Import,                     KoDocument::readExtraNativeMimeTypes() );
+    dialog->setMimeFilter( mimeFilter );
+    if ( dialog->exec() != QDialog::Accepted ) {
+        delete dialog;
+	return;
+    }
+    KUrl url( dialog->selectedUrl() );
     delete dialog;
 
-    QString path = url.path();
+    KoStore* store = KoStore::createStore(this, url, KoStore::Read );
+    if( !store )
+	kDebug("file not found");
+    KoOdfReadStore odfStore(store);
 
-  KoStore* store = KoStore::createStore( path, KoStore::Read );
-  if(!store)
-    kDebug("file not found");
-  KoOdfReadStore odfStore(store);
-
-  QString errorMessage;
+    QString errorMessage;
     if (! odfStore.loadAndParse(errorMessage)) {
         kError() << "loading and parsing failed:" << errorMessage << endl;
     }
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
-    KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
+    KoXmlElement realBody( KoXml::namedItemNS(content, KoXmlNS::office, "body") );
 
-    if (realBody.isNull()) {
+    if ( realBody.isNull() ) {
         kError() << "No body tag found!" << endl;
     }
 
-    KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, KoOdf::bodyContentElement(KoOdf::Presentation, false));
+    KoXmlElement body = KoXml::namedItemNS( realBody, KoXmlNS::office, KoOdf::bodyContentElement( KoOdf::Presentation, false ) );
 
-    if (body.isNull()) {
-        kError() << "No" << KoOdf::bodyContentElement(KoOdf::Presentation, true) << "tag found!" << endl;
-}
+    if ( body.isNull() ) {
+        kError() << "No" << KoOdf::bodyContentElement( KoOdf::Presentation, true ) << "tag found!" << endl;
+    }
 
-
-
-
-
-KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store(), m_doc->componentData() );
+    KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store(), m_doc->componentData() );
     KoPALoadingContext paContext( loadingContext, m_doc->dataCenterMap() );
 
     QList<KoPAPageBase *> masterPages( m_doc->loadOdfMasterPages( odfStore.styles().masterPages(), paContext ) );

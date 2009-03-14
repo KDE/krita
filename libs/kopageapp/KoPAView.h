@@ -214,7 +214,7 @@ protected slots:
     /** 
      * Import slideshow 
      */
-    void importSlideshow();
+    void importDocument();
 
 protected:
     KoPADocument *m_doc;

@@ -17,6 +17,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_grid_painter_configuration.cpp
     canvas/kis_perspective_grid_manager.cpp  
     canvas/kis_prescaled_projection.cpp
+    canvas/kis_projection_cache.cpp
     canvas/kis_qpainter_canvas.cpp
     dialogs/kis_dlg_adj_layer_props.cc 
     dialogs/kis_dlg_adjustment_layer.cc

@@ -106,7 +106,7 @@ public: // KoCanvasBase implementation
 
     virtual KoToolProxy* toolProxy() const;
 
-    KoColorProfile * monitorProfile();
+    KoColorProfile* monitorProfile();
 
     /**
      * Prescale the canvas represention of the image (if necessary, it

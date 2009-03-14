@@ -95,7 +95,6 @@ public:
 #ifdef HAVE_OPENGL
     KisOpenGLImageTexturesSP openGLImageTextures;
 #endif
-    bool updateAllOfQPainterCanvas;
     KisPrescaledProjectionSP prescaledProjection;
 };
 
@@ -194,15 +193,9 @@ void KisCanvas2::updateCanvas(const QRectF& rc)
 {
     // updateCanvas is called from tools, never from the projection
     // updates, so no need to prescale!
-
-    // First convert from document coordinated to widget coordinates
-    if (m_d->updateAllOfQPainterCanvas && !m_d->currentCanvasIsOpenGL) {
-        m_d->canvasWidget->widget()->update();
-    } else {
-        QRect vRect = viewRectFromDoc(rc);
-        if (!vRect.isEmpty()) {
-            m_d->canvasWidget->widget()->update(vRect);
-        }
+    QRect vRect = viewRectFromDoc(rc);
+    if (!vRect.isEmpty()) {
+        m_d->canvasWidget->widget()->update(vRect);
     }
 }
 
@@ -247,11 +240,8 @@ void KisCanvas2::createQPainterCanvas()
     KisQPainterCanvas * canvasWidget = new KisQPainterCanvas(this, m_d->view);
     m_d->prescaledProjection = new KisPrescaledProjection();
     m_d->prescaledProjection->setViewConverter(m_d->viewConverter);
-
+    m_d->prescaledProjection->setMonitorProfile( monitorProfile() );
     canvasWidget->setPrescaledProjection(m_d->prescaledProjection);
-
-    KisConfig cfg;
-    m_d->updateAllOfQPainterCanvas = cfg.updateAllOfQPainterCanvas();
 
     setCanvasWidget(canvasWidget);
 }
@@ -275,6 +265,8 @@ void KisCanvas2::createOpenGLCanvas()
 void KisCanvas2::createCanvas()
 {
     KisConfig cfg;
+    slotSetDisplayProfile( KoColorSpaceRegistry::instance()->profileByName(cfg.monitorProfile()) );
+
     if (cfg.useOpenGL()) {
 #ifdef HAVE_OPENGL
         createOpenGLCanvas();
@@ -306,28 +298,18 @@ QRect KisCanvas2::viewRectFromDoc(const QRectF & rc)
 
 void KisCanvas2::updateCanvasProjection(const QRect & rc)
 {
+
 #ifdef HAVE_OPENGL
     // Should never have an OpenGL image context and get here as that
     // connects to the image directly.
     Q_ASSERT(m_d->openGLImageTextures.isNull());
 #endif
-    // XXX: Use the KisQPainterImageContext here
-    // If this does anything, it updates the pixel-for-pixel
-    // projection of the KisImage
-    m_d->prescaledProjection->updateCanvasProjection(rc);
 
     QRect vRect = m_d->prescaledProjection->viewRectFromImagePixels(rc);
 
     if (!vRect.isEmpty()) {
 
-        // If so desired, rescale all of the visible area so we don't
-        // see any jitter when using algorithms that cannot handle the
-        // +/- half pixel inaccuracy of our algorithms
-        if (m_d->updateAllOfQPainterCanvas) {
-            m_d->prescaledProjection->preScale();
-        } else {
-            m_d->prescaledProjection->preScale(vRect);
-        }
+        m_d->prescaledProjection->updateCanvasProjection(rc);
 
         // Regardless, the actual
         m_d->canvasWidget->widget()->update(vRect);
@@ -397,7 +379,6 @@ void KisCanvas2::disconnectCurrentImage()
 void KisCanvas2::resetCanvas()
 {
     KisConfig cfg;
-
 #if HAVE_OPENGL
 
     if ((cfg.useOpenGL() != m_d->currentCanvasIsOpenGL) ||
@@ -416,7 +397,6 @@ void KisCanvas2::resetCanvas()
         }
     }
 #endif
-    m_d->updateAllOfQPainterCanvas = cfg.updateAllOfQPainterCanvas();
     m_d->canvasWidget->widget()->update();
 }
 

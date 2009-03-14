@@ -140,24 +140,13 @@ public:
     bool useRegionOfInterestInProjection();
     void setUseRegionOfInterestInProjection(bool use);
 
-    bool updateAllOfQPainterCanvas();
-    void setUpdateAllOfQpainterCanvas(bool all);
-
     // Use nearest-neighbour interpolation on KisImage
-    bool useNearestNeigbour();
+    bool useNearestNeighbour();
     void setUseNearestNeighbour(bool useNearestNeigbour);
 
     // Use Blitz sampling on a QImage
     bool useSampling();
     void setSampling(bool sampling);
-
-    // First nearest-neighbour, then smooth scaling
-    bool useDeferredSmoothing();
-    void setDeferredSmoothing(bool deferredSmoothing);
-
-    // Don't use our own method, but use Qt
-    bool useQtSmoothScaling();
-    void setUseQtSmoothScaling(bool useQtSmoothScaling);
 
     bool threadColorSpaceConversion();
     void setThreadColorSpaceConversion(bool threadColorSpaceConversion);
@@ -178,6 +167,11 @@ public:
 
     bool showRootLayer();
     void setShowRootLayer(bool showRootLayer);
+
+    // in megapixels -- above 5, we will no longer use the
+    // memory-guzzling qimage canvas cache
+    quint32 maxCachedImageSize();
+    void setMaxCachedImageSize( quint32 );
 
 
 private:

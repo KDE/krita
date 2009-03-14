@@ -103,7 +103,10 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     setAutoFillBackground(true);
     setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
-    setAttribute(Qt::WA_InputMethodEnabled, true);
+    setAttribute( Qt::WA_InputMethodEnabled, true);
+    setAttribute( Qt::WA_StaticContents );
+    setAttribute( Qt::WA_OpaquePaintEvent );
+
 
     m_d->canvas =  canvas;
     m_d->toolProxy = canvas->toolProxy();

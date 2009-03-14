@@ -117,7 +117,7 @@ bool KoOdfReadStore::loadAndParse(const QString& fileName, KoXmlDocument& doc, Q
     }
 
     if (!d->store->open(fileName)) {
-        kWarning(30003) << "Entry " << fileName << " not found!";
+        kDebug(30003) << "Entry " << fileName << " not found!"; // not a warning as embedded stores don't have to have all files
         errorMessage = i18n("Could not find %1", fileName);
         return false;
     }

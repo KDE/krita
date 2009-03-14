@@ -29,10 +29,11 @@
 #include "kis_selection.h"
 #include "kis_types.h"
 
-KisGenerator::KisGenerator(const KoID& id, const KoID & category, const QString & entry)
-        : KisBaseProcessor(id, category, entry)
+
+KisGenerator::KisGenerator(const KoID& _id, const KoID & category, const QString & entry)
+        : KisBaseProcessor(_id, category, entry)
 {
-    setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(), new KisFilterConfigurationFactory(id.id(), 1)));
+    init(id() + "_generator_bookmarks");
 }
 
 KisGenerator::~KisGenerator()
@@ -50,11 +51,6 @@ void KisGenerator::generate(KisProcessingInformation dst,
 const KoColorSpace * KisGenerator::colorSpace()
 {
     return 0;
-}
-
-QString KisGenerator::configEntryGroup() const
-{
-    return id() + "_generator_bookmarks";
 }
 
 QRect KisGenerator::generatedRect( QRect _imageArea, const KisFilterConfiguration*  ) const

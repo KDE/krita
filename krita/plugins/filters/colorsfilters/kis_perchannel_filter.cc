@@ -255,21 +255,6 @@ void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguratio
 }
 
 
-class KisPerChannelFilterConfigurationFactory : public KisFilterConfigurationFactory
-{
-public:
-    KisPerChannelFilterConfigurationFactory() : KisFilterConfigurationFactory("perchannel", 1) {}
-    virtual ~KisPerChannelFilterConfigurationFactory() { }
-    virtual KisSerializableConfiguration* createDefault() {
-        return new KisPerChannelFilterConfiguration(0);
-    }
-    virtual KisSerializableConfiguration* create(const QDomElement& e) {
-        KisFilterConfiguration* fc = new KisPerChannelFilterConfiguration(0);
-        fc->fromXML(e);
-        return fc;
-    }
-};
-
 KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int nCh)
         : KisFilterConfiguration("perchannel", 1)
 {
@@ -481,8 +466,6 @@ KisPerChannelFilter::KisPerChannelFilter() : KisFilter(id(), categoryAdjust(), i
     setSupportsPreview(true);
     setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(TO_LAB16);
-    setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(),
-                       new KisPerChannelFilterConfigurationFactory()));
 }
 
 KisConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, const KisImageSP image) const

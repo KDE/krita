@@ -50,21 +50,6 @@
 #include "kis_histogram.h"
 #include "kis_painter.h"
 
-class KisBrightnessContrastFilterConfigurationFactory : public KisFilterConfigurationFactory
-{
-public:
-    KisBrightnessContrastFilterConfigurationFactory() : KisFilterConfigurationFactory("brightnesscontrast", 1) {}
-    virtual ~KisBrightnessContrastFilterConfigurationFactory() { }
-    virtual KisSerializableConfiguration* createDefault() {
-        return new KisBrightnessContrastFilterConfiguration();
-    }
-    virtual KisSerializableConfiguration* create(const QDomElement& e) {
-        KisFilterConfiguration* fc = new KisBrightnessContrastFilterConfiguration();
-        fc->fromXML(e);
-        return fc;
-    }
-};
-
 KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfiguration()
         : KisFilterConfiguration("brightnesscontrast", 1)
 {
@@ -160,8 +145,6 @@ KisBrightnessContrastFilter::KisBrightnessContrastFilter()
     setSupportsPreview(true);
     setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(TO_LAB16);
-    setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(), new KisBrightnessContrastFilterConfigurationFactory()));
-
 }
 
 KisConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, const KisImageSP image) const
@@ -173,8 +156,7 @@ KisConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget
 KisFilterConfiguration* KisBrightnessContrastFilter::factoryConfiguration(const KisPaintDeviceSP)
 const
 {
-    KisFilterConfiguration* config = new KisBrightnessContrastFilterConfiguration();
-    return config;
+    return new KisBrightnessContrastFilterConfiguration();
 }
 
 

@@ -205,6 +205,7 @@ install( FILES
 install( FILES 
     kis_base_node.h
     kis_base_processor.h
+    kis_config_widget.h
     kis_convolution_kernel.h
     kis_convolution_painter.h
     kis_debug.h

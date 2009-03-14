@@ -223,10 +223,10 @@ install( FILES
     kis_paint_device.h
     kis_properties_configuration.h
     kis_processing_information.h
+    kis_random_accessor.h
     kis_iterators_pixel.h
     kis_serializable_configuration.h
     kis_shared.h
-    kis_shared_data.h
     kis_shared_data.h
     kis_shared_ptr.h
     kis_shared_ptr_vector.h

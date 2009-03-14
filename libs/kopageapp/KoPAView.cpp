@@ -51,6 +51,7 @@
 #include <KoShapeDeleteCommand.h>
 #include <KoCutController.h>
 #include <KoCopyController.h>
+#include "KoFilterManager.h"
 
 #include "KoPADocumentStructureDocker.h"
 #include "KoShapeTraversal.h"

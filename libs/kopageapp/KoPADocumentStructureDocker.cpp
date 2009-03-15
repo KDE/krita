@@ -666,7 +666,7 @@ void KoPADocumentStructureDocker::editCopy()
         KoDrag drag;
         drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
         drag.addToClipboard();
-        
+
         return;
     }
     
@@ -694,7 +694,7 @@ void KoPADocumentStructureDocker::editPaste()
         }
         KoShapePaste paste(canvas, zIndex + 1, shapeManager->selection()->activeLayer());
         paste.paste(KoOdf::Text, data);
-        
+
     } else {
         // Paste Pages
         KoPACanvas * canvas = dynamic_cast<KoPACanvas *>( KoToolManager::instance()->activeCanvasController()->canvas() );

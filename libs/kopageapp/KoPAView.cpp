@@ -311,14 +311,14 @@ void KoPAView::importDocument()
     dialog->setMimeFilter( mimeFilter );
     if ( dialog->exec() != QDialog::Accepted ) {
         delete dialog;
-	return;
+        return;
     }
     KUrl url( dialog->selectedUrl() );
     delete dialog;
 
     KoStore* store = KoStore::createStore(this, url, KoStore::Read );
     if( !store )
-	kDebug("file not found");
+        kDebug("file not found");
     KoOdfReadStore odfStore(store);
 
     QString errorMessage;
@@ -464,7 +464,7 @@ void KoPAView::viewGuides(bool show)
 void KoPAView::editPaste()
 {
     if ( !m_canvas->toolProxy()->paste() ) {
-	pagePaste();
+        pagePaste();
     }
 }
 
@@ -476,11 +476,11 @@ void KoPAView::pagePaste()
 
     for ( unsigned int i = 0; i < sizeof( documentTypes ) / sizeof( KoOdf::DocumentType ); ++i )
     {
-	if ( data->hasFormat( KoOdf::mimeType( documentTypes[i] ) ) ) {
-	    KoPAPastePage paste( m_doc, m_activePage );
-	    paste.paste( documentTypes[i], data );
-	    break;
-	}
+        if ( data->hasFormat( KoOdf::mimeType( documentTypes[i] ) ) ) {
+            KoPAPastePage paste( m_doc, m_activePage );
+            paste.paste( documentTypes[i], data );
+            break;
+        }
     }
 }
 

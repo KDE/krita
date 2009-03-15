@@ -36,6 +36,7 @@ public:
 public slots:
     void setCurrentProgram(const QString& text);
     void addProgram();
+    void deleteProgram();
     void saveCurrentProgram();
 private:
     Ui_DynamicProgramsEditor* m_dynamicProgramsEditor;

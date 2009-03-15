@@ -41,6 +41,7 @@ KisDynamicProgramsEditor::KisDynamicProgramsEditor(QWidget* parent, KisBookmarke
     m_frameVBoxLayout->setMargin(0);
     connect(m_dynamicProgramsEditor->comboBoxPrograms, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(setCurrentProgram(const QString&)));
     connect(m_dynamicProgramsEditor->pushButtonAdd, SIGNAL(pressed()), SLOT(addProgram()));
+    connect(m_dynamicProgramsEditor->pushButtonDelete, SIGNAL(pressed()), SLOT(deleteProgram()));
     m_dynamicProgramsEditor->comboBoxPrograms->setModel(m_bookmarksModel);
     m_dynamicProgramsEditor->comboBoxProgramsType->setIDList(m_factoryRegistry->programTypes());
 }
@@ -71,6 +72,11 @@ void KisDynamicProgramsEditor::addProgram()
     KisDynamicProgram* program = factory->program(m_bookmarksManager->uniqueName(ki18n("New program %1")));
     Q_ASSERT(program);
     m_bookmarksModel->saveConfiguration(program->name(), program);
+}
+
+void KisDynamicProgramsEditor::deleteProgram()
+{
+    m_bookmarksModel->deleteIndex(m_bookmarksModel->index(m_dynamicProgramsEditor->comboBoxPrograms->currentIndex(),0));
 }
 
 void KisDynamicProgramsEditor::saveCurrentProgram()

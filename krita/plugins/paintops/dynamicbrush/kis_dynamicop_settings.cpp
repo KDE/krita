@@ -42,10 +42,12 @@ KisDynamicOpSettings::KisDynamicOpSettings(KisDynamicOpSettingsWidget* widget, K
     m_shapeBookmarksModel = new KisBookmarkedConfigurationsModel(shapeBookmarksManager);
     m_coloringBookmarksModel = new KisBookmarkedConfigurationsModel(coloringBookmarksManager);
 
+    int s = m_optionsWidget->m_uiOptions->comboBoxShapePrograms->currentIndex();
     m_optionsWidget->m_uiOptions->comboBoxShapePrograms->setModel(m_shapeBookmarksModel);
+    m_optionsWidget->m_uiOptions->comboBoxShapePrograms->setCurrentIndex(s);
+    int c = m_optionsWidget->m_uiOptions->comboBoxColoringPrograms->currentIndex();
     m_optionsWidget->m_uiOptions->comboBoxColoringPrograms->setModel(m_coloringBookmarksModel);
-
-
+    m_optionsWidget->m_uiOptions->comboBoxColoringPrograms->setCurrentIndex(c);
 }
 
 KisDynamicOpSettings::~KisDynamicOpSettings()
@@ -112,6 +114,28 @@ void KisDynamicOpSettings::fromXML(const QDomElement& elt)
 
     m_optionsWidget->m_uiOptions->comboBoxShapes->setCurrentIndex(elt.attribute("shapeType", "0").toInt());
     m_optionsWidget->m_uiOptions->comboBoxColoring->setCurrentIndex(elt.attribute("coloringType", "0").toInt());
+    #if 0
+    // The following is not good, nothing prove that the programs contained in elt are the same as in the registry
+    QDomNode nShape = elt.firstChildElement("Shape");
+    if(nShape.isElement())
+    {
+      QDomElement eShape = nShape.toElement();
+      QString name = eShape.attribute("name");
+      m_optionsWidget->m_uiOptions->comboBoxShapePrograms->setCurrentIndex(
+        m_shapeBookmarksModel->indexFor(name).row() );
+      dbgPlugins << name << " " << m_shapeBookmarksModel->indexFor(name).row();
+    }
+    abort();
+    QDomNode nColoring = elt.firstChildElement("Coloring");
+    if(nColoring.isElement())
+    {
+      QDomElement eColoring = nColoring.toElement();
+      QString name = eColoring.attribute("name");
+      m_optionsWidget->m_uiOptions->comboBoxColoringPrograms->setCurrentIndex(
+        m_coloringBookmarksModel->indexFor(name).row() );
+    }
+    #endif
+    qFatal("Unimplemented");
 }
 
 void KisDynamicOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const

@@ -19,9 +19,11 @@
 #define DYNAMIC_BRUSH_H
 
 #include <kparts/plugin.h>
+#include <kis_bookmarked_configurations_model.h>
 
 class KisView2;
 class KisBookmarkedConfigurationManager;
+class KisBookmarkedConfigurationsModel;
 
 /**
  * A plugin wrapper that adds the Dynamic brush paintop
@@ -44,6 +46,8 @@ private:
     KisView2 * m_view;
     KisBookmarkedConfigurationManager* m_shapeBookmarksManager;
     KisBookmarkedConfigurationManager* m_coloringBookmarksManager;
+    KisBookmarkedConfigurationsModel* m_shapeBookmarksModel;
+    KisBookmarkedConfigurationsModel* m_coloringBookmarksModel;
 };
 
 #endif // DYNAMIC_BRUSH_H

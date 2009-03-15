@@ -33,14 +33,14 @@
 #include "kis_dab_shape.h"
 #include "kis_bristle_shape.h"
 
-KisDynamicOpSettings::KisDynamicOpSettings(KisDynamicOpSettingsWidget* widget, KisBookmarkedConfigurationManager* shapeBookmarksManager, KisBookmarkedConfigurationManager* coloringBookmarksManager)
+KisDynamicOpSettings::KisDynamicOpSettings(KisDynamicOpSettingsWidget* widget, KisBookmarkedConfigurationsModel* shapeBookmarksManager, KisBookmarkedConfigurationsModel* coloringBookmarksManager)
     : KisPaintOpSettings( widget )
 {
     Q_ASSERT( widget );
     m_optionsWidget = widget;
     m_optionsWidget->writeConfiguration( this );
-    m_shapeBookmarksModel = new KisBookmarkedConfigurationsModel(shapeBookmarksManager);
-    m_coloringBookmarksModel = new KisBookmarkedConfigurationsModel(coloringBookmarksManager);
+    m_shapeBookmarksModel = shapeBookmarksManager;
+    m_coloringBookmarksModel = coloringBookmarksManager;
 
     int s = m_optionsWidget->m_uiOptions->comboBoxShapePrograms->currentIndex();
     if( s < 0 ) s = 0;
@@ -72,6 +72,7 @@ KisDynamicBrush* KisDynamicOpSettings::createBrush(KisPainter *painter) const
     Q_ASSERT(shapeProgram);
     current->setShapeProgram(shapeProgram);
     // Init coloring program
+    dbgKrita << "Load color programs at: " << m_optionsWidget->m_uiOptions->comboBoxColoringPrograms->currentIndex();
     QModelIndex coloringModelIndex = m_coloringBookmarksModel->index(
                                          m_optionsWidget->m_uiOptions->comboBoxColoringPrograms->currentIndex(), 0);
     KisDynamicColoringProgram* coloringProgram = static_cast<KisDynamicColoringProgram*>(m_coloringBookmarksModel->configuration(coloringModelIndex));
@@ -177,7 +178,7 @@ void KisDynamicOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
 KisPaintOpSettingsSP KisDynamicOpSettings::clone() const
 {
     return new KisDynamicOpSettings(m_optionsWidget,
-                                    m_shapeBookmarksModel->bookmarkedConfigurationManager(),
-                                    m_coloringBookmarksModel->bookmarkedConfigurationManager());
+                                    m_shapeBookmarksModel,
+                                    m_coloringBookmarksModel);
 
 }

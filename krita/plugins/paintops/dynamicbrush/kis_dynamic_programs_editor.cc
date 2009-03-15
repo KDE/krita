@@ -28,8 +28,8 @@
 #include "kis_dynamic_coloring_program_factory_registry.h"
 #include "kis_dynamic_shape_program_factory_registry.h"
 
-KisDynamicProgramsEditor::KisDynamicProgramsEditor(QWidget* parent, KisBookmarkedConfigurationManager* bookmarksManager, const KisDynamicProgramFactoryRegistry* factoryRegistry) : KDialog(parent), m_dynamicProgramsEditor(0), m_currentEditor(0), m_frameVBoxLayout(0), m_bookmarksManager(bookmarksManager),
-        m_bookmarksModel(new KisBookmarkedConfigurationsModel(bookmarksManager)), m_factoryRegistry(factoryRegistry)
+KisDynamicProgramsEditor::KisDynamicProgramsEditor(QWidget* parent, KisBookmarkedConfigurationsModel* bookmarksManager, const KisDynamicProgramFactoryRegistry* factoryRegistry) : KDialog(parent), m_dynamicProgramsEditor(0), m_currentEditor(0), m_frameVBoxLayout(0), m_bookmarksManager(bookmarksManager->bookmarkedConfigurationManager()),
+        m_bookmarksModel(bookmarksManager), m_factoryRegistry(factoryRegistry)
 {
     setCaption(i18n("Edit dynamic programs"));
     setButtons(KDialog::Close);

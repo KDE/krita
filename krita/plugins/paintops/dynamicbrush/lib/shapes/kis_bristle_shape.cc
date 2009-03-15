@@ -139,8 +139,10 @@ void KisBristleShape::paintAt(const QPointF &brushPos, const KisPaintInformation
         it->m_lastX = pos.x();
         it->m_lastY = pos.y();
     }
+    QRegion region = m_paintBrush->bristlesPainter->dirtyRegion();
+    dbgPlugins << region;
+    painter()->device()->setDirty(region);
     m_paintBrush->m_firstStroke = false;
-    painter()->device()->setDirty(m_paintBrush->bristlesPainter->dirtyRegion());
 }
 
 #if 0

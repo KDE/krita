@@ -43,9 +43,11 @@ KisDynamicOpSettings::KisDynamicOpSettings(KisDynamicOpSettingsWidget* widget, K
     m_coloringBookmarksModel = new KisBookmarkedConfigurationsModel(coloringBookmarksManager);
 
     int s = m_optionsWidget->m_uiOptions->comboBoxShapePrograms->currentIndex();
+    if( s < 0 ) s = 0;
     m_optionsWidget->m_uiOptions->comboBoxShapePrograms->setModel(m_shapeBookmarksModel);
     m_optionsWidget->m_uiOptions->comboBoxShapePrograms->setCurrentIndex(s);
     int c = m_optionsWidget->m_uiOptions->comboBoxColoringPrograms->currentIndex();
+    if( c < 0 ) c = 0;
     m_optionsWidget->m_uiOptions->comboBoxColoringPrograms->setModel(m_coloringBookmarksModel);
     m_optionsWidget->m_uiOptions->comboBoxColoringPrograms->setCurrentIndex(c);
 }
@@ -147,6 +149,7 @@ void KisDynamicOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
     QDomElement shapeElt = doc.createElement("Shape");
     rootElt.appendChild(shapeElt);
 
+    dbgKrita << m_optionsWidget->m_uiOptions->comboBoxShapePrograms->currentIndex();
     QModelIndex shapeModelIndex = m_shapeBookmarksModel->index(
                                       m_optionsWidget->m_uiOptions->comboBoxShapePrograms->currentIndex(), 0);
     KisDynamicShapeProgram* shapeProgram = static_cast<KisDynamicShapeProgram*>(m_shapeBookmarksModel->configuration(shapeModelIndex));

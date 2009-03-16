@@ -73,7 +73,7 @@ struct Finalizer {
 #include <kdebug.h>
 
 
-TextShape::TextShape()
+TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
         : KoShapeContainer(new KoTextShapeContainerModel())
         , KoFrameShape(KoXmlNS::draw, "text-box")
         , m_footnotes(0)
@@ -87,7 +87,7 @@ TextShape::TextShape()
     lay->addShape(this);
     m_textShapeData->document()->setDocumentLayout(lay);
 
-    lay->setInlineObjectTextManager(new KoInlineTextObjectManager(lay));
+    KoTextDocument(m_textShapeData->document()).setInlineTextObjectManager(inlineTextObjectManager);
     setCollisionDetection(true);
 
     lay->connect(m_textShapeData, SIGNAL(relayout()), SLOT(scheduleLayout()));
@@ -307,6 +307,8 @@ void TextShape::init(const QMap<QString, KoDataCenter *> & dataCenterMap)
 {
     KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(dataCenterMap["StyleManager"]);
     KoTextDocument(m_textShapeData->document()).setStyleManager(styleManager);
+    KoInlineTextObjectManager *tom = dynamic_cast<KoInlineTextObjectManager *>(dataCenterMap["InlineTextObjectManager"]);
+    KoTextDocument(m_textShapeData->document()).setInlineTextObjectManager(tom);
 }
 
 QTextDocument *TextShape::footnoteDocument()

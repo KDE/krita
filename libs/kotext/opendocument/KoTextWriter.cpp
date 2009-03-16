@@ -189,7 +189,7 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
             break;
         if (currentFragment.isValid()) {
             QTextCharFormat charFormat = currentFragment.charFormat();
-            KoInlineObject *inlineObject = m_layout->inlineObjectTextManager()->inlineTextObject(charFormat);
+            KoInlineObject *inlineObject = m_layout->inlineTextObjectManager()->inlineTextObject(charFormat);
             if (currentFragment.length() == 1 && inlineObject
                     && currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter) {
                 inlineObject->saveOdf(m_context);
@@ -227,7 +227,7 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
     m_styleManager = KoTextDocument(document).styleManager();
     m_layout = dynamic_cast<KoTextDocumentLayout*>(document->documentLayout());
     Q_ASSERT(m_layout);
-    Q_ASSERT(m_layout->inlineObjectTextManager());
+    Q_ASSERT(m_layout->inlineTextObjectManager());
 
     QTextBlock block = document->findBlock(from);
     KoTextDocument textDocument(document);

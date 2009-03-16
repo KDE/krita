@@ -77,6 +77,9 @@ public:
     /// Returns the KoInlineTextObjectManager
     KoInlineTextObjectManager *inlineTextObjectManager() const;
 
+    /// Set the KoInlineTextObjectManager
+    void setInlineTextObjectManager(KoInlineTextObjectManager *manager);
+
     /**
      * Clears the text in the document. Unlike QTextDocument::clear(), this
      * function does not clear the resources of the QTextDocument.
@@ -86,10 +89,12 @@ public:
     /// Enum (type) used to add resources using QTextDocument::addResource()
     enum ResourceType {
         StyleManager = QTextDocument::UserResource,
-        Lists
+        Lists,
+        InlineTextManager
     };
     static const QUrl StyleManagerURL;
     static const QUrl ListsURL;
+    static const QUrl InlineObjectTextManagerURL;
 
 private:
     QTextDocument *m_document;

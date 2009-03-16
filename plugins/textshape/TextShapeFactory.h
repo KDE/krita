@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@
 #include <KoShapeFactory.h>
 
 class KoShape;
+class KoInlineTextObjectManager;
 
 class TextShapeFactory : public KoShapeFactory
 {
@@ -38,6 +39,9 @@ public:
     KoShape *createShape(const KoProperties * params) const;
     virtual bool supports(const KoXmlElement & e) const;
     virtual void populateDataCenterMap(QMap<QString, KoDataCenter *>  & dataCenterMap);
+
+private:
+    KoInlineTextObjectManager *m_inlineTextObjectManager;
 };
 
 #endif

@@ -934,7 +934,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             fn->setLabel("1");
             KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
             Q_ASSERT(lay);
-            lay->inlineObjectTextManager()->insertInlineObject(m_caret, fn);
+            lay->inlineTextObjectManager()->insertInlineObject(m_caret, fn);
         }
 #endif
         else if ((event->modifiers() & (Qt::ControlModifier | Qt::AltModifier)) || event->text().length() == 0) {
@@ -1872,6 +1872,7 @@ void TextTool::debugTextDocument()
         foreach (QTextCharFormat cf, inlineCharacters) {
             KoInlineObject *object= inlineManager->inlineTextObject(cf);
             kDebug(32500) << "At pos:" << cf.intProperty(CHARPOSITION) << object;
+            // kDebug(32500) << "-> id:" << cf.intProperty(577297549);
         }
         QTextList *list = block.textList();
         if (list) {

@@ -34,9 +34,10 @@
 
 const QUrl KoTextDocument::StyleManagerURL = QUrl("kotext://stylemanager");
 const QUrl KoTextDocument::ListsURL = QUrl("kotext://lists");
+const QUrl KoTextDocument::InlineObjectTextManagerURL = QUrl("kotext://inlineObjectTextManager");
 
 KoTextDocument::KoTextDocument(QTextDocument *document)
-: m_document(document)
+    : m_document(document)
 {
     Q_ASSERT(m_document);
 }
@@ -63,6 +64,17 @@ void KoTextDocument::setStyleManager(KoStyleManager *sm)
     m_document->addResource(KoTextDocument::StyleManager, StyleManagerURL, v);
 }
 
+void KoTextDocument::setInlineTextObjectManager(KoInlineTextObjectManager *manager)
+{
+    QVariant v;
+    v.setValue(manager);
+    m_document->addResource(KoTextDocument::InlineTextManager, InlineObjectTextManagerURL, v);
+
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_document->documentLayout());
+    if (lay)
+        lay->setInlineTextObjectManager(manager);
+}
+
 KoStyleManager *KoTextDocument::styleManager() const
 {
     QVariant resource = m_document->resource(KoTextDocument::StyleManager, StyleManagerURL);
@@ -75,6 +87,7 @@ void KoTextDocument::setLists(const QList<KoList *> &lists)
     v.setValue(lists);
     m_document->addResource(KoTextDocument::Lists, ListsURL, v);
 }
+
 
 QList<KoList *> KoTextDocument::lists() const
 {
@@ -129,8 +142,7 @@ void KoTextDocument::clearText()
 
 KoInlineTextObjectManager *KoTextDocument::inlineTextObjectManager() const
 {
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_document->documentLayout());
-    if (lay)
-        return lay->inlineObjectTextManager();
-    return 0;
+    QVariant resource = m_document->resource(KoTextDocument::InlineTextManager,
+            InlineObjectTextManagerURL);
+    return resource.value<KoInlineTextObjectManager *>();
 }

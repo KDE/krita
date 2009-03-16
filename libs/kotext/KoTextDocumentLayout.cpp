@@ -155,12 +155,12 @@ void KoTextDocumentLayout::addShape(KoShape *shape)
     }
 }
 
-void KoTextDocumentLayout::setInlineObjectTextManager(KoInlineTextObjectManager *iom)
+void KoTextDocumentLayout::setInlineTextObjectManager(KoInlineTextObjectManager *iom)
 {
     d->inlineTextObjectManager = iom;
 }
 
-KoInlineTextObjectManager *KoTextDocumentLayout::inlineObjectTextManager()
+KoInlineTextObjectManager *KoTextDocumentLayout::inlineTextObjectManager()
 {
     return d->inlineTextObjectManager;
 }

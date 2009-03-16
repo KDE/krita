@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2004-2006 David Faure <faure@kde.org>
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007,2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
  * Copyright (C) 2007-2009 Thorsten Zachmann <zachmann@kde.org>
@@ -201,7 +201,7 @@ void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
                     if (var) {
                         KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
                         if (layout) {
-                            KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+                            KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
                             if (textObjectManager) {
                                 KoVariableManager *varManager = textObjectManager->variableManager();
                                 if (varManager) {
@@ -483,7 +483,7 @@ void KoTextLoader::loadNote(const KoXmlElement& noteElem, QTextCursor& cursor)
     if (layout) {
         KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
         if (note->loadOdf(noteElem)) {
-            KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+            KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
             textObjectManager->insertInlineObject(cursor, note);
         } else {
             kDebug(32500) << "Error while loading the note !";
@@ -617,7 +617,7 @@ void KoTextLoader::loadSpan(const KoXmlElement& element, QTextCursor& cursor, bo
             KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
             if (layout) {
                 const QTextDocument *document = cursor.block().document();
-                KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+                KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
                 KoBookmark *bookmark = new KoBookmark(bookmarkName, document);
 
                 if (localName == "bookmark")
@@ -644,7 +644,7 @@ void KoTextLoader::loadSpan(const KoXmlElement& element, QTextCursor& cursor, bo
             if (var) {
                 KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
                 if (layout) {
-                    KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+                    KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
                     if (textObjectManager) {
                         KoVariableManager *varManager = textObjectManager->variableManager();
                         if (varManager) {
@@ -692,7 +692,7 @@ void KoTextLoader::loadTable(const KoXmlElement& tableElem, QTextCursor& cursor)
         anchor->loadOdfFromShape(tableElem);
         d->textSharedData->shapeInserted(shape);
 
-        KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+        KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
         if (textObjectManager) {
             textObjectManager->insertInlineObject(cursor, anchor);
         }
@@ -717,7 +717,7 @@ void KoTextLoader::loadShape(const KoXmlElement& element, QTextCursor& cursor)
 
             KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
             if (layout) {
-                KoInlineTextObjectManager *textObjectManager = layout->inlineObjectTextManager();
+                KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
                 if (textObjectManager) {
                     textObjectManager->insertInlineObject(cursor, anchor);
                 }

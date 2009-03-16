@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -32,6 +32,8 @@
 
 #define TextShape_SHAPEID "TextShapeID"
 
+class KoInlineTextObjectManager;
+
 /**
  * A text shape.
  * The Text shape is capable of drawing structured text.
@@ -40,7 +42,7 @@
 class TextShape : public KoShapeContainer, public KoFrameShape
 {
 public:
-    TextShape();
+    TextShape(KoInlineTextObjectManager *inlineTextObjectManager);
     virtual ~TextShape();
 
     /// reimplemented

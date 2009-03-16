@@ -716,7 +716,7 @@ QTextDocument *TestLoading::documentFromOdt(const QString &odt)
     QTextDocument *document = new QTextDocument;
     textShapeData->setDocument(document, false /* ownership */);
     KoTextDocumentLayout *layout = new KoTextDocumentLayout(textShapeData->document());
-    layout->setInlineObjectTextManager(new KoInlineTextObjectManager(layout)); // required while saving
+    layout->setInlineTextObjectManager(new KoInlineTextObjectManager(layout)); // required while saving
     KoTextDocument(document).setStyleManager(styleManager);
     textShapeData->document()->setDocumentLayout(layout);
 
@@ -769,7 +769,7 @@ QString TestLoading::documentToOdt(QTextDocument *document)
         // Setup layout and managers just like kotext
         KoTextDocumentLayout *layout = new KoTextDocumentLayout(textShapeData->document());
         textShapeData->document()->setDocumentLayout(layout);
-        layout->setInlineObjectTextManager(new KoInlineTextObjectManager(layout)); // required while saving
+        layout->setInlineTextObjectManager(new KoInlineTextObjectManager(layout)); // required while saving
         KoStyleManager *styleManager = new KoStyleManager;
         KoTextDocument(textShapeData->document()).setStyleManager(styleManager);
     }

@@ -468,7 +468,6 @@ void KisPrescaledProjection::drawScaledImage(const QRect & rc,  QPainter & gc)
 
 
         QSize s( ceil( rcFromAligned.size().width() ), ceil( rcFromAligned.size().height() ) );
-        qDebug() << "aligned: " << alignedImageRect << ", s: " << s;
 
         if ( s.width() > 0 && s.height() > 0 ) {
 

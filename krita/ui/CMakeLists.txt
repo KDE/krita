@@ -1,4 +1,4 @@
-include_directories( ${KOTEXT_INCLUDES} ${BLITZ_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/flake ${CMAKE_CURRENT_SOURCE_DIR}/openrastertk ${CMAKE_SOURCE_DIR}/krita/image/metadata )
+include_directories( ${KOTEXT_INCLUDES} ${BLITZ_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/flake ${CMAKE_CURRENT_SOURCE_DIR}/openrastertk ${CMAKE_SOURCE_DIR}/krita/image/metadata ${EXIV2_INCLUDE_DIR} )
 
 add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
@@ -179,7 +179,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 
-target_link_libraries(kritaui ${KDE4_KDE3SUPPORT_LIBS} ${BLITZ_LIBRARIES} ${KDE4_KPARTS_LIBS} kritaimage kotext ${PNG_LIBRARIES})
+target_link_libraries(kritaui ${KDE4_KDE3SUPPORT_LIBS} ${BLITZ_LIBRARIES} ${KDE4_KPARTS_LIBS} kritaimage kotext ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 
 if(HAVE_OPENGL)
     target_link_libraries(kritaui ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENEXR_LIBRARIES})

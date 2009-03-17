@@ -19,6 +19,9 @@
  */
 
 #include "filter/kis_filter_registry.h"
+
+#include <math.h>
+
 #include <QString>
 
 #include <kaction.h>
@@ -26,10 +29,11 @@
 #include <kparts/plugin.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
-
 #include <kparts/componentfactory.h>
+
+#include <KoPluginLoader.h>
+
 #include "kis_debug.h"
-#include <math.h>
 #include "kis_types.h"
 
 #include "kis_paint_device.h"
@@ -41,26 +45,6 @@ KisFilterRegistry::KisFilterRegistry()
 {
     Q_ASSERT(KisFilterRegistry::m_singleton == 0);
     KisFilterRegistry::m_singleton = this;
-
-    KService::List  offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/Filter"),
-                             QString::fromLatin1("(Type == 'Service') and "
-                                                 "([X-Krita-Version] == 3)"));
-
-    KService::List::Iterator iter;
-
-    for (iter = offers.begin(); iter != offers.end(); ++iter) {
-        KService::Ptr service = *iter;
-        int errCode = 0;
-        KParts::Plugin* plugin =
-            KService::createInstance<KParts::Plugin> (service, this, QStringList(), &errCode);
-        if (!plugin) {
-            dbgPlugins << "found plugin" << service->property("Name").toString() << "," << errCode << "";
-            if (errCode == KLibLoader::ErrNoLibrary) {
-                warnPlugins << " Error loading plugin was : ErrNoLibrary" << KLibLoader::self()->lastErrorMessage();
-            }
-        }
-
-    }
 }
 
 KisFilterRegistry::~KisFilterRegistry()
@@ -71,6 +55,9 @@ KisFilterRegistry* KisFilterRegistry::instance()
 {
     if (KisFilterRegistry::m_singleton == 0) {
         KisFilterRegistry::m_singleton = new KisFilterRegistry();
+        Q_CHECK_PTR( KisGeneratorRegistry::m_singleton );
+        KoPluginLoader::instance()->load( "Krita/Filter", "Type == 'Service' and ([X-Krita-Version] == 3)" );
+
     }
     return KisFilterRegistry::m_singleton;
 }

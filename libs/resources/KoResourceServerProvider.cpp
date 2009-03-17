@@ -63,13 +63,13 @@ private:
 KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase * server, const QString & extensions)
     : QThread()
     , m_server(server)
+    , m_extensions( extensions )
 {
-    m_fileNames = getFileNames( extensions );
 }
 
 void KoResourceLoaderThread::run()
 {
-    m_server->loadResources(m_fileNames);
+    m_server->loadResources(getFileNames( m_extensions ));
 }
 
 QStringList KoResourceLoaderThread::getFileNames( const QString & extensions)

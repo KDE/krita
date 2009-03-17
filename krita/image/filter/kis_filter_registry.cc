@@ -55,7 +55,7 @@ KisFilterRegistry* KisFilterRegistry::instance()
 {
     if (KisFilterRegistry::m_singleton == 0) {
         KisFilterRegistry::m_singleton = new KisFilterRegistry();
-        Q_CHECK_PTR( KisGeneratorRegistry::m_singleton );
+        Q_CHECK_PTR( KisFilterRegistry::m_singleton );
         KoPluginLoader::instance()->load( "Krita/Filter", "Type == 'Service' and ([X-Krita-Version] == 3)" );
 
     }

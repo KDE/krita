@@ -33,11 +33,7 @@ KisSobelFilterPlugin::KisSobelFilterPlugin(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
     setComponentData(KisSobelFilterPluginFactory::componentData());
-
-    if (parent->inherits("KisFilterRegistry")) {
-        KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(KisFilterSP(new KisSobelFilter()));
-    }
+    KisFilterRegistry::instance()->add(new KisSobelFilter());
 }
 
 KisSobelFilterPlugin::~KisSobelFilterPlugin()

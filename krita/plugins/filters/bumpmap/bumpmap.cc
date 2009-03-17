@@ -77,12 +77,8 @@ KritaBumpmap::KritaBumpmap(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
     setComponentData(KritaBumpmapFactory::componentData());
+    KisFilterRegistry::instance()->add( new KisFilterBumpmap());
 
-
-    if (parent->inherits("KisFilterRegistry")) {
-        KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(KisFilterSP(new KisFilterBumpmap()));
-    }
 }
 
 KritaBumpmap::~KritaBumpmap()

@@ -94,12 +94,7 @@ private:
         : KParts::Plugin(parent)
 {
     setComponentData(KritaWaveFilterFactory::componentData());
-
-
-    if (parent->inherits("KisFilterRegistry")) {
-        KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(KisFilterSP(new KisFilterWave()));
-    }
+    KisFilterRegistry::instance()->add(new KisFilterWave());
 }
 
 KritaWaveFilter::~KritaWaveFilter()

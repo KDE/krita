@@ -32,11 +32,8 @@ KisRoundCornersFilterPlugin::KisRoundCornersFilterPlugin(QObject *parent, const 
         : KParts::Plugin(parent)
 {
     setComponentData(KisRoundCornersFilterPluginFactory::componentData());
+    KisFilterRegistry::instance()->add(new KisRoundCornersFilter());
 
-    if (parent->inherits("KisFilterRegistry")) {
-        KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(KisFilterSP(new KisRoundCornersFilter()));
-    }
 }
 
 KisRoundCornersFilterPlugin::~KisRoundCornersFilterPlugin()

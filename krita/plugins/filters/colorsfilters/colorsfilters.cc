@@ -69,14 +69,13 @@ ColorsFilters::ColorsFilters(QObject *parent, const QStringList &)
 {
     setComponentData(ColorsFiltersFactory::componentData());
 
-    if (parent->inherits("KisFilterRegistry")) {
-        KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(new KisBrightnessContrastFilter());
-        manager->add(new KisAutoContrast());
-        manager->add(new KisPerChannelFilter());
-        manager->add(new KisDesaturateFilter());
-        manager->add(new KisHSVAdjustmentFilter());
-    }
+    KisFilterRegistry * manager = KisFilterRegistry::instance();
+    manager->add(new KisBrightnessContrastFilter());
+    manager->add(new KisAutoContrast());
+    manager->add(new KisPerChannelFilter());
+    manager->add(new KisDesaturateFilter());
+    manager->add(new KisHSVAdjustmentFilter());
+
 }
 
 ColorsFilters::~ColorsFilters()

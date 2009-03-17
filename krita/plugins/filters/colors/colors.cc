@@ -33,12 +33,11 @@ KritaExtensionsColors::KritaExtensionsColors(QObject *parent, const QStringList 
 {
     setComponentData(KritaExtensionsColorsFactory::componentData());
 
-    if (parent->inherits("KisFilterRegistry")) {
-        KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(KisFilterSP(new KisFilterMax()));
-        manager->add(KisFilterSP(new KisFilterMin()));
-        manager->add(KisFilterSP(new KisFilterColorToAlpha()));
-    }
+    KisFilterRegistry * manager = KisFilterRegistry::instance();
+    manager->add(new KisFilterMax());
+    manager->add(new KisFilterMin());
+    manager->add(new KisFilterColorToAlpha());
+
 }
 
 KritaExtensionsColors::~KritaExtensionsColors()

@@ -50,12 +50,8 @@ KritaImageEnhancement::KritaImageEnhancement(QObject *parent, const QStringList 
         : KParts::Plugin(parent)
 {
     setComponentData(KritaImageEnhancementFactory::componentData());
-
-    if (parent->inherits("KisFilterRegistry")) {
-        KisFilterRegistry * r = dynamic_cast<KisFilterRegistry*>(parent);
-        r->add(KisFilterSP(new KisSimpleNoiseReducer()));
-        r->add(KisFilterSP(new KisWaveletNoiseReduction()));
-    }
+    KisFilterRegistry::instance()->add( new KisSimpleNoiseReducer());
+    KisFilterRegistry::instance()->add( new KisWaveletNoiseReduction());
 }
 
 KritaImageEnhancement::~KritaImageEnhancement()

@@ -211,7 +211,7 @@ protected:
 
 private:
     Q_DECLARE_PRIVATE(KoInlineObject)
-    friend Q_CORE_EXPORT QDebug operator<<(QDebug, const KoInlineObject *);
+    friend KOTEXT_EXPORT QDebug operator<<(QDebug, const KoInlineObject *);
 };
 
 KOTEXT_EXPORT QDebug operator<<(QDebug dbg, const KoInlineObject *o);

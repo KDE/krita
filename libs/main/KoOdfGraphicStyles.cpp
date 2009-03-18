@@ -209,6 +209,12 @@ QString KoOdfGraphicStyles::saveOasisGradientStyle(KoGenStyles &mainStyles, cons
         gradientStyle.addAttributePt("svg:y1", gradient->start().y());
         gradientStyle.addAttributePt("svg:x2", gradient->finalStop().x());
         gradientStyle.addAttributePt("svg:y2", gradient->finalStop().y());
+    } else if (brush.style() == Qt::ConicalGradientPattern) {
+        const QConicalGradient * gradient = static_cast<const QConicalGradient*>(brush.gradient());
+        gradientStyle = KoGenStyle(KoGenStyle::StyleGradientConical /*no family name*/);
+        gradientStyle.addAttributePt("svg:cx", gradient->center().x());
+        gradientStyle.addAttributePt("svg:cy", gradient->center().y());
+        gradientStyle.addAttribute("draw:angle", QString("%1").arg(gradient->angle()));
     }
     const QGradient * gradient = brush.gradient();
     if (gradient->spread() == QGradient::RepeatSpread)
@@ -372,8 +378,44 @@ QBrush KoOdfGraphicStyles::loadOasisGradientStyle(const KoStyleStack &styleStack
                 stops.append(stop);
             }
         }
-        // TODO should the stops be sorted?
         gradient->setStops(stops);
+    } else if (e->namespaceURI() == KoXmlNS::koffice) {
+        if (e->localName() == "conicalGradient") {
+            QPointF center;
+            center.setX(KoUnit::parseValue(e->attributeNS(KoXmlNS::svg, "cx", QString())));
+            center.setY(KoUnit::parseValue(e->attributeNS(KoXmlNS::svg, "cy", QString())));
+            qreal angle = KoUnit::parseValue(e->attributeNS(KoXmlNS::draw, "angle", QString()));
+            QConicalGradient * g = new QConicalGradient();
+            g->setCenter(center);
+            g->setAngle(angle);
+            gradient = g;
+
+            QString strSpread(e->attributeNS(KoXmlNS::svg, "spreadMethod", "pad"));
+            if (strSpread == "repeat")
+                gradient->setSpread(QGradient::RepeatSpread);
+            else if (strSpread == "reflect")
+                gradient->setSpread(QGradient::ReflectSpread);
+            else
+                gradient->setSpread(QGradient::PadSpread);
+
+            if (e->hasAttributeNS(KoXmlNS::svg, "gradientTransform"))
+                matrix = loadTransformation(e->attributeNS(KoXmlNS::svg, "gradientTransform", QString()));
+
+            QGradientStops stops;
+
+            // load stops
+            KoXmlElement colorstop;
+            forEachElement(colorstop, (*e)) {
+                if (colorstop.namespaceURI() == KoXmlNS::svg && colorstop.localName() == "stop") {
+                    QGradientStop stop;
+                    stop.second = QColor(colorstop.attributeNS(KoXmlNS::svg, "stop-color", QString()));
+                    stop.second.setAlphaF(colorstop.attributeNS(KoXmlNS::svg, "stop-opacity", "1.0").toDouble());
+                    stop.first = colorstop.attributeNS(KoXmlNS::svg, "offset", "0.0").toDouble();
+                    stops.append(stop);
+                }
+            }
+            gradient->setStops(stops);
+        }
     }
 
     if (! gradient)

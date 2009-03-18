@@ -160,6 +160,8 @@ void KoOdfStylesReader::insertOfficeStyles(const KoXmlElement& styles)
                         || localName == "marker"
                         || localName == "stroke-dash"
                         || localName == "opacity"))
+                || (ns == KoXmlNS::koffice && ( 
+                        localName == "conicalGradient"))
            ) {
             const QString name = e.attributeNS(KoXmlNS::draw, "name", QString());
             Q_ASSERT(!name.isEmpty());
@@ -169,7 +171,6 @@ void KoOdfStylesReader::insertOfficeStyles(const KoXmlElement& styles)
             insertStyle(e, CustomInStyles);
     }
 }
-
 
 void KoOdfStylesReader::insertStyles(const KoXmlElement& styles, TypeAndLocation typeAndLocation)
 {

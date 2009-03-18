@@ -43,4 +43,9 @@ QString KoDevice::id() const
     return d->id;
 }
 
+QString KoDevice::name() const
+{
+    return objectName();
+}
+
 #include "KoDevice.moc"

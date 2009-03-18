@@ -24,21 +24,40 @@
 
 class KisMaskGenerator;
 
-class PAINTOP_EXPORT KisAutoBrush : public KisBrush
+/**
+ * XXX: docs!
+ */
+class BRUSH_EXPORT KisAutoBrush : public KisBrush
 {
+
 public:
+
     KisAutoBrush(KisMaskGenerator* img);
+
     virtual ~KisAutoBrush();
+
 public:
-    virtual void generateMask(KisPaintDeviceSP dst, KisBrush::ColoringInformation* src, double scaleX, double scaleY, double angle, const KisPaintInformation& info = KisPaintInformation(), double subPixelX = 0, double subPixelY = 0) const;
+
+    virtual void generateMask(KisPaintDeviceSP dst,
+                              KisBrush::ColoringInformation* src,
+                              double scaleX, double scaleY, double angle,
+                              const KisPaintInformation& info = KisPaintInformation(),
+                              double subPixelX = 0, double subPixelY = 0) const;
+
 public:
+
     virtual bool load() {
         return false;
     }
+
     virtual void toXML(QDomDocument& , QDomElement&) const;
+
 private:
+
     QImage createBrushPreview();
+
 private:
+
     struct Private;
     Private* const d;
 };

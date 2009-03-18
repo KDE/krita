@@ -39,7 +39,7 @@ public:
     /**
      * @return the currently selected brush
      */
-    KisBrush* brush() const;
+    KisBrushSP brush() const;
 
     void setAutoBrush( bool on );
     void setPredefinedBrushes( bool on );

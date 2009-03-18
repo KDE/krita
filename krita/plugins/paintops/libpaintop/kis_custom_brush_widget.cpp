@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_custom_brush.h"
+#include "kis_custom_brush_widget.h"
 
 #include <KoImageResource.h>
 #include <kis_debug.h>
@@ -35,7 +35,7 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
-#include "kis_brush.h"
+#include "kis_gbr_brush.h"
 #include "kis_imagepipe_brush.h"
 
 #include "kis_resource_mediator.h"
@@ -43,7 +43,7 @@
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 
-KisCustomBrush::KisCustomBrush(QWidget *parent, const QString& caption, KisImageSP image)
+KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& caption, KisImageSP image)
         : KisWdgCustomBrush(parent)
         , m_image(image)
 {
@@ -51,8 +51,8 @@ KisCustomBrush::KisCustomBrush(QWidget *parent, const QString& caption, KisImage
     preview->setScaledContents(true);
     preview->setFixedSize(preview->size());
 
-    KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
-    m_rServerAdapter = new KoResourceServerAdapter<KisBrush>(rServer);
+    KoResourceServer<KisGbrBrush>* rServer = KisBrushServer::instance()->brushServer();
+    m_rServerAdapter = new KoResourceServerAdapter<KisGbrBrush>(rServer);
 
     connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
     connect(brushButton, SIGNAL(pressed()), this, SLOT(slotUpdateCurrentBrush()));
@@ -62,17 +62,22 @@ KisCustomBrush::KisCustomBrush(QWidget *parent, const QString& caption, KisImage
     slotUpdateCurrentBrush();
 }
 
-KisCustomBrush::~KisCustomBrush()
+KisCustomBrushWidget::~KisCustomBrushWidget()
 {
     delete m_rServerAdapter;
 }
 
-void KisCustomBrush::showEvent(QShowEvent *)
+
+KisBrushSP KisCustomBrushWidget::brush() {
+    return m_brush;
+};
+
+void KisCustomBrushWidget::showEvent(QShowEvent *)
 {
     slotUpdateCurrentBrush(0);
 }
 
-void KisCustomBrush::slotUpdateCurrentBrush(int)
+void KisCustomBrushWidget::slotUpdateCurrentBrush(int)
 {
     if (m_image) {
         createBrush();
@@ -82,12 +87,12 @@ void KisCustomBrush::slotUpdateCurrentBrush(int)
     emit sigBrushChanged();
 }
 
-void KisCustomBrush::slotExport()
+void KisCustomBrushWidget::slotExport()
 {
     ;
 }
 
-void KisCustomBrush::slotAddPredefined()
+void KisCustomBrushWidget::slotAddPredefined()
 {
     // Save in the directory that is likely to be: ~/.kde/share/apps/krita/brushes
     // a unique file with this brushname
@@ -116,18 +121,18 @@ void KisCustomBrush::slotAddPredefined()
     // Add it to the brush server, so that it automatically gets to the mediators, and
     // so to the other brush choosers can pick it up, if they want to
     if (m_rServerAdapter)
-        m_rServerAdapter->addResource(m_brush->clone());
+        m_rServerAdapter->addResource(static_cast<KisGbrBrush*>( m_brush.data() )->clone());
 }
 
-void KisCustomBrush::createBrush()
+void KisCustomBrushWidget::createBrush()
 {
     if (!m_image)
         return;
 
     if (brushStyle->currentIndex() == 0) {
-        m_brush = new KisBrush(m_image->mergedImage().data(), 0, 0, m_image->width(), m_image->height());
+        m_brush = new KisGbrBrush(m_image->mergedImage().data(), 0, 0, m_image->width(), m_image->height());
         if (colorAsMask->isChecked())
-            m_brush->makeMaskImage();
+            static_cast<KisGbrBrush*>( m_brush.data() )->makeMaskImage();
         return;
     }
 
@@ -159,13 +164,13 @@ void KisCustomBrush::createBrush()
 
     m_brush = new KisImagePipeBrush(m_image->objectName(), w, h, devices, modes);
     if (colorAsMask->isChecked())
-        m_brush->makeMaskImage();
+        static_cast<KisGbrBrush*>( m_brush.data() )->makeMaskImage();
 }
 
-void KisCustomBrush::setImage(KisImageSP image)
+void KisCustomBrushWidget::setImage(KisImageSP image)
 {
     m_image = image;
 }
 
 
-#include "kis_custom_brush.moc"
+#include "kis_custom_brush_widget.moc"

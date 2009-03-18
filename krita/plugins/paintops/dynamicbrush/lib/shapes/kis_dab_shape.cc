@@ -49,8 +49,19 @@ KisAlphaMaskShape::KisAlphaMaskShape() {}
 
 #endif
 
-KisDabShape::~KisDabShape() { }
-KisDabShape::KisDabShape(KisBrush* brush) : m_scaleX(1.0), m_scaleY(1.0), m_rotate(0.0), m_dab(0), m_brush(brush) { }
+
+KisDabShape::~KisDabShape()
+{
+}
+
+KisDabShape::KisDabShape(KisBrushSP brush)
+    : m_scaleX(1.0)
+    , m_scaleY(1.0)
+    , m_rotate(0.0)
+    , m_dab(0)
+    , m_brush(brush)
+{
+}
 
 KisDynamicShape* KisDabShape::clone() const
 {

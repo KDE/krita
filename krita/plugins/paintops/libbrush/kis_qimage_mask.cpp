@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2004-2008 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_brush_p.h"
+#include "kis_qimage_mask.h"
 
 #include <cfloat>
 #include <QImage>
@@ -28,48 +28,6 @@
 
 #include "kis_global.h"
 
-
-KisBrush::ScaledBrush::ScaledBrush()
-{
-    m_mask = 0;
-    m_image = QImage();
-    m_scale = 1;
-    m_xScale = 1;
-    m_yScale = 1;
-}
-
-KisBrush::ScaledBrush::ScaledBrush(KisQImagemaskSP scaledMask, const QImage& scaledImage, double scale, double xScale, double yScale)
-{
-    m_mask = scaledMask;
-    m_image = scaledImage;
-    m_scale = scale;
-    m_xScale = xScale;
-    m_yScale = yScale;
-
-    if (!m_image.isNull()) {
-        // Convert image to pre-multiplied by alpha.
-
-        m_image.detach();
-
-        for (int y = 0; y < m_image.height(); y++) {
-            for (int x = 0; x < m_image.width(); x++) {
-
-                QRgb pixel = m_image.pixel(x, y);
-
-                int red = qRed(pixel);
-                int green = qGreen(pixel);
-                int blue = qBlue(pixel);
-                int alpha = qAlpha(pixel);
-
-                red = (red * alpha) / 255;
-                green = (green * alpha) / 255;
-                blue = (blue * alpha) / 255;
-
-                m_image.setPixel(x, y, qRgba(red, green, blue, alpha));
-            }
-        }
-    }
-}
 
 KisQImagemask::KisQImagemask(const QImage& img, bool hasColor)
 {

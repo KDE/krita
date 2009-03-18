@@ -20,6 +20,8 @@
 #include "kis_brush_selection_widget.h"
 #include <klocale.h>
 #include "kis_brush.h"
+#include "kis_brush_registry.h"
+#include "kis_brush_factory.h"
 #include "kis_image.h"
 
 KisBrushOption::KisBrushOption()
@@ -32,11 +34,10 @@ KisBrushOption::KisBrushOption()
     setConfigurationPage(m_brushSelectionWidget);
 }
 
-KisBrush* KisBrushOption::brush() const
+KisBrushSP KisBrushOption::brush() const
 {
     return m_brushSelectionWidget->brush();
 }
-
 
 void KisBrushOption::setAutoBrush( bool on )
 {
@@ -69,8 +70,6 @@ void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
 #ifdef __GNUC__
 #warning "KisBrushOption::writeOptionSetting: define a serialization format for potato stamps"
 #endif
-
-
 }
 
 void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting)
@@ -78,4 +77,17 @@ void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting
 #ifdef __GNUC__
 #warning "KisBrushOption::readOptionSetting: define a serialization format for potato stamps & a way to  set the active potato stamp correctly"
 #endif
+    QString brushtype = setting->getString("brush_type_id");
+    Q_ASSERT(!brushtype.isEmpty());
+    if (brushtype.isEmpty()) return;
+
+    KisBrushFactory* factory = KisBrushRegistry::instance()->get(brushtype);
+    Q_ASSERT(factory);
+    if (!factory) return;
+
+    QString brushDefinition = setting->getString("brush_definition");
+    KisBrushSP brush = factory->createBrush(brushDefinition);
+
+    m_brushSelectionWidget->setCurrentBrush(brush);
+
 }

@@ -15,51 +15,48 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_BRUSH_SERVER_H
-#define KIS_BRUSH_SERVER_H
+#ifndef KIS_SCALED_BRUSH_H
+#define KIS_SCALED_BRUSH_H
 
-#include <QString>
-#include <QStringList>
-#include <QList>
+#include <QImage>
 
-#include <KoResourceServer.h>
+#include <kis_types.h>
 
-class KoResource;
-class KisBrush;
+#include "kis_qimage_mask.h"
 
-/**
- *
- */
-class KisBrushServer : public QObject
+class KisScaledBrush
 {
-
-    Q_OBJECT
 
 public:
 
-    virtual ~KisBrushServer();
-    KoResourceServer<KisBrush>* brushServer();
+    KisScaledBrush();
 
-    static KisBrushServer* instance();
+    KisScaledBrush(KisQImagemaskSP scaledMask,
+                   const QImage& scaledImage,
+                   double scale, double xScale, double yScale);
+
+    double scale() const {
+        return m_scale;
+    }
+    double xScale() const {
+        return m_xScale;
+    }
+    double yScale() const {
+        return m_yScale;
+    }
+    KisQImagemaskSP mask() const {
+        return m_mask;
+    }
+    QImage image() const {
+        return m_image;
+    }
 
 private:
-
-    KisBrushServer();
-    KisBrushServer(const KisBrushServer&);
-    KisBrushServer operator=(const KisBrushServer&);
-
-    static KisBrushServer *m_singleton;
-
-    KoResourceServer<KisBrush>* m_brushServer;
-
-private slots:
-
-    void brushThreadDone();
-
-private:
-
-    QThread * brushThread;
-
+    KisQImagemaskSP m_mask;
+    QImage m_image;
+    double m_scale;
+    double m_xScale;
+    double m_yScale;
 };
 
 #endif

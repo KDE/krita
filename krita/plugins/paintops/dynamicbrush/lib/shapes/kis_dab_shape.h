@@ -27,14 +27,14 @@
 class KisAutobrushShape;
 class KisDynamicColoring;
 class KisPaintInformation;
-class KisBrush;
 
+#include <kis_brush.h>
 #include "kis_dynamic_shape.h"
 
 class DYNAMIC_BRUSH_EXPORT KisDabShape : public KisDynamicShape
 {
 public:
-    KisDabShape(KisBrush* brush);
+    KisDabShape(KisBrushSP brush);
     virtual ~KisDabShape();
     virtual void paintAt(const QPointF &pos, const KisPaintInformation& info, KisDynamicColoring* coloringsrc);
     virtual void resize(double xs, double ys);
@@ -44,7 +44,7 @@ public:
 private:
     double m_scaleX, m_scaleY, m_rotate;
     KisPaintDeviceSP m_dab;
-    KisBrush* m_brush;
+    KisBrushSP m_brush;
 };
 
 #endif

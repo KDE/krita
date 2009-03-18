@@ -19,20 +19,23 @@
 #ifndef _KIS_TEXT_BRUSH_H_
 #define _KIS_TEXT_BRUSH_H_
 
-#include "ui_wdgtextbrush.h"
+#include <QFont>
 
 #include "kis_brush.h"
+#include "krita_export.h"
 
-class KisTextBrushResource : public KisBrush
+class BRUSH_EXPORT KisTextBrush : public KisBrush
 {
 
 public:
 
-    KisTextBrushResource() : KisBrush("") {
+    KisTextBrush()
+    {
         setBrushType(MASK);
     }
 
-    KisTextBrushResource(const QString& txt, const QFont& font) : KisBrush("") {
+    KisTextBrush(const QString& txt, const QFont& font)
+    {
         setFont(font);
         setText(txt);
         updateBrush();
@@ -42,54 +45,21 @@ public:
     virtual bool load() {
         return false;
     }
+
     void setText(const QString& txt) {
         m_txt = txt;
     }
+
     void setFont(const QFont& font) {
         m_font = font;
     }
+
     void updateBrush();
 
 private:
 
     QFont m_font;
     QString m_txt;
-};
-
-class KisWdgTextBrush : public QWidget, public Ui::KisWdgTextBrush
-{
-    Q_OBJECT
-
-public:
-    KisWdgTextBrush(QWidget *parent, const char *name)
-            : QWidget(parent) {
-        setObjectName(name);
-        setupUi(this);
-    }
-};
-
-class KisTextBrush : public KisWdgTextBrush
-{
-    Q_OBJECT
-
-public:
-
-    KisTextBrush(QWidget *parent, const char* name, const QString& caption);
-    KisBrush* brush() {
-        return m_textBrush;
-    }
-
-private slots:
-    void rebuildTextBrush();
-    void getFont();
-
-signals:
-
-    void sigBrushChanged();
-    
-private:
-    KisBrush* m_textBrush;
-    QFont m_font;
 };
 
 #endif

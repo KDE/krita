@@ -20,9 +20,9 @@
 #include <QImage>
 #include <QPainter>
 
-KisBrushBasedPaintOp::KisBrushBasedPaintOp(KisPainter * painter, KisBrush* brush)
+KisBrushBasedPaintOp::KisBrushBasedPaintOp(KisPainter * painter, KisBrushSP brush)
         : KisPaintOp(painter)
-            , m_brush(brush)
+        , m_brush(brush)
 {
 }
 

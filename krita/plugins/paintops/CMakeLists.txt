@@ -1,5 +1,6 @@
-include_directories(libpaintop)
+include_directories(libbrush libpaintop)
 
+add_subdirectory( libbrush )
 add_subdirectory( libpaintop )
 add_subdirectory( defaultpaintops )
 add_subdirectory( sumie )

@@ -39,8 +39,12 @@ KisPressureRateOption::KisPressureRateOption()
 {
     QWidget* w = new QWidget;
     QLabel* rateLabel = new QLabel(i18n("Rate: "));
-    m_rateSlider = new QSlider(0, 100, 1, 50, Qt::Horizontal);
-    m_rateSlider->setValue( 50 );
+    m_rateSlider = new QSlider();
+    m_rateSlider->setMinimum(0);
+    m_rateSlider->setMaximum(0);
+    m_rateSlider->setPageStep(1);
+    m_rateSlider->setValue(50);
+    m_rateSlider->setOrientation(Qt::Horizontal);
     QHBoxLayout* hl = new QHBoxLayout;
     hl->addWidget( rateLabel );
     hl->addWidget( m_rateSlider );

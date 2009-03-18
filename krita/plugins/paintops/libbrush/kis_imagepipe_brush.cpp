@@ -30,13 +30,13 @@ public:
     mutable quint32 currentBrush;
 
     QByteArray data;
-    mutable QList<KisBrush *> brushes;
+    mutable QList<KisGbrBrush*> brushes;
 
     enumBrushType brushType;
 };
 
 KisImagePipeBrush::KisImagePipeBrush(const QString& filename)
-    : KisBrush(filename)
+    : KisGbrBrush(filename)
     , m_d( new Private() )
 {
     m_d->brushType = INVALID;
@@ -47,7 +47,7 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& filename)
 KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
                                      QVector< QVector<KisPaintDevice*> > devices,
                                      QVector<KisParasite::SelectionMode > modes)
-    : KisBrush("")
+    : KisGbrBrush("")
     , m_d( new Private() )
 {
     Q_ASSERT(devices.count() == modes.count());
@@ -65,7 +65,7 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
     m_d->parasite.setBrushesCount();
 
     for (int i = 0; i < devices.at(0).count(); i++) {
-        m_d->brushes.append(new KisBrush(devices.at(0).at(i), 0, 0, w, h));
+        m_d->brushes.append(new KisGbrBrush(devices.at(0).at(i), 0, 0, w, h));
     }
 
     setImage(m_d->brushes.at(0)->img());
@@ -74,7 +74,7 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
 }
 
 KisImagePipeBrush::KisImagePipeBrush(const KisImagePipeBrush& rhs)
-    : KisBrush(rhs),
+    : KisGbrBrush(rhs),
       m_d(new Private)
 {
     *m_d = *(rhs.m_d);
@@ -136,7 +136,7 @@ bool KisImagePipeBrush::init()
 
     qint32 numOfBrushes = 0;
     while (numOfBrushes < m_d->numOfBrushes && i < m_d->data.size()) {
-        KisBrush * brush = new KisBrush(name() + '_' + QString().setNum(numOfBrushes),
+        KisGbrBrush* brush = new KisGbrBrush(name() + '_' + QString().setNum(numOfBrushes),
                                         m_d->data,
                                         i);
         Q_CHECK_PTR(brush);

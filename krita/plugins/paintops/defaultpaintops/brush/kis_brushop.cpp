@@ -78,13 +78,12 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()->device()) return;
 
-    KisBrush* brush = m_brush;
-
+    KisBrushSP brush = m_brush;
     Q_ASSERT(brush);
     if (!brush) return;
 
     KisPaintInformation adjustedInfo = settings->m_optionsWidget->m_sizeOption->apply(info);
-    if (! brush->canPaintFor(adjustedInfo))
+    if (!brush->canPaintFor(adjustedInfo))
         return;
 
     KisPaintDeviceSP device = painter()->device();
@@ -125,7 +124,7 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
     qint32 sh = dstRect.height();
 
     KisPaintDeviceSP dab = KisPaintDeviceSP(0);
-    
+
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         dab = brush->image(device->colorSpace(), scale, 0.0, adjustedInfo, xFraction, yFraction);
     } else {

@@ -26,7 +26,7 @@
 #include <kio/job.h>
 
 #include "KoResource.h"
-#include "kis_brush.h"
+#include "kis_gbr_brush.h"
 #include "kis_global.h"
 
 class QImage;
@@ -48,7 +48,7 @@ namespace KisParasite {
     };
 }
 
-class PAINTOP_EXPORT KisImagePipeBrush : public KisBrush
+class BRUSH_EXPORT KisImagePipeBrush : public KisGbrBrush
 {
 
     Q_OBJECT
@@ -76,13 +76,6 @@ public:
     */
     virtual QImage img() const;
 
-    /**
-     *  @return the next mask in the pipe.
-     */
-    virtual void generateMask(KisPaintDeviceSP dst, KisBrush::ColoringInformation* src, double scaleX, double scaleY,
-                              double angle, const KisPaintInformation& info, double subPixelX = 0,
-                              double subPixelY = 0) const;
-
     virtual KisPaintDeviceSP image(const KoColorSpace * colorSpace, double scale, double angle,
                                    const KisPaintInformation& info, double subPixelX = 0, double subPixelY = 0) const;
 
@@ -102,7 +95,18 @@ public:
 
     virtual QString defaultFileExtension() const;
 
+
+    /**
+     *  @return the next mask in the pipe.
+     */
+    virtual void generateMask(KisPaintDeviceSP dst, KisBrush::ColoringInformation* src, double scaleX, double scaleY,
+                              double angle, const KisPaintInformation& info, double subPixelX = 0,
+                              double subPixelY = 0) const;
+
+
 protected:
+
+
     KisImagePipeBrush(const KisImagePipeBrush& rhs);
 
 private:

@@ -36,8 +36,8 @@
 #include "kis_imagepipe_brush.h"
 #include "kis_brush_chooser.h"
 #include "kis_auto_brush_widget.h"
-#include "kis_custom_brush.h"
-#include "kis_text_brush.h"
+#include "kis_custom_brush_widget.h"
+#include "kis_text_brush_chooser.h"
 
 KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
         : QWidget(parent)
@@ -63,11 +63,11 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     m_brushesTab->addTab(m_brushChooser, i18n("Predefined Brushes"));
 
     // XXX: pass image!
-    m_customBrushWidget = new KisCustomBrush(0, i18n("Custom Brush"), 0);
+    m_customBrushWidget = new KisCustomBrushWidget(0, i18n("Custom Brush"), 0);
     connect(m_customBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
     m_brushesTab->addTab(m_customBrushWidget, i18n("Custom Brush"));
 
-    m_textBrushWidget = new KisTextBrush(0, "textbrush", i18n("Text Brush"));
+    m_textBrushWidget = new KisTextBrushChooser(0, "textbrush", i18n("Text Brush"));
     connect(m_textBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
     m_brushesTab->addTab(m_textBrushWidget, i18n("Text Brush"));
 
@@ -82,9 +82,9 @@ KisBrushSelectionWidget::~KisBrushSelectionWidget()
 {
 }
 
-KisBrush* KisBrushSelectionWidget::brush()
+KisBrushSP KisBrushSelectionWidget::brush()
 {
-    KisBrush* theBrush;
+    KisBrushSP theBrush;
     switch (m_brushesTab->currentIndex()) {
     case 0:
         theBrush = m_autoBrushWidget->brush();
@@ -130,5 +130,27 @@ void KisBrushSelectionWidget::setImage(KisImageSP image)
 {
     m_customBrushWidget->setImage(image);
 }
+
+void KisBrushSelectionWidget::setCurrentBrush( KisBrushSP brush)
+{
+#if 0
+    // XXX: clever code have brush plugins know their configuration
+    //      pane, so we don't have to have this if statement and
+    //      have an extensible set of brush types
+    if (brush->inherits("KisAutoBrush")) {
+        m_autoBrushWidget->setBrush(brush);
+    }
+    else if (brush->inherits("KisCustomBrushWidget")) {
+        m_customBrushWidget->setBrush(brush);
+    }
+    else if (brush->inherits("KisTextBrush")) {
+        m_testBrushWidget->setBrush(brush);
+    }
+    else {
+        m_brushChooser->setBrush(brush);
+    }
+#endif
+}
+
 
 #include "kis_brush_selection_widget.moc"

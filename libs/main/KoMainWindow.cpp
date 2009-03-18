@@ -548,7 +548,7 @@ void KoMainWindow::addRecentURL(const KUrl& url)
     if (!url.isEmpty()) {
         bool ok = true;
         if (url.isLocalFile()) {
-            QString path = url.path(KUrl::RemoveTrailingSlash);
+            QString path = url.toLocalFile(KUrl::RemoveTrailingSlash);
             const QStringList tmpDirs = KGlobal::dirs()->resourceDirs("tmp");
             for (QStringList::ConstIterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it)
                 if (path.contains(*it))
@@ -680,7 +680,7 @@ bool KoMainWindow::openDocument(KoDocument *newdoc, const KUrl & url)
         if (mime.isEmpty() || mime == KMimeType::defaultMimeType())
             mime = newdoc->nativeFormatMimeType();
         if (url.isLocalFile())   // workaround for kde<=3.3 kparts bug, fixed for 3.4
-            newdoc->setLocalFilePath(url.path());
+            newdoc->setLocalFilePath(url.toLocalFile());
         newdoc->setMimeTypeAfterLoading(mime);
         updateCaption();
         return true;

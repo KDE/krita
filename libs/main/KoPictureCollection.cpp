@@ -85,7 +85,7 @@ KoPicture KoPictureCollection::downloadPicture(const KUrl& url, QWidget *window)
 
     // If it is a local file, we can check the last modification date, so we should better use loadPicture
     if (url.isLocalFile())
-        return loadPicture(url.path());
+        return loadPicture(url.toLocalFile());
 
 
     // We have really a remote file, so we cannot check the last modification date

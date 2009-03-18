@@ -409,7 +409,7 @@ bool KoDocument::saveFile()
 
     if (backupFile()) {
         if (url().isLocalFile())
-            KSaveFile::backupFile(url().path(), d->m_backupPath);
+            KSaveFile::backupFile(url().toLocalFile(), d->m_backupPath);
         else {
             KIO::UDSEntry entry;
             if (KIO::NetAccess::stat(url(), entry, shells().current())) {     // this file exists => backup
@@ -1364,7 +1364,7 @@ bool KoDocument::openUrl(const KUrl & _url)
     bool autosaveOpened = false;
     d->m_bLoading = true;
     if (url.isLocalFile() && d->m_shouldCheckAutoSaveFile) {
-        QString file = url.path();
+        QString file = url.toLocalFile();
         QString asf = autoSaveFile(file);
         if (QFile::exists(asf)) {
             //kDebug(30003) <<"KoDocument::openUrl asf=" << asf;
@@ -2578,7 +2578,7 @@ void KoDocument::openExistingFile(const KUrl& url)
 
 void KoDocument::openTemplate(const KUrl& url)
 {
-    bool ok = loadNativeFormat(url.path());
+    bool ok = loadNativeFormat(url.toLocalFile());
     setModified(false);
 
     if (ok) {

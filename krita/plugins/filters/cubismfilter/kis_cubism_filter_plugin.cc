@@ -31,11 +31,8 @@ K_EXPORT_COMPONENT_FACTORY(kritacubismfilter, KisCubismFilterPluginFactory("krit
 KisCubismFilterPlugin::KisCubismFilterPlugin(QObject *parent, const QStringList &) : KParts::Plugin(parent)
 {
     setComponentData(KisCubismFilterPluginFactory::componentData());
+    KisFilterRegistry::instance()->add(new KisCubismFilter());
 
-    if (parent->inherits("KisFilterRegistry")) {
-        KisFilterRegistry * r = dynamic_cast<KisFilterRegistry*>(parent);
-        r->add(new KisCubismFilter());
-    }
 }
 
 KisCubismFilterPlugin::~KisCubismFilterPlugin()

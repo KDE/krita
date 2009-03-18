@@ -44,14 +44,16 @@ K_EXPORT_COMPONENT_FACTORY(kritadynamicbrushpaintop, DynamicBrushFactory("krita"
 DynamicBrush::DynamicBrush(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
         , m_shapeBookmarksManager(new KisBookmarkedConfigurationManager("dynamicopshape", new KisDynamicShapeProgramsFactory()))
+        , m_shapeBookmarksModel (new KisBookmarkedConfigurationsModel(m_shapeBookmarksManager))
         , m_coloringBookmarksManager(new KisBookmarkedConfigurationManager("dynamicopcoloring", new KisDynamicColoringProgramsFactory()))
+        , m_coloringBookmarksModel (new KisBookmarkedConfigurationsModel(m_coloringBookmarksManager))
 
 {
     setComponentData(DynamicBrushFactory::componentData());
 
     // This is not a gui plugin; only load it when the doc is created.
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisDynamicOpFactory(m_shapeBookmarksManager, m_coloringBookmarksManager));
+    r->add(new KisDynamicOpFactory(m_shapeBookmarksModel, m_coloringBookmarksModel));
 #if 0
     {
         // TODO: remove this, temp stuff for testing only
@@ -97,13 +99,13 @@ DynamicBrush::~DynamicBrush()
 
 void DynamicBrush::slotEditDynamicShapePrograms()
 {
-    KisDynamicProgramsEditor editor(m_view, m_shapeBookmarksManager, KisDynamicShapeProgramFactoryRegistry::instance());
+    KisDynamicProgramsEditor editor(m_view, m_shapeBookmarksModel, KisDynamicShapeProgramFactoryRegistry::instance());
     editor.exec();
 }
 
 void DynamicBrush::slotEditDynamicColoringPrograms()
 {
-    KisDynamicProgramsEditor editor(m_view, m_coloringBookmarksManager, KisDynamicColoringProgramFactoryRegistry::instance());
+    KisDynamicProgramsEditor editor(m_view, m_coloringBookmarksModel, KisDynamicColoringProgramFactoryRegistry::instance());
     editor.exec();
 }
 

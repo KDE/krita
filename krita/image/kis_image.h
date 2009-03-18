@@ -120,6 +120,8 @@ public:
                            const KoColorProfile *profile,
                            KisSelectionSP mask = 0);
 
+    QImage convertToQImage(const QRect& r, const QSize& scaledImageSize, const KoColorProfile *profile);
+
     /**
      * Lock the image to make sure no recompositing-causing signals
      * get emitted while you're messing with the layers. Don't forget

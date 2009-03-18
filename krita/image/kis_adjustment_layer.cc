@@ -56,7 +56,7 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageSP img, const QString &name, KisF
     m_d->filterConfig = kfc;
     setSelection(selection);
 
-    m_d->cachedPaintDevice = new KisPaintDevice(img->colorSpace(), name.toLatin1());
+    m_d->cachedPaintDevice = new KisPaintDevice(img->colorSpace());
     m_d->showSelection = true;
     Q_ASSERT(m_d->cachedPaintDevice);
 }
@@ -125,7 +125,7 @@ KoDocumentSectionModel::PropertyList KisAdjustmentLayer::sectionModelProperties(
 
 void KisAdjustmentLayer::resetCache()
 {
-    m_d->cachedPaintDevice = new KisPaintDevice(image()->colorSpace(), name().toLatin1());
+    m_d->cachedPaintDevice = new KisPaintDevice(image()->colorSpace());
 }
 
 KisFilterConfiguration * KisAdjustmentLayer::filter() const

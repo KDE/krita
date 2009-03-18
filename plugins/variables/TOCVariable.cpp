@@ -119,7 +119,7 @@ void TOCSource::buildFromDocument(const QTextDocument *source, QTextCursor *targ
     // Ok, look in the document, find the title... :)
     KoTextDocumentLayout *docLayout = dynamic_cast<KoTextDocumentLayout*>(source->documentLayout());
     if (!docLayout) {
-        kDebug() << "No layout for the document ??? I cancel.";
+        kWarning(31000) << "No layout for the document ??? I cancel.";
         return;
     }
     block = source->begin();
@@ -239,7 +239,7 @@ void TOCVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument
     Q_UNUSED(pd);
     Q_UNUSED(format);
 
-    kDebug() << "Painting a TOCVariable with rect=" << rect;
+    //kDebug(31000) << "Painting a TOCVariable with rect=" << rect;
     painter.translate(QPointF(-2, -2) + rect.topLeft());
     indexBody.drawContents(&painter);
     painter.translate(QPointF(2, 2) - rect.topLeft());

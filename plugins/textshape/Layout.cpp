@@ -1331,7 +1331,7 @@ qreal Layout::inlineCharHeight(const QTextFragment &fragment)
 
 qreal Layout::findFootnote(const QTextLine &line, int *oldLength)
 {
-    if (m_parent->inlineObjectTextManager() == 0)
+    if (m_parent->inlineTextObjectManager() == 0)
         return 0;
     Q_ASSERT(oldLength);
     QString text = m_block.text();
@@ -1341,7 +1341,7 @@ qreal Layout::findFootnote(const QTextLine &line, int *oldLength)
         QTextCursor c1(m_block);
         c1.setPosition(m_block.position() + pos);
         c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
-        KoInlineNote *note = dynamic_cast<KoInlineNote*>(m_parent->inlineObjectTextManager()->inlineTextObject(c1));
+        KoInlineNote *note = dynamic_cast<KoInlineNote*>(m_parent->inlineTextObjectManager()->inlineTextObject(c1));
         if (note && note->type() == KoInlineNote::Footnote) {
             QTextCursor cursor(m_textShape->footnoteDocument());
 #if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)

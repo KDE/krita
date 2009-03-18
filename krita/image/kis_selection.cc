@@ -55,7 +55,7 @@ struct KisSelection::Private {
 };
 
 KisSelection::KisSelection(KisPaintDeviceSP dev)
-    : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), QString("selection for ") + dev->objectName())
+    : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8())
     , m_d(new Private)
 {
     Q_ASSERT(dev);
@@ -71,7 +71,7 @@ KisSelection::KisSelection(KisPaintDeviceSP dev)
 
 
 KisSelection::KisSelection(KisPaintDeviceSP parent, KisMaskSP mask)
-    : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), "selection from mask")
+    : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8())
     , m_d(new Private)
 {
     m_d->parentPaintDevice = parent;
@@ -95,7 +95,7 @@ KisSelection::KisSelection(KisPaintDeviceSP parent, KisMaskSP mask)
 }
 
 KisSelection::KisSelection()
-    : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), "anonymous selection")
+    : KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8())
     , m_d(new Private)
 {
     m_d->parentPaintDevice = 0;

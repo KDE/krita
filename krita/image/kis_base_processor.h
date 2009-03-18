@@ -55,6 +55,7 @@ class KisConfigWidget;
  */
 class KRITAIMAGE_EXPORT KisBaseProcessor : public KisShared
 {
+    friend class KisBaseProcessorConfigurationFactory;
 
 public:
 
@@ -72,7 +73,7 @@ public:
      *
      * @return the default configuration of this widget
      */
-    virtual KisFilterConfiguration * defaultConfiguration(const KisPaintDeviceSP) const;
+    KisFilterConfiguration * defaultConfiguration(const KisPaintDeviceSP) const;
 
     /**
      * @return the bookmark manager for this processor
@@ -148,10 +149,7 @@ protected:
 
 protected:
 
-    void setBookmarkManager(KisBookmarkedConfigurationManager*);
-
-    /// @return the name of config group in KConfig
-    virtual QString configEntryGroup() const = 0;
+    void init(const QString& configEntryGroup);
 
     /// @return the default configuration as defined by whoever wrote the plugin
     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;

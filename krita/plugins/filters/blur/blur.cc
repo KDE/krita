@@ -32,10 +32,8 @@ BlurFilterPlugin::BlurFilterPlugin(QObject *parent, const QStringList &)
 {
     setComponentData(BlurFilterPluginFactory::componentData());
 
-    if (parent->inherits("KisFilterRegistry")) {
-        KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(KisFilterSP(new KisBlurFilter()));
-    }
+    KisFilterRegistry::instance()->add(new KisBlurFilter());
+
 }
 
 BlurFilterPlugin::~BlurFilterPlugin()

@@ -18,6 +18,8 @@
 
 #include "generator/kis_generator_registry.h"
 
+#include <math.h>
+
 #include <QString>
 
 #include <kaction.h>
@@ -25,13 +27,12 @@
 #include <kparts/plugin.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
-
 #include <kparts/componentfactory.h>
-#include <math.h>
+
+#include <KoPluginLoader.h>
 
 #include "kis_debug.h"
 #include "kis_types.h"
-
 #include "kis_paint_device.h"
 #include "generator/kis_generator.h"
 
@@ -41,26 +42,6 @@ KisGeneratorRegistry::KisGeneratorRegistry()
 {
     Q_ASSERT(KisGeneratorRegistry::m_singleton == 0);
     KisGeneratorRegistry::m_singleton = this;
-
-    KService::List  offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/Generator"),
-                             QString::fromLatin1("(Type == 'Service') and "
-                                                 "([X-Krita-Version] == 4)"));
-
-    KService::List::ConstIterator iter;
-    dbgPlugins << "generators found: " << offers.count();
-    for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
-        KService::Ptr service = *iter;
-        int errCode = 0;
-        KParts::Plugin* plugin =
-            KService::createInstance<KParts::Plugin> (service, this, QStringList(), &errCode);
-        if (!plugin) {
-            dbgPlugins << "found plugin" << service->property("Name").toString() << "," << errCode << "";
-            if (errCode == KLibLoader::ErrNoLibrary) {
-                warnPlugins << " Error loading plugin was : ErrNoLibrary" << KLibLoader::self()->lastErrorMessage();
-            }
-        }
-
-    }
 }
 
 KisGeneratorRegistry::~KisGeneratorRegistry()
@@ -71,6 +52,9 @@ KisGeneratorRegistry* KisGeneratorRegistry::instance()
 {
     if (KisGeneratorRegistry::m_singleton == 0) {
         KisGeneratorRegistry::m_singleton = new KisGeneratorRegistry();
+        Q_CHECK_PTR( KisGeneratorRegistry::m_singleton );
+        KoPluginLoader::instance()->load( "Krita/Generator", "Type == 'Service' and ([X-Krita-Version] == 5)" );
+
     }
     return KisGeneratorRegistry::m_singleton;
 }

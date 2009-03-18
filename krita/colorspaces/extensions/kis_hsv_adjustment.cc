@@ -109,6 +109,12 @@ public:
         }
     }
 
+    /**
+    * name - "h", "s" or "v"
+    * (h)ue in range <-180.0, 180.0>
+    * (s)aturation in range <-100.0, 100.0>
+    * (v)alue in range <-100.0, 100.0>
+    */
     virtual void setParameter(const QString& name, const QVariant& parameter) {
         if( name == "h") {
             m_adj_h = parameter.toDouble();

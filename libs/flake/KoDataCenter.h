@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
-   Copyright (C) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
    Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
    Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
@@ -25,6 +25,7 @@
 #define KODATACENTER_H
 
 #include <QtGlobal>
+#include "flake_export.h"
 
 class KoShapeSavingContext;
 class KoStore;
@@ -36,7 +37,7 @@ class KoXmlWriter;
  * This abstraction is done so that shapes can get access to any possible type of data center.
  * The KoShapeControillerBase has a method that returns a map of data centers
  */
-class KoDataCenter
+class FLAKE_EXPORT KoDataCenter
 {
 public:
     KoDataCenter() { }
@@ -44,11 +45,13 @@ public:
 
     /**
      * Load any remaining binary blobs needed
+     * @returns false if an error occured, which typically cancels the load.
      */
     virtual bool completeLoading(KoStore *store) = 0;
 
     /**
      * Save any remaining binary blobs
+     * @returns false if an error occured, which typically cancels the save.
      */
     virtual bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context) = 0;
 };

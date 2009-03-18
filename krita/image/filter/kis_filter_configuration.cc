@@ -136,6 +136,11 @@ qint32 KisFilterConfiguration::version() const
     return d->version;
 }
 
+void KisFilterConfiguration::setVersion(qint32 version)
+{
+    d->version = version;
+}
+
 bool KisFilterConfiguration::isCompatible(const KisPaintDeviceSP) const
 {
     return true;
@@ -149,32 +154,4 @@ QBitArray KisFilterConfiguration::channelFlags() const
 void KisFilterConfiguration::setChannelFlags(QBitArray channelFlags)
 {
     d->channelFlags = channelFlags;
-}
-
-struct KisFilterConfigurationFactory::Private {
-    QString name;
-    qint32 version;
-};
-
-KisFilterConfigurationFactory::KisFilterConfigurationFactory(const QString & name, qint32 version) : d(new Private)
-{
-    d->name = name;
-    d->version = version;
-}
-
-KisFilterConfigurationFactory::~KisFilterConfigurationFactory()
-{
-    delete d;
-}
-
-KisSerializableConfiguration* KisFilterConfigurationFactory::createDefault()
-{
-    return new KisFilterConfiguration(d->name, d->version);
-}
-
-KisSerializableConfiguration* KisFilterConfigurationFactory::create(const QDomElement& e)
-{
-    KisFilterConfiguration* fc = new KisFilterConfiguration(d->name, d->version);
-    fc->fromXML(e);
-    return fc;
 }

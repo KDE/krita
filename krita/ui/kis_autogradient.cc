@@ -50,9 +50,7 @@ KisAutogradient::KisAutogradient(QWidget *parent, const char* name, const QStrin
     connect(leftColorButton, SIGNAL(changed(const QColor&)), SLOT(slotChangedLeftColor(const QColor&)));
     connect(rightColorButton, SIGNAL(changed(const QColor&)), SLOT(slotChangedRightColor(const QColor&)));
 
-//     intNumInputLeftOpacity->setRange( 0, 100, false);
     connect(intNumInputLeftOpacity, SIGNAL(valueChanged(int)), SLOT(slotChangedLeftOpacity(int)));
-//     intNumInputRightOpacity->setRange( 0, 100, false);
     connect(intNumInputRightOpacity, SIGNAL(valueChanged(int)), SLOT(slotChangedRightOpacity(int)));
 
 }
@@ -138,7 +136,6 @@ void KisAutogradient::slotChangedRightColor(const QColor& color)
 
 void KisAutogradient::slotChangedLeftOpacity(int value)
 {
-    dbgUI << value;
     KoGradientSegment* segment = gradientSlider->selectedSegment();
     if (segment) {
         KoColor c(segment->startColor().toQColor(), segment->startColor().colorSpace());
@@ -152,7 +149,6 @@ void KisAutogradient::slotChangedLeftOpacity(int value)
 
 void KisAutogradient::slotChangedRightOpacity(int value)
 {
-    dbgUI << value;
     KoGradientSegment* segment = gradientSlider->selectedSegment();
     if (segment) {
         KoColor c(segment->endColor().toQColor(), segment->endColor().colorSpace());

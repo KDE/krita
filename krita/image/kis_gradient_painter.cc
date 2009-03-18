@@ -567,7 +567,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
         totalPixels *= 2;
     }
 
-    KisPaintDeviceSP dev = KisPaintDeviceSP(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "temporary device for gradient"));
+    KisPaintDeviceSP dev = KisPaintDeviceSP(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8()));
 
     int pixelsProcessed = 0;
 
@@ -656,7 +656,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                                                 d = ((quint16) * (pixel + pos) * opacity - (quint16) * (thisPixel + pos) * thisPixelOpacity) / 65535.0;
                                             } else if (channel->channelValueType() == KoChannelInfo::UINT32) {
                                                 d = ((quint32) * (pixel + pos) * opacity - (quint32) * (thisPixel + pos) * thisPixelOpacity) / 65535.0;
-#if 0 // Check how to use the half datatype                                                    
+#if 0 // Check how to use the half datatype
                                             } else if (channel->channelValueType() == KoChannelInfo::FLOAT16) {
                                                 d = ((quint8) * (pixel + pos) * opacity - (quint8) * (thisPixel + pos) * thisPixelOpacity) / 65535.0;
 #endif

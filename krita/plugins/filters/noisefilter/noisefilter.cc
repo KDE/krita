@@ -57,12 +57,8 @@ KritaNoiseFilter::KritaNoiseFilter(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
     setComponentData(KritaNoiseFilterFactory::componentData());
+    KisFilterRegistry::instance()->add(new KisFilterNoise());
 
-
-    if (parent->inherits("KisFilterRegistry")) {
-        KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(KisFilterSP(new KisFilterNoise()));
-    }
 }
 
 KritaNoiseFilter::~KritaNoiseFilter()

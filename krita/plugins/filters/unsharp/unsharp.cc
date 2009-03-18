@@ -32,11 +32,8 @@ UnsharpPlugin::UnsharpPlugin(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
     setComponentData(UnsharpPluginFactory::componentData());
+    KisFilterRegistry::instance()->add(new KisUnsharpFilter());
 
-    if (parent->inherits("KisFilterRegistry")) {
-        KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(KisFilterSP(new KisUnsharpFilter()));
-    }
 }
 
 UnsharpPlugin::~UnsharpPlugin()

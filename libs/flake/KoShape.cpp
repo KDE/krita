@@ -853,9 +853,11 @@ bool KoShape::loadOdfAttributes(const KoXmlElement & element, KoShapeLoadingCont
 
     if (attributes & OdfZIndex) {
         if (element.hasAttributeNS(KoXmlNS::draw, "z-index")) {
-            context.addShapeZIndex(this, element.attributeNS(KoXmlNS::draw, "z-index").toInt());
+            setZIndex(element.attributeNS(KoXmlNS::draw, "z-index").toInt());
         }
-        setZIndex(context.zIndex());
+        else {
+            setZIndex(context.zIndex());
+        }
     }
 
     if (attributes & OdfName) {

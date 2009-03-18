@@ -31,11 +31,8 @@ K_EXPORT_COMPONENT_FACTORY(kritaembossfilter, KisEmbossFilterPluginFactory("krit
 KisEmbossFilterPlugin::KisEmbossFilterPlugin(QObject *parent, const QStringList &) : KParts::Plugin(parent)
 {
     setComponentData(KisEmbossFilterPluginFactory::componentData());
+    KisFilterRegistry::instance()->add(new KisEmbossFilter());
 
-    if (parent->inherits("KisFilterRegistry")) {
-        KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(KisFilterSP(new KisEmbossFilter()));
-    }
 }
 
 KisEmbossFilterPlugin::~KisEmbossFilterPlugin()

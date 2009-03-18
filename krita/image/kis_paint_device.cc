@@ -450,7 +450,7 @@ void KisPaintDevice::convertFromQImage(const QImage& image, const QString &srcPr
         KoColorSpaceRegistry::instance()
             ->colorSpace("RGBA", srcProfileName)
             ->convertPixelsTo(img.bits(), dstData, colorSpace(), img.width() * img.height());
-            
+
         writeBytes(dstData, offsetX, offsetY, img.width(), img.height());
         delete[] dstData;
     }
@@ -498,7 +498,7 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint3
     //      This copies potentially a lot of data.
     readBytes(data, x1, y1, w, h);
     QImage image = colorSpace()->convertToQImage(data, w, h, dstProfile,
-                   KoColorConversionTransformation::IntentPerceptual);
+                                                 KoColorConversionTransformation::IntentPerceptual);
     delete[] data;
 
     return image;
@@ -506,7 +506,7 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint3
 
 KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h) const
 {
-    KisPaintDeviceSP thumbnail = KisPaintDeviceSP(new KisPaintDevice(colorSpace(), "thumbnail"));
+    KisPaintDeviceSP thumbnail = new KisPaintDevice(colorSpace());
     thumbnail->clear();
 
     int srcw, srch;

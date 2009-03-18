@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007,2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
@@ -28,9 +28,11 @@
 #include <KoTextShapeData.h>
 #include <KoXmlNS.h>
 #include <KoStyleManager.h>
+#include <KoInlineTextObjectManager.h>
 
 TextShapeFactory::TextShapeFactory(QObject *parent)
-        : KoShapeFactory(parent, TextShape_SHAPEID, i18n("Text"))
+        : KoShapeFactory(parent, TextShape_SHAPEID, i18n("Text")),
+        m_inlineTextObjectManager(0)
 {
     setToolTip(i18n("A shape that shows text"));
     setOdfElementNames(KoXmlNS::draw, QStringList("text-box"));
@@ -48,19 +50,15 @@ TextShapeFactory::TextShapeFactory(QObject *parent)
 
 KoShape *TextShapeFactory::createDefaultShape() const
 {
-    TextShape *text = new TextShape();
+    TextShape *text = new TextShape(m_inlineTextObjectManager);
     return text;
 }
 
 KoShape *TextShapeFactory::createShape(const KoProperties * params) const
 {
-    TextShape *shape = new TextShape();
+    TextShape *shape = new TextShape(m_inlineTextObjectManager);
     shape->setSize(QSizeF(300, 200));
     shape->setDemoText(params->boolProperty("demo"));
-    shape->addConnectionPoint(QPointF(0, 0));
-    shape->addConnectionPoint(QPointF(150, 100));
-    shape->addConnectionPoint(QPointF(0, 200));
-    shape->addConnectionPoint(QPointF(300, 200));
     return shape;
 }
 
@@ -72,7 +70,8 @@ bool TextShapeFactory::supports(const KoXmlElement & e) const
 void TextShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter *>  & dataCenterMap)
 {
     dataCenterMap["StyleManager"] = new KoStyleManager();
+    m_inlineTextObjectManager = new KoInlineTextObjectManager(this);
+    dataCenterMap["InlineTextObjectManager"] = m_inlineTextObjectManager;
 }
-
 
 #include "TextShapeFactory.moc"

@@ -78,11 +78,10 @@ KoID KisFilter::categoryOther()
 }
 
 
-KisFilter::KisFilter(const KoID& id, const KoID & category, const QString & entry)
-        : KisBaseProcessor(id, category, entry)
+KisFilter::KisFilter(const KoID& _id, const KoID & category, const QString & entry)
+        : KisBaseProcessor(_id, category, entry)
 {
-    setBookmarkManager(new KisBookmarkedConfigurationManager(configEntryGroup(),
-                       new KisFilterConfigurationFactory(id.id(), 1)));
+    init(id() + "_filter_bookmarks");
 }
 
 KisFilter::~KisFilter()
@@ -110,10 +109,6 @@ void KisFilter::process(KisPaintDeviceSP device, const QRect& rect, const KisFil
     process(info, info, rect.size(), config, 0);
 }
 
-QString KisFilter::configEntryGroup() const
-{
-    return id() + "_filter_bookmarks";
-}
 
 bool KisFilter::workWith(const KoColorSpace* cs) const
 {

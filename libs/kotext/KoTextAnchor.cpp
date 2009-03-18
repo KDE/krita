@@ -64,12 +64,16 @@ public:
     void setContainer(KoShapeContainer *container)
     {
         if (container == 0) {
+            if (model)
+                model->removeAnchor(parent);
             model = 0;
             shape->setParent(0);
             return;
         }
         KoTextShapeContainerModel *theModel = dynamic_cast<KoTextShapeContainerModel*>(container->model());
         if (theModel != model) {
+            if (model)
+                model->removeAnchor(parent);
             if (shape->parent() != container) {
                 if (shape->parent())
                     shape->parent()->removeChild(shape);

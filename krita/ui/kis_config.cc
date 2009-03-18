@@ -34,8 +34,8 @@
 namespace
 {
 const double IMG_DEFAULT_RESOLUTION = 100.0; // dpi
-const qint32 IMG_DEFAULT_WIDTH = 2048;
-const qint32 IMG_DEFAULT_HEIGHT = 2048;
+const qint32 IMG_DEFAULT_WIDTH = 1600;
+const qint32 IMG_DEFAULT_HEIGHT = 1200;
 const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_OUTLINE;
 const qint32 DEFAULT_MAX_TILES_MEM = 5000;
 const qint32 DEFAULT_SWAPPINESS = 100;
@@ -438,17 +438,7 @@ void KisConfig::setUseRegionOfInterestInProjection(bool use)
     m_cfg.writeEntry("use_region_of_interest", use);
 }
 
-bool KisConfig::updateAllOfQPainterCanvas()
-{
-    return m_cfg.readEntry("update_all_of_qpainter_canvas", false);
-}
-
-void KisConfig::setUpdateAllOfQpainterCanvas(bool all)
-{
-    m_cfg.writeEntry("update_all_of_qpainter_canvas", all);
-}
-
-bool KisConfig::useNearestNeigbour()
+bool KisConfig::useNearestNeighbour()
 {
     return m_cfg.readEntry("fast_zoom", false);
 }
@@ -467,26 +457,6 @@ bool KisConfig::useSampling()
 void KisConfig::setSampling(bool sampling)
 {
     m_cfg.writeEntry("sampled_scaling", sampling);
-}
-
-bool KisConfig::useDeferredSmoothing()
-{
-    return m_cfg.readEntry("deferred_smoothing", false);
-}
-
-void KisConfig::setDeferredSmoothing(bool deferredSmoothing)
-{
-    m_cfg.writeEntry("deferred_smoothing", deferredSmoothing);
-}
-
-bool KisConfig::useQtSmoothScaling()
-{
-    return m_cfg.readEntry("qt_smooth_scaling", false);
-}
-
-void KisConfig::setUseQtSmoothScaling(bool useQtSmoothScaling)
-{
-    m_cfg.writeEntry("qt_smooth_scaling", useQtSmoothScaling);
 }
 
 bool KisConfig::threadColorSpaceConversion()
@@ -538,4 +508,16 @@ bool KisConfig::showRootLayer()
 void KisConfig::setShowRootLayer(bool showRootLayer)
 {
     m_cfg.writeEntry("ShowRootLayer", showRootLayer);
+}
+
+
+quint32 KisConfig::maxCachedImageSize()
+{
+    // Let's say, 5 megapixels
+    return m_cfg.readEntry( "maxCachedImageSize", 5 );
+}
+
+void KisConfig::setMaxCachedImageSize( quint32 size )
+{
+    m_cfg.writeEntry( "maxCachedImageSize", size );
 }

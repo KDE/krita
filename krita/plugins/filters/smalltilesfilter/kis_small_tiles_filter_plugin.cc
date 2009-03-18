@@ -33,11 +33,7 @@ KisSmallTilesFilterPlugin::KisSmallTilesFilterPlugin(QObject *parent, const QStr
         : KParts::Plugin(parent)
 {
     setComponentData(KisSmallTilesFilterPluginFactory::componentData());
-
-    if (parent->inherits("KisFilterRegistry")) {
-        KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(KisFilterSP(new KisSmallTilesFilter()));
-    }
+    KisFilterRegistry::instance()->add(new KisSmallTilesFilter());
 }
 
 KisSmallTilesFilterPlugin::~KisSmallTilesFilterPlugin()

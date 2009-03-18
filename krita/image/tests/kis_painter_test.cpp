@@ -90,9 +90,9 @@ void KisPainterTest::testPaintDeviceBltSelection(const KoColorSpace * cs)
     if (cs->id() == QString("RGBAF16HALF")) return;
     if (cs->id() == QString("RGBAF32")) return;
 
-    KisPaintDeviceSP dst = new KisPaintDevice(cs, "dst");
+    KisPaintDeviceSP dst = new KisPaintDevice(cs);
 
-    KisPaintDeviceSP src = new KisPaintDevice(cs, "src");
+    KisPaintDeviceSP src = new KisPaintDevice(cs);
     KoColor c(Qt::red, cs);
     c.setOpacity(128);
     src->fill(0, 0, 20, 20, c.data());
@@ -119,7 +119,7 @@ void KisPainterTest::testPaintDeviceBltSelection(const KoColorSpace * cs)
 
     QCOMPARE(dst->exactBounds(), QRect(10, 10, 10, 10));
 
-    KisPaintDeviceSP dst2 = new KisPaintDevice(cs, "dst2");
+    KisPaintDeviceSP dst2 = new KisPaintDevice(cs);
     KisPainter painter2(dst2);
     painter2.setSelection(selection);
 
@@ -144,8 +144,8 @@ void KisPainterTest::testPaintDeviceBltSelectionIrregular(const KoColorSpace * c
     if (cs->id() == QString("RGBAF16HALF")) return;
     if (cs->id() == QString("RGBAF32")) return;
 
-    KisPaintDeviceSP dst = new KisPaintDevice(cs, "dst");
-    KisPaintDeviceSP src = new KisPaintDevice(cs, "src");
+    KisPaintDeviceSP dst = new KisPaintDevice(cs);
+    KisPaintDeviceSP src = new KisPaintDevice(cs);
     KisFillPainter gc(src);
     gc.fillRect(0, 0, 20, 20, KoColor(Qt::red, cs));
     gc.end();
@@ -194,8 +194,8 @@ void KisPainterTest::testPaintDeviceBltSelectionIrregular()
 
 void KisPainterTest::testPaintDeviceBltSelectionInverted(const KoColorSpace * cs)
 {
-    KisPaintDeviceSP dst = new KisPaintDevice(cs, "dst");
-    KisPaintDeviceSP src = new KisPaintDevice(cs, "src");
+    KisPaintDeviceSP dst = new KisPaintDevice(cs);
+    KisPaintDeviceSP src = new KisPaintDevice(cs);
     KisFillPainter gc(src);
     gc.fillRect(0, 0, 30, 30, KoColor(Qt::red, cs));
     gc.end();
@@ -277,7 +277,7 @@ Test with non-square selection
 void KisPainterTest::testSelectionBltSelectionIrregular()
 {
 
-    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(), "temporary");
+    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
 
     KisPixelSelectionSP src = new KisPixelSelection();
     src->select(QRect(0, 0, 20, 20));
@@ -310,8 +310,8 @@ void KisPainterTest::testSelectionBltSelectionIrregular()
 
 void KisPainterTest::testSimpleAlphaCopy()
 {
-    KisPaintDeviceSP src = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), "src");
-    KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), "dst");
+    KisPaintDeviceSP src = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+    KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
     quint8 p = 128;
     src->fill(0, 0, 100, 100, &p);
     QVERIFY(src->exactBounds() == QRect(0, 0, 100, 100));
@@ -325,8 +325,8 @@ void KisPainterTest::testSimpleAlphaCopy()
 
 void KisPainterTest::checkPerformance()
 {
-    KisPaintDeviceSP src = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), "src");
-    KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8(), "dst");
+    KisPaintDeviceSP src = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+    KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
     quint8 p = 128;
     src->fill(0, 0, 10000, 5000, &p);
     KisSelectionSP sel = new KisSelection();

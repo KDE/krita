@@ -44,13 +44,9 @@ K_EXPORT_COMPONENT_FACTORY(kritafastcolortransferfilter, KritaFastColorTransferF
 FastColorTransferPlugin::FastColorTransferPlugin(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
-    dbgPlugins << "Load FastColorTransferPlugin";
     setComponentData(KritaFastColorTransferFactory::componentData());
+    KisFilterRegistry::instance()->add(new KisFilterFastColorTransfer());
 
-    if (parent->inherits("KisFilterRegistry")) {
-        KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(KisFilterSP(new KisFilterFastColorTransfer()));
-    }
 }
 
 FastColorTransferPlugin::~FastColorTransferPlugin()

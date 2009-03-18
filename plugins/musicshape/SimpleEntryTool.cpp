@@ -312,7 +312,7 @@ void SimpleEntryTool::activate (bool temporary)
 
 void SimpleEntryTool::deactivate()
 {
-    kDebug()<<"SimpleEntryTool::deactivate";
+    //kDebug()<<"SimpleEntryTool::deactivate";
     m_musicshape = 0;
 }
 
@@ -408,18 +408,18 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
 
     p.setY(p.y() + sheet->staffSystem(m_musicshape->firstSystem())->top());
 
-    kDebug() << "pos:" << p;
+    //kDebug() << "pos:" << p;
     // find closest staff system
     StaffSystem* system = 0;
     for (int i = m_musicshape->firstSystem(); i <= m_musicshape->lastSystem() && i < sheet->staffSystemCount(); i++) {
         StaffSystem* ss = sheet->staffSystem(i);
-        kDebug() << "system" << i << "has top" << ss->top();
+        //kDebug() << "system" << i << "has top" << ss->top();
         if (ss->top() > p.y()) break;
         system = ss;
     }
 
     if(system == 0) {
-        kDebug() << "no staff system found";
+        //kDebug() << "no staff system found";
         return;
     }
 
@@ -654,7 +654,7 @@ int SimpleEntryTool::voice()
 
 void SimpleEntryTool::setSelection(int firstBar, int lastBar, Staff* startStaff, Staff* endStaff)
 {
-    kDebug() << "firstBar:" << firstBar << "lastBar:" << lastBar;
+    //kDebug() << "firstBar:" << firstBar << "lastBar:" << lastBar;
     m_selectionStart = firstBar;
     m_selectionEnd = lastBar;
     m_selectionStaffStart = startStaff;
@@ -697,7 +697,7 @@ void SimpleEntryTool::importSheet()
     KoXmlDocument doc;
     KoXml::setDocument(doc, &f, true);
     KoXmlElement e = doc.documentElement();
-    kDebug() << e.localName() << e.nodeName();
+    //kDebug() << e.localName() << e.nodeName();
     Sheet* sheet = MusicXmlReader(0).loadSheet(doc.documentElement());
     if (sheet) {
         m_musicshape->setSheet(sheet, 0);

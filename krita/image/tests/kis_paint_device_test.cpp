@@ -42,7 +42,7 @@ void KisPaintDeviceTest::testCreation()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     QVERIFY(dev->objectName() == QString());
 
-    dev = new KisPaintDevice(cs, "test");
+    dev = new KisPaintDevice(cs);
     QVERIFY(dev->objectName() == "test");
     QVERIFY(*dev->colorSpace() == *cs);
     QVERIFY(dev->x() == 0);
@@ -54,7 +54,7 @@ void KisPaintDeviceTest::testCreation()
     KisImageSP image = new KisImage(0, 1000, 1000, cs, "merge test");
     KisPaintLayerSP layer = new KisPaintLayer(image, "bla", 125);
 
-    dev = new KisPaintDevice(layer.data(), cs, "test2");
+    dev = new KisPaintDevice(layer.data(), cs);
     QVERIFY(dev->objectName() == QString("test2"));
     QVERIFY(*dev->colorSpace() == *cs);
     QVERIFY(dev->x() == 0);
@@ -66,7 +66,7 @@ void KisPaintDeviceTest::testCreation()
     // Let the layer go out of scope and see what happens
     {
         KisPaintLayerSP l2 = new KisPaintLayer(image, "blabla", 250);
-        dev = new KisPaintDevice(l2.data(), cs, "test3");
+        dev = new KisPaintDevice(l2.data(), cs);
     }
 
 }

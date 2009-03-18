@@ -153,7 +153,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
     if (srcPoint.y() < 0)
         srcPoint.setY(0);
     if (!(m_srcdev && !(*m_srcdev->colorSpace() == *source()->colorSpace()))) {
-        m_srcdev = new KisPaintDevice(source()->colorSpace(), "duplicate source dev");
+        m_srcdev = new KisPaintDevice(source()->colorSpace());
     }
     Q_CHECK_PTR(m_srcdev);
 

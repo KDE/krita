@@ -52,7 +52,7 @@ KoShape* KoCollectionShapeFactory::createDefaultShape( KoShapeControllerBase * s
 
     shapes << m_shape;
 
-    kDebug() << m_shape->shapeId();
+    //kDebug() << m_shape->shapeId();
 
     KoDrag drag;
     KoShapeOdfSaveHelper saveHelper(shapes);

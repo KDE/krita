@@ -42,8 +42,8 @@ public:
     using KisPaintOpSettings::toXML;
 
     KisDynamicOpSettings(KisDynamicOpSettingsWidget* widget,
-                         KisBookmarkedConfigurationManager* shapeConfigurationManager,
-                         KisBookmarkedConfigurationManager* coloringConfigurationManager);
+                         KisBookmarkedConfigurationsModel* shapeConfigurationManager,
+                         KisBookmarkedConfigurationsModel* coloringConfigurationManager);
     virtual ~KisDynamicOpSettings();
 
     bool paintIncremental();

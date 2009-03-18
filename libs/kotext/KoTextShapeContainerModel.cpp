@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007,2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,10 +33,17 @@ class Relation
 {
 public:
     Relation(KoShape *shape) : child(shape), anchor(0), nested(false) {}
+    ~Relation();
     KoShape *child;
     KoTextAnchor *anchor;
     bool nested;
 };
+
+
+Relation::~Relation()
+{
+    delete anchor;
+}
 
 class KoTextShapeContainerModel::Private
 {
@@ -66,8 +73,8 @@ void KoTextShapeContainerModel::add(KoShape *child)
 void KoTextShapeContainerModel::remove(KoShape *child)
 {
     Relation *relation = d->children.value(child);
-    delete relation;
     d->children.remove(child);
+    delete relation;
 }
 
 void KoTextShapeContainerModel::setClipping(const KoShape *child, bool clipping)

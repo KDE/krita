@@ -180,7 +180,7 @@ bool KoShapeSavingContext::saveDataCenter(KoStore *store, KoXmlWriter* manifestW
     bool ok = true;
     foreach(KoDataCenter *dataCenter, m_dataCenter) {
         ok = ok && dataCenter->completeSaving(store, manifestWriter, this);
-        kDebug() << "ok" << ok;
+        //kDebug() << "ok" << ok;
     }
     for ( QMap<QString, QImage>::iterator it(m_images.begin()); it != m_images.end(); ++it ) {
         if (store->open(it.key())) {

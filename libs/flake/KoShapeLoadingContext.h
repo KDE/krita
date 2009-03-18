@@ -101,17 +101,6 @@ public:
     void setZIndex(int index);
 
     /**
-     * Add the z-index
-     *
-     * Used for document which use the z-index instead of the order of the shapes
-     * in the document.
-     */
-    void addShapeZIndex(KoShape * shape, int index);
-
-    /// Get the save z-indices
-    const QMap<KoShape*, int> & shapeZIndices();
-
-    /**
      * Add shared data
      *
      * This can be use to pass data between shapes on loading. E.g. The decoded text styles

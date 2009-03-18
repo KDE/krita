@@ -70,7 +70,7 @@ KisPaintDeviceSP KisPattern::image(const KoColorSpace * colorSpace)
         return (*it);
 
     // If not, create one
-    KisPaintDeviceSP layer = KisPaintDeviceSP(new KisPaintDevice(colorSpace, "pattern"));
+    KisPaintDeviceSP layer = KisPaintDeviceSP(new KisPaintDevice(colorSpace));
 
     Q_CHECK_PTR(layer);
 

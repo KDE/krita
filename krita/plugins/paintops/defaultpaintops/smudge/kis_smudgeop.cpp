@@ -76,8 +76,8 @@ KisSmudgeOp::KisSmudgeOp(const KisSmudgeOpSettings *settings, KisPainter *painte
     else {
         m_source = painter->device();
     }
-    m_srcdev = new KisPaintDevice(m_source->colorSpace(), "duplicate source dev");
-    m_target = new KisPaintDevice(m_source->colorSpace(), "duplicate target dev");
+    m_srcdev = new KisPaintDevice(m_source->colorSpace());
+    m_target = new KisPaintDevice(m_source->colorSpace());
 
 }
 
@@ -166,7 +166,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     copyPainter.bitBlt(0, 0, COMPOSITE_OVER, device, opacity, pt.x(), pt.y(), sw, sh);
     copyPainter.end();
 
-    m_target = new KisPaintDevice(device->colorSpace(), "duplicate target dev");
+    m_target = new KisPaintDevice(device->colorSpace());
 
     // Looks hacky, but we lost bltMask, or the ability to easily convert alpha8 paintdev to selection?
     KisSelectionSP dabAsSelection = new KisSelection();

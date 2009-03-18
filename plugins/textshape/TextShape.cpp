@@ -73,7 +73,7 @@ struct Finalizer {
 #include <kdebug.h>
 
 
-TextShape::TextShape()
+TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
         : KoShapeContainer(new KoTextShapeContainerModel())
         , KoFrameShape(KoXmlNS::draw, "text-box")
         , m_footnotes(0)
@@ -87,7 +87,7 @@ TextShape::TextShape()
     lay->addShape(this);
     m_textShapeData->document()->setDocumentLayout(lay);
 
-    lay->setInlineObjectTextManager(new KoInlineTextObjectManager(lay));
+    KoTextDocument(m_textShapeData->document()).setInlineTextObjectManager(inlineTextObjectManager);
     setCollisionDetection(true);
 
     lay->connect(m_textShapeData, SIGNAL(relayout()), SLOT(scheduleLayout()));
@@ -120,7 +120,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
 {
     if (background()) {
         QPainterPath p;
-        p.addRect(converter.documentToView(QRectF(QPointF(0.0, 0.0), size())));
+        p.addRect(converter.documentToView(QRectF(QPointF(), size())));
         background()->paint(painter, p);
     }
     QTextDocument *doc = m_textShapeData->document();
@@ -140,7 +140,9 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     context.textContext = pc;
     context.viewConverter = &converter;
 
-    painter.setClipRect(QRectF(QPointF(0, 0), size()), Qt::IntersectClip);
+    QRectF rect(0, 0, size().width(), size().height());
+    rect.adjust(-5, 0, 5, 0);
+    painter.setClipRect(rect, Qt::IntersectClip);
     painter.save();
     painter.translate(0, -m_textShapeData->documentOffset());
     lay->draw(&painter, context);
@@ -305,6 +307,8 @@ void TextShape::init(const QMap<QString, KoDataCenter *> & dataCenterMap)
 {
     KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(dataCenterMap["StyleManager"]);
     KoTextDocument(m_textShapeData->document()).setStyleManager(styleManager);
+    KoInlineTextObjectManager *tom = dynamic_cast<KoInlineTextObjectManager *>(dataCenterMap["InlineTextObjectManager"]);
+    KoTextDocument(m_textShapeData->document()).setInlineTextObjectManager(tom);
 }
 
 QTextDocument *TextShape::footnoteDocument()

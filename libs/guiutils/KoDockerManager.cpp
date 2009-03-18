@@ -84,7 +84,7 @@ void KoDockerManager::removeUnusedOptionWidgets()
         j.next();
         d->toolDockerVisibillityMap[j.key()] = j.value()->isVisible();
         if (!d->activeToolDockerMap.contains(j.key())) {
-            // kDebug() << "removing" << j.key() << ((void*) j.value());
+            // kDebug(30004) << "removing" << j.key() << ((void*) j.value());
             j.value()->toggleViewAction()->setVisible(false);
             d->view->removeDockWidget(j.value());
             d->toolDockerMap.remove(j.key());
@@ -111,7 +111,7 @@ void KoDockerManager::newOptionWidgets(const QMap<QString, QWidget *> & optionWi
     while (i.hasNext()) {
         i.next();
         if (i.value()->objectName().isEmpty()) {
-            kDebug() << "tooldocker widget have no name " << i.key() << " " << i.value()->objectName();
+            kDebug(30004) << "tooldocker widget have no name " << i.key() << " " << i.value()->objectName();
             Q_ASSERT(!(i.value()->objectName().isEmpty()));
             continue; // skip this docker in release build when assert don't crash
         }

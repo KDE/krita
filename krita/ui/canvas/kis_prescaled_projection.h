@@ -151,19 +151,6 @@ public slots:
     void setImageSize(qint32 w, qint32 h);
 
     /**
-     * Called whenever the zoom level changes or another chunk of the
-     * image becomes visible. The currently visible area of the image
-     * is complete scaled again.
-     */
-    void preScale();
-
-    /**
-     * preScale and draw onto the scaled projection the specified rect,
-     * in canvas view pixels.
-     */
-    void preScale(const QRect & rc);
-
-    /**
      * Resize the prescaled image. The size is given in canvas
      * widget pixels.
      */
@@ -187,6 +174,19 @@ public slots:
     void showCurrentMask(bool showMask);
 
 
+    /**
+     * Called whenever the zoom level changes or another chunk of the
+     * image becomes visible. The currently visible area of the image
+     * is complete scaled again.
+     */
+    void preScale();
+
+    /**
+     * preScale and draw onto the scaled projection the specified rect,
+     * in canvas view pixels.
+     */
+    void preScale(const QRect & rc);
+
 
 signals:
 
@@ -199,21 +199,12 @@ signals:
      */
     void sigPrescaledProjectionUpdated(const QRect & rc);
 
-private slots:
-
-    /**
-     * The timer has fired, and we're going to smoothly scale the
-     * entire rect that's been aggregated, in the main thread (for
-     * now).
-     */
-    void slotDoSmoothScale();
-
 private:
+
 
     friend class KisPrescaledProjectionTest;
 
     void setSettingsForTests(bool updateAllQPainterCanvas,
-                             bool useDeferredSmoothing,
                              bool useNearestNeighbour,
                              bool useQtScaling,
                              bool useSampling,
@@ -231,10 +222,9 @@ private:
      *
      * @param rc The desired rect in KisImage pixels
      * @param gc The painter we draw on
-     * @param isDeferredAction we're in the smoothing cycle, so go
      * directly to the blitz code
      */
-    void drawScaledImage(const QRect & rc,  QPainter & gc, bool isDeferredAction = false);
+    void drawScaledImage(const QRect & rc,  QPainter & gc);
 
     /**
      * Return the aligned rect in image pixels.

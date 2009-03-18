@@ -56,12 +56,7 @@ KritaColorGenerator::KritaColorGenerator(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
     setComponentData(KritaColorGeneratorFactory::componentData());
-    if (parent->inherits("KisGeneratorRegistry")) {
-        KisGeneratorRegistry * manager = dynamic_cast<KisGeneratorRegistry *>(parent);
-        if (manager) {
-            manager->add(new KisColorGenerator());
-        }
-    }
+    KisGeneratorRegistry::instance()->add(new KisColorGenerator());
 }
 
 KritaColorGenerator::~KritaColorGenerator()

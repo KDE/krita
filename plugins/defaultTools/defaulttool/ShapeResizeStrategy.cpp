@@ -31,6 +31,7 @@
 #include <KoTool.h>
 
 #include <klocale.h>
+#include <limits>
 
 ShapeResizeStrategy::ShapeResizeStrategy( KoTool *tool, KoCanvasBase *canvas,
         const QPointF &clicked, KoFlake::SelectionHandle direction )
@@ -104,7 +105,11 @@ void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
         keepAspect = keepAspect || shape->keepAspectRatio();
 
     qreal startWidth = m_initialSize.width();
+    if (startWidth < std::numeric_limits<qreal>::epsilon())
+        startWidth = std::numeric_limits<qreal>::epsilon();
     qreal startHeight = m_initialSize.height();
+    if (startHeight < std::numeric_limits<qreal>::epsilon())
+        startHeight = std::numeric_limits<qreal>::epsilon();
 
     QPointF distance = m_unwindMatrix.map(newPos) - m_unwindMatrix.map( m_start );
 

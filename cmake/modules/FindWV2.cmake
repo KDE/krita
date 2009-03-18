@@ -41,3 +41,5 @@ ELSE (WV2_LIBRARIES AND WV2_INCLUDE_DIR)
 
 ENDIF (WV2_LIBRARIES AND WV2_INCLUDE_DIR)
 
+MACRO_LOG_FEATURE(WV2_FOUND "wv2 libraries" "Library that interprets MS Office files. You need this for reading word/powerpoint files" "http://sf.net/projects/wvware/")
+

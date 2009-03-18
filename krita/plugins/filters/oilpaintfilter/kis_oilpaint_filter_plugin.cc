@@ -31,11 +31,7 @@ K_EXPORT_COMPONENT_FACTORY(kritaoilpaintfilter, KisOilPaintFilterPluginFactory("
 KisOilPaintFilterPlugin::KisOilPaintFilterPlugin(QObject *parent, const QStringList &) : KParts::Plugin(parent)
 {
     setComponentData(KisOilPaintFilterPluginFactory::componentData());
-
-    if (parent->inherits("KisFilterRegistry")) {
-        KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(KisFilterSP(new KisOilPaintFilter()));
-    }
+    KisFilterRegistry::instance()->add(new KisOilPaintFilter());
 
 }
 

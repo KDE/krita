@@ -30,8 +30,8 @@
 #include "kis_dynamicop.h"
 #include "kis_dynamicop_settings_widget.h"
 
-KisDynamicOpFactory::KisDynamicOpFactory(KisBookmarkedConfigurationManager* shapeBookmarksManager,
-                                         KisBookmarkedConfigurationManager* coloringBookmarksManager)
+KisDynamicOpFactory::KisDynamicOpFactory(KisBookmarkedConfigurationsModel* shapeBookmarksManager,
+                                         KisBookmarkedConfigurationsModel* coloringBookmarksManager)
         : m_widget( new KisDynamicOpSettingsWidget )
         , m_shapeBookmarksManager(shapeBookmarksManager)
         , m_coloringBookmarksManager(coloringBookmarksManager)

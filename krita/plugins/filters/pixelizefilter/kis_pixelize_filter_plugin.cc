@@ -36,11 +36,7 @@ KisPixelizeFilterPlugin::KisPixelizeFilterPlugin(QObject *parent, const QStringL
         : KParts::Plugin(parent)
 {
     setComponentData(KisPixelizeFilterPluginFactory::componentData());
-
-    if (parent->inherits("KisFilterRegistry")) {
-        KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(KisFilterSP(new KisPixelizeFilter()));
-    }
+    KisFilterRegistry::instance()->add(new KisPixelizeFilter());
 }
 
 KisPixelizeFilterPlugin::~KisPixelizeFilterPlugin()

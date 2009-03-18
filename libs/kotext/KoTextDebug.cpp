@@ -119,7 +119,7 @@ QString KoTextDebug::inlineObjectAttributes(const QTextCharFormat &textFormat)
 
     if (textFormat.objectType() == QTextFormat::UserObject + 1) {
         KoTextDocumentLayout *lay = document ? dynamic_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
-        KoInlineTextObjectManager *inlineObjectManager = lay ? lay->inlineObjectTextManager() : 0;
+        KoInlineTextObjectManager *inlineObjectManager = lay ? lay->inlineTextObjectManager() : 0;
         KoInlineObject *inlineObject = inlineObjectManager->inlineTextObject(textFormat);
         if (KoBookmark *bookmark = dynamic_cast<KoBookmark *>(inlineObject)) {
             if (bookmark->type() == KoBookmark::SinglePosition) {
@@ -622,7 +622,7 @@ void KoTextDebug::dumpFragment(const QTextFragment &fragment)
 
     KoTextDocumentLayout *lay = document ? dynamic_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
     QTextCharFormat charFormat = fragment.charFormat();
-    KoInlineObject *inlineObject = lay ? lay->inlineObjectTextManager()->inlineTextObject(charFormat) : 0;
+    KoInlineObject *inlineObject = lay ? lay->inlineTextObjectManager()->inlineTextObject(charFormat) : 0;
     if (inlineObject) {
         QString cf = inlineObjectAttributes(charFormat);
 

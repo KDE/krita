@@ -20,7 +20,6 @@
 
 #include "KoXmlWriter.h"
 
-#include <kglobal.h> // kMin
 #include <kdebug.h>
 #include <QIODevice>
 #include <QByteArray>

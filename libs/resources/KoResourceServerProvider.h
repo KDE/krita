@@ -42,6 +42,7 @@ private:
     QStringList getFileNames( const QString & extensions);
 
     KoResourceServerBase * m_server;
+    QString m_extensions;
     QStringList m_fileNames;
 
 };
@@ -68,7 +69,7 @@ private:
     KoResourceServer<KoPattern>* m_patternServer;
     KoResourceServer<KoAbstractGradient>* m_gradientServer;
     KoResourceServer<KoColorSet>* m_paletteServer;
-    
+
 private slots:
 
     void paletteThreadDone();
@@ -76,7 +77,7 @@ private slots:
     void gradientThreadDone();
 
 private:
-    
+
     QThread * paletteThread;
     QThread * gradientThread;
     QThread * patternThread;

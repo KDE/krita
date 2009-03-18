@@ -2,7 +2,7 @@
 
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
-   Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2008-2009 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
 
    This library is free software; you can redistribute it and/or

@@ -51,7 +51,6 @@ public:
     QMap<QString, KoShapeLayer*> layers;
     QMap<QString, KoShape*> drawIds;
     QMap<QString, KoSharedLoadingData*> sharedData;
-    QMap<KoShape*, int> zIndices;
     int zIndex;
     QMap<QString, KoDataCenter *> dataCenterMap;
 };
@@ -104,16 +103,6 @@ int KoShapeLoadingContext::zIndex()
 void KoShapeLoadingContext::setZIndex(int index)
 {
     d->zIndex = index;
-}
-
-void KoShapeLoadingContext::addShapeZIndex(KoShape * shape, int index)
-{
-    d->zIndices.insert(shape, index);
-}
-
-const QMap<KoShape*, int> & KoShapeLoadingContext::shapeZIndices()
-{
-    return d->zIndices;
 }
 
 void KoShapeLoadingContext::addSharedData(const QString & id, KoSharedLoadingData * data)

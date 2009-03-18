@@ -69,7 +69,7 @@ void KisFilterJobTest::testInWeaver()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     QImage qimg(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
-    KisPaintDeviceSP dev = new KisPaintDevice(cs, "filter test");
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->convertFromQImage(qimg, "", 0, 0);
 
     KisFilterJobFactory factory(f, kfc);

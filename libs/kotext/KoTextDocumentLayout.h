@@ -66,9 +66,10 @@ public:
     /**
      * Register the manager for inline objects which is needed to notify variables of layout changes.
      */
-    void setInlineObjectTextManager(KoInlineTextObjectManager *iom);
+    void setInlineTextObjectManager(KoInlineTextObjectManager *manager);
+
     /// return the currently set manager, or 0 if none is set.
-    KoInlineTextObjectManager *inlineObjectTextManager();
+    KoInlineTextObjectManager *inlineTextObjectManager();
 
     /// Returns the bounding rectangle of block.
     virtual QRectF blockBoundingRect(const QTextBlock & block) const;

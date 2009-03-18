@@ -52,11 +52,7 @@ KritaExample::KritaExample(QObject *parent, const QStringList &)
 {
     setComponentData(KritaExampleFactory::componentData());
 
-    if (parent->inherits("KisFilterRegistry")) {
-        KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        if (manager)
-            manager->add(KisFilterSP(new KisFilterInvert()));
-    }
+    KisFilterRegistry::instance()->add(KisFilterSP(new KisFilterInvert()));
 }
 
 KritaExample::~KritaExample()

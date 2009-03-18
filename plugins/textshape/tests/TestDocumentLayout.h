@@ -95,7 +95,9 @@ private:
 class MockTextShape : public TextShape
 {
 public:
-    MockTextShape() {
+    MockTextShape()
+        : TextShape(0)
+    {
         layout = dynamic_cast<KoTextDocumentLayout*>(textShapeData()->document()->documentLayout());
     }
     void paint(QPainter &painter, const KoViewConverter &converter) {

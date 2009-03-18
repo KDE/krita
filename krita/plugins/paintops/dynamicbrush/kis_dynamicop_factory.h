@@ -38,8 +38,8 @@ class KisDynamicOpFactory : public KisPaintOpFactory
 {
 public:
 
-    KisDynamicOpFactory(KisBookmarkedConfigurationManager* shapeBookmarksManager,
-                        KisBookmarkedConfigurationManager* coloringBookmarksManager);
+    KisDynamicOpFactory(KisBookmarkedConfigurationsModel* shapeBookmarksManager,
+                        KisBookmarkedConfigurationsModel* coloringBookmarksManager);
 
     virtual ~KisDynamicOpFactory();
 
@@ -61,20 +61,20 @@ public:
 
     virtual KisPaintOpSettingsSP settings(KisImageSP image);
 
-    KisBookmarkedConfigurationManager* shapeBookmarksManager()
+    KisBookmarkedConfigurationsModel* shapeBookmarksManager()
     {
         return m_shapeBookmarksManager;
     }
 
-    KisBookmarkedConfigurationManager* coloringBookmarksManager()
+    KisBookmarkedConfigurationsModel* coloringBookmarksManager()
     {
         return m_coloringBookmarksManager;
     }
 
 private:
     KisDynamicOpSettingsWidget* const m_widget;
-    KisBookmarkedConfigurationManager* m_shapeBookmarksManager;
-    KisBookmarkedConfigurationManager* m_coloringBookmarksManager;
+    KisBookmarkedConfigurationsModel* m_shapeBookmarksManager;
+    KisBookmarkedConfigurationsModel* m_coloringBookmarksManager;
 };
 
 

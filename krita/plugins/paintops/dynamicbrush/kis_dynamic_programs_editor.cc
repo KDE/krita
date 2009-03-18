@@ -28,8 +28,8 @@
 #include "kis_dynamic_coloring_program_factory_registry.h"
 #include "kis_dynamic_shape_program_factory_registry.h"
 
-KisDynamicProgramsEditor::KisDynamicProgramsEditor(QWidget* parent, KisBookmarkedConfigurationManager* bookmarksManager, const KisDynamicProgramFactoryRegistry* factoryRegistry) : KDialog(parent), m_dynamicProgramsEditor(0), m_currentEditor(0), m_frameVBoxLayout(0), m_bookmarksManager(bookmarksManager),
-        m_bookmarksModel(new KisBookmarkedConfigurationsModel(bookmarksManager)), m_factoryRegistry(factoryRegistry)
+KisDynamicProgramsEditor::KisDynamicProgramsEditor(QWidget* parent, KisBookmarkedConfigurationsModel* bookmarksManager, const KisDynamicProgramFactoryRegistry* factoryRegistry) : KDialog(parent), m_dynamicProgramsEditor(0), m_currentEditor(0), m_frameVBoxLayout(0), m_bookmarksManager(bookmarksManager->bookmarkedConfigurationManager()),
+        m_bookmarksModel(bookmarksManager), m_factoryRegistry(factoryRegistry)
 {
     setCaption(i18n("Edit dynamic programs"));
     setButtons(KDialog::Close);
@@ -41,6 +41,7 @@ KisDynamicProgramsEditor::KisDynamicProgramsEditor(QWidget* parent, KisBookmarke
     m_frameVBoxLayout->setMargin(0);
     connect(m_dynamicProgramsEditor->comboBoxPrograms, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(setCurrentProgram(const QString&)));
     connect(m_dynamicProgramsEditor->pushButtonAdd, SIGNAL(pressed()), SLOT(addProgram()));
+    connect(m_dynamicProgramsEditor->pushButtonDelete, SIGNAL(pressed()), SLOT(deleteProgram()));
     m_dynamicProgramsEditor->comboBoxPrograms->setModel(m_bookmarksModel);
     m_dynamicProgramsEditor->comboBoxProgramsType->setIDList(m_factoryRegistry->programTypes());
 }
@@ -56,10 +57,14 @@ void KisDynamicProgramsEditor::setCurrentProgram(const QString& text)
     dbgPlugins << "program changed to" << text;
     delete m_currentEditor;
     m_currentProgram = static_cast<KisDynamicProgram*>(m_bookmarksManager->load(text));
-    Q_ASSERT(m_currentProgram);
-    m_currentEditor = m_currentProgram->createEditor(m_dynamicProgramsEditor->frame);
-    m_frameVBoxLayout->addWidget(m_currentEditor);
-    connect(m_currentProgram, SIGNAL(programChanged()), SLOT(saveCurrentProgram()));
+    if(m_currentProgram)
+    {
+        m_currentEditor = m_currentProgram->createEditor(m_dynamicProgramsEditor->frame);
+        m_frameVBoxLayout->addWidget(m_currentEditor);
+        connect(m_currentProgram, SIGNAL(programChanged()), SLOT(saveCurrentProgram()));
+    } else {
+        m_currentEditor = 0;
+    }
 }
 
 void KisDynamicProgramsEditor::addProgram()
@@ -71,6 +76,11 @@ void KisDynamicProgramsEditor::addProgram()
     KisDynamicProgram* program = factory->program(m_bookmarksManager->uniqueName(ki18n("New program %1")));
     Q_ASSERT(program);
     m_bookmarksModel->saveConfiguration(program->name(), program);
+}
+
+void KisDynamicProgramsEditor::deleteProgram()
+{
+    m_bookmarksModel->deleteIndex(m_bookmarksModel->index(m_dynamicProgramsEditor->comboBoxPrograms->currentIndex(),0));
 }
 
 void KisDynamicProgramsEditor::saveCurrentProgram()

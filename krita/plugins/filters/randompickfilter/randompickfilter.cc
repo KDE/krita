@@ -58,12 +58,7 @@ KritaRandomPickFilter::KritaRandomPickFilter(QObject *parent, const QStringList 
         : KParts::Plugin(parent)
 {
     setComponentData(KritaRandomPickFilterFactory::componentData());
-
-
-    if (parent->inherits("KisFilterRegistry")) {
-        KisFilterRegistry * manager = dynamic_cast<KisFilterRegistry *>(parent);
-        manager->add(KisFilterSP(new KisFilterRandomPick()));
-    }
+    KisFilterRegistry::instance()->add(new KisFilterRandomPick());
 }
 
 KritaRandomPickFilter::~KritaRandomPickFilter()

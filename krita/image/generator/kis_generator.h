@@ -43,7 +43,7 @@ class KisProcessingInformation;
  */
 class KRITAIMAGE_EXPORT KisGenerator : public KisBaseProcessor
 {
-
+    friend class KisGeneratorConfigurationFactory;
 public:
 
     KisGenerator(const KoID& id, const KoID & category, const QString & entry);

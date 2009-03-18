@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,8 +22,9 @@
 #include "KoInlineObject.h"
 #include "KoBookmarkManager.h"
 #include "KoVariableManager.h"
-
 #include "kotext_export.h"
+
+#include <KoDataCenter.h>
 
 // Qt + kde
 #include <QHash>
@@ -40,7 +41,7 @@ class QAction;
  * KoTextDocumentLayout for that specific textDocument, your inline text object will get painted
  * properly.
  */
-class KOTEXT_EXPORT KoInlineTextObjectManager : public QObject
+class KOTEXT_EXPORT KoInlineTextObjectManager : public QObject , public KoDataCenter
 {
     Q_OBJECT
 // TODO, when to delete the inlineObject s
@@ -87,6 +88,9 @@ public:
      *      deleted
      */
     bool removeInlineObject(QTextCursor &cursor);
+
+    /// remove an inline object from this manager.
+    void removeInlineObject(KoInlineObject *object);
 
     /**
      * Set a property that may have changed which will be forwarded to all registered textObjects.
@@ -148,6 +152,11 @@ private:
         InlineInstanceId = 577297549 // If you change this, don't forget to change KoCharacterStyle.h
     };
 
+    /// reimplemented from KoDataCenter
+    virtual bool completeLoading(KoStore*) {return true;}
+    /// reimplemented from KoDataCenter
+    virtual bool completeSaving(KoStore *, KoXmlWriter *, KoShapeSavingContext *) {return true;}
+
     QHash<int, KoInlineObject*> m_objects;
     QList<KoInlineObject*> m_listeners; // holds objects also in m_objects, but which want propertyChanges
     int m_lastObjectId;
@@ -157,4 +166,5 @@ private:
     KoBookmarkManager m_bookmarkManager;
 };
 
+Q_DECLARE_METATYPE(KoInlineTextObjectManager*)
 #endif

@@ -100,18 +100,8 @@ public:
      */
     void setChannelFlags(QBitArray channelFlags);
 
-private:
-    struct Private;
-    Private* const d;
-};
-
-class KRITAIMAGE_EXPORT KisFilterConfigurationFactory : public KisSerializableConfigurationFactory
-{
-public:
-    KisFilterConfigurationFactory(const QString & name, qint32 version);
-    virtual ~KisFilterConfigurationFactory();
-    virtual KisSerializableConfiguration* createDefault();
-    virtual KisSerializableConfiguration* create(const QDomElement& e);
+protected:
+    void setVersion(qint32 version);
 private:
     struct Private;
     Private* const d;

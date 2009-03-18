@@ -54,8 +54,7 @@ public:
     virtual bool load() = 0;
 
     /**
-     * Save this resource asynchronously.  The signal saveComplete is emitted when
-     * the resource has been saved.
+     * Save this resource.
      */
     virtual bool save() = 0;
 

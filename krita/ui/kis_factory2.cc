@@ -40,6 +40,9 @@
 #include <KoShapeRegistry.h>
 
 #include "kis_aboutdata.h"
+#include "filter/kis_filter_registry.h"
+#include "generator/kis_generator_registry.h"
+#include "kis_paintop_registry.h"
 
 #include "flake/kis_shape_selection.h"
 #include "kis_doc2.h"
@@ -99,6 +102,10 @@ const KComponentData &KisFactory2::componentData()
 
         KoShapeRegistry* r = KoShapeRegistry::instance();
         r->add(new KisShapeSelectionFactory(r));
+
+        KisFilterRegistry::instance();
+        KisGeneratorRegistry::instance();
+        KisPaintOpRegistry::instance();
 
         // Load the krita-specific tools
         KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),

@@ -66,7 +66,7 @@ KisWdgGenerator::KisWdgGenerator(QWidget * parent)
         : QWidget(parent)
         , d(new Private())
 {
-    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(0), "tmp");
+    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(0));
     init(dev);
 }
 

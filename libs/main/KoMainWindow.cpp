@@ -464,6 +464,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc)
         d->m_rootViews.append(view);
         view->setPartManager(d->m_manager);
         view->show();
+        view->setFocus();
         // The addShell has been done already if using openUrl
         if (!d->m_rootDoc->shells().contains(this))
             d->m_rootDoc->addShell(this);

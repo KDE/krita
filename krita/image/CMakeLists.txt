@@ -45,7 +45,6 @@ endif(USE_OLD_TILESYSTEM)
 include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
                      ${CMAKE_SOURCE_DIR}/krita/image/metadata
                      ${KOMAIN_INCLUDES}
-                     ${EXIV2_INCLUDE_DIR}
 )
 
 set(kritaimage_LIB_SRCS
@@ -176,8 +175,8 @@ set(kritaimage_LIB_SRCS
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} ${KDE4_KDE3SUPPORT_LIBS} koguiutils ${KDE4_THREADWEAVER_LIBRARIES} ${EXIV2_LIBRARIES} )
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES koguiutils ${KDE4_KPARTS_LIBS} ${QT_QT3SUPPORT_LIBRARY} ${EXIV2_LIBRARIES})
+target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} ${KDE4_KDE3SUPPORT_LIBS} koguiutils ${KDE4_THREADWEAVER_LIBRARIES} )
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES koguiutils ${KDE4_KPARTS_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
 
 if(OPENEXR_FOUND)
   target_link_libraries(kritaimage  ${OPENEXR_LIBRARIES})
@@ -205,6 +204,7 @@ install( FILES
 install( FILES 
     kis_base_node.h
     kis_base_processor.h
+    kis_config_widget.h
     kis_convolution_kernel.h
     kis_convolution_painter.h
     kis_debug.h
@@ -222,10 +222,11 @@ install( FILES
     kis_paint_device.h
     kis_properties_configuration.h
     kis_processing_information.h
+    kis_random_accessor.h
     kis_iterators_pixel.h
+    kis_transform_worker.h
     kis_serializable_configuration.h
     kis_shared.h
-    kis_shared_data.h
     kis_shared_data.h
     kis_shared_ptr.h
     kis_shared_ptr_vector.h

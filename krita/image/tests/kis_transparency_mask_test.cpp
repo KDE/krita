@@ -28,7 +28,7 @@
 KisPaintDeviceSP createDevice()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisPaintDeviceSP dev = new KisPaintDevice(cs, "bla");
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
     KisFillPainter gc(dev);
     KoColor c(Qt::red, dev->colorSpace());
     gc.fillRect(0, 0, 100, 100, c);

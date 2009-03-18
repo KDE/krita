@@ -409,7 +409,7 @@ void KisSelectionManager::copy()
 
         QRect r = (selection) ? selection->selectedExactRect() : img->bounds();
 
-        KisPaintDeviceSP clip = new KisPaintDevice(dev->colorSpace(), "clip");
+        KisPaintDeviceSP clip = new KisPaintDevice(dev->colorSpace());
         Q_CHECK_PTR(clip);
 
         const KoColorSpace * cs = clip->colorSpace();

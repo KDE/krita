@@ -183,7 +183,7 @@ KisPaintDeviceSP KisClipboard::clip()
 
         const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(csName, profile);
 
-        m_clip = new KisPaintDevice(cs, "clip");
+        m_clip = new KisPaintDevice(cs);
 
         if (store->hasFile("layerdata")) {
             store->open("layerdata");
@@ -212,7 +212,7 @@ KisPaintDeviceSP KisClipboard::clip()
             profileName = cfg.monitorProfile();
 
         cs = KoColorSpaceRegistry::instance() ->colorSpace("RGBA", profileName);
-        m_clip = new KisPaintDevice(cs, "from paste");
+        m_clip = new KisPaintDevice(cs);
         Q_CHECK_PTR(m_clip);
         m_clip->convertFromQImage(qimg, profileName);
     }
@@ -278,7 +278,7 @@ QSize KisClipboard::clipSize()
 
         const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(csName, profile);
 
-        clip = new KisPaintDevice(cs, "clip");
+        clip = new KisPaintDevice(cs);
 
         if (store->hasFile("layerdata")) {
             store->open("layerdata");

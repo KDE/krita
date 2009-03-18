@@ -26,6 +26,25 @@
 #include "kis_selection.h"
 #include "kis_types.h"
 
+
+class KisBaseProcessorConfigurationFactory : public KisSerializableConfigurationFactory
+{
+public:
+    KisBaseProcessorConfigurationFactory(KisBaseProcessor* _generator) : m_generator(_generator) {}
+    virtual ~KisBaseProcessorConfigurationFactory() {}
+    virtual KisSerializableConfiguration* createDefault() {
+      return m_generator->factoryConfiguration(0);
+    }
+    virtual KisSerializableConfiguration* create(const QDomElement& e)
+    {
+      KisSerializableConfiguration* config = m_generator->factoryConfiguration(0);
+      config->fromXML(e);
+      return config;
+    }
+private:
+    KisBaseProcessor* m_generator;
+};
+
 struct KisBaseProcessor::Private {
     Private()
         : bookmarkManager(0)
@@ -57,6 +76,11 @@ KisBaseProcessor::KisBaseProcessor(const KoID& id, const KoID & category, const 
     d->id = id;
     d->category = category;
     d->entry = entry;
+}
+
+void KisBaseProcessor::init(const QString& configEntryGroup)
+{
+    d->bookmarkManager = new KisBookmarkedConfigurationManager(configEntryGroup, new KisBaseProcessorConfigurationFactory(this));
 }
 
 KisBaseProcessor::~KisBaseProcessor()
@@ -95,12 +119,6 @@ KisBookmarkedConfigurationManager* KisBaseProcessor::bookmarkManager()
 const KisBookmarkedConfigurationManager* KisBaseProcessor::bookmarkManager() const
 {
     return d->bookmarkManager;
-}
-
-void KisBaseProcessor::setBookmarkManager(KisBookmarkedConfigurationManager* bm)
-{
-    delete d->bookmarkManager;
-    d->bookmarkManager = bm;
 }
 
 QString KisBaseProcessor::id() const

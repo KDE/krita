@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
@@ -395,8 +395,8 @@ void KoTextSelectionHandler::insertInlineObject(KoInlineObject *inliner)
     emit startMacro(i18n("Insert"));
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(d->textShapeData->document()->documentLayout());
     Q_ASSERT(layout);
-    Q_ASSERT(layout->inlineObjectTextManager());
-    layout->inlineObjectTextManager()->insertInlineObject(*d->caret, inliner);
+    Q_ASSERT(layout->inlineTextObjectManager());
+    layout->inlineTextObjectManager()->insertInlineObject(*d->caret, inliner);
     emit stopMacro();
 }
 
@@ -493,9 +493,9 @@ bool KoTextSelectionHandler::insertIndexMarker()
     emit startMacro(i18n("Insert Index"));
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(d->textShapeData->document()->documentLayout());
     Q_ASSERT(layout);
-    Q_ASSERT(layout->inlineObjectTextManager());
+    Q_ASSERT(layout->inlineTextObjectManager());
     KoTextLocator *tl = new KoTextLocator();
-    layout->inlineObjectTextManager()->insertInlineObject(*d->caret, tl);
+    layout->inlineTextObjectManager()->insertInlineObject(*d->caret, tl);
     emit stopMacro();
     return true;
 }
@@ -508,7 +508,7 @@ void KoTextSelectionHandler::addBookmark(const QString &name)
 
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(d->textShapeData->document()->documentLayout());
     Q_ASSERT(layout);
-    Q_ASSERT(layout->inlineObjectTextManager());
+    Q_ASSERT(layout->inlineTextObjectManager());
     if (d->caret->hasSelection()) {
         startPos = d->caret->selectionStart();
         endPos = d->caret->selectionEnd();
@@ -518,14 +518,14 @@ void KoTextSelectionHandler::addBookmark(const QString &name)
         KoBookmark *endBookmark = new KoBookmark(name, document);
         bookmark->setType(KoBookmark::StartBookmark);
         endBookmark->setType(KoBookmark::EndBookmark);
-        layout->inlineObjectTextManager()->insertInlineObject(*d->caret, endBookmark);
+        layout->inlineTextObjectManager()->insertInlineObject(*d->caret, endBookmark);
         bookmark->setEndBookmark(endBookmark);
         d->caret->setPosition(startPos);
     } else
         bookmark->setType(KoBookmark::SinglePosition);
     // TODO the macro & undo things
     emit startMacro(i18n("Add Bookmark"));
-    layout->inlineObjectTextManager()->insertInlineObject(*d->caret, bookmark);
+    layout->inlineTextObjectManager()->insertInlineObject(*d->caret, bookmark);
     emit stopMacro();
     if (startPos != -1) {
         // TODO repaint selection properly

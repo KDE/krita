@@ -81,7 +81,7 @@ void KisThreadedApplicatorTest::testApplication()
     TestJobFactory factory;
     TestUtil::TestProgressBar bar;
     KoProgressUpdater updater(&bar);
-    KisPaintDeviceSP test = new KisPaintDevice(colorSpace, "test");
+    KisPaintDeviceSP test = new KisPaintDevice(colorSpace);
 
     quint8 *bytes = test->colorSpace()->allocPixelBuffer(1);
     memset(bytes, 128, test->colorSpace()->pixelSize());

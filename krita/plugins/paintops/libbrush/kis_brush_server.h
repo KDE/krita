@@ -24,13 +24,15 @@
 
 #include <KoResourceServer.h>
 
+#include "krita_export.h"
+
 class KoResource;
 class KisGbrBrush;
 
 /**
  *
  */
-class KisBrushServer : public QObject
+class BRUSH_EXPORT KisBrushServer : public QObject
 {
 
     Q_OBJECT

@@ -43,6 +43,7 @@ private:
 
     KoResourceServerBase * m_server;
     QString m_extensions;
+    QStringList m_fileNames;
 
 };
 

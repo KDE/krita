@@ -65,11 +65,12 @@ KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase * server, co
     , m_server(server)
     , m_extensions( extensions )
 {
+    m_fileNames = getFileNames(m_extensions);
 }
 
 void KoResourceLoaderThread::run()
 {
-    m_server->loadResources(getFileNames( m_extensions ));
+    m_server->loadResources(m_fileNames);
 }
 
 QStringList KoResourceLoaderThread::getFileNames( const QString & extensions)

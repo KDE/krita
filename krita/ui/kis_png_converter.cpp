@@ -901,7 +901,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
         if ((*it) -> type().startsWith(QString("krita_attribute:"))) { //
                                                               // Attribute
 #ifdef __GNUC__                                                 \
-    #warning "it should be possible to save krita_attributes in the "CHUNKs""
+    #warning "it should be possible to save krita_attributes in the \"CHUNKs\""
 #endif
             dbgFile << "cannot save this annotation : " << (*it) -> type();
         } else { // Profile

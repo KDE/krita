@@ -25,8 +25,10 @@
 #include <KoResourceServerAdapter.h>
 
 #include "ui_wdgcustombrush.h"
-#include "kis_types.h"
-#include "kis_brush.h"
+#include <kis_types.h>
+#include <kis_brush.h>
+
+class KisGbrBrush;
 
 class KoResource;
 
@@ -40,15 +42,13 @@ public:
     }
 };
 
-class KisCustomBrush : public KisWdgCustomBrush
+class KisCustomBrushWidget : public KisWdgCustomBrush
 {
     Q_OBJECT
 public:
-    KisCustomBrush(QWidget *parent, const QString& caption, KisImageSP image);
-    virtual ~KisCustomBrush();
-    KisBrush* brush() {
-        return m_brush;
-    };
+    KisCustomBrushWidget(QWidget *parent, const QString& caption, KisImageSP image);
+    virtual ~KisCustomBrushWidget();
+    KisBrushSP brush();
 
     void setImage(KisImageSP image);
 
@@ -63,12 +63,13 @@ private slots:
 signals:
 
     void sigBrushChanged();
-    
+
 private:
     void createBrush();
+
     KisImageSP m_image;
-    KisBrush* m_brush;
-    KoResourceServerAdapter<KisBrush>* m_rServerAdapter;
+    KisBrushSP m_brush;
+    KoResourceServerAdapter<KisGbrBrush>* m_rServerAdapter;
 };
 
 

@@ -15,30 +15,34 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_BRUSH_BASED_PAINTOP_H
-#define KIS_BRUSH_BASED_PAINTOP_H
+#include <QString>
 
-#include "krita_export.h"
-#include "kis_paintop.h"
 #include "kis_brush.h"
 
 /**
- * This is a base class for paintops that use a KisBrush or derived
- * brush to paint with. This is mainly important for the spacing
- * generation.
+ * A brush factory can create a new brush instance based
+ * on a properties object that contains a serialized representation
+ * of the object.
  */
-class PAINTOP_EXPORT KisBrushBasedPaintOp : public KisPaintOp
+class BRUSH_EXPORT KisBrushFactory
 {
 
 public:
 
-    KisBrushBasedPaintOp(KisPainter* painter, KisBrushSP brush = 0);
-    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const;
+    KisBrushFactory() {}
+    virtual ~KisBrushFactory() {}
 
-protected: // XXX: make private!
+    /**
+     * Intializes the factory, for instance by loading the relevant resources.
+     */
+    virtual void init() = 0;
 
-    KisBrushSP m_brush;
+    /**
+     * Create a a new brush from the given data or return an existing KisBrush
+     * object. If this call leads to the creation of a resource, it should be
+     * added to the resource provider, too.
+     */
+    virtual KisBrushSP createBrush( const QString& brushDefinition ) = 0;
 
 };
 
-#endif

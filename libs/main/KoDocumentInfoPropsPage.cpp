@@ -67,7 +67,7 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage(KPropertiesDialog *props,
 #ifdef __GNUC__
 #warning TODO port this to KoStore !!!
 #endif
-    d->m_src = new KTar(d->m_url.path(), "application/x-gzip");
+    d->m_src = new KTar(d->m_url.toLocalFile(), "application/x-gzip");
 
     if (!d->m_src->open(QIODevice::ReadOnly))
         return;

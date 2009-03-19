@@ -52,7 +52,7 @@ public:
     }
 
     virtual QString pixmap() {
-        return "krita-paintbrush.png";
+        return "krita-mixing.png";
     }
 
     virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);

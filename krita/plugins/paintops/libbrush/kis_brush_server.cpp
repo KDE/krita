@@ -27,18 +27,20 @@
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 
-#include "kis_brush.h"
+#include "kis_gbr_brush.h"
 #include "kis_imagepipe_brush.h"
-class BrushResourceServer : public KoResourceServer<KisBrush>
+
+class BrushResourceServer : public KoResourceServer<KisGbrBrush>
 {
 
 public:
 
-    BrushResourceServer() : KoResourceServer<KisBrush>("kis_brushes") {
+    BrushResourceServer() : KoResourceServer<KisGbrBrush>("kis_brushes") {
     }
 
 private:
-    virtual KisBrush* createResource(const QString & filename) {
+
+    virtual KisGbrBrush* createResource(const QString & filename) {
 
         QString fileExtension;
         int index = filename.lastIndexOf('.');
@@ -46,12 +48,14 @@ private:
         if (index != -1)
             fileExtension = filename.mid(index).toLower();
 
-        KisBrush* brush = 0;
+        KisGbrBrush* brush = 0;
 
-        if (fileExtension == ".gbr")
-            brush = new KisBrush(filename);
-        else if (fileExtension == ".gih")
+        if (fileExtension == ".gbr") {
+            brush = new KisGbrBrush(filename);
+        }
+        else if (fileExtension == ".gih") {
             brush = new KisImagePipeBrush(filename);
+        }
 
         return brush;
     }
@@ -84,7 +88,7 @@ KisBrushServer* KisBrushServer::instance()
 }
 
 
-KoResourceServer<KisBrush>* KisBrushServer::brushServer()
+KoResourceServer<KisGbrBrush>* KisBrushServer::brushServer()
 {
     return m_brushServer;
 }

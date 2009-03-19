@@ -36,21 +36,9 @@ struct KisAutoBrush::Private {
     KisMaskGenerator* shape;
 };
 
-QImage KisAutoBrush::createBrushPreview()
-{
-    QImage img((int)(d->shape->width() + 0.5), (int)(d->shape->height() + 0.5), QImage::Format_ARGB32);
-    double centerX = img.width() * 0.5;
-    double centerY = img.height() * 0.5;
-    for (int j = 0; j < d->shape->height(); j++) {
-        for (int i = 0; i < d->shape->width(); i++) {
-            qint8 v = d->shape->valueAt(i - centerX, j - centerY);
-            img.setPixel(i, j, qRgb(v, v, v));
-        }
-    }
-    return img;
-}
-
-KisAutoBrush::KisAutoBrush(KisMaskGenerator* as) : KisBrush(""), d(new Private)
+KisAutoBrush::KisAutoBrush(KisMaskGenerator* as)
+    : KisBrush()
+    , d( new Private )
 {
     d->shape = as;
     QImage img = createBrushPreview();
@@ -64,7 +52,11 @@ KisAutoBrush::~KisAutoBrush()
     delete d;
 }
 
-void KisAutoBrush::generateMask(KisPaintDeviceSP dst, KisBrush::ColoringInformation* src, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX , double subPixelY) const
+void KisAutoBrush::generateMask(KisPaintDeviceSP dst,
+                                KisBrush::ColoringInformation* src,
+                                double scaleX, double scaleY, double angle,
+                                const KisPaintInformation& info,
+                                double subPixelX , double subPixelY) const
 {
     Q_UNUSED(info);
 
@@ -112,3 +104,18 @@ void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
     e.setAttribute("type", "autobrush");
     d->shape->toXML(doc, e);
 }
+
+QImage KisAutoBrush::createBrushPreview()
+{
+    QImage img((int)(d->shape->width() + 0.5), (int)(d->shape->height() + 0.5), QImage::Format_ARGB32);
+    double centerX = img.width() * 0.5;
+    double centerY = img.height() * 0.5;
+    for (int j = 0; j < d->shape->height(); j++) {
+        for (int i = 0; i < d->shape->width(); i++) {
+            qint8 v = d->shape->valueAt(i - centerX, j - centerY);
+            img.setPixel(i, j, qRgb(v, v, v));
+        }
+    }
+    return img;
+}
+

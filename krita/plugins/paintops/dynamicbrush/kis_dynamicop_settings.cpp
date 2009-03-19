@@ -31,6 +31,7 @@
 #include "kis_dynamic_shape_program.h"
 #include "kis_dynamic_coloring_program.h"
 #include "kis_dab_shape.h"
+#include "kis_brush.h"
 #include "kis_bristle_shape.h"
 
 KisDynamicOpSettings::KisDynamicOpSettings(KisDynamicOpSettingsWidget* widget, KisBookmarkedConfigurationsModel* shapeBookmarksManager, KisBookmarkedConfigurationsModel* coloringBookmarksManager)

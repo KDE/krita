@@ -140,7 +140,7 @@ KoStore* KoStore::createStore(QWidget* window, const KUrl& url, Mode mode, const
 {
     const bool automatic = (backend == Auto);
     if (url.isLocalFile())
-        return createStore(url.path(), mode,  appIdentification, backend);
+        return createStore(url.toLocalFile(), mode,  appIdentification, backend);
 
     QString tmpFile;
     if (mode == KoStore::Write) {

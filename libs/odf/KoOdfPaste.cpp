@@ -53,6 +53,7 @@ bool KoOdfPaste::paste(KoOdf::DocumentType documentType, QByteArray &arr)
     QByteArray *bytes = &arr;
     QBuffer buffer(bytes);
     KoStore * store = KoStore::createStore(&buffer, KoStore::Read);
+    store->disallowNameExpansion();
     KoOdfReadStore odfStore(store);
 
     QString errorMessage;

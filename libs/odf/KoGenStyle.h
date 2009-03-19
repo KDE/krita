@@ -66,7 +66,8 @@ public:
         StyleStrokeDash,             ///< draw:stroke-dash as in odf 14.14.7 Stroke Dash (office:styles)
         StyleGradient,               ///< draw:gradient as in odf 14.14.1 Gradient (office:styles)
         StyleGradientLinear,         ///< svg:linearGradient as in odf 14.14.2 SVG Gradients (office:styles)
-        StyleGradientRadial,         ///< svg-radialGradient as in odf 14.14.2 SVG Gradients (office:styles)
+        StyleGradientRadial,         ///< svg:radialGradient as in odf 14.14.2 SVG Gradients (office:styles)
+        StyleGradientConical,        ///< koffice:conicalGradient koffice extension for conical gradients 
         StyleFillImage,              ///< draw:fill-image as in odf 14.14.4 Fill Image (office:styles)
         StyleDrawingPage,            ///< style:drawing-page-properties as in odf 14.13.2 Drawing Page Style
         StyleNumericBoolean,         ///< number:boolean 14.7.6 Boolean Style not used

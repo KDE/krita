@@ -96,7 +96,7 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
 
     if (!painter()->device()) return;
 
-    KisBrush* brush = m_brush;
+    KisBrushSP brush = m_brush;
 
     Q_ASSERT(brush);
     if (!brush) return;

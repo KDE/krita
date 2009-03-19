@@ -15,30 +15,37 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_BRUSH_BASED_PAINTOP_H
-#define KIS_BRUSH_BASED_PAINTOP_H
 
-#include "krita_export.h"
-#include "kis_paintop.h"
-#include "kis_brush.h"
+#ifndef KIS_GENERATOR_REGISTRY_H_
+#define KIS_GENERATOR_REGISTRY_H_
 
-/**
- * This is a base class for paintops that use a KisBrush or derived
- * brush to paint with. This is mainly important for the spacing
- * generation.
- */
-class PAINTOP_EXPORT KisBrushBasedPaintOp : public KisPaintOp
+#include <QObject>
+
+#include "kis_types.h"
+#include "KoGenericRegistry.h"
+
+#include <krita_export.h>
+
+class QString;
+class KisBrushFactory;
+
+class BRUSH_EXPORT KisBrushRegistry : public QObject, public KoGenericRegistry<KisBrushFactory*>
 {
 
+    Q_OBJECT
+
 public:
+    virtual ~KisBrushRegistry();
 
-    KisBrushBasedPaintOp(KisPainter* painter, KisBrushSP brush = 0);
-    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const;
+    static KisBrushRegistry* instance();
 
-protected: // XXX: make private!
+private:
+    KisBrushRegistry();
+    KisBrushRegistry(const KisBrushRegistry&);
+    KisBrushRegistry operator=(const KisBrushRegistry&);
 
-    KisBrushSP m_brush;
-
+private:
+    static KisBrushRegistry *m_singleton;
 };
 
-#endif
+#endif // KIS_GENERATOR_REGISTRY_H_

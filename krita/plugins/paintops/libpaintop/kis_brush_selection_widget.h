@@ -24,8 +24,9 @@
 class QTabWidget;
 class KisAutoBrushWidget;
 class KisBrushChooser;
-class KisTextBrush;
-class KisCustomBrush;
+class KisTextBrushChooser;
+class KisCustomBrushWidget;
+class KisBrush;
 
 class KisView2;
 
@@ -41,7 +42,7 @@ public:
 
     ~KisBrushSelectionWidget();
 
-    KisBrush* brush();
+    KisBrushSP brush();
 
     void setAutoBrush( bool on );
     void setPredefinedBrushes( bool on );
@@ -49,6 +50,8 @@ public:
     void setTextBrush( bool on );
 
     void setImage(KisImageSP image);
+
+    void setCurrentBrush( KisBrushSP brush);
 
 signals:
 
@@ -59,8 +62,8 @@ private:
     QTabWidget * m_brushesTab;
     KisAutoBrushWidget * m_autoBrushWidget;
     KisBrushChooser * m_brushChooser;
-    KisTextBrush * m_textBrushWidget;
-    KisCustomBrush * m_customBrushWidget;
+    KisTextBrushChooser * m_textBrushWidget;
+    KisCustomBrushWidget * m_customBrushWidget;
 
 };
 

@@ -28,3 +28,5 @@ install(TARGETS kritadynamicbrushpaintop DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  kritadynamicbrush.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  dynamicbrush.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install( FILES krita-dynamic.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
+

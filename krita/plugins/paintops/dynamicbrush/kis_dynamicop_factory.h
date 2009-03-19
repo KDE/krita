@@ -54,7 +54,7 @@ public:
     }
 
     virtual QString pixmap() {
-        return "dynamicbrush.png";
+        return "krita-dynamic.png";
     }
 
     virtual KisPaintOpSettingsSP settings(QWidget * parent, const KoInputDevice& inputDevice, KisImageSP image);

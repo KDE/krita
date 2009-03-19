@@ -167,7 +167,7 @@ void KisAutoBrushWidget::linkFadeToggled(bool b)
     }
 }
 
-KisBrush* KisAutoBrushWidget::brush()
+KisBrushSP KisAutoBrushWidget::brush()
 {
     return m_autoBrush;
 }

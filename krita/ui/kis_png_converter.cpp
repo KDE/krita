@@ -756,7 +756,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageSP im
     if (!uri.isLocalFile())
         return KisImageBuilder_RESULT_NOT_LOCAL;
     // Open a QIODevice for writing
-    QFile *fp = new QFile(uri.path());
+    QFile *fp = new QFile(uri.toLocalFile());
     KisImageBuilder_Result result = buildFile(fp, img, device, annotationsStart, annotationsEnd, options, metaData);
     delete fp;
     return result;
@@ -901,7 +901,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
         if ((*it) -> type().startsWith(QString("krita_attribute:"))) { //
                                                               // Attribute
 #ifdef __GNUC__                                                 \
-    #warning "it should be possible to save krita_attributes in the "CHUNKs""
+    #warning "it should be possible to save krita_attributes in the \"CHUNKs\""
 #endif
             dbgFile << "cannot save this annotation : " << (*it) -> type();
         } else { // Profile

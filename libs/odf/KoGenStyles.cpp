@@ -41,6 +41,7 @@ static const struct {
     { KoGenStyle::StyleList, "text:list-style", 0, false  },
     { KoGenStyle::StyleGradientLinear, "svg:linearGradient", 0, true  },
     { KoGenStyle::StyleGradientRadial, "svg:radialGradient", 0, true  },
+    { KoGenStyle::StyleGradientConical, "koffice:conicalGradient", 0, true  },
     { KoGenStyle::StyleStrokeDash, "draw:stroke-dash", 0, true  },
     { KoGenStyle::StyleFillImage, "draw:fill-image", 0, true  },
     { KoGenStyle::StyleHatch, "draw:hatch", "style:graphic-properties", true  },

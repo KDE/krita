@@ -21,7 +21,7 @@
 #include "widgets/kis_item_chooser.h"
 #include <QLabel>
 #include <krita_export.h>
-#include "kis_brush.h"
+#include <kis_brush.h>
 
 class QLabel;
 class QCheckBox;
@@ -29,7 +29,6 @@ class QCheckBox;
 class KisDoubleWidget;
 class KisResourceMediator;
 class KoResource;
-
 
 class PAINTOP_EXPORT KisBrushChooser : public QWidget
 {
@@ -39,7 +38,8 @@ class PAINTOP_EXPORT KisBrushChooser : public QWidget
 public:
     KisBrushChooser(QWidget *parent = 0, const char *name = 0);
     virtual ~KisBrushChooser();
-    KisBrush* brush() {
+
+    KisBrushSP brush() {
         return m_brush;
     };
 
@@ -48,7 +48,7 @@ public:
     }
 
 private slots:
-    
+
     void slotSetItemSpacing(double);
     void slotSetItemUseColorAsMask(bool);
     void slotImportBrush();
@@ -58,14 +58,14 @@ private slots:
 signals:
 
     void sigBrushChanged();
-        
+
 private:
     QLabel* m_lbName;
     QLabel* m_lbSpacing;
     KisDoubleWidget* m_slSpacing;
     QCheckBox* m_chkColorMask;
     KisResourceMediator* m_brushMediator;
-    KisBrush* m_brush;
+    KisBrushSP m_brush;
     KisItemChooser* m_itemChooser;
 
 };

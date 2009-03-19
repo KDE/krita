@@ -16,10 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_text_brush.h"
+#include "kis_text_brush_chooser.h"
 
-#include <QFontMetrics>
-#include <QPainter>
 #include <QSpinBox>
 #include <QCheckBox>
 #include <QLabel>
@@ -28,26 +26,13 @@
 #include <kfontdialog.h>
 #include <klineedit.h>
 
-void KisTextBrushResource::updateBrush()
+KisTextBrushChooser::KisTextBrushChooser(QWidget *parent, const char* name, const QString& caption)
+        : QWidget(parent)
+        , m_textBrush(new KisTextBrush())
 {
-    QFontMetrics metric(m_font);
-    int w = metric.width(m_txt);
-    int h = metric.height();
-    QPixmap px(w, h);
-    QPainter p;
-    p.begin(&px);
-    p.setFont(m_font);
-    p.fillRect(0, 0, w, h, Qt::white);
-    p.setPen(Qt::black);
-    p.drawText(0, metric.ascent(), m_txt);
-    p.end();
-    setImage(px.toImage());
-}
+    setObjectName(name);
+    setupUi(this);
 
-KisTextBrush::KisTextBrush(QWidget *parent, const char* name, const QString& caption)
-        : KisWdgTextBrush(parent, name),
-        m_textBrush(new KisTextBrushResource())
-{
     setWindowTitle(caption);
     connect((QObject*)lineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(rebuildTextBrush()));
     connect((QObject*)bnFont, SIGNAL(clicked()), this, SLOT(getFont()));
@@ -56,17 +41,17 @@ KisTextBrush::KisTextBrush(QWidget *parent, const char* name, const QString& cap
 }
 
 
-void KisTextBrush::getFont()
+void KisTextBrushChooser::getFont()
 {
     KFontDialog::getFont(m_font, false/*, QWidget* parent! */);
     rebuildTextBrush();
 }
 
-void KisTextBrush::rebuildTextBrush()
+void KisTextBrushChooser::rebuildTextBrush()
 {
     lblFont->setText(QString(m_font.family() + ", %1").arg(m_font.pointSize()));
     lblFont->setFont(m_font);
-    KisTextBrushResource* textBrush = dynamic_cast<KisTextBrushResource*>(m_textBrush);
+    KisTextBrush* textBrush = dynamic_cast<KisTextBrush*>(m_textBrush.data());
     textBrush->setFont(m_font);
     textBrush->setText(lineEdit->text());
     textBrush->updateBrush();
@@ -74,4 +59,4 @@ void KisTextBrush::rebuildTextBrush()
     emit sigBrushChanged();
 }
 
-#include "kis_text_brush.moc"
+#include "kis_text_brush_chooser.moc"

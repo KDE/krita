@@ -96,7 +96,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
             if (name.isEmpty())
                 name = url.fileName();
 
-            if (!url.isLocalFile() || QFile::exists(url.path())) {
+            if (!url.isLocalFile() || QFile::exists(url.toLocalFile())) {
                 KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, url);
                 fileList.prepend(fileItem);
                 //center all icons in 64x64 area

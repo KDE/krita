@@ -36,11 +36,13 @@
 #include "widgets/kis_double_widget.h"
 
 #include "kis_global.h"
-#include "kis_brush.h"
+#include "kis_gbr_brush.h"
 
 KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
-        : QWidget(parent, name)
+        : QWidget(parent)
 {
+    setObjectName(name);
+
     m_lbSpacing = new QLabel(i18n("Spacing: "), this);
     m_slSpacing = new KisDoubleWidget(0.0, 10, this, "double_widget");
     m_slSpacing->setTickPosition(QSlider::TicksBelow);
@@ -74,8 +76,8 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 
     connect(m_itemChooser, SIGNAL(importClicked()), this, SLOT(slotImportBrush()));
 
-    KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
-    KoResourceServerAdapter<KisBrush>* rServerAdapter = new KoResourceServerAdapter<KisBrush>(rServer);
+    KoResourceServer<KisGbrBrush>* rServer = KisBrushServer::instance()->brushServer();
+    KoResourceServerAdapter<KisGbrBrush>* rServerAdapter = new KoResourceServerAdapter<KisGbrBrush>(rServer);
 
     m_brushMediator = new KisResourceMediator(m_itemChooser, rServerAdapter, this);
     connect(m_brushMediator, SIGNAL(activatedResource(KoResource*)),
@@ -92,7 +94,7 @@ void KisBrushChooser::slotSetItemSpacing(double spacingValue)
     KoResourceItem *item = static_cast<KoResourceItem *>(m_itemChooser->currentItem());
 
     if (item) {
-        KisBrush *brush = static_cast<KisBrush *>(item->resource());
+        KisGbrBrush *brush = static_cast<KisGbrBrush *>(item->resource());
         brush->setSpacing(spacingValue);
         slotActivatedBrush(brush);
 
@@ -105,7 +107,7 @@ void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
     KoResourceItem *item = static_cast<KoResourceItem *>(m_itemChooser->currentItem());
 
     if (item) {
-        KisBrush *brush = static_cast<KisBrush *>(item->resource());
+        KisGbrBrush* brush = static_cast<KisGbrBrush*>(item->resource());
         brush->setUseColorAsMask(useColorAsMask);
         slotActivatedBrush(brush);
 
@@ -118,7 +120,7 @@ void KisBrushChooser::update(QTableWidgetItem *item)
     KoResourceItem *kisItem = static_cast<KoResourceItem *>(item);
 
     if (kisItem) {
-        KisBrush *brush = static_cast<KisBrush *>(kisItem->resource());
+        KisGbrBrush* brush = static_cast<KisGbrBrush*>(kisItem->resource());
 
         QString text = QString("%1 (%2 x %3)")
                        .arg(brush->name())
@@ -146,7 +148,7 @@ void KisBrushChooser::slotImportBrush()
 
 void KisBrushChooser::slotActivatedBrush(KoResource * resource)
 {
-    KisBrush* brush = dynamic_cast<KisBrush*>(resource);
+    KisGbrBrush* brush = dynamic_cast<KisGbrBrush*>(resource);
     if (brush) {
         m_brush = brush;
     }

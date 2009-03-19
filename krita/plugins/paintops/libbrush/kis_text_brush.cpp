@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,30 +15,27 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_BRUSH_BASED_PAINTOP_H
-#define KIS_BRUSH_BASED_PAINTOP_H
 
-#include "krita_export.h"
-#include "kis_paintop.h"
-#include "kis_brush.h"
+#include "kis_text_brush.h"
 
-/**
- * This is a base class for paintops that use a KisBrush or derived
- * brush to paint with. This is mainly important for the spacing
- * generation.
- */
-class PAINTOP_EXPORT KisBrushBasedPaintOp : public KisPaintOp
+#include <QFontMetrics>
+#include <QPainter>
+#include <QPixmap>
+
+
+void KisTextBrush::updateBrush()
 {
+    QFontMetrics metric(m_font);
+    int w = metric.width(m_txt);
+    int h = metric.height();
+    QPixmap px(w, h);
+    QPainter p;
+    p.begin(&px);
+    p.setFont(m_font);
+    p.fillRect(0, 0, w, h, Qt::black);
+    p.setPen(Qt::white);
+    p.drawText(0, metric.ascent(), m_txt);
+    p.end();
+    setImage(px.toImage());
+}
 
-public:
-
-    KisBrushBasedPaintOp(KisPainter* painter, KisBrushSP brush = 0);
-    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const;
-
-protected: // XXX: make private!
-
-    KisBrushSP m_brush;
-
-};
-
-#endif

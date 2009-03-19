@@ -54,7 +54,7 @@ public:
     /**
      * Needed for KoGenericRegistry::listKeys() on windows
      */
-    virtual QString name() = 0;
+    QString name() const;
 
 private:
     class Private;

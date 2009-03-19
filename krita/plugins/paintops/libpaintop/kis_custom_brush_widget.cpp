@@ -70,7 +70,7 @@ KisCustomBrushWidget::~KisCustomBrushWidget()
 
 KisBrushSP KisCustomBrushWidget::brush() {
     return m_brush;
-};
+}
 
 void KisCustomBrushWidget::showEvent(QShowEvent *)
 {

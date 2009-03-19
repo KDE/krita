@@ -377,9 +377,6 @@ void KisBrush::generateMask(KisPaintDeviceSP dst,
         if (src) src->nextRow();
         hiter.nextRow();
     }
-
-    dst->convertToQImage(0, 0, 0, maskWidth, maskHeight).save( "Test.png" );
-
 }
 
 KisPaintDeviceSP KisBrush::image(const KoColorSpace * colorSpace,

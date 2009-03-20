@@ -256,13 +256,13 @@ void TextShape::saveOdf(KoShapeSavingContext & context) const
 {
     KoXmlWriter & writer = context.xmlWriter();
 
-    QString minHeight = additionalAttribute("fo:min-height");
+    QString textHeight = additionalAttribute("fo:min-height");
+    const_cast<TextShape*>(this)->removeAdditionalAttribute("fo:min-height");
     writer.startElement("draw:frame");
     saveOdfAttributes(context, OdfAllAttributes);
     writer.startElement("draw:text-box");
-    if (! minHeight.isEmpty())
-        writer.addAttribute("fo:min-height", minHeight);
-    const_cast<TextShape*>(this)->removeAdditionalAttribute("fo:min-height");
+    if (! textHeight.isEmpty())
+        writer.addAttribute("fo:min-height", textHeight);
     KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     int index = -1;
     if (lay) {

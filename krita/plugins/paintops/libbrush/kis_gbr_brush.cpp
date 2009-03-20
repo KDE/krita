@@ -530,11 +530,7 @@ bool KisGbrBrush::useColorAsMask() const
     return d->useColorAsMask;
 }
 
-
 QString KisGbrBrush::defaultFileExtension() const
 {
     return QString(".gbr");
 }
-
-
-#include "kis_gbr_brush.moc"

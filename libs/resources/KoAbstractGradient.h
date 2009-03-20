@@ -27,7 +27,6 @@
 
 /// Write API docs here
 class KORESOURCES_EXPORT KoAbstractGradient : public KoResource {
-    Q_OBJECT
 
 public:
     KoAbstractGradient(const QString& filename);

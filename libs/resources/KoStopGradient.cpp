@@ -642,5 +642,3 @@ QString KoStopGradient::defaultFileExtension() const
 {
     return QString(".svg");
 }
-
-#include "KoStopGradient.moc"

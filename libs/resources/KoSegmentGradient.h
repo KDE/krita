@@ -226,8 +226,6 @@ class KORESOURCES_EXPORT KoGradientSegment {
 /// Write API docs here
 class KORESOURCES_EXPORT KoSegmentGradient : public KoAbstractGradient {
 
-    Q_OBJECT
-
 public:
     KoSegmentGradient(const QString& file);
     virtual ~KoSegmentGradient();

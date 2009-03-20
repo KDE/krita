@@ -34,7 +34,6 @@ typedef QPair<qreal, KoColor> KoGradientStop;
  * Resource for colorstop based gradients like Karbon gradients and SVG gradients
  */
 class KORESOURCES_EXPORT KoStopGradient : public KoAbstractGradient {
-    Q_OBJECT
 
 public:
     KoStopGradient(const QString& filename);

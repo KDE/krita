@@ -45,10 +45,6 @@ class KisBoundary;
 class BRUSH_EXPORT KisGbrBrush : public KisBrush
 {
 
-    class ScaledBrush;
-
-    Q_OBJECT
-
 protected:
 
 public:

@@ -20,7 +20,6 @@
 #define KORESOURCE_H
 
 #include <QtGui/QImage>
-#include <QtCore/QObject>
 #include <QtCore/QString>
 #include <koresource_export.h>
 
@@ -33,8 +32,7 @@ class QDomElement;
  *
  * This replaces the KisKrayon facility that used to be present in Krayon.
  */
-class KORESOURCES_EXPORT KoResource : public QObject {
-    Q_OBJECT
+class KORESOURCES_EXPORT KoResource {
 
 public:
 

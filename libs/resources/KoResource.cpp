@@ -90,5 +90,3 @@ QString KoResource::defaultFileExtension() const
     return QString();
 }
 
-#include "KoResource.moc"
-

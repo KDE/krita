@@ -87,5 +87,3 @@ KisPattern* KisPattern::clone() const
     pattern->setName(name());
     return pattern;
 }
-
-#include "kis_pattern.moc"

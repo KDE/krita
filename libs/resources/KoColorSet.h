@@ -45,8 +45,6 @@ struct KoColorSetEntry {
 class KORESOURCES_EXPORT KoColorSet : public KoResource {
     typedef KoResource super;
 
-    Q_OBJECT
-
 public:
     /**
      * Load a color set from a file. This can be a Gimp

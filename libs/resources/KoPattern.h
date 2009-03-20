@@ -23,7 +23,6 @@
 
 /// Write API docs here
 class KORESOURCES_EXPORT KoPattern : public KoResource {
-    Q_OBJECT
 
 public:
 

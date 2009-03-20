@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006, 2008 Casper Boemann <cbr@boemann.dk>
-   Copyright (C) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
@@ -752,6 +752,10 @@ public:
      * @return The value of the attribute if it exists or a null string if not found.
      */
     QString additionalAttribute(const char * name);
+
+    void setAdditionalStyleAttribute(const char * name, const QString & value);
+
+    void removeAdditionalStyleAttribute(const char * name);
 
 protected:
 

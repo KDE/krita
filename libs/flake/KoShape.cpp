@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
-   Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
@@ -139,6 +139,7 @@ public:
     QList<KoShape*> dependees; ///< list of shape dependent on this shape
     KoShapeShadow * shadow; ///< the current shape shadow
     QMap<QByteArray, QString> additionalAttributes;
+    QMap<QByteArray, QString> additionalStyleAttributes;
     QList<KoEventAction *> eventActions; ///< list of event actions the shape has
 };
 
@@ -789,6 +790,11 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
         style.setAutoStyleInStylesDotXml(true);
     }
 
+    QMap<QByteArray, QString>::const_iterator it(d->additionalStyleAttributes.constBegin());
+    for (; it != d->additionalStyleAttributes.constEnd(); ++it) {
+        style.addProperty(it.key(), it.value());
+    }
+
     return context.mainStyles().lookup(style, context.isSet(KoShapeSavingContext::PresentationShape) ? "pr" : "gr");
 }
 
@@ -861,7 +867,6 @@ bool KoShape::loadOdfAttributes(const KoXmlElement & element, KoShapeLoadingCont
     }
 
     if (attributes & OdfName) {
-
         if (element.hasAttributeNS(KoXmlNS::draw, "name")) {
             setName(element.attributeNS(KoXmlNS::draw, "name"));
         }
@@ -1220,3 +1225,14 @@ QString KoShape::additionalAttribute(const char * name)
 {
     return d->additionalAttributes.value(name);
 }
+
+void KoShape::setAdditionalStyleAttribute(const char * name, const QString & value)
+{
+    d->additionalStyleAttributes.insert(name, value);
+}
+
+void KoShape::removeAdditionalStyleAttribute(const char * name)
+{
+    d->additionalStyleAttributes.remove(name);
+}
+

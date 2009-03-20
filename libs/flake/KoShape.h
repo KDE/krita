@@ -755,7 +755,7 @@ public:
      *
      * @return true if there is a attribute with prefix:tag set, false otherwise
      */
-    bool hasAdditionalAttribute(const char * name);
+    bool hasAdditionalAttribute(const char * name) const;
 
     /**
      * Get additional attribute
@@ -764,7 +764,7 @@ public:
      *
      * @return The value of the attribute if it exists or a null string if not found.
      */
-    QString additionalAttribute(const char * name);
+    QString additionalAttribute(const char * name) const;
 
     void setAdditionalStyleAttribute(const char * name, const QString & value);
 

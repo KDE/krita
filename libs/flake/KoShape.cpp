@@ -1240,12 +1240,12 @@ void KoShape::removeAdditionalAttribute(const char * name)
     d->additionalAttributes.remove(name);
 }
 
-bool KoShape::hasAdditionalAttribute(const char * name)
+bool KoShape::hasAdditionalAttribute(const char * name) const
 {
     return d->additionalAttributes.contains(name);
 }
 
-QString KoShape::additionalAttribute(const char * name)
+QString KoShape::additionalAttribute(const char * name) const
 {
     return d->additionalAttributes.value(name);
 }

@@ -1072,7 +1072,8 @@ QMatrix KoShape::parseOdfTransform(const QString &transform)
         } else if (cmd == "matrix") {
             QMatrix m;
             if (params.count() >= 6)
-                m.setMatrix(params[0].toDouble(), params[1].toDouble(), params[2].toDouble(), params[3].toDouble(), KoUnit::parseValue(params[4]), KoUnit::parseValue(params[5]));
+                m.setMatrix(params[0].toDouble(), params[1].toDouble(), params[2].toDouble(), params[3].toDouble(),
+                        KoUnit::parseValue(params[4]), KoUnit::parseValue(params[5]));
             matrix = matrix * m;
         }
     }
@@ -1127,11 +1128,16 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
     if (attributes & OdfTransformation) {
         QMatrix matrix = absoluteTransformation(0) * context.shapeOffset(this);
         if (! matrix.isIdentity()) {
-            QString m = QString("matrix(%1 %2 %3 %4 %5pt %6pt)")
-                        .arg(matrix.m11()).arg(matrix.m12())
-                        .arg(matrix.m21()).arg(matrix.m22())
-                        .arg(matrix.dx()) .arg(matrix.dy());
-            context.xmlWriter().addAttribute("draw:transform", m);
+            if (matrix.m11() == 1 && matrix.m12() == 0 && matrix.m21() == 0 && matrix.m22() == 1) {
+                context.xmlWriter().addAttribute("svg:x", QString("%1pt").arg(matrix.dx()));
+                context.xmlWriter().addAttribute("svg:y", QString("%1pt").arg(matrix.dy()));
+            } else {
+                QString m = QString("matrix(%1 %2 %3 %4 %5pt %6pt)")
+                            .arg(matrix.m11()).arg(matrix.m12())
+                            .arg(matrix.m21()).arg(matrix.m22())
+                            .arg(matrix.dx()) .arg(matrix.dy());
+                context.xmlWriter().addAttribute("draw:transform", m);
+            }
         }
     }
 

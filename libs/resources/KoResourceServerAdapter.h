@@ -48,6 +48,7 @@ protected:
     void emitRemovingResource(KoResource* resource);
 };
 
+/// Write API docs here
 template <class T> class KoResourceServerAdapter : public KoAbstractResourceServerAdapter, public KoResourceServerObserver<T>
 {
 public:

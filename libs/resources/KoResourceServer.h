@@ -42,6 +42,7 @@
 
 class KoResource;
 
+/// Write API docs here
 class KORESOURCES_EXPORT KoResourceServerBase {
 
 public:
@@ -60,6 +61,7 @@ protected:
 
 };
 
+/// Write API docs here
 template <class T> class KoResourceServer : public KoResourceServerBase {
 
 public:

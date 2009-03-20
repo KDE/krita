@@ -31,6 +31,7 @@
 #include "KoAbstractGradient.h"
 #include "KoColorSet.h"
 
+/// Write API docs here
 class KORESOURCES_EXPORT KoResourceLoaderThread : public QThread {
 
 public:
@@ -48,6 +49,7 @@ private:
 };
 
 
+/// Write API docs here
 class KORESOURCES_EXPORT KoResourceServerProvider : public QObject
 {
     Q_OBJECT

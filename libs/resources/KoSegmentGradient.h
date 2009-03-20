@@ -49,6 +49,7 @@ enum {
     COLOR_INTERP_HSV_CW
 };
 
+/// Write API docs here
 class KORESOURCES_EXPORT KoGradientSegment {
     public:
         KoGradientSegment(int interpolationType, int colorInterpolationType, qreal startOffset, qreal middleOffset, qreal endOffset, const KoColor& startColor, const KoColor& endColor);
@@ -222,6 +223,7 @@ class KORESOURCES_EXPORT KoGradientSegment {
         KoColor m_endColor;
 };
 
+/// Write API docs here
 class KORESOURCES_EXPORT KoSegmentGradient : public KoAbstractGradient {
 
     Q_OBJECT

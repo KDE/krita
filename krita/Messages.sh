@@ -4,6 +4,6 @@ $EXTRACTRC `find . -name \*.rc` >> rc.cpp
 $EXTRACTATTR --attr=collection,text --attr=collection,comment --attr=script,text --attr=script,comment plugins/viewplugins/scripting/scripts/*.rc >> rc.cpp || exit 12
 perl extracti18n.pl > i18ndata
 # ignore sdk/templates since it contains templates for use a future plugins, none of the strings there will ever be seen by any user
-$XGETTEXT i18ndata rc.cpp `find . -name \*.cc -o -name \*.h  -o -name \*.cpp | grep -v './sdk/templates' | grep -v './plugins/paintops/deform' | grep -v './plugins/paintops/chalk' | grep -v './plugins/paintops/curvebrush' | grep -v './plugins/paintops/spray'` ui/kis_aboutdata.h -o $podir/krita.pot
+$XGETTEXT i18ndata rc.cpp `find . -name \*.cc -o -name \*.h  -o -name \*.cpp | grep -v './sdk/templates' | grep -v './plugins/paintops/deform' | grep -v './plugins/tools/tool_dyna' | grep -v './plugins/paintops/chalk' | grep -v './plugins/paintops/curvebrush' | grep -v './plugins/paintops/spray'` ui/kis_aboutdata.h -o $podir/krita.pot
 rm -f i18ndata
 

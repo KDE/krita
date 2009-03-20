@@ -427,6 +427,19 @@ public:
     bool isLocked() const;
 
     /**
+     * Marks the shape to have its content protected against editing.
+     * Content protection is a hint for tools to disallow the user editing the content.
+     * @param protect when true set the shapes content to be protected from user modification.
+     */
+    void setContentProtected(bool protect);
+    /**
+     * Returns current content protection state of this shape.
+     * Content protection is a hint for tools to disallow the user editing the content.
+     * @return current content protection state of this shape.
+     */
+    bool isContentProtected() const;
+
+    /**
      * Returns the parent, or 0 if there is no parent.
      * @return the parent, or 0 if there is no parent.
      */
@@ -856,6 +869,7 @@ protected:
      * @param detect if true detect collisions.
      */
     void setCollisionDetection(bool detect);
+
     /**
      * get the property collision detection.
      * @returns true if collision detection is on.

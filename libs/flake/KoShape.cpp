@@ -70,20 +70,22 @@ class KoShape::Private
 public:
     Private(KoShape *shape)
             : size(50, 50),
-            zIndex(0),
             parent(0),
+            userData(0),
+            appData(0),
+            fill(0),
+            border(0),
+            me(shape),
+            shadow(0),
+            zIndex(0),
             visible(true),
             printable(true),
             locked(false),
             keepAspect(false),
             selectable(true),
             detectCollision(false),
-            userData(0),
-            appData(0),
-            fill(0),
-            border(0),
-            me(shape),
-            shadow(0) {
+            protectContent(false)
+    {
     }
 
     ~Private() {
@@ -120,16 +122,7 @@ public:
 
     QVector<QPointF> connectors; // in pt
 
-    int zIndex;
     KoShapeContainer *parent;
-
-    bool visible;
-    bool printable;
-    bool locked;
-    bool keepAspect;
-    bool selectable;
-    bool detectCollision;
-
     QSet<KoShapeManager *> shapeManagers;
     KoShapeUserData *userData;
     KoShapeApplicationData *appData;
@@ -141,6 +134,16 @@ public:
     QMap<QByteArray, QString> additionalAttributes;
     QMap<QByteArray, QString> additionalStyleAttributes;
     QList<KoEventAction *> eventActions; ///< list of event actions the shape has
+
+    uint zIndex : 10; // should be enough ;)
+    uint visible : 1;
+    uint printable : 1;
+    uint locked : 1;
+    uint keepAspect : 1;
+    uint selectable : 1;
+    uint detectCollision : 1;
+    uint protectContent : 1;
+    uint reserved : 15; // for future extensions, keep total bits used 32!
 };
 
 KoShape::KoShape()
@@ -382,7 +385,7 @@ void KoShape::setParent(KoShapeContainer *parent)
 int KoShape::zIndex() const
 {
     if (parent()) // we can't be under our parent...
-        return qMax(d->zIndex, parent()->zIndex());
+        return qMax((int) d->zIndex, parent()->zIndex());
     return d->zIndex;
 }
 
@@ -646,6 +649,16 @@ bool KoShape::isLocked() const
     return d->locked;
 }
 
+void KoShape::setContentProtected(bool protect)
+{
+    d->protectContent = protect;
+}
+
+bool KoShape::isContentProtected() const
+{
+    return d->protectContent;
+}
+
 KoShapeContainer *KoShape::parent() const
 {
     return d->parent;
@@ -789,6 +802,17 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
     if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml)) {
         style.setAutoStyleInStylesDotXml(true);
     }
+
+    QString value;
+    if (isLocked())
+        value = "position size";
+    if (isContentProtected()) {
+        if (! value.isEmpty())
+            value += ' ';
+        value += "content";
+    }
+    if (!value.isEmpty())
+        d->additionalStyleAttributes.insert("style:protect", value);
 
     QMap<QByteArray, QString>::const_iterator it(d->additionalStyleAttributes.constBegin());
     for (; it != d->additionalStyleAttributes.constEnd(); ++it) {

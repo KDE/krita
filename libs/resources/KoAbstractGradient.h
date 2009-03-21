@@ -25,7 +25,9 @@
 #include "KoResource.h"
 #include <koresource_export.h>
 
-/// Write API docs here
+/**
+ * KoAbstractGradient is the base class of all gradient resources
+ */
 class KORESOURCES_EXPORT KoAbstractGradient : public KoResource {
 
 public:
@@ -35,8 +37,13 @@ public:
     virtual bool load() { return false; }
     virtual bool save() { return false; }
 
+    /**
+    * Creates a QGradient from the gradient.
+    * The resulting QGradient might differ from original gradient
+    */
     virtual QGradient* toQGradient() const { return new QGradient(); }
 
+    /// gets the color at position 0 <= t <= 1
     virtual void colorAt(KoColor&, qreal t) const;
 
     void setColorSpace(KoColorSpace* colorSpace);

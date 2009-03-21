@@ -43,13 +43,16 @@ public:
     /// Not implemented
     virtual bool save();
 
+    /// reimplemented
     virtual QGradient* toQGradient() const;
 
+    /// reimplemented
     void colorAt(KoColor&, qreal t) const;
 
     /// Creates KoStopGradient from a QGradient
     static KoStopGradient * fromQGradient( QGradient * gradient );
 
+    /// reimplemented
     QString defaultFileExtension() const;
 
 protected:

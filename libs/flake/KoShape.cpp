@@ -966,19 +966,30 @@ KoShapeBackground * KoShape::loadOdfFill(const KoXmlElement & element, KoShapeLo
 KoShapeBorderModel * KoShape::loadOdfStroke(const KoXmlElement & element, KoShapeLoadingContext & context)
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+    KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
+    
     QString stroke = getStyleProperty("stroke", element, context);
     if (stroke == "solid" || stroke == "dash") {
-        QPen pen = KoOdfGraphicStyles::loadOasisStrokeStyle(styleStack, stroke, context.odfLoadingContext().stylesReader());
+        QPen pen = KoOdfGraphicStyles::loadOasisStrokeStyle(styleStack, stroke, stylesReader);
 
         KoLineBorder * border = new KoLineBorder();
+        
+        if (styleStack.hasProperty(KoXmlNS::koffice, "stroke-gradient")) {
+            QString gradientName = styleStack.property(KoXmlNS::koffice, "stroke-gradient");
+            QBrush brush = KoOdfGraphicStyles::loadOasisGradientStyleByName(stylesReader, gradientName, size());
+            border->setLineBrush(brush);
+        } else {
+            border->setColor(pen.color());
+        }
+        
         border->setLineWidth(pen.widthF());
-        border->setColor(pen.color());
         border->setJoinStyle(pen.joinStyle());
         border->setLineStyle(pen.style(), pen.dashPattern());
 
         return border;
-    } else
+    } else {
         return 0;
+    }
 }
 
 KoShapeShadow * KoShape::loadOdfShadow(const KoXmlElement & element, KoShapeLoadingContext & context)

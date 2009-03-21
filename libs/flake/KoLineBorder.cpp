@@ -85,7 +85,10 @@ KoLineBorder& KoLineBorder::operator = (const KoLineBorder & rhs)
 void KoLineBorder::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
 {
     QPen pen = d->pen;
-    pen.setColor(d->color);
+    if (d->brush.gradient())
+        pen.setBrush(d->brush);
+    else
+        pen.setColor(d->color);
     KoOdfGraphicStyles::saveOasisStrokeStyle(style, context.mainStyles(), pen);
 }
 

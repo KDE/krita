@@ -70,14 +70,14 @@ struct KoPageLayout {
     }
 
     /**
-     * Save this page layout to OASIS.
+     * Save this page layout to ODF.
      */
-    KOMAIN_EXPORT KoGenStyle saveOasis() const;
+    KOMAIN_EXPORT KoGenStyle saveOdf() const;
 
     /**
-     * Load this page layout from OASIS
+     * Load this page layout from ODF
      */
-    KOMAIN_EXPORT void loadOasis(const KoXmlElement &style);
+    KOMAIN_EXPORT void loadOdf(const KoXmlElement &style);
 
     /**
      * @return a page layout with the default page size depending on the locale settings,

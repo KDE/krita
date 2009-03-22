@@ -970,7 +970,7 @@ KoShapeBorderModel * KoShape::loadOdfStroke(const KoXmlElement & element, KoShap
     
     QString stroke = getStyleProperty("stroke", element, context);
     if (stroke == "solid" || stroke == "dash") {
-        QPen pen = KoOdfGraphicStyles::loadOasisStrokeStyle(styleStack, stroke, stylesReader);
+        QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, stroke, stylesReader);
 
         KoLineBorder * border = new KoLineBorder();
         

@@ -152,7 +152,7 @@ void KoGradientBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &co
 {
     QBrush brush(*d->gradient);
     brush.setMatrix(d->matrix);
-    KoOdfGraphicStyles::saveOasisFillStyle(style, context.mainStyles(), brush);
+    KoOdfGraphicStyles::saveOdfFillStyle(style, context.mainStyles(), brush);
 }
 
 bool KoGradientBackground::loadStyle(KoOdfLoadingContext & context, const QSizeF &shapeSize)
@@ -163,7 +163,7 @@ bool KoGradientBackground::loadStyle(KoOdfLoadingContext & context, const QSizeF
 
     QString fillStyle = styleStack.property(KoXmlNS::draw, "fill");
     if (fillStyle == "gradient") {
-        QBrush brush = KoOdfGraphicStyles::loadOasisGradientStyle(styleStack, context.stylesReader(), shapeSize);
+        QBrush brush = KoOdfGraphicStyles::loadOdfGradientStyle(styleStack, context.stylesReader(), shapeSize);
         const QGradient * gradient = brush.gradient();
         if (gradient) {
             d->gradient = d->cloneGradient(gradient);

@@ -49,7 +49,7 @@ void KoPAMasterPage::saveOdf( KoShapeSavingContext & context ) const
 {
     KoPASavingContext &paContext = static_cast<KoPASavingContext&>( context );
 
-    KoGenStyle pageLayoutStyle = pageLayout().saveOasis();
+    KoGenStyle pageLayoutStyle = pageLayout().saveOdf();
     pageLayoutStyle.setAutoStyleInStylesDotXml( true );
     pageLayoutStyle.addAttribute( "style:page-usage", "all" );
     QString pageLayoutName( paContext.mainStyles().lookup( pageLayoutStyle, "pm" ) );
@@ -91,7 +91,7 @@ void KoPAMasterPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingCon
     KoPageLayout pageLayout = KoPageLayout::standardLayout();
 
     if ( masterPageStyle ) {
-        pageLayout.loadOasis( *masterPageStyle );
+        pageLayout.loadOdf( *masterPageStyle );
     }
 
     setPageLayout( pageLayout );

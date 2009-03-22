@@ -467,7 +467,7 @@ void KisTileSwapper::fromSwappableList(KisSharedTileData* tileData)   // ### Spe
 
     m_swapQueueLock.lock();
     // Perhaps this is all not locked enough -> can't we remove twice here if we aren't careful?
-    m_swapList.remove(memInfo->node);
+    m_swapList.erase(memInfo->node);
     m_swapQueueLock.unlock();
 }
 

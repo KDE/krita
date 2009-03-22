@@ -77,6 +77,7 @@ void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting
 #ifdef __GNUC__
 #warning "KisBrushOption::readOptionSetting: define a serialization format for potato stamps & a way to  set the active potato stamp correctly"
 #endif
+/*
     QString brushtype = setting->getString("brush_type_id");
     Q_ASSERT(!brushtype.isEmpty());
     if (brushtype.isEmpty()) return;
@@ -89,5 +90,5 @@ void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting
     KisBrushSP brush = factory->createBrush(brushDefinition);
 
     m_brushSelectionWidget->setCurrentBrush(brush);
-
+*/
 }

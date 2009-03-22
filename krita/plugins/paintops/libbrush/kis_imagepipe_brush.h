@@ -51,8 +51,6 @@ namespace KisParasite {
 class BRUSH_EXPORT KisImagePipeBrush : public KisGbrBrush
 {
 
-    Q_OBJECT
-
 public:
     KisImagePipeBrush(const QString& filename);
     /**

@@ -34,7 +34,6 @@ typedef QPair<qreal, KoColor> KoGradientStop;
  * Resource for colorstop based gradients like Karbon gradients and SVG gradients
  */
 class KORESOURCES_EXPORT KoStopGradient : public KoAbstractGradient {
-    Q_OBJECT
 
 public:
     KoStopGradient(const QString& filename);
@@ -44,13 +43,16 @@ public:
     /// Not implemented
     virtual bool save();
 
+    /// reimplemented
     virtual QGradient* toQGradient() const;
 
+    /// reimplemented
     void colorAt(KoColor&, qreal t) const;
 
     /// Creates KoStopGradient from a QGradient
     static KoStopGradient * fromQGradient( QGradient * gradient );
 
+    /// reimplemented
     QString defaultFileExtension() const;
 
 protected:

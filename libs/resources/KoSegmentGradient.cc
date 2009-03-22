@@ -688,6 +688,3 @@ qreal KoGradientSegment::SphereDecreasingInterpolationStrategy::valueAt(qreal t,
 
     return value;
 }
-
-#include "KoSegmentGradient.moc"
-

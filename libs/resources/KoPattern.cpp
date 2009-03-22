@@ -302,5 +302,3 @@ QString KoPattern::defaultFileExtension() const
 {
     return QString(".pat");
 }
-
-#include "KoPattern.moc"

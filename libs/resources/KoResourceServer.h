@@ -23,6 +23,8 @@
 #ifndef KORESOURCESERVER_H
 #define KORESOURCESERVER_H
 
+#include <QtCore/QMutex>
+#include <QtCore/QMutexLocker>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtCore/QList>
@@ -36,12 +38,14 @@
 #include "KoResourceServerObserver.h"
 
 #include "koresource_export.h"
-#include <QtCore/QMutex>
-#include <QtCore/QMutexLocker>
+
 #include <KDebug>
 
 class KoResource;
 
+/**
+ * KoResourceServerBase is the base class of all resource servers
+ */
 class KORESOURCES_EXPORT KoResourceServerBase {
 
 public:
@@ -60,6 +64,10 @@ protected:
 
 };
 
+/**
+ * KoResourceServer manages the resources of one type. It stores, loads and saves the resources.
+ * To keep track of changes the server can be observed with a KoResourceServerObserver
+ */
 template <class T> class KoResourceServer : public KoResourceServerBase {
 
 public:
@@ -72,6 +80,12 @@ public:
         {
         }
 
+   /**
+     * Loads a set of resources and adds them to the resource server.
+     * If a filename appears twice the resource will only be added once. Resources that can't
+     * be loaded or and invalid aren't added to the server.
+     * @param filenames list of filenames to be loaded
+     */
     void loadResources(QStringList filenames) {
         kDebug(30009) << "loading  resources for type " << type();
         QStringList uniqueFiles;
@@ -151,6 +165,11 @@ public:
         return KGlobal::mainComponent().dirs()->saveLocation(type().toAscii());
     }
 
+    /**
+     * Creates a new resource from a given file and adds it to the resource server
+     * @param filename file name of the resource to be imported
+     * @return the imported resource, 0 if the import failed
+     */
     T* importResource( const QString & filename ) {
         QFileInfo fi( filename );
         if( fi.exists() == false )
@@ -196,6 +215,10 @@ public:
         loadLock.unlock();
     }
 
+    /**
+     * Removes an observer from the server
+     * @param observer the observer to be removed
+     */
     void removeObserver(KoResourceServerObserver<T>* observer)
     {
         int index = m_observers.indexOf( observer );

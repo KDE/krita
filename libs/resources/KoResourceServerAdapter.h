@@ -48,6 +48,10 @@ protected:
     void emitRemovingResource(KoResource* resource);
 };
 
+/**
+ * The KoResourceServerAdapter provides adapter to a specific resource server
+ * It provides a resource type independent interface to the server.
+ */
 template <class T> class KoResourceServerAdapter : public KoAbstractResourceServerAdapter, public KoResourceServerObserver<T>
 {
 public:

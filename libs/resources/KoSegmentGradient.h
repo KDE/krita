@@ -49,6 +49,7 @@ enum {
     COLOR_INTERP_HSV_CW
 };
 
+/// Write API docs here
 class KORESOURCES_EXPORT KoGradientSegment {
     public:
         KoGradientSegment(int interpolationType, int colorInterpolationType, qreal startOffset, qreal middleOffset, qreal endOffset, const KoColor& startColor, const KoColor& endColor);
@@ -222,23 +223,35 @@ class KORESOURCES_EXPORT KoGradientSegment {
         KoColor m_endColor;
 };
 
+/**
+  * KoSegmentGradient stores a segment based gradients like Gimp gradients
+  */
 class KORESOURCES_EXPORT KoSegmentGradient : public KoAbstractGradient {
-
-    Q_OBJECT
 
 public:
     KoSegmentGradient(const QString& file);
     virtual ~KoSegmentGradient();
 
+    /// reimplemented
     virtual bool load();
+
+    /// not implemented
     virtual bool save();
 
+    /// reimplemented
     void colorAt(KoColor& dst, qreal t) const;
 
+    /**
+     * Returns the segment at a given position
+     * @param t position inside the gradient, with 0 <= t <= 1
+     * @return the segment the position, 0 if no segment is found
+     */
     KoGradientSegment *segmentAt(qreal t) const;
 
+    /// reimplemented
     virtual QGradient* toQGradient() const;
 
+    /// reimplemented
     QString defaultFileExtension() const;
 
 protected:

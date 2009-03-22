@@ -179,7 +179,7 @@ KoShapeManager* KisCanvas2::shapeManager() const
 
         }
     }
-    dbgUI << "current shape manager belongs to the man canvas " << m_d->shapeManager;
+    dbgUI << "current shape manager belongs to the main canvas " << m_d->shapeManager;
 
     return m_d->shapeManager;
 }

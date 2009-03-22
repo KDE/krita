@@ -255,12 +255,30 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
 void TextShape::saveOdf(KoShapeSavingContext & context) const
 {
     KoXmlWriter & writer = context.xmlWriter();
-    //fo:min-height="120pt" draw:chain-next-name="Framesetje-2"
 
+    QString textHeight = additionalAttribute("fo:min-height");
+    const_cast<TextShape*>(this)->removeAdditionalAttribute("fo:min-height");
     writer.startElement("draw:frame");
     saveOdfAttributes(context, OdfAllAttributes);
     writer.startElement("draw:text-box");
-    m_textShapeData->saveOdf(context);
+    if (! textHeight.isEmpty())
+        writer.addAttribute("fo:min-height", textHeight);
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    int index = -1;
+    if (lay) {
+        int i = 0;
+        foreach (KoShape* shape, lay->shapes()) {
+            if (shape == this) {
+                index = i;
+            } else if (index >= 0) {
+                writer.addAttribute("draw:chain-next-name", shape->name());
+                break;
+            }
+            ++i;
+        }
+    }
+
+    m_textShapeData->saveOdf(context, 0, index > 0 ? 0 : -1);
     writer.endElement(); // draw:text-box
     saveOdfCommonChildElements(context);
     writer.endElement(); // draw:frame

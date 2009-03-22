@@ -31,12 +31,21 @@
 #include "KoAbstractGradient.h"
 #include "KoColorSet.h"
 
+/**
+ * KoResourceLoaderThread allows threaded loading of the resources of a resource server
+ */
 class KORESOURCES_EXPORT KoResourceLoaderThread : public QThread {
 
 public:
 
+    /**
+    * Constructs a KoResourceLoaderThread for a server
+    * @param server the server the resources will be loaded for
+    * @param extensions the file extensions seperate by ':', e.g. "*.kgr:*.svg:*.ggr" 
+    */
     KoResourceLoaderThread(KoResourceServerBase * server, const QString & extensions);
 
+    /// loads the resources
     void run();
 private:
     QStringList getFileNames( const QString & extensions);
@@ -48,6 +57,9 @@ private:
 };
 
 
+/**
+ * Provides default resource servers for gradients, patterns and palettes
+ */
 class KORESOURCES_EXPORT KoResourceServerProvider : public QObject
 {
     Q_OBJECT

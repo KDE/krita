@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006, 2008 Casper Boemann <cbr@boemann.dk>
-   Copyright (C) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
@@ -427,6 +427,19 @@ public:
     bool isLocked() const;
 
     /**
+     * Marks the shape to have its content protected against editing.
+     * Content protection is a hint for tools to disallow the user editing the content.
+     * @param protect when true set the shapes content to be protected from user modification.
+     */
+    void setContentProtected(bool protect);
+    /**
+     * Returns current content protection state of this shape.
+     * Content protection is a hint for tools to disallow the user editing the content.
+     * @return current content protection state of this shape.
+     */
+    bool isContentProtected() const;
+
+    /**
      * Returns the parent, or 0 if there is no parent.
      * @return the parent, or 0 if there is no parent.
      */
@@ -742,7 +755,7 @@ public:
      *
      * @return true if there is a attribute with prefix:tag set, false otherwise
      */
-    bool hasAdditionalAttribute(const char * name);
+    bool hasAdditionalAttribute(const char * name) const;
 
     /**
      * Get additional attribute
@@ -751,7 +764,11 @@ public:
      *
      * @return The value of the attribute if it exists or a null string if not found.
      */
-    QString additionalAttribute(const char * name);
+    QString additionalAttribute(const char * name) const;
+
+    void setAdditionalStyleAttribute(const char * name, const QString & value);
+
+    void removeAdditionalStyleAttribute(const char * name);
 
 protected:
 
@@ -852,6 +869,7 @@ protected:
      * @param detect if true detect collisions.
      */
     void setCollisionDetection(bool detect);
+
     /**
      * get the property collision detection.
      * @returns true if collision detection is on.

@@ -364,5 +364,3 @@ void KisImagePipeBrush::sanitize() {
     }
 }
 
-#include "kis_imagepipe_brush.moc"
-

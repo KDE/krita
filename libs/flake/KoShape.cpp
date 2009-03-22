@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
-   Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
@@ -70,20 +70,22 @@ class KoShape::Private
 public:
     Private(KoShape *shape)
             : size(50, 50),
-            zIndex(0),
             parent(0),
+            userData(0),
+            appData(0),
+            fill(0),
+            border(0),
+            me(shape),
+            shadow(0),
+            zIndex(0),
             visible(true),
             printable(true),
             locked(false),
             keepAspect(false),
             selectable(true),
             detectCollision(false),
-            userData(0),
-            appData(0),
-            fill(0),
-            border(0),
-            me(shape),
-            shadow(0) {
+            protectContent(false)
+    {
     }
 
     ~Private() {
@@ -120,16 +122,7 @@ public:
 
     QVector<QPointF> connectors; // in pt
 
-    int zIndex;
     KoShapeContainer *parent;
-
-    bool visible;
-    bool printable;
-    bool locked;
-    bool keepAspect;
-    bool selectable;
-    bool detectCollision;
-
     QSet<KoShapeManager *> shapeManagers;
     KoShapeUserData *userData;
     KoShapeApplicationData *appData;
@@ -139,7 +132,18 @@ public:
     QList<KoShape*> dependees; ///< list of shape dependent on this shape
     KoShapeShadow * shadow; ///< the current shape shadow
     QMap<QByteArray, QString> additionalAttributes;
+    QMap<QByteArray, QString> additionalStyleAttributes;
     QList<KoEventAction *> eventActions; ///< list of event actions the shape has
+
+    uint zIndex : 10; // should be enough ;)
+    uint visible : 1;
+    uint printable : 1;
+    uint locked : 1;
+    uint keepAspect : 1;
+    uint selectable : 1;
+    uint detectCollision : 1;
+    uint protectContent : 1;
+    uint reserved : 15; // for future extensions, keep total bits used 32!
 };
 
 KoShape::KoShape()
@@ -381,7 +385,7 @@ void KoShape::setParent(KoShapeContainer *parent)
 int KoShape::zIndex() const
 {
     if (parent()) // we can't be under our parent...
-        return qMax(d->zIndex, parent()->zIndex());
+        return qMax((int) d->zIndex, parent()->zIndex());
     return d->zIndex;
 }
 
@@ -645,6 +649,16 @@ bool KoShape::isLocked() const
     return d->locked;
 }
 
+void KoShape::setContentProtected(bool protect)
+{
+    d->protectContent = protect;
+}
+
+bool KoShape::isContentProtected() const
+{
+    return d->protectContent;
+}
+
 KoShapeContainer *KoShape::parent() const
 {
     return d->parent;
@@ -789,6 +803,22 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
         style.setAutoStyleInStylesDotXml(true);
     }
 
+    QString value;
+    if (isLocked())
+        value = "position size";
+    if (isContentProtected()) {
+        if (! value.isEmpty())
+            value += ' ';
+        value += "content";
+    }
+    if (!value.isEmpty())
+        d->additionalStyleAttributes.insert("style:protect", value);
+
+    QMap<QByteArray, QString>::const_iterator it(d->additionalStyleAttributes.constBegin());
+    for (; it != d->additionalStyleAttributes.constEnd(); ++it) {
+        style.addProperty(it.key(), it.value());
+    }
+
     return context.mainStyles().lookup(style, context.isSet(KoShapeSavingContext::PresentationShape) ? "pr" : "gr");
 }
 
@@ -861,7 +891,6 @@ bool KoShape::loadOdfAttributes(const KoXmlElement & element, KoShapeLoadingCont
     }
 
     if (attributes & OdfName) {
-
         if (element.hasAttributeNS(KoXmlNS::draw, "name")) {
             setName(element.attributeNS(KoXmlNS::draw, "name"));
         }
@@ -937,19 +966,30 @@ KoShapeBackground * KoShape::loadOdfFill(const KoXmlElement & element, KoShapeLo
 KoShapeBorderModel * KoShape::loadOdfStroke(const KoXmlElement & element, KoShapeLoadingContext & context)
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+    KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
+    
     QString stroke = getStyleProperty("stroke", element, context);
     if (stroke == "solid" || stroke == "dash") {
-        QPen pen = KoOdfGraphicStyles::loadOasisStrokeStyle(styleStack, stroke, context.odfLoadingContext().stylesReader());
+        QPen pen = KoOdfGraphicStyles::loadOasisStrokeStyle(styleStack, stroke, stylesReader);
 
         KoLineBorder * border = new KoLineBorder();
+        
+        if (styleStack.hasProperty(KoXmlNS::koffice, "stroke-gradient")) {
+            QString gradientName = styleStack.property(KoXmlNS::koffice, "stroke-gradient");
+            QBrush brush = KoOdfGraphicStyles::loadOasisGradientStyleByName(stylesReader, gradientName, size());
+            border->setLineBrush(brush);
+        } else {
+            border->setColor(pen.color());
+        }
+        
         border->setLineWidth(pen.widthF());
-        border->setColor(pen.color());
         border->setJoinStyle(pen.joinStyle());
         border->setLineStyle(pen.style(), pen.dashPattern());
 
         return border;
-    } else
+    } else {
         return 0;
+    }
 }
 
 KoShapeShadow * KoShape::loadOdfShadow(const KoXmlElement & element, KoShapeLoadingContext & context)
@@ -1043,7 +1083,8 @@ QMatrix KoShape::parseOdfTransform(const QString &transform)
         } else if (cmd == "matrix") {
             QMatrix m;
             if (params.count() >= 6)
-                m.setMatrix(params[0].toDouble(), params[1].toDouble(), params[2].toDouble(), params[3].toDouble(), KoUnit::parseValue(params[4]), KoUnit::parseValue(params[5]));
+                m.setMatrix(params[0].toDouble(), params[1].toDouble(), params[2].toDouble(), params[3].toDouble(),
+                        KoUnit::parseValue(params[4]), KoUnit::parseValue(params[5]));
             matrix = matrix * m;
         }
     }
@@ -1098,11 +1139,16 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
     if (attributes & OdfTransformation) {
         QMatrix matrix = absoluteTransformation(0) * context.shapeOffset(this);
         if (! matrix.isIdentity()) {
-            QString m = QString("matrix(%1 %2 %3 %4 %5pt %6pt)")
-                        .arg(matrix.m11()).arg(matrix.m12())
-                        .arg(matrix.m21()).arg(matrix.m22())
-                        .arg(matrix.dx()) .arg(matrix.dy());
-            context.xmlWriter().addAttribute("draw:transform", m);
+            if (matrix.m11() == 1 && matrix.m12() == 0 && matrix.m21() == 0 && matrix.m22() == 1) {
+                context.xmlWriter().addAttribute("svg:x", QString("%1pt").arg(matrix.dx()));
+                context.xmlWriter().addAttribute("svg:y", QString("%1pt").arg(matrix.dy()));
+            } else {
+                QString m = QString("matrix(%1 %2 %3 %4 %5pt %6pt)")
+                            .arg(matrix.m11()).arg(matrix.m12())
+                            .arg(matrix.m21()).arg(matrix.m22())
+                            .arg(matrix.dx()) .arg(matrix.dy());
+                context.xmlWriter().addAttribute("draw:transform", m);
+            }
         }
     }
 
@@ -1211,12 +1257,23 @@ void KoShape::removeAdditionalAttribute(const char * name)
     d->additionalAttributes.remove(name);
 }
 
-bool KoShape::hasAdditionalAttribute(const char * name)
+bool KoShape::hasAdditionalAttribute(const char * name) const
 {
     return d->additionalAttributes.contains(name);
 }
 
-QString KoShape::additionalAttribute(const char * name)
+QString KoShape::additionalAttribute(const char * name) const
 {
     return d->additionalAttributes.value(name);
 }
+
+void KoShape::setAdditionalStyleAttribute(const char * name, const QString & value)
+{
+    d->additionalStyleAttributes.insert(name, value);
+}
+
+void KoShape::removeAdditionalStyleAttribute(const char * name)
+{
+    d->additionalStyleAttributes.remove(name);
+}
+

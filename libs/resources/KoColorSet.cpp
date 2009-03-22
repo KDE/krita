@@ -259,5 +259,3 @@ KoColorSetEntry KoColorSet::getColor(quint32 index)
 {
     return m_colors[index];
 }
-
-#include "KoColorSet.moc"

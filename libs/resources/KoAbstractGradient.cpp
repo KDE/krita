@@ -141,5 +141,3 @@ void KoAbstractGradient::updatePreview()
 {
     d->img = generatePreview( PREVIEW_WIDTH, PREVIEW_HEIGHT );
 }
-
-#include "KoAbstractGradient.moc"

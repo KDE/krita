@@ -680,8 +680,9 @@ void KoCharacterStyle::loadOdf(KoOdfLoadingContext& context)
                 setFontStyleHint(QFont::Decorative);
             else if (genericFamily == "system")
                 setFontStyleHint(QFont::System);
-            else if (genericFamily == "script")
-                ; // TODO: no hint available in Qt yet
+            else if (genericFamily == "script") {
+                ; // TODO: no hint available in Qt yet, we should at least store it as a property internally!
+            }
         }
 #endif
 

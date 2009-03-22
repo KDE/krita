@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Dyna Tool
+Name[pt]=Ferramenta Dinâmica
+Name[pt_BR]=Ferramenta Dinâmica
+Name[sv]=Dynaverktyg
+Name[uk]=Дайна-інструмент
+Name[zh_TW]=Dyna 工具
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatooldyna

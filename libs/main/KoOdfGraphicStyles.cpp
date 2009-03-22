@@ -155,6 +155,7 @@ void KoOdfGraphicStyles::saveOdfStrokeStyle(KoGenStyle &styleStroke, KoGenStyles
         break;
     default:
         styleStroke.addProperty("draw:stroke-linejoin", "miter");
+        styleStroke.addProperty("koffice:stroke-miterlimit", QString("%1").arg(pen.miterLimit()));
         break;
     }
 }
@@ -686,8 +687,13 @@ QPen KoOdfGraphicStyles::loadOdfStrokeStyle(const KoStyleStack &styleStack, cons
                 tmpPen.setJoinStyle(Qt::BevelJoin);
             else if (join == "round")
                 tmpPen.setJoinStyle(Qt::RoundJoin);
-            else
+            else {
                 tmpPen.setJoinStyle(Qt::MiterJoin);
+                if (styleStack.hasProperty(KoXmlNS::koffice, "stroke-miterlimit")) {
+                    QString miterLimit = styleStack.property(KoXmlNS::koffice, "stroke-miterlimit");
+                    tmpPen.setMiterLimit(miterLimit.toDouble());
+                }
+            }
         }
 
         if (stroke == "dash" && styleStack.hasProperty(KoXmlNS::draw, "stroke-dash")) {

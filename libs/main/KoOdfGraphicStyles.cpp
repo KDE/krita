@@ -135,7 +135,7 @@ void KoOdfGraphicStyles::saveOdfStrokeStyle(KoGenStyle &styleStroke, KoGenStyles
     }
 
     if (pen.brush().gradient()) {
-        styleStroke.addProperty("koffice:stroke-gradient", saveOasisGradientStyle(mainStyles, pen.brush()));
+        styleStroke.addProperty("koffice:stroke-gradient", saveOdfGradientStyle(mainStyles, pen.brush()));
     }
     else {
         styleStroke.addProperty("svg:stroke-color", pen.color().name());
@@ -257,10 +257,10 @@ QString KoOdfGraphicStyles::saveOdfGradientStyle(KoGenStyles &mainStyles, const 
 QBrush KoOdfGraphicStyles::loadOdfGradientStyle(const KoStyleStack &styleStack, const KoOdfStylesReader & stylesReader, const QSizeF &size)
 {
     QString styleName = styleStack.property(KoXmlNS::draw, "fill-gradient-name");
-    return loadOasisGradientStyleByName(stylesReader, styleName, size);
+    return loadOdfGradientStyleByName(stylesReader, styleName, size);
 }
 
-QBrush KoOdfGraphicStyles::loadOasisGradientStyleByName(const KoOdfStylesReader & stylesReader, const QString styleName, const QSizeF &size)
+QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader & stylesReader, const QString styleName, const QSizeF &size)
 {
     KoXmlElement* e = stylesReader.drawStyles()[styleName];
     if (! e)

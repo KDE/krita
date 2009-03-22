@@ -976,7 +976,7 @@ KoShapeBorderModel * KoShape::loadOdfStroke(const KoXmlElement & element, KoShap
         
         if (styleStack.hasProperty(KoXmlNS::koffice, "stroke-gradient")) {
             QString gradientName = styleStack.property(KoXmlNS::koffice, "stroke-gradient");
-            QBrush brush = KoOdfGraphicStyles::loadOasisGradientStyleByName(stylesReader, gradientName, size());
+            QBrush brush = KoOdfGraphicStyles::loadOdfGradientStyleByName(stylesReader, gradientName, size());
             border->setLineBrush(brush);
         } else {
             border->setColor(pen.color());

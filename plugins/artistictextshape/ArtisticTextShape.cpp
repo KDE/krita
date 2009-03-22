@@ -201,6 +201,8 @@ bool ArtisticTextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingCon
     QMatrix invMatrix = isOnPath() ? transformation().inverted() : QMatrix();
 
     loadOdfAttributes( element, context, OdfAllAttributes & ~OdfGeometry );
+    if( ! isOnPath() )
+        loadOdfAttributes( element, context, OdfPosition );
 
     // compensate transformation resulting from being put on path
     applyTransformation( invMatrix );

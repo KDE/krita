@@ -45,12 +45,16 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const 
     connect(bnLinkFade, SIGNAL(toggled(bool)), this, SLOT(linkFadeToggled(bool)));
 
     connect((QObject*)comboBoxShape, SIGNAL(activated(int)), this, SLOT(paramChanged()));
+
     spinBoxWidth->setMinimum(1);
     connect(spinBoxWidth, SIGNAL(valueChanged(int)), this, SLOT(spinBoxWidthChanged(int)));
+
     spinBoxHeigth->setMinimum(1);
     connect(spinBoxHeigth, SIGNAL(valueChanged(int)), this, SLOT(spinBoxHeigthChanged(int)));
+
     spinBoxHorizontal->setMinimum(0);
     connect(spinBoxHorizontal, SIGNAL(valueChanged(int)), this, SLOT(spinBoxHorizontalChanged(int)));
+
     spinBoxVertical->setMinimum(0);
     connect(spinBoxVertical, SIGNAL(valueChanged(int)), this, SLOT(spinBoxVerticalChanged(int)));
 
@@ -170,6 +174,14 @@ void KisAutoBrushWidget::linkFadeToggled(bool b)
 KisBrushSP KisAutoBrushWidget::brush()
 {
     return m_autoBrush;
+}
+
+void KisAutoBrushWidget::setBrush( KisBrushSP brush )
+{
+    m_autoBrush = brush;
+    m_brush = brush->img();
+    // XXX: lock, set and unlock the widgets.
+
 }
 
 #include "kis_auto_brush_widget.moc"

@@ -100,9 +100,9 @@ void KisAutoBrush::generateMask(KisPaintDeviceSP dst,
 
 void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
 {
-    KisBrush::toXML(doc, e);
-    e.setAttribute("type", "autobrush");
     d->shape->toXML(doc, e);
+    e.setAttribute( "brush_type", "kis_auto_brush" );
+    e.setAttribute( "brush_spacing", spacing() );
 }
 
 QImage KisAutoBrush::createBrushPreview()

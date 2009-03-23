@@ -15,8 +15,13 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <QString>
+#ifndef KIS_GBR_BRUSH_FACTORY
+#define KIS_GBR_BRUSH_FACTORY
 
+#include <QString>
+#include <QDomElement>
+
+#include "kis_brush_factory.h"
 #include "kis_brush.h"
 
 /**
@@ -24,25 +29,28 @@
  * on a properties object that contains a serialized representation
  * of the object.
  */
-class BRUSH_EXPORT KisBrushFactory
+class BRUSH_EXPORT KisGbrBrushFactory : public KisBrushFactory
 {
 
 public:
 
-    KisBrushFactory() {}
-    virtual ~KisBrushFactory() {}
-
     /**
-     * Intializes the factory, for instance by loading the relevant resources.
+     * Creating the KisBrushFactory will load all gbr and gih
+     * brushes.
      */
-    virtual void init() = 0;
+    KisGbrBrushFactory();
+    virtual ~KisGbrBrushFactory() {}
+
+    virtual QString id() const { return "kis_gbr_brush"; }
 
     /**
      * Create a a new brush from the given data or return an existing KisBrush
      * object. If this call leads to the creation of a resource, it should be
      * added to the resource provider, too.
      */
-    virtual KisBrushSP createBrush( const QString& brushDefinition ) = 0;
+    KisBrushSP getOrCreateBrush( const QDomElement& brushDefinition );
+
 
 };
 
+#endif

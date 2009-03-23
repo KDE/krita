@@ -15,36 +15,19 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_BRUSH_FACTORY
-#define KIS_BRUSH_FACTORY
 
-#include "kis_brush.h"
+#include "kis_auto_brush_factory.h"
 
-class QDomElement;
+#include <QDomDocument>
 
-/**
- * A brush factory can create a new brush instance based
- * on a properties object that contains a serialized representation
- * of the object.
- */
-class BRUSH_EXPORT KisBrushFactory
+#include "kis_auto_brush.h"
+#include "kis_mask_generator.h"
+
+KisBrushSP KisAutoBrushFactory::getOrCreateBrush( const QDomElement& brushDefinition )
 {
-
-public:
-
-    KisBrushFactory() {}
-    virtual ~KisBrushFactory() {}
-
-
-    virtual QString id() const = 0;
-
-    /**
-     * Create a a new brush from the given data or return an existing KisBrush
-     * object. If this call leads to the creation of a resource, it should be
-     * added to the resource provider, too.
-     */
-    virtual KisBrushSP getOrCreateBrush( const QDomElement& element ) = 0;
-
-};
-
-#endif
+    KisMaskGenerator* mask = KisMaskGenerator::fromXML(brushDefinition);
+    KisBrushSP brush = new KisAutoBrush( mask );
+    double spacing = brushDefinition.attribute("brush_spacing", "1.0").toDouble();
+    brush->setSpacing( spacing );
+    return brush;
+}

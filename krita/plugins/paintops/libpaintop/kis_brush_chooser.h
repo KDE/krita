@@ -47,6 +47,8 @@ public:
         return m_itemChooser;
     }
 
+    void setBrush( KisBrushSP );
+
 private slots:
 
     void slotSetItemSpacing(double);

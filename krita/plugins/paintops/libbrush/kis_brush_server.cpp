@@ -30,12 +30,12 @@
 #include "kis_gbr_brush.h"
 #include "kis_imagepipe_brush.h"
 
-class BrushResourceServer : public KoResourceServer<KisGbrBrush>
+class BrushResourceServer : public KoResourceServer<KisBrush>
 {
 
 public:
 
-    BrushResourceServer() : KoResourceServer<KisGbrBrush>("kis_brushes") {
+    BrushResourceServer() : KoResourceServer<KisBrush>("kis_brushes") {
     }
 
 private:
@@ -88,7 +88,7 @@ KisBrushServer* KisBrushServer::instance()
 }
 
 
-KoResourceServer<KisGbrBrush>* KisBrushServer::brushServer()
+KoResourceServer<KisBrush>* KisBrushServer::brushServer()
 {
     return m_brushServer;
 }

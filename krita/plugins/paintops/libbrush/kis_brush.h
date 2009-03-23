@@ -55,6 +55,9 @@ enum enumBrushType {
 
 
 
+class KisBrush;
+typedef KisSharedPtr<KisBrush> KisBrushSP;
+
 /**
  * KisBrush is the base class for brush resources. A brush resource
  * defines one or more images that are used to potato-stamp along
@@ -118,6 +121,7 @@ protected:
 public:
 
     KisBrush();
+    KisBrush( const QString& filename );
 
     virtual ~KisBrush();
 
@@ -237,9 +241,15 @@ public:
                               double subPixelX = 0, double subPixelY = 0) const;
 
 
-protected:
+    /**
+     * Serialize this brush to XML.
+     */
+    virtual void toXML(QDomDocument& , QDomElement&) const {};
 
-    KisBrush( const QString& filename );
+    static KisBrushSP fromXML( const QDomElement& element );
+
+
+protected:
 
     KisBrush(const KisBrush& rhs);
 
@@ -259,12 +269,6 @@ protected:
      * XXX
      */
     void setBrushType(enumBrushType type);
-
-    /**
-     * Serialize this brush to XML.
-     */
-    virtual void toXML(QDomDocument& , QDomElement&) const {};
-
 
     void clearScaledBrushes();
 
@@ -306,8 +310,6 @@ private:
 
 };
 
-
-typedef KisSharedPtr<KisBrush> KisBrushSP;
 
 #endif // KIS_BRUSH_
 

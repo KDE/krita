@@ -133,23 +133,22 @@ void KisBrushSelectionWidget::setImage(KisImageSP image)
 
 void KisBrushSelectionWidget::setCurrentBrush( KisBrushSP brush)
 {
-#if 0
     // XXX: clever code have brush plugins know their configuration
     //      pane, so we don't have to have this if statement and
     //      have an extensible set of brush types
-    if (brush->inherits("KisAutoBrush")) {
+    if ( dynamic_cast<KisAutoBrush*>(brush.data()) ) {
+        m_brushesTab->setCurrentWidget( m_autoBrushWidget );
         m_autoBrushWidget->setBrush(brush);
     }
-    else if (brush->inherits("KisCustomBrushWidget")) {
-        m_customBrushWidget->setBrush(brush);
-    }
-    else if (brush->inherits("KisTextBrush")) {
-        m_testBrushWidget->setBrush(brush);
+    else if (dynamic_cast<KisTextBrush*>(brush.data())) {
+        m_brushesTab->setCurrentWidget( m_textBrushWidget );
+        m_textBrushWidget->setBrush(brush);
     }
     else {
+        m_brushesTab->setCurrentWidget( m_brushChooser );
         m_brushChooser->setBrush(brush);
     }
-#endif
+
 }
 
 

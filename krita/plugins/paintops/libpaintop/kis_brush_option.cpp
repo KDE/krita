@@ -17,12 +17,17 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "kis_brush_option.h"
-#include "kis_brush_selection_widget.h"
+
+#include <QDomDocument>
+#include <QDomElement>
+
 #include <klocale.h>
+
+#include <kis_image.h>
+
+#include "kis_brush_selection_widget.h"
 #include "kis_brush.h"
-#include "kis_brush_registry.h"
-#include "kis_brush_factory.h"
-#include "kis_image.h"
+
 
 KisBrushOption::KisBrushOption()
         : KisPaintOpOption(i18n("Brush Tip"))
@@ -65,30 +70,24 @@ void KisBrushOption::setImage(KisImageSP image)
 }
 
 
-void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* settings) const
 {
-#ifdef __GNUC__
-#warning "KisBrushOption::writeOptionSetting: define a serialization format for potato stamps"
-#endif
+    KisBrushSP brush = m_brushSelectionWidget->brush();
+    QDomDocument d;
+    QDomElement e = d.createElement( "brush_definition" );
+    brush->toXML( d, e );
+    settings->setProperty( "BrushDefinition", d.toString() );
+
 }
 
 void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-#ifdef __GNUC__
-#warning "KisBrushOption::readOptionSetting: define a serialization format for potato stamps & a way to  set the active potato stamp correctly"
-#endif
-/*
-    QString brushtype = setting->getString("brush_type_id");
-    Q_ASSERT(!brushtype.isEmpty());
-    if (brushtype.isEmpty()) return;
-
-    KisBrushFactory* factory = KisBrushRegistry::instance()->get(brushtype);
-    Q_ASSERT(factory);
-    if (!factory) return;
 
     QString brushDefinition = setting->getString("brush_definition");
-    KisBrushSP brush = factory->createBrush(brushDefinition);
-
+    QDomDocument d;
+    d.setContent( brushDefinition, false );
+    QDomElement e = d.elementsByTagName("brush_definition" ).at( 0 ).toElement();
+    KisBrushSP brush = KisBrush::fromXML( e );
     m_brushSelectionWidget->setCurrentBrush(brush);
-*/
+
 }

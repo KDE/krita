@@ -54,7 +54,14 @@ public:
         m_font = font;
     }
 
+    QFont font() {
+
+        return m_font;
+    }
+
     void updateBrush();
+
+    void toXML(QDomDocument& , QDomElement&) const;
 
 private:
 

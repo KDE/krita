@@ -13,6 +13,9 @@ set(kritalibbrush_LIB_SRCS
     kis_qimage_mask.cpp
     kis_scaled_brush.cpp
     kis_text_brush.cpp
+    kis_auto_brush_factory.cpp
+    kis_text_brush_factory.cpp
+    kis_gbr_brush_factory.cpp
 )
 
 kde4_add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS} )

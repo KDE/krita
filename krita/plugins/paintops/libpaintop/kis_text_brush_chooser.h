@@ -35,6 +35,8 @@ public:
         return m_textBrush;
     }
 
+    void setBrush( KisBrushSP brush );
+
 private slots:
 
     void rebuildTextBrush();

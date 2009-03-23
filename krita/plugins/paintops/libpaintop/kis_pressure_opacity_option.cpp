@@ -23,13 +23,14 @@
 #include <KoColorSpace.h>
 
 KisPressureOpacityOption::KisPressureOpacityOption()
-        : KisCurveOption(i18n("Opacity"), "Opacity", false)
+        : KisCurveOption(i18n("Opacity"), "Opacity", true)
 {
 }
 
 
 quint8 KisPressureOpacityOption::apply(KisPainter * painter, double pressure) const
 {
+
     if (!isChecked()) {
         return painter->opacity();
     }

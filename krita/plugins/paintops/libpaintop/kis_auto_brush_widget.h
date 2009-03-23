@@ -38,10 +38,16 @@ public:
 class PAINTOP_EXPORT KisAutoBrushWidget : public KisWdgAutobrush
 {
     Q_OBJECT
+
 public:
+
     KisAutoBrushWidget(QWidget *parent, const char* name, const QString& caption);
+
     void activate();
+
     KisBrushSP brush();
+
+    void setBrush( KisBrushSP brush );
 
 private slots:
 

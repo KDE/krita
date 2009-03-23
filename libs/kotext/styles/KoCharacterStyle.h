@@ -326,6 +326,12 @@ signals:
     void nameChanged(const QString &newName);
 
 private:
+    /**
+    * Load the style from the \a KoStyleStack style stack using the
+    * OpenDocument format.
+    */
+    void loadOdfProperties(KoStyleStack& styleStack);
+
     class Private;
     Private * const d;
 };

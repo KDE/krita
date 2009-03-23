@@ -101,10 +101,6 @@ void KoOdfLoadingContext::addStyles(const KoXmlElement* style, const char* famil
             kWarning(32500) << "Parent style not found: " << family << parentStyleName << usingStylesAutoStyles;
             //we are handling a non compliant odf file. let's at the very least load the application default, and the eventual odf default
             if (family) {
-                const KoXmlElement* appDef = m_defaultStylesReader.defaultStyle(family);
-                if (appDef) {// on top of all, the application default style for this family
-                    m_styleStack.push(*appDef);
-                }
                 const KoXmlElement* def = m_stylesReader.defaultStyle(family);
                 if (def) {   // then, the default style for this family
                     m_styleStack.push(*def);
@@ -112,11 +108,6 @@ void KoOdfLoadingContext::addStyles(const KoXmlElement* style, const char* famil
             }
         }
     } else if (family) {
-        //first push the applicationDefaultStyle
-        const KoXmlElement* appDef = m_defaultStylesReader.defaultStyle(family);
-        if (appDef) {// on top of all, the application default style for this family
-            m_styleStack.push(*appDef);
-        }
         const KoXmlElement* def = m_stylesReader.defaultStyle(family);
         if (def) {   // then, the default style for this family
             m_styleStack.push(*def);

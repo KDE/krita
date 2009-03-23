@@ -136,10 +136,15 @@ QPixmap KoPAMasterPage::generateThumbnail( const QSize& size )
     painter.setRenderHint( QPainter::Antialiasing );
     painter.translate( pageRect.topLeft() );
 
+    paintPage( painter, zoomHandler );
+    return pixmap;
+}
+
+void KoPAMasterPage::paintPage( QPainter & painter, KoZoomHandler & zoomHandler )
+{
     paintBackground( painter, zoomHandler );
 
     KoShapePainter shapePainter;
     shapePainter.setShapes( iterator() );
     shapePainter.paintShapes( painter, zoomHandler );
-    return pixmap;
 }

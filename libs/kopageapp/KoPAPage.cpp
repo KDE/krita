@@ -151,20 +151,24 @@ QPixmap KoPAPage::generateThumbnail( const QSize& size )
     // don't paint null pixmap
     if ( size.isEmpty() ) // either width or height is <= 0
         return QPixmap();
-
     KoZoomHandler zoomHandler;
     const KoPageLayout & layout = pageLayout();
     KoPAUtil::setZoom( layout, size, zoomHandler );
     QRect pageRect( KoPAUtil::pageRect( layout, size, zoomHandler ) );
 
     QPixmap pixmap( size.width(), size.height() );
-    // should it be transparent at the places where it is to big?
     pixmap.fill( Qt::white );
     QPainter painter( &pixmap );
     painter.setClipRect( pageRect );
     painter.setRenderHint( QPainter::Antialiasing );
     painter.translate( pageRect.topLeft() );
 
+    paintPage( painter, zoomHandler );
+    return pixmap;
+}
+
+void KoPAPage::paintPage( QPainter & painter, KoZoomHandler & zoomHandler )
+{
     paintBackground( painter, zoomHandler );
 
     KoShapePainter shapePainter( getPaintingStrategy() );
@@ -174,7 +178,6 @@ QPixmap KoPAPage::generateThumbnail( const QSize& size )
     }
     shapePainter.setShapes( iterator() );
     shapePainter.paintShapes( painter, zoomHandler );
-    return pixmap;
 }
 
 void KoPAPage::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const

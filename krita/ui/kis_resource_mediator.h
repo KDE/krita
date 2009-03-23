@@ -48,6 +48,7 @@ public:
     virtual ~KisResourceMediator();
 
 public:
+
     KoResource *currentResource() const;
     KoResourceItem *itemFor(KoResource *r) const;
     KoResource *resourceFor(QTableWidgetItem *item) const;
@@ -55,9 +56,11 @@ public:
     QWidget *chooserWidget() const;
 
 public slots:
+
     void setActiveItem(QTableWidgetItem *item);
 
 private slots:
+
     void deleteActiveResource();
     void rServerAddedResource(KoResource *resource);
     void rServerRemovingResource(KoResource *resource);

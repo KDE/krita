@@ -25,14 +25,16 @@ class QDomElement;
 class QDomDocument;
 
 /**
- * This is the base class of auto brush shape.
+ * This is the base class for mask shapes
  * You should subclass it if you want to create a new
  * shape.
  */
 class KRITAIMAGE_EXPORT KisMaskGenerator
 {
 public:
+
     virtual ~KisMaskGenerator() {}
+
     /**
      * This function creates an auto brush shape with the following value :
      * @param w width
@@ -41,41 +43,57 @@ public:
      * @param fv vertical fade (fv \< h / 2 )
      */
     KisMaskGenerator(double w, double h, double fh, double fv) : m_w(w), m_h(h), m_fh(fh), m_fv(fv) { }
+
     /**
      * @return the alpha value at the position (x,y)
      */
     virtual quint8 valueAt(double x, double y) = 0;
+
     quint8 interpolatedValueAt(double x, double y);
+
     virtual void toXML(QDomDocument& , QDomElement&) const;
+
     /**
      * Unserialise a \ref KisMaskGenerator
      */
     static KisMaskGenerator* fromXML(const QDomElement&);
+
     double width() const {
         return m_w;
     }
+
     double height() const {
         return m_h;
     }
+
 protected:
+
     double m_w, m_h;
     double m_fh, m_fv;
 };
 
 /**
- * This class allows to create circular shape.
+ * This class allows to create circular shapes.
  */
 class KRITAIMAGE_EXPORT KisCircleMaskGenerator : public KisMaskGenerator
 {
+
 public:
+
     virtual ~KisCircleMaskGenerator() {}
+
     KisCircleMaskGenerator(double w, double h, double fh, double fv);
+
     virtual quint8 valueAt(double x, double y);
+
     virtual void toXML(QDomDocument& , QDomElement&) const;
+
 private:
+
     double norme(double a, double b) {
         return a*a + b * b;
     }
+
 private:
     double m_xcenter, m_ycenter;
     double m_xcoef, m_ycoef;
@@ -83,16 +101,23 @@ private:
 };
 
 /**
- * This class allows to create rectangular shape.
+ * This class allows to create rectangular shapes.
  */
 class KRITAIMAGE_EXPORT KisRectangleMaskGenerator : public KisMaskGenerator
 {
+
 public:
+
     virtual ~KisRectangleMaskGenerator() {}
+
     KisRectangleMaskGenerator(double w, double h, double fh, double fv);
+
     virtual quint8 valueAt(double x, double y);
+
     virtual void toXML(QDomDocument& , QDomElement&) const;
+
 private:
+
     double m_xcenter, m_ycenter, m_c;
 };
 

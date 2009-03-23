@@ -236,7 +236,7 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
     QList<QTextList*> textLists; // Store the current lists being stored.
     KoList *currentList = 0;
 
-    while (block.isValid() && ((to == -1) || (block.position() < to))) {
+    while (block.isValid() && ((to == -1) || (block.position() <= to))) {
         QTextBlockFormat blockFormat = block.blockFormat();
         QTextList *textList = block.textList();
         int headingLevel = 0, numberedParagraphLevel = 0;

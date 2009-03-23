@@ -613,6 +613,7 @@ void TestLoading::addData()
 
     QTest::newRow("attributedText") << "TextContents/Paragraph/attributedText";
     QTest::newRow("basicContents") << "TextContents/Paragraph/basicContents";
+    QTest::newRow("nestedSpan") << "TextContents/Paragraph/nestedSpan";
     QTest::newRow("whitespace") << "TextContents/Paragraph/whitespace";
 
     QTest::newRow("fontSize1") << "TextContents/TextFormatting/fontSize";
@@ -756,9 +757,9 @@ QString TestLoading::documentToOdt(QTextDocument *document)
 
     KoGenStyles mainStyles;
     KoStyleManager *styleMan = KoTextDocument(document).styleManager();
-    styleMan->saveOdf(mainStyles);
     KoEmbeddedDocumentSaver embeddedSaver;
     KoShapeSavingContext context(xmlWriter, mainStyles, embeddedSaver);
+    styleMan->saveOdf(mainStyles);
 
     xmlWriter.startElement("office:body");
     xmlWriter.startElement("office:text");

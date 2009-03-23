@@ -25,6 +25,7 @@
 #include "KoShapeControllerBase.h"
 #include "KoDataCenter.h"
 #include "KoImageCollection.h"
+#include "KoLoadingShapeUpdater.h"
 
 #include <kdebug.h>
 
@@ -53,6 +54,8 @@ public:
     QMap<QString, KoSharedLoadingData*> sharedData;
     int zIndex;
     QMap<QString, KoDataCenter *> dataCenterMap;
+    QMap<QString, KoLoadingShapeUpdater*> updaterById;
+    QMap<KoShape *, KoLoadingShapeUpdater*> updaterByShape;
 };
 
 KoShapeLoadingContext::KoShapeLoadingContext(KoOdfLoadingContext & context, const QMap<QString, KoDataCenter *> & dataCenterMap)
@@ -83,11 +86,32 @@ void KoShapeLoadingContext::addLayer(KoShapeLayer * layer, const QString & layer
 void KoShapeLoadingContext::addShapeId(KoShape * shape, const QString & id)
 {
     d->drawIds.insert(id, shape);
+    QMap<QString, KoLoadingShapeUpdater*>::iterator it(d->updaterById.find(id));
+    while (it != d->updaterById.end() && it.key() == id) {
+        d->updaterByShape.insertMulti(shape, it.value());
+        it = d->updaterById.erase(it);
+    }
 }
 
 KoShape * KoShapeLoadingContext::shapeById(const QString & id)
 {
     return d->drawIds.value(id, 0);
+}
+
+// TODO make sure to remove the shape from the loading context when loading for it failed and it was deleted. This can also happen when the parent is deleted
+void KoShapeLoadingContext::updateShape(const QString & id, KoLoadingShapeUpdater * shapeUpdater)
+{
+    d->updaterById.insertMulti(id, shapeUpdater);
+}
+
+void KoShapeLoadingContext::shapeLoaded(KoShape * shape)
+{
+    QMap<KoShape*, KoLoadingShapeUpdater*>::iterator it(d->updaterByShape.find(shape));
+    while (it != d->updaterByShape.end() && it.key() == shape) {
+        it.value()->update(shape);
+        delete it.value();
+        it = d->updaterByShape.erase(it);
+    }
 }
 
 KoImageCollection * KoShapeLoadingContext::imageCollection()

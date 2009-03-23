@@ -37,6 +37,8 @@
 #include <QtGui/QPainter>
 #include <QtGui/QFont>
 
+#include "ArtisticTextShapeLoadingUpdater.h"
+
 #define FROM_PS_SIZE(x) (72.0 / KoGlobal::dpiY() * x)
 #define TO_PS_SIZE(x) ( KoGlobal::dpiY() / 72.0 * x)
 
@@ -179,7 +181,12 @@ bool ArtisticTextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingCon
         else if( pair[0] == "textPath" )
         {
             KoPathShape * path = dynamic_cast<KoPathShape*>( context.shapeById( pair[1] ) ); 
-            putOnPath( path );
+            if ( path ) {
+                putOnPath( path );
+            }
+            else {
+                context.updateShape( pair[1], new ArtisticTextShapeLoadingUpdater(this) );
+            }
         }
         else if( pair[0] == "startOffset" )
         {

@@ -23,12 +23,13 @@
 #ifndef KORESOURCESERVER_H
 #define KORESOURCESERVER_H
 
-#include <QtCore/QMutex>
-#include <QtCore/QMutexLocker>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QList>
-#include <QtCore/QFileInfo>
+#include <QMutex>
+#include <QMutexLocker>
+#include <QString>
+#include <QStringList>
+#include <QList>
+#include <QHash>
+#include <QFileInfo>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -75,7 +76,7 @@ public:
         : KoResourceServerBase(type)
         {
         }
-        
+
     virtual ~KoResourceServer()
         {
         }
@@ -96,6 +97,7 @@ public:
             filenames.pop_front();
 
             QString fname = QFileInfo(front).fileName();
+
             //kDebug(30009) << "Loading " << fname << " of type " << type();
             // XXX: Don't load resources with the same filename. Actually, we should look inside
             //      the resource to find out whether they are really the same, but for now this
@@ -106,7 +108,14 @@ public:
                 T* resource = createResource(front);
                 if (resource->load() && resource->valid())
                 {
-                    m_resources.append(resource);
+                    m_resourcesByFilename[fname] = resource;
+
+                    if ( resource->name().isNull() ) {
+                        resource->setName( fname );
+                    }
+                    m_resourcesByName[resource->name()] = resource;
+
+
                     notifyResourceAdded(resource);
                     Q_CHECK_PTR(resource);
                 }
@@ -129,7 +138,17 @@ public:
         if( ! resource->save() )
             return false;
 
-        m_resources.append(resource);
+        Q_ASSERT( !resource->filename().isEmpty() || !resource->name().isEmpty() );
+        if ( resource->filename().isEmpty() ) {
+            resource->setFilename( resource->name() );
+        }
+        else if ( resource->name().isEmpty() ) {
+            resource->setName( resource->filename() );
+        }
+
+        m_resourcesByFilename[resource->filename()] = resource;
+        m_resourcesByName[resource->name()] = resource;
+
         notifyResourceAdded(resource);
 
         return true;
@@ -137,25 +156,36 @@ public:
 
     /// Remove a resource from resourceserver and hard disk
     bool removeResource(T* resource) {
-        int index = m_resources.indexOf( resource );
-        if( index < 0 )
+
+        if ( !m_resourcesByFilename.contains( resource->filename() ) ) {
             return false;
+        }
 
         QFile file( resource->filename() );
+        if( ! file.remove() ) {
 
-        if( ! file.remove() )
-            return false;
+            // Don't do anything, it's probably write protected. In
+            // //future, we should store in config which read-only
+            // //resources the user has removed and blacklist them on
+            // app-start. But if we cannot remove a resource from the
+            // disk, remove it from the chooser at least.
+
+            //return false;
+        }
 
         notifyRemovingResource(resource);
 
-        m_resources.removeAt( index );
+        //m_resourcesByName.remove[resource->name()];
+        //m_resourcesByFilename.remove[resource->filename()];
+
         delete resource;
+
         return true;
     }
 
     QList<T*> resources() {
         loadLock.lock();
-        QList<T*> resourceList = m_resources;
+        QList<T*> resourceList = m_resourcesByFilename.values();
         loadLock.unlock();
         return resourceList;
     }
@@ -199,7 +229,7 @@ public:
     /**
      * Addes an observer to the server
      * @param observer the observer to be added
-     * @param notifyLoadedResources determines if the observer should be notified about the already loaded resources 
+     * @param notifyLoadedResources determines if the observer should be notified about the already loaded resources
      */
     void addObserver(KoResourceServerObserver<T>* observer, bool notifyLoadedResources = true)
     {
@@ -208,8 +238,9 @@ public:
             m_observers.append(observer);
 
             if(notifyLoadedResources) {
-                foreach(T* resource, m_resources)
+                foreach(T* resource, m_resourcesByFilename) {
                     observer->resourceAdded(resource);
+                }
             }
         }
         loadLock.unlock();
@@ -228,7 +259,27 @@ public:
         m_observers.removeAt( index );
     }
 
+    T* getResourceByFilename( const QString& filename )
+    {
+        if ( !m_resourcesByFilename.contains( filename ) ) {
+            return 0;
+        }
+
+        return m_resourcesByFilename[filename];
+    }
+
+
+    T* getResourceByName( const QString& name )
+    {
+        if ( !m_resourcesByName.contains( name ) ) {
+            return 0;
+        }
+
+        return m_resourcesByName[name];
+    }
+
 protected:
+
     virtual T* createResource( const QString & filename ) { return new T(filename); }
 
     void notifyResourceAdded(T* resource)
@@ -246,7 +297,10 @@ protected:
 
 
 private:
-    QList<T*> m_resources;
+
+    QHash<QString, T*> m_resourcesByName;
+    QHash<QString, T*> m_resourcesByFilename;
+
     QList<KoResourceServerObserver<T>*> m_observers;
 
 };

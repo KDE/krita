@@ -142,10 +142,13 @@ void KoColorPopupAction::updateIcon( )
         d->applyMode = false;
     }
     QPainter p(&pm);
-    if(d->applyMode)
+    if(d->applyMode) {
         p.fillRect(0, iconSize.height() - 4, iconSize.width(), 4, d->currentColor.toQColor());
-    else
+    }
+    else {
+        d->checkerPainter.paint(p, QRect(QPoint(),iconSize));
         p.fillRect(0, 0, iconSize.width(), iconSize.height(), d->currentColor.toQColor());
+    }
 
     p.end();
 

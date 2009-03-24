@@ -81,6 +81,7 @@ private:
 class KoResourceSelector::Private
 {
 public:
+    Private() : model(0), view(0) {}
     KoResourceModel * model;
     KoResourceItemView * view;
 };
@@ -96,6 +97,7 @@ KoResourceSelector::KoResourceSelector( KoAbstractResourceServerAdapter * resour
     setView( d->view );
     setModel( d->model );
     setItemDelegate( new KoResourceItemDelegate( this ) );
+    setMouseTracking(true);
 
     d->view->setCurrentIndex( d->model->index( 0, 0 ) );
 }
@@ -143,6 +145,17 @@ void KoResourceSelector::mousePressEvent( QMouseEvent * event )
         if( resource )
             emit resourceApplied( resource );
     }
+}
+
+void KoResourceSelector::mouseMoveEvent( QMouseEvent * event )
+{
+    QStyleOptionComboBox option;
+    option.initFrom( this );
+    QRect r = style()->subControlRect( QStyle::CC_ComboBox, &option, QStyle::SC_ComboBoxEditField, this );
+    if (r.contains(event->pos()))
+        setCursor(Qt::PointingHandCursor);
+    else
+        unsetCursor();
 }
 
 void KoResourceSelector::setColumnCount( int columnCount )

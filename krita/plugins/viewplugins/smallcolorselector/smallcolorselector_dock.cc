@@ -29,6 +29,7 @@ SmallColorSelectorDock::SmallColorSelectorDock() : QDockWidget(), m_canvas(0)
 {
     m_smallColorWidget = new KisSmallColorWidget(this);
     setWidget(m_smallColorWidget);
+    m_smallColorWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Maximum );
     connect(m_smallColorWidget, SIGNAL(colorChanged(const QColor&)),
             this, SLOT(colorChangedProxy(const QColor&)));
 

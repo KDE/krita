@@ -137,6 +137,9 @@ void KoColorPopupAction::updateIcon( )
     {
         pm = QPixmap(iconSize);
         pm.fill(Qt::transparent);
+        // there was no icon set so we assume 
+        // that we create an icon from the current color
+        d->applyMode = false;
     }
     QPainter p(&pm);
     if(d->applyMode)

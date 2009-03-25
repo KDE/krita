@@ -23,13 +23,12 @@
 #ifndef KORESOURCESERVER_H
 #define KORESOURCESERVER_H
 
-#include <QMutex>
-#include <QMutexLocker>
-#include <QString>
-#include <QStringList>
-#include <QList>
-#include <QHash>
-#include <QFileInfo>
+#include <QtCore/QMutex>
+#include <QtCore/QMutexLocker>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
+#include <QtCore/QList>
+#include <QtCore/QFileInfo>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>

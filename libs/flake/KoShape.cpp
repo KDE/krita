@@ -1139,7 +1139,10 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
     if (attributes & OdfTransformation) {
         QMatrix matrix = absoluteTransformation(0) * context.shapeOffset(this);
         if (! matrix.isIdentity()) {
-            if (matrix.m11() == 1 && matrix.m12() == 0 && matrix.m21() == 0 && matrix.m22() == 1) {
+            if (qAbs(matrix.m11()) - 1 < 1E-5           // 1
+                    && qAbs(matrix.m12()) < 1E-5        // 0
+                    && qAbs(matrix.m21()) < 1E-5        // 0
+                    && qAbs(matrix.m22()) - 1 < 1E-5) { // 1
                 context.xmlWriter().addAttribute("svg:x", QString("%1pt").arg(matrix.dx()));
                 context.xmlWriter().addAttribute("svg:y", QString("%1pt").arg(matrix.dy()));
             } else {

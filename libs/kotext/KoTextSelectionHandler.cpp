@@ -456,6 +456,7 @@ void KoTextSelectionHandler::nextParagraph()
     bf.clearProperty(KoParagraphStyle::ListStartValue);
     bf.clearProperty(KoParagraphStyle::UnnumberedListItem);
     bf.clearProperty(KoParagraphStyle::IsListHeader);
+    bf.clearProperty(KoParagraphStyle::MasterPageName);
     d->caret->setBlockFormat(bf);
     if (nextStyle) {
         QTextBlock block = d->caret->block();

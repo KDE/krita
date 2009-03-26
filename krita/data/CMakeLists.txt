@@ -10,6 +10,7 @@ add_subdirectory( images )
 
 install( FILES  
     krita_filter.desktop      
+    krita_brush.desktop      
     krita_paintop.desktop      
     krita_plugin.desktop      
     krita_tool.desktop

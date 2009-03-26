@@ -61,8 +61,8 @@
 
 
 KisBrushOp::KisBrushOp(const KisBrushOpSettings *settings, KisPainter *painter)
-        : KisBrushBasedPaintOp(painter)
-        , settings(settings)
+    : KisBrushBasedPaintOp(painter)
+    , settings(settings)
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);

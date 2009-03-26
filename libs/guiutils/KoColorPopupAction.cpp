@@ -137,12 +137,18 @@ void KoColorPopupAction::updateIcon( )
     {
         pm = QPixmap(iconSize);
         pm.fill(Qt::transparent);
+        // there was no icon set so we assume 
+        // that we create an icon from the current color
+        d->applyMode = false;
     }
     QPainter p(&pm);
-    if(d->applyMode)
+    if(d->applyMode) {
         p.fillRect(0, iconSize.height() - 4, iconSize.width(), 4, d->currentColor.toQColor());
-    else
+    }
+    else {
+        d->checkerPainter.paint(p, QRect(QPoint(),iconSize));
         p.fillRect(0, 0, iconSize.width(), iconSize.height(), d->currentColor.toQColor());
+    }
 
     p.end();
 

@@ -61,6 +61,9 @@ public:
     /// reimplemented
     virtual void setDisplayMasterBackground( bool display );
 
+    /// reimplemented
+    virtual void paintPage( QPainter & painter, KoZoomHandler & zoomHandler );
+
 protected:
     /**
      * DisplayMasterBackground and DisplayMasterShapes are only saved loaded in a presentation

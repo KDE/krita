@@ -10,4 +10,5 @@
 * fix dynamic brush where it tries to get a brush shape (it probably shouldn't inherit kis_brush_based_paintop, though)
 * fix scripting plugins (include scripts themselves)
 * fix action recorder serialize/unserialize
-
+* spacing should be set in the brush selection widget, not in the gbr brush chooser -- it is useful for all libbrush brushes
+* make kisbrush plugins for .abr, .myb and other brush formats

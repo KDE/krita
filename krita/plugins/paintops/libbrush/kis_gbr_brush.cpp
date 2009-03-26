@@ -516,9 +516,12 @@ KisGbrBrush* KisGbrBrush::clone() const
 void KisGbrBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
     Q_UNUSED(d);
-    e.setAttribute("type", "brush");
-    e.setAttribute("name", name());
-    e.setAttribute("filename", filename());
+    e.setAttribute("type", "brush"); // legacy
+    e.setAttribute( "brush_type", "kis_gbr_brush" );
+    e.setAttribute("name", name()); // legacy
+    e.setAttribute("filename", filename()); // legacy
+    e.setAttribute( "brush_filename", filename() );
+    e.setAttribute( "brush_spacing", spacing() );
 }
 
 void KisGbrBrush::setUseColorAsMask(bool useColorAsMask)

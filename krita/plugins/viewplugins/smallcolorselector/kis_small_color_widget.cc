@@ -150,7 +150,7 @@ void KisSmallColorWidget::paintEvent(QPaintEvent * event)
 void KisSmallColorWidget::resizeEvent(QResizeEvent * event)
 {
     QWidget::resizeEvent(event);
-    setMaximumHeight(width() / 3);
+    setMaximumHeight(50);
     updateParameters();
     generateRubber();
     generateSquare();

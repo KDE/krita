@@ -221,7 +221,7 @@ QString KoUnit::unitName(KoUnit _unit)
     return QString::fromLatin1("pt");
 }
 
-void KoUnit::saveOasis(KoXmlWriter* settingsWriter, KoUnit _unit)
+void KoUnit::saveOdf(KoXmlWriter* settingsWriter, KoUnit _unit)
 {
     settingsWriter->addConfigItem("unit", unitName(_unit));
 }

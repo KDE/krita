@@ -37,6 +37,7 @@ KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
     double hfade = elt.attribute("autobrush_hfade", "1.0").toDouble();
     double vfade = elt.attribute("autobrush_vfade", "1.0").toDouble();
     QString typeShape = elt.attribute("autobrush_type", "circle");
+
     if (typeShape == "circle") {
         return new KisCircleMaskGenerator(width, height, hfade, vfade);
     } else {

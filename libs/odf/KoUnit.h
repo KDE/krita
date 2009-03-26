@@ -191,7 +191,7 @@ public:
     static qreal parseValue(const QString& value, qreal defaultVal = 0.0);
 
     /// Save a unit in OASIS format
-    static void saveOasis(KoXmlWriter* settingsWriter, KoUnit _unit);
+    static void saveOdf(KoXmlWriter* settingsWriter, KoUnit _unit);
 
 private:
     Unit m_unit;

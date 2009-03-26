@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Peter Simonsson <peter.simonsson@gmail.com>
+ * Copyright (C) 2007-2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,7 +27,6 @@
 
 #include "kopageapp_export.h"
 
-class KComponentData;
 class KoPAMasterPage;
 class KoPAPage;
 
@@ -41,6 +41,7 @@ public:
      * @param context The shape controller.
      */
      KoPALoadingContext( KoOdfLoadingContext &context, const QMap<QString, KoDataCenter *> & dataCenterMap );
+     ~KoPALoadingContext();
 
     /**
      * Get the master page with the name @p name.
@@ -78,8 +79,8 @@ public:
     void addPage( const QString& name, KoPAPage* page );
 
 private:
-    QMap<QString, KoPAMasterPage*> m_masterPages;
-    QMap<QString, KoPAPage*> m_pages;
+    class Private;
+    Private * const d;
 };
 
 #endif /*KOPALOADINGCONTEXT_H*/

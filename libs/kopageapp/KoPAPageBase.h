@@ -38,6 +38,7 @@ class KoGenStyle;
 class KoShape;
 class KoPALoadingContext;
 class KoShapeManagerPaintingStrategy;
+class KoZoomHandler;
 
 /**
  * Base class used for KoPAMasterPage and KoPAPage
@@ -134,6 +135,14 @@ public:
      * The default page type KoPageApp::Page is returned
      */
     virtual KoPageApp::PageType pageType() const;
+
+    /**
+     * Paint to content of the page to the painter
+     *
+     * @param painter The painter used to paint the page
+     * @param zoomHandler The zoomHandler used to paint the page
+     */
+    virtual void paintPage( QPainter & painter, KoZoomHandler & zoomHandler ) = 0;
 
 protected:
     /**

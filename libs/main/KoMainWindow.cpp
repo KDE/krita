@@ -342,45 +342,35 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->m_dockWidgetMenu->setVisible(false);
 
     // Load list of recent files
-    KSharedConfigPtr config = componentData.isValid() ? componentData.config() : KGlobal::config();
-    d->recent->loadEntries(config->group("RecentFiles"));
+    KSharedConfigPtr configPtr = componentData.isValid() ? componentData.config() : KGlobal::config();
+    d->recent->loadEntries(configPtr->group("RecentFiles"));
 
     createShellGUI();
     d->bMainWindowGUIBuilt = true;
 
     // Get screen geometry
     const int scnum = QApplication::desktop()->screenNumber(parentWidget());
-    QRect desk = QApplication::desktop()->screenGeometry(scnum);
+    QRect desk = QApplication::desktop()->availableGeometry(scnum);
 
     // if the desktop is virtual then use virtual screen size
     if (QApplication::desktop()->isVirtualDesktop())
-        desk = QApplication::desktop()->screenGeometry(QApplication::desktop()->screen());
+        desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen());
 
     if (!initialGeometrySet()) {
         // Default size
         const int deskWidth = desk.width();
-        if (deskWidth > 1100) // very big desktop ?
-            resize(1000, 800);
-        if (deskWidth > 850) // big desktop ?
-            resize(800, 600);
-        else // small (800x600, 640x480) desktop
-            resize(600, 400);
-    }
-
-    // Saved size
-    //kDebug(30003) <<"KoMainWindow::restoreWindowSize";
-//     restoreWindowSize( config->group( "MainWindow" ) );
-
-    // Dunno why, but  KWindowSystem::setState( winId(), state ); make KOffice application becomes smaller instead of staying big, TODO contact David Faure about this when he is around again.
-    {
-        KConfigGroup config(KGlobal::config(), "MainWindow");
-
-        const QSize size(config.readEntry(QString::fromLatin1("Width %1").arg(desk.width()), 0),
-                         config.readEntry(QString::fromLatin1("Height %1").arg(desk.height()), 0));
-        if (!size.isEmpty()) {
-            resize(size);
+        if (deskWidth > 1024) {
+            // a nice width, and slightly less than total available
+            // height to componensate for the window decs
+            resize( ( deskWidth / 3 ) * 2, desk.height() - 50);
+        }
+        else {
+            resize( desk.size() );
         }
     }
+
+   KConfigGroup config(KGlobal::config(), "MainWindow");
+   restoreWindowSize( config );
 }
 
 KoMainWindow::~KoMainWindow()
@@ -1078,13 +1068,18 @@ void KoMainWindow::closeEvent(QCloseEvent *e)
 
 void KoMainWindow::saveWindowSettings()
 {
-    if (d->m_windowSizeDirty && rootDocument()) {
-        KSharedConfigPtr config = componentData().config();
+    KSharedConfigPtr config = componentData().config();
+
+    if (d->m_windowSizeDirty ) {
+
         // Save window size into the config file of our componentData
         kDebug(30003) << "KoMainWindow::saveWindowSettings";
         saveWindowSize(config->group("MainWindow"));
         config->sync();
         d->m_windowSizeDirty = false;
+    }
+
+    if ( rootDocument()) {
 
         // Save toolbar position into the config file of the app, under the doc's component name
         KConfigGroup group = KGlobal::config()->group(rootDocument()->componentData().componentName());
@@ -1100,9 +1095,11 @@ void KoMainWindow::saveWindowSettings()
             }
         }
 
-        KGlobal::config()->sync();
-        resetAutoSaveSettings(); // Don't let KMainWindow override the good stuff we wrote down
     }
+
+    KGlobal::config()->sync();
+    resetAutoSaveSettings(); // Don't let KMainWindow override the good stuff we wrote down
+
 }
 
 void KoMainWindow::resizeEvent(QResizeEvent * e)

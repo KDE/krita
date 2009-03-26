@@ -61,6 +61,8 @@ protected:
     virtual void paintEvent( QPaintEvent * );
     /// reimplemented
     virtual void mousePressEvent( QMouseEvent * );
+    /// reimplemented
+    virtual void mouseMoveEvent( QMouseEvent * event );
 
 private slots:
     void indexChanged( int index );

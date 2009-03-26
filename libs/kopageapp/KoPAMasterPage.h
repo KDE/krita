@@ -54,6 +54,8 @@ public:
     /// reimplemented
     virtual void setDisplayMasterBackground( bool display );
 
+    virtual void paintPage( QPainter & painter, KoZoomHandler & zoomHandler );
+
 protected:
     /// Reimplemented from KoPageBase
     virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );

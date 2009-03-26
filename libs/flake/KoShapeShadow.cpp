@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008-2009 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -67,22 +67,43 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
     if (! d->visible)
         return;
 
-    painter.save();
-    KoShape::applyConversion(painter, converter);
-
-    painter.setPen(d->color);
-    if (shape->background())
+    // calculate the shadow offset independent of shape transformation
+    QMatrix tm;
+    tm.translate(d->offset.x(), d->offset.y());   
+    QMatrix tr = shape->absoluteTransformation(&converter);   
+    QMatrix offsetMatrix = tr * tm * tr.inverted();
+    
+    if (shape->background()) {
+        painter.save();
+        
+        KoShape::applyConversion(painter, converter);
+        
+        // the shadow direction is independent of the shapes transformation
+        // please only change if you know what you are doing
+        painter.setMatrix(offsetMatrix * painter.matrix());
         painter.setBrush(QBrush(d->color));
-    painter.translate(d->offset);
-    QPainterPath path(shape->outline());
-    KoPathShape * pathShape = dynamic_cast<KoPathShape*>(shape);
-    if (pathShape)
-        path.setFillRule(pathShape->fillRule());
-    painter.drawPath(path);
-    painter.restore();
+
+        QPainterPath path(shape->outline());
+        KoPathShape * pathShape = dynamic_cast<KoPathShape*>(shape);
+        if (pathShape)
+            path.setFillRule(pathShape->fillRule());
+        painter.drawPath(path);
+        painter.restore();
+    }
 
     if (shape->border()) {
-        painter.translate(converter.documentToView(d->offset));
+        QMatrix oldPainterMatrix = painter.matrix();
+        KoShape::applyConversion(painter, converter);
+        QMatrix newPainterMatrix = painter.matrix();
+        
+        // the shadow direction is independent of the shapes transformation
+        // please only change if you know what you are doing
+        painter.setMatrix(offsetMatrix * painter.matrix());
+        
+        // compensate applyConversion call in paintBorder
+        QMatrix scaleMatrix = newPainterMatrix * oldPainterMatrix.inverted();
+        painter.setMatrix(scaleMatrix.inverted() * painter.matrix());
+        
         shape->border()->paintBorder(shape, painter, converter, d->color);
     }
 }

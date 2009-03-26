@@ -223,7 +223,7 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     }
 
     KoGenStyles mainStyles;
-    KoGenStyle pageLayout = page.saveOasis();
+    KoGenStyle pageLayout = page.saveOdf();
     QString layoutName = mainStyles.lookup(pageLayout, "PL");
     KoGenStyle masterPage(KoGenStyle::StyleMaster);
     masterPage.addAttribute("style:page-layout-name", layoutName);
@@ -343,7 +343,7 @@ bool KisShapeLayer::loadLayer( KoStore* store )
         const KoXmlElement *style = odfStore.styles().findStyle(
             master->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) );
         KoPageLayout pageLayout;
-        pageLayout.loadOasis( *style );
+        pageLayout.loadOdf( *style );
         setSize( QSizeF( pageLayout.width, pageLayout.height ) );
     }
     else

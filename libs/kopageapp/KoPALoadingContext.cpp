@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Peter Simonsson <peter.simonsson@gmail.com>
+ * Copyright (C) 2007-2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,32 +29,45 @@
 #include "KoPAMasterPage.h"
 #include "KoPAPage.h"
 
+class KoPALoadingContext::Private
+{
+public:
+    QMap<QString, KoPAMasterPage*> masterPages;
+    QMap<QString, KoPAPage*> pages;
+};
+
 KoPALoadingContext::KoPALoadingContext( KoOdfLoadingContext &context, const QMap<QString, KoDataCenter *> & dataCenterMap )
 : KoShapeLoadingContext( context, dataCenterMap )
+, d( new Private() )
 {
+}
+
+KoPALoadingContext::~KoPALoadingContext()
+{
+    delete d;
 }
 
 KoPAMasterPage* KoPALoadingContext::masterPageByName( const QString& name )
 {
-    return m_masterPages.value( name, 0 );
+    return d->masterPages.value( name, 0 );
 }
 
 void KoPALoadingContext::addMasterPage( const QString& name, KoPAMasterPage* master )
 {
-    m_masterPages.insert( name, master );
+    d->masterPages.insert( name, master );
 }
 
 const QMap<QString, KoPAMasterPage *> & KoPALoadingContext::masterPages()
 {
-    return m_masterPages;
+    return d->masterPages;
 }
 
 KoPAPage* KoPALoadingContext::pageByName( const QString& name )
 {
-    return m_pages.value( name, 0 );
+    return d->pages.value( name, 0 );
 }
 
 void KoPALoadingContext::addPage( const QString& name, KoPAPage* page )
 {
-    m_pages.insert( name, page );
+    d->pages.insert( name, page );
 }

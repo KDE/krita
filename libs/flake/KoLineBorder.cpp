@@ -89,7 +89,7 @@ void KoLineBorder::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
         pen.setBrush(d->brush);
     else
         pen.setColor(d->color);
-    KoOdfGraphicStyles::saveOasisStrokeStyle(style, context.mainStyles(), pen);
+    KoOdfGraphicStyles::saveOdfStrokeStyle(style, context.mainStyles(), pen);
 }
 
 void KoLineBorder::borderInsets(const KoShape *shape, KoInsets &insets)

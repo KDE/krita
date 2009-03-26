@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
@@ -1555,6 +1555,8 @@ void KoParagraphStyle::saveOdf(KoGenStyle & style, KoGenStyles &mainStyles)
             style.addProperty("style:auto-text-indent", autoTextIndent(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::TabStopDistance) {
             style.addPropertyPt("style:tab-stop-distance", tabStopDistance(), KoGenStyle::ParagraphType);
+        } else if (key == KoParagraphStyle::MasterPageName) {
+            style.addProperty("style:master-page-name", masterPageName());
         }
     }
     if (!writtenLineSpacing && normalLineHeight)

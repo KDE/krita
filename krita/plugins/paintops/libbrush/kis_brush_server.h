@@ -27,7 +27,7 @@
 #include "krita_export.h"
 
 class KoResource;
-class KisGbrBrush;
+class KisBrush;
 
 /**
  *
@@ -40,7 +40,7 @@ class BRUSH_EXPORT KisBrushServer : public QObject
 public:
 
     virtual ~KisBrushServer();
-    KoResourceServer<KisGbrBrush>* brushServer();
+    KoResourceServer<KisBrush>* brushServer();
 
     static KisBrushServer* instance();
 
@@ -52,7 +52,7 @@ private:
 
     static KisBrushServer *m_singleton;
 
-    KoResourceServer<KisGbrBrush>* m_brushServer;
+    KoResourceServer<KisBrush>* m_brushServer;
 
 private slots:
 

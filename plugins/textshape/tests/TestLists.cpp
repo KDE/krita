@@ -573,4 +573,3 @@ void TestDocumentLayout::testInvalidateLists()
 
     QCOMPARE(data->hasCounterData(), false); // inserting a new block on this list made the list be invalidated
 }
-

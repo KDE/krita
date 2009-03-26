@@ -40,6 +40,7 @@ class KRITAUI_EXPORT KisItemChooser : public QWidget
     Q_OBJECT
 
 public:
+
     KisItemChooser(QWidget *parent = 0, const char *name = 0);
     virtual ~KisItemChooser();
 
@@ -47,14 +48,16 @@ public:
     void setCurrent(QTableWidgetItem *item);
     void setCurrent(int index);
 
-    void removeItem(KoResourceItem *item);
+    void removeItem( KoResourceItem *item );
     void selectItem( QTableWidgetItem* item );
 
 public slots:
+
     void addItem(KoResourceItem *item);
     void addItems(const QList<KoResourceItem *>& items);
 
 signals:
+
     void selected(QTableWidgetItem *item);
     void importClicked();
     void deleteClicked();

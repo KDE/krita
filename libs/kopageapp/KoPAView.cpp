@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2009 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -62,6 +62,7 @@
 #include "KoPAViewModeNormal.h"
 #include "KoPAOdfPageSaveHelper.h"
 #include "KoPAPastePage.h"
+#include "KoPAPrintJob.h"
 #include "commands/KoPAPageInsertCommand.h"
 #include "commands/KoPAChangeMasterPageCommand.h"
 #include "dialogs/KoPAMasterPageDialog.h"
@@ -553,6 +554,11 @@ void KoPAView::navigatePage( KoPageApp::PageNavigation pageNavigation )
     if ( newPage != m_activePage ) {
         doUpdateActivePage( newPage );
     }
+}
+
+KoPrintJob * KoPAView::createPrintJob()
+{
+    return new KoPAPrintJob(this);
 }
 
 void KoPAView::canvasControllerResized()

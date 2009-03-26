@@ -15,9 +15,12 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <QString>
+#ifndef KIS_BRUSH_FACTORY
+#define KIS_BRUSH_FACTORY
 
 #include "kis_brush.h"
+
+class QDomElement;
 
 /**
  * A brush factory can create a new brush instance based
@@ -32,17 +35,16 @@ public:
     KisBrushFactory() {}
     virtual ~KisBrushFactory() {}
 
-    /**
-     * Intializes the factory, for instance by loading the relevant resources.
-     */
-    virtual void init() = 0;
+
+    virtual QString id() const = 0;
 
     /**
      * Create a a new brush from the given data or return an existing KisBrush
      * object. If this call leads to the creation of a resource, it should be
      * added to the resource provider, too.
      */
-    virtual KisBrushSP createBrush( const QString& brushDefinition ) = 0;
+    virtual KisBrushSP getOrCreateBrush( const QDomElement& element ) = 0;
 
 };
 
+#endif

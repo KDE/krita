@@ -46,11 +46,9 @@ public:
 
 public:
 
-    virtual bool load() {
-        return false;
-    }
+    bool load() { return false; }
 
-    virtual void toXML(QDomDocument& , QDomElement&) const;
+    void toXML(QDomDocument& , QDomElement&) const;
 
 private:
 

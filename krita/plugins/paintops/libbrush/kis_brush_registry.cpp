@@ -29,9 +29,14 @@
 
 #include <KoPluginLoader.h>
 
-#include "kis_debug.h"
+#include <kis_debug.h>
 
+#include "kis_brush_server.h"
 #include "kis_brush_factory.h"
+#include "kis_brush_registry.h"
+#include "kis_auto_brush_factory.h"
+#include "kis_gbr_brush_factory.h"
+#include "kis_text_brush_factory.h"
 
 KisBrushRegistry *KisBrushRegistry::m_singleton = 0;
 
@@ -39,6 +44,9 @@ KisBrushRegistry::KisBrushRegistry()
 {
     Q_ASSERT(KisBrushRegistry::m_singleton == 0);
     KisBrushRegistry::m_singleton = this;
+
+    // Initialize the brush server. This loads gbr and gih brushes.
+    KisBrushServer::instance();
 }
 
 KisBrushRegistry::~KisBrushRegistry()
@@ -49,10 +57,29 @@ KisBrushRegistry* KisBrushRegistry::instance()
 {
     if (KisBrushRegistry::m_singleton == 0) {
         KisBrushRegistry::m_singleton = new KisBrushRegistry();
+
+        KisBrushRegistry::m_singleton->add( new KisAutoBrushFactory() );
+        KisBrushRegistry::m_singleton->add( new KisGbrBrushFactory() );
+        KisBrushRegistry::m_singleton->add( new KisTextBrushFactory() );
+
         Q_CHECK_PTR( KisBrushRegistry::m_singleton );
         KoPluginLoader::instance()->load( "Krita/brush", "Type == 'Service' and ([X-Krita-Version] == 3)" );
     }
     return KisBrushRegistry::m_singleton;
+}
+
+
+KisBrushSP KisBrushRegistry::getOrCreateBrush( const QDomElement& element )
+{
+    QString brushType = element.attribute( "brush_type" );
+
+    if ( brushType.isEmpty() ) return 0;
+
+    KisBrushFactory* factory = get(brushType);
+    if (!factory) return 0;
+
+    KisBrushSP brush = factory->getOrCreateBrush(element);
+    return brush;
 }
 
 #include "kis_brush_registry.moc"

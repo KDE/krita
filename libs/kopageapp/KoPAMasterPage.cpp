@@ -49,7 +49,7 @@ void KoPAMasterPage::saveOdf( KoShapeSavingContext & context ) const
 {
     KoPASavingContext &paContext = static_cast<KoPASavingContext&>( context );
 
-    KoGenStyle pageLayoutStyle = pageLayout().saveOasis();
+    KoGenStyle pageLayoutStyle = pageLayout().saveOdf();
     pageLayoutStyle.setAutoStyleInStylesDotXml( true );
     pageLayoutStyle.addAttribute( "style:page-usage", "all" );
     QString pageLayoutName( paContext.mainStyles().lookup( pageLayoutStyle, "pm" ) );
@@ -91,7 +91,7 @@ void KoPAMasterPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingCon
     KoPageLayout pageLayout = KoPageLayout::standardLayout();
 
     if ( masterPageStyle ) {
-        pageLayout.loadOasis( *masterPageStyle );
+        pageLayout.loadOdf( *masterPageStyle );
     }
 
     setPageLayout( pageLayout );
@@ -136,10 +136,15 @@ QPixmap KoPAMasterPage::generateThumbnail( const QSize& size )
     painter.setRenderHint( QPainter::Antialiasing );
     painter.translate( pageRect.topLeft() );
 
+    paintPage( painter, zoomHandler );
+    return pixmap;
+}
+
+void KoPAMasterPage::paintPage( QPainter & painter, KoZoomHandler & zoomHandler )
+{
     paintBackground( painter, zoomHandler );
 
     KoShapePainter shapePainter;
     shapePainter.setShapes( iterator() );
     shapePainter.paintShapes( painter, zoomHandler );
-    return pixmap;
 }

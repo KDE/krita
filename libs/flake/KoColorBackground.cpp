@@ -79,7 +79,7 @@ void KoColorBackground::paint(QPainter &painter, const QPainterPath &fillPath) c
 
 void KoColorBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
 {
-    KoOdfGraphicStyles::saveOasisFillStyle(style, context.mainStyles(), QBrush(d->color, d->style));
+    KoOdfGraphicStyles::saveOdfFillStyle(style, context.mainStyles(), QBrush(d->color, d->style));
 }
 
 bool KoColorBackground::loadStyle(KoOdfLoadingContext & context, const QSizeF &)
@@ -90,7 +90,7 @@ bool KoColorBackground::loadStyle(KoOdfLoadingContext & context, const QSizeF &)
 
     QString fillStyle = styleStack.property(KoXmlNS::draw, "fill");
     if (fillStyle == "solid" || fillStyle == "hatch") {
-        QBrush brush = KoOdfGraphicStyles::loadOasisFillStyle(styleStack, fillStyle, context.stylesReader());
+        QBrush brush = KoOdfGraphicStyles::loadOdfFillStyle(styleStack, fillStyle, context.stylesReader());
         d->color = brush.color();
         d->style = brush.style();
         return true;

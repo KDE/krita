@@ -31,6 +31,7 @@ class KoOdfLoadingContext;
 class KoShapeLayer;
 class KoShape;
 class KoShapeControllerBase;
+class KoLoadingShapeUpdater;
 class KoImageCollection;
 class KoSharedLoadingData;
 class KoDataCenter;
@@ -90,6 +91,18 @@ public:
     void addShapeId(KoShape * shape, const QString & id);
     /// return the shape formerly registered using addShapeId()
     KoShape * shapeById(const QString & id);
+
+    /**
+     * call function on the shapeUpdater when the shape with the id shapeid is inserted
+     * After that destroy the updater.
+     */
+    void updateShape(const QString & id, KoLoadingShapeUpdater * shapeUpdater);
+
+    /**
+     * this checks if there is an updater for this shape if yes it calls it
+     * this needs to be done via the shape id and 
+     */
+    void shapeLoaded(KoShape * shape);
 
     /// Returns the image collection for loading images
     KoImageCollection * imageCollection();

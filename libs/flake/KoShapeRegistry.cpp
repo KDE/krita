@@ -127,6 +127,7 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
 {
     kDebug(30006) << "Going to check for" << e.namespaceURI() << ":" << e.tagName();
 
+    KoShape * shape = 0;
     // If the element is in a frame, the frame is already added by the
     // application and we only want to create a shape from the
     // embedded element. The very first shape we create is accepted.
@@ -136,9 +137,9 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
 
         KoXmlElement element;
         forEachElement(element, e) {
-            KoShape * shape = createShapeInternal(e, context, element);
+            shape = createShapeInternal(e, context, element);
             if (shape) {
-                return shape;
+                break;
             }
         }
     }
@@ -151,15 +152,21 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
         bool loaded = group->loadOdf(e, context);
         context.odfLoadingContext().styleStack().restore();
 
-        if (loaded)
-            return group;
-
-        delete group;
+        if (loaded) {
+            shape = group;
+        }
+        else {
+            delete group;
+        }
     } else {
-        return createShapeInternal(e, context, e);
+        shape = createShapeInternal(e, context, e);
     }
 
-    return 0;
+    if (shape) {
+        context.shapeLoaded(shape);
+    }
+
+    return shape;
 }
 
 KoShape * KoShapeRegistry::createShapeInternal(const KoXmlElement & fullElement, KoShapeLoadingContext & context, const KoXmlElement & element) const

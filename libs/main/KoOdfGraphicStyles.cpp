@@ -39,7 +39,7 @@
 #include "KoOdfStylesReader.h"
 #include "KoPictureShared.h"
 
-void KoOdfGraphicStyles::saveOasisFillStyle(KoGenStyle &styleFill, KoGenStyles& mainStyles, const QBrush & brush)
+void KoOdfGraphicStyles::saveOdfFillStyle(KoGenStyle &styleFill, KoGenStyles& mainStyles, const QBrush & brush)
 {
     switch (brush.style()) {
     case Qt::Dense1Pattern:
@@ -81,7 +81,7 @@ void KoOdfGraphicStyles::saveOasisFillStyle(KoGenStyle &styleFill, KoGenStyles& 
     case Qt::RadialGradientPattern:
     case Qt::ConicalGradientPattern:
         styleFill.addProperty("draw:fill", "gradient");
-        styleFill.addProperty("draw:fill-gradient-name", saveOasisGradientStyle(mainStyles, brush));
+        styleFill.addProperty("draw:fill-gradient-name", saveOdfGradientStyle(mainStyles, brush));
         break;
     case Qt::HorPattern:
     case Qt::VerPattern:
@@ -90,7 +90,7 @@ void KoOdfGraphicStyles::saveOasisFillStyle(KoGenStyle &styleFill, KoGenStyles& 
     case Qt::FDiagPattern:
     case Qt::DiagCrossPattern:
         styleFill.addProperty("draw:fill", "hatch");
-        styleFill.addProperty("draw:fill-hatch-name", saveOasisHatchStyle(mainStyles, brush));
+        styleFill.addProperty("draw:fill-hatch-name", saveOdfHatchStyle(mainStyles, brush));
         break;
     case Qt::SolidPattern:
         styleFill.addProperty("draw:fill", "solid");
@@ -105,7 +105,7 @@ void KoOdfGraphicStyles::saveOasisFillStyle(KoGenStyle &styleFill, KoGenStyles& 
     }
 }
 
-void KoOdfGraphicStyles::saveOasisStrokeStyle(KoGenStyle &styleStroke, KoGenStyles &mainStyles, const QPen &pen)
+void KoOdfGraphicStyles::saveOdfStrokeStyle(KoGenStyle &styleStroke, KoGenStyles &mainStyles, const QPen &pen)
 {
     // TODO implement all possibilities
     switch (pen.style()) {
@@ -135,7 +135,7 @@ void KoOdfGraphicStyles::saveOasisStrokeStyle(KoGenStyle &styleStroke, KoGenStyl
     }
 
     if (pen.brush().gradient()) {
-        styleStroke.addProperty("koffice:stroke-gradient", saveOasisGradientStyle(mainStyles, pen.brush()));
+        styleStroke.addProperty("koffice:stroke-gradient", saveOdfGradientStyle(mainStyles, pen.brush()));
     }
     else {
         styleStroke.addProperty("svg:stroke-color", pen.color().name());
@@ -155,11 +155,12 @@ void KoOdfGraphicStyles::saveOasisStrokeStyle(KoGenStyle &styleStroke, KoGenStyl
         break;
     default:
         styleStroke.addProperty("draw:stroke-linejoin", "miter");
+        styleStroke.addProperty("koffice:stroke-miterlimit", QString("%1").arg(pen.miterLimit()));
         break;
     }
 }
 
-QString KoOdfGraphicStyles::saveOasisHatchStyle(KoGenStyles& mainStyles, const QBrush &brush)
+QString KoOdfGraphicStyles::saveOdfHatchStyle(KoGenStyles& mainStyles, const QBrush &brush)
 {
     KoGenStyle hatchStyle(KoGenStyle::StyleHatch /*no family name*/);
     hatchStyle.addAttribute("draw:color", brush.color().name());
@@ -196,7 +197,7 @@ QString KoOdfGraphicStyles::saveOasisHatchStyle(KoGenStyles& mainStyles, const Q
     return mainStyles.lookup(hatchStyle, "hatch");
 }
 
-QString KoOdfGraphicStyles::saveOasisGradientStyle(KoGenStyles &mainStyles, const QBrush &brush)
+QString KoOdfGraphicStyles::saveOdfGradientStyle(KoGenStyles &mainStyles, const QBrush &brush)
 {
     KoGenStyle gradientStyle;
     if (brush.style() == Qt::RadialGradientPattern) {
@@ -254,13 +255,13 @@ QString KoOdfGraphicStyles::saveOasisGradientStyle(KoGenStyles &mainStyles, cons
     return mainStyles.lookup(gradientStyle, "gradient");
 }
 
-QBrush KoOdfGraphicStyles::loadOasisGradientStyle(const KoStyleStack &styleStack, const KoOdfStylesReader & stylesReader, const QSizeF &size)
+QBrush KoOdfGraphicStyles::loadOdfGradientStyle(const KoStyleStack &styleStack, const KoOdfStylesReader & stylesReader, const QSizeF &size)
 {
     QString styleName = styleStack.property(KoXmlNS::draw, "fill-gradient-name");
-    return loadOasisGradientStyleByName(stylesReader, styleName, size);
+    return loadOdfGradientStyleByName(stylesReader, styleName, size);
 }
 
-QBrush KoOdfGraphicStyles::loadOasisGradientStyleByName(const KoOdfStylesReader & stylesReader, const QString styleName, const QSizeF &size)
+QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader & stylesReader, const QString styleName, const QSizeF &size)
 {
     KoXmlElement* e = stylesReader.drawStyles()[styleName];
     if (! e)
@@ -437,7 +438,7 @@ QBrush KoOdfGraphicStyles::loadOasisGradientStyleByName(const KoOdfStylesReader 
     return resultBrush;
 }
 
-QBrush KoOdfGraphicStyles::loadOasisPatternStyle(const KoStyleStack &styleStack, KoOdfLoadingContext & context, const QSizeF &size)
+QBrush KoOdfGraphicStyles::loadOdfPatternStyle(const KoStyleStack &styleStack, KoOdfLoadingContext & context, const QSizeF &size)
 {
     QString styleName = styleStack.property(KoXmlNS::draw, "fill-image-name");
 
@@ -541,7 +542,7 @@ QBrush KoOdfGraphicStyles::loadOasisPatternStyle(const KoStyleStack &styleStack,
     return resultBrush;
 }
 
-QBrush KoOdfGraphicStyles::loadOasisFillStyle(const KoStyleStack &styleStack, const QString & fill,  const KoOdfStylesReader & stylesReader)
+QBrush KoOdfGraphicStyles::loadOdfFillStyle(const KoStyleStack &styleStack, const QString & fill,  const KoOdfStylesReader & stylesReader)
 {
     QBrush tmpBrush;
     if (fill == "solid") {
@@ -662,7 +663,7 @@ QBrush KoOdfGraphicStyles::loadOasisFillStyle(const KoStyleStack &styleStack, co
     return tmpBrush;
 }
 
-QPen KoOdfGraphicStyles::loadOasisStrokeStyle(const KoStyleStack &styleStack, const QString & stroke, const KoOdfStylesReader & stylesReader)
+QPen KoOdfGraphicStyles::loadOdfStrokeStyle(const KoStyleStack &styleStack, const QString & stroke, const KoOdfStylesReader & stylesReader)
 {
     QPen tmpPen;
 
@@ -686,8 +687,13 @@ QPen KoOdfGraphicStyles::loadOasisStrokeStyle(const KoStyleStack &styleStack, co
                 tmpPen.setJoinStyle(Qt::BevelJoin);
             else if (join == "round")
                 tmpPen.setJoinStyle(Qt::RoundJoin);
-            else
+            else {
                 tmpPen.setJoinStyle(Qt::MiterJoin);
+                if (styleStack.hasProperty(KoXmlNS::koffice, "stroke-miterlimit")) {
+                    QString miterLimit = styleStack.property(KoXmlNS::koffice, "stroke-miterlimit");
+                    tmpPen.setMiterLimit(miterLimit.toDouble());
+                }
+            }
         }
 
         if (stroke == "dash" && styleStack.hasProperty(KoXmlNS::draw, "stroke-dash")) {

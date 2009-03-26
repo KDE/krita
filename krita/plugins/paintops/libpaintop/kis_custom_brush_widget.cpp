@@ -51,8 +51,8 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
     preview->setScaledContents(true);
     preview->setFixedSize(preview->size());
 
-    KoResourceServer<KisGbrBrush>* rServer = KisBrushServer::instance()->brushServer();
-    m_rServerAdapter = new KoResourceServerAdapter<KisGbrBrush>(rServer);
+    KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
+    m_rServerAdapter = new KoResourceServerAdapter<KisBrush>(rServer);
 
     connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
     connect(brushButton, SIGNAL(pressed()), this, SLOT(slotUpdateCurrentBrush()));

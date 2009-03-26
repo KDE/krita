@@ -37,7 +37,7 @@
 class KoCharacterStyle::Private
 {
 public:
-    Private() { }
+    Private();
     ~Private() { }
 
     void setProperty(int key, const QVariant &value) {
@@ -74,9 +74,57 @@ public:
         return variant.value<QColor>();
     }
 
+    //Overload the hard-coded default with defaultstyles.xml properties if defined
+    void setApplicationDefaults(KoOdfLoadingContext &context);
+
+    //This should be called after all charFormat properties are merged to the cursor.
+    void ensureMinimalProperties(QTextCursor &cursor, bool blockCharFormatAlso);
+
+    StylePrivate hardCodedDefaultStyle;
+
     QString name;
     StylePrivate stylesPrivate;
 };
+
+KoCharacterStyle::Private::Private()
+{
+    //set the minimal default properties
+    hardCodedDefaultStyle.add(QTextFormat::FontFamily, QString("Sans Serif"));
+    hardCodedDefaultStyle.add(QTextFormat::FontPointSize, 12.0);
+    hardCodedDefaultStyle.add(QTextFormat::ForegroundBrush, QBrush(Qt::black));
+}
+
+void KoCharacterStyle::Private::setApplicationDefaults(KoOdfLoadingContext &context)
+{
+    KoStyleStack defaultStyleStack;
+    const KoXmlElement* appDef = context.defaultStylesReader().defaultStyle("paragraph");
+    if (appDef) {
+        defaultStyleStack.push(*appDef);
+        defaultStyleStack.setTypeProperties("text");
+        KoCharacterStyle defStyle;
+        defStyle.loadOdfProperties(defaultStyleStack);
+
+        QList<int> keys = defStyle.d->stylesPrivate.keys();
+        foreach(int key, keys) {
+            hardCodedDefaultStyle.add(key, defStyle.value(key));
+        }
+    }
+}
+
+void KoCharacterStyle::Private::ensureMinimalProperties(QTextCursor &cursor, bool blockCharFormatAlso)
+{
+    QTextCharFormat format = cursor.charFormat();
+    QList<int> keys = hardCodedDefaultStyle.keys();
+    for (int i = 0; i < keys.count(); i++) {
+        QVariant variant = hardCodedDefaultStyle.value(keys.at(i));
+        if (!variant.isNull() && !format.hasProperty(keys.at(i))) {
+            format.setProperty(keys.at(i), variant);
+        }
+    }
+    cursor.mergeCharFormat(format);
+    if (blockCharFormatAlso)
+        cursor.mergeBlockCharFormat(format);
+}
 
 KoCharacterStyle::KoCharacterStyle(QObject *parent)
         : QObject(parent), d(new Private())
@@ -172,6 +220,7 @@ void KoCharacterStyle::applyStyle(QTextBlock &block) const
     applyStyle(cf);
     cursor.mergeCharFormat(cf);
     cursor.mergeBlockCharFormat(cf);
+    d->ensureMinimalProperties(cursor, true);
 }
 
 void KoCharacterStyle::applyStyle(QTextCursor *selection) const
@@ -179,6 +228,7 @@ void KoCharacterStyle::applyStyle(QTextCursor *selection) const
     QTextCharFormat cf;
     applyStyle(cf);
     selection->mergeCharFormat(cf);
+    d->ensureMinimalProperties(*selection, false);
 }
 
 // OASIS 14.2.29
@@ -642,8 +692,34 @@ bool KoCharacterStyle::hasProperty(int key) const
 //in 1.6 this was defined in KoTextFormat::load(KoOasisContext& context)
 void KoCharacterStyle::loadOdf(KoOdfLoadingContext& context)
 {
+    d->setApplicationDefaults(context);
     KoStyleStack &styleStack = context.styleStack();
+    loadOdfProperties(styleStack);
 
+    QString fontName;
+    if (styleStack.hasProperty(KoXmlNS::style, "font-name")) {
+        // This font name is a reference to a font face declaration.
+        KoOdfStylesReader &stylesReader = context.stylesReader();
+        const KoXmlElement *fontFace = stylesReader.findStyle(styleStack.property(KoXmlNS::style, "font-name"));
+        if (fontFace != 0)
+            fontName = fontFace->attributeNS(KoXmlNS::svg, "font-family", "");
+    }
+    if (! fontName.isNull()) {
+    // Hmm, the remove "'" could break it's in the middle of the fontname...
+        fontName = fontName.remove('\'');
+
+    // 'Thorndale' is not known outside OpenOffice so we substitute it
+    // with 'Times New Roman' that looks nearly the same.
+        if (fontName == "Thorndale")
+            fontName = "Times New Roman";
+
+        fontName.remove(QRegExp("\\sCE$")); // Arial CE -> Arial
+        setFontFamily(fontName);
+    }
+}
+
+void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
+{
     // The fo:color attribute specifies the foreground color of text.
     if (styleStack.hasProperty(KoXmlNS::fo, "color")) {     // 3.10.3
         if (styleStack.property(KoXmlNS::style, "use-window-font-color") != "true") {
@@ -694,13 +770,6 @@ void KoCharacterStyle::loadOdf(KoOdfLoadingContext& context)
     }
     if (styleStack.hasProperty(KoXmlNS::style, "font-family"))
         fontName = styleStack.property(KoXmlNS::style, "font-family");
-    if (styleStack.hasProperty(KoXmlNS::style, "font-name")) {
-        // This font name is a reference to a font face declaration.
-        KoOdfStylesReader &stylesReader = context.stylesReader();
-        const KoXmlElement *fontFace = stylesReader.findStyle(styleStack.property(KoXmlNS::style, "font-name"));
-        if (fontFace != 0)
-            fontName = fontFace->attributeNS(KoXmlNS::svg, "font-family", "");
-    }
 
     if (! fontName.isNull()) {
         // Hmm, the remove "'" could break it's in the middle of the fontname...
@@ -933,7 +1002,7 @@ void KoCharacterStyle::loadOdf(KoOdfLoadingContext& context)
 
     if (styleStack.hasProperty(KoXmlNS::style, "text-outline")) {
         if (styleStack.property(KoXmlNS::style, "text-outline") == "true") {
-            setTextOutline(QPen(foreground(), 0));
+            setTextOutline(QPen((foreground().style() != Qt::NoBrush)?foreground():QBrush(Qt::black) , 0));
             setForeground(Qt::transparent);
         } else {
             setTextOutline(QPen(Qt::NoPen));

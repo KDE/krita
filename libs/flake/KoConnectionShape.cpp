@@ -29,6 +29,7 @@
 #include <KoXmlNS.h>
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
+#include "KoConnectionShapeLoadingUpdater.h"
 
 #include <kdebug.h>
 
@@ -107,16 +108,18 @@ void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
         context.xmlWriter().addAttribute( "draw:start-glue-point", d->connectionPointIndex1 );
     }
     else {
-        context.xmlWriter().addAttributePt( "svg:x1", m_handles[0].x() );
-        context.xmlWriter().addAttributePt( "svg:y1", m_handles[0].y() );
+        QPointF p((m_handles[0] + position()) * context.shapeOffset(this));
+        context.xmlWriter().addAttributePt( "svg:x1", p.x() );
+        context.xmlWriter().addAttributePt( "svg:y1", p.y() );
     }
     if (d->shape2) {
         context.xmlWriter().addAttribute( "draw:end-shape", context.drawId(d->shape2) );
         context.xmlWriter().addAttribute( "draw:end-glue-point", d->connectionPointIndex2 );
     }
     else {
-        context.xmlWriter().addAttributePt( "svg:x2", m_handles[1].x() );
-        context.xmlWriter().addAttributePt( "svg:y2", m_handles[1].y() );
+        QPointF p((m_handles[1] + position()) * context.shapeOffset(this));
+        context.xmlWriter().addAttributePt( "svg:x2", p.x() );
+        context.xmlWriter().addAttributePt( "svg:y2", p.y() );
     }
 
     saveOdfCommonChildElements(context);
@@ -139,22 +142,30 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
         d->connectionType = Standard;
 
     if (element.hasAttributeNS(KoXmlNS::draw, "start-shape")) {
+        d->connectionPointIndex1 = element.attributeNS(KoXmlNS::draw, "start-glue-point", "").toInt();
         QString shapeId1 = element.attributeNS(KoXmlNS::draw, "start-shape", "");
         d->shape1 = context.shapeById(shapeId1);
-        if (d->shape1)
+        if (d->shape1) {
             d->shape1->addDependee(this);
-        d->connectionPointIndex1 = element.attributeNS(KoXmlNS::draw, "start-glue-point", "").toInt();
+        }
+        else {
+            context.updateShape(shapeId1, new KoConnectionShapeLoadingUpdater(this, KoConnectionShapeLoadingUpdater::First));
+        }
     } else {
         m_handles[0].setX(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "x1", QString())));
         m_handles[0].setY(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "y1", QString())));
     }
 
     if (element.hasAttributeNS(KoXmlNS::draw, "end-shape")) {
+        d->connectionPointIndex2 = element.attributeNS(KoXmlNS::draw, "end-glue-point", "").toInt();
         QString shapeId2 = element.attributeNS(KoXmlNS::draw, "end-shape", "");
         d->shape2 = context.shapeById(shapeId2);
-        if (d->shape2)
+        if (d->shape2) {
             d->shape2->addDependee(this);
-        d->connectionPointIndex2 = element.attributeNS(KoXmlNS::draw, "end-glue-point", "").toInt();
+        }
+        else {
+            context.updateShape(shapeId2, new KoConnectionShapeLoadingUpdater(this, KoConnectionShapeLoadingUpdater::Second));
+        }
     } else {
         m_handles[1].setX(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "x2", QString())));
         m_handles[1].setY(KoUnit::parseValue(element.attributeNS(KoXmlNS::svg, "y2", QString())));

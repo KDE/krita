@@ -47,6 +47,7 @@ set(flake_SRCS
     KoToolProxy.cpp
     KoShapeSavingContext.cpp
     KoShapeLoadingContext.cpp
+    KoLoadingShapeUpdater.cpp
     KoSvgPathParser.cpp
     KoPathShapeLoader.cpp
     ShapeDeleter_p.cpp
@@ -65,6 +66,7 @@ set(flake_SRCS
     KoShapeOdfSaveHelper.cpp
     KoShapePaste.cpp
     KoConnectionShape.cpp
+    KoConnectionShapeLoadingUpdater.cpp
     KoConnectionShapeFactory.cpp
     KoConnectionShapeConfigWidget.cpp
     KoSnapGuide.cpp
@@ -83,6 +85,7 @@ set(flake_SRCS
     KoImageData.cpp
     KoImageData_p.cpp
     KoImageCollection.cpp
+    KoOdfWorkaround.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp
@@ -193,6 +196,7 @@ install(
     KoShapeControllerBase.h
     KoShapeFactory.h
     KoShapeLoadingContext.h
+    KoLoadingShapeUpdater.h
     KoShapeManager.h
     KoShapeRegistry.h
     KoShapeSavingContext.h
@@ -202,6 +206,7 @@ install(
     KoToolManager.h
     KoToolFactory.h
     KoToolRegistry.h
+    KoOdfWorkaround.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel
 )

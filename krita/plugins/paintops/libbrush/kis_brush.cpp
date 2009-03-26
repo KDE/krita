@@ -42,6 +42,8 @@
 #include "kis_scaled_brush.h"
 #include "kis_qimage_mask.h"
 
+#include "kis_brush_registry.h"
+
 #define MAXIMUM_SCALE 2
 
 KisBrush::ColoringInformation::~ColoringInformation()
@@ -236,6 +238,15 @@ enumBrushType KisBrush::brushType() const
 {
     return d->brushType;
 }
+
+KisBrushSP KisBrush::fromXML( const QDomElement& element )
+{
+
+    return KisBrushRegistry::instance()->getOrCreateBrush( element );
+
+}
+
+
 
 qint32 KisBrush::maskWidth(double scale, double angle) const
 {

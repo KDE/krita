@@ -26,7 +26,11 @@
 
 #include <krita_export.h>
 
+#include "kis_brush.h"
+
 class QString;
+class QDomElement;
+
 class KisBrushFactory;
 
 class BRUSH_EXPORT KisBrushRegistry : public QObject, public KoGenericRegistry<KisBrushFactory*>
@@ -38,6 +42,8 @@ public:
     virtual ~KisBrushRegistry();
 
     static KisBrushRegistry* instance();
+
+    KisBrushSP getOrCreateBrush( const QDomElement& element );
 
 private:
     KisBrushRegistry();

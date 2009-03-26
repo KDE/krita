@@ -69,7 +69,7 @@ private:
 
     KisImageSP m_image;
     KisBrushSP m_brush;
-    KoResourceServerAdapter<KisGbrBrush>* m_rServerAdapter;
+    KoResourceServerAdapter<KisBrush>* m_rServerAdapter;
 };
 
 

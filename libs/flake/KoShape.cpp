@@ -43,6 +43,7 @@
 #include "KoShapeShadow.h"
 #include "KoEventAction.h"
 #include "KoEventActionRegistry.h"
+#include "KoOdfWorkaround.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -970,18 +971,21 @@ KoShapeBorderModel * KoShape::loadOdfStroke(const KoXmlElement & element, KoShap
     
     QString stroke = getStyleProperty("stroke", element, context);
     if (stroke == "solid" || stroke == "dash") {
-        QPen pen = KoOdfGraphicStyles::loadOasisStrokeStyle(styleStack, stroke, stylesReader);
+        QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, stroke, stylesReader);
 
         KoLineBorder * border = new KoLineBorder();
         
         if (styleStack.hasProperty(KoXmlNS::koffice, "stroke-gradient")) {
             QString gradientName = styleStack.property(KoXmlNS::koffice, "stroke-gradient");
-            QBrush brush = KoOdfGraphicStyles::loadOasisGradientStyleByName(stylesReader, gradientName, size());
+            QBrush brush = KoOdfGraphicStyles::loadOdfGradientStyleByName(stylesReader, gradientName, size());
             border->setLineBrush(brush);
         } else {
             border->setColor(pen.color());
         }
-        
+
+#ifndef NWORKAROUND_ODF_BUGS
+        KoOdfWorkaround::fixPenWidth(pen, context);
+#endif
         border->setLineWidth(pen.widthF());
         border->setJoinStyle(pen.joinStyle());
         border->setLineStyle(pen.style(), pen.dashPattern());
@@ -1139,7 +1143,10 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
     if (attributes & OdfTransformation) {
         QMatrix matrix = absoluteTransformation(0) * context.shapeOffset(this);
         if (! matrix.isIdentity()) {
-            if (matrix.m11() == 1 && matrix.m12() == 0 && matrix.m21() == 0 && matrix.m22() == 1) {
+            if (qAbs(matrix.m11() - 1) < 1E-5           // 1
+                    && qAbs(matrix.m12()) < 1E-5        // 0
+                    && qAbs(matrix.m21()) < 1E-5        // 0
+                    && qAbs(matrix.m22() - 1) < 1E-5) { // 1
                 context.xmlWriter().addAttribute("svg:x", QString("%1pt").arg(matrix.dx()));
                 context.xmlWriter().addAttribute("svg:y", QString("%1pt").arg(matrix.dy()));
             } else {

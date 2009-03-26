@@ -26,61 +26,26 @@
 
 #include "rand_salt.h"
 
-inline uint64_t swapbitsinbytes( uint64_t v )
-{
- const uint64_t h_mask_1 = 0xaaaaaaaaaaaaaaaaLL;
- const uint64_t l_mask_1 = 0x5555555555555555LL;
- 
- const uint64_t h_mask_2 = 0xccccccccccccccccLL;
- const uint64_t l_mask_2 = 0x3333333333333333LL;
- 
- const uint64_t h_mask_4 = 0xf0f0f0f0f0f0f0f0LL;
- const uint64_t l_mask_4 = 0x0f0f0f0f0f0f0f0fLL;
- 
- v = ( ( v & h_mask_1 ) >> 1 ) | ( ( v & l_mask_1 ) << 1 );
- v = ( ( v & h_mask_2 ) >> 2 ) | ( ( v & l_mask_2 ) << 2 );
- return ( ( v & h_mask_4 ) >> 4 ) | ( ( v & l_mask_4 ) << 4 );
-}
-
-quint64 permuteWhole(quint64 n, quint64 a, quint64 b)
+inline quint64 permuteWhole(quint64 n, quint64 a, quint64 b)
 {
     return ((n * a) + b);
 }
 
-inline uint64_t makePart( uint64_t v, int idx, int small, int big )
+inline quint64 part(quint64 n1, quint64 n2, int p)
 {
-  uint64_t a = salt[small][big];
-  uint64_t b = 8 * idx;
-  uint64_t c = a << b;
-  return v | c  ;
-}
-
-// This mask and coef generated doing some "random" computation and concatenation of numbers from random.org
-#define mask 0x2D88F3F11F491819LL
-#define coef 0x37DB094
-
-uint64_t myRandom1(uint64_t n1, uint64_t n2)
-{
-  uint64_t v = 0;
-  for(int i = 0; i < 8; ++ i)
-  {
-    int a = (n1 >> (8 * i )) ;
-    int b = (n2 >> (8 * i )) ;
-    v = makePart( v, i, a & 0xFF, b & 0xFF );
-  }
-  return v;
+    int b = p * 8;
+    int i = (n1 >> b) & 0xFF;
+    int j = (n2 >> b) & 0xFF;
+    return salt[i][j] << b;
 }
 
 struct KisRandomGenerator::Private {
-    quint64 rawSeed;
-    quint64 maskedSeed;
+    quint64 seed;
 };
 
 KisRandomGenerator::KisRandomGenerator(quint64 seed) : d(new Private)
 {
-    d->rawSeed = seed;
-    seed ^= swapbitsinbytes( seed );
-    d->maskedSeed = seed ^ mask;
+    d->seed = seed;
 }
 
 KisRandomGenerator::~KisRandomGenerator()
@@ -90,19 +55,26 @@ KisRandomGenerator::~KisRandomGenerator()
 
 quint64 KisRandomGenerator::randomAt(qint64 x, qint64 y)
 {
-    const quint64 kxn = 427140578808118991LL;
-    const quint64 kyn = 166552399647317237LL;
-    const quint64 kxs = 48058817213113801LL;
-    const quint64 kys = 9206429469018994469LL;
-    quint64 n1 = (quint64(x + 5) * kxn) * d->rawSeed;
-    quint64 n2 = (quint64(y + 7) * kyn) + d->rawSeed;
+    const quint64 kxa = 427140578808118991LL;
+    const quint64 kya = 166552399647317237LL;
+    const quint64 kxb = 48058817213113801LL;
+    const quint64 kyb = 9206429469018994469LL;
+
+    // Generate salts
+    quint64 n1 = (quint64(x + 5) * kxa) * d->seed;
+    quint64 n2 = (quint64(y + 7) * kya) + d->seed;
     n1 = permuteWhole(n1, 8759824322359LL, 13);
     n1 = (n1 >> 32) ^ (n1 << 32);
     n2 = permuteWhole(n2, 200560490131LL, 2707);
     n2 = (n2 >> 32) ^ (n2 << 32);
-    n1 ^= x ^ (y * 1040097393733LL) ^ kxs;
-    n2 ^= y ^ (x * 1040097393733LL) ^ kys;
-    return myRandom1( n1, n2 );
+    n1 ^= x ^ (y * 1040097393733LL) ^ kxb;
+    n2 ^= y ^ (x * 1040097393733LL) ^ kyb;
+
+    // Combine salts
+    quint64 v = 0;
+    for(int p = 0; p < 8; ++p)
+        v |= part(n1, n2, p);
+    return v;
 }
 
 double KisRandomGenerator::doubleRandomAt(qint64 x, qint64 y)

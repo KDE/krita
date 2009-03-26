@@ -43,6 +43,7 @@
 #include "KoShapeShadow.h"
 #include "KoEventAction.h"
 #include "KoEventActionRegistry.h"
+#include "KoOdfWorkaround.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -981,7 +982,10 @@ KoShapeBorderModel * KoShape::loadOdfStroke(const KoXmlElement & element, KoShap
         } else {
             border->setColor(pen.color());
         }
-        
+
+#ifndef NWORKAROUND_ODF_BUGS
+        KoOdfWorkaround::fixPenWidth(pen, context);
+#endif
         border->setLineWidth(pen.widthF());
         border->setJoinStyle(pen.joinStyle());
         border->setLineStyle(pen.style(), pen.dashPattern());

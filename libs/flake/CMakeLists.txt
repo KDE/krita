@@ -84,6 +84,7 @@ set(flake_SRCS
     KoImageData.cpp
     KoImageData_p.cpp
     KoImageCollection.cpp
+    KoOdfWorkaround.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp
@@ -204,6 +205,7 @@ install(
     KoToolManager.h
     KoToolFactory.h
     KoToolRegistry.h
+    KoOdfWorkaround.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel
 )

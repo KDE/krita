@@ -269,8 +269,8 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     } else {
         m_painter->setCompositeOp(device->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
         m_painter->setOpacity(OPACITY_OPAQUE);
-
     }
+
     m_previousTangent = QPointF(0, 0);
     m_previousDrag = QPointF(0, 0);
     /*    dbgUI <<"target:" << m_target <<"(" << m_target->name() <<" )"

@@ -109,7 +109,7 @@ void KisResourceMediator::addResourceItem(KoResourceItem* item)
         m_items[item->resource()] = item;
 
         m_chooser->addItem(item);
-        if (m_chooser->currentItem() == 0) setActiveItem(item);
+        //if (m_chooser->currentItem() == 0) setActiveItem(item);
     }
 }
 

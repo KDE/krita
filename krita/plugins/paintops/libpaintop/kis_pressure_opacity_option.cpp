@@ -37,9 +37,9 @@ quint8 KisPressureOpacityOption::apply(KisPainter * painter, double pressure) co
     quint8 origOpacity = painter->opacity();
 
     if (!customCurve()) {
-        painter->setOpacity((qint8)(origOpacity * pressure));
+        painter->setOpacity((qint8)(origOpacity * pressure / PRESSURE_DEFAULT));
     } else {
-        painter->setOpacity((qint8)(origOpacity * scaleToCurve(pressure)));
+        painter->setOpacity((qint8)(origOpacity * scaleToCurve(pressure) / PRESSURE_DEFAULT));
     }
 
     return origOpacity;

@@ -288,19 +288,19 @@ bool TextShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &con
 {
     loadOdfAttributes(element, context, OdfAllAttributes);
 
-    // load the style of the frame
+    // load the (text) style of the frame
     const KoXmlElement * style = 0;
     if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {
         style = context.odfLoadingContext().stylesReader().findStyle(
                     element.attributeNS(KoXmlNS::draw, "style-name"), "graphic",
                     context.odfLoadingContext().useStylesAutoStyles());
-        Q_ASSERT( style );
+        Q_ASSERT(style);
     }
     else if (element.hasAttributeNS(KoXmlNS::presentation, "style-name")) {
         style = context.odfLoadingContext().stylesReader().findStyle(
                     element.attributeNS(KoXmlNS::presentation, "style-name"), "presentation",
                     context.odfLoadingContext().useStylesAutoStyles());
-        Q_ASSERT( style );
+        Q_ASSERT(style);
     }
 
     if (style) {

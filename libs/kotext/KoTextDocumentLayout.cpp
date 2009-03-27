@@ -365,7 +365,6 @@ void KoTextDocumentLayout::layout()
 
     if (! m_state->start())
         return;
-    bool newParagraph = true;
     while (m_state->shape) {
         QTextLine line = m_state->layout->createLine();
         if (!line.isValid()) { // end of parag
@@ -377,10 +376,8 @@ void KoTextDocumentLayout::layout()
 
             if (! moreText)
                 return; // done!
-            newParagraph = true;
             continue;
         }
-        newParagraph = false;
         if (m_state->numColumns() > 0)
             line.setNumColumns(m_state->numColumns());
         else

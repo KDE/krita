@@ -34,7 +34,7 @@ class KisFilterDialog : public QDialog
 
 public:
 
-    KisFilterDialog(QWidget* parent, KisNodeSP device, KisImageSP image);
+    KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageSP image);
 
     ~KisFilterDialog();
 

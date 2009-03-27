@@ -29,6 +29,8 @@
 #include <kis_selection.h>
 #include <kis_pixel_selection.h>
 #include <kis_paint_device.h>
+#include "commands/kis_image_layer_add_command.h"
+#include "kis_undo_adapter.h"
 
 #include "ui_wdgfilterdialog.h"
 
@@ -69,6 +71,7 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageSP ima
     } else {
         d->uiFilterDialog.pushButtonCreateMaskEffect->hide();
     }
+    d->uiFilterDialog.pushButtonCreateMaskEffect->hide(); // TODO fixme, understand why the mask isn't created, and then remove that line
     d->uiFilterDialog.filterSelection->setPaintDevice(d->node->paintDevice());
     d->uiFilterDialog.filterSelection->setImage(d->image);
 
@@ -131,9 +134,10 @@ void KisFilterDialog::createMask()
         KisLayer * l = qobject_cast<KisLayer*>(d->node.data());
         mask = l->previewMask();
         l->removePreviewMask();
-        d->image->addNode(mask, l);
+        d->image->undoAdapter()->addCommand( new KisImageLayerAddCommand( d->image, mask, l, KisNodeSP(0)) );
         mask->setDirty();
         close();
+        accept();
     }
 }
 

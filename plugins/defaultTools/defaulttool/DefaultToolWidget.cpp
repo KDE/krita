@@ -102,6 +102,12 @@ void DefaultToolWidget::updatePosition()
     positionYSpinBox->changeValue( selPosition.y() );
     positionXSpinBox->blockSignals(false);
     positionYSpinBox->blockSignals(false);
+
+    QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+    bool aspectLocked = false;
+    foreach (KoShape* shape, selectedShapes)
+        aspectLocked = aspectLocked | shape->keepAspectRatio();
+    aspectButton->setKeepAspectRatio(aspectLocked);
 }
 
 void DefaultToolWidget::positionHasChanged()

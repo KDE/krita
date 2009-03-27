@@ -42,8 +42,8 @@ void KoPageLayout::loadOdf(const KoXmlElement &style)
 {
     KoXmlElement properties(KoXml::namedItemNS(style, KoXmlNS::style, "page-layout-properties"));
     if (!properties.isNull()) {
-        width = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "page-width", QString()));
-        height = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "page-height", QString()));
+        width = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "page-width"));
+        height = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "page-height"));
         KoPageLayout standard = standardLayout();
         if (width == 0)
             width = standard.width;
@@ -53,10 +53,10 @@ void KoPageLayout::loadOdf(const KoXmlElement &style)
             orientation = KoPageFormat::Portrait;
         else
             orientation = KoPageFormat::Landscape;
-        right = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-right", QString()));
-        bottom = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-bottom", QString()));
-        left = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-left", QString()));
-        top = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-top", QString()));
+        right = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-right"));
+        bottom = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-bottom"));
+        left = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-left"));
+        top = KoUnit::parseValue(properties.attributeNS(KoXmlNS::fo, "margin-top"));
         // guessFormat takes millimeters
         if (orientation == KoPageFormat::Landscape)
             format = KoPageFormat::guessFormat(POINT_TO_MM(height), POINT_TO_MM(width));

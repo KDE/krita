@@ -244,14 +244,12 @@ bool KisLayer::hasEffectMasks() const
 
 void KisLayer::applyEffectMasks(const KisPaintDeviceSP original, const KisPaintDeviceSP projection, const QRect & rc)
 {
-    if (m_d->previewMask) {
-        m_d->previewMask->apply(projection, rc);
-    }
 
     KoProperties props;
     props.setProperty("visible", true);
 
     QList<KisNodeSP> masks = childNodes(QStringList("KisEffectMask"), props);
+    masks.push_front(m_d->previewMask);
 
     // Compute the needed area
     

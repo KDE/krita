@@ -141,7 +141,7 @@ void KisPaintLayer::updateProjection(const QRect & rc)
     QList<KisNodeSP> masks = childNodes(QStringList("KisEffectMask"), props);
 
     if( temporaryTarget() ) {
-        if ( masks.size() == 0 ) {
+        if ( masks.size() == 0 && !previewMask()) {
             KisPainter gc(m_d->projection);
             gc.setCompositeOp(temporaryCompositeOp());
             gc.setOpacity(temporaryOpacity());
@@ -168,7 +168,7 @@ void KisPaintLayer::updateProjection(const QRect & rc)
         }
 
     }
-    if (masks.size() > 0) {
+    if (masks.size() > 0 || previewMask()) {
         applyEffectMasks(source, m_d->projection, rc);
     }
 }

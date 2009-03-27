@@ -27,10 +27,9 @@
 #include <QObject>
 
 #include "kotext_export.h"
-
 #include "KoXmlReaderForward.h"
-class KoShapeLoadingContext;
 
+class KoShapeLoadingContext;
 class QTextCursor;
 
 /**

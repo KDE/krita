@@ -280,8 +280,9 @@ KoListStyle * KoTextSharedLoadingData::listStyle(const QString &name, bool style
     return stylesDotXml ? d->listStylesDotXmlStyles.value(name) : d->listContentDotXmlStyles.value(name);
 }
 
-void KoTextSharedLoadingData::shapeInserted(KoShape* shape, const KoXmlElement &element)
+void KoTextSharedLoadingData::shapeInserted(KoShape* shape, const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     Q_UNUSED(shape);
     Q_UNUSED(element);
+    Q_UNUSED(context);
 }

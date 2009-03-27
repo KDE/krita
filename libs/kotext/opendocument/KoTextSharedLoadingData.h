@@ -93,8 +93,10 @@ protected:
      * This method got called by kotext once a \a KoShape got inserted and an
      * application can implement this to do additional things with shapes once
      * they got inserted.
+     * @param shape a shape that has finished loading.
+     * @param element the xml element that represents the shape being inserted.
      */
-    virtual void shapeInserted(KoShape* shape);
+    virtual void shapeInserted(KoShape* shape, const KoXmlElement &element);
 
 private:
     enum StyleType {

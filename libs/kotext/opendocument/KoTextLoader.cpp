@@ -690,7 +690,7 @@ void KoTextLoader::loadTable(const KoXmlElement& tableElem, QTextCursor& cursor)
     if (layout) {
         KoTextAnchor *anchor = new KoTextAnchor(shape);
         anchor->loadOdfFromShape(tableElem);
-        d->textSharedData->shapeInserted(shape);
+        d->textSharedData->shapeInserted(shape, tableElem);
 
         KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
         if (textObjectManager) {
@@ -713,7 +713,7 @@ void KoTextLoader::loadShape(const KoXmlElement& element, QTextCursor& cursor)
         if (anchorType != "page") {
             KoTextAnchor *anchor = new KoTextAnchor(shape);
             anchor->loadOdfFromShape(element);
-            d->textSharedData->shapeInserted(shape);
+            d->textSharedData->shapeInserted(shape, element);
 
             KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
             if (layout) {
@@ -724,7 +724,7 @@ void KoTextLoader::loadShape(const KoXmlElement& element, QTextCursor& cursor)
             }
         }
         else {
-            d->textSharedData->shapeInserted(shape);
+            d->textSharedData->shapeInserted(shape, element);
         }
     }
 }

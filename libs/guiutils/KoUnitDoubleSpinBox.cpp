@@ -159,8 +159,8 @@ void KoUnitDoubleSpinBox::setUnit( KoUnit unit )
     QDoubleSpinBox::setMinimum( unit.toUserValue( d->lowerInPoints ) );
     QDoubleSpinBox::setMaximum( unit.toUserValue( d->upperInPoints ) );
     QDoubleSpinBox::setSingleStep( unit.toUserValue( d->stepInPoints ) );
-    QDoubleSpinBox::setValue( KoUnit::ptToUnit( oldvalue, unit ) );
     d->unit = unit;
+    QDoubleSpinBox::setValue( KoUnit::ptToUnit( oldvalue, unit ) );
     setSuffix( KoUnit::unitName( unit ).prepend( ' ' ) );
 }
 

@@ -212,7 +212,7 @@ void KoUpdater::setValue( int value )
     if ( value < min ) value = min;
     if ( value > max ) value = max;
     // Go from range to percent
-    setProgress( (100 / range) * value + 1 );
+    setProgress( (100 * value ) / range + 1 );
 }
 
 void KoUpdater::setRange( int minimum, int maximum )

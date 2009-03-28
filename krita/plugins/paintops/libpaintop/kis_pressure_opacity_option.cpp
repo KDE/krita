@@ -22,6 +22,7 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 
+
 KisPressureOpacityOption::KisPressureOpacityOption()
         : KisCurveOption(i18n("Opacity"), "Opacity", true)
 {
@@ -36,11 +37,13 @@ quint8 KisPressureOpacityOption::apply(KisPainter * painter, double pressure) co
     }
     quint8 origOpacity = painter->opacity();
 
+    qint32 opacity;
     if (!customCurve()) {
-        painter->setOpacity((qint8)(origOpacity * pressure / PRESSURE_DEFAULT));
+        opacity = (qint32)(origOpacity * pressure / PRESSURE_DEFAULT);
     } else {
-        painter->setOpacity((qint8)(origOpacity * scaleToCurve(pressure) / PRESSURE_DEFAULT));
+        opacity = (qint32)(origOpacity * scaleToCurve(pressure) / PRESSURE_DEFAULT);
     }
+    painter->setOpacity((qint8)qBound<qint32>(OPACITY_TRANSPARENT, opacity, OPACITY_OPAQUE ));
 
     return origOpacity;
 }

@@ -32,8 +32,7 @@ public:
         : lowerInPoints(low),
         upperInPoints(up),
         stepInPoints(step),
-        unit(KoUnit(KoUnit::Point)),
-        precision(2)
+        unit(KoUnit(KoUnit::Point))
     {
     }
 
@@ -41,7 +40,6 @@ public:
     double upperInPoints; ///< highest value in points
     double stepInPoints;  ///< step in points
     KoUnit unit;
-    unsigned int precision;
 };
 
 KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent)
@@ -205,7 +203,7 @@ QString KoUnitDoubleSpinBox::textFromValue( double value ) const
     //kDebug(30004) <<"textFromValue:" << QString::number( value, 'f', 12 ) <<" =>" << num;
     //const QString num ( QString( "%1%2").arg( KGlobal::locale()->formatNumber( value, d->precision ), KoUnit::unitName( m_unit ) ) );
     //const QString num ( QString( "%1").arg( KGlobal::locale()->formatNumber( value, d->precision )) );
-    return KGlobal::locale()->formatNumber( value, d->precision );
+    return KGlobal::locale()->formatNumber( value, decimals() );
 }
 
 double KoUnitDoubleSpinBox::valueFromText( const QString& str ) const

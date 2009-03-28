@@ -77,7 +77,7 @@ public:
         // this one (forced to the Gui Thread).
         lock.lock();
         int totalProgress = 0;
-        foreach(KoProgressUpdaterPrivate *updater, subtasks) {
+        foreach(QPointer<KoProgressUpdaterPrivate> updater, subtasks) {
             if(updater->interrupted()) {
                 currentProgress = -1;
                 lock.unlock();
@@ -102,7 +102,7 @@ public:
     }
 
     KoProgressProxy *progressBar;
-    QList<KoProgressUpdaterPrivate*> subtasks;
+    QList<QPointer<KoProgressUpdaterPrivate> > subtasks;
     int totalWeight;
     int currentProgress; // used for the update and updateUi methods. Don't use elsewhere
     QMutex lock; // protects access to d->subtasks

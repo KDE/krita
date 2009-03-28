@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -94,8 +94,10 @@ protected:
      * a reasonably long time withing posing problems for user interaction.
      * @param pageNumber the number of the page to prepare.
      * @see isStopped() printPage()
+     * @returns a cliprect. If the rect is valid then it will be set on the painter right after
+     *   newPage is called.
      */
-    virtual void preparePage(int pageNumber);
+    virtual QRectF preparePage(int pageNumber);
 
     /**
      * This is a similar method to preparePage(), but is guaranteed to be called in the Ui thread.

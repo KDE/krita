@@ -69,8 +69,9 @@ public:
         KoUpdater updater = updaters.at(index-1);
         if (painter)
             painter->save(); // state before page preparation
+        QRectF clipRect;
         if(! stop)
-            parent->preparePage(pageNumber);
+            clipRect = parent->preparePage(pageNumber);
         updater.setProgress(45);
         if (!painter) {
             // force the painter to be created *after* the preparePage since the page
@@ -80,6 +81,8 @@ public:
         }
         if (index > 1)
             printer->newPage();
+        if (clipRect.isValid()) // make sure the clipRect is done *after* the newPage. Required for printPreview
+            painter->setClipRect(clipRect);
         updater.setProgress(55);
         painter->save(); // state after page preparation
 
@@ -269,6 +272,10 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy) {
                 d->preparePage(page);
                 d->printPage(page);
             }
+            d->painter->end();
+            printingDone();
+            d->stop = true;
+            d->resetValues();
         }
         else {
             for(int i=0; i < d->pages.count(); i++)
@@ -287,8 +294,9 @@ void KoPrintingDialog::printPage(int, QPainter &)
 {
 }
 
-void KoPrintingDialog::preparePage(int)
+QRectF KoPrintingDialog::preparePage(int)
 {
+    return QRectF();
 }
 
 #include <KoPrintingDialog.moc>

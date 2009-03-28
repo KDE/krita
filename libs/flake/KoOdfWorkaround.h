@@ -22,27 +22,34 @@
 
 #include "flake_export.h"
 
+class KoXmlElement;
 class KoShapeLoadingContext;
 class QPen;
+class QString;
 
 /**
  * This class should contain all workarounds to correct problems with differenet ODF 
- * implementations. If you need to access application specifc things please inherit this
- * class.
+ * implementations. If you need to access application specifc things please create a
+ * new namespace in the app you need it
  * All calls to methods of this class should be wrapped into ifndefs like e.g.
  *
  * #ifndef NWORKAROUND_ODF_BUGS
  *     KoOdfWorkaround::fixPenWidth(pen, context);
  * #endif
  */
-class FLAKE_EXPORT KoOdfWorkaround
+namespace KoOdfWorkaround
 {
-public:
     /**
      * OpenOffice handels a line with the width of 0 as a cosmetic line but in svg it makes the line invisible. 
      * To show it in koffice use a very small line width. However this is not a cosmetic line.
      */
-    static void fixPenWidth(QPen & pen, KoShapeLoadingContext &context);
+    FLAKE_EXPORT void fixPenWidth(QPen & pen, KoShapeLoadingContext &context);
+
+    /**
+     * OpenOffice < 3.0 does not store the draw:enhanced-path for draw:type="ellipse"
+     * Add the path needed for the ellipse
+     */
+    FLAKE_EXPORT void fixEnhancedPath(QString & path, const KoXmlElement &element, KoShapeLoadingContext &context);
 };
 
 #endif /* KOODFWORKAROUND_H */

@@ -21,6 +21,8 @@
 
 #include "KoShapeLoadingContext.h"
 #include <KoOdfLoadingContext.h>
+#include <KoXmlReader.h>
+#include <KoXmlNS.h>
 #include <QPen>
 
 #include <kdebug.h>
@@ -31,5 +33,14 @@ void KoOdfWorkaround::fixPenWidth(QPen & pen, KoShapeLoadingContext &context)
     if (context.odfLoadingContext().generator().startsWith("OpenOffice.org") && pen.widthF() == 0.0) {
         pen.setWidthF(0.5);
         kDebug(30003) << "Work around OO bug with pen width 0";
+    }
+}
+
+void KoOdfWorkaround::fixEnhancedPath(QString & path, const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    if (context.odfLoadingContext().generator().startsWith("OpenOffice.org") ) {
+        if (path.isEmpty() && element.attributeNS(KoXmlNS::draw, "type", "") == "ellipse" ) {
+            path = "U 10800 10800 10800 10800 0 360 Z N";
+        }
     }
 }

@@ -28,6 +28,7 @@
 #include <KoXmlReader.h>
 #include <KoShapeSavingContext.h>
 #include <KoUnit.h>
+#include <KoOdfWorkaround.h>
 
 KoEnhancedPathShape::KoEnhancedPathShape( const QRectF &viewBox )
 : m_viewBox( viewBox ), m_viewBoxOffset( 0.0, 0.0 )
@@ -425,8 +426,10 @@ bool KoEnhancedPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingC
             }
             // load the enhanced path data
             QString path = child.attributeNS( KoXmlNS::draw, "enhanced-path", "" );
-            if( ! path.isEmpty() )
-            {
+#ifndef NWORKAROUND_ODF_BUGS
+            KoOdfWorkaround::fixEnhancedPath(path, child, context);
+#endif
+            if ( !path.isEmpty() ) {
                 parsePathData( path );
             }
         }

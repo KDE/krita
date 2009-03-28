@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C)  2008 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ * Copyright (C) 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -235,44 +236,46 @@ void FormattingPreview::paintEvent(QPaintEvent *event)
     QTextLayout layout(m_sampleText, displayFont);
     layout.setTextOption(QTextOption(m_align));
 
-    QFontMetrics fm = QFontMetrics(displayFont, paintDevice);
+    QFontMetricsF fm = QFontMetrics(displayFont, paintDevice);
     qreal xmargin = 5; //leave a tiny space on borders
     qreal ymargin = 5;
     qreal height = 0;
-    qreal lineHeight = zoomHandler->documentToViewY(m_fixedLineHeight);
-    qreal lineSpacing = 0;
     qreal lineWidth = (contentsRect().width() - 2*xmargin)/zoomX;
     bool firstLine = true;
 
-    bool useFixedLineHeight = zoomHandler->documentToViewY(m_fixedLineHeight) != 0.0;
-    if (! useFixedLineHeight) {
-        lineHeight = fm.height();
-        lineSpacing = zoomHandler->documentToViewY(m_lineSpacing);
-        if (lineSpacing == 0.0) { // unset
-            if (m_percentLineHeight != 0)
-                lineSpacing = lineHeight * ((m_percentLineHeight-100) / 100.0);
-            else if (lineSpacing == 0.0)
-                lineSpacing = lineHeight * 0.2;
-        }
+    qreal lineSpacing = 0;
+    if (m_fixedLineHeight != 0) { // this one is easy.
+        lineSpacing = m_fixedLineHeight;
+    } else {
+        if (m_useFontProperties)
+            lineSpacing = fm.height();
+        else if (m_lineSpacing > 0)
+            lineSpacing = m_lineSpacing;
+        else
+            lineSpacing = 12;
+        if (m_percentLineHeight > 0)
+            lineSpacing = lineSpacing * m_percentLineHeight / 100.;
+        lineSpacing = qMax(lineSpacing, m_minimumLineHeight);
     }
 
-    if (m_minimumLineHeight > 0.0 && (m_minimumLineHeight>lineHeight+lineSpacing)) {
-        lineHeight = zoomHandler->documentToViewY(m_minimumLineHeight);
-        lineSpacing = 0;
-    }
+    lineSpacing = zoomHandler->documentToViewY(lineSpacing);
 
     layout.beginLayout();
     while (1) {
         QTextLine line = layout.createLine();
         if (!line.isValid())
             break;
-        line.setLineWidth(lineWidth - ((firstLine)?zoomHandler->documentToViewX(m_firstLineMargin):zoomHandler->documentToViewX(m_leftMargin - m_rightMargin)));
-        line.setPosition(QPointF((firstLine)?m_firstLineMargin:zoomHandler->documentToViewX(m_leftMargin), height*zoomY));
-        height += lineHeight + lineSpacing;
+        qreal leftIndent = zoomHandler->documentToViewX(m_leftMargin);
+        if (firstLine)
+            leftIndent += zoomHandler->documentToViewX(m_firstLineMargin);
+        qreal rightIndent = zoomHandler->documentToViewX(m_rightMargin);
+        line.setLineWidth(lineWidth - leftIndent - rightIndent);
+        line.setPosition(QPointF(leftIndent, height*zoomY));
+        height += lineSpacing;
 
         firstLine = false;
 
-        if ((height + lineHeight) > ((contentsRect().height() - 2* ymargin))/zoomY)
+        if (height + lineSpacing > ((contentsRect().height() - 2* ymargin))/zoomY)
             break;
     }
     layout.endLayout();

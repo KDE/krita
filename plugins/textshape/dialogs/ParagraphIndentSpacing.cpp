@@ -164,15 +164,15 @@ void ParagraphIndentSpacing::lineSpacingChanged(int row)
 void ParagraphIndentSpacing::spacingPercentChanged(int percent)
 {
     if (widget.lineSpacing->currentIndex() == 3)
-        emit lineSpacingChanged(0, 0, widget.minimumLineSpacing->value(), percent, widget.useFont->isChecked());
+        emit lineSpacingChanged(0, 0, (qreal) widget.minimumLineSpacing->value(), percent, widget.useFont->isChecked());
 }
 
 void ParagraphIndentSpacing::spacingValueChanged(double value)
 {
     if (widget.lineSpacing->currentIndex() == 4)
-        emit lineSpacingChanged(0, value, widget.minimumLineSpacing->value(), 0, widget.useFont->isChecked());
+        emit lineSpacingChanged(0, (qreal) value, (qreal) widget.minimumLineSpacing->value(), 0, widget.useFont->isChecked());
     else if (widget.lineSpacing->currentIndex() == 5)
-        emit lineSpacingChanged(value, 0, 0, 0, 0);
+        emit lineSpacingChanged((qreal) value, 0, 0, 0, false);
 }
 
 void ParagraphIndentSpacing::save(KoParagraphStyle *style)

@@ -162,7 +162,7 @@ void FormattingPreview::setParagraphStyle(const KoParagraphStyle* style)
     m_align = style->alignment();
 }
 
-void FormattingPreview::setFirstLineMargin(double margin)
+void FormattingPreview::setFirstLineMargin(qreal margin)
 {
     m_firstLineMargin = margin;
     update();
@@ -175,13 +175,13 @@ void FormattingPreview::setHorizontalAlign(Qt::Alignment align)
     update();
 }
 
-void FormattingPreview::setLeftMargin(double margin)
+void FormattingPreview::setLeftMargin(qreal margin)
 {
     m_leftMargin = margin;
     update();
 }
 
-void FormattingPreview::setLineSpacing(double fixedLineHeight, double lineSpacing, double minimumLineHeight, int percentLineSpacing, bool useFontProperties)
+void FormattingPreview::setLineSpacing(qreal fixedLineHeight, qreal lineSpacing, qreal minimumLineHeight, int percentLineSpacing, bool useFontProperties)
 {
     m_fixedLineHeight = fixedLineHeight;
     m_lineSpacing = lineSpacing;
@@ -191,7 +191,7 @@ void FormattingPreview::setLineSpacing(double fixedLineHeight, double lineSpacin
     update();
 }
 
-void FormattingPreview::setRightMargin(double margin)
+void FormattingPreview::setRightMargin(qreal margin)
 {
     m_rightMargin = margin;
     update();

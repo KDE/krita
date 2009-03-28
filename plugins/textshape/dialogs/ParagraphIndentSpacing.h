@@ -41,7 +41,7 @@ public:
 signals:
     void firstLineMarginChanged(qreal margin);
     void leftMarginChanged(qreal margin);
-    void lineSpacingChanged(double fixedLineHeight, double lineSpacing, double minimumLineHeight, int percentLineSpacing, bool useFontProperties);
+    void lineSpacingChanged(qreal fixedLineHeight, qreal lineSpacing, qreal minimumLineHeight, int percentLineSpacing, bool useFontProperties);
     void rightMarginChanged(qreal margin);
 
 private slots:

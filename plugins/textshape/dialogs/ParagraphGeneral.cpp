@@ -50,7 +50,7 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
     connect(m_paragraphIndentSpacing, SIGNAL(firstLineMarginChanged(qreal)), this, SLOT(firstLineMarginChanged(qreal)));
     connect(m_paragraphIndentSpacing, SIGNAL(leftMarginChanged(qreal)), this, SLOT(leftMarginChanged(qreal)));
     connect(m_paragraphIndentSpacing, SIGNAL(rightMarginChanged(qreal)), this, SLOT(rightMarginChanged(qreal)));
-    connect(m_paragraphIndentSpacing, SIGNAL(lineSpacingChanged(double,double,double,int,bool)), this, SLOT(lineSpacingChanged(double,double,double,int,bool)));
+    connect(m_paragraphIndentSpacing, SIGNAL(lineSpacingChanged(qreal,qreal,qreal,int,bool)), this, SLOT(lineSpacingChanged(qreal,qreal,qreal,int,bool)));
 
     m_paragraphLayout = new ParagraphLayout(this);
     widget.tabs->addTab(m_paragraphLayout, i18n("General Layout"));
@@ -99,7 +99,7 @@ void ParagraphGeneral::leftMarginChanged(qreal margin)
     widget.preview->setLeftMargin(margin);
 }
 
-void ParagraphGeneral::lineSpacingChanged(double fixedLineHeight, double lineSpacing, double minimumLineHeight, int percentLineSpacing, bool useFontProperties)
+void ParagraphGeneral::lineSpacingChanged(qreal fixedLineHeight, qreal lineSpacing, qreal minimumLineHeight, int percentLineSpacing, bool useFontProperties)
 {
     widget.preview->setLineSpacing(fixedLineHeight, lineSpacing, minimumLineHeight, percentLineSpacing, useFontProperties);
 }

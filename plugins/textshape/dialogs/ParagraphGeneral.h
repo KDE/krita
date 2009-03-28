@@ -54,10 +54,6 @@ signals:
 private slots:
     void setName(const QString &name);
     void backgroundColorChanged(QColor);
-    void firstLineMarginChanged(qreal margin);
-    void leftMarginChanged(qreal margin);
-    void lineSpacingChanged(qreal fixedLineHeight, qreal lineSpacing, qreal minimumLineHeight, int percentLineSpacing, bool useFontProperties);
-    void rightMarginChanged(qreal margin);
     void horizontalAlignmentChanged(Qt::Alignment);
 
 private:

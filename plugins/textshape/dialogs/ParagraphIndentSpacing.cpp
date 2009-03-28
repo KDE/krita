@@ -29,9 +29,9 @@ ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
 {
     widget.setupUi(this);
 
-    connect(widget.first, SIGNAL(valueChanged(double)), this, SLOT(slotFirstLineMarginChanged(double)));
-    connect(widget.left, SIGNAL(valueChanged(double)), this, SLOT(slotLeftMarginChanged(double)));
-    connect(widget.right, SIGNAL(valueChanged(double)), this, SLOT(slotRightMarginChanged(double)));
+    connect(widget.first, SIGNAL(valueChangedPt(qreal)), this, SIGNAL(firstLineMarginChanged(qreal)));
+    connect(widget.left, SIGNAL(valueChangedPt(qreal)), this, SIGNAL(leftMarginChanged(qreal)));
+    connect(widget.right, SIGNAL(valueChangedPt(qreal)), this, SIGNAL(rightMarginChanged(qreal)));
 
     // Keep order in sync with lineSpacingType() and display()
     widget.lineSpacing->addItem(i18nc("Line spacing value", "Single"));
@@ -45,23 +45,8 @@ ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
     connect(widget.useFont, SIGNAL(toggled(bool)), this, SLOT(useFontMetrices(bool)));
     connect(widget.autoTextIndent, SIGNAL(stateChanged(int)), this, SLOT(autoTextIndentChanged(int)));
     connect(widget.proportional, SIGNAL(valueChanged(int)), this, SLOT(spacingPercentChanged(int)));
-    connect(widget.custom, SIGNAL(valueChanged(double)), this, SLOT(spacingValueChanged(double)));
+    connect(widget.custom, SIGNAL(valueChangedPt(qreal)), this, SLOT(spacingValueChanged(qreal)));
     lineSpacingChanged(0);
-}
-
-void ParagraphIndentSpacing::slotFirstLineMarginChanged(double margin)
-{
-    emit firstLineMarginChanged(margin);
-}
-
-void ParagraphIndentSpacing::slotLeftMarginChanged(double margin)
-{
-    emit leftMarginChanged(margin);
-}
-
-void ParagraphIndentSpacing::slotRightMarginChanged(double margin)
-{
-    emit rightMarginChanged(margin);
 }
 
 void ParagraphIndentSpacing::autoTextIndentChanged(int state)
@@ -167,12 +152,12 @@ void ParagraphIndentSpacing::spacingPercentChanged(int percent)
         emit lineSpacingChanged(0, 0, (qreal) widget.minimumLineSpacing->value(), percent, widget.useFont->isChecked());
 }
 
-void ParagraphIndentSpacing::spacingValueChanged(double value)
+void ParagraphIndentSpacing::spacingValueChanged(qreal value)
 {
     if (widget.lineSpacing->currentIndex() == 4)
-        emit lineSpacingChanged(0, (qreal) value, (qreal) widget.minimumLineSpacing->value(), 0, widget.useFont->isChecked());
+        emit lineSpacingChanged(0, value, (qreal) widget.minimumLineSpacing->value(), 0, widget.useFont->isChecked());
     else if (widget.lineSpacing->currentIndex() == 5)
-        emit lineSpacingChanged((qreal) value, 0, 0, 0, false);
+        emit lineSpacingChanged(value, 0, 0, 0, false);
 }
 
 void ParagraphIndentSpacing::save(KoParagraphStyle *style)

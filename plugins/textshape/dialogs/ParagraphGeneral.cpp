@@ -47,10 +47,14 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
 //
     m_paragraphIndentSpacing = new ParagraphIndentSpacing(this);
     widget.tabs->addTab(m_paragraphIndentSpacing, i18n("Indent/Spacing"));
-    connect(m_paragraphIndentSpacing, SIGNAL(firstLineMarginChanged(qreal)), this, SLOT(firstLineMarginChanged(qreal)));
-    connect(m_paragraphIndentSpacing, SIGNAL(leftMarginChanged(qreal)), this, SLOT(leftMarginChanged(qreal)));
-    connect(m_paragraphIndentSpacing, SIGNAL(rightMarginChanged(qreal)), this, SLOT(rightMarginChanged(qreal)));
-    connect(m_paragraphIndentSpacing, SIGNAL(lineSpacingChanged(qreal,qreal,qreal,int,bool)), this, SLOT(lineSpacingChanged(qreal,qreal,qreal,int,bool)));
+    connect(m_paragraphIndentSpacing, SIGNAL(firstLineMarginChanged(qreal)),
+            widget.preview, SLOT(setFirstLineMargin(qreal)));
+    connect(m_paragraphIndentSpacing, SIGNAL(leftMarginChanged(qreal)),
+            widget.preview, SLOT(setLeftMargin(qreal)));
+    connect(m_paragraphIndentSpacing, SIGNAL(rightMarginChanged(qreal)),
+            widget.preview, SLOT(setRightMargin(qreal)));
+    connect(m_paragraphIndentSpacing, SIGNAL(lineSpacingChanged(qreal,qreal,qreal,int,bool)),
+            widget.preview, SLOT(setLineSpacing(qreal,qreal,qreal,int,bool)));
 
     m_paragraphLayout = new ParagraphLayout(this);
     widget.tabs->addTab(m_paragraphLayout, i18n("General Layout"));
@@ -89,31 +93,10 @@ void ParagraphGeneral::backgroundColorChanged(QColor color)
     widget.preview->setParagraphBackgroundColor(color);
 }
 
-void ParagraphGeneral::firstLineMarginChanged(qreal margin)
-{
-    widget.preview->setFirstLineMargin(margin);
-}
-
-void ParagraphGeneral::leftMarginChanged(qreal margin)
-{
-    widget.preview->setLeftMargin(margin);
-}
-
-void ParagraphGeneral::lineSpacingChanged(qreal fixedLineHeight, qreal lineSpacing, qreal minimumLineHeight, int percentLineSpacing, bool useFontProperties)
-{
-    widget.preview->setLineSpacing(fixedLineHeight, lineSpacing, minimumLineHeight, percentLineSpacing, useFontProperties);
-}
-
-void ParagraphGeneral::rightMarginChanged(qreal margin)
-{
-    widget.preview->setRightMargin(margin);
-}
-
 void ParagraphGeneral::horizontalAlignmentChanged(Qt::Alignment align)
 {
     widget.preview->setHorizontalAlign(align);
 }
-
 
 void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level)
 {

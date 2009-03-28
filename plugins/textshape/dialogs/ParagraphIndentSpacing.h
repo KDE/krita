@@ -45,11 +45,8 @@ signals:
     void rightMarginChanged(qreal margin);
 
 private slots:
-    void slotFirstLineMarginChanged(double margin);
-    void slotLeftMarginChanged(double margin);
-    void slotRightMarginChanged(double margin);
     void lineSpacingChanged(int);
-    void spacingValueChanged(double value);
+    void spacingValueChanged(qreal value);
     void spacingPercentChanged(int percent);
     void useFontMetrices(bool);
     void autoTextIndentChanged(int state);

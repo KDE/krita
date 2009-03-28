@@ -324,7 +324,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
                           const KoCompositeOp * op,
                           const QBitArray & channelFlags) const
 {
-    Q_ASSERT_X(*op->colorSpace() == *this, "KoColorSpace::bitBlt", QString("Composite op is for color space %1 while this is %2" ).arg( op->colorSpace()->id() ).arg(id()).toLatin1() );
+    Q_ASSERT_X(*op->colorSpace() == *this, "KoColorSpace::bitBlt", QString("Composite op is for color space %1 (%2) while this is %3 (%4)" ).arg( op->colorSpace()->id() ).arg(op->colorSpace()->profile()->name()).arg(id()).arg(profile()->name()).toLatin1() );
 
     if (rows <= 0 || cols <= 0)
         return;

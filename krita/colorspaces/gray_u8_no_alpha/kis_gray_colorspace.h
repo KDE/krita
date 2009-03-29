@@ -51,7 +51,7 @@ class KisGrayColorSpaceFactory : public KoLcmsColorSpaceFactory
 public:
     KisGrayColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_GRAY_8, icSigGrayData) {}
     virtual QString id() const {
-        return "GRAY";
+        return "GRAYU8";
     }
     virtual QString name() const {
         return i18n("Grayscale (8-bit integer/channel)");

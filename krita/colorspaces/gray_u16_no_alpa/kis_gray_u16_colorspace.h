@@ -50,7 +50,7 @@ class KisGrayU16ColorSpaceFactory : public KoLcmsColorSpaceFactory
 public:
     KisGrayU16ColorSpaceFactory() : KoLcmsColorSpaceFactory(TYPE_GRAY_16, icSigGrayData) {}
     virtual QString id() const {
-        return "GRAY16";
+        return "GRAYU16";
     }
     virtual QString name() const {
         return i18n("Grayscale (16-bit integer/channel)");

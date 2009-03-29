@@ -44,6 +44,7 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <QLabel>
 #include <QRadioButton>
@@ -83,7 +84,7 @@ StrokeDocker::StrokeDocker()
     // set min/max/step and value in points, then set actual unit
     d->setLineWidth = new KoUnitDoubleSpinBox( mainWidget );
     d->setLineWidth->setMinMaxStep( 0.0, 1000.0, 0.5 );
-    d->setLineWidth->setDecimals( 1 );
+    d->setLineWidth->setDecimals( 2 );
     d->setLineWidth->setUnit( KoUnit(KoUnit::Point) );
     d->setLineWidth->setToolTip( i18n( "Set line width of actual selection" ) );
     mainLayout->addWidget( d->setLineWidth, 1, 1, 1, 3 );
@@ -154,7 +155,7 @@ StrokeDocker::StrokeDocker()
     // set min/max/step and value in points, then set actual unit
     d->miterLimit = new KoUnitDoubleSpinBox( mainWidget );
     d->miterLimit->setMinMaxStep( 0.0, 1000.0, 0.5 );
-    d->miterLimit->setDecimals( 1 );
+    d->miterLimit->setDecimals( 2 );
     d->miterLimit->setUnit( KoUnit(KoUnit::Point) );
     d->miterLimit->setToolTip( i18n( "Set miter limit" ) );
     mainLayout->addWidget( d->miterLimit, 4, 1, 1, 3 );
@@ -224,6 +225,7 @@ void StrokeDocker::updateControls()
 
 void StrokeDocker::widthChanged()
 {
+    kDebug() << "widthChanged" << d->setLineWidth->value();
     d->border.setLineWidth( d->setLineWidth->value() );
     applyChanges();
 }

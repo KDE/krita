@@ -44,7 +44,6 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 #include <QLabel>
 #include <QRadioButton>
@@ -225,7 +224,6 @@ void StrokeDocker::updateControls()
 
 void StrokeDocker::widthChanged()
 {
-    kDebug() << "widthChanged" << d->setLineWidth->value();
     d->border.setLineWidth( d->setLineWidth->value() );
     applyChanges();
 }

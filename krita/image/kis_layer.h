@@ -166,12 +166,13 @@ public:
      * Return the composite op associated with this layer.
      */
     const KoCompositeOp * compositeOp() const;
+    const QString& compositeOpId() const;
 
     /**
      * Set a new composite op for this layer. The layer will be marked
      * dirty.
      */
-    void setCompositeOp(const KoCompositeOp * compositeOp);
+    void setCompositeOp(const QString& compositeOpId);
 
 
     KisImageSP image() const;

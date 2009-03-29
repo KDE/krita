@@ -49,7 +49,7 @@ public:
 
     KisImageWSP image;
     QBitArray channelFlags;
-    const KoCompositeOp * compositeOp;
+    QString compositeOp;
     KisEffectMaskSP previewMask;
     KisMetaData::Store* metaDataStore;
 };
@@ -63,10 +63,7 @@ KisLayer::KisLayer(KisImageWSP img, const QString &name, quint8 opacity)
     setName(name);
     setOpacity(opacity);
     m_d->image = img;
-    if (m_d->image)
-        m_d->compositeOp = const_cast<KoCompositeOp*>(img->colorSpace()->compositeOp(COMPOSITE_OVER));
-    else
-        m_d->compositeOp = 0;
+    m_d->compositeOp = COMPOSITE_OVER;
     m_d->metaDataStore = new KisMetaData::Store();
 }
 
@@ -160,18 +157,28 @@ void KisLayer::setTemporary(bool t)
     nodeProperties().setProperty("temporary", t);
 }
 
-const KoCompositeOp * KisLayer::compositeOp() const
+const QString& KisLayer::compositeOpId() const
 {
-    //dbgImage << m_d->compositeOp->description();
     return m_d->compositeOp;
 }
 
-void KisLayer::setCompositeOp(const KoCompositeOp* compositeOp)
+const KoCompositeOp * KisLayer::compositeOp() const
 {
-    //dbgImage << "old: " <<  m_d->compositeOp->description() << ", new: " << compositeOp->description();
-    if (m_d->compositeOp != compositeOp) {
-        m_d->compositeOp = const_cast<KoCompositeOp*>(compositeOp);
+    dbgImage << m_d->compositeOp;
+    
+    KisLayerSP parent = parentLayer();
+    if( !parent )
+    {
+      return 0;
     }
+    const KoCompositeOp* op = parent->colorSpace()->compositeOp(m_d->compositeOp);
+    if( op ) return op;
+    return parent->colorSpace()->compositeOp(COMPOSITE_OVER);
+}
+
+void KisLayer::setCompositeOp(const QString& compositeOp)
+{
+    m_d->compositeOp = compositeOp;
 }
 
 KisImageSP KisLayer::image() const
@@ -244,7 +251,8 @@ bool KisLayer::hasEffectMasks() const
 
 void KisLayer::applyEffectMasks(const KisPaintDeviceSP original, const KisPaintDeviceSP projection, const QRect & rc)
 {
-
+    Q_ASSERT(original);
+    Q_ASSERT(projection);
     KoProperties props;
     props.setProperty("visible", true);
 

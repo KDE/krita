@@ -24,8 +24,8 @@
 
 #include "kis_layer.h"
 
-KisLayerCompositeOpCommand::KisLayerCompositeOpCommand(KisLayerSP layer, const KoCompositeOp* oldCompositeOp,
-        const KoCompositeOp* newCompositeOp) :
+KisLayerCompositeOpCommand::KisLayerCompositeOpCommand(KisLayerSP layer, const QString& oldCompositeOp,
+        const QString& newCompositeOp) :
         KisLayerCommand(i18n("Layer Composite Mode"), layer)
 {
     m_oldCompositeOp = oldCompositeOp;

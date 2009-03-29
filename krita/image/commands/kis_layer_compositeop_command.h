@@ -41,14 +41,14 @@ public:
      * @param oldCompositeOp the old layer composite op
      * @param newCompositeOp the new layer composite op
      */
-    KisLayerCompositeOpCommand(KisLayerSP layer, const KoCompositeOp * oldCompositeOp, const KoCompositeOp * newCompositeOp);
+    KisLayerCompositeOpCommand(KisLayerSP layer, const QString& oldCompositeOp, const QString& newCompositeOp);
 
     virtual void redo();
     virtual void undo();
 
 private:
-    const KoCompositeOp * m_oldCompositeOp;
-    const KoCompositeOp * m_newCompositeOp;
+    QString m_oldCompositeOp;
+    QString m_newCompositeOp;
 };
 #endif 
 

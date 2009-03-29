@@ -50,7 +50,7 @@ public:
      */
     KisLayerPropsCommand( KisLayerSP layer,
                            qint32 oldOpacity, qint32 newOpactiy,
-                           const KoCompositeOp* oldCompositeOp, const KoCompositeOp* newCompositeOp,
+                           const QString&  oldCompositeOp, const QString& newCompositeOp,
                            const QString& oldName, const QString& newName,
                            const QBitArray oldChannelFlags, const QBitArray newChannelFlags );
     virtual ~KisLayerPropsCommand();
@@ -64,8 +64,8 @@ private:
     qint32 m_oldOpacity;
     qint32 m_newOpacity;
 
-    const KoCompositeOp * m_oldCompositeOp;
-    const KoCompositeOp * m_newCompositeOp;
+    QString m_oldCompositeOp;
+    QString m_newCompositeOp;
 
     QBitArray m_oldChannelFlags;
     QBitArray m_newChannelFlags;

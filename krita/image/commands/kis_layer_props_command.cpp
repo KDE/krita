@@ -36,7 +36,7 @@
 
 KisLayerPropsCommand::KisLayerPropsCommand(KisLayerSP layer,
                            qint32 oldOpacity, qint32 newOpactiy,
-                           const KoCompositeOp* oldCompositeOp, const KoCompositeOp* newCompositeOp,
+                           const QString& oldCompositeOp, const QString& newCompositeOp,
                            const QString& oldName, const QString& newName,
                            const QBitArray oldChannelFlags, const QBitArray newChannelFlags )
         : KisLayerCommand(i18n("Property Changes"), layer)

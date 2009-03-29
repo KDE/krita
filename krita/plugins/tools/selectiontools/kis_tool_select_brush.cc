@@ -82,6 +82,7 @@ void KisToolSelectBrush::initPaint(KoPointerEvent* /*e*/)
 
 #endif
     KisSelectionSP selection = currentSelection();
+    Q_ASSERT(selection);
 
     m_target = selection.data();
     m_painter = new KisPainter(selection);

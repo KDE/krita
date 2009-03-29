@@ -344,7 +344,7 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP img)
         }
 
         QString compositeOpName = element.attribute( COMPOSITE_OP, "normal" );
-        layer->setCompositeOp( colorSpace->compositeOp( compositeOpName ) );
+        layer->setCompositeOp( compositeOpName );
     }
 
     if ( element.attribute( FILE_NAME ).isNull() )

@@ -306,7 +306,7 @@ void KisLayerManager::layerCompositeOp(const KoCompositeOp* compositeOp)
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    m_doc->addCommand(new KisLayerCompositeOpCommand(layer, layer->compositeOp(), compositeOp));
+    m_doc->addCommand(new KisLayerCompositeOpCommand(layer, layer->compositeOpId(), compositeOp->id()));
 }
 
 // range: 0 - 100
@@ -453,7 +453,7 @@ void KisLayerManager::layerProperties()
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
                 m_view->undoAdapter()->addCommand(new KisLayerPropsCommand(layer,
                                                   layer->opacity(), dlg.getOpacity(),
-                                                  layer->compositeOp(), dlg.getCompositeOp(),
+                                                  layer->compositeOpId(), dlg.getCompositeOp()->id(),
                                                   layer->name(), dlg.getName(),
                                                   oldChannelFlags, newChannelFlags));
                 QApplication::restoreOverrideCursor();
@@ -481,7 +481,7 @@ void KisLayerManager::addLayer(KisNodeSP parent, KisNodeSP above)
         QString profilename;
         KisLayerSP layer = new KisPaintLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE, img->colorSpace());
         if (layer) {
-            layer->setCompositeOp(img->colorSpace()->compositeOp(COMPOSITE_OVER));
+            layer->setCompositeOp(COMPOSITE_OVER);
             m_commandsAdapter->addNode(layer.data(), parent.data(), above.data());
             m_view->canvas()->update();
             m_view->layerBox()->setCurrentNode( layer );
@@ -497,7 +497,7 @@ void KisLayerManager::addGroupLayer(KisNodeSP parent, KisNodeSP above)
     if (img) {
         KisLayerSP layer = KisLayerSP(new KisGroupLayer(img.data(), img->nextLayerName(), OPACITY_OPAQUE));
         if (layer) {
-            layer->setCompositeOp(img->colorSpace()->compositeOp(COMPOSITE_OVER));
+            layer->setCompositeOp(COMPOSITE_OVER);
             m_commandsAdapter->addNode(layer.data(), parent.data(), above.data());
             m_view->canvas()->update();
         } else {
@@ -537,7 +537,7 @@ void KisLayerManager::addCloneLayer(KisNodeSP parent, KisNodeSP above)
 
         if (layer) {
 
-            layer->setCompositeOp(img->colorSpace()->compositeOp(COMPOSITE_OVER));
+            layer->setCompositeOp(COMPOSITE_OVER);
             m_commandsAdapter->addNode(layer.data(), parent.data(), above.data());
 
             m_view->canvas()->update();
@@ -571,7 +571,7 @@ void KisLayerManager::addShapeLayer(KisNodeSP parent, KisNodeSP above)
 
         KisLayerSP layer = new KisShapeLayer(parentContainer, m_doc->shapeController(), img.data(), img->nextLayerName(), OPACITY_OPAQUE);
         if (layer) {
-            layer->setCompositeOp(img->colorSpace()->compositeOp(COMPOSITE_OVER));
+            layer->setCompositeOp(COMPOSITE_OVER);
             m_commandsAdapter->addNode(layer.data(), parent, above.data());
             m_view->canvas()->update();
         } else {

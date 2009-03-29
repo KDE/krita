@@ -123,7 +123,7 @@ void KisPaintLayer::updateProjection(const QRect & rc)
 
     dbgImage << name() << ": updateProjection " << rc;
 
-    if (!m_d->projection) {
+    if (!m_d->projection || !( *m_d->projection->colorSpace() == *m_d->paintDevice->colorSpace() ) ) {
         m_d->projection = new KisPaintDevice(*m_d->paintDevice);
     } else {
         m_d->projection->setX(m_d->paintDevice->x());

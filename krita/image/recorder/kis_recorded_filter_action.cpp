@@ -88,7 +88,7 @@ void KisRecordedFilterAction::play(KisUndoAdapter* adapter) const
     }
 
     d->filter->process(dev, r1, kfc);
-    dev->setDirty(r1);
+    d->node->setDirty(r1);
     if (adapter) adapter->addCommand(cmd);
 }
 

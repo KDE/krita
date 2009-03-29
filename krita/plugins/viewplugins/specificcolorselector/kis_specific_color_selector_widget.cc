@@ -26,6 +26,8 @@
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_color_input.h"
+#include <KoColorProfile.h>
+#include "kis_debug.h"
 
 
 KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent) : QWidget(parent), m_colorSpace(0)
@@ -41,8 +43,12 @@ KisSpecificColorSelectorWidget::~KisSpecificColorSelectorWidget()
 
 void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
 {
+    Q_ASSERT(cs);
     if (m_colorSpace && *m_colorSpace == *cs) return;
+    dbgPlugins << cs->id() << " " << cs->profile()->name();
     m_colorSpace = KoColorSpaceRegistry::instance()->colorSpace(cs->id(), cs->profile());
+    Q_ASSERT(m_colorSpace);
+    Q_ASSERT(*m_colorSpace == *cs);
     m_color = KoColor(m_color, m_colorSpace);
     foreach(KisColorInput* input, m_inputs) {
         delete input;

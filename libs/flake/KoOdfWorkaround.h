@@ -50,6 +50,6 @@ namespace KoOdfWorkaround
      * Add the path needed for the ellipse
      */
     FLAKE_EXPORT void fixEnhancedPath(QString & path, const KoXmlElement &element, KoShapeLoadingContext &context);
-};
+}
 
 #endif /* KOODFWORKAROUND_H */

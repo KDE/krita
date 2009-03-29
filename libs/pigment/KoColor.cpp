@@ -54,6 +54,7 @@ KoColor::KoColor()
 KoColor::KoColor(const KoColorSpace * colorSpace)
     : d(new Private())
 {
+    Q_ASSERT(colorSpace);
     d->colorSpace = colorSpace;
     d->data = new quint8[d->colorSpace->pixelSize()];
     memset(d->data, 0, d->colorSpace->pixelSize());
@@ -68,9 +69,9 @@ KoColor::~KoColor()
 KoColor::KoColor(const QColor & color, const KoColorSpace * colorSpace)
     : d(new Private())
 {
-    d->colorSpace = colorSpace;
     Q_ASSERT(color.isValid());
     Q_ASSERT(colorSpace);
+    d->colorSpace = colorSpace;
 
     d->data = new quint8[colorSpace->pixelSize()];
     memset(d->data, 0, d->colorSpace->pixelSize());
@@ -81,6 +82,8 @@ KoColor::KoColor(const QColor & color, const KoColorSpace * colorSpace)
 KoColor::KoColor(const quint8 * data, const KoColorSpace * colorSpace)
     : d(new Private())
 {
+    Q_ASSERT(colorSpace);
+    Q_ASSERT(data);
     d->colorSpace = colorSpace;
     d->data = new quint8[colorSpace->pixelSize()];
     memset(d->data, 0, d->colorSpace->pixelSize());
@@ -91,6 +94,7 @@ KoColor::KoColor(const quint8 * data, const KoColorSpace * colorSpace)
 KoColor::KoColor(const KoColor &src, const KoColorSpace * colorSpace)
     : d(new Private())
 {
+    Q_ASSERT(colorSpace);
     d->colorSpace = colorSpace;
     d->data = new quint8[colorSpace->pixelSize()];
     memset(d->data, 0, d->colorSpace->pixelSize());
@@ -152,6 +156,8 @@ void KoColor::convertTo(const KoColorSpace * cs)
 
 void KoColor::setColor(quint8 * data, const KoColorSpace * colorSpace)
 {
+    Q_ASSERT(data);
+    Q_ASSERT(colorSpace);
     delete [] d->data;
     d->data = new quint8[colorSpace->pixelSize()];
     memcpy(d->data, data, colorSpace->pixelSize());
@@ -161,6 +167,7 @@ void KoColor::setColor(quint8 * data, const KoColorSpace * colorSpace)
 // To save the user the trouble of doing color->colorSpace()->toQColor(color->data(), &c, &a, profile
 void KoColor::toQColor(QColor *c) const
 {
+    Q_ASSERT(c);
     if (d->colorSpace && d->data) {
         d->colorSpace->toQColor(d->data, c);
     }

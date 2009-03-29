@@ -97,25 +97,26 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
 
     QRect rect = dev->exactBounds();
 
-    KisHLineConstIteratorPixel srcIt = dev->createHLineConstIterator(rect.x(), rect.y(), rect.width());
-    KisHLineIteratorPixel dstIt = shadowDev->createHLineIterator(rect.x(), rect.y(), rect.width());
+    {
+        KisHLineConstIteratorPixel srcIt = dev->createHLineConstIterator(rect.x(), rect.y(), rect.width());
+        KisHLineIteratorPixel dstIt = shadowDev->createHLineIterator(rect.x(), rect.y(), rect.width());
 
-    for (qint32 row = 0; row < rect.height(); ++row) {
-        while (! srcIt.isDone()) {
-            if (srcIt.isSelected()) {
-                //set the shadow color
-                quint8 alpha = dev->colorSpace()->alpha(srcIt.rawData());
-                color.setAlpha(alpha);
-                rgb8cs->fromQColor(color, dstIt.rawData());
+        for (qint32 row = 0; row < rect.height(); ++row) {
+            while (! srcIt.isDone()) {
+                if (srcIt.isSelected()) {
+                    //set the shadow color
+                    quint8 alpha = dev->colorSpace()->alpha(srcIt.rawData());
+                    color.setAlpha(alpha);
+                    rgb8cs->fromQColor(color, dstIt.rawData());
+                }
+                ++srcIt;
+                ++dstIt;
             }
-            ++srcIt;
-            ++dstIt;
+            srcIt.nextRow();
+            dstIt.nextRow();
+            progressUpdater->setProgress((row * 100) / rect.height());
         }
-        srcIt.nextRow();
-        dstIt.nextRow();
-        progressUpdater->setProgress((row * 100) / rect.height());
     }
-
     if (blurradius > 0) {
         bShadowDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0));
         gaussianblur(progressUpdater, shadowDev, bShadowDev, rect, blurradius, blurradius, BLUR_RLE, progressUpdater);

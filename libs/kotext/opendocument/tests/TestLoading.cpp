@@ -25,8 +25,6 @@
 #include <QtScript>
 #include <QtTest>
 
-#include <kdeversion.h>
-
 #include <KoStyleManager.h>
 #include <KoDocument.h>
 #include <KoOdfStylesReader.h>
@@ -625,9 +623,7 @@ void TestLoading::addData()
     QTest::newRow("country") << "FormattingProperties/TextFormattingProperties/country";
     QTest::newRow("fontCharset") << "FormattingProperties/TextFormattingProperties/fontCharacterSet";
     QTest::newRow("fontFamily") << "FormattingProperties/TextFormattingProperties/fontFamily";
-#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
     QTest::newRow("fontFamilyGeneric") << "FormattingProperties/TextFormattingProperties/fontFamilyGeneric";
-#endif
     QTest::newRow("fontName") << "FormattingProperties/TextFormattingProperties/fontName";
     QTest::newRow("fontPitch") << "FormattingProperties/TextFormattingProperties/fontPitch";
     QTest::newRow("fontSize2") << "FormattingProperties/TextFormattingProperties/fontSize";
@@ -635,9 +631,7 @@ void TestLoading::addData()
     QTest::newRow("fontWeight") << "FormattingProperties/TextFormattingProperties/fontWeight";
     QTest::newRow("fontVariant") << "FormattingProperties/TextFormattingProperties/fontVariant";
     QTest::newRow("language") << "FormattingProperties/TextFormattingProperties/language";
-#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
     QTest::newRow("letterKerning") << "FormattingProperties/TextFormattingProperties/letterKerning";
-#endif
     QTest::newRow("lineThroughColor") << "FormattingProperties/TextFormattingProperties/lineThroughColor";
     QTest::newRow("lineThroughMode") << "FormattingProperties/TextFormattingProperties/lineThroughMode";
     QTest::newRow("lineThroughStyle") << "FormattingProperties/TextFormattingProperties/lineThroughStyle";

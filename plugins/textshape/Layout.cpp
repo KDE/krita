@@ -176,12 +176,7 @@ bool Layout::addLine(QTextLine &line)
         if (oldFootnoteDocLength >= 0) {
             QTextCursor cursor(m_textShape->footnoteDocument());
             cursor.setPosition(oldFootnoteDocLength);
-#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
             cursor.setPosition(m_textShape->footnoteDocument()->characterCount()-1, QTextCursor::KeepAnchor);
-#else
-            QTextBlock last = m_textShape->footnoteDocument()->end().previous();
-            cursor.setPosition(last.position() + last.length() - 1, QTextCursor::KeepAnchor);
-#endif
             cursor.removeSelectedText();
         }
 
@@ -1346,12 +1341,7 @@ qreal Layout::findFootnote(const QTextLine &line, int *oldLength)
         KoInlineNote *note = dynamic_cast<KoInlineNote*>(m_parent->inlineTextObjectManager()->inlineTextObject(c1));
         if (note && note->type() == KoInlineNote::Footnote) {
             QTextCursor cursor(m_textShape->footnoteDocument());
-#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
             cursor.setPosition(m_textShape->footnoteDocument()->characterCount()-1);
-#else
-            QTextBlock last = m_textShape->footnoteDocument()->end().previous();
-            cursor.setPosition(last.position() + last.length() - 1);
-#endif
             if (firstFootnote) {
                 (*oldLength) = cursor.position();
                 firstFootnote = false;

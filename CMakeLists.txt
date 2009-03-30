@@ -17,6 +17,7 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 # search packages used by KDE
 set(KDE_MIN_VERSION "4.1.0")
 find_package(KDE4 4.1.0 REQUIRED)
+find_package(Qt4 4.5.0 REQUIRED)
 include(KDE4Defaults)
 include(MacroLibrary)
 macro_optional_find_package(Boost)

@@ -369,7 +369,6 @@ static QString exportOdfLineWidth(KoCharacterStyle::LineWeight lineWeight, qreal
     }
 }
 
-#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
 static QString exportOdfFontStyleHint(QFont::StyleHint hint)
 {
     switch (hint) {
@@ -388,7 +387,6 @@ static QString exportOdfFontStyleHint(QFont::StyleHint hint)
         return "";
     }
 }
-#endif
 
 void KoCharacterStyle::setFontFamily(const QString &family)
 {
@@ -438,7 +436,6 @@ bool KoCharacterStyle::fontFixedPitch() const
 {
     return d->propertyBoolean(QTextFormat::FontFixedPitch);
 }
-#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
 void KoCharacterStyle::setFontStyleHint(QFont::StyleHint styleHint)
 {
     d->setProperty(QTextFormat::FontStyleHint, styleHint);
@@ -455,7 +452,6 @@ bool KoCharacterStyle::fontKerning() const
 {
     return d->propertyBoolean(QTextFormat::FontKerning);
 }
-#endif
 void KoCharacterStyle::setVerticalAlignment(QTextCharFormat::VerticalAlignment alignment)
 {
     d->setProperty(QTextFormat::TextVerticalAlignment, alignment);
@@ -743,7 +739,6 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
                 setFontFixedPitch(false);
         }
 
-#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
         if (styleStack.hasProperty(KoXmlNS::style, "font-family-generic")) {
             QString genericFamily = styleStack.property(KoXmlNS::style, "font-family-generic");
             if (genericFamily == "roman")
@@ -760,7 +755,6 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
                 ; // TODO: no hint available in Qt yet, we should at least store it as a property internally!
             }
         }
-#endif
 
         if (styleStack.hasProperty(KoXmlNS::style, "font-charset")) {
             // this property is not required by Qt, since Qt auto selects the right font based on the text
@@ -990,7 +984,6 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
         }
     }
 
-#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
     if (styleStack.hasProperty(KoXmlNS::style, "letter-kerning")) {
         if (styleStack.property(KoXmlNS::style, "letter-kerning") == "true") {
             setFontKerning(true);
@@ -998,7 +991,6 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
             setFontKerning(false);
         }
     }
-#endif
 
     if (styleStack.hasProperty(KoXmlNS::style, "text-outline")) {
         if (styleStack.property(KoXmlNS::style, "text-outline") == "true") {
@@ -1094,7 +1086,6 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
         } else if (key == QTextFormat::FontFixedPitch) {
             bool fixedPitch = d->stylesPrivate.value(key).toBool();
             style.addProperty("style:font-pitch", fixedPitch ? "fixed" : "variable", KoGenStyle::TextType);
-#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
         } else if (key == QTextFormat::FontStyleHint) {
             bool ok = false;
             int styleHint = d->stylesPrivate.value(key).toInt(&ok);
@@ -1102,7 +1093,6 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("style:font-family-generic", exportOdfFontStyleHint((QFont::StyleHint) styleHint), KoGenStyle::TextType);
         } else if (key == QTextFormat::FontKerning) {
             style.addProperty("style:letter-kerning", fontKerning() ? "true" : "false", KoGenStyle::TextType);
-#endif
         } else if (key == QTextFormat::FontCapitalization) {
             switch (fontCapitalization()) {
             case QFont::SmallCaps:

@@ -36,7 +36,6 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoBookmark.h>
 #include <KoInlineNote.h>
-#include <kdeversion.h>
 
 #define PARAGRAPH_BORDER_DEBUG
 
@@ -81,14 +80,12 @@ static QString fontProperties(const QTextCharFormat &textFormat)
         case KoCharacterStyle::FontCharset:
             fontProps.append(properties[id].toString());
             break;
-#if QT_VERSION >= KDE_MAKE_VERSION(4,5,0)
         case QTextFormat::FontStyleHint:
             fontProps.append(QString::number(properties[id].toInt()));
             break;
         case QTextFormat::FontKerning:
             fontProps.append(QString("kerning %1").arg(properties[id].toInt()));
             break;
-#endif
         default:
             break;
         }

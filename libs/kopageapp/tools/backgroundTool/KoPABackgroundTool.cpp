@@ -34,6 +34,8 @@
 #include <KoPAView.h>
 #include <KoPAPageBase.h> // this is needed to make setResource work correctly
 #include <KoPointerEvent.h>
+#include <KoShapeManager.h>
+#include <KoSelection.h>
 
 #include "KoPAMasterPageDocker.h"
 #include "KoPABackgroundToolWidget.h"
@@ -62,6 +64,7 @@ void KoPABackgroundTool::activate( bool temporary )
 {
     Q_UNUSED( temporary );
 
+    m_canvas->shapeManager()->selection()->deselectAll();
     m_canvas->resourceProvider()->setResource( KoPageApp::CurrentPage, m_view->activePage() );
 }
 

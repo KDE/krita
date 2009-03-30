@@ -37,7 +37,6 @@ int KoProgressBar::maximum() const
 
 void KoProgressBar::setValue( int value )
 {
-    QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     if( value >= minimum() && value < maximum() )
     {
         QProgressBar::setValue( value );

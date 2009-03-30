@@ -72,22 +72,23 @@ void KisBrushOption::setImage(KisImageSP image)
 
 void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* settings) const
 {
+/*
     KisBrushSP brush = m_brushSelectionWidget->brush();
     QDomDocument d;
     QDomElement e = d.createElement( "brush_definition" );
     brush->toXML( d, e );
     settings->setProperty( "BrushDefinition", d.toString() );
-
+*/
 }
 
 void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-
+/*
     QString brushDefinition = setting->getString("brush_definition");
     QDomDocument d;
     d.setContent( brushDefinition, false );
     QDomElement e = d.elementsByTagName("brush_definition" ).at( 0 ).toElement();
     KisBrushSP brush = KisBrush::fromXML( e );
     m_brushSelectionWidget->setCurrentBrush(brush);
-
+*/
 }

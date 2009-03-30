@@ -50,7 +50,11 @@ class KoCompositeOpOver : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOp
                                                  const QBitArray & channelFlags )
         {
             if (srcBlend == NATIVE_OPACITY_OPAQUE) {
-                memcpy(dstN, srcN, pixelSize);
+                for(int i = 0; (uint)i <  _CSTraits::channels_nb; i++)
+                {
+                    if( i != _CSTraits::alpha_pos && (  channelFlags.isEmpty() || channelFlags.testBit( i ) ) )
+                        dstN[i] = srcN[i];
+                }
             } else {
                 for(int i = 0; (uint)i <  _CSTraits::channels_nb; i++)
                 {

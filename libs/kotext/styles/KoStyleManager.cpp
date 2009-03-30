@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
@@ -99,6 +99,7 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
 
     // don't save character styles that are already saved as part of a paragraph style
     QSet<KoCharacterStyle*> characterParagraphStyles;
+    QHash<KoParagraphStyle*, QString> savedNames;
     foreach(KoParagraphStyle *paragraphStyle, d->paragStyles) {
         if (paragraphStyle == d->defaultParagraphStyle)
             continue;
@@ -110,8 +111,18 @@ void KoStyleManager::saveOdf(KoGenStyles& mainStyles)
 
         KoGenStyle style(KoGenStyle::StyleUser, "paragraph");
         paragraphStyle->saveOdf(style, mainStyles);
-        mainStyles.lookup(style, name, KoGenStyles::DontForceNumbering);
+        QString newName = mainStyles.lookup(style, name, KoGenStyles::DontForceNumbering);
+        savedNames.insert(paragraphStyle, newName);
         characterParagraphStyles.insert(paragraphStyle->characterStyle());
+    }
+
+    foreach(KoParagraphStyle *p, d->paragStyles) {
+        if (p->nextStyle() > 0 && savedNames.contains(p) && paragraphStyle(p->nextStyle())) {
+            KoParagraphStyle *next = paragraphStyle(p->nextStyle());
+            if (next == p) // this is the default
+                continue;
+            mainStyles.insertStyleRelation(savedNames.value(p), savedNames.value(next), "style:next-style-name");
+        }
     }
 
     foreach(KoCharacterStyle *characterStyle, d->charStyles) {

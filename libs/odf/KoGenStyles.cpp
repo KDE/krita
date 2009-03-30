@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
    Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2009 Thomas Zander <zander@kde.org>
    Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
 
    This library is free software; you can redistribute it and/or
@@ -106,6 +107,12 @@ public:
     QSet<QString> fontFaces;
 
     StyleMap::iterator insertStyle(const KoGenStyle &style, const QString &name, int flags);
+
+    struct RelationTarget {
+        QString target; // the style we point to
+        QString attribute; // the attribute name used for the relation
+    };
+    QHash<QString, RelationTarget> relations; // key is the name of the source style
 
     KoGenStyles *q;
 };
@@ -344,8 +351,16 @@ void KoGenStyles::saveOdfDocumentStyles(KoXmlWriter* xmlWriter) const
         QList<KoGenStyles::NamedStyle> stylesList = styles(int(styleData[i].m_type));
         QList<KoGenStyles::NamedStyle>::const_iterator it = stylesList.constBegin();
         for (; it != stylesList.constEnd() ; ++it) {
-            (*it).style->writeStyle(xmlWriter, *this, styleData[i].m_elementName, (*it).name,
+            if (d->relations.contains(it->name)) {
+                KoGenStyles::Private::RelationTarget relation = d->relations.value(it->name);
+                KoGenStyle styleCopy = *(*it).style;
+                styleCopy.addAttribute(relation.attribute, relation.target);
+                styleCopy.writeStyle(xmlWriter, *this, styleData[i].m_elementName, (*it).name,
                                     styleData[i].m_propertiesElementName, true, styleData[i].m_drawElement);
+            } else {
+                (*it).style->writeStyle(xmlWriter, *this, styleData[i].m_elementName, (*it).name,
+                                    styleData[i].m_propertiesElementName, true, styleData[i].m_drawElement);
+            }
         }
     }
 
@@ -381,4 +396,12 @@ void KoGenStyles::saveOdfFontFaceDecls(KoXmlWriter* xmlWriter) const
 
         xmlWriter->endElement(); // office:font-face-decls
     }
+}
+
+void KoGenStyles::insertStyleRelation(const QString &source, const QString &target, const char *tagName)
+{
+    KoGenStyles::Private::RelationTarget relation;
+    relation.target = target;
+    relation.attribute = QString(tagName);
+    d->relations.insert(source, relation);
 }

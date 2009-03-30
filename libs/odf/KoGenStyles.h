@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -216,6 +217,12 @@ public:
      * declarations
      */
     void saveOdfFontFaceDecls(KoXmlWriter* xmlWriter) const;
+
+    /**
+     * register a relation for a previously inserted style to a previously inserted target style.
+     * This allows you to add a style relation based on generated names.
+     */
+    void insertStyleRelation(const QString &source, const QString &target, const char *tagName);
 
 private:
     QString makeUniqueName(const QString& base, int flags) const;

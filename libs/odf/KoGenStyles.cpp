@@ -133,7 +133,7 @@ QString KoGenStyles::lookup(const KoGenStyle& style, const QString& name, int fl
                  style.type() == KoGenStyle::StyleTableCell);
         d->defaultStyles.insert(style.type(), style);
         // default styles don't have a name
-        return QString("");
+        return QString();
     }
 
     if (flags & AllowDuplicates) {

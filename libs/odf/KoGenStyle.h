@@ -337,6 +337,7 @@ private:
 private:
     // Note that the copy constructor and assignment operator are allowed.
     // Better not use pointers below!
+    // TODO turn this into a QSharedData class
     Type m_type;
     QByteArray m_familyName;
     QString m_parentName;

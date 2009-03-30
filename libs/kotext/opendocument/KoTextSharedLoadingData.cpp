@@ -124,14 +124,6 @@ void KoTextSharedLoadingData::addParagraphStyles(KoOdfLoadingContext & context, 
         if (styleTypes & StylesDotXml) {
             d->paragraphStylesDotXmlStyles.insert(it->first, it->second);
         }
-
-        // TODO check if it a know style set the styleid so that the custom styles are kept during copy and paste
-        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memeory
-        if (styleManager) {
-            styleManager->add(it->second);
-        } else {
-            d->paragraphStylesToDelete.append(it->second);
-        }
     }
 }
 
@@ -139,6 +131,8 @@ QList<QPair<QString, KoParagraphStyle *> > KoTextSharedLoadingData::loadParagrap
         int styleTypes, KoStyleManager *styleManager)
 {
     QList<QPair<QString, KoParagraphStyle *> > paragraphStyles;
+    QHash<KoParagraphStyle*,QString> nextStyles;
+    QHash<QString, KoParagraphStyle*> namedStyles; // duplicate of the qlist, but easier to access for nextStyles
 
     foreach(KoXmlElement* styleElem, styleElements) {
         Q_ASSERT(styleElem);
@@ -155,7 +149,26 @@ QList<QPair<QString, KoParagraphStyle *> > KoTextSharedLoadingData::loadParagrap
             parastyle->setListStyle(newListStyle);
         }
         paragraphStyles.append(QPair<QString, KoParagraphStyle *>(name, parastyle));
+        namedStyles.insert(name, parastyle);
+
+        if (styleElem->hasAttributeNS(KoXmlNS::style, "next-style-name"))
+            nextStyles.insert(parastyle, styleElem->attributeNS(KoXmlNS::style, "next-style-name"));
+
+        // TODO check if it a know style set the styleid so that the custom styles are kept during copy and paste
+        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memeory
+        if (styleManager)
+            styleManager->add(parastyle);
+        else
+            d->paragraphStylesToDelete.append(parastyle);
     }
+
+    // second pass; resolve all the 'next-style's.
+    foreach (KoParagraphStyle *style, nextStyles.keys()) {
+        KoParagraphStyle *next = namedStyles.value(nextStyles.value(style));
+        if (next && next->styleId() >= 0)
+            style->setNextStyle(next->styleId());
+    }
+
     return paragraphStyles;
 }
 

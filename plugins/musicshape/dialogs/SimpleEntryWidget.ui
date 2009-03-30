@@ -314,7 +314,7 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="3" >
+<!--        <item row="1" column="3" >
          <widget class="QToolButton" name="selectButton" >
           <property name="text" >
            <string/>
@@ -323,7 +323,7 @@
            <bool>true</bool>
           </property>
          </widget>
-        </item>
+        </item> -->
        </layout>
       </widget>
      </item>

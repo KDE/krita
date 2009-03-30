@@ -293,7 +293,6 @@ void ListItemsHelper::recalculate()
                 break;
             }
         }
-
         QString item("");
         if (displayLevel > 1) {
             int checkLevel = level;
@@ -377,7 +376,8 @@ void ListItemsHelper::recalculate()
         }
         case KoListStyle::CustomCharItem:
             calcWidth = false;
-            item = QString(QChar(format.intProperty(KoListStyle::BulletCharacter)));
+            if (format.intProperty(KoListStyle::BulletCharacter))
+                item = QString(QChar(format.intProperty(KoListStyle::BulletCharacter)));
             width = m_fm.width(item);
             break;
         case KoListStyle::None:

@@ -1227,7 +1227,9 @@ void Layout::drawListItem(QPainter *painter, const QTextBlock &block)
             }
             break;
             case KoListStyle::CustomCharItem:
-                painter->drawText(0, 0, QChar(listFormat.intProperty(KoListStyle::BulletCharacter)));
+                if (!QChar(listFormat.intProperty(KoListStyle::BulletCharacter)).isNull()){
+                    painter->drawText(0, 0, QChar(listFormat.intProperty(KoListStyle::BulletCharacter)));
+                }
                 break;
             default:; // others we ignore.
             }

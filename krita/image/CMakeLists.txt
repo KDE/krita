@@ -113,7 +113,6 @@ set(kritaimage_LIB_SRCS
    kis_math_toolbox.cpp
    kis_name_server.cpp
    kis_node.cpp
-   kis_node_action.cpp
    kis_node_facade.cpp
    kis_node_progress_proxy.cpp
    kis_node_visitor.cpp

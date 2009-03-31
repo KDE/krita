@@ -131,6 +131,7 @@ void KoCanvasController::setCanvas(KoCanvasBase *canvas)
     d->canvas->canvasWidget()->installEventFilter(this);
     d->canvas->canvasWidget()->setMouseTracking(true);
     canvas->setCanvasController(this);
+    setFocusProxy(d->canvas->canvasWidget());
 
     emit canvasSet(this);
     QTimer::singleShot(0, this, SLOT(activate()));
@@ -241,8 +242,6 @@ void KoCanvasController::updateCanvasOffsetX()
     emit canvasOffsetXChanged(canvasOffsetX());
     if (d->ignoreScrollSignals)
         return;
-    if (d->viewportWidget && d->viewportWidget->canvas() && horizontalScrollBar()->hasFocus())
-        d->viewportWidget->canvas()->setFocus(); // workaround ugly bug in Qt that the focus is transferred to the sliders
     d->preferredCenterFractionX = (horizontalScrollBar()->value() + horizontalScrollBar()->pageStep() / 2.0) / d->documentSize.width();
 }
 
@@ -251,8 +250,6 @@ void KoCanvasController::updateCanvasOffsetY()
     emit canvasOffsetYChanged(canvasOffsetY());
     if (d->ignoreScrollSignals)
         return;
-    if (d->viewportWidget && d->viewportWidget->canvas() && verticalScrollBar()->hasFocus())
-        d->viewportWidget->canvas()->setFocus(); // workaround ugly bug in Qt that the focus is transferred to the sliders
     d->preferredCenterFractionY = (verticalScrollBar()->value() + verticalScrollBar()->pageStep() / 2.0) / d->documentSize.height();
 }
 

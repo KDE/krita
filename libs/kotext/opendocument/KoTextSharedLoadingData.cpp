@@ -63,6 +63,7 @@ public:
     QList<KoParagraphStyle *> paragraphStylesToDelete;
     QList<KoCharacterStyle *> characterStylesToDelete;
     QList<KoListStyle *> listStylesToDelete;
+    QHash<QString, KoParagraphStyle*> namedParagraphStyles;
 };
 
 KoTextSharedLoadingData::KoTextSharedLoadingData()
@@ -97,13 +98,15 @@ void KoTextSharedLoadingData::loadOdfStyles(KoOdfLoadingContext & context, KoSty
     addListStyles(context, context.stylesReader().customStyles("list").values(), ContentDotXml | StylesDotXml, styleManager);
 
     addDefaultParagraphStyle(context, context.stylesReader().defaultStyle("paragraph"), context.defaultStylesReader().defaultStyle("paragraph"), styleManager);
-    // add office:automatic-styles in content.xml to paragraphContentDotXmlStyles
-    addParagraphStyles(context, context.stylesReader().autoStyles("paragraph").values(), ContentDotXml);
-    // add office:automatic-styles in styles.xml to paragraphStylesDotXmlStyles
-    addParagraphStyles(context, context.stylesReader().autoStyles("paragraph", true).values(), StylesDotXml);
+    // adding all the styles in order of dependency; automatic styles can have a parent in the named styles, so load the named styles first.
+
     // add office:styles from styles.xml to paragraphContentDotXmlStyles, paragraphStylesDotXmlStyles and styleManager
     // now all styles referencable from the body in content.xml is in paragraphContentDotXmlStyles
     addParagraphStyles(context, context.stylesReader().customStyles("paragraph").values(), ContentDotXml | StylesDotXml, styleManager);
+    // add office:automatic-styles in styles.xml to paragraphStylesDotXmlStyles
+    addParagraphStyles(context, context.stylesReader().autoStyles("paragraph", true).values(), StylesDotXml);
+    // add office:automatic-styles in content.xml to paragraphContentDotXmlStyles
+    addParagraphStyles(context, context.stylesReader().autoStyles("paragraph").values(), ContentDotXml);
 
     addOutlineStyle(context, styleManager);
 
@@ -132,7 +135,7 @@ QList<QPair<QString, KoParagraphStyle *> > KoTextSharedLoadingData::loadParagrap
 {
     QList<QPair<QString, KoParagraphStyle *> > paragraphStyles;
     QHash<KoParagraphStyle*,QString> nextStyles;
-    QHash<QString, KoParagraphStyle*> namedStyles; // duplicate of the qlist, but easier to access for nextStyles
+    QHash<KoParagraphStyle*,QString> parentStyles;
 
     foreach(KoXmlElement* styleElem, styleElements) {
         Q_ASSERT(styleElem);
@@ -149,10 +152,12 @@ QList<QPair<QString, KoParagraphStyle *> > KoTextSharedLoadingData::loadParagrap
             parastyle->setListStyle(newListStyle);
         }
         paragraphStyles.append(QPair<QString, KoParagraphStyle *>(name, parastyle));
-        namedStyles.insert(name, parastyle);
+        d->namedParagraphStyles.insert(name, parastyle);
 
         if (styleElem->hasAttributeNS(KoXmlNS::style, "next-style-name"))
             nextStyles.insert(parastyle, styleElem->attributeNS(KoXmlNS::style, "next-style-name"));
+        if (styleElem->hasAttributeNS(KoXmlNS::style, "parent-style-name"))
+            parentStyles.insert(parastyle, styleElem->attributeNS(KoXmlNS::style, "parent-style-name"));
 
         // TODO check if it a know style set the styleid so that the custom styles are kept during copy and paste
         // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memeory
@@ -162,11 +167,16 @@ QList<QPair<QString, KoParagraphStyle *> > KoTextSharedLoadingData::loadParagrap
             d->paragraphStylesToDelete.append(parastyle);
     }
 
-    // second pass; resolve all the 'next-style's.
+    // second pass; resolve all the 'next-style's and parent-style's.
     foreach (KoParagraphStyle *style, nextStyles.keys()) {
-        KoParagraphStyle *next = namedStyles.value(nextStyles.value(style));
+        KoParagraphStyle *next = d->namedParagraphStyles.value(nextStyles.value(style));
         if (next && next->styleId() >= 0)
             style->setNextStyle(next->styleId());
+    }
+    foreach (KoParagraphStyle *style, parentStyles.keys()) {
+        KoParagraphStyle *parent = d->namedParagraphStyles.value(parentStyles.value(style));
+        if (parent)
+            style->setParentStyle(parent);
     }
 
     return paragraphStyles;

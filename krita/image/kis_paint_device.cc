@@ -25,7 +25,6 @@
 #include <QList>
 #include <QHash>
 
-#include <QThread>
 #include <klocale.h>
 #include <kconfiggroup.h>
 
@@ -51,7 +50,6 @@
 
 #include "kis_selection_component.h"
 #include "kis_pixel_selection.h"
-#include "kis_paint_device_jobs.h"
 #include "kis_repeat_iterators_pixel.h"
 
 class KisPaintDevice::Private

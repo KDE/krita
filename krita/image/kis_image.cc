@@ -29,8 +29,6 @@
 #include <QImage>
 #include <QPainter>
 #include <QSize>
-#include <QApplication>
-#include <QThread>
 #include <QDateTime>
 #include <QRect>
 #include <QRegion>

@@ -152,7 +152,7 @@ void KisFilterHandler::apply(KisNodeSP layer, KisFilterConfiguration* config)
     KisProcessingInformation src(m_d->dev, rect.topLeft(), selection);
     KisProcessingInformation dst(m_d->dev, rect.topLeft(), selection);
 
-    if (!filter->supportsThreading()) {
+    if (true || !filter->supportsThreading()) {
         KoUpdater up = updater.startSubtask();
         filter->process(src, dst, rect.size(), config, &up);
         areaDone(rect);

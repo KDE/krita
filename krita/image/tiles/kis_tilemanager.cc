@@ -30,7 +30,6 @@
 #include <cassert>
 
 #include <QMutex>
-#include <QThread>
 #include <qfile.h>
 
 #include <k3staticdeleter.h>

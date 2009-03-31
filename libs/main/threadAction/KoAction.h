@@ -32,8 +32,10 @@ class KoExecutePolicy;
  * Events based programming creates the need to execute certain pieces of logic based
  * on the incoming event, conveniently grouped per action. An action can be something
  * like 'print'.
- * This action uses a ThreadWeaver object to handle the actions and therefor this
+ * 
+ * This action uses a ThreadWeaver object to handle the actions and therefore this
  * action is implicitly multithreading.
+ *
  * Example usage:
  * @code
     Action *myAction = new KoAction();
@@ -43,6 +45,7 @@ class KoExecutePolicy;
 
     myAction->execute();
  * @endcode
+ *
  * In this example the method 'slot' will be called each time
  * the 'execute()' method is called on the action. It will be called in a different
  * thread from the main thread and you get the guarantee that it will

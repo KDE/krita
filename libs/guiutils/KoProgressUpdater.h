@@ -28,7 +28,6 @@
 
 class KoUpdater;
 class KoProgressUpdaterPrivate;
-class KoAction;
 class KoProgressProxy;
 
 /**
@@ -134,7 +133,7 @@ public:
  * routines.)
  *
  * KoUpdater implements KoProgressProxy because it is possible to recursively
- * create anoter KoProgressUpdater with an updater as progress proxy.
+ * create another KoProgressUpdater with an updater as progress proxy.
  *
  * @see KoProgressUpdater::startSubtask()
  */
@@ -163,14 +162,14 @@ public:
      * @return true when this task should stop processing immediately.
      */
     bool interrupted() const;
-    
+
     /**
      * return the progress this subtask has made.
      */
     int progress() const;
-    
+
 public: // KoProgressProxy implementation
-   
+
     int maximum() const;
     void setValue( int value );
     void setRange( int minimum, int maximum );

@@ -363,12 +363,6 @@ target_link_libraries(KisPaintDeviceActionTest  ${KDE4_KDEUI_LIBS} kritaimage ${
 
 ########### next target ###############
 
-set(kis_paint_device_jobs_test_SRCS kis_paint_device_jobs_test.cpp )
-kde4_add_unit_test(KisPaintDeviceJobsTest TESTNAME krita-image-KisPaintDeviceJobsTest ${kis_paint_device_jobs_test_SRCS})
-target_link_libraries(KisPaintDeviceJobsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_painterly_overlay_colorspace_test_SRCS kis_painterly_overlay_colorspace_test.cpp )
 kde4_add_unit_test(KisPainterlyOverlayColorspaceTest TESTNAME krita-image-KisPainterlyOverlayColorspaceTest ${kis_painterly_overlay_colorspace_test_SRCS})
 target_link_libraries(KisPainterlyOverlayColorspaceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
@@ -522,12 +516,6 @@ target_link_libraries(KisFilterConfigWidgetTest  ${KDE4_KDEUI_LIBS} kritaimage $
 set(kis_filter_job_test_SRCS kis_filter_job_test.cpp )
 kde4_add_unit_test(KisFilterJobTest TESTNAME krita-image-KisFilterJobTest ${kis_filter_job_test_SRCS})
 target_link_libraries(KisFilterJobTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-set(kis_node_action_test_SRCS kis_node_action_test.cpp)
-kde4_add_unit_test(KisNodeActionTest TESTNAME krita-image-KisNodeActionTest ${kis_node_action_test_SRCS})
-target_link_libraries(KisNodeActionTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
 
 ########### next target ###############
 

@@ -24,6 +24,7 @@
 #include <KoColorSpace.h>
 
 #include "kis_image.h"
+#include "kis_layer.h"
 #include "kis_paint_layer.h"
 
 #include "kis_threaded_applicator.h"
@@ -73,6 +74,8 @@ public:
         Q_UNUSED(updater);
         return new TestJob(parent, dev, rc, margin);
     }
+
+    KisLayerSP layer() const { return 0; }
 };
 
 void KisThreadedApplicatorTest::testApplication()

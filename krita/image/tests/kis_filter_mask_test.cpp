@@ -18,8 +18,6 @@
 
 #include "kis_filter_mask_test.h"
 #include <qtest_kde.h>
-#include <QThread>
-#include <QCoreApplication>
 
 #include <KoColorSpaceRegistry.h>
 

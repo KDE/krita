@@ -347,7 +347,9 @@ void KoTextLoader::loadHeading(const KoXmlElement& element, QTextCursor& cursor)
     cursor.mergeBlockFormat(blockFormat);
 
     if (!d->currentList) { // apply <text:outline-style> (if present) only if heading is not within a <text:list>
-        KoListStyle *outlineStyle = d->styleManager->outlineStyle();
+        KoListStyle *outlineStyle = 0;
+        if (d->styleManager)
+            outlineStyle = d->styleManager->outlineStyle();
         if (outlineStyle) {
             KoList *list = d->list(block.document(), outlineStyle);
             list->applyStyle(block, outlineStyle, level);

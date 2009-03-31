@@ -49,7 +49,7 @@ KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev,
     m_xshear = xshear;
     m_yshear = yshear;
     m_rotation = rotation,
-                 m_xtranslate = xtranslate;
+    m_xtranslate = xtranslate;
     m_ytranslate = ytranslate;
     m_progressUpdater = progress;
     m_filter = filter;

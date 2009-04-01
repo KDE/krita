@@ -1,6 +1,4 @@
-if(BUILD_EVERYTHING)
-    add_subdirectory( bigbrother )
-endif(BUILD_EVERYTHING)
+add_subdirectory( bigbrother )
 
 add_subdirectory( bracketing2hdr )
 add_subdirectory( colorrange )
@@ -12,9 +10,7 @@ add_subdirectory( imagesize )
 add_subdirectory( metadataeditor )
 add_subdirectory( modify_selection )
 add_subdirectory( rotateimage )
-if(BUILD_EVERYTHING)
-    add_subdirectory( scripting ) # TODO: port it to the change of KisFilter
-endif(BUILD_EVERYTHING)
+add_subdirectory( scripting ) # TODO: port it to the change of KisFilter
 add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 add_subdirectory( smallcolorselector )
@@ -31,13 +27,9 @@ macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by
 macro_log_feature(HAVE_GLEW "GLEW" "The OpenGL Extension Wrangler Library" "http://glew.sourceforge.net" FALSE "" "Required by the Krita shader filter plugin")
 
 if(GMM_FOUND AND NOT MSVC)
-    if(BUILD_EVERYTHING)
-        add_subdirectory( panorama )
-    endif(BUILD_EVERYTHING)
+    add_subdirectory( panorama )
 endif(GMM_FOUND AND NOT MSVC)
 
 if(HAVE_OPENGL AND HAVE_GLEW)
-    if(BUILD_EVERYTHING)
-        add_subdirectory( glsl )
-    endif(BUILD_EVERYTHING)
+    add_subdirectory( glsl )
 endif(HAVE_OPENGL AND HAVE_GLEW)

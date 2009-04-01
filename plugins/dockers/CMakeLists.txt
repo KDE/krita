@@ -21,8 +21,6 @@ set(kofficedockers_SRCS
     Plugin.cpp
 )
 
-if( BUILD_EVERYTHING )
-
 set(kofficedockers_SRCS ${kofficedockers_SRCS}
     shapeselector/Canvas.cpp
     shapeselector/DragCanvasStrategy.cpp
@@ -42,7 +40,6 @@ set(kofficedockers_SRCS ${kofficedockers_SRCS}
     shapeselector/ClipboardProxyShape.cpp
     shapeselector/ResizeFolderStrategy.cpp
 )
-endif( BUILD_EVERYTHING )
 
 add_subdirectory( strokedocker/pics )
 

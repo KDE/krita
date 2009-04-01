@@ -11,8 +11,6 @@ add_subdirectory( tool_perspectivegrid )
 add_subdirectory( tool_grid )
 #add_subdirectory( tool_perspectivetransform )
 
-if ( BUILD_EVERYTHING )
-	add_subdirectory ( tool_dyna )
-endif( BUILD_EVERYTHING )
+add_subdirectory ( tool_dyna )
 
 message("Krita: Port the perspective transform tool")

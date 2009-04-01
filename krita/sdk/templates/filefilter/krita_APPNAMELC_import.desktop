@@ -2,6 +2,7 @@
 Icon=
 Name=Krita %{APPNAMELC} Import Filter
 Name[ca]=Filtre d'importació %{APPNAMELC} per al Krita
+Name[da]=Importfilter til Krita %{APPNAMELC}
 Name[de]=Krita %{APPNAMELC}-Importfilter
 Name[el]=Φίλτρο εισαγωγής %{APPNAMELC} του Krita
 Name[es]=Filtro de importación de %{APPNAMELC} de Krita

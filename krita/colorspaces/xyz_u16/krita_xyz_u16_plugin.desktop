@@ -2,6 +2,7 @@
 Name=XYZ Color Model (16-bit integer)
 Name[bg]=Цветови модел XYZ (16 бита)
 Name[ca]=Model de color XYZ (enters de 16 bits)
+Name[da]=XYZ-farvemodel (16-bit heltal)
 Name[de]=XYZ-Farbmodell (16-bit Ganzzahl)
 Name[el]=Χρωματικό μοντέλο ΧΥΖ (16-bit ακέραιοι)
 Name[en_GB]=XYZ Colour Model (16-bit integer)
@@ -30,6 +31,7 @@ Name[zh_TW]=XYZ 色彩模型 (16-bit 整數)
 Comment=Color model for 16-bit integer per channel XYZ images
 Comment[bg]=Цветови модел за 16 битови изображения XYZ
 Comment[ca]=Model de color d'enters de 16 bits per a canal d'imatges XYZ
+Comment[da]=Farvemodel for 16-bit heltal pr. kanal XYZ-billeder
 Comment[de]=Farbmodell für 16-bit pro Kanal XYZ-Bilder
 Comment[el]=Χρωματικό μοντέλο για 16-bit ακεραίους ανά κανάλι XYZ εικόνες
 Comment[en_GB]=Colour model for 16-bit integer per channel XYZ images

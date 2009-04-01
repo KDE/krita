@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Solid Color Generator
 Name[ca]=Generador de color sòlid
+Name[da]=Generering af massiv farve
 Name[de]=Volltonfarben-Generator
 Name[el]=Δημιουργός συμπαγών χρωμάτων
 Name[en_GB]=Solid Colour Generator
@@ -24,6 +25,7 @@ Name[x-test]=xxSolid Color Generatorxx
 Name[zh_TW]=實心顏色產生器
 Comment=Generates a solid color
 Comment[ca]=Genera un color sòlid
+Comment[da]=Genererer en massiv farve
 Comment[de]=Erzeugt eine Volltonfarbe
 Comment[el]=Δημιουργεί ένα συμπαγές χρώμα
 Comment[en_GB]=Generates a solid colour

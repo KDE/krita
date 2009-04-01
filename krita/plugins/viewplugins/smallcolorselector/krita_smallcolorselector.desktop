@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=SmallColorSelector
 Name[ca]=SelectorDeColorPetit
+Name[da]=LilleFarveVælger
 Name[de]=Kleiner Farbwähler
 Name[en_GB]=SmallColourSelector
 Name[es]=Selector de colores pequeño
@@ -21,6 +22,7 @@ Name[x-test]=xxSmallColorSelectorxx
 Name[zh_TW]=小型顏色選擇器
 Comment=SmallColorSelector
 Comment[ca]=SelectorDeColorPetit
+Comment[da]=LilleFarveVælger
 Comment[de]=Kleiner Farbwähler
 Comment[en_GB]=SmallColourSelector
 Comment[es]=Selector de colores pequeño

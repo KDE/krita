@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=RulerAssistantView
 Name[ca]=VisualitzacióAssistentRegla
+Name[da]=LinealAssistentVisning
 Name[de]=Hilfslineal-Ansicht
 Name[el]=Προβολή βοηθού κανόνα
 Name[et]=Joonlauaabilise vaade
@@ -14,6 +15,7 @@ Name[x-test]=xxRulerAssistantViewxx
 Name[zh_TW]=尺規小助手檢視
 Comment=RulerAssistantView
 Comment[ca]=VisualitzacióAssistentRegla
+Comment[da]=LinealAssistentVisning
 Comment[de]=Hilfslineal-Ansicht
 Comment[el]=Προβολή βοηθού κανόνα
 Comment[et]=Joonlauaabilise vaade

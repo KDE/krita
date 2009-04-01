@@ -1,7 +1,8 @@
 /*
  *  This file is part of the KDE project
  *
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008, 2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2009 Matthew Woehlke <mw_triad@users.sourceforge.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

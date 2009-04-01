@@ -59,6 +59,13 @@ if (APPLE)
 endif (APPLE)
 
 
+#Set the build of TextShape changetraker
+set(CHANGETRK FALSE)
+    
+if(CHANGETRK)
+ add_definitions(-DCHANGETRK)
+endif(CHANGETRK)
+
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 
 if(WIN32)
@@ -130,7 +137,7 @@ set(KORESOURCES_INCLUDES ${CMAKE_SOURCE_DIR}/libs/resources ${CMAKE_BINARY_DIR}/
 set(KOGUIUTILS_INCLUDES ${CMAKE_SOURCE_DIR}/libs/guiutils ${CMAKE_BINARY_DIR}/libs/guiutils ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${PIGMENT_INCLUDES} ${KORESOURCES_INCLUDES})
 
 # The rest must be specified independently, in addition to one of the above three
-set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext/styles ${CMAKE_SOURCE_DIR}/libs/kotext/opendocument ${CMAKE_SOURCE_DIR}/libs/kotext ${CMAKE_BINARY_DIR}/libs/kotext)
+set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext/styles ${CMAKE_SOURCE_DIR}/libs/kotext/opendocument ${CMAKE_SOURCE_DIR}/libs/kotext ${CMAKE_SOURCE_DIR}/libs/kotext/changetracker ${CMAKE_BINARY_DIR}/libs/kotext)
 set(KFORMULA_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kformula ${CMAKE_BINARY_DIR}/libs/kformula)
 set(KOKROSS_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kokross ${CMAKE_BINARY_DIR}/libs/kokross)
 # kopageapp

@@ -53,6 +53,8 @@ bool KoTextOdfSaveHelper::writeBody()
     KoXmlWriter & bodyWriter = m_context->xmlWriter();
     bodyWriter.startElement("office:body");
     bodyWriter.startElement(KoOdf::bodyContentElement(KoOdf::Text, true));
+    
+    
 
     d->shapeData->saveOdf(*m_context, d->from, d->to);
 
@@ -60,3 +62,14 @@ bool KoTextOdfSaveHelper::writeBody()
     bodyWriter.endElement(); // office:body
     return true;
 }
+#ifdef CHANGETRK
+KoShapeSavingContext * KoTextOdfSaveHelper::context(KoXmlWriter * bodyWriter, KoGenStyles & mainStyles, KoEmbeddedDocumentSaver & embeddedSaver)
+{
+    Q_ASSERT(m_context == 0);
+    
+    KoGenChanges changes;
+    m_context = new KoTextShapeSavingContext(*bodyWriter, mainStyles, embeddedSaver, changes);
+    return m_context;
+}
+#endif
+

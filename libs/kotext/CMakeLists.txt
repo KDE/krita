@@ -71,11 +71,19 @@ set(kotext_LIB_SRCS ${libkohyphen_SRCS}
     styles/KoListStyle.cpp
     styles/KoListLevelProperties.cpp
     styles/ChangeFollower.cpp
-
     opendocument/KoTextSharedLoadingData.cpp
     opendocument/KoTextLoader.cpp
     opendocument/KoTextWriter.cpp
 )
+
+ if(CHANGETRK)   
+   set(kotext_LIB_SRCS ${kotext_LIB_SRCS}
+    changetracker/KoChangeTracker.cpp
+    changetracker/KoChangeTrackerElement.cpp
+    KoTextShapeSavingContext.cpp
+    KoTextDrag.cpp
+  )
+endif(CHANGETRK)
 
 
 kde4_add_ui_files(kotext_LIB_SRCS

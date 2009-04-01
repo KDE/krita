@@ -2,6 +2,7 @@
  * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -55,6 +56,11 @@
 #include <KoStyleManager.h>
 #include <KoTextOdfSaveHelper.h>
 #include <KoDrag.h>
+
+#ifdef CHANGETRK
+ #include <KoTextDrag.h>
+#endif
+
 #include <KoOdf.h>
 #include <KoTextPaste.h>
 #include <KoTextDocument.h>
@@ -83,6 +89,10 @@
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoShapeSavingContext.h>
+
+#ifdef CHANGETRK
+ #include <KoChangeTracker.h>
+#endif
 
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut)
 {
@@ -678,6 +688,21 @@ void TextTool::setShapeData(KoTextShapeData *data)
             m_changeTracker->setDocument(m_textShapeData->document());
         }
     }
+#ifdef CHANGETRK
+/*    if (m_trackChanges) {
+        if (m_changeTracker == 0)
+            m_changeTracker = new ChangeTracker(this);
+        m_changeTracker->setDocument(m_textShapeData->document());
+    }
+*/
+#else
+    if (m_trackChanges) {
+        if (m_changeTracker == 0)
+            m_changeTracker = new ChangeTracker(this);
+        m_changeTracker->setDocument(m_textShapeData->document());
+    }
+#endif
+
     if (m_spellcheckPlugin)
         m_spellcheckPlugin->checkSection(m_textShapeData->document(), 0, 0);
 }
@@ -716,7 +741,11 @@ void TextTool::copy() const
     int from = m_caret.position();
     int to = m_caret.anchor();
     KoTextOdfSaveHelper saveHelper(m_textShapeData, from, to);
+#ifdef CHANGETRK
+    KoTextDrag drag;
+#else
     KoDrag drag;
+#endif
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
     QTextDocumentFragment fragment = m_caret.selection();
     drag.setData("text/html", fragment.toHtml("utf-8").toUtf8());
@@ -949,11 +978,22 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             editingPluginEvents();
             ensureCursorVisible();
         } else if (event->key() == Qt::Key_Tab || !(event->text().length() == 1 && !event->text().at(0).isPrint())) { // insert the text
+#ifdef CHANGETRK
+            int m_changeRegistered = m_processingKeyPress;
+#endif
             startMacro(i18n("Key Press"));
             if (m_caret.hasSelection())
                 m_selectionHandler.deleteInlineObjects();
             m_prevCursorPosition = m_caret.position();
             ensureCursorVisible();
+#ifdef CHANGETRK
+            if ( !m_changeRegistered ) {
+                int changeId = KoTextDocument(m_textShapeData->document()).changeTracker()->getInsertChangeId(i18n("Key Press"), m_caret.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+                QTextCharFormat format;
+                format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+                m_caret.mergeCharFormat(format);
+            }
+#endif
             m_caret.insertText(event->text());
             if (m_textShapeData->pageDirection() == KoText::AutoDirection)
                 m_updateParagDirection.action->execute(m_prevCursorPosition);
@@ -1365,8 +1405,13 @@ void TextTool::addUndoCommand()
             if ( !(m_tool.isNull()) && (m_tool->m_textShapeData) && (m_tool->m_textShapeData->document() == m_document) ) {
                 m_tool->stopMacro();
                 m_tool->m_allowAddUndoCommand = false;
+#ifdef CHANGETRK
+//                if (m_tool->m_changeTracker && !m_tool->m_canvas->resourceProvider()->boolResource(KoCanvasResource::DocumentIsLoading))
+//                    m_tool->m_changeTracker->notifyForUndo();
+#else
                 if (m_tool->m_changeTracker && !m_tool->m_canvas->resourceProvider()->boolResource(KoCanvasResource::DocumentIsLoading))
                     m_tool->m_changeTracker->notifyForUndo();
+#endif
                 m_document->undo(&m_tool->m_caret);
             } else
                 m_document->undo();
@@ -1531,6 +1576,8 @@ void TextTool::formatParagraph()
 
 void TextTool::toggleTrackChanges(bool on)
 {
+#ifdef CHANGETRK
+/*
     m_trackChanges = on;
     if (m_textShapeData && on) {
         if (m_changeTracker == 0)
@@ -1539,6 +1586,17 @@ void TextTool::toggleTrackChanges(bool on)
             m_changeTracker->setDocument(m_textShapeData->document());
     } else if (m_changeTracker)
         m_changeTracker->setDocument(0);
+	*/
+#else
+    m_trackChanges = on;
+    if (m_textShapeData && on) {
+        if (m_changeTracker == 0)
+            m_changeTracker = new ChangeTracker(this);
+        if (m_changeTracker)
+            m_changeTracker->setDocument(m_textShapeData->document());
+    } else if (m_changeTracker)
+        m_changeTracker->setDocument(0);
+#endif
 }
 
 void TextTool::selectAll()

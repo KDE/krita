@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,6 +25,10 @@
 #include <KoShapeContainer.h>
 #include <KoFrameShape.h>
 #include <KoTextShapeData.h>
+
+#ifdef CHANGETRK
+ #include <KoTextShapeSavingContext.h>
+#endif
 
 #include <QTextDocument>
 #include <QPainter>

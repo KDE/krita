@@ -1,5 +1,4 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -17,34 +16,44 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef CHANGETRACKER_H
-#define CHANGETRACKER_H
+#ifndef KOCHANGETRACKER_H
+#define KOCHANGETRACKER_H
 
 #include <QObject>
+#include <QMetaType>
+#include <QTextCharFormat>
+#include <QTextFormat>
+#include <QHash>
+#include <QString>
+#include <QList>
 
-class QTextDocument;
-class TextTool;
+#include "kotext_export.h"
+#include <KoDataCenter.h>
+#include "KoChangeTrackerElement.h"
 
-class ChangeTracker : public QObject
+#include <KoGenChange.h>
+#include <KoGenChanges.h>
+
+class KOTEXT_EXPORT KoChangeTracker : public QObject//, public KoDataCenter
 {
     Q_OBJECT
 public:
-    ChangeTracker(TextTool *parent);
-
-    void setDocument(QTextDocument * document);
+    KoChangeTracker(QObject *parent = 0);
     
-    int getChangeId(QString title, int existingChangeId);
+    ~KoChangeTracker();
 
-    void notifyForUndo();
-
-private slots:
-    void contentsChange(int from, int charsRemoves, int charsAdded);
+    int getFormatChangeId(QString title, QTextFormat &format, QTextFormat &prevFormat, int existingChangeId);
+    int getInsertChangeId(QString title, int existingChangeId);
+    
+    bool containsInlineChanges(const QTextFormat &format);
+    bool saveInlineChange(int changeId, KoGenChange &change);
 
 private:
-    QTextDocument *m_document;
-    TextTool *m_tool;
-    bool m_enableSignals, m_reverseUndo;
-    int m_changeId;
+   
+    class Private;
+    Private* const d;
 };
+
+Q_DECLARE_METATYPE(KoChangeTracker*)
 
 #endif

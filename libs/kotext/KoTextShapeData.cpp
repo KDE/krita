@@ -33,6 +33,11 @@
 #include <KoGenStyles.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
+
+#ifdef CHANGETRK
+ #include <KoTextShapeSavingContext.h>
+#endif
+
 #include <KoXmlWriter.h>
 
 #include "KoTextPage.h"
@@ -196,7 +201,11 @@ bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContex
     return true;
 }
 
+#ifdef CHANGETRK
+void KoTextShapeData::saveOdf(KoTextShapeSavingContext &context, int from, int to) const
+#else
 void KoTextShapeData::saveOdf(KoShapeSavingContext &context, int from, int to) const
+#endif
 {
     KoTextWriter writer(context);
     writer.write(d->document, from, to);

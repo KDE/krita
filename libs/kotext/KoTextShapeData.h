@@ -31,6 +31,9 @@ class QTextDocument;
 class KoXmlWriter;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
+#ifdef CHANGETRK
+ class KoTextShapeSavingContext;
+#endif
 class KoTextShapeDataPrivate;
 class KoTextPage;
 
@@ -138,7 +141,11 @@ public:
     * Store the TextShape data as ODF.
     * @see TextShape::saveOdf()
     */
+#ifdef CHANGETRK
+    void saveOdf(KoTextShapeSavingContext & context, int from = 0, int to = -1) const;
+#else
     void saveOdf(KoShapeSavingContext & context, int from = 0, int to = -1) const;
+#endif
 
     /**
      * Set the page direction.

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -71,6 +72,10 @@ struct Finalizer {
 #include <QPainter>
 #include <QAbstractTextDocumentLayout>
 #include <kdebug.h>
+
+#ifdef CHANGETRK
+  #include <KoChangeTracker.h>
+#endif
 
 
 TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
@@ -278,7 +283,11 @@ void TextShape::saveOdf(KoShapeSavingContext & context) const
         }
     }
     const bool saveMyText = index == 0 && !m_demoText; // only save the text once.
+#ifdef CHANGETRK
+    m_textShapeData->saveOdf(dynamic_cast<KoTextShapeSavingContext &>(context), 0, saveMyText ? -1 : 0);
+#else
     m_textShapeData->saveOdf(context, 0, saveMyText ? -1 : 0);
+#endif
     writer.endElement(); // draw:text-box
     saveOdfCommonChildElements(context);
     writer.endElement(); // draw:frame
@@ -327,6 +336,13 @@ void TextShape::init(const QMap<QString, KoDataCenter *> & dataCenterMap)
     KoTextDocument(m_textShapeData->document()).setStyleManager(styleManager);
     KoInlineTextObjectManager *tom = dynamic_cast<KoInlineTextObjectManager *>(dataCenterMap["InlineTextObjectManager"]);
     KoTextDocument(m_textShapeData->document()).setInlineTextObjectManager(tom);
+#ifdef CHANGETRK
+    if ( !KoTextDocument(m_textShapeData->document()).changeTrackerAssigned())
+    {
+        KoChangeTracker *changeTracker = new KoChangeTracker();
+        KoTextDocument(m_textShapeData->document()).setChangeTracker(changeTracker);
+    }
+#endif
 }
 
 QTextDocument *TextShape::footnoteDocument()

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,6 +31,10 @@
 #include "styles/KoStyleManager.h"
 #include "KoTextDocument.h"
 
+#ifdef CHANGETRK
+ #include "changetracker/KoChangeTracker.h"
+#endif
+
 #include <kdebug.h>
 #include <KLocale>
 #include <QTextCharFormat>
@@ -38,6 +43,11 @@
 #include <QTextCursor>
 #include <QTextBlock>
 #include <QTextList>
+
+#ifdef CHANGETRK
+ #include <QTextFormat>
+#endif
+
 
 class KoTextSelectionHandler::Private
 {
@@ -162,6 +172,12 @@ void KoTextSelectionHandler::bold(bool bold)
     emit startMacro(i18n("Bold"));
     QTextCharFormat format;
     format.setFontWeight(bold ? QFont::Bold : QFont::Normal);
+#ifdef CHANGETRK
+    QTextCharFormat prevFormat(d->caret->charFormat());
+    
+    int changeId = KoTextDocument(d->textShapeData->document()).changeTracker()->getFormatChangeId(i18n("Bold"), format, prevFormat, d->caret->charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+    format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+#endif
     d->caret->mergeCharFormat(format);
     emit stopMacro();
 }
@@ -172,6 +188,12 @@ void KoTextSelectionHandler::italic(bool italic)
     emit startMacro(i18n("Italic"));
     QTextCharFormat format;
     format.setFontItalic(italic);
+#ifdef CHANGETRK
+    QTextCharFormat prevFormat(d->caret->charFormat());
+
+    int changeId = KoTextDocument(d->textShapeData->document()).changeTracker()->getFormatChangeId(i18n("Italic"), format, prevFormat, d->caret->charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+    format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+#endif
     d->caret->mergeCharFormat(format);
     emit stopMacro();
 }

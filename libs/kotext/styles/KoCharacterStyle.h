@@ -2,6 +2,7 @@
  * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_koffice@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -74,6 +75,9 @@ public:
         DropCapsAdditionalFormatting, // to identify the purpose of the additionalFormatting
         // set on the layout. is not copied during applyStyle().
         InlineInstanceId = 577297549 // Internal: Reserved for KoInlineTextObjectManager
+#ifdef CHANGETRK
+	,ChangeTrackerId = 577297550 // Internal: Reserved for ChangeTracker
+#endif
     };
 
     /// list of possible line type : no line, single line, double line

@@ -621,7 +621,7 @@ void KoMainWindow::updateCaption(const QString & caption, bool mod)
     return;
 #endif
 #ifdef KOFFICE_RC
-    setCaption("RELEASE CANDIDATE %1: %2").arg(KOFFICE_RC).arg(caption), mod);
+    setCaption(QString("RELEASE CANDIDATE %1: %2").arg(KOFFICE_RC).arg(caption), mod);
     return;
 #endif
 

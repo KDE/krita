@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,10 +22,10 @@
 
 #include "KoGlobal.h"
 #include "KoApplicationAdaptor.h"
-
-#include <KoQueryTrader.h>
-#include <KoDocument.h>
-#include <KoMainWindow.h>
+#include "KoPrintJob.h"
+#include "KoQueryTrader.h"
+#include "KoDocument.h"
+#include "KoMainWindow.h"
 
 #include <klocale.h>
 #include <kcmdlineargs.h>
@@ -72,6 +73,8 @@ bool KoApplication::initHack()
     options.add("print", ki18n("Only print and exit"));
     options.add("template", ki18n("Open a new document with a template"));
     options.add("dpi <dpiX,dpiY>", ki18n("Override display DPI"));
+    options.add("export-pdf", ki18n("Only export to PDF and exit"));
+    options.add("export-filename <filename>", ki18n("Filename for export-pdf"));
     KCmdLineArgs::addCmdLineOptions(options, ki18n("KOffice"), "koffice", "kde");
     return true;
 }
@@ -148,8 +151,10 @@ bool KoApplication::start()
         // FIXME This needs to be moved someplace else
         QObject::disconnect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
     } else {
-        bool print = koargs->isSet("print");
-        bool doTemplate = koargs->isSet("template");
+        const bool print = koargs->isSet("print");
+        const bool exportAsPdf = koargs->isSet("export-pdf");
+        QString pdfFileName = koargs->getOption("export-filename");
+        const bool doTemplate = koargs->isSet("template");
         koargs->clear();
 
         // Loop through arguments
@@ -163,8 +168,7 @@ bool KoApplication::start()
             if (doc) {
                 // show a shell asap
                 KoMainWindow *shell = new KoMainWindow(doc->componentData());
-                if (!print)
-                    shell->show();
+                shell->show();
                 // are we just trying to open a template?
                 if (doTemplate) {
                     QStringList paths;
@@ -208,10 +212,17 @@ bool KoApplication::start()
                         }
                     }
                     // now try to load
-                } else if (shell->openDocument(doc, args->url(i))) {
+                }
+                else if (shell->openDocument(doc, args->url(i))) {
                     if (print) {
                         shell->slotFilePrint();
                         // delete shell; done by ~KoDocument
+                        nPrinted++;
+                    } else if (exportAsPdf) {
+                        KoPrintJob *job = shell->exportToPdf(pdfFileName);
+                        if (job)
+                            connect (job, SIGNAL(destroyed(QObject*)), shell,
+                                    SLOT(slotFileQuit()), Qt::QueuedConnection);
                         nPrinted++;
                     } else {
                         // Normal case, success
@@ -224,7 +235,7 @@ bool KoApplication::start()
                 }
             }
         }
-        if (print)
+        if (print || exportAsPdf)
             return nPrinted > 0;
         if (n == 0) // no doc, e.g. all URLs were malformed
             return false;

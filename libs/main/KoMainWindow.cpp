@@ -250,7 +250,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->m_exportPdf  = new KAction(i18n("Export as PDF..."), this);
     d->m_exportPdf->setIcon(KIcon("application-pdf"));
     actionCollection()->addAction("file_export_pdf", d->m_exportPdf);
-    connect(d->m_exportPdf, SIGNAL(triggered()), this, SLOT(slotPrintAndSave()));
+    connect(d->m_exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
 
     d->m_sendfile = actionCollection()->addAction(KStandardAction::Mail,  "file_send_file", this, SLOT(slotEmailFile()));
 
@@ -1328,27 +1328,31 @@ void KoMainWindow::slotFilePrintPreview()
     delete preview;
 }
 
-void KoMainWindow::slotPrintAndSave()
+KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
 {
     if (!rootView())
-        return;
-    KFileDialog dialog(KUrl("kfiledialog:///SaveDialog/"), QString::fromLatin1("*.pdf *.ps"), this);
-    dialog.setObjectName("print file");
-    dialog.setMode(KFile::File);
-    dialog.setCaption(i18n("Write PDF"));
-    if (dialog.exec() != QDialog::Accepted)
-        return;
-    KUrl url(dialog.selectedUrl());
-    // TODO warn when overwriting
+        return 0;
+    if (pdfFileName.isEmpty()) {
+        KFileDialog dialog(KUrl("kfiledialog:///SaveDialog/"), QString::fromLatin1("*.pdf *.ps"), this);
+        dialog.setObjectName("print file");
+        dialog.setMode(KFile::File);
+        dialog.setCaption(i18n("Write PDF"));
+        if (dialog.exec() != QDialog::Accepted)
+            return 0;
+        KUrl url(dialog.selectedUrl());
+        // TODO warn when overwriting
+        pdfFileName = url.toLocalFile();
+    }
 
     KoPrintJob *printJob = rootView()->createPrintJob();
     if (printJob == 0)
-        return;
+        return 0;
     d->applyDefaultSettings(printJob->printer());
 
     // TODO for remote files we have to first save locally and then upload.
-    printJob->printer().setOutputFileName(url.toLocalFile());
+    printJob->printer().setOutputFileName(pdfFileName);
     printJob->startPrinting(KoPrintJob::DeleteWhenDone);
+    return printJob;
 }
 
 

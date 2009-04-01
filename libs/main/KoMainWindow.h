@@ -30,6 +30,7 @@
 class KoMainWindowPrivate;
 class KoDocument;
 class KoView;
+class KoPrintJob;
 class KoDockFactory;
 class KRecentFilesAction;
 class QDockWidget;
@@ -243,7 +244,8 @@ public slots:
      */
     virtual void slotFilePrint();
     virtual void slotFilePrintPreview();
-    virtual void slotPrintAndSave();
+
+    KoPrintJob* exportToPdf(QString fileName = QString());
 
     /**
      * Show a dialog with author and document information.

@@ -284,6 +284,10 @@ private:
     QList<TextSelection> m_previousSelections;
 
     InsertCharacter *m_specialCharacterDocker;
+
+    #ifdef CHANGETRK
+    bool m_textTyping;
+    #endif
 };
 
 #endif

@@ -145,6 +145,10 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_currentCommand(0),
         m_currentCommandHasChildren(false),
         m_specialCharacterDocker(0)
+        #ifdef CHANGETRK
+        ,
+        m_textTyping(false)
+        #endif
 {
     m_actionFormatBold  = new KAction(KIcon("format-text-bold"), i18n("Bold"), this);
     addAction("format_bold", m_actionFormatBold);
@@ -979,7 +983,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             ensureCursorVisible();
         } else if (event->key() == Qt::Key_Tab || !(event->text().length() == 1 && !event->text().at(0).isPrint())) { // insert the text
 #ifdef CHANGETRK
-            int m_changeRegistered = m_processingKeyPress;
+            bool m_changeRegistered = m_textTyping;
 #endif
             startMacro(i18n("Key Press"));
             if (m_caret.hasSelection())
@@ -1614,7 +1618,14 @@ void TextTool::selectAll()
 
 void TextTool::startMacro(const QString &title)
 {
+    #ifdef CHANGETRK
+    if (title != i18n("Key Press"))
+        m_textTyping = false;
+    else
+        m_textTyping = true;
+    #endif
     if (m_currentCommand) return;
+
     class MacroCommand : public QUndoCommand
     {
     public:
@@ -1629,6 +1640,7 @@ void TextTool::startMacro(const QString &title)
         }
         bool m_first;
     };
+
     m_currentCommand = new MacroCommand(title);
     m_currentCommandHasChildren = false;
 }

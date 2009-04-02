@@ -30,6 +30,7 @@ KoPAPageDeleteCommand::KoPAPageDeleteCommand( KoPADocument *document, KoPAPageBa
 , m_deletePages(false)
 {
     Q_ASSERT(m_document);
+    Q_ASSERT(m_document->pages().count() > 1);
     Q_ASSERT(page);
     int index = m_document->pageIndex(page);
     Q_ASSERT(index != -1);
@@ -60,12 +61,10 @@ KoPAPageDeleteCommand::KoPAPageDeleteCommand(KoPADocument *document, const QList
     }
 
     if (pages.first()->pageType() == KoPageApp::Slide) {
-        //setText( i18n( "Delete slides" ) ); // TODO: <-- Pluralize after string freeze
-        setText(i18n( "Delete slide"));
+        setText(i18n("Delete slides"));
     }
     else {
-        //setText( i18n( "Delete pages" ) ); // TODO: <-- Pluralize after string freeze
-        setText(i18n("Delete page"));
+        setText(i18n("Delete pages"));
     }
 }
 

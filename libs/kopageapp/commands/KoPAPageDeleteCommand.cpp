@@ -60,10 +60,10 @@ KoPAPageDeleteCommand::KoPAPageDeleteCommand(KoPADocument *document, const QList
     }
 
     if (pages.first()->pageType() == KoPageApp::Slide) {
-        setText(i18n("Delete slides"));
+        setText(i18np("Delete slide", "Delete slides", m_pages.count()));
     }
     else {
-        setText(i18n("Delete pages"));
+        setText(i18np("Delete page", "Delete pages", m_pages.count()));
     }
 }
 

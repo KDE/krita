@@ -30,7 +30,6 @@ KoPAPageDeleteCommand::KoPAPageDeleteCommand( KoPADocument *document, KoPAPageBa
 , m_deletePages(false)
 {
     Q_ASSERT(m_document);
-    Q_ASSERT(m_document->pages().count() > 1);
     Q_ASSERT(page);
     int index = m_document->pageIndex(page);
     Q_ASSERT(index != -1);

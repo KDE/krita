@@ -30,6 +30,7 @@ class QCheckBox;
 class QComboBox;
 class QGridLayout;
 class QSlider;
+class QSpinBox;
 
 class KoCanvasBase;
 
@@ -68,6 +69,7 @@ private:
     QSlider * m_sliderMagnetism;
     QSlider * m_sliderSmoothness;
     QSlider * m_sliderRate;
+    QSpinBox * m_spinRate;
 };
 
 

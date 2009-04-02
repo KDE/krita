@@ -54,6 +54,7 @@ protected:
 private slots:
 
     void timeoutPaint();
+    void slotSetRate(int rate);
     void slotSetSmoothness(int smoothness);
     void slotSetMagnetism(int magnetism);
 
@@ -66,6 +67,7 @@ private:
     QCheckBox * m_chkAssistant;
     QSlider * m_sliderMagnetism;
     QSlider * m_sliderSmoothness;
+    QSlider * m_sliderRate;
 };
 
 

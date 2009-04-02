@@ -51,6 +51,8 @@
 #define MAXIMUM_SMOOTHNESS 1000
 #define MAXIMUM_MAGNETISM 1000
 
+const int MAXIMUM_RATE = 1000;  // 1 second for rate? Just quick test
+
 KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
         : KisToolFreehand(canvas, KisCursor::load("tool_freehand_cursor.png", 5, 5), i18n("Brush"))
 {
@@ -130,6 +132,10 @@ void KisToolBrush::leave(QEvent */*e*/)
 #endif
 
 
+void KisToolBrush::slotSetRate(int rate) {
+    m_rate = rate;
+}
+
 void KisToolBrush::slotSetSmoothness(int smoothness)
 {
     m_smoothness = smoothness / (double)MAXIMUM_SMOOTHNESS;
@@ -149,6 +155,13 @@ QWidget * KisToolBrush::createOptionWidget()
     m_chkSmooth->setObjectName("chkSmooth");
     m_chkSmooth->setChecked(m_smooth);
     connect(m_chkSmooth, SIGNAL(toggled(bool)), this, SLOT(setSmooth(bool)));
+
+    QLabel* labelRate = new QLabel(i18n("Rate:"), optionWidget);
+    m_sliderRate = new QSlider(Qt::Horizontal, optionWidget);
+    m_sliderRate->setMinimum(0);
+    m_sliderRate->setMaximum(MAXIMUM_RATE);
+    connect(m_sliderRate, SIGNAL(valueChanged(int)), SLOT(slotSetRate(int)));
+    m_sliderRate->setValue( m_rate );
 
     m_sliderSmoothness = new QSlider(Qt::Horizontal, optionWidget);
     m_sliderSmoothness->setMinimum(0);
@@ -178,11 +191,14 @@ QWidget * KisToolBrush::createOptionWidget()
     m_optionLayout->setSpacing(2);
 
     KisToolFreehand::addOptionWidgetLayout(m_optionLayout);
-    m_optionLayout->addWidget(m_chkSmooth, 1, 0);
-    m_optionLayout->addWidget(m_sliderSmoothness, 1, 2);
-    m_optionLayout->addWidget(m_chkAssistant, 3, 0);
-    m_optionLayout->addWidget(labelMagnetism, 4, 0);
-    m_optionLayout->addWidget(m_sliderMagnetism, 4, 1, 1, 2);
+    m_optionLayout->addWidget(labelRate, 1, 0);
+    m_optionLayout->addWidget(m_sliderRate, 1, 1, 1, 2);
+
+    m_optionLayout->addWidget(m_chkSmooth, 2, 0);
+    m_optionLayout->addWidget(m_sliderSmoothness, 2, 2);
+    m_optionLayout->addWidget(m_chkAssistant, 4, 0);
+    m_optionLayout->addWidget(labelMagnetism, 5, 0);
+    m_optionLayout->addWidget(m_sliderMagnetism, 5, 1, 1, 2);
 
     return optionWidget;
 }

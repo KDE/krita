@@ -44,7 +44,7 @@ macro_log_feature(Boost_FOUND "Boost" "Boost C++ Libraries" "http://www.boost.or
 
 macro_log_feature(KdepimLibs_FOUND "KDE PIMLibs" "KDE Personal Information Management Libraries" "http://www.kde.org/" FALSE "" "Required by KPlato and the KDE address book integration (available as a module in KDE)")
 
-set(REQUIRED_LCMS_VERSION 115)
+set(REQUIRED_LCMS_VERSION 118)
 
 if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
     set(HAVE_REQUIRED_LCMS_VERSION TRUE)

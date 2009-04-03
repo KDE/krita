@@ -40,6 +40,7 @@
 #include <KoColorProfile.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
+#include <KoProgressUpdater.h>
 
 #include <filter/kis_filter_configuration.h>
 #include <filter/kis_filter.h>

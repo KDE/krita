@@ -52,7 +52,7 @@ else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
     set(HAVE_REQUIRED_LCMS_VERSION FALSE)
 endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
 
-macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" TRUE "1.15" "Required by KOffice")
+macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" TRUE "1.18" "Required by KOffice")
 
 if (APPLE)
    find_package(Carbon REQUIRED)

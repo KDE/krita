@@ -18,7 +18,6 @@
 
 #include "kis_image_manager.h"
 
-
 #include <QString>
 
 #include <kstandardaction.h>
@@ -29,6 +28,7 @@
 #include <kactioncollection.h>
 
 #include <KoFilterManager.h>
+#include <KoProgressUpdater.h>
 
 #include <kis_types.h>
 #include <kis_image.h>

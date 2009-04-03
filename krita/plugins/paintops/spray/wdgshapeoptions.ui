@@ -1,0 +1,166 @@
+<ui version="4.0" >
+ <class>WdgShapeOptions</class>
+ <widget class="QWidget" name="WdgShapeOptions" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>310</width>
+    <height>200</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+    <horstretch>255</horstretch>
+    <verstretch>255</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>310</width>
+    <height>200</height>
+   </size>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <widget class="QGroupBox" name="objectBox" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>131</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="title" >
+    <string>Spray Object</string>
+   </property>
+   <property name="checkable" >
+    <bool>false</bool>
+   </property>
+   <widget class="QWidget" name="layoutWidget" >
+    <property name="geometry" >
+     <rect>
+      <x>30</x>
+      <y>30</y>
+      <width>73</width>
+      <height>73</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout" >
+     <item>
+      <widget class="QRadioButton" name="shapeBtn" >
+       <property name="text" >
+        <string>Shape</string>
+       </property>
+       <property name="checked" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="particleBtn" >
+       <property name="text" >
+        <string>Particle</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="pixelBtn" >
+       <property name="text" >
+        <string>Pixel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="layoutWidget" >
+   <property name="geometry" >
+    <rect>
+     <x>130</x>
+     <y>0</y>
+     <width>168</width>
+     <height>123</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout_3" >
+    <item>
+     <widget class="QComboBox" name="shapeBox" >
+      <property name="currentIndex" >
+       <number>0</number>
+      </property>
+      <item>
+       <property name="text" >
+        <string>Circle</string>
+       </property>
+      </item>
+      <item>
+       <property name="text" >
+        <string>Ellipse</string>
+       </property>
+      </item>
+      <item>
+       <property name="text" >
+        <string>Rectangle</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_2" >
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout" >
+        <item>
+         <widget class="QLabel" name="widthInfoLbl" >
+          <property name="text" >
+           <string>Width</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="heightSpin" >
+          <property name="value" >
+           <number>6</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2" >
+        <item>
+         <widget class="QLabel" name="heightInfoLbl" >
+          <property name="text" >
+           <string>Height</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="widthSpin" >
+          <property name="value" >
+           <number>6</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="jitterShape" >
+      <property name="text" >
+       <string>Jitter size</string>
+      </property>
+      <property name="checked" >
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

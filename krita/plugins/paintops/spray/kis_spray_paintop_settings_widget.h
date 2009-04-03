@@ -22,10 +22,12 @@
 #include <kis_paintop_options_widget.h>
 
 #include "ui_wdgsprayoptions.h"
+#include "ui_wdgshapeoptions.h"
 #include "widgets/kis_popup_button.h"
 
 class KisPaintActionTypeOption;
 class KisSprayOpOption;
+class KisSprayShapeOption;
 
 class KisSprayPaintOpSettingsWidget : public KisPaintOpOptionsWidget
 {
@@ -42,6 +44,7 @@ public:
 public:
     KisPaintActionTypeOption* m_paintActionTypeOption;
     KisSprayOpOption* m_sprayOption;
+    KisSprayShapeOption* m_sprayShapeOption;
 
 };
 

@@ -34,10 +34,10 @@ public:
     qreal coverage() const;
     qreal amount() const;
     qreal spacing() const;
+    qreal scale() const;
 
     bool jitterMovement() const;
     bool jitterSize() const;
-    bool useParticles() const;
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);

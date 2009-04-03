@@ -48,9 +48,14 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     m_sprayBrush.setCoverity( settings->coverage() );
     m_sprayBrush.setJitterSize( settings->jitterSize() );
     m_sprayBrush.setJitterMovement( settings->jitterMovement() );
-    m_sprayBrush.setUseParticles( settings->useParticles() );
+
+    m_sprayBrush.setObject( settings->object() );
+    m_sprayBrush.setShape( settings->shape() );
+    m_sprayBrush.setJitterShapeSize(settings->jitterShapeSize());
+    m_sprayBrush.setObjectDimenstion( settings->width(), settings->height() );
+
     m_sprayBrush.setAmount( settings->amount() );
-    
+    m_sprayBrush.setScale( settings->scale() );
     
     if ( (settings->diameter() * 0.5) > 1)
     {

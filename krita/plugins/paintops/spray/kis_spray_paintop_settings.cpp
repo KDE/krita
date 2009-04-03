@@ -31,6 +31,7 @@
 
 #include "kis_spray_paintop_settings_widget.h"
 #include "kis_sprayop_option.h"
+#include "kis_spray_shape_option.h"
 
 KisSprayPaintOpSettings::KisSprayPaintOpSettings(KisSprayPaintOpSettingsWidget* settingsWidget)
         : KisPaintOpSettings(settingsWidget)
@@ -87,6 +88,9 @@ qreal KisSprayPaintOpSettings::spacing() const
     return m_options->m_sprayOption->spacing();
 }
 
+qreal KisSprayPaintOpSettings::scale() const {
+    return m_options->m_sprayOption->scale();
+}
 
 bool KisSprayPaintOpSettings::jitterMovement() const
 {
@@ -98,8 +102,26 @@ bool KisSprayPaintOpSettings::jitterSize() const
     return m_options->m_sprayOption->jitterSize();
 }
 
-bool KisSprayPaintOpSettings::useParticles() const
-{
-    return m_options->m_sprayOption->useParticles();
+
+int KisSprayPaintOpSettings::width() const {
+    return m_options->m_sprayShapeOption->width();
+}
+
+
+int KisSprayPaintOpSettings::height() const {
+    return m_options->m_sprayShapeOption->height();
+}
+
+int KisSprayPaintOpSettings::object() const {
+    return m_options->m_sprayShapeOption->object();
+}
+
+
+int KisSprayPaintOpSettings::shape() const {
+    return m_options->m_sprayShapeOption->shape();
+}
+
+bool KisSprayPaintOpSettings::jitterShapeSize() const {
+    return m_options->m_sprayShapeOption->jitterShapeSize();
 }
 

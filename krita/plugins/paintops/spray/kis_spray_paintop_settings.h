@@ -55,6 +55,13 @@ public:
     qreal coverage() const;
     qreal amount() const;
     qreal spacing() const;
+    qreal scale() const;
+
+    int object() const;
+    int shape() const;
+    int width() const;
+    int height() const;
+    bool jitterShapeSize() const;
 
     bool jitterMovement() const;
     bool jitterSize() const;

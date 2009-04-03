@@ -24,6 +24,7 @@
 #include <KoColor.h>
 
 #include "kis_paint_device.h"
+#include "kis_painter.h"
 
 class SprayBrush
 {
@@ -34,9 +35,12 @@ public:
     ~SprayBrush();
     SprayBrush(KoColor inkColor);
     void paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color);
-
+    
     /// Paints Wu Particle
     void paintParticle(KisRandomAccessor &writeAccessor,const KoColor &color,qreal rx, qreal ry);
+    void paintCircle(KisPainter &painter,qreal x, qreal y, int radius, int steps);
+    void paintEllipse(KisPainter &painter,qreal x, qreal y, int a, int b, qreal angle, int steps);
+    void paintRectangle(KisPainter &painter,qreal x, qreal y, int width, int height, qreal angle, int steps);
 
     void setDiameter(int diameter){
         m_diameter = diameter;
@@ -55,30 +59,57 @@ public:
         m_jitterMovement = jitterMovement;
     }
 
-    void setUseParticles(bool useParticles){
-        m_useParticles = useParticles;
-    }
-
     void setAmount(qreal amount){
         m_amount = amount;
     }
 
+    void setScale(qreal scale){
+        m_scale = scale;
+    }
+
     void setCurveData(const QList<qreal>& curveData);
+
+    void setObject(int object){
+        m_object = object;
+    }
+
+    void setShape(int shape){
+        m_shape = shape;
+    }
+
+    void setJitterShapeSize(bool jitterShapeSize){
+        m_jitterShapeSize = jitterShapeSize;
+    }
+
+    void setObjectDimenstion(int width, int height){
+        m_width = width;
+        m_height = height;
+    }
+
+    
+
 private:
     KoColor m_inkColor;
     int m_counter;
     qreal m_radius;
     int m_pixelSize;
     int m_diameter;
-
+    qreal m_scale;
 
     // jitter
     bool m_jitterSize;
     bool m_jitterMovement;
-    bool m_useParticles;
+
     qreal m_coverage;
     // amount of jitter for movement
     qreal m_amount;
+
+    int m_object;
+    int m_shape;
+    // object shape
+    int m_width;
+    int m_height;
+    bool m_jitterShapeSize;
 };
 
 #endif

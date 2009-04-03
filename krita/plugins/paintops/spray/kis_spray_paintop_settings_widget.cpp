@@ -31,6 +31,7 @@
 
 #include "kis_sprayop_option.h"
 #include "kis_spray_paintop_settings.h"
+#include "kis_spray_shape_option.h"
 
 #include <kis_paintop_options_widget.h>
 #include <kis_paint_action_type_option.h>
@@ -40,8 +41,10 @@ KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
 {
     m_paintActionTypeOption = new KisPaintActionTypeOption();
     m_sprayOption =  new KisSprayOpOption();
+    m_sprayShapeOption = new KisSprayShapeOption();
 
     addPaintOpOption(m_sprayOption);
+    addPaintOpOption(m_sprayShapeOption);
     addPaintOpOption(m_paintActionTypeOption);
 }
 

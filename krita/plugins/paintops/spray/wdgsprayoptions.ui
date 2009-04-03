@@ -5,20 +5,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>233</width>
-    <height>264</height>
+    <width>310</width>
+    <height>260</height>
    </rect>
   </property>
   <property name="sizePolicy" >
    <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
-    <horstretch>210</horstretch>
-    <verstretch>60</verstretch>
+    <horstretch>255</horstretch>
+    <verstretch>255</verstretch>
    </sizepolicy>
   </property>
   <property name="minimumSize" >
    <size>
-    <width>210</width>
-    <height>60</height>
+    <width>310</width>
+    <height>260</height>
    </size>
   </property>
   <widget class="QWidget" name="layoutWidget" >
@@ -26,8 +26,8 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>207</width>
-     <height>229</height>
+     <width>252</width>
+     <height>231</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2" >
@@ -46,7 +46,7 @@
          <number>999</number>
         </property>
         <property name="value" >
-         <number>12</number>
+         <number>100</number>
         </property>
        </widget>
       </item>
@@ -54,6 +54,9 @@
        <widget class="QSlider" name="diameterSlider" >
         <property name="maximum" >
          <number>999</number>
+        </property>
+        <property name="value" >
+         <number>100</number>
         </property>
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
@@ -76,7 +79,7 @@
          <double>0.050000000000000</double>
         </property>
         <property name="value" >
-         <double>0.300000000000000</double>
+         <double>0.001000000000000</double>
         </property>
        </widget>
       </item>
@@ -122,13 +125,6 @@
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="useParticlesBox" >
-        <property name="text" >
-         <string>Paint Particles</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <spacer name="verticalSpacer" >
         <property name="orientation" >
          <enum>Qt::Vertical</enum>
@@ -164,6 +160,33 @@
          </widget>
         </item>
        </layout>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3" >
+      <item>
+       <widget class="QLabel" name="scaleLbl" >
+        <property name="text" >
+         <string>scale</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDoubleSpinBox" name="scaleSpin" >
+        <property name="decimals" >
+         <number>2</number>
+        </property>
+        <property name="maximum" >
+         <double>10.000000000000000</double>
+        </property>
+        <property name="singleStep" >
+         <double>0.050000000000000</double>
+        </property>
+        <property name="value" >
+         <double>1.000000000000000</double>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>

@@ -61,11 +61,6 @@ bool KisSprayOpOption::jitterMovement() const
     return m_options->jitterMoveBox->isChecked();
 }
 
-bool KisSprayOpOption::useParticles() const
-{
-    return m_options->useParticlesBox->isChecked();
-}
-
 qreal KisSprayOpOption::coverage() const
 {
     return m_options->coverageSpin->value();
@@ -81,6 +76,10 @@ qreal KisSprayOpOption::spacing() const
     return m_options->spacingKDNumInp->value();
 }
 
+qreal KisSprayOpOption::scale() const
+{
+    return m_options->scaleSpin->value();
+}
 
 void KisSprayOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
@@ -90,7 +89,6 @@ void KisSprayOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     setting->setProperty( "Spray/spacing", spacing() );
     setting->setProperty( "Spray/jitterSize", jitterSize() );
     setting->setProperty( "Spray/jitterMovement", jitterMovement() );
-    setting->setProperty( "Spray/particles", useParticles() );
 }
 
 void KisSprayOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
@@ -101,7 +99,6 @@ void KisSprayOpOption::readOptionSetting(const KisPropertiesConfiguration* setti
     m_options->spacingKDNumInp->setValue( setting->getDouble("Spray/spacing") );
     m_options->jitterSizeBox->setChecked( setting->getBool("Spray/jitterSize") );
     m_options->jitterMoveBox->setChecked( setting->getBool("Spray/jitterMovement") );
-    m_options->useParticlesBox->setChecked( setting->getBool("Spray/particles") );
 }
 
 

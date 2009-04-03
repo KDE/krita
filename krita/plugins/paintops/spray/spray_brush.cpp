@@ -118,28 +118,29 @@ void SprayBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
             qreal random = drand48();       
             drawer.setFillColor(m_inkColor);
             drawer.setBackgroundColor(m_inkColor);
-            // it is circle
+            // it is ellipse
             if (m_shape == 0){
-                // (m_width == m_height) should be done in GUI somehow
-                qreal circleRadius = m_width / 2.0;
-                if (m_jitterShapeSize){
-                    paintCircle(drawer, nx + x, ny + y, int((random * circleRadius) + 1.5) , steps);
-                } else{
-                    paintCircle(drawer, nx + x, ny + y, qRound(circleRadius)  , steps);
-                }
-                
-            } else if (m_shape == 1){
-                
+                //  
                 qreal ellipseA = m_width / 2.0;
                 qreal ellipseB = m_height / 2.0;
 
-                if (m_jitterShapeSize){
-                    paintEllipse(drawer, nx + x, ny + y,int((random * ellipseA) + 1.5) ,int((random * ellipseB) + 1.5), angle , steps);
-                } else{
-                    paintEllipse(drawer, nx + x, ny + y, qRound(ellipseA), qRound(ellipseB), angle , steps);
+                if (m_width == m_height)
+                {
+                    if (m_jitterShapeSize){
+                        paintCircle(drawer, nx + x, ny + y, int((random * ellipseA) + 1.5) , steps);
+                    } else{
+                        paintCircle(drawer, nx + x, ny + y, qRound(ellipseA)  , steps);
+                    }
+                } else 
+                {
+                    if (m_jitterShapeSize){
+                        paintEllipse(drawer, nx + x, ny + y,int((random * ellipseA) + 1.5) ,int((random * ellipseB) + 1.5), angle , steps);
+                    } else{
+                        paintEllipse(drawer, nx + x, ny + y, qRound(ellipseA), qRound(ellipseB), angle , steps);
+                    }
                 }
-
-            } else if (m_shape == 2){
+            } else if (m_shape == 1)
+            {
                 if (m_jitterShapeSize){
                     paintRectangle(drawer, nx + x, ny + y,int((random * m_width) + 1.5) ,int((random * m_height) + 1.5), angle , steps);
                 } else{

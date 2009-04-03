@@ -63,9 +63,12 @@ public:
     int height() const;
     bool jitterShapeSize() const;
 
+    bool proportional() const;
+    qreal widthPerc() const;
+    qreal heightPerc() const;
+
     bool jitterMovement() const;
     bool jitterSize() const;
-    bool useParticles() const;
  
 private:
 

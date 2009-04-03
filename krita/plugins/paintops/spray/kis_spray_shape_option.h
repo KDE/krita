@@ -34,10 +34,14 @@ public:
     /// 0 - shape, 1 - particle, 2 - pixel
     int object() const; 
 
-    /// 0 - circle, 1 - ellipse, 2 - rectangle
+    /// 0 - ellipse, 1 - rectangle
     int shape() const;
 
     bool jitterShapeSize() const;
+
+    bool proportional() const;
+    qreal widthPerc() const;
+    qreal heightPerc() const;
 
     /// TODO
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;

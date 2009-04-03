@@ -52,7 +52,15 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     m_sprayBrush.setObject( settings->object() );
     m_sprayBrush.setShape( settings->shape() );
     m_sprayBrush.setJitterShapeSize(settings->jitterShapeSize());
-    m_sprayBrush.setObjectDimenstion( settings->width(), settings->height() );
+
+    if (settings->proportional()){
+        m_sprayBrush.setObjectDimenstion( settings->widthPerc()/100.0 * settings->diameter(), settings->heightPerc()/100.0 * settings->diameter() );
+    } else
+    {
+        m_sprayBrush.setObjectDimenstion( settings->width(), settings->height() );
+    }
+    
+
 
     m_sprayBrush.setAmount( settings->amount() );
     m_sprayBrush.setScale( settings->scale() );

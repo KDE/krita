@@ -34,7 +34,7 @@ public:
 };
 
 KisSprayShapeOption::KisSprayShapeOption()
-        : KisPaintOpOption(i18n("Spray object"), false)
+        : KisPaintOpOption(i18n("Particle type"), false)
 {
     m_checkable = false;
     m_options = new KisShapeOptionsWidget();
@@ -53,6 +53,7 @@ int KisSprayShapeOption::object() const {
         return 1;
     if (m_options->pixelBtn->isChecked())
         return 2;
+    return -1;
 }
 
 int KisSprayShapeOption::shape() const {
@@ -70,6 +71,19 @@ int KisSprayShapeOption::height() const {
 bool KisSprayShapeOption::jitterShapeSize() const {
     return m_options->jitterShape->isChecked();
 }
+
+qreal KisSprayShapeOption::heightPerc() const {
+    return m_options->widthPro->value(); 
+}
+
+qreal KisSprayShapeOption::widthPerc() const {
+    return m_options->heightPro->value();
+}
+
+bool KisSprayShapeOption::proportional() const {
+    return m_options->proportionalBox->isChecked();
+}
+
 
 // TODO
 void KisSprayShapeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const

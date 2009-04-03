@@ -1,74 +1,75 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>WdgShapeOptions</class>
- <widget class="QWidget" name="WdgShapeOptions" >
-  <property name="geometry" >
+ <widget class="QWidget" name="WdgShapeOptions">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>310</width>
+    <width>425</width>
     <height>200</height>
    </rect>
   </property>
-  <property name="sizePolicy" >
-   <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
     <horstretch>255</horstretch>
     <verstretch>255</verstretch>
    </sizepolicy>
   </property>
-  <property name="minimumSize" >
+  <property name="minimumSize">
    <size>
-    <width>310</width>
+    <width>425</width>
     <height>200</height>
    </size>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QGroupBox" name="objectBox" >
-   <property name="geometry" >
+  <widget class="QGroupBox" name="objectBox">
+   <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>131</width>
+     <width>181</width>
      <height>111</height>
     </rect>
    </property>
-   <property name="title" >
+   <property name="title">
     <string>Spray Object</string>
    </property>
-   <property name="checkable" >
+   <property name="checkable">
     <bool>false</bool>
    </property>
-   <widget class="QWidget" name="layoutWidget" >
-    <property name="geometry" >
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
      <rect>
       <x>30</x>
       <y>30</y>
-      <width>73</width>
+      <width>133</width>
       <height>73</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout" >
+    <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QRadioButton" name="shapeBtn" >
-       <property name="text" >
+      <widget class="QRadioButton" name="shapeBtn">
+       <property name="text">
         <string>Shape</string>
        </property>
-       <property name="checked" >
+       <property name="checked">
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="particleBtn" >
-       <property name="text" >
-        <string>Particle</string>
+      <widget class="QRadioButton" name="particleBtn">
+       <property name="text">
+        <string>Anti-aliased pixel</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="pixelBtn" >
-       <property name="text" >
+      <widget class="QRadioButton" name="pixelBtn">
+       <property name="text">
         <string>Pixel</string>
        </property>
       </widget>
@@ -76,52 +77,47 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QWidget" name="layoutWidget" >
-   <property name="geometry" >
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
     <rect>
-     <x>130</x>
+     <x>190</x>
      <y>0</y>
      <width>168</width>
      <height>123</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_3" >
+   <layout class="QVBoxLayout" name="verticalLayout_3">
     <item>
-     <widget class="QComboBox" name="shapeBox" >
-      <property name="currentIndex" >
+     <widget class="QComboBox" name="shapeBox">
+      <property name="currentIndex">
        <number>0</number>
       </property>
       <item>
-       <property name="text" >
-        <string>Circle</string>
-       </property>
-      </item>
-      <item>
-       <property name="text" >
+       <property name="text">
         <string>Ellipse</string>
        </property>
       </item>
       <item>
-       <property name="text" >
+       <property name="text">
         <string>Rectangle</string>
        </property>
       </item>
      </widget>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_2" >
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout" >
+       <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QLabel" name="widthInfoLbl" >
-          <property name="text" >
+         <widget class="QLabel" name="widthInfoLbl">
+          <property name="text">
            <string>Width</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="heightSpin" >
-          <property name="value" >
+         <widget class="QSpinBox" name="heightSpin">
+          <property name="value">
            <number>6</number>
           </property>
          </widget>
@@ -129,17 +125,17 @@
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2" >
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QLabel" name="heightInfoLbl" >
-          <property name="text" >
+         <widget class="QLabel" name="heightInfoLbl">
+          <property name="text">
            <string>Height</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="widthSpin" >
-          <property name="value" >
+         <widget class="QSpinBox" name="widthSpin">
+          <property name="value">
            <number>6</number>
           </property>
          </widget>
@@ -149,14 +145,60 @@
      </layout>
     </item>
     <item>
-     <widget class="QCheckBox" name="jitterShape" >
-      <property name="text" >
-       <string>Jitter size</string>
+     <widget class="QCheckBox" name="jitterShape">
+      <property name="text">
+       <string>Random size</string>
       </property>
-      <property name="checked" >
+      <property name="checked">
        <bool>true</bool>
       </property>
      </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>130</y>
+     <width>175</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <item>
+     <widget class="QCheckBox" name="proportionalBox">
+      <property name="text">
+       <string>Proportional</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <item>
+       <widget class="QDoubleSpinBox" name="widthPro">
+        <property name="decimals">
+         <number>1</number>
+        </property>
+        <property name="value">
+         <double>6.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDoubleSpinBox" name="heightPro">
+        <property name="decimals">
+         <number>1</number>
+        </property>
+        <property name="value">
+         <double>6.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>

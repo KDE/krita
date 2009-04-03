@@ -71,16 +71,16 @@
       <item row="0" column="1">
        <widget class="QDoubleSpinBox" name="coverageSpin">
         <property name="decimals">
-         <number>3</number>
+         <number>1</number>
         </property>
         <property name="maximum">
-         <double>1.000000000000000</double>
+         <double>100.000000000000000</double>
         </property>
         <property name="singleStep">
-         <double>0.050000000000000</double>
+         <double>1.000000000000000</double>
         </property>
         <property name="value">
-         <double>0.001000000000000</double>
+         <double>0.100000000000000</double>
         </property>
        </widget>
       </item>
@@ -197,7 +197,7 @@
  <customwidgets>
   <customwidget>
    <class>KDoubleNumInput</class>
-   <extends></extends>
+   <extends>QWidget</extends>
    <header>knuminput.h</header>
   </customwidget>
  </customwidgets>

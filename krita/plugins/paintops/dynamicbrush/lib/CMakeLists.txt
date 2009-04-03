@@ -12,6 +12,7 @@ set(kritadynamicbrushlib_LIB_SRCS
     kis_dynamic_shape.cc
     kis_dynamic_shape_program.cc
     kis_dynamic_shape_program_factory_registry.cc
+    kis_dynamic_transformable_factory.cc
     shapes/kis_bristle_shape.cc
     shapes/kis_dab_shape.cc
     sensors/kis_dynamic_sensors.cc

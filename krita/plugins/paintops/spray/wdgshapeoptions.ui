@@ -117,6 +117,9 @@
         </item>
         <item>
          <widget class="QSpinBox" name="heightSpin">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="value">
            <number>6</number>
           </property>
@@ -135,6 +138,9 @@
         </item>
         <item>
          <widget class="QSpinBox" name="widthSpin">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="value">
            <number>6</number>
           </property>
@@ -204,5 +210,70 @@
   </widget>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>proportionalBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>heightPro</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>247</x>
+     <y>164</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>317</x>
+     <y>185</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>proportionalBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>widthPro</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>257</x>
+     <y>156</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>325</x>
+     <y>138</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>proportionalBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>widthSpin</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>217</x>
+     <y>155</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>302</x>
+     <y>86</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>proportionalBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>heightSpin</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>226</x>
+     <y>159</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>283</x>
+     <y>41</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

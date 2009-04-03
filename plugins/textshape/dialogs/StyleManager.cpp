@@ -30,7 +30,10 @@
 
 StyleManager::StyleManager(QWidget *parent)
         : QWidget(parent),
-        m_blockSignals(false)
+        m_styleManager(0),
+        m_blockSignals(false),
+        m_selectedParagStyle(0),
+        m_selectedCharStyle(0)
 {
     widget.setupUi(this);
     layout()->setMargin(0);

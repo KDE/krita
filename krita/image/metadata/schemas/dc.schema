@@ -14,6 +14,7 @@
     <bag name="relation" type="text" />
     <lang name="rights" />
     <text name="source" />
+    <bag name="subject" type="text" />
     <lang name="title" />
     <bag name="type">
       <openedchoice type="text" />

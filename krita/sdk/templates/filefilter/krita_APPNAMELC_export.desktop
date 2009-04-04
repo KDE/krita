@@ -2,7 +2,7 @@
 Icon=
 Name=Krita %{APPNAMELC} Export Filter
 Name[ca]=Filtre d'exportació %{APPNAMELC} per al Krita
-Name[da]=Eksportfilter til Krita %{APPNAMELC}
+Name[da]=Krita %{APPNAMELC}-eksportfilter
 Name[de]=Krita %{APPNAMELC}-Exportfilter
 Name[el]=Φίλτρο εξαγωγής %{APPNAMELC} του Krita
 Name[es]=Filtro de exportación a %{APPNAMELC} de Krita
@@ -20,6 +20,7 @@ Name[nds]=%{APPNAMELC}-Exportfilter för Krita
 Name[nl]=Krita %{APPNAMELC} Exportfilter
 Name[pt]=Filtro de Exportação de %{APPNAMELC} para o Krita
 Name[pt_BR]=Filtro de Exportação %{APPNAMELC} para o Krita
+Name[sl]=Izvozni filter Krite za %{APPNAMELC}
 Name[sv]=Krita %{APPNAMELC}-exportfilter
 Name[tr]=Krita %{APPNAMELC} Aktarma Filtresi
 Name[uk]=Фільтр експорту %{APPNAMELC} для Krita

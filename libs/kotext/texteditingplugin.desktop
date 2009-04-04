@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=Text Editing plugin for the KOffice text tool
+Name[it]=Estensione di modifica di testo per lo strumento di testo di KOffice
 Name[pt]='Plugin' de edição de texto para a ferramenta de texto do KOffice
-Name[pt_BR]='Plugin' de edição de texto para a ferramenta de texto do KOffice
+Name[pt_BR]=Plug-in de edição de texto para a ferramenta de texto do KOffice
 Name[sv]=Insticksprogram med textredigering för Koffice textverktyg
 Name[uk]=Втулок редагування тексту для текстового редактора KOffice
+Name[x-test]=xxText Editing plugin for the KOffice text toolxx
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Text-EditingPlugin
 Comment=Definition of a text-editing plugin

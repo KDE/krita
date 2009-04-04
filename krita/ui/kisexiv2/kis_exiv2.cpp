@@ -124,7 +124,7 @@ Exiv2::Value* arrayToExivValue(const KisMetaData::Value& value)
 {
     Exiv2::ValueType<_TYPE_>* ev = new Exiv2::ValueType<_TYPE_>();
     for (int i = 0; i < value.asArray().size(); ++i) {
-        ev->value_.push_back(qVariantValue<_TYPE_>(value.asVariant()));
+        ev->value_.push_back(qVariantValue<_TYPE_>(value.asArray()[i].asVariant()));
     }
     return ev;
 }
@@ -160,6 +160,15 @@ Exiv2::Value* kmdValueToExivValue(const KisMetaData::Value& value, Exiv2::TypeId
             return arrayToExivValue<int16_t>(value);
         case Exiv2::signedLong:
             return arrayToExivValue<int32_t>(value);
+        case Exiv2::string:
+        {
+          Exiv2::StringValue* ev = new Exiv2::StringValue();
+          for (int i = 0; i < value.asArray().size(); ++i) {
+              ev->value_ += qVariantValue<QString>(value.asArray()[i].asVariant()).toAscii().data();
+              if( i != value.asArray().size() - 1) ev->value_ += ",";
+          }
+          return ev;
+        }
         default:
             dbgFile << type << " " << value;
             Q_ASSERT(false);

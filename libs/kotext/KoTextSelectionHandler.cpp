@@ -468,9 +468,10 @@ void KoTextSelectionHandler::nextParagraph()
     KoTextDocument koDocument(d->textShapeData->document());
     KoStyleManager *styleManager = koDocument.styleManager();
     KoParagraphStyle *nextStyle = 0;
+    KoParagraphStyle *currentStyle = 0;
     if (styleManager) {
         int id = d->caret->blockFormat().intProperty(KoParagraphStyle::StyleId);
-        KoParagraphStyle *currentStyle = styleManager->paragraphStyle(id);
+        currentStyle = styleManager->paragraphStyle(id);
         if (currentStyle == 0) // not a style based parag.  Lets make the next one correct.
             nextStyle = styleManager->defaultParagraphStyle();
         else
@@ -479,7 +480,6 @@ void KoTextSelectionHandler::nextParagraph()
         if (currentStyle == nextStyle)
             nextStyle = 0;
     }
-    QTextList *list = d->caret->block().textList();
     d->caret->insertBlock();
     QTextBlockFormat bf = d->caret->blockFormat();
     QVariant direction = bf.property(KoParagraphStyle::TextProgressionDirection);
@@ -491,11 +491,11 @@ void KoTextSelectionHandler::nextParagraph()
     d->caret->setBlockFormat(bf);
     if (nextStyle) {
         QTextBlock block = d->caret->block();
+        if (currentStyle)
+            currentStyle->unapplyStyle(block);
         nextStyle->applyStyle(block);
-        if (list)
-            list->add(block);
     }
-    
+
     bf = d->caret->blockFormat();
     if (d->textShapeData->pageDirection() != KoText::AutoDirection) { // inherit from shape
         KoText::Direction dir;

@@ -1,5 +1,5 @@
 /* This file is part of the KOffice project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
  * This library is free software; you can redistribute it and/or
@@ -19,7 +19,12 @@
 #include "TestStyles.h"
 
 #include <styles/KoParagraphStyle.h>
-#include <QDebug>
+#include <KDebug>
+#include <QTextDocument>
+#include <QTextBlock>
+#include <QTextBlockFormat>
+#include <QTextCharFormat>
+#include <QTextCursor>
 
 void TestStyles::testStyleInheritance()
 {
@@ -194,6 +199,85 @@ void TestStyles::testCopyParagraphStyle()
     newStyle.copyProperties(&style2);
     QCOMPARE(newStyle.leftMargin(), 10.);
     QCOMPARE(newStyle.rightMargin(), 20.);
+}
+
+void TestStyles::testUnapplyStyle()
+{
+    // in this test we should avoid testing any of the hardcodedDefaultProperties; see KoCharacterStyle for details!
+    KoParagraphStyle headers;
+    headers.characterStyle()->setFontOverline(true);
+    headers.characterStyle()->setFontWeight(QFont::Bold);
+    headers.setAlignment(Qt::AlignCenter);
+    KoParagraphStyle head1;
+    head1.setParentStyle(&headers);
+    head1.setLeftMargin(40);
+
+    QTextDocument doc;
+    doc.setPlainText("abc");
+    QTextBlock block = doc.begin();
+    head1.applyStyle(block);
+
+    QTextCursor cursor(block);
+    QTextBlockFormat bf = cursor.blockFormat();
+    QCOMPARE(bf.alignment(), Qt::AlignCenter);
+    QCOMPARE(bf.leftMargin(), 40.);
+    QTextCharFormat cf = cursor.charFormat();
+    QCOMPARE(cf.fontOverline(), true);
+
+    head1.unapplyStyle(block);
+    bf = cursor.blockFormat();
+    QCOMPARE(bf.hasProperty(QTextFormat::BlockAlignment), false);
+    QCOMPARE(bf.hasProperty(QTextFormat::BlockLeftMargin), false);
+    cf = cursor.charFormat();
+    QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
+
+    doc.clear();
+    block = doc.begin();
+    head1.applyStyle(block);
+    bf = cursor.blockFormat();
+    QCOMPARE(bf.alignment(), Qt::AlignCenter);
+    QCOMPARE(bf.leftMargin(), 40.);
+    cf = cursor.charFormat();
+    QCOMPARE(cf.fontOverline(), true);
+
+    head1.unapplyStyle(block);
+    bf = cursor.blockFormat();
+    QCOMPARE(bf.hasProperty(QTextFormat::BlockAlignment), false);
+    QCOMPARE(bf.hasProperty(QTextFormat::BlockLeftMargin), false);
+    cf = cursor.charFormat();
+    QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
+
+    doc.setHtml("bla bla<i>italic</i>enzo");
+    block = doc.begin();
+    head1.applyStyle(block);
+    bf = cursor.blockFormat();
+    QCOMPARE(bf.alignment(), Qt::AlignCenter);
+    QCOMPARE(bf.leftMargin(), 40.);
+    cf = cursor.charFormat();
+    QCOMPARE(cf.fontOverline(), true);
+
+    head1.unapplyStyle(block);
+    cursor.setPosition(0);
+    bf = cursor.blockFormat();
+    QCOMPARE(bf.hasProperty(QTextFormat::BlockAlignment), false);
+    QCOMPARE(bf.hasProperty(QTextFormat::BlockLeftMargin), false);
+    cf = cursor.charFormat();
+    QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
+
+    cursor.setPosition(8);
+    cf = cursor.charFormat();
+    QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
+    QCOMPARE(cf.fontItalic(), true);
+    cursor.setPosition(13);
+    cf = cursor.charFormat();
+    QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
+    QCOMPARE(cf.fontItalic(), true);
+
+    cursor.setPosition(14);
+    cf = cursor.charFormat();
+    QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
+    QCOMPARE(cf.hasProperty(QTextFormat::FontWeight), false);
+    QCOMPARE(cf.hasProperty(QTextFormat::FontItalic), false);
 }
 
 QTEST_KDEMAIN(TestStyles, GUI)

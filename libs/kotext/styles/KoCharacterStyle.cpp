@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
@@ -229,6 +229,48 @@ void KoCharacterStyle::applyStyle(QTextCursor *selection) const
     applyStyle(cf);
     selection->mergeCharFormat(cf);
     d->ensureMinimalProperties(*selection, false);
+}
+
+void KoCharacterStyle::unapplyStyle(QTextCharFormat &format) const
+{
+    QList<int> keys = d->stylesPrivate.keys();
+    for (int i = 0; i < keys.count(); i++) {
+        QVariant variant = d->stylesPrivate.value(keys[i]);
+        if (!variant.isNull()) {
+            if (variant == format.property(keys[i]))
+                format.clearProperty(keys[i]);
+        }
+    }
+
+    keys = d->hardCodedDefaultStyle.keys();
+    for (int i = 0; i < keys.count(); i++) {
+        QVariant variant = d->hardCodedDefaultStyle.value(keys.at(i));
+        if (!variant.isNull() && !format.hasProperty(keys.at(i))) {
+            format.setProperty(keys.at(i), variant);
+        }
+    }
+}
+
+void KoCharacterStyle::unapplyStyle(QTextBlock &block) const
+{
+    QTextCursor cursor(block);
+    QTextCharFormat cf = cursor.blockCharFormat();
+    unapplyStyle(cf);
+    cursor.setBlockCharFormat(cf);
+
+    if (block.length() == 1) // only the linefeed
+        return;
+    QTextBlock::iterator iter = block.end();
+    do {
+        iter--;
+        QTextFragment fragment = iter.fragment();
+        cursor.setPosition(fragment.position() + 1);
+        cf = cursor.charFormat();
+        unapplyStyle(cf);
+        cursor.setPosition(fragment.position());
+        cursor.setPosition(fragment.position() + fragment.length(), QTextCursor::KeepAnchor);
+        cursor.setCharFormat(cf);
+    } while (iter != block.begin());
 }
 
 // OASIS 14.2.29

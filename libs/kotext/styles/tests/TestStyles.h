@@ -33,8 +33,7 @@ private slots: // tests
     void testApplyParagraphStyle();
     void testApplyParagraphStyleWithParent();
     void testCopyParagraphStyle();
-
-private:
+    void testUnapplyStyle();
 };
 
 #endif

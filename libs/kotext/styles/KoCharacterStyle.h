@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_koffice@gadz.org>
@@ -274,6 +274,9 @@ public:
 
     /// each style has a unique ID (non persistent) given out by the styleManager
     void setStyleId(int id);
+
+    void unapplyStyle(QTextBlock &block) const;
+    void unapplyStyle(QTextCharFormat &format) const;
 
     /**
      * Apply this style to a blockFormat by copying all properties from this

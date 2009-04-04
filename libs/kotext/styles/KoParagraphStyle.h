@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
@@ -483,6 +483,8 @@ public:
 
     /// copy all the properties from the other style to this style, effectively duplicating it.
     void copyProperties(const KoParagraphStyle *style);
+
+    void unapplyStyle(QTextBlock &block) const;
 
     /**
      * Apply this style to a blockFormat by copying all properties from this, and parent

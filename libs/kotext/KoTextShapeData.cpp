@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
@@ -20,6 +20,9 @@
  */
 
 #include "KoTextShapeData.h"
+#include "KoTextDocument.h"
+#include "styles/KoStyleManager.h"
+#include "styles/KoParagraphStyle.h"
 
 #include <KDebug>
 #include <QUrl>
@@ -97,6 +100,18 @@ void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnershi
     if (! d->document->useDesignMetrics())
         d->document->setUseDesignMetrics(true);
     d->ownsDocument = transferOwnership;
+
+    if (d->document->isEmpty()) { // apply app default style for first parag
+        KoTextDocument doc(d->document);
+        KoStyleManager *sm = doc.styleManager();
+        if (sm) {
+            KoParagraphStyle *defaultStyle = sm->defaultParagraphStyle();
+            if (defaultStyle) {
+                QTextBlock block = d->document->begin();
+                defaultStyle->applyStyle(block);
+            }
+        }
+    }
 }
 
 QTextDocument *KoTextShapeData::document()

@@ -198,6 +198,8 @@ void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
     QTextBlockFormat format = cursor.blockFormat();
     applyStyle(format);
     cursor.setBlockFormat(format);
+    if (d->parentStyle && d->parentStyle->characterStyle())
+        d->parentStyle->characterStyle()->applyStyle(block);
     if (d->charStyle) {
         d->charStyle->applyStyle(block);
     }
@@ -215,6 +217,27 @@ void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
                 data->setCounterWidth(-1);
         }
     }
+}
+
+void KoParagraphStyle::unapplyStyle(QTextBlock &block) const
+{
+    if (d->parentStyle)
+        d->parentStyle->unapplyStyle(block);
+
+    QTextCursor cursor(block);
+    QTextBlockFormat format = cursor.blockFormat();
+
+    QList<int> keys = d->stylesPrivate.keys();
+    for (int i = 0; i < keys.count(); i++) {
+        QVariant variant = d->stylesPrivate.value(keys[i]);
+        if (variant == format.property(keys[i]))
+            format.clearProperty(keys[i]);
+    }
+    cursor.setBlockFormat(format);
+    if (d->charStyle)
+        d->charStyle->unapplyStyle(block);
+    if (d->listStyle && block.textList()) // TODO check its the same one?
+        block.textList()->remove(block);
 }
 
 static KoParagraphStyle::BorderStyle oasisBorderStyle(const QString& borderstyle)

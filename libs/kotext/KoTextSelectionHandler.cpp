@@ -411,7 +411,16 @@ void KoTextSelectionHandler::setStyle(KoParagraphStyle* style)
     QTextBlock block = d->caret->block().document()->findBlock(from);
     Q_ASSERT(block.isValid());
 
+    KoTextDocument doc(block.document());
+    KoStyleManager *styleManager = doc.styleManager();
+
     while (block.isValid() && block.position() <= to) {
+        if (styleManager) {
+            KoParagraphStyle *old = styleManager->paragraphStyle(block.blockFormat().intProperty(KoParagraphStyle::StyleId));
+            if (old)
+                old->unapplyStyle(block);
+        }
+
         style->applyStyle(block);
         block = block.next();
     }

@@ -53,7 +53,7 @@ class FLAKE_EXPORT KoShapeManager : public QObject
 
 public:
     /**
-     * Empty constructor.
+     * Constructor.
      */
     explicit KoShapeManager(KoCanvasBase *canvas);
     /**

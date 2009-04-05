@@ -136,15 +136,14 @@ public:
     QMap<QByteArray, QString> additionalStyleAttributes;
     QList<KoEventAction *> eventActions; ///< list of event actions the shape has
 
-    uint zIndex : 10; // should be enough ;)
-    uint visible : 1;
-    uint printable : 1;
-    uint locked : 1;
-    uint keepAspect : 1;
-    uint selectable : 1;
-    uint detectCollision : 1;
-    uint protectContent : 1;
-    uint reserved : 15; // for future extensions, keep total bits used 32!
+    int zIndex : 14; // should be enough ;)
+    int visible : 1;
+    int printable : 1;
+    int locked : 1;
+    int keepAspect : 1;
+    int selectable : 1;
+    int detectCollision : 1;
+    int protectContent : 1;
 };
 
 KoShape::KoShape()

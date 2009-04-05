@@ -29,6 +29,7 @@
 #include <KoSelection.h>
 #include <KoPointerEvent.h>
 
+#include <KDebug>
 #include <QMouseEvent>
 #include <QDrag>
 

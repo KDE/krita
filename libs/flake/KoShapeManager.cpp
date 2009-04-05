@@ -33,6 +33,8 @@
 #include "KoShapeShadow.h"
 #include "KoShapeLayer.h"
 
+#include <KoRTree.h>
+
 #include <QPainter>
 #include <kdebug.h>
 

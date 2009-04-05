@@ -27,7 +27,6 @@
 
 #include "KoFlake.h"
 #include "flake_export.h"
-#include <KoRTree.h>
 
 class KoShape;
 class KoSelection;

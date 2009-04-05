@@ -41,6 +41,7 @@
 #include <KLocale>
 #include <KConfigGroup>
 #include <KGlobal>
+#include <KDebug>
 
 Q_GLOBAL_STATIC(ItemStorePrivate, s_itemStorePrivate)
 

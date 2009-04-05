@@ -995,6 +995,11 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         else
             m_caret.setPosition(destinationPosition,
                                      shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+        if (moveOperation == QTextCursor::Down && prevPosition == m_caret.position()) {
+            // change behavior a little big from Qt; at the bottom of the doc we go to the end of the doc
+            m_caret.movePosition(QTextCursor::End,
+                    shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+        }
         if (shiftPressed) // altered selection.
             repaintSelection(prevPosition, m_caret.position());
         else

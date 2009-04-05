@@ -155,32 +155,36 @@ void KoDocumentInfoDlg::initAboutTab()
 
     d->m_aboutUi->lblRevision->setText(d->m_info->aboutInfo("editing-cycles"));
 
-    if (doc->specialOutputFlag() == KoDocument::SaveEncrypted) {
-        if (d->m_toggleEncryption) {
-            QPixmap p = KIconLoader::global()->loadIcon("object-unlocked", KIconLoader::Small);
-            d->m_aboutUi->lblEncrypted->setText(i18n("This document will be decrypted"));
-            d->m_aboutUi->lblEncryptedPic->setPixmap(p);
-            d->m_aboutUi->pbEncrypt->setText(i18n("Do not decrypt"));
+    if ( doc->supportedSpecialFormats() & KoDocument::SaveEncrypted ) {
+        if (doc->specialOutputFlag() == KoDocument::SaveEncrypted) {
+            if (d->m_toggleEncryption) {
+                QPixmap p = KIconLoader::global()->loadIcon("object-unlocked", KIconLoader::Small);
+                d->m_aboutUi->lblEncrypted->setText(i18n("This document will be decrypted"));
+                d->m_aboutUi->lblEncryptedPic->setPixmap(p);
+                d->m_aboutUi->pbEncrypt->setText(i18n("Do not decrypt"));
+            } else {
+                QPixmap p = KIconLoader::global()->loadIcon("object-locked", KIconLoader::Small);
+                d->m_aboutUi->lblEncrypted->setText(i18n("This document is encrypted"));
+                d->m_aboutUi->lblEncryptedPic->setPixmap(p);
+                d->m_aboutUi->pbEncrypt->setText(i18n("D&ecrypt"));
+            }
         } else {
-            QPixmap p = KIconLoader::global()->loadIcon("object-locked", KIconLoader::Small);
-            d->m_aboutUi->lblEncrypted->setText(i18n("This document is encrypted"));
-            d->m_aboutUi->lblEncryptedPic->setPixmap(p);
-            d->m_aboutUi->pbEncrypt->setText(i18n("D&ecrypt"));
+            if (d->m_toggleEncryption) {
+                QPixmap p = KIconLoader::global()->loadIcon("object-locked", KIconLoader::Small);
+                d->m_aboutUi->lblEncrypted->setText(i18n("This document will be encrypted."));
+                d->m_aboutUi->lblEncryptedPic->setPixmap(p);
+                d->m_aboutUi->pbEncrypt->setText(i18n("Do not encrypt"));
+            } else {
+                QPixmap p = KIconLoader::global()->loadIcon("object-unlocked", KIconLoader::Small);
+                d->m_aboutUi->lblEncrypted->setText(i18n("This document is not encrypted"));
+                d->m_aboutUi->lblEncryptedPic->setPixmap(p);
+                d->m_aboutUi->pbEncrypt->setText(i18n("&Encrypt"));
+            }
         }
     } else {
-        if (d->m_toggleEncryption) {
-            QPixmap p = KIconLoader::global()->loadIcon("object-locked", KIconLoader::Small);
-            d->m_aboutUi->lblEncrypted->setText(i18n("This document will be encrypted."));
-            d->m_aboutUi->lblEncryptedPic->setPixmap(p);
-            d->m_aboutUi->pbEncrypt->setText(i18n("Do not encrypt"));
-        } else {
-            QPixmap p = KIconLoader::global()->loadIcon("object-unlocked", KIconLoader::Small);
-            d->m_aboutUi->lblEncrypted->setText(i18n("This document is not encrypted"));
-            d->m_aboutUi->lblEncryptedPic->setPixmap(p);
-            d->m_aboutUi->pbEncrypt->setText(i18n("&Encrypt"));
-        }
+        d->m_aboutUi->lblEncrypted->setText(i18n("This document does not support encryption"));
+        d->m_aboutUi->pbEncrypt->setEnabled( false );
     }
-
     connect(d->m_aboutUi->pbReset, SIGNAL(clicked()),
             this, SLOT(slotResetMetaData()));
     connect(d->m_aboutUi->pbEncrypt, SIGNAL(clicked()),

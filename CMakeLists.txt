@@ -60,7 +60,7 @@ endif (APPLE)
 
 
 #Set the build of TextShape changetraker
-set(CHANGETRK TRUE)
+set(CHANGETRK FALSE)
     
 if(CHANGETRK)
  add_definitions(-DCHANGETRK)

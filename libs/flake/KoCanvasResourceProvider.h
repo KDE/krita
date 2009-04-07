@@ -18,8 +18,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
  */
-#ifndef KO_CANVAS_RESOURCE_PROVIDER_
-#define KO_CANVAS_RESOURCE_PROVIDER_
+#ifndef KO_CANVAS_RESOURCE_PROVIDER_H
+#define KO_CANVAS_RESOURCE_PROVIDER_H
 
 #include <QObject>
 #include <QHash>
@@ -75,7 +75,6 @@ enum CanvasResource {
  */
 class FLAKE_EXPORT KoCanvasResourceProvider : public QObject
 {
-
     Q_OBJECT
 
 public:
@@ -84,7 +83,7 @@ public:
      * Constructor.
      * @param parent the parent QObject, used for memory management.
      */
-    explicit KoCanvasResourceProvider(QObject * parent);
+    explicit KoCanvasResourceProvider(QObject * parent = 0);
     ~KoCanvasResourceProvider();
 
     /**
@@ -231,7 +230,6 @@ signals:
     void resourceChanged(int key, const QVariant & value);
 
 private:
-
     KoCanvasResourceProvider(const KoCanvasResourceProvider&);
     KoCanvasResourceProvider& operator=(const KoCanvasResourceProvider&);
 
@@ -240,4 +238,4 @@ private:
     Private *const d;
 };
 
-#endif // KO_CANVAS_RESOURCE_PROVIDER_
+#endif // KO_CANVAS_RESOURCE_PROVIDER_H

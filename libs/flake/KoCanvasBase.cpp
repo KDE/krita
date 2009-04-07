@@ -47,7 +47,7 @@ public:
 KoCanvasBase::KoCanvasBase(KoShapeControllerBase * shapeControllerBase)
         : d(new Private())
 {
-    d->resourceProvider = new KoCanvasResourceProvider(0);
+    d->resourceProvider = new KoCanvasResourceProvider();
     d->shapeController = new KoShapeController(this, shapeControllerBase);
     d->snapGuide = new KoSnapGuide(this);
 }

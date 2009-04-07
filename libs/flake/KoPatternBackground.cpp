@@ -332,9 +332,9 @@ void KoPatternBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &con
         QSizeF targetSize = d->targetSize();
         QSizeF imageSize = d->imageData->imageSize();
         if (targetSize.height() != imageSize.height())
-            style.addAttribute("draw:fill-image-height", QString("%1").arg(targetSize.height()));
+            style.addProperty("draw:fill-image-height", QString("%1").arg(targetSize.height()));
         if (targetSize.width() != imageSize.width())
-            style.addAttribute("draw:fill-image-width", QString("%1").arg(targetSize.width()));
+            style.addProperty("draw:fill-image-width", QString("%1").arg(targetSize.width()));
     }
 
     KoGenStyle patternStyle(KoGenStyle::StyleFillImage /*no family name*/);

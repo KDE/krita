@@ -69,6 +69,8 @@ void KoTextDocument::setStyleManager(KoStyleManager *sm)
     QVariant v;
     v.setValue(sm);
     m_document->addResource(KoTextDocument::StyleManager, StyleManagerURL, v);
+    if (sm)
+        sm->add(m_document);
 }
 
 void KoTextDocument::setInlineTextObjectManager(KoInlineTextObjectManager *manager)

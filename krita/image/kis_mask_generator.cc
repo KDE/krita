@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004,2007-2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004,2007-2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,24 +24,41 @@
 
 void KisMaskGenerator::toXML(QDomDocument& , QDomElement& e) const
 {
-    e.setAttribute("autobrush_width", m_w);
-    e.setAttribute("autobrush_height", m_h);
-    e.setAttribute("autobrush_hfade", m_w / 2.0 - m_fh);
-    e.setAttribute("autobrush_vfade", m_h / 2.0 - m_fv);
+    e.setAttribute("autobrush_radius", m_radius);
+    e.setAttribute("autobrush_ratio", m_ratio);
+    e.setAttribute("autobrush_hfade", m_fh);
+    e.setAttribute("autobrush_vfade", m_fv);
+    e.setAttribute("autobrush_spikes", m_spikes);
 }
 
 KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
 {
-    double width = elt.attribute("autobrush_width", "1.0").toDouble();
-    double height = elt.attribute("autobrush_height", "1.0").toDouble();
-    double hfade = elt.attribute("autobrush_hfade", "1.0").toDouble();
-    double vfade = elt.attribute("autobrush_vfade", "1.0").toDouble();
-    QString typeShape = elt.attribute("autobrush_type", "circle");
+    if( elt.hasAttribute("autobrush_radius") )
+    {
+        double radius = elt.attribute("autobrush_radius", "1.0").toDouble();
+        double ratio = elt.attribute("autobrush_ratio", "1.0").toDouble();
+        double hfade = elt.attribute("autobrush_hfade", "0.0").toDouble();
+        double vfade = elt.attribute("autobrush_vfade", "0.0").toDouble();
+        int spikes = elt.attribute("autobrush_spikes", "2").toInt();
+        QString typeShape = elt.attribute("autobrush_type", "circle");
 
-    if (typeShape == "circle") {
-        return new KisCircleMaskGenerator(width, height, hfade, vfade);
+        if (typeShape == "circle") {
+            return new KisCircleMaskGenerator(radius, ratio, hfade, vfade, spikes);
+        } else {
+            return new KisRectangleMaskGenerator(radius, ratio, hfade, vfade, spikes);
+        }
     } else {
-        return new KisRectangleMaskGenerator(width, height, hfade, vfade);
+        double width = elt.attribute("autobrush_width", "1.0").toDouble();
+        double height = elt.attribute("autobrush_height", "1.0").toDouble();
+        double hfade = elt.attribute("autobrush_hfade", "1.0").toDouble();
+        double vfade = elt.attribute("autobrush_vfade", "1.0").toDouble();
+        QString typeShape = elt.attribute("autobrush_type", "circle");
+
+        if (typeShape == "circle") {
+            return new KisCircleMaskGenerator(width, height, hfade, vfade);
+        } else {
+            return new KisRectangleMaskGenerator(width, height, hfade, vfade);
+        }
     }
 }
 
@@ -65,15 +82,25 @@ quint8 KisMaskGenerator::interpolatedValueAt(double x, double y)
             x_f   * y_f   * valueAt(x_i + 1,  y_i + 1));
 }
 
-
 KisCircleMaskGenerator::KisCircleMaskGenerator(double w, double h, double fh, double fv)
-        : KisMaskGenerator(w, h, w / 2.0 - fh, h / 2.0 - fv),
+        : KisMaskGenerator(w, h, 0.5 * w - fh, 0.5 * h - fv),
         m_xcenter(w / 2.0),
         m_ycenter(h / 2.0),
         m_xcoef(2.0 / w),
         m_ycoef(2.0 / h),
-        m_xfadecoef((m_fh == 0) ? 1 : (1.0 / m_fh)),
-        m_yfadecoef((m_fv == 0) ? 1 : (1.0 / m_fv))
+        m_xfadecoef((m_fh == 0) ? 1 : (1.0 / (m_fh*width()))),
+        m_yfadecoef((m_fv == 0) ? 1 : (1.0 / (m_fv*height())))
+{
+}
+
+KisCircleMaskGenerator::KisCircleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes)
+        : KisMaskGenerator(radius, ratio, fh, fv, spikes),
+        m_xcenter(width() / 2.0),
+        m_ycenter(height() / 2.0),
+        m_xcoef(2.0 / width()),
+        m_ycoef(2.0 / height()),
+        m_xfadecoef((m_fh == 0) ? 1 : (1.0 / (m_fh*width()))),
+        m_yfadecoef((m_fv == 0) ? 1 : (1.0 / (m_fv*height())))
 {
 }
 quint8 KisCircleMaskGenerator::valueAt(double x, double y)
@@ -81,6 +108,26 @@ quint8 KisCircleMaskGenerator::valueAt(double x, double y)
     double xr = (x /*- m_xcenter*/);
     double yr = (y /*- m_ycenter*/);
     double n = norme(xr * m_xcoef, yr * m_ycoef);
+    
+//     double cs = cos (- 2 * M_PI / m_spikes);
+//     double ss = sin (- 2 * M_PI / m_spikes);
+//     
+//     if( m_spikes > 2 )
+//     {
+//         double angle = atan2 (yr, xr);
+// 
+//         while (angle > M_PI / m_spikes)
+//         {
+//             double sx = xr, sy = yr;
+// 
+//             xr = cs * sx - ss * sy;
+//             yr = ss * sx + cs * sy;
+// 
+//             angle -= 2 * M_PI / m_spikes;
+//         }
+//     }
+
+    
     if (n > 1) {
         return 255;
     } else {
@@ -115,23 +162,30 @@ void KisCircleMaskGenerator::toXML(QDomDocument& d, QDomElement& e) const
     e.setAttribute("autobrush_type", "circle");
 }
 
-
 KisRectangleMaskGenerator::KisRectangleMaskGenerator(double w, double h, double fh, double fv)
-        : KisMaskGenerator(w, h, w / 2.0 - fh, h / 2.0 - fv),
+        : KisMaskGenerator(w, h, 0.5 * w - fh, 0.5 * h - fv),
         m_xcenter(w / 2.0),
         m_ycenter(h / 2.0),
         m_c(fv / fh)
 {
 }
+
+KisRectangleMaskGenerator::KisRectangleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes)
+        : KisMaskGenerator(radius, ratio, fh, fv, spikes),
+        m_xcenter(width() / 2.0),
+        m_ycenter(height() / 2.0),
+        m_c(fv / fh)
+{
+}
 quint8 KisRectangleMaskGenerator::valueAt(double x, double y)
 {
-    double xr = qAbs(x /*- m_xcenter*/);
-    double yr = qAbs(y /*- m_ycenter*/);
-    if (xr > m_fh || yr > m_fv) {
-        if (yr <= ((xr - m_fh) * m_c + m_fv)) {
-            return (uchar)(255 * (xr - m_fh) / (m_w - m_fh));
+    double xr = qAbs(x /*- m_xcenter*/) / width();
+    double yr = qAbs(y /*- m_ycenter*/) / height();
+    if (xr > m_fh || yr > m_fv ) {
+        if (yr <= ((xr - m_fh ) * m_c + m_fv )) {
+            return (uchar)(255 * (xr - 0.5 * m_fh ) / ( 1.0 - 0.5 * m_fh) );
         } else {
-            return (uchar)(255 * (yr - m_fv) / (m_w - m_fv));
+            return (uchar)(255 * (yr - 0.5 * m_fv ) /( 1.0 - 0.5 * m_fv) );
         }
     } else {
         return 0;

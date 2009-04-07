@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008-2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,6 +35,9 @@ public:
 
     virtual ~KisMaskGenerator() {}
 
+    KDE_DEPRECATED KisMaskGenerator(double width, double height, double fh, double fv) : m_radius(width), m_ratio(height/width), m_fh( 2.0 * fh / width), m_fv( 2.0 * fv / height ), m_spikes(2)
+    {
+    }
     /**
      * This function creates an auto brush shape with the following value :
      * @param w width
@@ -42,7 +45,7 @@ public:
      * @param fh horizontal fade (fh \< w / 2 )
      * @param fv vertical fade (fv \< h / 2 )
      */
-    KisMaskGenerator(double w, double h, double fh, double fv) : m_w(w), m_h(h), m_fh(fh), m_fv(fv) { }
+    KisMaskGenerator(double radius, double ratio, double fh, double fv, int spikes) : m_radius(radius), m_ratio(ratio), m_fh(fh), m_fv(fv), m_spikes(spikes) { }
 
     /**
      * @return the alpha value at the position (x,y)
@@ -59,17 +62,18 @@ public:
     static KisMaskGenerator* fromXML(const QDomElement&);
 
     double width() const {
-        return m_w;
+        return m_radius;
     }
 
     double height() const {
-        return m_h;
+        return m_radius * m_ratio;
     }
 
 protected:
 
-    double m_w, m_h;
+    double m_radius, m_ratio;
     double m_fh, m_fv;
+    int m_spikes;
 };
 
 /**
@@ -82,7 +86,8 @@ public:
 
     virtual ~KisCircleMaskGenerator() {}
 
-    KisCircleMaskGenerator(double w, double h, double fh, double fv);
+    KDE_DEPRECATED KisCircleMaskGenerator(double w, double h, double fh, double fv);
+    KisCircleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes);
 
     virtual quint8 valueAt(double x, double y);
 
@@ -110,7 +115,8 @@ public:
 
     virtual ~KisRectangleMaskGenerator() {}
 
-    KisRectangleMaskGenerator(double w, double h, double fh, double fv);
+    KDE_DEPRECATED KisRectangleMaskGenerator(double w, double h, double fh, double fv);
+    KisRectangleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes);
 
     virtual quint8 valueAt(double x, double y);
 

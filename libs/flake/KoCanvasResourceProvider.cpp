@@ -47,6 +47,8 @@ KoCanvasResourceProvider::~KoCanvasResourceProvider()
 void KoCanvasResourceProvider::setResource(int key, const QVariant & value)
 {
     if (d->resources.contains(key)) {
+        if (d->resources.value(key) == value)
+            return;
         d->resources[key] = value;
     } else {
         d->resources.insert(key, value);

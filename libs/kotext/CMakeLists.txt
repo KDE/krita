@@ -1,25 +1,11 @@
-
-
-
 include_directories( ${KOGUIUTILS_INCLUDES} ${KOMAIN_INCLUDES} )
 
-add_subdirectory( kohyphen )
 add_subdirectory( tests )
 add_subdirectory( styles/tests )
 add_subdirectory( opendocument/tests )
 
-
-# Need by kohyphen
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
-
 ########### next target ###############
-set(libkohyphen_SRCS
-	${CMAKE_SOURCE_DIR}/libs/kotext/kohyphen/hnjalloc.c
-	${CMAKE_SOURCE_DIR}/libs/kotext/kohyphen/hyphen.c
-	${CMAKE_SOURCE_DIR}/libs/kotext/kohyphen/kohyphen.cpp
-	)
-
-set(kotext_LIB_SRCS ${libkohyphen_SRCS}
+set(kotext_LIB_SRCS
     KoTextShapeData.cpp
     KoText.cpp
     KoTextBlockData.cpp

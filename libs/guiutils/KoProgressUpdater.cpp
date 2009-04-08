@@ -66,6 +66,7 @@ KoProgressUpdater::KoProgressUpdater(KoProgressProxy *progressBar)
 
 KoProgressUpdater::~KoProgressUpdater()
 {
+    d->progressBar->setValue(d->progressBar->maximum());
     qDeleteAll(d->subtasks);
     d->subtasks.clear();
 
@@ -78,6 +79,7 @@ KoProgressUpdater::~KoProgressUpdater()
 void KoProgressUpdater::start(int range, const QString &text)
 {
     kDebug(30004) << "KoProgressUpdater::start " << range << ", " << text << " in " << thread();
+    d->updateGuiTimer.start( 100 ); // 10 updates/second should be enough?
 
     qDeleteAll(d->subtasks);
     d->subtasks.clear();
@@ -121,19 +123,11 @@ void KoProgressUpdater::cancel()
 void KoProgressUpdater::update()
 {
     d->updated = true;
-    if ( !d->updateGuiTimer.isActive() ) {
-        kDebug(30004) << "KoProgressUpdater::update(), starting timer in " << thread();
-        d->updateGuiTimer.start( 100 ); // 10 updates/second should be enough?
-    }
-
-
 }
 
 void KoProgressUpdater::updateUi() {
 
     kDebug(30004) << "KoProgressUpdater::updateUi() in " << thread();
-
-    d->updateGuiTimer.stop(); // 10 upd ates/second should be enough?
 
     // This function runs in the app main thread. All the progress
     // updates arrive at the KoUpdaterPrivate instances through
@@ -178,6 +172,10 @@ void KoProgressUpdater::updateUi() {
     }
 
     kDebug(30004) << "\tsetting value!" << d->currentProgress;
+    if ( d->currentProgress >= d->progressBar->maximum()) {
+        // we're done
+        d->updateGuiTimer.stop(); // 10 upd ates/second should be enough?
+    }
     d->progressBar->setValue(d->currentProgress);
 }
 

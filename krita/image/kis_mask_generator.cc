@@ -90,6 +90,17 @@ quint8 KisMaskGenerator::interpolatedValueAt(double x, double y)
             x_f   * y_f   * valueAt(x_i + 1,  y_i + 1));
 }
 
+double KisMaskGenerator::width() const {
+    return m_radius;
+}
+
+double KisMaskGenerator::height() const {
+    if (m_spikes == 2) {
+        return m_radius * m_ratio;
+    }
+    return m_radius;
+}
+
 KisCircleMaskGenerator::KisCircleMaskGenerator(double w, double h, double fh, double fv)
         : KisMaskGenerator(w, h, 0.5 * w - fh, 0.5 * h - fv),
         m_xcenter(w / 2.0),
@@ -106,35 +117,36 @@ KisCircleMaskGenerator::KisCircleMaskGenerator(double radius, double ratio, doub
         m_xcenter(width() / 2.0),
         m_ycenter(height() / 2.0),
         m_xcoef(2.0 / width()),
-        m_ycoef(2.0 / height()),
+        m_ycoef(2.0 / (m_ratio * width())),
         m_xfadecoef((m_fh == 0) ? 1 : (1.0 / (m_fh*width()))),
-        m_yfadecoef((m_fv == 0) ? 1 : (1.0 / (m_fv*height())))
+        m_yfadecoef((m_fv == 0) ? 1 : (1.0 / (m_fv*m_ratio * width())))
 {
 }
+
 quint8 KisCircleMaskGenerator::valueAt(double x, double y)
 {
     double xr = (x /*- m_xcenter*/);
-    double yr = (y /*- m_ycenter*/);
-    double n = norme(xr * m_xcoef, yr * m_ycoef);
+    double yr = fabs(y /*- m_ycenter*/);
     
-//     double cs = cos (- 2 * M_PI / m_spikes);
-//     double ss = sin (- 2 * M_PI / m_spikes);
-//     
-//     if( m_spikes > 2 )
-//     {
-//         double angle = atan2 (yr, xr);
-// 
-//         while (angle > M_PI / m_spikes)
-//         {
-//             double sx = xr, sy = yr;
-// 
-//             xr = cs * sx - ss * sy;
-//             yr = ss * sx + cs * sy;
-// 
-//             angle -= 2 * M_PI / m_spikes;
-//         }
-//     }
+    double cs = cos ( - 2 * M_PI / m_spikes);
+    double ss = sin ( - 2 * M_PI / m_spikes);
+    
+    if( m_spikes > 2 )
+    {
+        double angle = (atan2 (yr, xr));
 
+        while (angle > M_PI / m_spikes)
+        {
+            double sx = xr, sy = yr;
+
+            xr = cs * sx - ss * sy;
+            yr = ss * sx + cs * sy;
+
+            angle -= 2 * M_PI / m_spikes;
+        }
+    }
+
+    double n = norme(xr * m_xcoef, yr * m_ycoef);
     
     if (n > 1) {
         return 255;

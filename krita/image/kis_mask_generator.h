@@ -59,13 +59,9 @@ public:
      */
     static KisMaskGenerator* fromXML(const QDomElement&);
 
-    double width() const {
-        return m_radius;
-    }
+    double width() const;
 
-    double height() const {
-        return m_radius * m_ratio;
-    }
+    double height() const;
 
 protected:
 

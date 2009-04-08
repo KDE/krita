@@ -16,8 +16,6 @@ set(kritaoraimport_PART_SRCS
 
 kde4_add_plugin(kritaoraimport WITH_PREFIX ${kritaoraimport_PART_SRCS})
 
-
-
 target_link_libraries(kritaoraimport kritaui )
 
 install(TARGETS kritaoraimport  DESTINATION ${PLUGIN_INSTALL_DIR})
@@ -43,6 +41,7 @@ install( FILES  krita_ora_import.desktop krita_ora_export.desktop  DESTINATION $
 install( FILES  krita_ora.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 find_package(SharedMimeInfo REQUIRED)
+macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "http://freedesktop.org/wiki/Specifications/shared-mime-info-spec" TRUE "" "Required by the OpenRaster file format")
 
 install(FILES krita_ora.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
 update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})

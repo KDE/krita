@@ -10,6 +10,7 @@ if (SHOULD_BUILD_KRITA)
     macro_optional_find_package(GLEW)
     macro_bool_to_01(GLEW_FOUND HAVE_GLEW)
     configure_file(config-glew.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-glew.h )
+    macro_log_feature(HAVE_GLEW "GLEW" "The OpenGL Extension Wrangler Library" "http://glew.sourceforge.net" FALSE "" "Required by the Krita shader filter plugin")
 
     if(HAVE_GLEW)
             message(STATUS "GLEW found!")

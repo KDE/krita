@@ -20,31 +20,11 @@ find_package(KDE4 4.1.0 REQUIRED)
 find_package(Qt4 4.5.0 REQUIRED)
 include(KDE4Defaults)
 include(MacroLibrary)
-macro_optional_find_package(Boost)
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
-macro_optional_find_package(KdepimLibs)
+
 find_package(LCMS REQUIRED)
-find_package(PNG REQUIRED)
-find_package(CreateResources)
-message( STATUS "Create Resources will be required in the final release")
-macro_optional_find_package(Eigen2)
-macro_optional_find_package(Blitz)
-macro_optional_find_package(QCA2)
-set(EXIV2_MIN_VERSION "0.16")
-macro_optional_find_package(Exiv2)
-
-macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http://www.exiv2.org" FALSE "0.16" "Required by Krita")
-
-macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by KSpread and Krita (available as a module in kdesupport)")
-
-macro_log_feature(QCA2_FOUND "QCA" "Qt Cryptographic Architecture" "http://delta.affinix.com/qca" FALSE "2.0" "Required for encrypted OpenDocument files support (available as a module in kdesupport)")
-
-macro_log_feature(Boost_FOUND "Boost" "Boost C++ Libraries" "http://www.boost.org" FALSE "" "Required by KPresenter")
-
-macro_log_feature(KdepimLibs_FOUND "KDE PIMLibs" "KDE Personal Information Management Libraries" "http://www.kde.org/" FALSE "" "Required by KPlato and the KDE address book integration (available as a module in KDE)")
-
-set(REQUIRED_LCMS_VERSION 115)
+set(REQUIRED_LCMS_VERSION 118)
 
 if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
     set(HAVE_REQUIRED_LCMS_VERSION TRUE)
@@ -53,6 +33,32 @@ else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
 endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
 
 macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" TRUE "1.18" "Required by KOffice")
+
+find_package(PNG REQUIRED)
+
+macro_optional_find_package(CreateResources)
+macro_log_feature(CreateResources_FOUND "Create Resources" "Create Resources (brushes, palettes etc.)" "http://create.freedesktop.org" FALSE "" "Required by KOffice for optional extra resources.")
+
+macro_optional_find_package(KdepimLibs)
+macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Management Libraries" "http://www.kde.org/" FALSE "" "Required by KPlato and the KDE address book integration (available as a module in KDE)")
+
+macro_optional_find_package(Boost)
+macro_log_feature(Boost_FOUND "Boost" "Boost C++ Libraries" "http://www.boost.org" FALSE "" "Required by KPresenter")
+
+macro_optional_find_package(Eigen2)
+macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by KSpread and Krita (available as a module in kdesupport)")
+
+macro_optional_find_package(Blitz)
+macro_log_feature(BLITZ_FOUND "Blitz" "Image effect library" "http://www.kde.org" FALSE "" "Required by Krita (available in kdesupport)")
+
+macro_optional_find_package(QCA2)
+macro_log_feature(QCA2_FOUND "QCA" "Qt Cryptographic Architecture" "http://delta.affinix.com/qca" FALSE "2.0" "Required for encrypted OpenDocument files support (available as a module in kdesupport)")
+
+set(EXIV2_MIN_VERSION "0.16")
+macro_optional_find_package(Exiv2)
+macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http://www.exiv2.org" FALSE "0.16" "Required by Krita")
+
+
 
 if (APPLE)
    find_package(Carbon REQUIRED)
@@ -105,6 +111,8 @@ else(OPENGL_FOUND)
     message(STATUS "Did NOT find OpenGL libraries")
 endif(OPENGL_FOUND)
 
+macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita")
+
 configure_file(config-opengl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-opengl.h )
 
 # Look for OpenCTL
@@ -123,16 +131,22 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
 
 # kostore is at the bottom of stack, so it has the dependency on the kde4 includes.
 set(KOSTORE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/store ${CMAKE_BINARY_DIR}/libs/store ${KDE4_INCLUDES})
+
 # koodf depends on kostore
 set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf ${CMAKE_BINARY_DIR}/libs/odf ${KOSTORE_INCLUDES})
+
 # komain depends on koodf
 set(KOMAIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/main ${CMAKE_SOURCE_DIR}/libs/main/threadAction ${CMAKE_BINARY_DIR}/libs/main ${KOODF_INCLUDES})
+
 # pigment depends on komain and lcms
 set(PIGMENT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/pigment ${CMAKE_SOURCE_DIR}/libs/pigment/colorspaces ${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles ${LCMS_INCLUDE_DIR} )
+
 # flake depends on komain
 set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake ${CMAKE_SOURCE_DIR}/libs/flake/commands ${CMAKE_SOURCE_DIR}/libs/flake/tools ${CMAKE_BINARY_DIR}/libs/flake)
+
 # koresources depends on pigment
 set(KORESOURCES_INCLUDES ${CMAKE_SOURCE_DIR}/libs/resources ${CMAKE_BINARY_DIR}/libs/resources ${PIGMENT_INCLUDES})
+
 # koguiutils depends on komain, flake and pigment
 set(KOGUIUTILS_INCLUDES ${CMAKE_SOURCE_DIR}/libs/guiutils ${CMAKE_BINARY_DIR}/libs/guiutils ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${PIGMENT_INCLUDES} ${KORESOURCES_INCLUDES})
 
@@ -140,8 +154,10 @@ set(KOGUIUTILS_INCLUDES ${CMAKE_SOURCE_DIR}/libs/guiutils ${CMAKE_BINARY_DIR}/li
 set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext/styles ${CMAKE_SOURCE_DIR}/libs/kotext/opendocument ${CMAKE_SOURCE_DIR}/libs/kotext ${CMAKE_SOURCE_DIR}/libs/kotext/changetracker ${CMAKE_BINARY_DIR}/libs/kotext)
 set(KFORMULA_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kformula ${CMAKE_BINARY_DIR}/libs/kformula)
 set(KOKROSS_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kokross ${CMAKE_BINARY_DIR}/libs/kokross)
+
 # kopageapp
 set(KOPAGEAPP_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands ${CMAKE_BINARY_DIR}/libs/kopageapp )
+
 # Those are included with e.g. <koproperty/set.h>
 set(KOPROPERTY_INCLUDES ${CMAKE_SOURCE_DIR}/libs ${CMAKE_BINARY_DIR}/libs)
 
@@ -154,8 +170,6 @@ endif(WIN32)
 if(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
    set(SHOULD_BUILD_KRITA FALSE)
 endif(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
-
-macro_log_feature(BLITZ_FOUND "Blitz" "Image effect library" "http://www.kde.org" FALSE "" "Required by Krita (available in kdesupport)")
 
 #Check if build kpresenter here to be able to test if we can build filters/kpresenter
 if(Boost_FOUND)
@@ -198,7 +212,6 @@ macro_optional_add_subdirectory(kdgantt)
 macro_optional_add_subdirectory(kchart)
 
 FIND_PROGRAM(BZIP2_EXECUTABLE NAMES bzip2 )
-
 macro_log_feature(BZIP2_EXECUTABLE "bzip2" "High-quality data compressor" "http://www.bzip.org" FALSE "" "Required by Kexi")
 
 OPTION(BUILD_kexi "Build kexi" FALSE)
@@ -224,7 +237,7 @@ add_subdirectory(servicetypes)
 add_subdirectory(templates)
 add_subdirectory(tools)
 add_subdirectory(filters)
-#macro_optional_add_subdirectory(doc)
+macro_optional_add_subdirectory(doc)
 
 MACRO_DISPLAY_FEATURE_LOG()
 

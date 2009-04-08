@@ -21,10 +21,9 @@ add_subdirectory( trianglecolorselector )
 add_subdirectory( histogram_docker )
 
 macro_optional_find_package(GMM)
-
 macro_log_feature(GMM_FOUND "Gmm++" "Generic C++ template library for sparse, dense and skyline matrices" "http://home.gna.org/getfem/download.html" FALSE "" "Required by the Krita panorama plugin")
-macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by the Krita shader filter plugin")
-macro_log_feature(HAVE_GLEW "GLEW" "The OpenGL Extension Wrangler Library" "http://glew.sourceforge.net" FALSE "" "Required by the Krita shader filter plugin")
+
+
 
 if(GMM_FOUND AND NOT MSVC)
     add_subdirectory( panorama )

@@ -32,9 +32,9 @@ class KoExecutePolicy;
  * Events based programming creates the need to execute certain pieces of logic based
  * on the incoming event, conveniently grouped per action. An action can be something
  * like 'print'.
- * 
+ *
  * This action uses a ThreadWeaver object to handle the actions and therefore this
- * action is implicitly multithreading.
+ * action is implicitly multithreaded.
  *
  * Example usage:
  * @code

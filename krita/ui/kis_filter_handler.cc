@@ -51,9 +51,11 @@
 struct KisFilterHandler::Private {
 
     Private()
-            : view(0)
-            , manager(0)
-            , lastConfiguration(0) {
+        : view(0)
+        , manager(0)
+        , lastConfiguration(0)
+        , updater( 0 )
+    {
     }
 
     ~Private() {
@@ -74,9 +76,6 @@ KisFilterHandler::KisFilterHandler(KisFilterManager* parent, KisFilterSP f, KisV
     m_d->filter = f;
     m_d->view = view;
     m_d->manager = parent;
-    m_d->updater = new KoProgressUpdater(m_d->view->statusBar()->progress());
-
-
 }
 
 KisFilterHandler::~KisFilterHandler()
@@ -148,6 +147,10 @@ void KisFilterHandler::apply(KisNodeSP layer, KisFilterConfiguration* config)
     }
 
     KisTransaction * cmd = 0;
+
+    if ( m_d->updater == 0 ) {
+        m_d->updater = new KoProgressUpdater(m_d->view->statusBar()->progress());
+    }
     // also deletes all old updaters
     m_d->updater->start( 100, filter->name() );
 

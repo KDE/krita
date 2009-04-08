@@ -24,7 +24,7 @@
 #include "ArtisticTextShape.h"
 
 #include <KoTool.h>
-
+#include <KLocale>
 #include <QTimer>
 #include <QUndoCommand>
 
@@ -80,7 +80,7 @@ public:
         : m_tool( tool ), m_text( text ), m_from( from )
     {
         m_shape = tool->m_currentShape;
-        setText( "Add text range" );
+        setText( i18n("Add text range") );
     }
     virtual void undo()
     {
@@ -125,7 +125,7 @@ public:
         : m_tool( tool ), m_from( from ), m_nr( nr )
     {
         m_shape = tool->m_currentShape;
-        setText( "Remove text range" );
+        setText( i18n("Remove text range") );
     }
     virtual void undo()
     {

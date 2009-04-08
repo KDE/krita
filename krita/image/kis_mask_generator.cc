@@ -22,6 +22,14 @@
 
 #include <QDomDocument>
 
+KisMaskGenerator::KisMaskGenerator(double width, double height, double fh, double fv) : m_radius(width), m_ratio(height/width), m_fh( 2.0 * fh / width), m_fv( 2.0 * fv / height ), m_spikes(2)
+{
+}
+
+KisMaskGenerator::KisMaskGenerator(double radius, double ratio, double fh, double fv, int spikes) : m_radius(radius), m_ratio(ratio), m_fh(0.5 * fh), m_fv(0.5 * fv), m_spikes(spikes)
+{
+}
+
 void KisMaskGenerator::toXML(QDomDocument& , QDomElement& e) const
 {
     e.setAttribute("autobrush_radius", m_radius);
@@ -174,7 +182,7 @@ KisRectangleMaskGenerator::KisRectangleMaskGenerator(double radius, double ratio
         : KisMaskGenerator(radius, ratio, fh, fv, spikes),
         m_xcenter(width() / 2.0),
         m_ycenter(height() / 2.0),
-        m_c(fv / fh)
+        m_c(m_fv / m_fh)
 {
 }
 quint8 KisRectangleMaskGenerator::valueAt(double x, double y)

@@ -52,11 +52,10 @@ public:
 private slots:
 
     void paramChanged();
-    void spinBoxWidthChanged(int);
-    void spinBoxHeigthChanged(int);
-    void spinBoxHorizontalChanged(int);
-    void spinBoxVerticalChanged(int);
-    void linkSizeToggled(bool);
+    void spinBoxRadiusChanged(double);
+    void spinBoxRatioChanged(double);
+    void spinBoxHorizontalChanged(double);
+    void spinBoxVerticalChanged(double);
     void linkFadeToggled(bool);
 
 

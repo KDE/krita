@@ -35,9 +35,7 @@ public:
 
     virtual ~KisMaskGenerator() {}
 
-    KDE_DEPRECATED KisMaskGenerator(double width, double height, double fh, double fv) : m_radius(width), m_ratio(height/width), m_fh( 2.0 * fh / width), m_fv( 2.0 * fv / height ), m_spikes(2)
-    {
-    }
+    KDE_DEPRECATED KisMaskGenerator(double width, double height, double fh, double fv);
     /**
      * This function creates an auto brush shape with the following value :
      * @param w width
@@ -45,7 +43,7 @@ public:
      * @param fh horizontal fade (fh \< w / 2 )
      * @param fv vertical fade (fv \< h / 2 )
      */
-    KisMaskGenerator(double radius, double ratio, double fh, double fv, int spikes) : m_radius(radius), m_ratio(ratio), m_fh(fh), m_fv(fv), m_spikes(spikes) { }
+    KisMaskGenerator(double radius, double ratio, double fh, double fv, int spikes);
 
     /**
      * @return the alpha value at the position (x,y)

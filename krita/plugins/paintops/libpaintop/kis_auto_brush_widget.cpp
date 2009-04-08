@@ -29,6 +29,8 @@
 
 #include "kis_mask_generator.h"
 
+#define showSlider(input) input->setRange(input->minimum(), input->maximum())
+
 KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const QString& caption)
         : KisWdgAutobrush(parent, name)
         , m_autoBrush(0)
@@ -38,25 +40,24 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const 
     m_linkSize = true;
     m_linkFade = true;
 
-    linkFadeToggled(m_linkSize);
-    linkSizeToggled(m_linkFade);
+//     linkFadeToggled(m_linkSize);
+//     linkSizeToggled(m_linkFade);
 
-    connect(bnLinkSize, SIGNAL(toggled(bool)), this, SLOT(linkSizeToggled(bool)));
     connect(bnLinkFade, SIGNAL(toggled(bool)), this, SLOT(linkFadeToggled(bool)));
 
     connect((QObject*)comboBoxShape, SIGNAL(activated(int)), this, SLOT(paramChanged()));
 
-    spinBoxWidth->setMinimum(1);
-    connect(spinBoxWidth, SIGNAL(valueChanged(int)), this, SLOT(spinBoxWidthChanged(int)));
+//     showSlider(inputRadius);
+    connect(inputRadius, SIGNAL(valueChanged(double)), this, SLOT(spinBoxRadiusChanged(double)));
 
-    spinBoxHeigth->setMinimum(1);
-    connect(spinBoxHeigth, SIGNAL(valueChanged(int)), this, SLOT(spinBoxHeigthChanged(int)));
+    showSlider(inputRatio);
+    connect(inputRatio, SIGNAL(valueChanged(double)), this, SLOT(spinBoxRatioChanged(double)));
 
-    spinBoxHorizontal->setMinimum(0);
-    connect(spinBoxHorizontal, SIGNAL(valueChanged(int)), this, SLOT(spinBoxHorizontalChanged(int)));
+    showSlider(inputHFade);
+    connect(inputHFade, SIGNAL(valueChanged(double)), this, SLOT(spinBoxHorizontalChanged(double)));
 
-    spinBoxVertical->setMinimum(0);
-    connect(spinBoxVertical, SIGNAL(valueChanged(int)), this, SLOT(spinBoxVerticalChanged(int)));
+    showSlider(inputVFade);
+    connect(inputVFade, SIGNAL(valueChanged(double)), this, SLOT(spinBoxVerticalChanged(double)));
 
     m_brush = QImage(1, 1, QImage::Format_RGB32);
 
@@ -79,16 +80,15 @@ void KisAutoBrushWidget::activate()
 
 void KisAutoBrushWidget::paramChanged()
 {
-    qint32 fh = qMin(spinBoxWidth->value() / 2, spinBoxHorizontal->value()) ;
-    qint32 fv = qMin(spinBoxHeigth->value() / 2, spinBoxVertical->value());
     KisMaskGenerator* kas;
 
     if (comboBoxShape->currentIndex() == 0) { // use index compare instead of comparing a translatable string
-        kas = new KisCircleMaskGenerator(spinBoxWidth->value(),  spinBoxHeigth->value(), fh, fv);
+        kas = new KisCircleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
+//         kas = new KisCircleMaskGenerator(inputRadius->value(), inputRadius->value() * inputRatio->value(), inputHFade->value(), inputVFade->value());
         Q_CHECK_PTR(kas);
 
     } else {
-        kas = new KisRectangleMaskGenerator(spinBoxWidth->value(),  spinBoxHeigth->value(), fh, fv);
+        kas = new KisRectangleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value());
         Q_CHECK_PTR(kas);
 
     }
@@ -116,47 +116,25 @@ void KisAutoBrushWidget::paramChanged()
     emit sigBrushChanged();
 }
 
-void KisAutoBrushWidget::spinBoxWidthChanged(int a)
+void KisAutoBrushWidget::spinBoxRatioChanged(double a)
 {
-    spinBoxHorizontal->setMaximum(a / 2);
-    if (m_linkSize) {
-        spinBoxHeigth->setValue(a);
-        spinBoxVertical->setMaximum(a / 2);
-    }
     paramChanged();
 }
-void KisAutoBrushWidget::spinBoxHeigthChanged(int a)
+void KisAutoBrushWidget::spinBoxRadiusChanged(double a)
 {
-    spinBoxVertical->setMaximum(a / 2);
-    if (m_linkSize) {
-        spinBoxWidth->setValue(a);
-        spinBoxHorizontal->setMaximum(a / 2);
-    }
     paramChanged();
 }
-void KisAutoBrushWidget::spinBoxHorizontalChanged(int a)
+void KisAutoBrushWidget::spinBoxHorizontalChanged(double a)
 {
     if (m_linkFade)
-        spinBoxVertical->setValue(a);
+        inputHFade->setValue(a);
     paramChanged();
 }
-void KisAutoBrushWidget::spinBoxVerticalChanged(int a)
+void KisAutoBrushWidget::spinBoxVerticalChanged(double a)
 {
     if (m_linkFade)
-        spinBoxHorizontal->setValue(a);
+        inputVFade->setValue(a);
     paramChanged();
-}
-
-void KisAutoBrushWidget::linkSizeToggled(bool b)
-{
-    m_linkSize = b;
-
-    KoImageResource kir;
-    if (b) {
-        bnLinkSize->setIcon(QIcon(kir.chain()));
-    } else {
-        bnLinkSize->setIcon(QIcon(kir.chainBroken()));
-    }
 }
 
 void KisAutoBrushWidget::linkFadeToggled(bool b)

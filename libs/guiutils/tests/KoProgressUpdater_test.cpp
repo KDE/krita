@@ -21,6 +21,7 @@
 #include "KoProgressUpdater_test.h"
 
 #include "KoProgressUpdater.h"
+#include "KoUpdater.h"
 #include <QThread>
 
 #include <QThread>
@@ -50,7 +51,7 @@ public:
             }
             m_updater->setProgress(100);
         }
-        
+
 
 protected:
     KoUpdater * m_updater;
@@ -104,23 +105,23 @@ public:
         , value(0)
         {
         }
-    
+
     int maximum() const
         {
             return max;
         }
-        
+
     void setValue( int v )
         {
             value = v;
         }
-        
+
     void setRange( int minimum, int maximum )
         {
             min = minimum;
             max = maximum;
         }
-        
+
     void setFormat( const QString & format )
         {
             formatString = format;
@@ -196,7 +197,7 @@ void KoProgressUpdaterTest::testThreadedSubUpdaters()
     pu.start();
     KoUpdater u1 = pu.startSubtask(4);
     KoUpdater u2= pu.startSubtask(6);
-    
+
     TestJob t1(&u1, 4);
     TestJob t2(&u2, 6);
     t1.start();
@@ -240,12 +241,12 @@ void KoProgressUpdaterTest::testThreadedRecursiveProgress()
 
     TestJob t1(&u2);
     t1.start();
-    
+
     while (t1.isRunning() ) {
         QTest::qSleep(250); // allow the action to do its job.
         QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
     }
-    
+
     while(bar.value < 100) {
         QCoreApplication::processEvents();
         QTest::qSleep(250);
@@ -256,7 +257,7 @@ void KoProgressUpdaterTest::testThreadedRecursiveProgress()
 void KoProgressUpdaterTest::testFromWeaver()
 {
     jobsdone = 0;
-    
+
     TestProgressBar bar;
     KoProgressUpdater pu(&bar);
     pu.start(10);

@@ -24,6 +24,7 @@
 #include <KoShapeManager.h>
 #include <KoShape.h>
 #include <KoProgressBar.h>
+#include <KoUpdater.h>
 
 #include <KDebug>
 #include <KLocale>
@@ -58,21 +59,33 @@ public:
     ~KoPrintingDialogPrivate() {
         stop = true;
         delete progress;
-        if(painter && painter->isActive())
+        if(painter && painter->isActive()) {
             painter->end();
+        }
+
+        qDeleteAll( updaters );
+        updaters.clear();
+
         delete printer;
         delete dialog;
     }
 
     void preparePage(const QVariant &page) {
         const int pageNumber = page.toInt();
-        KoUpdater updater = updaters.at(index-1);
-        if (painter)
+        QPointer<KoUpdater> updater = updaters.at(index-1);
+
+        if (painter) {
             painter->save(); // state before page preparation
+        }
+
         QRectF clipRect;
-        if(! stop)
+
+        if(! stop) {
             clipRect = parent->preparePage(pageNumber);
-        updater.setProgress(45);
+        }
+
+        updater->setProgress(45);
+
         if (!painter) {
             // force the painter to be created *after* the preparePage since the page
             // size may have been updated there and that doesn't work with the first page
@@ -83,7 +96,7 @@ public:
             printer->newPage();
         if (clipRect.isValid()) // make sure the clipRect is done *after* the newPage. Required for printPreview
             painter->setClipRect(clipRect);
-        updater.setProgress(55);
+        updater->setProgress(55);
         painter->save(); // state after page preparation
 
         QList<KoShape*> shapes = parent->shapesOnPage(pageNumber);
@@ -96,10 +109,10 @@ public:
                 if(! stop)
                     shape->waitUntilReady();
                 kDebug(30004) <<"  done";
-                updater.setProgress(updater.progress() + progressPart);
+                updater->setProgress(updater->progress() + progressPart);
             }
         }
-        updater.setProgress(100);
+        updater->setProgress(100);
     }
 
     void resetValues() {
@@ -171,7 +184,7 @@ public:
     QLabel *pageNumber;
     QPushButton *button;
     QList<int> pages;
-    QList<KoUpdater> updaters;
+    QList< QPointer<KoUpdater> > updaters;
     QDialog *dialog;
     KoPrintJob::RemovePolicy removePolicy;
 };

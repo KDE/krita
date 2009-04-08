@@ -20,8 +20,9 @@
 #define KOPROGRESSBAR_H
 
 #include <QProgressBar>
-#include <KoProgressUpdater.h>
+#include <KoProgressProxy.h>
 #include "koguiutils_export.h"
+
 /**
  * KoProgressBar is a thin wrapper around QProgressBar that also implements
  * the abstract base class KoProgressProxy. Use this class, not QProgressBar
@@ -30,11 +31,11 @@
 class KOGUIUTILS_EXPORT KoProgressBar : public QProgressBar, public KoProgressProxy
 {
 public:
-    
+
     KoProgressBar( QWidget * parent = 0 );
 
     ~KoProgressBar();
-    
+
     int maximum() const;
     void setValue( int value );
     void setRange( int minimum, int maximum );

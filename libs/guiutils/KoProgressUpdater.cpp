@@ -18,224 +18,152 @@
  */
 #include "KoProgressUpdater.h"
 
-#include <threadAction/KoAction.h>
-#include <threadAction/KoExecutePolicy.h>
-#include <threadweaver/ThreadWeaver.h>
-
 #include <QApplication>
 #include <QString>
+#include <QTimer>
+#include <QDebug>
 
-class KoProgressUpdaterPrivate : public QObject {
-public:
-    KoProgressUpdaterPrivate(KoProgressUpdater *parent, int weight)
-        : m_progress(0),
-        m_weight(weight),
-        m_interrupted(false),
-        m_parent(parent)
-    {
-    }
-
-    bool interrupted() const { return m_interrupted; }
-    int progress() const { return m_progress; }
-    int weight() const { return m_weight; }
-
-    void cancel() {
-        m_parent->cancel();
-    }
-
-    void interrupt() { m_interrupted = true; }
-
-    void setProgress(int percent) {
-        if(m_progress >= percent)
-            return;
-        m_progress = percent;
-        m_parent->scheduleUpdate();
-    }
-
-private:
-    int m_progress; // always in percent
-    int m_weight;
-    bool m_interrupted;
-    KoProgressUpdater *m_parent;
-    int min;
-    int max;
-};
+#include "KoUpdaterPrivate.h"
+#include "KoUpdater.h"
+#include "KoProgressProxy.h"
 
 class KoProgressUpdater::Private {
+
 public:
-    Private(KoProgressProxy *p)
-        : progressBar(p),
-        totalWeight(0),
-        currentProgress(0),
-        action(0)
+
+    Private(KoProgressUpdater* _parent, KoProgressProxy* p)
+        : parent( _parent )
+        , progressBar(p)
+        , totalWeight(0)
+        , currentProgress(0)
+        , updated( false )
     {
     }
 
-    void update() {
-        // this method is called by the action. The action will ensure it is called
-        // serially from one thread only. With an updateUi followed directly after
-        // this one (forced to the Gui Thread).
-        lock.lock();
-        int totalProgress = 0;
-        foreach(QPointer<KoProgressUpdaterPrivate> updater, subtasks) {
-            if(updater->interrupted()) {
-                currentProgress = -1;
-                lock.unlock();
-                return;
-            }
-            int progress = updater->progress();
-            if(progress > 100 || progress < 0)
-                progress = updater->progress(); // see comment in KoProgressUpdaterPrivate cpp file
-            totalProgress += progress * updater->weight();
-        }
-        currentProgress = totalProgress / totalWeight;
-        lock.unlock();
-    }
-
-    void updateUi() {
-        if(currentProgress == -1) {
-            progressBar->setValue(progressBar->maximum());
-            // should we hide the progressbar after a little while?
-            return;
-        }
-        progressBar->setValue(currentProgress);
-    }
-
-    KoProgressProxy *progressBar;
-    QList<QPointer<KoProgressUpdaterPrivate> > subtasks;
+    KoProgressUpdater* parent;
+    KoProgressProxy* progressBar;
     int totalWeight;
-    int currentProgress; // used for the update and updateUi methods. Don't use elsewhere
-    QMutex lock; // protects access to d->subtasks
-    KoAction *action;
+    int currentProgress;
+    bool updated;          // is true whenever the progress needs to be recomputed
+    QTimer updateGuiTimer; // fires regulary to update the progress bar widget
+    QList<QPointer<KoUpdaterPrivate> > subtasks;
+
 };
 
 
 KoProgressUpdater::KoProgressUpdater(KoProgressProxy *progressBar)
-    : d(new Private(progressBar))
+    : d ( new Private(this, progressBar) )
 {
+    moveToThread( qApp->thread() );
+    qDebug() << "Creating KoProgressUpdater in " << thread() << ", app thread: " << qApp->thread();
     Q_ASSERT(d->progressBar);
+    connect( &d->updateGuiTimer, SIGNAL( timeout() ), SLOT( updateUi() ));
 
-    d->action = new KoAction(this);
-    d->action->setExecutePolicy(KoExecutePolicy::onlyLastPolicy);
-    connect(d->action, SIGNAL(triggered(const QVariant &)), SLOT(update()), Qt::DirectConnection);
-    connect(d->action, SIGNAL(updateUi(const QVariant &)), SLOT(updateUi()), Qt::DirectConnection);
 }
 
-KoProgressUpdater::~KoProgressUpdater() {
+KoProgressUpdater::~KoProgressUpdater()
+{
     qDeleteAll(d->subtasks);
     d->subtasks.clear();
     delete d;
 }
 
-void KoProgressUpdater::start(int range, const QString &text) {
-    d->lock.lock();
+void KoProgressUpdater::start(int range, const QString &text)
+{
+    qDebug() << "KoProgressUpdater::start " << range << ", " << text << " in " << thread();
     qDeleteAll(d->subtasks);
     d->subtasks.clear();
+
     d->progressBar->setRange(0, range-1);
     d->progressBar->setValue(0);
-    if(! text.isEmpty())
+
+    if(! text.isEmpty()) {
         d->progressBar->setFormat(text);
+    }
     d->totalWeight = 0;
-    d->lock.unlock();
 }
 
-KoUpdater KoProgressUpdater::startSubtask(int weight) {
-    d->lock.lock();
-    KoProgressUpdaterPrivate *p = new KoProgressUpdaterPrivate(this, weight);
+QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight)
+{
+    qDebug() << "KoProgressUpdater::startSubtask() in " << thread();
+    KoUpdaterPrivate *p = new KoUpdaterPrivate(this, weight);
     d->totalWeight += weight;
     d->subtasks.append(p);
-    d->lock.unlock();
-    return KoUpdater(p);
+    connect( p, SIGNAL( sigUpdated() ), SLOT( update() ) );
+
+    return new KoUpdater(p);
 }
 
-void KoProgressUpdater::scheduleUpdate() {
-//     d->action->execute();
-
-    // The previous line triggers random crashes, that are impossible to track or to trully understand,
-    // to fix that issue, I make directly the following call, I believe this is a wrong change, since it
-    // probably have a significant performance impact (especially on small operation) and
-    // that a simple QThread running would be better, but for now this change will have to do.
-    //HACK
-    d->update();
-    d->updateUi();
-    // ENDHACK
-    
-    QApplication::processEvents(QEventLoop::ExcludeUserInputEvents); // This is needed otherwise the action doesn't emit its signal (sick) TODO: it would probably better to do without the signal emiting things of KoAction and to connect directly threadweaver stuff to the updates functions
-}
-
-
-void KoProgressUpdater::cancel() {
-    d->lock.lock();
-    foreach(KoProgressUpdaterPrivate *updater, d->subtasks) {
+void KoProgressUpdater::cancel()
+{
+    qDebug() << "KoProgressUpdater::cancel in " << thread();
+    foreach(KoUpdaterPrivate *updater, d->subtasks) {
         updater->setProgress(100);
         updater->interrupt();
     }
-    d->lock.unlock();
-    scheduleUpdate();
+    updateUi();
 }
 
-
-// -------- KoUpdater ----------
-KoUpdater::KoUpdater(const KoUpdater &other)
-    : KoProgressProxy( other )
+void KoProgressUpdater::update()
 {
-    d = other.d;
+    d->updated = true;
+    qDebug() << "KoProgressUpdater::update(), starting timer in " << thread();
+    d->updateGuiTimer.start( 100 ); // 10 updates/second should be enough?
+
 }
 
-KoUpdater::KoUpdater(KoProgressUpdaterPrivate *p)
-{
-    d = p;
-    Q_ASSERT(p);
-    Q_ASSERT(!d.isNull());
-    setRange(0, 100);
+void KoProgressUpdater::updateUi() {
+
+    qDebug() << "KoProgressUpdater::updateUi() in " << thread();
+
+    d->updateGuiTimer.stop(); // 10 updates/second should be enough?
+
+    // This function runs in the app main thread. All the progress
+    // updates arrive at the KoUpdaterPrivate instances through
+    // queued connections, so until we relinguish control to the
+    // event loop, the progress values cannot change, and that
+    // won't happen until we return from this function (which is
+    // triggered by a timer)
+
+    if ( d->updated ) {
+
+        int totalProgress = 0;
+
+        foreach(QPointer<KoUpdaterPrivate> updater, d->subtasks) {
+
+            if(updater->interrupted()) {
+                qDebug() << "\tthe updater got interruped, returning";
+                d->currentProgress = -1;
+                return;
+            }
+
+            int progress = updater->progress();
+
+            if(progress > 100 || progress < 0) {
+                progress = updater->progress();
+            }
+
+            totalProgress += progress * updater->weight();
+        }
+
+        d->currentProgress = totalProgress / d->totalWeight;
+        d->updated = false;
+
+    }
+    qDebug() << "\tupdateUi currentProgress " << d->currentProgress;
+
+    if( d->currentProgress == -1 ) {
+
+        d->progressBar->setValue( d->progressBar->maximum() );
+        // should we hide the progressbar after a little while?
+        qDebug() << "\t current progress is -1, returning";
+        return;
+    }
+
+    qDebug() << "\tsetting value!" << d->currentProgress;
+    d->progressBar->setValue(d->currentProgress);
 }
 
-void KoUpdater::cancel() {
-    if(!d.isNull())
-        d->cancel();
-}
 
-void KoUpdater::setProgress(int percent) {
-    if(!d.isNull())
-        d->setProgress(percent);
-}
-
-int KoUpdater::progress() const {
-    if(d.isNull())
-        return 100;
-    return d->progress();
-}
-
-bool KoUpdater::interrupted() const {
-    if(d.isNull())
-        return true;
-    return d->interrupted();
-}
-
-int KoUpdater::maximum() const
-{
-    return 100;
-}
-
-void KoUpdater::setValue( int value )
-{
-    if ( value < min ) value = min;
-    if ( value > max ) value = max;
-    // Go from range to percent
-    setProgress( (100 * value ) / range + 1 );
-}
-
-void KoUpdater::setRange( int minimum, int maximum )
-{
-    min = minimum - 1;
-    max = maximum;
-    range = max - min;
-}
-
-void KoUpdater::setFormat( const QString & format )
-{
-    Q_UNUSED(format);
-    // XXX: Do nothing
-}
 
 #include <KoProgressUpdater.moc>

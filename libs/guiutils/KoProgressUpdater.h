@@ -21,13 +21,12 @@
 
 #include "koguiutils_export.h"
 
-#include <QList>
 #include <QString>
-#include <QMutex>
-#include <QPointer>
+#include <QObject>
 
-class KoUpdater;
-class KoProgressUpdaterPrivate;
+#include "KoUpdater.h" // replace with class KoUpdater when all koffice is ported;
+#include "KoProgressProxy.h" // replace with class KoProgressUpdaterPrivate ditto;
+
 class KoProgressProxy;
 
 /**
@@ -54,15 +53,25 @@ class KoProgressProxy;
   @endcode
  * Doing an smooth.setProgress(50) will move the progress bar to 50% of the share
  * of task 'smooth' which is 5 / 11 of the total and thus to 22.
+ *
+ *
+ * KoProgressUpdater should be created in the main thread;
+ * KoProgressProxy must be, if it is gui subclass in the QApplication
+ * main thread. The other objects can be created in whatever thread
+ * one wants.
  */
 class KOGUIUTILS_EXPORT KoProgressUpdater : public QObject {
+
     Q_OBJECT
+
 public:
+
     /**
      * Constructor.
      * @param progressBar the progress bar to update.
      */
     KoProgressUpdater(KoProgressProxy *progressBar);
+
     /// destructor
     virtual ~KoProgressUpdater();
 
@@ -82,7 +91,7 @@ public:
      * @param weight use a weight to specify the weight this subtask has compared
      * to the rest of the subtasks.
      */
-    KoUpdater startSubtask(int weight=1);
+    QPointer<KoUpdater> startSubtask(int weight=1);
 
     /**
      * Cancelling the action will make each subtask be marked as 'interrupted' and
@@ -90,101 +99,19 @@ public:
      */
     void cancel();
 
-protected:
-    friend class KoProgressUpdaterPrivate;
-    void scheduleUpdate();
+private slots:
+
+    void update();
+    void updateUi();
 
 private:
+
     class Private;
     Private * const d;
-    Q_PRIVATE_SLOT(d, void update())
-    Q_PRIVATE_SLOT(d, void updateUi())
+
 };
 
 
-/**
- * A proxy interface for a real progress status reporting thing, either
- * a widget such as a KoProgressProxy childclass that also inherits this
- * interface, or something that prints progress to stdout.
- */
-class KoProgressProxy {
-
-public:
-
-    virtual ~KoProgressProxy()
-        {
-        }
-
-    virtual int maximum() const = 0;
-    virtual void setValue( int value ) = 0;
-    virtual void setRange( int minimum, int maximum ) = 0;
-    virtual void setFormat( const QString & format ) = 0;
-};
-
-/**
- * An KoUpdater is a helper for keeping the progress of each subtask up to speed.
- * This class is not thread safe, and it should only be used from one thread.
- * The thread it is used in can be different from any other subtask or the
- * KoProgressUpdater, though.
- *
- * It is possible to create a KoProgressUpdater on a KoUpdater for when you
- * need to recursively split up progress reporting. (For instance, when your
- * progress reporting routine can be called by other progress reporting
- * routines.)
- *
- * KoUpdater implements KoProgressProxy because it is possible to recursively
- * create another KoProgressUpdater with an updater as progress proxy.
- *
- * @see KoProgressUpdater::startSubtask()
- */
-class KOGUIUTILS_EXPORT KoUpdater : public KoProgressProxy {
-public:
-    /// copy constructor.
-    KoUpdater(const KoUpdater &other);
-    /**
-     * Call this when this subtask wants to abort all the actions.
-     */
-    void cancel();
-    /**
-     * Update your progress. Progress is always from 0 to 100.
-     * The global progress shown to the user is determined by the total
-     * amount of subtasks there are. This means that each subtasks can just
-     * report its own private progress in the range from 0 to 100.
-     */
-    void setProgress(int percent);
-
-    /**
-     * return true when this task should stop processing immediately.
-     * When the task has been cancelled all the subtasks will get interrupted
-     * and should stop working.  It is therefor important to have repeated calls to
-     * this method at regular (time) intervals and as soon as the method returns true
-     * cancel the subtask.
-     * @return true when this task should stop processing immediately.
-     */
-    bool interrupted() const;
-
-    /**
-     * return the progress this subtask has made.
-     */
-    int progress() const;
-
-public: // KoProgressProxy implementation
-
-    int maximum() const;
-    void setValue( int value );
-    void setRange( int minimum, int maximum );
-    void setFormat( const QString & format );
-
-protected:
-    friend class KoProgressUpdater;
-    KoUpdater(KoProgressUpdaterPrivate *p);
-
-public:
-    QPointer<KoProgressUpdaterPrivate> d;
-    int range;
-    int min;
-    int max;
-};
 
 
 #endif

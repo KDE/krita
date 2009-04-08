@@ -9,63 +9,65 @@ add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 ########### next target ###############
 
 set(koguiutils_LIB_SRCS
-    KoAspectButton.cpp
+   KoAspectButton.cpp
    KoCharSelectDia.cpp
+   KoCheckerBoardPainter.cpp
+   KoColorDocker.cpp
+   KoColorPatch.cpp
+   KoColorPopupAction.cpp
+   KoColorSetWidget.cpp
+   KoColorSlider.cpp
    KoContextHelp.cpp
+   KoCopyController.cpp
    KoCsvImportDialog.cpp
+   KoCutController.cpp
    KoDockerManager.cpp
    KoDocumentSectionDelegate.cpp
-   KoDocumentSectionView.cpp
    KoDocumentSectionToolTip.cpp
+   KoDocumentSectionView.cpp
+   KoDualColorButton.cpp
+   KoEditColorSetDialog.cpp
    KoGeneralPropertyUi.cpp
    KoGuideLineDia.cpp 
    KoGuides.cpp 
    KoImageResource.cpp
    KoItemToolTip.cpp
+   KoLayoutVisitor.cpp
+   KoLineStyleSelector.cpp
+   KoPageLayoutDialog.cpp
+   KoPageLayoutWidget.cpp
+   KoPagePreviewWidget.cpp
+   KoPasteController.cpp
+   KoPositionSelector.cpp
+   KoPrintingDialog.cpp
+   KoProgressBar.cpp
+   KoProgressUpdater.cpp
+   KoUpdaterPrivate.cpp
+   KoResourceChooser.cpp
+   KoResourceItemChooser.cpp
+   KoResourceSelector.cpp
    KoRuler.cpp
+   KoSelectShapeAction.cpp
+   KoShadowConfigWidget.cpp
+   KoShapePainter.cpp
    KoSliderCombo.cpp
    KoTabBar.cpp
    KoTemplateCreateDia.cpp
    KoToolBox.cpp
-    KoUnitDoubleSpinBox.cpp
+   KoToolBoxFactory.cpp
+   KoToolDocker.cpp
+   KoToolDockerFactory.cpp
+   KoTriangleColorSelector.cpp
+   KoUniColorChooser.cpp
+   KoUniColorDialog.cpp
+   KoUnitDoubleSpinBox.cpp
+   KoUpdater.cpp
+   KoXYColorSelector.cpp
    KoZoomAction.cpp
    KoZoomController.cpp
    KoZoomHandler.cpp
-   KoZoomMode.cpp
-   KoToolBoxFactory.cpp
-    KoToolDocker.cpp
-    KoToolDockerFactory.cpp
-    KoLayoutVisitor.cpp
-    KoCopyController.cpp
-    KoCutController.cpp
-    KoPasteController.cpp
-   KoColorDocker.cpp
-   KoResourceChooser.cpp
-   KoColorSlider.cpp
-   KoXYColorSelector.cpp
-   KoUniColorChooser.cpp
-   KoUniColorDialog.cpp
-   KoColorSetWidget.cpp
-   KoColorPopupAction.cpp
-   KoEditColorSetDialog.cpp
-   KoColorPatch.cpp
-   KoDualColorButton.cpp
-    KoTriangleColorSelector.cpp
-   KoLineStyleSelector.cpp
-    KoProgressUpdater.cpp
-    KoPrintingDialog.cpp
-   KoShapePainter.cpp
-   KoProgressBar.cpp
-   KoPositionSelector.cpp
-   KoResourceItemChooser.cpp
-    KoCheckerBoardPainter.cpp
-   KoSelectShapeAction.cpp
    KoZoomInput.cpp
-    KoShadowConfigWidget.cpp
-    KoPageLayoutDialog.cpp
-    KoPageLayoutWidget.cpp
-    KoPagePreviewWidget.cpp
-    KoResourceSelector.cpp
+   KoZoomMode.cpp
 )
 
 kde4_add_ui_files( koguiutils_LIB_SRCS

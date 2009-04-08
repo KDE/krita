@@ -59,6 +59,9 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const 
     showSlider(inputVFade);
     connect(inputVFade, SIGNAL(valueChanged(double)), this, SLOT(spinBoxVerticalChanged(double)));
 
+    inputSpikes->setSliderEnabled(true);
+    connect(inputSpikes, SIGNAL(valueChanged(int)), this, SLOT(paramChanged()));
+
     m_brush = QImage(1, 1, QImage::Format_RGB32);
 
     connect(brushPreview, SIGNAL(clicked()), SLOT(paramChanged()));

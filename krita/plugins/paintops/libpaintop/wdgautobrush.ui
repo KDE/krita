@@ -239,7 +239,14 @@
         </widget>
        </item>
        <item>
-        <widget class="KIntNumInput" name="inputSpikes"/>
+        <widget class="KIntNumInput" name="inputSpikes">
+         <property name="minimum">
+          <number>2</number>
+         </property>
+         <property name="maximum">
+          <number>20</number>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>

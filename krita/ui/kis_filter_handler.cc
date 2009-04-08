@@ -64,6 +64,7 @@ struct KisFilterHandler::Private {
     KisFilterManager* manager;
     KisFilterConfiguration* lastConfiguration;
     KisPaintDeviceSP dev;
+    KoProgressUpdater* updater;
 };
 
 KisFilterHandler::KisFilterHandler(KisFilterManager* parent, KisFilterSP f, KisView2* view)
@@ -73,6 +74,9 @@ KisFilterHandler::KisFilterHandler(KisFilterManager* parent, KisFilterSP f, KisV
     m_d->filter = f;
     m_d->view = view;
     m_d->manager = parent;
+    m_d->updater = new KoProgressUpdater(m_d->view->statusBar()->progress());
+
+
 }
 
 KisFilterHandler::~KisFilterHandler()
@@ -123,9 +127,9 @@ void KisFilterHandler::apply(KisNodeSP layer, KisFilterConfiguration* config)
     dbgUI << "Applying a filter";
     if (!layer) return;
 
-    
+
     KisSystemLocker l( layer );
-    
+
     KisFilterSP filter = KisFilterRegistry::instance()->value(config->name());
 
     m_d->dev = layer->paintDevice();
@@ -144,22 +148,22 @@ void KisFilterHandler::apply(KisNodeSP layer, KisFilterConfiguration* config)
     }
 
     KisTransaction * cmd = 0;
-    KoProgressUpdater updater(m_d->view->statusBar()->progress());
-    updater.start( 100, filter->name() );
-    
+    // also deletes all old updaters
+    m_d->updater->start( 100, filter->name() );
+
     if (m_d->view->image()->undo()) cmd = new KisTransaction(filter->name(), m_d->dev);
 
     KisProcessingInformation src(m_d->dev, rect.topLeft(), selection);
     KisProcessingInformation dst(m_d->dev, rect.topLeft(), selection);
 
-    if (true || !filter->supportsThreading()) {
-        KoUpdater up = updater.startSubtask();
-        filter->process(src, dst, rect.size(), config, &up);
+    if (!filter->supportsThreading()) {
+        KoUpdater* up = m_d->updater->startSubtask();
+        filter->process(src, dst, rect.size(), config, up);
         areaDone(rect);
     } else {
         // Chop up in rects.
         KisFilterJobFactory factory(filter, config, selection);
-        KisThreadedApplicator applicator(m_d->dev, rect, &factory, &updater, filter->overlapMarginNeeded(config));
+        KisThreadedApplicator applicator(m_d->dev, rect, &factory, m_d->updater, filter->overlapMarginNeeded(config));
         applicator.connect(&applicator, SIGNAL(areaDone(const QRect&)), this, SLOT(areaDone(const QRect &)));
         applicator.execute();
     }
@@ -170,7 +174,8 @@ void KisFilterHandler::apply(KisNodeSP layer, KisFilterConfiguration* config)
                 cmm_d->undo();
                 delete cmd;
             }
-        } else */{
+        } else */
+    {
         if (cmd) m_d->view->document()->addCommand(cmd);
         if (filter->bookmarkManager()) {
             filter->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed.id(), config); // TODO ugly const_cast
@@ -191,6 +196,7 @@ const KisFilterSP KisFilterHandler::filter() const
 {
     return m_d->filter;
 }
+
 void KisFilterHandler::areaDone(const QRect & rc)
 {
     m_d->dev->setDirty(rc); // Starts computing the projection for the area we've done.

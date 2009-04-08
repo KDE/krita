@@ -47,6 +47,7 @@ public:
     bool updated;          // is true whenever the progress needs to be recomputed
     QTimer updateGuiTimer; // fires regulary to update the progress bar widget
     QList<QPointer<KoUpdaterPrivate> > subtasks;
+    QList<KoUpdaterPtr> subTaskWrappers; // We delete these
 
 };
 
@@ -65,14 +66,22 @@ KoProgressUpdater::~KoProgressUpdater()
 {
     qDeleteAll(d->subtasks);
     d->subtasks.clear();
+
+    qDeleteAll( d->subTaskWrappers );
+    d->subTaskWrappers.clear();
+
     delete d;
 }
 
 void KoProgressUpdater::start(int range, const QString &text)
 {
     qDebug() << "KoProgressUpdater::start " << range << ", " << text << " in " << thread();
+
     qDeleteAll(d->subtasks);
     d->subtasks.clear();
+
+    qDeleteAll( d->subTaskWrappers );
+    d->subTaskWrappers.clear();
 
     d->progressBar->setRange(0, range-1);
     d->progressBar->setValue(0);
@@ -91,7 +100,10 @@ QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight)
     d->subtasks.append(p);
     connect( p, SIGNAL( sigUpdated() ), SLOT( update() ) );
 
-    return new KoUpdater(p);
+    KoUpdaterPtr updater = new KoUpdater( p );
+    d->subTaskWrappers.append( updater );
+
+    return updater;
 }
 
 void KoProgressUpdater::cancel()

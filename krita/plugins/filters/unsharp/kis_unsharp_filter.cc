@@ -68,15 +68,16 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
                               ) const
 {
 
-    KoUpdater* filterUpdater = 0;
-    KoUpdater* convolutionUpdater = 0;
+    KoUpdaterPtr filterUpdater = 0;
+    KoUpdaterPtr convolutionUpdater = 0;
     KoProgressUpdater* updater = 0;
+
     if (progressUpdater) {
         updater = new KoProgressUpdater(progressUpdater);
         updater->start();
         // Two sub-sub tasks that each go from 0 to 100.
-        convolutionUpdater = new KoUpdater(updater->startSubtask());
-        filterUpdater = new KoUpdater(updater->startSubtask());
+        convolutionUpdater = updater->startSubtask();
+        filterUpdater = updater->startSubtask();
     }
 
     if (!config) config = new KisFilterConfiguration(id().id(), 1);
@@ -158,8 +159,6 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     }
     delete colors[0];
     delete colors[1];
-    delete filterUpdater;
-    delete convolutionUpdater;
     delete updater;
 
     if (progressUpdater) progressUpdater->setProgress(100);

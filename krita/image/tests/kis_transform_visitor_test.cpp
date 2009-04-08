@@ -35,11 +35,11 @@ void KisTransformVisitorTest::testCreation()
 {
     TestUtil::TestProgressBar bar;
     KoProgressUpdater pu(&bar);
-    KoUpdater updater = pu.startSubtask();
+    KoUpdaterPtr updater = pu.startSubtask();
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP img = new KisImage(0, 10, 10, cs, "bla");
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
-    KisTransformVisitor test(img, 1.5, 1.5, 0, 0, 1.5, 0, 0, &updater, filter);
+    KisTransformVisitor test(img, 1.5, 1.5, 0, 0, 1.5, 0, 0, updater, filter);
     delete filter;
 }
 

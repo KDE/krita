@@ -74,7 +74,7 @@ public:
     virtual ~KisJobFactory() {}
 
 
-    virtual ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev,  const QRect & rc, int margin, KoUpdater updater) = 0;
+    virtual ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev,  const QRect & rc, int margin, KoUpdaterPtr updater) = 0;
 };
 
 /**

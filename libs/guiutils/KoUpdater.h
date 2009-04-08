@@ -29,6 +29,7 @@
 class KoProgressUpdater;
 class KoUpdaterPrivate;
 
+
 /**
  * An KoUpdater is a helper for keeping the progress of each subtask up to speed.
  * This class is not thread safe, and it should only be used from one thread.
@@ -50,11 +51,6 @@ class KOGUIUTILS_EXPORT KoUpdater : public QObject, public KoProgressProxy {
     Q_OBJECT
 
 public:
-
-    /// copy constructor.
-    KoUpdater(const KoUpdater &other);
-
-    KoUpdater& operator=( const KoUpdater &other );
 
     /**
      * Call this when this subtask wants to abort all the actions.
@@ -120,5 +116,7 @@ private:
     bool m_interrupted;
 };
 
+
+typedef QPointer<KoUpdater> KoUpdaterPtr;
 
 #endif

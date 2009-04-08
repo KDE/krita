@@ -63,7 +63,6 @@ public:
             painter->end();
         }
 
-        qDeleteAll( updaters );
         updaters.clear();
 
         delete printer;
@@ -71,8 +70,10 @@ public:
     }
 
     void preparePage(const QVariant &page) {
+
         const int pageNumber = page.toInt();
-        QPointer<KoUpdater> updater = updaters.at(index-1);
+
+        KoUpdaterPtr updater = updaters.at(index-1);
 
         if (painter) {
             painter->save(); // state before page preparation
@@ -184,7 +185,7 @@ public:
     QLabel *pageNumber;
     QPushButton *button;
     QList<int> pages;
-    QList< QPointer<KoUpdater> > updaters;
+    QList< KoUpdaterPtr > updaters;
     QDialog *dialog;
     KoPrintJob::RemovePolicy removePolicy;
 };

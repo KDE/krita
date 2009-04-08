@@ -222,11 +222,11 @@ namespace
             Q_ASSERT( layer->nodeProgressProxy() );
             KoProgressUpdater updater( layer->nodeProgressProxy() );
             updater.start( 100, f->name() );
-            KoUpdater up = updater.startSubtask();
+            KoUpdaterPtr up = updater.startSubtask();
             // Some filters will require usage of oldRawData, which is not available without
             // a transaction!
             KisTransaction* cmd = new KisTransaction("", layerProjection);
-            f->process(srcCfg, dstCfg, tmpRc.size(), cfg, &up);
+            f->process(srcCfg, dstCfg, tmpRc.size(), cfg, up);
             delete cmd;
             layer->nodeProgressProxy()->setValue( layer->nodeProgressProxy()->maximum() );
 

@@ -44,7 +44,7 @@ void KisFilterJobTest::testCreation()
 
     TestUtil::TestProgressBar bar;
     KoProgressUpdater pu(&bar);
-    KoUpdater up = pu.startSubtask();
+    KoUpdaterPtr up = pu.startSubtask();
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
@@ -64,7 +64,7 @@ void KisFilterJobTest::testInWeaver()
     Q_ASSERT(kfc);
 
     TestUtil::TestProgressBar * bar = new TestUtil::TestProgressBar();
-    KoProgressUpdater * pu = new KoProgressUpdater(bar);
+    KoProgressUpdater* pu = new KoProgressUpdater(bar);
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     QImage qimg(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");

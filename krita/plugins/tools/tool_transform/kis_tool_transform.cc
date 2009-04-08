@@ -641,7 +641,7 @@ void KisToolTransform::transform()
     QPointF t = m_translate - rot(m_originalCenter.x() * m_scaleX, m_originalCenter.y() * m_scaleY);
     KoProgressUpdater updater(canvas->view()->statusBar()->progress());
     updater.start( 100, i18n("Transform") );
-    KoUpdater progress = updater.startSubtask();
+    KoUpdaterPtr progress = updater.startSubtask();
 
     // This mementoes the current state of the active device.
     TransformCmd * transaction = new TransformCmd(this, currentNode(), m_scaleX,
@@ -681,12 +681,12 @@ void KisToolTransform::transform()
                         selectRect.x(), selectRect.y(), selectRect.width(), selectRect.height());
         gc.end();
 
-        KisTransformWorker worker(tmpDevice, m_scaleX, m_scaleY, 0, 0, m_a, int(t.x()), int(t.y()), &progress, m_filter);
+        KisTransformWorker worker(tmpDevice, m_scaleX, m_scaleY, 0, 0, m_a, int(t.x()), int(t.y()), progress, m_filter);
         worker.run();
 
         currentNode()->paintDevice()->clearSelection(currentSelection());
 
-        KisTransformWorker selectionWorker(currentSelection()->getOrCreatePixelSelection(), m_scaleX, m_scaleY, 0, 0, m_a, int(t.x()), int(t.y()), &progress, m_filter);
+        KisTransformWorker selectionWorker(currentSelection()->getOrCreatePixelSelection(), m_scaleX, m_scaleY, 0, 0, m_a, int(t.x()), int(t.y()), progress, m_filter);
         selectionWorker.run();
 
 
@@ -718,7 +718,7 @@ void KisToolTransform::transform()
                        tmpRc.x(), tmpRc.y(), tmpRc.width(), tmpRc.height());
         painter.end();
     } else {
-        KisTransformWorker worker(currentNode()->paintDevice(), m_scaleX, m_scaleY, 0, 0, m_a, int(t.x()), int(t.y()), &progress, m_filter);
+        KisTransformWorker worker(currentNode()->paintDevice(), m_scaleX, m_scaleY, 0, 0, m_a, int(t.x()), int(t.y()), progress, m_filter);
         worker.run();
     }
 
@@ -790,7 +790,7 @@ QWidget* KisToolTransform::createOptionWidget()
     m_optWidget = new WdgToolTransform(0);
     Q_CHECK_PTR(m_optWidget);
     m_optWidget->setObjectName(toolId() + " option widget");
-    
+
     m_optWidget->cmbFilter->clear();
     m_optWidget->cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
 

@@ -61,8 +61,8 @@ void KisFilterTest::testCreation()
 void KisFilterTest::testWithProgressUpdater()
 {
     TestUtil::TestProgressBar * bar = new TestUtil::TestProgressBar();
-    KoProgressUpdater * pu = new KoProgressUpdater(bar);
-    KoUpdater updater = pu->startSubtask();
+    KoProgressUpdater* pu = new KoProgressUpdater(bar);
+    KoUpdaterPtr updater = pu->startSubtask();
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
@@ -80,7 +80,7 @@ void KisFilterTest::testWithProgressUpdater()
     KisConstProcessingInformation src(dev,  QPoint(0, 0), 0);
     KisProcessingInformation dst(dev, QPoint(0, 0), 0);
 
-    f->process(src, dst, qimg.size(), kfc, &updater);
+    f->process(src, dst, qimg.size(), kfc, updater);
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, inverted, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()))) {

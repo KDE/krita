@@ -30,8 +30,8 @@ void KisShearVisitorTest::testCreation()
 {
     TestUtil::TestProgressBar bar;
     KoProgressUpdater pu(&bar);
-    KoUpdater updater = pu.startSubtask();
-    KisShearVisitor test(0.5, 0.5, &updater);
+    KoUpdaterPtr updater = pu.startSubtask();
+    KisShearVisitor test(0.5, 0.5, updater);
 }
 
 

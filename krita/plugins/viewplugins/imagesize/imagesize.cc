@@ -178,7 +178,7 @@ void ImageSize::slotSelectionScale()
     dlgSize->setHeight(rc.height());
 
     KoProgressUpdater pu(m_view->statusBar()->progress());
-    KoUpdater u = pu.startSubtask();
+    KoUpdaterPtr u = pu.startSubtask();
 
     if (dlgSize->exec() == QDialog::Accepted) {
         qint32 w = dlgSize->width();
@@ -186,7 +186,7 @@ void ImageSize::slotSelectionScale()
         KisTransformWorker worker(selection.data(),
                                   (double)w / ((double)(rc.width())),
                                   (double)h / ((double)(rc.height())),
-                                  0, 0, 0.0, 0, 0, &u,
+                                  0, 0, 0.0, 0, 0, u,
                                   dlgSize->filterType()
                                  );
         worker.run();

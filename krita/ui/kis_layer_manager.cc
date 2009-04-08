@@ -899,9 +899,9 @@ void KisLayerManager::shearLayer(double angleX, double angleY)
 
     KoProgressUpdater updater(m_view->statusBar()->progress());
     updater.start( 100, i18n("Shear layer") );
-    KoUpdater up = updater.startSubtask();
+    KoUpdaterPtr up = updater.startSubtask();
 
-    KisShearVisitor v(angleX, angleY, &up);
+    KisShearVisitor v(angleX, angleY, up);
     v.setUndoAdapter(undo);
     layer->accept(v);
 

@@ -77,8 +77,11 @@ public:
 
     /**
      * Start a new task.
-     * This will invalidate any previously created subtasks and set the range of
-     * the progressBar as well as the text in the progressbar.
+     *
+     * This will invalidate any previously created subtasks and set
+     * the range of the progressBar as well as the text in the
+     * progressbar.
+     *
      * @param range the total range of progress bar makes.
      * @param text The text to show in the progressBar.
      * @see KoProgressProxy::setRange()
@@ -87,11 +90,16 @@ public:
     void start(int range = 100, const QString &text = "%p%");
 
     /**
-     * After calling start() you can create any number of Updaters, one for each subtask.
-     * @param weight use a weight to specify the weight this subtask has compared
-     * to the rest of the subtasks.
+     * After calling start() you can create any number of Updaters,
+     * one for each subtask. @param weight use a weight to specify the
+     * weight this subtask has compared to the rest of the subtasks.
+     *
+     * KoProgressUpdater will delete the KoUpdater instances when a
+     * start() is called or when it is deleted. The KoUpdater pointers
+     * are packed in a QPointer so you can check whether they have
+     * been deleted before dereferencing.
      */
-    QPointer<KoUpdater> startSubtask(int weight=1);
+    KoUpdaterPtr startSubtask(int weight=1);
 
     /**
      * Cancelling the action will make each subtask be marked as 'interrupted' and

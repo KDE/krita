@@ -41,7 +41,7 @@ public:
                  KisPaintDeviceSP dev,
                  const QRect & rc,
                  int margin,
-                 const KoUpdater& updater,
+                 KoUpdaterPtr updater,
                  KisSelectionSP selection);
 
     virtual ~KisFilterJob() {}
@@ -53,7 +53,7 @@ private:
 
     const KisFilter * m_filter;
     const KisFilterConfiguration * m_config;
-    KoUpdater m_updater;
+    KoUpdaterPtr m_updater;
     const KisSelectionSP m_selection;
 };
 
@@ -62,7 +62,7 @@ class KRITAIMAGE_EXPORT KisFilterJobFactory : public KisJobFactory
 public:
 
     KisFilterJobFactory(const KisFilter* filter, const KisFilterConfiguration * config, KisSelectionSP selection = 0);
-    ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc, int margin, KoUpdater updater);
+    ThreadWeaver::Job * createJob(QObject * parent, KisPaintDeviceSP dev, const QRect & rc, int margin, KoUpdaterPtr updater);
 
 private:
 

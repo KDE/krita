@@ -120,9 +120,9 @@ void KisImageManager::scaleCurrentImage(double sx, double sy, KisFilterStrategy 
 
     KoProgressUpdater updater(m_view->statusBar()->progress());
     updater.start( 100, "Scale Image" );
-    KoUpdater up = updater.startSubtask();
+    KoUpdaterPtr up = updater.startSubtask();
 
-    m_view->image()->scale(sx, sy, &up, filterStrategy);
+    m_view->image()->scale(sx, sy, up, filterStrategy);
     m_view->image()->setModified();
     m_view->layerManager()->layersUpdated();
 }
@@ -133,9 +133,9 @@ void KisImageManager::rotateCurrentImage(double radians)
 
     KoProgressUpdater updater(m_view->statusBar()->progress());
     updater.start( 100, "Rotate Image" );
-    KoUpdater up = updater.startSubtask();
+    KoUpdaterPtr up = updater.startSubtask();
 
-    m_view->image()->rotate(radians, &up );
+    m_view->image()->rotate(radians, up );
     m_view->image()->setModified();
     m_view->layerManager()->layersUpdated();
 }
@@ -146,9 +146,9 @@ void KisImageManager::shearCurrentImage(double angleX, double angleY)
 
     KoProgressUpdater updater(m_view->statusBar()->progress());
     updater.start( 100, "Shear Image" );
-    KoUpdater up = updater.startSubtask();
+    KoUpdaterPtr up = updater.startSubtask();
 
-    m_view->image()->shear(angleX, angleY, &up );
+    m_view->image()->shear(angleX, angleY, up );
     m_view->image()->setModified();
     m_view->layerManager()->layersUpdated();
 }

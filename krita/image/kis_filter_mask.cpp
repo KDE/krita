@@ -102,12 +102,14 @@ void KisFilterMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
         warnKrita << "Could not retrieve filter with name " <<  m_d->filterConfig->name();
         return;
     }
+
     Q_ASSERT( nodeProgressProxy() );
+
     KoProgressUpdater updater( nodeProgressProxy() );
     updater.start( 100, filter->name() );
-    KoUpdater up = updater.startSubtask();
-    
-    filter->process(src, dst, rc.size(), m_d->filterConfig, &up);
+    KoUpdaterPtr up = updater.startSubtask();
+
+    filter->process(src, dst, rc.size(), m_d->filterConfig,  up);
     nodeProgressProxy()->setValue( nodeProgressProxy()->maximum() );
 
 }

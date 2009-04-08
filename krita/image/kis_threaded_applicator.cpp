@@ -99,9 +99,9 @@ void KisThreadedApplicator::execute()
     // at the bottom, we have as few and as long runs of pixels left
     // as possible.
     if (w <= m_d->tileSize && h <= m_d->tileSize) {
-        KoUpdater updater = m_d->progressUpdater->startSubtask();
-        updater.setRange(0, 100);
-        Job * job = m_d->jobFactory->createJob(this, m_d->dev, m_d->rc, m_d->margin, updater);
+        KoUpdaterPtr updater = m_d->progressUpdater->startSubtask();
+        updater->setRange(0, 100);
+        Job * job = m_d->jobFactory->createJob(this, m_d->dev, m_d->rc, m_d->margin, updater.data());
         m_d->weaver->enqueue(job);
     } else {
         int numTasks = static_cast<int>(ceil(w / m_d->tileSize * h / m_d->tileSize));
@@ -114,8 +114,8 @@ void KisThreadedApplicator::execute()
             int row = 0;
             while (hleft > 0) {
                 QRect subrect(col + x, row + y, qMin(wleft, m_d->tileSize), qMin(hleft, m_d->tileSize));
-                KoUpdater updater = m_d->progressUpdater->startSubtask();
-                Job * job = m_d->jobFactory->createJob(this, m_d->dev, subrect, m_d->margin, updater);
+                KoUpdaterPtr updater = m_d->progressUpdater->startSubtask();
+                Job * job = m_d->jobFactory->createJob(this, m_d->dev, subrect, m_d->margin, updater.data());
                 m_d->weaver->enqueue(job);
                 hleft -= m_d->tileSize;
                 row += m_d->tileSize;

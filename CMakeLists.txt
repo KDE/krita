@@ -224,7 +224,7 @@ add_subdirectory(servicetypes)
 add_subdirectory(templates)
 add_subdirectory(tools)
 add_subdirectory(filters)
-macro_optional_add_subdirectory(doc)
+#macro_optional_add_subdirectory(doc)
 
 MACRO_DISPLAY_FEATURE_LOG()
 

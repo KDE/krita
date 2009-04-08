@@ -26,8 +26,8 @@ void KisRotateVisitorTest::testCreation()
 {
     TestUtil::TestProgressBar bar;
     KoProgressUpdater pu(&bar);
-    KoUpdater updater = pu.startSubtask();
-    KisRotateVisitor test(&updater);
+    KoUpdaterPtr updater = pu.startSubtask();
+    KisRotateVisitor test(updater);
 }
 
 

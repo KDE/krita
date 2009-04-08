@@ -27,23 +27,6 @@
 #include "KoProgressUpdater.h"
 #include "KoUpdaterPrivate.h"
 
-KoUpdater::KoUpdater(const KoUpdater &other)
-    : KoProgressProxy( other )
-{
-    d = other.d;
-    m_interrupted = other.m_interrupted;
-
-}
-
-KoUpdater& KoUpdater::operator=( const KoUpdater &other )
-{
-    d = other.d;
-    m_interrupted = other.m_interrupted;
-
-    return *this;
-}
-
-
 KoUpdater::KoUpdater(KoUpdaterPrivate *p)
 {
     qDebug() << "created KoUpdater in thread " << thread();

@@ -32,7 +32,7 @@ class TestWeaverJob : public ThreadWeaver::Job
 {
 public:
 
-    TestWeaverJob( QObject * parent, KoUpdater * updater, int steps = 10 )
+    TestWeaverJob( QObject * parent, KoUpdaterPtr updater, int steps = 10 )
         : ThreadWeaver::Job( parent )
         , m_updater(updater)
         , m_steps(steps)
@@ -54,7 +54,7 @@ public:
 
 
 protected:
-    KoUpdater * m_updater;
+    KoUpdaterPtr m_updater;
     int m_steps;
 };
 
@@ -63,7 +63,7 @@ class TestJob : public QThread {
 
 public:
 
-    TestJob( KoUpdater * updater, int steps = 10 )
+    TestJob( KoUpdaterPtr updater, int steps = 10 )
         : QThread()
         , m_updater( updater )
         , m_steps( steps )
@@ -85,7 +85,7 @@ public:
 
 private:
 
-    KoUpdater * m_updater;
+    KoUpdaterPtr m_updater;
     int m_steps;
 };
 
@@ -133,7 +133,7 @@ void KoProgressUpdaterTest::testCreation()
 {
     TestProgressBar bar;
     KoProgressUpdater pu(&bar);
-    KoUpdater updater = pu.startSubtask();
+    KoUpdaterPtr updater = pu.startSubtask();
     QCOMPARE(bar.min, 0);
     QCOMPARE(bar.max, 0);
     QCOMPARE(bar.value, 0);
@@ -149,11 +149,11 @@ void KoProgressUpdaterTest::testSimpleProgress()
     TestProgressBar bar;
     KoProgressUpdater pu(&bar);
     pu.start();
-    KoUpdater updater = pu.startSubtask();
-    updater.setProgress(50);
+    KoUpdaterPtr updater = pu.startSubtask();
+    updater->setProgress(50);
     QTest::qSleep(250); // allow the action to do its job.
     QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
-    updater.setProgress(100);
+    updater->setProgress(100);
     QTest::qSleep(250); // allow the action to do its job.
     QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
     QCOMPARE(bar.value, 100);
@@ -163,8 +163,8 @@ void KoProgressUpdaterTest::testSimpleThreadedProgress()
     TestProgressBar bar;
     KoProgressUpdater pu(&bar);
     pu.start();
-    KoUpdater u = pu.startSubtask();
-    TestJob t(&u);
+    KoUpdaterPtr u = pu.startSubtask();
+    TestJob t(u);
     t.start();
     while (!t.isFinished()) {
         QTest::qSleep(250); // allow the action to do its job.
@@ -178,13 +178,13 @@ void KoProgressUpdaterTest::testSubUpdaters()
     TestProgressBar bar;
     KoProgressUpdater pu(&bar);
     pu.start();
-    KoUpdater u1 = pu.startSubtask(4);
-    KoUpdater u2 = pu.startSubtask(6);
-    u1.setProgress(100);
+    KoUpdaterPtr u1 = pu.startSubtask(4);
+    KoUpdaterPtr u2 = pu.startSubtask(6);
+    u1->setProgress(100);
     QTest::qSleep(250); // allow the action to do its job.
     QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
     QCOMPARE(bar.value, 40);
-    u2.setProgress(100);
+    u2->setProgress(100);
     QTest::qSleep(250); // allow the action to do its job.
     QCoreApplication::processEvents(); // allow the actions 'gui' stuff to run.
     QCOMPARE(bar.value, 100);
@@ -195,11 +195,11 @@ void KoProgressUpdaterTest::testThreadedSubUpdaters()
     TestProgressBar bar;
     KoProgressUpdater pu(&bar);
     pu.start();
-    KoUpdater u1 = pu.startSubtask(4);
-    KoUpdater u2= pu.startSubtask(6);
+    KoUpdaterPtr u1 = pu.startSubtask(4);
+    KoUpdaterPtr u2= pu.startSubtask(6);
 
-    TestJob t1(&u1, 4);
-    TestJob t2(&u2, 6);
+    TestJob t1(u1, 4);
+    TestJob t2(u2, 6);
     t1.start();
     t2.start();
     while ( t1.isRunning() || t2.isRunning() ) {
@@ -214,13 +214,13 @@ void KoProgressUpdaterTest::testRecursiveProgress()
     TestProgressBar bar;
     KoProgressUpdater pu(&bar);
     pu.start();
-    KoUpdater u1 = pu.startSubtask();
+    KoUpdaterPtr u1 = pu.startSubtask();
 
-    KoProgressUpdater pu2(&u1);
+    KoProgressUpdater pu2(u1);
     pu2.start();
-    KoUpdater u2 = pu2.startSubtask();
-    u2.setProgress(50);
-    u2.setProgress(100);
+    KoUpdaterPtr u2 = pu2.startSubtask();
+    u2->setProgress(50);
+    u2->setProgress(100);
     while(bar.value < 100) {
         QCoreApplication::processEvents();
         QTest::qSleep(250);
@@ -233,13 +233,13 @@ void KoProgressUpdaterTest::testThreadedRecursiveProgress()
     TestProgressBar bar;
     KoProgressUpdater pu(&bar);
     pu.start();
-    KoUpdater u1 = pu.startSubtask();
+    KoUpdaterPtr u1 = pu.startSubtask();
 
-    KoProgressUpdater pu2(&u1);
+    KoProgressUpdater pu2(u1);
     pu2.start();
-    KoUpdater u2 = pu2.startSubtask();
+    KoUpdaterPtr u2 = pu2.startSubtask();
 
-    TestJob t1(&u2);
+    TestJob t1(u2);
     t1.start();
 
     while (t1.isRunning() ) {
@@ -265,8 +265,8 @@ void KoProgressUpdaterTest::testFromWeaver()
     weaver->setMaximumNumberOfThreads( 4 );
     connect( weaver, SIGNAL( jobDone(ThreadWeaver::Job*) ), this, SLOT( jobDone( ThreadWeaver::Job* ) ) );
     for (int i = 0; i < 10; ++i) {
-        KoUpdater up = pu.startSubtask();
-        ThreadWeaver::Job * job = new TestWeaverJob(this, &up, 10);
+        KoUpdaterPtr up = pu.startSubtask();
+        ThreadWeaver::Job * job = new TestWeaverJob(this, up, 10);
         weaver->enqueue(job);
     }
     while (!weaver->isIdle()) {

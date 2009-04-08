@@ -89,10 +89,10 @@ void KisSeparateChannelsPlugin::slotSeparate()
     if (dlgSeparate->exec() == QDialog::Accepted) {
 
         KoProgressUpdater pu(m_view->statusBar()->progress());
-        KoUpdater u = pu.startSubtask();
+        KoUpdaterPtr u = pu.startSubtask();
 
         KisChannelSeparator separator(m_view);
-        separator.separate(&u,
+        separator.separate(u,
                            dlgSeparate->getAlphaOptions(),
                            dlgSeparate->getSource(),
                            dlgSeparate->getOutput(),

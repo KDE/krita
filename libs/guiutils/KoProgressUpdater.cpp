@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2009 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -44,7 +45,8 @@ public:
     KoProgressProxy* progressBar;
     int totalWeight;
     int currentProgress;
-    bool updated;          // is true whenever the progress needs to be recomputed
+    bool updated;          // is true whe
+                           // never the progress needs to be recomputed
     QTimer updateGuiTimer; // fires regulary to update the progress bar widget
     QList<QPointer<KoUpdaterPrivate> > subtasks;
     QList<KoUpdaterPtr> subTaskWrappers; // We delete these
@@ -55,7 +57,6 @@ public:
 KoProgressUpdater::KoProgressUpdater(KoProgressProxy *progressBar)
     : d ( new Private(this, progressBar) )
 {
-    moveToThread( qApp->thread() );
     qDebug() << "Creating KoProgressUpdater in " << thread() << ", app thread: " << qApp->thread();
     Q_ASSERT(d->progressBar);
     connect( &d->updateGuiTimer, SIGNAL( timeout() ), SLOT( updateUi() ));
@@ -119,8 +120,11 @@ void KoProgressUpdater::cancel()
 void KoProgressUpdater::update()
 {
     d->updated = true;
-    qDebug() << "KoProgressUpdater::update(), starting timer in " << thread();
-    d->updateGuiTimer.start( 100 ); // 10 updates/second should be enough?
+    if ( !d->updateGuiTimer.isActive() ) {
+        qDebug() << "KoProgressUpdater::update(), starting timer in " << thread();
+        d->updateGuiTimer.start( 100 ); // 10 updates/second should be enough?
+    }
+
 
 }
 
@@ -128,7 +132,7 @@ void KoProgressUpdater::updateUi() {
 
     qDebug() << "KoProgressUpdater::updateUi() in " << thread();
 
-    d->updateGuiTimer.stop(); // 10 updates/second should be enough?
+    d->updateGuiTimer.stop(); // 10 upd ates/second should be enough?
 
     // This function runs in the app main thread. All the progress
     // updates arrive at the KoUpdaterPrivate instances through

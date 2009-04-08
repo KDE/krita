@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritacolorspaceconversion" version="1">
+<MenuBar>
+    <Menu name="Image"><text>&amp;Image</text>
+		<Action name="imgcolorspaceconversion"/>
+    </Menu>
+    <Menu name="Layer"><text>La&amp;yer</text>
+		<Action name="layercolorspaceconversion"/>
+    </Menu>
+</MenuBar>
+</kpartgui>

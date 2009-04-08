@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritaseparatechannels" version="6">
+<MenuBar>
+    <Menu name="Image"><text>Image</text>
+	<Separator/>
+	<Action name="separate"/>
+    </Menu>
+</MenuBar>
+</kpartgui>

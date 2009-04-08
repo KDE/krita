@@ -1,0 +1,16 @@
+[Desktop Entry]
+Name=Krita
+Name[hi]=केरिता
+Name[hne]=केरिता
+Name[ne]=क्रिता
+Name[ta]=கிரிட்டா
+Name[x-test]=xxKritaxx
+Name[zh_TW]=繪圖_Krita
+Exec=krita %u
+MimeType=image/x-nikon-nef;image/x-canon-cr2;image/x-sony-sr2;image/x-canon-crw;image/x-pentax-pef;image/x-sigma-x3f;image/x-kodak-kdc;image/x-minolta-mrw;image/x-sony-arw;image/x-kodak-k25;image/x-kodak-dcr;image/x-olympus-orf;image/x-panasonic-raw;image/x-fuji-raf;image/x-sony-srf;
+Icon=krita
+Categories=Qt;KDE;Office;Graphics;
+X-KDE-StartupNotify=true
+X-DBUS-StartupType=Multi
+X-DBUS-ServiceName=org.koffice.krita
+NoDisplay=true

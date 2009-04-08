@@ -1,8 +1,0 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritametadataeditor" version="2">
-<MenuBar>
-    <Menu name="Layer"><text>La&amp;yer</text>
-        <Action name="EditLayerMetaData"  group="layer_properties_merge"/>
-    </Menu>
-</MenuBar>
-</kpartgui>

@@ -1,0 +1,22 @@
+[Desktop Entry]
+Categories=Qt;KDE;Office;Graphics;
+Exec=krita %u
+Icon=krita
+MimeType=application/pdf;
+Name=Krita
+Name[hi]=केरिता
+Name[hne]=केरिता
+Name[ne]=क्रिता
+Name[ta]=கிரிட்டா
+Name[x-test]=xxKritaxx
+Name[zh_TW]=繪圖_Krita
+Path=
+StartupNotify=true
+Terminal=false
+Type=Application
+X-DBUS-StartupType=Multi
+X-DBUS-ServiceName=org.koffice.krita
+X-KDE-StartupNotify=true
+X-KDE-SubstituteUID=false
+X-KDE-Username=
+NoDisplay=true

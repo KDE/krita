@@ -1,0 +1,15 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritabigbrother" version="2">
+<MenuBar>
+    <Menu name="Tools">
+        <Menu name="Recording"><text>&amp;Recording</text>
+            <Action name="Recording_Open_Play"/>
+            <Separator/>
+            <Action name="Recording_Global_Save"/>
+            <Separator/>
+            <Action name="Recording_Start_Recording_Macro"/>
+            <Action name="Recording_Stop_Recording_Macro"/>
+        </Menu>
+    </Menu>
+</MenuBar>
+</kpartgui>

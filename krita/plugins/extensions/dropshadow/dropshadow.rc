@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritadropshadow" version="6">
+<MenuBar>
+    <Menu name="Layer"><text>La&amp;yer</text>
+       <Separator/>
+       <Menu name="layerEffects"><text>Layer Effects</text>
+            <Action name="dropshadow"/>
+       </Menu>
+    </Menu>
+</MenuBar>
+</kpartgui>

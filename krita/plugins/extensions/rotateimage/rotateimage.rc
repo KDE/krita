@@ -1,0 +1,25 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kritarotateimage" version="7">
+<MenuBar>
+    <Menu name="Image"><text>&amp;Image</text>
+        <Menu name="Rotate"><text>&amp;Rotate</text>
+           <Action name="rotateimage"/>
+        <Separator />
+           <Action name="rotateImageCW90"/>
+           <Action name="rotateImageCCW90"/>
+           <Action name="rotateImage180"/>
+       </Menu>
+    </Menu>
+
+    <Menu name="Layer"><text>La&amp;yer</text>
+        <Menu name="Rotate"><text>&amp;Rotate</text>
+        <Action name="rotatelayer"/>
+        <Separator />
+        <Action name="rotateLayerCW90"/>
+        <Action name="rotateLayerCCW90"/>
+        <Action name="rotateLayer180"/>
+        </Menu>
+    </Menu>
+</MenuBar>
+
+</kpartgui>

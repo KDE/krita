@@ -39,4 +39,19 @@ There are several kinds of plugins for Krita:
     they provide an .rc file to merge their gui with the view gui. Extensions
     have the servicetype Krita/Plugin. They are not loaded automatically by
     the KParts mechanism; please do not create ordinary kparts that are to
-    be loaded by the Krita view since KParts are not versioned.
+    be loaded by the Krita view since KParts are not versioned. 
+
+* Formats
+
+    Formats are plugins for loading various graphics file formats, such as jpeg,
+    tiff or png
+
+* Generators
+
+    Generators are plugins that can fill a certain area with a computed pattern 
+    of pixels.
+
+* Assistants 
+
+    Assistants are plugins that constrain the freehand tool when painting in a 
+    certain way

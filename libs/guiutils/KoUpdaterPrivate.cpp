@@ -20,7 +20,7 @@
  */
 #include "KoUpdaterPrivate.h"
 
-#include <QDebug>
+#include <kdebug.h>
 
 KoUpdaterPrivate::~KoUpdaterPrivate()
 {
@@ -29,20 +29,20 @@ KoUpdaterPrivate::~KoUpdaterPrivate()
 
 void KoUpdaterPrivate::cancel()
 {
-    qDebug() << "KoUpdaterPrivate::cancel in " << thread();
+    kDebug(30004) << "KoUpdaterPrivate::cancel in " << thread();
     m_parent->cancel();
 }
 
 void KoUpdaterPrivate::interrupt()
 {
-    qDebug() << "KoUpdaterPrivate::interrupt in " << thread();
+    kDebug(30004) << "KoUpdaterPrivate::interrupt in " << thread();
     m_interrupted = true;
     emit sigInterrupted();
 }
 
 void KoUpdaterPrivate::setProgress(int percent)
 {
-    qDebug() << "KoUpdaterPrivate::setProgress" << percent << " in " << thread();
+    kDebug(30004) << "KoUpdaterPrivate::setProgress" << percent << " in " << thread();
     if(m_progress >= percent) {
         return;
     }

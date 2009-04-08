@@ -22,14 +22,15 @@
 #include "KoUpdater.h"
 
 #include <QApplication>
-#include <QDebug>
+
+#include <kdebug.h>
 
 #include "KoProgressUpdater.h"
 #include "KoUpdaterPrivate.h"
 
 KoUpdater::KoUpdater(KoUpdaterPrivate *p)
 {
-    qDebug() << "created KoUpdater in thread " << thread();
+    kDebug(30004) << "created KoUpdater in thread " << thread();
 
     d = p;
     Q_ASSERT(p);
@@ -45,23 +46,23 @@ KoUpdater::KoUpdater(KoUpdaterPrivate *p)
 
 void KoUpdater::cancel()
 {
-    qDebug() << "KoUpdater::cancel in " << thread();
+    kDebug(30004) << "KoUpdater::cancel in " << thread();
     emit sigCancel();
 }
 
 void KoUpdater::setProgress(int percent)
 {
-    qDebug() << "KoUpdater::setProgress " << percent << " in " << thread();
+    kDebug(30004) << "KoUpdater::setProgress " << percent << " in " << thread();
     emit sigProgress( percent );
     qApp->processEvents();
 }
 
 int KoUpdater::progress() const
 {
-    qDebug() << "KoUpdater::progress in " << thread();
+    kDebug(30004) << "KoUpdater::progress in " << thread();
 
     if ( d.isNull() ) {
-        qDebug() << "\t Private is null!";
+        kDebug(30004) << "\t Private is null!";
         return 100;
     }
 
@@ -80,7 +81,7 @@ int KoUpdater::maximum() const
 
 void KoUpdater::setValue( int value )
 {
-    qDebug() << "KoUpdater::setValue " << value << " in " << thread();
+    kDebug(30004) << "KoUpdater::setValue " << value << " in " << thread();
 
     if ( value < min ) value = min;
     if ( value > max ) value = max;
@@ -103,7 +104,7 @@ void KoUpdater::setFormat( const QString & format )
 
 void KoUpdater::interrupt()
 {
-    qDebug() << "KoUpdater::interrupt() in " << thread();
+    kDebug(30004) << "KoUpdater::interrupt() in " << thread();
     m_interrupted = true;
 }
 

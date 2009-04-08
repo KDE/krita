@@ -19,8 +19,7 @@
 
 #include "KoProgressBar.h"
 
-#include <QApplication>
-#include <QDebug>
+#include <kdebug.h>
 
 KoProgressBar::KoProgressBar( QWidget * parent )
  : QProgressBar( parent )
@@ -38,7 +37,7 @@ int KoProgressBar::maximum() const
 
 void KoProgressBar::setValue( int value )
 {
-    qDebug() << "KoProgressBar::setValue " << value;
+    kDebug(30004) << "KoProgressBar::setValue " << value;
 
     if( value >= minimum() && value < maximum() )
     {

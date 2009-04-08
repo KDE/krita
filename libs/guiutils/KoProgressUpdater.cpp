@@ -22,7 +22,8 @@
 #include <QApplication>
 #include <QString>
 #include <QTimer>
-#include <QDebug>
+
+#include <kdebug.h>
 
 #include "KoUpdaterPrivate.h"
 #include "KoUpdater.h"
@@ -57,7 +58,7 @@ public:
 KoProgressUpdater::KoProgressUpdater(KoProgressProxy *progressBar)
     : d ( new Private(this, progressBar) )
 {
-    qDebug() << "Creating KoProgressUpdater in " << thread() << ", app thread: " << qApp->thread();
+    kDebug(30004) << "Creating KoProgressUpdater in " << thread() << ", app thread: " << qApp->thread();
     Q_ASSERT(d->progressBar);
     connect( &d->updateGuiTimer, SIGNAL( timeout() ), SLOT( updateUi() ));
 
@@ -76,7 +77,7 @@ KoProgressUpdater::~KoProgressUpdater()
 
 void KoProgressUpdater::start(int range, const QString &text)
 {
-    qDebug() << "KoProgressUpdater::start " << range << ", " << text << " in " << thread();
+    kDebug(30004) << "KoProgressUpdater::start " << range << ", " << text << " in " << thread();
 
     qDeleteAll(d->subtasks);
     d->subtasks.clear();
@@ -95,7 +96,7 @@ void KoProgressUpdater::start(int range, const QString &text)
 
 QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight)
 {
-    qDebug() << "KoProgressUpdater::startSubtask() in " << thread();
+    kDebug(30004) << "KoProgressUpdater::startSubtask() in " << thread();
     KoUpdaterPrivate *p = new KoUpdaterPrivate(this, weight);
     d->totalWeight += weight;
     d->subtasks.append(p);
@@ -109,7 +110,7 @@ QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight)
 
 void KoProgressUpdater::cancel()
 {
-    qDebug() << "KoProgressUpdater::cancel in " << thread();
+    kDebug(30004) << "KoProgressUpdater::cancel in " << thread();
     foreach(KoUpdaterPrivate *updater, d->subtasks) {
         updater->setProgress(100);
         updater->interrupt();
@@ -121,7 +122,7 @@ void KoProgressUpdater::update()
 {
     d->updated = true;
     if ( !d->updateGuiTimer.isActive() ) {
-        qDebug() << "KoProgressUpdater::update(), starting timer in " << thread();
+        kDebug(30004) << "KoProgressUpdater::update(), starting timer in " << thread();
         d->updateGuiTimer.start( 100 ); // 10 updates/second should be enough?
     }
 
@@ -130,7 +131,7 @@ void KoProgressUpdater::update()
 
 void KoProgressUpdater::updateUi() {
 
-    qDebug() << "KoProgressUpdater::updateUi() in " << thread();
+    kDebug(30004) << "KoProgressUpdater::updateUi() in " << thread();
 
     d->updateGuiTimer.stop(); // 10 upd ates/second should be enough?
 
@@ -148,7 +149,7 @@ void KoProgressUpdater::updateUi() {
         foreach(QPointer<KoUpdaterPrivate> updater, d->subtasks) {
 
             if(updater->interrupted()) {
-                qDebug() << "\tthe updater got interruped, returning";
+                kDebug(30004) << "\tthe updater got interruped, returning";
                 d->currentProgress = -1;
                 return;
             }
@@ -166,17 +167,17 @@ void KoProgressUpdater::updateUi() {
         d->updated = false;
 
     }
-    qDebug() << "\tupdateUi currentProgress " << d->currentProgress;
+    kDebug(30004) << "\tupdateUi currentProgress " << d->currentProgress;
 
     if( d->currentProgress == -1 ) {
 
         d->progressBar->setValue( d->progressBar->maximum() );
         // should we hide the progressbar after a little while?
-        qDebug() << "\t current progress is -1, returning";
+        kDebug(30004) << "\t current progress is -1, returning";
         return;
     }
 
-    qDebug() << "\tsetting value!" << d->currentProgress;
+    kDebug(30004) << "\tsetting value!" << d->currentProgress;
     d->progressBar->setValue(d->currentProgress);
 }
 

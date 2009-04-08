@@ -106,7 +106,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Radius:</string>
+           <string>Diameter:</string>
           </property>
           <property name="pixmap">
            <pixmap>image0</pixmap>

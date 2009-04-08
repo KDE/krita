@@ -1,2 +1,2 @@
 #! /bin/sh
-$XGETTEXT *.cpp -o $podir/ArtisticTextShape.pot
+$XGETTEXT *.cpp *.h -o $podir/ArtisticTextShape.pot

@@ -25,8 +25,9 @@
 
 #include <QRect>
 
+#include <KoUpdater.h>
+
 class KisPaintDevice;
-class KoUpdater;
 class KisFilterStrategy;
 class KisSelection;
 
@@ -38,7 +39,7 @@ public:
                        double  xscale, double  yscale,
                        double  xshear, double  yshear, double rotation,
                        qint32  xtranslate, qint32  ytranslate,
-                       KoUpdater *progress,
+                       KoUpdaterPtr progress,
                        KisFilterStrategy *filter, bool fixBorderAlpha = false);
     ~KisTransformWorker();
 
@@ -77,7 +78,7 @@ private:
     double  m_xscale, m_yscale;
     double  m_xshear, m_yshear, m_rotation;
     qint32  m_xtranslate, m_ytranslate;
-    KoUpdater *m_progressUpdater;
+    KoUpdaterPtr m_progressUpdater;
     KisFilterStrategy *m_filter;
     int m_progressTotalSteps;
     int m_progressStep;

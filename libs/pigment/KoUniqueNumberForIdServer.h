@@ -21,6 +21,7 @@
 #define _KO_UNIQUE_NUMBER_FOR_ID_SERVER_H_
 
 #include <QtGlobal>
+#include "pigment_export.h"
 
 class QString;
 
@@ -29,7 +30,7 @@ class QString;
  * This is useful for fast comparison of Ids, but the number *should* remains private
  * especially considering that it changes from one running instance to an other.
  */
-class KoUniqueNumberForIdServer {
+class PIGMENTCMS_EXPORT KoUniqueNumberForIdServer {
   private:
     KoUniqueNumberForIdServer();
     ~KoUniqueNumberForIdServer();

@@ -24,7 +24,7 @@
 #include <OpenCTL/Program.h>
 
 #include "KoColorSpace.h"
-#include "colorprofiles/KoCtlColorProfile.h"
+#include "KoCtlColorProfile.h"
 #include "DebugPigment.h"
 
 #include <QString>

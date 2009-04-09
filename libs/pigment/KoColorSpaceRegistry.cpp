@@ -50,12 +50,6 @@
 #include "colorspaces/KoRgbU16ColorSpace.h"
 #include "colorspaces/KoRgbU8ColorSpace.h"
 
-#include <config-openctl.h>
-#ifdef HAVE_OPENCTL
-#include <OpenCTL/ModulesManager.h>
-#include "colorprofiles/KoCtlColorProfile.h"
-#endif
-
 struct KoColorSpaceRegistry::Private {
     QHash<QString, KoColorProfile * > profileMap;
     QHash<QString, const KoColorSpace * > csMap;
@@ -120,36 +114,6 @@ void KoColorSpaceRegistry::init()
             }
         }
     }
-#ifdef HAVE_OPENCTL
-    // Set PigmentCMS's ctl module directory
-    QStringList ctlModulesDirs = KGlobal::mainComponent().dirs()->findDirs( "data", "pigmentcms/ctlmodules/");
-    dbgPigmentCSRegistry << ctlModulesDirs;
-    foreach(const QString & dir, ctlModulesDirs)
-    {
-        dbgPigmentCSRegistry << "Append : " << dir << " to the list of CTL modules";
-        OpenCTL::ModulesManager::instance()->addDirectory( dir.toAscii().data());
-    }
-    // Load CTL Profiles
-    KGlobal::mainComponent().dirs()->addResourceType("ctl_profiles", "data", "pigmentcms/ctlprofiles/");
-    QStringList ctlprofileFilenames;
-    ctlprofileFilenames += KGlobal::mainComponent().dirs()->findAllResources("ctl_profiles", "*.ctlp",  KStandardDirs::Recursive);
-    dbgPigmentCSRegistry << "There are " << ctlprofileFilenames.size() << " CTL profiles";
-    if (!ctlprofileFilenames.empty()) {
-        KoColorProfile* profile = 0;
-        for( QStringList::Iterator it = ctlprofileFilenames.begin(); it != ctlprofileFilenames.end(); ++it ) {
-            dbgPigmentCSRegistry << "Load profile : " << *it;
-            profile = new KoCtlColorProfile(*it);
-            profile->load();
-            if (profile->valid()) {
-                dbgPigment << "Valid profile : " << profile->name();
-                d->profileMap[profile->name()] = profile;
-            } else {
-                dbgPigment << "Invalid profile : " << profile->name();
-                delete profile;
-            }
-        }
-    }
-#endif
 
     // Initialise LAB
     KoColorProfile *labProfile = KoLcmsColorProfileContainer::createFromLcmsProfile(cmsCreateLabProfile(NULL));
@@ -332,7 +296,10 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         KoColorSpaceFactory *csf = value(csID);
 
         if(!csf)
+        {
+            dbgPigmentCSRegistry << "Unknown color space type : " << csID;
             return 0;
+        }
 
         profileName = csf->defaultProfile();
     }
@@ -355,7 +322,10 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         }
         const KoColorSpace *cs = csf->createColorSpace( p);
         if(!cs)
+        {
+            dbgPigmentCSRegistry << "Unable to create color space";
             return 0;
+        }
 
         d->csMap[name] = cs;
         dbgPigmentCSRegistry << "colorspace count: " << d->csMap.count() << ", adding name: " << name;

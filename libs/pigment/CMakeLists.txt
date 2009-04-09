@@ -17,20 +17,6 @@ if(MSVC)
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
 endif(MSVC)
 
-message(STATUS ${OPENCTL_FOUND})
-
-if(OPENCTL_FOUND)
-  include_directories(${OPENCTL_INCLUDE_DIR})
-  set(LINK_OPENCTL_LIB ${OPENCTL_LIBRARIES})
-  add_definitions(${OPENCTL_DEFINITIONS})
-  add_subdirectory(ctlmodules)
-  set( OPENCTL_PIGMENT_SRCS
-    colorprofiles/KoCtlColorProfile.cpp
-    KoCtlColorConversionTransformation.cpp
-    KoCtlColorSpace.cpp
-  )
-endif(OPENCTL_FOUND)
-
 set(pigmentcms_SRCS
     KoBasicHistogramProducers.cpp
     KoColor.cpp
@@ -64,7 +50,6 @@ set(pigmentcms_SRCS
     colorspaces/KoRgbU16ColorSpace.cpp
     colorspaces/KoRgbU8ColorSpace.cc
     colorspaces/KoRgbU8CompositeOp.cpp
-    ${OPENCTL_PIGMENT_SRCS}
 )
 
 add_subdirectory(tests)
@@ -80,11 +65,10 @@ target_link_libraries(
     ${QT_QTCORE_LIBRARY}
     ${X11_X11_LIB}
     ${LINK_OPENEXR_LIB}
-    ${LINK_OPENCTL_LIB}
     )
 
 target_link_libraries(
-    pigmentcms LINK_INTERFACE_LIBRARIES komain ${LCMS_LIBRARIES} ${LINK_OPENEXR_LIB} ${LINK_OPENCTL_LIB}
+    pigmentcms LINK_INTERFACE_LIBRARIES komain ${LCMS_LIBRARIES} ${LINK_OPENEXR_LIB}
 )
 
 set_target_properties(pigmentcms PROPERTIES

@@ -22,7 +22,7 @@
 #include "KoColorSpaceAbstract.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorSpaceMaths.h"
-#include "colorprofiles/KoCtlColorProfile.h"
+#include "KoCtlColorProfile.h"
 
 struct KoCtlColorSpace::Private
 {

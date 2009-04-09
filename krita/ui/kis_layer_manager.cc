@@ -840,8 +840,9 @@ void KisLayerManager::scaleLayer(double sx, double sy, KisFilterStrategy *filter
         Q_CHECK_PTR(t);
     }
 
-    // XXX_PROGRESS: pass KoUpdater
-    KisTransformWorker worker(layer->paintDevice(), sx, sy, 0, 0, 0.0, 0, 0, 0, filterStrategy);
+    KoProgressUpdater pu(m_view->statusBar()->progress());
+    KoUpdater u = pu.startSubtask();
+    KisTransformWorker worker(layer->paintDevice(), sx, sy, 0, 0, 0.0, 0, 0, &u, filterStrategy);
     worker.run();
 
     if (t) m_view->undoAdapter()->addCommand(t);

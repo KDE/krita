@@ -101,6 +101,13 @@ unchunkable filter, we need apply the filter to the source layer in
 one go, mark everything as clean, and then recomposite from there in
 chunks again.
        
+ * Block as less as possible the main event loop of Qt. Which means use signals 
+when a processing is finished, if needed, but as much as possible it should be 
+avoided to block the main event loop (and use of QApplication::processEvents 
+need to be limited since it can trigger hidden issues)
+
+ * Distinguish between background processes (like perhaps recomposition?) and
+user actions.
 
 --- notes ---
 

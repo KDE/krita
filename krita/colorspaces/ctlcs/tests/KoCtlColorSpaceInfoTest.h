@@ -17,30 +17,17 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KO_CTL_COLOR_SPACE_INFO_H_
-#define _KO_CTL_COLOR_SPACE_INFO_H_
+#ifndef _KOCTLCOLORSPACEINFOTEST_H_
+#define _KOCTLCOLORSPACEINFOTEST_H_
 
-class QString;
+#include <QtTest/QtTest>
 
-class KoCtlColorSpaceInfo {
-    public:
-        class ChannelInfo {
-                ChannelInfo();
-                ~ChannelInfo();
-            public:
-            private:
-                struct Private;
-                Private* const d;
-        };
-    public:
-        KoCtlColorSpaceInfo(const QString& _xmlfile);
-        const QString& fileName() const;
-        bool load();
-        ~KoCtlColorSpaceInfo();
-        const QString& colorDepthId() const;
-    private:
-        struct Private;
-        Private* const d;
+class KoCtlColorSpaceInfoTest : public QObject
+{
+    Q_OBJECT
+private slots:
+
+    void testCreation();
 };
 
 #endif

@@ -17,30 +17,19 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KO_CTL_COLOR_SPACE_INFO_H_
-#define _KO_CTL_COLOR_SPACE_INFO_H_
+#include "KoCtlColorSpaceInfoTest.h"
 
-class QString;
+#include <qtest_kde.h>
+#include "../KoCtlColorSpaceInfo.h"
 
-class KoCtlColorSpaceInfo {
-    public:
-        class ChannelInfo {
-                ChannelInfo();
-                ~ChannelInfo();
-            public:
-            private:
-                struct Private;
-                Private* const d;
-        };
-    public:
-        KoCtlColorSpaceInfo(const QString& _xmlfile);
-        const QString& fileName() const;
-        bool load();
-        ~KoCtlColorSpaceInfo();
-        const QString& colorDepthId() const;
-    private:
-        struct Private;
-        Private* const d;
-};
+void KoCtlColorSpaceInfoTest::testCreation()
+{
+    KoCtlColorSpaceInfo info(FILES_DATA_DIR + QString("rgba32f.ctlcs"));
+    QVERIFY(info.load());
+    QCOMPARE(info.colorDepthId(), QString( "F32"));
+}
 
-#endif
+
+
+QTEST_KDEMAIN(KoCtlColorSpaceInfoTest, NoGUI)
+#include "KoCtlColorSpaceInfoTest.moc"

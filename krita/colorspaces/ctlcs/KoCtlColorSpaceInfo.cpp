@@ -21,7 +21,7 @@
 #include <QFile>
 #include <QDomDocument>
 #include <kis_debug.h>
-#include <KoCtlParser.h>
+#include "KoCtlParser.h"
 
 struct KoCtlColorSpaceInfo::ChannelInfo::Private {
 };
@@ -78,7 +78,7 @@ bool KoCtlColorSpaceInfo::load()
         return false;
     }
     QDomNode n = docElem.firstChild();
-    while(not n.isNull()) {
+    while(!n.isNull()) {
         QDomElement e = n.toElement();
         if(not e.isNull()) {
             dbgPlugins << e.tagName();
@@ -87,5 +87,12 @@ bool KoCtlColorSpaceInfo::load()
                 d->colorDepthID = KoCtlParser::generateDepthID(e.attribute("depth"), e.attribute("type"));
             }
         }
+        n = n.nextSibling();
     }
+    return true;
+}
+
+const QString& KoCtlColorSpaceInfo::colorDepthId() const
+{
+    return d->colorDepthID;
 }

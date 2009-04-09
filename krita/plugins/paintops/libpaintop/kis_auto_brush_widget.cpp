@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004,2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004,2007,2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -61,6 +61,9 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const 
 
     inputSpikes->setSliderEnabled(true);
     connect(inputSpikes, SIGNAL(valueChanged(int)), this, SLOT(paramChanged()));
+    
+    showSlider(inputSpacing);
+    connect(inputSpacing, SIGNAL(valueChanged(double)), this, SLOT(paramChanged()));
 
     m_brush = QImage(1, 1, QImage::Format_RGB32);
 
@@ -96,7 +99,7 @@ void KisAutoBrushWidget::paramChanged()
 
     }
     m_autoBrush = new KisAutoBrush(kas);
-
+    m_autoBrush->setSpacing(inputSpacing->value());
     m_brush = m_autoBrush->img();
 
     QImage pi(m_brush);

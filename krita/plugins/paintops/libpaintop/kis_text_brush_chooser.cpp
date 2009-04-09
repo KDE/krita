@@ -26,6 +26,8 @@
 #include <kfontdialog.h>
 #include <klineedit.h>
 
+#define showSlider(input) input->setRange(input->minimum(), input->maximum())
+
 KisTextBrushChooser::KisTextBrushChooser(QWidget *parent, const char* name, const QString& caption)
         : QWidget(parent)
         , m_textBrush(new KisTextBrush())
@@ -38,6 +40,8 @@ KisTextBrushChooser::KisTextBrushChooser(QWidget *parent, const char* name, cons
     connect((QObject*)bnFont, SIGNAL(clicked()), this, SLOT(getFont()));
     m_font = font();
     rebuildTextBrush();
+    showSlider(inputSpacing);
+    connect((QObject*)inputSpacing, SIGNAL(valueChanged(double)), this, SLOT(rebuildTextBrush()));
 }
 
 
@@ -54,6 +58,7 @@ void KisTextBrushChooser::rebuildTextBrush()
     KisTextBrush* textBrush = dynamic_cast<KisTextBrush*>(m_textBrush.data());
     textBrush->setFont(m_font);
     textBrush->setText(lineEdit->text());
+    textBrush->setSpacing(inputSpacing->value());
     textBrush->updateBrush();
 
     emit sigBrushChanged();

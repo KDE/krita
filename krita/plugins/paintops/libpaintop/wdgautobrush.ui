@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>306</width>
-    <height>303</height>
+    <height>300</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -106,7 +106,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Diameter:</string>
+           <string/>
           </property>
           <property name="pixmap">
            <pixmap>image0</pixmap>
@@ -129,7 +129,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Ratio:</string>
+           <string/>
           </property>
           <property name="pixmap">
            <pixmap>image0</pixmap>
@@ -230,21 +230,38 @@
       </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
           <string>Spikes:</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="0" column="1">
         <widget class="KIntNumInput" name="inputSpikes">
          <property name="minimum">
           <number>2</number>
          </property>
          <property name="maximum">
           <number>20</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Spacing:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="KDoubleNumInput" name="inputSpacing">
+         <property name="value">
+          <double>0.100000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>10.000000000000000</double>
          </property>
         </widget>
        </item>

@@ -172,10 +172,12 @@ bool KoPattern::init(QByteArray& bytes)
     memcpy(name, data + sizeof(GimpPatternHeader), size);
 
     if (name[size - 1]) {
+        delete[] name;
         return false;
     }
 
     setName(QString::fromAscii(name, size));
+    delete[] name;
 
     if (bh.width == 0 || bh.height == 0) {
         return false;

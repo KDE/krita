@@ -10,6 +10,8 @@ set( CTLCS_SRCS
     KoCtlColorProfile.cpp
     KoCtlColorConversionTransformation.cpp
     KoCtlColorSpace.cpp
+    KoCtlColorSpaceInfo.cpp
+    KoCtlParser.cpp
     ctl_cs_plugin.cpp
 )
 

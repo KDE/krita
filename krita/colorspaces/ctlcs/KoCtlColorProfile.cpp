@@ -43,6 +43,8 @@
 #include <OpenCTL/Program.h>
 #include <OpenCTL/Module.h>
 
+#include "KoCtlParser.h"
+
 struct ConversionInfo {
     QString sourceColorModelID;
     QString sourceColorDepthID;
@@ -218,15 +220,6 @@ void KoCtlColorProfile::decodeTransformations(QDomElement& elt)
     }
 }
 
-QString generateDepthID(QString depth, QString type)
-{
-    QString prefix;
-    if(type == "integer") prefix = "U";
-    else if(type == "float") prefix = "F";
-    else dbgPigment << "Invalid type";
-    return prefix + depth;
-}
-
 void KoCtlColorProfile::decodeConversions(QDomElement& elt)
 {
     for(QDomNode n = elt.firstChild(); not n.isNull(); n = n.nextSibling())
@@ -244,10 +237,10 @@ void KoCtlColorProfile::decodeConversions(QDomElement& elt)
                     ConversionInfo ci;
                     ci.function = e.attribute("function");
                     ci.sourceColorModelID = eIn.attribute("colorModel");
-                    ci.sourceColorDepthID = generateDepthID(eIn.attribute("depth"), eIn.attribute("type"));
+                    ci.sourceColorDepthID = KoCtlParser::generateDepthID(eIn.attribute("depth"), eIn.attribute("type"));
                     ci.sourceProfile = eIn.attribute("profile");
                     ci.destinationColorModelID = eOut.attribute("colorModel");
-                    ci.destinationColorDepthID = generateDepthID(eOut.attribute("depth"), eOut.attribute("type") );
+                    ci.destinationColorDepthID = KoCtlParser::generateDepthID(eOut.attribute("depth"), eOut.attribute("type") );
                     ci.destinationProfile = eOut.attribute("profile");
                     if( ci.sourceColorModelID == colorModel() and ci.sourceColorDepthID == colorDepth() and ci.sourceProfile.isEmpty())
                     {
@@ -301,7 +294,7 @@ bool KoCtlColorProfile::load()
             if( e.tagName() == "info")
             {
                 setName(e.attribute("name"));
-                d->colorDepthID = generateDepthID(e.attribute("depth"), e.attribute("type"));
+                d->colorDepthID = KoCtlParser::generateDepthID(e.attribute("depth"), e.attribute("type"));
                 d->colorDepthIDNumber = KoUniqueNumberForIdServer::instance()->numberForId( d->colorDepthID );
                 d->colorModelID = e.attribute("colorModel");
                 d->colorModelIDNumber = KoUniqueNumberForIdServer::instance()->numberForId( d->colorModelID );

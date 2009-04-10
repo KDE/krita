@@ -31,8 +31,11 @@ class QDomDocument;
 
 
 /**
- * KisPropertiesConfiguration is a map-based properties class that can be serialized
- * and deserialized.
+ * KisPropertiesConfiguration is a map-based properties class that can
+ * be serialized and deserialized.
+ *
+ * It differs from the base class KisSerializableConfiguration in that
+ * it provides a number of convenience methods to get at the data and
  */
 class KRITAIMAGE_EXPORT KisPropertiesConfiguration : public KisSerializableConfiguration
 {
@@ -56,28 +59,30 @@ public:
 
     /**
      * Fill the filter configuration object from the XML encoded representation in s.
-     * This function use the "Legacy" style XML in the 1.x kra file.
+     * This function use the "Legacy" style XML of the 1.x .kra file format.
      */
     virtual void fromXML(const QString&);
     /**
      * Fill the filter configuration object from the XML encoded representation in s.
-     * This function use the "Legacy" style XML in the 1.x kra file.
+     * This function use the "Legacy" style XML  of the 1.x .kra file format.
      */
     virtual void fromXML(const QDomElement&);
 
     /**
      * Create a serialized version of this filter config
-     * This function use the "Legacy" style XML in the 1.x kra file.
+     * This function use the "Legacy" style XML  of the 1.x .kra file format.
      */
     virtual void toXML(QDomDocument&, QDomElement&) const;
 
     /**
      * Create a serialized version of this filter config
-     * This function use the "Legacy" style XML in the 1.x kra file.
+     * This function use the "Legacy" style XML  of the 1.x .kra file format.
      */
     virtual QString toXML() const;
 
-
+    /**
+     * @return true if the map contains a property with the specified name
+     */
     bool hasProperty( const QString& name );
 
     /**
@@ -87,6 +92,9 @@ public:
 
     /**
      * Set value to the value associated with property name
+     *
+     * XXX: API alert: a setter that is prefixed with get?
+     *
      * @return false if the specified property did not exist.
      */
     virtual bool getProperty(const QString & name, QVariant & value) const;

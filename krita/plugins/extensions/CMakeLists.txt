@@ -34,6 +34,6 @@ if(HAVE_OPENGL AND HAVE_GLEW)
 endif(HAVE_OPENGL AND HAVE_GLEW)
 
 if(OPENCTL_FOUND)
-  add_subdirectory( painterlyframework )
+#   add_subdirectory( painterlyframework )
 endif(OPENCTL_FOUND)
 

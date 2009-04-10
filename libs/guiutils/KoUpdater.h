@@ -114,6 +114,7 @@ private slots:
 private:
 
     bool m_interrupted;
+    int  m_progressPercent;
 };
 
 

@@ -20,14 +20,23 @@
 #ifndef _KO_CTL_COLOR_SPACE_INFO_H_
 #define _KO_CTL_COLOR_SPACE_INFO_H_
 
-class QString;
+#include <KoChannelInfo.h>
 
 class KoCtlColorSpaceInfo {
     public:
         class ChannelInfo {
+            friend class QList<ChannelInfo>;
                 ChannelInfo();
                 ~ChannelInfo();
             public:
+                const QString& name() const;
+                const QString& shortName() const;
+                qint32 position() const;
+                qint32 index() const;
+                enum KoChannelInfo::enumChannelType channelType() const;
+                enum KoChannelInfo::enumChannelValueType valueType() const;
+                qint32 size() const;
+                const QColor& color() const;
             private:
                 struct Private;
                 Private* const d;
@@ -42,6 +51,7 @@ class KoCtlColorSpaceInfo {
         const QString& colorSpaceId() const;
         const QString& name() const;
         const QString& defaultProfile() const;
+        const QList<ChannelInfo>& channels() const;
         bool isHdr() const;
     private:
         struct Private;

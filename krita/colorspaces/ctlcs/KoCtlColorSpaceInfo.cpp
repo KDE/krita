@@ -24,14 +24,54 @@
 #include "KoCtlParser.h"
 
 struct KoCtlColorSpaceInfo::ChannelInfo::Private {
+    Private() : color(0,0,0) {}
+    QString name;
+    QString shortName;
+    qint32 position;
+    qint32 index;
+    enum KoChannelInfo::enumChannelType channelType;
+    enum KoChannelInfo::enumChannelValueType valueType;
+    qint32 size;
+    QColor color;
 };
 
 KoCtlColorSpaceInfo::ChannelInfo::ChannelInfo() : d(new Private) {
-    
 }
 
 KoCtlColorSpaceInfo::ChannelInfo::~ChannelInfo() {
     delete d;
+}
+
+const QString& KoCtlColorSpaceInfo::ChannelInfo::name() const {
+    return d->name;
+}
+
+const QString& KoCtlColorSpaceInfo::ChannelInfo::shortName() const {
+    return d->shortName;
+}
+
+qint32 KoCtlColorSpaceInfo::ChannelInfo::position() const {
+    return d->position;
+}
+
+qint32 KoCtlColorSpaceInfo::ChannelInfo::index() const {
+    return d->index;
+}
+
+enum KoChannelInfo::enumChannelType KoCtlColorSpaceInfo::ChannelInfo::channelType() const {
+    return d->channelType;
+}
+
+enum KoChannelInfo::enumChannelValueType KoCtlColorSpaceInfo::ChannelInfo::valueType() const {
+    return d->valueType;
+}
+
+qint32 KoCtlColorSpaceInfo::ChannelInfo::size() const {
+    return d->size;
+}
+
+const QColor& KoCtlColorSpaceInfo::ChannelInfo::color() const {
+    return d->color;
 }
 
 struct KoCtlColorSpaceInfo::Private {
@@ -42,6 +82,7 @@ struct KoCtlColorSpaceInfo::Private {
     QString name;
     QString defaultProfile;
     bool isHdr;
+    QList<KoCtlColorSpaceInfo::ChannelInfo> channels;
 };
 
 KoCtlColorSpaceInfo::KoCtlColorSpaceInfo(const QString& _xmlfile) : d(new Private)
@@ -146,4 +187,8 @@ const QString& KoCtlColorSpaceInfo::defaultProfile() const
 bool KoCtlColorSpaceInfo::isHdr() const
 {
     return d->isHdr;
+}
+
+const QList<KoCtlColorSpaceInfo::ChannelInfo>& KoCtlColorSpaceInfo::channels() const {
+    return d->channels;
 }

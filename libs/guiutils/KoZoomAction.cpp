@@ -253,6 +253,7 @@ QWidget * KoZoomAction::createWidget( QWidget * _parent )
         QToolButton * aspectButton = new QToolButton(group);
         aspectButton->setIcon(KIcon("zoom-pixels").pixmap(22));
         aspectButton->setCheckable(true);
+        aspectButton->setChecked(true);
         aspectButton->setAutoRaise(true);
         aspectButton->setToolTip(i18n("Use same aspect as pixels"));
         connect(aspectButton, SIGNAL(toggled(bool)), this, SIGNAL(aspectModeChanged(bool)));

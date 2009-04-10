@@ -83,9 +83,8 @@ void KisFilterInvert::process(KisConstProcessingInformation srcInfo,
     Q_ASSERT(!dst.isNull());
 
     if (progressUpdater) {
-        progressUpdater->setRange(0, size.width() * size.height());
+        progressUpdater->setRange(0, size.height());
     }
-    int count = 0;
 
     const KoColorSpace * cs = src->colorSpace();
 
@@ -109,10 +108,10 @@ void KisFilterInvert::process(KisConstProcessingInformation srcInfo,
             }
             ++srcIt;
             ++dstIt;
-            if (progressUpdater) progressUpdater->setValue(++count);
         }
         srcIt.nextRow();
         dstIt.nextRow();
+        if (progressUpdater) progressUpdater->setValue(row);
     }
     dbgPlugins << "Per-pixel isSelected():" << t.elapsed() << " ms";
 

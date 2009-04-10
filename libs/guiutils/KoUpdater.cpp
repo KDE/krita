@@ -52,6 +52,10 @@ void KoUpdater::cancel()
 
 void KoUpdater::setProgress(int percent)
 {
+    if (progress() >= percent) {
+        return;
+    }
+
     kDebug(30004) << "KoUpdater::setProgress " << percent << " in " << thread();
     emit sigProgress( percent );
     qApp->processEvents();

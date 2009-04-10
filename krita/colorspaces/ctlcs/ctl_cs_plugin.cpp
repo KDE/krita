@@ -28,6 +28,8 @@
 
 #include <OpenCTL/ModulesManager.h>
 #include "kis_debug.h"
+#include "KoCtlColorSpaceInfo.h"
+#include "KoCtlColorSpaceFactory.h"
 
 // #include "kis_lms_f32_colorspace.h"
 
@@ -70,7 +72,25 @@ CTLCSPlugin::CTLCSPlugin(QObject *parent, const QStringList &)
                 }
             }
         }
-
+        
+        // Load CTL Color spaces
+        KGlobal::mainComponent().dirs()->addResourceType("ctl_colorspaces", "data", "pigmentcms/ctlcolorspaces/");
+        QStringList ctlcolorspacesFilenames;
+        ctlcolorspacesFilenames += KGlobal::mainComponent().dirs()->findAllResources("ctl_colorspaces", "*.ctlcs",  KStandardDirs::Recursive);
+        dbgPlugins << "There are " << ctlcolorspacesFilenames.size() << " CTL colorspaces";
+        if (!ctlcolorspacesFilenames.empty()) {
+            for( QStringList::Iterator it = ctlcolorspacesFilenames.begin(); it != ctlcolorspacesFilenames.end(); ++it ) {
+                dbgPlugins << "Load colorspace : " << *it;
+                KoCtlColorSpaceInfo* info = new KoCtlColorSpaceInfo(*it);
+                if(info->load())
+                {
+                    f->add(new KoCtlColorSpaceFactory(info));
+                } else {
+                    dbgPlugins << "Invalid color space : " << *it;
+                    delete info;
+                }
+            }
+        }
 #if 0
         KisLmsAF32ColorSpaceFactory * csf  = new KisLmsAF32ColorSpaceFactory();
         f->add(csf);

@@ -48,7 +48,6 @@ KisPropertiesConfiguration::KisPropertiesConfiguration(const KisPropertiesConfig
 
 void KisPropertiesConfiguration::fromXML(const QString & s)
 {
-//     dbgImage << "From XML (s) !!!!" << endl;
     clearProperties();
 
     QDomDocument doc;
@@ -112,7 +111,7 @@ void KisPropertiesConfiguration::setProperty(const QString & name, const QVarian
     }
 }
 
-bool KisPropertiesConfiguration::getProperty(const QString & name, QVariant & value) const
+bool KisPropertiesConfiguration::setProperty(const QString & name, QVariant & value) const
 {
     if (d->properties.find(name) == d->properties.end()) {
         return false;

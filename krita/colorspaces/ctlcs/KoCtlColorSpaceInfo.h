@@ -57,6 +57,8 @@ class KoCtlColorSpaceInfo {
         const QString& defaultProfile() const;
         const QList<const ChannelInfo*>& channels() const;
         bool isHdr() const;
+        quint32 colorChannelCount() const;
+        quint32 pixelSize() const;
     private:
         struct Private;
         Private* const d;

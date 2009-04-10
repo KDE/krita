@@ -23,14 +23,19 @@
 #include <KoColorSpace.h>
 
 class KoCtlColorProfile;
+class KoCtlColorSpaceInfo;
 
 class KoCtlColorSpace : public KoColorSpace {
     public:
         /**
          * This class is use when creating color space that are defined using the Color Transformation Language.
          */
-        KoCtlColorSpace(const QString &id, const QString &name, KoMixColorsOp* mixColorsOp, const KoColorSpace* fallBack, const KoCtlColorProfile* profile);
+        KoCtlColorSpace(const KoCtlColorSpaceInfo*, const KoCtlColorProfile* profile);
         ~KoCtlColorSpace();
+//         virtual KoColorSpace* clone() const;
+        virtual quint32 channelCount() const;
+        virtual quint32 colorChannelCount() const;
+        virtual quint32 pixelSize() const;
         virtual bool profileIsCompatible(const KoColorProfile* profile) const;
         virtual bool hasHighDynamicRange() const;
         virtual const KoColorProfile * profile() const;

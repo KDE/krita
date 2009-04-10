@@ -84,7 +84,9 @@ struct KoCtlColorSpaceInfo::Private {
     QString defaultProfile;
     bool isHdr;
     qint32 referenceDepth;
+    quint32 colorChannelCount;
     QList<const KoCtlColorSpaceInfo::ChannelInfo*> channels;
+    quint32 pixelSize;
 };
 
 KoCtlColorSpaceInfo::KoCtlColorSpaceInfo(const QString& _xmlfile) : d(new Private)
@@ -140,6 +142,7 @@ bool KoCtlColorSpaceInfo::load()
         return false;
     }
     d->isHdr = false;
+    d->colorChannelCount = 0;
     QDomNode n = docElem.firstChild();
     while(!n.isNull()) {
         QDomElement e = n.toElement();
@@ -181,6 +184,7 @@ bool KoCtlColorSpaceInfo::load()
                         QString channelType = e.attribute("channelType");
                         if( channelType == "Color" )
                         {
+                            ++d->colorChannelCount;
                             info->d->channelType = KoChannelInfo::COLOR;
                         } else if( channelType == "Alpha" )
                         {
@@ -245,6 +249,7 @@ bool KoCtlColorSpaceInfo::load()
         }
         if( currentPos == oldPos ) return false;
     }
+    d->pixelSize = currentPos;
     
     return true;
 }
@@ -286,4 +291,14 @@ const QList<const KoCtlColorSpaceInfo::ChannelInfo*>& KoCtlColorSpaceInfo::chann
 qint32 KoCtlColorSpaceInfo::referenceDepth() const
 {
     return d->referenceDepth;
+}
+
+quint32 KoCtlColorSpaceInfo::colorChannelCount() const
+{
+    return d->colorChannelCount;
+}
+
+quint32 KoCtlColorSpaceInfo::pixelSize() const
+{
+    return d->pixelSize;
 }

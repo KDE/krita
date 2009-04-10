@@ -34,6 +34,8 @@ void KoCtlColorSpaceInfoTest::testCreation()
     QCOMPARE(info.name(), QString( "RGB (32-bit float/channel) for High Dynamic Range imaging"));
     QCOMPARE(info.defaultProfile(), QString( "Standard Linear RGB (scRGB/sRGB64)"));
     QVERIFY(info.isHdr());
+    QCOMPARE(info.colorChannelCount(), 3U);
+    QCOMPARE(info.pixelSize(), 32U);
     
     QCOMPARE(info.channels().size(), 4);
     const KoCtlColorSpaceInfo::ChannelInfo* redChannel = info.channels()[0];

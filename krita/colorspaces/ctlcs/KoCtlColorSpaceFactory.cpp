@@ -22,6 +22,7 @@
 #include "KoCtlColorProfile.h"
 #include <KoColorSpaceRegistry.h>
 #include "KoCtlColorSpaceInfo.h"
+#include "KoCtlColorSpace.h"
 
 KoCtlColorSpaceFactory::KoCtlColorSpaceFactory( KoCtlColorSpaceInfo* info) : m_info(info)
 {
@@ -81,9 +82,10 @@ KoID KoCtlColorSpaceFactory::colorDepthId() const
     return m_info->colorDepthId();
 }
 
-KoColorSpace *KoCtlColorSpaceFactory::createColorSpace(const KoColorProfile *) const
+KoColorSpace *KoCtlColorSpaceFactory::createColorSpace(const KoColorProfile * profile) const
 {
     return 0;
+//     return new KoCtlColorSpace(m_info, profile);
 }
 
 QString KoCtlColorSpaceFactory::colorSpaceEngine() const

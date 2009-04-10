@@ -56,12 +56,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(QWidget * parent)
     m_d->smallFont.setPointSizeF(pointSize);
     setFont(m_d->smallFont);
 
-    // XXX_2.0 Functionality disabled for 2.0
-
     m_d->uiWdgPaintOpPresets.setupUi(this);
-    m_d->uiWdgPaintOpPresets.bnSave->hide();
-    m_d->uiWdgPaintOpPresets.tabPresets->removeTab( 1 );
-    delete m_d->uiWdgPaintOpPresets.tabChooser;
 
     m_d->layout = new QGridLayout(m_d->uiWdgPaintOpPresets.frmOptionWidgetContainer);
     m_d->layout->setSizeConstraint( QLayout::SetFixedSize );

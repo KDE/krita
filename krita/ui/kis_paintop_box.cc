@@ -83,14 +83,10 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_cmbPaintopPresets->setMinimumWidth(150);
     m_cmbPaintopPresets->setToolTip(i18n("Brush presets"));
 
-    // XXX: for 2.0
-    m_cmbPaintopPresets->hide();
-
 #ifdef Q_WS_MAC
     m_cmbPaintops->setAttribute(Qt::WA_MacSmallSize, true);
     m_cmbPaintopPresets->setAttribute(Qt::WA_MacSmallSize, true);
 #endif
-
 
     m_presetWidget = new KisPresetWidget(this, "presetwidget");
     m_presetWidget->setToolTip(i18n("Edit brush preset"));
@@ -104,7 +100,6 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_presetsPopup = new KisPaintOpPresetsPopup();
     m_presetWidget->setPopupWidget(m_presetsPopup);
 
-    // XXX: Let's see... Are all paintops loaded and ready?
     QList<KoID> keys = KisPaintOpRegistry::instance()->listKeys();
     for (QList<KoID>::Iterator it = keys.begin(); it != keys.end(); ++it) {
         // add all paintops, and show/hide them afterwards
@@ -130,7 +125,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
 
 KisPaintopBox::~KisPaintopBox()
 {
-    // XXX???
+    // Do not delete the widget, since it it is global to the application, not owned by the view
     m_presetsPopup->setPaintOpSettingsWidget(0);
 }
 
@@ -294,7 +289,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
     preset->settings()->setNode( m_resourceProvider->currentNode() );
     m_resourceProvider->slotPaintOpPresetActivated(preset);
 
-    m_activePreset = preset; //.data(); // XXX: Why grab the pointer from the shared object?
+    m_activePreset = preset;
     m_presetWidget->setPreset(m_activePreset);
 }
 

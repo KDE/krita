@@ -25,6 +25,7 @@
 class KoCtlColorSpaceInfo {
     public:
         class ChannelInfo {
+            friend class KoCtlColorSpaceInfo;
             friend class QList<ChannelInfo>;
                 ChannelInfo();
                 ~ChannelInfo();
@@ -51,7 +52,7 @@ class KoCtlColorSpaceInfo {
         const QString& colorSpaceId() const;
         const QString& name() const;
         const QString& defaultProfile() const;
-        const QList<ChannelInfo>& channels() const;
+        const QList<const ChannelInfo*>& channels() const;
         bool isHdr() const;
     private:
         struct Private;

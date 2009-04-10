@@ -82,7 +82,7 @@ struct KoCtlColorSpaceInfo::Private {
     QString name;
     QString defaultProfile;
     bool isHdr;
-    QList<KoCtlColorSpaceInfo::ChannelInfo> channels;
+    QList<const KoCtlColorSpaceInfo::ChannelInfo*> channels;
 };
 
 KoCtlColorSpaceInfo::KoCtlColorSpaceInfo(const QString& _xmlfile) : d(new Private)
@@ -109,6 +109,10 @@ const QString& KoCtlColorSpaceInfo::fileName() const
 #define FILL_MEMBER(attributeName, member) \
     CHECK_AVAILABILITY(attributeName) \
     d->member = e.attribute(attributeName);
+
+#define FILL_CI_MEMBER(attributeName, member) \
+    CHECK_AVAILABILITY(attributeName) \
+    info->d->member = e.attribute(attributeName);
 
 bool KoCtlColorSpaceInfo::load()
 {
@@ -137,7 +141,7 @@ bool KoCtlColorSpaceInfo::load()
     QDomNode n = docElem.firstChild();
     while(!n.isNull()) {
         QDomElement e = n.toElement();
-        if(not e.isNull()) {
+        if(!e.isNull()) {
             dbgPlugins << e.tagName();
             if( e.tagName() == "info")
             {
@@ -152,10 +156,91 @@ bool KoCtlColorSpaceInfo::load()
                 FILL_MEMBER("name", defaultProfile);
             } else if( e.tagName() == "isHdr" ) {
                 d->isHdr = true;
+            } else if( e.tagName() == "channels" ) {
+                QDomNode n = e.firstChild();
+                while( !n.isNull())
+                {
+                    QDomElement e = n.toElement();
+                    if(!e.isNull())
+                    {
+                        dbgPlugins << e.tagName();
+                        if( e.tagName() != "channel") return false;
+                        ChannelInfo* info = new ChannelInfo;
+                        FILL_CI_MEMBER("name", name);
+                        FILL_CI_MEMBER("shortName", shortName);
+                        CHECK_AVAILABILITY("index");
+                        info->d->index = e.attribute("index").toInt();
+                        
+                        // Parse channelType
+                        CHECK_AVAILABILITY("channelType");
+                        QString channelType = e.attribute("channelType");
+                        if( channelType == "Color" )
+                        {
+                            info->d->channelType = KoChannelInfo::COLOR;
+                        } else if( channelType == "Alpha" )
+                        {
+                            info->d->channelType = KoChannelInfo::ALPHA;
+                        } else {
+                            dbgPlugins << "Invalid channel type: " << channelType;
+                            return false;
+                        }
+                        
+                        // Parse valueType
+                        CHECK_AVAILABILITY("valueType");
+                        QString valueType = e.attribute("valueType");
+                        if( valueType == "float32" )
+                        {
+                            info->d->valueType = KoChannelInfo::FLOAT32;
+                        } else if( valueType == "float16" )
+                        {
+                            info->d->valueType = KoChannelInfo::FLOAT16;
+                        } else if( valueType == "uint8" )
+                        {
+                            info->d->valueType = KoChannelInfo::UINT8;
+                        } else if( valueType == "uint16" )
+                        {
+                            info->d->valueType = KoChannelInfo::UINT16;
+                        } else {
+                            dbgPlugins << "Invalid value type: " << valueType;
+                            return false;
+                        }
+                        
+                        // Parse size
+                        CHECK_AVAILABILITY("size");
+                        info->d->size = e.attribute("size").toInt();
+                        
+                        // Parse color
+                        if( e.hasAttribute("color") )
+                        {
+                            QStringList colorlist = e.attribute("color").split(",");
+                            if(colorlist.size() != 3) return false;
+                            info->d->color = QColor( colorlist[0].toInt(), colorlist[1].toInt(), colorlist[2].toInt() );
+                        }
+                        d->channels.push_back(info);
+                    }
+                    n = n.nextSibling();
+                }
             }
         }
         n = n.nextSibling();
     }
+    if(d->channels.size() == 0) return false;
+    
+    int currentPos = 0;
+    for(int i = 0; i < d->channels.size(); ++i)
+    {
+        int oldPos = currentPos;
+        foreach( const ChannelInfo* info, d->channels )
+        {
+            if(info->index() == i)
+            {
+                const_cast<ChannelInfo*>(info)->d->position = currentPos;
+                currentPos += info->size();
+            }
+        }
+        if( currentPos == oldPos ) return false;
+    }
+    
     return true;
 }
 
@@ -189,6 +274,6 @@ bool KoCtlColorSpaceInfo::isHdr() const
     return d->isHdr;
 }
 
-const QList<KoCtlColorSpaceInfo::ChannelInfo>& KoCtlColorSpaceInfo::channels() const {
+const QList<const KoCtlColorSpaceInfo::ChannelInfo*>& KoCtlColorSpaceInfo::channels() const {
     return d->channels;
 }

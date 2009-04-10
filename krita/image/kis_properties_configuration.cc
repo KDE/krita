@@ -111,7 +111,7 @@ void KisPropertiesConfiguration::setProperty(const QString & name, const QVarian
     }
 }
 
-bool KisPropertiesConfiguration::setProperty(const QString & name, QVariant & value) const
+bool KisPropertiesConfiguration::getProperty(const QString & name, QVariant & value) const
 {
     if (d->properties.find(name) == d->properties.end()) {
         return false;

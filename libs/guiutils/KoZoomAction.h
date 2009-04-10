@@ -49,7 +49,7 @@ public:
     ~KoZoomAction();
 
     /**
-     * Reimplemented from QAction.
+     * Reimplemented from QWidgetAction.
      */
     virtual QWidget* createWidget(QWidget* parent);
 
@@ -65,7 +65,7 @@ public:
      * This should be called immediately after calling the constructor.
      * @param buttons mask of the special button flags to enable
      */
-    void setSpecialButtons( SpecialButtons buttons ); 
+    void setSpecialButtons( SpecialButtons buttons );
 
 public slots:
 

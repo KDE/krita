@@ -47,7 +47,7 @@
   <li> colorspaces
   <li> file filters
   <li> view plugins
-</u>
+</ul>
 
   Of these, file filters exist outside the Krita tree and colorspaces
   depend only on pigment, which is also outside krita itself. Please

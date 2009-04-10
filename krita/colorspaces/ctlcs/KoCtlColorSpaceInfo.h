@@ -38,6 +38,11 @@ class KoCtlColorSpaceInfo {
         bool load();
         ~KoCtlColorSpaceInfo();
         const QString& colorDepthId() const;
+        const QString& colorModelId() const;
+        const QString& colorSpaceId() const;
+        const QString& name() const;
+        const QString& defaultProfile() const;
+        bool isHdr() const;
     private:
         struct Private;
         Private* const d;

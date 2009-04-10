@@ -37,6 +37,11 @@ KoCtlColorSpaceInfo::ChannelInfo::~ChannelInfo() {
 struct KoCtlColorSpaceInfo::Private {
     QString fileName;
     QString colorDepthID;
+    QString colorModelId;
+    QString id;
+    QString name;
+    QString defaultProfile;
+    bool isHdr;
 };
 
 KoCtlColorSpaceInfo::KoCtlColorSpaceInfo(const QString& _xmlfile) : d(new Private)
@@ -53,6 +58,16 @@ const QString& KoCtlColorSpaceInfo::fileName() const
 {
     return d->fileName;
 }
+
+#define CHECK_AVAILABILITY(attribute) \
+    if(!e.hasAttribute(attribute)) { \
+        dbgPlugins << "Missing: " << attribute; \
+        return false; \
+    }
+
+#define FILL_MEMBER(attributeName, member) \
+    CHECK_AVAILABILITY(attributeName) \
+    d->member = e.attribute(attributeName);
 
 bool KoCtlColorSpaceInfo::load()
 {
@@ -77,6 +92,7 @@ bool KoCtlColorSpaceInfo::load()
         dbgPlugins << "Not a ctlcolorspace, root tag was : " << docElem.tagName();
         return false;
     }
+    d->isHdr = false;
     QDomNode n = docElem.firstChild();
     while(!n.isNull()) {
         QDomElement e = n.toElement();
@@ -84,7 +100,17 @@ bool KoCtlColorSpaceInfo::load()
             dbgPlugins << e.tagName();
             if( e.tagName() == "info")
             {
+                CHECK_AVAILABILITY("depth");
+                CHECK_AVAILABILITY("type");
+                CHECK_AVAILABILITY("depth");
                 d->colorDepthID = KoCtlParser::generateDepthID(e.attribute("depth"), e.attribute("type"));
+                FILL_MEMBER("colorModel", colorModelId);
+                FILL_MEMBER("name", name);
+                FILL_MEMBER("id", id);
+            } else if( e.tagName() == "defaultProfile" ) {
+                FILL_MEMBER("name", defaultProfile);
+            } else if( e.tagName() == "isHdr" ) {
+                d->isHdr = true;
             }
         }
         n = n.nextSibling();
@@ -95,4 +121,29 @@ bool KoCtlColorSpaceInfo::load()
 const QString& KoCtlColorSpaceInfo::colorDepthId() const
 {
     return d->colorDepthID;
+}
+
+const QString& KoCtlColorSpaceInfo::colorModelId() const
+{
+    return d->colorModelId;
+}
+
+const QString& KoCtlColorSpaceInfo::colorSpaceId() const
+{
+    return d->id;
+}
+
+const QString& KoCtlColorSpaceInfo::name() const
+{
+    return d->name;
+}
+
+const QString& KoCtlColorSpaceInfo::defaultProfile() const
+{
+    return d->defaultProfile;
+}
+
+bool KoCtlColorSpaceInfo::isHdr() const
+{
+    return d->isHdr;
 }

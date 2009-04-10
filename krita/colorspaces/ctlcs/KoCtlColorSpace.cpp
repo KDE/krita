@@ -132,29 +132,3 @@ void KoCtlColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt) const
 {
     
 }
-
-bool KoCtlColorSpaceFactory::profileIsCompatible(const KoColorProfile* profile) const
-{
-    const KoCtlColorProfile* ctlp = dynamic_cast<const KoCtlColorProfile*>(profile);
-    if(ctlp and ctlp->colorModel() == colorModelId().id() and ctlp->colorDepth() == colorDepthId().id() )
-    {
-        return true;
-    }
-    return false;
-}
-
-
-QList<KoColorConversionTransformationFactory*> KoCtlColorSpaceFactory::colorConversionLinks() const
-{
-    QList<const KoColorProfile*> profiles = KoColorSpaceRegistry::instance()->profilesFor( this );
-    QList<KoColorConversionTransformationFactory*> list;
-    foreach(const KoColorProfile* profile, profiles)
-    {
-        const KoCtlColorProfile* ctlprofile = dynamic_cast<const KoCtlColorProfile*>( profile );
-        if(ctlprofile)
-        {
-            list += ctlprofile->createColorConversionTransformationFactories();
-        }
-    }
-    return list;
-}

@@ -22,6 +22,8 @@
 
 #include <KoChannelInfo.h>
 
+class KoID;
+
 class KoCtlColorSpaceInfo {
     public:
         class ChannelInfo {
@@ -47,8 +49,9 @@ class KoCtlColorSpaceInfo {
         const QString& fileName() const;
         bool load();
         ~KoCtlColorSpaceInfo();
-        const QString& colorDepthId() const;
-        const QString& colorModelId() const;
+        qint32 referenceDepth() const;
+        const KoID& colorDepthId() const;
+        const KoID& colorModelId() const;
         const QString& colorSpaceId() const;
         const QString& name() const;
         const QString& defaultProfile() const;

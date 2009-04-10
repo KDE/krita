@@ -21,11 +21,10 @@
 #define _KO_CTL_COLOR_SPACE_H_
 
 #include <KoColorSpace.h>
-#include "pigment_export.h"
 
 class KoCtlColorProfile;
 
-class PIGMENTCMS_EXPORT KoCtlColorSpace : public KoColorSpace {
+class KoCtlColorSpace : public KoColorSpace {
     public:
         /**
          * This class is use when creating color space that are defined using the Color Transformation Language.
@@ -51,13 +50,6 @@ class PIGMENTCMS_EXPORT KoCtlColorSpace : public KoColorSpace {
     private:
         struct Private;
         Private* const d;
-};
-
-class PIGMENTCMS_EXPORT KoCtlColorSpaceFactory : public KoColorSpaceFactory {
-    public:
-        virtual ~KoCtlColorSpaceFactory() {}
-        virtual bool profileIsCompatible(const KoColorProfile* profile) const;
-        QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
 };
 
 #endif

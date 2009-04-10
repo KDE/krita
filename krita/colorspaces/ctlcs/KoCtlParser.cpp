@@ -22,13 +22,23 @@
 #include<QString>
 
 #include <kis_debug.h>
+#include <KoColorModelStandardIds.h>
 
-QString KoCtlParser::generateDepthID(const QString& depth, const QString& type)
+KoID KoCtlParser::generateDepthID(const QString& depth, const QString& type)
 {
-    QString prefix;
-    if(type == "integer") prefix = "U";
-    else if(type == "float") prefix = "F";
-    else dbgPlugins << "Invalid type";
-    return prefix + depth;
+    if(type == "integer") {
+        if( depth == "8" )
+            return Integer8BitsColorDepthID;
+        else if(depth == "16" )
+            return Integer16BitsColorDepthID;
+    }
+    else if(type == "float") {
+        if( depth == "16" )
+            return Float16BitsColorDepthID;
+        else if(depth == "32" )
+            return Float32BitsColorDepthID;
+    }
+    dbgPlugins << "Invalid type";
+    return KoID("","");
 }
 

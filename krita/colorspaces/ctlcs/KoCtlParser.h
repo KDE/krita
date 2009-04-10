@@ -18,8 +18,9 @@
 */
 
 class QString;
+class KoID;
 
 namespace KoCtlParser {
-    QString generateDepthID(const QString& depth, const QString& type);
+    KoID generateDepthID(const QString& depth, const QString& type);
     
 }

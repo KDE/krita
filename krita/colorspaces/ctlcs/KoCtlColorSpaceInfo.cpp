@@ -22,6 +22,7 @@
 #include <QDomDocument>
 #include <kis_debug.h>
 #include "KoCtlParser.h"
+#include <KoID.h>
 
 struct KoCtlColorSpaceInfo::ChannelInfo::Private {
     Private() : color(0,0,0) {}
@@ -76,12 +77,13 @@ const QColor& KoCtlColorSpaceInfo::ChannelInfo::color() const {
 
 struct KoCtlColorSpaceInfo::Private {
     QString fileName;
-    QString colorDepthID;
-    QString colorModelId;
+    KoID colorDepthID;
+    KoID colorModelId;
     QString id;
     QString name;
     QString defaultProfile;
     bool isHdr;
+    qint32 referenceDepth;
     QList<const KoCtlColorSpaceInfo::ChannelInfo*> channels;
 };
 
@@ -149,7 +151,10 @@ bool KoCtlColorSpaceInfo::load()
                 CHECK_AVAILABILITY("type");
                 CHECK_AVAILABILITY("depth");
                 d->colorDepthID = KoCtlParser::generateDepthID(e.attribute("depth"), e.attribute("type"));
-                FILL_MEMBER("colorModel", colorModelId);
+                d->referenceDepth = e.attribute("depth").toInt();
+                CHECK_AVAILABILITY("colorModelId");
+                CHECK_AVAILABILITY("colorModelName");
+                d->colorModelId = KoID(e.attribute("colorModelId"), e.attribute("colorModelName"));
                 FILL_MEMBER("name", name);
                 FILL_MEMBER("id", id);
             } else if( e.tagName() == "defaultProfile" ) {
@@ -244,12 +249,12 @@ bool KoCtlColorSpaceInfo::load()
     return true;
 }
 
-const QString& KoCtlColorSpaceInfo::colorDepthId() const
+const KoID& KoCtlColorSpaceInfo::colorDepthId() const
 {
     return d->colorDepthID;
 }
 
-const QString& KoCtlColorSpaceInfo::colorModelId() const
+const KoID& KoCtlColorSpaceInfo::colorModelId() const
 {
     return d->colorModelId;
 }
@@ -276,4 +281,9 @@ bool KoCtlColorSpaceInfo::isHdr() const
 
 const QList<const KoCtlColorSpaceInfo::ChannelInfo*>& KoCtlColorSpaceInfo::channels() const {
     return d->channels;
+}
+
+qint32 KoCtlColorSpaceInfo::referenceDepth() const
+{
+    return d->referenceDepth;
 }

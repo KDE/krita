@@ -237,10 +237,10 @@ void KoCtlColorProfile::decodeConversions(QDomElement& elt)
                     ConversionInfo ci;
                     ci.function = e.attribute("function");
                     ci.sourceColorModelID = eIn.attribute("colorModel");
-                    ci.sourceColorDepthID = KoCtlParser::generateDepthID(eIn.attribute("depth"), eIn.attribute("type"));
+                    ci.sourceColorDepthID = KoCtlParser::generateDepthID(eIn.attribute("depth"), eIn.attribute("type")).id();
                     ci.sourceProfile = eIn.attribute("profile");
                     ci.destinationColorModelID = eOut.attribute("colorModel");
-                    ci.destinationColorDepthID = KoCtlParser::generateDepthID(eOut.attribute("depth"), eOut.attribute("type") );
+                    ci.destinationColorDepthID = KoCtlParser::generateDepthID(eOut.attribute("depth"), eOut.attribute("type") ).id();
                     ci.destinationProfile = eOut.attribute("profile");
                     if( ci.sourceColorModelID == colorModel() and ci.sourceColorDepthID == colorDepth() and ci.sourceProfile.isEmpty())
                     {
@@ -294,7 +294,7 @@ bool KoCtlColorProfile::load()
             if( e.tagName() == "info")
             {
                 setName(e.attribute("name"));
-                d->colorDepthID = KoCtlParser::generateDepthID(e.attribute("depth"), e.attribute("type"));
+                d->colorDepthID = KoCtlParser::generateDepthID(e.attribute("depth"), e.attribute("type")).id();
                 d->colorDepthIDNumber = KoUniqueNumberForIdServer::instance()->numberForId( d->colorDepthID );
                 d->colorModelID = e.attribute("colorModel");
                 d->colorModelIDNumber = KoUniqueNumberForIdServer::instance()->numberForId( d->colorModelID );

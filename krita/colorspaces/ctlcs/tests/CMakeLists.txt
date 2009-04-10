@@ -7,5 +7,5 @@ set(ko_ctl_color_space_info_test_SRCS KoCtlColorSpaceInfoTest.cpp ../KoCtlColorS
 
 kde4_add_unit_test(ko_ctl_color_space_info_test TESTNAME krita-cs-ko_ctl_color_space_info_test ${ko_ctl_color_space_info_test_SRCS})
 
-target_link_libraries(ko_ctl_color_space_info_test  ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+target_link_libraries(ko_ctl_color_space_info_test  ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY} pigmentcms)
 

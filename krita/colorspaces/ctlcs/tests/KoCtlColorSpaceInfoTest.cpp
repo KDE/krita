@@ -21,13 +21,15 @@
 
 #include <qtest_kde.h>
 #include "../KoCtlColorSpaceInfo.h"
+#include <KoID.h>
 
 void KoCtlColorSpaceInfoTest::testCreation()
 {
     KoCtlColorSpaceInfo info(FILES_DATA_DIR + QString("rgba32f.ctlcs"));
     QVERIFY(info.load());
-    QCOMPARE(info.colorDepthId(), QString( "F32"));
-    QCOMPARE(info.colorModelId(), QString( "RGBA"));
+    QCOMPARE(info.colorDepthId().id(), QString( "F32"));
+    QCOMPARE(info.colorModelId().id(), QString( "RGBA"));
+    QCOMPARE(info.colorModelId().name(), QString( "Red Green Blue"));
     QCOMPARE(info.colorSpaceId(), QString( "RgbAF32"));
     QCOMPARE(info.name(), QString( "RGB (32-bit float/channel) for High Dynamic Range imaging"));
     QCOMPARE(info.defaultProfile(), QString( "Standard Linear RGB (scRGB/sRGB64)"));

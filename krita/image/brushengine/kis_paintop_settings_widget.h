@@ -26,7 +26,7 @@
 #include <kdebug.h>
 
 /**
- * Base class for widgets that are used to edit and display paintop settings
+ * Base class for widgets that are used to edit and display paintop settings.
  */
 class KRITAIMAGE_EXPORT KisPaintOpSettingsWidget : public KisConfigWidget
 {

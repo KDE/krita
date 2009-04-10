@@ -29,16 +29,40 @@ class QDomDocument;
 class QDomElement;
 
 /**
- * This class keeps information that can be used in the painting process, for example by
- * brushes.
+ * KisPaintInformation contains information about the input event that
+ * causes the brush action to happen to the brush engine's paint
+ * methods.
+ *
+ * XXX: we directly pass the KoPointerEvent x and y tilt to
+ * KisPaintInformation, and their range is -60 to +60!
+ *
+ * @param pos: the position of the paint event in subpixel accuracy
+ * @param pressure: the pressure of the stylus
+ * @param xTilt: the angle between the device (a pen, for example) and
+ * the perpendicular in the direction of the x axis. Positive values
+ * are towards the bottom of the tablet. The angle is within the range
+ * 0 to 1
+ * @param yTilt: the angle between the device (a pen, for example) and
+ * the perpendicular in the direction of the y axis. Positive values
+ * are towards the bottom of the tablet. The angle is within the range
+ * 0 to .
+ * @param movement: current position minus the last position of the call to paintAt
+ * @param rotation
+ * @param tangentialPressure
  **/
 class KRITAIMAGE_EXPORT KisPaintInformation
 {
 
 public:
-    
-    KisPaintInformation(const QPointF & pos = QPointF(), double pressure = PRESSURE_DEFAULT,
-                        double xTilt = 0.0, double yTilt = 0.0,
+
+    /**
+     * Create a new KisPaintInformation object.
+
+     */
+    KisPaintInformation(const QPointF & pos = QPointF(),
+			double pressure = PRESSURE_DEFAULT,
+                        double xTilt = 0.0,
+			double yTilt = 0.0,
                         KisVector2D movement = nullKisVector2D(),
                         double rotation = 0.0,
                         double tangentialPressure = 0.0

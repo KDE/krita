@@ -77,12 +77,11 @@ Panel::Panel(QWidget *parent)
     setInitialButtonIcon(widget.style2, "serif");
     setInitialButtonIcon(widget.style3, "script");
     if (QApplication::isRightToLeft()) {
-        setInitialButtonIcon(widget.left, "left");
-        setInitialButtonIcon(widget.right, "right");
-    }
-    else {
         setInitialButtonIcon(widget.right, "left");
         setInitialButtonIcon(widget.left, "right");
+    } else {
+        setInitialButtonIcon(widget.left, "left");
+        setInitialButtonIcon(widget.right, "right");
     }
 
     // TODO enable 'font color'
@@ -122,12 +121,11 @@ void Panel::toolChangeDetected(const QString &toolId)
     applyAction(actions.value("format_underline"), widget.underline, "underline", false);
     applyAction(actions.value("format_aligncenter"), widget.center, "middle", true);
     if (QApplication::isRightToLeft()) {
-        applyAction(actions.value("format_alignright"), widget.left, "left", true);
-        applyAction(actions.value("format_alignleft"), widget.right, "right", true);
-    }
-    else {
-        applyAction(actions.value("format_alignright"), widget.right, "left", true);
-        applyAction(actions.value("format_alignleft"), widget.left, "right", true);
+        applyAction(actions.value("format_alignright"), widget.left, "right", true);
+        applyAction(actions.value("format_alignleft"), widget.right, "left", true);
+    } else {
+        applyAction(actions.value("format_alignright"), widget.right, "right", true);
+        applyAction(actions.value("format_alignleft"), widget.left, "left", true);
     }
 
     applyAction(actions.value("fontsizeup"), widget.sizeUp, "sizeup", false);

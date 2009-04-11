@@ -23,6 +23,7 @@ Name[sv]=Insticksprogram med textredigering för Koffice textverktyg
 Name[ta]=உரை-தொகுப்பானின் சொருகலுக்கான கேஆபிஸ் உரைக்கருவி
 Name[tr]=KOffice metin aracı için Metin Düzenleme eklentisi
 Name[uk]=Втулок редагування тексту для текстового редактора KOffice
+Name[wa]=Tchôke-divins d' aspougnaedje di tecse po l' usteye tecse di KOffice
 Name[x-test]=xxText Editing plugin for the KOffce texttoolxx
 Name[zh_TW]=KOffice 文字工具的文字編輯外掛程式
 Type=ServiceType
@@ -50,6 +51,7 @@ Comment[sv]=Definition av ett Insticksprogram för textredigering
 Comment[ta]=உரை-தொகுப்பானின் சொருகல் வரையறை
 Comment[tr]=Metin düzenleme eklentisi tanımı
 Comment[uk]=Визначення втулка для зміни тексту
+Comment[wa]=Definixha d' on tchôke-divins d' aspougnaedje di tecse
 Comment[x-test]=xxDefinition of a text-editing pluginxx
 Comment[zh_TW]=文字編輯外掛程式定義
 [PropertyDef::X-KoText-MinVersion]

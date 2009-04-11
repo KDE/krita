@@ -65,6 +65,7 @@ void KisImportCatcher::slotLoadingFinished()
             }
 
             importedImageLayer->setName(m_url.prettyUrl());
+            importedImageLayer->setImage(m_view->image());
 
             KisNodeSP parent = 0;
             KisLayerSP currentActiveLayer = m_view->activeLayer();

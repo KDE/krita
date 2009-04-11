@@ -2,7 +2,7 @@
 Name=CTL Color Spaces
 Name[sv]=CTL-färgrymder
 Name[uk]=Простори кольорів CTL
-Comment=Color model written using the Color Transformation Language
+Comment=Color model written using the Color Transformation Language.
 Comment[sv]=Färgmodell skriven med färgtransformeringsspråket CTL
 Comment[uk]=Модель кольорів, описана за допомогою Color Transformation Language (мови перетворення кольорів)
 X-KDE-ServiceTypes=KOffice/ColorSpace

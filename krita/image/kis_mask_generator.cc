@@ -22,21 +22,53 @@
 
 #include <QDomDocument>
 
-KisMaskGenerator::KisMaskGenerator(double width, double height, double fh, double fv) : m_radius(width), m_ratio(height/width), m_fh( 2.0 * fh / width), m_fv( 2.0 * fv / height ), m_spikes(2)
+struct KisMaskGenerator::Private {
+    double m_radius, m_ratio;
+    double m_fh, m_fv;
+    int m_spikes;
+    double cs, ss;
+    bool m_empty;
+};
+
+KisMaskGenerator::KisMaskGenerator(double width, double height, double fh, double fv) : d(new Private)
 {
+    d->m_radius = width;
+    d->m_ratio = height/width;
+    d->m_fh = 2.0 * fh / width;
+    d->m_fv = 2.0 * fv / height;
+    d->m_spikes = 2;
+    init();
 }
 
-KisMaskGenerator::KisMaskGenerator(double radius, double ratio, double fh, double fv, int spikes) : m_radius(radius), m_ratio(ratio), m_fh(0.5 * fh), m_fv(0.5 * fv), m_spikes(spikes)
+KisMaskGenerator::KisMaskGenerator(double radius, double ratio, double fh, double fv, int spikes) : d(new Private)
 {
+    d->m_radius = radius;
+    d->m_ratio = ratio;
+    d->m_fh = 0.5 * fh;
+    d->m_fv = 0.5 * fv;
+    d->m_spikes = spikes;
+    init();
+}
+
+KisMaskGenerator::~KisMaskGenerator()
+{
+    delete d;
+}
+
+void KisMaskGenerator::init()
+{
+    d->cs = cos ( - 2 * M_PI / d->m_spikes);
+    d->ss = sin ( - 2 * M_PI / d->m_spikes);
+    d->m_empty = (d->m_ratio == 0.0 || d->m_radius == 0.0);
 }
 
 void KisMaskGenerator::toXML(QDomDocument& , QDomElement& e) const
 {
-    e.setAttribute("autobrush_radius", m_radius);
-    e.setAttribute("autobrush_ratio", m_ratio);
-    e.setAttribute("autobrush_hfade", m_fh);
-    e.setAttribute("autobrush_vfade", m_fv);
-    e.setAttribute("autobrush_spikes", m_spikes);
+    e.setAttribute("autobrush_radius", d->m_radius);
+    e.setAttribute("autobrush_ratio", d->m_ratio);
+    e.setAttribute("autobrush_hfade", d->m_fh);
+    e.setAttribute("autobrush_vfade", d->m_fv);
+    e.setAttribute("autobrush_spikes", d->m_spikes);
 }
 
 KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
@@ -91,67 +123,71 @@ quint8 KisMaskGenerator::interpolatedValueAt(double x, double y)
 }
 
 double KisMaskGenerator::width() const {
-    return m_radius;
+    return d->m_radius;
 }
 
 double KisMaskGenerator::height() const {
-    if (m_spikes == 2) {
-        return m_radius * m_ratio;
+    if (d->m_spikes == 2) {
+        return d->m_radius * d->m_ratio;
     }
-    return m_radius;
+    return d->m_radius;
 }
 
+struct KisCircleMaskGenerator::Private {
+    double m_xcoef, m_ycoef;
+    double m_xfadecoef, m_yfadecoef;
+};
+
 KisCircleMaskGenerator::KisCircleMaskGenerator(double w, double h, double fh, double fv)
-        : KisMaskGenerator(w, h, 0.5 * w - fh, 0.5 * h - fv),
-        m_xcenter(w / 2.0),
-        m_ycenter(h / 2.0),
-        m_xcoef(2.0 / w),
-        m_ycoef(2.0 / h),
-        m_xfadecoef((m_fh == 0) ? 1 : (1.0 / (m_fh*width()))),
-        m_yfadecoef((m_fv == 0) ? 1 : (1.0 / (m_fv*height())))
+        : KisMaskGenerator(w, h, 0.5 * w - fh, 0.5 * h - fv), d(new Private)
 {
+    d->m_xcoef = 2.0 / w;
+    d->m_ycoef = 2.0 / h;
+    d->m_xfadecoef = (KisMaskGenerator::d->m_fh == 0) ? 1 : (1.0 / (KisMaskGenerator::d->m_fh*width()));
+    d->m_yfadecoef = (KisMaskGenerator::d->m_fv == 0) ? 1 : (1.0 / (KisMaskGenerator::d->m_fv*height()));
 }
 
 KisCircleMaskGenerator::KisCircleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes)
-        : KisMaskGenerator(radius, ratio, fh, fv, spikes),
-        m_xcenter(width() / 2.0),
-        m_ycenter(height() / 2.0),
-        m_xcoef(2.0 / width()),
-        m_ycoef(2.0 / (m_ratio * width())),
-        m_xfadecoef((m_fh == 0) ? 1 : (1.0 / (m_fh*width()))),
-        m_yfadecoef((m_fv == 0) ? 1 : (1.0 / (m_fv*m_ratio * width())))
+        : KisMaskGenerator(radius, ratio, fh, fv, spikes), d(new Private)
 {
+    d->m_xcoef = 2.0 / width();
+    d->m_ycoef = 2.0 / (KisMaskGenerator::d->m_ratio * width());
+    d->m_xfadecoef = (KisMaskGenerator::d->m_fh == 0) ? 1 : (1.0 / (KisMaskGenerator::d->m_fh * width()));
+    d->m_yfadecoef = (KisMaskGenerator::d->m_fv == 0) ? 1 : (1.0 / (KisMaskGenerator::d->m_fv * KisMaskGenerator::d->m_ratio * width()));
+}
+
+KisCircleMaskGenerator::~KisCircleMaskGenerator()
+{
+    delete d;
 }
 
 quint8 KisCircleMaskGenerator::valueAt(double x, double y)
 {
+    if( KisMaskGenerator::d->m_empty ) return 255;
     double xr = (x /*- m_xcenter*/);
     double yr = fabs(y /*- m_ycenter*/);
     
-    double cs = cos ( - 2 * M_PI / m_spikes);
-    double ss = sin ( - 2 * M_PI / m_spikes);
-    
-    if( m_spikes > 2 )
+    if( KisMaskGenerator::d->m_spikes > 2 )
     {
         double angle = (atan2 (yr, xr));
 
-        while (angle > M_PI / m_spikes)
+        while (angle > M_PI / KisMaskGenerator::d->m_spikes)
         {
             double sx = xr, sy = yr;
 
-            xr = cs * sx - ss * sy;
-            yr = ss * sx + cs * sy;
+            xr = KisMaskGenerator::d->cs * sx - KisMaskGenerator::d->ss * sy;
+            yr = KisMaskGenerator::d->ss * sx + KisMaskGenerator::d->cs * sy;
 
-            angle -= 2 * M_PI / m_spikes;
+            angle -= 2 * M_PI / KisMaskGenerator::d->m_spikes;
         }
     }
 
-    double n = norme(xr * m_xcoef, yr * m_ycoef);
+    double n = norme(xr * d->m_xcoef, yr * d->m_ycoef);
     
     if (n > 1) {
         return 255;
     } else {
-        double normeFade = norme(xr * m_xfadecoef, yr * m_yfadecoef);
+        double normeFade = norme(xr * d->m_xfadecoef, yr * d->m_yfadecoef);
         if (normeFade > 1) {
             double xle, yle;
             // xle stands for x-coordinate limit exterior
@@ -160,15 +196,15 @@ quint8 KisCircleMaskGenerator::valueAt(double x, double y)
             // the fade value
             if (xr == 0) {
                 xle = 0;
-                yle = yr > 0 ? 1 / m_ycoef : -1 / m_ycoef;
+                yle = yr > 0 ? 1 / d->m_ycoef : -1 / d->m_ycoef;
             } else {
                 double c = yr / (double)xr;
-                xle = sqrt(1 / norme(m_xcoef, c * m_ycoef));
+                xle = sqrt(1 / norme(d->m_xcoef, c * d->m_ycoef));
                 xle = xr > 0 ? xle : -xle;
                 yle = xle * c;
             }
             // On the internal limit of the fade area, normeFade is equal to 1
-            double normeFadeLimitE = norme(xle * m_xfadecoef, yle * m_yfadecoef);
+            double normeFadeLimitE = norme(xle * d->m_xfadecoef, yle * d->m_yfadecoef);
             return (uchar)(255 * (normeFade - 1) / (normeFadeLimitE - 1));
         } else {
             return 0;
@@ -182,30 +218,37 @@ void KisCircleMaskGenerator::toXML(QDomDocument& d, QDomElement& e) const
     e.setAttribute("autobrush_type", "circle");
 }
 
+struct KisRectangleMaskGenerator::Private {
+    double m_c;
+};
+
 KisRectangleMaskGenerator::KisRectangleMaskGenerator(double w, double h, double fh, double fv)
-        : KisMaskGenerator(w, h, 0.5 * w - fh, 0.5 * h - fv),
-        m_xcenter(w / 2.0),
-        m_ycenter(h / 2.0),
-        m_c(fv / fh)
+        : KisMaskGenerator(w, h, 0.5 * w - fh, 0.5 * h - fv), d(new Private)
 {
+    d->m_c = (fv / fh);
 }
 
 KisRectangleMaskGenerator::KisRectangleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes)
-        : KisMaskGenerator(radius, ratio, fh, fv, spikes),
-        m_xcenter(width() / 2.0),
-        m_ycenter(height() / 2.0),
-        m_c(m_fv / m_fh)
+        : KisMaskGenerator(radius, ratio, fh, fv, spikes), d(new Private)
 {
+    d->m_c = (KisMaskGenerator::d->m_fv / KisMaskGenerator::d->m_fh);
 }
+
+KisRectangleMaskGenerator::~KisRectangleMaskGenerator()
+{
+    delete d;
+}
+
 quint8 KisRectangleMaskGenerator::valueAt(double x, double y)
 {
+    if( KisMaskGenerator::d->m_empty ) return 255;
     double xr = qAbs(x /*- m_xcenter*/) / width();
     double yr = qAbs(y /*- m_ycenter*/) / height();
-    if (xr > m_fh || yr > m_fv ) {
-        if (yr <= ((xr - m_fh ) * m_c + m_fv )) {
-            return (uchar)(255 * (xr - 0.5 * m_fh ) / ( 1.0 - 0.5 * m_fh) );
+    if (xr > KisMaskGenerator::d->m_fh || yr > KisMaskGenerator::d->m_fv ) {
+        if (yr <= ((xr - KisMaskGenerator::d->m_fh ) * d->m_c + KisMaskGenerator::d->m_fv )) {
+            return (uchar)(255 * (xr - 0.5 * KisMaskGenerator::d->m_fh ) / ( 1.0 - 0.5 * KisMaskGenerator::d->m_fh) );
         } else {
-            return (uchar)(255 * (yr - 0.5 * m_fv ) /( 1.0 - 0.5 * m_fv) );
+            return (uchar)(255 * (yr - 0.5 * KisMaskGenerator::d->m_fv ) /( 1.0 - 0.5 * KisMaskGenerator::d->m_fv) );
         }
     } else {
         return 0;

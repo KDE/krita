@@ -33,8 +33,6 @@ class KRITAIMAGE_EXPORT KisMaskGenerator
 {
 public:
 
-    virtual ~KisMaskGenerator() {}
-
     KDE_DEPRECATED KisMaskGenerator(double width, double height, double fh, double fv);
     /**
      * This function creates an auto brush shape with the following value :
@@ -44,7 +42,10 @@ public:
      * @param fv vertical fade (fv \< h / 2 )
      */
     KisMaskGenerator(double radius, double ratio, double fh, double fv, int spikes);
-
+    virtual ~KisMaskGenerator();
+private:
+    void init();
+public:
     /**
      * @return the alpha value at the position (x,y)
      */
@@ -64,10 +65,8 @@ public:
     double height() const;
 
 protected:
-
-    double m_radius, m_ratio;
-    double m_fh, m_fv;
-    int m_spikes;
+    struct Private;
+    Private* const d;
 };
 
 /**
@@ -78,10 +77,9 @@ class KRITAIMAGE_EXPORT KisCircleMaskGenerator : public KisMaskGenerator
 
 public:
 
-    virtual ~KisCircleMaskGenerator() {}
-
     KDE_DEPRECATED KisCircleMaskGenerator(double w, double h, double fh, double fv);
     KisCircleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes);
+    virtual ~KisCircleMaskGenerator();
 
     virtual quint8 valueAt(double x, double y);
 
@@ -94,9 +92,8 @@ private:
     }
 
 private:
-    double m_xcenter, m_ycenter;
-    double m_xcoef, m_ycoef;
-    double m_xfadecoef, m_yfadecoef;
+    struct Private;
+    Private* const d;
 };
 
 /**
@@ -107,18 +104,17 @@ class KRITAIMAGE_EXPORT KisRectangleMaskGenerator : public KisMaskGenerator
 
 public:
 
-    virtual ~KisRectangleMaskGenerator() {}
-
     KDE_DEPRECATED KisRectangleMaskGenerator(double w, double h, double fh, double fv);
     KisRectangleMaskGenerator(double radius, double ratio, double fh, double fv, int spikes);
+    virtual ~KisRectangleMaskGenerator();
 
     virtual quint8 valueAt(double x, double y);
 
     virtual void toXML(QDomDocument& , QDomElement&) const;
 
 private:
-
-    double m_xcenter, m_ycenter, m_c;
+    struct Private;
+    Private* const d;
 };
 
 

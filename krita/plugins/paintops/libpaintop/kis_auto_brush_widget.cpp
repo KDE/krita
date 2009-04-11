@@ -29,7 +29,7 @@
 
 #include "kis_mask_generator.h"
 
-#define showSlider(input) input->setRange(input->minimum(), input->maximum())
+#define showSlider(input, step) input->setRange(input->minimum(), input->maximum(), step)
 
 KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const QString& caption)
         : KisWdgAutobrush(parent, name)
@@ -48,21 +48,22 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name, const 
     connect((QObject*)comboBoxShape, SIGNAL(activated(int)), this, SLOT(paramChanged()));
 
 //     showSlider(inputRadius);
+    inputRadius->setRange(inputRadius->minimum(), inputRadius->maximum(), 1.0, false);
     connect(inputRadius, SIGNAL(valueChanged(double)), this, SLOT(spinBoxRadiusChanged(double)));
 
-    showSlider(inputRatio);
+    showSlider(inputRatio, 0.1);
     connect(inputRatio, SIGNAL(valueChanged(double)), this, SLOT(spinBoxRatioChanged(double)));
 
-    showSlider(inputHFade);
+    showSlider(inputHFade, 0.1);
     connect(inputHFade, SIGNAL(valueChanged(double)), this, SLOT(spinBoxHorizontalChanged(double)));
 
-    showSlider(inputVFade);
+    showSlider(inputVFade, 0.1);
     connect(inputVFade, SIGNAL(valueChanged(double)), this, SLOT(spinBoxVerticalChanged(double)));
 
     inputSpikes->setSliderEnabled(true);
     connect(inputSpikes, SIGNAL(valueChanged(int)), this, SLOT(paramChanged()));
     
-    showSlider(inputSpacing);
+    showSlider(inputSpacing, 0.1);
     connect(inputSpacing, SIGNAL(valueChanged(double)), this, SLOT(paramChanged()));
 
     m_brush = QImage(1, 1, QImage::Format_RGB32);
@@ -117,6 +118,7 @@ void KisAutoBrushWidget::paramChanged()
     }
 
     QPixmap p = QPixmap::fromImage(pi);
+    brushPreview->setIconSize(p.size());
     brushPreview->setIcon(QIcon(p));
 
     emit sigBrushChanged();

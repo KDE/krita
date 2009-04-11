@@ -107,7 +107,10 @@ void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
 
 QImage KisAutoBrush::createBrushPreview()
 {
-    QImage img((int)(d->shape->width() + 0.5), (int)(d->shape->height() + 0.5), QImage::Format_ARGB32);
+    int width = qMax((int)(d->shape->width() + 0.5), 1);
+    int height = qMax((int)(d->shape->height() + 0.5), 1);
+    QImage img(width, height, QImage::Format_ARGB32);
+    
     double centerX = img.width() * 0.5;
     double centerY = img.height() * 0.5;
     for (int j = 0; j < d->shape->height(); j++) {

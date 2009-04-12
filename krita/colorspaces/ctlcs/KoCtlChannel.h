@@ -76,7 +76,7 @@ private:
     }
     inline _ChannelType_* channel(quint8* pixel) const
     {
-        return reinterpret_cast<const _ChannelType_*>( pixel + m_pos );
+        return reinterpret_cast<_ChannelType_*>( pixel + m_pos );
     }
 private:
     quint32 m_pos;

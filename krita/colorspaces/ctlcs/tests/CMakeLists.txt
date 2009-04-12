@@ -9,3 +9,10 @@ kde4_add_unit_test(ko_ctl_color_space_info_test TESTNAME krita-cs-ko_ctl_color_s
 
 target_link_libraries(ko_ctl_color_space_info_test  ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY} pigmentcms)
 
+########### next target ###############
+set(ko_ctl_channel_test_SRCS KoCtlChannelTest.cpp ../KoCtlChannel.cpp )
+
+kde4_add_unit_test(ko_ctl_channel_test TESTNAME krita-cs-ko_ctl_channel_test ${ko_ctl_channel_test_SRCS})
+
+target_link_libraries(ko_ctl_channel_test  ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY} pigmentcms)
+

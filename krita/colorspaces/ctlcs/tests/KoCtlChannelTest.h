@@ -15,39 +15,19 @@
  * along with this library; see the file COPYING.LIB.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- */
+*/
 
-#include "KoCtlChannel.h"
+#ifndef _KOCTLCHANNELTEST_H_
+#define _KOCTLCHANNELTEST_H_
 
-KoCtlChannel::~KoCtlChannel()
+#include <QtTest/QtTest>
+
+class KoCtlChannelTest : public QObject
 {
-}
+    Q_OBJECT
+private slots:
 
-template<>
-QString KoCtlChannelImpl<float>::channelValueText(const quint8* pixel) const
-{
-    return QString::number(double(*channel(pixel)));
-}
-
-template<>
-QString KoCtlChannelImpl<float>::normalisedChannelValueText(const quint8* pixel) const
-{
-    return QString::number(double(scaleToF32(pixel)));
-}
-
-#include <config-openexr.h>
-#ifdef HAVE_OPENEXR
-
-template<>
-QString KoCtlChannelImpl<half>::channelValueText(const quint8* pixel) const
-{
-return QString::number(double(*channel(pixel)));
-}
-
-template<>
-QString KoCtlChannelImpl<half>::normalisedChannelValueText(const quint8* pixel) const
-{
-return QString::number(double(scaleToF32(pixel)));
-}
+    void test();
+};
 
 #endif

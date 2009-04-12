@@ -7,6 +7,7 @@ add_subdirectory(ctlprofiles)
 add_subdirectory(ctlcolorspaces)
 
 set( CTLCS_SRCS
+    KoCtlChannel.cpp
     KoCtlColorProfile.cpp
     KoCtlColorConversionTransformation.cpp
     KoCtlColorSpace.cpp

@@ -34,12 +34,7 @@ KoCtlColorSpaceFactory::~KoCtlColorSpaceFactory()
 
 bool KoCtlColorSpaceFactory::profileIsCompatible(const KoColorProfile* profile) const
 {
-    const KoCtlColorProfile* ctlp = dynamic_cast<const KoCtlColorProfile*>(profile);
-    if(ctlp and ctlp->colorModel() == colorModelId().id() and ctlp->colorDepth() == colorDepthId().id() )
-    {
-        return true;
-    }
-    return false;
+    return KoCtlColorSpace::profileIsCompatible(m_info, profile);
 }
 
 QList<KoColorConversionTransformationFactory*> KoCtlColorSpaceFactory::colorConversionLinks() const

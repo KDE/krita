@@ -26,6 +26,8 @@
 #include "KoCtlColorSpaceInfo.h"
 #include "KoCtlChannel.h"
 
+#include <kis_debug.h>
+
 struct KoCtlColorSpace::Private
 {
     Private() : alphaCtlChannel(0) {}
@@ -160,8 +162,23 @@ void KoCtlColorSpace::singleChannelPixel(quint8 *dstPixel, const quint8 *srcPixe
 
 bool KoCtlColorSpace::profileIsCompatible(const KoColorProfile* profile) const
 {
-    return ( dynamic_cast<const KoCtlColorProfile*>(profile) );
+    return profileIsCompatible( d->info, profile);
 }
+
+bool KoCtlColorSpace::profileIsCompatible(const KoCtlColorSpaceInfo* info, const KoColorProfile* profile)
+{
+    const KoCtlColorProfile* ctlp = dynamic_cast<const KoCtlColorProfile*>(profile);
+    if(!ctlp) return false;
+    dbgPlugins << ctlp->colorModel() << ctlp->colorDepth() << info->colorModelId() << info->colorDepthId();
+    if(ctlp and ctlp->colorModel() == info->colorModelId().id()
+       and (ctlp->colorDepth() == info->colorDepthId().id()
+            or ( ctlp->colorDepth() == "F" and ( info->colorDepthId().id() == "F16" or info->colorDepthId().id() == "F32" ) ) ) )
+    {
+        return true;
+    }
+    return false;
+}
+
 
 bool KoCtlColorSpace::hasHighDynamicRange() const
 {
@@ -237,6 +254,7 @@ quint8 KoCtlColorSpace::intensity8(const quint8 * src) const
 
 KoID KoCtlColorSpace::mathToolboxId() const
 {
+    return KoID("Default","");
 }
 
 void KoCtlColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const

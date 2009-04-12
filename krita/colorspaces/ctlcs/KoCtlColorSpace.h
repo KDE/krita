@@ -44,6 +44,7 @@ class KoCtlColorSpace : public KoColorSpace {
         virtual quint16 scaleToU16(const quint8 * srcPixel, qint32 channelPos) const;
         virtual void singleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex) const;
         virtual bool profileIsCompatible(const KoColorProfile* profile) const;
+        static bool profileIsCompatible(const KoCtlColorSpaceInfo*, const KoColorProfile* profile);
         virtual bool hasHighDynamicRange() const;
         virtual const KoColorProfile * profile() const;
         virtual KoColorProfile * profile();

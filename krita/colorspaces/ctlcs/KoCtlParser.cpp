@@ -23,6 +23,7 @@
 
 #include <kis_debug.h>
 #include <KoColorModelStandardIds.h>
+#include <klocale.h>
 
 KoID KoCtlParser::generateDepthID(const QString& depth, const QString& type)
 {
@@ -37,6 +38,8 @@ KoID KoCtlParser::generateDepthID(const QString& depth, const QString& type)
             return Float16BitsColorDepthID;
         else if(depth == "32" )
             return Float32BitsColorDepthID;
+        else if(depth == "" )
+            return KoID("F", i18n("Float"));
     }
     dbgPlugins << "Invalid type";
     return KoID("","");

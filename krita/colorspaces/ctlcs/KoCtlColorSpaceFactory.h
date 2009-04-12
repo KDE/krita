@@ -38,7 +38,7 @@ class KoCtlColorSpaceFactory : public KoColorSpaceFactory {
         virtual bool isHdr() const;
         virtual int referenceDepth() const;
         virtual QString defaultProfile() const;
-       virtual bool profileIsCompatible(const KoColorProfile* profile) const;
+        virtual bool profileIsCompatible(const KoColorProfile* profile) const;
         QList<KoColorConversionTransformationFactory*> colorConversionLinks() const;
     private:
         KoCtlColorSpaceInfo* m_info;

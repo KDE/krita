@@ -153,14 +153,14 @@ KoPageFormat::Format KoPageFormat::defaultFormat()
 
 QString KoPageFormat::name(Format format)
 {
-    return i18n("Page size", pageFormatInfo[ format ].descriptiveName);
+    return i18nc("Page size", pageFormatInfo[ format ].descriptiveName);
 }
 
 QStringList KoPageFormat::allFormats()
 {
     QStringList lst;
     for (int i = 0; pageFormatInfo[i].format != -1 ;i++) {
-        lst << i18n("Page size", pageFormatInfo[ i ].descriptiveName);
+        lst << i18nc("Page size", pageFormatInfo[ i ].descriptiveName);
     }
     return lst;
 }

@@ -115,6 +115,42 @@ quint32 KoCtlColorSpace::pixelSize() const
     return d->info->pixelSize();
 }
 
+QString KoCtlColorSpace::channelValueText(const quint8 *pixel, quint32 channelIndex) const
+{
+    return d->ctlChannels[channelIndex]->channelValueText(pixel);
+}
+
+QString KoCtlColorSpace::normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const
+{
+    return d->ctlChannels[channelIndex]->normalisedChannelValueText(pixel);
+}
+
+void KoCtlColorSpace::normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const
+{
+}
+
+void KoCtlColorSpace::fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) const
+{
+    for(int i = 0; i < d->ctlChannels.size(); ++i)
+    {
+        d->ctlChannels[i]->scaleFromF32(pixel, values[i]);
+    }
+}
+quint8 KoCtlColorSpace::scaleToU8(const quint8 * srcPixel, qint32 channelIndex) const
+{
+    return d->ctlChannels[channelIndex]->scaleToU8(srcPixel);
+}
+
+quint16 KoCtlColorSpace::scaleToU16(const quint8 * srcPixel, qint32 channelIndex) const
+{
+    return d->ctlChannels[channelIndex]->scaleToU16(srcPixel);
+}
+
+void KoCtlColorSpace::singleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex) const
+{
+    return d->ctlChannels[channelIndex]->singleChannelPixel(dstPixel, srcPixel);
+}
+
 bool KoCtlColorSpace::profileIsCompatible(const KoColorProfile* profile) const
 {
     return ( dynamic_cast<const KoCtlColorProfile*>(profile) );

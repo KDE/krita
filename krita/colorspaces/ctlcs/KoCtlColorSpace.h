@@ -36,6 +36,13 @@ class KoCtlColorSpace : public KoColorSpace {
         virtual quint32 channelCount() const;
         virtual quint32 colorChannelCount() const;
         virtual quint32 pixelSize() const;
+        virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const;
+        virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const;
+        virtual void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const;
+        virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) const;
+        virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelPos) const;
+        virtual quint16 scaleToU16(const quint8 * srcPixel, qint32 channelPos) const;
+        virtual void singleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex) const;
         virtual bool profileIsCompatible(const KoColorProfile* profile) const;
         virtual bool hasHighDynamicRange() const;
         virtual const KoColorProfile * profile() const;
@@ -46,8 +53,8 @@ class KoCtlColorSpace : public KoColorSpace {
         virtual KoColorTransformation *createDarkenAdjustment(qint32 shade, bool compensate, qreal compensation) const;
         virtual KoColorTransformation *createInvertTransformation() const;
         virtual quint8 difference(const quint8* src1, const quint8* src2) const;
-        virtual void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile = 0) const;
-        virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const;
+        virtual void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile) const;
+        virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile) const;
         virtual quint8 intensity8(const quint8 * src) const;
         virtual KoID mathToolboxId() const;
         virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;

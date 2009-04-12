@@ -32,7 +32,7 @@ class KoCtlColorSpace : public KoColorSpace {
          */
         KoCtlColorSpace(const KoCtlColorSpaceInfo*, const KoCtlColorProfile* profile);
         ~KoCtlColorSpace();
-//         virtual KoColorSpace* clone() const;
+        virtual KoColorSpace* clone() const;
         virtual quint32 channelCount() const;
         virtual quint32 colorChannelCount() const;
         virtual quint32 pixelSize() const;
@@ -66,6 +66,7 @@ class KoCtlColorSpace : public KoColorSpace {
         virtual void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const;
         virtual void applyAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const;
         virtual void applyInverseAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const;
+        virtual bool willDegrade(ColorSpaceIndependence independence) const;
     private:
         struct Private;
         Private* const d;

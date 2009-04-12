@@ -84,8 +84,9 @@ KoID KoCtlColorSpaceFactory::colorDepthId() const
 
 KoColorSpace *KoCtlColorSpaceFactory::createColorSpace(const KoColorProfile * profile) const
 {
-    return 0;
-//     return new KoCtlColorSpace(m_info, profile);
+    const KoCtlColorProfile* ctlprofile = dynamic_cast<const KoCtlColorProfile*>(profile);
+    Q_ASSERT(ctlprofile);
+    return new KoCtlColorSpace(m_info, ctlprofile);
 }
 
 QString KoCtlColorSpaceFactory::colorSpaceEngine() const

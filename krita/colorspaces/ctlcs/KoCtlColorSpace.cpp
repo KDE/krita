@@ -102,10 +102,10 @@ KoCtlColorSpace::~KoCtlColorSpace()
     delete d;
 }
 
-// KoColorSpace* KoCtlColorSpace::clone() const
-// {
-//     return new KoCtlColorSpace(d->info, d->profile);
-// }
+KoColorSpace* KoCtlColorSpace::clone() const
+{
+    return new KoCtlColorSpace(d->info, d->profile);
+}
 
 quint32 KoCtlColorSpace::channelCount() const
 {
@@ -293,4 +293,11 @@ void KoCtlColorSpace::applyInverseAlphaU8Mask(quint8 * pixels, const quint8 * al
 {
     if( !d->alphaCtlChannel ) return;
     d->alphaCtlChannel->applyInverseU8Mask(pixels, alpha, nPixels);
+}
+
+bool KoCtlColorSpace::willDegrade(ColorSpaceIndependence /*independence*/) const
+{
+    // Currently all levels of colorspace independence will degrade floating point
+    // colorspaces images.
+    return true;
 }

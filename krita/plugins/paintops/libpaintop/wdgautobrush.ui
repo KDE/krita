@@ -129,7 +129,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Rato:</string>
+           <string>Ratio:</string>
           </property>
           <property name="pixmap">
            <pixmap>image0</pixmap>

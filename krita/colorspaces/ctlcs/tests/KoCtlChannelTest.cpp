@@ -39,6 +39,10 @@ void KoCtlChannelTest::test()
     QCOMPARE( rgbu8[0], quint8(100) );
     QCOMPARE( rgbu8[1], quint8(127) );
     QCOMPARE( rgbu8[2], quint8(200) );
+    c8.scaleFromU8(rgbu8, 34);
+    QCOMPARE( rgbu8[0], quint8(100) );
+    QCOMPARE( rgbu8[1], quint8(34) );
+    QCOMPARE( rgbu8[2], quint8(200) );
     
     float rgbf32[] = { 1.0, 0.12, -1.0 };
     quint8* rgbf32_ptr= reinterpret_cast<quint8*>(rgbf32);
@@ -54,6 +58,10 @@ void KoCtlChannelTest::test()
     c32.scaleFromF32(rgbf32_ptr, 3.0f);
     QCOMPARE( rgbf32[0], 1.0f );
     QCOMPARE( rgbf32[1], 3.0f );
+    QCOMPARE( rgbf32[2], -1.0f );
+    c32.scaleFromU8(rgbf32_ptr, 100);
+    QCOMPARE( rgbf32[0], 1.0f );
+    QCOMPARE( rgbf32[1], 100 / 255.0f );
     QCOMPARE( rgbf32[2], -1.0f );
 }
 

@@ -30,6 +30,7 @@ public:
     virtual QString channelValueText(const quint8 *pixel) const = 0;
     virtual QString normalisedChannelValueText(const quint8 *pixel) const = 0;
     virtual quint8 scaleToU8(const quint8 * srcPixel) const = 0;
+    virtual void scaleFromU8(quint8 * dstPixel, quint8 value) const = 0;
     virtual quint16 scaleToU16(const quint8 * srcPixel) const = 0;
     virtual float scaleToF32(const quint8 * srcPixel) const = 0;
     virtual void scaleFromF32(quint8 * dstPixel, float value) const = 0;
@@ -52,6 +53,10 @@ public:
     virtual quint8 scaleToU8(const quint8* srcPixel) const
     {
         return KoColorSpaceMaths<_ChannelType_, quint8>::scaleToA(*channel(srcPixel) );
+    }
+    virtual void scaleFromU8(quint8 * dstPixel, quint8 value) const
+    {
+        *channel(dstPixel) = KoColorSpaceMaths<quint8, _ChannelType_ >::scaleToA( value );
     }
     virtual quint16 scaleToU16(const quint8* srcPixel) const
     {

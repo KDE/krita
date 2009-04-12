@@ -1,10 +1,11 @@
 [Desktop Entry]
 Name=CTL Color Spaces
+Name[en_GB]=CTL Colour Spaces
+Name[pt]=Espaços de Cores CTL
+Name[pt_BR]=Espaços de Cores CTL
 Name[sv]=CTL-färgrymder
 Name[uk]=Простори кольорів CTL
 Comment=Color model written using the Color Transformation Language.
-Comment[sv]=Färgmodell skriven med färgtransformeringsspråket CTL
-Comment[uk]=Модель кольорів, описана за допомогою Color Transformation Language (мови перетворення кольорів)
 X-KDE-ServiceTypes=KOffice/ColorSpace
 Type=Service
 X-KDE-Library=krita_ctlcs_plugin

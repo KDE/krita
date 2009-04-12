@@ -37,7 +37,7 @@ public:
 };
 
 template<typename _ChannelType_>
-class KoCtlChannelImpl {
+class KoCtlChannelImpl : public KoCtlChannel {
 public:
     KoCtlChannelImpl(quint32 _pos) : m_pos(_pos) { }
     virtual ~KoCtlChannelImpl() {}

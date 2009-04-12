@@ -24,12 +24,14 @@
 #include "KoColorSpaceMaths.h"
 #include "KoCtlColorProfile.h"
 #include "KoCtlColorSpaceInfo.h"
+#include "KoCtlChannel.h"
 
 struct KoCtlColorSpace::Private
 {
     KoCtlColorProfile* profile;
     const KoCtlColorSpaceInfo* info;
     mutable quint16 * qcolordata; // A small buffer for conversion from and to qcolor.
+    QList<KoCtlChannel*> ctlChannels;
 };
 
 KoCtlColorSpace::KoCtlColorSpace(const KoCtlColorSpaceInfo* info, const KoCtlColorProfile* profile) : KoColorSpace( info->colorSpaceId(), info->name(), 0,0), d(new Private)
@@ -39,10 +41,57 @@ KoCtlColorSpace::KoCtlColorSpace(const KoCtlColorSpaceInfo* info, const KoCtlCol
     d->profile = static_cast<KoCtlColorProfile*>(profile->clone());
     d->qcolordata = new quint16[4];
     this->addCompositeOp( new CompositeCopy( this ) );
+    for(int i = 0; i < info->channels().size(); ++i )
+    {
+        d->ctlChannels.push_back(0);
+    }
+    foreach( const KoCtlColorSpaceInfo::ChannelInfo* cinfo, info->channels() )
+    {
+        addChannel( new KoChannelInfo( cinfo->name(), cinfo->position(), cinfo->channelType(), cinfo->valueType(), cinfo->size(), cinfo->color() ) );
+        KoCtlChannel* ctlchannel = 0;
+        
+        switch(cinfo->valueType())
+        {
+            case KoChannelInfo::UINT8:
+                ctlchannel = new KoCtlChannelImpl<quint8>( cinfo->index() );
+                break;
+            case KoChannelInfo::UINT16:
+                ctlchannel = new KoCtlChannelImpl<quint16>( cinfo->index() );
+                break;
+/*            case KoChannelInfo::UINT32:
+                ctlchannel = new KoCtlChannelImpl<quint32>( cinfo->index() );
+                break;
+            case KoChannelInfo::INT8:
+                ctlchannel = new KoCtlChannelImpl<qint8>( cinfo->index() );
+                break;
+            case KoChannelInfo::INT16:
+                ctlchannel = new KoCtlChannelImpl<qint16>( cinfo->index() );
+                break;*/
+            case KoChannelInfo::FLOAT16:
+                ctlchannel = new KoCtlChannelImpl<half>( cinfo->index() );
+                break;
+            case KoChannelInfo::FLOAT32:
+                ctlchannel = new KoCtlChannelImpl<float>( cinfo->index() );
+                break;
+/*            case KoChannelInfo::FLOAT64:
+                ctlchannel = new KoCtlChannelImpl<double>( cinfo->index() );
+                break;*/
+            default:
+                qFatal("Unimplemented");
+        }
+        
+        Q_ASSERT(ctlchannel);
+        d->ctlChannels[ cinfo->index() ] = ctlchannel;
+    }
+    
 }
 
 KoCtlColorSpace::~KoCtlColorSpace()
 {
+    foreach( KoCtlChannel* ctlChannel, d->ctlChannels )
+    {
+        delete ctlChannel;
+    }
     delete d;
 }
 

@@ -59,6 +59,13 @@ class KoCtlColorSpace : public KoColorSpace {
         virtual KoID mathToolboxId() const;
         virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const;
         virtual void colorFromXML( quint8* pixel, const QDomElement& elt) const;
+        virtual KoID colorModelId() const;
+        virtual KoID colorDepthId() const;
+        virtual quint8 alpha(const quint8 * pixel) const;
+        virtual void setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const;
+        virtual void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const;
+        virtual void applyAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const;
+        virtual void applyInverseAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const;
     private:
         struct Private;
         Private* const d;

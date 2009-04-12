@@ -23,6 +23,7 @@
 #include <QtGlobal>
 #include <qstring.h>
 #include <KoColorSpaceMaths.h>
+#include <KoColorSpaceConstants.h>
 
 class KoCtlChannel {
 public:
@@ -35,12 +36,15 @@ public:
     virtual float scaleToF32(const quint8 * srcPixel) const = 0;
     virtual void scaleFromF32(quint8 * dstPixel, float value) const = 0;
     virtual void singleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel) const = 0;
+    virtual void multiplyU8(quint8 * pixels, quint8 alpha, qint32 nPixels) const = 0;
+    virtual void applyU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const = 0;
+    virtual void applyInverseU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const = 0;
 };
 
 template<typename _ChannelType_>
 class KoCtlChannelImpl : public KoCtlChannel {
 public:
-    KoCtlChannelImpl(quint32 _pos) : m_pos(_pos) { }
+    KoCtlChannelImpl(quint32 _pos, quint32 _pixelSize) : m_pos(_pos), m_pixelSize(_pixelSize) { }
     virtual ~KoCtlChannelImpl() {}
     virtual QString channelValueText(const quint8* pixel) const
     {
@@ -74,6 +78,33 @@ public:
     {
         *channel(dstPixel) = KoColorSpaceMaths<float, _ChannelType_ >::scaleToA( value );
     }
+    virtual void multiplyU8(quint8 * pixels, quint8 alpha, qint32 nPixels) const
+    {
+        _ChannelType_ valpha =  KoColorSpaceMaths<quint8, _ChannelType_>::scaleToA(alpha);
+
+        for (; nPixels > 0; --nPixels, pixels += m_pixelSize) {
+            _ChannelType_* alphapixel = channel(pixels);
+            *alphapixel = KoColorSpaceMaths<_ChannelType_>::multiply( *alphapixel, valpha );
+        }
+    }
+
+    virtual void applyU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const
+    {
+        for (; nPixels > 0; --nPixels, pixels += m_pixelSize, ++alpha) {
+            _ChannelType_ valpha =  KoColorSpaceMaths<quint8, _ChannelType_>::scaleToA(*alpha);
+            _ChannelType_* alphapixel = channel(pixels);
+            *alphapixel = KoColorSpaceMaths<_ChannelType_>::multiply( *alphapixel, valpha );
+        }
+    }
+
+    virtual void applyInverseU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const
+    {
+        for (; nPixels > 0; --nPixels, pixels += m_pixelSize, ++alpha) {
+            _ChannelType_ valpha =  KoColorSpaceMaths<quint8,_ChannelType_>::scaleToA(OPACITY_OPAQUE - *alpha);
+            _ChannelType_* alphapixel = channel(pixels);
+            *alphapixel = KoColorSpaceMaths<_ChannelType_>::multiply( *alphapixel, valpha );
+        }
+    }
 private:
     inline const _ChannelType_* channel(const quint8* pixel) const
     {
@@ -85,6 +116,7 @@ private:
     }
 private:
     quint32 m_pos;
+    quint32 m_pixelSize;
 };
 
 

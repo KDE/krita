@@ -26,7 +26,7 @@
 void KoCtlChannelTest::test()
 {
     quint8 rgbu8[] = { 100, 50, 200 };
-    KoCtlChannelImpl<quint8> c8(1);
+    KoCtlChannelImpl<quint8> c8(1, 3 * sizeof(quint8));
     QCOMPARE(c8.channelValueText(rgbu8), QString("50"));
     QCOMPARE(c8.normalisedChannelValueText(rgbu8), QString("0.196078"));
     QCOMPARE(c8.scaleToU8(rgbu8), quint8(50));
@@ -46,7 +46,7 @@ void KoCtlChannelTest::test()
     
     float rgbf32[] = { 1.0, 0.12, -1.0 };
     quint8* rgbf32_ptr= reinterpret_cast<quint8*>(rgbf32);
-    KoCtlChannelImpl<float> c32(4);
+    KoCtlChannelImpl<float> c32(4, 3 * sizeof(quint8));
     QCOMPARE(c32.channelValueText(rgbf32_ptr), QString("0.12"));
     QCOMPARE(c32.normalisedChannelValueText(rgbf32_ptr), QString("0.12"));
     QCOMPARE(c32.scaleToU8(rgbf32_ptr), quint8(0.12 * 0xFF));

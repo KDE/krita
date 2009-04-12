@@ -28,10 +28,12 @@
 
 struct KoCtlColorSpace::Private
 {
+    Private() : alphaCtlChannel(0) {}
     KoCtlColorProfile* profile;
     const KoCtlColorSpaceInfo* info;
     mutable quint16 * qcolordata; // A small buffer for conversion from and to qcolor.
     QList<KoCtlChannel*> ctlChannels;
+    KoCtlChannel* alphaCtlChannel;
 };
 
 KoCtlColorSpace::KoCtlColorSpace(const KoCtlColorSpaceInfo* info, const KoCtlColorProfile* profile) : KoColorSpace( info->colorSpaceId(), info->name(), 0,0), d(new Private)
@@ -53,28 +55,28 @@ KoCtlColorSpace::KoCtlColorSpace(const KoCtlColorSpaceInfo* info, const KoCtlCol
         switch(cinfo->valueType())
         {
             case KoChannelInfo::UINT8:
-                ctlchannel = new KoCtlChannelImpl<quint8>( cinfo->index() );
+                ctlchannel = new KoCtlChannelImpl<quint8>( cinfo->index(), info->pixelSize() );
                 break;
             case KoChannelInfo::UINT16:
-                ctlchannel = new KoCtlChannelImpl<quint16>( cinfo->index() );
+                ctlchannel = new KoCtlChannelImpl<quint16>( cinfo->index(), info->pixelSize() );
                 break;
 /*            case KoChannelInfo::UINT32:
-                ctlchannel = new KoCtlChannelImpl<quint32>( cinfo->index() );
+                ctlchannel = new KoCtlChannelImpl<quint32>( cinfo->index(), info->pixelSize() );
                 break;
             case KoChannelInfo::INT8:
-                ctlchannel = new KoCtlChannelImpl<qint8>( cinfo->index() );
+                ctlchannel = new KoCtlChannelImpl<qint8>( cinfo->index(), info->pixelSize() );
                 break;
             case KoChannelInfo::INT16:
-                ctlchannel = new KoCtlChannelImpl<qint16>( cinfo->index() );
+                ctlchannel = new KoCtlChannelImpl<qint16>( cinfo->index(), info->pixelSize() );
                 break;*/
             case KoChannelInfo::FLOAT16:
-                ctlchannel = new KoCtlChannelImpl<half>( cinfo->index() );
+                ctlchannel = new KoCtlChannelImpl<half>( cinfo->index(), info->pixelSize() );
                 break;
             case KoChannelInfo::FLOAT32:
-                ctlchannel = new KoCtlChannelImpl<float>( cinfo->index() );
+                ctlchannel = new KoCtlChannelImpl<float>( cinfo->index(), info->pixelSize() );
                 break;
 /*            case KoChannelInfo::FLOAT64:
-                ctlchannel = new KoCtlChannelImpl<double>( cinfo->index() );
+                ctlchannel = new KoCtlChannelImpl<double>( cinfo->index(), info->pixelSize() );
                 break;*/
             default:
                 qFatal("Unimplemented");
@@ -82,6 +84,11 @@ KoCtlColorSpace::KoCtlColorSpace(const KoCtlColorSpaceInfo* info, const KoCtlCol
         
         Q_ASSERT(ctlchannel);
         d->ctlChannels[ cinfo->index() ] = ctlchannel;
+        if( cinfo->channelType() == KoChannelInfo::ALPHA )
+        {
+            Q_ASSERT(d->alphaCtlChannel == 0);
+            d->alphaCtlChannel = ctlchannel;
+        }
     }
     
 }
@@ -239,4 +246,51 @@ void KoCtlColorSpace::colorToXML( const quint8* pixel, QDomDocument& doc, QDomEl
 void KoCtlColorSpace::colorFromXML( quint8* pixel, const QDomElement& elt) const
 {
     
+}
+
+KoID KoCtlColorSpace::colorModelId() const
+{
+    return d->info->colorModelId();
+}
+KoID KoCtlColorSpace::colorDepthId() const
+{
+    return d->info->colorDepthId();
+}
+
+quint8 KoCtlColorSpace::alpha(const quint8 * pixel) const
+{
+    if( d->alphaCtlChannel )
+    {
+        return d->alphaCtlChannel->scaleToU8(pixel);
+    } else {
+        return 0;
+    }
+}
+
+void KoCtlColorSpace::setAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const
+{
+    if( !d->alphaCtlChannel ) return;
+    quint32 pixelSize_ = pixelSize();
+    for( int i = 0; i < nPixels; ++i, pixels += pixelSize_)
+    {
+        d->alphaCtlChannel->scaleFromU8( pixels, alpha );
+    }
+}
+
+void KoCtlColorSpace::multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const
+{
+    if( !d->alphaCtlChannel ) return;
+    d->alphaCtlChannel->multiplyU8(pixels, alpha, nPixels);
+}
+
+void KoCtlColorSpace::applyAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const
+{
+    if( !d->alphaCtlChannel ) return;
+    d->alphaCtlChannel->applyU8Mask(pixels, alpha, nPixels);
+}
+
+void KoCtlColorSpace::applyInverseAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const
+{
+    if( !d->alphaCtlChannel ) return;
+    d->alphaCtlChannel->applyInverseU8Mask(pixels, alpha, nPixels);
 }

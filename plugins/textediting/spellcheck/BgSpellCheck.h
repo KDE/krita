@@ -34,7 +34,7 @@ class BgSpellCheck : public BackgroundChecker
     Q_OBJECT
 public:
     explicit BgSpellCheck(const Speller &speller, QObject *parent = 0);
-    void start(QTextDocument *document, int startPosition, int endPosition);
+    void startRun(QTextDocument *document, int startPosition, int endPosition);
 
 protected:
     virtual QString fetchMoreText(); /// reimplemented from super

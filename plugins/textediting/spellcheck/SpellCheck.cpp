@@ -65,7 +65,7 @@ void SpellCheck::finishedWord(QTextDocument *document, int cursorPosition)
 
     QTextCursor cursor(document);
     selectWord(cursor, cursorPosition);
-    m_bgSpellCheck->start(m_document, cursor.anchor(), cursor.position());
+    m_bgSpellCheck->startRun(m_document, cursor.anchor(), cursor.position());
 }
 
 void SpellCheck::finishedParagraph(QTextDocument *document, int cursorPosition)
@@ -81,7 +81,7 @@ void SpellCheck::checkSection(QTextDocument *document, int startPosition, int en
 
     if (m_documentsQueue.isEmpty()) {
         kDebug(31000) << "Document queue is empty";
-        m_bgSpellCheck->start(document, startPosition, endPosition);
+        m_bgSpellCheck->startRun(document, startPosition, endPosition);
     } else {
         m_documentsQueue.enqueue(document);
     }
@@ -183,7 +183,7 @@ void SpellCheck::dequeueDocument()
 {
     // kDebug(31000) << "Dequeueing document";
     if (!m_documentsQueue.isEmpty()) {
-        m_bgSpellCheck->start(m_documentsQueue.dequeue(), 0, 0);
+        m_bgSpellCheck->startRun(m_documentsQueue.dequeue(), 0, 0);
     }
 }
 
@@ -238,7 +238,7 @@ void SpellCheck::checkDocument(int position, int charsRemoved, int charsAdded)
 
     if (recheck) {
         QTextCursor cursor(m_document);
-        m_bgSpellCheck->start(m_document, changeStart, changeEnd);
+        m_bgSpellCheck->startRun(m_document, changeStart, changeEnd);
     }
 }
 

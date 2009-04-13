@@ -30,7 +30,7 @@ BgSpellCheck::BgSpellCheck(const Speller &speller, QObject *parent):
     connect(this, SIGNAL(misspelling(const QString &, int)), this, SLOT(foundMisspelling(const QString &, int)));
 }
 
-void BgSpellCheck::start(QTextDocument *document, int startPosition, int endPosition)
+void BgSpellCheck::startRun(QTextDocument *document, int startPosition, int endPosition)
 {
     m_document = document;
     m_cursor = QTextCursor(document);

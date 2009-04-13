@@ -53,7 +53,8 @@ SpellCheck::SpellCheck()
     m_defaultMisspelledFormat.setUnderlineStyle(QTextCharFormat::SpellCheckUnderline);
     m_defaultMisspelledFormat.setUnderlineColor(QColor(Qt::red)); // TODO make use kde-config
 
-    connect(m_bgSpellCheck, SIGNAL(misspelledWord(const QString &,int,bool)), this, SLOT(highlightMisspelled(const QString &,int,bool)));
+    connect(m_bgSpellCheck, SIGNAL(misspelledWord(const QString &,int,bool)),
+            this, SLOT(highlightMisspelled(const QString &,int,bool)));
     connect(m_bgSpellCheck, SIGNAL(done()), this, SLOT(dequeueDocument()));
 }
 
@@ -81,9 +82,9 @@ void SpellCheck::checkSection(QTextDocument *document, int startPosition, int en
     if (m_documentsQueue.isEmpty()) {
         kDebug(31000) << "Document queue is empty";
         m_bgSpellCheck->start(document, startPosition, endPosition);
-    }
-    else
+    } else {
         m_documentsQueue.enqueue(document);
+    }
 }
 
 QStringList SpellCheck::availableBackends() const
@@ -101,24 +102,24 @@ QStringList SpellCheck::availableLanguages() const
     m_speller.setDefaultClient(client);
 } */
 
-void SpellCheck::setDefaultLanguage(const QString &lang)
+void SpellCheck::setDefaultLanguage(const QString &language)
 {
-    m_speller.setDefaultLanguage(lang);
+    m_speller.setDefaultLanguage(language);
 }
 
-void SpellCheck::setBackgroundSpellChecking(bool b)
+void SpellCheck::setBackgroundSpellChecking(bool on)
 {
-    m_enableSpellCheck = b;
+    m_enableSpellCheck = on;
 }
 
-void SpellCheck::setSkipAllUppercaseWords(bool b)
+void SpellCheck::setSkipAllUppercaseWords(bool on)
 {
-    m_speller.setAttribute(Speller::CheckUppercase, !b);
+    m_speller.setAttribute(Speller::CheckUppercase, !on);
 }
 
-void SpellCheck::setSkipRunTogetherWords(bool b)
+void SpellCheck::setSkipRunTogetherWords(bool on)
 {
-    m_speller.setAttribute(Speller::SkipRunTogether, b);
+    m_speller.setAttribute(Speller::SkipRunTogether, on);
 }
 
 /* QString SpellCheck::defaultClient() const
@@ -156,10 +157,10 @@ void SpellCheck::highlightMisspelled(const QString &word, int startPosition, boo
     range.start = startPosition - block.position();
     range.length = word.trimmed().length();
 
-    QList< QTextLayout::FormatRange > ranges = layout->additionalFormats();
-    QList< QTextLayout::FormatRange >::Iterator iter = ranges.begin();
+    QList<QTextLayout::FormatRange> ranges = layout->additionalFormats();
+    QList<QTextLayout::FormatRange>::Iterator iter = ranges.begin();
     const int rangeEnd = range.start + range.length;
-    while( iter != ranges.end() ) {
+    while (iter != ranges.end()) {
         QTextLayout::FormatRange r = *(iter);
         const int rEnd = r.start + r.length;
         if ((rEnd >= range.start && rEnd <= rangeEnd) || (rangeEnd >= r.start && rangeEnd <= rEnd // intersect
@@ -204,8 +205,9 @@ void SpellCheck::checkDocument(int position, int charsRemoved, int charsAdded)
             continue;
 
         if (range.start > position - block.position()
-                && qMax(charsRemoved, charsAdded) + position - block.position() < range.start + range.length) // range is moved.
+                && qMax(charsRemoved, charsAdded) + position - block.position() < range.start + range.length) { // range is moved.
             range.start += charsAdded - charsRemoved;
+        }
         else if (position - block.position() >= range.start &&
                 position - block.position() < range.start + range.length) { // change is starting inside this range
             if (position - block.position() + qMax(charsRemoved, charsAdded) > range.start + range.length) {
@@ -214,18 +216,18 @@ void SpellCheck::checkDocument(int position, int charsRemoved, int charsAdded)
             }
 
             range.length = 0; // delete range, I don't want to see spell-check errors while typing a word
-        }
-        else
+        } else {
             continue;
+        }
 
         ranges.takeAt(index);
         if (range.length > 0) {
             ranges.insert(0, range);
             changeStart = qMin(changeStart, range.start);
             changeEnd = qMax(changeEnd, range.start + range.length);
-        }
-        else
+        } else {
             index--; // make sure we don't skip one
+        }
     }
 
     m_allowSignals = false;
@@ -257,10 +259,10 @@ void SpellCheck::configureSpellCheck()
     }
 }
 
-void SpellCheck::resourceChanged( int key, const QVariant & res )
+void SpellCheck::resourceChanged( int key, const QVariant &resource )
 {
     if (key == KoCanvasResource::DocumentIsLoading)
-        m_documentIsLoading = res.toBool();
+        m_documentIsLoading = resource.toBool();
 }
 
 #include "SpellCheck.moc"

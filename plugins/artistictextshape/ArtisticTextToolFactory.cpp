@@ -28,7 +28,7 @@ ArtisticTextToolFactory::ArtisticTextToolFactory( QObject *parent )
 {
     setToolTip( i18n("Artistic Text Editing Tool") );
     setToolType( dynamicToolType() );
-    //setIcon ("");
+    setIcon ("artistictext-tool");
     setPriority( 1 );
     setActivationShapeId( ArtisticTextShapeID );
 }

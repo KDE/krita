@@ -63,9 +63,6 @@ void KisGridManager::setup(KActionCollection * collection)
     m_view->document()->gridData().setGrid(config.getGridHSpacing(), config.getGridVSpacing());
 
     KToggleAction *toggleGrid = m_view->document()->gridData().gridToggleAction();
-    // XXX remove the translated strings when the string freeze is lifted, the KoGridData should have those
-    toggleGrid->setText(i18n("Show Grid"));
-    toggleGrid->setCheckedState(KGuiItem(i18n("Hide Grid")));
     collection->addAction("view_grid", toggleGrid);
     connect(toggleGrid, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
 

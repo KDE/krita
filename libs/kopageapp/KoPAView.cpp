@@ -218,8 +218,6 @@ void KoPAView::initActions()
     connect(m_canvas->toolProxy(), SIGNAL(selectionChanged(bool)), m_deleteSelectionAction, SLOT(setEnabled(bool)));
 
     KToggleAction *showGrid= m_doc->gridData().gridToggleAction(m_canvas);
-    // XXX remove the translated string when the string freeze is lifted, the KoGridData should have those
-    showGrid->setText(i18n("Show &Grid"));
     actionCollection()->addAction("view_grid", showGrid );
 
     m_actionViewSnapToGrid = new KToggleAction(i18n("Snap to Grid"), this);

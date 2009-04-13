@@ -204,13 +204,10 @@ void KoGridData::saveOdfSettings(KoXmlWriter &settingsWriter)
 KToggleAction *KoGridData::gridToggleAction(QWidget* canvas)
 {
     if (! d->toggleGridAction) {
-        d->toggleGridAction = new KToggleAction(KIcon("grid"), QString(), 0);
-#if 0 // re-enable when the string-freeze is lifted.
         d->toggleGridAction = new KToggleAction(KIcon("grid"), i18n("Show Grid"), 0);
         d->toggleGridAction->setCheckedState(KGuiItem(i18n("Hide Grid")));
         d->toggleGridAction->setToolTip(i18n("Shows or hides grid"));
         d->toggleGridAction->setChecked(d->showGrid);
-#endif
     }
     if (canvas)
         QObject::connect(d->toggleGridAction, SIGNAL(toggled(bool)), canvas, SLOT(update()));

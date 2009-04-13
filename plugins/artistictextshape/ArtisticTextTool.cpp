@@ -45,11 +45,11 @@
 ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
     : KoTool(canvas), m_currentShape(0), m_path(0), m_tmpPath(0), m_textCursor( -1 ), m_showCursor( true )
 {
-    m_attachPath  = new QAction(KIcon("attach-path"), i18n("Attach Path"), this);
+    m_attachPath  = new QAction(KIcon("artistictext-attach-path"), i18n("Attach Path"), this);
     m_attachPath->setEnabled( false );
     connect( m_attachPath, SIGNAL(triggered()), this, SLOT(attachPath()) );
 
-    m_detachPath  = new QAction(KIcon("detach-path"), i18n("Detach Path"), this);
+    m_detachPath  = new QAction(KIcon("artistictext-detach-path"), i18n("Detach Path"), this);
     m_detachPath->setEnabled( false );
     connect( m_detachPath, SIGNAL(triggered()), this, SLOT(detachPath()) );
 

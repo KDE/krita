@@ -21,17 +21,13 @@
 
 #include "KoScriptingOdf.h"
 
-#include <QPointer>
-#include <QIODevice>
-#include <QBuffer>
-#include <QRegExp>
 #include <KoStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoDocumentAdaptor.h>
-#include <KoDocument.h>
 #include <KoEmbeddedDocumentSaver.h>
 
 #include <KDebug>
+#include <QBuffer>
 
 /************************************************************************************************
  * KoScriptingOdfReader

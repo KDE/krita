@@ -20,16 +20,12 @@
  ***************************************************************************/
 
 #include "KoScriptManagerAdd.h"
-#include "KoScriptManager.h"
 
 #include <kross/core/manager.h>
 #include <kross/core/interpreter.h>
-#include <kross/core/action.h>
 #include <kross/core/actioncollection.h>
 #include <kross/ui/view.h>
-#include <kross/ui/model.h>
 
-#include <QtCore/QFileInfo>
 #include <QtGui/QBoxLayout>
 #include <QtGui/QLabel>
 #include <QtGui/QRadioButton>
@@ -38,9 +34,8 @@
 #include <QComboBox>
 
 #include <klocale.h>
-#include <kurl.h>
+#include <kfilewidget.h>
 #include <kurlrequester.h>
-#include <kmimetype.h>
 #include <kdebug.h>
 
 /********************************************************************

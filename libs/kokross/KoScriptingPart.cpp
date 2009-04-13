@@ -22,28 +22,29 @@
 #include "KoScriptingPart.h"
 #include "KoScriptingModule.h"
 #include "KoScriptManager.h"
+#include "KoScriptingDocker.h"
+
+// koffice
+#include <KoView.h>
+#include <KoMainWindow.h>
 
 // qt
 #include <QApplication>
+
 // kde
-#include <kaction.h>
 #include <kactioncollection.h>
 #include <klocale.h>
-#include <kdialog.h>
 #include <kactionmenu.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
-#include <kdialog.h>
 #include <kfiledialog.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
-// koffice
-#include <KoMainWindow.h>
-#include <KoScriptingDocker.h>
 #include <kross/core/manager.h>
 #include <kross/core/interpreter.h>
 #include <kross/core/actioncollection.h>
-#include <kross/ui/view.h>
+
+
 
 /// \internal d-pointer class.
 class KoScriptingPart::Private

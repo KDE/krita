@@ -22,17 +22,11 @@
 #include "KoScriptingModule.h"
 #include "KoScriptingOdf.h"
 
-// qt
-#include <QApplication>
-#include <QPointer>
 // koffice
 #include <KoMainWindow.h>
 #include <KoApplicationAdaptor.h>
 #include <KoDocumentAdaptor.h>
 #include <KoView.h>
-
-#include <kross/core/manager.h>
-#include <kross/core/action.h>
 
 /// \internal d-pointer class.
 class KoScriptingModule::Private

@@ -23,11 +23,7 @@
 #ifndef KOKROSS_KOSCRIPTMANAGER_H
 #define KOKROSS_KOSCRIPTMANAGER_H
 
-#include <QtCore/QObject>
 #include <QtGui/QWidget>
-#include <QtCore/QModelIndex>
-#include <QtGui/QItemSelection>
-#include <QtGui/QTreeView>
 
 #include <kdialog.h>
 

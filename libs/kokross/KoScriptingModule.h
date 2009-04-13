@@ -23,12 +23,12 @@
 #define KOKROSS_KOSCRIPTINGMODULE_H
 
 #include <QObject>
-#include <QWidget>
-
-#include <KoView.h>
-#include <KoDocument.h>
 
 #include "kokross_export.h"
+
+class KoView;
+class KoDocument;
+class QWidget;
 
 /**
 * The KoScriptingModule provides the base class for Kross

@@ -23,9 +23,6 @@
 #define KOSCRIPTINGODF_H
 
 #include <QPair>
-#include <QObject>
-#include <QDomDocument>
-#include <QtDebug>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoDocument.h>

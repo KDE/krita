@@ -22,24 +22,17 @@
 #ifndef KOKROSS_KOSCRIPTMANAGERADD_H
 #define KOKROSS_KOSCRIPTMANAGERADD_H
 
-#include <QtCore/QObject>
-#include <QtGui/QWidget>
-
 #include <kassistantdialog.h>
-#include <kfilewidget.h>
+class KoScriptManagerAddWizard;
 
 class QRadioButton;
 class KPageWidgetItem;
+class KFileWidget;
 
 namespace Kross {
-    //class Action;
     class ActionCollection;
     class ActionCollectionEditor;
-    class ActionCollectionModel;
-    //class FormFileWidget;
 }
-
-class KoScriptManagerAddWizard;
 
 /**
 * The KoScriptManagerAddTypeWidget widget is the first page within

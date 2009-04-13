@@ -24,39 +24,14 @@
 #include "KoScriptManagerAdd.h"
 
 #include <kross/core/manager.h>
-#include <kross/core/action.h>
 #include <kross/core/actioncollection.h>
 #include <kross/ui/model.h>
 #include <kross/ui/view.h>
 
-#include <QtCore/QFileInfo>
-#include <QtCore/QDir>
-#include <QtGui/QBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QTreeView>
-#include <QtCore/QSignalMapper>
-#include <QtCore/QFileInfo>
-
-#include <kapplication.h>
-#include <kconfig.h>
 #include <klocale.h>
-#include <kicon.h>
 #include <kstandarddirs.h>
-#include <kmessagebox.h>
-#include <kpushbutton.h>
-#include <kfiledialog.h>
-#include <kmenu.h>
-#include <kpagedialog.h>
-#include <kaction.h>
-#include <kactioncollection.h>
 #include <kdebug.h>
-
-#include <ktar.h>
-#include <kio/netaccess.h>
-//#include <knewstuff/provider.h>
-//#include <knewstuff/engine.h>
-//#include <knewstuff/downloaddialog.h>
-//#include <knewstuff/knewstuffsecure.h>
+#include <QtGui/QBoxLayout>
 
 /******************************************************************************
  * KoScriptManagerCollection

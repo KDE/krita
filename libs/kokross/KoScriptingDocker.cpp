@@ -21,22 +21,16 @@
 
 #include "KoScriptingDocker.h"
 #include "KoScriptingModule.h"
-#include "KoScriptingPart.h"
 #include "KoScriptManager.h"
 
 #include <QToolBar>
 #include <QBoxLayout>
-#include <QModelIndex>
-#include <QLineEdit>
 
-#include <kdialog.h>
 #include <klocale.h>
 #include <kicon.h>
-#include <kaction.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
 
-#include <kross/core/manager.h>
 #include <kross/core/action.h>
 #include <kross/ui/model.h>
 #include <kross/ui/view.h>

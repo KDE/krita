@@ -230,6 +230,20 @@ void KoShape::setSize(const QSizeF &newSize)
     if (oldSize == newSize)
         return;
 
+    QMatrix matrix;
+    matrix.scale(newSize.width()/oldSize.width(), newSize.height()/oldSize.height());
+    
+    KoGradientBackground * g = dynamic_cast<KoGradientBackground*>(background());
+    if (g) {
+        g->setMatrix( g->matrix() * matrix );
+    }
+    KoLineBorder * l = dynamic_cast<KoLineBorder*>(border());
+    if (l && l->lineBrush().gradient()) {
+        QBrush brush = l->lineBrush();
+        brush.setMatrix( brush.matrix() * matrix );
+        l->setLineBrush( brush );
+    }
+    
     d->size = newSize;
 
     notifyChanged();

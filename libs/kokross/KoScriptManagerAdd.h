@@ -7,10 +7,12 @@
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
+ *
  * You should have received a copy of the GNU Library General Public License
  * along with this program; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
@@ -66,15 +68,17 @@ class KoScriptManagerAddWizard;
 */
 class KoScriptManagerAddTypeWidget : public QWidget
 {
-        Q_OBJECT
-    public:
-        explicit KoScriptManagerAddTypeWidget(KoScriptManagerAddWizard* wizard);
-        virtual ~KoScriptManagerAddTypeWidget();
-    public Q_SLOTS:
-        void slotUpdate();
-    private:
-        class Private;
-        Private* const d;
+    Q_OBJECT
+public:
+    explicit KoScriptManagerAddTypeWidget(KoScriptManagerAddWizard *wizard);
+    virtual ~KoScriptManagerAddTypeWidget();
+
+public slots:
+    void slotUpdate();
+
+private:
+    class Private;
+    Private* const d;
 };
 
 /**
@@ -83,18 +87,20 @@ class KoScriptManagerAddTypeWidget : public QWidget
 */
 class KoScriptManagerAddFileWidget : public QWidget
 {
-        Q_OBJECT
-    public:
-        explicit KoScriptManagerAddFileWidget(KoScriptManagerAddWizard* wizard, const QString& startDirOrVariable = QString());
-        virtual ~KoScriptManagerAddFileWidget();
-        /// \return the currently selected file.
-        QString selectedFile() const;
-    public Q_SLOTS:
-        void slotUpdate();
-        void slotFileHighlighted(const QString &file);
-    private:
-        class Private;
-        Private* const d;
+    Q_OBJECT
+public:
+    explicit KoScriptManagerAddFileWidget(KoScriptManagerAddWizard *wizard, const QString &startDirOrVariable = QString());
+    virtual ~KoScriptManagerAddFileWidget();
+    /// \return the currently selected file.
+    QString selectedFile() const;
+
+public slots:
+    void slotUpdate();
+    void slotFileHighlighted(const QString &file);
+
+private:
+    class Private;
+    Private* const d;
 };
 
 /**
@@ -103,20 +109,22 @@ class KoScriptManagerAddFileWidget : public QWidget
 */
 class KoScriptManagerAddScriptWidget : public QWidget
 {
-        Q_OBJECT
-    public:
-        explicit KoScriptManagerAddScriptWidget(KoScriptManagerAddWizard* wizard);
-        virtual ~KoScriptManagerAddScriptWidget();
-    public Q_SLOTS:
-        void slotUpdate();
-        //bool back();
-        //bool next();
-        bool accept();
-    private:
-        virtual void showEvent(QShowEvent* event);
-    private:
-        class Private;
-        Private* const d;
+    Q_OBJECT
+public:
+    explicit KoScriptManagerAddScriptWidget(KoScriptManagerAddWizard *wizard);
+    virtual ~KoScriptManagerAddScriptWidget();
+public slots:
+    void slotUpdate();
+    //bool back();
+    //bool next();
+    bool accept();
+
+private:
+    virtual void showEvent(QShowEvent* event);
+
+private:
+    class Private;
+    Private* const d;
 };
 
 /**
@@ -125,18 +133,20 @@ class KoScriptManagerAddScriptWidget : public QWidget
 */
 class KoScriptManagerAddCollectionWidget : public QWidget
 {
-        Q_OBJECT
-    public:
-        explicit KoScriptManagerAddCollectionWidget(KoScriptManagerAddWizard* wizard);
-        virtual ~KoScriptManagerAddCollectionWidget();
+    Q_OBJECT
+public:
+    explicit KoScriptManagerAddCollectionWidget(KoScriptManagerAddWizard *wizard);
+    virtual ~KoScriptManagerAddCollectionWidget();
 
-        QString uniqueName() const;
-    public Q_SLOTS:
-        void slotUpdate();
-        bool accept();
-    private:
-        KoScriptManagerAddWizard* m_wizard;
-        Kross::ActionCollectionEditor* m_editor;
+    QString uniqueName() const;
+
+public slots:
+    void slotUpdate();
+    bool accept();
+
+private:
+    KoScriptManagerAddWizard *m_wizard;
+    Kross::ActionCollectionEditor *m_editor;
 };
 
 /**
@@ -147,32 +157,36 @@ class KoScriptManagerAddCollectionWidget : public QWidget
 */
 class KoScriptManagerAddWizard : public KAssistantDialog
 {
-        Q_OBJECT
-        friend class KoScriptManagerAddTypeWidget;
-        friend class KoScriptManagerAddFileWidget;
-        friend class KoScriptManagerAddScriptWidget;
-        friend class KoScriptManagerAddCollectionWidget;
-    public:
-        explicit KoScriptManagerAddWizard(QWidget* parent, Kross::ActionCollection* collection = 0);
-        virtual ~KoScriptManagerAddWizard();
-    public Q_SLOTS:
-        /// Show the modal wizard dialog.
-        virtual int exec();
-        /// Called when the user clicks the Back button.
-        virtual void back();
-        /// Called when the user clicks the Next button.
-        virtual void next();
-        /// Called when the user clicks the Finish button.
-        virtual void accept();
-    private:
-        bool invokeWidgetMethod(const char* member);
-    private:
-        Kross::ActionCollection* m_collection;
-        KPageWidgetItem *m_typeItem, *m_fileItem, *m_scriptItem, *m_collectionItem;
-        KoScriptManagerAddTypeWidget *m_typewidget;
-        KoScriptManagerAddFileWidget *m_filewidget;
-        KoScriptManagerAddScriptWidget *m_scriptwidget;
-        KoScriptManagerAddCollectionWidget *m_collectionwidget;
+    Q_OBJECT
+public:
+    explicit KoScriptManagerAddWizard(QWidget* parent, Kross::ActionCollection* collection = 0);
+    virtual ~KoScriptManagerAddWizard();
+
+public slots:
+    /// Show the modal wizard dialog.
+    virtual int exec();
+    /// Called when the user clicks the Back button.
+    virtual void back();
+    /// Called when the user clicks the Next button.
+    virtual void next();
+    /// Called when the user clicks the Finish button.
+    virtual void accept();
+
+private:
+    bool invokeWidgetMethod(const char* member);
+
+private:
+    friend class KoScriptManagerAddTypeWidget;
+    friend class KoScriptManagerAddFileWidget;
+    friend class KoScriptManagerAddScriptWidget;
+    friend class KoScriptManagerAddCollectionWidget;
+
+    Kross::ActionCollection *m_collection;
+    KPageWidgetItem *m_typeItem, *m_fileItem, *m_scriptItem, *m_collectionItem;
+    KoScriptManagerAddTypeWidget *m_typewidget;
+    KoScriptManagerAddFileWidget *m_filewidget;
+    KoScriptManagerAddScriptWidget *m_scriptwidget;
+    KoScriptManagerAddCollectionWidget *m_collectionwidget;
 };
 
 #endif

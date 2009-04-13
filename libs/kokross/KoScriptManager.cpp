@@ -8,10 +8,12 @@
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
+ *
  * You should have received a copy of the GNU Library General Public License
  * along with this program; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
@@ -65,115 +67,116 @@
 class KoScriptManagerNewStuff : public KNewStuffSecure
 {
     public:
-        KoScriptManagerNewStuff(KoScriptManagerCollection* collection, const QString& type, QWidget *parentWidget = 0)
+        KoScriptManagerNewStuff(KoScriptManagerCollection *collection, const QString& type, QWidget *parentWidget = 0)
             : KNewStuffSecure(type, parentWidget)
             , m_collection(collection) {}
         virtual ~KoScriptManagerNewStuff() {}
     private:
-        KoScriptManagerCollection* m_collection;
-        virtual void installResource() { m_collection->module()->installPackage( m_tarName ); }
+        KoScriptManagerCollection *m_collection;
+        virtual void installResource() { m_collection->module()->installPackage(m_tarName); }
 };
 */
 
 class KoScriptManagerView : public Kross::ActionCollectionView
 {
-    public:
-        KoScriptManagerView(KoScriptManagerCollection* collection) : Kross::ActionCollectionView(collection)
-        {
-            setDragEnabled(true);
-            setAcceptDrops(true);
+public:
+    KoScriptManagerView(KoScriptManagerCollection *collection) : Kross::ActionCollectionView(collection)
+    {
+        setDragEnabled(true);
+        setAcceptDrops(true);
 
-            Kross::ActionCollectionModel::Mode modelmode = Kross::ActionCollectionModel::Mode( Kross::ActionCollectionModel::Icons | Kross::ActionCollectionModel::ToolTips | Kross::ActionCollectionModel::UserCheckable );
-            Kross::ActionCollectionModel* model = new Kross::ActionCollectionModel(this, Kross::Manager::self().actionCollection(), modelmode);
-            setModel(model);
-            //selectionModel();
-        }
+        Kross::ActionCollectionModel::Mode modelmode = Kross::ActionCollectionModel::Mode(Kross::ActionCollectionModel::Icons | Kross::ActionCollectionModel::ToolTips | Kross::ActionCollectionModel::UserCheckable);
+        Kross::ActionCollectionModel *model = new Kross::ActionCollectionModel(this, Kross::Manager::self().actionCollection(), modelmode);
+        setModel(model);
+        //selectionModel();
+    }
 
-        virtual ~KoScriptManagerView() {}
+    virtual ~KoScriptManagerView() {}
 
-        Kross::ActionCollectionModel* model() const
-        {
-                return static_cast<Kross::ActionCollectionModel*>( Kross::ActionCollectionView::model() );
-        }
+    Kross::ActionCollectionModel *model() const
+    {
+            return static_cast<Kross::ActionCollectionModel*>(Kross::ActionCollectionView::model());
+    }
+
 #ifndef DISABLE_ADD_REMOVE
-        virtual void slotAdd()
-        {
-            Kross::ActionCollection *collection = model()->rootCollection();
-            if ( itemSelection().count() == 1 ) {
-                collection = Kross::ActionCollectionModel::collection( itemSelection().indexes().first() );
-            }
-            KoScriptManagerAddWizard wizard(this, collection );
-            int result = wizard.exec();
-            Q_UNUSED(result);
+    virtual void slotAdd()
+    {
+        Kross::ActionCollection *collection = model()->rootCollection();
+        if (itemSelection().count() == 1) {
+            collection = Kross::ActionCollectionModel::collection(itemSelection().indexes().first());
         }
-        virtual void slotRemove()
-        {
-            if ( itemSelection().isEmpty() ) {
-                return;
-            }
-            // get the actions/collections, indexes will change when things are removed
-            QList<Kross::Action*> actions;
-            QList<Kross::ActionCollection*> collections;
-            foreach ( const QModelIndex &idx, itemSelection().indexes() ) {
-                Kross::Action *a =  model()->action( idx );
-                if ( a ) {
-                    actions << a;
-                } else {
-                    Kross::ActionCollection *c = model()->collection( idx );
-                    if ( c ) {
-                        collections << c;
-                    }
-                }
-            }
-            foreach ( Kross::Action *action, actions ) {
-                QModelIndex idx = model()->indexForAction( action );
-                if ( idx.isValid() ) {
-                    //kDebug(32010)<<"action:"<<action->name();
-                    delete action;
-                }
-            }
-            foreach ( Kross::ActionCollection *collection, collections ) {
-                QModelIndex idx = model()->indexForCollection( collection );
-                if ( idx.isValid() ) {
-                    //kDebug(32010)<<"collection:"<<collection->name();
-                    delete collection;
+        KoScriptManagerAddWizard wizard(this, collection);
+        int result = wizard.exec();
+        Q_UNUSED(result);
+    }
+    virtual void slotRemove()
+    {
+        if (itemSelection().isEmpty()) {
+            return;
+        }
+        // get the actions/collections, indexes will change when things are removed
+        QList<Kross::Action*> actions;
+        QList<Kross::ActionCollection*> collections;
+        foreach (const QModelIndex &idx, itemSelection().indexes()) {
+            Kross::Action *a =  model()->action(idx);
+            if (a) {
+                actions << a;
+            } else {
+                Kross::ActionCollection *c = model()->collection(idx);
+                if (c) {
+                    collections << c;
                 }
             }
         }
+        foreach (Kross::Action *action, actions) {
+            QModelIndex idx = model()->indexForAction(action);
+            if (idx.isValid()) {
+                //kDebug(32010)<<"action:"<<action->name();
+                delete action;
+            }
+        }
+        foreach (Kross::ActionCollection *collection, collections) {
+            QModelIndex idx = model()->indexForCollection(collection);
+            if (idx.isValid()) {
+                //kDebug(32010)<<"collection:"<<collection->name();
+                delete collection;
+            }
+        }
+    }
 #endif
 };
 
 /// \internal d-pointer class.
 class KoScriptManagerCollection::Private
 {
-    public:
-        bool modified;
-        KoScriptManagerView* view;
-        Private() : modified(false) {}
+public:
+    bool modified;
+    KoScriptManagerView *view;
+    Private() : modified(false) {}
 };
 
-KoScriptManagerCollection::KoScriptManagerCollection(QWidget* parent)
+KoScriptManagerCollection::KoScriptManagerCollection(QWidget *parent)
     : QWidget(parent), d(new Private())
 {
-    QHBoxLayout* mainlayout = new QHBoxLayout();
+    QHBoxLayout *mainlayout = new QHBoxLayout();
     mainlayout->setMargin(0);
     setLayout(mainlayout);
 
     d->view = new KoScriptManagerView(this);
     mainlayout->addWidget(d->view);
 
-    QWidget* btnwidget = new QWidget(this);
-    QVBoxLayout* btnlayout = new QVBoxLayout();
+    QWidget *btnwidget = new QWidget(this);
+    QVBoxLayout *btnlayout = new QVBoxLayout();
     btnlayout->setMargin(0);
     btnwidget->setLayout(btnlayout);
     mainlayout->addWidget(btnwidget);
 
-    //KActionCollection* collection = d->view->actionCollection();
+    //KActionCollection *collection = d->view->actionCollection();
 
     d->view->createButton(btnwidget, "run");
     d->view->createButton(btnwidget, "stop");
 
-    QFrame* hr1 = new QFrame(btnwidget);
+    QFrame *hr1 = new QFrame(btnwidget);
     hr1->setFrameStyle(QFrame::HLine | QFrame::Sunken);
     btnlayout->addWidget(hr1, 0);
 
@@ -325,13 +328,13 @@ bool KoScriptManagerModule::uninstallPackage(Action* action)
 KoScriptManagerDialog::KoScriptManagerDialog()
     : KDialog()
 {
-    setCaption( i18n("Script Manager") );
-    setButtons( KDialog::Ok | KDialog::Cancel );
-    setButtonText( KDialog::Ok, i18n("Save") );
-    setButtonIcon( KDialog::Ok, KIcon("document-save") );
-    m_collection = new KoScriptManagerCollection( mainWidget() );
+    setCaption(i18n("Script Manager"));
+    setButtons(KDialog::Ok | KDialog::Cancel);
+    setButtonText(KDialog::Ok, i18n("Save"));
+    setButtonIcon(KDialog::Ok, KIcon("document-save"));
+    m_collection = new KoScriptManagerCollection(mainWidget());
     setMainWidget(m_collection);
-    resize( QSize(520, 380).expandedTo( minimumSizeHint() ) );
+    resize(QSize(520, 380).expandedTo(minimumSizeHint()));
     connect(this, SIGNAL(accepted()), this, SLOT(slotAccepted()));
 }
 
@@ -342,12 +345,12 @@ KoScriptManagerDialog::~KoScriptManagerDialog()
 void KoScriptManagerDialog::slotAccepted()
 {
     const QString dir = KGlobal::dirs()->saveLocation("appdata", "scripts/");
-    if( ! dir.isEmpty() ) {
+    if (! dir.isEmpty()) {
         const QString file = QFileInfo(dir, "scripts.rc").absoluteFilePath();
         QFile f(file);
-        if( f.open(QIODevice::WriteOnly) )
-            if( Kross::Manager::self().actionCollection()->writeXml(&f) )
-                kDebug(32010)<<"KoScriptManagerDialog: Successfully saved file:"<<file;
+        if (f.open(QIODevice::WriteOnly))
+            if (Kross::Manager::self().actionCollection()->writeXml(&f))
+                kDebug(32010)<<"Successfully saved file:"<<file;
         f.close();
     }
 }

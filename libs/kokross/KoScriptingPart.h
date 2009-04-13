@@ -8,9 +8,11 @@
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  * This program is distributed in the hope that it will be useful,
+ *
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
+ *
  * You should have received a copy of the GNU Library General Public License
  * along with this program; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
@@ -40,77 +42,77 @@ namespace Kross {
 */
 class KOKROSS_EXPORT KoScriptingPart : public KParts::Plugin
 {
-        Q_OBJECT
-    public:
+    Q_OBJECT
+public:
 
-        /**
-        * Constructor.
-        *
-        * \param parent The parent QObject.
-        * \param args the optional list of arguments.
-        */
-        KoScriptingPart(KoScriptingModule* const module, const QStringList& args);
+    /**
+    * Constructor.
+    *
+    * \param parent The parent QObject.
+    * \param args the optional list of arguments.
+    */
+    KoScriptingPart(KoScriptingModule *const module, const QStringList& args);
 
-        /**
-        * Destructor.
-        */
-        virtual ~KoScriptingPart();
+    /**
+    * Destructor.
+    */
+    virtual ~KoScriptingPart();
 
-        /**
-        * \return the \a KoScriptingModule instance that is the top-level module for
-        * the scripting backends.
-        */
-        KoScriptingModule* module() const;
+    /**
+    * \return the \a KoScriptingModule instance that is the top-level module for
+    * the scripting backends.
+    */
+    KoScriptingModule *module() const;
 
-        /**
-        * Show the "Execute Script File" filedialog that allows the user to pick
-        * a scripting file and execute it.
-        * \return true if the user did choose a file and the file got executed successful.
-        */
-	bool showExecuteScriptFile();
+    /**
+    * Show the "Execute Script File" filedialog that allows the user to pick
+    * a scripting file and execute it.
+    * \return true if the user did choose a file and the file got executed successful.
+    */
+    bool showExecuteScriptFile();
 
-    protected Q_SLOTS:
+protected slots:
 
-        /**
-        * Show the modal "Execute Script File" dialog.
-        */
-        virtual void slotShowExecuteScriptFile();
+    /**
+    * Show the modal "Execute Script File" dialog.
+    */
+    void slotShowExecuteScriptFile();
 
-        /**
-        * The scripts-menu is about to show, update the content.
-        */
-        virtual void slotMenuAboutToShow();
+    /**
+    * The scripts-menu is about to show, update the content.
+    */
+    void slotMenuAboutToShow();
 
-        /**
-        * Show the modal "Script Manager" dialog.
-        */
-        virtual void slotShowScriptManager();
+    /**
+    * Show the modal "Script Manager" dialog.
+    */
+    void slotShowScriptManager();
 
-        /**
-        * Called if a script got executed.
-        */
-        virtual void slotStarted(Kross::Action*);
+    /**
+    * Called if a script got executed.
+    */
+    void slotStarted(Kross::Action*);
 
-        /**
-        * Called if execution of a script finished.
-        */
-        virtual void slotFinished(Kross::Action*);
+    /**
+    * Called if execution of a script finished.
+    */
+    void slotFinished(Kross::Action*);
 
-        /**
-        * Called if the script finalized.
-        */
-        virtual void slotFinalized(Kross::Action*);
+    /**
+    * Called if the script finalized.
+    */
+    void slotFinalized(Kross::Action*);
 
-    protected:
-        virtual void myStarted(Kross::Action*) {}
-        virtual void myFinished(Kross::Action*) {}
-        virtual void myFinalized(Kross::Action*) {}
+protected:
+    virtual void myStarted(Kross::Action*) {}
+    virtual void myFinished(Kross::Action*) {}
+    virtual void myFinalized(Kross::Action*) {}
 
-    private:
-        /// \internal d-pointer class.
-        class Private;
-        /// \internal d-pointer instance.
-        Private* const d;
+private:
+    /// \internal d-pointer class.
+    class Private;
+    /// \internal d-pointer instance.
+    Private* const d;
 };
 
 #endif

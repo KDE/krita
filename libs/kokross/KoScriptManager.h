@@ -8,10 +8,12 @@
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
+ *
  * You should have received a copy of the GNU Library General Public License
  * along with this program; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
@@ -37,77 +39,79 @@
 */
 class KoScriptManagerCollection : public QWidget
 {
-        Q_OBJECT
-    public:
+    Q_OBJECT
+public:
 
-        /**
-        * Constructor.
-        * \param parent The parent widget this widget is child of.
-        */
-        explicit KoScriptManagerCollection(QWidget* parent);
+    /**
+    * Constructor.
+    * \param parent The parent widget this widget is child of.
+    */
+    explicit KoScriptManagerCollection(QWidget *parent);
 
-        /**
-        * Destructor.
-        */
-        virtual ~KoScriptManagerCollection();
+    /**
+    * Destructor.
+    */
+    virtual ~KoScriptManagerCollection();
 
-        /**
-        * \return true if the collection was modified.
-        */
-        //bool isModified() const;
+    /**
+    * \return true if the collection was modified.
+    */
+    //bool isModified() const;
 
 #if 0
-        public Q_SLOTS:
+public slots:
 
-            /**
-            * Run the selected script.
-            */
-            void slotRun();
+    /**
+    * Run the selected script.
+    */
+    void slotRun();
 
-            /**
-            * Stop the selected script if running.
-            */
-            void slotStop();
+    /**
+    * Stop the selected script if running.
+    */
+    void slotStop();
 
-            /**
-            * Edit the select item.
-            */
-            void slotEdit();
+    /**
+    * Edit the select item.
+    */
+    void slotEdit();
 
-            /**
-            * Add a new item.
-            */
-            void slotAdd();
+    /**
+    * Add a new item.
+    */
+    void slotAdd();
 
-            /**
-            * Remove the selected item.
-            */
-            void slotRemove();
+    /**
+    * Remove the selected item.
+    */
+    void slotRemove();
 
-        private Q_SLOTS:
-            /// The selected item changed.
-            void slotSelectionChanged();
-            /// The data changed.
-            void slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+private slots:
+    /// The selected item changed.
+    void slotSelectionChanged();
+    /// The data changed.
+    void slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 #endif
 
-    private:
-        /// \internal d-pointer class.
-        class Private;
-        /// \internal d-pointer instance.
-        Private* const d;
+private:
+    /// \internal d-pointer class.
+    class Private;
+    /// \internal d-pointer instance.
+    Private* const d;
 };
 
 class KoScriptManagerDialog : public KDialog
 {
-        Q_OBJECT
-    public:
-        explicit KoScriptManagerDialog();
-        virtual ~KoScriptManagerDialog();
-    private Q_SLOTS:
-        void slotAccepted();
-    private:
-        KoScriptManagerCollection* m_collection;
+    Q_OBJECT
+public:
+    explicit KoScriptManagerDialog();
+    virtual ~KoScriptManagerDialog();
+
+private slots:
+    void slotAccepted();
+
+private:
+    KoScriptManagerCollection *m_collection;
 };
 
 #endif

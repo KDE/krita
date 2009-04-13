@@ -26,6 +26,7 @@
 #include <QtGui/QWidget>
 
 #include <kassistantdialog.h>
+#include <kfilewidget.h>
 
 class QRadioButton;
 class KPageWidgetItem;
@@ -77,8 +78,8 @@ public slots:
     void slotUpdate();
 
 private:
-    class Private;
-    Private* const d;
+    KoScriptManagerAddWizard *m_wizard;
+    QRadioButton *m_scriptCheckbox, *m_collectionCheckbox, *m_installCheckBox, *m_onlineCheckbox;
 };
 
 /**
@@ -99,8 +100,9 @@ public slots:
     void slotFileHighlighted(const QString &file);
 
 private:
-    class Private;
-    Private* const d;
+    KoScriptManagerAddWizard *const m_wizard;
+    KFileWidget *m_filewidget;
+    QString m_file;
 };
 
 /**
@@ -123,8 +125,8 @@ private:
     virtual void showEvent(QShowEvent* event);
 
 private:
-    class Private;
-    Private* const d;
+    KoScriptManagerAddWizard *const m_wizard;
+    Kross::ActionCollectionEditor *m_editor;
 };
 
 /**

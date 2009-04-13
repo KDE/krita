@@ -146,24 +146,16 @@ public:
 #endif
 };
 
-/// \internal d-pointer class.
-class KoScriptManagerCollection::Private
-{
-public:
-    bool modified;
-    KoScriptManagerView *view;
-    Private() : modified(false) {}
-};
-
 KoScriptManagerCollection::KoScriptManagerCollection(QWidget *parent)
-    : QWidget(parent), d(new Private())
+    : QWidget(parent),
+    m_modified(false)
 {
     QHBoxLayout *mainlayout = new QHBoxLayout();
     mainlayout->setMargin(0);
     setLayout(mainlayout);
 
-    d->view = new KoScriptManagerView(this);
-    mainlayout->addWidget(d->view);
+    m_view = new KoScriptManagerView(this);
+    mainlayout->addWidget(m_view);
 
     QWidget *btnwidget = new QWidget(this);
     QVBoxLayout *btnlayout = new QVBoxLayout();
@@ -171,26 +163,25 @@ KoScriptManagerCollection::KoScriptManagerCollection(QWidget *parent)
     btnwidget->setLayout(btnlayout);
     mainlayout->addWidget(btnwidget);
 
-    //KActionCollection *collection = d->view->actionCollection();
+    //KActionCollection *collection = m_view->actionCollection();
 
-    d->view->createButton(btnwidget, "run");
-    d->view->createButton(btnwidget, "stop");
+    m_view->createButton(btnwidget, "run");
+    m_view->createButton(btnwidget, "stop");
 
     QFrame *hr1 = new QFrame(btnwidget);
     hr1->setFrameStyle(QFrame::HLine | QFrame::Sunken);
     btnlayout->addWidget(hr1, 0);
 
-    d->view->createButton(btnwidget, "edit");
-    d->view->createButton(btnwidget, "add");
-    d->view->createButton(btnwidget, "remove");
+    m_view->createButton(btnwidget, "edit");
+    m_view->createButton(btnwidget, "add");
+    m_view->createButton(btnwidget, "remove");
 
     btnlayout->addStretch(1);
-    d->view->expandAll();
+    m_view->expandAll();
 }
 
 KoScriptManagerCollection::~KoScriptManagerCollection()
 {
-    delete d;
 }
 
 /*

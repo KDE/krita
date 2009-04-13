@@ -41,25 +41,16 @@
 #include <kurl.h>
 #include <kurlrequester.h>
 #include <kmimetype.h>
-#include <kfilewidget.h>
 #include <kdebug.h>
 
 /********************************************************************
  * KoScriptManagerAddTypeWidget
  */
 
-/// \internal d-pointer class.
-class KoScriptManagerAddTypeWidget::Private
-{
-public:
-    KoScriptManagerAddWizard *wizard;
-    QRadioButton *scriptCheckbox, *collectionCheckbox, *installCheckBox, *onlineCheckbox;
-};
-
 KoScriptManagerAddTypeWidget::KoScriptManagerAddTypeWidget(KoScriptManagerAddWizard *wizard)
-    : QWidget(wizard), d(new Private())
+    : QWidget(wizard),
+    m_wizard(wizard)
 {
-    d->wizard = wizard;
     setObjectName("ScriptManagerAddTypeWidget");
     QVBoxLayout *layout = new QVBoxLayout(this);
     setLayout(layout);
@@ -68,61 +59,51 @@ KoScriptManagerAddTypeWidget::KoScriptManagerAddTypeWidget(KoScriptManagerAddWiz
     layout->addWidget(label);
     layout->addSpacing(10);
 
-    d->scriptCheckbox = new QRadioButton(i18n("Add script file"), this);
-    d->scriptCheckbox->setChecked(true);
-    connect(d->scriptCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotUpdate()));
-    layout->addWidget(d->scriptCheckbox);
+    m_scriptCheckbox = new QRadioButton(i18n("Add script file"), this);
+    m_scriptCheckbox->setChecked(true);
+    connect(m_scriptCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotUpdate()));
+    layout->addWidget(m_scriptCheckbox);
 
-    d->collectionCheckbox = new QRadioButton(i18n("Add collection folder"), this);
-    layout->addWidget(d->collectionCheckbox);
+    m_collectionCheckbox = new QRadioButton(i18n("Add collection folder"), this);
+    layout->addWidget(m_collectionCheckbox);
 
-    d->installCheckBox = new QRadioButton(i18n("Install script package file"), this);
-    d->installCheckBox->setEnabled(false);
-    layout->addWidget(d->installCheckBox);
+    m_installCheckBox = new QRadioButton(i18n("Install script package file"), this);
+    m_installCheckBox->setEnabled(false);
+    layout->addWidget(m_installCheckBox);
 
-    d->onlineCheckbox = new QRadioButton(i18n("Install online script package"), this);
-    d->onlineCheckbox->setEnabled(false);
-    layout->addWidget(d->onlineCheckbox);
+    m_onlineCheckbox = new QRadioButton(i18n("Install online script package"), this);
+    m_onlineCheckbox->setEnabled(false);
+    layout->addWidget(m_onlineCheckbox);
 
     layout->addStretch(1);
 }
 
 KoScriptManagerAddTypeWidget::~KoScriptManagerAddTypeWidget()
 {
-    delete d;
 }
 
 void KoScriptManagerAddTypeWidget::slotUpdate()
 {
-    d->wizard->setAppropriate(d->wizard->m_fileItem, d->scriptCheckbox->isChecked());
-    d->wizard->setAppropriate(d->wizard->m_scriptItem, d->scriptCheckbox->isChecked());
-    d->wizard->setAppropriate(d->wizard->m_collectionItem, d->collectionCheckbox->isChecked());
-    //d->installCheckBox->isChecked()
-    //d->onlineCheckbox->isChecked()
+    m_wizard->setAppropriate(m_wizard->m_fileItem, m_scriptCheckbox->isChecked());
+    m_wizard->setAppropriate(m_wizard->m_scriptItem, m_scriptCheckbox->isChecked());
+    m_wizard->setAppropriate(m_wizard->m_collectionItem, m_collectionCheckbox->isChecked());
+    //m_installCheckBox->isChecked()
+    //m_onlineCheckbox->isChecked()
 }
 
 /********************************************************************
  * KoScriptManagerAddFileWidget
  */
 
-/// \internal d-pointer class.
-class KoScriptManagerAddFileWidget::Private
-{
-public:
-    KoScriptManagerAddWizard *const wizard;
-    KFileWidget *filewidget;
-    explicit Private(KoScriptManagerAddWizard* const w): wizard(w) {}
-    QString m_file;
-};
-
 KoScriptManagerAddFileWidget::KoScriptManagerAddFileWidget(KoScriptManagerAddWizard *wizard, const QString &startDirOrVariable)
-    : QWidget(wizard), d(new Private(wizard))
+    : QWidget(wizard),
+    m_wizard(wizard)
 {
     setObjectName("ScriptManagerAddFileWidget");
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setMargin(0);
     setLayout(layout);
-    d->filewidget = new KFileWidget(KUrl(startDirOrVariable), this);
+    m_filewidget = new KFileWidget(KUrl(startDirOrVariable), this);
 
     QStringList mimetypes;
     foreach (const QString &interpretername, Kross::Manager::self().interpreters()) {
@@ -130,52 +111,43 @@ KoScriptManagerAddFileWidget::KoScriptManagerAddFileWidget(KoScriptManagerAddWiz
         Q_ASSERT(info);
         mimetypes.append(info->mimeTypes().join(" ").trimmed());
     }
-    d->filewidget->setMimeFilter(mimetypes /*, defaultmime*/);
+    m_filewidget->setMimeFilter(mimetypes /*, defaultmime*/);
 
-    layout->addWidget(d->filewidget);
-    connect(d->filewidget, SIGNAL(fileHighlighted(const QString&)), this, SLOT(slotFileHighlighted(const QString&)));
-    connect(d->filewidget, SIGNAL(fileSelected(const QString&)), this, SLOT(slotUpdate()));
+    layout->addWidget(m_filewidget);
+    connect(m_filewidget, SIGNAL(fileHighlighted(const QString&)), this, SLOT(slotFileHighlighted(const QString&)));
+    connect(m_filewidget, SIGNAL(fileSelected(const QString&)), this, SLOT(slotUpdate()));
 }
 
 KoScriptManagerAddFileWidget::~KoScriptManagerAddFileWidget()
 {
-    delete d;
 }
 
 QString KoScriptManagerAddFileWidget::selectedFile() const
 {
-    //kDebug(32010)<<d->filewidget->selectedFile();
-    return d->m_file;
+    //kDebug(32010)<<m_filewidget->selectedFile();
+    return m_file;
 }
 
 void KoScriptManagerAddFileWidget::slotFileHighlighted(const QString &file)
 {
     //kDebug(32010)<<file;
-    d->m_file = file;
-    d->wizard->setValid(d->wizard->m_fileItem, ! file.isEmpty());
+    m_file = file;
+    m_wizard->setValid(m_wizard->m_fileItem, ! file.isEmpty());
 }
 
 void KoScriptManagerAddFileWidget::slotUpdate()
 {
     //kDebug(32010)<<selectedFile();
-    d->wizard->setValid(d->wizard->m_fileItem, ! d->m_file.isEmpty());
+    m_wizard->setValid(m_wizard->m_fileItem, ! m_file.isEmpty());
 }
 
 /********************************************************************
  * KoScriptManagerAddScriptWidget
  */
 
-/// \internal d-pointer class.
-class KoScriptManagerAddScriptWidget::Private
-{
-public:
-    KoScriptManagerAddWizard *const wizard;
-    Kross::ActionCollectionEditor *editor;
-    explicit Private(KoScriptManagerAddWizard* const w): wizard(w), editor(0) {}
-};
-
 KoScriptManagerAddScriptWidget::KoScriptManagerAddScriptWidget(KoScriptManagerAddWizard *wizard)
-    : QWidget(wizard), d(new Private(wizard))
+    : QWidget(wizard),
+    m_wizard(wizard)
 {
     setObjectName("ScriptManagerAddScriptWidget");
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -184,7 +156,6 @@ KoScriptManagerAddScriptWidget::KoScriptManagerAddScriptWidget(KoScriptManagerAd
 
 KoScriptManagerAddScriptWidget::~KoScriptManagerAddScriptWidget()
 {
-    delete d;
 }
 
 void KoScriptManagerAddScriptWidget::slotUpdate()
@@ -192,26 +163,26 @@ void KoScriptManagerAddScriptWidget::slotUpdate()
     //NOTE: idValid() only checks ! nameEdit.isEmpty()
     //d->wizard->setValid(d->wizard->m_scriptItem, d->editor && d->editor->isValid());
 
-    d->wizard->setValid(d->wizard->m_scriptItem,
-                         ! (d->editor == 0 ||
-                             d->editor->nameEdit()->text().isEmpty() ||
-                             d->editor->textEdit()->text().isEmpty() ||
-                             d->editor->interpreterEdit()->currentText().isEmpty() ||
-                             d->editor->fileEdit()->url().fileName().isEmpty() )
+    m_wizard->setValid(m_wizard->m_scriptItem,
+                         ! (m_editor == 0 ||
+                             m_editor->nameEdit()->text().isEmpty() ||
+                             m_editor->textEdit()->text().isEmpty() ||
+                             m_editor->interpreterEdit()->currentText().isEmpty() ||
+                             m_editor->fileEdit()->url().fileName().isEmpty() )
                         );
 }
 
 void KoScriptManagerAddScriptWidget::showEvent(QShowEvent *event)
 {
     Kross::Action *action = 0;
-    if (d->editor) {
-        action = d->editor->action();
-        delete d->editor;
+    if (m_editor) {
+        action = m_editor->action();
+        delete m_editor;
     }
     if (! action)
         action = new Kross::Action(0, QString());
 
-    const QString file = d->wizard->m_filewidget->selectedFile();
+    const QString file = m_wizard->m_filewidget->selectedFile();
     QFileInfo fi(file);
     action->setObjectName(file);
     action->setText(fi.baseName());
@@ -222,13 +193,13 @@ void KoScriptManagerAddScriptWidget::showEvent(QShowEvent *event)
     }
     action->setFile(file);
 
-    d->editor = new Kross::ActionCollectionEditor(action, this);
-    layout()->addWidget(d->editor);
-    d->editor->interpreterEdit()->setEnabled(false);
-    d->editor->fileEdit()->setEnabled(false);
-    connect(d->editor->textEdit(), SIGNAL(textChanged(const QString&)), this, SLOT(slotUpdate()));
-    connect(d->editor->interpreterEdit(), SIGNAL(editTextChanged(const QString&)), this, SLOT(slotUpdate()));
-    connect(d->editor->fileEdit(), SIGNAL(textChanged(const QString&)), this, SLOT(slotUpdate()));
+    m_editor = new Kross::ActionCollectionEditor(action, this);
+    layout()->addWidget(m_editor);
+    m_editor->interpreterEdit()->setEnabled(false);
+    m_editor->fileEdit()->setEnabled(false);
+    connect(m_editor->textEdit(), SIGNAL(textChanged(const QString&)), this, SLOT(slotUpdate()));
+    connect(m_editor->interpreterEdit(), SIGNAL(editTextChanged(const QString&)), this, SLOT(slotUpdate()));
+    connect(m_editor->fileEdit(), SIGNAL(textChanged(const QString&)), this, SLOT(slotUpdate()));
 
     QWidget::showEvent(event);
     slotUpdate();
@@ -237,12 +208,12 @@ void KoScriptManagerAddScriptWidget::showEvent(QShowEvent *event)
 bool KoScriptManagerAddScriptWidget::accept()
 {
     kDebug(32010);
-    Q_ASSERT(d->editor);
-    Q_ASSERT(d->editor->action());
-    Q_ASSERT(d->wizard);
-    Q_ASSERT(d->wizard->m_collection);
-    d->editor->commit(); // take over changes done in the editor into the action
-    d->wizard->m_collection->addAction(d->editor->action()); // add the action to the collection
+    Q_ASSERT(m_editor);
+    Q_ASSERT(m_editor->action());
+    Q_ASSERT(m_wizard);
+    Q_ASSERT(m_wizard->m_collection);
+    m_editor->commit(); // take over changes done in the editor into the action
+    m_wizard->m_collection->addAction(m_editor->action()); // add the action to the collection
     //TODO select new item
     return true;
 }

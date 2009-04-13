@@ -31,6 +31,7 @@
 
 #include <kdialog.h>
 
+class KoScriptManagerView;
 
 /**
 * The KoScriptManagerCollection class shows a QListView where the content of a
@@ -94,10 +95,8 @@ private slots:
 #endif
 
 private:
-    /// \internal d-pointer class.
-    class Private;
-    /// \internal d-pointer instance.
-    Private* const d;
+    bool m_modified;
+    KoScriptManagerView *m_view;
 };
 
 class KoScriptManagerDialog : public KDialog

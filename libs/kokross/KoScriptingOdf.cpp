@@ -37,39 +37,22 @@
  * KoScriptingOdfReader
  */
 
-/// \internal d-pointer class.
-class KoScriptingOdfReader::Private
-{
-public:
-    KoScriptingOdfStore *store;
-    KoXmlDocument doc;
-    KoXmlElement currentElement;
-    int level;
-    QString filter;
-    QRegExp filterRegExp;
-    Private(KoScriptingOdfStore *store, const KoXmlDocument &doc)
-        : store(store),
-        doc(doc),
-        level(0),
-        filterRegExp(false)
-    {
-    }
-};
-
 KoScriptingOdfReader::KoScriptingOdfReader(KoScriptingOdfStore *store, const KoXmlDocument &doc)
     : QObject(store),
-    d(new Private(store, doc))
+    m_store(store),
+    m_doc(doc),
+    m_level(0),
+    m_filterRegExp(false)
 {
 }
 
 KoScriptingOdfReader::~KoScriptingOdfReader()
 {
-    delete d;
 }
 
 void KoScriptingOdfReader::start()
 {
-    KoXmlElement elem = d->doc.documentElement();
+    KoXmlElement elem = m_doc.documentElement();
     handleElement(elem);
     setCurrentElement(KoXmlElement());
     setLevel(0);
@@ -77,96 +60,96 @@ void KoScriptingOdfReader::start()
 
 QString KoScriptingOdfReader::nameFilter() const
 {
-    return d->filter;
+    return m_filter;
 }
 
-void KoScriptingOdfReader::setNameFilter(const QString &name, bool regularExpression) const
+void KoScriptingOdfReader::setNameFilter(const QString &name, bool regularExpression)
 {
-    d->filter = name.isEmpty() ? QString() : name;
-    d->filterRegExp = regularExpression ? QRegExp(name, Qt::CaseInsensitive) : QRegExp();
+    m_filter = name.isEmpty() ? QString() : name;
+    m_filterRegExp = regularExpression ? QRegExp(name, Qt::CaseInsensitive) : QRegExp();
 }
 
 KoScriptingOdfStore *KoScriptingOdfReader::store() const
 {
-    return d->store;
+    return m_store;
 }
 
 KoXmlDocument KoScriptingOdfReader::doc() const
 {
-    return d->doc;
+    return m_doc;
 }
 
 KoXmlElement KoScriptingOdfReader::currentElement() const
 {
-    return d->currentElement;
+    return m_currentElement;
 }
 
 QString KoScriptingOdfReader::name() const
 {
-    return d->currentElement.tagName(); /*.nodeName();*/
+    return m_currentElement.tagName(); /*.nodeName();*/
 }
 
 QString KoScriptingOdfReader::namespaceURI() const
 {
-    return d->currentElement.namespaceURI();
+    return m_currentElement.namespaceURI();
 }
 
 int KoScriptingOdfReader::level() const
 {
-    return d->level;
+    return m_level;
 }
 
 #ifndef KOXML_USE_QDOM
 QStringList KoScriptingOdfReader::attributeNames()
 {
-    return d->currentElement.attributeNames();
+    return m_currentElement.attributeNames();
 }
 #endif
 
 QString KoScriptingOdfReader::attribute(const QString &name, const QString &defaultValue) const
 {
-    return d->currentElement.attribute(name, defaultValue);
+    return m_currentElement.attribute(name, defaultValue);
 }
 
 QString KoScriptingOdfReader::attributeNS(const QString &namespaceURI, const QString &localName, const QString &defaultValue) const
 {
-    return d->currentElement.attributeNS(namespaceURI, localName, defaultValue);
+    return m_currentElement.attributeNS(namespaceURI, localName, defaultValue);
 }
 
 bool KoScriptingOdfReader::hasAttribute(const QString &name) const
 {
-    return d->currentElement.hasAttribute(name);
+    return m_currentElement.hasAttribute(name);
 }
 
 bool KoScriptingOdfReader::hasAttributeNS(const QString &namespaceURI, const QString &localName) const
 {
-    return d->currentElement.hasAttributeNS(namespaceURI, localName);
+    return m_currentElement.hasAttributeNS(namespaceURI, localName);
 }
 
 bool KoScriptingOdfReader::isNull() const
 {
-    return d->currentElement.isNull();
+    return m_currentElement.isNull();
 }
 
 bool KoScriptingOdfReader::isElement() const
 {
-    return d->currentElement.isElement();
+    return m_currentElement.isElement();
 }
 
 QString KoScriptingOdfReader::text() const
 {
-    return d->currentElement.text();
+    return m_currentElement.text();
 }
 
 bool KoScriptingOdfReader::hasChildren() const {
 #ifdef KOXML_USE_QDOM
-    const int count = d->currentElement.childNodes().count();
+    const int count = m_currentElement.childNodes().count();
 #else
-    const int count = d->currentElement.childNodesCount();
+    const int count = m_currentElement.childNodesCount();
 #endif
     if (count < 1)
         return false;
-    if (count == 1 && d->currentElement.firstChild().isText())
+    if (count == 1 && m_currentElement.firstChild().isText())
         return false;
     return true;
 }
@@ -178,22 +161,22 @@ emit onElement();
 
 void KoScriptingOdfReader::setCurrentElement(const KoXmlElement &elem)
 {
-    d->currentElement = elem;
+    m_currentElement = elem;
 }
 
 void KoScriptingOdfReader::setLevel(int level)
 {
-    d->level = level;
+    m_level = level;
 }
 
 void KoScriptingOdfReader::handleElement(KoXmlElement &elem, int level)
 {
-    bool ok = d->filter.isNull();
+    bool ok = m_filter.isNull();
     if (! ok) {
-        if (d->filterRegExp.isEmpty())
-            ok = d->filter == elem.tagName();
+        if (m_filterRegExp.isEmpty())
+            ok = m_filter == elem.tagName();
         else
-            ok = d->filterRegExp.exactMatch(elem.tagName());
+            ok = m_filterRegExp.exactMatch(elem.tagName());
     }
     if (ok) {
         setCurrentElement(elem);
@@ -259,120 +242,112 @@ KoScriptingOdfContentReader::KoScriptingOdfContentReader(KoScriptingOdfStore *st
  * KoScriptingOdfStore
  */
 
-/// \internal d-pointer class.
-class KoScriptingOdfStore::Private
+KoStore *KoScriptingOdfStore::getReadStore()
 {
-public:
-    QPointer<KoDocument> document;
-    QPointer<KoDocumentAdaptor> documentAdaptor;
+    QByteArray ba = getByteArray();
+    if (ba.isNull()) {
+        kWarning(32010)  << "KoScriptingOdfStore::getReadStore() Failed to fetch ByteArray";
+        return 0;
+    }
+    if (m_readStore ) {
+        //kDebug(32010) <<"KoScriptingOdfStore::getReadStore() Return cached store";
+        Q_ASSERT(m_readDevice);
+        return m_readStore;
+    }
+    //kDebug(32010) <<"KoScriptingOdfStore::getReadStore() Return new store";
+    Q_ASSERT(!m_readDevice);
+    m_readDevice = new QBuffer(&m_byteArray);
+    m_readStore = KoStore::createStore(m_readDevice, KoStore::Read, "KrossScript", KoStore::Tar);
+    return m_readStore;
+}
 
-    KoStore *readStore;
-    QIODevice *readDevice;
-    KoScriptingOdfReader *reader;
-    QByteArray byteArray;
-
-    explicit Private(KoDocument *doc) : document(doc), documentAdaptor(0), readStore(0), readDevice(0), reader(0) {}
-    ~Private() { delete readStore; delete readDevice; delete reader; }
-
-    KoStore *getReadStore() {
-        QByteArray ba = getByteArray();
-        if (ba.isNull()) {
-            kWarning(32010)  << "KoScriptingOdfStore::getReadStore() Failed to fetch ByteArray";
-            return 0;
+QByteArray KoScriptingOdfStore::getByteArray()
+{
+    if (! m_byteArray.isNull())
+        return m_byteArray;
+    if (m_readStore) {
+        //kDebug(32010)  << "KoScriptingOdfStore::getByteArray() Cleaning prev cached store up.";
+        if (m_readStore->isOpen() ) {
+            //kDebug(32010)  << "KoScriptingOdfStore::getByteArray() Closing prev cached store.";
+            m_readStore->close();
         }
-        if (readStore ) {
-            //kDebug(32010) <<"KoScriptingOdfStore::getReadStore() Return cached store";
-            Q_ASSERT(readDevice);
-            return readStore;
-        }
-        //kDebug(32010) <<"KoScriptingOdfStore::getReadStore() Return new store";
-        Q_ASSERT(!readDevice);
-        readDevice = new QBuffer(&byteArray);
-        readStore = KoStore::createStore(readDevice, KoStore::Read, "KrossScript", KoStore::Tar);
-        return readStore;
+        delete m_readStore;
+        m_readStore = 0;
+    }
+    if (m_readDevice) {
+        //kDebug(32010)  << "KoScriptingOdfStore::getByteArray() Cleaning prev cached device up.";
+        delete m_readDevice;
+        m_readDevice = 0;
+    }
+    if (! m_document) {
+        //kWarning(32010)  << "KoScriptingOdfStore::getByteArray() No document defined.";
+        return QByteArray();
     }
 
-    QByteArray getByteArray() {
-        if (! byteArray.isNull())
-            return byteArray;
-        if (readStore) {
-            //kDebug(32010)  << "KoScriptingOdfStore::getByteArray() Cleaning prev cached store up.";
-            if (readStore->isOpen() ) {
-                //kDebug(32010)  << "KoScriptingOdfStore::getByteArray() Closing prev cached store.";
-                readStore->close();
-            }
-            delete readStore;
-            readStore = 0;
-        }
-        if (readDevice) {
-            //kDebug(32010)  << "KoScriptingOdfStore::getByteArray() Cleaning prev cached device up.";
-            delete readDevice;
-            readDevice = 0;
-        }
-        if (! document) {
-            //kWarning(32010)  << "KoScriptingOdfStore::getByteArray() No document defined.";
-            return QByteArray();
-        }
-
-        //kDebug(32010)  << "KoScriptingOdfStore::getByteArray() Reading ByteArray.";
-        QBuffer buffer(&byteArray);
-        KoStore *store = KoStore::createStore(&buffer, KoStore::Write, "KrossScript", KoStore::Tar);
-        KoOdfWriteStore odfStore(store);
-        odfStore.manifestWriter("");
-        KoEmbeddedDocumentSaver embeddedSaver;
-        KoDocument::SavingContext documentContext(odfStore, embeddedSaver);
-        QByteArray mime = getMimeType();
-        if (! document->saveOdf(documentContext)) {
-            kWarning(32010)  << "KoScriptingOdfStore::open() Failed to save Oasis to ByteArray";
-            byteArray = QByteArray();
-        }
-        //odfStore.closeContentWriter();
-        odfStore.closeManifestWriter();
-        delete store;
-        return byteArray;
+    //kDebug(32010)  << "KoScriptingOdfStore::getByteArray() Reading ByteArray.";
+    QBuffer buffer(&m_byteArray);
+    KoStore *store = KoStore::createStore(&buffer, KoStore::Write, "KrossScript", KoStore::Tar);
+    KoOdfWriteStore odfStore(store);
+    odfStore.manifestWriter("");
+    KoEmbeddedDocumentSaver embeddedSaver;
+    KoDocument::SavingContext documentContext(odfStore, embeddedSaver);
+    QByteArray mime = getMimeType();
+    if (! m_document->saveOdf(documentContext)) {
+        kWarning(32010)  << "KoScriptingOdfStore::open() Failed to save Oasis to ByteArray";
+        m_byteArray = QByteArray();
     }
+    //odfStore.closeContentWriter();
+    odfStore.closeManifestWriter();
+    delete store;
+    return m_byteArray;
+}
 
-    QByteArray getMimeType() const {
-        return "application/vnd.oasis.opendocument.text"; //odt
-        //return "application/vnd.oasis.opendocument.spreadsheet"; //ods
-        //return "application/vnd.oasis.opendocument.presentation"; //odp
-        //return "pplication/vnd.oasis.opendocument.graphics"; //odg
-        //return "application/vnd.oasis.opendocument.chart"; //odc
-        //return "application/vnd.oasis.opendocument.formula"; //odf
-        //return "application/vnd.oasis.opendocument.image"; //odi
-    }
-
-};
+QByteArray KoScriptingOdfStore::getMimeType() const
+{
+    return "application/vnd.oasis.opendocument.text"; //odt
+    //return "application/vnd.oasis.opendocument.spreadsheet"; //ods
+    //return "application/vnd.oasis.opendocument.presentation"; //odp
+    //return "pplication/vnd.oasis.opendocument.graphics"; //odg
+    //return "application/vnd.oasis.opendocument.chart"; //odc
+    //return "application/vnd.oasis.opendocument.formula"; //odf
+    //return "application/vnd.oasis.opendocument.image"; //odi
+}
 
 KoScriptingOdfStore::KoScriptingOdfStore(QObject *parent, KoDocument *doc)
-    : QObject(parent)
-    , d(new Private(doc))
+    : QObject(parent),
+    m_document(doc),
+    m_documentAdaptor(0),
+    m_readStore(0),
+    m_readDevice(0),
+    m_reader(0)
 {
 }
 
 KoScriptingOdfStore::~KoScriptingOdfStore()
 {
-    delete d;
+    delete m_readStore;
+    delete m_readDevice;
+    delete m_reader;
 }
 
-//KoStore *KoScriptingOdfStore::readStore() const { return d->getReadStore(); }
-//QIODevice *KoScriptingOdfStore::readDevice() const { return d->readDevice; }
+//KoStore *KoScriptingOdfStore::readStore() const { return getReadStore(); }
+//QIODevice *KoScriptingOdfStore::readDevice() const { return readDevice; }
 
 bool KoScriptingOdfStore::hasFile(const QString &fileName)
 {
-    KoStore *store = d->getReadStore();
+    KoStore *store = getReadStore();
     return store ? store->hasFile(fileName) : false;
 }
 
 bool KoScriptingOdfStore::isOpen() const
 {
-    return d->readStore && d->readStore->isOpen();
+    return m_readStore && m_readStore->isOpen();
 }
 
 QObject *KoScriptingOdfStore::open(const QString &fileName)
 {
-    delete d->reader; d->reader = 0;
-    KoStore *store = d->getReadStore();
+    delete m_reader; m_reader = 0;
+    KoStore *store = getReadStore();
     if (! store)
         return 0;
     if (store->isOpen())
@@ -397,26 +372,26 @@ QObject *KoScriptingOdfStore::open(const QString &fileName)
     const QString tagName = doc.documentElement().tagName();
     kDebug(32010) <<"KoScriptingOdfStore::open documentElement.tagName="<<tagName;
     if (tagName == "office:document-content")
-        d->reader = new KoScriptingOdfContentReader(this, doc);
+        m_reader = new KoScriptingOdfContentReader(this, doc);
     if (tagName == "office:document-styles")
-        d->reader = new KoScriptingOdfStylesReader(this, doc);
+        m_reader = new KoScriptingOdfStylesReader(this, doc);
     else if (tagName == "manifest:manifest")
-        d->reader = new KoScriptingOdfManifestReader(this, doc);
+        m_reader = new KoScriptingOdfManifestReader(this, doc);
     else
-        d->reader = new KoScriptingOdfReader(this, doc);
-    return d->reader;
+        m_reader = new KoScriptingOdfReader(this, doc);
+    return m_reader;
 }
 
 bool KoScriptingOdfStore::close()
 {
-    if (! d->readStore || ! d->readStore->isOpen())
+    if (! m_readStore || ! m_readStore->isOpen())
         return true;
-    return d->readStore->close();
+    return m_readStore->close();
 }
 
 QByteArray KoScriptingOdfStore::extract(const QString &fileName)
 {
-    KoStore *store = d->getReadStore();
+    KoStore *store = getReadStore();
     if (! store)
         return QByteArray();
     if (store->isOpen())
@@ -428,7 +403,7 @@ QByteArray KoScriptingOdfStore::extract(const QString &fileName)
 
 bool KoScriptingOdfStore::extractToFile(const QString &fileName, const QString &toFileName)
 {
-    KoStore *store = d->getReadStore();
+    KoStore *store = getReadStore();
     if (! store)
         return false;
     if (store->isOpen())
@@ -438,27 +413,26 @@ bool KoScriptingOdfStore::extractToFile(const QString &fileName, const QString &
 
 QObject *KoScriptingOdfStore::document() const
 {
-    if (d->documentAdaptor)
-        return d->documentAdaptor;
-    return d->document;
+    if (m_documentAdaptor)
+        return m_documentAdaptor;
+    return m_document;
 }
 
 bool KoScriptingOdfStore::setDocument(QObject *document)
 {
-    //d->clear();
     bool ok = true;
-    d->documentAdaptor = dynamic_cast<KoDocumentAdaptor*>(document);
-    if (d->documentAdaptor) {
-        d->document = dynamic_cast<KoDocument*>(d->documentAdaptor->parent());
-        Q_ASSERT(d->document);
+    m_documentAdaptor = dynamic_cast<KoDocumentAdaptor*>(document);
+    if (m_documentAdaptor) {
+        m_document = dynamic_cast<KoDocument*>(m_documentAdaptor->parent());
+        Q_ASSERT(m_document);
     } else {
         if (KoDocument *doc = dynamic_cast<KoDocument*>(document)) {
-            d->document = doc;
+            m_document = doc;
         } else {
-            d->document = 0;
+            m_document = 0;
             ok = false;
         }
-        d->documentAdaptor = 0;
+        m_documentAdaptor = 0;
     }
     return ok;
 }

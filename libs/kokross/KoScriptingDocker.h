@@ -22,14 +22,19 @@
 #ifndef KOKROSS_KOSCRIPTINGDOCKER_H
 #define KOKROSS_KOSCRIPTINGDOCKER_H
 
-#include <QDockWidget>
 #include <KoDockFactory.h>
+
+#include <QDockWidget>
+#include <QPointer>
+#include <QMap>
 
 namespace Kross {
     class Action;
+    class ActionCollectionView;
 }
 
 class KoScriptingModule;
+class QAction;
 
 /**
 * The KoScriptingDockerFactory class implements a factory to
@@ -50,11 +55,6 @@ public:
     explicit KoScriptingDockerFactory(QWidget *parent = 0, KoScriptingModule *module = 0, Kross::Action *action = 0);
 
     /**
-    * Destructor.
-    */
-    virtual ~KoScriptingDockerFactory();
-
-    /**
     * \return the id the docker has. This will be always "Scripting".
     */
     virtual QString id() const;
@@ -70,10 +70,12 @@ public:
     virtual QDockWidget *createDockWidget();
 
 private:
-    /// \internal d-pointer class.
-    class Private;
-    /// \internal d-pointer instance.
-    Private* const d;
+    /// The parent QWidget instance.
+    QPointer<QWidget> m_parent;
+    /// The module, can be 0.
+    KoScriptingModule *m_module;
+    /// The action, can be 0.
+    Kross::Action *m_action;
 };
 
 /**
@@ -84,18 +86,12 @@ class KoScriptingDocker : public QDockWidget
 {
     Q_OBJECT
 public:
-
     /**
     * Constructor.
     *
     * \param parent The parent QWidget of the \a KoScriptingDocker .
     */
     explicit KoScriptingDocker(QWidget *parent = 0);
-
-    /**
-    * Destructor.
-    */
-    virtual ~KoScriptingDocker();
 
 protected slots:
 
@@ -120,10 +116,10 @@ protected slots:
     void slotDoubleClicked();
 
 private:
-    /// \internal d-pointer class.
-    class Private;
-    /// \internal d-pointer instance.
-    Private* const d;
+    /// The view we are using to display the collections and there actions.
+    Kross::ActionCollectionView *m_view;
+    /// The map of actions we are using to display toolbar-buttons like "run" and "stop".
+    QMap<QString, QAction*> m_actions;
 };
 
 /**
@@ -170,10 +166,8 @@ private slots:
     void slotVisibilityChanged(bool visible);
 
 private:
-    /// \internal d-pointer class.
-    class Private;
-    /// \internal d-pointer instance.
-    Private* const d;
+    QPointer<KoScriptingModule> m_module;
+    Kross::Action *m_action;
 };
 
 #endif

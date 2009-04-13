@@ -28,7 +28,6 @@
 #include <QBoxLayout>
 #include <QModelIndex>
 #include <QLineEdit>
-#include <QPointer>
 
 #include <kdialog.h>
 #include <klocale.h>
@@ -46,35 +45,17 @@
  * KoScriptingDockerFactory
  */
 
-/// \internal d-pointer class.
-class KoScriptingDockerFactory::Private
-{
-public:
-    /// The parent QWidget instance.
-    QPointer<QWidget> parent;
-    /// The module, can be 0.
-    KoScriptingModule *module;
-    /// The action, can be 0.
-    Kross::Action *action;
-};
-
 KoScriptingDockerFactory::KoScriptingDockerFactory(QWidget *parent, KoScriptingModule *module, Kross::Action *action)
-    : KoDockFactory()
-    , d(new Private())
+    : KoDockFactory(),
+    m_parent(parent),
+    m_module(module),
+    m_action(action)
 {
-    d->parent = parent;
-    d->module = module;
-    d->action = action;
-}
-
-KoScriptingDockerFactory::~KoScriptingDockerFactory()
-{
-    delete d;
 }
 
 QString KoScriptingDockerFactory::id() const
 {
-    return d->action ? d->action->name() : "Scripting";
+    return m_action ? m_action->name() : "Scripting";
 }
 
 KoDockFactory::DockPosition  KoScriptingDockerFactory::defaultDockPosition() const
@@ -85,10 +66,10 @@ KoDockFactory::DockPosition  KoScriptingDockerFactory::defaultDockPosition() con
 QDockWidget *KoScriptingDockerFactory::createDockWidget()
 {
     QDockWidget *dw = 0;
-    if (d->action)
-        dw = new KoScriptingActionDocker(d->module, d->action, d->parent);
+    if (m_action)
+        dw = new KoScriptingActionDocker(m_module, m_action, m_parent);
     else
-        dw = new KoScriptingDocker(d->parent);
+        dw = new KoScriptingDocker(m_parent);
     dw->setObjectName(id());
     return dw;
 }
@@ -97,51 +78,40 @@ QDockWidget *KoScriptingDockerFactory::createDockWidget()
  * KoScriptingDocker
  */
 
-/// \internal d-pointer class.
-class KoScriptingDocker::Private
-{
-public:
-    /// The view we are using to display the collections and there actions.
-    Kross::ActionCollectionView *view;
-    /// The map of actions we are using to display toolbar-buttons like "run" and "stop".
-    QMap<QString, QAction*> actions;
-};
-
 KoScriptingDocker::KoScriptingDocker(QWidget *parent)
     : QDockWidget(i18n("Scripts"), parent)
-    , d(new Private())
 {
     QWidget *widget = new QWidget(this);
     QBoxLayout *layout = new QVBoxLayout(widget);
     layout->setMargin(0);
     widget->setLayout(layout);
 
-    d->view = new Kross::ActionCollectionView(widget);
-    d->view->setRootIsDecorated(false);
+    m_view = new Kross::ActionCollectionView(widget);
+    m_view->setRootIsDecorated(false);
 
     //Kross::ActionCollectionModel::Mode modelmode = Kross::ActionCollectionModel::Mode(Kross::ActionCollectionModel::ToolTips);
     //d->model = new Kross::ActionCollectionProxyModel(this, new Kross::ActionCollectionModel(this, 0, modelmode));
     Kross::ActionCollectionProxyModel *model = new Kross::ActionCollectionProxyModel(this);
 
-    d->view->setModel(model);
-    layout->addWidget(d->view, 1);
-    d->view->expandAll();
+    m_view->setModel(model);
+    layout->addWidget(m_view, 1);
+    m_view->expandAll();
 
     QToolBar *tb = new QToolBar(widget);
     layout->addWidget(tb);
     tb->setMovable(false);
     //tb->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
-    KActionCollection *collection = d->view->actionCollection();
+    KActionCollection *collection = m_view->actionCollection();
     if (QAction *a = collection->action("run")) {
         a = tb->addAction(a->icon(), a->text(), a, SLOT(trigger()));
         a->setEnabled(false);
-        d->actions.insert("run", a);
+        m_actions.insert("run", a);
     }
     if (QAction *a = collection->action("stop")) {
         a = tb->addAction(a->icon(), a->text(), a, SLOT(trigger()));
         a->setEnabled(false);
-        d->actions.insert("stop", a);
+        m_actions.insert("stop", a);
     }
 
     tb->addAction(KIcon("configure"), i18n("Script Manager"), this, SLOT(slotShowScriptManager()));
@@ -156,13 +126,8 @@ KoScriptingDocker::KoScriptingDocker(QWidget *parent)
     setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
     setWidget(widget);
 
-    connect(d->view, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(slotDoubleClicked()));
-    connect(d->view, SIGNAL(enabledChanged(const QString&)), this, SLOT(slotEnabledChanged(const QString&)));
-}
-
-KoScriptingDocker::~KoScriptingDocker()
-{
-    delete d;
+    connect(m_view, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(slotDoubleClicked()));
+    connect(m_view, SIGNAL(enabledChanged(const QString&)), this, SLOT(slotEnabledChanged(const QString&)));
 }
 
 void KoScriptingDocker::slotShowScriptManager()
@@ -174,59 +139,48 @@ void KoScriptingDocker::slotShowScriptManager()
 
 void KoScriptingDocker::slotEnabledChanged(const QString &actionname)
 {
-    if (d->actions.contains(actionname))
-        if (QAction *a = d->view->actionCollection()->action(actionname))
-            d->actions[actionname]->setEnabled(a->isEnabled());
+    if (m_actions.contains(actionname))
+        if (QAction *a = m_view->actionCollection()->action(actionname))
+            m_actions[actionname]->setEnabled(a->isEnabled());
 }
 
 void KoScriptingDocker::slotDoubleClicked()
 {
     //kDebug(32010)<<"KoScriptingDocker::slotDoubleClicked()";
-    d->view->slotRun();
+    m_view->slotRun();
 }
 
 /***********************************************************************
  * KoScriptingDocker
  */
 
-/// \internal d-pointer class.
-class KoScriptingActionDocker::Private
-{
-public:
-    QWidget *widget;
-    QPointer<KoScriptingModule> module;
-    Kross::Action *action;
-};
-
 KoScriptingActionDocker::KoScriptingActionDocker(KoScriptingModule *module, Kross::Action *action, QWidget *parent)
-    : QDockWidget(action->text(), parent)
-    , d(new Private())
+    : QDockWidget(action->text(), parent),
+    m_module(module),
+    m_action(action)
 {
     kDebug(32010);
-    d->module = module;
-    d->action = action;
-    d->action->addObject(this, "KoDocker", Kross::ChildrenInterface::AutoConnectSignals);
+    m_action->addObject(this, "KoDocker", Kross::ChildrenInterface::AutoConnectSignals);
     //connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(slotVisibilityChanged(bool)));
 }
 
 KoScriptingActionDocker::~KoScriptingActionDocker()
 {
     kDebug(32010);
-    d->action->finalize();
-    delete d;
+    m_action->finalize();
 }
 
 void KoScriptingActionDocker::slotVisibilityChanged(bool visible)
 {
     kDebug(32010)<<"visible="<<visible;
     if (visible) {
-        if (d->module && d->action->isFinalized()) {
-            //KoView *view = d->module->view();
+        if (m_module && m_action->isFinalized()) {
+            //KoView *view = m_module->view();
             //KoMainWindow *mainwindow = view ? view->shell() : 0;
-            d->action->trigger();
+            m_action->trigger();
         }
     } else {
-        //d->action->finalize();
+        //m_action->finalize();
     }
 }
 

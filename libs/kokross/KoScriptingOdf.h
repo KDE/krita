@@ -31,6 +31,7 @@
 #include <KoDocument.h>
 
 class KoScriptingOdfStore;
+class KoDocumentAdaptor;
 
 /**
 * The KoScriptingOdfReader provides functionality to read content
@@ -86,7 +87,7 @@ public slots:
     * reader.setNameFilter(".*:p", True)
     * \endcode
     */
-    void setNameFilter(const QString &name = QString(), bool regularExpression = false) const;
+    void setNameFilter(const QString &name = QString(), bool regularExpression = false);
 
     //QString levelFilter() const;
     //void setLevelFilter(const QString &name = QString()) const;
@@ -197,11 +198,14 @@ protected:
     void setLevel(int level);
     /** Element-handler. */
     virtual void handleElement(KoXmlElement &elem, int level = 0);
+
 private:
-    /** \internal d-pointer class. */
-    class Private;
-    /** \internal d-pointer instance. */
-    Private* const d;
+    KoScriptingOdfStore *m_store;
+    KoXmlDocument m_doc;
+    KoXmlElement m_currentElement;
+    int m_level;
+    QString m_filter;
+    QRegExp m_filterRegExp;
 };
 
 /**
@@ -432,10 +436,17 @@ signals:
     //void onParagraph();
 
 private:
-    /** \internal d-pointer class. */
-    class Private;
-    /** \internal d-pointer instance. */
-    Private* const d;
+    KoStore *getReadStore();
+    QByteArray getByteArray();
+    QByteArray getMimeType() const;
+
+    QPointer<KoDocument> m_document;
+    QPointer<KoDocumentAdaptor> m_documentAdaptor;
+
+    KoStore *m_readStore;
+    QIODevice *m_readDevice;
+    KoScriptingOdfReader *m_reader;
+    QByteArray m_byteArray;
 };
 
 

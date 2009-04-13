@@ -231,19 +231,21 @@ void KoShape::setSize(const QSizeF &newSize)
         return;
 
     QMatrix matrix;
+    oldSize.setHeight(qMax((qreal) 1E-4, oldSize.height())); // avoids devision by zero below
+    oldSize.setWidth(qMax((qreal) 1E-4, oldSize.width()));
     matrix.scale(newSize.width()/oldSize.width(), newSize.height()/oldSize.height());
-    
-    KoGradientBackground * g = dynamic_cast<KoGradientBackground*>(background());
+
+    KoGradientBackground * g = dynamic_cast<KoGradientBackground*>(d->fill);
     if (g) {
-        g->setMatrix( g->matrix() * matrix );
+        g->setMatrix(g->matrix() * matrix);
     }
-    KoLineBorder * l = dynamic_cast<KoLineBorder*>(border());
+    KoLineBorder *l = dynamic_cast<KoLineBorder*>(d->border);
     if (l && l->lineBrush().gradient()) {
         QBrush brush = l->lineBrush();
-        brush.setMatrix( brush.matrix() * matrix );
-        l->setLineBrush( brush );
+        brush.setMatrix(brush.matrix() * matrix);
+        l->setLineBrush(brush);
     }
-    
+
     d->size = newSize;
 
     notifyChanged();

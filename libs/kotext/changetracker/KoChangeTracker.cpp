@@ -21,6 +21,9 @@
 
 #include "styles/KoCharacterStyle.h"
 
+#include <KoXmlReader.h>
+#include <KoXmlNS.h>
+
 #include <KDebug>
 #include <KDateTime>
 
@@ -29,93 +32,158 @@
 class KoChangeTracker::Private
 {
 public:
-  Private() { }
-  ~Private() { }
-  
-  QHash<int, int> m_childs;
-  QHash<int, int> m_parents;
-  QHash<int, KoChangeTrackerElement *> m_changes;
-  QList<int> m_saveChanges;
-  int m_changeId;
+    Private() { }
+    ~Private() { }
+
+    QHash<int, int> m_childs;
+    QHash<int, int> m_parents;
+    QHash<int, KoChangeTrackerElement *> m_changes;
+    QHash<QString, int> m_loadedChanges;
+    QList<int> m_saveChanges;
+    int m_changeId;
 };
 
 KoChangeTracker::KoChangeTracker(QObject *parent)
         : QObject(parent),
 	d(new Private())
 {
-  d->m_changeId = 1;
+    kDebug() << "in changeTracker cstr";
+    d->m_changeId = 1;
 }
 
 KoChangeTracker::~KoChangeTracker()
 {
-  delete d;
+    kDebug() << "in changeTracker destr";
+    delete d;
 }
 
 int KoChangeTracker::getFormatChangeId(QString title, QTextFormat &format, QTextFormat &prevFormat, int existingChangeId)
 {
-  if ( existingChangeId ) {
-    d->m_childs.insert(existingChangeId, d->m_changeId);
-    d->m_parents.insert(d->m_changeId, existingChangeId);
-  }
-  
-  KoChangeTrackerElement *changeElement = new KoChangeTrackerElement(title, KoGenChange::formatChange);
-  changeElement->setChangeFormat(format);
-  changeElement->setPrevFormat(format);
-  
-  changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate));
-  changeElement->setCreator(QString("essai format"));
+    if ( existingChangeId ) {
+        d->m_childs.insert(existingChangeId, d->m_changeId);
+        d->m_parents.insert(d->m_changeId, existingChangeId);
+    }
 
-  d->m_changes.insert(d->m_changeId, changeElement);
-  changeElement=d->m_changes.value(d->m_changeId);
-    
-  return d->m_changeId++;
+    KoChangeTrackerElement *changeElement = new KoChangeTrackerElement(title, KoGenChange::formatChange);
+    changeElement->setChangeFormat(format);
+    changeElement->setPrevFormat(format);
+
+    changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate));
+    changeElement->setCreator(QString("essai format"));
+
+    d->m_changes.insert(d->m_changeId, changeElement);
+//    changeElement=d->m_changes.value(d->m_changeId);
+
+    return d->m_changeId++;
 }
 
 int KoChangeTracker::getInsertChangeId(QString title, int existingChangeId)
 {
-  if ( existingChangeId ) {
-    d->m_childs.insert(existingChangeId, d->m_changeId);
-    d->m_parents.insert(d->m_changeId, existingChangeId);
-  }
-  
-  KoChangeTrackerElement *changeElement = new KoChangeTrackerElement(title, KoGenChange::insertChange);
+    if ( existingChangeId ) {
+        d->m_childs.insert(existingChangeId, d->m_changeId);
+        d->m_parents.insert(d->m_changeId, existingChangeId);
+    }
 
-  changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate));
-  changeElement->setCreator(QString("essai insert"));
+    KoChangeTrackerElement *changeElement = new KoChangeTrackerElement(title, KoGenChange::insertChange);
 
-  d->m_changes.insert(d->m_changeId, changeElement);
-  
-  return d->m_changeId++;
+    changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate));
+    changeElement->setCreator(QString("essai insert"));
+
+    d->m_changes.insert(d->m_changeId, changeElement);
+
+    return d->m_changeId++;
 }
+
+KoChangeTrackerElement* KoChangeTracker::elementById(int id)
+{
+    return d->m_changes.value(id);
+}
+
 
 bool KoChangeTracker::containsInlineChanges(const QTextFormat &format)
 {
-  if (format.property(KoCharacterStyle::ChangeTrackerId).toInt())
-    return true;
-  else
- 
- return false;
+    if (format.property(KoCharacterStyle::ChangeTrackerId).toInt())
+        return true;
+
+    return false;
 }
 
 bool KoChangeTracker::saveInlineChange(int changeId, KoGenChange &change)
 {
-  if (!d->m_changes.contains(changeId))
-    return false;
-  
-  change.setType(d->m_changes.value(changeId)->getChangeType());
-  if (d->m_changes.value(changeId)->hasCreator())
-    change.addChangeMetaData("dc-creator", d->m_changes.value(changeId)->getCreator());
-  if (d->m_changes.value(changeId)->hasDate())
-    change.addChangeMetaData("dc-date", d->m_changes.value(changeId)->getDate());
-  if (d->m_changes.value(changeId)->hasExtraMetaData())
-    change.addChildElement("changeMetaData", d->m_changes.value(changeId)->getExtraMetaData());
-  
-  if (d->m_changes.value(changeId)->hasDeleteData())
-    change.addChildElement("deleteData", d->m_changes.value(changeId)->getDeleteData());
-    
-  return true;
+    if (!d->m_changes.contains(changeId))
+        return false;
+
+    change.setType(d->m_changes.value(changeId)->getChangeType());
+    if (d->m_changes.value(changeId)->hasCreator())
+        change.addChangeMetaData("dc-creator", d->m_changes.value(changeId)->getCreator());
+    if (d->m_changes.value(changeId)->hasDate())
+        change.addChangeMetaData("dc-date", d->m_changes.value(changeId)->getDate());
+    if (d->m_changes.value(changeId)->hasExtraMetaData())
+        change.addChildElement("changeMetaData", d->m_changes.value(changeId)->getExtraMetaData());
+
+    if (d->m_changes.value(changeId)->hasDeleteData())
+        change.addChildElement("deleteData", d->m_changes.value(changeId)->getDeleteData());
+
+    return true;
 }
 
+void KoChangeTracker::loadOdfChanges(const KoXmlElement& element)
+{
+    KoXmlElement tag;
+    forEachElement(tag, element) {
+        if (! tag.isNull()) {
+            const QString localName = tag.localName();
+            if (localName == "changed-region") {
+                KoChangeTrackerElement *changeElement;
+                KoXmlElement region;
+                forEachElement(region, tag) {
+                    if (!region.isNull()) {
+                        if (region.localName() == "insertion") {
+                            changeElement = new KoChangeTrackerElement(tag.attributeNS(KoXmlNS::text,"id"),KoGenChange::insertChange);
+                        } else if (region.localName() == "format-change") {
+                            changeElement = new KoChangeTrackerElement(tag.attributeNS(KoXmlNS::text,"id"),KoGenChange::formatChange);
+                        } else if (region.localName() == "deletion") {
+                            changeElement = new KoChangeTrackerElement(tag.attributeNS(KoXmlNS::text,"id"),KoGenChange::deleteChange);
+                        }
+                        KoXmlElement metadata = region.namedItemNS(KoXmlNS::office,"change-info").toElement();
+                        if (!metadata.isNull()) {
+                            KoXmlElement date = metadata.namedItem("dc-date").toElement();
+                            if (!date.isNull()) {
+                                changeElement->setDate(date.text());
+                            }
+                            KoXmlElement creator = metadata.namedItem("dc-creator").toElement();
+                            if (!date.isNull()) {
+                                changeElement->setCreator(creator.text());
+                            }
+                            //TODO load comments
+/*                            KoXmlElement extra = metadata.namedItem("dc-").toElement();
+                            if (!date.isNull()) {
+                                kDebug() << "creator: " << creator.text();
+                                changeElement->setCreator(creator.text());
+                            }*/
+                        }
+                        d->m_changes.insert( d->m_changeId, changeElement);
+                        d->m_loadedChanges.insert(tag.attributeNS(KoXmlNS::text,"id"), d->m_changeId++);
+                    }
+                }
+            }
+        }
+    }
+}
 
+int KoChangeTracker::getLoadedChangeId(QString odfId)
+{
+    return d->m_loadedChanges.value(odfId);
+}
+
+bool KoChangeTracker::completeLoading(KoStore *)
+{
+    return true;
+}
+
+bool KoChangeTracker::completeSaving(KoStore *, KoXmlWriter *, KoShapeSavingContext *)
+{
+    return true;
+}
 
 #include "KoChangeTracker.moc"

@@ -66,11 +66,6 @@ endif (APPLE)
 
 
 #Set the build of TextShape changetraker
-set(CHANGETRK FALSE)
-    
-if(CHANGETRK)
- add_definitions(-DCHANGETRK)
-endif(CHANGETRK)
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 

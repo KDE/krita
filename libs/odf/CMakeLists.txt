@@ -23,15 +23,10 @@ set(koodf_LIB_SRCS
     KoOdfReadStore.cpp
     KoOdfWriteStore.cpp
     KoStyleStack.cpp
-)
 
-if(CHANGETRK)
-  set(koodf_LIB_SRCS ${koodf_LIB_SRCS}
     KoGenChange.cpp
     KoGenChanges.cpp
-  )
-endif(CHANGETRK)
-
+)
 
 kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})
 

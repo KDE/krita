@@ -27,9 +27,7 @@
 
 #include "KoList.h"
 
-#ifdef CHANGETRK
- #include "changetracker/KoChangeTracker.h"
-#endif
+#include "changetracker/KoChangeTracker.h"
 
 class KoStyleManager;
 class KoInlineTextObjectManager;
@@ -61,16 +59,14 @@ public:
     /// Returns the style manager
     KoStyleManager *styleManager() const;
 
-#ifdef CHANGETRK
     /// Sets the change tracker of the document
     void setChangeTracker(KoChangeTracker *changeTracker);
-    
+
     ///Returns the change tracker of the document
     KoChangeTracker *changeTracker() const;
-    
+
     ///Returns true if a changeTracker is already assigned to the document
     bool changeTrackerAssigned();
-#endif
 
     /// Sets the lists of the document
     void setLists(const QList<KoList *> &lists);
@@ -106,23 +102,17 @@ public:
     enum ResourceType {
         StyleManager = QTextDocument::UserResource,
         Lists,
-        InlineTextManager
-#ifdef CHANGETRK
-        ,ChangeTrackerRessource = QTextDocument::UserResource
-#endif
+        InlineTextManager,
+        ChangeTrackerRessource = QTextDocument::UserResource
     };
     static const QUrl StyleManagerURL;
     static const QUrl ListsURL;
     static const QUrl InlineObjectTextManagerURL;
-#ifdef CHANGETRK
     static const QUrl ChangeTrackerURL;
-#endif
 
 private:
     QTextDocument *m_document;
-#ifdef CHANGETRK
     bool m_changeTrackerAssigned;
-#endif
 };
 
 #endif // KOTEXTDOCUMENT_H

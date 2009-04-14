@@ -44,14 +44,14 @@ public:
     KoTextShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles& mainStyles,
                          KoEmbeddedDocumentSaver& embeddedSaver, KoGenChanges& changes, SavingMode savingMode = Store);
     virtual ~KoTextShapeSavingContext();
-    
+
     /**
      * @brief Get the changes (tracked)
      *
      * @return changes (tracked)
      */
     KoGenChanges & changes();
-    
+
 
 private:
     KoGenChanges& m_changes;

@@ -29,6 +29,7 @@
 #include <KoXmlNS.h>
 #include <KoStyleManager.h>
 #include <KoInlineTextObjectManager.h>
+#include <changetracker/KoChangeTracker.h>
 
 TextShapeFactory::TextShapeFactory(QObject *parent)
         : KoShapeFactory(parent, TextShape_SHAPEID, i18n("Text")),
@@ -72,6 +73,7 @@ void TextShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter *>  & da
     dataCenterMap["StyleManager"] = new KoStyleManager();
     m_inlineTextObjectManager = new KoInlineTextObjectManager(this);
     dataCenterMap["InlineTextObjectManager"] = m_inlineTextObjectManager;
+    dataCenterMap["ChangeTracker"] = new KoChangeTracker();
 }
 
 #include "TextShapeFactory.moc"

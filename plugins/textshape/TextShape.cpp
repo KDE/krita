@@ -73,10 +73,7 @@ struct Finalizer {
 #include <QAbstractTextDocumentLayout>
 #include <kdebug.h>
 
-#ifdef CHANGETRK
-  #include <KoChangeTracker.h>
-#endif
-
+#include <KoChangeTracker.h>
 
 TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
         : KoShapeContainer(new KoTextShapeContainerModel())
@@ -283,11 +280,8 @@ void TextShape::saveOdf(KoShapeSavingContext & context) const
         }
     }
     const bool saveMyText = index == 0 && !m_demoText; // only save the text once.
-#ifdef CHANGETRK
+
     m_textShapeData->saveOdf(dynamic_cast<KoTextShapeSavingContext &>(context), 0, saveMyText ? -1 : 0);
-#else
-    m_textShapeData->saveOdf(context, 0, saveMyText ? -1 : 0);
-#endif
     writer.endElement(); // draw:text-box
     saveOdfCommonChildElements(context);
     writer.endElement(); // draw:frame
@@ -336,13 +330,15 @@ void TextShape::init(const QMap<QString, KoDataCenter *> & dataCenterMap)
     KoTextDocument(m_textShapeData->document()).setStyleManager(styleManager);
     KoInlineTextObjectManager *tom = dynamic_cast<KoInlineTextObjectManager *>(dataCenterMap["InlineTextObjectManager"]);
     KoTextDocument(m_textShapeData->document()).setInlineTextObjectManager(tom);
-#ifdef CHANGETRK
+    KoChangeTracker *changeTracker = dynamic_cast<KoChangeTracker *>(dataCenterMap["ChangeTracker"]);
+    KoTextDocument(m_textShapeData->document()).setChangeTracker(changeTracker);
+/*#ifdef CHANGETRK
     if ( !KoTextDocument(m_textShapeData->document()).changeTrackerAssigned())
     {
         KoChangeTracker *changeTracker = new KoChangeTracker();
         KoTextDocument(m_textShapeData->document()).setChangeTracker(changeTracker);
     }
-#endif
+#endif*/
 }
 
 QTextDocument *TextShape::footnoteDocument()

@@ -57,12 +57,9 @@
 #include <KoTextDocument.h>
 #include <kstandarddirs.h>
 
-
-#ifdef CHANGETRK
- #include <KoTextShapeSavingContext.h>
- #include <KoGenChanges.h>
- #include <KoChangeTracker.h>
-#endif
+#include <KoTextShapeSavingContext.h>
+#include <KoGenChanges.h>
+#include <KoChangeTracker.h>
 
 typedef KoText::Tab KoTextTab;
 // because in a QtScript, I don't seem to be able to use a namespaced type
@@ -705,6 +702,7 @@ QTextDocument *TestLoading::documentFromOdt(const QString &odt)
     KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "text");
 
     KoStyleManager *styleManager = new KoStyleManager;
+    KoChangeTracker *changeTracker = new KoChangeTracker;
 
     KoOdfLoadingContext odfLoadingContext(odfReadStore.styles(), odfReadStore.store(), *componentData);
     QMap<QString, KoDataCenter *> dataCenterMap;
@@ -720,6 +718,7 @@ QTextDocument *TestLoading::documentFromOdt(const QString &odt)
     layout->setInlineTextObjectManager(new KoInlineTextObjectManager(layout)); // required while saving
     KoTextDocument(document).setStyleManager(styleManager);
     textShapeData->document()->setDocumentLayout(layout);
+    KoTextDocument(document).setChangeTracker(changeTracker);
 
     if (!textShapeData->loadOdf(body, shapeLoadingContext)) {
         qDebug() << "KoTextShapeData failed to load ODT";
@@ -758,17 +757,9 @@ QString TestLoading::documentToOdt(QTextDocument *document)
     KoGenStyles mainStyles;
     KoStyleManager *styleMan = KoTextDocument(document).styleManager();
     KoEmbeddedDocumentSaver embeddedSaver;
-    
-#ifdef CHANGETRK
+
     KoGenChanges changes;
     KoTextShapeSavingContext context(xmlWriter, mainStyles, embeddedSaver, changes);
-#else
-    KoShapeSavingContext context(xmlWriter, mainStyles, embeddedSaver);
-    styleMan->saveOdf(mainStyles);
-
-    xmlWriter.startElement("office:body");
-    xmlWriter.startElement("office:text");
-#endif
 
     KoTextShapeData *textShapeData = new KoTextShapeData;
     textShapeData->setDocument(document, false /* ownership */);
@@ -779,37 +770,25 @@ QString TestLoading::documentToOdt(QTextDocument *document)
         layout->setInlineTextObjectManager(new KoInlineTextObjectManager(layout)); // required while saving
         KoStyleManager *styleManager = new KoStyleManager;
         KoTextDocument(textShapeData->document()).setStyleManager(styleManager);
-#ifdef CHANGETRK
-	KoChangeTracker* changeTracker = new KoChangeTracker;
-	KoTextDocument(textShapeData->document()).setChangeTracker(changeTracker);
-#endif
     }
-    textShapeData->saveOdf(context);
+    KoChangeTracker* changeTracker = new KoChangeTracker;
+    KoTextDocument(textShapeData->document()).setChangeTracker(changeTracker);
 
-#ifdef CHANGETRK
-//   
-#else
-    xmlWriter.endElement(); // office:text
-    xmlWriter.endElement(); // office:body
-#endif
+    textShapeData->saveOdf(context);
 
     contentTmpFile.close();
 
     mainStyles.saveOdfAutomaticStyles(contentWriter, false);
-    
-#ifdef CHANGETRK
+
     contentWriter->startElement("office:body");
     contentWriter->startElement("office:text");
-    
+
 //    changes.saveOdfChanges(contentWriter, false);
-#endif
-    
+
     contentWriter->addCompleteElement(&contentTmpFile);
 
-#ifdef CHANGETRK
     contentWriter->endElement(); //office text
     contentWriter->endElement(); //office body
-#endif
 
     contentWriter->endElement(); // root element
     contentWriter->endDocument();

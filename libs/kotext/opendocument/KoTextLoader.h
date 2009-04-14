@@ -121,6 +121,16 @@ private:
     void loadShape(const KoXmlElement& element, QTextCursor& cursor);
 
     /**
+    * Load the changed area data
+    */
+    void loadChangedRegion(const KoXmlElement& element, QTextCursor& cursor);
+
+    /**
+    * Close a changed area
+    */
+    void closeChangedRegion();
+
+    /**
     * This is called in loadBody before reading the body starts.
     */
     void startBody(int total);

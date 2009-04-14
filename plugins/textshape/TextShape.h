@@ -26,9 +26,7 @@
 #include <KoFrameShape.h>
 #include <KoTextShapeData.h>
 
-#ifdef CHANGETRK
- #include <KoTextShapeSavingContext.h>
-#endif
+#include <KoTextShapeSavingContext.h>
 
 #include <QTextDocument>
 #include <QPainter>

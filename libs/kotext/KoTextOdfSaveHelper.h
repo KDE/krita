@@ -22,17 +22,13 @@
 
 #include <KoDragOdfSaveHelper.h>
 
-#ifdef CHANGETRK
- #include <KoGenChanges.h>
- #include <KoTextShapeSavingContext.h>
-#endif
+#include <KoGenChanges.h>
+#include <KoTextShapeSavingContext.h>
 
 #include "kotext_export.h"
 
 class KoTextShapeData;
-#ifdef CHANGETRK
- class KoXmlWriter;
-#endif
+class KoXmlWriter;
 
 class KOTEXT_EXPORT KoTextOdfSaveHelper : public KoDragOdfSaveHelper
 {
@@ -42,17 +38,14 @@ public:
 
     /// reimplemented
     virtual bool writeBody();
-#ifdef CHANGETRK
+
     virtual KoShapeSavingContext * context(KoXmlWriter * bodyWriter, KoGenStyles & mainStyles, KoEmbeddedDocumentSaver & embeddedSaver);
-#endif
 
 private:
     struct Private;
     Private * const d;
-#ifdef CHANGETRK  
+
     KoTextShapeSavingContext * m_context;
-#endif
-    
 };
 
 #endif /* KOTEXTODFSAVEHELPER_H */

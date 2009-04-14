@@ -34,33 +34,20 @@
 #include "KoTextBlockData.h"
 #include "KoTextDocument.h"
 
-#ifdef CHANGETRK
- #include <KoTextShapeSavingContext.h>
-#else
- #include <KoShapeSavingContext.h>
-#endif
-
+#include <KoTextShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 
-#ifdef CHANGETRK
- #include "changetracker/KoChangeTracker.h"
- #include <KoGenChange.h>
- #include <KoGenChanges.h>
-#endif
+#include "changetracker/KoChangeTracker.h"
+#include <KoGenChange.h>
+#include <KoGenChanges.h>
 
-#ifdef CHANGETRK
 KoTextWriter::KoTextWriter(KoTextShapeSavingContext &m_context)
-#else
-KoTextWriter::KoTextWriter(KoShapeSavingContext &m_context)
-#endif
     : m_context(m_context),
       m_layout(0),
       m_styleManager(0)
-#ifdef CHANGETRK
       ,m_changeTracker(0)
-#endif
 {
     m_writer = &m_context.xmlWriter();
 }
@@ -184,9 +171,8 @@ QHash<QTextList *, QString> KoTextWriter::saveListStyles(QTextBlock block, int t
 
 void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
 {
-#ifdef CHANGETRK
     QString changeName = QString();
-#endif
+
     QTextBlockFormat blockFormat = block.blockFormat();
     int outlineLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
     if (outlineLevel > 0) {
@@ -211,16 +197,16 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
             break;
         if (currentFragment.isValid()) {
             QTextCharFormat charFormat = currentFragment.charFormat();
-#ifdef CHANGETRK
-        if (m_changeTracker->containsInlineChanges(charFormat)) {
-            KoGenChange change;
-            m_changeTracker->saveInlineChange(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt(), change);
-            changeName = m_context.changes().insert(change);
-            m_writer->startElement("text:change-start", false);
-            m_writer->addAttribute("text:change-id", changeName);
-            m_writer->endElement();
-        }
-#endif
+
+            if (m_changeTracker->containsInlineChanges(charFormat)) {
+                KoGenChange change;
+                m_changeTracker->saveInlineChange(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt(), change);
+                changeName = m_context.changes().insert(change);
+                m_writer->startElement("text:change-start", false);
+                m_writer->addAttribute("text:change-id", changeName);
+                m_writer->endElement();
+            }
+
             KoInlineObject *inlineObject = m_layout->inlineTextObjectManager()->inlineTextObject(charFormat);
             if (currentFragment.length() == 1 && inlineObject
                     && currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter) {
@@ -248,14 +234,13 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
                 if (!styleName.isEmpty() || charFormat.isAnchor())
                     m_writer->endElement();
             } // if (inlineObject)
-#ifdef CHANGETRK
+
             if (!changeName.isEmpty()) {
                 m_writer->startElement("text:change-end", false);
                 m_writer->addAttribute("text:change-id",changeName);
                 m_writer->endElement();
                 changeName=QString();
             }
-#endif
         } // if (fragment.valid())
     } // foeach(fragment)
 
@@ -266,10 +251,10 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
 {
     m_styleManager = KoTextDocument(document).styleManager();
     m_layout = dynamic_cast<KoTextDocumentLayout*>(document->documentLayout());
-#ifdef CHANGETRK
+
     m_changeTracker = KoTextDocument(document).changeTracker();
     Q_ASSERT(m_changeTracker);
-#endif
+
     Q_ASSERT(m_layout);
     Q_ASSERT(m_layout->inlineTextObjectManager());
 
@@ -373,4 +358,3 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
         }
     }
 }
-

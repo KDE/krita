@@ -104,9 +104,9 @@ public:
     /// The following two methods allow an undo/redo command to tell the tool, it will modify the QTextDocument and wants to be parent of the undo/redo commands resulting from these changes.
 
     void startEditing(QUndoCommand* command);
-    
+
     void stopEditing();
-    
+
     const QTextCursor cursor();
 
 
@@ -185,7 +185,7 @@ private slots:
     void updateParagraphDirection(const QVariant &variant);
     /// method that will be called in the UI thread directly after the one above
     void updateParagraphDirectionUi();
-    
+
     /// returns the focus to canvas when styles are selected in the optionDocker
     void returnFocusToCanvas();
 
@@ -285,9 +285,7 @@ private:
 
     InsertCharacter *m_specialCharacterDocker;
 
-    #ifdef CHANGETRK
     bool m_textTyping;
-    #endif
 };
 
 #endif

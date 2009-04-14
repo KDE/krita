@@ -33,47 +33,46 @@ class KOTEXT_EXPORT KoChangeTrackerElement
 public:
 
     KoChangeTrackerElement(QString title, KoGenChange::Type type);
-    
+
     KoChangeTrackerElement();
-    
+
     ~KoChangeTrackerElement();
-    
+
     void setChangeType(KoGenChange::Type type);
     KoGenChange::Type getChangeType();
-    
+
     void setChangeTitle(QString title);
     QString getChangeTitle();
-    
+
     void setChangeFormat(QTextFormat &format);
     QTextFormat getChangeFormat();
-    
+
     void setPrevFormat(QTextFormat &prevFormat);
     QTextFormat getPrevFormat();
-    
+
     bool hasCreator();
     void setCreator(QString creator);
     QString getCreator();
-    
+
     bool hasDate();
     void setDate(QString date);
     QString getDate();
-    
+
     bool hasExtraMetaData();
     void setExtraMetaData(QString metaData);
     QString getExtraMetaData();
-    
+
     bool hasDeleteData();
     void setDeleteData(QString data);
     QString getDeleteData();
-    
+
 private:
 
-  
   QString m_title;
   KoGenChange::Type m_type;
   QTextFormat m_changeFormat;
   QTextFormat m_prevFormat;
-  
+
   QString m_creator;
   QString m_date;
   QString m_extraMetaData;

@@ -36,15 +36,12 @@
 const QUrl KoTextDocument::StyleManagerURL = QUrl("kotext://stylemanager");
 const QUrl KoTextDocument::ListsURL = QUrl("kotext://lists");
 const QUrl KoTextDocument::InlineObjectTextManagerURL = QUrl("kotext://inlineObjectTextManager");
-#ifdef CHANGETRK
- const QUrl KoTextDocument::ChangeTrackerURL = QUrl("kotext://changetracker");
-#endif
+
+const QUrl KoTextDocument::ChangeTrackerURL = QUrl("kotext://changetracker");
 
 KoTextDocument::KoTextDocument(QTextDocument *document)
     : m_document(document)
-#ifdef CHANGETRK
-  ,m_changeTrackerAssigned(false)
-#endif
+    ,m_changeTrackerAssigned(false)
 {
     Q_ASSERT(m_document);
 }
@@ -90,9 +87,9 @@ KoStyleManager *KoTextDocument::styleManager() const
     return resource.value<KoStyleManager *>();
 }
 
-#ifdef CHANGETRK
 void KoTextDocument::setChangeTracker(KoChangeTracker *changeTracker)
 {
+    kDebug() << "in KoTextDoc set changeTracker: " << changeTracker;
     QVariant v;
     v.setValue(changeTracker);
     m_document->addResource(KoTextDocument::ChangeTrackerRessource, ChangeTrackerURL, v);
@@ -109,7 +106,6 @@ bool KoTextDocument::changeTrackerAssigned()
 {
     return m_changeTrackerAssigned;
 }
-#endif
 
 void KoTextDocument::setLists(const QList<KoList *> &lists)
 {

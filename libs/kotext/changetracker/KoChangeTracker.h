@@ -34,22 +34,35 @@
 #include <KoGenChange.h>
 #include <KoGenChanges.h>
 
-class KOTEXT_EXPORT KoChangeTracker : public QObject//, public KoDataCenter
+class KoXmlElement;
+
+class KOTEXT_EXPORT KoChangeTracker : public QObject, public KoDataCenter
 {
     Q_OBJECT
 public:
     KoChangeTracker(QObject *parent = 0);
-    
+
     ~KoChangeTracker();
 
     int getFormatChangeId(QString title, QTextFormat &format, QTextFormat &prevFormat, int existingChangeId);
     int getInsertChangeId(QString title, int existingChangeId);
-    
+
+    KoChangeTrackerElement* elementById(int id);
+
     bool containsInlineChanges(const QTextFormat &format);
     bool saveInlineChange(int changeId, KoGenChange &change);
 
+    void loadOdfChanges(const KoXmlElement& element);
+    int getLoadedChangeId(QString odfId);
+
 private:
-   
+
+    /// reimplemented
+    virtual bool completeLoading(KoStore *store);
+
+    /// reimplemented
+    virtual bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context);
+
     class Private;
     Private* const d;
 };

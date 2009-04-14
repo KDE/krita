@@ -57,9 +57,7 @@
 #include <KoTextOdfSaveHelper.h>
 #include <KoDrag.h>
 
-#ifdef CHANGETRK
- #include <KoTextDrag.h>
-#endif
+#include <KoTextDrag.h>
 
 #include <KoOdf.h>
 #include <KoTextPaste.h>
@@ -90,9 +88,7 @@
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoShapeSavingContext.h>
 
-#ifdef CHANGETRK
- #include <KoChangeTracker.h>
-#endif
+#include <KoChangeTracker.h>
 
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut)
 {
@@ -144,11 +140,8 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_spellcheckPlugin(0),
         m_currentCommand(0),
         m_currentCommandHasChildren(false),
-        m_specialCharacterDocker(0)
-        #ifdef CHANGETRK
-        ,
+        m_specialCharacterDocker(0),
         m_textTyping(false)
-        #endif
 {
     m_actionFormatBold  = new KAction(KIcon("format-text-bold"), i18n("Bold"), this);
     addAction("format_bold", m_actionFormatBold);
@@ -687,26 +680,18 @@ void TextTool::setShapeData(KoTextShapeData *data)
             m_textShape->setDemoText(false); // remove demo text
             m_textShapeData->document()->setUndoRedoEnabled(true); // allow undo history
         }
-        if (m_trackChanges) {
-            if (m_changeTracker == 0)
-                m_changeTracker = new ChangeTracker(this);
-            m_changeTracker->setDocument(m_textShapeData->document());
-        }
+//        if (m_trackChanges) {
+//            if (m_changeTracker == 0)
+//                m_changeTracker = new ChangeTracker(this);
+//            m_changeTracker->setDocument(m_textShapeData->document());
+//        }
     }
-#ifdef CHANGETRK
 /*    if (m_trackChanges) {
         if (m_changeTracker == 0)
             m_changeTracker = new ChangeTracker(this);
         m_changeTracker->setDocument(m_textShapeData->document());
     }
 */
-#else
-    if (m_trackChanges) {
-        if (m_changeTracker == 0)
-            m_changeTracker = new ChangeTracker(this);
-        m_changeTracker->setDocument(m_textShapeData->document());
-    }
-#endif
 
     if (m_spellcheckPlugin)
         m_spellcheckPlugin->checkSection(m_textShapeData->document(), 0, 0);
@@ -746,11 +731,8 @@ void TextTool::copy() const
     int from = m_caret.position();
     int to = m_caret.anchor();
     KoTextOdfSaveHelper saveHelper(m_textShapeData, from, to);
-#ifdef CHANGETRK
     KoTextDrag drag;
-#else
-    KoDrag drag;
-#endif
+
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
     QTextDocumentFragment fragment = m_caret.selection();
     drag.setData("text/html", fragment.toHtml("utf-8").toUtf8());
@@ -983,22 +965,20 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             editingPluginEvents();
             ensureCursorVisible();
         } else if (event->key() == Qt::Key_Tab || !(event->text().length() == 1 && !event->text().at(0).isPrint())) { // insert the text
-#ifdef CHANGETRK
             bool m_changeRegistered = m_textTyping;
-#endif
             startMacro(i18n("Key Press"));
             if (m_caret.hasSelection())
                 m_selectionHandler.deleteInlineObjects();
             m_prevCursorPosition = m_caret.position();
             ensureCursorVisible();
-#ifdef CHANGETRK
+
             if ( !m_changeRegistered ) {
                 int changeId = KoTextDocument(m_textShapeData->document()).changeTracker()->getInsertChangeId(i18n("Key Press"), m_caret.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
                 QTextCharFormat format;
                 format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
                 m_caret.mergeCharFormat(format);
             }
-#endif
+
             m_caret.insertText(event->text());
             if (m_textShapeData->pageDirection() == KoText::AutoDirection)
                 m_updateParagDirection.action->execute(m_prevCursorPosition);
@@ -1371,7 +1351,7 @@ QWidget *TextTool::createOptionWidget()
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), ssw, SLOT(setStyleManager(KoStyleManager *)));
     connect(this, SIGNAL(blockChanged(const QTextBlock&)), ssw, SLOT(setCurrentBlock(const QTextBlock&)));
     connect(this, SIGNAL(charFormatChanged(const QTextCharFormat &)), ssw, SLOT(setCurrentFormat(const QTextCharFormat &)));
-    
+
     connect(ssw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), styles, SLOT(setStyleManager(KoStyleManager *)));
@@ -1415,13 +1395,10 @@ void TextTool::addUndoCommand()
             if ( !(m_tool.isNull()) && (m_tool->m_textShapeData) && (m_tool->m_textShapeData->document() == m_document) ) {
                 m_tool->stopMacro();
                 m_tool->m_allowAddUndoCommand = false;
-#ifdef CHANGETRK
+
 //                if (m_tool->m_changeTracker && !m_tool->m_canvas->resourceProvider()->boolResource(KoCanvasResource::DocumentIsLoading))
 //                    m_tool->m_changeTracker->notifyForUndo();
-#else
-                if (m_tool->m_changeTracker && !m_tool->m_canvas->resourceProvider()->boolResource(KoCanvasResource::DocumentIsLoading))
-                    m_tool->m_changeTracker->notifyForUndo();
-#endif
+
                 m_document->undo(&m_tool->m_caret);
             } else
                 m_document->undo();
@@ -1586,7 +1563,6 @@ void TextTool::formatParagraph()
 
 void TextTool::toggleTrackChanges(bool on)
 {
-#ifdef CHANGETRK
 /*
     m_trackChanges = on;
     if (m_textShapeData && on) {
@@ -1597,16 +1573,6 @@ void TextTool::toggleTrackChanges(bool on)
     } else if (m_changeTracker)
         m_changeTracker->setDocument(0);
 	*/
-#else
-    m_trackChanges = on;
-    if (m_textShapeData && on) {
-        if (m_changeTracker == 0)
-            m_changeTracker = new ChangeTracker(this);
-        if (m_changeTracker)
-            m_changeTracker->setDocument(m_textShapeData->document());
-    } else if (m_changeTracker)
-        m_changeTracker->setDocument(0);
-#endif
 }
 
 void TextTool::selectAll()
@@ -1624,12 +1590,11 @@ void TextTool::selectAll()
 
 void TextTool::startMacro(const QString &title)
 {
-    #ifdef CHANGETRK
     if (title != i18n("Key Press"))
         m_textTyping = false;
     else
         m_textTyping = true;
-    #endif
+
     if (m_currentCommand) return;
 
     class MacroCommand : public QUndoCommand
@@ -1895,6 +1860,7 @@ void TextTool::debugTextDocument()
             if (!fragment.isValid())
                 continue;
             QTextCharFormat fmt = fragment.charFormat();
+            kDebug() << "changeId: " << fmt.property(KoCharacterStyle::ChangeTrackerId);
             const int fragmentStart = fragment.position() - block.position();
             for (int i = fragmentStart; i < fragmentStart + fragment.length(); i += CHARSPERLINE) {
                 if (lastPrintedChar == fragmentStart-1)

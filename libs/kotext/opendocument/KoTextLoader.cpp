@@ -58,6 +58,8 @@
 #include "KoTextDebug.h"
 #include "KoList.h"
 
+#include "changetracker/KoChangeTracker.h"
+
 // KDE + Qt includes
 #include <QTextCursor>
 #include <QTextBlock>
@@ -93,8 +95,11 @@ public:
 
     KoStyleManager *styleManager;
 
+    KoChangeTracker *changeTracker;
+
     int loadSpanLevel;
     int loadSpanInitialPos;
+    int currentChangeId;
 
     explicit Private(KoShapeLoadingContext &context)
             : context(context),
@@ -112,7 +117,9 @@ public:
               currentListLevel(1),
               styleManager(0),
               loadSpanLevel(0),
-              loadSpanInitialPos(0) {
+              loadSpanInitialPos(0),
+              changeTracker(0),
+              currentChangeId(0) {
         dt.start();
     }
 
@@ -167,6 +174,12 @@ void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
 
     const QTextDocument *document = cursor.block().document();
     d->styleManager = KoTextDocument(document).styleManager();
+    Q_ASSERT(d->styleManager);
+
+    d->changeTracker = KoTextDocument(document).changeTracker();
+//    if (!d->changeTracker)
+//        d->changeTracker = dynamic_cast<KoChangeTracker *>(d->context.dataCenterMap().value("ChangeTracker"));
+    Q_ASSERT(d->changeTracker);
 
     kDebug(32500) << "text-style:" << KoTextDebug::textAttributes( cursor.blockCharFormat() );
 #if 0
@@ -186,7 +199,16 @@ void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
                 if (usedParagraph)
                     cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
                 usedParagraph = true;
-                if (localName == "p") {    // text paragraph
+                if (localName == "tracked-changes") {
+                    d->changeTracker->loadOdfChanges(tag);
+                    usedParagraph = false;
+                } else if (localName == "change-start") {
+                    loadChangedRegion(tag, cursor);
+                    usedParagraph = false;
+                } else if (localName == "change-end") {
+                    d->currentChangeId = 0;
+                    usedParagraph = false;
+                } else if (localName == "p") {    // text paragraph
                     loadParagraph(tag, cursor);
                 } else if (localName == "h") {  // heading
                     loadHeading(tag, cursor);
@@ -288,6 +310,18 @@ void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
     endBody();
 }
 
+void KoTextLoader::loadChangedRegion(const KoXmlElement& element, QTextCursor& cursor)
+{
+    QString id = element.attributeNS(KoXmlNS::text,"change-id");
+    int changeId = d->changeTracker->getLoadedChangeId(id);
+    d->currentChangeId = changeId;
+
+    //debug
+    KoChangeTrackerElement* changeElement = d->changeTracker->elementById(changeId);
+    kDebug() << "changed-region id: " << changeId << " title: " << changeElement->getChangeTitle() << " creator: " << changeElement->getCreator() << " date: " << changeElement->getDate();
+}
+
+
 void KoTextLoader::loadParagraph(const KoXmlElement& element, QTextCursor& cursor)
 {
     // TODO use the default style name a default value?
@@ -367,6 +401,7 @@ void KoTextLoader::loadHeading(const KoXmlElement& element, QTextCursor& cursor)
 
 void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
 {
+    kDebug() << "in load List";
     const bool numberedParagraph = element.localName() == "numbered-paragraph";
 
     QString styleName = element.attributeNS(KoXmlNS::text, "style-name", QString());
@@ -551,6 +586,12 @@ void KoTextLoader::loadSpan(const KoXmlElement& element, QTextCursor& cursor, bo
                 // if present text ends with a space,
                 // we can remove the leading space in the next text
                 *stripLeadingSpace = text[text.length() - 1].isSpace();
+
+                if (d->currentChangeId) {
+                    QTextCharFormat format;
+                    format.setProperty(KoCharacterStyle::ChangeTrackerId, d->currentChangeId);
+                    cursor.mergeCharFormat(format);
+                }
                 cursor.insertText(text);
 
                 if (d->loadSpanLevel == 1 && node.nextSibling().isNull()
@@ -562,6 +603,11 @@ void KoTextLoader::loadSpan(const KoXmlElement& element, QTextCursor& cursor, bo
                     }
                 }
             }
+        } else if (isTextNS && localName == "change-start") { // text:change-start
+            loadChangedRegion(ts,cursor);
+        } else if (isTextNS && localName == "change-end") {
+            d->currentChangeId = 0;
+            kDebug() << "change-end";
         } else if (isTextNS && localName == "span") { // text:span
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
             kDebug(32500) << "  <span> localName=" << localName;

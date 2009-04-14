@@ -55,18 +55,15 @@ ShivaPlugin::ShivaPlugin(QObject *parent, const QStringList &)
         : KParts::Plugin(parent)
 {
     setComponentData( ShivaPluginFactory::componentData());
-    if (parent->inherits("KisGeneratorRegistry")) {
-        KisGeneratorRegistry * manager = dynamic_cast<KisGeneratorRegistry *>(parent);
-        if (manager) {
-            OpenShiva::SourcesCollection* kc = new OpenShiva::SourcesCollection();
-            std::list< OpenShiva::Source* > kernels = kc->sources(OpenShiva::Source::GeneratorKernel);
-            
-            foreach( OpenShiva::Source* kernel, kernels )
-            {
-//                 kDebug() << kernel->metadataCompilationErrors().c_str() << " " << kernel->isCompiled() ;
-                manager->add(new ShivaGenerator( kernel ));
-            }
-        }
+    KisGeneratorRegistry * manager = KisGeneratorRegistry::instance();
+    Q_ASSERT(manager);
+    OpenShiva::SourcesCollection* kc = new OpenShiva::SourcesCollection();
+    std::list< OpenShiva::Source* > kernels = kc->sources(OpenShiva::Source::GeneratorKernel);
+    
+    foreach( OpenShiva::Source* kernel, kernels )
+    {
+    // kDebug() << kernel->metadataCompilationErrors().c_str() << " " << kernel->isCompiled() ;
+        manager->add(new ShivaGenerator( kernel ));
     }
 }
 

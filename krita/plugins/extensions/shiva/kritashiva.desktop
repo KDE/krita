@@ -1,0 +1,17 @@
+[Desktop Entry]
+Name=Shiva Kernel Language Support
+Name[pt]=Gerador Shiva
+Name[pt_BR]=Gerador Shiva
+Name[sv]=Shivagenerator
+Name[x-test]=xxShivaGeneratorxx
+Comment=Shiva Kernel Language Support
+Comment[nds]=Shiva-Maker
+Comment[pt]=Gerador Shiva
+Comment[pt_BR]=Gerador Shiva
+Comment[sv]=Shivagenerator
+Comment[tr]=ShivaÜreteci
+Comment[x-test]=xxShivaGeneratorxx
+X-KDE-ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritashiva
+X-Krita-Version=3

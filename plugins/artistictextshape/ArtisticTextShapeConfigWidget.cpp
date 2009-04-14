@@ -20,6 +20,7 @@
 
 #include "ArtisticTextShapeConfigWidget.h"
 #include "ArtisticTextShape.h"
+#include "ChangeTextOffsetCommand.h"
 #include <QtGui/QButtonGroup>
 
 #include <KoCanvasController.h>
@@ -114,18 +115,21 @@ void ArtisticTextShapeConfigWidget::save()
     else
         newAnchor = ArtisticTextShape::AnchorEnd;
 
+    qreal newOffset = static_cast<qreal>(widget.startOffset->value()) / 100.0;
+
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     if ( canvasController ) {
         KoCanvasBase *canvas = canvasController->canvas();
         if ( newAnchor != m_shape->textAnchor() ) {
             canvas->addCommand( new ChangeAnchor( this, newAnchor ) );
         }
+        else if( newOffset != m_shape->startOffset() ) {
+            canvas->addCommand(new ChangeTextOffsetCommand(m_shape, m_shape->startOffset(), newOffset));
+        }
         else if( font.key() != m_shape->font().key() ) {
             canvas->addCommand( new ChangeFont( this, font ) );
         }
     }
-
-    m_shape->setStartOffset( static_cast<qreal>(widget.startOffset->value()) / 100.0 );
 }
 
 QUndoCommand * ArtisticTextShapeConfigWidget::createCommand()

@@ -28,6 +28,7 @@
 #include <KoShapeConfigWidgetBase.h>
 
 #include <QUndoCommand>
+#include <KLocale>
 
 class ArtisticTextShape;
 
@@ -53,7 +54,7 @@ private:
             : m_widget( widget ), m_font( font )
         {
             m_shape = widget->m_shape;
-            setText( "Change font" );
+            setText( i18n("Change font") );
         }
         virtual void undo()
         {
@@ -83,7 +84,7 @@ private:
             : m_widget( widget ), m_text( text )
         {
             m_shape = widget->m_shape;
-            setText( "Change text" );
+            setText( i18n("Change text") );
         }
         virtual void undo()
         {
@@ -113,7 +114,7 @@ private:
             : m_widget( widget ), m_anchor( anchor )
         {
             m_shape = widget->m_shape;
-            setText( "Change text anchor" );
+            setText( i18n("Change text anchor") );
         }
         virtual void undo()
         {

@@ -53,7 +53,7 @@ KisGeneratorRegistry* KisGeneratorRegistry::instance()
     if (KisGeneratorRegistry::m_singleton == 0) {
         KisGeneratorRegistry::m_singleton = new KisGeneratorRegistry();
         Q_CHECK_PTR( KisGeneratorRegistry::m_singleton );
-        KoPluginLoader::instance()->load( "Krita/Generator", "Type == 'Service' and ([X-Krita-Version] == 5)" );
+        KoPluginLoader::instance()->load( "Krita/Generator", "Type == 'Service' and ([X-Krita-Version] == 3)" );
 
     }
     return KisGeneratorRegistry::m_singleton;

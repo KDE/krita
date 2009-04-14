@@ -80,7 +80,7 @@ void ArtisticTextShapeConfigWidget::open(KoShape *shape)
     widget.fontSize->setValue( font.pointSize() );
     font.setPointSize( 8 );
 
-    widget.fontFamily->setFont( font );
+    widget.fontFamily->setCurrentFont( font );
     widget.bold->setChecked( font.bold() );
     widget.italic->setChecked( font.italic() );
     if( m_shape->textAnchor() == ArtisticTextShape::AnchorStart )
@@ -100,28 +100,29 @@ void ArtisticTextShapeConfigWidget::save()
     if( ! m_shape )
         return;
 
-    QFont font = widget.fontFamily->currentFont();
+    QFont font = m_shape->font();
+    font.setFamily( widget.fontFamily->currentFont().family() );
     font.setBold( widget.bold->isChecked() );
     font.setItalic( widget.italic->isChecked() );
     font.setPointSize( widget.fontSize->value() );
 
+    ArtisticTextShape::TextAnchor newAnchor;
+    if ( widget.anchorStart->isChecked() )
+        newAnchor = ArtisticTextShape::AnchorStart;
+    else if ( widget.anchorMiddle->isChecked() )
+        newAnchor = ArtisticTextShape::AnchorMiddle;
+    else
+        newAnchor = ArtisticTextShape::AnchorEnd;
+
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     if ( canvasController ) {
         KoCanvasBase *canvas = canvasController->canvas();
-    if ( font != m_shape->font() ) {
+        if ( newAnchor != m_shape->textAnchor() ) {
+            canvas->addCommand( new ChangeAnchor( this, newAnchor ) );
+        }
+        else if( font.key() != m_shape->font().key() ) {
             canvas->addCommand( new ChangeFont( this, font ) );
-	} else {
-	    ArtisticTextShape::TextAnchor anchor;
-            if ( widget.anchorStart->isChecked() )
-                anchor = ArtisticTextShape::AnchorStart;
-            else if ( widget.anchorMiddle->isChecked() )
-                anchor = ArtisticTextShape::AnchorMiddle;
-            else
-                anchor = ArtisticTextShape::AnchorEnd;
-            if ( anchor != m_shape->textAnchor() ) {
-                canvas->addCommand( new ChangeAnchor( this, anchor ) );
-	    }
-	}
+        }
     }
 
     m_shape->setStartOffset( static_cast<qreal>(widget.startOffset->value()) / 100.0 );

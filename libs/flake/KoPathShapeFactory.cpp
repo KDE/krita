@@ -29,7 +29,7 @@
 KoPathShapeFactory::KoPathShapeFactory(QObject *parent, const QStringList&)
         : KoShapeFactory(parent, KoPathShapeId, i18n("A simple path shape"))
 {
-    setToolTip("A simple path shape");
+    setToolTip(i18n("A simple path shape"));
     setIcon("pathshape");
     QStringList elementNames;
     elementNames << "path" << "line" << "polyline" << "polygon";

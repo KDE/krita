@@ -1,5 +1,6 @@
 /**
  * Copyright (c) 2006 Casper Boemann (cbr@boemann.dk)
+ * Copyright (c) 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,35 +21,31 @@
 #define KOUNICOLORDIALOG_H
 
 #include "KoColor.h"
-#include "KoUniColorChooser.h"
 
 #include <kpagedialog.h>
 #include "koguiutils_export.h"
 
+class KoUniColorDialogPrivate;
 
 /**
  * @short A colormanaged dialog for selecting a colors.
  *
  * KoUniColorDialog is simply the dialog'ification of KoUniColorChooser.
- *
  */
-class KOGUIUTILS_EXPORT KoUniColorDialog
-     : public KPageDialog
+class KOGUIUTILS_EXPORT KoUniColorDialog : public KPageDialog
 {
     Q_OBJECT
-    typedef KPageDialog super;
-
 public:
-    explicit KoUniColorDialog(KoColor &initialColor, QWidget *parent = 0L);
+    explicit KoUniColorDialog(KoColor &initialColor, QWidget *parent = 0);
     virtual ~KoUniColorDialog() {}
 
     /**
       * @return the selected color
       */
-    KoColor color();
+    KoColor color() const;
 
 private:
-    KoUniColorChooser *m_chooser;
+    KoUniColorDialogPrivate *d;
 };
 
 #endif

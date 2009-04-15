@@ -1,5 +1,6 @@
 /**
  * Copyright (c) 2006 Casper Boemann (cbr@boemann.dk)
+ * Copyright (c) 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,20 +19,29 @@
 */
 #include <klocale.h>
 #include "KoUniColorDialog.h"
+#include "KoUniColorChooser.h"
+
+class KoUniColorDialogPrivate
+{
+public:
+    KoUniColorDialogPrivate() : chooser(0) {}
+    KoUniColorChooser *chooser;
+};
 
 KoUniColorDialog::KoUniColorDialog(KoColor &initialColor, QWidget *parent)
-    : KPageDialog( parent )
- {
-    setFaceType( Plain );
+    : KPageDialog(parent),
+    d(new KoUniColorDialogPrivate())
+{
+    setFaceType(Plain);
 
-    m_chooser = new KoUniColorChooser( );
-    m_chooser->setColor(initialColor);
-    addPage( m_chooser, i18n( "Color Selector") );
+    d->chooser = new KoUniColorChooser();
+    d->chooser->setColor(initialColor);
+    addPage(d->chooser, i18n("Color Selector"));
 }
 
-KoColor KoUniColorDialog::color()
+KoColor KoUniColorDialog::color() const
 {
-    return m_chooser->color();
+    return d->chooser->color();
 }
 
 #include "KoUniColorDialog.moc"

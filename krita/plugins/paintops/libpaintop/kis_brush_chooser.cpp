@@ -143,7 +143,7 @@ void KisBrushChooser::update(QTableWidgetItem *item)
         KisGbrBrush* brush = static_cast<KisGbrBrush*>(kisItem->resource());
 
         QString text = QString("%1 (%2 x %3)")
-                       .arg(brush->name())
+                       .arg( i18n(brush->name().toUtf8().data()) )
                        .arg(brush->width())
                        .arg(brush->height());
 

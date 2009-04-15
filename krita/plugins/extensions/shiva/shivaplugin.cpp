@@ -17,36 +17,14 @@
 
 #include "shivaplugin.h"
 
-#include <qpoint.h>
-
 #include <kis_debug.h>
-#include <kiconloader.h>
-#include <kcomponentdata.h>
 #include <kgenericfactory.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <knuminput.h>
 #include <kstandarddirs.h>
 
-#include <KoProgressUpdater.h>
-#include <KoColorSpaceRegistry.h>
-
-#include <kis_image.h>
-#include <kis_paint_device.h>
-#include <kis_iterators_pixel.h>
 #include <generator/kis_generator_registry.h>
-#include <kis_types.h>
-#include <filter/kis_filter_configuration.h>
-#include <kis_processing_information.h>
 
-#include <GTLCore/Region.h>
-#include <OpenShiva/Kernel.h>
 #include <OpenShiva/SourcesCollection.h>
 
-#include <ShivaGeneratorConfigWidget.h>
-#include <PaintDeviceImage.h>
-#include "QVariantValue.h"
-#include <OpenShiva/Metadata.h>
 #include "shivagenerator.h"
 
 typedef KGenericFactory<ShivaPlugin> ShivaPluginFactory;

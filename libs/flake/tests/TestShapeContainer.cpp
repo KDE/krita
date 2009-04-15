@@ -63,5 +63,17 @@ void TestShapeContainer::testSetParent()
     QCOMPARE(shape.parent(), &container2);
 }
 
+void TestShapeContainer::testSetParent2()
+{
+    MockContainerModel *model = new MockContainerModel();
+    MockContainer container(model);
+    MockShape *shape = new MockShape();
+    shape->setParent(&container);
+    QCOMPARE(model->iterator().count(), 1);
+
+    shape->setParent(0);
+    QCOMPARE(model->iterator().count(), 0);
+}
+
 QTEST_MAIN(TestShapeContainer)
 #include "TestShapeContainer.moc"

@@ -81,11 +81,12 @@ void ShivaFilter::process( KisConstProcessingInformation srcInfo,
     kernel.compile();
     if(kernel.isCompiled())
     {
-      PaintDeviceImage pdisrc(src);
+      ConstPaintDeviceImage pdisrc(src);
       PaintDeviceImage pdi(dst);
       std::list< GTLCore::AbstractImage* > inputs;
       inputs.push_back(&pdisrc);
       GTLCore::Region region(dstTopLeft.x(), dstTopLeft.y() , size.width(), size.height());
+      dbgPlugins << dstTopLeft << " " << size;
       kernel.evaluatePixeles(region, inputs, &pdi);
     }
 }

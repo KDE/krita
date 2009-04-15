@@ -59,6 +59,39 @@ GTLCore::PixelDescription csToPD(const KoColorSpace* cs)
   return GTLCore::PixelDescription(types);
 }
 
+ConstPaintDeviceImage::ConstPaintDeviceImage( KisPaintDeviceSP device) : GTLCore::AbstractImage( csToPD( device->colorSpace()) ), m_device(device)
+{
+  m_accessor = new KisRandomConstAccessor(device->createRandomConstAccessor(0,0));
+}
+
+ConstPaintDeviceImage::~ConstPaintDeviceImage()
+{
+  delete m_accessor;
+}
+
+char* ConstPaintDeviceImage::data( int _x, int _y )
+{
+  // TODO should return 0, when http://bugs.opengtl.org/index.php?do=details&task_id=24 is fixed
+  m_accessor->moveTo(_x, _y);
+  return const_cast<char*>((const char*)(m_accessor->oldRawData()));
+}
+
+const char* ConstPaintDeviceImage::data( int _x, int _y ) const
+{
+  m_accessor->moveTo(_x, _y);
+  return (const char*)(m_accessor->oldRawData());
+}
+
+GTLCore::AbstractImage::ConstIterator* ConstPaintDeviceImage::createIterator() const
+{
+  return 0;
+}
+
+GTLCore::AbstractImage::Iterator* ConstPaintDeviceImage::createIterator()
+{
+  return 0;
+}
+
 PaintDeviceImage::PaintDeviceImage( KisPaintDeviceSP device) : GTLCore::AbstractImage( csToPD( device->colorSpace()) ), m_device(device)
 {
   m_accessor = new KisRandomAccessor(device->createRandomAccessor(0,0));

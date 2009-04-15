@@ -21,6 +21,19 @@
 #include <GTLCore/AbstractImage.h>
 #include <kis_types.h>
 
+class ConstPaintDeviceImage : public GTLCore::AbstractImage {
+  public:
+    ConstPaintDeviceImage( KisPaintDeviceSP );
+    virtual ~ConstPaintDeviceImage();
+    virtual char* data( int _x, int _y );
+    virtual const char* data( int _x, int _y ) const ;
+    virtual ConstIterator* createIterator() const;
+    virtual Iterator* createIterator();
+  private:
+    KisPaintDeviceSP m_device;
+    KisRandomConstAccessor* m_accessor;
+};
+
 class PaintDeviceImage : public GTLCore::AbstractImage {
   public:
     PaintDeviceImage( KisPaintDeviceSP );

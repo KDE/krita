@@ -49,7 +49,7 @@ macro_optional_find_package(Eigen2)
 macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by KSpread and Krita (available as a module in kdesupport)")
 
 macro_optional_find_package(Blitz)
-macro_log_feature(BLITZ_FOUND "Blitz" "Image effect library" "http://www.kde.org" FALSE "" "Required by Krita (available in kdesupport)")
+macro_log_feature(BLITZ_FOUND "QImageBlitz" "Image effect library" "http://www.kde.org" FALSE "" "Required by Krita (available in kdesupport)")
 
 macro_optional_find_package(QCA2)
 macro_log_feature(QCA2_FOUND "QCA" "Qt Cryptographic Architecture" "http://delta.affinix.com/qca" FALSE "2.0" "Required for encrypted OpenDocument files support (available as a module in kdesupport)")

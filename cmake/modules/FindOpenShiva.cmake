@@ -17,7 +17,7 @@ if(OPENSHIVA_DEFINITIONS AND OPENSHIVA_LIBRARIES)
     set(OPENSHIVA_FOUND TRUE)
     set(HAVE_OPENSHIVA TRUE)
   else(_return_VALUE STREQUAL "0")
-    message(STATUS "OpenShiva >= 0.9.9 8 not found")
+    message(STATUS "OpenShiva >= 0.9.8 not found")
   endif(_return_VALUE STREQUAL "0")
 endif(OPENSHIVA_DEFINITIONS AND OPENSHIVA_LIBRARIES)
 

@@ -63,7 +63,7 @@ void KisPatternChooser::update(QTableWidgetItem *item)
     if (item) {
         KisPattern *pattern = static_cast<KisPattern *>(kisItem->resource());
 
-        QString text = QString("%1 (%2 x %3)").arg(pattern->name()).arg(pattern->width()).arg(pattern->height());
+        QString text = QString("%1 (%2 x %3)").arg( i18n(pattern->name().toUtf8().data()) ).arg(pattern->width()).arg(pattern->height());
 
         m_lbName->setText(text);
     }

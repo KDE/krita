@@ -83,7 +83,7 @@ void KisGradientChooser::update(QTableWidgetItem *item)
     if (item) {
         KoAbstractGradient *gradient = static_cast<KoAbstractGradient *>(kisItem->resource());
 
-        m_lbName->setText(gradient->name());
+        m_lbName->setText( i18n(gradient->name().toUtf8().data() ));
     }
 }
 

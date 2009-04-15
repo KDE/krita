@@ -10,14 +10,14 @@ if(OPENSHIVA_DEFINITIONS AND OPENSHIVA_LIBRARIES)
 
   FIND_PROGRAM(PKGCONFIG_EXECUTABLE NAMES pkg-config PATHS /usr/bin/ /usr/local/bin )
 
-  # query pkg-config asking for OpenShiva >= 0.9.9
-  EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=0.9.9 OpenShiva RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
+  # query pkg-config asking for OpenShiva >= 0.9.8
+  EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=0.9.8 OpenShiva RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
 
   if(_return_VALUE STREQUAL "0")
     set(OPENSHIVA_FOUND TRUE)
     set(HAVE_OPENSHIVA TRUE)
   else(_return_VALUE STREQUAL "0")
-    message(STATUS "OpenShiva >= 0.9.9 was not found")
+    message(STATUS "OpenShiva >= 0.9.9 8 not found")
   endif(_return_VALUE STREQUAL "0")
 endif(OPENSHIVA_DEFINITIONS AND OPENSHIVA_LIBRARIES)
 

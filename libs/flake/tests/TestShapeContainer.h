@@ -10,7 +10,7 @@ private slots:
     // tests
     void testModel();
     void testSetParent();
-
+    void testSetParent2();
 };
 
 #endif

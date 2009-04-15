@@ -387,13 +387,14 @@ void KoShape::setParent(KoShapeContainer *parent)
 {
     if (d->parent == parent)
         return;
+    KoShapeContainer *oldParent = d->parent;
+    d->parent = 0; // avoids recursive removing
+    if (oldParent)
+        oldParent->removeChild(this);
     if (parent && dynamic_cast<KoShape*>(parent) != this) {
-        if (d->parent)
-            d->parent->removeChild(this);
         d->parent = parent;
         parent->addChild(this);
-    } else
-        d->parent = 0;
+    }
     notifyChanged();
     d->shapeChanged(ParentChanged);
 }

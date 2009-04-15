@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ *
+ * Copyright (C) 2009 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,24 +17,23 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Plugin.h"
-#include "defaulttool/DefaultToolFactory.h"
-#include "guidestool/GuidesToolFactory.h"
-#include "connectionTool/KoConnectionToolFactory.h"
 
-#include <KoShapeRegistry.h>
-#include <KoToolRegistry.h>
+#ifndef KOCONNECTIONTOOLWIDGET_H
+#define KOCONNECTIONTOOLWIDGET_H
 
-#include <kgenericfactory.h>
+#include "ui_KoConnectionToolWidget.h"
 
-K_EXPORT_COMPONENT_FACTORY(defaulttools, KGenericFactory<Plugin>( "koffice-defaulttools" ) )
+#include <QtGui/QWidget>
 
-Plugin::Plugin(QObject * parent, const QStringList &)
-    : QObject(parent)
+class KoConnectionToolWidget : public QWidget
 {
-    KoToolRegistry::instance()->add(new DefaultToolFactory(parent));
-    KoToolRegistry::instance()->add(new GuidesToolFactory(parent));
-    KoToolRegistry::instance()->add(new KoConnectionToolFactory(parent));
-}
+    Q_OBJECT
+public:
+    KoConnectionToolWidget( QWidget * parent );
+    
+   private:
 
-#include "Plugin.moc"
+    Ui::KoConnectionToolWidget widget;
+};
+
+#endif // KOCONNECTIONTOOLWIDGET_H

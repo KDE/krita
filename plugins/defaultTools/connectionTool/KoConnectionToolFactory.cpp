@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ *
+ * Copyright (C) 2009 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,24 +17,26 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Plugin.h"
-#include "defaulttool/DefaultToolFactory.h"
-#include "guidestool/GuidesToolFactory.h"
-#include "connectionTool/KoConnectionToolFactory.h"
 
-#include <KoShapeRegistry.h>
-#include <KoToolRegistry.h>
+#include "KoConnectionToolFactory.h"
+#include "KoConnectionTool.h"
 
-#include <kgenericfactory.h>
+#include <KDebug>
 
-K_EXPORT_COMPONENT_FACTORY(defaulttools, KGenericFactory<Plugin>( "koffice-defaulttools" ) )
-
-Plugin::Plugin(QObject * parent, const QStringList &)
-    : QObject(parent)
+KoConnectionToolFactory::KoConnectionToolFactory( QObject *parent )
+    : KoToolFactory(parent, KoConnectionTool_ID, i18n("Connect shapes"))
 {
-    KoToolRegistry::instance()->add(new DefaultToolFactory(parent));
-    KoToolRegistry::instance()->add(new GuidesToolFactory(parent));
-    KoToolRegistry::instance()->add(new KoConnectionToolFactory(parent));
+    setToolTip(i18n("Connect shapes"));    
+    setIcon("x-shape-connection");
+    setToolType(mainToolType());
+    setPriority(1);
 }
 
-#include "Plugin.moc"
+KoConnectionToolFactory::~KoConnectionToolFactory()
+{
+}
+
+KoTool* KoConnectionToolFactory::createTool(KoCanvasBase *canvas)
+{
+    return new KoConnectionTool( canvas );
+}

@@ -24,12 +24,14 @@
 
 #include <KoParameterShape.h>
 
+#include "flake_export.h"
+
 #define KOCONNECTIONSHAPEID "KoConnectionShape"
 
 /// A connection to a connection point of a shape
 typedef QPair<KoShape*, int> KoConnection;
 
-class KoConnectionShape : public KoParameterShape
+class FLAKE_EXPORT KoConnectionShape : public KoParameterShape
 {
 public:
     enum Type {

@@ -31,8 +31,6 @@
 #include <KoUnit.h>
 #include "KoConnectionShapeLoadingUpdater.h"
 
-#include <kdebug.h>
-
 #include <QPainter>
 
 // XXX: Add editable text in path shapes so we can get a label here

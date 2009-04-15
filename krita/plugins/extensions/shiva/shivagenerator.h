@@ -6,12 +6,6 @@
 
 class KisConfigWidget;
 
-class ShivaPlugin : public KParts::Plugin {
-public:
-    ShivaPlugin(QObject *parent, const QStringList &);
-    virtual ~ShivaPlugin();
-};
-
 namespace OpenShiva {
   class Source;
 };

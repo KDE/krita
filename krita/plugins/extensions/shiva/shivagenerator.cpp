@@ -48,31 +48,6 @@
 #include "QVariantValue.h"
 #include <OpenShiva/Metadata.h>
 
-typedef KGenericFactory<ShivaPlugin> ShivaPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kritashiva, ShivaPluginFactory("krita"))
-
-ShivaPlugin::ShivaPlugin(QObject *parent, const QStringList &)
-        : KParts::Plugin(parent)
-{
-    setComponentData( ShivaPluginFactory::componentData());
-    KisGeneratorRegistry * manager = KisGeneratorRegistry::instance();
-    Q_ASSERT(manager);
-    OpenShiva::SourcesCollection* kc = new OpenShiva::SourcesCollection();
-    std::list< OpenShiva::Source* > kernels = kc->sources(OpenShiva::Source::GeneratorKernel);
-    
-    foreach( OpenShiva::Source* kernel, kernels )
-    {
-    // kDebug() << kernel->metadataCompilationErrors().c_str() << " " << kernel->isCompiled() ;
-        manager->add(new ShivaGenerator( kernel ));
-    }
-}
-
-ShivaPlugin::~ShivaPlugin()
-{
-}
-
-
-
 ShivaGenerator::ShivaGenerator(OpenShiva::Source* kernel) : KisGenerator(KoID( kernel->name().c_str(), kernel->name().c_str() ), KoID("basic"), kernel->name().c_str()), m_source(kernel)
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);

@@ -15,18 +15,30 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _SHIVAPLUGIN_H_
-#define _SHIVAPLUGIN_H_
+#ifndef _SHIVA_FILTER_H_
+#define _SHIVA_FILTER_H_
 
-#include <kparts/plugin.h>
-#include "generator/kis_generator.h"
+#include "filter/kis_filter.h"
 
-class KisConfigWidget;
+namespace OpenShiva {
+  class Source;
+};
 
-class ShivaPlugin : public KParts::Plugin {
-public:
-    ShivaPlugin(QObject *parent, const QStringList &);
-    virtual ~ShivaPlugin();
+class ShivaFilter : public KisFilter {
+  public:
+    ShivaFilter( OpenShiva::Source* source );
+    virtual ~ShivaFilter();
+    
+    virtual void process(KisConstProcessingInformation src,
+                         KisProcessingInformation dst,
+                         const QSize& size,
+                         const KisFilterConfiguration* config,
+                         KoUpdater* progressUpdater
+                        ) const;
+    
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image) const;
+  private:
+    OpenShiva::Source* m_source;
 };
 
 #endif

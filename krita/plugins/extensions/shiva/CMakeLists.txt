@@ -2,6 +2,7 @@ include_directories(${OPENSHIVA_INCLUDE_DIR})
 
 set(kritashiva_PART_SRCS
     shivaplugin.cpp
+    shivafilter.cpp
     shivagenerator.cpp
     ShivaGeneratorConfigWidget.cpp
     PaintDeviceImage.cpp

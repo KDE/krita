@@ -16,6 +16,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+#include <klocale.h>
 #include "KoUniColorDialog.h"
 
 KoUniColorDialog::KoUniColorDialog(KoColor &initialColor, QWidget *parent)
@@ -25,7 +26,7 @@ KoUniColorDialog::KoUniColorDialog(KoColor &initialColor, QWidget *parent)
 
     m_chooser = new KoUniColorChooser( );
     m_chooser->setColor(initialColor);
-    addPage( m_chooser, tr( "Color Selector") );
+    addPage( m_chooser, i18n( "Color Selector") );
 }
 
 KoColor KoUniColorDialog::color()

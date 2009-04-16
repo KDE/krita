@@ -124,7 +124,7 @@ public:
 
 signals:
 
-    void areaDone(KisPaintDeviceSP dev, const QRect& rc);
+    void areaDone(const QRect& rc);
 
 private slots:
 

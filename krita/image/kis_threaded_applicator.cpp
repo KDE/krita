@@ -134,7 +134,7 @@ void KisThreadedApplicator::jobDone(Job* job)
 {
     QRect rc = static_cast<KisJob*>(job)->area();
     delete job;
-    emit areaDone(m_d->dev, rc);
+    emit areaDone(rc);
 }
 
 #include "kis_threaded_applicator.moc"

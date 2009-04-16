@@ -105,6 +105,16 @@ bool PictureShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeLoa
             KoStore * store = context.odfLoadingContext().store();
             KoImageData * data = m_imageCollection->getImage(href, store);
             setUserData(data);
+        } else {
+            // check if we have an office:binary data element containing the image data
+            const KoXmlElement & binaryData(KoXml::namedItemNS(element, KoXmlNS::office, "binary-data"));
+            if (!binaryData.isNull()) {
+                QImage image;
+                if( image.loadFromData( QByteArray::fromBase64( binaryData.text().toLatin1() ) ) ) {
+                    KoImageData * data = m_imageCollection->getImage(image);
+                    setUserData(data);
+                }
+            }
         }
     }
 

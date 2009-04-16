@@ -32,6 +32,7 @@
 #include <KoSelection.h>
 
 #include <QUndoCommand>
+#include <QPointF>
 
 KoConnectionTool::KoConnectionTool( KoCanvasBase * canvas )
     : KoPathTool(canvas)
@@ -49,10 +50,15 @@ void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converte
 
 void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
 {
+    int MAX_DISTANCE = m_canvas->canvasWidget()->width()*m_canvas->canvasWidget()->width();
+    MAX_DISTANCE += m_canvas->canvasWidget()->height()*m_canvas->canvasWidget()->height();  
+    QPointF nearestPoint;
+    int nearestPointIndex, i;
     KoShape * tempShape = m_canvas->shapeManager()->shapeAt( event->point );
+    
     if( tempShape != 0 )
     { // If the shape selected is not the background
-	if( m_firstShape == 0 )
+        if( m_firstShape == 0 )
         { // If any connections is beginning
             m_firstShape = tempShape;
         }
@@ -64,10 +70,33 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
             KoShape *shape = factory->createDefaultShapeAndInit( m_canvas->shapeController()->dataCenterMap() );
             KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>( shape );
 
-            KoConnection newConnection = KoConnection(m_firstShape, 1);
+	    QList<QPointF> connectionPoints = m_firstShape->connectionPoints();
+	    for( i = 0; i < connectionPoints.count(); i++)
+            {
+                QPointF difference = tempShape->position() - connectionPoints[i];
+                qreal distance = difference.x() * difference.x() + difference.y() * difference.y();
+        	if( distance < MAX_DISTANCE )
+                {
+                    MAX_DISTANCE = distance;
+                    nearestPointIndex =  i;
+                    nearestPoint = connectionPoints[i];
+                }
+            }
+            KoConnection newConnection = KoConnection(m_firstShape, nearestPointIndex);
             connectionShape->setConnection1( newConnection.first, newConnection.second );
 	    
-            newConnection = KoConnection(tempShape, 1);
+            connectionPoints = tempShape->connectionPoints();
+            for( i = 0; i < connectionPoints.count(); i++)
+            {
+                QPointF difference = nearestPoint - connectionPoints[i];
+                qreal distance = difference.x() * difference.x() + difference.y() * difference.y();
+                if( distance <= MAX_DISTANCE )
+                {
+                    MAX_DISTANCE = distance;
+                    nearestPointIndex =  i;
+                }
+            }
+            newConnection = KoConnection(tempShape, nearestPointIndex);
             connectionShape->setConnection2( newConnection.first, newConnection.second );
             
 	    QUndoCommand * cmd;
@@ -81,6 +110,7 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
                 delete connectionShape;
             }
 	    
+            connectionShape->updateConnections();
             m_firstShape = 0;
         }
     }

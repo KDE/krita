@@ -734,7 +734,7 @@ void KisToolTransform::transform()
     currentNode()->paintDevice()->setDirty(rc); // XXX: This is not enough - should union with new extent
 
     canvas->view()->selectionManager()->selectionChanged();
-    if(currentSelection()->hasShapeSelection())
+    if(currentSelection() && currentSelection()->hasShapeSelection())
         canvas->view()->selectionManager()->shapeSelectionChanged();
 
     // Else add the command -- this will have the memento from the previous state,

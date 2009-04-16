@@ -74,7 +74,7 @@ set(kis_threaded_applicator_test_SRCS kis_threaded_applicator_test.cpp )
 
 kde4_add_unit_test(KisThreadedApplicatorTest TESTNAME krita-image-KisThreadedApplicatorTest ${kis_threaded_applicator_test_SRCS})
 
-target_link_libraries(KisThreadedApplicatorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+target_link_libraries(KisThreadedApplicatorTest  ${KDE4_KDEUI_LIBS} ${KDE4_THREADWEAVER_LIBRARY} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

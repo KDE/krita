@@ -51,30 +51,34 @@ KisStatusBar::KisStatusBar(KStatusBar * sb, KisView2 * view)
     m_selectionStatusLabel = new QLabel(sb);
     m_selectionStatusLabel->setPixmap(KIcon("tool_rect_selection").pixmap(22));
     m_selectionStatusLabel->setEnabled(false);
-    sb->addWidget(m_selectionStatusLabel);
-
-    sb->insertFixedItem("99999 x 99999", IMAGE_SIZE_ID);
-    sb->insertFixedItem("99999, 99999", POINTER_POSITION_ID);
-
-    sb->changeItem("", POINTER_POSITION_ID);
-    sb->changeItem("", IMAGE_SIZE_ID);
+    view->addStatusBarItem(m_selectionStatusLabel);
 
     // XXX: Use the KStatusbar fixed size labels!
     m_statusBarStatusLabel = new KSqueezedTextLabel(sb);
     connect(KoToolManager::instance(), SIGNAL(changedStatusText(const QString &)),
             m_statusBarStatusLabel, SLOT(setText(const QString &)));
-    sb->addWidget(m_statusBarStatusLabel, 2);
+    view->addStatusBarItem(m_statusBarStatusLabel, 2);
 
     m_statusBarProfileLabel = new KSqueezedTextLabel(sb);
-    sb->addWidget(m_statusBarProfileLabel, 3);
+    view->addStatusBarItem(m_statusBarProfileLabel, 3);
 
     //int height = m_statusBarProfileLabel->height();
+
+    m_imageSizeLabel = new QLabel( QString(), sb );
+    m_imageSizeLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
+    m_imageSizeLabel->setMinimumWidth( 100 );
+    view->addStatusBarItem( m_imageSizeLabel );
+
+    m_pointerPositionLabel = new QLabel( QString(), sb );
+    m_pointerPositionLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
+    m_pointerPositionLabel->setMinimumWidth( 100 );
+    view->addStatusBarItem( m_pointerPositionLabel );
 
     m_progress = new KoProgressBar(sb);
     m_progress->setMaximumWidth(225);
     m_progress->setMinimumWidth(225);
     m_progress->setMaximumHeight(sb->fontMetrics().height());
-    sb->addPermanentWidget(m_progress, 2);
+    view->addStatusBarItem(m_progress, 2, true);
 
     m_progress->hide();
 }
@@ -103,12 +107,12 @@ void KisStatusBar::documentMousePositionChanged(const QPointF &pos)
 
     pixelPos.setX(qBound(0, pixelPos.x(), m_view->image()->width() - 1));
     pixelPos.setY(qBound(0, pixelPos.y(), m_view->image()->height() - 1));
-    m_statusbar->changeItem(QString("%1, %2").arg(pixelPos.x()).arg(pixelPos.y()), POINTER_POSITION_ID);
+    m_pointerPositionLabel->setText(QString("%1, %2").arg(pixelPos.x()).arg(pixelPos.y()));
 }
 
 void KisStatusBar::imageSizeChanged(qint32 w, qint32 h)
 {
-    m_statusbar->changeItem(QString("%1 x %2").arg(w).arg(h), IMAGE_SIZE_ID);
+    m_imageSizeLabel->setText(QString("%1 x %2").arg(w).arg(h));
 }
 
 void KisStatusBar::setSelection(KisImageSP img)

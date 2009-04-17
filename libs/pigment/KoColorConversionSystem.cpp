@@ -289,7 +289,7 @@ void KoColorConversionSystem::createColorConverters(const KoColorSpace* colorSpa
     // TODO This function currently only select the best conversion only based on the transformation
     // from colorSpace to one of the color spaces in the list, but not the other way around
     // it might be worth to look also the return path.
-    const Node* csNode = nodeFor( colorSpace->colorModelId().id(), colorSpace->colorDepthId().id(), colorSpace->profile()->name() );
+    const Node* csNode = nodeFor( colorSpace  );
     PathQualityChecker pQC( csNode->referenceDepth, not csNode->isHdr, not csNode->isGray );
     // Look for a color conversion
     Path* bestPath = 0;

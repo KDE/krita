@@ -40,10 +40,14 @@
 #include <KoTextSharedLoadingData.h>
 #include <KoTextBlockData.h>
 #include <KoTextPage.h>
+#include <KoTextDocument.h>
+#include <KoStyleManager.h>
 
 TOCVariable::TOCVariable()
         : KoVariable(true), currentDoc(0), source(TOCSource(this))
 {
+    KoTextDocument doc(&indexBody);
+    doc.setStyleManager(new KoStyleManager());
 }
 
 void TOCVariable::setProperties(const KoProperties *props)
@@ -61,7 +65,7 @@ void TOCVariable::variableMoved(const KoShape *shape, const QTextDocument *docum
 {
     Q_UNUSED(posInDocument);
     Q_UNUSED(shape);
-    currentDoc = document;
+    setCurrentDocument(document);
 // Refresh forced here....
 //update();
 }
@@ -252,4 +256,14 @@ void TOCVariable::update()
     indexBody.clear();
     QTextCursor cursor(&indexBody);
     source.buildFromDocument(currentDoc, &cursor);
+}
+
+void TOCVariable::setCurrentDocument(const QTextDocument *document)
+{
+    if (currentDoc == document)
+        return;
+    currentDoc = document;
+    KoTextDocument orig(currentDoc);
+    KoTextDocument doc(&indexBody);
+    doc.setStyleManager(orig.styleManager());
 }

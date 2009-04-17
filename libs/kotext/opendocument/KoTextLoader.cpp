@@ -116,9 +116,9 @@ public:
               currentListStyle(0),
               currentListLevel(1),
               styleManager(0),
+              changeTracker(0),
               loadSpanLevel(0),
               loadSpanInitialPos(0),
-              changeTracker(0),
               currentChangeId(0) {
         dt.start();
     }
@@ -320,7 +320,6 @@ void KoTextLoader::loadChangedRegion(const KoXmlElement &element, QTextCursor &c
     KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
     kDebug() << "changed-region id: " << changeId << " title: " << changeElement->getChangeTitle() << " creator: " << changeElement->getCreator() << " date: " << changeElement->getDate();
 }
-
 
 void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &cursor)
 {

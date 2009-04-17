@@ -205,7 +205,7 @@ public:
     /// Apply a font strike out width to this KoCharacterStyle
     void setStrikeOutWidth(LineWeight weight, qreal width);
     /// Get the current font strike out width of this KoCharacterStyle
-    void strikeOutWidth(LineWeight& weight, qreal& width) const;
+    void strikeOutWidth(LineWeight &weight, qreal &width) const;
     /// Apply a font strike out color to this KoCharacterStyle
     void setStrikeOutColor(const QColor &color);
     /// Get the current font strike out color of this KoCharacterStyle
@@ -219,7 +219,7 @@ public:
     /// Get the current strike out mode of this KoCharacterStyle
     LineMode strikeOutMode() const;
     /// Apply a strike out text of this KoCharacterStyle
-    void setStrikeOutText(const QString& text);
+    void setStrikeOutText(const QString &text);
     /// Get the current strike out text of this KoCharacterStyle
     QString strikeOutText() const;
 
@@ -230,7 +230,7 @@ public:
     /// Apply a font underline width to this KoCharacterStyle
     void setUnderlineWidth(LineWeight weight, qreal width);
     /// Get the current font underline width of this KoCharacterStyle
-    void underlineWidth(LineWeight& weight, qreal& width) const;
+    void underlineWidth(LineWeight &weight, qreal &width) const;
     /// Apply a font underline color to this KoCharacterStyle
     void setUnderlineColor(const QColor &color);
     /// Get the current font underline color of this KoCharacterStyle
@@ -295,7 +295,7 @@ public:
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
-    void loadOdf(KoOdfLoadingContext& context);
+    void loadOdf(KoOdfLoadingContext &context);
 
     /// return true if this style has a non-default value set for the Property
     bool hasProperty(int key) const;
@@ -335,7 +335,7 @@ private:
     * Load the style from the \a KoStyleStack style stack using the
     * OpenDocument format.
     */
-    void loadOdfProperties(KoStyleStack& styleStack);
+    void loadOdfProperties(KoStyleStack &styleStack);
 
     class Private;
     Private * const d;

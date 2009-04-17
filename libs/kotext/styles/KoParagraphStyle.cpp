@@ -240,7 +240,7 @@ void KoParagraphStyle::unapplyStyle(QTextBlock &block) const
         block.textList()->remove(block);
 }
 
-static KoParagraphStyle::BorderStyle oasisBorderStyle(const QString& borderstyle)
+static KoParagraphStyle::BorderStyle oasisBorderStyle(const QString &borderstyle)
 {
     if (borderstyle == "none")
         return KoParagraphStyle::BorderNone;
@@ -536,7 +536,7 @@ KoParagraphStyle::BorderStyle KoParagraphStyle::leftBorderStyle()
     return static_cast<KoParagraphStyle::BorderStyle>(propertyInt(LeftBorderStyle));
 }
 
-void KoParagraphStyle::setLeftBorderColor(const QColor& color)
+void KoParagraphStyle::setLeftBorderColor(const QColor &color)
 {
     setProperty(LeftBorderColor, color);
 }
@@ -586,7 +586,7 @@ KoParagraphStyle::BorderStyle KoParagraphStyle::topBorderStyle()
     return static_cast<KoParagraphStyle::BorderStyle>(propertyInt(TopBorderStyle));
 }
 
-void KoParagraphStyle::setTopBorderColor(const QColor& color)
+void KoParagraphStyle::setTopBorderColor(const QColor &color)
 {
     setProperty(TopBorderColor, color);
 }
@@ -636,7 +636,7 @@ KoParagraphStyle::BorderStyle KoParagraphStyle::rightBorderStyle()
     return static_cast<KoParagraphStyle::BorderStyle>(propertyInt(RightBorderStyle));
 }
 
-void KoParagraphStyle::setRightBorderColor(const QColor& color)
+void KoParagraphStyle::setRightBorderColor(const QColor &color)
 {
     setProperty(RightBorderColor, color);
 }
@@ -686,7 +686,7 @@ KoParagraphStyle::BorderStyle KoParagraphStyle::bottomBorderStyle()
     return static_cast<KoParagraphStyle::BorderStyle>(propertyInt(BottomBorderStyle));
 }
 
-void KoParagraphStyle::setBottomBorderColor(const QColor& color)
+void KoParagraphStyle::setBottomBorderColor(const QColor &color)
 {
     setProperty(BottomBorderColor, color);
 }
@@ -829,7 +829,7 @@ QString KoParagraphStyle::masterPageName() const
     return value(MasterPageName).toString();
 }
 
-void KoParagraphStyle::setMasterPageName(const QString& name)
+void KoParagraphStyle::setMasterPageName(const QString &name)
 {
     setProperty(MasterPageName, name);
 }
@@ -948,7 +948,7 @@ QBrush KoParagraphStyle::background() const
     return qvariant_cast<QBrush>(variant);
 }
 
-void KoParagraphStyle::loadOdf(const KoXmlElement* element, KoOdfLoadingContext & context)
+void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context)
 {
     if (element->hasAttributeNS(KoXmlNS::style, "display-name"))
         d->name = element->attributeNS(KoXmlNS::style, "display-name", QString());
@@ -986,7 +986,7 @@ void KoParagraphStyle::loadOdf(const KoXmlElement* element, KoOdfLoadingContext 
     context.styleStack().restore();
 }
 
-void KoParagraphStyle::loadOdfProperties(KoStyleStack& styleStack)
+void KoParagraphStyle::loadOdfProperties(KoStyleStack &styleStack)
 {
     // in 1.6 this was defined at KoParagLayout::loadOasisParagLayout(KoParagLayout&, KoOasisContext&)
 
@@ -1393,7 +1393,7 @@ void KoParagraphStyle::setTabPositions(const QList<KoText::Tab> &tabs)
     QList<KoText::Tab> newTabs = tabs;
     qSort(newTabs.begin(), newTabs.end(), compareTabs);
     QList<QVariant> list;
-    foreach(const KoText::Tab & tab, tabs) {
+    foreach(const KoText::Tab &tab, tabs) {
         QVariant v;
         v.setValue(tab);
         list.append(v);
@@ -1407,7 +1407,7 @@ QList<KoText::Tab> KoParagraphStyle::tabPositions() const
     if (variant.isNull())
         return QList<KoText::Tab>();
     QList<KoText::Tab> answer;
-    foreach(const QVariant & tab, qvariant_cast<QList<QVariant> >(variant)) {
+    foreach(const QVariant &tab, qvariant_cast<QList<QVariant> >(variant)) {
         answer.append(tab.value<KoText::Tab>());
     }
     return answer;
@@ -1472,7 +1472,7 @@ void KoParagraphStyle::removeDuplicates(const KoParagraphStyle &other)
         d->charStyle->removeDuplicates(*other.d->charStyle);
 }
 
-void KoParagraphStyle::saveOdf(KoGenStyle & style, KoGenStyles &mainStyles)
+void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
 {
     bool writtenLineSpacing = false;
     if (d->charStyle) {
@@ -1683,7 +1683,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle & style, KoGenStyles &mainStyles)
         buf.open(QIODevice::WriteOnly);
         KoXmlWriter elementWriter(&buf);
         elementWriter.startElement("style:tab-stops");
-        foreach(const KoText::Tab & tab, tabPositions()) {
+        foreach(const KoText::Tab &tab, tabPositions()) {
             elementWriter.startElement("style:tab-stop");
             elementWriter.addAttributePt("style:position", tab.position);
             if (!tabTypeMap[tab.type].isEmpty())

@@ -332,7 +332,7 @@ public:
     qreal leftBorderSpacing();
     void setLeftBorderStyle(BorderStyle style);
     BorderStyle leftBorderStyle();
-    void setLeftBorderColor(const QColor& color);
+    void setLeftBorderColor(const QColor &color);
     QColor leftBorderColor();
     void setTopBorderWidth(qreal width);
     qreal topBorderWidth();
@@ -342,7 +342,7 @@ public:
     qreal topBorderSpacing();
     void setTopBorderStyle(BorderStyle style);
     BorderStyle topBorderStyle();
-    void setTopBorderColor(const QColor& color);
+    void setTopBorderColor(const QColor &color);
     QColor topBorderColor();
     void setRightBorderWidth(qreal width);
     qreal rightBorderWidth();
@@ -352,7 +352,7 @@ public:
     qreal rightBorderSpacing();
     void setRightBorderStyle(BorderStyle style);
     BorderStyle rightBorderStyle();
-    void setRightBorderColor(const QColor& color);
+    void setRightBorderColor(const QColor &color);
     QColor rightBorderColor();
     void setBottomBorderWidth(qreal width);
     qreal bottomBorderWidth();
@@ -362,7 +362,7 @@ public:
     qreal bottomBorderSpacing();
     void setBottomBorderStyle(BorderStyle style);
     BorderStyle bottomBorderStyle();
-    void setBottomBorderColor(const QColor& color);
+    void setBottomBorderColor(const QColor &color);
     QColor bottomBorderColor();
 
     KoText::Direction textProgressionDirection() const;
@@ -442,7 +442,7 @@ public:
     /// return the optional name of the master-page or a QString() if this paragraph isn't attached to a master-page.
     QString masterPageName() const;
     /// Set the name of the master-page.
-    void setMasterPageName(const QString& name);
+    void setMasterPageName(const QString &name);
 
 
     /// Set the list start value
@@ -538,7 +538,7 @@ public:
      * @param context the odf loading context
      * @param element the element containing the
      */
-    void loadOdf(const KoXmlElement* element, KoOdfLoadingContext & context);
+    void loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context);
 
     void saveOdf(KoGenStyle &style, KoGenStyles &mainStyles);
 
@@ -573,7 +573,7 @@ private:
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
-    void loadOdfProperties(KoStyleStack& styleStack);
+    void loadOdfProperties(KoStyleStack &styleStack);
     qreal propertyDouble(int key) const;
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;

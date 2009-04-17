@@ -97,7 +97,7 @@ KoCharacterStyle::Private::Private()
 void KoCharacterStyle::Private::setApplicationDefaults(KoOdfLoadingContext &context)
 {
     KoStyleStack defaultStyleStack;
-    const KoXmlElement* appDef = context.defaultStylesReader().defaultStyle("paragraph");
+    const KoXmlElement *appDef = context.defaultStylesReader().defaultStyle("paragraph");
     if (appDef) {
         defaultStyleStack.push(*appDef);
         defaultStyleStack.setTypeProperties("text");
@@ -274,9 +274,9 @@ void KoCharacterStyle::unapplyStyle(QTextBlock &block) const
 }
 
 // OASIS 14.2.29
-static void importOdfLine(const QString& type, const QString& style, const QString& width,
-                          KoCharacterStyle::LineStyle& lineStyle, KoCharacterStyle::LineType& lineType,
-                          KoCharacterStyle::LineWeight& lineWeight, qreal& lineWidth)
+static void importOdfLine(const QString &type, const QString &style, const QString &width,
+                          KoCharacterStyle::LineStyle &lineStyle, KoCharacterStyle::LineType &lineType,
+                          KoCharacterStyle::LineWeight &lineWeight, qreal &lineWidth)
 {
     lineStyle = KoCharacterStyle::NoLineStyle;
     lineType = KoCharacterStyle::NoLineType;
@@ -590,7 +590,7 @@ void KoCharacterStyle::setStrikeOutWidth(LineWeight weight, qreal width)
     d->setProperty(KoCharacterStyle::StrikeOutWidth, width);
 }
 
-void KoCharacterStyle::strikeOutWidth(LineWeight& weight, qreal& width) const
+void KoCharacterStyle::strikeOutWidth(LineWeight &weight, qreal &width) const
 {
     weight = (KoCharacterStyle::LineWeight) d->propertyInt(KoCharacterStyle::StrikeOutWeight);
     width = d->propertyDouble(KoCharacterStyle::StrikeOutWidth);
@@ -600,7 +600,7 @@ void KoCharacterStyle::setStrikeOutMode(LineMode lineMode)
     d->setProperty(StrikeOutMode, lineMode);
 }
 
-void KoCharacterStyle::setStrikeOutText(const QString& text)
+void KoCharacterStyle::setStrikeOutText(const QString &text)
 {
     d->setProperty(StrikeOutText, text);
 }
@@ -649,7 +649,7 @@ void KoCharacterStyle::setUnderlineWidth(LineWeight weight, qreal width)
     d->setProperty(KoCharacterStyle::UnderlineWidth, width);
 }
 
-void KoCharacterStyle::underlineWidth(LineWeight& weight, qreal& width) const
+void KoCharacterStyle::underlineWidth(LineWeight &weight, qreal &width) const
 {
     weight = (KoCharacterStyle::LineWeight) d->propertyInt(KoCharacterStyle::UnderlineWeight);
     width = d->propertyDouble(KoCharacterStyle::UnderlineWidth);
@@ -727,8 +727,8 @@ bool KoCharacterStyle::hasProperty(int key) const
     return d->stylesPrivate.contains(key);
 }
 
-//in 1.6 this was defined in KoTextFormat::load(KoOasisContext& context)
-void KoCharacterStyle::loadOdf(KoOdfLoadingContext& context)
+//in 1.6 this was defined in KoTextFormat::load(KoOasisContext &context)
+void KoCharacterStyle::loadOdf(KoOdfLoadingContext &context)
 {
     d->setApplicationDefaults(context);
     KoStyleStack &styleStack = context.styleStack();

@@ -99,6 +99,8 @@ private:
     void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
                const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
+    void setCurrentDocument(const QTextDocument *document);
+
     QTextDocument indexBody;
     const QTextDocument *currentDoc;
     TOCSource source;

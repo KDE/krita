@@ -60,7 +60,7 @@ public:
      * @param context The shape loading context.
      * @param styleManager The style manager too use or 0 if you don't have a style manager.
      */
-    void loadOdfStyles(KoOdfLoadingContext & context, KoStyleManager * styleManager);
+    void loadOdfStyles(KoOdfLoadingContext &context, KoStyleManager *styleManager);
 
     /**
      * Get the paragraph style for the given name
@@ -71,7 +71,7 @@ public:
      * @param stylesDotXml If set the styles from styles.xml are use if unset sytles from content.xml are used.
      * @return The paragraph style for the given name or 0 if not found
      */
-    KoParagraphStyle * paragraphStyle(const QString &name, bool stylesDotXml);
+    KoParagraphStyle *paragraphStyle(const QString &name, bool stylesDotXml);
 
     /**
      * Get the character style for the given name
@@ -82,7 +82,7 @@ public:
      * @param stylesDotXml If set the styles from styles.xml are use if unset sytles from content.xml are used.
      * @return The character style for the given name or 0 if not found
      */
-    KoCharacterStyle * characterStyle(const QString &name, bool stylesDotXml);
+    KoCharacterStyle *characterStyle(const QString &name, bool stylesDotXml);
 
     /**
      * Get the list style for the given name
@@ -97,7 +97,7 @@ protected:
      * @param shape a shape that has finished loading.
      * @param element the xml element that represents the shape being inserted.
      */
-    virtual void shapeInserted(KoShape* shape, const KoXmlElement &element, KoShapeLoadingContext &context);
+    virtual void shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context);
 
 private:
     enum StyleType {
@@ -105,18 +105,18 @@ private:
         StylesDotXml = 2
     };
     // helper functions for loading of paragraph styles
-    void addParagraphStyles(KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements, int styleTypes,
+    void addParagraphStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
                             KoStyleManager *styleManager = 0);
     QList<QPair<QString, KoParagraphStyle *> > loadParagraphStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements,
             int styleTypes, KoStyleManager *manager = 0);
 
     // helper functions for loading of character styles
-    void addCharacterStyles(KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements, int styleTypes,
+    void addCharacterStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
                             KoStyleManager *styleManager = 0);
-    QList<QPair<QString, KoCharacterStyle *> > loadCharacterStyles(KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements);
+    QList<QPair<QString, KoCharacterStyle *> > loadCharacterStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
 
     // helper functions for loading of list styles
-    void addListStyles(KoOdfLoadingContext & context, QList<KoXmlElement*> styleElements, int styleTypes,
+    void addListStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
                        KoStyleManager *styleManager = 0);
     QList<QPair<QString, KoListStyle *> > loadListStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
 

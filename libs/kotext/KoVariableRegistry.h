@@ -49,7 +49,7 @@ public:
      * Return an instance of the KoVariableRegistry
      * Creates an instance if that has never happened before and returns the singleton instance.
      */
-    static KoVariableRegistry * instance();
+    static KoVariableRegistry *instance();
 
     /**
      * Use the element to find out which variable plugin can load it, and returns the loaded
@@ -57,7 +57,7 @@ public:
      *
      * @returns the variable or 0 if no variable could be created
      */
-    KoVariable * createFromOdf(const KoXmlElement & e, KoShapeLoadingContext & context) const;
+    KoVariable *createFromOdf(const KoXmlElement & e, KoShapeLoadingContext & context) const;
 
     /**
      * Create a list of actions that can be used to plug into a menu, for example.
@@ -81,7 +81,7 @@ private:
     void init();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOVARIABLEREGISTRY_H

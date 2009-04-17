@@ -68,7 +68,7 @@ void KoVariableRegistry::init()
 
     QList<KoVariableFactory*> factories = values();
     kDebug(32500) << "factories count" << factories.size();
-    foreach(KoVariableFactory * factory, factories) {
+    foreach(KoVariableFactory *factory, factories) {
         kDebug(32500) << factory->id();
         QString nameSpace = factory->odfNameSpace();
         if (nameSpace.isEmpty() || factory->odfElementNames().isEmpty()) {
@@ -85,9 +85,9 @@ void KoVariableRegistry::init()
 
 }
 
-KoVariableRegistry* KoVariableRegistry::instance()
+KoVariableRegistry *KoVariableRegistry::instance()
 {
-    KoVariableRegistry * registry = &(singleton->q);
+    KoVariableRegistry *registry = &(singleton->q);
     if (! singleton->initDone) {
         singleton->initDone = true;
         registry->init();
@@ -95,13 +95,13 @@ KoVariableRegistry* KoVariableRegistry::instance()
     return registry;
 }
 
-KoVariable * KoVariableRegistry::createFromOdf(const KoXmlElement & e, KoShapeLoadingContext & context) const
+KoVariable *KoVariableRegistry::createFromOdf(const KoXmlElement & e, KoShapeLoadingContext & context) const
 {
     kDebug(32500) << "Going to check for" << e.namespaceURI() << ":" << e.tagName();
 
-    KoVariable * variable = 0;
+    KoVariable *variable = 0;
 
-    KoVariableFactory * factory = d->factories.value(QPair<QString, QString>(e.namespaceURI(), e.tagName()));
+    KoVariableFactory *factory = d->factories.value(QPair<QString, QString>(e.namespaceURI(), e.tagName()));
 
     if (factory) {
         variable = factory->createVariable();
@@ -116,7 +116,7 @@ KoVariable * KoVariableRegistry::createFromOdf(const KoXmlElement & e, KoShapeLo
 QList<QAction*> KoVariableRegistry::createInsertVariableActions(KoCanvasBase *host) const
 {
     QList<QAction*> answer;
-    foreach(KoVariableFactory * factory, values()) {
+    foreach(KoVariableFactory *factory, values()) {
         foreach(const KoVariableTemplate & templ, factory->templates()) {
             answer.append(new InsertVariableAction(host, factory, templ));
         }

@@ -75,8 +75,8 @@
 class KoTextLoader::Private
 {
 public:
-    KoShapeLoadingContext & context;
-    KoTextSharedLoadingData * textSharedData;
+    KoShapeLoadingContext &context;
+    KoTextSharedLoadingData *textSharedData;
     // store it here so that you don't need to get it all the time from
     // the KoOdfLoadingContext.
     bool stylesDotXml;
@@ -138,11 +138,11 @@ public:
     }
 };
 
-KoTextLoader::KoTextLoader(KoShapeLoadingContext & context)
+KoTextLoader::KoTextLoader(KoShapeLoadingContext &context)
         : QObject()
         , d(new Private(context))
 {
-    KoSharedLoadingData * sharedData = context.sharedData(KOTEXT_SHARED_LOADING_ID);
+    KoSharedLoadingData *sharedData = context.sharedData(KOTEXT_SHARED_LOADING_ID);
     if (sharedData) {
         d->textSharedData = dynamic_cast<KoTextSharedLoadingData *>(sharedData);
     }
@@ -167,7 +167,7 @@ KoTextLoader::~KoTextLoader()
     delete d;
 }
 
-void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
+void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
 {
     const QTextBlockFormat defaultBlockFormat = cursor.blockFormat();
     const QTextCharFormat defaultCharFormat = cursor.charFormat();
@@ -218,7 +218,7 @@ void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
                 } else if (localName == "section") {  // Temporary support (###TODO)
                     loadSection(tag, cursor);
                 } else {
-                    KoVariable * var = KoVariableRegistry::instance()->createFromOdf(tag, d->context);
+                    KoVariable *var = KoVariableRegistry::instance()->createFromOdf(tag, d->context);
 
                     if (var) {
                         KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
@@ -310,24 +310,24 @@ void KoTextLoader::loadBody(const KoXmlElement& bodyElem, QTextCursor& cursor)
     endBody();
 }
 
-void KoTextLoader::loadChangedRegion(const KoXmlElement& element, QTextCursor& cursor)
+void KoTextLoader::loadChangedRegion(const KoXmlElement &element, QTextCursor &cursor)
 {
     QString id = element.attributeNS(KoXmlNS::text,"change-id");
     int changeId = d->changeTracker->getLoadedChangeId(id);
     d->currentChangeId = changeId;
 
     //debug
-    KoChangeTrackerElement* changeElement = d->changeTracker->elementById(changeId);
+    KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
     kDebug() << "changed-region id: " << changeId << " title: " << changeElement->getChangeTitle() << " creator: " << changeElement->getCreator() << " date: " << changeElement->getDate();
 }
 
 
-void KoTextLoader::loadParagraph(const KoXmlElement& element, QTextCursor& cursor)
+void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &cursor)
 {
     // TODO use the default style name a default value?
     QString styleName = element.attributeNS(KoXmlNS::text, "style-name", QString());
 
-    KoParagraphStyle * paragraphStyle = d->textSharedData->paragraphStyle(styleName, d->stylesDotXml);
+    KoParagraphStyle *paragraphStyle = d->textSharedData->paragraphStyle(styleName, d->stylesDotXml);
 
     if (!paragraphStyle && d->styleManager) {
         // Either the paragraph has no style or the style-name could not be found.
@@ -355,7 +355,7 @@ void KoTextLoader::loadParagraph(const KoXmlElement& element, QTextCursor& curso
     cursor.setCharFormat(cf);   // restore the cursor char format
 }
 
-void KoTextLoader::loadHeading(const KoXmlElement& element, QTextCursor& cursor)
+void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
 {
     int level = qMax(1, element.attributeNS(KoXmlNS::text, "outline-level", "1").toInt());
     // TODO: fallback to default-outline-level from the style, if specified?
@@ -365,7 +365,7 @@ void KoTextLoader::loadHeading(const KoXmlElement& element, QTextCursor& cursor)
     QTextBlock block = cursor.block();
 
     // Set the paragraph-style on the block
-    KoParagraphStyle * paragraphStyle = d->textSharedData->paragraphStyle(styleName, d->stylesDotXml);
+    KoParagraphStyle *paragraphStyle = d->textSharedData->paragraphStyle(styleName, d->stylesDotXml);
     if (!paragraphStyle && d->styleManager) {
         paragraphStyle = d->styleManager->defaultParagraphStyle();
     }
@@ -399,7 +399,7 @@ void KoTextLoader::loadHeading(const KoXmlElement& element, QTextCursor& cursor)
     cursor.setCharFormat(cf);   // restore the cursor char format
 }
 
-void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
+void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
 {
     kDebug() << "in load List";
     const bool numberedParagraph = element.localName() == "numbered-paragraph";
@@ -507,13 +507,13 @@ void KoTextLoader::loadList(const KoXmlElement& element, QTextCursor& cursor)
     }
 }
 
-void KoTextLoader::loadSection(const KoXmlElement& sectionElem, QTextCursor& cursor)
+void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cursor)
 {
     Q_UNUSED(sectionElem);
     Q_UNUSED(cursor);
 }
 
-void KoTextLoader::loadNote(const KoXmlElement& noteElem, QTextCursor& cursor)
+void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
 {
     kDebug(32500) << "Loading a text:note element.";
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
@@ -533,7 +533,7 @@ void KoTextLoader::loadNote(const KoXmlElement& noteElem, QTextCursor& cursor)
 // leading and trailing whitespace, but such whitespace is significant
 // in ODF -- so we use this function to compress sequences of space characters
 // into single spaces
-static QString normalizeWhitespace(const QString& in, bool leadingSpace)
+static QString normalizeWhitespace(const QString &in, bool leadingSpace)
 {
     QString text = in;
     int r, w = 0;
@@ -561,7 +561,7 @@ static QString normalizeWhitespace(const QString& in, bool leadingSpace)
     return text;
 }
 
-void KoTextLoader::loadSpan(const KoXmlElement& element, QTextCursor& cursor, bool *stripLeadingSpace)
+void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bool *stripLeadingSpace)
 {
     kDebug(32500) << "text-style:" << KoTextDebug::textAttributes( cursor.blockCharFormat() );
     Q_ASSERT(stripLeadingSpace);
@@ -616,7 +616,7 @@ void KoTextLoader::loadSpan(const KoXmlElement& element, QTextCursor& cursor, bo
 
             QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
 
-            KoCharacterStyle * characterStyle = d->textSharedData->characterStyle(styleName, d->stylesDotXml);
+            KoCharacterStyle *characterStyle = d->textSharedData->characterStyle(styleName, d->stylesDotXml);
             if (characterStyle) {
                 characterStyle->applyStyle(&cursor);
             } else {
@@ -687,7 +687,7 @@ void KoTextLoader::loadSpan(const KoXmlElement& element, QTextCursor& cursor, bo
         } else if (isDrawNS) {
             loadShape(ts, cursor);
         } else {
-            KoVariable * var = KoVariableRegistry::instance()->createFromOdf(ts, d->context);
+            KoVariable *var = KoVariableRegistry::instance()->createFromOdf(ts, d->context);
 
             if (var) {
                 KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
@@ -704,7 +704,7 @@ void KoTextLoader::loadSpan(const KoXmlElement& element, QTextCursor& cursor, bo
 #if 0 //1.6:
                 bool handled = false;
                 // Check if it's a variable
-                KoVariable* var = context.variableCollection().loadOasisField(textDocument(), ts, context);
+                KoVariable *var = context.variableCollection().loadOasisField(textDocument(), ts, context);
                 if (var) {
                     textData = "#";     // field placeholder
                     customItem = var;
@@ -727,7 +727,7 @@ void KoTextLoader::loadSpan(const KoXmlElement& element, QTextCursor& cursor, bo
     --d->loadSpanLevel;
 }
 
-void KoTextLoader::loadTable(const KoXmlElement& tableElem, QTextCursor& cursor)
+void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
 {
     KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(tableElem, d->context);
     if (!shape) {
@@ -747,7 +747,7 @@ void KoTextLoader::loadTable(const KoXmlElement& tableElem, QTextCursor& cursor)
     }
 }
 
-void KoTextLoader::loadShape(const KoXmlElement& element, QTextCursor& cursor)
+void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)
 {
     KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(element, d->context);
     if (!shape) {

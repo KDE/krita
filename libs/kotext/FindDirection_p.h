@@ -28,49 +28,49 @@ class QTextDocument;
 class FindDirection
 {
 public:
-    FindDirection(KoCanvasResourceProvider * provider);
+    FindDirection(KoCanvasResourceProvider *provider);
     virtual ~FindDirection();
 
-    virtual bool positionReached(const QTextCursor & currentPos, const QTextCursor & endPos) = 0;
+    virtual bool positionReached(const QTextCursor &currentPos, const QTextCursor &endPos) = 0;
 
-    virtual void positionCursor(QTextCursor & currentPos) = 0;
+    virtual void positionCursor(QTextCursor &currentPos) = 0;
 
-    virtual void select(const QTextCursor & cursor) = 0;
+    virtual void select(const QTextCursor &cursor) = 0;
 
-    virtual void nextDocument(QTextDocument * document, KoFindPrivate * findPrivate) = 0;
+    virtual void nextDocument(QTextDocument *document, KoFindPrivate *findPrivate) = 0;
 
 protected:
-    KoCanvasResourceProvider * m_provider;
+    KoCanvasResourceProvider *m_provider;
 };
 
 class FindForward : public FindDirection
 {
 public:
-    FindForward(KoCanvasResourceProvider * provider);
+    FindForward(KoCanvasResourceProvider *provider);
     virtual ~FindForward();
 
-    virtual bool positionReached(const QTextCursor & currentPos, const QTextCursor & endPos);
+    virtual bool positionReached(const QTextCursor &currentPos, const QTextCursor &endPos);
 
-    virtual void positionCursor(QTextCursor & currentPos);
+    virtual void positionCursor(QTextCursor &currentPos);
 
-    virtual void select(const QTextCursor & cursor);
+    virtual void select(const QTextCursor &cursor);
 
-    virtual void nextDocument(QTextDocument * document, KoFindPrivate * findPrivate);
+    virtual void nextDocument(QTextDocument *document, KoFindPrivate *findPrivate);
 };
 
 class FindBackward : public FindDirection
 {
 public:
-    FindBackward(KoCanvasResourceProvider * provider);
+    FindBackward(KoCanvasResourceProvider *provider);
     virtual ~FindBackward();
 
-    virtual bool positionReached(const QTextCursor & currentPos, const QTextCursor & endPos);
+    virtual bool positionReached(const QTextCursor &currentPos, const QTextCursor &endPos);
 
-    virtual void positionCursor(QTextCursor & currentPos);
+    virtual void positionCursor(QTextCursor &currentPos);
 
-    virtual void select(const QTextCursor & cursor);
+    virtual void select(const QTextCursor &cursor);
 
-    virtual void nextDocument(QTextDocument * document, KoFindPrivate * findPrivate);
+    virtual void nextDocument(QTextDocument *document, KoFindPrivate *findPrivate);
 };
 
 #endif // FINDDIRECTION_P_H

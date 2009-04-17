@@ -169,15 +169,15 @@ bool KoOdfWriteStore::closeContentWriter()
     d->contentWriter->startElement("office:body");
     d->contentWriter->startElement("office:text");
 
-    Q_ASSERT(d->changeTmpFile);
-
     delete d->changeWriter; d->changeWriter = 0;
 
     //copy over the content of the change tmp file
-    d->changeTmpFile->close();
-    d->contentWriter->addCompleteElement(d->changeTmpFile);
-    d->changeTmpFile->close();
-    delete d->changeTmpFile; d->changeTmpFile = 0;
+    if ( d->changeTmpFile ) {
+        d->changeTmpFile->close();
+        d->contentWriter->addCompleteElement(d->changeTmpFile);
+        d->changeTmpFile->close();
+        delete d->changeTmpFile; d->changeTmpFile = 0;
+    }
 
     Q_ASSERT(d->bodyWriter);
     Q_ASSERT(d->contentTmpFile);

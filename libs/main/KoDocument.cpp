@@ -2582,7 +2582,10 @@ void KoDocument::openTemplate(const KUrl& url)
     setModified(false);
 
     if (ok) {
-        setMimeTypeAfterLoading(KMimeType::findByUrl(url, 0, true)->name());
+        QString mimeType = KMimeType::findByUrl( url, 0, true )->name();
+        // in case this is a open document template remove the -template from the end
+        mimeType.remove( QRegExp( "-template$" ) );
+        setMimeTypeAfterLoading(mimeType);
         deleteOpenPane();
         resetURL();
         setEmpty();

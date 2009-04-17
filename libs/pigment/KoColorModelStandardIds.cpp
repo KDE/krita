@@ -33,5 +33,5 @@ extern const KoID YCbCrAColorModelID("YCbCrA", i18n("YCbCr"));
 
 extern const KoID Integer8BitsColorDepthID("U8", i18n("8 Bits"));
 extern const KoID Integer16BitsColorDepthID("U16", i18n("16 Bits"));
-extern const KoID Float16BitsColorDepthID("F16", i18n("16 Bits Float (HDR)"));
-extern const KoID Float32BitsColorDepthID("F32", i18n("32 Bits Float (HDR)"));
+extern const KoID Float16BitsColorDepthID("F16", i18n("16 Bits Float"));
+extern const KoID Float32BitsColorDepthID("F32", i18n("32 Bits Float"));

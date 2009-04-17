@@ -37,7 +37,7 @@ class KOGUIUTILS_EXPORT KoUniColorDialog : public KPageDialog
     Q_OBJECT
 public:
     explicit KoUniColorDialog(KoColor &initialColor, QWidget *parent = 0);
-    virtual ~KoUniColorDialog() {}
+    virtual ~KoUniColorDialog();
 
     /**
       * @return the selected color

@@ -39,6 +39,11 @@ KoUniColorDialog::KoUniColorDialog(KoColor &initialColor, QWidget *parent)
     addPage(d->chooser, i18n("Color Selector"));
 }
 
+KoUniColorDialog::~KoUniColorDialog()
+{
+   delete d;
+}
+
 KoColor KoUniColorDialog::color() const
 {
     return d->chooser->color();

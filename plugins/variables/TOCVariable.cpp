@@ -193,12 +193,6 @@ bool TOCSource::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & co
 
 bool TOCVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context)
 {
-    KoSharedLoadingData * sharedData = context.sharedData(KOTEXT_SHARED_LOADING_ID);
-    KoTextSharedLoadingData * textSharedData;
-    if (sharedData) {
-        textSharedData = dynamic_cast<KoTextSharedLoadingData *>(sharedData);
-    }
-
     KoXmlElement e;
     forEachElement(e, element) {
         //kDebug() << e.namespaceURI() << e.tagName();

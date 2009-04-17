@@ -36,8 +36,8 @@ struct KoOdfWriteStore::Private {
             : store(store)
             , storeDevice(0)
             , contentWriter(0)
-            , bodyWriter(0)
             , changeWriter(0)
+            , bodyWriter(0)
             , manifestWriter(0)
             , contentTmpFile(0)
             , changeTmpFile(0) {}
@@ -154,10 +154,10 @@ KoXmlWriter* KoOdfWriteStore::bodyWriter()
 KoXmlWriter* KoOdfWriteStore::changeWriter()
 {
     if (!d->changeWriter) {
-	Q_ASSERT(!d->changeTmpFile);
-	d->changeTmpFile = new KTemporaryFile;
-	d->changeTmpFile->open();
-	d->changeWriter = new KoXmlWriter(d->changeTmpFile, 1);
+        Q_ASSERT(!d->changeTmpFile);
+        d->changeTmpFile = new KTemporaryFile;
+        d->changeTmpFile->open();
+        d->changeWriter = new KoXmlWriter(d->changeTmpFile, 1);
     }
     return d->changeWriter;
 }
@@ -169,7 +169,6 @@ bool KoOdfWriteStore::closeContentWriter()
     d->contentWriter->startElement("office:body");
     d->contentWriter->startElement("office:text");
 
-    Q_ASSERT(d->changeWriter);
     Q_ASSERT(d->changeTmpFile);
 
     delete d->changeWriter; d->changeWriter = 0;

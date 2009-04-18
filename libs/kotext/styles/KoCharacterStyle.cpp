@@ -1098,7 +1098,7 @@ bool KoCharacterStyle::isEmpty() const
 
 void KoCharacterStyle::saveOdf(KoGenStyle &style)
 {
-    if (!d->name.isEmpty()) {
+    if (!d->name.isEmpty() && !style.isDefaultStyle()) {
         style.addAttribute("style:display-name", d->name);
     }
     QList<int> keys = d->stylesPrivate.keys();

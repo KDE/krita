@@ -198,7 +198,7 @@ void KoListStyle::loadOdf(KoOdfLoadingContext& context, const KoXmlElement& styl
 
 void KoListStyle::saveOdf(KoGenStyle &style)
 {
-    if (!d->name.isEmpty()) {
+    if (!d->name.isEmpty() && !style.isDefaultStyle()) {
         style.addAttribute("style:display-name", d->name);
     }
     QBuffer buffer;

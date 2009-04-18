@@ -179,15 +179,28 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
 {
     event->accept();
     if ( m_currentShape && textCursor() > -1 ) {
-        if ( event->key() == Qt::Key_Backspace ) {
+        switch(event->key())
+        {
+        case Qt::Key_Backspace:
             removeFromTextCursor( m_textCursor, 1 );
-        } else if ((event->key() == Qt::Key_Right)) {
+            break;
+        case Qt::Key_Right:
             setTextCursor( textCursor() + 1 );
-        } else if ((event->key() == Qt::Key_Left)) {
+            break;
+        case Qt::Key_Left:
             setTextCursor( textCursor() - 1 );
-        } else if( event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter ) {
+            break;
+        case Qt::Key_Home:
+            setTextCursor( 0 );
+            break;
+        case Qt::Key_End:
+            setTextCursor( m_currentShape->text().length() );
+            break;
+        case Qt::Key_Return:
+        case Qt::Key_Enter:
             emit done();
-        } else {
+            break;
+        default:
             addToTextCursor( event->text() );
         }
     } else {

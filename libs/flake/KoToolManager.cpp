@@ -341,13 +341,6 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary)
 
     d->canvasData->activeTool = tool;
 
-    // make sure the old tool will not be called after it has been deactivated
-    if (d->canvasData->canvas->canvas()) {
-        KoCanvasBase *canvas = d->canvasData->canvas->canvas();
-        KoToolProxy *tp = d->proxies.value(canvas);
-        if (tp)
-            tp->setActiveTool(d->canvasData->activeTool);
-    }
 
     connect(d->canvasData->activeTool, SIGNAL(cursorChanged(QCursor)),
             this, SLOT(updateCursor(QCursor)));
@@ -368,12 +361,11 @@ void KoToolManager::switchTool(KoTool *tool, bool temporary)
         action->setEnabled(true);
         d->canvasData->canvas->addAction(action);
     }
-    d->canvasData->activeTool->activate(temporary);
 
-    postSwitchTool();
+    postSwitchTool(temporary);
 }
 
-void KoToolManager::postSwitchTool()
+void KoToolManager::postSwitchTool(bool temporary)
 {
 #ifndef NDEBUG
     int canvasCount = 1;
@@ -389,7 +381,14 @@ void KoToolManager::postSwitchTool()
 #endif
     if (d->canvasData->canvas->canvas()) {
         KoCanvasBase *canvas = d->canvasData->canvas->canvas();
+        // Caller of postSwitchTool expect this to be called to update the selected tool
+        KoToolProxy *tp = d->proxies.value(canvas);
+        if (tp)
+            tp->setActiveTool(d->canvasData->activeTool);
+        d->canvasData->activeTool->activate(temporary);
         canvas->updateInputMethodInfo();
+    } else {
+        d->canvasData->activeTool->activate(temporary);
     }
 
     QMap<QString, QWidget *> optionWidgetMap = d->canvasData->activeTool->optionWidgets();
@@ -490,7 +489,7 @@ void KoToolManager::movedFocus(QWidget *from, QWidget *to)
             d->canvasData = data;
             d->canvasData->canvas->canvas()->canvasWidget()->setCursor(d->canvasData->activeTool->cursor());
             d->canvasData->canvas->activate();
-            postSwitchTool();
+            postSwitchTool(false);
             emit changedCanvas(d->canvasData ? d->canvasData->canvas->canvas() : 0);
             return;
         }
@@ -703,7 +702,7 @@ void KoToolManager::switchInputDevice(const KoInputDevice &device)
             if (cd->activeTool == 0)
                 switchTool(KoInteractionTool_ID, false);
             else {
-                postSwitchTool();
+                postSwitchTool(false);
                 d->canvasData->canvas->canvas()->canvasWidget()->setCursor(d->canvasData->activeTool->cursor());
             }
             d->canvasData->canvas->activate();

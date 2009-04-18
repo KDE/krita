@@ -32,6 +32,7 @@ class KoStyleManager;
 class KoTextBlockData;
 class KoTextShapeData;
 class TextShape;
+class KoChangeTracker;
 
 /**
  * The document layouter for KoText style docs.
@@ -89,6 +90,7 @@ private:
     void cleanupShape(KoShape *daShape);
     void nextShape();
     void drawListItem(QPainter *painter, const QTextBlock &block);
+    void drawTrackedChangeItem(QPainter *painter, QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter);
     void decorateParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter);
     void decorateTabs(QPainter *painter, const QVariantList& tabList, const QTextLine &line, const QTextFragment& currentFragment, int startOfBlock);
 
@@ -108,6 +110,8 @@ private:
 
 private:
     KoStyleManager *m_styleManager;
+
+    KoChangeTracker *m_changeTracker;
 
     qreal m_y;
     QTextBlock m_block;

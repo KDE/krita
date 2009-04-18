@@ -40,7 +40,7 @@ class KoColor;
 class KoColorPopupAction;
 class UndoTextCommand;
 class InsertCharacter;
-class ChangeTracker;
+class KoChangeTracker;
 
 class QUndoCommand;
 class KFontSizeAction;
@@ -197,6 +197,9 @@ private slots:
     // called when the m_textShapeData has been deleted.
     void shapeDataRemoved();
 
+    //Show tooltip with change info
+    void showChangeTip();
+
     /// print debug about the details of the text document
     void debugTextDocument();
     /// print debug about the details of the styles on the current text document
@@ -232,7 +235,7 @@ private:
     TextShape *m_textShape;
     KoTextShapeData *m_textShapeData;
     QTextCursor m_caret;
-    ChangeTracker *m_changeTracker;
+    KoChangeTracker *m_changeTracker;
     KoTextSelectionHandler m_selectionHandler;
     bool m_allowActions;
     bool m_allowAddUndoCommand;
@@ -286,6 +289,10 @@ private:
     InsertCharacter *m_specialCharacterDocker;
 
     bool m_textTyping;
+
+    QTimer m_changeTipTimer;
+    int m_changeTipCursorPos;
+    QPoint m_changeTipPos;
 };
 
 #endif

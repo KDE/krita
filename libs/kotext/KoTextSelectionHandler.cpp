@@ -31,9 +31,7 @@
 #include "styles/KoStyleManager.h"
 #include "KoTextDocument.h"
 
-#ifdef CHANGETRK
- #include "changetracker/KoChangeTracker.h"
-#endif
+#include "changetracker/KoChangeTracker.h"
 
 #include <kdebug.h>
 #include <KLocale>
@@ -44,9 +42,7 @@
 #include <QTextBlock>
 #include <QTextList>
 
-#ifdef CHANGETRK
- #include <QTextFormat>
-#endif
+#include <QTextFormat>
 
 
 class KoTextSelectionHandler::Private
@@ -172,12 +168,12 @@ void KoTextSelectionHandler::bold(bool bold)
     emit startMacro(i18n("Bold"));
     QTextCharFormat format;
     format.setFontWeight(bold ? QFont::Bold : QFont::Normal);
-#ifdef CHANGETRK
+
     QTextCharFormat prevFormat(d->caret->charFormat());
-    
+
     int changeId = KoTextDocument(d->textShapeData->document()).changeTracker()->getFormatChangeId(i18n("Bold"), format, prevFormat, d->caret->charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
     format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-#endif
+
     d->caret->mergeCharFormat(format);
     emit stopMacro();
 }
@@ -188,12 +184,12 @@ void KoTextSelectionHandler::italic(bool italic)
     emit startMacro(i18n("Italic"));
     QTextCharFormat format;
     format.setFontItalic(italic);
-#ifdef CHANGETRK
+
     QTextCharFormat prevFormat(d->caret->charFormat());
 
     int changeId = KoTextDocument(d->textShapeData->document()).changeTracker()->getFormatChangeId(i18n("Italic"), format, prevFormat, d->caret->charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
     format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-#endif
+
     d->caret->mergeCharFormat(format);
     emit stopMacro();
 }

@@ -89,6 +89,7 @@
 #include <KoShapeSavingContext.h>
 
 #include <KoChangeTracker.h>
+#include <kpassivepopup.h>
 
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut)
 {
@@ -141,7 +142,9 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_currentCommand(0),
         m_currentCommandHasChildren(false),
         m_specialCharacterDocker(0),
-        m_textTyping(false)
+        m_textTyping(false),
+        m_changeTipTimer(this),
+        m_changeTipCursorPos(0)
 {
     m_actionFormatBold  = new KAction(KIcon("format-text-bold"), i18n("Bold"), this);
     addAction("format_bold", m_actionFormatBold);
@@ -451,6 +454,10 @@ TextTool::TextTool(KoCanvasBase *canvas)
 
     m_caretTimer.setInterval(500);
     connect(&m_caretTimer, SIGNAL(timeout()), this, SLOT(blinkCaret()));
+
+    m_changeTipTimer.setInterval(2000);
+    m_changeTipTimer.setSingleShot(true);
+    connect(&m_changeTipTimer, SIGNAL(timeout()), this, SLOT(showChangeTip()));
 }
 
 #ifndef NDEBUG
@@ -471,7 +478,9 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     m_spellcheckPlugin(0),
     m_currentCommand(0),
     m_currentCommandHasChildren(false),
-    m_specialCharacterDocker(0)
+    m_specialCharacterDocker(0),
+    m_changeTipTimer(this),
+    m_changeTipCursorPos(0)
 {
     // we could init some vars here, but we probably don't have to
 }
@@ -480,6 +489,21 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
 TextTool::~TextTool()
 {
     qDeleteAll(m_textEditingPlugins);
+}
+
+void TextTool::showChangeTip()
+{
+    QTextCursor c(m_textShapeData->document());
+    c.setPosition(m_changeTipCursorPos);
+    if (m_changeTracker->containsInlineChanges(c.charFormat())) {
+        KoChangeTrackerElement *element = m_changeTracker->elementById(c.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt());
+        QString change = element->getChangeTitle() + " " + element->getDate() + " " + element->getCreator();
+        KPassivePopup *popup = new KPassivePopup();
+        popup->setTimeout(5000);
+        popup->setAutoDelete(true);
+        popup->setView("Latest change", change);
+        popup->show(m_changeTipPos);
+    }
 }
 
 void TextTool::blinkCaret()
@@ -828,15 +852,33 @@ void TextTool::mouseDoubleClickEvent(KoPointerEvent *event)
 
 void TextTool::mouseMoveEvent(KoPointerEvent *event)
 {
+    m_changeTipPos = event->pos();
+
     useCursor(Qt::IBeamCursor);
-    if (event->buttons())
+    if (event->buttons()) {
         updateSelectedShape(event->point);
+        m_changeTipTimer.stop();
+    }
 
     int position = pointToPosition(event->point);
 
     if (event->buttons() == Qt::NoButton) {
         QTextCursor cursor(m_caret);
         cursor.setPosition(position);
+
+        QTextCursor mouseOver(m_textShapeData->document());
+        mouseOver.setPosition(position);
+
+        QTextCharFormat fmt = mouseOver.charFormat();
+
+        if (m_changeTracker->containsInlineChanges(mouseOver.charFormat())) {
+            QTextCursor test(m_textShapeData->document());
+            test.setPosition(m_changeTipCursorPos);
+            if (m_changeTracker->elementById(mouseOver.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt()) != m_changeTracker->elementById(test.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt()) || !m_changeTipCursorPos) {
+                m_changeTipTimer.start();
+                m_changeTipCursorPos = position;
+            }
+        }
 
         if (cursor.charFormat().isAnchor())
             useCursor(Qt::PointingHandCursor);
@@ -1168,6 +1210,9 @@ void TextTool::updateStyleManager()
     Q_ASSERT(m_textShapeData);
     KoStyleManager *styleManager = KoTextDocument(m_textShapeData->document()).styleManager();
     emit styleManagerChanged(styleManager);
+
+    //TODO move this to its own method
+    m_changeTracker = KoTextDocument(m_textShapeData->document()).changeTracker();
 }
 
 void TextTool::activate(bool temporary)

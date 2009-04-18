@@ -36,7 +36,8 @@
 #include <KoXmlWriter.h>
 #include <KoDocument.h>
 #include <KoEmbeddedDocumentSaver.h>
-#include "KoTextShapeSavingContext.h"
+#include "KoShapeSavingContext.h"
+#include <opendocument/KoTextSharedSavingData.h>
 
 #include "KoTextOdfSaveHelper.h"
 
@@ -79,10 +80,26 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
     }
 
     KoGenStyles mainStyles;
+    KoXmlWriter *bodyWriter = odfStore.bodyWriter();
+    KoShapeSavingContext * context = helper.context(bodyWriter, mainStyles, embeddedSaver);
     KoGenChanges changes;
-    KoXmlWriter* bodyWriter = odfStore.bodyWriter();
-    
-    KoTextShapeSavingContext * context = dynamic_cast<KoTextShapeSavingContext *>(helper.context(bodyWriter, mainStyles, embeddedSaver));
+
+    KoSharedSavingData *sharedData = context->sharedData(KOTEXT_SHARED_SAVING_ID);
+    KoTextSharedSavingData *textSharedData;
+    if (sharedData) {
+        textSharedData = dynamic_cast<KoTextSharedSavingData *>(sharedData);
+    }
+
+    if (!textSharedData) {
+        textSharedData = new KoTextSharedSavingData();
+        textSharedData->setGenChanges(changes);
+        if (!sharedData) {
+            context->addSharedData(KOTEXT_SHARED_SAVING_ID, textSharedData);
+        } else {
+            kWarning(32500) << "A different type of sharedData was found under the" << KOTEXT_SHARED_SAVING_ID;
+            Q_ASSERT(false);
+        }
+    }
 
     if (!helper.writeBody()) {
         return false;

@@ -58,12 +58,12 @@ set(kotext_LIB_SRCS
     styles/KoListLevelProperties.cpp
     styles/ChangeFollower.cpp
     opendocument/KoTextSharedLoadingData.cpp
+    opendocument/KoTextSharedSavingData.cpp
     opendocument/KoTextLoader.cpp
     opendocument/KoTextWriter.cpp
 
     changetracker/KoChangeTracker.cpp
     changetracker/KoChangeTrackerElement.cpp
-    KoTextShapeSavingContext.cpp
     KoTextDrag.cpp
 )
 

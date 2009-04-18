@@ -22,9 +22,6 @@
 
 #include <KoDragOdfSaveHelper.h>
 
-#include <KoGenChanges.h>
-#include <KoTextShapeSavingContext.h>
-
 #include "kotext_export.h"
 
 class KoTextShapeData;
@@ -44,8 +41,6 @@ public:
 private:
     struct Private;
     Private * const d;
-
-    KoTextShapeSavingContext * m_context;
 };
 
 #endif /* KOTEXTODFSAVEHELPER_H */

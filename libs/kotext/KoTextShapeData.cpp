@@ -37,8 +37,6 @@
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 
-#include <KoTextShapeSavingContext.h>
-
 #include <KoXmlWriter.h>
 
 #include "KoTextPage.h"
@@ -214,7 +212,7 @@ bool KoTextShapeData::loadOdf(const KoXmlElement & element, KoShapeLoadingContex
     return true;
 }
 
-void KoTextShapeData::saveOdf(KoTextShapeSavingContext &context, int from, int to) const
+void KoTextShapeData::saveOdf(KoShapeSavingContext &context, int from, int to) const
 {
     KoTextWriter writer(context);
     writer.write(d->document, from, to);

@@ -22,14 +22,20 @@
 #include <KoXmlWriter.h>
 #include <KoOdf.h>
 #include "KoTextShapeData.h"
+#include <KoGenChanges.h>
+#include <KoShapeSavingContext.h>
+
+#include <opendocument/KoTextSharedSavingData.h>
 
 struct KoTextOdfSaveHelper::Private {
-    Private(KoTextShapeData * shapeData, int from, int to)
-            : shapeData(shapeData)
-            , from(from)
-            , to(to) {}
+    Private(KoTextShapeData *shapeData, int from, int to)
+            :shapeData(shapeData),
+            from(from),
+            to(to) {}
 
-    KoTextShapeData * shapeData;
+    KoShapeSavingContext *context;
+    KoTextShapeData *shapeData;
+
     int from;
     int to;
 };
@@ -50,11 +56,11 @@ bool KoTextOdfSaveHelper::writeBody()
     if (d->to < d->from)
         qSwap(d->to, d->from);
 
-    KoXmlWriter & bodyWriter = m_context->xmlWriter();
+    KoXmlWriter & bodyWriter = d->context->xmlWriter();
     bodyWriter.startElement("office:body");
     bodyWriter.startElement(KoOdf::bodyContentElement(KoOdf::Text, true));
 
-    d->shapeData->saveOdf(*m_context, d->from, d->to);
+    d->shapeData->saveOdf(*d->context, d->from, d->to);
 
     bodyWriter.endElement(); // office:element
     bodyWriter.endElement(); // office:body
@@ -63,9 +69,12 @@ bool KoTextOdfSaveHelper::writeBody()
 
 KoShapeSavingContext * KoTextOdfSaveHelper::context(KoXmlWriter * bodyWriter, KoGenStyles & mainStyles, KoEmbeddedDocumentSaver & embeddedSaver)
 {
-    Q_ASSERT(m_context == 0);
+    Q_ASSERT(d->context == 0);
 
     KoGenChanges changes;
-    m_context = new KoTextShapeSavingContext(*bodyWriter, mainStyles, embeddedSaver, changes);
-    return m_context;
+    d->context = new KoShapeSavingContext(*bodyWriter, mainStyles, embeddedSaver);
+    KoTextSharedSavingData *sharedData = new KoTextSharedSavingData();
+    sharedData->setGenChanges(changes);
+    d->context->addSharedData(KOTEXT_SHARED_SAVING_ID, sharedData);
+    return d->context;
 }

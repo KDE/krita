@@ -26,8 +26,6 @@
 #include <KoFrameShape.h>
 #include <KoTextShapeData.h>
 
-#include <KoTextShapeSavingContext.h>
-
 #include <QTextDocument>
 #include <QPainter>
 #include <QMutex>

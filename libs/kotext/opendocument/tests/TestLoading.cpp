@@ -54,10 +54,10 @@
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextSharedLoadingData.h>
+#include <KoTextSharedSavingData.h>
 #include <KoTextDocument.h>
 #include <kstandarddirs.h>
 
-#include <KoTextShapeSavingContext.h>
 #include <KoGenChanges.h>
 #include <KoChangeTracker.h>
 
@@ -759,7 +759,26 @@ QString TestLoading::documentToOdt(QTextDocument *document)
     KoEmbeddedDocumentSaver embeddedSaver;
 
     KoGenChanges changes;
-    KoTextShapeSavingContext context(xmlWriter, mainStyles, embeddedSaver, changes);
+    KoShapeSavingContext context(xmlWriter, mainStyles, embeddedSaver);
+
+    KoSharedSavingData *sharedData = context.sharedData(KOTEXT_SHARED_SAVING_ID);
+    KoTextSharedSavingData *textSharedData;
+    if (sharedData) {
+        textSharedData = dynamic_cast<KoTextSharedSavingData *>(sharedData);
+    }
+
+    kDebug(32500) << "sharedData" << sharedData << "textSharedData" << textSharedData;
+
+    if (!textSharedData) {
+        textSharedData = new KoTextSharedSavingData();
+        textSharedData->setGenChanges(changes);
+        if (!sharedData) {
+            context.addSharedData(KOTEXT_SHARED_SAVING_ID, textSharedData);
+        } else {
+            kWarning(32500) << "A different type of sharedData was found under the" << KOTEXT_SHARED_SAVING_ID;
+            Q_ASSERT(false);
+        }
+    }
 
     KoTextShapeData *textShapeData = new KoTextShapeData;
     textShapeData->setDocument(document, false /* ownership */);

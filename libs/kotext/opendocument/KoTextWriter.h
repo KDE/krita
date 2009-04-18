@@ -22,9 +22,7 @@
 
 #include "kotext_export.h"
 
- class KoTextShapeSavingContext;
-// class KoShapeSavingContext; //changetracker
-
+class KoShapeSavingContext;
 class KoXmlWriter;
 class KoTextDocumentLayout;
 class KoStyleManager;
@@ -45,7 +43,7 @@ public:
     *
     * @param context The context the KoTextWriter is called in
     */
-    explicit KoTextWriter(KoTextShapeSavingContext &context);
+    explicit KoTextWriter(KoShapeSavingContext &context);
 
     /**
     * Destructor.
@@ -63,13 +61,8 @@ private:
     QHash<QTextList *, QString> saveListStyles(QTextBlock block, int to);
     void saveParagraph(const QTextBlock &block, int from, int to);
 
-    KoTextShapeSavingContext &m_context;
-
-    KoXmlWriter *m_writer;
-    KoTextDocumentLayout *m_layout;
-    KoStyleManager *m_styleManager;
-
-    KoChangeTracker *m_changeTracker;
+    class Private;
+    Private* const d;
 };
 
 #endif

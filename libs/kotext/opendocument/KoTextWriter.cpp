@@ -34,22 +34,60 @@
 #include "KoTextBlockData.h"
 #include "KoTextDocument.h"
 
-#include <KoTextShapeSavingContext.h>
+#include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 
+#include <opendocument/KoTextSharedSavingData.h>
 #include "changetracker/KoChangeTracker.h"
 #include <KoGenChange.h>
 #include <KoGenChanges.h>
 
-KoTextWriter::KoTextWriter(KoTextShapeSavingContext &m_context)
-    : m_context(m_context),
-      m_layout(0),
-      m_styleManager(0)
-      ,m_changeTracker(0)
+class KoTextWriter::Private
 {
-    m_writer = &m_context.xmlWriter();
+public:
+    explicit Private(KoShapeSavingContext &context)
+    : context(context),
+    sharedData(0),
+    writer(0),
+    layout(0),
+    styleManager(0),
+    changeTracker(0)
+    {
+        writer = &context.xmlWriter();
+    }
+
+    ~Private() {}
+
+    KoShapeSavingContext &context;
+    KoTextSharedSavingData *sharedData;
+    KoXmlWriter *writer;
+
+    KoTextDocumentLayout *layout;
+    KoStyleManager *styleManager;
+    KoChangeTracker *changeTracker;
+};
+
+KoTextWriter::KoTextWriter(KoShapeSavingContext &context)
+    : d(new Private(context))
+{
+    KoSharedSavingData *sharedData = context.sharedData(KOTEXT_SHARED_SAVING_ID);
+    if (sharedData) {
+        d->sharedData = dynamic_cast<KoTextSharedSavingData *>(sharedData);
+    }
+
+    if (!d->sharedData) {
+        d->sharedData = new KoTextSharedSavingData();
+        KoGenChanges *changes = new KoGenChanges();
+        d->sharedData->setGenChanges(*changes);
+        if (!sharedData) {
+            context.addSharedData(KOTEXT_SHARED_SAVING_ID, d->sharedData);
+        } else {
+            kWarning(32500) << "A different type of sharedData was found under the" << KOTEXT_SHARED_SAVING_ID;
+            Q_ASSERT(false);
+        }
+    }
 }
 
 KoTextWriter::~KoTextWriter()
@@ -58,12 +96,12 @@ KoTextWriter::~KoTextWriter()
 
 QString KoTextWriter::saveParagraphStyle(const QTextBlock &block)
 {
-    KoParagraphStyle *defaultParagraphStyle = m_styleManager->defaultParagraphStyle();
+    KoParagraphStyle *defaultParagraphStyle = d->styleManager->defaultParagraphStyle();
 
     QTextBlockFormat blockFormat = block.blockFormat();
     QTextCharFormat charFormat = QTextCursor(block).blockCharFormat();
 
-    KoParagraphStyle *originalParagraphStyle = m_styleManager->paragraphStyle(blockFormat.intProperty(KoParagraphStyle::StyleId));
+    KoParagraphStyle *originalParagraphStyle = d->styleManager->paragraphStyle(blockFormat.intProperty(KoParagraphStyle::StyleId));
     if (!originalParagraphStyle)
         originalParagraphStyle = defaultParagraphStyle;
 
@@ -78,26 +116,26 @@ QString KoTextWriter::saveParagraphStyle(const QTextBlock &block)
         // therefore we would need to store that information in the saving context
         if (originalParagraphStyle != defaultParagraphStyle) {
             KoGenStyle style(KoGenStyle::StyleUser, "paragraph");
-            originalParagraphStyle->saveOdf(style, m_context.mainStyles());
-            generatedName = m_context.mainStyles().lookup(style, internalName, KoGenStyles::DontForceNumbering);
+            originalParagraphStyle->saveOdf(style, d->context.mainStyles());
+            generatedName = d->context.mainStyles().lookup(style, internalName, KoGenStyles::DontForceNumbering);
         }
     } else { // There are manual changes... We'll have to store them then
         KoGenStyle style(KoGenStyle::StyleAuto, "paragraph", internalName);
-        if (m_context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
+        if (d->context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
             style.setAutoStyleInStylesDotXml(true);
         if (originalParagraphStyle)
             paragStyle.removeDuplicates(*originalParagraphStyle);
-        paragStyle.saveOdf(style, m_context.mainStyles());
-        generatedName = m_context.mainStyles().lookup(style, "P");
+        paragStyle.saveOdf(style, d->context.mainStyles());
+        generatedName = d->context.mainStyles().lookup(style, "P");
     }
     return generatedName;
 }
 
 QString KoTextWriter::saveCharacterStyle(const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat)
 {
-    KoCharacterStyle *defaultCharStyle = m_styleManager->defaultParagraphStyle()->characterStyle();
+    KoCharacterStyle *defaultCharStyle = d->styleManager->defaultParagraphStyle()->characterStyle();
 
-    KoCharacterStyle *originalCharStyle = m_styleManager->characterStyle(charFormat.intProperty(KoCharacterStyle::StyleId));
+    KoCharacterStyle *originalCharStyle = d->styleManager->characterStyle(charFormat.intProperty(KoCharacterStyle::StyleId));
     if (!originalCharStyle)
         originalCharStyle = defaultCharStyle;
 
@@ -114,17 +152,17 @@ QString KoTextWriter::saveCharacterStyle(const QTextCharFormat &charFormat, cons
             if (!charStyle.isEmpty()) {
                 KoGenStyle style(KoGenStyle::StyleUser, "text");
                 originalCharStyle->saveOdf(style);
-                generatedName = m_context.mainStyles().lookup(style, internalName, KoGenStyles::DontForceNumbering);
+                generatedName = d->context.mainStyles().lookup(style, internalName, KoGenStyles::DontForceNumbering);
             }
         }
     } else { // There are manual changes... We'll have to store them then
         KoGenStyle style(KoGenStyle::StyleAuto, "text", originalCharStyle != defaultCharStyle ? internalName : "" /*parent*/);
-        if (m_context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
+        if (d->context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
             style.setAutoStyleInStylesDotXml(true);
         charStyle.removeDuplicates(*originalCharStyle);
         if (!charStyle.isEmpty()) {
             charStyle.saveOdf(style);
-            generatedName = m_context.mainStyles().lookup(style, "T");
+            generatedName = d->context.mainStyles().lookup(style, "T");
         }
     }
 
@@ -151,7 +189,7 @@ QHash<QTextList *, QString> KoTextWriter::saveListStyles(QTextBlock block, int t
             bool automatic = listStyle->styleId() == 0;
             KoGenStyle style(automatic ? KoGenStyle::StyleListAuto : KoGenStyle::StyleList);
             listStyle->saveOdf(style);
-            QString generatedName = m_context.mainStyles().lookup(style, listStyle->name(), KoGenStyles::AllowDuplicates);
+            QString generatedName = d->context.mainStyles().lookup(style, listStyle->name(), KoGenStyles::AllowDuplicates);
             listStyles[textList] = generatedName;
             generatedLists.insert(list, generatedName);
         } else {
@@ -162,7 +200,7 @@ QHash<QTextList *, QString> KoTextWriter::saveListStyles(QTextBlock block, int t
             KoListStyle listStyle;
             listStyle.setLevelProperties(llp);
             listStyle.saveOdf(style);
-            QString generatedName = m_context.mainStyles().lookup(style, listStyle.name());
+            QString generatedName = d->context.mainStyles().lookup(style, listStyle.name());
             listStyles[textList] = generatedName;
         }
     }
@@ -176,14 +214,14 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
     QTextBlockFormat blockFormat = block.blockFormat();
     int outlineLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
     if (outlineLevel > 0) {
-        m_writer->startElement("text:h", false);
-        m_writer->addAttribute("text:outline-level", outlineLevel);
+        d->writer->startElement("text:h", false);
+        d->writer->addAttribute("text:outline-level", outlineLevel);
     } else 
-        m_writer->startElement("text:p", false);
+        d->writer->startElement("text:p", false);
 
     QString styleName = saveParagraphStyle(block);
     if (!styleName.isEmpty())
-        m_writer->addAttribute("text:style-name", styleName);
+        d->writer->addAttribute("text:style-name", styleName);
 
     // Write the fragments and their formats
     QTextCursor cursor(block);
@@ -198,65 +236,65 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
         if (currentFragment.isValid()) {
             QTextCharFormat charFormat = currentFragment.charFormat();
 
-            if (m_changeTracker->containsInlineChanges(charFormat)) {
+            if (d->changeTracker->containsInlineChanges(charFormat)) {
                 KoGenChange change;
-                m_changeTracker->saveInlineChange(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt(), change);
-                changeName = m_context.changes().insert(change);
-                m_writer->startElement("text:change-start", false);
-                m_writer->addAttribute("text:change-id", changeName);
-                m_writer->endElement();
+                d->changeTracker->saveInlineChange(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt(), change);
+                changeName = d->sharedData->genChanges().insert(change);
+                d->writer->startElement("text:change-start", false);
+                d->writer->addAttribute("text:change-id", changeName);
+                d->writer->endElement();
             }
 
-            KoInlineObject *inlineObject = m_layout->inlineTextObjectManager()->inlineTextObject(charFormat);
+            KoInlineObject *inlineObject = d->layout->inlineTextObjectManager()->inlineTextObject(charFormat);
             if (currentFragment.length() == 1 && inlineObject
                     && currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter) {
-                inlineObject->saveOdf(m_context);
+                inlineObject->saveOdf(d->context);
             } else {
                 QString styleName = saveCharacterStyle(charFormat, blockCharFormat);
                 if (charFormat.isAnchor()) {
-                    m_writer->startElement("text:a", false);
-                    m_writer->addAttribute("xlink:type", "simple");
-                    m_writer->addAttribute("xlink:href", charFormat.anchorHref());
+                    d->writer->startElement("text:a", false);
+                    d->writer->addAttribute("xlink:type", "simple");
+                    d->writer->addAttribute("xlink:href", charFormat.anchorHref());
                 } else if (!styleName.isEmpty()) {
-                    m_writer->startElement("text:span", false);
-                    m_writer->addAttribute("text:style-name", styleName);
+                    d->writer->startElement("text:span", false);
+                    d->writer->addAttribute("text:style-name", styleName);
                 }
 
                 QString text = currentFragment.text();
                 int spanFrom = fragmentStart >= from ? 0 : from;
                 int spanTo = to == -1 ? fragmentEnd : (fragmentEnd > to ? to : fragmentEnd);
                 if (spanFrom != fragmentStart || spanTo != fragmentEnd) { // avoid mid, if possible
-                    m_writer->addTextSpan(text.mid(spanFrom - fragmentStart, spanTo - spanFrom));
+                    d->writer->addTextSpan(text.mid(spanFrom - fragmentStart, spanTo - spanFrom));
                 } else {
-                    m_writer->addTextSpan(text);
+                    d->writer->addTextSpan(text);
                 }
 
                 if (!styleName.isEmpty() || charFormat.isAnchor())
-                    m_writer->endElement();
+                    d->writer->endElement();
             } // if (inlineObject)
 
             if (!changeName.isEmpty()) {
-                m_writer->startElement("text:change-end", false);
-                m_writer->addAttribute("text:change-id",changeName);
-                m_writer->endElement();
+                d->writer->startElement("text:change-end", false);
+                d->writer->addAttribute("text:change-id",changeName);
+                d->writer->endElement();
                 changeName=QString();
             }
         } // if (fragment.valid())
     } // foeach(fragment)
 
-    m_writer->endElement();
+    d->writer->endElement();
 }
 
 void KoTextWriter::write(QTextDocument *document, int from, int to)
 {
-    m_styleManager = KoTextDocument(document).styleManager();
-    m_layout = dynamic_cast<KoTextDocumentLayout*>(document->documentLayout());
+    d->styleManager = KoTextDocument(document).styleManager();
+    d->layout = dynamic_cast<KoTextDocumentLayout*>(document->documentLayout());
 
-    m_changeTracker = KoTextDocument(document).changeTracker();
-    Q_ASSERT(m_changeTracker);
+    d->changeTracker = KoTextDocument(document).changeTracker();
+    Q_ASSERT(d->changeTracker);
 
-    Q_ASSERT(m_layout);
-    Q_ASSERT(m_layout->inlineTextObjectManager());
+    Q_ASSERT(d->layout);
+    Q_ASSERT(d->layout->inlineTextObjectManager());
 
     QTextBlock block = document->findBlock(from);
     KoTextDocument textDocument(document);
@@ -279,51 +317,51 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
                 if (currentList != list) {
                     while (!textLists.isEmpty()) {
                         textLists.removeLast();
-                        m_writer->endElement(); // </text:list>
+                        d->writer->endElement(); // </text:list>
                         if (!textLists.isEmpty()) {
-                            m_writer->endElement(); // </text:list-element>
+                            d->writer->endElement(); // </text:list-element>
                         }
                     }
                     currentList = list;
                 } else if (!textLists.isEmpty()) // sublists should be written within a list-item
-                    m_writer->startElement("text:list-item", false);
-                m_writer->startElement("text:list", false);
-                m_writer->addAttribute("text:style-name", listStyles[textList]);
+                    d->writer->startElement("text:list-item", false);
+                d->writer->startElement("text:list", false);
+                d->writer->addAttribute("text:style-name", listStyles[textList]);
                 if (textList->format().hasProperty(KoListStyle::ContinueNumbering))
-                    m_writer->addAttribute("text:continue-numbering",
+                    d->writer->addAttribute("text:continue-numbering",
                                          textList->format().boolProperty(KoListStyle::ContinueNumbering) ? "true" : "false");
                 textLists.append(textList);
             } else if (textList != textLists.last()) {
                 while ((!textLists.isEmpty()) && (textList != textLists.last())) {
                     textLists.removeLast();
-                    m_writer->endElement(); // </text:list>
-                    m_writer->endElement(); // </text:list-element>
+                    d->writer->endElement(); // </text:list>
+                    d->writer->endElement(); // </text:list-element>
                 }
             }
             const bool listHeader = blockFormat.boolProperty(KoParagraphStyle::IsListHeader)
                                     || blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem);
-            m_writer->startElement(listHeader ? "text:list-header" : "text:list-item", false);
+                d->writer->startElement(listHeader ? "text:list-header" : "text:list-item", false);
             if (KoListStyle::isNumberingStyle(textList->format().style())) {
                 if (KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData())) {
-                    m_writer->startElement("text:number", false);
-                    m_writer->addTextSpan(blockData->counterText());
-                    m_writer->endElement();
+                    d->writer->startElement("text:number", false);
+                    d->writer->addTextSpan(blockData->counterText());
+                    d->writer->endElement();
                 }
             }
         } else {
             // Close any remaining list...
             while (!textLists.isEmpty()) {
                 textLists.removeLast();
-                m_writer->endElement(); // </text:list>
+                d->writer->endElement(); // </text:list>
                 if (!textLists.isEmpty()) {
-                    m_writer->endElement(); // </text:list-element>
+                    d->writer->endElement(); // </text:list-element>
                 }
             }
 
             if (textList && numberedParagraphLevel) {
-                m_writer->startElement("text:numbered-paragraph", false);
-                m_writer->addAttribute("text:level", numberedParagraphLevel);
-                m_writer->addAttribute("text:style-name", listStyles.value(textList));
+                d->writer->startElement("text:numbered-paragraph", false);
+                d->writer->addAttribute("text:level", numberedParagraphLevel);
+                d->writer->addAttribute("text:style-name", listStyles.value(textList));
             }
         }
 
@@ -344,7 +382,7 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
 
         // We must check if we need to close a previously-opened text:list node.
         if ((block.textList() && !headingLevel) || numberedParagraphLevel)
-            m_writer->endElement();
+            d->writer->endElement();
 
         block = block.next();
     } // while
@@ -352,9 +390,9 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
     // Close any remaining lists
     while (!textLists.isEmpty()) {
         textLists.removeLast();
-        m_writer->endElement(); // </text:list>
+        d->writer->endElement(); // </text:list>
         if (!textLists.isEmpty()) {
-            m_writer->endElement(); // </text:list-element>
+            d->writer->endElement(); // </text:list-element>
         }
     }
 }

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008-2009 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -269,6 +269,73 @@ void TestPathSegment::segmentFlatness()
         QVERIFY(! s5.isFlat());
         KoPathSegment s6(QPointF(0, 0), QPointF(-25, 75), QPointF(25, 125), QPointF(100, 100));
         QVERIFY(! s6.isFlat());
+    }
+}
+
+void TestPathSegment::nearestPoint()
+{
+    // line segments
+    {
+        KoPathSegment s1(QPointF(0, 0), QPointF(100, 0));
+        QCOMPARE( s1.nearestPoint( QPointF(0,0) ),    0.0 );
+        QCOMPARE( s1.nearestPoint( QPointF(-20,0) ),  0.0 );
+        QCOMPARE( s1.nearestPoint( QPointF(100,0) ),  1.0 );
+        QCOMPARE( s1.nearestPoint( QPointF(120,0) ),  1.0 );
+        QCOMPARE( s1.nearestPoint( QPointF(50,0) ),   0.5 );
+        QCOMPARE( s1.nearestPoint( QPointF(50,-10) ), 0.5 );
+        QCOMPARE( s1.nearestPoint( QPointF(50,10) ),  0.5 );
+        QCOMPARE( s1.nearestPoint( QPointF(63,50) ),  0.63 );
+        QCOMPARE( s1.nearestPoint( QPointF(63,50) ),  0.63 );
+        QCOMPARE( s1.nearestPoint( QPointF(63,50) ),  0.63 );
+        QCOMPARE( s1.nearestPoint( s1.pointAt( 0.25 ) ),  0.25 );
+        QCOMPARE( s1.nearestPoint( s1.pointAt( 0.75 ) ),  0.75 );
+    }
+    // quadratic segments
+    {
+        KoPathSegment s1(QPointF(0, 0), QPointF(50, 0), QPointF(100, 0));
+        QCOMPARE( s1.nearestPoint( QPointF(0,0) ),    0.0 );
+        QCOMPARE( s1.nearestPoint( QPointF(-20,0) ),  0.0 );
+        QCOMPARE( s1.nearestPoint( QPointF(100,0) ),  1.0 );
+        QCOMPARE( s1.nearestPoint( QPointF(120,0) ),  1.0 );
+        QCOMPARE( s1.nearestPoint( QPointF(50,0) ),   0.5 );
+        QCOMPARE( s1.nearestPoint( QPointF(50,-10) ), 0.5 );
+        QCOMPARE( s1.nearestPoint( QPointF(50,10) ),  0.5 );
+        KoPathSegment s2(QPointF(0, 0), QPointF(50, 50), QPointF(100, 0));
+        QCOMPARE( s2.nearestPoint( QPointF(0,0) ),    0.0 );
+        QCOMPARE( s2.nearestPoint( QPointF(-20,0) ),  0.0 );
+        QCOMPARE( s2.nearestPoint( QPointF(100,0) ),  1.0 );
+        QCOMPARE( s2.nearestPoint( QPointF(120,0) ),  1.0 );
+        QCOMPARE( s2.nearestPoint( QPointF(50,50) ),   0.5 );
+
+        QCOMPARE( s2.nearestPoint( s2.pointAt( 0.0 ) ), 0.0 );
+        QCOMPARE( s2.nearestPoint( s2.pointAt( 0.25 ) ), 0.25 );
+        QCOMPARE( s2.nearestPoint( s2.pointAt( 0.5 ) ), 0.5 );
+        QCOMPARE( s2.nearestPoint( s2.pointAt( 0.75 ) ), 0.75 );
+        QCOMPARE( s2.nearestPoint( s2.pointAt( 1.0 ) ), 1.0 );
+    }
+    // cubic segments
+    {
+        // a flat cubic bezier
+        KoPathSegment s1(QPointF(0, 0), QPointF(25, 0), QPointF(75, 0), QPointF(100, 0));
+        QCOMPARE( s1.nearestPoint( QPointF(0,0) ),    0.0 );
+        QCOMPARE( s1.nearestPoint( QPointF(-20,0) ),  0.0 );
+        QCOMPARE( s1.nearestPoint( QPointF(100,0) ),  1.0 );
+        QCOMPARE( s1.nearestPoint( QPointF(120,0) ),  1.0 );
+        QCOMPARE( s1.nearestPoint( QPointF(50,0) ),   0.5 );
+        QCOMPARE( s1.nearestPoint( QPointF(50,-10) ), 0.5 );
+        QCOMPARE( s1.nearestPoint( QPointF(50,10) ),  0.5 );
+        KoPathSegment s2(QPointF(0, 0), QPointF(25, 50), QPointF(75, 50), QPointF(100, 0));
+        QCOMPARE( s2.nearestPoint( QPointF(0,0) ),    0.0 );
+        QCOMPARE( s2.nearestPoint( QPointF(-20,0) ),  0.0 );
+        QCOMPARE( s2.nearestPoint( QPointF(100,0) ),  1.0 );
+        QCOMPARE( s2.nearestPoint( QPointF(120,0) ),  1.0 );
+        QCOMPARE( s2.nearestPoint( QPointF(50,50) ),   0.5 );
+
+        QCOMPARE( s2.nearestPoint( s2.pointAt( 0.0 ) ), 0.0 );
+        QCOMPARE( s2.nearestPoint( s2.pointAt( 0.25 ) ), 0.25 );
+        QCOMPARE( s2.nearestPoint( s2.pointAt( 0.5 ) ), 0.5 );
+        QCOMPARE( s2.nearestPoint( s2.pointAt( 0.75 ) ), 0.75 );
+        QCOMPARE( s2.nearestPoint( s2.pointAt( 1.0 ) ), 1.0 );
     }
 }
 

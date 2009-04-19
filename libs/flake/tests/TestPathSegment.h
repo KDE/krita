@@ -35,6 +35,7 @@ private slots:
     void segmentIntersections();
     void segmentLength();
     void segmentFlatness();
+    void nearestPoint();
 };
 
 #endif // TESTPATHSEGMENT_H

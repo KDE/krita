@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008-2009 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -131,12 +131,20 @@ public:
      */
     bool isFlat(qreal tolerance = 0.01) const;
 
+    /**
+     * Returns the parameter for the curve point nearest to the given point
+     * @param point the point to find nearest point to
+     * @return the parameter of the curve point nearest to the given point
+     */
+    qreal nearestPoint( const QPointF &point );
+    
     /// Returns ordered list of control points
     QList<QPointF> controlPoints() const;
 
     void printDebug() const;
 
 private:
+    
     /// calculates signed distance of given point from segment chord
     qreal distanceFromChord(const QPointF &point) const;
 
@@ -149,6 +157,9 @@ private:
     /// Returns parameters for curve extrema
     QList<qreal> extrema() const;
 
+    /// Returns parameters for curve roots
+    QList<qreal> roots() const;
+    
     /**
      * The DeCasteljau algorithm for parameter t.
      * @param t the parameter to evaluate at

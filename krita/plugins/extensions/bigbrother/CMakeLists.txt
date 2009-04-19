@@ -1,7 +1,8 @@
 
 set(kritabigbrother_PART_SRCS
         bigbrother.cc
-        actionseditor/kis_actions_editor.cpp )
+        actionseditor/kis_actions_editor.cpp
+        actionseditor/kis_actions_editor_dialog.cpp )
 
 kde4_add_ui_files(kritabigbrother_PART_SRCS
         actionseditor/wdgactionseditor.ui )

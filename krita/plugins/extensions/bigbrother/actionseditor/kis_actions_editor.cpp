@@ -30,3 +30,8 @@ KisActionsEditor::~KisActionsEditor()
 {
     delete m_form;
 }
+
+void KisActionsEditor::setMacro(KisMacro* _macro)
+{
+    m_macro = _macro;
+}

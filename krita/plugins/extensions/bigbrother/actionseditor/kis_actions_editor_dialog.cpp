@@ -17,25 +17,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_ACTIONS_EDITOR_H_
-#define _KIS_ACTIONS_EDITOR_H_
+#include "kis_actions_editor_dialog.h"
+#include "kis_actions_editor.h"
 
-#include <QWidget>
-
-class KisMacro;
-
-namespace Ui {
-    class ActionsEditor;
+KisActionsEditorDialog::KisActionsEditorDialog(QWidget* parent) : KDialog(parent),
+    m_actionsEditor(new KisActionsEditor(this))
+{
+    setMainWidget(m_actionsEditor);
 }
 
-class KisActionsEditor : public QWidget {
-    public:
-        KisActionsEditor(QWidget* parent);
-        ~KisActionsEditor();
-        void setMacro(KisMacro* );
-    private:
-        Ui::ActionsEditor* m_form;
-        KisMacro* m_macro;
-};
+KisActionsEditorDialog::~KisActionsEditorDialog()
+{
+}
 
-#endif
+KisActionsEditor* KisActionsEditorDialog::actionsEditor()
+{
+    return m_actionsEditor;
+}

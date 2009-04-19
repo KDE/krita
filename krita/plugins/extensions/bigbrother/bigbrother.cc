@@ -37,6 +37,9 @@
 #include <kis_types.h>
 #include <kis_view2.h>
 
+#include "actionseditor/kis_actions_editor.h"
+#include "actionseditor/kis_actions_editor_dialog.h"
+
 typedef KGenericFactory<BigBrotherPlugin> BigBrotherPluginFactory;
 K_EXPORT_COMPONENT_FACTORY(kritabigbrother, BigBrotherPluginFactory("krita"))
 
@@ -54,8 +57,12 @@ BigBrotherPlugin::BigBrotherPlugin(QObject *parent, const QStringList &)
         KAction* action = 0;
         // Open and play action
         action  = new KAction(KIcon("media-playback-start"), i18n("Open and play..."), this);
-        actionCollection()->addAction("Recording_Open_Play", action);
+        actionCollection()->addAction("Macro_Open_Play", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotOpenPlay()));
+        // Open and edit action
+        action  = new KAction(KIcon("document-edit"), i18n("Open and edit..."), this);
+        actionCollection()->addAction("Macro_Open_Edit", action);
+        connect(action, SIGNAL(triggered()), this, SLOT(slotOpenEdit()));
         // Save recorded action
         action  = new KAction(i18n("Save all actions"), this);
         actionCollection()->addAction("Recording_Global_Save", action);
@@ -85,36 +92,26 @@ void BigBrotherPlugin::slotSave()
 
 void BigBrotherPlugin::slotOpenPlay()
 {
-    QString filename = KFileDialog::getOpenFileName(KUrl(), "*.krarec|Recorded actions (*.krarec)", m_view);
-    if (!filename.isNull()) {
-        QDomDocument doc;
-        QFile f(filename);
-        if (f.exists()) {
-            dbgPlugins << f.open(QIODevice::ReadOnly);
-            QString err;
-            int line, col;
-            if (!doc.setContent(&f, &err, &line, &col)) {
-                // TODO error message
-                dbgPlugins << err << " line = " << line << " col = " << col;
-                f.close();
-                return;
-            }
-            f.close();
-            QDomElement docElem = doc.documentElement();
-            if (!docElem.isNull() && docElem.tagName() == "RecordedActions") {
-                dbgPlugins << "Load the macro";
-                KisMacro m(m_view->image());
-                m.fromXML(docElem);
-                dbgPlugins << "Play the macro";
-                m.play();
-                dbgPlugins << "Finished";
-            } else {
-                // TODO error message
-            }
-        } else {
-            dbgPlugins << "Unexistant file : " << filename;
-        }
-    }
+    KisMacro* m = openMacro();
+    if(!m) return;
+    dbgPlugins << "Play the macro";
+    m->play();
+    dbgPlugins << "Finished";
+    delete m;
+}
+
+
+void BigBrotherPlugin::slotOpenEdit()
+{
+    KisMacro* m = openMacro();
+    if(!m) return;
+    KisActionsEditorDialog aed(m_view);
+    
+    aed.actionsEditor()->setMacro(m);
+    
+    aed.exec();
+    
+    delete m;
 }
 
 void BigBrotherPlugin::slotStartRecordingMacro()
@@ -142,6 +139,39 @@ void BigBrotherPlugin::slotStopRecordingMacro()
     // Delete recorder
     delete m_recorder;
     m_recorder = 0;
+}
+
+KisMacro* BigBrotherPlugin::openMacro()
+{
+    QString filename = KFileDialog::getOpenFileName(KUrl(), "*.krarec|Recorded actions (*.krarec)", m_view);
+    if (!filename.isNull()) {
+        QDomDocument doc;
+        QFile f(filename);
+        if (f.exists()) {
+            dbgPlugins << f.open(QIODevice::ReadOnly);
+            QString err;
+            int line, col;
+            if (!doc.setContent(&f, &err, &line, &col)) {
+                // TODO error message
+                dbgPlugins << err << " line = " << line << " col = " << col;
+                f.close();
+                return 0;
+            }
+            f.close();
+            QDomElement docElem = doc.documentElement();
+            if (!docElem.isNull() && docElem.tagName() == "RecordedActions") {
+                dbgPlugins << "Load the macro";
+                KisMacro* m = new KisMacro(m_view->image());
+                m->fromXML(docElem);
+                return m;
+            } else {
+                // TODO error message
+            }
+        } else {
+            dbgPlugins << "Unexistant file : " << filename;
+        }
+    }
+    return 0;
 }
 
 void BigBrotherPlugin::saveMacro(const KisMacro* macro)

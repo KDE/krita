@@ -38,11 +38,13 @@ private slots:
 
     void slotSave();
     void slotOpenPlay();
+    void slotOpenEdit();
     void slotStartRecordingMacro();
     void slotStopRecordingMacro();
 
 private:
     void saveMacro(const KisMacro* macro);
+    KisMacro* openMacro();
 private:
 
     KisView2 * m_view;

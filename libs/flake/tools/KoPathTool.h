@@ -60,7 +60,8 @@ public:
     virtual void keyPressEvent(QKeyEvent *event);
     /// reimplemented
     virtual void keyReleaseEvent(QKeyEvent *event);
-
+    /// reimplemented
+    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
     /// reimplemented
     virtual void activate(bool temporary = false);
     /// reimplemented

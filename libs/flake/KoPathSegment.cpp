@@ -1205,7 +1205,7 @@ QList<qreal> KoPathSegment::extrema() const
     return params;
 }
 
-qreal KoPathSegment::nearestPoint( const QPointF &point )
+qreal KoPathSegment::nearestPoint( const QPointF &point ) const
 {
     if (!isValid())
         return -1.0;

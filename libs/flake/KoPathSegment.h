@@ -136,7 +136,7 @@ public:
      * @param point the point to find nearest point to
      * @return the parameter of the curve point nearest to the given point
      */
-    qreal nearestPoint( const QPointF &point );
+    qreal nearestPoint( const QPointF &point ) const;
     
     /// Returns ordered list of control points
     QList<QPointF> controlPoints() const;

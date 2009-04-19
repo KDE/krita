@@ -31,7 +31,7 @@ struct KisRecordedAction::Private {
     QString id;
 };
 
-KisRecordedAction::KisRecordedAction(QString name, QString id) : d(new Private)
+KisRecordedAction::KisRecordedAction(const QString& name, const QString& id) : d(new Private)
 {
     d->name = name;
     d->id = id;
@@ -47,14 +47,19 @@ KisRecordedAction::~KisRecordedAction()
     delete d;
 }
 
-QString KisRecordedAction::id() const
+const QString& KisRecordedAction::id() const
 {
     return d->id;
 }
 
-QString KisRecordedAction::name() const
+const QString& KisRecordedAction::name() const
 {
     return d->name;
+}
+
+void KisRecordedAction::setName(const QString& name)
+{
+    d->name = name;
 }
 
 void KisRecordedAction::toXML(QDomDocument& , QDomElement& elt) const

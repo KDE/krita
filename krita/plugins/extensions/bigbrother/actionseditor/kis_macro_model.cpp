@@ -31,16 +31,35 @@ KisMacroModel::~KisMacroModel()
 
 int KisMacroModel::rowCount( const QModelIndex & parent ) const
 {
+    Q_UNUSED(parent);
     return m_macro->actions().count();
 }
 
 QVariant KisMacroModel::data( const QModelIndex & index, int role ) const
 {
-    if(!index.isValid()) {
-        if( role == Qt::DisplayRole )
+    if(index.isValid()) {
+        if( role == Qt::DisplayRole || role == Qt::EditRole )
         {
             return m_macro->actions()[index.row()]->name();
         }
     }
     return QVariant();
+}
+
+bool KisMacroModel::setData( const QModelIndex & index, const QVariant & value, int role )
+{
+    if(index.isValid()) {
+        if( role == Qt::EditRole )
+        {
+            m_macro->actions()[index.row()]->setName(value.toString());
+            return true;
+        }
+    }
+    return false;
+}
+
+Qt::ItemFlags KisMacroModel::flags( const QModelIndex & index ) const
+{
+    Q_UNUSED(index);
+    return Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable;
 }

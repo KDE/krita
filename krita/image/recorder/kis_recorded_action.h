@@ -30,15 +30,16 @@ class KisUndoAdapter;
 class KRITAIMAGE_EXPORT KisRecordedAction
 {
 public:
-    KisRecordedAction(QString name, QString id);
+    KisRecordedAction(const QString& name, const QString& id);
     KisRecordedAction(const KisRecordedAction&);
     virtual ~KisRecordedAction();
     virtual void play(KisUndoAdapter* adapter = 0) const = 0;
     virtual KisRecordedAction* clone() const = 0;
     virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
 public:
-    QString id() const;
-    QString name() const;
+    const QString& id() const;
+    const QString& name() const;
+    void setName(const QString& name);
 protected:
     static QString nodeToIndexPath(KisNodeSP node);
 private:

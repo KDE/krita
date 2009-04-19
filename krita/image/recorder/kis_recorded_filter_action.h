@@ -36,6 +36,7 @@ public:
     virtual void play(KisUndoAdapter* adapter = 0) const;
     virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
     virtual KisRecordedAction* clone() const;
+    virtual QWidget* createEditor(QWidget* parent);
 private:
     struct Private;
     Private* const d;

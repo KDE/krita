@@ -40,6 +40,10 @@ public:
     const QString& id() const;
     const QString& name() const;
     void setName(const QString& name);
+    /**
+     * @return a widget that allow to edit this action, or 0 if this action is not editable
+     */
+    virtual QWidget* createEditor(QWidget* parent);
 protected:
     static QString nodeToIndexPath(KisNodeSP node);
 private:

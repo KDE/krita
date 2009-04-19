@@ -31,6 +31,7 @@
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
 #include "kis_selection_mask.h"
+#include "kis_config_widget.h"
 
 struct KisRecordedFilterAction::Private {
     KisNodeSP node;
@@ -110,6 +111,12 @@ void KisRecordedFilterAction::toXML(QDomDocument& doc, QDomElement& elt) const
 KisRecordedAction* KisRecordedFilterAction::clone() const
 {
     return new KisRecordedFilterAction(*this);
+}
+
+QWidget* KisRecordedFilterAction::createEditor(QWidget* parent)
+{
+    // TODO make a proxy QObject to update the action
+    return d->filter->createConfigurationWidget(parent, d->node->paintDevice(), 0 );
 }
 
 KisRecordedFilterActionFactory::KisRecordedFilterActionFactory() :

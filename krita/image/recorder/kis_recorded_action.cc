@@ -68,6 +68,13 @@ void KisRecordedAction::toXML(QDomDocument& , QDomElement& elt) const
     elt.setAttribute("id", id());
 }
 
+
+QWidget* KisRecordedAction::createEditor(QWidget* parent)
+{
+    Q_UNUSED(parent);
+    return 0;
+}
+
 QString KisRecordedAction::nodeToIndexPath(KisNodeSP _node)
 {
     QString path;

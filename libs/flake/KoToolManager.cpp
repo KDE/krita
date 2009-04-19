@@ -91,7 +91,7 @@ public:
 class KoToolManager::Private
 {
 public:
-    Private() : canvasData(0) {
+    Private() : canvasData(0), layerEnabled(true) {
         tabletEventTimer.setSingleShot(true);
     }
     ~Private() {
@@ -109,6 +109,8 @@ public:
     KoInputDevice inputDevice;
     QTimer tabletEventTimer; // Runs for a short while after any tablet event is
     // received to help correct input device detection.
+    
+    bool layerEnabled;
 
     // helper method.
     CanvasData *createCanvasData(KoCanvasController *controller, KoInputDevice device) {
@@ -150,6 +152,13 @@ public:
         CanvasData *cd = new CanvasData(controller, device);
         cd->allTools = toolsHash;
         return cd;
+    }
+    
+    bool toolCanBeUsed( const QString& activationShapeId)
+    {
+      if (layerEnabled) return true;
+      if (activationShapeId.endsWith( QLatin1String( "/always") ) ) return true;
+      return false;
     }
 };
 
@@ -268,13 +277,15 @@ void KoToolManager::removeCanvasController(KoCanvasController *controller)
 
 void KoToolManager::toolActivated(ToolHelper *tool)
 {
+    if(!d->toolCanBeUsed(tool->activationShapeId()) ) return;
+    
     Q_ASSERT(d->canvasData);
     KoTool *t = d->canvasData->allTools.value(tool->id());
     Q_ASSERT(t);
 
     d->canvasData->activeToolId = tool->id();
     d->canvasData->activationShapeId = tool->activationShapeId();
-
+    
     switchTool(t, false);
 }
 
@@ -291,6 +302,7 @@ void KoToolManager::switchTool(const QString &id, bool temporary)
 
     foreach(ToolHelper *th, d->tools) {
         if (th->id() == id) {
+            if(!d->toolCanBeUsed(th->activationShapeId()) ) return;
             d->canvasData->activationShapeId = th->activationShapeId();
             break;
         }
@@ -626,15 +638,15 @@ void KoToolManager::currentLayerChanged(const KoShapeLayer* layer)
     kDebug( 30006 ) << "layer changed to " << layer;
 
     emit currentLayerChanged(d->canvasData->canvas, layer);
-    bool enabled = layer == 0 || (layer->isEditable() && layer->isVisible());
+    d->layerEnabled = layer == 0 || (layer->isEditable() && layer->isVisible());
 
-    kDebug(30006 ) << "and the layer is " << ( enabled ? "true" : "false" );
+    kDebug(30006 ) << "and the layer is " << ( d->layerEnabled ? "true" : "false" );
 
     KoToolProxy *proxy = d->proxies.value(d->canvasData->canvas->canvas());
     kDebug( 30006 ) << " and the proxy is " << proxy;
     if (proxy) {
-        kDebug( 30006 ) << " set " << d->canvasData->activeTool << ( enabled ? "enabled" : "disabled" );
-        proxy->setActiveTool(enabled ? d->canvasData->activeTool : 0);
+        kDebug( 30006 ) << " set " << d->canvasData->activeTool << ( d->layerEnabled ? "enabled" : "disabled" );
+        proxy->setActiveTool(d->toolCanBeUsed(d->canvasData->activationShapeId) ? d->canvasData->activeTool : 0);
     }
 }
 

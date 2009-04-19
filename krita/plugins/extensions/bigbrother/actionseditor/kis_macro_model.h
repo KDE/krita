@@ -17,27 +17,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_ACTIONS_EDITOR_H_
-#define _KIS_ACTIONS_EDITOR_H_
+#ifndef _KIS_MACRO_MODEL_H_
+#define _KIS_MACRO_MODEL_H_
 
-#include <QWidget>
+#include <QAbstractListModel>
 
 class KisMacro;
-class KisMacroModel;
 
-namespace Ui {
-    class ActionsEditor;
-}
-
-class KisActionsEditor : public QWidget {
+class KisMacroModel : public QAbstractListModel {
     public:
-        KisActionsEditor(QWidget* parent);
-        ~KisActionsEditor();
-        void setMacro(KisMacro* );
+        KisMacroModel(KisMacro* );
+        ~KisMacroModel();
+        virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
+        virtual QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const;
     private:
-        Ui::ActionsEditor* m_form;
         KisMacro* m_macro;
-        KisMacroModel* m_model;
 };
+
 
 #endif

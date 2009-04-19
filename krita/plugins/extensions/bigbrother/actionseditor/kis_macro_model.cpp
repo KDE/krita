@@ -17,38 +17,30 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "kis_actions_editor.h"
-
-#include "ui_wdgactionseditor.h"
-
 #include "kis_macro_model.h"
+#include <recorder/kis_macro.h>
+#include <recorder/kis_recorded_action.h>
 
-KisActionsEditor::KisActionsEditor(QWidget* parent) : QWidget(parent), m_form(new Ui::ActionsEditor), m_macro(0), m_model(0)
+KisMacroModel::KisMacroModel(KisMacro* _macro) : m_macro(_macro)
 {
-    m_form->setupUi(this);
-    m_form->bnAdd->setIcon(SmallIcon("list-add"));
-
-    m_form->bnDelete->setIcon(SmallIcon("list-remove"));
-
-    m_form->bnRaise->setEnabled(false);
-    m_form->bnRaise->setIcon(SmallIcon("go-up"));
-
-    m_form->bnLower->setEnabled(false);
-    m_form->bnLower->setIcon(SmallIcon("go-down"));
-
-    m_form->bnDuplicate->setIcon(SmallIcon("edit-copy"));
 }
 
-KisActionsEditor::~KisActionsEditor()
+KisMacroModel::~KisMacroModel()
 {
-    delete m_form;
 }
 
-void KisActionsEditor::setMacro(KisMacro* _macro)
+int KisMacroModel::rowCount( const QModelIndex & parent ) const
 {
-    m_macro = _macro;
-    KisMacroModel* oldModel = m_model;
-    m_model = new KisMacroModel(m_macro);
-    m_form->actionsList->setModel(m_model);
-    delete oldModel;
+    return m_macro->actions().count();
+}
+
+QVariant KisMacroModel::data( const QModelIndex & index, int role ) const
+{
+    if(!index.isValid()) {
+        if( role == Qt::DisplayRole )
+        {
+            return m_macro->actions()[index.row()]->name();
+        }
+    }
+    return QVariant();
 }

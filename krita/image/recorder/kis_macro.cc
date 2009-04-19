@@ -121,4 +121,9 @@ void KisMacro::toXML(QDomDocument& doc, QDomElement& e) const
     }
 }
 
+const QList<KisRecordedAction*>& KisMacro::actions() const
+{
+    return d->actions;
+}
+
 #include "kis_macro.moc"

@@ -46,6 +46,7 @@ public: // serialization functions
 
     virtual void fromXML(const QDomElement&);
     virtual void toXML(QDomDocument&, QDomElement&) const;
+    const QList<KisRecordedAction*>& actions() const;
 public slots:
     virtual void addAction(const KisRecordedAction& action);
 private:

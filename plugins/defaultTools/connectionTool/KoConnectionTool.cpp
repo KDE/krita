@@ -50,10 +50,6 @@ void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converte
 
 void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
 {
-    int MAX_DISTANCE = m_canvas->canvasWidget()->width()*m_canvas->canvasWidget()->width();
-    MAX_DISTANCE += m_canvas->canvasWidget()->height()*m_canvas->canvasWidget()->height();  
-    QPointF nearestPoint;
-    int nearestPointIndex, i;
     KoShape * tempShape = m_canvas->shapeManager()->shapeAt( event->point );
     
     if( tempShape != 0 )
@@ -70,46 +66,23 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
             KoShape *shape = factory->createDefaultShapeAndInit( m_canvas->shapeController()->dataCenterMap() );
             KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>( shape );
 
-	    QList<QPointF> connectionPoints = m_firstShape->connectionPoints();
-	    for( i = 0; i < connectionPoints.count(); i++)
-            {
-                QPointF difference = tempShape->position() - connectionPoints[i];
-                qreal distance = difference.x() * difference.x() + difference.y() * difference.y();
-        	if( distance < MAX_DISTANCE )
-                {
-                    MAX_DISTANCE = distance;
-                    nearestPointIndex =  i;
-                    nearestPoint = connectionPoints[i];
-                }
-            }
-            KoConnection newConnection = KoConnection(m_firstShape, nearestPointIndex);
-            connectionShape->setConnection1( newConnection.first, newConnection.second );
-	    
-            connectionPoints = tempShape->connectionPoints();
-            for( i = 0; i < connectionPoints.count(); i++)
-            {
-                QPointF difference = nearestPoint - connectionPoints[i];
-                qreal distance = difference.x() * difference.x() + difference.y() * difference.y();
-                if( distance <= MAX_DISTANCE )
-                {
-                    MAX_DISTANCE = distance;
-                    nearestPointIndex =  i;
-                }
-            }
-            newConnection = KoConnection(tempShape, nearestPointIndex);
-            connectionShape->setConnection2( newConnection.first, newConnection.second );
+            KoConnection myConnection1 = getConnection( m_firstShape, tempShape );
+            connectionShape->setConnection1( myConnection1.first, myConnection1.second );
             
-	    QUndoCommand * cmd;
-	    if( connectionShape != 0 )
+            KoConnection myConnection2 = getConnection( tempShape, m_firstShape );
+            connectionShape->setConnection2( myConnection2.first, myConnection2.second );
+            
+            QUndoCommand * cmd;
+            if( connectionShape != 0 )
                 cmd = m_canvas->shapeController()->addShape( connectionShape );
-	    
+        
             if (cmd) {
                 m_canvas->addCommand(cmd);
             } else {
                 m_canvas->updateCanvas(connectionShape->boundingRect());
                 delete connectionShape;
             }
-	    
+        
             connectionShape->updateConnections();
             m_firstShape = 0;
         }
@@ -132,4 +105,42 @@ void KoConnectionTool::activate( bool temporary )
 void KoConnectionTool::deactivate()
 {
     m_firstShape = 0;
+}
+
+KoConnection KoConnectionTool::getConnection( KoShape * shape1, KoShape * shape2 )
+{
+    float MAX_DISTANCE = m_canvas->canvasWidget()->width()*m_canvas->canvasWidget()->width();
+    MAX_DISTANCE += m_canvas->canvasWidget()->height()*m_canvas->canvasWidget()->height();
+    int nearestPointIndex, i, j;
+    // Get all the points
+    QList<QPointF> connectionPoints1 = shape1->connectionPoints();
+    QList<QPointF> connectionPoints2 = shape2->connectionPoints();
+    
+    // Find the nearest point and stock the index
+    for( i = 0; i < connectionPoints1.count(); i++)
+    {
+        for( j = 0; j < connectionPoints2.count(); j++)
+        {
+	    float distance = distanceSquare( connectionPoints1[i] + shape1->position(), connectionPoints2[j] + shape2->position());
+	    
+            if( distance < MAX_DISTANCE )
+            {
+                MAX_DISTANCE = distance;
+                nearestPointIndex =  i;
+		break;
+            }
+	}
+    }
+    // Create and return the connection
+    KoConnection newConnection = KoConnection(shape1, nearestPointIndex);
+    return newConnection;
+}
+
+float KoConnectionTool::distanceSquare( QPointF p1, QPointF p2 )
+{
+    // Square of the distance
+    float distx = ( p2.x() - p1.x() ) * ( p2.x() - p1.x() );
+    float disty = ( p2.y() - p1.y() ) * ( p2.y() - p1.y() );
+    float dist = distx + disty;
+    return dist;
 }

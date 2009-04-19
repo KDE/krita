@@ -31,7 +31,13 @@ class KoConnectionTool : public KoPathTool
 {
     Q_OBJECT
 public:
+    /**
+     * @brief Constructor
+     */
     explicit KoConnectionTool( KoCanvasBase * canvas );
+    /**
+     * @brief Destructor
+     */
     ~KoConnectionTool();
     
     /// reimplemented from superclass
@@ -47,6 +53,21 @@ public:
     virtual void activate( bool temporary );
     /// reimplemented from superclass
     virtual void deactivate();
+    
+    /**
+     * @brief Connect on the shape1 which is the nearest point with the second shape 
+     *
+     * @param shape1 The shape to connect
+     * @param shape2 The shape to be nearby
+     */
+    KoConnection getConnection( KoShape * shape1, KoShape * shape2 );
+    /**
+     * @brief Return the square of the absolute distance between p1 and p2 
+     *
+     * @param p1 The first point
+     * @param p2 The second point
+     */
+    float distanceSquare( QPointF p1, QPointF p2 );
     
 private:
     KoShape * m_firstShape;

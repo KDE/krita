@@ -299,6 +299,7 @@ public:
 
     /**
      * Return a list of the connection points that have been added to this shape.
+     * All the points are relative, need an add with position to find absolute points.
      * @return a list of the connectors that have been added to this shape.
      */
     QList<QPointF> connectionPoints() const;

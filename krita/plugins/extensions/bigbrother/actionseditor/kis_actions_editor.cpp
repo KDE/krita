@@ -24,6 +24,17 @@
 KisActionsEditor::KisActionsEditor(QWidget* parent) : QWidget(parent), m_form(new Ui::ActionsEditor)
 {
     m_form->setupUi(this);
+    m_form->bnAdd->setIcon(SmallIcon("list-add"));
+
+    m_form->bnDelete->setIcon(SmallIcon("list-remove"));
+
+    m_form->bnRaise->setEnabled(false);
+    m_form->bnRaise->setIcon(SmallIcon("go-up"));
+
+    m_form->bnLower->setEnabled(false);
+    m_form->bnLower->setIcon(SmallIcon("go-down"));
+
+    m_form->bnDuplicate->setIcon(SmallIcon("edit-copy"));
 }
 
 KisActionsEditor::~KisActionsEditor()

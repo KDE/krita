@@ -166,18 +166,21 @@ bool KoOdfWriteStore::closeContentWriter()
 {
     Q_ASSERT(d->contentWriter);
 
-    d->contentWriter->startElement("office:body");
-    d->contentWriter->startElement("office:text");
-
-    delete d->changeWriter; d->changeWriter = 0;
-
+#ifdef CHANGETRK
     //copy over the content of the change tmp file
     if ( d->changeTmpFile ) {
+        // FIXME I'm not sure that belongs in here maybe this should use the changeWriter and not the contentWriter
+        d->contentWriter->startElement("office:body");
+        d->contentWriter->startElement("office:text");
+
+        delete d->changeWriter; d->changeWriter = 0;
+
         d->changeTmpFile->close();
         d->contentWriter->addCompleteElement(d->changeTmpFile);
         d->changeTmpFile->close();
         delete d->changeTmpFile; d->changeTmpFile = 0;
     }
+#endif
 
     Q_ASSERT(d->bodyWriter);
     Q_ASSERT(d->contentTmpFile);
@@ -190,8 +193,10 @@ bool KoOdfWriteStore::closeContentWriter()
     d->contentTmpFile->close();
     delete d->contentTmpFile; d->contentTmpFile = 0;
 
+#ifdef CHANGETRK
     d->contentWriter->endElement(); // office-body
     d->contentWriter->endElement(); //office-text
+#endif
 
     d->contentWriter->endElement(); // document-content
     d->contentWriter->endDocument();

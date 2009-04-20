@@ -81,7 +81,7 @@ public:
             zIndex(0),
             visible(true),
             printable(true),
-            locked(false),
+            geometryProtected(false),
             keepAspect(false),
             selectable(true),
             detectCollision(false),
@@ -139,7 +139,7 @@ public:
     int zIndex : 14; // should be enough ;)
     int visible : 1;
     int printable : 1;
-    int locked : 1;
+    int geometryProtected : 1;
     int keepAspect : 1;
     int selectable : 1;
     int detectCollision : 1;
@@ -471,7 +471,7 @@ void KoShape::copySettings(const KoShape *shape)
     else
         d->printable = shape->isPrintable();
 
-    d->locked = shape->isLocked();
+    d->geometryProtected = shape->isGeometryProtected();
     d->keepAspect = shape->keepAspectRatio();
     d->localMatrix = shape->d->localMatrix;
 }
@@ -656,14 +656,14 @@ bool KoShape::isSelectable() const
     return d->selectable;
 }
 
-void KoShape::setLocked(bool locked)
+void KoShape::setGeometryProtected(bool on)
 {
-    d->locked = locked;
+    d->geometryProtected = on;
 }
 
-bool KoShape::isLocked() const
+bool KoShape::isGeometryProtected() const
 {
-    return d->locked;
+    return d->geometryProtected;
 }
 
 void KoShape::setContentProtected(bool protect)
@@ -784,7 +784,7 @@ void KoShape::deleteLater()
 
 bool KoShape::isEditable() const
 {
-    if (!d->visible || d->locked)
+    if (!d->visible || d->geometryProtected)
         return false;
 
     if (d->parent && d->parent->isChildLocked(this))
@@ -821,7 +821,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
     }
 
     QString value;
-    if (isLocked())
+    if (isGeometryProtected())
         value = "position size";
     if (isContentProtected()) {
         if (! value.isEmpty())

@@ -169,7 +169,7 @@ public:
     }// ignored
     /// reimplemented
     bool isChildLocked(const KoShape *child) const {
-        return child->isLocked();
+        return child->isGeometryProtected();
     }
     /// reimplemented
     int count() const {

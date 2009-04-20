@@ -128,5 +128,5 @@ void KisShapeSelectionModel::childChanged(KoShape * child, KoShape::ChangeType t
 
 bool KisShapeSelectionModel::isChildLocked(const KoShape *child) const
 {
-    return child->isLocked() || child->parent()->isLocked();
+    return child->isGeometryProtected() || child->parent()->isGeometryProtected();
 }

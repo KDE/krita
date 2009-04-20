@@ -128,7 +128,7 @@ bool recursiveFindActiveLayerInChildren( KoSelection* _selection, KoShapeLayer* 
 void KisLayerContainerShape::editabilityChanged( )
 {
     dbgKrita << m_d->groupLayer->isEditable();
-    setLocked( !m_d->groupLayer->isEditable() );
+    setGeometryProtected( !m_d->groupLayer->isEditable() );
     KoCanvasController* canvas = KoToolManager::instance()->activeCanvasController();
     if( canvas )
     {

@@ -288,19 +288,19 @@ KoDocumentSectionModel::PropertyList KoPADocumentModel::properties( KoShape* sha
 {
     PropertyList l;
     l << Property(i18n("Visible"), SmallIcon("14_layer_visible"), SmallIcon("14_layer_novisible"), shape->isVisible());
-    l << Property(i18n("Locked"), SmallIcon("object-locked"), SmallIcon("object-unlocked"), shape->isLocked());
+    l << Property(i18n("Locked"), SmallIcon("object-locked"), SmallIcon("object-unlocked"), shape->isGeometryProtected());
     return l;
 }
 
 void KoPADocumentModel::setProperties( KoShape* shape, const PropertyList &properties )
 {
     bool oldVisibleState = shape->isVisible();
-    bool oldLockedState = shape->isLocked();
+    bool oldLockedState = shape->isGeometryProtected();
 
     shape->setVisible( properties.at( 0 ).state.toBool() );
-    shape->setLocked( properties.at( 1 ).state.toBool() );
+    shape->setGeometryProtected( properties.at( 1 ).state.toBool() );
 
-    if( ( oldVisibleState != shape->isVisible() ) || ( oldLockedState != shape->isLocked() ) )
+    if( ( oldVisibleState != shape->isVisible() ) || ( oldLockedState != shape->isGeometryProtected() ) )
         shape->update();
 }
 

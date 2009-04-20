@@ -668,7 +668,7 @@ bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
         QList<QPointF> newPos;
         QList<KoShape*> shapes;
         foreach(KoShape* shape, koSelection()->selectedShapes(KoFlake::StrippedSelection)) {
-            if (shape->isLocked())
+            if (shape->isGeometryProtected())
                 continue;
             shapes.append(shape);
             QPointF p = shape->position();
@@ -791,7 +791,7 @@ void DefaultTool::deleteSelection()
 {
     QList<KoShape *> shapes;
     foreach (KoShape *s, m_canvas->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        if (s->isLocked())
+        if (s->isGeometryProtected())
             continue;
         shapes << s;
     }

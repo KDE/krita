@@ -44,7 +44,7 @@ void KoShapeLockCommand::redo()
 {
     QUndoCommand::redo();
     for (int i = 0; i < m_shapes.count(); ++i) {
-        m_shapes[i]->setLocked(m_newLock[i]);
+        m_shapes[i]->setGeometryProtected(m_newLock[i]);
     }
 }
 
@@ -52,6 +52,6 @@ void KoShapeLockCommand::undo()
 {
     QUndoCommand::undo();
     for (int i = 0; i < m_shapes.count(); ++i) {
-        m_shapes[i]->setLocked(m_oldLock[i]);
+        m_shapes[i]->setGeometryProtected(m_oldLock[i]);
     }
 }

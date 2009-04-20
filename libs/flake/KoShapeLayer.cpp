@@ -77,7 +77,7 @@ bool KoShapeLayer::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     // set layer name
     setName(element.attributeNS(KoXmlNS::draw, "name"));
     // layer locking
-    setLocked(element.attributeNS(KoXmlNS::draw, "protected", "false") == "true");
+    setGeometryProtected(element.attributeNS(KoXmlNS::draw, "protected", "false") == "true");
     // layer visibility
     setVisible(element.attributeNS(KoXmlNS::draw, "display", "false") != "none");
 

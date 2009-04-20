@@ -49,7 +49,7 @@ public:
     void childChanged(KoShape *, KoShape::ChangeType) { }
     bool isChildLocked(const KoShape *child) const {
         Q_ASSERT(child->parent());
-        return child->isLocked() || child->parent()->isLocked();
+        return child->isGeometryProtected() || child->parent()->isGeometryProtected();
     }
 
 private: // members

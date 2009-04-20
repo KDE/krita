@@ -80,7 +80,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
         // draw the shape bounding rect
         painter.drawRect( QRectF( QPointF(), shape->size() ) );
 
-        if(!shape->isLocked())
+        if(!shape->isGeometryProtected())
             editable = true;
     }
 

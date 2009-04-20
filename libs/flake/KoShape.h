@@ -372,6 +372,7 @@ public:
      * Being visible means being painted, as well as being used for
      *   things like guidelines or searches.
      * @param on when true; set the shape to be visible.
+     * @see setGeometryProtected(), setContentProtected(), setSelectable()
      */
     void setVisible(bool on);
     /**
@@ -380,6 +381,7 @@ public:
      *   things like guidelines or searches.
      * @param recursive when true, checks visibility recursively
      * @return current visibility state of this shape.
+     * @see isGeometryProtected(), isContentProtected(), isSelectable()
      */
     bool isVisible(bool recursive = false) const;
 
@@ -406,37 +408,45 @@ public:
      * Makes it possible for the user to select this shape.
      * This parameter defaults to true.
      * @param selectable when true; set the shape to be selectable by the user.
+     * @see setGeometryProtected(), setContentProtected(), setVisible()
      */
     void setSelectable(bool selectable);
     /**
      * Returns if this shape can be selected by the user.
      * @return true only when the object is selectable.
+     * @see isGeometryProtected(), isContentProtected(), isVisible()
      */
     bool isSelectable() const;
 
     /**
-     * Changes the Shape to be locked in place.
-     * Being locked means the user can not change shape or position of the shape.
-     * @param locked when true; set the shape to be locked.
+     * Tells the shape to have its position/rotation and size protected from user-changes.
+     * The geometry being protected means the user can not change shape or position of the
+     * shape. This includes any matrix operation such as rotation.
+     * @param on when true; set the shape to have its geometry protected.
+     * @see setContentProtected(), setSelectable(), setVisible()
      */
-    void setLocked(bool locked);
+    void setGeometryProtected(bool on);
     /**
-     * Returns current locked state of this shape.
-     * Being locked means the user can not change shape or position of the shape.
-     * @return current locked state of this shape.
+     * Returns current geometry protection state of this shape.
+     * The geometry being protected means the user can not change shape or position of the
+     * shape. This includes any matrix operation such as rotation.
+     * @return current geometry protection state of this shape.
+     * @see isContentProtected(), isSelectable(), isVisible()
      */
-    bool isLocked() const;
+    bool isGeometryProtected() const;
 
     /**
      * Marks the shape to have its content protected against editing.
      * Content protection is a hint for tools to disallow the user editing the content.
      * @param protect when true set the shapes content to be protected from user modification.
+     * @see setGeometryProtected(), setSelectable(), setVisible()
      */
     void setContentProtected(bool protect);
     /**
      * Returns current content protection state of this shape.
      * Content protection is a hint for tools to disallow the user editing the content.
      * @return current content protection state of this shape.
+     * @see isGeometryProtected(), isSelectable(), isVisible()
      */
     bool isContentProtected() const;
 

@@ -684,7 +684,7 @@ void KoPathTool::activate(bool temporary)
     foreach(KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes()) {
         KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
 
-        if (!shape->isLocked() && pathShape) {
+        if (!shape->isGeometryProtected() && pathShape) {
             // as the tool is just in activation repaintDecorations does not yet get called
             // so we need to use repaint of the tool and it is only needed to repaint the
             // current canvas

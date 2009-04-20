@@ -88,7 +88,7 @@ public:
     }
 
     bool isChildLocked(const KoShape *child) const {
-        return child->isLocked();
+        return child->isGeometryProtected();
     }
 
     void containerChanged(KoShapeContainer *) { }

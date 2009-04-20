@@ -611,6 +611,8 @@ void KoPathTool::keyReleaseEvent(QKeyEvent *event)
 
 void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
+    event->ignore();
+    
     // check if we are doing something else at the moment
     if (m_currentStrategy)
         return;
@@ -667,8 +669,6 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
         }
         updateActions();
         event->accept();
-    } else {
-        event->ignore();
     }
 }
 

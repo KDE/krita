@@ -89,3 +89,25 @@ void KisMacroModel::duplicateAction( const QModelIndex& index )
         endInsertRows();
     }
 }
+
+void KisMacroModel::raise( const QModelIndex& index )
+{
+    if( index.isValid() )
+    {
+        KisRecordedAction* action = m_macro->actions()[index.row()];
+        KisRecordedAction* before = m_macro->actions()[index.row() - 1];
+        m_macro->moveAction(action, before);
+        emit(dataChanged(createIndex(index.row()-1, 0), index));
+    }
+}
+
+void KisMacroModel::lower( const QModelIndex& index )
+{
+    if( index.isValid() )
+    {
+        KisRecordedAction* before = m_macro->actions()[index.row()];
+        KisRecordedAction* action = m_macro->actions()[index.row() + 1];
+        m_macro->moveAction(action, before);
+        emit(dataChanged(index, createIndex(index.row()+1, 0)));
+    }
+}

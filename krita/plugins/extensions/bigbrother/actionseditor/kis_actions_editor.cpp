@@ -37,8 +37,10 @@ KisActionsEditor::KisActionsEditor(QWidget* parent) : QWidget(parent), m_current
     connect(m_form->bnDelete, SIGNAL(released()), SLOT(slotBtnDelete()));
 
     m_form->bnRaise->setIcon(SmallIcon("go-up"));
+    connect(m_form->bnRaise, SIGNAL(released()), SLOT(slotBtnRaise()));
 
     m_form->bnLower->setIcon(SmallIcon("go-down"));
+    connect(m_form->bnLower, SIGNAL(released()), SLOT(slotBtnLower()));
 
     m_form->bnDuplicate->setIcon(SmallIcon("edit-copy"));
     connect(m_form->bnDuplicate, SIGNAL(released()), SLOT(slotBtnDuplicate()));
@@ -124,6 +126,24 @@ void KisActionsEditor::slotBtnDuplicate()
     QModelIndex idx = m_form->actionsList->currentIndex();
     Q_ASSERT(idx.isValid());
     m_model->duplicateAction(idx);
+}
+
+void KisActionsEditor::slotBtnRaise()
+{
+    QModelIndex idx = m_form->actionsList->currentIndex();
+    Q_ASSERT(idx.isValid());
+    m_model->raise(idx);
+    m_form->actionsList->setCurrentIndex(m_model->index(idx.row()-1));
+    slotActionActivated( m_form->actionsList->currentIndex() );
+}
+
+void KisActionsEditor::slotBtnLower()
+{
+    QModelIndex idx = m_form->actionsList->currentIndex();
+    Q_ASSERT(idx.isValid());
+    m_model->lower(idx);
+    m_form->actionsList->setCurrentIndex(m_model->index(idx.row()+1));
+    slotActionActivated( m_form->actionsList->currentIndex() );
 }
 
 #include "kis_actions_editor.moc"

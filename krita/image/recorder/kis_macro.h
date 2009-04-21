@@ -36,7 +36,14 @@ public:
     KisMacro(KisImageSP _image, const QList<KisRecordedAction*>& _actions);
     ~KisMacro();
 public:
+    /**
+     * Append a list of actions, and make clone of them.
+     */
     void appendActions(const QList<KisRecordedAction*>& actions);
+    /**
+     * Remove the list of actions. Actions are deleted.
+     */
+    void removeActions(const QList<KisRecordedAction*>& actions);
 public:
     void play();
 public: // serialization functions
@@ -48,7 +55,12 @@ public: // serialization functions
     virtual void toXML(QDomDocument&, QDomElement&) const;
     const QList<KisRecordedAction*>& actions() const;
 public slots:
-    virtual void addAction(const KisRecordedAction& action);
+    /**
+     * add a single action, and make a clone of it.
+     * @param before if non null, the action will be added before that action,
+     *               otherwise, if null, the action will be added at the end.
+     */
+    virtual void addAction(const KisRecordedAction& action, const KisRecordedAction* before = 0);
 private:
     struct Private;
     Private* const d;

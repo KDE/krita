@@ -45,6 +45,7 @@ KisMacro::KisMacro(KisImageSP _image, const QList<KisRecordedAction*>& actions) 
 
 KisMacro::~KisMacro()
 {
+    qDeleteAll(d->actions);
     delete d;
 }
 
@@ -56,9 +57,22 @@ void KisMacro::appendActions(const QList<KisRecordedAction*>& actions)
     }
 }
 
-void KisMacro::addAction(const KisRecordedAction& action)
+void KisMacro::removeActions(const QList<KisRecordedAction*>& actions)
 {
-    d->actions.append(action.clone());
+    foreach(KisRecordedAction* action, actions) {
+        d->actions.removeAll(action);
+    }
+    qDeleteAll(actions);
+}
+
+void KisMacro::addAction(const KisRecordedAction& action, const KisRecordedAction* before )
+{
+    if( before == 0 )
+    {
+        d->actions.append(action.clone());
+    } else {
+        d->actions.insert(d->actions.indexOf(const_cast<KisRecordedAction*>(before)), action.clone());
+    }
 }
 
 #include <QApplication>

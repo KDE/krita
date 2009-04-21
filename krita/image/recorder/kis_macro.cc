@@ -75,6 +75,17 @@ void KisMacro::addAction(const KisRecordedAction& action, const KisRecordedActio
     }
 }
 
+void KisMacro::moveAction( const KisRecordedAction* action, const KisRecordedAction* before)
+{
+    KisRecordedAction* _action = d->actions.takeAt(d->actions.indexOf(const_cast<KisRecordedAction*>(action)));
+    if( before == 0 )
+    {
+        d->actions.append(_action);
+    } else {
+        d->actions.insert(d->actions.indexOf(const_cast<KisRecordedAction*>(before)), _action);
+    }
+}
+
 #include <QApplication>
 
 void KisMacro::play()

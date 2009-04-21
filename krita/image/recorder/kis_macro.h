@@ -44,6 +44,11 @@ public:
      * Remove the list of actions. Actions are deleted.
      */
     void removeActions(const QList<KisRecordedAction*>& actions);
+    /**
+     * Move the action before an other one.
+     * @param before if null, the action is moved to the end
+     */
+    void moveAction( const KisRecordedAction* action, const KisRecordedAction* before);
 public:
     void play();
 public: // serialization functions

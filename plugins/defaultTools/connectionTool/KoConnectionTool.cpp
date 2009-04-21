@@ -30,6 +30,7 @@
 #include <KoShapeLayer.h>
 #include <KoShapeRegistry.h>
 #include <KoSelection.h>
+#include <KoLineBorder.h>
 
 #include <QUndoCommand>
 #include <QPointF>
@@ -37,6 +38,7 @@
 KoConnectionTool::KoConnectionTool( KoCanvasBase * canvas )
     : KoPathTool(canvas)
     , m_firstShape(0)
+    , m_shapeOn(0)
 {
 }
 
@@ -46,6 +48,17 @@ KoConnectionTool::~KoConnectionTool()
 
 void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
+    float x = 0;
+    float y = 0;
+    if( m_shapeOn !=  0)
+    {
+        foreach( QPointF point, m_shapeOn->connectionPoints() )
+        {
+            x = point.x() - 2 + m_shapeOn->position().x();
+            y = point.y() - 2 + m_shapeOn->position().y();
+            painter.fillRect( x, y, 4, 4, QColor(Qt::green) );
+        }
+    }    
 }
 
 void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
@@ -58,7 +71,7 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
         { // If any connections is beginning
             m_firstShape = tempShape;
         }
-        else
+        else if( m_firstShape != tempShape )
         { //If a connection is on
 
             // All sizes and positions are hardcoded for now
@@ -91,7 +104,11 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
 
 void KoConnectionTool::mouseMoveEvent( KoPointerEvent *event )
 {
-    event->ignore();
+    kDebug()<<"jyyy";
+    m_shapeOn = m_canvas->shapeManager()->shapeAt( event->point );
+    kDebug()<<"j'y passe";
+    m_canvas->updateCanvas(QRectF( 0, 0, m_canvas->canvasWidget()->width(), m_canvas->canvasWidget()->height() ));
+    kDebug()<<"j'y passe";
 }
 
 void KoConnectionTool::mouseReleaseEvent( KoPointerEvent *event )
@@ -105,6 +122,9 @@ void KoConnectionTool::activate( bool temporary )
 void KoConnectionTool::deactivate()
 {
     m_firstShape = 0;
+    QList<QPointF> m_highlightPoints;
+    repaint(QRectF( 0, 0, m_canvas->canvasWidget()->x(), m_canvas->canvasWidget()->y() ));
+    m_canvas->updateCanvas(QRectF( 0, 0, m_canvas->canvasWidget()->x(), m_canvas->canvasWidget()->y() ));
 }
 
 KoConnection KoConnectionTool::getConnection( KoShape * shape1, KoShape * shape2 )
@@ -121,15 +141,15 @@ KoConnection KoConnectionTool::getConnection( KoShape * shape1, KoShape * shape2
     {
         for( j = 0; j < connectionPoints2.count(); j++)
         {
-	    float distance = distanceSquare( connectionPoints1[i] + shape1->position(), connectionPoints2[j] + shape2->position());
-	    
+            float distance = distanceSquare( connectionPoints1[i] + shape1->position(), connectionPoints2[j] + shape2->position());
+            
             if( distance < MAX_DISTANCE )
             {
                 MAX_DISTANCE = distance;
                 nearestPointIndex =  i;
-		break;
+                break;
             }
-	}
+        }
     }
     // Create and return the connection
     KoConnection newConnection = KoConnection(shape1, nearestPointIndex);

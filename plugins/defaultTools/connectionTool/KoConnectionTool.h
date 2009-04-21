@@ -71,6 +71,7 @@ public:
     
 private:
     KoShape * m_firstShape;
+    KoShape * m_shapeOn;
 };
 
 #endif

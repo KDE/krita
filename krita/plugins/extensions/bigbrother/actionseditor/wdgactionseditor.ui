@@ -54,7 +54,7 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>Create a new mask or layer</string>
+            <string>Create a new action</string>
            </property>
            <property name="text">
             <string/>
@@ -82,13 +82,13 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>Duplicate layer or mask</string>
+            <string>Duplicate action</string>
            </property>
            <property name="statusTip">
-            <string>Duplicate layer or mask</string>
+            <string>Duplicate action</string>
            </property>
            <property name="whatsThis">
-            <string>Duplicate the currently selected layer or mask</string>
+            <string>Duplicate the currently selected action</string>
            </property>
            <property name="text">
             <string/>
@@ -113,7 +113,7 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>Move layer or mask up</string>
+            <string>Move an action up</string>
            </property>
            <property name="text">
             <string/>
@@ -138,7 +138,7 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>Move layer or mask down</string>
+            <string>Move an action down</string>
            </property>
            <property name="text">
             <string/>
@@ -176,7 +176,7 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>Delete the layer or mask</string>
+            <string>Delete the current action</string>
            </property>
            <property name="text">
             <string/>

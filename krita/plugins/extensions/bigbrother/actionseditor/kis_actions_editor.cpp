@@ -34,6 +34,7 @@ KisActionsEditor::KisActionsEditor(QWidget* parent) : QWidget(parent), m_current
     m_form->bnAdd->setIcon(SmallIcon("list-add"));
 
     m_form->bnDelete->setIcon(SmallIcon("list-remove"));
+    connect(m_form->bnDelete, SIGNAL(released()), SLOT(slotBtnDelete()));
 
     m_form->bnRaise->setEnabled(false);
     m_form->bnRaise->setIcon(SmallIcon("go-up"));
@@ -45,9 +46,11 @@ KisActionsEditor::KisActionsEditor(QWidget* parent) : QWidget(parent), m_current
 
     // Setup actions list
     connect(m_form->actionsList, SIGNAL(clicked(const QModelIndex&)), SLOT(slotActionActivated(const QModelIndex&)));
+    connect(m_form->actionsList, SIGNAL(activated(QModelIndex)), SLOT(slotActionActivated(const QModelIndex&)));
 
     // Editor
     m_widgetLayout = new QGridLayout(m_form->editorWidget);
+    setCurrentAction(0);
 }
 
 KisActionsEditor::~KisActionsEditor()
@@ -69,7 +72,8 @@ void KisActionsEditor::slotActionActivated(const QModelIndex& item)
     if( item.isValid() && m_macro )
     {
         setCurrentAction( m_macro->actions()[item.row()] );
-        
+    } else {
+        setCurrentAction(0);
     }
 }
 
@@ -79,12 +83,24 @@ void KisActionsEditor::setCurrentAction(KisRecordedAction* _action)
     m_currentEditor = 0;
     if(_action) {
         m_currentEditor = _action->createEditor(this);
+    } else {
+        m_currentEditor = new QLabel(i18n("No action is selected."), this);
     }
     if(!m_currentEditor)
     {
-        m_currentEditor = new QLabel(i18n("No editor"), this);
+        m_currentEditor = new QLabel(i18n("No editor for current action."), this);
     }
     m_widgetLayout->addWidget(m_currentEditor, 0 , 0);
+}
+
+void KisActionsEditor::slotBtnDelete()
+{
+    QModelIndex idx = m_form->actionsList->currentIndex();
+    if(idx.isValid())
+    {
+        m_model->removeRows(idx.row(), 1);
+        setCurrentAction(0);
+    }
 }
 
 #include "kis_actions_editor.moc"

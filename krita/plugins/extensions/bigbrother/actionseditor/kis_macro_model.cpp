@@ -63,3 +63,17 @@ Qt::ItemFlags KisMacroModel::flags( const QModelIndex & index ) const
     Q_UNUSED(index);
     return Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable;
 }
+
+bool KisMacroModel::removeRows ( int row, int count, const QModelIndex & parent )
+{
+    beginRemoveRows(parent, row, row + count);
+    
+    QList<KisRecordedAction*> actions;
+    for(int i = row; i < row + count; ++i)
+    {
+        actions.push_back(m_macro->actions()[i]);
+    }
+    m_macro->removeActions(actions);
+    
+    endRemoveRows();
+}

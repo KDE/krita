@@ -41,6 +41,7 @@ class KisActionsEditor : public QWidget {
         void setMacro(KisMacro* );
     private slots:
         void slotActionActivated(const QModelIndex&);
+        void slotBtnDelete();
     private:
         void setCurrentAction(KisRecordedAction* _action);
     private:

@@ -42,6 +42,7 @@ class KisActionsEditor : public QWidget {
     private slots:
         void slotActionActivated(const QModelIndex&);
         void slotBtnDelete();
+        void slotBtnDuplicate();
     private:
         void setCurrentAction(KisRecordedAction* _action);
     private:

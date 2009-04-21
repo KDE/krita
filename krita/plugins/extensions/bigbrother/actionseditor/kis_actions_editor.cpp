@@ -36,13 +36,12 @@ KisActionsEditor::KisActionsEditor(QWidget* parent) : QWidget(parent), m_current
     m_form->bnDelete->setIcon(SmallIcon("list-remove"));
     connect(m_form->bnDelete, SIGNAL(released()), SLOT(slotBtnDelete()));
 
-    m_form->bnRaise->setEnabled(false);
     m_form->bnRaise->setIcon(SmallIcon("go-up"));
 
-    m_form->bnLower->setEnabled(false);
     m_form->bnLower->setIcon(SmallIcon("go-down"));
 
     m_form->bnDuplicate->setIcon(SmallIcon("edit-copy"));
+    connect(m_form->bnDuplicate, SIGNAL(released()), SLOT(slotBtnDuplicate()));
 
     // Setup actions list
     connect(m_form->actionsList, SIGNAL(clicked(const QModelIndex&)), SLOT(slotActionActivated(const QModelIndex&)));
@@ -94,10 +93,10 @@ void KisActionsEditor::setCurrentAction(KisRecordedAction* _action)
     m_widgetLayout->addWidget(m_currentEditor, 0 , 0);
     
     // Then disable/enalbed button
-        m_form->bnDuplicate->setEnabled(_action);
-        m_form->bnRaise->setEnabled(_action);
-        m_form->bnLower->setEnabled(_action);
-        m_form->bnDelete->setEnabled(_action);
+    m_form->bnDuplicate->setEnabled(_action);
+    m_form->bnRaise->setEnabled(_action);
+    m_form->bnLower->setEnabled(_action);
+    m_form->bnDelete->setEnabled(_action);
     if(_action)
     {
         int pos = m_macro->actions().indexOf(_action);
@@ -115,11 +114,16 @@ void KisActionsEditor::setCurrentAction(KisRecordedAction* _action)
 void KisActionsEditor::slotBtnDelete()
 {
     QModelIndex idx = m_form->actionsList->currentIndex();
-    if(idx.isValid())
-    {
-        m_model->removeRows(idx.row(), 1);
-        setCurrentAction(0);
-    }
+    Q_ASSERT(idx.isValid());
+    m_model->removeRows(idx.row(), 1);
+    setCurrentAction(0);
+}
+
+void KisActionsEditor::slotBtnDuplicate()
+{
+    QModelIndex idx = m_form->actionsList->currentIndex();
+    Q_ASSERT(idx.isValid());
+    m_model->duplicateAction(idx);
 }
 
 #include "kis_actions_editor.moc"

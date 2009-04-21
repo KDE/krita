@@ -78,3 +78,14 @@ bool KisMacroModel::removeRows ( int row, int count, const QModelIndex & parent 
     endRemoveRows();
     return true;
 }
+
+void KisMacroModel::duplicateAction( const QModelIndex& index )
+{
+    if( index.isValid() )
+    {
+        KisRecordedAction* action = m_macro->actions()[index.row()];
+        beginInsertRows(QModelIndex(), index.row(), index.row());
+        m_macro->addAction(*action, action);
+        endInsertRows();
+    }
+}

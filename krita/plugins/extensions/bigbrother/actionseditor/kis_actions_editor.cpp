@@ -79,6 +79,7 @@ void KisActionsEditor::slotActionActivated(const QModelIndex& item)
 
 void KisActionsEditor::setCurrentAction(KisRecordedAction* _action)
 {
+    // First change, the editor
     delete m_currentEditor;
     m_currentEditor = 0;
     if(_action) {
@@ -91,6 +92,24 @@ void KisActionsEditor::setCurrentAction(KisRecordedAction* _action)
         m_currentEditor = new QLabel(i18n("No editor for current action."), this);
     }
     m_widgetLayout->addWidget(m_currentEditor, 0 , 0);
+    
+    // Then disable/enalbed button
+        m_form->bnDuplicate->setEnabled(_action);
+        m_form->bnRaise->setEnabled(_action);
+        m_form->bnLower->setEnabled(_action);
+        m_form->bnDelete->setEnabled(_action);
+    if(_action)
+    {
+        int pos = m_macro->actions().indexOf(_action);
+        if( pos == 0 )
+        {
+            m_form->bnRaise->setEnabled(false);
+        }
+        if( pos == m_macro->actions().count() - 1 )
+        {
+            m_form->bnLower->setEnabled(false);
+        }
+    }
 }
 
 void KisActionsEditor::slotBtnDelete()

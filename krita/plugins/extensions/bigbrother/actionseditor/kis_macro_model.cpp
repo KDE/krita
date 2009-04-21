@@ -76,4 +76,5 @@ bool KisMacroModel::removeRows ( int row, int count, const QModelIndex & parent 
     m_macro->removeActions(actions);
     
     endRemoveRows();
+    return true;
 }

@@ -19,14 +19,19 @@
 #define _SHIVAPLUGIN_H_
 
 #include <kparts/plugin.h>
-#include "generator/kis_generator.h"
 
 class KisConfigWidget;
+
+namespace OpenShiva {
+    class SourcesCollection;
+}
 
 class ShivaPlugin : public KParts::Plugin {
 public:
     ShivaPlugin(QObject *parent, const QStringList &);
     virtual ~ShivaPlugin();
+private:
+    OpenShiva::SourcesCollection* m_sourceCollection;
 };
 
 #endif

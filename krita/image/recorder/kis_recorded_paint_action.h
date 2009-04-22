@@ -29,6 +29,9 @@ class KoCompositeOp;
 
 #include <krita_export.h>
 
+/**
+ * Base class for paint action.
+ */
 class KRITAIMAGE_EXPORT KisRecordedPaintAction : public KisRecordedAction
 {
 public:

@@ -23,6 +23,10 @@
 
 class KisRecordedAction;
 
+/**
+ * This class record actions and allow other \ref KisMacro to connect to it
+ * to get the action that are currently created.
+ */
 class KRITAIMAGE_EXPORT KisActionRecorder : public KisMacro
 {
 
@@ -37,7 +41,9 @@ public slots:
     void addAction(const KisRecordedAction& action);
 
 signals:
-
+    /**
+     * This signal is emited each time an action is added to this recorder.
+     */
     void addedAction(const KisRecordedAction& action);
 };
 

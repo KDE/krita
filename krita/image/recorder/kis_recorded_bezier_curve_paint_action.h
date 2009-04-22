@@ -30,6 +30,9 @@ class KoCompositeOp;
 
 #include <krita_export.h>
 
+/**
+ * This class will record the painting of a bezier curve.
+ */
 class KRITAIMAGE_EXPORT KisRecordedBezierCurvePaintAction : public KisRecordedPaintAction
 {
 

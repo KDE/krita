@@ -28,6 +28,10 @@
 
 class KisRecordedAction;
 
+/**
+ * This is the base class for macro in Krita. It's basically a list of recorded action,KisRecordedAction
+ * that can be stored as XML, played, and edited.
+ */
 class KRITAIMAGE_EXPORT KisMacro : public QObject, public KisSerializableConfiguration
 {
     Q_OBJECT
@@ -50,6 +54,9 @@ public:
      */
     void moveAction( const KisRecordedAction* action, const KisRecordedAction* before);
 public:
+    /**
+     * Play the macro on the image.
+     */
     void play();
 public: // serialization functions
 

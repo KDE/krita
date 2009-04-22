@@ -27,13 +27,22 @@ class KisUndoAdapter;
 #include <krita_export.h>
 #include <kis_types.h>
 
+/**
+ * This class represent an action.
+ */
 class KRITAIMAGE_EXPORT KisRecordedAction
 {
 public:
     KisRecordedAction(const QString& name, const QString& id);
     KisRecordedAction(const KisRecordedAction&);
     virtual ~KisRecordedAction();
+    /**
+     * Play the action.
+     */
     virtual void play(KisUndoAdapter* adapter = 0) const = 0;
+    /**
+     * Clone this action.
+     */
     virtual KisRecordedAction* clone() const = 0;
     virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
 public:
@@ -45,12 +54,18 @@ public:
      */
     virtual QWidget* createEditor(QWidget* parent);
 protected:
+    /**
+     * This function create a string representing the path of a layer.
+     */
     static QString nodeToIndexPath(KisNodeSP node);
 private:
     struct Private;
     Private* const d;
 };
 
+/**
+ * This class is used to create recorded action.
+ */
 class KRITAIMAGE_EXPORT KisRecordedActionFactory
 {
 public:
@@ -60,6 +75,9 @@ public:
     QString id() const;
     QString name() const;
 protected:
+    /**
+     * This function return a pointer to the node corresponding to the path.
+     */
     static KisNodeSP indexPathToNode(KisImageSP img, const QString &);
 private:
     struct Private;

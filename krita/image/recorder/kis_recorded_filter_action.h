@@ -27,6 +27,9 @@ class QString;
 class KisFilterConfiguration;
 class QRect;
 
+/**
+ * Action representing a filter.
+ */
 class KRITAIMAGE_EXPORT KisRecordedFilterAction : public KisRecordedAction
 {
 public:

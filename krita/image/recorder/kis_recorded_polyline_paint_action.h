@@ -31,6 +31,9 @@ class KoCompositeOp;
 
 #include <krita_export.h>
 
+/**
+ * This class will record the painting of a polyline.
+ */
 class KRITAIMAGE_EXPORT KisRecordedPolyLinePaintAction : public KisRecordedPaintAction
 {
 

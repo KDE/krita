@@ -150,6 +150,12 @@ private:
     /// selects guide line at given position
     void selectGuideAtPosition( const QPointF &position );
 
+    /// Returns list of editable shapes from the given list of shapes
+    QList<KoShape*> filterEditableShapes( const QList<KoShape*> &shapes );
+
+    /// Returns the number of editable shapes from the given list of shapes
+    uint editableShapesCount( const QList<KoShape*> &shapes );
+
     KoFlake::SelectionHandle m_lastHandle;
     KoFlake::Position m_hotPosition;
     bool m_mouseWasInsideHandles;

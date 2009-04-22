@@ -369,14 +369,7 @@ void DefaultTool::updateCursor()
     QString statusText;
 
     if (koSelection()->count() > 0) { // has a selection
-        bool editable=false;
-        // check if we have at least one shape that is edtiable
-        foreach(KoShape *shape, koSelection()->selectedShapes(KoFlake::StrippedSelection)) {
-            if (shape->isEditable()) {
-                editable = true;
-                break;
-            }
-        }
+        bool editable=editableShapesCount(koSelection()->selectedShapes(KoFlake::StrippedSelection));
 
         if (!m_mouseWasInsideHandles) {
             m_angle = rotationOfHandle(m_lastHandle, true);
@@ -934,38 +927,31 @@ void DefaultTool::activate(bool temporary)
 
 void DefaultTool::selectionAlignHorizontalLeft()
 {
-
     selectionAlign(KoShapeAlignCommand::HorizontalLeftAlignment);
 }
 
 void DefaultTool::selectionAlignHorizontalCenter()
 {
-
     selectionAlign(KoShapeAlignCommand::HorizontalCenterAlignment);
 }
 
-
 void DefaultTool::selectionAlignHorizontalRight()
 {
-
     selectionAlign(KoShapeAlignCommand::HorizontalRightAlignment);
 }
 
 void DefaultTool::selectionAlignVerticalTop()
 {
-
     selectionAlign(KoShapeAlignCommand::VerticalTopAlignment);
 }
 
 void DefaultTool::selectionAlignVerticalCenter()
 {
-
     selectionAlign(KoShapeAlignCommand::VerticalCenterAlignment);
 }
 
 void DefaultTool::selectionAlignVerticalBottom()
 {
-
     selectionAlign(KoShapeAlignCommand::VerticalBottomAlignment);
 }
 
@@ -980,7 +966,7 @@ void DefaultTool::selectionGroup()
 
     // only group shapes with an unselected parent
     foreach (KoShape* shape, selectedShapes) {
-        if (! selectedShapes.contains(shape->parent())) {
+        if (! selectedShapes.contains(shape->parent()) && shape->isEditable()) {
             groupedShapes << shape;
         }
     }
@@ -1007,7 +993,7 @@ void DefaultTool::selectionUngroup()
 
     // only ungroup shape groups with an unselected parent
     foreach (KoShape* shape, selectedShapes) {
-        if (!selectedShapes.contains(shape->parent())) {
+        if (!selectedShapes.contains(shape->parent()) && shape->isEditable()) {
             containerSet << shape;
         }
     }
@@ -1038,18 +1024,25 @@ void DefaultTool::selectionAlign(KoShapeAlignCommand::Align align)
     if (selectedShapes.count() < 1)
         return;
 
+    QList<KoShape*> editableShapes = filterEditableShapes(selectedShapes);
+
     // TODO add an option to the widget so that one can align to the page
     // with multiple selected shapes too
 
     QRectF bb;
 
     // single selected shape is automatically aligned to document rect
-    if (selectedShapes.count() == 1 && m_canvas->resourceProvider()->hasResource(KoCanvasResource::PageSize))
+    if (editableShapes.count() == 1 ) {
+        if (!m_canvas->resourceProvider()->hasResource(KoCanvasResource::PageSize))
+            return;
         bb = QRectF(QPointF(0,0), m_canvas->resourceProvider()->sizeResource(KoCanvasResource::PageSize));
-    else
-        bb = selection->boundingRect();
+    } else {
+        foreach( KoShape * shape, editableShapes ) {
+            bb |= shape->boundingRect();
+        }
+    }
 
-    KoShapeAlignCommand *cmd = new KoShapeAlignCommand(selectedShapes, align, bb);
+    KoShapeAlignCommand *cmd = new KoShapeAlignCommand(editableShapes, align, bb);
 
     m_canvas->addCommand(cmd);
     selection->updateSizeAndPosition();
@@ -1085,7 +1078,11 @@ void DefaultTool::selectionReorder(KoShapeReorderCommand::MoveShapeType order)
     if (selectedShapes.count() < 1)
         return;
 
-    QUndoCommand * cmd = KoShapeReorderCommand::createCommand(selectedShapes, m_canvas->shapeManager(), order);
+    QList<KoShape*> editableShapes = filterEditableShapes(selectedShapes);
+    if (editableShapes.count() < 1)
+        return;
+
+    QUndoCommand * cmd = KoShapeReorderCommand::createCommand(editableShapes, m_canvas->shapeManager(), order);
     m_canvas->addCommand(cmd);
 }
 
@@ -1114,15 +1111,10 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
 
     KoShapeManager *shapeManager = m_canvas->shapeManager();
     KoSelection *select = shapeManager->selection();
-    bool insideSelection, editableShape=false;
+    bool insideSelection;
     KoFlake::SelectionHandle handle = handleAt(event->point, &insideSelection);
 
-    foreach (KoShape* shape, select->selectedShapes()) {
-        if (shape->isEditable()) {
-            editableShape = true;
-            break;
-        }
-    }
+    bool editableShape = editableShapesCount(select->selectedShapes());
 
     if (event->buttons() & Qt::MidButton) {
         // change the hot selection position when middle clicking on a handle
@@ -1235,12 +1227,13 @@ void DefaultTool::updateActions()
         return;
     }
 
-    bool enable = selection->count () > 0;
+    QList<KoShape*> editableShapes = filterEditableShapes(selection->selectedShapes(KoFlake::TopLevelSelection));
+    bool enable = editableShapes.count () > 0;
     action("object_order_front")->setEnabled(enable);
     action("object_order_raise")->setEnabled(enable);
     action("object_order_lower")->setEnabled(enable);
     action("object_order_back")->setEnabled(enable);
-    enable = selection->count() > 1 || (enable && m_canvas->resourceProvider()->hasResource(KoCanvasResource::PageSize));
+    enable = (editableShapes.count () > 1) || (enable && m_canvas->resourceProvider()->hasResource(KoCanvasResource::PageSize));
     action("object_align_horizontal_left")->setEnabled(enable);
     action("object_align_horizontal_center")->setEnabled(enable);
     action("object_align_horizontal_right")->setEnabled(enable);
@@ -1248,10 +1241,9 @@ void DefaultTool::updateActions()
     action("object_align_vertical_center")->setEnabled(enable);
     action("object_align_vertical_bottom")->setEnabled(enable);
 
-    QList<KoShape *> shapes = selection->selectedShapes(KoFlake::TopLevelSelection);
-    action("object_group")->setEnabled(shapes.count() > 1);
+    action("object_group")->setEnabled(editableShapes.count() > 1);
     bool groupShape = false;
-    foreach (KoShape * shape, shapes) {
+    foreach (KoShape * shape, editableShapes) {
         if (dynamic_cast<KoShapeGroup *>(shape)) {
             groupShape = true;
             break;
@@ -1265,6 +1257,28 @@ void DefaultTool::updateActions()
 KoToolSelection* DefaultTool::selection()
 {
     return m_selectionHandler;
+}
+
+QList<KoShape*> DefaultTool::filterEditableShapes( const QList<KoShape*> &shapes )
+{
+    QList<KoShape*> editableShapes;
+    foreach( KoShape * shape, shapes ) {
+        if (shape->isEditable())
+            editableShapes.append(shape);
+    }
+
+    return editableShapes;
+}
+
+uint DefaultTool::editableShapesCount( const QList<KoShape*> &shapes )
+{
+    uint count = 0;
+    foreach( KoShape * shape, shapes ) {
+        if (shape->isEditable())
+            count++;
+    }
+
+    return count;
 }
 
 #include "DefaultTool.moc"

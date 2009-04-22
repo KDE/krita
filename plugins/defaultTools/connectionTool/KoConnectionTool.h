@@ -68,10 +68,20 @@ public:
      * @param p2 The second point
      */
     float distanceSquare( QPointF p1, QPointF p2 );
+    /**
+     * @brief Return true if the two float are approximativly equal, false else
+     *
+     * @param x The first float
+     * @param y The second float
+     */
+    bool approx( float x, float y );
     
 private:
     KoShape * m_firstShape;
     KoShape * m_shapeOn;
+    QPointF m_mouse;
+    QPointF * m_pointSelected;
+    
 };
 
 #endif

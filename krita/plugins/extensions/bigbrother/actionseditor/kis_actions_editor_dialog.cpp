@@ -20,10 +20,15 @@
 #include "kis_actions_editor_dialog.h"
 #include "kis_actions_editor.h"
 
+#include <klocale.h>
+
 KisActionsEditorDialog::KisActionsEditorDialog(QWidget* parent) : KDialog(parent),
     m_actionsEditor(new KisActionsEditor(this))
 {
     setMainWidget(m_actionsEditor);
+    setButtons( Cancel | Ok );
+    setButtonText( Ok, i18n("Save macro") );
+    setButtonText( Cancel, i18n("Discard changes") );
 }
 
 KisActionsEditorDialog::~KisActionsEditorDialog()

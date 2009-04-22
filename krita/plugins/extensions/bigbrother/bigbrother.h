@@ -23,6 +23,7 @@
 class QAction;
 class KisMacro;
 class KisView2;
+class KUrl;
 
 /**
  * Template of view plugin
@@ -43,8 +44,8 @@ private slots:
     void slotStopRecordingMacro();
 
 private:
-    void saveMacro(const KisMacro* macro);
-    KisMacro* openMacro();
+    void saveMacro(const KisMacro* macro, const KUrl& url);
+    KisMacro* openMacro(KUrl* url = 0);
 private:
 
     KisView2 * m_view;

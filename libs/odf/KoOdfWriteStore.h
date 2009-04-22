@@ -85,11 +85,6 @@ public:
     KoXmlWriter* bodyWriter();
 
     /**
-     * Open another KoXmlWriter for writing out the contents
-     * into a temporary file, to collect changes while doing that.
-     */
-    KoXmlWriter* changeWriter();
-    /**
      * This will copy the body into the content writer,
      * delete the bodyWriter and the contentWriter, and then
      * close contents.xml.

@@ -36,11 +36,9 @@ struct KoOdfWriteStore::Private {
             : store(store)
             , storeDevice(0)
             , contentWriter(0)
-            , changeWriter(0)
             , bodyWriter(0)
             , manifestWriter(0)
-            , contentTmpFile(0)
-            , changeTmpFile(0) {}
+            , contentTmpFile(0) {}
 
 
     ~Private() {
@@ -52,25 +50,17 @@ struct KoOdfWriteStore::Private {
         delete bodyWriter;
         Q_ASSERT(!storeDevice);
         delete storeDevice;
-        Q_ASSERT(!contentTmpFile);
-        delete contentTmpFile;
         Q_ASSERT(!manifestWriter);
         delete manifestWriter;
-        Q_ASSERT(!changeWriter);
-        delete changeWriter;
     }
 
     KoStore * store;
     KoStoreDevice * storeDevice;
     KoXmlWriter * contentWriter;
 
-    KoXmlWriter * changeWriter;
-
     KoXmlWriter * bodyWriter;
     KoXmlWriter * manifestWriter;
     KTemporaryFile * contentTmpFile;
-
-    KTemporaryFile * changeTmpFile;
 };
 
 KoOdfWriteStore::KoOdfWriteStore(KoStore* store)
@@ -151,37 +141,9 @@ KoXmlWriter* KoOdfWriteStore::bodyWriter()
     return d->bodyWriter;
 }
 
-KoXmlWriter* KoOdfWriteStore::changeWriter()
-{
-    if (!d->changeWriter) {
-        Q_ASSERT(!d->changeTmpFile);
-        d->changeTmpFile = new KTemporaryFile;
-        d->changeTmpFile->open();
-        d->changeWriter = new KoXmlWriter(d->changeTmpFile, 1);
-    }
-    return d->changeWriter;
-}
-
 bool KoOdfWriteStore::closeContentWriter()
 {
     Q_ASSERT(d->contentWriter);
-
-#ifdef CHANGETRK
-    //copy over the content of the change tmp file
-    if ( d->changeTmpFile ) {
-        // FIXME I'm not sure that belongs in here maybe this should use the changeWriter and not the contentWriter
-        d->contentWriter->startElement("office:body");
-        d->contentWriter->startElement("office:text");
-
-        delete d->changeWriter; d->changeWriter = 0;
-
-        d->changeTmpFile->close();
-        d->contentWriter->addCompleteElement(d->changeTmpFile);
-        d->changeTmpFile->close();
-        delete d->changeTmpFile; d->changeTmpFile = 0;
-    }
-#endif
-
     Q_ASSERT(d->bodyWriter);
     Q_ASSERT(d->contentTmpFile);
 
@@ -192,11 +154,6 @@ bool KoOdfWriteStore::closeContentWriter()
     d->contentWriter->addCompleteElement(d->contentTmpFile);
     d->contentTmpFile->close();
     delete d->contentTmpFile; d->contentTmpFile = 0;
-
-#ifdef CHANGETRK
-    d->contentWriter->endElement(); // office-body
-    d->contentWriter->endElement(); //office-text
-#endif
 
     d->contentWriter->endElement(); // document-content
     d->contentWriter->endDocument();

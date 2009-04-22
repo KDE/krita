@@ -69,7 +69,7 @@ bool KoTextOdfSaveHelper::writeBody()
 
 KoShapeSavingContext * KoTextOdfSaveHelper::context(KoXmlWriter * bodyWriter, KoGenStyles & mainStyles, KoEmbeddedDocumentSaver & embeddedSaver)
 {
-    Q_ASSERT(d->context == 0);
+//    Q_ASSERT(d->context == 0);
 
     KoGenChanges changes;
     d->context = new KoShapeSavingContext(*bodyWriter, mainStyles, embeddedSaver);

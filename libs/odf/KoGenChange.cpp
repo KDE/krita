@@ -72,7 +72,7 @@ void KoGenChange::writeChange(KoXmlWriter* writer, const QString& name) const
 {
   writer->startElement("text:changed-region");
   writer->addAttribute("text:id", name);
-    
+
   const char* elementName;
   switch (m_type) {
     case KoGenChange::deleteChange:

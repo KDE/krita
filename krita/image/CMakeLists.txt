@@ -169,6 +169,7 @@ set(kritaimage_LIB_SRCS
    recorder/kis_recorded_filter_action.cpp
    recorder/kis_recorded_paint_action.cpp
    recorder/kis_recorded_polyline_paint_action.cpp
+   recorder/kis_node_query_path.cc
 )
 
 

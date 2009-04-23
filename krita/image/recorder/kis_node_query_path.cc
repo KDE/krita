@@ -177,3 +177,19 @@ KisNodeQueryPath KisNodeQueryPath::fromString(const QString& _path)
     path.d->simplifyPath();
     return path;
 }
+
+KisNodeQueryPath KisNodeQueryPath::absolutePath(KisNodeSP node)
+{
+    KisNodeQueryPath path;
+    KisNodeSP parent = 0;
+    while ((parent = node->parent())) {
+        int index = parent->index(node);
+        if (index >= 0) {
+            path.d->elements.push_front( index );
+        }
+        node = parent;
+    }
+    return path;
+}
+
+

@@ -47,6 +47,7 @@ public:
      * @see toString for an explanation of the string format
      */
     static KisNodeQueryPath fromString(const QString& path);
+    static KisNodeQueryPath absolutePath(KisNodeSP node);
 private:
     struct Private;
     Private* const d;

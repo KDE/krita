@@ -97,6 +97,11 @@ void KisBrushServer::brushThreadDone()
 {
     delete brushThread;
     brushThread = 0;
+
+    QList<KisBrush*> brushPointers = m_brushServer->resources();
+    foreach(KisBrush* brush, brushPointers) {
+        m_brushes << brush;
+    }
 }
 
 #include "kis_brush_server.moc"

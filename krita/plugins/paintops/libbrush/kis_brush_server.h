@@ -25,9 +25,9 @@
 #include <KoResourceServer.h>
 
 #include "krita_export.h"
+#include "kis_brush.h"
 
 class KoResource;
-class KisBrush;
 
 /**
  *
@@ -61,6 +61,7 @@ private slots:
 private:
 
     QThread * brushThread;
+    QList<KisBrushSP> m_brushes; // to avoid the brushes being deleted.
 
 };
 

@@ -151,11 +151,7 @@ install( FILES
     KoDocumentInfoDlg.h 
     KoFactory.h 
     KoChild.h 
-    KoPictureKey.h 
-    KoPicture.h 
-    KoPictureCollection.h 
     kofficeversion.h 
-    KoOdfGraphicStyles.h 
     KoPageFormat.h 
     KoPageLayout.h 
     KoVersionDialog.h 

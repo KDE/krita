@@ -394,12 +394,15 @@ void ArtisticTextShape::setTextAnchor( TextAnchor anchor )
     else if( m_textAnchor == AnchorEnd )
         newOffset = -length;
 
-    QMatrix m;
-    m.translate( newOffset-oldOffset, 0.0 );
 
     update();
     updateSizeAndPosition();
-    setTransformation( transformation() * m );
+    if( ! isOnPath() )
+    {
+        QMatrix m;
+        m.translate( newOffset-oldOffset, 0.0 );
+        setTransformation( transformation() * m );
+    }
     update();
 }
 

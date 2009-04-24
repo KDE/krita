@@ -39,7 +39,7 @@ class KRITAIMAGE_EXPORT KisRecordedBezierCurvePaintAction : public KisRecordedPa
 public:
 
     KisRecordedBezierCurvePaintAction(const QString & name,
-                                      KisNodeSP node,
+                                      const KisNodeQueryPath& path,
                                       const KisPaintOpPresetSP paintOpPreset,
                                       KoColor foregroundColor,
                                       KoColor backgroundColor,
@@ -62,7 +62,7 @@ public:
 
 protected:
 
-    virtual void playPaint(KisPainter* painter) const;
+    virtual void playPaint(const KisPlayInfo& info, KisPainter* painter) const;
 
 private:
 
@@ -76,7 +76,7 @@ class KisRecordedBezierCurvePaintActionFactory : public KisRecordedPaintActionFa
 public:
     KisRecordedBezierCurvePaintActionFactory();
     virtual ~KisRecordedBezierCurvePaintActionFactory();
-    virtual KisRecordedAction* fromXML(KisImageSP img, const QDomElement& elt);
+    virtual KisRecordedAction* fromXML(const QDomElement& elt);
 };
 
 

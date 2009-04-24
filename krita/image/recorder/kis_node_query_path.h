@@ -20,17 +20,19 @@
 #define _KIS_NODE_QUERY_PATH_H_
 
 #include <kis_types.h>
+#include <krita_export.h>
 
 /**
  * This class represent a path to access a node starting from an other node.
  */
-class KisNodeQueryPath {
+class KRITAIMAGE_EXPORT KisNodeQueryPath {
     KisNodeQueryPath();
 public:
     ~KisNodeQueryPath();
     KisNodeQueryPath(const KisNodeQueryPath& );
     KisNodeQueryPath& operator=(const KisNodeQueryPath& );
-    QList<KisNodeSP> queryNodes(KisNodeSP);
+    QList<KisNodeSP> queryNodes(KisImageSP image, KisNodeSP currentNode) const;
+    bool isRelative() const;
     /**
      * This function return a string representing this path. Which is a list seperated by '\' of:
      * - '*': represents all layers
@@ -39,6 +41,7 @@ public:
      *
      * For instance: "1/*" return all children of the first layer, "../3" return the third layer of the parent
      * of the current layer
+     * If the string start with "/" then it's an aboslute path, otherwise it's a relative path.
      */
     QString toString() const;
     /**

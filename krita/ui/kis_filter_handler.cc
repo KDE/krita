@@ -47,6 +47,7 @@
 #include "filter/kis_filter_job.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_system_locker.h"
+#include <recorder/kis_node_query_path.h>
 
 struct KisFilterHandler::Private {
 
@@ -189,7 +190,7 @@ void KisFilterHandler::apply(KisNodeSP layer, KisFilterConfiguration* config)
         m_d->lastConfiguration = config;
         m_d->manager->setLastFilterHandler(this);
 
-        m_d->view->image()->actionRecorder()->addAction(KisRecordedFilterAction(filter->name(), layer, filter, config));
+        m_d->view->image()->actionRecorder()->addAction(KisRecordedFilterAction(filter->name(), KisNodeQueryPath::absolutePath(layer), filter, config));
     }
     QApplication::restoreOverrideCursor();
 }

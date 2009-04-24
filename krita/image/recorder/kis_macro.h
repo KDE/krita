@@ -26,6 +26,7 @@
 #include "kis_serializable_configuration.h"
 #include "kis_types.h"
 
+class KisPlayInfo;
 class KisRecordedAction;
 
 /**
@@ -36,8 +37,8 @@ class KRITAIMAGE_EXPORT KisMacro : public QObject, public KisSerializableConfigu
 {
     Q_OBJECT
 public:
-    KisMacro(KisImageSP _image);
-    KisMacro(KisImageSP _image, const QList<KisRecordedAction*>& _actions);
+    KisMacro();
+    KisMacro( const QList<KisRecordedAction*>& _actions);
     ~KisMacro();
 public:
     /**
@@ -57,7 +58,7 @@ public:
     /**
      * Play the macro on the image.
      */
-    void play();
+    void play(const KisPlayInfo&) const;
 public: // serialization functions
 
     using KisSerializableConfiguration::fromXML;

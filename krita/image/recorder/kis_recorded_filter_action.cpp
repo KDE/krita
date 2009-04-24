@@ -32,17 +32,17 @@
 #include "kis_undo_adapter.h"
 #include "kis_selection_mask.h"
 #include "kis_config_widget.h"
+#include "kis_node_query_path.h"
+#include "kis_play_info.h"
 
 struct KisRecordedFilterAction::Private {
-    KisNodeSP node;
     const KisFilter* filter;
     QString config;
     QRect rect;
 };
 
-KisRecordedFilterAction::KisRecordedFilterAction(QString name, KisNodeSP node, const KisFilter* filter, KisFilterConfiguration* fc) : KisRecordedAction(name, "FilterAction"), d(new Private)
+KisRecordedFilterAction::KisRecordedFilterAction(QString name, const KisNodeQueryPath& path, const KisFilter* filter, KisFilterConfiguration* fc) : KisRecordedAction("FilterAction", name, path), d(new Private)
 {
-    d->node = node;
     d->filter = filter;
     if (fc) {
         d->config = fc->toXML();
@@ -57,22 +57,22 @@ KisRecordedFilterAction::~KisRecordedFilterAction()
 {
 }
 
-void KisRecordedFilterAction::play(KisUndoAdapter* adapter) const
+void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& info) const
 {
 
     KisFilterConfiguration * kfc = d->filter->defaultConfiguration(0);
     if (kfc) {
         kfc->fromXML(d->config);
     }
-    KisPaintDeviceSP dev = d->node->paintDevice();
+    KisPaintDeviceSP dev = nodeQueryPath().queryNodes(info.image(), info.currentNode())[0]->paintDevice(); // TODO: not good should take the full list into consideration
     KisTransaction * cmd = 0;
-    if (adapter) cmd = new KisTransaction(d->filter->name(), dev);
+    if ( info.undoAdapter()) cmd = new KisTransaction(d->filter->name(), dev);
 
     QRect r1 = dev->extent();
 
     // Ugly hack to get at the image without bloating the node interface
     KisImageSP image;
-    KisNodeSP parent = d->node;
+    KisNodeSP parent = nodeQueryPath().queryNodes(info.image(), info.currentNode())[0];
     while (image == 0 && parent->parent()) {
         // XXX: ugly!
         KisLayerSP layer = dynamic_cast<KisLayer*>(parent.data());
@@ -89,17 +89,16 @@ void KisRecordedFilterAction::play(KisUndoAdapter* adapter) const
     }
 
     d->filter->process(dev, r1, kfc);
-    d->node->setDirty(r1);
-    if (adapter) adapter->addCommand(cmd);
+    nodeQueryPath().queryNodes(info.image(), info.currentNode())[0]->setDirty(r1);
+    if (info.undoAdapter()) info.undoAdapter()->addCommand(cmd);
 }
 
 void KisRecordedFilterAction::toXML(QDomDocument& doc, QDomElement& elt) const
 {
     KisRecordedAction::toXML(doc, elt);
-    elt.setAttribute("node", KisRecordedAction::nodeToIndexPath(d->node));
     elt.setAttribute("filter", d->filter->id());
     // Save configuration
-    KisFilterConfiguration * kfc = d->filter->defaultConfiguration(d->node->paintDevice());
+    KisFilterConfiguration * kfc = d->filter->defaultConfiguration(0);
     if (kfc) {
         kfc->fromXML(d->config);
         QDomElement filterConfigElt = doc.createElement("Params");
@@ -116,7 +115,7 @@ KisRecordedAction* KisRecordedFilterAction::clone() const
 QWidget* KisRecordedFilterAction::createEditor(QWidget* parent)
 {
     // TODO make a proxy QObject to update the action
-    KisConfigWidget* widget = d->filter->createConfigurationWidget(parent, d->node->paintDevice(), 0 );
+    KisConfigWidget* widget = d->filter->createConfigurationWidget(parent, 0, 0 );
     KisFilterConfiguration * kfc = d->filter->defaultConfiguration(0);
     if (kfc) {
         kfc->fromXML(d->config);
@@ -135,18 +134,18 @@ KisRecordedFilterActionFactory::~KisRecordedFilterActionFactory()
 
 }
 
-KisRecordedAction* KisRecordedFilterActionFactory::fromXML(KisImageSP img, const QDomElement& elt)
+KisRecordedAction* KisRecordedFilterActionFactory::fromXML( const QDomElement& elt)
 {
     QString name = elt.attribute("name");
-    KisNodeSP node = KisRecordedActionFactory::indexPathToNode(img, elt.attribute("node"));
+    KisNodeQueryPath pathnode = KisNodeQueryPath::fromString(elt.attribute("path"));
     const KisFilterSP filter = KisFilterRegistry::instance()->get(elt.attribute("filter"));
     if (filter) {
-        KisFilterConfiguration* config = filter->defaultConfiguration(node->paintDevice());
+        KisFilterConfiguration* config = filter->defaultConfiguration(0);
         QDomElement paramsElt = elt.firstChildElement("Params");
         if (config && !paramsElt.isNull()) {
             config->fromXML(paramsElt);
         }
-        KisRecordedFilterAction* rfa = new KisRecordedFilterAction(name, node, filter, config);
+        KisRecordedFilterAction* rfa = new KisRecordedFilterAction(name, pathnode, filter, config);
         delete config;
         return rfa;
     } else {

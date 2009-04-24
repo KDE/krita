@@ -20,6 +20,7 @@
 
 #include <QStringList>
 #include <kis_node.h>
+#include <kis_image.h>
 
 struct PathElement {
     enum Type {
@@ -35,6 +36,7 @@ struct PathElement {
 
 struct KisNodeQueryPath::Private {
     QList<PathElement> elements;
+    bool relative;
     /// This function will remove uneeded call to parent, for instance, "1/../3/../5" => "5"
     void simplifyPath()
     {
@@ -127,8 +129,22 @@ KisNodeQueryPath& KisNodeQueryPath::operator=(const KisNodeQueryPath& nqp)
     *d = *nqp.d;
 }
 
-QList<KisNodeSP> KisNodeQueryPath::queryNodes(KisNodeSP _node)
+bool KisNodeQueryPath::isRelative() const
 {
+    return d->relative;
+}
+
+
+QList<KisNodeSP> KisNodeQueryPath::queryNodes(KisImageSP image, KisNodeSP currentNode) const
+{
+    KisNodeSP _node;
+    if( d->relative )
+    {
+        _node = currentNode;
+    } else {
+        _node = image->root();
+    }
+    
     QList<KisNodeSP> result;
     
     d->queryLevel( 0, _node, result);
@@ -161,6 +177,7 @@ QString KisNodeQueryPath::toString() const
 KisNodeQueryPath KisNodeQueryPath::fromString(const QString& _path)
 {
     KisNodeQueryPath path;
+    path.d->relative = !( _path.at(0) == '\\');
     QStringList indexes = _path.split("\\");
     foreach(const QString& index, indexes)
     {
@@ -181,6 +198,7 @@ KisNodeQueryPath KisNodeQueryPath::fromString(const QString& _path)
 KisNodeQueryPath KisNodeQueryPath::absolutePath(KisNodeSP node)
 {
     KisNodeQueryPath path;
+    path.d->relative = false;
     KisNodeSP parent = 0;
     while ((parent = node->parent())) {
         int index = parent->index(node);

@@ -23,6 +23,8 @@ class QDomDocument;
 class QDomElement;
 class QString;
 class KisUndoAdapter;
+class KisNodeQueryPath;
+class KisPlayInfo;
 
 #include <krita_export.h>
 #include <kis_types.h>
@@ -33,13 +35,13 @@ class KisUndoAdapter;
 class KRITAIMAGE_EXPORT KisRecordedAction
 {
 public:
-    KisRecordedAction(const QString& name, const QString& id);
+    KisRecordedAction(const QString& id, const QString& name, const KisNodeQueryPath& path);
     KisRecordedAction(const KisRecordedAction&);
     virtual ~KisRecordedAction();
     /**
      * Play the action.
      */
-    virtual void play(KisUndoAdapter* adapter = 0) const = 0;
+    virtual void play(KisNodeSP node, const KisPlayInfo&) const = 0;
     /**
      * Clone this action.
      */
@@ -53,11 +55,7 @@ public:
      * @return a widget that allow to edit this action, or 0 if this action is not editable
      */
     virtual QWidget* createEditor(QWidget* parent);
-protected:
-    /**
-     * This function create a string representing the path of a layer.
-     */
-    static QString nodeToIndexPath(KisNodeSP node);
+    const KisNodeQueryPath& nodeQueryPath() const;
 private:
     struct Private;
     Private* const d;
@@ -71,14 +69,9 @@ class KRITAIMAGE_EXPORT KisRecordedActionFactory
 public:
     KisRecordedActionFactory(QString id);
     virtual ~KisRecordedActionFactory();
-    virtual KisRecordedAction* fromXML(KisImageSP img, const QDomElement& elt) = 0;
+    virtual KisRecordedAction* fromXML(const QDomElement& elt) = 0;
     QString id() const;
     QString name() const;
-protected:
-    /**
-     * This function return a pointer to the node corresponding to the path.
-     */
-    static KisNodeSP indexPathToNode(KisImageSP img, const QString &);
 private:
     struct Private;
     Private* const d;

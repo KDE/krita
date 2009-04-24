@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,25 +16,24 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "recorder/kis_action_recorder.h"
+#ifndef _KIS_PLAY_INFO_H_
+#define _KIS_PLAY_INFO_H_
 
-#include "kis_image.h"
-#include "recorder/kis_recorded_action.h"
+#include <kis_types.h>
+#include <krita_export.h>
 
-KisActionRecorder::KisActionRecorder()
-        : KisMacro()
-{
+class KisUndoAdapter;
 
-}
+class KRITAIMAGE_EXPORT KisPlayInfo {
+    public:
+        KisPlayInfo(KisImageSP image, KisNodeSP currentNodes);
+        ~KisPlayInfo();
+        KisUndoAdapter* undoAdapter() const;
+        KisImageSP image() const;
+        KisNodeSP currentNode() const;
+    private:
+        struct Private;
+        Private* const d;
+};
 
-KisActionRecorder::~KisActionRecorder()
-{
-}
-
-void KisActionRecorder::addAction(const KisRecordedAction& action)
-{
-    KisMacro::addAction(action);
-    emit(addedAction(action));
-}
-
-#include "kis_action_recorder.moc"
+#endif

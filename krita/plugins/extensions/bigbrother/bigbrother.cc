@@ -32,6 +32,7 @@
 #include <kis_debug.h>
 #include <kis_global.h>
 #include <kis_image.h>
+#include <recorder/kis_play_info.h>
 #include <recorder/kis_recorded_action.h>
 #include <recorder/kis_recorded_action_factory_registry.h>
 #include <kis_types.h>
@@ -95,7 +96,7 @@ void BigBrotherPlugin::slotOpenPlay()
     KisMacro* m = openMacro();
     if(!m) return;
     dbgPlugins << "Play the macro";
-    m->play();
+    m->play(KisPlayInfo(m_view->image(), m_view->activeNode()));
     dbgPlugins << "Finished";
     delete m;
 }
@@ -127,7 +128,7 @@ void BigBrotherPlugin::slotStartRecordingMacro()
     m_stopRecordingMacroAction->setEnabled(true);
 
     // Create recorder
-    m_recorder = new KisMacro(m_view->image());
+    m_recorder = new KisMacro();
     connect(m_view->image()->actionRecorder(), SIGNAL(addedAction(const KisRecordedAction&)), m_recorder, SLOT(addAction(const KisRecordedAction&)));
 }
 
@@ -165,7 +166,7 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
             QDomElement docElem = doc.documentElement();
             if (!docElem.isNull() && docElem.tagName() == "RecordedActions") {
                 dbgPlugins << "Load the macro";
-                KisMacro* m = new KisMacro(m_view->image());
+                KisMacro* m = new KisMacro();
                 m->fromXML(docElem);
                 return m;
             } else {

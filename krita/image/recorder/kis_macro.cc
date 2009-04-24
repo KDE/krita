@@ -26,20 +26,19 @@
 #include "recorder/kis_recorded_action.h"
 #include "recorder/kis_recorded_action_factory_registry.h"
 #include "kis_undo_adapter.h"
+#include "kis_play_info.h"
+#include "kis_node_query_path.h"
 
 struct KisMacro::Private {
     QList<KisRecordedAction*> actions;
-    KisImageSP image;
 };
 
-KisMacro::KisMacro(KisImageSP _image) : d(new Private)
+KisMacro::KisMacro() : d(new Private)
 {
-    d->image = _image;
 }
 
-KisMacro::KisMacro(KisImageSP _image, const QList<KisRecordedAction*>& actions) : d(new Private)
+KisMacro::KisMacro(const QList<KisRecordedAction*>& actions) : d(new Private)
 {
-    d->image = _image;
     appendActions(actions);
 }
 
@@ -86,27 +85,31 @@ void KisMacro::moveAction( const KisRecordedAction* action, const KisRecordedAct
     }
 }
 
+// TODO should be threaded instead
 #include <QApplication>
 
-void KisMacro::play()
+void KisMacro::play(const KisPlayInfo& info) const
 {
     dbgImage << "Start playing macro with " << d->actions.size() << " actions";
-    KisUndoAdapter* undoAdapter = 0;
-    if (d->image->undo()) {
-        undoAdapter = d->image->undoAdapter();
-        undoAdapter->beginMacro(i18n("Play macro"));
+    if ( info.undoAdapter() ) {
+        info.undoAdapter() ->beginMacro(i18n("Play macro"));
     }
+
 
     for (QList<KisRecordedAction*>::iterator it = d->actions.begin(); it != d->actions.end(); ++it) {
         if ( *it ) {
-            dbgImage << "Play action : " << (*it)->name();
-            (*it)->play(undoAdapter);
+            QList<KisNodeSP> nodes = (*it)->nodeQueryPath().queryNodes(info.image(), info.currentNode());
+            foreach(KisNodeSP node, nodes)
+            {
+                dbgImage << "Play action : " << (*it)->name();
+                (*it)->play(node, info);
+            }
         }
         QApplication::processEvents();
     }
 
-    if (undoAdapter) {
-        undoAdapter->endMacro();
+    if (info.undoAdapter() ) {
+        info.undoAdapter() ->endMacro();
     }
 }
 
@@ -122,7 +125,7 @@ void KisMacro::fromXML(const QDomElement& docElem)
                 dbgImage << "Reconstruct : " << id << endl; // the node really is an element.
                 KisRecordedActionFactory* raf = KisRecordedActionFactoryRegistry::instance()->get(id);
                 if (raf) {
-                    d->actions.append(raf->fromXML(d->image, elt));
+                    d->actions.append(raf->fromXML(elt));
                 } else {
                     dbgImage << "Unknown action : " << id << endl;
                 }

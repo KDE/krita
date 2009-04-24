@@ -40,7 +40,7 @@ class KRITAIMAGE_EXPORT KisRecordedPolyLinePaintAction : public KisRecordedPaint
 public:
 
     KisRecordedPolyLinePaintAction(const QString & name,
-                                   KisNodeSP node,
+                                   const KisNodeQueryPath& path,
                                    const KisPaintOpPresetSP paintOpPreset,
                                    KoColor foregroundColor,
                                    KoColor backgroundColor,
@@ -60,7 +60,7 @@ public:
 
 protected:
 
-    virtual void playPaint(KisPainter* painter) const;
+    virtual void playPaint(const KisPlayInfo&, KisPainter* painter) const;
 
 private:
 
@@ -73,7 +73,7 @@ class KisRecordedPolyLinePaintActionFactory : public KisRecordedPaintActionFacto
 public:
     KisRecordedPolyLinePaintActionFactory();
     virtual ~KisRecordedPolyLinePaintActionFactory();
-    virtual KisRecordedAction* fromXML(KisImageSP img, const QDomElement& elt);
+    virtual KisRecordedAction* fromXML(const QDomElement& elt);
 };
 
 

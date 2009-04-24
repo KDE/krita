@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "recorder/kis_recorded_action.h"
+#include "kis_recorded_action.h"
 #include <QDomDocument>
 #include <QDomElement>
 #include <QString>
@@ -26,12 +26,16 @@
 #include <kis_layer.h>
 #include <kis_group_layer.h>
 
+#include "kis_node_query_path.h"
+
 struct KisRecordedAction::Private {
+    Private(const KisNodeQueryPath& _path) : path(_path) {}
     QString name;
     QString id;
+    KisNodeQueryPath path;
 };
 
-KisRecordedAction::KisRecordedAction(const QString& name, const QString& id) : d(new Private)
+KisRecordedAction::KisRecordedAction(const QString& id, const QString& name, const KisNodeQueryPath& path) : d(new Private(path))
 {
     d->name = name;
     d->id = id;
@@ -62,10 +66,17 @@ void KisRecordedAction::setName(const QString& name)
     d->name = name;
 }
 
+
+const KisNodeQueryPath& KisRecordedAction::nodeQueryPath() const
+{
+    return d->path;
+}
+
 void KisRecordedAction::toXML(QDomDocument& , QDomElement& elt) const
 {
     elt.setAttribute("name", name());
     elt.setAttribute("id", id());
+    elt.setAttribute("path", d->path.toString());
 }
 
 
@@ -73,21 +84,6 @@ QWidget* KisRecordedAction::createEditor(QWidget* parent)
 {
     Q_UNUSED(parent);
     return 0;
-}
-
-QString KisRecordedAction::nodeToIndexPath(KisNodeSP _node)
-{
-    QString path;
-    KisNodeSP node = _node;
-    KisNodeSP parent = 0;
-    while ((parent = node->parent())) {
-        int index = parent->index(node);
-        if (index >= 0) {
-            path = (QString("\\%0").arg(index)) + path;
-        }
-        node = parent;
-    }
-    return path;
 }
 
 struct KisRecordedActionFactory::Private {
@@ -112,19 +108,4 @@ QString KisRecordedActionFactory::id() const
 QString KisRecordedActionFactory::name() const
 {
     return QString();
-}
-
-KisNodeSP KisRecordedActionFactory::indexPathToNode(KisImageSP img, const QString & path)
-{
-    QStringList indexes = path.split("\\");
-    KisNodeSP current = (img->rootLayer()->at(indexes[0].toUInt()));
-    for (int i = 1; i < indexes.size(); i++) {
-        KisGroupLayer* groupCurrent = dynamic_cast<KisGroupLayer*>(current.data());
-        if (groupCurrent) {
-            current = groupCurrent->at(indexes[i].toUInt());
-        } else {
-            break;
-        }
-    }
-    return current;
 }

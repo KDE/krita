@@ -58,6 +58,7 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_cursor.h"
 #include "kis_painting_assistant.h"
+#include <recorder/kis_node_query_path.h>
 
 #define ENABLE_RECORDING
 
@@ -284,7 +285,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
       // distracted by the recording
     if (m_smooth) {
         m_bezierCurvePaintAction = new KisRecordedBezierCurvePaintAction(i18n("Freehand tool"),
-                                                                         currentNode(),
+                                                                         KisNodeQueryPath::absolutePath(currentNode()),
                                                                          currentPaintOpPreset(),
                                                                          m_painter->paintColor(),
                                                                          m_painter->backgroundColor(),
@@ -293,7 +294,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
                                                                          m_compositeOp);
     } else {
         m_polyLinePaintAction = new KisRecordedPolyLinePaintAction(i18n("Freehand tool"),
-                                                                   currentNode(),
+                                                                   KisNodeQueryPath::absolutePath(currentNode()),
                                                                    currentPaintOpPreset(),
                                                                    m_painter->paintColor(),
                                                                    m_painter->backgroundColor(),

@@ -33,7 +33,7 @@ class KRITAIMAGE_EXPORT KisActionRecorder : public KisMacro
     Q_OBJECT
 
 public:
-    KisActionRecorder(KisImageSP image);
+    KisActionRecorder();
     ~KisActionRecorder();
 
 public slots:

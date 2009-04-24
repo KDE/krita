@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,25 +16,39 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "recorder/kis_action_recorder.h"
+#include "kis_play_info.h"
 
 #include "kis_image.h"
-#include "recorder/kis_recorded_action.h"
+#include "kis_node.h"
 
-KisActionRecorder::KisActionRecorder()
-        : KisMacro()
+struct KisPlayInfo::Private
 {
+    KisImageSP image;
+    KisNodeSP currentNode;
+};
 
+KisPlayInfo::KisPlayInfo(KisImageSP image, KisNodeSP currentNode) : d(new Private)
+{
+    d->image = image;
+    d->currentNode = currentNode;
 }
 
-KisActionRecorder::~KisActionRecorder()
+KisPlayInfo::~KisPlayInfo()
 {
+    delete d;
 }
 
-void KisActionRecorder::addAction(const KisRecordedAction& action)
+KisUndoAdapter* KisPlayInfo::undoAdapter() const
 {
-    KisMacro::addAction(action);
-    emit(addedAction(action));
+    return d->image->undoAdapter();
 }
 
-#include "kis_action_recorder.moc"
+KisImageSP KisPlayInfo::image() const
+{
+    return d->image;
+}
+
+KisNodeSP KisPlayInfo::currentNode() const
+{
+    return d->currentNode;
+}

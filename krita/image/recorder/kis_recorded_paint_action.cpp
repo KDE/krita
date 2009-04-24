@@ -39,10 +39,10 @@
 #include "kis_paint_device.h"
 #include "kis_image.h"
 #include "kis_layer.h"
+#include "kis_play_info.h"
 
 
 struct KisRecordedPaintAction::Private {
-    KisNodeSP node;
     KisPaintOpPresetSP paintOpPreset;
     KoColor foregroundColor;
     KoColor backgroundColor;
@@ -51,19 +51,18 @@ struct KisRecordedPaintAction::Private {
     const KoCompositeOp * compositeOp;
 };
 
-KisRecordedPaintAction::KisRecordedPaintAction(const QString & name,
-        const QString & id,
-        KisNodeSP node,
+KisRecordedPaintAction::KisRecordedPaintAction(const QString & id,
+        const QString & name,
+        const KisNodeQueryPath& path,
         const KisPaintOpPresetSP paintOpPreset,
         KoColor foregroundColor,
         KoColor backgroundColor,
         int opacity,
         bool paintIncremental,
         const KoCompositeOp * compositeOp)
-        : KisRecordedAction(name, id)
+        : KisRecordedAction(id, name, path)
         , d(new Private)
 {
-    d->node = node;
     d->paintOpPreset = paintOpPreset ? d->paintOpPreset = paintOpPreset->clone() : 0;
     d->foregroundColor = foregroundColor;
     d->backgroundColor = backgroundColor;
@@ -85,7 +84,6 @@ KisRecordedPaintAction::~KisRecordedPaintAction()
 void KisRecordedPaintAction::toXML(QDomDocument& doc, QDomElement& elt) const
 {
     KisRecordedAction::toXML(doc, elt);
-    elt.setAttribute("node", KisRecordedAction::nodeToIndexPath(d->node));
 #if 0 // XXX
     elt.setAttribute("paintop", d->paintOpId);
 
@@ -121,28 +119,23 @@ void KisRecordedPaintAction::toXML(QDomDocument& doc, QDomElement& elt) const
     elt.setAttribute("compositeOp", d->compositeOp->id());
 }
 
-KisNodeSP KisRecordedPaintAction::node() const
+void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
 {
-    return d->node;
-}
-
-void KisRecordedPaintAction::play(KisUndoAdapter* adapter) const
-{
-    dbgUI << "Play recorded paint action on node : " << node()->name() ;
+    dbgUI << "Play recorded paint action on node : " << node->name() ;
     KisTransaction * cmd = 0;
-    if (adapter) cmd = new KisTransaction("", node()->paintDevice());
+    if (info.undoAdapter()) cmd = new KisTransaction("", node->paintDevice());
 
     KisPaintDeviceSP target = 0;
     if (d->paintIncremental) {
-        target = node()->paintDevice();
+        target = node->paintDevice();
     } else {
-        target = new KisPaintDevice(node()->paintDevice()->colorSpace());
+        target = new KisPaintDevice(node->paintDevice()->colorSpace());
     }
 
     KisPainter painter(target);
 
     KisImageSP image;
-    KisNodeSP parent = node();
+    KisNodeSP parent = node;
     while (image == 0 && parent->parent()) {
         // XXX: ugly!
         KisLayerSP layer = dynamic_cast<KisLayer*>(parent.data());
@@ -158,7 +151,7 @@ void KisRecordedPaintAction::play(KisUndoAdapter* adapter) const
         painter.setCompositeOp(d->compositeOp);
         painter.setOpacity(d->opacity);
     } else {
-        painter.setCompositeOp(node()->paintDevice()->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
+        painter.setCompositeOp(node->paintDevice()->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
         painter.setOpacity(OPACITY_OPAQUE);
 
     }
@@ -166,10 +159,10 @@ void KisRecordedPaintAction::play(KisUndoAdapter* adapter) const
     painter.setPaintColor(d->foregroundColor);
     painter.setFillColor(d->backgroundColor);
 
-    playPaint(&painter);
+    playPaint(info, &painter);
 
     if (!d->paintIncremental) {
-        KisPainter painter2(node()->paintDevice());
+        KisPainter painter2(node->paintDevice());
         painter2.setCompositeOp(d->compositeOp);
         QRegion r = painter.dirtyRegion();
         QVector<QRect> dirtyRects = r.rects();
@@ -184,11 +177,11 @@ void KisRecordedPaintAction::play(KisUndoAdapter* adapter) const
             ++it;
         }
 
-        node()->setDirty(painter2.dirtyRegion());
+        node->setDirty(painter2.dirtyRegion());
     } else {
-        node()->setDirty(painter.dirtyRegion());
+        node->setDirty(painter.dirtyRegion());
     }
-    if (adapter) adapter->addCommand(cmd);
+    if (info.undoAdapter()) info.undoAdapter()->addCommand(cmd);
 }
 
 

@@ -36,9 +36,9 @@ class KRITAIMAGE_EXPORT KisRecordedPaintAction : public KisRecordedAction
 {
 public:
 
-    KisRecordedPaintAction(const QString & name,
-                           const QString & id,
-                           KisNodeSP node,
+    KisRecordedPaintAction(const QString & id,
+                           const QString & name,
+                           const KisNodeQueryPath& path,
                            const KisPaintOpPresetSP paintOpPreset,
                            KoColor foregroundColor,
                            KoColor backgroundColor,
@@ -52,13 +52,11 @@ public:
 
     virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
 
-    virtual void play(KisUndoAdapter* adapter = 0) const;
+    virtual void play(KisNodeSP node, const KisPlayInfo&) const;
 
 protected:
 
-    virtual void playPaint(KisPainter* painter) const = 0;
-
-    KisNodeSP node() const;
+    virtual void playPaint(const KisPlayInfo&, KisPainter* painter) const = 0;
 
     KisPaintOpPresetSP paintOpPreset() const;
 private:

@@ -50,14 +50,14 @@ struct KisRecordedBezierCurvePaintAction::Private {
 };
 
 KisRecordedBezierCurvePaintAction::KisRecordedBezierCurvePaintAction(const QString & name,
-        KisNodeSP node,
+        const KisNodeQueryPath& path,
         const KisPaintOpPresetSP preset,
         KoColor foregroundColor,
         KoColor backgroundColor,
         int opacity,
         bool paintIncremental,
         const KoCompositeOp * compositeOp)
-        : KisRecordedPaintAction(name, "BezierCurvePaintAction", node, preset,
+        : KisRecordedPaintAction("BezierCurvePaintAction", name, path, preset,
                                  foregroundColor, backgroundColor, opacity, paintIncremental, compositeOp)
         , d(new Private)
 {
@@ -86,7 +86,7 @@ void KisRecordedBezierCurvePaintAction::addPoint(const KisPaintInformation& poin
     d->infos.append(slice);
 }
 
-void KisRecordedBezierCurvePaintAction::playPaint(KisPainter* painter) const
+void KisRecordedBezierCurvePaintAction::playPaint(const KisPlayInfo&, KisPainter* painter) const
 {
     dbgUI << "play bezier curve paint with " << d->infos.size() << " points";
     if (d->infos.size() <= 0) return;
@@ -144,9 +144,8 @@ KisRecordedBezierCurvePaintActionFactory::~KisRecordedBezierCurvePaintActionFact
 
 }
 
-KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(KisImageSP img, const QDomElement& elt)
+KisRecordedAction* KisRecordedBezierCurvePaintActionFactory::fromXML(const QDomElement& elt)
 {
-    Q_UNUSED(img);
     Q_UNUSED(elt);
 #if 0 // XXX
     QString name = elt.attribute("name");

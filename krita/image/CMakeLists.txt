@@ -163,13 +163,14 @@ set(kritaimage_LIB_SRCS
    metadata/kis_meta_data_value.cc
    recorder/kis_action_recorder.cc
    recorder/kis_macro.cc
+   recorder/kis_node_query_path.cc
+   recorder/kis_play_info.cc
    recorder/kis_recorded_action.cc
    recorder/kis_recorded_action_factory_registry.cc
    recorder/kis_recorded_bezier_curve_paint_action.cpp
    recorder/kis_recorded_filter_action.cpp
    recorder/kis_recorded_paint_action.cpp
    recorder/kis_recorded_polyline_paint_action.cpp
-   recorder/kis_node_query_path.cc
 )
 
 

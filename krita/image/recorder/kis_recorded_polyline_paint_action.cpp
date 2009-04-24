@@ -44,14 +44,14 @@ struct KisRecordedPolyLinePaintAction::Private {
 };
 
 KisRecordedPolyLinePaintAction::KisRecordedPolyLinePaintAction(const QString & name,
-        KisNodeSP node,
+        const KisNodeQueryPath& path,
         const KisPaintOpPresetSP paintOpPreset,
         KoColor foregroundColor,
         KoColor backgroundColor,
         int opacity,
         bool paintIncremental,
         const KoCompositeOp * compositeOp)
-        : KisRecordedPaintAction(name, "PolyLinePaintAction", node, paintOpPreset, foregroundColor,
+        : KisRecordedPaintAction(name, "PolyLinePaintAction", path, paintOpPreset, foregroundColor,
                                  backgroundColor, opacity, paintIncremental, compositeOp)
         , d(new Private)
 {
@@ -73,7 +73,7 @@ void KisRecordedPolyLinePaintAction::addPoint(const KisPaintInformation& info)
     d->infos.append(info);
 }
 
-void KisRecordedPolyLinePaintAction::playPaint(KisPainter* painter) const
+void KisRecordedPolyLinePaintAction::playPaint(const KisPlayInfo&, KisPainter* painter) const
 {
     dbgUI << "play poly line paint with " << d->infos.size() << " points";
     if (d->infos.size() <= 0) return;
@@ -114,9 +114,8 @@ KisRecordedPolyLinePaintActionFactory::~KisRecordedPolyLinePaintActionFactory()
 
 }
 
-KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(KisImageSP img, const QDomElement& elt)
+KisRecordedAction* KisRecordedPolyLinePaintActionFactory::fromXML(const QDomElement& elt)
 {
-    Q_UNUSED(img);
     Q_UNUSED(elt);
 #if 0
     QString name = elt.attribute("name");

@@ -33,10 +33,10 @@ class QRect;
 class KRITAIMAGE_EXPORT KisRecordedFilterAction : public KisRecordedAction
 {
 public:
-    KisRecordedFilterAction(QString name, KisNodeSP node, const KisFilter* filter, KisFilterConfiguration*);
+    KisRecordedFilterAction(QString name, const KisNodeQueryPath& path, const KisFilter* filter, KisFilterConfiguration*);
     KisRecordedFilterAction(const KisRecordedFilterAction&);
     virtual ~KisRecordedFilterAction();
-    virtual void play(KisUndoAdapter* adapter = 0) const;
+    virtual void play(KisNodeSP node, const KisPlayInfo&) const;
     virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
     virtual KisRecordedAction* clone() const;
     virtual QWidget* createEditor(QWidget* parent);
@@ -50,7 +50,7 @@ class KisRecordedFilterActionFactory : public KisRecordedActionFactory
 public:
     KisRecordedFilterActionFactory();
     virtual ~KisRecordedFilterActionFactory();
-    virtual KisRecordedAction* fromXML(KisImageSP img, const QDomElement& elt);
+    virtual KisRecordedAction* fromXML(const QDomElement& elt);
 };
 
 #endif

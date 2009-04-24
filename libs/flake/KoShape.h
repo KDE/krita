@@ -895,6 +895,9 @@ protected:
      * @param type the change type
      */
     void notifyChangedShape(ChangeType type);
+    
+    /// Returns if the given shape is dependent on this shape
+    bool hasDependee(KoShape * shape) const;
 
 private:
     friend class KoShapeManager;

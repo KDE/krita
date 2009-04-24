@@ -286,24 +286,36 @@ void KoConnectionShape::updatePath(const QSizeF &size)
     normalize();
 }
 
-void KoConnectionShape::setConnection1(KoShape * shape1, int connectionPointIndex1)
+bool KoConnectionShape::setConnection1(KoShape * shape1, int connectionPointIndex1)
 {
+    // refuse to connect to a shape that depends on us (e.g. a artistic text shape)
+    if (hasDependee(shape1))
+        return false;
+    
     if (d->shape1)
         d->shape1->removeDependee(this);
     d->shape1 = shape1;
     if (d->shape1)
         d->shape1->addDependee(this);
     d->connectionPointIndex1 = connectionPointIndex1;
+    
+    return true;
 }
 
-void KoConnectionShape::setConnection2(KoShape * shape2, int connectionPointIndex2)
+bool KoConnectionShape::setConnection2(KoShape * shape2, int connectionPointIndex2)
 {
+    // refuse to connect to a shape that depends on us (e.g. a artistic text shape)
+    if (hasDependee(shape2))
+        return false;
+    
     if (d->shape2)
         d->shape2->removeDependee(this);
     d->shape2 = shape2;
     if (d->shape2)
         d->shape2->addDependee(this);
     d->connectionPointIndex2 = connectionPointIndex2;
+    
+    return true;
 }
 
 KoConnection KoConnectionShape::connection1() const

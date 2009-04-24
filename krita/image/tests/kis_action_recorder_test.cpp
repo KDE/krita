@@ -28,6 +28,7 @@
 #include "recorder/kis_macro.h"
 
 #include <ktemporaryfile.h>
+#include <recorder/kis_play_info.h>
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
@@ -40,7 +41,7 @@ void KisActionRecorderTest::testCreation()
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "paintop registry test");
 
-    KisActionRecorder test(image);
+    KisActionRecorder test();
 }
 
 void KisActionRecorderTest::testFiles()
@@ -68,10 +69,10 @@ void KisActionRecorderTest::testFiles()
             QDomElement docElem = domDoc.documentElement();
             QVERIFY(!docElem.isNull() && docElem.tagName() == "RecordedActions");
             // Unserialise
-            KisMacro m(image);
+            KisMacro m;
             m.fromXML(docElem);
             // Play
-            m.play();
+            m.play(KisPlayInfo(image, image->root()));
             QImage sourceImg = image->convertToQImage(0, 0, 200, 200, 0);
             // load what we should have get from the hard drive
             QImage resultImg(resultFileInfo.absoluteFilePath());

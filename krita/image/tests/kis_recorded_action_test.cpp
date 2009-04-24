@@ -20,20 +20,21 @@
 
 #include <qtest_kde.h>
 #include "recorder/kis_recorded_action.h"
+#include <recorder/kis_node_query_path.h>
 
 class TestAction : public KisRecordedAction
 {
 public:
 
-    TestAction(const QString & name, const QString & id)
-            : KisRecordedAction(name, id) {
+    TestAction(const QString & id, const QString & name, const KisNodeQueryPath& path)
+            : KisRecordedAction(id, name, path ) {
     }
 
-    void play(KisUndoAdapter*) const {
+    void play(KisNodeSP node, const KisPlayInfo&) const {
     }
 
     KisRecordedAction* clone() const {
-        return new TestAction(name(), id());
+        return new TestAction(id(), name(), nodeQueryPath());
     }
 
 };
@@ -41,7 +42,7 @@ public:
 
 void KisRecordedActionTest::testCreation()
 {
-    TestAction test("Test", "Test");
+    TestAction tc("bla", "bla", KisNodeQueryPath::fromString("/"));
 }
 
 

@@ -25,20 +25,21 @@
 #include "kis_image.h"
 
 #include "recorder/kis_recorded_action.h"
+#include <recorder/kis_node_query_path.h>
 
 class TestAction : public KisRecordedAction
 {
 public:
 
-    TestAction(const QString & name, const QString & id)
-            : KisRecordedAction(name, id) {
+    TestAction(const QString & id, const QString & name, const KisNodeQueryPath& path)
+            : KisRecordedAction(id, name, path ) {
     }
 
-    void play(KisUndoAdapter*) const {
+    void play(KisNodeSP node, const KisPlayInfo&) const {
     }
 
     KisRecordedAction* clone() const {
-        return new TestAction(name(), id());
+        return new TestAction(id(), name(), nodeQueryPath());
     }
 
 };
@@ -47,14 +48,14 @@ public:
 void KisMacroTest::testCreation()
 {
     QList<KisRecordedAction*> actions;
-    TestAction tc("bla", "bla");
+    TestAction tc("bla", "bla", KisNodeQueryPath::fromString("/"));
     actions << &tc;
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, cs, "test");
 
-    KisMacro a(image);
-    KisMacro b(image, actions);
+    KisMacro a();
+    KisMacro b(actions);
 }
 
 

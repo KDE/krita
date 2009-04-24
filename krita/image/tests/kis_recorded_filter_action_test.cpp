@@ -28,6 +28,7 @@
 #include "filter/kis_filter_registry.h"
 #include "kis_image.h"
 #include "kis_paint_device.h"
+#include <recorder/kis_node_query_path.h>
 
 void KisRecordedFilterActionTest::testCreation()
 {
@@ -37,7 +38,7 @@ void KisRecordedFilterActionTest::testCreation()
     KisImageSP image = new KisImage(0, 10, 10, cs, "merge test");
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE);
 
-    KisRecordedFilterAction test("invert", layer, f, kfc);
+    KisRecordedFilterAction test("invert", KisNodeQueryPath::absolutePath(layer), f, kfc);
 }
 
 

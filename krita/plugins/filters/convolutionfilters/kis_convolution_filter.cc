@@ -66,7 +66,7 @@ void KisConvolutionFilter::process(KisConstProcessingInformation srcInfo,
     }
 
     painter.setProgress(progressUpdater);
-    painter.applyMatrix(m_matrix, src, dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);
+    painter.applyMatrix(m_matrix, src, srcTopLeft, dstTopLeft, size, BORDER_REPEAT);
 
 }
 

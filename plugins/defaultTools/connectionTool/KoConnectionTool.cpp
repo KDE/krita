@@ -35,6 +35,8 @@
 #include <QUndoCommand>
 #include <QPointF>
 
+#include <typeinfo>
+
 KoConnectionTool::KoConnectionTool( KoCanvasBase * canvas )
     : KoPathTool(canvas)
     , m_firstShape(0)
@@ -70,6 +72,8 @@ void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converte
 void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
 {
     KoShape * tempShape = m_canvas->shapeManager()->shapeAt( event->point );
+    if( dynamic_cast<KoSelection*>( tempShape ) )
+        tempShape = 0;
     if( tempShape != 0 )
     { // If the shape selected is not the background
         if( m_firstShape == 0 )
@@ -164,6 +168,8 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
 void KoConnectionTool::mouseMoveEvent( KoPointerEvent *event )
 {
     m_shapeOn = m_canvas->shapeManager()->shapeAt( event->point );
+    if( dynamic_cast<KoSelection*>( m_shapeOn ) )
+        m_shapeOn = 0;
     m_mouse = QPointF( event->point );
     m_canvas->updateCanvas(QRectF( 0, 0, m_canvas->canvasWidget()->width(), m_canvas->canvasWidget()->height() ));
 }
@@ -174,6 +180,7 @@ void KoConnectionTool::mouseReleaseEvent( KoPointerEvent *event )
 
 void KoConnectionTool::activate( bool temporary )
 {
+    m_canvas->canvasWidget()->setCursor( Qt::PointingHandCursor );
 }
 
 void KoConnectionTool::deactivate()

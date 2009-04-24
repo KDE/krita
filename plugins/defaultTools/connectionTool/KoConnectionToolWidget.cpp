@@ -30,5 +30,6 @@ KoConnectionToolWidget::KoConnectionToolWidget( QWidget * parent )
     
     widget.connectionType->clear();
     widget.connectionType->addItem(i18n("Standard"));
+    
 }
 #include "KoConnectionToolWidget.moc"

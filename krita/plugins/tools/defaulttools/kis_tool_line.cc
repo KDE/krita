@@ -42,6 +42,7 @@
 
 #include <recorder/kis_action_recorder.h>
 #include <recorder/kis_recorded_polyline_paint_action.h>
+#include <recorder/kis_node_query_path.h>
 
 KisToolLine::KisToolLine(KoCanvasBase * canvas)
         : KisToolPaint(canvas, KisCursor::load("tool_line_cursor.png", 6, 6)),
@@ -150,7 +151,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *e)
 #endif
 
                 if (image()) {
-                    KisRecordedPolyLinePaintAction* linePaintAction = new KisRecordedPolyLinePaintAction(i18n("Line tool"), currentNode(), currentPaintOpPreset(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), false, m_compositeOp);
+                    KisRecordedPolyLinePaintAction* linePaintAction = new KisRecordedPolyLinePaintAction(i18n("Line tool"), KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset(), m_painter->paintColor(), m_painter->backgroundColor(), m_painter->opacity(), false, m_compositeOp);
                     linePaintAction->addPoint(m_startPos);
                     linePaintAction->addPoint(m_endPos);
                     image()->actionRecorder()->addAction(*linePaintAction);

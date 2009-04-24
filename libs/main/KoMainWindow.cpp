@@ -211,6 +211,7 @@ public:
     KActionMenu* m_dockWidgetMenu;
     QMap<QDockWidget*, bool> m_dockWidgetVisibilityMap;
     KoDockerManager *m_dockerManager;
+    QList<QDockWidget*> m_dockWidgets;
 };
 
 KoMainWindow::KoMainWindow(const KComponentData &componentData)
@@ -1615,6 +1616,14 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         // Position and show toolbars according to user's preference
         setAutoSaveSettings(newPart->componentData().componentName(), false);
 
+        foreach(QDockWidget* wdg, d->m_dockWidgets)
+        {
+            if ((wdg->features()&QDockWidget::DockWidgetClosable) == 0)
+            {
+                wdg->setVisible(true);
+            }
+        }
+
         // Create and plug toolbar list for Settings menu
         //QPtrListIterator<KToolBar> it = toolBarIterator();
         foreach(QWidget* it, factory->containers("ToolBar")) {
@@ -1782,6 +1791,7 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactory* factory)
 
     if (!d->m_dockWidgetMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();
+        d->m_dockWidgets.push_back(dockWidget);
 
         // It is quite possible that a dock factory cannot create the dock; don't
         // do anything in that case.

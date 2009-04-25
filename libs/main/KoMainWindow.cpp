@@ -1791,11 +1791,11 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactory* factory)
 
     if (!d->m_dockWidgetMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();
-        d->m_dockWidgets.push_back(dockWidget);
 
         // It is quite possible that a dock factory cannot create the dock; don't
         // do anything in that case.
         if (!dockWidget) return 0;
+        d->m_dockWidgets.push_back(dockWidget);
 
         KoDockWidgetTitleBar *titleBar = 0;
         // Check if the dock widget is supposed to be collapsable

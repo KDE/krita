@@ -24,7 +24,7 @@
 #include <QPair>
 #include <QList>
 
-#include "filter/kis_filter.h"
+#include "filter/kis_color_transformation_filter.h"
 #include "filter/kis_filter_configuration.h"
 #include "kis_config_widget.h"
 
@@ -82,7 +82,7 @@ protected:
  * This class is generic for filters that affect channel separately
  */
 class KisPerChannelFilter
-            : public KisFilter
+            : public KisColorTransformationFilter
 {
 public:
     KisPerChannelFilter();
@@ -90,13 +90,8 @@ public:
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
     virtual KisFilterConfiguration * factoryConfiguration(const KisPaintDeviceSP) const;
 
-    using KisFilter::process;
-    void process(KisConstProcessingInformation src,
-                 KisProcessingInformation dst,
-                 const QSize& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-                ) const;
+    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
+
     static inline KoID id() {
         return KoID("perchannel", i18n("Color Adjustment"));
     }

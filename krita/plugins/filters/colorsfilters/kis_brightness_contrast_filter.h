@@ -23,7 +23,7 @@
 
 #include <QList>
 
-#include "filter/kis_filter.h"
+#include "filter/kis_color_transformation_filter.h"
 #include "kis_config_widget.h"
 #include "ui_wdg_brightness_contrast.h"
 #include <filter/kis_filter_configuration.h>
@@ -31,6 +31,7 @@
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
 #include <KoProgressUpdater.h>
+
 class QWidget;
 class KoColorTransformation;
 
@@ -63,7 +64,7 @@ public:
 /**
  * This class affect Intensity Y of the image
  */
-class KisBrightnessContrastFilter : public KisFilter
+class KisBrightnessContrastFilter : public KisColorTransformationFilter
 {
 
 public:
@@ -73,12 +74,8 @@ public:
 public:
     using KisFilter::process;
 
-    void process(KisConstProcessingInformation src,
-                 KisProcessingInformation dst,
-                 const QSize& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-                ) const;
+    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
+
     static inline KoID id() {
         return KoID("brightnesscontrast", i18n("Brightness / Contrast"));
     }

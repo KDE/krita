@@ -32,13 +32,9 @@
 #include <kis_debug.h>
 #include <kgenericfactory.h>
 
-#include <KoColorTransformation.h>
-#include <KoProgressUpdater.h>
-
 #include <kis_processing_information.h>
 #include <kis_types.h>
 #include <kis_selection.h>
-#include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <filter/kis_filter_registry.h>
@@ -59,7 +55,7 @@ KritaExample::~KritaExample()
 {
 }
 
-KisFilterInvert::KisFilterInvert() : KisFilter(id(), categoryAdjust(), i18n("&Invert"))
+KisFilterInvert::KisFilterInvert() : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Invert"))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
@@ -67,108 +63,8 @@ KisFilterInvert::KisFilterInvert() : KisFilter(id(), categoryAdjust(), i18n("&In
     setSupportsIncrementalPainting(false);
 }
 
-void KisFilterInvert::process(KisConstProcessingInformation srcInfo,
-                              KisProcessingInformation dstInfo,
-                              const QSize& size,
-                              const KisFilterConfiguration* config,
-                              KoUpdater* progressUpdater
-                             ) const
+KoColorTransformation* KisFilterInvert::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
 {
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
     Q_UNUSED(config);
-    Q_ASSERT(!src.isNull());
-    Q_ASSERT(!dst.isNull());
-
-    if (progressUpdater) {
-        progressUpdater->setRange(0, size.height());
-    }
-
-    const KoColorSpace * cs = src->colorSpace();
-
-    KoColorTransformation* inverter = cs->createInvertTransformation();
-
-    QTime t;
-    t.start();
-
-// Method one: iterate and check every pixel for selectedness. It is
-// only slightly slower than the next method and the code is very
-// clear. Note that using nextRow() instead of recreating the iterators
-// for every row makes a huge difference.
-
-    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
-
-    for (int row = 0; row < size.height() && !(progressUpdater && progressUpdater->interrupted()); ++row) {
-        while (!srcIt.isDone() && !(progressUpdater && progressUpdater->interrupted())) {
-            if (srcIt.isSelected()) {
-                inverter->transform(srcIt.oldRawData(), dstIt.rawData(), 1);
-            }
-            ++srcIt;
-            ++dstIt;
-        }
-        srcIt.nextRow();
-        dstIt.nextRow();
-        if (progressUpdater) progressUpdater->setValue(row);
-    }
-    dbgPlugins << "Per-pixel isSelected():" << t.elapsed() << " ms";
-
-#if 0
-    t.restart();
-
-    bool hasSelection = srcInfo.selection();
-
-// Method two: check the number of consecutive pixels the iterators
-// points to. Take as large stretches of unselected pixels as possible
-// and pass those to the color space transform object in one go. It's
-// quite a bit speedier, with the speed improvement more noticeable
-// the less happens inside the color transformation.
-
-    srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width());
-    dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width());
-
-    for (int row = 0; row < size.height(); ++row) {
-        while (! srcIt.isDone()) {
-            int srcItConseq = srcIt.nConseqHPixels();
-            int dstItConseq = srcIt.nConseqHPixels();
-            int conseqPixels = qMin(srcItConseq, dstItConseq);
-
-            int pixels = 0;
-
-            if (hasSelection) {
-                // Get largest horizontal row of selected pixels
-
-                while (srcIt.isSelected() && pixels < conseqPixels) {
-                    ++pixels;
-                }
-                inverter->transform(srcIt.oldRawData(), dstIt.rawData(), pixels);
-
-                // We apparently found a non-selected pixels, or the row
-                // was done; get the stretch of non-selected pixels
-                while (!srcIt.isSelected() && pixels < conseqPixels) {
-                    ++ pixels;
-                }
-            } else {
-                pixels = conseqPixels;
-                inverter->transform(srcIt.oldRawData(), dstIt.rawData(), pixels);
-            }
-
-            // Update progress
-            srcIt += pixels;
-            dstIt += pixels;
-        }
-        srcIt.nextRow();
-        dstIt.nextRow();
-    }
-    dbgPlugins << "Consecutive pixels:" << t.elapsed() << " ms";
-
-#endif
-    delete inverter;
-    //if(progressUpdater) progressUpdater->setProgress( 100 );
-
-    // Two inversions make no inversion? No -- because we're reading
-    // from the oldData in both loops without saving the transaction
-    // in between, both inversion loops invert the original image.
+    return cs->createInvertTransformation();
 }

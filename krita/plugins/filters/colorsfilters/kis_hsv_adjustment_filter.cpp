@@ -28,7 +28,7 @@
 #include <kis_processing_information.h>
 
 KisHSVAdjustmentFilter::KisHSVAdjustmentFilter()
-        : KisFilter(id(), categoryAdjust(), i18n("&HSV Adjustment..."))
+        : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&HSV Adjustment..."))
 {
     setSupportsPainting(true);
     setSupportsPreview(true);
@@ -42,51 +42,15 @@ KisConfigWidget * KisHSVAdjustmentFilter::createConfigurationWidget(QWidget* par
     return new KisHSVConfigWidget(parent);
 }
 
-void KisHSVAdjustmentFilter::process(KisConstProcessingInformation srcInfo,
-                                     KisProcessingInformation dstInfo,
-                                     const QSize& size,
-                                     const KisFilterConfiguration* config,
-                                     KoUpdater* progressUpdater
-                                    ) const
+KoColorTransformation* KisHSVAdjustmentFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
 {
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
-    Q_ASSERT(src != 0);
-    Q_ASSERT(dst != 0);
     QHash<QString, QVariant> params;
     if (config) {
         params["h"] = config->getInt("h", 0) / 180.0;
         params["s"] = config->getInt("s", 0) * 0.01;
         params["v"] = config->getInt("v", 0) * 0.01;
     }
-    KoColorTransformation* transfo = src->colorSpace()->createColorTransformation("hsv_adjustment", params);
-    if (!transfo) {
-        kError() << "hsv_adjustment transformation is unavailable, go check your installation";
-        return;
-    }
-    int count = 0;
-    int cost = size.width() * size.height();
-    if (cost == 0) cost = 1;
-    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width());
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width());
-
-    for (int row = 0; row < size.height(); ++row) {
-        while (!srcIt.isDone()) {
-            if (srcIt.isSelected()) {
-                transfo->transform(srcIt.oldRawData(), dstIt.rawData(), 1);
-            }
-            ++srcIt;
-            ++dstIt;
-            if (progressUpdater) progressUpdater->setProgress((++count) / cost);
-
-        }
-        srcIt.nextRow();
-        dstIt.nextRow();
-    }
-
-    delete transfo;
+    return cs->createColorTransformation("hsv_adjustment", params);
 }
 
 KisFilterConfiguration* KisHSVAdjustmentFilter::factoryConfiguration(const KisPaintDeviceSP) const

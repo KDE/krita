@@ -258,76 +258,8 @@ bool KisDesaturateFilter::workWith(const KoColorSpace* cs) const
     return (cs->profile() != 0);
 }
 
-void KisDesaturateFilter::process(KisConstProcessingInformation srcInfo,
-                                  KisProcessingInformation dstInfo,
-                                  const QSize& size,
-                                  const KisFilterConfiguration* config,
-                                  KoUpdater* progressUpdater
-                                 ) const
+KoColorTransformation* KisDesaturateFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
 {
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
-    Q_ASSERT(src != 0);
-    Q_ASSERT(dst != 0);
     Q_UNUSED(config);
-
-    if (dst != src) {
-        KisPainter gc(dst, dstInfo.selection());
-        gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
-        gc.end();
-    }
-
-    KoColorTransformation * m_adj = src->colorSpace()->createDesaturateAdjustment();
-
-    KisRectIteratorPixel iter = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection());
-
-    qint32 totalCost = size.width() * size.height() / 100;
-    if (totalCost == 0) totalCost = 1;
-    qint32 pixelsProcessed = 0;
-    KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
-
-    while (! iter.isDone()  && !(progressUpdater && progressUpdater->interrupted())) {
-        quint32 npix = 0, maxpix = iter.nConseqPixels();
-        quint8 selectedness = iter.selectedness();
-        // The idea here is to handle stretches of completely selected and completely unselected pixels.
-        // Partially selected pixels are handled one pixel at a time.
-        switch (selectedness) {
-        case MIN_SELECTED:
-            while (iter.selectedness() == MIN_SELECTED && maxpix) {
-                --maxpix;
-                ++iter;
-                ++npix;
-            }
-            pixelsProcessed += npix;
-            break;
-
-        case MAX_SELECTED: {
-            quint8 *firstPixel = iter.rawData();
-            while (iter.selectedness() == MAX_SELECTED && maxpix) {
-                --maxpix;
-                if (maxpix != 0)
-                    ++iter;
-                ++npix;
-            }
-            // adjust
-            m_adj->transform(firstPixel, firstPixel, npix);
-            pixelsProcessed += npix;
-            ++iter;
-            break;
-        }
-
-        default:
-            // adjust, but since it's partially selected we also only partially adjust
-            m_adj->transform(iter.oldRawData(), iter.rawData(), 1);
-            const quint8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
-            qint16 weights[2] = {MAX_SELECTED - selectedness, selectedness};
-            mixOp->mixColors(pixels, weights, 2, iter.rawData());
-            ++iter;
-            pixelsProcessed++;
-            break;
-        }
-        if (progressUpdater) progressUpdater->setProgress(pixelsProcessed / totalCost);
-    }
+    return cs->createDesaturateAdjustment();
 }

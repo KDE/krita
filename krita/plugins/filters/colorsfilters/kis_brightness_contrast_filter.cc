@@ -139,7 +139,7 @@ QString KisBrightnessContrastFilterConfiguration::toString()
 }
 
 KisBrightnessContrastFilter::KisBrightnessContrastFilter()
-        : KisFilter(id(), categoryAdjust(), i18n("&Brightness/Contrast curve..."))
+        : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Brightness/Contrast curve..."))
 {
     setSupportsPainting(true);
     setSupportsPreview(true);
@@ -165,85 +165,12 @@ bool KisBrightnessContrastFilter::workWith(const KoColorSpace* cs) const
     return (cs->profile() != 0);
 }
 
-
-void KisBrightnessContrastFilter::process(KisConstProcessingInformation srcInfo,
-        KisProcessingInformation dstInfo,
-        const QSize& size,
-        const KisFilterConfiguration* config,
-        KoUpdater* progressUpdater
-                                         ) const
+KoColorTransformation* KisBrightnessContrastFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
 {
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
-    Q_ASSERT(src != 0);
-    Q_ASSERT(dst != 0);
-    if (!config) {
-        warnKrita << "No configuration object for brightness/contrast filter\n";
-        return;
-    }
-
     const KisBrightnessContrastFilterConfiguration* configBC = dynamic_cast<const KisBrightnessContrastFilterConfiguration*>( config );
-    Q_ASSERT(configBC);
+    if(!configBC) return 0;
 
-    if (src != dst) {
-        KisPainter gc(dst, dstInfo.selection());
-        gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
-        gc.end();
-    }
-
-    KoColorTransformation * adjustment = src->colorSpace()->createBrightnessContrastAdjustment(configBC->transfer);
-
-    KisRectIteratorPixel iter = dst->createRectIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), dstInfo.selection());
-
-    qint32 totalCost = (size.width() * size.height()) / 100;
-    if (totalCost == 0) totalCost = 1;
-    qint32 pixelsProcessed = 0;
-    KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
-    while (! iter.isDone()  && !(progressUpdater && progressUpdater->interrupted())) {
-        quint32 npix = 0, maxpix = iter.nConseqPixels();
-        quint8 selectedness = iter.selectedness();
-        // The idea here is to handle stretches of completely selected and completely unselected pixels.
-        // Partially selected pixels are handled one pixel at a time.
-        switch (selectedness) {
-        case MIN_SELECTED:
-            while (iter.selectedness() == MIN_SELECTED && maxpix) {
-                --maxpix;
-                ++iter;
-                ++npix;
-            }
-            pixelsProcessed += npix;
-            break;
-
-        case MAX_SELECTED: {
-            quint8 *firstPixel = iter.rawData();
-            while (iter.selectedness() == MAX_SELECTED && maxpix) {
-                --maxpix;
-                if (maxpix != 0)
-                    ++iter;
-                ++npix;
-            }
-            // adjust
-            adjustment->transform(firstPixel, firstPixel, npix);
-            pixelsProcessed += npix;
-            ++iter;
-            break;
-        }
-
-        default:
-            // adjust, but since it's partially selected we also only partially adjust
-            adjustment->transform(iter.oldRawData(), iter.rawData(), 1);
-            const quint8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
-            qint16 weights[2] = {MAX_SELECTED - selectedness, selectedness};
-            mixOp->mixColors(pixels, weights, 2, iter.rawData());
-            ++iter;
-            pixelsProcessed++;
-            break;
-        }
-        if (progressUpdater) progressUpdater->setProgress(pixelsProcessed / totalCost);
-    }
-    delete adjustment;
+    KoColorTransformation * adjustment = cs->createBrightnessContrastAdjustment(configBC->transfer);
 }
 
 KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)

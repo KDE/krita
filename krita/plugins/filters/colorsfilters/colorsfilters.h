@@ -22,6 +22,7 @@
 
 #include <kparts/plugin.h>
 #include "kis_perchannel_filter.h"
+#include "filter/kis_color_transformation_filter.h"
 
 class KoColorSpace;
 class KoColorTransformation;
@@ -33,18 +34,13 @@ public:
     virtual ~ColorsFilters();
 };
 
-class KisAutoContrast : public KisFilter
+class KisAutoContrast : public KisColorTransformationFilter
 {
 public:
     KisAutoContrast();
 public:
     using KisFilter::process;
-    void process(KisConstProcessingInformation src,
-                 KisProcessingInformation dst,
-                 const QSize& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-                ) const;
+    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
     static inline KoID id() {
         return KoID("autocontrast", i18n("Auto Contrast"));
     }

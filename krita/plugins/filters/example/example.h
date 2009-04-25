@@ -22,7 +22,7 @@
 #define EXAMPLE_H
 
 #include <kparts/plugin.h>
-#include "filter/kis_filter.h"
+#include "filter/kis_color_transformation_filter.h"
 
 class KritaExample : public KParts::Plugin
 {
@@ -31,19 +31,14 @@ public:
     virtual ~KritaExample();
 };
 
-class KisFilterInvert : public KisFilter
+class KisFilterInvert : public KisColorTransformationFilter
 {
 public:
     KisFilterInvert();
 public:
-    using KisFilter::process;
 
-    void process(KisConstProcessingInformation src,
-                 KisProcessingInformation dst,
-                 const QSize& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-                ) const;
+    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
+
     static inline KoID id() {
         return KoID("invert", i18n("Invert"));
     }

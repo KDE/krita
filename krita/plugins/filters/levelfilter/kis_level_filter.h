@@ -21,7 +21,7 @@
 #ifndef _KIS_LEVEL_FILTER_H_
 #define _KIS_LEVEL_FILTER_H_
 
-#include "filter/kis_filter.h"
+#include "filter/kis_color_transformation_filter.h"
 #include "filter/kis_filter_configuration.h"
 #include "kis_config_widget.h"
 #include "ui_wdg_level.h"
@@ -35,7 +35,7 @@ class KisHistogram;
 /**
  * This class affect Intensity Y of the image
  */
-class KisLevelFilter : public KisFilter
+class KisLevelFilter : public KisColorTransformationFilter
 {
 
 public:
@@ -48,14 +48,8 @@ public:
 //     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageSP image = 0) const;
 
-    using KisFilter::process;
+    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
 
-    virtual void process(KisConstProcessingInformation src,
-                         KisProcessingInformation dst,
-                         const QSize& size,
-                         const KisFilterConfiguration* config,
-                         KoUpdater* progressUpdater
-                        ) const;
     static inline KoID id() {
         return KoID("levels", i18n("Levels"));
     };

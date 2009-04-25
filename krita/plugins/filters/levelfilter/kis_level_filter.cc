@@ -46,7 +46,7 @@
 #include "kis_types.h"
 
 KisLevelFilter::KisLevelFilter()
-        : KisFilter(id(), categoryAdjust(), i18n("&Levels"))
+        : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Levels"))
 {
     setSupportsPainting(true);
     setSupportsPreview(true);
@@ -70,21 +70,11 @@ bool KisLevelFilter::workWith(KoColorSpace* cs) const
     return true;
 }
 
-
-void KisLevelFilter::process(KisConstProcessingInformation srcInfo,
-                             KisProcessingInformation dstInfo,
-                             const QSize& size,
-                             const KisFilterConfiguration* config,
-                             KoUpdater* progressUpdater
-                            ) const
+KoColorTransformation* KisLevelFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
 {
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
     if (!config) {
         warnKrita << "No configuration object for level filter\n";
-        return;
+        return 0;
     }
 
     Q_ASSERT(config);
@@ -110,68 +100,7 @@ void KisLevelFilter::process(KisConstProcessingInformation srcInfo,
         // TODO use floats instead of integer in the configuration
         transfer[i] = ((int)transfer[i] * 0xFFFF) / 0xFF ;
     }
-    adjustment = src->colorSpace()->createBrightnessContrastAdjustment(transfer);
-
-    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
-
-    if (progressUpdater) {
-        progressUpdater->setRange(0, size.width() * size.height());
-    }
-    qint32 pixelsProcessed = 0;
-
-    for (int row = 0; row < size.height() && !(progressUpdater && progressUpdater->interrupted()); ++row) {
-        while (! srcIt.isDone()  && !(progressUpdater && progressUpdater->interrupted())) {
-            quint32 npix = 0, maxpix = qMin(srcIt.nConseqHPixels(), dstIt.nConseqHPixels());
-            quint8 selectedness = dstIt.selectedness();
-            // The idea here is to handle stretches of completely selected and completely unselected pixels.
-            // Partially selected pixels are handled one pixel at a time.
-            switch (selectedness) {
-            case MIN_SELECTED:
-                while (dstIt.selectedness() == MIN_SELECTED && maxpix) {
-                    --maxpix;
-                    ++srcIt;
-                    ++dstIt;
-                    ++npix;
-                }
-                pixelsProcessed += npix;
-                break;
-
-            case MAX_SELECTED: {
-                const quint8 *firstPixelSrc = srcIt.oldRawData();
-                quint8 *firstPixelDst = dstIt.rawData();
-                while (dstIt.selectedness() == MAX_SELECTED && maxpix) {
-                    --maxpix;
-                    if (maxpix != 0) {
-                        ++srcIt;
-                        ++dstIt;
-                    }
-                    ++npix;
-                }
-                // adjust
-                adjustment->transform(firstPixelSrc, firstPixelDst, npix);
-                pixelsProcessed += npix;
-                ++srcIt;
-                ++dstIt;
-                break;
-            }
-
-            default:
-                // adjust, but since it's partially selected we also only partially adjust
-                adjustment->transform(srcIt.oldRawData(), dstIt.rawData(), 1);
-                const quint8 *pixels[2] = {srcIt.oldRawData(), dstIt.rawData()};
-                qint16 weights[2] = {MAX_SELECTED - selectedness, selectedness};
-                src->colorSpace()->mixColorsOp()->mixColors(pixels, weights, 2, dstIt.rawData());
-                ++srcIt;
-                ++dstIt;
-                pixelsProcessed++;
-                break;
-            }
-            if (progressUpdater) progressUpdater->setValue(pixelsProcessed);
-        }
-        srcIt.nextRow();
-        dstIt.nextRow();
-    }
+    return cs->createBrightnessContrastAdjustment(transfer);
 }
 
 KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev)

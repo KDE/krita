@@ -26,6 +26,7 @@
 #include "filter/kis_filter.h"
 #include "kis_config_widget.h"
 #include "ui_wdg_hsv_adjustment.h"
+#include "filter/kis_color_transformation_filter.h"
 
 class QWidget;
 class KoColorTransformation;
@@ -33,7 +34,7 @@ class KoColorTransformation;
 /**
  * This class affect Intensity Y of the image
  */
-class KisHSVAdjustmentFilter : public KisFilter
+class KisHSVAdjustmentFilter : public KisColorTransformationFilter
 {
 
 public:
@@ -46,12 +47,8 @@ public:
 
     using KisFilter::process;
 
-    void process(KisConstProcessingInformation src,
-                 KisProcessingInformation dst,
-                 const QSize& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-                ) const;
+    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
+
     static inline KoID id() {
         return KoID("hsvadjustment", i18n("HSV Adjustment"));
     }

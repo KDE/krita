@@ -190,7 +190,7 @@ bool ArtisticTextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingCon
         }
         else if( pair[0] == "startOffset" )
         {
-            m_startOffset = 0.01 * pair[1].toDouble();
+            m_startOffset = 0.01 * pair[1].remove('%').toDouble();
         }
         else if( pair[0] == "text-anchor" )
         {
@@ -205,14 +205,11 @@ bool ArtisticTextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingCon
     updateSizeAndPosition();
     update();
 
-    QMatrix invMatrix = isOnPath() ? transformation().inverted() : QMatrix();
+    // reset transformation resulting from being put on path
+    setTransformation( QMatrix() );
 
-    loadOdfAttributes( element, context, OdfAllAttributes & ~OdfGeometry );
-    if( ! isOnPath() )
-        loadOdfAttributes( element, context, OdfPosition );
-
-    // compensate transformation resulting from being put on path
-    applyTransformation( invMatrix );
+    // load odf attributes including transformation
+    loadOdfAttributes( element, context, OdfAllAttributes & ~OdfSize );
 
     return true;
 }

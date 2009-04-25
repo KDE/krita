@@ -29,7 +29,7 @@ class Trajectory
 public:
     Trajectory();
     ~Trajectory();
-    QVector<QPointF> &getLinearTrajectory(QPointF start, QPointF end, double space);
+    QVector<QPointF> &getLinearTrajectory(const QPointF &start, const QPointF &end, double space);
     QVector<QPointF> getDDATrajectory(QPointF start, QPointF end, double space);
 private:
     QVector<QPointF> m_path;

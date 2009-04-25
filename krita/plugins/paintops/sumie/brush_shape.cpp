@@ -24,11 +24,6 @@
 #include <cmath>
 #include "kis_debug.h"
 
-#include <iostream>
-using namespace std;
-
-const float PI = 3.141592f;
-
 BrushShape::BrushShape()
 {
 
@@ -39,6 +34,24 @@ BrushShape::~BrushShape()
 
 }
 
+void BrushShape::fromDistance(int radius, float scale) {
+    m_width = m_height = radius * 2 + 1;
+    qreal distance = 0.0;
+    qreal maxDist = sqrt(radius * radius);
+
+    for (int y = -radius; y <= radius; y++){
+        for (int x = -radius; x <= radius; x++)
+        {
+            if ((x*x + y*y) < radius*radius){
+                distance = sqrt(x*x + y*y);
+                distance /= maxDist;
+                Bristle b(x, y, 1.0 - distance );
+                b.setInkAmount(1.0f);
+                m_bristles.append(b);
+            }
+        }
+    }
+}
 
 void BrushShape::fromGaussian(int radius, float sigma)
 {
@@ -50,7 +63,7 @@ void BrushShape::fromGaussian(int radius, float sigma)
     //int center = (edgeSize - 1) / 2;
 
     float sigmaSquare = - 2.0 * sigma * sigma;
-    float sigmaConst = 1.0 / (2.0 * PI * sigma * sigma);
+    float sigmaConst = 1.0 / (2.0 * M_PI * sigma * sigma);
 
     float total = 0;
     float length = 0;

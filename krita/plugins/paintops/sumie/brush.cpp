@@ -47,6 +47,7 @@ Brush::Brush(const BrushShape &initialShape,const KoColor &inkColor)
     setBrushShape(initialShape);
     setInkColor(inkColor);
     initDefaultValues();
+	srand48(time(0));
 }
 
 Brush::Brush()
@@ -173,7 +174,6 @@ void Brush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPain
     rotateBristles(angle + 1.57);
     int ix1, iy1, ix2, iy2;
 
-    srand48(time(0));
     int size = m_bristles.size();
     Trajectory trajectory; // used for interpolation the path of bristles
     QVector<QPointF> bristlePath; // path for single bristle
@@ -239,7 +239,8 @@ void Brush::paintLine(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPain
             }
 
             // saturation transformation of the bristle ink color
-            if (m_useSaturation){
+            // add check for hsv transformation
+            if (m_useSaturation && transfo != 0){
                 if (m_useWeights){
 
                     // new weighted way (experiment)

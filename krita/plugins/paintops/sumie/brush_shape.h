@@ -28,6 +28,8 @@ class BrushShape
 public:
     BrushShape();
     ~BrushShape();
+
+    void fromDistance(int radius, float scale);
     void fromGaussian(int radius, float sigma);
     void fromLine(int radius, float sigma);
     void fromBitMap(const char* fileName);

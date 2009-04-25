@@ -111,13 +111,13 @@ public:
 
     /**
     * name - "h", "s" or "v"
-    * (h)ue in range <-180.0, 180.0>
-    * (s)aturation in range <-100.0, 100.0>
-    * (v)alue in range <-100.0, 100.0>
+    * (h)ue in range <-1.0, 1.0> ( for user, show as -180, 180)
+    * (s)aturation in range <-1.0, 1.0> ( for user, show -100, 100)
+    * (v)alue in range <-1.0, 1.0> (for user, show -100, 100)
     */
     virtual void setParameter(const QString& name, const QVariant& parameter) {
         if( name == "h") {
-            m_adj_h = parameter.toDouble();
+            m_adj_h = parameter.toDouble() * 180;
         }
         else if (name == "s") {
             m_adj_s = parameter.toDouble();

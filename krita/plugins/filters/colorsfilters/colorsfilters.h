@@ -34,26 +34,10 @@ public:
     virtual ~ColorsFilters();
 };
 
-class KisAutoContrast : public KisColorTransformationFilter
+class KisAutoContrast : public KisFilter
 {
 public:
     KisAutoContrast();
-public:
-    using KisFilter::process;
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
-    static inline KoID id() {
-        return KoID("autocontrast", i18n("Auto Contrast"));
-    }
-    virtual bool workWith(const KoColorSpace* cs) const;
-
-};
-
-
-class KisDesaturateFilter : public KisFilter
-{
-public:
-    KisDesaturateFilter();
-    ~KisDesaturateFilter();
 public:
     using KisFilter::process;
     void process(KisConstProcessingInformation src,
@@ -62,6 +46,21 @@ public:
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater
                 ) const;
+    static inline KoID id() {
+        return KoID("autocontrast", i18n("Auto Contrast"));
+    }
+    virtual bool workWith(const KoColorSpace* cs) const;
+
+};
+
+
+class KisDesaturateFilter : public KisColorTransformationFilter
+{
+public:
+    KisDesaturateFilter();
+    ~KisDesaturateFilter();
+public:
+    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
     static inline KoID id() {
         return KoID("desaturate", i18n("Desaturate"));
     }

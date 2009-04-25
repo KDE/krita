@@ -240,7 +240,7 @@ void KisAutoContrast::process(KisConstProcessingInformation srcInfo,
 //==================================================================
 
 KisDesaturateFilter::KisDesaturateFilter()
-        : KisFilter(id(), categoryAdjust(), i18n("&Desaturate"))
+        : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Desaturate"))
 {
 
 }

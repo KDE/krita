@@ -328,10 +328,10 @@ void CurveBrush::paintLine ( KisPaintDeviceSP dab,KisPaintDeviceSP layer, const 
         
             qreal MAX_OPACITY = 255;
         
-            int btl = ( 1-fx ) * ( 1-fy ) * MAX_OPACITY;
-            int btr = ( fx )  * ( 1-fy ) * MAX_OPACITY;
-            int bbl = ( 1-fx ) * ( fy )  * MAX_OPACITY;
-            int bbr = ( fx )  * ( fy )  * MAX_OPACITY;
+            int btl = qRound( ( 1-fx ) * ( 1-fy ) * MAX_OPACITY);
+            int btr = qRound( ( fx )   * ( 1-fy ) * MAX_OPACITY);
+            int bbl = qRound( ( 1-fx ) * ( fy )   * MAX_OPACITY);
+            int bbr = qRound( ( fx )   * ( fy )   * MAX_OPACITY);
         
             pcolor.setOpacity ( btl );
             m_writeAccessor->moveTo ( ipx  , ipy );

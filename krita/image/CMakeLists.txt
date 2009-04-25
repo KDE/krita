@@ -83,6 +83,7 @@ set(kritaimage_LIB_SRCS
    filter/kis_filter_configuration.cc
    filter/kis_filter_job.cpp
    filter/kis_filter_registry.cc
+   filter/kis_color_transformation_filter.cc
    generator/kis_generator.cpp
    generator/kis_generator_layer.cpp
    generator/kis_generator_registry.cpp

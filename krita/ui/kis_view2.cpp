@@ -474,7 +474,7 @@ void KisView2::createGUI()
 
     }
 
-    m_d->statusBar = KoView::statusBar() ? new KisStatusBar(KoView::statusBar(), this) : 0;
+    m_d->statusBar = new KisStatusBar(this);
     connect(m_d->canvasController, SIGNAL(documentMousePositionChanged(const QPointF &)),
             m_d->statusBar, SLOT(documentMousePositionChanged(const QPointF &)));
 

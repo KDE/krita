@@ -25,7 +25,6 @@
 #include <kis_types.h>
 
 class QLabel;
-class KStatusBar;
 class KSqueezedTextLabel;
 class KisView2;
 
@@ -36,7 +35,7 @@ class KisStatusBar : public QObject
 
 public:
 
-    KisStatusBar(KStatusBar * statusBar, KisView2 * view);
+    KisStatusBar(KisView2 * view);
     ~KisStatusBar();
 
 public slots:
@@ -55,7 +54,6 @@ private:
 
     KisView2 * m_view;
     KoProgressBar * m_progress;
-    KStatusBar * m_statusbar;
 
     QLabel *m_selectionStatusLabel;
     QLabel *m_statusBarZoomLabel; // Make interactive line edit

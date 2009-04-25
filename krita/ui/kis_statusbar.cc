@@ -44,40 +44,39 @@ enum {
     POINTER_POSITION_ID
 };
 
-KisStatusBar::KisStatusBar(KStatusBar * sb, KisView2 * view)
+KisStatusBar::KisStatusBar(KisView2 * view)
         : m_view(view)
-        , m_statusbar(sb)
 {
-    m_selectionStatusLabel = new QLabel(sb);
+    m_selectionStatusLabel = new QLabel(view);
     m_selectionStatusLabel->setPixmap(KIcon("tool_rect_selection").pixmap(22));
     m_selectionStatusLabel->setEnabled(false);
     view->addStatusBarItem(m_selectionStatusLabel);
 
     // XXX: Use the KStatusbar fixed size labels!
-    m_statusBarStatusLabel = new KSqueezedTextLabel(sb);
+    m_statusBarStatusLabel = new KSqueezedTextLabel(view);
     connect(KoToolManager::instance(), SIGNAL(changedStatusText(const QString &)),
             m_statusBarStatusLabel, SLOT(setText(const QString &)));
     view->addStatusBarItem(m_statusBarStatusLabel, 2);
 
-    m_statusBarProfileLabel = new KSqueezedTextLabel(sb);
+    m_statusBarProfileLabel = new KSqueezedTextLabel(view);
     view->addStatusBarItem(m_statusBarProfileLabel, 3);
 
     //int height = m_statusBarProfileLabel->height();
 
-    m_imageSizeLabel = new QLabel( QString(), sb );
+    m_imageSizeLabel = new QLabel( QString(), view );
     m_imageSizeLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
     m_imageSizeLabel->setMinimumWidth( 100 );
     view->addStatusBarItem( m_imageSizeLabel );
 
-    m_pointerPositionLabel = new QLabel( QString(), sb );
+    m_pointerPositionLabel = new QLabel( QString(), view );
     m_pointerPositionLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
     m_pointerPositionLabel->setMinimumWidth( 100 );
     view->addStatusBarItem( m_pointerPositionLabel );
 
-    m_progress = new KoProgressBar(sb);
+    m_progress = new KoProgressBar(view);
     m_progress->setMaximumWidth(225);
     m_progress->setMinimumWidth(225);
-    m_progress->setMaximumHeight(sb->fontMetrics().height());
+    m_progress->setMaximumHeight(view->fontMetrics().height());
     view->addStatusBarItem(m_progress, 2, true);
 
     m_progress->hide();

@@ -148,10 +148,6 @@ double KisBrushOp::paintLine(const KisPaintInformation &pi1,
 {
     KisPaintInformation adjustedInfo1(pi1);
     KisPaintInformation adjustedInfo2(pi2);
-    if (!settings->m_optionsWidget->m_sizeOption->isChecked()) {
-        adjustedInfo1.setPressure(PRESSURE_DEFAULT);
-        adjustedInfo2.setPressure(PRESSURE_DEFAULT);
-    }
     return KisPaintOp::paintLine(adjustedInfo1, adjustedInfo2, savedDist);
 }
 

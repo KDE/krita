@@ -22,6 +22,8 @@
 #include <QRadioButton>
 
 #include "ui_wdgduplicateop.h"
+#include <kis_image.h>
+#include <kis_perspective_grid.h>
 
 class KisDuplicateOpOptionsWidget: public QWidget, public Ui::DuplicateOpOptionsWidget
 {
@@ -30,6 +32,13 @@ public:
         : QWidget(parent)
     {
         setupUi(this);
+    }
+    KisImageSP m_image;
+protected:
+    void showEvent(QShowEvent* event)
+    {
+        QWidget::showEvent(event);
+        cbPerspective->setEnabled( m_image && m_image->perspectiveGrid() && m_image->perspectiveGrid()->countSubGrids() == 1);
     }
 };
 
@@ -83,3 +92,7 @@ void KisDuplicateOpOption::readOptionSetting(const KisPropertiesConfiguration* s
     emit sigSettingChanged();
 }
 
+void KisDuplicateOpOption::setImage( KisImageSP image )
+{
+    m_optionWidget->m_image = image;
+}

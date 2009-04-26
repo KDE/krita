@@ -40,6 +40,7 @@ public:
 
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
+    void setImage(KisImageSP image);
 
 private:
 

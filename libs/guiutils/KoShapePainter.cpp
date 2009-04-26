@@ -162,10 +162,11 @@ void KoShapePainter::paintShapes( QPainter & painter, const QRect & painterRect,
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setClipRect( painterRect );
 
+    // convert document rectangle to view coordinates
     QRectF zoomedBound = zoomHandler.documentToView( documentRect );
-    QPointF offset = QPointF( 0.5 * painterRect.width(), 0.5 * painterRect.height() ) - zoomedBound.center();
-
-    // center content in image
+    // calculate offset between painter rectangle and converted document rectangle
+    QPointF offset = QPointF(painterRect.center()) - zoomedBound.center();
+    // center content in painter rectangle
     painter.translate( offset.x(), offset.y() );
 
     // finally paint the shapes

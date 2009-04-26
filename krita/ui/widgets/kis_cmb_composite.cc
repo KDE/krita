@@ -25,10 +25,8 @@
 #include <KoCompositeOp.h>
 #include "../kis_composite_ops_model.h"
 #include <kis_composite_ops_categorized_model.h>
-#include <qabstractitemview.h>
-#include <qlistview.h>
-#include <QStringListModel>
-#include <qtreeview.h>
+#include <KCategorizedView>
+#include <KCategoryDrawer>
 
 KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
         : KComboBox(parent), m_lastModel(0), m_sortModel(new KisCompositeOpsCategorizedModel)
@@ -37,6 +35,12 @@ KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
     setEditable(false);
     connect(this, SIGNAL(activated(int)), this, SLOT(slotOpActivated(int)));
     connect(this, SIGNAL(highlighted(int)), this, SLOT(slotOpHighlighted(int)));
+    
+//     m_sortModel->setCategorizedModel(true);
+    
+    KCategorizedView* view = new KCategorizedView(this);
+    view->setCategoryDrawer(new KCategoryDrawer);
+    setView(view);
 }
 
 KisCmbComposite::~KisCmbComposite()

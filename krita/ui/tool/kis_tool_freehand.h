@@ -71,6 +71,7 @@ protected:
     virtual void endPaint();
 
     void paintOutline(const QPointF& point);
+    virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
 protected slots:
 
@@ -109,6 +110,7 @@ protected:
 
 private:
 
+    QPointF mousePos;
     bool m_paintedOutline;
     QRegion m_incrementalDirtyRegion;
     QList<FreehandPaintJob*> m_paintJobs;

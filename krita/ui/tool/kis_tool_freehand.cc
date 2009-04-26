@@ -59,6 +59,7 @@
 #include "kis_cursor.h"
 #include "kis_painting_assistant.h"
 #include <recorder/kis_node_query_path.h>
+#include <KoViewConverter.h>
 
 #define ENABLE_RECORDING
 
@@ -190,6 +191,9 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 
         m_previousPaintInformation = info;
     }
+    m_canvas->updateCanvas( currentPaintOpPreset()->settings()->paintOutlineRect(mousePos, currentImage()) ); // erase the old guy
+    mousePos = e->point;
+    m_canvas->updateCanvas( currentPaintOpPreset()->settings()->paintOutlineRect(mousePos, currentImage()) ); // paint the new one
 }
 
 void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
@@ -488,6 +492,11 @@ void KisToolFreehand::paintOutline(const QPointF& point)
         m_paintedOutline = true;
     }
 #endif
+}
+
+void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
+{
+    currentPaintOpPreset()->settings()->paintOutline(mousePos, currentImage(), gc, converter);
 }
 
 QPointF KisToolFreehand::adjustPosition(const QPointF& point)

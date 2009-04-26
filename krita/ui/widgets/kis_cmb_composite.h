@@ -25,6 +25,8 @@
 #include "kcombobox.h"
 #include "KoCompositeOp.h"
 
+class KisCompositeOpsModel;
+
 /**
  * A combobox filled with the various composition strategies
  * associated with a certain colorspace.
@@ -60,7 +62,7 @@ private:
     // Prevent deprectated Qt3 method from being called. Use setCurrent instead.
     void setCurrentText(const QString & s);
 
-    QList<KoCompositeOp*> m_list;
+    KisCompositeOpsModel* m_lastModel;
 };
 
 #endif

@@ -35,6 +35,7 @@ class QPointF;
 class KoColorSpace;
 class KoInputDevice;
 class KoPointerEvent;
+class KoViewConverter;
 
 class KisPainter;
 class KisPaintInformation;
@@ -102,6 +103,18 @@ public:
     virtual bool incremental() const {
         return false;
     }
+    /**
+     * This function allow the paintop to draw an outline at a given position.
+     */
+    virtual void paintOutline(const QPointF& pos, QPainter &painter, const KoViewConverter &converter);
+    /**
+     * This function allow the paintop to draw an outline a long a line.
+     */
+    virtual void paintOutline(const QLineF& pos, QPainter &painter, const KoViewConverter &converter);
+    /**
+     * This function allow the paintop to draw an outline a long a curve.
+     */
+    virtual void paintOutline(const QPolygon& pos, QPainter &painter, const KoViewConverter &converter);
 
 protected:
 

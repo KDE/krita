@@ -33,13 +33,19 @@ KisPerspectiveGridNode::KisPerspectiveGridNode(double x, double y) : QPointF(x, 
 KisPerspectiveGridNode::KisPerspectiveGridNode(QPointF p) : QPointF(p), d(new Private)
 {
 }
+
+KisPerspectiveGridNode::KisPerspectiveGridNode(const KisPerspectiveGridNode& rhs) : QPointF(rhs), d(new Private()) {
+}
+
 KisPerspectiveGridNode::~KisPerspectiveGridNode()
 {
+    Q_ASSERT(d->subGrids.empty());
     delete d;
 }
 
 void KisPerspectiveGridNode::registerSubPerspectiveGrid(KisSubPerspectiveGrid* grid)
 {
+    Q_ASSERT(!d->subGrids.contains(grid));
     d->subGrids.append(grid);
 }
 
@@ -48,6 +54,10 @@ void KisPerspectiveGridNode::unRegisterSubPerspectiveGrid(KisSubPerspectiveGrid*
     d->subGrids.removeAll(grid);
 }
 
+bool KisPerspectiveGridNode::containsSubPerspectiveGrid(KisSubPerspectiveGrid* grid)
+{
+    return d->subGrids.contains(grid);
+}
 
 void KisPerspectiveGridNode::mergeWith(KisPerspectiveGridNodeSP node)
 {
@@ -87,6 +97,10 @@ KisSubPerspectiveGrid::KisSubPerspectiveGrid(KisPerspectiveGridNodeSP topLeft, K
     setTopRight(topRight);
     setBottomLeft(bottomLeft);
     setBottomRight(bottomRight);
+    Q_ASSERT(d->topLeft == topLeft);
+    Q_ASSERT(d->topRight == topRight);
+    Q_ASSERT(d->bottomLeft == bottomLeft);
+    Q_ASSERT(d->bottomRight == bottomRight);
     d->subdivisions = 5;
     d->index = ++Private::s_lastIndex;
 }
@@ -164,6 +178,8 @@ KisPerspectiveGridNodeSP KisSubPerspectiveGrid::topLeft()
 
 void KisSubPerspectiveGrid::setTopLeft(KisPerspectiveGridNodeSP node)
 {
+    if(node->containsSubPerspectiveGrid(this)) return;
+    if(d->topLeft) d->topLeft->unRegisterSubPerspectiveGrid(this);
     d->topLeft = node;
     d->topLeft->registerSubPerspectiveGrid(this);
 }
@@ -180,6 +196,8 @@ KisPerspectiveGridNodeSP KisSubPerspectiveGrid::topRight()
 
 void KisSubPerspectiveGrid::setTopRight(KisPerspectiveGridNodeSP node)
 {
+    if(node->containsSubPerspectiveGrid(this)) return;
+    if(d->topRight) d->topRight->unRegisterSubPerspectiveGrid(this);
     d->topRight = node;
     d->topRight->registerSubPerspectiveGrid(this);
 }
@@ -196,6 +214,8 @@ KisPerspectiveGridNodeSP KisSubPerspectiveGrid::bottomLeft()
 
 void KisSubPerspectiveGrid::setBottomLeft(KisPerspectiveGridNodeSP node)
 {
+    if(node->containsSubPerspectiveGrid(this)) return;
+    if(d->bottomLeft) d->bottomLeft->unRegisterSubPerspectiveGrid(this);
     d->bottomLeft = node;
     d->bottomLeft->registerSubPerspectiveGrid(this);
 }
@@ -212,6 +232,8 @@ KisPerspectiveGridNodeSP KisSubPerspectiveGrid::bottomRight()
 
 void KisSubPerspectiveGrid::setBottomRight(KisPerspectiveGridNodeSP node)
 {
+    if(node->containsSubPerspectiveGrid(this)) return;
+    if(d->bottomRight) d->bottomRight->unRegisterSubPerspectiveGrid(this);
     d->bottomRight = node;
     d->bottomRight->registerSubPerspectiveGrid(this);
 }

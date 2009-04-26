@@ -42,11 +42,13 @@ class KRITAIMAGE_EXPORT KisPerspectiveGridNode : public QPointF, public KisShare
 public:
     KisPerspectiveGridNode(double x, double y);
     KisPerspectiveGridNode(QPointF p);
+    KisPerspectiveGridNode(const KisPerspectiveGridNode&);
     ~KisPerspectiveGridNode();
     void mergeWith(KisPerspectiveGridNodeSP);
 private:
     void registerSubPerspectiveGrid(KisSubPerspectiveGrid*);
     void unRegisterSubPerspectiveGrid(KisSubPerspectiveGrid*);
+    bool containsSubPerspectiveGrid(KisSubPerspectiveGrid*);
 private:
     struct Private;
     Private* const d;

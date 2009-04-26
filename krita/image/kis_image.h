@@ -333,6 +333,13 @@ public:
     QPointF pixelToDocument(const QPoint &pixelCoord) const;
 
     /**
+     * Convert a document rectangle to an integer pixel rectangle.
+     *
+     * @param pixelCoord pixel coordinate to convert.
+     */
+    QRectF pixelToDocument(const QRectF &pixelCoord) const;
+
+    /**
      * Return the width of the image
      */
     qint32 width() const;

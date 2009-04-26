@@ -653,6 +653,11 @@ QPointF KisImage::pixelToDocument(const QPoint &pixelCoord) const
     return QPointF((pixelCoord.x() + 0.5) / xRes(), (pixelCoord.y() + 0.5) / yRes());
 }
 
+QRectF KisImage::pixelToDocument(const QRectF &pixelCoord) const
+{
+    return QRectF( pixelToDocument( pixelCoord.topLeft() ), pixelToDocument( pixelCoord.bottomRight() ) );
+}
+
 qint32 KisImage::width() const
 {
     return m_d->width;

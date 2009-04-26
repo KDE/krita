@@ -37,7 +37,7 @@ class KoCompositeOpAlphaDarken : public KoCompositeOp {
 public:
 
     KoCompositeOpAlphaDarken(const KoColorSpace * cs)
-        : KoCompositeOp(cs, COMPOSITE_ALPHA_DARKEN, i18n("Alpha darken" ) )
+        : KoCompositeOp(cs, COMPOSITE_ALPHA_DARKEN, i18n("Alpha darken" ), KoCompositeOp::categoryMix() )
     {
     }
 

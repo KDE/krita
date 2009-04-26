@@ -32,7 +32,7 @@ class KoCompositeOpDivide : public KoCompositeOpAlphaBase<_CSTraits, KoComposite
     public:
 
         KoCompositeOpDivide(const KoColorSpace * cs)
-        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDivide<_CSTraits> >(cs, COMPOSITE_DIVIDE, i18n("Divide" ) )
+        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDivide<_CSTraits> >(cs, COMPOSITE_DIVIDE, i18n("Divide" ), KoCompositeOp::categoryArithmetic() )
         {
         }
 

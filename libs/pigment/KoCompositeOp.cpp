@@ -22,6 +22,22 @@
 #include "KoCompositeOp.h"
 #include "KoColorSpace.h"
 
+QString KoCompositeOp::categoryMix() {
+    return i18n("Mix");
+}
+QString KoCompositeOp::categoryLight() {
+    return i18n("Light");
+}
+QString KoCompositeOp::categoryArithmetic() {
+    return i18n("Arithmetic");
+}
+QString KoCompositeOp::categoryColor() {
+    return i18n("Color");
+}
+QString KoCompositeOp::categoryMisc() {
+    return i18n("Misc");
+}
+
 struct KoCompositeOp::Private {
     const KoColorSpace * colorSpace;
     QString id;
@@ -49,6 +65,10 @@ KoCompositeOp::KoCompositeOp(const KoColorSpace * cs, const QString& id,  const 
     d->description = description;
     d->userVisible = userVisible;
     d->category = category;
+    if(d->category.isEmpty())
+    {
+        d->category = categoryMisc();
+    }
 }
 
 void KoCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,

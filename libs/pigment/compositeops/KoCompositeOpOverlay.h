@@ -32,7 +32,7 @@ class KoCompositeOpOverlay : public KoCompositeOpAlphaBase<_CSTraits, KoComposit
     public:
 
         KoCompositeOpOverlay(const KoColorSpace * cs)
-        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpOverlay<_CSTraits> >(cs, COMPOSITE_OVERLAY, i18n("Overlay" ) )
+        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpOverlay<_CSTraits> >(cs, COMPOSITE_OVERLAY, i18n("Overlay" ), KoCompositeOp::categoryArithmetic() )
         {
         }
 

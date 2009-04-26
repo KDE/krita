@@ -32,7 +32,7 @@ class KoCompositeOpSubstract : public KoCompositeOpAlphaBase<_CSTraits, KoCompos
     public:
 
         KoCompositeOpSubstract(const KoColorSpace * cs)
-        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpSubstract<_CSTraits> >(cs, COMPOSITE_SUBSTRACT, i18n("Subtract" ) )
+        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpSubstract<_CSTraits> >(cs, COMPOSITE_SUBSTRACT, i18n("Subtract" ), KoCompositeOp::categoryArithmetic() )
         {
         }
 

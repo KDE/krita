@@ -42,7 +42,7 @@ class CompositeCopy : public KoCompositeOp {
     public:
 
         explicit CompositeCopy(KoColorSpace * cs)
-        : KoCompositeOp(cs, COMPOSITE_COPY, i18n("Copy" ) )
+        : KoCompositeOp(cs, COMPOSITE_COPY, i18n("Copy" ), KoCompositeOp::categoryMix() )
         {
         }
 

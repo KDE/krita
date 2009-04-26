@@ -31,7 +31,7 @@ class KoCompositeOpMultiply : public KoCompositeOpAlphaBase<_CSTraits, KoComposi
     public:
 
         KoCompositeOpMultiply(const KoColorSpace * cs)
-        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpMultiply<_CSTraits> >(cs, COMPOSITE_MULT, i18n("Multiply" ) )
+        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpMultiply<_CSTraits> >(cs, COMPOSITE_MULT, i18n("Multiply" ), KoCompositeOp::categoryArithmetic() )
         {
         }
 

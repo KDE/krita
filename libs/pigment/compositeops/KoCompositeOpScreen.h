@@ -32,7 +32,7 @@ class KoCompositeOpScreen : public KoCompositeOpAlphaBase<_CSTraits, KoComposite
     public:
 
         KoCompositeOpScreen(const KoColorSpace * cs)
-        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpScreen<_CSTraits> >(cs, COMPOSITE_SCREEN, i18n("Screen" ) )
+        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpScreen<_CSTraits> >(cs, COMPOSITE_SCREEN, i18n("Screen" ), KoCompositeOp::categoryArithmetic() )
         {
         }
 

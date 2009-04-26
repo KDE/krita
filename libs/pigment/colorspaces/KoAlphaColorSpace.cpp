@@ -40,7 +40,7 @@ namespace {
     public:
 
         CompositeOver(KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_OVER, i18n("Normal" ) )
+            : KoCompositeOp(cs, COMPOSITE_OVER, i18n("Normal" ), KoCompositeOp::categoryMix() )
             {
             }
 
@@ -139,7 +139,7 @@ namespace {
     public:
 
         CompositeClear(KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_CLEAR, i18n("Clear" ) )
+            : KoCompositeOp(cs, COMPOSITE_CLEAR, i18n("Clear" ), KoCompositeOp::categoryMix() )
             {
             }
 
@@ -214,7 +214,7 @@ namespace {
     public:
 
         CompositeErase(KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_ERASE, i18n("Erase" ) )
+            : KoCompositeOp(cs, COMPOSITE_ERASE, i18n("Erase" ), KoCompositeOp::categoryMix() )
             {
             }
 
@@ -279,7 +279,7 @@ namespace {
     public:
 
         CompositeSubtract(KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_SUBSTRACT, i18n("Subtract" ) )
+            : KoCompositeOp(cs, COMPOSITE_SUBSTRACT, i18n("Subtract" ), KoCompositeOp::categoryArithmetic() )
             {
             }
 

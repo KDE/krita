@@ -33,7 +33,7 @@ class KoCompositeOpDodge : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeO
     public:
 
         KoCompositeOpDodge(const KoColorSpace * cs)
-        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDodge<_CSTraits> >(cs, COMPOSITE_DODGE, i18n("Dodge" ) )
+        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDodge<_CSTraits> >(cs, COMPOSITE_DODGE, i18n("Dodge" ), KoCompositeOp::categoryLight() )
         {
         }
 

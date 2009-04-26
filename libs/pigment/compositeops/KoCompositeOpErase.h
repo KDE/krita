@@ -36,7 +36,7 @@ class KoCompositeOpErase : public KoCompositeOp {
 public:
 
     KoCompositeOpErase(const KoColorSpace * cs)
-    : KoCompositeOp(cs, COMPOSITE_ERASE, i18n("Erase" ) )
+    : KoCompositeOp(cs, COMPOSITE_ERASE, i18n("Erase" ), KoCompositeOp::categoryMix() )
     {
     }
 

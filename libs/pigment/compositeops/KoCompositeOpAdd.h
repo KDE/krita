@@ -32,7 +32,7 @@ class KoCompositeOpAdd : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpA
     public:
 
         KoCompositeOpAdd(const KoColorSpace * cs)
-        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpAdd<_CSTraits> >(cs, COMPOSITE_ADD, i18n("Add" ) )
+        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpAdd<_CSTraits> >(cs, COMPOSITE_ADD, i18n("Add" ), KoCompositeOp::categoryArithmetic() )
         {
         }
 

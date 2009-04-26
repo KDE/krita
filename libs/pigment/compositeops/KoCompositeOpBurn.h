@@ -32,7 +32,7 @@ class KoCompositeOpBurn : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOp
     public:
 
         KoCompositeOpBurn(const KoColorSpace * cs)
-        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpBurn<_CSTraits> >(cs, COMPOSITE_BURN, i18n("Burn" ) )
+        : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpBurn<_CSTraits> >(cs, COMPOSITE_BURN, i18n("Burn" ), KoCompositeOp::categoryLight() )
         {
         }
 

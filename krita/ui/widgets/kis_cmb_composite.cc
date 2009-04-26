@@ -29,18 +29,12 @@
 #include <KCategoryDrawer>
 
 KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
-        : KComboBox(parent), m_lastModel(0), m_sortModel(new KisCompositeOpsCategorizedModel)
+        : KComboBox(parent), m_lastModel(0), m_sortModel(0)
 {
     setObjectName(name);
     setEditable(false);
     connect(this, SIGNAL(activated(int)), this, SLOT(slotOpActivated(int)));
     connect(this, SIGNAL(highlighted(int)), this, SLOT(slotOpHighlighted(int)));
-    
-//     m_sortModel->setCategorizedModel(true);
-    
-    KCategorizedView* view = new KCategorizedView(this);
-    view->setCategoryDrawer(new KCategoryDrawer);
-    setView(view);
 }
 
 KisCmbComposite::~KisCmbComposite()
@@ -50,12 +44,23 @@ KisCmbComposite::~KisCmbComposite()
 void KisCmbComposite::setCompositeOpList(const QList<KoCompositeOp*> & list)
 {
     KisCompositeOpsModel* model = new KisCompositeOpsModel(list);
-    m_sortModel->setSourceModel(model);
-    m_sortModel->sort(0);
-    setModel(m_sortModel);
+    KisCompositeOpsCategorizedModel* sortModel = new KisCompositeOpsCategorizedModel;
+    sortModel->setSourceModel(model);
+    sortModel->sort(0);
+    sortModel->setCategorizedModel(true);
     
+    // KCategorizedView is so br0ken that you need to recreate one when changing the model
+    KCategorizedView* view = new KCategorizedView(this);
+    view->setCategoryDrawer(new KCategoryDrawer);
+    setView(view);
+    
+    setModel(sortModel);
+
+    delete m_sortModel;
+    m_sortModel = sortModel;
     delete m_lastModel;
     m_lastModel = model;
+
 }
 
 KoCompositeOp* KisCmbComposite::itemAt(int idx) const

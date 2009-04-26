@@ -116,21 +116,12 @@ QImage KisPaintOpSettings::sampleStroke(const QSize& size )
     return layer->paintDevice()->convertToQImage(0);
 }
 
-void KisPaintOpSettings::paintOutline(const QPointF& pos, QPainter &painter, const KoViewConverter &converter)
+QRectF KisPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP image) const
 {
-    Q_UNUSED(pos);
-    Q_UNUSED(painter);
-    Q_UNUSED(converter);
+    return QRectF();
 }
 
-void KisPaintOpSettings::paintOutline(const QLineF& pos, QPainter &painter, const KoViewConverter &converter)
-{
-    Q_UNUSED(pos);
-    Q_UNUSED(painter);
-    Q_UNUSED(converter);
-}
-
-void KisPaintOpSettings::paintOutline(const QPolygon& pos, QPainter &painter, const KoViewConverter &converter)
+void KisPaintOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter) const
 {
     Q_UNUSED(pos);
     Q_UNUSED(painter);

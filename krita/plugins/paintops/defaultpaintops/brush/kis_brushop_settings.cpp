@@ -95,7 +95,7 @@ void KisBrushOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPai
     QPointF hotSpot = brush->hotSpot(1.0, 1.0);
     painter.setPen(Qt::black);
     painter.setBackground(Qt::black);
-    painter.drawRect( converter.documentToView( image->pixelToDocument(QRect(0,0, brush->width(), brush->height()) ).translated( pos - hotSpot + QPoint(1,1) ) ) );
+    painter.drawEllipse( converter.documentToView( image->pixelToDocument(QRect(0,0, brush->width(), brush->height()) ).translated( pos - hotSpot + QPoint(1,1) ) ) );
 }
 
 #include "kis_brushop_settings.moc"

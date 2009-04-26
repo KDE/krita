@@ -26,6 +26,7 @@
 #include "KoCompositeOp.h"
 
 class KisCompositeOpsModel;
+class KisCompositeOpsCategorizedModel;
 
 /**
  * A combobox filled with the various composition strategies
@@ -61,8 +62,10 @@ private slots:
 private:
     // Prevent deprectated Qt3 method from being called. Use setCurrent instead.
     void setCurrentText(const QString & s);
+    KoCompositeOp* itemAt(int idx) const;
 
     KisCompositeOpsModel* m_lastModel;
+    KisCompositeOpsCategorizedModel* m_sortModel;
 };
 
 #endif

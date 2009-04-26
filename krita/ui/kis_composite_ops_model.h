@@ -28,11 +28,15 @@ class KoCompositeOp;
  */
 class KisCompositeOpsModel : public QAbstractListModel {
     public:
+        enum AdditionalRoles {
+            CompositeOpSortRole = 0x1FDFDA
+        };
+    public:
         KisCompositeOpsModel(const QList<KoCompositeOp*>& list);
         ~KisCompositeOpsModel();
         int rowCount( const QModelIndex & parent = QModelIndex() ) const;
         QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const;
-        KoCompositeOp* itemAt(qint32 idx) const;
+        KoCompositeOp* itemAt(const QModelIndex & index) const;
         /**
          * @return the index for the given composite op
          */

@@ -16,3 +16,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kis_composite_ops_categorized_model.h"
+#include "kis_composite_ops_model.h"
+
+
+KisCompositeOpsCategorizedModel::KisCompositeOpsCategorizedModel()
+{
+    setSortRole(KisCompositeOpsModel::CompositeOpSortRole);
+}
+
+KisCompositeOpsCategorizedModel::~KisCompositeOpsCategorizedModel()
+{
+}

@@ -24,56 +24,19 @@
 #include <kis_debug.h>
 #include <KoCompositeOp.h>
 #include "../kis_composite_ops_model.h"
-
-static QStringList opsInOrder;
+#include <kis_composite_ops_categorized_model.h>
+#include <qabstractitemview.h>
+#include <qlistview.h>
+#include <QStringListModel>
+#include <qtreeview.h>
 
 KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
-        : KComboBox(parent), m_lastModel(0)
+        : KComboBox(parent), m_lastModel(0), m_sortModel(new KisCompositeOpsCategorizedModel)
 {
     setObjectName(name);
     setEditable(false);
     connect(this, SIGNAL(activated(int)), this, SLOT(slotOpActivated(int)));
     connect(this, SIGNAL(highlighted(int)), this, SLOT(slotOpHighlighted(int)));
-    if (opsInOrder.isEmpty()) {
-        opsInOrder <<
-        COMPOSITE_OVER <<
-        COMPOSITE_ERASE <<
-        COMPOSITE_COPY <<
-        COMPOSITE_ALPHA_DARKEN <<
-        COMPOSITE_IN <<
-        COMPOSITE_OUT <<
-        COMPOSITE_ATOP <<
-        COMPOSITE_XOR <<
-        COMPOSITE_PLUS <<
-        COMPOSITE_MINUS <<
-        COMPOSITE_ADD <<
-        COMPOSITE_SUBSTRACT <<
-        COMPOSITE_DIFF <<
-        COMPOSITE_MULT <<
-        COMPOSITE_DIVIDE <<
-        COMPOSITE_DODGE <<
-        COMPOSITE_BURN <<
-        COMPOSITE_BUMPMAP <<
-        COMPOSITE_CLEAR <<
-        COMPOSITE_DISSOLVE <<
-        COMPOSITE_DISPLACE <<
-        COMPOSITE_NO <<
-        COMPOSITE_DARKEN <<
-        COMPOSITE_LIGHTEN <<
-        COMPOSITE_HUE <<
-        COMPOSITE_SATURATION <<
-        COMPOSITE_VALUE <<
-        COMPOSITE_COLOR <<
-        COMPOSITE_COLORIZE <<
-        COMPOSITE_LUMINIZE <<
-        COMPOSITE_SCREEN <<
-        COMPOSITE_OVERLAY <<
-        COMPOSITE_UNDEF <<
-        COMPOSITE_COPY_RED <<
-        COMPOSITE_COPY_GREEN <<
-        COMPOSITE_COPY_BLUE <<
-        COMPOSITE_COPY_OPACITY;
-    }
 }
 
 KisCmbComposite::~KisCmbComposite()
@@ -83,48 +46,27 @@ KisCmbComposite::~KisCmbComposite()
 void KisCmbComposite::setCompositeOpList(const QList<KoCompositeOp*> & list)
 {
     KisCompositeOpsModel* model = new KisCompositeOpsModel(list);
-    setModel(model);
+    m_sortModel->setSourceModel(model);
+    m_sortModel->sort(0);
+    setModel(m_sortModel);
     
     delete m_lastModel;
     m_lastModel = model;
-    
-#if 0
-    KComboBox::clear();
-    m_list.clear();
+}
 
-    // First, insert all composite ops that we know about, in a nice order.
-    foreach(const QString & id, opsInOrder) {
-        foreach(KoCompositeOp* op, list) {
-            if (op->id() == id) {
-                m_list.append(op);
-                addItem(op->description());
-            }
-        }
-    }
-    // Then check for all given composite ops whether they are already inserted, and if not, add them at the end.
-    foreach(KoCompositeOp* op1, list) {
-        bool found = false;
-        foreach(KoCompositeOp* op2, m_list) {
-            if (op1->id() == op2->id()) {
-                found = true;
-            }
-        }
-        if (!found && op1->userVisible()) {
-            m_list.append(op1);
-            addItem(op1->description());
-        }
-    }
-#endif
+KoCompositeOp* KisCmbComposite::itemAt(int idx) const
+{
+    return m_lastModel->itemAt(m_sortModel->mapToSource( m_sortModel->index( idx, 0 ) ) );
 }
 
 KoCompositeOp * KisCmbComposite::currentItem() const
 {
-    return m_lastModel->itemAt(currentIndex());
+    return itemAt(currentIndex());
 }
 
 void KisCmbComposite::setCurrent(const KoCompositeOp* op)
 {
-    QModelIndex index = m_lastModel->indexOf(op);
+    QModelIndex index = m_sortModel->mapFromSource( m_lastModel->indexOf(op) );
     if (index.isValid()) {
         KComboBox::setCurrentIndex(index.row());
     }
@@ -132,7 +74,7 @@ void KisCmbComposite::setCurrent(const KoCompositeOp* op)
 
 void KisCmbComposite::setCurrent(const QString & s)
 {
-    QModelIndex index = m_lastModel->indexOf(s);
+    QModelIndex index = m_sortModel->mapFromSource( m_lastModel->indexOf(s));
     if (index.isValid()) {
         KComboBox::setCurrentIndex(index.row());
     }
@@ -142,14 +84,14 @@ void KisCmbComposite::slotOpActivated(int i)
 {
     if (i >= m_lastModel->rowCount()) return;
 
-    emit activated(m_lastModel->itemAt(i));
+    emit activated(itemAt(i));
 }
 
 void KisCmbComposite::slotOpHighlighted(int i)
 {
     if (i >= m_lastModel->rowCount()) return;
 
-    emit activated(m_lastModel->itemAt(i));
+    emit activated(itemAt(i));
 }
 
 

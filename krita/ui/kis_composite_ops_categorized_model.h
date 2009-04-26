@@ -16,3 +16,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#ifndef _KIS_COMPOSITE_OPS_CATEGORIZED_MODEL_H_
+#define _KIS_COMPOSITE_OPS_CATEGORIZED_MODEL_H_
+
+#include <KCategorizedSortFilterProxyModel>
+
+class KisCompositeOpsCategorizedModel : public KCategorizedSortFilterProxyModel {
+    public:
+        KisCompositeOpsCategorizedModel();
+        ~KisCompositeOpsCategorizedModel();
+};
+
+
+
+#endif

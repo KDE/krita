@@ -60,7 +60,6 @@ private:
     const KisDuplicateOpSettings * settings;
     KisPaintDeviceSP m_srcdev;
     KisPaintDeviceSP m_target;
-    KisImageSP m_image;
     QPointF m_duplicateStart;
     bool m_duplicateStartIsSet;
 

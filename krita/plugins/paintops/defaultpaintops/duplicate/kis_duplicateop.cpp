@@ -159,13 +159,14 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     // Perspective correction ?
     KisPainter copyPainter(m_srcdev);
-    if (settings->perspectiveCorrection()) {
+    KisImageSP image = settings->m_image;
+    if (settings->perspectiveCorrection() && image && image->perspectiveGrid()->countSubGrids() == 1) {
         Matrix3qreal startM = Matrix3qreal::Identity();
         Matrix3qreal endM = Matrix3qreal::Identity();
 
         // First look for the grid corresponding to the start point
-        KisSubPerspectiveGrid* subGridStart = *m_image->perspectiveGrid()->begin();
-        QRect r = QRect(0, 0, m_image->width(), m_image->height());
+        KisSubPerspectiveGrid* subGridStart = *image->perspectiveGrid()->begin();
+        QRect r = QRect(0, 0, image->width(), image->height());
 
 #if 1
         if (subGridStart) {
@@ -174,7 +175,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 #endif
 #if 1
         // Second look for the grid corresponding to the end point
-        KisSubPerspectiveGrid* subGridEnd = *m_image->perspectiveGrid()->begin();
+        KisSubPerspectiveGrid* subGridEnd = *image->perspectiveGrid()->begin();
         if (subGridEnd) {
             endM = KisPerspectiveMath::computeMatrixTransfoToPerspective(*subGridEnd->topLeft(), *subGridEnd->topRight(), *subGridEnd->bottomLeft(), *subGridEnd->bottomRight(), r);
         }

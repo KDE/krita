@@ -37,6 +37,7 @@
 #include <kis_pressure_size_option.h>
 #include <kis_paint_action_type_option.h>
 #include <kis_perspective_grid.h>
+#include <KoViewConverter.h>
 
 
 KisDuplicateOpSettings::KisDuplicateOpSettings( KisDuplicateOpSettingsWidget* widget, KisImageSP image )
@@ -142,6 +143,43 @@ KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const {
     s->m_position = m_position;
 
     return s;
+
+}
+
+QRectF KisDuplicateOpSettings::duplicateOutlineRect(const QPointF& pos, KisImageSP image) const
+{
+    // Compute the rectangle for the offset
+    QRectF rect2 = QRectF( -5, -5, 10, 10);
+    if(m_isOffsetNotUptodate)
+    {
+        rect2.translate(m_position);
+    } else {
+        rect2.translate(- m_offset + image->documentToPixel( pos) );
+    }
+    return image->pixelToDocument(rect2);
+}
+
+QRectF KisDuplicateOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP image) const
+{
+    KisBrushSP brush = m_optionsWidget->m_brushOption->brush();
+    QPointF hotSpot = brush->hotSpot(1.0, 1.0);
+    QRectF rect = image->pixelToDocument(QRect(0,0, brush->width(), brush->height()) );
+    rect.translate( pos - hotSpot + QPoint(1,1) );
+    rect |= duplicateOutlineRect(pos, image);
+    return rect;
+}
+
+void KisDuplicateOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter) const
+{
+    KisBrushSP brush = m_optionsWidget->m_brushOption->brush();
+    QPointF hotSpot = brush->hotSpot(1.0, 1.0);
+    painter.setPen(Qt::black);
+    painter.setBackground(Qt::black);
+    painter.drawEllipse( converter.documentToView( image->pixelToDocument(QRect(0,0, brush->width(), brush->height()) ).translated( pos - hotSpot + QPoint(1,1) ) ) );
+    
+    QRectF rect2 = converter.documentToView( duplicateOutlineRect( pos, image ) );
+    painter.drawLine(rect2.topLeft(), rect2.bottomRight() );
+    painter.drawLine(rect2.topRight(), rect2.bottomLeft() );
 
 }
 

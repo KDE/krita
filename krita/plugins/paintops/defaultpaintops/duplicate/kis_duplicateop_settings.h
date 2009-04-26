@@ -52,6 +52,8 @@ public:
     void toXML(QDomDocument& doc, QDomElement& rootElt) const;
 
     KisPaintOpSettingsSP clone() const;
+    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageSP image ) const;
+    virtual void paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter) const;
 
 public:
 
@@ -60,7 +62,8 @@ public:
     KisImageSP m_image;
     bool m_isOffsetNotUptodate;
     QPointF m_position; // Give the position of the last alt-click
-
+private:
+    QRectF duplicateOutlineRect(const QPointF& pos, KisImageSP image) const;
 };
 
 

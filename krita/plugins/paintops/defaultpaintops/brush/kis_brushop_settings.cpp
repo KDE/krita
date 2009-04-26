@@ -29,6 +29,8 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_paint_action_type_option.h>
+#include "kis_image.h"
+#include <KoViewConverter.h>
 
 KisBrushOpSettings::KisBrushOpSettings( KisBrushOpSettingsWidget* widget )
     : KisPaintOpSettings( widget )
@@ -78,6 +80,22 @@ KisPaintOpSettingsSP KisBrushOpSettings::clone() const
     KisPaintOpSettingsSP settings = dynamic_cast<KisPaintOpSettings*>( m_optionsWidget->configuration() );
     return settings;
 
+}
+
+QRectF KisBrushOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP image) const
+{
+    KisBrushSP brush = m_optionsWidget->m_brushOption->brush();
+    QPointF hotSpot = brush->hotSpot(1.0, 1.0);
+    return image->pixelToDocument(QRect(0,0, brush->width(), brush->height()) ).translated( pos - hotSpot + QPoint(1,1) );
+}
+
+void KisBrushOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter) const
+{
+    KisBrushSP brush = m_optionsWidget->m_brushOption->brush();
+    QPointF hotSpot = brush->hotSpot(1.0, 1.0);
+    painter.setPen(Qt::black);
+    painter.setBackground(Qt::black);
+    painter.drawRect( converter.documentToView( image->pixelToDocument(QRect(0,0, brush->width(), brush->height()) ).translated( pos - hotSpot + QPoint(1,1) ) ) );
 }
 
 #include "kis_brushop_settings.moc"

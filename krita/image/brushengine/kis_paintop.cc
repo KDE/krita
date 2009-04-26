@@ -247,24 +247,3 @@ double KisPaintOp::scaleForPressure(double pressure)
 
     return scale;
 }
-
-void KisPaintOp::paintOutline(const QPointF& pos, QPainter &painter, const KoViewConverter &converter)
-{
-    Q_UNUSED(pos);
-    Q_UNUSED(painter);
-    Q_UNUSED(converter);
-}
-
-void KisPaintOp::paintOutline(const QLineF& pos, QPainter &painter, const KoViewConverter &converter)
-{
-    Q_UNUSED(pos);
-    Q_UNUSED(painter);
-    Q_UNUSED(converter);
-}
-
-void KisPaintOp::paintOutline(const QPolygon& pos, QPainter &painter, const KoViewConverter &converter)
-{
-    Q_UNUSED(pos);
-    Q_UNUSED(painter);
-    Q_UNUSED(converter);
-}

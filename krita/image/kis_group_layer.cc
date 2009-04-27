@@ -39,6 +39,7 @@
 #include "kis_projection.h"
 #include "kis_paint_layer.h"
 #include "kis_projection_update_strategy.h"
+#include <KoProperties.h>
 
 class KisGroupLayer::Private
 {
@@ -227,6 +228,12 @@ void KisGroupLayer::updateProjection(const QRect & rc)
     } else {
         m_d->projection->clear(rc); // needed when layers in the group aren't fully opaque
         m_d->projection = updateStrategy()->updateGroupLayerProjection(rc, m_d->projection);
+    }
+    KoProperties props;
+    props.setProperty("visible", true);
+    QList<KisNodeSP> masks = childNodes(QStringList("KisEffectMask"), props);
+    if (masks.size() > 0 ) {
+        applyEffectMasks(m_d->projection, m_d->projection, rc);
     }
 }
 

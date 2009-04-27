@@ -40,6 +40,7 @@
 #include "kis_paint_layer.h"
 #include "kis_projection_update_strategy.h"
 #include <KoProperties.h>
+#include "kis_effect_mask.h"
 
 class KisGroupLayer::Private
 {
@@ -52,6 +53,7 @@ public:
     }
 
     KisPaintDeviceSP projection; // The cached composition of all
+    KisPaintDeviceSP projectionUnfiltered; // The cached composition of all before filtering
     // layers in this group
     bool cacheProjection;
     qint32 x;
@@ -222,18 +224,40 @@ QImage KisGroupLayer::createThumbnail(qint32 w, qint32 h)
 
 void KisGroupLayer::updateProjection(const QRect & rc)
 {
+    QRect currentNeededRc = rc;
     if( childCount() == 0 )
     {
         m_d->projection->clear();
     } else {
-        m_d->projection->clear(rc); // needed when layers in the group aren't fully opaque
-        m_d->projection = updateStrategy()->updateGroupLayerProjection(rc, m_d->projection);
-    }
-    KoProperties props;
-    props.setProperty("visible", true);
-    QList<KisNodeSP> masks = childNodes(QStringList("KisEffectMask"), props);
-    if (masks.size() > 0 ) {
-        applyEffectMasks(m_d->projection, m_d->projection, rc);
+        KoProperties props;
+        props.setProperty("visible", true);
+        QList<KisNodeSP> masks = childNodes(QStringList("KisEffectMask"), props);
+        
+        KisPaintDeviceSP source;
+        
+        if( masks.isEmpty() ) {
+            source = m_d->projection;
+            m_d->projectionUnfiltered = 0; // No masks, make sure this projection memory is freed
+        } else {
+            for( int i = masks.size() - 1; i >= 0 ; --i )
+            {
+                const KisEffectMask * effectMask = dynamic_cast<const KisEffectMask*>(masks.at(i).data());
+                if (effectMask) {
+                    currentNeededRc |= effectMask->neededRect( currentNeededRc );
+                }
+            }
+            if( !m_d->projectionUnfiltered || !(*m_d->projectionUnfiltered->colorSpace() == *m_d->projection->colorSpace() ) ) {
+                m_d->projectionUnfiltered = new KisPaintDevice(m_d->projection->colorSpace());
+            }
+            source = m_d->projectionUnfiltered;
+        }
+        
+        source->clear(currentNeededRc); // needed when layers in the group aren't fully opaque
+        source = updateStrategy()->updateGroupLayerProjection(currentNeededRc, m_d->projection);
+    
+        if (masks.size() > 0 ) {
+            applyEffectMasks(source, m_d->projection, rc);
+        }
     }
 }
 

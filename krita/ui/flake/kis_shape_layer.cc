@@ -34,6 +34,7 @@
 #include <ktemporaryfile.h>
 #include <kicon.h>
 
+#include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoDataCenter.h>
 #include <KoDocument.h>
@@ -45,6 +46,7 @@
 #include <KoOdfStylesReader.h>
 #include <KoOdfWriteStore.h>
 #include <KoPageLayout.h>
+#include <KoProperties.h>
 #include <KoShapeContainer.h>
 #include <KoShapeLayer.h>
 #include <KoShapeLoadingContext.h>
@@ -67,6 +69,7 @@
 #include "kis_image_view_converter.h"
 #include <kis_painter.h>
 #include "kis_node_visitor.h"
+#include "kis_effect_mask.h"
 
 class KisShapeLayer::Private
 {
@@ -75,6 +78,7 @@ public:
     qint32 x;
     qint32 y;
     KisPaintDeviceSP projection;
+    KisPaintDeviceSP filteredProjection;
     KisShapeLayerCanvas * canvas;
     KoShapeControllerBase* controller;
 };
@@ -135,14 +139,34 @@ QIcon KisShapeLayer::icon() const
     return KIcon("bookmarks");
 }
 
-void KisShapeLayer::updateProjection(const QRect& r)
+void KisShapeLayer::updateProjection(const QRect& rc)
 {
-    dbgImage << "KisShapeLayer::updateProjection()" << r;
+    dbgImage << "KisShapeLayer::updateProjection()" << rc;
+
+    KoProperties props;
+    props.setProperty("visible", true);
+    QList<KisNodeSP> masks = childNodes(QStringList("KisEffectMask"), props);
+
+    if(masks.empty()) {
+        m_d->filteredProjection = 0; // Don't use the filtered projection anymore
+    } else {
+        if( !m_d->filteredProjection || !(*m_d->filteredProjection->colorSpace() == *m_d->projection->colorSpace() ) ) {
+            m_d->filteredProjection = new KisPaintDevice(m_d->projection->colorSpace());
+        } else {
+            m_d->filteredProjection->clear(rc);
+        }
+        applyEffectMasks(m_d->projection, m_d->filteredProjection, rc);
+    }
 }
 
 KisPaintDeviceSP KisShapeLayer::projection() const
 {
-    return m_d->projection;
+    if(m_d->filteredProjection)
+    {
+        return m_d->filteredProjection;
+    } else {
+        return m_d->projection;
+    }
 }
 
 qint32 KisShapeLayer::x() const

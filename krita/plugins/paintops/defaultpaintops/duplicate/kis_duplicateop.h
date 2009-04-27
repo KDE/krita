@@ -37,7 +37,6 @@ class KisDuplicateOpSettingsWidget;
 
 class QPointF;
 class KisPainter;
-class KCurve;
 
 
 class KisDuplicateOp : public KisBrushBasedPaintOp

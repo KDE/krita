@@ -29,7 +29,7 @@
 #include <klocale.h>
 
 #include <kis_paint_device.h>
-#include <widgets/kcurve.h>
+#include <widgets/kis_curve_widget.h>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>

@@ -23,7 +23,6 @@
 #include "kis_filterop_settings_widget.h"
 #include "kis_filterop_settings.h"
 
-#include <widgets/kcurve.h>
 #include <kis_properties_configuration.h>
 #include <kis_brush_option.h>
 #include <filter/kis_filter.h>

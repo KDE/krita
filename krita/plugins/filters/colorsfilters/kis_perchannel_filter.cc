@@ -45,9 +45,10 @@
 #include <kis_processing_information.h>
 
 #include "kis_iterators_pixel.h"
-#include "widgets/kcurve.h"
 #include "kis_histogram.h"
 #include "kis_painter.h"
+#include "widgets/kis_curve_widget.h"
+
 
 #define bounds(x,a,b) (x<a ? a : (x>b ? b :x))
 
@@ -85,10 +86,10 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     hpf = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(0).id());
     m_histogram = new KisHistogram(m_dev, hpf->generate(), LINEAR);
 
-    connect(m_page->kCurve, SIGNAL(modified()), this, SIGNAL(sigConfigChanged()));
+    connect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigChanged()));
     connect(m_page->cbPreview, SIGNAL(stateChanged(int)), this, SLOT(setPreview(int)));
 
-    m_page->kCurve->setupInOutControls(m_page->intIn, m_page->intOut, 0, 100);
+    m_page->curveWidget->setupInOutControls(m_page->intIn, m_page->intOut, 0, 100);
 
     setActiveChannel(0);
 }
@@ -96,11 +97,11 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
 void KisPerChannelConfigWidget::setPreview(int state)
 {
     if(state) {
-        connect(m_page->kCurve, SIGNAL(modified()), this, SIGNAL(sigConfigChanged()));
+        connect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigChanged()));
         emit sigConfigChanged();
     }
     else
-        disconnect(m_page->kCurve, SIGNAL(modified()), this, SIGNAL(sigConfigChanged()));
+        disconnect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigChanged()));
 }
 
 
@@ -163,10 +164,10 @@ inline QPixmap KisPerChannelConfigWidget::getHistogram()
 
 void KisPerChannelConfigWidget::setActiveChannel(int ch)
 {
-    m_curves[m_activeCh] = m_page->kCurve->getCurve();
+    m_curves[m_activeCh] = m_page->curveWidget->getCurve();
     m_activeCh = ch;
-    m_page->kCurve->setCurve(m_curves[m_activeCh]);
-    m_page->kCurve->setPixmap(getHistogram());
+    m_page->curveWidget->setCurve(m_curves[m_activeCh]);
+    m_page->curveWidget->setPixmap(getHistogram());
     m_page->cmbChannel->setCurrentIndex(ch);
 
     // Getting range accepted by chahhel
@@ -176,7 +177,7 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
     int min;
     int max;
 
-    m_page->kCurve->dropInOutControls();
+    m_page->curveWidget->dropInOutControls();
 
     switch(channel->channelValueType())
       {
@@ -207,7 +208,7 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
         break;
       }
 
-    m_page->kCurve->setupInOutControls(m_page->intIn, m_page->intOut, min, max);
+    m_page->curveWidget->setupInOutControls(m_page->intIn, m_page->intOut, min, max);
 }
 
 
@@ -217,12 +218,12 @@ KisPropertiesConfiguration * KisPerChannelConfigWidget::configuration() const
     KisPerChannelFilterConfiguration * cfg = new KisPerChannelFilterConfiguration(nCh);
 
     // updating current state
-    m_curves[m_activeCh] = m_page->kCurve->getCurve();
+    m_curves[m_activeCh] = m_page->curveWidget->getCurve();
 
     cfg->setCurves(m_curves);
 
     /* Cached version */
-    cfg->updateTransfersCached(*m_page->kCurve);
+    cfg->updateTransfersCached(*m_page->curveWidget);
     //cfg->updateTransfers();
 
     return cfg;
@@ -250,7 +251,7 @@ void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguratio
             m_curves[ch] = cfg->m_curves[ch];
     }
 
-    m_page->kCurve->setCurve(m_curves[m_activeCh]);
+    m_page->curveWidget->setCurve(m_curves[m_activeCh]);
     setActiveChannel(0);
 }
 
@@ -320,7 +321,7 @@ void KisPerChannelFilterConfiguration::updateTransfers()
         qint32 val;
         for (int i = 0; i < 256; ++i) {
             /* Direct uncached version */
-            val = int(0xFFFF * KCurve::getCurveValue(m_curves[ch], i / 255.0));
+            val = int(0xFFFF * KisCurveWidget::getCurveValue(m_curves[ch], i / 255.0));
             val = bounds(val, 0, 0xFFFF);
             m_transfers[ch][i] = val;
         }
@@ -328,7 +329,7 @@ void KisPerChannelFilterConfiguration::updateTransfers()
     }
 }
 
-void KisPerChannelFilterConfiguration::updateTransfersCached(KCurve &cacheKCurve)
+void KisPerChannelFilterConfiguration::updateTransfersCached(KisCurveWidget &cacheCurveWidget)
 {
     for (int ch = 0; ch < m_nTransfers; ++ch) {
         if (!m_transfers[ch])
@@ -337,7 +338,7 @@ void KisPerChannelFilterConfiguration::updateTransfersCached(KCurve &cacheKCurve
         qint32 val;
         for (int i = 0; i < 256; ++i) {
             /* Cached version of the cycle */
-            val = int(0xFFFF * cacheKCurve.getCurveValue(i / 255.0));
+            val = int(0xFFFF * cacheCurveWidget.getCurveValue(i / 255.0));
                 val = bounds(val, 0, 0xFFFF);
                 m_transfers[ch][i] = val;
         }

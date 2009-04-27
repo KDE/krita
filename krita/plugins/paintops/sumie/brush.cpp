@@ -30,7 +30,7 @@
 #include <QList>
 
 #include "kis_random_accessor.h"
-#include "widgets/kcurve.h"
+#include "widgets/kis_curve_widget.h"
 
 #include <cmath>
 #include <ctime>

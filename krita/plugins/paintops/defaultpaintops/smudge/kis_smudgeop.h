@@ -45,7 +45,6 @@ class KisSmudgeOpSettingsWidget;
 class QWidget;
 class QPointF;
 class KisPainter;
-class KCurve;
 
 
 class KisSmudgeOp : public KisBrushBasedPaintOp

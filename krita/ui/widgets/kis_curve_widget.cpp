@@ -17,7 +17,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "widgets/kcurve.h"
 
 // C++ includes.
 
@@ -49,23 +48,25 @@
 
 // Local includes.
 
+#include "widgets/kis_curve_widget.h"
+
+
 #define bounds(x,a,b) (x<a ? a : (x>b ? b :x))
 #define MOUSE_AWAY_THRES 15
 #define POINT_AREA       1E-4
 #define CURVE_AREA       1E-4
+
+#include "kis_curve_widget_p.h"
 
 
 static
 bool pointLessThan(const QPointF &a, const QPointF &b);
 
 
-#include "kcurve_p.h"
-
-
-KCurve::KCurve(QWidget *parent, Qt::WFlags f)
-    : QWidget(parent, f), d(new KCurve::Private(this))
+KisCurveWidget::KisCurveWidget(QWidget *parent, Qt::WFlags f)
+    : QWidget(parent, f), d(new KisCurveWidget::Private(this))
 {
-    setObjectName("KCurve");
+    setObjectName("KisCurveWidget");
     d->m_grab_point_index = -1;
     d->m_readOnlyMode   = false;
     d->m_guideVisible   = false;
@@ -92,14 +93,14 @@ KCurve::KCurve(QWidget *parent, Qt::WFlags f)
     setFocusPolicy(Qt::StrongFocus);
 }
 
-KCurve::~KCurve()
+KisCurveWidget::~KisCurveWidget()
 {
     if(d->m_pixmapCache)
 	delete d->m_pixmapCache;
     delete d;
 }
 
-void KCurve::setupInOutControls(QSpinBox *in, QSpinBox *out, int min, int max)
+void KisCurveWidget::setupInOutControls(QSpinBox *in, QSpinBox *out, int min, int max)
 {
     d->m_intIn=in;
     d->m_intOut=out;
@@ -119,7 +120,7 @@ void KCurve::setupInOutControls(QSpinBox *in, QSpinBox *out, int min, int max)
     d->syncIOControls();
   
 }
-void KCurve::dropInOutControls()
+void KisCurveWidget::dropInOutControls()
 {
     if(!d->m_intIn || !d->m_intOut)
 	return;
@@ -131,7 +132,7 @@ void KCurve::dropInOutControls()
   
 }
 
-void KCurve::inOutChanged(int)
+void KisCurveWidget::inOutChanged(int)
 {
     QPointF pt;
 
@@ -162,7 +163,7 @@ void KCurve::inOutChanged(int)
 }
 
 
-void KCurve::reset(void)
+void KisCurveWidget::reset(void)
 {
     d->m_grab_point_index = -1;
     d->m_guideVisible = false;
@@ -170,21 +171,21 @@ void KCurve::reset(void)
     d->setCurveModified();
 }
 
-void KCurve::setCurveGuide(const QColor & color)
+void KisCurveWidget::setCurveGuide(const QColor & color)
 {
     d->m_guideVisible = true;
     d->m_colorGuide   = color;
 
 }
 
-void KCurve::setPixmap(const QPixmap & pix)
+void KisCurveWidget::setPixmap(const QPixmap & pix)
 {
     d->m_pix = pix;
     d->m_pixmapDirty=true;
     d->setCurveRepaint();
 }
 
-void KCurve::keyPressEvent(QKeyEvent *e)
+void KisCurveWidget::keyPressEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Delete || e->key() == Qt::Key_Backspace) {
         if (d->m_grab_point_index > 0 && d->m_grab_point_index < d->m_points.count() - 1) {
@@ -221,7 +222,7 @@ void KCurve::keyPressEvent(QKeyEvent *e)
         QWidget::keyPressEvent(e);
 }
 
-void KCurve::addPointInTheMiddle()
+void KisCurveWidget::addPointInTheMiddle()
 {
     QPointF pt;
     pt.rx()=0.5;
@@ -239,13 +240,13 @@ void KCurve::addPointInTheMiddle()
     d->setCurveModified();
 }
 
-void KCurve::resizeEvent(QResizeEvent *e)
+void KisCurveWidget::resizeEvent(QResizeEvent *e)
 {
     d->m_pixmapDirty=true;
     QWidget::resizeEvent(e);
 }
 
-void KCurve::paintEvent(QPaintEvent *)
+void KisCurveWidget::paintEvent(QPaintEvent *)
 {
     int    wWidth = width()-1;
     int    wHeight = height()-1;
@@ -329,7 +330,7 @@ static bool pointLessThan(const QPointF &a, const QPointF &b)
     return a.x() < b.x();
 }
 
-void KCurve::mousePressEvent(QMouseEvent * e)
+void KisCurveWidget::mousePressEvent(QMouseEvent * e)
 {
     if (d->m_readOnlyMode) return;
 
@@ -368,7 +369,7 @@ void KCurve::mousePressEvent(QMouseEvent * e)
 }
 
 
-void KCurve::mouseReleaseEvent(QMouseEvent *e)
+void KisCurveWidget::mouseReleaseEvent(QMouseEvent *e)
 {
     if (d->m_readOnlyMode) return;
 
@@ -382,7 +383,7 @@ void KCurve::mouseReleaseEvent(QMouseEvent *e)
 }
 
 
-void KCurve::mouseMoveEvent(QMouseEvent * e)
+void KisCurveWidget::mouseMoveEvent(QMouseEvent * e)
 {
     if (d->m_readOnlyMode) return;
 
@@ -461,7 +462,7 @@ void KCurve::mouseMoveEvent(QMouseEvent * e)
     }
 }
 
-double KCurve::getCurveValue(double x)
+double KisCurveWidget::getCurveValue(double x)
 {
     if(d->m_splineDirty) {
 	d->m_spline.createSpline(QVector<QPointF>::fromList(d->m_points));
@@ -470,26 +471,26 @@ double KCurve::getCurveValue(double x)
     return Private::checkBounds(d->m_spline, x);
 }
 
-double KCurve::getCurveValue(const QList<QPointF>& curve, double x)
+double KisCurveWidget::getCurveValue(const QList<QPointF>& curve, double x)
 {
     KisCubicSpline<QPointF, double> spline(QVector<QPointF>::fromList(curve));
     return Private::checkBounds(spline, x);
 }
 
-QList<QPointF> KCurve::getCurve()
+QList<QPointF> KisCurveWidget::getCurve()
 {
     return d->m_points;
 }
 
-void KCurve::setCurve(QList<QPointF >inlist)
+void KisCurveWidget::setCurve(QList<QPointF >inlist)
 {
     d->m_points = inlist;
     d->m_grab_point_index=bounds(d->m_grab_point_index, 0,d->m_points.count()-1);
     d->setCurveModified();
 }
 
-void KCurve::leaveEvent(QEvent *)
+void KisCurveWidget::leaveEvent(QEvent *)
 {
 }
 
-#include "kcurve.moc"
+#include "kis_curve_widget.moc"

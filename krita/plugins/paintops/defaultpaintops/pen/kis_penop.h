@@ -43,7 +43,6 @@ class KisPenOpSettingsWidget;
 class QWidget;
 class QPointF;
 class KisPainter;
-class KCurve;
 
 
 class KisPenOp : public KisBrushBasedPaintOp

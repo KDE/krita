@@ -24,8 +24,6 @@
 #include "kis_duplicateop_settings.h"
 #include "kis_duplicateop_option.h"
                                                 
-#include <widgets/kcurve.h>
-
 #include <kis_image.h>
 #include <kis_properties_configuration.h>
 #include <kis_brush_option.h>

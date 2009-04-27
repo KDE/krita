@@ -42,7 +42,7 @@
                     </widget>
                   </item>
                   <item>
-                    <widget class="KCurve" name="sizeCurve" >
+                    <widget class="KisCurveWidget" name="sizeCurve" >
                       <property name="sizePolicy" >
                         <sizepolicy>
                           <hsizetype>7</hsizetype>
@@ -78,7 +78,7 @@
                     </widget>
                   </item>
                   <item>
-                    <widget class="KCurve" name="opacityCurve" >
+                    <widget class="KisCurveWidget" name="opacityCurve" >
                       <property name="sizePolicy" >
                         <sizepolicy>
                           <hsizetype>7</hsizetype>
@@ -114,7 +114,7 @@
                     </widget>
                   </item>
                   <item>
-                    <widget class="KCurve" name="darkenCurve" >
+                    <widget class="KisCurveWidget" name="darkenCurve" >
                       <property name="sizePolicy" >
                         <sizepolicy>
                           <hsizetype>7</hsizetype>
@@ -191,8 +191,8 @@
   <layoutdefault spacing="6" margin="11" />
   <customwidgets>
     <customwidget>
-      <class>KCurve</class>
-      <header location="local" >widgets/kcurve.h</header>
+      <class>KisCurveWidget</class>
+      <header location="local" >widgets/kis_curve_widget.h</header>
       <sizehint>
         <width>-1</width>
         <height>-1</height>
@@ -211,9 +211,9 @@
     </image>
   </images>
   <includes>
-    <include location="local" >widgets/kcurve.h</include>
-    <include location="local" >widgets/kcurve.h</include>
-    <include location="local" >widgets/kcurve.h</include>
+    <include location="local" >widgets/kis_curve_widget.h</include>
+    <include location="local" >widgets/kis_curve_widget.h</include>
+    <include location="local" >widgets/kis_curve_widget.h</include>
   </includes>
   <connections>
     <connection>

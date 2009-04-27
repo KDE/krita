@@ -234,7 +234,7 @@ protected:
 };
 
 
-class KCurve;
+class KisCurveWidget;
 
 
 enum enumState{
@@ -245,16 +245,16 @@ enum enumState{
 
 
 /**
- * Private members for KCurve class
+ * Private members for KisCurveWidget class
  */
-class KCurve::Private
+class KisCurveWidget::Private
 {
 
-    KCurve *m_curveWidget;
+    KisCurveWidget *m_curveWidget;
 
 
 public:
-    Private(KCurve *parent);
+    Private(KisCurveWidget *parent);
     virtual ~Private();
 
     /* Dragging variables */
@@ -357,30 +357,30 @@ public:
 
 };
 
-KCurve::Private::Private(KCurve *parent)
+KisCurveWidget::Private::Private(KisCurveWidget *parent)
 {
     m_curveWidget=parent;
 }
 
-KCurve::Private::~Private()
+KisCurveWidget::Private::~Private()
 {
 }
 
 
-double KCurve::Private::io2sp(int x)
+double KisCurveWidget::Private::io2sp(int x)
 {
     int rangeLen = m_inOutMax-m_inOutMin;
     return double(x - m_inOutMin)/rangeLen;
 }
 
-int KCurve::Private::sp2io(double x)
+int KisCurveWidget::Private::sp2io(double x)
 {
     int rangeLen = m_inOutMax-m_inOutMin;
     return int(x*rangeLen + 0.5) + m_inOutMin;
 }
 
 
-bool KCurve::Private::jumpOverExistingPoints(QPointF &pt, int skipIndex)
+bool KisCurveWidget::Private::jumpOverExistingPoints(QPointF &pt, int skipIndex)
 {
     foreach(const QPointF &it, m_points) {
 	if(m_points.indexOf(it)==skipIndex)
@@ -392,7 +392,7 @@ bool KCurve::Private::jumpOverExistingPoints(QPointF &pt, int skipIndex)
     return (pt.x()>=0 && pt.x()<=1.);
 }
 
-int KCurve::Private::nearestPointInRange(QPointF pt, int wWidth, int wHeight) const
+int KisCurveWidget::Private::nearestPointInRange(QPointF pt, int wWidth, int wHeight) const
 {
     double nearestDistanceSquared = 1000;
     int nearestIndex = -1;
@@ -422,7 +422,7 @@ int KCurve::Private::nearestPointInRange(QPointF pt, int wWidth, int wHeight) co
 }
 
 
-double KCurve::Private::checkBounds(const KisCubicSpline<QPointF, double> &spline, double x)
+double KisCurveWidget::Private::checkBounds(const KisCubicSpline<QPointF, double> &spline, double x)
 {
     double y;
     x=bounds(x, spline.begin(), spline.end());
@@ -435,7 +435,7 @@ double KCurve::Private::checkBounds(const KisCubicSpline<QPointF, double> &splin
 #define div2_round(x) (((x)+1)>>1)
 #define div4_round(x) (((x)+2)>>2)
 
-void KCurve::Private::drawGrid(QPainter &p, int wWidth, int wHeight)
+void KisCurveWidget::Private::drawGrid(QPainter &p, int wWidth, int wHeight)
 {
     /**
      * Hint: widget size should conform
@@ -457,7 +457,7 @@ void KCurve::Private::drawGrid(QPainter &p, int wWidth, int wHeight)
 
 }
 
-void KCurve::Private::syncIOControls()
+void KisCurveWidget::Private::syncIOControls()
 {
     if(!m_intIn || !m_intOut)
 	return;
@@ -482,7 +482,7 @@ void KCurve::Private::syncIOControls()
     }
 }
 
-void KCurve::Private::setCurveModified()
+void KisCurveWidget::Private::setCurveModified()
 {
     syncIOControls();
     m_splineDirty=true;
@@ -490,18 +490,18 @@ void KCurve::Private::setCurveModified()
     m_curveWidget->emit modified();
 }
 
-void KCurve::Private::setCurveRepaint()
+void KisCurveWidget::Private::setCurveRepaint()
 {
     m_curveWidget->update();
 }
 
-void KCurve::Private::setState(enumState st)
+void KisCurveWidget::Private::setState(enumState st)
 {
     m_state=st;
 }
 
 
-enumState KCurve::Private::state() const
+enumState KisCurveWidget::Private::state() const
 {
     return m_state;
 }

@@ -313,7 +313,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3" >
           <item>
-           <widget class="KCurve" native="1" name="inkCurve" />
+           <widget class="KisCurveWidget" native="1" name="inkCurve" />
           </item>
          </layout>
         </widget>
@@ -454,9 +454,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KCurve</class>
+   <class>KisCurveWidget</class>
    <extends>QWidget</extends>
-   <header>widgets/kcurve.h</header>
+   <header>widgets/kis_curve_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

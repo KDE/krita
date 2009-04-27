@@ -46,7 +46,7 @@
 #include "kis_paint_device.h"
 #include "kis_iterators_pixel.h"
 #include "kis_iterator.h"
-#include "widgets/kcurve.h"
+#include "widgets/kis_curve_widget.h"
 #include "kis_histogram.h"
 #include "kis_painter.h"
 
@@ -192,7 +192,7 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
 
     l->addWidget(m_page, 0, Qt::AlignTop);
     height = 256;
-    connect(m_page->kCurve, SIGNAL(modified()), SIGNAL(sigConfigChanged()));
+    connect(m_page->curveWidget, SIGNAL(modified()), SIGNAL(sigConfigChanged()));
 
     // Create the horizontal gradient label
     QPixmap hgradientpix(256, 1);
@@ -236,7 +236,7 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
         }
     }
 
-    m_page->kCurve->setPixmap(pix);
+    m_page->curveWidget->setPixmap(pix);
 
 }
 
@@ -246,7 +246,7 @@ KisBrightnessContrastFilterConfiguration * KisBrightnessContrastConfigWidget::co
 
     for (int i = 0; i < 256; i++) {
         qint32 val;
-        val = int(0xFFFF * m_page->kCurve->getCurveValue(i / 255.0));
+        val = int(0xFFFF * m_page->curveWidget->getCurveValue(i / 255.0));
         if (val > 0xFFFF)
             val = 0xFFFF;
         if (val < 0)
@@ -254,7 +254,7 @@ KisBrightnessContrastFilterConfiguration * KisBrightnessContrastConfigWidget::co
 
         cfg->transfer[i] = val;
     }
-    cfg->curve = m_page->kCurve->getCurve();
+    cfg->curve = m_page->curveWidget->getCurve();
     return cfg;
 }
 
@@ -262,7 +262,7 @@ void KisBrightnessContrastConfigWidget::setConfiguration(const KisPropertiesConf
 {
     const KisBrightnessContrastFilterConfiguration * cfg = dynamic_cast<const KisBrightnessContrastFilterConfiguration *>(config);
     Q_ASSERT(cfg);
-    m_page->kCurve->setCurve(cfg->curve);
+    m_page->curveWidget->setCurve(cfg->curve);
 }
 
 #include "kis_brightness_contrast_filter.moc"

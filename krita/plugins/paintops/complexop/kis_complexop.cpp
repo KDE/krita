@@ -41,7 +41,7 @@
 #include <KoColor.h>
 #include <KoInputDevice.h>
 
-#include <widgets/kcurve.h>
+#include <widgets/kis_curve_widget.h>
 #include <kis_brush.h>
 #include <kis_datamanager.h>
 #include <kis_global.h>

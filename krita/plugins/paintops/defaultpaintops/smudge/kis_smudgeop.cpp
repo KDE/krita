@@ -41,7 +41,6 @@
 #include <KoCompositeOp.h>
 #include <KoInputDevice.h>
 
-#include <widgets/kcurve.h>
 #include <kis_brush.h>
 #include <kis_datamanager.h>
 #include <kis_global.h>

@@ -22,7 +22,6 @@
 
 #include "kis_smudgeop_settings_widget.h"
 #include "kis_smudgeop_settings.h"
-#include <widgets/kcurve.h>
 #include <kis_properties_configuration.h>
 #include <kis_brush_option.h>
 #include <kis_paintop_options_widget.h>

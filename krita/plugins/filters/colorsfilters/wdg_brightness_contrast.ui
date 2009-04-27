@@ -107,7 +107,7 @@
          <number>6</number>
         </property>
         <item>
-         <widget class="KCurve" name="kCurve" >
+         <widget class="KisCurveWidget" name="curveWidget" >
           <property name="minimumSize" >
            <size>
             <width>250</width>
@@ -252,9 +252,9 @@
  <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>KCurve</class>
+   <class>KisCurveWidget</class>
    <extends></extends>
-   <header>widgets/kcurve.h</header>
+   <header>widgets/kis_curve_widget.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>

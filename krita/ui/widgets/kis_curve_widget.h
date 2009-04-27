@@ -16,8 +16,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KCURVE_H
-#define KCURVE_H
+#ifndef KIS_CURVE_WIDGET_H
+#define KIS_CURVE_WIDGET_H
 
 // Qt includes.
 
@@ -36,18 +36,18 @@
 class QSpinBox;
 
 /**
- * KCurve is a widget that shows a single curve that can be edited
+ * KisCurveWidget is a widget that shows a single curve that can be edited
  * by the user. The user can grab the curve and move it; this creates
  * a new control point. Control points can be deleted by selecting a point
  * and pressing the delete key.
  *
- * (From: http://techbase.kde.org/Projects/Widgets_and_Classes#KCurve)
- * KCurve allows editing of spline based y=f(x) curves. Handy for cases
+ * (From: http://techbase.kde.org/Projects/Widgets_and_Classes#KisCurveWidget)
+ * KisCurveWidget allows editing of spline based y=f(x) curves. Handy for cases
  * where you want the user to control such things as tablet pressure
  * response, color transformations, acceleration by time, aeroplane lift
  *by angle of attack.
  */
-class KRITAUI_EXPORT KCurve : public QWidget
+class KRITAUI_EXPORT KisCurveWidget : public QWidget
 {
     Q_OBJECT
 
@@ -57,9 +57,9 @@ public:
      * Create a new curve widget with a default curve, that is a straight
      * line from bottom-left to top-right.
      */
-    KCurve(QWidget *parent = 0, Qt::WFlags f = 0);
+    KisCurveWidget(QWidget *parent = 0, Qt::WFlags f = 0);
 
-    virtual ~KCurve();
+    virtual ~KisCurveWidget();
 
     /**
      * Reset the curve to the default shape
@@ -153,4 +153,4 @@ private:
 };
 
 
-#endif /* KCURVE_H */
+#endif /* KIS_CURVE_WIDGET_H */

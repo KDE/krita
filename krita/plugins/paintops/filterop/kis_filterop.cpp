@@ -44,7 +44,6 @@
 #include <filter/kis_filter_registry.h>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
-#include <widgets/kcurve.h>
 #include <kis_brush.h>
 #include <kis_datamanager.h>
 #include <kis_global.h>

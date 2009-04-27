@@ -37,8 +37,7 @@ class KisComplexOpSettingsWidget;
 class QWidget;
 class QPointF;
 class KisPainter;
-class KCurve;
-
+class KisCurveWidget;
 
 class KisComplexOp : public KisBrushBasedPaintOp
 {

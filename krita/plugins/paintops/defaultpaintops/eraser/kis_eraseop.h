@@ -43,7 +43,6 @@ class KisEraseOpSettingsWidget;
 class QWidget;
 class QPointF;
 class KisPainter;
-class KCurve;
 
 
 class KisEraseOp : public KisBrushBasedPaintOp

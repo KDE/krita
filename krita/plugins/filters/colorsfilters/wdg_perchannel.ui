@@ -100,7 +100,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="KCurve" native="1" name="kCurve" />
+         <widget class="KisCurveWidget" native="1" name="curveWidget" />
         </item>
        </layout>
       </widget>
@@ -274,9 +274,9 @@
  <layoutdefault spacing="6" margin="11" />
  <customwidgets>
   <customwidget>
-   <class>KCurve</class>
+   <class>KisCurveWidget</class>
    <extends></extends>
-   <header>widgets/kcurve.h</header>
+   <header>widgets/kis_curve_widget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -17,12 +17,12 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "kis_curve_option.h"
-#include "widgets/kcurve.h"
+#include "widgets/kis_curve_widget.h"
 
 KisCurveOption::KisCurveOption(const QString & label, const QString& name, bool checked)
     : KisPaintOpOption(label, checked)
     , m_customCurve(false)
-    , m_curveWidget( new KCurve() )
+    , m_curveWidget( new KisCurveWidget() )
     , m_name( name )
 {
     setConfigurationPage(m_curveWidget);

@@ -27,7 +27,7 @@
 #include "kis_paintop_option.h"
 #include "krita_export.h"
 
-class KCurve;
+class KisCurveWidget;
 
 /**
  * KisCurveOption is the base class for paintop options that are
@@ -71,7 +71,7 @@ private slots:
 protected:
 
     bool m_customCurve;
-    KCurve * m_curveWidget;
+    KisCurveWidget * m_curveWidget;
     QVector<double> m_curve;
     QString m_name;
 };

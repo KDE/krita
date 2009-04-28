@@ -531,6 +531,7 @@ void KisImage::shear(double angleX, double angleY, KoUpdater *progress)
         }
 
         KisShearVisitor v(angleX, angleY, progress);
+        v.setUndoAdapter(m_d->adapter);
         rootLayer()->accept(v);
 
         if (undo()) m_d->adapter->addCommand(new KisImageResizeCommand(KisImageSP(this), w, h, width(), height()));

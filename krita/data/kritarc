@@ -4,3 +4,6 @@ State=AAAA/wAAAAD9AAAAAgAAAAAAAAA2AAACqfwCAAAAAfsAAAAOAFQAbwBvAGwAQgBvAHgBAAAANA
 
 [KoShapeCollection]
 QuickShapes=ArtisticText,TextShapeID,DivineProportionShapeID,KoEllipseShape,KoRectangleShape
+
+[koffice]
+TextEditingPluginsDisabled=spellcheck,thesaurustool,autocorrect

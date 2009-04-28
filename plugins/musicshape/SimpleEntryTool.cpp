@@ -100,38 +100,47 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     connect(addBars, SIGNAL(triggered()), this, SLOT(addBars()));
 
     AbstractMusicAction* actionBreveNote = new NoteEntryAction(BreveNote, false, this);
+    actionBreveNote->setShortcut(Qt::Key_9);
     addAction("note_breve", actionBreveNote);
     actionGroup->addAction(actionBreveNote);
 
     AbstractMusicAction* actionWholeNote = new NoteEntryAction(WholeNote, false, this);
+    actionWholeNote->setShortcut(Qt::Key_8);
     addAction("note_whole", actionWholeNote);
     actionGroup->addAction(actionWholeNote);
 
     AbstractMusicAction* actionHalfNote = new NoteEntryAction(HalfNote, false, this);
+    actionHalfNote->setShortcut(Qt::Key_7);
     addAction("note_half", actionHalfNote);
     actionGroup->addAction(actionHalfNote);
 
     AbstractMusicAction* actionQuarterNote = new NoteEntryAction(QuarterNote, false, this);
+    actionQuarterNote->setShortcut(Qt::Key_6);
     addAction("note_quarter", actionQuarterNote);
     actionGroup->addAction(actionQuarterNote);
 
     AbstractMusicAction* actionNote8 = new NoteEntryAction(EighthNote, false, this);
+    actionNote8->setShortcut(Qt::Key_5);
     addAction("note_eighth", actionNote8);
     actionGroup->addAction(actionNote8);
 
     AbstractMusicAction* actionNote16 = new NoteEntryAction(SixteenthNote, false, this);
+    actionNote16->setShortcut(Qt::Key_4);
     addAction("note_16th", actionNote16);
     actionGroup->addAction(actionNote16);
 
     AbstractMusicAction* actionNote32 = new NoteEntryAction(ThirtySecondNote, false, this);
+    actionNote32->setShortcut(Qt::Key_3);
     addAction("note_32nd", actionNote32);
     actionGroup->addAction(actionNote32);
 
     AbstractMusicAction* actionNote64 = new NoteEntryAction(SixtyFourthNote, false, this);
+    actionNote64->setShortcut(Qt::Key_2);
     addAction("note_64th", actionNote64);
     actionGroup->addAction(actionNote64);
 
     AbstractMusicAction* actionNote128 = new NoteEntryAction(HundredTwentyEighthNote, false, this);
+    actionNote128->setShortcut(Qt::Key_1);
     addAction("note_128th", actionNote128);
     actionGroup->addAction(actionNote128);
 

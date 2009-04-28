@@ -22,6 +22,7 @@
 #include <KAction>
 
 class SimpleEntryTool;
+class MusicCursor;
 namespace MusicCore {
     class Staff;
 }
@@ -37,6 +38,9 @@ public:
     virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos) = 0;
     virtual void mouseMove(MusicCore::Staff* staff, int bar, const QPointF& pos);
     bool isVoiceAware();
+    
+    virtual void renderKeyboardPreview(QPainter& painter, const MusicCursor& cursor);
+    virtual void keyPress(QKeyEvent* event, const MusicCursor& cursor);
 protected:
     bool m_isVoiceAware;
     SimpleEntryTool* m_tool;

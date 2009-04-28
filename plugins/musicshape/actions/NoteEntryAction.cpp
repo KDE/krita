@@ -21,6 +21,7 @@
 #include "../SimpleEntryTool.h"
 #include "../MusicShape.h"
 #include "../Renderer.h"
+#include "../MusicCursor.h"
 
 #include "../core/Staff.h"
 #include "../core/Clef.h"
@@ -39,6 +40,8 @@
 #include <kicon.h>
 #include <kdebug.h>
 #include <klocale.h>
+
+#include <QKeyEvent>
 
 using namespace MusicCore;
 
@@ -145,3 +148,71 @@ void NoteEntryAction::mousePress(Staff* staff, int bar, const QPointF& pos)
     }
 }
 
+void NoteEntryAction::renderKeyboardPreview(QPainter& painter, const MusicCursor& cursor)
+{
+    Staff* staff = cursor.staff();
+    Part* part = staff->part();
+    Sheet* sheet = part->sheet();
+    Bar* bar = sheet->bar(cursor.bar());
+    QPointF p = bar->position() + QPointF(0, staff->top());
+    Voice* voice = cursor.staff()->part()->voice(cursor.voice());
+    VoiceBar* vb = voice->bar(bar);
+
+    if (cursor.element() >= vb->elementCount()) {
+        // cursor is past last element in bar, position of cursor is
+        // halfway between last element and end of bar
+        if (vb->elementCount() == 0) {
+            // unless entire voicebar is still empty
+            p.rx() += 15.0;
+        } else {
+            VoiceElement* ve = vb->element(vb->elementCount()-1);
+            p.rx() += (ve->x() + bar->size()) / 2;
+        }
+    } else {
+        // cursor is on an element, get the position of that element
+        p.rx() += vb->element(cursor.element())->x();
+    }
+
+    p.ry() += (cursor.staff()->lineCount() - 1)* cursor.staff()->lineSpacing();
+    p.ry() -= cursor.staff()->lineSpacing() * cursor.line() / 2;
+
+    m_tool->shape()->renderer()->renderNote(painter, m_duration < QuarterNote ? QuarterNote : m_duration, p, 0, Qt::magenta);
+}
+
+void NoteEntryAction::keyPress(QKeyEvent* event, const MusicCursor& cursor)
+{
+    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
+        Staff* staff = cursor.staff();
+        Part* part = staff->part();
+        Sheet* sheet = part->sheet();
+        Bar* bar = sheet->bar(cursor.bar());
+        Clef* clef = staff->lastClefChange(cursor.bar());
+        int line = cursor.line();
+        int pitch = 0, accidentals = 0;
+        VoiceBar* vb = cursor.voiceBar();
+        if (clef) {
+            pitch = clef->lineToPitch(line);
+            // get correct accidentals for note
+            KeySignature* ks = staff->lastKeySignatureChange(cursor.bar());
+            if (ks) accidentals = ks->accidentals(pitch);
+            for (int i = 0; i < cursor.element(); i++) {
+                Chord* c = dynamic_cast<Chord*>(vb->element(i));
+                if (!c) continue;
+                for (int n = 0; n < c->noteCount(); n++) {
+                    if (c->note(n)->pitch() == pitch) {
+                        accidentals = c->note(n)->accidentals();
+                    }
+                }
+            }
+        }
+
+        Chord* join = 0;
+        if (cursor.element() < vb->elementCount()) join = dynamic_cast<Chord*>(vb->element(cursor.element()));
+        if (event->modifiers() & Qt::ShiftModifier || !join) {
+            m_tool->addCommand(new CreateChordCommand(m_tool->shape(), vb, staff, m_duration, cursor.element(), pitch, accidentals));
+        } else {
+            m_tool->addCommand(new AddNoteCommand(m_tool->shape(), join, staff, join->duration(), pitch, accidentals));
+        }
+        event->accept();
+    }
+}

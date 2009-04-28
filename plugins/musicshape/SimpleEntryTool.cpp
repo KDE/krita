@@ -398,30 +398,7 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
     
     // draw cursor
     if (m_cursor) {
-        Bar* bar = sheet->bar(m_cursor->bar());
-        QPointF p = bar->position() + QPointF(0, m_cursor->staff()->top());
-        Voice* voice = m_cursor->staff()->part()->voice(m_cursor->voice());
-        VoiceBar* vb = voice->bar(bar);
-
-        if (m_cursor->element() >= vb->elementCount()) {
-            // cursor is past last element in bar, position of cursor is
-            // halfway between last element and end of bar
-            if (vb->elementCount() == 0) {
-                // unless entire voicebar is still empty
-                p.rx() += 15.0;
-            } else {
-                VoiceElement* ve = vb->element(vb->elementCount()-1);
-                p.rx() += (ve->x() + bar->size()) / 2;
-            }
-        } else {
-            // cursor is on an element, get the position of that element
-            p.rx() += vb->element(m_cursor->element())->x();
-        }
-
-        p.ry() += (m_cursor->staff()->lineCount() - 1)* m_cursor->staff()->lineSpacing();
-        p.ry() -= m_cursor->staff()->lineSpacing() * m_cursor->line() / 2;
-
-        m_musicshape->renderer()->renderNote(painter, QuarterNote, p, 0, Qt::magenta);
+        m_activeAction->renderKeyboardPreview(painter, *m_cursor);
     }
 
     m_activeAction->renderPreview(painter, m_point);
@@ -637,57 +614,30 @@ void SimpleEntryTool::mouseReleaseEvent( KoPointerEvent* )
 
 void SimpleEntryTool::keyPressEvent( QKeyEvent *event )
 {
-    Sheet* sheet = m_musicshape->sheet();
-    switch (event->key()) {
-        case Qt::Key_Left:
-            m_cursor->moveLeft();
-            m_musicshape->update();
-            break;
-        case Qt::Key_Right:
-            m_cursor->moveRight();
-            m_musicshape->update();
-            break;
-        case Qt::Key_Up:
-            m_cursor->moveUp();
-            m_musicshape->update();
-            break;
-        case Qt::Key_Down:
-            m_cursor->moveDown();
-            m_musicshape->update();
-            break;
-        case Qt::Key_Enter:
-        case Qt::Key_Return: {
-            Clef* clef = m_cursor->staff()->lastClefChange(m_cursor->bar());
-            int line = m_cursor->line();
-            int pitch = 0, accidentals = 0;
-            VoiceBar* vb = m_cursor->voiceBar();
-            if (clef) {
-                pitch = clef->lineToPitch(line);
-                // get correct accidentals for note
-                KeySignature* ks = m_cursor->staff()->lastKeySignatureChange(m_cursor->bar());
-                if (ks) accidentals = ks->accidentals(pitch);
-                for (int i = 0; i < m_cursor->element(); i++) {
-                    Chord* c = dynamic_cast<Chord*>(vb->element(i));
-                    if (!c) continue;
-                    for (int n = 0; n < c->noteCount(); n++) {
-                        if (c->note(n)->pitch() == pitch) {
-                            accidentals = c->note(n)->accidentals();
-                        }
-                    }
-                }
-            }
-
-            Chord* join = 0;
-            if (m_cursor->element() < vb->elementCount()) join = dynamic_cast<Chord*>(vb->element(m_cursor->element()));
-            if (event->modifiers() & Qt::ShiftModifier || !join) {
-                addCommand(new CreateChordCommand(m_musicshape, vb, m_cursor->staff(), QuarterNote, m_cursor->element(), pitch, accidentals));
-            } else {
-                addCommand(new AddNoteCommand(m_musicshape, join, m_cursor->staff(), QuarterNote, pitch, accidentals));
-            }
-            break;
+    event->ignore();
+    m_activeAction->keyPress(event, *m_cursor);
+    if (!event->isAccepted()) {
+        event->accept();
+        switch (event->key()) {
+            case Qt::Key_Left:
+                m_cursor->moveLeft();
+                m_musicshape->update();
+                break;
+            case Qt::Key_Right:
+                m_cursor->moveRight();
+                m_musicshape->update();
+                break;
+            case Qt::Key_Up:
+                m_cursor->moveUp();
+                m_musicshape->update();
+                break;
+            case Qt::Key_Down:
+                m_cursor->moveDown();
+                m_musicshape->update();
+                break;
+            default:
+                event->ignore();
         }
-        default:
-            event->ignore();
     }
 }
 
@@ -710,10 +660,10 @@ void SimpleEntryTool::activeActionChanged(QAction* action)
 {
     bool oldVoiceAware = m_activeAction->isVoiceAware();
     m_activeAction = qobject_cast<AbstractMusicAction*>(action);
-    if (m_activeAction->isVoiceAware() != oldVoiceAware) {
+    //if (m_activeAction->isVoiceAware() != oldVoiceAware) {
         m_musicshape->update();
     //    reinterpret_cast<SimpleEntryWidget*>(optionWidget())->setVoiceListEnabled(m_activeAction->isVoiceAware());
-    }
+    //}
 }
 
 void SimpleEntryTool::voiceChanged(int voice)

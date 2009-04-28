@@ -140,13 +140,3 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
     painter()->setPaintColor(origColor);
 
 }
-
-double KisBrushOp::paintLine(const KisPaintInformation &pi1,
-                             const KisPaintInformation &pi2,
-                             double savedDist)
-{
-    KisPaintInformation adjustedInfo1(pi1);
-    KisPaintInformation adjustedInfo2(pi2);
-    return KisPaintOp::paintLine(adjustedInfo1, adjustedInfo2, savedDist);
-}
-

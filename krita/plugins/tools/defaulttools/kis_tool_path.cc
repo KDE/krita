@@ -26,6 +26,8 @@
 #include "kis_image.h"
 #include "kis_painter.h"
 #include "kis_layer.h"
+#include "canvas/kis_canvas2.h"
+#include "kis_view2.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_paintop_registry.h"
 #include "kis_selection.h"
@@ -43,17 +45,21 @@ void KisToolPath::addPathShape()
 {
     KisNodeSP currentNode =
         m_canvas->resourceProvider()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
-    if (!currentNode)
+    if (!currentNode || !currentNode->paintDevice()) {
+        delete m_shape;
+        m_shape = 0;
         return;
+    }
 
-    KisImageSP image = qobject_cast<KisLayer*>(currentNode->parent().data())->image();
     KisPaintDeviceSP dev = currentNode->paintDevice();
 
-    KisSelectionSP selection = image->globalSelection();
-    // XXX: also get global selection!
-    if (selection && currentNode->inherits("KisLayer")) {
-        selection = qobject_cast<KisLayer*>(currentNode.data())->selection();
-    }
+    KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(m_canvas);
+    if(!canvas)
+        return;
+
+    KisImageSP image = canvas->view()->image();
+    KisSelectionSP selection = canvas->view()->selection();
+
     KisPainter painter(dev, selection);
     painter.beginTransaction(i18n("Path"));
     painter.setPaintColor(KoColor(Qt::black, dev->colorSpace()));

@@ -2,7 +2,7 @@
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006, 2008 Casper Boemann <cbr@boemann.dk>
    Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
-   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2007-2009 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -721,8 +721,16 @@ public:
     /// Removes connection point with given index
     void removeConnectionPoint(int index);
 
-    /// Adds a shape which depends on this shape
-    void addDependee(KoShape * shape);
+    /**
+     * Adds a shape which depends on this shape.
+     *
+     * If this shape already depends on the given shape, establishing the
+     * dependency is refused to prevent circular dependencies.
+     *
+     * @param shape the shape which depends on this shape
+     * @return true if dependency could be established, else false
+     */
+    bool addDependee(KoShape * shape);
 
     /// Removes as shape depending on this shape
     void removeDependee(KoShape * shape);

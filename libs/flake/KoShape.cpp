@@ -2,7 +2,7 @@
    Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
    Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2007-2009 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1239,11 +1239,19 @@ QRectF KoShape::documentToShape(const QRectF &rect) const
     return absoluteTransformation(0).inverted().mapRect(rect);
 }
 
-
-void KoShape::addDependee(KoShape * shape)
+bool KoShape::addDependee(KoShape * shape)
 {
+    if (! shape)
+        return false;
+    
+    // refuse to establish a circular dependency
+    if (shape->hasDependee(this))
+        return false;
+    
     if (! d->dependees.contains(shape))
         d->dependees.append(shape);
+    
+    return true;
 }
 
 void KoShape::removeDependee(KoShape * shape)

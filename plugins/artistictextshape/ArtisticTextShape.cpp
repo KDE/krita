@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007-2009 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Rob Buis <buis@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -419,10 +419,13 @@ bool ArtisticTextShape::putOnPath( KoPathShape * path )
     if( path->outline().isEmpty() )
         return false;
 
+    if( ! path->addDependee( this ) )
+        return false;
+
     update();
 
     m_path = path;
-    m_path->addDependee( this );
+
     // use the paths outline converted to document coordinates as the baseline
     m_baseline = m_path->absoluteTransformation(0).map( m_path->outline() );
 

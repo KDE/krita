@@ -39,6 +39,7 @@ SET (musicshape_LIB_SRCS
     MusicStyle.cpp
     Engraver.cpp
     Renderer.cpp
+    MusicCursor.cpp
 
     dialogs/PartsWidget.cpp
     dialogs/PartDetailsDialog.cpp

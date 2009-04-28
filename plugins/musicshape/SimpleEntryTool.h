@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright 2007 Marijn Kruisselbrink <m.Kruisselbrink@student.tue.nl>
+ * Copyright 2007,2009 Marijn Kruisselbrink <m.Kruisselbrink@student.tue.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +26,7 @@
 class MusicShape;
 class QUndoCommand;
 class AbstractMusicAction;
+class MusicCursor;
 
 namespace MusicCore {
     class Staff;
@@ -46,6 +47,8 @@ public:
     virtual void mousePressEvent( KoPointerEvent* event ) ;
     virtual void mouseMoveEvent( KoPointerEvent* event );
     virtual void mouseReleaseEvent( KoPointerEvent* event );
+
+    virtual void keyPressEvent( QKeyEvent *event );
 
     void activate (bool temporary=false);
     void deactivate();
@@ -70,13 +73,15 @@ private:
     AbstractMusicAction* m_activeAction;
     QPointF m_point;
     int m_voice;
-    
+
     MusicCore::Staff* m_contextMenuStaff;
     int m_contextMenuBar;
     QPointF m_contextMenuPoint;
-    
+
     int m_selectionStart, m_selectionEnd;
     MusicCore::Staff *m_selectionStaffStart, *m_selectionStaffEnd;
+
+    MusicCursor* m_cursor;
 };
 
 #endif

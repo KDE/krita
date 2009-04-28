@@ -60,10 +60,10 @@ public:
     virtual bool hitTest(const QPointF &position) const;
 
     /// Sets the first shape the connector is connected to
-    void setConnection1(KoShape * shape1, int connectionPointIndex);
+    bool setConnection1(KoShape * shape1, int connectionPointIndex);
 
     /// Sets the second shape the connector is connected to
-    void setConnection2(KoShape * shape2, int connectionPointIndex);
+    bool setConnection2(KoShape * shape2, int connectionPointIndex);
 
     /// Returns the connection to the first shape
     KoConnection connection1() const;

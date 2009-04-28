@@ -1253,6 +1253,11 @@ void KoShape::removeDependee(KoShape * shape)
         d->dependees.removeAt(index);
 }
 
+bool KoShape::hasDependee(KoShape * shape) const
+{
+    return d->dependees.contains(shape);
+}
+
 void KoShape::notifyShapeChanged(KoShape * shape, ChangeType type)
 {
     Q_UNUSED(shape);

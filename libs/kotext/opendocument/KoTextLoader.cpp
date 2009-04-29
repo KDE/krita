@@ -179,7 +179,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
     d->changeTracker = KoTextDocument(document).changeTracker();
 //    if (!d->changeTracker)
 //        d->changeTracker = dynamic_cast<KoChangeTracker *>(d->context.dataCenterMap().value("ChangeTracker"));
-    Q_ASSERT(d->changeTracker);
+//    Q_ASSERT(d->changeTracker);
 
     kDebug(32500) << "text-style:" << KoTextDebug::textAttributes( cursor.blockCharFormat() );
 #if 0
@@ -199,13 +199,13 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                 if (usedParagraph)
                     cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
                 usedParagraph = true;
-                if (localName == "tracked-changes") {
+                if (d->changeTracker && localName == "tracked-changes") {
                     d->changeTracker->loadOdfChanges(tag);
                     usedParagraph = false;
-                } else if (localName == "change-start") {
+                } else if (d->changeTracker && localName == "change-start") {
                     loadChangedRegion(tag, cursor);
                     usedParagraph = false;
-                } else if (localName == "change-end") {
+                } else if (d->changeTracker && localName == "change-end") {
                     d->currentChangeId = 0;
                     usedParagraph = false;
                 } else if (localName == "p") {    // text paragraph
@@ -318,7 +318,6 @@ void KoTextLoader::loadChangedRegion(const KoXmlElement &element, QTextCursor &c
 
     //debug
     KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
-    kDebug() << "changed-region id: " << changeId << " title: " << changeElement->getChangeTitle() << " creator: " << changeElement->getCreator() << " date: " << changeElement->getDate();
 }
 
 void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &cursor)
@@ -586,7 +585,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 // we can remove the leading space in the next text
                 *stripLeadingSpace = text[text.length() - 1].isSpace();
 
-                if (d->currentChangeId) {
+                if (d->changeTracker && d->currentChangeId) {
                     QTextCharFormat format;
                     format.setProperty(KoCharacterStyle::ChangeTrackerId, d->currentChangeId);
                     cursor.mergeCharFormat(format);

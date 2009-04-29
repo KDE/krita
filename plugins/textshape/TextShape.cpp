@@ -330,8 +330,8 @@ void TextShape::init(const QMap<QString, KoDataCenter *> & dataCenterMap)
     KoTextDocument(m_textShapeData->document()).setStyleManager(styleManager);
     KoInlineTextObjectManager *tom = dynamic_cast<KoInlineTextObjectManager *>(dataCenterMap["InlineTextObjectManager"]);
     KoTextDocument(m_textShapeData->document()).setInlineTextObjectManager(tom);
-    KoChangeTracker *changeTracker = dynamic_cast<KoChangeTracker *>(dataCenterMap["ChangeTracker"]);
-    KoTextDocument(m_textShapeData->document()).setChangeTracker(changeTracker);
+//    KoChangeTracker *changeTracker = dynamic_cast<KoChangeTracker *>(dataCenterMap["ChangeTracker"]);
+//    KoTextDocument(m_textShapeData->document()).setChangeTracker(changeTracker);
 }
 
 QTextDocument *TextShape::footnoteDocument()

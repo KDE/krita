@@ -169,10 +169,12 @@ void KoTextSelectionHandler::bold(bool bold)
     QTextCharFormat format;
     format.setFontWeight(bold ? QFont::Bold : QFont::Normal);
 
-    QTextCharFormat prevFormat(d->caret->charFormat());
+    if (KoTextDocument(d->textShapeData->document()).changeTracker()) {
+        QTextCharFormat prevFormat(d->caret->charFormat());
 
-    int changeId = KoTextDocument(d->textShapeData->document()).changeTracker()->getFormatChangeId(i18n("Bold"), format, prevFormat, d->caret->charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
-    format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+        int changeId = KoTextDocument(d->textShapeData->document()).changeTracker()->getFormatChangeId(i18n("Bold"), format, prevFormat, d->caret->charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+        format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+    }
 
     d->caret->mergeCharFormat(format);
     emit stopMacro();
@@ -185,10 +187,12 @@ void KoTextSelectionHandler::italic(bool italic)
     QTextCharFormat format;
     format.setFontItalic(italic);
 
-    QTextCharFormat prevFormat(d->caret->charFormat());
+    if (KoTextDocument(d->textShapeData->document()).changeTracker()) {
+        QTextCharFormat prevFormat(d->caret->charFormat());
 
-    int changeId = KoTextDocument(d->textShapeData->document()).changeTracker()->getFormatChangeId(i18n("Italic"), format, prevFormat, d->caret->charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
-    format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+        int changeId = KoTextDocument(d->textShapeData->document()).changeTracker()->getFormatChangeId(i18n("Italic"), format, prevFormat, d->caret->charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+        format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+    }
 
     d->caret->mergeCharFormat(format);
     emit stopMacro();

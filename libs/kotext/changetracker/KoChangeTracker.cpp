@@ -41,20 +41,25 @@ public:
     QHash<QString, int> m_loadedChanges;
     QList<int> m_saveChanges;
     int m_changeId;
+    bool m_enabled;
 };
 
 KoChangeTracker::KoChangeTracker(QObject *parent)
-        : QObject(parent),
+    : QObject(parent),
 	d(new Private())
 {
-    kDebug() << "in changeTracker cstr";
     d->m_changeId = 1;
 }
 
 KoChangeTracker::~KoChangeTracker()
 {
-    kDebug() << "in changeTracker destr";
     delete d;
+}
+
+void KoChangeTracker::setEnabled(bool enabled)
+{
+    kDebug() << "in change tracker enable: " << enabled;
+    d->m_enabled = enabled;
 }
 
 int KoChangeTracker::getFormatChangeId(QString title, QTextFormat &format, QTextFormat &prevFormat, int existingChangeId)
@@ -71,8 +76,9 @@ int KoChangeTracker::getFormatChangeId(QString title, QTextFormat &format, QText
     changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate));
     changeElement->setCreator(QString("essai format"));
 
+    changeElement->setEnabled(d->m_enabled);
+
     d->m_changes.insert(d->m_changeId, changeElement);
-//    changeElement=d->m_changes.value(d->m_changeId);
 
     return d->m_changeId++;
 }
@@ -88,6 +94,8 @@ int KoChangeTracker::getInsertChangeId(QString title, int existingChangeId)
 
     changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate));
     changeElement->setCreator(QString("essai insert"));
+
+    changeElement->setEnabled(d->m_enabled);
 
     d->m_changes.insert(d->m_changeId, changeElement);
 

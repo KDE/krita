@@ -21,14 +21,34 @@
 
 #include <KDebug>
 
-KoChangeTrackerElement::KoChangeTrackerElement(QString title, KoGenChange::Type type):
-//  QObject(),
-  m_title(title),
-  m_type(type)
+class KoChangeTrackerElement::Private
 {
+public:
+    Private() {}
+    ~Private() {}
+
+    QString title;
+    KoGenChange::Type type;
+    QTextFormat changeFormat;
+    QTextFormat prevFormat;
+
+    QString creator;
+    QString date;
+    QString extraMetaData;
+    QString deleteData;
+
+    bool enabled;
+};
+
+KoChangeTrackerElement::KoChangeTrackerElement(QString title, KoGenChange::Type type)
+    :d(new Private())
+{
+    d->title = title;
+    d->type = type;
 }
 
 KoChangeTrackerElement::KoChangeTrackerElement()
+    :d(new Private())
 {
 }
 
@@ -36,102 +56,113 @@ KoChangeTrackerElement::~KoChangeTrackerElement()
 {
 }
 
+void KoChangeTrackerElement::setEnabled(bool enabled)
+{
+    kDebug() << "in chage element set enabled: " << enabled;
+    d->enabled = enabled;
+}
+
+bool KoChangeTrackerElement::isEnabled()
+{
+    return d->enabled;
+}
+
 void KoChangeTrackerElement::setChangeType(KoGenChange::Type type)
 {
-  m_type = type;
+    d->type = type;
 }
 
 KoGenChange::Type KoChangeTrackerElement::getChangeType()
 {
-  return m_type;
+    return d->type;
 }
-    
+
 void KoChangeTrackerElement::setChangeTitle(QString title)
 {
-  m_title = title;
+    d->title = title;
 }
 
 QString KoChangeTrackerElement::getChangeTitle()
 {
-  return m_title;
+    return d->title;
 }
-    
+
 void KoChangeTrackerElement::setChangeFormat(QTextFormat &format)
 {
-  m_changeFormat = format;
+    d->changeFormat = format;
 }
 
 QTextFormat KoChangeTrackerElement::getChangeFormat()
 {
-  return m_changeFormat;
+    return d->changeFormat;
 }
 
 void KoChangeTrackerElement::setPrevFormat(QTextFormat &format)
 {
-  m_prevFormat = format;
+    d->prevFormat = format;
 }
 
 QTextFormat KoChangeTrackerElement::getPrevFormat()
 {
-  return m_prevFormat;
+    return d->prevFormat;
 }
 
 bool KoChangeTrackerElement::hasCreator()
 {
-  return !m_creator.isEmpty();
+    return !d->creator.isEmpty();
 }
 
 void KoChangeTrackerElement::setCreator(QString creator)
 {
-  m_creator = creator;
+    d->creator = creator;
 }
 
 QString KoChangeTrackerElement::getCreator()
 {
-  return m_creator;
+    return d->creator;
 }
-    
+
 bool KoChangeTrackerElement::hasDate()
 {
-  return !m_date.isEmpty();
+    return !d->date.isEmpty();
 }
 
 void KoChangeTrackerElement::setDate(QString date)
 {
-  m_date = date;
+    d->date = date;
 }
 
 QString KoChangeTrackerElement::getDate()
 {
-  return m_date;
+    return d->date;
 }
-    
+
 bool KoChangeTrackerElement::hasExtraMetaData()
 {
-  return !m_extraMetaData.isEmpty();
+    return !d->extraMetaData.isEmpty();
 }
 
 void KoChangeTrackerElement::setExtraMetaData(QString metaData)
 {
-  m_extraMetaData = metaData;
+    d->extraMetaData = metaData;
 }
 
 QString KoChangeTrackerElement::getExtraMetaData()
 {
-  return m_extraMetaData;
+    return d->extraMetaData;
 }
-    
+
 bool KoChangeTrackerElement::hasDeleteData()
 {
-  return !m_deleteData.isEmpty();
+    return !d->deleteData.isEmpty();
 }
 
 void KoChangeTrackerElement::setDeleteData(QString data)
 {
-  m_deleteData = data;
+    d->deleteData = data;
 }
 
 QString KoChangeTrackerElement::getDeleteData()
 {
-  return m_deleteData;
+    return d->deleteData;
 }

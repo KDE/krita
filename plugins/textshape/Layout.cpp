@@ -1009,26 +1009,27 @@ void Layout::drawTrackedChangeItem(QPainter *painter, QTextBlock &block, int sel
             if (startOfBlock == -1)
                 startOfBlock = currentFragment.position(); // start of this block w.r.t. the document
             if (m_changeTracker->containsInlineChanges(fmt)) {
-                int firstLine = layout->lineForTextPosition(currentFragment.position() - startOfBlock).lineNumber();
-                int lastLine = layout->lineForTextPosition(currentFragment.position() + currentFragment.length() - startOfBlock).lineNumber();
-                for (int i = firstLine ; i <= lastLine ; i++) {
-                    QTextLine line = layout->lineAt(i);
-                    if (layout->isValidCursorPosition(currentFragment.position() - startOfBlock)) {
-                        qreal x1 = line.cursorToX(currentFragment.position() - startOfBlock);
-                        qreal x2 = line.cursorToX(currentFragment.position() + currentFragment.length() - startOfBlock);
+                KoChangeTrackerElement *changeElement = m_changeTracker->elementById(fmt.property(KoCharacterStyle::ChangeTrackerId).toInt());
+                if (changeElement->isEnabled()) {
+                    int firstLine = layout->lineForTextPosition(currentFragment.position() - startOfBlock).lineNumber();
+                    int lastLine = layout->lineForTextPosition(currentFragment.position() + currentFragment.length() - startOfBlock).lineNumber();
+                    for (int i = firstLine ; i <= lastLine ; i++) {
+                        QTextLine line = layout->lineAt(i);
+                        if (layout->isValidCursorPosition(currentFragment.position() - startOfBlock)) {
+                            qreal x1 = line.cursorToX(currentFragment.position() - startOfBlock);
+                            qreal x2 = line.cursorToX(currentFragment.position() + currentFragment.length() - startOfBlock);
 
-                        KoChangeTrackerElement *changeElement = m_changeTracker->elementById(fmt.property(KoCharacterStyle::ChangeTrackerId).toInt());
-                        switch(changeElement->getChangeType()) {
-                            case (KoGenChange::insertChange):
-                                painter->fillRect(x1, line.y(), x2-x1, line.height(), QColor(0,255,0,255));
-                                break;
-                            case (KoGenChange::formatChange):
-                                painter->fillRect(x1, line.y(), x2-x1, line.height(), QColor(0,0,255,255));
-                                break;
-                            case (KoGenChange::deleteChange):
-                                break;
+                            switch(changeElement->getChangeType()) {
+                                case (KoGenChange::insertChange):
+                                    painter->fillRect(x1, line.y(), x2-x1, line.height(), QColor(0,255,0,255));
+                                    break;
+                                case (KoGenChange::formatChange):
+                                    painter->fillRect(x1, line.y(), x2-x1, line.height(), QColor(0,0,255,255));
+                                    break;
+                                case (KoGenChange::deleteChange):
+                                    break;
+                            }
                         }
-
                     }
                 }
 /*

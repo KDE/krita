@@ -38,6 +38,9 @@ public:
 
     ~KoChangeTrackerElement();
 
+    void setEnabled(bool enabled);
+    bool isEnabled();
+
     void setChangeType(KoGenChange::Type type);
     KoGenChange::Type getChangeType();
 
@@ -67,16 +70,8 @@ public:
     QString getDeleteData();
 
 private:
-
-  QString m_title;
-  KoGenChange::Type m_type;
-  QTextFormat m_changeFormat;
-  QTextFormat m_prevFormat;
-
-  QString m_creator;
-  QString m_date;
-  QString m_extraMetaData;
-  QString m_deleteData;
+    class Private;
+    Private* const d;
 };
 
 #endif

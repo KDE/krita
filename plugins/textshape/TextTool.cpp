@@ -495,14 +495,16 @@ void TextTool::showChangeTip()
 {
     QTextCursor c(m_textShapeData->document());
     c.setPosition(m_changeTipCursorPos);
-    if (m_changeTracker->containsInlineChanges(c.charFormat())) {
+    if (m_changeTracker && m_changeTracker->containsInlineChanges(c.charFormat())) {
         KoChangeTrackerElement *element = m_changeTracker->elementById(c.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt());
-        QString change = element->getChangeTitle() + " " + element->getDate() + " " + element->getCreator();
-        KPassivePopup *popup = new KPassivePopup();
-        popup->setTimeout(5000);
-        popup->setAutoDelete(true);
-        popup->setView("Latest change", change);
-        popup->show(m_changeTipPos);
+        if (element->isEnabled()) {
+            QString change = element->getChangeTitle() + " " + element->getDate() + " " + element->getCreator();
+            KPassivePopup *popup = new KPassivePopup();
+            popup->setTimeout(5000);
+            popup->setAutoDelete(true);
+            popup->setView("Latest change", change);
+            popup->show(m_changeTipPos);
+        }
     }
 }
 
@@ -871,7 +873,7 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
 
         QTextCharFormat fmt = mouseOver.charFormat();
 
-        if (m_changeTracker->containsInlineChanges(mouseOver.charFormat())) {
+        if (m_changeTracker && m_changeTracker->containsInlineChanges(mouseOver.charFormat())) {
             QTextCursor test(m_textShapeData->document());
             test.setPosition(m_changeTipCursorPos);
             if (m_changeTracker->elementById(mouseOver.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt()) != m_changeTracker->elementById(test.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt()) || !m_changeTipCursorPos) {
@@ -1014,11 +1016,13 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             m_prevCursorPosition = m_caret.position();
             ensureCursorVisible();
 
-            if ( !m_changeRegistered ) {
-                int changeId = KoTextDocument(m_textShapeData->document()).changeTracker()->getInsertChangeId(i18n("Key Press"), m_caret.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
-                QTextCharFormat format;
-                format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-                m_caret.mergeCharFormat(format);
+            if (KoTextDocument(m_textShapeData->document()).changeTracker()) {
+                if ( !m_changeRegistered ) {
+                    int changeId = KoTextDocument(m_textShapeData->document()).changeTracker()->getInsertChangeId(i18n("Key Press"), m_caret.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+                    QTextCharFormat format;
+                    format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+                    m_caret.mergeCharFormat(format);
+                }
             }
 
             m_caret.insertText(event->text());
@@ -1608,6 +1612,10 @@ void TextTool::formatParagraph()
 
 void TextTool::toggleTrackChanges(bool on)
 {
+    kDebug() << "in toggle track change";
+    if (m_changeTracker)
+        m_changeTracker->setEnabled(on);
+    m_textTyping=false;
 /*
     m_trackChanges = on;
     if (m_textShapeData && on) {

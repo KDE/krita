@@ -35,8 +35,6 @@
 #include <QUndoCommand>
 #include <QPointF>
 
-#include <typeinfo>
-
 KoConnectionTool::KoConnectionTool( KoCanvasBase * canvas )
     : KoPathTool(canvas)
     , m_firstShape(0)
@@ -53,20 +51,42 @@ void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converte
 {
     float x = 0;
     float y = 0;
+    painter.setRenderHint(QPainter::Antialiasing, true);
     if( m_shapeOn !=  0)
     {
-        m_shapeOn->applyConversion(painter, converter);
+        painter.save();
+        
+        KoShape::applyConversion(painter, converter);
+        //m_shapeOn->applyConversion(painter, converter);    
+        painter.setMatrix(m_shapeOn->absoluteTransformation(&converter) * painter.matrix());
         foreach( QPointF point, m_shapeOn->connectionPoints() )
         {
-            x = point.x() - 3 + m_shapeOn->position().x();
-            y = point.y() - 3 + m_shapeOn->position().y();
+            x = point.x() - 3;// + m_shapeOn->position().x();
+            y = point.y() - 3;// + m_shapeOn->position().y();
+            // x = m_shapeOn->absoluteTransformation(&converter).map( point ).x();
+            // y = m_shapeOn->absoluteTransformation(&converter).map( point ).y();
             if( distanceSquare(m_mouse, QPointF( x + 3, y + 3 )) > 225 )
                 painter.fillRect( x, y, 6, 6, QColor(Qt::green) );
             else
                 painter.fillRect( x, y, 6, 6, QColor(Qt::blue) );
                 
         }
+        painter.restore();
     }    
+}
+
+void KoConnectionTool::getPointSelected(KoShape * shape)
+{
+    float x,y;
+    foreach( QPointF point, shape->connectionPoints() )
+    {
+        x = point.x() + m_shapeOn->position().x();
+        y = point.y() + m_shapeOn->position().y();
+        if( distanceSquare(m_mouse, QPointF( x, y )) <= 225 )
+        {
+            m_pointSelected = new QPointF( x, y );
+        }
+    }
 }
 
 void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
@@ -79,16 +99,7 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
         if( m_firstShape == 0 )
         { // If any connections is beginning
             m_firstShape = tempShape;
-            float x,y;
-            foreach( QPointF point, m_firstShape->connectionPoints() )
-            {
-                x = point.x() + m_shapeOn->position().x();
-                y = point.y() + m_shapeOn->position().y();
-                if( distanceSquare(m_mouse, QPointF( x, y )) <= 225 )
-                {
-                    m_pointSelected = new QPointF( x, y );
-                }
-            }
+            getPointSelected( m_firstShape );
         }
         else if( m_firstShape != tempShape )
         { //If a connection is on
@@ -118,16 +129,7 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
             
             connectionShape->setConnection1( myConnection1.first, myConnection1.second );
             // Le second point
-            float x,y;
-            foreach( QPointF point, tempShape->connectionPoints() )
-            {
-                x = point.x() + m_shapeOn->position().x();
-                y = point.y() + m_shapeOn->position().y();
-                if( distanceSquare(m_mouse, QPointF( x, y )) <= 225 )
-                {
-                    m_pointSelected = new QPointF( x, y );
-                }
-            }
+            getPointSelected( tempShape );
             KoConnection myConnection2;
             if( m_pointSelected != 0 )
             {

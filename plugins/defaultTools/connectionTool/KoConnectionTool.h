@@ -75,6 +75,12 @@ public:
      * @param y The second float
      */
     bool approx( float x, float y );
+    /**
+     * @brief Permit to put in m_pointSelected the point on the shape, under the mouse
+     *
+     * @param shape A KoShape on which we want to select the point
+     */
+    void getPointSelected(KoShape * shape);
     
 private:
     KoShape * m_firstShape;

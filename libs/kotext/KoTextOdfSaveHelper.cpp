@@ -71,10 +71,6 @@ KoShapeSavingContext * KoTextOdfSaveHelper::context(KoXmlWriter * bodyWriter, Ko
 {
 //    Q_ASSERT(d->context == 0);
 
-    KoGenChanges changes;
     d->context = new KoShapeSavingContext(*bodyWriter, mainStyles, embeddedSaver);
-    KoTextSharedSavingData *sharedData = new KoTextSharedSavingData();
-    sharedData->setGenChanges(changes);
-    d->context->addSharedData(KOTEXT_SHARED_SAVING_ID, sharedData);
     return d->context;
 }

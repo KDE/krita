@@ -41,85 +41,85 @@ public:
 };
 
 KoGenChanges::KoGenChanges()
-        : d(new Private(this))
+    : d(new Private(this))
 {
 }
 
 KoGenChanges::~KoGenChanges()
 {
-  delete d;
+    delete d;
 }
 
 QString KoGenChanges::insert(const KoGenChange& change, const QString& name)
 {
-  ChangeMap::iterator it = d->changeMap.find(change);
-  if (it == d->changeMap.end()) {
-    it = d->insertChange(change, name);
-  }
-  return it.value();
+    ChangeMap::iterator it = d->changeMap.find(change);
+    if (it == d->changeMap.end()) {
+        it = d->insertChange(change, name);
+    }
+    return it.value();
 }
 
 KoGenChanges::ChangeMap::iterator KoGenChanges::Private::insertChange(const KoGenChange &change, const QString &name)
 {
-  QString changeName(name);
-  if (changeName.isEmpty()) {
-    switch (change.type()) {
-      case KoGenChange::insertChange: changeName = 'I'; break;
-      case KoGenChange::formatChange: changeName = 'F'; break;
-      case KoGenChange::deleteChange: changeName = 'D'; break;
-      default:
-	changeName = 'C';
-      }
-  }
-  changeName = q->makeUniqueName(changeName);
-  changeNames.insert(changeName);
-  KoGenChanges::ChangeMap::iterator it = changeMap.insert(change, changeName);
-  NamedChange s;
-  s.change = &it.key();
-  s.name = changeName;
-  changeArray.append(s);
+    QString changeName(name);
+    if (changeName.isEmpty()) {
+        switch (change.type()) {
+        case KoGenChange::insertChange: changeName = 'I'; break;
+        case KoGenChange::formatChange: changeName = 'F'; break;
+        case KoGenChange::deleteChange: changeName = 'D'; break;
+        default:
+            changeName = 'C';
+        }
+    }
+    changeName = q->makeUniqueName(changeName);
+    changeNames.insert(changeName);
+    KoGenChanges::ChangeMap::iterator it = changeMap.insert(change, changeName);
+    NamedChange s;
+    s.change = &it.key();
+    s.name = changeName;
+    changeArray.append(s);
 
-  return it;
+    return it;
 }
 
 KoGenChanges::ChangeMap KoGenChanges::changes() const
 {
-  return d->changeMap;
+    return d->changeMap;
 }
 
 QString KoGenChanges::makeUniqueName(const QString& base) const
 {
-  if (! d->changeNames.contains(base))
-    return base;
-  int num = 1;
-  QString name;
-  do {
-    name = base;
-    name += QString::number(num++);
-  } while (d->changeNames.contains(name));
-  return name;
+    if (! d->changeNames.contains(base))
+        return base;
+    int num = 1;
+    QString name;
+    do {
+        name = base;
+        name += QString::number(num++);
+    } while (d->changeNames.contains(name));
+    return name;
 }
 
 const KoGenChange* KoGenChanges::change(const QString& name) const
 {
-  ChangeArray::const_iterator it = d->changeArray.begin();
-  const ChangeArray::const_iterator end = d->changeArray.end();
-  for (; it != end ; ++it) {
-    if ((*it).name == name)
-      return (*it).change;
-  }
-  return 0;
+    ChangeArray::const_iterator it = d->changeArray.begin();
+    const ChangeArray::const_iterator end = d->changeArray.end();
+    for (; it != end ; ++it) {
+        if ((*it).name == name)
+            return (*it).change;
+    }
+    return 0;
 }
 
 void KoGenChanges::saveOdfChanges(KoXmlWriter* xmlWriter) const
 {
-  xmlWriter->startElement("text:tracked-changes");
+    xmlWriter->startElement("text:tracked-changes");
     
-  ChangeMap changesList = changes();
-  KoGenChanges::ChangeMap::const_iterator it = changesList.constBegin();
-  for (; it != changesList.constEnd() ; ++it) {
-    it.key().writeChange(xmlWriter, it.value());
-  }
+    ChangeMap changesList = changes();
+    KoGenChanges::ChangeMap::const_iterator it = changesList.constBegin();
+    for (; it != changesList.constEnd() ; ++it) {
+        it.key().writeChange(xmlWriter, it.value());
+    }
   
-  xmlWriter->endElement(); // text:tracked-changes
+    xmlWriter->endElement(); // text:tracked-changes
 }

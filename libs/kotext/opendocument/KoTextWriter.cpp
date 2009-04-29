@@ -236,7 +236,7 @@ void KoTextWriter::saveParagraph(const QTextBlock &block, int from, int to)
         if (currentFragment.isValid()) {
             QTextCharFormat charFormat = currentFragment.charFormat();
 
-            if (d->sharedData && d->changeTracker && d->changeTracker->containsInlineChanges(charFormat) && d->changeTracker->elementById(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()) {
+            if ( d->changeTracker && d->changeTracker->containsInlineChanges(charFormat) && d->changeTracker->elementById(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()) {
                 KoGenChange change;
                 d->changeTracker->saveInlineChange(charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt(), change);
                 changeName = d->sharedData->genChanges().insert(change);

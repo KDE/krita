@@ -89,7 +89,6 @@ KoStyleManager *KoTextDocument::styleManager() const
 
 void KoTextDocument::setChangeTracker(KoChangeTracker *changeTracker)
 {
-    kDebug() << "in KoTextDoc set changeTracker: " << changeTracker;
     QVariant v;
     v.setValue(changeTracker);
     m_document->addResource(KoTextDocument::ChangeTrackerRessource, ChangeTrackerURL, v);

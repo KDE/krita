@@ -69,7 +69,7 @@
 #include <kdebug.h>
 
 // if defined then debugging is enabled
-#define KOOPENDOCUMENTLOADER_DEBUG
+// #define KOOPENDOCUMENTLOADER_DEBUG
 
 /// \internal d-pointer class.
 class KoTextLoader::Private
@@ -399,7 +399,7 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
 
 void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
 {
-    kDebug() << "in load List";
+    //kDebug() << "in load List";
     const bool numberedParagraph = element.localName() == "numbered-paragraph";
 
     QString styleName = element.attributeNS(KoXmlNS::text, "style-name", QString());
@@ -605,7 +605,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             loadChangedRegion(ts,cursor);
         } else if (isTextNS && localName == "change-end") {
             d->currentChangeId = 0;
-            kDebug() << "change-end";
+            //kDebug() << "change-end";
         } else if (isTextNS && localName == "span") { // text:span
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
             kDebug(32500) << "  <span> localName=" << localName;

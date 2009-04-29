@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+o/* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -63,6 +63,11 @@ public:
 
     /// If showInMenu() returns true; the returned text is used in the context menu.
     QString title() const;
+
+    QString name() const 
+    { 
+	return QString(); 
+    }
 
 protected:
     /**

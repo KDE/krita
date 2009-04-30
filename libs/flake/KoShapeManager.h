@@ -78,8 +78,9 @@ public:
      * Add a KoShape to be displayed and managed by this manager.
      * This will trigger a repaint of the shape.
      * @param shape the shape to add
+     * @param repaint if true it will tigger a repaint of the shape
      */
-    void add(KoShape *shape);
+    void add(KoShape *shape, bool repaint = true);
 
     /**
      * Add an additional shape to the manager.
@@ -182,12 +183,6 @@ public:
     void setPaintingStrategy(KoShapeManagerPaintingStrategy * strategy);
 
 private:
-    /**
-     * Add a KoShape to be displayed and managed by this manager.
-     * @param shape the shape to add
-     * @param repaint if true it will tigger a repaint of the shape
-     */
-    void add(KoShape *shape, bool repaint);
 
     /**
      * Update the tree when there are shapes in m_aggregate4update. This is done so not all

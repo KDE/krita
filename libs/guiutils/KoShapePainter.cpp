@@ -131,7 +131,7 @@ KoShapePainter::~KoShapePainter()
 
 void KoShapePainter::setShapes( const QList<KoShape*> &shapes )
 {
-    d->canvas->shapeManager()->setShapes( shapes, false );
+    d->canvas->shapeManager()->setShapes(shapes, KoShapeManager::AddWithoutRepaint);
 }
 
 void KoShapePainter::paintShapes( QPainter & painter, KoViewConverter & converter )

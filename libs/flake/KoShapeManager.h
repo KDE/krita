@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -51,6 +52,12 @@ class FLAKE_EXPORT KoShapeManager : public QObject
     Q_OBJECT
 
 public:
+    /// enum for add()
+    enum Repaint {
+        PaintShapeOnAdd,    ///< Causes each shapes 'update()' to be called after being added to the shapeManager
+        AddWithoutRepaint   ///< Avoids each shapes 'update()' to be called for faster addition when its possible.
+    };
+
     /**
      * Constructor.
      */
@@ -69,7 +76,7 @@ public:
      * @param shapes the new shapes to manage.
      * @param repaint if true it will trigger a repaint of the shapes
      */
-    void setShapes(const QList<KoShape *> &shapes, bool repaint = true);
+    void setShapes(const QList<KoShape *> &shapes, Repaint repaint = PaintShapeOnAdd);
 
     /// returns the list of maintained shapes
     const QList<KoShape *> & shapes() const;
@@ -80,7 +87,7 @@ public:
      * @param shape the shape to add
      * @param repaint if true it will trigger a repaint of the shape
      */
-    void add(KoShape *shape, bool repaint = true);
+    void add(KoShape *shape, Repaint repaint = PaintShapeOnAdd);
 
     /**
      * Add an additional shape to the manager.

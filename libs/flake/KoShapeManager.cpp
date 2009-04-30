@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -90,7 +90,7 @@ KoShapeManager::~KoShapeManager()
 }
 
 
-void KoShapeManager::setShapes(const QList<KoShape *> &shapes, bool repaint)
+void KoShapeManager::setShapes(const QList<KoShape *> &shapes, Repaint repaint)
 {
     //clear selection
     d->selection->deselectAll();
@@ -105,7 +105,7 @@ void KoShapeManager::setShapes(const QList<KoShape *> &shapes, bool repaint)
     }
 }
 
-void KoShapeManager::add(KoShape *shape, bool repaint)
+void KoShapeManager::add(KoShape *shape,  Repaint repaint)
 {
     if (d->shapes.contains(shape))
         return;
@@ -115,7 +115,7 @@ void KoShapeManager::add(KoShape *shape, bool repaint)
         QRectF br(shape->boundingRect());
         d->tree.insert(br, shape);
     }
-    if (repaint) {
+    if (repaint == PaintShapeOnAdd) {
         shape->update();
     }
 

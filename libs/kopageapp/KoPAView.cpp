@@ -459,7 +459,7 @@ void KoPAView::setActivePage( KoPAPageBase* page )
     m_activePage = page;
     shapeManager()->addAdditional( m_activePage );
     QList<KoShape*> shapes = page->iterator();
-    shapeManager()->setShapes( shapes, false );
+    shapeManager()->setShapes(shapes, KoShapeManager::AddWithoutRepaint);
     //Make the top most layer active
     if ( !shapes.isEmpty() ) {
         KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes.last() );
@@ -471,7 +471,7 @@ void KoPAView::setActivePage( KoPAPageBase* page )
     if ( paPage ) {
         KoPAMasterPage * masterPage = paPage->masterPage();
         QList<KoShape*> masterShapes = masterPage->iterator();
-        masterShapeManager()->setShapes( masterShapes, false );
+        masterShapeManager()->setShapes(masterShapes, KoShapeManager::AddWithoutRepaint);
         //Make the top most layer active
         if ( !masterShapes.isEmpty() ) {
             KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( masterShapes.last() );

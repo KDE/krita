@@ -78,7 +78,7 @@ public:
      * Add a KoShape to be displayed and managed by this manager.
      * This will trigger a repaint of the shape.
      * @param shape the shape to add
-     * @param repaint if true it will tigger a repaint of the shape
+     * @param repaint if true it will trigger a repaint of the shape
      */
     void add(KoShape *shape, bool repaint = true);
 

@@ -493,6 +493,8 @@ TextTool::~TextTool()
 
 void TextTool::showChangeTip()
 {
+    if (!m_textShapeData)
+        return;
     QTextCursor c(m_textShapeData->document());
     c.setPosition(m_changeTipCursorPos);
     if (m_changeTracker && m_changeTracker->containsInlineChanges(c.charFormat())) {

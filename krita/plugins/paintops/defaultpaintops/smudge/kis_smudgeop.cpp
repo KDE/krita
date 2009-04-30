@@ -147,7 +147,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     */
     int opacity = OPACITY_OPAQUE;
     if (!m_firstRun) {
-        opacity = settings->m_optionsWidget->m_rateOption->apply( opacity, sw, sh, m_srcdev, adjustedInfo.pressure() );
+        opacity = settings->m_optionsWidget->m_rateOption->apply( opacity, sw, sh, m_srcdev, info.pressure() );
 
         KisRectIterator it = m_srcdev->createRectIterator(0, 0, sw, sh);
         KoColorSpace* cs = m_srcdev->colorSpace();
@@ -185,17 +185,4 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_target, painter()->opacity(), sx, sy, sw, sh);
 
     //painter()->setOpacity(origOpacity);
-}
-
-double KisSmudgeOp::paintLine(const KisPaintInformation &pi1,
-                             const KisPaintInformation &pi2,
-                             double savedDist)
-{
-    KisPaintInformation adjustedInfo1(pi1);
-    KisPaintInformation adjustedInfo2(pi2);
-    if (!settings->m_optionsWidget->m_sizeOption->isChecked()) {
-        adjustedInfo1.setPressure(PRESSURE_DEFAULT);
-        adjustedInfo2.setPressure(PRESSURE_DEFAULT);
-    }
-    return KisPaintOp::paintLine(adjustedInfo1, adjustedInfo2, savedDist);
 }

@@ -177,6 +177,7 @@ QString KisNodeQueryPath::toString() const
 KisNodeQueryPath KisNodeQueryPath::fromString(const QString& _path)
 {
     KisNodeQueryPath path;
+    if( _path.size() == 0 ) return path;
     path.d->relative = !( _path.at(0) == '\\');
     QStringList indexes = _path.split("\\");
     foreach(const QString& index, indexes)

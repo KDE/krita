@@ -42,7 +42,6 @@ public:
     virtual void play(KisNodeSP node, const KisPlayInfo&) const;
     virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
     virtual KisRecordedAction* clone() const;
-    virtual QWidget* createEditor(QWidget* parent);
     const KisFilter* filter() const;
     const KisFilterConfiguration* filterConfiguration() const;
     /**

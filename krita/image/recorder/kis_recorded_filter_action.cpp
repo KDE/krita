@@ -137,20 +137,6 @@ KisRecordedAction* KisRecordedFilterAction::clone() const
     return new KisRecordedFilterAction(*this);
 }
 
-QWidget* KisRecordedFilterAction::createEditor(QWidget* parent)
-{
-    return 0;
-/*    // TODO make a proxy QObject to update the action
-    KisConfigWidget* widget = d->filter->createConfigurationWidget(parent, 0, 0 );
-    KisFilterConfiguration * kfc = d->filter->defaultConfiguration(0);
-    if (kfc) {
-        kfc->fromXML(d->config);
-    }
-    widget->setConfiguration(kfc);
-    return widget;*/
-}
-
-
 const KisFilter* KisRecordedFilterAction::filter() const
 {
     return d->filter;

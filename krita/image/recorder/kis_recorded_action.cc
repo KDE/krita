@@ -79,13 +79,6 @@ void KisRecordedAction::toXML(QDomDocument& , QDomElement& elt) const
     elt.setAttribute("path", d->path.toString());
 }
 
-
-QWidget* KisRecordedAction::createEditor(QWidget* parent)
-{
-    Q_UNUSED(parent);
-    return 0;
-}
-
 struct KisRecordedActionFactory::Private {
     QString id;
 };

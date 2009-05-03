@@ -89,3 +89,9 @@ target_link_libraries(KisAutogradientResourceTest  ${KDE4_KDEUI_LIBS} kritaimage
 set(kis_exiv2_test_SRCS kis_exiv2_test.cpp )
 kde4_add_unit_test(KisExiv2Test TESTNAME krita-ui-KisExiv2Test ${kis_exiv2_test_SRCS})
 target_link_libraries(KisExiv2Test  ${KDE4_KDEUI_LIBS} kritaimage kritaui ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_recorded_action_editor_test_SRCS kis_recorded_action_editor_test.cpp )
+kde4_add_unit_test(KisRecordedActionEditorTest TESTNAME krita-ui-KisRecordedActionEditor ${kis_recorded_action_editor_test_SRCS})
+target_link_libraries(KisRecordedActionEditorTest  ${KDE4_KDEUI_LIBS} kritaimage kritaui ${QT_QTTEST_LIBRARY})

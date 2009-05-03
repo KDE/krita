@@ -33,13 +33,22 @@ class QRect;
 class KRITAIMAGE_EXPORT KisRecordedFilterAction : public KisRecordedAction
 {
 public:
-    KisRecordedFilterAction(QString name, const KisNodeQueryPath& path, const KisFilter* filter, KisFilterConfiguration*);
+    /**
+     * @param config the filter configuration, the ownership of config remains in the caller.
+     */
+    KisRecordedFilterAction(QString name, const KisNodeQueryPath& path, const KisFilter* filter, const KisFilterConfiguration* config);
     KisRecordedFilterAction(const KisRecordedFilterAction&);
     virtual ~KisRecordedFilterAction();
     virtual void play(KisNodeSP node, const KisPlayInfo&) const;
     virtual void toXML(QDomDocument& doc, QDomElement& elt) const;
     virtual KisRecordedAction* clone() const;
     virtual QWidget* createEditor(QWidget* parent);
+    const KisFilter* filter() const;
+    const KisFilterConfiguration* filterConfiguration() const;
+    /**
+     * Set the configuration, and takes the ownership of the config object.
+     */
+    void setFilterConfiguration( KisFilterConfiguration* config);
 private:
     struct Private;
     Private* const d;

@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_painting_assistants.h"
+#include "kis_painting_assistants_manager.h"
 
 #include <cfloat>
 
@@ -25,29 +25,29 @@
 
 #include "kis_painting_assistant.h"
 
-struct KisPaintingAssistants::Private {
+struct KisPaintingAssistantsManager::Private {
     QList<KisPaintingAssistant*> assistants;
 };
 
-KisPaintingAssistants::KisPaintingAssistants() : d(new Private)
+KisPaintingAssistantsManager::KisPaintingAssistantsManager() : d(new Private)
 {
 }
 
-KisPaintingAssistants::~KisPaintingAssistants()
+KisPaintingAssistantsManager::~KisPaintingAssistantsManager()
 {
     qDeleteAll(d->assistants.begin(), d->assistants.end());
 }
 
-void KisPaintingAssistants::addAssistant(KisPaintingAssistant* assistant) {
+void KisPaintingAssistantsManager::addAssistant(KisPaintingAssistant* assistant) {
     if(d->assistants.contains(assistant)) return;
     d->assistants.push_back(assistant);
 }
 
-void KisPaintingAssistants::removeAssistant(KisPaintingAssistant* assistant) {
+void KisPaintingAssistantsManager::removeAssistant(KisPaintingAssistant* assistant) {
     d->assistants.removeAll(assistant);
 }
 
-QPointF KisPaintingAssistants::adjustPosition(const QPointF& point) const
+QPointF KisPaintingAssistantsManager::adjustPosition(const QPointF& point) const
 {
     if(d->assistants.empty()) return point;
     if(d->assistants.count() == 1) return d->assistants.first()->adjustPosition(point);

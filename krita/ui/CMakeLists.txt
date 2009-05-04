@@ -71,7 +71,7 @@ set(kritaui_LIB_SRCS
     kis_node_manager.cpp 
     kis_node_model.cpp
     kis_painting_assistant.cc 
-    kis_painting_assistants.cc 
+    kis_painting_assistants_manager.cc 
     kis_paintop_box.cc 
     kis_palette_docker.cc
     kis_png_converter.cpp

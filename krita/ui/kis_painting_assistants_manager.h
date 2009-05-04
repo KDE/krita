@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_PAINTING_ASSISTANTS_H_
-#define _KIS_PAINTING_ASSISTANTS_H_
+#ifndef _KIS_PAINTING_ASSISTANTS_MANAGER_H_
+#define _KIS_PAINTING_ASSISTANTS_MANAGER_H_
 
 #include <QPointF>
 
@@ -26,10 +26,10 @@ class KisPaintingAssistant;
 /**
  * This class hold a list of painting assistants.
  */
-class KisPaintingAssistants {
+class KisPaintingAssistantsManager {
     public:
-        KisPaintingAssistants();
-        ~KisPaintingAssistants();
+        KisPaintingAssistantsManager();
+        ~KisPaintingAssistantsManager();
         void addAssistant(KisPaintingAssistant* assistant);
         void removeAssistant(KisPaintingAssistant* assistant);
         QPointF adjustPosition(const QPointF& point) const;

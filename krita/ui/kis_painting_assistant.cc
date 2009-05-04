@@ -21,10 +21,7 @@
 struct KisPaintingAssistant::Private {
     QString id;
     QString name;
-    static KisPaintingAssistant* s_currentAssistant;
 };
-
-KisPaintingAssistant* KisPaintingAssistant::Private::s_currentAssistant = 0;
 
 KisPaintingAssistant::KisPaintingAssistant(const QString& id, const QString& name) : d(new Private)
 {
@@ -45,14 +42,4 @@ const QString& KisPaintingAssistant::id() const
 const QString& KisPaintingAssistant::name() const
 {
     return d->name;
-}
-
-KisPaintingAssistant* KisPaintingAssistant::currentAssistant()
-{
-    return Private::s_currentAssistant;
-}
-
-void KisPaintingAssistant::setCurrentAssistant(KisPaintingAssistant* _assistant)
-{
-    Private::s_currentAssistant = _assistant;
 }

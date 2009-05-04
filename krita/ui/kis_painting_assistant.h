@@ -40,21 +40,6 @@ public:
      * @param point the coordinates in point in the document reference
      */
     virtual QPointF adjustPosition(const QPointF& point) const = 0;
-    /**
-     * @return the current painting assistant, or null if none.
-     */
-    static KisPaintingAssistant* currentAssistant();
-    /**
-     * Set the current painting assistant.
-     *
-     * This function do not take ownership of the pointer,
-     * the responsibility of deleting the KisPaintingAssistant
-     * is left to the caller of this function.
-     *
-     * Call with a null pointer to make freehand painting without
-     * any assistant.
-     */
-    static void setCurrentAssistant(KisPaintingAssistant*);
 private:
     struct Private;
     Private* const d;

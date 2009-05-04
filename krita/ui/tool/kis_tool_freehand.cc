@@ -60,6 +60,8 @@
 #include "kis_painting_assistant.h"
 #include <recorder/kis_node_query_path.h>
 #include <KoViewConverter.h>
+#include <kis_view2.h>
+#include <kis_painting_assistants_manager.h>
 
 #define ENABLE_RECORDING
 
@@ -501,9 +503,8 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
 
 QPointF KisToolFreehand::adjustPosition(const QPointF& point)
 {
-    KisPaintingAssistant* assistant = KisPaintingAssistant::currentAssistant();
-    if (assistant && m_assistant) {
-        QPointF ap = assistant->adjustPosition(point);
+    if (m_assistant) {
+        QPointF ap = static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantManager()->adjustPosition(point);
         return (1.0 - m_magnetism) * point + m_magnetism * ap;
     }
     return point;

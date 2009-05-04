@@ -54,6 +54,7 @@ QPointF adjustPointF( const QPointF& _pt, const QRectF& _rc)
 
 void KisRulerAssistantTool::activate(bool )
 {
+#if 0
     // Add code here to initialize your tool when it got activated
     KisTool::activate();
     
@@ -76,6 +77,7 @@ void KisRulerAssistantTool::activate(bool )
     Q_ASSERT(m_rulerDecoration);
     m_rulerDecoration->setRuler( ra->ruler() );
     m_rulerDecoration->setVisible( true);
+#endif
 }
 
 void KisRulerAssistantTool::deactivate()

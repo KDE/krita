@@ -39,7 +39,7 @@ public:
      * Adjust the position given in parameter.
      * @param point the coordinates in point in the document reference
      */
-    virtual QPointF adjustPosition(const QPointF& point) = 0;
+    virtual QPointF adjustPosition(const QPointF& point) const = 0;
     /**
      * @return the current painting assistant, or null if none.
      */

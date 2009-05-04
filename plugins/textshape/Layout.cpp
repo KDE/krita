@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
@@ -169,9 +169,11 @@ bool Layout::addLine(QTextLine &line)
     const qreal footnoteHeight = findFootnote(line, &oldFootnoteDocLength);
 
     if (!m_newShape
+            // line does not fit.
             && m_data->documentOffset() + shape->size().height() - footnoteHeight
-            < m_y + line.height() + m_shapeBorder.bottom) {
-        // line does not fit.
+              < m_y + line.height() + m_shapeBorder.bottom
+            // but make sure we don't leave the shape empty.
+            && m_block.position() + line.textStart() > m_data->position()) {
 
         if (oldFootnoteDocLength >= 0) {
             QTextCursor cursor(m_textShape->footnoteDocument());
@@ -343,8 +345,8 @@ bool Layout::nextParag()
     updateBorders(); // fill the border inset member vars.
     m_y += m_borderInsets.top;
 
-    bool pagebreak = (m_format.pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore ||
-                      m_format.boolProperty(KoParagraphStyle::BreakBefore));
+    bool pagebreak = m_format.pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore ||
+                      m_format.boolProperty(KoParagraphStyle::BreakBefore);
 
     const QVariant masterPageName = m_format.property(KoParagraphStyle::MasterPageName);
     if (! masterPageName.isNull() && m_currentMasterPage != masterPageName.toString()) {
@@ -352,7 +354,8 @@ bool Layout::nextParag()
         pagebreak = true; // new master-page means new page
     }
 
-    if (!m_newShape && pagebreak) {
+    // start a new shape if requested, but not if that would leave the current shape empty.
+    if (!m_newShape && pagebreak && m_block.position() > m_data->position()) {
         m_data->setEndPosition(m_block.position() - 1);
         nextShape();
         if (m_data)

@@ -45,6 +45,7 @@ class KisImageManager;
 class KisNodeManager;
 class KisMaskManager;
 class KisPerspectiveGridManager;
+class KisPaintingAssistantsManager;
 class KisGridManager;
 class KisLayerBox;
 
@@ -164,6 +165,7 @@ public:  // Krita specific interfaces
 
     KisGridManager * gridManager();
     KisPerspectiveGridManager* perspectiveGridManager();
+    KisPaintingAssistantsManager* paintingAssistantManager();
 
     /// @return the layer box for this view
     KisLayerBox* layerBox();

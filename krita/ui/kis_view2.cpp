@@ -101,6 +101,7 @@
 #include "kis_node_manager.h"
 #include "kis_selection.h"
 #include "kis_print_job.h"
+#include "kis_painting_assistants_manager.h"
 
 class KisView2::KisView2Private
 {
@@ -123,7 +124,8 @@ public:
             , zoomManager(0)
             , imageManager(0)
             , gridManager(0)
-            , perspectiveGridManager(0) {
+            , perspectiveGridManager(0)
+            , paintingAssistantManager(0) {
     }
 
     ~KisView2Private() {
@@ -136,6 +138,7 @@ public:
         delete imageManager;
         delete gridManager;
         delete perspectiveGridManager;
+        delete paintingAssistantManager;
         delete viewConverter;
     }
 
@@ -158,6 +161,7 @@ public:
     KisImageManager * imageManager;
     KisGridManager * gridManager;
     KisPerspectiveGridManager * perspectiveGridManager;
+    KisPaintingAssistantsManager* paintingAssistantManager;
 };
 
 
@@ -546,6 +550,7 @@ void KisView2::createManagers()
     m_d->perspectiveGridManager->setup(actionCollection());
     m_d->canvas->addDecoration(m_d->perspectiveGridManager);
 
+    m_d->paintingAssistantManager = new KisPaintingAssistantsManager;
 }
 
 void KisView2::updateGUI()
@@ -721,6 +726,11 @@ KisPerspectiveGridManager* KisView2::perspectiveGridManager()
 KisGridManager * KisView2::gridManager()
 {
     return m_d->gridManager;
+}
+
+KisPaintingAssistantsManager* KisView2::paintingAssistantManager()
+{
+    return m_d->paintingAssistantManager;
 }
 
 void KisView2::slotTotalRefresh()

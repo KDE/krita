@@ -21,12 +21,14 @@
 
 #include <QPointF>
 
+#include <krita_export.h>
+
 class KisPaintingAssistant;
 
 /**
  * This class hold a list of painting assistants.
  */
-class KisPaintingAssistantsManager {
+class KRITAUI_EXPORT KisPaintingAssistantsManager {
     public:
         KisPaintingAssistantsManager();
         ~KisPaintingAssistantsManager();

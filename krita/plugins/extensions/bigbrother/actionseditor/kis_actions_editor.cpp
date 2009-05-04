@@ -24,6 +24,7 @@
 #include "kis_macro_model.h"
 #include <recorder/kis_recorded_action.h>
 #include <recorder/kis_macro.h>
+#include <recorder/kis_recorded_action_editor_factory_registry.h>
 
 KisActionsEditor::KisActionsEditor(QWidget* parent) : QWidget(parent), m_currentEditor(0), m_form(new Ui::ActionsEditor), m_macro(0), m_model(0), m_widgetLayout(0)
 
@@ -84,7 +85,7 @@ void KisActionsEditor::setCurrentAction(KisRecordedAction* _action)
     delete m_currentEditor;
     m_currentEditor = 0;
     if(_action) {
-        m_currentEditor = _action->createEditor(this);
+        m_currentEditor = KisRecordedActionEditorFactoryRegistry::instance()->createEditor(this, _action);
     } else {
         m_currentEditor = new QLabel(i18n("No action is selected."), this);
     }

@@ -1616,10 +1616,8 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         // Position and show toolbars according to user's preference
         setAutoSaveSettings(newPart->componentData().componentName(), false);
 
-        foreach(QDockWidget* wdg, d->m_dockWidgets)
-        {
-            if ((wdg->features()&QDockWidget::DockWidgetClosable) == 0)
-            {
+        foreach (QDockWidget *wdg, d->m_dockWidgets) {
+            if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
                 wdg->setVisible(true);
             }
         }

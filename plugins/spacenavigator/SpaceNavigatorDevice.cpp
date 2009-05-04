@@ -50,9 +50,6 @@ bool SpaceNavigatorDevice::start()
     if( m_thread->isRunning() )
         return true;
 
-    if(spnav_open() == -1)
-        return false;
-
     m_thread->start();
 
     return true;

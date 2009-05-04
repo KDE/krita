@@ -35,6 +35,8 @@ SpaceNavigatorPollingThread::~SpaceNavigatorPollingThread()
 void SpaceNavigatorPollingThread::run()
 {
     m_stopped = false;
+    if(spnav_open() == -1)
+        return;
 
     qreal posfactor = 0.1;
     int currX = 0, currY = 0, currZ = 0;

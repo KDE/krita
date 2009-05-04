@@ -33,6 +33,7 @@
 #include "RulerAssistant.h"
 #include "RulerDecoration.h"
 #include "Ruler.h"
+#include <kis_painting_assistants_manager.h>
 
 KisRulerAssistantTool::KisRulerAssistantTool(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::arrowCursor()), m_canvas( dynamic_cast<KisCanvas2*>(canvas) )
@@ -54,19 +55,15 @@ QPointF adjustPointF( const QPointF& _pt, const QRectF& _rc)
 
 void KisRulerAssistantTool::activate(bool )
 {
-#if 0
     // Add code here to initialize your tool when it got activated
     KisTool::activate();
     
-    RulerAssistant* ra = dynamic_cast<RulerAssistant*>( KisPaintingAssistant::currentAssistant() );
+    RulerAssistant* ra = new RulerAssistant();
     
-    if( !ra )
-    {
-      ra = new RulerAssistant();
-      KisPaintingAssistant::setCurrentAssistant( ra );
-    }
     QRectF imageArea = QRectF( pixelToView( QPoint(0,0) ),
                                m_canvas->image()->pixelToDocument( QPoint( m_canvas->image()->width(), m_canvas->image()->height()) ) );
+    
+    m_canvas->view()->paintingAssistantManager()->addAssistant(ra);
     
     dbgPlugins << imageArea << ra->ruler()->point1() << ra->ruler()->point2();
     
@@ -77,7 +74,6 @@ void KisRulerAssistantTool::activate(bool )
     Q_ASSERT(m_rulerDecoration);
     m_rulerDecoration->setRuler( ra->ruler() );
     m_rulerDecoration->setVisible( true);
-#endif
 }
 
 void KisRulerAssistantTool::deactivate()

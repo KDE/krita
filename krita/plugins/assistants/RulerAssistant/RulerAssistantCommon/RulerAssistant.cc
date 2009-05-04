@@ -28,7 +28,7 @@ RulerAssistant::RulerAssistant()
 {
 }
 
-QPointF RulerAssistant::adjustPosition( const QPointF& pt)
+QPointF RulerAssistant::adjustPosition( const QPointF& pt) const
 {
     QPointF project = m_ruler->project( pt );
     return m_ruler->project( pt );

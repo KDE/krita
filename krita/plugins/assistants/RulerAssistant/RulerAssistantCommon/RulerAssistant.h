@@ -28,7 +28,7 @@ class KRITARULERASSISTANTCOMMON_EXPORT RulerAssistant : public KisPaintingAssist
 {
     public:
         RulerAssistant();
-        virtual QPointF adjustPosition( const QPointF& point);
+        virtual QPointF adjustPosition( const QPointF& point) const;
         Ruler* ruler();
     private:
         Ruler* m_ruler;

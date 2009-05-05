@@ -20,9 +20,7 @@
 
 #include <QPointF>
 
-#include "KritaRulerAssistantCommon_export.h"
-
-class KRITARULERASSISTANTCOMMON_EXPORT Ruler {
+class Ruler {
     public:
         Ruler();
         ~Ruler();

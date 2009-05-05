@@ -20,11 +20,9 @@
 
 #include "kis_painting_assistant.h"
 
-#include "KritaRulerAssistantCommon_export.h"
-
 class Ruler;
 
-class KRITARULERASSISTANTCOMMON_EXPORT RulerAssistant : public KisPaintingAssistant
+class RulerAssistant : public KisPaintingAssistant
 {
     public:
         RulerAssistant();

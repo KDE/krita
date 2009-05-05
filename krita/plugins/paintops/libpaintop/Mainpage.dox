@@ -17,7 +17,7 @@
  */
 
 /**
-  @mainpage libpaintop: shared functionality for brush engines
+  \mainpage libpaintop: shared functionality for brush engines
 
 libpaintop is meant to share common classes used by Krita brush
 engines, suchs as certain configuration widgets.
@@ -30,8 +30,3 @@ in an option popup) and possible also the code necessary for applying
 the effects of that option to the paint device as part of painting.
 
 */
-#ifndef DESIGN
-#define DESIGN
-// Let's keep kRaZy happy
-#endif
-

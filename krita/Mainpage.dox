@@ -17,7 +17,7 @@
  */
 
 /**
-  @mainpage Krita Image manipulation and paint application
+  \mainpage Krita Image manipulation and paint application
 
   Krita is an advanced and modular paint and image manipulation
   application.
@@ -54,7 +54,3 @@
   consult the plugin writers' manual for more information.
 
  */
-#ifndef DESIGN
-#define DESIGN
-// Let's keep icefox.net/kde/tests.headerincluded_koffice.html happy
-#endif

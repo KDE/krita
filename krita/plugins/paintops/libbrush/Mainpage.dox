@@ -17,7 +17,7 @@
  */
 
 /**
-  @mainpage LibBrush
+  \mainpage LibBrush
 
   March 2008
 
@@ -111,8 +111,3 @@ independent brush plugins or use libbrush from other places, like some filters,
 we need to move the widgets in here.
 
 */
-
-#ifndef LIBBRUSH
-#define LIBBRUSH
-// Let's keep krazy happy
-#endif

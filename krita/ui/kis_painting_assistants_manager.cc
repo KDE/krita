@@ -58,8 +58,9 @@ QPointF KisPaintingAssistantsManager::adjustPosition(const QPointF& point) const
         QPointF pt = assistant->adjustPosition(point);
         double d = qAbs(pt.x() - point.x()) + qAbs(pt.y() - point.y());
         if( d < distance ) {
-            best = point;
+            best = pt;
             distance = d;
         }
     }
+    return best;
 }

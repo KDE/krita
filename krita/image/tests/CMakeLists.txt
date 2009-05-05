@@ -195,12 +195,6 @@ target_link_libraries(KisBookmarkedConfigurationManagerTest  ${KDE4_KDEUI_LIBS} 
 
 ########### next target ###############
 
-set(kis_boundary_test_SRCS kis_boundary_test.cpp )
-kde4_add_unit_test(KisBoundaryTest TESTNAME krita-image-KisBoundaryTest ${kis_boundary_test_SRCS})
-target_link_libraries(KisBoundaryTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_change_profile_visitor_test_SRCS kis_change_profile_visitor_test.cpp )
 kde4_add_unit_test(KisChangeProfileVisitorTest TESTNAME krita-image-KisChangeProfileVisitorTest ${kis_change_profile_visitor_test_SRCS})
 target_link_libraries(KisChangeProfileVisitorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

@@ -45,7 +45,6 @@
 #include "kis_cursor.h"
 #include "kis_painter.h"
 
-#include "kis_boundary.h"
 #include "kis_paint_device.h"
 #include "kis_layer.h"
 

@@ -38,6 +38,7 @@ class KRITAIMAGE_EXPORT KisBoundary
 {
 public:
     KisBoundary(KisPaintDeviceSP dev);
+    ~KisBoundary();
     void generateBoundary(int w, int h);
 
 private:

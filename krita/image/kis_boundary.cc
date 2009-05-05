@@ -31,6 +31,10 @@ KisBoundary::KisBoundary(KisPaintDeviceSP dev)
     m_fuzzyness = 255 / 2;
 }
 
+KisBoundary::~KisBoundary()
+{
+}
+
 bool KisBoundary::isDark(quint8 val)
 {
     return val < m_fuzzyness;

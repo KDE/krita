@@ -1047,8 +1047,8 @@ void KisBrush::resetBoundary()
 void KisBrush::generateBoundary()
 {
     KisPaintDeviceSP dev;
-    int w = maskWidth(1.0, 0.0);
-    int h = maskHeight(1.0, 0.0);
+    int w = width();
+    int h = height();
 
     if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
         dev = image(KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0), 1.0, 0.0, KisPaintInformation());

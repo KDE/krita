@@ -31,6 +31,8 @@
 #include <kis_paint_action_type_option.h>
 #include "kis_image.h"
 #include <KoViewConverter.h>
+#include <kis_boundary.h>
+#include <kis_boundary_painter.h>
 
 KisBrushOpSettings::KisBrushOpSettings( KisBrushOpSettingsWidget* widget )
     : KisPaintOpSettings( widget )
@@ -95,7 +97,9 @@ void KisBrushOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPai
     QPointF hotSpot = brush->hotSpot(1.0, 1.0);
     painter.setPen(Qt::black);
     painter.setBackground(Qt::black);
-    painter.drawEllipse( converter.documentToView( image->pixelToDocument(QRect(0,0, brush->width(), brush->height()) ).translated( pos - hotSpot + QPoint(1,1) ) ) );
+    painter.translate(converter.documentToView( pos - image->pixelToDocument(hotSpot)));
+    KisBoundaryPainter::paint( brush->boundary(), image, painter, converter);
+//     painter.drawEllipse( converter.documentToView( image->pixelToDocument(QRect(0,0, brush->width(), brush->height()) ).translated( pos - hotSpot + QPoint(1,1) ) ) );
 }
 
 #include "kis_brushop_settings.moc"

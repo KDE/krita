@@ -54,7 +54,6 @@
 #include <kis_paintop_preset.h>
 
 // Krita/ui
-#include "kis_boundary_painter.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_cursor.h"
 #include "kis_painting_assistant.h"

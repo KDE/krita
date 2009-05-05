@@ -60,8 +60,7 @@ inline double norm2(const QPointF& p)
 void RulerAssistant::drawAssistant(QPainter& _painter, const QPoint& documentOffset,  const QRect& _area, const KoViewConverter &_converter) const
 {
     Q_UNUSED(_area);
-    if(!m_ruler)
-        return;
+    Q_ASSERT(m_ruler);
     // Draw the gradient
     _painter.save();
     {

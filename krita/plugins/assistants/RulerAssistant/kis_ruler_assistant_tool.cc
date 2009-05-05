@@ -57,17 +57,17 @@ void KisRulerAssistantTool::activate(bool )
     // Add code here to initialize your tool when it got activated
     KisTool::activate();
     
-    RulerAssistant* ra = new RulerAssistant();
+    m_rulerAssistant = new RulerAssistant();
     
     QRectF imageArea = QRectF( pixelToView( QPoint(0,0) ),
                                m_canvas->image()->pixelToDocument( QPoint( m_canvas->image()->width(), m_canvas->image()->height()) ) );
     
-    m_canvas->view()->paintingAssistantManager()->addAssistant(ra);
+    m_canvas->view()->paintingAssistantManager()->addAssistant(m_rulerAssistant);
     
-    dbgPlugins << imageArea << ra->ruler()->point1() << ra->ruler()->point2();
+    dbgPlugins << imageArea << m_rulerAssistant->ruler()->point1() << m_rulerAssistant->ruler()->point2();
     
-    ra->ruler()->setPoint1( adjustPointF( ra->ruler()->point1(), imageArea ) );
-    ra->ruler()->setPoint2( adjustPointF( ra->ruler()->point2(), imageArea ) );
+    m_rulerAssistant->ruler()->setPoint1( adjustPointF( m_rulerAssistant->ruler()->point1(), imageArea ) );
+    m_rulerAssistant->ruler()->setPoint2( adjustPointF( m_rulerAssistant->ruler()->point2(), imageArea ) );
 }
 
 void KisRulerAssistantTool::deactivate()

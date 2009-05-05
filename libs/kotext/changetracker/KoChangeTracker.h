@@ -45,6 +45,7 @@ public:
     ~KoChangeTracker();
 
     void setEnabled(bool enabled);
+    bool isEnabled();
 
     int getFormatChangeId(QString title, QTextFormat &format, QTextFormat &prevFormat, int existingChangeId);
     int getInsertChangeId(QString title, int existingChangeId);

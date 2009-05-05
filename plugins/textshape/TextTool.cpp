@@ -1018,7 +1018,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             m_prevCursorPosition = m_caret.position();
             ensureCursorVisible();
 
-            if (KoTextDocument(m_textShapeData->document()).changeTracker()) {
+            if (KoTextDocument(m_textShapeData->document()).changeTracker() && KoTextDocument(m_textShapeData->document()).changeTracker()->isEnabled()) {
                 if ( !m_changeRegistered ) {
                     int changeId = KoTextDocument(m_textShapeData->document()).changeTracker()->getInsertChangeId(i18n("Key Press"), m_caret.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
                     QTextCharFormat format;

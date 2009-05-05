@@ -62,6 +62,11 @@ void KoChangeTracker::setEnabled(bool enabled)
     d->m_enabled = enabled;
 }
 
+bool KoChangeTracker::isEnabled()
+{
+    return d->m_enabled;
+}
+
 int KoChangeTracker::getFormatChangeId(QString title, QTextFormat &format, QTextFormat &prevFormat, int existingChangeId)
 {
     if ( existingChangeId ) {

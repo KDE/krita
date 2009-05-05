@@ -21,20 +21,26 @@
 
 #include <QPointF>
 
+#include "canvas/kis_canvas_decoration.h"
+
 #include <krita_export.h>
 
+class KActionCollection;
 class KisPaintingAssistant;
 
 /**
  * This class hold a list of painting assistants.
  */
-class KRITAUI_EXPORT KisPaintingAssistantsManager {
+class KRITAUI_EXPORT KisPaintingAssistantsManager : public KisCanvasDecoration {
     public:
-        KisPaintingAssistantsManager();
+        KisPaintingAssistantsManager(KisView2* parent);
         ~KisPaintingAssistantsManager();
         void addAssistant(KisPaintingAssistant* assistant);
         void removeAssistant(KisPaintingAssistant* assistant);
         QPointF adjustPosition(const QPointF& point) const;
+        void setup(KActionCollection * collection);
+    protected:
+        virtual void drawDecoration(QPainter& gc, const QPoint& documentOffset,  const QRect& area, const KoViewConverter &converter);
     private:
         struct Private;
         Private* const d;

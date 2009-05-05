@@ -550,7 +550,8 @@ void KisView2::createManagers()
     m_d->perspectiveGridManager->setup(actionCollection());
     m_d->canvas->addDecoration(m_d->perspectiveGridManager);
 
-    m_d->paintingAssistantManager = new KisPaintingAssistantsManager;
+    m_d->paintingAssistantManager = new KisPaintingAssistantsManager(this);
+    m_d->paintingAssistantManager->setup(actionCollection());
 }
 
 void KisView2::updateGUI()

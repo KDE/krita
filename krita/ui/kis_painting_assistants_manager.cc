@@ -22,14 +22,24 @@
 
 #include <QList>
 #include <QPointF>
+#include <klocale.h>
+#include <KActionCollection>
+#include <KToggleAction>
 
 #include "kis_painting_assistant.h"
 
 struct KisPaintingAssistantsManager::Private {
     QList<KisPaintingAssistant*> assistants;
+    KToggleAction* toggleAssistant;
+    void updateAction()
+    {
+        toggleAssistant->setEnabled(!assistants.isEmpty());
+    }
 };
 
-KisPaintingAssistantsManager::KisPaintingAssistantsManager() : d(new Private)
+KisPaintingAssistantsManager::KisPaintingAssistantsManager(KisView2* parent) :
+    KisCanvasDecoration("paintingAssistantsManager", i18n("Painting assistants"), parent),
+    d(new Private)
 {
 }
 
@@ -41,10 +51,12 @@ KisPaintingAssistantsManager::~KisPaintingAssistantsManager()
 void KisPaintingAssistantsManager::addAssistant(KisPaintingAssistant* assistant) {
     if(d->assistants.contains(assistant)) return;
     d->assistants.push_back(assistant);
+    d->updateAction();
 }
 
 void KisPaintingAssistantsManager::removeAssistant(KisPaintingAssistant* assistant) {
     d->assistants.removeAll(assistant);
+    d->updateAction();
 }
 
 QPointF KisPaintingAssistantsManager::adjustPosition(const QPointF& point) const
@@ -63,4 +75,18 @@ QPointF KisPaintingAssistantsManager::adjustPosition(const QPointF& point) const
         }
     }
     return best;
+}
+
+void KisPaintingAssistantsManager::setup(KActionCollection * collection)
+{
+    d->toggleAssistant = new KToggleAction(i18n("Show Painting Assistants"), this);
+    collection->addAction("view_toggle_painting_assistants", d->toggleAssistant);
+    connect(d->toggleAssistant, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
+
+    d->toggleAssistant->setCheckedState(KGuiItem(i18n("Hide Painting Assistants")));
+    d->toggleAssistant->setChecked(false);
+}
+
+void KisPaintingAssistantsManager::drawDecoration(QPainter& gc, const QPoint& documentOffset,  const QRect& area, const KoViewConverter &converter)
+{
 }

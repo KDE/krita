@@ -55,6 +55,8 @@
   <Action name="view_toggle_perspective_grid" />
   <Action name="view_clear_perspective_grid" />
   <Separator/>
+  <Action name="view_toggle_painting_assistants" />
+  <Separator/>
   <Action name="view_palette_action_menu"/>
   <Separator/>
   <Action name="refresh_canvas"/>

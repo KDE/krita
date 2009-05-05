@@ -1,8 +1,0 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritarulerassistantview" version="1">
-<MenuBar>
-    <Menu name="View"><text>&amp;View</text>
-		<Action name="ShowRulerAssitantDecoration"/>
-    </Menu>
-</MenuBar>
-</kpartgui>

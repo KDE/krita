@@ -31,7 +31,6 @@
 #include <kis_view2.h>
 
 #include "RulerAssistant.h"
-#include "RulerDecoration.h"
 #include "Ruler.h"
 #include <kis_painting_assistants_manager.h>
 
@@ -69,11 +68,6 @@ void KisRulerAssistantTool::activate(bool )
     
     ra->ruler()->setPoint1( adjustPointF( ra->ruler()->point1(), imageArea ) );
     ra->ruler()->setPoint2( adjustPointF( ra->ruler()->point2(), imageArea ) );
-    
-    m_rulerDecoration = dynamic_cast<RulerDecoration*>(m_canvas->decoration("ruler"));
-    Q_ASSERT(m_rulerDecoration);
-    m_rulerDecoration->setRuler( ra->ruler() );
-    m_rulerDecoration->setVisible( true);
 }
 
 void KisRulerAssistantTool::deactivate()
@@ -90,11 +84,11 @@ inline double norm2(const QPointF& p)
 
 void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
 {
-  if( norm2(event->point - m_rulerDecoration->ruler()->point1() ) < 10)
+  if( norm2(event->point - m_rulerAssistant->ruler()->point1() ) < 10)
   {
       m_mode = MODE_POINT1DRAGING;
       m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
-  } else if( norm2(event->point - m_rulerDecoration->ruler()->point2() ) < 10 )
+  } else if( norm2(event->point - m_rulerAssistant->ruler()->point2() ) < 10 )
   {
       m_mode = MODE_POINT2DRAGING;
       m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
@@ -108,11 +102,11 @@ void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 {
     if( m_mode == MODE_POINT1DRAGING)
     {
-        m_rulerDecoration->ruler()->setPoint1( event->point);
+        m_rulerAssistant->ruler()->setPoint1( event->point);
         m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
     } else if( m_mode == MODE_POINT2DRAGING)
     {
-        m_rulerDecoration->ruler()->setPoint2( event->point);
+        m_rulerAssistant->ruler()->setPoint2( event->point);
         m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
     } else {
         event->ignore();
@@ -134,14 +128,14 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
     } else {
       _gc.setBrush( QColor(0,0,0,0) );
     }
-    _gc.drawEllipse( QRectF( _converter.documentToView( m_rulerDecoration->ruler()->point1() ) - QPointF(5,5), QSizeF(10,10)));
+    _gc.drawEllipse( QRectF( _converter.documentToView( m_rulerAssistant->ruler()->point1() ) - QPointF(5,5), QSizeF(10,10)));
     if( m_mode == MODE_POINT2DRAGING)
     {
       _gc.setBrush( QColor(0,0,0,125) );
     } else {
       _gc.setBrush( QColor(0,0,0,0) );
     }
-    _gc.drawEllipse( QRectF( _converter.documentToView( m_rulerDecoration->ruler()->point2() ) - QPointF(5,5), QSizeF(10,10)));
+    _gc.drawEllipse( QRectF( _converter.documentToView( m_rulerAssistant->ruler()->point2() ) - QPointF(5,5), QSizeF(10,10)));
 }
 
 

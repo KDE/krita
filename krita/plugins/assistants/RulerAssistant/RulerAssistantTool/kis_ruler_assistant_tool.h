@@ -1,3 +1,4 @@
+class RulerAssistant;
 /*
  * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
@@ -51,7 +52,7 @@ protected:
 
 protected:
     KisCanvas2* m_canvas;
-    RulerDecoration* m_rulerDecoration;
+    RulerAssistant* m_rulerAssistant;
     Mode m_mode;
     QWidget* m_widget;
 };

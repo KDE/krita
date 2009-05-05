@@ -1,3 +1,2 @@
 add_subdirectory(RulerAssistantCommon)
-add_subdirectory(RulerAssistantView)
 add_subdirectory(RulerAssistantTool)

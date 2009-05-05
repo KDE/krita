@@ -30,6 +30,7 @@ class KRITARULERASSISTANTCOMMON_EXPORT RulerAssistant : public KisPaintingAssist
         RulerAssistant();
         virtual QPointF adjustPosition( const QPointF& point) const;
         Ruler* ruler();
+        virtual void drawAssistant(QPainter& gc, const QPoint& documentOffset,  const QRect& area, const KoViewConverter &converter) const;
     private:
         Ruler* m_ruler;
 };

@@ -24,6 +24,10 @@
 
 #include <krita_export.h>
 
+class QPainter;
+class QRect;
+class KoViewConverter;
+
 /**
  * A KisPaintingAssistant is an object that assist the drawing on the canvas.
  * With this class you can implement virtual equivalent to ruler or compas.
@@ -40,6 +44,7 @@ public:
      * @param point the coordinates in point in the document reference
      */
     virtual QPointF adjustPosition(const QPointF& point) const = 0;
+    virtual void drawAssistant(QPainter& gc, const QPoint& documentOffset,  const QRect& area, const KoViewConverter &converter) const = 0;
 private:
     struct Private;
     Private* const d;

@@ -20,23 +20,12 @@
 #include <QPixmap>
 #include <QPainter>
 
+#include <KoViewConverter.h>
+
 #include "kis_boundary.h"
+#include <kis_image.h>
 
-
-QPixmap KisBoundaryPainter::createPixmap(const KisBoundary& boundary, int w, int h)
-{
-    QPixmap target(w, h);
-    QPainter painter(&target);
-
-    painter.eraseRect(0, 0, w, h);
-
-    paint(boundary, painter);
-
-    painter.end();
-    return target;
-}
-
-void KisBoundaryPainter::paint(const KisBoundary& boundary, QPainter& painter)
+void KisBoundaryPainter::paint(const KisBoundary& boundary, KisImageSP image, QPainter& painter, const KoViewConverter &converter)
 {
     KisBoundary::PointPairListList::const_iterator it = boundary.m_horSegments.constBegin();
     KisBoundary::PointPairListList::const_iterator end = boundary.m_horSegments.constEnd();
@@ -50,8 +39,10 @@ void KisBoundaryPainter::paint(const KisBoundary& boundary, QPainter& painter)
             int y = static_cast<int>((*lineIt).first.y());
             int x2 = x1 + (*lineIt).second;
 
-            painter.drawLine(x1, y, x2, y);
-            painter.drawPoint(x2, y);
+            QPointF p1 = converter.documentToView( image->pixelToDocument( QPoint(x1,y ) ) );
+            QPointF p2 = converter.documentToView( image->pixelToDocument( QPoint(x2,y ) ) );
+            painter.drawLine(p1, p2);
+            painter.drawPoint(p2);
 
             ++lineIt;
         }
@@ -70,8 +61,10 @@ void KisBoundaryPainter::paint(const KisBoundary& boundary, QPainter& painter)
             int y1 = static_cast<int>((*lineIt).first.y());
             int y2 = y1 + (*lineIt).second;
 
-            painter.drawLine(x, y1, x, y2);
-            painter.drawPoint(x, y2);
+            QPointF p1 = converter.documentToView( image->pixelToDocument( QPoint(x,y1 ) ) );
+            QPointF p2 = converter.documentToView( image->pixelToDocument( QPoint(x,y2 ) ) );
+            painter.drawLine(p1, p2);
+            painter.drawPoint(p2);
 
             ++lineIt;
         }

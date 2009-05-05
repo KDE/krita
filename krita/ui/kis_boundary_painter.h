@@ -22,14 +22,16 @@
 //Added by qt3to4:
 #include <QPixmap>
 
+#include <kis_types.h>
+
 class KisBoundary;
 class QPainter;
+class KoViewConverter;
 
 class KRITAUI_EXPORT KisBoundaryPainter
 {
 public:
-    static void paint(const KisBoundary& boundary, QPainter& painter);
-    static QPixmap createPixmap(const KisBoundary& boundary, int w, int h);
+    static void paint(const KisBoundary& boundary, KisImageSP image, QPainter& painter, const KoViewConverter &converter);
 };
 
 #endif // _KIS_BOUNDARY_PAINTER_H_

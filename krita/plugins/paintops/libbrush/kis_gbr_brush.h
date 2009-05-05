@@ -40,8 +40,6 @@ class QIODevice;
 class KoColor;
 class KoColorSpace;
 
-class KisBoundary;
-
 class BRUSH_EXPORT KisGbrBrush : public KisBrush
 {
 
@@ -88,8 +86,6 @@ public:
 
     virtual enumBrushType brushType() const;
 
-    virtual KisBoundary boundary();
-
     /**
      * Makes a copy of this brush.
      */
@@ -112,9 +108,6 @@ private:
 
     bool init();
     bool initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, int h);
-
-    // Initialize our boundary
-    void generateBoundary();
 
     struct Private;
     Private* const d;

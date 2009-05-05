@@ -96,7 +96,10 @@ void KisBrush::PaintDeviceColoringInformation::nextRow()
 
 
 struct KisBrush::Private {
-
+    Private() : boundary(0) {}
+    ~Private() {
+        delete boundary;
+    }
     enumBrushType brushType;
     qint32 width;
     qint32 height;
@@ -104,6 +107,7 @@ struct KisBrush::Private {
     QPointF hotSpot;
     mutable QVector<KisScaledBrush> scaledBrushes;
     bool hasColor;
+    KisBoundary* boundary;
 
 };
 
@@ -1032,5 +1036,53 @@ QImage KisBrush::interpolate(const QImage& image1, const QImage& image2, double 
     }
 
     return outputImage;
+}
+
+void KisBrush::resetBoundary()
+{
+    delete d->boundary;
+    d->boundary = 0;
+}
+
+void KisBrush::generateBoundary()
+{
+    KisPaintDeviceSP dev;
+    int w = maskWidth(1.0, 0.0);
+    int h = maskHeight(1.0, 0.0);
+
+    if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
+        dev = image(KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0), 1.0, 0.0, KisPaintInformation());
+    } else {
+        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+        dev = new KisPaintDevice(cs);
+        mask(dev, KoColor(dev->dataManager()->defaultPixel(), cs) , 1.0, 1.0, 0.0, KisPaintInformation());
+#if 0
+        KisQImagemaskSP amask = mask(KisPaintInformation());
+        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+        dev = new KisPaintDevice(cs, "tmp for generateBoundary");
+
+        KisHLineIteratorPixel it = dev->createHLineIterator(0, 0, w);
+
+        for (int y = 0; y < h; y++) {
+            int x = 0;
+
+            while (!it.isDone()) {
+                cs->setAlpha(it.rawData(), amask->alphaAt(x++, y), 1);
+                ++it;
+            }
+            it.nextRow();
+        }
+#endif
+    }
+
+    d->boundary = new KisBoundary(dev.data());
+    d->boundary->generateBoundary(w, h);
+}
+
+KisBoundary KisBrush::boundary()
+{
+    if (!d->boundary)
+        generateBoundary();
+    return *d->boundary;
 }
 

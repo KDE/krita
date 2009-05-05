@@ -248,6 +248,7 @@ public:
 
     static KisBrushSP fromXML( const QDomElement& element );
 
+    virtual KisBoundary boundary();
 
 protected:
 
@@ -276,11 +277,11 @@ protected:
 
     void setHasColor( bool hasColor );
 
-
 protected:
 
     QImage m_image;
 
+    void resetBoundary();
 private:
 
     KisQImagemaskSP scaleMask(const KisScaledBrush *srcBrush,
@@ -304,6 +305,8 @@ private:
                            const KisScaledBrush **aboveBrush,
                            const KisScaledBrush **belowBrush) const;
 
+    // Initialize our boundary
+    void generateBoundary();
 
     struct Private;
     Private* const d;

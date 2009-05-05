@@ -39,7 +39,6 @@
 #include "kis_datamanager.h"
 #include "kis_paint_device.h"
 #include "kis_global.h"
-#include "kis_boundary.h"
 #include "kis_iterators_pixel.h"
 #include "kis_image.h"
 
@@ -82,7 +81,6 @@ struct KisGbrBrush::Private {
     quint32 bytes;        /*  depth of brush in bytes */
     quint32 magic_number; /*  GIMP brush magic number  */
 
-    KisBoundary* boundary;
 };
 
 #define DEFAULT_SPACING 0.25
@@ -96,7 +94,6 @@ KisGbrBrush::KisGbrBrush(const QString& filename)
     d->useColorAsMask = false;
     setHasColor( false );
     setSpacing(DEFAULT_SPACING);
-    d->boundary = 0;
 }
 
 KisGbrBrush::KisGbrBrush(const QString& filename,
@@ -110,7 +107,6 @@ KisGbrBrush::KisGbrBrush(const QString& filename,
     d->useColorAsMask = false;
     setHasColor( false );
     setSpacing(DEFAULT_SPACING);
-    d->boundary = 0;
 
     d->data = QByteArray::fromRawData(data.data() + dataPos, data.size() - dataPos);
     init();
@@ -127,7 +123,6 @@ KisGbrBrush::KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
     d->useColorAsMask = false;
     setHasColor( false );
     setSpacing(DEFAULT_SPACING);
-    d->boundary = 0;
 
     initFromPaintDev(image, x, y, w, h);
 }
@@ -140,7 +135,6 @@ KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
     d->useColorAsMask = false;
     setHasColor( false );
     setSpacing(DEFAULT_SPACING);
-    d->boundary = 0;
 
     setImage(image);
     setName(name);
@@ -154,12 +148,10 @@ KisGbrBrush::KisGbrBrush(const KisGbrBrush& rhs)
     setName(rhs.name());
     *d = *rhs.d;
     d->data = QByteArray();
-    d->boundary = 0;
 }
 
 KisGbrBrush::~KisGbrBrush()
 {
-    delete d->boundary;
     delete d;
 }
 
@@ -439,48 +431,6 @@ void KisGbrBrush::setImage(const QImage& img)
     return result;
 }*/
 
-void KisGbrBrush::generateBoundary()
-{
-    KisPaintDeviceSP dev;
-    int w = maskWidth(1.0, 0.0);
-    int h = maskHeight(1.0, 0.0);
-
-    if (brushType() == IMAGE || brushType() == PIPE_IMAGE) {
-        dev = image(KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0), 1.0, 0.0, KisPaintInformation());
-    } else {
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-        dev = new KisPaintDevice(cs);
-        mask(dev, KoColor(dev->dataManager()->defaultPixel(), cs) , 1.0, 1.0, 0.0, KisPaintInformation());
-#if 0
-        KisQImagemaskSP amask = mask(KisPaintInformation());
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
-        dev = new KisPaintDevice(cs, "tmp for generateBoundary");
-
-        KisHLineIteratorPixel it = dev->createHLineIterator(0, 0, w);
-
-        for (int y = 0; y < h; y++) {
-            int x = 0;
-
-            while (!it.isDone()) {
-                cs->setAlpha(it.rawData(), amask->alphaAt(x++, y), 1);
-                ++it;
-            }
-            it.nextRow();
-        }
-#endif
-    }
-
-    d->boundary = new KisBoundary(dev.data());
-    d->boundary->generateBoundary(w, h);
-}
-
-KisBoundary KisGbrBrush::boundary()
-{
-    if (!d->boundary)
-        generateBoundary();
-    return *d->boundary;
-}
-
 void KisGbrBrush::makeMaskImage()
 {
     if (!hasColor())
@@ -503,8 +453,7 @@ void KisGbrBrush::makeMaskImage()
     setBrushType(MASK);
     setHasColor( false );
     d->useColorAsMask = false;
-    delete d->boundary;
-    d->boundary = 0;
+    resetBoundary();
     clearScaledBrushes();
 }
 

@@ -33,6 +33,7 @@
 #include <KoViewConverter.h>
 #include <kis_boundary.h>
 #include <kis_boundary_painter.h>
+#include <kis_paint_device.h> // TODO remove me when KisBoundary is used as pointers
 
 KisBrushOpSettings::KisBrushOpSettings( KisBrushOpSettingsWidget* widget )
     : KisPaintOpSettings( widget )

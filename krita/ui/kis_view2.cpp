@@ -552,6 +552,7 @@ void KisView2::createManagers()
 
     m_d->paintingAssistantManager = new KisPaintingAssistantsManager(this);
     m_d->paintingAssistantManager->setup(actionCollection());
+    m_d->canvas->addDecoration(m_d->paintingAssistantManager);
 }
 
 void KisView2::updateGUI()

@@ -86,6 +86,7 @@ void KisPaintingAssistantsManager::setup(KActionCollection * collection)
 
     d->toggleAssistant->setCheckedState(KGuiItem(i18n("Hide Painting Assistants")));
     d->toggleAssistant->setChecked(false);
+    d->updateAction();
 }
 
 void KisPaintingAssistantsManager::drawDecoration(QPainter& gc, const QPoint& documentOffset,  const QRect& area, const KoViewConverter &converter)

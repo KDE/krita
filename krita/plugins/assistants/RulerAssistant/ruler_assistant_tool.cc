@@ -44,7 +44,6 @@ RulerAssistantToolPlugin::RulerAssistantToolPlugin(QObject *parent, const QStrin
     : KParts::Plugin(parent)
 {
     setComponentData(RulerAssistantToolFactory::componentData());
-
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisRulerAssistantToolFactory(r, QStringList()));
 }

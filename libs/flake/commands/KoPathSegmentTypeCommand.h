@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2006,2009 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2006,2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -26,9 +26,10 @@
 #include <QPointF>
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
+#include "flake_export.h"
 
 /// The undo / redo command for changing segments to curves/lines
-class KoPathSegmentTypeCommand : public QUndoCommand
+class FLAKE_TEST_EXPORT KoPathSegmentTypeCommand : public QUndoCommand
 {
 public:
     /// Segment Types
@@ -38,9 +39,17 @@ public:
     };
 
     /**
+    * Command for changing the segment type ( curve/line )
+    * @param pointData point data identifying the segement that should be changed.
+    * @param segmentType to which the segment should be changed to
+    * @param parent the parent command used for macro commands
+    */
+    KoPathSegmentTypeCommand(const KoPathPointData & pointData, SegmentType segmentType, QUndoCommand *parent = 0);
+    
+    /**
      * Command for changing the segment type ( curve/line )
      * @param pointDataList List of point data identifying the segements that should be changed.
-     * @param segmentType to which the segements should be changed to
+     * @param segmentType to which the segments should be changed to
      * @param parent the parent command used for macro commands
      */
     KoPathSegmentTypeCommand(const QList<KoPathPointData> & pointDataList, SegmentType segmentType, QUndoCommand *parent = 0);
@@ -61,6 +70,8 @@ private:
         KoPathPoint::KoPointProperties m_properties2;
     };
 
+    void initialize(const QList<KoPathPointData> & pointDataList);
+    
     QList<KoPathPointData> m_pointDataList;
     QList<SegmentTypeData> m_segmentData;
     SegmentType m_segmentType;

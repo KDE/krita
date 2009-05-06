@@ -248,7 +248,7 @@ public:
 
     static KisBrushSP fromXML( const QDomElement& element );
 
-    virtual KisBoundary boundary();
+    virtual const KisBoundary* boundary() const;
 
 protected:
 
@@ -306,7 +306,7 @@ private:
                            const KisScaledBrush **belowBrush) const;
 
     // Initialize our boundary
-    void generateBoundary();
+    void generateBoundary() const;
 
     struct Private;
     Private* const d;

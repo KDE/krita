@@ -107,7 +107,7 @@ struct KisBrush::Private {
     QPointF hotSpot;
     mutable QVector<KisScaledBrush> scaledBrushes;
     bool hasColor;
-    KisBoundary* boundary;
+    mutable KisBoundary* boundary;
 
 };
 
@@ -1044,7 +1044,7 @@ void KisBrush::resetBoundary()
     d->boundary = 0;
 }
 
-void KisBrush::generateBoundary()
+void KisBrush::generateBoundary() const
 {
     KisPaintDeviceSP dev;
     int w = width();
@@ -1079,10 +1079,10 @@ void KisBrush::generateBoundary()
     d->boundary->generateBoundary(w, h);
 }
 
-KisBoundary KisBrush::boundary()
+const KisBoundary* KisBrush::boundary() const
 {
     if (!d->boundary)
         generateBoundary();
-    return *d->boundary;
+    return d->boundary;
 }
 

@@ -83,7 +83,7 @@ public:
 
     virtual enumBrushType brushType() const;
 
-    virtual KisBoundary boundary();
+    virtual const KisBoundary* boundary() const;
 
     virtual bool canPaintFor(const KisPaintInformation& info);
 

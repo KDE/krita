@@ -282,7 +282,7 @@ bool KisImagePipeBrush::hasColor() const
     }
 }
 
-KisBoundary KisImagePipeBrush::boundary()
+const KisBoundary* KisImagePipeBrush::boundary() const
 {
     Q_ASSERT(!m_d->brushes.isEmpty());
     return m_d->brushes.at(0)->boundary();

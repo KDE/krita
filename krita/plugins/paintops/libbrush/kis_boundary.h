@@ -40,20 +40,14 @@ public:
     KisBoundary(KisPaintDeviceSP dev);
     ~KisBoundary();
     void generateBoundary(int w, int h);
-
-private:
     typedef QPair<QPointF, int> PointPair; // int->length
-    bool isDark(quint8 val);
-    KisPaintDeviceSP m_device;
-    int m_fuzzyness;
-
     typedef QList<PointPair> PointPairList;
     typedef QList< PointPairList > PointPairListList;
-
-    PointPairListList m_horSegments;
-    PointPairListList m_vertSegments;
-
-    friend class KisBoundaryPainter;
+    const PointPairListList& horizontalSegment() const;
+    const PointPairListList& verticalSegment() const;
+private:
+    struct Private;
+    Private* const d;
 };
 
 #endif // _KIS_BOUNDARY_H_

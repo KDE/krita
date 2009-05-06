@@ -27,8 +27,8 @@
 
 void KisBoundaryPainter::paint(const KisBoundary* boundary, KisImageSP image, QPainter& painter, const KoViewConverter &converter)
 {
-    KisBoundary::PointPairListList::const_iterator it = boundary->m_horSegments.constBegin();
-    KisBoundary::PointPairListList::const_iterator end = boundary->m_horSegments.constEnd();
+    KisBoundary::PointPairListList::const_iterator it = boundary->horizontalSegment().constBegin();
+    KisBoundary::PointPairListList::const_iterator end = boundary->horizontalSegment().constEnd();
 
     // Horizontal
     while (it != end) {
@@ -50,8 +50,8 @@ void KisBoundaryPainter::paint(const KisBoundary* boundary, KisImageSP image, QP
     }
 
     // Vertical
-    it = boundary->m_vertSegments.constBegin();
-    end = boundary->m_vertSegments.constEnd();
+    it = boundary->verticalSegment().constBegin();
+    end = boundary->verticalSegment().constEnd();
 
     while (it != end) {
         KisBoundary::PointPairList::const_iterator lineIt = (*it).constBegin();

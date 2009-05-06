@@ -141,6 +141,15 @@ public:
     /// Returns ordered list of control points
     QList<QPointF> controlPoints() const;
 
+    /**
+     * Interpolates quadric bezier curve.
+     * @return the interpolated bezier segment
+     */
+    static KoPathSegment interpolate( const QPointF &p0, const QPointF &p1, const QPointF &p2, qreal t );
+
+    /// Converts to cubic segment
+    KoPathSegment convertToCubic() const;
+    
     void printDebug() const;
 
 private:

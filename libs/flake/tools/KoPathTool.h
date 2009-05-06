@@ -93,7 +93,7 @@ protected:
 
 private:
     void updateOptionsWidget();
-
+    bool segmentAtPoint( const QPointF &point, KoPathShape* &shape, KoPathPoint* &segmentStart, qreal &pointParam );
     // needed for interaction strategy
     QPointF m_lastPoint;
 

@@ -146,6 +146,7 @@ set(flake_SRCS
     tools/KoCreateShapesTool.cpp
     tools/KoCreateShapesToolFactory.cpp
     tools/KoShapeRubberSelectStrategy.cpp
+    tools/KoPathSegmentChangeStrategy.cpp
     tools/KoGuidesTool.cpp
 )
 

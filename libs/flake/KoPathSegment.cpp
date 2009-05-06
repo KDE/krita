@@ -1389,6 +1389,59 @@ QList<qreal> KoPathSegment::roots() const
     return rootParams;
 }
 
+KoPathSegment KoPathSegment::interpolate( const QPointF &p0, const QPointF &p1, const QPointF &p2, qreal t )
+{
+    if (t <= 0.0 || t >= 1.0)
+        return KoPathSegment();
+    
+    /*
+        B(t) = [x2 y2] = (1-t)^2*P0 + 2t*(1-t)*P1 + t^2*P2
+        
+               B(t) - (1-t)^2*P0 - t^2*P2
+         P1 =  --------------------------
+                       2t*(1-t)
+    */
+    
+    QPointF c1 = p1 - (1.0-t)*(1.0-t)*p0 - t*t*p2;
+    
+    qreal denom = 2.0*t*(1.0-t);
+
+    c1.rx() /= denom;
+    c1.ry() /= denom;
+    
+    return KoPathSegment( p0, c1, p2 );
+}
+
+KoPathSegment KoPathSegment::convertToCubic() const
+{
+    if (! isValid())
+        return KoPathSegment();
+    
+    int deg = degree();
+    
+    QList<QPointF> ctrlPoints = controlPoints();
+    
+    if (deg == 1) {
+        QPointF p0 = ctrlPoints[0];
+        QPointF p1 = p0 + 0.25 * (ctrlPoints[1]-p0);
+        QPointF p2 = p1 + 0.25 * (ctrlPoints[1]-p0);
+        QPointF p3 = ctrlPoints[1];
+        return KoPathSegment(p0, p1, p2, p3);
+    }
+    else if (deg == 2) {
+        QPointF p0 = ctrlPoints[0];
+        QPointF p1 = p0 + 2.0/3.0 * (ctrlPoints[1]-p0);
+        QPointF p2 = p1 + 1.0/3.0 * (ctrlPoints[2]-p0);
+        QPointF p3 = ctrlPoints[2];
+        return KoPathSegment(p0, p1, p2, p3);
+    }
+    else if (deg == 3) {
+        return KoPathSegment(*this);
+    }
+    
+    return KoPathSegment();
+}
+
 void KoPathSegment::printDebug() const
 {
     int deg = degree();

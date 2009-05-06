@@ -55,7 +55,6 @@ if (SHOULD_BUILD_KRITA)
         ${CMAKE_SOURCE_DIR}/krita/ui
         ${CMAKE_SOURCE_DIR}/krita/ui/tool
         ${CMAKE_SOURCE_DIR}/krita/ui/flake
-        ${CMAKE_SOURCE_DIR}/krita/colorspaces/rgb_u8
 
         # For generated files from .ui
         ${CMAKE_BINARY_DIR}/krita/ui
@@ -85,7 +84,6 @@ if (SHOULD_BUILD_KRITA)
     add_subdirectory( ui )
     add_subdirectory( shape )
     add_subdirectory( dtd )
-    add_subdirectory( colorspaces )
     add_subdirectory( plugins )
     add_subdirectory( data )
     add_subdirectory( pics )

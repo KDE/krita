@@ -65,11 +65,7 @@ public:
         {
             setToolTip( i18n( "Ruler assistant editor tool" ) );
             setToolType( TOOL_TYPE_VIEW );
-#ifdef __GNUC__
-#warning "KisRulerAssistantToolFactory: create a tool icon"
-#endif
-
-            setIcon("math_matrix");//"tool_rulerassistanttool" );
+            setIcon("krita_tool_ruler_assistant");
             setPriority( 0 );
         };
 

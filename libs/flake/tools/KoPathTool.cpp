@@ -708,7 +708,8 @@ bool KoPathTool::segmentAtPoint( const QPointF &point, KoPathShape* &shape, KoPa
     qreal clickedPointParam = 0.0;
     
     foreach(KoPathShape *shape, m_pointSelection.selectedShapes()) {
-        if (dynamic_cast<KoParameterShape*>( shape ))
+        KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>( shape );
+        if (parameterShape && parameterShape->isParametricShape())
             continue;
         
         // convert document point to shape coordinates

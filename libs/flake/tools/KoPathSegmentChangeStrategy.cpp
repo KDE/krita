@@ -38,9 +38,7 @@ KoPathSegmentChangeStrategy::KoPathSegmentChangeStrategy( KoPathTool *tool, KoCa
 {
     m_path = segment.pathShape;
     m_segment = m_path->segmentByIndex(segment.pointIndex);
-    // increase point index for the second point
-    m_pointData2.pointIndex.second++;
-    
+    m_pointData2.pointIndex = m_path->pathPointIndex(m_segment.second());
     m_originalSegmentDegree = m_segment.degree();
 }
 

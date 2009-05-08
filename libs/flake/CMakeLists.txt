@@ -180,9 +180,11 @@ install(
     FILES
     flake_export.h
     KoCanvasBase.h
+    KoCanvasController.h
     KoCanvasObserver.h
     KoCanvasResourceProvider.h
     KoDataCenter.h
+    KoDrag.h
     KoFlake.h
     KoFrameShape.h
     KoImageCollection.h
@@ -193,8 +195,11 @@ install(
     KoPointerEvent.h
     KoSelection.h
     KoShape.h
+    KoShapeContainer.h
+    KoShapeController.h
     KoShapeControllerBase.h
     KoShapeFactory.h
+    KoShapeLayer.h
     KoShapeLoadingContext.h
     KoLoadingShapeUpdater.h
     KoShapeManager.h
@@ -205,7 +210,9 @@ install(
     KoTool.h
     KoToolManager.h
     KoToolFactory.h
+    KoToolProxy.h
     KoToolRegistry.h
+    commands/KoShapeRenameCommand.h
     KoOdfWorkaround.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel

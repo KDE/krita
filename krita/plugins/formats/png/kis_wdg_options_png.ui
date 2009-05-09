@@ -10,7 +10,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Options of Your PNG</string>
+   <string>PNG Options</string>
   </property>
   <layout class="QVBoxLayout" >
    <property name="spacing" >
@@ -146,7 +146,7 @@
    <item>
     <widget class="QCheckBox" name="interlacing" >
      <property name="toolTip" >
-      <string>Use interlacing when publishing on the Internet</string>
+      <string>Use interlacing when publishing on the Internet.</string>
      </property>
      <property name="whatsThis" >
       <string>&lt;p>Interlacing is useful if you intend to publish your image on the Internet.&lt;br>

@@ -25,16 +25,11 @@ class QRect;
 class KoStore;
 
 
-// Change the following two lines to switch (at compiletime) to another datamanager
-//#define USE_OLD_TILESYSTEM
+// Change the following line to switch (at compiletime) to different datamanager
+//#define USE_TILESYSTEM 0
 #include <config-tiles.h> // For the next define
+#include TILES_DIR(kis_tileddatamanager.h)
 
-
-#ifdef USE_OLD_TILESYSTEM
-#include "tiles/kis_tileddatamanager.h"
-#else
-#include "tiles_new/kis_tileddatamanager.h"
-#endif
 
 #define ACTUAL_DATAMGR KisTiledDataManager
 

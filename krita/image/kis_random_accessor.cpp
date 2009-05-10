@@ -22,13 +22,11 @@
 
 
 #include <config-tiles.h> // For the next define
-#ifdef USE_OLD_TILESYSTEM
-#include "tiles/kis_tiled_random_accessor.h"
-#else
-#include "tiles_new/kis_tiled_random_accessor.h"
-#endif
+#include TILES_DIR(kis_tiled_random_accessor.h)
+
 
 #include <kis_shared_ptr.h>
+
 
 typedef KisSharedPtr<KisTiledRandomAccessor> KisTiledRandomAccessorSP;
 

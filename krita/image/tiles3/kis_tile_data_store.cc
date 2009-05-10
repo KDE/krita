@@ -1,0 +1,139 @@
+/*
+ *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+
+#include "kis_tile_data.h"
+#include "kis_tile_data_store.h"
+
+
+/**
+ * TODO:
+ * 1) Swapper thread
+ * 2) Pool of prealloc'ed tiledata objects
+ * 3) Compression before swapping
+ */
+
+
+KisTileDataStore globalTileDataStore;
+
+
+#define tileListHead() (m_tileDataListHead)
+#define tileListTail() (m_tileDataListHead->m_prevTD)
+#define tileListEmpty() (!m_tileDataListHead)
+#define tileListForEach(iter, first, last) for(iter=first; iter; iter=(iter==last ? 0 : iter->m_nextTD)) 
+
+/* TODO: _|_ */
+/*#define tileListForEachSafe(iter, first, last)        \
+    for(iter=first; iter!=last ;iter=iter->nextTD;) 
+*/
+
+void KisTileDataStore::tileListAppend(KisTileData *td)
+{
+    if(!tileListEmpty()) {
+        td->m_prevTD = tileListTail();
+        td->m_nextTD = tileListHead();
+
+        tileListTail()->m_nextTD = td;
+        tileListHead()->m_prevTD = td;
+    }
+    else {
+        td->m_prevTD=td->m_nextTD=td;
+        tileListHead() = td;
+    }
+}
+
+void KisTileDataStore::tileListDetach(KisTileData *td)
+{
+    if(td->m_prevTD != td->m_nextTD) {
+        td->m_prevTD->m_nextTD=td->m_nextTD;
+        td->m_nextTD->m_prevTD=td->m_prevTD;
+    }
+    else {
+        /* List has the only element */
+        tileListHead()=0;
+    }
+}
+
+
+KisTileDataStore::KisTileDataStore()
+    : m_listRWLock(QReadWriteLock::Recursive),
+      m_tileDataListHead(0)
+{
+}
+
+KisTileDataStore::~KisTileDataStore()
+{
+    QWriteLocker lock(&m_listRWLock);
+
+    if(!tileListEmpty()) {
+        KisTileData *tmp;
+        while(!tileListEmpty()) {
+            tmp = tileListHead();
+            tileListDetach(tmp);
+            delete tmp;
+        }
+    }
+}
+
+KisTileData *KisTileDataStore::allocTileData(qint32 pixelSize, const qint8 *defPixel)
+{
+    KisTileData *td = new KisTileData(pixelSize, defPixel, this);
+
+    QWriteLocker lock(&m_listRWLock); 
+    tileListAppend(td);
+    return td;
+}
+
+KisTileData *KisTileDataStore::duplicateTileData(KisTileData *rhs)
+{
+    KisTileData *td = new KisTileData(*rhs);
+
+    QWriteLocker lock(&m_listRWLock); 
+    tileListAppend(td);
+    return td;
+}
+
+void KisTileDataStore::freeTileData(KisTileData *td)
+{
+    Q_ASSERT(td->m_store==this);
+    
+    QWriteLocker lock(&m_listRWLock);
+    tileListDetach(td);
+
+    delete td;
+}
+
+void KisTileDataStore::ensureTileDataLoaded(const KisTileData *td)
+{
+    /* Swapping isn't implemented yet */
+    Q_ASSERT(td->m_state==KisTileData::NORMAL);
+}
+
+
+#include <stdio.h>
+void KisTileDataStore::debugPrintList()
+{
+    KisTileData *iter;
+    tileListForEach(iter, tileListHead(), tileListTail()) {
+        printf("-------------------------\n");
+        printf("TileData:\t\t\t%X\n", (int)iter);
+        printf("  refCount:\t0x%X\n", (int)iter->m_refCount);
+        printf("  next:    \t0x%X\n", (int)iter->m_nextTD);
+        printf("  prev:    \t0x%X\n", (int)iter->m_prevTD);
+    }
+}

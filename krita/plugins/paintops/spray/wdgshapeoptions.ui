@@ -102,6 +102,11 @@
         <string>Rectangle</string>
        </property>
       </item>
+      <item>
+       <property name="text">
+        <string>Metaball</string>
+       </property>
+      </item>
      </widget>
     </item>
     <item>
@@ -116,7 +121,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="heightSpin">
+         <widget class="QSpinBox" name="widthSpin">
           <property name="enabled">
            <bool>false</bool>
           </property>
@@ -137,7 +142,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="widthSpin">
+         <widget class="QSpinBox" name="heightSpin">
           <property name="enabled">
            <bool>false</bool>
           </property>
@@ -246,7 +251,7 @@
   <connection>
    <sender>proportionalBox</sender>
    <signal>clicked(bool)</signal>
-   <receiver>widthSpin</receiver>
+   <receiver>heightSpin</receiver>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -262,7 +267,7 @@
   <connection>
    <sender>proportionalBox</sender>
    <signal>clicked(bool)</signal>
-   <receiver>heightSpin</receiver>
+   <receiver>widthSpin</receiver>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">

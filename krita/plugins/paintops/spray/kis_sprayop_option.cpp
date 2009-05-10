@@ -81,6 +81,18 @@ qreal KisSprayOpOption::scale() const
     return m_options->scaleSpin->value();
 }
 
+
+int KisSprayOpOption::particleCount() const
+{
+    return m_options->particlesSpinBox->value();
+}
+
+bool KisSprayOpOption::useDensity() const
+{
+    return m_options->densityChBox->isChecked();
+}
+
+
 void KisSprayOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
     setting->setProperty( "Spray/diameter", diameter() );

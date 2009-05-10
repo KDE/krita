@@ -30,6 +30,7 @@ public:
     ~KisSprayOpOption();
 
     int diameter() const;
+    int particleCount() const;
 
     qreal coverage() const;
     qreal amount() const;
@@ -38,6 +39,8 @@ public:
 
     bool jitterMovement() const;
     bool jitterSize() const;
+    bool useDensity() const;
+
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);

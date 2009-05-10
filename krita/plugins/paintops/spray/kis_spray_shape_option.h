@@ -34,7 +34,7 @@ public:
     /// 0 - shape, 1 - particle, 2 - pixel
     int object() const; 
 
-    /// 0 - ellipse, 1 - rectangle
+    /// 0 - ellipse, 1 - rectangle, 2 - metaball
     int shape() const;
 
     bool jitterShapeSize() const;

@@ -136,3 +136,13 @@ bool KisSprayPaintOpSettings::proportional() const {
 qreal KisSprayPaintOpSettings::widthPerc() const {
     return m_options->m_sprayShapeOption->widthPerc();
 }
+
+bool KisSprayPaintOpSettings::useDensity() const
+{
+    return m_options->m_sprayOption->useDensity();
+}
+
+int KisSprayPaintOpSettings::particleCount() const
+{
+    return m_options->m_sprayOption->particleCount();
+}

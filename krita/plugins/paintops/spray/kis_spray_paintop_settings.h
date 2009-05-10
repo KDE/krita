@@ -69,6 +69,9 @@ public:
 
     bool jitterMovement() const;
     bool jitterSize() const;
+    
+    bool useDensity() const;
+    int particleCount() const;
  
 private:
 

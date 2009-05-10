@@ -28,6 +28,9 @@
 
 #include "kis_random_accessor.h"
 #include "kis_painter.h"
+#include "kis_paint_information.h"
+
+#include "metaball.h"
 
 #include <cmath>
 
@@ -51,8 +54,11 @@ SprayBrush::SprayBrush()
 
 
 
-void SprayBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color)
+void SprayBrush::paint(KisPaintDeviceSP dev, const KisPaintInformation& info, const KoColor &color)
 {
+    qreal x = info.pos().x();
+    qreal y = info.pos().y();
+
     // initializing painter
     KisPainter drawer(dev);
     drawer.setPaintColor(color);
@@ -69,27 +75,20 @@ void SprayBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
         y = y + (( 2 * m_radius * drand48() ) - m_radius) * m_amount;
     }
 
+    KisRandomAccessor accessor = dev->createRandomAccessor( qRound(x), qRound(y) );
     m_pixelSize = dev->colorSpace()->pixelSize();
     m_inkColor = color;
     m_counter++;
 
-    qint32 pixelSize = dev->colorSpace()->pixelSize();
-    KisRandomAccessor accessor = dev->createRandomAccessor((int)x, (int)y);
-
-/* Not using now */
-// random coloring
-//            KoColorTransformation* transfo; QHash<QString, QVariant> params;
-//         params["h"] = (360.0 * drand48()) - 180.0;
-//         params["s"] = (200.0 * drand48()) - 100.0;
-//         params["v"] = (200.0 * drand48()) - 100.0;;
-//         transfo = dev->colorSpace()->createColorTransformation("hsv_adjustment", params);
-//         transfo->transform(color.data(), m_inkColor.data(), 1);
-
     // coverage: adaptively select how many objects are sprayed per paint
-    int points = (m_coverage * (M_PI * m_radius * m_radius) );
+    if (m_useDensity){
+        m_particlesCount = (m_coverage * (M_PI * m_radius * m_radius) );
+    }
 
-    int opacity = 255;
-    m_inkColor.setOpacity(opacity);
+    // Metaballs are rendered little differently
+    if (m_shape == 2 && m_object == 0){
+        paintMetaballs(dev, info, color);
+    }
 
     qreal nx, ny;
     int ix, iy;
@@ -98,7 +97,8 @@ void SprayBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
     qreal lengthX;
     qreal lengthY;
     
-    for (int i = 0; i < points; i++){
+    
+    for (int i = 0; i < m_particlesCount; i++){
         // generate random angle
         angle = drand48() * M_PI * 2;
         // different X and Y length??
@@ -106,6 +106,7 @@ void SprayBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
         // I hope we live the era where sin and cos is not slow for spray
         nx = (sin(angle) * m_radius * lengthX);
         ny = (cos(angle) * m_radius * lengthY);
+
         // transform
         nx *= m_scale;
         ny *= m_scale;
@@ -116,8 +117,10 @@ void SprayBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
             // steps for single step in circle and ellipse
             int steps = 36;
             qreal random = drand48();       
+
             drawer.setFillColor(m_inkColor);
             drawer.setBackgroundColor(m_inkColor);
+            drawer.setPaintColor(m_inkColor);
             // it is ellipse
             if (m_shape == 0){
                 //  
@@ -147,7 +150,7 @@ void SprayBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
                     paintRectangle(drawer, nx + x, ny + y, qRound(m_width), qRound(m_height), angle , steps);
                 }
             }    
-        // it is particle
+        // it is pixel particle
         }else if (m_object == 1){
             paintParticle(accessor,m_inkColor,nx + x, ny + y);
         }
@@ -157,9 +160,15 @@ void SprayBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
             ix = qRound(nx + x);
             iy = qRound(ny + y);
             accessor.moveTo(ix, iy);
-            memcpy(accessor.rawData(), m_inkColor.data(), pixelSize);
+            memcpy(accessor.rawData(), m_inkColor.data(), m_pixelSize);
         }
     }
+
+    
+
+    // hidden code for outline detection
+    //m_inkColor.setOpacity(128);
+    //paintOutline(dev,m_inkColor,x, y, m_radius * 2);
 
     // recover from jittering of color
     m_radius = tmpRadius;
@@ -171,7 +180,6 @@ SprayBrush::~SprayBrush()
 
 
 void SprayBrush::paintParticle(KisRandomAccessor &writeAccessor,const KoColor &color,qreal rx, qreal ry){
-    qreal MAX_OPACITY = 255;
     // opacity top left, right, bottom left, right
     KoColor pcolor(color);
 
@@ -180,10 +188,10 @@ void SprayBrush::paintParticle(KisRandomAccessor &writeAccessor,const KoColor &c
     qreal fx = rx - ipx;
     qreal fy = ry - ipy;
 
-    int btl = qRound( ( 1-fx ) * ( 1-fy ) * MAX_OPACITY );
-    int btr = qRound( ( fx )  * ( 1-fy ) * MAX_OPACITY );
-    int bbl = qRound( ( 1-fx ) * ( fy )  * MAX_OPACITY );
-    int bbr = qRound( ( fx )  * ( fy )  * MAX_OPACITY );
+    int btl = qRound( ( 1-fx ) * ( 1-fy ) * OPACITY_OPAQUE );
+    int btr = qRound( ( fx )  * ( 1-fy ) * OPACITY_OPAQUE );
+    int bbl = qRound( ( 1-fx ) * ( fy )  * OPACITY_OPAQUE );
+    int bbr = qRound( ( fx )  * ( fy )  * OPACITY_OPAQUE );
 
     // this version overwrite pixels, e.g. when it sprays two particle next
     // to each other, the pixel with lower opacity can override other pixel.
@@ -225,8 +233,8 @@ void SprayBrush::paintCircle(KisPainter& painter, qreal x, qreal y, int radius, 
 
         points.append( QPointF(cx, cy) );
     }
-    painter.setOpacity( int( ( 255 * drand48() ) + 0.5 ) );
-    painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+    painter.setOpacity( qRound(  OPACITY_OPAQUE * drand48()  ) );
+    painter.setFillStyle( KisPainter::FillStyleForegroundColor );
     painter.paintPolygon( points );
 }
 
@@ -262,8 +270,6 @@ void SprayBrush::paintRectangle(KisPainter& painter, qreal x, qreal y, int width
     qreal halfHeight = height / 2.0;
     qreal tx, ty;
 
-    
-
     transform.reset();
     transform.rotateRadians( angle );
     // top left
@@ -283,8 +289,180 @@ void SprayBrush::paintRectangle(KisPainter& painter, qreal x, qreal y, int width
     painter.setOpacity( int( ( 255 * drand48() ) + 0.5 ) );
     painter.setFillStyle(KisPainter::FillStyleForegroundColor);
     painter.paintPolygon( points );
+
+}
+
+void SprayBrush::paintDistanceMap(KisPaintDeviceSP dev, const KisPaintInformation &info, const KoColor &painterColor){
+    KisRandomAccessor accessor = dev->createRandomAccessor(0, 0);
+    KoColor color = painterColor;
+
+    qreal posX = info.pos().x();
+    qreal posY = info.pos().y();
+    
+    qreal opacity = 255;
+    for (int y = -m_radius; y <= m_radius; y++){
+        for (int x = -m_radius; x <= m_radius; x++){
+            //opacity = sqrt(y*y + x*x) / m_radius;
+            opacity = (y*y + x*x) / (m_radius * m_radius);
+            opacity = 1.0 - opacity;
+            opacity *= m_scale;
+
+            if (opacity < 0) continue;
+            if (opacity > 1.0) opacity = 1.0;
+
+            if ( (y*y + x*x) <= (m_radius * m_radius) )
+            {
+                color.setOpacity( opacity * 255);
+                accessor.moveTo(x + posX, y + posY);
+                memcpy( accessor.rawData(), color.data(), dev->colorSpace()->pixelSize() );
+            }
+
+        }
+    }
+}
+
+void SprayBrush::paintMetaballs(KisPaintDeviceSP dev, const KisPaintInformation &info, const KoColor &painterColor) {
+    // TODO: make adjustable?
+    qreal MIN_TRESHOLD = -1.01;
+    qreal MAX_TRESHOLD = 6.0;
+
+    KoColor color = painterColor;
+    qreal posX = info.pos().x();
+    qreal posY = info.pos().y();
+
+    //int points = m_coverage * (m_radius * m_radius * M_PI);
+    qreal ballRadius = m_width * 0.5;
+
+    // generate metaballs
+    QList<Metaball> list;
+    for (int i = 0; i < m_particlesCount ; i++){
+        qreal x = (2 * drand48() * m_radius) - m_radius;
+        qreal y = (2 * drand48() * m_radius) - m_radius;
+        list.append(
+                    Metaball( x, 
+                              y ,
+                              drand48() *  ballRadius)
+                    );
+    }
+
+    // double the radius
+    qreal doubleRadius = 2 * m_radius;
+ 
+    // paint it
+    KisRandomAccessor accessor = dev->createRandomAccessor(0, 0);
+    qreal sum = 0.0;
+    for (int y = -doubleRadius; y <= doubleRadius; y++){
+        for (int x = -doubleRadius; x <= doubleRadius; x++){
+
+            sum = 0.0;        
+
+            for (int i = 0; i < m_particlesCount; i++){
+                sum += list[i].equation(x, y );
+            }
+           
+            if (sum >= MIN_TRESHOLD && sum <= MAX_TRESHOLD){
+                    if (sum < 0.0) sum = 0.0;
+                    if (sum > 1.0) sum = 1.0;
+
+                    color.setOpacity(OPACITY_OPAQUE * sum);
+                    accessor.moveTo( x + posX ,y + posY );
+                    memcpy(accessor.rawData(), color.data(), dev->colorSpace()->pixelSize() );
+            }
+        }
+    }
+
+
+#if 0        
+        KisPainter dabPainter(dev);
+        dabPainter.setFillColor(color);
+        dabPainter.setPaintColor(color);
+        dabPainter.setFillStyle(KisPainter::FillStyleForegroundColor);
+
+        for (int i = 0; i < m_particlesCount; i++){
+                qreal x = list[i].x() + posX;
+                qreal y = list[i].y() + posY;
+                dabPainter.paintEllipse(x, y, list[i].radius() * 2,list[i].radius() * 2);
+        }
+#endif
+
 }
 
 
+void SprayBrush::paintOutline(KisPaintDeviceSP dev ,const KoColor &outlineColor,qreal posX, qreal posY, qreal radius) {
+    QList<QPointF> antiPixels;
+    KisRandomAccessor accessor = dev->createRandomAccessor( qRound(posX), qRound(posY) );
 
+    for (int y = -radius+posY; y <= radius+posY; y++){
+        for (int x = -radius+posX; x <= radius+posX; x++){
+            accessor.moveTo(x,y);
+            qreal alpha = dev->colorSpace()->alpha(accessor.rawData());
 
+            if (alpha != 0){
+                // top left
+                accessor.moveTo(x - 1,y - 1);
+                if ( dev->colorSpace()->alpha(accessor.rawData()) == 0){
+                    antiPixels.append( QPointF(x - 1,y - 1) );
+                    //continue;
+                }
+
+                // top
+                accessor.moveTo(x,y - 1);
+                if ( dev->colorSpace()->alpha(accessor.rawData()) == 0){
+                    antiPixels.append( QPointF(x,y - 1) );
+                    //continue;
+                }
+
+                // top right
+                accessor.moveTo(x + 1,y - 1);
+                if ( dev->colorSpace()->alpha(accessor.rawData()) == 0){
+                    antiPixels.append( QPointF(x + 1,y - 1) );
+                    //continue;
+                }
+
+                //left 
+                accessor.moveTo(x - 1,y);
+                if ( dev->colorSpace()->alpha(accessor.rawData()) == 0){
+                    antiPixels.append( QPointF(x - 1,y) );
+                    //continue;
+                }
+
+                //right
+                accessor.moveTo(x + 1,y);
+                if ( dev->colorSpace()->alpha(accessor.rawData()) == 0){
+                    antiPixels.append( QPointF(x + 1,y) );
+                    //continue;
+                }
+
+                // bottom left
+                accessor.moveTo(x - 1,y + 1);
+                if ( dev->colorSpace()->alpha(accessor.rawData()) == 0){
+                    antiPixels.append( QPointF(x - 1,y + 1) );
+                    //continue;
+                }
+
+                // bottom
+                accessor.moveTo(x,y + 1);
+                if ( dev->colorSpace()->alpha(accessor.rawData()) == 0){
+                    antiPixels.append( QPointF(x,y + 1) );
+                    //continue;
+                }
+
+                // bottom right
+                accessor.moveTo(x + 1,y + 1);
+                if ( dev->colorSpace()->alpha(accessor.rawData()) == 0){
+                    antiPixels.append( QPointF(x + 1,y + 1) );
+                    //continue;
+                }
+            }
+
+        }
+    }
+
+    // anti-alias it
+    int size = antiPixels.size();
+    for (int i = 0; i < size; i++)
+    {
+        accessor.moveTo( antiPixels[i].x(), antiPixels[i].y() );
+        memcpy(accessor.rawData(), outlineColor.data(), dev->colorSpace()->pixelSize() );
+    }
+}

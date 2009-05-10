@@ -38,6 +38,9 @@ public:
     virtual ~KisDeformPaintOpSettings() {}
     KisPaintOpSettingsSP clone() const;
 
+    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageSP image ) const;
+    virtual void paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter) const;
+
     using KisPropertiesConfiguration::fromXML;
     using KisPropertiesConfiguration::toXML;
 

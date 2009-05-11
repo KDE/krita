@@ -76,7 +76,7 @@ KisTileData::~KisTileData()
 void KisTileData::fillWithPixel(const qint8 *defPixel)
 {
     for (int i=0; i<WIDTH*HEIGHT; i++) {
-        memcpy(m_data+i, defPixel, m_pixelSize);        
+        memcpy(m_data+i, defPixel, m_pixelSize);
     }
 }
 

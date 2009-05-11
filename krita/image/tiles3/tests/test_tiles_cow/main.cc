@@ -24,16 +24,19 @@ int main()
     
     cout << "Tile created\n";
 
-    tile2.acquireForWrite();
-    tile.acquireForRead();
+    tile2.lockForWrite();
+    tile.lockForRead();
     
     KisTile tile4(0,0,tile2);
     
+    defaultTileData = globalTileDataStore.createDefaultTileData(PIXEL_SIZE, pixel);
         
     globalTileDataStore.debugPrintList();
     tile.debugPrintInfo();
     tile2.debugPrintInfo();
     tile4.debugPrintInfo();
+    
+    
     
 
 }

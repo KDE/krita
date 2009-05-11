@@ -51,9 +51,9 @@ public:
     
     void debugPrintInfo();
 
-    void acquireForRead() const;
-    void acquireForWrite();
-    void release() const;
+    void lockForRead() const;
+    void lockForWrite();
+    void unlock() const;
 
     /* this allows us work directly on tile's data */
     inline qint8 *data() const {
@@ -105,7 +105,8 @@ private:
     friend class KisTileCompressor;
     friend class KisTiledRandomAccessor;
 */
-    KisTile& operator=(const KisTile&);
+    /*Why it was present before? */
+/*  KisTile& operator=(const KisTile&);*/
     void init(qint32 col, qint32 row, KisTileData *defaultTileData);
 
 private:

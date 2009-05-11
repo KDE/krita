@@ -44,6 +44,7 @@ KisTileDataStore globalTileDataStore;
 
 void KisTileDataStore::tileListAppend(KisTileData *td)
 {
+    QWriteLocker lock(&m_listRWLock);
     if(!tileListEmpty()) {
         td->m_prevTD = tileListTail();
         td->m_nextTD = tileListHead();
@@ -59,9 +60,12 @@ void KisTileDataStore::tileListAppend(KisTileData *td)
 
 void KisTileDataStore::tileListDetach(KisTileData *td)
 {
-    if(td->m_prevTD != td->m_nextTD) {
+    QWriteLocker lock(&m_listRWLock);
+    if(td != td->m_nextTD) {
         td->m_prevTD->m_nextTD=td->m_nextTD;
         td->m_nextTD->m_prevTD=td->m_prevTD;
+        if(td == tileListHead())
+            tileListHead()=td->m_nextTD;
     }
     else {
         /* List has the only element */
@@ -69,17 +73,9 @@ void KisTileDataStore::tileListDetach(KisTileData *td)
     }
 }
 
-
-KisTileDataStore::KisTileDataStore()
-    : m_listRWLock(QReadWriteLock::Recursive),
-      m_tileDataListHead(0)
-{
-}
-
-KisTileDataStore::~KisTileDataStore()
+void KisTileDataStore::tileListClear()
 {
     QWriteLocker lock(&m_listRWLock);
-
     if(!tileListEmpty()) {
         KisTileData *tmp;
         while(!tileListEmpty()) {
@@ -90,11 +86,21 @@ KisTileDataStore::~KisTileDataStore()
     }
 }
 
+KisTileDataStore::KisTileDataStore()
+    : m_listRWLock(QReadWriteLock::Recursive),
+      m_tileDataListHead(0)
+{
+}
+
+KisTileDataStore::~KisTileDataStore()
+{
+    tileListClear();
+}
+
 KisTileData *KisTileDataStore::allocTileData(qint32 pixelSize, const qint8 *defPixel)
 {
     KisTileData *td = new KisTileData(pixelSize, defPixel, this);
 
-    QWriteLocker lock(&m_listRWLock); 
     tileListAppend(td);
     return td;
 }
@@ -103,7 +109,6 @@ KisTileData *KisTileDataStore::duplicateTileData(KisTileData *rhs)
 {
     KisTileData *td = new KisTileData(*rhs);
 
-    QWriteLocker lock(&m_listRWLock); 
     tileListAppend(td);
     return td;
 }
@@ -111,10 +116,8 @@ KisTileData *KisTileDataStore::duplicateTileData(KisTileData *rhs)
 void KisTileDataStore::freeTileData(KisTileData *td)
 {
     Q_ASSERT(td->m_store==this);
-    
-    QWriteLocker lock(&m_listRWLock);
-    tileListDetach(td);
 
+    tileListDetach(td);
     delete td;
 }
 

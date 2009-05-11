@@ -49,6 +49,7 @@ public:
     }
 
     void setData(const qint8 *data) {
+        Q_ASSERT(m_data);
         memcpy(m_data, data, m_pixelSize*WIDTH*HEIGHT);
     }
 
@@ -57,12 +58,11 @@ public:
         return m_pixelSize;
     }
 
-    
+
 private:
     void fillWithPixel(const qint8 *defPixel);
 
 private:
-    /* FIXME: Should be public? */
     friend class KisTile;
     friend class KisTileDataStore;
 

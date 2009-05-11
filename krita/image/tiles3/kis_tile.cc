@@ -61,13 +61,13 @@ KisTile::~KisTile()
 }
 
 
-void KisTile::acquireForRead() const
+void KisTile::lockForRead() const
 {
     m_tileData->m_RWLock.lockForRead();
     globalTileDataStore.ensureTileDataLoaded(m_tileData);
 }
 
-void KisTile::acquireForWrite()
+void KisTile::lockForWrite()
 {
     /* We are doing COW here */
     if(lazyCopying()) {
@@ -79,7 +79,7 @@ void KisTile::acquireForWrite()
     globalTileDataStore.ensureTileDataLoaded(m_tileData);
 }
 
-void KisTile::release() const
+void KisTile::unlock() const
 {
     m_tileData->m_RWLock.unlock();
 }

@@ -49,7 +49,7 @@ public:
         }
         return td->m_refCount;
     }
-    
+
     inline KisTileData *createDefaultTileData(qint32 pixelSize, const qint8 *defPixel) {
         return allocTileData(pixelSize, defPixel);
     }
@@ -60,6 +60,7 @@ private:
 
     void tileListAppend(KisTileData *td);
     void tileListDetach(KisTileData *td);
+    void tileListClear();
 
 private:
     QReadWriteLock m_listRWLock;

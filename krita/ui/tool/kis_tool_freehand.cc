@@ -193,9 +193,12 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
 
         m_previousPaintInformation = info;
     }
-    m_canvas->updateCanvas( currentPaintOpPreset()->settings()->paintOutlineRect(mousePos, currentImage()) ); // erase the old guy
-    mousePos = e->point;
-    m_canvas->updateCanvas( currentPaintOpPreset()->settings()->paintOutlineRect(mousePos, currentImage()) ); // paint the new one
+    KisConfig cfg;
+    if (m_mode != PAINT && cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
+        m_canvas->updateCanvas( currentPaintOpPreset()->settings()->paintOutlineRect(mousePos, currentImage()) ); // erase the old guy
+        mousePos = e->point;
+        m_canvas->updateCanvas( currentPaintOpPreset()->settings()->paintOutlineRect(mousePos, currentImage()) ); // paint the new one
+    }
 }
 
 void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)

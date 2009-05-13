@@ -107,15 +107,29 @@ public:
      */
     QImage sampleStroke(const QSize& size );
 
+    /**
+     * @return the rectangle covered by the current brush (or the previous brush??? and what about pressure???)
+     * based on the given position, in XXX (image or view???) coordinates.
+     *
+     * XXX: the function name is very misleading, since this function doesn't do any painting! Rename
+     * to brushOutlineRect, and perhaps just return the brushSize and let the caller handle the x,y
+     * location.
+     */
     virtual QRectF paintOutlineRect(const QPointF& pos, KisImageSP image) const;
+
     /**
      * This function allow the paintop to draw an outline at a given position.
+     *
+     * XXX: It would be _much_ better to pass return a QImage, instead of pass a painter and
+     * a KoViewConverter (which is _not_ a class that that should be referenced in krita/image.
+     * And we need a lot of caching here, since no matter what we do, it is utterly slow, especially
+     * when using a tablet.
      */
     virtual void paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter) const;
 private:
 
     struct Private;
-    Private* const d;
+Private* const d;
 
 };
 

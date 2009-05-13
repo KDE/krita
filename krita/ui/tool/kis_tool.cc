@@ -50,6 +50,8 @@
 #include "kis_canvas_resource_provider.h"
 #include "canvas/kis_canvas2.h"
 #include "filter/kis_filter_configuration.h"
+#include "kis_config.h"
+#include "kis_cursor.h"
 
 struct KisTool::Private {
     Private() : currentPattern(0),
@@ -87,7 +89,21 @@ KisTool::~KisTool()
 
 void KisTool::activate(bool)
 {
-    useCursor(d->cursor, true);
+    KisConfig cfg;
+    switch(cfg.cursorStyle()) {
+        case CURSOR_STYLE_TOOLICON:
+            useCursor(d->cursor, true);
+            break;
+        case CURSOR_STYLE_CROSSHAIR:
+            useCursor(KisCursor::crossCursor(), true);
+            break;     
+        case CURSOR_STYLE_POINTER:
+            useCursor(KisCursor::upArrowCursor(), true);
+            break;
+        case CURSOR_STYLE_OUTLINE:
+        default:
+            useCursor(KisCursor::blankCursor(), true);
+    }
 
     d->currentFgColor = m_canvas->resourceProvider()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
     d->currentBgColor = m_canvas->resourceProvider()->resource(KoCanvasResource::BackgroundColor).value<KoColor>();

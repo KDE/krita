@@ -34,6 +34,7 @@
 #include <QWidget>
 
 #include <kis_debug.h>
+#include "kis_config.h"
 #include <klocale.h>
 
 #include <KoPointerEvent.h>
@@ -437,67 +438,12 @@ void KisToolFreehand::setAssistant(bool assistant)
     m_assistant = assistant;
 }
 
-
-void KisToolFreehand::paintOutline(const QPointF& point)
-{
-    Q_UNUSED(point);
-#if 0
-    // XXX TOOL_PORT
-    // I don't get this 1.6 code: we update the whole canvas, and then
-    // repaint all of it again? It's incompatible with qt4 anyway --
-    // rework later.
-
-    if (!m_canvas) {
-        return;
-    }
-
-    if (currentImage() && !currentImage()->bounds().contains(point.floorQPoint())) {
-        if (m_paintedOutline) {
-            m_canvas->updateCanvas(); // Huh? The _whole_ canvas needs to be
-            // repainted for this outline cursor?
-            // It was this way in 1.6, btw.
-            m_paintedOutline = false;
-        }
-        return;
-    }
-
-    KisCanvas *canvas = controller->kiscanvas();
-    canvas->repaint();
-
-    KisBrush *brush = m_subject->currentBrush();
-    // There may not be a brush present, and we shouldn't crash in that case
-    if (brush) {
-        QPainter gc(canvas->canvasWidget());
-        QPen pen(Qt::SolidLine);
-
-        QPointF hotSpot = brush->hotSpot(1.0, 1.0);
-
-        //gc.setRasterOp(Qt::NotROP);
-        gc.setPen(pen);
-        gc.setViewport(0, 0, static_cast<qint32>(canvas->width() * m_subject->zoomFactor()),
-                       static_cast<qint32>(canvas->height() * m_subject->zoomFactor()));
-        gc.translate((- controller->horzValue()) / m_subject->zoomFactor(),
-                     (- controller->vertValue()) / m_subject->zoomFactor());
-
-        QPointF topLeft = point - hotSpot;
-
-        if (m_subject->currentPaintop().id() == "pen") {
-            // Pen paints on whole pixels only.
-            topLeft = topLeft.roundQPoint();
-        }
-
-        gc.translate(topLeft.x(), topLeft.y());
-        gc.end();
-        KisBoundaryPainter::paint(brush->boundary(), gc);
-
-        m_paintedOutline = true;
-    }
-#endif
-}
-
 void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
 {
-    currentPaintOpPreset()->settings()->paintOutline(mousePos, currentImage(), gc, converter);
+    KisConfig cfg;
+    if (m_mode != PAINT && cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
+        currentPaintOpPreset()->settings()->paintOutline(mousePos, currentImage(), gc, converter);
+    }
 }
 
 QPointF KisToolFreehand::adjustPosition(const QPointF& point)

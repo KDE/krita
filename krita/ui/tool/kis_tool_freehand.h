@@ -70,7 +70,6 @@ protected:
     virtual void initPaint(KoPointerEvent *e);
     virtual void endPaint();
 
-    void paintOutline(const QPointF& point);
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
 protected slots:

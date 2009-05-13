@@ -250,8 +250,6 @@ KisBrushSP KisBrush::fromXML( const QDomElement& element )
 
 }
 
-
-
 qint32 KisBrush::maskWidth(double scale, double angle) const
 {
     double width_ = width() * scale;
@@ -377,7 +375,6 @@ void KisBrush::generateMask(KisPaintDeviceSP dst,
 
 
     if (coloringInformation) {
-        qDebug() << "Got coloring information";
         // Apply the alpha mask
         KisHLineIteratorPixel hiter = dst->createHLineIterator(0, 0, maskWidth);
         for (int y = 0; y < maskHeight; y++) {

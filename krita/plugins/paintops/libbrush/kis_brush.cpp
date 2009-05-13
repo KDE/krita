@@ -323,7 +323,7 @@ void KisBrush::mask(KisPaintDeviceSP dst, const KisPaintDeviceSP src, double sca
 
 
 void KisBrush::generateMask(KisPaintDeviceSP dst,
-                            ColoringInformation* src,
+                            ColoringInformation* coloringInformation,
                             double scaleX, double scaleY, double angle,
                             const KisPaintInformation& info_,
                             double subPixelX, double subPixelY) const
@@ -375,22 +375,38 @@ void KisBrush::generateMask(KisPaintDeviceSP dst,
     qint32 maskWidth = outputMask->width();
     qint32 maskHeight = outputMask->height();
 
-    // Apply the alpha mask
-    KisHLineIteratorPixel hiter = dst->createHLineIterator(0, 0, maskWidth);
-    for (int y = 0; y < maskHeight; y++) {
-        while (! hiter.isDone()) {
-            int hiterConseq = 1; //hiter.nConseqHPixels();
-            cs->setAlpha(hiter.rawData(), OPACITY_OPAQUE, hiterConseq);
-            if (src) {
-                memcpy(hiter.rawData(), src->color(), pixelSize);
-                src->nextColumn();
+
+    if (coloringInformation) {
+        qDebug() << "Got coloring information";
+        // Apply the alpha mask
+        KisHLineIteratorPixel hiter = dst->createHLineIterator(0, 0, maskWidth);
+        for (int y = 0; y < maskHeight; y++) {
+            while (! hiter.isDone()) {
+                int hiterConseq = 1; //hiter.nConseqHPixels();
+                cs->setAlpha(hiter.rawData(), OPACITY_OPAQUE, hiterConseq);
+                memcpy(hiter.rawData(), coloringInformation->color(), pixelSize);
+                coloringInformation->nextColumn();
+                cs->applyAlphaU8Mask(hiter.rawData(), maskData, hiterConseq);
+                hiter += hiterConseq;
+                maskData += hiterConseq;
             }
-            cs->applyAlphaU8Mask(hiter.rawData(), maskData, hiterConseq);
-            hiter += hiterConseq;
-            maskData += hiterConseq;
+            coloringInformation->nextRow();
+            hiter.nextRow();
         }
-        if (src) src->nextRow();
-        hiter.nextRow();
+    }
+    else {
+        // Apply the alpha mask
+        KisHLineIteratorPixel hiter = dst->createHLineIterator(0, 0, maskWidth);
+        for (int y = 0; y < maskHeight; y++) {
+            while (! hiter.isDone()) {
+                int hiterConseq = hiter.nConseqHPixels();
+                cs->setAlpha(hiter.rawData(), OPACITY_OPAQUE, hiterConseq);
+                cs->applyAlphaU8Mask(hiter.rawData(), maskData, hiterConseq);
+                hiter += hiterConseq;
+                maskData += hiterConseq;
+            }
+            hiter.nextRow();
+        }
     }
 }
 

@@ -222,7 +222,7 @@ public:
      *
      * @param dst the destination that will be draw on the image, and this function
      *            will edit its alpha channel
-     * @param src coloring information that will be copied on the dab, it can be null
+     * @param coloringInfo coloring information that will be copied on the dab, it can be null
      * @param scale a scale applied on the alpha mask
      * @param angle a rotation applied on the alpha mask
      * @param info the painting information (this is only and should only be used by
@@ -235,7 +235,7 @@ public:
      * pixels in the brush.
      */
     virtual void generateMask(KisPaintDeviceSP dst,
-                              ColoringInformation* src,
+                              ColoringInformation* coloringInfo,
                               double scaleX, double scaleY, double angle,
                               const KisPaintInformation& info = KisPaintInformation(),
                               double subPixelX = 0, double subPixelY = 0) const;

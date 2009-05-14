@@ -611,6 +611,20 @@ void KoMainWindow::updateCaption()
 
 void KoMainWindow::updateCaption(const QString & caption, bool mod)
 {
+    kDebug(30003) << "KoMainWindow::updateCaption(" << caption << "," << mod << ")";
+#ifdef KOFFICE_ALPHA
+    setCaption(QString("ALPHA %1: %2").arg(KOFFICE_ALPHA).arg(caption), mod);
+    return;
+#endif
+#ifdef KOFFICE_BETA
+    setCaption(QString("BETA %1: %2").arg(KOFFICE_BETA).arg(caption), mod);
+    return;
+#endif
+#ifdef KOFFICE_RC
+    setCaption(QString("RELEASE CANDIDATE %1: %2").arg(KOFFICE_RC).arg(caption), mod);
+    return;
+#endif
+
     setCaption(caption, mod);
 }
 

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Shiva Kernel Language Support
+Name[es]=Implementación del lenguaje del núcleo Shiva
 Name[et]=Shiva kernelikeele toetus
 Name[it]=Supporto per il linguaggio Shiva Kernel
 Name[pt]=Suporte à Linguagem do 'Kernel' Shiva
@@ -9,6 +10,7 @@ Name[uk]=Підтримка мови ядра Shiva
 Name[x-test]=xxShiva Kernel Language Supportxx
 Name[zh_TW]=Shiva 核心語言支援
 Comment=Shiva Kernel Language Support
+Comment[es]=Implementación del lenguaje del núcleo Shiva
 Comment[et]=Shiva kernelikeele toetus
 Comment[it]=Supporto per il linguaggio Shiva Kernel
 Comment[pt]=Suporte à Linguagem do 'Kernel' Shiva

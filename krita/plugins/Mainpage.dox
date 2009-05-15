@@ -1,4 +1,5 @@
-About plugins
+/**
+  \mainpage About plugins
 
 Plugins are components with a GUI that perform some action for Krita.
 Note that plugins are only loaded when a KisView is constructed; note 

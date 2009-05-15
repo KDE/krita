@@ -20,6 +20,8 @@
 #ifndef KOSNAPSTRATEGY_H
 #define KOSNAPSTRATEGY_H
 
+#include "flake_export.h"
+
 #include <QtCore/QPointF>
 #include <QtGui/QPainterPath>
 
@@ -27,7 +29,7 @@ class KoPathPoint;
 class KoSnapProxy;
 class KoViewConverter;
 
-class KoSnapStrategy
+class FLAKE_EXPORT KoSnapStrategy
 {
 public:
     /// the different possible snap types

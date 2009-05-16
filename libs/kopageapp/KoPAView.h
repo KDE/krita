@@ -117,6 +117,11 @@ public:
      * Set the active page and updates the UI
      */
     void doUpdateActivePage( KoPAPageBase * page );
+    
+    /**
+     * Paste the page if everything is ok
+     */
+    void pagePaste();
 
     /// reimplemented
     virtual KoPrintJob * createPrintJob();
@@ -213,6 +218,11 @@ protected slots:
      * view has been changed
      */
     void reinitDocumentDocker();
+
+    /** 
+     * Import slideshow 
+     */
+    void importDocument();
 
 protected:
     KoPADocument *m_doc;

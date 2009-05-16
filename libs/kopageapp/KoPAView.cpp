@@ -51,6 +51,7 @@
 #include <KoShapeDeleteCommand.h>
 #include <KoCutController.h>
 #include <KoCopyController.h>
+#include <KoFilterManager.h>
 
 #include "KoPADocumentStructureDocker.h"
 #include "KoShapeTraversal.h"
@@ -66,8 +67,7 @@
 #include "commands/KoPAChangeMasterPageCommand.h"
 #include "dialogs/KoPAMasterPageDialog.h"
 
-#include "KoShapeOdfSaveHelper.h"
-
+#include <kfiledialog.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kicon.h>
@@ -75,8 +75,10 @@
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kstatusbar.h>
+#include <kmessagebox.h>
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
+#include <kio/netaccess.h>
 
 KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
 : KoView( document, parent )
@@ -275,7 +277,59 @@ void KoPAView::initActions()
         actionMenu->addAction(action);
     actionCollection()->addAction("insert_variable", actionMenu);
 
+    KAction * am = new KAction(i18n("Import Document..."), this);
+    actionCollection()->addAction("import_document", am);
+    connect(am, SIGNAL(triggered()), this, SLOT(importDocument()));
+
     m_find = new KoFind( this, m_canvas->resourceProvider(), actionCollection() );
+}
+
+void KoPAView::importDocument()
+{
+    KFileDialog *dialog = new KFileDialog( KUrl("kfiledialog:///OpenDialog"),QString(), this );
+    dialog->setObjectName( "file dialog" );
+    dialog->setMode( KFile::File );
+    if ( m_doc->pageType() == KoPageApp::Slide ) {
+        dialog->setCaption(i18n("Import Slideshow"));
+    }
+    else {
+        dialog->setCaption(i18n("Import Document"));
+    }
+
+    // TODO make it possible to select also other supported types (then the default format) here.
+    // this needs to go via the filters to get the file in the correct format.
+    // For now we only support the native mime types
+    QStringList mimeFilter;
+#if 1
+    mimeFilter << KoOdf::mimeType( m_doc->documentType() ) << KoOdf::templateMimeType( m_doc->documentType() );
+#else
+    mimeFilter = KoFilterManager::mimeFilter( KoDocument::readNativeFormatMimeType(m_doc->componentData()), KoFilterManager::Import,
+                                              KoDocument::readExtraNativeMimeTypes() );
+#endif
+
+    dialog->setMimeFilter( mimeFilter );
+    if (dialog->exec() == QDialog::Accepted) {
+        KUrl url(dialog->selectedUrl());
+        QString tmpFile;
+        if ( KIO::NetAccess::download( url, tmpFile, 0 ) ) {
+            QFile file( tmpFile );
+            file.open( QIODevice::ReadOnly );
+            QByteArray ba;
+            ba = file.readAll();
+
+            // set the correct mime type as otherwise it does not find the correct tag when loading
+            QMimeData data;
+            data.setData( KoOdf::mimeType( m_doc->documentType() ), ba);
+            KoPAPastePage paste( m_doc,m_activePage );
+            if ( ! paste.paste( m_doc->documentType(), &data ) ) {
+                KMessageBox::error( 0L, i18n("Could not import\n%1", url.pathOrUrl()));
+            }
+        }
+        else {
+            KMessageBox::error( 0L, i18n("Could not import\n%1", url.pathOrUrl()));
+        }
+    }
+    delete dialog;
 }
 
 void KoPAView::viewSnapToGrid(bool snap)
@@ -293,17 +347,22 @@ void KoPAView::viewGuides(bool show)
 void KoPAView::editPaste()
 {
     if ( !m_canvas->toolProxy()->paste() ) {
-        const QMimeData * data = QApplication::clipboard()->mimeData();
+        pagePaste();
+    }
+}
 
-        KoOdf::DocumentType documentTypes[] = { KoOdf::Graphics, KoOdf::Presentation };
+void KoPAView::pagePaste()
+{
+    const QMimeData * data = QApplication::clipboard()->mimeData();
 
-        for ( unsigned int i = 0; i < sizeof( documentTypes ) / sizeof( KoOdf::DocumentType ); ++i )
-        {
-            if ( data->hasFormat( KoOdf::mimeType( documentTypes[i] ) ) ) {
-                KoPAPastePage paste( m_doc, m_activePage );
-                paste.paste( documentTypes[i], data );
-                break;
-            }
+    KoOdf::DocumentType documentTypes[] = { KoOdf::Graphics, KoOdf::Presentation };
+
+    for ( unsigned int i = 0; i < sizeof( documentTypes ) / sizeof( KoOdf::DocumentType ); ++i )
+    {
+        if ( data->hasFormat( KoOdf::mimeType( documentTypes[i] ) ) ) {
+            KoPAPastePage paste( m_doc, m_activePage );
+            paste.paste( documentTypes[i], data );
+            break;
         }
     }
 }

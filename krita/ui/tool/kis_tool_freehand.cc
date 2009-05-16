@@ -78,7 +78,7 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_paintedOutline = false;
     m_executor = new QThreadPool(this);
     m_executor->setMaxThreadCount(1);
-    m_smooth = false;
+    m_smooth = true;
     m_assistant = false;
     m_smoothness = 0.5;
     m_magnetism = 1.0;

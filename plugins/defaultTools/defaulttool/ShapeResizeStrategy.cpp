@@ -113,6 +113,10 @@ void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
 
     QPointF distance = m_unwindMatrix.map(newPos) - m_unwindMatrix.map( m_start );
 
+    const bool scaleFromCenter = modifiers & Qt::ControlModifier;
+    if (scaleFromCenter) {
+        distance *= 2.0;
+    }
     qreal zoomX=1, zoomY=1;
     if (m_left)
         zoomX = (startWidth - distance.x()) / startWidth;
@@ -122,6 +126,7 @@ void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
         zoomY = (startHeight - distance.y()) / startHeight;
     else if (m_bottom)
         zoomY = (startHeight + distance.y()) / startHeight;
+
     if (keepAspect) {
         const bool cornerUsed = ((m_bottom?1:0) + (m_top?1:0) + (m_left?1:0) + (m_right?1:0)) == 2;
         if ((cornerUsed && startWidth < startHeight) || m_left || m_right)
@@ -130,7 +135,6 @@ void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
             zoomX = zoomY;
     }
 
-    bool scaleFromCenter = modifiers & Qt::ControlModifier;
     QPointF move;
 
     if (scaleFromCenter)

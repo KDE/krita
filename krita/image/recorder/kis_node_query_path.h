@@ -39,7 +39,7 @@ public:
      * - '..': represents the parent layer
      * - number: index of the layer
      *
-     * For instance: "1" return all children of the first layer, "../3" return the third layer of the parent
+     * For instance: "1/*" return all children of the first layer, "../3" return the third layer of the parent
      * of the current layer
      * If the string starts with "/" then it's an aboslute path, otherwise it's a relative path.
      */

@@ -49,10 +49,13 @@ void KisCmbComposite::setCompositeOpList(const QList<KoCompositeOp*> & list)
     sortModel->sort(0);
     sortModel->setCategorizedModel(true);
     
+    // KCategorizedView is actually so broken that it is better not to use it
+#if 0
     // KCategorizedView is so br0ken that you need to recreate one when changing the model
     KCategorizedView* view = new KCategorizedView(this);
     view->setCategoryDrawer(new KCategoryDrawer);
     setView(view);
+#endif
     
     setModel(sortModel);
 

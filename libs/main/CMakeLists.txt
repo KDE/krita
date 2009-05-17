@@ -165,6 +165,7 @@ install( FILES
     threadAction/KoExecutePolicy.h
     threadAction/KoAction.h
     KoDockFactory.h
+    KoDockRegistry.h
     KoViewChild.h
     komain_export.h
     KoViewConverter.h

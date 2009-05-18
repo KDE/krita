@@ -292,6 +292,11 @@ signals:
     void toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, KoView *);
 
     /**
+     * Emit the new tool option widgets to be used with this canvas.
+     */
+    void toolOptionWidgetsChanged(const QMap<QString, QWidget *> &);
+
+    /**
      * Emitted whenever the document is scrolled.
      *
      * @param point the new top-left point from which the document should

@@ -414,10 +414,11 @@ void KoCanvasController::setToolOptionWidgets(const QMap<QString, QWidget *>&wid
         view = qobject_cast<KoView*>(w);
         if(view) {
             emit toolOptionWidgetsChanged(widgetMap, view);
-            break;
+            return;
         }
         w = w->parentWidget();
     }
+    emit toolOptionWidgetsChanged(widgetMap);
 }
 
 void KoCanvasController::setDocumentSize(const QSize & sz, bool recalculateCenter)

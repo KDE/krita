@@ -113,6 +113,8 @@ bool KoGridData::showGrid() const
 
 void KoGridData::setShowGrid(bool showGrid)
 {
+    if (d->toggleGridAction)
+        d->toggleGridAction->setChecked(showGrid);
     d->showGrid = showGrid;
 }
 

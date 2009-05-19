@@ -349,14 +349,23 @@ const QPainterPath KoPathShape::outline() const
 
 QRectF KoPathShape::boundingRect() const
 {
-    QRectF bb(outline().boundingRect());
+    QMatrix transform = absoluteTransformation(0);
+    // calculate the bounding rect of the transformed outline
+    QRectF bb(transform.map(outline()).boundingRect());
     if (border()) {
         KoInsets inset;
         border()->borderInsets(this, inset);
-        bb.adjust(-inset.left, -inset.top, inset.right, inset.bottom);
+        
+        // calculate transformed border insets
+        QPointF center = transform.map(QPointF());
+        QPointF tl = transform.map(QPointF(-inset.left,-inset.top)) - center;
+        QPointF br = transform.map(QPointF(inset.right,inset.bottom)) -center;
+        qreal left = qMin(tl.x(),br.x());
+        qreal right = qMax(tl.x(),br.x());
+        qreal top = qMin(tl.y(),br.y());
+        qreal bottom = qMax(tl.y(),br.y());
+        bb.adjust(left, top, right, bottom);
     }
-    //qDebug() << "KoPathShape::boundingRect = " << bb;
-    bb = absoluteTransformation(0).mapRect(bb);
     if (shadow()) {
         KoInsets insets;
         shadow()->insets(this, insets);
@@ -364,7 +373,6 @@ QRectF KoPathShape::boundingRect() const
     }
     return bb;
 }
-
 
 QSizeF KoPathShape::size() const
 {

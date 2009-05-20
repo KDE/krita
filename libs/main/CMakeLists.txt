@@ -141,6 +141,7 @@ install( FILES
     KoMainWindow.h 
     KoApplication.h 
     KoApplicationAdaptor.h 
+    KoEmbeddedDocumentSaver.h
     KoQueryTrader.h 
     KoFilterManager.h 
     KoDocumentInfo.h 

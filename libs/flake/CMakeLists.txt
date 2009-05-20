@@ -202,6 +202,7 @@ install(
     KoShapeLayer.h
     KoShapeLoadingContext.h
     KoLoadingShapeUpdater.h
+    KoShapeConfigWidgetBase.h
     KoShapeManager.h
     KoShapeRegistry.h
     KoShapeSavingContext.h

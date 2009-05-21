@@ -309,10 +309,10 @@ void KisCanvas2::updateCanvasProjection(const QRect & rc)
 
     if (!vRect.isEmpty()) {
 
-//        m_d->prescaledProjection->updateCanvasProjection(rc);
+        m_d->prescaledProjection->updateCanvasProjection(rc);
 
         // Regardless, the actual
-//        m_d->canvasWidget->widget()->update(vRect);
+        m_d->canvasWidget->widget()->update(vRect);
 
     }
 }

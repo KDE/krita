@@ -6,6 +6,7 @@ add_subdirectory( palettes )
 add_subdirectory( templates )
 add_subdirectory( shaders )
 add_subdirectory( images )
+add_subdirectory( backgrounds )
 ########### install files ###############
 
 install( FILES  

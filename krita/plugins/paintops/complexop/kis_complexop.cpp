@@ -137,7 +137,7 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
 
     settings->m_optionsWidget->m_bidiOption->apply(dab, device, painter(), sx, sy, sw, sh, adjustedInfo.pressure(), dstRect);
 
-    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab, painter()->opacity(), sx, sy, sw, sh);
+    painter()->bitBlt(dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);
 
     painter()->setOpacity(origOpacity);
     painter()->setPaintColor(origColor);

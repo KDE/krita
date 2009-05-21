@@ -72,12 +72,6 @@ void KisChalkPaintOp::paintAt(const KisPaintInformation& info)
 
     QRect rc = dab->extent();
 
-    painter()->bltSelection(
-        rc.x(), rc.y(),
-        painter()->compositeOp(),
-        dab,
-        painter()->opacity(),
-        rc.x(), rc.y(),
-        rc.width(), rc.height());
+    painter()->bitBlt(rc.x(), rc.y(), dab, rc.x(), rc.y(), rc.width(), rc.height());
 
 }

@@ -371,7 +371,7 @@ void KisShapeSelection::renderSelection(KisSelection* projection, const QRect& r
         }
     }
     KisPainter painter(projection);
-    painter.bitBlt(r.x(), r.y(), COMPOSITE_OVER, tmpMask, r.x(), r.y(), r.width(), r.height());
+    painter.bitBlt(r.x(), r.y(), tmpMask, r.x(), r.y(), r.width(), r.height());
     painter.end();
     dbgRender << "Shape selection rendering: " << t.elapsed();
 }

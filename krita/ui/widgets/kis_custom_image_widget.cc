@@ -191,7 +191,8 @@ void KisCustomImageWidget::buttonClicked()
                 QRect r = clip->exactBounds();
                 KisPainter gc;
                 gc.begin(layer->paintDevice());
-                gc.bitBlt(0, 0, COMPOSITE_COPY, clip, r.x(), r.y(), r.width(), r.height());
+                gc.setCompositeOp(COMPOSITE_COPY);
+                gc.bitBlt(0, 0, clip, r.x(), r.y(), r.width(), r.height());
                 gc.end();
             }
         }

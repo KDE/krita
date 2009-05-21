@@ -61,10 +61,6 @@
 #include "KoColor.h"
 #include "kis_selection.h"
 
-namespace
-{
-}
-
 KisFillPainter::KisFillPainter()
         : KisPainter()
 {
@@ -143,8 +139,8 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, KisPatte
 
         while (x < x1 + w) {
             sw = qMin((x1 + w) - x, pattern->width() - sx);
-
-            bitBlt(x, y, compositeOp(), patternLayer, opacity(), sx, sy, sw, sh);
+            
+            bitBlt(x, y, patternLayer, sx, sy, sw, sh);
             x += sw; sx = 0;
         }
 
@@ -225,11 +221,10 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled)
 //  want that, since we want a transparent layer to be completely filled
 //     QRect rc = m_fillSelection->selectedExactRect();
 
-    // Sets dirty!
-//     bltSelection(rc.x(), rc.y(), compositeOp(), filled, m_fillSelection, opacity(),
-//                  rc.x(), rc.y(), rc.width(), rc.height());
-
-    bltSelection(0, 0, compositeOp(), filled, m_fillSelection, opacity(), 0, 0, m_width, m_height);
+    KisSelectionSP tmpSelection = selection();
+    setSelection(m_fillSelection);
+    bitBlt(0, 0, filled, 0, 0, m_width, m_height);
+    setSelection(tmpSelection);
 
     if (progressUpdater()) progressUpdater()->setProgress(100);
 

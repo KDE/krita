@@ -114,10 +114,12 @@ bool KisToolFill::flood(int startX, int startY)
         QVector<QRect>::iterator it = rects.begin();
         QVector<QRect>::iterator end = rects.end();
 
+        m_painter->setCompositeOp(m_compositeOp);
+        m_painter->setOpacity(m_opacity);
+        
         while (it != end) {
             QRect rc = *it;
-            m_painter->bltSelection(rc.x(), rc.y(), m_compositeOp, filled, m_opacity,
-                                    rc.x(), rc.y(), rc.width(), rc.height());
+            m_painter->bitBlt(rc.topLeft(), filled, rc);
             ++it;
         }
 

@@ -147,9 +147,7 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
         brush->mask(dab, color, 1.0, 1.0, 0.0, info, xFraction, yFraction);
     }
 
-    painter()->bltSelection(dstRect.x(), dstRect.y(),
-                            painter()->compositeOp(), dab, painter()->opacity(),
-                            sx, sy, sw, sh);
+    painter()->bitBlt(dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);
 
 
 }

@@ -417,7 +417,7 @@ void KisBrush::generateMask(KisPaintDeviceSP dst,
         }
     }
     dst->writeBytes(dabData, 0, 0, maskWidth, maskHeight);
-    delete dabData;
+    delete[] dabData;
 }
 
 KisPaintDeviceSP KisBrush::image(const KoColorSpace * colorSpace,

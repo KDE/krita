@@ -653,7 +653,8 @@ void KisToolTransform::transform()
     rc = rc.normalized();
     currentNode()->paintDevice()->clear();
     KisPainter gc(currentNode()->paintDevice());
-    gc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, m_origDevice, rc.x(), rc.y(), rc.width(), rc.height());
+    gc.setCompositeOp(COMPOSITE_COPY);
+    gc.bitBlt(rc.topLeft(), m_origDevice, rc);
     gc.end();
 
     // Also restore the original selection.
@@ -663,7 +664,8 @@ void KisToolTransform::transform()
         if (currentSelection()) {
             currentSelection()->getOrCreatePixelSelection()->clear();
             KisPainter sgc(KisPaintDeviceSP(currentSelection()->getOrCreatePixelSelection()));
-            sgc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, m_origSelection, rc.x(), rc.y(), rc.width(), rc.height());
+            sgc.setCompositeOp(COMPOSITE_COPY);
+            sgc.bitBlt(rc.topLeft(), m_origSelection, rc);
             sgc.end();
         }
     } else
@@ -677,8 +679,7 @@ void KisToolTransform::transform()
         KisPaintDeviceSP tmpDevice = new KisPaintDevice(m_origDevice->colorSpace());
         QRect selectRect = currentSelection()->selectedRect();
         KisPainter gc(tmpDevice, currentSelection());
-        gc.bltSelection(selectRect.x(), selectRect.y(), COMPOSITE_OVER, m_origDevice, OPACITY_OPAQUE,
-                        selectRect.x(), selectRect.y(), selectRect.width(), selectRect.height());
+        gc.bitBlt(selectRect.topLeft(),m_origDevice, selectRect);
         gc.end();
 
         KisTransformWorker worker(tmpDevice, m_scaleX, m_scaleY, 0, 0, m_a, int(t.x()), int(t.y()), progress, m_filter);
@@ -714,8 +715,7 @@ void KisToolTransform::transform()
 
         QRect tmpRc = tmpDevice->extent();
         KisPainter painter(currentNode()->paintDevice());
-        painter.bitBlt(tmpRc.x(), tmpRc.y(), COMPOSITE_OVER, tmpDevice,
-                       tmpRc.x(), tmpRc.y(), tmpRc.width(), tmpRc.height());
+        painter.bitBlt(tmpRc.topLeft(), tmpDevice, tmpRc);
         painter.end();
     } else {
         KisTransformWorker worker(currentNode()->paintDevice(), m_scaleX, m_scaleY, 0, 0, m_a, int(t.x()), int(t.y()), progress, m_filter);

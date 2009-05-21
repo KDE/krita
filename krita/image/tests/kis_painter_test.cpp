@@ -107,11 +107,7 @@ void KisPainterTest::testPaintDeviceBltSelection(const KoColorSpace * cs)
     KisPainter painter(dst);
     painter.setSelection(selection);
 
-    painter.bltSelection(0, 0,
-                         dst->colorSpace()->compositeOp(COMPOSITE_OVER),
-                         src,
-                         OPACITY_OPAQUE,
-                         0, 0, 30, 30);
+    painter.bitBlt(0, 0, src, 0, 0, 30, 30);
     painter.end();
 
     QImage img = dst->convertToQImage(0);
@@ -122,12 +118,8 @@ void KisPainterTest::testPaintDeviceBltSelection(const KoColorSpace * cs)
     KisPaintDeviceSP dst2 = new KisPaintDevice(cs);
     KisPainter painter2(dst2);
     painter2.setSelection(selection);
-
-    painter2.bltSelection(0, 0,
-                         dst2->colorSpace()->compositeOp(COMPOSITE_SUBSTRACT),
-                         src,
-                         OPACITY_OPAQUE,
-                         0, 0, 30, 30);
+    painter2.setCompositeOp(dst2->colorSpace()->compositeOp(COMPOSITE_SUBSTRACT));
+    painter2.bitBlt(0, 0,src, 0, 0, 30, 30);
     painter2.end();
 
     QCOMPARE(dst2->exactBounds(), QRect(10, 10, 10, 10));
@@ -162,11 +154,7 @@ void KisPainterTest::testPaintDeviceBltSelectionIrregular(const KoColorSpace * c
     sel->setPixelSelection(psel);
     KisPainter painter(dst);
     painter.setSelection(sel);
-    painter.bltSelection(0, 0,
-                         dst->colorSpace()->compositeOp(COMPOSITE_OVER),
-                         src,
-                         OPACITY_OPAQUE,
-                         0, 0, 30, 30);
+    painter.bitBlt(0, 0, src, 0, 0, 30, 30);
     painter.end();
 
     QImage img = dst->convertToQImage(0);
@@ -209,11 +197,7 @@ void KisPainterTest::testPaintDeviceBltSelectionInverted(const KoColorSpace * cs
 
     KisPainter painter(dst);
     painter.setSelection(sel);
-    painter.bltSelection(0, 0,
-                         dst->colorSpace()->compositeOp(COMPOSITE_OVER),
-                         src,
-                         OPACITY_OPAQUE,
-                         0, 0, 30, 30);
+    painter.bitBlt(0, 0, src, 0, 0, 30, 30);
     painter.end();
     QCOMPARE(dst->exactBounds(), QRect(0, 0, 30, 30));
 }
@@ -239,11 +223,7 @@ void KisPainterTest::testSelectionBltSelection()
     KisPixelSelectionSP dst = new KisPixelSelection();
     KisPainter painter(dst);
     painter.setSelection(sel);
-    painter.bltSelection(0, 0,
-                         dst->colorSpace()->compositeOp(COMPOSITE_OVER),
-                         src,
-                         OPACITY_OPAQUE,
-                         0, 0, 30, 30);
+    painter.bitBlt(0, 0, src, 0, 0, 30, 30);
     painter.end();
 
     QCOMPARE(dst->selectedExactRect(), QRect(10, 10, 10, 10));
@@ -296,12 +276,7 @@ void KisPainterTest::testSelectionBltSelectionIrregular()
     KisPixelSelectionSP dst = new KisPixelSelection();
     KisPainter painter(dst);
     painter.setSelection(sel);
-
-    painter.bltSelection(0, 0,
-                         dst->colorSpace()->compositeOp(COMPOSITE_OVER),
-                         src,
-                         OPACITY_OPAQUE,
-                         0, 0, 30, 30);
+    painter.bitBlt(0, 0, src, 0, 0, 30, 30);
     painter.end();
 
     QCOMPARE(dst->selectedExactRect(), QRect(10, 10, 10, 10));
@@ -337,13 +312,13 @@ void KisPainterTest::checkPerformance()
     t.start();
     for (int i = 0; i < 10; ++i) {
         KisPainter gc(dst);
-        gc.bitBlt(0, 0, COMPOSITE_OVER, src, OPACITY_OPAQUE, 0, 0, 10000, 5000);
+        gc.bitBlt(0, 0, src, 0, 0, 10000, 5000);
     }
 
     t.restart();
     for (int i = 0; i < 10; ++i) {
         KisPainter gc(dst, sel);
-        gc.bltSelection(0, 0, COMPOSITE_OVER, src, OPACITY_OPAQUE, 0, 0, 10000, 5000);
+        gc.bitBlt(0, 0, src, 0, 0, 10000, 5000);
     }
 }
 

@@ -159,12 +159,18 @@ void KisPaintLayer::updateProjection(const QRect & rc)
             }
 
             KisPainter gc(source);
-            gc.bitBlt( currentNeededRc.left(), currentNeededRc.top(), COMPOSITE_COPY,
-                       m_d->paintDevice, temporaryOpacity(), currentNeededRc.left(),
-                       currentNeededRc.top(), currentNeededRc.width(), currentNeededRc.height());
-            gc.bitBlt( currentNeededRc.left(), currentNeededRc.top(), temporaryCompositeOp(),
-                       temporaryTarget(), temporaryOpacity(), currentNeededRc.left(),
-                       currentNeededRc.top(), currentNeededRc.width(), currentNeededRc.height());
+            gc.setCompositeOp(COMPOSITE_COPY);
+            gc.setOpacity(temporaryOpacity());
+            gc.bitBlt( currentNeededRc.left(), currentNeededRc.top(),
+                       m_d->paintDevice, 
+                       currentNeededRc.left(), currentNeededRc.top(), 
+                       currentNeededRc.width(), currentNeededRc.height());
+                    
+            gc.setCompositeOp(temporaryCompositeOp());
+            gc.bitBlt( currentNeededRc.left(), currentNeededRc.top(), 
+                       temporaryTarget(), 
+                       currentNeededRc.left(), currentNeededRc.top(), 
+                       currentNeededRc.width(), currentNeededRc.height());
         }
 
     }

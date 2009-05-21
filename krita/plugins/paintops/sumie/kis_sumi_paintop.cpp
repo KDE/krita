@@ -122,24 +122,11 @@ double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
     m_brush.paintLine(dab, m_dev, pi1, pi2);
 
     QRect rc = dab->extent();
-
-    painter()->bltSelection(
+    painter()->bitBlt(
         rc.x(), rc.y(),
-        painter()->compositeOp(),
         dab,
-        painter()->opacity(),
         rc.x(), rc.y(),
         rc.width(), rc.height());
-
-
-   /* painter()->bltSelection(
-        rc.x(), rc.y(),
-        device->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN),
-        dab,
-        painter()->opacity(),
-        rc.x(), rc.y(),
-        rc.width(), rc.height());
-    */
 
     KisVector2D end = toKisVector2D(pi2.pos());
     KisVector2D start = toKisVector2D(pi1.pos());

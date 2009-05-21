@@ -199,7 +199,8 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     } else {
         // Or, copy the source data on the temporary device:
-        copyPainter.bitBlt(0, 0, COMPOSITE_COPY, source(), srcPoint.x(), srcPoint.y(), sw, sh);
+        copyPainter.setCompositeOp(COMPOSITE_COPY);
+        copyPainter.bitBlt(0, 0, source(), srcPoint.x(), srcPoint.y(), sw, sh);
         copyPainter.end();
     }
 
@@ -281,7 +282,7 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
     sw = dstRect.width();
     sh = dstRect.height();
 
-    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_srcdev, painter()->opacity(), sx, sy, sw, sh);
+    painter()->bitBlt(dstRect.x(), dstRect.y(), m_srcdev, sx, sy, sw, sh);
 
 
 }

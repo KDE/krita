@@ -53,7 +53,8 @@ void KisBidirectionalMixingOption::apply(KisPaintDeviceSP dab, KisPaintDeviceSP 
     KoColorSpace *cs = dab->colorSpace();
     KisPaintDeviceSP canvas = new KisPaintDevice(cs);
     KisPainter p(canvas);
-    p.bitBlt(sx, sy, COMPOSITE_COPY, device, OPACITY_OPAQUE, dstRect.x(), dstRect.y(), sw, sh);
+    p.setCompositeOp(COMPOSITE_COPY);
+    p.bitBlt(sx, sy, device, dstRect.x(), dstRect.y(), sw, sh);
 
     int count = cs->channelCount();
     KisRectIterator cit = canvas->createRectIterator(sx, sy, sw, sh);

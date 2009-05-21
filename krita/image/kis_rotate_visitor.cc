@@ -72,7 +72,8 @@ void KisRotateVisitor::rotate(double angle, QPointF centerOfRotation, KoUpdater 
     QRect r = rotated->extent();
 
     // OVER ipv COPY
-    p.bitBlt(r.x(), r.y(), COMPOSITE_OVER, rotated, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
+    
+    p.bitBlt(r.x(), r.y(), rotated, r.x(), r.y(), r.width(), r.height());
     p.end();
 }
 
@@ -94,35 +95,15 @@ void KisRotateVisitor::shear(double angleX, double angleY, KoUpdater *progress)
 
 
     KisPaintDeviceSP sheared;
-#if 0
-    if (m_dev->hasSelection()) {
-        sheared = new KisPaintDevice(m_dev->colorSpace());
-        KisPainter p1(sheared);
-        p1.bltSelection(r.x(), r.y(), COMPOSITE_OVER, m_dev, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
-        p1.end();
-        sheared = xShear(sheared, shearX);
-    } else {
-#endif
-        sheared = xShear(m_dev, shearX);
-#if 0
-    }
-#endif
+    sheared = xShear(m_dev, shearX);
 
     sheared = yShear(sheared, shearY);
-#if 0
-    if (!m_dev->hasSelection()) {
-#endif
-        m_dev->clear();
-#if 0
-    } else {
-        // Clear selected pixels
-        m_dev->clearSelection();
-    }
-#endif
+    m_dev->clear();
+
     KisPainter p2(m_dev);
     r = sheared->extent();
 
-    p2.bitBlt(r.x(), r.y(), COMPOSITE_OVER, sheared, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
+    p2.bitBlt(r.x(), r.y(), sheared, r.x(), r.y(), r.width(), r.height());
     p2.end();
 
     m_progressUpdater->setProgress( m_progressUpdater->maximum() );

@@ -88,7 +88,8 @@ void KisSmallTilesFilter::process(KisConstProcessingInformation srcInfo,
     if (srcInfo.selection()) {
         KisPaintDeviceSP tmp = new KisPaintDevice(src->colorSpace());
         KisPainter gc(tmp);
-        gc.bltSelection(0, 0, COMPOSITE_COPY, src, OPACITY_OPAQUE, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
+        gc.setCompositeOp(COMPOSITE_COPY);
+        gc.bitBlt(0, 0, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         tile = tmp->createThumbnailDevice(srcRect.width() / numberOfTiles, srcRect.height() / numberOfTiles);
     } else {
         tile = src->createThumbnailDevice(srcRect.width() / numberOfTiles, srcRect.height() / numberOfTiles);
@@ -100,17 +101,14 @@ void KisSmallTilesFilter::process(KisConstProcessingInformation srcInfo,
     if (progressUpdater) {
         progressUpdater->setRange(0, numberOfTiles);
     }
-
+    
+    if (srcInfo.selection()) {
+        gc.setSelection(srcInfo.selection());
+    }
+    
     for (uint y = 0; y < numberOfTiles; ++y) {
         for (uint x = 0; x < numberOfTiles; ++x) {
-            // XXX make composite op and opacity configurable
-            if (srcInfo.selection()) {
-                gc.bltSelection(w * x, h * y, COMPOSITE_OVER, tile, srcInfo.selection(), OPACITY_OPAQUE,
-                                0, 0, w, h);
-            }
-            else {
-                gc.bitBlt(w * x, h * y, COMPOSITE_OVER, tile, OPACITY_OPAQUE, 0, 0, w, h);
-            }
+            gc.bitBlt(w * x, h * y, tile, 0, 0, w, h);
         }
         if (progressUpdater) progressUpdater->setValue(y);
     }

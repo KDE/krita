@@ -149,7 +149,10 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
         brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
     }
 
-    painter()->bltSelection(dstRect.x(), dstRect.y(), COMPOSITE_ERASE, dab, painter()->opacity(), sx, sy, sw, sh);
+    const KoCompositeOp* op = painter()->compositeOp();
+    painter()->setCompositeOp(COMPOSITE_ERASE);
+    painter()->bitBlt(dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);
+    painter()->setCompositeOp(op);
 
     painter()->setOpacity(origOpacity);
 

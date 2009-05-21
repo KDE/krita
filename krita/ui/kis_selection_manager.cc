@@ -419,7 +419,8 @@ void KisSelectionManager::copy()
         // Copy image data
         KisPainter gc;
         gc.begin(clip);
-        gc.bitBlt(0, 0, COMPOSITE_COPY, dev, r.x(), r.y(), r.width(), r.height());
+        gc.setCompositeOp(COMPOSITE_COPY);
+        gc.bitBlt(0, 0, dev, r.x(), r.y(), r.width(), r.height());
         gc.end();
 
         if (selection) {
@@ -464,7 +465,8 @@ void KisSelectionManager::paste()
         QRect r = clip->exactBounds();
         KisPainter gc;
         gc.begin(layer->paintDevice());
-        gc.bitBlt(0, 0, COMPOSITE_COPY, clip, r.x(), r.y(), r.width(), r.height());
+        gc.setCompositeOp(COMPOSITE_COPY);
+        gc.bitBlt(0, 0, clip, r.x(), r.y(), r.width(), r.height());
         gc.end();
 
         //figure out where to position the clip
@@ -522,7 +524,8 @@ void KisSelectionManager::pasteNew()
     KisPaintLayerSP layer = new KisPaintLayer(img.data(), clip->objectName(), OPACITY_OPAQUE, clip->colorSpace());
 
     KisPainter p(layer->paintDevice());
-    p.bitBlt(0, 0, COMPOSITE_COPY, clip, OPACITY_OPAQUE, r.x(), r.y(), r.width(), r.height());
+    p.setCompositeOp(COMPOSITE_COPY);
+    p.bitBlt(0, 0, clip, r.x(), r.y(), r.width(), r.height());
     p.end();
 
     img->addNode(layer.data(), img->rootLayer());
@@ -631,10 +634,10 @@ void KisSelectionManager::fill(const KoColor& color, bool fillWithPattern, const
     painter.end();
 
     KisPainter painter2(dev, selection);
-
+    
     if (img->undo()) painter2.beginTransaction(transactionText);
-    painter2.bltSelection(0, 0, COMPOSITE_OVER, filled, OPACITY_OPAQUE,
-                          0, 0, img->width(), img->height());
+    
+    painter2.bitBlt(0, 0, filled, 0, 0, img->width(), img->height());
 
     dev->setDirty();
 

@@ -175,7 +175,8 @@ void KisAutoContrast::process(KisConstProcessingInformation srcInfo,
     KisSelectionSP dstSel;
     if (dst != src) {
         KisPainter gc(dst, dstInfo.selection());
-        gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), COMPOSITE_COPY, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
+        gc.setCompositeOp(COMPOSITE_COPY);
+        gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
         gc.end();
     }
 

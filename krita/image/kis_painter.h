@@ -110,7 +110,6 @@ public:
     /// Return the current transcation
     KisTransaction  * transaction();
 
-
     /// Returns the current paint device.
     const KisPaintDeviceSP device() const;
     KisPaintDeviceSP device();
@@ -121,16 +120,13 @@ public:
      * @param dy the destination y-coordinate
      * @param op a pointer to the composite op use to blast the pixels from src on dst
      * @param src the source device
-     * @param opacity the opacity of the source pixel
      * @param sx the source x-coordinate
      * @param sy the source y-coordinate
      * @param sw the width of the region
      * @param sh the height of the region
      */
     void bitBlt(qint32 dx, qint32 dy,
-                const KoCompositeOp* op,
                 const KisPaintDeviceSP src,
-                quint8 opacity,
                 qint32 sx, qint32 sy,
                 qint32 sw, qint32 sh);
 
@@ -139,151 +135,6 @@ public:
      * in the painter. If nothing is set, opaque and OVER are assumed.
      */
     void bitBlt(const QPoint & pos, const KisPaintDeviceSP src, const QRect & srcRect);
-
-    /**
-     * Overloaded function of the previous which differs that you can pass the composite op using
-     * the name
-     * @param dx the destination x-coordinate
-     * @param dy the destination y-coordinate
-     * @param op the name of composite op use to blast the pixels from src on dst
-     * @param src the source device
-     * @param opacity the opacity of the source pixel
-     * @param sx the source x-coordinate
-     * @param sy the source y-coordinate
-     * @param sw the width of the region
-     * @param sh the height of the region
-     */
-    void bitBlt(qint32 dx, qint32 dy,
-                const QString & op,
-                const KisPaintDeviceSP src,
-                quint8 opacity,
-                qint32 sx, qint32 sy,
-                qint32 sw, qint32 sh);
-    /**
-     * Overloaded version of the previous, differs in that the opacity is forced to OPACITY_OPAQUE
-     * @param dx the destination x-coordinate
-     * @param dy the destination y-coordinate
-     * @param op a pointer to the composite op use to blast the pixels from src on dst
-     * @param src the source device
-     * @param sx the source x-coordinate
-     * @param sy the source y-coordinate
-     * @param sw the width of the region
-     * @param sh the height of the region
-     */
-    void bitBlt(qint32 dx, qint32 dy,
-                const KoCompositeOp* op,
-                const KisPaintDeviceSP src,
-                qint32 sx, qint32 sy,
-                qint32 sw, qint32 sh);
-
-    /**
-     * Overloaded function of the previous which differs that you can pass the composite op using
-     * the name and the opacity is forced to OPACITY_OPAQUE
-     * @param dx the destination x-coordinate
-     * @param dy the destination y-coordinate
-     * @param op the name of composite op use to blast the pixels from src on dst
-     * @param src the source device
-     * @param sx the source x-coordinate
-     * @param sy the source y-coordinate
-     * @param sw the width of the region
-     * @param sh the height of the region
-     */
-    inline void bitBlt(qint32 dx, qint32 dy,
-                       const QString & op,
-                       const KisPaintDeviceSP src,
-                       qint32 sx, qint32 sy,
-                       qint32 sw, qint32 sh) {
-        bitBlt(dx, dy, op, src, OPACITY_OPAQUE, sx, sy, sw, sh);
-    }
-
-    /**
-     * Overloaded function of the previous that take a KisSelection instead of a KisPaintDevice.
-     * @param dx the destination x-coordinate
-     * @param dy the destination y-coordinate
-     * @param op a pointer to the composite op use to blast the pixels from src on dst
-     * @param src the source device
-     * @param selMask the mask
-     * @param opacity the opacity of the source pixel
-     * @param sx the source x-coordinate
-     * @param sy the source y-coordinate
-     * @param sw the width of the region
-     * @param sh the height of the region
-     */
-    void bltSelection(qint32 dx, qint32 dy,
-                      const KoCompositeOp  *op,
-                      const KisPaintDeviceSP src,
-                      const KisSelectionSP seldev,
-                      quint8 opacity,
-                      qint32 sx, qint32 sy,
-                      qint32 sw, qint32 sh);
-
-    /**
-     * Convenience method that uses the opacity and composite op set
-     * in the painter. If noting is set, opaque and OVER are assumed.
-     */
-    void bltSelection(const QPoint & pos, const KisPaintDeviceSP src, const KisSelectionSP selDev, const QRect & srcRect);
-
-    /**
-     * Overloaded function of the previous that takes a KisSelection
-     * instead of a KisPaintDevice and you can pass the composite op
-     * using the name.
-     *
-     * @param dx the destination x-coordinate
-     * @param dy the destination y-coordinate
-     * @param op the name of the composite op use to blast the pixels from src on dst
-     * @param src the source device
-     * @param selMask the mask
-     * @param opacity the opacity of the source pixel
-     * @param sx the source x-coordinate
-     * @param sy the source y-coordinate
-     * @param sw the width of the region
-     * @param sh the height of the region
-     */
-    void bltSelection(qint32 dx, qint32 dy,
-                      const QString & op,
-                      const KisPaintDeviceSP src,
-                      const KisSelectionSP selMask,
-                      quint8 opacity,
-                      qint32 sx, qint32 sy,
-                      qint32 sw, qint32 sh);
-
-    /**
-     * A version of bitBlt that renders using the src device's selection mask, if it has one.
-     * @param dx the destination x-coordinate
-     * @param dy the destination y-coordinate
-     * @param op a pointer to the composite op use to blast the pixels from src on dst
-     * @param src the source device
-     * @param opacity the opacity of the source pixel
-     * @param sx the source x-coordinate
-     * @param sy the source y-coordinate
-     * @param sw the width of the region
-     * @param sh the height of the region
-     */
-    void bltSelection(qint32 dx, qint32 dy,
-                      const KoCompositeOp *op,
-                      const KisPaintDeviceSP srcdev,
-                      quint8 opacity,
-                      qint32 sx, qint32 sy,
-                      qint32 sw, qint32 sh);
-
-    /**
-     * Overloaded function of the previous that takes the name of the composite op using the name
-     * @param dx the destination x-coordinate
-     * @param dy the destination y-coordinate
-     * @param op the name of the composite op use to blast the pixels from src on dst
-     * @param src the source device
-     * @param opacity the opacity of the source pixel
-     * @param sx the source x-coordinate
-     * @param sy the source y-coordinate
-     * @param sw the width of the region
-     * @param sh the height of the region
-     */
-    void bltSelection(qint32 dx, qint32 dy,
-                      const QString & op,
-                      const KisPaintDeviceSP src,
-                      quint8 opacity,
-                      qint32 sx, qint32 sy,
-                      qint32 sw, qint32 sh);
 
     /**
      * The methods below are 'higher' level than the above methods. They need brushes, colors
@@ -446,7 +297,7 @@ public:
      */
     void setChannelFlags(QBitArray channelFlags);
 
-
+    /// @return the channel flags
     QBitArray channelFlags();
 
     /**
@@ -540,6 +391,7 @@ public:
 
     /// Set the opacity which is used in painting (like filling polygons)
     void setOpacity(quint8 opacity);
+    
     /// Returns the opacity that is used in painting
     quint8 opacity() const;
 
@@ -553,6 +405,10 @@ public:
     void setCompositeOp(const KoCompositeOp * op);
     const KoCompositeOp * compositeOp();
 
+    /// Set the composite op for this painter by string.
+    /// Note: the colorspace must be set previously!
+    void setCompositeOp(const QString& op);
+    
     /**
      * Add the r to the current dirty rect, and return the dirtyRegion after adding r to it.
      */
@@ -597,6 +453,7 @@ private:
 
 protected:
     KoUpdater * progressUpdater();
+
 private:
 
     struct Private;

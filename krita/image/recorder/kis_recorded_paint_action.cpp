@@ -164,16 +164,14 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
     if (!d->paintIncremental) {
         KisPainter painter2(node->paintDevice());
         painter2.setCompositeOp(d->compositeOp);
+        painter2.setOpacity(d->opacity);
+        
         QRegion r = painter.dirtyRegion();
         QVector<QRect> dirtyRects = r.rects();
         QVector<QRect>::iterator it = dirtyRects.begin();
         QVector<QRect>::iterator end = dirtyRects.end();
         while (it != end) {
-
-            painter2.bitBlt(it->x(), it->y(), d->compositeOp, target,
-                            d->opacity,
-                            it->x(), it->y(),
-                            it->width(), it->height());
+            painter2.bitBlt(it->topLeft(), target, *it);
             ++it;
         }
 

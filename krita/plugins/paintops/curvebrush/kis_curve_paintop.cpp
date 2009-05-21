@@ -87,13 +87,7 @@ double KisCurvePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaint
 
     QRect rc = dab->extent();
 
-    painter()->bltSelection(
-        rc.x(), rc.y(),
-        painter()->compositeOp(),
-        dab,
-        painter()->opacity(),
-        rc.x(), rc.y(),
-        rc.width(), rc.height());
+    painter()->bitBlt(rc.topLeft(), dab, rc);
 
     KisVector2D end = toKisVector2D(pi2.pos());
     KisVector2D start = toKisVector2D(pi1.pos());

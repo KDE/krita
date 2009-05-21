@@ -340,10 +340,13 @@ void KisToolFreehand::endPaint()
             QVector<QRect>::iterator it = dirtyRects.begin();
             QVector<QRect>::iterator end = dirtyRects.end();
 
+            painter.setCompositeOp(m_compositeOp);
+            painter.setOpacity(m_opacity);
+            
             while (it != end) {
-
-                painter.bitBlt(it->x(), it->y(), m_compositeOp, m_target,
-                               m_opacity,
+                
+                painter.bitBlt(it->x(), it->y(), 
+                               m_target,
                                it->x(), it->y(),
                                it->width(), it->height());
                 ++it;

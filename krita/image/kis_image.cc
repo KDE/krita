@@ -718,7 +718,8 @@ void KisImage::flatten()
     QRect rc = mergedImage()->extent();
 
     KisPainter gc(dst->paintDevice());
-    gc.bitBlt(rc.x(), rc.y(), COMPOSITE_COPY, mergedImage(), OPACITY_OPAQUE, rc.left(), rc.top(), rc.width(), rc.height());
+    gc.setCompositeOp(COMPOSITE_COPY);
+    gc.bitBlt(rc.x(), rc.y(), mergedImage(), rc.left(), rc.top(), rc.width(), rc.height());
 
     setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE));
 

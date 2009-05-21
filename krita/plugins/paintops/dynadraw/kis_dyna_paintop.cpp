@@ -85,11 +85,9 @@ double KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
 
     QRect rc = dab->extent();
 
-    painter()->bltSelection(
+    painter()->bitBlt(
         rc.x(), rc.y(),
-        painter()->compositeOp(),
         dab,
-        painter()->opacity(),
         rc.x(), rc.y(),
         rc.width(), rc.height());
 

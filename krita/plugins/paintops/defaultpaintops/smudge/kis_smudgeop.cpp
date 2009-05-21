@@ -115,7 +115,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
 
     KisPaintDeviceSP dab = KisPaintDeviceSP(0);
 
-    quint8 origOpacity = settings->m_optionsWidget->m_opacityOption->apply(painter(), info.pressure());
+    //quint8 origOpacity = settings->m_optionsWidget->m_opacityOption->apply(painter(), info.pressure());
 
     double scale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());
 
@@ -162,7 +162,8 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     }
 
     KisPainter copyPainter(m_srcdev);
-    copyPainter.bitBlt(0, 0, COMPOSITE_OVER, device, opacity, pt.x(), pt.y(), sw, sh);
+    copyPainter.setOpacity(opacity);
+    copyPainter.bitBlt(0, 0, device, pt.x(), pt.y(), sw, sh);
     copyPainter.end();
 
     m_target = new KisPaintDevice(device->colorSpace());
@@ -170,11 +171,15 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     // Looks hacky, but we lost bltMask, or the ability to easily convert alpha8 paintdev to selection?
     KisSelectionSP dabAsSelection = new KisSelection();
     copyPainter.begin(dabAsSelection);
-    copyPainter.bitBlt(0, 0, COMPOSITE_COPY, dab, OPACITY_OPAQUE, 0, 0, sw, sh);
+    copyPainter.setOpacity(OPACITY_OPAQUE);
+    copyPainter.setCompositeOp(COMPOSITE_COPY);
+    copyPainter.bitBlt(0, 0, dab, 0, 0, sw, sh);
     copyPainter.end();
 
     copyPainter.begin(m_target);
-    copyPainter.bltSelection(0, 0, COMPOSITE_OVER, m_srcdev, dabAsSelection, OPACITY_OPAQUE, 0, 0, sw, sh);
+    copyPainter.setCompositeOp(COMPOSITE_OVER);
+    copyPainter.setSelection(dabAsSelection);
+    copyPainter.bitBlt(0, 0, m_srcdev, 0, 0, sw, sh);
     copyPainter.end();
 
     qint32 sx = dstRect.x() - x;
@@ -182,7 +187,6 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     sw = dstRect.width();
     sh = dstRect.height();
 
-    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), m_target, painter()->opacity(), sx, sy, sw, sh);
+    painter()->bitBlt(dstRect.x(), dstRect.y(), m_target, sx, sy, sw, sh);
 
-    //painter()->setOpacity(origOpacity);
 }

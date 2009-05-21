@@ -147,7 +147,7 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
 
-    painter()->bltSelection(dstRect.x(), dstRect.y(), painter()->compositeOp(), dab, painter()->opacity(), sx, sy, sw, sh);
+    painter()->bitBlt(dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);
     painter()->setOpacity(origOpacity);
     painter()->setPaintColor(origColor);
 }

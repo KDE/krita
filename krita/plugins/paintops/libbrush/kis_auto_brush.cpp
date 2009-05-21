@@ -112,7 +112,7 @@ void KisAutoBrush::generateMask(KisPaintDeviceSP dst,
     }
 
     dst->writeBytes(dabData, 0, 0, dstWidth, dstHeight);
-    delete dabData;
+    delete[] dabData;
 
 }
 

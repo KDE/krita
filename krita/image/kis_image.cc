@@ -265,7 +265,6 @@ KisBackgroundSP KisImage::backgroundPattern() const
 
 void KisImage::setBackgroundPattern(KisBackgroundSP background)
 {
-    qDebug() << "setBackgroundPattern() " << background << ", current " << m_d->backgroundPattern;
     if (background != m_d->backgroundPattern) {
         m_d->backgroundPattern = background;
         emit sigImageUpdated(bounds());

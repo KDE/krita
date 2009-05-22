@@ -71,7 +71,6 @@
 class KisImage::KisImagePrivate
 {
 public:
-    KoColor backgroundColor;
     KisPaintDeviceSP backgroundPattern;
     quint32 lockCount;
     bool sizeChangedWhileLocked;
@@ -258,17 +257,6 @@ void KisImage::setDeleselectedGlobalSelection(KisSelectionSP selection)
     m_d->deselectedGlobalSelection = selection;
 }
 
-
-KoColor KisImage::backgroundColor() const
-{
-    return m_d->backgroundColor;
-}
-
-void KisImage::setBackgroundColor(const KoColor & color)
-{
-    m_d->backgroundColor = color;
-}
-
 KisPaintDeviceSP KisImage::backgroundPattern() const
 {
     return m_d->backgroundPattern;
@@ -303,7 +291,6 @@ void KisImage::init(KisUndoAdapter *adapter, qint32 width, qint32 height, const 
         colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     }
 
-    m_d->backgroundColor = KoColor(Qt::white, colorSpace);
     m_d->lockCount = 0;
     m_d->sizeChangedWhileLocked = false;
     m_d->perspectiveGrid = 0;

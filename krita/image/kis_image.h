@@ -140,9 +140,6 @@ public:
      */
     bool locked() const;
 
-    KoColor backgroundColor() const;
-    void setBackgroundColor(const KoColor & color);
-
     /**
      * @return the image that is used as background tile.
      */

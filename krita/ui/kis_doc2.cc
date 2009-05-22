@@ -436,7 +436,6 @@ bool KisDoc2::newImage(const QString& name, qint32 width, qint32 height, const K
     for (int i = 0; i < actions.count(); i++)
         actions.at(i)->act(layer->paintDevice(), img->width(), img->height());
 
-    img->setBackgroundColor(bgColor);
     img->addNode(layer.data(), img->rootLayer().data());
 
     setCurrentImage(img);

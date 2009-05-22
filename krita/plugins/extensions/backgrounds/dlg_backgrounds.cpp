@@ -26,6 +26,7 @@
 #include <kis_view2.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
+#include <kis_background.h>
 
 DlgBackgrounds::DlgBackgrounds(KisView2* view)
         : KDialog(view)
@@ -46,14 +47,18 @@ DlgBackgrounds::~DlgBackgrounds()
 {
 }
 
-KisPaintDeviceSP DlgBackgrounds::background()
+KisBackgroundSP DlgBackgrounds::background()
 {
-    QImage img = m_page->lstBackgrounds->currentItem()->data(Qt::DecorationRole).value<QImage>();
-    KisPaintDeviceSP dev = new KisPaintDevice(m_view->image()->colorSpace());
-    dev->convertFromQImage(img, "");
-    return dev;
+    QListWidgetItem* item = m_page->lstBackgrounds->currentItem();
+    QString file = item->data(Qt::UserRole + 1).value<QString>();
+    if (file.isEmpty()) {
+        return 0;
+    }
+    else {
+        QImage img = item->data(Qt::DecorationRole).value<QImage>();
+        return new KisBackground(img);
+    }
 }
-
 
 void DlgBackgrounds::applyClicked()
 {

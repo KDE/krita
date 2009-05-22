@@ -44,6 +44,7 @@
 #include "recorder/kis_action_recorder.h"
 #include "kis_adjustment_layer.h"
 #include "kis_annotation.h"
+#include "kis_background.h"
 #include "kis_change_profile_visitor.h"
 #include "kis_colorspace_convert_visitor.h"
 #include "kis_count_visitor.h"
@@ -71,7 +72,7 @@
 class KisImage::KisImagePrivate
 {
 public:
-    KisPaintDeviceSP backgroundPattern;
+    KisBackgroundSP  backgroundPattern;
     quint32 lockCount;
     bool sizeChangedWhileLocked;
     KisPerspectiveGrid* perspectiveGrid;
@@ -257,16 +258,17 @@ void KisImage::setDeleselectedGlobalSelection(KisSelectionSP selection)
     m_d->deselectedGlobalSelection = selection;
 }
 
-KisPaintDeviceSP KisImage::backgroundPattern() const
+KisBackgroundSP KisImage::backgroundPattern() const
 {
     return m_d->backgroundPattern;
 }
 
-void KisImage::setBackgroundPattern(KisPaintDeviceSP image)
+void KisImage::setBackgroundPattern(KisBackgroundSP background)
 {
-    if (image != m_d->backgroundPattern) {
-        m_d->backgroundPattern = image;
-        m_d->rootLayer->setDirty();
+    qDebug() << "setBackgroundPattern() " << background << ", current " << m_d->backgroundPattern;
+    if (background != m_d->backgroundPattern) {
+        m_d->backgroundPattern = background;
+        emit sigImageUpdated(bounds());
     }
 }
 
@@ -827,8 +829,10 @@ QImage KisImage::convertToQImage(qint32 x,
     if (!dev) return QImage();
     QImage img = dev->convertToQImage(const_cast<KoColorProfile*>(profile), x, y, w, h);
 
+    if (m_d->backgroundPattern) {
+        m_d->backgroundPattern->paintBackground(img, QRect(x, y, w, h));
+    }
     if (!img.isNull()) {
-
 #ifdef WORDS_BIGENDIAN
         uchar * data = img.bits();
         for (int i = 0; i < w * h; ++i) {
@@ -851,82 +855,6 @@ QImage KisImage::convertToQImage(qint32 x,
     return QImage();
 }
 
-
-QImage KisImage::convertToQImage(const QRect& r, const double xScale, const double yScale, const KoColorProfile *profile, KisSelectionSP mask)
-{
-    Q_UNUSED(mask);
-
-    qDebug() << "KisImage::convertToQimage " << r << ", x scale " << xScale << ", y scale " << yScale;
-
-#ifdef __GNUC__
-#warning "KisImage::convertToQImage: Implement direct rendering of current mask onto scaled image pixels"
-#endif
-
-    if (r.isEmpty()) {
-        return QImage();
-    }
-
-    quint32 pixelSize = colorSpace()->pixelSize();
-
-    QRect srcRect;
-
-    srcRect.setLeft(static_cast<int>(r.left() * xScale));
-    srcRect.setRight(static_cast<int>(ceil((r.right() + 1) * xScale)) - 1);
-    srcRect.setTop(static_cast<int>(r.top() * yScale));
-    srcRect.setBottom(static_cast<int>(ceil((r.bottom() + 1) * yScale)) - 1);
-
-    KisPaintDeviceSP mergedImage = m_d->rootLayer->projection();
-
-    quint8 *scaledImageData = new quint8[r.width() * r.height() * pixelSize];
-
-    quint8 *imageRow = new quint8[srcRect.width() * pixelSize];
-    const qint32 imageRowX = srcRect.x();
-
-    for (qint32 y = 0; y < r.height(); ++y) {
-
-        qint32 dstY = r.y() + y;
-        qint32 dstX = r.x();
-        qint32 srcY = int(dstY * yScale);
-
-        mergedImage->readBytes(imageRow, imageRowX, srcY, srcRect.width(), 1);
-
-        quint8 *dstPixel = scaledImageData + (y * r.width() * pixelSize);
-        quint32 columnsRemaining = r.width();
-
-        while (columnsRemaining > 0) {
-
-            qint32 srcX = int(dstX * xScale);
-
-            memcpy(dstPixel, imageRow + ((srcX - imageRowX) * pixelSize), pixelSize);
-
-            ++dstX;
-            dstPixel += pixelSize;
-            --columnsRemaining;
-        }
-    }
-
-    delete [] imageRow;
-
-    QImage image = colorSpace()->convertToQImage(scaledImageData, r.width(), r.height(), const_cast<KoColorProfile*>(profile), KoColorConversionTransformation::IntentPerceptual);
-    delete [] scaledImageData;
-
-#ifdef WORDS_BIGENDIAN
-    uchar * data = image.bits();
-    for (int i = 0; i < image.width() * image.height(); ++i) {
-        uchar r, g, b, a;
-        a = data[0];
-        b = data[1];
-        g = data[2];
-        r = data[3];
-        data[0] = r;
-        data[1] = g;
-        data[2] = b;
-        data[3] = a;
-        data += 4;
-    }
-#endif
-    return image;
-}
 
 
 QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, const KoColorProfile *profile)
@@ -986,6 +914,10 @@ QImage KisImage::convertToQImage(const QRect& r, const QSize& scaledImageSize, c
     delete [] imageRow;
 
     QImage image = colorSpace()->convertToQImage(scaledImageData, r.width(), r.height(), const_cast<KoColorProfile*>(profile), KoColorConversionTransformation::IntentPerceptual);
+
+    if (m_d->backgroundPattern) {
+        m_d->backgroundPattern->paintBackground(image, r, scaledImageSize, QSize(imageWidth, imageHeight));
+    }
 
     delete [] scaledImageData;
 

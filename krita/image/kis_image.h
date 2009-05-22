@@ -98,27 +98,6 @@ public:
                            qint32 height,
                            const KoColorProfile * profile);
 
-    /**
-     * Render the projection scaled onto a QImage. Use this when zoom
-     * < 100% to avoid color-adjusting pixels that will be filtered
-     * away anyway. It uses nearest-neighbour sampling, so the result
-     * is inaccurate and ugly. Set the option "fast_zoom" to true to
-     * make Krita use this.
-     *
-     * XXX: Implement the mask option to draw the mask onto the
-     * scaled image.
-     *
-     * @param r the source rectangle in pixels that needs to be drawn
-     * @param xScale the X axis scale (1.0 == 100%)
-     * @param yScale the Y axis scale (1.0 == 100%)
-     * @param projection the display profile
-     * @param mask the mask that will be rendered on top of the image
-     * @return a qimage containing the sampled image pixels
-     */
-    QImage convertToQImage(const QRect& r,
-                           const double xScale, const double yScale,
-                           const KoColorProfile *profile,
-                           KisSelectionSP mask = 0);
 
     QImage convertToQImage(const QRect& r, const QSize& scaledImageSize, const KoColorProfile *profile);
 
@@ -143,12 +122,12 @@ public:
     /**
      * @return the image that is used as background tile.
      */
-    KisPaintDeviceSP backgroundPattern() const;
+    KisBackgroundSP backgroundPattern() const;
 
     /**
      * Set a 64x64 tile for the background of the image.
      */
-    void setBackgroundPattern(KisPaintDeviceSP image);
+    void setBackgroundPattern(KisBackgroundSP image);
 
     /**
      * @return the global selection object or 0 if there is none. The

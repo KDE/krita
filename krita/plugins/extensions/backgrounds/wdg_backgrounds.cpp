@@ -18,14 +18,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "wdg_backgrounds.h"
-#include <kstandarddirs.h>
-#include <kcomponentdata.h>
-#include "kis_factory2.h"
 
+#include <QPainter>
 #include <QStringList>
 #include <QImage>
 #include <QListWidgetItem>
 #include <QDebug>
+
+#include <kstandarddirs.h>
+#include <kcomponentdata.h>
+
+#include "kis_factory2.h"
+#include "kis_config.h"
 
 WdgBackgrounds::WdgBackgrounds(QWidget* parent)
     : QWidget(parent)
@@ -35,12 +39,27 @@ WdgBackgrounds::WdgBackgrounds(QWidget* parent)
     QStringList backgroundFileNames =
             KisFactory2::componentData().dirs()->findAllResources("kis_backgrounds", "*.png");
 
+    KisConfig cfg;
+    QImage none(QSize(64,64), QImage::Format_RGB32);
+    QPainter pt(&none);
+    pt.fillRect(none.rect(), Qt::white);
+    pt.fillRect(0, 0, 32, 32, cfg.checkersColor());
+    pt.fillRect(32, 32, 32, 32, cfg.checkersColor());
+    pt.end();
+
+    QListWidgetItem* noneItem = new QListWidgetItem(lstBackgrounds);
+    noneItem->setData(Qt::DecorationRole, none);
+    noneItem->setData(Qt::UserRole + 1, "none");
+
     foreach(QString fileName, backgroundFileNames) {
         QImage img = QImage(fileName).copy(0, 0, 64, 64);
         QListWidgetItem* item = new QListWidgetItem(lstBackgrounds);
         //item->setData(Qt::DisplayRole, fileName);
         item->setData(Qt::DecorationRole, img);
+        item->setData(Qt::UserRole + 1, fileName);
     }
+
+    lblName->setVisible( false );
 
     bnAdd->setVisible( false );
     bnAdd->setIcon( SmallIcon( "list-add" ) );

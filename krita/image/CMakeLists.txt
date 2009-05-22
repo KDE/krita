@@ -88,6 +88,7 @@ set(kritaimage_LIB_SRCS
    generator/kis_generator_layer.cpp
    generator/kis_generator_registry.cpp
    kis_adjustment_layer.cc
+   kis_background.cpp
    kis_base_node.cpp
    kis_base_processor.cpp
    kis_basic_math_toolbox.cpp

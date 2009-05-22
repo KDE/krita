@@ -41,7 +41,7 @@ public:
     DlgBackgrounds(KisView2* view);
     ~DlgBackgrounds();
 
-    KisPaintDeviceSP background();
+    KisBackgroundSP background();
 
 private slots:
 

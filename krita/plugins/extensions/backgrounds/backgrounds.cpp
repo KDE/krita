@@ -34,7 +34,7 @@
 #include <kis_view2.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
-
+#include <kis_background.h>
 #include "dlg_backgrounds.h"
 
 typedef KGenericFactory<Backgrounds> BackgroundsFactory;

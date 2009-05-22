@@ -7,3 +7,4 @@
 * integrate with image properties
 * loading/saving of KisImage
 * set pattern on double click
+* allow non 64x64 pattern tiles

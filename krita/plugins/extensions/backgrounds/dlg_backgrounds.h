@@ -22,8 +22,11 @@
 
 #include <kdialog.h>
 
-class KisView2;
+#include <kis_types.h>
+
 #include "wdg_backgrounds.h"
+
+class KisView2;
 /**
  * This dialog allows the user to create a selection mask based
  * on a (range of) colors.
@@ -37,6 +40,8 @@ public:
 
     DlgBackgrounds(KisView2* view);
     ~DlgBackgrounds();
+
+    KisPaintDeviceSP background();
 
 private slots:
 

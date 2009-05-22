@@ -32,6 +32,8 @@
 #include <kis_config.h>
 #include <kis_types.h>
 #include <kis_view2.h>
+#include <kis_image.h>
+#include <kis_paint_device.h>
 
 #include "dlg_backgrounds.h"
 
@@ -67,7 +69,7 @@ void Backgrounds::slotBackgrounds()
     Q_CHECK_PTR(dlgBackgrounds);
 
     if (dlgBackgrounds->exec() == QDialog::Accepted) {
-        //m_view->setBackgroundImage();
+        m_view->image()->setBackgroundPattern(dlgBackgrounds->background());
     }
 
     delete dlgBackgrounds;

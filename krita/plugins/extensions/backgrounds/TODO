@@ -3,3 +3,6 @@
 * add solid-color background patterns and use a categorized view for them
 * add a custom-color background pattern
 * add lots of nice patters (copy from MyPaint?)
+* integrate with custom image widget
+* integrate with image properties
+* loading/saving of KisImage

@@ -72,6 +72,7 @@ class KisImage::KisImagePrivate
 {
 public:
     KoColor backgroundColor;
+    KisPaintDeviceSP backgroundPattern;
     quint32 lockCount;
     bool sizeChangedWhileLocked;
     KisPerspectiveGrid* perspectiveGrid;
@@ -268,6 +269,18 @@ void KisImage::setBackgroundColor(const KoColor & color)
     m_d->backgroundColor = color;
 }
 
+KisPaintDeviceSP KisImage::backgroundPattern() const
+{
+    return m_d->backgroundPattern;
+}
+
+void KisImage::setBackgroundPattern(KisPaintDeviceSP image)
+{
+    if (image != m_d->backgroundPattern) {
+        m_d->backgroundPattern = image;
+        m_d->rootLayer->setDirty();
+    }
+}
 
 QString KisImage::nextLayerName() const
 {

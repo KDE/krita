@@ -144,6 +144,16 @@ public:
     void setBackgroundColor(const KoColor & color);
 
     /**
+     * @return the image that is used as background tile.
+     */
+    KisPaintDeviceSP backgroundPattern() const;
+
+    /**
+     * Set a 64x64 tile for the background of the image.
+     */
+    void setBackgroundPattern(KisPaintDeviceSP image);
+
+    /**
      * @return the global selection object or 0 if there is none. The
      * global selection is always read-write.
      */

@@ -20,13 +20,14 @@
 
 #include "widgets/kis_cmb_composite.h"
 
+#include <QItemDelegate>
+
 #include <klocale.h>
 #include <kis_debug.h>
 #include <KoCompositeOp.h>
 #include "../kis_composite_ops_model.h"
 #include <kis_composite_ops_categorized_model.h>
-#include <KCategorizedView>
-#include <KCategoryDrawer>
+#include <kis_categorized_item_delegate.h>
 
 KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
         : KComboBox(parent), m_lastModel(0), m_sortModel(0)
@@ -35,6 +36,7 @@ KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
     setEditable(false);
     connect(this, SIGNAL(activated(int)), this, SLOT(slotOpActivated(int)));
     connect(this, SIGNAL(highlighted(int)), this, SLOT(slotOpHighlighted(int)));
+    setItemDelegate(new KisCategorizedItemDelegate(new QItemDelegate));
 }
 
 KisCmbComposite::~KisCmbComposite()

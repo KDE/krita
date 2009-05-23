@@ -56,6 +56,7 @@
 
 
 #include "dlg_imagesize.h"
+#include "dlg_canvassize.h"
 #include "dlg_layersize.h"
 #include "kis_filter_strategy.h"
 
@@ -73,6 +74,10 @@ ImageSize::ImageSize(QObject *parent, const QStringList &)
         KAction *action  = new KAction(i18n("Scale To New Size..."), this);
         actionCollection()->addAction("imagesize", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotImageSize()));
+
+        action = new KAction(i18n("Size Canvas..."), this);
+        actionCollection()->addAction("canvassize", action);
+        connect(action, SIGNAL(triggered()), this, SLOT(slotCanvasSize()));
 
         action  = new KAction(i18n("Scale &Layer..."), this);
         actionCollection()->addAction("layersize", action);
@@ -119,6 +124,26 @@ void ImageSize::slotImageSize()
     }
 
     delete dlgImageSize;
+}
+
+void ImageSize::slotCanvasSize()
+{
+    KisImageSP image = m_view->image();
+
+    if (!image) return;
+
+    DlgCanvasSize * dlgCanvasSize = new DlgCanvasSize(m_view, image->width(), image->height());
+    Q_CHECK_PTR(dlgCanvasSize);
+
+    if (dlgCanvasSize->exec() == QDialog::Accepted) {
+        qint32 width = dlgCanvasSize->width();
+        qint32 height = dlgCanvasSize->height();
+        qint32 xOffset = dlgCanvasSize->xOffset();
+        qint32 yOffset = dlgCanvasSize->yOffset();
+
+        m_view->imageManager()->resizeCurrentImage(width, height, xOffset, yOffset);
+    }
+    delete dlgCanvasSize;
 }
 
 void ImageSize::slotLayerSize()

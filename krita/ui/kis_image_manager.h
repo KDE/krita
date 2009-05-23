@@ -56,6 +56,7 @@ public slots:
     qint32 importImage(const KUrl& url = KUrl());
 
     void resizeCurrentImage(qint32 w, qint32 h, bool cropLayers = false);
+    void resizeCurrentImage(qint32 w, qint32 h, qint32 xOffset, qint32 yOffset);
     void scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterStrategy);
     void rotateCurrentImage(double radians);
     void shearCurrentImage(double angleX, double angleY);

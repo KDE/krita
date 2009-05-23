@@ -114,6 +114,15 @@ void KisImageManager::resizeCurrentImage(qint32 w, qint32 h, bool cropLayers)
     m_view->layerManager()->layersUpdated();
 }
 
+void KisImageManager::resizeCurrentImage(qint32 w, qint32 h, qint32 xOffset, qint32 yOffset)
+{
+    if (!m_view->image()) return;
+
+    m_view->image()->resizeWithOffset(w, h, xOffset, yOffset);
+    m_view->image()->setModified();
+    m_view->layerManager()->layersUpdated();
+}
+
 void KisImageManager::scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterStrategy)
 {
     if (!m_view->image()) return;

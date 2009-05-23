@@ -194,6 +194,17 @@ public:
     void resize(const QRect& rc, bool cropLayers = false);
 
     /**
+     * Resize the image to the specified width and height. The previous
+     * image is offset by the amount specified.
+     *
+     * @param w the width of the image
+     * @param h the height of the image
+     * @param xOffset the horizontal offset of the previous image
+     * @param yOffset the vertical offset of the previous image
+     */
+    void resizeWithOffset(qint32 w, qint32 h, qint32 xOffset = 0, qint32 yOffset = 0);
+
+    /**
      * Execute a scale transform on all layers in this image.
      */
     void scale(double sx, double sy, KoUpdater *m_progress, KisFilterStrategy *filterStrategy);

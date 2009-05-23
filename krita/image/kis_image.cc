@@ -403,6 +403,31 @@ void KisImage::resize(qint32 w, qint32 h, qint32 x, qint32 y, bool cropLayers)
     }
 }
 
+void KisImage::resizeWithOffset(qint32 w, qint32 h, qint32 xOffset, qint32 yOffset)
+{
+    if (w == width() && h == height() && xOffset == 0 && yOffset == 0)
+      return;
+
+    lock();
+    if (undo()) {
+        m_d->adapter->beginMacro(i18n("Size Canvas"));
+        m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), true));
+        m_d->adapter->addCommand(new KisImageResizeCommand(KisImageSP(this), w, h, width(), height()));
+    }
+
+    KisCropVisitor v(QRect(-xOffset, -yOffset, w, h), m_d->adapter);
+    m_d->rootLayer->accept(v);
+
+    emitSizeChanged();
+
+    unlock();
+
+    if (undo()) {
+        m_d->adapter->addCommand(new KisImageLockCommand(KisImageSP(this), false));
+        m_d->adapter->endMacro();
+    }
+
+}
 
 void KisImage::emitSizeChanged()
 {

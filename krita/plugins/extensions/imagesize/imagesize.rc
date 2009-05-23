@@ -4,6 +4,7 @@
     <Menu name="Image"><text>Image</text>
 	<Action name="imagesize"/>
 	<Action name="imageresolution"/>
+	<Action name="canvassize"/>
     </Menu>
     <Menu name="Layer"><text>Layer</text>
 	<Action name="layersize"/>

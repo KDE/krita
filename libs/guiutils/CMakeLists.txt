@@ -96,6 +96,8 @@ install(
     koguiutils_export.h
     KoCharSelectDia.h
     KoContextHelp.h
+    KoCutController.h
+    KoCopyController.h
     KoDocumentSectionModel.h
     KoDocumentSectionView.h
     KoGeneralPropertyUi.h

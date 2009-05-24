@@ -90,7 +90,7 @@ QRectF KisBrushOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP image
     KisBrushSP brush = m_optionsWidget->m_brushOption->brush();
     QPointF hotSpot = brush->hotSpot(1.0, 1.0);
     return image->pixelToDocument(
-            QRectF(0,0, brush->width(), brush->height()).translated(-(hotSpot + QPointF(0.5, 0.5)) )
+            QRectF(0,0, brush->width() + 1, brush->height() + 1).translated(-(hotSpot + QPointF(0.5, 0.5)) )
         ).translated( pos );
 }
 

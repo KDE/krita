@@ -1,5 +1,8 @@
 [Desktop Entry]
 Name=Image Background Pattern Selector
+Name[pt]=Selector de Padrões de Fundo da Imagem
+Name[pt_BR]=Selector de Padrões de Fundo da Imagem
+Name[uk]=Інструмент вибору зображення візерунка тла
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritabackgrounds

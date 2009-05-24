@@ -42,6 +42,7 @@ public:
     QList<int> m_saveChanges;
     int m_changeId;
     bool m_enabled;
+    bool m_displayDeleted;
 };
 
 KoChangeTracker::KoChangeTracker(QObject *parent)
@@ -58,13 +59,22 @@ KoChangeTracker::~KoChangeTracker()
 
 void KoChangeTracker::setEnabled(bool enabled)
 {
-    kDebug() << "in change tracker enable: " << enabled;
     d->m_enabled = enabled;
 }
 
 bool KoChangeTracker::isEnabled()
 {
     return d->m_enabled;
+}
+
+void KoChangeTracker::setDisplayDeleted(bool enabled)
+{
+    d->m_displayDeleted = enabled;
+}
+
+bool KoChangeTracker::displayDeleted()
+{
+    return d->m_displayDeleted;
 }
 
 int KoChangeTracker::getFormatChangeId(QString title, QTextFormat &format, QTextFormat &prevFormat, int existingChangeId)
@@ -99,6 +109,25 @@ int KoChangeTracker::getInsertChangeId(QString title, int existingChangeId)
 
     changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate));
     changeElement->setCreator(QString("essai insert"));
+
+    changeElement->setEnabled(d->m_enabled);
+
+    d->m_changes.insert(d->m_changeId, changeElement);
+
+    return d->m_changeId++;
+}
+
+int KoChangeTracker::getDeleteChangeId(QString title, int existingChangeId)
+{
+    if ( existingChangeId ) {
+        d->m_childs.insert(existingChangeId, d->m_changeId);
+        d->m_parents.insert(d->m_changeId, existingChangeId);
+    }
+
+    KoChangeTrackerElement *changeElement = new KoChangeTrackerElement(title, KoGenChange::deleteChange);
+
+    changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate));
+    changeElement->setCreator(QString("essai delete"));
 
     changeElement->setEnabled(d->m_enabled);
 

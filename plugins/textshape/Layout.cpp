@@ -162,8 +162,15 @@ bool Layout::addLine(QTextLine &line)
                 while (!(m_fragmentIterator.atEnd() || m_fragmentIterator.fragment().contains(
                              m_block.position() + line.textStart() + line.textLength() - 1))) {
                     m_fragmentIterator++;
-                    height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
-                    objectHeight = qMax(objectHeight, inlineCharHeight(m_fragmentIterator.fragment()));
+                    if (!m_changeTracker
+                        || !m_changeTracker->isEnabled()
+                        || !m_changeTracker->containsInlineChanges(m_fragmentIterator.fragment().charFormat())
+                        || !m_changeTracker->elementById(m_fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
+                        || (m_changeTracker->elementById(m_fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::deleteChange)
+                        || m_changeTracker->displayDeleted()) {
+                        height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
+                        objectHeight = qMax(objectHeight, inlineCharHeight(m_fragmentIterator.fragment()));
+                    }
                 }
             }
             if (height < 0.01) height = 12; // default size for uninitialized styles.
@@ -757,13 +764,21 @@ void Layout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &c
 
                 if (end < block.position() || begin > block.position() + block.length())
                     continue; // selection does not intersect this block.
-                QTextLayout::FormatRange fr;
-                fr.start = begin - block.position();
-                fr.length = end - begin;
-                fr.format = selection.format;
-                selections.append(fr);
+                if (!m_changeTracker
+                    || m_changeTracker->displayDeleted()
+                    || !m_changeTracker->containsInlineChanges(selection.format)
+                    || !m_changeTracker->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
+                    || (m_changeTracker->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::deleteChange)) {
+                    QTextLayout::FormatRange fr;
+                    kDebug() << "append selection. start: " << begin << " format changeId: " << selection.format.property(KoCharacterStyle::ChangeTrackerId);
+                    fr.start = begin - block.position();
+                    fr.length = end - begin;
+                    fr.format = selection.format;
+                    selections.append(fr);
+                }
+                else
+                    kDebug() << "not appended selection. start: " << begin << " format changeId: " << selection.format.property(KoCharacterStyle::ChangeTrackerId);
             }
-            //TODO call drawTrackedChange here. it should iterate over the fragments to draw background
             drawTrackedChangeItem(painter, block, selectionStart - block.position(), selectionEnd - block.position(), context.viewConverter);
             layout->draw(painter, QPointF(0, 0), selections);
 //            drawTrackedChangeItem(painter, block, selectionStart - block.position(), selectionEnd - block.position(), context.viewConverter);
@@ -996,7 +1011,8 @@ void Layout::drawTrackedChangeItem(QPainter *painter, QTextBlock &block, int sel
     Q_UNUSED(selectionStart);
     Q_UNUSED(selectionEnd);
     Q_UNUSED(converter);
-
+    if (!m_changeTracker)
+        return;
     QTextLayout *layout = block.layout();
 //    QList<QTextLayout::FormatRange> ranges = layout->additionalFormats();
 
@@ -1030,6 +1046,8 @@ void Layout::drawTrackedChangeItem(QPainter *painter, QTextBlock &block, int sel
                                     painter->fillRect(x1, line.y(), x2-x1, line.height(), QColor(0,0,255,255));
                                     break;
                                 case (KoGenChange::deleteChange):
+                                    if (m_changeTracker->displayDeleted())
+                                        painter->fillRect(x1, line.y(), x2-x1, line.height(), QColor(255,0,0,255));
                                     break;
                             }
                         }

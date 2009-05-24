@@ -58,7 +58,6 @@ KoChangeTrackerElement::~KoChangeTrackerElement()
 
 void KoChangeTrackerElement::setEnabled(bool enabled)
 {
-    kDebug() << "in chage element set enabled: " << enabled;
     d->enabled = enabled;
 }
 

@@ -143,6 +143,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_currentCommandHasChildren(false),
         m_specialCharacterDocker(0),
         m_textTyping(false),
+        m_textDeleting(false),
         m_changeTipTimer(this),
         m_changeTipCursorPos(0)
 {
@@ -771,8 +772,21 @@ void TextTool::copy() const
 void TextTool::deleteSelection()
 {
     if (!m_selectionHandler.deleteInlineObjects(false) || m_caret.hasSelection()) {
-        startMacro(i18n("Delete"));
-        m_caret.deleteChar();
+        bool m_changeRegistered = m_textDeleting;
+       startMacro(i18n("Delete"));
+/*        if (KoTextDocument(m_textShapeData->document()).changeTracker() && KoTextDocument(m_textShapeData->document()).changeTracker()->isEnabled()) {
+            QTextCharFormat format;
+            if (!m_changeRegistered) {
+                int changeId = KoTextDocument(m_textShapeData->document()).changeTracker()->getDeleteChangeId(i18n("Delete"), m_caret.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+                format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+            } else
+                format = m_caret.charFormat();
+            if (!m_caret.hasSelection())
+                m_caret.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+            m_caret.mergeCharFormat(format);
+            m_caret.setPosition(m_caret.position(), QTextCursor::MoveAnchor);
+        } else
+*/            m_caret.deleteChar();
         stopMacro();
     }
     editingPluginEvents();
@@ -950,8 +964,21 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         // the event only gets through when the Del is not used in the app
         // if the app forwards Del then deleteSelection is used
         if (!m_selectionHandler.deleteInlineObjects(false) || m_caret.hasSelection()) {
+            bool m_changeRegistered = m_textDeleting;
             startMacro(i18n("Delete"));
-            m_caret.deleteChar();
+/*            if (KoTextDocument(m_textShapeData->document()).changeTracker() && KoTextDocument(m_textShapeData->document()).changeTracker()->isEnabled()) {
+                QTextCharFormat format;
+                if (!m_changeRegistered) {
+                    int changeId = KoTextDocument(m_textShapeData->document()).changeTracker()->getDeleteChangeId(i18n("Delete"), m_caret.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+                    format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+                } else
+                    format = m_caret.charFormat();
+                if (!m_caret.hasSelection())
+                    m_caret.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+                m_caret.mergeCharFormat(format);
+                m_caret.setPosition(m_caret.position(), QTextCursor::MoveAnchor);
+            } else
+*/                m_caret.deleteChar();
             stopMacro();
         }
         editingPluginEvents();
@@ -1614,10 +1641,15 @@ void TextTool::formatParagraph()
 
 void TextTool::toggleTrackChanges(bool on)
 {
-    kDebug() << "in toggle track change";
-    if (m_changeTracker)
+    if (m_changeTracker){
         m_changeTracker->setEnabled(on);
-    m_textTyping=false;
+        m_changeTracker->setDisplayDeleted(on);
+        QTextCharFormat format = m_caret.charFormat();
+        format.clearProperty(KoCharacterStyle::ChangeTrackerId);
+        m_caret.setCharFormat(format);
+    }
+    m_textTyping = false;
+    m_textDeleting = false;
 /*
     m_trackChanges = on;
     if (m_textShapeData && on) {
@@ -1645,10 +1677,15 @@ void TextTool::selectAll()
 
 void TextTool::startMacro(const QString &title)
 {
-    if (title != i18n("Key Press"))
+    if (title != i18n("Key Press") && title !=i18n("Autocorrection")) //dirty hack while waiting for refactor of text editing
         m_textTyping = false;
     else
         m_textTyping = true;
+
+    if (title != i18n("Delete") && title != i18n("Autocorrection")) //same dirty hack as above
+        m_textDeleting = false;
+    else
+        m_textDeleting = true;
 
     if (m_currentCommand) return;
 

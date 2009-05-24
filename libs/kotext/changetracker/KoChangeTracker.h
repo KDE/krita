@@ -47,8 +47,12 @@ public:
     void setEnabled(bool enabled);
     bool isEnabled();
 
+    void setDisplayDeleted(bool enabled);
+    bool displayDeleted();
+
     int getFormatChangeId(QString title, QTextFormat &format, QTextFormat &prevFormat, int existingChangeId);
     int getInsertChangeId(QString title, int existingChangeId);
+    int getDeleteChangeId(QString title, int existingChangeId);
 
     KoChangeTrackerElement* elementById(int id);
 

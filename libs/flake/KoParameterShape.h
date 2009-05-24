@@ -33,7 +33,7 @@
  * In flake, these shape parameters can be manipulated visually by means
  * of control points. These control points can be moved with the mouse
  * on the canvas which changes the shapes parameter values and hence the
- * shapes apperance in realtime.
+ * shapes appearance in realtime.
  * KoParameterShape is derived from the KoPathShape class that means
  * by changing the shape parameters, the underlying path is manipulated.
  * A parametric shape can be converted into a path shape by simply calling
@@ -53,24 +53,24 @@ public:
      * This method calls moveHandleAction. Overload moveHandleAction to get the behaviour you want.
      * After that updatePath and a repaint is called.
      *
-     * @param handleId of the handle
-     * @param point to move the handle to in document coordinates
-     * @param modifiers used during move to point
+     * @param handleId the id of the handle to move
+     * @param point the point to move the handle to in document coordinates
+     * @param modifiers the keyboard modifiers used during moving the handle
      */
     virtual void moveHandle(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
 
     /**
-     * @brief Get the handleId in the rect
+     * @brief Get the id of the handle within the given rect
      *
-     * @param rect in shape coordinates
-     * @return id of the found handle or -1 if one was found
+     * @param rect the rect in shape coordinates
+     * @return id of the found handle or -1 if none was found
      */
     virtual int handleIdAt(const QRectF & rect) const;
 
     /**
      * @brief Get the handle position
      *
-     * @param handleId for which ti get the position in shape coordinates
+     * @param handleId the id of the handle for which to get the position in shape coordinates
      */
     virtual QPointF handlePosition(int handleId);
 
@@ -93,6 +93,7 @@ public:
      */
     virtual void paintHandle(QPainter & painter, const KoViewConverter & converter, int handleId, int handleRadius);
 
+    /// reimplemented from KoShape
     virtual void setSize(const QSizeF &size);
 
     /**

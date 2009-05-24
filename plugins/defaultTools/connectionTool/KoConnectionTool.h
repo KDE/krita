@@ -54,6 +54,27 @@ public:
     /// reimplemented from superclass
     virtual void deactivate();
     
+
+    /**
+     * @brief Modify connections if they are on a shape and not the nearest one
+     */
+    void updateConnections();
+    /**
+     * @brief return the index of the nearest connection point of the shape with the point
+     *
+     * @param shape The shape to connect
+     * @param point The point to connect
+     * @return the index of the nearest point
+     */
+    int getConnectionIndex( KoShape * shape, QPointF point );
+    /**
+     * @brief Return the square of the absolute distance between p1 and p2 
+     *
+     * @param p1 The first point
+     * @param p2 The second point
+     * @return the float which is the square of the distance
+     */
+    float distanceSquare( QPointF p1, QPointF p2 );
     /**
      * @brief Permit to activate the connection with a comand
      */

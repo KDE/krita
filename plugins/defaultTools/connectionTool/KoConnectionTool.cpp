@@ -113,14 +113,14 @@ void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
         // Apply the connection shape for now
         command();
         // If the shape selected is not the background
-        if( tempShape != 0 ) { 
+        if( tempShape != 0 ) {
             m_connectionShape->setConnection2( tempShape, 0 );
-            // The connection is now done, so update and put everything to 0
-            m_connectionShape->updateConnections();
         } else { 
         // If the cursor points the background
             m_connectionShape->moveHandle( 1, event->point );
         }
+        // Will find the nearest point and update the connection shape
+        updateConnections();
         m_connectionShape = 0;
     }
 }
@@ -132,6 +132,7 @@ void KoConnectionTool::mouseMoveEvent( KoPointerEvent *event )
         m_shapeOn = 0;
     if( m_connectionShape != 0 ) {
         m_connectionShape->moveHandle( 1, event->point );
+        updateConnections();
     }
     m_canvas->updateCanvas(QRectF( 0, 0, m_canvas->canvasWidget()->width(), m_canvas->canvasWidget()->height() ));
 }
@@ -150,6 +151,64 @@ void KoConnectionTool::deactivate()
     repaint(QRectF( 0, 0, m_canvas->canvasWidget()->x(), m_canvas->canvasWidget()->y() ));
     m_canvas->updateCanvas(QRectF( 0, 0, m_canvas->canvasWidget()->x(), m_canvas->canvasWidget()->y() ));
     m_connectionShape = 0;
+}
+
+void KoConnectionTool::updateConnections()
+{
+    if( m_connectionShape == 0 )
+        return;
+    
+    KoConnection connection1 = m_connectionShape->connection1();
+    KoConnection connection2 = m_connectionShape->connection2();
+    // If two shapes are connected
+    if( connection1.first != 0 and connection2.first != 0 ) {
+        KoShape* shape1 = connection1.first;
+        KoShape* shape2 = connection2.first;
+        m_connectionShape->setConnection1( shape1 , getConnectionIndex( shape1, shape2->absolutePosition() ) );        
+        m_connectionShape->setConnection2( shape2 , getConnectionIndex( shape2, shape1->absolutePosition() ) );
+    // If only the first item of the connection is a shape
+    } else if( connection1.first != 0 ) {
+        KoShape* shape = connection1.first;
+        QPointF point = m_connectionShape->handlePosition(1) + m_connectionShape->absolutePosition();
+        m_connectionShape->setConnection1( shape , getConnectionIndex( shape, point ) );
+    // If only the second item of the connection is a shape
+    } else if( connection2.first != 0 ) {
+        KoShape* shape = connection2.first;
+        QPointF point = m_connectionShape->handlePosition(0) + m_connectionShape->absolutePosition();
+        m_connectionShape->setConnection2( shape , getConnectionIndex( shape, point ) );
+    }
+    // The connection is now done, so update and put everything to 0
+    m_connectionShape->updateConnections();
+}
+
+int KoConnectionTool::getConnectionIndex( KoShape * shape, QPointF point )
+{
+    float MAX_DISTANCE = m_canvas->canvasWidget()->width()*m_canvas->canvasWidget()->width();
+    MAX_DISTANCE += m_canvas->canvasWidget()->height()*m_canvas->canvasWidget()->height();
+    int nearestPointIndex, i;
+    // Get all the points
+    QList<QPointF> connectionPoints = shape->connectionPoints();
+    
+    // Find the nearest point and stock the index
+    for( i = 0; i < connectionPoints.count(); i++)
+    {
+        float distance = distanceSquare( connectionPoints[i] + shape->absolutePosition(), point);
+        if( distance < MAX_DISTANCE ) {
+            MAX_DISTANCE = distance;
+            nearestPointIndex =  i;
+        }
+    }
+    // return the nearest point index
+    return nearestPointIndex;
+}
+
+float KoConnectionTool::distanceSquare( QPointF p1, QPointF p2 )
+{
+    // Square of the distance
+    float distx = ( p2.x() - p1.x() ) * ( p2.x() - p1.x() );
+    float disty = ( p2.y() - p1.y() ) * ( p2.y() - p1.y() );
+    float dist = distx + disty;
+    return dist;
 }
 
 void KoConnectionTool::command()

@@ -109,22 +109,19 @@ void KisDeformPaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) co
     delete settings;
 }
 
+
 QRectF KisDeformPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP image) const
 {
-    QPointF hotSpot = QPointF( radius(), radius() );
+    qreal size = radius() * 2;
+    size += 10;
     return image->pixelToDocument(
-            QRectF(0,0, radius() * 2, radius() * 2).translated(-(hotSpot + QPointF(0.5, 0.5)) )
-        ).translated( pos );
+            QRectF(0,0, size,size )
+        ).translated( pos - QPointF( size * 0.5 , size * 0.5 ) );
 }
 
-void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPainter& painter, const KoViewConverter& converter) const
+void KisDeformPaintOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter) const
 {
-    QPointF hotSpot = QPointF( radius(), radius() );
+    qreal size = radius() * 2;
     painter.setPen(Qt::black);
-    painter.setBackground(Qt::black);
-    painter.translate( converter.documentToView( pos - image->pixelToDocument(hotSpot + QPointF(0.5, 0.5) )) );
-
-    QPointF p1 = converter.documentToView( image->pixelToDocument( pos ) );
-    // if you zoom, radius() have to be according zoom so something like radius() * zoomFromImage * maybeAlsoDPI;
-    painter.drawEllipse(p1, radius(),radius() );
+    painter.drawEllipse( converter.documentToView( image->pixelToDocument( QRect(0,0, size, size ) ).translated( pos - QPointF( size * 0.5,size * 0.5 ) ) ) );
 }

@@ -55,50 +55,13 @@ public:
     virtual void deactivate();
     
     /**
-     * @brief Connect on the shape1 which is the nearest point with the second shape 
-     *
-     * @param shape1 The shape to connect
-     * @param shape2 The shape to be nearby
-     */
-    KoConnection getConnection( KoShape * shape1, KoShape * shape2 );
-    /**
-     * @brief Connect on the shape1 which is the point 
-     *
-     * @param shape1 The shape to connect
-     * @param point The point to connect
-     */
-    KoConnection getConnectionPointShape( KoShape * shape1, QPointF * point );
-    /**
-     * @brief Return the square of the absolute distance between p1 and p2 
-     *
-     * @param p1 The first point
-     * @param p2 The second point
-     */
-    float distanceSquare( QPointF p1, QPointF p2 );
-    /**
-     * @brief Return true if the two float are approximativly equal, false else
-     *
-     * @param x The first float
-     * @param y The second float
-     */
-    bool approx( float x, float y );
-    /**
-     * @brief Permit to put in m_pointSelected the point on the shape, under the mouse
-     *
-     * @param shape A KoShape on which we want to select the point
-     */
-    void getPointSelected(KoShape * shape);
-    /**
      * @brief Permit to activate the connection with a comand
      */
     void command();
     
 private:
-    KoShape * m_firstShape;
     KoShape * m_shapeOn;
-    QPointF m_mouse;
     QPointF * m_pointSelected;
-    QPointF * m_beginPoint;
     KoConnectionShape * m_connectionShape;
     
 };

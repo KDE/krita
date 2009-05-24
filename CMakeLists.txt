@@ -58,14 +58,6 @@ set(EXIV2_MIN_VERSION "0.16")
 macro_optional_find_package(Exiv2)
 macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http://www.exiv2.org" FALSE "0.16" "Required by Krita")
 
-#TODO check version
-find_path(LIBRCPS_INCLUDE_DIR librcps.h)
-find_library(LIBRCPS_LIBRARIES librcps.so)
-if(LIBRCPS_INCLUDE_DIR AND LIBRCPS_LIBRARIES)
-    set(HAVE_LIBRCPS 1)
-endif(LIBRCPS_INCLUDE_DIR AND LIBRCPS_LIBRARIES)
-macro_log_feature(HAVE_LIBRCPS "LibRCPS" "Resource Conflict Project Scheduling Library" "http://www.librcps.org" FALSE "0.2" "Required by KPlato RCPS Plugin")
-
 
 if (APPLE)
    find_package(Carbon REQUIRED)

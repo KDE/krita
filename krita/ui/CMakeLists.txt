@@ -50,7 +50,6 @@ set(kritaui_LIB_SRCS
     kis_config_notifier.cpp 
     kis_control_frame.cpp
     kis_composite_ops_model.cc
-    kis_composite_ops_categorized_model.cc
     kis_cursor.cc
     kis_custom_palette.cc 
     kis_custom_pattern.cc

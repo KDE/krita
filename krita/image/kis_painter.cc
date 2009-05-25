@@ -252,7 +252,7 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
     // have unexpected behavior since it would reduce the area that 
     // is copied.
     if (d->compositeOp->id() != COMPOSITE_COPY) { 
-        srcRect &= srcdev->exactBounds();
+        srcRect &= srcdev->extent();
     }
     
     if (srcRect.isEmpty()) {

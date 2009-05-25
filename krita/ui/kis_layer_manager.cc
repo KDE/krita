@@ -171,11 +171,11 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("insert_shape_layer", m_layerAddShapeLayer);
     connect(m_layerAddShapeLayer, SIGNAL(triggered()), this, SLOT(addShapeLayer()));
 
-    m_layerRm  = new KAction(i18n("&Remove"), this);
+    m_layerRm  = new KAction(KIcon("edit-delete"), i18n("&Remove"), this);
     actionCollection->addAction("remove_layer", m_layerRm);
     connect(m_layerRm, SIGNAL(triggered()), this, SLOT(layerRemove()));
 
-    m_layerDup  = new KAction(i18n("Duplicate"), this);
+    m_layerDup  = new KAction(KIcon("edit-duplicate"), i18n("Duplicate"), this);
     actionCollection->addAction("duplicate_layer", m_layerDup);
     connect(m_layerDup, SIGNAL(triggered()), this, SLOT(layerDuplicate()));
 
@@ -201,12 +201,12 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_layerTop->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_BracketRight));
     connect(m_layerTop, SIGNAL(triggered()), this, SLOT(layerFront()));
 
-    m_layerBottom  = new KAction(KIcon("go-down"), i18n("To Bottom"), this);
+    m_layerBottom  = new KAction(KIcon("go-bottom"), i18n("To Bottom"), this);
     actionCollection->addAction("bottomlayer", m_layerBottom);
     m_layerBottom->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_BracketLeft));
     connect(m_layerBottom, SIGNAL(triggered()), this, SLOT(layerBack()));
 
-    m_layerProperties  = new KAction(i18n("Properties..."), this);
+    m_layerProperties  = new KAction(KIcon("document-properties"), i18n("Properties..."), this);
     actionCollection->addAction("layer_properties", m_layerProperties);
     connect(m_layerProperties, SIGNAL(triggered()), this, SLOT(layerProperties()));
 

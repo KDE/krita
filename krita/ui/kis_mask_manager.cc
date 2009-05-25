@@ -83,11 +83,11 @@ void KisMaskManager::setup(KActionCollection * actionCollection)
 {
     // XXX: Set shortcuts, tooltips, what's this text and statustips!
 
-    m_createTransparencyMask  = new KAction(i18n("Transparency Mask"), this);
+    m_createTransparencyMask  = new KAction(KIcon("edit-copy"), i18n("Transparency Mask"), this);
     actionCollection->addAction("create_transparency_mask", m_createTransparencyMask);
     connect(m_createTransparencyMask, SIGNAL(triggered()), this, SLOT(createTransparencyMask()));
 
-    m_createFilterMask  = new KAction(i18n("Filter Mask..."), this);
+    m_createFilterMask  = new KAction(KIcon("bookmarks"), i18n("Filter Mask..."), this);
     actionCollection->addAction("create_filter_mask", m_createFilterMask);
     connect(m_createFilterMask, SIGNAL(triggered()), this, SLOT(createFilterMask()));
 #if 0 // XXX_2.0
@@ -95,7 +95,7 @@ void KisMaskManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("create_transformation_mask", m_createTransformationMask);
     connect(m_createTransformationMask, SIGNAL(triggered()), this, SLOT(createTransformationMask()));
 #endif
-    m_createSelectionMask = new KAction(i18n("Selection Mask..."), this);
+    m_createSelectionMask = new KAction(KIcon("edit-paste"), i18n("Selection Mask..."), this);
     actionCollection->addAction("create_selection_mask", m_createSelectionMask);
     connect(m_createSelectionMask, SIGNAL(triggered()), this, SLOT(createSelectionmask()));
 
@@ -107,11 +107,11 @@ void KisMaskManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("create_layer_from_mask", m_maskToLayer);
     connect(m_maskToLayer, SIGNAL(triggered()), this, SLOT(maskToLayer()));
 
-    m_duplicateMask = new KAction(i18n("Duplicate Mask"), this);
+    m_duplicateMask = new KAction(KIcon("edit-duplicate"), i18n("Duplicate Mask"), this);
     actionCollection->addAction("duplicate_mask", m_duplicateMask);
     connect(m_duplicateMask, SIGNAL(triggered()), this, SLOT(duplicateMask()));
 
-    m_removeMask  = new KAction(i18n("Remove Mask"), this);
+    m_removeMask  = new KAction(KIcon("edit-delete"), i18n("Remove Mask"), this);
     actionCollection->addAction("remove_mask", m_removeMask);
     connect(m_removeMask, SIGNAL(triggered()), this, SLOT(removeMask()));
 
@@ -119,31 +119,31 @@ void KisMaskManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("show_mask", m_showMask);
     connect(m_showMask, SIGNAL(triggered()), this, SLOT(showMask()));
 
-    m_raiseMask = new KAction(i18n("Raise Mask"), this);
+    m_raiseMask = new KAction(KIcon("go-up"), i18n("Raise Mask"), this);
     actionCollection->addAction("raise_mask", m_raiseMask);
     connect(m_raiseMask, SIGNAL(triggered()), this, SLOT(raiseMask()));
 
-    m_lowerMask  = new KAction(i18n("Lower Mask"), this);
+    m_lowerMask  = new KAction(KIcon("go-down"), i18n("Lower Mask"), this);
     actionCollection->addAction("lower_mask", m_lowerMask);
     connect(m_lowerMask, SIGNAL(triggered()), this, SLOT(lowerMask()));
 
-    m_maskToTop  = new KAction(i18n("Move Mask to Top"), this);
+    m_maskToTop  = new KAction(KIcon("go-top"), i18n("Move Mask to Top"), this);
     actionCollection->addAction("mask_to_top", m_maskToTop);
     connect(m_maskToTop, SIGNAL(triggered()), this, SLOT(maskToTop()));
 
-    m_maskToBottom = new KAction(i18n("Move Mask to Bottom"), this);
+    m_maskToBottom = new KAction(KIcon("go-bottom"), i18n("Move Mask to Bottom"), this);
     actionCollection->addAction("mask_to_bottom", m_maskToBottom);
     connect(m_maskToBottom, SIGNAL(triggered()), this, SLOT(maskToBottom()));
 
-    m_mirrorMaskX = new KAction(i18n("Mirror Mask Horizontally"), this);
+    m_mirrorMaskX = new KAction(KIcon("view-split-left-right"), i18n("Mirror Mask Horizontally"), this);
     actionCollection->addAction("mirror_mask_x", m_mirrorMaskX);
     connect(m_mirrorMaskX, SIGNAL(triggered()), this, SLOT(mirrorMaskX()));
 
-    m_mirrorMaskY  = new KAction(i18n("Mirror Mask Vertically"), this);
+    m_mirrorMaskY  = new KAction(KIcon("view-split-top-bottom"), i18n("Mirror Mask Vertically"), this);
     actionCollection->addAction("mirror_mask_y", m_mirrorMaskY);
     connect(m_mirrorMaskY, SIGNAL(triggered()), this, SLOT(mirrorMaskY()));
 
-    m_maskProperties  = new KAction(i18n("Mask Properties"), this);
+    m_maskProperties  = new KAction(KIcon("document-properties"), i18n("Mask Properties"), this);
     actionCollection->addAction("mask_properties", m_maskProperties);
     connect(m_maskProperties, SIGNAL(triggered()), this, SLOT(maskProperties()));
 

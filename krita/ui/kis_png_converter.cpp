@@ -182,6 +182,7 @@ void writeRawProfile(png_struct *ping, png_info *ping_info, QString profile_type
     png_free(ping, text[0].text);
     png_free(ping, text);
 }
+
 QByteArray png_read_raw_profile(png_textp text)
 {
     QByteArray profile;
@@ -225,6 +226,7 @@ QByteArray png_read_raw_profile(png_textp text)
     }
     return profile;
 }
+
 void decode_meta_data(png_textp text, KisMetaData::Store* store, QString type, int headerSize)
 {
     dbgFile << "Decoding " << type << " " << text[0].key;
@@ -808,7 +810,6 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageS
 
     /* set the zlib compression level */
     png_set_compression_level(png_ptr, options.compression);
-
 
     png_set_write_fn(png_ptr, (void*)iodevice, _write_fn, _flush_fn);
 

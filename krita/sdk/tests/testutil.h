@@ -103,7 +103,7 @@ bool compareQImages(QPoint & pt, const QImage & img1, const QImage & img2, int f
         }
     }
 //     qDebug() << "compareQImages time elapsed:" << t.elapsed();
-    qDebug() << "Images are identical";
+//    qDebug() << "Images are identical";
     return true;
 }
 

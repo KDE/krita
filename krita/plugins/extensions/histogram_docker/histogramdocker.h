@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include <QMenu>
+#include <QDockWidget>
 
 #include <kparts/plugin.h>
 #include <kis_histogram.h>
@@ -57,6 +58,7 @@ private:
     QMenu m_popup;
     KisHistogramSP m_histogram;
     int m_currentProducerPos;
+    QDockWidget* m_docker;
 };
 
 

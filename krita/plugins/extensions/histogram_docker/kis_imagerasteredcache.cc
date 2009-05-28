@@ -33,6 +33,7 @@
 
 KisImageRasteredCache::KisImageRasteredCache(KisView2* view, Observer* o)
         : m_observer(o->createNew(0, 0, 0, 0)), m_view(view)
+        , m_docker(0)
 {
     m_busy = false;
     m_imageProjection = 0;
@@ -65,6 +66,9 @@ KisImageRasteredCache::~KisImageRasteredCache()
 
 void KisImageRasteredCache::imageUpdated(QRect rc)
 {
+    // Do our but against global warming: don't waste cpu if the histogram isn't visible anyway.
+    if (m_docker && !m_docker->isVisible()) return;
+
     QRect r(0, 0, m_width * m_rasterSize, m_height * m_rasterSize);
     r &= rc;
 

@@ -50,6 +50,7 @@
 #include "filter/kis_filter.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
+#include "kis_fixed_paint_device.h"
 #include "kis_transaction.h"
 #include "kis_types.h"
 #include "kis_vec.h"
@@ -232,10 +233,6 @@ QRegion KisPainter::addDirtyRect(const QRect & r)
     }
 }
 
-void KisPainter::bitBlt(const QPoint & pos, const KisPaintDeviceSP src, const QRect & srcRect)
-{
-    bitBlt(pos.x(), pos.y(), src, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height());
-}
 
 void KisPainter::bitBlt(qint32 dx, qint32 dy,
                         const KisPaintDeviceSP srcdev,
@@ -245,79 +242,79 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
     if (sw == 0 || sh == 0) return;
     if (srcdev.isNull()) return;
     if (d->device.isNull()) return;
-    
+
     QRect srcRect = QRect(sx, sy, sw, sh);
-    
-    // In case of COMPOSITE_COPY restricting bitblt to extent can                 
-    // have unexpected behavior since it would reduce the area that 
+
+    // In case of COMPOSITE_COPY restricting bitblt to extent can
+    // have unexpected behavior since it would reduce the area that
     // is copied.
-    if (d->compositeOp->id() != COMPOSITE_COPY) { 
+    if (d->compositeOp->id() != COMPOSITE_COPY) {
         srcRect &= srcdev->extent();
     }
-    
+
     if (srcRect.isEmpty()) {
         return;
     }
-    
+
     dx += srcRect.x() - sx;
     dy += srcRect.y() - sy;
-    
+
     sx = srcRect.x();
     sy = srcRect.y();
     sw = srcRect.width();
     sh = srcRect.height();
-    
+
     const KoColorSpace * srcCs = srcdev->colorSpace();
-    
+
     qint32 dstY = dy;
     qint32 srcY = sy;
     qint32 rowsRemaining = sh;
-    
+
     KisRandomConstAccessorPixel srcIt = srcdev->createRandomConstAccessor(sx, sy);
     KisRandomAccessorPixel dstIt = d->device->createRandomAccessor(dx, dy);
-    
+
     if (d->selection) {
-    
+
         KisRandomConstAccessorPixel maskIt = d->selection->createRandomConstAccessor(dx, dy);
-        
+
         while (rowsRemaining > 0) {
-            
+
             qint32 dstX = dx;
             qint32 srcX = sx;
             qint32 columnsRemaining = sw;
             qint32 numContiguousDstRows = d->device->numContiguousRows(dstY, dstX, dstX + sw - 1);
             qint32 numContiguousSrcRows = srcdev->numContiguousRows(srcY, srcX, srcX + sw - 1);
             qint32 numContiguousSelRows = d->selection->numContiguousRows(srcY, srcX, srcX + sw - 1);
-            
+
             qint32 rows = qMin(numContiguousDstRows, numContiguousSrcRows);
             rows = qMin(rows, numContiguousSelRows);
             rows = qMin(rows, rowsRemaining);
-            
+
             while (columnsRemaining > 0) {
-                
+
                 qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX, dstY, dstY + rows - 1);
                 qint32 numContiguousSrcColumns = srcdev->numContiguousColumns(srcX, srcY, srcY + rows - 1);
                 qint32 numContiguousSelColumns = d->selection->numContiguousColumns(srcX, srcY, srcY + rows - 1);
-                
+
                 qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
                 columns = qMin(columns, numContiguousSelColumns);
                 columns = qMin(columns, columnsRemaining);
-                
+
                 qint32 srcRowStride = srcdev->rowStride(srcX, srcY);
                 srcIt.moveTo(srcX, srcY);
-                
+
                 qint32 dstRowStride = d->device->rowStride(dstX, dstY);
                 dstIt.moveTo(dstX, dstY);
-                
+
                 qint32 maskRowStride = d->selection->rowStride(dstX, dstY);
                 maskIt.moveTo(dstX, dstY);
-                
+
                 d->colorSpace->bitBlt(dstIt.rawData(),
                                       dstRowStride,
                                       srcCs,
                                       srcIt.rawData(),
                                       srcRowStride,
-                                       maskIt.rawData(),
+                                      maskIt.rawData(),
                                       maskRowStride,
                                       d->opacity,
                                       rows,
@@ -328,14 +325,14 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
                 dstX += columns;
                 columnsRemaining -= columns;
             }
-            
+
             srcY += rows;
             dstY += rows;
             rowsRemaining -= rows;
         }
     }
     else {
-    
+
         while (rowsRemaining > 0) {
 
             qint32 dstX = dx;
@@ -357,22 +354,22 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
 
                 qint32 srcRowStride = srcdev->rowStride(srcX, srcY);
                 srcIt.moveTo(srcX, srcY);
-                
+
                 qint32 dstRowStride = d->device->rowStride(dstX, dstY);
                 dstIt.moveTo(dstX, dstY);
 
                 d->colorSpace->bitBlt(dstIt.rawData(),
-                                        dstRowStride,
-                                        srcCs,
-                                        srcIt.rawData(),
-                                        srcRowStride,
-                                        0,
-                                        0,
-                                        d->opacity,
-                                        rows,
-                                        columns,
-                                        d->compositeOp,
-                                        d->channelFlags);
+                                      dstRowStride,
+                                      srcCs,
+                                      srcIt.rawData(),
+                                      srcRowStride,
+                                      0,
+                                      0,
+                                      d->opacity,
+                                      rows,
+                                      columns,
+                                      d->compositeOp,
+                                      d->channelFlags);
 
                 srcX += columns;
                 dstX += columns;
@@ -384,8 +381,95 @@ void KisPainter::bitBlt(qint32 dx, qint32 dy,
             rowsRemaining -= rows;
         }
     }
-    
+
     addDirtyRect(QRect(dx, dy, sw, sh));
+}
+
+void KisPainter::bitBlt(const QPoint & pos, const KisPaintDeviceSP src, const QRect & srcRect)
+{
+    bitBlt(pos.x(), pos.y(), src, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height());
+}
+
+
+
+void KisPainter::bltFixed(qint32 dx, qint32 dy,
+                          const KisFixedPaintDeviceSP srcDev,
+                          qint32 sx, qint32 sy,
+                          qint32 sw, qint32 sh)
+{
+    if (sw == 0 || sh == 0) return;
+    if (srcDev.isNull()) return;
+    if (d->device.isNull()) return;
+    Q_ASSERT(srcDev->pixelSize() == d->pixelSize);
+
+    QRect srcRect = QRect(sx, sy, sw, sh);
+
+    if (srcRect.isEmpty()) {
+        return;
+    }
+
+    if (!srcRect.contains(srcDev->bounds())) {
+        srcRect = srcDev->bounds();
+    }
+
+    dx += srcRect.x() - sx;
+    dy += srcRect.y() - sy;
+
+    sx = srcRect.x();
+    sy = srcRect.y();
+    sw = srcRect.width();
+    sh = srcRect.height();
+
+    const KoColorSpace * srcCs = d->colorSpace;
+    quint8* dstBytes = new quint8[sw * sh * d->device->pixelSize()];
+    d->device->readBytes(dstBytes, dx, dy, sw, sh);
+
+    if (d->selection) {
+
+        quint8* selBytes = new quint8[sw * sh * d->selection->pixelSize()];
+        d->selection->readBytes(selBytes, dx, dy, sw, sh);
+
+        d->colorSpace->bitBlt(dstBytes,
+                              sw * d->device->pixelSize(),
+                              srcCs,
+                              srcDev->data() + sx,
+                              srcDev->bounds().width() * srcDev->pixelSize(),
+                              selBytes,
+                              sw  * d->selection->pixelSize(),
+                              d->opacity,
+                              sh,
+                              sw,
+                              d->compositeOp,
+                              d->channelFlags);
+
+        delete[] selBytes;
+    }
+    else {
+        d->colorSpace->bitBlt(dstBytes,
+                              sw * d->device->pixelSize(),
+                              srcCs,
+                              srcDev->data() + sx,
+                              srcDev->bounds().width() * srcDev->pixelSize(),
+                              0,
+                              0,
+                              d->opacity,
+                              sh,
+                              sw,
+                              d->compositeOp,
+                              d->channelFlags);
+
+    }
+
+    d->device->writeBytes(dstBytes, dx, dy, sw, sh);
+
+    delete[] dstBytes;
+
+    addDirtyRect(QRect(dx, dy, sw, sh));
+}
+
+void KisPainter::bltFixed(const QPoint & pos, const KisFixedPaintDeviceSP src, const QRect & srcRect)
+{
+    bltFixed(pos.x(), pos.y(), src, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height());
 }
 
 double KisPainter::paintLine(const KisPaintInformation &pi1,
@@ -449,7 +533,7 @@ void KisPainter::getBezierCurvePoints(const QPointF &pos1,
                                       const QPointF &pos2,
                                       vQPointF& points) const
 {
-    ::getBezierCurvePoints(toKisVector2D(pos1), toKisVector2D(control1), toKisVector2D(control2), toKisVector2D(pos2), points);
+::getBezierCurvePoints(toKisVector2D(pos1), toKisVector2D(control1), toKisVector2D(control2), toKisVector2D(pos2), points);
 }
 
 double KisPainter::paintBezierCurve(const KisPaintInformation &pi1,
@@ -1101,7 +1185,7 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
     KoColor col2(c1);
 
     float grada, gradb, dxa, dxb, dya, dyb, adya, adyb, fraca, fracb,
-        xfa, yfa, xfb, yfb, b1a, b2a, b1b, b2b, dx, dy;
+    xfa, yfa, xfb, yfb, b1a, b2a, b1b, b2b, dx, dy;
     int x, y, ix1, ix2, iy1, iy2;
 
     KoColor pix;
@@ -1308,18 +1392,18 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             if (!(startWidth == 1 && endWidth == 1)) {
                 if (yfa < yfb)
                     for (int i = yfa + 1; i <= yfb; i++) {
-                        accessor.moveTo(x, i);
-                        if (accessor.isSelected()) {
-                            memcpy(accessor.rawData(), c3.data(), pixelSize);
-                        }
+                    accessor.moveTo(x, i);
+                    if (accessor.isSelected()) {
+                        memcpy(accessor.rawData(), c3.data(), pixelSize);
                     }
+                }
                 else
                     for (int i = yfa + 1; i >= yfb; i--) {
-                        accessor.moveTo(x, i);
-                        if (accessor.isSelected()) {
-                            memcpy(accessor.rawData(), c3.data(), pixelSize);
-                        }
+                    accessor.moveTo(x, i);
+                    if (accessor.isSelected()) {
+                        memcpy(accessor.rawData(), c3.data(), pixelSize);
                     }
+                }
 
             }
 
@@ -1409,18 +1493,18 @@ void KisPainter::drawThickLine(const QPointF & start, const QPointF & end, int s
             if (!(startWidth == 1 && endWidth == 1)) {
                 if (xfa < xfb)
                     for (int i = (int) xfa + 1; i <= (int) xfb; i++) {
-                        accessor.moveTo(i, y);
-                        if (accessor.isSelected()) {
-                            memcpy(accessor.rawData(), c3.data(), pixelSize);
-                        }
+                    accessor.moveTo(i, y);
+                    if (accessor.isSelected()) {
+                        memcpy(accessor.rawData(), c3.data(), pixelSize);
                     }
+                }
                 else
                     for (int i = (int) xfb; i <= (int) xfa + 1; i++) {
-                        accessor.moveTo(i, y);
-                        if (accessor.isSelected()) {
-                            memcpy(accessor.rawData(), c3.data(), pixelSize);
-                        }
+                    accessor.moveTo(i, y);
+                    if (accessor.isSelected()) {
+                        memcpy(accessor.rawData(), c3.data(), pixelSize);
                     }
+                }
             }
 
             xfa += grada;

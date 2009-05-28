@@ -26,8 +26,6 @@
 
 #include "kis_global.h"
 #include "kis_types.h"
-#include "kis_paint_device.h"
-
 #include <krita_export.h>
 
 class QRegion;
@@ -61,6 +59,9 @@ class KisPaintOp;
  *
  * For more complex operations, you might want to have a look at the subclasses
  * of KisPainter: KisConvolutionPainter, KisFillPainter and KisGradientPainter
+ *
+ * KisPainter sets a number of default values, like COMPOSITE_OVER for compositeop,
+ * OPACITY_OPAQUE for opacity and no selection for selection.
  */
 class KRITAIMAGE_EXPORT KisPainter
 {
@@ -131,10 +132,34 @@ public:
                 qint32 sw, qint32 sh);
 
     /**
-     * Convenience method that uses the opacity and composite op set
-     * in the painter. If nothing is set, opaque and OVER are assumed.
+     * Convenience method that uses QPoint and QRect
      */
     void bitBlt(const QPoint & pos, const KisPaintDeviceSP src, const QRect & srcRect);
+
+    /**
+     * Blast the specified region from src onto the current paint device. Src is a
+     * fixed-size paint device: this means that src must have the same colorspace as
+     * the destination device.
+     *
+     * @param dx the destination x-coordinate
+     * @param dy the destination y-coordinate
+     * @param op a pointer to the composite op use to blast the pixels from src on dst
+     * @param src the source device
+     * @param sx the source x-coordinate
+     * @param sy the source y-coordinate
+     * @param sw the width of the region
+     * @param sh the height of the region
+     */
+    void bltFixed(qint32 dx, qint32 dy,
+                const KisFixedPaintDeviceSP src,
+                qint32 sx, qint32 sy,
+                qint32 sw, qint32 sh);
+
+    /**
+     * Convenience method that uses QPoint and QRect
+     */
+    void bltFixed(const QPoint & pos, const KisFixedPaintDeviceSP src, const QRect & srcRect);
+
 
     /**
      * The methods below are 'higher' level than the above methods. They need brushes, colors
@@ -391,7 +416,7 @@ public:
 
     /// Set the opacity which is used in painting (like filling polygons)
     void setOpacity(quint8 opacity);
-    
+
     /// Returns the opacity that is used in painting
     quint8 opacity() const;
 
@@ -408,7 +433,7 @@ public:
     /// Set the composite op for this painter by string.
     /// Note: the colorspace must be set previously!
     void setCompositeOp(const QString& op);
-    
+
     /**
      * Add the r to the current dirty rect, and return the dirtyRegion after adding r to it.
      */

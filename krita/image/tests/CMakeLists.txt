@@ -37,6 +37,17 @@ target_link_libraries(KisPaintDeviceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTT
 
 ########### next target ###############
 
+add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
+
+set(kis_fixed_paint_device_test_SRCS kis_fixed_paint_device_test.cpp )
+
+kde4_add_unit_test(KisFixedPaintDeviceTest TESTNAME krita-image-KisFixedPaintDeviceTest ${kis_fixed_paint_device_test_SRCS})
+
+target_link_libraries(KisFixedPaintDeviceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+
+########### next target ###############
+
 set(kis_layer_test_SRCS kis_layer_test.cpp )
 
 kde4_add_unit_test(KisLayerTest TESTNAME krita-image-KisLayerTest  ${kis_layer_test_SRCS})

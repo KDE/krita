@@ -258,7 +258,7 @@ private:
     void setup();
     void switchTool(KoTool *tool, bool temporary);
     void switchTool(const QString &id, bool temporary);
-    void postSwitchTool();
+    void postSwitchTool(bool temporary);
     bool eventFilter(QObject *object, QEvent *event);
 
 private slots:

@@ -55,9 +55,6 @@ public:
     virtual ~KisEraseOp();
 
     void paintAt(const KisPaintInformation& info);
-    virtual double paintLine(const KisPaintInformation &pi1,
-                             const KisPaintInformation &pi2,
-                             double savedDist = -1);
 
 private:
 

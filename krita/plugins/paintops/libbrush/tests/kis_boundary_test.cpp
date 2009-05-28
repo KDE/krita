@@ -21,14 +21,14 @@
 #include <qtest_kde.h>
 #include "kis_boundary.h"
 #include "kis_types.h"
-#include "kis_paint_device.h"
+#include "kis_fixed_paint_device.h"
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 
 void KisBoundaryTest::testCreation()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
     KisBoundary test(dev);
 }
 

@@ -52,8 +52,8 @@ KisAutoBrush::~KisAutoBrush()
     delete d;
 }
 
-void KisAutoBrush::generateMask(KisPaintDeviceSP dst,
-                                KisBrush::ColoringInformation* src,
+void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
+                                KisBrush::ColoringInformation* coloringInformation,
                                 double scaleX, double scaleY, double angle,
                                 const KisPaintInformation& info,
                                 double subPixelX , double subPixelY) const
@@ -75,44 +75,76 @@ void KisAutoBrush::generateMask(KisPaintDeviceSP dst,
     double cosa = cos(angle);
     double sina = sin(angle);
 
-    quint8* dabData = new quint8[pixelSize * dstWidth * dstHeight];
-    quint8* dabPointer = dabData;
-    memset(dabData, OPACITY_TRANSPARENT, pixelSize * dstWidth * dstHeight);
+    // if there's coloring information, we merely change the alpha: in that case,
+    // the dab should be big enough!
+    if (coloringInformation) {
 
-    quint8* color = 0;
-    if (src) {
-        if (dynamic_cast<PlainColoringInformation*>(src)) {
-            color = const_cast<quint8*>(src->color());
+        // old bounds
+        QRect bounds = dst->bounds();
+
+        // new bounds. we don't care if there is some extra memory occcupied.
+        dst->setRect(QRect(0, 0, dstWidth, dstHeight));
+
+        if (dstWidth * dstHeight <= bounds.width() * bounds.height()) {
+            // just clear the data in dst,
+            memset(dst->data(), OPACITY_TRANSPARENT, dstWidth * dstHeight * dst->pixelSize());
+        }
+        else {
+            // enlarge the data
+            dst->initialize();
         }
     }
-    
+    else {
+        if (dst->data() == 0 || dst->bounds().isEmpty()) {
+            qWarning() << "Creating a default black dab: no coloring info and no initialized paint device to mask";
+            dst->clear(QRect(0, 0, dstWidth, dstHeight));
+        }
+        Q_ASSERT(dst->bounds().size() >= QSize(dstWidth, dstHeight));
+    }
+
+    quint8* dabPointer = dst->data();
+
+    quint8* color = 0;
+    if (coloringInformation) {
+        if (dynamic_cast<PlainColoringInformation*>(coloringInformation)) {
+            color = const_cast<quint8*>(coloringInformation->color());
+        }
+    }
+    else {
+        // Mask everything out
+        cs->setAlpha(dst->data(), OPACITY_TRANSPARENT, dst->bounds().width() * dst->bounds().height());
+    }
+
+    int rowWidth = dst->bounds().width();
+
     for (int y = 0; y < dstHeight; y++) {
         for (int x = 0; x < dstWidth; x++) {
-            
+
             double x_ = (x - centerX) * invScaleX;
             double y_ = (y - centerY) * invScaleY;
             double maskX = cosa * x_ - sina * y_;
             double maskY = sina * x_ + cosa * y_;
 
-            if (src) {
+            if (coloringInformation) {
                 if (color) {
                     memcpy(dabPointer, color, pixelSize);
                 }
                 else {
-                    memcpy(dabPointer, src->color(), pixelSize);
-                    src->nextColumn();
+                    memcpy(dabPointer, coloringInformation->color(), pixelSize);
+                    coloringInformation->nextColumn();
                 }
             }
             cs->setAlpha(dabPointer, OPACITY_OPAQUE - d->shape->interpolatedValueAt(maskX, maskY), 1);
             dabPointer += pixelSize;
         }
-        if (!color && src) {
-            src->nextRow();
+        if (!color && coloringInformation) {
+            coloringInformation->nextRow();
+        }
+        if (dstWidth < rowWidth) {
+            dabPointer += (pixelSize * (rowWidth - dstWidth));
         }
     }
 
-    dst->writeBytes(dabData, 0, 0, dstWidth, dstHeight);
-    delete[] dabData;
 
 }
 

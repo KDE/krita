@@ -38,7 +38,15 @@ public:
 
 public:
 
-    virtual void generateMask(KisPaintDeviceSP dst,
+    virtual KisFixedPaintDeviceSP image(const KoColorSpace*,
+                                        double, double,
+                                        const KisPaintInformation&,
+                                        double = 0, double = 0) const
+    {
+        return 0; // The autobrush does NOT support images!
+    }
+
+    virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
                               KisBrush::ColoringInformation* src,
                               double scaleX, double scaleY, double angle,
                               const KisPaintInformation& info = KisPaintInformation(),

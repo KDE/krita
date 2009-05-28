@@ -24,11 +24,11 @@
 
 #include <KoResource.h>
 
-#include "kis_types.h"
-#include "kis_shared.h"
-#include "kis_paint_information.h"
-
-#include "krita_export.h"
+#include <kis_types.h>
+#include <kis_shared.h>
+#include <kis_paint_information.h>
+#include <kis_fixed_paint_device.h>
+#include <krita_export.h>
 
 class KisQImagemask;
 typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
@@ -192,24 +192,35 @@ public:
      **/
     virtual bool canPaintFor(const KisPaintInformation& /*info*/);
 
-    // XXX: return non-tiled simple buffer
-    virtual KisPaintDeviceSP image(const KoColorSpace * colorSpace,
-                                   double scale, double angle,
-                                   const KisPaintInformation& info,
-                                   double subPixelX = 0, double subPixelY = 0) const;
+    /**
+     * Return a fixed paint device that contains a correctly scaled image dab.
+     */
+    virtual KisFixedPaintDeviceSP image(const KoColorSpace * colorSpace,
+                                        double scale, double angle,
+                                        const KisPaintInformation& info,
+                                        double subPixelX = 0, double subPixelY = 0) const;
 
-    void mask(KisPaintDeviceSP dst,
+    /**
+     * Apply the brush mask to the pixels in dst. Dst should be big enough!
+     */
+    void mask(KisFixedPaintDeviceSP dst,
               double scaleX, double scaleY, double angle,
               const KisPaintInformation& info = KisPaintInformation(),
               double subPixelX = 0, double subPixelY = 0) const;
 
-    void mask(KisPaintDeviceSP dst,
+    /**
+     * clear dst fill it with a mask colored with KoColor
+     */
+    void mask(KisFixedPaintDeviceSP dst,
               const KoColor& color,
               double scaleX, double scaleY, double angle,
               const KisPaintInformation& info = KisPaintInformation(),
               double subPixelX = 0, double subPixelY = 0) const;
 
-    void mask(KisPaintDeviceSP dst,
+    /**
+     * clear dst and fill it with a mask colored with the corresponding colors of src
+     */
+    void mask(KisFixedPaintDeviceSP dst,
               const KisPaintDeviceSP src,
               double scaleX, double scaleY, double angle,
               const KisPaintInformation& info = KisPaintInformation(),
@@ -219,6 +230,10 @@ public:
     virtual bool hasColor() const;
 
     /**
+     * Create a mask and either mask dst (that is, change all alpha values of the
+     * existing pixels to those of the mask) or, if coloringInfo is present, clear
+     * dst and fill dst with pixels according to coloringInfo, masked according to the
+     * generated mask.
      *
      * @param dst the destination that will be draw on the image, and this function
      *            will edit its alpha channel
@@ -234,7 +249,7 @@ public:
      * @return a mask computed from the grey-level values of the
      * pixels in the brush.
      */
-    virtual void generateMask(KisPaintDeviceSP dst,
+    virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
                               ColoringInformation* coloringInfo,
                               double scaleX, double scaleY, double angle,
                               const KisPaintInformation& info = KisPaintInformation(),
@@ -282,7 +297,10 @@ protected:
     QImage m_image;
 
     void resetBoundary();
+
 private:
+
+    KisQImagemaskSP createMask(double scale, double subPixelX, double subPixelY) const;
 
     KisQImagemaskSP scaleMask(const KisScaledBrush *srcBrush,
                               double scale, double subPixelX, double subPixelY) const;

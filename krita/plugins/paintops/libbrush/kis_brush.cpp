@@ -301,130 +301,119 @@ double KisBrush::spacing() const
 {
     return d->spacing;
 }
-
-void KisBrush::mask(KisPaintDeviceSP dst, double scaleX, double scaleY, double angle, const KisPaintInformation& info , double subPixelX, double subPixelY) const
+void KisBrush::mask(KisFixedPaintDeviceSP dst, double scaleX, double scaleY, double angle, const KisPaintInformation& info , double subPixelX, double subPixelY) const
 {
-    generateMask(dst, 0, scaleX, scaleY, angle, info, subPixelX, subPixelY);
+    generateMaskAndApplyMaskOrCreateDab(dst, 0, scaleX, scaleY, angle, info, subPixelX, subPixelY);
 }
 
-void KisBrush::mask(KisPaintDeviceSP dst, const KoColor& color, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
+void KisBrush::mask(KisFixedPaintDeviceSP dst, const KoColor& color, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
-    // XXX: assumes color's colorspace is dst's colorspace!
     PlainColoringInformation pci(color.data());
-    generateMask(dst, &pci, scaleX, scaleY, angle, info, subPixelX, subPixelY);
+    generateMaskAndApplyMaskOrCreateDab(dst, &pci, scaleX, scaleY, angle, info, subPixelX, subPixelY);
 }
 
-void KisBrush::mask(KisPaintDeviceSP dst, const KisPaintDeviceSP src, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
+void KisBrush::mask(KisFixedPaintDeviceSP dst, const KisPaintDeviceSP src, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
 {
     PaintDeviceColoringInformation pdci(src, maskWidth(scaleX, angle));
-    generateMask(dst, &pdci, scaleX, scaleY, angle, info, subPixelX, subPixelY);
+    generateMaskAndApplyMaskOrCreateDab(dst, &pdci, scaleX, scaleY, angle, info, subPixelX, subPixelY);
 }
 
 
-void KisBrush::generateMask(KisPaintDeviceSP dst,
+void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
                             ColoringInformation* coloringInformation,
                             double scaleX, double scaleY, double angle,
                             const KisPaintInformation& info_,
                             double subPixelX, double subPixelY) const
 {
+    Q_ASSERT(valid());
     Q_UNUSED(angle);
     Q_UNUSED(info_);
 
-    double scale = 0.5 * (scaleX + scaleY);
-
-    if (d->scaledBrushes.isEmpty()) {
-        createScaledBrushes();
-    }
-
-    const KisScaledBrush *aboveBrush = 0;
-    const KisScaledBrush *belowBrush = 0;
-
-    findScaledBrushes(scale, &aboveBrush,  &belowBrush);
-    Q_ASSERT(aboveBrush != 0);
-
-    KisQImagemaskSP outputMask = KisQImagemaskSP(0);
-
-    if (belowBrush != 0) {
-        // We're in between two masks. Interpolate between them.
-
-        KisQImagemaskSP scaledAboveMask = scaleMask(aboveBrush, scale, subPixelX, subPixelY);
-        KisQImagemaskSP scaledBelowMask = scaleMask(belowBrush, scale, subPixelX, subPixelY);
-
-        double t = (scale - belowBrush->scale()) / (aboveBrush->scale() - belowBrush->scale());
-
-        outputMask = KisQImagemask::interpolate(scaledBelowMask, scaledAboveMask, t);
-    } else {
-        if (Eigen::ei_isApprox(scale, aboveBrush->scale())) {
-            // Exact match.
-            outputMask = scaleMask(aboveBrush, scale, subPixelX, subPixelY);
-        } else {
-            // We are smaller than the smallest mask, which is always 1x1.
-            double s = scale / aboveBrush->scale();
-            outputMask = scaleSinglePixelMask(s, aboveBrush->mask()->alphaAt(0, 0), subPixelX, subPixelY);
-        }
-    }
-
-    // Generate the paint device from the mask
-
     const KoColorSpace* cs = dst->colorSpace();
-
     quint32 pixelSize = cs->pixelSize();
 
-    quint8* maskData = outputMask->data();
+    double scale = 0.5 * (scaleX + scaleY);
+
+    KisQImagemaskSP outputMask = createMask(scale, subPixelX, subPixelY);
+
     qint32 maskWidth = outputMask->width();
     qint32 maskHeight = outputMask->height();
 
-    quint8* dabData = new quint8[pixelSize * maskWidth * maskHeight];
-    quint8* dabPointer = dabData;
-    memset(dabData, OPACITY_TRANSPARENT, pixelSize * maskWidth * maskHeight);
+    if (coloringInformation) {
+
+        // old bounds
+        QRect bounds = dst->bounds();
+
+        // new bounds. we don't care if there is some extra memory occcupied.
+        dst->setRect(QRect(0, 0, maskWidth, maskHeight));
+
+        if (maskWidth * maskHeight <= bounds.width() * bounds.height()) {
+            // just clear the data in dst,
+            memset(dst->data(), OPACITY_TRANSPARENT, maskWidth * maskHeight * dst->pixelSize());
+        }
+        else {
+            dst->initialize();
+        }
+    }
+    else {
+        if (dst->data() == 0 || dst->bounds().isEmpty()) {
+            qWarning() << "Creating a default black dab: no coloring info and no initialized paint device to mask";
+            dst->clear(QRect(0, 0, maskWidth, maskHeight));
+        }
+    }
+    Q_ASSERT(dst->bounds().size() >= QSize(maskWidth, maskHeight));
+
+    quint8* dabPointer = dst->data();
+    quint8* color = 0;
 
     if (coloringInformation) {
-        // cache the color, if the the coloringinfo is plain.
-        quint8* color = 0;
         if (dynamic_cast<PlainColoringInformation*>(coloringInformation)) {
             color = const_cast<quint8*>(coloringInformation->color());
         }
-        // Apply the alpha mask
-        for (int y = 0; y < maskHeight; y++) {
-            for (int x = 0; x < maskWidth; x++) {
-                // XXX: and what if the coloringInformation's color's colorspace isn't the one of the dab?
+    }
+    else {
+        // Mask everything out
+        cs->setAlpha(dst->data(), OPACITY_TRANSPARENT, dst->bounds().width() * dst->bounds().height());
+    }
+
+    int rowWidth = dst->bounds().width();
+
+    quint8* maskPointer = outputMask->data();
+    quint8* rowPointer = dabPointer;
+
+    for (int y = 0; y < maskHeight; y++) {
+        for (int x = 0; x < maskWidth; x++) {
+            if (coloringInformation) {
                 if (color) {
                     memcpy(dabPointer, color, pixelSize);
                 }
                 else {
                     memcpy(dabPointer, coloringInformation->color(), pixelSize);
-                }
-                cs->applyAlphaU8Mask(dabPointer, maskData, 1);
-                if (!color) {
                     coloringInformation->nextColumn();
                 }
-                dabPointer += pixelSize;
-                maskData++;
             }
-            if (!color) {
-                coloringInformation->nextRow();
-            }
+
+            dabPointer += pixelSize;
+        }
+        cs->applyAlphaU8Mask(rowPointer, maskPointer, maskWidth);
+        maskPointer += maskWidth;
+        rowPointer += maskWidth * pixelSize;
+
+        if (!color && coloringInformation) {
+            coloringInformation->nextRow();
+        }
+        if (maskWidth < rowWidth) {
+            dabPointer += (pixelSize * (rowWidth - maskWidth));
         }
     }
-    else {
-        // Apply the alpha mask
-        for (int y = 0; y < maskHeight; y++) {
-            for(int x = 0; x < maskWidth; x++) {
-                cs->applyAlphaU8Mask(dabPointer, maskData, 1);
-                dabPointer += pixelSize;
-                maskData++;
-            }
-        }
-    }
-    dst->writeBytes(dabData, 0, 0, maskWidth, maskHeight);
-    delete[] dabData;
 }
 
-KisPaintDeviceSP KisBrush::image(const KoColorSpace * colorSpace,
-                                 double scale, double angle,
-                                 const KisPaintInformation& info,
-                                 double subPixelX, double subPixelY) const
+KisFixedPaintDeviceSP KisBrush::image(const KoColorSpace * colorSpace,
+                                      double scale, double angle,
+                                      const KisPaintInformation& info,
+                                      double subPixelX, double subPixelY) const
 {
+    Q_ASSERT(valid());
     Q_UNUSED(colorSpace);
     Q_UNUSED(info);
     Q_UNUSED(angle);
@@ -444,36 +433,42 @@ KisPaintDeviceSP KisBrush::image(const KoColorSpace * colorSpace,
         // We're in between two brushes. Interpolate between them.
 
         QImage scaledAboveImage = scaleImage(aboveBrush, scale, subPixelX, subPixelY);
+
         QImage scaledBelowImage = scaleImage(belowBrush, scale, subPixelX, subPixelY);
 
         double t = (scale - belowBrush->scale()) / (aboveBrush->scale() - belowBrush->scale());
 
         outputImage = interpolate(scaledBelowImage, scaledAboveImage, t);
+
     } else {
         if (Eigen::ei_isApprox(scale, aboveBrush->scale())) {
             // Exact match.
             outputImage = scaleImage(aboveBrush, scale, subPixelX, subPixelY);
+
         } else {
             // We are smaller than the smallest brush, which is always 1x1.
             double s = scale / aboveBrush->scale();
             outputImage = scaleSinglePixelImage(s, aboveBrush->image().pixel(0, 0), subPixelX, subPixelY);
+
         }
     }
 
     int outputWidth = outputImage.width();
     int outputHeight = outputImage.height();
 
-    KisPaintDeviceSP layer = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-
-    Q_CHECK_PTR(layer);
-
-    KisHLineIterator iter = layer->createHLineIterator(0, 0, outputWidth);
+    KisFixedPaintDeviceSP dab = new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+    Q_CHECK_PTR(dab);
+    dab->setRect(outputImage.rect());
+    dab->initialize();
+    quint8* dabPointer = dab->data();
+    quint32 pixelSize = dab->pixelSize();
 
     for (int y = 0; y < outputHeight; y++) {
-        for (int x = 0; x < outputWidth; x++) {
-            quint8 * p = iter.rawData();
+        const QRgb *scanline = reinterpret_cast<const QRgb *>(outputImage.scanLine(y));
+        for (int x = 0; x < outputWidth; x++)
+        {
+            QRgb pixel = scanline[x];
 
-            QRgb pixel = outputImage.pixel(x, y);
             int red = qRed(pixel);
             int green = qGreen(pixel);
             int blue = qBlue(pixel);
@@ -481,20 +476,26 @@ KisPaintDeviceSP KisBrush::image(const KoColorSpace * colorSpace,
 
             // Scaled images are in pre-multiplied alpha form so
             // divide by alpha.
+            // XXX: Is alpha != 0 ever true?
             // channel order is BGRA
             if (alpha != 0) {
-                p[2] = (red * 255) / alpha;
-                p[1] = (green * 255) / alpha;
-                p[0] = (blue * 255) / alpha;
-                p[3] = alpha;
+                dabPointer[2] = (red * 255) / alpha;
+                dabPointer[1] = (green * 255) / alpha;
+                dabPointer[0] = (blue * 255) / alpha;
+                dabPointer[3] = alpha;
+            }
+            else {
+                dabPointer[2] = red;
+                dabPointer[1] = green;
+                dabPointer[0] = blue;
+                dabPointer[3] = 0;
             }
 
-            ++iter;
-        }
-        iter.nextRow();
-    }
+            dabPointer += pixelSize;
 
-    return layer;
+        }
+    }
+    return dab;
 }
 
 void KisBrush::clearScaledBrushes()
@@ -508,13 +509,15 @@ void KisBrush::createScaledBrushes() const
         const_cast<KisBrush*>( this )->clearScaledBrushes();
     }
 
+    if (img().isNull()) {
+        return;
+    }
     // Construct a series of brushes where each one's dimensions are
     // half the size of the previous one.
     int width = img().width() * MAXIMUM_SCALE;
     int height = img().height() * MAXIMUM_SCALE;
 
     QImage scaledImage;
-
     while (true) {
 
         if (width >= img().width() && height >= img().height()) {
@@ -542,6 +545,44 @@ void KisBrush::createScaledBrushes() const
         height = (height + 1) / 2;
 
     }
+}
+
+KisQImagemaskSP KisBrush::createMask(double scale, double subPixelX, double subPixelY) const
+{
+    if (d->scaledBrushes.isEmpty()) {
+        createScaledBrushes();
+    }
+
+    const KisScaledBrush *aboveBrush = 0;
+    const KisScaledBrush *belowBrush = 0;
+
+    findScaledBrushes(scale, &aboveBrush,  &belowBrush);
+    Q_ASSERT(aboveBrush != 0);
+
+    // get the right mask
+    KisQImagemaskSP outputMask = KisQImagemaskSP(0);
+
+    if (belowBrush != 0) {
+        // We're in between two masks. Interpolate between them.
+
+        KisQImagemaskSP scaledAboveMask = scaleMask(aboveBrush, scale, subPixelX, subPixelY);
+        KisQImagemaskSP scaledBelowMask = scaleMask(belowBrush, scale, subPixelX, subPixelY);
+
+        double t = (scale - belowBrush->scale()) / (aboveBrush->scale() - belowBrush->scale());
+
+        outputMask = KisQImagemask::interpolate(scaledBelowMask, scaledAboveMask, t);
+    } else {
+        if (Eigen::ei_isApprox(scale, aboveBrush->scale())) {
+            // Exact match.
+            outputMask = scaleMask(aboveBrush, scale, subPixelX, subPixelY);
+        } else {
+            // We are smaller than the smallest mask, which is always 1x1.
+            double s = scale / aboveBrush->scale();
+            outputMask = scaleSinglePixelMask(s, aboveBrush->mask()->alphaAt(0, 0), subPixelX, subPixelY);
+        }
+    }
+
+    return outputMask;
 }
 
 KisQImagemaskSP KisBrush::scaleMask(const KisScaledBrush *srcBrush, double scale, double subPixelX, double subPixelY) const
@@ -1072,7 +1113,7 @@ void KisBrush::resetBoundary()
 
 void KisBrush::generateBoundary() const
 {
-    KisPaintDeviceSP dev;
+    KisFixedPaintDeviceSP dev;
     int w = width();
     int h = height();
 
@@ -1080,8 +1121,8 @@ void KisBrush::generateBoundary() const
         dev = image(KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0), 1.0, 0.0, KisPaintInformation());
     } else {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-        dev = new KisPaintDevice(cs);
-        mask(dev, KoColor(dev->dataManager()->defaultPixel(), cs) , 1.0, 1.0, 0.0, KisPaintInformation());
+        dev = new KisFixedPaintDevice(cs);
+        mask(dev, KoColor(Qt::black, cs) , 1.0, 1.0, 0.0, KisPaintInformation());
 #if 0
         KisQImagemaskSP amask = mask(KisPaintInformation());
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);

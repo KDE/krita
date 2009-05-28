@@ -74,8 +74,10 @@ public:
     */
     virtual QImage img() const;
 
-    virtual KisPaintDeviceSP image(const KoColorSpace * colorSpace, double scale, double angle,
-                                   const KisPaintInformation& info, double subPixelX = 0, double subPixelY = 0) const;
+    virtual KisFixedPaintDeviceSP image(const KoColorSpace * colorSpace,
+                                        double scale, double angle,
+                                        const KisPaintInformation& info,
+                                        double subPixelX = 0, double subPixelY = 0) const;
 
     virtual bool useColorAsMask() const;
     virtual void setUseColorAsMask(bool useColorAsMask);
@@ -93,13 +95,13 @@ public:
 
     virtual QString defaultFileExtension() const;
 
-
     /**
      *  @return the next mask in the pipe.
      */
-    virtual void generateMask(KisPaintDeviceSP dst, KisBrush::ColoringInformation* src, double scaleX, double scaleY,
-                              double angle, const KisPaintInformation& info, double subPixelX = 0,
-                              double subPixelY = 0) const;
+    virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
+                              double scaleX, double scaleY, double angle,
+                              const KisPaintInformation& info,
+                              double subPixelX = 0, double subPixelY = 0) const;
 
 
 protected:

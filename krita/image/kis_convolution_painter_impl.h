@@ -58,20 +58,19 @@ struct RepeatIteratorFactory {
     }
 };
 template< class _IteratorFactory_>
-void KisConvolutionPainter::applyMatrixImpl(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, qint32 h, const QRect& _dataRect)
+void KisConvolutionPainter::applyMatrixImpl(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize, const QRect& _dataRect)
 {
     dbgImage << *kernel;
     // Make the area we cover as small as possible
     if (selection()) {
 
-        QRect r = selection()->selectedRect().intersect(QRect(x, y, w, h));
-        x = r.x();
-        y = r.y();
-        w = r.width();
-        h = r.height();
+        QRect r = selection()->selectedRect().intersect(QRect(srcPos, areaSize));
+        dstPos += r.topLeft() - srcPos;
+        srcPos = r.topLeft();
+        areaSize = r.size();
     }
 
-    if (w == 0 && h == 0) return;
+    if (areaSize.width() == 0 && areaSize.height() == 0) return;
     // Determine the kernel's extent from the center pixel
     qint32 kw, kh, khalfWidth, khalfHeight, xLastMinuskhw, yLastMinuskhh;
     kw = kernel->width();
@@ -79,11 +78,11 @@ void KisConvolutionPainter::applyMatrixImpl(const KisConvolutionKernelSP kernel,
     khalfWidth = (kw - 1) / 2;
     khalfHeight = (kh - 1) / 2;
 
-    xLastMinuskhw = x + (w - khalfWidth);
-    yLastMinuskhh = y + (h - khalfHeight);
+    xLastMinuskhw = srcPos.x() + (areaSize.width() - khalfWidth);
+    yLastMinuskhh = srcPos.y() + (areaSize.height() - khalfHeight);
 
     // Don't try to convolve on an area smaller than the kernel, or with a kernel that is not square or has no center pixel.
-    if (w < kw || h < kh || (kw&1) == 0 || (kh&1) == 0 || kernel->factor() == 0) return;
+    if (areaSize.width() < kw || areaSize.height() < kh || (kw&1) == 0 || (kh&1) == 0 || kernel->factor() == 0) return;
 
     int lastProgressPercent = 0;
     if (progressUpdater()) progressUpdater()->setProgress(0);
@@ -100,14 +99,14 @@ void KisConvolutionPainter::applyMatrixImpl(const KisConvolutionKernelSP kernel,
 //     pixelPtrCache.fill(0);
 
     // row == the y position of the pixel we want to change in the paint device
-    int row = y;
+    int row = srcPos.y();
 
-    typename _IteratorFactory_::HLineIterator hit = _IteratorFactory_::createHLineIterator(device(), x, y, w, _dataRect );
+    typename _IteratorFactory_::HLineIterator hit = _IteratorFactory_::createHLineIterator(device(), dstPos.x(), dstPos.y(), areaSize.width(), _dataRect );
 
-    for (; row < y + h; ++row) {
+    for (; row < srcPos.y() + areaSize.height(); ++row) {
 
         // col = the x position of the pixel we want to change
-        int col = x;
+        int col = srcPos.x();
 
 
         bool needFull = true;
@@ -162,7 +161,7 @@ void KisConvolutionPainter::applyMatrixImpl(const KisConvolutionKernelSP kernel,
 
         hit.nextRow();
 
-        int progressPercent = 100 - ((((y + h) - row) * 100) / h);
+        int progressPercent = 100 - ((((dstPos.y() + areaSize.height()) - row) * 100) / areaSize.height());
 
         if (progressUpdater() && progressPercent > lastProgressPercent) {
             progressUpdater()->setProgress(progressPercent);
@@ -180,7 +179,7 @@ void KisConvolutionPainter::applyMatrixImpl(const KisConvolutionKernelSP kernel,
 
     }
 
-    addDirtyRect(QRect(x, y, w, h));
+    addDirtyRect(QRect(dstPos.x(), dstPos.y(), areaSize.width(), areaSize.height()));
 
     if (progressUpdater()) progressUpdater()->setProgress(100);
 

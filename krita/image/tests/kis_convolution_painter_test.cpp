@@ -56,7 +56,7 @@ void KisConvolutionPainterTest::testIdentityConvolution()
     kernel->data()[7] = 0;
     kernel->data()[8] = 0;
     KisConvolutionPainter gc(dev);
-    gc.applyMatrix(kernel, dev, 0, 0, qimg.width(), qimg.height());
+    gc.applyMatrix(kernel, dev, QPoint(0, 0), QPoint(0, 0), QSize(qimg.width(), qimg.height()));
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, qimg, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()))) {
@@ -86,7 +86,7 @@ void KisConvolutionPainterTest::testIdentityConvolutionOnColorChannels()
     KisConvolutionPainter gc(dev);
 
     gc.setChannelFlags(dev->colorSpace()->channelFlags());
-    gc.applyMatrix(kernel, dev, 0, 0, qimg.width(), qimg.height());
+    gc.applyMatrix(kernel, dev, QPoint(0, 0), QPoint(0, 0), QSize(qimg.width(), qimg.height()));
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, qimg, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()))) {
@@ -106,7 +106,7 @@ void KisConvolutionPainterTest::testMaskConvolution()
     KisConvolutionKernelSP kernel = KisConvolutionKernel::kernelFromMaskGenerator(kas);
 
     KisConvolutionPainter gc(dev);
-    gc.applyMatrix(kernel, dev, 0, 0, qimg.width(), qimg.height());
+    gc.applyMatrix(kernel, dev, QPoint(0, 0), QPoint(0, 0), QSize(qimg.width(), qimg.height()));
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, result, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()))) {
@@ -127,7 +127,7 @@ void KisConvolutionPainterTest::testMaskConvolutionOnColorChannels()
 
     KisConvolutionPainter gc(dev);
     gc.setChannelFlags(dev->colorSpace()->channelFlags());
-    gc.applyMatrix(kernel, dev, 0, 0, qimg.width(), qimg.height());
+    gc.applyMatrix(kernel, dev, QPoint(0, 0), QPoint(0, 0), QSize(qimg.width(), qimg.height()));
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, result, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()))) {
@@ -154,7 +154,7 @@ void KisConvolutionPainterTest::testMaskConvolutionOnRedChannel()
     channelFlags.setBit(3, false);
 
     gc.setChannelFlags(channelFlags);
-    gc.applyMatrix(kernel, dev, 0, 0, qimg.width(), qimg.height());
+    gc.applyMatrix(kernel, dev, QPoint(0, 0), QPoint(0, 0), QSize(qimg.width(), qimg.height()));
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, result, dev->convertToQImage(0, 0, 0, qimg.width(), qimg.height()))) {

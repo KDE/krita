@@ -105,7 +105,7 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     }
     painter.setChannelFlags(channelFlags);
     painter.beginTransaction("convolution step");
-    painter.applyMatrix(kernel, interm, src.topLeft().x(), src.topLeft().y(), areaSize.width(), areaSize.height(), BORDER_REPEAT);
+    painter.applyMatrix(kernel, interm, src.topLeft(), dst.topLeft(), areaSize, BORDER_REPEAT);
 
     if (progressUpdater && progressUpdater->interrupted()) {
         return;

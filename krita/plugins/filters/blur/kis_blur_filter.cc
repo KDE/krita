@@ -106,7 +106,7 @@ void KisBlurFilter::process(KisConstProcessingInformation srcInfo,
     delete kas;
     KisConvolutionPainter painter(dst, dstInfo.selection());
     painter.setProgress(progressUpdater);
-    painter.applyMatrix(kernel, src, dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), BORDER_REPEAT);
+    painter.applyMatrix(kernel, src, srcTopLeft, dstTopLeft, size, BORDER_REPEAT);
 
 }
 

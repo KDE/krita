@@ -350,7 +350,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
         }
 
         // The old srcRowStride is no longer valid because we converted to the current cs
-        srcRowStride = cols * pixelSize();
+        srcRowStride = (srcRowStride / srcSpace->pixelSize()) * pixelSize();
 
         op->composite( dst, dststride,
                        conversionData, srcRowStride,

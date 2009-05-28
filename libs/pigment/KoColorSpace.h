@@ -535,13 +535,13 @@ public:
      * colorspace.
      *
      * @param dst pointer to the pixels onto which src will be composited. dst is "below" src.
-     * @param dststride skip in bytes to the starting point of the next row of dst pixels
+     * @param dststride the total number of bytes in one line in the dst paint device
      * @param srcSpace the colorspace of the source pixels that will be composited onto "us"
      * @param src pointer to the pixels that will be composited onto "us"
-     * @param srcRowStride skip in bytes to the starting point of the next row of src pixels
+     * @param srcRowStride the total number of bytes in one line in the src paint device
      * @param srcAlphaMask pointer to an alpha mask that determines whether and how much
      *        of src will be composited onto dst
-     * @param maskRowStride skip in bytes to the starting point of the next row of mask pixels
+     * @param maskRowStride the total number of bytes in one line in the mask paint device
      * @param rows the number of rows of pixels we'll be compositing
      * @param cols the length in pixels of a single row we'll be compositing.
      * @param op the composition operator to use, e.g. COPY_OVER

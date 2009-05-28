@@ -147,7 +147,7 @@ public:
      * especially on larger paint devices because it does a linear scanline search.
      */
     void exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
-        
+
     /// Convience method for the above
     virtual QRect exactBounds() const;
 
@@ -178,14 +178,14 @@ public:
     const quint8 *defaultPixel() const;
 
     /**
-     * Clear the given rectangle to transparent black. This does not take the selection
-     * into account.
+     * Clear the given rectangle to transparent black. The paint device will expand to
+     * contain the given rect.
      */
     void clear(const QRect & rc);
 
     /**
-     * Fill the given rectangle with the given pixel. This does not take the
-     * selection into account.
+     * Fill the given rectangle with the given pixel. The paint device will expand to
+     * contain the given rect.
      */
     void fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *fillPixel);
 
@@ -321,7 +321,7 @@ public:
      *
      * The color values will be transformed from the profile of
      * this paint device to the display profile.
-     
+
      * @deprecated use iterators instead
      * @return true if the operation was successful.
      */
@@ -412,7 +412,7 @@ public:
     void removePainterlyOverlay();
 
 public:
-    
+
     /**
      * Add the specified rect to the parent layer's set of dirty rects
      * (if there is a parent layer)
@@ -433,7 +433,7 @@ public:
      * @deprecated: call setDirty on the node
      */
     virtual void KDE_DEPRECATED setDirty();
-    
+
 public:
 
     /**
@@ -468,18 +468,18 @@ public:
     /**
      * Create an iterator that will "artificially" extend the paint device with the
      * value of the border when trying to access values outside the range of data.
-     * 
+     *
      * @param rc indicates the rectangle that truly contains data
      */
     KisRepeatHLineConstIteratorPixel createRepeatHLineConstIterator(qint32 x, qint32 y, qint32 w, const QRect& _dataWidth, const KisSelection * selection = 0) const;
     /**
      * Create an iterator that will "artificially" extend the paint device with the
      * value of the border when trying to access values outside the range of data.
-     * 
+     *
      * @param rc indicates the rectangle that trully contains data
      */
     KisRepeatVLineConstIteratorPixel createRepeatVLineConstIterator(qint32 x, qint32 y, qint32 h, const QRect& _dataWidth, const KisSelection * selection = 0) const;
-    
+
     /**
     * @param selection an up-to-date selection that has the same origin as the paint device
      * @return an iterator which points to the first pixel of a horizontal line
@@ -544,7 +544,7 @@ signals:
      * manage the undo system.
      */
     void painterlyOverlayCreated();
-    
+
 private:
 
     KisPaintDevice& operator=(const KisPaintDevice&);

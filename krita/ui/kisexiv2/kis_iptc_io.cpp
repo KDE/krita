@@ -164,10 +164,24 @@ bool KisIptcIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
         dbgFile << "Reading info for key" << it->key().c_str();
         if (d->iptcToKMD.contains(it->key().c_str())) {
             const IPTCToKMD& iptcToKMd = d->iptcToKMD[it->key().c_str()];
-            store->addEntry(KisMetaData::Entry(
-                                KisMetaData::SchemaRegistry::instance()->schemaFromUri(iptcToKMd.namespaceUri),
-                                iptcToKMd.name,
-                                exivValueToKMDValue(it->getValue(), false)));
+            const KisMetaData::Schema* schema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(iptcToKMd.namespaceUri);
+            KisMetaData::Value value;
+            if( iptcToKMd.exivTag == "Iptc.Application2.Keywords" )
+            {
+              Q_ASSERT( it->getValue()->typeId() == Exiv2::string );
+              QString data = it->getValue()->toString().c_str();
+              
+              QStringList list = data.split(",");
+              QList<KisMetaData::Value> values;
+              foreach( QString entry, list)
+              {
+                values.push_back(KisMetaData::Value(entry));
+              }
+              value = KisMetaData::Value(values, KisMetaData::Value::UnorderedArray );
+            } else {
+              value = exivValueToKMDValue(it->getValue(), false);
+            }
+            store->addEntry(KisMetaData::Entry( schema, iptcToKMd.name, value ));
         }
     }
     return false;

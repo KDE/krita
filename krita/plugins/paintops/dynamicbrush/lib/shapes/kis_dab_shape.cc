@@ -109,7 +109,15 @@ void KisDabShape::paintAt(const QPointF &pos, const KisPaintInformation& info, K
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
     coloringsrc->colorize(m_dab, dabRect);
-    m_brush->mask(m_dab, m_scaleX, m_scaleY, m_rotate, info, xFraction, yFraction);    if (painter()->bounds().isValid()) {
+    KisFixedPaintDeviceSP fixedDab = new KisFixedPaintDevice(m_dab->colorSpace());
+    fixedDab->setRect(dabRect);
+    fixedDab->initialize();
+
+    m_dab->writeBytes(fixedDab->data(), dstRect);
+    m_brush->mask(fixedDab, m_scaleX, m_scaleY, m_rotate, info, xFraction, yFraction);
+    m_dab->readBytes(fixedDab->data(), dstRect);
+
+    if (painter()->bounds().isValid()) {
         dstRect &= painter()->bounds();
     }
 

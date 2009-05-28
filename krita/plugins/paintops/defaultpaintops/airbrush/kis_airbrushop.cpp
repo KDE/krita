@@ -121,7 +121,7 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    KisPaintDeviceSP dab = KisPaintDeviceSP(0);
+    KisFixedPaintDeviceSP dab = KisFixedPaintDeviceSP(0);
 
     QRect dabRect = QRect(0, 0, brush->maskWidth(1.0, 0.0), brush->maskHeight(1.0, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
@@ -147,7 +147,7 @@ void KisAirbrushOp::paintAt(const KisPaintInformation& info)
         brush->mask(dab, color, 1.0, 1.0, 0.0, info, xFraction, yFraction);
     }
 
-    painter()->bitBlt(dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);
+    painter()->bltFixed( dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);
 
 
 }

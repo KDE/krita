@@ -49,13 +49,10 @@ public:
         return true;
     }
 
-
-
-
 private:
     const KisSprayPaintOpSettings* m_settings;
     KisImageSP m_image;
-    KisPaintDeviceSP dab;
+    KisPaintDeviceSP m_dab;
     SprayBrush m_sprayBrush;
     double m_xSpacing, m_ySpacing, m_spacing;
 };

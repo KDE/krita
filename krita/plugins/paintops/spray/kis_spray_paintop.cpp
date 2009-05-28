@@ -56,7 +56,7 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     m_sprayBrush.setJitterShapeSize(settings->jitterShapeSize());
 
     if (settings->proportional()){
-        m_sprayBrush.setObjectDimension( settings->widthPerc()  / 100.0 * settings->diameter() * settings->scale(), 
+        m_sprayBrush.setObjectDimension( settings->widthPerc()  / 100.0 * settings->diameter() * settings->scale(),
                                           settings->heightPerc() / 100.0 * settings->diameter() * settings->scale());
     } else
     {
@@ -71,7 +71,7 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     m_sprayBrush.setUseDensity( settings->useDensity() );
     m_sprayBrush.setParticleCount( settings->particleCount() );
 
-    // spacing 
+    // spacing
     if ( (settings->diameter() * 0.5) > 1)
     {
         m_ySpacing = m_xSpacing = settings->diameter() * 0.5 * settings->spacing();
@@ -101,14 +101,18 @@ void KisSprayPaintOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) return;
 
-    dab = cachedDab();
-    dab->clear();
-    
-    m_sprayBrush.paint(dab, info, painter()->paintColor());
-        
-    QRect rc = dab->extent();
+    if (!m_dab) {
+        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+    }
+    else {
+        m_dab->clear();
+    }
 
-    painter()->bitBlt(rc.topLeft(), dab, rc);
+    m_sprayBrush.paint(m_dab, info, painter()->paintColor());
+
+    QRect rc = m_dab->extent();
+
+    painter()->bitBlt(rc.topLeft(), m_dab, rc);
 
 }
 

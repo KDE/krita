@@ -70,10 +70,17 @@ KisDynaPaintOp::~KisDynaPaintOp()
 {
 }
 
-double KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist){
+double KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist)
+{
+
     if (!painter()) return 0;
-    dab = cachedDab();
-    dab->clear();
+
+    if (!m_dab) {
+        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+    }
+    else {
+        m_dab->clear();
+    }
 
     qreal x1, y1;
 
@@ -81,16 +88,11 @@ double KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
     y1 = pi1.pos().y();
 
     m_dynaBrush.initMouse( pi2.pos() );
-    m_dynaBrush.paint(dab, x1, y1, painter()->paintColor());
+    m_dynaBrush.paint(m_dab, x1, y1, painter()->paintColor());
 
-    QRect rc = dab->extent();
+    QRect rc = m_dab->extent();
 
-    painter()->bitBlt(
-        rc.x(), rc.y(),
-        dab,
-        rc.x(), rc.y(),
-        rc.width(), rc.height());
-
+    painter()->bitBlt(rc.topLeft(), m_dab, rc);
 
     KisVector2D end = toKisVector2D(pi2.pos());
     KisVector2D start = toKisVector2D(pi1.pos());

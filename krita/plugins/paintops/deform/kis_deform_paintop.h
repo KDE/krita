@@ -52,8 +52,10 @@ public:
 
 private:
     bool m_useMovementPaint;
-    KisPaintDeviceSP dab;
+
+    KisPaintDeviceSP m_dab;
     KisPaintDeviceSP m_dev;
+
     DeformBrush m_deformBrush;
     qreal m_xSpacing;
     qreal m_ySpacing;

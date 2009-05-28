@@ -119,7 +119,7 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    KisPaintDeviceSP dab = KisPaintDeviceSP(0);
+    KisFixedPaintDeviceSP dab = cachedDab(device->colorSpace());
 
     quint8 origOpacity = settings->m_optionsWidget->m_opacityOption->apply(painter(), info.pressure());
 
@@ -151,7 +151,7 @@ void KisEraseOp::paintAt(const KisPaintInformation& info)
 
     const KoCompositeOp* op = painter()->compositeOp();
     painter()->setCompositeOp(COMPOSITE_ERASE);
-    painter()->bitBlt(dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);
+    painter()->bltFixed(dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);
     painter()->setCompositeOp(op);
 
     painter()->setOpacity(origOpacity);

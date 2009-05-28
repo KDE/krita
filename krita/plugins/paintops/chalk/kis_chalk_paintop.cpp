@@ -58,20 +58,22 @@ void KisChalkPaintOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()) return;
 
-    dbgPlugins << info;
-
-    dab = cachedDab();
-    dab->clear();
+    if (!m_dab) {
+        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+    }
+    else {
+        m_dab->clear();
+    }
 
     qreal x1, y1;
 
     x1 = info.pos().x();
     y1 = info.pos().y();
 
-    m_chalkBrush.paint(dab, x1, y1, painter()->paintColor());
+    m_chalkBrush.paint(m_dab, x1, y1, painter()->paintColor());
 
-    QRect rc = dab->extent();
+    QRect rc = m_dab->extent();
 
-    painter()->bitBlt(rc.x(), rc.y(), dab, rc.x(), rc.y(), rc.width(), rc.height());
+    painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
 
 }

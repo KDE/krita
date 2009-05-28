@@ -61,7 +61,7 @@ public:
 private:
     const KisChalkPaintOpSettings* m_settings;
     KisImageSP m_image;
-    KisPaintDeviceSP dab;
+    KisPaintDeviceSP m_dab;
     ChalkBrush m_chalkBrush;
 };
 

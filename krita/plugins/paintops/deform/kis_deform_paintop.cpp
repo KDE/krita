@@ -60,9 +60,10 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
     m_deformBrush.setUseCounter( settings->useCounter() );
     m_deformBrush.setUseOldData( settings->useOldData() );
 
-    if ( !settings->node() ){
+    if ( !settings->node() ) {
         m_dev = 0;
-    }else{
+    }
+    else {
         m_dev = settings->node()->paintDevice();
     }
 
@@ -92,20 +93,21 @@ double KisDeformPaintOp::spacing(double & xSpacing, double & ySpacing, double pr
 
 void KisDeformPaintOp::paintAt(const KisPaintInformation& info)
 {
-//    QMutexLocker locker(&m_mutex);
-
     if (!painter()) return;
-    /* m_dev = painter()->device(); */
     if (!m_dev) return;
 
-    dab = cachedDab();
-    dab->clear();
+    if (!m_dab) {
+        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+    }
+    else {
+        m_dab->clear();
+    }
 
-    //write device, read device, position 
-    m_deformBrush.paint(dab,m_dev, info);
+    //write device, read device, position
+    m_deformBrush.paint(m_m_dab, m_dev, info);
 
-    QRect rc = dab->extent();
-    painter()->bitBlt( rc.x(), rc.y(), dab, rc.x(), rc.y(), rc.width(), rc.height());
+    QRect rc = m_dab->extent();
+    painter()->bitBlt( rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
 }
 
 

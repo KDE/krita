@@ -125,7 +125,7 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
 
-    KisPaintDeviceSP dab = KisPaintDeviceSP(0);
+    KisFixedPaintDeviceSP dab;
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         dab = brush->image(device->colorSpace(), scale, 0.0, adjustedInfo, xFraction, yFraction);
     } else {
@@ -135,9 +135,9 @@ void KisComplexOp::paintAt(const KisPaintInformation& info)
         brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
     }
 
-    settings->m_optionsWidget->m_bidiOption->apply(dab, device, painter(), sx, sy, sw, sh, adjustedInfo.pressure(), dstRect);
+    settings->m_optionsWidget->m_bidiOption->applyFixed(dab, device, painter(), sx, sy, sw, sh, adjustedInfo.pressure(), dstRect);
 
-    painter()->bitBlt(dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);
+    painter()->bltFixed(dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);
 
     painter()->setOpacity(origOpacity);
     painter()->setPaintColor(origColor);

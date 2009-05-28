@@ -107,26 +107,21 @@ void KisSumiPaintOp::paintAt(const KisPaintInformation& info)
 
 double KisSumiPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist)
 {
-//    QMutexLocker locker(&m_mutex);
     Q_UNUSED(savedDist);
 
     if (!painter()) return 0;
 
-/*    KisPaintDeviceSP device = painter()->device();
-    if (!device) return 0;
-    m_dev = device;*/
+    if (!m_dab) {
+        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+    }
+    else {
+        m_dab->clear();
+    }
 
-    dab = cachedDab();
-    dab->clear();
+    m_brush.paintLine(m_dab, m_dev, pi1, pi2);
 
-    m_brush.paintLine(dab, m_dev, pi1, pi2);
-
-    QRect rc = dab->extent();
-    painter()->bitBlt(
-        rc.x(), rc.y(),
-        dab,
-        rc.x(), rc.y(),
-        rc.width(), rc.height());
+    QRect rc = m_dab->extent();
+    painter()->bitBlt(rc.topLeft(), m_dab, rc);
 
     KisVector2D end = toKisVector2D(pi2.pos());
     KisVector2D start = toKisVector2D(pi1.pos());

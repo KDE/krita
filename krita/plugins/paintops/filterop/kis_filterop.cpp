@@ -119,8 +119,6 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
     qint32 maskWidth = brush->maskWidth(scale, 0.0);
     qint32 maskHeight = brush->maskHeight(scale, 0.0);
 
-    m_tmpDevice->clear();
-
     // Filter the paint device
     filter->process(KisConstProcessingInformation(source(), QPoint(x, y)),
                     KisProcessingInformation(m_tmpDevice, QPoint(0, 0)),
@@ -128,7 +126,14 @@ void KisFilterOp::paintAt(const KisPaintInformation& info)
                     settings->filterConfig(), 0);
 
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
-    brush->mask(m_tmpDevice, scale, scale, 0.0, info, xFraction, yFraction);
+
+    KisFixedPaintDeviceSP fixedDab = new KisFixedPaintDevice(m_tmpDevice->colorSpace());
+    fixedDab->setRect(m_tmpDevice->extent());
+    fixedDab->initialize();
+
+    m_tmpDevice->readBytes(fixedDab->data(), fixedDab->bounds());
+    brush->mask(fixedDab, scale, scale, 0.0, info, xFraction, yFraction);
+    m_tmpDevice->writeBytes(fixedDab->data(), fixedDab->bounds());
 
     if (!settings->ignoreAlpha()) {
         KisHLineIteratorPixel itTmpDev = m_tmpDevice->createHLineIterator(0, 0, maskWidth);

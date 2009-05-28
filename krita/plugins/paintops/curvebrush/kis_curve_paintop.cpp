@@ -73,21 +73,22 @@ void KisCurvePaintOp::paintAt(const KisPaintInformation& info)
 
 double KisCurvePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, double savedDist)
 {
-//    QMutexLocker locker(&m_mutex);
-
     if (!painter()) return 0;
     m_dev = painter()->device();
     if (!m_dev) return 0;
 
-    dab = cachedDab();
-    dab->clear();
-
+    if (!m_dab) {
+        m_dab = new KisPaintDevice(painter()->device()->colorSpace());
+    }
+    else {
+        m_dab->clear();
+    }
     //write device, read device, position
-    m_curveBrush.paintLine(dab,m_dev, pi1, pi2);
+    m_curveBrush.paintLine(m_dab, m_dev, pi1, pi2);
 
-    QRect rc = dab->extent();
+    QRect rc = m_dab->extent();
 
-    painter()->bitBlt(rc.topLeft(), dab, rc);
+    painter()->bitBlt(rc.topLeft(), m_dab, rc);
 
     KisVector2D end = toKisVector2D(pi2.pos());
     KisVector2D start = toKisVector2D(pi1.pos());

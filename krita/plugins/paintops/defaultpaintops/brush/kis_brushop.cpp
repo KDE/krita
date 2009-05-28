@@ -107,35 +107,16 @@ void KisBrushOp::paintAt(const KisPaintInformation& info)
 
     double scale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());
 
-    QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
-    QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
-
-
-    if (painter()->bounds().isValid()) {
-        dstRect &= painter()->bounds();
-    }
-
-    if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return;
-
-    qint32 sx = dstRect.x() - x;
-    qint32 sy = dstRect.y() - y;
-    qint32 sw = dstRect.width();
-    qint32 sh = dstRect.height();
-
-    KisPaintDeviceSP dab = KisPaintDeviceSP(0);
-
+    KisFixedPaintDeviceSP dab = cachedDab(device->colorSpace());
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         dab = brush->image(device->colorSpace(), scale, 0.0, adjustedInfo, xFraction, yFraction);
     } else {
-        dab = cachedDab();
-        dab->clear();
         KoColor color = painter()->paintColor();
         color.convertTo(dab->colorSpace());
         brush->mask(dab, color, scale, scale, 0.0, info, xFraction, yFraction);
     }
 
-    painter()->bitBlt(dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);
-
+    painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
     painter()->setOpacity(origOpacity);
     painter()->setPaintColor(origColor);
 

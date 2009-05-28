@@ -103,13 +103,11 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
 
     double scale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());
 
-    KisPaintDeviceSP dab = KisPaintDeviceSP(0);
-    if (brush->brushType() == IMAGE ||
-            brush->brushType() == PIPE_IMAGE) {
+    KisFixedPaintDeviceSP dab = cachedDab();
+
+    if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         dab = brush->image(device->colorSpace(), scale, 0.0, info);
     } else {
-        // Compute mask without sub-pixel positioning
-        dab = cachedDab();
         KoColor color = painter()->paintColor();
         color.convertTo(dab->colorSpace());
         brush->mask(dab, color, scale, scale, 0.0, info);
@@ -128,18 +126,19 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
 
     // Set all alpha > opaque/2 to opaque, the rest to transparent.
     // XXX: Using 4/10 as the 1x1 circle brush paints nothing with 0.5.
-
-    KisRectIteratorPixel pixelIt = dab->createRectIterator(dabRect.x(), dabRect.y(), dabRect.width(), dabRect.height());
-    while (!pixelIt.isDone()) {
-        quint8 alpha = cs->alpha(pixelIt.rawData());
+    quint8* dabPointer = dab->data();
+    QRect rc = dab->bounds();
+    int pixelSize = dab->pixelSize();
+    for (int i = 0; i < rc.width() * rc.height(); i++) {
+        quint8 alpha = cs->alpha(dabPointer);
 
         if (alpha < (4 * OPACITY_OPAQUE) / 10) {
-            cs->setAlpha(pixelIt.rawData(), OPACITY_TRANSPARENT, 1);
+            cs->setAlpha(dabPointer, OPACITY_TRANSPARENT, 1);
         } else {
-            cs->setAlpha(pixelIt.rawData(), OPACITY_OPAQUE, 1);
+            cs->setAlpha(dabPointer, OPACITY_OPAQUE, 1);
         }
 
-        ++pixelIt;
+        dabPointer += pixelSize;
     }
 
     qint32 sx = dstRect.x() - x;
@@ -147,7 +146,7 @@ void KisPenOp::paintAt(const KisPaintInformation& info)
     qint32 sw = dstRect.width();
     qint32 sh = dstRect.height();
 
-    painter()->bitBlt(dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);
+    painter()->bltFixed(dstRect.x(), dstRect.y(), dab, sx, sy, sw, sh);
     painter()->setOpacity(origOpacity);
     painter()->setPaintColor(origColor);
 }

@@ -28,6 +28,7 @@
 #include <KoColor.h>
 
 #include <kis_painter.h>
+#include <kis_fixed_paint_device.h>
 #include <kis_paint_device.h>
 #include <kis_properties_configuration.h>
 
@@ -73,6 +74,46 @@ void KisBidirectionalMixingOption::apply(KisPaintDeviceSP dab, KisPaintDeviceSP 
         ++cit;
         ++dit;
     }
+}
+
+void KisBidirectionalMixingOption::applyFixed(KisFixedPaintDeviceSP dab, KisPaintDeviceSP device, KisPainter* painter, qint32 sx, qint32 sy, qint32 sw, qint32 sh, quint8 pressure, const QRect& dstRect)
+{
+    if (!isChecked()) return;
+
+    KisFixedPaintDevice canvas(device->colorSpace());
+    canvas.setRect(QRect(dstRect.x(), dstRect.y(), sw, sh));
+    canvas.initialize();
+    device->readBytes(canvas.data(), canvas.bounds());
+
+    const KoColorSpace* cs = dab->colorSpace();
+    int channelCount = cs->channelCount();
+
+    quint8* dabPointer = dab->data();
+    quint8* canvasPointer = canvas.data();
+
+    QVector<float> cc(channelCount ), dc(channelCount );
+
+    for (int y = 0; y < sh; y++) {
+        for (int x = 0; x < sw; x++) {
+            if (cs->alpha(dabPointer) > 10 && cs->alpha(canvasPointer) > 10) {
+
+                cs->normalisedChannelsValue(canvasPointer, cc);
+                cs->normalisedChannelsValue(dabPointer, dc);
+
+                for (int i = 0; i < channelCount ; i++) {
+                    dc[i] = (1.0 - 0.4 * pressure) * cc[i] + 0.4 * pressure * dc[i];
+                }
+
+                cs->fromNormalisedChannelsValue(dabPointer, dc);
+
+                if (x == (int)(sw / 2) && y == (int)(sh / 2))
+                    painter->setPaintColor(KoColor(dabPointer, cs));
+            }
+        }
+        dabPointer += dab->pixelSize();
+        canvasPointer += canvas.pixelSize();
+    }
+
 }
 
 void KisBidirectionalMixingOption::writeOptionSetting(KisPropertiesConfiguration* setting) const

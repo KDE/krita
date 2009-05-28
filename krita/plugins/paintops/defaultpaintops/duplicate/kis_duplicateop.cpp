@@ -58,6 +58,7 @@
 #include <kis_paint_action_type_option.h>
 #include <kis_perspective_grid.h>
 #include <kis_random_sub_accessor.h>
+#include <kis_fixed_paint_device.h>
 
 #include "kis_duplicateop_settings.h"
 #include "kis_duplicateop_settings_widget.h"
@@ -266,7 +267,13 @@ void KisDuplicateOp::paintAt(const KisPaintInformation& info)
         delete [] matrix;
     }
 
-    brush->mask(m_srcdev, scale, scale, 0.0, info, xFraction, yFraction);
+    KisFixedPaintDeviceSP fixedDab = new KisFixedPaintDevice(m_srcdev->colorSpace());
+    fixedDab->setRect(QRect(0, 0, sw, sh));
+    fixedDab->initialize();
+
+    m_srcdev->readBytes(fixedDab->data(), fixedDab->bounds());
+    brush->mask(fixedDab, scale, scale, 0.0, info, xFraction, yFraction);
+    m_srcdev->writeBytes(fixedDab->data(), fixedDab->bounds());
 
     QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());

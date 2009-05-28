@@ -113,9 +113,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
 
-    KisPaintDeviceSP dab = KisPaintDeviceSP(0);
-
-    //quint8 origOpacity = settings->m_optionsWidget->m_opacityOption->apply(painter(), info.pressure());
+    KisFixedPaintDeviceSP dab = 0;
 
     double scale = KisPaintOp::scaleForPressure(adjustedInfo.pressure());
 
@@ -133,8 +131,8 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
         brush->mask(dab, color, scale, pScale, 0.0, info, xFraction, yFraction);
     }
 
-    qint32 sw = dab->extent().width();
-    qint32 sh = dab->extent().height();
+    qint32 sw = dab->bounds().width();
+    qint32 sh = dab->bounds().height();
 
     /* To smudge, one does the following:
          * at first, initialize a temporary paint device with a copy of the original (dab-sized piece, really).
@@ -173,7 +171,7 @@ void KisSmudgeOp::paintAt(const KisPaintInformation& info)
     copyPainter.begin(dabAsSelection);
     copyPainter.setOpacity(OPACITY_OPAQUE);
     copyPainter.setCompositeOp(COMPOSITE_COPY);
-    copyPainter.bitBlt(0, 0, dab, 0, 0, sw, sh);
+    copyPainter.bltFixed(0, 0, dab, 0, 0, sw, sh);
     copyPainter.end();
 
     copyPainter.begin(m_target);

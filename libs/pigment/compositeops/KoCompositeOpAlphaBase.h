@@ -50,7 +50,7 @@ public:
 
 public:
     using KoCompositeOp::composite;
-    
+
     void composite(quint8 *dstRowStart,
                    qint32 dststride,
                    const quint8 *srcRowStart,
@@ -67,6 +67,8 @@ public:
 
                 qint32 pixelSize = colorSpace()->pixelSize();
 
+                // XXX: if cols == (dststride/dstPixelSize) == (srcstride/srcPixelSize) == maskstride/maskpixelsize)
+                // then don't loop through rows and cols, but composite everything in one go
                 while (rows > 0) {
                     const channels_type *srcN = reinterpret_cast<const channels_type *>(srcRowStart);
                     channels_type *dstN = reinterpret_cast<channels_type *>(dstRowStart);

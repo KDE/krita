@@ -224,11 +224,19 @@ Value SmartMergeStrategy::election(QList<const Store*> srcs, QList<double> score
 
 void SmartMergeStrategy::mergeEntry(Store* dst, QList<const Store*> srcs, const KisMetaData::Schema* schema, const QString & identifier) const
 {
+    bool foundOnce = false;
     Value v(QList<Value>(), Value::OrderedArray);
     foreach(const Store* store, srcs) {
-        v += store->getEntry(schema, identifier).value();
+        if( store->containsEntry(schema, identifier) )
+        {
+          v += store->getEntry(schema, identifier).value();
+          foundOnce = true;
+        }
     }
-    dst->getEntry(schema, identifier).value() = v;
+    if( foundOnce )
+    {
+        dst->getEntry(schema, identifier).value() = v;
+    }
 }
 
 void SmartMergeStrategy::merge(Store* dst, QList<const Store*> srcs, QList<double> scores) const

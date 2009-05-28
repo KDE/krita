@@ -205,15 +205,15 @@ public:
      */
     virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const = 0;
 
-	/**
-	 * Return a QVector of floats with channels' values normalized
-	 * to floating point range 0 to 1.
-	 */
-	virtual void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const = 0;
+        /**
+         * Return a QVector of floats with channels' values normalized
+         * to floating point range 0 to 1.
+         */
+        virtual void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const = 0;
   /**
    * Write in the pixel the value from the normalized vector.
    */
-	virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) const = 0;
+        virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) const = 0;
 
     /**
      * Convert the value of the channel at the specified position into
@@ -360,7 +360,7 @@ public:
      * This functions allocates the ncessary memory for numPixels number of pixels.
      * It is your responsibility to delete[] it.
      */
-    quint8 *allocPixelBuffer(quint32 numPixels) const;
+    quint8 *allocPixelBuffer(quint32 numPixels, bool clear = false, quint8 defaultvalue = 0) const;
 
     /**
      * Convert the specified data to Lab (D50). All colorspaces are guaranteed to support this
@@ -549,61 +549,61 @@ public:
      *        channels won't.
      */
     virtual void bitBlt(quint8 *dst,
-			qint32 dststride,
-			const KoColorSpace * srcSpace,
-			const quint8 *src,
-			qint32 srcRowStride,
-			const quint8 *srcAlphaMask,
-			qint32 maskRowStride,
-			quint8 opacity,
-			qint32 rows,
-			qint32 cols,
-			const KoCompositeOp * op,
+                        qint32 dststride,
+                        const KoColorSpace * srcSpace,
+                        const quint8 *src,
+                        qint32 srcRowStride,
+                        const quint8 *srcAlphaMask,
+                        qint32 maskRowStride,
+                        quint8 opacity,
+                        qint32 rows,
+                        qint32 cols,
+                        const KoCompositeOp * op,
                         const QBitArray & channelFlags) const;
     /**
      * Convenience function for the above where all channels are turned on.
      */
     virtual void bitBlt(quint8 *dst,
-			qint32 dststride,
-			const KoColorSpace * srcSpace,
-			const quint8 *src,
-			qint32 srcRowStride,
-			const quint8 *srcAlphaMask,
-			qint32 maskRowStride,
-			quint8 opacity,
-			qint32 rows,
-			qint32 cols,
+                        qint32 dststride,
+                        const KoColorSpace * srcSpace,
+                        const quint8 *src,
+                        qint32 srcRowStride,
+                        const quint8 *srcAlphaMask,
+                        qint32 maskRowStride,
+                        quint8 opacity,
+                        qint32 rows,
+                        qint32 cols,
                         const KoCompositeOp * op) const;
 
     /**
      * Convenience function for the above if you don't have the composite op object yet.
      */
     virtual void bitBlt(quint8 *dst,
-			qint32 dststride,
-			const KoColorSpace * srcSpace,
-			const quint8 *src,
-			qint32 srcRowStride,
-			const quint8 *srcAlphaMask,
-			qint32 maskRowStride,
-			quint8 opacity,
-			qint32 rows,
-			qint32 cols,
-			const QString & op,
+                        qint32 dststride,
+                        const KoColorSpace * srcSpace,
+                        const quint8 *src,
+                        qint32 srcRowStride,
+                        const quint8 *srcAlphaMask,
+                        qint32 maskRowStride,
+                        quint8 opacity,
+                        qint32 rows,
+                        qint32 cols,
+                        const QString & op,
                         const QBitArray & channelFlags) const;
 
     /**
      * Convenience function for the above, if you simply want all channels composited
      */
     virtual void bitBlt(quint8 *dst,
-			qint32 dststride,
-			const KoColorSpace * srcSpace,
-			const quint8 *src,
-			qint32 srcRowStride,
-			const quint8 *srcAlphaMask,
-			qint32 maskRowStride,
-			quint8 opacity,
-			qint32 rows,
-			qint32 cols,
+                        qint32 dststride,
+                        const KoColorSpace * srcSpace,
+                        const quint8 *src,
+                        qint32 srcRowStride,
+                        const quint8 *srcAlphaMask,
+                        qint32 maskRowStride,
+                        quint8 opacity,
+                        qint32 rows,
+                        qint32 cols,
                         const QString& op) const;
 
 

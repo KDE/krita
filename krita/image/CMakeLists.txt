@@ -49,6 +49,7 @@ include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
 
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
+   kis_painter.cc
    brushengine/kis_paint_information.cc
    brushengine/kis_paintop.cc
    brushengine/kis_paintop_factory.cpp
@@ -118,8 +119,8 @@ set(kritaimage_LIB_SRCS
    kis_node_progress_proxy.cpp
    kis_node_visitor.cpp
    kis_paint_device.cc
+   kis_fixed_paint_device.cpp
    kis_paint_layer.cc
-   kis_painter.cc
    kis_painterly_overlay.cpp
    kis_painterly_overlay_colorspace.cpp
    kis_pattern.cc

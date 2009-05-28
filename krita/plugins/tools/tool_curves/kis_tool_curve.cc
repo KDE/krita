@@ -35,8 +35,6 @@
 #include "kis_global.h"
 //#include "kis_doc2.h"
 #include "kis_painter.h"
-#include "kis_canvas_subject.h"
-#include "kis_canvas_controller.h"
 #include "KoPointerEvent.h"
 #include "kis_cursor.h"
 #include "kis_vec.h"
@@ -44,7 +42,6 @@
 #include "kis_selection_options.h"
 #include "kis_selected_transaction.h"
 #include "kis_paintop_registry.h"
-#include "canvas/kis_canvas.h"
 
 #include "kis_curve_framework.h"
 
@@ -59,8 +56,8 @@ QRect KisToolCurve::selectedPivotRect(const QPointF& pos)
     return QRect((pos -QPointF(5, 5)).toPoint(), (pos + QPointF(5, 5)).toPoint());
 }
 
-KisToolCurve::KisToolCurve(const QString& UIName)
-        : KisToolPaint(UIName)
+KisToolCurve::KisToolCurve(KoCanvasBase* canvas, const QString& UIName)
+        : KisToolPaint(canvas)
 {
     m_UIName = UIName;
     m_currentImage = 0;
@@ -98,7 +95,7 @@ void KisToolCurve::deactivate()
     m_drawPivots = true;
 }
 
-void KisToolCurve::buttonPress(KoPointerEvent *event)
+void KisToolCurve::mousePressEvent(KoPointerEvent *event)
 {
     updateOptions(QApplication::keyboardModifiers());
     if (!m_currentImage)
@@ -128,7 +125,7 @@ void KisToolCurve::buttonPress(KoPointerEvent *event)
     }
 }
 
-void KisToolCurve::keyPress(QKeyEvent *event)
+void KisToolCurve::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Return) {
         m_dragging = false;
@@ -147,23 +144,23 @@ void KisToolCurve::keyPress(QKeyEvent *event)
             }
 }
 
-void KisToolCurve::keyRelease(QKeyEvent *)
+void KisToolCurve::keyReleaseEvent(QKeyEvent *)
 {
 
 }
 
-void KisToolCurve::buttonRelease(KoPointerEvent *event)
+void KisToolCurve::mouseReleaseEvent(KoPointerEvent *event)
 {
     updateOptions(QApplication::keyboardModifiers());
     m_dragging = false;
 }
 
-void KisToolCurve::doubleClick(KoPointerEvent *)
+void KisToolCurve::mouseDoubleClick(KoPointerEvent *)
 {
     commitCurve();
 }
 
-void KisToolCurve::move(KoPointerEvent *event)
+void KisToolCurve::mouseMoveEvent(KoPointerEvent *event)
 {
     updateOptions(QApplication::keyboardModifiers());
     PointPair temp = pointUnderMouse(m_subject->canvasController()->windowToView(event->pos()).toPointF());
@@ -286,6 +283,7 @@ void KisToolCurve::draw(bool m, bool o)
 
 void KisToolCurve::draw(KisCurve::iterator inf, bool pivotonly, bool minimal)
 {
+/*
     if (m_curve->isEmpty())
         return;
     QPainter *gc;
@@ -350,10 +348,12 @@ void KisToolCurve::draw(KisCurve::iterator inf, bool pivotonly, bool minimal)
     }
 
     delete gc;
+*/
 }
 
 KisCurve::iterator KisToolCurve::drawPoint(QPainter& gc, KisCurve::iterator point)
 {
+/*
     KisCanvasController *controller = m_subject->canvasController();
 
     QPointF pos1, pos2;
@@ -376,10 +376,12 @@ KisCurve::iterator KisToolCurve::drawPoint(QPainter& gc, KisCurve::iterator poin
     }
 
     return point;
+*/
 }
 
 void KisToolCurve::drawPivotHandle(QPainter& gc, KisCurve::iterator point)
 {
+/*
     KisCanvasController *controller = m_subject->canvasController();
 
     if (m_drawPivots) {
@@ -393,6 +395,7 @@ void KisToolCurve::drawPivotHandle(QPainter& gc, KisCurve::iterator point)
         }
         gc.setPen(m_drawingPen);
     }
+*/
 }
 
 void KisToolCurve::paint(QPainter&)
@@ -526,10 +529,10 @@ void KisToolCurve::selectCurve()
     } else {
         dev->setDirty();
     }
-
+/*
     if (m_currentImage->undo())
         m_currentImage->undoAdapter()->addCommandOld(t);
-
+*/
     QApplication::restoreOverrideCursor();
 
     draw(false);
@@ -537,12 +540,14 @@ void KisToolCurve::selectCurve()
 
 QWidget* KisToolCurve::createOptionWidget()
 {
+/*
     if (toolType() == TOOL_SHAPE || toolType() == TOOL_FREEHAND)
         return KisToolPaint::createOptionWidget(parent);
     else if (toolType() == TOOL_SELECT)
         return createSelectionOptionWidget(parent);
     else
         dbgKrita << "NO SUPPORT FOR THIS TOOL TYPE";
+*/
     return 0;
 }
 
@@ -568,10 +573,12 @@ QWidget* KisToolCurve::createSelectionOptionWidget(QWidget* parent)
 
 QWidget* KisToolCurve::optionWidget()
 {
+/*
     if (toolType() == TOOL_SELECT)
         return m_optWidget;
     else
         return KisToolPaint::optionWidget();
+*/
 }
 
 #include "kis_tool_curve.moc"

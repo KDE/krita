@@ -27,6 +27,7 @@ class KisAutoBrushTest : public QObject
 private slots:
 
     void testCreation();
+    void testMaskGeneration();
 
 };
 

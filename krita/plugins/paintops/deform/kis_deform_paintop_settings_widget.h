@@ -41,6 +41,7 @@ public:
     bool useMovementPaint() const;
     bool useCounter() const;
     bool useOldData() const;
+    qreal spacing() const;
 
 private:
     Ui::WdgDeformOptions* m_options;

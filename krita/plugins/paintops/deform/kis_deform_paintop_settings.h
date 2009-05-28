@@ -56,6 +56,7 @@ public:
     bool useMovementPaint() const;
     bool useCounter() const;
     bool useOldData() const;
+    qreal spacing() const;
 
 private:
     KisDeformPaintOpSettingsWidget* m_options;

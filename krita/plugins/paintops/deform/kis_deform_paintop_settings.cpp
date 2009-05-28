@@ -90,6 +90,11 @@ int KisDeformPaintOpSettings::deformAction() const
     return m_options->deformAction();
 }
 
+qreal KisDeformPaintOpSettings::spacing() const
+{
+    return m_options->spacing();
+}
+
 void KisDeformPaintOpSettings::fromXML(const QDomElement& elt)
 {
     // First, call the parent class fromXML to make sure all the

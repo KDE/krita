@@ -545,7 +545,7 @@ void DeformBrush::paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPa
             fastSwirl(x1,y1, (m_counter) *  degToRad);
             //fastSwirl(x1,y1, (1.0/360*m_counter) *  radToDeg); // crazy fast swirl
         }else{
-            fastSwirl(x1,y1, ( 360 * m_amount) *  degToRad);
+            fastSwirl(x1,y1, ( 360 * m_amount * 0.5) *  degToRad);
         }
 
     } else 
@@ -557,7 +557,7 @@ void DeformBrush::paint(KisPaintDeviceSP dev,KisPaintDeviceSP layer, const KisPa
             fastSwirl(x1,y1, (m_counter) *  degToRad);
             //fastSwirl(x1,y1, (1.0/360*m_counter) * -radToDeg); // crazy fast swirl ccw
         }else{
-            fastSwirl(x1,y1, ( 360 * m_amount) *  -degToRad);
+            fastSwirl(x1,y1, ( 360 * m_amount * 0.5) *  -degToRad);
         }
     } else 
     

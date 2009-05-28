@@ -64,8 +64,8 @@ private:
 };
 
 /**
- * Gives a random access to the pixel of an image. Use the moveTo function, to select the pixel. And then rawData to
- * access the value of a pixel.
+ * Gives a random access to the pixel of an image. Use the moveTo function, to select the pixel. And
+ * then rawData to access the value of a pixel.
  */
 class KRITAIMAGE_EXPORT KisRandomAccessor : public KisRandomConstAccessor
 {
@@ -144,7 +144,8 @@ private:
  * Gives a random access to the pixel of an image. Use the moveTo function, to select the pixel. And then rawData to
  * access the value of a pixel.
  * The function isSelected() and selectedness() gives you access to the selection of the current pixel.
- * Note, that you should use this class only if you need random access to a pixel. It is best to use iterators as much as possible.
+ * Note, that you should use this class only if you need random access to a pixel.
+ * It is best to use iterators as much as possible.
  */
 template<class T, typename TSelect>
 class KisRandomAccessorPixelBase : public T, public KisRandomAccessorPixelTrait<T, TSelect>

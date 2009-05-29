@@ -1,13 +1,11 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritashearimage" version="6">
+<kpartgui library="kritashearimage" version="7">
 <MenuBar>
     <Menu name="Image"><text>&amp;Image</text>
-	<Separator/>
-	<Action name="shearimage"/>
+	<Action name="shearimage" group="image_transform_merge"/>
     </Menu>
     <Menu name="Layer"><text>La&amp;yer</text>
-	<Separator/>
-	<Action name="shearlayer"/>
+	<Action name="shearlayer" group="layer_transform_merge"/>
     </Menu>
 </MenuBar>
 </kpartgui>

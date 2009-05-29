@@ -142,7 +142,7 @@ KisLayerBox::KisLayerBox()
     m_newLayerMenu->addAction(KIcon("view-filter"), i18n("&Generated Layer..."), this, SLOT(slotNewGeneratorLayer()));
     m_newLayerMenu->addSeparator();
     m_newLayerMenu->addAction(KIcon("edit-copy"), i18n("&Transparency Mask"), this, SLOT(slotNewTransparencyMask()));
-    m_newLayerMenu->addAction(KIcon("bookmarks"), i18n("&Effect Mask..."), this, SLOT(slotNewEffectMask()));
+    m_newLayerMenu->addAction(KIcon("bookmarks"), i18n("&Filter Mask..."), this, SLOT(slotNewEffectMask()));
 #if 0 // XXX_2.0
     m_newLayerMenu->addAction(KIcon("view-filter"), i18n("&Transformation Mask..."), this, SLOT(slotNewTransformationMask()));
 #endif

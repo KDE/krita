@@ -1,13 +1,13 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritaimagesize" version="6">
+<kpartgui library="kritaimagesize" version="7">
 <MenuBar>
     <Menu name="Image"><text>Image</text>
-	<Action name="imagesize"/>
+	<Action name="imagesize" group="image_transform_merge"/>
 	<Action name="imageresolution"/>
-	<Action name="canvassize"/>
+	<Action name="canvassize" group="canvas_resize_merge"/>
     </Menu>
     <Menu name="Layer"><text>Layer</text>
-	<Action name="layersize"/>
+	<Action name="layersize" group="layer_transform_merge"/>
     </Menu>
     <Menu name="Select"><text>&amp;Select</text>
 	<Action name="selectionscale"/>

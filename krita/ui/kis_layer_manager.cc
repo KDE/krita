@@ -150,24 +150,24 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_imgMergeLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
     connect(m_imgMergeLayer, SIGNAL(triggered()), this, SLOT(mergeLayer()));
 
-    m_layerAdd  = new KAction(i18n("&Add..."), this);
+    m_layerAdd  = new KAction(KIcon("document-new"), i18n("&Paint Layer"), this);
     actionCollection->addAction("insert_layer", m_layerAdd);
     m_layerAdd->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_N));
     connect(m_layerAdd, SIGNAL(triggered()), this, SLOT(layerAdd()));
 
-    m_actionAdjustmentLayer  = new KAction(i18n("&Filter Layer"), this);
+    m_actionAdjustmentLayer  = new KAction(KIcon("view-filter"), i18n("&Filter Layer..."), this);
     actionCollection->addAction("insert_adjustment_layer", m_actionAdjustmentLayer);
     connect(m_actionAdjustmentLayer, SIGNAL(triggered()), this, SLOT(addAdjustmentLayer()));
 
-    m_actionGeneratorLayer  = new KAction(i18n("&Generator Layer"), this);
-    actionCollection->addAction("insert_Generator_layer", m_actionGeneratorLayer);
+    m_actionGeneratorLayer  = new KAction(KIcon("view-filter"), i18n("&Generator Layer..."), this);
+    actionCollection->addAction("insert_generator_layer", m_actionGeneratorLayer);
     connect(m_actionGeneratorLayer, SIGNAL(triggered()), this, SLOT(addGeneratorLayer()));
 
-    m_layerAddCloneLayer  = new KAction(i18n("&Clone Layer"), this);
+    m_layerAddCloneLayer  = new KAction(KIcon("edit-copy"), i18n("&Clone Layer"), this);
     actionCollection->addAction("insert_clone_layer", m_layerAddCloneLayer);
     connect(m_layerAddCloneLayer, SIGNAL(triggered()), this, SLOT(addCloneLayer()));
 
-    m_layerAddShapeLayer  = new KAction(i18n("&Shape Layer"), this);
+    m_layerAddShapeLayer  = new KAction(KIcon("bookmark-new"), i18n("&Shape Layer"), this);
     actionCollection->addAction("insert_shape_layer", m_layerAddShapeLayer);
     connect(m_layerAddShapeLayer, SIGNAL(triggered()), this, SLOT(addShapeLayer()));
 
@@ -175,7 +175,7 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("remove_layer", m_layerRm);
     connect(m_layerRm, SIGNAL(triggered()), this, SLOT(layerRemove()));
 
-    m_layerDup  = new KAction(KIcon("edit-duplicate"), i18n("Duplicate"), this);
+    m_layerDup  = new KAction(KIcon("edit-copy"), i18n("Duplicate current Layer"), this);
     actionCollection->addAction("duplicate_layer", m_layerDup);
     connect(m_layerDup, SIGNAL(triggered()), this, SLOT(layerDuplicate()));
 
@@ -214,15 +214,15 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("save_layer_as_image", m_layerSaveAs);
     connect(m_layerSaveAs, SIGNAL(triggered()), this, SLOT(saveLayerAsImage()));
 
-    KAction * action  = new KAction(KIcon("view-split-left-right"), i18n("Flip on &X Axis"), this);
+    KAction * action  = new KAction(KIcon("view-split-left-right"), i18n("Mirror Horizontally"), this);
     actionCollection->addAction("mirrorLayerX", action);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorLayerX()));
 
-    action  = new KAction(KIcon("view-split-top-bottom"), i18n("Flip on &Y Axis"), this);
+    action  = new KAction(KIcon("view-split-top-bottom"), i18n("Mirror Vertically"), this);
     actionCollection->addAction("mirrorLayerY", action);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorLayerY()));
 
-    m_imgResizeToLayer  = new KAction(i18n("Resize Image to Size of Current Layer"), this);
+    m_imgResizeToLayer  = new KAction(i18n("Size Canvas to Size of Current Layer"), this);
     actionCollection->addAction("resizeimgtolayer", m_imgResizeToLayer);
     connect(m_imgResizeToLayer, SIGNAL(triggered()), this, SLOT(imgResizeToActiveLayer()));
 }

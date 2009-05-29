@@ -5,7 +5,7 @@
 		<Action name="imgcolorspaceconversion"/>
     </Menu>
     <Menu name="Layer"><text>La&amp;yer</text>
-		<Action name="layercolorspaceconversion"/>
+		<Action name="layercolorspaceconversion" group="layer_properties_merge"/>
     </Menu>
 </MenuBar>
 </kpartgui>

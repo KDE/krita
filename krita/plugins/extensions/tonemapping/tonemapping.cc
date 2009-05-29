@@ -49,7 +49,7 @@ tonemappingPlugin::tonemappingPlugin(QObject *parent, const QStringList &)
 
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/tonemapping.rc"), true);
 
-        m_toneMappingAction  = new KAction(i18n("Tonemapping"), this);
+        m_toneMappingAction  = new KAction(i18n("Tonemapping..."), this);
         actionCollection()->addAction("tonemapping", m_toneMappingAction);
         connect(m_toneMappingAction, SIGNAL(triggered()), this, SLOT(slotToneMapping()));
     }

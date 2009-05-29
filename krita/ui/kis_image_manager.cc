@@ -57,7 +57,7 @@ void KisImageManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("insert_image_as_layer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotInsertImageAsLayer()));
 
-    action  = new KAction(i18n("Properties..."), this);
+    action  = new KAction(KIcon("document-properties"), i18n("Properties..."), this);
     actionCollection->addAction("img_properties", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
 }

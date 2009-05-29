@@ -362,6 +362,7 @@ void KisMaskManager::maskToLayer()
         while (!dstiter.isDone()) {
             cs->setAlpha(color.data(), dstiter.selectedness(), 1);
             memcpy(dstiter.rawData(), color.data(), pixelsize);
+            ++dstiter;
         }
         dstiter.nextRow();
     }

@@ -104,7 +104,7 @@ void KisDeformPaintOp::paintAt(const KisPaintInformation& info)
     }
 
     //write device, read device, position
-    m_deformBrush.paint(m_m_dab, m_dev, info);
+    m_deformBrush.paint(m_dab, m_dev, info);
 
     QRect rc = m_dab->extent();
     painter()->bitBlt( rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());

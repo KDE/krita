@@ -361,7 +361,7 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
             dst->clear(QRect(0, 0, maskWidth, maskHeight));
         }
     }
-    Q_ASSERT(dst->bounds().size() >= QSize(maskWidth, maskHeight));
+    Q_ASSERT(dst->bounds().size().width() >= maskWidth && dst->bounds().size().height() >= maskHeight);
 
     quint8* dabPointer = dst->data();
     quint8* color = 0;

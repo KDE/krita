@@ -99,7 +99,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
             qWarning() << "Creating a default black dab: no coloring info and no initialized paint device to mask";
             dst->clear(QRect(0, 0, dstWidth, dstHeight));
         }
-        Q_ASSERT(dst->bounds().size() >= QSize(dstWidth, dstHeight));
+        Q_ASSERT(dst->bounds().size().width() >= dstWidth && dst->bounds().size().height() >= dstHeight);
     }
 
     quint8* dabPointer = dst->data();

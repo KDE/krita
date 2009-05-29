@@ -394,7 +394,7 @@ bool KoDocument::exportDocument(const KUrl & _url)
 
 bool KoDocument::saveFile()
 {
-    kDebug(30003) << "KoDocument::saveFile() doc='" << url().url() << "'";
+    kDebug(30003) << "KoDocument::saveFile() doc=" << url().url();
 
     // Save it to be able to restore it after a failed save
     const bool wasModified = isModified();

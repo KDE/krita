@@ -265,20 +265,20 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString& url, Q
                 chain = m_graph.chain(this, mimeType);
         }
     } else if (!m_importUrlMimetypeHint.isEmpty()) {
-        kDebug(s_area) << "Using the mimetype hint: '" << m_importUrlMimetypeHint << "'";
+        kDebug(s_area) << "Using the mimetype hint:" << m_importUrlMimetypeHint;
         m_graph.setSourceMimeType(m_importUrlMimetypeHint);
     } else {
         KUrl u;
         u.setPath(m_importUrl);
         KMimeType::Ptr t = KMimeType::findByUrl(u, 0, true);
         if (!t || t->name() == KMimeType::defaultMimeType()) {
-            kError(s_area) << "No mimetype found for " << m_importUrl << endl;
+            kError(s_area) << "No mimetype found for" << m_importUrl;
             return KoFilter::BadMimeType;
         }
         m_graph.setSourceMimeType(t->name().toLatin1());
 
         if (!m_graph.isValid()) {
-            kWarning(s_area) << "Can't open " << t->name() << ", trying filter chooser";
+            kWarning(s_area) << "Can't open" << t->name() << ", trying filter chooser";
 
             QApplication::setOverrideCursor(Qt::ArrowCursor);
             KoFilterChooser chooser(0, KoFilterManager::mimeFilter(), QString(), u);
@@ -292,7 +292,7 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString& url, Q
     }
 
     if (!m_graph.isValid()) {
-        kError(s_area) << "Couldn't create a valid graph for this source mimetype." << endl;
+        kError(s_area) << "Couldn't create a valid graph for this source mimetype.";
         if (!userCancelled) KMessageBox::error(0L, i18n("Could not export file."), i18n("Missing Export Filter"));
         return KoFilter::BadConversionGraph;
     }

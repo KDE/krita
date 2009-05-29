@@ -833,7 +833,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
 
     QStringList mimeFilter = KoFilterManager::mimeFilter(_native_format, KoFilterManager::Export, pDoc->extraNativeMimeTypes());
     if (!mimeFilter.contains(oldOutputFormat) && !isExporting()) {
-        kDebug(30003) << "KoMainWindow::saveDocument no export filter for '" << oldOutputFormat << "'";
+        kDebug(30003) << "KoMainWindow::saveDocument no export filter for" << oldOutputFormat;
 
         // --- don't setOutputMimeType in case the user cancels the Save As
         // dialog and then tries to just plain Save ---

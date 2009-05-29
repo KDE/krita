@@ -185,6 +185,7 @@ install(
     KoCanvasResourceProvider.h
     KoDataCenter.h
     KoDrag.h
+    KoDragOdfSaveHelper.h
     KoFlake.h
     KoFrameShape.h
     KoImageCollection.h
@@ -196,11 +197,13 @@ install(
     KoSelection.h
     KoShape.h
     KoShapeContainer.h
+    KoShapeContainerModel.h
     KoShapeController.h
     KoShapeControllerBase.h
     KoShapeFactory.h
     KoShapeLayer.h
     KoShapeLoadingContext.h
+    KoShapeOdfSaveHelper.h
     KoLoadingShapeUpdater.h
     KoShapeConfigWidgetBase.h
     KoShapeManager.h

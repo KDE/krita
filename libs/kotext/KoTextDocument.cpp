@@ -91,13 +91,13 @@ void KoTextDocument::setChangeTracker(KoChangeTracker *changeTracker)
 {
     QVariant v;
     v.setValue(changeTracker);
-    m_document->addResource(KoTextDocument::ChangeTrackerRessource, ChangeTrackerURL, v);
+    m_document->addResource(KoTextDocument::ChangeTrackerResource, ChangeTrackerURL, v);
     m_changeTrackerAssigned = true;
 }
 
 KoChangeTracker *KoTextDocument::changeTracker() const
 {
-    QVariant resource = m_document->resource(KoTextDocument::ChangeTrackerRessource, ChangeTrackerURL);
+    QVariant resource = m_document->resource(KoTextDocument::ChangeTrackerResource, ChangeTrackerURL);
     return resource.value<KoChangeTracker *>();
 }
 

@@ -56,14 +56,14 @@ struct KoPageLayout {
     qreal bindingSide;
 
     bool operator==(const KoPageLayout& l) const {
-        return (width == l.width &&
-                height == l.height &&
-                left == l.left &&
-                right == l.right &&
-                top == l.top &&
-                bottom == l.bottom &&
-                pageEdge == l.pageEdge &&
-                bindingSide == l.bindingSide);
+        return (qFuzzyCompare(width,l.width) &&
+                qFuzzyCompare(height,l.height) &&
+                qFuzzyCompare(left,l.left) &&
+                qFuzzyCompare(right,l.right) &&
+                qFuzzyCompare(top,l.top) &&
+                qFuzzyCompare(bottom,l.bottom) &&
+                qFuzzyCompare(pageEdge,l.pageEdge) &&
+                qFuzzyCompare(bindingSide,l.bindingSide));
     }
     bool operator!=(const KoPageLayout& l) const {
         return !((*this) == l);

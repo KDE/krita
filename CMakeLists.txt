@@ -197,6 +197,7 @@ if(EIGEN2_FOUND)
 else(EIGEN2_FOUND)
     set(SHOULD_BUILD_KSPREAD FALSE)
 endif(EIGEN2_FOUND)
+set(SHOULD_BUILD_KSPREAD FALSE)
 
 if(SHOULD_BUILD_KPRESENTER)
     macro_optional_add_subdirectory(kpresenter)

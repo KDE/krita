@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright ( C ) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2009 Fredy Yanardi <fyanardi@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,17 +28,39 @@
 KoPAPageMoveCommand::KoPAPageMoveCommand( KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, QUndoCommand *parent )
 : QUndoCommand( parent )
 , m_document( document )
-, m_page( page )
 , m_after( after )
-, m_index( -1 )
 {
     Q_ASSERT( document );
-    Q_ASSERT( page );
-    if ( m_page->pageType() == KoPageApp::Slide ) {
-        setText( i18n( "Move slide" ) );
+    init( QList<KoPAPageBase *>() << page );
+}
+
+KoPAPageMoveCommand::KoPAPageMoveCommand( KoPADocument *document, const QList<KoPAPageBase *> &pages, KoPAPageBase *after, QUndoCommand *parent )
+: QUndoCommand( parent )
+, m_document( document )
+, m_after( after )
+{
+    Q_ASSERT( document );
+
+    init( pages );
+}
+
+// Since C++ constructor can't call another constructor ...
+void KoPAPageMoveCommand::init( const QList<KoPAPageBase *> &pages )
+{
+    Q_ASSERT( pages.size() > 0 );
+
+    int afterIndex = m_document->pageIndex( m_after );
+
+    foreach ( KoPAPageBase *page, pages ) {
+        int index = m_document->pageIndex( page );
+        m_pageIndices.insert( index, page );
+    }
+
+    if ( pages.at(0)->pageType() == KoPageApp::Slide ) {
+        setText( i18np( "Move slide", "Move slides", pages.size() ) );
     }
     else {
-        setText( i18n( "Move page" ) );
+        setText( i18np( "Move page", "Move pages", pages.size() ) );
     }
 }
 
@@ -47,18 +70,27 @@ KoPAPageMoveCommand::~KoPAPageMoveCommand()
 
 void KoPAPageMoveCommand::redo()
 {
-    m_index = m_document->takePage( m_page );
-    Q_ASSERT( m_index != -1 );
-    m_document->insertPage( m_page, m_after );
+    KoPAPageBase *after = m_after;
+    QList<KoPAPageBase *> pages = m_pageIndices.values();
+
+    foreach ( KoPAPageBase *page, pages ) {
+        m_document->takePage( page );
+        m_document->insertPage( page, after );
+        after = page;
+    }
+
 }
 
 void KoPAPageMoveCommand::undo()
 {
-    Q_ASSERT( m_index != -1 );
+    QList<KoPAPageBase *> pages = m_pageIndices.values();
+    foreach ( KoPAPageBase *page, pages ) {
+        m_document->takePage( page );
+    }
 
-    int pos = m_document->takePage( m_page );
-    Q_ASSERT( pos != -1 );
-
-    m_document->insertPage( m_page, m_index );
+    QMap<int, KoPAPageBase *>::const_iterator it;
+    for ( it = m_pageIndices.constBegin(); it != m_pageIndices.constEnd(); it++ ) {
+        m_document->insertPage( it.value(), it.key() );
+    }
 }
 

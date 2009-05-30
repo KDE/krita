@@ -30,7 +30,7 @@ KoPABackgroundToolFactory::KoPABackgroundToolFactory( QObject *parent )
     setToolTip( i18n( "Background editing tool" ) );
     setToolType( mainToolType() );
     setActivationShapeId("flake/always");
-    setIcon( "background-kpresenter" );
+    setIcon( "backgroundtool" );
     setPriority( 3 );
 }
 

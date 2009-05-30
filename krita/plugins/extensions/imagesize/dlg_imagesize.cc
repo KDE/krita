@@ -2,6 +2,7 @@
  *  dlg_imagesize.cc - part of KimageShop^WKrayon^WKrita
  *
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2009 Casper Boemann <cbr@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -67,9 +68,11 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 
     slotAspectChanged(true);
 
-    m_page->chkPercentage->setEnabled(false);
-    m_page->chkPercentage->hide();
-    m_page->labelPercentage->hide();
+    m_page->doublePercentageWidth->setVisible(false);
+    m_page->doublePercentageHeight->setVisible(false);
+
+    m_page->doublePercentageWidth->setValue(100.0 * width / m_origW);
+    m_page->doublePercentageHeight->setValue(100.0 * height / m_origH);
 
     setMainWidget(m_page);
     resize(m_page->sizeHint());
@@ -91,6 +94,21 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 
     connect(m_page->intPixelHeight, SIGNAL(valueChanged(int)),
             this, SLOT(slotHeightPixelsChanged(int)));
+
+    connect(m_page->doublePercentageWidth, SIGNAL(valueChanged(double)),
+            this, SLOT(slotWidthPercentageChanged(double)));
+
+    connect(m_page->doublePercentageHeight, SIGNAL(valueChanged(double)),
+            this, SLOT(slotHeightPercentageChanged(double)));
+
+    connect(m_page->cmbWidthPixelUnit, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(slotWidthPixelUnitChanged(int)));
+
+    connect(m_page->cmbHeightPixelUnit, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(slotHeightPixelUnitChanged(int)));
+
+    connect(m_page->doublePhysicalWidth, SIGNAL(valueChanged(double)),
+            this, SLOT(slotWidthPhysicalChanged(double)));
 
     connect(m_page->doublePhysicalWidth, SIGNAL(valueChanged(double)),
             this, SLOT(slotWidthPhysicalChanged(double)));
@@ -178,6 +196,10 @@ void DlgImageSize::slotWidthPixelsChanged(int w)
     // recalculate aspect ratio
     m_aspectRatio = m_width / m_height;
 
+    if (m_page->cmbWidthPixelUnit->currentIndex()==0)
+        m_page->doublePercentageWidth->setValue(100.0 * m_page->intPixelWidth->value() / m_origW);
+    m_page->doublePercentageHeight->setValue(100.0 * m_page->intPixelHeight->value() / m_origH);
+
     unblockAll();
 }
 
@@ -208,6 +230,44 @@ void DlgImageSize::slotHeightPixelsChanged(int h)
     // recalculate aspect ratio
     m_aspectRatio = m_width / m_height;
 
+    m_page->doublePercentageWidth->setValue(100.0 * m_page->intPixelWidth->value() / m_origW);
+    if (m_page->cmbHeightPixelUnit->currentIndex()==0)
+        m_page->doublePercentageHeight->setValue(100.0 * m_page->intPixelHeight->value() / m_origH);
+
+    unblockAll();
+}
+
+void DlgImageSize::slotWidthPercentageChanged(double w)
+{
+    m_page->intPixelWidth->setValue(w * m_origW / 100.0);
+}
+
+void DlgImageSize::slotHeightPercentageChanged(double h)
+{
+    m_page->intPixelHeight->setValue(h * m_origH / 100.0);
+}
+
+void DlgImageSize::slotWidthPixelUnitChanged(int index)
+{
+    m_page->intPixelWidth->setVisible(index==0);
+    m_page->doublePercentageWidth->setVisible(index==1);
+
+    //Make sure the percentage value is correct - which it might not have been have we 1)just entered a value 2)switched to pixel and back
+    blockAll();
+    if(index==1)
+        m_page->doublePercentageWidth->setValue(100.0 * m_page->intPixelWidth->value() / m_origW);
+    unblockAll();
+}
+
+void DlgImageSize::slotHeightPixelUnitChanged(int index)
+{
+    m_page->intPixelHeight->setVisible(index==0);
+    m_page->doublePercentageHeight->setVisible(index==1);
+
+    //Make sure the percentage value is correct - which it might not have been have we 1)just entered a value 2)switched to pixel and back
+    blockAll();
+    if(index==1)
+        m_page->doublePercentageHeight->setValue(100.0 * m_page->intPixelHeight->value() / m_origH);
     unblockAll();
 }
 
@@ -333,6 +393,8 @@ void DlgImageSize::blockAll()
     m_page->doublePhysicalWidth->blockSignals(true);
     m_page->doublePhysicalHeight->blockSignals(true);
     m_page->doubleResolution->blockSignals(true);
+    m_page->doublePercentageWidth->blockSignals(true);
+    m_page->doublePercentageHeight->blockSignals(true);
 }
 
 void DlgImageSize::unblockAll()
@@ -342,6 +404,8 @@ void DlgImageSize::unblockAll()
     m_page->doublePhysicalWidth->blockSignals(false);
     m_page->doublePhysicalHeight->blockSignals(false);
     m_page->doubleResolution->blockSignals(false);
+    m_page->doublePercentageWidth->blockSignals(false);
+    m_page->doublePercentageHeight->blockSignals(false);
 }
 
 #include "dlg_imagesize.moc"

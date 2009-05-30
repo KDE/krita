@@ -30,6 +30,8 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QPoint>
+#include <QPainter>
+#include <QTimer>
 
 #include <kxmlguifactory.h>
 
@@ -56,15 +58,15 @@ public:
             : viewConverter(vc)
             , canvas(0)
             , toolProxy(0)
-            , previousEvent(QEvent::TabletRelease, QPoint(), QPoint(), QPointF(),
-                            QTabletEvent::NoDevice, 0, 0.0, 0, 0, 0, 0, 0, Qt::NoModifier, Q_INT64_C(932838457459459)) {}
+    {
+    }
+
     const KoViewConverter * viewConverter;
     KisCanvas2 * canvas;
     KoToolProxy * toolProxy;
     KisOpenGLImageTexturesSP openGLImageTextures;
     QPoint documentOffset;
-    bool tabletDown;
-    QTabletEvent previousEvent;
+    QTimer blockMouseEvent;
 
 };
 
@@ -75,6 +77,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 * canvas, QWidget * parent, KisOpe
     m_d->canvas = canvas;
     m_d->toolProxy = canvas->toolProxy();
     m_d->openGLImageTextures = imageTextures;
+    m_d->blockMouseEvent.setSingleShot(true);
 
     setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
@@ -288,24 +291,17 @@ void KisOpenGLCanvas2::setPixelToViewTransformation(void)
 
 void KisOpenGLCanvas2::enterEvent(QEvent* e)
 {
-    dbgRender << "Enter event ";
     QWidget::enterEvent(e);
 }
 
 void KisOpenGLCanvas2::leaveEvent(QEvent* e)
 {
-    dbgRender << "Leave event ";
-    if (m_d->tabletDown) {
-        m_d->tabletDown = false;
-        QTabletEvent* fakeEvent = new QTabletEvent(QEvent::TabletRelease, m_d->previousEvent.pos(), m_d->previousEvent.globalPos(), m_d->previousEvent.hiResGlobalPos(), m_d->previousEvent.device(), m_d->previousEvent.pointerType(), m_d->previousEvent.pressure(), m_d->previousEvent.xTilt(), m_d->previousEvent.yTilt(), m_d->previousEvent.tangentialPressure(), m_d->previousEvent.rotation(), m_d->previousEvent.z(), m_d->previousEvent.modifiers(), m_d->previousEvent.uniqueId());
-        m_d->toolProxy->tabletEvent(fakeEvent , QPointF());   // HACK this fake event is a work around a bug in Qt which stops sending tablet events when the tablet pen move outside the widget (and you get a nasty surprise when the cursor moves back on the widget especially if you have released your tablet as krita is still in drawing mode)
-    }
     QWidget::leaveEvent(e);
 }
 
-
 void KisOpenGLCanvas2::mouseMoveEvent(QMouseEvent *e)
 {
+    if (m_d->blockMouseEvent.isActive()) return;
     m_d->toolProxy->mouseMoveEvent(e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset));
 }
 
@@ -321,16 +317,19 @@ void KisOpenGLCanvas2::contextMenuEvent(QContextMenuEvent *e)
 
 void KisOpenGLCanvas2::mousePressEvent(QMouseEvent *e)
 {
+    if (m_d->blockMouseEvent.isActive()) return;
     m_d->toolProxy->mousePressEvent(e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset));
 }
 
 void KisOpenGLCanvas2::mouseReleaseEvent(QMouseEvent *e)
 {
+    if (m_d->blockMouseEvent.isActive()) return;
     m_d->toolProxy->mouseReleaseEvent(e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset));
 }
 
 void KisOpenGLCanvas2::mouseDoubleClickEvent(QMouseEvent *e)
 {
+    if (m_d->blockMouseEvent.isActive()) return;
     m_d->toolProxy->mouseDoubleClickEvent(e, m_d->viewConverter->viewToDocument(e->pos() + m_d->documentOffset));
 }
 
@@ -363,26 +362,13 @@ void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
 
 void KisOpenGLCanvas2::tabletEvent(QTabletEvent *e)
 {
-    dbgRender << "tablet event:" << e->pressure() << e->type() << " " << e->device();
-    switch (e->type()) {
-    case QEvent::TabletPress:
-        m_d->tabletDown = true;
-        break;
-    case QEvent::TabletRelease:
-        m_d->tabletDown = false;
-        break;
-    case QEvent::TabletMove:
-        break;
-    default:
-        ; // ignore the rest.
-    }
+    setFocus(Qt::OtherFocusReason);
+    m_d->blockMouseEvent.start(100);
     qreal subpixelX = e->hiResGlobalX();
     subpixelX = subpixelX - ((int) subpixelX); // leave only part behind the dot
     qreal subpixelY = e->hiResGlobalY();
     subpixelY = subpixelY - ((int) subpixelY); // leave only part behind the dot
     QPointF pos(e->x() + subpixelX + m_d->documentOffset.x(), e->y() + subpixelY + m_d->documentOffset.y());
-
-    m_d->previousEvent = *e;
     m_d->toolProxy->tabletEvent(e, m_d->viewConverter->viewToDocument(pos));
 }
 

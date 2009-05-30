@@ -59,9 +59,6 @@
 
 //#define DEBUG_REPAINT
 
-#if QT_VERSION < 0x040500
-#define WORKAROUNT_TABLET_TRACKING_BUG
-#endif
 
 class KisQPainterCanvas::Private
 {
@@ -70,10 +67,7 @@ public:
             : toolProxy(0),
             canvas(0),
             viewConverter(vc)
-#ifdef WORKAROUNT_TABLET_TRACKING_BUG
-            , previousEvent(QEvent::TabletRelease, QPoint(), QPoint(), QPointF(), QTabletEvent::NoDevice, 0, 0.0, 0, 0, 0, 0, 0, Qt::NoModifier, Q_INT64_C(932838457459459))
-#endif
-            {
+    {
     }
 
     KisPrescaledProjectionSP prescaledProjection;
@@ -83,10 +77,6 @@ public:
     QBrush checkBrush;
     /// the offset of the view in the document, expressed in the view reference (not in the document reference)
     QPoint documentOffset;
-#ifdef WORKAROUNT_TABLET_TRACKING_BUG
-    bool tabletDown;
-    QTabletEvent previousEvent;
-#endif
     QTimer blockMouseEvent;
 };
 
@@ -107,14 +97,10 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 * canvas, QWidget * parent)
     setAttribute( Qt::WA_StaticContents );
     setAttribute( Qt::WA_OpaquePaintEvent );
 
-
     m_d->canvas =  canvas;
     m_d->toolProxy = canvas->toolProxy();
     m_d->checkBrush = QBrush(checkImage(cfg.checkSize()));
     m_d->blockMouseEvent.setSingleShot(true);
-#ifdef WORKAROUNT_TABLET_TRACKING_BUG
-    m_d->tabletDown = false;
-#endif
 }
 
 KisQPainterCanvas::~KisQPainterCanvas()
@@ -192,22 +178,6 @@ void KisQPainterCanvas::enterEvent(QEvent* e)
 
 void KisQPainterCanvas::leaveEvent(QEvent* e)
 {
-#ifdef WORKAROUNT_TABLET_TRACKING_BUG
-    if (m_d->tabletDown) {
-        m_d->tabletDown = false;
-        QTabletEvent* fakeEvent =
-            new QTabletEvent(QEvent::TabletRelease, m_d->previousEvent.pos(),
-                m_d->previousEvent.globalPos(), m_d->previousEvent.hiResGlobalPos(), m_d->previousEvent.device(),
-                m_d->previousEvent.pointerType(), m_d->previousEvent.pressure(), m_d->previousEvent.xTilt(),
-                m_d->previousEvent.yTilt(), m_d->previousEvent.tangentialPressure(), m_d->previousEvent.rotation(),
-                m_d->previousEvent.z(), m_d->previousEvent.modifiers(), m_d->previousEvent.uniqueId());
-
-        // HACK this fake event is a work around a bug in Qt which stops sending tablet events when the
-        // tablet pen move outside the widget (and you get a nasty surprise when the cursor moves back
-        // on the widget especially if you have released your tablet as krita is still in drawing mode)
-        m_d->toolProxy->tabletEvent(fakeEvent , QPointF());
-    }
-#endif
     QWidget::leaveEvent(e);
 }
 
@@ -274,30 +244,13 @@ void KisQPainterCanvas::inputMethodEvent(QInputMethodEvent *event)
 
 void KisQPainterCanvas::tabletEvent(QTabletEvent *e)
 {
+    setFocus(Qt::OtherFocusReason);
     m_d->blockMouseEvent.start(100);
-#ifdef WORKAROUNT_TABLET_TRACKING_BUG
-    switch (e->type()) {
-    case QEvent::TabletPress:
-        m_d->tabletDown = true;
-        break;
-    case QEvent::TabletRelease:
-        m_d->tabletDown = false;
-        break;
-    case QEvent::TabletMove:
-        break;
-    default:
-        ; // ignore the rest.
-    }
-#endif
     qreal subpixelX = e->hiResGlobalX();
     subpixelX = subpixelX - ((int) subpixelX); // leave only part behind the dot
     qreal subpixelY = e->hiResGlobalY();
     subpixelY = subpixelY - ((int) subpixelY); // leave only part behind the dot
     QPointF pos(e->x() + subpixelX + m_d->documentOffset.x(), e->y() + subpixelY + m_d->documentOffset.y());
-
-#ifdef WORKAROUNT_TABLET_TRACKING_BUG
-    m_d->previousEvent = *e;
-#endif
     m_d->toolProxy->tabletEvent(e, m_d->viewConverter->viewToDocument(pos));
 }
 

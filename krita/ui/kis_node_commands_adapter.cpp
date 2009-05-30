@@ -39,6 +39,18 @@ KisNodeCommandsAdapter::~KisNodeCommandsAdapter()
     
 }
 
+void KisNodeCommandsAdapter::beginMacro(const QString& macroName)
+{
+    Q_ASSERT(m_view->image()->undoAdapter());
+    m_view->image()->undoAdapter()->beginMacro(macroName);
+}
+
+void KisNodeCommandsAdapter::endMacro()
+{
+    Q_ASSERT(m_view->image()->undoAdapter());
+    m_view->image()->undoAdapter()->endMacro();
+}
+
 void KisNodeCommandsAdapter::addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis )
 {
     Q_ASSERT(m_view->image()->undoAdapter());

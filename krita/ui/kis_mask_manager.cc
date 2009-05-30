@@ -55,6 +55,7 @@
 #include <KoColorSpace.h>
 #include <KoColor.h>
 #include "kis_node_commands_adapter.h"
+#include "commands/kis_selection_commands.h"
 
 KisMaskManager::KisMaskManager(KisView2 * view)
         : m_view(view)
@@ -331,10 +332,12 @@ void KisMaskManager::maskToSelection()
     if (!m_activeMask) return;
     KisImageSP image = m_view->image();
     if (!image) return;
-    // TODO require a macro
-    image->setGlobalSelection(m_activeMask->selection()); // TODO that definitively require a command !
+    m_commandsAdapter->beginMacro(i18n("Mask to Selection"));
+    QUndoCommand* cmd = new KisSetGlobalSelectionCommand(image, 0, m_activeMask->selection());
+    image->undoAdapter()->addCommand(cmd);
     m_commandsAdapter->removeNode(m_activeMask);
     m_activeMask = 0;
+    m_commandsAdapter->endMacro();
 }
 
 void KisMaskManager::maskToLayer()
@@ -367,10 +370,11 @@ void KisMaskManager::maskToLayer()
         dstiter.nextRow();
     }
 
-    // TODO make a macro (require a string)
+    m_commandsAdapter->beginMacro(i18n("Layer from Mask"));
     m_commandsAdapter->removeNode(m_activeMask);
     m_activeMask = 0;
     m_commandsAdapter->addNode(layer, activeLayer->parent(), activeLayer);
+    m_commandsAdapter->endMacro();
 }
 
 void KisMaskManager::duplicateMask()

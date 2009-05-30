@@ -370,7 +370,7 @@ void KisMaskManager::maskToLayer()
         dstiter.nextRow();
     }
 
-    m_commandsAdapter->beginMacro(i18n("Layer from Mask"));
+    m_commandsAdapter->beginMacro(i18n("Create Layer from Mask..."));
     m_commandsAdapter->removeNode(m_activeMask);
     m_activeMask = 0;
     m_commandsAdapter->addNode(layer, activeLayer->parent(), activeLayer);

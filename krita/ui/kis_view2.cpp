@@ -439,12 +439,6 @@ void KisView2::createGUI()
     KoToolManager::instance()->addController(m_d->canvasController);
     KoToolManager::instance()->registerTools(actionCollection(), m_d->canvasController);
 
-    // Remove the plugin dock widgets
-    QList<QDockWidget*> dockWidgets = shell()->dockWidgets();
-    foreach(QDockWidget * dockWidget, dockWidgets) {
-        shell()->removeDockWidget(dockWidget);
-    }
-
     KoToolBoxFactory toolBoxFactory(m_d->canvasController, i18n("Tools"));
     createDockWidget(&toolBoxFactory);
 
@@ -456,8 +450,6 @@ void KisView2::createGUI()
 
     connect( m_d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, KoView *) ),
              dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, KoView *) ) );
-
-
 
     KisBirdEyeBoxFactory birdeyeFactory(this);
     m_d->birdEyeBox = qobject_cast<KisBirdEyeBox*>(createDockWidget(&birdeyeFactory));
@@ -471,12 +463,6 @@ void KisView2::createGUI()
 
     KisLayerBoxFactory layerboxFactory;
     m_d->layerBox = qobject_cast<KisLayerBox*>(createDockWidget(&layerboxFactory));
-
-    // Add the plugin dock widgets again
-    foreach(QDockWidget * dockWidget, dockWidgets) {
-        shell()->addDockWidget(Qt::RightDockWidgetArea, dockWidget);
-
-    }
 
     m_d->statusBar = new KisStatusBar(this);
     connect(m_d->canvasController, SIGNAL(documentMousePositionChanged(const QPointF &)),

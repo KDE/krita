@@ -104,7 +104,7 @@ void KisMaskManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("create_selection_from_mask", m_maskToSelection);
     connect(m_maskToSelection, SIGNAL(triggered()), this, SLOT(maskToSelection()));
 
-    m_maskToLayer = new KAction(i18n("Create Layer from Mask..."), this);
+    m_maskToLayer = new KAction(i18n("Create Layer from Mask"), this);
     actionCollection->addAction("create_layer_from_mask", m_maskToLayer);
     connect(m_maskToLayer, SIGNAL(triggered()), this, SLOT(maskToLayer()));
 

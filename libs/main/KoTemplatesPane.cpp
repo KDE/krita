@@ -37,7 +37,7 @@ public:
 
 
 KoTemplatesPane::KoTemplatesPane(QWidget* parent, const KComponentData &_componentData, const QString& header,
-                                 KoTemplateGroup *group, KoTemplate* /*defaultTemplate*/)
+                                 KoTemplateGroup *group, KoTemplate* defaultTemplate)
         : KoDetailsPane(parent, _componentData, header)
         , d(new KoTemplatesPanePrivate)
 {
@@ -52,6 +52,7 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, const KComponentData &_compone
 
     QStandardItem* selectItem = 0;
     QStandardItem* rootItem = model()->invisibleRootItem();
+    QStandardItem* defaultItem = 0;
 
     for (KoTemplate* t = group->first(); t != 0L; t = group->next()) {
         if (t->isHidden())
@@ -74,6 +75,10 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, const KComponentData &_compone
         } else if (!selectItem && (t->file() == fullTemplateName)) {
             selectItem = item;
         }
+
+        if (defaultTemplate && (t->file() == defaultTemplate->file())) {
+            defaultItem = item;
+        }
     }
 
     QModelIndex selectedIndex;
@@ -81,6 +86,8 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, const KComponentData &_compone
     if (selectItem) {
         selectedIndex = model()->indexFromItem(selectItem);
         d->m_selected = true;
+    } else if (defaultItem) {
+        selectedIndex = model()->indexFromItem(defaultItem);
     } else {
         selectedIndex = model()->indexFromItem(model()->item(0));
     }

@@ -40,6 +40,7 @@ class KoShapeManager;
 class KoZoomAction;
 class KoZoomController;
 class QTextDocument;
+class QLabel;
 
 /// Creates a view with a KoPACanvas and rulers
 class KOPAGEAPP_EXPORT KoPAView : public KoView
@@ -260,6 +261,9 @@ private:
     KoFind * m_find;
 
     KoPAViewMode *m_viewModeNormal;
+
+    // status bar
+    QLabel * m_status;       ///< ordinary status
 };
 
 #endif /* KOPAVIEW_H */

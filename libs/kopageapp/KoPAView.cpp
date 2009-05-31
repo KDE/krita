@@ -26,6 +26,7 @@
 #include <QTimer>
 #include <QApplication>
 #include <QClipboard>
+#include <QLabel>
 
 #include <KoCanvasController.h>
 #include <KoCanvasResourceProvider.h>
@@ -131,6 +132,14 @@ void KoPAView::initGUI()
              this, SLOT( slotZoomChanged( KoZoomMode::Mode, qreal ) ) );
 
     m_zoomAction = m_zoomController->zoomAction();
+
+    // set up status bar message
+    m_status = new QLabel( QString(), statusBar() );
+    m_status->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
+    m_status->setMinimumWidth( 300 );
+    addStatusBarItem( m_status, 1 );
+    connect( KoToolManager::instance(), SIGNAL( changedStatusText( const QString & ) ),
+             m_status, SLOT( setText( const QString & ) ) );
     addStatusBarItem( m_zoomAction->createWidget( statusBar() ), 0, true );
 
     m_zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );

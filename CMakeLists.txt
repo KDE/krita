@@ -170,10 +170,10 @@ add_subdirectory(cmake)
 
 set(SHOULD_BUILD_KARBON TRUE)
 
-#macro_optional_add_subdirectory(karbon)
+macro_optional_add_subdirectory(karbon)
 
 if(EIGEN2_FOUND)
-   #macro_optional_add_subdirectory(kspread)
+   macro_optional_add_subdirectory(kspread)
     if(BUILD_kspread)
         set(SHOULD_BUILD_KSPREAD true)
     else(BUILD_kspread)
@@ -184,7 +184,7 @@ else(EIGEN2_FOUND)
 endif(EIGEN2_FOUND)
 
 if(SHOULD_BUILD_KPRESENTER)
-    #macro_optional_add_subdirectory(kpresenter)
+    macro_optional_add_subdirectory(kpresenter)
 endif(SHOULD_BUILD_KPRESENTER)
 
 OPTION(BUILD_EVERYTHING "This option control wether plugins/apps that are not part of the 2.0 release should be build." FALSE)
@@ -193,8 +193,8 @@ if(BUILD_EVERYTHING)
 endif(BUILD_EVERYTHING)
 
 
-#macro_optional_add_subdirectory(kdgantt)
-#macro_optional_add_subdirectory(kchart)
+macro_optional_add_subdirectory(kdgantt)
+macro_optional_add_subdirectory(kchart)
 
 FIND_PROGRAM(BZIP2_EXECUTABLE NAMES bzip2 )
 
@@ -203,27 +203,27 @@ macro_log_feature(BZIP2_EXECUTABLE "bzip2" "High-quality data compressor" "http:
 OPTION(BUILD_kexi "Build kexi" FALSE)
 if(BUILD_kexi)
     if( BZIP2_EXECUTABLE )
-        #macro_optional_add_subdirectory(kexi)
+        macro_optional_add_subdirectory(kexi)
     endif( BZIP2_EXECUTABLE )
 endif(BUILD_kexi)
 
-#macro_optional_add_subdirectory(kformula)
-#macro_optional_add_subdirectory(kivio)
-#macro_optional_add_subdirectory(kounavail)
+macro_optional_add_subdirectory(kformula)
+macro_optional_add_subdirectory(kivio)
+macro_optional_add_subdirectory(kounavail)
 
 if(KdepimLibs_FOUND)
 	#macro_optional_add_subdirectory(kplato)
 endif(KdepimLibs_FOUND)
 
 macro_optional_add_subdirectory(krita)
-#macro_optional_add_subdirectory(kword)
+macro_optional_add_subdirectory(kword)
 add_subdirectory(pics)
-#add_subdirectory(plugins)
+add_subdirectory(plugins)
 add_subdirectory(servicetypes)
-#add_subdirectory(templates)
-#add_subdirectory(tools)
-#add_subdirectory(filters)
-#macro_optional_add_subdirectory(doc)
+add_subdirectory(templates)
+add_subdirectory(tools)
+add_subdirectory(filters)
+macro_optional_add_subdirectory(doc)
 
 MACRO_DISPLAY_FEATURE_LOG()
 

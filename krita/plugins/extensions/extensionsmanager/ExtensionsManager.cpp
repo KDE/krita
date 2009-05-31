@@ -21,6 +21,9 @@
 #include <kurl.h>
 #include <kio/netaccess.h>
 #include <QFile>
+#include <KoStore.h>
+#include <kmessagebox.h>
+#include <klocalizedstring.h>
 
 ExtensionsManager* ExtensionsManager::s_instance = 0;
 
@@ -67,5 +70,14 @@ bool ExtensionsManager::installExtension(const KUrl& uri) {
 }
 
 bool ExtensionsManager::installExtension(QIODevice* _device) {
+    KoStore* store = KoStore::createStore(_device, KoStore::Read, "", KoStore::Zip);
+    bool hasManifestXML = store->hasFile("manifest.xml");
+    bool hasSource = store->hasFile("source.tar.bz2");
+    if( !hasManifestXML || !hasSource ) {
+        KMessageBox::error(0, i18n("Invalid extension, missing 'manifest.xml' or 'source.tar.bz2'"));
+        delete store;
+        return false;
+    }
+    delete store;
     return false;
 }

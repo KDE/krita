@@ -19,6 +19,7 @@ add_subdirectory( together )
 add_subdirectory( tonemapping )
 add_subdirectory( trianglecolorselector )
 add_subdirectory( histogram_docker )
+add_subdirectory( extensionsmanager )
 
 macro_optional_find_package(GMM)
 macro_log_feature(GMM_FOUND "Gmm++" "Generic C++ template library for sparse, dense and skyline matrices" "http://home.gna.org/getfem/download.html" FALSE "" "Required by the Krita panorama plugin")

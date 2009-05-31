@@ -221,9 +221,14 @@ QRegion KisPainter::dirtyRegion()
 }
 
 
-QRegion KisPainter::addDirtyRect(const QRect & r)
+QRegion KisPainter::addDirtyRect(const QRect & rc)
 {
-    Q_ASSERT(r.width() >= 0 || r.height() >= 0);
+    QRect r = rc.normalized();
+
+    if (!r.isValid() || r.width() <= 0 || r.height() <= 0) {
+        return d->dirtyRegion;
+    }
+
     if (d->useBoundingDirtyRect) {
         d->dirtyRect = d->dirtyRect.united(r);
         return QRegion(d->dirtyRect);

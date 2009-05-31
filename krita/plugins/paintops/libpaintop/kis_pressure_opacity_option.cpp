@@ -43,9 +43,8 @@ quint8 KisPressureOpacityOption::apply(KisPainter * painter, double pressure) co
     } else {
         opacity = (qreal)(origOpacity * scaleToCurve(pressure) / PRESSURE_DEFAULT);
     }
-    quint8 opacity2 = (quint8)qRound(qBound<qreal>(OPACITY_TRANSPARENT, opacity, OPACITY_OPAQUE ));
+    quint8 opacity2 = (quint8)qRound(qBound<qreal>(OPACITY_TRANSPARENT, opacity, OPACITY_OPAQUE));
 
     painter->setOpacity(opacity2);
-
     return origOpacity;
 }

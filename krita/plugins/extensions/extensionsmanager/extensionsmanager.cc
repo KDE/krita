@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation; version 2 of the License.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
 #include "extensionsmanager.h"
 
 #include <stdlib.h>
@@ -30,7 +47,7 @@ ExtensionsManagerPlugin::ExtensionsManagerPlugin(QObject *parent, const QStringL
 
         setXMLFile(KStandardDirs::locate("data","kritaplugins/extensionsmanager.rc"), true);
 
-        KAction *action  = new KAction(i18n("&My action !"), this);
+        KAction *action  = new KAction(i18n("Extensions manager..."), this);
         actionCollection()->addAction("ExtensionsManager", action );
         connect(action, SIGNAL(triggered()), this, SLOT(slotMyAction()));
     }
@@ -43,7 +60,7 @@ ExtensionsManagerPlugin::~ExtensionsManagerPlugin()
 
 void ExtensionsManagerPlugin::slotMyAction()
 {
-  // TODO: implement your action there ! go go go !
+  
 }
 
 #include "extensionsmanager.moc"

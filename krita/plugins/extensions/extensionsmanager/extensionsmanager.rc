@@ -1,7 +1,7 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui library="kritaextensionsmanager" version="1">
 <MenuBar>
-    <Menu name="Image"><text>&amp;Image</text>
+    <Menu name="Tools"><text>&amp;Tools</text>
 		<Action name="ExtensionsManager"/>
     </Menu>
 </MenuBar>

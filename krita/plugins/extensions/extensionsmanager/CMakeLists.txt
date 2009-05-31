@@ -1,5 +1,6 @@
 
 set(kritaextensionsmanager_PART_SRCS
+    Extension.cpp
     ExtensionsManager.cpp
     ExtensionsManagerPlugin.cc
     ExtensionsManagerWindow.cpp )

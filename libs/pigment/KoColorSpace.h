@@ -131,12 +131,12 @@ protected:
     KoColorSpace();
 
 public:
+
     /// Should be called by real color spaces
     KoColorSpace(const QString &id, const QString &name, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp );
     virtual ~KoColorSpace();
 
     virtual bool operator==(const KoColorSpace& rhs) const;
-
 
 public:
 
@@ -205,15 +205,16 @@ public:
      */
     virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const = 0;
 
-        /**
-         * Return a QVector of floats with channels' values normalized
-         * to floating point range 0 to 1.
-         */
-        virtual void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const = 0;
-  /**
-   * Write in the pixel the value from the normalized vector.
-   */
-        virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) const = 0;
+    /**
+     * Return a QVector of floats with channels' values normalized
+     * to floating point range 0 to 1.
+     */
+    virtual void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const = 0;
+
+    /**
+     * Write in the pixel the value from the normalized vector.
+     */
+    virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) const = 0;
 
     /**
      * Convert the value of the channel at the specified position into
@@ -494,7 +495,6 @@ public:
      */
     virtual KoColorTransformation *createDarkenAdjustment(qint32 shade, bool compensate, qreal compensation) const = 0;
 
-
     /**
      * Invert color channels of the given pixels
      * This function is thread-safe, but you need to create one KoColorTransformation per thread.
@@ -560,6 +560,7 @@ public:
                         qint32 cols,
                         const KoCompositeOp * op,
                         const QBitArray & channelFlags) const;
+
     /**
      * Convenience function for the above where all channels are turned on.
      */
@@ -621,6 +622,7 @@ public:
      * @param doc is the document containing colorElt
      */
     virtual void colorToXML( const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const = 0;
+
     /**
      * Unserialize a color following Create's swatch color specification available
      * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
@@ -637,11 +639,12 @@ public:
      * created paint device. XXX: Currently this uses timers and not
      * threads.
      */
-    virtual QList<KisFilter*> createBackgroundFilters() const
-        { return QList<KisFilter*>(); }
+    virtual QList<KisFilter*> createBackgroundFilters() const { return QList<KisFilter*>(); }
 
     KoColorTransformation* createColorTransformation( const QString & id, const QHash<QString, QVariant> & parameters) const;
+
 protected:
+
     /**
      * Use this function in the constructor of your colorspace to add the information about a channel.
      * @param ci a pointer to the information about a channel
@@ -651,6 +654,7 @@ protected:
     const KoColorConversionTransformation* fromLabA16Converter() const;
     const KoColorConversionTransformation* toRgbA16Converter() const;
     const KoColorConversionTransformation* fromRgbA16Converter() const;
+
 private:
 
     /**
@@ -668,77 +672,80 @@ private:
  */
 class KoColorSpaceFactory {
 public:
-    virtual ~KoColorSpaceFactory() {}
-    /**
-     * Return the unchanging name of this color space
-     */
-    virtual QString id() const = 0;
+     virtual ~KoColorSpaceFactory() {}
+     /**
+      * Return the unchanging name of this color space
+      */
+     virtual QString id() const = 0;
 
-    /**
-     * return the i18n'able description.
-     */
-    virtual QString name() const = 0;
+     /**
+      * return the i18n'able description.
+      */
+     virtual QString name() const = 0;
 
-    /**
-     * @return true if the color space should be shown in an User Interface, or false
-     *         other wise.
-     */
-    virtual bool userVisible() const =0;
-    /**
-     * @return a string that identify the color model (for instance "RGB" or "CMYK" ...)
-     * @see KoColorModelStandardIds.h
-     */
-    virtual KoID colorModelId() const = 0;
-    /**
-     * @return a string that identify the bit depth (for instance "U8" or "F16" ...)
-     * @see KoColorModelStandardIds.h
-     */
-    virtual KoID colorDepthId() const = 0;
+     /**
+      * @return true if the color space should be shown in an User Interface, or false
+      *         other wise.
+      */
+     virtual bool userVisible() const =0;
 
-    /**
-     * @param profile a pointer to a color profile
-     * @return true if the color profile can be used by a color space created by
-     * this factory
-     */
-    virtual bool profileIsCompatible(const KoColorProfile* profile) const =0;
-    /**
-     * creates a color space using the given profile.
-     */
-    virtual KoColorSpace *createColorSpace(const KoColorProfile *) const = 0;
+     /**
+      * @return a string that identify the color model (for instance "RGB" or "CMYK" ...)
+      * @see KoColorModelStandardIds.h
+      */
+     virtual KoID colorModelId() const = 0;
 
-    /**
-     * @return the name of the color space engine for this color space, or "" if none
-     */
-    virtual QString colorSpaceEngine() const = 0;
-    /**
-     * @return true if the color space supports High-Dynamic Range.
-     */
-    virtual bool isHdr() const = 0;
-    /**
-     * @return the reference depth, that is for a color space where all channels have the same
-     * depth, this is the depth of one channel, for a color space with different bit depth for
-     * each channel, it's usually the higest bit depth. This value is used by the Color
-     * Conversion System to check if a lost of bit depth during a color conversion is
-     * acceptable, for instance when converting from RGB32bit to XYZ16bit, it's acceptable to go
-     * through a conversion to RGB16bit, while it's not the case for RGB32bit to XYZ32bit.
-     */
-    virtual int referenceDepth() const = 0;
-    /**
-     * @return the list of color conversion provided by this colorspace, the factories
-     * constructed by this functions are owned by the caller of the function
-     */
-    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const = 0;
+     /**
+      * @return a string that identify the bit depth (for instance "U8" or "F16" ...)
+      * @see KoColorModelStandardIds.h
+      */
+     virtual KoID colorDepthId() const = 0;
 
-    /**
-     *  @return
-     */
-    /**
-     * Returns the default icc profile for use with this colorspace. This may be ""
-     *
-     * @return the default icc profile name
-     */
-    virtual QString defaultProfile() const = 0;
+     /**
+      * @param profile a pointer to a color profile
+      * @return true if the color profile can be used by a color space created by
+      * this factory
+      */
+     virtual bool profileIsCompatible(const KoColorProfile* profile) const =0;
 
-};
+     /**
+      * creates a color space using the given profile.
+      */
+     virtual KoColorSpace *createColorSpace(const KoColorProfile *) const = 0;
+
+     /**
+      * @return the name of the color space engine for this color space, or "" if none
+      */
+     virtual QString colorSpaceEngine() const = 0;
+
+     /**
+      * @return true if the color space supports High-Dynamic Range.
+      */
+     virtual bool isHdr() const = 0;
+
+     /**
+      * @return the reference depth, that is for a color space where all channels have the same
+      * depth, this is the depth of one channel, for a color space with different bit depth for
+      * each channel, it's usually the higest bit depth. This value is used by the Color
+      * Conversion System to check if a lost of bit depth during a color conversion is
+      * acceptable, for instance when converting from RGB32bit to XYZ16bit, it's acceptable to go
+      * through a conversion to RGB16bit, while it's not the case for RGB32bit to XYZ32bit.
+      */
+     virtual int referenceDepth() const = 0;
+
+     /**
+      * @return the list of color conversion provided by this colorspace, the factories
+      * constructed by this functions are owned by the caller of the function
+      */
+     virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const = 0;
+
+     /**
+      * Returns the default icc profile for use with this colorspace. This may be ""
+      *
+      * @return the default icc profile name
+      */
+     virtual QString defaultProfile() const = 0;
+
+ };
 
 #endif // KOCOLORSPACE_H

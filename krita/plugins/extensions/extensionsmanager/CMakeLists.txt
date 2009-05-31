@@ -1,5 +1,7 @@
 
-set(kritaextensionsmanager_PART_SRCS extensionsmanager.cc )
+set(kritaextensionsmanager_PART_SRCS
+    extensionsmanager.cc
+    ExtensionsManagerWindow.cpp )
 
 
 kde4_add_ui_files(kritaextensionsmanager_PART_SRCS

@@ -21,6 +21,7 @@
 #include <kparts/plugin.h>
 
 class KisView2;
+class ExtensionsManagerWindow;
 
 /**
  * Template of view plugin
@@ -39,7 +40,7 @@ private slots:
 private:
 
     KisView2 * m_view;
-
+    ExtensionsManagerWindow* m_emWindow;
 };
 
 #endif // ExtensionsManagerPlugin_H

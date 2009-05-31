@@ -31,13 +31,14 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_view2.h"
+#include "ExtensionsManagerWindow.h"
 
 typedef KGenericFactory<ExtensionsManagerPlugin> ExtensionsManagerPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( kritaextensionsmanager, ExtensionsManagerPluginFactory( "krita" ) )
 
 
 ExtensionsManagerPlugin::ExtensionsManagerPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+    : KParts::Plugin(parent), m_emWindow(0)
 {
     if ( parent->inherits("KisView2") )
     {
@@ -60,7 +61,11 @@ ExtensionsManagerPlugin::~ExtensionsManagerPlugin()
 
 void ExtensionsManagerPlugin::slotMyAction()
 {
-  
+  if(!m_emWindow)
+  {
+    m_emWindow = new ExtensionsManagerWindow;
+  }
+  m_emWindow->setVisible(true);
 }
 
 #include "extensionsmanager.moc"

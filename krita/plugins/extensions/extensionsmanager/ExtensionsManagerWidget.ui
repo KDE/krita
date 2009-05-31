@@ -11,14 +11,14 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Extensions manager</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" rowspan="4">
     <widget class="QListView" name="listView"/>
    </item>
    <item row="0" column="1">
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="pushButtonInstall">
      <property name="text">
       <string>Install from file</string>
      </property>
@@ -38,14 +38,14 @@
     </spacer>
    </item>
    <item row="3" column="1">
-    <widget class="QPushButton" name="pushButton_2">
+    <widget class="QPushButton" name="pushButtonClose">
      <property name="text">
       <string>Close</string>
      </property>
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QPushButton" name="pushButton_3">
+    <widget class="QPushButton" name="pushButtonUninstall">
      <property name="text">
       <string>Uninstall</string>
      </property>

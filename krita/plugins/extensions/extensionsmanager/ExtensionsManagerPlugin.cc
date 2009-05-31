@@ -15,7 +15,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "extensionsmanager.h"
+#include "ExtensionsManagerPlugin.h"
 
 #include <stdlib.h>
 
@@ -68,4 +68,4 @@ void ExtensionsManagerPlugin::slotMyAction()
   m_emWindow->setVisible(true);
 }
 
-#include "extensionsmanager.moc"
+#include "ExtensionsManagerPlugin.moc"

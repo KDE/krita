@@ -1,12 +1,12 @@
 
 set(kritaextensionsmanager_PART_SRCS
-    extensionsmanager.cc
+    ExtensionsManagerPlugin.cc
     ExtensionsManagerWindow.cpp )
 
 
 kde4_add_ui_files(kritaextensionsmanager_PART_SRCS
     ExtensionsManagerWidget.ui
-    PackageInformationWidget.ui )
+    ExtensionInformationWidget.ui )
 
 kde4_add_plugin(kritaextensionsmanager ${kritaextensionsmanager_PART_SRCS})
 

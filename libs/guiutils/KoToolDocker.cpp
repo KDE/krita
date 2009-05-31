@@ -55,16 +55,21 @@ bool KoToolDocker::hasOptionWidget()
 void KoToolDocker::newOptionWidget(QWidget *optionWidget) {
     if(d->currentWidget == optionWidget)
         return;
+/*
     if(d->currentWidget) {
         d->currentWidget->hide();
         d->currentWidget->setParent(0);
     }
+*/
     d->currentWidget = optionWidget;
+
     connect(d->currentWidget, SIGNAL(destroyed(QObject*)), this, SLOT(optionWidgetDestroyed(QObject*)));
-    setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX); // will be overwritten again next
+//    setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX); // will be overwritten again next
+
     setWidget(optionWidget);
-    adjustSize();
+/*    adjustSize();
     optionWidget->show();
+*/
     update(); // force qt to update the layout even when we are floating
 }
 

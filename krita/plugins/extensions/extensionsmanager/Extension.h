@@ -20,7 +20,7 @@
 
 #include <QString>
 
-class QDomDocument;
+class QDomElement;
 
 class Extension {
     public:
@@ -31,7 +31,7 @@ class Extension {
         const QString& description() const;
         const QString& version() const;
     public:
-        void parse(const QDomDocument& document);
+        void parse(const QDomElement& document);
     private:
         QString m_name;
         QString m_description;

@@ -17,7 +17,7 @@
 
 #include "Extension.h"
 
-#include <QDomDocument>
+#include <QDomElement>
 
 Extension::Extension() {
 }
@@ -39,18 +39,26 @@ const QString& Extension::version() const {
 
 #include <kdebug.h>
 
-void Extension::parse(const QDomDocument& document) {
+QString getChildText(const QDomElement& element) {
+    QDomText text = element.firstChild().toText();
+    return text.data();
+}
+
+void Extension::parse(const QDomElement& element) {
     Q_ASSERT(m_name.isEmpty());
     Q_ASSERT(m_description.isEmpty());
     Q_ASSERT(m_version.isEmpty());
-    QDomNode n = document.firstChild();
+    QDomNode n = element.firstChild();
     while (!n.isNull()) {
         if (n.isElement()) {
             QDomElement e = n.toElement();
             if(e.tagName() == "name") {
-                kDebug() << e.nodeValue();
+                m_name = getChildText(e);
+            } else if(e.tagName() == "description") {
+                m_description = getChildText(e);
+            } else if(e.tagName() == "version") {
+                m_version = getChildText(e);
             }
-            break;
         }
         n = n.nextSibling();
     }

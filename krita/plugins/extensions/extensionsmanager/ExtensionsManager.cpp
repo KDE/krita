@@ -71,20 +71,29 @@ bool ExtensionsManager::installExtension(const KUrl& uri) {
     return false;
 }
 
+template<class _T_>
+class Keeper {
+public:
+    Keeper(_T_* t) : m_t(t) {}
+    ~Keeper() { delete m_t; }
+    void release() { m_t = 0; }
+private:
+    _T_* m_t;
+};
+
 bool ExtensionsManager::installExtension(QIODevice* _device) {
     KoStore* store = KoStore::createStore(_device, KoStore::Read, "", KoStore::Zip);
+    Keeper<KoStore> storek(store);
     // Check that 'manifest.xml' and 'source.tar.bz2' are present
     bool hasManifestXML = store->hasFile("manifest.xml");
     bool hasSource = store->hasFile("source.tar.bz2");
     if( !hasManifestXML || !hasSource ) {
         KMessageBox::error(0, i18n("Invalid extension, missing 'manifest.xml' or 'source.tar.bz2'"));
-        delete store;
         return false;
     }
     // Attempt to open the 'manifest.xml' file
     if( !store->open("manifest.xml") ) {
         KMessageBox::error(0, i18n("Failed to open 'manifest.xml'."));
-        delete store;
         return false;
     }
     // Parse the 'manifest.xml'
@@ -93,15 +102,19 @@ bool ExtensionsManager::installExtension(QIODevice* _device) {
     QString errMsg;
     if( !doc.setContent(store->device(), &errMsg, &line) ) {
         KMessageBox::error(0, i18n("Failed to parse 'manifest.xml' : %1 at line: %2", errMsg, line));
-        delete store;
         return false;
     }
     // Create the extension
     Extension* extension = new Extension;
-    extension->parse(doc);
+    Keeper<Extension> extensionk(extension);
+    QDomNode n = doc.firstChild();
+    QDomElement e = n.toElement();
+    if( e.isNull() || e.tagName() != "manifest" ) {
+        KMessageBox::error(0, i18n("Invalid 'manifest.xml' : should contain a <manifest> tag."));
+        return false;
+    }
+    extension->parse(e);
     
     // Cleanup
-    delete extension;
-    delete store;
     return false;
 }

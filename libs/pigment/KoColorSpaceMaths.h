@@ -162,6 +162,7 @@ class KoColorSpaceMaths {
         {
             return ((traits_compositetype)a * b ) /  KoColorSpaceMathsTraits<_Tdst>::unitValue;
         }
+
         /**
          * Division : (a * MAX ) / b
          * @param a
@@ -171,6 +172,7 @@ class KoColorSpaceMaths {
         {
             return ((traits_compositetype)a *  KoColorSpaceMathsTraits<_Tdst>::unitValue ) / b;
         }
+
         /**
          * Blending : (a * alpha) + b * (1 - alpha)
          * @param a
@@ -182,6 +184,7 @@ class KoColorSpaceMaths {
             traits_compositetype c = ( ((traits_compositetype)a - (traits_compositetype)b) * alpha ) >> traits::bits;
             return c+b;
         }
+
         /**
          * This function will scale a value of type _T to fit into a _Tdst.
          */
@@ -189,6 +192,7 @@ class KoColorSpaceMaths {
         {
             return (traits_compositetype)a >> ( traits::bits - KoColorSpaceMathsTraits<_Tdst>::bits );
         }
+
         inline static typename  KoColorSpaceMathsTraits<_Tdst>::compositetype clamp( typename  KoColorSpaceMathsTraits<_Tdst>::compositetype val )
         {
             return qBound( (typename  KoColorSpaceMathsTraits<_Tdst>::compositetype) KoColorSpaceMathsTraits<_Tdst>::min,

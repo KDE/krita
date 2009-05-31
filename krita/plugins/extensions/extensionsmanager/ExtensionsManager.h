@@ -15,25 +15,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "ExtensionsManagerWindow.h"
+class Extension;
 
-#include "ui_ExtensionsManagerWidget.h"
-#include <kfiledialog.h>
-#include "ExtensionsManager.h"
+#include <QList>
+class KUrl;
 
-ExtensionsManagerWindow::ExtensionsManagerWindow() : m_emWidget(new Ui_ExtensionsManagerWidget) {
-  m_emWidget->setupUi(this);
-  connect(m_emWidget->pushButtonInstall, SIGNAL(released()), SLOT(installFromFile()));
-  connect(m_emWidget->pushButtonClose, SIGNAL(released()), SLOT(close()));
-}
-
-ExtensionsManagerWindow::~ExtensionsManagerWindow() {
-  delete m_emWidget;
-}
-
-void ExtensionsManagerWindow::installFromFile() {
-  KUrl url = KFileDialog::getOpenFileName(KUrl(), "*.koffice-extension");
-  if( !url.isEmpty() ) {
-    ExtensionsManager::instance()->installExtension(url);
-  }
-}
+class ExtensionsManager {
+    ExtensionsManager();
+    ~ExtensionsManager();
+  public:
+    static ExtensionsManager* instance();
+    QList<Extension*> installedExtension();
+    void installExtension(const KUrl& _file);
+  private:
+    QList<Extension*> m_installedExtension;
+    static ExtensionsManager* s_instance;
+};

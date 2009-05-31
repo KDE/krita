@@ -48,6 +48,10 @@ converted to use KisThreadedApplicator anyway. I've svn rm'ed it now.
  * We used to use ThreadWeaver to recompute the thumbnails in the
 filters gallery, however that got replaced by lazy creation of
 thumbnails in KisFiltersModel. (At least, I hope it's lazy!)
+Note that we still need threading here: since when you expand a catetory in the tree view, 
+then Qt will ask for all the previews (mostly because it needs to know the 
+size of all elements), so we would need threading there too, for the 
+categories with a lot of filters
 
 
 ---- KoAction ----

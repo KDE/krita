@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PackageInformationWidget</class>
- <widget class="QWidget" name="PackageInformationWidget">
+ <class>ExtensionInformationWidget</class>
+ <widget class="QWidget" name="ExtensionInformationWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -22,9 +22,9 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QLabel" name="label_4">
+    <widget class="QLabel" name="labelName">
      <property name="text">
-      <string>sds</string>
+      <string/>
      </property>
     </widget>
    </item>
@@ -36,9 +36,9 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QLabel" name="label_5">
+    <widget class="QLabel" name="labelDescription">
      <property name="text">
-      <string>sds</string>
+      <string/>
      </property>
     </widget>
    </item>
@@ -50,9 +50,9 @@
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QLabel" name="label_6">
+    <widget class="QLabel" name="labelVersion">
      <property name="text">
-      <string>ver</string>
+      <string/>
      </property>
     </widget>
    </item>

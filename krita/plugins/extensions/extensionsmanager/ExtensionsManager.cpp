@@ -26,6 +26,7 @@
 #include <klocalizedstring.h>
 #include <QDomDocument>
 #include "Extension.h"
+#include <ui_ExtensionInformationWidget.h>
 
 ExtensionsManager* ExtensionsManager::s_instance = 0;
 
@@ -114,6 +115,23 @@ bool ExtensionsManager::installExtension(QIODevice* _device) {
         return false;
     }
     extension->parse(e);
+    // Test if extension contains valid information
+    if(extension->name().isEmpty() || extension->description().isEmpty() || extension->version().isEmpty()) {
+        KMessageBox::error(0, i18n("Missing information in 'manifest.xml'."));
+    }
+    // Show a dialog with package information
+    Ui::ExtensionInformationWidget eiw;
+    QWidget* widget = new QWidget;
+    eiw.setupUi(widget);
+    eiw.labelName->setText(extension->name());
+    eiw.labelDescription->setText(extension->description());
+    eiw.labelVersion->setText(extension->version());
+    KDialog dialog;
+    dialog.setMainWidget(widget);
+    dialog.setButtonText(KDialog::Ok, i18n("Continue"));
+    if( dialog.exec() != QDialog::Accepted ) {
+        return false;
+    }
     
     // Cleanup
     return false;

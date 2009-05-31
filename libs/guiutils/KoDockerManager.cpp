@@ -87,7 +87,7 @@ void KoDockerManager::removeUnusedOptionWidgets()
             // kDebug(30004) << "removing" << j.key() << ((void*) j.value());
             j.value()->toggleViewAction()->setVisible(false);
             d->view->removeDockWidget(j.value());
-            d->toolDockerMap.remove(j.key());
+            //d->toolDockerMap.remove(j.key());
         }
     }
 }

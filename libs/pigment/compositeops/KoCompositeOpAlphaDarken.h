@@ -65,6 +65,8 @@ public:
 
             const quint8 *mask = maskRowStart;
 
+            channels_type opacity = KoColorSpaceMaths<quint8, channels_type>::scaleToA(U8_opacity);
+
             for (qint32 i = cols; i > 0; i--, s+=srcInc, d+=_CSTraits::channels_nb)
             {
 
@@ -81,8 +83,8 @@ public:
                     mask++;
                 }
 
-                if (U8_opacity != OPACITY_OPAQUE) {
-                    srcAlpha = KoColorSpaceMaths<channels_type>::multiply(srcAlpha, U8_opacity);
+                if (opacity != NATIVE_OPACITY_OPAQUE) {
+                    srcAlpha = KoColorSpaceMaths<channels_type>::multiply(srcAlpha, opacity);
                 }
 
                 // not transparent

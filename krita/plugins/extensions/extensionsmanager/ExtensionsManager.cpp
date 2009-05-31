@@ -119,6 +119,8 @@ bool ExtensionsManager::installExtension(QIODevice* _device) {
     if(extension->name().isEmpty() || extension->description().isEmpty() || extension->version().isEmpty()) {
         KMessageBox::error(0, i18n("Missing information in 'manifest.xml'."));
     }
+    // Close the 'manifest.xml'
+    store->close();
     // Show a dialog with package information
     Ui::ExtensionInformationWidget eiw;
     QWidget* widget = new QWidget;
@@ -132,7 +134,7 @@ bool ExtensionsManager::installExtension(QIODevice* _device) {
     if( dialog.exec() != QDialog::Accepted ) {
         return false;
     }
-    
+    // Start the installation
     // Cleanup
     return false;
 }

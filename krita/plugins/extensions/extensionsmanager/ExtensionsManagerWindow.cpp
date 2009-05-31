@@ -20,6 +20,7 @@
 #include "ui_ExtensionsManagerWidget.h"
 #include <kfiledialog.h>
 #include "ExtensionsManager.h"
+#include <kmessagebox.h>
 
 ExtensionsManagerWindow::ExtensionsManagerWindow() : m_emWidget(new Ui_ExtensionsManagerWidget) {
   m_emWidget->setupUi(this);
@@ -34,6 +35,8 @@ ExtensionsManagerWindow::~ExtensionsManagerWindow() {
 void ExtensionsManagerWindow::installFromFile() {
   KUrl url = KFileDialog::getOpenFileName(KUrl(), "*.koffice-extension");
   if( !url.isEmpty() ) {
-    ExtensionsManager::instance()->installExtension(url);
+    if(ExtensionsManager::instance()->installExtension(url) ) {
+        KMessageBox::information(this, i18n("The installation was successfull, you will need to restart Krita to use the extensions"), i18n("Success") );
+    }
   }
 }

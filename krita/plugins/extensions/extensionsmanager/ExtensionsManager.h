@@ -15,10 +15,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-class Extension;
-
 #include <QList>
+
+class QIODevice;
+
 class KUrl;
+
+class Extension;
 
 class ExtensionsManager {
     ExtensionsManager();
@@ -26,7 +29,8 @@ class ExtensionsManager {
   public:
     static ExtensionsManager* instance();
     QList<Extension*> installedExtension();
-    void installExtension(const KUrl& _file);
+    bool installExtension(const KUrl& _file);
+    bool installExtension(QIODevice* _device);
   private:
     QList<Extension*> m_installedExtension;
     static ExtensionsManager* s_instance;

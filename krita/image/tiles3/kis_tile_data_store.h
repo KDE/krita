@@ -38,24 +38,54 @@ public:
     KisTileData *duplicateTileData(KisTileData *rhs);
 
 
+    /**
+     * Increments usersCount of a TD and refs shared pointer counter
+     * Used by KisTile for COW
+     */
     inline quint32 acquireTileData(const KisTileData *td) const {
-        return td->m_refCount.ref();
+        qint32 ref = refTileData(td);
+        td->m_usersCount.ref();
+        return ref;
     }
 
+    /**
+     * Decrements usersCount of a TD and derefs shared pointer counter
+     * Used by KisTile for COW
+     */
     inline quint32 releaseTileData(KisTileData *td) {
+        td->m_usersCount.deref();
+        qint32 ref = derefTileData(td);
+        return ref;
+    }
+
+    /**
+     * Only refs shared pointer counter.
+     * Used only by KisMementoManager without 
+     * consideration of COW.
+     */
+    inline quint32 refTileData(const KisTileData *td) const {
+        return td->m_refCount.ref();
+    }
+    
+    /**
+     * Only refs shared pointer counter.
+     * Used only by KisMementoManager without 
+     * consideration of COW.
+     */
+    inline quint32 derefTileData(KisTileData *td) {
         if( !(td->m_refCount.deref())) {
             freeTileData(td);
             return 0;
         }
         return td->m_refCount;
     }
-
-    inline KisTileData *createDefaultTileData(qint32 pixelSize, const qint8 *defPixel) {
+    
+    inline KisTileData* createDefaultTileData(qint32 pixelSize, const quint8 *defPixel) {
         return allocTileData(pixelSize, defPixel);
     }
-
+    
 private:
-    KisTileData *allocTileData(qint32 pixelSize, const qint8 *defPixel);
+    KisTileData *allocTileData(qint32 pixelSize, const quint8 *defPixel);
     void freeTileData(KisTileData *td);
 
     void tileListAppend(KisTileData *td);

@@ -30,7 +30,7 @@ class KisTileDataStore;
 class KisTileData
 {
 public:
-    KisTileData(qint32 pixelSize, const qint8 *defPixel, KisTileDataStore *store);
+    KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store);
 private:
     KisTileData(const KisTileData& rhs);
 
@@ -43,12 +43,12 @@ public:
         SWAPPED
     };
 
-    inline qint8* data() const {
+    inline quint8* data() const {
         Q_ASSERT(m_data);
         return m_data;
     }
 
-    void setData(const qint8 *data) {
+    void setData(const quint8 *data) {
         Q_ASSERT(m_data);
         memcpy(m_data, data, m_pixelSize*WIDTH*HEIGHT);
     }
@@ -60,7 +60,7 @@ public:
 
 
 private:
-    void fillWithPixel(const qint8 *defPixel);
+    void fillWithPixel(const quint8 *defPixel);
 
 private:
     friend class KisTile;
@@ -92,10 +92,16 @@ private:
      * FIXME: We should be able to work in const environment 
      * even when actual data is swapped out to disk 
      */
-    mutable qint8* m_data;
+    mutable quint8* m_data;
 
     /**
-     * How many tiles use this tiledata?
+     * How many tiles/mementoes use 
+     * this tiledata through COW?
+     */
+    mutable QAtomicInt m_usersCount;    
+
+    /**
+     * Shared pointer counter
      */
     mutable QAtomicInt m_refCount;
 

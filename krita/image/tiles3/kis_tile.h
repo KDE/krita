@@ -22,13 +22,17 @@
 #include <QReadWriteLock>
 #include <QRect>
 
+#include <kis_shared.h>
+#include <kis_shared_ptr.h>
+
 #include "kis_tile_data.h"
 #include "kis_tile_data_store.h"
 
 //class KisTiledDataManager;
 //class KisTiledIterator;
 
-
+class KisTile;
+typedef KisSharedPtr<KisTile> KisTileSP;
 
 /**
  * Provides abstraction to a tile.  
@@ -38,7 +42,7 @@
  * + Actual tile data is stored in KisTileData that can be 
  *   shared between many tiles
  */
-class KisTile
+class KisTile : public KisShared
 {
 public:
     KisTile(qint32 col, qint32 row, KisTileData *defaultTileData);
@@ -50,16 +54,17 @@ public:
 public:
     
     void debugPrintInfo();
+    void debugDumpTile();
 
     void lockForRead() const;
     void lockForWrite();
     void unlock() const;
 
     /* this allows us work directly on tile's data */
-    inline qint8 *data() const {
+    inline quint8 *data() const {
         return m_tileData->data();
     }
-    inline void setData(const qint8 *data) {
+    inline void setData(const quint8 *data) {
         m_tileData->setData(data);
     }
 
@@ -75,11 +80,11 @@ public:
                      KisTileData::WIDTH, KisTileData::HEIGHT);
     }
 
-    inline KisTile *next() const {
+    inline KisTileSP next() const {
         return m_nextTile;
     }
     
-    void setNext(KisTile *next) {
+    void setNext(KisTileSP next) {
         m_nextTile=next;
     }
 
@@ -120,7 +125,7 @@ private:
     /**
      * For KisTiledDataManager's hash table
      */
-    KisTile *m_nextTile;
+    KisTileSP m_nextTile;
 };
 
 #endif // KIS_TILE_H_

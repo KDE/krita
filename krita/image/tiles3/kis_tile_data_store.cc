@@ -97,7 +97,7 @@ KisTileDataStore::~KisTileDataStore()
     tileListClear();
 }
 
-KisTileData *KisTileDataStore::allocTileData(qint32 pixelSize, const qint8 *defPixel)
+KisTileData *KisTileDataStore::allocTileData(qint32 pixelSize, const quint8 *defPixel)
 {
     KisTileData *td = new KisTileData(pixelSize, defPixel, this);
 
@@ -134,9 +134,9 @@ void KisTileDataStore::debugPrintList()
     KisTileData *iter;
     tileListForEach(iter, tileListHead(), tileListTail()) {
         printf("-------------------------\n");
-        printf("TileData:\t\t\t%X\n", (int)iter);
-        printf("  refCount:\t0x%X\n", (int)iter->m_refCount);
-        printf("  next:    \t0x%X\n", (int)iter->m_nextTD);
-        printf("  prev:    \t0x%X\n", (int)iter->m_prevTD);
+        printf("TileData:\t\t\t%X\n", (quintptr)iter);
+        printf("  refCount:\t0x%X\n", (quintptr)iter->m_refCount);
+        printf("  next:    \t0x%X\n", (quintptr)iter->m_nextTD);
+        printf("  prev:    \t0x%X\n", (quintptr)iter->m_prevTD);
     }
 }

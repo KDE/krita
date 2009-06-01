@@ -1,0 +1,255 @@
+/*
+ *  Copyright (c) 2004 Casper Boemann <cbr@boemann.dk>
+ *            (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+
+
+#include "kis_tile_hash_table.h"
+
+
+KisTileHashTable::KisTileHashTable()
+  : m_lock(QReadWriteLock::Recursive)
+{
+    m_hashTable = new KisTileSP [TABLE_SIZE];
+    Q_CHECK_PTR(m_hashTable);
+
+    for (int i = 0; i < TABLE_SIZE; i++)
+        m_hashTable[i] = 0;
+
+    m_numTiles = 0;
+    m_defaultTileData=0;
+}
+
+KisTileHashTable::KisTileHashTable(const KisTileHashTable &ht)
+  : m_lock(QReadWriteLock::Recursive)
+{
+    m_hashTable = new KisTileSP [TABLE_SIZE];
+    Q_CHECK_PTR(m_hashTable);
+    memcpy(m_hashTable, ht.m_hashTable, sizeof(KisTileSP) * TABLE_SIZE);
+
+    m_numTiles = ht.m_numTiles;
+
+    setDefaultTileData(ht.m_defaultTileData);
+}
+
+KisTileHashTable::~KisTileHashTable()
+{
+    clear();
+    delete[] m_hashTable;
+}
+
+quint32 KisTileHashTable::calculateHash(qint32 col, qint32 row)
+{
+    return ((row << 5) + (col & 0x1F)) & 0x3FF;
+}
+
+KisTileSP KisTileHashTable::getTile(qint32 col, qint32 row)
+{
+    QReadLocker locker(&m_lock);
+    qint32 idx = calculateHash(col,row);
+    KisTileSP tile = m_hashTable[idx];
+    
+    for(; tile; tile=tile->next()) {
+        if(tile->col() == col &&
+           tile->row() == row) {
+
+            return tile;
+        }
+    }
+
+    return 0;
+}
+
+bool KisTileHashTable::tileExists(qint32 col, qint32 row)
+{
+    return getTile(col,row);
+}
+
+void KisTileHashTable::linkTile(KisTileSP tile)
+{
+    QWriteLocker locker(&m_lock);
+    qint32 idx = calculateHash(tile->col(),tile->row());
+    KisTileSP firstTile = m_hashTable[idx];
+    
+    tile->setNext(firstTile);
+    m_hashTable[idx]=tile;
+    m_numTiles++;
+}
+
+KisTileSP KisTileHashTable::unlinkTile(qint32 col, qint32 row)
+{
+    QWriteLocker locker(&m_lock);
+    qint32 idx = calculateHash(col,row);
+    KisTileSP tile = m_hashTable[idx];
+    KisTileSP prevTile=0;
+    
+    for(; tile; tile=tile->next()) {
+        if(tile->col() == col &&
+           tile->row() == row) {
+
+            if(prevTile)
+                prevTile->setNext(tile->next());
+            else
+                m_hashTable[idx]=tile->next();
+
+            m_numTiles--;
+            return tile;
+        }
+        prevTile=tile;
+    }
+
+    return 0;
+}
+
+KisTileSP KisTileHashTable::getTileLazy(qint32 col, qint32 row)
+{
+    //FIXME: race condition
+    //QReadLocker locker(&m_lock);
+
+    KisTileSP tile = getTile(col,row);
+    if(!tile) {
+        tile = new KisTile(col, row, m_defaultTileData);
+        linkTile(tile);
+    }
+    
+    return tile;
+}
+
+void KisTileHashTable::deleteTile(qint32 col, qint32 row)
+{
+    KisTileSP tile = unlinkTile(col, row);
+
+    /* Done by KisSharedPtr */
+    //if(tile)
+    //    delete tile;
+
+}
+
+void KisTileHashTable::deleteTile(KisTileSP tile)
+{
+    deleteTile(tile->col(), tile->row());
+}
+
+void KisTileHashTable::clear()
+{
+    QWriteLocker locker(&m_lock);
+    KisTileSP tile = 0;
+//    KisTile* tmp;
+    qint32 i;
+
+    for(i=0; i<TABLE_SIZE; i++) {
+        tile=m_hashTable[i];
+
+        while(tile) {
+            //tmp = tile;
+            tile=tile->next();
+            /* done by KisShared */
+            //delete tmp;
+            m_numTiles--;
+        }
+        m_hashTable[i]=0;
+    }
+
+    Q_ASSERT(!m_numTiles);
+}
+
+
+void KisTileHashTable::setDefaultTileData(KisTileData *defaultTileData)
+{
+    if(m_defaultTileData) {
+        globalTileDataStore.releaseTileData(m_defaultTileData);
+        m_defaultTileData=0;
+    }
+
+    globalTileDataStore.acquireTileData(defaultTileData);
+    m_defaultTileData=defaultTileData;
+}
+
+KisTileData* KisTileHashTable::defaultTileData()
+{
+    return m_defaultTileData;
+}
+
+void KisTileHashTable::debugPrintInfo()
+{
+    printf("==========================\n");
+    printf("TileHashTable:\n");
+    printf("   def. data:\t\t0x%X\n", (quintptr) m_defaultTileData);
+    printf("   numTiles:\t\t%d\n", (int) m_numTiles);
+    debugListLengthDistibution();
+    printf("==========================\n");
+}
+
+/*#define foreach(it)                                     \
+    for(qint32 i=0; i<TABLE_SIZE; i++, it=m_hashTable[i]) \
+        for(it=m_hashTable[0]; it; it=it->next())
+*/
+qint32 KisTileHashTable::debugChainLen(qint32 idx)
+{
+      qint32 len=0;
+      for(KisTileSP it=m_hashTable[idx]; it; it=it->next(), len++) ;
+      return len;
+}
+
+void KisTileHashTable::debugMaxListLength(qint32 &min, qint32 &max)
+{
+    KisTileSP tile;
+    qint32 maxLen=0;
+    qint32 minLen=m_numTiles;
+    qint32 tmp=0;
+
+    for(qint32 i=0; i<TABLE_SIZE; i++) {
+        tmp=debugChainLen(i);
+        if(tmp>maxLen)
+            maxLen=tmp;
+        if(tmp<minLen)
+            minLen=tmp;
+    }
+    
+    min=minLen;
+    max=maxLen;
+}
+
+void KisTileHashTable::debugListLengthDistibution()
+{
+    qint32 min,max;
+    qint32 arraySize;
+    qint32 tmp;
+
+    debugMaxListLength(min,max);
+    arraySize=max-min+1;
+
+    qint32 *array = new qint32[arraySize];
+    memset(array, 0, sizeof(qint32)*arraySize);
+
+    for(qint32 i=0; i<TABLE_SIZE; i++) {
+        tmp=debugChainLen(i);
+        array[tmp-min]++;
+    }
+
+    printf("   minChain:\t\t%d\n", min);
+    printf("   maxChain:\t\t%d\n", max);
+
+    printf("   Chain size distribution:\n");
+    for(qint32 i=0; i<arraySize; i++)
+        printf("      %3d:\t%4d\n", i+min, array[i]);
+
+    delete[] array;
+}
+
+

@@ -25,16 +25,17 @@ const qint32 KisTileData::WIDTH = 64;
 const qint32 KisTileData::HEIGHT = 64;
 
 
-KisTileData::KisTileData(qint32 pixelSize, const qint8 *defPixel, KisTileDataStore *store)
+KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store)
     :m_RWLock(QReadWriteLock::Recursive),
      m_state(NORMAL),
+     m_usersCount(0),
      m_refCount(0), 
      m_pixelSize(pixelSize),
      m_store(store)
 {
     m_nextTD = m_prevTD = this;
 
-    m_data = new qint8[m_pixelSize*WIDTH*HEIGHT];
+    m_data = new quint8[m_pixelSize*WIDTH*HEIGHT];
 
     fillWithPixel(defPixel);
 }
@@ -48,14 +49,15 @@ KisTileData::KisTileData(qint32 pixelSize, const qint8 *defPixel, KisTileDataSto
 KisTileData::KisTileData(const KisTileData& rhs)
     :m_RWLock(QReadWriteLock::Recursive),
      m_state(NORMAL),
-     m_refCount(0), 
+     m_usersCount(0),
+     m_refCount(0),
      m_pixelSize(rhs.m_pixelSize), 
      m_store(rhs.m_store)
 {
     m_nextTD = m_prevTD = this;
 
     const quint32 tileDataSize = m_pixelSize*WIDTH*HEIGHT;
-    m_data = new qint8[tileDataSize];
+    m_data = new quint8[tileDataSize];
 
     QReadLocker lock(&rhs.m_RWLock);
     rhs.m_store->ensureTileDataLoaded(&rhs);
@@ -73,10 +75,12 @@ KisTileData::~KisTileData()
         delete[] m_data;
 }
 
-void KisTileData::fillWithPixel(const qint8 *defPixel)
+void KisTileData::fillWithPixel(const quint8 *defPixel)
 {
-    for (int i=0; i<WIDTH*HEIGHT; i++) {
-        memcpy(m_data+i, defPixel, m_pixelSize);
+    quint8 *it = m_data;
+
+    for (int i=0; i<WIDTH*HEIGHT; i++, it+=m_pixelSize) {
+        memcpy(it, defPixel, m_pixelSize);
     }
 }
 

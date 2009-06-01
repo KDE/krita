@@ -36,7 +36,7 @@ typedef KisSharedPtr<KisTiledHLineIterator> KisTiledHLineIteratorSP;
 class KisDataManager;
 
 /**
- * The KisRectIterator iterators over a rectangular area in the most efficient order. That is,
+ * The KisRectIterator iterates over a rectangular area in the most efficient order. That is,
  * there is no guarantee that the iterator will work scanline by scanline.
  */
 class KRITAIMAGE_EXPORT KisRectConstIterator

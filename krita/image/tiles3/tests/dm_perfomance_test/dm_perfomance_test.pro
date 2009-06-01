@@ -6,7 +6,10 @@ TEMPLATE = app
 TARGET = 
 DEPENDPATH += . 
 
-LIBS += -g -Wl,-rpath,/home/devel/kde-install/release/kde/lib
+#CONFIG-=debug
+#CONFIG+=release
+
+LIBS += -Wl,-rpath,/home/devel/kde-install/release/kde/lib
 
 LIBPATH += /home/devel/kde-install/release/kde/lib/
 LIBS +=  -lkdecore
@@ -32,4 +35,4 @@ SOURCES += ../../kis_tile.cc \
            ../../kis_tile_processors.cc \
            ../../kis_tile_hash_table.cc \
            ../../../kis_shared.cc \
-           main.cc
+           dm_pf_test.cc

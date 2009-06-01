@@ -22,7 +22,7 @@
 #include "kis_tile.h"
 
 
-#define lazyCopying() (m_tileData==m_defaultTileData)
+#define lazyCopying() (m_tileData->m_usersCount>1)
 #define activateLazyCopying() do { m_tileData=m_defaultTileData; \
                                    globalTileDataStore.acquireTileData(m_tileData);} while(0)
 
@@ -45,11 +45,13 @@ KisTile::KisTile(qint32 col, qint32 row, KisTileData *defaultTileData)
 }
 
 KisTile::KisTile(qint32 col, qint32 row, const KisTile& rhs)
+    : KisShared(rhs)
 {
     init(col, row, rhs.tileData());
 }
 
 KisTile::KisTile(const KisTile& rhs)
+    : KisShared(rhs)
 {
     init(rhs.col(), rhs.row(), rhs.tileData());
 }
@@ -89,8 +91,22 @@ void KisTile::unlock() const
 void KisTile::debugPrintInfo()
 {
     printf("------\n");
-    printf("Tile:\t\t\t0x%X\n", (int) this);
-    printf("   data:\t0x%X\n", (int) m_tileData);
-    printf("   def. data:\t0x%X\n", (int) m_defaultTileData);
-    printf("   next:\t0x%X\n", (int) m_nextTile);
+    printf("Tile:\t\t\t0x%X\n", (quintptr) this);
+    printf("   data:\t0x%X\n", (quintptr) m_tileData);
+    printf("   def. data:\t0x%X\n", (quintptr) m_defaultTileData);
+    printf("   next:\t0x%X\n", (quintptr) m_nextTile.data());
+}
+
+void KisTile::debugDumpTile()
+{
+    lockForRead();
+    quint8 *data = this->data();
+
+    for(int i=0; i<KisTileData::HEIGHT; i++) {
+        for(int j=0; j<KisTileData::WIDTH; j++) {
+            printf("%4d ", data[ (i*KisTileData::WIDTH+j)*pixelSize() ]);
+        }
+        printf("\n");
+     }
+     unlock();
 }

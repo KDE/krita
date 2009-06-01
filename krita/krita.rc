@@ -198,9 +198,9 @@
  <Action name="edit_undo"/>
  <Action name="edit_redo"/>
  <Separator/>
- <Action name="cut"/>
- <Action name="copy"/>
- <Action name="paste"/>
+ <Action name="edit_cut"/>
+ <Action name="edit_copy"/>
+ <Action name="edit_paste"/>
  <Action name="paste_new"/>
  <Separator/>
  <ActionList name="flake_tool_actions"/>

@@ -1,8 +1,6 @@
 [Desktop Entry]
 Name=ExtensionsManager
-Name[x-test]=xxExtensionsManagerxx
 Comment=ExtensionsManager
-Comment[x-test]=xxExtensionsManagerxx
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaextensionsmanager

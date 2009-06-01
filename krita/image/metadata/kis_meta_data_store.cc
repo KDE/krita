@@ -193,7 +193,7 @@ void Store::debugDump() const
     dbgImage << " - Metadata (there are" << d->entries.size() << " entries)";
     foreach(const Entry& e, d->entries) {
         if (e.isValid()) {
-            //dbgImage << e;
+            dbgImage << e;
         } else {
             dbgImage << "Invalid entry";
         }

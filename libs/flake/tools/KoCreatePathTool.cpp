@@ -114,7 +114,7 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
 
     if (m_shape) {
         // the path shape gets closed by clicking on the first point
-        if (handleRect(m_firstPoint->point()).contains(event->point)) {
+        if (grabRect(m_firstPoint->point()).contains(event->point)) {
             m_activePoint->setPoint(m_firstPoint->point());
             m_shape->closeMerge();
             addPathShape();
@@ -173,7 +173,7 @@ void KoCreatePathTool::mouseMoveEvent(KoPointerEvent *event)
         return;
     }
 
-    m_mouseOverFirstPoint = handleRect(m_firstPoint->point()).contains(event->point);
+    m_mouseOverFirstPoint = grabRect(m_firstPoint->point()).contains(event->point);
 
     m_canvas->updateCanvas(m_shape->boundingRect());
 
@@ -268,14 +268,19 @@ void KoCreatePathTool::addPathShape()
 
 QRectF KoCreatePathTool::handleRect(const QPointF &p)
 {
-    QPointF border = m_canvas->viewConverter()
-                     ->viewToDocument(QPointF(m_handleRadius, m_handleRadius));
+    const KoViewConverter * converter = m_canvas->viewConverter();
+    QRectF hr = converter->viewToDocument(QRectF(0, 0, 2*m_handleRadius, 2*m_handleRadius));
+    hr.moveCenter( p );
+    return hr;
+}
 
-    const qreal x = p.x() - border.x();
-    const qreal y = p.y() - border.y();
-    const qreal w = border.x() * 2;
-    const qreal h = border.x() * 2;
-    return QRectF(x, y, w, h);
+QRectF KoCreatePathTool::grabRect(const QPointF &p)
+{
+    uint grabSize = 2*m_canvas->resourceProvider()->grabSensitivity();
+    const KoViewConverter * converter = m_canvas->viewConverter();
+    QRectF hr = converter->viewToDocument(QRectF(0, 0, grabSize, grabSize));
+    hr.moveCenter( p );
+    return hr;
 }
 
 void KoCreatePathTool::repaintActivePoint()

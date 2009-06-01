@@ -555,8 +555,8 @@ void DefaultTool::selectGuideAtPosition(const QPointF &position)
     // check if we are on a guide line
     KoGuidesData * guidesData = m_canvas->guidesData();
     if (guidesData && guidesData->showGuideLines()) {
-        qreal handleRadius = m_canvas->resourceProvider()->handleRadius();
-        qreal minDistance = m_canvas->viewConverter()->viewToDocumentX(handleRadius);
+        qreal grabSensitivity = m_canvas->resourceProvider()->grabSensitivity();
+        qreal minDistance = m_canvas->viewConverter()->viewToDocumentX(grabSensitivity);
         uint i = 0;
         foreach (qreal guidePos, guidesData->horizontalGuideLines()) {
             qreal distance = qAbs(guidePos - position.y());

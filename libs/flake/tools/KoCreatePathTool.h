@@ -68,6 +68,7 @@ protected:
 
 private:
     QRectF handleRect(const QPointF &p);
+    QRectF grabRect(const QPointF &p);
     void repaintActivePoint();
 
     KoPathPoint *m_activePoint;

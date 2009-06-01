@@ -51,6 +51,7 @@ enum CanvasResource {
     CompositeOperation,
     CompositeOpacity,
     HandleRadius,       ///< The handle radius used for drawing handles of any kind
+    GrabSensitivity,    ///< The grab sensitivity used for grabbing handles of any kind
     PageSize,           ///< The size of the (current) page in postscript points.
     DocumentIsLoading,  ///< A boolean that is set to true while loading is happening.
     Unit,               ///< The unit of this canvas
@@ -146,7 +147,16 @@ public:
     void setHandleRadius(int handleSize);
     /// Returns the actual handle radius
     int handleRadius();
-
+    
+    /**
+     * Tools that are used to grab handles or similar with the mouse
+     * should use this value to determine if the mouse is near enough
+     * @param grabSensitivity the grab sensitivity in pixels
+     */
+    void setGrabSensitivity(uint grabSensitivity);
+    /// Returns the actual grab sensitivity
+    uint grabSensitivity();
+    
     /// Sets the border resource
     void setActiveBorder( const KoLineBorder &border );
     

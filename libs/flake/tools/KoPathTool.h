@@ -73,13 +73,6 @@ public:
     /// reimplemented
     virtual KoToolSelection* selection();
 
-    /**
-     * Returns a handle rect at the given position.
-     * The position is expected to be in document coordinates.
-     * @return the handle rectangle in document coordinates
-     */
-    QRectF handleRect(const QPointF &p);
-
     /// repaints the specified rect
     void repaint(const QRectF &repaintRect);
 
@@ -94,9 +87,14 @@ protected:
 private:
     void updateOptionsWidget();
     bool segmentAtPoint( const QPointF &point, KoPathShape* &shape, KoPathPoint* &segmentStart, qreal &pointParam );
-    // needed for interaction strategy
-    QPointF m_lastPoint;
-
+    
+    /**
+    * Returns a handle rect at the given position.
+    * The position is expected to be in document coordinates.
+    * @return the handle rectangle in document coordinates
+    */
+    QRectF handleGrabRect(const QPointF &p);
+    
 private slots:
     void pointTypeChanged(QAction *type);
     void insertPoints();
@@ -116,10 +114,13 @@ private slots:
 private:
 
     KoPathToolHandle * m_activeHandle;       ///< the currently active handle
-    int m_handleRadius;                ///< the radius of the control point handles
+    int m_handleRadius;    ///< the radius of the control point handles
+    uint m_grabSensitivity; ///< the grab sensitivity
     /// the point selection
     KoPathToolSelection m_pointSelection;
-
+    // needed for interaction strategy
+    QPointF m_lastPoint;
+    
     // make a frind so that it can test private member/methods
     friend class TestPathTool;
 

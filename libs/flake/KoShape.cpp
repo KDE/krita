@@ -1266,6 +1266,11 @@ bool KoShape::hasDependee(KoShape * shape) const
     return d->dependees.contains(shape);
 }
 
+bool KoShape::hasDependees() const
+{
+    return !d->dependees.isEmpty();
+}
+
 void KoShape::notifyShapeChanged(KoShape * shape, ChangeType type)
 {
     Q_UNUSED(shape);

@@ -746,6 +746,9 @@ public:
     /// Removes as shape depending on this shape
     void removeDependee(KoShape * shape);
 
+    /// @return true if this shape depend on at least an other shape
+    bool hasDependees() const;
+
     /// Returns additional snap data the shape wants to have snapping to
     virtual KoSnapData snapData() const;
 

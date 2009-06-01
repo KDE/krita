@@ -93,15 +93,13 @@ bool KoDocumentSectionView::viewportEvent( QEvent *e )
     {
         switch( e->type() )
         {
-#if 0
-          // i commented this because it was breaking the expanding/unexpanding of items with children, I don't see the need for those, but maybe I miss something ? </cyrille>
             case QEvent::MouseButtonPress:
             {
                 const QPoint pos = static_cast<QMouseEvent*>( e )->pos();
                 if( !indexAt( pos ).isValid() )
                     return super::viewportEvent( e );
                 QModelIndex index = model()->buddy( indexAt( pos ) );
-                return d->delegate->editorEvent( e, model(), optionForIndex( index ), index );
+                if(d->delegate->editorEvent( e, model(), optionForIndex( index ), index )) return true;
             } break;
             case QEvent::Leave:
             {
@@ -128,7 +126,6 @@ bool KoDocumentSectionView::viewportEvent( QEvent *e )
                     d->hovered = hovered;
                 }
             } break;
- #endif
            case QEvent::ToolTip:
             {
                 const QPoint pos = static_cast<QHelpEvent*>( e )->pos();

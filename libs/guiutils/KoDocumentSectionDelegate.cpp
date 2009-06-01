@@ -101,19 +101,9 @@ bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *mode
     if( ( e->type() == QEvent::MouseButtonPress || e->type() == QEvent::MouseButtonDblClick ) && (index.flags() & Qt::ItemIsEnabled ) )
     {
         QMouseEvent *me = static_cast<QMouseEvent*>( e );
-        if( me->button() != Qt::LeftButton )
-        {
-            d->view->setCurrentIndex( index );
-            return false;
-        }
 
         const QRect ir = iconsRect( option, index ).translated( option.rect.topLeft() ),
                     tr = textRect( option, index ).translated( option.rect.topLeft() );
-
-        if( !( me->modifiers() & Qt::ControlModifier) && !( me->modifiers() & Qt::ShiftModifier ) )
-        {
-            d->view->setCurrentIndex( index );
-        }
 
         if( ir.isValid() && ir.contains( me->pos() ) )
         {
@@ -140,6 +130,16 @@ bool KoDocumentSectionDelegate::editorEvent( QEvent *e, QAbstractItemModel *mode
         {
             d->view->edit( index );
             return true;
+        }
+        if( me->button() != Qt::LeftButton )
+        {
+            d->view->setCurrentIndex( index );
+            return false;
+        }
+
+        if( !( me->modifiers() & Qt::ControlModifier) && !( me->modifiers() & Qt::ShiftModifier ) )
+        {
+            d->view->setCurrentIndex( index );
         }
     }
 

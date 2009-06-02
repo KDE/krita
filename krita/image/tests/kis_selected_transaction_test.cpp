@@ -21,6 +21,8 @@
 #include <qtest_kde.h>
 #include "kis_selected_transaction.h"
 #include <KoColorSpace.h>
+#include "kis_image.h"
+#include "kis_paint_layer.h"
 #include <KoColorSpaceRegistry.h>
 #include "kis_paint_device.h"
 #include <QUndoCommand>
@@ -29,11 +31,11 @@
 void KisSelectedTransactionTest::testCreation()
 {
 
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    QFAIL("implement this test again after api change");
-//    QUndoCommand * cmd = new QUndoCommand();
-//    KisSelectedTransaction test("bla", dev, cmd);
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->colorSpace("RGBA", 0);
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
+    KisNodeSP node = new KisPaintLayer(image, "bla", 0);
+    QUndoCommand * cmd = new QUndoCommand();
+    KisSelectedTransaction test("bla", node, cmd);
 
 }
 

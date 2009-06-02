@@ -394,7 +394,7 @@ bool KoDocument::exportDocument(const KUrl & _url)
 
 bool KoDocument::saveFile()
 {
-    kDebug(30003) << "KoDocument::saveFile() doc=" << url().url();
+    kDebug(30003) << "doc=" << url().url();
 
     // Save it to be able to restore it after a failed save
     const bool wasModified = isModified();
@@ -432,7 +432,7 @@ bool KoDocument::saveFile()
     bool ret = false;
     bool suppressErrorDialog = false;
     if (!isNativeFormat(outputMimeType)) {
-        kDebug(30003) << "Saving to format" << outputMimeType << " in" << localFilePath();
+        kDebug(30003) << "Saving to format" << outputMimeType << "in" << localFilePath();
         // Not native format : save using export filter
         if (!d->filterManager)
             d->filterManager = new KoFilterManager(this);
@@ -895,7 +895,7 @@ bool KoDocument::saveChildren(KoStore* _store)
         KoDocument* childDoc = it.current()->document();
         if (childDoc && !it.current()->isDeleted()) {
             if (!childDoc->isStoredExtern()) {
-                //kDebug(30003) <<"KoDocument::saveChildren internal url: /" << i;
+                //kDebug(30003) <<"internal url: /" << i;
                 if (!childDoc->saveToStore(_store, QString::number(i++)))
                     return false;
 
@@ -1157,7 +1157,7 @@ bool KoDocument::saveToStream(QIODevice * dev)
     dev->open(QIODevice::WriteOnly);
     int nwritten = dev->write(s.data(), s.size());
     if (nwritten != (int)s.size())
-        kWarning(30003) << "KoDocument::saveToStream wrote " << nwritten << "   - expected " <<  s.size();
+        kWarning(30003) << "wrote " << nwritten << "- expected" <<  s.size();
     return nwritten == (int)s.size();
 }
 
@@ -1350,7 +1350,7 @@ bool KoDocument::importDocument(const KUrl & _url)
 
 bool KoDocument::openUrl(const KUrl & _url)
 {
-    kDebug(30003) << "KoDocument::openUrl url=" << _url.url();
+    kDebug(30003) << "url=" << _url.url();
     d->lastErrorMessage.clear();
 
     // Reimplemented, to add a check for autosave files and to improve error reporting
@@ -1367,7 +1367,7 @@ bool KoDocument::openUrl(const KUrl & _url)
         QString file = url.toLocalFile();
         QString asf = autoSaveFile(file);
         if (QFile::exists(asf)) {
-            //kDebug(30003) <<"KoDocument::openUrl asf=" << asf;
+            //kDebug(30003) <<"asf=" << asf;
             // ## TODO compare timestamps ?
             int res = KMessageBox::warningYesNoCancel(0,
                       i18n("An autosaved file exists for this document.\nDo you want to open it instead?"));
@@ -1393,7 +1393,7 @@ bool KoDocument::openUrl(const KUrl & _url)
     else {
         // We have no koffice shell when we are being embedded as a readonly part.
         //if ( d->m_shells.isEmpty() )
-        //    kWarning(30003) << "KoDocument::openUrl no shell yet !";
+        //    kWarning(30003) << "no shell yet !";
         // Add to recent actions list in our shells
         Q3PtrListIterator<KoMainWindow> it(d->m_shells);
         for (; it.current(); ++it)
@@ -1404,7 +1404,7 @@ bool KoDocument::openUrl(const KUrl & _url)
 
 bool KoDocument::openFile()
 {
-    //kDebug(30003) <<"KoDocument::openFile for" << localFilePath();
+    //kDebug(30003) <<"for" << localFilePath();
     if (!QFile::exists(localFilePath())) {
         QApplication::restoreOverrideCursor();
         if (d->m_autoErrorHandlingEnabled)
@@ -1448,9 +1448,9 @@ bool KoDocument::openFile()
     if (u.fileName() == "maindoc.xml" || u.fileName() == "content.xml" || typeName == "inode/directory") {
         typeName = _native_format; // Hmm, what if it's from another app? ### Check mimetype
         d->m_specialOutputFlag = SaveAsDirectoryStore;
-        kDebug(30003) << "KoDocument::openFile loading" << u.fileName() << ", using directory store for" << localFilePath() << "; typeName=" << typeName;
+        kDebug(30003) << "loading" << u.fileName() << ", using directory store for" << localFilePath() << "; typeName=" << typeName;
     }
-    kDebug(30003) << "KoDocument::openFile" << localFilePath() << " type:" << typeName;
+    kDebug(30003) << localFilePath() << "type:" << typeName;
 
     QString importedFile = localFilePath();
 
@@ -1521,8 +1521,8 @@ bool KoDocument::openFile()
             return false;
         }
         m_bEmpty = false;
-        kDebug(30003) << "KoDocument::openFile - importedFile '" << importedFile
-        << "', status: " << static_cast<int>(status) << endl;
+        kDebug(30003) << "importedFile" << importedFile
+        << "status:" << static_cast<int>(status) << endl;
     }
 
     QApplication::restoreOverrideCursor();
@@ -1558,6 +1558,9 @@ bool KoDocument::openFile()
 
         // remove temp file - uncomment this to debug import filters
         if (!importedFile.isEmpty()) {
+#ifndef NDEBUG
+            if (!getenv("KOFFICE_DEBUG_FILTERS"))
+#endif
             QFile::remove(importedFile);
         }
     }
@@ -1615,7 +1618,7 @@ void KoDocument::setMimeTypeAfterLoading(const QString& mimeType)
 // The caller must call store->close() if loadAndParse returns true.
 bool KoDocument::oldLoadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc)
 {
-    //kDebug(30003) <<"oldLoadAndParse: Trying to open" << filename;
+    //kDebug(30003) <<"Trying to open" << filename;
 
     if (!store->open(filename)) {
         kWarning(30003) << "Entry " << filename << " not found!";
@@ -1660,7 +1663,7 @@ bool KoDocument::loadNativeFormat(const QString & file_)
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    kDebug(30003) << "KoDocument::loadNativeFormat(" << file << " )";
+    kDebug(30003) << file;
 
     QFile in;
     bool isRawXML = false;
@@ -2201,7 +2204,7 @@ QDomDocument KoDocument::createDomDocument(const QString& appName, const QString
 
 QDomDocument KoDocument::saveXML()
 {
-    kError(30003) << "KoDocument::saveXML not implemented" << endl;
+    kError(30003) << "not implemented" << endl;
     d->lastErrorMessage = i18n("Internal error: saveXML not implemented");
     return QDomDocument();
 }
@@ -2331,7 +2334,7 @@ int KoDocument::supportedSpecialFormats() const
 void KoDocument::addShell(KoMainWindow *shell)
 {
     if (d->m_shells.findRef(shell) == -1) {
-        //kDebug(30003) <<"addShell: shell" << (void*)shell <<" added to doc" << this;
+        //kDebug(30003) <<"shell" << (void*)shell <<"added to doc" << this;
         d->m_shells.append(shell);
         connect(shell, SIGNAL(documentSaved()), d->m_undoStack, SLOT(setClean()));
     }
@@ -2339,7 +2342,7 @@ void KoDocument::addShell(KoMainWindow *shell)
 
 void KoDocument::removeShell(KoMainWindow *shell)
 {
-    //kDebug(30003) <<"removeShell: shell" << (void*)shell <<" removed from doc" << this;
+    //kDebug(30003) <<"shell" << (void*)shell <<"removed from doc" << this;
     d->m_shells.removeRef(shell);
 }
 

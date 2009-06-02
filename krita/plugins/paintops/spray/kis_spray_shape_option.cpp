@@ -101,5 +101,19 @@ void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfiguration* se
 }
 
 
+qreal KisSprayShapeOption::maxTresh() const
+{
+    return m_options->maxTreshSpin->value();
+}
 
+
+qreal KisSprayShapeOption::minTresh() const
+{
+    return m_options->minTreshSpin->value();
+}
+
+bool KisSprayShapeOption::highRendering() const
+{
+    return m_options->renderBox->isChecked();
+}
 

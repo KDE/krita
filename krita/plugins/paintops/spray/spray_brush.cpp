@@ -323,8 +323,11 @@ void SprayBrush::paintDistanceMap(KisPaintDeviceSP dev, const KisPaintInformatio
 
 void SprayBrush::paintMetaballs(KisPaintDeviceSP dev, const KisPaintInformation &info, const KoColor &painterColor) {
     // TODO: make adjustable?
-    qreal MIN_TRESHOLD = -1.01;
-    qreal MAX_TRESHOLD = 6.0;
+    qreal MIN_TRESHOLD = m_mintresh;
+    qreal MAX_TRESHOLD = m_maxtresh;
+
+//    dbgPlugins << "MAX " << MAX_TRESHOLD;
+//    dbgPlugins << "MIN " << MIN_TRESHOLD;
 
     KoColor color = painterColor;
     qreal posX = info.pos().x();
@@ -345,14 +348,14 @@ void SprayBrush::paintMetaballs(KisPaintDeviceSP dev, const KisPaintInformation 
                     );
     }
 
-    // double the radius
-    qreal doubleRadius = 2 * m_radius;
  
     // paint it
     KisRandomAccessor accessor = dev->createRandomAccessor(0, 0);
+
     qreal sum = 0.0;
-    for (int y = -doubleRadius; y <= doubleRadius; y++){
-        for (int x = -doubleRadius; x <= doubleRadius; x++){
+    m_computeArea.translate( -qRound(posX), -qRound(posY) );
+    for (int y = m_computeArea.y(); y <= m_computeArea.height(); y++){
+        for (int x = m_computeArea.x() ; x <= m_computeArea.width(); x++){
 
             sum = 0.0;        
 
@@ -370,7 +373,7 @@ void SprayBrush::paintMetaballs(KisPaintDeviceSP dev, const KisPaintInformation 
             }
         }
     }
-
+    m_computeArea.translate( qRound(posX), qRound(posY) );
 
 #if 0        
         KisPainter dabPainter(dev);

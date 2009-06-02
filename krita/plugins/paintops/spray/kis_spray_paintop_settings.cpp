@@ -23,6 +23,8 @@
 #include <kis_image.h>
 #include <kis_debug.h>
 
+#include <QDebug>
+
 #include <kis_paintop_registry.h>
 #include <kis_painter.h>
 #include <kis_paint_device.h>
@@ -66,6 +68,25 @@ void KisSprayPaintOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) con
     KisPropertiesConfiguration * settings = m_options->configuration();
     settings->KisPropertiesConfiguration::toXML( doc, rootElt );
     delete settings;
+}
+
+QRectF KisSprayPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageSP image) const
+{
+    qreal size = diameter();
+    size += 2;
+    return image->pixelToDocument(
+            QRectF(0,0, size,size )
+        ).translated( pos - QPointF( size * 0.5 , size * 0.5 ) );
+}
+
+void KisSprayPaintOpSettings::paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter) const
+{
+    qreal size = diameter();
+    QRectF brushSize(0,0, size, size );
+    painter.setPen(Qt::black);
+    //painter.translate(converter.documentToView( pos - image->pixelToDocument( QPointF( size * 0.5,size * 0.5 ) + QPointF(0.5, 0.5) )) );
+    painter.drawEllipse( converter.documentToView( image->pixelToDocument( brushSize ).translated(pos - QPointF( size * 0.5, size * 0.5 ) ) ) );
+    qDebug() <<"pos:" << pos;
 }
 
 int KisSprayPaintOpSettings::diameter() const
@@ -145,4 +166,22 @@ bool KisSprayPaintOpSettings::useDensity() const
 int KisSprayPaintOpSettings::particleCount() const
 {
     return m_options->m_sprayOption->particleCount();
+}
+
+
+qreal KisSprayPaintOpSettings::maxTresh() const
+{
+    return m_options->m_sprayShapeOption->maxTresh();
+}
+
+
+qreal KisSprayPaintOpSettings::minTresh() const
+{
+    return m_options->m_sprayShapeOption->minTresh();
+}
+
+
+bool KisSprayPaintOpSettings::highRendering() const
+{
+    return m_options->m_sprayShapeOption->highRendering();
 }

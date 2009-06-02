@@ -39,9 +39,13 @@ public:
 
     bool jitterShapeSize() const;
 
+    bool highRendering() const;
     bool proportional() const;
     qreal widthPerc() const;
     qreal heightPerc() const;
+
+    qreal minTresh() const;
+    qreal maxTresh() const;
 
     /// TODO
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;

@@ -17,6 +17,7 @@
  */
 #include "kis_spray_paintop_settings_widget.h"
 
+#include <KoViewConverter.h>
 #include <KoColorSpaceRegistry.h>
 
 #include <kis_image.h>

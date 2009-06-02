@@ -71,7 +71,18 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     m_sprayBrush.setUseDensity( settings->useDensity() );
     m_sprayBrush.setParticleCount( settings->particleCount() );
 
-    // spacing
+    m_sprayBrush.setMaxTreshold( settings->maxTresh() );
+    m_sprayBrush.setMinTreshold( settings->minTresh() );
+
+    QRect area;
+    if ( settings->highRendering() ){
+        area = QRect( 0, 0, m_image->width(), m_image->height() );
+        m_sprayBrush.setComputeArea( area );
+    }else{
+        area = QRect( 0, 0, settings->diameter() * 1.5 , settings->diameter() * 1.5 );
+    }
+    m_sprayBrush.setComputeArea( area );
+    // spacing 
     if ( (settings->diameter() * 0.5) > 1)
     {
         m_ySpacing = m_xSpacing = settings->diameter() * 0.5 * settings->spacing();

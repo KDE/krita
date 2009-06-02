@@ -26,7 +26,9 @@
 #include "kis_paint_device.h"
 #include "kis_painter.h"
 #include "kis_paint_information.h"
+#include <qrect.h>
 
+class QRect;
 
 class SprayBrush
 {
@@ -113,6 +115,27 @@ public:
         m_particlesCount = particleCount;
     }
 
+    void setMaxTreshold(qreal tresh){
+        m_maxtresh = tresh;
+    }
+
+    void setMinTreshold(qreal tresh){
+        m_mintresh = tresh;
+    }
+
+    void setRendering(bool highQuality){
+        m_highQuality = highQuality;
+    }
+
+    void setRadius(qreal radiusX, qreal radiusY){
+        m_radiusX = qRound(radiusX);
+        m_radiusY = qRound(radiusY);
+    }
+
+    void setComputeArea(QRect area){
+        m_computeArea = area;
+    }
+
 private:
     KoColor m_inkColor;
     int m_counter;
@@ -141,8 +164,16 @@ private:
     int m_particlesCount;
     bool m_useDensity;
 
-    
+    // metaballs
+    qreal m_maxtresh;
+    qreal m_mintresh;
 
+    int m_radiusX;
+    int m_radiusY;
+
+    bool m_highQuality;
+
+    QRect m_computeArea;
     
 };
 

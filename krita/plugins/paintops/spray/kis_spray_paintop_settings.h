@@ -23,6 +23,7 @@
 #include <QList>
 #include <kis_paintop_settings.h>
 #include <kis_types.h>
+#include <KoViewConverter.h>
 
 class QWidget;
 class KisSprayPaintOpSettingsWidget;
@@ -48,6 +49,9 @@ public:
     virtual void fromXML(const QDomElement&);
     virtual void toXML(QDomDocument&, QDomElement&) const;
 
+    QRectF paintOutlineRect(const QPointF& pos, KisImageSP image) const;
+    void paintOutline(const QPointF& pos, KisImageSP image, QPainter &painter, const KoViewConverter &converter) const;
+
     KisPaintOpSettingsSP clone() const;
 
     int diameter() const;
@@ -62,7 +66,12 @@ public:
     int width() const;
     int height() const;
     bool jitterShapeSize() const;
+    // metaballs
+    qreal maxTresh() const;
+    qreal minTresh() const;
 
+
+    bool highRendering() const;
     bool proportional() const;
     qreal widthPerc() const;
     qreal heightPerc() const;
@@ -76,6 +85,7 @@ public:
 private:
 
     KisSprayPaintOpSettingsWidget* m_options;
+
 };
 
 #endif

@@ -24,12 +24,17 @@
 class KisRandomGeneratorTest : public QObject
 {
     Q_OBJECT
+
+
 private slots:
+
+    void testEvolution();
     void twoSeeds();
     void twoCalls();
     void testConstantness();
-    void testEvolution();
+
 private:
+
     void twoCalls(quint64 seed);
     void testConstantness(quint64 seed);
     void twoSeeds(quint64 seed1, quint64 seed2);

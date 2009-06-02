@@ -23,6 +23,7 @@
 #include <threadweaver/ThreadWeaver.h>
 
 #include <QApplication>
+#include <QThread>
 #include <QString>
 
 class KoProgressUpdaterPrivate : public QObject {
@@ -149,18 +150,20 @@ KoUpdater KoProgressUpdater::startSubtask(int weight) {
 }
 
 void KoProgressUpdater::scheduleUpdate() {
-//     d->action->execute();
+    if (QApplication::instance()->thread() == QThread::currentThread()) {
+        // The previous line triggers random crashes, that are impossible to track or to trully understand,
+        // to fix that issue, I make directly the following call, I believe this is a wrong change, since it
+        // probably have a significant performance impact (especially on small operation) and
+        // that a simple QThread running would be better, but for now this change will have to do.
+        //HACK
+        d->update();
+        d->updateUi();
 
-    // The previous line triggers random crashes, that are impossible to track or to trully understand,
-    // to fix that issue, I make directly the following call, I believe this is a wrong change, since it
-    // probably have a significant performance impact (especially on small operation) and
-    // that a simple QThread running would be better, but for now this change will have to do.
-    //HACK
-    d->update();
-    d->updateUi();
-    // ENDHACK
-    
-    QApplication::processEvents(QEventLoop::ExcludeUserInputEvents); // This is needed otherwise the action doesn't emit its signal (sick) TODO: it would probably better to do without the signal emiting things of KoAction and to connect directly threadweaver stuff to the updates functions
+            QApplication::processEvents(QEventLoop::ExcludeUserInputEvents); // This is needed otherwise the action doesn't emit its signal (sick) TODO: it would probably better to do without the signal emiting things of KoAction and to connect directly threadweaver stuff to the updates functions
+        // ENDHACK
+    } else {
+        d->action->execute();
+    }
 }
 
 

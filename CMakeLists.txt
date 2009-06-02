@@ -212,7 +212,7 @@ macro_optional_add_subdirectory(kivio)
 macro_optional_add_subdirectory(kounavail)
 
 if(KdepimLibs_FOUND)
-	#macro_optional_add_subdirectory(kplato)
+	macro_optional_add_subdirectory(kplato)
 endif(KdepimLibs_FOUND)
 
 macro_optional_add_subdirectory(krita)

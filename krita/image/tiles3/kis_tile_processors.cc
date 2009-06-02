@@ -129,7 +129,7 @@ void KisTileReadWriteProcessor::copyData()
     const qint32 lineSize = m_workRect.width() * pixelSize;
 
 
-    const qint32 dataIdx = indexFromPoint(m_dataLeftTop, m_dataStride);
+    static const qint32 dataIdx = indexFromPoint(m_dataLeftTop, m_dataStride);
     const qint32 tileIdx = indexFromPoint(m_workRect.topLeft(),
                                           KisTileData::WIDTH);
 

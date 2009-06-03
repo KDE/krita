@@ -20,7 +20,7 @@
 
 #include <kdebug.h>
 
-//#define KRITA_RELEASE_MODE
+#define KRITA_RELEASE_MODE
 
 /**
  * In krita code, include kis_debug.h instead of kdebug.h. Then use one of the areas #defined here

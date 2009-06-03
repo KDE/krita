@@ -1,12 +1,18 @@
 [Desktop Entry]
 Name=ExtensionsManager
 Name[et]=Laienduste haldur
+Name[pt]=Gestor de Extensões
+Name[pt_BR]=Gestor de Extensões
 Name[sv]=Utökningshantering
 Name[uk]=Керування додатками
+Name[zh_TW]=延伸管理員
 Comment=ExtensionsManager
 Comment[et]=Laienduste haldur
+Comment[pt]=Gestor de Extensões
+Comment[pt_BR]=Gestor de Extensões
 Comment[sv]=Utökningshantering
 Comment[uk]=Керування додатками
+Comment[zh_TW]=延伸管理員
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaextensionsmanager

@@ -70,6 +70,14 @@ KisHSVConfigWidget::KisHSVConfigWidget(QWidget * parent, Qt::WFlags f) : KisConf
     connect(m_page->hue, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
     connect(m_page->value, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
     connect(m_page->saturation, SIGNAL(valueChanged(int)), SIGNAL(sigConfigChanged()));
+    
+    connect(m_page->hueSlider, SIGNAL(valueChanged(int)), m_page->hue, SLOT(setValue(int)));
+    connect(m_page->saturationSlider, SIGNAL(valueChanged(int)), m_page->saturation, SLOT(setValue(int)));
+    connect(m_page->valueSlider, SIGNAL(valueChanged(int)), m_page->value, SLOT(setValue(int)));
+    
+    connect(m_page->hue, SIGNAL(valueChanged(int)), m_page->hueSlider, SLOT(setValue(int)));
+    connect(m_page->saturation, SIGNAL(valueChanged(int)), m_page->saturationSlider, SLOT(setValue(int)));
+    connect(m_page->value, SIGNAL(valueChanged(int)), m_page->valueSlider, SLOT(setValue(int)));
 }
 
 KisHSVConfigWidget::~KisHSVConfigWidget()

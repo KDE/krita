@@ -32,6 +32,8 @@ class QComboBox;
 class QGridLayout;
 class QSlider;
 
+class QDoubleSpinBox;
+
 class KoCanvasBase;
 
 class DynaFilter {
@@ -96,6 +98,13 @@ private slots:
     void timeoutPaint();
     void slotSetSmoothness(int smoothness);
     void slotSetMagnetism(int magnetism);
+    void slotSetDynaWidth(double width);
+    void slotSetMass(double mass); 
+    void slotSetDrag(double drag);
+    void slotSetXangle(double angle);
+    void slotSetYangle(double angle);
+    void slotSetWidthRange(double widthRange);
+    void slotSetFixedAngle(bool fixedAngle);
 
 private:
     qint32 m_rate;
@@ -103,9 +112,17 @@ private:
     QGridLayout* m_optionLayout;
     QCheckBox * m_chkSmooth;
     QCheckBox * m_chkAssistant;
-    QCheckBox * m_chkQueueing;
     QSlider * m_sliderMagnetism;
     QSlider * m_sliderSmoothness;
+
+    // dyna gui
+    QCheckBox * m_chkFixedAngle;
+    QDoubleSpinBox * m_initWidthSPBox;
+    QDoubleSpinBox * m_massSPBox;
+    QDoubleSpinBox * m_dragSPBox;
+    QDoubleSpinBox * m_xAngleSPBox;
+    QDoubleSpinBox * m_yAngleSPBox;
+    QDoubleSpinBox * m_widthRangeSPBox;
 
     qreal m_previousPressure;
 
@@ -154,7 +171,7 @@ public:
         setIcon("krita_tool_dyna");
         // TODO
         //setShortcut(KShortcut(Qt::Key_F));
-        setPriority(0);
+        setPriority( 10 );
         //setActivationShapeId( KIS_NODE_SHAPE_ID );
         setInputDeviceAgnostic(false);
     }

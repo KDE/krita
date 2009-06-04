@@ -770,14 +770,14 @@ void Layout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &c
                     || !m_changeTracker->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
                     || (m_changeTracker->elementById(selection.format.property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::deleteChange)) {
                     QTextLayout::FormatRange fr;
-                    kDebug() << "append selection. start: " << begin << " format changeId: " << selection.format.property(KoCharacterStyle::ChangeTrackerId);
+selection.format.property(KoCharacterStyle::ChangeTrackerId);
                     fr.start = begin - block.position();
                     fr.length = end - begin;
                     fr.format = selection.format;
                     selections.append(fr);
                 }
                 else
-                    kDebug() << "not appended selection. start: " << begin << " format changeId: " << selection.format.property(KoCharacterStyle::ChangeTrackerId);
+selection.format.property(KoCharacterStyle::ChangeTrackerId);
             }
             drawTrackedChangeItem(painter, block, selectionStart - block.position(), selectionEnd - block.position(), context.viewConverter);
             layout->draw(painter, QPointF(0, 0), selections);

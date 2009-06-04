@@ -89,6 +89,8 @@
 #include <KoShapeSavingContext.h>
 
 #include <KoChangeTracker.h>
+#include <KoChangeTrackerElement.h>
+#include <KoDeleteChangeMarker.h>
 #include <kpassivepopup.h>
 
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut)
@@ -771,22 +773,60 @@ void TextTool::copy() const
 
 void TextTool::deleteSelection()
 {
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    Q_ASSERT(layout);
+    Q_ASSERT(layout->inlineTextObjectManager());
+//TODO this should not be needed. this case should be handled by the generic code
+    if (!m_caret.hasSelection() && dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(m_caret))) {
+        kDebug() << "move over existing del";
+        m_caret.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor);
+        return;
+    }
+
     if (!m_selectionHandler.deleteInlineObjects(false) || m_caret.hasSelection()) {
+
+        startMacro(i18n("Delete"));
+
+/*        QTextCursor cur = QTextCursor(m_caret);
+        if (!cur.hasSelection())
+            cur.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
+        //find out if we have a delete marker before
+        cur.setPosition((qMin(m_caret.position(), m_caret.anchor()) -1);
+        KoDeleteChangeMarker *prev = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(m_caret));
+        //find out if we have a delete marker after
+        cur.setPosition(qMax(m_caret.anchor(), m_caret.position()));
+        KoDeleteChangeMarker *next = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(m_caret));
+
+        
+        
         bool m_changeRegistered = m_textDeleting;
-       startMacro(i18n("Delete"));
-/*        if (KoTextDocument(m_textShapeData->document()).changeTracker() && KoTextDocument(m_textShapeData->document()).changeTracker()->isEnabled()) {
-            QTextCharFormat format;
-            if (!m_changeRegistered) {
-                int changeId = KoTextDocument(m_textShapeData->document()).changeTracker()->getDeleteChangeId(i18n("Delete"), m_caret.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
-                format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-            } else
-                format = m_caret.charFormat();
-            if (!m_caret.hasSelection())
-                m_caret.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-            m_caret.mergeCharFormat(format);
-            m_caret.setPosition(m_caret.position(), QTextCursor::MoveAnchor);
-        } else
-*/            m_caret.deleteChar();
+        kDebug() << "delete. registered: " << m_changeRegistered;
+        startMacro(i18n("Delete"));
+*///        QTextCharFormat oldFormat = m_caret.charFormat();
+//        QTextCharFormat format = m_caret.charFormat();
+        QTextCursor delText = QTextCursor(m_caret);
+        if (!delText.hasSelection())
+            delText.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
+        QString text = delText.selectedText();
+        kDebug() << "delText: " << text;
+        QTextDocumentFragment selection = delText.selection();
+        m_caret.deleteChar();
+        kDebug() << "inlineObject property: " << m_caret.charFormat().intProperty(KoCharacterStyle::InlineInstanceId);
+        if (KoTextDocument(m_textShapeData->document()).changeTracker() && KoTextDocument(m_textShapeData->document()).changeTracker()->isEnabled()) {
+//            KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+//            Q_ASSERT(layout);
+//            Q_ASSERT(layout->inlineTextObjectManager());
+//            if (!m_changeRegistered) {
+            int changeId = KoTextDocument(m_textShapeData->document()).changeTracker()->getDeleteChangeId(i18n("Delete"), selection, m_caret.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+//                format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+//            }
+            KoDeleteChangeMarker *deleteMarker = new KoDeleteChangeMarker;
+            deleteMarker->setChangeId(changeId);
+//            deleteMarker->setId(format.property(KoCharacterStyle::ChangeTrackerId).toInt());
+//            deleteMarker->setText(text);
+            layout->inlineTextObjectManager()->insertInlineObject(m_caret, deleteMarker);
+//            m_caret.setCharFormat(oldFormat);
+        }
         stopMacro();
     }
     editingPluginEvents();

@@ -19,22 +19,29 @@
 #ifndef KOCHANGETRACKER_H
 #define KOCHANGETRACKER_H
 
-#include <QObject>
-#include <QMetaType>
-#include <QTextCharFormat>
-#include <QTextFormat>
-#include <QHash>
-#include <QString>
-#include <QList>
-
+//KOffice includes
 #include "kotext_export.h"
 #include <KoDataCenter.h>
-#include "KoChangeTrackerElement.h"
+//#include "KoChangeTrackerElement.h"
+class KoChangeTrackerElement;
 
 #include <KoGenChange.h>
 #include <KoGenChanges.h>
 
 class KoXmlElement;
+
+//KDE includes
+
+//Qt includes
+#include <QObject>
+#include <QMetaType>
+//#include <QTextCharFormat>
+//#include <QTextFormat>
+class QTextFormat;
+//#include <QHash>
+class QString;
+//#include <QList>
+class QTextDocumentFragment;
 
 class KOTEXT_EXPORT KoChangeTracker : public QObject, public KoDataCenter
 {
@@ -52,7 +59,7 @@ public:
 
     int getFormatChangeId(QString title, QTextFormat &format, QTextFormat &prevFormat, int existingChangeId);
     int getInsertChangeId(QString title, int existingChangeId);
-    int getDeleteChangeId(QString title, int existingChangeId);
+    int getDeleteChangeId(QString title, QTextDocumentFragment selection, int existingChangeId);
 
     KoChangeTrackerElement* elementById(int id);
 

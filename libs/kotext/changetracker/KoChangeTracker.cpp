@@ -19,15 +19,23 @@
 
 #include "KoChangeTracker.h"
 
+//KOffice includes
 #include "styles/KoCharacterStyle.h"
-
+#include "KoChangeTrackerElement.h"
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
+//KDE includes
 #include <KDebug>
 #include <KDateTime>
 
+//Qt includes
 #include <QList>
+#include <QString>
+#include <QHash>
+#include <QTextFormat>
+#include <QTextCharFormat>
+#include <QTextDocumentFragment>
 
 class KoChangeTracker::Private
 {
@@ -117,7 +125,7 @@ int KoChangeTracker::getInsertChangeId(QString title, int existingChangeId)
     return d->m_changeId++;
 }
 
-int KoChangeTracker::getDeleteChangeId(QString title, int existingChangeId)
+int KoChangeTracker::getDeleteChangeId(QString title, QTextDocumentFragment selection, int existingChangeId)
 {
     if ( existingChangeId ) {
         d->m_childs.insert(existingChangeId, d->m_changeId);
@@ -128,6 +136,8 @@ int KoChangeTracker::getDeleteChangeId(QString title, int existingChangeId)
 
     changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate));
     changeElement->setCreator(QString("essai delete"));
+    //TODO preserve formating info there. this will do for now
+    changeElement->setDeleteData(selection.toPlainText());
 
     changeElement->setEnabled(d->m_enabled);
 

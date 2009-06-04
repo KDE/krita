@@ -40,7 +40,8 @@
 #include <KoGenStyles.h>
 
 #include <opendocument/KoTextSharedSavingData.h>
-#include "changetracker/KoChangeTracker.h"
+#include <changetracker/KoChangeTracker.h>
+#include <changetracker/KoChangeTrackerElement.h>
 #include <KoGenChange.h>
 #include <KoGenChanges.h>
 

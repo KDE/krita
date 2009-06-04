@@ -62,7 +62,7 @@ void KisGridManager::setup(KActionCollection * collection)
     KisConfig config;
     m_view->document()->gridData().setGrid(config.getGridHSpacing(), config.getGridVSpacing());
 
-    KToggleAction *toggleGrid = m_view->document()->gridData().gridToggleAction();
+    toggleGrid = m_view->document()->gridData().gridToggleAction();
     collection->addAction("view_grid", toggleGrid);
     connect(toggleGrid, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
 
@@ -99,6 +99,11 @@ void KisGridManager::setup(KActionCollection * collection)
 void KisGridManager::updateGUI()
 {
 
+}
+
+void KisGridManager::checkVisibilityAction(bool check)
+{
+    toggleGrid->setChecked(check);
 }
 
 void KisGridManager::toggleSnapToGrid()

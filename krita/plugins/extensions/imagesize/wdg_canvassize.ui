@@ -39,16 +39,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QSpinBox" name="newWidth">
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>429496729</number>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="1">
        <widget class="QLabel" name="label_4">
         <property name="text">
@@ -59,17 +49,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="QSpinBox" name="newHeight">
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>429496729</number>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="4">
+      <item row="0" column="6">
        <spacer name="horizontalSpacer_2">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -82,7 +62,7 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="3" rowspan="2">
+      <item row="0" column="5" rowspan="2">
        <widget class="KoAspectButton" name="aspectRatio" native="true"/>
       </item>
       <item row="0" column="0">
@@ -100,6 +80,54 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="0" column="3">
+       <widget class="QComboBox" name="comboWidthUnit">
+        <item>
+         <property name="text">
+          <string>Pixels</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Percent</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QComboBox" name="comboHeightUnit">
+        <item>
+         <property name="text">
+          <string>Pixels</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Percent</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QSpinBox" name="newWidth">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>65536</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QSpinBox" name="newHeight">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>65536</number>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

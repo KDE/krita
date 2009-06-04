@@ -76,7 +76,32 @@ void KisCustomPattern::slotUpdateCurrentPattern(int)
     if (m_view && m_view->image()) {
         createPattern();
         if (m_pattern)
-            preview->setPixmap(QPixmap::fromImage(m_pattern->img()));
+        {
+            const qint32 maxSize = 150;
+            if ((m_pattern->width() > maxSize) || (m_pattern->height() > maxSize))
+            {
+                float aspectRatio = (float)m_pattern->width() / m_pattern->height();
+                qint32 scaledWidth, scaledHeight;
+                
+                if (m_pattern->width() > m_pattern->height()) {
+                    scaledWidth = maxSize;
+                    scaledHeight = maxSize / aspectRatio;
+                }
+                else {
+                    scaledWidth = maxSize * aspectRatio;
+                    scaledHeight = maxSize;
+                }
+                
+                if (scaledWidth == 0) scaledWidth++;
+                if (scaledHeight == 0) scaledHeight++;
+                
+                QPixmap scaledPixmap = QPixmap::fromImage(m_pattern->img());
+                preview->setPixmap(scaledPixmap.scaled(scaledWidth, scaledHeight));
+            }
+            else {
+                preview->setPixmap(QPixmap::fromImage(m_pattern->img()));
+            }
+        }
     }
 }
 

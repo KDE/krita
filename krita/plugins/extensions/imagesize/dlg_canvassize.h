@@ -74,6 +74,8 @@ protected slots:
     void slotBottomLeftClicked();
     void slotBottomCenterClicked();
     void slotBottomRightClicked();
+    void slotWidthUnitChanged(QString);
+    void slotHeightUnitChanged(QString);
 
 protected:
     void loadAnchorIcons();
@@ -81,7 +83,7 @@ protected:
     void setButtonIcon(QPushButton * button, anchor enumAnchorIcon);
 
 private:
-    const int m_width, m_height;
+    const int m_originalWidth, m_originalHeight;
     const double m_aspectRatio;
     bool m_keepAspect;
     int m_newWidth, m_newHeight;

@@ -1,136 +1,134 @@
-<ui version="4.0" stdsetdef="1" >
-  <author></author>
-  <comment></comment>
-  <exportmacro></exportmacro>
-  <class>KisWdgCustomPattern</class>
-  <widget class="QWidget" name="KisWdgCustomPattern" >
-    <property name="geometry" >
-      <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>255</width>
-        <height>232</height>
-      </rect>
-    </property>
-    <layout class="QVBoxLayout" >
-      <item>
-        <layout class="QHBoxLayout" >
-          <property name="margin" >
-            <number>0</number>
-          </property>
-          <item>
-            <widget class="QLabel" name="textLabel1" >
-              <property name="text" >
-                <string>Source:</string>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="QComboBox" name="comboBox1" >
-              <property name="enabled" >
-                <bool>false</bool>
-              </property>
-              <item>
-                <property name="text" >
-                  <string>Entire Image</string>
-                </property>
-              </item>
-            </widget>
-          </item>
-        </layout>
-      </item>
-      <item>
-        <layout class="QHBoxLayout" >
-          <property name="margin" >
-            <number>0</number>
-          </property>
-          <item>
-            <spacer name="spacer2" >
-              <property name="sizeHint" >
-                <size>
-                  <width>40</width>
-                  <height>20</height>
-                </size>
-              </property>
-              <property name="sizeType" >
-                <enum>Expanding</enum>
-              </property>
-              <property name="orientation" >
-                <enum>Qt::Horizontal</enum>
-              </property>
-            </spacer>
-          </item>
-          <item>
-            <widget class="QLabel" name="preview" >
-              <property name="sizePolicy" >
-                <sizepolicy>
-                  <hsizetype>0</hsizetype>
-                  <vsizetype>0</vsizetype>
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                </sizepolicy>
-              </property>
-              <property name="minimumSize" >
-                <size>
-                  <width>50</width>
-                  <height>50</height>
-                </size>
-              </property>
-              <property name="text" >
-                <string/>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <spacer name="spacer1" >
-              <property name="sizeHint" >
-                <size>
-                  <width>40</width>
-                  <height>20</height>
-                </size>
-              </property>
-              <property name="sizeType" >
-                <enum>Expanding</enum>
-              </property>
-              <property name="orientation" >
-                <enum>Qt::Horizontal</enum>
-              </property>
-            </spacer>
-          </item>
-        </layout>
-      </item>
-      <item>
-        <layout class="QVBoxLayout" >
-          <property name="margin" >
-            <number>0</number>
-          </property>
-          <item>
-            <widget class="QPushButton" name="patternButton" >
-              <property name="text" >
-                <string>Use as Pattern</string>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="QPushButton" name="exportButton" >
-              <property name="enabled" >
-                <bool>false</bool>
-              </property>
-              <property name="text" >
-                <string>Export</string>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="QPushButton" name="addButton" >
-              <property name="text" >
-                <string>Add to Predefined Patterns</string>
-              </property>
-            </widget>
-          </item>
-        </layout>
-      </item>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>KisWdgCustomPattern</class>
+ <widget class="QWidget" name="KisWdgCustomPattern">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>255</width>
+    <height>232</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout">
+   <item>
+    <layout class="QHBoxLayout">
+     <property name="margin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="textLabel1">
+       <property name="text">
+        <string>Source:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBox1">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <item>
+        <property name="text">
+         <string>Entire Image</string>
+        </property>
+       </item>
+      </widget>
+     </item>
     </layout>
-  </widget>
-  <layoutdefault spacing="6" margin="11" />
+   </item>
+   <item>
+    <layout class="QHBoxLayout">
+     <property name="margin">
+      <number>0</number>
+     </property>
+     <item>
+      <spacer name="spacer2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="preview">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="spacer1">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout">
+     <property name="margin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="patternButton">
+       <property name="text">
+        <string>Use as Pattern</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="exportButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>Export</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="addButton">
+       <property name="text">
+        <string>Add to Predefined Patterns</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
 </ui>

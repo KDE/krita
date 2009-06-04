@@ -20,9 +20,13 @@
 #include "dlg_canvassize.h"
 #include "kcanvaspreview.h"
 
+#include <klocalizedstring.h>
+
+#include <math.h>
+
 
 DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height)
-        : KDialog(parent), m_width(width), m_height(height), m_aspectRatio((double)width / height), m_keepAspect(true)
+        : KDialog(parent), m_originalWidth(width), m_originalHeight(height), m_aspectRatio((double)width / height), m_keepAspect(true)
 {
     setCaption(i18n("Canvas Size"));
     setButtons(Ok | Cancel);
@@ -50,6 +54,9 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height)
     connect(m_page->bottomLeft, SIGNAL(clicked()), this, SLOT(slotBottomLeftClicked()));
     connect(m_page->bottomCenter, SIGNAL(clicked()), this, SLOT(slotBottomCenterClicked()));
     connect(m_page->bottomRight, SIGNAL(clicked()), this, SLOT(slotBottomRightClicked()));
+    
+    connect(m_page->comboWidthUnit, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotWidthUnitChanged(QString)));
+    connect(m_page->comboHeightUnit, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotHeightUnitChanged(QString)));
 
     connect(m_page->aspectRatio, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotAspectChanged(bool)));
     
@@ -64,8 +71,8 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height)
     m_page->newWidth->setValue(width);
     m_page->newHeight->setValue(height);
 
-    m_page->canvasPreview->setImageSize(m_width, m_height);
-    m_page->canvasPreview->setCanvasSize(m_width, m_height);
+    m_page->canvasPreview->setImageSize(m_originalWidth, m_originalHeight);
+    m_page->canvasPreview->setCanvasSize(m_originalWidth, m_originalHeight);
     m_page->canvasPreview->setImageOffset(0, 0);
 
     loadAnchorIcons();
@@ -81,12 +88,12 @@ DlgCanvasSize::~DlgCanvasSize()
 
 qint32 DlgCanvasSize::width()
 {
-    return (qint32)m_page->newWidth->value();
+    return (qint32)m_newWidth;
 }
 
 qint32 DlgCanvasSize::height()
 {
-    return (qint32)m_page->newHeight->value();
+    return (qint32)m_newHeight;
 }
 
 qint32 DlgCanvasSize::xOffset()
@@ -106,16 +113,21 @@ void DlgCanvasSize::slotAspectChanged(bool keep)
 
 void DlgCanvasSize::slotWidthChanged(int v)
 {
+    QString index = m_page->comboWidthUnit->currentText();
+    
     m_newWidth = v;
+    if (index == i18n("Percent"))
+        m_newWidth = m_page->newWidth->value() / 100.0f * m_originalWidth;
+        
     m_page->xOffset->setMaximum(m_newWidth - 1);
     
     if (m_keepAspect) {
-        m_newHeight = (qint32)round(v / m_aspectRatio);
+        m_newHeight = (qint32)round(m_newWidth / m_aspectRatio);
         
         m_page->yOffset->setMaximum(m_newHeight - 1);
 
         m_page->newHeight->blockSignals(true);
-        m_page->newHeight->setValue(m_newHeight);
+        slotHeightUnitChanged(QString());
         m_page->newHeight->blockSignals(false);
     }
 
@@ -124,16 +136,19 @@ void DlgCanvasSize::slotWidthChanged(int v)
 
 void DlgCanvasSize::slotHeightChanged(int v)
 {
+    QString index = m_page->comboWidthUnit->currentText();
+    
     m_newHeight = v;
-    m_page->yOffset->setMaximum(m_newHeight - 1);
+    if (index == i18n("Percent"))
+        m_newHeight = m_page->newHeight->value() / 100.0f * m_originalHeight;
     
     if (m_keepAspect) {
-        m_newWidth = (qint32)round(v * m_aspectRatio);
+        m_newWidth = (qint32)round(m_newHeight * m_aspectRatio);
         
         m_page->xOffset->setMaximum(m_newWidth - 1);
 
         m_page->newWidth->blockSignals(true);
-        m_page->newWidth->setValue(m_newWidth);
+        slotWidthUnitChanged(QString());
         m_page->newWidth->blockSignals(false);
     }
 
@@ -162,7 +177,7 @@ void DlgCanvasSize::slotTopLeftClicked()
 
 void DlgCanvasSize::slotTopCenterClicked()
 {
-    m_page->xOffset->setValue((int)((m_newWidth - m_width) / 2.0));
+    m_page->xOffset->setValue((int)((m_newWidth - m_originalWidth) / 2.0));
     m_page->yOffset->setValue(0);
 
     updateAnchorIcons(NORTH);
@@ -170,7 +185,7 @@ void DlgCanvasSize::slotTopCenterClicked()
 
 void DlgCanvasSize::slotTopRightClicked()
 {
-    m_page->xOffset->setValue(m_newWidth - m_width);
+    m_page->xOffset->setValue(m_newWidth - m_originalWidth);
     m_page->yOffset->setValue(0);
 
     updateAnchorIcons(NORTH_EAST);
@@ -179,23 +194,23 @@ void DlgCanvasSize::slotTopRightClicked()
 void DlgCanvasSize::slotMiddleLeftClicked()
 {
     m_page->xOffset->setValue(0);
-    m_page->yOffset->setValue((int)((m_newHeight - m_height) / 2.0));
+    m_page->yOffset->setValue((int)((m_newHeight - m_originalHeight) / 2.0));
 
     updateAnchorIcons(WEST);
 }
 
 void DlgCanvasSize::slotMiddleCenterClicked()
 {
-    m_page->xOffset->setValue((int)(m_newWidth - m_width) / 2.0);
-    m_page->yOffset->setValue((int)((m_newHeight - m_height) / 2.0));
+    m_page->xOffset->setValue((int)(m_newWidth - m_originalWidth) / 2.0);
+    m_page->yOffset->setValue((int)((m_newHeight - m_originalHeight) / 2.0));
 
     updateAnchorIcons(CENTER);
 }
 
 void DlgCanvasSize::slotMiddleRightClicked()
 {
-    m_page->xOffset->setValue(m_newWidth - m_width);
-    m_page->yOffset->setValue((int)((m_newHeight - m_height) / 2.0));
+    m_page->xOffset->setValue(m_newWidth - m_originalWidth);
+    m_page->yOffset->setValue((int)((m_newHeight - m_originalHeight) / 2.0));
 
     updateAnchorIcons(EAST);
 }
@@ -203,25 +218,63 @@ void DlgCanvasSize::slotMiddleRightClicked()
 void DlgCanvasSize::slotBottomLeftClicked()
 {
     m_page->xOffset->setValue(0);
-    m_page->yOffset->setValue(m_newHeight - m_height);
+    m_page->yOffset->setValue(m_newHeight - m_originalHeight);
 
     updateAnchorIcons(SOUTH_WEST);
 }
 
 void DlgCanvasSize::slotBottomCenterClicked()
 {
-    m_page->xOffset->setValue((int)(m_newWidth - m_width) / 2.0);
-    m_page->yOffset->setValue(m_newHeight - m_height);
+    m_page->xOffset->setValue((int)(m_newWidth - m_originalWidth) / 2.0);
+    m_page->yOffset->setValue(m_newHeight - m_originalHeight);
 
     updateAnchorIcons(SOUTH);
 }
 
 void DlgCanvasSize::slotBottomRightClicked()
 {
-    m_page->xOffset->setValue(m_newWidth - m_width);
-    m_page->yOffset->setValue(m_newHeight - m_height);
+    m_page->xOffset->setValue(m_newWidth - m_originalWidth);
+    m_page->yOffset->setValue(m_newHeight - m_originalHeight);
 
     updateAnchorIcons(SOUTH_EAST);
+}
+
+void DlgCanvasSize::slotWidthUnitChanged(QString)
+{
+    QString index = m_page->comboWidthUnit->currentText();
+    m_page->newWidth->blockSignals(true);
+    
+    if (index == i18n("Pixels"))
+    {
+        m_page->newWidth->setSuffix(QString());
+        m_page->newWidth->setValue(m_newWidth);
+    }
+    else if (index == i18n("Percent"))
+    {
+        m_page->newWidth->setSuffix(QString("%"));
+        m_page->newWidth->setValue(round((float)m_newWidth / m_originalWidth * 100));
+    }
+    
+    m_page->newWidth->blockSignals(false);
+}
+
+void DlgCanvasSize::slotHeightUnitChanged(QString)
+{
+    QString index = m_page->comboHeightUnit->currentText();
+    m_page->newHeight->blockSignals(true);
+    
+    if (index == QString("Pixels"))
+    {
+        m_page->newHeight->setSuffix(QString());
+        m_page->newHeight->setValue(m_newHeight);
+    }
+    else if (index == QString("Percent"))
+    {
+        m_page->newHeight->setSuffix(QString("%"));
+        m_page->newHeight->setValue(round((float)m_newHeight / m_originalHeight * 100));
+    }
+    
+    m_page->newHeight->blockSignals(false);
 }
 
 void DlgCanvasSize::loadAnchorIcons()

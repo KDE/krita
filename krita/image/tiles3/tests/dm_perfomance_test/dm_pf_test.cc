@@ -1,18 +1,28 @@
 #include <iostream>
 
+#include <valgrind/callgrind.h>
+
 #include "kis_tile.h"
 #include "kis_tile_data_store.h"
 #include "kis_tile_data.h"
 #include "kis_tiled_data_manager.h"
-#include "kis_tile_processors.h"
 
-#define PIXEL_SIZE 5
+#define PIXEL_SIZE 6
 quint8   pixel[PIXEL_SIZE];
+
+#define NUM_CYCLES 2
+#define NUM_CYCLES_SMALL 2
+
+
+void testPlanarRW(KisTiledDataManager &dm);
+void testRW(KisTiledDataManager &dm);
 
 using namespace std;
 
 #include <sys/time.h>
 #include <sys/times.h>
+
+#define prop(fst, snd) ((fst-snd)/snd*100.)
 
 #define startMeasure(msg, tv, tms)               \
     do {                                         \
@@ -54,32 +64,39 @@ using namespace std;
 
 int main()
 {
+    memset(pixel, 8, PIXEL_SIZE);
+    KisTiledDataManager dm(PIXEL_SIZE, pixel);
+    
+    testRW(dm);
+    testPlanarRW(dm);
+
+    return 0;
+}
+
+void testRW(KisTiledDataManager &dm)
+{
     struct timeval tv;
     struct tms     tms;
     double rstime=0;
     double ustime=0;
     double custime=0;
 
-    memset(pixel, 8, PIXEL_SIZE);
-
-    KisTiledDataManager dm(PIXEL_SIZE, pixel);
-    
     QRect dataRect;
     dataRect.setCoords(60,60,7110,7110);
-//    dataRect.setCoords(60,60,110,110);
    
     const qint32 dataSize = dataRect.width()*dataRect.height()*PIXEL_SIZE;
 
     quint8 *data = new quint8[dataSize];
-    memset(data, 1, dataSize);
+    for(qint32 i=0; i< dataRect.height(); i++) {
+	memset(data, i%256, dataRect.width()*PIXEL_SIZE);
+    }
 
     
-    #define NUM_CYCLES 5
-    #define NUM_CYCLES_SMALL 2
+
 
     /*BLOCK1**************************************************/
     printf("-----------------------------------\n");
-    printf("One loop to warm up ld\n");
+    printf("One loop to warm up COW\n");
     for(int i=0; i<NUM_CYCLES_SMALL; i++) {
         printf("\tcycle %d", i);
         startMeasure("", tv, tms);
@@ -93,7 +110,7 @@ int main()
 
 
     /*BLOCK2**************************************************/
-    printf("-----------------------------------\n");
+    /*    printf("-----------------------------------\n");
     printf("Test writing with heavy COW'ing\n");
     zeroValues(rstime, ustime, custime);
     for(int i=0; i<NUM_CYCLES_SMALL; i++) {
@@ -109,13 +126,12 @@ int main()
         endMeasure(tv,tms, rstime, ustime, custime);
     }
     meanValues(NUM_CYCLES_SMALL, rstime, ustime, custime);
-
+    */
 
     /*BLOCK3**************************************************/
     printf("-----------------------------------\n");
     printf("Now COW is done. Test actual writing\n");
     printf("KisTileProcessor subsystem (threading is OFF)\n");
-    debugDMFlags=DEBUG_THREADING_OFF;
     zeroValues(rstime, ustime, custime);
     for(int i=0; i<NUM_CYCLES; i++) {
         printf("\tcycle %d", i);
@@ -127,54 +143,112 @@ int main()
         endMeasure(tv,tms, rstime, ustime, custime);
     }
     meanValues(NUM_CYCLES, rstime, ustime, custime);
-    double proc_nth = rstime;
-
+ 
+    quint8 *read_data = new quint8[dataSize];
+    memset(read_data, 255, dataSize);    
 
     /*BLOCK4**************************************************/
     printf("-----------------------------------\n");
-    printf("KisTileProcessor subsystem (threading is ON)\n");
-    debugDMFlags=DEBUG_THREADING_ON;
+    printf("Read and consistency test\n");
     zeroValues(rstime, ustime, custime);
     for(int i=0; i<NUM_CYCLES; i++) {
         printf("\tcycle %d", i);
         startMeasure("", tv, tms);
 
-        dm.writeBytes(data, dataRect.left(), dataRect.top(), 
-                       dataRect.width(), dataRect.height());
+        dm.readBytes(read_data, dataRect.left(), dataRect.top(), 
+		     dataRect.width(), dataRect.height());
          
         endMeasure(tv,tms, rstime, ustime, custime);
     }
     meanValues(NUM_CYCLES, rstime, ustime, custime);
-    double proc_th = rstime;
 
-    /*BLOCK5**************************************************/
-    printf("-----------------------------------\n");
-    printf("Old datamanager subsystem (threading is OFF of course)\n");
-//    debugDMFlags=DEBUG_THREADING_OFF;
-    zeroValues(rstime, ustime, custime);
-    for(int i=0; i<NUM_CYCLES; i++) {
-        printf("\tcycle %d", i);
-        startMeasure("", tv, tms);
-
-        dm.writeBytesOld(data, dataRect.left(), dataRect.top(), 
-                         dataRect.width(), dataRect.height());
-         
-        endMeasure(tv,tms, rstime, ustime, custime);
+    printf("Consistency: ");
+    int err = memcmp(data, read_data, dataSize);
+    if(!err) {
+	printf("OK\n");
     }
-    meanValues(NUM_CYCLES, rstime, ustime, custime);
-    double old_nth = rstime;
+    else {
+	printf("FAILED\n");
+	printf("data and read_data are not the same! (%d)\n", err);
+    }
 
-    printf("====================================================\n");
-    printf("Comparison \t\t\t(looses, %%)\n");
-
-#define prop(fst, snd) ((fst-snd)/snd*100.)
-
-    printf("threaded vs non-threaded:\t%9.3f%%\n", prop(proc_th, proc_nth));
-    printf("threaded vs old:\t\t%9.3f%%\n", prop(proc_th, old_nth));
-    printf("non-threaded vs old:\t\t%9.3f%%\n", prop(proc_nth, old_nth));
-
+    delete[] read_data;
     delete[] data;
-    return 0;
+}
+
+void testPlanarRW(KisTiledDataManager &dm)
+{
+    struct timeval tv;
+    struct tms     tms;
+    double rstime=0;
+    double ustime=0;
+    double custime=0;
+
+
+    QRect dataRect;
+    dataRect.setCoords(60,60,7110,7110);
+    const qint32 numPixels = dataRect.width()*dataRect.height();
+
+    QVector<quint8*> planes;
+    QVector<quint8*> read_planes;
+    QVector<qint32>  channelSizes;
+
+    for(qint32 i=0; i<3; i++) {
+	channelSizes.append(i);
+	quint8 *data = new quint8[i*numPixels];
+	memset(data, i+10, i*numPixels);
+	planes.append(data);	
+    }
+
+    printf("Strarting test planar write\n");
+    zeroValues(rstime, ustime, custime);
+    for(int i=0; i<NUM_CYCLES; i++) {
+        printf("\tcycle %d", i);
+        startMeasure("", tv, tms);
+
+	dm.writePlanarBytes(planes, channelSizes,
+			    dataRect.left(), dataRect.top(), 
+			    dataRect.width(), dataRect.height());    
+         
+        endMeasure(tv,tms, rstime, ustime, custime);
+    }
+    meanValues(NUM_CYCLES, rstime, ustime, custime);
+
+
+    
+    printf("---\nStrarting test planar read\n");
+    zeroValues(rstime, ustime, custime);
+    for(int i=0; i<NUM_CYCLES; i++) {
+        printf("\tcycle %d", i);
+        startMeasure("", tv, tms);
+
+	read_planes=dm.readPlanarBytes(channelSizes,
+			   dataRect.left(), dataRect.top(), 
+			   dataRect.width(), dataRect.height());    
+         
+        endMeasure(tv,tms, rstime, ustime, custime);
+    }
+    meanValues(NUM_CYCLES, rstime, ustime, custime);
+
+    int err;
+    int errSum=0;
+    for(qint32 i=0; i<3; i++) {
+	err = memcmp(planes[i], read_planes[i], i*numPixels);
+	err*=err;
+	errSum+=err;
+	delete[] planes[i];
+	delete[] read_planes[i];
+
+    }
+   
+    printf("Planar consistency: ");
+    if(!errSum) {
+	printf("OK\n");
+    }
+    else {
+	printf("FAILED\n");
+	printf("planar and read_planar are not the same! (%d)\n", errSum);
+    }    
 }
 
 

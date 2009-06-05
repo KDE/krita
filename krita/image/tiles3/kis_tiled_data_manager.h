@@ -19,13 +19,6 @@
 #ifndef KIS_TILEDDATAMANAGER_H_
 #define KIS_TILEDDATAMANAGER_H_
 
-enum debugDataManager {
-    DEBUG_THREADING_OFF = 0x00,
-    DEBUG_THREADING_ON  = 0x01
-};
-
-extern qint32 debugDMFlags;
-
 #include <QtGlobal>
 //#include <Q3ValueVector>
 #include <QVector>
@@ -39,7 +32,6 @@ extern qint32 debugDMFlags;
 #include "krita_export.h"
 
 
-#include "kis_tile_processors.h"
 #include "kis_tile_hash_table.h"
 
 
@@ -52,6 +44,40 @@ typedef KisSharedPtr<KisTiledDataManager> KisTiledDataManagerSP;
 class KisTiledIterator;
 class KisTiledRandomAccessor;
 class KoStore;
+
+
+/**
+ * Not shared. Is it right?
+ */
+class KisTileDataWrapper // : class KisShared
+{
+public:
+    enum accessType {
+	READ,
+	WRITE
+    };
+    KisTileDataWrapper(KisTileSP tile, qint32 offset, accessType type) 
+	: m_tile(tile), m_offset (offset)
+    {
+	if(type == READ)
+	    m_tile->lockForRead();
+	else
+	    m_tile->lockForWrite();
+    }
+
+    virtual ~KisTileDataWrapper() {
+	m_tile->unlock();
+    }
+
+    inline quint8* data() const {
+        return m_tile->data() + m_offset;
+    }
+private:
+    KisTileSP m_tile;
+    qint32 m_offset;
+};
+
+//typedef shared...
 
 
 /**
@@ -156,11 +182,6 @@ public:
                     qint32 x, qint32 y,
                     qint32 w, qint32 h);
     
-    void writeBytesOld(const quint8 * bytes,
-                       qint32 x, qint32 y,
-                       qint32 w, qint32 h);
-    
-
     /**
      * Copy the bytes in the paint device into a vector of arrays of bytes,
      * where the number of arrays is the number of channels in the
@@ -170,7 +191,7 @@ public:
     QVector<quint8*> readPlanarBytes(QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h);
 
     /**
-     * Write the data in the separate arrays to the channes. If there
+     * Write the data in the separate arrays to the channels. If there
      * are less vectors than channels, the remaining channels will not
      * be copied. If any of the arrays points to 0, the channel in
      * that location will not be touched. If the specified area is
@@ -196,16 +217,10 @@ public:
     /// pointer to pixel (x, y) to access (x, y + 1).
     qint32 rowStride(qint32 x, qint32 y) const;
 
-
-    // For debugging use
-    qint32 debugNumTiles() const;
-
 private:
     QRect m_extent;
     KisTileData *m_defaultTileData;    
     KisTileHashTable m_hashTable;
-
-    QVector<KisTileProcessorSP> m_processorsCache;
 
     //quint32 m_numTiles;
 
@@ -216,8 +231,20 @@ private:
     qint32 yToRow(qint32 y) const;
     qint32 divideRoundDown(qint32 x, const qint32 y) const;
     void setDefaultTileData(KisTileData *td);
-    void applyProcessor(QRect &workRect, KisTileProcessorFactory &factory);
-    void applyProcessorThreaded(QRect &workRect, KisTileProcessorFactory &factory);
+    KisTileDataWrapper pixelPtr(qint32 x, qint32 y, 
+				enum KisTileDataWrapper::accessType type);
+
+    void writeBytesBody(const quint8 *data,
+			qint32 x, qint32 y, qint32 width, qint32 height);
+    void readBytesBody(quint8 *data,
+		       qint32 x, qint32 y, qint32 width, qint32 height);
+    void writePlanarBytesBody(QVector<quint8*> planes,
+			      QVector<qint32> channelsizes,
+			      qint32 x, qint32 y, qint32 w, qint32 h);
+    QVector<quint8*> readPlanarBytesBody(QVector<qint32> channelsizes,
+					 qint32 x, qint32 y,
+					 qint32 w, qint32 h);
+
 };
 
 inline qint32 KisTiledDataManager::divideRoundDown(qint32 x, const qint32 y) const

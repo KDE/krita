@@ -76,8 +76,9 @@ public:
     }
 
     inline QRect extent() const {
-        return QRect(m_col * KisTileData::WIDTH, m_row * KisTileData::HEIGHT,
-                     KisTileData::WIDTH, KisTileData::HEIGHT);
+	return m_extent;
+//QRect(m_col * KisTileData::WIDTH, m_row * KisTileData::HEIGHT,
+//                     KisTileData::WIDTH, KisTileData::HEIGHT);
     }
 
     inline KisTileSP next() const {
@@ -121,6 +122,10 @@ private:
     qint32 m_col;
     qint32 m_row;
 
+    /**
+     * Added for faster retrieving by processors
+     */
+    QRect m_extent;
 
     /**
      * For KisTiledDataManager's hash table

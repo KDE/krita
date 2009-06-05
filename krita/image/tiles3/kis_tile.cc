@@ -31,6 +31,9 @@ void KisTile::init(qint32 col, qint32 row, KisTileData *defaultTileData)
     m_col=col;
     m_row=row;
 
+    m_extent=QRect(m_col * KisTileData::WIDTH, m_row * KisTileData::HEIGHT,
+		   KisTileData::WIDTH, KisTileData::HEIGHT);
+
     m_nextTile=0;
 
     globalTileDataStore.acquireTileData(defaultTileData);

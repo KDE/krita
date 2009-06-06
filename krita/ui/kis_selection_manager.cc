@@ -34,6 +34,7 @@
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 
+#include "KoCanvasController.h"
 #include "KoChannelInfo.h"
 #include "KoIntegerMaths.h"
 #include <KoDocument.h>
@@ -138,10 +139,13 @@ void KisSelectionManager::setup(KActionCollection * collection)
     collection->addAction("paste_new", m_pasteNew);
     connect(m_pasteNew, SIGNAL(triggered()), this, SLOT(pasteNew()));
 
+    m_pasteAt = new KAction(i18n("Paste at cursor"), this);
+    collection->addAction("paste_at", m_pasteAt);
+    connect(m_pasteAt, SIGNAL(triggered()), this, SLOT(pasteAt()));
+
     m_selectAll = collection->addAction(KStandardAction::SelectAll,  "select_all", this, SLOT(selectAll()));
 
     m_deselect = collection->addAction(KStandardAction::Deselect,  "deselect", this, SLOT(deselect()));
-
 
     m_clear = collection->addAction(KStandardAction::Clear,  "clear", this, SLOT(clear()));
 
@@ -383,9 +387,9 @@ void KisSelectionManager::cut()
     Q_CHECK_PTR(t);
 
     layer->paintDevice()->clearSelection(m_view->selection());
-#if 0 // XXX_SELECTION
-    dev->deselect();
-#endif
+
+    deselect();
+
     m_view->document()->addCommand(t);
 }
 
@@ -479,8 +483,14 @@ void KisSelectionManager::paste()
         if (bottomright.y() > img->height())
             center.setY(img->height() / 2);
         center -= QPoint(r.width() / 2, r.height() / 2);
-        layer->setX(center.x());
-        layer->setY(center.y());
+
+        const KoCanvasBase* canvasBase = m_view->canvasBase();
+        const KoViewConverter* viewConverter = m_view->canvasBase()->viewConverter();
+
+        layer->setX(viewConverter->viewToDocumentX(canvasBase->canvasController()->canvasOffsetX() + center.x()));
+        layer->setY(viewConverter->viewToDocumentY(canvasBase->canvasController()->canvasOffsetY() + center.y()));
+
+        qDebug() << "layer x,y:" << layer->x() << ", " << layer->y();
 
         /*XXX CBR have an idea of asking the user if he is about to paste a clip in another cs than that of
           the image if that is what he want rather than silently converting
@@ -497,6 +507,11 @@ void KisSelectionManager::paste()
         layer->setDirty();
     } else
         m_view->canvasBase()->toolProxy()->paste();
+}
+
+void KisSelectionManager::pasteAt()
+{
+    //XXX
 }
 
 void KisSelectionManager::pasteNew()
@@ -634,9 +649,9 @@ void KisSelectionManager::fill(const KoColor& color, bool fillWithPattern, const
     painter.end();
 
     KisPainter painter2(dev, selection);
-    
+
     if (img->undo()) painter2.beginTransaction(transactionText);
-    
+
     painter2.bitBlt(0, 0, filled, 0, 0, img->width(), img->height());
 
     dev->setDirty();

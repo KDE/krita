@@ -201,7 +201,7 @@
  <Action name="edit_cut"/>
  <Action name="edit_copy"/>
  <Action name="edit_paste"/>
- <Action name="paste_new"/>
+ <Action name="paste_at"/>
  <Separator/>
  <ActionList name="flake_tool_actions"/>
 </Menu>

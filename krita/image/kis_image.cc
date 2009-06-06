@@ -53,7 +53,7 @@
 #include "commands/kis_image_commands.h"
 #include "kis_iterators_pixel.h"
 #include "kis_layer.h"
-
+#include "kis_meta_data_merge_strategy_registry.h"
 #include "kis_name_server.h"
 #include "kis_paint_device.h"
 #include "kis_paint_device_action.h"
@@ -781,7 +781,6 @@ KisLayerSP KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrate
     KisPaintLayerSP newLayer = new KisPaintLayer(this, layer->name(), OPACITY_OPAQUE, colorSpace());
     Q_CHECK_PTR(newLayer);
 
-
     QRect layerExtent = layer->extent();
     QRect layerPrevSiblingExtent = layer->prevSibling()->extent();
 
@@ -818,6 +817,40 @@ KisLayerSP KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrate
     undoAdapter()->addCommand(new KisImageLayerAddCommand(this, newLayer, parent, layer ));
     undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, layer->prevSibling() ));
     undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, layer ));
+
+    undoAdapter()->endMacro();
+
+    return newLayer;
+}
+
+KisLayerSP KisImage::flattenLayer(KisLayerSP layer)
+{
+    if (!layer->firstChild()) return layer;
+
+    undoAdapter()->beginMacro(i18n("Flatten Layer"));
+    KisPaintLayerSP newLayer = new KisPaintLayer(this, layer->name(), layer->opacity(), colorSpace());
+    newLayer->setCompositeOp(layer->compositeOp()->id());
+    newLayer->metaData();
+    QRect rc = layer->extent();
+
+    KisPainter gc(newLayer->paintDevice());
+    gc.setCompositeOp(newLayer->colorSpace()->compositeOp(COMPOSITE_COPY));
+    gc.bitBlt(rc.topLeft(), layer->projection(), rc);
+    gc.end();
+    undoAdapter()->addCommand(new KisImageLayerAddCommand(this, newLayer, layer->parent(), layer->nextSibling()));
+
+    KisNodeSP node = layer->firstChild();
+    while (node) {
+        undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, node));
+        node = node->nextSibling();
+    }
+
+    QList<const KisMetaData::Store*> srcs;
+    srcs.append(layer->metaData());
+
+    const KisMetaData::MergeStrategy* strategy = KisMetaData::MergeStrategyRegistry::instance()->get("Smart");
+    QList<double> scores;
+    strategy->merge(newLayer->metaData(), srcs, scores);
 
     undoAdapter()->endMacro();
 

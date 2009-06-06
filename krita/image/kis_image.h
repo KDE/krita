@@ -394,6 +394,14 @@ public:
      */
     KisLayerSP mergeLayer(KisLayerSP l, const KisMetaData::MergeStrategy* strategy);
 
+    /**
+     * flatten the layer: that is, the projection becomes the layer
+     * and all subnodes are removed. If this is not a paint layer, it will morph
+     * into a paint layer.
+     */
+    KisLayerSP flattenLayer(KisLayerSP layer);
+
+
     QRect bounds() const;
 
     /// use if the layers have changed _completely_ (eg. when flattening)

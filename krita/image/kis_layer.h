@@ -208,6 +208,9 @@ public:
      */
     KisEffectMaskSP previewMask() const;
 
+    /**
+     * XXX
+     */
     KisLayerSP KDE_DEPRECATED parentLayer() const;
 
     /**
@@ -221,6 +224,7 @@ public:
     KisMetaData::Store* metaData();
 
 protected:
+
     /**
      * Apply the effect masks to the given projection, producing
      * finally the dst paint device.

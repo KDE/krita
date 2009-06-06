@@ -126,7 +126,14 @@ bool PictureShape::loadFromUrl( KUrl &url )
     KoImageData * data = m_imageCollection->getImage(url);
     if ( data ) {
         setUserData( data );
-        setSize(data->imageSize());
+        // don't set the size of the shape to the size of the picture, but instead keep the
+        // area of the shape constant, and only change the aspect ratio to be that of the image
+        QSizeF oldsize = size();
+        QSizeF newsize = data->imageSize();
+        qreal oldarea = oldsize.width() * oldsize.height();
+        qreal newarea = newsize.width() * newsize.height();
+        newsize *= sqrt(oldarea / newarea);
+        setSize(newsize);
     }
     return data != 0;
 }

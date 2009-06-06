@@ -98,6 +98,7 @@ public slots:
     void shearLayer(double angleX, double angleY)        ;
     void flattenImage();
     void mergeLayer();
+    void flattenlayer();
 
     void layersUpdated();
 
@@ -154,7 +155,7 @@ private:
     KAction *m_layerTop;
     bool m_actLayerVis;
     KAction *m_imgResizeToLayer;
-
+    KAction *m_flattenLayer;
     KisLayerSP m_activeLayer;
     KisNodeCommandsAdapter* m_commandsAdapter;
 };

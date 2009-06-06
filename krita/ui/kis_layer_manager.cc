@@ -104,6 +104,7 @@ KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
         , m_actLayerVis(false)
         , m_imgResizeToLayer(0)
         , m_activeLayer(0)
+        , m_flattenLayer(0)
         , m_commandsAdapter( new KisNodeCommandsAdapter( m_view ) )
 {
 }
@@ -149,6 +150,10 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("merge_layer", m_imgMergeLayer);
     m_imgMergeLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
     connect(m_imgMergeLayer, SIGNAL(triggered()), this, SLOT(mergeLayer()));
+
+    m_flattenLayer  = new KAction(i18n("&Flatten Layer"), this);
+    actionCollection->addAction("flatten_layer", m_flattenLayer);
+    connect(m_flattenLayer, SIGNAL(triggered()), this, SLOT(flattenLayer()));
 
     m_layerAdd  = new KAction(KIcon("document-new"), i18n("&Paint Layer"), this);
     actionCollection->addAction("insert_layer", m_layerAdd);
@@ -951,12 +956,27 @@ void KisLayerManager::mergeLayer()
     if (!strategy) return;
 
     KisLayerSP  newLayer = img->mergeLayer(layer, strategy);
-    if(newLayer) {
+    if (newLayer) {
         newLayer->setDirty();
     }
 
     m_view->updateGUI();
 
+}
+
+void KisLayerManager::flattenlayer()
+{
+    KisImageSP img = m_view->image();
+    if (!img) return;
+
+    KisLayerSP layer = activeLayer();
+    if (!layer) return;
+
+    KisLayerSP newLayer = img->flattenLayer(layer);
+    if (newLayer) {
+        newLayer->setDirty();
+    }
+    m_view->updateGUI();
 }
 
 void KisLayerManager::layersUpdated()

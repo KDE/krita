@@ -964,7 +964,7 @@ void KisLayerManager::mergeLayer()
 
 }
 
-void KisLayerManager::flattenlayer()
+void KisLayerManager::flattenLayer()
 {
     KisImageSP img = m_view->image();
     if (!img) return;

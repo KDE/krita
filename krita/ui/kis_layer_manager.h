@@ -95,10 +95,10 @@ public slots:
     void mirrorLayerY();
     void scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy);
     void rotateLayer(double radians);
-    void shearLayer(double angleX, double angleY)        ;
+    void shearLayer(double angleX, double angleY);
     void flattenImage();
     void mergeLayer();
-    void flattenlayer();
+    void flattenLayer();
 
     void layersUpdated();
 

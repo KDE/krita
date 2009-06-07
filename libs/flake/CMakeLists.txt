@@ -1,4 +1,4 @@
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOMAIN_INCLUDES} ${PIGMENT_INCLUDES})
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOMAIN_INCLUDES} ${PIGMENT_INCLUDES} ${OPENGL_INCLUDE_DIR})
 
 if(KDE4_BUILD_TESTS)
     # only with this definition will the FLAKE_TEST_EXPORT macro do something

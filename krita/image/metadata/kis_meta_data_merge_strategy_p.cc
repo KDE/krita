@@ -246,6 +246,7 @@ void SmartMergeStrategy::merge(Store* dst, QList<const Store*> srcs, QList<doubl
     Q_ASSERT(srcs.size() > 0);
     if (srcs.size() == 1) {
         dst->copyFrom(srcs[0]);
+        return;
     }
     // Initialize some schema
     const KisMetaData::Schema* dcSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::DublinCoreSchemaUri);

@@ -103,8 +103,8 @@ KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
         , m_layerTop(0)
         , m_actLayerVis(false)
         , m_imgResizeToLayer(0)
-        , m_activeLayer(0)
         , m_flattenLayer(0)
+        , m_activeLayer(0)
         , m_commandsAdapter( new KisNodeCommandsAdapter( m_view ) )
 {
 }
@@ -268,6 +268,7 @@ void KisLayerManager::updateGUI()
     // XXX these should be named layer instead of img
     m_imgFlatten->setEnabled(nlayers > 1);
     m_imgMergeLayer->setEnabled(nlayers > 1 && layer && layer->prevSibling());
+    m_flattenLayer->setEnabled(nlayers > 1 && layer && layer->firstChild());
 
 
     // XXX: Check whether the colorspace was really changed

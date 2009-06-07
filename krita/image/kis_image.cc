@@ -843,6 +843,8 @@ KisLayerSP KisImage::flattenLayer(KisLayerSP layer)
         undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, node));
         node = node->nextSibling();
     }
+    undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, layer));
+    
 
     QList<const KisMetaData::Store*> srcs;
     srcs.append(layer->metaData());

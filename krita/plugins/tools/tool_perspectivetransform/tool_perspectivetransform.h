@@ -20,8 +20,6 @@
 
 #include <kparts/plugin.h>
 
-class KisView;
-
 /**
  * A module that provides a tool for doinge perspective transformation.
  */
@@ -31,10 +29,6 @@ class ToolPerspectiveTransform : public KParts::Plugin
 public:
     ToolPerspectiveTransform(QObject *parent, const QStringList &);
     virtual ~ToolPerspectiveTransform();
-
-private:
-
-    KisView * m_view;
 
 };
 

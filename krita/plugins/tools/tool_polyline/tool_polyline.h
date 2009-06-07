@@ -21,8 +21,6 @@
 
 #include <kparts/plugin.h>
 
-class KisView;
-
 /**
  * A module that provides a polyline tool.
  */
@@ -32,11 +30,6 @@ class ToolPolyline : public KParts::Plugin
 public:
     ToolPolyline(QObject *parent, const QStringList &);
     virtual ~ToolPolyline();
-
-private:
-
-    KisView * m_view;
-
 };
 
 #endif // TOOL_POLYLINE_H_

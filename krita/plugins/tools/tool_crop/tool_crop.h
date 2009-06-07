@@ -21,8 +21,6 @@
 
 #include <kparts/plugin.h>
 
-class KisView;
-
 /**
  * A module that provides a crop tool.
  */
@@ -32,10 +30,6 @@ class ToolCrop : public KParts::Plugin
 public:
     ToolCrop(QObject *parent, const QStringList &);
     virtual ~ToolCrop();
-
-private:
-
-    KisView * m_view;
 
 };
 

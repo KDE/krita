@@ -89,9 +89,6 @@ protected:
     /// reimplemented
     void updatePath(const QSizeF &size);
 
-    /// reimplemented
-    virtual void shapeChanged(ChangeType type);
-
     /// Returns if given handle is connected to a shape
     bool handleConnected(int handleId) const;
 
@@ -104,7 +101,7 @@ protected:
     /// Returns perpendicular direction from given point p1 and direction d1 toward point p2
     QPointF perpendicularDirection(const QPointF &p1, const QPointF &d1, const QPointF &p2);
 
-    // reimplemented
+    /// reimplemented
     virtual void shapeChanged(ChangeType type, KoShape * shape);
 
 private:

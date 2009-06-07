@@ -105,8 +105,9 @@ bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     return true;
 }
 
-void KoShapeGroup::shapeChanged(ChangeType type)
+void KoShapeGroup::shapeChanged(ChangeType type, KoShape *shape)
 {
+    Q_UNUSED(shape);
     switch( type )
     {
         case KoShape::BorderChanged:

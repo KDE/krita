@@ -467,32 +467,27 @@ QPointF KoConnectionShape::perpendicularDirection(const QPointF &p1, const QPoin
     return perpendicular;
 }
 
-void KoConnectionShape::shapeChanged(ChangeType type)
+void KoConnectionShape::shapeChanged(ChangeType type, KoShape * shape)
 {
     if (! isParametricShape())
         return;
-
+    
     switch (type) {
-    case RotationChanged:
-    case ShearChanged:
-    case ScaleChanged:
-    case GenericMatrixChange:
-        d->forceUpdate = true;
-        break;
-    default:
-        return;
+        case RotationChanged:
+        case ShearChanged:
+        case ScaleChanged:
+        case GenericMatrixChange:
+            d->forceUpdate = true;
+            break;
+        case Deleted:
+            if (shape == d->shape1)
+                setConnection1(0, -1);
+            else if (shape == d->shape2)
+                setConnection2(0, -1);
+            break;
+        default:
+            return;
     }
-}
-
-void KoConnectionShape::shapeChanged(ChangeType type, KoShape * shape)
-{
-    if (type == KoShape::Deleted) {
-        if (shape == d->shape1)
-            setConnection1(0, -1);
-        else if (shape == d->shape2)
-            setConnection2(0, -1);
-    }
-
-    if (isParametricShape())
-        updateConnections();
+    
+    updateConnections();
 }

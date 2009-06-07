@@ -167,7 +167,7 @@ protected:
     virtual void childCountChanged() { }
 
 private:
-    void shapeChanged(ChangeType type);
+    void shapeChanged(ChangeType type, KoShape *shape = 0);
 
     class Private;
     Private * const d;

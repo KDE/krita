@@ -81,8 +81,8 @@ public:
 
     /// Sets the connection type
     void setConnectionType(Type connectionType);
-protected:
 
+protected:
     /// reimplemented
     void moveHandleAction(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
 
@@ -104,11 +104,10 @@ protected:
     /// Returns perpendicular direction from given point p1 and direction d1 toward point p2
     QPointF perpendicularDirection(const QPointF &p1, const QPointF &d1, const QPointF &p2);
 
-private:
-
     // reimplemented
-    virtual void notifyShapeChanged(KoShape * shape, ChangeType type);
+    virtual void shapeChanged(ChangeType type, KoShape * shape);
 
+private:
     qreal scalarProd(const QPointF &v1, const QPointF &v2);
     qreal crossProd(const QPointF &v1, const QPointF &v2);
 

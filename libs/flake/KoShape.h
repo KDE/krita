@@ -877,12 +877,7 @@ protected:
      * This is called whenever the shape, position rotation or scale properties were altered.
      * @param type an indicator which type was changed.
      */
-    virtual void shapeChanged(ChangeType type) {
-        Q_UNUSED(type);
-    }
-
-    /// This is called whenever a shape this shape depends on has changed
-    virtual void notifyShapeChanged(KoShape * shape, ChangeType type);
+    virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
 
     /**
      * Set the property collision detection.

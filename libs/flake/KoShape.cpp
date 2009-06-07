@@ -112,7 +112,7 @@ public:
             parent->model()->childChanged(me, type);
         me->shapeChanged(type);
         foreach(KoShape * shape, dependees)
-            shape->notifyShapeChanged(me, type);
+            shape->shapeChanged(type, me);
     }
 
     QSizeF size; // size in pt
@@ -1266,17 +1266,16 @@ bool KoShape::hasDependee(KoShape * shape) const
     return d->dependees.contains(shape);
 }
 
-void KoShape::notifyShapeChanged(KoShape * shape, ChangeType type)
+void KoShape::shapeChanged(ChangeType type, KoShape *shape)
 {
-    Q_UNUSED(shape);
     Q_UNUSED(type);
+    Q_UNUSED(shape);
 }
 
 void KoShape::notifyChangedShape(ChangeType type)
 {
     d->shapeChanged(type);
 }
-
 
 KoSnapData KoShape::snapData() const
 {

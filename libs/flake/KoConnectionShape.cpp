@@ -484,7 +484,7 @@ void KoConnectionShape::shapeChanged(ChangeType type)
     }
 }
 
-void KoConnectionShape::notifyShapeChanged(KoShape * shape, ChangeType type)
+void KoConnectionShape::shapeChanged(ChangeType type, KoShape * shape)
 {
     if (type == KoShape::Deleted) {
         if (shape == d->shape1)

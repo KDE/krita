@@ -602,9 +602,9 @@ void ArtisticTextShape::cacheGlyphOutlines()
     }
 }
 
-void ArtisticTextShape::notifyShapeChanged( KoShape * shape, ChangeType type )
+void ArtisticTextShape::shapeChanged(ChangeType type, KoShape * shape)
 {
-    if( shape == m_path )
+    if( m_path && shape == m_path )
     {
         if( type == KoShape::Deleted )
         {

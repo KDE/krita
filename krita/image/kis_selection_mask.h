@@ -46,7 +46,7 @@ public:
     bool allowAsChild(KisNodeSP) const;
 
     QIcon icon() const {
-        return KIcon(""); // XXX: Find nice icon for the subclasses.
+        return KIcon("edit-paste");
     }
 
     KisNodeSP clone() const {

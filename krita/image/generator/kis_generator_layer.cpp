@@ -136,7 +136,7 @@ KisPaintDeviceSP KisGeneratorLayer::paintDevice() const
 
 QIcon KisGeneratorLayer::icon() const
 {
-    return KIcon("tool_filter");
+    return KIcon("view-filter");
 }
 
 KoDocumentSectionModel::PropertyList KisGeneratorLayer::sectionModelProperties() const

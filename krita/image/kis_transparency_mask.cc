@@ -47,6 +47,10 @@ bool KisTransparencyMask::allowAsChild(KisNodeSP node) const
     return false;
 }
 
+QIcon KisTransparencyMask::icon() const
+{
+    return KIcon("view-filter");
+}
 
 void KisTransparencyMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
 {

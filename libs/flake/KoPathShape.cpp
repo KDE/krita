@@ -638,7 +638,7 @@ QList<KoPathSegment> KoPathShape::segmentsAt(const QRectF &r)
     int subpathCount = m_subpaths.count();
     for (int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex) {
         KoSubpath * subpath = m_subpaths[subpathIndex];
-        int pointCount = subpath[subpathIndex].count();
+        int pointCount = subpath->count();
         bool subpathClosed = isClosedSubpath(subpathIndex);
         for (int pointIndex = 0; pointIndex < pointCount; ++pointIndex) {
             if (pointIndex == (pointCount - 1) && ! subpathClosed)

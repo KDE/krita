@@ -380,6 +380,7 @@ void KisLayerBox::slotRmClicked()
         KisNodeSP node = m_nodeModel->nodeFromIndex(l.at(i));
         m_nodeManager->removeNode( node );
     }
+    m_nodeManager->updateGUI();
 }
 
 void KisLayerBox::slotRaiseClicked()

@@ -202,6 +202,7 @@ void KisMaskManager::createTransparencyMask(KisNodeSP parent, KisNodeSP above)
     m_commandsAdapter->addNode(mask, parent, above);
     mask->setDirty();
     activateMask(mask);
+    masksUpdated();
 }
 
 

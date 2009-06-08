@@ -76,14 +76,21 @@ public:
      */
     float distanceSquare( QPointF p1, QPointF p2 );
     /**
+     * @brief true if the mouse is near to a connection point
+     */
+    bool isInRoi();
+    /**
      * @brief Permit to activate the connection with a comand
      */
     void command();
     
 private:
     KoShape * m_shapeOn;
+    KoShape * m_lastShapeOn;
     QPointF * m_pointSelected;
+    QPointF m_mouse;
     KoConnectionShape * m_connectionShape;
+    QPair<bool,bool> * m_isTied;
     
 };
 

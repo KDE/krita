@@ -40,10 +40,16 @@
 class KoChangeTracker::Private
 {
 public:
-    Private() { }
+    Private()
+      : m_changeId(1),
+        m_enabled(false),
+        m_displayDeleted(false)
+    {
+    }
     ~Private() { }
 
-    QHash<int, int> m_childs;
+    // TODO remove the m_ prefix
+    QHash<int, int> m_childs; // TODO rename to 'children'
     QHash<int, int> m_parents;
     QHash<int, KoChangeTrackerElement *> m_changes;
     QHash<QString, int> m_loadedChanges;

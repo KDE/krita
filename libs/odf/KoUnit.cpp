@@ -204,6 +204,7 @@ KoUnit KoUnit::unit(const QString &_unitName, bool* ok)
     if (_unitName == QString::fromLatin1("pi")) return KoUnit(Pica);
     if (_unitName == QString::fromLatin1("cc")) return KoUnit(Cicero);
     if (_unitName == QString::fromLatin1("pt")) return KoUnit(Point);
+    if (_unitName == QString::fromLatin1("px")) return KoUnit(Pixel);
     if (ok)
         *ok = false;
     return KoUnit(Point);

@@ -108,7 +108,7 @@ KisMeanRemovalFilter::KisMeanRemovalFilter()
 }
 
 KisEmbossLaplascianFilter::KisEmbossLaplascianFilter()
-        : KisConvolutionFilter(id(), categoryEmboss(), i18n("Emboss Laplascian"))
+        : KisConvolutionFilter(id(), categoryEmboss(), i18n("Emboss (Laplacian)"))
 {
     setSupportsPainting(false);
     m_matrix = createKernel(-1, 0, -1 , 0, 4, 0 , -1, 0, -1, 1, 127);

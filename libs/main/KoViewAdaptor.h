@@ -29,7 +29,6 @@
 class QString;
 class QStringList;
 
-#include "KoViewAdaptor.h"
 #include "komain_export.h"
 //Added by qt3to4:
 

@@ -267,7 +267,7 @@ public:
      *
      * @return the position of the shape
      */
-    virtual QPointF position() const;
+    QPointF position() const;
 
     /**
      * @brief Check if the shape is hit on position

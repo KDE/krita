@@ -291,14 +291,9 @@ QPainterPath KisShapeSelection::selectionOutline()
         QList<KoShape*> shapesList = iterator();
 
         QPainterPath outline;
-        KoPathShape* pathShape;
         foreach(KoShape * shape, shapesList) {
-            pathShape = dynamic_cast<KoPathShape*>(shape);
-            if (pathShape) {
                 QMatrix shapeMatrix = shape->absoluteTransformation(0);
-
                 outline = outline.united(shapeMatrix.map(shape->outline()));
-            }
         }
         m_outline = outline;
         m_dirty = false;

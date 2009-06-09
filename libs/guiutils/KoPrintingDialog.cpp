@@ -184,7 +184,8 @@ public:
     KoProgressUpdater *progress;
     QLabel *pageNumber;
     QPushButton *button;
-    QList<int> pages;
+    QList<int> pageRange; ///< user requested list of pages
+    QList<int> pages; ///< effecive list of pages
     QList< KoUpdaterPtr > updaters;
     QDialog *dialog;
     KoPrintJob::RemovePolicy removePolicy;
@@ -237,7 +238,7 @@ KoShapeManager *KoPrintingDialog::shapeManager() const {
 
 void KoPrintingDialog::setPageRange(const QList<int> &pages) {
     if(d->index == 0) // can't change after we started
-        d->pages = pages;
+        d->pageRange = pages;
 }
 
 QPainter & KoPrintingDialog::painter() const {
@@ -254,6 +255,7 @@ bool KoPrintingDialog::isStopped() const {
 
 void KoPrintingDialog::startPrinting(RemovePolicy removePolicy) {
     d->removePolicy = removePolicy;
+    d->pages = d->pageRange;
     if (d->pages.isEmpty()) { // auto-fill from min/max
         if (d->printer->fromPage() == 0) { // all pages, no range.
             for (int i=documentFirstPage(); i <= documentLastPage(); i++)
@@ -278,9 +280,9 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy) {
         d->painter = 0;
         d->zoomer.setZoomAndResolution(100, d->printer->resolution(), d->printer->resolution());
         d->progress->start();
-        QList<int> oldPages = d->pages; // backup
 
         if (d->printer->numCopies() > 1) {
+            QList<int> oldPages = d->pages;
             if (d->printer->collateCopies()) { // means we print whole doc at once
                 for (int count = 1; count < d->printer->numCopies(); ++count)
                     d->pages.append(oldPages);
@@ -321,7 +323,6 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy) {
             d->pageNumber->setText(i18n("Printing page %1", QString::number(d->pages[d->index])));
             d->action->execute(d->pages[d->index++]);
         }
-        d->pages = oldPages;
     }
 }
 

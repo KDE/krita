@@ -68,6 +68,7 @@ void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo
     t.start();
 #endif
 
+#if 0
 // Method one: iterate and check every pixel for selectedness. It is
 // only slightly slower than the next method and the code is very
 // clear. Note that using nextRow() instead of recreating the iterators
@@ -92,9 +93,13 @@ void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo
     dbgPlugins << "Per-pixel isSelected():" << t.elapsed() << " ms";
 #endif
 
-#if 0
+
+
+
 #ifndef NDEBUG
     t.restart();
+#endif
+
 #endif
 
     bool hasSelection = srcInfo.selection();
@@ -105,8 +110,8 @@ void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo
 // quite a bit speedier, with the speed improvement more noticeable
 // the less happens inside the color transformation.
 
-    srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width());
-    dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width());
+    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width());
+    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width());
 
     for (int row = 0; row < size.height(); ++row) {
         while (! srcIt.isDone()) {
@@ -145,7 +150,6 @@ void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo
     dbgPlugins << "Consecutive pixels:" << t.elapsed() << " ms";
 #endif
 
-#endif
     delete inverter;
     //if(progressUpdater) progressUpdater->setProgress( 100 );
 

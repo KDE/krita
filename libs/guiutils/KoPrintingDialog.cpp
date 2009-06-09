@@ -272,12 +272,36 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy) {
     const bool blocking = property("blocking").toBool();
     if (!blocking)
         d->dialog->show();
-    if(d->index == 0 && d->pages.count() > 0 && d->printer) {
+    if (d->index == 0 && d->pages.count() > 0 && d->printer) {
         d->stop = false;
         delete d->painter;
         d->painter = 0;
         d->zoomer.setZoomAndResolution(100, d->printer->resolution(), d->printer->resolution());
         d->progress->start();
+        QList<int> oldPages = d->pages; // backup
+
+        if (d->printer->numCopies() > 1) {
+            if (d->printer->collateCopies()) { // means we print whole doc at once
+                for (int count = 1; count < d->printer->numCopies(); ++count)
+                    d->pages.append(oldPages);
+            } else {
+                d->pages.clear();
+                foreach (int page, oldPages) {
+                    for (int count = 1; count < d->printer->numCopies(); ++count)
+                        d->pages.append(page);
+                }
+            }
+        }
+        if (d->printer->pageOrder() == QPrinter::LastPageFirst) {
+            QList<int> pages = d->pages;
+            d->pages.clear();
+            QList<int>::Iterator iter = pages.end();
+            do {
+                --iter;
+                d->pages << *iter;
+            } while (iter != pages.begin());
+        }
+
         if (blocking) {
             d->resetValues();
             foreach (int page, d->pages) {
@@ -297,6 +321,7 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy) {
             d->pageNumber->setText(i18n("Printing page %1", QString::number(d->pages[d->index])));
             d->action->execute(d->pages[d->index++]);
         }
+        d->pages = oldPages;
     }
 }
 

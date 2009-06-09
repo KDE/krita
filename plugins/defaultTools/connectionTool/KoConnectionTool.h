@@ -50,6 +50,8 @@ public:
     /// reimplemented from superclass
     virtual void mouseReleaseEvent( KoPointerEvent *event );
     /// reimplemented from superclass
+    virtual void keyPressEvent( QKeyEvent *event );
+    /// reimplemented from superclass
     virtual void activate( bool temporary );
     /// reimplemented from superclass
     virtual void deactivate();

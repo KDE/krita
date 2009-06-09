@@ -103,6 +103,21 @@ void KisIteratorBenchmark::hLineIter(const KoColorSpace * colorSpace)
         t.restart();
     }
 
+    for(int i=0; i<3; i++) {
+        KisHLineIteratorPixel it = dev.createHLineIterator(0, 0, TEST_WIDTH);
+        for(int i=0; i<TEST_HEIGHT; i++){
+            while (!it.isDone()) {
+                int pixels = it.nConseqHPixels();
+                //memcpy(it.rawData(), bytes, colorSpace->pixelSize());
+                it += pixels;
+            }
+            it.nextRow();
+        }
+
+        kDebug() << "HLineIterator with nConseqHPixels run " << i  << "took" << t.elapsed();
+        t.restart();
+    }
+
     KisHLineConstIteratorPixel cit = dev.createHLineConstIterator(0, 0, TEST_WIDTH);
     for(int i=0; i<TEST_HEIGHT; i++){
         while (!cit.isDone())

@@ -61,10 +61,26 @@ public:
     // reimplemented
     virtual bool hitTest(const QPointF &position) const;
 
-    /// Sets the first shape the connector is connected to
+    /**
+     * Sets the first shape the connector is connected to
+     *
+     * Passing a null pointer as the first parameter will reset the connection.
+     *
+     * @param shape1 the shape to connect to or null to reset the connection
+     * @param connectionPointIndex1 the index of the connection point to connect to
+     * @return true if connection could be established, otherwise false
+     */
     bool setConnection1(KoShape * shape1, int connectionPointIndex);
 
-    /// Sets the second shape the connector is connected to
+    /**
+    * Sets the second shape the connector is connected to
+    *
+    * Passing a null pointer as the first parameter will reset the connection.
+    *
+    * @param shape2 the shape to connect to or null to reset the connection
+    * @param connectionPointIndex2 the index of the connection point to connect to
+    * @return true if connection could be established, otherwise false
+    */
     bool setConnection2(KoShape * shape2, int connectionPointIndex);
 
     /// Returns the connection to the first shape

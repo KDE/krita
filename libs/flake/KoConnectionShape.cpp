@@ -292,11 +292,16 @@ bool KoConnectionShape::setConnection1(KoShape * shape1, int connectionPointInde
     if (hasDependee(shape1))
         return false;
     
+    // check if the connection point does exist
+    if (shape1 && connectionPointIndex1 >= shape1->connectionPoints().count())
+        return false;
+    
     if (d->shape1)
         d->shape1->removeDependee(this);
     d->shape1 = shape1;
     if (d->shape1)
         d->shape1->addDependee(this);
+    
     d->connectionPointIndex1 = connectionPointIndex1;
     
     return true;
@@ -308,11 +313,16 @@ bool KoConnectionShape::setConnection2(KoShape * shape2, int connectionPointInde
     if (hasDependee(shape2))
         return false;
     
+    // check if the connection point does exist
+    if (shape2 && connectionPointIndex2 >= shape2->connectionPoints().count())
+        return false;
+    
     if (d->shape2)
         d->shape2->removeDependee(this);
     d->shape2 = shape2;
     if (d->shape2)
         d->shape2->addDependee(this);
+    
     d->connectionPointIndex2 = connectionPointIndex2;
     
     return true;

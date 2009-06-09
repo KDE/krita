@@ -272,9 +272,9 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy) {
     }
 
     const bool blocking = property("blocking").toBool();
-    if (!blocking)
-        d->dialog->show();
     if (d->index == 0 && d->pages.count() > 0 && d->printer) {
+        if (!blocking)
+            d->dialog->show();
         d->stop = false;
         delete d->painter;
         d->painter = 0;

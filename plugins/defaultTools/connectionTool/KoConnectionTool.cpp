@@ -45,6 +45,7 @@ KoConnectionTool::KoConnectionTool( KoCanvasBase * canvas )
     , m_connectionShape(0)
 {
     m_isTied = new QPair<bool, bool>(false,false);
+    m_isControlDown = false;
 }
 
 KoConnectionTool::~KoConnectionTool()
@@ -104,6 +105,8 @@ void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converte
 
 void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
 {
+    if(m_isControlDown)
+            return;
     KoShape * tempShape;
     if( isInRoi() )
         tempShape = m_lastShapeOn;
@@ -197,6 +200,19 @@ void KoConnectionTool::mouseMoveEvent( KoPointerEvent *event )
 
 void KoConnectionTool::mouseReleaseEvent( KoPointerEvent *event )
 {
+    if( m_isControlDown) {
+        if(isInRoi()) {
+            // delete a connection Point
+            m_shapeOn->removeConnectionPoint( getConnectionIndex( m_lastShapeOn, m_mouse ) );
+        }else{
+            // add a connection Point
+            m_shapeOn = m_canvas->shapeManager()->shapeAt( event->point );
+            QPointF point = m_shapeOn->documentToShape(event->point);
+            if( dynamic_cast<KoSelection*>( m_shapeOn ) )
+                m_shapeOn = 0;
+            m_shapeOn->addConnectionPoint( point );
+        }
+    }
 }
 
 void KoConnectionTool::keyPressEvent(QKeyEvent *event)
@@ -204,8 +220,17 @@ void KoConnectionTool::keyPressEvent(QKeyEvent *event)
     if( event->key() == Qt::Key_Escape ) {
         deactivate();
     }
+    if( event->key() == Qt::Key_Control ) {
+        m_isControlDown = true;
+    }
 }
 
+void KoConnectionTool::keyReleaseEvent(QKeyEvent *event)
+{
+    if( event->key() == Qt::Key_Control ) {
+        m_isControlDown = false;
+    }
+}
 void KoConnectionTool::activate( bool temporary )
 {
     m_canvas->canvasWidget()->setCursor( Qt::PointingHandCursor );

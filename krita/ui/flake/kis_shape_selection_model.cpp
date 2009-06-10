@@ -98,7 +98,7 @@ int KisShapeSelectionModel::count() const
     return m_shapeMap.count();
 }
 
-QList<KoShape*> KisShapeSelectionModel::iterator() const
+QList<KoShape*> KisShapeSelectionModel::childShapes() const
 {
     return QList<KoShape*>(m_shapeMap.keys());
 }

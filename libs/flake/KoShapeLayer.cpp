@@ -49,7 +49,7 @@ QRectF KoShapeLayer::boundingRect() const
 {
     QRectF bb;
 
-    foreach(KoShape* shape, iterator()) {
+    foreach(KoShape* shape, childShapes()) {
         if (bb.isEmpty())
             bb = shape->boundingRect();
         else
@@ -64,7 +64,7 @@ void KoShapeLayer::saveOdf(KoShapeSavingContext & context) const
     // save later according to parag 9.1.3
     context.addLayerForSaving(this);
 
-    QList<KoShape*> shapes = iterator();
+    QList<KoShape*> shapes = childShapes();
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
     foreach(KoShape* shape, shapes) {

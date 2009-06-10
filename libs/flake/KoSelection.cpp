@@ -64,10 +64,10 @@ QRectF KoSelection::Private::sizeRect()
         for (; it != selectedShapes.end(); ++it) {
             if (dynamic_cast<KoShapeGroup*>(*it))
                 continue;
-            
+
             const QMatrix shapeTransform = (*it)->absoluteTransformation(0);
             const QRectF shapeRect(QRectF(QPointF(), (*it)->size()));
-            
+
             if (first) {
                 bb = (shapeTransform * invSelectionTransform).mapRect(shapeRect);
                 bound = shapeTransform.mapRect( shapeRect );
@@ -104,7 +104,7 @@ void KoSelection::Private::selectGroupChildren(KoShapeGroup *group)
     if (! group)
         return;
 
-    foreach(KoShape *shape, group->iterator()) {
+    foreach(KoShape *shape, group->childShapes()) {
         if (selectedShapes.contains(shape))
             continue;
         selectedShapes << shape;
@@ -120,7 +120,7 @@ void KoSelection::Private::deselectGroupChildren(KoShapeGroup *group)
     if (! group)
         return;
 
-    foreach(KoShape *shape, group->iterator()) {
+    foreach(KoShape *shape, group->childShapes()) {
         if (selectedShapes.contains(shape))
             selectedShapes.removeAll(shape);
 

@@ -288,7 +288,7 @@ void KisShapeSelection::removeChild(KoShape *object)
 QPainterPath KisShapeSelection::selectionOutline()
 {
     if (m_dirty) {
-        QList<KoShape*> shapesList = iterator();
+        QList<KoShape*> shapesList = childShapes();
 
         QPainterPath outline;
         foreach(KoShape * shape, shapesList) {

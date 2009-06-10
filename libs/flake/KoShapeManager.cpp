@@ -123,7 +123,7 @@ void KoShapeManager::add(KoShape *shape,  Repaint repaint)
     KoShapeContainer* container = dynamic_cast<KoShapeContainer*>(shape);
 
     if (container) {
-        foreach(KoShape* containerShape, container->iterator()) {
+        foreach(KoShape* containerShape, container->childShapes()) {
             add(containerShape, repaint);
         }
     }
@@ -153,7 +153,7 @@ void KoShapeManager::remove(KoShape *shape)
     KoShapeContainer* container = dynamic_cast<KoShapeContainer*>(shape);
 
     if (container) {
-        foreach(KoShape* containerShape, container->iterator()) {
+        foreach(KoShape* containerShape, container->childShapes()) {
             remove(containerShape);
         }
     }
@@ -325,7 +325,7 @@ void KoShapeManager::notifyShapeChanged(KoShape * shape)
 
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
     if (container) {
-        foreach(KoShape *child, container->iterator())
+        foreach(KoShape *child, container->childShapes())
             d->aggregate4update.insert(child);
     }
 }

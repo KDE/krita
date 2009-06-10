@@ -93,7 +93,7 @@ void KisShapeController::Private::removeShapeAndChildrenFromMap( KoShape* shape)
 {
     KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>(shape);
     if (parent) {
-        foreach(KoShape * child, parent->iterator()) {
+        foreach(KoShape * child, parent->childShapes()) {
             removeShapeFromMap(child);
         }
     }
@@ -187,7 +187,7 @@ void KisShapeController::removeShape(KoShape* shape)
     {
         KoShapeContainer * parent = dynamic_cast<KoShapeContainer*>(shape);
         if (parent) {
-            foreach(KoShape * child, parent->iterator()) {
+            foreach(KoShape * child, parent->childShapes()) {
                 removeShape(child);
             }
         }

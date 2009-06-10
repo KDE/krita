@@ -91,7 +91,7 @@ public:
      * Create and return an iterator over all child objects.
      * @return an interator over all child objects.
      */
-    virtual QList<KoShape*> iterator() const = 0;
+    virtual QList<KoShape*> childShapes() const = 0;
 
     /**
      * This method is called as a notification that one of the properties of the

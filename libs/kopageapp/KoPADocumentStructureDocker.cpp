@@ -351,7 +351,7 @@ void KoPADocumentStructureDocker::deleteItem()
             QList<KoShape*> deleteShapes;
             foreach( KoPAPageBase* page, selectedPages )
             {
-                deleteShapes += page->iterator();
+                deleteShapes += page->childShapes();
                 deleteShapes.append( page );
             }
             cmd = new KoShapeDeleteCommand( m_doc, deleteShapes );

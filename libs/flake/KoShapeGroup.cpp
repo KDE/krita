@@ -63,7 +63,7 @@ void KoShapeGroup::saveOdf(KoShapeSavingContext & context) const
     saveOdfAttributes(context, (OdfMandatories ^ OdfLayer) | OdfAdditionalAttributes);
     context.xmlWriter().addAttributePt("svg:y", position().y());
 
-    QList<KoShape*> shapes = iterator();
+    QList<KoShape*> shapes = childShapes();
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
     foreach(KoShape* shape, shapes) {
@@ -88,7 +88,7 @@ bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
 
     QRectF bound;
     bool boundInitialized = false;
-    foreach(KoShape * shape, iterator()) {
+    foreach(KoShape * shape, childShapes()) {
         if (! boundInitialized) {
             bound = shape->boundingRect();
             boundInitialized = true;
@@ -99,7 +99,7 @@ bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     setSize(bound.size());
     setPosition(bound.topLeft());
 
-    foreach(KoShape * shape, iterator())
+    foreach(KoShape * shape, childShapes())
         shape->setAbsolutePosition(shape->absolutePosition() - bound.topLeft());
 
     return true;

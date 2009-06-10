@@ -36,7 +36,7 @@ static void deleteShape(KoShape *shape)
 {
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*> (shape);
     if (container) {
-        foreach(KoShape *shape, container->iterator())
+        foreach(KoShape *shape, container->childShapes())
             deleteShape(shape);
     }
     delete shape;

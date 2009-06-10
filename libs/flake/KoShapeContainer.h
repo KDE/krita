@@ -150,7 +150,7 @@ public:
      * Create and return an iterator over all child shapes.
      * @return an interator over all child shapes.
      */
-    QList<KoShape*> iterator() const;
+    QList<KoShape*> childShapes() const;
 
     /**
      * return the model for this container

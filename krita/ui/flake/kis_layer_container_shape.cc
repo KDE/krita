@@ -114,7 +114,7 @@ bool recursiveFindActiveLayerInChildren( KoSelection* _selection, KoShapeLayer* 
         _selection->setActiveLayer( _currentLayer );
         return true;
     }
-    foreach( KoShape* shape, _currentLayer->iterator() )
+    foreach( KoShape* shape, _currentLayer->childShapes() )
     {
         KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shape );
         if(layer && recursiveFindActiveLayerInChildren( _selection, layer ) )

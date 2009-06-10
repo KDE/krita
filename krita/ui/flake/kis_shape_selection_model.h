@@ -40,7 +40,7 @@ public:
     bool childClipped(const KoShape *child) const;
 
     int count() const;
-    QList<KoShape*> iterator() const;
+    QList<KoShape*> childShapes() const;
 
     void containerChanged(KoShapeContainer *);
     void childChanged(KoShape * child, KoShape::ChangeType type);

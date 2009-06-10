@@ -52,8 +52,6 @@ public:
     /// reimplemented from superclass
     virtual void keyPressEvent( QKeyEvent *event );
     /// reimplemented from superclass
-    virtual void keyReleaseEvent( QKeyEvent *event );
-    /// reimplemented from superclass
     virtual void activate( bool temporary );
     /// reimplemented from superclass
     virtual void deactivate();
@@ -95,7 +93,6 @@ private:
     QPointF m_mouse;
     KoConnectionShape * m_connectionShape;
     QPair<bool,bool> * m_isTied;
-    bool m_isControlDown;
 };
 
 #endif

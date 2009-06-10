@@ -31,6 +31,7 @@
 #include <KoShapeRegistry.h>
 #include <KoSelection.h>
 #include <KoLineBorder.h>
+#include <KoCanvasResourceProvider.h>
 
 #include <QUndoCommand>
 #include <QPointF>
@@ -45,7 +46,6 @@ KoConnectionTool::KoConnectionTool( KoCanvasBase * canvas )
     , m_connectionShape(0)
 {
     m_isTied = new QPair<bool, bool>(false,false);
-    m_isControlDown = false;
 }
 
 KoConnectionTool::~KoConnectionTool()
@@ -56,6 +56,7 @@ void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converte
 {
     float x = 0;
     float y = 0;
+    int handleRadius = m_canvas->resourceProvider()->handleRadius();
     painter.setRenderHint(QPainter::Antialiasing, true);
     if( m_shapeOn !=  0) {
         // save the painter to restore it later
@@ -66,9 +67,9 @@ void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converte
         foreach( const QPointF &point, m_shapeOn->connectionPoints() )
         { // Draw all the connection point of the shape
             QPointF p = transform.map(point);
-            x = p.x() - 3;
-            y = p.y() - 3;
-            painter.fillRect( x, y, 6, 6, QColor(Qt::green) );
+            x = p.x() - handleRadius;
+            y = p.y() - handleRadius;
+            painter.fillRect( x, y, 2*handleRadius, 2*handleRadius, QColor(Qt::green) );
         }
         painter.restore();
 
@@ -82,7 +83,7 @@ void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converte
         KoShape::applyConversion(painter, converter);
         QPointF pointSelected = m_lastShapeOn->connectionPoints().value( getConnectionIndex(m_lastShapeOn, m_mouse) );
         QPointF point = transform.map( pointSelected );
-        painter.fillRect( point.x()-3, point.y()-3, 6, 6, QColor(Qt::blue) );
+        painter.fillRect( point.x()-handleRadius, point.y()-handleRadius, 2*handleRadius, 2*handleRadius, QColor(Qt::blue) );
 
         painter.restore();
     }
@@ -105,7 +106,7 @@ void KoConnectionTool::paint( QPainter &painter, const KoViewConverter &converte
 
 void KoConnectionTool::mousePressEvent( KoPointerEvent *event )
 {
-    if(m_isControlDown)
+    if( event->modifiers() & Qt::ControlModifier )
             return;
     KoShape * tempShape;
     if( isInRoi() )
@@ -200,7 +201,7 @@ void KoConnectionTool::mouseMoveEvent( KoPointerEvent *event )
 
 void KoConnectionTool::mouseReleaseEvent( KoPointerEvent *event )
 {
-    if( m_isControlDown) {
+    if( event->modifiers() & Qt::ControlModifier ) {
         if(isInRoi()) {
             // delete a connection Point
             m_shapeOn->removeConnectionPoint( getConnectionIndex( m_lastShapeOn, m_mouse ) );
@@ -220,17 +221,8 @@ void KoConnectionTool::keyPressEvent(QKeyEvent *event)
     if( event->key() == Qt::Key_Escape ) {
         deactivate();
     }
-    if( event->key() == Qt::Key_Control ) {
-        m_isControlDown = true;
-    }
 }
 
-void KoConnectionTool::keyReleaseEvent(QKeyEvent *event)
-{
-    if( event->key() == Qt::Key_Control ) {
-        m_isControlDown = false;
-    }
-}
 void KoConnectionTool::activate( bool temporary )
 {
     m_canvas->canvasWidget()->setCursor( Qt::PointingHandCursor );
@@ -310,11 +302,12 @@ float KoConnectionTool::distanceSquare( QPointF p1, QPointF p2 )
 
 bool KoConnectionTool::isInRoi()
 {
+    int grabSensitivity = m_canvas->resourceProvider()->grabSensitivity() * m_canvas->resourceProvider()->grabSensitivity();
     if( m_lastShapeOn == 0 )
         return false;
     QPointF mouse = m_lastShapeOn->documentToShape( m_mouse );
     foreach( QPointF point, m_lastShapeOn->connectionPoints() )
-        if( distanceSquare( mouse, point) <= 100 )
+        if( distanceSquare( mouse, point) <= grabSensitivity )
             return true;
     return false;
 }

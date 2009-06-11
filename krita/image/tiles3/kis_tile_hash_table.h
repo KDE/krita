@@ -17,8 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_TILEDDATAMANAGER_P_H_
-#define KIS_TILEDDATAMANAGER_P_H_
+#ifndef KIS_TILEHASHTABLE_H_
+#define KIS_TILEHASHTABLE_H_
 
 #include "kis_tile.h"
 
@@ -32,13 +32,9 @@ public:
     /* virtual? */
     ~KisTileHashTable();
     
-    KisTileSP getTile(qint32 col, qint32 row);
     bool tileExists(qint32 col, qint32 row);
-
-    void linkTile(KisTileSP tile);
-    KisTileSP unlinkTile(qint32 col, qint32 row);
-    
-    KisTileSP getTileLazy(qint32 col, qint32 row);
+    KisTileSP getTileLazy(qint32 col, qint32 row, bool& newTile);
+    void addTile(KisTileSP tile);
     void deleteTile(KisTileSP tile);
     void deleteTile(qint32 col, qint32 row);
 
@@ -50,6 +46,11 @@ public:
     void debugPrintInfo();
     void debugMaxListLength(qint32 &min, qint32 &max);
 private:
+
+    KisTileSP getTile(qint32 col, qint32 row);
+    void linkTile(KisTileSP tile);
+    KisTileSP unlinkTile(qint32 col, qint32 row);
+
     
     static inline quint32 calculateHash(qint32 col, qint32 row);
 
@@ -57,6 +58,7 @@ private:
     void debugListLengthDistibution();
 private:
 //    Q_DISABLE_COPY(KisTileHashTable);
+    friend class KisTileHashTableIterator;
     
     static const qint32 TABLE_SIZE = 1024;
     KisTileSP *m_hashTable;
@@ -67,5 +69,80 @@ private:
     QReadWriteLock m_lock;
 };
 
+/**
+ * Walks through all tiles inside hash table 
+ * Note: You can't work with your hash table in a regular way
+ *       during iterating with this iterator, because HT is locked.
+ *       The only thing you can is to delete current tile.
+ */
+class KisTileHashTableIterator 
+{
+public:
+    KisTileHashTableIterator(KisTileHashTable *ht) {
+	m_hashTable = ht;
+	m_index = nextNonEmptyList(0);
+	if(m_index < KisTileHashTable::TABLE_SIZE)
+	    m_tile = m_hashTable->m_hashTable[m_index];
 
-#endif /* KIS_TILEDDATAMANAGER_P_H_ */
+	m_hashTable->m_lock.lockForWrite();
+    }
+
+    ~KisTileHashTableIterator() {
+	if(m_index!=-1)
+            m_hashTable->m_lock.unlock();
+    }
+
+    KisTileHashTableIterator& operator++() {
+	next();
+	return *this;
+    }
+
+    void next() {
+	if(m_tile) {
+	    m_tile = m_tile->next();
+	    if(!m_tile) {
+		qint32 idx = nextNonEmptyList(m_index+1);
+		if(idx < KisTileHashTable::TABLE_SIZE) {
+		    m_index = idx;
+		    m_tile = m_hashTable->m_hashTable[idx];
+		}
+		else {
+		    //EOList reached
+		    destroy();
+		}
+	    }
+	}
+    }
+
+    KisTileSP tile() const {
+	return m_tile;
+    }
+    bool isDone() const {
+	return !m_tile;
+    }
+    
+    void deleteCurrent() {
+	KisTileSP tile = m_tile;
+	next();
+	m_hashTable->unlinkTile(tile->col(), tile->row());
+    }
+    
+    void destroy() {
+	m_index=-1;
+	m_hashTable->m_lock.unlock();
+    }
+protected:
+    KisTileSP m_tile;
+    qint32 m_index;
+    KisTileHashTable *m_hashTable;
+
+protected:
+    qint32 nextNonEmptyList(qint32 startIdx);
+private:
+    Q_DISABLE_COPY(KisTileHashTableIterator);
+};
+
+
+
+
+#endif /* KIS_TILEHASHTABLE_H_ */

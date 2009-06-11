@@ -3,7 +3,8 @@
 #include "kis_tile.h"
 #include "kis_tile_data_store.h"
 #include "kis_tile_data.h"
-#include "kis_tiled_data_manager.h"
+//#include "kis_tiled_data_manager.h"
+#include "kis_tile_hash_table.h"
 
 #define PIXEL_SIZE 5
 quint8   pixel[PIXEL_SIZE];
@@ -21,9 +22,6 @@ void tileCOWTest();
 int main()
 {
     memset(pixel, 8, PIXEL_SIZE);
-
-
-    KisTiledDataManager dm(PIXEL_SIZE, pixel);
     
     QRect dataRect;
     dataRect.setCoords(60,60,110,110);
@@ -33,14 +31,15 @@ int main()
     table.setDefaultTileData(defaultTileData1);
 
     tileHashTableTest(table);
-
     table.clear();
+    
     return 0;
 }
 
 void tileHashTableTest(KisTileHashTable &table)
 {
     KisTileSP tile;
+    bool newTile;
     cout << "Starting KisTileHashTable test...\n";
     cout << "---\n";
     cout << "  Generating tiles...";
@@ -49,7 +48,7 @@ void tileHashTableTest(KisTileHashTable &table)
      */
     for(int i=0; i<100; i++) {
         for(int j=0; j<300; j++) {
-            tile = table.getTileLazy(i,j);
+	  tile = table.getTileLazy(i,j, newTile);
         }
         if(!((i+1)%20))
             cout << " " << i+1 << "%";

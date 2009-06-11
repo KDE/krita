@@ -25,9 +25,10 @@
 #include "kis_tiled_data_manager.h"
 #include "kis_tiled_data_manager_p.h"
 
+
 //#include <KoStore.h>
 
-//#include "kis_global.h"
+#include "kis_global.h"
 //#include "kis_debug.h"
 
 
@@ -45,54 +46,46 @@
 KisTiledDataManager::KisTiledDataManager(quint32 pixelSize, 
                                          const quint8 *defaultPixel)
 {
-    /* FIXME: dirty hack */
-    m_defaultTileData = 0;
-    setDefaultTileData(globalTileDataStore.createDefaultTileData(pixelSize, defaultPixel));
+    m_pixelSize = pixelSize;
+    m_defaultPixel = new quint8[m_pixelSize];
+    setDefaultPixel(defaultPixel);
 
-    //m_extent.setCoords(qint32_MAX, qint32_MAX, 
-    //                   qint32_MIN, qint32_MIN);
-    m_extent.setCoords(0,0,0,0);
-
-/* FIXME: What's this?
     m_extentMinX = qint32_MAX;
     m_extentMinY = qint32_MAX;
     m_extentMaxX = qint32_MIN;
     m_extentMaxY = qint32_MIN;
-*/
 }
 
 KisTiledDataManager::KisTiledDataManager(const KisTiledDataManager &dm) 
     : KisShared(dm),
-      m_extent(dm.m_extent),
       m_hashTable(dm.m_hashTable)
 {
-    /* FIXME: dirty hack (once more) */
-    m_defaultTileData = 0;
-    setDefaultTileData(dm.m_defaultTileData);
+    m_pixelSize = dm.m_pixelSize;
+    m_defaultPixel = new quint8[m_pixelSize];
+    /**
+     * We don't call setDefaultTileData here, as defaultTileDatas 
+     * will be made shared in m_hashTable(dm.m_hashTable)
+     */
+    memcpy(m_defaultPixel, dm.m_defaultPixel, m_pixelSize);
+
+    m_extentMinX = dm.m_extentMinX;
+    m_extentMinY = dm.m_extentMinY;
+    m_extentMaxX = dm.m_extentMaxX;
+    m_extentMaxY = dm.m_extentMaxY;
 }
 
 KisTiledDataManager::~KisTiledDataManager()
 {
-    globalTileDataStore.releaseTileData(m_defaultTileData);
-}
-
-void KisTiledDataManager::setDefaultTileData(KisTileData *td)
-{
-    if(m_defaultTileData) {
-        globalTileDataStore.releaseTileData(m_defaultTileData);
-        m_defaultTileData=0;
-    }
-    
-    globalTileDataStore.acquireTileData(td);
-    m_defaultTileData=td;
-    m_hashTable.setDefaultTileData(td);
+    delete[] m_defaultPixel;
 }
 
 void KisTiledDataManager::setDefaultPixel(const quint8 *defaultPixel)
 {
     KisTileData *td = globalTileDataStore.createDefaultTileData(pixelSize(),
                                                                 defaultPixel);
-    setDefaultTileData(td);
+    m_hashTable.setDefaultTileData(td);    
+
+    memcpy(m_defaultPixel, defaultPixel, pixelSize());
 }
 
 
@@ -109,94 +102,191 @@ bool KisTiledDataManager::read(KoStore *store)
     return true;
 }
 
-void KisTiledDataManager::extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
+quint8* KisTiledDataManager::duplicatePixel(qint32 num, const quint8 *pixel)
 {
-    m_extent.getRect(&x, &y, &w, &h);
+    const qint32 pixelSize = this->pixelSize();
+    /*FIXME:  Make a fun filling here */
+    quint8 *dstBuf = new quint8[num * pixelSize];
+    quint8 *dstIt = dstBuf;
+    for(qint32 i=0; i<num; i++) {
+	memcpy(dstIt, pixel, pixelSize);
+	dstIt+=pixelSize;
+    }
+    return dstBuf;
 }
 
-QRect KisTiledDataManager::extent() const
+void KisTiledDataManager::clear(QRect clearRect, const quint8 *clearPixel)
 {
-    return m_extent;
+    if(clearPixel == 0)
+	clearPixel = m_defaultPixel;
+
+    if(clearRect.isEmpty())
+        return;
+
+    const qint32 pixelSize = this->pixelSize();
+
+    bool pixelBytesAreDefault = !memcmp(clearPixel, m_defaultPixel, pixelSize);
+
+    bool pixelBytesAreTheSame = true;
+    for (qint32 i = 0; i < pixelSize; ++i) {
+        if (clearPixel[i] != clearPixel[0]) {
+            pixelBytesAreTheSame = false;
+            break;
+        }
+    }
+
+    qint32 firstColumn = xToCol(clearRect.left());
+    qint32 lastColumn = xToCol(clearRect.right());
+    
+    qint32 firstRow = yToRow(clearRect.top());
+    qint32 lastRow = yToRow(clearRect.bottom());
+    
+    const quint32 rowStride = KisTileData::WIDTH * pixelSize;
+    
+    // Generate one row
+    quint8 *clearPixelData = 0;
+    quint32 maxRunLength = qMin(clearRect.width(), KisTileData::WIDTH);
+    clearPixelData = duplicatePixel(maxRunLength, clearPixel);
+    
+    KisTileData *td = 0;
+    if (clearRect.width() >= KisTileData::WIDTH && 
+	clearRect.height() >= KisTileData::HEIGHT) {
+	if(pixelBytesAreDefault)
+	    /**
+	     * FIXME: Theoretical race condition 
+	     *        if setDefaultPixel has been called first
+	     */
+	    td = m_hashTable.defaultTileData();
+	else
+	    td = globalTileDataStore.createDefaultTileData(pixelSize,
+							   clearPixel);
+	globalTileDataStore.acquireTileData(td);
+    } 
+    
+    for (qint32 row = firstRow; row <= lastRow; ++row) {
+	for (qint32 column = firstColumn; column <= lastColumn; ++column) {
+	    
+	    QRect tileRect(column*KisTileData::WIDTH, row*KisTileData::HEIGHT,
+			   KisTileData::WIDTH, KisTileData::WIDTH);
+	    QRect clearTileRect = clearRect & tileRect;
+	    
+	    KisTileDataWrapper tw = pixelPtr(clearTileRect.left(),
+					     clearTileRect.top(),
+					     KisTileDataWrapper::WRITE);
+	    quint8* tileIt = tw.data();
+	    
+	    if (clearTileRect == tileRect) {
+		// Clear whole tile
+		m_hashTable.deleteTile(column, row);
+		m_hashTable.addTile(new KisTile(column,row,td));
+	    } 
+	    else {
+		const qint32 lineSize = clearTileRect.width() * pixelSize;
+		qint32 rowsRemaining = clearTileRect.height();
+		
+		if(pixelBytesAreTheSame) {
+		    while (rowsRemaining > 0) {
+			memset(tileIt, *clearPixelData, lineSize);
+			tileIt += rowStride;
+			rowsRemaining--;
+		    }
+		}
+		else {
+		    while (rowsRemaining > 0) {
+			memcpy(tileIt, clearPixelData, lineSize);
+			tileIt += rowStride;
+			rowsRemaining--;
+		    }
+		}
+	    }
+	}
+    }
+    if(td) globalTileDataStore.releaseTileData(td);
+    delete[] clearPixelData;
 }
 
-/*****************************************************************************/
-    /* FIXME: */
-/*
+void KisTiledDataManager::clear(QRect clearRect, quint8 clearValue)
+{
+    quint8 *buf = new quint8[pixelSize()];
+    memset(buf, clearValue, pixelSize());
+    clear(clearRect, buf);
+    delete[] buf;
+}
+
+void KisTiledDataManager::clear(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *clearPixel)
+{
+    clear(QRect(x,y,w,h), clearPixel);
+}
+void KisTiledDataManager::clear(qint32 x, qint32 y, qint32 w, qint32 h, quint8 clearValue)
+{
+    clear(QRect(x,y,w,h), clearValue);
+}
+
+void KisTiledDataManager::clear()
+{
+    m_hashTable.clear();
+
+    m_extentMinX = qint32_MAX;
+    m_extentMinY = qint32_MAX;
+    m_extentMaxX = qint32_MIN;
+    m_extentMaxY = qint32_MIN;
+}
+
+
 void KisTiledDataManager::setExtent(qint32 x, qint32 y, qint32 w, qint32 h)
 {
-    QRect newRect = QRect(x, y, w, h).normalized();
-    //printRect("newRect", newRect);
+    setExtent(QRect(x,y,w,h));
+}
+
+void KisTiledDataManager::setExtent(QRect newRect)
+{
     QRect oldRect = extent();
-    //printRect("oldRect", oldRect);
+    newRect = newRect.normalized();
 
     // Do nothing if the desired size is bigger than we currently are: 
     // that is handled by the autoextending automatically
     if (newRect.contains(oldRect)) return;
 
-    // Loop through all tiles, if a tile is wholly outside the extent, add to the memento, then delete it,
-    // if the tile is partially outside the extent, clear the outside pixels to the default pixel.
-    for (int tileHash = 0; tileHash < 1024; tileHash++) {
-        KisTile *tile = m_hashTable[tileHash];
-        KisTile *previousTile = 0;
+    KisTileSP tile;
+    QRect tileRect;
+    KisTileHashTableIterator iter(&m_hashTable);
 
-        while (tile) {
-            QRect tileRect = QRect(tile->getCol() * KisTile::WIDTH, tile->getRow() * KisTile::HEIGHT, KisTile::WIDTH, KisTile::HEIGHT);
-            //printRect("tileRect", tileRect);
+    while(!iter.isDone()) {
+	tile=iter.tile();
+	
+	tileRect = tile->extent();
+	if(newRect.contains(tileRect)) {
+	    //do nothing
+	    ++iter;
+	} 
+	else if(newRect.intersects(tileRect)) {
+	    QRect intersection = newRect & tileRect;
+	    intersection.translate(- tileRect.topLeft());
+	    
+	    const qint32 pixelSize = this->pixelSize();
 
-            if (newRect.contains(tileRect)) {
-                // Completely inside, do nothing
-                previousTile = tile;
-                tile = tile->getNext();
-            } else {
-                ensureTileMementoed(tile->getCol(), tile->getRow(), tileHash, tile);
+	    tile->lockForWrite();
+	    quint8* data = tile->data();
+	    quint8* ptr;
 
-                if (newRect.intersects(tileRect)) {
-
-                    // Create the intersection of the tile and new rect
-                    QRect intersection = newRect.intersect(tileRect);
-                    //printRect("intersection", intersection);
-                    intersection.setRect(intersection.x() - tileRect.x(), intersection.y() - tileRect.y(), intersection.width(), intersection.height());
-
-                    // This can be done a lot more efficiently, no doubt, by clearing runs of pixels to the left and the right of
-                    // the intersecting line.
-                    tile->addReader();
-                    for (int y = 0; y < KisTile::HEIGHT; ++y) {
-                        for (int x = 0; x < KisTile::WIDTH; ++x) {
-                            if (!intersection.contains(x, y)) {
-                                tile->addReader();
-                                quint8 * ptr = tile->data();
-                                if (ptr)  {
-                                    ptr += m_pixelSize * (y * KisTile::WIDTH + x);
-                                    memcpy(ptr, m_defPixel, m_pixelSize);
-                                }
-                                tile->removeReader();
-                            }
-                        }
-                    }
-                    tile->removeReader();
-                    previousTile = tile;
-                    tile = tile->getNext();
-                } else {
-                    KisTile *deltile = tile;
-                    tile = tile->getNext();
-
-                    m_numTiles--;
-
-                    if (previousTile)
-                        previousTile->setNext(tile);
-                    else
-                        m_hashTable[tileHash] = tile;
-                    delete deltile;
-                }
-            }
-        }
+	    /* FIXME: make it faster */
+	    for (int y = 0; y < KisTileData::HEIGHT; y++) {
+		for (int x = 0; x < KisTileData::WIDTH; x++) {
+		    if (!intersection.contains(x, y)) {
+			ptr = data + pixelSize * (y * KisTileData::WIDTH + x);
+			memcpy(ptr, m_defaultPixel, pixelSize);
+		    }
+		}
+	    }
+	    tile->unlock();
+	    ++iter;
+	}
+	else {
+	    iter.deleteCurrent();
+	}
     }
 
-    // Set the extent correctly
-    m_extentMinX = x;
-    m_extentMinY = y;
-    m_extentMaxX = x + w - 1;
-    m_extentMaxY = y + h - 1;
+    recalculateExtent();
 }
 
 void KisTiledDataManager::recalculateExtent()
@@ -205,202 +295,155 @@ void KisTiledDataManager::recalculateExtent()
     m_extentMinY = qint32_MAX;
     m_extentMaxX = qint32_MIN;
     m_extentMaxY = qint32_MIN;
-
-    // Loop through all tiles.
-    for (int tileHash = 0; tileHash < 1024; tileHash++) {
-        const KisTile *tile = m_hashTable[tileHash];
-
-        while (tile) {
-            updateExtent(tile->getCol(), tile->getRow());
-            tile = tile->getNext();
-        }
+    
+    KisTileHashTableIterator iter(&m_hashTable);
+    KisTileSP tile;
+    
+    while(! (tile = iter.tile()) ) {
+	updateExtent(tile->col(), tile->row());
+	++iter;
     }
 }
 
-void KisTiledDataManager::clear(qint32 x, qint32 y, qint32 w, qint32 h, quint8 clearValue)
+void KisTiledDataManager::updateExtent(qint32 col, qint32 row)
 {
-    if (w < 1 || h < 1) {
-        return;
-    }
+    const qint32 tileMinX = col * KisTileData::WIDTH;
+    const qint32 tileMinY = row * KisTileData::HEIGHT;
+    const qint32 tileMaxX = tileMinX + KisTileData::WIDTH - 1;
+    const qint32 tileMaxY = tileMinY + KisTileData::HEIGHT - 1;
 
-    qint32 firstColumn = xToCol(x);
-    qint32 lastColumn = xToCol(x + w - 1);
-
-    qint32 firstRow = yToRow(y);
-    qint32 lastRow = yToRow(y + h - 1);
-
-    QRect clearRect(x, y, w, h);
-
-    const quint32 rowStride = KisTile::WIDTH * m_pixelSize;
-
-    for (qint32 row = firstRow; row <= lastRow; ++row) {
-        for (qint32 column = firstColumn; column <= lastColumn; ++column) {
-
-            KisTile *tile = getTile(column, row, true);
-            QRect tileRect = tile->extent();
-
-            QRect clearTileRect = clearRect & tileRect;
-
-            tile->addReader();
-            if (clearTileRect == tileRect) {
-                // Clear whole tile
-                memset(tile->data(), clearValue, KisTile::WIDTH * KisTile::HEIGHT * m_pixelSize);
-            } else {
-                quint8 *dst = tile->data();
-                if (dst) {
-                    quint32 rowsRemaining = clearTileRect.height();
-                    dst += m_pixelSize * ((clearTileRect.y() - tileRect.y()) * KisTile::WIDTH + (clearTileRect.x() - tileRect.x()));
-                    while (rowsRemaining > 0) {
-                        memset(dst, clearValue, clearTileRect.width() * m_pixelSize);
-                        dst += rowStride;
-                        --rowsRemaining;
-                    }
-                }
-            }
-            tile->removeReader();
-        }
-    }
+    m_extentMinX = qMin(m_extentMinX, tileMinX);
+    m_extentMaxX = qMax(m_extentMaxX, tileMaxX);
+    m_extentMinY = qMin(m_extentMinY, tileMinY);
+    m_extentMaxY = qMax(m_extentMaxY, tileMaxY);
 }
 
-void KisTiledDataManager::clear(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *clearPixel)
+void KisTiledDataManager::extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const
 {
-    Q_ASSERT(clearPixel != 0);
+    x = m_extentMinX;
+    y = m_extentMinY;
+    w = m_extentMaxX - m_extentMinX + 1;
+    h = m_extentMaxY - m_extentMinY + 1;
+}
 
-    if (clearPixel == 0 || w < 1 || h < 1) {
-        return;
-    }
+QRect KisTiledDataManager::extent() const
+{
+    qint32 x,y,w,h;
+    extent(x,y,w,h);
 
-    bool pixelBytesAreTheSame = true;
+    return QRect(x, y, w, h);
+}
 
-    for (quint32 i = 0; i < m_pixelSize; ++i) {
-        if (clearPixel[i] != clearPixel[0]) {
-            pixelBytesAreTheSame = false;
-            break;
-        }
-    }
 
-    if (pixelBytesAreTheSame) {
-        clear(x, y, w, h, clearPixel[0]);
+
+KisTileDataWrapper KisTiledDataManager::pixelPtr(qint32 x, qint32 y, 
+			    enum KisTileDataWrapper::accessType type)
+{
+    const qint32 col = xToCol(x);
+    const qint32 row = yToRow(y);
+    
+    /* FIXME: Always positive? */
+    const qint32 xInTile = x - col * KisTileData::WIDTH;
+    const qint32 yInTile = y - row * KisTileData::HEIGHT;
+
+    const qint32 pixelIndex = xInTile + yInTile * KisTileData::WIDTH;
+
+    bool newTile;
+    KisTileSP tile = m_hashTable.getTileLazy(col, row, newTile);
+    if(newTile)
+	updateExtent(tile->col(), tile->row());
+
+    return KisTileDataWrapper(tile,
+			      pixelIndex*pixelSize(),
+			      type);
+}
+
+void KisTiledDataManager::setPixel(qint32 x, qint32 y, const quint8 * data)
+{
+    KisTileDataWrapper tw = pixelPtr(x, y, KisTileDataWrapper::WRITE);
+    memcpy(tw.data(), data, pixelSize());
+}
+
+void KisTiledDataManager::writeBytes(const quint8 *data,
+				     qint32 x, qint32 y,
+				     qint32 width, qint32 height)
+{
+    // Actial bytes reading/writing is done in private header 
+    writeBytesBody(data, x, y, width, height);
+}
+
+void KisTiledDataManager::readBytes(quint8 *data,
+                                    qint32 x, qint32 y,
+                                    qint32 width, qint32 height)
+{
+    // Actial bytes reading/writing is done in private header 
+    readBytesBody(data, x, y, width, height);
+}
+
+QVector<quint8*> 
+KisTiledDataManager::readPlanarBytes(QVector<qint32> channelSizes,
+				     qint32 x, qint32 y,
+				     qint32 width, qint32 height)
+{
+    // Actial bytes reading/writing is done in private header 
+    return readPlanarBytesBody(channelSizes, x, y, width, height);
+}
+
+
+void KisTiledDataManager::writePlanarBytes(QVector<quint8*> planes,
+					   QVector<qint32> channelSizes,
+					   qint32 x, qint32 y,
+					   qint32 width, qint32 height)
+{
+    // Actial bytes reading/writing is done in private header 
+    writePlanarBytesBody(planes, channelSizes, x, y, width, height);
+}
+
+qint32 KisTiledDataManager::numContiguousColumns(qint32 x, qint32 minY, qint32 maxY) const
+{
+    qint32 numColumns;
+
+    Q_UNUSED(minY);
+    Q_UNUSED(maxY);
+
+    if (x >= 0) {
+        numColumns = KisTileData::WIDTH - (x % KisTileData::WIDTH);
     } else {
-
-        qint32 firstColumn = xToCol(x);
-        qint32 lastColumn = xToCol(x + w - 1);
-
-        qint32 firstRow = yToRow(y);
-        qint32 lastRow = yToRow(y + h - 1);
-
-        QRect clearRect(x, y, w, h);
-
-        const quint32 rowStride = KisTile::WIDTH * m_pixelSize;
-
-        quint8 *clearPixelData = 0;
-
-        if (w >= KisTile::WIDTH && h >= KisTile::HEIGHT) {
-
-            // There might be a whole tile to be cleared so generate a cleared tile.
-            clearPixelData = new quint8[KisTile::WIDTH * KisTile::HEIGHT * m_pixelSize];
-
-            quint8 *dst = clearPixelData;
-            quint32 pixelsRemaining = KisTile::WIDTH;
-
-            // Generate one row
-            while (pixelsRemaining > 0) {
-                memcpy(dst, clearPixel, m_pixelSize);
-                dst += m_pixelSize;
-                --pixelsRemaining;
-            }
-
-            quint32 rowsRemaining = KisTile::HEIGHT - 1;
-
-            // Copy to the rest of the rows.
-            while (rowsRemaining > 0) {
-                memcpy(dst, clearPixelData, rowStride);
-                dst += rowStride;
-                --rowsRemaining;
-            }
-
-        } else {
-
-            // Generate one row
-            quint32 maxRunLength = qMin(w, KisTile::WIDTH);
-
-            clearPixelData = new quint8[maxRunLength * m_pixelSize];
-
-            quint8 *dst = clearPixelData;
-            quint32 pixelsRemaining = maxRunLength;
-
-            while (pixelsRemaining > 0) {
-                memcpy(dst, clearPixel, m_pixelSize);
-                dst += m_pixelSize;
-                --pixelsRemaining;
-            }
-        }
-
-        for (qint32 row = firstRow; row <= lastRow; ++row) {
-            for (qint32 column = firstColumn; column <= lastColumn; ++column) {
-
-                KisTile *tile = getTile(column, row, true);
-                QRect tileRect = tile->extent();
-
-                QRect clearTileRect = clearRect & tileRect;
-
-                if (clearTileRect == tileRect) {
-
-                    // Clear whole tile
-                    tile->addReader();
-                    memcpy(tile->data(), clearPixelData, KisTile::WIDTH * KisTile::HEIGHT * m_pixelSize);
-                    tile->removeReader();
-                } else {
-
-                    quint32 rowsRemaining = clearTileRect.height();
-                    tile->addReader();
-                    quint8 *dst = tile->data();
-                    if (dst)
-                        dst += m_pixelSize * ((clearTileRect.y() - tileRect.y()) * KisTile::WIDTH + (clearTileRect.x() - tileRect.x()));
-
-
-                    while (rowsRemaining > 0) {
-                        memcpy(dst, clearPixelData, clearTileRect.width() * m_pixelSize);
-                        dst += rowStride;
-                        --rowsRemaining;
-                    }
-                    tile->removeReader();
-                }
-            }
-        }
-
-        delete [] clearPixelData;
+        numColumns = ((-x - 1) % KisTileData::WIDTH) + 1;
     }
+
+    return numColumns;
 }
 
-void KisTiledDataManager::clear()
+qint32 KisTiledDataManager::numContiguousRows(qint32 y, qint32 minX, qint32 maxX) const
 {
-    // Loop through all tiles, add to the memento, then delete it,
-    for (int tileHash = 0; tileHash < 1024; tileHash++) {
-        const KisTile *tile = m_hashTable[tileHash];
+    qint32 numRows;
 
-        while (tile) {
-            ensureTileMementoed(tile->getCol(), tile->getRow(), tileHash, tile);
+    Q_UNUSED(minX);
+    Q_UNUSED(maxX);
 
-            const KisTile *deltile = tile;
-            tile = tile->getNext();
-
-            delete deltile;
-        }
-        m_hashTable[tileHash] = 0;
+    if (y >= 0) {
+        numRows = KisTileData::HEIGHT - (y % KisTileData::HEIGHT);
+    } else {
+        numRows = ((-y - 1) % KisTileData::HEIGHT) + 1;
     }
 
-    m_numTiles = 0;
-
-    // Set the extent correctly
-    m_extentMinX = qint32_MAX;
-    m_extentMinY = qint32_MAX;
-    m_extentMaxX = qint32_MIN;
-    m_extentMaxY = qint32_MIN;
+    return numRows;
 }
-*/
 
-/*
+qint32 KisTiledDataManager::rowStride(qint32 x, qint32 y) const
+{
+    Q_UNUSED(x);
+    Q_UNUSED(y);
+
+    return KisTileData::WIDTH * pixelSize();
+}
+
+
+
+
+/*****************************************************************************/
+    /* 
 KisMementoSP KisTiledDataManager::getMemento()
 {
     m_currentMemento = new KisMemento(m_pixelSize);
@@ -584,102 +627,6 @@ void KisTiledDataManager::deleteTiles(const KisMemento::DeletedTile *d)
 */
 
 
-KisTileDataWrapper KisTiledDataManager::pixelPtr(qint32 x, qint32 y, 
-			    enum KisTileDataWrapper::accessType type)
-{
-    const qint32 col = xToCol(x);
-    const qint32 row = yToRow(y);
-    
-    /* FIXME: Always positive? */
-    const qint32 xInTile = x - col * KisTileData::WIDTH;
-    const qint32 yInTile = y - row * KisTileData::HEIGHT;
 
-    const qint32 pixelIndex = xInTile + yInTile * KisTileData::WIDTH;
-
-    return KisTileDataWrapper(m_hashTable.getTileLazy(col, row),
-			      pixelIndex*pixelSize(),
-			      type);
-}
-
-void KisTiledDataManager::setPixel(qint32 x, qint32 y, const quint8 * data)
-{
-    KisTileDataWrapper tw = pixelPtr(x, y, KisTileDataWrapper::WRITE);
-    memcpy(tw.data(), data, pixelSize());
-}
-
-void KisTiledDataManager::writeBytes(const quint8 *data,
-				     qint32 x, qint32 y,
-				     qint32 width, qint32 height)
-{
-    // Actial bytes reading/writing is done in private header 
-    writeBytesBody(data, x, y, width, height);
-}
-
-void KisTiledDataManager::readBytes(quint8 *data,
-                                    qint32 x, qint32 y,
-                                    qint32 width, qint32 height)
-{
-    // Actial bytes reading/writing is done in private header 
-    readBytesBody(data, x, y, width, height);
-}
-
-QVector<quint8*> 
-KisTiledDataManager::readPlanarBytes(QVector<qint32> channelSizes,
-				     qint32 x, qint32 y,
-				     qint32 width, qint32 height)
-{
-    // Actial bytes reading/writing is done in private header 
-    return readPlanarBytesBody(channelSizes, x, y, width, height);
-}
-
-
-void KisTiledDataManager::writePlanarBytes(QVector<quint8*> planes,
-					   QVector<qint32> channelSizes,
-					   qint32 x, qint32 y,
-					   qint32 width, qint32 height)
-{
-    // Actial bytes reading/writing is done in private header 
-    writePlanarBytesBody(planes, channelSizes, x, y, width, height);
-}
-
-qint32 KisTiledDataManager::numContiguousColumns(qint32 x, qint32 minY, qint32 maxY) const
-{
-    qint32 numColumns;
-
-    Q_UNUSED(minY);
-    Q_UNUSED(maxY);
-
-    if (x >= 0) {
-        numColumns = KisTileData::WIDTH - (x % KisTileData::WIDTH);
-    } else {
-        numColumns = ((-x - 1) % KisTileData::WIDTH) + 1;
-    }
-
-    return numColumns;
-}
-
-qint32 KisTiledDataManager::numContiguousRows(qint32 y, qint32 minX, qint32 maxX) const
-{
-    qint32 numRows;
-
-    Q_UNUSED(minX);
-    Q_UNUSED(maxX);
-
-    if (y >= 0) {
-        numRows = KisTileData::HEIGHT - (y % KisTileData::HEIGHT);
-    } else {
-        numRows = ((-y - 1) % KisTileData::HEIGHT) + 1;
-    }
-
-    return numRows;
-}
-
-qint32 KisTiledDataManager::rowStride(qint32 x, qint32 y) const
-{
-    Q_UNUSED(x);
-    Q_UNUSED(y);
-
-    return KisTileData::WIDTH * pixelSize();
-}
 
 

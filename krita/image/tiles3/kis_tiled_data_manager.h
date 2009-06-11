@@ -68,6 +68,10 @@ public:
     virtual ~KisTileDataWrapper() {
 	m_tile->unlock();
     }
+    
+    inline KisTileSP& tile() {
+      return m_tile;
+    }
 
     inline quint8* data() const {
         return m_tile->data() + m_offset;
@@ -100,7 +104,7 @@ class KRITAIMAGE_EXPORT KisTiledDataManager : public KisShared
 {
 
 protected:
-/*FIXEME:*/
+/*FIXME:*/
 public:
     KisTiledDataManager(quint32 pixelSize, const quint8 *defPixel);
     ~KisTiledDataManager();
@@ -116,9 +120,8 @@ protected:
 protected:
 
     void setDefaultPixel(const quint8 *defPixel);
-    /* FIXME: */
     const quint8 *defaultPixel() const {
-        return 0;
+	return m_defaultPixel;
     }
 
 //    KisMementoSP getMemento();
@@ -130,34 +133,32 @@ protected:
 
 protected:
     /**
-     * Reads and writes the tiles from/onto a KoStore (which is simply a file within a zip file)
-     *
+     * Reads and writes the tiles from/onto a KoStore 
+     * (which is simply a file within a zip file)
      */
     bool write(KoStore *store);
     bool read(KoStore *store);
 
-protected:
-
     inline quint32 pixelSize() const {
-        return m_defaultTileData->pixelSize();
+        return m_pixelSize;
     }
 
-    QRect extent() const;
+/* FIXME:*/
+public:
+
+
     void  extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
+    void  setExtent(qint32 x, qint32 y, qint32 w, qint32 h);
+    QRect extent() const;
+    void  setExtent(QRect newRect);
 
-    void setExtent(QRect newRect);
-    void setExtent(qint32 x, qint32 y, qint32 w, qint32 h);
 
-protected:
-
+    void clear(QRect clearRect, quint8 clearValue);
+    void clear(QRect clearRect, const quint8 *clearPixel);
     void clear(qint32 x, qint32 y, qint32 w, qint32 h, quint8 clearValue);
     void clear(qint32 x, qint32 y,  qint32 w, qint32 h, const quint8 *clearPixel);
     void clear();
 
-
-protected:
-/* FIXME:*/
-public:
 
     /**
      * write the specified data to x, y. There is no checking on pixelSize!
@@ -218,11 +219,18 @@ public:
     qint32 rowStride(qint32 x, qint32 y) const;
 
 private:
-    QRect m_extent;
-    KisTileData *m_defaultTileData;    
     KisTileHashTable m_hashTable;
+    quint8* m_defaultPixel;
+    qint32 m_pixelSize;
+   
+    /**
+     * Extents stuff
+     */
+    qint32 m_extentMinX;
+    qint32 m_extentMaxX;
+    qint32 m_extentMinY;
+    qint32 m_extentMaxY;
 
-    //quint32 m_numTiles;
 
     //KisMementoSP m_currentMemento;
 
@@ -230,10 +238,14 @@ private:
     qint32 xToCol(qint32 x) const;
     qint32 yToRow(qint32 y) const;
     qint32 divideRoundDown(qint32 x, const qint32 y) const;
-    void setDefaultTileData(KisTileData *td);
     KisTileDataWrapper pixelPtr(qint32 x, qint32 y, 
 				enum KisTileDataWrapper::accessType type);
 
+    void updateExtent(qint32 col, qint32 row);
+    void recalculateExtent();
+
+    quint8* duplicatePixel(qint32 num, const quint8 *pixel);    
+ 
     void writeBytesBody(const quint8 *data,
 			qint32 x, qint32 y, qint32 width, qint32 height);
     void readBytesBody(quint8 *data,
@@ -244,7 +256,6 @@ private:
     QVector<quint8*> readPlanarBytesBody(QVector<qint32> channelsizes,
 					 qint32 x, qint32 y,
 					 qint32 w, qint32 h);
-
 };
 
 inline qint32 KisTiledDataManager::divideRoundDown(qint32 x, const qint32 y) const

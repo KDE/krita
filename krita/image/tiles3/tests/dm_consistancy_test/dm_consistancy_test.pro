@@ -11,6 +11,9 @@ LIBS += -g -Wl,-rpath,/home/devel/kde-install/release/kde/lib
 LIBPATH += /home/devel/kde-install/release/kde/lib/
 LIBS +=  -lkdecore
 
+CONFIG-=release
+CONFIG+=debug
+
 
 INCLUDEPATH += . ../../ 
 INCLUDEPATH += /home/devel/kde-install/release/kde/include/

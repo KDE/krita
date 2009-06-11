@@ -221,6 +221,8 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     setStandardToolBarMenuEnabled(true);
     Q_ASSERT(componentData.isValid());
 
+    setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
+    
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
 
     d->m_manager = new KoPartManager(this);
@@ -1093,6 +1095,7 @@ void KoMainWindow::saveWindowSettings()
             if (i.value()->widget()) {
                 KConfigGroup dockGroup = group.group(QString("DockWidget ") + i.key());
                 dockGroup.writeEntry("Collapsed", i.value()->widget()->isHidden());
+                dockGroup.writeEntry("DockArea", (int) dockWidgetArea(i.value()));
             }
         }
 
@@ -1828,6 +1831,11 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactory* factory)
         case KoDockFactory::DockMinimized:
             visible = false; break;
         default:;
+        }
+
+        if (rootDocument()) {
+            KConfigGroup group = KGlobal::config()->group(rootDocument()->componentData().componentName()).group("DockWidget " + factory->id());
+            side = static_cast<Qt::DockWidgetArea>(group.readEntry("DockArea", static_cast<int>(side)));
         }
 
         addDockWidget(side, dockWidget);

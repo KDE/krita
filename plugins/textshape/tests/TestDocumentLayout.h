@@ -83,12 +83,12 @@ private:
     void initForNewTest(const QString &initText = QString());
 
 private:
-    MockTextShape *shape1;
-    QTextDocument *doc;
-    KoTextDocumentLayout *layout;
-    QTextLayout *blockLayout;
-    QString loremIpsum;
-    KoStyleManager *styleManager;
+    MockTextShape *m_shape1;
+    QTextDocument *m_doc;
+    KoTextDocumentLayout *m_layout;
+    QTextLayout *m_blockLayout;
+    QString m_loremIpsum;
+    KoStyleManager *m_styleManager;
     Layout *m_textLayout;
 };
 

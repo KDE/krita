@@ -46,8 +46,8 @@ int main(int /*argc*/, char ** /*argv*/)
         //kDebug() << ( *partIt ).service()->desktopEntryName();
         QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes").toStringList();
         nativeMimeTypes += (*partIt).service()->property("X-KDE-NativeMimeType").toString();
-        QStringList::ConstIterator it = nativeMimeTypes.begin();
-        QStringList::ConstIterator end = nativeMimeTypes.end();
+        QStringList::ConstIterator it = nativeMimeTypes.constBegin();
+        QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; it != end; ++it) {
             QString key = *it;
             //kDebug() <<"" << key;

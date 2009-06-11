@@ -58,13 +58,13 @@ int main(int argc, char ** argv)
         return 1;
     }
 
-    QStringList::ConstIterator it, itres;
+    QStringList::ConstIterator it;
 
     //testing Czech language, this text is in UTF-8!
     QStringList cs_tests = QStringList() << "Žluťoučký" << "kůň" << "úpěl" <<
                            "ďábelské" << "ódy";
 
-    for (it = cs_tests.begin(); it != cs_tests.end() ; ++it)
+    for (it = cs_tests.constBegin(); it != cs_tests.constEnd() ; ++it)
         kDebug(32500) << (*it) << " hyphenates like this:" << hypher->hyphenate((*it), "cs");
 
     //testing English

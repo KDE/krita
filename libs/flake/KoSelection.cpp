@@ -60,8 +60,8 @@ QRectF KoSelection::Private::sizeRect()
     QRectF bound;
     
     if (!selectedShapes.isEmpty()) {
-        QList<KoShape*>::const_iterator it = selectedShapes.begin();
-        for (; it != selectedShapes.end(); ++it) {
+        QList<KoShape*>::const_iterator it = selectedShapes.constBegin();
+        for (; it != selectedShapes.constEnd(); ++it) {
             if (dynamic_cast<KoShapeGroup*>(*it))
                 continue;
 
